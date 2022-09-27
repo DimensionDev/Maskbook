@@ -1,17 +1,18 @@
 import React, { lazy, Suspense } from 'react'
 import { Route, Routes, Navigate } from 'react-router-dom'
-import { DashboardFrame } from '../components/DashboardFrame'
+import { DashboardFrame } from '../components/DashboardFrame/index.js'
 import { DashboardRoutes } from '@masknet/shared-base'
-import NoPersonaGuardRoute from '../GuardRoute'
-const Wallets = lazy(() => import(/* webpackPrefetch: true */ './Wallets'))
-const Setup = lazy(() => import('./Setup'))
-const SignUp = lazy(() => import('./SignUp'))
-const SignIn = lazy(() => import('./SignIn'))
-const PrivacyPolicy = lazy(() => import('./PrivacyPolicy'))
-const Welcome = lazy(() => import('./Welcome'))
-const Personas = lazy(() => import(/* webpackPrefetch: true */ './Personas'))
-const Settings = lazy(() => import(/* webpackPrefetch: true */ './Settings'))
-const CreateWallet = lazy(() => import('./CreateMaskWallet'))
+import NoPersonaGuardRoute from './GuardRoute.js'
+
+const Wallets = lazy(() => import(/* webpackPrefetch: true */ './Wallets/index.js'))
+const Setup = lazy(() => import('./Setup/index.js'))
+const SignUp = lazy(() => import('./SignUp/index.js'))
+const SignIn = lazy(() => import('./SignIn/index.js'))
+const PrivacyPolicy = lazy(() => import('./PrivacyPolicy/index.js'))
+const Welcome = lazy(() => import('./Welcome/index.js'))
+const Personas = lazy(() => import(/* webpackPrefetch: true */ './Personas/index.js'))
+const Settings = lazy(() => import(/* webpackPrefetch: true */ './Settings/index.js'))
+const CreateWallet = lazy(() => import('./CreateMaskWallet/index.js'))
 
 export function Pages() {
     return (

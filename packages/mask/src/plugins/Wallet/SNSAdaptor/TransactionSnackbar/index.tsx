@@ -3,10 +3,12 @@ import type { JsonRpcPayload } from 'web3-core-helpers'
 import { useAsync } from 'react-use'
 import { Link } from '@mui/material'
 import { Icons } from '@masknet/icons'
-import { createLookupTableResolver, NetworkPluginID, TransactionStatusType } from '@masknet/web3-shared-base'
-import { useWeb3State, useChainId, Web3Helper } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID, TransactionStatusType } from '@masknet/web3-shared-base'
+import { createLookupTableResolver } from '@masknet/shared-base'
+import { useWeb3State, useChainId } from '@masknet/plugin-infra/web3'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import { makeStyles, ShowSnackbarOptions, SnackbarKey, SnackbarMessage, useCustomSnackbar } from '@masknet/theme'
-import { useI18N } from '../../../../utils'
+import { useI18N } from '../../../../utils/index.js'
 
 const useStyles = makeStyles()({
     link: {
@@ -24,7 +26,13 @@ export function TransactionSnackbar<T extends NetworkPluginID>({ pluginID }: Tra
     const snackbarKeyRef = useRef<SnackbarKey>()
 
     const chainId = useChainId(pluginID)
-    const [errorInfo, setErrorInfo] = useState<{ error: Error; request: JsonRpcPayload } | undefined>()
+    const [errorInfo, setErrorInfo] = useState<
+        | {
+              error: Error
+              request: JsonRpcPayload
+          }
+        | undefined
+    >()
     const [progress, setProgress] = useState<{
         chainId: Web3Helper.Definition[T]['ChainId']
         status: TransactionStatusType
@@ -59,6 +67,7 @@ export function TransactionSnackbar<T extends NetworkPluginID>({ pluginID }: Tra
     }, [TransactionWatcher, chainId, pluginID])
 
     useEffect(() => {
+        setProgress(undefined)
         setErrorInfo(undefined)
     }, [chainId])
 
@@ -140,6 +149,7 @@ export function TransactionSnackbar<T extends NetworkPluginID>({ pluginID }: Tra
             ...snackbarConfig,
             message: message ?? snackbarConfig.message,
         })
+        setErrorInfo(undefined)
     }, [JSON.stringify(errorInfo), chainId])
 
     return null

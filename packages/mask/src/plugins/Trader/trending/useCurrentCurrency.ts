@@ -10,7 +10,7 @@ const CURRENCIES_MAP: Record<
           description: string
       }>
 > = {
-    [DataProvider.COIN_GECKO]: [
+    [DataProvider.CoinGecko]: [
         {
             id: 'usd',
             name: 'USD',
@@ -18,7 +18,7 @@ const CURRENCIES_MAP: Record<
             description: 'Unite State Dollar',
         },
     ],
-    [DataProvider.COIN_MARKET_CAP]: [
+    [DataProvider.CoinMarketCap]: [
         {
             id: '2781',
             name: 'USD',
@@ -26,7 +26,7 @@ const CURRENCIES_MAP: Record<
             description: 'Unite State Dollar',
         },
     ],
-    [DataProvider.UNISWAP_INFO]: [
+    [DataProvider.UniswapInfo]: [
         {
             id: 'usd',
             name: 'USD',
@@ -34,7 +34,7 @@ const CURRENCIES_MAP: Record<
             description: 'Unite State Dollar',
         },
     ],
-    [DataProvider.NFTSCAN]: [
+    [DataProvider.NFTScan]: [
         {
             id: 'eth',
             name: '\u039E',

@@ -1,21 +1,34 @@
 import { DataProvider } from '@masknet/public-api'
-import { EMPTY_LIST } from '@masknet/shared-base'
+import { createLookupTableResolver, EMPTY_LIST } from '@masknet/shared-base'
 import { TokenType } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import urlcat from 'urlcat'
 import { compact } from 'lodash-unified'
-import { LooksRareLogo, OpenSeaLogo } from '../../resources'
-import type { TrendingAPI } from '../../types'
-import { NFTSCAN_API } from '../constants'
-import type { EVM, Response } from '../types'
-import { fetchFromNFTScan, getContractSymbol } from '../helpers/EVM'
-import { LooksRareAPI } from '../../looksrare'
-import { OpenSeaAPI } from '../../opensea'
+import { LooksRareLogo, OpenSeaLogo } from '../../resources/index.js'
+import { TrendingAPI } from '../../types/index.js'
+import { NFTSCAN_API } from '../constants.js'
+import type { EVM, Response } from '../types/index.js'
+import { fetchFromNFTScan, getContractSymbol } from '../helpers/EVM.js'
+import { LooksRareAPI } from '../../looksrare/index.js'
+import { OpenSeaAPI } from '../../opensea/index.js'
 
 enum NonFungibleMarketplace {
     OpenSea = 'OpenSea',
     LooksRare = 'LooksRare',
 }
+
+const resolveNFTScanRange = createLookupTableResolver<TrendingAPI.Days, string>(
+    {
+        [TrendingAPI.Days.MAX]: 'all',
+        [TrendingAPI.Days.ONE_DAY]: '1d',
+        [TrendingAPI.Days.ONE_WEEK]: '7d',
+        [TrendingAPI.Days.ONE_MONTH]: '1mth',
+        [TrendingAPI.Days.THREE_MONTHS]: '3mth',
+        [TrendingAPI.Days.ONE_YEAR]: '1y',
+    },
+    // NFTScan will discard range unrecognized range
+    () => '',
+)
 
 export class NFTScanTrendingAPI implements TrendingAPI.Provider<ChainId> {
     private looksrare = new LooksRareAPI()
@@ -45,8 +58,9 @@ export class NFTScanTrendingAPI implements TrendingAPI.Provider<ChainId> {
             contract,
             range,
         })
-        const response = await fetchFromNFTScan<Response<EVM.VolumeAndFloorRecord[]>>(url)
-        return response.data ?? EMPTY_LIST
+        const response = await fetchFromNFTScan<Response<EVM.VolumeAndFloor>>(url)
+        // We only care about the record list
+        return response.data?.result ?? EMPTY_LIST
     }
 
     async getCoins(keyword: string, chainId = ChainId.Mainnet): Promise<TrendingAPI.Coin[]> {
@@ -80,9 +94,9 @@ export class NFTScanTrendingAPI implements TrendingAPI.Provider<ChainId> {
         currency: TrendingAPI.Currency,
         days: number,
     ): Promise<TrendingAPI.Stat[]> {
-        const range = `${Math.min(days, 90)}d`
+        const range = resolveNFTScanRange(days)
         const records = await this.getContractVolumeAndFloorByRange(coinId, range)
-        return records.map((x) => [x.time, x.floor])
+        return records.map((x) => [x.time, x.price])
     }
 
     async getCoinTrending(
@@ -124,7 +138,7 @@ export class NFTScanTrendingAPI implements TrendingAPI.Provider<ChainId> {
         ])
         return {
             lastUpdated: new Date().toJSON(),
-            dataProvider: DataProvider.NFTSCAN,
+            dataProvider: DataProvider.NFTScan,
             contracts: [{ chainId, address: platformInfo.address }],
             currency,
             coin: {

@@ -2,12 +2,12 @@ import { Icons } from '@masknet/icons'
 import { useReverseAddress, useWallets, useWeb3State } from '@masknet/plugin-infra/web3'
 import { FormattedAddress, useSnackbarCallback } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainId, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { Link, Typography } from '@mui/material'
 import { useMemo } from 'react'
 import { useCopyToClipboard } from 'react-use'
-import { useI18N } from '../../locales'
+import { useI18N } from '../../locales/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     currentAccount: {
@@ -39,7 +39,7 @@ const useStyles = makeStyles()((theme) => ({
         display: 'inline-block',
     },
     link: {
-        color: theme.palette.text.primary,
+        color: theme.palette.maskColor.second,
         fontSize: 14,
         display: 'flex',
         alignItems: 'center',
@@ -68,6 +68,10 @@ const useStyles = makeStyles()((theme) => ({
         backgroundColor: '#ffffff',
         color: theme.palette.common.black,
     },
+    disabled: {
+        cursor: 'default',
+        color: theme.palette.maskColor.third,
+    },
 }))
 
 interface WalletItemProps {
@@ -80,7 +84,7 @@ interface WalletItemProps {
 }
 
 export function WalletItem({ address, isDefault, deletable, fallbackName, setAsDefault, onDelete }: WalletItemProps) {
-    const { classes } = useStyles()
+    const { classes, cx } = useStyles()
     const t = useI18N()
     const [, copyToClipboard] = useCopyToClipboard()
     const { value: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, address)
@@ -102,17 +106,18 @@ export function WalletItem({ address, isDefault, deletable, fallbackName, setAsD
         if (domain && Others?.formatDomainName) {
             return Others.formatDomainName(domain)
         }
-        const currentWallet = wallets.find((x) => Others?.isSameAddress(x.address, address))
+        const currentWallet = wallets.find((x) => isSameAddress(x.address, address))
         const name = currentWallet?.name
         return name !== undefined && currentWallet?.hasStoredKeyInfo ? name : fallbackName
     }, [address, domain, fallbackName])
 
     const getActionRender = () => {
-        if (!deletable && !isDefault)
+        if (!deletable)
             return (
                 <Typography
-                    className={classes.actionBtn}
+                    className={cx(classes.actionBtn, isDefault ? classes.disabled : undefined)}
                     onClick={() => {
+                        if (isDefault) return
                         setAsDefault?.(address)
                     }}>
                     {t.tip_set_as_default()}

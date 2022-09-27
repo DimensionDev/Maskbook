@@ -7,13 +7,13 @@ import { useSharedI18N } from '@masknet/shared'
 import {
     useGasOptions,
     useCurrentWeb3NetworkPluginID,
-    Web3Helper,
     useChainId,
     useSingleBlockBeatRetry,
     useWeb3State,
 } from '@masknet/plugin-infra/web3'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import { GasOptionType, NetworkPluginID } from '@masknet/web3-shared-base'
-import { GasSettingsType } from './types'
+import { GasSettingsType } from './types/index.js'
 
 const DEFAULT_SLIPPAGE_TOLERANCE = 0.5
 const DEFAULT_SLIPPAGE_TOLERANCES = [0.5, 1, 2, 5]

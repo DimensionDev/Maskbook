@@ -1,12 +1,12 @@
 import { makeTypedMessageText, SerializableTypedMessages } from '@masknet/typed-message'
-import { CrossIsolationMessages, CompositionRequest } from '@masknet/shared-base'
+import { CrossIsolationMessages, CompositionDialogEvent } from '@masknet/shared-base'
 import { delay, waitDocumentReadyState } from '@dimensiondev/kit'
-import { i18n } from '../../../../shared-ui/locales_legacy'
-import { composeButtonSelector, composeDialogIndicatorSelector, composeTextareaSelector } from '../utils/selector'
+import { i18n } from '../../../../shared-ui/locales_legacy/index.js'
+import { composeButtonSelector, composeDialogIndicatorSelector, composeTextareaSelector } from '../utils/selector.js'
 
 export async function openComposeBoxMinds(
     content: string | SerializableTypedMessages,
-    options?: CompositionRequest['options'],
+    options?: CompositionDialogEvent['options'],
 ) {
     await waitDocumentReadyState('interactive')
     await delay(800)
@@ -26,7 +26,7 @@ export async function openComposeBoxMinds(
     }
 
     await delay(800)
-    CrossIsolationMessages.events.requestComposition.sendToLocal({
+    CrossIsolationMessages.events.compositionDialogEvent.sendToLocal({
         reason: 'popup',
         open: true,
         content: typeof content === 'string' ? makeTypedMessageText(content) : content,

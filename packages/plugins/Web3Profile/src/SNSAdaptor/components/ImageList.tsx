@@ -3,14 +3,14 @@ import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { ChainId, SchemaType, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
 import { useWeb3State } from '@masknet/plugin-infra/web3'
 import { useEffect, useState } from 'react'
-import { useI18N } from '../../locales'
-import { PLUGIN_ID } from '../../constants'
+import { useI18N } from '../../locales/index.js'
+import { PLUGIN_ID } from '../../constants.js'
 import { InjectedDialog, CollectionTypes, WalletTypes } from '@masknet/shared'
 import { PersonaInformation, NextIDPlatform } from '@masknet/shared-base'
 import { NetworkPluginID, NonFungibleToken } from '@masknet/web3-shared-base'
-import { AddNFT } from './AddCollectibles'
+import { AddNFT } from './AddCollectibles.js'
 import classNames from 'classnames'
-import { CollectionList } from './CollectionList'
+import { CollectionList } from './CollectionList.js'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -31,12 +31,10 @@ const useStyles = makeStyles()((theme) => {
             position: 'relative',
             cursor: 'pointer',
             display: 'flex',
-            overflow: 'hidden',
             padding: 0,
             flexDirection: 'column',
             borderRadius: 12,
             userSelect: 'none',
-            lineHeight: 0,
         },
         content: {
             width: 600,

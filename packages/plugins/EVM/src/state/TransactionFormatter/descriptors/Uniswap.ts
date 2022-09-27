@@ -1,6 +1,6 @@
 import type { TransactionContext } from '@masknet/web3-shared-base'
 import { ChainId, createNativeToken } from '@masknet/web3-shared-evm'
-import { getTokenAmountDescription } from '../utils'
+import { getTokenAmountDescription } from '../utils.js'
 
 export class UniswapDescriptor {
     compute(context: TransactionContext<ChainId>) {

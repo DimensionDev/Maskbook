@@ -7,8 +7,8 @@ import { Box, Paper } from '@mui/material'
 import { isZero } from '@masknet/web3-shared-base'
 import type { z as zod } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { RadioChip } from './RadioChip'
-import { useSlippageToleranceSchema } from './hooks'
+import { RadioChip } from './RadioChip.js'
+import { useSlippageToleranceSchema } from './hooks/index.js'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -24,23 +24,6 @@ const useStyles = makeStyles()((theme) => {
         textfield: {
             flex: 1,
             maxWidth: 100,
-            '& input::-webkit-input-placeholder': {
-                fontWeight: 700,
-            },
-            '& input[type=number]': {
-                fontSize: 16,
-                fontWeight: 700,
-                height: 24,
-                padding: 0,
-                textAlign: 'center',
-                '-moz-appearance': 'textfield',
-            },
-            '& input[type=number]::-webkit-outer-spin-button': {
-                '-webkit-appearance': 'none',
-            },
-            '& input[type=number]::-webkit-inner-spin-button': {
-                '-webkit-appearance': 'none',
-            },
         },
     }
 })

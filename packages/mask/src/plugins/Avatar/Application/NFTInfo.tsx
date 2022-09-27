@@ -1,5 +1,5 @@
-import { Box, CircularProgress, Typography } from '@mui/material'
-import { makeStyles, ShadowRootTooltip, useStylesExtends } from '@masknet/theme'
+import { Box, Typography } from '@mui/material'
+import { LoadingBase, makeStyles, ShadowRootTooltip, useStylesExtends } from '@masknet/theme'
 import { useI18N } from '../locales/i18n_generated'
 
 const useStyles = makeStyles()(() => ({
@@ -23,7 +23,7 @@ export function NFTInfo(props: NFTInfoProps) {
     const classes = useStylesExtends(useStyles(), props)
     const t = useI18N()
 
-    if (loading) return <CircularProgress size={24} />
+    if (loading) return <LoadingBase size={24} />
     return (
         <ShadowRootTooltip
             arrow

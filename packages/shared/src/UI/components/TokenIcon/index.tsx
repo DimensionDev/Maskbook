@@ -1,34 +1,36 @@
-import { memo, useState } from 'react'
 import { useAsyncRetry } from 'react-use'
 import { first } from 'lodash-unified'
-import { Avatar, AvatarProps, useTheme } from '@mui/material'
-import { makeStyles, useStylesExtends } from '@masknet/theme'
-import { useChainId, useWeb3Hub, Web3Helper } from '@masknet/plugin-infra/web3'
+import type { AvatarProps } from '@mui/material'
+import { useChainId, useWeb3Hub } from '@masknet/plugin-infra/web3'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import { NetworkPluginID, TokenType } from '@masknet/web3-shared-base'
 import { EMPTY_LIST } from '@masknet/shared-base'
-import NO_IMAGE_COLOR from './constants'
-import { useAccessibleUrl } from '../../../hooks/useImageBase64'
-
-const useStyles = makeStyles()((theme) => ({
-    icon: {
-        margin: 0,
-    },
-}))
+import { Icon } from '../Icon/index.js'
+import { useImageURL } from '../../../hooks/useImageURL.js'
 
 export interface TokenIconProps extends withClasses<'icon'> {
-    chainId?: Web3Helper.ChainIdAll
     pluginID?: NetworkPluginID
+    chainId?: Web3Helper.ChainIdAll
     address: string
-    name?: string
+    name: string
+    symbol?: string
     logoURL?: string
-    isERC721?: boolean
     tokenType?: TokenType
     disableDefaultIcon?: boolean
     AvatarProps?: Partial<AvatarProps>
 }
 
 export function TokenIcon(props: TokenIconProps) {
-    const { address, logoURL, name, AvatarProps, classes, tokenType = TokenType.Fungible, disableDefaultIcon } = props
+    const {
+        address,
+        logoURL,
+        name,
+        symbol,
+        AvatarProps,
+        classes,
+        tokenType = TokenType.Fungible,
+        disableDefaultIcon,
+    } = props
 
     const chainId = useChainId(props.pluginID, props.chainId)
     const hub = useWeb3Hub(props.pluginID)
@@ -42,56 +44,20 @@ export function TokenIcon(props: TokenIconProps) {
             key,
             urls: [logoURL, ...(logoURLs ?? [])].filter(Boolean) as string[],
         }
-    }, [chainId, address, isNFT, logoURL, hub])
+    }, [chainId, address, isNFT, logoURL, hub?.getNonFungibleTokenIconURLs, hub?.getFungibleTokenIconURLs])
     const { urls = EMPTY_LIST, key } = value ?? {}
+    const originalUrl = first(urls)
+    const { value: accessibleUrl } = useImageURL(originalUrl)
 
-    const accessibleUrl = useAccessibleUrl(key, first(urls))
-    if (!accessibleUrl && disableDefaultIcon) return null
+    if (!accessibleUrl && originalUrl && disableDefaultIcon) return null
 
     return (
-        <TokenIconUI
+        <Icon
             key={key}
-            logoURL={isNFT ? logoURL : accessibleUrl}
-            AvatarProps={AvatarProps}
             classes={classes}
-            name={name}
+            name={symbol ?? name}
+            logoURL={isNFT ? logoURL : accessibleUrl || originalUrl}
+            AvatarProps={AvatarProps}
         />
     )
 }
-
-export interface TokenIconUIProps extends withClasses<'icon'> {
-    logoURL?: string
-    AvatarProps?: Partial<AvatarProps>
-    name?: string
-}
-
-export const TokenIconUI = memo<TokenIconUIProps>((props) => {
-    const { logoURL, AvatarProps, name } = props
-    const [error, setError] = useState(false)
-
-    // add background color to no-img token icon
-    const defaultBackgroundColorNumber = name?.split('')?.reduce((total, cur) => total + Number(cur?.charCodeAt(0)), 0)
-    const defaultBackgroundColor = defaultBackgroundColorNumber
-        ? NO_IMAGE_COLOR[defaultBackgroundColorNumber % 5]
-        : undefined
-    const classes = useStylesExtends(useStyles(), props)
-    const theme = useTheme()
-
-    return (
-        <Avatar
-            className={classes.icon}
-            src={logoURL}
-            {...AvatarProps}
-            imgProps={{
-                onError: () => {
-                    setError(true)
-                },
-            }}
-            sx={{
-                ...AvatarProps?.sx,
-                backgroundColor: logoURL && !error ? theme.palette.common.white : defaultBackgroundColor,
-            }}>
-            {name?.slice(0, 1).toUpperCase()}
-        </Avatar>
-    )
-})

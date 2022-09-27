@@ -1,9 +1,9 @@
 import { getEnumAsArray } from '@dimensiondev/kit'
 import { createFungibleToken, createFungibleTokensFromConstants } from '@masknet/web3-shared-base'
 import Token from '@masknet/web3-constants/evm/token.json'
-import { chainResolver } from './resolver'
-import { CHAIN_DESCRIPTORS, getTokenConstant, ZERO_ADDRESS } from '../constants'
-import { ChainId, SchemaType } from '../types'
+import { chainResolver } from './resolver.js'
+import { CHAIN_DESCRIPTORS, getTokenConstant, ZERO_ADDRESS } from '../constants/index.js'
+import { ChainId, SchemaType } from '../types/index.js'
 
 export function isNativeTokenSymbol(symbol: string) {
     return CHAIN_DESCRIPTORS.filter((x) => x.network === 'mainnet' && x.nativeCurrency)
@@ -44,3 +44,15 @@ export function createERC20Token(
 }
 
 export const createERC20Tokens = createFungibleTokensFromConstants(getEnumAsArray(ChainId), SchemaType.ERC20, Token)
+
+export function isNativeTokenSchemaType(schemaType?: SchemaType) {
+    return schemaType === SchemaType.Native
+}
+
+export function isFungibleTokenSchemaType(schemaType?: SchemaType) {
+    return schemaType === SchemaType.Native || schemaType === SchemaType.ERC20
+}
+
+export function isNonFungibleTokenSchemaType(schemaType?: SchemaType) {
+    return schemaType === SchemaType.ERC721 || schemaType === SchemaType.ERC1155
+}

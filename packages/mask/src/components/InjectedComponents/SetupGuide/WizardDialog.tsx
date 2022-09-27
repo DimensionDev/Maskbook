@@ -2,7 +2,7 @@ import { Box, IconButton, Paper, Typography } from '@mui/material'
 import classNames from 'classnames'
 import CloseIcon from '@mui/icons-material/Close'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { SetupGuideStep } from '../../../../shared/legacy-settings/types'
+import { SetupGuideStep } from '../../../../shared/legacy-settings/types.js'
 
 interface ContentUIProps {
     dialogType: SetupGuideStep
@@ -32,6 +32,7 @@ function ContentUI(props: ContentUIProps) {
     const { classes } = useStyles()
     switch (props.dialogType) {
         case SetupGuideStep.FindUsername:
+        case SetupGuideStep.VerifyOnNextID:
         case SetupGuideStep.PinExtension:
             return (
                 <Box>

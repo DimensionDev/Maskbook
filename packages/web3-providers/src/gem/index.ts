@@ -1,14 +1,9 @@
 import urlcat from 'urlcat'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import {
-    HubOptions,
-    HubIndicator,
-    SourceType,
-    createLookupTableResolver,
-    NonFungibleTokenRarity,
-} from '@masknet/web3-shared-base'
-import type { NonFungibleTokenAPI } from '../types'
-import { GEM_API_URL, RARITY_SOURCE_TYPE } from './constants'
+import { HubOptions, HubIndicator, SourceType, NonFungibleTokenRarity } from '@masknet/web3-shared-base'
+import type { NonFungibleTokenAPI } from '../types/index.js'
+import { GEM_API_URL, RARITY_SOURCE_TYPE } from './constants.js'
+import { createLookupTableResolver } from '@masknet/shared-base'
 
 const resolveRarityId = createLookupTableResolver<
     SourceType.Gem | SourceType.RaritySniper | SourceType.TraitSniper,
@@ -32,7 +27,7 @@ async function fetchFromGem<T>(pathname: string, init?: RequestInit) {
 
 export class GemAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
     async getRarity(address: string, tokenId: string, options?: HubOptions<ChainId, HubIndicator>) {
-        const response = await fetchFromGem<Record<string, NonFungibleTokenRarity>>(
+        const response = await fetchFromGem<Record<string, NonFungibleTokenRarity<ChainId>>>(
             urlcat('/rarity/:address/:tokenId', {
                 address: address.toLowerCase(),
                 tokenId: tokenId.toLowerCase(),

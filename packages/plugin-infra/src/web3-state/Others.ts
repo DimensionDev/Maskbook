@@ -9,7 +9,7 @@ import {
     ProviderDescriptor,
     OthersState as Web3OthersState,
 } from '@masknet/web3-shared-base'
-import type { Plugin } from '../types'
+import type { Plugin } from '../types.js'
 
 export class OthersState<ChainId, SchemaType, ProviderType, NetworkType, Transaction>
     implements Web3OthersState<ChainId, SchemaType, ProviderType, NetworkType, Transaction>
@@ -77,6 +77,16 @@ export class OthersState<ChainId, SchemaType, ProviderType, NetworkType, Transac
         throw new Error('Method not implemented.')
     }
 
+    isNativeTokenSchemaType(schemaType?: SchemaType | undefined): boolean {
+        throw new Error('Method not implemented.')
+    }
+    isFungibleTokenSchemaType(schemaType?: SchemaType | undefined): boolean {
+        throw new Error('Method not implemented.')
+    }
+    isNonFungibleTokenSchemaType(schemaType?: SchemaType | undefined): boolean {
+        throw new Error('Method not implemented.')
+    }
+
     formatAddress(address: string, size?: number | undefined): string {
         throw new Error('Method not implemented.')
     }
@@ -84,6 +94,9 @@ export class OthersState<ChainId, SchemaType, ProviderType, NetworkType, Transac
         throw new Error('Method not implemented.')
     }
     formatDomainName(domain?: string | undefined, size?: number | undefined): string {
+        throw new Error('Method not implemented.')
+    }
+    formatSchemaType(schema: SchemaType): string {
         throw new Error('Method not implemented.')
     }
 }

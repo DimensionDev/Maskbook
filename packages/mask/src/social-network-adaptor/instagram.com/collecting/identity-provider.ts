@@ -1,6 +1,6 @@
-import { SocialNetworkUI, creator } from '../../../social-network'
+import { SocialNetworkUI, creator } from '../../../social-network/index.js'
 import { ProfileIdentifier } from '@masknet/shared-base'
-import { instagramBase } from '../base'
+import { instagramBase } from '../base.js'
 import { openDB } from 'idb/with-async-ittr'
 import type { IdentityResolved } from '@masknet/plugin-infra'
 export const IdentityProviderInstagram: SocialNetworkUI.CollectingCapabilities.IdentityResolveProvider = {

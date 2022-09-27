@@ -1,8 +1,8 @@
 import { Box, CardContent, Grid, Typography } from '@mui/material'
-import type { UserStoryStatus } from '../types'
-import { BorderLinearProgress } from './ResultCard'
+import type { UserStoryStatus } from '../types.js'
+import { BorderLinearProgress } from './ResultCard.js'
 import { useContext } from 'react'
-import { FindTrumanContext } from '../context'
+import { FindTrumanContext } from '../context.js'
 
 interface StageCardProps {
     userStoryStatus?: UserStoryStatus

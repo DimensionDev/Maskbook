@@ -2,9 +2,9 @@ import { useAsyncRetry } from 'react-use'
 import { useChainId } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { OrderSide } from 'opensea-js/lib/types'
-import type { Token } from '../types'
-import { toTokenIdentifier } from '../utils'
-import { getOrders } from '../apis'
+import type { Token } from '../types/index.js'
+import { toTokenIdentifier } from '../utils.js'
+import { getOrders } from '../apis/index.js'
 
 export function useOrders(token?: Token, side = OrderSide.Buy) {
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)

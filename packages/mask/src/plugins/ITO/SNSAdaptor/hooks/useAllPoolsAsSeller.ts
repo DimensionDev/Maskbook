@@ -1,11 +1,12 @@
-import { useChainId, useWeb3Connection, Web3Helper } from '@masknet/plugin-infra/web3'
+import { useChainId, useWeb3Connection } from '@masknet/plugin-infra/web3'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainId, getITOConstants } from '@masknet/web3-shared-evm'
 import { useRef, useEffect } from 'react'
 import { useAsyncRetry } from 'react-use'
-import type { PoolFromNetwork } from '../../types'
-import * as chain from '../utils/chain'
-import { PluginITO_RPC } from '../../messages'
+import type { PoolFromNetwork } from '../../types.js'
+import * as chain from '../utils/chain.js'
+import { PluginITO_RPC } from '../../messages.js'
 import { EMPTY_LIST } from '@masknet/shared-base'
 
 export function useAllPoolsAsSeller(address: string) {

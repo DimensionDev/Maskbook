@@ -1,11 +1,11 @@
 import { first } from 'lodash-unified'
 import { setGunData, getGunData } from '@masknet/gun-utils'
-import type { PollMetaData } from './types'
-import { PollGunRootNode } from './constants'
+import type { PollMetaData } from './types.js'
+import { PollGunRootNode } from './constants.js'
 import { WorkerChannel } from 'async-call-rpc/utils/web/worker'
 import { AsyncCall } from 'async-call-rpc'
 
-import * as self from './Services'
+import * as self from './Services.js'
 setTimeout(() => {
     AsyncCall(self, { channel: new WorkerChannel() })
 }, 0)

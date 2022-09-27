@@ -1,4 +1,4 @@
-import { getAvatarId } from './user'
+import { getAvatarId } from './user.js'
 
 export function getInjectNodeInfo(element: HTMLImageElement) {
     const avatarId = getAvatarId(element.src)

@@ -4,9 +4,9 @@ import { NextIDProof } from '@masknet/web3-providers'
 import { head } from 'lodash-unified'
 import { useEffect } from 'react'
 import { useAsyncRetry } from 'react-use'
-import Services from '../../../extension/service'
-import { currentPersonaIdentifier } from '../../../../shared/legacy-settings/settings'
-import { MaskMessages } from '../../../utils'
+import Services from '../../../extension/service.js'
+import { currentPersonaIdentifier } from '../../../../shared/legacy-settings/settings.js'
+import { MaskMessages } from '../../../utils/index.js'
 
 export function useProvedWallets() {
     const currentIdentifier = useValueRef(currentPersonaIdentifier)
@@ -28,6 +28,8 @@ export function useProvedWallets() {
         const { proofs } = (await NextIDProof.queryExistedBindingByPersona(currentPersona.identifier.publicKeyAsHex))!
         return proofs.filter((x) => x.platform === NextIDPlatform.Ethereum)
     }, [currentPersonaIdentifier, personas])
+
+    useEffect(() => MaskMessages.events.ownProofChanged.on(res.retry), [res.retry])
 
     return res
 }

@@ -1,24 +1,35 @@
 import { CollectionDetailCard } from '@masknet/shared'
 import { EMPTY_LIST } from '@masknet/shared-base'
-import { CollectionType, RSS3, RSS3BaseAPI } from '@masknet/web3-providers'
+import { makeStyles } from '@masknet/theme'
+import { CollectionType, RSS3 } from '@masknet/web3-providers'
 import { Box, BoxProps } from '@mui/material'
 import { memo, useState } from 'react'
 import { useAsyncRetry } from 'react-use'
-import { useI18N } from '../../locales'
-import { FeedCard } from '../components/FeedCard'
-import { StatusBox } from '../components/StatusBox'
+import { useI18N } from '../../locales/index.js'
+import type { RSS3Feed } from '../../types.js'
+import { FeedCard } from '../components/FeedCard.js'
+import { StatusBox } from '../components/StatusBox.js'
 
 export interface FeedPageProps extends BoxProps {
     address?: string
+    // Allow to click to view activity details
+    disableViewDetails?: boolean
 }
 
-export const FeedsPage = memo(function FeedsPage({ address, ...rest }: FeedPageProps) {
+const useStyles = makeStyles()(() => ({
+    normalCard: {
+        cursor: 'default',
+    },
+}))
+
+export const FeedsPage = memo(function FeedsPage({ address, disableViewDetails, ...rest }: FeedPageProps) {
+    const { classes } = useStyles()
     const t = useI18N()
-    const [selectedFeed, setSelectedFeed] = useState<RSS3BaseAPI.Web3Feed>()
+    const [selectedFeed, setSelectedFeed] = useState<RSS3Feed>()
     const { value: feeds = EMPTY_LIST, loading } = useAsyncRetry(async () => {
-        if (!address) return
-        const result = await RSS3.getWeb3Feed(address)
-        return result?.list
+        if (!address) return EMPTY_LIST
+        const { data } = await RSS3.getWeb3Feeds(address)
+        return data
     }, [address])
 
     if (loading || !feeds.length) {
@@ -31,19 +42,28 @@ export const FeedsPage = memo(function FeedsPage({ address, ...rest }: FeedPageP
 
     return (
         <Box p={2} boxSizing="border-box" {...rest}>
-            {feeds.map((feed) => {
-                return <FeedCard key={feed.links} onSelect={setSelectedFeed} feed={feed} address={address} />
+            {feeds.map((feed, index) => {
+                return (
+                    <FeedCard
+                        key={index}
+                        className={disableViewDetails ? classes.normalCard : undefined}
+                        onSelect={setSelectedFeed}
+                        feed={feed}
+                        address={address}
+                    />
+                )
             })}
-            {selectedFeed ? (
+            {selectedFeed && !disableViewDetails ? (
                 <CollectionDetailCard
                     open
                     onClose={() => setSelectedFeed(undefined)}
-                    img={selectedFeed.imageURL}
+                    img={selectedFeed.image}
                     title={selectedFeed.title}
-                    relatedURLs={selectedFeed.related_urls}
-                    description={selectedFeed.summary}
+                    relatedURLs={selectedFeed.relatedURLs}
+                    description={selectedFeed.description}
+                    network={selectedFeed.network}
                     metadata={selectedFeed.metadata}
-                    traits={selectedFeed.traits}
+                    attributes={selectedFeed.attributes}
                     type={CollectionType.Feeds}
                 />
             ) : null}

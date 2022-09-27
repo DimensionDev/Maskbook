@@ -3,11 +3,11 @@ import { unreachable } from '@dimensiondev/kit'
 import type { AsyncState } from 'react-use/lib/useAsyncFn'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { SchemaType } from '@masknet/web3-shared-evm'
-import { useERC20TokenContract } from './useERC20TokenContract'
-import { useERC721TokenContract } from './useERC721TokenContract'
-import { useWeb3 } from '../useWeb3'
-import { useAccount } from '../useAccount'
-import { useChainId } from '../useChainId'
+import { useERC20TokenContract } from './useERC20TokenContract.js'
+import { useERC721TokenContract } from './useERC721TokenContract.js'
+import { useWeb3 } from '../useWeb3.js'
+import { useAccount } from '../useAccount.js'
+import { useChainId } from '../useChainId.js'
 
 export function useGasLimit(
     type?: SchemaType,

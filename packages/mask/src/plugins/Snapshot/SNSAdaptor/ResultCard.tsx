@@ -2,17 +2,17 @@ import { useContext, useRef, useEffect, useState, useMemo } from 'react'
 import classNames from 'classnames'
 import { Box, List, ListItem, Typography, LinearProgress, styled, Button, linearProgressClasses } from '@mui/material'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
-import { useI18N } from '../../../utils'
+import { useI18N } from '../../../utils/index.js'
 import millify from 'millify'
-import { SnapshotContext } from '../context'
-import { useProposal } from './hooks/useProposal'
-import { useVotes } from './hooks/useVotes'
-import { useResults } from './hooks/useResults'
-import { SnapshotCard } from './SnapshotCard'
+import { SnapshotContext } from '../context.js'
+import { useProposal } from './hooks/useProposal.js'
+import { useVotes } from './hooks/useVotes.js'
+import { useResults } from './hooks/useResults.js'
+import { SnapshotCard } from './SnapshotCard.js'
 import { parse } from 'json2csv'
-import { useRetry } from './hooks/useRetry'
-import { LoadingFailCard } from './LoadingFailCard'
-import { LoadingCard } from './LoadingCard'
+import { useRetry } from './hooks/useRetry.js'
+import { LoadingFailCard } from './LoadingFailCard.js'
+import { LoadingCard } from './LoadingCard.js'
 
 const choiceMaxWidth = 240
 
@@ -25,6 +25,8 @@ const useStyles = makeStyles()((theme) => {
         listItem: {
             display: 'flex',
             flexDirection: 'column',
+            paddingLeft: 0,
+            paddingRight: 0,
         },
         listItemHeader: {
             display: 'flex',
@@ -32,12 +34,15 @@ const useStyles = makeStyles()((theme) => {
         },
         power: {
             marginLeft: theme.spacing(2),
+            color: theme.palette.maskColor.publicMain,
         },
         ratio: {
             marginLeft: 'auto',
+            color: theme.palette.maskColor.publicMain,
         },
         choice: {
             maxWidth: choiceMaxWidth,
+            color: theme.palette.maskColor.publicMain,
         },
         linearProgressWrap: {
             width: '100%',
@@ -51,19 +56,33 @@ const useStyles = makeStyles()((theme) => {
         resultButton: {
             width: 200,
             margin: '0 auto',
+            backgroundColor: theme.palette.maskColor.publicMain,
+            color: theme.palette.maskColor.white,
+            '&:hover': {
+                backgroundColor: theme.palette.maskColor.publicMain,
+                color: theme.palette.maskColor.white,
+            },
+        },
+        tooltip: {
+            backgroundColor: theme.palette.maskColor.publicMain,
+            color: theme.palette.maskColor.white,
+        },
+        arrow: {
+            color: theme.palette.maskColor.publicMain,
         },
     }
 })
 
-const StyledLinearProgress = styled(LinearProgress)`
-    &.${linearProgressClasses.root} {
-        height: 8px;
-        border-radius: 5px;
-    }
-    &.${linearProgressClasses.bar} {
-        border-radius: 5px;
-    }
-`
+const StyledLinearProgress = styled(LinearProgress)(({ theme }) => ({
+    [`&.${linearProgressClasses.root}`]: {
+        height: 8,
+        borderRadius: 5,
+        backgroundColor: theme.palette.maskColor.publicBg,
+    },
+    [`&.${linearProgressClasses.bar}`]: {
+        borderRadius: 5,
+    },
+}))
 
 function Content() {
     const identifier = useContext(SnapshotContext)
@@ -110,6 +129,7 @@ function Content() {
                                 title={<Typography>{result.choice}</Typography>}
                                 placement="top"
                                 disableHoverListener={!tooltipsVisible[i]}
+                                classes={{ tooltip: classes.tooltip, arrow: classes.arrow }}
                                 arrow>
                                 <Typography
                                     ref={(ref) => {
@@ -123,6 +143,7 @@ function Content() {
                                 PopperProps={{
                                     disablePortal: true,
                                 }}
+                                classes={{ tooltip: classes.tooltip, arrow: classes.arrow }}
                                 title={
                                     <Typography className={classes.ellipsisText}>
                                         {result.powerDetail
@@ -147,14 +168,14 @@ function Content() {
                             </Typography>
                         </Box>
                         <Box className={classes.linearProgressWrap}>
-                            <StyledLinearProgress variant="determinate" value={result.percentage} />
+                            <StyledLinearProgress color="inherit" variant="determinate" value={result.percentage} />
                         </Box>
                     </ListItem>
                 ))}
             </List>
             {proposal.isEnd ? (
                 <Button
-                    color="primary"
+                    variant="roundedContained"
                     className={classes.resultButton}
                     onClick={() => {
                         const csv = parse(dataForCsv)

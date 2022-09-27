@@ -1,7 +1,7 @@
 import { makeStyles } from '@masknet/theme'
 import { Link, Typography, TypographyProps } from '@mui/material'
 import { NetworkPluginID, SocialAddress, SocialAddressType } from '@masknet/web3-shared-base'
-import { ReversedAddress } from '../../..'
+import { ReversedAddress } from '../../../index.js'
 import { Icons } from '@masknet/icons'
 import { useWeb3State } from '@masknet/plugin-infra/web3'
 
@@ -13,6 +13,7 @@ const useStyles = makeStyles()((theme) => ({
         '&:hover': {
             textDecoration: 'none',
         },
+        lineHeight: 0,
     },
     linkIcon: {
         color: theme.palette.maskColor.second,
@@ -49,13 +50,11 @@ export function AddressItem({
     return (
         <>
             {reversible ? (
-                <Typography>
-                    <ReversedAddress
-                        TypographyProps={TypographyProps}
-                        address={socialAddress.address}
-                        pluginId={socialAddress.networkSupporterPluginID}
-                    />
-                </Typography>
+                <ReversedAddress
+                    TypographyProps={TypographyProps}
+                    address={socialAddress.address}
+                    pluginId={socialAddress.networkSupporterPluginID}
+                />
             ) : (
                 <Typography {...TypographyProps}>{socialAddress.label}</Typography>
             )}

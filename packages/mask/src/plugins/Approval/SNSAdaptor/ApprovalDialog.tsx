@@ -2,21 +2,21 @@ import { DialogContent, Button, Tab } from '@mui/material'
 import { MaskTabList, useTabs } from '@masknet/theme'
 import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
 import { useState } from 'react'
-import { NetworkTab } from '../../../components/shared/NetworkTab'
+import { NetworkTab } from '../../../components/shared/NetworkTab.js'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { ChainId, chainResolver, NetworkType } from '@masknet/web3-shared-evm'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
-import { PluginId } from '@masknet/plugin-infra'
+import { PluginID } from '@masknet/plugin-infra'
 import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
-import { useI18N } from '../locales'
-import { useI18N as useBaseI18n, PluginWalletStatusBar } from '../../../utils'
-import { WalletMessages } from '../../../plugins/Wallet/messages'
+import { useI18N } from '../locales/index.js'
+import { useI18N as useBaseI18n, PluginWalletStatusBar } from '../../../utils/index.js'
+import { WalletMessages } from '../../../plugins/Wallet/messages.js'
 import { InjectedDialog } from '@masknet/shared'
-import { useStyles } from './useStyles'
-import { ApprovalEmptyContent } from './ApprovalEmptyContent'
-import { ApprovalTokenContent } from './ApprovalTokenContent'
-import { ApprovalNFTContent } from './ApprovalNFTContent'
+import { useStyles } from './useStyles.js'
+import { ApprovalEmptyContent } from './ApprovalEmptyContent.js'
+import { ApprovalTokenContent } from './ApprovalTokenContent.js'
+import { ApprovalNFTContent } from './ApprovalNFTContent.js'
 import { TabContext } from '@mui/lab'
 
 export interface ApprovalDialogProps {
@@ -66,7 +66,7 @@ function ApprovalWrapper(props: ApprovalWrapperProps) {
     const t = useI18N()
     const { targetChainId: chainId } = TargetChainIdContext.useContainer()
     const [networkTabChainId, setNetworkTabChainId] = useState<ChainId>(chainId)
-    const approvalDefinition = useActivatedPlugin(PluginId.Approval, 'any')
+    const approvalDefinition = useActivatedPlugin(PluginID.Approval, 'any')
     const pluginId = useCurrentWeb3NetworkPluginID()
     const chainIdList =
         approvalDefinition?.enableRequirement.web3?.[NetworkPluginID.PLUGIN_EVM]?.supportedChainIds ?? []

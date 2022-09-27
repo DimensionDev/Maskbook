@@ -1,6 +1,6 @@
 import type { TextFieldProps } from '@mui/material'
-import { story, MuiArgs, matrix } from '../utils'
-import { MaskTextField as TextField } from '../../src/Components/TextField'
+import { story, MuiArgs, matrix } from '../utils/index.js'
+import { MaskTextField as TextField } from '../../src/Components/TextField/index.js'
 
 const { meta, of } = story(TextField)
 export default meta({

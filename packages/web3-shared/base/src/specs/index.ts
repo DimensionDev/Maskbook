@@ -15,8 +15,7 @@ import type {
     ReturnExplorerResolver,
     ReturnNetworkResolver,
     ReturnProviderResolver,
-} from '../utils'
-
+} from '../utils/index.js'
 
 export interface Pageable<Item, Indicator = unknown> {
     /** the indicator of the current page */
@@ -66,8 +65,15 @@ export enum SourceType {
     // FT assets
     DeBank = 'DeBank',
     Zerion = 'Zerion',
+    Flow = 'Flow',
+    Solana = 'Solana',
+    CoinGecko = 'CoinGecko',
+    CoinMarketCap = 'CoinMarketCap',
+    UniswapInfo = 'UniswapInfo',
+    CF = 'CloudFlare',
 
     // NFT assets
+    Rabby = 'Rabby',
     Gem = 'Gem',
     RSS3 = 'RSS3',
     Zora = 'zora',
@@ -79,10 +85,15 @@ export enum SourceType {
     Alchemy_FLOW = 'Alchemy_FLOW',
     Chainbase = 'Chainbase',
     X2Y2 = 'X2Y2',
+    MagicEden = 'MagicEden',
+    Element = 'Element',
 
     // Rarity
     RaritySniper = 'RaritySniper',
     TraitSniper = 'TraitSniper',
+
+    // Token List
+    R2D2 = 'R2D2',
 }
 
 export enum TransactionStatusType {
@@ -101,7 +112,7 @@ export enum TransactionDescriptorType {
     /** A transaction to cancel a previous transaction. */
     CANCEL = 'cancel',
     /** A transaction to modify a previous transaction. */
-    RETRY = 'retry', // speed up
+    RETRY = 'retry',
 }
 
 export enum SocialAddressType {
@@ -258,9 +269,7 @@ export interface FungibleToken<ChainId, SchemaType> extends Token<ChainId, Schem
     logoURL?: string
 }
 
-export interface FungibleTokenStats {
-    /** TODO */
-}
+export interface FungibleTokenStats {}
 
 export interface NonFungibleTokenStats {
     volume24h: number
@@ -268,10 +277,13 @@ export interface NonFungibleTokenStats {
     floorPrice: number
 }
 
-export interface NonFungibleTokenRarity {
+export interface NonFungibleTokenRarity<ChainId> {
+    chainId: ChainId
     rank: number
     url: string
     status?: 'verified' | 'unverified'
+    /** source type */
+    source?: SourceType
 }
 
 export interface NonFungibleTokenContract<ChainId, SchemaType> {
@@ -284,6 +296,8 @@ export interface NonFungibleTokenContract<ChainId, SchemaType> {
     logoURL?: string
     iconURL?: string
     creatorEarning?: string
+    /** source type */
+    source?: SourceType
 }
 
 export interface NonFungibleTokenMetadata<ChainId> {
@@ -300,6 +314,8 @@ export interface NonFungibleTokenMetadata<ChainId> {
     mediaType?: string
     /** project url */
     projectURL?: string
+    /** source type */
+    source?: SourceType
 }
 
 export interface NonFungibleCollection<ChainId, SchemaType> {
@@ -310,7 +326,7 @@ export interface NonFungibleCollection<ChainId, SchemaType> {
     description?: string
     address?: string
     schema?: SchemaType
-    iconURL?: string
+    iconURL?: string | null
     /** the amount of mint tokens */
     tokensTotal?: number
     /** the amount of holders */
@@ -319,6 +335,8 @@ export interface NonFungibleCollection<ChainId, SchemaType> {
     verified?: boolean
     /** unix timestamp */
     createdAt?: number
+    /** source type */
+    source?: SourceType
 }
 
 export interface NonFungibleToken<ChainId, SchemaType> extends Token<ChainId, SchemaType> {
@@ -378,6 +396,8 @@ export interface NonFungibleTokenOrder<ChainId, SchemaType> {
     price?: Price
     /** the payment token and corresponding price */
     priceInToken?: PriceInToken<ChainId, SchemaType>
+    /** source type */
+    source?: SourceType
 }
 
 export interface NonFungibleTokenEvent<ChainId, SchemaType> {
@@ -408,6 +428,8 @@ export interface NonFungibleTokenEvent<ChainId, SchemaType> {
     priceInToken?: PriceInToken<ChainId, SchemaType>
     /** the payment token */
     paymentToken?: FungibleToken<ChainId, SchemaType>
+    /** source type */
+    source?: SourceType
 }
 
 /**
@@ -440,7 +462,7 @@ export interface NonFungibleAsset<ChainId, SchemaType> extends NonFungibleToken<
     /** estimated price */
     price?: Price
     /** rarity */
-    rarity?: Record<SourceType, NonFungibleTokenRarity>
+    rarity?: Record<SourceType, NonFungibleTokenRarity<ChainId>>
     /** traits of the digital asset */
     traits?: NonFungibleTokenTrait[]
     /** token on auction */
@@ -453,12 +475,14 @@ export interface NonFungibleAsset<ChainId, SchemaType> extends NonFungibleToken<
     paymentTokens?: Array<FungibleToken<ChainId, SchemaType>>
     /** the payment token and corresponding price */
     priceInToken?: PriceInToken<ChainId, SchemaType>
+    /** source type */
+    source?: SourceType
 }
 
 /**
  * Authorization about a fungible token.
  */
-export interface FungibleTokenSpenderAuthorization<ChainId, SchemaType> {
+export interface FungibleTokenSpender<ChainId, SchemaType> {
     tokenInfo: Pick<FungibleToken<ChainId, SchemaType>, 'address' | 'logoURL' | 'symbol' | 'name'>
     /** spender address */
     address: string
@@ -473,7 +497,7 @@ export interface FungibleTokenSpenderAuthorization<ChainId, SchemaType> {
 /**
  * Authorization about a non-fungible contract.
  */
-export interface NonFungibleContractSpenderAuthorization<ChainId, SchemaType> {
+export interface NonFungibleContractSpender<ChainId, SchemaType> {
     amount: string
     contract: Pick<NonFungibleTokenContract<ChainId, SchemaType>, 'name' | 'address'>
     address: string
@@ -484,18 +508,12 @@ export interface NonFungibleContractSpenderAuthorization<ChainId, SchemaType> {
 /**
  * The security diagnosis about a fungible token.
  */
-export interface FungibleTokenSecurity {
-    // TODO:
-    // security items
-}
+export interface FungibleTokenSecurity {}
 
 /**
  * The security diagnosis about a non-fungible token.
  */
-export interface NonFungibleTokenSecurity {
-    // TODO:
-    // security items
-}
+export interface NonFungibleTokenSecurity {}
 
 /**
  * Plugin can declare what chain it supports to trigger side effects (e.g. create a new transaction).
@@ -522,6 +540,10 @@ export interface TransactionDescriptor<ChainId, Transaction> {
     successfulDescription?: string
     /** a human-readable description for failed transaction. */
     failedDescription?: string
+    /** The address of the token leveraged to swap other tokens */
+    tokenInAddress?: string
+    /** The amount of the token leveraged to swap other tokens */
+    tokenInAmount?: string
     /** The original transaction object */
     _tx: Transaction
 }
@@ -713,6 +735,7 @@ export interface ConnectionOptions<ChainId, ProviderType, Transaction> {
 }
 export interface Connection<
     ChainId,
+    AddressType,
     SchemaType,
     ProviderType,
     Signature,
@@ -732,8 +755,10 @@ export interface Connection<
     getWeb3Provider(initial?: Web3ConnectionOptions): Promise<Web3Provider>
     /** Get gas price */
     getGasPrice(initial?: Web3ConnectionOptions): Promise<string>
+    /** Get address type of given address. */
+    getAddressType(address: string, initial?: Web3ConnectionOptions): Promise<AddressType | undefined>
     /** Get schema type of given token address. */
-    getTokenSchema(address: string, initial?: Web3ConnectionOptions): Promise<SchemaType | undefined>
+    getSchemaType(address: string, initial?: Web3ConnectionOptions): Promise<SchemaType | undefined>
     /** Get a native fungible token. */
     getNativeToken(initial?: Web3ConnectionOptions): Promise<FungibleToken<ChainId, SchemaType>>
     /** Get a fungible token. */
@@ -745,8 +770,12 @@ export interface Connection<
         schema?: SchemaType,
         initial?: Web3ConnectionOptions,
     ): Promise<NonFungibleToken<ChainId, SchemaType>>
-    getNonFungibleTokenOwner(address: string, tokenId: string, schema?: SchemaType,
-        initial?: Web3ConnectionOptions,): Promise<string>
+    getNonFungibleTokenOwner(
+        address: string,
+        tokenId: string,
+        schema?: SchemaType,
+        initial?: Web3ConnectionOptions,
+    ): Promise<string>
     getNonFungibleTokenOwnership(
         address: string,
         tokenId: string,
@@ -917,20 +946,45 @@ export interface HubOptions<ChainId, Indicator = HubIndicator> {
     indicator?: Indicator
 }
 
-export interface Hub<ChainId, SchemaType, GasOption, Web3HubOptions = HubOptions<ChainId>> {
-    /** Get recommended gas options. */
-    getGasOptions?: (chainId: ChainId, initial?: Web3HubOptions) => Promise<Record<GasOptionType, GasOption>>
-    /** Get the most recent transactions of the given account. */
-    getTransactions: (
+export interface HubFungible<ChainId, SchemaType, GasOption, Web3HubOptions = HubOptions<ChainId>> {
+    /** Get balance of a fungible token owned by the given account. */
+    getFungibleTokenBalance?: (address: string, initial?: Web3HubOptions) => Promise<number>
+    /** Get stats data of a fungible token */
+    getFungibleTokenStats?: (address: string, initial?: Web3HubOptions) => Promise<FungibleTokenStats>
+    /** Get security diagnosis about a fungible token. */
+    getFungibleTokenSecurity?: (
+        chainId: ChainId,
+        address: string,
+        initial?: Web3HubOptions,
+    ) => Promise<FungibleTokenSecurity>
+    /** Get fungible tokens from built-in token list. */
+    getFungibleTokensFromTokenList?: (
+        chainId: ChainId,
+        initial?: Web3HubOptions,
+    ) => Promise<Array<FungibleToken<ChainId, SchemaType>>>
+    /** Get price of a fungible token. */
+    getFungibleTokenPrice?: (chainId: ChainId, address: string, initial?: Web3HubOptions) => Promise<number>
+    /** Get token icon URLs that point to a fungible token. */
+    getFungibleTokenIconURLs?: (chainId: ChainId, address: string, initial?: Web3HubOptions) => Promise<string[]>
+    /** Get spenders of a fungible token approved by the given account. */
+    getFungibleTokenSpenders?: (
         chainId: ChainId,
         account: string,
         initial?: Web3HubOptions,
-    ) => Promise<Pageable<Transaction<ChainId, SchemaType>>>
-    /** Get non-fungible tokens of the given collection. */
-    getNonFungibleTokensByCollection?: (
+    ) => Promise<Array<FungibleTokenSpender<ChainId, SchemaType>>>
+    /** Get a fungible asset. */
+    getFungibleAsset?: (
         address: string,
         initial?: Web3HubOptions,
-    ) => Promise<Pageable<NonFungibleToken<ChainId, SchemaType>>>
+    ) => Promise<FungibleAsset<ChainId, SchemaType> | undefined>
+    /** Get fungible assets owned by the given account. */
+    getFungibleAssets?: (
+        account: string,
+        initial?: Web3HubOptions,
+    ) => Promise<Pageable<FungibleAsset<ChainId, SchemaType>>>
+}
+
+export interface HubNonFungible<ChainId, SchemaType, GasOption, Web3HubOptions = HubOptions<ChainId>> {
     /** Get non-fungible assets of the given collection. */
     getNonFungibleAssetsByCollection?: (
         address: string,
@@ -949,38 +1003,21 @@ export interface Hub<ChainId, SchemaType, GasOption, Web3HubOptions = HubOptions
         address: string,
         initial?: Web3HubOptions,
     ) => Promise<NonFungibleTokenContract<ChainId, SchemaType> | undefined>
-    /** Get balance of a fungible token owned by the given account. */
-    getFungibleTokenBalance?: (address: string, initial?: Web3HubOptions) => Promise<number>
     /** Get balance of non-fungible tokens in a collection owned by the given account. */
     getNonFungibleTokenBalance?: (address: string, initial?: Web3HubOptions) => Promise<number>
-    /** Get stats data of a fungible token */
-    getFungibleTokenStats?: (address: string, initial?: Web3HubOptions) => Promise<FungibleTokenStats>
     /** Get stats data of a non-fungible token */
     getNonFungibleTokenStats?: (address: string, initial?: Web3HubOptions) => Promise<NonFungibleTokenStats>
-    /** Get security diagnosis about a fungible token. */
-    getFungibleTokenSecurity?: (
-        chainId: ChainId,
-        address: string,
-        initial?: Web3HubOptions,
-    ) => Promise<FungibleTokenSecurity>
     /** Get security diagnosis about a non-fungible token. */
     getNonFungibleTokenSecurity?: (
         chainId: ChainId,
         address: string,
         initial?: Web3HubOptions,
     ) => Promise<NonFungibleTokenSecurity>
-    /** Get fungible tokens from built-in token list. */
-    getFungibleTokensFromTokenList?: (
-        chainId: ChainId,
-        initial?: Web3HubOptions,
-    ) => Promise<Array<FungibleToken<ChainId, SchemaType>>>
     /** Get non-fungible tokens from built-in token list. */
     getNonFungibleTokensFromTokenList?: (
         chainId: ChainId,
         initial?: Web3HubOptions,
     ) => Promise<Array<NonFungibleToken<ChainId, SchemaType>>>
-    /** Get price of a fungible token. */
-    getFungibleTokenPrice?: (chainId: ChainId, address: string, initial?: Web3HubOptions) => Promise<number>
     /** Get price of a non-fungible token. */
     getNonFungibleTokenPrice?: (
         chainId: ChainId,
@@ -988,8 +1025,6 @@ export interface Hub<ChainId, SchemaType, GasOption, Web3HubOptions = HubOptions
         tokenId: string,
         initial?: Web3HubOptions,
     ) => Promise<number>
-    /** Get token icon URLs that point to a fungible token. */
-    getFungibleTokenIconURLs?: (chainId: ChainId, address: string, initial?: Web3HubOptions) => Promise<string[]>
     /** Get token icon URLs that point to a non-fungible token. */
     getNonFungibleTokenIconURLs?: (
         chainId: ChainId,
@@ -997,60 +1032,23 @@ export interface Hub<ChainId, SchemaType, GasOption, Web3HubOptions = HubOptions
         tokenId?: string,
         initial?: Web3HubOptions,
     ) => Promise<string[]>
-    /** Get spenders of a fungible token approved by the given account. */
-    getApprovedFungibleTokenSpenders?: (
-        chainId: ChainId,
-        account: string,
-        initial?: Web3HubOptions,
-    ) => Promise<Array<FungibleTokenSpenderAuthorization<ChainId, SchemaType>>>
     /** Get contracts of a non-fungible token approved by the given account. */
-    getApprovedNonFungibleContracts?: (
+    getNonFungibleTokenSpenders?: (
         chainId: ChainId,
         account: string,
         initial?: Web3HubOptions,
-    ) => Promise<Array<NonFungibleContractSpenderAuthorization<ChainId, SchemaType>>>
-    /** Get a fungible asset. */
-    getFungibleAsset?: (
-        address: string,
-        initial?: Web3HubOptions,
-    ) => Promise<FungibleAsset<ChainId, SchemaType> | undefined>
+    ) => Promise<Array<NonFungibleContractSpender<ChainId, SchemaType>>>
     /** Get a non-fungible asset. */
     getNonFungibleAsset?: (
         address: string,
         tokenId: string,
         initial?: Web3HubOptions,
     ) => Promise<NonFungibleAsset<ChainId, SchemaType> | undefined>
-    /** Get fungible assets owned by the given account. */
-    getFungibleAssets?: (
-        account: string,
-        initial?: Web3HubOptions,
-    ) => Promise<Pageable<FungibleAsset<ChainId, SchemaType>>>
     /** Get non-fungible assets owned by the given account. */
     getNonFungibleAssets?: (
         account: string,
         initial?: Web3HubOptions,
     ) => Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>>>
-    /** Get a fungible token. */
-    getFungibleToken?: (
-        address: string,
-        initial?: Web3HubOptions,
-    ) => Promise<FungibleToken<ChainId, SchemaType> | undefined>
-    /** Get a non-fungible token. */
-    getNonFungibleToken?: (
-        address: string,
-        tokenId: string,
-        initial?: Web3HubOptions,
-    ) => Promise<NonFungibleToken<ChainId, SchemaType> | undefined>
-    /** Get fungible tokens owned by the given account. */
-    getFungibleTokens?: (
-        account: string,
-        initial?: Web3HubOptions,
-    ) => Promise<Pageable<FungibleToken<ChainId, SchemaType> | Error>>
-    /** Get non-fungible tokens owned by the given account. */
-    getNonFungibleTokens?: (
-        account: string,
-        initial?: Web3HubOptions,
-    ) => Promise<Pageable<NonFungibleToken<ChainId, SchemaType>>>
     /** Get events of a non-fungible token. */
     getNonFungibleTokenEvents?: (
         address: string,
@@ -1086,11 +1084,12 @@ export interface Hub<ChainId, SchemaType, GasOption, Web3HubOptions = HubOptions
         keyword: string,
         initial?: Web3HubOptions,
     ) => Promise<Pageable<NonFungibleCollection<ChainId, SchemaType>>>
-    getNonFungibleRarity?:(
+    getNonFungibleRarity?: (
         address: string,
         tokenId: string,
         initial?: Web3HubOptions,
-    )=>Promise<NonFungibleTokenRarity | undefined>
+    ) => Promise<NonFungibleTokenRarity<ChainId> | undefined>
+
     /** Place a bid on a token. */
     createBuyOrder?: (/** TODO: add parameters */) => Promise<void>
     /** List a token for public sell. */
@@ -1099,6 +1098,19 @@ export interface Hub<ChainId, SchemaType, GasOption, Web3HubOptions = HubOptions
     fulfillOrder?: (/** TODO: add parameters */) => Promise<void>
     /** Cancel an order. */
     cancelOrder?: (/** TODO: add parameters */) => Promise<void>
+}
+
+export interface Hub<ChainId, SchemaType, GasOption, Web3HubOptions = HubOptions<ChainId>>
+    extends HubFungible<ChainId, SchemaType, GasOption, Web3HubOptions>,
+        HubNonFungible<ChainId, SchemaType, GasOption, Web3HubOptions> {
+    /** Get recommended gas options. */
+    getGasOptions?: (chainId: ChainId, initial?: Web3HubOptions) => Promise<Record<GasOptionType, GasOption>>
+    /** Get the most recent transactions of the given account. */
+    getTransactions: (
+        chainId: ChainId,
+        account: string,
+        initial?: Web3HubOptions,
+    ) => Promise<Pageable<Transaction<ChainId, SchemaType>>>
 }
 
 export interface Storage {
@@ -1165,7 +1177,11 @@ export interface Web3StorageServiceState {
     ) => Storage
     createKVStorage: (namespace: string) => Storage
     createRSS3Storage: (namespace: string) => Storage
-    createNextIDStorage: (proofIdentity: string, platform: NextIDPlatform, signerOrPublicKey: string | ECKeyIdentifier) => Storage
+    createNextIDStorage: (
+        proofIdentity: string,
+        platform: NextIDPlatform,
+        signerOrPublicKey: string | ECKeyIdentifier,
+    ) => Storage
 }
 
 export interface IdentityServiceState {
@@ -1277,6 +1293,7 @@ export interface ProviderState<ChainId, ProviderType, NetworkType> {
 }
 export interface ConnectionState<
     ChainId,
+    AddressType,
     SchemaType,
     ProviderType,
     Signature,
@@ -1291,11 +1308,12 @@ export interface ConnectionState<
     Web3ConnectionOptions = ConnectionOptions<ChainId, ProviderType, Transaction>,
     Web3Connection = Connection<
         ChainId,
+        AddressType,
         SchemaType,
         ProviderType,
         Signature,
         Block,
-    Operation,
+        Operation,
         Transaction,
         TransactionReceipt,
         TransactionDetailed,
@@ -1336,12 +1354,15 @@ export interface OthersState<ChainId, SchemaType, ProviderType, NetworkType, Tra
     isValidAddress(address?: string): boolean
     isZeroAddress(address?: string): boolean
     isNativeTokenAddress(address?: string): boolean
-    isSameAddress(address?: string, otherAddress?: string): boolean
+    isNativeTokenSchemaType(schemaType?: SchemaType): boolean
+    isFungibleTokenSchemaType(schemaType?: SchemaType): boolean
+    isNonFungibleTokenSchemaType(schemaType?: SchemaType): boolean
     // #endregion
 
     // #region data formatting
     formatAddress(address: string, size?: number): string
     formatDomainName(domain?: string, size?: number): string
+    formatSchemaType(schemaType: SchemaType): string
     formatTokenId(id?: string, size?: number): string
     // #endregion
 
@@ -1354,7 +1375,6 @@ export interface OthersState<ChainId, SchemaType, ProviderType, NetworkType, Tra
     getMaskTokenAddress(chainId?: ChainId): string | undefined
     getAverageBlockDelay(chainId?: ChainId, scale?: number): number
     getTransactionSignature(chainId?: ChainId, transaction?: Partial<Transaction>): string | undefined
-    // #endregion
 }
 
 export interface BalanceNotifierState<ChainId> {
@@ -1363,4 +1383,99 @@ export interface BalanceNotifierState<ChainId> {
 
 export interface BlockNumberNotifierState<ChainId> {
     emitter: Emitter<BlockNumberEvent<ChainId>>
+}
+
+export interface Web3State<
+        ChainId,
+        AddressType,
+        SchemaType,
+        ProviderType,
+        NetworkType,
+        Signature,
+        GasOption,
+        Block,
+        Operation,
+        Transaction,
+        TransactionReceipt,
+        TransactionDetailed,
+        TransactionSignature,
+        TransactionParameter,
+        Web3,
+        Web3Provider
+    > {
+        AddressBook?: AddressBookState<ChainId>
+        BalanceNotifier?: BalanceNotifierState<ChainId>
+        BlockNumberNotifier?: BlockNumberNotifierState<ChainId>
+        Hub?: HubState<ChainId, SchemaType, GasOption>
+        IdentityService?: IdentityServiceState
+        NameService?: NameServiceState<ChainId>
+        RiskWarning?: RiskWarningState
+        Settings?: SettingsState
+        Token?: TokenState<ChainId, SchemaType>
+        Transaction?: TransactionState<ChainId, Transaction>
+        TransactionFormatter?: TransactionFormatterState<ChainId, TransactionParameter, Transaction>
+        TransactionWatcher?: TransactionWatcherState<ChainId, Transaction>
+        Connection?: ConnectionState<
+            ChainId,
+            AddressType,
+            SchemaType,
+            ProviderType,
+            Signature,
+            Block,
+            Operation,
+            Transaction,
+            TransactionReceipt,
+            TransactionDetailed,
+            TransactionSignature,
+            Web3,
+            Web3Provider
+        >
+        Provider?: ProviderState<ChainId, ProviderType, NetworkType>
+        Wallet?: WalletState
+        Others?: OthersState<ChainId, SchemaType, ProviderType, NetworkType, Transaction>
+        Storage?: Web3StorageServiceState
+}
+
+export interface NetworkIconClickBaitProps<ChainId, ProviderType, NetworkType> {
+    network: NetworkDescriptor<ChainId, NetworkType>
+    provider?: ProviderDescriptor<ChainId, ProviderType>
+    children?: React.ReactNode
+    onClick?: (
+        network: NetworkDescriptor<ChainId, NetworkType>,
+        provider?: ProviderDescriptor<ChainId, ProviderType>,
+    ) => void
+}
+
+export interface ProviderIconClickBaitProps<ChainId, ProviderType, NetworkType> {
+    network: NetworkDescriptor<ChainId, NetworkType>
+    provider: ProviderDescriptor<ChainId, ProviderType>
+    children?: React.ReactNode
+    onClick?: (
+        network: NetworkDescriptor<ChainId, NetworkType>,
+        provider: ProviderDescriptor<ChainId, ProviderType>,
+    ) => void
+}
+
+export interface AddressFormatterProps {
+    address: string
+    size?: number
+}
+
+export interface Web3UI<ChainId, ProviderType, NetworkType> {
+    SelectNetworkMenu?: {
+        /** This UI will receive network icon as children component, and the plugin may hook click handle on it. */
+        NetworkIconClickBait?: React.ComponentType<
+            NetworkIconClickBaitProps<ChainId, ProviderType, NetworkType>
+        >
+    }
+    SelectProviderDialog?: {
+        /** This UI will receive network icon as children component, and the plugin may hook click handle on it. */
+        NetworkIconClickBait?: React.ComponentType<
+            NetworkIconClickBaitProps<ChainId, ProviderType, NetworkType>
+        >
+        /** This UI will receive provider icon as children component, and the plugin may hook click handle on it. */
+        ProviderIconClickBait?: React.ComponentType<
+            ProviderIconClickBaitProps<ChainId, ProviderType, NetworkType>
+        >
+    }
 }

@@ -75,6 +75,10 @@ export enum ChainId {
 
     // Astar
     Astar = 592,
+
+    ZKSync_Alpha_Testnet = 280,
+
+    Crossbell = 3737,
 }
 
 /**
@@ -91,6 +95,11 @@ export interface Wallet {
     hasStoredKeyInfo: boolean
     /** yep: Derivable Wallet. nope: UnDerivable Wallet */
     hasDerivationPath: boolean
+}
+
+export enum AddressType {
+    ExternalOwned = 1,
+    Contract = 2,
 }
 
 export enum SchemaType {

@@ -1,8 +1,8 @@
-import { ChainId } from '../types'
+import { ChainId } from '../types.js'
 import { Connection } from '@solana/web3.js'
 
 const Endpoints: Record<ChainId, string> = {
-    [ChainId.Mainnet]: 'https://solana--mainnet.datahub.figment.io/apikey/30d4290fe1f4fcf371a9e27c513d099f',
+    [ChainId.Mainnet]: 'https://solana-mainnet.phantom.app/YBPpkkN4g91xDiAnTE9r0RcMkjg0sKUIWvAfoFVJ',
     [ChainId.Testnet]: 'https://api.testnet.solana.com',
     [ChainId.Devnet]: 'https://api.devnet.solana.com',
 }

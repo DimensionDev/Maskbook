@@ -1,11 +1,11 @@
 import { FormEvent, memo, useCallback } from 'react'
 import { MaskDialog, MaskTextField } from '@masknet/theme'
 import { Button, DialogActions, DialogContent } from '@mui/material'
-import { useDashboardI18N } from '../../../../locales'
+import { useDashboardI18N } from '../../../../locales/index.js'
 import { z } from 'zod'
 import { Controller, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { PERSONA_NAME_MAX_LENGTH } from '../../../../utils'
+import { PERSONA_NAME_MAX_LENGTH } from '../../../../utils/index.js'
 
 export interface RenameDialogProps {
     open: boolean

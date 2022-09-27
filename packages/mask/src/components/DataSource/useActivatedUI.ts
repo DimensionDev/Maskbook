@@ -5,11 +5,11 @@ import { ValueRef } from '@dimensiondev/holoflows-kit'
 import { useValueRef } from '@masknet/shared-base-ui'
 import type { IdentityResolved } from '@masknet/plugin-infra'
 import { NextIDProof } from '@masknet/web3-providers'
-import { EMPTY_LIST, ProfileInformation } from '@masknet/shared-base'
+import type { ProfileInformation } from '@masknet/shared-base'
 import type { SocialIdentity } from '@masknet/web3-shared-base'
-import { activatedSocialNetworkUI, globalUIState } from '../../social-network'
-import Services from '../../extension/service'
-import { MaskMessages, sortPersonaBindings } from '../../utils'
+import { activatedSocialNetworkUI, globalUIState } from '../../social-network/index.js'
+import Services from '../../extension/service.js'
+import { MaskMessages, sortPersonaBindings } from '../../utils/index.js'
 import { useEffect } from 'react'
 
 async function queryPersonaFromDB(identityResolved: IdentityResolved) {
@@ -22,7 +22,7 @@ async function queryPersonasFromNextID(identityResolved: IdentityResolved) {
     if (!activatedSocialNetworkUI.configuration.nextIDConfig?.platform) return
     return NextIDProof.queryAllExistedBindingsByPlatform(
         activatedSocialNetworkUI.configuration.nextIDConfig?.platform,
-        identityResolved.identifier.userId.toLowerCase(),
+        identityResolved.identifier.userId,
     )
 }
 
@@ -53,15 +53,13 @@ export function useCurrentVisitingIdentity() {
     return useValueRef(activatedSocialNetworkUI.collecting.currentVisitingIdentityProvider?.recognized || defaults)
 }
 
-export function useIsOwnerIdentity(identity: IdentityResolved) {
+export function useIsOwnerIdentity(identity: IdentityResolved | null | undefined) {
     const lastRecognizedIdentity = useLastRecognizedIdentity()
     const lastRecognizedUserId = lastRecognizedIdentity.identifier?.userId
-    const currentVisitingUserId = identity.identifier?.userId
-    return !!(
-        lastRecognizedUserId &&
-        currentVisitingUserId &&
-        lastRecognizedUserId.toLowerCase() === currentVisitingUserId.toLowerCase()
-    )
+    const currentVisitingUserId = identity?.identifier?.userId
+
+    if (!lastRecognizedUserId || !currentVisitingUserId) return false
+    return lastRecognizedUserId.toLowerCase() === currentVisitingUserId.toLowerCase()
 }
 
 export function useCurrentLinkedPersona() {
@@ -113,14 +111,15 @@ export function useCurrentVisitingPersonas() {
 /**
  * Get the social identity of the given identity
  */
-export function useSocialIdentity(identity: IdentityResolved) {
+export function useSocialIdentity(identity: IdentityResolved | null | undefined) {
     const isOwner = useIsOwnerIdentity(identity)
 
-    const result = useAsyncRetry<SocialIdentity>(async () => {
+    const result = useAsyncRetry<SocialIdentity | undefined>(async () => {
+        if (!identity) return
         const bindings = await queryPersonasFromNextID(identity)
         const persona = await queryPersonaFromDB(identity)
         const personaBindings =
-            bindings?.filter((x) => x.persona === persona?.identifier.publicKeyAsHex.toLowerCase()) ?? EMPTY_LIST
+            bindings?.filter((x) => x.persona === persona?.identifier.publicKeyAsHex.toLowerCase()) ?? []
         return {
             ...identity,
             isOwner,
@@ -128,11 +127,19 @@ export function useSocialIdentity(identity: IdentityResolved) {
             hasBinding: personaBindings.length > 0,
             binding: first(personaBindings),
         }
-    }, [isOwner, identity.identifier?.toText()])
+    }, [isOwner, identity])
 
     useEffect(() => MaskMessages.events.ownProofChanged.on(result.retry), [result.retry])
 
     return result
+}
+
+export function useSocialIdentityByUseId(userId?: string) {
+    const { value: identity } = useAsync(async () => {
+        if (!userId) return
+        return activatedSocialNetworkUI.utils.getUserIdentity?.(userId)
+    }, [userId])
+    return useSocialIdentity(identity)
 }
 
 /**

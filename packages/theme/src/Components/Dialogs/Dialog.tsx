@@ -1,9 +1,9 @@
 import { Dialog, DialogActions, DialogContent, DialogProps } from '@mui/material'
 import { memo, ReactNode, useCallback, useState } from 'react'
-import { usePortalShadowRoot } from '../../ShadowRoot'
-import { MaskDialogTitle, MaskDialogTitleProps } from './DialogTitle'
+import { usePortalShadowRoot } from '../../ShadowRoot/index.js'
+import { MaskDialogTitle, MaskDialogTitleProps } from './DialogTitle.js'
 import { CrossIsolationMessages } from '@masknet/shared-base'
-import { useDialogStackActor } from './DialogStack'
+import { useDialogStackActor } from './DialogStack.js'
 export interface MaskDialogProps
     extends React.PropsWithChildren<Omit<MaskDialogTitleProps, 'children'>>,
         Pick<DialogProps, 'fullWidth' | 'maxWidth'> {
@@ -26,7 +26,7 @@ export const MaskDialog = memo((props: MaskDialogProps) => {
     const { extraProps, shouldReplaceExitWithBack, IncreaseStack } = useDialogStackActor(open)
     const closeBothCompositionDialog = useCallback(() => {
         if (isOpenFromApplicationBoard) {
-            CrossIsolationMessages.events.requestComposition.sendToLocal({ open: false, reason: 'timeline' })
+            CrossIsolationMessages.events.compositionDialogEvent.sendToLocal({ open: false, reason: 'timeline' })
         }
 
         onClose?.()

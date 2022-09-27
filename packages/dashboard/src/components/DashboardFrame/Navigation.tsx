@@ -16,15 +16,20 @@ import {
 import { ExpandLess, ExpandMore } from '@mui/icons-material'
 import { useContext } from 'react'
 import { useMatch, useNavigate } from 'react-router-dom'
-import { DashboardContext } from './context'
+import { DashboardContext } from './context.js'
 import { Icons } from '@masknet/icons'
-import { useDashboardI18N } from '../../locales'
+import { useDashboardI18N } from '../../locales/index.js'
 import { MaskColorVar } from '@masknet/theme'
 import { DashboardRoutes } from '@masknet/shared-base'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
 
-const ListItemLinkUnStyled = ({ to, ...props }: ListItemProps & { to: string }) => {
+const ListItemLinkUnStyled = ({
+    to,
+    ...props
+}: ListItemProps & {
+    to: string
+}) => {
     const navigate = useNavigate()
 
     return (

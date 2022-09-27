@@ -1,1 +1,1 @@
-export * from './getDomainName'
+export * from './getDomainName.js'

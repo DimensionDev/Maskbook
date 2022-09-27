@@ -9,16 +9,16 @@ import { EMPTY_LIST } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 
-import { useI18N } from '../locales'
-import { PluginReferralMessages, ReferralRPC } from '../messages'
-import { NATIVE_TOKEN } from '../constants'
-import { parseChainAddress } from '../helpers'
-import type { FungibleTokenDetailed } from '../types'
+import { useI18N } from '../locales/index.js'
+import { PluginReferralMessages, ReferralRPC } from '../messages.js'
+import { NATIVE_TOKEN } from '../constants.js'
+import { parseChainAddress } from '../helpers/index.js'
+import type { FungibleTokenDetailed } from '../types.js'
 
-import { FungibleTokenList } from './shared-ui/FungibleTokenList'
+import { FungibleTokenList } from './shared-ui/FungibleTokenList/index.js'
 
-import { useSharedStyles } from './styles'
-import { useRowSize } from '../../../../../shared/src/contexts/components/useRowSize'
+import { useSharedStyles } from './styles.js'
+import { useRowSize } from '../../../../../shared/src/contexts/components/useRowSize.js'
 
 const DISABLED_NATIVE_TOKEN = true
 

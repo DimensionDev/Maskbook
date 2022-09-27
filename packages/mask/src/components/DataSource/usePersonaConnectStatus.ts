@@ -4,21 +4,21 @@ import {
     DashboardRoutes,
     isSamePersona,
     isSameProfile,
-    nextIDIdentityToProfile,
     BindingProof,
     PersonaInformation,
+    resolveNextIDIdentityToProfile,
 } from '@masknet/shared-base'
-import Services from '../../extension/service'
-import { currentPersonaIdentifier, currentSetupGuideStatus } from '../../../shared/legacy-settings/settings'
-import { activatedSocialNetworkUI } from '../../social-network'
-import { SetupGuideStep } from '../../../shared/legacy-settings/types'
-import { useLastRecognizedIdentity } from './useActivatedUI'
-import { usePersonasFromDB } from './usePersonasFromDB'
+import Services from '../../extension/service.js'
+import { currentPersonaIdentifier, currentSetupGuideStatus } from '../../../shared/legacy-settings/settings.js'
+import { activatedSocialNetworkUI } from '../../social-network/index.js'
+import { SetupGuideStep } from '../../../shared/legacy-settings/types.js'
+import { useLastRecognizedIdentity } from './useActivatedUI.js'
+import { usePersonasFromDB } from './usePersonasFromDB.js'
 import { useRemoteControlledDialog, useValueRef } from '@masknet/shared-base-ui'
 import { useAsync, useAsyncRetry } from 'react-use'
-import { PluginNextIDMessages } from '../../plugins/NextID/messages'
+import { PluginNextIDMessages } from '../../plugins/NextID/messages.js'
 import { NextIDProof } from '@masknet/web3-providers'
-import { MaskMessages, useI18N } from '../../utils'
+import { MaskMessages, useI18N } from '../../utils/index.js'
 
 const createPersona = () => {
     Services.Helper.openDashboard(DashboardRoutes.Setup)
@@ -73,6 +73,7 @@ export interface PersonaConnectStatus {
         target?: string | undefined,
         position?: 'center' | 'top-right' | undefined,
         enableVerify?: boolean,
+        direct?: boolean,
     ) => void
     currentPersona?: PersonaInformation
     connected?: boolean
@@ -103,16 +104,20 @@ export function useCurrentPersonaConnectStatus() {
     const { setDialog: setCreatePersonaConfirmDialog } = useRemoteControlledDialog(MaskMessages.events.openPageConfirm)
 
     const create = useCallback(
-        (target?: string, position?: 'center' | 'top-right') => {
-            setCreatePersonaConfirmDialog({
-                open: true,
-                target: 'dashboard',
-                url: target ?? DashboardRoutes.Setup,
-                text: t('applications_create_persona_hint'),
-                title: t('applications_create_persona_title'),
-                actionHint: t('applications_create_persona_action'),
-                position,
-            })
+        (target?: string, position?: 'center' | 'top-right', enableVerify?: boolean, direct = false) => {
+            if (direct) {
+                Services.Helper.openDashboard(DashboardRoutes.Setup)
+            } else {
+                setCreatePersonaConfirmDialog({
+                    open: true,
+                    target: 'dashboard',
+                    url: target ?? DashboardRoutes.Setup,
+                    text: t('applications_create_persona_hint'),
+                    title: t('applications_create_persona_title'),
+                    actionHint: t('applications_create_persona_action'),
+                    position,
+                })
+            }
         },
         [setCreatePersonaConfirmDialog],
     )
@@ -132,6 +137,7 @@ export function useCurrentPersonaConnectStatus() {
     const {
         value = defaultStatus,
         loading,
+        error,
         retry,
     } = useAsyncRetry<PersonaConnectStatus>(async () => {
         const currentPersona = personas.find((x) => isSamePersona(x, currentIdentifier))
@@ -168,7 +174,7 @@ export function useCurrentPersonaConnectStatus() {
             const verifiedProfile = nextIDInfo?.proofs.find(
                 (x) =>
                     // TODO: should move to next id api center, link the MF-1845
-                    isSameProfile(nextIDIdentityToProfile(x.identity, x.platform), currentProfile?.identifier) &&
+                    isSameProfile(resolveNextIDIdentityToProfile(x.identity, x.platform), currentProfile?.identifier) &&
                     x.is_valid,
             )
 
@@ -200,5 +206,5 @@ export function useCurrentPersonaConnectStatus() {
     useEffect(() => MaskMessages.events.ownProofChanged.on(retry), [retry])
     useEffect(() => MaskMessages.events.ownPersonaChanged.on(retry), [retry])
 
-    return { value, loading, retry }
+    return { value, loading, retry, error }
 }

@@ -2,7 +2,7 @@ import LRUCache from 'lru-cache'
 import { useAsyncRetry } from 'react-use'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { NetworkPluginID, SocialAddress, SocialAddressType, SocialIdentity } from '@masknet/web3-shared-base'
-import { useWeb3State } from './useWeb3State'
+import { useWeb3State } from './useWeb3State.js'
 
 type AddressList = Array<SocialAddress<NetworkPluginID>>
 type CacheValue = Promise<Array<PromiseSettledResult<AddressList>>>
@@ -24,23 +24,24 @@ export function useSocialAddressListAll(
     const { IdentityService: EVM_IdentityService } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const { IdentityService: SolanaIdentityService } = useWeb3State(NetworkPluginID.PLUGIN_SOLANA)
 
-    return useAsyncRetry(async () => {
+    return useAsyncRetry<Array<SocialAddress<NetworkPluginID>>>(async () => {
         const userId = identity?.identifier?.userId
         if (!userId || userId === '$unknown') return EMPTY_LIST
-        let cached = addressCache.get(userId)
+        const cacheKey = `${userId}_${identity.publicKey ?? ''}`
+        let cached = addressCache.get(cacheKey)
 
         if (!cached || identity.isOwner) {
             cached = Promise.allSettled<AddressList>(
                 [EVM_IdentityService, SolanaIdentityService].map((x) => x?.lookup(identity) ?? []),
             )
             if (!identity.isOwner) {
-                addressCache.set(`${userId}_${identity.publicKey ?? ''}`, cached)
+                addressCache.set(cacheKey, cached)
             }
         }
         const allSettled = await cached
         const listOfAddress = allSettled.flatMap((x) => (x.status === 'fulfilled' ? x.value : []))
         if (allSettled.every((x) => x.status === 'rejected')) {
-            addressCache.delete(userId)
+            addressCache.delete(cacheKey)
         }
         const sorted = sorter && listOfAddress.length ? listOfAddress.sort(sorter) : listOfAddress
         return typeWhitelist?.length ? sorted.filter((x) => typeWhitelist.includes(x.type)) : sorted

@@ -4,16 +4,16 @@ import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import classNames from 'classnames'
 import millify from 'millify'
 import { useContext } from 'react'
-import { useI18N } from '../../../utils'
-import { EthereumBlockie } from '../../../web3/UI/EthereumBlockie'
-import { SnapshotContext } from '../context'
-import { useRetry } from './hooks/useRetry'
-import { useVotes } from './hooks/useVotes'
-import { LoadingCard } from './LoadingCard'
-import { LoadingFailCard } from './LoadingFailCard'
-import { SnapshotCard } from './SnapshotCard'
+import { useI18N } from '../../../utils/index.js'
+import { EthereumBlockie } from '../../../web3/UI/EthereumBlockie.js'
+import { SnapshotContext } from '../context.js'
+import { useRetry } from './hooks/useRetry.js'
+import { useVotes } from './hooks/useVotes.js'
+import { LoadingCard } from './LoadingCard.js'
+import { LoadingFailCard } from './LoadingFailCard.js'
+import { SnapshotCard } from './SnapshotCard.js'
 import { useChainId } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID, resolveIPFSLink } from '@masknet/web3-shared-base'
+import { NetworkPluginID, resolveIPFS_URL } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -31,7 +31,10 @@ const useStyles = makeStyles()((theme) => {
         listItem: {
             display: 'flex',
             justifyContent: 'space-between',
-            borderBottom: `1px solid ${theme.palette.divider}`,
+            borderBottom: `1px solid ${theme.palette.maskColor.publicLine}`,
+            paddingLeft: 0,
+            paddingRight: 0,
+            gap: 16,
         },
         badge: {
             transform: 'translateX(40px) translateY(2.5px)',
@@ -44,7 +47,8 @@ const useStyles = makeStyles()((theme) => {
             overflow: 'hidden',
             whiteSpace: 'nowrap',
             textOverflow: 'ellipsis',
-            maxWidth: 180,
+            maxWidth: 170,
+            color: theme.palette.maskColor.publicMain,
         },
         ellipsisText: {
             textOverflow: 'ellipsis',
@@ -61,13 +65,24 @@ const useStyles = makeStyles()((theme) => {
             color: 'inherit',
             alignItems: 'center',
             textDecoration: 'none !important',
-            marginRight: 16,
         },
         power: {
             minWidth: 90,
+            color: theme.palette.maskColor.publicMain,
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap',
+            overflow: 'hidden',
+            maxWidth: 90,
         },
         shadowRootTooltip: {
+            color: theme.palette.maskColor.white,
+        },
+        tooltip: {
+            backgroundColor: theme.palette.maskColor.publicMain,
             color: 'white',
+        },
+        arrow: {
+            color: theme.palette.maskColor.publicMain,
         },
     }
 })
@@ -76,7 +91,7 @@ function Content() {
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const identifier = useContext(SnapshotContext)
     const { payload: votes } = useVotes(identifier)
-    const { classes } = useStyles()
+    const { classes, theme } = useStyles()
     const { t } = useI18N()
 
     return (
@@ -108,33 +123,51 @@ function Content() {
                                 href={explorerResolver.addressLink(chainId, v.address)}>
                                 <Box className={classes.avatarWrapper}>
                                     {v.authorAvatar ? (
-                                        <Avatar src={resolveIPFSLink(v.authorAvatar)} className={classes.avatar} />
+                                        <Avatar src={resolveIPFS_URL(v.authorAvatar)} className={classes.avatar} />
                                     ) : (
                                         <EthereumBlockie address={v.address} />
                                     )}
                                 </Box>
-                                <Typography>{v.authorName ?? formatEthereumAddress(v.address, 4)}</Typography>
+                                <Typography color={theme.palette.maskColor.dark}>
+                                    {v.authorName ?? formatEthereumAddress(v.address, 4)}
+                                </Typography>
                             </Link>
                             {v.choice ? (
                                 <Typography className={classes.choice}>{v.choice}</Typography>
                             ) : v.choices ? (
                                 <ShadowRootTooltip
                                     PopperProps={{
-                                        disablePortal: true,
+                                        disablePortal: false,
                                     }}
                                     title={
                                         <Typography className={classes.shadowRootTooltip}>{fullChoiceText}</Typography>
                                     }
                                     placement="top"
+                                    classes={{ tooltip: classes.tooltip, arrow: classes.arrow }}
                                     arrow>
                                     <Typography className={classes.choice}>{fullChoiceText}</Typography>
                                 </ShadowRootTooltip>
                             ) : null}
-                            <Typography className={classes.power}>
-                                {millify(v.balance, { precision: 2, lowercase: true }) +
-                                    ' ' +
-                                    (v.strategySymbol ? v.strategySymbol.toUpperCase() : '')}
-                            </Typography>
+                            <ShadowRootTooltip
+                                PopperProps={{
+                                    disablePortal: true,
+                                }}
+                                classes={{ tooltip: classes.tooltip, arrow: classes.arrow }}
+                                title={
+                                    <Typography className={classes.shadowRootTooltip}>
+                                        {millify(v.balance, { precision: 2, lowercase: true }) +
+                                            ' ' +
+                                            (v.strategySymbol ? v.strategySymbol.toUpperCase() : '')}
+                                    </Typography>
+                                }
+                                placement="top"
+                                arrow>
+                                <Typography className={classes.power}>
+                                    {millify(v.balance, { precision: 2, lowercase: true }) +
+                                        ' ' +
+                                        (v.strategySymbol ? v.strategySymbol.toUpperCase() : '')}
+                                </Typography>
+                            </ShadowRootTooltip>
                         </ListItem>
                     )
                 })}

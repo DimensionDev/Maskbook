@@ -1,18 +1,20 @@
 import { Button, DialogActions, DialogContent, Stack, Typography } from '@mui/material'
 import { InjectedDialog } from '@masknet/shared'
-import { MaskMessages } from '../../utils'
+import { MaskMessages } from '../../utils/index.js'
 import { makeStyles } from '@masknet/theme'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { useCallback, useEffect, useState } from 'react'
-import Services from '../../extension/service'
+import Services from '../../extension/service.js'
 import { DashboardRoutes, OpenPageConfirmEvent } from '@masknet/shared-base'
 
+type PositionStyle = {
+    top?: number
+    right?: number
+    position?: 'absolute'
+}
+
 const useStyles = makeStyles<{
-    positionStyle: {
-        top?: number
-        right?: number
-        position?: 'absolute'
-    }
+    positionStyle: PositionStyle
 }>()((theme, props) => {
     return {
         root: {
@@ -40,11 +42,6 @@ const useStyles = makeStyles<{
 })
 
 type PositionOption = 'center' | 'top-right'
-type PositionStyle = {
-    top?: number
-    right?: number
-    position?: 'absolute'
-}
 
 const positionStyleMap: Record<PositionOption, PositionStyle> = {
     center: {},

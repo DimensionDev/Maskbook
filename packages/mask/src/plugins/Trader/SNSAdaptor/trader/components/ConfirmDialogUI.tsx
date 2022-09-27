@@ -2,8 +2,8 @@ import { FormattedBalance, FormattedCurrency, InjectedDialog, TokenIcon } from '
 import { isDashboardPage } from '@masknet/shared-base'
 import { makeStyles, MaskColorVar, parseColor } from '@masknet/theme'
 import { memo, useCallback, useEffect, useMemo, useState } from 'react'
-import { PluginWalletStatusBar, useI18N } from '../../../../../utils'
-import type { TradeComputed } from '../../../types'
+import { PluginWalletStatusBar, useI18N } from '../../../../../utils/index.js'
+import type { TradeComputed } from '../../../types/index.js'
 import type BigNumber from 'bignumber.js'
 import {
     formatBalance,
@@ -12,15 +12,18 @@ import {
     multipliedBy,
     formatPercentage,
     isZero,
+    leftShift,
 } from '@masknet/web3-shared-base'
-import type { Web3Helper } from '@masknet/plugin-infra/web3'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import { Alert, alpha, Box, Button, DialogActions, DialogContent, dialogTitleClasses, Typography } from '@mui/material'
 import { ArrowDownward } from '@mui/icons-material'
 import { Icons } from '@masknet/icons'
-import { ONE_BIPS, MIN_SLIPPAGE, MAX_SLIPPAGE } from '../../../constants'
+import { ONE_BIPS, MIN_SLIPPAGE, MAX_SLIPPAGE } from '../../../constants/index.js'
 import { useUpdateEffect } from 'react-use'
 
-const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }) => ({
+const useStyles = makeStyles<{
+    isDashboard: boolean
+}>()((theme, { isDashboard }) => ({
     section: {
         display: 'flex',
         justifyContent: 'space-between',
@@ -327,6 +330,8 @@ export const ConfirmDialogUI = memo<ConfirmDialogUIProps>(
                                 <TokenIcon
                                     classes={{ icon: classes.tokenIcon }}
                                     address={inputToken.address}
+                                    name={inputToken.name}
+                                    symbol={inputToken.symbol}
                                     logoURL={inputToken.logoURL}
                                 />
                                 {inputToken.symbol}
@@ -352,10 +357,9 @@ export const ConfirmDialogUI = memo<ConfirmDialogUIProps>(
                             <Typography className={classes.label}>
                                 ~
                                 <FormattedCurrency
-                                    value={multipliedBy(
-                                        formatBalance(outputAmount.toFixed(), outputToken.decimals),
-                                        outputTokenPrice,
-                                    ).toFixed(2)}
+                                    value={leftShift(outputAmount.toFixed(), outputToken.decimals)
+                                        .multipliedBy(outputTokenPrice)
+                                        .toFixed(2)}
                                     formatter={formatCurrency}
                                 />
                             </Typography>
@@ -364,7 +368,10 @@ export const ConfirmDialogUI = memo<ConfirmDialogUIProps>(
                             <Typography component="div" className={classes.symbol}>
                                 <TokenIcon
                                     classes={{ icon: classes.tokenIcon }}
+                                    chainId={outputToken.chainId}
                                     address={outputToken.address}
+                                    name={outputToken.name}
+                                    symbol={outputToken.symbol}
                                     logoURL={outputToken.logoURL}
                                 />
                                 {outputToken.symbol}

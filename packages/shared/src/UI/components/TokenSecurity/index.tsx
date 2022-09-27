@@ -1,7 +1,7 @@
 import { Stack, Typography } from '@mui/material'
-import { useSharedI18N } from '../../../locales'
+import { useSharedI18N } from '../../../locales/index.js'
 import { memo } from 'react'
-import { DefineMapping, SecurityMessageLevel } from './Common'
+import { DefineMapping, SecurityMessageLevel } from './Common.js'
 import { Icons } from '@masknet/icons'
 import type { SecurityAPI } from '@masknet/web3-providers'
 import { CrossIsolationMessages } from '@masknet/shared-base'
@@ -16,7 +16,7 @@ export const TokenSecurityBar = memo<TokenCardProps>(({ tokenSecurity }) => {
     const { warn_item_quantity: attentionFactors = 0, risk_item_quantity: riskyFactors = 0 } = tokenSecurity
 
     const handleOpenDialog = () => {
-        CrossIsolationMessages.events.requestCheckSecurityDialog.sendToAll({
+        CrossIsolationMessages.events.checkSecurityDialogEvent.sendToAll({
             open: true,
             searchHidden: true,
             tokenAddress: tokenSecurity.contract,

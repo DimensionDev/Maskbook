@@ -5,11 +5,11 @@ import { GasOptionType, getLocale } from '@masknet/web3-shared-base'
 import { useSharedI18N } from '@masknet/shared'
 import { Typography, useTheme } from '@mui/material'
 import { CheckCircle, RadioButtonUnchecked } from '@mui/icons-material'
-import type { Web3Helper } from '@masknet/plugin-infra/web3'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import formatDistanceStrict from 'date-fns/formatDistanceStrict'
 import addSeconds from 'date-fns/addSeconds'
 import type { SupportedLanguages } from '@masknet/public-api'
-import { SettingsContext } from './Context'
+import { SettingsContext } from './Context.js'
 
 const useStyles = makeStyles()((theme) => {
     return {

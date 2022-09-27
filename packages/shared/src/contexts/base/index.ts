@@ -1,2 +1,2 @@
-export * from './BaseSharedUIProvider'
-export * from './types'
+export * from './BaseSharedUIProvider.js'
+export * from './types.js'

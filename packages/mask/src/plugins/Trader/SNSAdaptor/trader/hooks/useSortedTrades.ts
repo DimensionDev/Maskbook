@@ -1,10 +1,9 @@
-import type { TradeInfo } from '../../../types'
+import type { TradeInfo } from '../../../types/index.js'
 import { useMemo } from 'react'
-import { isGreaterThan, isLessThan, multipliedBy, NetworkPluginID, formatBalance } from '@masknet/web3-shared-base'
-import { MINIMUM_AMOUNT } from '../../../constants'
-import BigNumber from 'bignumber.js'
+import { isGreaterThan, isLessThan, multipliedBy, NetworkPluginID, leftShift } from '@masknet/web3-shared-base'
+import { MINIMUM_AMOUNT } from '../../../constants/index.js'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import { AllProviderTradeContext } from '../../../trader/useAllProviderTradeContext'
+import { AllProviderTradeContext } from '../../../trader/useAllProviderTradeContext.js'
 import { useFungibleToken, useFungibleTokenPrice, useNativeTokenPrice } from '@masknet/plugin-infra/web3'
 
 export function useSortedTrades(traders: TradeInfo[], chainId: ChainId, gasPrice?: string) {
@@ -35,13 +34,9 @@ export function useSortedTrades(traders: TradeInfo[], chainId: ChainId, gasPrice
                     ) {
                         const gasFee = multipliedBy(gasPrice, trade.gas.value).integerValue().toFixed()
 
-                        const gasFeeUSD = new BigNumber(formatBalance(gasFee ?? 0, nativeToken?.decimals)).times(
-                            nativeTokenPrice,
-                        )
+                        const gasFeeUSD = leftShift(gasFee ?? 0, nativeToken?.decimals).times(nativeTokenPrice)
 
-                        const finalPrice = new BigNumber(
-                            formatBalance(trade.value.outputAmount, outputToken.decimals, 2),
-                        )
+                        const finalPrice = leftShift(trade.value.outputAmount, outputToken.decimals)
                             .times(outputToken.schema !== SchemaType.Native ? outputTokenPrice : nativeTokenPrice)
                             .minus(gasFeeUSD)
 

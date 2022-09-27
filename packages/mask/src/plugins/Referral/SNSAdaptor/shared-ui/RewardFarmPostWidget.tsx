@@ -2,8 +2,8 @@ import type { ReactElement } from 'react'
 import { Typography, Grid } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 
-import { useI18N } from '../../locales'
-import type { RewardData } from '../../types'
+import { useI18N } from '../../locales/index.js'
+import type { RewardData } from '../../types.js'
 
 const useStyles = makeStyles()((theme) => ({
     dataContainer: {

@@ -1,19 +1,19 @@
 import { type Plugin, usePluginWrapper } from '@masknet/plugin-infra/content-script'
 import { useState } from 'react'
-import { ItoLabelIcon } from '../assets/ItoLabelIcon'
+import { ItoLabelIcon } from '../assets/ItoLabelIcon.js'
 import { makeStyles } from '@masknet/theme'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
-import { PostInspector } from './PostInspector'
-import { base } from '../base'
-import { ITO_MetaKey_1, ITO_MetaKey_2, MSG_DELIMITER } from '../constants'
-import type { JSON_PayloadComposeMask } from '../types'
-import { ITO_MetadataReader, payloadIntoMask } from './helpers'
-import { CompositionDialog } from './CompositionDialog'
+import { PostInspector } from './PostInspector.js'
+import { base } from '../base.js'
+import { ITO_MetaKey_1, ITO_MetaKey_2, MSG_DELIMITER } from '../constants.js'
+import type { JSON_PayloadComposeMask } from '../types.js'
+import { ITO_MetadataReader, payloadIntoMask } from './helpers.js'
+import { CompositionDialog } from './CompositionDialog.js'
 import { set } from 'lodash-unified'
 import { Icons } from '@masknet/icons'
 import { ApplicationEntry } from '@masknet/shared'
 import { CrossIsolationMessages } from '@masknet/shared-base'
-import { ClaimAllDialog } from './ClaimAllDialog'
+import { ClaimAllDialog } from './ClaimAllDialog.js'
 import { useFungibleToken } from '@masknet/plugin-infra/web3'
 import { formatBalance, NetworkPluginID } from '@masknet/web3-shared-base'
 import { Trans } from 'react-i18next'
@@ -65,7 +65,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             const name = <Trans i18nKey="plugin_ito_name" />
             const iconFilterColor = 'rgba(56, 228, 239, 0.3)'
             const clickHandler = () =>
-                CrossIsolationMessages.events.requestComposition.sendToLocal({
+                CrossIsolationMessages.events.compositionDialogEvent.sendToLocal({
                     reason: 'timeline',
                     open: true,
                     options: {

@@ -14,6 +14,7 @@ import {
     NonFungibleTokenOrder,
     OrderSide,
     Pageable,
+    SourceType,
     TokenType,
 } from '@masknet/web3-shared-base'
 import { ChainId, createNativeToken, SchemaType } from '@masknet/web3-shared-evm'
@@ -26,10 +27,10 @@ import {
     Token,
     TransferEventProperty,
     V3AskEventProperty,
-} from './types'
-import type { NonFungibleTokenAPI } from '../types'
-import { GetCollectionsByKeywordQuery, GetEventsQuery, GetTokenQuery } from './queries'
-import { ZORA_MAINNET_GRAPHQL_URL } from './constants'
+} from './types.js'
+import type { NonFungibleTokenAPI } from '../types/index.js'
+import { GetCollectionsByKeywordQuery, GetEventsQuery, GetTokenQuery } from './queries.js'
+import { ZORA_MAINNET_GRAPHQL_URL } from './constants.js'
 import type { Variables } from 'graphql-request/dist/types'
 
 export class ZoraAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
@@ -182,6 +183,7 @@ export class ZoraAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType
             timestamp: new Date(event.transactionInfo.blockTimestamp).getTime(),
             hash: event.transactionInfo.transactionHash,
             ...price,
+            source: SourceType.Zora,
         }
     }
 
@@ -198,6 +200,7 @@ export class ZoraAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType
                     : '',
             quantity: '1',
             hash: event.transactionInfo.transactionHash,
+            source: SourceType.Zora,
         }
 
         switch (event.eventType) {

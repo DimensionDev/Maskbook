@@ -7,7 +7,7 @@ import {
     TokenType,
 } from '@masknet/web3-shared-base'
 import { ChainId, createClientEndpoint, SchemaType } from '@masknet/web3-shared-solana'
-import type { RpcOptions } from './types'
+import type { RpcOptions } from './types.js'
 
 export async function requestRPC<T = unknown>(chainId: ChainId, options: RpcOptions): Promise<T> {
     const response = await globalThis.fetch(createClientEndpoint(chainId), {
@@ -51,7 +51,9 @@ export function createFungibleToken(
 export function createFungibleAsset(
     token: FungibleToken<ChainId, SchemaType>,
     balance: string,
-    price?: { [key in CurrencyType]?: string },
+    price?: {
+        [key in CurrencyType]?: string
+    },
 ): FungibleAsset<ChainId, SchemaType> {
     return {
         ...token,

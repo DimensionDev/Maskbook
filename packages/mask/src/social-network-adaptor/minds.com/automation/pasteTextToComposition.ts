@@ -1,11 +1,11 @@
-import type { SocialNetworkUI } from '../../../social-network'
-import { untilElementAvailable } from '../../../utils/dom'
-import { MaskMessages } from '../../../utils/messages'
-import { selectElementContents } from '../../../utils/utils'
+import type { SocialNetworkUI } from '../../../social-network/index.js'
+import { untilElementAvailable } from '../../../utils/dom.js'
+import { MaskMessages } from '../../../utils/messages.js'
+import { selectElementContents } from '../../../utils/utils.js'
 import { abortSignalTimeout, delay } from '@dimensiondev/kit'
 import { inputText } from '@masknet/injected-script'
-import { getEditorContent, hasEditor, hasFocus, isCompose } from '../utils/postBox'
-import { composeButtonSelector, postEditorDraftContentSelector } from '../utils/selector'
+import { getEditorContent, hasEditor, hasFocus, isCompose } from '../utils/postBox.js'
+import { composeButtonSelector, postEditorDraftContentSelector } from '../utils/selector.js'
 
 /**
  * Wait for up to 5000 ms

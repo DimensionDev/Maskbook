@@ -1,4 +1,4 @@
-import type { Component } from './types'
+import type { Component } from './types.js'
 
 export const Translate: Component<{}> = () => {
     return (

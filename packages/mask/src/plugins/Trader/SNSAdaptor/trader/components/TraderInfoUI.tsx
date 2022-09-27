@@ -1,16 +1,18 @@
-import type { Web3Helper } from '@masknet/plugin-infra/web3'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import { isDashboardPage } from '@masknet/shared-base'
 import { makeStyles, MaskColorVar, LoadingBase } from '@masknet/theme'
 import { formatBalance, FungibleToken } from '@masknet/web3-shared-base'
 import { memo } from 'react'
-import { useI18N } from '../../../../../utils'
+import { useI18N } from '../../../../../utils/index.js'
 import { Box, TextField, Typography } from '@mui/material'
 import { FormattedBalance } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
 import classNames from 'classnames'
 
 // TODO: remove isDashboard after remove Dashboard page
-const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }) => ({
+const useStyles = makeStyles<{
+    isDashboard: boolean
+}>()((theme, { isDashboard }) => ({
     trade: {
         marginBottom: 8,
         padding: 10,

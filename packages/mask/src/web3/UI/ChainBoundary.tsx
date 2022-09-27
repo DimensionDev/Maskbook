@@ -1,31 +1,32 @@
-import React, { useCallback, useMemo } from 'react'
+import React, { useCallback, useMemo, cloneElement, Children, DetailedReactHTMLElement, isValidElement } from 'react'
+import { useAsyncFn } from 'react-use'
 import { Box, Typography } from '@mui/material'
 import { makeStyles, MaskColorVar, ShadowRootTooltip, useStylesExtends, ActionButton } from '@masknet/theme'
 import {
     useCurrentWeb3NetworkPluginID,
     useAccount,
     useNetworkDescriptor,
-    useChainId,
     useAllowTestnet,
-    useProviderType,
-    Web3Helper,
     useWeb3State,
     useWeb3Connection,
     useChainIdValid,
     useProviderDescriptor,
+    useChainId,
+    useProviderType,
 } from '@masknet/plugin-infra/web3'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { delay } from '@dimensiondev/kit'
 import {
     ActionButtonPromise,
     ActionButtonPromiseProps,
-} from '../../extension/options-page/DashboardComponents/ActionButton'
-import { useI18N } from '../../utils'
-import { WalletMessages } from '../../plugins/Wallet/messages'
+} from '../../extension/options-page/DashboardComponents/ActionButton.js'
+import { useI18N } from '../../utils/index.js'
+import { WalletMessages } from '../../plugins/Wallet/messages.js'
 import { WalletIcon } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import type { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
 
 const useStyles = makeStyles()((theme) => ({
@@ -45,6 +46,11 @@ const useStyles = makeStyles()((theme) => ({
         padding: 10,
         maxWidth: 260,
     },
+    connectWallet: {
+        '& > .MuiButton-startIcon': {
+            display: 'block',
+        },
+    },
 }))
 
 export interface ChainBoundaryProps<T extends NetworkPluginID> extends withClasses<'switchButton'> {
@@ -54,13 +60,12 @@ export interface ChainBoundaryProps<T extends NetworkPluginID> extends withClass
     expectedChainId: Web3Helper.Definition[T]['ChainId']
     /** Judge the network is available for children components */
     predicate?: (actualPluginID: NetworkPluginID, actualChainId: Web3Helper.Definition[T]['ChainId']) => boolean
-
+    expectedAccount?: string
     className?: string
-    switchChainWithoutPopup?: boolean
     noSwitchNetworkTip?: boolean
     hiddenConnectButton?: boolean
+    switchChainWithoutPopup?: boolean
     children?: React.ReactNode
-    expectedChainIdSwitchedCallback?: () => void
     ActionButtonPromiseProps?: Partial<ActionButtonPromiseProps>
 }
 
@@ -69,8 +74,8 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
         noSwitchNetworkTip = true,
         expectedPluginID,
         expectedChainId,
-        expectedChainIdSwitchedCallback,
-        switchChainWithoutPopup = true,
+        expectedAccount,
+        switchChainWithoutPopup = false,
         predicate = (actualPluginID, actualChainId) =>
             actualPluginID === expectedPluginID && actualChainId === expectedChainId,
     } = props
@@ -86,7 +91,7 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
     const actualProviderType = useProviderType(actualPluginID)
     const actualProviderDescriptor = useProviderDescriptor(actualPluginID)
     const actualChainName = actualOthers?.chainResolver.chainName(actualChainId)
-    const account = useAccount(actualPluginID)
+    const account = useAccount(actualPluginID, expectedAccount)
 
     const { Others: expectedOthers } = useWeb3State(expectedPluginID)
     const expectedConnection = useWeb3Connection(expectedPluginID)
@@ -95,24 +100,31 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
     const chainIdValid = useChainIdValid(actualPluginID)
 
     const expectedChainName = expectedOthers?.chainResolver.chainName(expectedChainId)
-    const expectedNetworkDescriptor = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, expectedChainId)
+    const expectedNetworkDescriptor = useNetworkDescriptor(expectedPluginID, expectedChainId)
     const expectedChainAllowed = expectedOthers?.chainResolver.isValid(expectedChainId, expectedAllowTestnet)
 
     const isPluginIDMatched = actualPluginID === expectedPluginID
     const isMatched = predicate(actualPluginID, actualChainId)
 
-    const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
+    const { setDialog: setSelectProviderDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectProviderDialogUpdated,
     )
 
-    const onSwitchChain = useCallback(async () => {
+    const openSelectProviderDialog = useCallback(() => {
+        setSelectProviderDialog({
+            open: true,
+            network: expectedNetworkDescriptor,
+        })
+    }, [expectedNetworkDescriptor])
+
+    const [{ loading }, onSwitchChain] = useAsyncFn(async () => {
         // a short time loading makes the user fells better
         await delay(1000)
 
         if (!expectedChainAllowed) return 'init'
 
         if (!isPluginIDMatched || actualProviderType === ProviderType.WalletConnect) {
-            openSelectProviderDialog()
+            setSelectProviderDialog({ open: true, network: expectedNetworkDescriptor })
             return 'init'
         }
         if (!isMatched) {
@@ -123,10 +135,8 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
                     chainId: expectedChainId,
                 })
             }
-
-            expectedChainIdSwitchedCallback?.()
         }
-        return
+        return 'complete'
     }, [
         expectedChainAllowed,
         isMatched,
@@ -134,7 +144,7 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
         actualProviderType,
         expectedChainId,
         expectedConnection,
-        openSelectProviderDialog,
+        switchChainWithoutPopup,
     ])
 
     const switchButtonDisabled = useMemo(() => {
@@ -171,6 +181,7 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
             <>
                 {!props.hiddenConnectButton ? (
                     <ActionButton
+                        className={classes.connectWallet}
                         fullWidth
                         startIcon={<Icons.ConnectWallet size={18} />}
                         onClick={openSelectProviderDialog}
@@ -183,7 +194,7 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
 
     if (isMatched) return <>{props.children}</>
 
-    if (actualPluginID !== expectedPluginID) {
+    if (!isPluginIDMatched) {
         return renderBox(
             <>
                 {!noSwitchNetworkTip ? (
@@ -243,7 +254,7 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
                     </span>
                 </Typography>
             ) : null}
-            {expectedChainAllowed ? (
+            {expectedChainAllowed && !switchChainWithoutPopup ? (
                 <ActionButtonPromise
                     fullWidth
                     startIcon={
@@ -265,7 +276,16 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
                     failedOnClick="use executor"
                     {...props.ActionButtonPromiseProps}
                 />
-            ) : null}
+            ) : (
+                CopyDeepElementWithEventHandler(
+                    props.children,
+                    async () => {
+                        const result = await onSwitchChain()
+                        return result === 'complete'
+                    },
+                    loading,
+                )
+            )}
         </>,
         actualProviderType === ProviderType.WalletConnect
             ? t('plugin_wallet_connect_tips')
@@ -273,4 +293,29 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
             ? t('plugin_wallet_not_support_network')
             : '',
     )
+}
+
+function CopyDeepElementWithEventHandler(
+    children: React.ReactNode,
+    injectHandler: () => Promise<boolean>,
+    loading: boolean,
+): Array<DetailedReactHTMLElement<any, any>> {
+    return (
+        Children.map(children, (child: any) => {
+            const isValid = !isValidElement(child.props?.children)
+            return cloneElement(child, {
+                onClick: isValid
+                    ? async (...args: unknown[]) => {
+                          const result = await injectHandler()
+                          if (!result) return
+                          await child.props.onClick(...args)
+                      }
+                    : child.props.onClick,
+                loading: isValid ? loading || child.props?.loading : child.props?.loading,
+                children: isValid
+                    ? child.props.children
+                    : CopyDeepElementWithEventHandler(child.props?.children, injectHandler, loading),
+            })
+        }) || []
+    ).filter(Boolean)
 }

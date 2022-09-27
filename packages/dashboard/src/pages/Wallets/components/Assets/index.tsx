@@ -1,15 +1,16 @@
 import { memo, useEffect, useState } from 'react'
-import { useCurrentWeb3NetworkPluginID, Web3Helper } from '@masknet/plugin-infra/web3'
+import { useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import { makeStyles, useTabs } from '@masknet/theme'
 import { TabContext, TabList, TabPanel } from '@mui/lab'
 import { Box, Button, Tab } from '@mui/material'
 import { useSelectFungibleToken } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { ContentContainer } from '../../../../components/ContentContainer'
-import { useDashboardI18N } from '../../../../locales'
-import { AddCollectibleDialog } from '../AddCollectibleDialog'
-import { CollectibleList } from '../CollectibleList'
-import { FungibleTokenTable } from '../FungibleTokenTable'
+import { ContentContainer } from '../../../../components/ContentContainer/index.js'
+import { useDashboardI18N } from '../../../../locales/index.js'
+import { AddCollectibleDialog } from '../AddCollectibleDialog/index.js'
+import { CollectibleList } from '../CollectibleList/index.js'
+import { FungibleTokenTable } from '../FungibleTokenTable/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     caption: {
@@ -38,13 +39,13 @@ export enum AssetTab {
 
 const assetTabs = [AssetTab.Token, AssetTab.Collectibles] as const
 
-interface TokenAssetsProps {
+export interface AssetsProps {
     network: Web3Helper.NetworkDescriptorAll | null
 }
 
-export const Assets = memo<TokenAssetsProps>(({ network }) => {
+export const Assets = memo<AssetsProps>(({ network }) => {
     const t = useDashboardI18N()
-    const pluginId = useCurrentWeb3NetworkPluginID()
+    const pluginID = useCurrentWeb3NetworkPluginID()
     const { classes } = useStyles()
     const assetTabsLabel: Record<AssetTab, string> = {
         [AssetTab.Token]: t.wallets_assets_token(),
@@ -58,9 +59,9 @@ export const Assets = memo<TokenAssetsProps>(({ network }) => {
 
     useEffect(() => {
         setTab(AssetTab.Token)
-    }, [pluginId])
+    }, [pluginID])
 
-    const showCollectibles = [NetworkPluginID.PLUGIN_EVM, NetworkPluginID.PLUGIN_SOLANA].includes(pluginId)
+    const showCollectibles = [NetworkPluginID.PLUGIN_EVM, NetworkPluginID.PLUGIN_SOLANA].includes(pluginID)
     const selectFungibleToken = useSelectFungibleToken()
 
     return (
@@ -75,7 +76,7 @@ export const Assets = memo<TokenAssetsProps>(({ network }) => {
                                     <Tab key={key} value={key} label={assetTabsLabel[key]} />
                                 ))}
                         </TabList>
-                        {pluginId === NetworkPluginID.PLUGIN_EVM && network && (
+                        {pluginID === NetworkPluginID.PLUGIN_EVM && network && (
                             <Button
                                 size="small"
                                 color="secondary"

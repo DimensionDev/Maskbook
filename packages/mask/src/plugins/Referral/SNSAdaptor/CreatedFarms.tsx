@@ -1,20 +1,20 @@
 import { useAsync } from 'react-use'
 import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
-import { getMaskColor, makeStyles } from '@masknet/theme'
-import { Grid, Typography, CircularProgress, Box, Button } from '@mui/material'
+import { getMaskColor, LoadingBase, makeStyles } from '@masknet/theme'
+import { Grid, Typography, Box, Button } from '@mui/material'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 
-import { useI18N } from '../locales'
-import { PageInterface, PagesType, FarmDetailed } from '../types'
-import { getRequiredChainId } from '../helpers'
-import { ReferralRPC } from '../messages'
+import { useI18N } from '../locales/index.js'
+import { PageInterface, PagesType, FarmDetailed } from '../types.js'
+import { getRequiredChainId } from '../helpers/index.js'
+import { ReferralRPC } from '../messages.js'
 
-import { AccordionFarm } from './shared-ui/AccordionFarm'
-import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
-import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
+import { AccordionFarm } from './shared-ui/AccordionFarm.js'
+import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary.js'
+import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
 
-import { useSharedStyles, useMyFarmsStyles } from './styles'
+import { useSharedStyles, useMyFarmsStyles } from './styles.js'
 
 const useStyles = makeStyles()((theme) => ({
     buttonWithdraw: {
@@ -40,7 +40,7 @@ function FarmList({ loading, error, farms, onAdjustRewardButtonClick }: FarmList
     const { classes } = useStyles()
     const { classes: sharedClasses } = useSharedStyles()
 
-    if (loading) return <CircularProgress size={50} />
+    if (loading) return <LoadingBase size={50} />
 
     if (error) return <Typography className={sharedClasses.msg}>{t.blockchain_error_referral_farms()}</Typography>
 

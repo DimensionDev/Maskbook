@@ -11,7 +11,7 @@ import { useCompositionContext } from '@masknet/plugin-infra/content-script'
 import { Typography, Box, Tab, Tabs, Grid, TextField, Chip, InputAdornment, Divider } from '@mui/material'
 import { TabContext, TabPanel } from '@mui/lab'
 
-import { useI18N } from '../locales'
+import { useI18N } from '../locales/index.js'
 import {
     TabsCreateFarm,
     TokenType,
@@ -20,19 +20,19 @@ import {
     PagesType,
     ReferralMetaData,
     FungibleTokenDetailed,
-} from '../types'
-import { ATTRACE_FEE_PERCENT, NATIVE_TOKEN, META_KEY } from '../constants'
-import { useCurrentIdentity, useCurrentLinkedPersona } from '../../../components/DataSource/useActivatedUI'
-import { PluginReferralMessages, SelectTokenUpdated } from '../messages'
-import { roundValue, getRequiredChainId } from '../helpers'
-import { runCreateERC20PairFarm } from './utils/referralFarm'
+} from '../types.js'
+import { ATTRACE_FEE_PERCENT, NATIVE_TOKEN, META_KEY } from '../constants.js'
+import { useCurrentIdentity, useCurrentLinkedPersona } from '../../../components/DataSource/useActivatedUI.js'
+import { PluginReferralMessages, SelectTokenUpdated } from '../messages.js'
+import { roundValue, getRequiredChainId } from '../helpers/index.js'
+import { runCreateERC20PairFarm } from './utils/referralFarm.js'
 
-import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
-import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
-import { CreatedFarms } from './CreatedFarms'
-import { TokenSelectField } from './shared-ui/TokenSelectField'
+import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary.js'
+import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
+import { CreatedFarms } from './CreatedFarms.js'
+import { TokenSelectField } from './shared-ui/TokenSelectField.js'
 
-import { useSharedStyles, useTabStyles } from './styles'
+import { useSharedStyles, useTabStyles } from './styles.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -163,7 +163,7 @@ export function CreateFarm(props: PageInterface) {
 
     const openComposeBox = useCallback(
         (selectedReferralData: Map<string, ReferralMetaData>) =>
-            CrossIsolationMessages.events.requestComposition.sendToLocal({
+            CrossIsolationMessages.events.compositionDialogEvent.sendToLocal({
                 reason: 'timeline',
                 open: true,
                 content: makeTypedMessageText('', selectedReferralData),

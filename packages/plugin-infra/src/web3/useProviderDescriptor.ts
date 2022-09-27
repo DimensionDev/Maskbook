@@ -1,8 +1,8 @@
 import type { NetworkPluginID } from '@masknet/web3-shared-base'
-import { useProviderType } from './useProviderType'
-import type { Web3Helper } from '../web3-helpers'
-import { useCurrentWeb3NetworkPluginID } from './Context'
-import { getPluginDefine } from '../manager/store'
+import { useProviderType } from './useProviderType.js'
+import type { Web3Helper } from '@masknet/web3-helpers'
+import { useCurrentWeb3NetworkPluginID } from './Context.js'
+import { getPluginDefine } from '../manager/store.js'
 
 export function useProviderDescriptor<S extends 'all' | void = void, T extends NetworkPluginID = NetworkPluginID>(
     expectedPluginID?: T,

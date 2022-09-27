@@ -1,12 +1,12 @@
 import classNames from 'classnames'
-import { Chip, ChipProps, CircularProgress } from '@mui/material'
-import { makeStyles, useStylesExtends } from '@masknet/theme'
+import { Chip, ChipProps } from '@mui/material'
+import { LoadingBase, makeStyles, useStylesExtends } from '@masknet/theme'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import ErrorIcon from '@mui/icons-material/Error'
 import { noop } from 'lodash-unified'
-import { useSharedI18N } from '../../../locales'
-import { TokenIcon } from '../TokenIcon'
-import type { Web3Helper } from '@masknet/plugin-infra/web3'
+import { useSharedI18N } from '../../../locales/index.js'
+import { TokenIcon } from '../TokenIcon/index.js'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import type { FungibleToken } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => {
@@ -51,7 +51,7 @@ export function SelectTokenChip(props: SelectTokenChipProps) {
         return (
             <Chip
                 className={classNames(classes.chip, classes.loadingChip)}
-                icon={<CircularProgress size={16} />}
+                icon={<LoadingBase size={16} />}
                 size="small"
                 clickable={false}
                 variant="outlined"

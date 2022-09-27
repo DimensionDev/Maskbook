@@ -1,6 +1,6 @@
 import { Transform, TransformCallback } from 'node:stream'
 import { fileURLToPath } from 'node:url'
-import { readFile, writeFile } from 'node:fs/promises'
+import { readdir, readFile, writeFile } from 'node:fs/promises'
 import { isAbsolute, join, relative } from 'node:path'
 import { createRequire } from 'node:module'
 import { ensureDir } from 'fs-extra'
@@ -10,6 +10,7 @@ import { parseJSONc } from '../utils/jsonc.js'
 import { transform } from '@swc/core'
 import { dest, lastRun, parallel, src, TaskFunction } from 'gulp'
 import { parseArgs } from 'node:util'
+import { getLanguageFamilyName } from '../locale-kit-next/index.js'
 
 const require = createRequire(new URL(import.meta.url))
 const sandboxedPlugins = new URL('./sandboxed-plugins/', PKG_PATH)
@@ -24,6 +25,10 @@ export async function watchSandboxedPlugin() {
     await buildSandboxedPluginConfigurable(path, false)
 }
 
+interface Locale {
+    url: string
+    language: string
+}
 export async function buildSandboxedPluginConfigurable(distPath: string, isProduction: boolean) {
     distPath = join(distPath, 'sandboxed-modules/')
     await ensureDir(distPath)
@@ -36,6 +41,8 @@ export async function buildSandboxedPluginConfigurable(distPath: string, isProdu
     const id = new Set<string>()
     const localID = new Set<string>()
 
+    const languages = new Map<string, Locale[]>()
+
     for (const spec of normal) {
         const manifestPath = resolveManifestPath(spec)
         if (builders.has(manifestPath)) {
@@ -47,6 +54,7 @@ export async function buildSandboxedPluginConfigurable(distPath: string, isProdu
         const json = await readFile(manifestPath, 'utf8').then(parseJSONc)
         if (!json.id) throw new TypeError(`${manifestPath} does not contain an id.`)
         if (id.has(json.id)) throw new TypeError(`Plugin ${json.id} appear twice in the plugins.json.`)
+        await getLocales(json, manifestPath).then((x) => languages.set(json.id, x))
         id.add(json.id)
         builders.set(
             manifestPath,
@@ -68,6 +76,7 @@ export async function buildSandboxedPluginConfigurable(distPath: string, isProdu
         const json = await readFile(manifestPath, 'utf8').then(parseJSONc)
         if (!json.id) throw new TypeError(`${manifestPath} does not contain an id.`)
         if (localID.has(json.id)) throw new TypeError(`Plugin ${json.id} appear twice in the plugins-local.json.`)
+        await getLocales(json, manifestPath).then((x) => languages.set(json.id, x))
         localID.add(json.id)
         builders.set(
             manifestPath,
@@ -81,7 +90,7 @@ export async function buildSandboxedPluginConfigurable(distPath: string, isProdu
         )
     }
 
-    const internalList: Record<string, { normal?: boolean; local?: boolean }> = {}
+    const internalList: Record<string, { normal?: boolean; local?: boolean; locales?: Locale[] }> = {}
     for (const _ of id) {
         internalList[_] ||= {}
         internalList[_].normal = true
@@ -89,6 +98,9 @@ export async function buildSandboxedPluginConfigurable(distPath: string, isProdu
     for (const _ of localID) {
         internalList[_] ||= {}
         internalList[_].local = true
+    }
+    for (const [id, locales] of languages) {
+        internalList[id]!.locales = locales
     }
 
     const tasks = builders.size && awaitTask(parallel(...builders.values()))
@@ -181,6 +193,21 @@ function resolveManifestPath(spec: string) {
     } else {
         throw new TypeError('Unknown specifier')
     }
+}
+async function getLocales(manifest: any, manifestPath: string): Promise<Locale[]> {
+    const locales = manifest.locales
+    if (!locales) return []
+    const base = join(manifestPath, '../')
+    const localesPath = join(base, locales)
+    if (!localesPath.startsWith(base)) throw new TypeError(`locales cannot point to parent of the manifest file.`)
+    const directChildren = await readdir(localesPath, { withFileTypes: true })
+    const languageFamily = getLanguageFamilyName(directChildren.filter((x) => x.isFile()).map((x) => x.name))
+    return [...languageFamily].map(
+        ([languageName, languagePossibleFamilyName]): Locale => ({
+            language: languagePossibleFamilyName,
+            url: locales + (locales.endsWith('/') ? '' : '/') + languageName + '.json',
+        }),
+    )
 }
 class TransformStream extends Transform {
     constructor(public origin: string, public onJS: (id: string, relative: string) => void) {

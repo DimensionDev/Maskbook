@@ -1,5 +1,5 @@
-import { InjectedProvider } from './Base'
-import { createPromise, sendEvent } from './utils'
+import { InjectedProvider } from './Base.js'
+import { createPromise, sendEvent } from './utils.js'
 
 export class WalletLinkProvider extends InjectedProvider {
     constructor() {

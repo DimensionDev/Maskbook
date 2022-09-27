@@ -1,13 +1,15 @@
 import { WebExtensionMessage } from '@dimensiondev/holoflows-kit'
 import type {
-    CheckSecurityCloseConfirmDialogRequest,
-    CompositionRequest,
-    Web3ProfileDialogRequest,
-    CheckSecurityDialogRequest,
-    OpenApplicationRequestEvent,
+    CheckSecurityConfirmationDialogEvent,
+    CompositionDialogEvent,
+    Web3ProfileDialogEvent,
+    CheckSecurityDialogEvent,
+    ApplicationDialogEvent,
     SwapDialogEvent,
-    OpenProfileCardEvent,
-    SettingDialogEvent,
+    ProfileCardEvent,
+    SettingsDialogEvent,
+    NonFungibleTokenDialogEvent,
+    WalletSettingsDialogEvent,
 } from './Mask.js'
 
 /**
@@ -25,12 +27,15 @@ import type {
 export const CrossIsolationMessages = new WebExtensionMessage<CrossIsolationEvents>({ domain: 'cross-isolation' })
 
 export interface CrossIsolationEvents {
-    requestComposition: CompositionRequest
-    requestWeb3ProfileDialog: Web3ProfileDialogRequest
-    requestCheckSecurityCloseConfirmDialog: CheckSecurityCloseConfirmDialogRequest
-    requestCheckSecurityDialog: CheckSecurityDialogRequest
-    requestOpenApplication: OpenApplicationRequestEvent
-    swapDialogUpdate: SwapDialogEvent
-    PluginSettingsDialogUpdate: SettingDialogEvent
-    requestOpenProfileCard: OpenProfileCardEvent
+    compositionDialogEvent: CompositionDialogEvent
+    web3ProfileDialogEvent: Web3ProfileDialogEvent
+    checkSecurityDialogEvent: CheckSecurityDialogEvent
+    checkSecurityConfirmationDialogEvent: CheckSecurityConfirmationDialogEvent
+    applicationDialogEvent: ApplicationDialogEvent
+    swapDialogEvent: SwapDialogEvent
+    settingsDialogEvent: SettingsDialogEvent
+
+    profileCardEvent: ProfileCardEvent
+    nonFungibleTokenDialogEvent: NonFungibleTokenDialogEvent
+    walletSettingsDialogEvent: WalletSettingsDialogEvent
 }

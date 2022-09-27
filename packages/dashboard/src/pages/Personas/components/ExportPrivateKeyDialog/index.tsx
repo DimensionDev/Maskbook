@@ -1,10 +1,10 @@
 import { Box, Button, DialogActions, DialogContent, Typography } from '@mui/material'
 import { memo } from 'react'
 import { MaskDialog, MaskTextField } from '@masknet/theme'
-import { useDashboardI18N } from '../../../../locales'
+import { useDashboardI18N } from '../../../../locales/index.js'
 import { useNavigate } from 'react-router-dom'
 import { PersonaIdentifier, DashboardRoutes } from '@masknet/shared-base'
-import { useExportPrivateKey } from '../../hooks/useExportPrivateKey'
+import { useExportPrivateKey } from '../../hooks/useExportPrivateKey.js'
 import { useCopyToClipboard } from 'react-use'
 
 export interface ExportPrivateKeyDialogProps {

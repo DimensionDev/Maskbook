@@ -1,21 +1,32 @@
 import { NextIDPlatform, ProfileIdentifier } from '../index.js'
 import { EnhanceableSite } from '../Site/type.js'
+import { createLookupTableResolver } from '../utils/index.js'
 
-export function nextIDPlatformToNetwork(platform: NextIDPlatform) {
-    // inline the pairs for testing, if out the pairs will not work
-    const pairs = [[NextIDPlatform.Twitter, EnhanceableSite.Twitter]]
-    const pair = pairs.find((x) => x[0] === platform)
-    return pair?.[1]
-}
+export const resolveNextIDPlatformToNetwork = createLookupTableResolver<NextIDPlatform, EnhanceableSite | undefined>(
+    {
+        [NextIDPlatform.Ethereum]: undefined,
+        [NextIDPlatform.GitHub]: undefined,
+        [NextIDPlatform.Keybase]: undefined,
+        [NextIDPlatform.Twitter]: EnhanceableSite.Twitter,
+    } as Record<NextIDPlatform, EnhanceableSite | undefined>,
+    undefined,
+)
 
-export function networkToNextIDPlatform(site: EnhanceableSite) {
-    const pairs = [[NextIDPlatform.Twitter, EnhanceableSite.Twitter]]
-    const pair = pairs.find((x) => x[1] === site)
-    return pair?.[0]
-}
+export const resolveNetworkToNextIDPlatform = createLookupTableResolver<EnhanceableSite, NextIDPlatform | undefined>(
+    {
+        [EnhanceableSite.Facebook]: undefined,
+        [EnhanceableSite.Instagram]: undefined,
+        [EnhanceableSite.Minds]: undefined,
+        [EnhanceableSite.OpenSea]: undefined,
+        [EnhanceableSite.Localhost]: undefined,
+        [EnhanceableSite.Mirror]: undefined,
+        [EnhanceableSite.Twitter]: NextIDPlatform.Twitter,
+    },
+    undefined,
+)
 
-export function nextIDIdentityToProfile(nextIDIdentity: string, platform: NextIDPlatform) {
-    const network = nextIDPlatformToNetwork(platform)
+export function resolveNextIDIdentityToProfile(nextIDIdentity: string, platform: NextIDPlatform) {
+    const network = resolveNextIDPlatformToNetwork(platform)
     if (!network) return
 
     return ProfileIdentifier.of(network, nextIDIdentity).unwrap()

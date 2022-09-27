@@ -1,9 +1,14 @@
+import { createContext, memo, useContext, useEffect, useRef, useState } from 'react'
 import { ErrorBoundary } from '@masknet/shared-base-ui'
 import { ShadowRootIsolation } from '@masknet/theme'
-import { createContext, memo, useContext, useEffect, useRef, useState } from 'react'
-import { PluginWrapperComponent, PluginWrapperMethods, useAvailablePlugins, usePluginI18NField } from '../hooks'
-import { PluginWrapperMethodsContext } from '../hooks/usePluginWrapper'
-import type { Plugin } from '../types'
+import {
+    PluginWrapperComponent,
+    PluginWrapperMethods,
+    useAvailablePlugins,
+    usePluginI18NField,
+} from '../hooks/index.js'
+import { PluginWrapperMethodsContext } from '../hooks/usePluginWrapper.js'
+import type { Plugin } from '../types.js'
 
 type Inject<T> = Plugin.InjectUI<T>
 type Raw<T> = Plugin.InjectUIRaw<T>

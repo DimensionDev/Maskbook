@@ -1,11 +1,11 @@
-import { RowLayout } from '../../components/RegisterFrame/RowLayout'
-import { Header } from '../../components/RegisterFrame/ColumnContentHeader'
-import { useDashboardI18N } from '../../locales'
-import { Body, ColumnContentLayout } from '../../components/RegisterFrame/ColumnContentLayout'
+import { RowLayout } from '../../components/RegisterFrame/RowLayout.js'
+import { Header } from '../../components/RegisterFrame/ColumnContentHeader.js'
+import { useDashboardI18N } from '../../locales/index.js'
+import { Body, ColumnContentLayout } from '../../components/RegisterFrame/ColumnContentLayout.js'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { DashboardRoutes } from '@masknet/shared-base'
-import { Restore } from '../../components/Restore'
-import { UserProvider } from '../Settings/hooks/UserContext'
+import { Restore } from '../../components/Restore/index.js'
+import { UserProvider } from '../Settings/hooks/UserContext.js'
 import { useMemo } from 'react'
 
 export default function SignIn() {
@@ -13,7 +13,11 @@ export default function SignIn() {
     const navigate = useNavigate()
 
     const { state: _state, search } = useLocation()
-    const state = _state as any as undefined | { from?: string }
+    const state = _state as any as
+        | undefined
+        | {
+              from?: string
+          }
 
     const from = new URLSearchParams(search).get('from')
 

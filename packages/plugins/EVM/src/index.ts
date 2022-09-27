@@ -1,5 +1,6 @@
 import { registerPlugin } from '@masknet/plugin-infra'
 import type {
+    AddressType,
     ChainId,
     NetworkType,
     ProviderType,
@@ -15,10 +16,11 @@ import type {
     TransactionSignature,
     Web3,
 } from '@masknet/web3-shared-evm'
-import { base } from './base'
+import { base } from './base.js'
 
 registerPlugin<
     ChainId,
+    AddressType,
     SchemaType,
     ProviderType,
     NetworkType,
@@ -35,20 +37,20 @@ registerPlugin<
 >({
     ...base,
     SNSAdaptor: {
-        load: () => import('./UI/SNSAdaptor'),
+        load: () => import('./UI/SNSAdaptor/index.js'),
         hotModuleReload: (hot) =>
             import.meta.webpackHot &&
-            import.meta.webpackHot.accept('./UI/SNSAdaptor', () => hot(import('./UI/SNSAdaptor'))),
+            import.meta.webpackHot.accept('./UI/SNSAdaptor', () => hot(import('./UI/SNSAdaptor/index.js'))),
     },
     Dashboard: {
-        load: () => import('./UI/Dashboard'),
+        load: () => import('./UI/Dashboard/index.js'),
         hotModuleReload: (hot) =>
             import.meta.webpackHot &&
-            import.meta.webpackHot.accept('./UI/Dashboard', () => hot(import('./UI/Dashboard'))),
+            import.meta.webpackHot.accept('./UI/Dashboard', () => hot(import('./UI/Dashboard/index.js'))),
     },
     Worker: {
-        load: () => import('./Worker'),
+        load: () => import('./Worker/index.js'),
         hotModuleReload: (hot) =>
-            import.meta.webpackHot && import.meta.webpackHot.accept('./Worker', () => hot(import('./Worker'))),
+            import.meta.webpackHot && import.meta.webpackHot.accept('./Worker', () => hot(import('./Worker/index.js'))),
     },
 })

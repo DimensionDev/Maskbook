@@ -1,9 +1,10 @@
+import type { RSS3BaseAPI } from '@masknet/web3-providers'
+
 export enum PageTags {
     WalletTag = 'Wallets',
     NFTTag = 'NFTs',
     DonationTag = 'Donations',
     FootprintTag = 'Footprints',
-    DAOTag = 'DAO',
 }
 
 export interface Asset {
@@ -34,10 +35,6 @@ export interface GeneralAsset {
     }
 }
 
-export interface GeneralAssetWithTags extends GeneralAsset {
-    tags?: string[]
-}
-
 export interface RSS3Profile {
     avatar: string[]
     bio: string
@@ -47,4 +44,17 @@ export interface RSS3Profile {
 export enum AssetType {
     GitcoinDonation = 'Gitcoin-Donation',
     POAP = 'POAP',
+}
+/**
+ * Normalized RSS3BaseAPI.Activity
+ */
+export interface RSS3Feed {
+    image: string
+    title?: string
+    relatedURLs?: string[]
+    description?: string
+    network: RSS3BaseAPI.Network
+    metadata?: RSS3BaseAPI.Metadata
+    attributes?: RSS3BaseAPI.Attribute[]
+    tokenId?: string
 }

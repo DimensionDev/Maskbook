@@ -3,14 +3,14 @@ import { Appearance } from '@masknet/theme'
 import { LanguageOptions } from '@masknet/public-api'
 import { EnhanceableSite, ExtensionSite, updateLanguage } from '@masknet/shared-base'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { LaunchPage } from './types'
+import { LaunchPage } from './types.js'
 import {
     createGlobalSettings,
     createNetworkSettings,
     createComplexNetworkSettings,
     createComplexGlobalSettings,
     NetworkSettings,
-} from './createSettings'
+} from './createSettings.js'
 import { BooleanPreference } from '@masknet/plugin-infra'
 
 export const appearanceSettings = createGlobalSettings<Appearance>('appearance', Appearance.default)
@@ -25,6 +25,7 @@ export const pluginIDSettings = createComplexGlobalSettings<Record<EnhanceableSi
         [EnhanceableSite.OpenSea]: NetworkPluginID.PLUGIN_EVM,
         [EnhanceableSite.Minds]: NetworkPluginID.PLUGIN_EVM,
         [EnhanceableSite.Localhost]: NetworkPluginID.PLUGIN_EVM,
+        [EnhanceableSite.Mirror]: NetworkPluginID.PLUGIN_EVM,
         [ExtensionSite.Popup]: NetworkPluginID.PLUGIN_EVM,
         [ExtensionSite.Dashboard]: NetworkPluginID.PLUGIN_EVM,
     },

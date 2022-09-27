@@ -1,12 +1,12 @@
 import { Alert, Box, Card, CardContent, Divider, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useContext, useState } from 'react'
-import { fetchClue } from '../Worker/apis'
-import { FindTrumanContext } from '../context'
+import { fetchClue } from '../Worker/apis/index.js'
+import { FindTrumanContext } from '../context.js'
 import { useAsync } from 'react-use'
-import FlipCard from './FlipCard'
-import type { ClueCondition } from '../types'
-import { ClueConditionType } from '../types'
+import FlipCard from './FlipCard.js'
+import type { ClueCondition } from '../types.js'
+import { ClueConditionType } from '../types.js'
 import { Image } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => {

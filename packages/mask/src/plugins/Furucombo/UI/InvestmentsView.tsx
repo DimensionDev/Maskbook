@@ -1,10 +1,10 @@
 import * as React from 'react'
 import { useTheme } from '@mui/material/styles'
-import { apyFormatter, liquidityFormatter, shortenApy } from '../utils'
-import { useI18N } from '../../../utils'
-import { BASE_URL } from '../constants'
+import { apyFormatter, liquidityFormatter, shortenApy } from '../utils.js'
+import { useI18N } from '../../../utils/index.js'
+import { BASE_URL } from '../constants.js'
 import { makeStyles } from '@masknet/theme'
-import type { Investable } from '../types'
+import type { Investable } from '../types.js'
 import {
     Box,
     Button,

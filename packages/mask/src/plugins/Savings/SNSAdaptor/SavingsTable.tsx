@@ -5,13 +5,13 @@ import { FormattedBalance, TokenIcon } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
 import { formatBalance, isSameAddress, isZero, NetworkPluginID, rightShift } from '@masknet/web3-shared-base'
 import type { ChainId, Web3 } from '@masknet/web3-shared-evm'
-import { ProviderIconURLs } from './IconURL'
-import { useI18N } from '../../../utils'
-import { ProtocolType, SavingsProtocol, TabType } from '../types'
+import { ProviderIconURLs } from './IconURL.js'
+import { useI18N } from '../../../utils/index.js'
+import { ProtocolType, SavingsProtocol, TabType } from '../types.js'
 import { useAccount, useFungibleAssets, useWeb3 } from '@masknet/plugin-infra/web3'
 import { CrossIsolationMessages } from '@masknet/shared-base'
 import { useCallback, useMemo } from 'react'
-import { LDO_PAIRS } from '../constants'
+import { LDO_PAIRS } from '../constants.js'
 
 const useStyles = makeStyles()((theme, props) => ({
     containerWrap: {
@@ -122,7 +122,7 @@ export function SavingsTable({ chainId, tab, protocols, setTab, setSelectedProto
     const onConvertClick = useCallback(() => {
         const ETH = LDO_PAIRS[0][0]
         const sETH = LDO_PAIRS[0][1]
-        CrossIsolationMessages.events.swapDialogUpdate.sendToLocal({
+        CrossIsolationMessages.events.swapDialogEvent.sendToLocal({
             open: true,
             traderProps: {
                 defaultInputCoin: sETH,
@@ -224,7 +224,7 @@ export function SavingsTable({ chainId, tab, protocols, setTab, setSelectedProto
                 </div>
             ) : (
                 <div className={classes.placeholder}>
-                    <Icons.Direct size={36} className={classes.direct} />
+                    <Icons.EmptySimple size={36} className={classes.direct} />
                 </div>
             )}
         </Box>

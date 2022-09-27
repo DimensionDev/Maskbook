@@ -1,5 +1,7 @@
+import { useState } from 'react'
+import { Button, Checkbox, FormControlLabel, Table, TableBody, TableCell, TableRow, Typography } from '@mui/material'
 import { getEnumAsArray } from '@dimensiondev/kit'
-import { PluginId } from '@masknet/plugin-infra'
+import { PluginID } from '@masknet/plugin-infra'
 import {
     useAccount,
     useBalance,
@@ -9,16 +11,15 @@ import {
     useCurrentWeb3NetworkPluginID,
     useNetworkType,
     useProviderType,
+    useReverseAddress,
+    useLookupAddress,
     useWeb3State,
 } from '@masknet/plugin-infra/web3'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useSelectAdvancedSettings, useSelectFungibleToken } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
-import { Button, Checkbox, FormControlLabel, Table, TableBody, TableCell, TableRow, Typography } from '@mui/material'
-import { useState } from 'react'
 
 export interface ConsoleContentProps {
     onClose?: () => void
@@ -43,13 +44,15 @@ export function ConsoleContent(props: ConsoleContentProps) {
     const { value: blockTimestamp = 0 } = useBlockTimestamp()
 
     const onSelectFungibleToken = useSelectFungibleToken()
-    const onSelectGasSettings = useSelectAdvancedSettings(NetworkPluginID.PLUGIN_EVM)
+    const onSelectGasSettings = useSelectAdvancedSettings(pluginID)
 
-    const [pluginId, setPluginId] = useState<PluginId>(PluginId.RSS3)
-    const plugins = getEnumAsArray(PluginId) as Array<{ key: PluginId; value: string }>
+    const [pluginId, setPluginId] = useState<PluginID>(PluginID.RSS3)
+    const plugins = getEnumAsArray(PluginID) as Array<{ key: PluginID; value: string }>
 
     const [quickMode, setQuickMode] = useState(true)
     const { setDialog } = useRemoteControlledDialog(WalletMessages.events.ApplicationDialogUpdated)
+    const { value: reversedName, retry: retryReversedName } = useReverseAddress(pluginID, account)
+    const { value: lookedAddress, retry: retryLookedAddress } = useLookupAddress(pluginID, reversedName)
 
     const { showSnackbar } = useCustomSnackbar()
     const table: Array<{ name: string; content: JSX.Element }> = [
@@ -86,16 +89,35 @@ export function ConsoleContent(props: ConsoleContentProps) {
             content: <Typography variant="body2">{blockTimestamp}</Typography>,
         },
         {
-            name: 'Token List',
+            name: 'Lookup Address',
             content: (
-                <Button
-                    size="small"
-                    onClick={async () => {
-                        const token = await onSelectFungibleToken()
-                        console.log(token)
-                    }}>
-                    Select Fungible Token
-                </Button>
+                <Typography variant="body2">
+                    <span>{lookedAddress}</span>
+                    <br />
+                    <Button
+                        size="small"
+                        onClick={() => {
+                            retryLookedAddress()
+                        }}>
+                        Lookup Address
+                    </Button>
+                </Typography>
+            ),
+        },
+        {
+            name: 'Reversed Name',
+            content: (
+                <Typography variant="body2">
+                    <span>{reversedName}</span>
+                    <br />
+                    <Button
+                        size="small"
+                        onClick={() => {
+                            retryReversedName()
+                        }}>
+                        Reversed Name
+                    </Button>
+                </Typography>
             ),
         },
         {
@@ -124,7 +146,7 @@ export function ConsoleContent(props: ConsoleContentProps) {
             ),
         },
         {
-            name: 'Test Snackbar',
+            name: 'Snackbar',
             content: (
                 <Button
                     size="small"
@@ -135,21 +157,22 @@ export function ConsoleContent(props: ConsoleContentProps) {
                             autoHideDuration: 100000000,
                         })
                     }}>
-                    show
+                    Show
                 </Button>
             ),
         },
         {
-            name: 'Open plugin setting',
+            name: 'Plugin Settings',
             content: (
                 <>
-                    <select onChange={(event) => setPluginId(event.target.value as PluginId)}>
+                    <select onChange={(event) => setPluginId(event.target.value as PluginID)}>
                         {plugins.map((x) => (
                             <option key={x.value} value={x.value}>
                                 {x.key}
                             </option>
                         ))}
                     </select>
+                    <br />
                     <FormControlLabel
                         control={
                             <Checkbox
@@ -157,9 +180,9 @@ export function ConsoleContent(props: ConsoleContentProps) {
                                 onChange={(event) => setQuickMode(event.currentTarget.checked)}
                             />
                         }
-                        label="Settings Quick Mode"
+                        label="Quick Mode"
                     />
-
+                    <br />
                     <Button
                         size="small"
                         onClick={() => {
@@ -173,7 +196,7 @@ export function ConsoleContent(props: ConsoleContentProps) {
                                 },
                             })
                         }}>
-                        open
+                        Open
                     </Button>
                 </>
             ),

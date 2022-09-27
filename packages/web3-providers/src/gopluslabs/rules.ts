@@ -1,6 +1,6 @@
-import { SecurityKey, SecurityMessageLevel } from './constants'
+import { SecurityKey, SecurityMessageLevel } from './constants.js'
 import parseInt from 'lodash-es/parseInt'
-import type { SecurityAPI } from '../types/Security'
+import type { SecurityAPI } from '../types/Security.js'
 
 export type I18nOptions = 'rate' | 'quantity'
 
@@ -16,7 +16,9 @@ export interface SecurityMessage {
     condition(info: SecurityAPI.TokenSecurityType): boolean
     titleKey: SecurityKey
     messageKey: SecurityKey
-    i18nParams?: (info: SecurityAPI.TokenSecurityType) => { [key in I18nOptions]: string }
+    i18nParams?: (info: SecurityAPI.TokenSecurityType) => {
+        [key in I18nOptions]: string
+    }
     shouldHide(info: SecurityAPI.TokenSecurityType): boolean
 }
 

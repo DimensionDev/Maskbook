@@ -3,8 +3,8 @@ import { makeStyles } from '@masknet/theme'
 import { DataProvider } from '@masknet/public-api'
 import { FormattedCurrency } from '@masknet/shared'
 import { formatCurrency, formatInteger, formatMarketCap, formatSupply, TokenType } from '@masknet/web3-shared-base'
-import type { Trending } from '../../types'
-import { useI18N } from '../../../../utils'
+import type { Trending } from '../../types/index.js'
+import { useI18N } from '../../../../utils/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -53,7 +53,7 @@ export function FungibleCoinMarketTable(props: CoinMarketTableProps) {
             <TableContainer className={classes.container} component={Paper} elevation={0}>
                 <Table size="small">
                     <TableBody>
-                        {DataProvider.UNISWAP_INFO !== dataProvider ? (
+                        {DataProvider.UniswapInfo !== dataProvider ? (
                             <TableRow>
                                 <TableCell className={classes.head} component="th">
                                     <Typography color="textSecondary" variant="body2">
@@ -65,7 +65,7 @@ export function FungibleCoinMarketTable(props: CoinMarketTableProps) {
                                 </TableCell>
                             </TableRow>
                         ) : null}
-                        {DataProvider.UNISWAP_INFO !== dataProvider ? (
+                        {DataProvider.UniswapInfo !== dataProvider ? (
                             <TableRow>
                                 <TableCell className={classes.head} component="th">
                                     <Typography color="textSecondary" variant="body2">
@@ -87,7 +87,7 @@ export function FungibleCoinMarketTable(props: CoinMarketTableProps) {
                                 {market?.total_volume ? `$${formatSupply(market.total_volume)}` : '--'}
                             </TableCell>
                         </TableRow>
-                        {dataProvider !== DataProvider.UNISWAP_INFO ? (
+                        {dataProvider !== DataProvider.UniswapInfo ? (
                             <TableRow>
                                 <TableCell className={classes.head} component="th">
                                     <Typography color="textSecondary" variant="body2">

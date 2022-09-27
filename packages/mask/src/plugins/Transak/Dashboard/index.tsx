@@ -1,11 +1,11 @@
 import type { Plugin } from '@masknet/plugin-infra'
-import { base } from '../base'
-import { BuyTokenDialog } from '../SNSAdaptor/BuyTokenDialog'
+import { base } from '../base.js'
+import { BuyTokenDialog } from '../SNSAdaptor/BuyTokenDialog.js'
 
 const dashboard: Plugin.Dashboard.Definition = {
     ...base,
     init(signal) {},
-    GlobalInjection: function Component() {
+    GlobalInjection() {
         return <BuyTokenDialog />
     },
 }

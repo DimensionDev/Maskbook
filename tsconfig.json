@@ -79,6 +79,7 @@
       "@masknet/theme": ["./packages/theme/src"],
       // @masknet/web3-constants is not listed. It is not a TS project (only contains JSON files).
       // @masknet/web3-contracts is not listed. It is not a TS project (only contains generated JSON and .d.ts files).
+      "@masknet/web3-helpers": ["./packages/web3-helpers/src"],
       "@masknet/web3-providers": ["./packages/web3-providers/src"],
       "@masknet/web3-shared-base": ["./packages/web3-shared/base/src"],
       "@masknet/web3-shared-evm": ["./packages/web3-shared/evm/src"],
@@ -86,13 +87,13 @@
       "@masknet/web3-shared-solana": ["./packages/web3-shared/solana/src"],
       "@masknet/typed-message": ["./packages/typed-message/base"],
       "@masknet/typed-message/dom": ["./packages/typed-message/dom"],
+      "@masknet/sandboxed-plugin-runtime": ["./packages/sandboxed-plugin-runtime/src/runtime/export.ts"],
       "@masknet/sandboxed-plugin-runtime/background": ["./packages/sandboxed-plugin-runtime/src/background"],
       "@masknet/sandboxed-plugin-runtime/site-adaptor": ["./packages/sandboxed-plugin-runtime/src/site-adaptor"],
       "@masknet/sandboxed-plugin-runtime/extension-page": ["./packages/sandboxed-plugin-runtime/src/extension-page"],
       // @masknet/scripts: insert-here 2
 
       // Plugins
-      "@masknet/plugin-dao": ["./packages/plugins/DAO/src"],
       "@masknet/plugin-debugger": ["./packages/plugins/Debugger/src"],
       "@masknet/plugin-example": ["./packages/plugins/example/src"],
       "@masknet/plugin-file-service": ["./packages/plugins/FileService/src"],
@@ -105,6 +106,7 @@
       "@masknet/plugin-go-plus-security": ["./packages/plugins/GoPlusSecurity/src"],
       "@masknet/plugin-cross-chain-bridge": ["./packages/plugins/CrossChainBridge/src"],
       "@masknet/plugin-web3-profile": ["./packages/plugins/Web3Profile/src"],
+      "@masknet/plugin-ens": ["./packages/plugins/ens/src"],
       // @masknet/scripts: insert-here 3
       "@masknet/plugin-wallet": ["./packages/plugins/Wallet/src"]
     },

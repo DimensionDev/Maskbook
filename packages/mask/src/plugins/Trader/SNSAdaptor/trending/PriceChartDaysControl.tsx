@@ -1,7 +1,8 @@
 import { Link, Stack, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { resolveDaysName } from '../../pipes'
+import { resolveDaysName } from '../../pipes.js'
 import classNames from 'classnames'
+import { TrendingAPI } from '@masknet/web3-providers'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -26,21 +27,14 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export enum Days {
-    MAX = 0,
-    ONE_DAY = 1,
-    ONE_WEEK = 7,
-    ONE_MONTH = 30,
-    THREE_MONTHS = 90,
-    ONE_YEAR = 365,
-}
+const Days = TrendingAPI.Days
 
 export const DEFAULT_RANGE_OPTIONS = [Days.ONE_DAY, Days.ONE_WEEK, Days.ONE_MONTH, Days.ONE_YEAR, Days.MAX]
-export const NFT_RANGE_OPTIONS = [Days.ONE_DAY, Days.ONE_WEEK, Days.ONE_MONTH, Days.THREE_MONTHS]
+export const NFT_RANGE_OPTIONS = [Days.ONE_DAY, Days.ONE_WEEK, Days.ONE_MONTH, Days.THREE_MONTHS, Days.MAX]
 
 export interface PriceChartDaysControlProps {
     days: number
-    rangeOptions?: Days[]
+    rangeOptions?: TrendingAPI.Days[]
     onDaysChange?: (days: number) => void
 }
 

@@ -1,10 +1,10 @@
 import { DataProvider } from '@masknet/public-api'
 import { TokenType } from '@masknet/web3-shared-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
-import { isMirroredKeyword } from '../CoinMarketCap/helper'
-import type { TrendingAPI } from '../types'
-import * as BaseAPI from './base-api'
-import { BTC_FIRST_LEGER_DATE, getAllCoinsByKeyword, getPriceStats as getStats } from './base-api'
+import { isMirroredKeyword } from '../cmc/helper.js'
+import type { TrendingAPI } from '../types/index.js'
+import * as BaseAPI from './base-api.js'
+import { BTC_FIRST_LEGER_DATE, getAllCoinsByKeyword, getPriceStats as getStats } from './base-api.js'
 
 export enum Days {
     MAX = 0,
@@ -43,7 +43,7 @@ export class UniSwapAPI implements TrendingAPI.Provider<ChainId> {
         const { token, marketInfo, tickersInfo } = await BaseAPI.getCoinInfo(chainId, id)
         return {
             currency,
-            dataProvider: DataProvider.UNISWAP_INFO,
+            dataProvider: DataProvider.UniswapInfo,
             market: marketInfo,
             coin: {
                 id,

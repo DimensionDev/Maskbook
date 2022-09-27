@@ -3,13 +3,14 @@ import {
     NETWORK_DESCRIPTORS,
     PROVIDER_DESCRIPTORS,
     ChainId,
+    SchemaType,
     NetworkType,
     ProviderType,
 } from '@masknet/web3-shared-flow'
-import { languages } from './locales/languages'
-import { PLUGIN_ID, PLUGIN_NAME, PLUGIN_DESCRIPTION } from './constants'
+import { languages } from './locales/languages.js'
+import { PLUGIN_ID, PLUGIN_NAME, PLUGIN_DESCRIPTION } from './constants.js'
 
-export const base: Plugin.Shared.Definition<ChainId, ProviderType, NetworkType> = {
+export const base: Plugin.Shared.Definition<ChainId, SchemaType, ProviderType, NetworkType> = {
     ID: PLUGIN_ID,
     name: { fallback: PLUGIN_NAME },
     description: { fallback: PLUGIN_DESCRIPTION },

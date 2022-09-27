@@ -7,11 +7,11 @@ import {
     TransformerProvider,
     TransformationContextProvider,
 } from '@masknet/typed-message/dom'
-import { TypedMessageRenderRegistry } from './registry'
+import { TypedMessageRenderRegistry } from './registry.js'
 import { useSubscription } from 'use-subscription'
 import { useMemo } from 'react'
-import { Container, Link } from './Components/Text'
-import { TypedMessageTransformers } from './transformer'
+import { Container, Link } from './Components/Text.js'
+import { TypedMessageTransformers } from './transformer.js'
 
 export interface TypedMessageRenderContextProps extends React.PropsWithChildren<{}> {
     context?: TransformationContext

@@ -3,8 +3,8 @@ import { ApplicationEntry } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
 import { Trans } from 'react-i18next'
 import { useState } from 'react'
-import { base } from '../base'
-import { SavingsDialog } from './SavingsDialog'
+import { base } from '../base.js'
+import { SavingsDialog } from './SavingsDialog.js'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,

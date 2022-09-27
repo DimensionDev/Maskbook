@@ -1,4 +1,4 @@
-import type { IDBPSafeTransaction } from '../utils/openDB'
+import type { IDBPSafeTransaction } from '../utils/openDB.js'
 import type { DBSchema } from 'idb/with-async-ittr'
 import type {
     PersonaIdentifier,
@@ -123,7 +123,10 @@ export interface PersonaRecord {
      */
     mnemonic?: {
         words: string
-        parameter: { path: string; withPassword: boolean }
+        parameter: {
+            path: string
+            withPassword: boolean
+        }
     }
     publicKey: EC_Public_JsonWebKey
     publicHexKey?: string

@@ -1,9 +1,9 @@
 import { type Plugin, usePluginWrapper, usePostInfoDetails } from '@masknet/plugin-infra/content-script'
-import { base } from '../base'
+import { base } from '../base.js'
 import { useMemo, Suspense } from 'react'
 import { Skeleton } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { PostInspector } from './PostInspector'
+import { PostInspector } from './PostInspector.js'
 import { Trans } from 'react-i18next'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import { parseURL } from '@masknet/shared-base'
@@ -48,7 +48,7 @@ function Renderer({ url }: { url: string }) {
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
     init(signal) {},
-    DecryptedInspector: function Component(props): JSX.Element | null {
+    DecryptedInspector(props): JSX.Element | null {
         const link = useMemo(() => {
             const x = extractTextFromTypedMessage(props.message)
             if (x.none) return null
@@ -57,7 +57,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
         if (!link) return null
         return <Renderer url={link} />
     },
-    PostInspector: function Component(): JSX.Element | null {
+    PostInspector(): JSX.Element | null {
         const links = usePostInfoDetails.mentionedLinks()
 
         const link = links.find(isSnapshotURL)

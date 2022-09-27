@@ -3,7 +3,7 @@ import type { NftRedPacket } from '@masknet/web3-contracts/types/NftRedPacket'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { encodeContractTransaction } from '@masknet/web3-shared-evm'
 import { useAsyncFn } from 'react-use'
-import { useNftRedPacketContract } from './useNftRedPacketContract'
+import { useNftRedPacketContract } from './useNftRedPacketContract.js'
 
 const EXTRA_GAS_PER_NFT = 335
 

@@ -1,5 +1,5 @@
 import { Icons } from '@masknet/icons'
-import { InputBox, InputBoxProps } from './InputBox'
+import { InputBox, InputBoxProps } from './InputBox.js'
 
 export interface SearchInputProps extends InputBoxProps {}
 export function SearchInput(props: SearchInputProps) {

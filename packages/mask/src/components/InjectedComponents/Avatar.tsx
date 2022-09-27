@@ -2,7 +2,7 @@ import { createInjectHooksRenderer, useActivatedPluginsSNSAdaptor } from '@maskn
 import { useSocialAddressListAll } from '@masknet/plugin-infra/web3'
 import type { Plugin } from '@masknet/plugin-infra'
 import { EMPTY_LIST } from '@masknet/shared-base'
-import { makeStyles, useStylesExtends } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 import type { SocialIdentity } from '@masknet/web3-shared-base'
 import { useMemo } from 'react'
 
@@ -10,14 +10,14 @@ const useStyles = makeStyles()(() => ({
     root: {},
 }))
 
-export interface AvatarProps extends withClasses<'root'> {
+interface AvatarProps {
     identity: SocialIdentity
     sourceType?: Plugin.SNSAdaptor.AvatarRealmSourceType
 }
 
 export function Avatar(props: AvatarProps) {
     const { identity, sourceType } = props
-    const classes = useStylesExtends(useStyles(), props)
+    const { classes } = useStyles()
 
     const { value: socialAddressList = EMPTY_LIST, loading: loadingSocialAddressList } =
         useSocialAddressListAll(identity)

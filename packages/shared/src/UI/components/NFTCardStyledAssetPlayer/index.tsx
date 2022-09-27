@@ -1,14 +1,15 @@
-import { useMemo } from 'react'
-import classNames from 'classnames'
-import { useTheme } from '@mui/material'
+import { useNetworkDescriptor, useNonFungibleToken } from '@masknet/plugin-infra/web3'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
+import type { Web3Helper } from '@masknet/web3-helpers'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { NETWORK_DESCRIPTORS } from '@masknet/web3-shared-evm'
-import { useNetworkDescriptor, useNonFungibleToken, Web3Helper } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID, SocialAddress } from '@masknet/web3-shared-base'
-import { AssetPlayer } from '../AssetPlayer'
-import { useIsImageURL } from '../../../hooks'
-import { ImageIcon } from '../ImageIcon'
-import { Image } from '../Image'
+import { useTheme } from '@mui/material'
+import classNames from 'classnames'
+import { useMemo } from 'react'
+import { useIsImageURL } from '../../../hooks/index.js'
+import { AssetPlayer } from '../AssetPlayer/index.js'
+import { Image } from '../Image/index.js'
+import { ImageIcon } from '../ImageIcon/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     wrapper: {
@@ -19,13 +20,16 @@ const useStyles = makeStyles()((theme) => ({
         width: 120,
         overflow: 'hidden',
     },
+    imageContainer: {
+        height: '100%',
+    },
     loadingPlaceholder: {
         height: 160,
         width: 120,
     },
     fallbackImage: {
-        height: '64px !important',
-        width: '64px !important',
+        height: 64,
+        width: 64,
     },
     loadingIcon: {
         width: 30,
@@ -41,7 +45,7 @@ const useStyles = makeStyles()((theme) => ({
     networkIcon: {
         position: 'absolute',
         top: 6,
-        right: 6,
+        left: 6,
     },
 }))
 
@@ -57,11 +61,11 @@ interface Props extends withClasses<'fallbackImage' | 'iframe' | 'wrapper' | 'lo
     setERC721TokenName?: (name: string) => void
     setSourceType?: (type: string) => void
     showNetwork?: boolean
-    address?: SocialAddress<NetworkPluginID>
+    pluginID?: NetworkPluginID
 }
 
-const assetPlayerFallbackImageDark = new URL('./nft_token_fallback_dark.png', import.meta.url)
-const assetPlayerFallbackImageLight = new URL('./nft_token_fallback.png', import.meta.url)
+const assetPlayerFallbackImageDark = new URL('../Image/nft_token_fallback_dark.png', import.meta.url)
+const assetPlayerFallbackImageLight = new URL('../Image/nft_token_fallback.png', import.meta.url)
 
 export function NFTCardStyledAssetPlayer(props: Props) {
     const {
@@ -72,7 +76,7 @@ export function NFTCardStyledAssetPlayer(props: Props) {
         fallbackImage,
         fallbackResourceLoader,
         url,
-        address,
+        pluginID,
         setERC721TokenName,
         renderOrder,
         setSourceType,
@@ -90,19 +94,19 @@ export function NFTCardStyledAssetPlayer(props: Props) {
         },
     )
     const urlComputed = url || tokenDetailed?.metadata?.imageURL || tokenDetailed?.metadata?.mediaURL
-    const { value: isImageURL } = useIsImageURL(urlComputed)
+    const { value: isImageURL = true } = useIsImageURL(urlComputed)
 
     const fallbackImageURL =
         fallbackImage ?? (theme.palette.mode === 'dark' ? assetPlayerFallbackImageDark : assetPlayerFallbackImageLight)
 
-    const networkDescriptor = useNetworkDescriptor(address?.networkSupporterPluginID)
+    const networkDescriptor = useNetworkDescriptor(pluginID)
 
     const networkIcon = useMemo(() => {
-        if (address?.networkSupporterPluginID === NetworkPluginID.PLUGIN_EVM) {
+        if (pluginID === NetworkPluginID.PLUGIN_EVM) {
             return NETWORK_DESCRIPTORS.find((network) => network?.chainId === chainId)?.icon
         }
         return networkDescriptor?.icon
-    }, [networkDescriptor])
+    }, [networkDescriptor?.icon, pluginID])
 
     if (isImageURL || isImageOnly) {
         return (
@@ -110,18 +114,20 @@ export function NFTCardStyledAssetPlayer(props: Props) {
                 <Image
                     classes={{
                         fallbackImage: classes.fallbackImage,
+                        container: classes.imageContainer,
                     }}
                     width="100%"
                     height="100%"
                     style={{ objectFit: 'cover' }}
                     src={urlComputed}
+                    fallback={fallbackImageURL}
                 />
-                {showNetwork && <ImageIcon icon={networkIcon} size={20} classes={{ icon: classes.networkIcon }} />}
+                {showNetwork && <ImageIcon icon={networkIcon} size={24} classes={{ icon: classes.networkIcon }} />}
             </div>
         )
     }
 
-    if (typeof isImageURL === 'undefined') return null
+    if (!isImageURL) return null
 
     return (
         <AssetPlayer

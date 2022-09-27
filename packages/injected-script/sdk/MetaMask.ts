@@ -1,4 +1,4 @@
-import { InjectedProvider } from './Base'
+import { InjectedProvider } from './Base.js'
 
 export class MetaMaskProvider extends InjectedProvider {
     constructor() {

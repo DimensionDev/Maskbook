@@ -1,5 +1,5 @@
-import { Tag as MaskTag } from '../../src/Components'
-import { story } from '../utils'
+import { Tag as MaskTag } from '../../src/Components/index.js'
+import { story } from '../utils/index.js'
 
 const { meta, of } = story(MaskTag)
 

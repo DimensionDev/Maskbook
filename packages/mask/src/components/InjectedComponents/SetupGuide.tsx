@@ -1,36 +1,30 @@
-import { useMemo, useState, useEffect, useRef } from 'react'
-import { makeStyles } from '@masknet/theme'
-import { useValueRef } from '@masknet/shared-base-ui'
-import { useI18N, MaskMessages } from '../../utils'
-import { activatedSocialNetworkUI } from '../../social-network'
+import { useState, useEffect, useMemo, useCallback } from 'react'
+import { makeStyles, useCustomSnackbar } from '@masknet/theme'
+import { useI18N } from '../../utils/index.js'
+import { activatedSocialNetworkUI } from '../../social-network/index.js'
 import {
     currentSetupGuideStatus,
-    languageSettings,
     userGuideStatus,
     userGuideVersion,
     userPinExtension,
-} from '../../../shared/legacy-settings/settings'
+} from '../../../shared/legacy-settings/settings.js'
 import { makeTypedMessageText } from '@masknet/typed-message'
 import {
     PersonaIdentifier,
     ProfileIdentifier,
     NextIDPlatform,
-    toBase64,
-    fromHex,
-    NextIDAction,
     EnhanceableSite,
     EncryptionTargetType,
 } from '@masknet/shared-base'
-import Services from '../../extension/service'
-import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI'
-import { useAsync } from 'react-use'
-import stringify from 'json-stable-stringify'
-import { SetupGuideContext, SetupGuideStep } from '../../../shared/legacy-settings/types'
-import { FindUsername } from './SetupGuide/FindUsername'
-import { VerifyNextID } from './SetupGuide/VerifyNextID'
-import { PinExtension } from './SetupGuide/PinExtension'
+import Services from '../../extension/service.js'
+import { SetupGuideStep } from '../../../shared/legacy-settings/types.js'
+import { FindUsername } from './SetupGuide/FindUsername.js'
+import { VerifyNextID } from './SetupGuide/VerifyNextID.js'
+import { PinExtension } from './SetupGuide/PinExtension.js'
 import { NextIDProof } from '@masknet/web3-providers'
-import type { IdentityResolved } from '@masknet/plugin-infra'
+import { useSetupGuideStepInfo } from './SetupGuide/useSetupGuideStepInfo'
+import stringify from 'json-stable-stringify'
+import { useNextIDVerify } from '../DataSource/useNextIDVerify.js'
 
 // #region setup guide ui
 interface SetupGuideUIProps {
@@ -41,65 +35,51 @@ interface SetupGuideUIProps {
 function SetupGuideUI(props: SetupGuideUIProps) {
     const { t } = useI18N()
     const { persona } = props
+    const { showSnackbar } = useCustomSnackbar()
+    const [, handleVerifyNextID] = useNextIDVerify()
     const ui = activatedSocialNetworkUI
-    const [step, setStep] = useState(SetupGuideStep.FindUsername)
     const [enableNextID] = useState(ui.configuration.nextIDConfig?.enable)
-    const verifyPostCollectTimer = useRef<NodeJS.Timer | null>(null)
-    const platform = ui.configuration.nextIDConfig?.platform as NextIDPlatform
-    // #region parse setup status
-    const lastState_ = useValueRef(currentSetupGuideStatus[ui.networkIdentifier])
-    const lastState = useMemo<SetupGuideContext>(() => {
-        try {
-            return JSON.parse(lastState_)
-        } catch {
-            return {}
-        }
-    }, [lastState_])
+
+    const {
+        value: { step, userId, currentIdentityResolved, destinedPersonaInfo, type } = {
+            step: SetupGuideStep.Close,
+            userId: '',
+            type: 'close',
+        },
+        loading: loadingSetupGuideStep,
+        retry: retryCheckStep,
+    } = useSetupGuideStepInfo(persona)
+
+    // #region should not show notification if user have operation
+    const [hasOperation, setOperation] = useState(false)
+
+    const notify = useCallback(
+        () =>
+            showSnackbar(t('setup_guide_connected_title'), {
+                variant: 'success',
+                message: t('setup_guide_connected_description'),
+            }),
+        [],
+    )
+
     useEffect(() => {
-        setStep(lastState.status ?? SetupGuideStep.Close)
-    }, [lastState])
+        if (!(type === 'done' && !hasOperation)) return
+
+        notify()
+        currentSetupGuideStatus[ui.networkIdentifier].value = ''
+    }, [type, hasOperation, notify])
     // #endregion
 
-    // #region setup username
-    const lastRecognized = useLastRecognizedIdentity()
-    const getUsername = () => lastState.username || lastRecognized.identifier?.userId || ''
-    const [username, setUsername] = useState(getUsername)
+    const disableVerify = useMemo(
+        () =>
+            !currentIdentityResolved?.identifier || !userId
+                ? false
+                : currentIdentityResolved?.identifier.userId !== userId,
+        [currentIdentityResolved, userId],
+    )
 
-    const disableVerify =
-        !lastRecognized.identifier || !lastState.username
-            ? false
-            : lastRecognized.identifier.userId !== lastState.username
-
-    useEffect(() => {
-        const handler = (val: IdentityResolved) => {
-            if (username === '' && val.identifier) setUsername(val.identifier.userId)
-        }
-        return ui.collecting.identityProvider?.recognized.addListener(handler)
-    }, [username])
-
-    useEffect(() => {
-        if (username || ui.networkIdentifier !== EnhanceableSite.Twitter) return
-        // In order to collect user info after login, need to reload twitter once
-        let reloaded = false
-        const handler = () => {
-            // twitter will redirect to home page after login
-            if (!(!reloaded && location.pathname === '/home')) return
-            reloaded = true
-            location.reload()
-        }
-        window.addEventListener('locationchange', handler)
-        return () => {
-            window.removeEventListener('locationchange', handler)
-        }
-    }, [username])
-    // #endregion
-
-    const { value: persona_ } = useAsync(async () => {
-        return Services.Identity.queryPersona(persona)
-    }, [persona])
-
-    const onConnect = async () => {
-        const id = ProfileIdentifier.of(ui.networkIdentifier, username)
+    const onConnect = useCallback(async () => {
+        const id = ProfileIdentifier.of(ui.networkIdentifier, userId)
         if (!id.some) return
         // attach persona with SNS profile
         await Services.Identity.attachProfile(id.val, persona, {
@@ -107,120 +87,55 @@ function SetupGuideUI(props: SetupGuideUIProps) {
         })
 
         // auto-finish the setup process
-        if (!persona_) throw new Error('invalid persona')
-        await Services.Identity.setupPersona(persona_?.identifier)
-    }
+        if (!destinedPersonaInfo) throw new Error('invalid persona')
+        await Services.Identity.setupPersona(destinedPersonaInfo?.identifier)
 
-    const onVerify = async () => {
-        if (!username) return
-        if (!persona_) return
-        const collectVerificationPost = ui.configuration.nextIDConfig?.collectVerificationPost
+        setOperation(true)
+        if (step !== SetupGuideStep.FindUsername) return
+
+        currentSetupGuideStatus[ui.networkIdentifier].value = stringify({
+            status: SetupGuideStep.VerifyOnNextID,
+        })
+    }, [ui.networkIdentifier, destinedPersonaInfo, step])
+
+    const onVerify = useCallback(async () => {
+        if (!userId) return
+        if (!destinedPersonaInfo) return
 
         const platform = ui.configuration.nextIDConfig?.platform as NextIDPlatform | undefined
         if (!platform) return
 
-        const isBound = await NextIDProof.queryIsBound(persona_.identifier.publicKeyAsHex, platform, username)
-        if (!isBound) {
-            const payload = await NextIDProof.createPersonaPayload(
-                persona_.identifier.publicKeyAsHex,
-                NextIDAction.Create,
-                username,
-                platform,
-                languageSettings.value ?? 'default',
-            )
-            if (!payload) throw new Error('Failed to create persona payload.')
-            const signResult = await Services.Identity.signWithPersona({
-                method: 'eth',
-                message: payload.signPayload,
-                identifier: persona_.identifier,
-            })
-            if (!signResult) throw new Error('Failed to sign by persona.')
-            const signature = signResult.signature.signature
-            const postContent = payload.postContent.replace('%SIG_BASE64%', toBase64(fromHex(signature)))
-            ui.automation?.nativeCompositionDialog?.appendText?.(postContent, { recover: false })
+        const isBound = await NextIDProof.queryIsBound(destinedPersonaInfo.identifier.publicKeyAsHex, platform, userId)
+        if (isBound) return
 
-            const waitingPost = new Promise<void>((resolve, reject) => {
-                verifyPostCollectTimer.current = setInterval(async () => {
-                    const post = collectVerificationPost?.(postContent)
-                    if (post && persona_.identifier.publicKeyAsHex) {
-                        clearInterval(verifyPostCollectTimer.current!)
-                        await NextIDProof.bindProof(
-                            payload.uuid,
-                            persona_.identifier.publicKeyAsHex,
-                            NextIDAction.Create,
-                            platform,
-                            username,
-                            payload.createdAt,
-                            {
-                                signature,
-                                proofLocation: post.postId,
-                            },
-                        )
-                        resolve()
-                    }
-                }, 1000)
+        const afterVerify = () => setOperation(true)
+        await handleVerifyNextID(destinedPersonaInfo, userId, afterVerify)
+    }, [userId, destinedPersonaInfo])
 
-                setTimeout(() => {
-                    clearInterval(verifyPostCollectTimer.current!)
-                    reject({ message: t('setup_guide_verify_post_not_found') })
-                }, 1000 * 20)
-            })
-
-            await waitingPost
-            const isBound = await NextIDProof.queryIsBound(persona_.identifier.publicKeyAsHex, platform, username)
-            if (!isBound) throw new Error('Failed to verify.')
-            MaskMessages.events.ownProofChanged.sendToAll(undefined)
+    const onVerifyDone = useCallback(() => {
+        if (step === SetupGuideStep.VerifyOnNextID) {
+            currentSetupGuideStatus[ui.networkIdentifier].value = ''
         }
-    }
+        retryCheckStep()
+    }, [step, retryCheckStep])
 
-    const onClose = () => {
+    const onClose = useCallback(() => {
         currentSetupGuideStatus[ui.networkIdentifier].value = ''
-        setStep(SetupGuideStep.Close)
-    }
+    }, [ui.networkIdentifier])
 
-    const onConnected = async () => {
-        if (enableNextID && persona_?.identifier.publicKeyAsHex && platform && username) {
-            const isBound = await NextIDProof.queryIsBound(persona_.identifier.publicKeyAsHex, platform, username)
-            if (!isBound) {
-                currentSetupGuideStatus[ui.networkIdentifier].value = stringify({
-                    status: SetupGuideStep.VerifyOnNextID,
-                })
-                setStep(SetupGuideStep.VerifyOnNextID)
-                return
-            }
-        }
-
-        if (!userPinExtension.value) {
-            userPinExtension.value = true
-            setStep(SetupGuideStep.PinExtension)
-            return
-        }
-
-        onDone()
-    }
-
-    const onVerifyDone = async () => {
-        if (!userPinExtension.value) {
-            userPinExtension.value = true
-            setStep(SetupGuideStep.PinExtension)
-            return
-        }
-
-        onDone()
-    }
-
-    const onDone = async () => {
+    const onPinDone = useCallback(() => {
         const network = ui.networkIdentifier
+        if (!userPinExtension.value) {
+            userPinExtension.value = true
+        }
         if (network === EnhanceableSite.Twitter && userGuideStatus[network].value !== userGuideVersion.value) {
             userGuideStatus[network].value = '1'
         } else {
             onCreate()
         }
+    }, [])
 
-        onClose()
-    }
-
-    const onCreate = async () => {
+    const onCreate = () => {
         let content = t('setup_guide_say_hello_content')
         if (ui.networkIdentifier === EnhanceableSite.Twitter) {
             content += t('setup_guide_say_hello_follow', { account: '@realMaskNetwork' })
@@ -235,25 +150,24 @@ function SetupGuideUI(props: SetupGuideUIProps) {
         case SetupGuideStep.FindUsername:
             return (
                 <FindUsername
-                    personaName={persona_?.nickname}
-                    username={username}
-                    avatar={lastRecognized.avatar}
-                    onUsernameChange={setUsername}
+                    personaName={destinedPersonaInfo?.nickname}
+                    username={userId}
+                    avatar={currentIdentityResolved?.avatar}
                     onConnect={onConnect}
-                    onDone={onConnected}
+                    onDone={retryCheckStep}
                     onClose={onClose}
                     enableNextID={enableNextID}
+                    stepUpdating={loadingSetupGuideStep}
                 />
             )
         case SetupGuideStep.VerifyOnNextID:
             return (
                 <VerifyNextID
-                    personaIdentifier={persona_?.identifier}
-                    personaName={persona_?.nickname}
-                    username={username}
+                    personaIdentifier={destinedPersonaInfo?.identifier}
+                    personaName={destinedPersonaInfo?.nickname}
+                    username={userId}
                     network={ui.networkIdentifier}
-                    avatar={lastRecognized.avatar}
-                    onUsernameChange={setUsername}
+                    avatar={currentIdentityResolved?.avatar}
                     onVerify={onVerify}
                     onDone={onVerifyDone}
                     onClose={onClose}
@@ -261,7 +175,7 @@ function SetupGuideUI(props: SetupGuideUIProps) {
                 />
             )
         case SetupGuideStep.PinExtension:
-            return <PinExtension onDone={onDone} />
+            return <PinExtension onDone={onPinDone} />
         default:
             return null
     }

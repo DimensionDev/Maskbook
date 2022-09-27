@@ -1,13 +1,13 @@
 import { useMemo } from 'react'
 import { Trans } from 'react-i18next'
-import { usePostInfoDetails, Plugin, usePluginWrapper, PluginId } from '@masknet/plugin-infra/content-script'
+import { usePostInfoDetails, Plugin, usePluginWrapper, PluginID } from '@masknet/plugin-infra/content-script'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import { parseURL } from '@masknet/shared-base'
 import { Icons } from '@masknet/icons'
-import { PreviewCard } from './PreviewCard'
-import { base } from '../base'
-import { PLUGIN_META_KEY, PLUGIN_NAME } from '../constants'
-import { DonateDialog } from './DonateDialog'
+import { PreviewCard } from './PreviewCard.js'
+import { base } from '../base.js'
+import { PLUGIN_META_KEY, PLUGIN_NAME } from '../constants.js'
+import { DonateDialog } from './DonateDialog.js'
 
 const isGitcoin = (x: string): boolean => /^https:\/\/gitcoin.co\/grants\/\d+/.test(x)
 
@@ -38,8 +38,8 @@ const sns: Plugin.SNSAdaptor.Definition = {
         {
             ApplicationEntryID: base.ID,
             category: 'dapp',
-            description: <Trans ns={PluginId.Gitcoin} i18nKey="description" />,
-            name: <Trans ns={PluginId.Gitcoin} i18nKey="name" />,
+            description: <Trans ns={PluginID.Gitcoin} i18nKey="description" />,
+            name: <Trans ns={PluginID.Gitcoin} i18nKey="name" />,
             icon: <Icons.Gitcoin size={36} />,
             marketListSortingPriority: 9,
             tutorialLink: 'https://realmasknetwork.notion.site/98ed83784ed4446a8a13fa685c7bddfb',
@@ -50,7 +50,11 @@ const sns: Plugin.SNSAdaptor.Definition = {
     },
 }
 
-function Renderer(props: React.PropsWithChildren<{ url: string }>) {
+function Renderer(
+    props: React.PropsWithChildren<{
+        url: string
+    }>,
+) {
     const [id = ''] = props.url.match(/\d+/) ?? []
     usePluginWrapper(true)
     return <PreviewCard id={id} />

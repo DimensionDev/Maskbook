@@ -1,5 +1,6 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import type {
+    AddressType,
     Block,
     ChainId,
     GasOption,
@@ -15,12 +16,13 @@ import type {
     TransactionReceipt,
     Web3,
 } from '@masknet/web3-shared-evm'
-import { base } from '../../base'
-import { createWeb3State } from '../../state'
-import { SharedContextSettings, Web3StateSettings } from '../../settings'
+import { base } from '../../base.js'
+import { createWeb3State } from '../../state/index.js'
+import { SharedContextSettings, Web3StateSettings } from '../../settings/index.js'
 
 const dashboard: Plugin.Dashboard.Definition<
     ChainId,
+    AddressType,
     SchemaType,
     ProviderType,
     NetworkType,

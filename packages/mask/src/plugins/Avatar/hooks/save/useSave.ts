@@ -3,12 +3,14 @@ import type { TwitterBaseAPI } from '@masknet/web3-providers'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { useAsyncFn } from 'react-use'
-import type { AllChainsNonFungibleToken, NextIDAvatarMeta } from '../../types'
-import { useSaveKV } from './useSaveKV'
-import { useSaveToNextID } from './useSaveToNextID'
-import { useSaveToRSS3 } from './useSaveToRSS3'
+import type { AllChainsNonFungibleToken, NextIDAvatarMeta } from '../../types.js'
+import { useSaveKV } from './useSaveKV.js'
+import { useSaveToNextID } from './useSaveToNextID.js'
+import { useSaveToRSS3 } from './useSaveToRSS3.js'
 
-export type AvatarInfo = TwitterBaseAPI.AvatarInfo & { avatarId: string }
+export type AvatarInfo = TwitterBaseAPI.AvatarInfo & {
+    avatarId: string
+}
 
 export function useSave(pluginId: NetworkPluginID, chainId: ChainId) {
     const saveToNextID = useSaveToNextID()
@@ -24,7 +26,7 @@ export function useSave(pluginId: NetworkPluginID, chainId: ChainId) {
             persona: ECKeyIdentifier,
             proof: BindingProof,
         ) => {
-            if (!token.contract?.address || !token.tokenId) return
+            if (!token.contract?.address) return
             const info: NextIDAvatarMeta = {
                 pluginId,
                 nickname: data.nickname,
@@ -32,7 +34,7 @@ export function useSave(pluginId: NetworkPluginID, chainId: ChainId) {
                 imageUrl: data.imageUrl,
                 avatarId: data.avatarId,
                 address: token.contract?.address ?? '',
-                tokenId: token.tokenId,
+                tokenId: token.tokenId || token.id,
                 chainId: (token.contract?.chainId ?? ChainId.Mainnet) as ChainId,
                 schema: (token.contract?.schema ?? SchemaType.ERC721) as SchemaType,
             }
@@ -41,12 +43,15 @@ export function useSave(pluginId: NetworkPluginID, chainId: ChainId) {
                 switch (pluginId) {
                     case NetworkPluginID.PLUGIN_EVM: {
                         if (isBindAccount) {
-                            return saveToNextID(info, account, persona, proof)
+                            const result = await saveToNextID(info, account, persona, proof)
+                            return result
                         }
-                        return saveToRSS3(info, account)
+                        const result = await saveToRSS3(info, account)
+                        return result
                     }
                     default:
-                        return saveToKV(info, account, persona, proof)
+                        const result = await saveToKV(info, account, persona, proof)
+                        return result
                 }
             } catch {
                 return

@@ -1,14 +1,14 @@
 import { DialogContent, Card, Grid, Alert, Box, Typography, Button } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useContext, useEffect, useState } from 'react'
-import { useI18N } from '../../../utils'
+import { useI18N } from '../../../utils/index.js'
 import { InjectedDialog, InjectedDialogProps, Image } from '@masknet/shared'
 import { useAccount } from '@masknet/plugin-infra/web3'
-import { fetchConst, fetchUserParticipatedStoryStatus } from '../Worker/apis'
-import type { UserStoryStatus, FindTrumanConst } from '../types'
-import { BorderLinearProgress } from './ResultCard'
-import { FindTruman_Const } from '../constants'
-import { FindTrumanContext } from '../context'
+import { fetchConst, fetchUserParticipatedStoryStatus } from '../Worker/apis/index.js'
+import type { UserStoryStatus, FindTrumanConst } from '../types.js'
+import { BorderLinearProgress } from './ResultCard.js'
+import { FindTruman_Const } from '../constants.js'
+import { FindTrumanContext } from '../context.js'
 
 interface Props extends InjectedDialogProps {
     onClose: () => void

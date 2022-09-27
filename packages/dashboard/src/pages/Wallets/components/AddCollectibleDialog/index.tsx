@@ -6,7 +6,7 @@ import { Box, Button, DialogActions, DialogContent } from '@mui/material'
 import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useDashboardI18N } from '../../../../locales'
+import { useDashboardI18N } from '../../../../locales/index.js'
 import {
     useWeb3Connection,
     useNonFungibleTokenContract,
@@ -15,8 +15,8 @@ import {
     useTrustedNonFungibleTokens,
     useCurrentWeb3NetworkPluginID,
     useWeb3Hub,
-    Web3Helper,
 } from '@masknet/plugin-infra/web3'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import type { ChainId } from '@masknet/web3-shared-evm'
 
 export interface AddCollectibleDialogProps {

@@ -2,10 +2,10 @@ import { LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-k
 import { makeStyles } from '@masknet/theme'
 import { CrossIsolationMessages } from '@masknet/shared-base'
 import { useCallback } from 'react'
-import { PostDialogHint } from '../../../components/InjectedComponents/PostDialogHint'
-import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot'
-import { startWatch } from '../../../utils/watcher'
-import { postEditorInDialogSelector, postEditorInTimelineSelector } from '../utils/selector'
+import { PostDialogHint } from '../../../components/InjectedComponents/PostDialogHint.js'
+import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot.js'
+import { startWatch } from '../../../utils/watcher.js'
+import { postEditorInDialogSelector, postEditorInTimelineSelector } from '../utils/selector.js'
 
 export function injectPostDialogHintAtMinds(signal: AbortSignal) {
     renderPostDialogHintTo(postEditorInDialogSelector(), signal, 'popup')
@@ -45,7 +45,7 @@ function PostDialogHintAtMinds({ reason }: { reason: 'timeline' | 'popup' }) {
     const { classes } = useStyles({ reason })
 
     const onHintButtonClicked = useCallback(
-        () => CrossIsolationMessages.events.requestComposition.sendToLocal({ reason, open: true }),
+        () => CrossIsolationMessages.events.compositionDialogEvent.sendToLocal({ reason, open: true }),
         [reason],
     )
     return (

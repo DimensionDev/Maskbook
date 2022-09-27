@@ -1,8 +1,8 @@
 import { useAsyncRetry } from 'react-use'
 import type { NetworkPluginID } from '@masknet/web3-shared-base'
-import type { Web3Helper } from '../web3-helpers'
-import { useAccount } from './useAccount'
-import { useWeb3Connection } from './useWeb3Connection'
+import type { Web3Helper } from '@masknet/web3-helpers'
+import { useAccount } from './useAccount.js'
+import { useWeb3Connection } from './useWeb3Connection.js'
 
 export function useNativeTokenBalance<S extends 'all' | void = void, T extends NetworkPluginID = NetworkPluginID>(
     pluginID?: T,

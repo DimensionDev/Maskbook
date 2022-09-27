@@ -3,10 +3,11 @@ import { useCopyToClipboard } from 'react-use'
 import { MaskColorVar, MaskDialog, makeStyles } from '@masknet/theme'
 import { QRCode, useSnackbarCallback } from '@masknet/shared'
 import { DialogContent, Typography, DialogActions, Button } from '@mui/material'
-import { useChainId, useReverseAddress, useWeb3State, Web3Helper } from '@masknet/plugin-infra/web3'
+import { useChainId, useReverseAddress, useWeb3State } from '@masknet/plugin-infra/web3'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import { chainResolver } from '@masknet/web3-shared-evm'
-import { WalletQRCodeContainer } from '../../../../components/WalletQRCodeContainer'
-import { useDashboardI18N } from '../../../../locales'
+import { WalletQRCodeContainer } from '../../../../components/WalletQRCodeContainer/index.js'
+import { useDashboardI18N } from '../../../../locales/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {

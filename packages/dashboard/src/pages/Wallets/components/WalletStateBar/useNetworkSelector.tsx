@@ -1,3 +1,4 @@
+import { useCallback } from 'react'
 import { MenuItem, Stack, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
@@ -9,9 +10,8 @@ import {
     useProviderDescriptor,
     useWeb3State,
     useWeb3UI,
-    Web3Helper,
 } from '@masknet/plugin-infra/web3'
-import { useCallback } from 'react'
+import type { Web3Helper } from '@masknet/web3-helpers'
 
 const useStyles = makeStyles()((theme) => ({
     item: {

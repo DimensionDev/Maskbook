@@ -1,4 +1,4 @@
-import { maskSDKServer } from './bridge'
+import { maskSDKServer } from './bridge/index.js'
 
 export const hmr_sdkServer = { ...maskSDKServer }
 

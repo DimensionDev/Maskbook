@@ -12,8 +12,8 @@ import {
     Pageable,
 } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import type { NonFungibleTokenAPI } from '../../types'
-import { EVM, PageableResponse, Response } from '../types'
+import type { NonFungibleTokenAPI } from '../../types/index.js'
+import { EVM, PageableResponse, Response } from '../types/index.js'
 import {
     createNonFungibleAsset,
     createNonFungibleTokenContract,
@@ -21,7 +21,7 @@ import {
     createNonFungibleTokenEvent,
     createNonFungibleCollectionFromGroup,
     createNonFungibleCollectionFromCollection,
-} from '../helpers/EVM'
+} from '../helpers/EVM.js'
 
 export class NFTScanNonFungibleTokenAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
     async getAsset(address: string, tokenId: string, { chainId = ChainId.Mainnet }: HubOptions<ChainId> = {}) {
@@ -43,9 +43,8 @@ export class NFTScanNonFungibleTokenAPI_EVM implements NonFungibleTokenAPI.Provi
             show_attribute: true,
         })
         const response = await fetchFromNFTScanV2<Response<EVM.AssetsGroup[]>>(chainId, path)
-        const assets =
-            response?.data?.flatMap((x) => x.assets.map((x) => createNonFungibleAsset(chainId, x))) ?? EMPTY_LIST
-        return createPageable(assets, createIndicator(indicator))
+        const assets = response?.data?.flatMap((x) => x.assets.map((y) => createNonFungibleAsset(chainId, y, x)))
+        return createPageable(assets ?? EMPTY_LIST, createIndicator(indicator))
     }
 
     async getAssetsByCollection(

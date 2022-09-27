@@ -1,7 +1,7 @@
 import type { NetworkPluginID } from '@masknet/web3-shared-base'
-import type { Web3Helper } from '../web3-helpers'
-import { useFungibleToken } from './useFungibleToken'
-import { useNativeTokenAddress } from './useNativeTokenAddress'
+import type { Web3Helper } from '@masknet/web3-helpers'
+import { useFungibleToken } from './useFungibleToken.js'
+import { useNativeTokenAddress } from './useNativeTokenAddress.js'
 
 export function useNativeToken<S extends 'all' | void = void, T extends NetworkPluginID = NetworkPluginID>(
     pluginID?: T,

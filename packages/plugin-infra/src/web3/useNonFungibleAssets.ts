@@ -1,10 +1,11 @@
 import { pageableToIterator, NetworkPluginID } from '@masknet/web3-shared-base'
-import type { Web3Helper } from '../web3-helpers'
-import { useAccount } from './useAccount'
-import { useWeb3Hub } from './useWeb3Hub'
+import type { Web3Helper } from '@masknet/web3-helpers'
+import { useAccount } from './useAccount.js'
+import { useWeb3Hub } from './useWeb3Hub.js'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { flattenAsyncIterator, EMPTY_LIST } from '@masknet/shared-base'
-import { useNetworkDescriptors } from './useNetworkDescriptors'
+import { useNetworkDescriptors } from './useNetworkDescriptors.js'
+import { useUpdateEffect } from 'react-use'
 
 export function useNonFungibleAssets<S extends 'all' | void = void, T extends NetworkPluginID = NetworkPluginID>(
     pluginID?: T,
@@ -16,13 +17,13 @@ export function useNonFungibleAssets<S extends 'all' | void = void, T extends Ne
     const [loading, toggleLoading] = useState(false)
     const [error, setError] = useState<string>()
 
-    const account = useAccount(pluginID)
-    const hub = useWeb3Hub(pluginID, options)
+    const account = useAccount(pluginID, options?.account)
+    const hub = useWeb3Hub(pluginID)
     const networks = useNetworkDescriptors(pluginID)
 
     // create iterator
     const iterator = useMemo(() => {
-        if ((!account && !options?.account) || !hub?.getNonFungibleAssets || !networks) return
+        if (!account || !hub?.getNonFungibleAssets || !networks) return
         setAssets(EMPTY_LIST)
         setDone(false)
         return flattenAsyncIterator(
@@ -31,7 +32,7 @@ export function useNonFungibleAssets<S extends 'all' | void = void, T extends Ne
                 .filter((x) => (options?.chainId ? x.chainId === options.chainId : true))
                 .map((x) => {
                     return pageableToIterator(async (indicator) => {
-                        return hub.getNonFungibleAssets!(options?.account ?? account, {
+                        return hub.getNonFungibleAssets!(account, {
                             indicator,
                             size: 50,
                             ...options,
@@ -44,7 +45,7 @@ export function useNonFungibleAssets<S extends 'all' | void = void, T extends Ne
 
     const next = useCallback(async () => {
         if (!iterator || done) return
-
+        setError(undefined)
         const batchResult: Array<Web3Helper.NonFungibleAssetScope<S, T>> = []
         toggleLoading(true)
         try {
@@ -69,8 +70,10 @@ export function useNonFungibleAssets<S extends 'all' | void = void, T extends Ne
             setError(error_ as string)
             setDone(true)
         }
+        setAssets((pred) => {
+            return [...pred, ...batchResult]
+        })
         toggleLoading(false)
-        setAssets((pred) => [...pred, ...batchResult])
     }, [iterator, done])
 
     // Execute once after next update
@@ -78,7 +81,13 @@ export function useNonFungibleAssets<S extends 'all' | void = void, T extends Ne
         if (next) next()
     }, [next])
 
+    // clear assets after account updated
+    useUpdateEffect(() => {
+        setAssets([])
+    }, [account])
+
     const retry = useCallback(() => {
+        setError(undefined)
         setAssets(EMPTY_LIST)
         setDone(false)
     }, [])

@@ -1,9 +1,9 @@
 export type {
-    CompositionRequest,
+    CompositionDialogEvent as CompositionRequest,
     NFTAvatarEvent,
     UpdateEvent,
     AutoPasteFailedEvent,
     ProfileNFTsPageEvent,
     SettingsUpdateEvent,
 } from '@masknet/shared-base'
-export { MaskMessages } from '../../shared'
+export { MaskMessages } from '../../shared/index.js'

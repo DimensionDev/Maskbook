@@ -1,4 +1,4 @@
-import { memo } from 'react'
+import { memo, useMemo } from 'react'
 import { noop } from 'lodash-unified'
 import { Icons } from '@masknet/icons'
 import { FormattedCurrency, MiniNetworkSelector } from '@masknet/shared'
@@ -6,9 +6,13 @@ import { DashboardRoutes } from '@masknet/shared-base'
 import { MaskColorVar } from '@masknet/theme'
 import { formatCurrency, NetworkDescriptor, NetworkPluginID } from '@masknet/web3-shared-base'
 import { Box, Button, buttonClasses, styled, Typography } from '@mui/material'
-import { useDashboardI18N } from '../../../../locales'
-import { useIsMatched } from '../../hooks'
-import type { Web3Helper } from '@masknet/plugin-infra/web3'
+import { useDashboardI18N } from '../../../../locales/index.js'
+import { useIsMatched } from '../../hooks/index.js'
+import type { Web3Helper } from '@masknet/web3-helpers'
+import { useContainer } from 'unstated-next'
+import { Context } from '../../hooks/useContext'
+import { getTokenUSDValue } from '../../utils/getTokenUSDValue'
+import BigNumber from 'bignumber.js'
 
 const BalanceContainer = styled('div')(
     ({ theme }) => `
@@ -69,7 +73,6 @@ const ButtonGroup = styled('div')`
 `
 
 export interface BalanceCardProps {
-    balance: number
     onSend(): void
     onBuy(): void
     onSwap(): void
@@ -94,11 +97,22 @@ export interface BalanceCardProps {
 }
 
 export const Balance = memo<BalanceCardProps>(
-    ({ balance, onSend, onBuy, onSwap, onReceive, onSelectNetwork, networks, selectedNetwork, showOperations }) => {
+    ({ onSend, onBuy, onSwap, onReceive, onSelectNetwork, networks, selectedNetwork, showOperations }) => {
         const t = useDashboardI18N()
 
         const isWalletTransferPath = useIsMatched(DashboardRoutes.WalletsTransfer)
         const isWalletHistoryPath = useIsMatched(DashboardRoutes.WalletsHistory)
+
+        const { fungibleAssets } = useContainer(Context)
+
+        const balance = useMemo(() => {
+            if (!fungibleAssets.value?.length) return 0
+
+            const values = fungibleAssets.value
+                .filter((x) => (selectedNetwork ? x.chainId === selectedNetwork.chainId : true))
+                .map((y) => getTokenUSDValue(y.value))
+            return BigNumber.sum(...values).toNumber()
+        }, [selectedNetwork, fungibleAssets.value])
 
         const isDisabledNonCurrentChainSelect = !!isWalletTransferPath
         const isHiddenAllButton = isWalletHistoryPath || isWalletTransferPath || networks.length <= 1

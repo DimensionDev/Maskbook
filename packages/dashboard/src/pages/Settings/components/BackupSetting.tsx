@@ -1,18 +1,22 @@
-import SettingButton from './SettingButton'
+import SettingButton from './SettingButton.js'
 import { useContext, useEffect, useState } from 'react'
-import BackupDialog from './dialogs/BackupDialog'
-import BackupModeSelectDialog from './dialogs/BackupModeSelectDialog'
-import { CloudBackupMergeDialog } from './dialogs/CloudBackupMergeDialog'
-import { useDashboardI18N } from '../../../locales'
-import { CloudBackupVerifyDialog, VerifyNextData } from './dialogs/CloudBackupVerifyDialog'
-import { UserContext } from '../hooks/UserContext'
-import type { VerifyCodeRequest } from '../api'
-import type { BackupFileInfo } from '../type'
+import BackupDialog from './dialogs/BackupDialog.js'
+import BackupModeSelectDialog from './dialogs/BackupModeSelectDialog.js'
+import { CloudBackupMergeDialog } from './dialogs/CloudBackupMergeDialog.js'
+import { useDashboardI18N } from '../../../locales/index.js'
+import { CloudBackupVerifyDialog, VerifyNextData } from './dialogs/CloudBackupVerifyDialog.js'
+import { UserContext } from '../hooks/UserContext.js'
+import type { VerifyCodeRequest } from '../api.js'
+import type { BackupFileInfo } from '../type.js'
 import { useLocation } from 'react-router-dom'
 
 export default function BackupSetting() {
     const t = useDashboardI18N()
-    const { state } = useLocation() as { state: { open: 'setting' | null } }
+    const { state } = useLocation() as {
+        state: {
+            open: 'setting' | null
+        }
+    }
     const { ensurePasswordSet } = useContext(UserContext)
     const [merged, setMerged] = useState(false)
     const [showDialog, setShowDialog] = useState({

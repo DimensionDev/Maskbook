@@ -68,6 +68,15 @@ describe('Compare is same Profile', () => {
         expect(isSameProfile(p, p1, p2, p3, p4, p5)).toBe(true)
     })
 
+    test('should return true when give same identifier with case insensitive', () => {
+        const p: ProfileInformation = {
+            identifier: ProfileIdentifier.from(identifierTextMock).unwrap(),
+        }
+        const p1 = ProfileIdentifier.of('twitter.com', 'Test_twitter_1').unwrap()
+
+        expect(isSameProfile(p, p1)).toBe(true)
+    })
+
     test('should return true when give different identifier', () => {
         const p = identifierTextMock1
         const p1 = ProfileIdentifier.from(identifierTextMock).unwrap()

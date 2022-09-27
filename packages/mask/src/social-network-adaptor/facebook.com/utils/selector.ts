@@ -68,9 +68,9 @@ export const searchFacebookAvatarContainerSelector = () =>
     querySelector('div[data-pagelet="ProfileActions"] > div > div')
 
 export const searchFacebookProfileSettingButtonSelector = () =>
-    querySelector(
-        '[role="main"] > div > div > div > div > div > div:last-child > div:last-child > div input',
-    ).closest<E>(2)
+    querySelector('[role="main"] > div > div > div > div > div input[accept*="image"] + div[role="button"]').closest<E>(
+        2,
+    )
 
 export const searchFacebookProfileCoverSelector = () =>
     querySelector('[role="button"] [role="img"]')
@@ -98,13 +98,17 @@ export const searchFacebookConfirmAvatarImageSelector = () =>
 export const inpageAvatarSelector = () => querySelectorAll('[type="nested/pressable"]').closest<HTMLAnchorElement>(2)
 // #region
 
-export const toolBoxInSideBarSelector: () => LiveSelector<E, true> = () =>
+export const toolboxInSidebarSelector: () => LiveSelector<E, true> = () =>
     /* cspell:disable-next-line */
     querySelector<E>('#ssrb_left_rail_start')
         .closest(1)
         .querySelector('h2')
         .closest(1)
         .querySelector('div > div > div > :nth-child(2) > ul > li:nth-child(2)')
+
+export const toolboxInSidebarSelectorWithNoLeftRailStart: () => LiveSelector<E, true> = () =>
+    /* cspell:disable-next-line */
+    querySelector<E>('#ssrb_top_nav_start ~ [role="banner"] ~ div [href="/gaming/?ref=games_tab"]').closest(2)
 
 // for getting normal tab style
 export const profileTabUnselectedSelector: () => LiveSelector<E, true> = () =>
@@ -133,9 +137,9 @@ export const profileSectionSelector: () => LiveSelector<E, true> = () =>
 export const searchIntroSectionSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[role="main"] > div:last-child > div:last-child')
 
-export const searchBioSelector = () =>
-    searchIntroSectionSelector().querySelector<E>(
-        'div > div > div:last-child > div > div > div > div > div > div > div:nth-child(2) > div span',
+export const searchBioSelector: () => LiveSelector<E, true> = () =>
+    querySelector<E>(
+        '[role="main"] > div:last-child > div:last-child > div > div > div:last-child > div > div > div > div > div > div > div:nth-child(2) > div span',
     )
 
 export const searchResultHeadingSelector = () => querySelector('[role="article"]')

@@ -1,8 +1,10 @@
-import { CurrentSNSNetwork, Plugin, PluginId } from '@masknet/plugin-infra'
-import { languages } from './locales/languages'
+import { CurrentSNSNetwork, Plugin, PluginID } from '@masknet/plugin-infra'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { ChainId } from '@masknet/web3-shared-evm'
+import { languages } from './locales/languages.js'
 
 export const base: Plugin.Shared.Definition = {
-    ID: PluginId.Tips,
+    ID: PluginID.Tips,
     name: { fallback: 'Tips' },
     description: {
         fallback: 'Tips Entrance',
@@ -17,6 +19,26 @@ export const base: Plugin.Shared.Definition = {
             },
         },
         target: 'stable',
+        web3: {
+            [NetworkPluginID.PLUGIN_EVM]: {
+                supportedChainIds: [
+                    ChainId.Mainnet,
+                    ChainId.BSC,
+                    ChainId.Matic,
+                    ChainId.Arbitrum,
+                    ChainId.xDai,
+                    ChainId.Aurora,
+                    ChainId.Avalanche,
+                    ChainId.Fantom,
+                    ChainId.Harmony,
+                    ChainId.Conflux,
+                    ChainId.Astar,
+                    ChainId.Optimism,
+                ],
+            },
+            [NetworkPluginID.PLUGIN_FLOW]: { supportedChainIds: [] },
+            [NetworkPluginID.PLUGIN_SOLANA]: { supportedChainIds: [] },
+        },
     },
     i18n: languages,
 }

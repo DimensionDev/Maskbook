@@ -1,16 +1,15 @@
 import { Fragment, useCallback, useEffect, useState } from 'react'
-import { InputAdornment } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { v4 as uuid } from 'uuid'
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward'
-import { useI18N } from '../../../utils'
-import { ITO_EXCHANGE_RATION_MAX } from '../constants'
+import { useI18N } from '../../../utils/index.js'
+import { ITO_EXCHANGE_RATION_MAX } from '../constants.js'
 import {
     ExchangeTokenAndAmountState,
     ExchangeTokenAndAmountActionType,
     useExchangeTokenAndAmount,
-} from './hooks/useExchangeTokenAmountstate'
-import { ExchangeTokenPanel } from './ExchangeTokenPanel'
+} from './hooks/useExchangeTokenAmountstate.js'
+import { ExchangeTokenPanel } from './ExchangeTokenPanel.js'
 import type { FungibleToken } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 
@@ -106,19 +105,7 @@ export function ExchangeTokenPanelGroup(props: ExchangeTokenPanelGroupProps) {
                                 })
                             }
                             onAdd={onAdd}
-                            TokenAmountPanelProps={{
-                                InputProps: idx
-                                    ? {
-                                          startAdornment: props.token ? (
-                                              <InputAdornment position="start" className={classes.adornment}>
-                                                  1{props.token?.symbol}=
-                                              </InputAdornment>
-                                          ) : (
-                                              ''
-                                          ),
-                                      }
-                                    : {},
-                            }}
+                            placeholder={idx ? `1${props.token?.symbol}=` : undefined}
                         />
                         {idx === 0 ? (
                             <div className={classes.arrow}>

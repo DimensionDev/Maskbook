@@ -4,9 +4,9 @@ import { first } from 'lodash-unified'
 import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainId, chainResolver, getExplorerConstants, getRedPacketConstants } from '@masknet/web3-shared-evm'
 import { Interface } from '@ethersproject/abi'
-import type { RedPacketJSONPayloadFromChain } from '../../types'
+import type { RedPacketJSONPayloadFromChain } from '../../types.js'
 import REDPACKET_ABI from '@masknet/web3-contracts/abis/HappyRedPacketV4.json'
-import type { Web3Helper } from '@masknet/plugin-infra/web3'
+import type { Web3Helper } from '@masknet/web3-helpers'
 
 const interFace = new Interface(REDPACKET_ABI)
 
@@ -59,7 +59,11 @@ export async function getRedPacketHistory(
         _total_tokens: BigNumber
     }
 
-    const { result }: { result: TxType[] } = await response.json()
+    const {
+        result,
+    }: {
+        result: TxType[]
+    } = await response.json()
     if (!result.length) return []
 
     const payloadList: RedPacketJSONPayloadFromChain[] = result.flatMap((txType: TxType) => {

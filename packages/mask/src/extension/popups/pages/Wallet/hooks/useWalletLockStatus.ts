@@ -1,5 +1,5 @@
 import { useAsyncRetry } from 'react-use'
-import { WalletRPC } from '../../../../../plugins/Wallet/messages'
+import { WalletRPC } from '../../../../../plugins/Wallet/messages.js'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useEffect } from 'react'
 

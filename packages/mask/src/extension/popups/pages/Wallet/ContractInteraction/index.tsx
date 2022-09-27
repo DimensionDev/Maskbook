@@ -2,16 +2,16 @@ import { memo, useMemo, useState } from 'react'
 import { useAsync, useAsyncFn, useUpdateEffect } from 'react-use'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { makeStyles } from '@masknet/theme'
-import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest'
-import { formatGweiToWei, formatWeiToEther, SchemaType } from '@masknet/web3-shared-evm'
+import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest.js'
+import { formatGweiToWei, formatWeiToEther, SchemaType, isNativeTokenAddress } from '@masknet/web3-shared-evm'
 import { FormattedBalance, FormattedCurrency, TokenIcon } from '@masknet/shared'
 import { Link, Typography } from '@mui/material'
-import { useI18N } from '../../../../../utils'
+import { useI18N } from '../../../../../utils/index.js'
 import { PopupRoutes } from '@masknet/shared-base'
 import { LoadingButton } from '@mui/lab'
 import { unreachable } from '@dimensiondev/kit'
 import BigNumber from 'bignumber.js'
-import { LoadingPlaceholder } from '../../../components/LoadingPlaceholder'
+import { LoadingPlaceholder } from '../../../components/LoadingPlaceholder/index.js'
 import { toHex } from 'web3-utils'
 import {
     useChainId,
@@ -23,7 +23,7 @@ import {
     useNativeTokenPrice,
     useNetworkType,
     useReverseAddress,
-    useTokenSchema,
+    useSchemaType,
     useWeb3State,
 } from '@masknet/plugin-infra/web3'
 import {
@@ -36,9 +36,9 @@ import {
     TransactionDescriptorType,
     ZERO,
 } from '@masknet/web3-shared-base'
-import { CopyIconButton } from '../../../components/CopyIconButton'
-import { useTitle } from '../../../hook/useTitle'
-import { WalletRPC } from '../../../../../plugins/Wallet/messages'
+import { CopyIconButton } from '../../../components/CopyIconButton/index.js'
+import { useTitle } from '../../../hook/useTitle.js'
+import { WalletRPC } from '../../../../../plugins/Wallet/messages.js'
 
 const useStyles = makeStyles()(() => ({
     container: {
@@ -152,11 +152,18 @@ const ContractInteraction = memo(() => {
     const { classes } = useStyles()
     const location = useLocation()
     const navigate = useNavigate()
-    const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
+    const { Others, TransactionFormatter } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const networkType = useNetworkType(NetworkPluginID.PLUGIN_EVM)
     const [transferError, setTransferError] = useState(false)
     const { value: request, loading: requestLoading } = useUnconfirmedRequest()
+    const { value: transactionDescription } = useAsync(async () => {
+        if (!request?.transactionContext?.chainId) return
+        return TransactionFormatter?.formatTransaction?.(request?.transactionContext?.chainId, {
+            ...request?.transactionContext,
+            data: request?.computedPayload?.data,
+        })
+    }, [TransactionFormatter, request])
 
     const {
         tokenAddress,
@@ -216,15 +223,17 @@ const ContractInteraction = memo(() => {
                     }
                 }
                 return {
-                    isNativeTokenInteraction: true,
+                    isNativeTokenInteraction: transactionDescription?.tokenInAddress
+                        ? isNativeTokenAddress(transactionDescription?.tokenInAddress)
+                        : true,
                     typeName: t('popups_wallet_contract_interaction'),
-                    tokenAddress: request.computedPayload?.to,
+                    tokenAddress: transactionDescription?.tokenInAddress ?? request.computedPayload?.to,
                     to: request.computedPayload?.to,
                     gas: request.computedPayload?.gas,
                     gasPrice: request.computedPayload?.gasPrice,
                     maxFeePerGas: request.computedPayload?.maxFeePerGas,
                     maxPriorityFeePerGas: request.computedPayload?.maxPriorityFeePerGas,
-                    amount: request.computedPayload?.value,
+                    amount: transactionDescription?.tokenInAmount ?? request.computedPayload?.value,
                 }
             case TransactionDescriptorType.TRANSFER:
                 return {
@@ -245,16 +254,16 @@ const ContractInteraction = memo(() => {
             default:
                 unreachable(type)
         }
-    }, [request, t])
+    }, [request, t, transactionDescription])
 
-    const { value: contractType } = useTokenSchema(NetworkPluginID.PLUGIN_EVM, contractAddress)
+    const { value: contractType } = useSchemaType(NetworkPluginID.PLUGIN_EVM, contractAddress)
 
     // token detailed
     const { value: nativeToken } = useNativeToken(NetworkPluginID.PLUGIN_EVM)
     const { value: token } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, !isNativeTokenInteraction ? tokenAddress : '')
 
     // gas price
-    const isSupport1559 = useChainIdSupport(NetworkPluginID.PLUGIN_EVM, chainId, 'EIP1559')
+    const isSupport1559 = useChainIdSupport(NetworkPluginID.PLUGIN_EVM, 'EIP1559', chainId)
     const { value: gasOptions } = useGasOptions(NetworkPluginID.PLUGIN_EVM)
     const { value: defaultPrices } = useAsync(async () => {
         if (isSupport1559 && !maxFeePerGas && !maxPriorityFeePerGas) {
@@ -362,7 +371,7 @@ const ContractInteraction = memo(() => {
                         {tokenDecimals !== undefined ? (
                             <>
                                 <Typography className={classes.amount}>
-                                    {isGreaterThan(formatBalance(tokenAmount, tokenDecimals), pow10(9)) ? (
+                                    {leftShift(tokenAmount, tokenDecimals).gt(pow10(9)) ? (
                                         t('popups_wallet_token_infinite_unlock')
                                     ) : (
                                         <FormattedBalance

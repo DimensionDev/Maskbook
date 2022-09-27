@@ -35,6 +35,7 @@ import {
     isNativeTokenAddress,
     encodeTransaction,
     Operation,
+    AddressType,
 } from '@masknet/web3-shared-evm'
 import {
     Account,
@@ -50,15 +51,15 @@ import {
     NonFungibleTokenContract,
     NonFungibleTokenMetadata,
     TransactionStatusType,
-    resolveIPFSLink,
-    resolveCORSLink,
+    resolveIPFS_URL,
+    resolveCrossOriginURL,
 } from '@masknet/web3-shared-base'
 import type { BaseContract } from '@masknet/web3-contracts/types/types'
-import { createContext, dispatch } from './composer'
-import { Providers } from './provider'
-import type { ERC1155Metadata, ERC721Metadata, EVM_Connection, EVM_Web3ConnectionOptions } from './types'
-import { getReceiptStatus } from './utils'
-import { Web3StateSettings } from '../../settings'
+import { createContext, dispatch } from './composer.js'
+import { Providers } from './provider.js'
+import type { ERC1155Metadata, ERC721Metadata, EVM_Connection, EVM_Web3ConnectionOptions } from './types.js'
+import { getReceiptStatus } from './utils.js'
+import { Web3StateSettings } from '../../settings/index.js'
 import { getSubscriptionCurrentValue, PartialRequired } from '@masknet/shared-base'
 
 const EMPTY_STRING = Promise.resolve('')
@@ -291,7 +292,7 @@ class Connection implements EVM_Connection {
         initial?: EVM_Web3ConnectionOptions,
     ): Promise<string> {
         const options = this.getOptions(initial)
-        const actualSchema = schema ?? (await this.getTokenSchema(address, options))
+        const actualSchema = schema ?? (await this.getSchemaType(address, options))
 
         // ERC1155
         if (actualSchema === SchemaType.ERC1155) {
@@ -314,7 +315,12 @@ class Connection implements EVM_Connection {
             this.getOptions(initial),
         )
     }
-    async getTokenSchema(address: string, initial?: EVM_Web3ConnectionOptions): Promise<SchemaType | undefined> {
+    async getAddressType(address: string, initial?: EVM_Web3ConnectionOptions): Promise<AddressType | undefined> {
+        if (!isValidAddress(address)) return
+        const code = await this.getCode(address, initial)
+        return code === '0x' ? AddressType.ExternalOwned : AddressType.Contract
+    }
+    async getSchemaType(address: string, initial?: EVM_Web3ConnectionOptions): Promise<SchemaType | undefined> {
         const options = this.getOptions(initial)
         const ERC165_INTERFACE_ID = '0x01ffc9a7'
         const ERC721_ENUMERABLE_INTERFACE_ID = '0x780e9d63'
@@ -352,7 +358,7 @@ class Connection implements EVM_Connection {
         initial?: EVM_Web3ConnectionOptions,
     ): Promise<NonFungibleToken<ChainId, SchemaType>> {
         const options = this.getOptions(initial)
-        const actualSchema = schema ?? (await this.getTokenSchema(address, options))
+        const actualSchema = schema ?? (await this.getSchemaType(address, options))
         const allSettled = await Promise.allSettled([
             this.getNonFungibleTokenMetadata(address, tokenId, schema, options),
             this.getNonFungibleTokenContract(address, schema, options),
@@ -389,7 +395,7 @@ class Connection implements EVM_Connection {
         initial?: EVM_Web3ConnectionOptions,
     ) {
         const options = this.getOptions(initial)
-        const actualSchema = schema ?? (await this.getTokenSchema(address, options))
+        const actualSchema = schema ?? (await this.getSchemaType(address, options))
 
         // ERC1155
         if (actualSchema === SchemaType.ERC1155) return ''
@@ -407,7 +413,7 @@ class Connection implements EVM_Connection {
         initial?: EVM_Web3ConnectionOptions,
     ) {
         const options = this.getOptions(initial)
-        const actualSchema = schema ?? (await this.getTokenSchema(address, options))
+        const actualSchema = schema ?? (await this.getSchemaType(address, options))
 
         // ERC1155
         if (actualSchema === SchemaType.ERC1155) {
@@ -433,12 +439,12 @@ class Connection implements EVM_Connection {
             if (uri.startsWith('https://api.opensea.io/') && tokenId) return uri.replace('0x{id}', tokenId)
 
             // add cors header
-            if (!uri.startsWith('ipfs://')) return resolveCORSLink(resolveIPFSLink(uri))!
+            if (!uri.startsWith('ipfs://')) return resolveCrossOriginURL(resolveIPFS_URL(uri))!
 
             return uri
         }
         const options = this.getOptions(initial)
-        const actualSchema = schema ?? (await this.getTokenSchema(address, options))
+        const actualSchema = schema ?? (await this.getSchemaType(address, options))
 
         // ERC1155
         if (actualSchema === SchemaType.ERC1155) {
@@ -455,8 +461,8 @@ class Connection implements EVM_Connection {
                 '',
                 response.description,
                 undefined,
-                resolveIPFSLink(response.image),
-                resolveIPFSLink(response.image),
+                resolveIPFS_URL(response.image),
+                resolveIPFS_URL(response.image),
             )
         }
 
@@ -473,8 +479,8 @@ class Connection implements EVM_Connection {
             '',
             response.description,
             undefined,
-            resolveIPFSLink(response.image),
-            resolveIPFSLink(response.image),
+            resolveIPFS_URL(response.image),
+            resolveIPFS_URL(response.image),
         )
     }
     async getNonFungibleTokenContract(
@@ -483,7 +489,7 @@ class Connection implements EVM_Connection {
         initial?: EVM_Web3ConnectionOptions,
     ): Promise<NonFungibleTokenContract<ChainId, SchemaType>> {
         const options = this.getOptions(initial)
-        const actualSchema = schema ?? (await this.getTokenSchema(address, options))
+        const actualSchema = schema ?? (await this.getSchemaType(address, options))
 
         // ERC1155
         if (actualSchema === SchemaType.ERC1155) {
@@ -529,7 +535,7 @@ class Connection implements EVM_Connection {
         initial?: EVM_Web3ConnectionOptions,
     ): Promise<NonFungibleCollection<ChainId, SchemaType>> {
         const options = this.getOptions(initial)
-        const actualSchema = schema ?? (await this.getTokenSchema(address, options))
+        const actualSchema = schema ?? (await this.getSchemaType(address, options))
 
         // ERC1155
         if (actualSchema === SchemaType.ERC1155) {
@@ -568,7 +574,7 @@ class Connection implements EVM_Connection {
         initial?: EVM_Web3ConnectionOptions,
     ): Promise<string> {
         const options = this.getOptions(initial)
-        const actualSchema = schema ?? (await this.getTokenSchema(address, options))
+        const actualSchema = schema ?? (await this.getSchemaType(address, options))
 
         // ERC1155
         if (actualSchema === SchemaType.ERC1155) {

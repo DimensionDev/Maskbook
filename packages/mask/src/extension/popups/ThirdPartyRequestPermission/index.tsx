@@ -1,7 +1,7 @@
 import { useLocation } from 'react-router-dom'
 import { useAsync } from 'react-use'
-import Services from '../../service'
-import { ThirdPartyRequestPermission } from './ThirdPartyRequestPermission'
+import Services from '../../service.js'
+import { ThirdPartyRequestPermission } from './ThirdPartyRequestPermission.js'
 
 export default function () {
     const param = useLocation()

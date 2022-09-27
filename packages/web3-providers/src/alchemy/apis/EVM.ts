@@ -6,20 +6,21 @@ import {
     createPageable,
     HubOptions,
     NonFungibleAsset,
+    resolveResourceURL,
     TokenType,
 } from '@masknet/web3-shared-base'
 import { ChainId, ChainId as ChainId_EVM, SchemaType as SchemaType_EVM } from '@masknet/web3-shared-evm'
-import type { NonFungibleTokenAPI } from '../../types'
-import { fetchJSON } from '../../helpers'
-import { Alchemy_EVM_NetworkMap } from '../constants'
+import type { NonFungibleTokenAPI } from '../../types/index.js'
+import { fetchJSON } from '../../helpers.js'
+import { Alchemy_EVM_NetworkMap } from '../constants.js'
 import type {
     AlchemyNFT_EVM,
     AlchemyResponse_EVM,
     AlchemyResponse_EVM_Contact_Metadata,
     AlchemyResponse_EVM_Metadata,
     AlchemyResponse_EVM_Owners,
-} from '../types'
-import { formatAlchemyTokenId } from '../helpers'
+} from '../types.js'
+import { formatAlchemyTokenId } from '../helpers.js'
 
 function createNonFungibleTokenLink(chainId: ChainId, address: string, tokenId: string) {
     if (chainId === ChainId.Matic) {
@@ -40,6 +41,10 @@ function createNonFungibleToken(
 ): NonFungibleAsset<ChainId_EVM, SchemaType_EVM> {
     const contractAddress = asset.contract.address
     const tokenId = formatAlchemyTokenId(asset.id.tokenId)
+    const imageURL =
+        asset.metadata.image || asset.metadata.image_url || asset.media?.[0]?.gateway || asset.metadata.animation_url
+    const mediaURL =
+        asset.media?.[0]?.gateway || asset.media?.[0]?.raw || asset.metadata.image_url || asset.metadata.image
     return {
         id: `${contractAddress}_${tokenId}`,
         chainId,
@@ -52,19 +57,14 @@ function createNonFungibleToken(
             chainId,
             name: asset.metadata.name ?? asset.title,
             description: asset.metadata.description || asset.description,
-            imageURL:
-                asset.metadata.image ||
-                asset.metadata.image_url ||
-                asset.media?.[0]?.gateway ||
-                asset.metadata.animation_url,
-            mediaURL:
-                asset.media?.[0]?.gateway ?? asset.media?.[0]?.raw ?? asset.metadata.image_url ?? asset.metadata.image,
+            imageURL: resolveResourceURL(imageURL),
+            mediaURL: resolveResourceURL(mediaURL),
         },
         contract: {
             chainId,
             schema: asset.id?.tokenMetadata.tokenType === 'ERC721' ? SchemaType_EVM.ERC721 : SchemaType_EVM.ERC1155,
             address: contractAddress,
-            name: asset.metadata.name ?? asset.title,
+            name: asset.metadata.name || asset.title,
             symbol: '',
         },
         collection: {
@@ -114,18 +114,18 @@ function createNonFungibleAsset(
                     : SchemaType_EVM.ERC1155,
             address: metaDataResponse.contract?.address,
             name:
-                contractMetadataResponse?.contractMetadata.name ??
-                metaDataResponse.metadata?.name ??
+                contractMetadataResponse?.contractMetadata.name ||
+                metaDataResponse.metadata?.name ||
                 metaDataResponse.title,
             symbol: contractMetadataResponse?.contractMetadata?.symbol ?? '',
         },
         collection: {
             chainId,
             name:
-                contractMetadataResponse?.contractMetadata.name ??
-                metaDataResponse.metadata?.name ??
+                contractMetadataResponse?.contractMetadata.name ||
+                metaDataResponse.metadata?.name ||
                 metaDataResponse.title,
-            slug: contractMetadataResponse?.contractMetadata?.symbol ?? '',
+            slug: contractMetadataResponse?.contractMetadata?.symbol || '',
             description: metaDataResponse.description,
         },
         link: createNonFungibleTokenLink(chainId, metaDataResponse.contract?.address, metaDataResponse.id?.tokenId),
@@ -141,7 +141,7 @@ function createNonFungibleAsset(
 
 export class AlchemyEVM_API implements NonFungibleTokenAPI.Provider<ChainId_EVM, SchemaType_EVM, string> {
     async getAsset(address: string, tokenId: string, { chainId = ChainId_EVM.Mainnet }: HubOptions<ChainId_EVM> = {}) {
-        const chainInfo = Alchemy_EVM_NetworkMap?.chains?.find((chain) => chain.chainId === chainId)
+        const chainInfo = Alchemy_EVM_NetworkMap.chains.find((chain) => chain.chainId === chainId)
         if (!chainInfo) return
 
         const allSettled = await Promise.allSettled([
@@ -178,23 +178,21 @@ export class AlchemyEVM_API implements NonFungibleTokenAPI.Provider<ChainId_EVM,
     }
 
     async getAssets(from: string, { chainId = ChainId_EVM.Mainnet, indicator }: HubOptions<ChainId_EVM> = {}) {
-        const chainInfo = Alchemy_EVM_NetworkMap?.chains?.find((chain) => chain.chainId === chainId)
+        const chainInfo = Alchemy_EVM_NetworkMap.chains.find((chain) => chain.chainId === chainId)
         if (!chainInfo) return createPageable([], createIndicator(indicator, ''))
 
         const response = await fetchJSON<AlchemyResponse_EVM>(
-            urlcat(`${chainInfo?.baseURL}/getNFTs/`, {
+            urlcat(`${chainInfo.baseURL}/getNFTs/`, {
                 owner: from,
                 pageKey: typeof indicator?.index !== 'undefined' && indicator.index !== 0 ? indicator.id : undefined,
             }),
         )
 
-        const assets = response?.ownedNfts?.map((nft) =>
-            createNonFungibleToken((chainId as ChainId_EVM | undefined) ?? ChainId_EVM.Mainnet, nft),
-        )
+        const assets = response.ownedNfts.map((nft) => createNonFungibleToken(chainId, nft))
         return createPageable(
             assets,
             createIndicator(indicator),
-            response?.pageKey ? createNextIndicator(indicator, response.pageKey) : undefined,
+            response.pageKey ? createNextIndicator(indicator, response.pageKey) : undefined,
         )
     }
 }

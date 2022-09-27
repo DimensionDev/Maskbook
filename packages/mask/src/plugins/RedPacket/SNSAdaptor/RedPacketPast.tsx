@@ -1,21 +1,14 @@
-import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import { makeStyles } from '@masknet/theme'
-import { useCallback, useState } from 'react'
-import { useI18N } from '../locales'
-import { RedPacketHistoryList } from './RedPacketHistoryList'
-import { NftRedPacketHistoryList } from './NftRedPacketHistoryList'
-import type { NftRedPacketHistory, RedPacketJSONPayload } from '../types'
-import { RedPacketNftMetaKey } from '../constants'
-import { useCompositionContext } from '@masknet/plugin-infra/content-script'
-import { useCurrentIdentity, useCurrentLinkedPersona } from '../../../components/DataSource/useActivatedUI'
-import { useChainId } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID, NonFungibleTokenContract } from '@masknet/web3-shared-base'
+import { useCallback } from 'react'
 import { TabPanel } from '@mui/lab'
-
-enum RpTypeTabs {
-    ERC20 = 0,
-    ERC721 = 1,
-}
+import { makeStyles } from '@masknet/theme'
+import { useCompositionContext } from '@masknet/plugin-infra/content-script'
+import type { NonFungibleTokenContract } from '@masknet/web3-shared-base'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import { RedPacketHistoryList } from './RedPacketHistoryList.js'
+import { NftRedPacketHistoryList } from './NftRedPacketHistoryList.js'
+import type { NftRedPacketHistory, RedPacketJSONPayload } from '../types.js'
+import { RedPacketNftMetaKey } from '../constants.js'
+import { useCurrentIdentity, useCurrentLinkedPersona } from '../../../components/DataSource/useActivatedUI.js'
 
 const useStyles = makeStyles()((theme) => ({
     tab: {
@@ -59,10 +52,7 @@ interface Props {
 }
 
 export function RedPacketPast({ onSelect, onClose, tabs }: Props) {
-    const t = useI18N()
     const { classes } = useStyles()
-    const state = useState(RpTypeTabs.ERC20)
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
 
     const currentIdentity = useCurrentIdentity()
 

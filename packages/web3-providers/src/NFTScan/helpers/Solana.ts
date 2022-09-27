@@ -6,13 +6,14 @@ import {
     NonFungibleCollection,
     NonFungibleTokenContract,
     NonFungibleTokenEvent,
-    resolveIPFSLink,
+    resolveIPFS_URL,
     scale10,
+    SourceType,
     TokenType,
 } from '@masknet/web3-shared-base'
-import { NFTSCAN_BASE_SOLANA, NFTSCAN_URL } from '../constants'
-import type { Solana } from '../types'
-import { getJSON } from '../../helpers'
+import { NFTSCAN_BASE_SOLANA, NFTSCAN_URL } from '../constants.js'
+import type { Solana } from '../types/index.js'
+import { getJSON } from '../../helpers.js'
 
 export function createPermalink(chainId: ChainId, address?: string) {
     if (!address) return
@@ -40,7 +41,7 @@ export function createNonFungibleAsset(chainId: ChainId, asset: Solana.Asset): N
     const payload = getJSON<Solana.Payload>(asset.metadata_json)
     const name = payload?.name || asset.name || payload?.name || ''
     const description = payload?.description
-    const mediaURL = resolveIPFSLink(asset.image_uri ?? asset.content_uri)
+    const mediaURL = resolveIPFS_URL(asset.image_uri ?? asset.content_uri)
 
     const creator = asset.minter
     const owner = asset.owner
@@ -173,5 +174,6 @@ export function createNonFungibleTokenEvent(
                   }
                 : undefined,
         paymentToken,
+        source: SourceType.NFTScan,
     }
 }

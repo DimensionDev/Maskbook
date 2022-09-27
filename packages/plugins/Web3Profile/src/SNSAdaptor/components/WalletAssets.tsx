@@ -1,16 +1,16 @@
 import { Card, Typography, Link, Box } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
-import { useI18N } from '../../locales'
+import { useI18N } from '../../locales/index.js'
 import { useReverseAddress, useWeb3State } from '@masknet/plugin-infra/web3'
 import { ChainId, explorerResolver, NETWORK_DESCRIPTORS } from '@masknet/web3-shared-evm'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { Empty } from './Empty'
-import { CollectionList } from './CollectionList'
+import { Empty } from './Empty.js'
+import { CollectionList } from './CollectionList.js'
 import { useMemo, useState } from 'react'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { PersonaImageIcon, CollectionTypes, WalletTypes } from '@masknet/shared'
-import { CurrentStatusMap, CURRENT_STATUS } from '../../constants'
+import { CurrentStatusMap, CURRENT_STATUS } from '../../constants.js'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -33,13 +33,11 @@ const useStyles = makeStyles()((theme) => {
             position: 'relative',
             cursor: 'pointer',
             display: 'flex',
-            // overflow: 'hidden',
             padding: 0,
             width: 126,
             height: 126,
             borderRadius: 12,
             userSelect: 'none',
-            lineHeight: 0,
             '&:nth-last-child(-n+4)': {
                 marginBottom: 0,
             },
@@ -138,11 +136,9 @@ export function WalletAssetsCard(props: WalletAssetsCardProps) {
 
     const collections = useMemo(() => {
         const filterCollections = collectionList?.filter((collection) => !collection?.hidden)
-        if (!filterCollections || filterCollections?.length === 0) {
-            return EMPTY_LIST
-        }
-        if (filterCollections?.length > 8 && loadStatus !== LOAD_STATUS.Finish) {
-            return filterCollections?.slice(0, 8)
+        if (!filterCollections?.length) return EMPTY_LIST
+        if (filterCollections.length > 8 && loadStatus !== LOAD_STATUS.Finish) {
+            return filterCollections.slice(0, 8)
         }
         return filterCollections
     }, [loadStatus, collectionList])
@@ -189,7 +185,7 @@ export function WalletAssetsCard(props: WalletAssetsCardProps) {
                 </div>
             </div>
 
-            {collectionList && collectionList?.filter((collection) => !collection?.hidden)?.length > 0 ? (
+            {collectionList?.some((collection) => !collection?.hidden) ? (
                 <Box className={classes.listBox}>
                     <CollectionList
                         classes={{ list: classes.list, collectionWrap: classes.imageIconWrapper }}

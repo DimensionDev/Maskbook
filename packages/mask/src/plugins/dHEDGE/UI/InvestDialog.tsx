@@ -1,4 +1,4 @@
-import { InjectedDialog, useOpenShareTxDialog, useSelectFungibleToken } from '@masknet/shared'
+import { InjectedDialog, useOpenShareTxDialog, useSelectFungibleToken, FungibleTokenInput } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles, ActionButton } from '@masknet/theme'
 import { useAccount, useFungibleTokenBalance } from '@masknet/plugin-infra/web3'
@@ -6,18 +6,17 @@ import { formatBalance, FungibleToken, isZero, NetworkPluginID, rightShift } fro
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { DialogActions, DialogContent } from '@mui/material'
 import { useCallback, useMemo, useState, useEffect } from 'react'
-import { activatedSocialNetworkUI } from '../../../social-network'
-import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
-import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
-import { useI18N } from '../../../utils/i18n-next-ui'
-import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
-import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
-import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
+import { activatedSocialNetworkUI } from '../../../social-network/index.js'
+import { isFacebook } from '../../../social-network-adaptor/facebook.com/base.js'
+import { isTwitter } from '../../../social-network-adaptor/twitter.com/base.js'
+import { useI18N } from '../../../utils/i18n-next-ui.js'
+import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary.js'
+import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary.js'
 import { CrossIsolationMessages } from '@masknet/shared-base'
-import { useInvestCallback } from '../hooks/useInvestCallback'
-import { PluginDHedgeMessages } from '../messages'
-import type { Pool } from '../types'
-import { PluginWalletStatusBar } from '../../../utils'
+import { useInvestCallback } from '../hooks/useInvestCallback.js'
+import { PluginDHedgeMessages } from '../messages.js'
+import type { Pool } from '../types.js'
+import { PluginWalletStatusBar } from '../../../utils/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {
@@ -121,7 +120,7 @@ export function InvestDialog() {
     // #region Swap
     useEffect(
         () =>
-            CrossIsolationMessages.events.swapDialogUpdate.on(({ open }) => {
+            CrossIsolationMessages.events.swapDialogEvent.on(({ open }) => {
                 if (!open) retryLoadTokenBalance()
             }),
         [retryLoadTokenBalance],
@@ -129,7 +128,7 @@ export function InvestDialog() {
 
     const openSwap = useCallback(() => {
         if (!token) return
-        CrossIsolationMessages.events.swapDialogUpdate.sendToLocal({
+        CrossIsolationMessages.events.swapDialogEvent.sendToLocal({
             open: true,
             traderProps: {
                 defaultInputCoin: token,
@@ -156,18 +155,13 @@ export function InvestDialog() {
             <InjectedDialog open={open} onClose={onClose} title={pool.name} maxWidth="xs">
                 <DialogContent style={{ padding: 16 }}>
                     <form className={classes.form} noValidate autoComplete="off">
-                        <TokenAmountPanel
-                            label="Amount"
+                        <FungibleTokenInput
+                            label={t('amount')}
                             amount={rawAmount}
                             balance={tokenBalance ?? '0'}
                             token={token}
                             onAmountChange={setRawAmount}
-                            SelectTokenChip={{
-                                loading: loadingTokenBalance,
-                                ChipProps: {
-                                    onClick: onSelectTokenChipClick,
-                                },
-                            }}
+                            onSelectToken={onSelectTokenChipClick}
                         />
                     </form>
                 </DialogContent>

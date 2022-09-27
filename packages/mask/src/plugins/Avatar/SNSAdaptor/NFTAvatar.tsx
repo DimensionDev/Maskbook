@@ -4,16 +4,16 @@ import { WalletMessages } from '@masknet/plugin-wallet'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { LoadingBase, makeStyles, useStylesExtends } from '@masknet/theme'
 import { Box, Button, List, ListItem, Skeleton, Typography } from '@mui/material'
-import { useI18N } from '../../../utils'
-import { AddNFT } from './AddNFT'
+import { useI18N } from '../../../utils/index.js'
+import { AddNFT } from './AddNFT.js'
 import { useAccount, useChainId, useCurrentWeb3NetworkPluginID, useNonFungibleAssets } from '@masknet/plugin-infra/web3'
 import { ElementAnchor, ReversedAddress } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
-import type { AllChainsNonFungibleToken, SelectTokenInfo } from '../types'
+import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
+import type { AllChainsNonFungibleToken, SelectTokenInfo } from '../types.js'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { EMPTY_LIST } from '@masknet/shared-base'
-import { NFTImage } from './NFTImage'
+import { NFTImage } from './NFTImage.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {},
@@ -201,7 +201,7 @@ export function NFTAvatar(props: NFTAvatarProps) {
                                             showBadge
                                             token={token}
                                             selectedToken={selectedToken}
-                                            onChange={(token) => _onChange(token)}
+                                            onClick={(token) => _onChange(token)}
                                         />
                                     </ListItem>
                                 ))}

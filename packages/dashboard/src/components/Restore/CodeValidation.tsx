@@ -1,14 +1,14 @@
 import { memo } from 'react'
-import { fetchDownloadLink } from '../../pages/Settings/api'
+import { fetchDownloadLink } from '../../pages/Settings/api.js'
 import { useAsyncFn } from 'react-use'
-import { Step, Stepper } from '../Stepper'
-import { ConfirmBackupInfo } from './steps/ConfirmBackupInfo'
-import { EmailField } from './steps/EmailField'
-import { PhoneField } from './steps/PhoneField'
-import { LoadingCard } from './steps/LoadingCard'
-import { ValidationAccount } from './steps/ValidationAccount'
-import { ValidationCodeStep } from './steps/common'
-import type { AccountType } from '../../pages/Settings/type'
+import { Step, Stepper } from '../Stepper/index.js'
+import { ConfirmBackupInfo } from './steps/ConfirmBackupInfo.js'
+import { EmailField } from './steps/EmailField.js'
+import { PhoneField } from './steps/PhoneField.js'
+import { LoadingCard } from './steps/LoadingCard.js'
+import { ValidationAccount } from './steps/ValidationAccount.js'
+import { ValidationCodeStep } from './steps/common.js'
+import type { AccountType } from '../../pages/Settings/type.js'
 
 interface CodeValidationProps {
     onValidated(downloadLink: string, account: string, password: string, type: AccountType): Promise<string | null>

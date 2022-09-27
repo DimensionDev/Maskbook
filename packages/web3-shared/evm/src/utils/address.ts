@@ -1,9 +1,9 @@
 import { EthereumAddress } from 'wallet.ts'
 import { getEnumAsArray } from '@dimensiondev/kit'
 import { isSameAddress } from '@masknet/web3-shared-base'
-import { getRedPacketConstants, getTokenConstant, ZERO_ADDRESS } from '../constants'
-import { ChainId, NetworkType, ProviderType } from '../types'
-import { isExtensionSiteType } from '@masknet/shared-base'
+import { getRedPacketConstants, getTokenConstant, ZERO_ADDRESS } from '../constants/index.js'
+import { ChainId, NetworkType, ProviderType } from '../types/index.js'
+import { isPopupPage } from '@masknet/shared-base'
 
 export function isEmptyHex(hex?: string) {
     return !hex || ['0x', '0x0'].includes(hex)
@@ -63,7 +63,7 @@ export function getDefaultNetworkType() {
 }
 
 export function getDefaultProviderType() {
-    return isExtensionSiteType() ? ProviderType.MaskWallet : ProviderType.None
+    return isPopupPage() ? ProviderType.MaskWallet : ProviderType.None
 }
 
 export function getZeroAddress() {

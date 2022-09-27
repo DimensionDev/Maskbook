@@ -4,11 +4,14 @@ import { LoadingBase, makeStyles } from '@masknet/theme'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { Box, List, ListItem, Stack, Typography } from '@mui/material'
 import { useEffect, useState } from 'react'
-import { useI18N } from '../locales'
-import { NFTImage } from '../SNSAdaptor/NFTImage'
-import type { AllChainsNonFungibleToken } from '../types'
+import { supportPluginIds } from '../constants.js'
+import { useI18N } from '../locales/index.js'
+import { NFTImage } from '../SNSAdaptor/NFTImage.js'
+import type { AllChainsNonFungibleToken } from '../types.js'
 
-const useStyles = makeStyles<{ networkPluginID: NetworkPluginID }>()((theme, props) => ({
+const useStyles = makeStyles<{
+    networkPluginID: NetworkPluginID
+}>()((theme, props) => ({
     root: {
         paddingTop: props.networkPluginID === NetworkPluginID.PLUGIN_EVM ? 60 : 16,
     },
@@ -32,13 +35,11 @@ const useStyles = makeStyles<{ networkPluginID: NetworkPluginID }>()((theme, pro
         position: 'relative',
         cursor: 'pointer',
         display: 'flex',
-        overflow: 'hidden',
         padding: 0,
         flexDirection: 'column',
         borderRadius: 8,
         userSelect: 'none',
         justifyContent: 'center',
-        lineHeight: 0,
     },
     skeleton: {
         width: 100,
@@ -59,6 +60,19 @@ const useStyles = makeStyles<{ networkPluginID: NetworkPluginID }>()((theme, pro
             border: `1px solid ${theme.palette.primary.main}`,
         },
         borderRadius: 8,
+    },
+    placeholder: {
+        display: 'flex',
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexDirection: 'column',
+        rowGap: 14,
+    },
+    placeholderText: {
+        fontSize: 14,
+        lineHeight: '18px',
+        color: theme.palette.maskColor.second,
     },
 }))
 
@@ -87,20 +101,19 @@ export function NFTListPage(props: NFTListPageProps) {
 
     useEffect(() => setSelectedToken(tokenInfo), [tokenInfo])
 
+    if (!supportPluginIds.includes(pluginId)) {
+        return (
+            <Box className={classes.placeholder}>
+                <Icons.EmptySimple variant="light" size={36} />
+                <Typography className={classes.placeholderText}>{t.unsupported_network()}</Typography>
+            </Box>
+        )
+    }
     if (!loadError && !loadFinish && !tokens.length)
         return (
-            <Box
-                sx={{
-                    display: 'flex',
-                    flex: 1,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    flexDirection: 'column',
-                }}>
-                <Icons.EmptySimple variant="light" size={36} />
-                <Typography color={(theme) => theme.palette.maskColor.main} fontSize={14} mt="14px">
-                    {t.loading()}
-                </Typography>
+            <Box className={classes.placeholder}>
+                <LoadingBase size={36} />
+                <Typography className={classes.placeholderText}>{t.loading()}</Typography>
             </Box>
         )
     if (children) return <>{children}</>
@@ -116,7 +129,7 @@ export function NFTListPage(props: NFTListPageProps) {
                                 showBadge
                                 token={token}
                                 selectedToken={selectedToken}
-                                onChange={(token) => _onChange(token)}
+                                onClick={(token) => _onChange(token)}
                             />
                         </ListItem>
                     ))}

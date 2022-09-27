@@ -1,10 +1,11 @@
 // DO NOT import React in this file. This file is also used by worker.
-import type { Plugin } from '../types'
+import type { Plugin, PluginID } from '../types.js'
 import { memoize } from 'lodash-unified'
-import type { Web3Helper } from '../web3-helpers'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import type { Subscription } from 'use-subscription'
+import type { NetworkPluginID } from '@masknet/web3-shared-base'
 
-const __registered = new Map<string, Plugin.DeferredDefinition>()
+const __registered = new Map<PluginID, Plugin.DeferredDefinition>()
 const listeners = new Set<onNewPluginRegisteredListener>()
 
 export type onNewPluginRegisteredListener = (id: string, def: Plugin.DeferredDefinition) => void
@@ -13,7 +14,7 @@ export function onNewPluginRegistered(f: onNewPluginRegisteredListener) {
     return () => listeners.delete(f)
 }
 
-export const registeredPlugins: Subscription<Array<[string, Plugin.DeferredDefinition]>> = {
+export const registeredPlugins: Subscription<Array<[PluginID, Plugin.DeferredDefinition]>> = {
     getCurrentValue() {
         return Array.from(__registered.entries())
     },
@@ -22,12 +23,13 @@ export const registeredPlugins: Subscription<Array<[string, Plugin.DeferredDefin
     },
 }
 
-export function getPluginDefine(id: string) {
-    return __registered.get(id)
+export function getPluginDefine(id: PluginID | NetworkPluginID) {
+    return __registered.get(id as unknown as PluginID)
 }
 
 export function registerPlugin<
     ChainId = unknown,
+    AddressType = unknown,
     SchemaType = unknown,
     ProviderType = unknown,
     NetworkType = unknown,
@@ -44,6 +46,7 @@ export function registerPlugin<
 >(
     def: Plugin.DeferredDefinition<
         ChainId,
+        AddressType,
         SchemaType,
         ProviderType,
         NetworkType,

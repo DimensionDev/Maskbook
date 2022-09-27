@@ -1,41 +1,43 @@
-import { PluginId, useIsMinimalMode } from '@masknet/plugin-infra/content-script'
+import { PluginID, useIsMinimalMode } from '@masknet/plugin-infra/content-script'
 import {
+    useChainId,
     useChainIdValid,
-    useFungibleToken,
     useNetworkType,
     useNonFungibleAssetsByCollection,
-    useChainId,
 } from '@masknet/plugin-infra/web3'
 import { DataProvider } from '@masknet/public-api'
 import { NFTList } from '@masknet/shared'
 import { EMPTY_LIST } from '@masknet/shared-base'
-import { makeStyles, MaskTabList, useTabs, ActionButton } from '@masknet/theme'
-import { NetworkPluginID, TokenType, createFungibleToken } from '@masknet/web3-shared-base'
-import { isNativeTokenSymbol, isNativeTokenAddress, SchemaType } from '@masknet/web3-shared-evm'
+import { ActionButton, makeStyles, MaskTabList, useTabs } from '@masknet/theme'
+import { TrendingAPI } from '@masknet/web3-providers'
+import { createFungibleToken, NetworkPluginID, TokenType } from '@masknet/web3-shared-base'
+import { isNativeTokenAddress, isNativeTokenSymbol, SchemaType } from '@masknet/web3-shared-evm'
 import { TabContext } from '@mui/lab'
 import { Link, Stack, Tab } from '@mui/material'
 import { Box, useTheme } from '@mui/system'
 import { compact } from 'lodash-unified'
 import { useEffect, useMemo, useState } from 'react'
-import { useI18N } from '../../../../utils'
-import { resolveDataProviderLink, resolveDataProviderName } from '../../pipes'
-import { setStorage } from '../../storage'
-import { useAvailableCoins } from '../../trending/useAvailableCoins'
-import { usePreferredCoinId } from '../../trending/useCurrentCoinId'
-import { useCurrentDataProvider } from '../../trending/useCurrentDataProvider'
-import { usePriceStats } from '../../trending/usePriceStats'
-import { useTrendingById, useTrendingByKeyword } from '../../trending/useTrending'
-import type { TagType } from '../../types'
-import { TradeView } from '../trader/TradeView'
-import { CoinMarketPanel } from './CoinMarketPanel'
-import { PriceChart } from './PriceChart'
-import { Days, DEFAULT_RANGE_OPTIONS, NFT_RANGE_OPTIONS, PriceChartDaysControl } from './PriceChartDaysControl'
-import { TickersTable } from './TickersTable'
-import { TrendingViewDeck } from './TrendingViewDeck'
-import { TrendingViewError } from './TrendingViewError'
-import { TrendingViewSkeleton } from './TrendingViewSkeleton'
+import { useI18N } from '../../../../utils/index.js'
+import { resolveDataProviderLink, resolveDataProviderName } from '../../pipes.js'
+import { setStorage } from '../../storage/index.js'
+import { useAvailableCoins } from '../../trending/useAvailableCoins.js'
+import { usePreferredCoinId } from '../../trending/useCurrentCoinId.js'
+import { useCurrentDataProvider } from '../../trending/useCurrentDataProvider.js'
+import { usePriceStats } from '../../trending/usePriceStats.js'
+import { useTrendingById, useTrendingByKeyword } from '../../trending/useTrending.js'
+import type { TagType } from '../../types/index.js'
+import { TradeView } from '../trader/TradeView.js'
+import { CoinMarketPanel } from './CoinMarketPanel.js'
+import { PriceChart } from './PriceChart.js'
+import { DEFAULT_RANGE_OPTIONS, NFT_RANGE_OPTIONS, PriceChartDaysControl } from './PriceChartDaysControl.js'
+import { TickersTable } from './TickersTable.js'
+import { TrendingViewDeck } from './TrendingViewDeck.js'
+import { TrendingViewError } from './TrendingViewError.js'
+import { TrendingViewSkeleton } from './TrendingViewSkeleton.js'
 
-const useStyles = makeStyles<{ isPopper: boolean }>()((theme, props) => {
+const useStyles = makeStyles<{
+    isPopper: boolean
+}>()((theme, props) => {
     return {
         root: props.isPopper
             ? {
@@ -122,9 +124,9 @@ export function TrendingView(props: TrendingViewProps) {
     const { classes } = useStyles({ isPopper })
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const theme = useTheme()
-    const isMinimalMode = useIsMinimalMode(PluginId.Trader)
+    const isMinimalMode = useIsMinimalMode(PluginID.Trader)
     const dataProvider = useCurrentDataProvider(dataProviders)
-    const [tabIndex, setTabIndex] = useState(dataProvider !== DataProvider.UNISWAP_INFO ? 1 : 0)
+    const [tabIndex, setTabIndex] = useState(dataProvider !== DataProvider.UniswapInfo ? 1 : 0)
     const chainIdValid = useChainIdValid(NetworkPluginID.PLUGIN_EVM)
     // #region track network type
     const networkType = useNetworkType(NetworkPluginID.PLUGIN_EVM)
@@ -148,15 +150,8 @@ export function TrendingView(props: TrendingViewProps) {
 
     const coinSymbol = (trending?.coin.symbol || '').toLowerCase()
 
-    // #region swap
-    const { value: tokenDetailed } = useFungibleToken(
-        NetworkPluginID.PLUGIN_EVM,
-        coinSymbol === 'eth' ? '' : trending?.coin.contract_address ?? '',
-    )
-    // #endregion
-
     // #region stats
-    const [days, setDays] = useState(Days.ONE_WEEK)
+    const [days, setDays] = useState(TrendingAPI.Days.ONE_WEEK)
     const {
         value: stats = EMPTY_LIST,
         loading: loadingStats,
@@ -227,10 +222,12 @@ export function TrendingView(props: TrendingViewProps) {
 
         return (
             <ActionButton sx={{ marginTop: 1 }} color="primary" onClick={() => setStorage(nextOption)}>
-                Switch to {resolveDataProviderName(nextOption)}
+                {t('plugin_trader_switch_provider', {
+                    provider: resolveDataProviderName(nextOption),
+                })}
             </ActionButton>
         )
-    }, [dataProvider, resolveDataProviderName])
+    }, [dataProvider])
     // // #endregion
 
     // #region api ready callback

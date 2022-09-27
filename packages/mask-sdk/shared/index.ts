@@ -12,5 +12,5 @@ export interface InitInformation {
         connected: boolean
     }
 }
-export { serializer } from './serializer'
-export { createMaskSDKChannel } from './channel'
+export { serializer } from './serializer.js'
+export { createMaskSDKChannel } from './channel.js'

@@ -1,19 +1,19 @@
 import { useCallback, useEffect, useState, useRef } from 'react'
 import { DialogActions, DialogContent } from '@mui/material'
 import { DialogStackingProvider, makeStyles } from '@masknet/theme'
-import { activatedSocialNetworkUI } from '../../social-network'
-import { MaskMessages, useI18N } from '../../utils'
+import { activatedSocialNetworkUI } from '../../social-network/index.js'
+import { MaskMessages, useI18N } from '../../utils/index.js'
 import { CrossIsolationMessages } from '@masknet/shared-base'
-import { useRecipientsList } from './useRecipientsList'
+import { useRecipientsList } from './useRecipientsList.js'
 import { InjectedDialog } from '@masknet/shared'
-import { CompositionDialogUI, CompositionRef, E2EUnavailableReason } from './CompositionUI'
-import { useCompositionClipboardRequest } from './useCompositionClipboardRequest'
-import Services from '../../extension/service'
-import { useSubmit } from './useSubmit'
+import { CompositionDialogUI, CompositionRef, E2EUnavailableReason } from './CompositionUI.js'
+import { useCompositionClipboardRequest } from './useCompositionClipboardRequest.js'
+import Services from '../../extension/service.js'
+import { useSubmit } from './useSubmit.js'
 import { useAsync } from 'react-use'
-import { useCurrentIdentity } from '../DataSource/useActivatedUI'
-import { useCurrentPersonaConnectStatus } from '../DataSource/usePersonaConnectStatus'
-import { Flags } from '../../../shared'
+import { useCurrentIdentity } from '../DataSource/useActivatedUI.js'
+import { useCurrentPersonaConnectStatus } from '../DataSource/usePersonaConnectStatus.js'
+import { Flags } from '../../../shared/index.js'
 
 const useStyles = makeStyles()({
     dialogRoot: {
@@ -27,7 +27,7 @@ const useStyles = makeStyles()({
         visibility: 'hidden',
     },
     dialogContent: {
-        padding: '20px 24px',
+        padding: 16,
     },
 })
 export interface PostDialogProps {
@@ -75,7 +75,7 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
     }, [onQueryClipboardPermission])
 
     useEffect(() => {
-        return CrossIsolationMessages.events.requestComposition.on(({ reason, open, content, options }) => {
+        return CrossIsolationMessages.events.compositionDialogEvent.on(({ reason, open, content, options }) => {
             if ((reason !== 'reply' && reason !== type) || (reason === 'reply' && type === 'popup')) return
             setOpen(open)
             setReason(reason)
@@ -134,7 +134,7 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
                         isOpenFromApplicationBoard={isOpenFromApplicationBoard}
                     />
                 </DialogContent>
-                <DialogActions sx={{ height: 68 }} />
+                <DialogActions sx={{ height: 68, padding: '0px !important' }} />
             </InjectedDialog>
         </DialogStackingProvider>
     )

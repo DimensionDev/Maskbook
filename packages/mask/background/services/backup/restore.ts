@@ -3,9 +3,9 @@ import { BackupPreview, getBackupPreviewInfo, normalizeBackup, NormalizedBackup 
 import { PopupRoutes } from '@masknet/shared-base'
 import { Result } from 'ts-results'
 import { v4 as uuid } from 'uuid'
-import { openPopupWindow } from '../helper/popup-opener'
-import { requestHostPermission } from '../helper/request-permission'
-import { restoreNormalizedBackup } from './internal_restore'
+import { openPopupWindow } from '../helper/popup-opener.js'
+import { requestHostPermission } from '../helper/request-permission.js'
+import { restoreNormalizedBackup } from './internal_restore.js'
 
 const unconfirmedBackup = new Map<string, NormalizedBackup.Data>()
 export interface RestoreUnconfirmedBackupOptions {
@@ -31,7 +31,15 @@ export async function restoreUnconfirmedBackup({ id, action }: RestoreUnconfirme
     else unreachable(action)
 }
 
-export async function addUnconfirmedBackup(raw: string): Promise<Result<{ info: BackupPreview; id: string }, unknown>> {
+export async function addUnconfirmedBackup(raw: string): Promise<
+    Result<
+        {
+            info: BackupPreview
+            id: string
+        },
+        unknown
+    >
+> {
     return Result.wrapAsync(async () => {
         const backupObj: unknown = JSON.parse(raw)
         const backup = await normalizeBackup(backupObj)
@@ -42,9 +50,15 @@ export async function addUnconfirmedBackup(raw: string): Promise<Result<{ info: 
     })
 }
 
-export async function getUnconfirmedBackup(
-    id: string,
-): Promise<undefined | { wallets: Array<{ address: string; name: string }> }> {
+export async function getUnconfirmedBackup(id: string): Promise<
+    | undefined
+    | {
+          wallets: Array<{
+              address: string
+              name: string
+          }>
+      }
+> {
     if (!unconfirmedBackup.has(id)) return undefined
     const backup = unconfirmedBackup.get(id)!
     return {

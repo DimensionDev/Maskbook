@@ -1,13 +1,13 @@
 import { useChainId } from '@masknet/plugin-infra/web3'
 import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
-import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { Card, CardContent, Tabs, Tab, Typography, Paper, CircularProgress, Button, Stack } from '@mui/material'
+import { LoadingBase, makeStyles, MaskColorVar } from '@masknet/theme'
+import { Card, CardContent, Tabs, Tab, Typography, Paper, Button, Stack } from '@mui/material'
 import { useState } from 'react'
-import { useI18N } from '../../../utils/i18n-next-ui'
-import { useFetchPools } from '../hooks/usePool'
-import type { Investable } from '../types'
-import { InvestmentsView } from './InvestmentsView'
-import { PoolView } from './PoolView'
+import { useI18N } from '../../../utils/i18n-next-ui.js'
+import { useFetchPools } from '../hooks/usePool.js'
+import type { Investable } from '../types.js'
+import { InvestmentsView } from './InvestmentsView.js'
+import { PoolView } from './PoolView.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -60,7 +60,7 @@ export function FurucomboView(props: PoolViewProps) {
     if (loading)
         return (
             <Stack sx={{ alignItems: 'center' }}>
-                <CircularProgress size="small" />
+                <LoadingBase />
             </Stack>
         )
 
@@ -99,7 +99,7 @@ export function FurucomboView(props: PoolViewProps) {
                         className={classes.tabs}
                         variant="fullWidth"
                         indicatorColor="primary"
-                        textColor="secondary"
+                        textColor="primary"
                         onChange={(_, newValue: number) => setTabIndex(newValue)}>
                         <Tab value={0} className={classes.tab} key={0} label={t('plugin_furucombo_tab_pool')} />,
                         <Tab value={1} className={classes.tab} key={1} label={t('plugin_furucombo_tab_investments')} />,

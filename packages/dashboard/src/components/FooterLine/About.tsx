@@ -5,10 +5,10 @@ import FacebookIcon from '@mui/icons-material/Facebook'
 import GitHubIcon from '@mui/icons-material/GitHub'
 import TelegramIcon from '@mui/icons-material/Telegram'
 import TwitterIcon from '@mui/icons-material/Twitter'
-import { useDashboardI18N } from '../../locales'
-import { Version } from './Version'
+import { useDashboardI18N } from '../../locales/index.js'
+import { Version } from './Version.js'
 import links from './links.json'
-import { ABOUT_DIALOG_BACKGROUND } from '../../assets'
+import { ABOUT_DIALOG_BACKGROUND } from '../../assets/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     wrapper: {

@@ -1,11 +1,11 @@
 import type { EnhanceableSite } from '@masknet/shared-base'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useAsyncRetry } from 'react-use'
-import { activatedSocialNetworkUI } from '../../../social-network'
-import type { RSS3_KEY_SNS } from '../constants'
-import type { AvatarMetaDB, NextIDAvatarMeta } from '../types'
-import { getNFTAvatarByUserId } from '../utils'
-import { useGetNFTAvatar } from './useGetNFTAvatar'
+import { activatedSocialNetworkUI } from '../../../social-network/index.js'
+import type { RSS3_KEY_SNS } from '../constants.js'
+import type { AvatarMetaDB, NextIDAvatarMeta } from '../types.js'
+import { getNFTAvatarByUserId } from '../utils/index.js'
+import { useGetNFTAvatar } from './useGetNFTAvatar.js'
 import LRU from 'lru-cache'
 
 const cache = new LRU<string, Promise<NextIDAvatarMeta | undefined>>({
@@ -42,6 +42,7 @@ async function getNFTAvatarForCache(
     if (avatarMetaFromPersona) return avatarMetaFromPersona
     const avatarMeta = await fn(userId, activatedSocialNetworkUI.networkIdentifier as EnhanceableSite, snsKey)
     if (!avatarMeta) return
+    if (avatarId && avatarId !== avatarMeta.avatarId) return
     if (avatarMeta.pluginId === NetworkPluginID.PLUGIN_SOLANA) {
         return { imageUrl: '', nickname: '', ...avatarMeta, address: avatarMeta.tokenId }
     }

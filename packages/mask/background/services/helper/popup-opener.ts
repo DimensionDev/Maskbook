@@ -1,6 +1,6 @@
 import { DashboardRoutes, PopupRoutes } from '@masknet/shared-base'
 import urlcat from 'urlcat'
-import { MaskMessages } from '../../../shared'
+import { MaskMessages } from '../../../shared/index.js'
 
 let currentPopupWindowId = 0
 function isLocked() {

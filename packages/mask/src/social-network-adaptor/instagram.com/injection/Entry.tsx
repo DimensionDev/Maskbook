@@ -1,7 +1,7 @@
 import { Fab, styled } from '@mui/material'
 import { Create } from '@mui/icons-material'
 import { CrossIsolationMessages } from '@masknet/shared-base'
-import { Composition } from '../../../components/CompositionDialog/Composition'
+import { Composition } from '../../../components/CompositionDialog/Composition.js'
 import { useState, useEffect } from 'react'
 import { LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 
@@ -31,7 +31,7 @@ export function Entry() {
             <Fab
                 variant="extended"
                 onClick={() => {
-                    CrossIsolationMessages.events.requestComposition.sendToLocal({ open: true, reason: 'timeline' })
+                    CrossIsolationMessages.events.compositionDialogEvent.sendToLocal({ open: true, reason: 'timeline' })
                 }}>
                 <Create />
                 Create with Mask

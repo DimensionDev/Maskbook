@@ -1,11 +1,11 @@
 import { memo } from 'react'
 import { Box, Tooltip } from '@mui/material'
-import { Image } from '../../../../components/shared/Image'
 import { makeStyles } from '@masknet/theme'
-import { TokenIcon } from '@masknet/shared'
+import { Image, Icon } from '@masknet/shared'
 import classNames from 'classnames'
 import { isSameAddress, NonFungibleCollection } from '@masknet/web3-shared-base'
-import type { Web3Helper } from '@masknet/plugin-infra/src/entry-web3'
+import type { Web3Helper } from '@masknet/web3-helpers'
+import { Icons } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => ({
     collectionWrap: {
@@ -17,8 +17,8 @@ const useStyles = makeStyles()((theme) => ({
     },
     collectionImg: {
         objectFit: 'cover',
-        width: '100%',
-        height: '100%',
+        width: 24,
+        height: 24,
         borderRadius: '50%',
         color: theme.palette.primary.main,
     },
@@ -28,6 +28,10 @@ const useStyles = makeStyles()((theme) => ({
     selected: {
         border: '2px solid #1D9BF0',
         borderRadius: '50%',
+    },
+    imageLoading: {
+        width: 24,
+        height: 24,
     },
 }))
 
@@ -39,9 +43,7 @@ export interface CollectionIconProps {
 
 export const CollectionIcon = memo<CollectionIconProps>(({ collection, onClick, selectedCollection }) => {
     const { classes } = useStyles()
-    if (!collection) {
-        return <TokenIcon classes={{ icon: classes.collectionImg }} name="other" address="other" />
-    }
+
     return (
         <Tooltip
             placement="right-end"
@@ -54,22 +56,22 @@ export const CollectionIcon = memo<CollectionIconProps>(({ collection, onClick, 
             <Box
                 className={classNames(
                     classes.collectionWrap,
-                    isSameAddress(collection.address, selectedCollection) ? classes.selected : '',
+                    isSameAddress(collection?.address, selectedCollection) ? classes.selected : '',
                 )}
                 onClick={onClick}>
                 {collection?.iconURL ? (
                     <Image
                         width={24}
                         height={24}
-                        component="img"
                         className={classes.collectionImg}
                         src={collection?.iconURL}
+                        fallback={<Icons.MaskPlaceholder size={24} />}
+                        disableSpinner
                     />
                 ) : (
-                    <TokenIcon
+                    <Icon
                         classes={{ icon: classes.collectionImg }}
-                        name={collection?.name}
-                        address={collection.name}
+                        name={collection?.name ?? collection?.symbol ?? 'Unknown'}
                     />
                 )}
             </Box>

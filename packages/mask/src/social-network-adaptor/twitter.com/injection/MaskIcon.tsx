@@ -1,12 +1,12 @@
 import { MutationObserverWatcher, DOMProxy, LiveSelector } from '@dimensiondev/holoflows-kit'
-import { bioPageUserNickNameSelector, floatingBioCardSelector, bioPageUserIDSelector } from '../utils/selector'
+import { bioPageUserNickNameSelector, floatingBioCardSelector, bioPageUserIDSelector } from '../utils/selector.js'
 import type { PostInfo } from '@masknet/plugin-infra/content-script'
-import Services from '../../../extension/service'
+import Services from '../../../extension/service.js'
 import { EnhanceableSite, ProfileIdentifier } from '@masknet/shared-base'
-import { MaskIcon } from '../../../resources/MaskIcon'
-import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot'
+import { MaskIcon } from '@masknet/shared'
+import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot.js'
 import { memoizePromise } from '@dimensiondev/kit'
-import { startWatch } from '../../../utils/watcher'
+import { startWatch } from '../../../utils/watcher.js'
 
 function Icon(props: { size: number }) {
     return (

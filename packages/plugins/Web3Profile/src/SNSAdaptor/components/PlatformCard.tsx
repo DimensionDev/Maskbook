@@ -1,11 +1,11 @@
 import { Stack, Card, Typography, Divider } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 
-import { useI18N } from '../../locales'
-import type { AccountType } from '../types'
+import { useI18N } from '../../locales/index.js'
+import type { AccountType } from '../types.js'
 import type { IdentityResolved } from '@masknet/plugin-infra'
-import { CollectionItem } from './CollectionItem'
-import { CURRENT_STATUS } from '../../constants'
+import { CollectionItem } from './CollectionItem.js'
+import { CURRENT_STATUS } from '../../constants.js'
 import { PlatformAvatar } from '@masknet/shared'
 const DEFAULT_PLACEHOLDER = '--'
 
@@ -80,7 +80,11 @@ export function PlatformCard(props: PlatformCardProps) {
                                 {isCurrent
                                     ? currentPersona?.nickname
                                     : account?.linkedProfile?.nickname || DEFAULT_PLACEHOLDER}
-                                {isCurrent && <Typography className={classes.currentTag}>{t.current()}</Typography>}
+                                {isCurrent && (
+                                    <Typography component="span" className={classes.currentTag}>
+                                        {t.current()}
+                                    </Typography>
+                                )}
                             </Typography>
                             <Typography>
                                 @{isCurrent ? currentPersona?.identifier?.userId : account?.identity}

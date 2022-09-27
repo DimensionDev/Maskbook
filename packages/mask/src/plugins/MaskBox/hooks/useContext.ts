@@ -8,19 +8,20 @@ import { omit, clamp, first, uniq } from 'lodash-unified'
 import BigNumber from 'bignumber.js'
 import { createContainer } from 'unstated-next'
 import { unreachable } from '@dimensiondev/kit'
+import { useERC20TokenAllowance } from '@masknet/plugin-infra/web3-evm'
 import { useMaskBoxConstants, isZeroAddress, SchemaType, isNativeTokenAddress } from '@masknet/web3-shared-evm'
 import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
-import { BoxInfo, BoxState } from '../type'
-import { useMaskBoxInfo } from './useMaskBoxInfo'
-import { useMerkelProof } from './useMerkleProof'
-import { useMaskBoxStatus } from './useMaskBoxStatus'
-import { useMaskBoxCreationSuccessEvent } from './useMaskBoxCreationSuccessEvent'
-import { useMaskBoxTokensForSale } from './useMaskBoxTokensForSale'
-import { useMaskBoxPurchasedTokens } from './useMaskBoxPurchasedTokens'
-import { formatCountdown } from '../helpers/formatCountdown'
-import { useOpenBoxTransaction } from './useOpenBoxTransaction'
-import { useMaskBoxMetadata } from './useMaskBoxMetadata'
-import { useQualification } from './useQualification'
+import { BoxInfo, BoxState } from '../type.js'
+import { useMaskBoxInfo } from './useMaskBoxInfo.js'
+import { useMerkelProof } from './useMerkleProof.js'
+import { useMaskBoxStatus } from './useMaskBoxStatus.js'
+import { useMaskBoxCreationSuccessEvent } from './useMaskBoxCreationSuccessEvent.js'
+import { useMaskBoxTokensForSale } from './useMaskBoxTokensForSale.js'
+import { useMaskBoxPurchasedTokens } from './useMaskBoxPurchasedTokens.js'
+import { formatCountdown } from '../helpers/formatCountdown.js'
+import { useOpenBoxTransaction } from './useOpenBoxTransaction.js'
+import { useMaskBoxMetadata } from './useMaskBoxMetadata.js'
+import { useQualification } from './useQualification.js'
 import {
     formatBalance,
     isGreaterThan,
@@ -39,14 +40,13 @@ import {
     useNonFungibleTokenContract,
 } from '@masknet/plugin-infra/web3'
 import { EMPTY_LIST } from '@masknet/shared-base'
-import { useERC20TokenAllowance } from '@masknet/plugin-infra/web3-evm'
 
 function useContext(initialState?: { boxId: string; hashRoot: string }) {
     const now = new Date()
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+
     const { MASK_BOX_CONTRACT_ADDRESS } = useMaskBoxConstants()
     const coder = ABICoder as unknown as ABICoder.AbiCoder
-
     const [boxId, setBoxId] = useState(initialState?.boxId ?? '')
     const rootHash = initialState?.hashRoot || ''
     const [paymentTokenAddress, setPaymentTokenAddress] = useState('')

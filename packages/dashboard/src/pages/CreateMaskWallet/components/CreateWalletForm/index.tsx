@@ -1,21 +1,22 @@
 import { memo, useEffect, useMemo, useState } from 'react'
-import { Box, Button, formHelperTextClasses, Typography } from '@mui/material'
+import { Box, Button, formHelperTextClasses, lighten, Typography } from '@mui/material'
 import { makeStyles, MaskColorVar, MaskTextField } from '@masknet/theme'
 import { z as zod } from 'zod'
 import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { DashboardRoutes } from '@masknet/shared-base'
-import { useDashboardI18N } from '../../../../locales'
+import { useDashboardI18N } from '../../../../locales/index.js'
 import { useAsyncRetry } from 'react-use'
 import { WalletMessages } from '@masknet/plugin-wallet'
-import { PluginServices } from '../../../../API'
+import { PluginServices } from '../../../../API.js'
 import urlcat from 'urlcat'
-import PasswordField from '../../../../components/PasswordField'
+import PasswordField from '../../../../components/PasswordField/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
         padding: '120px 18%',
+        width: '100%',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
@@ -75,6 +76,9 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: 24,
         fontSize: 18,
         background: theme.palette.mode === 'dark' ? '#1A1D20' : '#F7F9FA',
+        '&:hover': {
+            background: `${lighten(theme.palette.mode === 'dark' ? '#1A1D20' : '#F7F9FA', 0.1)}!important`,
+        },
     },
     alert: {
         marginTop: 24,

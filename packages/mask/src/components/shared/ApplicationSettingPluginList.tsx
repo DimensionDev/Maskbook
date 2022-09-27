@@ -1,13 +1,18 @@
-import { useActivatedPluginsSNSAdaptor, Plugin, PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
-import { useMemo, useState, useCallback } from 'react'
+import {
+    useActivatedPluginsSNSAdaptor,
+    Plugin,
+    PluginI18NFieldRender,
+    PluginID,
+} from '@masknet/plugin-infra/content-script'
+import { useMemo, useState, useCallback, useRef } from 'react'
 import { List, ListItem, Typography } from '@mui/material'
 import { makeStyles, getMaskColor, ShadowRootTooltip } from '@masknet/theme'
-import { useI18N } from '../../utils'
-import { PersistentStorages } from '../../../shared'
+import { useI18N } from '../../utils/index.js'
+import { PersistentStorages } from '../../../shared/index.js'
 
 export interface Application {
     entry: Plugin.SNSAdaptor.ApplicationEntry
-    pluginId: string
+    pluginId: PluginID
     enabled?: boolean
     isWalletConnectedRequired?: boolean
     isWalletConnectedEVMRequired?: boolean
@@ -29,7 +34,9 @@ export function getUnlistedApp(app: Application): boolean {
 }
 // #endregion
 
-const useStyles = makeStyles<{ iconFilterColor?: string }>()((theme, { iconFilterColor }) => ({
+const useStyles = makeStyles<{
+    iconFilterColor?: string
+}>()((theme, { iconFilterColor }) => ({
     list: {
         display: 'grid',
         gap: theme.spacing(1.5),
@@ -136,13 +143,15 @@ interface AppListProps {
 function AppList(props: AppListProps) {
     const { appList, setUnlistedApp, isListed } = props
     const { classes } = useStyles({ iconFilterColor: undefined })
+    const popperBoundaryRef = useRef<HTMLUListElement | null>(null)
     const { t } = useI18N()
 
     return appList.length > 0 ? (
-        <List className={classes.list}>
+        <List className={classes.list} ref={popperBoundaryRef}>
             {appList.map((application, index) => (
                 <AppListItem
                     key={index}
+                    popperBoundary={popperBoundaryRef.current}
                     application={application}
                     setUnlistedApp={setUnlistedApp}
                     isListed={isListed}
@@ -162,25 +171,35 @@ function AppList(props: AppListProps) {
 
 interface AppListItemProps {
     application: Application
+    popperBoundary: HTMLUListElement | null
     setUnlistedApp: (app: Application, unlisted: boolean) => void
     isListed: boolean
 }
 
 function AppListItem(props: AppListItemProps) {
-    const { application, setUnlistedApp, isListed } = props
+    const { application, setUnlistedApp, isListed, popperBoundary } = props
     const { classes } = useStyles({ iconFilterColor: application.entry.iconFilterColor })
     return (
         <ShadowRootTooltip
             PopperProps={{
                 disablePortal: true,
-                placement: 'top',
+                placement: 'bottom',
+                modifiers: [
+                    {
+                        name: 'flip',
+                        options: {
+                            boundary: popperBoundary,
+                            flipVariations: false,
+                        },
+                    },
+                ],
             }}
             title={
                 <Typography>
                     <PluginI18NFieldRender field={application.entry.name} pluginID={application.pluginId} />
                 </Typography>
             }
-            placement="top"
+            placement="bottom"
             arrow>
             <ListItem className={classes.listItem} onClick={() => setUnlistedApp(application, isListed)}>
                 <div className={classes.iconWrapper}>{application.entry.icon}</div>

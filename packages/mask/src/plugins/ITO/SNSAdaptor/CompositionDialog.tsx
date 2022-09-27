@@ -1,4 +1,4 @@
-import { PluginId, useActivatedPlugin, useCompositionContext } from '@masknet/plugin-infra/content-script'
+import { PluginID, useActivatedPlugin, useCompositionContext } from '@masknet/plugin-infra/content-script'
 import { InjectedDialog, InjectedDialogProps, useOpenShareTxDialog } from '@masknet/shared'
 import { EMPTY_LIST, EnhanceableSite } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
@@ -8,22 +8,22 @@ import { DialogContent } from '@mui/material'
 import { omit, set } from 'lodash-unified'
 import { useCallback, useEffect, useState } from 'react'
 import Web3Utils from 'web3-utils'
-import { useCurrentIdentity, useCurrentLinkedPersona } from '../../../components/DataSource/useActivatedUI'
-import { activatedSocialNetworkUI } from '../../../social-network'
-import { useI18N } from '../../../utils'
-import { WalletMessages } from '../../Wallet/messages'
-import { ITO_MetaKey_2, MSG_DELIMITER } from '../constants'
-import { PluginITO_RPC } from '../messages'
-import { DialogTabs, JSON_PayloadInMask } from '../types'
-import { ConfirmDialog } from './ConfirmDialog'
-import { CreateForm } from './CreateForm'
-import { payloadOutMask } from './helpers'
-import { PoolList } from './PoolList'
+import { useCurrentIdentity, useCurrentLinkedPersona } from '../../../components/DataSource/useActivatedUI.js'
+import { activatedSocialNetworkUI } from '../../../social-network/index.js'
+import { useI18N } from '../../../utils/index.js'
+import { WalletMessages } from '../../Wallet/messages.js'
+import { ITO_MetaKey_2, MSG_DELIMITER } from '../constants.js'
+import { PluginITO_RPC } from '../messages.js'
+import { DialogTabs, JSON_PayloadInMask } from '../types.js'
+import { ConfirmDialog } from './ConfirmDialog.js'
+import { CreateForm } from './CreateForm.js'
+import { payloadOutMask } from './helpers.js'
+import { PoolList } from './PoolList.js'
 import { useAccount, useChainId, useCurrentWeb3NetworkPluginID, useWeb3Connection } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { PoolSettings, useFillCallback } from './hooks/useFill'
+import { PoolSettings, useFillCallback } from './hooks/useFill.js'
 import { Icons } from '@masknet/icons'
-import { NetworkTab } from '../../../components/shared/NetworkTab'
+import { NetworkTab } from '../../../components/shared/NetworkTab.js'
 
 interface StyleProps {
     snsId: string
@@ -79,7 +79,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
     const { classes } = useStyles({ snsId: activatedSocialNetworkUI.networkIdentifier })
     const { attachMetadata, dropMetadata } = useCompositionContext()
     const pluginID = useCurrentWeb3NetworkPluginID()
-    const ITO_Definition = useActivatedPlugin(PluginId.ITO, 'any')
+    const ITO_Definition = useActivatedPlugin(PluginID.ITO, 'any')
     const chainIdList = ITO_Definition?.enableRequirement.web3?.[pluginID]?.supportedChainIds ?? EMPTY_LIST
     const [chainId, setChainId] = useState<ChainId>(currentChainId)
 

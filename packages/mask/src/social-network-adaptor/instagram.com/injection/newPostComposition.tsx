@@ -1,5 +1,5 @@
-import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot'
-import { Entry } from './Entry'
+import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot.js'
+import { Entry } from './Entry.js'
 export function newPostCompositionInstagram(signal: AbortSignal) {
     const container = document.createElement('div')
     const shadow = container.attachShadow({ mode: 'closed' })

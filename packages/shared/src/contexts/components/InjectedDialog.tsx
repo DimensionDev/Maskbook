@@ -17,9 +17,9 @@ import {
     useTheme,
 } from '@mui/material'
 import { Children, cloneElement, useCallback } from 'react'
-import { useSharedI18N } from '../../locales'
-import { sharedUIComponentOverwrite, sharedUINetworkIdentifier } from '../base'
-import { DialogDismissIcon } from './DialogDismissIcon'
+import { useSharedI18N } from '../../locales/index.js'
+import { sharedUIComponentOverwrite, sharedUINetworkIdentifier } from '../base/index.js'
+import { DialogDismissIcon } from './DialogDismissIcon.js'
 import classnames from 'classnames'
 
 interface StyleProps {
@@ -38,6 +38,7 @@ const useStyles = makeStyles<StyleProps>()((theme, { clean }) => ({
         alignItems: 'flex-end',
     },
     dialogTitleWithTabs: {
+        display: 'grid !important',
         paddingBottom: '0 !important',
         gridTemplateRows: `${theme.spacing(3.5)} ${theme.spacing(4.5)}`,
         gridRowGap: theme.spacing(1.5),
@@ -140,7 +141,7 @@ export function InjectedDialog(props: InjectedDialogProps) {
 
     const closeBothCompositionDialog = useCallback(() => {
         if (isOpenFromApplicationBoard) {
-            CrossIsolationMessages.events.requestComposition.sendToLocal({ open: false, reason: 'timeline' })
+            CrossIsolationMessages.events.compositionDialogEvent.sendToLocal({ open: false, reason: 'timeline' })
         }
 
         onClose?.()

@@ -12,6 +12,7 @@ import {
     TransactionStatusType,
 } from '@masknet/web3-shared-base'
 import {
+    AddressType,
     ChainId,
     createClient,
     createNativeToken,
@@ -31,10 +32,10 @@ import {
 } from '@solana/web3.js'
 import type { Plugin } from '@masknet/plugin-infra'
 import type { PartialRequired } from '@masknet/shared-base'
-import { Web3StateSettings } from '../../settings'
-import { Providers } from './provider'
-import { createTransferInstruction, getOrCreateAssociatedTokenAccount } from './spl-token'
-import type { SolanaConnection as BaseConnection, SolanaWeb3ConnectionOptions } from './types'
+import { Web3StateSettings } from '../../settings/index.js'
+import { Providers } from './provider.js'
+import { createTransferInstruction, getOrCreateAssociatedTokenAccount } from './spl-token/index.js'
+import type { SolanaConnection as BaseConnection, SolanaWeb3ConnectionOptions } from './types.js'
 
 class Connection implements BaseConnection {
     private connections: Map<ChainId, SolConnection> = new Map()
@@ -207,7 +208,13 @@ class Connection implements BaseConnection {
     getGasPrice(initial?: SolanaWeb3ConnectionOptions): Promise<string> {
         throw new Error('Method not implemented.')
     }
-    getTokenSchema(address: string, initial?: SolanaWeb3ConnectionOptions): Promise<SchemaType> {
+    getAddressType(
+        address: string,
+        initial?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined,
+    ): Promise<AddressType | undefined> {
+        return Promise.resolve(AddressType.Default)
+    }
+    getSchemaType(address: string, initial?: SolanaWeb3ConnectionOptions): Promise<SchemaType> {
         throw new Error('Method not implemented.')
     }
     getNonFungibleTokenContract(
@@ -405,8 +412,8 @@ class Connection implements BaseConnection {
         if (!address || isNativeTokenAddress(address)) {
             return this.getNativeToken()
         }
-        const tokens = await SolanaFungible.getFungibleTokens(options.chainId, [])
-        const token = tokens.find((x) => x.address === address)
+        const tokens = await SolanaFungible.getFungibleTokenList(options.chainId, [])
+        const token = tokens.find((x) => isSameAddress(x.address, address))
         return (
             token ??
             ({

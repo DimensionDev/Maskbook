@@ -1,5 +1,5 @@
-import { story } from '../utils'
-import { SearchableListExample } from './SearchableListExample'
+import { story } from '../utils/index.js'
+import { SearchableListExample } from './SearchableListExample.js'
 
 const { meta, of } = story(SearchableListExample)
 export default meta({

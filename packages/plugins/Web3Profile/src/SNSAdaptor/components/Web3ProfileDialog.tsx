@@ -1,28 +1,34 @@
 import { DialogActions, DialogContent } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { InjectedDialog, PersonaAction } from '@masknet/shared'
-import { useAllPersonas, useCurrentPersona, useLastRecognizedProfile } from '../hooks/usePersona'
-import { Main } from './Main'
-import { CrossIsolationMessages, NextIDPlatform, PersonaInformation, PopupRoutes } from '@masknet/shared-base'
+import { useAllPersonas, useCurrentPersona, useLastRecognizedProfile } from '../hooks/usePersona.js'
+import { Main } from './Main.js'
+import {
+    CrossIsolationMessages,
+    EMPTY_LIST,
+    NextIDPlatform,
+    PersonaInformation,
+    PopupRoutes,
+} from '@masknet/shared-base'
 import { NextIDProof } from '@masknet/web3-providers'
 import { useAsyncRetry } from 'react-use'
-import { ImageManagement } from './ImageManagement'
+import { ImageManagement } from './ImageManagement.js'
 import {
     getDonationList,
     getFootprintList,
     getNFTList,
-    getNFTList_Polygon,
     getWalletHiddenList,
     getWalletList,
     mergeList,
     placeFirst,
-} from '../utils'
+} from '../utils.js'
 import { Icons } from '@masknet/icons'
-import { context } from '../context'
+import { context } from '../context.js'
 import { useChainId } from '@masknet/plugin-infra/web3'
-import { CurrentStatusMap, CURRENT_STATUS } from '../../constants'
+import { CurrentStatusMap, CURRENT_STATUS } from '../../constants.js'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { ChainId } from '@masknet/web3-shared-evm'
 const useStyles = makeStyles()((theme) => ({
     content: {
         width: 568,
@@ -66,7 +72,7 @@ export function Web3ProfileDialog() {
     const [open, setOpen] = useState(false)
 
     useEffect(() => {
-        return CrossIsolationMessages.events.requestWeb3ProfileDialog.on(({ open }) => {
+        return CrossIsolationMessages.events.web3ProfileDialogEvent.on(({ open }) => {
             setOpen(open)
         })
     }, [])
@@ -86,38 +92,38 @@ export function Web3ProfileDialog() {
 
     const { value: avatar } = useAsyncRetry(async () => context.getPersonaAvatar(currentPersona?.identifier), [])
 
-    const wallets =
-        bindings?.proofs
-            ?.filter((proof) => proof?.platform === NextIDPlatform.Ethereum)
-            ?.map((address) => ({
+    const wallets = useMemo(() => {
+        if (!bindings?.proofs.length) return EMPTY_LIST
+        return bindings.proofs
+            .filter((proof) => proof.platform === NextIDPlatform.Ethereum)
+            .map((address) => ({
                 address: address?.identity,
                 platform: NetworkPluginID.PLUGIN_EVM,
                 updateTime: address.last_checked_at ?? address.created_at,
-            })) || []
+            }))
+    }, [bindings?.proofs])
 
     const accounts = bindings?.proofs?.filter((proof) => proof?.platform === NextIDPlatform.Twitter) || []
 
     const { value: MainnetNFTList } = useAsyncRetry(async () => {
         if (!currentPersona) return
         return getNFTList(wallets)
-    }, [wallets?.length, currentPersona])
+    }, [wallets, currentPersona])
 
     const { value: PolygonNFTList } = useAsyncRetry(async () => {
         if (!currentPersona) return
-        return getNFTList_Polygon(wallets)
-    }, [wallets?.length, currentPersona])
+        return getNFTList(wallets, ChainId.Matic)
+    }, [wallets, currentPersona])
 
     const NFTList = mergeList(MainnetNFTList, PolygonNFTList)
 
     const { value: donationList } = useAsyncRetry(async () => {
-        if (!currentPersona) return
         return getDonationList(wallets)
-    }, [wallets?.length, currentPersona])
+    }, [wallets])
 
     const { value: footprintList } = useAsyncRetry(async () => {
-        if (!currentPersona) return
         return getFootprintList(wallets)
-    }, [wallets?.length, currentPersona])
+    }, [wallets])
 
     const { value: hiddenObj, retry: retryGetWalletHiddenList } = useAsyncRetry(async () => {
         if (!currentPersona) return

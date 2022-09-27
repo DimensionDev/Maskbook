@@ -1,19 +1,14 @@
 import { makeGlobalThis } from '@masknet/compartment'
 import createMembrane from '@masknet/membrane'
+import { createFetch, createTimers } from '@masknet/web-endowments'
 
 export function createGlobal(pluginID: string, manifest: unknown, signal: AbortSignal) {
     const { proxy: localThis, revoke } = Proxy.revocable(makeGlobalThis(Object.prototype), {})
+    signal.addEventListener('abort', revoke, { once: true })
 
-    // TODO: move this out
-    // TODO: type of harden
-    // @ts-ignore
-    harden(console)
-
-    Object.defineProperties(localThis, {
-        window: { value: localThis },
-        self: { value: localThis },
-        console: { value: console },
-    })
+    // Note: move it to elsewhere
+    // Note: reenable this after https://github.com/facebook/react/pull/25198/files
+    // if (typeof harden === 'function') harden(console)
 
     const endowments = {
         AbortController,
@@ -43,6 +38,7 @@ export function createGlobal(pluginID: string, manifest: unknown, signal: AbortS
         TextDecoderStream,
         TextEncoder,
         TextEncoderStream,
+        // TODO: provide a custom-scheme friendly URL constructor?
         URL,
         URLSearchParams,
         WebAssembly,
@@ -50,27 +46,38 @@ export function createGlobal(pluginID: string, manifest: unknown, signal: AbortS
         WritableStreamDefaultController,
         WritableStreamDefaultWriter,
 
-        // TODO: bind those timers with signal.
-        cancelIdleCallback,
-        requestIdleCallback,
         crypto,
         atob,
         btoa,
-        clearInterval,
-        clearTimeout,
-        // TODO: limit what it can fetch to.
-        // TODO: support fetch mask-modules: scheme and ban fetch *-extension: scheme
-        // TODO: support fetch ipfs: scheme
-        fetch,
-        queueMicrotask,
-        setInterval,
-        setTimeout,
+        ...createTimers(signal),
+        fetch: createFetch({
+            signal,
+            canConnect(url) {
+                if (new URL(url).protocol.endsWith('-extension:')) return false
+                // TODO: add content security policy
+                return true
+            },
+            // rewriteURL:
+            // TODO: support rewrite URL of mask-modules
+            // normalizeURL:
+            // TODO: support normalize relative URL
+        }),
     }
+
     const membrane = createMembrane(globalThis, localThis, {
         endowments: Object.getOwnPropertyDescriptors(endowments),
+        // distortionCallback: (o) => (o === globalThis ? localThis : o),
+    })
+
+    // Note: the membrane library will replace all intrinsic with the link to the blueRealm
+    // we need to avoid it.
+    if (typeof window === 'object') Object.defineProperty(localThis, 'window', { value: localThis })
+    Object.defineProperties(localThis, {
+        self: { value: localThis, configurable: true, writable: true },
+        globalThis: { value: localThis, configurable: true, writable: true },
+        console: { value: console, configurable: true, writable: true },
     })
     membrane.virtualEnvironment.link('console')
 
-    signal.addEventListener('abort', revoke, { once: true })
     return { localThis, membrane }
 }

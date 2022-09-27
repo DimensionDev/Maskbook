@@ -1,3 +1,4 @@
+import { useCallback } from 'react'
 import type { Option } from 'ts-results'
 import {
     useActivatedPluginsSNSAdaptor,
@@ -6,17 +7,16 @@ import {
     Plugin,
     PluginI18NFieldRender,
 } from '@masknet/plugin-infra/content-script'
-import { extractTextFromTypedMessage } from '@masknet/typed-message'
-import Services from '../../extension/service'
-import MaskPostExtraInfoWrapper from '../../plugins/MaskPluginWrapper'
-import { HTMLProps, useCallback } from 'react'
-import { Button, Skeleton, useTheme } from '@mui/material'
+import { MaskPostExtraInfoWrapper } from '@masknet/shared'
+import { Box, BoxProps, Button, Skeleton, useTheme } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
-import { useI18N } from '../../utils'
+import { extractTextFromTypedMessage } from '@masknet/typed-message'
+import Services from '../../extension/service.js'
+import { useI18N } from '../../utils/index.js'
 import { useSubscription } from 'use-subscription'
 
-function useDisabledPlugins() {
+export function useDisabledPlugins() {
     const activated = new Set(useActivatedPluginsSNSAdaptor('any').map((x) => x.ID))
     const minimalMode = new Set(useActivatedPluginsSNSAdaptor(true).map((x) => x.ID))
     const disabledPlugins = useSubscription(registeredPlugins)
@@ -114,15 +114,16 @@ const useRectangleStyles = makeStyles()(() => ({
         background: 'rgba(255, 255, 255, 0.5)',
     },
 }))
-interface RectangleProps extends HTMLProps<HTMLDivElement> {}
+
+export interface RectangleProps extends BoxProps {}
 
 export function Rectangle(props: RectangleProps) {
     const { classes } = useRectangleStyles()
     return (
-        <div {...props}>
+        <Box component="div" {...props}>
             <Skeleton className={classes.rectangle} variant="text" animation={false} width={103} height={16} />
             <Skeleton className={classes.rectangle} variant="text" animation={false} width={68} height={16} />
             <Skeleton className={classes.rectangle} variant="text" animation={false} width={48} height={16} />
-        </div>
+        </Box>
     )
 }

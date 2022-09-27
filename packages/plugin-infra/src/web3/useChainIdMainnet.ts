@@ -1,7 +1,7 @@
 import type { NetworkPluginID } from '@masknet/web3-shared-base'
-import type { Web3Helper } from '../web3-helpers'
-import { useChainId } from './useChainId'
-import { useWeb3State } from './useWeb3State'
+import type { Web3Helper } from '@masknet/web3-helpers'
+import { useChainId } from './useChainId.js'
+import { useWeb3State } from './useWeb3State.js'
 
 export function useChainIdMainnet<T extends NetworkPluginID>(
     pluginID?: T,

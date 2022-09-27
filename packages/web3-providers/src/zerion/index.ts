@@ -7,7 +7,6 @@ import {
     createPageable,
     createIndicator,
     Pageable,
-    createLookupTableResolver,
     isSameAddress,
 } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
@@ -17,11 +16,11 @@ import type {
     SocketResponseBody,
     ZerionTransactionResponseBody,
     ZerionAssetResponseBody,
-} from './type'
-import { formatAsset, formatTransactions } from './format'
-import type { FungibleTokenAPI, HistoryAPI } from '../types'
-import { getAllEVMNativeAssets } from '../helpers'
-import { EMPTY_LIST } from '@masknet/shared-base'
+} from './type.js'
+import { formatAsset, formatTransactions } from './format.js'
+import type { FungibleTokenAPI, HistoryAPI } from '../types/index.js'
+import { getAllEVMNativeAssets } from '../helpers.js'
+import { createLookupTableResolver, EMPTY_LIST } from '@masknet/shared-base'
 
 const ZERION_API = 'wss://api-v4.zerion.io'
 // cspell:disable-next-line

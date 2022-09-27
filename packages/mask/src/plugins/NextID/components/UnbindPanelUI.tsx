@@ -1,15 +1,15 @@
 import { memo, useState } from 'react'
 import { Box, DialogContent, Stack, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
-import { WalletStatusBox } from '../../../components/shared/WalletStatusBox'
+import { WalletStatusBox } from '../../../components/shared/WalletStatusBox/index.js'
 import { LoadingButton } from '@mui/lab'
 import DoneIcon from '@mui/icons-material/Done'
-import { useI18N } from '../locales'
+import { useI18N } from '../locales/index.js'
 import { getMaskColor, makeStyles, MaskColorVar, LoadingBase } from '@masknet/theme'
 import { InjectedDialog } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
-import AbstractTab, { AbstractTabProps } from '../../../components/shared/AbstractTab'
+import AbstractTab, { AbstractTabProps } from '../../../components/shared/AbstractTab.js'
 import { formatPersonaFingerprint, PersonaInformation } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({

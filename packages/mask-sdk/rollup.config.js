@@ -1,4 +1,4 @@
-import sucrase from '@rollup/plugin-sucrase'
+import { swc } from 'rollup-plugin-swc3'
 import node from '@rollup/plugin-node-resolve'
 
 export default {
@@ -9,9 +9,8 @@ export default {
     },
     plugins: [
         node(),
-        sucrase({
-            exclude: ['node_modules/**'],
-            transforms: ['typescript'],
+        swc({
+            tsconfig: '../../tsconfig.json',
         }),
     ],
 }

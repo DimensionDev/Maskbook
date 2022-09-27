@@ -7,6 +7,10 @@ export enum ChainId {
     Testnet = 2,
 }
 
+export enum AddressType {
+    Default = 1,
+}
+
 export enum SchemaType {
     Fungible = 1,
     NonFungible = 2,

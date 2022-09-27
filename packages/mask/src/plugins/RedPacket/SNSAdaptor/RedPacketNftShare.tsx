@@ -1,7 +1,7 @@
 import { makeStyles } from '@masknet/theme'
 import { Button, DialogActions, DialogContent } from '@mui/material'
 import { InjectedDialog } from '@masknet/shared'
-import { useI18N } from '../../../utils'
+import { useI18N } from '../../../utils/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     button: {

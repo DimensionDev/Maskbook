@@ -13,7 +13,7 @@ import { uniqBy } from 'lodash-unified'
 import { EMPTY_LIST, EMPTY_OBJECT } from '@masknet/shared-base'
 import { makeStyles, MaskFixedSizeListProps, MaskTextFieldProps, SearchableList } from '@masknet/theme'
 import { Box, Stack, Typography } from '@mui/material'
-import { useSharedI18N } from '../../../locales'
+import { useSharedI18N } from '../../../locales/index.js'
 import {
     useAccount,
     useBlockedFungibleTokens,
@@ -25,21 +25,21 @@ import {
     useFungibleTokensFromTokenList,
     useTrustedFungibleTokens,
     useWeb3State,
-    Web3Helper,
 } from '@masknet/plugin-infra/web3'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import {
     CurrencyType,
     currySameAddress,
-    formatBalance,
     FungibleToken,
     isSameAddress,
+    leftShift,
     minus,
     NetworkPluginID,
     toZero,
 } from '@masknet/web3-shared-base'
-import { getFungibleTokenItem } from './FungibleTokenItem'
-import { ManageTokenListBar } from './ManageTokenListBar'
-import { TokenListMode } from './type'
+import { getFungibleTokenItem } from './FungibleTokenItem.js'
+import { ManageTokenListBar } from './ManageTokenListBar.js'
+import { TokenListMode } from './type.js'
 import { Icons } from '@masknet/icons'
 
 const DEFAULT_LIST_HEIGHT = 300
@@ -94,7 +94,9 @@ const Content = memo(({ message, height }: { message: ReactNode; height?: number
 export const FungibleTokenList = forwardRef(
     <T extends NetworkPluginID>(
         props: FungibleTokenListProps<T>,
-        ref: ForwardedRef<{ updateMode(mode: TokenListMode): void }>,
+        ref: ForwardedRef<{
+            updateMode(mode: TokenListMode): void
+        }>,
     ) => {
         const {
             tokens = EMPTY_LIST,
@@ -222,8 +224,8 @@ export const FungibleTokenList = forwardRef(
             return filteredFungibleTokens
                 .filter((x) => !isBlockedToken(x))
                 .sort((a, z) => {
-                    const aBalance = toZero(formatBalance(fungibleTokensBalance[a.address] ?? '0', a.decimals))
-                    const zBalance = toZero(formatBalance(fungibleTokensBalance[z.address] ?? '0', z.decimals))
+                    const aBalance = toZero(leftShift(fungibleTokensBalance[a.address] ?? '0', a.decimals))
+                    const zBalance = toZero(leftShift(fungibleTokensBalance[z.address] ?? '0', z.decimals))
 
                     const aUSD = toZero(fungibleAssetsTable[a.address]?.value?.[CurrencyType.USD] ?? '0')
                     const zUSD = toZero(fungibleAssetsTable[z.address]?.value?.[CurrencyType.USD] ?? '0')

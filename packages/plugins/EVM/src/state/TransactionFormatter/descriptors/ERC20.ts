@@ -1,9 +1,9 @@
 import { i18NextInstance } from '@masknet/shared-base'
 import { TransactionContext, isZero } from '@masknet/web3-shared-base'
 import { ChainId, TransactionParameter, SchemaType } from '@masknet/web3-shared-evm'
-import type { TransactionDescriptor } from '../types'
-import { getTokenAmountDescription } from '../utils'
-import { Web3StateSettings } from '../../../settings'
+import type { TransactionDescriptor } from '../types.js'
+import { getTokenAmountDescription } from '../utils.js'
+import { Web3StateSettings } from '../../../settings/index.js'
 
 export class ERC20Descriptor implements TransactionDescriptor {
     async compute(context_: TransactionContext<ChainId, TransactionParameter>) {
@@ -53,7 +53,7 @@ export class ERC20Descriptor implements TransactionDescriptor {
                 parameters?.value &&
                 !parameters?.tokenId
             ) {
-                const schemaType = await connection?.getTokenSchema(context.to ?? '', { chainId: context.chainId })
+                const schemaType = await connection?.getSchemaType(context.to ?? '', { chainId: context.chainId })
                 if (schemaType === SchemaType.ERC721) return
                 const token = await connection?.getFungibleToken(context.to ?? '', {
                     chainId: context.chainId,
@@ -62,7 +62,7 @@ export class ERC20Descriptor implements TransactionDescriptor {
                     chainId: context.chainId,
                     title: i18NextInstance.t('plugin_infra_descriptor_token_transfer_title'),
                     description: i18NextInstance.t('plugin_infra_descriptor_token_transfer', {
-                        symbol: token?.symbol,
+                        tokenAmountDescription: getTokenAmountDescription(parameters?.value, token),
                     }),
                     successfulDescription: i18NextInstance.t('plugin_infra_descriptor_token_transfer_success', {
                         tokenAmountDescription: getTokenAmountDescription(parameters?.value, token),

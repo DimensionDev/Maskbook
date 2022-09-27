@@ -1,12 +1,17 @@
-import { story } from '../utils'
+import { story } from '../utils/index.js'
 import TabContext from '@mui/lab/TabContext'
 import TabPanel from '@mui/lab/TabPanel'
 import { Stack, Tab } from '@mui/material'
 import { useState } from 'react'
-import { MaskTabList, MaskTabListProps } from '../../src'
+import { MaskTabList, MaskTabListProps } from '../../src/index.js'
 
 const defaultTabs = ['One', 'Two', 'Three']
-const { meta, of } = story(function ({ tabs, ...rest }: { tabs: string[] } & MaskTabListProps) {
+const { meta, of } = story(function ({
+    tabs,
+    ...rest
+}: {
+    tabs: string[]
+} & MaskTabListProps) {
     const [state, setState] = useState(tabs[0])
     return (
         <Stack p={3}>

@@ -7,11 +7,11 @@ import { AbiItem, asciiToHex, padRight, toWei } from 'web3-utils'
 import ReferralFarmsV1ABI from '@masknet/web3-contracts/abis/ReferralFarmsV1.json'
 import ERC20ABI from '@masknet/web3-contracts/abis/ERC20.json'
 
-import { roundValue, toChainAddressEthers } from '../../helpers'
-import { ReferralRPC } from '../../messages'
-import type { FungibleTokenDetailed } from '../../types'
+import { roundValue, toChainAddressEthers } from '../../helpers/index.js'
+import { ReferralRPC } from '../../messages.js'
+import type { FungibleTokenDetailed } from '../../types.js'
 import type { NetworkPluginID } from '@masknet/web3-shared-base'
-import type { Web3Helper } from '@masknet/plugin-infra/web3'
+import type { Web3Helper } from '@masknet/web3-helpers'
 
 async function resolveReferralFarmsV1Address() {
     try {

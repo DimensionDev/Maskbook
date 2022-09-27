@@ -1,8 +1,8 @@
 import { memo, useMemo } from 'react'
 import { Box, ImageList, Typography, ImageListItem, Stack } from '@mui/material'
-import { NFTCard } from './NFTCard'
+import { NFTCard } from './NFTCard.js'
 import { MaskColorVar, LoadingBase } from '@masknet/theme'
-import { useDashboardI18N } from '../../../../locales'
+import { useDashboardI18N } from '../../../../locales/index.js'
 import type { NonFungibleToken } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 

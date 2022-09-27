@@ -4,8 +4,8 @@ import { Box, Divider, Skeleton } from '@mui/material'
 import { GasOptionType, NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainId, formatGweiToWei, GasOption, Transaction } from '@masknet/web3-shared-evm'
 import { useWeb3State } from '@masknet/plugin-infra/web3'
-import { GasOption as GasOptionItem } from './GasOption'
-import { SettingsContext } from './Context'
+import { GasOption as GasOptionItem } from './GasOption.js'
+import { SettingsContext } from './Context.js'
 
 const useStyles = makeStyles()((theme) => {
     return {

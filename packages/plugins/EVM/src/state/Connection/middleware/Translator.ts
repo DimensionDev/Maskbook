@@ -1,7 +1,7 @@
 import { ChainId } from '@masknet/web3-shared-evm'
-import { Base } from '../translators/Base'
-import { Polygon } from '../translators/Polygon'
-import type { Context, Middleware, Translator as ChainTranslator } from '../types'
+import { Base } from '../translators/Base.js'
+import { Polygon } from '../translators/Polygon.js'
+import type { Context, Middleware, Translator as ChainTranslator } from '../types.js'
 
 /**
  * JSON RPC transactor for EVM chains.

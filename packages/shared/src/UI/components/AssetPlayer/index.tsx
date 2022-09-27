@@ -7,8 +7,8 @@ import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { Box } from '@mui/material'
 import { ImageIcon } from '@masknet/shared'
 import { GeneratedIconProps, Icons } from '@masknet/icons'
-import type { Web3Helper } from '@masknet/plugin-infra/web3'
-import { MEDIA_VIEWER_URL } from '../../../constants'
+import type { Web3Helper } from '@masknet/web3-helpers'
+import { MEDIA_VIEWER_URL } from '../../../constants.js'
 
 interface ERC721TokenQuery {
     contractAddress: string
@@ -102,18 +102,50 @@ export const AssetPlayer = memo<AssetPlayerProps>((props) => {
         }
     }, [url, JSON.stringify(erc721Token), type, JSON.stringify(options), playerState])
     // endregion
-    type ERC721TokenNameMsg = { message: { type: 'name'; name: string } | { type: 'sourceType'; name: string } }
+    type ERC721TokenNameMsg = {
+        message:
+            | {
+                  type: 'name'
+                  name: string
+              }
+            | {
+                  type: 'sourceType'
+                  name: string
+              }
+    }
     // #region resource loaded error
     const onMessage = useCallback(
         ({
             message,
         }: {
-            message: { name: string } | ERC721TokenNameMsg | { type: 'webglContextLost' } | { type: 'reload' }
+            message:
+                | {
+                      name: string
+                  }
+                | ERC721TokenNameMsg
+                | {
+                      type: 'webglContextLost'
+                  }
+                | {
+                      type: 'reload'
+                  }
         }) => {
-            if ((message as { name: string })?.name === 'Error') {
+            if (
+                (
+                    message as {
+                        name: string
+                    }
+                )?.name === 'Error'
+            ) {
                 setPlayerState(AssetPlayerState.ERROR)
             }
-            if ((message as { type: 'webglContextLost' })?.type === 'webglContextLost') {
+            if (
+                (
+                    message as {
+                        type: 'webglContextLost'
+                    }
+                )?.type === 'webglContextLost'
+            ) {
                 setHidden(true)
                 setPlayerState(AssetPlayerState.LOADING)
                 setTimeout(() => setHidden(false), 1000)

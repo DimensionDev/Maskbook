@@ -2,27 +2,17 @@ import classNames from 'classnames'
 import { NFTCardStyledAssetPlayer } from '@masknet/shared'
 import { NetworkPluginID, isSameAddress, NonFungibleToken, NonFungibleTokenContract } from '@masknet/web3-shared-base'
 import { SchemaType, formatTokenId, ChainId } from '@masknet/web3-shared-evm'
-import { useI18N as useBaseI18N } from '../../../utils'
-import { Translate, useI18N } from '../locales'
-import {
-    DialogContent,
-    Box,
-    InputBase,
-    Paper,
-    Button,
-    Typography,
-    ListItem,
-    CircularProgress,
-    useTheme,
-} from '@mui/material'
+import { useI18N as useBaseI18N } from '../../../utils/index.js'
+import { Translate, useI18N } from '../locales/index.js'
+import { DialogContent, Box, InputBase, Button, Typography, ListItem, useTheme } from '@mui/material'
 import QuestionMarkIcon from '@mui/icons-material/QuestionMark'
-import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
+import { LoadingBase, makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { useCallback, useState, useEffect } from 'react'
 import { Icons } from '@masknet/icons'
 import CheckIcon from '@mui/icons-material/Check'
 import { useUpdate } from 'react-use'
 import { findLastIndex, uniq } from 'lodash-unified'
-import { NFT_RED_PACKET_MAX_SHARES } from '../constants'
+import { NFT_RED_PACKET_MAX_SHARES } from '../constants.js'
 import { useAccount, useChainId, useWeb3Connection } from '@masknet/plugin-infra/web3'
 
 interface StyleProps {
@@ -92,14 +82,16 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         display: 'flex',
         justifyContent: 'space-between',
         padding: 0,
+        columnGap: 16,
     },
     searchWrapperSingle: {
         display: 'flex',
         justifyContent: 'space-between',
+        columnGap: 16,
         padding: 0,
     },
     textField: {
-        width: 394,
+        flex: 1,
     },
     wrapper: {
         position: 'relative',
@@ -305,7 +297,9 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
     },
 }))
 
-export type OrderedERC721Token = NonFungibleToken<ChainId, SchemaType.ERC721> & { index: number }
+export type OrderedERC721Token = NonFungibleToken<ChainId, SchemaType.ERC721> & {
+    index: number
+}
 
 export interface SelectNftTokenDialogProps extends withClasses<never> {
     loadingOwnerList: boolean
@@ -484,15 +478,14 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
         <DialogContent className={classes.dialogContent}>
             <Box className={classes.tokenBox}>
                 <div className={classes.searchWrapperSingle}>
-                    <Paper className={classes.search} elevation={0}>
-                        <Icons.Search className={classes.iconButton} />
-                        <InputBase
-                            value={searchTokenListInput}
-                            placeholder="Input Token ID"
-                            className={classes.textField}
-                            onChange={(e) => setSearchTokenListInput(e.target.value)}
-                        />
-                    </Paper>
+                    <InputBase
+                        startAdornment={<Icons.Search className={classes.iconButton} />}
+                        value={searchTokenListInput}
+                        placeholder="Input Token ID"
+                        className={classes.textField}
+                        onChange={(e) => setSearchTokenListInput(e.target.value)}
+                    />
+
                     <Button disabled={!searchTokenListInput} className={classes.searchButton} onClick={onSearch}>
                         {t.search()}
                     </Button>
@@ -561,19 +554,18 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
     ) : (
         <DialogContent className={classNames(classes.dialogContent, classes.dialogContentFixedHeight)}>
             <div className={classes.searchWrapper}>
-                <Paper className={classes.search} elevation={0}>
-                    <Icons.Search className={classes.iconButton} />
-                    <InputBase
-                        value={tokenDetailedOwnerList.length === 0 ? searchTokenListInput : tokenIdListInput}
-                        placeholder={t.nft_search_placeholder()}
-                        className={classes.textField}
-                        onChange={(e) =>
-                            tokenDetailedOwnerList.length === 0
-                                ? setSearchTokenListInput(e.target.value)
-                                : setTokenIdListInput(e.target.value)
-                        }
-                    />
-                </Paper>
+                <InputBase
+                    startAdornment={<Icons.Search className={classes.iconButton} />}
+                    value={tokenDetailedOwnerList.length === 0 ? searchTokenListInput : tokenIdListInput}
+                    placeholder={t.nft_search_placeholder()}
+                    className={classes.textField}
+                    onChange={(e) =>
+                        tokenDetailedOwnerList.length === 0
+                            ? setSearchTokenListInput(e.target.value)
+                            : setTokenIdListInput(e.target.value)
+                    }
+                />
+
                 <Button
                     disabled={tokenDetailedOwnerList.length === 0 ? !searchTokenListInput : !tokenIdListInput}
                     className={classes.searchButton}
@@ -642,7 +634,7 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                                 })}
                                 {loadingOwnerList ? (
                                     <ListItem className={classNames(classes.selectWrapper, classes.loadingWrapper)}>
-                                        <CircularProgress size={25} />
+                                        <LoadingBase size={25} />
                                     </ListItem>
                                 ) : null}
                             </div>

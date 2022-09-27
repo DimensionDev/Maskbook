@@ -1,20 +1,21 @@
 import { formatEthereumAddress, explorerResolver } from '@masknet/web3-shared-evm'
 import { Avatar, Box, Link, Typography } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, useStylesExtends } from '@masknet/theme'
 import OpenInNew from '@mui/icons-material/OpenInNew'
 import formatDateTime from 'date-fns/format'
 import { useContext } from 'react'
-import { useI18N } from '../../../utils'
-import { EthereumBlockie } from '../../../web3/UI/EthereumBlockie'
-import { SnapshotContext } from '../context'
-import { useProposal } from './hooks/useProposal'
-import { SnapshotCard } from './SnapshotCard'
-import { useChainId } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID, resolveIPFSLink } from '@masknet/web3-shared-base'
+import { useI18N } from '../../../utils/index.js'
+import { EthereumBlockie } from '../../../web3/UI/EthereumBlockie.js'
+import { SnapshotContext } from '../context.js'
+import { useProposal } from './hooks/useProposal.js'
+import { SnapshotCard } from './SnapshotCard.js'
+import { resolveIPFS_URL, resolveResourceURL } from '@masknet/web3-shared-base'
+import urlcat from 'urlcat'
+import { SNAPSHOT_IPFS } from '../constants.js'
 
 export interface InformationCardProps {}
 
-export interface InfoFieldProps {
+export interface InfoFieldProps extends withClasses<'field'> {
     title: string
     children: React.ReactNode
 }
@@ -25,7 +26,13 @@ const useStyles = makeStyles()((theme) => {
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
-            margin: `${theme.spacing(1)} auto`,
+            marginTop: 14,
+            color: theme.palette.maskColor.main,
+            width: '100%',
+        },
+        title: {
+            fontSize: 14,
+            fontWeight: 400,
         },
         link: {
             display: 'flex',
@@ -33,6 +40,8 @@ const useStyles = makeStyles()((theme) => {
             alignItems: 'center',
             marginLeft: theme.spacing(1),
             textDecoration: 'none !important',
+            fontSize: 14,
+            fontWeight: 400,
         },
         avatar: {
             width: 16,
@@ -41,16 +50,21 @@ const useStyles = makeStyles()((theme) => {
         avatarWrapper: {
             marginRight: 8,
         },
+        info: {
+            marginTop: 0,
+            color: theme.palette.maskColor.publicMain,
+        },
+        infoColor: {
+            color: theme.palette.maskColor.publicMain,
+        },
     }
 })
 
 export function InfoField(props: InfoFieldProps) {
-    const { classes } = useStyles()
+    const classes = useStylesExtends(useStyles(), props)
     return (
         <div className={classes.field}>
-            <div>
-                <Typography>{props.title}</Typography>
-            </div>
+            <Typography className={classes.title}>{props.title}</Typography>
             <div>{props.children}</div>
         </div>
     )
@@ -59,68 +73,75 @@ export function InfoField(props: InfoFieldProps) {
 export function InformationCard(props: InformationCardProps) {
     const { classes } = useStyles()
     const { t } = useI18N()
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
 
     const identifier = useContext(SnapshotContext)
     const { payload: proposal } = useProposal(identifier.id)
 
-    const { start, end, snapshot, strategies } = proposal
+    const { start, end, snapshot, strategies, chainId } = proposal
     return (
         <SnapshotCard title={t('plugin_snapshot_info_title')}>
-            <Typography component="div">
-                <InfoField title={t('plugin_snapshot_info_strategy')}>
-                    <Box sx={{ display: 'flex' }}>
-                        {strategies
-                            .filter((strategy) => Boolean(strategy.params.address))
-                            .map((strategy, i) => (
-                                <Link
-                                    key={i}
-                                    className={classes.link}
-                                    target="_blank"
-                                    rel="noopener"
-                                    href={explorerResolver.addressLink(chainId, strategy.params.address)}>
-                                    <Avatar src={resolveIPFSLink(proposal.space.avatar)} className={classes.avatar} />
-                                </Link>
-                            ))}
-                    </Box>
-                </InfoField>
-                <InfoField title={t('plugin_snapshot_info_author')}>
-                    <Link
-                        className={classes.link}
-                        target="_blank"
-                        rel="noopener"
-                        href={explorerResolver.addressLink(chainId, proposal.address)}>
-                        <div className={classes.avatarWrapper}>
-                            {proposal.authorAvatar ? (
-                                <Avatar src={resolveIPFSLink(proposal.authorAvatar)} className={classes.avatar} />
-                            ) : (
-                                <EthereumBlockie address={proposal.address} />
-                            )}
-                        </div>
-                        {proposal.authorName ?? formatEthereumAddress(proposal.address, 4)}
-                    </Link>
-                </InfoField>
-                <InfoField title={t('plugin_snapshot_info_ipfs')}>
-                    <Link className={classes.link} target="_blank" rel="noopener" href={resolveIPFSLink(identifier.id)}>
-                        #{identifier.id.slice(0, 7)}
-                        <OpenInNew fontSize="small" />
-                    </Link>
-                </InfoField>
-                <InfoField title={t('plugin_snapshot_info_start')}>
+            <InfoField title={t('plugin_snapshot_info_strategy')} classes={{ field: classes.info }}>
+                <Box sx={{ display: 'flex' }}>
+                    {strategies
+                        .filter((strategy) => Boolean(strategy.params.address))
+                        .map((strategy, i) => (
+                            <Link
+                                key={i}
+                                className={classes.link}
+                                target="_blank"
+                                rel="noopener"
+                                href={explorerResolver.addressLink(chainId, strategy.params.address)}>
+                                <Avatar src={resolveIPFS_URL(proposal.space.avatar)} className={classes.avatar} />
+                            </Link>
+                        ))}
+                </Box>
+            </InfoField>
+            <InfoField title={t('plugin_snapshot_info_author')} classes={{ field: classes.infoColor }}>
+                <Link
+                    className={classes.link}
+                    target="_blank"
+                    rel="noopener"
+                    href={explorerResolver.addressLink(proposal.chainId, proposal.address)}>
+                    <div className={classes.avatarWrapper}>
+                        {proposal.authorAvatar ? (
+                            <Avatar src={resolveIPFS_URL(proposal.authorAvatar)} className={classes.avatar} />
+                        ) : (
+                            <EthereumBlockie address={proposal.address} />
+                        )}
+                    </div>
+                    {proposal.authorName ?? formatEthereumAddress(proposal.address, 4)}
+                </Link>
+            </InfoField>
+            <InfoField title={t('plugin_snapshot_info_ipfs')} classes={{ field: classes.infoColor }}>
+                <Link
+                    className={classes.link}
+                    target="_blank"
+                    rel="noopener"
+                    href={resolveResourceURL(urlcat(SNAPSHOT_IPFS, proposal.ipfs))}>
+                    #{identifier.id.slice(0, 7)}
+                    <OpenInNew fontSize="small" sx={{ paddingLeft: 1 }} />
+                </Link>
+            </InfoField>
+            <InfoField title={t('plugin_snapshot_info_start')} classes={{ field: classes.infoColor }}>
+                <Typography fontSize={14} fontWeight={400}>
                     {formatDateTime(start * 1000, 'MM/dd/yyyy')}
-                </InfoField>
-                <InfoField title={t('plugin_snapshot_info_end')}>{formatDateTime(end * 1000, 'MM/dd/yyyy')}</InfoField>
-                <InfoField title={t('plugin_snapshot_info_snapshot')}>
-                    <Link
-                        className={classes.link}
-                        target="_blank"
-                        rel="noopener"
-                        href={explorerResolver.blockLink(chainId, Number.parseInt(snapshot, 10))}>
-                        {snapshot}
-                        <OpenInNew fontSize="small" />
-                    </Link>
-                </InfoField>
-            </Typography>
+                </Typography>
+            </InfoField>
+            <InfoField title={t('plugin_snapshot_info_end')} classes={{ field: classes.infoColor }}>
+                <Typography fontSize={14} fontWeight={400}>
+                    {formatDateTime(end * 1000, 'MM/dd/yyyy')}
+                </Typography>
+            </InfoField>
+            <InfoField title={t('plugin_snapshot_info_snapshot')} classes={{ field: classes.infoColor }}>
+                <Link
+                    className={classes.link}
+                    target="_blank"
+                    rel="noopener"
+                    href={explorerResolver.blockLink(proposal.chainId, Number.parseInt(snapshot, 10))}>
+                    {snapshot}
+                    <OpenInNew fontSize="small" sx={{ paddingLeft: 1 }} />
+                </Link>
+            </InfoField>
         </SnapshotCard>
     )
 }

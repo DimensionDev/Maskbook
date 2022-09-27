@@ -1,11 +1,11 @@
-import { PlatformCard } from './PlatformCard'
+import { PlatformCard } from './PlatformCard.js'
 import type { PersonaInformation } from '@masknet/shared-base'
 import type { IdentityResolved } from '@masknet/plugin-infra'
-import type { AccountType } from '../types'
-import type { CURRENT_STATUS } from '../../constants'
-import { Empty } from './Empty'
+import type { AccountType } from '../types.js'
+import type { CURRENT_STATUS } from '../../constants.js'
+import { Empty } from './Empty.js'
 import { Box } from '@mui/material'
-import { useI18N } from '../../locales'
+import { useI18N } from '../../locales/index.js'
 
 export interface MainProps {
     persona?: PersonaInformation
@@ -16,23 +16,26 @@ export interface MainProps {
 export function Main(props: MainProps) {
     const t = useI18N()
     const { openImageSetting, currentVisitingProfile, accountList } = props
+    if (!accountList?.length) {
+        return (
+            <Box justifyContent="center" alignItems="center" height="100%">
+                <Empty content={t.account_empty()} />
+            </Box>
+        )
+    }
     return (
         <div>
-            {accountList?.map((account, index) => (
+            {accountList.map((account) => (
                 <PlatformCard
                     openImageSetting={(status: CURRENT_STATUS) => {
-                        openImageSetting(status, account?.identity)
+                        openImageSetting(status, account.identity)
                     }}
-                    key={account?.identity}
+                    key={account.identity}
                     account={account}
                     currentPersona={currentVisitingProfile}
-                    isCurrent={account?.identity === currentVisitingProfile?.identifier?.userId?.toLowerCase()}
+                    isCurrent={account.identity === currentVisitingProfile?.identifier?.userId?.toLowerCase()}
                 />
-            )) ?? (
-                <Box marginTop="calc(45% - 47px)">
-                    <Empty content={t.account_empty()} />
-                </Box>
-            )}
+            ))}
         </div>
     )
 }

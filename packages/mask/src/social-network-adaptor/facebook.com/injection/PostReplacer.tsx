@@ -1,4 +1,4 @@
-import { injectPostReplacer } from '../../../social-network/defaults/inject/PostReplacer'
+import { injectPostReplacer } from '../../../social-network/defaults/inject/PostReplacer.js'
 import type { PostInfo } from '@masknet/plugin-infra/content-script'
 
 function resolveContentNode(node: HTMLElement) {

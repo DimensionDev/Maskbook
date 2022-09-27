@@ -19,23 +19,47 @@ export const ProfileAvatarBadge: FC<Props> = ({ userId, className, ...rest }) =>
     const { classes, cx } = useStyles()
 
     useEffect(() => {
+        const button = buttonRef.current
+        if (!button) return
+        let closeTimer: NodeJS.Timeout
+        let openTimer: NodeJS.Timeout
         const enter = () => {
+            clearTimeout(openTimer)
+            clearTimeout(closeTimer)
             const button = buttonRef.current
             if (!button) return
-            const boundingRect = button.getBoundingClientRect()
-            const x = boundingRect.left + boundingRect.width / 2
-            const y = boundingRect.top + boundingRect.height + (document.scrollingElement?.scrollTop || 0)
-            CrossIsolationMessages.events.requestOpenProfileCard.sendToLocal({
-                userId,
-                x,
-                y,
-            })
+            openTimer = setTimeout(() => {
+                CrossIsolationMessages.events.profileCardEvent.sendToLocal({
+                    open: true,
+                    userId,
+                    badgeBounding: button.getBoundingClientRect(),
+                })
+            }, 200)
         }
-        buttonRef.current?.addEventListener('mouseenter', enter)
+        const leave = () => {
+            clearTimeout(openTimer)
+            clearTimeout(closeTimer)
+            closeTimer = setTimeout(() => {
+                CrossIsolationMessages.events.profileCardEvent.sendToLocal({
+                    open: false,
+                })
+            }, 2000)
+        }
+        button.addEventListener('mouseenter', enter)
+        button.addEventListener('mouseleave', leave)
+        // Other badges might want to open the profile card
+        const unsubscribe = CrossIsolationMessages.events.profileCardEvent.on((event) => {
+            if (!event.open) return
+            clearTimeout(closeTimer)
+        })
         return () => {
-            buttonRef.current?.removeEventListener('mouseenter', enter)
+            clearTimeout(closeTimer)
+            clearTimeout(openTimer)
+            button.removeEventListener('mouseenter', enter)
+            button.removeEventListener('mouseleave', leave)
+            unsubscribe()
         }
-    }, [])
+    }, [userId])
 
     return (
         <IconButton disableRipple className={cx(classes.badge, className)} {...rest} ref={buttonRef}>

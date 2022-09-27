@@ -90,7 +90,7 @@ export namespace EVM {
     export interface AssetsGroup {
         contract_address: string
         contract_name: string
-        logo_url: string
+        logo_url: string | null
         owns_total: number
         items_total: number
         description: string
@@ -168,7 +168,14 @@ export namespace EVM {
     export interface VolumeAndFloorRecord {
         /** timestamp */
         time: number
-        floor: number
-        value: number
+        price: number
+        volume: number
+        sales: number
+    }
+    export interface VolumeAndFloor {
+        code: number
+        result: VolumeAndFloorRecord[]
+        sales: number
+        volume: number
     }
 }

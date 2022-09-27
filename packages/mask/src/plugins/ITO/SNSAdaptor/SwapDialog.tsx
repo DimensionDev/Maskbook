@@ -1,5 +1,5 @@
 import { openWindow } from '@masknet/shared-base-ui'
-import { useSelectFungibleToken, useOpenShareTxDialog } from '@masknet/shared'
+import { useSelectFungibleToken, useOpenShareTxDialog, FungibleTokenInput } from '@masknet/shared'
 import { makeStyles, useStylesExtends, ActionButton } from '@masknet/theme'
 import {
     leftShift,
@@ -17,17 +17,16 @@ import {
     useTokenConstants,
     explorerResolver,
 } from '@masknet/web3-shared-evm'
-import { CircularProgress, Slider, Typography } from '@mui/material'
+import { Slider, Typography } from '@mui/material'
 import BigNumber from 'bignumber.js'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { useI18N } from '../../../utils'
-import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
-import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
-import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
-import type { JSON_PayloadInMask } from '../types'
-import { useQualificationVerify } from './hooks/useQualificationVerify'
-import { useSwapCallback } from './hooks/useSwapCallback'
-import { SwapStatus } from './SwapGuide'
+import { useI18N } from '../../../utils/index.js'
+import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary.js'
+import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary.js'
+import type { JSON_PayloadInMask } from '../types.js'
+import { useQualificationVerify } from './hooks/useQualificationVerify.js'
+import { useSwapCallback } from './hooks/useSwapCallback.js'
+import { SwapStatus } from './SwapGuide.js'
 import { useChainId, useFungibleToken, useFungibleTokenBalance, useWeb3State } from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()((theme) => ({
@@ -48,17 +47,6 @@ const useStyles = makeStyles()((theme) => ({
         flexGrow: 1,
         width: 'auto !important',
         margin: theme.spacing(0, 3),
-        '& .MuiSlider-thumb': {
-            width: 28,
-            height: 28,
-            background: theme.palette.mode === 'dark' ? '#fff' : '2CA4EF, 100%',
-        },
-        '& .MuiSlider-rail': {
-            height: 5,
-        },
-        '& .MuiSlider-track': {
-            height: 5,
-        },
     },
     exchangeText: {
         textAlign: 'right',
@@ -128,7 +116,7 @@ export function SwapDialog(props: SwapDialogProps) {
 
     const [swapAmount, setSwapAmount] = useState<BigNumber>(tokenAmount.multipliedBy(ratio))
     const [inputAmountForUI, setInputAmountForUI] = useState(
-        swapAmount.isZero() ? '' : formatBalance(swapAmount, swapToken?.decimals),
+        swapAmount.isZero() ? '' : leftShift(swapAmount, swapToken?.decimals).toFixed(),
     )
     // #region select token
     const selectFungibleToken = useSelectFungibleToken(NetworkPluginID.PLUGIN_EVM)
@@ -145,7 +133,9 @@ export function SwapDialog(props: SwapDialogProps) {
         setSwapToken(picked)
         setTokenAmount(initAmount)
         setSwapAmount(initAmount.multipliedBy(ratio))
-        setInputAmountForUI(initAmount.isZero() ? '' : formatBalance(initAmount.multipliedBy(ratio), picked.decimals))
+        setInputAmountForUI(
+            initAmount.isZero() ? '' : leftShift(initAmount.multipliedBy(ratio), picked.decimals).toFixed(),
+        )
     }, [
         initAmount,
         payload,
@@ -190,7 +180,9 @@ export function SwapDialog(props: SwapDialogProps) {
             await openShareTxDialog({
                 hash: receipt.transactionHash,
             })
-            const { to_value } = (receipt.events?.SwapSuccess.returnValues ?? {}) as { to_value: string }
+            const { to_value } = (receipt.events?.SwapSuccess.returnValues ?? {}) as {
+                to_value: string
+            }
             setActualSwapAmount(to_value)
             setStatus(SwapStatus.Share)
             setTimeout(() => {
@@ -235,14 +227,15 @@ export function SwapDialog(props: SwapDialogProps) {
                 <span className={classes.exchangeAmountText}>{formatBalance(tokenAmount, token.decimals)}</span>{' '}
                 {token.symbol}.
             </Typography>
-            <TokenAmountPanel
+            <FungibleTokenInput
+                label={t('amount')}
                 amount={inputAmountForUI}
                 maxAmount={maxAmount}
                 balance={tokenBalance}
                 token={swapToken}
                 onAmountChange={(value) => {
                     const val = value === '' || value === '0' ? ZERO : rightShift(value, swapToken.decimals)
-                    const isMax = value === formatBalance(maxAmount, swapToken.decimals) && !val.isZero()
+                    const isMax = value === leftShift(maxAmount, swapToken.decimals).toFixed() && !val.isZero()
                     const tokenAmount = isMax ? maxSwapAmount : val.dividedBy(ratio)
                     const swapAmount = isMax ? tokenAmount.multipliedBy(ratio) : val.dp(0)
                     setInputAmountForUI(
@@ -251,12 +244,7 @@ export function SwapDialog(props: SwapDialogProps) {
                     setTokenAmount(tokenAmount.dp(0))
                     setSwapAmount(swapAmount)
                 }}
-                label={t('plugin_ito_dialog_swap_panel_title')}
-                SelectTokenChip={{
-                    ChipProps: {
-                        onClick: onSelectTokenChipClick,
-                    },
-                }}
+                onSelectToken={onSelectTokenChipClick}
             />
             <Typography className={classes.remindText} variant="body1" color="textSecondary">
                 {t('plugin_ito_swap_only_once_remind')}
@@ -269,17 +257,13 @@ export function SwapDialog(props: SwapDialogProps) {
                         spender={payload.contract_address}
                         token={swapToken.schema === SchemaType.ERC20 ? swapToken : undefined}>
                         <ActionButton
-                            loading={isSwapping}
+                            loading={isSwapping || loadingQualification}
                             className={classes.button}
                             fullWidth
                             size="large"
                             disabled={!!validationMessage || loadingQualification || isSwapping}
                             onClick={onSwap}>
-                            {loadingQualification ? (
-                                <CircularProgress size={16} className={classes.loading} />
-                            ) : (
-                                validationMessage || t('plugin_ito_swap')
-                            )}
+                            {validationMessage || t('plugin_ito_swap')}
                         </ActionButton>
                     </EthereumERC20TokenApprovedBoundary>
                 </WalletConnectedBoundary>

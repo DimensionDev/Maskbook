@@ -1,22 +1,24 @@
 import { Icons } from '@masknet/icons'
 import {
     createInjectHooksRenderer,
-    PluginId,
+    PluginID,
     useActivatedPluginsSNSAdaptor,
     usePluginI18NField,
 } from '@masknet/plugin-infra/content-script'
-import { useAvailablePlugins, useSocialAddressListAll } from '@masknet/plugin-infra/web3'
+import { PluginWeb3ContextProvider, useAvailablePlugins } from '@masknet/plugin-infra/web3'
 import { EMPTY_LIST } from '@masknet/shared-base'
-import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
+import { LoadingBase, makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import { isSameAddress, NetworkPluginID, SocialIdentity } from '@masknet/web3-shared-base'
+import { ChainId } from '@masknet/web3-shared-evm'
 import { TabContext } from '@mui/lab'
-import { CircularProgress, Tab, Typography } from '@mui/material'
+import { Tab, Typography } from '@mui/material'
 import { first, uniqBy } from 'lodash-unified'
 import { FC, useEffect, useMemo, useState } from 'react'
 import { Trans } from 'react-i18next'
 import { useUpdateEffect } from 'react-use'
-import { MaskMessages, sorter, useLocationChange } from '../../../utils'
-import { ProfileCardTitle } from './ProfileCardTitle'
+import { MaskMessages, sorter, useLocationChange } from '../../../utils/index.js'
+import { ProfileCardTitle } from './ProfileCardTitle.js'
+import { useSocialAddressListBySettings } from '@masknet/shared'
 
 interface Props extends withClasses<'text' | 'button' | 'root'> {
     identity: SocialIdentity
@@ -37,6 +39,9 @@ const useStyles = makeStyles()((theme) => {
             flexDirection: 'column',
             overflow: 'auto',
             height: '100%',
+            overscrollBehavior: 'contain',
+            borderRadius: theme.spacing(1.5),
+            boxShadow: theme.palette.shadow.popup,
         },
         loading: {
             display: 'flex',
@@ -160,7 +165,7 @@ export const ProfileCard: FC<Props> = ({ identity, ...rest }) => {
         value: socialAddressList = EMPTY_LIST,
         loading: loadingSocialAddressList,
         retry: retrySocialAddress,
-    } = useSocialAddressListAll(identity, undefined, sorter)
+    } = useSocialAddressListBySettings(identity, undefined, sorter)
 
     const availableSocialAddressList = useMemo(() => {
         return uniqBy(
@@ -189,7 +194,7 @@ export const ProfileCard: FC<Props> = ({ identity, ...rest }) => {
         return plugins
             .flatMap((x) => x.ProfileCardTabs?.map((y) => ({ ...y, pluginID: x.ID })) ?? EMPTY_LIST)
             .filter((x) => {
-                const isAllowed = x.pluginID === PluginId.RSS3 || x.pluginID === PluginId.Collectible
+                const isAllowed = x.pluginID === PluginID.RSS3 || x.pluginID === PluginID.Collectible
                 const shouldDisplay = x.Utils?.shouldDisplay?.(identity, selectedSocialAddress) ?? true
                 return isAllowed && shouldDisplay
             })
@@ -200,7 +205,7 @@ export const ProfileCard: FC<Props> = ({ identity, ...rest }) => {
         label: typeof x.label === 'string' ? x.label : translate(x.pluginID, x.label),
     }))
 
-    const [currentTab, onChange] = useTabs(first(tabs)?.id ?? PluginId.Collectible, ...tabs.map((tab) => tab.id))
+    const [currentTab, onChange] = useTabs(first(tabs)?.id ?? PluginID.Collectible, ...tabs.map((tab) => tab.id))
 
     const component = useMemo(() => {
         const Component = getTabContent(currentTab)
@@ -219,13 +224,13 @@ export const ProfileCard: FC<Props> = ({ identity, ...rest }) => {
     if (!userId || loadingSocialAddressList)
         return (
             <div className={cx(classes.root, classes.loading)}>
-                <CircularProgress />
+                <LoadingBase />
             </div>
         )
 
     return (
-        <div className={classes.root}>
-            {tabs.length > 0 && (
+        <PluginWeb3ContextProvider pluginID={NetworkPluginID.PLUGIN_EVM} value={{ chainId: ChainId.Mainnet }}>
+            <div className={classes.root}>
                 <div className={classes.header}>
                     <ProfileCardTitle
                         socialAddressList={availableSocialAddressList}
@@ -233,38 +238,40 @@ export const ProfileCard: FC<Props> = ({ identity, ...rest }) => {
                         onAddressChange={setSelectedAddress}
                         identity={identity}
                     />
-                    <div className={classes.tabs}>
-                        <TabContext value={currentTab}>
-                            <MaskTabList variant="base" onChange={onChange} aria-label="Web3Tabs">
-                                {tabs.map((tab) => (
-                                    <Tab key={tab.id} label={tab.label} value={tab.id} />
-                                ))}
-                            </MaskTabList>
-                        </TabContext>
-                    </div>
+                    {tabs.length > 0 && (
+                        <div className={classes.tabs}>
+                            <TabContext value={currentTab}>
+                                <MaskTabList variant="base" onChange={onChange} aria-label="Web3Tabs">
+                                    {tabs.map((tab) => (
+                                        <Tab key={tab.id} label={tab.label} value={tab.id} />
+                                    ))}
+                                </MaskTabList>
+                            </TabContext>
+                        </div>
+                    )}
                 </div>
-            )}
-            <div className={classes.content}>{component}</div>
-            <div className={classes.footer}>
-                <Typography variant="body1" className={classes.powerBy}>
-                    <Trans
-                        i18nKey="powered_by_whom"
-                        values={{ whom: 'RSS3' }}
-                        components={{
-                            span: (
-                                <Typography
-                                    fontWeight={700}
-                                    fontSize="inherit"
-                                    variant="body1"
-                                    component="strong"
-                                    color={(theme) => theme.palette.text.primary}
-                                />
-                            ),
-                        }}
-                    />
-                </Typography>
-                <Icons.RSS3 size={24} sx={{ ml: '12px' }} />
+                <div className={classes.content}>{component}</div>
+                <div className={classes.footer}>
+                    <Typography variant="body1" className={classes.powerBy}>
+                        <Trans
+                            i18nKey="powered_by_whom"
+                            values={{ whom: 'RSS3' }}
+                            components={{
+                                span: (
+                                    <Typography
+                                        fontWeight={700}
+                                        fontSize="inherit"
+                                        variant="body1"
+                                        component="strong"
+                                        color={(theme) => theme.palette.text.primary}
+                                    />
+                                ),
+                            }}
+                        />
+                    </Typography>
+                    <Icons.RSS3 size={24} sx={{ ml: '12px' }} />
+                </div>
             </div>
-        </div>
+        </PluginWeb3ContextProvider>
     )
 }

@@ -1,11 +1,11 @@
 import { InjectedDialog } from '@masknet/shared'
 import { DialogContent } from '@mui/material'
-import { ChainId } from '@masknet/web3-shared-evm'
+import { ChainId } from '@masknet/web3-shared-flow'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { PluginIDContextProvider, PluginWeb3ContextProvider } from '@masknet/plugin-infra/web3'
-import { ConnectionContent } from './ConnectionContent'
-import { useRemoteControlledDialog } from '../../../../../shared-base-ui/src/hooks'
-import { PluginDebuggerMessages } from '../../messages'
+import { ConnectionContent } from './ConnectionContent.js'
+import { useRemoteControlledDialog } from '../../../../../shared-base-ui/src/hooks/index.js'
+import { PluginDebuggerMessages } from '../../messages.js'
 
 export interface ConnectionDialogProps {}
 
@@ -14,9 +14,9 @@ export function ConnectionDialog(props: ConnectionDialogProps) {
     return (
         <InjectedDialog title="Connection" fullWidth open={open} onClose={closeDialog}>
             <DialogContent>
-                <PluginIDContextProvider value={NetworkPluginID.PLUGIN_EVM}>
+                <PluginIDContextProvider value={NetworkPluginID.PLUGIN_FLOW}>
                     <PluginWeb3ContextProvider
-                        pluginID={NetworkPluginID.PLUGIN_EVM}
+                        pluginID={NetworkPluginID.PLUGIN_FLOW}
                         value={{
                             chainId: ChainId.Mainnet,
                         }}>

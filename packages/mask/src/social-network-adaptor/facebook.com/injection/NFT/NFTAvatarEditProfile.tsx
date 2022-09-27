@@ -1,8 +1,8 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { searchFacebookEditProfileSelector, searchFacebookProfileSettingButtonSelector } from '../../utils/selector'
-import { createReactRootShadowed, startWatch, useLocationChange } from '../../../../utils'
+import { searchFacebookEditProfileSelector, searchFacebookProfileSettingButtonSelector } from '../../utils/selector.js'
+import { createReactRootShadowed, startWatch, useLocationChange } from '../../../../utils/index.js'
 import { useLayoutEffect, useState } from 'react'
-import { NFTAvatarButton } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatarButton'
+import { NFTAvatarButton } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatarButton.js'
 import { makeStyles } from '@masknet/theme'
 
 export function injectOpenNFTAvatarEditProfileButton(signal: AbortSignal) {
@@ -18,6 +18,7 @@ interface StyleProps {
     fontSize: number
     marginTop: number
     backgroundColor?: string
+    color?: string
 }
 
 const useStyles = makeStyles<StyleProps>()((theme, props) => ({
@@ -25,12 +26,12 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         minHeight: props.minHeight,
         fontSize: props.fontSize,
         marginTop: props.marginTop,
-        backgroundColor: '#fff!important',
+        backgroundColor: theme.palette.maskColor.main,
         marginRight: theme.spacing(0.5),
         marginLeft: theme.spacing(1.25),
         borderRadius: '6px !important',
         border: 'none !important',
-        color: '#050505!important',
+        color: props.color,
     },
 }))
 
@@ -44,11 +45,9 @@ function OpenNFTAvatarEditProfileButtonInFaceBook() {
 
     const setStyleWithSelector = () => {
         const editDom = searchFacebookProfileSettingButtonSelector().evaluate()
-
         if (!editDom) return
 
-        const buttonDom = editDom.querySelector<HTMLDivElement>('a > div')
-
+        const buttonDom = editDom.querySelector<HTMLDivElement>('div > div[role="button"]')
         if (!buttonDom) return
 
         const editCss = window.getComputedStyle(editDom)
@@ -59,6 +58,7 @@ function OpenNFTAvatarEditProfileButtonInFaceBook() {
             marginTop: Number(editCss.paddingTop.replace('px', '')),
             minHeight: 36,
             backgroundColor: buttonCss.backgroundColor,
+            color: buttonCss.color,
         })
     }
 

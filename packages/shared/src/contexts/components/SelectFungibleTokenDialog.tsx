@@ -1,14 +1,15 @@
 import { useCallback, FC, useState, useMemo } from 'react'
-import { useCurrentWeb3NetworkPluginID, useNativeTokenAddress, Web3Helper } from '@masknet/plugin-infra/web3'
+import { useCurrentWeb3NetworkPluginID, useNativeTokenAddress } from '@masknet/plugin-infra/web3'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import { FungibleTokenList, useSharedI18N } from '@masknet/shared'
 import { EMPTY_LIST, EnhanceableSite, isDashboardPage } from '@masknet/shared-base'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import type { FungibleToken, NetworkPluginID } from '@masknet/web3-shared-base'
 import { DialogContent, Theme, useMediaQuery } from '@mui/material'
-import { useBaseUIRuntime } from '../base'
-import { InjectedDialog } from '../components'
-import { useRowSize } from './useRowSize'
-import { TokenListMode } from '../../UI/components/FungibleTokenList/type'
+import { useBaseUIRuntime } from '../base/index.js'
+import { InjectedDialog } from '../components/index.js'
+import { useRowSize } from './useRowSize.js'
+import { TokenListMode } from '../../UI/components/FungibleTokenList/type.js'
 
 interface StyleProps {
     compact: boolean

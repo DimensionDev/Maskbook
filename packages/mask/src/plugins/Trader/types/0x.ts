@@ -1,4 +1,4 @@
-import type { ZrxTradePool } from './trader'
+import type { ZrxTradePool } from './trader.js'
 
 export interface SwapOrder {
     chainId: string

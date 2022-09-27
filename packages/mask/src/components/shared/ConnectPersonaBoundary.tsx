@@ -1,9 +1,9 @@
 import { Button, Stack } from '@mui/material'
 import { memo, ReactNode, useCallback, useMemo } from 'react'
 import { makeStyles } from '@masknet/theme'
-import type { PluginId } from '@masknet/plugin-infra'
-import { PersonaConnectStatus, useCurrentPersonaConnectStatus } from '../DataSource/usePersonaConnectStatus'
-import { useI18N } from '../../utils'
+import type { PluginID } from '@masknet/plugin-infra'
+import { PersonaConnectStatus, useCurrentPersonaConnectStatus } from '../DataSource/usePersonaConnectStatus.js'
+import { useI18N } from '../../utils/index.js'
 import { Icons } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => ({
@@ -34,15 +34,24 @@ type SupportChildren = ((status: PersonaConnectStatus) => ReactNode) | ReactNode
 
 interface ConnectPersonaBoundaryProps {
     handlerPosition?: 'center' | 'top-right'
-    directTo?: PluginId
+    directTo?: PluginID
     customHint?: boolean
     children: SupportChildren
     enableVerify?: boolean
     beforeVerify?: () => void | Promise<void>
+    createConfirm?: boolean
 }
 
 export const ConnectPersonaBoundary = memo<ConnectPersonaBoundaryProps>(
-    ({ children, directTo, handlerPosition = 'center', customHint = false, beforeVerify, enableVerify = true }) => {
+    ({
+        children,
+        directTo,
+        handlerPosition = 'center',
+        customHint = false,
+        beforeVerify,
+        enableVerify = true,
+        createConfirm = true,
+    }) => {
         const { t } = useI18N()
         const { classes } = useStyles()
 
@@ -81,8 +90,8 @@ export const ConnectPersonaBoundary = memo<ConnectPersonaBoundaryProps>(
 
         const handleClick = useCallback(() => {
             if (!status.verified && status.connected && enableVerify) beforeVerify?.()
-            status.action?.(directTo, handlerPosition, enableVerify)
-        }, [directTo, handlerPosition, JSON.stringify(status), enableVerify])
+            status.action?.(directTo, handlerPosition, enableVerify, !createConfirm)
+        }, [directTo, handlerPosition, JSON.stringify(status), enableVerify, createConfirm])
 
         return (
             <Stack className={classes.root} display="inline-flex" onClick={handleClick}>

@@ -1,12 +1,13 @@
 import { isNull } from 'lodash-unified'
-import Services from '../../../extension/service'
+import Services from '../../../extension/service.js'
 import { NextIDProof, NextIDStorage } from '@masknet/web3-providers'
 import BigNumber from 'bignumber.js'
-import { activatedSocialNetworkUI } from '../../../social-network'
+import { activatedSocialNetworkUI } from '../../../social-network/index.js'
 import type { NextIDPlatform } from '@masknet/shared-base'
-import type { NextIDAvatarMeta } from '../types'
-import { PLUGIN_ID } from '../constants'
-import { sortPersonaBindings } from '../../../utils'
+import type { NextIDAvatarMeta } from '../types.js'
+import { PLUGIN_ID } from '../constants.js'
+import { sortPersonaBindings } from '../../../utils/index.js'
+import { isLocaleResource, resolveResourceURL } from '@masknet/web3-shared-base'
 
 export async function getImage(image: string): Promise<string> {
     const blob = await Services.Helper.fetch(image)
@@ -22,13 +23,16 @@ function blobToBase64(blob: Blob) {
 }
 
 async function fetchImage(url: string) {
+    if (isLocaleResource(url)) return
     const fetch = globalThis.r2d2Fetch ?? globalThis.fetch
     const response = await fetch(url)
     return response.blob()
 }
 
 export async function toPNG(image: string) {
-    const imageData = await fetchImage(image)
+    const isBase64 = isLocaleResource(image)
+    const resolvedURL = resolveResourceURL(image)
+    const imageData = await fetchImage(resolvedURL || image)
     return new Promise<Blob | null>((resolve, reject) => {
         const img = new Image()
         const canvas = document.createElement('canvas')
@@ -45,7 +49,8 @@ export async function toPNG(image: string) {
             reject(new Error('Could not load image'))
         })
         img.setAttribute('CrossOrigin', 'Anonymous')
-        img.src = URL.createObjectURL(imageData)
+        if (!isBase64 && imageData) img.src = URL.createObjectURL(imageData)
+        else img.src = image
     })
 }
 
@@ -53,9 +58,9 @@ export function formatPrice(amount: string, symbol: string) {
     const _amount = new BigNumber(amount ?? '0')
     if (_amount.isZero() || _amount.isLessThan(0.01)) return ''
     if (_amount.isLessThan(1)) return `${_amount.toFixed(2)} ${symbol}`
-    if (_amount.isLessThan(1e3)) return `${_amount.toFixed(1)} ${symbol}`
-    if (_amount.isLessThan(1e6)) return `${_amount.div(1e6).toFixed(1)}K ${symbol}`
-    return `${_amount.div(1e6).toFixed(1)}M ${symbol}`
+    if (_amount.isLessThan(1000)) return `${_amount.toFixed(1)} ${symbol}`
+    if (_amount.isLessThan(1000000)) return `${_amount.div(1000000).toFixed(1)}K ${symbol}`
+    return `${_amount.div(1000000).toFixed(1)}M ${symbol}`
 }
 
 export function formatText(name: string, tokenId: string) {

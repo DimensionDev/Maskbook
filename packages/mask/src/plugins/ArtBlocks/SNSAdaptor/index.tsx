@@ -1,24 +1,24 @@
 import { type Plugin, usePluginWrapper, usePostInfoDetails } from '@masknet/plugin-infra/content-script'
 import { uniq } from 'lodash-unified'
 import { Trans } from 'react-i18next'
-import { checkUrl, getAssetInfoFromURL, getRelevantUrl } from '../utils'
+import { checkUrl, getAssetInfoFromURL, getRelevantUrl } from '../utils.js'
 
-import { base } from '../base'
+import { base } from '../base.js'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
-import { Collectible } from './Collectible'
+import { Collectible } from './Collectible.js'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { Icons } from '@masknet/icons'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
     init(signal) {},
-    PostInspector: function Component() {
+    PostInspector() {
         const links = usePostInfoDetails.mentionedLinks()
         const link = uniq(links).find(checkUrl)
         const asset = getAssetInfoFromURL(link)
         return asset ? <Renderer chainId={asset?.chain_id} projectId={asset.project_id} /> : null
     },
-    DecryptedInspector: function Component(props) {
+    DecryptedInspector(props) {
         const collectibleUrl = getRelevantUrl(extractTextFromTypedMessage(props.message).unwrapOr(''))
         const asset = getAssetInfoFromURL(collectibleUrl)
         return asset ? <Renderer chainId={asset.chain_id} projectId={asset.project_id} /> : null
@@ -35,7 +35,12 @@ const sns: Plugin.SNSAdaptor.Definition = {
     ],
 }
 
-function Renderer(props: React.PropsWithChildren<{ chainId: ChainId; projectId: string }>) {
+function Renderer(
+    props: React.PropsWithChildren<{
+        chainId: ChainId
+        projectId: string
+    }>,
+) {
     usePluginWrapper(true)
     return <Collectible chainId={props.chainId} projectId={props.projectId} />
 }

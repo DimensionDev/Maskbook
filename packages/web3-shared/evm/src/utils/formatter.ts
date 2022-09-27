@@ -1,7 +1,9 @@
 import { BigNumber } from 'bignumber.js'
 import { EthereumAddress } from 'wallet.ts'
-import { isValidDomain } from './domain'
-import { isValidAddress } from './address'
+import { isValidDomain } from './domain.js'
+import { isValidAddress } from './address.js'
+import { SchemaType } from '../types/index.js'
+import { createLookupTableResolver } from '@masknet/shared-base'
 
 export { formatPercentage } from '@masknet/web3-shared-base'
 
@@ -20,7 +22,17 @@ export function formatEthereumAddress(address: string, size = 0) {
     return `${address_.slice(0, Math.max(0, 2 + size))}...${address_.slice(-size)}`
 }
 
-export function formatTokenId(tokenId: string, size = 4) {
+export const formatSchemaType = createLookupTableResolver<SchemaType, string>(
+    {
+        [SchemaType.Native]: 'Native',
+        [SchemaType.ERC20]: 'ERC20',
+        [SchemaType.ERC721]: 'ERC721',
+        [SchemaType.ERC1155]: 'ERC1155',
+    },
+    '',
+)
+
+export function formatTokenId(tokenId = '', size = 4) {
     size = Math.max(2, size)
     const isHex = tokenId.toLowerCase().startsWith('0x')
     const prefix = isHex ? '0x' : '#'
@@ -62,10 +74,17 @@ export function formatGweiToWei(value: BigNumber.Value) {
     return new BigNumber(value).shiftedBy(9).integerValue()
 }
 
+export function formatEtherToGwei(value: BigNumber.Value) {
+    return new BigNumber(value).shiftedBy(9).integerValue()
+}
+
 export function formatGweiToEther(value: BigNumber.Value) {
     return new BigNumber(value).shiftedBy(-9)
 }
 
+/**
+ * @deprecated Use formatCurrency instead
+ */
 export function formatUSD(value: BigNumber.Value, significant = 2): string {
     const bn = new BigNumber(value)
     return bn.lt(0.01) ? '<$0.01' : bn.toFixed(significant)

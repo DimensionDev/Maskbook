@@ -1,5 +1,5 @@
 import { story } from '@masknet/storybook-shared'
-import { RenameDialog as C } from '../../../src/pages/Personas/components/RenameDialog'
+import { RenameDialog as C } from '../../../src/pages/Personas/components/RenameDialog/index.js'
 import { action } from '@storybook/addon-actions'
 
 const { meta, of } = story(C)

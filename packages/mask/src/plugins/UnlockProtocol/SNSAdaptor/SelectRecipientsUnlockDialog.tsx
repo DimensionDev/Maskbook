@@ -12,9 +12,9 @@ import {
     Link,
 } from '@mui/material'
 import { useState, useMemo } from 'react'
-import type { UnlockLocks } from '../types'
-import { LockInList } from './LockInList'
-import { useI18N } from '../../../utils'
+import type { UnlockLocks } from '../types.js'
+import { LockInList } from './LockInList.js'
+import { useI18N } from '../../../utils/index.js'
 import { Trans } from 'react-i18next'
 
 export interface SelectRecipientsUnlockDialogUIProps extends withClasses<never> {

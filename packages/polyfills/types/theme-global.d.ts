@@ -29,6 +29,13 @@ declare module '@mui/material/styles/createPalette.d' {
             publicSecond: string
             publicThird: string
             publicLine: string
+            publicTwitter: string
+            publicThirdMain: string
+            publicBg: string
+            borderSecondary: string
+        }
+        shadow: {
+            popup: string
         }
     }
     export interface TypeText {

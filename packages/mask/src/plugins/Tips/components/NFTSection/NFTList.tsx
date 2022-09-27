@@ -1,11 +1,12 @@
-import { useChainId, useCurrentWeb3NetworkPluginID, useWeb3State, Web3Helper } from '@masknet/plugin-infra/web3'
+import { useChainId, useCurrentWeb3NetworkPluginID, useWeb3State } from '@masknet/plugin-infra/web3'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import { ElementAnchor, NFTCardStyledAssetPlayer, RetryHint } from '@masknet/shared'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import { isSameAddress, NetworkPluginID, NonFungibleToken } from '@masknet/web3-shared-base'
 import { Checkbox, List, ListItem, Radio, Stack, Tooltip } from '@mui/material'
 import classnames from 'classnames'
 import { FC, useCallback } from 'react'
-import type { TipNFTKeyPair } from '../../types'
+import type { TipNFTKeyPair } from '../../types/index.js'
 
 interface Props {
     selectedPairs: TipNFTKeyPair[]

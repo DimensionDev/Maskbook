@@ -35,7 +35,7 @@ import {
     transformAllFromJSON,
     transformFromJSON,
 } from '@masknet/web3-shared-base'
-import { ChainId } from '../types'
+import { ChainId } from '../types/index.js'
 
 function getEnvConstants(key: 'WEB3_CONSTANTS_RPC') {
     try {

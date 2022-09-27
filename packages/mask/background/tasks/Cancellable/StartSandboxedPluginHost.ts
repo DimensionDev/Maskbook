@@ -1,13 +1,22 @@
-import { hmr } from '../../../utils-pure'
-import { BackgroundInstance, BackgroundPluginHost } from '@masknet/sandboxed-plugin-runtime/background'
-import { Flags } from '../../../shared/flags'
-import { MessageTarget, WebExtensionMessage } from '@dimensiondev/holoflows-kit'
-import { Plugin, registerPlugin } from '@masknet/plugin-infra'
 import { None, Result, Some } from 'ts-results'
-import { createPluginDatabase } from '../../database/plugin-db'
+import { Plugin, PluginID, registerPlugin } from '@masknet/plugin-infra'
+import { BackgroundInstance, BackgroundPluginHost } from '@masknet/sandboxed-plugin-runtime/background'
+import { hmr } from '../../../utils-pure/index.js'
+import { Flags } from '../../../shared/flags.js'
+import { createPluginDatabase } from '../../database/plugin-db/index.js'
+import { createHostAPIs } from '../../../shared/sandboxed-plugin/host-api.js'
 
 const { signal } = hmr(import.meta.webpackHot)
-let hot: Map<string, (hot: Promise<{ default: Plugin.Worker.Definition }>) => void> | undefined
+let hot:
+    | Map<
+          string,
+          (
+              hot: Promise<{
+                  default: Plugin.Worker.Definition
+              }>,
+          ) => void
+      >
+    | undefined
 if (process.env.NODE_ENV === 'development') {
     const sym = Symbol.for('sandboxed plugin bridge hot map')
     hot = (globalThis as any)[sym] ??= new Map()
@@ -16,29 +25,7 @@ if (process.env.NODE_ENV === 'development') {
 if (Flags.sandboxedPluginRuntime) {
     const host = new BackgroundPluginHost(
         {
-            async getPluginList() {
-                const plugins = await fetch('/sandboxed-modules/plugins.json').then((x) => x.json())
-                return Object.entries(plugins)
-            },
-            async fetchManifest(id, isLocal) {
-                const prefix: string = isLocal ? 'local-plugin' : 'plugin'
-                const manifestPath = `/sandboxed-modules/${prefix}-${id}/mask-manifest.json`
-                const manifestURL = new URL(manifestPath, location.href)
-                if (manifestURL.pathname !== manifestPath) throw new TypeError('Plugin ID is invalid.')
-                return fetch(manifestPath).then((x) => x.json())
-            },
-            // TODO: support signal
-            createRpcChannel(id) {
-                return new WebExtensionMessage<{ f: any }>({ domain: `mask-plugin-${id}-rpc` }).events.f.bind(
-                    MessageTarget.Broadcast,
-                )
-            },
-            // TODO: support signal
-            createRpcGeneratorChannel(id) {
-                return new WebExtensionMessage<{ g: any }>({ domain: `mask-plugin-${id}-rpc` }).events.g.bind(
-                    MessageTarget.Broadcast,
-                )
-            },
+            ...createHostAPIs(true),
             createTaggedStorage: createPluginDatabase,
         },
         process.env.NODE_ENV === 'development',
@@ -56,7 +43,7 @@ function __builtInPluginInfraBridgeCallback__(this: BackgroundPluginHost, id: st
             networks: { type: 'opt-out', networks: {} },
             target: 'beta',
         },
-        ID: id,
+        ID: id as PluginID,
         // TODO: read i18n files
         // TODO: read the name from the manifest
         name: { fallback: '__generated__bridge__plugin__' + id },

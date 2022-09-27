@@ -1,13 +1,13 @@
 import { Icons } from '@masknet/icons'
-import { PluginId } from '@masknet/plugin-infra'
+import { PluginID } from '@masknet/plugin-infra'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
 import { NetworkPluginID, SocialAddress, SocialAddressType, SocialIdentity } from '@masknet/web3-shared-base'
 import { FC, HTMLProps, useMemo } from 'react'
-import { TipButton } from '../../../plugins/Tips/components'
-import type { TipAccount } from '../../../plugins/Tips/types'
-import { ProfileBar } from './ProfileBar'
+import { TipButton } from '../../../plugins/Tips/components/index.js'
+import type { TipsAccount } from '../../../plugins/Tips/types/index.js'
+import { ProfileBar } from './ProfileBar.js'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -17,11 +17,12 @@ const useStyles = makeStyles()((theme) => {
             alignItems: 'center',
         },
         profileBar: {
-            overflow: 'auto',
+            width: '100%',
         },
         settingItem: {
             display: 'flex',
             alignItems: 'center',
+            marginLeft: 'auto',
         },
         gearIcon: {
             color: theme.palette.text.primary,
@@ -58,17 +59,20 @@ export const ProfileCardTitle: FC<Props> = ({
             settings: {
                 quickMode: true,
                 switchTab: {
-                    focusPluginId: PluginId.Web3ProfileCard,
+                    focusPluginId: PluginID.Web3ProfileCard,
                 },
             },
         })
     }
-    const tipAccounts: TipAccount[] = useMemo(() => {
-        return socialAddressList.map((x) => ({
-            address: x.address,
-            name: x.label,
-            verified: x.type === SocialAddressType.NEXT_ID,
-        }))
+    const tipAccounts = useMemo(() => {
+        return socialAddressList.map(
+            (x): TipsAccount => ({
+                pluginId: x.networkSupporterPluginID,
+                address: x.address,
+                name: x.label,
+                verified: x.type === SocialAddressType.NEXT_ID,
+            }),
+        )
     }, [socialAddressList])
 
     return (
@@ -78,15 +82,19 @@ export const ProfileCardTitle: FC<Props> = ({
                 identity={identity}
                 socialAddressList={socialAddressList}
                 address={address}
-                onAddressChange={onAddressChange}
-            />
-            <div className={classes.settingItem}>
-                {identity.isOwner ? (
-                    <Icons.Gear onClick={handleOpenDialog} className={classes.gearIcon} />
-                ) : (
-                    <TipButton className={classes.tipButton} receiver={identity.identifier} addresses={tipAccounts} />
-                )}
-            </div>
+                onAddressChange={onAddressChange}>
+                <div className={classes.settingItem}>
+                    {identity.isOwner ? (
+                        <Icons.Gear onClick={handleOpenDialog} className={classes.gearIcon} />
+                    ) : (
+                        <TipButton
+                            className={classes.tipButton}
+                            receiver={identity.identifier}
+                            addresses={tipAccounts}
+                        />
+                    )}
+                </div>
+            </ProfileBar>
         </div>
     )
 }

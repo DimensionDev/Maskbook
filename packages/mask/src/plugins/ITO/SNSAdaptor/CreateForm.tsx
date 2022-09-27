@@ -1,7 +1,8 @@
 import { SchemaType, formatAmount, useITOConstants, ChainId } from '@masknet/web3-shared-evm'
-import { formatBalance, isGreaterThan, isZero, NetworkPluginID, FungibleToken } from '@masknet/web3-shared-base'
-import { Box, CircularProgress, Stack, TextField, Typography } from '@mui/material'
-import { makeStyles, useStylesExtends, ActionButton } from '@masknet/theme'
+import { isGreaterThan, isZero, NetworkPluginID, FungibleToken, leftShift } from '@masknet/web3-shared-base'
+import { TokenIcon } from '@masknet/shared'
+import { Box, Stack, Typography, InputBase, inputBaseClasses } from '@mui/material'
+import { makeStyles, useStylesExtends, ActionButton, LoadingBase } from '@masknet/theme'
 import CheckIcon from '@mui/icons-material/Check'
 import UnCheckIcon from '@mui/icons-material/Close'
 import classNames from 'classnames'
@@ -13,20 +14,20 @@ import {
     useCurrentIdentity,
     useCurrentLinkedPersona,
     useLastRecognizedIdentity,
-} from '../../../components/DataSource/useActivatedUI'
-import { PluginWalletStatusBar, sliceTextByUILength, useI18N } from '../../../utils'
-import { DateTimePanel } from '../../../web3/UI/DateTimePanel'
-import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
-import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
-import type { ExchangeTokenAndAmountState } from './hooks/useExchangeTokenAmountstate'
-import type { PoolSettings } from './hooks/useFill'
-import { useQualificationVerify } from './hooks/useQualificationVerify'
-import { decodeRegionCode, encodeRegionCode, regionCodes, useRegionSelect } from './hooks/useRegion'
-import { AdvanceSettingData, AdvanceSetting } from './AdvanceSetting'
-import { ExchangeTokenPanelGroup } from './ExchangeTokenPanelGroup'
-import { RegionSelect } from './RegionSelect'
+} from '../../../components/DataSource/useActivatedUI.js'
+import { PluginWalletStatusBar, sliceTextByUILength, useI18N } from '../../../utils/index.js'
+import { DateTimePanel } from '../../../web3/UI/DateTimePanel.js'
+import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary.js'
+import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary.js'
+import type { ExchangeTokenAndAmountState } from './hooks/useExchangeTokenAmountstate.js'
+import type { PoolSettings } from './hooks/useFill.js'
+import { useQualificationVerify } from './hooks/useQualificationVerify.js'
+import { decodeRegionCode, encodeRegionCode, regionCodes, useRegionSelect } from './hooks/useRegion.js'
+import { AdvanceSettingData, AdvanceSetting } from './AdvanceSetting.js'
+import { ExchangeTokenPanelGroup } from './ExchangeTokenPanelGroup.js'
+import { RegionSelect } from './RegionSelect.js'
 import { useAccount, useFungibleTokenBalance } from '@masknet/plugin-infra/web3'
-import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
+import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
 
 const useStyles = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -47,12 +48,22 @@ const useStyles = makeStyles()((theme) => {
             textAlign: 'center',
         },
         input: {
-            padding: theme.spacing(1),
-            flex: 1,
+            position: 'relative',
+            height: 66,
+            padding: theme.spacing(1.25, 1.5),
+            [`& > .${inputBaseClasses.input}`]: {
+                padding: theme.spacing(2.75, 0, 0, 0),
+                flex: 2,
+            },
         },
         inputLabel: {
-            left: 8,
-            top: 8,
+            position: 'absolute',
+            left: 12,
+            top: 10,
+            fontSize: 13,
+            lineHeight: '18px',
+            color: theme.palette.maskColor.second,
+            whiteSpace: 'nowrap',
         },
         label: {
             paddingLeft: theme.spacing(2),
@@ -64,6 +75,7 @@ const useStyles = makeStyles()((theme) => {
         date: {
             margin: theme.spacing(1),
             display: 'flex',
+            columnGap: 12,
             '& > * ': {
                 flex: 1,
                 padding: theme.spacing(1),
@@ -105,6 +117,16 @@ const useStyles = makeStyles()((theme) => {
             position: 'sticky',
             bottom: 0,
         },
+        tokenAdornment: {
+            display: 'flex',
+            columnGap: 4,
+            alignItems: 'center',
+            paddingRight: 11,
+        },
+        tokenIcon: {
+            width: 18,
+            height: 18,
+        },
     }
 })
 
@@ -137,21 +159,21 @@ export function CreateForm(props: CreateFormProps) {
 
     const [message, setMessage] = useState(origin?.title ?? '')
     const [totalOfPerWallet, setTotalOfPerWallet] = useState(
-        isZero(origin?.limit || '0') ? '' : formatBalance(origin?.limit || '0', origin?.token?.decimals),
+        isZero(origin?.limit || '0') ? '' : leftShift(origin?.limit ?? '0', origin?.token?.decimals).toFixed(),
     )
     const [tokenAndAmount, setTokenAndAmount] = useState<ExchangeTokenAndAmountState>()
     const TAS: ExchangeTokenAndAmountState[] = []
     if (origin?.token && origin?.total) {
         TAS.push({
             token: origin?.token,
-            amount: formatBalance(origin?.total || '0', origin?.token.decimals),
+            amount: leftShift(origin?.total ?? '0', origin?.token.decimals).toFixed(),
             key: uuid(),
         })
     }
     if (origin?.exchangeTokens && origin?.exchangeAmounts) {
         origin?.exchangeTokens.map((i, x) =>
             TAS.push({
-                amount: formatBalance(origin?.exchangeAmounts[x] || '0', i?.decimals),
+                amount: leftShift(origin?.exchangeAmounts[x] || '0', i?.decimals).toFixed(),
                 token: i,
                 key: uuid(),
             }),
@@ -369,42 +391,34 @@ export function CreateForm(props: CreateFormProps) {
                 />
             </Box>
             <Box className={classes.line}>
-                <TextField
-                    className={classes.input}
-                    label={t('plugin_ito_message_label')}
+                <InputBase
+                    placeholder={t('plugin_ito_message_label')}
                     value={message}
                     onChange={(e) => setMessage(sliceTextByUILength(e.target.value, 90))}
-                    InputLabelProps={{
-                        shrink: true,
-                        classes: {
-                            root: classes.inputLabel,
-                        },
-                    }}
+                    fullWidth
                 />
             </Box>
             <Box className={classes.line}>
-                <TextField
-                    className={classes.input}
-                    label={t('plugin_ito_allocation_per_wallet_title')}
+                <InputBase
+                    fullWidth
+                    placeholder={t('plugin_ito_allocation_per_wallet_title')}
                     onChange={onTotalOfPerWalletChange}
                     value={totalOfPerWallet}
-                    InputLabelProps={{
-                        shrink: true,
-                        classes: {
-                            root: classes.inputLabel,
-                        },
+                    inputProps={{
+                        autoComplete: 'off',
+                        autoCorrect: 'off',
+                        inputMode: 'decimal',
+                        pattern: '^[0-9]$',
+                        spellCheck: false,
                     }}
-                    InputProps={{
-                        endAdornment: tokenAndAmount?.token?.symbol,
-                        inputProps: {
-                            autoComplete: 'off',
-                            autoCorrect: 'off',
-                            inputMode: 'decimal',
-                            placeholder: '0.0',
-                            pattern: '^[0-9]$',
-                            spellCheck: false,
-                        },
-                    }}
+                    endAdornment={
+                        tokenAndAmount?.token ? (
+                            <Box className={classes.tokenAdornment}>
+                                <TokenIcon classes={{ icon: classes.tokenIcon }} {...tokenAndAmount.token} />
+                                <Typography>{tokenAndAmount.token?.symbol}</Typography>
+                            </Box>
+                        ) : null
+                    }
                 />
             </Box>
             <Stack className={classes.date} direction="row">
@@ -415,52 +429,43 @@ export function CreateForm(props: CreateFormProps) {
             </Box>
             {advanceSettingData.IPRegion ? (
                 <Box className={classes.line}>
-                    <TextField
+                    <InputBase
+                        startAdornment={
+                            <Typography className={classes.inputLabel}>{t('plugin_ito_region_label')}</Typography>
+                        }
                         className={classes.input}
-                        label={t('plugin_ito_region_label')}
-                        InputLabelProps={{
-                            shrink: true,
-                            classes: {
-                                root: classes.inputLabel,
-                            },
-                        }}
-                        InputProps={{
-                            inputComponent: RegionSelect,
-                            inputProps: {
-                                value: regions,
-                                onRegionChange: setRegions,
-                            },
-                        }}
+                        inputComponent={RegionSelect}
+                        inputProps={{ value: regions, onRegionChange: setRegions }}
+                        fullWidth
                     />
                 </Box>
             ) : null}
             {advanceSettingData.delayUnlocking ? <Box className={classes.date}>{UnlockTime}</Box> : null}
             {account && advanceSettingData.contract ? (
                 <Box className={classNames(classes.line, classes.column)}>
-                    <TextField
+                    <InputBase
                         className={classes.input}
-                        label={t('plugin_ito_qualification_label')}
                         onChange={(e) => setQualificationAddress(e.currentTarget.value)}
                         value={qualificationAddress}
-                        InputLabelProps={{
-                            shrink: true,
-                            classes: {
-                                root: classes.inputLabel,
-                            },
-                        }}
-                        InputProps={{
-                            endAdornment: qualification?.isQualification ? (
+                        startAdornment={
+                            <Typography className={classes.inputLabel}>
+                                {t('plugin_ito_qualification_label')}
+                            </Typography>
+                        }
+                        endAdornment={
+                            qualification?.isQualification ? (
                                 <Box className={classNames(classes.iconWrapper, classes.success)}>
                                     <CheckIcon fontSize="small" style={{ color: '#77E0B5' }} />
                                 </Box>
                             ) : qualification?.loadingERC165 || loadingQualification ? (
-                                <CircularProgress size={16} />
+                                <LoadingBase size={16} />
                             ) : qualificationAddress.length > 0 ? (
                                 <Box className={classNames(classes.iconWrapper, classes.fail)}>
                                     <UnCheckIcon fontSize="small" style={{ color: '#ff4e59' }} />
                                 </Box>
-                            ) : null,
-                        }}
+                            ) : null
+                        }
+                        placeholder="0x"
                     />
                     {qualification?.startTime && new Date(Number(qualification.startTime) * 1000) > startTime ? (
                         <div className={classes.qualStartTime}>

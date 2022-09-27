@@ -8,8 +8,8 @@ import { TransactionStatusType } from '@masknet/web3-shared-base'
 import { Typography } from '@mui/material'
 import classnames from 'classnames'
 import { useState } from 'react'
-import { useI18N } from '../../../utils'
-import { TransactionList } from './TransactionList'
+import { useI18N } from '../../../utils/index.js'
+import { TransactionList } from './TransactionList.js'
 
 const useStyles = makeStyles()((theme) => ({
     summaryWrapper: {

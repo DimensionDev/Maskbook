@@ -1,12 +1,12 @@
-import { WizardDialog, WizardDialogProps, useWizardDialogStyles } from './WizardDialog'
-import { useI18N } from '../../../utils'
+import { WizardDialog, WizardDialogProps, useWizardDialogStyles } from './WizardDialog.js'
+import { useI18N } from '../../../utils/index.js'
 import { useState } from 'react'
-import { SetupGuideStep } from '../../../../shared/legacy-settings/types'
+import { SetupGuideStep } from '../../../../shared/legacy-settings/types.js'
 import { Box, Typography } from '@mui/material'
-import { MaskIcon } from '../../../resources/MaskIcon'
+import { MaskIcon } from '@masknet/shared'
 import classNames from 'classnames'
 import { Icons } from '@masknet/icons'
-import { ActionButtonPromise } from '../../../extension/options-page/DashboardComponents/ActionButton'
+import { ActionButtonPromise } from '../../../extension/options-page/DashboardComponents/ActionButton.js'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { Trans } from 'react-i18next'
 
@@ -33,9 +33,9 @@ export const useFindUsernameStyles = makeStyles()((theme) => ({
 
 export interface FindUsernameProps extends Partial<WizardDialogProps> {
     username: string
+    stepUpdating?: boolean
     personaName?: string
     avatar?: string
-    onUsernameChange?: (username: string) => void
     onConnect: () => Promise<void>
     onDone?: () => void
     enableNextID?: boolean
@@ -49,6 +49,7 @@ export function FindUsername({
     onDone,
     onClose,
     enableNextID,
+    stepUpdating,
 }: FindUsernameProps) {
     const { t } = useI18N()
     const [connected, setConnected] = useState(false)
@@ -110,7 +111,7 @@ export function FindUsername({
                         executor={onConnect}
                         completeOnClick={enableNextID ? undefined : onDone}
                         onComplete={enableNextID ? onDone : () => setConnected(true)}
-                        disabled={!username || !personaName}
+                        disabled={!username || !personaName || stepUpdating}
                         completeIcon={null}
                         failIcon={null}
                         failedOnClick="use executor"

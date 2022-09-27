@@ -13,20 +13,23 @@ import type {
     ECKeyIdentifier,
     EnhanceableSite,
     ExtensionSite,
+    BindingProof,
 } from '@masknet/shared-base'
 import type {
-    ChainDescriptor,
+    NetworkPluginID,
     SocialAddress,
+    ChainDescriptor,
     NetworkDescriptor,
     ProviderDescriptor,
     SocialIdentity,
     Wallet,
     Web3EnableRequirement,
-    NetworkPluginID,
+    Web3UI,
+    Web3State,
+    SocialAddressType,
 } from '@masknet/web3-shared-base'
-import type { ChainId, SchemaType, Transaction } from '@masknet/web3-shared-evm'
+import type { ChainId as ChainIdEVM, Transaction as TransactionEVM } from '@masknet/web3-shared-evm'
 import type { Emitter } from '@servie/events'
-import type { Web3Plugin } from './web3-types'
 import type { UnboundedRegistry } from '@dimensiondev/holoflows-kit'
 
 export declare namespace Plugin {
@@ -54,13 +57,21 @@ export declare namespace Plugin {
          * @returns the actual definition of this plugin
          * @example load: () => import('./path')
          */
-        load(): Promise<{ default: DeferredModule }>
+        load(): Promise<{
+            default: DeferredModule
+        }>
         /**
          * This provides the functionality for hot module reload on the plugin.
          * When the callback is called, the old instance of the plugin will be unloaded, then the new instance will be init.
          * @example hotModuleReload: hot => import.meta.webpackHot && import.meta.webpackHot.accept('./path', () => hot(import('./path')))
          */
-        hotModuleReload(onHot: (hot: Promise<{ default: DeferredModule }>) => void): void
+        hotModuleReload(
+            onHot: (
+                hot: Promise<{
+                    default: DeferredModule
+                }>,
+            ) => void,
+        ): void
     }
     /**
      * DeferredDefinition should not contain any functionality of the plugin expects the loader.
@@ -68,6 +79,7 @@ export declare namespace Plugin {
      */
     export interface DeferredDefinition<
         ChainId = unknown,
+        AddressType = unknown,
         SchemaType = unknown,
         ProviderType = unknown,
         NetworkType = unknown,
@@ -81,11 +93,12 @@ export declare namespace Plugin {
         TransactionParameter = unknown,
         Web3 = unknown,
         Web3Provider = unknown,
-    > extends Shared.Definition<ChainId, ProviderType, NetworkType> {
+    > extends Shared.Definition<ChainId, SchemaType, ProviderType, NetworkType> {
         /** Load the SNSAdaptor part of the plugin. */
         SNSAdaptor?: Loader<
             SNSAdaptor.Definition<
                 ChainId,
+                AddressType,
                 SchemaType,
                 ProviderType,
                 NetworkType,
@@ -105,6 +118,7 @@ export declare namespace Plugin {
         Dashboard?: Loader<
             Dashboard.Definition<
                 ChainId,
+                AddressType,
                 SchemaType,
                 ProviderType,
                 NetworkType,
@@ -122,9 +136,6 @@ export declare namespace Plugin {
         >
         /** Load the Worker part of the plugin. */
         Worker?: Loader<Worker.Definition>
-        /** Load the General UI of the plugin. */
-        // TODO: not supported yet.
-        // GeneralUI?: Loader<GeneralUI.DefinitionDeferred>
     }
 }
 /**
@@ -158,7 +169,7 @@ export namespace Plugin.Shared {
             payload: JsonRpcPayload,
             options?: {
                 account?: string
-                chainId?: ChainId
+                chainId?: ChainIdEVM
                 popupsWindow?: boolean
             },
         ): Promise<JsonRpcResponse>
@@ -196,7 +207,7 @@ export namespace Plugin.Shared {
         generateSignResult(signer: ECKeyIdentifier, message: string): Promise<PersonaSignResult>
 
         /** Sign transaction */
-        signTransaction(address: string, transaction: Transaction): Promise<string>
+        signTransaction(address: string, transaction: TransactionEVM): Promise<string>
         /** Sign personal message, aka. eth.personal.sign() */
         signPersonalMessage(address: string, message: string): Promise<string>
         /** Sign typed data */
@@ -213,12 +224,17 @@ export namespace Plugin.Shared {
         /** Remove a old wallet */
         removeWallet(id: string, password?: string): Promise<void>
     }
-    export interface Definition<ChainId = unknown, ProviderType = unknown, NetworkType = unknown> {
+    export interface Definition<
+        ChainId = unknown,
+        SchemaType = unknown,
+        ProviderType = unknown,
+        NetworkType = unknown,
+    > {
         /**
          * ID of the plugin. It should be unique.
          * @example "com.mask.wallet"
          */
-        ID: string
+        ID: PluginID
         /**
          * The human readable name of the plugin.
          * @example { i18nKey: "name", fallback: "Never gonna give you up" }
@@ -323,19 +339,7 @@ export namespace Plugin.Shared {
         /** This plugin can recognize and enhance the post that matches the following matchers. */
         postContent?: ReadonlySet<RegExp | string>
     }
-    export interface Ability {
-        /**
-         * Declare that this plugin supports minimal mode.
-         * In this mode, the automated minimal mode is not applied to this plugin.
-         *
-         * The plugin MUST follow the design guide to behave like it is in the automated minimal mode, e.g.:
-         *
-         * - Do not display full UI in PostInspector
-         * - Do not display full UI in DecryptedPostInspector
-         */
-        // TODO: implement this flag when there is use case.
-        // UX_NEED_APPROVAL_manualMinimalMode?: boolean
-    }
+    export interface Ability {}
 
     export interface PersonaSignRequest {
         /** The message to be signed. */
@@ -395,6 +399,7 @@ export namespace Plugin.SNSAdaptor {
     }
     export interface Definition<
         ChainId = unknown,
+        AddressType = unknown,
         SchemaType = unknown,
         ProviderType = unknown,
         NetworkType = unknown,
@@ -415,16 +420,19 @@ export namespace Plugin.SNSAdaptor {
         /** This UI will be rendered for action of each post found. */
         PostActions?: InjectUI<{}>
         /** This UI will be rendered for each decrypted post. */
-        DecryptedInspector?: InjectUI<{ message: TypedMessage }>
+        DecryptedInspector?: InjectUI<{
+            message: TypedMessage
+        }>
         /** This UI will be rendered into the global scope of an SNS. */
         GlobalInjection?: InjectUI<{}>
         /** This UI will be rendered under the Search of the SNS. */
         SearchResultBox?: SearchResultBox
         /** This is a chunk of web3 UIs to be rendered into various places of Mask UI. */
-        Web3UI?: Web3Plugin.UI.UI<ChainId, ProviderType, NetworkType>
+        Web3UI?: Web3UI<ChainId, ProviderType, NetworkType>
         /** This is the context of the currently chosen network. */
-        Web3State?: Web3Plugin.ObjectCapabilities.Capabilities<
+        Web3State?: Web3State<
             ChainId,
+            AddressType,
             SchemaType,
             ProviderType,
             NetworkType,
@@ -441,7 +449,7 @@ export namespace Plugin.SNSAdaptor {
             Web3Provider
         >
         /** This UI will be an entry to the plugin in the Composition dialog of Mask. */
-        CompositionDialogEntry?: CompositionDialogEntry
+        readonly CompositionDialogEntry?: CompositionDialogEntry
         /** This UI will be use when there is known badges. */
         CompositionDialogMetadataBadgeRender?: CompositionMetadataBadgeRender
         /** This UI will be rendered as an entry in the wallet status dialog */
@@ -456,6 +464,13 @@ export namespace Plugin.SNSAdaptor {
         SettingTabs?: SettingTab[]
         /** This UI will be rendered components on the avatar realm */
         AvatarRealm?: AvatarRealm
+        /** This UI will be shared across plugins */
+        Widgets?: Widget[]
+        // Widgets?: {
+        //     [key in keyof WidgetRegistry]: Widget<WidgetRegistry[key]>
+        // }
+        /** This UI will be rendered components on the tips realm */
+        TipsRealm?: TipsRealm
         /** This UI will be rendered as plugin wrapper page */
         wrapperProps?: PluginWrapperProps
         /**
@@ -519,8 +534,8 @@ export namespace Plugin.SNSAdaptor {
         metadata: unknown,
     ) => string | BadgeDescriptor | null
     export interface BadgeDescriptor {
-        text: string | React.ReactChild
-        tooltip?: React.ReactChild
+        text: string | React.ReactNode
+        tooltip?: React.ReactNode
     }
     // #endregion
 
@@ -536,6 +551,7 @@ export namespace Plugin.SNSAdaptor {
             disabled: boolean
             tooltipHint?: string
             onClick?: (walletConnectedCallback?: () => void) => void
+            popperBoundary?: HTMLElement | null
         }) => JSX.Element | null
         /**
          * Used to order the applications on the board
@@ -575,8 +591,10 @@ export namespace Plugin.SNSAdaptor {
 
     export interface PluginWrapperProps {
         icon?: React.ReactNode
-        title?: string
+        title?: string | React.ReactNode
         backgroundGradient?: string
+        borderRadius?: string
+        margin?: string
     }
 
     export interface SearchResultBox {
@@ -630,6 +648,41 @@ export namespace Plugin.SNSAdaptor {
                 addressNames?: Array<SocialAddress<NetworkPluginID>>,
                 sourceType?: AvatarRealmSourceType,
             ): boolean
+        }
+    }
+    export enum TipsSlot {
+        FollowButton = 'follow',
+        FocusingPost = 'focusing-post',
+        Post = 'post',
+        Profile = 'profile',
+        MirrorMenu = 'mirror-menu',
+        MirrorEntry = 'mirror-entry',
+    }
+    export interface TipsAccount {
+        pluginId: NetworkPluginID
+        address: string
+        name?: string
+        type?: SocialAddressType
+        /** Verified by NextId. */
+        verified?: boolean
+        /** From SNS profile */
+        isSocialAddress?: boolean
+        last_checked_at?: string
+    }
+    export interface TipsRealmOptions {
+        identity?: ProfileIdentifier
+        slot: TipsSlot
+        tipsAccounts?: TipsAccount[]
+        onStatusUpdate?(disabled: boolean): void
+    }
+    export interface TipsRealm {
+        ID: string
+        priority: number
+        UI?: {
+            /**
+             * The injected Tips Content component
+             */
+            Content: InjectUI<TipsRealmOptions>
         }
     }
     export interface ProfileSlider {
@@ -725,7 +778,7 @@ export namespace Plugin.SNSAdaptor {
     }
 
     export interface SettingTab {
-        ID: string
+        ID: PluginID
         /**
          * The name of setting tab
          */
@@ -737,8 +790,31 @@ export namespace Plugin.SNSAdaptor {
         priority: number
 
         UI?: {
-            TabContent: InjectUI<{ onClose: () => void }>
+            TabContent: InjectUI<{
+                onClose: () => void
+                onOpenPopup: (route?: PopupRoutes, params?: Record<string, any>) => void
+                bindingWallets?: BindingProof[]
+                currentPersona?: ECKeyIdentifier
+                pluginId: PluginID
+            }>
         }
+    }
+
+    /** Contribute a widget to other plugins. */
+    export interface Widget {
+        ID: string
+
+        name: keyof WidgetRegistry
+
+        label: I18NStringField | string
+
+        UI?: {
+            Widget: InjectUI<{}>
+        }
+    }
+
+    export interface WidgetRegistry {
+        example: {}
     }
 }
 
@@ -748,6 +824,7 @@ export namespace Plugin.Dashboard {
     // As you can see we currently don't have so much use case for an API here.
     export interface Definition<
         ChainId = unknown,
+        AddressType = unknown,
         SchemaType = unknown,
         ProviderType = unknown,
         NetworkType = unknown,
@@ -766,10 +843,11 @@ export namespace Plugin.Dashboard {
         /** This UI will be injected into the global scope of the Dashboard. */
         GlobalInjection?: InjectUI<{}>
         /** This is a chunk of web3 UIs to be rendered into various places of Mask UI. */
-        Web3UI?: Web3Plugin.UI.UI<ChainId, ProviderType, NetworkType>
+        Web3UI?: Web3UI<ChainId, ProviderType, NetworkType>
         /** This is the context of the currently chosen network. */
-        Web3State?: Web3Plugin.ObjectCapabilities.Capabilities<
+        Web3State?: Web3State<
             ChainId,
+            AddressType,
             SchemaType,
             ProviderType,
             NetworkType,
@@ -852,7 +930,15 @@ export namespace Plugin.Worker {
          * @param type "type" field on the object
          * @param id "id" field on the object
          */
-        get<T extends Data['type']>(type: T, id: Data['id']): Promise<(Data & { type: T }) | undefined>
+        get<T extends Data['type']>(
+            type: T,
+            id: Data['id'],
+        ): Promise<
+            | (Data & {
+                  type: T
+              })
+            | undefined
+        >
         has<T extends Data['type']>(type: T, id: Data['id']): Promise<boolean>
         /**
          * Store a data into the database.
@@ -887,13 +973,18 @@ export namespace Plugin.Worker {
         iterate_mutate<T extends Data['type']>(type: T): AsyncIterableIterator<StorageMutableCursor<Data, T>>
     }
     export interface StorageReadonlyCursor<Data extends IndexableTaggedUnion, T extends Data['type']> {
-        value: Data & { type: T }
-        // continueTo(id: Data['id']): Promise<void>
+        value: Data & {
+            type: T
+        }
     }
     export interface StorageMutableCursor<Data extends IndexableTaggedUnion, T extends Data['type']>
         extends StorageReadonlyCursor<Data, T> {
         delete: () => Promise<void>
-        update: (data: Data & { type: T }) => Promise<void>
+        update: (
+            data: Data & {
+                type: T
+            },
+        ) => Promise<void>
     }
 }
 
@@ -939,12 +1030,17 @@ export namespace Plugin.GeneralUI {
         // new Map([ [reader, react component] ])
         export type StaticRender<T = any> = ReadonlyMap<MetadataReader<T>, StaticRenderComponent<T>>
         export type StaticRenderComponent<T> = Omit<React.ForwardRefExoticComponent<StaticRenderProps<T>>, 'propTypes'>
-        export type StaticRenderProps<T> = Context<T> & React.RefAttributes<RenderActions<T>> & { metadata: T }
+        export type StaticRenderProps<T> = Context<T> &
+            React.RefAttributes<RenderActions<T>> & {
+                metadata: T
+            }
         // #endregion
         // #region DynamicRender
         export type DynamicRender = Omit<React.ForwardRefExoticComponent<DynamicRenderProps>, 'propTypes'>
         export type DynamicRenderProps = Context<unknown> &
-            React.RefAttributes<RenderActions<unknown>> & { metadata: TypedMessage['meta'] }
+            React.RefAttributes<RenderActions<unknown>> & {
+                metadata: TypedMessage['meta']
+            }
         // #endregion
         export type RenderActions<T> = {
             /**
@@ -1048,14 +1144,17 @@ export interface IdentityResolved {
 /**
  * All integrated Plugin IDs
  */
-export enum PluginId {
+export enum PluginID {
+    EVM = 'com.mask.evm',
+    Flow = 'com.mask.flow',
+    Solana = 'com.mask.solana',
     Approval = 'com.maskbook.approval',
     Avatar = 'com.maskbook.avatar',
     ArtBlocks = 'io.artblocks',
     Collectible = 'com.maskbook.collectibles',
     CryptoArtAI = 'com.maskbook.cryptoartai',
     dHEDGE = 'org.dhedge',
-    EVM = 'com.mask.evm',
+    ENS = 'com.maskbook.ens',
     NextID = 'com.mask.next_id',
     External = 'io.mask.external',
     Furucombo = 'app.furucombo',
@@ -1069,10 +1168,8 @@ export enum PluginId {
     Tips = 'com.maskbook.tip',
     Transak = 'com.maskbook.transak',
     Valuables = 'com.maskbook.tweet',
-    DAO = 'money.juicebox',
     Debugger = 'io.mask.debugger',
     Example = 'io.mask.example',
-    Flow = 'com.mask.flow',
     RSS3 = 'bio.rss3',
     RedPacket = 'com.maskbook.red_packet',
     RedPacketNFT = 'com.maskbook.red_packet_nft',
@@ -1093,8 +1190,9 @@ export enum PluginId {
     Web3Profile = 'io.mask.web3-profile',
     Web3ProfileCard = 'io.mask.web3-profile-card',
     ScamSniffer = 'io.scamsniffer.mask-plugin',
-    // @masknet/scripts: insert-here
+    NFTCard = 'com.maskbook.nft-card',
 }
+
 /**
  * This namespace is not related to the plugin authors
  */
@@ -1113,7 +1211,10 @@ export namespace Plugin.__Host {
     }
     export interface EnabledStatusReporter {
         isEnabled(id: string): BooleanPreference | Promise<BooleanPreference>
-        events: Emitter<{ enabled: [id: string]; disabled: [id: string] }>
+        events: Emitter<{
+            enabled: [id: string]
+            disabled: [id: string]
+        }>
     }
 }
 

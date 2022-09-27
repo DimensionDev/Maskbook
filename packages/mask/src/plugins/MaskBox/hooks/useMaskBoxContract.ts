@@ -1,11 +1,12 @@
 import type { AbiItem } from 'web3-utils'
 import type { MaskBox } from '@masknet/web3-contracts/types/MaskBox'
 import MASK_BOX_ABI from '@masknet/web3-contracts/abis/MaskBox.json'
-import { useMaskBoxConstants } from '@masknet/web3-shared-evm'
-import { useContract, TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
+import { useMaskBoxConstants, ChainId } from '@masknet/web3-shared-evm'
+import { useChainId } from '@masknet/plugin-infra/web3'
+import { useContract } from '@masknet/plugin-infra/web3-evm'
 
 export function useMaskBoxContract() {
-    const { targetChainId: chainId } = TargetChainIdContext.useContainer()
+    const chainId = useChainId()
     const { MASK_BOX_CONTRACT_ADDRESS } = useMaskBoxConstants(chainId)
-    return useContract<MaskBox>(chainId, MASK_BOX_CONTRACT_ADDRESS, MASK_BOX_ABI as AbiItem[])
+    return useContract<MaskBox>(chainId as ChainId, MASK_BOX_CONTRACT_ADDRESS, MASK_BOX_ABI as AbiItem[])
 }

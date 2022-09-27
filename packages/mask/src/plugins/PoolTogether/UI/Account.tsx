@@ -1,14 +1,14 @@
 import { Icons } from '@masknet/icons'
 import { DarkColor } from '@masknet/theme/base'
-import { formatBalance } from '@masknet/web3-shared-base'
-import { CircularProgress, Grid, Link, Typography } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
-import { useI18N } from '../../../utils'
-import { COMMUNITY_URL } from '../constants'
-import { useAccountBalance } from '../hooks/useAccountBalances'
-import type { Pool } from '../types'
-import { AccountPool } from './AccountPool'
+import { Grid, Link, Typography } from '@mui/material'
+import { LoadingBase, makeStyles } from '@masknet/theme'
+import { useI18N } from '../../../utils/index.js'
+import { COMMUNITY_URL } from '../constants.js'
+import { useAccountBalance } from '../hooks/useAccountBalances.js'
+import type { Pool } from '../types.js'
+import { AccountPool } from './AccountPool.js'
 import { sumBy } from 'lodash-unified'
+import { leftShift } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -69,7 +69,7 @@ export function Account(props: AccountProps) {
     const { value: balances = [], loading, retry, error } = useAccountBalance(pools)
 
     if (loading) {
-        return <CircularProgress className={classes.progress} color="primary" size={15} />
+        return <LoadingBase className={classes.progress} color="primary" size={15} />
     }
 
     if (error) {
@@ -79,10 +79,10 @@ export function Account(props: AccountProps) {
     const noZeroBalances = balances.filter((balance) => Number.parseInt(balance.account.ticketBalance, 10) !== 0)
     const totalUsdBalance = sumBy(noZeroBalances, (balance) => {
         const decimals = Number.parseInt(balance.pool.tokens.ticket.decimals, 10)
-        const ticketBalance = Number.parseFloat(formatBalance(balance.account.ticketBalance, decimals))
+        const ticketBalance = leftShift(balance.account.ticketBalance, decimals)
         const ticketUsdRate = balance.pool.tokens.ticket.usd
         if (!ticketUsdRate) return 0
-        return ticketBalance * ticketUsdRate
+        return ticketBalance.multipliedBy(ticketUsdRate).toNumber()
     })
 
     return (

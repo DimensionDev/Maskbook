@@ -1,13 +1,13 @@
-import { isLessThan, NetworkPluginID, toFixed, isZero } from '@masknet/web3-shared-base'
 import { useCallback, useMemo } from 'react'
 import { useAsyncFn } from 'react-use'
-import { useERC20TokenContract } from './useERC20TokenContract'
-import { useERC20TokenAllowance } from './useERC20TokenAllowance'
-import { useWeb3Connection } from '../useWeb3Connection'
-import { useChainId } from '../useChainId'
-import { useAccount } from '../useAccount'
-import { useFungibleTokenBalance } from '../../entry-web3'
+import { isLessThan, NetworkPluginID, toFixed, isZero } from '@masknet/web3-shared-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
+import { useERC20TokenContract } from './useERC20TokenContract.js'
+import { useERC20TokenAllowance } from './useERC20TokenAllowance.js'
+import { useWeb3Connection } from '../useWeb3Connection.js'
+import { useChainId } from '../useChainId.js'
+import { useAccount } from '../useAccount.js'
+import { useFungibleTokenBalance } from '../../entry-web3.js'
 
 const MaxUint256 = toFixed('0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff')
 
@@ -38,13 +38,13 @@ export function useERC20TokenApproveCallback(
         loading: loadingBalance,
         error: errorBalance,
         retry: revalidateBalance,
-    } = useFungibleTokenBalance(NetworkPluginID.PLUGIN_EVM, address)
+    } = useFungibleTokenBalance(NetworkPluginID.PLUGIN_EVM, address, { chainId })
     const {
         value: allowance = '0',
         loading: loadingAllowance,
         error: errorAllowance,
         retry: revalidateAllowance,
-    } = useERC20TokenAllowance(address, spender)
+    } = useERC20TokenAllowance(address, spender, { chainId })
 
     // the computed approve state
     const approveStateType = useMemo(() => {

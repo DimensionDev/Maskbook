@@ -1,10 +1,10 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { DashboardRoutes } from '@masknet/shared-base'
-import { useDashboardI18N } from '../../../locales'
-import { SignUpRoutePath } from '../routePath'
-import { Services } from '../../../API'
-import { PersonaNameUI } from './PersonaNameUI'
+import { useDashboardI18N } from '../../../locales/index.js'
+import { SignUpRoutePath } from '../routePath.js'
+import { Services } from '../../../API.js'
+import { PersonaNameUI } from './PersonaNameUI.js'
 
 export const PersonaCreate = () => {
     const t = useDashboardI18N()

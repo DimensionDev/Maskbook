@@ -5,7 +5,7 @@ import classnames from 'classnames'
 import { FC, HTMLProps, useState } from 'react'
 import { NFTCardStyledAssetPlayer } from '@masknet/shared'
 import type { NonFungibleTokenContract } from '@masknet/web3-shared-base'
-import { useI18N } from '../locales'
+import { useI18N } from '../locales/index.js'
 
 const useStyles = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`

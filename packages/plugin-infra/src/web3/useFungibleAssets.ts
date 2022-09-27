@@ -3,21 +3,21 @@ import { asyncIteratorToArray, EMPTY_LIST } from '@masknet/shared-base'
 import {
     CurrencyType,
     currySameAddress,
-    formatBalance,
     HubIndicator,
     isSameAddress,
+    leftShift,
     minus,
     NetworkPluginID,
     pageableToIterator,
     toZero,
 } from '@masknet/web3-shared-base'
-import type { Web3Helper } from '../web3-helpers'
-import { useAccount } from './useAccount'
-import { useChainId } from './useChainId'
-import { useWeb3Hub } from './useWeb3Hub'
-import { useWeb3State } from './useWeb3State'
-import { useTrustedFungibleTokens } from './useTrustedFungibleTokens'
-import { useBlockedFungibleTokens } from './useBlockedFungibleTokens'
+import type { Web3Helper } from '@masknet/web3-helpers'
+import { useAccount } from './useAccount.js'
+import { useChainId } from './useChainId.js'
+import { useWeb3Hub } from './useWeb3Hub.js'
+import { useWeb3State } from './useWeb3State.js'
+import { useTrustedFungibleTokens } from './useTrustedFungibleTokens.js'
+import { useBlockedFungibleTokens } from './useBlockedFungibleTokens.js'
 
 export function useFungibleAssets<S extends 'all' | void = void, T extends NetworkPluginID = NetworkPluginID>(
     pluginID?: T,
@@ -50,8 +50,8 @@ export function useFungibleAssets<S extends 'all' | void = void, T extends Netwo
         return filteredAssets
             .filter((x) => !isBlockedToken(x))
             .sort((a, z) => {
-                const aBalance = toZero(formatBalance(a.balance, a.decimals))
-                const zBalance = toZero(formatBalance(z.balance, z.decimals))
+                const aBalance = toZero(leftShift(a.balance, a.decimals))
+                const zBalance = toZero(leftShift(z.balance, z.decimals))
 
                 const aUSD = toZero(a.value?.[CurrencyType.USD] ?? '0')
                 const zUSD = toZero(z.value?.[CurrencyType.USD] ?? '0')
@@ -95,5 +95,5 @@ export function useFungibleAssets<S extends 'all' | void = void, T extends Netwo
 
                 return 0
             })
-    }, [account, chainId, hub, trustedTokens, blockedTokens, Others])
+    }, [account, chainId, schemaType, hub, trustedTokens, blockedTokens, Others])
 }

@@ -3,9 +3,9 @@ import classNames from 'classnames'
 import { Checkbox, FormControlLabel, Link, Typography } from '@mui/material'
 import { makeStyles, useStylesExtends, ActionButton } from '@masknet/theme'
 import { FormattedAddress, TokenIcon } from '@masknet/shared'
-import { useI18N } from '../../../utils'
+import { useI18N } from '../../../utils/index.js'
 import { ChainId, formatEthereumAddress, explorerResolver, networkResolver, SchemaType } from '@masknet/web3-shared-evm'
-import { SwapStatus } from './SwapGuide'
+import { SwapStatus } from './SwapGuide.js'
 import { useNetworkType } from '@masknet/plugin-infra/web3'
 import { FungibleToken, NetworkPluginID } from '@masknet/web3-shared-base'
 
@@ -139,7 +139,14 @@ export function RemindDialog(props: RemindDialogProps) {
                 </Typography>
             </section>
             <section className={classNames(classes.wrapper, classes.tokenWrapper)}>
-                <TokenIcon address={token.address} classes={{ icon: classes.tokenIcon }} logoURL={token?.logoURL} />
+                <TokenIcon
+                    classes={{ icon: classes.tokenIcon }}
+                    chainId={token.chainId}
+                    address={token.address}
+                    name={token.name}
+                    symbol={token.symbol}
+                    logoURL={token?.logoURL}
+                />
                 <div className={classes.tokenTextWrapper}>
                     <Typography variant="h5" className={classes.tokenSymbol}>
                         {token.name}

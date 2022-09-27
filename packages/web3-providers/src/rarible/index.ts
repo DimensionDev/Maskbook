@@ -1,6 +1,6 @@
 import urlcat from 'urlcat'
 import { first } from 'lodash-unified'
-import { EMPTY_LIST } from '@masknet/shared-base'
+import { createLookupTableResolver, EMPTY_LIST } from '@masknet/shared-base'
 import {
     HubOptions,
     NonFungibleAsset,
@@ -11,15 +11,15 @@ import {
     createPageable,
     createIndicator,
     createNextIndicator,
-    createLookupTableResolver,
     CurrencyType,
     scale10,
+    SourceType,
 } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import { RaribleEventType, RaribleOrder, RaribleHistory, RaribleNFTItemMapResponse } from './types'
-import { RaribleURL } from './constants'
-import type { NonFungibleTokenAPI } from '../types'
-import { getPaymentToken } from '../helpers'
+import { RaribleEventType, RaribleOrder, RaribleHistory, RaribleNFTItemMapResponse } from './types.js'
+import { RaribleURL } from './constants.js'
+import type { NonFungibleTokenAPI } from '../types/index.js'
+import { getPaymentToken } from '../helpers.js'
 
 const resolveRaribleBlockchain = createLookupTableResolver<number, string>(
     {
@@ -38,10 +38,16 @@ async function fetchFromRarible<T>(url: string, path: string, init?: RequestInit
     return response.json() as Promise<T>
 }
 
-function createAccount(address?: string) {
+function createAddress(address?: string) {
     if (!address) return
+    return address.split(':')[1]
+}
+
+function createAccount(address?: string) {
+    const resolvedAddress = createAddress(address)
+    if (!resolvedAddress) return
     return {
-        address: address.split(':')[1],
+        address: resolvedAddress,
     }
 }
 
@@ -91,16 +97,21 @@ function createOrder(chainId: ChainId, order: RaribleOrder): NonFungibleTokenOrd
     const paymentToken = getPaymentToken(chainId, {
         name: order.make.type['@type'],
         symbol: order.make.type['@type'],
-        address: order.make.type.contract?.split(':')[1],
+        address: createAddress(order.make.type.contract),
     })
     return {
         id: order.id,
         chainId,
         assetPermalink: '',
         createdAt: new Date(order.createdAt).getTime(),
-        price: {
-            [CurrencyType.USD]: order.takePriceUsd ?? order.makePriceUsd,
-        },
+        maker: createAccount(order.maker),
+        taker: createAccount(order.taker),
+        price:
+            order.takePriceUsd ?? order.makePriceUsd
+                ? {
+                      [CurrencyType.USD]: order.takePriceUsd ?? order.makePriceUsd,
+                  }
+                : undefined,
         priceInToken: paymentToken
             ? {
                   amount: scale10(order.takePrice ?? order.makePrice ?? '0', paymentToken?.decimals).toFixed(),
@@ -109,6 +120,7 @@ function createOrder(chainId: ChainId, order: RaribleOrder): NonFungibleTokenOrd
             : undefined,
         side: OrderSide.Buy,
         quantity: order.fill,
+        source: SourceType.Rarible,
     }
 }
 
@@ -120,7 +132,7 @@ function createEvent(chainId: ChainId, history: RaribleHistory): NonFungibleToke
     })
     return {
         id: history.id,
-        chainId: ChainId.Mainnet,
+        chainId,
         from: createAccount(history.from ?? history.seller ?? history.owner ?? history.maker),
         to: createAccount(history.buyer),
         type: history['@type'],
@@ -143,11 +155,20 @@ function createEvent(chainId: ChainId, history: RaribleHistory): NonFungibleToke
               }
             : undefined,
         paymentToken,
+        source: SourceType.Rarible,
     }
 }
 
 export class RaribleAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
-    async getAsset(address: string, tokenId: string, { chainId = ChainId.Mainnet }: { chainId?: ChainId } = {}) {
+    async getAsset(
+        address: string,
+        tokenId: string,
+        {
+            chainId = ChainId.Mainnet,
+        }: {
+            chainId?: ChainId
+        } = {},
+    ) {
         const requestPath = `/v0.1/items/${resolveRaribleBlockchain(chainId)}:${address}:${tokenId}`
         const asset = await fetchFromRarible<RaribleNFTItemMapResponse>(RaribleURL, requestPath)
         if (!asset) return
@@ -200,6 +221,7 @@ export class RaribleAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
                 assetPermalink: createRaribleLink(tokenAddress, tokenId),
             }),
         )
+
         return createPageable(
             orders,
             createIndicator(indicator),
@@ -227,6 +249,7 @@ export class RaribleAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
                 assetPermalink: createRaribleLink(tokenAddress, tokenId),
             }),
         )
+
         return createPageable(
             orders,
             createIndicator(indicator),

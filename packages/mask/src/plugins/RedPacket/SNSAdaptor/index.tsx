@@ -1,4 +1,4 @@
-import { type Plugin, usePluginWrapper, PluginId } from '@masknet/plugin-infra/content-script'
+import { type Plugin, usePluginWrapper, PluginID } from '@masknet/plugin-infra/content-script'
 import {
     ChainId,
     SchemaType,
@@ -7,19 +7,19 @@ import {
     NetworkType,
     isNativeTokenAddress,
 } from '@masknet/web3-shared-evm'
-import { base } from '../base'
-import { RedPacketMetaKey, RedPacketNftMetaKey } from '../constants'
+import { base } from '../base.js'
+import { RedPacketMetaKey, RedPacketNftMetaKey } from '../constants.js'
 import {
     RedPacketMetadataReader,
     RedPacketNftMetadataReader,
     renderWithRedPacketMetadata,
     renderWithRedPacketNftMetadata,
-} from './helpers'
-import { useI18N } from '../locales'
-import type { RedPacketJSONPayload, RedPacketNftJSONPayload } from '../types'
-import RedPacketDialog from './RedPacketDialog'
-import { RedPacketInPost } from './RedPacketInPost'
-import { RedPacketNftInPost } from './RedPacketNftInPost'
+} from './helpers.js'
+import { useI18N } from '../locales/index.js'
+import type { RedPacketJSONPayload, RedPacketNftJSONPayload } from '../types.js'
+import RedPacketDialog from './RedPacketDialog.js'
+import { RedPacketInPost } from './RedPacketInPost.js'
+import { RedPacketNftInPost } from './RedPacketNftInPost.js'
 import { Trans } from 'react-i18next'
 import { Icons } from '@masknet/icons'
 import { CrossIsolationMessages } from '@masknet/shared-base'
@@ -27,7 +27,11 @@ import { ApplicationEntry } from '@masknet/shared'
 import { useFungibleToken } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID, formatBalance } from '@masknet/web3-shared-base'
 
-function Render(props: React.PropsWithChildren<{ name: string }>) {
+function Render(
+    props: React.PropsWithChildren<{
+        name: string
+    }>,
+) {
     usePluginWrapper(true, { name: props.name })
     return <>{props.children}</>
 }
@@ -93,9 +97,9 @@ const sns: Plugin.SNSAdaptor.Definition = {
     ApplicationEntries: [
         (() => {
             const icon = <Icons.RedPacket size={36} />
-            const name = <Trans ns={PluginId.RedPacket} i18nKey="name" />
+            const name = <Trans ns={PluginID.RedPacket} i18nKey="name" />
             const recommendFeature = {
-                description: <Trans ns={PluginId.RedPacket} i18nKey="recommend_feature_description" />,
+                description: <Trans ns={PluginID.RedPacket} i18nKey="recommend_feature_description" />,
                 backgroundGradient: 'linear-gradient(180.54deg, #FF9A9E 0.71%, #FECFEF 98.79%, #FECFEF 99.78%)',
                 isFirst: true,
             }
@@ -103,7 +107,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 ApplicationEntryID: base.ID,
                 RenderEntryComponent(EntryComponentProps) {
                     const clickHandler = () =>
-                        CrossIsolationMessages.events.requestComposition.sendToLocal({
+                        CrossIsolationMessages.events.compositionDialogEvent.sendToLocal({
                             reason: 'timeline',
                             open: true,
                             options: {
@@ -128,7 +132,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 appBoardSortingDefaultPriority: 1,
                 marketListSortingPriority: 1,
                 icon,
-                description: <Trans ns={PluginId.RedPacket} i18nKey="description" />,
+                description: <Trans ns={PluginID.RedPacket} i18nKey="description" />,
                 name,
                 tutorialLink: 'https://realmasknetwork.notion.site/0a71fd421aae4563bd07caa3e2129e5b',
                 category: 'dapp',

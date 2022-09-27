@@ -10,7 +10,7 @@ import { formatBalance, GasOptionType, isPositive, isZero, NetworkPluginID, scal
 import { useWeb3State } from '@masknet/plugin-infra/web3'
 import type { z as zod } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useGasSchema } from './hooks'
+import { useGasSchema } from './hooks/index.js'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -196,6 +196,7 @@ export function GasForm(props: GasFormProps) {
                                         methods.setValue('gasPrice', ev.target.value)
                                         methods.trigger()
                                     }}
+                                    fullWidth
                                 />
                             )}
                             name="gasPrice"
@@ -221,6 +222,7 @@ export function GasForm(props: GasFormProps) {
                                         {t.gas_settings_label_gas_limit()}
                                     </Typography>
                                 }
+                                fullWidth
                                 error={!!errors.gasLimit?.message}
                             />
                         )}
@@ -264,6 +266,7 @@ export function GasForm(props: GasFormProps) {
                                         methods.setValue('maxPriorityFeePerGas', ev.target.value)
                                         methods.trigger()
                                     }}
+                                    fullWidth
                                 />
                             )}
                             name="maxPriorityFeePerGas"
@@ -294,6 +297,7 @@ export function GasForm(props: GasFormProps) {
                                         methods.setValue('maxFeePerGas', ev.target.value)
                                         methods.trigger()
                                     }}
+                                    fullWidth
                                 />
                             )}
                             name="maxFeePerGas"

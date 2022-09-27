@@ -1,10 +1,11 @@
 import urlcat from 'urlcat'
 import { MEDIA_VIEWER_URL } from '@masknet/shared'
-import { resolveIPFSLink } from '@masknet/web3-shared-base'
+import { resolveIPFS_URL } from '@masknet/web3-shared-base'
 import { EMPTY_LIST } from '@masknet/shared-base'
-import { ImageType } from './types'
+import { ImageType } from './types.js'
+import { PluginID } from '@masknet/plugin-infra'
 
-export const PetsPluginID = 'com.maskbook.pets'
+export const PetsPluginID = PluginID.Pets
 export const TWITTER = 'twitter.com'
 export const MASK_TWITTER = 'realMaskNetwork'
 export const DEFAULT_SET_WORD =
@@ -36,7 +37,7 @@ export const Punk3D = {
     tokenId: '6128',
     url: urlcat(MEDIA_VIEWER_URL, {
         /* cspell:disable-next-line */
-        url: resolveIPFSLink('QmZjfo1zKTfQZjqs4CaZJ7pQDZHrUBaozre8Z71c7ZXGMc'),
+        url: resolveIPFS_URL('QmZjfo1zKTfQZjqs4CaZJ7pQDZHrUBaozre8Z71c7ZXGMc'),
         type: 'model/gltf-binary',
     }),
 }

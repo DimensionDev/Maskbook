@@ -1,32 +1,33 @@
-import { memo, useState, useMemo } from 'react'
+import { Icons } from '@masknet/icons'
 import { CollectionDetailCard, useWeb3ProfileHiddenSettings } from '@masknet/shared'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { CollectionType, RSS3BaseAPI } from '@masknet/web3-providers'
-import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { Box, BoxProps, Typography } from '@mui/material'
-import { FootprintCard, StatusBox } from '../components'
-import { useFootprints, useRSS3Profile } from '../hooks'
-import { Icons } from '@masknet/icons'
 import { differenceWith } from 'lodash-unified'
-import { useI18N } from '../../locales'
+import { memo, useMemo, useState } from 'react'
+import { RSS3_DEFAULT_IMAGE } from '../../constants.js'
+import { useI18N } from '../../locales/index.js'
+import { FootprintList, FootprintsLayoutProps, StatusBox } from '../components/index.js'
+import { useFootprints } from '../hooks/index.js'
 
-export interface FootprintPageProps extends BoxProps {
+export interface FootprintPageProps extends BoxProps, FootprintsLayoutProps {
     address: string
     publicKey?: string
     userId: string
+    collectionName?: string
 }
 
 export const FootprintsPage = memo(function FootprintsPage({
     address,
     publicKey,
     userId,
+    layout,
+    collectionName,
     ...rest
 }: FootprintPageProps) {
     const t = useI18N()
-    const { value: profile } = useRSS3Profile(address)
-    const username = profile?.name
 
-    const { value: allFootprints = EMPTY_LIST, loading } = useFootprints(formatEthereumAddress(address))
+    const { value: allFootprints = EMPTY_LIST, loading } = useFootprints(address)
 
     const { isHiddenAddress, hiddenList } = useWeb3ProfileHiddenSettings(userId, publicKey, {
         address,
@@ -36,15 +37,20 @@ export const FootprintsPage = memo(function FootprintsPage({
 
     const footprints = useMemo(() => {
         if (!hiddenList.length) return allFootprints
-        return differenceWith(allFootprints, hiddenList, (footprint, id) => footprint.id === id)
+        return differenceWith(
+            allFootprints,
+            hiddenList,
+            (footprint, id) => footprint.actions[0].index.toString() === id,
+        )
     }, [allFootprints, hiddenList])
 
-    const [selectedFootprint, setSelectedFootprint] = useState<RSS3BaseAPI.Collection | undefined>()
+    const [selectedFootprint, setSelectedFootprint] = useState<RSS3BaseAPI.Footprint | undefined>()
+    const collection = collectionName ?? CollectionType.Footprints
 
     if (loading || !footprints.length) {
         return (
             <Box p={2} {...rest}>
-                <StatusBox loading={loading} description={t.no_Footprint_found()} empty={!footprints.length} />
+                <StatusBox loading={loading} description={t.no_data({ collection })} empty={!footprints.length} />
             </Box>
         )
     }
@@ -56,41 +62,33 @@ export const FootprintsPage = memo(function FootprintsPage({
                 flexDirection="column"
                 alignItems="center"
                 justifyContent="center"
-                height={400}
+                height={300}
                 p={2}
                 boxSizing="border-box"
                 {...rest}>
                 <Icons.EmptySimple size={32} />
                 <Typography color={(theme) => theme.palette.maskColor.second} fontSize="14px" marginTop="12px">
-                    {t.no_data({ collection: CollectionType.Footprints })}
+                    {t.no_data({ collection })}
                 </Typography>
             </Box>
         )
     }
 
+    const action = selectedFootprint?.actions[0]
+
     return (
         <Box p={2} {...rest}>
-            <section className="grid items-center justify-start grid-cols-1 gap-2 py-4 ">
-                {footprints.map((footprint) => (
-                    <FootprintCard
-                        key={footprint.id}
-                        onSelect={setSelectedFootprint}
-                        username={username ?? ''}
-                        footprint={footprint}
-                    />
-                ))}
-            </section>
+            <FootprintList footprints={footprints} onSelect={setSelectedFootprint} layout={layout} />
             {selectedFootprint ? (
                 <CollectionDetailCard
                     open
                     onClose={() => setSelectedFootprint(undefined)}
-                    img={selectedFootprint.imageURL}
-                    title={selectedFootprint.title}
-                    referenceURL={selectedFootprint.actions?.[0]?.related_urls?.[0]}
-                    description={selectedFootprint.description}
+                    img={action?.metadata?.image || RSS3_DEFAULT_IMAGE}
+                    title={action?.metadata?.name}
+                    referenceURL={action?.related_urls?.[0]}
+                    description={action?.metadata?.description}
                     type={CollectionType.Footprints}
                     time={selectedFootprint.timestamp}
-                    location={selectedFootprint.location}
                 />
             ) : null}
         </Box>

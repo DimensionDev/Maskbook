@@ -1,9 +1,11 @@
+import { memoize } from 'lodash-unified'
 import type { Subscription } from 'use-subscription'
 import type { Connection, ConnectionOptions, ConnectionState as Web3ConnectionState } from '@masknet/web3-shared-base'
-import type { Plugin } from '../types'
+import type { Plugin } from '../types.js'
 
 export class ConnectionState<
     ChainId,
+    AddressType,
     SchemaType,
     ProviderType,
     Signature,
@@ -23,6 +25,7 @@ export class ConnectionState<
 > implements
         Web3ConnectionState<
             ChainId,
+            AddressType,
             SchemaType,
             ProviderType,
             Signature,
@@ -37,6 +40,8 @@ export class ConnectionState<
             Web3ConnectionOptions
         >
 {
+    private createConnectionCached: (ReturnType<typeof memoize> & typeof this.createConnection) | undefined
+
     constructor(
         protected context: Plugin.Shared.SharedUIContext,
         protected createConnection: (
@@ -48,6 +53,7 @@ export class ConnectionState<
             },
         ) => Connection<
             ChainId,
+            AddressType,
             SchemaType,
             ProviderType,
             Signature,
@@ -66,7 +72,30 @@ export class ConnectionState<
             chainId?: Subscription<ChainId>
             providerType?: Subscription<ProviderType>
         },
-    ) {}
+    ) {
+        this.createConnectionCached = memoize(
+            (
+                context: Plugin.Shared.SharedUIContext,
+                options?: {
+                    chainId?: ChainId
+                    account?: string
+                    providerType?: ProviderType
+                },
+            ) => {
+                return this.createConnection(context, options)
+            },
+            (
+                context: Plugin.Shared.SharedUIContext,
+                options?: {
+                    chainId?: ChainId
+                    account?: string
+                    providerType?: ProviderType
+                },
+            ) => {
+                return [options?.chainId, options?.account, options?.providerType].join()
+            },
+        )
+    }
 
     async getWeb3(options?: Web3ConnectionOptions) {
         const connection = await this.getConnection(options)
@@ -79,7 +108,7 @@ export class ConnectionState<
     }
 
     async getConnection(options?: Web3ConnectionOptions) {
-        return this.createConnection(this.context, {
+        return this.createConnectionCached?.(this.context, {
             chainId: options?.chainId ?? this.subscription.chainId?.getCurrentValue(),
             account: options?.account ?? this.subscription.account?.getCurrentValue(),
             providerType: options?.providerType ?? this.subscription.providerType?.getCurrentValue(),

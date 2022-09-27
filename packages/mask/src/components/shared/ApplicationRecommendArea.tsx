@@ -1,7 +1,7 @@
 import { Box } from '@mui/material'
 import { useState } from 'react'
 import { makeStyles } from '@masknet/theme'
-import type { Application } from './ApplicationSettingPluginList'
+import type { Application } from './ApplicationSettingPluginList.js'
 import { CarouselProvider, Slider, Slide } from 'pure-react-carousel'
 
 const useStyles = makeStyles()(() => {

@@ -1,6 +1,9 @@
-import { currentMaskWalletLockStatusSettings, LockStatus } from '../../../../../shared/legacy-settings/wallet-settings'
-import * as password from './password'
-import { WalletMessages } from '../../messages'
+import {
+    currentMaskWalletLockStatusSettings,
+    LockStatus,
+} from '../../../../../shared/legacy-settings/wallet-settings.js'
+import * as password from './password.js'
+import { WalletMessages } from '../../messages.js'
 
 export async function isLocked() {
     return (await password.hasPassword()) && !(await password.INTERNAL_getPassword())

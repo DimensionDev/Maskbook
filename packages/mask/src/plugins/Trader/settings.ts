@@ -1,7 +1,7 @@
 import { unreachable } from '@dimensiondev/kit'
-import { createGlobalSettings, createInternalSettings } from '../../../shared/legacy-settings/createSettings'
-import { PLUGIN_ID, SLIPPAGE_DEFAULT } from './constants'
-import type { ZrxTradePool } from './types'
+import { createGlobalSettings, createInternalSettings } from '../../../shared/legacy-settings/createSettings.js'
+import { PLUGIN_ID, SLIPPAGE_DEFAULT } from './constants/index.js'
+import type { ZrxTradePool } from './types/index.js'
 import { DataProvider } from '@masknet/public-api'
 
 /**
@@ -27,13 +27,13 @@ const coinNftScanPreferredCoinId = createInternalSettings(`${PLUGIN_ID}+coinNftS
 
 export function getCurrentPreferredCoinIdSettings(dataProvider: DataProvider) {
     switch (dataProvider) {
-        case DataProvider.COIN_GECKO:
+        case DataProvider.CoinGecko:
             return coinGeckoPreferredCoinId
-        case DataProvider.COIN_MARKET_CAP:
+        case DataProvider.CoinMarketCap:
             return coinMarketCapPreferredCoinId
-        case DataProvider.UNISWAP_INFO:
+        case DataProvider.UniswapInfo:
             return coinUniswapPreferredCoinId
-        case DataProvider.NFTSCAN:
+        case DataProvider.NFTScan:
             return coinNftScanPreferredCoinId
         default:
             unreachable(dataProvider)

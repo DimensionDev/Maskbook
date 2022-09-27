@@ -3,30 +3,28 @@ import {
     DialogContent,
     Typography,
     IconButton,
-    Button,
     InputLabel,
     TextField,
     FormControl,
     Select,
     MenuItem,
     Divider,
-    CircularProgress,
 } from '@mui/material'
-import { makeStyles, useStylesExtends, usePortalShadowRoot } from '@masknet/theme'
+import { makeStyles, useStylesExtends, usePortalShadowRoot, LoadingBase, ActionButton } from '@masknet/theme'
 import AddIcon from '@mui/icons-material/Add'
 import addDate from 'date-fns/add'
 import { InjectedDialog } from '@masknet/shared'
-import { useI18N } from '../../../utils'
-import AbstractTab, { AbstractTabProps } from '../../../components/shared/AbstractTab'
-import { useCurrentIdentity, useCurrentLinkedPersona } from '../../../components/DataSource/useActivatedUI'
-import type { PollGunDB } from '../Services'
-import { PollCardUI } from './Polls'
-import type { PollMetaData } from '../types'
-import { PLUGIN_META_KEY } from '../constants'
-import { PluginPollRPC } from '../messages'
+import { useI18N } from '../../../utils/index.js'
+import AbstractTab, { AbstractTabProps } from '../../../components/shared/AbstractTab.js'
+import { useCurrentIdentity, useCurrentLinkedPersona } from '../../../components/DataSource/useActivatedUI.js'
+import type { PollGunDB } from '../Services.js'
+import { PollCardUI } from './Polls.js'
+import type { PollMetaData } from '../types.js'
+import { PLUGIN_META_KEY } from '../constants.js'
+import { PluginPollRPC } from '../messages.js'
 import { useCompositionContext } from '@masknet/plugin-infra/content-script'
 import { useAsync } from 'react-use'
-import Services from '../../../extension/service'
+import Services from '../../../extension/service.js'
 import { head } from 'lodash-unified'
 
 const useNewPollStyles = makeStyles()((theme) => ({
@@ -188,13 +186,9 @@ function NewPollUI(props: PollsDialogProps & NewPollProps) {
                 </div>
             </div>
             <div className={classes.line} style={{ justifyContent: 'flex-end' }}>
-                <Button
-                    color="primary"
-                    startIcon={loading ? <CircularProgress classes={{ root: classes.whiteColor }} size={24} /> : null}
-                    style={{ color: '#fff' }}
-                    onClick={sendPoll}>
+                <ActionButton color="primary" loading={loading} onClick={sendPoll}>
                     {t('plugin_poll_send_poll')}
-                </Button>
+                </ActionButton>
             </div>
         </>
     )
@@ -231,7 +225,7 @@ function ExistingPollsUI(props: PollsDialogProps & ExistingPollsProps) {
     return (
         <div className={classes.wrapper}>
             {loading ? (
-                <CircularProgress size={35} classes={{ root: classes.loading }} />
+                <LoadingBase size={35} className={classes.loading} />
             ) : (
                 polls.map((p) => <PollCardUI onClick={() => insertPoll(p)} poll={p} key={p.key as string} />)
             )}

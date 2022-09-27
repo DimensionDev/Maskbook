@@ -1,19 +1,14 @@
 import { memo, useCallback } from 'react'
 import { Box, MenuItem, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { Flags } from '../../../../../shared'
+import { Flags } from '../../../../../shared/index.js'
 import { ChainId, ProviderType, NetworkType } from '@masknet/web3-shared-evm'
-import {
-    getRegisteredWeb3Networks,
-    useAccount,
-    useChainId,
-    Web3Helper,
-    useProviderType,
-} from '@masknet/plugin-infra/web3'
-import { currentMaskWalletAccountSettings } from '../../../../../shared/legacy-settings/wallet-settings'
+import { getRegisteredWeb3Networks, useAccount, useChainId, useProviderType } from '@masknet/plugin-infra/web3'
+import type { Web3Helper } from '@masknet/web3-helpers'
+import { currentMaskWalletAccountSettings } from '../../../../../shared/legacy-settings/wallet-settings.js'
 import { ChainIcon, useMenuConfig, WalletIcon } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
-import { WalletRPC } from '../../../../plugins/Wallet/messages'
+import { WalletRPC } from '../../../../plugins/Wallet/messages.js'
 import { NetworkDescriptor, NetworkPluginID } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({

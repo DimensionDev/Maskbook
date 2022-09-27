@@ -1,6 +1,6 @@
 import { createReactRootShadowedPartial, setupPortalShadowRoot, CSSVariableInjector } from '@masknet/theme'
-import { MaskUIRoot } from '../../UIRoot'
-import { useClassicMaskSNSTheme } from '../theme'
+import { MaskUIRoot } from '../../UIRoot.js'
+import { useClassicMaskSNSTheme } from '../theme/index.js'
 
 const captureEvents: Array<keyof HTMLElementEventMap> = [
     'paste',

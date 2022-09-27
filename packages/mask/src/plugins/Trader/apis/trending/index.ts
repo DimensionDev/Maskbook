@@ -1,12 +1,11 @@
-import { first, groupBy } from 'lodash-unified'
-import type { Coin, CommunityUrls, Currency, Stat, TagType, Trending } from '../../types'
-import { DataProvider } from '@masknet/public-api'
 import { getEnumAsArray, unreachable } from '@dimensiondev/kit'
-import { CRYPTOCURRENCY_MAP_EXPIRES_AT } from '../../constants'
-import { isBlockedId, isBlockedKeyword, resolveAlias, resolveCoinId, isBlockedAddress } from './hotfix'
+import { DataProvider } from '@masknet/public-api'
+import { CoinGeckoTrendingEVM, CoinMarketCap, NFTScanTrending, TrendingAPI, UniSwap } from '@masknet/web3-providers'
 import { ChainId, chainResolver, NetworkType } from '@masknet/web3-shared-evm'
-import { Days } from '../../SNSAdaptor/trending/PriceChartDaysControl'
-import { CoinGecko, CoinMarketCap, NFTScanTrending, UniSwap } from '@masknet/web3-providers'
+import { first, groupBy } from 'lodash-unified'
+import { CRYPTOCURRENCY_MAP_EXPIRES_AT } from '../../constants/index.js'
+import type { Coin, CommunityUrls, Currency, Stat, TagType, Trending } from '../../types/index.js'
+import { isBlockedAddress, isBlockedId, isBlockedKeyword, resolveAlias, resolveCoinId } from './hotfix.js'
 
 /**
  * Get supported currencies of specific data provider
@@ -14,13 +13,13 @@ import { CoinGecko, CoinMarketCap, NFTScanTrending, UniSwap } from '@masknet/web
  */
 export async function getCurrencies(dataProvider: DataProvider): Promise<Currency[]> {
     switch (dataProvider) {
-        case DataProvider.COIN_GECKO:
-            return CoinGecko.getCurrencies()
-        case DataProvider.COIN_MARKET_CAP:
+        case DataProvider.CoinGecko:
+            return CoinGeckoTrendingEVM.getCurrencies()
+        case DataProvider.CoinMarketCap:
             return CoinMarketCap.getCurrencies()
-        case DataProvider.UNISWAP_INFO:
+        case DataProvider.UniswapInfo:
             return UniSwap.getCurrencies()
-        case DataProvider.NFTSCAN:
+        case DataProvider.NFTScan:
             throw new Error('Not implemented yet.')
         default:
             unreachable(dataProvider)
@@ -29,13 +28,13 @@ export async function getCurrencies(dataProvider: DataProvider): Promise<Currenc
 
 export async function getCoins(dataProvider: DataProvider): Promise<Coin[]> {
     switch (dataProvider) {
-        case DataProvider.COIN_GECKO:
-            return CoinGecko.getCoins()
-        case DataProvider.COIN_MARKET_CAP:
+        case DataProvider.CoinGecko:
+            return CoinGeckoTrendingEVM.getCoins()
+        case DataProvider.CoinMarketCap:
             return CoinMarketCap.getCoins()
-        case DataProvider.UNISWAP_INFO:
+        case DataProvider.UniswapInfo:
             return UniSwap.getCoins()
-        case DataProvider.NFTSCAN:
+        case DataProvider.NFTScan:
             return []
         default:
             unreachable(dataProvider)
@@ -48,9 +47,9 @@ export async function getCoinsByKeyword(
     keyword: string,
 ): Promise<Coin[]> {
     switch (dataProvider) {
-        case DataProvider.UNISWAP_INFO:
+        case DataProvider.UniswapInfo:
             return UniSwap.getCoinsByKeyword(chainId, keyword)
-        case DataProvider.NFTSCAN:
+        case DataProvider.NFTScan:
             return keyword ? NFTScanTrending.getCoins(keyword) : []
         default:
             return []
@@ -73,7 +72,7 @@ const coinNamespace = new Map<
 async function updateCache(chainId: ChainId, dataProvider: DataProvider, keyword?: string) {
     try {
         // uniswap update cache with keyword
-        if (dataProvider === DataProvider.UNISWAP_INFO || dataProvider === DataProvider.NFTSCAN) {
+        if (dataProvider === DataProvider.UniswapInfo || dataProvider === DataProvider.NFTScan) {
             if (!keyword) return
             if (!coinNamespace.has(dataProvider))
                 coinNamespace.set(dataProvider, {
@@ -130,7 +129,7 @@ export async function checkAvailabilityOnDataProvider(
 ) {
     if (isBlockedKeyword(type, keyword)) return false
     // for uniswap, and NFTScan, we need to check availability by fetching token info dynamically
-    if (dataProvider === DataProvider.UNISWAP_INFO || dataProvider === DataProvider.NFTSCAN)
+    if (dataProvider === DataProvider.UniswapInfo || dataProvider === DataProvider.NFTScan)
         await updateCache(chainId, dataProvider, keyword)
     // cache never built before update in blocking way
     else if (!coinNamespace.has(dataProvider)) await updateCache(chainId, dataProvider, keyword)
@@ -146,11 +145,11 @@ export async function getAvailableDataProviders(chainId: ChainId, type?: TagType
     if (!isMainnet) return []
     if (!type || !keyword)
         return getEnumAsArray(DataProvider)
-            .filter((x) => (isMainnet ? true : x.value !== DataProvider.UNISWAP_INFO))
+            .filter((x) => (isMainnet ? true : x.value !== DataProvider.UniswapInfo))
             .map((y) => y.value)
     const checked = await Promise.all(
         getEnumAsArray(DataProvider)
-            .filter((x) => (x.value === DataProvider.UNISWAP_INFO ? networkType === NetworkType.Ethereum : true))
+            .filter((x) => (x.value === DataProvider.UniswapInfo ? networkType === NetworkType.Ethereum : true))
             .map(
                 async (x) =>
                     [
@@ -183,13 +182,13 @@ async function getCoinTrending(
     dataProvider: DataProvider,
 ): Promise<Trending> {
     switch (dataProvider) {
-        case DataProvider.COIN_GECKO:
-            return CoinGecko.getCoinTrending(chainId, id, currency)
-        case DataProvider.COIN_MARKET_CAP:
+        case DataProvider.CoinGecko:
+            return CoinGeckoTrendingEVM.getCoinTrending(chainId, id, currency)
+        case DataProvider.CoinMarketCap:
             return CoinMarketCap.getCoinTrending(chainId, id, currency)
-        case DataProvider.UNISWAP_INFO:
+        case DataProvider.UniswapInfo:
             return UniSwap.getCoinTrending(chainId, id, currency)
-        case DataProvider.NFTSCAN:
+        case DataProvider.NFTScan:
             return NFTScanTrending.getCoinTrending(chainId, id, currency)
         default:
             unreachable(dataProvider)
@@ -234,13 +233,18 @@ export async function getPriceStats(
     dataProvider: DataProvider,
 ): Promise<Stat[]> {
     switch (dataProvider) {
-        case DataProvider.COIN_GECKO:
-            return CoinGecko.getPriceStats(chainId, id, currency, days === Days.MAX ? 11430 : days)
-        case DataProvider.COIN_MARKET_CAP:
+        case DataProvider.CoinGecko:
+            return CoinGeckoTrendingEVM.getPriceStats(
+                chainId,
+                id,
+                currency,
+                days === TrendingAPI.Days.MAX ? 11430 : days,
+            )
+        case DataProvider.CoinMarketCap:
             return CoinMarketCap.getPriceStats(chainId, id, currency, days)
-        case DataProvider.UNISWAP_INFO:
+        case DataProvider.UniswapInfo:
             return UniSwap.getPriceStats(chainId, id, currency, days)
-        case DataProvider.NFTSCAN:
+        case DataProvider.NFTScan:
             return NFTScanTrending.getPriceStats(chainId, id, currency, days)
         default:
             return []

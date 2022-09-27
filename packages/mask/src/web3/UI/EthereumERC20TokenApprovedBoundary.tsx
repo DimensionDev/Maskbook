@@ -1,13 +1,13 @@
-import { Tooltip } from '@mui/material'
-import { makeStyles, useStylesExtends, ActionButton, ActionButtonProps } from '@masknet/theme'
+import { makeStyles, useStylesExtends, ActionButton, ActionButtonProps, ShadowRootTooltip } from '@masknet/theme'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { unreachable } from '@dimensiondev/kit'
-import { useI18N } from '../../utils'
+import { useI18N } from '../../utils/index.js'
 import type { FungibleToken } from '@masknet/web3-shared-base'
 import { ApproveStateType, useERC20TokenApproveCallback } from '@masknet/plugin-infra/web3-evm'
 import { TokenIcon } from '@masknet/shared'
 import { HelpOutline } from '@mui/icons-material'
 import React, { useCallback } from 'react'
+import { noop } from 'lodash-unified'
 
 const useStyles = makeStyles()((theme) => ({
     container: {},
@@ -59,16 +59,26 @@ export interface EthereumERC20TokenApprovedBoundaryProps extends withClasses<'bu
     ActionButtonProps?: ActionButtonProps
     onlyInfiniteUnlock?: boolean
     contractName?: string
+    expectedChainId?: ChainId
 }
 
 export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenApprovedBoundaryProps) {
-    const { children = null, amount, spender, token, fallback, infiniteUnlockContent, contractName } = props
+    const {
+        children = null,
+        amount,
+        spender,
+        token,
+        fallback,
+        infiniteUnlockContent,
+        contractName,
+        expectedChainId,
+    } = props
 
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
 
     const [{ type: approveStateType, allowance }, transactionState, approveCallback, resetApproveCallback] =
-        useERC20TokenApproveCallback(token?.address ?? '', amount, spender ?? '')
+        useERC20TokenApproveCallback(token?.address ?? '', amount, spender ?? '', noop, expectedChainId)
 
     const onApprove = useCallback(async () => {
         if (approveStateType !== ApproveStateType.NOT_APPROVED) return
@@ -121,23 +131,19 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
                     />
                 }
                 endIcon={
-                    <Tooltip
-                        classes={{
-                            tooltip: classes.tooltip,
-                        }}
-                        PopperProps={{
-                            disablePortal: true,
-                        }}
+                    <ShadowRootTooltip
                         title={t('plugin_wallet_token_infinite_unlock_tips', {
                             provider: contractName,
                             symbol: token.symbol,
                         })}
                         placement="top"
                         arrow
+                        leaveDelay={2000}
+                        disableInteractive
                         disableFocusListener
                         disableTouchListener>
                         <HelpOutline className={classes.helpIcon} />
-                    </Tooltip>
+                    </ShadowRootTooltip>
                 }
                 onClick={onApprove}
                 {...props.ActionButtonProps}>

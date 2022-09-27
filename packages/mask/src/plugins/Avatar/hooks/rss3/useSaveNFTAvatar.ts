@@ -1,10 +1,10 @@
 import type { EnhanceableSite } from '@masknet/shared-base'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useCallback } from 'react'
-import type { RSS3_KEY_SNS } from '../../constants'
-import type { AvatarMetaDB } from '../../types'
-import { useSaveAvatarToRSS3 } from './useSaveNFTAvatarToRSS3'
-import { useSaveAddress } from '../save/useSaveAddress'
+import type { RSS3_KEY_SNS } from '../../constants.js'
+import type { AvatarMetaDB } from '../../types.js'
+import { useSaveAvatarToRSS3 } from './useSaveNFTAvatarToRSS3.js'
+import { useSaveAddress } from '../save/useSaveAddress.js'
 
 export function useSaveNFTAvatar() {
     const saveAvatarToRSS3 = useSaveAvatarToRSS3()

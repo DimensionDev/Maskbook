@@ -1,5 +1,5 @@
 import { story } from '@masknet/storybook-shared'
-import { WalletQRCodeContainer as C } from '../../../src/components/WalletQRCodeContainer'
+import { WalletQRCodeContainer as C } from '../../../src/components/WalletQRCodeContainer/index.js'
 
 const { meta, of } = story(C)
 

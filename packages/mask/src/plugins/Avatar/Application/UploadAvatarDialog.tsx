@@ -1,25 +1,28 @@
 import { Button, DialogActions, DialogContent, Slider } from '@mui/material'
 import AvatarEditor from 'react-avatar-editor'
-import { makeStyles, parseColor, useCustomSnackbar } from '@masknet/theme'
+import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { useCallback, useState } from 'react'
 import { Twitter } from '@masknet/web3-providers'
 import { ChainId } from '@masknet/web3-shared-evm'
-import { getAvatarId } from '../../../social-network-adaptor/twitter.com/utils/user'
-import { usePersonaConnectStatus } from '../../../components/DataSource/usePersonaConnectStatus'
+import { getAvatarId } from '../../../social-network-adaptor/twitter.com/utils/user.js'
+import { usePersonaConnectStatus } from '../../../components/DataSource/usePersonaConnectStatus.js'
 import type { BindingProof } from '@masknet/shared-base'
 import { useI18N } from '../locales/i18n_generated'
-import { context } from '../context'
+import { context } from '../context.js'
 import { useSubscription } from 'use-subscription'
 import type { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
-import { AvatarInfo, useSave } from '../hooks/save/useSave'
-import type { AllChainsNonFungibleToken } from '../types'
+import { AvatarInfo, useSave } from '../hooks/save/useSave.js'
+import type { AllChainsNonFungibleToken } from '../types.js'
 
 const useStyles = makeStyles()((theme) => ({
     actions: {
         padding: 16,
-        boxShadow: `0 0 20px ${parseColor(theme.palette.maskColor.highlight).setAlpha(0.2).toRgbString()}`,
-        backdropFilter: 'blur(16px)',
+        boxSizing: 'border-box',
+        boxShadow: '0px 0px 20px rgba(0, 0, 0, 0.05)',
+        position: 'absolute',
+        bottom: 0,
+        width: '100%',
     },
     cancel: {
         backgroundColor: theme.palette.background.default,
@@ -116,7 +119,7 @@ export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
                 <AvatarEditor
                     ref={(e) => setEditor(e)}
                     image={image!}
-                    style={{ width: 'auto', height: 400 }}
+                    style={{ width: 'auto', height: 400, borderRadius: 8 }}
                     scale={scale ?? 1}
                     rotate={0}
                     border={50}
@@ -139,7 +142,7 @@ export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
                         },
                         '& .MuiSlider-rail': {
                             opacity: 0.5,
-                            backgroundColor: (theme) => theme.palette.maskColor.dark,
+                            backgroundColor: (theme) => theme.palette.maskColor.thirdMain,
                         },
                     }}
                 />

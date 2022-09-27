@@ -4,13 +4,12 @@ import {
     Plugin,
     PluginI18NFieldRender,
     usePluginI18NField,
+    PluginID,
 } from '@masknet/plugin-infra/content-script'
 import { useChainId, useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
 import { ErrorBoundary } from '@masknet/shared-base-ui'
 import { Result } from 'ts-results'
-import { RedPacketPluginID } from '../../plugins/RedPacket/constants'
-import { ITO_PluginID } from '../../plugins/ITO/constants'
-import { ClickableChip } from '../shared/SelectRecipients/ClickableChip'
+import { ClickableChip } from '../shared/SelectRecipients/ClickableChip.js'
 import { makeStyles } from '@masknet/theme'
 import { useCallback, useState, useRef, forwardRef, memo, useImperativeHandle, useMemo } from 'react'
 import { Trans } from 'react-i18next'
@@ -27,16 +26,23 @@ export interface PluginEntryRenderRef {
     openPlugin(id: string): void
 }
 export const PluginEntryRender = memo(
-    forwardRef<PluginEntryRenderRef, { readonly: boolean; isOpenFromApplicationBoard: boolean }>((props, ref) => {
+    forwardRef<
+        PluginEntryRenderRef,
+        {
+            readonly: boolean
+            isOpenFromApplicationBoard: boolean
+        }
+    >((props, ref) => {
         const [trackPluginRef] = useSetPluginEntryRenderRef(ref)
         const pluginField = usePluginI18NField()
         const chainId = useChainId()
         const pluginID = useCurrentWeb3NetworkPluginID()
-        const operatingSupportedChainMapping = useActivatedPluginSNSAdaptor_Web3Supported(chainId, pluginID)
+        // TODO: remove this line if it does not have side effects
+        useActivatedPluginSNSAdaptor_Web3Supported(chainId, pluginID)
         const result = [...useActivatedPluginsSNSAdaptor('any')]
             .sort((plugin) => {
                 // TODO: support priority order
-                if (plugin.ID === RedPacketPluginID || plugin.ID === ITO_PluginID) return -1
+                if (plugin.ID === PluginID.RedPacket || plugin.ID === PluginID.ITO) return -1
                 return 1
             })
             .map((plugin) =>
@@ -92,7 +98,9 @@ function useSetPluginRef(ref: React.ForwardedRef<PluginRef>, onClick: () => void
     useImperativeHandle(ref, () => refItem, [refItem])
 }
 
-type PluginRef = { open(): void }
+type PluginRef = {
+    open(): void
+}
 type ExtraPluginProps = {
     unstable: boolean
     id: string

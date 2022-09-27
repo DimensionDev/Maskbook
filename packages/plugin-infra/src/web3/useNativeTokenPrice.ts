@@ -1,9 +1,9 @@
 import { useAsyncRetry } from 'react-use'
 import type { NetworkPluginID } from '@masknet/web3-shared-base'
-import { useNativeTokenAddress } from './useNativeTokenAddress'
-import { useChainId } from './useChainId'
-import { useWeb3Hub } from './useWeb3Hub'
-import type { Web3Helper } from '../web3-helpers'
+import { useNativeTokenAddress } from './useNativeTokenAddress.js'
+import { useChainId } from './useChainId.js'
+import { useWeb3Hub } from './useWeb3Hub.js'
+import type { Web3Helper } from '@masknet/web3-helpers'
 
 export function useNativeTokenPrice<S extends 'all' | void = void, T extends NetworkPluginID = NetworkPluginID>(
     pluginID: T,
@@ -14,6 +14,7 @@ export function useNativeTokenPrice<S extends 'all' | void = void, T extends Net
     const nativeTokenAddress = useNativeTokenAddress(pluginID, options)
 
     return useAsyncRetry(async () => {
+        if (!nativeTokenAddress) return
         return hub?.getFungibleTokenPrice?.(chainId, nativeTokenAddress)
     }, [chainId, nativeTokenAddress, hub])
 }

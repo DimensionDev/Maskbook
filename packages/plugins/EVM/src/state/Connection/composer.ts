@@ -8,16 +8,16 @@ import {
     Transaction,
     ChainId,
 } from '@masknet/web3-shared-evm'
-import { getError, hasError } from './error'
-import type { Context, EVM_Connection, EVM_Web3ConnectionOptions, Middleware } from './types'
-import { SharedContextSettings, Web3StateSettings } from '../../settings'
-import { AddressBook } from './middleware/AddressBook'
-import { Interceptor } from './middleware/Interceptor'
-import { Nonce } from './middleware/Nonce'
-import { Squash } from './middleware/Squash'
-import { RecentTransaction } from './middleware/RecentTransaction'
-import { Translator } from './middleware/Translator'
-import { TransactionWatcher } from './middleware/TransactionWatcher'
+import { getError, hasError } from './error.js'
+import type { Context, EVM_Connection, EVM_Web3ConnectionOptions, Middleware } from './types.js'
+import { SharedContextSettings, Web3StateSettings } from '../../settings/index.js'
+import { AddressBook } from './middleware/AddressBook.js'
+import { Interceptor } from './middleware/Interceptor.js'
+import { Nonce } from './middleware/Nonce.js'
+import { Squash } from './middleware/Squash.js'
+import { RecentTransaction } from './middleware/RecentTransaction.js'
+import { Translator } from './middleware/Translator.js'
+import { TransactionWatcher } from './middleware/TransactionWatcher.js'
 
 class Composer<T> {
     private listOfMiddleware: Array<Middleware<T>> = []

@@ -1,1 +1,1 @@
-export * from './CoinIcon'
+export * from './CoinIcon.js'

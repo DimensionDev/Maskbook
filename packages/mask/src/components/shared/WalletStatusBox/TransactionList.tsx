@@ -1,7 +1,8 @@
 import { FC, forwardRef, useCallback, useMemo, useState, useEffect } from 'react'
 import { useAsync } from 'react-use'
 import { Icons } from '@masknet/icons'
-import { useChainId, useWeb3State, Web3Helper } from '@masknet/plugin-infra/web3'
+import { useChainId, useWeb3State } from '@masknet/plugin-infra/web3'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { isSameAddress, RecentTransactionComputed, TransactionStatusType, Transaction } from '@masknet/web3-shared-base'
 import { getContractOwnerDomain } from '@masknet/web3-shared-evm'
@@ -9,7 +10,7 @@ import { Grid, GridProps, Link, List, ListItem, ListProps, Stack, Typography } f
 import classnames from 'classnames'
 import format from 'date-fns/format'
 import { noop } from 'lodash-unified'
-import { useI18N } from '../../../utils'
+import { useI18N } from '../../../utils/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     list: {

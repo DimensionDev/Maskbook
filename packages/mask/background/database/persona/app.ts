@@ -8,7 +8,7 @@ import type {
     RelationRecord,
     RelationTransaction,
     LinkedProfileDetails,
-} from './type'
+} from './type.js'
 import {
     ProfileIdentifier,
     PersonaIdentifier,
@@ -19,7 +19,7 @@ import {
     convertRawMapToIdentifierMap,
     convertIdentifierMapToRawMap,
 } from '@masknet/shared-base'
-import { nativeAPI } from '../../../shared/native-rpc'
+import { nativeAPI } from '../../../shared/native-rpc/index.js'
 import type {
     PersonaRecord as NativePersonaRecord,
     ProfileRecord as NativeProfileRecord,
@@ -28,7 +28,7 @@ import type {
     EC_Public_JsonWebKey as Native_EC_Public_JsonWebKey,
     AESJsonWebKey as Native_AESJsonWebKey,
 } from '@masknet/public-api'
-import { MaskMessages } from '../../../shared'
+import { MaskMessages } from '../../../shared/index.js'
 
 export async function createPersonaDBReadonlyAccess(action: () => Promise<void>) {
     await action()

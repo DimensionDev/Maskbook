@@ -1,25 +1,33 @@
-import { useI18N } from '../../utils'
+import { useI18N, MaskMessages } from '../../utils/index.js'
 import { InjectedDialog } from '@masknet/shared'
 import {
-    PluginId,
+    PluginID,
     useActivatedPluginsSNSAdaptor,
     usePluginI18NField,
     createInjectHooksRenderer,
 } from '@masknet/plugin-infra/content-script'
-import { useAvailablePlugins, useChainId } from '@masknet/plugin-infra/web3'
-import { EMPTY_LIST, PopupRoutes, CrossIsolationMessages } from '@masknet/shared-base'
+import { NextIDPlatform, EMPTY_LIST, PopupRoutes, CrossIsolationMessages } from '@masknet/shared-base'
+import { useAvailablePlugins } from '@masknet/plugin-infra/web3'
 import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import { first } from 'lodash-unified'
 import { TabContext } from '@mui/lab'
 import { DialogContent, Tab } from '@mui/material'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import Services from '../../extension/service'
 import { Icons } from '@masknet/icons'
+import { NextIDProof } from '@masknet/web3-providers'
+import { useAsyncRetry } from 'react-use'
+import Services from '../../extension/service.js'
 
 const useStyles = makeStyles()((theme) => ({
     titleTailButton: {
         cursor: 'pointer',
         color: theme.palette.maskColor.main,
+    },
+    content: {
+        position: 'relative',
+        minHeight: 528,
+        padding: 0,
+        boxSizing: 'border-box',
     },
 }))
 
@@ -34,7 +42,6 @@ export function PluginSettingsDialog() {
     const { t } = useI18N()
     const { classes } = useStyles()
     const translate = usePluginI18NField()
-    const chainId = useChainId()
 
     const [open, setOpen] = useState(false)
     const activatedPlugins = useActivatedPluginsSNSAdaptor('any')
@@ -51,28 +58,55 @@ export function PluginSettingsDialog() {
         label: typeof x.label === 'string' ? x.label : translate(x.pluginID, x.label),
     }))
 
-    const [currentTab, onChange] = useTabs(first(tabs)?.id ?? PluginId.Tips, ...tabs.map((tab) => tab.id))
+    const [currentTab, onChange, , setTab] = useTabs<PluginID>(
+        first(tabs)?.id ?? PluginID.Tips,
+        ...tabs.map((tab) => tab.id),
+    )
 
     const openPopupWindow = useCallback(
         () =>
             Services.Helper.openPopupWindow(PopupRoutes.ConnectedWallets, {
-                chainId,
                 internal: true,
             }),
-        [chainId],
+        [],
     )
+
+    const { value: currentPersona, retry } = useAsyncRetry(Services.Settings.getCurrentPersonaIdentifier, [])
+
+    const { value: bindingWallets, retry: retryBindingWallets } = useAsyncRetry(async () => {
+        if (!currentPersona) return EMPTY_LIST
+        const response = await NextIDProof.queryExistedBindingByPersona(currentPersona.publicKeyAsHex)
+        if (!response) return EMPTY_LIST
+        const { proofs } = response
+        return proofs.filter((x) => x.platform === NextIDPlatform.Ethereum)
+    }, [currentPersona])
+
+    useEffect(() => MaskMessages.events.ownProofChanged.on(retryBindingWallets), [retryBindingWallets])
+
+    useEffect(() => MaskMessages.events.ownPersonaChanged.on(retry), [retry])
 
     const component = useMemo(() => {
         const Component = getTabContent(currentTab)
         if (!Component) return null
-        return <Component onClose={() => setOpen(false)} />
-    }, [currentTab])
+        return (
+            <Component
+                onClose={() => setOpen(false)}
+                bindingWallets={bindingWallets}
+                currentPersona={currentPersona}
+                pluginId={currentTab}
+                onOpenPopup={Services.Helper.openPopupWindow}
+            />
+        )
+    }, [currentTab, bindingWallets, currentPersona])
 
     useEffect(() => {
-        return CrossIsolationMessages.events.PluginSettingsDialogUpdate.on(({ open }) => {
+        return CrossIsolationMessages.events.settingsDialogEvent.on(({ open, targetTab }) => {
             setOpen(open)
+
+            if (targetTab) setTab(targetTab as PluginID)
         })
     }, [])
+
     return (
         <TabContext value={currentTab}>
             <InjectedDialog
@@ -88,8 +122,9 @@ export function PluginSettingsDialog() {
                             <Tab key={tab.id} label={tab.label} value={tab.id} />
                         ))}
                     </MaskTabList>
-                }>
-                <DialogContent>{component}</DialogContent>
+                }
+                titleBarIconStyle="back">
+                <DialogContent className={classes.content}>{component}</DialogContent>
             </InjectedDialog>
         </TabContext>
     )

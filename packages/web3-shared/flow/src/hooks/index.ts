@@ -1,2 +1,2 @@
-export * from './useFCL'
-export * from './useScript'
+export * from './useFCL.js'
+export * from './useScript.js'

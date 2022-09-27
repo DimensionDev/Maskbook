@@ -1,8 +1,8 @@
 import { DOMProxy, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { Plugin } from '@masknet/plugin-infra'
-import { Avatar } from '../../../../components/InjectedComponents/Avatar'
-import { createReactRootShadowed, startWatch } from '../../../../utils'
-import { inpageAvatarSelector } from '../../utils/selector'
+import { Avatar } from '../../../../components/InjectedComponents/Avatar.js'
+import { createReactRootShadowed, startWatch } from '../../../../utils/index.js'
+import { inpageAvatarSelector } from '../../utils/selector.js'
 
 export async function injectAvatar(signal: AbortSignal) {
     startWatch(

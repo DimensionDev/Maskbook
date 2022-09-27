@@ -3,12 +3,13 @@ import { first } from 'lodash-unified'
 import { Icons } from '@masknet/icons'
 import { ImageIcon } from '@masknet/shared'
 import { getSiteType } from '@masknet/shared-base'
-import { Web3Helper, Web3Plugin, useWeb3State } from '@masknet/plugin-infra/web3'
-import type { NetworkPluginID } from '@masknet/web3-shared-base'
+import { useWeb3State } from '@masknet/plugin-infra/web3'
+import type { Web3Helper } from '@masknet/web3-helpers'
+import type { NetworkIconClickBaitProps, NetworkPluginID, ProviderIconClickBaitProps } from '@masknet/web3-shared-base'
 import { makeStyles } from '@masknet/theme'
 import { Box, List, ListItem, Typography } from '@mui/material'
-import { useI18N } from '../../../../utils'
-import { ProviderIcon } from './ProviderIcon'
+import { useI18N } from '../../../../utils/index.js'
+import { ProviderIcon } from './ProviderIcon.js'
 
 const useStyles = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -133,14 +134,14 @@ export interface PluginProviderRenderProps {
         provider: Web3Helper.ProviderDescriptorAll,
     ) => void
     NetworkIconClickBait?: React.ComponentType<
-        Web3Plugin.UI.NetworkIconClickBaitProps<
+        NetworkIconClickBaitProps<
             Web3Helper.Definition[NetworkPluginID]['ChainId'],
             Web3Helper.Definition[NetworkPluginID]['ProviderType'],
             Web3Helper.Definition[NetworkPluginID]['NetworkType']
         >
     >
     ProviderIconClickBait?: React.ComponentType<
-        Web3Plugin.UI.ProviderIconClickBaitProps<
+        ProviderIconClickBaitProps<
             Web3Helper.Definition[NetworkPluginID]['ChainId'],
             Web3Helper.Definition[NetworkPluginID]['ProviderType'],
             Web3Helper.Definition[NetworkPluginID]['NetworkType']

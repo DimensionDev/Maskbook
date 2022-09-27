@@ -1,12 +1,17 @@
 import { delay } from '@dimensiondev/kit'
 import type { PersonaIdentifier, ProfileIdentifier } from '@masknet/shared-base'
-import { currentSetupGuideStatus, userGuideStatus } from '../../../shared/legacy-settings/settings'
-import { SetupGuideStep } from '../../../shared/legacy-settings/types'
-import { definedSiteAdaptors } from '../../../shared/site-adaptors/definitions'
-import { requestSiteAdaptorsPermission } from '../helper/request-permission'
+import { openOrActiveTab } from '@masknet/shared-base-ui'
+import { currentSetupGuideStatus, userGuideStatus } from '../../../shared/legacy-settings/settings.js'
+import { SetupGuideStep } from '../../../shared/legacy-settings/types.js'
+import { definedSiteAdaptors } from '../../../shared/site-adaptors/definitions.js'
+import { requestSiteAdaptorsPermission } from '../helper/request-permission.js'
 import stringify from 'json-stable-stringify'
 
-export async function getSupportedSites(): Promise<Array<{ networkIdentifier: string }>> {
+export async function getSupportedSites(): Promise<
+    Array<{
+        networkIdentifier: string
+    }>
+> {
     return [...definedSiteAdaptors.values()].map((x) => ({ networkIdentifier: x.networkIdentifier }))
 }
 
@@ -37,6 +42,7 @@ export async function connectSite(
 
     if (!(await requestSiteAdaptorsPermission([worker]))) return
 
+    // #region reset the global setup status setting
     currentSetupGuideStatus[network].value = stringify({
         status: type === 'nextID' ? SetupGuideStep.VerifyOnNextID : SetupGuideStep.FindUsername,
         persona: identifier.toText(),
@@ -44,8 +50,7 @@ export async function connectSite(
     })
 
     await delay(100)
+    // #endregion
 
-    if (worker.homepage) {
-        browser.tabs.create({ active: true, url: worker.homepage })
-    }
+    await openOrActiveTab(worker.homepage)
 }

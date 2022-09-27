@@ -1,7 +1,7 @@
 import urlcat from 'urlcat'
-import { fetchJSON } from '../helpers'
-import type { StorageAPI } from '../types'
-import { KV_ROOT_URL } from './constants'
+import { fetchJSON } from '../helpers.js'
+import type { StorageAPI } from '../types/index.js'
+import { KV_ROOT_URL } from './constants.js'
 
 export class JSON_Storage<T> implements StorageAPI.Storage<T> {
     constructor(private prefix: string) {}

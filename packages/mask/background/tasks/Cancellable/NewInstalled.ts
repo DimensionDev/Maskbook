@@ -1,6 +1,6 @@
-import { Flags } from '../../../shared/flags'
+import { Flags } from '../../../shared/flags.js'
 import { DashboardRoutes } from '@masknet/shared-base'
-import { hmr } from '../../../utils-pure'
+import { hmr } from '../../../utils-pure/index.js'
 
 const { signal } = hmr(import.meta.webpackHot)
 const onInstalled = (detail: { reason: browser.runtime.OnInstalledReason }) => {

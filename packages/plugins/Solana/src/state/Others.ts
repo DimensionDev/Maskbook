@@ -1,11 +1,14 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { OthersState } from '@masknet/plugin-infra/web3'
-import { isSameAddress } from '@masknet/web3-shared-base'
 import { formatDomainName } from '@masknet/web3-shared-evm'
 import {
     isValidDomain,
     isValidAddress,
     isZeroAddress,
+    isNativeTokenAddress,
+    isNativeTokenSchemaType,
+    isFungibleTokenSchemaType,
+    isNonFungibleTokenSchemaType,
     ChainId,
     formatAddress,
     ProviderType,
@@ -23,6 +26,7 @@ import {
     getMaskTokenAddress,
     getNativeTokenAddress,
     explorerResolver,
+    formatSchemaType,
 } from '@masknet/web3-shared-solana'
 
 export class Others extends OthersState<ChainId, SchemaType, ProviderType, NetworkType, Transaction> {
@@ -38,8 +42,12 @@ export class Others extends OthersState<ChainId, SchemaType, ProviderType, Netwo
 
     override isValidDomain = isValidDomain
     override isValidAddress = isValidAddress
-    override isSameAddress = isSameAddress
     override isZeroAddress = isZeroAddress
+    override isNativeTokenAddress = isNativeTokenAddress
+
+    override isNativeTokenSchemaType = isNativeTokenSchemaType
+    override isFungibleTokenSchemaType = isFungibleTokenSchemaType
+    override isNonFungibleTokenSchemaType = isNonFungibleTokenSchemaType
 
     override getDefaultChainId = getDefaultChainId
     override getDefaultNetworkType = getDefaultNetworkType
@@ -51,4 +59,5 @@ export class Others extends OthersState<ChainId, SchemaType, ProviderType, Netwo
     override formatAddress = formatAddress
     override formatDomainName = formatDomainName
     override formatTokenId = formatTokenId
+    override formatSchemaType = formatSchemaType
 }

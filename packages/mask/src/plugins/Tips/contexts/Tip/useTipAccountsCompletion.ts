@@ -1,18 +1,20 @@
 import { useChainId, useWeb3State } from '@masknet/plugin-infra/web3'
 import { useEffect, useMemo, useState } from 'react'
-import type { TipAccount } from '../../types'
+import type { TipsAccount } from '../../types/index.js'
 
 /**
  * Add name service
  */
-export function useTipAccountsCompletion(tipAccounts: TipAccount[]) {
+export function useTipAccountsCompletion(tipAccounts: TipsAccount[]) {
     const [map, setMap] = useState<Record<string, string>>({})
 
     const { NameService } = useWeb3State()
     const chainId = useChainId()
     useEffect(() => {
         if (!NameService?.reverse) return
-        tipAccounts.forEach(async ({ address }) => {
+        tipAccounts.forEach(async ({ address, name: originalName }) => {
+            if (originalName) return
+
             const name = await NameService.reverse!(chainId, address)
             if (!name) return
             setMap((oldMap) => ({
@@ -26,7 +28,7 @@ export function useTipAccountsCompletion(tipAccounts: TipAccount[]) {
         if (!Object.keys(map).length) return tipAccounts
         return tipAccounts.map((config) => ({
             ...config,
-            name: map[config.address] || config.name,
+            name: config.name || map[config.address],
         }))
     }, [tipAccounts, map])
 }

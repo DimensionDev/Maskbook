@@ -6,8 +6,8 @@ import {
     NetworkPluginID,
     ProviderDescriptor,
     SourceType,
-} from '../specs'
-import { NextIDPlatform } from '@masknet/shared-base'
+} from '../specs/index.js'
+import { createLookupTableResolver, NextIDPlatform } from '@masknet/shared-base'
 
 export interface ExplorerRoutes {
     addressPathname?: string
@@ -51,14 +51,6 @@ export type ReturnProviderResolver<ChainId, ProviderType> = ReturnType<
     Wrapper<ChainId, never, ProviderType, never>['createProviderResolver']
 >
 
-export function createLookupTableResolver<K extends keyof any, T>(map: Record<K, T>, fallback: T | ((key: K) => T)) {
-    function resolveFallback(key: K) {
-        if (typeof fallback === 'function') return (fallback as (key: K) => T)(key)
-        return fallback
-    }
-    return (key: K) => map[key] ?? resolveFallback(key)
-}
-
 export function createChainResolver<ChainId, SchemaType, NetworkType>(
     descriptors: Array<ChainDescriptor<ChainId, SchemaType, NetworkType>>,
 ) {
@@ -68,7 +60,7 @@ export function createChainResolver<ChainId, SchemaType, NetworkType>(
         chainId: (name?: string) =>
             name
                 ? descriptors.find((x) =>
-                      [x.name, x.fullName, x.shortName, x.network]
+                      [x.name, x.type as string, x.fullName, x.shortName]
                           .map((x) => x?.toLowerCase())
                           .filter(Boolean)
                           .includes(name?.toLowerCase()),
@@ -170,11 +162,13 @@ export function createProviderResolver<ChainId, ProviderType>(
     }
 }
 
-export const resolveSourceName = createLookupTableResolver<SourceType, string>(
+export const resolveSourceTypeName = createLookupTableResolver<SourceType, string>(
     {
         [SourceType.DeBank]: 'DeBank',
         [SourceType.Zerion]: 'Zerion',
         [SourceType.RSS3]: 'RSS3',
+        [SourceType.CoinMarketCap]: 'CoinMarketCap',
+        [SourceType.UniswapInfo]: 'UniswapInfo',
         [SourceType.OpenSea]: 'OpenSea',
         [SourceType.Rarible]: 'Rarible',
         [SourceType.LooksRare]: 'LooksRare',
@@ -187,6 +181,14 @@ export const resolveSourceName = createLookupTableResolver<SourceType, string>(
         [SourceType.TraitSniper]: 'TraitSniper',
         [SourceType.Chainbase]: 'Chainbase',
         [SourceType.X2Y2]: 'X2Y2',
+        [SourceType.MagicEden]: 'MagicEden',
+        [SourceType.Element]: 'Element',
+        [SourceType.Flow]: 'Flow',
+        [SourceType.Solana]: 'Solana',
+        [SourceType.R2D2]: 'R2D2',
+        [SourceType.Rabby]: 'Rabby',
+        [SourceType.CoinGecko]: 'CoinGecko',
+        [SourceType.CF]: 'CloudFlare',
     },
     (providerType) => {
         throw new Error(`Unknown provider type: ${providerType}.`)
@@ -228,56 +230,91 @@ export const resolveNextID_NetworkPluginID = createLookupTableResolver<NextIDPla
     },
 )
 
-const MATCH_IPFS_HASH_RE = /Qm[1-9A-HJ-NP-Za-km-z]{44}/
+// https://stackoverflow.com/a/67176726
+const MATCH_IPFS_CID_RAW =
+    'Qm[1-9A-HJ-NP-Za-km-z]{44,}|b[2-7A-Za-z]{58,}|B[2-7A-Z]{58,}|z[1-9A-HJ-NP-Za-km-z]{48,}|F[\\dA-F]{50,}'
 const MATCH_IPFS_DATA_RE = /ipfs\/(data:.*)$/
-const MATCH_IPFS_PROTOCOL_RE = /ipfs:\/\/(?:ipfs\/)?/
+const MATH_IPFS_CID_AND_PATHNAME_RE = new RegExp(`(?:${MATCH_IPFS_CID_RAW})\\/?.*`)
 const CORS_HOST = 'https://cors.r2d2.to'
-const IPFS_IO_HOST = 'https://ipfs.io'
-const IPFS_PROTOCOL_PREFIX = 'ipfs://'
+const IPFS_GATEWAY_HOST = 'https://gateway.ipfscdn.io'
 
-export function resolveIPFSLink(fragmentOrURL?: string): string | undefined {
-    if (!fragmentOrURL) return fragmentOrURL
+export const isIPFS_CID = (cid: string) => {
+    const re = new RegExp(`^${MATCH_IPFS_CID_RAW}$`)
+    return re.test(cid)
+}
+
+export const isIPFS_Resource = (str: string) => {
+    const re = new RegExp(MATCH_IPFS_CID_RAW)
+    return re.test(str)
+}
+
+export const isArweaveResource = (str: string) => {
+    return str.startsWith('ar:')
+}
+
+export const isLocaleResource = (url: string): boolean => {
+    return /^(data|blob:|\w+-extension:\/\/|<svg\s)/.test(url)
+}
+
+export const resolveLocalURL = (url: string): string => {
+    if (url.startsWith('<svg ')) return `data:image/svg+xml;base64,${btoa(url)}`
+    return url
+}
+
+/**
+ * Remove query from IPFS url, as it is not needed
+ * and will increase requests sometimes.
+ * For example https://ipfs.io/ipfs/<same-cid>?id=67891 and  https://ipfs.io/ipfs/<same-cid>?id=67892
+ * are set to two different NFTs, but according to the same CID,
+ * they are exactly the some.
+ */
+const trimQuery = (url: string) => {
+    return url.replace(/\?.+$/, '')
+}
+
+export function resolveIPFS_URL(cidOrURL: string | undefined): string | undefined {
+    if (!cidOrURL) return cidOrURL
 
     // eliminate cors proxy
-    if (fragmentOrURL.startsWith(CORS_HOST)) {
-        return resolveIPFSLink(decodeURIComponent(fragmentOrURL.replace(`${CORS_HOST}?`, '')))
-    }
-
-    // a ipfs protocol
-    if (fragmentOrURL.startsWith(IPFS_PROTOCOL_PREFIX)) {
-        return urlcat(`${IPFS_IO_HOST}/ipfs/:hash`, {
-            hash: fragmentOrURL.replace(MATCH_IPFS_PROTOCOL_RE, ''),
-        })
+    if (cidOrURL.startsWith(CORS_HOST)) {
+        return trimQuery(resolveIPFS_URL(decodeURIComponent(cidOrURL.replace(new RegExp(`^${CORS_HOST}\??`), '')))!)
     }
 
     // a ipfs.io host
-    if (fragmentOrURL.startsWith(IPFS_IO_HOST)) {
+    if (cidOrURL.startsWith(IPFS_GATEWAY_HOST)) {
         // base64 data string
-        const [_, data] = fragmentOrURL.match(MATCH_IPFS_DATA_RE) ?? []
+        const [_, data] = cidOrURL.match(MATCH_IPFS_DATA_RE) ?? []
         if (data) return decodeURIComponent(data)
 
         // plain
-        return decodeURIComponent(fragmentOrURL)
+        return trimQuery(decodeURIComponent(cidOrURL))
     }
 
     // a ipfs hash fragment
-    if (MATCH_IPFS_HASH_RE.test(fragmentOrURL)) {
-        return urlcat(`${IPFS_IO_HOST}/ipfs/:hash`, {
-            hash: fragmentOrURL,
-        })
+    if (isIPFS_Resource(cidOrURL)) {
+        const pathname = cidOrURL.match(MATH_IPFS_CID_AND_PATHNAME_RE)?.[0]
+        if (pathname) return trimQuery(`${IPFS_GATEWAY_HOST}/ipfs/${pathname}`)
     }
 
-    return fragmentOrURL
+    return cidOrURL
 }
 
-export function resolveARLink(str?: string): string {
-    if (!str) return ''
-    if (str.startsWith('https://')) return str
-    return urlcat('https://arweave.net/:str', { str })
+export function resolveArweaveURL(url: string | undefined) {
+    if (!url) return
+    if (url.startsWith('https://')) return url
+    return urlcat('https://arweave.net/:str', { str: url })
 }
 
-export function resolveCORSLink(url?: string): string | undefined {
-    if (!url) return url
+export function resolveCrossOriginURL(url: string | undefined) {
+    if (!url) return
+    if (isLocaleResource(url)) return url
     if (url.startsWith(CORS_HOST)) return url
     return `${CORS_HOST}?${encodeURIComponent(url)}`
+}
+
+export function resolveResourceURL(url: string | undefined) {
+    if (!url) return url
+    if (isLocaleResource(url)) return resolveLocalURL(url)
+    if (isArweaveResource(url)) return resolveArweaveURL(url)
+    return resolveIPFS_URL(url)
 }

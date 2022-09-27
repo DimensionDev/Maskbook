@@ -2,6 +2,7 @@ import type { Subscription } from 'use-subscription'
 import type { Plugin } from '@masknet/plugin-infra'
 import { ConnectionState } from '@masknet/plugin-infra/web3'
 import type {
+    AddressType,
     Block,
     ChainId,
     Operation,
@@ -15,10 +16,11 @@ import type {
     Web3,
     Web3Provider,
 } from '@masknet/web3-shared-evm'
-import { createConnection } from './Connection/connection'
+import { createConnection } from './Connection/connection.js'
 
 export class Connection extends ConnectionState<
     ChainId,
+    AddressType,
     SchemaType,
     ProviderType,
     Signature,

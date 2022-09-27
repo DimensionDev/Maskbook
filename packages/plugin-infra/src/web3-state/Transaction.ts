@@ -5,7 +5,7 @@ import {
     TransactionStatusType,
     TransactionState as Web3TransactionState,
 } from '@masknet/web3-shared-base'
-import type { Plugin } from '../types'
+import type { Plugin } from '../types.js'
 
 export type TransactionStorage<ChainId, Transaction> = Record<
     // @ts-ignore

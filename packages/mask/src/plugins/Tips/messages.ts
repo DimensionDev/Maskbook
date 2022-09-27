@@ -1,12 +1,11 @@
-import { createPluginMessage, PluginId, PluginMessageEmitter } from '@masknet/plugin-infra'
-import type { TipTask } from './types'
+import { createPluginMessage, PluginID, PluginMessageEmitter } from '@masknet/plugin-infra'
+import type { TipTask } from './types/index.js'
 
 export interface TipMessage {
     tipTask: TipTask
     tipTaskUpdate: TipTask
-
     rpc: unknown
 }
 
 if (import.meta.webpackHot) import.meta.webpackHot.accept()
-export const PluginNextIDMessages: PluginMessageEmitter<TipMessage> = createPluginMessage(PluginId.Tips)
+export const PluginTipsMessages: PluginMessageEmitter<TipMessage> = createPluginMessage(PluginID.Tips)
