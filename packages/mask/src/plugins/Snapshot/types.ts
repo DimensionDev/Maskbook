@@ -28,6 +28,7 @@ export interface Proposal {
     title: string
     version: string
     end: number
+    ipfs: string
     space: {
         id: string
         name: string
@@ -46,6 +47,7 @@ export interface Proposal {
     authorAvatar?: string
     chainId: ChainId
     network: string
+    chainId: ChainId
     type: string
     votes: RawVote[]
 }

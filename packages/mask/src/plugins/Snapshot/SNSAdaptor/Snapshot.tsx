@@ -90,13 +90,6 @@ export function Snapshot() {
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const [currentTab, onChange, tabs] = useTabs('Proposal', 'Progress')
     const { t } = useI18N()
-    const renderTab = () => {
-        const tabMap = {
-            [tabs.Proposal]: <ProposalTab />,
-            [tabs.Progress]: <ProgressTab />,
-        }
-        return tabMap[currentTab]
-    }
 
     const Tabs = [
         {
