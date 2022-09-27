@@ -26,6 +26,8 @@ const useStyles = makeStyles()((theme) => ({
             paddingTop: `${theme.spacing(2.75)}!important`,
             flex: 2,
             paddingLeft: '0px !important',
+            fontSize: 18,
+            fontWeight: 700,
         },
     },
     title: {

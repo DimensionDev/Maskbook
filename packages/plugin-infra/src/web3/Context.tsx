@@ -1,4 +1,4 @@
-import React, { createContext, useContext } from 'react'
+import React, { createContext, ReactNode, useContext } from 'react'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { EMPTY_OBJECT } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -34,7 +34,7 @@ export function PluginWeb3ContextProvider<T extends NetworkPluginID>({
     return <PluginWeb3Context.Provider value={value} children={children} />
 }
 
-export function PluginWeb3ActualContextProvider({ children }: React.ProviderProps<never>) {
+export function PluginWeb3ActualContextProvider({ children }: { children: ReactNode | undefined }) {
     const value = {
         account: useActualAccount(),
         chainId: useActualChainId(),
