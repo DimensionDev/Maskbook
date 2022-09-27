@@ -9,8 +9,9 @@ import { EthereumBlockie } from '../../../web3/UI/EthereumBlockie.js'
 import { SnapshotContext } from '../context.js'
 import { useProposal } from './hooks/useProposal.js'
 import { SnapshotCard } from './SnapshotCard.js'
-import { useChainId } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID, resolveIPFS_URL } from '@masknet/web3-shared-base'
+import { resolveIPFS_URL, resolveResourceURL } from '@masknet/web3-shared-base'
+import urlcat from 'urlcat'
+import { SNAPSHOT_IPFS } from '../constants.js'
 
 export interface InformationCardProps {}
 
@@ -72,12 +73,11 @@ export function InfoField(props: InfoFieldProps) {
 export function InformationCard(props: InformationCardProps) {
     const { classes } = useStyles()
     const { t } = useI18N()
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
 
     const identifier = useContext(SnapshotContext)
     const { payload: proposal } = useProposal(identifier.id)
 
-    const { start, end, snapshot, strategies } = proposal
+    const { start, end, snapshot, strategies, chainId } = proposal
     return (
         <SnapshotCard title={t('plugin_snapshot_info_title')}>
             <InfoField title={t('plugin_snapshot_info_strategy')} classes={{ field: classes.info }}>
@@ -101,7 +101,7 @@ export function InformationCard(props: InformationCardProps) {
                     className={classes.link}
                     target="_blank"
                     rel="noopener"
-                    href={explorerResolver.addressLink(chainId, proposal.address)}>
+                    href={explorerResolver.addressLink(proposal.chainId, proposal.address)}>
                     <div className={classes.avatarWrapper}>
                         {proposal.authorAvatar ? (
                             <Avatar src={resolveIPFS_URL(proposal.authorAvatar)} className={classes.avatar} />
@@ -112,8 +112,12 @@ export function InformationCard(props: InformationCardProps) {
                     {proposal.authorName ?? formatEthereumAddress(proposal.address, 4)}
                 </Link>
             </InfoField>
-            <InfoField title={t('plugin_snapshot_info_ipfs')} classes={{ field: classes.infoColor }}>
-                <Link className={classes.link} target="_blank" rel="noopener" href={resolveIPFS_URL(identifier.id)}>
+            <InfoField title={t('plugin_snapshot_info_ipfs')}>
+                <Link
+                    className={classes.link}
+                    target="_blank"
+                    rel="noopener"
+                    href={resolveResourceURL(urlcat(SNAPSHOT_IPFS, proposal.ipfs))}>
                     #{identifier.id.slice(0, 7)}
                     <OpenInNew fontSize="small" sx={{ paddingLeft: 1 }} />
                 </Link>
@@ -133,7 +137,7 @@ export function InformationCard(props: InformationCardProps) {
                     className={classes.link}
                     target="_blank"
                     rel="noopener"
-                    href={explorerResolver.blockLink(chainId, Number.parseInt(snapshot, 10))}>
+                    href={explorerResolver.blockLink(proposal.chainId, Number.parseInt(snapshot, 10))}>
                     {snapshot}
                     <OpenInNew fontSize="small" sx={{ paddingLeft: 1 }} />
                 </Link>

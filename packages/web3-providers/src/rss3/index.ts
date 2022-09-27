@@ -137,12 +137,13 @@ export class RSS3API implements RSS3BaseAPI.Provider, NonFungibleTokenAPI.Provid
         if (!address) return createPageable([], createIndicator(indicator))
         const tags = [RSS3BaseAPI.Tag.Donation, RSS3BaseAPI.Tag.Collectible, RSS3BaseAPI.Tag.Transaction]
         const queryString = `tag=${tags.join('&tag=')}&${query({
-            address,
             limit: size,
-            cursor: indicator?.id,
+            cursor: indicator?.id ?? '',
             include_poap: true,
         })}`
-        const url = urlcat(NEW_RSS3_ENDPOINT, `/:address?${queryString}`)
+        const url = urlcat(NEW_RSS3_ENDPOINT, `/:address?${queryString}`, {
+            address,
+        })
         const { result, cursor } = await fetchJSON<{
             result: RSS3BaseAPI.Activity[]
             cursor?: string

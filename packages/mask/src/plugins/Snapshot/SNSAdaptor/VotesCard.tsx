@@ -77,6 +77,13 @@ const useStyles = makeStyles()((theme) => {
         shadowRootTooltip: {
             color: theme.palette.maskColor.white,
         },
+        tooltip: {
+            backgroundColor: theme.palette.maskColor.publicMain,
+            color: 'white',
+        },
+        arrow: {
+            color: theme.palette.maskColor.publicMain,
+        },
     }
 })
 
@@ -130,12 +137,13 @@ function Content() {
                             ) : v.choices ? (
                                 <ShadowRootTooltip
                                     PopperProps={{
-                                        disablePortal: true,
+                                        disablePortal: false,
                                     }}
                                     title={
                                         <Typography className={classes.shadowRootTooltip}>{fullChoiceText}</Typography>
                                     }
                                     placement="top"
+                                    classes={{ tooltip: classes.tooltip, arrow: classes.arrow }}
                                     arrow>
                                     <Typography className={classes.choice}>{fullChoiceText}</Typography>
                                 </ShadowRootTooltip>
@@ -144,6 +152,7 @@ function Content() {
                                 PopperProps={{
                                     disablePortal: true,
                                 }}
+                                classes={{ tooltip: classes.tooltip, arrow: classes.arrow }}
                                 title={
                                     <Typography className={classes.shadowRootTooltip}>
                                         {millify(v.balance, { precision: 2, lowercase: true }) +

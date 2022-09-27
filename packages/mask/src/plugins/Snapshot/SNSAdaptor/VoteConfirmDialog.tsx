@@ -1,5 +1,5 @@
 import { Link, DialogContent, DialogActions, Typography } from '@mui/material'
-import { ActionButton, makeStyles } from '@masknet/theme'
+import { ActionButton, makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import millify from 'millify'
 import OpenInNew from '@mui/icons-material/OpenInNew'
 import { ChainId, explorerResolver } from '@masknet/web3-shared-evm'
@@ -32,6 +32,9 @@ const useStyles = makeStyles()((theme) => ({
     button: {
         margin: 16,
     },
+    shadowRootTooltip: {
+        color: theme.palette.maskColor.white,
+    },
 }))
 
 interface VoteConfirmDialogProps {
@@ -43,10 +46,11 @@ interface VoteConfirmDialogProps {
     onVoteConfirm: () => void
     choiceText: string
     power: number | undefined
+    chainId: ChainId
 }
 
 export function VoteConfirmDialog(props: VoteConfirmDialogProps) {
-    const { open, onClose, onVoteConfirm, choiceText, snapshot, powerSymbol, power = 0, loading } = props
+    const { open, onClose, onVoteConfirm, choiceText, snapshot, powerSymbol, power = 0, loading, chainId } = props
     const { t } = useI18N()
 
     const { classes } = useStyles()
@@ -58,23 +62,31 @@ export function VoteConfirmDialog(props: VoteConfirmDialogProps) {
             disableBackdropClick>
             <DialogContent className={classes.content}>
                 <InfoField classes={{ field: classes.field }} title={t('plugin_snapshot_vote_choice')}>
-                    <Typography
-                        sx={{
-                            textAlign: 'right',
-                            width: 100,
-                            whiteSpace: 'nowrap',
-                            textOverflow: 'ellipsis',
-                            overflow: 'hidden',
-                        }}>
-                        {choiceText}
-                    </Typography>
+                    <ShadowRootTooltip
+                        PopperProps={{
+                            disablePortal: true,
+                        }}
+                        title={<Typography className={classes.shadowRootTooltip}>{choiceText}</Typography>}
+                        placement="top"
+                        arrow>
+                        <Typography
+                            sx={{
+                                textAlign: 'right',
+                                width: 300,
+                                whiteSpace: 'nowrap',
+                                textOverflow: 'ellipsis',
+                                overflow: 'hidden',
+                            }}>
+                            {choiceText}
+                        </Typography>
+                    </ShadowRootTooltip>
                 </InfoField>
                 <InfoField classes={{ field: classes.field }} title={t('plugin_snapshot_info_snapshot')}>
                     <Link
                         className={classes.link}
                         target="_blank"
                         rel="noopener"
-                        href={explorerResolver.blockLink(ChainId.Mainnet, Number.parseInt(snapshot, 10))}>
+                        href={explorerResolver.blockLink(chainId, Number.parseInt(snapshot, 10))}>
                         {snapshot}
                         <OpenInNew fontSize="small" sx={{ paddingLeft: 1 }} />
                     </Link>

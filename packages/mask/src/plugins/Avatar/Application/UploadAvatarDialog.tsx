@@ -18,9 +18,11 @@ import type { AllChainsNonFungibleToken } from '../types.js'
 const useStyles = makeStyles()((theme) => ({
     actions: {
         padding: 16,
-
+        boxSizing: 'border-box',
         boxShadow: '0px 0px 20px rgba(0, 0, 0, 0.05)',
-        backdropFilter: 'blur(8px)',
+        position: 'absolute',
+        bottom: 0,
+        width: '100%',
     },
     cancel: {
         backgroundColor: theme.palette.background.default,
