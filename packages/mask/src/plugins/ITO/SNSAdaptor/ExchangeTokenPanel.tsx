@@ -134,6 +134,7 @@ export function ExchangeTokenPanel(props: ExchangeTokenPanelProps) {
                 disabled={!exchangeToken}
                 placeholder={!exchangeToken ? t('plugin_ito_placeholder_when_token_unselected') : placeholder || '0.0'}
                 disableMax
+                disableBalance={disableBalance}
             />
             {showAdd ? (
                 <IconButton size="large" onClick={onAdd} className={classes.button}>
