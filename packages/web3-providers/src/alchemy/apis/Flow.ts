@@ -49,12 +49,6 @@ function createNonFungibleToken(chainId: ChainId, asset: AlchemyNFT_FLOW): NonFu
             name: asset?.contract?.name ?? '',
             symbol: '',
         },
-        collection: {
-            chainId,
-            name: '',
-            slug: '',
-            description: asset.description,
-        },
     }
 }
 

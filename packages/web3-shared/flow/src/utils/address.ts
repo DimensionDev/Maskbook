@@ -51,10 +51,10 @@ export function getZeroAddress() {
 
 export function getContractAddress(address: string) {
     if (isValidContractAddress(address)) {
-        const [_, contractAddress, ...identifierFramgents] = address.split(/\./g)
+        const [_, contractAddress, ...identifierFragments] = address.split(/\./g)
         return {
             address: `0x${contractAddress}`,
-            identifier: identifierFramgents.join('.'),
+            identifier: identifierFragments.join('.'),
         }
     }
     return
