@@ -11,7 +11,7 @@ export interface AvatarMetaDB {
     schema?: SchemaType
     pluginId?: NetworkPluginID
     contractName?: string
-    onwerAddress?: string
+    ownerAddress?: string
 }
 
 export interface NFT {

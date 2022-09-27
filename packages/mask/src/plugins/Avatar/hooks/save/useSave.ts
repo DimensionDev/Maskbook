@@ -35,7 +35,7 @@ export function useSave(pluginId: NetworkPluginID, chainId: ChainId) {
                 avatarId: data.avatarId,
                 address: token.contract?.address ?? '',
                 contractName: token.contract?.name ?? '',
-                onwerAddress: account,
+                ownerAddress: account,
                 tokenId: token.tokenId || token.id,
                 chainId: (token.contract?.chainId ?? ChainId.Mainnet) as ChainId,
                 schema: (token.contract?.schema ?? SchemaType.ERC721) as SchemaType,

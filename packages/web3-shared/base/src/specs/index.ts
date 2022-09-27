@@ -944,6 +944,8 @@ export interface HubOptions<ChainId, Indicator = HubIndicator> {
     size?: number
     /** The page index. */
     indicator?: Indicator
+    /** The name of contract */
+    contractName?: string
 }
 
 export interface HubFungible<ChainId, SchemaType, GasOption, Web3HubOptions = HubOptions<ChainId>> {

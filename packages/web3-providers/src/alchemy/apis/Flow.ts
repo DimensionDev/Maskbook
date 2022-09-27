@@ -105,20 +105,25 @@ function createNonFungibleAsset(
 }
 
 export class AlchemyFlowAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
-    async getAsset(address: string, tokenId: string, { chainId = ChainId.Mainnet, account }: HubOptions<ChainId> = {}) {
-        if (!account) return
+    async getAsset(
+        address: string,
+        tokenId: string,
+        { chainId = ChainId.Mainnet, account: ownerAddress, contractName }: HubOptions<ChainId> = {},
+    ) {
+        if (!ownerAddress || !contractName) return
         const chainInfo = Alchemy_FLOW_NetworkMap?.chains?.find((chain) => chain.chainId === chainId)
 
         const metaDataResponse = await fetchJSON<AlchemyResponse_FLOW_Metadata>(
             urlcat(`${chainInfo?.baseURL}/getNFTMetadata/`, {
-                owner: account,
+                owner: ownerAddress,
+                contractName,
                 contractAddress: address,
                 tokenId,
             }),
         )
 
         if (!metaDataResponse) return
-        return createNonFungibleAsset(chainId, account, metaDataResponse)
+        return createNonFungibleAsset(chainId, ownerAddress, metaDataResponse)
     }
 
     async getAssets(from: string, { chainId, indicator }: HubOptions<ChainId> = {}) {
