@@ -64,12 +64,15 @@ export const ProfileCardTitle: FC<Props> = ({
             },
         })
     }
-    const tipAccounts: TipsAccount[] = useMemo(() => {
-        return socialAddressList.map((x) => ({
-            address: x.address,
-            name: x.label,
-            verified: x.type === SocialAddressType.NEXT_ID,
-        }))
+    const tipAccounts = useMemo(() => {
+        return socialAddressList.map(
+            (x): TipsAccount => ({
+                pluginId: x.networkSupporterPluginID,
+                address: x.address,
+                name: x.label,
+                verified: x.type === SocialAddressType.NEXT_ID,
+            }),
+        )
     }, [socialAddressList])
 
     return (
