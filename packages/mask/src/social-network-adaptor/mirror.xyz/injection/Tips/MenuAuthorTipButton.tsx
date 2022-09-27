@@ -8,13 +8,12 @@ import {
 } from '@masknet/plugin-infra/content-script'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useMemo } from 'react'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI.js'
 import type { TipsAccount } from '../../../../plugins/Tips/types/tip.js'
 import { createReactRootShadowed, startWatch } from '../../../../utils/index.js'
 import { menuAuthorSelector as selector } from '../../utils/selectors.js'
-import { PluginIDContextProvider, useWeb3State } from '@masknet/plugin-infra/web3'
+import { PluginIDContextProvider, useCurrentWeb3NetworkPluginID, useWeb3State } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 export function injectTipsButtonOnMenu(signal: AbortSignal) {
@@ -46,16 +45,18 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 function AuthorTipsButtonWrapper() {
+    const { classes } = useStyles()
+
     const visitingIdentity = useCurrentVisitingIdentity()
     const isMinimal = useIsMinimalMode(PluginID.Tips)
-    const { classes } = useStyles()
+    const pluginId = useCurrentWeb3NetworkPluginID()
     const { Others } = useWeb3State()
 
     const tipsAccounts = useMemo((): TipsAccount[] => {
         if (!visitingIdentity?.identifier) return EMPTY_LIST
         return [
             {
-                pluginId: NetworkPluginID.PLUGIN_EVM,
+                pluginId,
                 address: visitingIdentity.identifier.userId,
                 name: `(${visitingIdentity.nickname}) ${Others?.formatAddress(visitingIdentity.identifier.userId, 4)}`,
             },
