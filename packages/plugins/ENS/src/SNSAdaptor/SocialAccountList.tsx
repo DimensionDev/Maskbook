@@ -1,4 +1,6 @@
 import { useMenuConfig } from '@masknet/shared'
+import { useWindowScroll } from 'react-use'
+import { useEffect } from 'react'
 import { Icons } from '@masknet/icons'
 import { Box, Typography, MenuItem } from '@mui/material'
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
@@ -15,8 +17,8 @@ interface SocialAccountListProps {
 export function SocialAccountList({ validNextIdTwitterBindings }: SocialAccountListProps) {
     const t = useI18N()
     const { classes, cx, theme } = useStyles({ isMenuScroll: validNextIdTwitterBindings.length > 5 })
-
-    const [menu, openMenu] = useMenuConfig(
+    const position = useWindowScroll()
+    const [menu, openMenu, closeMenu] = useMenuConfig(
         validNextIdTwitterBindings.map((x, i) => (
             <MenuItem
                 className={classes.socialAccountListItem}
@@ -47,6 +49,8 @@ export function SocialAccountList({ validNextIdTwitterBindings }: SocialAccountL
             },
         },
     )
+
+    useEffect(closeMenu, [position])
 
     return (
         <>
