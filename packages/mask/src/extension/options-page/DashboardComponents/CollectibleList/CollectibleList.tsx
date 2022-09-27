@@ -20,6 +20,7 @@ export interface CollectibleListProps
     retry(): void
     readonly?: boolean
     hasRetry?: boolean
+    showNetworkIcon?: boolean
     /** Collectible key, in format of `${contractAddress}_${tokenId}` */
     value?: string | string[]
     onChange?(value: string | string[] | null): void
@@ -42,6 +43,7 @@ export function CollectibleList(props: CollectibleListProps) {
         hasRetry = true,
         selectable,
         multiple,
+        showNetworkIcon,
         value,
         onChange,
     } = props
@@ -108,6 +110,7 @@ export function CollectibleList(props: CollectibleListProps) {
                                         pluginID={pluginID}
                                         selectable={selectable}
                                         multiple={multiple}
+                                        showNetworkIcon={showNetworkIcon}
                                         checked={checked}
                                         inactive={inactive}
                                         value={collectibleKey}
