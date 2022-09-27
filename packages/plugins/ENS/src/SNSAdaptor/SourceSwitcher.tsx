@@ -6,7 +6,7 @@ import { CollectibleState } from './hooks/useCollectibleState'
 import { SUPPORTED_SOURCE_TYPES } from '../constants'
 
 export function SourceSwitcher() {
-    const { classes } = useStyles()
+    const { classes } = useStyles({})
     const { setSourceType, sourceType } = CollectibleState.useContainer()
 
     const onDataProviderChange = useCallback((option: FootnoteMenuOption) => {
