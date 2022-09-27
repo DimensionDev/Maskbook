@@ -34,7 +34,6 @@ export function useSave(pluginId: NetworkPluginID, chainId: ChainId) {
                 imageUrl: data.imageUrl,
                 avatarId: data.avatarId,
                 address: token.contract?.address ?? '',
-                contractName: token.contract?.name ?? '',
                 ownerAddress: account,
                 tokenId: token.tokenId || token.id,
                 chainId: (token.contract?.chainId ?? ChainId.Mainnet) as ChainId,

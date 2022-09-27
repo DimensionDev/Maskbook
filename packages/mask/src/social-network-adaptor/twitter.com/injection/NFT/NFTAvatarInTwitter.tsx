@@ -84,7 +84,6 @@ function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
         nftAvatar?.pluginId,
         nftAvatar?.chainId,
         nftAvatar?.ownerAddress,
-        nftAvatar?.contractName,
     )
 
     const windowSize = useWindowSize()
