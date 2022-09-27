@@ -144,7 +144,6 @@ export function InjectedDialog(props: InjectedDialogProps) {
         if (isOpenFromApplicationBoard) {
             CrossIsolationMessages.events.compositionDialogEvent.sendToLocal({ open: false, reason: 'timeline' })
         }
-
         if (recoverOverflow) {
             const html = document.documentElement
             html.style.overflow = 'auto scroll'
@@ -155,14 +154,21 @@ export function InjectedDialog(props: InjectedDialogProps) {
     }, [isOpenFromApplicationBoard, onClose, recoverOverflow])
 
     useEffect(() => {
-        if (!open) return
         const html = document.documentElement
-        if (html.style.overflow !== 'hidden') {
+        if (open && html.style.overflow !== 'hidden') {
             html.style.overflow = 'hidden'
             html.style.marginRight = '17px'
             setRecoverOverflow(true)
+            return
         }
-    }, [open])
+        if (!open && recoverOverflow) {
+            html.style.overflow = 'auto scroll'
+            html.style.removeProperty('margin-right')
+            setRecoverOverflow(false)
+            return
+        }
+    }, [open, recoverOverflow])
+
     return usePortalShadowRoot((container) => (
         <IncreaseStack>
             <Dialog
