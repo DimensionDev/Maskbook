@@ -735,6 +735,7 @@ export interface ConnectionOptions<ChainId, ProviderType, Transaction> {
 }
 export interface Connection<
     ChainId,
+    AddressType,
     SchemaType,
     ProviderType,
     Signature,
@@ -754,8 +755,10 @@ export interface Connection<
     getWeb3Provider(initial?: Web3ConnectionOptions): Promise<Web3Provider>
     /** Get gas price */
     getGasPrice(initial?: Web3ConnectionOptions): Promise<string>
+    /** Get address type of given address. */
+    getAddressType(address: string, initial?: Web3ConnectionOptions): Promise<AddressType | undefined>
     /** Get schema type of given token address. */
-    getTokenSchema(address: string, initial?: Web3ConnectionOptions): Promise<SchemaType | undefined>
+    getSchemaType(address: string, initial?: Web3ConnectionOptions): Promise<SchemaType | undefined>
     /** Get a native fungible token. */
     getNativeToken(initial?: Web3ConnectionOptions): Promise<FungibleToken<ChainId, SchemaType>>
     /** Get a fungible token. */
@@ -1290,6 +1293,7 @@ export interface ProviderState<ChainId, ProviderType, NetworkType> {
 }
 export interface ConnectionState<
     ChainId,
+    AddressType,
     SchemaType,
     ProviderType,
     Signature,
@@ -1304,6 +1308,7 @@ export interface ConnectionState<
     Web3ConnectionOptions = ConnectionOptions<ChainId, ProviderType, Transaction>,
     Web3Connection = Connection<
         ChainId,
+        AddressType,
         SchemaType,
         ProviderType,
         Signature,
@@ -1383,6 +1388,7 @@ export interface BlockNumberNotifierState<ChainId> {
 
 export interface Web3State<
         ChainId,
+        AddressType,
         SchemaType,
         ProviderType,
         NetworkType,
@@ -1412,6 +1418,7 @@ export interface Web3State<
         TransactionWatcher?: TransactionWatcherState<ChainId, Transaction>
         Connection?: ConnectionState<
             ChainId,
+            AddressType,
             SchemaType,
             ProviderType,
             Signature,

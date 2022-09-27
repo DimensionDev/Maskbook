@@ -5,6 +5,7 @@ import type { Plugin } from '../types.js'
 
 export class ConnectionState<
     ChainId,
+    AddressType,
     SchemaType,
     ProviderType,
     Signature,
@@ -24,6 +25,7 @@ export class ConnectionState<
 > implements
         Web3ConnectionState<
             ChainId,
+            AddressType,
             SchemaType,
             ProviderType,
             Signature,
@@ -51,6 +53,7 @@ export class ConnectionState<
             },
         ) => Connection<
             ChainId,
+            AddressType,
             SchemaType,
             ProviderType,
             Signature,

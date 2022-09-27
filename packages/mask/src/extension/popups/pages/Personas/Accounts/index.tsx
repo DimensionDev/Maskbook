@@ -19,7 +19,12 @@ const Accounts = memo(() => {
 
     const definedSocialNetworks = compact(
         getEnumAsArray(EnhanceableSite).map((x) => {
-            if (x.value === EnhanceableSite.Localhost || x.value === EnhanceableSite.OpenSea) return null
+            if (
+                x.value === EnhanceableSite.Localhost ||
+                x.value === EnhanceableSite.OpenSea ||
+                x.value === EnhanceableSite.Mirror
+            )
+                return null
             return x.value
         }),
     )

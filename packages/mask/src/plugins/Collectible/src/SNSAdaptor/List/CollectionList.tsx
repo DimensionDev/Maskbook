@@ -34,14 +34,14 @@ const AllButton = styled(Button)(({ theme }) => ({
 }))
 
 export interface CollectionListProps {
-    addressName: SocialAddress<NetworkPluginID>
+    socialAddress: SocialAddress<NetworkPluginID>
     persona?: string
     profile?: SocialIdentity
     gridProps?: CollectibleGridProps
 }
 
-export function CollectionList({ addressName, persona, profile, gridProps = EMPTY_OBJECT }: CollectionListProps) {
-    const { address: account } = addressName
+export function CollectionList({ socialAddress, persona, profile, gridProps = EMPTY_OBJECT }: CollectionListProps) {
+    const { address: account } = socialAddress
     const { t } = useI18N()
     const { classes } = useStyles(gridProps)
     const [selectedCollection, setSelectedCollection] = useState<
@@ -62,7 +62,7 @@ export function CollectionList({ addressName, persona, profile, gridProps = EMPT
         next: nextPage,
         error,
         retry: retryFetchCollectible,
-    } = useNonFungibleAssets(addressName.networkSupporterPluginID, undefined, { account })
+    } = useNonFungibleAssets(socialAddress.networkSupporterPluginID, undefined, { account })
 
     const { isHiddenAddress, hiddenList } = useWeb3ProfileHiddenSettings(
         profile?.identifier?.userId.toLowerCase(),
@@ -150,7 +150,7 @@ export function CollectionList({ addressName, persona, profile, gridProps = EMPT
                             </Box>
                         )}
                         <CollectibleList
-                            address={addressName}
+                            pluginID={socialAddress.networkSupporterPluginID}
                             retry={retryFetchCollectible}
                             collectibles={renderCollectibles}
                             loading={renderCollectibles.length === 0}

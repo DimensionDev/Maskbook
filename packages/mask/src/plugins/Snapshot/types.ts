@@ -1,3 +1,5 @@
+import type { ChainId } from '@masknet/web3-shared-evm'
+
 export interface ProposalIdentifier {
     /**
      * ENS domain name of space.
@@ -26,6 +28,7 @@ export interface Proposal {
     title: string
     version: string
     end: number
+    ipfs: string
     space: {
         id: string
         name: string
@@ -42,6 +45,7 @@ export interface Proposal {
     strategies: Strategy[]
     authorName?: string
     authorAvatar?: string
+    chainId: ChainId
     network: string
     type: string
     votes: RawVote[]

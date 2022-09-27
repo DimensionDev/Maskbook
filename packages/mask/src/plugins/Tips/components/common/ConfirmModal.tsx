@@ -1,11 +1,19 @@
 import { makeStyles } from '@masknet/theme'
-import { Button, DialogActions, DialogContent, Typography } from '@mui/material'
-import type { FC, ReactNode } from 'react'
+import { Box, Button, DialogActions, DialogContent, Typography } from '@mui/material'
+import type { FC, PropsWithChildren } from 'react'
 import { InjectedDialog, InjectedDialogProps } from '@masknet/shared'
+import { TargetRuntimeContext, useTip } from '../../contexts/index.js'
+import { TipsType } from '../../types/tip.js'
+import { Icons } from '@masknet/icons'
+import { useI18N } from '../../locales/index.js'
+import { useNonFungibleAsset, useWeb3State } from '@masknet/plugin-infra/web3'
+import { SourceType } from '@masknet/web3-shared-base'
+import { CollectibleCard } from '../../../../extension/options-page/DashboardComponents/CollectibleList/CollectibleCard.js'
 
 const useStyles = makeStyles()((theme) => ({
     confirmDialog: {
-        width: 480,
+        width: 420,
+        height: 420,
         backgroundImage: 'none',
     },
     content: {
@@ -19,26 +27,66 @@ const useStyles = makeStyles()((theme) => ({
         textAlign: 'center',
         fontSize: 18,
     },
-    icon: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
+
+    congratulation: {
+        fontFamily: 'Helvetica',
+        fontWeight: 700,
+        fontSize: '20px',
+        lineHeight: '24px',
+        color: theme.palette.maskColor.success,
     },
     actions: {
         padding: theme.spacing(0, 3, 3),
     },
+    nftContainer: {
+        height: 126,
+        width: 126,
+        boxShadow: '0px 6px 12px rgba(253, 194, 40, 0.2)',
+    },
+    nftName: {
+        display: 'flex',
+        fontFamily: 'Helvetica',
+        marginTop: 10,
+    },
+    nftMessage: {
+        textAlign: 'center',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+    },
+    collectibleCard: {
+        width: '100%',
+        height: '100%',
+        aspectRatio: '1/1',
+        borderRadius: theme.spacing(1),
+        overflow: 'hidden',
+    },
+    messageText: {
+        fontSize: 16,
+        color: theme.palette.maskColor.second,
+        lineHeight: '30px',
+    },
 }))
 
-interface Props extends InjectedDialogProps {
-    message: string | ReactNode
-    icon?: ReactNode
+interface Props extends PropsWithChildren<InjectedDialogProps> {
     confirmText?: string
     onConfirm?(): void
 }
 
-export const ConfirmModal: FC<Props> = ({ className, message, icon, confirmText, onConfirm, ...rest }) => {
+export const ConfirmModal: FC<Props> = ({ className, confirmText, onConfirm, children, ...rest }) => {
+    const { Others } = useWeb3State()
     const { classes } = useStyles()
+    const t = useI18N()
+    const { tipType, token, nonFungibleTokenContract, nonFungibleTokenId } = useTip()
+    const { pluginId } = TargetRuntimeContext.useContainer()
     confirmText = confirmText || 'Confirm'
+    const isTokenTip = tipType === TipsType.Tokens
+    const { value: nonFungibleToken } = useNonFungibleAsset(
+        undefined,
+        nonFungibleTokenContract?.address,
+        nonFungibleTokenId ?? '',
+    )
+    const uiTokenId = Others?.formatTokenId(nonFungibleToken?.tokenId)
     return (
         <InjectedDialog
             classes={{
@@ -51,8 +99,56 @@ export const ConfirmModal: FC<Props> = ({ className, message, icon, confirmText,
             }}
             {...rest}>
             <DialogContent className={classes.content}>
-                {icon ? <div className={classes.icon}>{icon}</div> : null}
-                {typeof message === 'string' ? <Typography>{message}</Typography> : message}
+                {isTokenTip ? (
+                    <Box>
+                        <Icons.Success size={75} />
+                        <Typography className={classes.congratulation} mt="19.5px">
+                            Congratulations!
+                        </Typography>
+                        <Typography className={classes.messageText} mt="41px">
+                            {t.send_specific_tip_successfully({
+                                amount: '1',
+                                name: `$${token?.symbol}`,
+                            })}
+                        </Typography>
+                    </Box>
+                ) : (
+                    <div className={classes.nftMessage}>
+                        {nonFungibleToken ? (
+                            <>
+                                <div className={classes.nftContainer}>
+                                    <CollectibleCard
+                                        className={classes.collectibleCard}
+                                        asset={nonFungibleToken}
+                                        provider={SourceType.OpenSea}
+                                        readonly
+                                        disableLink
+                                        renderOrder={0}
+                                        pluginID={pluginId}
+                                    />
+                                </div>
+                                <div className={classes.nftName}>
+                                    <Typography fontWeight={700} fontSize={20} lineHeight="24px">
+                                        {nonFungibleToken?.metadata?.name}
+                                    </Typography>
+                                    <Typography fontWeight={700} fontSize={16} mx="7px">
+                                        {uiTokenId}
+                                    </Typography>
+                                    <Icons.Verified size={21.43} />
+                                </div>
+                            </>
+                        ) : null}
+                        <Typography className={classes.congratulation} mt="24px">
+                            {t.congratulations()}
+                        </Typography>
+                        <Typography className={classes.messageText} mt="14px">
+                            {t.send_specific_tip_successfully({
+                                amount: '1',
+                                name: nonFungibleToken?.contract?.name || 'NFT',
+                            })}
+                        </Typography>
+                    </div>
+                )}
             </DialogContent>
             <DialogActions className={classes.actions}>
                 <Button fullWidth onClick={onConfirm}>

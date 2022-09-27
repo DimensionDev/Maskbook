@@ -34,6 +34,7 @@ const useStyles = makeStyles()((theme) => {
             borderBottom: `1px solid ${theme.palette.maskColor.publicLine}`,
             paddingLeft: 0,
             paddingRight: 0,
+            gap: 16,
         },
         badge: {
             transform: 'translateX(40px) translateY(2.5px)',
@@ -46,7 +47,7 @@ const useStyles = makeStyles()((theme) => {
             overflow: 'hidden',
             whiteSpace: 'nowrap',
             textOverflow: 'ellipsis',
-            maxWidth: 180,
+            maxWidth: 170,
             color: theme.palette.maskColor.publicMain,
         },
         ellipsisText: {
@@ -64,7 +65,6 @@ const useStyles = makeStyles()((theme) => {
             color: 'inherit',
             alignItems: 'center',
             textDecoration: 'none !important',
-            marginRight: 16,
         },
         power: {
             minWidth: 90,
@@ -76,6 +76,13 @@ const useStyles = makeStyles()((theme) => {
         },
         shadowRootTooltip: {
             color: theme.palette.maskColor.white,
+        },
+        tooltip: {
+            backgroundColor: theme.palette.maskColor.publicMain,
+            color: 'white',
+        },
+        arrow: {
+            color: theme.palette.maskColor.publicMain,
         },
     }
 })
@@ -130,12 +137,13 @@ function Content() {
                             ) : v.choices ? (
                                 <ShadowRootTooltip
                                     PopperProps={{
-                                        disablePortal: true,
+                                        disablePortal: false,
                                     }}
                                     title={
                                         <Typography className={classes.shadowRootTooltip}>{fullChoiceText}</Typography>
                                     }
                                     placement="top"
+                                    classes={{ tooltip: classes.tooltip, arrow: classes.arrow }}
                                     arrow>
                                     <Typography className={classes.choice}>{fullChoiceText}</Typography>
                                 </ShadowRootTooltip>
@@ -144,6 +152,7 @@ function Content() {
                                 PopperProps={{
                                     disablePortal: true,
                                 }}
+                                classes={{ tooltip: classes.tooltip, arrow: classes.arrow }}
                                 title={
                                     <Typography className={classes.shadowRootTooltip}>
                                         {millify(v.balance, { precision: 2, lowercase: true }) +

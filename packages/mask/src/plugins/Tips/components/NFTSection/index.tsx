@@ -1,17 +1,19 @@
+import { Icons } from '@masknet/icons'
 import { useAccount, useNonFungibleAssets } from '@masknet/plugin-infra/web3'
 import { RetryHint } from '@masknet/shared'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { LoadingBase, makeStyles } from '@masknet/theme'
-import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
-import { Button, Typography } from '@mui/material'
+import { isSameAddress, NetworkPluginID, NonFungibleAsset } from '@masknet/web3-shared-base'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import { Button, FormControl, Typography } from '@mui/material'
 import classnames from 'classnames'
 import { uniqWith } from 'lodash-unified'
-import { FC, HTMLProps, useEffect, useMemo, useState } from 'react'
-import { useTimeoutFn } from 'react-use'
+import { FC, HTMLProps, useCallback, useMemo } from 'react'
+import { useBoolean } from 'react-use'
+import { CollectibleList } from '../../../../extension/options-page/DashboardComponents/CollectibleList/index.js'
 import { TargetRuntimeContext, useTip } from '../../contexts/index.js'
-import { useI18N } from '../../locales/index.js'
-import type { TipNFTKeyPair } from '../../types/index.js'
-import { NFTList } from './NFTList.js'
+import { Translate, useI18N } from '../../locales/index.js'
+import { AddDialog } from '../AddDialog.js'
 
 export * from './NFTList.js'
 
@@ -20,13 +22,19 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         flexDirection: 'column',
         overflow: 'auto',
-        height: 282,
+        height: '100%',
+    },
+    header: {
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        flexShrink: 0,
     },
     selectSection: {
         display: 'flex',
         flexDirection: 'column',
         overflow: 'auto',
-        minHeight: '100%',
+        flexGrow: 1,
     },
     statusBox: {
         display: 'flex',
@@ -50,36 +58,34 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.error.main,
         marginBottom: theme.spacing(3),
     },
+    addButton: {
+        marginLeft: 'auto',
+    },
 }))
 
 interface Props extends HTMLProps<HTMLDivElement> {
-    onAddToken?(): void
     onEmpty?(empty: boolean): void
 }
 
-export const NFTSection: FC<Props> = ({ className, onAddToken, onEmpty, ...rest }) => {
+export const NFTSection: FC<Props> = ({ className, onEmpty, ...rest }) => {
     const {
         nonFungibleTokenAddress: tokenAddress,
         nonFungibleTokenId: tokenId,
         setNonFungibleTokenId,
         setNonFungibleTokenAddress,
     } = useTip()
-    const { classes } = useStyles()
+    const { classes, theme } = useStyles()
     const t = useI18N()
-    const selectedPairs: TipNFTKeyPair[] = useMemo(() => (tokenId ? [[tokenAddress, tokenId]] : []), [tokenId, tokenId])
-    // Cannot get the loading status of fetching via websocket
-    // loading status of `useAsyncRetry` is not the real status
-    const [guessLoading, setGuessLoading] = useState(true)
+    const [addTokenDialogIsOpen, openAddTokenDialog] = useBoolean(false)
+    const selectedKey = tokenAddress || tokenId ? `${tokenAddress}_${tokenId}` : undefined
     const account = useAccount()
-    useTimeoutFn(() => {
-        setGuessLoading(false)
-    }, 10000)
 
     const { targetChainId: chainId, pluginId } = TargetRuntimeContext.useContainer()
     const {
         value: fetchedTokens = EMPTY_LIST,
         done,
         next,
+        loading,
         error: loadError,
     } = useNonFungibleAssets(pluginId, undefined, { chainId })
 
@@ -95,55 +101,85 @@ export const NFTSection: FC<Props> = ({ className, onAddToken, onEmpty, ...rest 
         )
     }, [fetchedTokens, isEvm])
 
-    const showLoadingIndicator = tokens.length === 0 && done && !guessLoading
-
-    useEffect(() => {
-        onEmpty?.(showLoadingIndicator)
-    }, [onEmpty, showLoadingIndicator])
+    const handleAddToken = useCallback((token: NonFungibleAsset<ChainId, SchemaType>) => {
+        setNonFungibleTokenAddress(token.address ?? '')
+        setNonFungibleTokenId(token.tokenId)
+        openAddTokenDialog(false)
+    }, [])
 
     return (
         <div className={classnames(classes.root, className)} {...rest}>
+            <FormControl className={classes.header}>
+                {loading ? null : (
+                    <Typography fontSize={14} fontWeight={700} color={(theme) => theme.palette.maskColor.second}>
+                        <Translate.nft_amount
+                            values={{ count: tokens.length.toString() }}
+                            components={{
+                                strong: (
+                                    <Typography
+                                        component="strong"
+                                        fontWeight={700}
+                                        color={(theme) => theme.palette.maskColor.main}
+                                    />
+                                ),
+                            }}
+                        />
+                    </Typography>
+                )}
+                {isEvm ? (
+                    <Button variant="text" className={classes.addButton} onClick={() => openAddTokenDialog(true)}>
+                        {t.tip_add_collectibles()}
+                    </Button>
+                ) : null}
+            </FormControl>
             <div className={classes.selectSection}>
                 {(() => {
                     if (tokens.length) {
                         return (
-                            <NFTList
-                                className={classes.list}
-                                selectedPairs={selectedPairs}
-                                tokens={tokens}
-                                onChange={(id, address) => {
-                                    setNonFungibleTokenId(id)
-                                    setNonFungibleTokenAddress(address || '')
+                            <CollectibleList
+                                retry={next}
+                                collectibles={tokens}
+                                loading={loading}
+                                columns={4}
+                                selectable
+                                value={selectedKey}
+                                onChange={(value: string | null) => {
+                                    if (!value) {
+                                        setNonFungibleTokenAddress('')
+                                        setNonFungibleTokenId('')
+                                        return
+                                    }
+                                    const [address, tokenId] = value.split('_')
+                                    setNonFungibleTokenAddress(address)
+                                    setNonFungibleTokenId(tokenId)
                                 }}
-                                nextPage={next}
-                                loadFinish={done}
-                                loadError={!!loadError}
                             />
                         )
                     }
                     if (tokens.length === 0 && loadError && account) {
                         return <RetryHint retry={next} />
                     }
-                    if (tokens.length === 0 && (!done || guessLoading) && account) {
+                    if (tokens.length === 0 && (!done || loading) && account) {
                         return (
                             <div className={classes.statusBox}>
-                                <LoadingBase />
-                                <Typography className={classes.loadingText}>{t.tip_loading()}</Typography>
+                                <LoadingBase size={36} />
+                                <Typography fontSize={14} className={classes.loadingText}>
+                                    {t.tip_loading()}
+                                </Typography>
                             </div>
                         )
                     }
                     return (
                         <div className={classes.statusBox}>
-                            <Typography className={classes.loadingText}>{t.tip_empty_nft()}</Typography>
-                            {isEvm ? (
-                                <Button variant="text" onClick={onAddToken}>
-                                    {t.tip_add_collectibles()}
-                                </Button>
-                            ) : null}
+                            <Icons.EmptySimple size={36} color={theme.palette.maskColor.third} />
+                            <Typography className={classes.loadingText} color={theme.palette.maskColor.second}>
+                                {t.tip_empty_nft()}
+                            </Typography>
                         </div>
                     )
                 })()}
             </div>
+            <AddDialog open={addTokenDialogIsOpen} onClose={() => openAddTokenDialog(false)} onAdd={handleAddToken} />
         </div>
     )
 }

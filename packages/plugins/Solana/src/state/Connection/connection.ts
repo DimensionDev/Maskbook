@@ -12,6 +12,7 @@ import {
     TransactionStatusType,
 } from '@masknet/web3-shared-base'
 import {
+    AddressType,
     ChainId,
     createClient,
     createNativeToken,
@@ -207,7 +208,13 @@ class Connection implements BaseConnection {
     getGasPrice(initial?: SolanaWeb3ConnectionOptions): Promise<string> {
         throw new Error('Method not implemented.')
     }
-    getTokenSchema(address: string, initial?: SolanaWeb3ConnectionOptions): Promise<SchemaType> {
+    getAddressType(
+        address: string,
+        initial?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined,
+    ): Promise<AddressType | undefined> {
+        return Promise.resolve(AddressType.Default)
+    }
+    getSchemaType(address: string, initial?: SolanaWeb3ConnectionOptions): Promise<SchemaType> {
         throw new Error('Method not implemented.')
     }
     getNonFungibleTokenContract(

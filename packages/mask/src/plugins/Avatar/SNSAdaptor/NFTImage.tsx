@@ -65,7 +65,7 @@ function isSameNFT(pluginId: NetworkPluginID, a: AllChainsNonFungibleToken, b?: 
               a.contract?.chainId &&
               a.contract?.chainId === b?.contract?.chainId &&
               a.tokenId === b?.tokenId
-        : a.tokenId === b?.tokenId
+        : a.tokenId === b?.tokenId && a.id === b.id
 }
 
 export function NFTImage(props: NFTImageProps) {
@@ -77,6 +77,7 @@ export function NFTImage(props: NFTImageProps) {
     const name = token.collection?.name || token.contract?.name
     const uiTokenId = Others?.formatTokenId(token.tokenId, 4) ?? `#${token.tokenId}`
     const title = name ? `${name} ${uiTokenId}` : token.metadata?.name ?? ''
+
     return (
         <Tooltip
             title={title}

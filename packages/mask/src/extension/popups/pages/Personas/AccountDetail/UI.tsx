@@ -84,13 +84,13 @@ export const AccountDetailUI = memo<AccountDetailUIProps>(
                 <Typography className={classes.warning}>
                     {account.is_valid || account.identifier.network !== EnhanceableSite.Twitter ? (
                         <Trans
-                            i18nKey="popups_verify_warning_alert"
+                            i18nKey="popups_new_verify_warning_alert"
                             components={{ strong: <strong /> }}
                             values={{ account: account.identifier.userId, persona: personaName }}
                         />
                     ) : (
                         <Trans
-                            i18nKey="popups_disconnect_warning_alert"
+                            i18nKey="popups_new_disconnect_warning_alert"
                             components={{ strong: <strong /> }}
                             values={{ account: account.identifier.userId }}
                         />

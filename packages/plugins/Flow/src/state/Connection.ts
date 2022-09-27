@@ -13,6 +13,7 @@ import type {
     TransactionDetailed,
     Web3Provider,
     Operation,
+    AddressType,
 } from '@masknet/web3-shared-flow'
 import { createConnection } from './Connection/connection.js'
 
@@ -23,6 +24,7 @@ export interface ConnectionStorage {
 
 export class Connection extends ConnectionState<
     ChainId,
+    AddressType,
     SchemaType,
     ProviderType,
     Signature,
