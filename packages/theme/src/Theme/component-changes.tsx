@@ -659,8 +659,8 @@ export const Radio = (mode: PaletteMode, colors: MaskColor): ThemeOptions => ({
         MuiRadio: {
             defaultProps: {
                 size: 'medium',
-                icon: <Icons.RadioButtonUnChecked />,
-                checkedIcon: <Icons.RadioButtonChecked />,
+                icon: <Icons.RadioButtonUnChecked size={20} />,
+                checkedIcon: <Icons.RadioButtonChecked size={20} />,
                 disableRipple: true,
             },
             styleOverrides: {
@@ -811,6 +811,19 @@ export const InputBase = (mode: PaletteMode, colors: MaskColor) => ({
                         },
                         [`&.${inputBaseClasses.adornedEnd}:last-child`]: {
                             paddingRight: 14,
+                        },
+                    },
+                },
+                {
+                    props: {
+                        error: true,
+                    },
+                    style: {
+                        outline: `2px solid ${alpha(colors.maskColor.danger, 0.2)}`,
+                        border: `1px solid ${alpha(colors.maskColor.danger, 0.5)}`,
+                        [`&.${inputBaseClasses.focused}`]: {
+                            outline: `2px solid ${alpha(colors.maskColor.danger, 0.2)}`,
+                            border: `1px solid ${alpha(colors.maskColor.danger, 0.5)}`,
                         },
                     },
                 },
@@ -982,6 +995,7 @@ export const Tooltip = (mode: PaletteMode, colors: MaskColor) => ({
             },
             styleOverrides: {
                 tooltip: {
+                    maxWidth: 300,
                     padding: 10,
                     fontSize: 14,
                     borderRadius: 4,
