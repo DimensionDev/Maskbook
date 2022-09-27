@@ -83,7 +83,6 @@ function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
         nftAvatar?.tokenId,
         nftAvatar?.pluginId,
         nftAvatar?.chainId,
-        nftAvatar?.contractName,
         nftAvatar?.onwerAddress,
     )
 

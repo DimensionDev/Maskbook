@@ -17,7 +17,6 @@ export function useNFT(
     tokenId?: string,
     pluginId: NetworkPluginID = NetworkPluginID.PLUGIN_EVM,
     chainId: ChainId = ChainId.Mainnet,
-    contractName?: string,
     onwerAddress?: string,
 ) {
     const { Others, Connection } = useWeb3State<'all'>(pluginId ?? NetworkPluginID.PLUGIN_EVM)
@@ -33,15 +32,10 @@ export function useNFT(
         })
         const allSettled = await Promise.allSettled([
             connection?.getNonFungibleToken(address, tokenId),
-            hub?.getNonFungibleAsset?.(
-                address,
-                tokenId,
-                {
-                    chainId,
-                },
-                contractName,
-                onwerAddress,
-            ),
+            hub?.getNonFungibleAsset?.(address, tokenId, {
+                chainId,
+                account: onwerAddress,
+            }),
         ])
 
         const [token, asset] = allSettled.map((x) => (x.status === 'fulfilled' ? x.value : undefined)) as [
@@ -69,14 +63,5 @@ export function useNFT(
             slug: token ? undefined : asset?.collection?.slug,
             permalink,
         } as NFTInfo
-    }, [
-        hub?.getNonFungibleAsset,
-        Connection?.getConnection,
-        address,
-        tokenId,
-        Others,
-        chainId,
-        contractName,
-        onwerAddress,
-    ])
+    }, [hub?.getNonFungibleAsset, Connection?.getConnection, address, tokenId, Others, chainId, onwerAddress])
 }

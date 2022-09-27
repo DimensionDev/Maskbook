@@ -55,13 +55,11 @@ export class HubStateNonFungibleClient<ChainId, SchemaType> extends HubStateBase
         address: string,
         tokenId: string,
         initial?: HubOptions<ChainId>,
-        contractName?: string,
-        onwerAddress?: string,
     ): Promise<NonFungibleAsset<ChainId, SchemaType> | undefined> {
         const options = this.getOptions(initial)
         const providers = this.getProviders(initial)
         return attemptUntil(
-            providers.map((x) => () => x.getAsset?.(address, tokenId, options, onwerAddress, contractName)),
+            providers.map((x) => () => x.getAsset?.(address, tokenId, options)),
             undefined,
         )
     }
