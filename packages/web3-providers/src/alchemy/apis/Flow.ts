@@ -12,7 +12,7 @@ import type { NonFungibleTokenAPI } from '../../types/index.js'
 import { fetchJSON } from '../../helpers.js'
 import { Alchemy_FLOW_NetworkMap, FILTER_WORDS } from '../constants.js'
 import type { AlchemyNFT_FLOW, AlchemyResponse_FLOW, AlchemyResponse_FLOW_Metadata } from '../types.js'
-import { formatAlchemyTokenId } from '../helpers.js'
+import { formatAlchemyTokenId, formatAlchemyTokenAddress } from '../helpers.js'
 
 function createNonFungibleTokenImageURL(asset: AlchemyNFT_FLOW | AlchemyResponse_FLOW_Metadata) {
     return (
@@ -26,7 +26,7 @@ function createNonFungibleTokenImageURL(asset: AlchemyNFT_FLOW | AlchemyResponse
 
 function createNonFungibleToken(chainId: ChainId, asset: AlchemyNFT_FLOW): NonFungibleAsset<ChainId, SchemaType> {
     const tokenId = formatAlchemyTokenId(asset.id.tokenId)
-    const address = `A.${asset.contract.address}.${asset.contract.name}`
+    const address = formatAlchemyTokenAddress(asset.contract.address, asset.contract.name)
     return {
         id: `${asset.contract.address}_${tokenId}`,
         chainId,
@@ -64,7 +64,7 @@ function createNonFungibleAsset(
     metadata: AlchemyResponse_FLOW_Metadata,
 ): NonFungibleAsset<ChainId, SchemaType> {
     const tokenId = formatAlchemyTokenId(metadata.id.tokenId)
-    const address = `A.${metadata.contract.address}.${metadata.contract.name}`
+    const address = formatAlchemyTokenAddress(metadata.contract.address, metadata.contract.name)
     return {
         id: `${metadata.contract.address}_${tokenId}`,
         chainId,
@@ -108,15 +108,15 @@ function createNonFungibleAsset(
 
 export class AlchemyFlowAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
     async getAsset(address: string, tokenId: string, { account, chainId = ChainId.Mainnet }: HubOptions<ChainId> = {}) {
-        const [contractAddress, contractIdentifier] = address.split('.')
-        if (!account || !contractAddress || !contractIdentifier) return
+        const [_, contractAddress, ...contractIdentifiers] = address.split(/\./g)
+        if (!account || !contractAddress || !contractIdentifiers.length) return
         const chainInfo = Alchemy_FLOW_NetworkMap?.chains?.find((chain) => chain.chainId === chainId)
 
         const metadata = await fetchJSON<AlchemyResponse_FLOW_Metadata>(
             urlcat(`${chainInfo?.baseURL}/getNFTMetadata/`, {
                 owner: account,
-                contractAddress,
-                contractName: contractIdentifier,
+                contractAddress: `0x${contractAddress}`,
+                contractName: contractIdentifiers.join('.'),
                 tokenId,
             }),
         )
