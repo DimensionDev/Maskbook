@@ -32,6 +32,7 @@ declare module '@mui/material/styles/createPalette.d' {
             publicTwitter: string
             publicThirdMain: string
             publicBg: string
+            borderSecondary: string
         }
         shadow: {
             popup: string

@@ -32,7 +32,7 @@ export const formatSchemaType = createLookupTableResolver<SchemaType, string>(
     '',
 )
 
-export function formatTokenId(tokenId: string, size = 4) {
+export function formatTokenId(tokenId = '', size = 4) {
     size = Math.max(2, size)
     const isHex = tokenId.toLowerCase().startsWith('0x')
     const prefix = isHex ? '0x' : '#'

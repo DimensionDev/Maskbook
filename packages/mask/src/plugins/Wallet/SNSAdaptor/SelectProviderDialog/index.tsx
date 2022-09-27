@@ -100,8 +100,6 @@ export function SelectProviderDialog(props: SelectProviderDialogProps) {
         [Others, Provider, closeDialog, walletConnectedCallback],
     )
 
-    // not available for the native app
-
     const isDashboard = isDashboardPage()
     const selectedNetworks = useMemo(
         () =>

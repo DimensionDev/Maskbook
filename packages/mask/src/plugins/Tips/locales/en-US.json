@@ -71,5 +71,6 @@
     "source_tooltip_only$facebook": "Data source is retrieved from Facebook.",
     "source_tooltip$next_id": "Data source is retrieved from <Link>NEXT.ID</Link>.",
     "source_tooltip_only$next_id": "Data source is retrieved from <Link>NEXT.ID</Link>.",
-    "nft_amount": "NFT Amount: <strong>{{count}}</strong>"
+    "nft_amount": "NFT Amount: <strong>{{count}}</strong>",
+    "congratulations": "Congratulations!"
 }

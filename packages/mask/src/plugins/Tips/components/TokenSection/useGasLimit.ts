@@ -11,7 +11,7 @@ import { TipsType } from '../../types'
 const MIN_GAS_LIMIT = 21000
 // We only care about fungible tokens
 export function useGasLimit(fallback = 50000) {
-    const { Connection } = useWeb3State<void, NetworkPluginID.PLUGIN_EVM>()
+    const { Connection } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const { tipType, token, amount, recipientAddress } = useTip()
     const { targetChainId: chainId } = TargetRuntimeContext.useContainer()
     const account = useAccount()
@@ -28,7 +28,6 @@ export function useGasLimit(fallback = 50000) {
         })
         if (!connection || !token?.address) return fallback
         const web3 = await connection.getWeb3({
-            pluginId: NetworkPluginID.PLUGIN_EVM,
             chainId,
             account,
         })
@@ -39,5 +38,5 @@ export function useGasLimit(fallback = 50000) {
             from: account,
         })
         return estimated ?? fallback
-    }, [token, tipType, chainId, account, fallback])
+    }, [Connection, token, tipType, chainId, account, fallback])
 }

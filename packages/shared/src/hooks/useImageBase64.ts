@@ -22,15 +22,15 @@ const responseToBase64 = async (response: Response) => {
 }
 
 export function useImageBase64(key = '', url?: string) {
-    key = key || (url ?? '')
+    const cacheKey = key || (url ?? '')
     const [availableUrl, setAvailableUrl] = useState(() => {
-        const hit = cache.get(key)
+        const hit = cache.get(cacheKey)
         return typeof hit === 'string' ? hit : ''
     })
 
     useAsyncRetry(async () => {
-        if (!key) return
-        const hit = cache.get(key)
+        if (!cacheKey) return
+        const hit = cache.get(cacheKey)
         if (typeof hit === 'string') {
             setAvailableUrl(hit)
             return
@@ -38,7 +38,7 @@ export function useImageBase64(key = '', url?: string) {
             try {
                 const response = await hit
                 const result = await responseToBase64(response.clone())
-                cache.set(key, result)
+                cache.set(cacheKey, result)
                 setAvailableUrl(result)
                 return
             } catch {
@@ -54,20 +54,20 @@ export function useImageBase64(key = '', url?: string) {
                     : '',
             },
         })
-        cache.set(key, fetchingTask)
+        cache.set(cacheKey, fetchingTask)
         const response = await fetchingTask
         if (!response.ok) {
-            cache.delete(key)
+            cache.delete(cacheKey)
             setAvailableUrl('')
             return
         }
 
         const dataURL = await responseToBase64(response)
-        cache.set(key, dataURL)
+        cache.set(cacheKey, dataURL)
         setAvailableUrl(dataURL)
-    }, [key, url])
+    }, [cacheKey, url])
 
-    if (!key) return ''
+    if (!cacheKey) return ''
 
     return availableUrl
 }

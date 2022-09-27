@@ -6,7 +6,7 @@ import { TargetRuntimeContext, useTip } from '../../contexts/index.js'
 import { TipsType } from '../../types/tip.js'
 import { Icons } from '@masknet/icons'
 import { useI18N } from '../../locales/index.js'
-import { useNonFungibleAsset } from '@masknet/plugin-infra/web3'
+import { useNonFungibleAsset, useWeb3State } from '@masknet/plugin-infra/web3'
 import { SourceType } from '@masknet/web3-shared-base'
 import { CollectibleCard } from '../../../../extension/options-page/DashboardComponents/CollectibleList/CollectibleCard.js'
 
@@ -74,6 +74,7 @@ interface Props extends PropsWithChildren<InjectedDialogProps> {
 }
 
 export const ConfirmModal: FC<Props> = ({ className, confirmText, onConfirm, children, ...rest }) => {
+    const { Others } = useWeb3State()
     const { classes } = useStyles()
     const t = useI18N()
     const { tipType, token, nonFungibleTokenContract, nonFungibleTokenId } = useTip()
@@ -85,6 +86,7 @@ export const ConfirmModal: FC<Props> = ({ className, confirmText, onConfirm, chi
         nonFungibleTokenContract?.address,
         nonFungibleTokenId ?? '',
     )
+    const uiTokenId = Others?.formatTokenId(nonFungibleToken?.tokenId)
     return (
         <InjectedDialog
             classes={{
@@ -130,14 +132,14 @@ export const ConfirmModal: FC<Props> = ({ className, confirmText, onConfirm, chi
                                         {nonFungibleToken?.metadata?.name}
                                     </Typography>
                                     <Typography fontWeight={700} fontSize={16} mx="7px">
-                                        #{nonFungibleToken?.tokenId}
+                                        {uiTokenId}
                                     </Typography>
                                     <Icons.Verified size={21.43} />
                                 </div>
                             </>
                         ) : null}
                         <Typography className={classes.congratulation} mt="24px">
-                            Congratulations!
+                            {t.congratulations()}
                         </Typography>
                         <Typography className={classes.messageText} mt="14px">
                             {t.send_specific_tip_successfully({

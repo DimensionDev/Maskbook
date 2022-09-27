@@ -83,7 +83,7 @@ export const CollectibleItem = memo(
         const { classes, cx } = useStyles()
         const { Others } = useWeb3State()
 
-        const uiTokenId = Others?.formatTokenId(asset.tokenId, 4) ?? `#${asset.tokenId}`
+        const uiTokenId = Others?.formatTokenId(asset.tokenId, 4)
 
         const SelectableButton = selectable && multiple ? Checkbox : Radio
 
@@ -102,11 +102,13 @@ export const CollectibleItem = memo(
                     renderOrder={renderOrder}
                     pluginID={pluginID}
                 />
-                <div className={classes.description}>
-                    <Typography className={classes.name} color="textPrimary" variant="body2">
-                        {uiTokenId}
-                    </Typography>
-                </div>
+                {uiTokenId ? (
+                    <div className={classes.description}>
+                        <Typography className={classes.name} color="textPrimary" variant="body2">
+                            {uiTokenId}
+                        </Typography>
+                    </div>
+                ) : null}
                 {selectable ? (
                     <SelectableButton
                         className={classes.select}
