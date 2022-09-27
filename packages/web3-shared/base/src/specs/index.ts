@@ -1043,6 +1043,8 @@ export interface HubNonFungible<ChainId, SchemaType, GasOption, Web3HubOptions =
         address: string,
         tokenId: string,
         initial?: Web3HubOptions,
+        contractName?: string,
+        onwerAddress?: string
     ) => Promise<NonFungibleAsset<ChainId, SchemaType> | undefined>
     /** Get non-fungible assets owned by the given account. */
     getNonFungibleAssets?: (

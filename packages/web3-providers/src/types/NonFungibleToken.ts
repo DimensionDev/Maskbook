@@ -41,6 +41,8 @@ export namespace NonFungibleTokenAPI {
             address: string,
             tokenId: string,
             options?: HubOptions<ChainId>,
+            onwerAddress?: string,
+            contractName?: string,
         ) => Promise<NonFungibleAsset<ChainId, SchemaType> | undefined>
         /** Get non-fungible assets owned by the given account. */
         getAssets?: (
