@@ -13,7 +13,6 @@ const useStyles = makeStyles<void, 'icon' | 'tooltip'>()((theme, _, refs) => {
         root: {
             height: 48,
             flexGrow: 1,
-            marginLeft: theme.spacing(1),
         },
         menuItem: {
             height: 32,
@@ -26,6 +25,8 @@ const useStyles = makeStyles<void, 'icon' | 'tooltip'>()((theme, _, refs) => {
         },
         text: {
             fontWeight: 700,
+            fontSize: 14,
+            fontFamily: 'Helvetica',
             marginLeft: theme.spacing(0.5),
         },
         select: {
@@ -39,18 +40,21 @@ const useStyles = makeStyles<void, 'icon' | 'tooltip'>()((theme, _, refs) => {
             padding: theme.spacing(1.5),
             borderRadius: theme.spacing(2),
         },
-        icon: {
-            width: 20,
-            height: 20,
-        },
         link: {
             display: 'inline-flex',
             alignItems: 'center',
             fontSize: 0,
         },
+        icon: {
+            width: 20,
+            height: 20,
+        },
         actionIcon: {
             marginLeft: theme.spacing(0.5),
             color: theme.palette.maskColor.main,
+        },
+        twitterIcon: {
+            borderRadius: '50%',
         },
         checkIcon: {
             marginLeft: 'auto',
@@ -155,24 +159,37 @@ const SourceTooltip: FC<AddressSourceTooltipProps> = ({ platform, source, childr
 }
 
 const TipsAccountSource: FC<{ tipsAccount: TipsAccount }> = ({ tipsAccount }) => {
-    const { classes, cx } = useStyles()
+    const { classes, cx, theme } = useStyles()
+    const isLight = theme.palette.mode === 'light'
+    const iconStyle = isLight
+        ? {
+              boxShadow: '0px 6px 12px rgba(28, 104, 243, 0.2)',
+              backdropFilter: 'blur(8px)',
+          }
+        : undefined
     if (tipsAccount.verified)
         return (
             <SourceTooltip platform={AddressPlatform.NextId}>
-                <Icons.NextIDMini className={cx(classes.actionIcon, classes.icon)} />
+                <Icons.NextIDMini width={32} height={18} className={classes.actionIcon} style={iconStyle} />
             </SourceTooltip>
         )
     if (tipsAccount.isSocialAddress) {
         return (
             <SourceTooltip platform={AddressPlatform.Twitter} source={tipsAccount.type && sourceMap[tipsAccount.type]}>
-                <Icons.TwitterRound className={cx(classes.actionIcon, classes.icon)} />
+                <Icons.TwitterRound
+                    className={cx(classes.actionIcon, classes.icon, classes.twitterIcon)}
+                    style={iconStyle}
+                />
             </SourceTooltip>
         )
     }
     return null
 }
 
-export const RecipientSelect: FC = memo(() => {
+interface Props {
+    className?: string
+}
+export const RecipientSelect: FC<Props> = memo(({ className }) => {
     const t = useI18N()
     const { classes, cx } = useStyles()
     const selectRef = useRef(null)
@@ -183,7 +200,7 @@ export const RecipientSelect: FC = memo(() => {
 
     return (
         <Select
-            className={classes.root}
+            className={cx(classes.root, className)}
             ref={selectRef}
             value={recipientAddress}
             disabled={isSending}
