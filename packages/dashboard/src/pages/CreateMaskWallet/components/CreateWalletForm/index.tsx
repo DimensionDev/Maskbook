@@ -1,5 +1,5 @@
 import { memo, useEffect, useMemo, useState } from 'react'
-import { Box, Button, formHelperTextClasses, Typography } from '@mui/material'
+import { Box, Button, formHelperTextClasses, lighten, Typography } from '@mui/material'
 import { makeStyles, MaskColorVar, MaskTextField } from '@masknet/theme'
 import { z as zod } from 'zod'
 import { useForm, Controller } from 'react-hook-form'
@@ -76,6 +76,9 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: 24,
         fontSize: 18,
         background: theme.palette.mode === 'dark' ? '#1A1D20' : '#F7F9FA',
+        '&:hover': {
+            background: `${lighten(theme.palette.mode === 'dark' ? '#1A1D20' : '#F7F9FA', 0.1)}!important`,
+        },
     },
     alert: {
         marginTop: 24,

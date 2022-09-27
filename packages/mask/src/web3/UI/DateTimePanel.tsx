@@ -14,6 +14,10 @@ const useStyles = makeStyles()((theme) => ({
         position: 'relative',
         height: 66,
         padding: theme.spacing(1.25, 1.5),
+        [`&.${inputBaseClasses.focused} > .${inputBaseClasses.input}`]: {
+            padding: theme.spacing(2.75, 0, 0, 0),
+            flex: 2,
+        },
         [`& > .${inputBaseClasses.input}`]: {
             padding: theme.spacing(2.75, 0, 0, 0),
             flex: 2,
