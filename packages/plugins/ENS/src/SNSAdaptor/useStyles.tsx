@@ -1,10 +1,6 @@
 import { makeStyles } from '@masknet/theme'
 
-interface StyleProps {
-    isMenuScroll?: boolean
-}
-
-const useStyles = makeStyles<StyleProps>()((theme, { isMenuScroll = false }) => {
+const useStyles = makeStyles()((theme) => {
     return {
         root: {
             padding: theme.spacing(0, 2),
@@ -109,7 +105,6 @@ const useStyles = makeStyles<StyleProps>()((theme, { isMenuScroll = false }) => 
         },
         link: {
             display: 'flex',
-            alignItems: 'center',
             textDecoration: 'none !important',
         },
         nextIdLink: {
@@ -126,11 +121,9 @@ const useStyles = makeStyles<StyleProps>()((theme, { isMenuScroll = false }) => 
         socialAccountListItem: {
             width: 193,
             padding: '12px 6px',
-            margin: isMenuScroll ? '6px 0 6px 12px' : '6px 12px',
+            margin: '6px 12px',
             display: 'flex',
             alignItems: 'center',
-            background: theme.palette.background.default,
-            borderRadius: 12,
         },
         menuItemNextIdIcon: {
             display: 'flex',
@@ -138,38 +131,8 @@ const useStyles = makeStyles<StyleProps>()((theme, { isMenuScroll = false }) => 
         },
         accountNameInList: {
             maxWidth: 120,
-            color: theme.palette.text.primary,
             textOverflow: 'ellipsis',
             overflow: 'hidden',
-        },
-        bindingsWrapper: {
-            display: 'grid',
-            gridAutoFlow: 'column',
-            width: 300,
-            alignItems: 'center',
-            overflow: 'hidden',
-        },
-        badge: {
-            display: 'flex',
-            marginRight: 12,
-            alignItems: 'center',
-        },
-        menu: {
-            maxHeight: 296,
-            background: theme.palette.maskColor.bottom,
-            scrollbarColor: `${theme.palette.maskColor.secondaryLine} ${theme.palette.maskColor.secondaryLine}`,
-            scrollbarWidth: 'thin',
-            '::-webkit-scrollbar': {
-                backgroundColor: 'transparent',
-                width: 19,
-            },
-            '::-webkit-scrollbar-thumb': {
-                borderRadius: '20px',
-                width: 4,
-                border: '7px solid rgba(0, 0, 0, 0)',
-                backgroundColor: theme.palette.maskColor.secondaryLine,
-                backgroundClip: 'padding-box',
-            },
         },
     }
 })
