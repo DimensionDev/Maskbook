@@ -16,7 +16,7 @@ import { SocialAccountList } from './SocialAccountList'
 
 export function SearchResultInspectorContent() {
     const t = useI18N()
-    const { classes, cx } = useStyles()
+    const { classes, cx } = useStyles({})
     const {
         isLoading,
         isError,
@@ -62,12 +62,12 @@ export function SearchResultInspectorContent() {
                                         rel="noopener noreferrer"
                                         className={cx(classes.link, classes.rightSpace)}
                                         href={`https://twitter.com/${x.identity}`}>
-                                        <Icons.TwitterRound />
+                                        <Icons.TwitterRoundWithNoBorder width={20} height={20} />
                                         <Typography className={classes.nextIdVerifiedTwitterName}>
                                             {x.identity}
                                         </Typography>
                                     </Link>
-                                    <NextIdBadge />
+                                    <NextIdBadge variant="light" />
                                 </div>
                             ))}
                         </section>

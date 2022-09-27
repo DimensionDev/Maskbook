@@ -4,7 +4,7 @@ import useStyles from './useStyles'
 import { useI18N } from '../locales'
 
 export function LoadingContent() {
-    const { classes, cx } = useStyles()
+    const { classes, cx } = useStyles({})
 
     const t = useI18N()
     return (

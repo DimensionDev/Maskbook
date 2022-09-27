@@ -10,7 +10,7 @@ export function LoadFailedContent({
     retry: (() => void) | undefined
     isLoading: boolean
 }) {
-    const { classes, cx } = useStyles()
+    const { classes, cx } = useStyles({})
 
     const t = useI18N()
     return (

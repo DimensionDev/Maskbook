@@ -4,7 +4,7 @@ import { Icons } from '@masknet/icons'
 import { Typography, Box } from '@mui/material'
 
 export function EmptyContent() {
-    const { classes, cx } = useStyles()
+    const { classes, cx } = useStyles({})
 
     const t = useI18N()
     return (

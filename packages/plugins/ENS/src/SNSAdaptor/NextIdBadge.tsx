@@ -5,9 +5,9 @@ import { Trans } from 'react-i18next'
 import useStyles from './useStyles'
 import { useI18N } from '../locales'
 
-export function NextIdBadge() {
+export function NextIdBadge({ variant }: { variant?: 'dark' | 'light' }) {
     const t = useI18N()
-    const { classes } = useStyles()
+    const { classes } = useStyles({})
 
     return (
         <ShadowRootTooltip
@@ -30,7 +30,7 @@ export function NextIdBadge() {
                     />
                 </Typography>
             }>
-            <Icons.NextIDMini variant="light" width={32} />
+            <Icons.NextIDMini width={32} variant={variant} />
         </ShadowRootTooltip>
     )
 }
