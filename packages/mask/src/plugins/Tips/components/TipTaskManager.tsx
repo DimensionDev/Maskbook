@@ -1,5 +1,6 @@
 import { PluginIDContextProvider, PluginWeb3ContextProvider, useWeb3State } from '@masknet/plugin-infra/web3'
 import { EMPTY_LIST } from '@masknet/shared-base'
+import { isSameAddress } from '@masknet/web3-shared-base'
 import { FC, useCallback, useEffect, useState } from 'react'
 import { TargetRuntimeContext, TipTaskProvider } from '../contexts/index.js'
 import { PluginTipsMessages } from '../messages.js'
@@ -41,7 +42,7 @@ export const TipTaskManager: FC<React.PropsWithChildren<{}>> = ({ children }) =>
     return (
         <PluginWeb3ContextProvider pluginID={pluginId} value={{ chainId: targetChainId }}>
             {tasks.map((task) => {
-                const tipsAccount = task.addresses.find((x) => Others?.isSameAddress(x.address, task.recipient))
+                const tipsAccount = task.addresses.find((x) => isSameAddress(x.address, task.recipient))
                 const taskSession = (
                     <TipTaskProvider key={task.id} task={task}>
                         <TipDialog open key={task.id} onClose={() => removeTask(task)} />

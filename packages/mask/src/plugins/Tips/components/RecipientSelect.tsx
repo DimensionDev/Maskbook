@@ -1,7 +1,7 @@
 import { Icons } from '@masknet/icons'
 import { useChainId, useWeb3State } from '@masknet/plugin-infra/web3'
 import { makeStyles } from '@masknet/theme'
-import { NetworkPluginID, SocialAddressType } from '@masknet/web3-shared-base'
+import { isSameAddress, NetworkPluginID, SocialAddressType } from '@masknet/web3-shared-base'
 import { Link, MenuItem, Select, Tooltip, TooltipProps, Typography } from '@mui/material'
 import { FC, memo, ReactNode, useRef } from 'react'
 import { useTip } from '../contexts/index.js'
@@ -221,7 +221,7 @@ export const RecipientSelect: FC = memo(() => {
                         <Icons.LinkOut size={20} />
                     </Link>
                     <TipsAccountSource tipsAccount={tipsAccount} />
-                    {Others?.isSameAddress(tipsAccount.address, recipientAddress) ? (
+                    {isSameAddress(tipsAccount.address, recipientAddress) ? (
                         <Icons.CheckCircle className={cx(classes.checkIcon, classes.icon)} />
                     ) : null}
                 </MenuItem>
