@@ -108,7 +108,7 @@ function ApprovalWrapper(props: ApprovalWrapperProps) {
                             open: true,
                             supportedNetworkList: chainIdList
                                 ?.map((chainId) => {
-                                    const x = chainResolver.chainNetworkType(chainId)
+                                    const x = chainResolver.networkType(chainId)
                                     return x
                                 })
                                 .filter((x) => Boolean(x)) as NetworkType[],

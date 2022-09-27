@@ -77,8 +77,8 @@ export function createChainResolver<ChainId, SchemaType, NetworkType>(
         chainShortName: (chainId?: ChainId) => getChainDescriptor(chainId)?.shortName,
         chainColor: (chainId?: ChainId) => getChainDescriptor(chainId)?.color,
         chainPrefix: (chainId?: ChainId) => 'ETH:',
-        chainNetworkType: (chainId?: ChainId) => getChainDescriptor(chainId)?.type,
-        infoURL: (chainId?: ChainId) => getChainDescriptor(chainId)?.explorerURL,
+        networkType: (chainId?: ChainId) => getChainDescriptor(chainId)?.type,
+        explorerURL: (chainId?: ChainId) => getChainDescriptor(chainId)?.explorerURL,
         nativeCurrency: (chainId?: ChainId) => getChainDescriptor(chainId)?.nativeCurrency,
         isValid: (chainId?: ChainId, testnet = false) => getChainDescriptor(chainId)?.network === 'mainnet' || testnet,
         isMainnet: (chainId?: ChainId) => getChainDescriptor(chainId)?.network === 'mainnet',
@@ -145,6 +145,8 @@ export function createNetworkResolver<ChainId, NetworkType>(
 ) {
     const getNetworkDescriptor = (networkType: NetworkType) => descriptors.find((x) => x.type === networkType)
     return {
+        networkIcon: (networkType: NetworkType) => getNetworkDescriptor(networkType)?.icon,
+        networkIconColor: (networkType: NetworkType) => getNetworkDescriptor(networkType)?.iconColor,
         networkName: (networkType: NetworkType) => getNetworkDescriptor(networkType)?.name,
         networkChainId: (networkType: NetworkType) => getNetworkDescriptor(networkType)?.chainId,
     }

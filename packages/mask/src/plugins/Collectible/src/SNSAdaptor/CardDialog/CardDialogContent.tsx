@@ -77,7 +77,7 @@ export function CardDialogContent(props: CardDialogContentProps) {
                         setSelectProviderDialog({
                             open: true,
                             supportedNetworkList: chainIdList
-                                .map((chainId) => Others?.chainResolver.chainNetworkType(chainId))
+                                .map((chainId) => Others?.chainResolver.networkType(chainId))
                                 .filter((x) => Boolean(x)) as Web3Helper.NetworkTypeAll[],
                         })
                     }}
