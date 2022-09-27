@@ -20,6 +20,9 @@ const useStyles = makeStyles()((theme) => {
             fontSize: 19,
             fontWeight: 500,
         },
+        select: {
+            marginLeft: theme.spacing(2),
+        },
         validation: {
             fontFamily: 'Helvetica',
             fontSize: 14,
@@ -43,7 +46,7 @@ export const RecipientSection: FC<Props> = ({ className, ...rest }) => {
         <FormControl fullWidth className={cx(classes.container, className)} {...rest}>
             <div className={classes.receiverRow}>
                 <Typography className={classes.to}>{t.tip_to()}</Typography>
-                <RecipientSelect />
+                <RecipientSelect className={classes.select} />
             </div>
             {isValid ? null : <div className={classes.validation}>{validateMessage}</div>}
         </FormControl>
