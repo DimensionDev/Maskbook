@@ -80,22 +80,8 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
-function nameTagClickHandler() {
-    MaskMessages.events.profileTabUpdated.sendToLocal({ show: false })
-
-    const eleEmpty = searchProfileEmptySelector().evaluate()
-    if (eleEmpty) eleEmpty.style.display = 'none'
-
-    const elePage = searchProfileTabPageSelector().evaluate()
-    if (elePage) {
-        elePage.style.visibility = 'hidden'
-        elePage.style.height = 'auto'
-    }
-}
-
 function tabClickHandler() {
     MaskMessages.events.profileTabUpdated.sendToLocal({ show: false })
-
     resetTwitterActivatedContent()
 }
 
@@ -104,7 +90,6 @@ async function hideTwitterActivatedContent() {
     const loseConnectionEle = searchProfileTabLoseConnectionPageSelector().evaluate()
     if (!eleTab) return
     const style = window.getComputedStyle(eleTab)
-
     // hide the activated indicator
     const tabList = searchProfileTabListSelector().evaluate()
     tabList.map((v) => {
@@ -112,18 +97,14 @@ async function hideTwitterActivatedContent() {
         _v.style.color = style.color
         const line = v.querySelector('div > div') as HTMLDivElement
         line.style.display = 'none'
-        v.addEventListener('click', v.closest('#open-nft-button') ? nameTagClickHandler : tabClickHandler)
+        v.addEventListener('click', tabClickHandler)
     })
-
     if (loseConnectionEle) return
-
     // hide the empty list indicator on the page
     const eleEmpty = searchProfileEmptySelector().evaluate()
     if (eleEmpty) eleEmpty.style.display = 'none'
-
     // hide the content page
     await untilElementAvailable(searchProfileTabPageSelector())
-
     const elePage = searchProfileTabPageSelector().evaluate()
     if (elePage) {
         elePage.style.visibility = 'hidden'
@@ -135,18 +116,15 @@ function resetTwitterActivatedContent() {
     const eleTab = searchProfileTabSelector().evaluate()?.querySelector('div') as Element
     const loseConnectionEle = searchProfileTabLoseConnectionPageSelector().evaluate()
     if (!eleTab) return
-
     const tabList = searchProfileTabListSelector().evaluate()
     tabList.map((v) => {
         const _v = v.querySelector('div') as HTMLDivElement
         _v.style.color = ''
         const line = v.querySelector('div > div') as HTMLDivElement
         line.style.display = ''
-        v.removeEventListener('click', v.closest('#open-nft-button') ? nameTagClickHandler : tabClickHandler)
+        v.removeEventListener('click', tabClickHandler)
     })
-
     if (loseConnectionEle) return
-
     const eleEmpty = searchProfileEmptySelector().evaluate()
     if (eleEmpty) eleEmpty.style.display = ''
 
@@ -165,7 +143,6 @@ export function ProfileTabAtTwitter() {
             setHidden(data.hidden)
         })
     }, [])
-
     return hidden ? null : (
         <ProfileTab
             title="Web3"
@@ -188,6 +165,5 @@ export function injectProfileTabAtTwitter(signal: AbortSignal) {
             tabInjected = true
         }
     })
-
     startWatch(contentWatcher, signal)
 }
