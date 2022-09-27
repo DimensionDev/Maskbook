@@ -26,7 +26,7 @@ export const postsContentSelector = () =>
             // In collection
             '#__next > div:nth-child(2) > div > div > div > a:has(footer)',
             // In Entry detail
-            '#__next > div:nth-child(2) > div:has([class]):not(footer)',
+            '#__next > div:nth-child(2) > div:has([class]):not(footer):has(p)',
         ].join(),
     ).filter((x) => x.childNodes.length !== 0)
 
