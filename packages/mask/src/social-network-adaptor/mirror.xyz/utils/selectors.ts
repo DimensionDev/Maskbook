@@ -15,7 +15,7 @@ export const entryInfoSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('div+button').map((x) => x.parentElement?.firstElementChild?.lastElementChild as HTMLElement)
 
 export const menuAuthorSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>(['a[href="/"]', 'div[style="height: 56px;"] a'].join())
+    querySelector<E>(['a[href="/"]', 'div[style="height: 56px;"] a', '.GlobalNavigation a'].join())
 // export const entryDetailSelector: () => LiveSelector<E, true> = () => querySelector<E>('a[href="/"]')
 
 export const postsContentSelector = () =>
