@@ -7,7 +7,7 @@ import {
     NonFungibleAsset,
     TokenType,
 } from '@masknet/web3-shared-base'
-import { ChainId, SchemaType } from '@masknet/web3-shared-flow'
+import { ChainId, getContractAddress, SchemaType } from '@masknet/web3-shared-flow'
 import type { NonFungibleTokenAPI } from '../../types/index.js'
 import { fetchJSON } from '../../helpers.js'
 import { Alchemy_FLOW_NetworkMap, FILTER_WORDS } from '../constants.js'
@@ -108,15 +108,14 @@ function createNonFungibleAsset(
 
 export class AlchemyFlowAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
     async getAsset(address: string, tokenId: string, { account, chainId = ChainId.Mainnet }: HubOptions<ChainId> = {}) {
-        const [_, contractAddress, ...contractIdentifiers] = address.split(/\./g)
-        if (!account || !contractAddress || !contractIdentifiers.length) return
+        const { address: contractAddress, identifier: contractName } = getContractAddress(address) ?? {}
+        if (!account || !contractAddress || !contractName) return
         const chainInfo = Alchemy_FLOW_NetworkMap?.chains?.find((chain) => chain.chainId === chainId)
-
         const metadata = await fetchJSON<AlchemyResponse_FLOW_Metadata>(
             urlcat(`${chainInfo?.baseURL}/getNFTMetadata/`, {
                 owner: account,
-                contractAddress: `0x${contractAddress}`,
-                contractName: contractIdentifiers.join('.'),
+                contractAddress,
+                contractName,
                 tokenId,
             }),
         )

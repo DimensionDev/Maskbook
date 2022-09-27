@@ -49,6 +49,17 @@ export function getZeroAddress() {
     return ZERO_ADDRESS
 }
 
+export function getContractAddress(address: string) {
+    if (isValidContractAddress(address)) {
+        const [_, contractAddress, ...identifierFramgents] = address.split(/\./g)
+        return {
+            address: `0x${contractAddress}`,
+            identifier: identifierFramgents.join('.'),
+        }
+    }
+    return
+}
+
 export function getNativeTokenAddress(chainId = ChainId.Mainnet) {
     return getTokenConstant(chainId, 'FLOW_ADDRESS')
 }
