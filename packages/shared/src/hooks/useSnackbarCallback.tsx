@@ -56,7 +56,7 @@ export function useSnackbarCallback<P extends (...args: any[]) => Promise<T>, T>
                     throw error
                 },
             ),
-        [...deps!, showSnackbar, executor, onError, onSuccess, key, successText],
+        [...deps!, showSnackbar, executor, onError, onSuccess, key, successText, errorText],
     )
 }
 
