@@ -1,13 +1,13 @@
-import { InjectedDialog, LoadingAnimation, TokenAmountPanel, useOpenShareTxDialog } from '@masknet/shared'
+import { InjectedDialog, TokenAmountPanel, useOpenShareTxDialog } from '@masknet/shared'
 import { Card, CardContent, DialogContent, Typography, Grid, ToggleButtonGroup, ToggleButton } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, ActionButton } from '@masknet/theme'
 import { useI18N } from '../locales'
 import { useI18N as useBaseI18N } from '../../../utils'
 import { isGreaterThan, rightShift, isZero, NetworkPluginID } from '@masknet/web3-shared-base'
 import { useFungibleToken, useFungibleTokenBalance } from '@masknet/plugin-infra/web3'
 import { useState, useMemo, useCallback } from 'react'
 import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
-import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
+// import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { marketRegistry, outcomeRegistry, outcomeSecondParam } from './helpers'
 import { usePlaceBetCallback, useActualRate } from './hooks'
 import { activatedSocialNetworkUI } from '../../../social-network'
@@ -169,7 +169,7 @@ export function PlaceBetDialog() {
                                         {!amount ? (
                                             condition?.value
                                         ) : actualRateLoading ? (
-                                            <LoadingAnimation />
+                                            <div>Loading...</div>
                                         ) : (
                                             actualRate
                                         )}
@@ -181,7 +181,7 @@ export function PlaceBetDialog() {
                                         {!amount ? (
                                             condition?.value.toFixed(2)
                                         ) : actualRateLoading ? (
-                                            <LoadingAnimation />
+                                            <div>Loading...</div>
                                         ) : (
                                             minRate
                                         )}

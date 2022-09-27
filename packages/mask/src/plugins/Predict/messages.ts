@@ -1,4 +1,4 @@
-import { createPluginMessage, createPluginRPC, PluginMessageEmitter, PluginId } from '@masknet/plugin-infra'
+import { createPluginMessage, createPluginRPC, PluginMessageEmitter, PluginID } from '@masknet/plugin-infra'
 
 export interface PredictMessages {
     rpc: unknown
@@ -6,5 +6,5 @@ export interface PredictMessages {
 
 if (import.meta.webpackHot) import.meta.webpackHot.accept()
 
-const PluginPredictMessages: PluginMessageEmitter<PredictMessages> = createPluginMessage(PluginId.Predict)
-export const PluginPredictRPC = createPluginRPC(PluginId.Predict, () => import('./services'), PluginPredictMessages.rpc)
+const PluginPredictMessages: PluginMessageEmitter<PredictMessages> = createPluginMessage(PluginID.Predict)
+export const PluginPredictRPC = createPluginRPC(PluginID.Predict, () => import('./services'), PluginPredictMessages.rpc)

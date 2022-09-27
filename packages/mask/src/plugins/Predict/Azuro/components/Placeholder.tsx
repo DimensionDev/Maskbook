@@ -1,5 +1,4 @@
 import { makeStyles } from '@masknet/theme'
-import { Icons } from '@masknet/icons'
 import { useI18N } from '../../../../utils'
 import Button from '@mui/material/Button'
 
@@ -36,7 +35,7 @@ export function Placeholder(props: PlaceholderProps) {
 
     return (
         <div className={classes.placeholder}>
-            <Icons.Direct className={classes.icon} />
+            {/* <Icons.d className={classes.icon} /> */}
             {retry ? (
                 <Button variant="text" className={classes.retry} onClick={() => retry()}>
                     {t('retry')}
