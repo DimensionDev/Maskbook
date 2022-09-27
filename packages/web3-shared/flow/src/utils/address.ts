@@ -8,7 +8,7 @@ export function formatAddress(address: string, size = 0) {
         if (size === 0 || size >= 8) return partial
         return `${partial.slice(0, Math.max(0, 2 + size))}...${partial.slice(-size)}`
     }
-    if (isValidAcountAddress(address)) return format(address)
+    if (isValidAccountAddress(address)) return format(address)
     if (isValidContractAddress(address)) return format(`0x${address.split(/\./g)[1]}`)
     return address
 }
@@ -17,7 +17,7 @@ export function formatTokenId(id: string) {
     return `#${id}`
 }
 
-export function isValidAcountAddress(address: string) {
+export function isValidAccountAddress(address: string) {
     return /0x\w{16}/.test(address)
 }
 
@@ -26,7 +26,7 @@ export function isValidContractAddress(address: string) {
 }
 
 export function isValidAddress(address: string) {
-    return isValidAcountAddress(address) || isValidContractAddress(address)
+    return isValidAccountAddress(address) || isValidContractAddress(address)
 }
 
 export function isValidChainId(chainId: ChainId) {

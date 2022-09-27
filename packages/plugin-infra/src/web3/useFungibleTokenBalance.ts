@@ -1,8 +1,8 @@
-import type { Web3Helper } from '@masknet/web3-helpers'
-import type { NetworkPluginID } from '@masknet/web3-shared-base'
-import { noop } from 'lodash-unified'
 import { useEffect } from 'react'
 import useAsyncRetry from 'react-use/lib/useAsyncRetry'
+import { noop } from 'lodash-unified'
+import type { Web3Helper } from '@masknet/web3-helpers'
+import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
 import { useWeb3State } from '../entry-web3.js'
 import { useAccount } from './useAccount.js'
 import { useWeb3Connection } from './useWeb3Connection.js'
@@ -14,7 +14,7 @@ export function useFungibleTokenBalance<S extends 'all' | void = void, T extends
 ) {
     const account = useAccount(pluginID, options?.account)
     const connection = useWeb3Connection(pluginID, options)
-    const { BalanceNotifier, Others } = useWeb3State(pluginID)
+    const { BalanceNotifier } = useWeb3State(pluginID)
 
     const asyncRetry = useAsyncRetry(async () => {
         if (!connection) return '0'
@@ -24,12 +24,12 @@ export function useFungibleTokenBalance<S extends 'all' | void = void, T extends
     useEffect(() => {
         return (
             BalanceNotifier?.emitter.on('update', (ev) => {
-                if (Others?.isSameAddress(account, ev.account)) {
+                if (isSameAddress(account, ev.account)) {
                     asyncRetry.retry()
                 }
             }) ?? noop
         )
-    }, [account, asyncRetry.retry, BalanceNotifier, Others])
+    }, [account, asyncRetry.retry, BalanceNotifier])
 
     return asyncRetry
 }
