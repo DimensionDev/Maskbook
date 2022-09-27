@@ -2,6 +2,10 @@ import React, { createContext, useContext } from 'react'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { EMPTY_OBJECT } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
+import { useActualAccount } from './useAccount.js'
+import { useActualChainId } from './useChainId.js'
+import { useActualNetworkType } from './useNetworkType.js'
+import { useActualProviderType } from './useProviderType.js'
 
 interface Web3Context<T extends NetworkPluginID> {
     account?: string
@@ -32,10 +36,10 @@ export function PluginWeb3ContextProvider<T extends NetworkPluginID>({
 
 export function PluginWeb3ActualContextProvider({ children }: React.ProviderProps<never>) {
     const value = {
-        chainId: useCurrentWeb3NetworkChainId(),
-        account: useCurrentWeb3NetworkAccount(),
-        networkType: useCurrentWeb3NetworkNetworkType(),
-        providerType: useCurrentWeb3NetworkProviderType(),
+        account: useActualAccount(),
+        chainId: useActualChainId(),
+        networkType: useActualNetworkType(),
+        providerType: useActualProviderType(),
     }
     return <PluginWeb3Context.Provider value={value} children={children} />
 }
