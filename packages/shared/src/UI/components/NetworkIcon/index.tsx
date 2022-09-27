@@ -1,7 +1,7 @@
-import { useWeb3State } from "@masknet/plugin-infra/web3"
-import type { Web3Helper } from "@masknet/web3-helpers"
-import type { NetworkPluginID } from "@masknet/web3-shared-base"
-import { ImageIcon, ImageIconProps } from "../ImageIcon/index.js"
+import { useWeb3State } from '@masknet/plugin-infra/web3'
+import type { Web3Helper } from '@masknet/web3-helpers'
+import type { NetworkPluginID } from '@masknet/web3-shared-base'
+import { ImageIcon, ImageIconProps } from '../ImageIcon/index.js'
 
 export interface NetworkIconProps {
     pluginID: NetworkPluginID
@@ -10,12 +10,11 @@ export interface NetworkIconProps {
 }
 
 export function NetworkIcon(props: NetworkIconProps) {
-    const {pluginID, chainId, ImageIconProps} = props
-        const { Others } = useWeb3State(pluginID)
-        const networkType = Others?.chainResolver.networkType(chainId)
-        const networkIcon = networkType ? Others?.networkResolver.networkIcon(networkType) : undefined
+    const { pluginID, chainId, ImageIconProps } = props
+    const { Others } = useWeb3State(pluginID)
+    const networkType = Others?.chainResolver.networkType(chainId)
+    const networkIcon = networkType ? Others?.networkResolver.networkIcon(networkType) : undefined
 
-        if (networkIcon) return <ImageIcon icon={networkIcon} size={20} {...ImageIconProps} />
-
-        return null
+    if (networkIcon) return <ImageIcon icon={networkIcon} size={20} {...ImageIconProps} />
+    return null
 }
