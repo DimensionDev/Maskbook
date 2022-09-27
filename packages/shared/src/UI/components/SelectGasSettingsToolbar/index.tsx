@@ -8,14 +8,9 @@ import {
     isZero,
     formatBalance,
     FungibleToken,
+    formatCurrency,
 } from '@masknet/web3-shared-base'
-import {
-    formatEtherToGwei,
-    formatGweiToWei,
-    formatUSD,
-    formatWeiToEther,
-    GasOptionConfig,
-} from '@masknet/web3-shared-evm'
+import { formatEtherToGwei, formatGweiToWei, formatWeiToEther, GasOptionConfig } from '@masknet/web3-shared-evm'
 import { Typography, MenuItem, Box } from '@mui/material'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useChainId, useCurrentWeb3NetworkPluginID, useWeb3State } from '@masknet/plugin-infra/web3'
@@ -221,7 +216,11 @@ export function SelectGasSettingsToolbarUI({
 
     const gasFeeUSD = useMemo(() => {
         if (!gasFee) return '0'
-        return formatUSD(formatWeiToEther(gasFee).times(nativeTokenPrice))
+        return formatCurrency(formatWeiToEther(gasFee).times(nativeTokenPrice), 'USD', {
+            boundaries: {
+                min: 0.01,
+            },
+        })
     }, [gasFee, nativeTokenPrice])
 
     return gasOptions && !isZero(gasFee) ? (

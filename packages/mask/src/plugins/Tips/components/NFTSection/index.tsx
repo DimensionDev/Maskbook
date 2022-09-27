@@ -5,7 +5,7 @@ import { EMPTY_LIST } from '@masknet/shared-base'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import { isSameAddress, NetworkPluginID, NonFungibleAsset } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import { Button, FormControl, Typography } from '@mui/material'
+import { FormControl, Typography } from '@mui/material'
 import classnames from 'classnames'
 import { uniqWith } from 'lodash-unified'
 import { FC, HTMLProps, useCallback, useMemo } from 'react'
@@ -29,12 +29,14 @@ const useStyles = makeStyles()((theme) => ({
         flexDirection: 'row',
         alignItems: 'center',
         flexShrink: 0,
+        margin: theme.spacing(0, 2),
     },
     selectSection: {
         display: 'flex',
         flexDirection: 'column',
-        overflow: 'auto',
+        overflow: 'hidden',
         flexGrow: 1,
+        margin: theme.spacing(4, 0, 0),
     },
     statusBox: {
         display: 'flex',
@@ -45,6 +47,9 @@ const useStyles = makeStyles()((theme) => ({
     },
     loadingText: {
         marginTop: theme.spacing(1),
+    },
+    collectibleList: {
+        paddingRight: 0,
     },
     list: {
         flexGrow: 1,
@@ -60,6 +65,11 @@ const useStyles = makeStyles()((theme) => ({
     },
     addButton: {
         marginLeft: 'auto',
+        cursor: 'pointer',
+        color: theme.palette.maskColor.highlight,
+        fontSize: 14,
+        fontWeight: 700,
+        lineHeight: '18px',
     },
 }))
 
@@ -127,9 +137,9 @@ export const NFTSection: FC<Props> = ({ className, onEmpty, ...rest }) => {
                     </Typography>
                 )}
                 {isEvm ? (
-                    <Button variant="text" className={classes.addButton} onClick={() => openAddTokenDialog(true)}>
+                    <Typography className={classes.addButton} onClick={() => openAddTokenDialog(true)}>
                         {t.tip_add_collectibles()}
-                    </Button>
+                    </Typography>
                 ) : null}
             </FormControl>
             <div className={classes.selectSection}>
@@ -137,13 +147,14 @@ export const NFTSection: FC<Props> = ({ className, onEmpty, ...rest }) => {
                     if (tokens.length) {
                         return (
                             <CollectibleList
+                                classes={{ root: classes.collectibleList }}
                                 retry={next}
                                 collectibles={tokens}
                                 loading={loading}
                                 columns={4}
                                 selectable
                                 value={selectedKey}
-                                showNetworkIcon
+                                showNetworkIcon={false}
                                 onChange={(value: string | null) => {
                                     if (!value) {
                                         setNonFungibleTokenAddress('')

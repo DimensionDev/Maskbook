@@ -10,7 +10,7 @@ import { CollectibleGridProps, useStyles } from './hooks/useStyles.js'
 import { LoadingSkeleton } from './LoadingSkeleton.js'
 
 export interface CollectibleListProps
-    extends withClasses<'empty' | 'button'>,
+    extends withClasses<'empty' | 'button' | 'root'>,
         CollectibleGridProps,
         Omit<SelectableProps, 'value' | 'checked' | 'onChange'> {
     pluginID?: NetworkPluginID
@@ -20,6 +20,7 @@ export interface CollectibleListProps
     retry(): void
     readonly?: boolean
     hasRetry?: boolean
+    disableLink?: boolean
     showNetworkIcon?: boolean
     /** Collectible key, in format of `${contractAddress}_${tokenId}` */
     value?: string | string[]
@@ -43,6 +44,7 @@ export function CollectibleList(props: CollectibleListProps) {
         hasRetry = true,
         selectable,
         multiple,
+        disableLink,
         showNetworkIcon,
         value,
         onChange,
@@ -110,6 +112,7 @@ export function CollectibleList(props: CollectibleListProps) {
                                         pluginID={pluginID}
                                         selectable={selectable}
                                         multiple={multiple}
+                                        disableLink={disableLink}
                                         showNetworkIcon={showNetworkIcon}
                                         checked={checked}
                                         inactive={inactive}
