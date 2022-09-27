@@ -134,6 +134,17 @@ const useStyles = makeStyles()((theme) => {
             textOverflow: 'ellipsis',
             overflow: 'hidden',
         },
+        bindingsWrapper: {
+            display: 'grid',
+            gridAutoFlow: 'column',
+            width: 300,
+            alignItems: 'center',
+            overflow: 'hidden',
+        },
+        badge: {
+            display: 'flex',
+            marginRight: 12,
+        },
     }
 })
 

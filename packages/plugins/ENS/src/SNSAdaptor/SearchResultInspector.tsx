@@ -22,6 +22,7 @@ export function SearchResultInspectorContent() {
         isError,
         reversedAddress,
         retry,
+        validNextIdTwitterBindings,
         firstValidNextIdTwitterBinding,
         restOfValidNextIdTwitterBindings,
         domain,
@@ -53,17 +54,24 @@ export function SearchResultInspectorContent() {
                         <Typography className={classes.nextIdVerifiedTitle}>
                             {t.associated_social_accounts()}
                         </Typography>
-                        <Link
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className={cx(classes.link, classes.rightSpace)}
-                            href={`https://twitter.com/${firstValidNextIdTwitterBinding.identity}`}>
-                            <Icons.TwitterRound />
-                            <Typography className={classes.nextIdVerifiedTwitterName}>
-                                {firstValidNextIdTwitterBinding.identity}
-                            </Typography>
-                        </Link>
-                        <NextIdBadge />
+                        <section className={classes.bindingsWrapper}>
+                            {validNextIdTwitterBindings.map((x, i) => (
+                                <div key={i} className={classes.badge}>
+                                    <Link
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className={cx(classes.link, classes.rightSpace)}
+                                        href={`https://twitter.com/${x.identity}`}>
+                                        <Icons.TwitterRound />
+                                        <Typography className={classes.nextIdVerifiedTwitterName}>
+                                            {x.identity}
+                                        </Typography>
+                                    </Link>
+                                    <NextIdBadge />
+                                </div>
+                            ))}
+                        </section>
+
                         {restOfValidNextIdTwitterBindings.length > 0 ? (
                             <SocialAccountList restOfValidNextIdTwitterBindings={restOfValidNextIdTwitterBindings} />
                         ) : null}
