@@ -61,7 +61,7 @@ function AuthorTipsButtonWrapper() {
                 name: `(${visitingIdentity.nickname}) ${Others?.formatAddress(visitingIdentity.identifier.userId, 4)}`,
             },
         ]
-    }, [visitingIdentity])
+    }, [visitingIdentity, Others?.formatAddress])
 
     const component = useMemo(() => {
         const Component = createInjectHooksRenderer(
@@ -76,7 +76,7 @@ function AuthorTipsButtonWrapper() {
                 tipsAccounts={tipsAccounts}
             />
         )
-    }, [visitingIdentity.identifier])
+    }, [visitingIdentity.identifier, tipsAccounts])
 
     if (!component || !visitingIdentity.identifier || isMinimal) return null
 
