@@ -1,4 +1,5 @@
 import ENS from 'ethjs-ens'
+import namehash from '@ensdomains/eth-ens-namehash'
 import { Web3StateSettings } from '../../settings/index.js'
 import type { NameServiceResolver } from '@masknet/plugin-infra/web3'
 import { ChainId, ProviderType, isZeroAddress, isEmptyHex } from '@masknet/web3-shared-evm'
@@ -27,7 +28,7 @@ export class ENS_Resolver implements NameServiceResolver<ChainId> {
 
         try {
             const ens = await this.createENS()
-            const lookupAddress = await ens.lookup(name)
+            const lookupAddress = await ens.resolveAddressForNode(namehash.hash(name))
             return isZeroAddress(lookupAddress) || isEmptyHex(lookupAddress)
                 ? web3?.eth.ens.registry.getOwner(name)
                 : lookupAddress

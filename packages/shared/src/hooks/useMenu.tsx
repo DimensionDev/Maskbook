@@ -79,6 +79,7 @@ export function useMenuConfig(
         }, []),
         useCallback(() => {
             setOpen(false)
+            setAnchorEl(null)
         }, []),
     ]
 }
