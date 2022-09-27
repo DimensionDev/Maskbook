@@ -5,9 +5,9 @@ import { Trans } from 'react-i18next'
 import useStyles from './useStyles'
 import { useI18N } from '../locales'
 
-export function NextIdBadge({ variant, rightBoundary }: { variant?: 'dark' | 'light'; rightBoundary?: number }) {
+export function NextIdBadge() {
     const t = useI18N()
-    const { classes } = useStyles({})
+    const { classes } = useStyles()
 
     return (
         <ShadowRootTooltip
@@ -30,17 +30,7 @@ export function NextIdBadge({ variant, rightBoundary }: { variant?: 'dark' | 'li
                     />
                 </Typography>
             }>
-            <Icons.NextIDMini
-                width={32}
-                variant={variant}
-                ref={(e) => {
-                    if (!rightBoundary) return
-                    const offsetRight = e?.getBoundingClientRect().right
-                    if (offsetRight && offsetRight > rightBoundary) {
-                        e.style.display = 'none'
-                    }
-                }}
-            />
+            <Icons.NextIDMini variant="light" width={32} />
         </ShadowRootTooltip>
     )
 }
