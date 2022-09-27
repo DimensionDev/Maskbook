@@ -13,7 +13,7 @@ const useStyles = makeStyles<{}, 'postTipsButton'>()((theme, _, refs) => ({
         alignItems: 'center',
         color: '#8899a6',
         position: 'relative',
-        [`&.${refs.postTipsButton}::before`]: {
+        [`& .${refs.postTipsButton}::before`]: {
             content: '""',
             width: 34,
             height: 34,
