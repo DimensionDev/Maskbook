@@ -1,20 +1,11 @@
 import { memo, useRef, useCallback, useState, useEffect, useMemo } from 'react'
 import { useUpdateEffect } from 'react-use'
-import { first } from 'lodash-unified'
 import IframeResizer, { IFrameComponent } from 'iframe-resizer-react'
-import { getRPCConstants } from '@masknet/web3-shared-evm'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { Box } from '@mui/material'
 import { ImageIcon } from '@masknet/shared'
 import { GeneratedIconProps, Icons } from '@masknet/icons'
-import type { Web3Helper } from '@masknet/web3-helpers'
 import { MEDIA_VIEWER_URL } from '../../../constants.js'
-
-interface ERC721TokenQuery {
-    contractAddress: string
-    tokenId: string
-    chainId?: Web3Helper.ChainIdAll
-}
 
 interface AssetPlayerProps
     extends withClasses<
@@ -30,7 +21,6 @@ interface AssetPlayerProps
         muted?: boolean
     }
     loadingIcon?: React.ReactNode
-    erc721Token?: ERC721TokenQuery
     renderTimeout?: number
     iconProps?: GeneratedIconProps
     fallbackImage?: URL
@@ -39,9 +29,9 @@ interface AssetPlayerProps
     fallbackResourceLoader?: JSX.Element
     setERC721TokenName?: (name: string) => void
     setSourceType?: (type: string) => void
-    showNetwork?: boolean
     networkIcon?: URL | string
 }
+
 const useStyles = makeStyles()({
     hidden: {
         position: 'absolute',
@@ -62,16 +52,11 @@ enum AssetPlayerState {
 }
 
 export const AssetPlayer = memo<AssetPlayerProps>((props) => {
-    const ref = useRef<IFrameComponent | null>(null)
-    const { url, type, options, iconProps, isFixedIframeSize = true, showNetwork = false, networkIcon } = props
+    const { url, type, options, iconProps, isFixedIframeSize = true, networkIcon } = props
     const classes = useStylesExtends(useStyles(), props)
+    const ref = useRef<IFrameComponent | null>(null)
     const [hidden, setHidden] = useState(Boolean(props.renderTimeout))
-    const { RPC_URLS } = getRPCConstants(props.erc721Token?.chainId)
-    const rpc = first(RPC_URLS)
-    const erc721Token = rpc ? ({ ...props.erc721Token, rpc } as ERC721TokenQuery) : undefined
-    const [playerState, setPlayerState] = useState(
-        url || erc721Token ? AssetPlayerState.LOADING : AssetPlayerState.ERROR,
-    )
+    const [playerState, setPlayerState] = useState(url ? AssetPlayerState.LOADING : AssetPlayerState.ERROR)
 
     useEffect(() => {
         if (!props.renderTimeout || !hidden) return
@@ -87,20 +72,20 @@ export const AssetPlayer = memo<AssetPlayerProps>((props) => {
     const setIframe = useCallback(() => {
         // if iframe isn't be init or the load error has been existed
         if (!ref.current || playerState === AssetPlayerState.ERROR || playerState === AssetPlayerState.NORMAL) return
-        if (!url && !erc721Token) {
+        if (!url) {
             setPlayerState(AssetPlayerState.ERROR)
             return
         }
         if (playerState === AssetPlayerState.INIT) {
             ref.current.iFrameResizer.sendMessage({
                 url,
-                erc721Token,
                 type,
                 ...options,
             })
             return
         }
-    }, [url, JSON.stringify(erc721Token), type, JSON.stringify(options), playerState])
+    }, [url, type, JSON.stringify(options), playerState])
+
     // endregion
     type ERC721TokenNameMsg = {
         message:
@@ -251,7 +236,7 @@ export const AssetPlayer = memo<AssetPlayerProps>((props) => {
                       )) ?? <Icons.AssetLoading className={classes.loadingIcon} />}
             </Box>
             {IframeResizerMemo}
-            {showNetwork && <ImageIcon icon={networkIcon} size={20} classes={{ icon: classes.networkIcon }} />}
+            {networkIcon && <ImageIcon icon={networkIcon} size={20} classes={{ icon: classes.networkIcon }} />}
         </Box>
     )
 })

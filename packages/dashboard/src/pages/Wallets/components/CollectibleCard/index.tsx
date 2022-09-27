@@ -1,6 +1,6 @@
 import { memo, useEffect, useMemo, useRef, useState } from 'react'
 import { useHoverDirty } from 'react-use'
-import { WalletIcon, NFTCardStyledAssetPlayer } from '@masknet/shared'
+import { WalletIcon, AssetPreviewer } from '@masknet/shared'
 import { Box, Button, Link, Tooltip, Typography } from '@mui/material'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
@@ -74,13 +74,7 @@ const useStyles = makeStyles()((theme) => ({
         width: 64,
         height: 64,
     },
-    wrapper: {
-        width: '100%',
-        minWidth: 140,
-        height: '100%',
-        minHeight: 186,
-    },
-    linkWrapper: {
+    link: {
         position: 'relative',
         width: 140,
         height: 186,
@@ -96,32 +90,30 @@ const useStyles = makeStyles()((theme) => ({
 export interface CollectibleCardProps {
     asset: Web3Helper.NonFungibleAssetScope<'all'>
     onSend(): void
-    renderOrder: number
 }
 
-export const CollectibleCard = memo<CollectibleCardProps>(({ asset, onSend, renderOrder }) => {
+export const CollectibleCard = memo<CollectibleCardProps>(({ asset, onSend }) => {
     const t = useDashboardI18N()
-    const chainId = useChainId()
     const { classes } = useStyles()
     const ref = useRef(null)
+    const pluginID = useCurrentWeb3NetworkPluginID()
+    const chainId = useChainId()
     const { Others } = useWeb3State()
+    const networkDescriptor = useNetworkDescriptor(pluginID, asset.contract?.chainId)
     const [isHoveringTooltip, setHoveringTooltip] = useState(false)
     const isHovering = useHoverDirty(ref)
-    const networkDescriptor = useNetworkDescriptor(undefined, asset.contract?.chainId)
     const isOnCurrentChain = useMemo(() => chainId === asset.contract?.chainId, [chainId, asset])
-    const currentPluginId = useCurrentWeb3NetworkPluginID()
 
     useEffect(() => {
         setHoveringTooltip(false)
     }, [chainId])
 
     // Sending NFT is only available on EVM currently.
-    const sendable = currentPluginId === NetworkPluginID.PLUGIN_EVM
-    const showSendButton = (isHovering || isHoveringTooltip) && sendable
+    const showSendButton = (isHovering || isHoveringTooltip) && pluginID === NetworkPluginID.PLUGIN_EVM
 
     const nftLink = useMemo(() => {
         return Others?.explorerResolver.nonFungibleTokenLink(asset.chainId, asset.address, asset.tokenId)
-    }, [currentPluginId, asset.chainId, asset.address, asset.tokenId])
+    }, [asset.chainId, asset.address, asset.tokenId, Others])
 
     return (
         <Box className={`${classes.container} ${isHovering || isHoveringTooltip ? classes.hover : ''}`} ref={ref}>
@@ -132,19 +124,16 @@ export const CollectibleCard = memo<CollectibleCardProps>(({ asset, onSend, rend
                 <Link
                     target={asset.link ?? nftLink ? '_blank' : '_self'}
                     rel="noopener noreferrer"
-                    className={classes.linkWrapper}
+                    className={classes.link}
                     href={asset.link ?? nftLink}>
                     <div className={classes.blocker} />
                     <div className={classes.mediaContainer}>
-                        <NFTCardStyledAssetPlayer
-                            contractAddress={asset.contract?.address}
-                            chainId={asset.contract?.chainId}
-                            renderOrder={renderOrder}
+                        <AssetPreviewer
+                            pluginID={pluginID}
+                            chainId={asset.chainId}
                             url={asset.metadata?.imageURL || asset.metadata?.mediaURL}
-                            tokenId={asset.tokenId}
                             classes={{
                                 fallbackImage: classes.fallbackImage,
-                                wrapper: classes.wrapper,
                             }}
                         />
                     </div>

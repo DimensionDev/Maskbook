@@ -1,7 +1,7 @@
 import { useWeb3State } from '@masknet/plugin-infra/web3'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { CollectibleGridProps, useStyles } from './hooks/useStyles.js'
-import { NetworkPluginID, NonFungibleAsset, SocialAddress, SourceType } from '@masknet/web3-shared-base'
+import type { NetworkPluginID, NonFungibleAsset, SocialAddress } from '@masknet/web3-shared-base'
 import { Box, Button, Tooltip, Typography } from '@mui/material'
 import { useI18N } from '../../../../utils/index.js'
 import { CollectibleItem } from './CollectibleItem.js'
@@ -39,10 +39,10 @@ export function CollectibleList(props: CollectibleListProps) {
                     </Box>
                 ) : (
                     <Box className={classes.root}>
-                        {collectibles.map((token, index) => {
-                            const name = token.collection?.name || token.contract?.name
-                            const uiTokenId = Others?.formatTokenId(token.tokenId, 4) ?? `#${token.tokenId}`
-                            const title = name ? `${name} ${uiTokenId}` : token.metadata?.name ?? ''
+                        {collectibles.map((asset, index) => {
+                            const name = asset.collection?.name || asset.contract?.name
+                            const uiTokenId = Others?.formatTokenId(asset.tokenId, 4) ?? `#${asset.tokenId}`
+                            const title = name ? `${name} ${uiTokenId}` : asset.metadata?.name ?? ''
                             return (
                                 <Tooltip
                                     key={index}
@@ -56,14 +56,7 @@ export function CollectibleList(props: CollectibleListProps) {
                                         },
                                     }}
                                     arrow>
-                                    <CollectibleItem
-                                        className={classes.collectibleItem}
-                                        renderOrder={index}
-                                        asset={token}
-                                        provider={SourceType.OpenSea}
-                                        readonly={readonly}
-                                        address={address}
-                                    />
+                                    <CollectibleItem className={classes.collectibleItem} asset={asset} />
                                 </Tooltip>
                             )
                         })}

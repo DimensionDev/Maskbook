@@ -1,6 +1,12 @@
 import classNames from 'classnames'
-import { NFTCardStyledAssetPlayer } from '@masknet/shared'
-import { NetworkPluginID, isSameAddress, NonFungibleToken, NonFungibleTokenContract } from '@masknet/web3-shared-base'
+import { AssetPreviewer } from '@masknet/shared'
+import {
+    NetworkPluginID,
+    isSameAddress,
+    NonFungibleToken,
+    NonFungibleTokenContract,
+    NonFungibleAsset,
+} from '@masknet/web3-shared-base'
 import { SchemaType, formatTokenId, ChainId } from '@masknet/web3-shared-evm'
 import { useI18N as useBaseI18N } from '../../../utils/index.js'
 import { Translate, useI18N } from '../locales/index.js'
@@ -104,9 +110,6 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         height: 180,
         minHeight: 153,
         overflow: 'hidden',
-    },
-    iframe: {
-        minHeight: 147,
     },
     nftNameWrapper: {
         width: '100%',
@@ -289,9 +292,6 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-    },
-    assetImgWrapper: {
-        maxHeight: 155,
     },
 }))
 
@@ -503,9 +503,8 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                                 <div key={i}>
                                     <NFTCard
                                         findToken={findToken}
-                                        renderOrder={i}
                                         token={token}
-                                        selectToken={selectToken}
+                                        onSelect={selectToken}
                                         isSelectSharesExceed={isSelectSharesExceed}
                                     />
                                 </div>
@@ -621,15 +620,13 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
 
                                     return tokenIdFilterList.length > 0 &&
                                         !tokenIdFilterList.includes(token.tokenId) ? null : (
-                                        <div key={i}>
-                                            <NFTCard
-                                                findToken={findToken}
-                                                renderOrder={i}
-                                                token={token}
-                                                selectToken={selectToken}
-                                                isSelectSharesExceed={isSelectSharesExceed}
-                                            />
-                                        </div>
+                                        <NFTCard
+                                            key={token.tokenId}
+                                            findToken={findToken}
+                                            token={token}
+                                            onSelect={selectToken}
+                                            isSelectSharesExceed={isSelectSharesExceed}
+                                        />
                                     )
                                 })}
                                 {loadingOwnerList ? (
@@ -691,45 +688,40 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
 }
 
 interface NFTCardProps {
-    findToken: OrderedERC721Token | undefined
-    token: OrderedERC721Token
+    index: number
+    asset: NonFungibleAsset<ChainId, SchemaType>
+    findAsset: NonFungibleAsset<ChainId, SchemaType> | undefined
     isSelectSharesExceed: boolean
-    renderOrder: number
-    selectToken: (
-        token: OrderedERC721Token,
-        findToken: OrderedERC721Token | undefined,
+    onSelect: (
+        asset: NonFungibleAsset<ChainId, SchemaType>,
+        findAsset: NonFungibleAsset<ChainId, SchemaType> | undefined,
         shiftKey: boolean,
         index: number,
     ) => void
 }
 
 function NFTCard(props: NFTCardProps) {
-    const { findToken, token, isSelectSharesExceed, renderOrder, selectToken } = props
+    const { asset, findAsset, isSelectSharesExceed, index, onSelect } = props
     const { classes } = useStyles({ isSelectSharesExceed })
     return (
         <ListItem className={classes.selectWrapper}>
-            <NFTCardStyledAssetPlayer
-                url={token.metadata?.mediaURL || token.metadata?.imageURL}
-                contractAddress={token.contract?.address}
-                tokenId={token.tokenId}
-                renderOrder={renderOrder}
-                chainId={token.contract?.chainId}
+            <AssetPreviewer
                 classes={{
                     fallbackImage: classes.fallbackImage,
-                    iframe: classes.iframe,
-                    imgWrapper: classes.assetImgWrapper,
                 }}
+                pluginID={NetworkPluginID.PLUGIN_EVM}
+                chainId={asset.chainId}
+                url={asset.metadata?.imageURL}
             />
             <div className={classes.selectWrapperNftNameWrapper}>
                 <Typography className={classes.selectWrapperNftName} color="textSecondary">
-                    {formatTokenId(token.tokenId, 2)}
+                    {formatTokenId(asset.tokenId, 2)}
                 </Typography>
             </div>
-
             <div
-                className={classNames(classes.checkbox, findToken ? classes.checked : '')}
-                onClick={(event) => selectToken(token, findToken, event.shiftKey, token.index)}>
-                {findToken ? <CheckIcon className={classes.checkIcon} /> : null}
+                className={classNames(classes.checkbox, findAsset ? classes.checked : '')}
+                onClick={(event) => onSelect(asset, findAsset, event.shiftKey, index)}>
+                {findAsset ? <CheckIcon className={classes.checkIcon} /> : null}
             </div>
         </ListItem>
     )

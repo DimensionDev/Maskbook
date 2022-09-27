@@ -1,6 +1,8 @@
+import { useMemo } from 'react'
 import { useAsyncRetry } from 'react-use'
-import type { NetworkPluginID } from '@masknet/web3-shared-base'
+import { GasOptionType, NetworkPluginID } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
+import { useGasOption } from './useGasOption.js'
 import { useWeb3Connection } from './useWeb3Connection.js'
 
 export function useGasPrice<S extends 'all' | void = void, T extends NetworkPluginID = NetworkPluginID>(
@@ -8,8 +10,16 @@ export function useGasPrice<S extends 'all' | void = void, T extends NetworkPlug
     options?: Web3Helper.Web3ConnectionOptionsScope<S, T>,
 ) {
     const connection = useWeb3Connection(pluginID, options)
-    return useAsyncRetry(async () => {
+    const gasOption = useGasOption(pluginID, GasOptionType.NORMAL)
+    const gasPrice = useAsyncRetry(async () => {
         if (!connection) return '0'
         return connection.getGasPrice() ?? '0'
     }, [connection])
+
+    return useMemo(() => {
+        return {
+            ...gasPrice,
+            value: gasOption?.value?.suggestedMaxFeePerGas ?? gasPrice.value,
+        }
+    }, [gasPrice, gasOption])
 }

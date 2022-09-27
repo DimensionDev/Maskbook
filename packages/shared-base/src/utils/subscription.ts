@@ -40,6 +40,25 @@ export function createConstantSubscription<T>(value: T): Subscription<T> {
     }
 }
 
+export function createSubscriptionFromGetterSetter<T>({
+    getter,
+    setter,
+}: {
+    getter: () => T
+    setter: (value: T) => Promise<void> | void
+}) {
+    const listeners = new Set<Function>()
+    return {
+        getCurrentValue() {
+            return getter()
+        },
+        subscribe(callback: Function) {
+            listeners.add(callback)
+            return () => listeners.delete(callback)
+        },
+    }
+}
+
 export function createSubscriptionFromAsync<T>(
     f: () => Promise<T>,
     defaultValue: T,

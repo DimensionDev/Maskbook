@@ -7,9 +7,9 @@ export interface AvatarMetaDB {
     tokenId: string
     address: string
     avatarId: string
-    chainId?: ChainId
+    chainId: ChainId
     schema?: SchemaType
-    pluginId?: NetworkPluginID
+    pluginId: NetworkPluginID
 }
 
 export interface NFT {

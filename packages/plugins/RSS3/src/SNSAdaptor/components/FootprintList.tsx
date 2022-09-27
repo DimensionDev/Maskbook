@@ -1,7 +1,7 @@
+import type { FC } from 'react'
 import { makeStyles } from '@masknet/theme'
 import type { RSS3BaseAPI } from '@masknet/web3-providers'
 import { List, ListItem, ListProps, Tooltip } from '@mui/material'
-import type { FC } from 'react'
 import { FootprintCard, FootprintCardProps } from './FootprintCard.js'
 
 export interface FootprintsLayoutProps {

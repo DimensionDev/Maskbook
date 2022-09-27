@@ -1,24 +1,24 @@
+import { useState, useCallback, useEffect, useMemo } from 'react'
+import classNames from 'classnames'
 import { Box, Typography, List, ListItem } from '@mui/material'
 import { makeStyles, ActionButton, LoadingBase } from '@masknet/theme'
-import { useState, useCallback, useEffect, useMemo } from 'react'
 import { useI18N } from '../locales/index.js'
-import classNames from 'classnames'
 import { ERC721ContractSelectPanel } from '../../../web3/UI/ERC721ContractSelectPanel.js'
 import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary.js'
 import { EthereumERC721TokenApprovedBoundary } from '../../../web3/UI/EthereumERC721TokenApprovedBoundary.js'
-import { ChainId, SchemaType, useNftRedPacketConstants, formatTokenId } from '@masknet/web3-shared-evm'
+import { ChainId, SchemaType, useNftRedPacketConstants } from '@masknet/web3-shared-evm'
 import CheckIcon from '@mui/icons-material/Check'
 import CloseIcon from '@mui/icons-material/Close'
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline'
 import { RedpacketMessagePanel } from './RedpacketMessagePanel.js'
-import { SelectNftTokenDialog, OrderedERC721Token } from './SelectNftTokenDialog.js'
+import { SelectNftTokenDialog, OrderedERC721Token } from './SelectNFTTokenDialog.js'
 import { RedpacketNftConfirmDialog } from './RedpacketNftConfirmDialog.js'
-import { NFTCardStyledAssetPlayer } from '@masknet/shared'
+import { AssetPreviewer } from '@masknet/shared'
 import { NFTSelectOption } from '../types.js'
 import { NFT_RED_PACKET_MAX_SHARES } from '../constants.js'
 import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
 import { useNonFungibleOwnerTokens } from '@masknet/plugin-infra/web3-evm'
-import { NetworkPluginID, NonFungibleTokenContract, NonFungibleToken } from '@masknet/web3-shared-base'
+import { NetworkPluginID, NonFungibleTokenContract, NonFungibleAsset } from '@masknet/web3-shared-base'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { PluginWalletStatusBar } from '../../../utils/index.js'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
@@ -199,12 +199,6 @@ const useStyles = makeStyles()((theme) => {
         loadingOwnerList: {
             margin: '24px auto 16px',
         },
-        iframe: {
-            minHeight: 147,
-        },
-        assetImgWrapper: {
-            maxHeight: 155,
-        },
         approveButton: {
             height: 40,
             margin: 0,
@@ -248,7 +242,7 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
     } = useNonFungibleOwnerTokens(contract?.address ?? '', account, chainId, balance)
     const tokenDetailedOwnerList = _tokenDetailedOwnerList.map((v, index) => ({ ...v, index } as OrderedERC721Token))
     const removeToken = useCallback(
-        (token: NonFungibleToken<ChainId, SchemaType.ERC721>) => {
+        (token: NonFungibleAsset<ChainId, SchemaType>) => {
             ;(selectOption === NFTSelectOption.Partial ? setExistTokenDetailedList : setAllTokenDetailedList)((list) =>
                 list.filter((t) => t.tokenId !== token.tokenId),
             )
@@ -386,7 +380,7 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                         <List className={classes.tokenSelector}>
                             {tokenDetailedList.map((value, i) => (
                                 <div key={i}>
-                                    <NFTCard token={value} removeToken={removeToken} renderOrder={i} />
+                                    <NFTCard asset={value} onRemove={removeToken} />
                                 </div>
                             ))}
                             <ListItem
@@ -431,37 +425,30 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
     )
 }
 
-interface NFTCardProps {
-    token: OrderedERC721Token
-    removeToken: (token: NonFungibleToken<ChainId, SchemaType.ERC721>) => void
-    renderOrder: number
+export interface NFTCardProps {
+    asset: NonFungibleAsset<ChainId, SchemaType>
+    onRemove: (asset: NonFungibleAsset<ChainId, SchemaType>) => void
 }
 
 function NFTCard(props: NFTCardProps) {
-    const { token, removeToken, renderOrder } = props
     const { classes } = useStyles()
-    const [name, setName] = useState(formatTokenId(token.tokenId, 2))
+    const { asset, onRemove } = props
     return (
         <ListItem className={classNames(classes.tokenSelectorWrapper)}>
-            <NFTCardStyledAssetPlayer
-                contractAddress={token.contract?.address}
-                chainId={token.chainId}
-                url={token.metadata?.mediaURL || token.metadata?.imageURL}
-                tokenId={token.tokenId}
-                renderOrder={renderOrder}
-                setERC721TokenName={setName}
+            <AssetPreviewer
                 classes={{
                     fallbackImage: classes.fallbackImage,
-                    iframe: classes.iframe,
-                    imgWrapper: classes.assetImgWrapper,
                 }}
+                pluginID={NetworkPluginID.PLUGIN_EVM}
+                chainId={asset.chainId}
+                url={asset.metadata?.imageURL}
             />
             <div className={classes.nftNameWrapper}>
                 <Typography className={classes.nftName} color="textSecondary">
-                    {name}
+                    {asset.metadata?.name}
                 </Typography>
             </div>
-            <div className={classes.closeIconWrapperBack} onClick={() => removeToken(token)}>
+            <div className={classes.closeIconWrapperBack} onClick={() => onRemove(asset)}>
                 <div className={classes.closeIconWrapper}>
                     <CloseIcon className={classes.closeIcon} />
                 </div>

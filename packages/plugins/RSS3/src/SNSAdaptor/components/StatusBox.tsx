@@ -1,8 +1,8 @@
+import type { FC } from 'react'
+import { range } from 'lodash-unified'
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import { Box, Skeleton, Typography } from '@mui/material'
-import { range } from 'lodash-unified'
-import type { FC } from 'react'
 
 interface Props {
     loading?: boolean

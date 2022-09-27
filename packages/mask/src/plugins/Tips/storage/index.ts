@@ -1,18 +1,16 @@
 import { remove } from 'lodash-unified'
-import type { ScopedStorage, EnhanceableSite } from '@masknet/shared-base'
-import { NonFungibleToken, isSameAddress } from '@masknet/web3-shared-base'
-import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { useSubscription } from 'use-subscription'
-
-interface StorageValue {
-    addedTokens: Array<NonFungibleToken<ChainId, SchemaType>>
+import type { EnhanceableSite, ScopedStorage } from '@masknet/shared-base'
+import type { Web3Helper } from '@masknet/web3-helpers'
+import { isSameAddress } from '@masknet/web3-shared-base'
+export interface StorageValue {
+    addedTokens: Array<Web3Helper.NonFungibleTokenScope<'all'>>
     userGuide: Partial<Record<EnhanceableSite, number>>
 }
 
-export const storageDefaultValue = {
-    userGuide: {},
-    publicKey: null as null | string,
+export const STORAGE_DEFAULT_VALUE: StorageValue = {
     addedTokens: [],
+    userGuide: {},
 }
 
 let storage: ScopedStorage<StorageValue> = null!
@@ -32,15 +30,15 @@ export function getTokens() {
     return storage.storage.addedTokens.value
 }
 
-export function storeToken(token: NonFungibleToken<ChainId, SchemaType>) {
+export async function addToken(token: Web3Helper.NonFungibleTokenScope<'all'>) {
     const tokens = [token, ...getTokens()]
-    storage.storage.addedTokens.setValue(tokens)
+    await storage.storage.addedTokens.setValue(tokens)
 }
 
-export function deleteToken(address: string, tokenId: string) {
+export async function removeToken(address: string, tokenId: string) {
     const tokens = getTokens()
     remove(tokens, (t) => t.tokenId === tokenId && isSameAddress(t.contract?.address, address))
-    storage.storage.addedTokens.setValue(tokens)
+    await storage.storage.addedTokens.setValue(tokens)
 }
 
 export function finishUserGuide(site: EnhanceableSite) {

@@ -1,29 +1,22 @@
 import { useEffect, useState, useMemo, useCallback } from 'react'
+import BigNumber from 'bignumber.js'
 import { useMenuConfig, FormattedBalance, useSharedI18N, useSelectAdvancedSettings } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
-import {
-    NetworkPluginID,
-    GasOptionType,
-    multipliedBy,
-    isZero,
-    formatBalance,
-    FungibleToken,
-} from '@masknet/web3-shared-base'
-import { formatEtherToGwei, formatGweiToWei, Transaction, formatUSD, formatWeiToEther } from '@masknet/web3-shared-evm'
-import { Typography, MenuItem, Box } from '@mui/material'
-import type { Web3Helper } from '@masknet/web3-helpers'
-import { useChainId, useCurrentWeb3NetworkPluginID, useWeb3State } from '@masknet/plugin-infra/web3'
 import { Icons } from '@masknet/icons'
+import { NetworkPluginID, GasOptionType, isZero, formatBalance } from '@masknet/web3-shared-base'
+import { useChainId, useCurrentWeb3NetworkPluginID, useWeb3State } from '@masknet/plugin-infra/web3'
+import { formatEtherToGwei, formatGweiToWei, formatUSD, formatWeiToEther } from '@masknet/web3-shared-evm'
+import type { Web3Helper } from '@masknet/web3-helpers'
+import { Typography, MenuItem, Box } from '@mui/material'
 import { SettingsContext } from '../SettingsBoard/Context.js'
-import BigNumber from 'bignumber.js'
 
 interface SelectGasSettingsToolbarProps<T extends NetworkPluginID = NetworkPluginID> {
     pluginID?: T
-    chainId?: Web3Helper.Definition[T]['ChainId']
-    nativeToken: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
+    chainId?: Web3Helper.ChainIdAll
+    nativeToken: Web3Helper.FungibleTokenScope<'all'>
     nativeTokenPrice: number
-    transaction?: Transaction
-    onChange?(transaction?: Transaction): void
+    transaction?: Web3Helper.TransactionAll
+    onChange?(transaction?: Web3Helper.TransactionAll): Promise<void>
 }
 
 const useStyles = makeStyles()((theme) => {
@@ -111,9 +104,9 @@ export function SelectGasSettingsToolbarUI({
     const { gasOptions, GAS_OPTION_NAMES } = SettingsContext.useContainer()
     const t = useSharedI18N()
     const [isCustomGas, setIsCustomGas] = useState(false)
-    const [currentGasOptionType, setCurrentGasOptionType] = useState<GasOptionType>(GasOptionType.SLOW)
     const { classes, cx, theme } = useStyles()
     const chainId = useChainId()
+    const [currentGasOptionType, setCurrentGasOptionType] = useState(GasOptionType.NORMAL)
     const { Others } = useWeb3State<'all'>()
 
     const selectAdvancedSettings = useSelectAdvancedSettings(NetworkPluginID.PLUGIN_EVM)
@@ -204,9 +197,10 @@ export function SelectGasSettingsToolbarUI({
         },
     )
     const gasFee = useMemo(() => {
-        if (!tx) return '0'
-        const gasPrice = (tx.gasPrice ? tx.gasPrice : tx.maxFeePerGas) as string
-        return tx.gas && gasPrice ? multipliedBy(gasPrice, tx.gas).integerValue().toFixed() : '0'
+        return '0'
+        // if (!tx) return '0'
+        // const gasPrice = (tx.gasPrice ? tx.gasPrice : tx.maxFeePerGas) as string
+        // return tx.gas && gasPrice ? multipliedBy(gasPrice, tx.gas).integerValue().toFixed() : '0'
     }, [tx])
 
     const gasFeeUSD = useMemo(() => {

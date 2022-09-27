@@ -1,6 +1,6 @@
+import { useCallback } from 'react'
 import { useWeb3Connection, useWeb3State } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { useCallback } from 'react'
 import type { RSS3_KEY_SNS } from '../../constants.js'
 import type { AvatarMetaDB, NFTRSSNode } from '../../types.js'
 

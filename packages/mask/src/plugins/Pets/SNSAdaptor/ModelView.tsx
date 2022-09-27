@@ -53,11 +53,11 @@ const ModelView: FC<ModelViewProps> = ({ source, ...rest }) => {
         return (
             <div {...rest}>
                 <AssetPlayer
+                    classes={classes}
                     url={source}
                     options={{
                         playsInline: true,
                     }}
-                    classes={classes}
                     showIframeFromInit
                 />
             </div>

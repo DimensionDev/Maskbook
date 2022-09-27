@@ -1,9 +1,8 @@
+import { memo } from 'react'
+import { Typography } from '@mui/material'
 import { useNonFungibleAsset } from '@masknet/plugin-infra/web3'
 import { LoadingBase, makeStyles } from '@masknet/theme'
-import { NetworkPluginID, NonFungibleTokenContract, SourceType } from '@masknet/web3-shared-base'
-import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import { Typography } from '@mui/material'
-import { memo } from 'react'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { CollectibleCard } from '../../../../extension/options-page/DashboardComponents/CollectibleList/CollectibleCard.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -21,21 +20,20 @@ const useStyles = makeStyles()((theme) => ({
 
 export interface TokenCardProps {
     tokenId: string
-    contractDetailed: NonFungibleTokenContract<ChainId, SchemaType>
-    renderOrder: number
+    tokenAddress: string
 }
 
 export const TokenCard = memo<TokenCardProps>((props: TokenCardProps) => {
-    const { contractDetailed, tokenId, renderOrder } = props
+    const { tokenId, tokenAddress } = props
     const { classes } = useStyles()
-    const { value: tokenDetailed } = useNonFungibleAsset(NetworkPluginID.PLUGIN_EVM, contractDetailed.address, tokenId)
+    const { value: asset } = useNonFungibleAsset(NetworkPluginID.PLUGIN_EVM, tokenAddress, tokenId)
 
-    return tokenDetailed ? (
+    return asset ? (
         <>
-            <CollectibleCard readonly provider={SourceType.OpenSea} asset={tokenDetailed} renderOrder={renderOrder} />
+            <CollectibleCard asset={asset} />
             <div className={classes.title}>
                 <Typography className={classes.name} color="textSecondary" variant="body2">
-                    {tokenDetailed.contract?.name ?? tokenId}
+                    {asset.metadata?.name}
                 </Typography>
             </div>
         </>

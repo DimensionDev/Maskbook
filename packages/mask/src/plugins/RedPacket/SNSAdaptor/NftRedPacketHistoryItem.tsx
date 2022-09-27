@@ -13,7 +13,7 @@ import { dateTimeFormat } from '../../ITO/assets/formatDate.js'
 import type { NftRedPacketHistory } from '../types.js'
 import { useAvailabilityNftRedPacket } from './hooks/useAvailabilityNftRedPacket.js'
 import { useNftAvailabilityComputed } from './hooks/useNftAvailabilityComputed.js'
-import { NftList } from './NftList.js'
+import { NFTList } from './NftList.js'
 import { Translate, useI18N } from '../locales/index.js'
 
 const useStyles = makeStyles()((theme) => {
@@ -228,7 +228,7 @@ export const NftRedPacketHistoryItem: FC<NftRedPacketHistoryItemProps> = memo(
                             ) : null}
                         </section>
                         <section className={classes.nftList}>
-                            <NftList
+                            <NFTList
                                 contract={contractDetailed ?? history.token_contract}
                                 statusList={bitStatusList}
                                 tokenIds={history.token_ids}

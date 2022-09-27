@@ -9,6 +9,7 @@ import type {
 } from '@masknet/web3-contracts/types/types'
 import type { Transaction } from '../types/index.js'
 import { isValidAddress } from './address.js'
+import type { UnconfirmedTransaction } from '@masknet/web3-shared-base'
 
 export function encodeTransaction(transaction: Transaction): PayableTx & {
     maxPriorityFeePerGas?: string
@@ -66,14 +67,35 @@ export async function encodeContractTransaction(
     return encodeTransaction(tx)
 }
 
-export async function sendTransaction(
+export function composeContractTransaction(
+    contract: BaseContract | null,
+    transaction?: PayableTransactionObject<unknown> | NonPayableTransactionObject<unknown>,
+    overrides?: Partial<Transaction>,
+): UnconfirmedTransaction<Transaction> {
+    if (!contract || !transaction) throw new Error('Invalid contract or transaction.')
+    return {
+        get transaction() {
+            return encodeContractTransaction(contract, transaction, overrides)
+        },
+        async confirm(subOverrides?: Partial<Transaction>) {
+            const encodedTx = await encodeContractTransaction(contract, transaction, {
+                ...overrides,
+                ...subOverrides,
+            })
+            const receipt = await transaction.send(encodedTx)
+            return receipt?.transactionHash ?? ''
+        },
+    }
+}
+
+export async function sendContractTransaction(
     contract: BaseContract | null,
     transaction?: PayableTransactionObject<unknown> | NonPayableTransactionObject<unknown>,
     overrides?: Partial<Transaction>,
 ) {
     if (!contract || !transaction) throw new Error('Invalid contract or transaction.')
     const tx = await encodeContractTransaction(contract, transaction, overrides)
-    const receipt = await transaction.send(tx as PayableTx)
+    const receipt = await transaction.send(tx)
     return receipt?.transactionHash ?? ''
 }
 

@@ -150,9 +150,8 @@ export function CollectionList({ socialAddress, persona, profile, gridProps = EM
                             </Box>
                         )}
                         <CollectibleList
-                            address={socialAddress}
-                            retry={retryFetchCollectible}
                             collectibles={renderCollectibles}
+                            retry={retryFetchCollectible}
                             loading={renderCollectibles.length === 0}
                             {...gridProps}
                         />

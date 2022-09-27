@@ -655,6 +655,17 @@ export type RecentTransactionComputed<ChainId, Transaction> = RecentTransaction<
     _tx: Transaction
 }
 
+export interface UnconfirmedTransaction<Transaction> {
+    /* the raw transaction to be confirmed */
+    transaction: Subscription<Transaction>
+    /** update the internal transaction */
+    update: (transaction: Transaction) => Promise<void>
+    /** send the tx and wait for confirmation */
+    confirm: (overrides?: Partial<Transaction>) => Promise<string>
+    /** reset to the initial state */
+    rest: () => void
+}
+
 export interface TokenList<ChainId, SchemaType> {
     name: string
     description?: string
@@ -723,7 +734,7 @@ export interface TransactionChecker<ChainId, Transaction> {
     getStatus(chainId: ChainId, id: string, transaction: Transaction): Promise<TransactionStatusType>
 }
 
-export interface ConnectionOptions<ChainId, ProviderType, Transaction> {
+export interface ConnectionOptions<ChainId, ProviderType, GasOption, Transaction> {
     /** Designate the sub-network id of the transaction. */
     chainId?: ChainId
     /** Designate the signer of the transaction. */
@@ -739,6 +750,7 @@ export interface Connection<
     SchemaType,
     ProviderType,
     Signature,
+    GasOption,
     Block,
     Operation,
     Transaction,
@@ -747,7 +759,7 @@ export interface Connection<
     TransactionSignature,
     Web3,
     Web3Provider,
-    Web3ConnectionOptions = ConnectionOptions<ChainId, ProviderType, Transaction>,
+    Web3ConnectionOptions = ConnectionOptions<ChainId, ProviderType, GasOption, Transaction>,
 > {
     /** Get web3 instance */
     getWeb3(initial?: Web3ConnectionOptions): Promise<Web3>
@@ -808,7 +820,7 @@ export interface Connection<
     /** Get non-fungible token balance. */
     getNonFungibleTokenBalance(
         address: string,
-        tokenId?: string,
+        tokenId: string,
         schema?: SchemaType,
         initial?: Web3ConnectionOptions,
     ): Promise<string>
@@ -858,7 +870,7 @@ export interface Connection<
         recipient: string,
         amount: string,
         initial?: Web3ConnectionOptions,
-    ): Promise<string>
+    ): Promise<UnconfirmedTransaction<Transaction>>
     /** Approve a recipient for using a non-fungible token. */
     approveNonFungibleToken(
         address: string,
@@ -866,7 +878,7 @@ export interface Connection<
         tokenId: string,
         schema?: SchemaType,
         initial?: Web3ConnectionOptions,
-    ): Promise<string>
+    ): Promise<UnconfirmedTransaction<Transaction>>
     /** Approve a recipient for using all non-fungible tokens. */
     approveAllNonFungibleTokens(
         address: string,
@@ -874,7 +886,7 @@ export interface Connection<
         approved: boolean,
         schema?: SchemaType,
         initial?: Web3ConnectionOptions,
-    ): Promise<string>
+    ): Promise<UnconfirmedTransaction<Transaction>>
     /** Transfer fungible token to */
     transferFungibleToken(
         address: string,
@@ -882,7 +894,7 @@ export interface Connection<
         amount: string,
         memo?: string,
         initial?: Web3ConnectionOptions,
-    ): Promise<string>
+    ): Promise<UnconfirmedTransaction<Transaction>>
     /** Transfer non-fungible token to */
     transferNonFungibleToken(
         address: string | undefined,
@@ -891,7 +903,7 @@ export interface Connection<
         amount: string,
         schema?: SchemaType,
         initial?: Web3ConnectionOptions,
-    ): Promise<string>
+    ): Promise<UnconfirmedTransaction<Transaction>>
     /** Call a operation */
     callOperation?: (operation: Operation, initial?: Web3ConnectionOptions) => Promise<string>
     /** Send a operation */
@@ -900,6 +912,8 @@ export interface Connection<
     signTransaction(transaction: Transaction, initial?: Web3ConnectionOptions): Promise<TransactionSignature>
     /** Sign multiple transactions */
     signTransactions(transactions: Transaction[], initial?: Web3ConnectionOptions): Promise<TransactionSignature[]>
+    /** Compose an unconfirmed transaction */
+    composeTransaction(transaction: Transaction, initial?: Web3ConnectionOptions): UnconfirmedTransaction<Transaction>
     /** Query a transaction */
     callTransaction(transaction: Transaction, initial?: Web3ConnectionOptions): Promise<string>
     /** Send a transaction and wait for mining */
@@ -1029,7 +1043,7 @@ export interface HubNonFungible<ChainId, SchemaType, GasOption, Web3HubOptions =
     getNonFungibleTokenIconURLs?: (
         chainId: ChainId,
         address: string,
-        tokenId?: string,
+        tokenId: string,
         initial?: Web3HubOptions,
     ) => Promise<string[]>
     /** Get contracts of a non-fungible token approved by the given account. */
@@ -1297,6 +1311,7 @@ export interface ConnectionState<
     SchemaType,
     ProviderType,
     Signature,
+    GasOption,
     Block,
     Operation,
     Transaction,
@@ -1305,13 +1320,14 @@ export interface ConnectionState<
     TransactionSignature,
     Web3,
     Web3Provider,
-    Web3ConnectionOptions = ConnectionOptions<ChainId, ProviderType, Transaction>,
+    Web3ConnectionOptions = ConnectionOptions<ChainId, ProviderType, GasOption, Transaction>,
     Web3Connection = Connection<
         ChainId,
         AddressType,
         SchemaType,
         ProviderType,
         Signature,
+        GasOption,
         Block,
         Operation,
         Transaction,
@@ -1422,6 +1438,7 @@ export interface Web3State<
             SchemaType,
             ProviderType,
             Signature,
+            GasOption,
             Block,
             Operation,
             Transaction,

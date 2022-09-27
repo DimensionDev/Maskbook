@@ -10,6 +10,7 @@ import {
     NonFungibleTokenContract,
     NonFungibleTokenMetadata,
     TransactionStatusType,
+    UnconfirmedTransaction,
 } from '@masknet/web3-shared-base'
 import {
     AddressType,
@@ -17,6 +18,7 @@ import {
     createClient,
     createNativeToken,
     decodeAddress,
+    GasOption,
     getNativeTokenAddress,
     isNativeTokenAddress,
     ProviderType,
@@ -160,7 +162,7 @@ class Connection implements BaseConnection {
         recipient: string,
         amount: string,
         initial?: SolanaWeb3ConnectionOptions,
-    ): Promise<string> {
+    ): Promise<UnconfirmedTransaction<Transaction>> {
         throw new Error('Method not implemented.')
     }
     approveNonFungibleToken(
@@ -169,7 +171,7 @@ class Connection implements BaseConnection {
         tokenId: string,
         schema?: SchemaType,
         initial?: SolanaWeb3ConnectionOptions,
-    ): Promise<string> {
+    ): Promise<UnconfirmedTransaction<Transaction>> {
         throw new Error('Method not implemented.')
     }
     approveAllNonFungibleTokens(
@@ -178,7 +180,7 @@ class Connection implements BaseConnection {
         approved: boolean,
         schema?: SchemaType,
         initial?: SolanaWeb3ConnectionOptions,
-    ): Promise<string> {
+    ): Promise<UnconfirmedTransaction<Transaction>> {
         throw new Error('Method not implemented.')
     }
     async transferFungibleToken(
@@ -187,7 +189,7 @@ class Connection implements BaseConnection {
         amount: string,
         memo?: string,
         initial?: SolanaWeb3ConnectionOptions,
-    ): Promise<string> {
+    ): Promise<UnconfirmedTransaction<Transaction>> {
         const options = this.getOptions(initial)
         if (isNativeTokenAddress(address)) {
             return this.transferSol(recipient, amount, options)
@@ -210,7 +212,7 @@ class Connection implements BaseConnection {
     }
     getAddressType(
         address: string,
-        initial?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined,
+        initial?: ConnectionOptions<ChainId, ProviderType, GasOption, Transaction> | undefined,
     ): Promise<AddressType | undefined> {
         return Promise.resolve(AddressType.Default)
     }
@@ -466,18 +468,10 @@ class Connection implements BaseConnection {
     ): Promise<NonFungibleTokenMetadata<ChainId>> {
         throw new Error('Method not implemented.')
     }
-    requestTransaction(
-        hash: string,
-        config: Transaction,
-        options?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined,
-    ): Promise<void> {
+    requestTransaction(hash: string, config: Transaction, options?: SolanaWeb3ConnectionOptions): Promise<void> {
         throw new Error('Method not implemented.')
     }
-    cancelTransaction(
-        hash: string,
-        config: Transaction,
-        options?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined,
-    ): Promise<void> {
+    cancelTransaction(hash: string, config: Transaction, options?: SolanaWeb3ConnectionOptions): Promise<void> {
         throw new Error('Method not implemented.')
     }
 }

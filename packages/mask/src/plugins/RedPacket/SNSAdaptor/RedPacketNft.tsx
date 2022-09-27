@@ -14,7 +14,7 @@ import { usePostLink } from '../../../components/DataSource/usePostInfo.js'
 import { activatedSocialNetworkUI } from '../../../social-network/index.js'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base.js'
 import { isFacebook } from '../../../social-network-adaptor/facebook.com/base.js'
-import { NFTCardStyledAssetPlayer } from '@masknet/shared'
+import { AssetPreviewer } from '@masknet/shared'
 import { openWindow } from '@masknet/shared-base-ui'
 import { useAccount, useNetworkType, useWeb3 } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
@@ -229,17 +229,6 @@ const useStyles = makeStyles()((theme) => ({
         maxWidth: 400,
         fontSize: '1.5rem',
     },
-    assetPlayerIframe: {
-        marginBottom: 16,
-        height: '160px !important',
-    },
-    imgWrapper: {
-        maxWidth: 180,
-        marginBottom: 10,
-    },
-    assetPlayerVideoIframe: {
-        minWidth: 'fit-content',
-    },
     fallbackImage: {
         height: 160,
         width: 120,
@@ -355,19 +344,12 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
 
                 {availability.isClaimed ? (
                     <Box className={classes.tokenWrapper}>
-                        <NFTCardStyledAssetPlayer
-                            chainId={payload.chainId}
-                            contractAddress={payload.contractAddress}
-                            tokenId={availability.claimed_id}
-                            setSourceType={setSourceType}
+                        <AssetPreviewer
                             classes={{
-                                iframe: classNames(
-                                    classes.assetPlayerIframe,
-                                    sourceType === 'video' ? classes.assetPlayerVideoIframe : '',
-                                ),
-                                imgWrapper: classes.imgWrapper,
                                 fallbackImage: classes.fallbackImage,
                             }}
+                            pluginID={NetworkPluginID.PLUGIN_EVM}
+                            chainId={payload.chainId}
                             fallbackImage={new URL('./assets/nft-preview.png', import.meta.url)}
                         />
 

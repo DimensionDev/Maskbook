@@ -1,7 +1,7 @@
+import { forwardRef, HTMLProps } from 'react'
 import { useWeb3State } from '@masknet/plugin-infra/web3'
 import { makeStyles } from '@masknet/theme'
 import { Skeleton, Typography } from '@mui/material'
-import { forwardRef, HTMLProps } from 'react'
 import { CollectibleCard, CollectibleCardProps } from './CollectibleCard.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -32,10 +32,10 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-interface CollectibleItemProps extends HTMLProps<HTMLDivElement>, CollectibleCardProps {}
+export interface CollectibleItemProps extends HTMLProps<HTMLDivElement>, CollectibleCardProps {}
 
 export const CollectibleItem = forwardRef<HTMLDivElement, CollectibleItemProps>((props: CollectibleItemProps, ref) => {
-    const { provider, asset, readonly, renderOrder, address, className, ...rest } = props
+    const { className, asset, readonly, ...rest } = props
     const { classes, cx } = useStyles()
     const { Others } = useWeb3State()
 
@@ -43,14 +43,7 @@ export const CollectibleItem = forwardRef<HTMLDivElement, CollectibleItemProps>(
 
     return (
         <div className={cx(classes.card, className)} {...rest} ref={ref}>
-            <CollectibleCard
-                className={classes.collectibleCard}
-                asset={asset}
-                provider={provider}
-                readonly={readonly}
-                renderOrder={renderOrder}
-                address={address}
-            />
+            <CollectibleCard className={classes.collectibleCard} asset={asset} readonly={readonly} />
             <div className={classes.description}>
                 <Typography className={classes.name} color="textPrimary" variant="body2">
                     {uiTokenId}
@@ -60,7 +53,8 @@ export const CollectibleItem = forwardRef<HTMLDivElement, CollectibleItemProps>(
     )
 })
 
-interface SkeletonProps extends HTMLProps<HTMLDivElement> {}
+export interface SkeletonProps extends HTMLProps<HTMLDivElement> {}
+
 export function CollectibleItemSkeleton({ className, ...rest }: SkeletonProps) {
     const { classes, cx } = useStyles()
     return (

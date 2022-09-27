@@ -9,6 +9,7 @@ export class ConnectionState<
     SchemaType,
     ProviderType,
     Signature,
+    GasOption,
     Block,
     Operation,
     Transaction,
@@ -17,9 +18,10 @@ export class ConnectionState<
     TransactionSignature,
     Web3,
     Web3Provider,
-    Web3ConnectionOptions extends ConnectionOptions<ChainId, ProviderType, Transaction> = ConnectionOptions<
+    Web3ConnectionOptions extends ConnectionOptions<ChainId, ProviderType, GasOption, Transaction> = ConnectionOptions<
         ChainId,
         ProviderType,
+        GasOption,
         Transaction
     >,
 > implements
@@ -29,6 +31,7 @@ export class ConnectionState<
             SchemaType,
             ProviderType,
             Signature,
+            GasOption,
             Block,
             Operation,
             Transaction,
@@ -57,6 +60,7 @@ export class ConnectionState<
             SchemaType,
             ProviderType,
             Signature,
+            GasOption,
             Block,
             Operation,
             Transaction,

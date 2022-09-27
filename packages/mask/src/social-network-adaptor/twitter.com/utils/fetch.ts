@@ -1,6 +1,4 @@
-import { regexMatch } from '../../../utils/utils.js'
 import { defaultTo, flattenDeep } from 'lodash-unified'
-import { canonifyImgUrl } from './url.js'
 import {
     makeTypedMessageText,
     makeTypedMessageAnchor,
@@ -10,6 +8,8 @@ import {
     isTypedMessageText,
     TypedMessageText,
 } from '@masknet/typed-message'
+import { regexMatch } from '../../../utils/utils.js'
+import { canonifyImgUrl } from './url.js'
 import { collectNodeText, collectTwitterEmoji } from '../../../utils/index.js'
 
 const parseId = (t: string) => {

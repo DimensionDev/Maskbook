@@ -46,9 +46,9 @@ const useStyles = makeStyles<StyleProps>()((theme, { compact }) => ({
 export interface SelectGasSettingsDialogProps<T extends NetworkPluginID = NetworkPluginID> {
     open: boolean
     pluginID?: T
-    chainId?: Web3Helper.Definition[T]['ChainId']
+    chainId?: Web3Helper.ChainIdAll
     slippageTolerance?: number
-    transaction?: Web3Helper.Definition[T]['Transaction']
+    transaction?: Web3Helper.TransactionAll
     title?: string
     disableGasPrice?: boolean
     disableSlippageTolerance?: boolean
@@ -56,7 +56,7 @@ export interface SelectGasSettingsDialogProps<T extends NetworkPluginID = Networ
     onSubmit?(
         settings: {
             slippageTolerance?: number
-            transaction?: Web3Helper.Definition[T]['Transaction']
+            transaction?: Web3Helper.TransactionAll
         } | null,
     ): void
     onClose?(): void

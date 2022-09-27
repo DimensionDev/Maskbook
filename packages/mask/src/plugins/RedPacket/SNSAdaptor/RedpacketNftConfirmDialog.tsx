@@ -1,4 +1,6 @@
 import { useMemo, useCallback, useState } from 'react'
+import { useAsync } from 'react-use'
+import classNames from 'classnames'
 import { makeStyles, ActionButton } from '@masknet/theme'
 import {
     formatEthereumAddress,
@@ -8,9 +10,15 @@ import {
     isNativeTokenAddress,
     formatTokenId,
 } from '@masknet/web3-shared-evm'
-import { NFTCardStyledAssetPlayer } from '@masknet/shared'
+import { useAccount, useChainId, useWallet, useWeb3 } from '@masknet/plugin-infra/web3'
+import {
+    NetworkPluginID,
+    NonFungibleTokenContract,
+    NonFungibleToken,
+    NonFungibleAsset,
+} from '@masknet/web3-shared-base'
+import { AssetPreviewer } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import classNames from 'classnames'
 import { Grid, Link, Typography, List, DialogContent, ListItem, Box } from '@mui/material'
 import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary.js'
 import LaunchIcon from '@mui/icons-material/Launch'
@@ -22,9 +30,6 @@ import { useCompositionContext } from '@masknet/plugin-infra/content-script'
 import { RedPacketNftMetaKey } from '../constants.js'
 import { WalletMessages } from '../../Wallet/messages.js'
 import { RedPacketRPC } from '../messages.js'
-import { useAccount, useChainId, useWallet, useWeb3 } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID, NonFungibleTokenContract, NonFungibleToken } from '@masknet/web3-shared-base'
-import { useAsync } from 'react-use'
 import Services from '../../../extension/service.js'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
 
@@ -297,7 +302,7 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
                     <List className={classes.tokenSelector}>
                         {tokenList.map((value, i) => (
                             <div key={i}>
-                                <NFTCard token={value} renderOrder={i} />
+                                <NFTCard asset={value} />
                             </div>
                         ))}
                     </List>
@@ -341,32 +346,27 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
     )
 }
 
-interface NFTCardProps {
-    token: NonFungibleToken<ChainId, SchemaType.ERC721>
-    renderOrder: number
+export interface NFTCardProps {
+    asset: NonFungibleAsset<ChainId, SchemaType>
 }
 
 function NFTCard(props: NFTCardProps) {
-    const { token, renderOrder } = props
+    const { asset } = props
     const { classes } = useStyles()
-    const [name, setName] = useState(formatTokenId(token.tokenId, 2))
     return (
         <ListItem className={classNames(classes.tokenSelectorWrapper)}>
-            <NFTCardStyledAssetPlayer
-                contractAddress={token.contract?.address}
-                chainId={token.contract?.chainId}
-                tokenId={token.tokenId}
-                renderOrder={renderOrder}
-                setERC721TokenName={setName}
+            <AssetPreviewer
                 classes={{
                     fallbackImage: classes.fallbackImage,
-                    iframe: classes.iframe,
                 }}
+                pluginID={NetworkPluginID.PLUGIN_EVM}
+                chainId={asset.chainId}
+                url={asset.metadata?.imageURL}
             />
 
             <div className={classes.nftNameWrapper}>
                 <Typography className={classes.nftName} color="textSecondary">
-                    {name}
+                    {asset.metadata?.name}
                 </Typography>
             </div>
         </ListItem>

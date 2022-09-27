@@ -1,3 +1,4 @@
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { createReactRootShadowed, MaskMessages, startWatch, useI18N } from '../../../../utils/index.js'
 import {
     searchAvatarMetaSelector,
@@ -7,7 +8,6 @@ import {
 } from '../../utils/selector.js'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { makeStyles } from '@masknet/theme'
-import { useEffect, useMemo, useRef, useState } from 'react'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI.js'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { getAvatarId } from '../../utils/user.js'
@@ -22,7 +22,7 @@ import { Box, Typography } from '@mui/material'
 import { openWindow } from '@masknet/shared-base-ui'
 import { useWallet } from '../../../../plugins/Avatar/hooks/useWallet.js'
 import { useNFT, useSaveNFTAvatar } from '../../../../plugins/Avatar/hooks/index.js'
-import { NFTCardStyledAssetPlayer, useShowConfirm } from '@masknet/shared'
+import { AssetPreviewer, useShowConfirm } from '@masknet/shared'
 import type { AvatarMetaDB } from '../../../../plugins/Avatar/types.js'
 import { EnhanceableSite, NFTAvatarEvent, CrossIsolationMessages } from '@masknet/shared-base'
 import { activatedSocialNetworkUI } from '../../../../social-network/ui.js'
@@ -151,7 +151,7 @@ function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
             title: t('plugin_avatar_setup_share_title'),
             content: (
                 <Box display="flex" flexDirection="column" alignItems="center">
-                    <NFTCardStyledAssetPlayer contractAddress={avatar.address} tokenId={avatar.tokenId} />
+                    <AssetPreviewer pluginID={avatar.pluginId} chainId={avatar.chainId} />
                     <Typography mt={3} fontSize="18px">
                         {t('plugin_avatar_setup_success')}
                     </Typography>

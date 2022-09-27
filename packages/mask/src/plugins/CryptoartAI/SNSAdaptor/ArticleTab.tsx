@@ -1,7 +1,9 @@
 import { makeStyles } from '@masknet/theme'
+import { AssetPreviewer } from '@masknet/shared'
+import { useChainId } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { CollectibleTab } from './CollectibleTab.js'
 import { CollectibleState } from '../hooks/useCollectibleState.js'
-import { NFTCardStyledAssetPlayer } from '@masknet/shared'
 
 const useStyles = makeStyles()({
     body: {
@@ -14,17 +16,13 @@ const useStyles = makeStyles()({
         maxHeight: '100%',
         border: 'none',
     },
-    iframe: {
-        minWidth: 300,
-        minHeight: 300,
-        margin: 'auto',
-    },
 })
 
 export interface ArticleTabProps {}
 
 export function ArticleTab(props: ArticleTabProps) {
     const { classes } = useStyles()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const { asset } = CollectibleState.useContainer()
 
     if (!asset.value) return null
@@ -32,13 +30,7 @@ export function ArticleTab(props: ArticleTabProps) {
     return (
         <CollectibleTab>
             <div className={classes.body}>
-                <NFTCardStyledAssetPlayer
-                    url={resourceUrl}
-                    classes={{
-                        wrapper: classes.player,
-                        iframe: classes.iframe,
-                    }}
-                />
+                <AssetPreviewer pluginID={NetworkPluginID.PLUGIN_EVM} chainId={chainId} url={resourceUrl} />
             </div>
         </CollectibleTab>
     )

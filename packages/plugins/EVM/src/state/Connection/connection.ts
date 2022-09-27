@@ -15,29 +15,6 @@ import ERC1155ABI from '@masknet/web3-contracts/abis/ERC1155.json'
 import BalanceCheckerABI from '@masknet/web3-contracts/abis/BalanceChecker.json'
 import type { Plugin } from '@masknet/plugin-infra'
 import {
-    ChainId,
-    EthereumMethodType,
-    ProviderType,
-    SchemaType,
-    Block,
-    Transaction,
-    TransactionDetailed,
-    createNativeToken,
-    createContract,
-    getTokenConstant,
-    sendTransaction,
-    createERC20Token,
-    parseStringOrBytes32,
-    createWeb3,
-    createWeb3Provider,
-    getEthereumConstant,
-    isValidAddress,
-    isNativeTokenAddress,
-    encodeTransaction,
-    Operation,
-    AddressType,
-} from '@masknet/web3-shared-evm'
-import {
     Account,
     ConnectionOptions,
     createNonFungibleToken,
@@ -53,14 +30,39 @@ import {
     TransactionStatusType,
     resolveIPFS_URL,
     resolveCrossOriginURL,
+    UnconfirmedTransaction,
 } from '@masknet/web3-shared-base'
+import {
+    ChainId,
+    EthereumMethodType,
+    ProviderType,
+    SchemaType,
+    Block,
+    Transaction,
+    TransactionDetailed,
+    createNativeToken,
+    createContract,
+    getTokenConstant,
+    composeContractTransaction,
+    createERC20Token,
+    parseStringOrBytes32,
+    createWeb3,
+    createWeb3Provider,
+    getEthereumConstant,
+    isValidAddress,
+    isNativeTokenAddress,
+    encodeTransaction,
+    Operation,
+    GasOption,
+    AddressType,
+} from '@masknet/web3-shared-evm'
+import { getSubscriptionCurrentValue, PartialRequired } from '@masknet/shared-base'
 import type { BaseContract } from '@masknet/web3-contracts/types/types'
 import { createContext, dispatch } from './composer.js'
 import { Providers } from './provider.js'
 import type { ERC1155Metadata, ERC721Metadata, EVM_Connection, EVM_Web3ConnectionOptions } from './types.js'
 import { getReceiptStatus } from './utils.js'
 import { Web3StateSettings } from '../../settings/index.js'
-import { getSubscriptionCurrentValue, PartialRequired } from '@masknet/shared-base'
 
 const EMPTY_STRING = Promise.resolve('')
 const ZERO = Promise.resolve(0)
@@ -214,7 +216,7 @@ class Connection implements EVM_Connection {
         recipient: string,
         amount: string,
         initial?: EVM_Web3ConnectionOptions,
-    ): Promise<string> {
+    ): Promise<UnconfirmedTransaction<Transaction>> {
         const options = this.getOptions(initial)
 
         // Native
@@ -223,7 +225,7 @@ class Connection implements EVM_Connection {
         // ERC20
         const contract = await this.getERC20Contract(address, options)
         const tx = contract?.methods.approve(recipient, toHex(amount))
-        return sendTransaction(contract, tx, options.overrides)
+        return composeContractTransaction(contract, tx, options.overrides)
     }
     async approveNonFungibleToken(
         address: string,
@@ -231,7 +233,7 @@ class Connection implements EVM_Connection {
         tokenId: string,
         schema: SchemaType,
         initial?: EVM_Web3ConnectionOptions,
-    ): Promise<string> {
+    ): Promise<UnconfirmedTransaction<Transaction>> {
         // Do not use `approve()`, since it is buggy.
         // https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC721/ERC721.sol
         throw new Error('Method not implemented.')
@@ -242,7 +244,7 @@ class Connection implements EVM_Connection {
         approved: boolean,
         schema?: SchemaType,
         initial?: EVM_Web3ConnectionOptions,
-    ): Promise<string> {
+    ): Promise<UnconfirmedTransaction<Transaction>> {
         const options = this.getOptions(initial)
 
         // Native
@@ -251,7 +253,7 @@ class Connection implements EVM_Connection {
         // ERC721 & ERC1155
         const contract = await this.getERC721Contract(address, options)
         const tx = contract?.methods.setApprovalForAll(recipient, approved)
-        return sendTransaction(contract, tx, options.overrides)
+        return composeContractTransaction(contract, tx, options.overrides)
     }
     async transferFungibleToken(
         address: string,
@@ -259,7 +261,7 @@ class Connection implements EVM_Connection {
         amount: string,
         memo?: string,
         initial?: EVM_Web3ConnectionOptions,
-    ): Promise<string> {
+    ): Promise<UnconfirmedTransaction<Transaction>> {
         const options = this.getOptions(initial)
         // Native
         if (!address || isNativeTokenAddress(address)) {
@@ -269,19 +271,19 @@ class Connection implements EVM_Connection {
                 value: toHex(amount),
                 data: memo ? toHex(memo) : undefined,
             }
-            return this.sendTransaction(
+            return this.composeTransaction(
                 {
                     ...tx,
                     gas: await this.estimateTransaction(tx, 50000, options),
                 },
-                options,
+                initial,
             )
         }
 
         // ERC20
         const contract = await this.getERC20Contract(address, options)
         const tx = contract?.methods.transfer(recipient, toHex(amount))
-        return sendTransaction(contract, tx, options.overrides)
+        return composeContractTransaction(contract, tx, options.overrides)
     }
     async transferNonFungibleToken(
         address: string,
@@ -290,7 +292,7 @@ class Connection implements EVM_Connection {
         amount?: string,
         schema?: SchemaType,
         initial?: EVM_Web3ConnectionOptions,
-    ): Promise<string> {
+    ): Promise<UnconfirmedTransaction<Transaction>> {
         const options = this.getOptions(initial)
         const actualSchema = schema ?? (await this.getSchemaType(address, options))
 
@@ -298,13 +300,13 @@ class Connection implements EVM_Connection {
         if (actualSchema === SchemaType.ERC1155) {
             const contract = await this.getERC1155Contract(address, options)
             const tx = contract?.methods.safeTransferFrom(options.account, recipient, tokenId, amount ?? '', '0x')
-            return sendTransaction(contract, tx, options.overrides)
+            return composeContractTransaction(contract, tx, options.overrides)
         }
 
         // ERC721
         const contract = await this.getERC721Contract(address, options)
         const tx = contract?.methods.transferFrom(options.account, recipient, tokenId)
-        return sendTransaction(contract, tx, options.overrides)
+        return composeContractTransaction(contract, tx, options.overrides)
     }
 
     async getGasPrice(initial?: EVM_Web3ConnectionOptions): Promise<string> {
@@ -428,7 +430,7 @@ class Connection implements EVM_Connection {
     }
     async getNonFungibleTokenMetadata(
         address: string,
-        tokenId?: string,
+        tokenId: string,
         schema?: SchemaType,
         initial?: EVM_Web3ConnectionOptions,
     ) {
@@ -569,7 +571,7 @@ class Connection implements EVM_Connection {
     }
     async getNonFungibleTokenBalance(
         address: string,
-        tokenId?: string,
+        tokenId: string,
         schema?: SchemaType,
         initial?: EVM_Web3ConnectionOptions,
     ): Promise<string> {
@@ -874,7 +876,7 @@ class Connection implements EVM_Connection {
         dataToVerify: string,
         signature: string,
         signType?: string,
-        initial?: ConnectionOptions<ChainId, ProviderType, Transaction>,
+        initial?: ConnectionOptions<ChainId, ProviderType, GasOption, Transaction>,
     ) {
         const options = this.getOptions(initial)
         const web3 = await this.getWeb3(options)
@@ -898,7 +900,7 @@ class Connection implements EVM_Connection {
         return Promise.all(transactions.map((x) => this.signTransaction(x, initial)))
     }
 
-    supportedEntryPoints(initial?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined) {
+    supportedEntryPoints(initial?: EVM_Web3ConnectionOptions) {
         const options = this.getOptions(initial)
         return this.hijackedRequest<string[]>(
             {
@@ -909,10 +911,7 @@ class Connection implements EVM_Connection {
         )
     }
 
-    async callOperation(
-        operation: Operation,
-        initial?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined,
-    ) {
+    async callOperation(operation: Operation, initial?: EVM_Web3ConnectionOptions) {
         const options = this.getOptions(initial)
         const entryPoint = first(await this.supportedEntryPoints(initial))
         if (!isValidAddress(entryPoint)) throw new Error('No entry point.')
@@ -932,10 +931,7 @@ class Connection implements EVM_Connection {
         )
     }
 
-    async sendOperation(
-        operation: Operation,
-        initial?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined,
-    ) {
+    async sendOperation(operation: Operation, initial?: EVM_Web3ConnectionOptions) {
         const options = this.getOptions(initial)
         const entryPoint = first(await this.supportedEntryPoints(initial))
         if (!isValidAddress(entryPoint)) throw new Error('No entry point.')
@@ -953,6 +949,42 @@ class Connection implements EVM_Connection {
             },
             options,
         )
+    }
+
+    composeTransaction(transaction: Transaction, initial?: EVM_Web3ConnectionOptions) {
+        const listeners = new Set<Function>()
+        const pointToTransaction = {
+            transaction,
+        }
+        const subscription = {
+            getCurrentValue() {
+                return pointToTransaction.transaction
+            },
+            subscribe(callback: Function) {
+                listeners.add(callback)
+                return () => listeners.delete(callback)
+            },
+        }
+        const updateSubscription = (newTransaction: Transaction) => {
+            if (pointToTransaction.transaction === newTransaction) return
+            pointToTransaction.transaction = newTransaction
+            listeners.forEach((x) => x())
+        }
+        return {
+            get transaction() {
+                return subscription
+            },
+            update: async (newTransaction: Transaction) => {
+                updateSubscription(newTransaction)
+            },
+            confirm: async (overrides?: Transaction) => {
+                const options = this.getOptions(initial, overrides)
+                return this.sendTransaction(transaction, options)
+            },
+            rest: () => {
+                updateSubscription(transaction)
+            },
+        }
     }
 
     callTransaction(transaction: Transaction, initial?: EVM_Web3ConnectionOptions) {

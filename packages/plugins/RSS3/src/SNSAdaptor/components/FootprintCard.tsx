@@ -1,9 +1,10 @@
-import { NFTCardStyledAssetPlayer } from '@masknet/shared'
-import { makeStyles } from '@masknet/theme'
-import type { RSS3BaseAPI } from '@masknet/web3-providers'
-import { Card, Typography } from '@mui/material'
-import formatDateTime from 'date-fns/format'
 import { forwardRef, HTMLProps, memo } from 'react'
+import formatDateTime from 'date-fns/format'
+import { AssetPreviewer } from '@masknet/shared'
+import { makeStyles } from '@masknet/theme'
+import { RSS3BaseAPI } from '@masknet/web3-providers'
+import { useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
+import { Card, Typography } from '@mui/material'
 import { RSS3_DEFAULT_IMAGE } from '../../constants.js'
 import { useI18N } from '../../locales/index.js'
 
@@ -45,6 +46,8 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
+const { MaskNetworkMap } = RSS3BaseAPI
+
 export interface FootprintCardProps extends Omit<HTMLProps<HTMLDivElement>, 'onSelect'>, withClasses<'img'> {
     footprint: RSS3BaseAPI.Footprint
     onSelect: (footprint: RSS3BaseAPI.Footprint) => void
@@ -56,6 +59,7 @@ export const FootprintCard = memo(
         ({ footprint, onSelect, disableDescription, className, classes: externalClasses, ...rest }, ref) => {
             const t = useI18N()
             const { classes, cx } = useStyles(undefined, { props: { classes: externalClasses } })
+            const pluginID = useCurrentWeb3NetworkPluginID()
 
             const date = footprint.timestamp
                 ? formatDateTime(new Date(footprint.timestamp), 'MMM dd, yyyy')
@@ -65,13 +69,13 @@ export const FootprintCard = memo(
             return (
                 <div className={cx(classes.card, className)} {...rest} ref={ref} onClick={() => onSelect?.(footprint)}>
                     <Card className={classes.img}>
-                        <NFTCardStyledAssetPlayer
-                            url={action.metadata?.image || RSS3_DEFAULT_IMAGE}
+                        <AssetPreviewer
                             classes={{
                                 fallbackImage: classes.fallbackImage,
-                                wrapper: classes.img,
-                                iframe: classes.img,
                             }}
+                            pluginID={pluginID}
+                            chainId={RSS3BaseAPI.MaskNetworkMap[footprint.network]}
+                            url={action.metadata?.image || RSS3_DEFAULT_IMAGE}
                         />
                     </Card>
                     {disableDescription ? null : (

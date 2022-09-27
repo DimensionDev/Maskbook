@@ -1,5 +1,5 @@
-import { RSS3BaseAPI } from '@masknet/web3-providers'
 import { useMemo } from 'react'
+import { RSS3BaseAPI } from '@masknet/web3-providers'
 import { RSS3_DEFAULT_IMAGE } from '../../constants.js'
 import type { RSS3Feed } from '../../types.js'
 

@@ -1,8 +1,8 @@
-import { NFTCardStyledAssetPlayer } from '@masknet/shared'
+import { AssetPreviewer } from '@masknet/shared'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import VerifiedUserIcon from '@mui/icons-material/VerifiedUser'
-import { useWeb3State } from '@masknet/plugin-infra/web3'
+import { useCurrentWeb3NetworkPluginID, useWeb3State } from '@masknet/plugin-infra/web3'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import type { NetworkPluginID } from '@masknet/web3-shared-base'
 
@@ -21,22 +21,6 @@ const useStyles = makeStyles()((theme) => ({
         boxShadow: `0px 28px 56px -28px ${MaskColorVar.primary.alpha(0.5)}`,
         borderRadius: 20,
     },
-    loadingPlaceholder: {
-        position: 'absolute',
-        width: '100%',
-        height: '100%',
-        padding: '74px 0',
-    },
-    wrapper: {
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: '100% !important',
-        width: '100% !important',
-        overflow: 'hidden',
-        position: 'absolute',
-    },
-
     loadingIcon: {
         width: 36,
         height: 52,
@@ -44,23 +28,6 @@ const useStyles = makeStyles()((theme) => ({
     errorIcon: {
         width: 36,
         height: 36,
-    },
-    iframe: {
-        minWidth: 300,
-        minHeight: 300,
-        width: '100%',
-        height: '100%',
-        borderRadius: 20,
-        background: '#000',
-    },
-    imgWrapper: {
-        position: 'absolute',
-        width: '100%',
-        height: '100%',
-        borderRadius: 20,
-        '& > img': {
-            borderRadius: 20,
-        },
     },
     nameSm: {
         fontSize: 16,
@@ -100,39 +67,38 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface FigureCardProps {
-    hideSubTitle?: boolean
     timeline?: boolean
+    hideSubtitle?: boolean
     asset: Web3Helper.NonFungibleAssetScope<void, NetworkPluginID>
 }
 
 export function FigureCard(props: FigureCardProps) {
-    const { asset, hideSubTitle, timeline } = props
+    const { asset, hideSubtitle, timeline } = props
     const { classes, cx } = useStyles()
+    const pluginID = useCurrentWeb3NetworkPluginID()
     const { Others } = useWeb3State()
 
     const fallbackImgURL = new URL('../../assets/FallbackImage.svg', import.meta.url)
     const resourceUrl = asset.metadata?.imageURL ?? asset.metadata?.mediaURL
+
     return (
         <div className={classes.layout}>
             <div className={classes.body}>
-                <NFTCardStyledAssetPlayer
-                    fallbackImage={fallbackImgURL}
-                    url={resourceUrl}
+                <AssetPreviewer
                     classes={{
-                        iframe: classes.iframe,
-                        wrapper: classes.wrapper,
-                        imgWrapper: classes.imgWrapper,
-                        loadingPlaceholder: classes.loadingPlaceholder,
                         fallbackImage: classes.fallbackImage,
                     }}
-                    isImageOnly={false}
+                    pluginID={pluginID}
+                    chainId={asset.chainId}
+                    url={resourceUrl}
+                    fallbackImage={fallbackImgURL}
                 />
             </div>
             <Typography className={timeline ? cx(classes.nameSm, classes.unset) : classes.nameSm}>
                 {asset.metadata?.name ?? '-'}
                 {Others?.formatTokenId(asset.tokenId)}
             </Typography>
-            {!hideSubTitle && (
+            {!hideSubtitle && (
                 <div className={classes.nameLgBox}>
                     <Typography className={classes.nameLg}>{asset.collection?.name}</Typography>
                     {asset.collection?.verified && <VerifiedUserIcon color="primary" fontSize="small" />}

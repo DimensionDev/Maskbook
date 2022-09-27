@@ -358,7 +358,7 @@ export function TrendingView(props: TrendingViewProps) {
                     <Box className={classes.nftItems}>
                         <NFTList
                             className={classes.nftList}
-                            tokens={fetchedTokens}
+                            assets={fetchedTokens}
                             onNextPage={next}
                             finished={done}
                             hasError={!!loadError}

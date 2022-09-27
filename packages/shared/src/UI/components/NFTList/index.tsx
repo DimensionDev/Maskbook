@@ -1,33 +1,15 @@
+import { FC, useCallback } from 'react'
+import { noop } from 'lodash-unified'
+import classnames from 'classnames'
 import { useChainId, useCurrentWeb3NetworkPluginID, useWeb3State } from '@masknet/plugin-infra/web3'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { ElementAnchor, Linking, NFTCardStyledAssetPlayer, RetryHint } from '@masknet/shared'
+import { ElementAnchor, Linking, AssetPreviewer, RetryHint } from '@masknet/shared'
 import { LoadingBase, makeStyles } from '@masknet/theme'
-import { isSameAddress, NetworkPluginID, NonFungibleToken } from '@masknet/web3-shared-base'
+import { isSameAddress, NetworkPluginID, NonFungibleAsset } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { Checkbox, List, ListItem, Radio, Stack, Typography } from '@mui/material'
-import classnames from 'classnames'
-import { noop } from 'lodash-unified'
-import { FC, useCallback } from 'react'
-
-interface NFTItemProps {
-    token: NonFungibleToken<ChainId, SchemaType>
-}
 
 export type NFTKeyPair = [address: string, tokenId: string]
-
-interface Props {
-    selectable?: boolean
-    tokens: Array<Web3Helper.NonFungibleAssetScope<void, NetworkPluginID.PLUGIN_EVM>>
-    selectedPairs?: NFTKeyPair[]
-    onChange?: (id: string | null, contractAddress?: string) => void
-    limit?: number
-    columns?: number
-    gap?: number
-    className?: string
-    onNextPage(): void
-    finished: boolean
-    hasError?: boolean
-}
 
 const useStyles = makeStyles<{ columns?: number; gap?: number }>()((theme, { columns = 4, gap = 12 }) => {
     const isLight = theme.palette.mode === 'light'
@@ -94,22 +76,6 @@ const useStyles = makeStyles<{ columns?: number; gap?: number }>()((theme, { col
             width: 64,
             height: 64,
         },
-        assetPlayerIframe: {
-            aspectRatio: '1 / 1',
-        },
-        wrapper: {
-            aspectRatio: '1 / 1',
-            height: 'auto !important',
-            width: '100% !important',
-            borderRadius: 8,
-        },
-        imgWrapper: {
-            aspectRatio: '1 / 1',
-            img: {
-                height: '100%',
-                width: '100%',
-            },
-        },
         caption: {
             padding: theme.spacing(0.5),
             color: theme.palette.text.primary,
@@ -119,25 +85,26 @@ const useStyles = makeStyles<{ columns?: number; gap?: number }>()((theme, { col
     }
 })
 
-export const NFTItem: FC<NFTItemProps> = ({ token }) => {
+export interface NFTItemProps {
+    asset: NonFungibleAsset<ChainId, SchemaType>
+}
+
+export const NFTItem: FC<NFTItemProps> = ({ asset }) => {
     const { classes } = useStyles({})
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
-    const fullCaption = token.metadata?.name || token.tokenId
-    const caption = token.metadata?.name?.match(/#\d+$/) ? token.metadata.name : Others?.formatTokenId(token.tokenId)
+    const fullCaption = asset.metadata?.name || asset.tokenId
+    const caption = asset.metadata?.name?.match(/#\d+$/) ? asset.metadata.name : Others?.formatTokenId(asset.tokenId)
+
     return (
         <div className={classes.nftContainer}>
-            <NFTCardStyledAssetPlayer
-                chainId={chainId}
-                contractAddress={token.contract?.address}
-                url={token.metadata?.imageURL ?? token.metadata?.imageURL}
-                tokenId={token.tokenId}
+            <AssetPreviewer
                 classes={{
                     fallbackImage: classes.fallbackImage,
-                    iframe: classes.assetPlayerIframe,
-                    imgWrapper: classes.imgWrapper,
-                    wrapper: classes.wrapper,
                 }}
+                pluginID={NetworkPluginID.PLUGIN_EVM}
+                chainId={chainId}
+                url={asset.metadata?.imageURL ?? asset.metadata?.imageURL}
             />
             <Typography className={classes.caption} title={fullCaption !== caption ? fullCaption : undefined}>
                 {caption}
@@ -146,10 +113,24 @@ export const NFTItem: FC<NFTItemProps> = ({ token }) => {
     )
 }
 
-export const NFTList: FC<Props> = ({
+export interface NFTListProps {
+    selectable?: boolean
+    assets: Array<Web3Helper.NonFungibleAssetScope<void, NetworkPluginID.PLUGIN_EVM>>
+    selectedPairs?: NFTKeyPair[]
+    onChange?: (id: string | null, contractAddress?: string) => void
+    limit?: number
+    columns?: number
+    gap?: number
+    className?: string
+    onNextPage(): void
+    finished: boolean
+    hasError?: boolean
+}
+
+export const NFTList: FC<NFTListProps> = ({
     selectable,
     selectedPairs,
-    tokens,
+    assets,
     onChange,
     limit = 1,
     columns = 4,
@@ -186,29 +167,29 @@ export const NFTList: FC<Props> = ({
     return (
         <>
             <List className={classnames(classes.list, className)}>
-                {tokens.map((token) => {
+                {assets.map((asset) => {
                     const selected = selectedPairs
-                        ? includes(selectedPairs, [token.contract?.address!, token.tokenId])
+                        ? includes(selectedPairs, [asset.contract?.address!, asset.tokenId])
                         : false
                     const inactive = selectedPairs ? selectedPairs.length > 0 && !selected : false
                     const disabled = selectable ? !isRadio && reachedLimit && !selected : false
-                    const link = token.contract
+                    const link = asset.contract
                         ? Others?.explorerResolver?.nonFungibleTokenLink(
-                              token.contract.chainId,
-                              token.contract.address,
-                              token.tokenId,
+                              asset.contract.chainId,
+                              asset.contract.address,
+                              asset.tokenId,
                           )
                         : undefined
                     return (
                         <ListItem
-                            key={token.tokenId + token.id}
+                            key={asset.tokenId + asset.id}
                             className={classnames(classes.nftItem, {
                                 [classes.disabled]: disabled,
                                 [classes.selected]: selected,
                                 [classes.inactive]: inactive,
                             })}>
                             <Linking LinkProps={{ className: classes.link }} href={link}>
-                                <NFTItem token={token} />
+                                <NFTItem asset={asset} />
                             </Linking>
                             {selectable ? (
                                 <SelectComponent
@@ -220,7 +201,7 @@ export const NFTList: FC<Props> = ({
                                         if (selected) {
                                             toggleItem(null, '')
                                         } else {
-                                            toggleItem(token.tokenId, token.contract?.address)
+                                            toggleItem(asset.tokenId, asset.contract?.address)
                                         }
                                     }}
                                     className={classes.checkbox}
@@ -231,7 +212,7 @@ export const NFTList: FC<Props> = ({
                     )
                 })}
             </List>
-            {hasError && !finished && tokens.length ? (
+            {hasError && !finished && assets.length ? (
                 <Stack py={1}>
                     <RetryHint hint={false} retry={onNextPage} />
                 </Stack>

@@ -1,23 +1,22 @@
+import { useEffect, useState } from 'react'
+import { Trans } from 'react-i18next'
 import { Icons } from '@masknet/icons'
 import { Plugin, PluginID } from '@masknet/plugin-infra'
 import { PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
 import { ApplicationEntry, PublicWalletSetting } from '@masknet/shared'
 import { MaskColorVar } from '@masknet/theme'
 import { Link } from '@mui/material'
-import { useEffect, useState } from 'react'
-import { Trans } from 'react-i18next'
-import { base } from '../base.js'
-import { TipTaskManager } from '../components/index.js'
-import { RootContext } from '../contexts/index.js'
-import { setupStorage, storageDefaultValue } from '../storage/index.js'
-import { TipsEntranceDialog } from './TipsEntranceDialog.js'
 import { CrossIsolationMessages } from '@masknet/shared-base'
-import { TipsRealmContent } from './components/TipsRealmContent/index.js'
+import { base } from '../base.js'
+import { setupStorage, STORAGE_DEFAULT_VALUE } from '../storage/index.js'
+import { EntranceDialog } from './EntranceDialog/index.js'
+import { RealmContent } from './RealmContent/index.js'
+import { TipsTaskManager } from './Tips/TipsTaskManager/index.js'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
     init(_, context) {
-        setupStorage(context.createKVStorage('memory', storageDefaultValue))
+        setupStorage(context.createKVStorage('memory', STORAGE_DEFAULT_VALUE))
     },
     ApplicationEntries: [
         (() => {
@@ -67,7 +66,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                                 }
                             />
 
-                            <TipsEntranceDialog open={open} onClose={() => setOpen(false)} />
+                            <EntranceDialog open={open} onClose={() => setOpen(false)} />
                         </>
                     )
                 },
@@ -91,17 +90,13 @@ const sns: Plugin.SNSAdaptor.Definition = {
         },
     ],
     GlobalInjection() {
-        return (
-            <RootContext>
-                <TipTaskManager />
-            </RootContext>
-        )
+        return <TipsTaskManager />
     },
     TipsRealm: {
         ID: `${base.ID}_tips`,
         priority: 1,
         UI: {
-            Content: TipsRealmContent,
+            Content: RealmContent,
         },
     },
 }

@@ -1,12 +1,12 @@
-import { useReverseAddress, useWeb3State } from '@masknet/plugin-infra/web3'
-import { NFTCardStyledAssetPlayer } from '@masknet/shared'
+import { HTMLProps, memo } from 'react'
+import classnames from 'classnames'
+import formatDateTime from 'date-fns/format'
+import { useChainId, useReverseAddress, useWeb3State } from '@masknet/plugin-infra/web3'
+import { AssetPreviewer } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import type { RSS3BaseAPI } from '@masknet/web3-providers'
 import type { NetworkPluginID, SocialAddress } from '@masknet/web3-shared-base'
 import { Card, Typography } from '@mui/material'
-import classnames from 'classnames'
-import formatDateTime from 'date-fns/format'
-import { HTMLProps, memo } from 'react'
 import { RSS3_DEFAULT_IMAGE } from '../../constants.js'
 import { useI18N } from '../../locales/index.js'
 
@@ -81,6 +81,7 @@ export const DonationCard = memo(({ donation, socialAddress, onSelect, className
     const { classes } = useStyles()
     const t = useI18N()
     const { value: domain } = useReverseAddress(socialAddress.networkSupporterPluginID, socialAddress.address)
+    const chainId = useChainId(socialAddress.networkSupporterPluginID)
     const { Others } = useWeb3State(socialAddress.networkSupporterPluginID)
     const reversedAddress =
         !domain || !Others?.formatDomainName
@@ -93,13 +94,13 @@ export const DonationCard = memo(({ donation, socialAddress, onSelect, className
     return (
         <div onClick={() => onSelect(donation)} className={classnames(classes.card, className)} {...rest}>
             <Card className={classes.img}>
-                <NFTCardStyledAssetPlayer
-                    url={action.metadata?.logo || RSS3_DEFAULT_IMAGE}
+                <AssetPreviewer
                     classes={{
                         fallbackImage: classes.fallbackImage,
-                        wrapper: classes.img,
-                        iframe: classes.img,
                     }}
+                    pluginID={socialAddress.networkSupporterPluginID}
+                    chainId={chainId}
+                    url={action.metadata?.logo || RSS3_DEFAULT_IMAGE}
                 />
             </Card>
 

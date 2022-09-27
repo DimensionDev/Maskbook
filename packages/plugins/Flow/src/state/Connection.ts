@@ -3,17 +3,18 @@ import type { CurrentUserObject } from '@blocto/fcl'
 import type { Plugin } from '@masknet/plugin-infra'
 import { ConnectionState } from '@masknet/plugin-infra/web3'
 import type {
+    AddressType,
+    Block,
     ChainId,
+    GasOption,
+    Operation,
     ProviderType,
     SchemaType,
-    Web3,
     Signature,
-    Block,
     Transaction,
     TransactionDetailed,
+    Web3,
     Web3Provider,
-    Operation,
-    AddressType,
 } from '@masknet/web3-shared-flow'
 import { createConnection } from './Connection/connection.js'
 
@@ -28,6 +29,7 @@ export class Connection extends ConnectionState<
     SchemaType,
     ProviderType,
     Signature,
+    GasOption,
     Block,
     Operation,
     Transaction,

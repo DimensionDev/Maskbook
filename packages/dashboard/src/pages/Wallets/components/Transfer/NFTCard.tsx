@@ -1,10 +1,11 @@
-import { memo, useMemo, useState } from 'react'
+import { memo } from 'react'
 import { Checkbox, ImageListItem, ImageListItemBar, Box } from '@mui/material'
 import { getMaskColor, makeStyles, MaskColorVar } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
-import { NFTCardStyledAssetPlayer } from '@masknet/shared'
-import type { NonFungibleToken } from '@masknet/web3-shared-base'
+import { AssetPreviewer } from '@masknet/shared'
+import type { NonFungibleAsset } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import { useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()({
     card: {
@@ -41,16 +42,6 @@ const useStyles = makeStyles()({
         padding: 0,
         lineHeight: '16px',
     },
-    wrapper: {
-        borderTopRightRadius: '12px',
-        borderTopLeftRadius: '12px',
-        width: '140px !important',
-        height: '186px !important',
-    },
-    loadingPlaceholder: {
-        width: '140px !important',
-        height: '186px !important',
-    },
     fallbackImage: {
         minHeight: '0 !important',
         maxWidth: 'none',
@@ -61,37 +52,14 @@ const useStyles = makeStyles()({
 })
 
 export interface NFTCardProps {
-    token: NonFungibleToken<ChainId, SchemaType>
-    selectedTokenId: string
+    asset: NonFungibleAsset<ChainId, SchemaType>
+    selected: boolean
     onSelect(tokenId: string): void
-    renderOrder: number
 }
 
-export const NFTCard = memo<NFTCardProps>(({ token, selectedTokenId, onSelect, renderOrder }) => {
+export const NFTCard = memo<NFTCardProps>(({ asset, selected, onSelect }) => {
     const { classes } = useStyles()
-    const [checked, setChecked] = useState(!!selectedTokenId && selectedTokenId === token.tokenId)
-    const [name, setName] = useState(token.tokenId)
-    const isDisabled = useMemo(
-        () => !!selectedTokenId && selectedTokenId !== token.tokenId,
-        [selectedTokenId, token.tokenId],
-    )
-
-    const NFTNameBar = useMemo(() => {
-        return (
-            <ImageListItemBar
-                sx={{
-                    px: 1,
-                    py: 1.5,
-                    borderBottomLeftRadius: '8px',
-                    borderBottomRightRadius: '8px',
-                    background: (theme) => (theme.palette.mode === 'dark' ? MaskColorVar.primaryBackground : '#F9F9FA'),
-                }}
-                classes={{ titleWrap: classes.barTitle }}
-                subtitle={<span>{name}</span>}
-                position="below"
-            />
-        )
-    }, [name])
+    const pluginID = useCurrentWeb3NetworkPluginID()
 
     return (
         <ImageListItem
@@ -102,33 +70,39 @@ export const NFTCard = memo<NFTCardProps>(({ token, selectedTokenId, onSelect, r
                 maxWidth: '140px',
                 background: (theme) => (theme.palette.mode === 'dark' ? getMaskColor(theme).white : '#F9F9FA'),
             }}
-            className={isDisabled ? classes.disabled : ''}>
-            <NFTCardStyledAssetPlayer
-                contractAddress={token.address}
-                chainId={token.chainId}
-                tokenId={token.tokenId}
-                setERC721TokenName={setName}
-                renderOrder={renderOrder}
+            className={!selected ? classes.disabled : ''}>
+            <AssetPreviewer
                 classes={{
                     fallbackImage: classes.fallbackImage,
-                    loadingPlaceholder: classes.loadingPlaceholder,
-                    wrapper: classes.wrapper,
                 }}
+                pluginID={pluginID}
+                chainId={asset.chainId}
+                url={asset.metadata?.imageURL ?? asset.metadata?.mediaURL}
             />
-            {NFTNameBar}
+            <ImageListItemBar
+                sx={{
+                    px: 1,
+                    py: 1.5,
+                    borderBottomLeftRadius: '8px',
+                    borderBottomRightRadius: '8px',
+                    background: (theme) => (theme.palette.mode === 'dark' ? MaskColorVar.primaryBackground : '#F9F9FA'),
+                }}
+                classes={{ titleWrap: classes.barTitle }}
+                subtitle={<span>{asset.metadata?.name ?? ''}</span>}
+                position="below"
+            />
             <Box className={classes.checkbox}>
                 {/* TODO: replace to mask checkbox component */}
                 <Checkbox
-                    defaultChecked={selectedTokenId === token.tokenId}
-                    value={checked}
+                    defaultChecked={selected}
+                    value={selected}
                     size="small"
-                    disabled={isDisabled}
+                    disabled={!selected}
                     icon={<Icons.CheckboxBorder size={18} color="#D0D4DD" />}
                     checkedIcon={<Icons.Checkbox size={18} color="#1C68F3" />}
                     onChange={(e) => {
                         const value = e.target.checked
-                        onSelect(value ? token.tokenId : '')
-                        setChecked(value)
+                        onSelect(value ? asset.tokenId : '')
                     }}
                 />
             </Box>

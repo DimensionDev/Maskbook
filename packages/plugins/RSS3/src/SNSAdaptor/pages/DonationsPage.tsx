@@ -1,13 +1,13 @@
+import { useMemo, useState } from 'react'
+import { differenceWith } from 'lodash-unified'
 import { Icons } from '@masknet/icons'
 import { CollectionDetailCard, useWeb3ProfileHiddenSettings } from '@masknet/shared'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { CollectionType, RSS3BaseAPI } from '@masknet/web3-providers'
+import { useZeroAddress } from '@masknet/plugin-infra/web3'
 import type { NetworkPluginID, SocialAddress } from '@masknet/web3-shared-base'
-import { ZERO_ADDRESS } from '@masknet/web3-shared-evm'
 import { Box, List, ListItem, Typography } from '@mui/material'
-import { useMemo, useState } from 'react'
-import { differenceWith } from 'lodash-unified'
 import { useI18N } from '../../locales/index.js'
 import { DonationCard, StatusBox } from '../components/index.js'
 import { useDonations } from '../hooks/index.js'
@@ -52,6 +52,7 @@ export interface DonationPageProps {
 export function DonationPage({ socialAddress, publicKey, userId }: DonationPageProps) {
     const { classes } = useStyles()
     const t = useI18N()
+    const ZERO_ADDRESS = useZeroAddress()
     const { value: allDonations = EMPTY_LIST, loading } = useDonations(socialAddress?.address ?? ZERO_ADDRESS)
 
     const { isHiddenAddress, hiddenList } = useWeb3ProfileHiddenSettings(userId, publicKey, {

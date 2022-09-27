@@ -664,7 +664,7 @@ export namespace Plugin.SNSAdaptor {
     export interface TipsRealmOptions {
         identity?: ProfileIdentifier
         slot: TipsSlot
-        tipsAccounts?: TipsAccount[]
+        recipients?: TipsAccount[]
     }
     export interface TipsRealm {
         ID: string

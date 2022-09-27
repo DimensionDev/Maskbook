@@ -15,6 +15,7 @@ import type {
     RecentTransaction,
     HubIndicator,
     FungibleTokenSecurity,
+    NonFungibleTokenContract,
     NonFungibleTokenSecurity,
     Web3State as Web3StateShared,
     Web3UI as Web3UIShared,
@@ -107,6 +108,7 @@ export declare namespace Web3Helper {
               Definition[T]['SchemaType'],
               Definition[T]['ProviderType'],
               Definition[T]['Signature'],
+              Definition[T]['GasOption'],
               Definition[T]['Block'],
               Definition[T]['Operation'],
               Definition[T]['Transaction'],
@@ -119,7 +121,12 @@ export declare namespace Web3Helper {
 
     export type Web3ConnectionOptions<T extends NetworkPluginID = never> = T extends never
         ? never
-        : ConnectionOptions<Definition[T]['ChainId'], Definition[T]['ProviderType'], Definition[T]['Transaction']>
+        : ConnectionOptions<
+              Definition[T]['ChainId'],
+              Definition[T]['ProviderType'],
+              Definition[T]['GasOption'],
+              Definition[T]['Transaction']
+          >
 
     export type Web3Connection<T extends NetworkPluginID = never> = T extends never
         ? never
@@ -129,6 +136,7 @@ export declare namespace Web3Helper {
               Definition[T]['SchemaType'],
               Definition[T]['ProviderType'],
               Definition[T]['Signature'],
+              Definition[T]['GasOption'],
               Definition[T]['Block'],
               Definition[T]['Operation'],
               Definition[T]['Transaction'],
@@ -200,6 +208,7 @@ export declare namespace Web3Helper {
     export type Web3ConnectionOptionsAll = ConnectionOptions<
         Definition[NetworkPluginID]['ChainId'],
         Definition[NetworkPluginID]['ProviderType'],
+        Definition[NetworkPluginID]['GasOption'],
         Definition[NetworkPluginID]['Transaction']
     >
 
@@ -209,6 +218,7 @@ export declare namespace Web3Helper {
         Definition[NetworkPluginID]['SchemaType'],
         Definition[NetworkPluginID]['ProviderType'],
         Definition[NetworkPluginID]['Signature'],
+        Definition[NetworkPluginID]['GasOption'],
         Definition[NetworkPluginID]['Block'],
         Definition[NetworkPluginID]['Operation'],
         Definition[NetworkPluginID]['Transaction'],
@@ -290,6 +300,10 @@ export declare namespace Web3Helper {
         S extends 'all' | void = void,
         T extends NetworkPluginID = NetworkPluginID,
     > = NonFungibleToken<ChainIdScope<S, T>, SchemaTypeScope<S, T>>
+    export type NonFungibleTokenContractScope<
+        S extends 'all' | void = void,
+        T extends NetworkPluginID = NetworkPluginID,
+    > = NonFungibleTokenContract<ChainIdScope<S, T>, SchemaTypeScope<S, T>>
     export type FungibleTokenSecurityScope<
         S extends 'all' | void = void,
         T extends NetworkPluginID = NetworkPluginID,
@@ -353,7 +367,12 @@ export declare namespace Web3Helper {
         T extends NetworkPluginID = NetworkPluginID,
     > = S extends 'all'
         ? Web3ConnectionOptionsAll
-        : ConnectionOptions<Definition[T]['ChainId'], Definition[T]['ProviderType'], Definition[T]['Transaction']>
+        : ConnectionOptions<
+              Definition[T]['ChainId'],
+              Definition[T]['ProviderType'],
+              Definition[T]['GasOption'],
+              Definition[T]['Transaction']
+          >
     export type Web3ConnectionScope<
         S extends 'all' | void = void,
         T extends NetworkPluginID = NetworkPluginID,
@@ -365,6 +384,7 @@ export declare namespace Web3Helper {
               Definition[T]['SchemaType'],
               Definition[T]['ProviderType'],
               Definition[T]['Signature'],
+              Definition[T]['GasOption'],
               Definition[T]['Block'],
               Definition[T]['Operation'],
               Definition[T]['Transaction'],

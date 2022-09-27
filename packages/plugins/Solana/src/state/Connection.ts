@@ -2,19 +2,20 @@ import type { Subscription } from 'use-subscription'
 import type { Plugin } from '@masknet/plugin-infra'
 import { ConnectionState } from '@masknet/plugin-infra/web3'
 import type {
+    AddressType,
+    Block,
     ChainId,
+    GasOption,
+    Operation,
     ProviderType,
     SchemaType,
-    Web3,
     Signature,
-    Block,
     Transaction,
-    TransactionReceipt,
     TransactionDetailed,
+    TransactionReceipt,
     TransactionSignature,
+    Web3,
     Web3Provider,
-    Operation,
-    AddressType,
 } from '@masknet/web3-shared-solana'
 import { createConnection } from './Connection/connection.js'
 
@@ -24,6 +25,7 @@ export class Connection extends ConnectionState<
     SchemaType,
     ProviderType,
     Signature,
+    GasOption,
     Block,
     Operation,
     Transaction,

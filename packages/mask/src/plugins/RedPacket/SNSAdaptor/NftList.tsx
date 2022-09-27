@@ -1,10 +1,10 @@
-import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { ChainId, formatTokenId, SchemaType } from '@masknet/web3-shared-evm'
-import { List, ListItem, ListProps, Typography } from '@mui/material'
+import type { FC, HTMLProps } from 'react'
 import classnames from 'classnames'
-import { FC, HTMLProps, useState } from 'react'
-import { NFTCardStyledAssetPlayer } from '@masknet/shared'
-import type { NonFungibleTokenContract } from '@masknet/web3-shared-base'
+import { makeStyles, MaskColorVar } from '@masknet/theme'
+import { List, ListItem, ListProps, Typography } from '@mui/material'
+import { AssetPreviewer } from '@masknet/shared'
+import { NetworkPluginID, NonFungibleAsset, NonFungibleTokenContract } from '@masknet/web3-shared-base'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { useI18N } from '../locales/index.js'
 
 const useStyles = makeStyles()((theme) => {
@@ -92,49 +92,44 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
-interface NftItemProps extends HTMLProps<HTMLDivElement> {
-    contract: NonFungibleTokenContract<ChainId, SchemaType>
-    tokenId: string
+export interface NFTItemProps extends HTMLProps<HTMLDivElement> {
+    asset: NonFungibleAsset<ChainId, SchemaType>
     claimed?: boolean
-    renderOrder: number
 }
 
-export const NftItem: FC<NftItemProps> = ({ contract, tokenId, className, claimed, renderOrder, ...rest }) => {
+export const NFTItem: FC<NFTItemProps> = ({ className, asset, claimed, ...rest }) => {
     const t = useI18N()
     const { classes } = useStyles()
-    const [name, setName] = useState(formatTokenId(tokenId, 2))
 
     return (
         <div className={classnames(className, classes.nft)} {...rest}>
-            <NFTCardStyledAssetPlayer
+            <AssetPreviewer
                 classes={{
                     fallbackImage: classes.fallbackImage,
                 }}
-                tokenId={tokenId}
-                renderOrder={renderOrder}
-                contractAddress={contract.address}
-                chainId={contract.chainId}
-                setERC721TokenName={setName}
+                pluginID={NetworkPluginID.PLUGIN_EVM}
+                chainId={asset.chainId}
+                url={asset.metadata?.imageURL}
             />
-            <Typography className={classes.name}>{name}</Typography>
+            <Typography className={classes.name}>{asset.metadata?.name}</Typography>
             {claimed && <Typography className={classes.claimedBadge}>{t.claimed()}</Typography>}
         </div>
     )
 }
 
-interface NftListProps extends ListProps {
+export interface NFTListProps extends ListProps {
     contract: NonFungibleTokenContract<ChainId, SchemaType>
     statusList: boolean[]
     tokenIds: string[]
 }
 
-export const NftList: FC<NftListProps> = ({ contract, statusList, tokenIds, className, ...rest }) => {
+export const NFTList: FC<NFTListProps> = ({ contract, statusList, tokenIds, className, ...rest }) => {
     const { classes } = useStyles()
     return (
         <List className={classnames(className, classes.list)} {...rest}>
             {tokenIds.map((tokenId, index) => (
                 <ListItem className={classes.listItem} key={tokenId}>
-                    <NftItem contract={contract} claimed={statusList[index]} tokenId={tokenId} renderOrder={index} />
+                    <NFTItem claimed={statusList[index]} />
                 </ListItem>
             ))}
         </List>

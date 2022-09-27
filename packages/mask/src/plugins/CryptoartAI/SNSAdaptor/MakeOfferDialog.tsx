@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState, useCallback } from 'react'
-import { InjectedDialog, NFTCardStyledAssetPlayer, useOpenShareTxDialog } from '@masknet/shared'
+import { InjectedDialog, AssetPreviewer, useOpenShareTxDialog } from '@masknet/shared'
 import { makeStyles, ActionButton } from '@masknet/theme'
 import { first } from 'lodash-unified'
 import BigNumber from 'bignumber.js'
@@ -168,7 +168,11 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
                         <Box className={classes.mediaContent}>
                             {assetSource?.ossUrl.match(/\.(mp4|avi|webm)$/i) ? (
                                 <Link href={assetSource?.ossUrl} target="_blank" rel="noopener noreferrer">
-                                    <NFTCardStyledAssetPlayer url={assetSource.ossUrl || assetSource.shareUrl} />
+                                    <AssetPreviewer
+                                        pluginID={NetworkPluginID.PLUGIN_EVM}
+                                        chainId={chainId}
+                                        url={assetSource.ossUrl || assetSource.shareUrl}
+                                    />
                                 </Link>
                             ) : (
                                 <img

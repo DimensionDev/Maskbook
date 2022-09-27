@@ -1,9 +1,9 @@
 import { createPluginMessage, PluginID, PluginMessageEmitter } from '@masknet/plugin-infra'
-import type { TipTask } from './types/index.js'
+import type { Task } from './types/index.js'
 
 export interface TipMessage {
-    tipTask: TipTask
-    tipTaskUpdate: TipTask
+    tipsTask: Task
+    tipsTaskUpdate: Task
     rpc: unknown
 }
 
