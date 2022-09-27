@@ -1,6 +1,5 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { OthersState } from '@masknet/plugin-infra/web3'
-import { isSameAddress } from '@masknet/web3-shared-base'
 import { formatDomainName } from '@masknet/web3-shared-evm'
 import {
     isValidDomain,
@@ -43,7 +42,6 @@ export class Others extends OthersState<ChainId, SchemaType, ProviderType, Netwo
 
     override isValidDomain = isValidDomain
     override isValidAddress = isValidAddress
-    override isSameAddress = isSameAddress
     override isZeroAddress = isZeroAddress
     override isNativeTokenAddress = isNativeTokenAddress
 

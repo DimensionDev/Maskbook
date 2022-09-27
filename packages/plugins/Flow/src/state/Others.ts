@@ -1,6 +1,6 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { OthersState } from '@masknet/plugin-infra/web3'
-import { createExplorerResolver, isSameAddress } from '@masknet/web3-shared-base'
+import { createExplorerResolver } from '@masknet/web3-shared-base'
 import {
     isValidDomain,
     isValidAddress,
@@ -51,7 +51,6 @@ export class Others extends OthersState<ChainId, SchemaType, ProviderType, Netwo
 
     override isValidDomain = isValidDomain
     override isValidAddress = isValidAddress
-    override isSameAddress = isSameAddress
     override isZeroAddress = isZeroAddress
     override isNativeTokenAddress = isNativeTokenAddress
     override isNativeTokenSchemaType = isNativeTokenSchemaType

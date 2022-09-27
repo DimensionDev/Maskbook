@@ -19,6 +19,7 @@ import { NetworkSection } from './NetworkSection/index.js'
 import { NFTSection } from './NFTSection/index.js'
 import { RecipientSection } from './RecipientSection/index.js'
 import { TokenSection } from './TokenSection/index.js'
+import { PluginWeb3ActualContextProvider } from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()((theme) => ({
     dialog: {
@@ -218,20 +219,22 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
                     <TabPanel value={tabs.collectibles} className={classes.tabPanel}>
                         <NFTSection className={classes.section} />
                     </TabPanel>
-                    <PluginWalletStatusBar expectedPluginID={expectedPluginID} expectedChainId={targetChainId}>
-                        <ChainBoundary
-                            expectedPluginID={expectedPluginID}
-                            expectedChainId={targetChainId}
-                            noSwitchNetworkTip
-                            switchChainWithoutPopup
-                            ActionButtonPromiseProps={{
-                                fullWidth: true,
-                            }}>
-                            <ActionButton fullWidth disabled={!isValid || isSending} onClick={send}>
-                                {buttonLabel}
-                            </ActionButton>
-                        </ChainBoundary>
-                    </PluginWalletStatusBar>
+                    <PluginWeb3ActualContextProvider>
+                        <PluginWalletStatusBar expectedPluginID={expectedPluginID} expectedChainId={targetChainId}>
+                            <ChainBoundary
+                                expectedPluginID={expectedPluginID}
+                                expectedChainId={targetChainId}
+                                noSwitchNetworkTip
+                                switchChainWithoutPopup
+                                ActionButtonPromiseProps={{
+                                    fullWidth: true,
+                                }}>
+                                <ActionButton fullWidth disabled={!isValid || isSending} onClick={send}>
+                                    {buttonLabel}
+                                </ActionButton>
+                            </ChainBoundary>
+                        </PluginWalletStatusBar>
+                    </PluginWeb3ActualContextProvider>
                 </DialogContent>
             </InjectedDialog>
             <ConfirmModal

@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { useAsyncRetry } from 'react-use'
 import { noop } from 'lodash-unified'
-import type { NetworkPluginID } from '@masknet/web3-shared-base'
+import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useAccount } from './useAccount.js'
 import { useChainId } from './useChainId.js'
@@ -15,7 +15,7 @@ export function useBalance<S extends 'all' | void = void, T extends NetworkPlugi
     const account = useAccount(pluginID, options?.account)
     const chainId = useChainId(pluginID, options?.chainId)
     const connection = useWeb3Connection(pluginID, options)
-    const { BalanceNotifier, Others } = useWeb3State(pluginID)
+    const { BalanceNotifier } = useWeb3State(pluginID)
 
     const asyncResult = useAsyncRetry(async () => {
         if (!account || !connection) return '0'
@@ -25,10 +25,10 @@ export function useBalance<S extends 'all' | void = void, T extends NetworkPlugi
     useEffect(() => {
         return (
             BalanceNotifier?.emitter.on('update', (ev) => {
-                if (Others?.isSameAddress(account, ev.account)) asyncResult.retry()
+                if (isSameAddress(account, ev.account)) asyncResult.retry()
             }) ?? noop
         )
-    }, [account, asyncResult.retry, BalanceNotifier, Others])
+    }, [account, asyncResult.retry, BalanceNotifier])
 
     return asyncResult
 }
