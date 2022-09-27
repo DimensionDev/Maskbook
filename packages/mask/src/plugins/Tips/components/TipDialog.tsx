@@ -25,6 +25,7 @@ const useStyles = makeStyles()((theme) => ({
     dialog: {
         width: 600,
         height: 620,
+        overflow: 'hidden',
         backgroundImage: 'none',
     },
     content: {
@@ -216,7 +217,7 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
                     <TabPanel value={tabs.tokens} className={classes.tabPanel}>
                         <TokenSection className={classes.section} />
                     </TabPanel>
-                    <TabPanel value={tabs.collectibles} className={classes.tabPanel}>
+                    <TabPanel value={tabs.collectibles} className={classes.tabPanel} style={{ padding: 0 }}>
                         <NFTSection className={classes.section} />
                     </TabPanel>
                     <PluginWeb3ActualContextProvider>

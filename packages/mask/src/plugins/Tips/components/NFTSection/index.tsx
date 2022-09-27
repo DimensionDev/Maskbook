@@ -29,13 +29,14 @@ const useStyles = makeStyles()((theme) => ({
         flexDirection: 'row',
         alignItems: 'center',
         flexShrink: 0,
+        margin: theme.spacing(0, 2),
     },
     selectSection: {
         display: 'flex',
         flexDirection: 'column',
         overflow: 'hidden',
         flexGrow: 1,
-        margin: theme.spacing(4, -2, 0),
+        margin: theme.spacing(4, 0, 0),
     },
     statusBox: {
         display: 'flex',
@@ -46,6 +47,9 @@ const useStyles = makeStyles()((theme) => ({
     },
     loadingText: {
         marginTop: theme.spacing(1),
+    },
+    collectibleList: {
+        paddingRight: 0,
     },
     list: {
         flexGrow: 1,
@@ -143,6 +147,7 @@ export const NFTSection: FC<Props> = ({ className, onEmpty, ...rest }) => {
                     if (tokens.length) {
                         return (
                             <CollectibleList
+                                classes={{ root: classes.collectibleList }}
                                 retry={next}
                                 collectibles={tokens}
                                 loading={loading}

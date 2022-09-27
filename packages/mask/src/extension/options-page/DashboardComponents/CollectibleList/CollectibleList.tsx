@@ -10,7 +10,7 @@ import { CollectibleGridProps, useStyles } from './hooks/useStyles.js'
 import { LoadingSkeleton } from './LoadingSkeleton.js'
 
 export interface CollectibleListProps
-    extends withClasses<'empty' | 'button'>,
+    extends withClasses<'empty' | 'button' | 'root'>,
         CollectibleGridProps,
         Omit<SelectableProps, 'value' | 'checked' | 'onChange'> {
     pluginID?: NetworkPluginID
