@@ -82,6 +82,7 @@ const useStyles = makeStyles()((theme) => {
             },
         },
         title: {
+            fontSize: 14,
             fontWeight: 700,
         },
         estimateGas: {
