@@ -64,7 +64,7 @@ export function VotingCard() {
     const [loading, setLoading] = useState(false)
 
     const messageText = (text: string) => (
-        <Box sx={{ display: 'block' }}>
+        <Box>
             <Typography fontSize={14} fontWeight={700}>
                 {t('plugin_snapshot_vote')}
             </Typography>
