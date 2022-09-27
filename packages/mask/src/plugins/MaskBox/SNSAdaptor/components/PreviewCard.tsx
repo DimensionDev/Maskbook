@@ -1,4 +1,5 @@
 import { useCallback, useMemo, useState } from 'react'
+import { useWeb3State, useNetworkDescriptor, useChainId } from '@masknet/plugin-infra/web3'
 import { useContainer } from 'unstated-next'
 import { makeStyles, ActionButton, LoadingBase, useTabs, MaskTabList } from '@masknet/theme'
 import { Box, Button, Paper, Tab, Typography, useTheme } from '@mui/material'
@@ -9,13 +10,14 @@ import { ArticlesTab } from './ArticlesTab.js'
 import { DetailsTab } from './DetailsTab.js'
 import { DrawDialog } from './DrawDialog.js'
 import { DrawResultDialog } from './DrawResultDialog.js'
-import { useTransactionCallback, TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
+import { useTransactionCallback } from '@masknet/plugin-infra/web3-evm'
 import { ChainBoundary } from '../../../../web3/UI/ChainBoundary.js'
 import { formatBalance, NetworkPluginID } from '@masknet/web3-shared-base'
-import { useWeb3State, useNetworkDescriptor } from '@masknet/plugin-infra/web3'
+
 import { useI18N } from '../../locales/index.js'
 import { TabContext, TabPanel } from '@mui/lab'
 import { ImageIcon, TokenIcon } from '@masknet/shared'
+import type { ChainId } from '@masknet/web3-shared-evm'
 
 const useTabsStyles = makeStyles()((theme) => ({
     button: {
@@ -113,8 +115,8 @@ export function PreviewCard(props: PreviewCardProps) {
     const state = useState(CardTab.Articles)
     const [openDrawDialog, setOpenDrawDialog] = useState(false)
     const [openDrawResultDialog, setOpenDrawResultDialog] = useState(false)
-    const { targetChainId } = TargetChainIdContext.useContainer()
-    const networkDescriptor = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, targetChainId)
+    const chainId = useChainId()
+    const networkDescriptor = useNetworkDescriptor()
     const theme = useTheme()
     const t = useI18N()
     const {
@@ -248,7 +250,7 @@ export function PreviewCard(props: PreviewCardProps) {
                         <TokenIcon
                             address={boxInfo.tokenAddress ?? ''}
                             name={boxInfo.name}
-                            chainId={targetChainId}
+                            chainId={chainId}
                             AvatarProps={{ sx: { width: 48, height: 48 } }}
                         />
                         <Box className={tabClasses.iconBox}>
@@ -324,7 +326,7 @@ export function PreviewCard(props: PreviewCardProps) {
                 <Box style={{ padding: 12 }}>
                     <ChainBoundary
                         expectedPluginID={NetworkPluginID.PLUGIN_EVM}
-                        expectedChainId={targetChainId}
+                        expectedChainId={chainId as ChainId}
                         ActionButtonPromiseProps={{ variant: 'roundedDark' }}>
                         <WalletConnectedBoundary
                             ActionButtonProps={{ size: 'medium', variant: 'roundedDark' }}

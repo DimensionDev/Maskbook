@@ -14,7 +14,7 @@ const isPoolTogetherUrl = (url: string) => URL_PATTERN.test(url)
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
     init(signal) {},
-    DecryptedInspector: function Component(props) {
+    DecryptedInspector(props) {
         const link = useMemo(() => {
             const x = extractTextFromTypedMessage(props.message)
             if (x.none) return null
@@ -23,14 +23,14 @@ const sns: Plugin.SNSAdaptor.Definition = {
         if (!link) return null
         return <Renderer url={link} />
     },
-    PostInspector: function Component() {
+    PostInspector() {
         const links = usePostInfoDetails.mentionedLinks()
         const link = links.find(isPoolTogetherUrl)
 
         if (!link) return null
         return <Renderer url={link} />
     },
-    GlobalInjection: function Component() {
+    GlobalInjection() {
         return <DepositDialog />
     },
     ApplicationEntries: [

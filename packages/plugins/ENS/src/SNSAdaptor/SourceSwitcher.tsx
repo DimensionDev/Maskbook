@@ -7,10 +7,10 @@ import { SUPPORTED_SOURCE_TYPES } from '../constants'
 
 export function SourceSwitcher() {
     const { classes } = useStyles()
-    const { setProvider, provider } = CollectibleState.useContainer()
+    const { setSourceType, sourceType } = CollectibleState.useContainer()
 
     const onDataProviderChange = useCallback((option: FootnoteMenuOption) => {
-        setProvider(option.value as SourceType)
+        setSourceType(option.value as SourceType)
     }, [])
 
     return (
@@ -19,7 +19,7 @@ export function SourceSwitcher() {
                 classes={{
                     sourceNote: classes.sourceNote,
                 }}
-                sourceType={provider}
+                sourceType={sourceType}
                 sourceTypes={SUPPORTED_SOURCE_TYPES}
                 onSourceTypeChange={onDataProviderChange}
             />

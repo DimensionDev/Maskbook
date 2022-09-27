@@ -112,7 +112,6 @@ export enum SocialNetworkEnum {
     Twitter = 1,
     Instagram = 2,
     Minds = 3,
-    Mirror = 4,
 }
 /**
  * Version starts from -42 but -42 and -41 are dropped.
@@ -126,7 +125,6 @@ const SocialNetworkEnumToDomain: Record<SocialNetworkEnum, string> = {
     [SocialNetworkEnum.Minds]: EnhanceableSite.Minds,
     [SocialNetworkEnum.Twitter]: EnhanceableSite.Twitter,
     [SocialNetworkEnum.Instagram]: EnhanceableSite.Instagram,
-    [SocialNetworkEnum.Mirror]: EnhanceableSite.Mirror,
 }
 export function SocialNetworkEnumToProfileDomain(x: SocialNetworkEnum) {
     return SocialNetworkEnumToDomain[x]

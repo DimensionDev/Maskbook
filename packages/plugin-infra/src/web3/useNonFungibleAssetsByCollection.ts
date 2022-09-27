@@ -1,7 +1,7 @@
 import { pageableToIterator, NetworkPluginID } from '@masknet/web3-shared-base'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { EMPTY_LIST } from '@masknet/shared-base'
-import type { Web3Helper } from '../web3-helpers/index.js'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import { useWeb3Hub } from './useWeb3Hub.js'
 
 export function useNonFungibleAssetsByCollection<
@@ -17,12 +17,13 @@ export function useNonFungibleAssetsByCollection<
 
     // create iterator
     const iterator = useMemo(() => {
-        if (!address || !hub?.getNonFungibleAssetsByCollection) return
+        if (!hub?.getNonFungibleAssetsByCollection) return
+
         setAssets(EMPTY_LIST)
         setDone(false)
 
         return pageableToIterator(async (indicator) => {
-            return hub.getNonFungibleAssetsByCollection!(address, {
+            return hub.getNonFungibleAssetsByCollection!(address ?? '', {
                 indicator,
                 size: 50,
                 ...options,

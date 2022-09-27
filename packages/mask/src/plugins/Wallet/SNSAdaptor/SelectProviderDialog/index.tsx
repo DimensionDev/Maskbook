@@ -9,8 +9,8 @@ import {
     useNetworkDescriptor,
     useWeb3State,
     useWeb3UI,
-    Web3Helper,
 } from '@masknet/plugin-infra/web3'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import { useI18N } from '../../../../utils/i18n-next-ui.js'
 import { WalletMessages } from '../../messages.js'
 import { hasNativeAPI, nativeAPI } from '../../../../../shared/native-rpc/index.js'

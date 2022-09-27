@@ -8,6 +8,7 @@ import { omit, clamp, first, uniq } from 'lodash-unified'
 import BigNumber from 'bignumber.js'
 import { createContainer } from 'unstated-next'
 import { unreachable } from '@dimensiondev/kit'
+import { useERC20TokenAllowance } from '@masknet/plugin-infra/web3-evm'
 import { useMaskBoxConstants, isZeroAddress, SchemaType, isNativeTokenAddress } from '@masknet/web3-shared-evm'
 import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
 import { BoxInfo, BoxState } from '../type.js'
@@ -39,14 +40,13 @@ import {
     useNonFungibleTokenContract,
 } from '@masknet/plugin-infra/web3'
 import { EMPTY_LIST } from '@masknet/shared-base'
-import { useERC20TokenAllowance } from '@masknet/plugin-infra/web3-evm'
 
 function useContext(initialState?: { boxId: string; hashRoot: string }) {
     const now = new Date()
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+
     const { MASK_BOX_CONTRACT_ADDRESS } = useMaskBoxConstants()
     const coder = ABICoder as unknown as ABICoder.AbiCoder
-
     const [boxId, setBoxId] = useState(initialState?.boxId ?? '')
     const rootHash = initialState?.hashRoot || ''
     const [paymentTokenAddress, setPaymentTokenAddress] = useState('')

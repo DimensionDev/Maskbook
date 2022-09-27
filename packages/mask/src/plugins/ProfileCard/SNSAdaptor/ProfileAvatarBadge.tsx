@@ -29,7 +29,7 @@ export const ProfileAvatarBadge: FC<Props> = ({ userId, className, ...rest }) =>
             const button = buttonRef.current
             if (!button) return
             openTimer = setTimeout(() => {
-                CrossIsolationMessages.events.requestProfileCard.sendToLocal({
+                CrossIsolationMessages.events.profileCardEvent.sendToLocal({
                     open: true,
                     userId,
                     badgeBounding: button.getBoundingClientRect(),
@@ -40,7 +40,7 @@ export const ProfileAvatarBadge: FC<Props> = ({ userId, className, ...rest }) =>
             clearTimeout(openTimer)
             clearTimeout(closeTimer)
             closeTimer = setTimeout(() => {
-                CrossIsolationMessages.events.requestProfileCard.sendToLocal({
+                CrossIsolationMessages.events.profileCardEvent.sendToLocal({
                     open: false,
                 })
             }, 2000)
@@ -48,7 +48,7 @@ export const ProfileAvatarBadge: FC<Props> = ({ userId, className, ...rest }) =>
         button.addEventListener('mouseenter', enter)
         button.addEventListener('mouseleave', leave)
         // Other badges might want to open the profile card
-        const unsubscribe = CrossIsolationMessages.events.requestProfileCard.on((event) => {
+        const unsubscribe = CrossIsolationMessages.events.profileCardEvent.on((event) => {
             if (!event.open) return
             clearTimeout(closeTimer)
         })

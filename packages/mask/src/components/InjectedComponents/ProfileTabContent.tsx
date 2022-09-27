@@ -6,14 +6,14 @@ import {
     useIsMinimalMode,
     usePluginI18NField,
 } from '@masknet/plugin-infra/content-script'
-import { useAvailablePlugins, useSocialAddressListAll } from '@masknet/plugin-infra/web3'
+import { useAvailablePlugins, useHiddenAddressSetting, useSocialAddressListAll } from '@masknet/plugin-infra/web3'
 import { AddressItem, PluginCardFrameMini } from '@masknet/shared'
 import { CrossIsolationMessages, EMPTY_LIST, NextIDPlatform } from '@masknet/shared-base'
 import { makeStyles, MaskLightTheme, MaskTabList, ShadowRootMenu, useStylesExtends, useTabs } from '@masknet/theme'
 import { isSameAddress, NetworkPluginID, SocialAddress, SocialAddressType } from '@masknet/web3-shared-base'
 import { TabContext } from '@mui/lab'
 import { Button, Link, MenuItem, Stack, Tab, ThemeProvider, Typography } from '@mui/material'
-import { first, uniqBy } from 'lodash-unified'
+import { first, uniqBy, without } from 'lodash-unified'
 import { useEffect, useMemo, useState } from 'react'
 import { useUpdateEffect } from 'react-use'
 import { activatedSocialNetworkUI } from '../../social-network/index.js'
@@ -22,6 +22,7 @@ import { MaskMessages, sorter, useI18N, useLocationChange } from '../../utils/in
 import { useCurrentVisitingSocialIdentity } from '../DataSource/useActivatedUI.js'
 import { useCurrentPersonaConnectStatus } from '../DataSource/usePersonaConnectStatus.js'
 import { ConnectPersonaBoundary } from '../shared/ConnectPersonaBoundary.js'
+import { WalletSettingEntry } from './ProfileTab/WalletSettingEntry'
 
 function getTabContent(tabId?: string) {
     return createInjectHooksRenderer(useActivatedPluginsSNSAdaptor.visibility.useAnyMode, (x) => {
@@ -177,6 +178,18 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         retry: retrySocialAddress,
     } = useSocialAddressListAll(currentVisitingSocialIdentity, undefined, sorter)
 
+    const {
+        value: hiddenAddress,
+        loading: loadingHiddenAddress,
+        retry: retryLoadHiddenAddress,
+    } = useHiddenAddressSetting(PluginID.Web3Profile, personaStatus.currentPersona?.identifier.publicKeyAsHex)
+
+    useEffect(() => {
+        return CrossIsolationMessages.events.walletSettingsDialogEvent.on(({ pluginID }) => {
+            if (pluginID === PluginID.Web3Profile) retryLoadHiddenAddress()
+        })
+    }, [retryLoadHiddenAddress])
+
     useEffect(() => {
         return MaskMessages.events.ownProofChanged.on(() => {
             retryIdentity()
@@ -214,10 +227,6 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
                 // place those tabs from debugger last
                 if (a.pluginID === PluginID.Debugger) return 1
                 if (z.pluginID === PluginID.Debugger) return -1
-
-                // place those tabs from dao before the last
-                if (a.pluginID === PluginID.DAO) return 1
-                if (z.pluginID === PluginID.DAO) return -1
 
                 return a.priority - z.priority
             })
@@ -285,23 +294,36 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         }
     }, [])
 
+    const showPublicWalletSetting = useMemo(() => {
+        if (!hiddenAddress) return false
+
+        return socialAddressList.some((x) => x.type !== SocialAddressType.NEXT_ID)
+            ? false
+            : !without(
+                  socialAddressList.filter((x) => x.type === SocialAddressType.NEXT_ID).map((x) => x.address),
+                  ...hiddenAddress,
+              ).length
+    }, [socialAddressList, hiddenAddress])
+
     const onOpen = (event: React.MouseEvent<HTMLButtonElement>) => setAnchorEl(event.currentTarget)
     const onSelect = (option: SocialAddress<NetworkPluginID>) => {
         setSelectedAddress(option)
         setAnchorEl(null)
     }
     const handleOpenDialog = () => {
-        CrossIsolationMessages.events.requestWeb3ProfileDialog.sendToAll({
+        CrossIsolationMessages.events.web3ProfileDialogEvent.sendToAll({
             open: true,
         })
     }
+
     if (hidden) return null
 
     if (
         !currentVisitingUserId ||
         loadingSocialAddressList ||
         loadingCurrentVisitingSocialIdentity ||
-        loadingPersonaStatus
+        loadingPersonaStatus ||
+        loadingHiddenAddress
     )
         return (
             <ThemeProvider theme={MaskLightTheme}>
@@ -337,6 +359,40 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
                             <Button color="primary" className={classes.reload} onClick={handleClick}>
                                 {t('reload')}
                             </Button>
+                        </Stack>
+                    </PluginCardFrameMini>
+                </div>
+            </ThemeProvider>
+        )
+    }
+
+    if (socialAddressList.length === 0) {
+        return (
+            <ThemeProvider theme={MaskLightTheme}>
+                <div className={classes.root}>
+                    <PluginCardFrameMini>
+                        <Stack display="inline-flex" gap={3} justifyContent="center" alignItems="center">
+                            <Typography
+                                fontSize={14}
+                                fontWeight={400}
+                                lineHeight="18px"
+                                color={(t) => t.palette.maskColor.publicMain}>
+                                {t('web3_profile_no_social_address_list')}
+                            </Typography>
+                        </Stack>
+                    </PluginCardFrameMini>
+                </div>
+            </ThemeProvider>
+        )
+    }
+
+    if (showPublicWalletSetting && !showNextID) {
+        return (
+            <ThemeProvider theme={MaskLightTheme}>
+                <div className={classes.root}>
+                    <PluginCardFrameMini>
+                        <Stack display="inline-flex" gap={3} justifyContent="center" alignItems="center">
+                            <WalletSettingEntry />
                         </Stack>
                     </PluginCardFrameMini>
                 </div>

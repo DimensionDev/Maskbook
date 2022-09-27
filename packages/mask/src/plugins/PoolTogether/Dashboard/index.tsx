@@ -5,7 +5,7 @@ import { DepositDialog } from '../UI/DepositDialog.js'
 const dashboard: Plugin.Dashboard.Definition = {
     ...base,
     init(signal) {},
-    GlobalInjection: function Component() {
+    GlobalInjection() {
         return <DepositDialog />
     },
 }

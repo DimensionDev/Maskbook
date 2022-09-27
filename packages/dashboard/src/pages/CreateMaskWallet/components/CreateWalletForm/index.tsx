@@ -16,6 +16,7 @@ import PasswordField from '../../../../components/PasswordField/index.js'
 const useStyles = makeStyles()((theme) => ({
     container: {
         padding: '120px 18%',
+        width: '100%',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',

@@ -228,17 +228,21 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                         </Stack>
                         <Stack>
                             <Stack flexDirection="row" alignItems="center" gap={0.5} ref={titleRef}>
-                                <Linking href={first(coin.home_urls)}>
-                                    <Avatar className={classes.avatar} src={coin.image_url} alt={coin.symbol}>
-                                        <CoinIcon
-                                            type={coin.type}
-                                            address={coin.address}
-                                            name={coin.name}
-                                            logoUrl={coin.image_url}
-                                            size={20}
-                                        />
-                                    </Avatar>
-                                </Linking>
+                                {coin.address ? (
+                                    <Linking href={first(coin.home_urls)}>
+                                        <Avatar className={classes.avatar} src={coin.image_url} alt={coin.symbol}>
+                                            <CoinIcon
+                                                type={coin.type}
+                                                name={coin.name}
+                                                symbol={coin.symbol}
+                                                address={coin.address}
+                                                logoUrl={coin.image_url}
+                                                size={20}
+                                            />
+                                        </Avatar>
+                                    </Linking>
+                                ) : null}
+
                                 <Typography className={classes.title} variant="h6">
                                     <Linking
                                         href={first(coin.home_urls)}

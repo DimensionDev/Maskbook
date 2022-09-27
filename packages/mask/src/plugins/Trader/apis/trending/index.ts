@@ -1,12 +1,11 @@
-import { first, groupBy } from 'lodash-unified'
-import type { Coin, CommunityUrls, Currency, Stat, TagType, Trending } from '../../types/index.js'
-import { DataProvider } from '@masknet/public-api'
 import { getEnumAsArray, unreachable } from '@dimensiondev/kit'
-import { CRYPTOCURRENCY_MAP_EXPIRES_AT } from '../../constants/index.js'
-import { isBlockedId, isBlockedKeyword, resolveAlias, resolveCoinId, isBlockedAddress } from './hotfix.js'
+import { DataProvider } from '@masknet/public-api'
+import { CoinGeckoTrendingEVM, CoinMarketCap, NFTScanTrending, TrendingAPI, UniSwap } from '@masknet/web3-providers'
 import { ChainId, chainResolver, NetworkType } from '@masknet/web3-shared-evm'
-import { Days } from '../../SNSAdaptor/trending/PriceChartDaysControl.js'
-import { CoinGeckoTrendingEVM, CoinMarketCap, NFTScanTrending, UniSwap } from '@masknet/web3-providers'
+import { first, groupBy } from 'lodash-unified'
+import { CRYPTOCURRENCY_MAP_EXPIRES_AT } from '../../constants/index.js'
+import type { Coin, CommunityUrls, Currency, Stat, TagType, Trending } from '../../types/index.js'
+import { isBlockedAddress, isBlockedId, isBlockedKeyword, resolveAlias, resolveCoinId } from './hotfix.js'
 
 /**
  * Get supported currencies of specific data provider
@@ -235,7 +234,12 @@ export async function getPriceStats(
 ): Promise<Stat[]> {
     switch (dataProvider) {
         case DataProvider.CoinGecko:
-            return CoinGeckoTrendingEVM.getPriceStats(chainId, id, currency, days === Days.MAX ? 11430 : days)
+            return CoinGeckoTrendingEVM.getPriceStats(
+                chainId,
+                id,
+                currency,
+                days === TrendingAPI.Days.MAX ? 11430 : days,
+            )
         case DataProvider.CoinMarketCap:
             return CoinMarketCap.getPriceStats(chainId, id, currency, days)
         case DataProvider.UniswapInfo:

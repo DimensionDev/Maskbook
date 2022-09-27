@@ -79,6 +79,7 @@
       "@masknet/theme": ["./packages/theme/src"],
       // @masknet/web3-constants is not listed. It is not a TS project (only contains JSON files).
       // @masknet/web3-contracts is not listed. It is not a TS project (only contains generated JSON and .d.ts files).
+      "@masknet/web3-helpers": ["./packages/web3-helpers/src"],
       "@masknet/web3-providers": ["./packages/web3-providers/src"],
       "@masknet/web3-shared-base": ["./packages/web3-shared/base/src"],
       "@masknet/web3-shared-evm": ["./packages/web3-shared/evm/src"],
@@ -93,7 +94,6 @@
       // @masknet/scripts: insert-here 2
 
       // Plugins
-      "@masknet/plugin-dao": ["./packages/plugins/DAO/src"],
       "@masknet/plugin-debugger": ["./packages/plugins/Debugger/src"],
       "@masknet/plugin-example": ["./packages/plugins/example/src"],
       "@masknet/plugin-file-service": ["./packages/plugins/FileService/src"],

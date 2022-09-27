@@ -37,7 +37,7 @@ function CheckSecurityConfirmDialog() {
     const [open, setOpen] = useState(false)
 
     useEffect(() => {
-        return CrossIsolationMessages.events.requestCheckSecurityCloseConfirmDialog.on(({ open }) => {
+        return CrossIsolationMessages.events.checkSecurityConfirmationDialogEvent.on(({ open }) => {
             setOpen(open)
         })
     }, [])

@@ -7,7 +7,7 @@ import { PLUGIN_ID } from '../constants.js'
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
     init() {},
-    GlobalInjection: function Component() {
+    GlobalInjection() {
         return <PersonaSelectPanelDialog />
     },
     ProfileTabs: [

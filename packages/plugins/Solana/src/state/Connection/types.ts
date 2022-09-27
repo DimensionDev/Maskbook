@@ -1,5 +1,5 @@
 import type { AccountInfo } from '@solana/web3.js'
-import type { Web3Helper } from '@masknet/plugin-infra/web3'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import type { ChainId, ProviderType, Transaction, Web3, Web3Provider } from '@masknet/web3-shared-solana'
 import type { NetworkPluginID, WalletProvider } from '@masknet/web3-shared-base'
 

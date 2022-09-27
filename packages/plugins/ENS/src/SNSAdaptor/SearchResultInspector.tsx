@@ -1,7 +1,7 @@
 import { useContext } from 'react'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { SourceType } from '@masknet/web3-shared-base'
-import { Box, Typography } from '@mui/material'
+import { Box, Typography, Link } from '@mui/material'
 import useStyles from './useStyles'
 import { useI18N } from '../locales'
 import { Icons } from '@masknet/icons'
@@ -10,27 +10,38 @@ import { LoadingContent } from './LoadingContent'
 import { LoadFailedContent } from './LoadFailedContent'
 import { TopAndLastOffers } from './TopAndLastOffers'
 import { SourceSwitcher } from './SourceSwitcher'
-import { ENSProvider, ENSContext, SearchResultInspectorProps } from './context'
+import { ENSProvider, ENSContext, SearchResultInspectorProps, RootContext } from './context'
 import { CollectibleState } from './hooks/useCollectibleState'
+import { NextIdBadge } from './NextIdBadge'
+import { SocialAccountList } from './SocialAccountList'
 
 export function SearchResultInspectorContent() {
     const t = useI18N()
-    const { classes } = useStyles()
-    const { isLoading, isNoResult, isError, reversedAddress, retry, nextIdTwitterBindingName, domain, tokenId } =
-        useContext(ENSContext)
-
-    if (isNoResult || !reversedAddress || !tokenId) return <EmptyContent />
+    const { classes, cx } = useStyles()
+    const {
+        isLoading,
+        isError,
+        reversedAddress,
+        retry,
+        firstValidNextIdTwitterBinding,
+        restOfValidNextIdTwitterBindings,
+        domain,
+        tokenId,
+    } = useContext(ENSContext)
 
     if (isLoading) return <LoadingContent />
 
+    if (!reversedAddress || !tokenId) return <EmptyContent />
+
     if (isError) return <LoadFailedContent isLoading={isLoading} retry={retry} />
+
     return (
         <CollectibleState.Provider
             initialState={{
                 chainId: ChainId.Mainnet,
                 tokenId,
                 contractAddress: reversedAddress,
-                provider: SourceType.OpenSea,
+                sourceType: SourceType.OpenSea,
             }}>
             <Box className={classes.root}>
                 <div className={classes.coverCard}>
@@ -38,16 +49,25 @@ export function SearchResultInspectorContent() {
                 </div>
                 <SourceSwitcher />
                 <TopAndLastOffers />
-                {nextIdTwitterBindingName ? (
+                {firstValidNextIdTwitterBinding?.identity ? (
                     <div className={classes.nextIdVerified}>
                         <Typography className={classes.nextIdVerifiedTitle}>
                             {t.associated_social_accounts()}
                         </Typography>
-                        <Icons.TwitterRound />
-                        <Typography className={classes.nextIdVerifiedTwitterName}>
-                            {nextIdTwitterBindingName}
-                        </Typography>
-                        <Icons.NextIDMini variant="light" width={32} />
+                        <Link
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className={cx(classes.link, classes.rightSpace)}
+                            href={`https://twitter.com/${firstValidNextIdTwitterBinding.identity}`}>
+                            <Icons.TwitterRound />
+                            <Typography className={classes.nextIdVerifiedTwitterName}>
+                                {firstValidNextIdTwitterBinding.identity}
+                            </Typography>
+                        </Link>
+                        <NextIdBadge />
+                        {restOfValidNextIdTwitterBindings.length > 0 ? (
+                            <SocialAccountList restOfValidNextIdTwitterBindings={restOfValidNextIdTwitterBindings} />
+                        ) : null}
                     </div>
                 ) : null}
             </Box>
@@ -57,8 +77,10 @@ export function SearchResultInspectorContent() {
 
 export function SearchResultInspector(props: SearchResultInspectorProps) {
     return (
-        <ENSProvider {...props}>
-            <SearchResultInspectorContent />
-        </ENSProvider>
+        <RootContext>
+            <ENSProvider {...props}>
+                <SearchResultInspectorContent />
+            </ENSProvider>
+        </RootContext>
     )
 }

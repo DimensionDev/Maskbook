@@ -1,4 +1,5 @@
 import { PluginID } from '@masknet/plugin-infra'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 
 export const NFT_AVATAR_JSON_SERVER = 'https://configuration.r2d2.to/com.maskbook.avatar.json'
@@ -20,3 +21,4 @@ export const SUPPORTED_CHAIN_IDS: ChainId[] = [ChainId.Mainnet, ChainId.Matic, C
 
 export const mask_avatar_dark = new URL('./assets/mask.dark.svg', import.meta.url)
 export const mask_avatar_light = new URL('./assets/mask.light.svg', import.meta.url)
+export const supportPluginIds = [NetworkPluginID.PLUGIN_EVM, NetworkPluginID.PLUGIN_FLOW, NetworkPluginID.PLUGIN_SOLANA]

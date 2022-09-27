@@ -303,6 +303,9 @@ importers:
       '@masknet/theme':
         specifier: workspace:*
         version: link:../theme
+      '@masknet/web3-helpers':
+        specifier: workspace:*
+        version: link:../web3-helpers
       '@masknet/web3-providers':
         specifier: workspace:*
         version: link:../web3-providers
@@ -576,9 +579,6 @@ importers:
       '@masknet/plugin-cyberconnect':
         specifier: workspace:*
         version: link:../plugins/CyberConnect
-      '@masknet/plugin-dao':
-        specifier: workspace:*
-        version: link:../plugins/DAO
       '@masknet/plugin-debugger':
         specifier: workspace:*
         version: link:../plugins/Debugger
@@ -648,6 +648,9 @@ importers:
       '@masknet/web3-contracts':
         specifier: workspace:*
         version: link:../web3-contracts
+      '@masknet/web3-helpers':
+        specifier: workspace:*
+        version: link:../web3-helpers
       '@masknet/web3-providers':
         specifier: workspace:*
         version: link:../web3-providers
@@ -1019,6 +1022,9 @@ importers:
       '@masknet/web3-contracts':
         specifier: workspace:*
         version: link:../web3-contracts
+      '@masknet/web3-helpers':
+        specifier: workspace:*
+        version: link:../web3-helpers
       '@masknet/web3-providers':
         specifier: workspace:*
         version: link:../web3-providers
@@ -1139,39 +1145,6 @@ importers:
       react-use:
         specifier: ^17.4.0
         version: 17.4.0
-
-  packages/plugins/DAO:
-    dependencies:
-      '@masknet/configuration':
-        specifier: workspace:*
-        version: link:../../configuration
-      '@masknet/icons':
-        specifier: workspace:*
-        version: link:../../icons
-      '@masknet/plugin-infra':
-        specifier: workspace:*
-        version: link:../../plugin-infra
-      '@masknet/shared':
-        specifier: workspace:*
-        version: link:../../shared
-      '@masknet/shared-base':
-        specifier: workspace:*
-        version: link:../../shared-base
-      bignumber.js:
-        specifier: ^9.0.2
-        version: 9.0.2
-      date-fns:
-        specifier: ^2.28.0
-        version: 2.28.0
-      iframe-resizer-react:
-        specifier: ^1.1.0
-        version: 1.1.0
-      react-use:
-        specifier: ^17.4.0
-        version: 17.4.0
-      urlcat:
-        specifier: ^2.0.4
-        version: 2.0.4_fggwetex7eobhq3hztj4obsulu
 
   packages/plugins/Debugger:
     dependencies:
@@ -1975,6 +1948,9 @@ importers:
       '@masknet/theme':
         specifier: workspace:*
         version: link:../theme
+      '@masknet/web3-helpers':
+        specifier: workspace:*
+        version: link:../web3-helpers
       '@masknet/web3-providers':
         specifier: workspace:*
         version: link:../web3-providers
@@ -2287,6 +2263,21 @@ importers:
       web3-eth-contract:
         specifier: 1.7.5
         version: 1.7.5
+
+  packages/web3-helpers:
+    dependencies:
+      '@masknet/web3-shared-base':
+        specifier: workspace:*
+        version: link:../web3-shared/base
+      '@masknet/web3-shared-evm':
+        specifier: workspace:*
+        version: link:../web3-shared/evm
+      '@masknet/web3-shared-flow':
+        specifier: workspace:*
+        version: link:../web3-shared/flow
+      '@masknet/web3-shared-solana':
+        specifier: workspace:*
+        version: link:../web3-shared/solana
 
   packages/web3-providers:
     dependencies:
@@ -20997,7 +20988,7 @@ packages:
     patched: true
 
   /immutable/3.8.1:
-    resolution: {integrity: sha512-0R2q5f83L0h+zizu3lAA3ZR/mzEl04U1jVVXIqf2rQbZs9eX5YGtx1EFQuuJJHzVXH10ur6hGKehR8yBOQmZlQ==}
+    resolution: {integrity: sha1-IAgH8Rqw9ycQ6khVQt4IgHX2jNI=}
     engines: {node: '>=0.10.0'}
     dev: false
 

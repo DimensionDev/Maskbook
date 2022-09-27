@@ -182,6 +182,7 @@ export const resolveSourceTypeName = createLookupTableResolver<SourceType, strin
         [SourceType.Chainbase]: 'Chainbase',
         [SourceType.X2Y2]: 'X2Y2',
         [SourceType.MagicEden]: 'MagicEden',
+        [SourceType.Element]: 'Element',
         [SourceType.Flow]: 'Flow',
         [SourceType.Solana]: 'Solana',
         [SourceType.R2D2]: 'R2D2',

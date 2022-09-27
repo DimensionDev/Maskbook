@@ -1,6 +1,7 @@
 import ENS from 'ethjs-ens'
+import { Web3StateSettings } from '../../settings/index.js'
 import type { NameServiceResolver } from '@masknet/plugin-infra/web3'
-import { ChainId, ProviderType } from '@masknet/web3-shared-evm'
+import { ChainId, ProviderType, isZeroAddress, isEmptyHex } from '@masknet/web3-shared-evm'
 import { Providers } from '../Connection/provider.js'
 
 export class ENS_Resolver implements NameServiceResolver<ChainId> {
@@ -20,12 +21,18 @@ export class ENS_Resolver implements NameServiceResolver<ChainId> {
 
     async lookup(chainId: ChainId, name: string) {
         if (chainId !== ChainId.Mainnet) return
+        const web3 = await Web3StateSettings.value.Connection?.getWeb3?.({
+            chainId,
+        })
 
         try {
             const ens = await this.createENS()
-            return ens.lookup(name)
+            const lookupAddress = await ens.lookup(name)
+            return isZeroAddress(lookupAddress) || isEmptyHex(lookupAddress)
+                ? web3?.eth.ens.registry.getOwner(name)
+                : lookupAddress
         } catch {
-            return
+            return web3?.eth.ens.registry.getOwner(name)
         }
     }
 

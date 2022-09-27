@@ -6,20 +6,22 @@ import { NetworkPluginID, TokenType } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({}))
 
-interface CollectionListProps extends withClasses<never | 'root' | 'list' | 'collectionWrap'> {
+export interface CollectionListProps extends withClasses<never | 'root' | 'list' | 'collectionWrap'> {
     collections: CollectionTypes[]
     onList?: (key: string) => void
     size?: number
     showNetwork?: boolean
 }
+
 export function CollectionList(props: CollectionListProps) {
     const { collections, onList, size = 64, showNetwork = false } = props
     const classes = useStylesExtends(useStyles(), props)
 
     return (
         <List className={classes.list}>
-            {collections.map((collection, i) => (
+            {collections.map((collection) => (
                 <ListItem
+                    data-url={collection.imageURL ?? ''}
                     key={collection?.key}
                     className={classes.collectionWrap}
                     onClick={() => onList?.(collection.key)}>
@@ -42,7 +44,7 @@ export function CollectionList(props: CollectionListProps) {
                                 schema: SchemaType.ERC721,
                             },
                             metadata: {
-                                imageURL: collection.iconURL,
+                                imageURL: collection.imageURL,
                                 chainId: ChainId.Mainnet,
                                 name: '',
                                 symbol: '',

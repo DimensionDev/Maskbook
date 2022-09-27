@@ -2,7 +2,7 @@ import { PluginTraderMessages, PluginTraderRPC } from '../messages.js'
 import { TagType } from '../types/index.js'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import type { Plugin } from '@masknet/plugin-infra'
-import type { Web3Helper } from '@masknet/plugin-infra/web3'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import type { NetworkPluginID } from '@masknet/web3-shared-base'
 
 export const enhanceTag: Plugin.SNSAdaptor.Definition<ChainId>['enhanceTag'] = {

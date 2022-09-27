@@ -1,30 +1,14 @@
-import { Box, Typography, Card, CardContent, Link, DialogContent, DialogActions } from '@mui/material'
+import { Link, DialogContent, DialogActions, Typography } from '@mui/material'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import millify from 'millify'
 import OpenInNew from '@mui/icons-material/OpenInNew'
 import { ChainId, explorerResolver } from '@masknet/web3-shared-evm'
-import { useI18N } from '../../../utils/index.js'
+import { PluginWalletStatusBar, useI18N } from '../../../utils/index.js'
 import { InjectedDialog } from '@masknet/shared'
 import { InfoField } from './InformationCard.js'
 import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary.js'
 
 const useStyles = makeStyles()((theme) => ({
-    card: {
-        padding: 0,
-        border: `solid 1px ${theme.palette.divider}`,
-        margin: `${theme.spacing(2)} auto`,
-    },
-    content: {
-        width: '100%',
-        display: 'flex',
-        flexDirection: 'column',
-        boxSizing: 'border-box',
-    },
-    button: {
-        width: '60%',
-        minHeight: 39,
-        margin: `${theme.spacing(1)} auto`,
-    },
     link: {
         display: 'flex',
         color: 'inherit',
@@ -34,6 +18,19 @@ const useStyles = makeStyles()((theme) => ({
     },
     loading: {
         color: theme.palette.background.paper,
+    },
+    field: {
+        color: theme.palette.maskColor.second,
+    },
+    content: {
+        padding: 16,
+        '& > :first-child': {
+            marginTop: 0,
+        },
+        height: 492,
+    },
+    button: {
+        margin: 16,
     },
 }))
 
@@ -59,49 +56,45 @@ export function VoteConfirmDialog(props: VoteConfirmDialogProps) {
             onClose={onClose}
             title={t('plugin_snapshot_vote_confirm_dialog_title')}
             disableBackdropClick>
-            <DialogContent>
-                <Box>
-                    <Typography variant="h6" align="center">
-                        {t('plugin_snapshot_vote_confirm_dialog_choice', { choiceText })}
+            <DialogContent className={classes.content}>
+                <InfoField classes={{ field: classes.field }} title={t('plugin_snapshot_vote_choice')}>
+                    <Typography
+                        sx={{
+                            textAlign: 'right',
+                            width: 100,
+                            whiteSpace: 'nowrap',
+                            textOverflow: 'ellipsis',
+                            overflow: 'hidden',
+                        }}>
+                        {choiceText}
                     </Typography>
-                    <Typography variant="h6" align="center">
-                        {t('plugin_snapshot_vote_confirm_dialog_warning')}
-                    </Typography>
-                </Box>
-                <Card className={classes.card} variant="outlined">
-                    <CardContent className={classes.content}>
-                        <Box>
-                            <InfoField title={t('plugin_snapshot_vote_choice')}>{choiceText}</InfoField>
-                            <InfoField title={t('plugin_snapshot_info_snapshot')}>
-                                <Link
-                                    className={classes.link}
-                                    target="_blank"
-                                    rel="noopener"
-                                    href={explorerResolver.blockLink(ChainId.Mainnet, Number.parseInt(snapshot, 10))}>
-                                    {snapshot}
-                                    <OpenInNew fontSize="small" />
-                                </Link>
-                            </InfoField>
-                            <InfoField title={t('plugin_snapshot_vote_power')}>
-                                {millify(power, { precision: 2, lowercase: true })} {powerSymbol.toUpperCase()}
-                            </InfoField>
-                        </Box>
-                    </CardContent>
-                </Card>
+                </InfoField>
+                <InfoField classes={{ field: classes.field }} title={t('plugin_snapshot_info_snapshot')}>
+                    <Link
+                        className={classes.link}
+                        target="_blank"
+                        rel="noopener"
+                        href={explorerResolver.blockLink(ChainId.Mainnet, Number.parseInt(snapshot, 10))}>
+                        {snapshot}
+                        <OpenInNew fontSize="small" sx={{ paddingLeft: 1 }} />
+                    </Link>
+                </InfoField>
+                <InfoField classes={{ field: classes.field }} title={t('plugin_snapshot_vote_power')}>
+                    {millify(power, { precision: 2, lowercase: true })} {powerSymbol.toUpperCase()}
+                </InfoField>
             </DialogContent>
-            <DialogActions>
-                <WalletConnectedBoundary
-                    offChain
-                    classes={{ connectWallet: classes.button, unlockMetaMask: classes.button }}>
-                    <ActionButton
-                        classes={{ root: classes.button }}
-                        color="primary"
-                        fullWidth
-                        disabled={loading}
-                        onClick={onVoteConfirm}
-                        loading={loading}>
-                        {t('plugin_snapshot_vote')}
-                    </ActionButton>
+            <DialogActions style={{ padding: 0 }}>
+                <WalletConnectedBoundary offChain classes={{ button: classes.button }}>
+                    <PluginWalletStatusBar>
+                        <ActionButton
+                            color="primary"
+                            fullWidth
+                            disabled={loading}
+                            onClick={onVoteConfirm}
+                            loading={loading}>
+                            {t('plugin_snapshot_vote')}
+                        </ActionButton>
+                    </PluginWalletStatusBar>
                 </WalletConnectedBoundary>
             </DialogActions>
         </InjectedDialog>

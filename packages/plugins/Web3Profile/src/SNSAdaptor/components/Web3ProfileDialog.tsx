@@ -72,7 +72,7 @@ export function Web3ProfileDialog() {
     const [open, setOpen] = useState(false)
 
     useEffect(() => {
-        return CrossIsolationMessages.events.requestWeb3ProfileDialog.on(({ open }) => {
+        return CrossIsolationMessages.events.web3ProfileDialogEvent.on(({ open }) => {
             setOpen(open)
         })
     }, [])

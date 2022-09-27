@@ -76,7 +76,7 @@ function NFTAvatarInFacebookFirstStep() {
                 avatarId: '',
                 address: info.token.contract.address,
                 tokenId: info.token.tokenId,
-                pluginId: info.pluginId ?? NetworkPluginID.PLUGIN_EVM,
+                pluginID: info.pluginId ?? NetworkPluginID.PLUGIN_EVM,
                 chainId: info.token.chainId ?? ChainId.Mainnet,
                 schema: info.token.schema ?? SchemaType.ERC721,
             })

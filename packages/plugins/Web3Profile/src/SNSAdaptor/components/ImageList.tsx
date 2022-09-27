@@ -31,12 +31,10 @@ const useStyles = makeStyles()((theme) => {
             position: 'relative',
             cursor: 'pointer',
             display: 'flex',
-            overflow: 'hidden',
             padding: 0,
             flexDirection: 'column',
             borderRadius: 12,
             userSelect: 'none',
-            lineHeight: 0,
         },
         content: {
             width: 600,

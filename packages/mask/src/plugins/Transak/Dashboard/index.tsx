@@ -5,7 +5,7 @@ import { BuyTokenDialog } from '../SNSAdaptor/BuyTokenDialog.js'
 const dashboard: Plugin.Dashboard.Definition = {
     ...base,
     init(signal) {},
-    GlobalInjection: function Component() {
+    GlobalInjection() {
         return <BuyTokenDialog />
     },
 }

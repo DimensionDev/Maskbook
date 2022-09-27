@@ -1,4 +1,4 @@
-import type { Web3Helper } from '@masknet/plugin-infra/web3'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import type { FungibleToken, NonFungibleToken, NonFungibleTokenContract } from '@masknet/web3-shared-base'
 import type { GasConfig } from '@masknet/web3-shared-evm'
 import { noop } from 'lodash-unified'
@@ -26,6 +26,7 @@ export interface ContextOptions {
     storedTokens: Array<NonFungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>
     reset: () => void
     setGasConfig: Dispatch<SetStateAction<GasConfig | undefined>>
+    gasConfig: GasConfig | undefined
 }
 
 export const TipContext = createContext<ContextOptions>({
@@ -49,4 +50,5 @@ export const TipContext = createContext<ContextOptions>({
     storedTokens: [],
     reset: noop,
     setGasConfig: noop,
+    gasConfig: undefined,
 })

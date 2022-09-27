@@ -10,7 +10,6 @@ import {
     OrderSide,
     TokenType,
     resolveIPFS_URL,
-    resolveCrossOriginURL,
     SourceType,
 } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType } from '@masknet/web3-shared-solana'
@@ -27,19 +26,16 @@ import type {
 
 async function fetchFromMagicEden<T>(chainId: ChainId, path: string) {
     if (chainId !== ChainId.Mainnet) return
-    try {
-        const url = resolveCrossOriginURL(urlcat(MAGIC_EDEN_API_URL, path))!
-        const response = await fetch(url, {
-            method: 'GET',
-            headers: { Accept: 'application/json' },
-        })
-        if (response.ok) {
-            return (await response.json()) as T
-        }
-        return
-    } catch {
-        return
+
+    const url = urlcat(MAGIC_EDEN_API_URL, path)
+    const response = await fetch(url, {
+        method: 'GET',
+        headers: { Accept: 'application/json' },
+    })
+    if (response.ok) {
+        return (await response.json()) as T
     }
+    return
 }
 
 function createNFTToken(

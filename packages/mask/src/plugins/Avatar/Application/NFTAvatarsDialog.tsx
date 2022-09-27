@@ -16,6 +16,7 @@ import { PluginID } from '@masknet/plugin-infra'
 const useStyles = makeStyles()((theme) => ({
     root: {
         margin: 0,
+        minHeight: 564,
         padding: '0px !important',
         '::-webkit-scrollbar': {
             display: 'none',
@@ -42,7 +43,7 @@ export function NFTAvatarDialog() {
     const { classes } = useStyles()
 
     useEffect(() => {
-        return CrossIsolationMessages.events.requestOpenApplication.on(({ open, application }) => {
+        return CrossIsolationMessages.events.applicationDialogEvent.on(({ open, application }) => {
             if (application !== PluginID.Avatar) return
             setOpen(open)
         })
@@ -74,7 +75,7 @@ export function NFTAvatarDialog() {
     const onClose = useCallback(() => {
         setStep(CreateNFTAvatarStep.Persona)
         handleClose()
-    }, [handleClose])
+    }, [])
 
     useEffect(() => setSelectedAccount(account || wallets?.[0]?.identity || ''), [account, wallets?.[0]?.identity])
 

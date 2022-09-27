@@ -1,17 +1,17 @@
 import { PluginID, useIsMinimalMode } from '@masknet/plugin-infra/content-script'
 import {
+    useChainId,
     useChainIdValid,
-    useFungibleToken,
     useNetworkType,
     useNonFungibleAssetsByCollection,
-    useChainId,
 } from '@masknet/plugin-infra/web3'
 import { DataProvider } from '@masknet/public-api'
 import { NFTList } from '@masknet/shared'
 import { EMPTY_LIST } from '@masknet/shared-base'
-import { makeStyles, MaskTabList, useTabs, ActionButton } from '@masknet/theme'
-import { NetworkPluginID, TokenType, createFungibleToken } from '@masknet/web3-shared-base'
-import { isNativeTokenSymbol, isNativeTokenAddress, SchemaType } from '@masknet/web3-shared-evm'
+import { ActionButton, makeStyles, MaskTabList, useTabs } from '@masknet/theme'
+import { TrendingAPI } from '@masknet/web3-providers'
+import { createFungibleToken, NetworkPluginID, TokenType } from '@masknet/web3-shared-base'
+import { isNativeTokenAddress, isNativeTokenSymbol, SchemaType } from '@masknet/web3-shared-evm'
 import { TabContext } from '@mui/lab'
 import { Link, Stack, Tab } from '@mui/material'
 import { Box, useTheme } from '@mui/system'
@@ -29,7 +29,7 @@ import type { TagType } from '../../types/index.js'
 import { TradeView } from '../trader/TradeView.js'
 import { CoinMarketPanel } from './CoinMarketPanel.js'
 import { PriceChart } from './PriceChart.js'
-import { Days, DEFAULT_RANGE_OPTIONS, NFT_RANGE_OPTIONS, PriceChartDaysControl } from './PriceChartDaysControl.js'
+import { DEFAULT_RANGE_OPTIONS, NFT_RANGE_OPTIONS, PriceChartDaysControl } from './PriceChartDaysControl.js'
 import { TickersTable } from './TickersTable.js'
 import { TrendingViewDeck } from './TrendingViewDeck.js'
 import { TrendingViewError } from './TrendingViewError.js'
@@ -150,15 +150,8 @@ export function TrendingView(props: TrendingViewProps) {
 
     const coinSymbol = (trending?.coin.symbol || '').toLowerCase()
 
-    // #region swap
-    const { value: tokenDetailed } = useFungibleToken(
-        NetworkPluginID.PLUGIN_EVM,
-        coinSymbol === 'eth' ? '' : trending?.coin.contract_address ?? '',
-    )
-    // #endregion
-
     // #region stats
-    const [days, setDays] = useState(Days.ONE_WEEK)
+    const [days, setDays] = useState(TrendingAPI.Days.ONE_WEEK)
     const {
         value: stats = EMPTY_LIST,
         loading: loadingStats,

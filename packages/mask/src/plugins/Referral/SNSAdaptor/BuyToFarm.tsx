@@ -96,7 +96,7 @@ export function BuyToFarm(props: PageInterface) {
             return
         }
 
-        CrossIsolationMessages.events.swapDialogUpdate.sendToLocal({
+        CrossIsolationMessages.events.swapDialogEvent.sendToLocal({
             open: true,
             traderProps: {
                 chainId: SWAP_CHAIN_ID,

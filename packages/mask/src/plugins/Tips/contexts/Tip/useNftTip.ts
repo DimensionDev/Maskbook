@@ -1,4 +1,5 @@
-import { useAccount, useChainId, useWeb3State, Web3Helper } from '@masknet/plugin-infra/web3'
+import { useAccount, useChainId, useWeb3State } from '@masknet/plugin-infra/web3'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import type { TipTuple } from './type.js'
 import { useAsyncFn } from 'react-use'

@@ -154,6 +154,7 @@ export class MirrorAPI implements MirrorBaseAPI.Provider {
             transactionId: response.arweaveTransactionRequest.transactionId,
             digest: response.digest,
             author: response.publisher.member,
+            collaborators: response.collaborators,
             collection: {
                 chainId: response.writingNFT.network.chainId,
                 name: response.writingNFT.name,

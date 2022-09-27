@@ -25,7 +25,7 @@ function getPoolFromLinks(links: string[]) {
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
     init(signal) {},
-    DecryptedInspector: function Component(props) {
+    DecryptedInspector(props) {
         const links = useMemo(() => {
             const x = extractTextFromTypedMessage(props.message)
             if (x.none) return null
@@ -36,13 +36,13 @@ const sns: Plugin.SNSAdaptor.Definition = {
         if (!pool?.address) return null
         return <Renderer link={pool.link} address={pool.address} />
     },
-    PostInspector: function Component() {
+    PostInspector() {
         const links = usePostInfoDetails.mentionedLinks()
         const pool = getPoolFromLinks(links)
         if (!pool?.address) return null
         return <Renderer link={pool.link} address={pool.address} />
     },
-    GlobalInjection: function Component() {
+    GlobalInjection() {
         return <InvestDialog />
     },
     ApplicationEntries: [

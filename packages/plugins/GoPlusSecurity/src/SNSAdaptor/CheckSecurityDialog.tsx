@@ -49,7 +49,7 @@ export function CheckSecurityDialog() {
     const [searchHidden, setSearchHidden] = useState(false)
 
     useEffect(() => {
-        return CrossIsolationMessages.events.requestCheckSecurityDialog.on((env) => {
+        return CrossIsolationMessages.events.checkSecurityDialogEvent.on((env) => {
             if (!env.open) return
             setOpen(env.open)
             setSearchHidden(env.searchHidden)

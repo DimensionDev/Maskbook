@@ -122,7 +122,7 @@ export function SavingsTable({ chainId, tab, protocols, setTab, setSelectedProto
     const onConvertClick = useCallback(() => {
         const ETH = LDO_PAIRS[0][0]
         const sETH = LDO_PAIRS[0][1]
-        CrossIsolationMessages.events.swapDialogUpdate.sendToLocal({
+        CrossIsolationMessages.events.swapDialogEvent.sendToLocal({
             open: true,
             traderProps: {
                 defaultInputCoin: sETH,

@@ -86,6 +86,7 @@ export enum SourceType {
     Chainbase = 'Chainbase',
     X2Y2 = 'X2Y2',
     MagicEden = 'MagicEden',
+    Element = 'Element',
 
     // Rarity
     RaritySniper = 'RaritySniper',
@@ -734,6 +735,7 @@ export interface ConnectionOptions<ChainId, ProviderType, Transaction> {
 }
 export interface Connection<
     ChainId,
+    AddressType,
     SchemaType,
     ProviderType,
     Signature,
@@ -753,8 +755,10 @@ export interface Connection<
     getWeb3Provider(initial?: Web3ConnectionOptions): Promise<Web3Provider>
     /** Get gas price */
     getGasPrice(initial?: Web3ConnectionOptions): Promise<string>
+    /** Get address type of given address. */
+    getAddressType(address: string, initial?: Web3ConnectionOptions): Promise<AddressType | undefined>
     /** Get schema type of given token address. */
-    getTokenSchema(address: string, initial?: Web3ConnectionOptions): Promise<SchemaType | undefined>
+    getSchemaType(address: string, initial?: Web3ConnectionOptions): Promise<SchemaType | undefined>
     /** Get a native fungible token. */
     getNativeToken(initial?: Web3ConnectionOptions): Promise<FungibleToken<ChainId, SchemaType>>
     /** Get a fungible token. */
@@ -1289,6 +1293,7 @@ export interface ProviderState<ChainId, ProviderType, NetworkType> {
 }
 export interface ConnectionState<
     ChainId,
+    AddressType,
     SchemaType,
     ProviderType,
     Signature,
@@ -1303,6 +1308,7 @@ export interface ConnectionState<
     Web3ConnectionOptions = ConnectionOptions<ChainId, ProviderType, Transaction>,
     Web3Connection = Connection<
         ChainId,
+        AddressType,
         SchemaType,
         ProviderType,
         Signature,
@@ -1349,6 +1355,9 @@ export interface OthersState<ChainId, SchemaType, ProviderType, NetworkType, Tra
     isZeroAddress(address?: string): boolean
     isNativeTokenAddress(address?: string): boolean
     isSameAddress(address?: string, otherAddress?: string): boolean
+    isNativeTokenSchemaType(schemaType?: SchemaType): boolean
+    isFungibleTokenSchemaType(schemaType?: SchemaType): boolean
+    isNonFungibleTokenSchemaType(schemaType?: SchemaType): boolean
     // #endregion
 
     // #region data formatting
@@ -1375,4 +1384,99 @@ export interface BalanceNotifierState<ChainId> {
 
 export interface BlockNumberNotifierState<ChainId> {
     emitter: Emitter<BlockNumberEvent<ChainId>>
+}
+
+export interface Web3State<
+        ChainId,
+        AddressType,
+        SchemaType,
+        ProviderType,
+        NetworkType,
+        Signature,
+        GasOption,
+        Block,
+        Operation,
+        Transaction,
+        TransactionReceipt,
+        TransactionDetailed,
+        TransactionSignature,
+        TransactionParameter,
+        Web3,
+        Web3Provider
+    > {
+        AddressBook?: AddressBookState<ChainId>
+        BalanceNotifier?: BalanceNotifierState<ChainId>
+        BlockNumberNotifier?: BlockNumberNotifierState<ChainId>
+        Hub?: HubState<ChainId, SchemaType, GasOption>
+        IdentityService?: IdentityServiceState
+        NameService?: NameServiceState<ChainId>
+        RiskWarning?: RiskWarningState
+        Settings?: SettingsState
+        Token?: TokenState<ChainId, SchemaType>
+        Transaction?: TransactionState<ChainId, Transaction>
+        TransactionFormatter?: TransactionFormatterState<ChainId, TransactionParameter, Transaction>
+        TransactionWatcher?: TransactionWatcherState<ChainId, Transaction>
+        Connection?: ConnectionState<
+            ChainId,
+            AddressType,
+            SchemaType,
+            ProviderType,
+            Signature,
+            Block,
+            Operation,
+            Transaction,
+            TransactionReceipt,
+            TransactionDetailed,
+            TransactionSignature,
+            Web3,
+            Web3Provider
+        >
+        Provider?: ProviderState<ChainId, ProviderType, NetworkType>
+        Wallet?: WalletState
+        Others?: OthersState<ChainId, SchemaType, ProviderType, NetworkType, Transaction>
+        Storage?: Web3StorageServiceState
+}
+
+export interface NetworkIconClickBaitProps<ChainId, ProviderType, NetworkType> {
+    network: NetworkDescriptor<ChainId, NetworkType>
+    provider?: ProviderDescriptor<ChainId, ProviderType>
+    children?: React.ReactNode
+    onClick?: (
+        network: NetworkDescriptor<ChainId, NetworkType>,
+        provider?: ProviderDescriptor<ChainId, ProviderType>,
+    ) => void
+}
+
+export interface ProviderIconClickBaitProps<ChainId, ProviderType, NetworkType> {
+    network: NetworkDescriptor<ChainId, NetworkType>
+    provider: ProviderDescriptor<ChainId, ProviderType>
+    children?: React.ReactNode
+    onClick?: (
+        network: NetworkDescriptor<ChainId, NetworkType>,
+        provider: ProviderDescriptor<ChainId, ProviderType>,
+    ) => void
+}
+
+export interface AddressFormatterProps {
+    address: string
+    size?: number
+}
+
+export interface Web3UI<ChainId, ProviderType, NetworkType> {
+    SelectNetworkMenu?: {
+        /** This UI will receive network icon as children component, and the plugin may hook click handle on it. */
+        NetworkIconClickBait?: React.ComponentType<
+            NetworkIconClickBaitProps<ChainId, ProviderType, NetworkType>
+        >
+    }
+    SelectProviderDialog?: {
+        /** This UI will receive network icon as children component, and the plugin may hook click handle on it. */
+        NetworkIconClickBait?: React.ComponentType<
+            NetworkIconClickBaitProps<ChainId, ProviderType, NetworkType>
+        >
+        /** This UI will receive provider icon as children component, and the plugin may hook click handle on it. */
+        ProviderIconClickBait?: React.ComponentType<
+            ProviderIconClickBaitProps<ChainId, ProviderType, NetworkType>
+        >
+    }
 }

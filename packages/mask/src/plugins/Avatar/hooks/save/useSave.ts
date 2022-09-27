@@ -43,12 +43,15 @@ export function useSave(pluginId: NetworkPluginID, chainId: ChainId) {
                 switch (pluginId) {
                     case NetworkPluginID.PLUGIN_EVM: {
                         if (isBindAccount) {
-                            return saveToNextID(info, account, persona, proof)
+                            const result = await saveToNextID(info, account, persona, proof)
+                            return result
                         }
-                        return saveToRSS3(info, account)
+                        const result = await saveToRSS3(info, account)
+                        return result
                     }
                     default:
-                        return saveToKV(info, account, persona, proof)
+                        const result = await saveToKV(info, account, persona, proof)
+                        return result
                 }
             } catch {
                 return

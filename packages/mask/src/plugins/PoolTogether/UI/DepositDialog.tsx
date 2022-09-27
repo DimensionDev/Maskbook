@@ -167,7 +167,7 @@ export function DepositDialog() {
     // #region Swap
     const openSwap = useCallback(() => {
         if (!token) return
-        CrossIsolationMessages.events.swapDialogUpdate.sendToLocal({
+        CrossIsolationMessages.events.swapDialogEvent.sendToLocal({
             open: true,
             traderProps: {
                 defaultInputCoin: token,
@@ -177,7 +177,7 @@ export function DepositDialog() {
 
     useEffect(
         () =>
-            CrossIsolationMessages.events.swapDialogUpdate.on(({ open }) => {
+            CrossIsolationMessages.events.swapDialogEvent.on(({ open }) => {
                 if (!open) {
                     retryLoadTokenBalance()
                 }

@@ -8,10 +8,10 @@ import {
 } from '@masknet/plugin-infra/content-script'
 import { NextIDPlatform, EMPTY_LIST, PopupRoutes, CrossIsolationMessages } from '@masknet/shared-base'
 import { useAvailablePlugins } from '@masknet/plugin-infra/web3'
-import { makeStyles, useTabs } from '@masknet/theme'
+import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import { first } from 'lodash-unified'
 import { TabContext } from '@mui/lab'
-import { DialogContent } from '@mui/material'
+import { DialogContent, Tab } from '@mui/material'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Icons } from '@masknet/icons'
 import { NextIDProof } from '@masknet/web3-providers'
@@ -25,7 +25,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     content: {
         position: 'relative',
-        minHeight: 564,
+        minHeight: 528,
         padding: 0,
         boxSizing: 'border-box',
     },
@@ -58,7 +58,10 @@ export function PluginSettingsDialog() {
         label: typeof x.label === 'string' ? x.label : translate(x.pluginID, x.label),
     }))
 
-    const [currentTab, onChange, , setTab] = useTabs(first(tabs)?.id ?? PluginID.Tips, ...tabs.map((tab) => tab.id))
+    const [currentTab, onChange, , setTab] = useTabs<PluginID>(
+        first(tabs)?.id ?? PluginID.Tips,
+        ...tabs.map((tab) => tab.id),
+    )
 
     const openPopupWindow = useCallback(
         () =>
@@ -86,15 +89,21 @@ export function PluginSettingsDialog() {
         const Component = getTabContent(currentTab)
         if (!Component) return null
         return (
-            <Component onClose={() => setOpen(false)} bindingWallets={bindingWallets} currentPersona={currentPersona} />
+            <Component
+                onClose={() => setOpen(false)}
+                bindingWallets={bindingWallets}
+                currentPersona={currentPersona}
+                pluginId={currentTab}
+                onOpenPopup={Services.Helper.openPopupWindow}
+            />
         )
     }, [currentTab, bindingWallets, currentPersona])
 
     useEffect(() => {
-        return CrossIsolationMessages.events.PluginSettingsDialogUpdate.on(({ open, targetTab }) => {
+        return CrossIsolationMessages.events.settingsDialogEvent.on(({ open, targetTab }) => {
             setOpen(open)
 
-            if (targetTab) setTab(targetTab)
+            if (targetTab) setTab(targetTab as PluginID)
         })
     }, [])
 
@@ -106,6 +115,13 @@ export function PluginSettingsDialog() {
                 title={t('settings')}
                 titleTail={
                     <Icons.WalletUnderTabs size={24} onClick={openPopupWindow} className={classes.titleTailButton} />
+                }
+                titleTabs={
+                    <MaskTabList variant="base" onChange={onChange} aria-label="SettingTabs">
+                        {tabs.map((tab) => (
+                            <Tab key={tab.id} label={tab.label} value={tab.id} />
+                        ))}
+                    </MaskTabList>
                 }
                 titleBarIconStyle="back">
                 <DialogContent className={classes.content}>{component}</DialogContent>

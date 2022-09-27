@@ -12,8 +12,8 @@ import {
     useNetworkDescriptor,
     useProviderDescriptor,
     useWeb3State,
-    Web3Helper,
 } from '@masknet/plugin-infra/web3'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import { WalletDescription, WalletDescriptionProps } from './WalletDescription.js'
 
 interface WalletMenuItemProps {

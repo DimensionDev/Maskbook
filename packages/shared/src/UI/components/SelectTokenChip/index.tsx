@@ -6,7 +6,7 @@ import ErrorIcon from '@mui/icons-material/Error'
 import { noop } from 'lodash-unified'
 import { useSharedI18N } from '../../../locales/index.js'
 import { TokenIcon } from '../TokenIcon/index.js'
-import type { Web3Helper } from '@masknet/plugin-infra/web3'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import type { FungibleToken } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => {

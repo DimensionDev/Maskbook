@@ -13,10 +13,10 @@ import {
     useNetworkDescriptor,
     useProviderDescriptor,
     useWeb3State,
-    Web3Helper,
     useDefaultChainId,
     useRecentTransactions,
 } from '@masknet/plugin-infra/web3'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import { Icons } from '@masknet/icons'
 import type { WalletDescriptionProps } from './WalletDescription.js'
 import { first, omit } from 'lodash-unified'

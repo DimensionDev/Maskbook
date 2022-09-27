@@ -5,6 +5,8 @@ import { Button, Typography } from '@mui/material'
 import type { Account } from '../type.js'
 import { AccountAvatar } from '../components/AccountAvatar/index.js'
 import { useI18N } from '../../../../../utils/index.js'
+import { Trans } from 'react-i18next'
+import { EnhanceableSite } from '@masknet/shared-base'
 
 const useStyles = makeStyles()(() => ({
     container: {
@@ -28,6 +30,11 @@ const useStyles = makeStyles()(() => ({
         color: '#FFB915',
         fontSize: 12,
         lineHeight: '16px',
+    },
+    tip: {
+        fontSize: 12,
+        lineHeight: '16px',
+        marginTop: 16,
     },
     controller: {
         position: 'fixed',
@@ -75,14 +82,23 @@ export const AccountDetailUI = memo<AccountDetailUIProps>(
                 />
                 <Typography className={classes.name}>@{account.identifier.userId}</Typography>
                 <Typography className={classes.warning}>
-                    {account.is_valid
-                        ? t('popups_verify_warning_alert', {
-                              persona: personaName,
-                              account: account.identifier.userId,
-                          })
-                        : t('popups_disconnect_warning_alert', {
-                              account: account.identifier.userId,
-                          })}
+                    {account.is_valid || account.identifier.network !== EnhanceableSite.Twitter ? (
+                        <Trans
+                            i18nKey="popups_new_verify_warning_alert"
+                            components={{ strong: <strong /> }}
+                            values={{ account: account.identifier.userId, persona: personaName }}
+                        />
+                    ) : (
+                        <Trans
+                            i18nKey="popups_new_disconnect_warning_alert"
+                            components={{ strong: <strong /> }}
+                            values={{ account: account.identifier.userId }}
+                        />
+                    )}
+
+                    {account.identifier.network !== EnhanceableSite.Twitter ? (
+                        <Typography className={classes.tip}>{t('popups_disconnect_other_warning_alert')}</Typography>
+                    ) : null}
                 </Typography>
                 <div className={classes.controller}>
                     {account.is_valid ? (
