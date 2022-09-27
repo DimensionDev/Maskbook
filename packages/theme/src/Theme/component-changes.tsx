@@ -988,6 +988,10 @@ export const Tooltip = (mode: PaletteMode, colors: MaskColor) => ({
                     lineHeight: '18px',
                     backgroundColor: colors.maskColor.tips,
                     color: colors.maskColor.bottom,
+                    '& > *': {
+                        fontSize: 14,
+                        lineHeight: '18px',
+                    },
                 },
                 arrow: {
                     color: colors.maskColor.tips,
