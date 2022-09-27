@@ -52,47 +52,6 @@ const getPostId = (node: HTMLElement | HTMLLinkElement) => {
     return ''
 }
 
-const getPostWriters = async (postId: string) => {
-    const script = document.getElementById('__NEXT_DATA__')?.innerHTML
-    if (!script) return
-    const INIT_DATA = JSON.parse(script)
-
-    function getAuthorDetail(address?: string) {
-        const author = INIT_DATA?.props?.pageProps?.__APOLLO_STATE__?.[`ProjectType:${address}`]
-        return {
-            displayName: author?.displayName,
-            avatarURL: author?.avatarURL,
-            domain: author?.domain,
-        }
-    }
-
-    const publisher = INIT_DATA?.props?.pageProps?.__APOLLO_STATE__?.[`entry:${postId}`]?.publisher
-    if (!publisher) {
-        // get publisher from api
-        const post = await Mirror.getPost(postId)
-        if (!post) return
-
-        return {
-            author: formatWriter(post.author),
-            coAuthors: post.coAuthors.map(formatWriter),
-        }
-    } else {
-        // get publisher from local
-        return {
-            author: formatWriter({
-                address: publisher?.project?.__ref.replace('ProjectType:', '') as string,
-                ...getAuthorDetail(publisher?.project?.__ref.replace('ProjectType:', '') as string),
-            }),
-            coAuthors: [
-                formatWriter({
-                    address: publisher?.member.__ref.replace('ProjectType:', '') as string,
-                    ...getAuthorDetail(publisher?.member?.__ref.replace('ProjectType:', '') as string),
-                }),
-            ],
-        }
-    }
-}
-
 async function collectPostInfo(node: HTMLElement | null, cancel: AbortSignal) {
     if (!node) return
     if (cancel?.aborted) return
