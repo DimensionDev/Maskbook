@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { SourceType } from '@masknet/web3-shared-base'
 import { Box, Typography, Link } from '@mui/material'
@@ -18,6 +18,7 @@ import { ENSPostExtraInfoWrapper } from './ENSPostExtraInfoWrapper'
 export function SearchResultInspectorContent() {
     const t = useI18N()
     const { classes, cx } = useStyles({})
+    const [rightBoundary, setRightBoundary] = useState<number | undefined>()
     const {
         isLoading,
         isError,
@@ -58,7 +59,11 @@ export function SearchResultInspectorContent() {
                             <Typography className={classes.nextIdVerifiedTitle}>
                                 {t.associated_social_accounts()}
                             </Typography>
-                            <section className={classes.bindingsWrapper}>
+                            <section
+                                className={classes.bindingsWrapper}
+                                ref={(e) => {
+                                    setRightBoundary(e?.getBoundingClientRect().right)
+                                }}>
                                 {validNextIdTwitterBindings.map((x, i) => (
                                     <div key={i} className={classes.badge}>
                                         <Link
@@ -71,15 +76,13 @@ export function SearchResultInspectorContent() {
                                                 {x.identity}
                                             </Typography>
                                         </Link>
-                                        <NextIdBadge variant="light" />
+                                        <NextIdBadge variant="light" rightBoundary={rightBoundary} />
                                     </div>
                                 ))}
                             </section>
 
-                            {restOfValidNextIdTwitterBindings.length > 0 ? (
-                                <SocialAccountList
-                                    restOfValidNextIdTwitterBindings={restOfValidNextIdTwitterBindings}
-                                />
+                            {validNextIdTwitterBindings.length > 1 ? (
+                                <SocialAccountList validNextIdTwitterBindings={validNextIdTwitterBindings} />
                             ) : null}
                         </div>
                     ) : null}

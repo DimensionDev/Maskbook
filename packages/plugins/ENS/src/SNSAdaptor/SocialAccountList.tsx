@@ -9,15 +9,15 @@ import useStyles from './useStyles'
 import { useI18N } from '../locales'
 
 interface SocialAccountListProps {
-    restOfValidNextIdTwitterBindings: BindingProof[]
+    validNextIdTwitterBindings: BindingProof[]
 }
 
-export function SocialAccountList({ restOfValidNextIdTwitterBindings }: SocialAccountListProps) {
+export function SocialAccountList({ validNextIdTwitterBindings }: SocialAccountListProps) {
     const t = useI18N()
-    const { classes, cx, theme } = useStyles({ isMenuScroll: restOfValidNextIdTwitterBindings.length > 5 })
+    const { classes, cx, theme } = useStyles({ isMenuScroll: validNextIdTwitterBindings.length > 5 })
 
     const [menu, openMenu] = useMenuConfig(
-        restOfValidNextIdTwitterBindings.map((x, i) => (
+        validNextIdTwitterBindings.map((x, i) => (
             <MenuItem
                 className={classes.socialAccountListItem}
                 disabled={false}

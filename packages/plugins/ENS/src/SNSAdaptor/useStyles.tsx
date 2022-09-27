@@ -109,6 +109,7 @@ const useStyles = makeStyles<StyleProps>()((theme, { isMenuScroll = false }) => 
         },
         link: {
             display: 'flex',
+            alignItems: 'center',
             textDecoration: 'none !important',
         },
         nextIdLink: {
