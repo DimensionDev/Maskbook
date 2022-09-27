@@ -11,8 +11,8 @@ import {
     useWeb3Connection,
     useChainIdValid,
     useProviderDescriptor,
-    useActualChainId,
-    useActualProviderType,
+    useChainId,
+    useProviderType,
 } from '@masknet/plugin-infra/web3'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { ProviderType } from '@masknet/web3-shared-evm'
@@ -87,8 +87,8 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
     const plugin = useActivatedPlugin(actualPluginID, 'any')
 
     const { Others: actualOthers } = useWeb3State(actualPluginID)
-    const actualChainId = useActualChainId(actualPluginID)
-    const actualProviderType = useActualProviderType(actualPluginID)
+    const actualChainId = useChainId(actualPluginID)
+    const actualProviderType = useProviderType(actualPluginID)
     const actualProviderDescriptor = useProviderDescriptor(actualPluginID)
     const actualChainName = actualOthers?.chainResolver.chainName(actualChainId)
     const account = useAccount(actualPluginID, expectedAccount)
