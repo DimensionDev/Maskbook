@@ -5,7 +5,7 @@ import { EMPTY_LIST } from '@masknet/shared-base'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import { isSameAddress, NetworkPluginID, NonFungibleAsset } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import { Button, FormControl, Typography } from '@mui/material'
+import { FormControl, Typography } from '@mui/material'
 import classnames from 'classnames'
 import { uniqWith } from 'lodash-unified'
 import { FC, HTMLProps, useCallback, useMemo } from 'react'
@@ -35,6 +35,7 @@ const useStyles = makeStyles()((theme) => ({
         flexDirection: 'column',
         overflow: 'auto',
         flexGrow: 1,
+        margin: theme.spacing(4, -2, 0),
     },
     statusBox: {
         display: 'flex',
@@ -60,6 +61,11 @@ const useStyles = makeStyles()((theme) => ({
     },
     addButton: {
         marginLeft: 'auto',
+        cursor: 'pointer',
+        color: theme.palette.maskColor.highlight,
+        fontSize: 14,
+        fontWeight: 700,
+        lineHeight: '18px',
     },
 }))
 
@@ -127,9 +133,9 @@ export const NFTSection: FC<Props> = ({ className, onEmpty, ...rest }) => {
                     </Typography>
                 )}
                 {isEvm ? (
-                    <Button variant="text" className={classes.addButton} onClick={() => openAddTokenDialog(true)}>
+                    <Typography className={classes.addButton} onClick={() => openAddTokenDialog(true)}>
                         {t.tip_add_collectibles()}
-                    </Button>
+                    </Typography>
                 ) : null}
             </FormControl>
             <div className={classes.selectSection}>

@@ -38,7 +38,7 @@ const useStyles = makeStyles()((theme) => ({
         height: 528,
     },
     recipient: {
-        margin: theme.spacing(2, 2, 0),
+        margin: theme.spacing(1, 2, 0),
     },
     abstractTabWrapper: {
         width: '100%',

@@ -84,5 +84,5 @@ export function formatGweiToEther(value: BigNumber.Value) {
 
 export function formatUSD(value: BigNumber.Value, significant = 2): string {
     const bn = new BigNumber(value)
-    return bn.lt(0.01) ? '<$0.01' : bn.toFixed(significant)
+    return bn.lt(0.01) ? '<$0.01' : `$${bn.toFixed(significant)}`
 }
