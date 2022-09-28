@@ -25,7 +25,7 @@ const useStyles = makeStyles<StyleProps>()((theme, { isMenuScroll = false }) => 
             fontSize: 14,
         },
         loadingText: {
-            color: theme.palette.text.primary,
+            color: theme.palette.maskColor.dark,
             fontSize: 14,
         },
         loadFailedText: {
@@ -36,6 +36,7 @@ const useStyles = makeStyles<StyleProps>()((theme, { isMenuScroll = false }) => 
             width: 24,
             height: 24,
             marginBottom: 5,
+            color: theme.palette.maskColor.dark,
             '@keyframes loadingAnimation': {
                 '0%': {
                     transform: 'rotate(0deg)',

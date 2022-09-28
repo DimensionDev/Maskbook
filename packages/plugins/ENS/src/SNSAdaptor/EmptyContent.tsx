@@ -5,7 +5,7 @@ import { Typography, Box } from '@mui/material'
 import { ENSPostExtraInfoWrapper } from './ENSPostExtraInfoWrapper'
 
 export function EmptyContent() {
-    const { classes, cx } = useStyles({})
+    const { classes } = useStyles({})
 
     const t = useI18N()
     return (
