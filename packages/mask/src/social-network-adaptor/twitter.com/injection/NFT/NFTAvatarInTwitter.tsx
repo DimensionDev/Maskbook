@@ -18,7 +18,6 @@ import { usePersonaNFTAvatar } from '../../../../plugins/Avatar/hooks/usePersona
 import { useAccount } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { Box, Typography } from '@mui/material'
-import { openWindow } from '@masknet/shared-base-ui'
 import { useWallet } from '../../../../plugins/Avatar/hooks/useWallet.js'
 import { useNFT, useSaveNFTAvatar } from '../../../../plugins/Avatar/hooks/index.js'
 import { NFTCardStyledAssetPlayer, useShowConfirm } from '@masknet/shared'
@@ -238,11 +237,8 @@ function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
             event.stopPropagation()
             event.preventDefault()
 
-            // TODO: refactor NFTCard and Collectible to support multiple networks
-            if (nftAvatar.chainId !== ChainId.Mainnet || nftAvatar.pluginId !== NetworkPluginID.PLUGIN_EVM) {
-                if (nftInfo?.permalink) openWindow(nftInfo.permalink)
-                return
-            }
+            if (!nftAvatar.pluginId || !nftAvatar.chainId) return
+
             CrossIsolationMessages.events.nonFungibleTokenDialogEvent.sendToLocal({
                 open: true,
                 pluginID: nftAvatar.pluginId,
