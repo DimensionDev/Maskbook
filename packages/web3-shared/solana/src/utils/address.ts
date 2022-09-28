@@ -31,8 +31,12 @@ export const formatSchemaType = createLookupTableResolver<SchemaType, string>(
     '',
 )
 
-export function formatTokenId(id: string) {
-    return id
+export function formatTokenId(tokenId = '', size_ = 4) {
+    const size = Math.max(2, size_)
+    if (tokenId.length < size * 2) return `#${tokenId}`
+    const head = tokenId.slice(0, size)
+    const tail = tokenId.slice(-size)
+    return `${head}...${tail}`
 }
 
 export function isValidAddress(address?: string) {

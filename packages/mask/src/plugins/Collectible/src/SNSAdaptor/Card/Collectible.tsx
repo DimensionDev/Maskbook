@@ -12,7 +12,7 @@ import { CollectiblePaper } from './CollectiblePaper.js'
 import { LinkingAvatar } from '../Shared/LinkingAvatar.js'
 import { AboutTab } from './tabs/AboutTab.js'
 import { ActivityTab } from './tabs/ActivityTab.js'
-import { DetailTab } from './tabs/DetailTab.js'
+import { DetailsTab } from './tabs/DetailsTab.js'
 import { OffersTab } from './tabs/OffersTab.js'
 import { Context } from '../Context/index.js'
 import { useI18N, useSwitcher } from '../../../../../utils/index.js'
@@ -37,7 +37,7 @@ const useStyles = makeStyles()((theme) => {
         },
         body: {
             flex: 1,
-            backgroundColor: theme.palette.maskColor.white,
+            backgroundColor: theme.palette.maskColor.bg,
             overflow: 'auto',
             maxHeight: 800,
             borderRadius: '0 0 12px 12px',
@@ -191,7 +191,7 @@ export function Collectible(props: CollectibleProps) {
     const renderTab = () => {
         const tabMap = {
             [tabs.about]: <AboutTab asset={asset} />,
-            [tabs.details]: <DetailTab asset={asset} />,
+            [tabs.details]: <DetailsTab asset={asset} />,
             [tabs.offers]: <OffersTab offers={orders} />,
             [tabs.activity]: <ActivityTab events={events} />,
         }
