@@ -10,7 +10,7 @@ import type { NFTInfo, RawTokenInfo, TokenSpender } from './types.js'
 export class RabbyAPI implements AuthorizationAPI.Provider<ChainId> {
     async getNonFungibleTokenSpenders(chainId: ChainId, account: string) {
         const maskDappContractInfoList = getAllMaskDappContractInfo(chainId, 'nft')
-        const networkType = chainResolver.chainNetworkType(chainId)
+        const networkType = chainResolver.networkType(chainId)
 
         if (!networkType || !account) return []
         const response = await fetch(
@@ -61,7 +61,7 @@ export class RabbyAPI implements AuthorizationAPI.Provider<ChainId> {
 
     async getFungibleTokenSpenders(chainId: ChainId, account: string) {
         const maskDappContractInfoList = getAllMaskDappContractInfo(chainId, 'token')
-        const networkType = chainResolver.chainNetworkType(chainId)
+        const networkType = chainResolver.networkType(chainId)
 
         if (!networkType || !account) return []
 

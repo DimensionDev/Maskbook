@@ -1,7 +1,7 @@
 import { useWeb3State } from '@masknet/plugin-infra/web3'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { CollectibleGridProps, useStyles } from './hooks/useStyles.js'
-import { NetworkPluginID, NonFungibleAsset, SourceType } from '@masknet/web3-shared-base'
+import type { NetworkPluginID, NonFungibleAsset } from '@masknet/web3-shared-base'
 import { Box, Button, Tooltip, Typography } from '@mui/material'
 import { CollectibleItem } from './CollectibleItem.js'
 import { CollectibleListContext } from './CollectibleListContext.js'
@@ -56,11 +56,9 @@ export function CollectibleList(props: CollectibleListProps) {
                                     }}
                                     arrow>
                                     <CollectibleItem
-                                        pluginID={pluginID}
                                         className={classes.collectibleItem}
-                                        renderOrder={index}
+                                        pluginID={pluginID}
                                         asset={token}
-                                        provider={SourceType.OpenSea}
                                     />
                                 </Tooltip>
                             )

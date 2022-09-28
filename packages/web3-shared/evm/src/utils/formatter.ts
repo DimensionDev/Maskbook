@@ -83,7 +83,10 @@ export function formatGweiToEther(value: BigNumber.Value) {
 }
 
 /**
- * @deprecated Use formatCurrency instead
+ * @deprecated use formatCurrency stead
+ * @param value
+ * @param significant
+ * @returns
  */
 export function formatUSD(value: BigNumber.Value, significant = 2): string {
     const bn = new BigNumber(value)

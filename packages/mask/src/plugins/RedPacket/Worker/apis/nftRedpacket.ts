@@ -121,7 +121,7 @@ export async function getNftRedPacketHistory(chainId: ChainId, address: string, 
             creation_time: x.creation_time * 1000,
         } as NftRedPacketSubgraphInMask
         const redPacketBasic = pick(nftRedPacketSubgraphInMask, redPacketBasicKeys)
-        const network = chainResolver.chainNetworkType(nftRedPacketSubgraphInMask.chain_id)
+        const network = chainResolver.networkType(nftRedPacketSubgraphInMask.chain_id)
         const sender = {
             address: nftRedPacketSubgraphInMask.creator.address,
             name: nftRedPacketSubgraphInMask.creator.name,

@@ -15,7 +15,7 @@ const PLATFORM_COSTS: {
 }
 
 const useStyles = makeStyles()((theme) => ({
-    wrapper: {
+    root: {
         width: '100%',
         display: 'flex',
         flexDirection: 'column',
@@ -81,7 +81,7 @@ export function DetailsCard(props: DetailsCardProps) {
     ]
 
     return (
-        <div className={classes.wrapper}>
+        <div className={classes.root}>
             {infoConfigMapping.map((x) => {
                 return (
                     <div key={x.title} className={classes.listItem}>
