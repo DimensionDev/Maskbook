@@ -3,18 +3,18 @@ import { MirrorPageType, getMirrorPageType, getMirrorUserId } from '../collectin
 
 describe('test mirror collection utils', () => {
     test.each([
-        { give: 'https://0xtest.mirror.xyz', expected: MirrorPageType.Profile },
+        { give: 'https://test_ens.mirror.xyz', expected: MirrorPageType.Profile },
         { give: 'https://mirror.xyz/0x790116d0685eB197B886DAcAD9C247f785987A4a', expected: MirrorPageType.Profile },
         { give: 'https://mirror.xyz/test.eth', expected: MirrorPageType.Profile },
-        { give: 'https://0xtest.mirror.xyz/collection/', expected: MirrorPageType.Collection },
-        { give: 'https://0xtest.mirror.xyz/collection', expected: MirrorPageType.Collection },
+        { give: 'https://test_ens.mirror.xyz/collection/', expected: MirrorPageType.Collection },
+        { give: 'https://test_ens.mirror.xyz/collection', expected: MirrorPageType.Collection },
         {
             give: 'https://mirror.xyz/0x790116d0685eB197B886DAcAD9C247f785987A4a/collection',
             expected: MirrorPageType.Collection,
         },
         { give: 'https://mirror.xyz/test.eth/collection', expected: MirrorPageType.Collection },
         {
-            give: 'https://0xtest.mirror.xyz/aCCyRXugL4y4UxvqXgcMcDwh6TiChEFTZ_BHtY1cbro',
+            give: 'https://test_ens.mirror.xyz/aCCyRXugL4y4UxvqXgcMcDwh6TiChEFTZ_BHtY1cbro',
             expected: MirrorPageType.Post,
         },
         {
@@ -37,18 +37,18 @@ describe('test mirror collection utils', () => {
 describe('should get mirror id', () => {
     test.each([
         // mirror ens
-        { give: 'https://0xtest.mirror.xyz', expected: '0xtest' },
-        { give: 'https://0xtest.mirror.xyz/', expected: '0xtest' },
-        { give: 'https://0xtest.mirror.xyz?p=test', expected: '0xtest' },
-        { give: 'https://0xtest.mirror.xyz/collection', expected: '0xtest' },
-        { give: 'https://0xtest.mirror.xyz/collection?p=test', expected: '0xtest' },
+        { give: 'https://test_ens.mirror.xyz', expected: 'test_ens' },
+        { give: 'https://test_ens.mirror.xyz/', expected: 'test_ens' },
+        { give: 'https://test_ens.mirror.xyz?p=test', expected: 'test_ens' },
+        { give: 'https://test_ens.mirror.xyz/collection', expected: 'test_ens' },
+        { give: 'https://test_ens.mirror.xyz/collection?p=test', expected: 'test_ens' },
         {
-            give: 'https://0xtest.mirror.xyz/aCCyRXugL4y4UxvqXgcMcDwh6TiChEFTZ_BHtY1cbro',
-            expected: '0xtest',
+            give: 'https://test_ens.mirror.xyz/aCCyRXugL4y4UxvqXgcMcDwh6TiChEFTZ_BHtY1cbro',
+            expected: 'test_ens',
         },
         {
-            give: 'https://0xtest.mirror.xyz/aCCyRXugL4y4UxvqXgcMcDwh6TiChEFTZ_BHtY1cbro?p=test',
-            expected: '0xtest',
+            give: 'https://test_ens.mirror.xyz/aCCyRXugL4y4UxvqXgcMcDwh6TiChEFTZ_BHtY1cbro?p=test',
+            expected: 'test_ens',
         },
         // user ens
         { give: 'https://mirror.xyz/test.eth', expected: 'test.eth' },
