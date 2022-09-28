@@ -53,9 +53,9 @@ export function createNonFungibleAsset(chainId: ChainId, asset: Solana.Asset): N
         id: asset.token_address,
         chainId,
         link: createPermalink(chainId, asset.token_address),
-        tokenId: '',
+        tokenId: asset.token_address,
         type: TokenType.NonFungible,
-        address: asset.token_address,
+        address: '',
         schema,
         creator: {
             address: creator,
