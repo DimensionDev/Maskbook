@@ -25,7 +25,7 @@ const useStyles = makeStyles<StyleProps>()((theme, { isMenuScroll = false }) => 
             fontSize: 14,
         },
         loadingText: {
-            color: theme.palette.text.primary,
+            color: theme.palette.maskColor.dark,
             fontSize: 14,
         },
         loadFailedText: {
@@ -36,6 +36,7 @@ const useStyles = makeStyles<StyleProps>()((theme, { isMenuScroll = false }) => 
             width: 24,
             height: 24,
             marginBottom: 5,
+            color: theme.palette.maskColor.dark,
             '@keyframes loadingAnimation': {
                 '0%': {
                     transform: 'rotate(0deg)',
@@ -129,8 +130,10 @@ const useStyles = makeStyles<StyleProps>()((theme, { isMenuScroll = false }) => 
             margin: isMenuScroll ? '6px 0 6px 12px' : '6px 12px',
             display: 'flex',
             alignItems: 'center',
-            background: theme.palette.background.default,
             borderRadius: 12,
+            '&:hover': {
+                background: theme.palette.background.default,
+            },
         },
         menuItemNextIdIcon: {
             display: 'flex',

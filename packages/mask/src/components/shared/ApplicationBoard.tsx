@@ -142,7 +142,8 @@ function ApplicationBoardContent(props: Props) {
                         entry,
                         enabled: isSNSEnabled,
                         pluginId: ID,
-                        isWalletConnectedRequired: !account && isWalletConnectedRequired,
+                        isWalletConnectedRequired:
+                            !account && isWalletConnectedRequired && !entry.entryWalletConnectedNotRequired,
                         isWalletConnectedEVMRequired: Boolean(
                             account && currentWeb3Network !== NetworkPluginID.PLUGIN_EVM && isWalletConnectedRequired,
                         ),
