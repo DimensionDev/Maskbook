@@ -8,6 +8,11 @@ import { CrossIsolationMessages } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
+        position: 'relative',
+        display: 'block',
+        cursor: 'pointer',
+    },
+    card: {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -43,10 +48,6 @@ const useStyles = makeStyles()((theme) => ({
         width: '100%',
         height: '100%',
     },
-    linkWrapper: {
-        position: 'relative',
-        display: 'block',
-    },
 }))
 
 export interface CollectibleCardProps {
@@ -69,9 +70,9 @@ export function CollectibleCard({ className, pluginID, asset }: CollectibleCardP
     }, [pluginID, asset.chainId, asset.tokenId, asset.address])
 
     return (
-        <Box className={cx(classes.linkWrapper, className)} onClick={onClick}>
+        <Box className={cx(classes.root, className)} onClick={onClick}>
             <div className={classes.blocker} />
-            <Card className={classes.root}>
+            <Card className={classes.card}>
                 <AssetPreviewer
                     classes={{
                         fallbackImage: classes.fallbackImage,
