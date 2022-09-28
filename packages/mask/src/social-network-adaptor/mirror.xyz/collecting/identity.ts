@@ -3,7 +3,7 @@ import { EnhanceableSite } from '@masknet/shared-base'
 import { Mirror, Writer } from '@masknet/web3-providers'
 import type { SocialNetworkUI } from '../../../social-network/types'
 import { creator } from '../../../social-network/utils'
-import { formatWriter } from './utils.js'
+import { formatWriter, getMirrorUserId } from './utils.js'
 
 export const getCurrentUserInfo = async () => {
     if (location.host !== EnhanceableSite.Mirror) return
@@ -36,10 +36,24 @@ function resolveCurrentVisitingIdentityInner(
     cancel: AbortSignal,
 ) {
     const assign = async () => {
+        // get from mirror api
+        const userId = getMirrorUserId(location.href)
+        if (userId) {
+            const writer = await Mirror.getWriter(userId)
+            if (writer) {
+                ref.value = formatWriter(writer)
+                return
+            }
+        }
+
+        // get from local
+        // why local as second option?
+        // when location change, then __NEXT_DATA__ data maybe not update,
         const script = document.getElementById('__NEXT_DATA__')?.innerHTML
         if (!script) return
         const INIT_DATA = JSON.parse(script)
         if (!INIT_DATA) return
+
         const writer = INIT_DATA.props?.pageProps?.project as Writer
         if (!writer) {
             if (!location.pathname.startsWith('/dashboard')) return
