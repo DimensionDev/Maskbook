@@ -23,7 +23,7 @@ import { unionWith } from 'lodash-unified'
 import { EMPTY_LIST } from '@masknet/shared-base'
 
 const DEBANK_API = 'https://api.debank.com'
-const DEBANK_OPEN_API = 'https://openapi.debank.com'
+const DEBANK_OPEN_API = 'https://debank-proxy.r2d2.to'
 
 /**
  * Debank's data might be outdated, like gas price for aurora which requires 1 Gwei at least
