@@ -7,10 +7,11 @@ import type { NFTInfo } from '../types.js'
 
 export function useNFT(
     account: string,
-    address: string | undefined,
-    tokenId: string | undefined,
+    address?: string,
+    tokenId?: string,
     pluginId: NetworkPluginID = NetworkPluginID.PLUGIN_EVM,
     chainId: ChainId = ChainId.Mainnet,
+    ownerAddress?: string,
 ) {
     const { Others, Connection } = useWeb3State<'all'>(pluginId ?? NetworkPluginID.PLUGIN_EVM)
     const hub = useWeb3Hub<'all'>(pluginId, {
@@ -27,6 +28,7 @@ export function useNFT(
             connection?.getNonFungibleToken(address, tokenId),
             hub?.getNonFungibleAsset?.(address, tokenId, {
                 chainId,
+                account: ownerAddress,
             }),
         ])
 
@@ -55,5 +57,5 @@ export function useNFT(
             slug: token ? undefined : asset?.collection?.slug,
             permalink,
         } as NFTInfo
-    }, [hub?.getNonFungibleAsset, Connection?.getConnection, address, tokenId, Others, chainId])
+    }, [hub?.getNonFungibleAsset, Connection?.getConnection, address, tokenId, Others, chainId, ownerAddress])
 }
