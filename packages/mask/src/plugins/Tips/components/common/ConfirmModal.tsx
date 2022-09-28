@@ -77,7 +77,7 @@ export const ConfirmModal: FC<Props> = ({ className, confirmText, onConfirm, chi
     const { Others } = useWeb3State()
     const { classes } = useStyles()
     const t = useI18N()
-    const { tipType, token, nonFungibleTokenContract, nonFungibleTokenId } = useTip()
+    const { amount, tipType, token, nonFungibleTokenContract, nonFungibleTokenId } = useTip()
     const { pluginId } = TargetRuntimeContext.useContainer()
     confirmText = confirmText || 'Confirm'
     const isTokenTip = tipType === TipsType.Tokens
@@ -107,7 +107,7 @@ export const ConfirmModal: FC<Props> = ({ className, confirmText, onConfirm, chi
                         </Typography>
                         <Typography className={classes.messageText} mt="41px">
                             {t.send_specific_tip_successfully({
-                                amount: '1',
+                                amount,
                                 name: `$${token?.symbol}`,
                             })}
                         </Typography>
