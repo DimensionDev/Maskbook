@@ -1,7 +1,7 @@
 import { useChainId, useFungibleToken, useNonFungibleTokenContract } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import type { GasOptionConfig } from '@masknet/web3-shared-evm'
-import { FC, useCallback, useContext, useEffect, useMemo, useState } from 'react'
+import { FC, memo, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { useSubscription } from 'use-subscription'
 import { getStorage } from '../../storage/index.js'
 import { TipTask, TipsType } from '../../types/index.js'
@@ -17,7 +17,7 @@ interface Props {
     task: TipTask
 }
 
-export const TipTaskProvider: FC<React.PropsWithChildren<Props>> = ({ children, task }) => {
+export const TipTaskProvider: FC<React.PropsWithChildren<Props>> = memo(({ children, task }) => {
     const { targetChainId, pluginId, setPluginId } = TargetRuntimeContext.useContainer()
     const [recipientAddress, setRecipient] = useState<string>(task.recipient ?? '')
     const recipients = useTipAccountsCompletion(task.addresses)
@@ -133,7 +133,7 @@ export const TipTaskProvider: FC<React.PropsWithChildren<Props>> = ({ children, 
     }, [nativeTokenDetailed])
 
     return <TipContext.Provider value={contextValue}>{children}</TipContext.Provider>
-}
+})
 
 export function useTip() {
     return useContext(TipContext)
