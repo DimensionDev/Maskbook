@@ -12,11 +12,6 @@ export interface PostInspectorProps {
 export function PostInspector(props: PostInspectorProps) {
     const token = props.payload
 
-    console.log('DEBUG: token')
-    console.log({
-        token,
-    })
-
     return (
         <ThemeProvider theme={MaskLightTheme}>
             <Context.Provider

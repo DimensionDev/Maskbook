@@ -80,11 +80,6 @@ export function DetailsCard(props: DetailsCardProps) {
         },
     ]
 
-    console.log('DEBUG: asset')
-    console.log({
-        asset,
-    })
-
     return (
         <div className={classes.root}>
             {infoConfigMapping.map((x) => {
