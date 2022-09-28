@@ -154,6 +154,8 @@ export function InjectedDialog(props: InjectedDialogProps) {
     }, [isOpenFromApplicationBoard, onClose, recoverOverflow])
 
     useEffect(() => {
+        const body = document.body
+        body.style.removeProperty('overflow')
         const html = document.documentElement
         if (open && html.style.overflow !== 'hidden') {
             html.style.overflow = 'hidden'
