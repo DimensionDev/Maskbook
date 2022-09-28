@@ -38,6 +38,7 @@ export async function connectSite(
     network: string,
     type?: 'local' | 'nextID',
     profile?: ProfileIdentifier,
+    openInNewTab = true,
 ) {
     const worker = definedSiteAdaptors.get(network)
     if (!worker) return
@@ -53,6 +54,9 @@ export async function connectSite(
 
     await delay(100)
     // #endregion
-
-    await openOrActiveTab(worker.homepage)
+    if (openInNewTab) {
+        await browser.tabs.create({ active: true, url: worker.homepage })
+    } else {
+        await openOrActiveTab(worker.homepage)
+    }
 }

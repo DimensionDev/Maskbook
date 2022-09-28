@@ -20,7 +20,13 @@ const Accounts = memo(() => {
     const [, onConnect] = useAsyncFn(
         async (networkIdentifier: EnhanceableSite) => {
             if (currentPersona) {
-                await Services.SocialNetwork.connectSite(currentPersona.identifier, networkIdentifier, 'local')
+                await Services.SocialNetwork.connectSite(
+                    currentPersona.identifier,
+                    networkIdentifier,
+                    'local',
+                    undefined,
+                    false,
+                )
             }
         },
         [currentPersona],

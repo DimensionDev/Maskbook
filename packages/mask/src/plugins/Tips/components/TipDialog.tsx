@@ -1,5 +1,4 @@
 import { InjectedDialog } from '@masknet/shared'
-import { EnhanceableSite } from '@masknet/shared-base'
 import { ActionButton, makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import { NetworkPluginID, NonFungibleAsset } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
@@ -146,6 +145,7 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
     const { targetChainId, pluginId } = TargetRuntimeContext.useContainer()
 
     const isTokenTip = tipType === TipsType.Tokens
+    const enableShare = !!activatedSocialNetworkUI.utils.share
     const shareText = useMemo(() => {
         const promote = t.tip_mask_promote()
         const message = isTokenTip
@@ -176,8 +176,9 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
     const buttonLabel = isSending ? t.sending_tip() : isValid || !validateMessage ? t.send_tip() : validateMessage
 
     const handleConfirm = useCallback(() => {
-        if (activatedSocialNetworkUI.networkIdentifier === EnhanceableSite.Mirror) return
-        activatedSocialNetworkUI.utils.share?.(shareText)
+        if (enableShare) {
+            activatedSocialNetworkUI.utils.share?.(shareText)
+        }
         openConfirmModal(false)
         onClose?.()
     }, [shareText, onClose])
@@ -246,7 +247,7 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
                     reset()
                     onClose?.()
                 }}
-                confirmText={t.tip_share()}
+                confirmText={enableShare ? t.tip_share() : t.tip_success_ok()}
                 onConfirm={handleConfirm}
             />
             <AddDialog open={addTokenDialogIsOpen} onClose={() => openAddTokenDialog(false)} onAdd={handleAddToken} />
