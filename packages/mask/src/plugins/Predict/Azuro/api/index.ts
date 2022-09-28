@@ -80,8 +80,6 @@ export async function testEvents() {
             // rangeWide: 1000,
         })
 
-        console.log('gamesInterieur: ', games)
-
         return games
     } catch (err) {
         console.log('err: ', err)
