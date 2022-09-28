@@ -149,12 +149,12 @@ export function NFTAvatarClip(props: NFTAvatarClipProps) {
     const { width, height, viewBoxHeight = ViewBoxHeight, viewBoxWidth = ViewBoxWidth, screenName } = props
     const id = useMemo(() => props.id ?? uuid(), [props.id])
     const classes = useStylesExtends(useStyles(), props)
-    const { loading, value: avatarMetadata } = useNFTContainerAtTwitter(screenName ?? '')
+    const { loading, value: avatarMetadata } = useNFTContainerAtTwitter(screenName)
     const account = useAccount()
     const { value = { amount: '0', symbol: 'ETH', name: '', slug: '' }, loading: loadingNFT } = useNFT(
         account,
-        avatarMetadata?.address ?? '',
-        avatarMetadata?.token_id ?? '',
+        avatarMetadata?.address,
+        avatarMetadata?.token_id,
         NetworkPluginID.PLUGIN_EVM,
         ChainId.Mainnet,
     )

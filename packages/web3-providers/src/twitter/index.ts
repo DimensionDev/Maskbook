@@ -133,7 +133,16 @@ const cache = new LRUCache<string, any>({
     ttl: 300_000,
 })
 
+const TWITTER_AVATAR_ID_MATCH = /^\/profile_images\/(\d+)/
 export class TwitterAPI implements TwitterBaseAPI.Provider {
+    getAvatarId(avatarURL?: string) {
+        if (!avatarURL) return ''
+        const url = new URL(avatarURL)
+        const match = url.pathname.match(TWITTER_AVATAR_ID_MATCH)
+        if (!match) return ''
+
+        return match[1]
+    }
     async getSettings() {
         const { bearerToken, csrfToken } = await getTokens()
         if (!bearerToken || !csrfToken) return
@@ -147,7 +156,6 @@ export class TwitterAPI implements TwitterBaseAPI.Provider {
         return {
             address: result.data.user.result.nft_avatar_metadata.smart_contract.address,
             token_id: result.data.user.result.nft_avatar_metadata.token_id,
-            type_name: result.data.user.result.nft_avatar_metadata.smart_contract.__typename,
         }
     }
 
