@@ -86,20 +86,16 @@ export class MirrorAPI implements MirrorBaseAPI.Provider {
 
             return {
                 author: post.author,
-                coAuthors: [...post.coAuthors, ...post.collaborators],
+                coAuthors: post.collaborators,
             }
         } else {
             // get publisher from local
             return {
                 author: {
-                    address: publisher?.project?.__ref?.replace('ProjectType:', '') as string,
-                    ...getAuthorDetail(publisher?.project?.__ref?.replace('ProjectType:', '') as string),
+                    address: publisher?.member.__ref?.replace('ProjectType:', '') as string,
+                    ...getAuthorDetail(publisher?.member?.__ref?.replace('ProjectType:', '') as string),
                 },
                 coAuthors: [
-                    {
-                        address: publisher?.member.__ref?.replace('ProjectType:', '') as string,
-                        ...getAuthorDetail(publisher?.member?.__ref?.replace('ProjectType:', '') as string),
-                    },
                     ...collaborators.map((x: any) => ({
                         address: x.__ref?.replace('ProjectType:', '') as string,
                         ...getAuthorDetail(x.__ref?.replace('ProjectType:', '') as string),
@@ -202,8 +198,7 @@ export class MirrorAPI implements MirrorBaseAPI.Provider {
         return {
             transactionId: response.entry.arweaveTransactionRequest.transactionId,
             digest: response.entry.digest,
-            author: response.entry.publisher.project,
-            coAuthors: [response.entry.publisher.member],
+            author: response.entry.publisher.member,
             collaborators: response.entry.collaborators ?? EMPTY_LIST,
             collection: {
                 chainId: response.entry.writingNFT.network.chainId,
