@@ -33,13 +33,11 @@ const useStyles = makeStyles()((theme) => ({
         fontWeight: 700,
         color: theme.palette.maskColor.main,
     },
-    highlight: {
-        color: theme.palette.maskColor.second,
-    },
     salePrice: {
         display: 'flex',
         alignItems: 'center',
         gap: 4,
+        marginRight: theme.spacing(2),
     },
     salePriceText: {
         fontSize: 18,
@@ -93,10 +91,7 @@ export function ActivityCard(props: ActivityCardProps) {
     return (
         <div className={classes.root}>
             <div className={classes.flex}>
-                <Typography
-                    className={type === ActivityType.Sale ? cx(classes.title, classes.highlight) : classes.title}>
-                    {type}
-                </Typography>
+                <Typography className={classes.title}>{type}</Typography>
                 {![ActivityType.Mint, ActivityType.CancelOffer].includes(type) &&
                     activity.priceInToken &&
                     !isZero(activity.priceInToken.amount) && (
@@ -145,7 +140,6 @@ export function ActivityCard(props: ActivityCardProps) {
                             </strong>
                         </>
                     )}
-
                     {isValidTimestamp(activity.timestamp) &&
                         formatDistanceToNowStrict(new Date(activity.timestamp!), {
                             addSuffix: true,
