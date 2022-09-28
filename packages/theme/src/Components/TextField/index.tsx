@@ -105,7 +105,7 @@ export const MaskTextField = forwardRef((props: MaskTextFieldProps, ref: Forward
                     }}
                 />
             ) : (
-                <InputBase {...inputProps} {...omit(rest, 'margin', 'onKeyDown', 'onKeyUp')} />
+                <InputBase {...inputProps} {...omit(rest, 'margin', 'onKeyDown', 'onKeyUp', 'InputProps')} />
             )}
         </Box>
     )
