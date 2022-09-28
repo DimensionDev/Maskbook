@@ -12,7 +12,7 @@ import { FC, HTMLProps, useCallback, useMemo } from 'react'
 import { useBoolean } from 'react-use'
 import { CollectibleList } from '../../../../extension/options-page/DashboardComponents/CollectibleList/index.js'
 import { TargetRuntimeContext, useTip } from '../../contexts/index.js'
-import { Translate, useI18N } from '../../locales/index.js'
+import { useI18N } from '../../locales/index.js'
 import { AddDialog } from '../AddDialog.js'
 
 export * from './NFTList.js'
@@ -135,22 +135,6 @@ export const NFTSection: FC<Props> = ({ className, onEmpty, ...rest }) => {
     return (
         <div className={classnames(classes.root, className)} {...rest}>
             <FormControl className={classes.header}>
-                {loading ? null : (
-                    <Typography fontSize={14} fontWeight={700} color={(theme) => theme.palette.maskColor.second}>
-                        <Translate.nft_amount
-                            values={{ count: tokens.length.toString() }}
-                            components={{
-                                strong: (
-                                    <Typography
-                                        component="strong"
-                                        fontWeight={700}
-                                        color={(theme) => theme.palette.maskColor.main}
-                                    />
-                                ),
-                            }}
-                        />
-                    </Typography>
-                )}
                 {isEvm ? (
                     <Typography className={classes.addButton} onClick={() => openAddTokenDialog(true)}>
                         {t.tip_add_collectibles()}
