@@ -16,7 +16,9 @@ export function queryInjectPoint(node: HTMLElement) {
         [
             // workaround for case: only have one contributor in entry detail page
             // Not find better selector
+            /* cspell:disable-next-line */
             ':scope > div:nth-child(3) > div > div > div:has(div._1sjywpl0._1sjywpl1.bc5nci3lg.bc5nci3rz):not(svg)',
+            /* cspell:disable-next-line */
             ':scope > div:nth-child(4) > div > div > div:has(div._1sjywpl0._1sjywpl1.bc5nci3lg.bc5nci3rz):not(svg)',
 
             // if have header image is 4, either 3
