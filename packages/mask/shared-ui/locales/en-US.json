@@ -1214,8 +1214,8 @@
     "plugin_default_title": "Default",
     "plugin_provider_by": "Provided by",
     "plugin_enables": "Enable plugins",
-    "plugin_predict": "Predict",
     "show_wallet_setting_intro": "Please select the wallet to active after saving.",
     "show_wallet_setting_button": "Go to Settings",
-    "web3_profile_no_social_address_list": " The user has not set this."
+    "web3_profile_no_social_address_list": " The user has not set this.",
+    "plugin_predict": "Predict"
 }
