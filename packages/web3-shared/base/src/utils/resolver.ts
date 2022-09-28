@@ -126,7 +126,7 @@ export function createExplorerResolver<ChainId, SchemaType, NetworkType>(
                 ...getExplorerURL(chainId)?.parameters,
             }),
         fungibleTokenLink: (chainId: ChainId, address: string) => {
-            if (!chainId || !address) return ''
+            if (!address) return ''
             return urlcat(getExplorerURL(chainId).url, fungibleTokenPathname, {
                 address,
                 ...getExplorerURL(chainId)?.parameters,
