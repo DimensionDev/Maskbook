@@ -107,7 +107,7 @@ async function registerPostCollectorInner(
                         (result?.writers?.coAuthors
                             .map((x) => ({
                                 nickname: x.nickname,
-                                avatarURL: new URL(x.avatar),
+                                avatarURL: x.avatar ? new URL(x.avatar) : undefined,
                                 author: x.identifier,
                                 snsID: x.identifier?.userId,
                             }))
