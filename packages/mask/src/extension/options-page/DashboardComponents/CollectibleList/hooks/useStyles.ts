@@ -37,6 +37,7 @@ export const useStyles = makeStyles<CollectibleGridProps>()((theme, { columns = 
         },
         list: {
             overflow: 'auto',
+            position: 'relative',
         },
         sidebar: {
             width: 30,

@@ -45,10 +45,6 @@ const useStyles = makeStyles()((theme) => ({
         right: 0,
         padding: 6,
         zIndex: 9,
-        '& [data-icon]': {
-            width: 20,
-            height: 20,
-        },
     },
 }))
 
@@ -129,7 +125,7 @@ export const CollectibleItem = memo(
                         </Typography>
                     </div>
                 ) : null}
-                {selectable ? <SelectableButton className={classes.select} value={value} checked={!!checked} /> : null}
+                {checked ? <SelectableButton className={classes.select} value={value} checked /> : null}
             </div>
         )
     }),
