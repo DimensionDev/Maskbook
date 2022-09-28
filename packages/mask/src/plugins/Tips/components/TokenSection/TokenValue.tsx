@@ -1,6 +1,7 @@
 import { useFungibleTokenPrice } from '@masknet/plugin-infra/web3'
 import { TokenIcon } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
+import { formatCurrency } from '@masknet/web3-shared-base'
 import { Typography } from '@mui/material'
 import BigNumber from 'bignumber.js'
 import { FC, HTMLProps, useMemo } from 'react'
@@ -48,7 +49,11 @@ export const TokenValue: FC<Props> = ({ className, ...rest }) => {
 
     const priceUSD = useMemo(() => {
         if (!tokenPrice || !amount) return
-        return new BigNumber(amount).times(tokenPrice).toFixed(2)
+        return formatCurrency(new BigNumber(amount).times(tokenPrice), 'USD', {
+            boundaries: {
+                min: 0.01,
+            },
+        })
     }, [amount, tokenPrice])
 
     return amount && token ? (
