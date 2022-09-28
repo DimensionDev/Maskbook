@@ -581,7 +581,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                                 classes: { root: classes.button, disabled: classes.disabledButton },
                                 color: 'primary',
                             }}>
-                            <WalletConnectedBoundary>
+                            <WalletConnectedBoundary offChain>
                                 <EthereumERC20TokenApprovedBoundary
                                     onlyInfiniteUnlock
                                     spender={approveAddress}

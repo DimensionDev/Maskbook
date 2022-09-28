@@ -1,7 +1,7 @@
 import { useChainId, useFungibleToken, useNonFungibleTokenContract } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
 import type { GasOptionConfig } from '@masknet/web3-shared-evm'
-import { FC, useCallback, useContext, useEffect, useMemo, useState } from 'react'
+import { FC, memo, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { useSubscription } from 'use-subscription'
 import { getStorage } from '../../storage/index.js'
 import { TipTask, TipsType } from '../../types/index.js'
@@ -17,9 +17,9 @@ interface Props {
     task: TipTask
 }
 
-export const TipTaskProvider: FC<React.PropsWithChildren<Props>> = ({ children, task }) => {
+export const TipTaskProvider: FC<React.PropsWithChildren<Props>> = memo(({ children, task }) => {
     const { targetChainId, pluginId, setPluginId } = TargetRuntimeContext.useContainer()
-    const [recipientAddress, setRecipient] = useState<string>(task.recipient ?? '')
+    const [_recipientAddress, setRecipient] = useState<string>(task.recipient ?? '')
     const recipients = useTipAccountsCompletion(task.addresses)
     const [tipType, setTipType] = useState<TipsType>(TipsType.Tokens)
     const [amount, setAmount] = useState('')
@@ -32,7 +32,6 @@ export const TipTaskProvider: FC<React.PropsWithChildren<Props>> = ({ children, 
     const selectedToken = token ?? nativeTokenDetailed
     const [nonFungibleTokenId, setNonFungibleTokenId] = useState<TipContextOptions['nonFungibleTokenId']>(null)
     const storedTokens = useSubscription(getStorage().addedTokens.subscription)
-    const { loading: validatingRecipient, validation: recipientValidation } = useRecipientValidate(recipientAddress)
     const validation = useTipValidate({ tipType, amount, token, nonFungibleTokenId, nonFungibleTokenAddress })
 
     const { value: nonFungibleTokenContract } = useNonFungibleTokenContract(pluginId, nonFungibleTokenAddress)
@@ -48,11 +47,12 @@ export const TipTaskProvider: FC<React.PropsWithChildren<Props>> = ({ children, 
                   overrides: gasOption,
               }
             : undefined
-    const selectedRecipientAddress = recipientAddress || task.recipient || recipients[0]?.address
-    const tokenTipTuple = useTokenTip(pluginId, selectedRecipientAddress, token, amount, connectionOptions)
+    const recipientAddress = _recipientAddress || task.recipient || recipients[0]?.address
+    const { loading: validatingRecipient, validation: recipientValidation } = useRecipientValidate(recipientAddress)
+    const tokenTipTuple = useTokenTip(pluginId, recipientAddress, token, amount, connectionOptions)
     const nftTipTuple = useNftTip(
         pluginId,
-        selectedRecipientAddress,
+        recipientAddress,
         nonFungibleTokenId,
         nonFungibleTokenAddress,
         connectionOptions,
@@ -61,7 +61,7 @@ export const TipTaskProvider: FC<React.PropsWithChildren<Props>> = ({ children, 
     const sendTipTuple = tipType === TipsType.Tokens ? tokenTipTuple : nftTipTuple
     const isSending = sendTipTuple[0]
     const sendTip = sendTipTuple[1]
-    const recipient = recipients.find((x) => x.address === selectedRecipientAddress)
+    const recipient = recipients.find((x) => isSameAddress(x.address, recipientAddress))
 
     const reset = useCallback(() => {
         setAmount('')
@@ -73,7 +73,7 @@ export const TipTaskProvider: FC<React.PropsWithChildren<Props>> = ({ children, 
         return {
             recipient,
             recipientSnsId: task.recipientSnsId || '',
-            recipientAddress: selectedRecipientAddress,
+            recipientAddress,
             setRecipient,
             recipients,
             tipType,
@@ -100,7 +100,7 @@ export const TipTaskProvider: FC<React.PropsWithChildren<Props>> = ({ children, 
     }, [
         chainId,
         recipient,
-        selectedRecipientAddress,
+        recipientAddress,
         task.recipient,
         task.recipientSnsId,
         recipients,
@@ -133,7 +133,7 @@ export const TipTaskProvider: FC<React.PropsWithChildren<Props>> = ({ children, 
     }, [nativeTokenDetailed])
 
     return <TipContext.Provider value={contextValue}>{children}</TipContext.Provider>
-}
+})
 
 export function useTip() {
     return useContext(TipContext)

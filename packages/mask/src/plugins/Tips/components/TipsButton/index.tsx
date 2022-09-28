@@ -103,6 +103,7 @@ export const TipButton: FC<Props> = ({
     )
 
     useEffect(() => {
+        if (!receiverUserId || !tipsAccounts.length) return
         PluginTipsMessages.tipTaskUpdate.sendToLocal({
             recipient,
             recipientSnsId: receiverUserId,
