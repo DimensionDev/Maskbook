@@ -129,8 +129,10 @@ const useStyles = makeStyles<StyleProps>()((theme, { isMenuScroll = false }) => 
             margin: isMenuScroll ? '6px 0 6px 12px' : '6px 12px',
             display: 'flex',
             alignItems: 'center',
-            background: theme.palette.background.default,
             borderRadius: 12,
+            '&:hover': {
+                background: theme.palette.background.default,
+            },
         },
         menuItemNextIdIcon: {
             display: 'flex',
