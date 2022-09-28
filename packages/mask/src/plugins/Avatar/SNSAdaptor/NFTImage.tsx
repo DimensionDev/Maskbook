@@ -49,6 +49,9 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         display: 'flex',
     },
+    tooltip: {
+        whiteSpace: 'nowrap',
+    },
 }))
 
 interface NFTImageProps {
@@ -82,6 +85,7 @@ export function NFTImage(props: NFTImageProps) {
         <Tooltip
             title={title}
             arrow
+            classes={{ tooltip: classes.tooltip }}
             disableInteractive
             placement="top"
             PopperProps={{ disablePortal: true, popperOptions: { strategy: 'absolute' } }}>
