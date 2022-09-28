@@ -105,7 +105,7 @@ export function createExplorerResolver<ChainId, SchemaType, NetworkType>(
 
     return {
         explorerURL: getExplorerURL,
-        addressLink: (chainId: ChainId, address: string) =>
+        addressLink: (chainId: ChainId, address: string, tokenId?: string) =>
             urlcat(getExplorerURL(chainId).url, addressPathname, {
                 address,
                 ...getExplorerURL(chainId)?.parameters,

@@ -127,7 +127,7 @@ export function NFTAvatar(props: NFTAvatarProps) {
             pluginId: pluginID,
         })
         setSelectedToken(undefined)
-    }, [onChange, selectedToken])
+    }, [onChange, selectedToken, pluginID])
 
     const onAddClick = useCallback((token: AllChainsNonFungibleToken) => {
         setSelectedToken(token)

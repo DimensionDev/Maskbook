@@ -23,7 +23,7 @@ const useStyles = makeStyles()((theme) => ({
         boxSizing: 'border-box',
         gap: 8,
         borderRadius: 12,
-        background: theme.palette.maskColor.bg,
+        backgroundColor: theme.palette.maskColor.bg,
     },
     listItem: {
         width: '100%',
@@ -75,7 +75,7 @@ export function DetailsCard(props: DetailsCardProps) {
             value: `${Number.parseInt(asset.contract?.creatorEarning || '0', 10) / 100}%` ?? '0',
         },
         {
-            title: t('plugin_collectible_platform_costs', { platform: sourceType ?? SourceType.OpenSea }),
+            title: t('plugin_collectible_platform_costs', { platform: sourceType ?? SourceType.NFTScan }),
             value: sourceType && PLATFORM_COSTS[sourceType] ? `${PLATFORM_COSTS[sourceType]}%` : '-',
         },
     ]
@@ -91,7 +91,13 @@ export function DetailsCard(props: DetailsCardProps) {
                             {x.link && (
                                 <Link
                                     className={classes.link}
-                                    href={Others?.explorerResolver.addressLink?.(asset.chainId, asset.address) ?? ''}
+                                    href={
+                                        Others?.explorerResolver.nonFungibleTokenLink?.(
+                                            asset.chainId,
+                                            asset.address,
+                                            asset.tokenId,
+                                        ) ?? ''
+                                    }
                                     target="_blank"
                                     rel="noopener noreferrer">
                                     <Icons.LinkOut size={16} />

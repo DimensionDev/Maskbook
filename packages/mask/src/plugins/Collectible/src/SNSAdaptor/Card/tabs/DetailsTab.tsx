@@ -20,14 +20,14 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface DetailTabProps {
+export interface DetailsTabProps {
     asset: AsyncState<Web3Helper.NonFungibleAssetScope<'all'>>
 }
 
-export function DetailTab(props: DetailTabProps) {
+export function DetailsTab(props: DetailsTabProps) {
     const { asset } = props
-    const { sourceType, rarity } = Context.useContainer()
     const { classes } = useStyles()
+    const { sourceType, rarity } = Context.useContainer()
 
     return useMemo(() => {
         if (asset.loading || !asset.value || rarity.loading)
