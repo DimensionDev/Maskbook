@@ -36,7 +36,7 @@ export function formatTokenId(tokenId = '', size_ = 4) {
     if (tokenId.length < size * 2) return `#${tokenId}`
     const head = tokenId.slice(0, size)
     const tail = tokenId.slice(-size)
-    return `${head}...${tail}`
+    return `#${head}...${tail}`
 }
 
 export function isValidAddress(address?: string) {

@@ -67,9 +67,6 @@ const useStyles = makeStyles()((theme) => ({
         fontWeight: 700,
         color: theme.palette.maskColor.publicMain,
     },
-    tokenIdSm: {
-        marginLeft: theme.spacing(0.5),
-    },
     nameLg: {
         fontSize: 20,
         fontWeight: 700,
@@ -132,8 +129,8 @@ export function FigureCard(props: FigureCardProps) {
                 />
             </div>
             <Typography className={timeline ? cx(classes.nameSm, classes.unset) : classes.nameSm}>
-                <span>{asset.metadata?.name ?? '-'}</span>
-                <span className={classes.tokenIdSm}>{Others?.formatTokenId(asset.tokenId)}</span>
+                {asset.metadata?.name ?? '-'}
+                {Others?.formatTokenId(asset.tokenId)}
             </Typography>
             {!hideSubTitle && (
                 <div className={classes.nameLgBox}>
