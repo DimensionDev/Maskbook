@@ -254,7 +254,9 @@ export function Collectible(props: CollectibleProps) {
                             ))}
                         </MaskTabList>
                     </TabContext>
-                    <Paper className={classes.body}>{renderTab()}</Paper>
+                    <Paper className={classes.body} elevation={0}>
+                        {renderTab()}
+                    </Paper>
                 </CardContent>
             </CollectiblePaper>
             {endDate && isValidDate(endDate) && isAfter(endDate, Date.now()) && (

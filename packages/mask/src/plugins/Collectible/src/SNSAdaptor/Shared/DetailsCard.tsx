@@ -23,7 +23,7 @@ const useStyles = makeStyles()((theme) => ({
         boxSizing: 'border-box',
         gap: 8,
         borderRadius: 12,
-        background: theme.palette.maskColor.bg,
+        backgroundColor: theme.palette.maskColor.bg,
     },
     listItem: {
         width: '100%',
