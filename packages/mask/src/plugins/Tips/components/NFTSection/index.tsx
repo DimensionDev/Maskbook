@@ -1,6 +1,6 @@
 import { Icons } from '@masknet/icons'
 import { useAccount, useNonFungibleAssets } from '@masknet/plugin-infra/web3'
-import { RetryHint } from '@masknet/shared'
+import { ElementAnchor, RetryHint } from '@masknet/shared'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import { isSameAddress, NetworkPluginID, NonFungibleAsset } from '@masknet/web3-shared-base'
@@ -50,6 +50,21 @@ const useStyles = makeStyles()((theme) => ({
     },
     collectibleList: {
         paddingRight: 0,
+    },
+    loadingList: {
+        overflow: 'auto',
+        '::-webkit-scrollbar': {
+            backgroundColor: 'transparent',
+            width: 20,
+        },
+        '::-webkit-scrollbar-thumb': {
+            borderRadius: '20px',
+            width: 5,
+            minHeight: 50,
+            border: '7px solid rgba(0, 0, 0, 0)',
+            backgroundColor: theme.palette.maskColor.secondaryLine,
+            backgroundClip: 'padding-box',
+        },
     },
     list: {
         flexGrow: 1,
@@ -146,26 +161,31 @@ export const NFTSection: FC<Props> = ({ className, onEmpty, ...rest }) => {
                 {(() => {
                     if (tokens.length) {
                         return (
-                            <CollectibleList
-                                classes={{ root: classes.collectibleList }}
-                                retry={next}
-                                collectibles={tokens}
-                                loading={loading}
-                                columns={4}
-                                selectable
-                                value={selectedKey}
-                                showNetworkIcon={false}
-                                onChange={(value: string | null) => {
-                                    if (!value) {
-                                        setNonFungibleTokenAddress('')
-                                        setNonFungibleTokenId('')
-                                        return
-                                    }
-                                    const [address, tokenId] = value.split('_')
-                                    setNonFungibleTokenAddress(address)
-                                    setNonFungibleTokenId(tokenId)
-                                }}
-                            />
+                            <div className={classes.loadingList}>
+                                <CollectibleList
+                                    classes={{ root: classes.collectibleList }}
+                                    retry={next}
+                                    collectibles={tokens}
+                                    loading={loading}
+                                    columns={4}
+                                    selectable
+                                    value={selectedKey}
+                                    showNetworkIcon={false}
+                                    onChange={(value: string | null) => {
+                                        if (!value) {
+                                            setNonFungibleTokenAddress('')
+                                            setNonFungibleTokenId('')
+                                            return
+                                        }
+                                        const [address, tokenId] = value.split('_')
+                                        setNonFungibleTokenAddress(address)
+                                        setNonFungibleTokenId(tokenId)
+                                    }}
+                                />
+                                <ElementAnchor callback={() => next?.()}>
+                                    {!done && <LoadingBase size={36} />}
+                                </ElementAnchor>
+                            </div>
                         )
                     }
                     if (tokens.length === 0 && loadError && account) {
