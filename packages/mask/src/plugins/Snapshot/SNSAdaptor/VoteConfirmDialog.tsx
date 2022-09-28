@@ -35,6 +35,13 @@ const useStyles = makeStyles()((theme) => ({
     shadowRootTooltip: {
         color: theme.palette.maskColor.white,
     },
+    tooltip: {
+        backgroundColor: theme.palette.maskColor.publicMain,
+        color: theme.palette.maskColor.white,
+    },
+    arrow: {
+        color: theme.palette.maskColor.publicMain,
+    },
 }))
 
 interface VoteConfirmDialogProps {
@@ -66,6 +73,7 @@ export function VoteConfirmDialog(props: VoteConfirmDialogProps) {
                         PopperProps={{
                             disablePortal: true,
                         }}
+                        classes={{ tooltip: classes.tooltip, arrow: classes.arrow }}
                         title={<Typography className={classes.shadowRootTooltip}>{choiceText}</Typography>}
                         placement="top"
                         arrow>
@@ -92,7 +100,9 @@ export function VoteConfirmDialog(props: VoteConfirmDialogProps) {
                     </Link>
                 </InfoField>
                 <InfoField classes={{ field: classes.field }} title={t('plugin_snapshot_vote_power')}>
-                    {millify(power, { precision: 2, lowercase: true })} {powerSymbol.toUpperCase()}
+                    <Typography>
+                        {millify(power, { precision: 2, lowercase: true })} {powerSymbol.toUpperCase()}
+                    </Typography>
                 </InfoField>
             </DialogContent>
             <DialogActions style={{ padding: 0 }}>

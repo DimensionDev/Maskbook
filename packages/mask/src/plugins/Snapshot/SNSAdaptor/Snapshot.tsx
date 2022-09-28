@@ -107,7 +107,7 @@ export function Snapshot() {
             <Box className={classes.header}>
                 <Avatar src={resolveIPFS_URL(proposal.space.avatar)} className={classes.avatar} />
                 <Box className={classes.title}>
-                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                         <Typography fontSize={18} fontWeight="bold">
                             {proposal.space.name}
                         </Typography>
