@@ -49,12 +49,6 @@ jobs:
           restore-keys: ext-${{ hashFiles('pnpm-lock.yaml') }}
       - run: pnpm install
       - run: npx gulp build-ci
-      - name: Upload `MaskNetwork.base.zip`
-        uses: actions/upload-artifact@v3
-        with:
-          name: MaskNetwork.base.zip
-          path: masknetwork.base.zip
-          if-no-files-found: error
       - name: Upload `MaskNetwork.chromium.zip`
         uses: actions/upload-artifact@v3
         with:
