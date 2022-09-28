@@ -4,9 +4,9 @@ import { makeStyles } from '@masknet/theme'
 import { isSameAddress, NetworkPluginID, SocialAddressType } from '@masknet/web3-shared-base'
 import { Link, MenuItem, Select, Tooltip, TooltipProps, Typography } from '@mui/material'
 import { FC, memo, useRef } from 'react'
-import { useTip } from '../contexts/index.js'
-import { Translate, useI18N } from '../locales/index.js'
-import type { TipsAccount } from '../types/index.js'
+import { useTip } from '../../contexts/index.js'
+import { Translate, useI18N } from '../../locales/index.js'
+import type { TipsAccount } from '../../types/index.js'
 
 const useStyles = makeStyles<void, 'icon' | 'tooltip' | 'pluginIcon' | 'text'>()((theme, _, refs) => {
     return {

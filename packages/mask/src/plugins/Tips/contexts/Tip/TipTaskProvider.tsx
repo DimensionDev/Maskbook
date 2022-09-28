@@ -4,7 +4,7 @@ import type { GasOptionConfig } from '@masknet/web3-shared-evm'
 import { FC, memo, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { useSubscription } from 'use-subscription'
 import { getStorage } from '../../storage/index.js'
-import { TipTask, TipsType } from '../../types/index.js'
+import { TipTask, TipsType, TipsAccount } from '../../types/index.js'
 import { TargetRuntimeContext } from '../TargetRuntimeContext.js'
 import { TipContextOptions, TipContext } from './TipContext.js'
 import { useTipAccountsCompletion } from './useTipAccountsCompletion.js'
@@ -17,10 +17,21 @@ interface Props {
     task: TipTask
 }
 
+function useRecipients(tipsAccounts: TipsAccount[], pluginId: NetworkPluginID) {
+    const _recipients = useTipAccountsCompletion(tipsAccounts)
+    const recipients = useMemo(() => {
+        return [..._recipients].sort((a, z) => {
+            if (a.pluginId === z.pluginId) return 0
+            return a.pluginId === pluginId ? -1 : 1
+        })
+    }, [_recipients, pluginId])
+    return recipients
+}
+
 export const TipTaskProvider: FC<React.PropsWithChildren<Props>> = memo(({ children, task }) => {
     const { targetChainId, pluginId, setPluginId } = TargetRuntimeContext.useContainer()
     const [_recipientAddress, setRecipient] = useState<string>(task.recipient ?? '')
-    const recipients = useTipAccountsCompletion(task.addresses)
+    const recipients = useRecipients(task.addresses, pluginId)
     const [tipType, setTipType] = useState<TipsType>(TipsType.Tokens)
     const [amount, setAmount] = useState('')
     const chainId = useChainId()
