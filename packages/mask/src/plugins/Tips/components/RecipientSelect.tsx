@@ -3,12 +3,12 @@ import { useChainId, useWeb3State } from '@masknet/plugin-infra/web3'
 import { makeStyles } from '@masknet/theme'
 import { isSameAddress, NetworkPluginID, SocialAddressType } from '@masknet/web3-shared-base'
 import { Link, MenuItem, Select, Tooltip, TooltipProps, Typography } from '@mui/material'
-import { FC, memo, ReactNode, useRef } from 'react'
+import { FC, memo, useRef } from 'react'
 import { useTip } from '../contexts/index.js'
 import { Translate, useI18N } from '../locales/index.js'
 import type { TipsAccount } from '../types/index.js'
 
-const useStyles = makeStyles<void, 'icon' | 'tooltip' | 'text'>()((theme, _, refs) => {
+const useStyles = makeStyles<void, 'icon' | 'tooltip' | 'pluginIcon' | 'text'>()((theme, _, refs) => {
     return {
         root: {
             height: 40,
@@ -35,6 +35,9 @@ const useStyles = makeStyles<void, 'icon' | 'tooltip' | 'text'>()((theme, _, ref
             [`& .${refs.icon}`]: {
                 display: 'none',
             },
+            [`& .${refs.pluginIcon}`]: {
+                display: 'none',
+            },
             [`& .${refs.text}`]: {
                 fontWeight: 400,
             },
@@ -50,14 +53,15 @@ const useStyles = makeStyles<void, 'icon' | 'tooltip' | 'text'>()((theme, _, ref
             padding: theme.spacing(1.5),
             borderRadius: theme.spacing(2),
         },
+        icon: {
+            width: 20,
+            height: 20,
+        },
+        pluginIcon: {},
         link: {
             display: 'inline-flex',
             alignItems: 'center',
             fontSize: 0,
-        },
-        icon: {
-            width: 20,
-            height: 20,
         },
         actionIcon: {
             marginLeft: theme.spacing(0.5),
@@ -77,34 +81,41 @@ const useStyles = makeStyles<void, 'icon' | 'tooltip' | 'text'>()((theme, _, ref
     }
 })
 
-const pluginIconMap: Record<NetworkPluginID, ReactNode> = {
-    [NetworkPluginID.PLUGIN_EVM]: (
-        <Icons.ETH
-            size={20}
-            style={{
-                filter: 'drop-shadow(0px 6px 12px rgba(98, 126, 234, 0.2))',
-                backdropFilter: 'blur(16px)',
-            }}
-        />
-    ),
-    [NetworkPluginID.PLUGIN_FLOW]: (
-        <Icons.Flow
-            size={20}
-            style={{
-                filter: 'drop-shadow(0px 6px 12px rgba(25, 251, 155, 0.2))',
-                backdropFilter: 'blur(16px)',
-            }}
-        />
-    ),
-    [NetworkPluginID.PLUGIN_SOLANA]: (
-        <Icons.Solana
-            size={20}
-            style={{
-                filter: 'drop-shadow(0px 6px 12px rgba(25, 251, 155, 0.2))',
-                backdropFilter: 'blur(16px)',
-            }}
-        />
-    ),
+const PluginIcon = ({ pluginID }: { pluginID: NetworkPluginID }) => {
+    const { classes } = useStyles()
+    const mapping = {
+        [NetworkPluginID.PLUGIN_EVM]: (
+            <Icons.ETH
+                size={20}
+                className={classes.pluginIcon}
+                style={{
+                    filter: 'drop-shadow(0px 6px 12px rgba(98, 126, 234, 0.2))',
+                    backdropFilter: 'blur(16px)',
+                }}
+            />
+        ),
+        [NetworkPluginID.PLUGIN_FLOW]: (
+            <Icons.Flow
+                size={20}
+                className={classes.pluginIcon}
+                style={{
+                    filter: 'drop-shadow(0px 6px 12px rgba(25, 251, 155, 0.2))',
+                    backdropFilter: 'blur(16px)',
+                }}
+            />
+        ),
+        [NetworkPluginID.PLUGIN_SOLANA]: (
+            <Icons.Solana
+                size={20}
+                className={classes.pluginIcon}
+                style={{
+                    filter: 'drop-shadow(0px 6px 12px rgba(25, 251, 155, 0.2))',
+                    backdropFilter: 'blur(16px)',
+                }}
+            />
+        ),
+    }
+    return mapping[pluginID]
 }
 
 enum AddressPlatform {
@@ -238,7 +249,7 @@ export const RecipientSelect: FC<Props> = memo(({ className }) => {
             }}>
             {recipients.map((tipsAccount) => (
                 <MenuItem className={classes.menuItem} key={tipsAccount.address} value={tipsAccount.address}>
-                    {pluginIconMap[tipsAccount.pluginId]}
+                    <PluginIcon pluginID={tipsAccount.pluginId} />
                     <Typography component="span" className={classes.text}>
                         {tipsAccount.name || tipsAccount.address}
                     </Typography>
