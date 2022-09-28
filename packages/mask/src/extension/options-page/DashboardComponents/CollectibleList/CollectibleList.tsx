@@ -101,14 +101,15 @@ export function CollectibleList(props: CollectibleListProps) {
                                     PopperProps={{
                                         disablePortal: true,
                                         placement: 'top',
+                                        popperOptions: {
+                                            strategy: 'absolute',
+                                        },
                                         modifiers: [
                                             {
                                                 name: 'preventOverflow',
                                                 options: {
+                                                    rootBoundary: listRef.current,
                                                     boundary: listRef.current,
-                                                    mainAxis: false,
-                                                    altAxis: true,
-                                                    tether: false,
                                                 },
                                             },
                                         ],
