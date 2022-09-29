@@ -87,6 +87,8 @@ export enum SourceType {
     X2Y2 = 'X2Y2',
     MagicEden = 'MagicEden',
     Element = 'Element',
+    Solsea = 'Solsea',
+    Solanart = 'Solanart',
 
     // Rarity
     RaritySniper = 'RaritySniper',

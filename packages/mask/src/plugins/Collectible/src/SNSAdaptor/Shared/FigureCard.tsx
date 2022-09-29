@@ -14,8 +14,9 @@ const useStyles = makeStyles()((theme) => ({
     },
     body: {
         position: 'relative',
-        width: 510,
-        height: 510,
+        width: '100%',
+        height: 0,
+        paddingBottom: '100%',
         marginBottom: 36,
         boxShadow: `0px 28px 56px -28px ${MaskColorVar.primary.alpha(0.5)}`,
         borderRadius: 20,
@@ -61,14 +62,12 @@ export function FigureCard(props: FigureCardProps) {
     const { classes, cx } = useStyles()
     const { Others } = useWeb3State()
 
-    const fallbackImgURL = new URL('../../assets/FallbackImage.svg', import.meta.url)
-    const resourceUrl = asset.metadata?.imageURL ?? asset.metadata?.mediaURL
     return (
         <div className={classes.root}>
             <div className={classes.body}>
                 <AssetPreviewer
-                    fallbackImage={fallbackImgURL}
-                    url={resourceUrl}
+                    fallbackImage={new URL('../../assets/FallbackImage.svg', import.meta.url)}
+                    url={asset.metadata?.imageURL}
                     classes={{
                         root: classes.image,
                         fallbackImage: classes.fallbackImage,

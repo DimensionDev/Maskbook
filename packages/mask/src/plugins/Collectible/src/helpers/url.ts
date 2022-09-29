@@ -129,6 +129,33 @@ const RULES = [
         chainId: ChainIdEVM.Avalanche,
         provider: SourceType.Element,
     },
+
+    // magic eden
+    {
+        hosts: ['magiceden.io'],
+        pathname: /^\/item-details\/(\w+)/,
+        pluginID: NetworkPluginID.PLUGIN_SOLANA,
+        chainId: ChainIdSolana.Mainnet,
+        provider: SourceType.MagicEden,
+    },
+
+    // solsea
+    {
+        hosts: ['solsea.io'],
+        pathname: /^\/n\/(\w+)/,
+        pluginID: NetworkPluginID.PLUGIN_SOLANA,
+        chainId: ChainIdSolana.Mainnet,
+        provider: SourceType.Solsea,
+    },
+
+    // solanart
+    {
+        hosts: ['solanart.io'],
+        pathname: /^\/nft\/(\w+)/,
+        pluginID: NetworkPluginID.PLUGIN_SOLANA,
+        chainId: ChainIdSolana.Mainnet,
+        provider: SourceType.Solanart,
+    },
 ]
 
 export function getPayloadFromURLs(urls: string[]): CollectiblePayload | undefined {
