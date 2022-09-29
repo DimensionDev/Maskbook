@@ -1,10 +1,11 @@
+import { PluginWeb3ActualContextProvider } from '@masknet/plugin-infra/web3'
 import { InjectedDialog } from '@masknet/shared'
 import { ActionButton, makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import { NetworkPluginID, NonFungibleAsset } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { TabContext, TabPanel } from '@mui/lab'
 import { DialogContent, Tab } from '@mui/material'
-import { useCallback, useMemo } from 'react'
+import { useCallback, useEffect, useMemo } from 'react'
 import { useBoolean } from 'react-use'
 import { activatedSocialNetworkUI } from '../../../social-network/index.js'
 import { PluginWalletStatusBar } from '../../../utils/index.js'
@@ -18,7 +19,6 @@ import { NetworkSection } from './NetworkSection/index.js'
 import { NFTSection } from './NFTSection/index.js'
 import { RecipientSection } from './RecipientSection/index.js'
 import { TokenSection } from './TokenSection/index.js'
-import { PluginWeb3ActualContextProvider } from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()((theme) => ({
     dialog: {
@@ -165,7 +165,10 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
         return message
     }, [amount, isTokenTip, nonFungibleTokenContract?.name, token, recipient, recipientSnsId, t])
 
-    const [currentTab, onChange, tabs] = useTabs(TipsType.Tokens, TipsType.Collectibles)
+    const [currentTab, onChange, tabs, setTab] = useTabs(TipsType.Tokens, TipsType.Collectibles)
+    useEffect(() => {
+        setTab(isTokenTip ? TipsType.Tokens : TipsType.Collectibles)
+    }, [isTokenTip])
     const onTabChange: typeof onChange = useCallback(
         (_, value) => {
             setTipType(value as TipsType)

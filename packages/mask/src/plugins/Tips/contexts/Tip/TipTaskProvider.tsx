@@ -47,10 +47,6 @@ export const TipTaskProvider: FC<React.PropsWithChildren<Props>> = memo(({ child
 
     const { value: nonFungibleTokenContract } = useNonFungibleTokenContract(pluginId, nonFungibleTokenAddress)
 
-    useEffect(() => {
-        setTipType(TipsType.Tokens)
-    }, [targetChainId])
-
     const [gasOption, setGasOption] = useState<GasOptionConfig>()
     const connectionOptions =
         pluginId === NetworkPluginID.PLUGIN_EVM
@@ -79,6 +75,8 @@ export const TipTaskProvider: FC<React.PropsWithChildren<Props>> = memo(({ child
         setNonFungibleTokenId(null)
         setNonFungibleTokenAddress('')
     }, [])
+
+    useEffect(reset, [targetChainId])
 
     const contextValue = useMemo(() => {
         return {
