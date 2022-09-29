@@ -174,6 +174,10 @@ const useStyles = makeStyles<StyleProps>()((theme, { isMenuScroll = false }) => 
                 backgroundClip: 'padding-box',
             },
         },
+        tooltip: {
+            backgroundColor: theme.palette.maskColor.publicMain,
+            color: theme.palette.maskColor.white,
+        },
     }
 })
 
