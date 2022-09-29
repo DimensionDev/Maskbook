@@ -43,7 +43,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                                 recommendFeature={recommendFeature}
                                 onClick={() =>
                                     EntryComponentProps?.onClick
-                                        ? EntryComponentProps?.onClick()
+                                        ? EntryComponentProps.onClick()
                                         : CrossIsolationMessages.events.web3ProfileDialogEvent.sendToLocal({
                                               open: true,
                                           })

@@ -9,7 +9,7 @@ import { NetworkPluginID, EMPTY_LIST } from '@masknet/shared-base'
 import { Empty } from './Empty.js'
 import { CollectionList } from './CollectionList.js'
 import { PersonaImageIcon, CollectionTypes, WalletTypes } from '@masknet/shared'
-import { CurrentStatusMap, CURRENT_STATUS } from '../../constants.js'
+import { SceneMap, Scene } from '../../constants.js'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -129,7 +129,7 @@ export function WalletAssetsCard(props: WalletAssetsCardProps) {
             : LOAD_STATUS.Unnecessary,
     )
 
-    const { Others } = useWeb3State(address?.platform ?? NetworkPluginID.PLUGIN_EVM)
+    const { Others } = useWeb3State(address?.networkPluginID ?? NetworkPluginID.PLUGIN_EVM)
 
     const iconURL = NETWORK_DESCRIPTORS.find((network) => network?.chainId === ChainId.Mainnet)?.icon
 
@@ -201,10 +201,10 @@ export function WalletAssetsCard(props: WalletAssetsCardProps) {
                         content={
                             hasHiddenCollection
                                 ? t.all_collection_hidden({
-                                      collection: collectionName ?? CurrentStatusMap[CURRENT_STATUS.NFT_Setting].title,
+                                      collection: collectionName ?? SceneMap[Scene.NFTSetting].title,
                                   })
                                 : t.no_collection_item({
-                                      collection: collectionName ?? CurrentStatusMap[CURRENT_STATUS.NFT_Setting].title,
+                                      collection: collectionName ?? SceneMap[Scene.NFTSetting].title,
                                   })
                         }
                     />

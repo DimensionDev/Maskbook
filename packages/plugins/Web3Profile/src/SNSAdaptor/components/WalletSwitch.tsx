@@ -68,7 +68,7 @@ export function WalletSwitch({ type, address, isPublic, hiddenItems = [], setHid
 
     const iconURL = NETWORK_DESCRIPTORS.find((network) => network?.chainId === ChainId.Mainnet)?.icon
 
-    const { Others } = useWeb3State(address?.platform ?? NetworkPluginID.PLUGIN_EVM)
+    const { Others } = useWeb3State(address?.networkPluginID ?? NetworkPluginID.PLUGIN_EVM)
 
     const onSwitch = (e: React.ChangeEvent<HTMLInputElement>) => {
         const v = e.target.checked

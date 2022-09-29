@@ -12,7 +12,7 @@ import type { AccountType } from '../types.js'
 import { Empty } from './Empty.js'
 import { context } from '../context.js'
 import { Icons } from '@masknet/icons'
-import { CurrentStatusMap, CURRENT_STATUS } from '../../constants.js'
+import { SceneMap, Scene } from '../../constants.js'
 
 const useStyles = makeStyles()((theme) => ({
     bottomButton: {
@@ -61,22 +61,22 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface ImageManagementProps {
-    status: CURRENT_STATUS
+    status: Scene
     currentPersona?: PersonaInformation
     open: boolean
     onClose: () => void
     currentVisitingProfile?: IdentityResolved
-    accountList?: AccountType
+    account?: AccountType
     accountId?: string
     allWallets?: WalletTypes[]
     getWalletHiddenRetry: () => void
 }
-const getAddressesByStatus = (accountList: AccountType | undefined, status: CURRENT_STATUS) => {
+const getWalletsByStatus = (accountList: AccountType | undefined, status: Scene) => {
     if (!accountList) return EMPTY_LIST
     let addresses
-    if (status === CURRENT_STATUS.Donations_setting) addresses = accountList.walletList?.donations
-    if (status === CURRENT_STATUS.Footprints_setting) addresses = accountList.walletList?.footprints
-    if (status === CURRENT_STATUS.NFT_Setting) addresses = accountList.walletList?.NFTs
+    if (status === Scene.DonationsSetting) addresses = accountList.walletList?.donations
+    if (status === Scene.FootprintsSetting) addresses = accountList.walletList?.footprints
+    if (status === Scene.NFTSetting) addresses = accountList.walletList?.NFTs
     return addresses?.sort((a, z) => {
         const aHasItems = a.collections?.some?.((x) => !x?.hidden)
         const zHasItems = z.collections?.some?.((x) => !x?.hidden)
@@ -102,12 +102,12 @@ export function ImageManagement(props: ImageManagementProps) {
         onClose,
         accountId,
         allWallets = EMPTY_LIST,
-        accountList,
+        account,
         getWalletHiddenRetry,
     } = props
-    const [settingAddress, setSettingAddress] = useState<WalletTypes>()
+    const [settingWallet, setSettingWallet] = useState<WalletTypes>()
     const [imageListOpen, setImageListOpen] = useState(false)
-    const addresses = useMemo(() => getAddressesByStatus(accountList, status) ?? EMPTY_LIST, [accountList, status])
+    const wallets = useMemo(() => getWalletsByStatus(account, status) ?? EMPTY_LIST, [account, status])
 
     const handleOpenSettingDialog = useCallback(
         () =>
@@ -124,12 +124,12 @@ export function ImageManagement(props: ImageManagementProps) {
         await context.openPopupWindow(PopupRoutes.ConnectWallet)
     }
     const collectionList = useMemo(() => {
-        return addresses.find((address) => isSameAddress(address.address, settingAddress?.address))?.collections
-    }, [addresses, settingAddress?.address])
+        return wallets.find((address) => isSameAddress(address.address, settingWallet?.address))?.collections
+    }, [wallets, settingWallet?.address])
 
     return (
         <InjectedDialog
-            title={CurrentStatusMap[status].title}
+            title={SceneMap[status].title}
             classes={{ dialogContent: classes.content }}
             fullWidth={false}
             open={open}
@@ -137,17 +137,17 @@ export function ImageManagement(props: ImageManagementProps) {
             onClose={onClose}>
             <DialogContent className={classes.content}>
                 <div>
-                    {addresses.length ? (
-                        addresses.map((address) => (
+                    {wallets.length ? (
+                        wallets.map((wallet) => (
                             <WalletAssetsCard
-                                key={address.address}
-                                collectionName={CurrentStatusMap[status].title}
+                                key={wallet.address}
+                                collectionName={SceneMap[status].title}
                                 onSetting={() => {
-                                    setSettingAddress(address)
+                                    setSettingWallet(wallet)
                                     setImageListOpen(true)
                                 }}
-                                collectionList={address.collections}
-                                address={address}
+                                collectionList={wallet.collections}
+                                address={wallet}
                             />
                         ))
                     ) : (
@@ -164,16 +164,18 @@ export function ImageManagement(props: ImageManagementProps) {
                         </Box>
                     )}
                 </div>
-                <ImageListDialog
-                    currentPersona={currentPersona}
-                    title={CurrentStatusMap[status].title}
-                    address={settingAddress}
-                    open={imageListOpen}
-                    accountId={accountId}
-                    onClose={() => setImageListOpen(false)}
-                    retryData={getWalletHiddenRetry}
-                    collectionList={collectionList}
-                />
+                {settingWallet && imageListOpen ? (
+                    <ImageListDialog
+                        open
+                        currentPersona={currentPersona}
+                        title={SceneMap[status].title}
+                        wallet={settingWallet}
+                        accountId={accountId}
+                        onClose={() => setImageListOpen(false)}
+                        retryData={getWalletHiddenRetry}
+                        collectionList={collectionList}
+                    />
+                ) : null}
             </DialogContent>
         </InjectedDialog>
     )

@@ -1,11 +1,18 @@
 import { compact, uniqBy } from 'lodash-unified'
 import type { CollectionTypes, WalletsCollection, WalletTypes } from '@masknet/shared'
-import { NetworkPluginID, BindingProof, joinKeys, NextIDPlatform, PersonaInformation } from '@masknet/shared-base'
+import {
+    NetworkPluginID,
+    BindingProof,
+    joinKeys,
+    NextIDPlatform,
+    PersonaInformation,
+    EMPTY_LIST,
+} from '@masknet/shared-base'
 import { AlchemyEVM, NextIDStorage, RSS3 } from '@masknet/web3-providers'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { ChainId, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
 import { PLUGIN_ID } from '../constants.js'
-import type { Collection, PersonaKV } from './types.js'
+import type { Collection, HiddenConfig, PersonaKV } from './types.js'
 
 export const formatPublicKey = (publicKey?: string) => {
     return `${publicKey?.slice(0, 6)}...${publicKey?.slice(-6)}`
@@ -42,27 +49,12 @@ export const getWalletList = (
     accounts: BindingProof[],
     wallets: WalletTypes[],
     allPersona: PersonaInformation[],
-    hiddenObj:
-        | {
-              hiddenWallets: Record<string, WalletsCollection>
-              hiddenCollections: Record<
-                  string,
-                  Record<
-                      string,
-                      {
-                          Donations: string[]
-                          Footprints: string[]
-                          NFTs: string[]
-                      }
-                  >
-              >
-          }
-        | undefined,
+    hiddenConfig: HiddenConfig | undefined,
     footprints?: Collection[],
     donations?: Collection[],
     NFTs?: Collection[],
 ) => {
-    if (accounts?.length === 0) return
+    if (accounts?.length === 0) return EMPTY_LIST
     const allLinkedProfiles = allPersona?.flatMap((persona) => persona.linkedProfiles)
     // NextId can duplicate proof for twitter account and one persona
     const detailedAccounts = uniqBy(
@@ -80,8 +72,8 @@ export const getWalletList = (
         (x) => x.platform + x.identity,
     )
     return detailedAccounts.map((detailedAccount) => {
-        const hiddenWallet = hiddenObj?.hiddenWallets?.[detailedAccount.identity]
-        const hiddenCollection = hiddenObj?.hiddenCollections?.[detailedAccount.identity]
+        const hiddenWallet = hiddenConfig?.wallets?.[detailedAccount.identity]
+        const hiddenCollection = hiddenConfig?.collections?.[detailedAccount.identity]
         return {
             ...detailedAccount,
             walletList: {
@@ -111,8 +103,8 @@ export const getWalletList = (
     })
 }
 
-export const getDonationList = async (walletList: WalletTypes[]) => {
-    const promises = walletList.map(async ({ address, platform }) => {
+export const getDonationList = async (wallets: WalletTypes[]) => {
+    const promises = wallets.map(async ({ address, networkPluginID }) => {
         const { data: donations } = await RSS3.getDonations(address)
         return {
             address,
@@ -122,7 +114,7 @@ export const getDonationList = async (walletList: WalletTypes[]) => {
                     // TODO add a `getDonationKey()` function to hide the details behind
                     key: joinKeys(donation.hash, action.index),
                     address: donation.address_to ?? action.metadata?.token.contract_address ?? ZERO_ADDRESS,
-                    platform: platform ?? NetworkPluginID.PLUGIN_EVM,
+                    networkPluginID: networkPluginID ?? NetworkPluginID.PLUGIN_EVM,
                     imageURL: action.metadata?.logo,
                     name: action.metadata?.title,
                 }
@@ -134,7 +126,7 @@ export const getDonationList = async (walletList: WalletTypes[]) => {
 }
 
 export const getFootprintList = async (walletList: WalletTypes[]) => {
-    const promises = walletList.map(async ({ address, platform = NetworkPluginID.PLUGIN_EVM }) => {
+    const promises = walletList.map(async ({ address, networkPluginID = NetworkPluginID.PLUGIN_EVM }) => {
         const { data: footprints } = await RSS3.getFootprints(address)
         return {
             address,
@@ -146,7 +138,7 @@ export const getFootprintList = async (walletList: WalletTypes[]) => {
                         // TODO add a `getFootprintKey()` function to hide the details behind
                         key: joinKeys(metadata.contract_address, metadata.id),
                         address: metadata.contract_address,
-                        platform,
+                        networkPluginID,
                         imageURL: metadata.image,
                         name: metadata.name,
                     }
@@ -158,58 +150,51 @@ export const getFootprintList = async (walletList: WalletTypes[]) => {
     return collections
 }
 
-export const getNFTList = async (walletList: WalletTypes[], chainId: ChainId = ChainId.Mainnet) => {
-    const promises = walletList.map(async ({ address, platform = NetworkPluginID.PLUGIN_EVM }) => {
-        const { data } = await AlchemyEVM.getAssets(address, { chainId })
-        // Discard assets without name and imageURL
-        const assets = data.filter((x) => x.metadata?.name || x.metadata?.imageURL)
-        const collections: CollectionTypes[] = assets.map(
-            (asset): CollectionTypes => ({
-                key: `${asset.contract?.address}_${asset.tokenId}`,
-                address: asset.address,
-                platform,
-                tokenId: asset.tokenId,
-                imageURL: asset.metadata?.imageURL,
-                name: asset.metadata?.name,
-                chainId,
-            }),
-        )
-
+export const getNFTList = async (walletList: WalletTypes[], chainIds: ChainId[]) => {
+    const promises = walletList.map(async ({ address, networkPluginID = NetworkPluginID.PLUGIN_EVM }) => {
+        const chainPromises = chainIds.map(async (chainId) => {
+            const { data } = await AlchemyEVM.getAssets(address, { chainId })
+            // Discard assets without name and imageURL
+            const assets = data.filter((x) => x.metadata?.name || x.metadata?.imageURL)
+            const collections: CollectionTypes[] = assets.map(
+                (asset): CollectionTypes => ({
+                    key: `${asset.contract?.address}_${asset.tokenId}`,
+                    address: asset.address,
+                    networkPluginID,
+                    tokenId: asset.tokenId,
+                    imageURL: asset.metadata?.imageURL,
+                    name: asset.metadata?.name,
+                    chainId,
+                }),
+            )
+            return collections
+        })
+        const collections = await Promise.all(chainPromises)
         return {
             address,
-            collections,
+            collections: collections.flat(),
         }
     })
     const collections = await Promise.all(promises)
     return collections
 }
 
-export const getWalletHiddenList = async (publicKey: string) => {
+export const getWalletHiddenConfig = async (publicKey: string): Promise<HiddenConfig | undefined> => {
     if (!publicKey) return
+
     const res = await NextIDStorage.get<PersonaKV>(publicKey)
-    if (res.ok) {
-        const hiddenWallets: Record<string, WalletsCollection> = {}
-        const hiddenCollections: Record<
-            string,
-            Record<
-                string,
-                {
-                    Donations: string[]
-                    Footprints: string[]
-                    NFTs: string[]
-                }
-            >
-        > = {}
-        res.val?.proofs
-            ?.filter((x) => x.platform === NextIDPlatform.Twitter)
-            ?.forEach((y) => {
-                hiddenWallets[y.identity] = y.content?.[PLUGIN_ID]?.hiddenAddresses!
-                hiddenCollections[y.identity] = y.content?.[PLUGIN_ID]?.unListedCollections!
-            })
-        return {
-            hiddenWallets,
-            hiddenCollections,
-        }
+    if (!res.ok) return
+
+    const wallets: HiddenConfig['wallets'] = {}
+    const collections: HiddenConfig['collections'] = {}
+    res.val.proofs
+        ?.filter((x) => x.platform === NextIDPlatform.Twitter)
+        ?.forEach((y) => {
+            wallets[y.identity] = y.content?.[PLUGIN_ID]?.hiddenAddresses!
+            collections[y.identity] = y.content?.[PLUGIN_ID]?.unListedCollections!
+        })
+    return {
+        wallets,
+        collections,
     }
-    return
 }

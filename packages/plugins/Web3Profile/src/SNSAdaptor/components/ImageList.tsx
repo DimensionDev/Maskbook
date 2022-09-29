@@ -1,6 +1,6 @@
 import { useWeb3State } from '@masknet/web3-hooks-base'
 import { CollectionTypes, InjectedDialog, WalletTypes } from '@masknet/shared'
-import { EMPTY_LIST, NextIDPlatform, PersonaInformation, NetworkPluginID } from '@masknet/shared-base'
+import { EMPTY_LIST, NextIDPlatform, PersonaInformation } from '@masknet/shared-base'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { isSameAddress, NonFungibleToken } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
@@ -123,7 +123,7 @@ const useStyles = makeStyles()((theme) => {
 })
 
 export interface ImageListDialogProps extends withClasses<never | 'root'> {
-    address?: WalletTypes
+    wallet: WalletTypes
     open: boolean
     onClose: () => void
     title: string
@@ -134,20 +134,11 @@ export interface ImageListDialogProps extends withClasses<never | 'root'> {
 }
 
 export function ImageListDialog(props: ImageListDialogProps) {
-    const {
-        address = { address: ZERO_ADDRESS },
-        open,
-        onClose,
-        retryData,
-        title,
-        accountId,
-        currentPersona,
-        collectionList = EMPTY_LIST,
-    } = props
+    const { wallet, open, onClose, retryData, title, accountId, currentPersona, collectionList = EMPTY_LIST } = props
     const t = useI18N()
     const { Storage } = useWeb3State()
     const classes = useStylesExtends(useStyles(), props)
-    const [open_, setOpen_] = useState(false)
+    const [addNFTOpen, setAddNFTOpen] = useState(false)
 
     const unlistedKeys = collectionList.filter((x) => x.hidden).map((x) => x.key)
     const [pendingUnlistedKeys, setPendingUnlistedKeys] = useState(unlistedKeys ?? EMPTY_LIST)
@@ -175,10 +166,15 @@ export function ImageListDialog(props: ImageListDialogProps) {
     }, [])
 
     const onConfirm = async () => {
-        if (!currentPersona?.identifier.publicKeyAsHex || isSameAddress(address.address, ZERO_ADDRESS)) return
+        if (
+            !currentPersona?.identifier.publicKeyAsHex ||
+            !wallet?.address ||
+            isSameAddress(wallet.address, ZERO_ADDRESS)
+        )
+            return
         const patch = {
             unListedCollections: {
-                [address.address]: {
+                [wallet.address]: {
                     [title]: pendingUnlistedKeys,
                 },
             },
@@ -220,7 +216,7 @@ export function ImageListDialog(props: ImageListDialogProps) {
                         <Typography sx={{ fontSize: '16px', fontWeight: 700 }}>{t.listed()}</Typography>
                     </Box>
                     <Box className={classNames(classes.listedBox, classes.scrollBar)}>
-                        {listedCollections && listedCollections.length > 0 ? (
+                        {listedCollections?.length > 0 ? (
                             <CollectionList
                                 classes={{ list: classes.list, collectionWrap: classes.collectionWrap }}
                                 onList={unList}
@@ -238,7 +234,7 @@ export function ImageListDialog(props: ImageListDialogProps) {
                         <Typography sx={{ fontSize: '16px', fontWeight: 700, padding: 2 }}>{t.unlisted()}</Typography>
                     </Box>
                     <Box className={classNames(classes.unlistedBox, classes.scrollBar)}>
-                        {unListedCollections && unListedCollections.length > 0 ? (
+                        {unListedCollections.length > 0 ? (
                             <CollectionList
                                 classes={{ list: classes.list, collectionWrap: classes.collectionWrap }}
                                 onList={list}
@@ -246,20 +242,20 @@ export function ImageListDialog(props: ImageListDialogProps) {
                             />
                         ) : (
                             <Typography className={classes.unListedEmpty}>
-                                {listedCollections && listedCollections?.length > 0
+                                {listedCollections?.length > 0
                                     ? t.no_unlisted_collection({ collection: title })
                                     : (!collectionList || collectionList?.length === 0) && t.no_items_found()}
                             </Typography>
                         )}
                     </Box>
                     <AddNFT
-                        account={address.address}
+                        account={wallet.address}
                         chainId={ChainId.Mainnet}
                         title={t.add_collectible()}
-                        open={open_}
-                        onClose={() => setOpen_(false)}
+                        open={addNFTOpen}
+                        onClose={() => setAddNFTOpen(false)}
                         onAddClick={onAddClick}
-                        expectedPluginID={address?.platform ?? NetworkPluginID.PLUGIN_EVM}
+                        expectedPluginID={wallet.networkPluginID}
                     />
                 </div>
             </DialogContent>
