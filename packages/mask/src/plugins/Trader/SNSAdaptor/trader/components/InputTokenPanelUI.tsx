@@ -18,6 +18,7 @@ const useStyles = makeStyles<{
         border: `1px solid ${isDashboard ? MaskColorVar.lineLight : theme.palette.maskColor?.line}`,
         position: 'relative',
         height: 115,
+        minHeight: 115,
         outline: 'none!important',
         '& input': {
             padding: 11,
