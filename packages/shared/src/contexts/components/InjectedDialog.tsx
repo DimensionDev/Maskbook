@@ -139,7 +139,7 @@ export function InjectedDialog(props: InjectedDialogProps) {
     const actions = CopyElementWithNewProps(children, DialogActions, { root: dialogActions })
     const content = CopyElementWithNewProps(children, DialogContent, { root: dialogContent })
     const { extraProps, shouldReplaceExitWithBack, IncreaseStack } = useDialogStackActor(open)
-    const [unLockCallback] = useScrollLock(open)
+    const [, unLockCallback] = useScrollLock(open)
 
     const closeBothCompositionDialog = useCallback(() => {
         if (isOpenFromApplicationBoard) {
