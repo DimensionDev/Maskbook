@@ -17,7 +17,9 @@ const useStyles = makeStyles()((theme) => ({
     content: {
         padding: theme.spacing(2),
     },
-    dialog: {},
+    dialog: {
+        minHeight: 'auto !important',
+    },
 }))
 
 export function ConnectWalletDialog() {
@@ -82,7 +84,9 @@ export function ConnectWalletDialog() {
         <InjectedDialog
             title={t('plugin_wallet_dialog_title')}
             open={open}
-            className={classes.dialog}
+            classes={{
+                paper: classes.dialog,
+            }}
             onClose={() => setConnectWalletDialog({ open: false })}>
             <DialogContent className={classes.content}>
                 <ConnectionProgress
