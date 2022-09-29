@@ -5,22 +5,23 @@ import { Box, useTheme } from '@mui/material'
 import { useImageURL } from '../../../hooks/useImageURL.js'
 
 const useStyles = makeStyles()((theme) => ({
-    container: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
+    container: {},
     circle: {
         color: parseColor(theme.palette.maskColor.main).setAlpha(0.5).toRgbString(),
+    },
+    image: {
+        display: 'block',
     },
     failImage: {
         width: 30,
         height: 30,
     },
     spinContainer: {
-        display: 'flex',
-        alignItems: 'center',
-        position: 'relative',
+        width: 24,
+        height: 24,
+        inset: 0,
+        margin: 'auto',
+        position: 'absolute',
     },
 }))
 
@@ -38,7 +39,7 @@ export function Image({ fallback, disableSpinner, classes: externalClasses, onCl
 
     const { value: imageURL, loading: loadingImageURL } = useImageURL(rest.src)
 
-    if ((loadingImageURL && !disableSpinner) || Math.random() < 1) {
+    if (loadingImageURL && !disableSpinner) {
         return (
             <Box className={classes.container}>
                 <Box className={classes.spinContainer}>
@@ -51,7 +52,14 @@ export function Image({ fallback, disableSpinner, classes: externalClasses, onCl
     if (imageURL && !failed) {
         return (
             <Box className={classes.container} onClick={onClick}>
-                <img loading="lazy" decoding="async" {...rest} src={imageURL} onError={() => setFailed(true)} />
+                <img
+                    className={classes.image}
+                    loading="lazy"
+                    decoding="async"
+                    {...rest}
+                    src={imageURL}
+                    onError={() => setFailed(true)}
+                />
             </Box>
         )
     }
@@ -72,7 +80,7 @@ export function Image({ fallback, disableSpinner, classes: externalClasses, onCl
                 decoding="async"
                 {...rest}
                 src={fallbackImageURL}
-                className={classNames(classes.failImage, classes.fallbackImage)}
+                className={classNames(classes.image, classes.failImage, classes.fallbackImage)}
             />
         </Box>
     )

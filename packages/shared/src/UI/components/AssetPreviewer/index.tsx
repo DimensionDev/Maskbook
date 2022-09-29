@@ -8,9 +8,6 @@ const useStyles = makeStyles()((theme) => ({
     root: {
         width: '100%',
         height: '100%',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
     },
     imageContainer: {
         height: '100%',
