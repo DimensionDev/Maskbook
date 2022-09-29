@@ -12,10 +12,9 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: 9999,
         paddingLeft: theme.spacing(2),
         paddingRight: theme.spacing(2),
-        border: `1px solid ${theme.palette.mode === 'dark' ? '#2F3336' : '#EFF3F4'}`,
         color: theme.palette.text.primary,
         cursor: 'pointer',
-        background: theme.palette.maskColor.main,
+        backgroundColor: theme.palette.maskColor.main,
     },
     setIcon: {
         width: 14,
