@@ -1,10 +1,9 @@
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { useCallback } from 'react'
+import { openWindow } from '@masknet/shared-base-ui'
 import { Button, Typography } from '@mui/material'
 import { LoadingBase } from '@masknet/theme'
-import { useCurrentWeb3NetworkPluginID, useWeb3State } from '@masknet/plugin-infra/web3'
-import type { Web3Helper } from '@masknet/web3-helpers'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { WalletMessages } from '../../../../Wallet/messages.js'
+import { resolveSourceTypeName } from '@masknet/web3-shared-base'
+import { useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
 import { PluginWalletStatusBar, useI18N as useBaseI18n } from '../../../../../utils/index.js'
 import { useStyles } from './hooks/useStyles.js'
 import { AboutTab } from './tabs/AboutTab.js'
@@ -24,11 +23,12 @@ export function CardDialogContent(props: CardDialogContentProps) {
     const { classes } = useStyles()
     const { t } = useBaseI18n()
     const pluginID = useCurrentWeb3NetworkPluginID()
-    const { Others } = useWeb3State()
-    const { setDialog: setSelectProviderDialog } = useRemoteControlledDialog(
-        WalletMessages.events.selectProviderDialogUpdated,
-    )
     const { asset, orders, events } = Context.useContainer()
+
+    const onMoreButtonClick = useCallback(() => {
+        const link = asset.value?.link
+        if (link) openWindow(link)
+    }, [asset.value?.link])
 
     const chainIdList = pluginDefinition?.enableRequirement.web3?.[pluginID]?.supportedChainIds ?? []
 
@@ -70,22 +70,15 @@ export function CardDialogContent(props: CardDialogContentProps) {
             </div>
 
             <PluginWalletStatusBar className={classes.footer}>
-                <Button
-                    variant="contained"
-                    size="medium"
-                    onClick={() => {
-                        setSelectProviderDialog({
-                            open: true,
-                            supportedNetworkList: chainIdList
-                                .map((chainId) => Others?.chainResolver.networkType(chainId))
-                                .filter((x) => Boolean(x)) as Web3Helper.NetworkTypeAll[],
-                        })
-                    }}
-                    fullWidth>
-                    {pluginID === NetworkPluginID.PLUGIN_EVM
-                        ? t('wallet_status_button_change')
-                        : t('wallet_status_button_change_to_evm')}
-                </Button>
+                {asset.value.link && asset.value?.source ? (
+                    <Button variant="contained" size="medium" onClick={onMoreButtonClick} fullWidth>
+                        {t('plugin_collectibles_more_on_button', {
+                            provider: resolveSourceTypeName(asset.value.source),
+                        })}
+                    </Button>
+                ) : (
+                    <div></div>
+                )}
             </PluginWalletStatusBar>
         </div>
     )

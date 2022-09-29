@@ -106,6 +106,7 @@ export function createNonFungibleAsset(chainId: ChainId, asset: Solana.Asset): N
             verified: false,
             createdAt: asset.mint_timestamp,
         },
+        source: SourceType.NFTScan,
     }
 }
 

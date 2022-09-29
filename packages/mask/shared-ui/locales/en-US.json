@@ -799,6 +799,7 @@
     "plugin_collectible_legal_text": "By checking this box, I agree to OpenSea's <terms>Terms of Service</terms>.",
     "plugin_collectibles_name": "Collectibles",
     "plugin_collectibles_description": "Display specific information of collectibles in OpenSea and Rarible, make an offer directly on social media.",
+    "plugin_collectibles_more_on_button": "More on {{provider}}",
     "plugin_cryptoartai_description_title": "Description",
     "plugin_cryptoartai_dapp_name": "CryptoartAI",
     "plugin_cryptoartai_dapp_description": "Display Asia's largest authentic artworks and make offer on social media directly.",
