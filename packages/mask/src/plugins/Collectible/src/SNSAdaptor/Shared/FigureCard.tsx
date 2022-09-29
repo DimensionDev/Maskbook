@@ -68,12 +68,12 @@ export function FigureCard(props: FigureCardProps) {
         <div className={classes.root}>
             <div className={classes.body}>
                 <AssetPreviewer
-                    fallbackImage={new URL('../../assets/FallbackImage.svg', import.meta.url)}
-                    url={asset.metadata?.imageURL}
                     classes={{
                         root: classes.image,
                         fallbackImage: classes.fallbackImage,
                     }}
+                    url={asset.metadata?.imageURL}
+                    fallbackImage={new URL('../../assets/FallbackImage.svg', import.meta.url)}
                 />
             </div>
             <Typography className={timeline ? cx(classes.nameSm, classes.unset) : classes.nameSm}>

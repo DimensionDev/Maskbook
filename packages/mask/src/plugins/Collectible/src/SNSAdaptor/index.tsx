@@ -9,7 +9,7 @@ import { PostInspector } from './PostInspector.js'
 import { base } from '../base.js'
 import { getPayloadFromURL, getPayloadFromURLs } from '../helpers/index.js'
 import { setupContext } from '../context.js'
-import { PLUGIN_ID, PLUGIN_WRAPPER_TITLE } from '../constants.js'
+import { PLUGIN_ID, PLUGIN_NAME } from '../constants.js'
 import { DialogInspector } from './DialogInspector.js'
 import { CollectionList } from './List/CollectionList.js'
 
@@ -119,7 +119,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
         },
     ],
     wrapperProps: {
-        title: PLUGIN_WRAPPER_TITLE,
+        title: PLUGIN_NAME,
         icon: <Icons.ApplicationNFT size={24} />,
     },
 }
