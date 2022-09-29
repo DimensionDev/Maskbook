@@ -139,15 +139,15 @@ export function InjectedDialog(props: InjectedDialogProps) {
     const actions = CopyElementWithNewProps(children, DialogActions, { root: dialogActions })
     const content = CopyElementWithNewProps(children, DialogContent, { root: dialogContent })
     const { extraProps, shouldReplaceExitWithBack, IncreaseStack } = useDialogStackActor(open)
-    const clearScrollLock = useScrollLock(open)
+    const [unLockCallback] = useScrollLock(open)
 
     const closeBothCompositionDialog = useCallback(() => {
         if (isOpenFromApplicationBoard) {
             CrossIsolationMessages.events.compositionDialogEvent.sendToLocal({ open: false, reason: 'timeline' })
         }
-        clearScrollLock()
+        unLockCallback()
         onClose?.()
-    }, [isOpenFromApplicationBoard, onClose, clearScrollLock])
+    }, [isOpenFromApplicationBoard, onClose, unLockCallback])
 
     return usePortalShadowRoot((container) => (
         <IncreaseStack>

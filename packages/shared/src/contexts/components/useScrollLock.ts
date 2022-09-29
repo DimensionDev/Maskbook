@@ -3,7 +3,7 @@ import { useCallback, useEffect, useRef } from 'react'
 export function useScrollLock(lock: boolean) {
     const recoverOverflow = useRef(false)
 
-    const clearScrollLock = useCallback(() => {
+    const unLockCallback = useCallback(() => {
         if (!recoverOverflow.current) return
         const html = document.documentElement
         html.style.overflow = 'auto scroll'
@@ -11,23 +11,25 @@ export function useScrollLock(lock: boolean) {
         recoverOverflow.current = false
     }, [])
 
-    useEffect(() => {
+    const lockCallback = useCallback(() => {
         const html = document.documentElement
+        if (html.style.overflow === 'hidden') return
+        html.style.overflow = 'hidden'
+        html.style.marginRight = '17px'
+        recoverOverflow.current = true
+    }, [])
+
+    useEffect(() => {
         const body = document.body
         if (lock) {
             body.style.removeProperty('overflow')
-        }
-
-        if (lock && html.style.overflow !== 'hidden') {
-            html.style.overflow = 'hidden'
-            html.style.marginRight = '17px'
-            recoverOverflow.current = true
+            lockCallback()
             return
         }
         if (!lock && recoverOverflow.current) {
-            clearScrollLock()
+            unLockCallback()
         }
     }, [lock])
 
-    return clearScrollLock
+    return [unLockCallback, lockCallback] as const
 }
