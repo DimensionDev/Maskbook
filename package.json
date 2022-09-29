@@ -132,7 +132,8 @@
       "ses@0.15.21": "patches/ses@0.15.21.patch",
       "@emotion/use-insertion-effect-with-fallbacks@1.0.0": "patches/@emotion__use-insertion-effect-with-fallbacks@1.0.0.patch",
       "@emotion/cache@11.10.3": "patches/@emotion__cache@11.10.3.patch",
-      "@emotion/react@11.10.4": "patches/@emotion__react@11.10.4.patch"
+      "@emotion/react@11.10.4": "patches/@emotion__react@11.10.4.patch",
+      "@mui/base@5.0.0-alpha.96": "patches/@mui__base@5.0.0-alpha.96.patch"
     }
   }
 }
