@@ -34,6 +34,8 @@ const useStyles = makeStyles()((theme) => {
         },
         header: {
             alignItems: 'unset',
+            paddingTop: 10,
+            paddingBottom: 10,
         },
         body: {
             flex: 1,
@@ -64,7 +66,7 @@ const useStyles = makeStyles()((theme) => {
         tab: {
             whiteSpace: 'nowrap',
             background: 'transparent',
-            color: theme.palette.maskColor.publicMain,
+            color: theme.palette.maskColor.publicSecond,
             '&:hover': {
                 background: 'transparent',
             },
@@ -223,7 +225,9 @@ export function Collectible(props: CollectibleProps) {
                     title={
                         <Typography style={{ display: 'flex', alignItems: 'center' }}>
                             <span className={classes.cardTitle}>{_asset.metadata?.name || '-'}</span>
-                            {_asset.collection?.verified ? <Icons.VerifiedCollection sx={{ marginLeft: 0.5 }} /> : null}
+                            {_asset.collection?.verified ? (
+                                <Icons.VerifiedCollection size={20} sx={{ marginLeft: 0.5 }} />
+                            ) : null}
                         </Typography>
                     }
                     subheader={

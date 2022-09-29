@@ -33,6 +33,10 @@ const useStyles = makeStyles()((theme) => ({
         fontWeight: 700,
         color: theme.palette.maskColor.main,
     },
+    highlight: {
+        // there is no public highlight color, temp hardcode
+        color: '#1C68F3',
+    },
     salePrice: {
         display: 'flex',
         alignItems: 'center',
@@ -91,7 +95,10 @@ export function ActivityCard(props: ActivityCardProps) {
     return (
         <div className={classes.root}>
             <div className={classes.flex}>
-                <Typography className={classes.title}>{type}</Typography>
+                <Typography
+                    className={type === ActivityType.Sale ? cx(classes.title, classes.highlight) : classes.title}>
+                    {type}
+                </Typography>
                 {![ActivityType.Mint, ActivityType.CancelOffer].includes(type) &&
                     activity.priceInToken &&
                     !isZero(activity.priceInToken.amount) && (
