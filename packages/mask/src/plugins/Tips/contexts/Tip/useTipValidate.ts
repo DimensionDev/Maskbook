@@ -28,9 +28,11 @@ export function useTipValidate({
             if (!amount || isLessThanOrEqualTo(amount, 0)) return [false]
             if (isGreaterThan(rightShift(amount, token?.decimals), balance))
                 return [false, t.token_insufficient_balance()]
-        } else if (pluginId === NetworkPluginID.PLUGIN_EVM) {
+        }
+        if (pluginId === NetworkPluginID.PLUGIN_EVM) {
             if (!tokenId || !tokenAddress) return [false]
-        } else if (!tokenId) {
+        }
+        if (pluginId === NetworkPluginID.PLUGIN_SOLANA && !tokenId) {
             return [false]
         }
         return [true]
