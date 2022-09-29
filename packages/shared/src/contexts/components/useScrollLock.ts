@@ -9,8 +9,10 @@ export function useScrollLock(lock: boolean) {
         html.style.overflow = 'auto scroll'
         html.style.removeProperty('margin-right')
         recoverOverflow.current = false
-        const body = document.body
-        body.style.removeProperty('overflow')
+        setTimeout(() => {
+            const body = document.body
+            body.style.removeProperty('overflow')
+        }, 1000)
     }, [])
 
     const lockCallback = useCallback(() => {
@@ -19,8 +21,10 @@ export function useScrollLock(lock: boolean) {
         html.style.overflow = 'hidden'
         html.style.marginRight = '17px'
         recoverOverflow.current = true
-        const body = document.body
-        body.style.removeProperty('overflow')
+        setTimeout(() => {
+            const body = document.body
+            body.style.removeProperty('overflow')
+        }, 1000)
     }, [])
 
     useEffect(() => {
