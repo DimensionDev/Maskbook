@@ -60,10 +60,10 @@ export function useTrade(
             if (isZero(outputAmount) && !isExactIn) return null
 
             const sellToken = isNativeTokenAddress(inputToken.address)
-                ? getNativeTokenLabel(chainResolver.chainNetworkType(targetChainId) ?? networkType)
+                ? getNativeTokenLabel(chainResolver.networkType(targetChainId) ?? networkType)
                 : inputToken.address
             const buyToken = isNativeTokenAddress(outputToken.address)
-                ? getNativeTokenLabel(chainResolver.chainNetworkType(targetChainId) ?? networkType)
+                ? getNativeTokenLabel(chainResolver.networkType(targetChainId) ?? networkType)
                 : outputToken.address
             return PluginTraderRPC.swapQuote(
                 {
@@ -76,7 +76,7 @@ export function useTrade(
                     slippagePercentage: slippage,
                     affiliateAddress: ZRX_AFFILIATE_ADDRESS,
                 },
-                chainResolver.chainNetworkType(targetChainId) ?? networkType,
+                chainResolver.networkType(targetChainId) ?? networkType,
             )
         },
         [

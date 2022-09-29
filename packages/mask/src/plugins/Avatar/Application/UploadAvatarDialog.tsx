@@ -4,7 +4,6 @@ import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { useCallback, useState } from 'react'
 import { Twitter } from '@masknet/web3-providers'
 import { ChainId } from '@masknet/web3-shared-evm'
-import { getAvatarId } from '../../../social-network-adaptor/twitter.com/utils/user.js'
 import { usePersonaConnectStatus } from '../../../components/DataSource/usePersonaConnectStatus.js'
 import type { BindingProof } from '@masknet/shared-base'
 import { useI18N } from '../locales/i18n_generated'
@@ -60,7 +59,7 @@ async function uploadAvatar(blob: Blob, userId: string): Promise<AvatarInfo | un
         if (!data) {
             return
         }
-        const avatarId = getAvatarId(data?.imageUrl ?? '')
+        const avatarId = Twitter.getAvatarId(data?.imageUrl ?? '')
         return { ...data, avatarId }
     } catch (err) {
         return

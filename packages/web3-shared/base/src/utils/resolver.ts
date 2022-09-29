@@ -77,8 +77,8 @@ export function createChainResolver<ChainId, SchemaType, NetworkType>(
         chainShortName: (chainId?: ChainId) => getChainDescriptor(chainId)?.shortName,
         chainColor: (chainId?: ChainId) => getChainDescriptor(chainId)?.color,
         chainPrefix: (chainId?: ChainId) => 'ETH:',
-        chainNetworkType: (chainId?: ChainId) => getChainDescriptor(chainId)?.type,
-        infoURL: (chainId?: ChainId) => getChainDescriptor(chainId)?.explorerURL,
+        networkType: (chainId?: ChainId) => getChainDescriptor(chainId)?.type,
+        explorerURL: (chainId?: ChainId) => getChainDescriptor(chainId)?.explorerURL,
         nativeCurrency: (chainId?: ChainId) => getChainDescriptor(chainId)?.nativeCurrency,
         isValid: (chainId?: ChainId, testnet = false) => getChainDescriptor(chainId)?.network === 'mainnet' || testnet,
         isMainnet: (chainId?: ChainId) => getChainDescriptor(chainId)?.network === 'mainnet',
@@ -105,7 +105,7 @@ export function createExplorerResolver<ChainId, SchemaType, NetworkType>(
 
     return {
         explorerURL: getExplorerURL,
-        addressLink: (chainId: ChainId, address: string) =>
+        addressLink: (chainId: ChainId, address: string, tokenId?: string) =>
             urlcat(getExplorerURL(chainId).url, addressPathname, {
                 address,
                 ...getExplorerURL(chainId)?.parameters,
@@ -125,11 +125,13 @@ export function createExplorerResolver<ChainId, SchemaType, NetworkType>(
                 domain,
                 ...getExplorerURL(chainId)?.parameters,
             }),
-        fungibleTokenLink: (chainId: ChainId, address: string) =>
-            urlcat(getExplorerURL(chainId).url, fungibleTokenPathname, {
+        fungibleTokenLink: (chainId: ChainId, address: string) => {
+            if (!address) return ''
+            return urlcat(getExplorerURL(chainId).url, fungibleTokenPathname, {
                 address,
                 ...getExplorerURL(chainId)?.parameters,
-            }),
+            })
+        },
         nonFungibleTokenLink: (chainId: ChainId, address: string, tokenId: string) => {
             return urlcat(getExplorerURL(chainId).url, nonFungibleTokenPathname, {
                 address,
@@ -145,6 +147,8 @@ export function createNetworkResolver<ChainId, NetworkType>(
 ) {
     const getNetworkDescriptor = (networkType: NetworkType) => descriptors.find((x) => x.type === networkType)
     return {
+        networkIcon: (networkType: NetworkType) => getNetworkDescriptor(networkType)?.icon,
+        networkIconColor: (networkType: NetworkType) => getNetworkDescriptor(networkType)?.iconColor,
         networkName: (networkType: NetworkType) => getNetworkDescriptor(networkType)?.name,
         networkChainId: (networkType: NetworkType) => getNetworkDescriptor(networkType)?.chainId,
     }

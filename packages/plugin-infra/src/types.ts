@@ -26,6 +26,7 @@ import type {
     Web3EnableRequirement,
     Web3UI,
     Web3State,
+    SocialAddressType,
 } from '@masknet/web3-shared-base'
 import type { ChainId as ChainIdEVM, Transaction as TransactionEVM } from '@masknet/web3-shared-evm'
 import type { Emitter } from '@servie/events'
@@ -577,6 +578,10 @@ export namespace Plugin.SNSAdaptor {
         category?: 'dapp' | 'other'
 
         nextIdRequired?: boolean
+        /**
+         * One plugin may has multiple part. E.g. Tips requires connected wallet, but Tips setting not.
+         */
+        entryWalletConnectedNotRequired?: boolean
 
         /**
          * Display using an eye-catching card and unable to be unlisted.
@@ -654,10 +659,25 @@ export namespace Plugin.SNSAdaptor {
         FocusingPost = 'focusing-post',
         Post = 'post',
         Profile = 'profile',
+        MirrorMenu = 'mirror-menu',
+        MirrorEntry = 'mirror-entry',
+    }
+    export interface TipsAccount {
+        pluginId: NetworkPluginID
+        address: string
+        name?: string
+        type?: SocialAddressType
+        /** Verified by NextId. */
+        verified?: boolean
+        /** From SNS profile */
+        isSocialAddress?: boolean
+        last_checked_at?: string
     }
     export interface TipsRealmOptions {
         identity?: ProfileIdentifier
         slot: TipsSlot
+        tipsAccounts?: TipsAccount[]
+        onStatusUpdate?(disabled: boolean): void
     }
     export interface TipsRealm {
         ID: string

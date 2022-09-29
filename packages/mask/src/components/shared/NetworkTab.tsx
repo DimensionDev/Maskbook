@@ -34,7 +34,7 @@ export function NetworkTab<T extends NetworkPluginID = NetworkPluginID.PLUGIN_EV
         <TabContext value={currentTab}>
             <MaskTabList
                 variant="flexible"
-                onChange={(e, v) => {
+                onChange={(_, v) => {
                     setChainId(Number.parseInt(v, 10))
                     setTab(v)
                 }}

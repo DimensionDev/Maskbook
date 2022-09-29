@@ -33,6 +33,9 @@ export class LoadingFailCard extends Component<
                             fontWeight: 700,
                             marginBottom: 0.5,
                             marginTop: 4,
+                            '&:hover': {
+                                backgroundColor: (t) => t.palette.maskColor.publicMain,
+                            },
                         }}
                         variant="roundedContained"
                         onClick={() => {

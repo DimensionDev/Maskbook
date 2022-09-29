@@ -1,6 +1,6 @@
 import { SyntheticEvent, cloneElement, isValidElement, useCallback, useState, createElement } from 'react'
 import { Menu, MenuProps } from '@mui/material'
-import { ShadowRootMenu } from '@masknet/theme'
+import { makeStyles, ShadowRootMenu } from '@masknet/theme'
 import { useUpdate } from 'react-use'
 
 /**
@@ -18,6 +18,16 @@ export interface useMenuConfig extends Partial<MenuProps> {
     useShadowRoot?: boolean
 }
 
+const useStyles = makeStyles()((theme) => ({
+    menu: {
+        // TODO: replace hard code to theme
+        boxShadow:
+            theme.palette.mode === 'dark'
+                ? '0px 0px 20px rgba(255, 255, 255, 0.12)'
+                : '0px 4px 30px rgba(0, 0, 0, 0.1)',
+    },
+}))
+
 export function useMenuConfig(
     elements: Array<JSX.Element | null>,
     config: useMenuConfig,
@@ -26,6 +36,7 @@ export function useMenuConfig(
     openDialog: (anchorElOrEvent: HTMLElement | SyntheticEvent<HTMLElement>) => void,
     closeDialog: () => void,
 ] {
+    const { classes } = useStyles()
     const { anchorSibling = false, useShadowRoot = true, ...menuProps } = config
     const [open, setOpen] = useState(false)
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
@@ -39,6 +50,7 @@ export function useMenuConfig(
             useShadowRoot ? ShadowRootMenu : Menu,
             {
                 PaperProps: menuProps?.PaperProps,
+                classes: { paper: classes.menu },
                 MenuListProps: menuProps?.MenuListProps,
                 open,
                 anchorEl,
@@ -71,6 +83,7 @@ export function useMenuConfig(
         }, []),
         useCallback(() => {
             setOpen(false)
+            setAnchorEl(null)
         }, []),
     ]
 }

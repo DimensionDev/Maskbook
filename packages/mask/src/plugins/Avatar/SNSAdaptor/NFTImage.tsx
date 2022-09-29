@@ -18,7 +18,7 @@ const useStyles = makeStyles()((theme) => ({
         right: 5,
         width: 20,
         height: 20,
-        color: theme.palette.primary.main,
+        color: theme.palette.maskColor.primary,
     },
     image: {
         width: 100,
@@ -29,7 +29,7 @@ const useStyles = makeStyles()((theme) => ({
         border: '1px solid transparent',
     },
     selected: {
-        border: `1px solid ${theme.palette.primary.main}`,
+        border: `1px solid ${theme.palette.maskColor.primary}`,
         borderRadius: 8,
     },
     imageLoading: {
@@ -48,6 +48,9 @@ const useStyles = makeStyles()((theme) => ({
         justifyContent: 'center',
         alignItems: 'center',
         display: 'flex',
+    },
+    tooltip: {
+        whiteSpace: 'nowrap',
     },
 }))
 
@@ -82,6 +85,7 @@ export function NFTImage(props: NFTImageProps) {
         <Tooltip
             title={title}
             arrow
+            classes={{ tooltip: classes.tooltip }}
             disableInteractive
             placement="top"
             PopperProps={{ disablePortal: true, popperOptions: { strategy: 'absolute' } }}>

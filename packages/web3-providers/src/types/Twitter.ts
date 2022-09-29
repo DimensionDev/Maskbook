@@ -138,7 +138,6 @@ export namespace TwitterBaseAPI {
             | {
                   address: string
                   token_id: string
-                  type_name: string
               }
             | undefined
         >

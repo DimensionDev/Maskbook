@@ -13,7 +13,7 @@ const API_URL = 'https://api.rabby.io/v1/user/token_authorized_list'
 export function useApprovedTokenList(account: string, chainId: ChainId) {
     const maskDappContractInfoList = useAllMaskDappContractInfo(chainId, 'token')
     return useAsyncRetry(async () => {
-        const networkType = chainResolver.chainNetworkType(chainId)
+        const networkType = chainResolver.networkType(chainId)
         if (!networkType || !account) return EMPTY_LIST
         const response = await fetch(urlcat(API_URL, { id: account, chain_id: resolveNetworkOnRabby(networkType) }))
         const rawData: RawTokenInfo[] = await response.json()

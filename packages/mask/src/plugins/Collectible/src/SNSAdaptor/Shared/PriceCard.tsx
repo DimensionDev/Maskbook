@@ -64,8 +64,8 @@ export interface PriceCardProps {
 
 export function PriceCard(props: PriceCardProps) {
     const { asset, topOffer } = props
-    const { classes } = useStyles()
     const { t } = useI18N()
+    const { classes } = useStyles()
 
     if (!asset.priceInToken) return null
 

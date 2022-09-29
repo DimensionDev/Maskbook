@@ -10,6 +10,7 @@ export interface AvatarMetaDB {
     chainId?: ChainId
     schema?: SchemaType
     pluginId?: NetworkPluginID
+    ownerAddress?: string
 }
 
 export interface NFT {

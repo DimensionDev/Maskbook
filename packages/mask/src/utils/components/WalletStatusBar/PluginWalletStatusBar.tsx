@@ -1,14 +1,14 @@
 import {
-    useChainId,
     useCurrentWeb3NetworkPluginID,
     useProviderDescriptor,
     useRecentTransactions,
     useNetworkDescriptor,
-    useAccount,
     useWallet,
     useReverseAddress,
     useWeb3State,
     useProviderType,
+    useChainId,
+    useAccount,
 } from '@masknet/plugin-infra/web3'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { WalletMessages } from '@masknet/plugin-wallet'

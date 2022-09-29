@@ -8,8 +8,9 @@ import {
     isZero,
     formatBalance,
     FungibleToken,
+    formatCurrency,
 } from '@masknet/web3-shared-base'
-import { formatEtherToGwei, formatGweiToWei, Transaction, formatUSD, formatWeiToEther } from '@masknet/web3-shared-evm'
+import { formatEtherToGwei, formatGweiToWei, formatWeiToEther, GasOptionConfig } from '@masknet/web3-shared-evm'
 import { Typography, MenuItem, Box } from '@mui/material'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useChainId, useCurrentWeb3NetworkPluginID, useWeb3State } from '@masknet/plugin-infra/web3'
@@ -22,8 +23,9 @@ interface SelectGasSettingsToolbarProps<T extends NetworkPluginID = NetworkPlugi
     chainId?: Web3Helper.Definition[T]['ChainId']
     nativeToken: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
     nativeTokenPrice: number
-    transaction?: Transaction
-    onChange?(transaction?: Transaction): void
+    gasLimit: number
+    gasOption?: GasOptionConfig
+    onChange?(gasOption?: GasOptionConfig): void
 }
 
 const useStyles = makeStyles()((theme) => {
@@ -33,8 +35,11 @@ const useStyles = makeStyles()((theme) => {
             alignItems: 'center',
             border: `1px solid ${theme.palette.divider}`,
             borderRadius: 99,
-            padding: '8px 12px',
+            width: 93,
+            height: 26,
             cursor: 'pointer',
+            justifyContent: 'center',
+            marginLeft: 6,
         },
         section: {
             display: 'flex',
@@ -75,9 +80,11 @@ const useStyles = makeStyles()((theme) => {
             },
         },
         title: {
+            fontSize: 14,
             fontWeight: 700,
         },
         estimateGas: {
+            fontSize: 14,
             color: theme.palette.text.third,
         },
         menuItemBorder: {
@@ -104,7 +111,8 @@ export function SelectGasSettingsToolbar(props: SelectGasSettingsToolbarProps) {
 
 export function SelectGasSettingsToolbarUI({
     onChange,
-    transaction: tx,
+    gasOption,
+    gasLimit,
     nativeToken,
     nativeTokenPrice,
 }: SelectGasSettingsToolbarProps) {
@@ -118,10 +126,11 @@ export function SelectGasSettingsToolbarUI({
 
     const selectAdvancedSettings = useSelectAdvancedSettings(NetworkPluginID.PLUGIN_EVM)
 
+    const isSupportEIP1559 = Others?.chainResolver.isSupport(chainId, 'EIP1559')
     const setGasConfigCallback = useCallback(
         (maxFeePerGas: string, maxPriorityFeePerGas: string, gasPrice: string) =>
             onChange?.(
-                Others?.chainResolver.isSupport(chainId, 'EIP1559')
+                isSupportEIP1559
                     ? {
                           maxFeePerGas,
                           maxPriorityFeePerGas,
@@ -130,7 +139,7 @@ export function SelectGasSettingsToolbarUI({
                           gasPrice: new BigNumber(maxFeePerGas).gt(0) ? maxFeePerGas : gasPrice,
                       },
             ),
-        [chainId],
+        [isSupportEIP1559, chainId, onChange],
     )
 
     const openCustomGasSettingsDialog = useCallback(async () => {
@@ -139,7 +148,7 @@ export function SelectGasSettingsToolbarUI({
             chainId,
             disableGasLimit: true,
             disableSlippageTolerance: true,
-            transaction: tx,
+            transaction: gasOption,
         })
 
         if (!transaction) return
@@ -149,7 +158,7 @@ export function SelectGasSettingsToolbarUI({
             transaction.maxPriorityFeePerGas as string,
             transaction.gasPrice as string,
         )
-    }, [chainId, tx, selectAdvancedSettings])
+    }, [chainId, gasOption, selectAdvancedSettings, setGasConfigCallback])
 
     const currentGasOption = gasOptions?.[currentGasOptionType]
     useEffect(() => {
@@ -160,7 +169,7 @@ export function SelectGasSettingsToolbarUI({
             formatGweiToWei(currentGasOption.suggestedMaxPriorityFeePerGas).toString(),
             currentGasOption.suggestedMaxPriorityFeePerGas,
         )
-    }, [currentGasOption, isCustomGas])
+    }, [currentGasOption, isCustomGas, setGasConfigCallback])
 
     const [menu, openMenu] = useMenuConfig(
         Object.entries(gasOptions ?? {})
@@ -204,14 +213,18 @@ export function SelectGasSettingsToolbarUI({
         },
     )
     const gasFee = useMemo(() => {
-        if (!tx) return '0'
-        const gasPrice = (tx.gasPrice ? tx.gasPrice : tx.maxFeePerGas) as string
-        return tx.gas && gasPrice ? multipliedBy(gasPrice, tx.gas).integerValue().toFixed() : '0'
-    }, [tx])
+        if (!gasOption || !gasLimit) return '0'
+        const gasPrice = (gasOption.gasPrice ? gasOption.gasPrice : gasOption.maxFeePerGas) as string
+        return gasPrice ? multipliedBy(gasPrice, gasLimit).integerValue().toFixed() : '0'
+    }, [gasLimit, gasOption])
 
     const gasFeeUSD = useMemo(() => {
         if (!gasFee) return '0'
-        return formatUSD(formatWeiToEther(gasFee).times(nativeTokenPrice))
+        return formatCurrency(formatWeiToEther(gasFee).times(nativeTokenPrice), 'USD', {
+            boundaries: {
+                min: 0.01,
+            },
+        })
     }, [gasFee, nativeTokenPrice])
 
     return gasOptions && !isZero(gasFee) ? (

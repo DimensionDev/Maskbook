@@ -25,8 +25,7 @@ export class Provider extends ProviderState<ChainId, ProviderType, NetworkType, 
             getDefaultChainId,
             getDefaultNetworkType,
             getDefaultProviderType,
-            getNetworkTypeFromChainId: (chainId: ChainId) =>
-                chainResolver.chainNetworkType(chainId) ?? NetworkType.Solana,
+            getNetworkTypeFromChainId: (chainId: ChainId) => chainResolver.networkType(chainId) ?? NetworkType.Solana,
         })
     }
 }
