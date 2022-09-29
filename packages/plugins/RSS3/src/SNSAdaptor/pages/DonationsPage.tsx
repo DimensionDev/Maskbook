@@ -1,6 +1,6 @@
 import { Icons } from '@masknet/icons'
 import { CollectionDetailCard, useWeb3ProfileHiddenSettings } from '@masknet/shared'
-import { EMPTY_LIST } from '@masknet/shared-base'
+import { EMPTY_LIST, joinKeys } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { CollectionType, RSS3BaseAPI } from '@masknet/web3-providers'
 import type { NetworkPluginID, SocialAddress } from '@masknet/web3-shared-base'
@@ -62,7 +62,11 @@ export function DonationPage({ socialAddress, publicKey, userId }: DonationPageP
 
     const donations = useMemo(() => {
         if (!hiddenList.length) return allDonations
-        return differenceWith(allDonations, hiddenList, (donation, id) => donation.actions[0].index.toString() === id)
+        return differenceWith(
+            allDonations,
+            hiddenList,
+            (donation, id) => joinKeys(donation.hash, donation.actions[0].index) === id,
+        )
     }, [hiddenList, allDonations])
 
     const [selectedDonation, setSelectedDonation] = useState<RSS3BaseAPI.Donation>()

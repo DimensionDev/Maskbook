@@ -1,9 +1,6 @@
-import { DialogActions, DialogContent } from '@mui/material'
-import { makeStyles, useStylesExtends } from '@masknet/theme'
-import { useEffect, useMemo, useState } from 'react'
+import { Icons } from '@masknet/icons'
+import { useChainId } from '@masknet/plugin-infra/web3'
 import { InjectedDialog, PersonaAction } from '@masknet/shared'
-import { useAllPersonas, useCurrentPersona, useLastRecognizedProfile } from '../hooks/usePersona.js'
-import { Main } from './Main.js'
 import {
     CrossIsolationMessages,
     EMPTY_LIST,
@@ -11,9 +8,17 @@ import {
     PersonaInformation,
     PopupRoutes,
 } from '@masknet/shared-base'
+import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { NextIDProof } from '@masknet/web3-providers'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { ChainId } from '@masknet/web3-shared-evm'
+import { DialogActions, DialogContent } from '@mui/material'
+import { sortBy } from 'lodash-unified'
+import { useEffect, useMemo, useState } from 'react'
 import { useAsyncRetry } from 'react-use'
-import { ImageManagement } from './ImageManagement.js'
+import { CurrentStatusMap, CURRENT_STATUS } from '../../constants.js'
+import { context } from '../context.js'
+import { useAllPersonas, useCurrentPersona, useLastRecognizedProfile } from '../hooks/usePersona.js'
 import {
     getDonationList,
     getFootprintList,
@@ -21,14 +26,10 @@ import {
     getWalletHiddenList,
     getWalletList,
     mergeList,
-    placeFirst,
 } from '../utils.js'
-import { Icons } from '@masknet/icons'
-import { context } from '../context.js'
-import { useChainId } from '@masknet/plugin-infra/web3'
-import { CurrentStatusMap, CURRENT_STATUS } from '../../constants.js'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { ChainId } from '@masknet/web3-shared-evm'
+import { ImageManagement } from './ImageManagement.js'
+import { Main } from './Main.js'
+
 const useStyles = makeStyles()((theme) => ({
     content: {
         width: 568,
@@ -103,19 +104,25 @@ export function Web3ProfileDialog() {
             }))
     }, [bindings?.proofs])
 
-    const accounts = bindings?.proofs?.filter((proof) => proof?.platform === NextIDPlatform.Twitter) || []
+    const accounts = useMemo(
+        () => bindings?.proofs?.filter((proof) => proof.platform === NextIDPlatform.Twitter) || EMPTY_LIST,
+        [bindings?.proofs],
+    )
 
-    const { value: MainnetNFTList } = useAsyncRetry(async () => {
+    const { value: mainnetNFTList } = useAsyncRetry(async () => {
         if (!currentPersona) return
         return getNFTList(wallets)
     }, [wallets, currentPersona])
 
-    const { value: PolygonNFTList } = useAsyncRetry(async () => {
+    const { value: polygonNFTList } = useAsyncRetry(async () => {
         if (!currentPersona) return
         return getNFTList(wallets, ChainId.Matic)
     }, [wallets, currentPersona])
 
-    const NFTList = mergeList(MainnetNFTList, PolygonNFTList)
+    const NFTList = useMemo(
+        () => mergeList(mainnetNFTList ?? [], polygonNFTList ?? []),
+        [mainnetNFTList, polygonNFTList],
+    )
 
     const { value: donationList } = useAsyncRetry(async () => {
         return getDonationList(wallets)
@@ -130,9 +137,16 @@ export function Web3ProfileDialog() {
         return getWalletHiddenList(currentPersona.identifier.publicKeyAsHex!)
     }, [currentPersona])
 
-    const accountArr = getWalletList(accounts, wallets, allPersona, hiddenObj, footprintList, donationList, NFTList)
+    const accountArr = useMemo(
+        () =>
+            getWalletList(accounts, wallets, allPersona, hiddenObj, footprintList, donationList, NFTList) ?? EMPTY_LIST,
+        [accounts, wallets, allPersona, hiddenObj, footprintList, donationList, NFTList],
+    )
 
-    const accountList = placeFirst(currentVisitingProfile?.identifier?.userId, accountArr)
+    const userId = currentVisitingProfile?.identifier?.userId
+    const accountList = useMemo(() => {
+        return sortBy(accountArr, (x) => (x.identity.toLowerCase() === userId?.toLowerCase() ? -1 : 0))
+    }, [userId, accountArr])
     const chainId = useChainId()
 
     const openPopupsWindow = () => {
