@@ -3,18 +3,17 @@ import { useAsync } from 'react-use'
 import type { AsyncState } from 'react-use/lib/useAsyncFn'
 import { TradeStrategy } from '../../types/index.js'
 import { encodeContractTransaction, SchemaType, useTraderConstants } from '@masknet/web3-shared-evm'
-import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
 import { useExchangeProxyContract } from '../../contracts/balancer/useExchangeProxyContract.js'
 import type { ExchangeProxy } from '@masknet/web3-contracts/types/ExchangeProxy'
 import { useTradeAmount } from './useTradeAmount.js'
 import { SLIPPAGE_DEFAULT } from '../../constants/index.js'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { useAccount, useWeb3Connection } from '@masknet/plugin-infra/web3'
+import { useAccount, useChainId, useWeb3Connection } from '@masknet/plugin-infra/web3'
 import BigNumber from 'bignumber.js'
 
 export function useTradeGasLimit(trade: TradeComputed<SwapResponse> | null): AsyncState<number> {
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const { targetChainId } = TargetChainIdContext.useContainer()
+    const targetChainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const exchangeProxyContract = useExchangeProxyContract(targetChainId)
     const { BALANCER_ETH_ADDRESS } = useTraderConstants(targetChainId)
     const tradeAmount = useTradeAmount(trade, SLIPPAGE_DEFAULT)

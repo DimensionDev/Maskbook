@@ -1,12 +1,11 @@
 import { useEffect, useRef, useState } from 'react'
 import { PluginID } from '@masknet/plugin-infra'
 import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
-import { useChainId, useChainIdValid } from '@masknet/plugin-infra/web3'
+import { PluginWeb3ContextProvider, useChainId, useChainIdValid } from '@masknet/plugin-infra/web3'
 import { ChainId, isNativeTokenAddress, SchemaType } from '@masknet/web3-shared-evm'
 import { DialogContent, dialogTitleClasses, IconButton } from '@mui/material'
 import { InjectedDialog, useSelectAdvancedSettings } from '@masknet/shared'
 import { AllProviderTradeContext } from '../../trader/useAllProviderTradeContext.js'
-import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
 import { PluginTraderMessages } from '../../messages.js'
 import { Trader, TraderRef, TraderProps } from './Trader.js'
 import { useI18N } from '../../../../utils/index.js'
@@ -138,75 +137,73 @@ export function TraderDialog() {
     }, [currentChainId])
 
     return (
-        <TargetChainIdContext.Provider>
-            <AllProviderTradeContext.Provider>
-                <InjectedDialog
-                    open={open}
-                    onClose={() => {
-                        if (currentChainId) {
-                            setChainId(currentChainId)
-                        }
-                        setTraderProps(undefined)
-                        setOpen(false)
-                    }}
-                    title={t('plugin_trader_swap')}
-                    titleBarIconStyle={isDashboard ? 'close' : 'back'}
-                    titleTail={
-                        <div className={classes.tail}>
-                            <IconButton onClick={() => tradeRef.current?.refresh()}>
-                                <Icons.Refresh size={24} className={classes.icon} />
-                            </IconButton>
-                            <IconButton
-                                onClick={async () => {
-                                    const { slippageTolerance, transaction } = await selectAdvancedSettings({
-                                        chainId,
-                                        disableGasLimit: true,
-                                        disableSlippageTolerance: false,
-                                        transaction: {
-                                            gas: tradeRef.current?.focusedTrade?.gas.value ?? MIN_GAS_LIMIT,
-                                            ...(tradeRef.current?.gasConfig ?? {}),
-                                        },
-                                        slippageTolerance: currentSlippageSettings.value / 100,
-                                    })
+        <InjectedDialog
+            open={open}
+            onClose={() => {
+                if (currentChainId) {
+                    setChainId(currentChainId)
+                }
+                setTraderProps(undefined)
+                setOpen(false)
+            }}
+            title={t('plugin_trader_swap')}
+            titleBarIconStyle={isDashboard ? 'close' : 'back'}
+            titleTail={
+                <div className={classes.tail}>
+                    <IconButton onClick={() => tradeRef.current?.refresh()}>
+                        <Icons.Refresh size={24} className={classes.icon} />
+                    </IconButton>
+                    <IconButton
+                        onClick={async () => {
+                            const { slippageTolerance, transaction } = await selectAdvancedSettings({
+                                chainId,
+                                disableGasLimit: true,
+                                disableSlippageTolerance: false,
+                                transaction: {
+                                    gas: tradeRef.current?.focusedTrade?.gas.value ?? MIN_GAS_LIMIT,
+                                    ...(tradeRef.current?.gasConfig ?? {}),
+                                },
+                                slippageTolerance: currentSlippageSettings.value / 100,
+                            })
 
-                                    if (slippageTolerance) currentSlippageSettings.value = slippageTolerance
+                            if (slippageTolerance) currentSlippageSettings.value = slippageTolerance
 
-                                    PluginTraderMessages.swapSettingsUpdated.sendToAll({
-                                        open: false,
-                                        gasConfig: {
-                                            gasPrice: transaction?.gasPrice as string | undefined,
-                                            maxFeePerGas: transaction?.maxFeePerGas as string | undefined,
-                                            maxPriorityFeePerGas: transaction?.maxPriorityFeePerGas as
-                                                | string
-                                                | undefined,
-                                        },
-                                    })
-                                }}>
-                                <Icons.Gear size={24} className={classes.icon} />
-                            </IconButton>
-                        </div>
-                    }
-                    className={classes.dialog}>
-                    <DialogContent className={classes.content}>
-                        <div className={classes.abstractTabWrapper}>
-                            <NetworkTab
-                                chainId={chainId}
-                                /* @ts-ignore */
-                                setChainId={setChainId}
-                                classes={classes}
-                                chains={chainIdList}
-                                networkId={NetworkPluginID.PLUGIN_EVM}
-                            />
-                        </div>
+                            PluginTraderMessages.swapSettingsUpdated.sendToAll({
+                                open: false,
+                                gasConfig: {
+                                    gasPrice: transaction?.gasPrice as string | undefined,
+                                    maxFeePerGas: transaction?.maxFeePerGas as string | undefined,
+                                    maxPriorityFeePerGas: transaction?.maxPriorityFeePerGas as string | undefined,
+                                },
+                            })
+                        }}>
+                        <Icons.Gear size={24} className={classes.icon} />
+                    </IconButton>
+                </div>
+            }
+            className={classes.dialog}>
+            <DialogContent className={classes.content}>
+                <div className={classes.abstractTabWrapper}>
+                    <NetworkTab
+                        chainId={chainId}
+                        /* @ts-ignore */
+                        setChainId={setChainId}
+                        classes={classes}
+                        chains={chainIdList}
+                        networkId={NetworkPluginID.PLUGIN_EVM}
+                    />
+                </div>
+                <PluginWeb3ContextProvider pluginID={NetworkPluginID.PLUGIN_EVM} value={{ chainId }}>
+                    <AllProviderTradeContext.Provider>
                         <Trader
                             {...traderProps}
                             chainId={chainId}
                             classes={{ root: classes.tradeRoot }}
                             ref={tradeRef}
                         />
-                    </DialogContent>
-                </InjectedDialog>
-            </AllProviderTradeContext.Provider>
-        </TargetChainIdContext.Provider>
+                    </AllProviderTradeContext.Provider>
+                </PluginWeb3ContextProvider>
+            </DialogContent>
+        </InjectedDialog>
     )
 }

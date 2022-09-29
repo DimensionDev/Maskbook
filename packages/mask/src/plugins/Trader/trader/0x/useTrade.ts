@@ -4,8 +4,7 @@ import { ZRX_AFFILIATE_ADDRESS } from '../../constants/index.js'
 import { PluginTraderRPC } from '../../messages.js'
 import { SwapQuoteResponse, TradeStrategy } from '../../types/index.js'
 import { useSlippageTolerance } from '../0x/useSlippageTolerance.js'
-import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
-import { useAccount, useDoubleBlockBeatRetry, useNetworkType } from '@masknet/plugin-infra/web3'
+import { useAccount, useChainId, useDoubleBlockBeatRetry, useNetworkType } from '@masknet/plugin-infra/web3'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 import { FungibleToken, NetworkPluginID, isZero } from '@masknet/web3-shared-base'
 
@@ -47,8 +46,7 @@ export function useTrade(
 ): AsyncStateRetry<SwapQuoteResponse | null> {
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const networkType = useNetworkType(NetworkPluginID.PLUGIN_EVM)
-    const { targetChainId } = TargetChainIdContext.useContainer()
-
+    const targetChainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const slippageSetting = useSlippageTolerance()
     const slippage = temporarySlippage || slippageSetting
     return useDoubleBlockBeatRetry(
