@@ -838,7 +838,7 @@
     "plugin_snapshot_result_title": "Results",
     "plugin_snapshot_votes_title": "Votes",
     "plugin_snapshot_no_power": "No power",
-    "plugin_snapshot_vote_success": "Your vote has been successful.",
+    "plugin_snapshot_vote_success": "Voted successfully.",
     "plugin_snapshot_vote_failed": "Please try again if you failed to vote.",
     "plugin_snapshot_vote": "Vote",
     "plugin_snapshot_vote_choice": "Option(s)",
