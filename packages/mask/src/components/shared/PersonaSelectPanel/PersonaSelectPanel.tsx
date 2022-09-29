@@ -147,7 +147,7 @@ export const PersonaSelectPanel = memo<PersonaSelectPanelProps>((props) => {
             if (finishTarget) {
                 CrossIsolationMessages.events.applicationDialogEvent.sendToLocal({
                     open: true,
-                    application: finishTarget,
+                    pluginID: finishTarget,
                 })
             }
 

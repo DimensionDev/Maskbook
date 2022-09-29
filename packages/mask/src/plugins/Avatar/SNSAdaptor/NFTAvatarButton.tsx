@@ -2,7 +2,6 @@ import { Icons } from '@masknet/icons'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { Stack, Typography } from '@mui/material'
 import { useI18N } from '../../../utils/index.js'
-import { ApplicationSmallIcon } from '../assets/application.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -45,7 +44,7 @@ export function NFTAvatarButton(props: NFTAvatarButtonProps) {
 
     return (
         <div className={classes.root} onClick={onClick}>
-            <ApplicationSmallIcon className={classes.icon} />
+            <Icons.Avatar className={classes.icon} size={20} />
             <Stack display="inline-flex" gap={1}>
                 <Typography
                     fontSize={14}

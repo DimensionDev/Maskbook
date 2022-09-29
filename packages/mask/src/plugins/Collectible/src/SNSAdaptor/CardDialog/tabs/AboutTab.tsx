@@ -10,7 +10,7 @@ import { PriceCard } from '../../Shared/PriceCard.js'
 import { DetailsCard } from '../../Shared/DetailsCard.js'
 
 const useStyles = makeStyles()((theme) => ({
-    wrapper: {
+    root: {
         width: '100%',
         overflowY: 'auto',
         display: 'flex',
@@ -43,7 +43,7 @@ export function AboutTab(props: AboutTabProps) {
 
     if (!_asset) return null
     return (
-        <div className={classes.wrapper}>
+        <div className={classes.root}>
             <PriceCard topOffer={topOffer} asset={_asset} />
             <DetailsCard asset={_asset} />
             <DescriptionCard asset={_asset} />

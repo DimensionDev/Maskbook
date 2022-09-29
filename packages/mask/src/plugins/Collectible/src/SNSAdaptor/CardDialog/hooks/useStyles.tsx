@@ -41,6 +41,7 @@ export const useStyles = makeStyles<{ listItemBackground?: string; listItemBackg
             display: 'flex',
             padding: 24,
             boxSizing: 'border-box',
+            paddingBottom: 72,
         },
         tabWrapper: {
             width: 'calc( 100% - 336px)',
@@ -206,6 +207,10 @@ export const useStyles = makeStyles<{ listItemBackground?: string; listItemBackg
                 background: theme.palette.common.black,
                 boxShadow: `0 8px 25px ${parseColor(theme.palette.common.black).setAlpha(0.3).toRgbString()}`,
             },
+        },
+        buttonText: {
+            marginLeft: theme.spacing(1),
+            marginRight: theme.spacing(1),
         },
         chainBoundary: {
             width: 'auto !important',

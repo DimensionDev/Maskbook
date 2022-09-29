@@ -14,6 +14,7 @@ export function DialogInspector(props: DialogInspectorProps) {
     const [chainId, setChainId] = useState<Web3Helper.ChainIdAll>()
     const [tokenId, setTokenId] = useState<string>()
     const [tokenAddress, setTokenAddress] = useState<string>()
+    const [originType, setOriginType] = useState<string>()
     const chainIdValid = useChainIdValid(pluginID, chainId)
 
     useEffect(() => {
@@ -28,6 +29,7 @@ export function DialogInspector(props: DialogInspectorProps) {
                 setChainId(ev.chainId)
                 setTokenAddress(ev.tokenAddress)
                 setTokenId(ev.tokenId)
+                setOriginType(ev.origin ?? 'unknown')
                 setOpen(ev.open)
             }),
         [],
@@ -50,7 +52,14 @@ export function DialogInspector(props: DialogInspectorProps) {
                 value={{
                     chainId,
                 }}>
-                <Context.Provider initialState={{ pluginID, chainId, tokenId: tokenId!, tokenAddress: tokenAddress! }}>
+                <Context.Provider
+                    initialState={{
+                        pluginID,
+                        chainId,
+                        tokenId: tokenId!,
+                        tokenAddress: tokenAddress!,
+                        origin: originType,
+                    }}>
                     <CardDialog open={open} setOpen={setOpen} />
                 </Context.Provider>
             </PluginWeb3ContextProvider>

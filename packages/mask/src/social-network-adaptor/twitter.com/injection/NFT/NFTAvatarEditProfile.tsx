@@ -79,7 +79,7 @@ function OpenNFTAvatarEditProfileButtonInTwitter() {
     const clickHandler = () => {
         CrossIsolationMessages.events.applicationDialogEvent.sendToLocal({
             open: true,
-            application: PluginID.Avatar,
+            pluginID: PluginID.Avatar,
         })
     }
 

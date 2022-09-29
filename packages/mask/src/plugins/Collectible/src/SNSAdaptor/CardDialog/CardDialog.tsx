@@ -34,7 +34,7 @@ export function CardDialog(props: CardDialogProps) {
     return (
         <InjectedDialog
             open={props.open}
-            title={t('plugin_collectible_nft_detail')}
+            title={t('plugin_collectible_nft_details')}
             onClose={() => props.setOpen(false)}
             classes={{ paper: classes.dialogRoot }}
             titleTabs={
@@ -47,7 +47,7 @@ export function CardDialog(props: CardDialogProps) {
                 </TabContext>
             }>
             <DialogContent className={classes.dialogContent}>
-                <CardDialogContent currentTab={currentTab} />
+                <CardDialogContent open={props.open} setOpen={props.setOpen} currentTab={currentTab} />
             </DialogContent>
         </InjectedDialog>
     )
