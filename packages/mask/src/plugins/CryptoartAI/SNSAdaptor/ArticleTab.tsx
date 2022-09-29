@@ -1,6 +1,7 @@
 import { makeStyles } from '@masknet/theme'
 import { CollectibleTab } from './CollectibleTab.js'
 import { CollectibleState } from '../hooks/useCollectibleState.js'
+import { Video } from '../../../components/shared/Video.js'
 import { NFTCardStyledAssetPlayer } from '@masknet/shared'
 
 const useStyles = makeStyles()({
@@ -32,13 +33,17 @@ export function ArticleTab(props: ArticleTabProps) {
     return (
         <CollectibleTab>
             <div className={classes.body}>
-                <NFTCardStyledAssetPlayer
-                    url={resourceUrl}
-                    classes={{
-                        wrapper: classes.player,
-                        iframe: classes.iframe,
-                    }}
-                />
+                {asset.value.metadataContentType === 'video/mp4' ? (
+                    <Video VideoProps={{ controls: true }} src={resourceUrl} />
+                ) : (
+                    <NFTCardStyledAssetPlayer
+                        url={resourceUrl}
+                        classes={{
+                            wrapper: classes.player,
+                            iframe: classes.iframe,
+                        }}
+                    />
+                )}
             </div>
         </CollectibleTab>
     )
