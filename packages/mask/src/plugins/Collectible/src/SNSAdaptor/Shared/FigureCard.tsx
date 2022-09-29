@@ -14,12 +14,12 @@ const useStyles = makeStyles()((theme) => ({
     },
     body: {
         position: 'relative',
-        width: '100%',
-        height: 0,
-        paddingBottom: '100%',
+        width: 510,
+        height: 510,
         marginBottom: 36,
         boxShadow: `0px 28px 56px -28px ${MaskColorVar.primary.alpha(0.5)}`,
         borderRadius: 20,
+        alignItems: 'center',
     },
     nameSm: {
         fontSize: 16,

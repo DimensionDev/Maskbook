@@ -238,7 +238,7 @@ export const resolveNextID_NetworkPluginID = createLookupTableResolver<NextIDPla
 const MATCH_IPFS_CID_RAW =
     'Qm[1-9A-HJ-NP-Za-km-z]{44,}|b[2-7A-Za-z]{58,}|B[2-7A-Z]{58,}|z[1-9A-HJ-NP-Za-km-z]{48,}|F[\\dA-F]{50,}'
 const MATCH_IPFS_DATA_RE = /ipfs\/(data:.*)$/
-const MATH_IPFS_CID_AND_PATHNAME_RE = new RegExp(`(?:${MATCH_IPFS_CID_RAW})\\/?.*`)
+const MATCH_IPFS_CID_AND_PATHNAME_RE = new RegExp(`(?:${MATCH_IPFS_CID_RAW})\\/?.*`)
 const CORS_HOST = 'https://cors.r2d2.to'
 const IPFS_GATEWAY_HOST = 'https://gateway.ipfscdn.io'
 
@@ -296,7 +296,7 @@ export function resolveIPFS_URL(cidOrURL: string | undefined): string | undefine
 
     // a ipfs hash fragment
     if (isIPFS_Resource(cidOrURL)) {
-        const pathname = cidOrURL.match(MATH_IPFS_CID_AND_PATHNAME_RE)?.[0]
+        const pathname = cidOrURL.match(MATCH_IPFS_CID_AND_PATHNAME_RE)?.[0]
         if (pathname) return trimQuery(`${IPFS_GATEWAY_HOST}/ipfs/${pathname}`)
     }
 
