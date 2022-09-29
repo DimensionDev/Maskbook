@@ -3,12 +3,12 @@ import { makeStyles } from '@masknet/theme'
 import { Box, Button, Grid, Typography } from '@mui/material'
 import { FormattedBalance, TokenIcon } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
-import { formatBalance, isSameAddress, isZero, NetworkPluginID, rightShift } from '@masknet/web3-shared-base'
+import { formatBalance, isZero, NetworkPluginID, rightShift } from '@masknet/web3-shared-base'
 import type { ChainId, Web3 } from '@masknet/web3-shared-evm'
 import { ProviderIconURLs } from './IconURL.js'
 import { useI18N } from '../../../utils/index.js'
 import { ProtocolType, SavingsProtocol, TabType } from '../types.js'
-import { useAccount, useFungibleAssets, useWeb3 } from '@masknet/plugin-infra/web3'
+import { useAccount, useFungibleAssets, useWeb3, useFungibleTokenBalance } from '@masknet/plugin-infra/web3'
 import { CrossIsolationMessages } from '@masknet/shared-base'
 import { useCallback, useMemo } from 'react'
 import { LDO_PAIRS } from '../constants.js'
@@ -186,21 +186,7 @@ export function SavingsTable({ chainId, tab, protocols, setTab, setSelectedProto
                                 </Grid>
                             ) : null}
                             <Grid item xs={tab === TabType.Deposit ? 3 : 5} className={classes.tableCell}>
-                                <Typography variant="body1">
-                                    <FormattedBalance
-                                        value={
-                                            tab === TabType.Deposit
-                                                ? assets!.find((x) =>
-                                                      isSameAddress(x.address, protocol.bareToken.address),
-                                                  )?.balance
-                                                : protocol.balance
-                                        }
-                                        decimals={protocol.bareToken.decimals}
-                                        significant={6}
-                                        minimumBalance={rightShift(10, protocol.bareToken.decimals - 6)}
-                                        formatter={formatBalance}
-                                    />
-                                </Typography>
+                                <FungibleTokenBalance tab={tab} protocol={protocol} />
                             </Grid>
                             <Grid item xs={3} className={classes.tableCell}>
                                 <Button
@@ -228,5 +214,24 @@ export function SavingsTable({ chainId, tab, protocols, setTab, setSelectedProto
                 </div>
             )}
         </Box>
+    )
+}
+
+function FungibleTokenBalance({ protocol, tab }: { protocol: SavingsProtocol; tab: TabType }) {
+    const { value: tokenBalance = '0' } = useFungibleTokenBalance(
+        NetworkPluginID.PLUGIN_EVM,
+        protocol.bareToken.address,
+    )
+
+    return (
+        <Typography variant="body1">
+            <FormattedBalance
+                value={tab === TabType.Deposit ? tokenBalance : protocol.balance}
+                decimals={protocol.bareToken.decimals}
+                significant={6}
+                minimumBalance={rightShift(10, protocol.bareToken.decimals - 6)}
+                formatter={formatBalance}
+            />
+        </Typography>
     )
 }
