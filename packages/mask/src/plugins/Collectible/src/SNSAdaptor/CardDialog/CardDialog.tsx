@@ -2,6 +2,7 @@ import { InjectedDialog } from '@masknet/shared'
 import { MaskTabList, useTabs } from '@masknet/theme'
 import { TabContext } from '@mui/lab'
 import { DialogContent, Tab } from '@mui/material'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { CardDialogContent } from './CardDialogContent.js'
 import { useI18N } from '../../../../../utils/index.js'
 import { useStyles } from './hooks/useStyles.js'
@@ -21,7 +22,14 @@ export function CardDialog(props: CardDialogProps) {
     const [currentTab, onChange] = useTabs<TabType>(TabType.About, TabType.Offers, TabType.Activities)
 
     if (!chainId || !pluginID) return null
-    if (!tokenId || !tokenAddress) return null
+
+    if (pluginID === NetworkPluginID.PLUGIN_EVM) {
+        if (!tokenAddress || !tokenId) return null
+    }
+
+    if (pluginID === NetworkPluginID.PLUGIN_SOLANA) {
+        if (!tokenId) return null
+    }
 
     return (
         <InjectedDialog
