@@ -1,11 +1,11 @@
 import { PluginWeb3ActualContextProvider } from '@masknet/plugin-infra/web3'
 import { InjectedDialog } from '@masknet/shared'
-import { ActionButton, makeStyles, MaskTabList, useTabs } from '@masknet/theme'
+import { ActionButton, makeStyles, MaskTabList } from '@masknet/theme'
 import { NetworkPluginID, NonFungibleAsset } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { TabContext, TabPanel } from '@mui/lab'
 import { DialogContent, Tab } from '@mui/material'
-import { useCallback, useEffect, useMemo } from 'react'
+import { useCallback, useMemo } from 'react'
 import { useBoolean } from 'react-use'
 import { activatedSocialNetworkUI } from '../../../social-network/index.js'
 import { PluginWalletStatusBar } from '../../../utils/index.js'
@@ -165,17 +165,11 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
         return message
     }, [amount, isTokenTip, nonFungibleTokenContract?.name, token, recipient, recipientSnsId, t])
 
-    const [currentTab, onChange, tabs, setTab] = useTabs(TipsType.Tokens, TipsType.Collectibles)
-    useEffect(() => {
-        setTab(isTokenTip ? TipsType.Tokens : TipsType.Collectibles)
-    }, [isTokenTip])
-    const onTabChange: typeof onChange = useCallback(
-        (_, value) => {
-            setTipType(value as TipsType)
-            onChange(_, value)
-        },
-        [onChange],
-    )
+    const currentTab = isTokenTip ? TipsType.Tokens : TipsType.Collectibles
+    const onTabChange = useCallback((_: unknown, value: TipsType) => {
+        setTipType(value)
+    }, [])
+
     const buttonLabel = isSending ? t.sending_tip() : isValid || !validateMessage ? t.send_tip() : validateMessage
 
     const handleConfirm = useCallback(() => {
@@ -211,17 +205,17 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
                 title={t.tips()}
                 titleTabs={
                     <MaskTabList variant="base" onChange={onTabChange} aria-label="Tips">
-                        <Tab label={t.tips_tab_tokens()} value={tabs.tokens} />
-                        <Tab label={t.tips_tab_collectibles()} value={tabs.collectibles} />
+                        <Tab label={t.tips_tab_tokens()} value={TipsType.Tokens} />
+                        <Tab label={t.tips_tab_collectibles()} value={TipsType.Collectibles} />
                     </MaskTabList>
                 }>
                 <DialogContent className={classes.content}>
                     <NetworkSection />
                     <RecipientSection className={classes.recipient} />
-                    <TabPanel value={tabs.tokens} className={classes.tabPanel}>
+                    <TabPanel value={TipsType.Tokens} className={classes.tabPanel}>
                         <TokenSection className={classes.section} />
                     </TabPanel>
-                    <TabPanel value={tabs.collectibles} className={classes.tabPanel} style={{ padding: 0 }}>
+                    <TabPanel value={TipsType.Collectibles} className={classes.tabPanel} style={{ padding: 0 }}>
                         <NFTSection className={classes.section} />
                     </TabPanel>
                     <PluginWeb3ActualContextProvider>
