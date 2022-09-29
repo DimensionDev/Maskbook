@@ -234,11 +234,12 @@ export function NFTListDialog(props: NFTListDialogProps) {
                 token: selectedToken,
                 pluginId: selectedPluginId,
             })
-            setDisabled(false)
             onNext()
         } catch (error) {
             showSnackbar(String(error), { variant: 'error' })
             return
+        } finally {
+            setDisabled(false)
         }
     }, [selectedToken, selectedAccount, selectedPluginId])
 
