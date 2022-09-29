@@ -8,6 +8,7 @@ export * from './subscription.js'
 export * from './getAssetAsBlobURL.js'
 export * from './personas.js'
 export * from './createValueRefWithReady.js'
+export * from './misc.js'
 
 export enum MimeTypes {
     JSON = 'application/json',

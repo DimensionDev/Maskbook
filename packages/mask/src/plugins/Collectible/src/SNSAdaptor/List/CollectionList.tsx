@@ -4,7 +4,7 @@ import { Icons } from '@masknet/icons'
 import { ElementAnchor, RetryHint, useWeb3ProfileHiddenSettings } from '@masknet/shared'
 import { useNonFungibleAssets, useTrustedNonFungibleTokens } from '@masknet/plugin-infra/web3'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { EMPTY_LIST, EMPTY_OBJECT } from '@masknet/shared-base'
+import { EMPTY_LIST, EMPTY_OBJECT, joinKeys } from '@masknet/shared-base'
 import { LoadingBase } from '@masknet/theme'
 import { CollectionType } from '@masknet/web3-providers'
 import {
@@ -80,32 +80,35 @@ export function CollectionList({ socialAddress, persona, profile, gridProps = EM
         return differenceWith(
             collectibles,
             hiddenList,
-            (collection, id) => `${collection.id}_${collection.tokenId}`.toLowerCase() === id.toLowerCase(),
+            (collection, key) => joinKeys(collection.address, collection.tokenId).toLowerCase() === key.toLowerCase(),
         )
     }, [hiddenList, collectibles])
 
-    const allCollectibles = [
-        ...trustedNonFungibleTokens.filter((x) => isSameAddress(x.contract?.owner, account)),
-        ...unHiddenCollectibles,
-    ]
+    const allCollectibles = useMemo(
+        () => [
+            ...trustedNonFungibleTokens.filter((x) => isSameAddress(x.contract?.owner, account)),
+            ...unHiddenCollectibles,
+        ],
+        [trustedNonFungibleTokens, unHiddenCollectibles],
+    )
 
     const renderCollectibles = useMemo(() => {
         if (!selectedCollection) return allCollectibles
-        const uniqCollectibles = uniqBy(allCollectibles, (x) => x?.contract?.address.toLowerCase() + x?.tokenId)
+        const uniqCollectibles = uniqBy(allCollectibles, (x) => x.contract?.address.toLowerCase() + x?.tokenId)
         if (!selectedCollection) return uniqCollectibles.filter((x) => !x.collection)
         return uniqCollectibles.filter(
             (x) =>
                 selectedCollection.name === x.collection?.name ||
                 isSameAddress(selectedCollection.address, x.collection?.address),
         )
-    }, [selectedCollection, allCollectibles.length])
+    }, [selectedCollection, allCollectibles])
 
     const collectionsWithName = useMemo(() => {
-        const collections = uniqBy(allCollectibles, (x) => x?.contract?.address.toLowerCase())
-            .map((x) => x?.collection)
-            .filter((x) => x?.name?.length)
+        const collections = uniqBy(allCollectibles, (x) => x.contract?.address.toLowerCase())
+            .map((x) => x.collection)
+            .filter((x) => x?.name)
         return collections as Array<NonFungibleCollection<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>
-    }, [allCollectibles.length])
+    }, [allCollectibles])
 
     if (!allCollectibles.length && !done && !error && account)
         return (

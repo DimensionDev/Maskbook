@@ -1,21 +1,20 @@
 import type { CollectionTypes, WalletsCollection, WalletTypes } from '@masknet/shared'
-import { BindingProof, NextIDPlatform, PersonaInformation } from '@masknet/shared-base'
+import { BindingProof, joinKeys, NextIDPlatform, PersonaInformation } from '@masknet/shared-base'
 import { AlchemyEVM, NextIDStorage, RSS3 } from '@masknet/web3-providers'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainId, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
+import { compact } from 'lodash-unified'
 import { isSameAddress } from '../../../../web3-shared/base/src/utils/index.js'
 import { PLUGIN_ID } from '../constants.js'
-import type { AccountType, Collection, PersonaKV } from './types.js'
+import type { Collection, PersonaKV } from './types.js'
 
 export const formatPublicKey = (publicKey?: string) => {
     return `${publicKey?.slice(0, 6)}...${publicKey?.slice(-6)}`
 }
 
-export const mergeList = (listA?: WalletTypes[], listB?: WalletTypes[]) => {
-    if (!listA || listA?.length === 0) return listB
-    if (!listB || listB?.length === 0) return [...listA]
-    return listA?.map((item) => {
-        const listBCollection = listB?.find((itemB) => isSameAddress(itemB.address, item.address))?.collections
+export const mergeList = (listA: WalletTypes[], listB: WalletTypes[]) => {
+    return listA.map((item) => {
+        const listBCollection = listB.find((itemB) => isSameAddress(itemB.address, item.address))?.collections
         return {
             ...item,
             collections: [...(item?.collections ?? []), ...(listBCollection ?? [])],
@@ -114,24 +113,16 @@ export const getWalletList = (
     }))
 }
 
-export const placeFirst = (userId?: string, accountList?: AccountType[]) => {
-    if (!accountList || accountList?.length === 0) return accountList
-    const currentAccountIndex = accountList?.findIndex((account) => account?.identity === userId?.toLowerCase())
-    if (currentAccountIndex === -1) return accountList
-    const currentItem = accountList?.filter((item) => item?.identity === userId?.toLowerCase())?.[0]
-    const restAccountList = accountList?.filter((item) => item?.identity !== userId?.toLowerCase())
-    return [currentItem, ...restAccountList]
-}
-
 export const getDonationList = async (walletList: WalletTypes[]) => {
     const promises = walletList.map(async ({ address, platform }) => {
         const { data: donations } = await RSS3.getDonations(address)
         return {
             address,
-            collections: donations.map((donation) => {
+            collections: donations.map((donation): CollectionTypes => {
                 const action = donation.actions[0]
                 return {
-                    key: action.index.toString(),
+                    // TODO add a `getDonationKey()` function to hide the details behind
+                    key: joinKeys(donation.hash, action.index),
                     address: donation.address_to ?? action.metadata?.token.contract_address ?? ZERO_ADDRESS,
                     platform: platform ?? NetworkPluginID.PLUGIN_EVM,
                     imageURL: action.metadata?.logo,
@@ -149,16 +140,20 @@ export const getFootprintList = async (walletList: WalletTypes[]) => {
         const { data: footprints } = await RSS3.getFootprints(address)
         return {
             address,
-            collections: footprints.map((footprint) => {
-                const { metadata, index } = footprint.actions[0]
-                return {
-                    key: index.toString(),
-                    address: metadata?.contract_address ?? ZERO_ADDRESS,
-                    platform,
-                    imageURL: metadata?.image,
-                    name: metadata?.name,
-                }
-            }),
+            collections: compact(
+                footprints.map((footprint) => {
+                    const { metadata } = footprint.actions[0]
+                    if (!metadata) return null
+                    return {
+                        // TODO add a `getFootprintKey()` function to hide the details behind
+                        key: joinKeys(metadata.contract_address, metadata.id),
+                        address: metadata.contract_address,
+                        platform,
+                        imageURL: metadata.image,
+                        name: metadata.name,
+                    }
+                }),
+            ),
         }
     })
     const collections = await Promise.all(promises)
