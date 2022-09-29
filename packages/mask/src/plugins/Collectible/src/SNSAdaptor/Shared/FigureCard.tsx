@@ -20,7 +20,7 @@ const useStyles = makeStyles()((theme) => ({
         marginBottom: 36,
         boxShadow: `0px 28px 56px -28px ${MaskColorVar.primary.alpha(0.5)}`,
         borderRadius: 20,
-        alignItems: 'center',
+        overflow: 'hidden',
     },
     nameSm: {
         fontSize: 16,

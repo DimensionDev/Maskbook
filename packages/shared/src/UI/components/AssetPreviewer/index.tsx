@@ -18,8 +18,8 @@ const useStyles = makeStyles()((theme) => ({
     },
     networkIcon: {
         position: 'absolute',
-        top: 6,
-        right: 6,
+        top: theme.spacing(1.5),
+        right: theme.spacing(1.5),
     },
 }))
 
