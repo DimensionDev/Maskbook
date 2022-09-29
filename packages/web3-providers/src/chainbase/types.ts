@@ -8,6 +8,13 @@ export interface FT {
     balance: string
 }
 
+export interface FT_Price {
+    price: number
+    symbol: string
+    source: string
+    updated_at: string
+}
+
 export interface FT_Metadata {
     contract_address: string
     name: string

@@ -17,8 +17,16 @@ import {
     Transaction,
 } from '@masknet/web3-shared-base'
 import { EMPTY_LIST } from '@masknet/shared-base'
-import { ChainId, createNativeToken, explorerResolver, SchemaType, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
-import type { FT, NFT, NFT_FloorPrice, NFT_Metadata, NFT_TransferEvent, Tx } from './types.js'
+import {
+    ChainId,
+    createNativeToken,
+    explorerResolver,
+    isNativeTokenAddress,
+    isValidAddress,
+    SchemaType,
+    ZERO_ADDRESS,
+} from '@masknet/web3-shared-evm'
+import type { FT, FT_Price, NFT, NFT_FloorPrice, NFT_Metadata, NFT_TransferEvent, Tx } from './types.js'
 import type { FungibleTokenAPI, HistoryAPI, NonFungibleTokenAPI } from '../types/index.js'
 import { CHAINBASE_API_URL } from './constants.js'
 
@@ -115,6 +123,15 @@ export class ChainbaseFungibleTokenAPI implements FungibleTokenAPI.Provider<Chai
             createIndicator(indicator),
             assets.length ? createNextIndicator(indicator) : undefined,
         )
+    }
+
+    async getFungibleTokenPrice(chainId: ChainId, address: string) {
+        if (isNativeTokenAddress(address) || !isValidAddress(address)) return 0
+        const data = await fetchFromChainbase<FT_Price>(
+            urlcat('/v1/token/price', { chain_id: chainId, contract_address: address }),
+        )
+
+        return data?.price ?? 0
     }
 }
 
@@ -254,7 +271,7 @@ export class ChainbaseNonFungibleTokenAPI implements NonFungibleTokenAPI.Provide
             urlcat('/v1/nft/metadata', {
                 chain_id: chainId,
                 contract_address: address.toLowerCase(),
-                tokenId,
+                token_id: tokenId,
             }),
         )
         if (!metadata) return
@@ -306,7 +323,7 @@ export class ChainbaseNonFungibleTokenAPI implements NonFungibleTokenAPI.Provide
             urlcat('/v1/nft/metadata', {
                 chain_id: chainId,
                 contract_address: address.toLowerCase(),
-                tokenId: 1,
+                token_id: 1,
             }),
         )
         if (!metadata) return
