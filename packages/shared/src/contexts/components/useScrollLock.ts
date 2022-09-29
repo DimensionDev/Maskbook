@@ -1,32 +1,33 @@
-import { useEffect, useState } from 'react'
-
-export function clearScrollLock(recover: boolean) {
-    if (!recover) return
-    const html = document.documentElement
-    html.style.overflow = 'auto scroll'
-    html.style.removeProperty('margin-right')
-}
+import { useCallback, useEffect, useRef } from 'react'
 
 export function useScrollLock(lock: boolean) {
-    const [recoverOverflow, setRecoverOverflow] = useState(false)
+    const recoverOverflow = useRef(false)
+
+    const clearScrollLock = useCallback(() => {
+        if (!recoverOverflow.current) return
+        const html = document.documentElement
+        html.style.overflow = 'auto scroll'
+        html.style.removeProperty('margin-right')
+        recoverOverflow.current = false
+    }, [])
 
     useEffect(() => {
+        const html = document.documentElement
+        const body = document.body
         if (lock) {
-            const body = document.body
             body.style.removeProperty('overflow')
         }
 
-        const html = document.documentElement
         if (lock && html.style.overflow !== 'hidden') {
             html.style.overflow = 'hidden'
             html.style.marginRight = '17px'
-            setRecoverOverflow(true)
+            recoverOverflow.current = true
             return
         }
-        if (!lock && recoverOverflow) {
-            clearScrollLock(true)
+        if (!lock && recoverOverflow.current) {
+            clearScrollLock()
         }
-    }, [recoverOverflow, lock])
+    }, [lock])
 
-    return recoverOverflow
+    return clearScrollLock
 }

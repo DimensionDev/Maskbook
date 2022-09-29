@@ -21,7 +21,7 @@ import { useSharedI18N } from '../../locales/index.js'
 import { sharedUIComponentOverwrite, sharedUINetworkIdentifier } from '../base/index.js'
 import { DialogDismissIcon } from './DialogDismissIcon.js'
 import classnames from 'classnames'
-import { clearScrollLock, useScrollLock } from './useScrollLock'
+import { useScrollLock } from './useScrollLock'
 
 interface StyleProps {
     clean: boolean
@@ -139,15 +139,15 @@ export function InjectedDialog(props: InjectedDialogProps) {
     const actions = CopyElementWithNewProps(children, DialogActions, { root: dialogActions })
     const content = CopyElementWithNewProps(children, DialogContent, { root: dialogContent })
     const { extraProps, shouldReplaceExitWithBack, IncreaseStack } = useDialogStackActor(open)
-    const recover = useScrollLock(open)
+    const clearScrollLock = useScrollLock(open)
 
     const closeBothCompositionDialog = useCallback(() => {
         if (isOpenFromApplicationBoard) {
             CrossIsolationMessages.events.compositionDialogEvent.sendToLocal({ open: false, reason: 'timeline' })
         }
-        clearScrollLock(recover)
+        clearScrollLock()
         onClose?.()
-    }, [isOpenFromApplicationBoard, onClose, recover])
+    }, [isOpenFromApplicationBoard, onClose, clearScrollLock])
 
     return usePortalShadowRoot((container) => (
         <IncreaseStack>
