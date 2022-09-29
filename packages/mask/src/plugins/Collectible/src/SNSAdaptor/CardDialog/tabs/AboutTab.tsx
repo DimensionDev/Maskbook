@@ -12,7 +12,6 @@ import { DetailsCard } from '../../Shared/DetailsCard.js'
 const useStyles = makeStyles()((theme) => ({
     wrapper: {
         width: '100%',
-        maxHeight: 'calc(100% - 72px)',
         overflowY: 'auto',
         display: 'flex',
         flexDirection: 'column',
