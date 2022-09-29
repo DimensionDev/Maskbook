@@ -107,7 +107,7 @@ export function CardDialogContent(props: CardDialogContentProps) {
                         <Icons.LinkOut size={16} />
                     </Button>
                 ) : (
-                    <div></div>
+                    <div />
                 )}
             </PluginWalletStatusBar>
         </div>

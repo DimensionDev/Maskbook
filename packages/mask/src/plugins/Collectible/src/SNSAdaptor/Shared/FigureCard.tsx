@@ -4,7 +4,8 @@ import { Typography } from '@mui/material'
 import VerifiedUserIcon from '@mui/icons-material/VerifiedUser'
 import { useWeb3State } from '@masknet/plugin-infra/web3'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import type { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { Context } from '../Context/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -60,6 +61,7 @@ export interface FigureCardProps {
 export function FigureCard(props: FigureCardProps) {
     const { asset, hideSubTitle, timeline } = props
     const { classes, cx } = useStyles()
+    const { pluginID } = Context.useContainer()
     const { Others } = useWeb3State()
 
     return (
@@ -76,7 +78,7 @@ export function FigureCard(props: FigureCardProps) {
             </div>
             <Typography className={timeline ? cx(classes.nameSm, classes.unset) : classes.nameSm}>
                 {asset.metadata?.name ?? '-'}
-                {Others?.formatTokenId(asset.tokenId)}
+                {pluginID !== NetworkPluginID.PLUGIN_SOLANA ? Others?.formatTokenId(asset.tokenId) : null}
             </Typography>
             {!hideSubTitle && (
                 <div className={classes.nameLgBox}>
