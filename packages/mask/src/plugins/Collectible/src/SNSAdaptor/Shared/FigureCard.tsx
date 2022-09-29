@@ -1,4 +1,4 @@
-import { NFTCardStyledAssetPlayer } from '@masknet/shared'
+import { AssetPreviewer } from '@masknet/shared'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import VerifiedUserIcon from '@mui/icons-material/VerifiedUser'
@@ -7,7 +7,7 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import type { NetworkPluginID } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
-    layout: {
+    root: {
         width: '100%',
         display: 'flex',
         flexDirection: 'column',
@@ -20,47 +20,6 @@ const useStyles = makeStyles()((theme) => ({
         marginBottom: 36,
         boxShadow: `0px 28px 56px -28px ${MaskColorVar.primary.alpha(0.5)}`,
         borderRadius: 20,
-    },
-    loadingPlaceholder: {
-        position: 'absolute',
-        width: '100%',
-        height: '100%',
-        padding: '74px 0',
-    },
-    wrapper: {
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: '100% !important',
-        width: '100% !important',
-        overflow: 'hidden',
-        position: 'absolute',
-    },
-
-    loadingIcon: {
-        width: 36,
-        height: 52,
-    },
-    errorIcon: {
-        width: 36,
-        height: 36,
-    },
-    iframe: {
-        minWidth: 300,
-        minHeight: 300,
-        width: '100%',
-        height: '100%',
-        borderRadius: 20,
-        background: '#000',
-    },
-    imgWrapper: {
-        position: 'absolute',
-        width: '100%',
-        height: '100%',
-        borderRadius: 20,
-        '& > img': {
-            borderRadius: 20,
-        },
     },
     nameSm: {
         fontSize: 16,
@@ -77,21 +36,13 @@ const useStyles = makeStyles()((theme) => ({
         gap: 6,
         marginTop: 12,
     },
-    absoluteProvider: {
-        top: 16,
-        right: '5%',
-        position: 'absolute',
-        display: 'flex',
-        alignItems: 'center',
-        gap: 8,
-        zIndex: 99,
-    },
-    providerIcon: {
-        cursor: 'pointer',
+    image: {
+        height: 'auto !important',
     },
     fallbackImage: {
         width: '100% !important',
         height: '100% !important',
+        top: 0,
         position: 'absolute',
     },
     unset: {
@@ -113,19 +64,15 @@ export function FigureCard(props: FigureCardProps) {
     const fallbackImgURL = new URL('../../assets/FallbackImage.svg', import.meta.url)
     const resourceUrl = asset.metadata?.imageURL ?? asset.metadata?.mediaURL
     return (
-        <div className={classes.layout}>
+        <div className={classes.root}>
             <div className={classes.body}>
-                <NFTCardStyledAssetPlayer
+                <AssetPreviewer
                     fallbackImage={fallbackImgURL}
                     url={resourceUrl}
                     classes={{
-                        iframe: classes.iframe,
-                        wrapper: classes.wrapper,
-                        imgWrapper: classes.imgWrapper,
-                        loadingPlaceholder: classes.loadingPlaceholder,
+                        root: classes.image,
                         fallbackImage: classes.fallbackImage,
                     }}
-                    isImageOnly={false}
                 />
             </div>
             <Typography className={timeline ? cx(classes.nameSm, classes.unset) : classes.nameSm}>
