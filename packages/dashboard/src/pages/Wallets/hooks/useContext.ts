@@ -14,7 +14,6 @@ function useContext(initialState?: { account?: string; chainId?: Web3Helper.Chai
     return {
         account,
         chainId,
-
         fungibleAssets,
     }
 }
