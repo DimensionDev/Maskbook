@@ -9,7 +9,7 @@ import { PluginWalletStatusBar, useI18N as useBaseI18n } from '../../../../../ut
 import { useStyles } from './hooks/useStyles.js'
 import { AboutTab } from './tabs/AboutTab.js'
 import { OffersTab } from './tabs/OffersTab.js'
-import { ActivityTab } from './tabs/ActivityTab.js'
+import { ActivitiesTab } from './tabs/ActivitiesTab.js'
 import { base as pluginDefinition } from '../../base.js'
 import { TabType } from '../../types.js'
 import { FigureCard } from '../Shared/FigureCard.js'
@@ -64,7 +64,7 @@ export function CardDialogContent(props: CardDialogContentProps) {
                     ) : currentTab === TabType.Offers ? (
                         <OffersTab offers={orders} />
                     ) : (
-                        <ActivityTab events={events} />
+                        <ActivitiesTab events={events} />
                     )}
                 </div>
             </div>
