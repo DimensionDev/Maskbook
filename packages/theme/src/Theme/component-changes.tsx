@@ -1002,6 +1002,10 @@ export const Tooltip = (mode: PaletteMode, colors: MaskColor) => ({
                     lineHeight: '18px',
                     backgroundColor: colors.maskColor.tips,
                     color: colors.maskColor.bottom,
+                    boxShadow:
+                        mode === 'dark'
+                            ? '0px 0px 20px rgba(255, 255, 255, 0.12)'
+                            : ' 0px 0px 20px rgba(0, 0, 0, 0.05)',
                     '& > *': {
                         fontSize: 14,
                         lineHeight: '18px',

@@ -32,13 +32,6 @@ const useStyles = makeStyles()((theme) => ({
     button: {
         margin: 16,
     },
-    shadowRootTooltip: {
-        color: theme.palette.maskColor.white,
-    },
-    tooltip: {
-        backgroundColor: theme.palette.maskColor.publicMain,
-        color: theme.palette.maskColor.white,
-    },
     arrow: {
         color: theme.palette.maskColor.publicMain,
     },
@@ -73,8 +66,7 @@ export function VoteConfirmDialog(props: VoteConfirmDialogProps) {
                         PopperProps={{
                             disablePortal: true,
                         }}
-                        classes={{ tooltip: classes.tooltip, arrow: classes.arrow }}
-                        title={<Typography className={classes.shadowRootTooltip}>{choiceText}</Typography>}
+                        title={<Typography>{choiceText}</Typography>}
                         placement="top"
                         arrow>
                         <Typography

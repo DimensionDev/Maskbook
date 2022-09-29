@@ -1036,7 +1036,7 @@
     "popups_disconnect_warning_alert": "Twitter account {@<strong>{{account}}</strong>} has not been verified by Next.ID. Please switch to {@<strong>{{account}}</strong>} to proceed on Twitter.",
     "popups_new_verify_warning_alert": "Disconnect @<strong>{{account}}</strong> from Persona <strong>{{persona}}<strong> ?",
     "popups_new_disconnect_warning_alert": "Twitter account @<strong>{{account}}</strong> has not been verified by Next.ID. Please switch to @<strong>{{account}}</strong> to proceed on Twitter.",
-    "popups_disconnect_other_warning_alert": "Performing this actioni will have impact on sending encrypted messages by this Persona.",
+    "popups_disconnect_other_warning_alert": "Performing this action will have impact on sending encrypted messages by this Persona.",
     "popups_verify_account": "Verify Account",
     "popups_disconnect_wallet_tip": "Are you sure to disconnect {{persona}} from wallet <strong>{{address}}<strong/>?",
     "popups_add_and_verify_wallet": "Add and verify Wallet",
