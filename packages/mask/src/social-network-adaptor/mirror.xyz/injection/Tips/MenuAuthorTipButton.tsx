@@ -58,7 +58,9 @@ function AuthorTipsButtonWrapper() {
             {
                 pluginId,
                 address: visitingIdentity.identifier.userId,
-                name: `(${visitingIdentity.nickname}) ${Others?.formatAddress(visitingIdentity.identifier.userId, 4)}`,
+                name: visitingIdentity.nickname
+                    ? `(${visitingIdentity.nickname}) ${Others?.formatAddress(visitingIdentity.identifier.userId, 4)}`
+                    : visitingIdentity.identifier.userId,
             },
         ]
     }, [visitingIdentity, Others?.formatAddress])
