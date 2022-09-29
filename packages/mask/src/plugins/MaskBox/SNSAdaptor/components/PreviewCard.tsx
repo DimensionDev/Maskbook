@@ -281,7 +281,7 @@ export function PreviewCard(props: PreviewCardProps) {
                                     {t.limit()}
                                 </Typography>
                                 <Typography color="textPrimary" fontSize={14} fontWeight="bold">
-                                    {1}
+                                    1
                                 </Typography>
                             </Box>
                             <Box sx={{ display: 'flex', flexDirection: 'row' }}>
@@ -292,7 +292,7 @@ export function PreviewCard(props: PreviewCardProps) {
                                     fontWeight={400}>
                                     {t.by()}
                                 </Typography>
-                                <Typography color="textPrimary" fontSize={14} fontWeight="bold">
+                                <Typography color="textPrimary" fontSize={14} fontWeight="bold" title={boxInfo.creator}>
                                     {Others?.formatAddress(boxInfo.creator, 4)}
                                 </Typography>
                             </Box>
@@ -304,9 +304,9 @@ export function PreviewCard(props: PreviewCardProps) {
                 </Box>
                 <Box className={tabClasses.body}>
                     <MaskTabList variant="base" aria-label="maskbox" onChange={onChange}>
-                        {Tabs.map((x, i) => (
+                        {Tabs.map((x) => (
                             <Tab
-                                key={i}
+                                key={x.value}
                                 value={x.value}
                                 label={x.label}
                                 className={x.value === currentTab ? tabClasses.tabActive : tabClasses.tab}
