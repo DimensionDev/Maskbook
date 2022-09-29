@@ -230,7 +230,7 @@ export function SelectGasSettingsToolbarUI({
     return gasOptions && !isZero(gasFee) ? (
         <Box className={classes.section}>
             <Typography className={classes.title}>Gas fee</Typography>
-            <div className={classes.gasSection}>
+            <Typography className={classes.gasSection} component="div">
                 <FormattedBalance
                     value={gasFee}
                     decimals={nativeToken.decimals ?? 0}
@@ -246,7 +246,7 @@ export function SelectGasSettingsToolbarUI({
                     <Icons.Candle width={12} height={12} />
                 </div>
                 {menu}
-            </div>
+            </Typography>
         </Box>
     ) : null
 }
