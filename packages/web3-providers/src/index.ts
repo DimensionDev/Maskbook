@@ -30,7 +30,12 @@ import { UniSwapAPI } from './uniswap/index.js'
 import { RabbyAPI } from './rabby/index.js'
 import { GemAPI } from './gem/index.js'
 import { X2Y2API } from './x2y2/index.js'
-import { ChainbaseHistoryAPI, ChainbaseFungibleTokenAPI, ChainbaseNonFungibleTokenAPI } from './chainbase/index.js'
+import {
+    ChainbaseHistoryAPI,
+    ChainbaseFungibleTokenAPI,
+    ChainbaseNonFungibleTokenAPI,
+    ChainBaseDomainAPI,
+} from './chainbase/index.js'
 import { SolanaFungibleAPI, SolanaNonFungibleAPI } from './solana/index.js'
 import { FlowFungibleAPI } from './flow/index.js'
 import { CF_API } from './cf/index.js'
@@ -93,3 +98,4 @@ export const NFTScanNonFungibleTokenSolana = new NFTScanNonFungibleTokenAPI_Sola
 export const ChainbaseHistory = new ChainbaseHistoryAPI()
 export const ChainbaseFungibleToken = new ChainbaseFungibleTokenAPI()
 export const ChainbaseNonFungibleToken = new ChainbaseNonFungibleTokenAPI()
+export const ChainbaseDomain = new ChainBaseDomainAPI()

@@ -21,14 +21,19 @@ import {
     ChainId,
     createNativeToken,
     explorerResolver,
+    formatEthereumAddress,
     isNativeTokenAddress,
     isValidAddress,
     SchemaType,
     ZERO_ADDRESS,
 } from '@masknet/web3-shared-evm'
-import type { FT, FT_Price, NFT, NFT_FloorPrice, NFT_Metadata, NFT_TransferEvent, Tx } from './types.js'
+import type { ENSRecord, FT, FT_Price, NFT, NFT_FloorPrice, NFT_Metadata, NFT_TransferEvent, Tx } from './types.js'
 import type { FungibleTokenAPI, HistoryAPI, NonFungibleTokenAPI } from '../types/index.js'
 import { CHAINBASE_API_URL } from './constants.js'
+import type { DomianAPI } from '../types/Domain.js'
+import LRUCache from 'lru-cache'
+import { first } from 'lodash-unified'
+import { formatAddress } from '@masknet/web3-shared-solana'
 
 async function fetchFromChainbase<T>(pathname: string) {
     const response = await globalThis.fetch(urlcat(CHAINBASE_API_URL, pathname))
@@ -75,6 +80,72 @@ export class ChainbaseHistoryAPI implements HistoryAPI.Provider<ChainId, SchemaT
             createIndicator(indicator),
             assets.length ? createNextIndicator(indicator) : undefined,
         )
+    }
+}
+
+const domainCache = new LRUCache<ChainId, Record<string, string>>({
+    max: 100,
+    ttl: 300_000,
+})
+
+export class ChainBaseDomainAPI implements DomianAPI.Provider<ChainId, SchemaType> {
+    private async getAddress(name: string, chainId: ChainId) {
+        const response = await fetchFromChainbase<ENSRecord[]>(
+            urlcat('/v1/ens/records', { chain_id: chainId, domain: name }),
+        )
+        if (!response) return
+
+        const record = first(response)
+
+        return record?.address
+    }
+
+    private async getName(address: string, chainId: ChainId) {
+        const response = await fetchFromChainbase<ENSRecord[]>(
+            urlcat('/v1/ens/reverse', { chain_id: chainId, address }),
+        )
+
+        if (!response) return
+
+        const record = first(response)
+
+        return record?.name
+    }
+
+    private addName(name: string, address: string, chainId: ChainId) {
+        const formattedAddress = formatEthereumAddress(address)
+        const cache = domainCache.get(chainId)
+
+        domainCache.set(chainId, {
+            ...cache,
+            [name]: formattedAddress,
+            [formattedAddress]: name,
+        })
+    }
+
+    async lookup(name: string, chainId: ChainId): Promise<string | undefined> {
+        if (!name) return
+        const address = domainCache.get(chainId)?.[name] || (await this.getAddress(name, chainId))
+
+        if (address && isValidAddress(address)) {
+            this.addName(name, address, chainId)
+            const formattedAddress = formatEthereumAddress(address)
+            return formattedAddress
+        }
+
+        return
+    }
+
+    async reverse(address: string, chainId: ChainId): Promise<string | undefined> {
+        if (!address || !isValidAddress(address)) return
+
+        const name = domainCache.get(chainId)?.[formatAddress(address)] || (await this.getName(address, chainId))
+
+        if (name) {
+            this.addName(name, address, chainId)
+            return name
+        }
+        return
     }
 }
 

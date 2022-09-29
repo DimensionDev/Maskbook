@@ -89,3 +89,15 @@ export interface Tx {
     max_fee_per_gas: number
     max_priority_fee_per_gas: number
 }
+
+export interface ENSRecord {
+    name: string
+    address: string
+    registrant: string
+    owner: string
+    resolver: string
+    registrant_time: string
+    expiration_time: string
+    token_id: string
+    text_records: Record<string, string>
+}
