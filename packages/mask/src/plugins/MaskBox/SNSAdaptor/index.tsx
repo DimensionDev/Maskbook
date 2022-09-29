@@ -3,7 +3,7 @@ import { type Plugin, usePluginWrapper, usePostInfoDetails } from '@masknet/plug
 import { base } from '../base.js'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import { Trans } from 'react-i18next'
-import { parseURL } from '@masknet/shared-base'
+import { parseURLs } from '@masknet/shared-base'
 import { PreviewCard } from './components/PreviewCard.js'
 import { Context } from '../hooks/useContext.js'
 import { ApplicationEntry } from '@masknet/shared'
@@ -21,7 +21,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
         const link = useMemo(() => {
             const x = extractTextFromTypedMessage(props.message)
             if (x.none) return null
-            return parseURL(x.val).find(isMaskBox)
+            return parseURLs(x.val).find(isMaskBox)
         }, [props.message])
         if (!link) return null
         return <Renderer url={link} />

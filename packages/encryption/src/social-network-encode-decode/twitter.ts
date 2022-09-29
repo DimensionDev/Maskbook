@@ -1,5 +1,5 @@
 import { decodeArrayBuffer, encodeArrayBuffer } from '@dimensiondev/kit'
-import { parseURL } from '@masknet/shared-base'
+import { parseURLs } from '@masknet/shared-base'
 import { Some, None, Option } from 'ts-results'
 
 export function __TwitterEncoder(data: Uint8Array | string) {
@@ -36,7 +36,7 @@ function TwitterDecoderBinary(raw: string): Option<Uint8Array> {
     if (!raw) return None
     if (!raw.includes('PostData_v2')) return None
 
-    const payloadLink = parseURL(raw).filter((x) => x.startsWith('https://mask.io/?PostData_v2='))
+    const payloadLink = parseURLs(raw).filter((x) => x.startsWith('https://mask.io/?PostData_v2='))
     try {
         for (const link of payloadLink) {
             const url = new URL(link)
@@ -52,7 +52,7 @@ function TwitterDecoderBinary(raw: string): Option<Uint8Array> {
 function TwitterDecoderText(raw: string): Option<string> {
     if (!raw) return None
     if (!raw.includes('%20') || !raw.includes('%40')) return None
-    const payloadLink = parseURL(raw)
+    const payloadLink = parseURLs(raw)
         .map((x) => x.replace(/\u2026$/, ''))
         .filter((x) => x.endsWith('%40'))[0]
     try {

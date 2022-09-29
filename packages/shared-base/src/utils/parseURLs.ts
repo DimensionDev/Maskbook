@@ -1,5 +1,5 @@
 import parser from 'anchorme'
-export function parseURL(text: string) {
+export function parseURLs(text: string) {
     const lib = parser.default || parser
     // CJS-ESM compatibility
     return lib
