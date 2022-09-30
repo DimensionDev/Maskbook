@@ -25,6 +25,8 @@ enum AlchemyProxies {
     flow = 'flow-mainnet',
 }
 
+const IPFS_NODE_URLS = ['ipfs.infura.io']
+
 const HOTFIX_RPC_URLS = [
     'infura.io',
     'quiknode.pro',
@@ -111,18 +113,13 @@ export async function r2d2Fetch(input: RequestInfo, init?: RequestInit): Promise
         return originalFetch(url.replace(u.origin, `https://${r2deWorkerType}.${R2D2_ROOT_URL}`), info)
     }
 
+    if (IPFS_NODE_URLS.some((x) => url.includes(x))) {
+        return originalFetch(info, init)
+    }
+
     // hotfix rpc requests lost content-type header
     if (info.method === 'POST' && HOTFIX_RPC_URLS.some((x) => url.includes(x))) {
-        return originalFetch(info, {
-            ...init,
-            headers: {
-                // This code will loss the headers.
-                ...info?.headers,
-                // Maybe we have better solution
-                'Content-Type': info.headers.get('Content-Type') ?? 'application/json',
-                authorization: info.headers.get('authorization') || undefined,
-            },
-        })
+        return originalFetch(info, { ...init, headers: { ...info?.headers, 'Content-Type': 'application/json' } })
     }
 
     // fallback
