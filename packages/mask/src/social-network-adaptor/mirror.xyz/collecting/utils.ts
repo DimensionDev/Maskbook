@@ -1,5 +1,6 @@
 import { ProfileIdentifier } from '@masknet/shared-base'
 import type { Writer } from '@masknet/web3-providers'
+import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { last } from 'lodash-unified'
 import urlcat from 'urlcat'
 import { mirrorBase } from '../base.js'
@@ -12,7 +13,9 @@ export function formatWriter(writer: Writer) {
         nickname: writer.displayName,
         bio: writer.description,
         homepage: writer.domain || getMirrorProfileUrl(writer.address),
-        identifier: ProfileIdentifier.of(mirrorBase.networkIdentifier, writer.address).unwrapOr(undefined),
+        identifier: ProfileIdentifier.of(mirrorBase.networkIdentifier, formatEthereumAddress(writer.address)).unwrapOr(
+            undefined,
+        ),
     }
 }
 
