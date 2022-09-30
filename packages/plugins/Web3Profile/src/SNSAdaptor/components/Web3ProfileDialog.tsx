@@ -1,13 +1,7 @@
 import { Icons } from '@masknet/icons'
 import { useChainId } from '@masknet/plugin-infra/web3'
 import { InjectedDialog, PersonaAction } from '@masknet/shared'
-import {
-    CrossIsolationMessages,
-    EMPTY_LIST,
-    NextIDPlatform,
-    PersonaInformation,
-    PopupRoutes,
-} from '@masknet/shared-base'
+import { CrossIsolationMessages, EMPTY_LIST, NextIDPlatform, PopupRoutes } from '@masknet/shared-base'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { NextIDProof } from '@masknet/web3-providers'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
@@ -81,14 +75,13 @@ export function Web3ProfileDialog() {
     const persona = useCurrentPersona()
     const currentVisitingProfile = useLastRecognizedProfile()
     const allPersona = useAllPersonas()
-    const currentPersona = allPersona?.find(
-        (x: PersonaInformation) => x.identifier.rawPublicKey === persona?.rawPublicKey,
-    )
+    const currentPersona = allPersona.find((x) => x.identifier.rawPublicKey === persona?.rawPublicKey)
+    const personaPublicKey = currentPersona?.identifier.publicKeyAsHex
 
     const { value: bindings, retry: retryQueryBinding } = useAsyncRetry(async () => {
-        if (!currentPersona) return
-        return NextIDProof.queryExistedBindingByPersona(currentPersona.identifier.publicKeyAsHex!)
-    }, [currentPersona])
+        if (!personaPublicKey) return
+        return NextIDProof.queryExistedBindingByPersona(personaPublicKey)
+    }, [personaPublicKey])
     useEffect(() => context?.ownProofChanged.on(retryQueryBinding), [retryQueryBinding])
 
     const { value: avatar } = useAsyncRetry(async () => context.getPersonaAvatar(currentPersona?.identifier), [])
@@ -133,9 +126,9 @@ export function Web3ProfileDialog() {
     }, [wallets])
 
     const { value: hiddenObj, retry: retryGetWalletHiddenList } = useAsyncRetry(async () => {
-        if (!currentPersona) return
-        return getWalletHiddenList(currentPersona.identifier.publicKeyAsHex!)
-    }, [currentPersona])
+        if (!personaPublicKey) return
+        return getWalletHiddenList(personaPublicKey)
+    }, [personaPublicKey])
 
     const accountArr = useMemo(
         () =>

@@ -26,9 +26,9 @@ export interface WalletTypes {
 }
 
 export interface WalletsCollection {
-    NFTs?: WalletTypes[]
-    donations?: WalletTypes[]
-    footprints?: WalletTypes[]
+    NFTs: WalletTypes[]
+    donations: WalletTypes[]
+    footprints: WalletTypes[]
 }
 
 export interface Web3ProfileStorage {
