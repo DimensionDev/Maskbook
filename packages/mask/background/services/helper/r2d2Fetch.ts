@@ -113,7 +113,16 @@ export async function r2d2Fetch(input: RequestInfo, init?: RequestInit): Promise
 
     // hotfix rpc requests lost content-type header
     if (info.method === 'POST' && HOTFIX_RPC_URLS.some((x) => url.includes(x))) {
-        return originalFetch(info, { ...init, headers: { ...init?.headers, 'Content-Type': 'application/json' } })
+        return originalFetch(info, {
+            ...init,
+            headers: {
+                // This code will loss the headers.
+                ...info?.headers,
+                // Maybe we have better solution
+                'Content-Type': info.headers.get('Content-Type') ?? 'application/json',
+                authorization: info.headers.get('authorization') || undefined,
+            },
+        })
     }
 
     // fallback

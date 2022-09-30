@@ -8,6 +8,7 @@ import {
     HubOptions,
     createIndicator,
     Pageable,
+    isSameAddress,
 } from '@masknet/web3-shared-base'
 import {
     ChainId,
@@ -100,7 +101,7 @@ export class DeBankAPI
                     })),
                 ),
                 getAllEVMNativeAssets(),
-                (a, z) => a.symbol.toLowerCase() === z.symbol.toLowerCase() && a.chainId === z.chainId,
+                (a, z) => isSameAddress(a.address, z.address) && a.chainId === z.chainId,
             ),
             createIndicator(options?.indicator),
         )
