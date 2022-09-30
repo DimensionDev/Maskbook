@@ -194,7 +194,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                     ) : null
                 }
                 titleTabs={
-                    step === CreateRedPacketPageStep.NewRedPacketPage ? (
+                    step === CreateRedPacketPageStep.NewRedPacketPage && !openNFTConfirmDialog ? (
                         <MaskTabList variant="base" onChange={onChange} aria-label="Redpacket">
                             <Tab label={t.erc20_tab_title()} value={tabs.tokens} />
                             <Tab label={t.erc721_tab_title()} value={tabs.collectibles} />

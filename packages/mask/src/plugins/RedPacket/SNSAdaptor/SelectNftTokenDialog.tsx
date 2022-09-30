@@ -178,6 +178,8 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         overflow: 'hidden',
     },
     selectWrapperNftName: {
+        position: 'absolute',
+        bottom: 0,
         marginLeft: 8,
         minHeight: 35,
         whiteSpace: 'nowrap',

@@ -348,7 +348,7 @@
     "plugin_wallet_select_a_nft_contract": "Select an NFT Contract",
     "plugin_wallet_select_a_nft_owner": "Select an NFT Contract Owner",
     "plugin_wallet_select_a_nft_operator": "Select an NFT Contract Operator",
-    "plugin_wallet_fail_to_load_nft_contract": "Failed to load NFT Contract. Click to retry.",
+    "plugin_wallet_fail_to_load_nft_contract": "Click to retry",
     "plugin_wallet_nft_approving_all": "Unlocking {{symbol}}...",
     "plugin_wallet_approve_all_nft": "Unlock {{symbol}}",
     "plugin_wallet_approve_all_nft_successfully": "Unlock {{symbol}} successfully",
