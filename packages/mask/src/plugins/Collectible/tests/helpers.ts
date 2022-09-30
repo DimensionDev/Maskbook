@@ -139,16 +139,6 @@ describe('getPayloadFromURL', () => {
                 provider: SourceType.Element,
             },
         },
-        {
-            give: 'https://www.element.market/assets/avalanche/0x001e68282d52dcaba3749291bac33a9678073d01/20000',
-            expected: {
-                pluginID: NetworkPluginID.PLUGIN_EVM,
-                chainId: ChainIdEVM.Avalanche,
-                address: '0x001e68282d52dcaba3749291bac33a9678073d01',
-                tokenId: '20000',
-                provider: SourceType.Element,
-            },
-        },
     ])('.getAssetInfoFromURL($give)', ({ give, expected }) => {
         const asset = getPayloadFromURL(give)
 
