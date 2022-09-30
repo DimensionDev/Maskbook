@@ -348,7 +348,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     }
 
     // Maybe should merge in NextIdPage
-    if (socialAddressList.length === 0 && !showNextID && !hiddenAddress?.length && !isTwitterPlatform) {
+    if (socialAddressList.length === 0 && !showNextID && !isTwitterPlatform) {
         return (
             <ThemeProvider theme={MaskLightTheme}>
                 <div className={classes.root}>
