@@ -34,8 +34,7 @@ const useStyles = makeStyles()((theme) => {
         },
         header: {
             alignItems: 'unset',
-            paddingTop: 10,
-            paddingBottom: 10,
+            padding: 10,
         },
         body: {
             flex: 1,
@@ -124,6 +123,7 @@ const useStyles = makeStyles()((theme) => {
             webkitBoxOrient: 'vertical',
             webkitLineClamp: '3',
             '& > p': {
+                display: 'inline',
                 color: `${theme.palette.maskColor.publicSecond} !important`,
             },
             '& a': {
