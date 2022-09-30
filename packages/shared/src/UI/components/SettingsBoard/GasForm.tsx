@@ -60,10 +60,20 @@ export interface GasFormProps {
     transactionOptions: Partial<Transaction>
     gasOptions: Record<GasOptionType, GasOption>
     onChange?: (transactionOptions?: Partial<Transaction>) => void
+    maxPriorityFeePerGasByUser?: string
+    setMaxPriorityFeePerGasByUser: (s: string | undefined) => void
 }
 
 export function GasForm(props: GasFormProps) {
-    const { chainId, transaction, transactionOptions, gasOptions, onChange } = props
+    const {
+        chainId,
+        transaction,
+        transactionOptions,
+        gasOptions,
+        onChange,
+        maxPriorityFeePerGasByUser,
+        setMaxPriorityFeePerGasByUser,
+    } = props
     const t = useSharedI18N()
     const { classes } = useStyles()
     const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
@@ -104,7 +114,6 @@ export function GasForm(props: GasFormProps) {
     ])
     const [gasPriceByUser, setGasPriceByUser] = useState<string>()
     const [maxFeePerGasByUser, setMaxFeePerGasByUser] = useState<string>()
-    const [maxPriorityFeePerGasByUser, setMaxPriorityFeePerGasByUser] = useState<string>()
 
     const errorCenter = useMemo(() => {
         return isEIP1559 ? errors.gasLimit?.message ?? '' : ''
