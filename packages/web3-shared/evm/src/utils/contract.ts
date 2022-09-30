@@ -60,7 +60,7 @@ export async function encodeContractTransaction(
             to: tx.to as string | undefined,
             data: tx.data as string | undefined,
             value: tx.value,
-            // rpc hack
+            // rpc hack, alchemy rpc must pass gas parameter
             gas: hexToNumber(overrides?.chainId ?? '0x0') === ChainId.Astar ? '0x135168' : undefined,
         })
     }
