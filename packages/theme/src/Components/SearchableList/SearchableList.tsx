@@ -8,7 +8,7 @@ import { MaskTextField, MaskTextFieldProps } from '../TextField/index.js'
 import { Icons } from '@masknet/icons'
 import { EmptyResult } from './EmptyResult.js'
 
-export interface MaskSearchableListProps<T> {
+export interface MaskSearchableListProps<T> extends withClasses<'listBox'> {
     /** The list data should be render */
     data: T[]
     /** The identity of list data item for remove duplicates item */
@@ -59,9 +59,10 @@ export function SearchableList<T extends {}>({
     itemRender,
     FixedSizeListProps = {},
     SearchFieldProps,
+    ...props
 }: MaskSearchableListProps<T>) {
     const [keyword, setKeyword] = useState('')
-    const { classes } = useStyles()
+    const { classes } = useStyles(undefined, { props: { classes: props.classes } })
     const { height = 300, itemSize, ...rest } = FixedSizeListProps
     const { InputProps, ...textFieldPropsRest } = SearchFieldProps ?? {}
 
