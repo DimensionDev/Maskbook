@@ -3,7 +3,7 @@ import { BindingProof, joinKeys, NextIDPlatform, PersonaInformation } from '@mas
 import { AlchemyEVM, NextIDStorage, RSS3 } from '@masknet/web3-providers'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainId, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
-import { compact } from 'lodash-unified'
+import { compact, uniqBy } from 'lodash-unified'
 import { isSameAddress } from '../../../../web3-shared/base/src/utils/index.js'
 import { PLUGIN_ID } from '../constants.js'
 import type { Collection, PersonaKV } from './types.js'
@@ -71,17 +71,21 @@ export const getWalletList = (
 ) => {
     if (accounts?.length === 0) return
     const allLinkedProfiles = allPersona?.flatMap((persona) => persona?.linkedProfiles)
-    const detailedAccounts = accounts?.map((account) => {
-        const linkedProfile = allLinkedProfiles?.find(
-            (profile) =>
-                profile?.identifier?.network?.replace('.com', '') === NextIDPlatform.Twitter &&
-                profile?.identifier?.userId === account?.identity,
-        )
-        return {
-            ...account,
-            linkedProfile,
-        }
-    })
+    // NextId can duplicate proof for twitter account and one persona
+    const detailedAccounts = uniqBy(
+        accounts?.map((account) => {
+            const linkedProfile = allLinkedProfiles?.find(
+                (profile) =>
+                    profile?.identifier?.network?.replace('.com', '') === NextIDPlatform.Twitter &&
+                    profile?.identifier?.userId === account?.identity,
+            )
+            return {
+                ...account,
+                linkedProfile,
+            }
+        }),
+        (x) => x.platform + x.identity,
+    )
     return detailedAccounts?.map((key) => ({
         ...key,
         walletList: {
