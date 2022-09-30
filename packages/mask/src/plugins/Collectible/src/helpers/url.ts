@@ -122,13 +122,6 @@ const RULES = [
         chainId: ChainIdEVM.Matic,
         provider: SourceType.Element,
     },
-    {
-        hosts: ['element.market', 'www.element.market'],
-        pathname: /^\/assets\/avalanche\/(0x[\dA-Fa-f]{40})\/(\d+)/,
-        pluginID: NetworkPluginID.PLUGIN_EVM,
-        chainId: ChainIdEVM.Avalanche,
-        provider: SourceType.Element,
-    },
 
     // magic eden
     {
