@@ -121,6 +121,9 @@ const useStyles = makeStyles()((theme) => ({
             color: 'black',
             fontFamily: 'inherit',
         },
+        '& .MuiInputBase-colorPrimary': {
+            background: '#26292C',
+        },
     },
     invest: {
         maxWidth: theme.spacing(12),
@@ -137,6 +140,9 @@ const useStyles = makeStyles()((theme) => ({
     },
     selectIcon: {
         position: 'static',
+    },
+    select: {
+        background: '#26292C',
     },
 }))
 
@@ -263,7 +269,7 @@ export function InvestmentsView(props: InvestmentsProps) {
                                 },
                                 native: true,
                             }}
-                            classes={{ selectIcon: classes.selectIcon }}
+                            classes={{ selectIcon: classes.selectIcon, select: classes.select }}
                             onPageChange={handleChangePage}
                             onRowsPerPageChange={handleChangeRowsPerPage}
                             ActionsComponent={TablePaginationActions}
