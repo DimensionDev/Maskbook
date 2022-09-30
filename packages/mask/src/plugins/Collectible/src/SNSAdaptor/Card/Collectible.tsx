@@ -11,7 +11,7 @@ import { SUPPORTED_PROVIDERS } from '../../constants.js'
 import { CollectiblePaper } from './CollectiblePaper.js'
 import { LinkingAvatar } from '../Shared/LinkingAvatar.js'
 import { AboutTab } from './tabs/AboutTab.js'
-import { ActivityTab } from './tabs/ActivityTab.js'
+import { ActivitiesTab } from './tabs/ActivitiesTab.js'
 import { DetailsTab } from './tabs/DetailsTab.js'
 import { OffersTab } from './tabs/OffersTab.js'
 import { Context } from '../Context/index.js'
@@ -34,6 +34,8 @@ const useStyles = makeStyles()((theme) => {
         },
         header: {
             alignItems: 'unset',
+            paddingTop: 10,
+            paddingBottom: 10,
         },
         body: {
             flex: 1,
@@ -64,7 +66,7 @@ const useStyles = makeStyles()((theme) => {
         tab: {
             whiteSpace: 'nowrap',
             background: 'transparent',
-            color: theme.palette.maskColor.publicMain,
+            color: theme.palette.maskColor.publicSecond,
             '&:hover': {
                 background: 'transparent',
             },
@@ -153,7 +155,7 @@ export function Collectible(props: CollectibleProps) {
         true,
     )
     // #endregion
-    const [currentTab, onChange, tabs] = useTabs('about', 'details', 'offers', 'activity')
+    const [currentTab, onChange, tabs] = useTabs('about', 'details', 'offers', 'activities')
     if (asset.loading)
         return (
             <Box
@@ -193,7 +195,7 @@ export function Collectible(props: CollectibleProps) {
             [tabs.about]: <AboutTab asset={asset} />,
             [tabs.details]: <DetailsTab asset={asset} />,
             [tabs.offers]: <OffersTab offers={orders} />,
-            [tabs.activity]: <ActivityTab events={events} />,
+            [tabs.activities]: <ActivitiesTab events={events} />,
         }
 
         return tabMap[currentTab] || null
@@ -202,7 +204,7 @@ export function Collectible(props: CollectibleProps) {
         { value: tabs.about, label: t('plugin_collectible_about') },
         { value: tabs.details, label: t('plugin_collectible_details') },
         { value: tabs.offers, label: t('plugin_collectible_offers') },
-        { value: tabs.activity, label: t('plugin_collectible_activity') },
+        { value: tabs.activities, label: t('plugin_collectible_activities') },
     ]
 
     return (
@@ -223,7 +225,9 @@ export function Collectible(props: CollectibleProps) {
                     title={
                         <Typography style={{ display: 'flex', alignItems: 'center' }}>
                             <span className={classes.cardTitle}>{_asset.metadata?.name || '-'}</span>
-                            {_asset.collection?.verified ? <Icons.VerifiedCollection sx={{ marginLeft: 0.5 }} /> : null}
+                            {_asset.collection?.verified ? (
+                                <Icons.VerifiedCollection size={20} sx={{ marginLeft: 0.5 }} />
+                            ) : null}
                         </Typography>
                     }
                     subheader={

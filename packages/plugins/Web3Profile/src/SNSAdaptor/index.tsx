@@ -28,8 +28,8 @@ const sns: Plugin.SNSAdaptor.Definition = {
             return {
                 RenderEntryComponent(EntryComponentProps) {
                     useEffect(() => {
-                        return CrossIsolationMessages.events.applicationDialogEvent.on(({ open, application }) => {
-                            if (application !== PluginID.Web3Profile) return
+                        return CrossIsolationMessages.events.applicationDialogEvent.on(({ open, pluginID }) => {
+                            if (pluginID !== PluginID.Web3Profile) return
                             CrossIsolationMessages.events.web3ProfileDialogEvent.sendToLocal({ open })
                         })
                     }, [])

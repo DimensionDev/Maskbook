@@ -14,7 +14,7 @@ export enum ActivityType {
 export enum TabType {
     About = 'About',
     Offers = 'Offers',
-    Activity = 'Activity',
+    Activities = 'Activities',
 }
 
 export interface CollectiblePayload {

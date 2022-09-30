@@ -49,6 +49,10 @@ const useStyles = makeStyles()((theme) => ({
         boxSizing: 'border-box',
     },
     traitTitle: {
+        whiteSpace: 'nowrap',
+        display: 'inline-block',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
         fontWeight: 400,
         color: theme.palette.maskColor.second,
     },

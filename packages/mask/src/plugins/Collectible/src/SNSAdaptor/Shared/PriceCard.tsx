@@ -20,6 +20,10 @@ const useStyles = makeStyles()((theme) => ({
         width: '100%',
         justifyContent: 'space-between',
     },
+    textPrimary: {
+        color: theme.palette.maskColor.publicMain,
+        fontWeight: 700,
+    },
     textBase: {
         fontSize: 14,
         color: theme.palette.maskColor.publicSecond,
@@ -81,7 +85,7 @@ export function PriceCard(props: PriceCardProps) {
     return (
         <div className={classes.wrapper}>
             <div className={classes.header}>
-                <Typography className={classes.textBase}>{t('price')}</Typography>
+                <Typography className={classes.textPrimary}>{t('price')}</Typography>
                 {asset.auction?.endAt && !isZero(asset.auction.endAt) && (
                     <Typography className={classes.textBase}>
                         {t('plugin_collectible_time_left')}

@@ -4,7 +4,8 @@ import { Typography } from '@mui/material'
 import VerifiedUserIcon from '@mui/icons-material/VerifiedUser'
 import { useWeb3State } from '@masknet/plugin-infra/web3'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import type { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { Context } from '../Context/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -20,6 +21,7 @@ const useStyles = makeStyles()((theme) => ({
         marginBottom: 36,
         boxShadow: `0px 28px 56px -28px ${MaskColorVar.primary.alpha(0.5)}`,
         borderRadius: 20,
+        overflow: 'hidden',
     },
     nameSm: {
         fontSize: 16,
@@ -59,25 +61,24 @@ export interface FigureCardProps {
 export function FigureCard(props: FigureCardProps) {
     const { asset, hideSubTitle, timeline } = props
     const { classes, cx } = useStyles()
+    const { pluginID } = Context.useContainer()
     const { Others } = useWeb3State()
 
-    const fallbackImgURL = new URL('../../assets/FallbackImage.svg', import.meta.url)
-    const resourceUrl = asset.metadata?.imageURL ?? asset.metadata?.mediaURL
     return (
         <div className={classes.root}>
             <div className={classes.body}>
                 <AssetPreviewer
-                    fallbackImage={fallbackImgURL}
-                    url={resourceUrl}
                     classes={{
                         root: classes.image,
                         fallbackImage: classes.fallbackImage,
                     }}
+                    url={asset.metadata?.imageURL}
+                    fallbackImage={new URL('../../assets/FallbackImage.svg', import.meta.url)}
                 />
             </div>
             <Typography className={timeline ? cx(classes.nameSm, classes.unset) : classes.nameSm}>
                 {asset.metadata?.name ?? '-'}
-                {Others?.formatTokenId(asset.tokenId)}
+                {pluginID !== NetworkPluginID.PLUGIN_SOLANA ? Others?.formatTokenId(asset.tokenId) : null}
             </Typography>
             {!hideSubTitle && (
                 <div className={classes.nameLgBox}>

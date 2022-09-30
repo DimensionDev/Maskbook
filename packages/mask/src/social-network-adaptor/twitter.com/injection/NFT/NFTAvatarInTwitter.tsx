@@ -24,7 +24,6 @@ import { NFTCardStyledAssetPlayer, useShowConfirm } from '@masknet/shared'
 import type { AvatarMetaDB } from '../../../../plugins/Avatar/types.js'
 import { EnhanceableSite, NFTAvatarEvent, CrossIsolationMessages } from '@masknet/shared-base'
 import { activatedSocialNetworkUI } from '../../../../social-network/ui.js'
-import { NFTAvatar } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatar.js'
 import { Twitter } from '@masknet/web3-providers'
 
 export function injectNFTAvatarInTwitter(signal: AbortSignal) {
@@ -113,7 +112,7 @@ function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
     // After the avatar is set, it cannot be saved immediately,
     // and must wait until the avatar of twitter gets updated
     useAsync(async () => {
-        if (!account || !NFTAvatar) return
+        if (!account || !nftAvatar) return
         if (!identity.identifier) return
 
         if (!NFTEvent?.address || !NFTEvent?.tokenId) {
@@ -245,6 +244,7 @@ function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
                 chainId: nftAvatar.chainId,
                 tokenId: nftAvatar.tokenId,
                 tokenAddress: nftAvatar.address,
+                origin: 'pfp',
             })
         }
 
