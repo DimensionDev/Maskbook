@@ -14,6 +14,7 @@ import { ActivitiesTab } from './tabs/ActivitiesTab.js'
 import { TabType } from '../../types.js'
 import { FigureCard } from '../Shared/FigureCard.js'
 import { Context } from '../Context/index.js'
+import { useCurrentVisitingIdentity, useIsOwnerIdentity } from '../../../../../components/DataSource/useActivatedUI.js'
 
 export interface CardDialogContentProps {
     currentTab: TabType
@@ -26,6 +27,8 @@ export function CardDialogContent(props: CardDialogContentProps) {
     const { classes } = useStyles()
     const { t } = useBaseI18n()
     const { asset, orders, events, origin } = Context.useContainer()
+    const currentVisitingIdentity = useCurrentVisitingIdentity()
+    const isOwnerIdentity = useIsOwnerIdentity(currentVisitingIdentity)
 
     const onPFPButtonClick = useCallback(() => {
         CrossIsolationMessages.events.applicationDialogEvent.sendToLocal({
@@ -82,7 +85,7 @@ export function CardDialogContent(props: CardDialogContentProps) {
             </div>
 
             <PluginWalletStatusBar className={classes.footer}>
-                {origin === 'pfp' ? (
+                {origin === 'pfp' && isOwnerIdentity ? (
                     <Button
                         sx={{ display: 'flex', alignItems: 'center' }}
                         variant="contained"
