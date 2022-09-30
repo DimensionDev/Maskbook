@@ -34,7 +34,6 @@ export const useStyles = makeStyles<{ listItemBackground?: string; listItemBackg
         mediaBox: {
             width: 300,
         },
-
         contentLayout: {
             width: '100%',
             height: '100%',

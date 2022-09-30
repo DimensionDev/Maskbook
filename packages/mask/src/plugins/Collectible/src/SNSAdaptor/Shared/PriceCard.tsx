@@ -22,6 +22,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     textPrimary: {
         color: theme.palette.maskColor.publicMain,
+        fontSize: 14,
         fontWeight: 700,
     },
     textBase: {
@@ -105,7 +106,7 @@ export function PriceCard(props: PriceCardProps) {
             </div>
             {topOffer && (
                 <div className={classes.offerBox}>
-                    <Typography className={classes.textBase}>{t('plugin_collectible_top_offer')}</Typography>
+                    <Typography className={classes.textPrimary}>{t('plugin_collectible_top_offer')}</Typography>
                     {(topOffer.priceInToken?.token.logoURL && (
                         <img width={18} height={18} src={topOffer.priceInToken?.token.logoURL} alt="" />
                     )) ||

@@ -34,8 +34,7 @@ const useStyles = makeStyles()((theme) => {
         },
         header: {
             alignItems: 'unset',
-            paddingTop: 10,
-            paddingBottom: 10,
+            padding: 10,
         },
         body: {
             flex: 1,
