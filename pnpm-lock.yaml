@@ -56,9 +56,6 @@ patchedDependencies:
   '@emotion/react@11.10.4':
     hash: obcydjbogyjam4qag626nceajy
     path: patches/@emotion__react@11.10.4.patch
-  '@mui/base@5.0.0-alpha.96':
-    hash: fwm76moymj4sebrtjypfcpmoxm
-    path: patches/@mui__base@5.0.0-alpha.96.patch
 
 importers:
 
@@ -7478,7 +7475,7 @@ packages:
     engines: {node: '>= 10'}
     dev: false
 
-  /@mui/base/5.0.0-alpha.96_fwm76moymj4sebrtjypfcpmoxm_zxljzmqdrxwnuenbkrz77w74uy:
+  /@mui/base/5.0.0-alpha.96_zxljzmqdrxwnuenbkrz77w74uy:
     resolution: {integrity: sha512-GZf2YguepLFMWGG8vQNLRl7FlXPDeyxQBYgrkHxwNJYeRw55rrGrJxHzL1iCbk71VZ2IIAIs5IAxNpyHK9iqPQ==}
     engines: {node: '>=12.0.0'}
     peerDependencies:
@@ -7505,7 +7502,6 @@ packages:
       react-dom: 18.2.0_react@18.2.0
       react-is: 18.2.0
     dev: false
-    patched: true
 
   /@mui/core-downloads-tracker/5.10.4:
     resolution: {integrity: sha512-VGekVa9dleJ+ii47+gXvKUV5a11T0nsjXN8bk5NqiJRQWRCAhbTHgsfZuctNcMeLW9FSf2gu6U0k2U6rhABKcA==}
@@ -7559,7 +7555,7 @@ packages:
       '@babel/runtime': 7.19.0
       '@emotion/react': 11.10.4_obcydjbogyjam4qag626nceajy_ug65io7jkbhmo4fihdmbrh3ina
       '@emotion/styled': 11.10.4_4qlqmspomoqctzkikkhvhnn3qu
-      '@mui/base': 5.0.0-alpha.96_fwm76moymj4sebrtjypfcpmoxm_zxljzmqdrxwnuenbkrz77w74uy
+      '@mui/base': 5.0.0-alpha.96_zxljzmqdrxwnuenbkrz77w74uy
       '@mui/material': 5.10.4_pmt7mohamriu6nuiv5xnts3qce
       '@mui/system': 5.10.4_vwwef2nvz4gdxxvg6n4jd3cdiy
       '@mui/utils': 5.10.3_react@18.2.0
@@ -7595,7 +7591,7 @@ packages:
       '@babel/runtime': 7.19.0
       '@emotion/react': 11.10.4_obcydjbogyjam4qag626nceajy_ug65io7jkbhmo4fihdmbrh3ina
       '@emotion/styled': 11.10.4_4qlqmspomoqctzkikkhvhnn3qu
-      '@mui/base': 5.0.0-alpha.96_fwm76moymj4sebrtjypfcpmoxm_zxljzmqdrxwnuenbkrz77w74uy
+      '@mui/base': 5.0.0-alpha.96_zxljzmqdrxwnuenbkrz77w74uy
       '@mui/core-downloads-tracker': 5.10.4
       '@mui/system': 5.10.4_vwwef2nvz4gdxxvg6n4jd3cdiy
       '@mui/types': 7.2.0_@types+react@18.0.17
