@@ -67,8 +67,8 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         cursor: 'pointer',
         marginLeft: 4,
-        top: 8,
-        right: 8,
+        top: theme.spacing(1.8),
+        right: theme.spacing(1),
         position: 'absolute',
     },
     fallbackSymbol: {
