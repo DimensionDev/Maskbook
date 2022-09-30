@@ -108,6 +108,7 @@ const useStyles = makeStyles()((theme) => ({
         },
     },
     pagination: {
+        height: 68,
         '& .MuiIconButton-root, .MuiTablePagination-select, .MuiTablePagination-, .MuiTablePagination-selectLabel': {
             color: 'white',
             fontFamily: 'inherit',
@@ -133,6 +134,9 @@ const useStyles = makeStyles()((theme) => ({
             color: '#212529',
             border: '1px solid #393b4a',
         },
+    },
+    selectIcon: {
+        position: 'static',
     },
 }))
 
@@ -259,6 +263,7 @@ export function InvestmentsView(props: InvestmentsProps) {
                                 },
                                 native: true,
                             }}
+                            classes={{ selectIcon: classes.selectIcon }}
                             onPageChange={handleChangePage}
                             onRowsPerPageChange={handleChangeRowsPerPage}
                             ActionsComponent={TablePaginationActions}
