@@ -48,7 +48,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     connectWallet: {
         '& > .MuiButton-startIcon': {
-            display: 'block',
+            lineHeight: 1,
         },
     },
 }))

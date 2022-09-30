@@ -802,6 +802,8 @@ class Connection implements EVM_Connection {
                             from: options.account,
                             ...transaction,
                             value: transaction.value ? toHex(transaction.value) : undefined,
+                            // rpc hack
+                            gas: options.chainId === ChainId.Astar ? '0x135168' : undefined,
                         },
                     ],
                 },
