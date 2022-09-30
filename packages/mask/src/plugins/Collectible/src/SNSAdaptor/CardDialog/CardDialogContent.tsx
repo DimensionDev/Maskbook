@@ -15,6 +15,7 @@ import { TabType } from '../../types.js'
 import { FigureCard } from '../Shared/FigureCard.js'
 import { Context } from '../Context/index.js'
 import { useCurrentVisitingIdentity, useIsOwnerIdentity } from '../../../../../components/DataSource/useActivatedUI.js'
+import { ConnectPersonaBoundary } from '../../../../../components/shared/ConnectPersonaBoundary.js'
 
 export interface CardDialogContentProps {
     currentTab: TabType
@@ -86,15 +87,17 @@ export function CardDialogContent(props: CardDialogContentProps) {
 
             <PluginWalletStatusBar className={classes.footer}>
                 {origin === 'pfp' && isOwnerIdentity ? (
-                    <Button
-                        sx={{ display: 'flex', alignItems: 'center' }}
-                        variant="contained"
-                        size="medium"
-                        onClick={onPFPButtonClick}
-                        fullWidth>
-                        <Icons.Avatar size={20} />
-                        <span className={classes.buttonText}>{t('plugin_collectibles_pfp_button')}</span>
-                    </Button>
+                    <ConnectPersonaBoundary handlerPosition="top-right" customHint directTo={PluginID.Avatar}>
+                        <Button
+                            sx={{ display: 'flex', alignItems: 'center' }}
+                            variant="contained"
+                            size="medium"
+                            onClick={onPFPButtonClick}
+                            fullWidth>
+                            <Icons.Avatar size={20} />
+                            <span className={classes.buttonText}>{t('plugin_collectibles_pfp_button')}</span>
+                        </Button>
+                    </ConnectPersonaBoundary>
                 ) : asset.value.link && asset.value?.source ? (
                     <Button
                         sx={{ display: 'flex', alignItems: 'center' }}

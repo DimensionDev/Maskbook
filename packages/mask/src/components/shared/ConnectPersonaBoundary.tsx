@@ -8,6 +8,7 @@ import { Icons } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
+        flex: 1,
         position: 'relative',
     },
     mask: {

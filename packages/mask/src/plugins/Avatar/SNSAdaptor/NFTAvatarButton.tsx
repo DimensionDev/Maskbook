@@ -31,15 +31,15 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-interface NFTAvatarButtonProps extends withClasses<'root' | 'text'> {
+export interface NFTAvatarButtonProps extends withClasses<'root' | 'text'> {
     onClick: () => void
     showSetting?: boolean
 }
 
 export function NFTAvatarButton(props: NFTAvatarButtonProps) {
-    const classes = useStylesExtends(useStyles(), props)
     const { onClick } = props
     const { t } = useI18N()
+    const classes = useStylesExtends(useStyles(), props)
 
     return (
         <div className={classes.root} onClick={onClick}>
