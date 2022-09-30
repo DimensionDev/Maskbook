@@ -36,6 +36,8 @@ const useStyles = makeStyles()((theme) => {
             margin: theme.spacing(1, 0, 2, 0),
         },
         nftNameWrapper: {
+            position: 'absolute',
+            bottom: 0,
             width: '100%',
             background: theme.palette.background.paper,
             borderBottomRightRadius: 8,

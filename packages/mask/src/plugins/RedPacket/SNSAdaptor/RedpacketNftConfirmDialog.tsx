@@ -92,6 +92,8 @@ const useStyles = makeStyles()((theme) => ({
         maxWidth: '100%',
     },
     nftNameWrapper: {
+        position: 'absolute',
+        bottom: 0,
         width: '100%',
         background: theme.palette.background.paper,
         borderBottomRightRadius: 8,
