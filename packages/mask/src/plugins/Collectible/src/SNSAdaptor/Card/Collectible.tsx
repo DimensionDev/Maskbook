@@ -123,6 +123,7 @@ const useStyles = makeStyles()((theme) => {
             webkitBoxOrient: 'vertical',
             webkitLineClamp: '3',
             '& > p': {
+                display: 'inline',
                 color: `${theme.palette.maskColor.publicSecond} !important`,
             },
             '& a': {
