@@ -32,23 +32,28 @@ const scriptCache = new LRUCache<string, any>({
     max: 10,
     ttl: 300_000,
 })
-async function fetchContentAsTwitterDotCom(url: string) {
-    const fetchingTask: Promise<Response> = scriptCache.get(url) ?? globalThis.fetch(url)
-    scriptCache.set(url, fetchingTask)
-    const response = (await fetchingTask).clone()
+async function fetchContent(url: string) {
+    const hit: Promise<Response> = scriptCache.get(url) ?? globalThis.fetch(url)
+
+    if (scriptCache.get(url) !== hit) scriptCache.set(url, hit)
+
+    if (typeof hit === 'string') return hit
+
+    const response = (await hit).clone()
     if (!response.ok) {
         scriptCache.delete(url)
         return ''
     }
     const content = await response.text()
+    scriptCache.set(url, content)
     return content
 }
 
 async function getTokens(operationName?: string) {
-    const swContent = await fetchContentAsTwitterDotCom('https://twitter.com/sw.js')
+    const swContent = await fetchContent('https://twitter.com/sw.js')
     const [mainContent, nftContent] = await Promise.all([
-        fetchContentAsTwitterDotCom(getScriptURL(swContent, 'main')),
-        fetchContentAsTwitterDotCom(getScriptURL(swContent, 'bundle.UserNft')),
+        fetchContent(getScriptURL(swContent, 'main')),
+        fetchContent(getScriptURL(swContent, 'bundle.UserNft')),
     ])
 
     const bearerToken = getScriptContentMatched(mainContent ?? '', /s="(\w+%3D\w+)"/)
