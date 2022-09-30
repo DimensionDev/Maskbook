@@ -108,9 +108,25 @@ export function Snapshot() {
                 <Avatar src={resolveIPFS_URL(proposal.space.avatar)} className={classes.avatar} />
                 <Box className={classes.title}>
                     <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                        <Typography fontSize={18} fontWeight="bold">
-                            {proposal.space.name}
-                        </Typography>
+                        <ShadowRootTooltip
+                            PopperProps={{
+                                disablePortal: true,
+                            }}
+                            title={
+                                <Typography fontSize={18} fontWeight="bold">
+                                    {proposal.space.name}
+                                </Typography>
+                            }
+                            placement="top"
+                            classes={{ tooltip: classes.tooltip, arrow: classes.arrow }}
+                            arrow>
+                            <Typography
+                                fontSize={18}
+                                fontWeight="bold"
+                                sx={{ width: 150, whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden' }}>
+                                {proposal.space.name}
+                            </Typography>
+                        </ShadowRootTooltip>
                         <Box sx={{ display: 'flex' }}>
                             <Typography
                                 fontSize={14}
@@ -135,7 +151,7 @@ export function Snapshot() {
                         <Typography
                             fontSize={14}
                             fontWeight="700"
-                            sx={{ width: 334, whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden' }}>
+                            sx={{ width: 300, whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden' }}>
                             {proposal.title}
                         </Typography>
                     </ShadowRootTooltip>
