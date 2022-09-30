@@ -74,7 +74,6 @@ export function GasSection(props: GasSectionProps) {
         ? maxPriorityFeePerGasByUser
         : formatWeiToGwei((transaction as Transaction)?.maxPriorityFeePerGas as string)
 
-    console.log({ baseFeePerGas, priorityFee, maxPriorityFeePerGasByUser })
     const gasPrice = (transactionOptions as Transaction | undefined)?.gasPrice as string | undefined
     const customPrice = formatBalance(
         scale10(
