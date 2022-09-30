@@ -20,6 +20,7 @@ import { ChainId, createContract, getRPCConstants, SchemaType, WNATIVE } from '@
 import { NFTSCAN_BASE, NFTSCAN_LOGO_BASE, NFTSCAN_URL } from '../constants.js'
 import type { EVM } from '../types/EVM.js'
 import { getJSON, getPaymentToken } from '../../helpers.js'
+import LRUCache from 'lru-cache'
 
 type NFTScanChainId = ChainId.Mainnet | ChainId.Matic | ChainId.BSC | ChainId.Arbitrum | ChainId.Optimism
 
@@ -34,13 +35,28 @@ export const resolveHostName = createLookupTableResolver<NFTScanChainId, string>
     '',
 )
 
+const cache = new LRUCache<string, any>({
+    max: 10,
+    ttl: 30_000,
+})
+
 export async function fetchFromNFTScan<T>(url: string) {
-    const response = await fetch(resolveCrossOriginURL(url)!, {
-        headers: {
-            chain: 'ETH',
-        },
-    })
+    const hit =
+        cache.get(url) ??
+        fetch(resolveCrossOriginURL(url)!, {
+            headers: { chain: 'ETH' },
+        })
+
+    if (!(hit instanceof Promise)) return hit
+    if (hit !== cache.get(url)) cache.set(url, hit)
+
+    const response = (await hit).clone()
+    if (!response.ok) {
+        cache.delete(url)
+        return
+    }
     const json = await response.json()
+    cache.set(url, json)
     return json as T
 }
 
@@ -48,15 +64,28 @@ export async function fetchFromNFTScanV2<T>(chainId: ChainId, pathname: string, 
     const host = resolveHostName(chainId as NFTScanChainId)
     if (!host) return
 
-    const response = await fetch(urlcat(NFTSCAN_URL, pathname), {
-        ...init,
-        headers: {
-            ...init?.headers,
-            'x-app-chainid': chainId.toString(),
-        },
-        cache: 'no-cache',
-    })
+    const url = urlcat(NFTSCAN_URL, pathname)
+    const cacheKey = `${chainId}/${url}`
+    const hit: Promise<Response> | T =
+        cache.get(cacheKey) ??
+        fetch(url, {
+            ...init,
+            headers: {
+                ...init?.headers,
+                'x-app-chainid': chainId.toString(),
+            },
+            cache: 'no-cache',
+        })
+
+    if (!(hit instanceof Promise)) return hit
+
+    const response = (await hit).clone()
+    if (!response.ok) {
+        cache.delete(cacheKey)
+        return
+    }
     const json = await response.json()
+    cache.set(cacheKey, json)
     return json as T
 }
 

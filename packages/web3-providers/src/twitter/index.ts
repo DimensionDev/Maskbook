@@ -38,9 +38,8 @@ async function fetchContent(url?: string) {
 
     const hit: Promise<Response> = scriptCache.get(url) ?? fetch(url)
 
+    if (!(hit instanceof Promise)) return hit
     if (scriptCache.get(url) !== hit) scriptCache.set(url, hit)
-
-    if (typeof hit === 'string') return hit
 
     const response = (await hit).clone()
     if (!response.ok) {
