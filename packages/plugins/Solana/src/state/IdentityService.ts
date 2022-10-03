@@ -18,7 +18,7 @@ function getSolanaDomain(nickname: string, bio: string) {
     return matched
 }
 
-function getSoalnaDomainAddress(domain: string) {
+function getSolanaDomainAddress(domain: string) {
     if (!domain) return
     return SolanaRPC.lookup(ChainId.Mainnet, domain)
 }
@@ -32,7 +32,7 @@ export class IdentityService extends IdentityServiceState {
         const { bio = '', nickname = '' } = identity
         const address = getSolanaAddress(bio)
         const domain = getSolanaDomain(nickname, bio)
-        const domainAddress = domain ? await getSoalnaDomainAddress(domain) : undefined
+        const domainAddress = domain ? await getSolanaDomainAddress(domain) : undefined
 
         return [
             address
