@@ -38,9 +38,10 @@ interface ConnectPersonaBoundaryProps {
     directTo?: PluginID
     customHint?: boolean
     children: SupportChildren
-    enableVerify?: boolean
-    beforeVerify?: () => void | Promise<void>
     createConfirm?: boolean
+    enableVerify?: boolean
+    beforeAction?: (status: PersonaConnectStatus) => Promise<void> | void
+    afterAction?: (status: PersonaConnectStatus) => Promise<void> | void
 }
 
 export const ConnectPersonaBoundary = memo<ConnectPersonaBoundaryProps>(
@@ -49,9 +50,10 @@ export const ConnectPersonaBoundary = memo<ConnectPersonaBoundaryProps>(
         directTo,
         handlerPosition = 'center',
         customHint = false,
-        beforeVerify,
-        enableVerify = true,
         createConfirm = true,
+        enableVerify = true,
+        beforeAction,
+        afterAction,
     }) => {
         const { t } = useI18N()
         const { classes } = useStyles()
@@ -87,12 +89,13 @@ export const ConnectPersonaBoundary = memo<ConnectPersonaBoundaryProps>(
                     </Button>
                 )
             return null
-        }, [status, t, statusLoading, customHint, isFnChildren])
+        }, [t, status, statusLoading, customHint, isFnChildren])
 
         const handleClick = useCallback(() => {
-            if (!status.verified && status.connected && enableVerify) beforeVerify?.()
+            beforeAction?.(status)
             status.action?.(directTo, handlerPosition, enableVerify, !createConfirm)
-        }, [directTo, handlerPosition, JSON.stringify(status), enableVerify, createConfirm])
+            afterAction?.(status)
+        }, [directTo, handlerPosition, JSON.stringify(status), createConfirm])
 
         return (
             <Stack className={classes.root} display="inline-flex" onClick={handleClick}>

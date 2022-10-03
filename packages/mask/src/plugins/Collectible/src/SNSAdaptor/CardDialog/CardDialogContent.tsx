@@ -31,12 +31,15 @@ export function CardDialogContent(props: CardDialogContentProps) {
     const currentVisitingIdentity = useCurrentVisitingIdentity()
     const isOwnerIdentity = useIsOwnerIdentity(currentVisitingIdentity)
 
+    const onBeforeAction = useCallback(() => {
+        props.setOpen(false)
+    }, [props.setOpen])
+
     const onPFPButtonClick = useCallback(() => {
         CrossIsolationMessages.events.applicationDialogEvent.sendToLocal({
             open: true,
             pluginID: PluginID.Avatar,
         })
-        props.setOpen(false)
     }, [])
 
     const onMoreButtonClick = useCallback(() => {
@@ -87,7 +90,11 @@ export function CardDialogContent(props: CardDialogContentProps) {
 
             <PluginWalletStatusBar className={classes.footer}>
                 {origin === 'pfp' && isOwnerIdentity ? (
-                    <ConnectPersonaBoundary handlerPosition="top-right" customHint directTo={PluginID.Avatar}>
+                    <ConnectPersonaBoundary
+                        handlerPosition="top-right"
+                        customHint
+                        directTo={PluginID.Avatar}
+                        beforeAction={onBeforeAction}>
                         <Button
                             sx={{ display: 'flex', alignItems: 'center' }}
                             variant="contained"
