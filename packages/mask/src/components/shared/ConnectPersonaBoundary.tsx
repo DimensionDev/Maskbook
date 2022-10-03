@@ -87,7 +87,7 @@ export const ConnectPersonaBoundary = memo<ConnectPersonaBoundaryProps>(
                     </Button>
                 )
             return null
-        }, [status, t, statusLoading, customHint])
+        }, [status, t, statusLoading, customHint, isFnChildren])
 
         const handleClick = useCallback(() => {
             if (!status.verified && status.connected && enableVerify) beforeVerify?.()

@@ -119,12 +119,13 @@ const useStyles = makeStyles()((theme) => {
             padding: theme.spacing(8, 0),
         },
         markdown: {
-            textOverflow: 'ellipsis',
-            webkitBoxOrient: 'vertical',
-            webkitLineClamp: '3',
+            overflow: 'hidden',
             '& > p': {
                 display: 'inline',
                 color: `${theme.palette.maskColor.publicSecond} !important`,
+            },
+            '& hr': {
+                display: 'none',
             },
             '& a': {
                 color: `${theme.palette.maskColor.publicMain} !important`,
