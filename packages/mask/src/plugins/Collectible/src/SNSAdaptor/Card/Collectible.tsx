@@ -1,12 +1,12 @@
+import formatDateTime from 'date-fns/format'
+import isAfter from 'date-fns/isAfter'
+import isValidDate from 'date-fns/isValid'
 import { Icons } from '@masknet/icons'
 import { Markdown } from '@masknet/shared'
 import { LoadingBase, makeStyles, MaskColorVar, MaskTabList, useTabs } from '@masknet/theme'
 import { resolveSourceTypeName } from '@masknet/web3-shared-base'
 import { TabContext } from '@mui/lab'
 import { Box, Button, CardContent, CardHeader, Paper, Tab, Typography } from '@mui/material'
-import formatDateTime from 'date-fns/format'
-import isAfter from 'date-fns/isAfter'
-import isValidDate from 'date-fns/isValid'
 import { SUPPORTED_PROVIDERS } from '../../constants.js'
 import { CollectiblePaper } from './CollectiblePaper.js'
 import { LinkingAvatar } from '../Shared/LinkingAvatar.js'
@@ -80,7 +80,7 @@ const useStyles = makeStyles()((theme) => {
         subtitle: {
             fontSize: 14,
             marginRight: theme.spacing(0.5),
-            maxHeight: '3.5rem',
+            maxHeight: '3rem',
             overflow: 'hidden',
             wordBreak: 'break-word',
             color: theme.palette.maskColor.publicSecond,
