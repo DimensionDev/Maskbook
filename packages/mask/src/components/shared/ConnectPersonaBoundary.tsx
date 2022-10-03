@@ -1,10 +1,10 @@
-import { Button, Stack } from '@mui/material'
 import { memo, ReactNode, useCallback, useMemo } from 'react'
+import { Button, Stack } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
+import { Icons } from '@masknet/icons'
 import type { PluginID } from '@masknet/plugin-infra'
 import { PersonaConnectStatus, useCurrentPersonaConnectStatus } from '../DataSource/usePersonaConnectStatus.js'
 import { useI18N } from '../../utils/index.js'
-import { Icons } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => ({
     root: {

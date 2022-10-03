@@ -6,11 +6,9 @@ import { SolanaRPC } from '../messages.js'
 
 const SOL_RE = /\S{1,256}\.sol\b/
 
-function getSolanaName(twitterId: string, nickname: string, bio: string) {
+function getSolanaName(nickname: string, bio: string) {
     const [matched] = nickname.match(SOL_RE) ?? bio.match(SOL_RE) ?? []
-
-    if (matched) return matched
-    return twitterId && !twitterId.endsWith('.sol') ? `${twitterId}.sol` : twitterId
+    return matched
 }
 
 export class IdentityService extends IdentityServiceState {
@@ -22,8 +20,8 @@ export class IdentityService extends IdentityServiceState {
         const { identifier, bio = '', nickname = '' } = identity
         const addressMatched = bio.match(/\b\w{32,44}\b/)
         const address = addressMatched?.[0]
-        const solanaName = getSolanaName(identifier?.userId ?? '', nickname, bio)
-        const solanaDomainAddress = await SolanaRPC.lookup(ChainId.Mainnet, solanaName)
+        const solanaName = getSolanaName(nickname, bio)
+        const solanaDomainAddress = solanaName ? await SolanaRPC.lookup(ChainId.Mainnet, solanaName) : undefined
 
         return [
             address && !address.startsWith('0x') && isValidAddress(address)
