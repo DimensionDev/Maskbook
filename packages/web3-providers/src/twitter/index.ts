@@ -60,7 +60,7 @@ async function getTokens(operationName?: string) {
     const queryToken = getScriptContentMatched(nftContent ?? '', /{\s?id:\s?"([\w-]+)"/)
     const csrfToken = getCSRFToken()
     const queryId = operationName
-        ? getScriptContentMatched(mainContent ?? '', new RegExp(`queryId:"(\\w+)",operationName:"${operationName}"`))
+        ? getScriptContentMatched(mainContent ?? '', new RegExp(`queryId:"([^"]+)",operationName:"${operationName}"`))
         : undefined
 
     return {
@@ -139,6 +139,7 @@ const cache = new LRUCache<string, any>({
 })
 
 const TWITTER_AVATAR_ID_MATCH = /^\/profile_images\/(\d+)/
+
 export class TwitterAPI implements TwitterBaseAPI.Provider {
     getAvatarId(avatarURL?: string) {
         if (!avatarURL) return ''
