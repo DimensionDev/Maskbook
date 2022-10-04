@@ -1,5 +1,3 @@
-import type { AzuroGame } from '@azuro-protocol/sdk'
-
 const shortenCompetitorName = (name: string) => {
     const wordCount = name.split(' ').length
 
@@ -18,7 +16,7 @@ const shortenCompetitorName = (name: string) => {
     return name.slice(0, 3)
 }
 
-type Props = AzuroGame
+type Props = any
 
 const shortenedOutcomeDisplay = {
     W1: ({ participants }: Props) => `${shortenCompetitorName(participants[0].name)} win`,
@@ -37,8 +35,8 @@ const outcomeRegistry: Record<number, (props: Props) => string> = {
     4: shortenedOutcomeDisplay['1X'],
     5: shortenedOutcomeDisplay['12'],
     6: shortenedOutcomeDisplay['2X'],
-    7: (props: Props) => 'Handicap 1',
-    8: (props: Props) => 'Handicap 2',
+    7: (props: Props) => 'Home',
+    8: (props: Props) => 'Away',
     9: (props: Props) => 'Over',
     10: (props: Props) => 'Under',
     11: (props: Props) => 'Over',

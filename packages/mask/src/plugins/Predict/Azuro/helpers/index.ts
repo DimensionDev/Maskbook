@@ -1,3 +1,6 @@
 export { default as marketRegistry } from './marketRegistry'
+export { default as sportRegistry } from './sportRegistry'
+export { default as betTypeOdd } from './betTypeOdd'
 export { default as outcomeRegistry } from './outcomeRegistry'
 export { default as outcomeSecondParam } from './outcomeSecondParam'
+export { default as truncateDecimals } from './truncateDecimals'

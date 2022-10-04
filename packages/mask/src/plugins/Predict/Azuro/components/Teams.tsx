@@ -2,6 +2,7 @@ import { Grid, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../locales'
 import { VersusIcon } from '../icons/VersusIcon'
+import type { Participant } from '../types.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: { marginBottom: theme.spacing(2.1) },
@@ -23,10 +24,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 interface TeamsProps {
-    participants: Array<{
-        name: string
-        image: string
-    }>
+    participants: Participant[]
 }
 
 export function Teams(props: TeamsProps) {

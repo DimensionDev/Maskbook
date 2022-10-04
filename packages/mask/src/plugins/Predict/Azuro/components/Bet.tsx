@@ -4,9 +4,9 @@ import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../../utils/i18n-next-ui'
 import { BetInfos } from './BetInfos'
 import { League } from './League'
-import { Teams } from './Teams'
 import { EventDate } from './EventDate'
 import { Market } from './Market'
+import { Teams } from './Teams.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {

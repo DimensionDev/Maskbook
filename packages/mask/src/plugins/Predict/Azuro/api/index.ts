@@ -1,34 +1,41 @@
-import {
-    calculateActualOdds,
-    configure,
-    fetchGames,
-    fetchUserBets,
-    setContractAddresses,
-    setSelectedChainId,
-} from '@azuro-protocol/sdk'
+import { calculateActualOdds } from '@azuro-protocol/sdk'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { configureAzuroSDK } from '../helpers/configureAzuroSDK'
+import type { GamesRaw, OddsByConditions, RawEvents } from '../types.js'
 
-export async function fetchMyBets(account: string, chainId: ChainId) {
-    await configureAzuroSDK(chainId)
-
-    const bets = await fetchUserBets({ account })
-    return bets
-}
-
-export async function fetchEvents(chainId: ChainId) {
-    await configureAzuroSDK(chainId)
-
-    const events = await fetchGames({
-        filters: {
-            resolved: false,
-            canceled: false,
+export async function fetchOddsByConditions(conditionIds: number[]): Promise<OddsByConditions> {
+    const oddsData = await fetch('https://api.bookmaker.xyz/odds', {
+        headers: {
+            'Content-Type': 'application/json',
         },
-        // from: 1,
-        // rangeWide: 200000,
+        method: 'POST',
+        body: JSON.stringify({ conditionIds }),
     })
 
-    console.log('events: ', events)
+    const oddsByConditions = (await oddsData.json()).data
+    return oddsByConditions
+}
+
+export async function fetchGamesByIds(gameIds: number[]): Promise<GamesRaw[]> {
+    const response2 = await fetch('https://api.bookmaker.xyz/games/find', {
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        method: 'POST',
+        body: JSON.stringify({ gameIds }),
+    })
+
+    const games = (await response2.json()).data
+    return games
+}
+
+export async function fetchGames(): Promise<RawEvents[]> {
+    const response = await fetch('https://api.bookmaker.xyz/games', {
+        method: 'POST',
+    })
+    const data = await response.json()
+    const events = data.data
 
     return events
 }
@@ -55,35 +62,10 @@ export async function calculateActualRate({
     })
 }
 
-export async function testEvents() {
-    setSelectedChainId(100)
+export async function fetchUserBets(account: string) {
+    const response = await fetch('https://api.bookmaker.xyz/bets/' + account)
+    const data = await response.json()
+    const bets = data.data
 
-    setContractAddresses({
-        core: '0x4fE6A9e47db94a9b2a4FfeDE8db1602FD1fdd37d',
-        lp: '0xac004b512c33D029cf23ABf04513f1f380B3FD0a',
-        bet: '0xFd9E5A2A1bfc8B57A288A3e12E2c601b0Cc7e476',
-        token: '0xe91D153E0b41518A2Ce8Dd3D7944Fa863463a97d',
-    })
-
-    configure({
-        rpcUrl: 'https://cors.r2d2.to/?https://xdai-rpc.gateway.pokt.network',
-        ipfsGateway: 'https://ipfs-gateway.azuro.org/ipfs/',
-    })
-
-    try {
-        const games = await fetchGames({
-            filters: {
-                resolved: false,
-                canceled: false,
-            },
-            from: 26746291,
-            // rangeWide: 1000,
-        })
-
-        return games
-    } catch (err) {
-        console.log('err: ', err)
-
-        return err
-    }
+    return bets
 }

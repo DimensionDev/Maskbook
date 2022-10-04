@@ -1,11 +1,11 @@
 import { useAsync } from 'react-use'
-import type { Odds } from '../types'
+import type { Outcome } from '../types'
 import BigNumber from 'bignumber.js'
 import { calculateActualRate } from '../api'
 import { useChainId } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 
-export function useActualRate(condition: Odds | null, amount: string) {
+export function useActualRate(condition: Outcome | null, amount: string) {
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     return useAsync(async () => {
         if (!condition || !amount) return

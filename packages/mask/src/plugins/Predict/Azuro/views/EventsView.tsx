@@ -1,23 +1,15 @@
-import {
-    Button,
-    FormControl,
-    Grid,
-    InputLabel,
-    ListSubheader,
-    MenuItem,
-    Select,
-    SelectChangeEvent,
-    TextField,
-} from '@mui/material'
-import { Icons } from '@masknet/icons'
 import { useState } from 'react'
 import { makeStyles, usePortalShadowRoot } from '@masknet/theme'
-import { useFetchGames, useLeagueList, useMarketList } from '../hooks'
-import { Events } from '../components/Events'
-import { Sport } from '../types'
 import { DEFAULT_LABEL } from '../../constants'
 import { useI18N } from '../../locales'
 import { useI18N as useBaseI18N } from '../../../../utils'
+import { useFetchApi } from '../hooks/useFetchGames.js'
+import { useSportList } from '../hooks/useSportList.js'
+import { useLeagueList, useMarketList } from '../hooks/index.js'
+import { Icons } from '@masknet/icons'
+import { Grid, FormControl, InputLabel, Button, MenuItem, Select, SelectChangeEvent, TextField } from '@mui/material'
+import { Events } from '../components/Events.js'
+// import Grid from '@material-ui/core/Grid'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -68,12 +60,17 @@ export function EventsView(): JSX.Element {
     const [searchTerm, setSearchTerm] = useState<string>('')
 
     const [market, setMarket] = useState<number>(0)
-    const [league, setLeague] = useState<string>(DEFAULT_LABEL)
+    const [league, setLeague] = useState<number>(0)
     const [sort, setSort] = useState<string>(DEFAULT_LABEL)
 
-    const { value, error, loading, retry } = useFetchGames(searchTerm, market, league, sort)
-    const markets = useMarketList(value?.games)
-    const leagues = useLeagueList(value?.games)
+    const { value, error, loading, retry } = useFetchApi(searchTerm, market, league, sort)
+
+    const events = value?.events
+    const eventsFiltered = value?.eventsFiltered
+
+    const sports = useSportList(events)
+    const leagues = useLeagueList(events)
+    const markets = useMarketList(events)
     const sorts = [DEFAULT_LABEL, t.plugin_start_date(), t.plugin_newest()]
 
     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -81,7 +78,7 @@ export function EventsView(): JSX.Element {
         setSearchTerm(term)
     }
 
-    const marketSelect = usePortalShadowRoot((container) => (
+    const marketSelect = usePortalShadowRoot((container: any) => (
         <Select
             MenuProps={{
                 container,
@@ -106,29 +103,14 @@ export function EventsView(): JSX.Element {
                 anchorOrigin: { horizontal: 'left', vertical: 'bottom' },
                 classes: { paper: classes.menuPaper },
             }}
-            value={league}
+            value={league.toString()}
             label={t.plugin_league()}
-            onChange={(event: SelectChangeEvent) => setLeague(event.target.value)}>
-            <MenuItem key={DEFAULT_LABEL} value={DEFAULT_LABEL}>
-                {DEFAULT_LABEL}
-            </MenuItem>
-
-            <ListSubheader>{Sport.Dota2}</ListSubheader>
-            {leagues
-                ?.filter((league) => league.id.includes(Sport.Dota2))
-                .map((league) => (
-                    <MenuItem key={league.id} value={league.id}>
-                        {league.label}
-                    </MenuItem>
-                ))}
-            <ListSubheader>{Sport.Football}</ListSubheader>
-            {leagues
-                ?.filter((league) => !league.id.includes(Sport.Dota2))
-                .map((league) => (
-                    <MenuItem key={league.id} value={league.id}>
-                        {league.label}
-                    </MenuItem>
-                ))}
+            onChange={(event: SelectChangeEvent) => setLeague(Number(event.target.value))}>
+            {leagues?.map((league) => (
+                <MenuItem key={league.id} value={league.id}>
+                    {league.label}
+                </MenuItem>
+            ))}
         </Select>
     ))
 
@@ -182,7 +164,7 @@ export function EventsView(): JSX.Element {
                 </Button>
             </Grid>
             <div>
-                <Events games={value?.gamesFiltered} retry={retry} loading={loading} />
+                <Events events={eventsFiltered} retry={retry} loading={loading} />
             </div>
         </div>
     )

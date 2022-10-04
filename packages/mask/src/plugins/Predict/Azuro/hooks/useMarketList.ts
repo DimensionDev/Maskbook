@@ -1,14 +1,18 @@
-import type { AzuroGame } from '@azuro-protocol/sdk'
-import { uniqBy } from 'lodash-unified'
-import { useMemo } from 'react'
-import { marketRegistry } from '../helpers'
+// import type { Events } from '../types'
 
-export function useMarketList(games: AzuroGame[] | undefined) {
-    const markets = useMemo(() => {
-        return games?.map((game) => ({ id: game.marketRegistryId, label: marketRegistry[game.marketRegistryId] }))
-    }, [games])
+import { uniqBy, flattenDeep } from 'lodash-unified'
+import { marketRegistry } from '../helpers/index.js'
+import type { Event } from '../types.js'
 
-    return uniqBy(markets, 'id')
+export function useMarketList(events: Event[] | undefined) {
+    const markets = events?.map((event) => ({
+        id: event.marketRegistryId,
+        label: marketRegistry[event.marketRegistryId],
+    }))
+
+    const marketsFlatten: Array<{ id: number; label: string }> | undefined = flattenDeep(markets)
+
+    return uniqBy(marketsFlatten, 'id')
         .concat({ id: 0, label: 'All' })
         .sort((a, b) => a.label.localeCompare(b.label))
 }

@@ -1,12 +1,11 @@
-import type { AzuroGame } from '@azuro-protocol/sdk'
 import { makeStyles } from '@masknet/theme'
 import Grid from '@mui/material/Grid'
 import Typography from '@mui/material/Typography'
 import { useCallback } from 'react'
 import { PickContext } from '../context/usePickContext'
-import { outcomeRegistry, outcomeSecondParam } from '../helpers'
-import type { Odds as Pick } from '../types'
-import { v4 } from 'uuid'
+import { betTypeOdd, outcomeRegistry, outcomeSecondParam, truncateDecimals } from '../helpers'
+import { Markets } from '../types'
+import type { Outcome, Event } from '../types.js'
 
 const useStyles = makeStyles()((theme) => ({
     choice: {
@@ -44,66 +43,70 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 type OddsProps = {
-    game: AzuroGame
+    event: Event
 }
 
 export function Odds(props: OddsProps) {
     const { classes } = useStyles()
     const {
-        game,
-        game: { conditions },
+        event,
+        event: { conditions },
     } = props
     const { onOpenPlaceBetDialog, setConditionPick, setGamePick } = PickContext.useContainer()
 
-    const handleOnClickOdd = useCallback((pick: Pick) => {
+    const handleOnClickOdd = useCallback((pick: Outcome) => {
         setConditionPick(pick)
-        setGamePick(game)
+        setGamePick(event)
         onOpenPlaceBetDialog()
     }, [])
 
-    if (Object.keys(conditions).length === 1) {
-        const odds = conditions[0].odds
-
-        return (
-            <div>
-                {odds.map((pick) => {
-                    const title = outcomeRegistry[pick.outcomeRegistryId](game)
-
-                    return (
-                        <Grid
-                            key={v4()}
-                            container
-                            justifyContent="space-between"
-                            className={classes.choice}
-                            onClick={() => handleOnClickOdd(pick as Pick)}>
-                            <Typography className={classes.outcome}>{title}</Typography>
-                            <Typography className={classes.odds}>{pick.value.toFixed(2)}</Typography>
-                        </Grid>
-                    )
-                })}
-            </div>
-        )
-    }
-
     return (
         <>
-            {conditions.map((condition) => (
-                <Grid key={v4()} container alignItems="center" flexWrap="nowrap">
+            {conditions.map((condition, conditionIndex, participants) => (
+                <Grid key={condition.id} container alignItems="center" flexWrap="nowrap">
                     <Grid container flexWrap="nowrap" justifyContent="space-between" alignItems="center">
-                        <Typography>{outcomeSecondParam[condition.paramId]}</Typography>
-                        {condition.odds.map((pick) => {
-                            const title = outcomeRegistry[pick.outcomeRegistryId](game)
+                        {event.marketRegistryId === Markets.TotalGoals ? (
+                            <Typography>{outcomeSecondParam[betTypeOdd[condition.outcomes[0]].paramId]}</Typography>
+                        ) : (
+                            ''
+                        )}
+                        {condition.outcomes.map((outcomeId, index) => {
+                            const title = outcomeRegistry[condition.outcomesRegistryId[index]](event)
+                            const odds =
+                                event.marketRegistryId === Markets.DoubleChance
+                                    ? condition.odds[index + 1]
+                                    : condition.odds[index]
+                            const pick: Outcome = {
+                                outcomesRegistryId: condition.outcomesRegistryId,
+                                conditionId: condition.id,
+                                outcomeId,
+                                outcomeRegistryId: condition.outcomesRegistryId[index],
+                                paramId: betTypeOdd[condition.outcomes[index]].paramId,
+                                value: odds,
+                            }
 
                             return (
                                 <Grid
-                                    key={v4()}
+                                    key={outcomeId}
                                     container
                                     flexWrap="nowrap"
                                     justifyContent="space-between"
-                                    className={classes.OUchoice}
-                                    onClick={() => handleOnClickOdd(pick as Pick)}>
-                                    <Typography className={classes.outcome}>{title.slice(0, 1)}</Typography>
-                                    <Typography className={classes.odds}>{pick.value.toFixed(2)}</Typography>
+                                    className={
+                                        event.marketRegistryId === Markets.TotalGoals
+                                            ? classes.OUchoice
+                                            : classes.choice
+                                    }
+                                    onClick={() => handleOnClickOdd(pick)}>
+                                    <Typography className={classes.outcome}>
+                                        {event.marketRegistryId === Markets.TotalGoals
+                                            ? title.slice(0, 1)
+                                            : event.marketRegistryId === Markets.Handicap
+                                            ? `${title.slice(0, 1)} ${
+                                                  outcomeSecondParam[betTypeOdd[condition.outcomes[index]].paramId]
+                                              }`
+                                            : title}
+                                    </Typography>
+                                    <Typography className={classes.odds}>{truncateDecimals(odds)}</Typography>
                                 </Grid>
                             )
                         })}

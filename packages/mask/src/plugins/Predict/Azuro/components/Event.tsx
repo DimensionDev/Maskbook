@@ -1,12 +1,11 @@
 import { Card, CardContent, Grid } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../../utils'
-import type { AzuroGame } from '@azuro-protocol/sdk'
 import { Market } from './Market'
 import { League } from './League'
 import { Teams } from './Teams'
 import { EventDate } from './EventDate'
-import { Odds } from './Odds'
+import { Odds } from './Odds.js'
 
 const useStyles = makeStyles()((theme) => ({
     metas: { padding: theme.spacing(0, 2, 0, 0) },
@@ -27,14 +26,14 @@ const useStyles = makeStyles()((theme) => ({
 
 interface EventProps {
     key: string
-    game: AzuroGame
+    event: any
     isUserBet?: boolean
 }
 
 export function Event(props: EventProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const { game } = props
+    const { event } = props
 
     return (
         <Card className={classes.game}>
@@ -46,10 +45,10 @@ export function Event(props: EventProps) {
                         direction="row"
                         justifyContent="center"
                         alignItems="center">
-                        <League name={game.league} />
-                        <Teams participants={game.participants} />
-                        <EventDate date={game.startsAt} />
-                        <Market marketRegistryId={game.marketRegistryId} />
+                        <League name={event.titleLeague} />
+                        <Teams participants={event.participants} />
+                        <EventDate date={event.startDate} />
+                        <Market marketRegistryId={event.marketRegistryId} />
                     </Grid>
                     <Grid
                         container
@@ -57,7 +56,7 @@ export function Event(props: EventProps) {
                         direction="column"
                         className={classes.choicesContainer}
                         wrap="nowrap">
-                        <Odds game={game} />
+                        <Odds event={event} />
                     </Grid>
                 </Grid>
             </CardContent>

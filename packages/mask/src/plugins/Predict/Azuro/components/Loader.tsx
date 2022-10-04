@@ -19,7 +19,6 @@ const useStyles = makeStyles()((theme, props) => ({
         marginTop: 12,
     },
     animated: {
-        fontSize: 36,
         '@keyframes loadingAnimation': {
             '0%': {
                 transform: 'rotate(0deg)',
@@ -38,7 +37,7 @@ export function Loader() {
 
     return (
         <div className={classes.placeholder}>
-            <Icons.CircleLoading className={classes.animated} />
+            <Icons.CircleLoading size={36} className={classes.animated} />
             <Typography className={classes.loading}>{t('popups_loading')}</Typography>
         </div>
     )

@@ -1,10 +1,11 @@
-import type { AzuroGame } from '@azuro-protocol/sdk'
 import { Event } from './Event'
 import { makeStyles } from '@masknet/theme'
 import { PlaceBetDialog } from '../PlaceBetDialog'
-import { Placeholder } from './Placeholder'
-import { Loader } from './Loader'
 import { PickContext } from '../context/usePickContext'
+import { Placeholder } from '../components/Placeholder'
+import { Loader } from '../components/Loader'
+import { useI18N as useBaseI18N } from '../../../../utils'
+import type { Event as EventType } from '../types.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -27,9 +28,10 @@ const useStyles = makeStyles()((theme) => ({
     filters: { marginBottom: theme.spacing(1.5) },
 }))
 
-export function Events(props: { games: AzuroGame[] | undefined; retry: () => void; loading: boolean }) {
-    const { games, retry, loading } = props
+export function Events(props: { events: EventType[] | undefined; retry: () => void; loading: boolean }) {
+    const { events, retry, loading } = props
     const { classes } = useStyles()
+    const { t } = useBaseI18N()
 
     if (loading) {
         return <Loader />
@@ -38,10 +40,12 @@ export function Events(props: { games: AzuroGame[] | undefined; retry: () => voi
     return (
         <div className={classes.container}>
             <PickContext.Provider>
-                {games && games.length > 0 ? (
-                    games.map((game: AzuroGame) => <Event key={`${game.id}-${game.marketRegistryId}`} game={game} />)
+                {events && events.length > 0 ? (
+                    events.map((event: any) => (
+                        <Event key={`${event.gameId}-${event.marketRegistryId}`} event={event} />
+                    ))
                 ) : (
-                    <Placeholder retry={retry} />
+                    <Placeholder />
                 )}
                 <PlaceBetDialog />
             </PickContext.Provider>

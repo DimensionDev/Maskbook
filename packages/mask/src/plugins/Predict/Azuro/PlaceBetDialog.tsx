@@ -4,7 +4,13 @@ import { makeStyles, ActionButton } from '@masknet/theme'
 import { useI18N } from '../locales'
 import { useI18N as useBaseI18N } from '../../../utils'
 import { isGreaterThan, rightShift, isZero, NetworkPluginID } from '@masknet/web3-shared-base'
-import { useFungibleToken, useFungibleTokenBalance } from '@masknet/plugin-infra/web3'
+import {
+    useFungibleToken,
+    useFungibleTokenBalance,
+    useAccount,
+    useChainId,
+    useWeb3Connection,
+} from '@masknet/plugin-infra/web3'
 import { useState, useMemo, useCallback } from 'react'
 import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
 // import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
@@ -16,6 +22,7 @@ import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
 import { PickContext } from './context/usePickContext'
 import { useContainer } from 'unstated-next'
 import { Markets } from './types'
+import { useAzuroLPContract } from './hooks/useAzuroContract'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -81,14 +88,15 @@ export function PlaceBetDialog() {
     const { value: token } = useFungibleToken(NetworkPluginID.PLUGIN_EVM)
     const { value: balance } = useFungibleTokenBalance(NetworkPluginID.PLUGIN_EVM, token?.address)
     const RATE_DECIMALS = 18
+    const MINRATE_DECIMALS = 9
 
     const { value: actualRate, loading: actualRateLoading } = useActualRate(condition, amount)
     const rawAmount = rightShift(String(amount), token?.decimals)
     const deadline = Math.floor(Date.now() / 1000) + 2000
     const minRate = (1 + (((actualRate ?? 0) - 1) * (100 - slippage)) / 100).toFixed(8)
-    const rawMinRate = rightShift(minRate ?? '0', RATE_DECIMALS)
+    const rawMinRate = rightShift(minRate ?? '0', MINRATE_DECIMALS)
 
-    const [{ loading: isPlacing }, placeBetCallback] = usePlaceBetCallback(
+    const [{ loading: isPlacing, error }, placeBetCallback] = usePlaceBetCallback(
         condition?.conditionId,
         rawAmount,
         condition?.outcomeId,
@@ -125,6 +133,10 @@ export function PlaceBetDialog() {
             },
         })
     }, [placeBetCallback, openShareTxDialog])
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const azuroContract = useAzuroLPContract()
+    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
 
     if (!open) return null
 
@@ -145,8 +157,9 @@ export function PlaceBetDialog() {
                                 <Grid className={classes.infoContainer} container justifyContent="space-between">
                                     <Typography className={classes.infoTitle}>Event:</Typography>
                                     <Typography>
-                                        {game?.participants[0].name} {t.plugin_versus()}
-                                        {game?.participants[1].name}
+                                        {`${game?.participants[0].name} ${t.plugin_versus()} ${
+                                            game?.participants[1].name
+                                        }`}
                                     </Typography>
                                 </Grid>
                                 <Grid className={classes.infoContainer} container justifyContent="space-between">
@@ -160,6 +173,8 @@ export function PlaceBetDialog() {
                                         &nbsp;
                                         {game?.marketRegistryId === Markets.TotalGoals
                                             ? outcomeSecondParam[condition?.paramId ?? 0]
+                                            : game?.marketRegistryId === Markets.Handicap
+                                            ? outcomeSecondParam[condition?.paramId ?? 0]
                                             : null}
                                     </Typography>
                                 </Grid>
@@ -169,7 +184,7 @@ export function PlaceBetDialog() {
                                         {!amount ? (
                                             condition?.value
                                         ) : actualRateLoading ? (
-                                            <div>Loading...</div>
+                                            <div>{tr('loading')}</div>
                                         ) : (
                                             actualRate
                                         )}
@@ -181,7 +196,7 @@ export function PlaceBetDialog() {
                                         {!amount ? (
                                             condition?.value.toFixed(2)
                                         ) : actualRateLoading ? (
-                                            <div>Loading...</div>
+                                            <div>{tr('loading')}</div>
                                         ) : (
                                             minRate
                                         )}

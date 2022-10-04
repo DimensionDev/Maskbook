@@ -92,12 +92,16 @@ export function PredictDialog(props: PredictDialogProps) {
                     />
                 </div>
                 <div className={classes.applications}>
-                    <ApplicationEntry
-                        disabled={!protocols[chainId.valueOf()]?.supportedProtocols.includes(PLUGIN_AZURO_ID)}
-                        title={t.plugin_azuro()}
-                        icon={<AzuroIcon fill={classes.azuroIcon} />}
-                        onClick={() => setOpenAzuro(true)}
-                    />
+                    {protocols[chainId.valueOf()]?.supportedProtocols.includes(PLUGIN_AZURO_ID) ? (
+                        <ApplicationEntry
+                            disabled={
+                                !protocols[currentChainId.valueOf()]?.supportedProtocols.includes(PLUGIN_AZURO_ID)
+                            }
+                            title={t.plugin_azuro()}
+                            icon={<AzuroIcon fill={classes.azuroIcon} />}
+                            onClick={() => setOpenAzuro(true)}
+                        />
+                    ) : null}
                 </div>
                 <AzuroDialog open={openAzuro} onClose={useCallback(() => setOpenAzuro(false), [])} />
             </DialogContent>

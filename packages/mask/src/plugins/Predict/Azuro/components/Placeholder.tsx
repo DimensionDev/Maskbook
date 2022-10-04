@@ -1,6 +1,6 @@
 import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../../utils'
-import Button from '@mui/material/Button'
+import { Icons } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme, props) => ({
     placeholder: {
@@ -22,6 +22,9 @@ const useStyles = makeStyles()((theme, props) => ({
             background: 'none',
         },
     },
+    direct: {
+        color: theme.palette.secondaryDivider,
+    },
 }))
 
 interface PlaceholderProps {
@@ -29,18 +32,12 @@ interface PlaceholderProps {
 }
 
 export function Placeholder(props: PlaceholderProps) {
-    const { retry } = props
     const { classes } = useStyles()
     const { t } = useI18N()
 
     return (
         <div className={classes.placeholder}>
-            {/* <Icons.d className={classes.icon} /> */}
-            {retry ? (
-                <Button variant="text" className={classes.retry} onClick={() => retry()}>
-                    {t('retry')}
-                </Button>
-            ) : null}
+            <Icons.EmptySimple size={36} className={classes.direct} />
         </div>
     )
 }

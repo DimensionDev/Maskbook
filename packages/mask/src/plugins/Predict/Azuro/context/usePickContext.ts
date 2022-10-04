@@ -1,8 +1,7 @@
-import type { AzuroGame } from '@azuro-protocol/sdk'
 import { useState } from 'react'
 import { createContainer } from 'unstated-next'
 import { useControlledDialog } from '../../../../utils'
-import type { Odds } from '../types'
+import type { Game, Outcome } from '../types'
 
 function usePickContext() {
     const {
@@ -10,8 +9,8 @@ function usePickContext() {
         onClose: onClosePlaceBetDialog,
         onOpen: onOpenPlaceBetDialog,
     } = useControlledDialog()
-    const [conditionPick, setConditionPick] = useState<Odds | null>(null)
-    const [gamePick, setGamePick] = useState<AzuroGame | null>(null)
+    const [conditionPick, setConditionPick] = useState<Outcome | null>(null)
+    const [gamePick, setGamePick] = useState<Game | null>(null)
 
     return {
         openPlaceBetDialog,

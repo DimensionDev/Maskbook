@@ -1,7 +1,7 @@
 import LoadingButton from '@mui/lab/LoadingButton'
 import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../locales'
-import { ConditionStatus, UserBet } from '../types'
+import type { UserBet } from '../types'
 import { useAsyncFn } from 'react-use'
 import { useAzuroLPContract } from '../hooks/useAzuroContract'
 import { useAccount, useWeb3Connection } from '@masknet/plugin-infra/web3'
@@ -11,6 +11,11 @@ import { encodeContractTransaction } from '@masknet/web3-shared-evm'
 const useStyles = makeStyles()((theme) => ({
     redeemButton: {
         background: theme.palette.success.light,
+        color: theme.palette.text.buttonText,
+        padding: theme.spacing(0.25, 1),
+        '&:hover': {
+            background: theme.palette.success.light,
+        },
     },
 }))
 
@@ -49,11 +54,7 @@ export function RedeemButton(props: RedeemButtonProps) {
         return hash
     }, [bet.nftId, retry, connection, azuroContract, account])
 
-    const isRedeemable =
-        (isResultPositive && bet.gameInfo.state === ConditionStatus.RESOLVED) ||
-        bet.gameInfo.state === ConditionStatus.CANCELED
-
-    return isRedeemable ? (
+    return (
         <LoadingButton
             onClick={() => doFetch()}
             className={classes.redeemButton}
@@ -62,5 +63,5 @@ export function RedeemButton(props: RedeemButtonProps) {
             disabled={bet.isRedeemed || loading}>
             {bet.isRedeemed ? t.plugin_redeemed() : t.plugin_redeem()}
         </LoadingButton>
-    ) : null
+    )
 }

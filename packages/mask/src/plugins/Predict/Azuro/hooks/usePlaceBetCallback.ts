@@ -24,11 +24,13 @@ export function usePlaceBetCallback(
             from: account,
             value: toFixed(amount),
         }
+
         const tx = await encodeContractTransaction(
             azuroContract,
             azuroContract.methods.betNative(conditionID, outcomeID, deadline, minOdds),
             config,
         )
+
         return connection?.sendTransaction(tx)
     }, [account, amount, conditionID, outcomeID, deadline, minOdds, chainId, azuroContract, connection])
 }

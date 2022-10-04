@@ -20,7 +20,7 @@ export const base: Plugin.Shared.Definition = {
         target: 'stable',
         web3: {
             [NetworkPluginID.PLUGIN_EVM]: {
-                supportedChainIds: [ChainId.Sokol, ChainId.xDai],
+                supportedChainIds: [ChainId.xDai],
             },
             [NetworkPluginID.PLUGIN_FLOW]: { supportedChainIds: [] },
             [NetworkPluginID.PLUGIN_SOLANA]: { supportedChainIds: [] },
