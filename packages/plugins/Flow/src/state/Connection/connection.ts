@@ -142,8 +142,8 @@ class Connection implements BaseConnection {
     }
     transferNonFungibleToken(
         address: string,
-        recipient: string,
         tokenId: string,
+        recipient: string,
         amount: string,
         schema?: SchemaType,
         initial?: FlowConnectionOptions,

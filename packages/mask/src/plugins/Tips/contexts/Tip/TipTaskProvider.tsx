@@ -60,8 +60,8 @@ export const TipTaskProvider: FC<React.PropsWithChildren<Props>> = memo(({ child
     const nftTipTuple = useNftTip(
         pluginId,
         recipientAddress,
-        nonFungibleTokenId,
         nonFungibleTokenAddress,
+        nonFungibleTokenId,
         connectionOptions,
     )
 

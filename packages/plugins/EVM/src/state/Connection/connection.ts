@@ -285,8 +285,8 @@ class Connection implements EVM_Connection {
     }
     async transferNonFungibleToken(
         address: string,
-        recipient: string,
         tokenId: string,
+        recipient: string,
         amount?: string,
         schema?: SchemaType,
         initial?: EVM_Web3ConnectionOptions,
