@@ -1,4 +1,5 @@
 import { useEffect, useState, useMemo, useCallback } from 'react'
+import BigNumber from 'bignumber.js'
 import { useMenuConfig, FormattedBalance, useSharedI18N, useSelectAdvancedSettings } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import {
@@ -10,13 +11,18 @@ import {
     FungibleToken,
     formatCurrency,
 } from '@masknet/web3-shared-base'
-import { formatEtherToGwei, formatGweiToWei, formatWeiToEther, GasOptionConfig } from '@masknet/web3-shared-evm'
+import {
+    formatEtherToGwei,
+    formatGweiToWei,
+    formatWeiToEther,
+    formatWeiToGwei,
+    GasOptionConfig,
+} from '@masknet/web3-shared-evm'
 import { Typography, MenuItem, Box } from '@mui/material'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useChainId, useCurrentWeb3NetworkPluginID, useWeb3State } from '@masknet/plugin-infra/web3'
 import { Icons } from '@masknet/icons'
 import { SettingsContext } from '../SettingsBoard/Context.js'
-import BigNumber from 'bignumber.js'
 
 interface SelectGasSettingsToolbarProps<T extends NetworkPluginID = NetworkPluginID> {
     pluginID?: T
@@ -119,7 +125,7 @@ export function SelectGasSettingsToolbarUI({
     const { gasOptions, GAS_OPTION_NAMES } = SettingsContext.useContainer()
     const t = useSharedI18N()
     const [isCustomGas, setIsCustomGas] = useState(false)
-    const [currentGasOptionType, setCurrentGasOptionType] = useState<GasOptionType>(GasOptionType.SLOW)
+    const [currentGasOptionType, setCurrentGasOptionType] = useState<GasOptionType>(GasOptionType.NORMAL)
     const { classes, cx, theme } = useStyles()
     const chainId = useChainId()
     const { Others } = useWeb3State<'all'>()
@@ -165,8 +171,8 @@ export function SelectGasSettingsToolbarUI({
         if (!currentGasOption || isCustomGas) return
 
         setGasConfigCallback(
-            formatGweiToWei(currentGasOption.suggestedMaxFeePerGas).toString(),
-            formatGweiToWei(currentGasOption.suggestedMaxPriorityFeePerGas).toString(),
+            currentGasOption.suggestedMaxFeePerGas,
+            currentGasOption.suggestedMaxPriorityFeePerGas,
             currentGasOption.suggestedMaxPriorityFeePerGas,
         )
     }, [currentGasOption, isCustomGas, setGasConfigCallback])
@@ -184,10 +190,10 @@ export function SelectGasSettingsToolbarUI({
                     }}>
                     <Typography className={classes.title}>{GAS_OPTION_NAMES[type as GasOptionType]}</Typography>
                     <Typography className={classes.estimateGas}>
-                        {new BigNumber(option.suggestedMaxFeePerGas).gt(0)
-                            ? `${new BigNumber(option.suggestedMaxFeePerGas).toFixed(2)}Gwei`
-                            : new BigNumber(option.estimatedBaseFee ?? 0).gt(0)
-                            ? `${formatEtherToGwei(option.estimatedBaseFee!).toFixed(2)}Gwei`
+                        {!isZero(option.suggestedMaxFeePerGas)
+                            ? `${formatWeiToGwei(option.suggestedMaxFeePerGas).toFixed(2)} Gwei`
+                            : !isZero(option.estimatedBaseFee ?? 0)
+                            ? `${formatEtherToGwei(option.estimatedBaseFee!).toFixed(2)} Gwei`
                             : ''}
                     </Typography>
                 </MenuItem>
@@ -229,7 +235,7 @@ export function SelectGasSettingsToolbarUI({
 
     return gasOptions && !isZero(gasFee) ? (
         <Box className={classes.section}>
-            <Typography className={classes.title}>Gas fee</Typography>
+            <Typography className={classes.title}>{t.gas_settings_label_gas_fee()}</Typography>
             <Typography className={classes.gasSection} component="div">
                 <FormattedBalance
                     value={gasFee}
