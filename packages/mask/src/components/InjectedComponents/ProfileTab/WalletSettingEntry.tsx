@@ -22,7 +22,7 @@ export const WalletSettingEntry = memo(() => {
 
     const handleOpenSettingDialog = useCallback(
         () =>
-            CrossIsolationMessages.events.PluginSettingsDialogUpdate.sendToLocal({
+            CrossIsolationMessages.events.settingsDialogEvent.sendToLocal({
                 open: true,
                 targetTab: PluginID.Web3Profile,
             }),

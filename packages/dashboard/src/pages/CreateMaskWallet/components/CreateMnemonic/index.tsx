@@ -1,5 +1,5 @@
 import { memo, useCallback, useEffect, useState } from 'react'
-import { Alert, Box, Button, Typography } from '@mui/material'
+import { Alert, Box, Button, lighten, Typography } from '@mui/material'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
 import { useDashboardI18N } from '../../../../locales/index.js'
@@ -16,6 +16,7 @@ import { HD_PATH_WITHOUT_INDEX_ETHEREUM } from '@masknet/web3-shared-base'
 const useStyles = makeStyles()((theme) => ({
     container: {
         padding: '120px 18%',
+        width: '100%',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
@@ -62,6 +63,9 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: 24,
         fontSize: 18,
         background: theme.palette.mode === 'dark' ? '#1A1D20' : '#F7F9FA',
+        '&:hover': {
+            background: `${lighten(theme.palette.mode === 'dark' ? '#1A1D20' : '#F7F9FA', 0.1)}!important`,
+        },
     },
     alert: {
         marginTop: 24,

@@ -75,7 +75,7 @@ export function ApplicationBoardDialog() {
             return
         }
         closeBoard()
-        CrossIsolationMessages.events.requestComposition.sendToLocal({
+        CrossIsolationMessages.events.compositionDialogEvent.sendToLocal({
             reason: 'timeline',
             open: false,
         })
@@ -87,6 +87,7 @@ export function ApplicationBoardDialog() {
             <InjectedDialog
                 open={open}
                 maxWidth="sm"
+                isOnBack={openSettings && !quickMode}
                 onClose={closeDialog}
                 titleTabs={
                     openSettings ? (

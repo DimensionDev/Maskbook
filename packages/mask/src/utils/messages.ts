@@ -1,5 +1,5 @@
 export type {
-    CompositionRequest,
+    CompositionDialogEvent as CompositionRequest,
     NFTAvatarEvent,
     UpdateEvent,
     AutoPasteFailedEvent,

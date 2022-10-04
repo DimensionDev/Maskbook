@@ -1,5 +1,5 @@
 import getUnixTime from 'date-fns/getUnixTime'
-import type { TrendingAPI } from '../types/index.js'
+import { TrendingAPI } from '../types/index.js'
 import { TokenType } from '@masknet/web3-shared-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { BTC_FIRST_LEGER_DATE, CMC_STATIC_BASE_URL, CMC_V1_BASE_URL, THIRD_PARTY_V1_BASE_URL } from './constants.js'
@@ -7,14 +7,6 @@ import { getCommunityLink, isMirroredKeyword, resolveChainIdByName } from './hel
 import { DataProvider } from '@masknet/public-api'
 import type { Coin, ResultData, Status } from './type.js'
 import { fetchJSON } from '../helpers.js'
-
-export enum Days {
-    MAX = 0,
-    ONE_DAY = 1,
-    ONE_WEEK = 7,
-    ONE_MONTH = 30,
-    ONE_YEAR = 365,
-}
 
 // #regin get quote info
 export interface QuotesInfo {
@@ -373,7 +365,7 @@ export class CoinMarketCapAPI implements TrendingAPI.Provider<ChainId> {
         const stats = await this.getHistorical(
             coinId,
             currency.name.toUpperCase(),
-            days === Days.MAX ? BTC_FIRST_LEGER_DATE : startDate,
+            days === TrendingAPI.Days.MAX ? BTC_FIRST_LEGER_DATE : startDate,
             endDate,
             interval,
         )

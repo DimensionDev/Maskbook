@@ -4,7 +4,7 @@ import { delay } from '@dimensiondev/kit'
 import { useOpenShareTxDialog, useSelectFungibleToken } from '@masknet/shared'
 import { NetworkPluginID, FungibleToken, formatBalance } from '@masknet/web3-shared-base'
 import { ChainId, createNativeToken, GasOptionConfig, SchemaType } from '@masknet/web3-shared-evm'
-import { useGasConfig, TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
+import { useGasConfig } from '@masknet/plugin-infra/web3-evm'
 import { useAccount, useChainId, useChainIdValid, useFungibleTokenBalance } from '@masknet/plugin-infra/web3'
 import { activatedSocialNetworkUI } from '../../../../social-network/index.js'
 import { isFacebook } from '../../../../social-network-adaptor/facebook.com/base.js'
@@ -43,7 +43,6 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const chainIdValid = useChainIdValid(NetworkPluginID.PLUGIN_EVM)
     const t = useI18N()
-    const { setTargetChainId } = TargetChainIdContext.useContainer()
 
     const { openDialog: openConnectWalletDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectProviderDialogUpdated,
@@ -266,7 +265,6 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
     // #region if chain id be changed, reset the chain id on context, and reset gas config
     useEffect(() => {
         if (!chainId) return
-        setTargetChainId(chainId)
         setGasConfig(undefined)
     }, [chainId])
     // #endregion
@@ -283,7 +281,11 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
     useEffect(() => {
         return PluginTraderMessages.swapSettingsUpdated.on((event) => {
             if (event.open) return
-            if (event.gasConfig) setGasConfig(event.gasConfig)
+
+            if (event.gasConfig) {
+                console.log({ gasConfig: event.gasConfig })
+                setGasConfig(event.gasConfig)
+            }
         })
     }, [])
 

@@ -10,7 +10,8 @@ export function useSnackbarCallback<P extends (...args: any[]) => Promise<T>, T>
     onSuccess?: (ret: T) => void,
     onError?: (err: Error) => void,
     key?: string,
-    successText?: string,
+    successText?: string | React.ReactNode,
+    errorText?: string | React.ReactNode,
 ): P
 export function useSnackbarCallback<P extends (...args: any[]) => Promise<T>, T>(
     opts: SnackbarCallback<P, T> | P,
@@ -18,7 +19,8 @@ export function useSnackbarCallback<P extends (...args: any[]) => Promise<T>, T>
     onSuccess?: (ret: T) => void,
     onError?: (err: Error) => void,
     key?: string,
-    successText?: string,
+    successText?: string | React.ReactNode,
+    errorText?: string | React.ReactNode,
 ) {
     const t = useSharedI18N()
     const { showSnackbar } = useCustomSnackbar()
@@ -45,7 +47,7 @@ export function useSnackbarCallback<P extends (...args: any[]) => Promise<T>, T>
                     return res
                 },
                 (error) => {
-                    showSnackbar(`Error: ${error.message || error}`, {
+                    showSnackbar(errorText ?? `Error: ${error.message || error}`, {
                         key,
                         preventDuplicate: true,
                         variant: 'error',
@@ -54,7 +56,7 @@ export function useSnackbarCallback<P extends (...args: any[]) => Promise<T>, T>
                     throw error
                 },
             ),
-        [...deps!, showSnackbar, executor, onError, onSuccess, key, successText],
+        [...deps!, showSnackbar, executor, onError, onSuccess, key, successText, errorText],
     )
 }
 

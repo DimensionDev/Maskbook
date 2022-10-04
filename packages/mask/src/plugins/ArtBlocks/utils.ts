@@ -1,4 +1,4 @@
-import { parseURL } from '@masknet/shared-base'
+import { parseURLs } from '@masknet/shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { artBlocksHostnames, artBlocksPathnameRegexMatcher } from './constants.js'
 
@@ -10,7 +10,7 @@ export function checkUrl(url: string): boolean {
 }
 
 export function getRelevantUrl(textContent: string) {
-    const urls = parseURL(textContent)
+    const urls = parseURLs(textContent)
     return urls.find(checkUrl)
 }
 

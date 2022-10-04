@@ -1,6 +1,6 @@
 import { EMPTY_LIST, NextIDPlatform } from '@masknet/shared-base'
 import { useAsyncRetry } from 'react-use'
-import { useWeb3State } from '../entry-web3.js'
+import { useWeb3State } from './useWeb3State.js'
 import type { PluginID } from '../types.js'
 
 /**

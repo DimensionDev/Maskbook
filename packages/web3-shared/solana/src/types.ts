@@ -8,6 +8,11 @@ export enum ChainId {
     Devnet = 103,
 }
 
+export enum AddressType {
+    Default = 1,
+    Program = 2,
+}
+
 export enum SchemaType {
     Native = 1,
     Fungible = 2,

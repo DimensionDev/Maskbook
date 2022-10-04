@@ -1,11 +1,15 @@
 import { createGlobalState } from '@masknet/shared-base-ui'
 import { Services, Messages } from '../../API.js'
+import { noop } from 'lodash-unified'
 
 export type SocialNetwork = {
     networkIdentifier: string
 }
 
-export const [useSupportedSites] = createGlobalState(Services.SocialNetwork.getSupportedSites, () => () => {})
+export const [useSupportedSocialNetworkSites] = createGlobalState(
+    () => Services.SocialNetwork.getSupportedSites({ isSocialNetwork: true }),
+    () => noop,
+)
 
 export const [useOwnedPersonas] = createGlobalState(
     () => Services.Identity.queryOwnedPersonaInformation(false),

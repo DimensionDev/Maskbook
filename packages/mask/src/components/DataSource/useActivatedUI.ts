@@ -5,7 +5,7 @@ import { ValueRef } from '@dimensiondev/holoflows-kit'
 import { useValueRef } from '@masknet/shared-base-ui'
 import type { IdentityResolved } from '@masknet/plugin-infra'
 import { NextIDProof } from '@masknet/web3-providers'
-import { EMPTY_LIST, ProfileInformation } from '@masknet/shared-base'
+import type { ProfileInformation } from '@masknet/shared-base'
 import type { SocialIdentity } from '@masknet/web3-shared-base'
 import { activatedSocialNetworkUI, globalUIState } from '../../social-network/index.js'
 import Services from '../../extension/service.js'
@@ -22,7 +22,7 @@ async function queryPersonasFromNextID(identityResolved: IdentityResolved) {
     if (!activatedSocialNetworkUI.configuration.nextIDConfig?.platform) return
     return NextIDProof.queryAllExistedBindingsByPlatform(
         activatedSocialNetworkUI.configuration.nextIDConfig?.platform,
-        identityResolved.identifier.userId.toLowerCase(),
+        identityResolved.identifier.userId,
     )
 }
 
@@ -119,7 +119,7 @@ export function useSocialIdentity(identity: IdentityResolved | null | undefined)
         const bindings = await queryPersonasFromNextID(identity)
         const persona = await queryPersonaFromDB(identity)
         const personaBindings =
-            bindings?.filter((x) => x.persona === persona?.identifier.publicKeyAsHex.toLowerCase()) ?? EMPTY_LIST
+            bindings?.filter((x) => x.persona === persona?.identifier.publicKeyAsHex.toLowerCase()) ?? []
         return {
             ...identity,
             isOwner,
@@ -127,7 +127,7 @@ export function useSocialIdentity(identity: IdentityResolved | null | undefined)
             hasBinding: personaBindings.length > 0,
             binding: first(personaBindings),
         }
-    }, [isOwner, identity?.identifier?.toText()])
+    }, [isOwner, identity])
 
     useEffect(() => MaskMessages.events.ownProofChanged.on(result.retry), [result.retry])
 

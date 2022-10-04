@@ -18,7 +18,7 @@ const useStyles = makeStyles()((theme) => ({
         right: 5,
         width: 20,
         height: 20,
-        color: theme.palette.primary.main,
+        color: theme.palette.maskColor.primary,
     },
     image: {
         width: 100,
@@ -29,7 +29,7 @@ const useStyles = makeStyles()((theme) => ({
         border: '1px solid transparent',
     },
     selected: {
-        border: `1px solid ${theme.palette.primary.main}`,
+        border: `1px solid ${theme.palette.maskColor.primary}`,
         borderRadius: 8,
     },
     imageLoading: {
@@ -49,6 +49,9 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         display: 'flex',
     },
+    tooltip: {
+        whiteSpace: 'nowrap',
+    },
 }))
 
 interface NFTImageProps {
@@ -65,7 +68,7 @@ function isSameNFT(pluginId: NetworkPluginID, a: AllChainsNonFungibleToken, b?: 
               a.contract?.chainId &&
               a.contract?.chainId === b?.contract?.chainId &&
               a.tokenId === b?.tokenId
-        : a.tokenId === b?.tokenId
+        : a.tokenId === b?.tokenId && a.id === b.id
 }
 
 export function NFTImage(props: NFTImageProps) {
@@ -77,10 +80,12 @@ export function NFTImage(props: NFTImageProps) {
     const name = token.collection?.name || token.contract?.name
     const uiTokenId = Others?.formatTokenId(token.tokenId, 4) ?? `#${token.tokenId}`
     const title = name ? `${name} ${uiTokenId}` : token.metadata?.name ?? ''
+
     return (
         <Tooltip
             title={title}
             arrow
+            classes={{ tooltip: classes.tooltip }}
             disableInteractive
             placement="top"
             PopperProps={{ disablePortal: true, popperOptions: { strategy: 'absolute' } }}>

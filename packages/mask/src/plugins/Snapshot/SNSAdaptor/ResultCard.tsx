@@ -58,19 +58,31 @@ const useStyles = makeStyles()((theme) => {
             margin: '0 auto',
             backgroundColor: theme.palette.maskColor.publicMain,
             color: theme.palette.maskColor.white,
+            '&:hover': {
+                backgroundColor: theme.palette.maskColor.publicMain,
+                color: theme.palette.maskColor.white,
+            },
+        },
+        tooltip: {
+            backgroundColor: theme.palette.maskColor.publicMain,
+            color: theme.palette.maskColor.white,
+        },
+        arrow: {
+            color: theme.palette.maskColor.publicMain,
         },
     }
 })
 
-const StyledLinearProgress = styled(LinearProgress)`
-    &.${linearProgressClasses.root} {
-        height: 8px;
-        border-radius: 5px;
-    }
-    &.${linearProgressClasses.bar} {
-        border-radius: 5px;
-    }
-`
+const StyledLinearProgress = styled(LinearProgress)(({ theme }) => ({
+    [`&.${linearProgressClasses.root}`]: {
+        height: 8,
+        borderRadius: 5,
+        backgroundColor: theme.palette.maskColor.publicBg,
+    },
+    [`&.${linearProgressClasses.bar}`]: {
+        borderRadius: 5,
+    },
+}))
 
 function Content() {
     const identifier = useContext(SnapshotContext)
@@ -117,6 +129,7 @@ function Content() {
                                 title={<Typography>{result.choice}</Typography>}
                                 placement="top"
                                 disableHoverListener={!tooltipsVisible[i]}
+                                classes={{ tooltip: classes.tooltip, arrow: classes.arrow }}
                                 arrow>
                                 <Typography
                                     ref={(ref) => {
@@ -130,6 +143,7 @@ function Content() {
                                 PopperProps={{
                                     disablePortal: true,
                                 }}
+                                classes={{ tooltip: classes.tooltip, arrow: classes.arrow }}
                                 title={
                                     <Typography className={classes.ellipsisText}>
                                         {result.powerDetail
@@ -154,7 +168,7 @@ function Content() {
                             </Typography>
                         </Box>
                         <Box className={classes.linearProgressWrap}>
-                            <StyledLinearProgress variant="determinate" value={result.percentage} />
+                            <StyledLinearProgress color="inherit" variant="determinate" value={result.percentage} />
                         </Box>
                     </ListItem>
                 ))}

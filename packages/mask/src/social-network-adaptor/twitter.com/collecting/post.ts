@@ -40,9 +40,7 @@ function isQuotedTweet(tweetNode: HTMLElement | null) {
 }
 
 function isDetailTweet(tweetNode: HTMLElement) {
-    const isDetail =
-        /^\/[^/]+\/status\//.test(location.pathname) &&
-        !!tweetNode.querySelector(`a[role="link"][href="${location.pathname}"] time[datetime]`)
+    const isDetail = !!tweetNode.querySelector('a[role="link"] time[datetime]')
     return isDetail
 }
 

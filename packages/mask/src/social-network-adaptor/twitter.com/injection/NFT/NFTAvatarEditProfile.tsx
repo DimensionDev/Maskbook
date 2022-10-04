@@ -26,7 +26,6 @@ interface StyleProps {
     minHeight: number
     fontSize: number
     marginBottom: number
-    border: string
     color: string
 }
 const useStyles = makeStyles<StyleProps>()((theme, props) => ({
@@ -36,7 +35,6 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         marginBottom: props.marginBottom,
         marginTop: 1,
         marginRight: theme.spacing(2),
-        border: props.border,
     },
     text: {
         color: props.color,
@@ -53,7 +51,6 @@ function OpenNFTAvatarEditProfileButtonInTwitter() {
         minHeight: 32,
         fontSize: 14,
         marginBottom: 11,
-        border: 'none',
         color: '',
     })
 
@@ -67,7 +64,6 @@ function OpenNFTAvatarEditProfileButtonInTwitter() {
             minHeight: Number(css.minHeight.replace('px', '')),
             fontSize: Number(css.fontSize.replace('px', '')),
             marginBottom: Number(css.marginBottom.replace('px', '')),
-            border: css.border,
             color: spanCss.color,
         })
     }
@@ -77,9 +73,9 @@ function OpenNFTAvatarEditProfileButtonInTwitter() {
     useLocationChange(() => setStyleFromEditProfileSelector())
 
     const clickHandler = () => {
-        CrossIsolationMessages.events.requestOpenApplication.sendToLocal({
+        CrossIsolationMessages.events.applicationDialogEvent.sendToLocal({
             open: true,
-            application: PluginID.Avatar,
+            pluginID: PluginID.Avatar,
         })
     }
 

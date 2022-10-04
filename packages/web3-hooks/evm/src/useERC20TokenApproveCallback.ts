@@ -2,12 +2,9 @@ import { useCallback, useMemo } from 'react'
 import { useAsyncFn } from 'react-use'
 import { isLessThan, NetworkPluginID, toFixed, isZero } from '@masknet/web3-shared-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
+import { useChainId, useAccount, useWeb3Connection, useFungibleTokenBalance } from '@masknet/web3-hooks-base'
 import { useERC20TokenContract } from './useERC20TokenContract.js'
 import { useERC20TokenAllowance } from './useERC20TokenAllowance.js'
-import { useWeb3Connection } from '../useWeb3Connection.js'
-import { useChainId } from '../useChainId.js'
-import { useAccount } from '../useAccount.js'
-import { useFungibleTokenBalance } from '../../entry-web3.js'
 
 const MaxUint256 = toFixed('0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff')
 

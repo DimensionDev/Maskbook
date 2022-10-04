@@ -96,7 +96,6 @@
       // @masknet/scripts: insert-here 2
 
       // Plugins
-      "@masknet/plugin-dao": ["./packages/plugins/DAO/src"],
       "@masknet/plugin-debugger": ["./packages/plugins/Debugger/src"],
       "@masknet/plugin-example": ["./packages/plugins/example/src"],
       "@masknet/plugin-file-service": ["./packages/plugins/FileService/src"],

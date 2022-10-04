@@ -49,7 +49,7 @@ function createNFTToken(
         ownerId: token.owner,
         type: TokenType.NonFungible,
         schema: SchemaType.NonFungible,
-        tokenId: token.mintAddress,
+        tokenId: '',
         address: token.mintAddress,
         metadata: {
             chainId,
@@ -161,7 +161,7 @@ export class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
                 }),
                 type: TokenType.NonFungible,
                 schema: SchemaType.NonFungible,
-                tokenId: token.mintAddress,
+                tokenId: '',
                 address: token.mintAddress,
                 metadata: {
                     chainId,
@@ -185,7 +185,6 @@ export class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
                     description: '',
                     iconURL: '',
                     verified: false,
-                    address: token.mintAddress,
                 },
             }
         })

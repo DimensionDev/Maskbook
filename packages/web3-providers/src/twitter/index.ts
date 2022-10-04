@@ -28,24 +28,39 @@ function getCSRFToken() {
     return value
 }
 
-async function fetchContentAsTwitterDotCom(url: string) {
-    const res = await globalThis.fetch(url)
-    return res.text()
+const scriptCache = new LRUCache<string, any>({
+    max: 10,
+    ttl: 300_000,
+})
+async function fetchContent(url: string) {
+    const hit: Promise<Response> = scriptCache.get(url) ?? fetch(url)
+
+    if (scriptCache.get(url) !== hit) scriptCache.set(url, hit)
+
+    if (typeof hit === 'string') return hit
+
+    const response = (await hit).clone()
+    if (!response.ok) {
+        scriptCache.delete(url)
+        return ''
+    }
+    const content = await response.text()
+    scriptCache.set(url, content)
+    return content
 }
 
-let swContent = ''
 async function getTokens(operationName?: string) {
-    swContent = swContent || (await fetchContentAsTwitterDotCom('https://twitter.com/sw.js'))
+    const swContent = await fetchContent('https://twitter.com/sw.js')
     const [mainContent, nftContent] = await Promise.all([
-        fetchContentAsTwitterDotCom(getScriptURL(swContent ?? '', 'main')),
-        fetchContentAsTwitterDotCom(getScriptURL(swContent ?? '', 'bundle.UserNft')),
+        fetchContent(getScriptURL(swContent, 'main')),
+        fetchContent(getScriptURL(swContent, 'bundle.UserNft')),
     ])
 
     const bearerToken = getScriptContentMatched(mainContent ?? '', /s="(\w+%3D\w+)"/)
     const queryToken = getScriptContentMatched(nftContent ?? '', /{\s?id:\s?"([\w-]+)"/)
     const csrfToken = getCSRFToken()
     const queryId = operationName
-        ? getScriptContentMatched(mainContent ?? '', new RegExp(`queryId:"(\\w+)",operationName:"${operationName}"`))
+        ? getScriptContentMatched(mainContent ?? '', new RegExp(`queryId:"([^"]+)",operationName:"${operationName}"`))
         : undefined
 
     return {
@@ -68,7 +83,7 @@ async function getUserNftContainer(
         }
     }
 }> {
-    const response = await globalThis.fetch(
+    const response = await fetch(
         urlcat(
             `https://twitter.com/i/api/graphql/:queryToken/userNftContainer_Query?variables=${encodeURIComponent(
                 JSON.stringify({
@@ -94,7 +109,7 @@ async function getUserNftContainer(
 }
 
 async function getSettings(bearerToken: string, csrfToken: string): Promise<TwitterBaseAPI.Settings> {
-    const response = await globalThis.fetch(
+    const response = await fetch(
         urlcat('https://twitter.com/i/api/1.1/account/settings.json', {
             include_mention_filter: false,
             include_nsfw_user_flag: false,
@@ -119,13 +134,23 @@ async function getSettings(bearerToken: string, csrfToken: string): Promise<Twit
 }
 
 const cache = new LRUCache<string, any>({
-    max: 20,
-    ttl: 300000,
+    max: 40,
+    ttl: 300_000,
 })
 
+const TWITTER_AVATAR_ID_MATCH = /^\/profile_images\/(\d+)/
+
 export class TwitterAPI implements TwitterBaseAPI.Provider {
+    getAvatarId(avatarURL?: string) {
+        if (!avatarURL) return ''
+        const url = new URL(avatarURL)
+        const match = url.pathname.match(TWITTER_AVATAR_ID_MATCH)
+        if (!match) return ''
+
+        return match[1]
+    }
     async getSettings() {
-        const { bearerToken, queryToken, csrfToken } = await getTokens()
+        const { bearerToken, csrfToken } = await getTokens()
         if (!bearerToken || !csrfToken) return
         return getSettings(bearerToken, csrfToken)
     }
@@ -137,7 +162,6 @@ export class TwitterAPI implements TwitterBaseAPI.Provider {
         return {
             address: result.data.user.result.nft_avatar_metadata.smart_contract.address,
             token_id: result.data.user.result.nft_avatar_metadata.token_id,
-            type_name: result.data.user.result.nft_avatar_metadata.smart_contract.__typename,
         }
     }
 
@@ -170,7 +194,7 @@ export class TwitterAPI implements TwitterBaseAPI.Provider {
         const appendURL = `${UPLOAD_AVATAR_URL}?command=APPEND&media_id=${mediaId}&segment_index=0`
         const formData = new FormData()
         formData.append('media', image)
-        await globalThis.fetch(appendURL, {
+        await fetch(appendURL, {
             method: 'POST',
             credentials: 'include',
             body: formData,
@@ -198,7 +222,7 @@ export class TwitterAPI implements TwitterBaseAPI.Provider {
         const updateProfileImageURL = 'https://twitter.com/i/api/1.1/account/update_profile_image.json'
         if (!bearerToken || !queryToken || !csrfToken) return
 
-        const response = await globalThis.fetch(
+        const response = await fetch(
             urlcat(updateProfileImageURL, {
                 media_id: media_id_str,
                 skip_status: 1,
@@ -233,10 +257,10 @@ export class TwitterAPI implements TwitterBaseAPI.Provider {
                 responsive_web_graphql_timeline_navigation_enabled: false,
             }),
         })
-        const cacheKey = `${bearerToken}/${csrfToken}/${url}`
+        const cacheKey = `${bearerToken}/${csrfToken}/${queryId}/${screenName}`
         const fetchingTask: Promise<Response> =
             cache.get(cacheKey) ??
-            globalThis.fetch(url, {
+            fetch(url, {
                 headers: {
                     authorization: `Bearer ${bearerToken}`,
                     'x-csrf-token': csrfToken,
@@ -267,8 +291,7 @@ function request<TResponse>(
     // Inside, we call the `fetch` function with
     // a URL and config given:
     return (
-        globalThis
-            .fetch(url, config)
+        fetch(url, config)
             // When got a response call a `json` method on it
             .then((response) => response.json())
             // and return the result data.

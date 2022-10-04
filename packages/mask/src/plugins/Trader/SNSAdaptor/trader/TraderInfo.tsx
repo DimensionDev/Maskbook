@@ -6,9 +6,8 @@ import { multipliedBy, NetworkPluginID, formatBalance, ZERO } from '@masknet/web
 import { useAsyncRetry } from 'react-use'
 import { PluginTraderRPC } from '../../messages.js'
 import { TradeProvider } from '@masknet/public-api'
-import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
 import { useGreatThanSlippageSetting } from './hooks/useGreatThanSlippageSetting.js'
-import { useNativeTokenPrice } from '@masknet/plugin-infra/web3'
+import { useChainId, useNativeTokenPrice } from '@masknet/plugin-infra/web3'
 import { DefaultTraderPlaceholderUI, TraderInfoUI } from './components/TraderInfoUI.js'
 
 export interface TraderInfoProps {
@@ -20,17 +19,16 @@ export interface TraderInfoProps {
 }
 
 export const TraderInfo = memo<TraderInfoProps>(({ trade, gasPrice, isBest, onClick, isFocus }) => {
-    const { targetChainId } = TargetChainIdContext.useContainer()
-
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     // #region refresh pools
     useAsyncRetry(async () => {
         // force update balancer's pools each time user enters into the swap tab
-        if (trade.provider === TradeProvider.BALANCER) await PluginTraderRPC.updatePools(true, targetChainId)
-    }, [trade.provider, targetChainId])
+        if (trade.provider === TradeProvider.BALANCER) await PluginTraderRPC.updatePools(true, chainId)
+    }, [trade.provider, chainId])
     // #endregion
 
-    const nativeToken = createNativeToken(targetChainId)
-    const { value: tokenPrice = 0 } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM, { chainId: targetChainId })
+    const nativeToken = createNativeToken(chainId)
+    const { value: tokenPrice = 0 } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM, { chainId })
 
     const gasFee = useMemo(() => {
         return trade.gas.value && gasPrice ? multipliedBy(gasPrice, trade.gas.value).integerValue().toFixed() : '0'
@@ -63,7 +61,7 @@ export const TraderInfo = memo<TraderInfoProps>(({ trade, gasPrice, isBest, onCl
 })
 
 export const DefaultTraderPlaceholder = memo(() => {
-    const { targetChainId } = TargetChainIdContext.useContainer()
-    const nativeToken = createNativeToken(targetChainId)
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const nativeToken = createNativeToken(chainId)
     return <DefaultTraderPlaceholderUI nativeToken={nativeToken} />
 })

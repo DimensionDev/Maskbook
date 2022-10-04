@@ -176,7 +176,7 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
 
     const handleOpenSettingDialog = useCallback(
         () =>
-            CrossIsolationMessages.events.PluginSettingsDialogUpdate.sendToLocal({
+            CrossIsolationMessages.events.settingsDialogEvent.sendToLocal({
                 open: true,
                 targetTab: PluginID.Tips,
             }),
@@ -194,8 +194,8 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
     const openConnectWallet = useCallback(() => Services.Helper.openPopupWindow(PopupRoutes.ConnectWallet), [])
 
     useEffect(() => {
-        return CrossIsolationMessages.events.PluginPublicWalletSettingsUpdate.on((x) => {
-            if (x === PluginID.Tips) retrySetting()
+        return CrossIsolationMessages.events.walletSettingsDialogEvent.on(({ pluginID }) => {
+            if (pluginID === PluginID.Tips) retrySetting()
         })
     }, [retrySetting])
 

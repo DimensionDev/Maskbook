@@ -127,7 +127,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
 
     const onConvertClick = useCallback(() => {
         if (!token?.value) return
-        CrossIsolationMessages.events.swapDialogUpdate.sendToLocal({
+        CrossIsolationMessages.events.swapDialogEvent.sendToLocal({
             open: true,
             traderProps: {
                 defaultInputCoin: token.value,

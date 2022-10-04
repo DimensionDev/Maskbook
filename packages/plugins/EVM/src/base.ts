@@ -1,9 +1,16 @@
 import type { Plugin } from '@masknet/plugin-infra'
-import { ChainId, NetworkType, NETWORK_DESCRIPTORS, ProviderType, PROVIDER_DESCRIPTORS } from '@masknet/web3-shared-evm'
+import {
+    ChainId,
+    SchemaType,
+    NetworkType,
+    NETWORK_DESCRIPTORS,
+    ProviderType,
+    PROVIDER_DESCRIPTORS,
+} from '@masknet/web3-shared-evm'
 import { PLUGIN_ID, PLUGIN_NAME, PLUGIN_DESCRIPTION } from './constants/index.js'
 import { languages } from './locales/languages.js'
 
-export const base: Plugin.Shared.Definition<ChainId, ProviderType, NetworkType> = {
+export const base: Plugin.Shared.Definition<ChainId, SchemaType, ProviderType, NetworkType> = {
     ID: PLUGIN_ID,
     name: { fallback: PLUGIN_NAME },
     description: { fallback: PLUGIN_DESCRIPTION },

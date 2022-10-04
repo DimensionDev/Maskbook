@@ -1,5 +1,5 @@
 import { EMPTY_LIST } from '@masknet/shared-base'
-import { FungibleToken, multipliedBy, pow10 } from '@masknet/web3-shared-base'
+import { FungibleToken, multipliedBy, NetworkPluginID, pow10 } from '@masknet/web3-shared-base'
 import { useTrade as useNativeTokenTrade } from './native/useTrade.js'
 import { useTradeComputed as useNativeTokenTradeComputed } from './native/useTradeComputed.js'
 import { SwapOOData, TagType, TradeInfo, TradeStrategy } from '../types/index.js'
@@ -25,9 +25,9 @@ import { useTradeGasLimit as useOpenOceanTradeGasLimit } from './openocean/useTr
 import { TradeProvider } from '@masknet/public-api'
 import { useAvailableTraderProviders } from '../trending/useAvailableTraderProviders.js'
 import { useNativeTradeGasLimit } from './useNativeTradeGasLimit.js'
-import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
 import type { TradeComputed } from '../types/index.js'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import { useChainId } from '@masknet/plugin-infra/web3'
 
 export function useAllTradeComputed(
     inputAmount: string,
@@ -35,7 +35,7 @@ export function useAllTradeComputed(
     outputToken?: FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>,
     temporarySlippage?: number,
 ): TradeInfo[] {
-    const { targetChainId } = TargetChainIdContext.useContainer()
+    const targetChainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const inputTokenProduct = pow10(inputToken?.decimals ?? 0)
     const inputAmount_ = multipliedBy(inputAmount || '0', inputTokenProduct)
         .integerValue()

@@ -118,9 +118,9 @@ export const PublicWalletSetting = memo<PublicWalletSettingProps>(
                     NextIDPlatform.NextID,
                     currentPersona,
                 )
-                const prevResult = storage.get<PublicWalletSettingType>(PluginID.Web3Profile)
+                const prevResult = storage.get<PublicWalletSettingType>(pluginId)
 
-                await storage.set<PublicWalletSettingType>(PluginID.Web3Profile, {
+                await storage.set<PublicWalletSettingType>(pluginId, {
                     ...prevResult,
                     hiddenAddresses: uniq(addresses),
                 })
@@ -130,7 +130,7 @@ export const PublicWalletSetting = memo<PublicWalletSettingProps>(
                     message: t.wallet_set_up_successfully(),
                     autoHideDuration: 2000,
                 })
-                CrossIsolationMessages.events.PluginPublicWalletSettingsUpdate.sendToAll({ pluginId })
+                CrossIsolationMessages.events.walletSettingsDialogEvent.sendToAll({ pluginID: pluginId })
                 onClose()
             } catch {
                 showSnackbar(t.save_failed(), {
@@ -139,7 +139,7 @@ export const PublicWalletSetting = memo<PublicWalletSettingProps>(
                     autoHideDuration: 2000,
                 })
             }
-        }, [Storage, currentPersona, addresses])
+        }, [Storage, currentPersona, addresses, pluginId])
 
         useUpdateEffect(() => {
             if (!hiddenAddresses) return

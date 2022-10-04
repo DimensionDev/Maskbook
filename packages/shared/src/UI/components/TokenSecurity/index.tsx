@@ -16,7 +16,7 @@ export const TokenSecurityBar = memo<TokenCardProps>(({ tokenSecurity }) => {
     const { warn_item_quantity: attentionFactors = 0, risk_item_quantity: riskyFactors = 0 } = tokenSecurity
 
     const handleOpenDialog = () => {
-        CrossIsolationMessages.events.requestCheckSecurityDialog.sendToAll({
+        CrossIsolationMessages.events.checkSecurityDialogEvent.sendToAll({
             open: true,
             searchHidden: true,
             tokenAddress: tokenSecurity.contract,

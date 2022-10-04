@@ -129,7 +129,6 @@ export const SelectFungibleTokenDialog: FC<SelectFungibleTokenDialogProps> = ({
             <DialogContent classes={{ root: classes.content }}>
                 <FungibleTokenList
                     ref={onRefChange}
-                    classes={{ list: classes.list, placeholder: classes.placeholder }}
                     pluginID={pluginId}
                     chainId={chainId}
                     tokens={tokens ?? []}

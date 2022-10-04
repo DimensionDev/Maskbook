@@ -24,23 +24,6 @@ const useStyles = makeStyles()((theme) => {
         textfield: {
             flex: 1,
             maxWidth: 100,
-            '& input::-webkit-input-placeholder': {
-                fontWeight: 700,
-            },
-            '& input[type=number]': {
-                fontSize: 16,
-                fontWeight: 700,
-                height: 24,
-                padding: 0,
-                textAlign: 'center',
-                '-moz-appearance': 'textfield',
-            },
-            '& input[type=number]::-webkit-outer-spin-button': {
-                '-webkit-appearance': 'none',
-            },
-            '& input[type=number]::-webkit-inner-spin-button': {
-                '-webkit-appearance': 'none',
-            },
         },
     }
 })

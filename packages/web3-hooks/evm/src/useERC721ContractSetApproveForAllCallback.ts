@@ -1,9 +1,7 @@
+import { useAsyncFn } from 'react-use'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
-import { useAsyncFn } from 'react-use'
-import { useChainId } from '../../entry-web3.js'
-import { useWeb3Connection } from '../useWeb3Connection.js'
-import { useAccount } from '../useAccount.js'
+import { useAccount, useChainId, useWeb3Connection } from '@masknet/web3-hooks-base'
 import { useERC721TokenContract } from './useERC721TokenContract.js'
 
 /**

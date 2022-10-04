@@ -28,9 +28,9 @@ const sns: Plugin.SNSAdaptor.Definition = {
             return {
                 RenderEntryComponent(EntryComponentProps) {
                     useEffect(() => {
-                        return CrossIsolationMessages.events.requestOpenApplication.on(({ open, application }) => {
-                            if (application !== PluginID.Web3Profile) return
-                            CrossIsolationMessages.events.requestWeb3ProfileDialog.sendToLocal({ open })
+                        return CrossIsolationMessages.events.applicationDialogEvent.on(({ open, pluginID }) => {
+                            if (pluginID !== PluginID.Web3Profile) return
+                            CrossIsolationMessages.events.web3ProfileDialogEvent.sendToLocal({ open })
                         })
                     }, [])
 
@@ -44,7 +44,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                                 onClick={() =>
                                     EntryComponentProps?.onClick
                                         ? EntryComponentProps?.onClick()
-                                        : CrossIsolationMessages.events.requestWeb3ProfileDialog.sendToLocal({
+                                        : CrossIsolationMessages.events.web3ProfileDialogEvent.sendToLocal({
                                               open: true,
                                           })
                                 }

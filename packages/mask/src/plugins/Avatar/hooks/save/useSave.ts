@@ -26,7 +26,7 @@ export function useSave(pluginId: NetworkPluginID, chainId: ChainId) {
             persona: ECKeyIdentifier,
             proof: BindingProof,
         ) => {
-            if (!token.contract?.address || !token.tokenId) return
+            if (!token.contract?.address) return
             const info: NextIDAvatarMeta = {
                 pluginId,
                 nickname: data.nickname,
@@ -34,7 +34,8 @@ export function useSave(pluginId: NetworkPluginID, chainId: ChainId) {
                 imageUrl: data.imageUrl,
                 avatarId: data.avatarId,
                 address: token.contract?.address ?? '',
-                tokenId: token.tokenId,
+                ownerAddress: account,
+                tokenId: token.tokenId || token.id,
                 chainId: (token.contract?.chainId ?? ChainId.Mainnet) as ChainId,
                 schema: (token.contract?.schema ?? SchemaType.ERC721) as SchemaType,
             }
@@ -43,12 +44,15 @@ export function useSave(pluginId: NetworkPluginID, chainId: ChainId) {
                 switch (pluginId) {
                     case NetworkPluginID.PLUGIN_EVM: {
                         if (isBindAccount) {
-                            return saveToNextID(info, account, persona, proof)
+                            const result = await saveToNextID(info, account, persona, proof)
+                            return result
                         }
-                        return saveToRSS3(info, account)
+                        const result = await saveToRSS3(info, account)
+                        return result
                     }
                     default:
-                        return saveToKV(info, account, persona, proof)
+                        const result = await saveToKV(info, account, persona, proof)
+                        return result
                 }
             } catch {
                 return

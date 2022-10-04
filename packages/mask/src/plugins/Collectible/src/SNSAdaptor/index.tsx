@@ -2,15 +2,17 @@ import { Trans } from 'react-i18next'
 import { Icons } from '@masknet/icons'
 import { Box } from '@mui/material'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
+import { PluginIDContextProvider } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID, SocialAddressType } from '@masknet/web3-shared-base'
 import { type Plugin, usePostInfoDetails, usePluginWrapper } from '@masknet/plugin-infra/content-script'
 import { PostInspector } from './PostInspector.js'
 import { base } from '../base.js'
-import { getPayloadFromURL, getPayloadFromURLs } from '../helpers/index.js'
+import { getPayloadFromURLs } from '../helpers/index.js'
 import { setupContext } from '../context.js'
-import { PLUGIN_ID, PLUGIN_WRAPPER_TITLE } from '../constants.js'
-import { CollectibleList } from './List/CollectibleList.js'
+import { PLUGIN_ID, PLUGIN_NAME } from '../constants.js'
 import { DialogInspector } from './DialogInspector.js'
+import { CollectionList } from './List/CollectionList.js'
+import { parseURLs } from '@masknet/shared-base'
 
 const TabConfig: Plugin.SNSAdaptor.ProfileTab = {
     ID: `${PLUGIN_ID}_nfts`,
@@ -18,7 +20,12 @@ const TabConfig: Plugin.SNSAdaptor.ProfileTab = {
     priority: 1,
     UI: {
         TabContent({ socialAddress, identity }) {
-            return <CollectibleList socialAddress={socialAddress} identity={identity} />
+            if (!socialAddress) return null
+            return (
+                <PluginIDContextProvider value={socialAddress.networkSupporterPluginID}>
+                    <CollectionList socialAddress={socialAddress} persona={identity?.publicKey} profile={identity} />
+                </PluginIDContextProvider>
+            )
         },
     },
     Utils: {
@@ -64,12 +71,12 @@ const sns: Plugin.SNSAdaptor.Definition = {
     PostInspector() {
         const links = usePostInfoDetails.mentionedLinks()
         const payload = getPayloadFromURLs(links)
-
         usePluginWrapper(!!payload)
         return payload ? <PostInspector payload={payload} /> : null
     },
     DecryptedInspector(props) {
-        const payload = getPayloadFromURL(extractTextFromTypedMessage(props.message, { linkAsText: true }).unwrapOr(''))
+        const links = parseURLs(extractTextFromTypedMessage(props.message, { linkAsText: true }).unwrapOr(''))
+        const payload = getPayloadFromURLs(links)
         usePluginWrapper(!!payload)
         return payload ? <PostInspector payload={payload} /> : null
     },
@@ -80,15 +87,16 @@ const sns: Plugin.SNSAdaptor.Definition = {
             priority: 2,
             UI: {
                 TabContent({ socialAddress, identity }) {
+                    if (!socialAddress) return null
                     return (
                         <Box pr={1.5}>
-                            <CollectibleList
-                                socialAddress={socialAddress}
-                                identity={identity}
-                                gridProps={{
-                                    gap: 1.5,
-                                }}
-                            />
+                            <PluginIDContextProvider value={socialAddress.networkSupporterPluginID}>
+                                <CollectionList
+                                    socialAddress={socialAddress}
+                                    persona={identity?.publicKey}
+                                    profile={identity}
+                                />
+                            </PluginIDContextProvider>
                         </Box>
                     )
                 },
@@ -113,7 +121,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
         },
     ],
     wrapperProps: {
-        title: PLUGIN_WRAPPER_TITLE,
+        title: PLUGIN_NAME,
         icon: <Icons.ApplicationNFT size={24} />,
     },
 }

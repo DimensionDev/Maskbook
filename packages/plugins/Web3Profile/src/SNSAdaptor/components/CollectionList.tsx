@@ -6,12 +6,13 @@ import { NetworkPluginID, TokenType } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({}))
 
-interface CollectionListProps extends withClasses<never | 'root' | 'list' | 'collectionWrap'> {
+export interface CollectionListProps extends withClasses<never | 'root' | 'list' | 'collectionWrap'> {
     collections: CollectionTypes[]
     onList?: (key: string) => void
     size?: number
     showNetwork?: boolean
 }
+
 export function CollectionList(props: CollectionListProps) {
     const { collections, onList, size = 64, showNetwork = false } = props
     const classes = useStylesExtends(useStyles(), props)

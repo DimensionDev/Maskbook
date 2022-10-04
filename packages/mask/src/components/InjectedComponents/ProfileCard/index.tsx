@@ -5,7 +5,7 @@ import {
     useActivatedPluginsSNSAdaptor,
     usePluginI18NField,
 } from '@masknet/plugin-infra/content-script'
-import { PluginWeb3ContextProvider, useAvailablePlugins, useSocialAddressListAll } from '@masknet/plugin-infra/web3'
+import { PluginWeb3ContextProvider, useAvailablePlugins } from '@masknet/plugin-infra/web3'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { LoadingBase, makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import { isSameAddress, NetworkPluginID, SocialIdentity } from '@masknet/web3-shared-base'
@@ -18,6 +18,7 @@ import { Trans } from 'react-i18next'
 import { useUpdateEffect } from 'react-use'
 import { MaskMessages, sorter, useLocationChange } from '../../../utils/index.js'
 import { ProfileCardTitle } from './ProfileCardTitle.js'
+import { useSocialAddressListBySettings } from '@masknet/shared'
 
 interface Props extends withClasses<'text' | 'button' | 'root'> {
     identity: SocialIdentity
@@ -39,6 +40,8 @@ const useStyles = makeStyles()((theme) => {
             overflow: 'auto',
             height: '100%',
             overscrollBehavior: 'contain',
+            borderRadius: theme.spacing(1.5),
+            boxShadow: theme.palette.shadow.popup,
         },
         loading: {
             display: 'flex',
@@ -162,7 +165,7 @@ export const ProfileCard: FC<Props> = ({ identity, ...rest }) => {
         value: socialAddressList = EMPTY_LIST,
         loading: loadingSocialAddressList,
         retry: retrySocialAddress,
-    } = useSocialAddressListAll(identity, undefined, sorter)
+    } = useSocialAddressListBySettings(identity, undefined, sorter)
 
     const availableSocialAddressList = useMemo(() => {
         return uniqBy(

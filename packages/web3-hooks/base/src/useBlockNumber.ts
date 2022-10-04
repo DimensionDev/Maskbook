@@ -5,7 +5,7 @@ import type { NetworkPluginID } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useChainId } from './useChainId.js'
 import { useWeb3Connection } from './useWeb3Connection.js'
-import { useWeb3State } from '../entry-web3.js'
+import { useWeb3State } from './useWeb3State.js'
 
 export function useBlockNumber<S extends 'all' | void = void, T extends NetworkPluginID = NetworkPluginID>(
     pluginID?: T,

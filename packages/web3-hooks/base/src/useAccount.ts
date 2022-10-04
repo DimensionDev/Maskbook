@@ -11,3 +11,10 @@ export function useAccount<T extends NetworkPluginID>(pluginID?: T, expectedAcco
     const account = expectedAccount ?? currentAccount ?? defaultAccount ?? ''
     return Others?.formatAddress ? Others.formatAddress(account) : account
 }
+
+export function useActualAccount<T extends NetworkPluginID>(pluginID?: T, expectedAccount?: string) {
+    const { Provider, Others } = useWeb3State(pluginID)
+    const defaultAccount = useSubscription(Provider?.account ?? UNDEFINED)
+    const account = expectedAccount ?? defaultAccount ?? ''
+    return Others?.formatAddress ? Others.formatAddress(account) : account
+}

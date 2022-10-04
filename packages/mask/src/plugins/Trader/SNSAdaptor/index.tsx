@@ -58,7 +58,7 @@ const sns: Plugin.SNSAdaptor.Definition<
                 ApplicationEntryID: base.ID,
                 RenderEntryComponent(EntryComponentProps) {
                     const openDialog = () =>
-                        CrossIsolationMessages.events.swapDialogUpdate.sendToLocal({
+                        CrossIsolationMessages.events.swapDialogEvent.sendToLocal({
                             open: true,
                         })
                     return (

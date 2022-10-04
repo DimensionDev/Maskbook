@@ -120,7 +120,7 @@ export function InvestDialog() {
     // #region Swap
     useEffect(
         () =>
-            CrossIsolationMessages.events.swapDialogUpdate.on(({ open }) => {
+            CrossIsolationMessages.events.swapDialogEvent.on(({ open }) => {
                 if (!open) retryLoadTokenBalance()
             }),
         [retryLoadTokenBalance],
@@ -128,7 +128,7 @@ export function InvestDialog() {
 
     const openSwap = useCallback(() => {
         if (!token) return
-        CrossIsolationMessages.events.swapDialogUpdate.sendToLocal({
+        CrossIsolationMessages.events.swapDialogEvent.sendToLocal({
             open: true,
             traderProps: {
                 defaultInputCoin: token,

@@ -3,7 +3,6 @@ import { SourceType } from '@masknet/web3-shared-base'
 
 export const PLUGIN_NAME = 'Collectibles'
 export const PLUGIN_DESCRIPTION = 'An NFT collectible viewer.'
-export const PLUGIN_WRAPPER_TITLE = 'NFT'
 
 export const PLUGIN_ID = PluginID.Collectible
 export const PLUGIN_META_KEY = `${PluginID.Collectible}:1`

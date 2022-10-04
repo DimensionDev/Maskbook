@@ -1,16 +1,31 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useUpdateEffect } from 'react-use'
 import { Controller, FormProvider, useForm } from 'react-hook-form'
+import type { z as zod } from 'zod'
 import { makeStyles, MaskAlert, MaskTextField } from '@masknet/theme'
 import { Grid, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { useSharedI18N } from '@masknet/shared'
-import { ChainId, formatGweiToWei, formatWeiToGwei, GasOption, Transaction } from '@masknet/web3-shared-evm'
+import { ChainId, formatWeiToGwei, GasOption, Transaction } from '@masknet/web3-shared-evm'
 import { formatBalance, GasOptionType, isPositive, isZero, NetworkPluginID, scale10 } from '@masknet/web3-shared-base'
 import { useWeb3State } from '@masknet/plugin-infra/web3'
-import type { z as zod } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useGasSchema } from './hooks/index.js'
+
+function getDefaultValues(transaction: Transaction, gasOptions: Record<GasOptionType, GasOption>) {
+    return {
+        gasLimit: (transaction.gas as string | number | undefined)?.toString() ?? '21000',
+        gasPrice: formatWeiToGwei(
+            (transaction.gasPrice as string) || gasOptions.normal.suggestedMaxFeePerGas,
+        ).toString(),
+        maxPriorityFeePerGas: formatWeiToGwei(
+            (transaction.maxPriorityFeePerGas as string) || gasOptions.normal.suggestedMaxPriorityFeePerGas,
+        ).toString(),
+        maxFeePerGas: formatWeiToGwei(
+            (transaction.maxFeePerGas as string) || gasOptions.normal.suggestedMaxFeePerGas,
+        ).toString(),
+    }
+}
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -60,10 +75,20 @@ export interface GasFormProps {
     transactionOptions: Partial<Transaction>
     gasOptions: Record<GasOptionType, GasOption>
     onChange?: (transactionOptions?: Partial<Transaction>) => void
+    maxPriorityFeePerGasByUser?: string
+    setMaxPriorityFeePerGasByUser: (s: string) => void
 }
 
 export function GasForm(props: GasFormProps) {
-    const { chainId, transaction, transactionOptions, gasOptions, onChange } = props
+    const {
+        chainId,
+        transaction,
+        transactionOptions,
+        gasOptions,
+        onChange,
+        maxPriorityFeePerGasByUser,
+        setMaxPriorityFeePerGasByUser,
+    } = props
     const t = useSharedI18N()
     const { classes } = useStyles()
     const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
@@ -81,18 +106,7 @@ export function GasForm(props: GasFormProps) {
         shouldUnregister: false,
         mode: 'onChange',
         resolver: zodResolver(schema),
-        defaultValues: {
-            gasLimit: (transactionComputed.gas as string | number | undefined)?.toString() ?? '21000',
-            gasPrice: transactionComputed.gasPrice
-                ? formatWeiToGwei(transactionComputed.gasPrice as string).toString()
-                : gasOptions.normal.suggestedMaxFeePerGas,
-            maxPriorityFeePerGas: transactionComputed.maxPriorityFeePerGas
-                ? formatWeiToGwei(transactionComputed.maxPriorityFeePerGas as string).toString()
-                : gasOptions.normal.suggestedMaxPriorityFeePerGas,
-            maxFeePerGas: transactionComputed.maxFeePerGas
-                ? formatWeiToGwei(transactionComputed.maxFeePerGas as string).toString()
-                : gasOptions.normal.suggestedMaxFeePerGas,
-        },
+        defaultValues: getDefaultValues(transactionComputed, gasOptions),
     })
 
     const { errors } = methods.formState
@@ -104,7 +118,6 @@ export function GasForm(props: GasFormProps) {
     ])
     const [gasPriceByUser, setGasPriceByUser] = useState<string>()
     const [maxFeePerGasByUser, setMaxFeePerGasByUser] = useState<string>()
-    const [maxPriorityFeePerGasByUser, setMaxPriorityFeePerGasByUser] = useState<string>()
 
     const errorCenter = useMemo(() => {
         return isEIP1559 ? errors.gasLimit?.message ?? '' : ''
@@ -130,13 +143,16 @@ export function GasForm(props: GasFormProps) {
         if (!gasOptions) return
 
         if (!gasPriceByUser) {
-            methods.setValue('gasPrice', gasOptions.normal.suggestedMaxFeePerGas)
+            methods.setValue('gasPrice', formatWeiToGwei(gasOptions.normal.suggestedMaxFeePerGas).toString())
         }
         if (!maxFeePerGasByUser) {
-            methods.setValue('maxFeePerGas', gasOptions.normal.suggestedMaxFeePerGas)
+            methods.setValue('maxFeePerGas', formatWeiToGwei(gasOptions.normal.suggestedMaxFeePerGas).toString())
         }
         if (!maxPriorityFeePerGasByUser) {
-            methods.setValue('maxPriorityFeePerGas', gasOptions.normal.suggestedMaxPriorityFeePerGas)
+            methods.setValue(
+                'maxPriorityFeePerGas',
+                formatWeiToGwei(gasOptions.normal.suggestedMaxPriorityFeePerGas).toString(),
+            )
         }
     }, [gasOptions, gasPriceByUser, maxFeePerGasByUser, maxPriorityFeePerGasByUser, methods.setValue])
     // #endregion
@@ -145,11 +161,11 @@ export function GasForm(props: GasFormProps) {
         const payload = isEIP1559
             ? {
                   gas: gasLimit,
-                  maxFeePerGas: formatGweiToWei(maxFeePerGas).toFixed(),
-                  maxPriorityFeePerGas: formatGweiToWei(maxPriorityFeePerGas).toFixed(),
+                  maxFeePerGas,
+                  maxPriorityFeePerGas,
               }
             : {
-                  gasPrice: formatGweiToWei(gasPrice).toFixed(),
+                  gasPrice,
               }
         onChange?.(!errorCenter && !errorBottom ? payload : undefined)
     }, [errorCenter, errorBottom, isEIP1559, gasLimit, gasPrice, maxFeePerGas, maxPriorityFeePerGas, gasOptions])
@@ -196,6 +212,7 @@ export function GasForm(props: GasFormProps) {
                                         methods.setValue('gasPrice', ev.target.value)
                                         methods.trigger()
                                     }}
+                                    fullWidth
                                 />
                             )}
                             name="gasPrice"
@@ -221,6 +238,7 @@ export function GasForm(props: GasFormProps) {
                                         {t.gas_settings_label_gas_limit()}
                                     </Typography>
                                 }
+                                fullWidth
                                 error={!!errors.gasLimit?.message}
                             />
                         )}
@@ -264,6 +282,7 @@ export function GasForm(props: GasFormProps) {
                                         methods.setValue('maxPriorityFeePerGas', ev.target.value)
                                         methods.trigger()
                                     }}
+                                    fullWidth
                                 />
                             )}
                             name="maxPriorityFeePerGas"
@@ -294,6 +313,7 @@ export function GasForm(props: GasFormProps) {
                                         methods.setValue('maxFeePerGas', ev.target.value)
                                         methods.trigger()
                                     }}
+                                    fullWidth
                                 />
                             )}
                             name="maxFeePerGas"

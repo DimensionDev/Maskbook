@@ -5,7 +5,7 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import { useI18N } from '../../../../../utils/index.js'
 
 const useStyles = makeStyles()((theme) => ({
-    wrapper: {
+    root: {
         width: '100%',
         boxSizing: 'border-box',
         borderRadius: 12,
@@ -18,21 +18,23 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.maskColor.main,
     },
     content: {
+        fontSize: 14,
+        lineHeight: '18px',
         width: '100%',
         boxSizing: 'border-box',
         padding: 12,
     },
     textContent: {
-        fontSize: 14,
-        lineHeight: '18px',
         color: theme.palette.maskColor.second,
     },
     markdownContent: {
+        fontSize: 14,
         textOverflow: 'ellipsis',
         webkitBoxOrient: 'vertical',
         webkitLineClamp: '3',
         color: theme.palette.maskColor.second,
-        '& > p': {
+        '& p, & li': {
+            fontSize: '14px !important',
             color: `${theme.palette.maskColor.second} !important`,
         },
         '& a': {
@@ -50,7 +52,7 @@ export function DescriptionCard(props: DescriptionCardProps) {
     const { classes } = useStyles()
     const { t } = useI18N()
     return (
-        <div className={classes.wrapper}>
+        <div className={classes.root}>
             <Typography className={classes.title}>{t('plugin_collectible_description_title')}</Typography>
             <div className={classes.content}>
                 {asset.metadata?.description ? (

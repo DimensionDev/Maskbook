@@ -5,7 +5,6 @@ export enum PageTags {
     NFTTag = 'NFTs',
     DonationTag = 'Donations',
     FootprintTag = 'Footprints',
-    DAOTag = 'DAO',
 }
 
 export interface Asset {

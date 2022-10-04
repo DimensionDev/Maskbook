@@ -26,9 +26,9 @@ const sns: Plugin.SNSAdaptor.Definition = {
             return {
                 RenderEntryComponent(EntryComponentProps) {
                     const clickHandler = () => {
-                        CrossIsolationMessages.events.requestOpenApplication.sendToLocal({
+                        CrossIsolationMessages.events.applicationDialogEvent.sendToLocal({
                             open: true,
-                            application: PluginID.Avatar,
+                            pluginID: PluginID.Avatar,
                         })
                     }
                     return (

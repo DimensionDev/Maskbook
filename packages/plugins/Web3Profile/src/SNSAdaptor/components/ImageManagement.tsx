@@ -1,18 +1,18 @@
+import { useCallback, useMemo, useState } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../locales/index.js'
 import { WalletAssetsCard } from './WalletAssets.js'
 import { CrossIsolationMessages, EMPTY_LIST, PersonaInformation, PopupRoutes } from '@masknet/shared-base'
 import { ImageListDialog } from './ImageList.js'
-import { useCallback, useState } from 'react'
 import { InjectedDialog, WalletTypes } from '@masknet/shared'
 import { Box, Button, DialogContent } from '@mui/material'
 import { IdentityResolved, PluginID } from '@masknet/plugin-infra'
+import { isSameAddress } from '@masknet/web3-shared-base'
 import type { AccountType } from '../types.js'
 import { Empty } from './Empty.js'
 import { context } from '../context.js'
 import { Icons } from '@masknet/icons'
 import { CurrentStatusMap, CURRENT_STATUS } from '../../constants.js'
-import { isSameAddress } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     bottomButton: {
@@ -107,11 +107,11 @@ export function ImageManagement(props: ImageManagementProps) {
     } = props
     const [settingAddress, setSettingAddress] = useState<WalletTypes>()
     const [imageListOpen, setImageListOpen] = useState(false)
-    const addresses = getAddressesByStatus(accountList, status)
+    const addresses = useMemo(() => getAddressesByStatus(accountList, status) ?? EMPTY_LIST, [accountList, status])
 
     const handleOpenSettingDialog = useCallback(
         () =>
-            CrossIsolationMessages.events.PluginSettingsDialogUpdate.sendToLocal({
+            CrossIsolationMessages.events.settingsDialogEvent.sendToLocal({
                 open: true,
                 targetTab: PluginID.Web3Profile,
             }),
@@ -123,6 +123,10 @@ export function ImageManagement(props: ImageManagementProps) {
     const openPopupsWindow = async () => {
         await context.openPopupWindow(PopupRoutes.ConnectWallet)
     }
+    const collectionList = useMemo(() => {
+        return addresses.find((address) => isSameAddress(address.address, settingAddress?.address))?.collections
+    }, [addresses, settingAddress?.address])
+
     return (
         <InjectedDialog
             title={CurrentStatusMap[status].title}
@@ -133,7 +137,7 @@ export function ImageManagement(props: ImageManagementProps) {
             onClose={onClose}>
             <DialogContent className={classes.content}>
                 <div>
-                    {addresses?.length ? (
+                    {addresses.length ? (
                         addresses.map((address) => (
                             <WalletAssetsCard
                                 key={address.address}
@@ -168,10 +172,7 @@ export function ImageManagement(props: ImageManagementProps) {
                     accountId={accountId}
                     onClose={() => setImageListOpen(false)}
                     retryData={getWalletHiddenRetry}
-                    collectionList={
-                        addresses?.find((address) => isSameAddress(address?.address, settingAddress?.address))
-                            ?.collections
-                    }
+                    collectionList={collectionList}
                 />
             </DialogContent>
         </InjectedDialog>

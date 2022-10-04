@@ -42,7 +42,7 @@ const definition: Plugin.SNSAdaptor.Definition = {
                 ApplicationEntryID: base.ID,
                 RenderEntryComponent(EntryComponentProps) {
                     const clickHandler = () =>
-                        CrossIsolationMessages.events.requestComposition.sendToLocal({
+                        CrossIsolationMessages.events.compositionDialogEvent.sendToLocal({
                             reason: 'timeline',
                             open: true,
                             options: {

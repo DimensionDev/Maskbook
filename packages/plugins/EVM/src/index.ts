@@ -1,5 +1,6 @@
 import { registerPlugin } from '@masknet/plugin-infra'
 import type {
+    AddressType,
     ChainId,
     NetworkType,
     ProviderType,
@@ -19,6 +20,7 @@ import { base } from './base.js'
 
 registerPlugin<
     ChainId,
+    AddressType,
     SchemaType,
     ProviderType,
     NetworkType,

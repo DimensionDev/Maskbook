@@ -83,7 +83,7 @@ export async function getRedPacketHistory(
                 duration: decodedInputParam._duration.toNumber() * 1000,
                 block_number: Number(txType.blockNumber),
                 contract_version: 4,
-                network: chainResolver.chainNetworkType(chainId),
+                network: chainResolver.networkType(chainId),
                 token_address: decodedInputParam._token_addr,
                 sender: {
                     address: senderAddress,

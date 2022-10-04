@@ -65,7 +65,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             const name = <Trans i18nKey="plugin_ito_name" />
             const iconFilterColor = 'rgba(56, 228, 239, 0.3)'
             const clickHandler = () =>
-                CrossIsolationMessages.events.requestComposition.sendToLocal({
+                CrossIsolationMessages.events.compositionDialogEvent.sendToLocal({
                     reason: 'timeline',
                     open: true,
                     options: {
