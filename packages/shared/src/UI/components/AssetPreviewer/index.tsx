@@ -36,11 +36,6 @@ export function AssetPreviewer(props: AssetPreviewerProps) {
     const classes = useStylesExtends(useStyles(), props)
     const theme = useTheme()
 
-    console.log('DEBUG: AssetPreviewer')
-    console.log({
-        icon,
-    })
-
     return (
         <div className={classes.root}>
             <Image
