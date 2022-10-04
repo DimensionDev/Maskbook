@@ -11,13 +11,7 @@ import {
     FungibleToken,
     formatCurrency,
 } from '@masknet/web3-shared-base'
-import {
-    formatEtherToGwei,
-    formatGweiToWei,
-    formatWeiToEther,
-    formatWeiToGwei,
-    GasOptionConfig,
-} from '@masknet/web3-shared-evm'
+import { formatEtherToGwei, formatWeiToEther, formatWeiToGwei, GasOptionConfig } from '@masknet/web3-shared-evm'
 import { Typography, MenuItem, Box } from '@mui/material'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useChainId, useCurrentWeb3NetworkPluginID, useWeb3State } from '@masknet/plugin-infra/web3'

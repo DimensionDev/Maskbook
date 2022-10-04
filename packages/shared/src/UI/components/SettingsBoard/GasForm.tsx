@@ -14,7 +14,7 @@ import { useGasSchema } from './hooks/index.js'
 
 function getDefaultValues(transaction: Transaction, gasOptions: Record<GasOptionType, GasOption>) {
     return {
-        gasLimit: (transaction.gas as string)?.toString() ?? '21000',
+        gasLimit: (transaction.gas as string | number | undefined)?.toString() ?? '21000',
         gasPrice: formatWeiToGwei(
             (transaction.gasPrice as string) || gasOptions.normal.suggestedMaxFeePerGas,
         ).toString(),
