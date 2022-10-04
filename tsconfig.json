@@ -81,6 +81,8 @@
       // @masknet/web3-contracts is not listed. It is not a TS project (only contains generated JSON and .d.ts files).
       "@masknet/web3-helpers": ["./packages/web3-helpers/src"],
       "@masknet/web3-providers": ["./packages/web3-providers/src"],
+      "@masknet/web3-hooks-base": ["./packages/web3-hooks/base/src"],
+      "@masknet/web3-hooks-evm": ["./packages/web3-hooks/evm/src"],
       "@masknet/web3-shared-base": ["./packages/web3-shared/base/src"],
       "@masknet/web3-shared-evm": ["./packages/web3-shared/evm/src"],
       "@masknet/web3-shared-flow": ["./packages/web3-shared/flow/src"],

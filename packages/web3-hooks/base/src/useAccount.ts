@@ -2,7 +2,7 @@ import { useSubscription } from 'use-subscription'
 import type { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useWeb3State } from './useWeb3State.js'
 import { UNDEFINED } from '../utils/subscription.js'
-import { useCurrentWeb3NetworkAccount } from './Context.js'
+import { useCurrentWeb3NetworkAccount } from './useContext.js'
 
 export function useAccount<T extends NetworkPluginID>(pluginID?: T, expectedAccount?: string) {
     const { Provider, Others } = useWeb3State(pluginID)
