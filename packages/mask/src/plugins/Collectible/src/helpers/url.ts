@@ -161,7 +161,7 @@ export function getPayloadFromURL(url?: string): CollectiblePayload | undefined 
                     rule.provider === SourceType.Zora
                         ? matched[1].replace('zora', ZORA_COLLECTION_ADDRESS)
                         : matched[1],
-                tokenId: rule.pluginID === NetworkPluginID.PLUGIN_SOLANA ? matched[1] : matched[2],
+                tokenId: rule.pluginID === NetworkPluginID.PLUGIN_SOLANA ? '' : matched[2],
             }
         }
     }
