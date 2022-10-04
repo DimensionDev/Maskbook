@@ -67,7 +67,7 @@ describe('getPayloadFromURL', () => {
                 pluginID: NetworkPluginID.PLUGIN_SOLANA,
                 chainId: ChainIdSolana.Mainnet,
                 address: 'zyru7e6AadBrhFZFQe9r7vM3HxHAVee4Xb8d46qb5Tb',
-                tokenId: 'zyru7e6AadBrhFZFQe9r7vM3HxHAVee4Xb8d46qb5Tb',
+                tokenId: '',
                 provider: SourceType.Rarible,
             },
         },

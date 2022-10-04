@@ -1,8 +1,8 @@
 import { first, nth } from 'lodash-unified'
 import Web3SDK from 'web3'
 import type { FeeHistoryResult } from 'web3-eth'
-import { GasOptionType } from '@masknet/web3-shared-base'
-import { ChainId, chainResolver, formatWeiToGwei, GasOption, getRPCConstants, Web3 } from '@masknet/web3-shared-evm'
+import { GasOptionType, toFixed } from '@masknet/web3-shared-base'
+import { ChainId, chainResolver, GasOption, getRPCConstants, Web3 } from '@masknet/web3-shared-evm'
 import type { GasOptionAPI } from '../types/index.js'
 
 function avg(arr: number[]) {
@@ -46,25 +46,25 @@ export class EthereumWeb3API implements GasOptionAPI.Provider<ChainId, GasOption
 
         return {
             [GasOptionType.FAST]: {
-                estimatedBaseFee: formatWeiToGwei(baseFeePerGas).toFixed(),
+                estimatedBaseFee: toFixed(baseFeePerGas),
                 estimatedSeconds: 0,
-                baseFeePerGas: formatWeiToGwei(baseFeePerGas).toFixed(),
-                suggestedMaxFeePerGas: formatWeiToGwei(baseFeePerGas + fast).toFixed(),
-                suggestedMaxPriorityFeePerGas: formatWeiToGwei(fast).toFixed(),
+                baseFeePerGas: toFixed(baseFeePerGas),
+                suggestedMaxFeePerGas: toFixed(baseFeePerGas + fast),
+                suggestedMaxPriorityFeePerGas: toFixed(fast),
             },
             [GasOptionType.NORMAL]: {
-                estimatedBaseFee: formatWeiToGwei(baseFeePerGas).toFixed(),
+                estimatedBaseFee: toFixed(baseFeePerGas),
                 estimatedSeconds: 0,
-                baseFeePerGas: formatWeiToGwei(baseFeePerGas).toFixed(),
-                suggestedMaxFeePerGas: formatWeiToGwei(baseFeePerGas + normal).toFixed(),
-                suggestedMaxPriorityFeePerGas: formatWeiToGwei(normal).toFixed(),
+                baseFeePerGas: toFixed(baseFeePerGas),
+                suggestedMaxFeePerGas: toFixed(baseFeePerGas + normal),
+                suggestedMaxPriorityFeePerGas: toFixed(normal),
             },
             [GasOptionType.SLOW]: {
-                estimatedBaseFee: formatWeiToGwei(baseFeePerGas).toFixed(),
+                estimatedBaseFee: toFixed(baseFeePerGas),
                 estimatedSeconds: 0,
-                baseFeePerGas: formatWeiToGwei(baseFeePerGas).toFixed(),
-                suggestedMaxFeePerGas: formatWeiToGwei(baseFeePerGas + slow).toFixed(),
-                suggestedMaxPriorityFeePerGas: formatWeiToGwei(slow).toFixed(),
+                baseFeePerGas: toFixed(baseFeePerGas),
+                suggestedMaxFeePerGas: toFixed(baseFeePerGas + slow),
+                suggestedMaxPriorityFeePerGas: toFixed(slow),
             },
         }
     }
@@ -75,19 +75,19 @@ export class EthereumWeb3API implements GasOptionAPI.Provider<ChainId, GasOption
             [GasOptionType.FAST]: {
                 estimatedBaseFee: '0',
                 estimatedSeconds: 15,
-                suggestedMaxFeePerGas: formatWeiToGwei(gasPrice).toFixed(),
+                suggestedMaxFeePerGas: toFixed(gasPrice),
                 suggestedMaxPriorityFeePerGas: '0',
             },
             [GasOptionType.NORMAL]: {
                 estimatedBaseFee: '0',
                 estimatedSeconds: 30,
-                suggestedMaxFeePerGas: formatWeiToGwei(gasPrice).toFixed(),
+                suggestedMaxFeePerGas: toFixed(gasPrice),
                 suggestedMaxPriorityFeePerGas: '0',
             },
             [GasOptionType.SLOW]: {
                 estimatedBaseFee: '0',
                 estimatedSeconds: 60,
-                suggestedMaxFeePerGas: formatWeiToGwei(gasPrice).toFixed(),
+                suggestedMaxFeePerGas: toFixed(gasPrice),
                 suggestedMaxPriorityFeePerGas: '0',
             },
         }
