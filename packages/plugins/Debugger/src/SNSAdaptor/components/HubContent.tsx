@@ -138,7 +138,7 @@ export function HubContent(props: HubContentProps) {
                                 size="small"
                                 onClick={(e) => setAnchorEl(e.currentTarget)}
                                 endIcon={<Icons.ArrowDownRound size={14} />}>
-                                {sourceType ? resolveSourceTypeName(sourceType) : 'NOT PROVIDER'}
+                                {sourceType ? resolveSourceTypeName(sourceType) : 'NO PROVIDER'}
                             </Button>
                             <ShadowRootMenu
                                 anchorEl={anchorEl}
