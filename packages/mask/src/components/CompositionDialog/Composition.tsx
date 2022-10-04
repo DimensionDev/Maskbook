@@ -51,8 +51,10 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
     // #region Open
     const [open, setOpen] = useState(false)
     const [isOpenFromApplicationBoard, setIsOpenFromApplicationBoard] = useState(false)
+
     const onClose = useCallback(() => {
         setOpen(false)
+
         UI.current?.reset()
     }, [])
 
@@ -61,7 +63,6 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
         openOnInitAnswered = true
         Services.SocialNetwork.getDesignatedAutoStartPluginID().then((plugin) => {
             if (!plugin) return
-
             setOpen(true)
             UI.current?.startPlugin(plugin)
         })
@@ -77,6 +78,7 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
     useEffect(() => {
         return CrossIsolationMessages.events.compositionDialogEvent.on(({ reason, open, content, options }) => {
             if ((reason !== 'reply' && reason !== type) || (reason === 'reply' && type === 'popup')) return
+
             setOpen(open)
             setReason(reason)
             setIsOpenFromApplicationBoard(Boolean(options?.isOpenFromApplicationBoard))
@@ -87,6 +89,7 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
     }, [type])
     useEffect(() => {
         if (!open) return
+
         return MaskMessages.events.replaceComposition.on((message) => {
             const ui = UI.current
             if (!ui) return

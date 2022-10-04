@@ -214,12 +214,13 @@ const useStyles = makeStyles()((theme) => ({
         width: 220,
     },
     errorButton: {
-        borderColor: 'white',
+        background: theme.palette.common.black,
         minHeight: 30,
         width: 100,
         marginTop: 16,
+        whiteSpace: 'nowrap',
         '&:hover': {
-            borderColor: 'white',
+            background: theme.palette.common.black,
         },
     },
     ellipsis: {

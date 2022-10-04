@@ -19,6 +19,7 @@ import InfoIcon from '@mui/icons-material/Info'
 import { Icons } from '@masknet/icons'
 import { makeStyles, useStylesExtends } from '../../UIHelper/index.js'
 import { MaskColorVar } from '../../CSSVariables/index.js'
+import { usePortalShadowRoot } from '../../entry-base.js'
 
 export { PopupSnackbarProvider, usePopupCustomSnackbar } from './PopupSnackbar.js'
 export { SnackbarProvider, useSnackbar } from 'notistack'
@@ -258,7 +259,7 @@ export const CustomSnackbarProvider = memo<
         ref.current?.closeSnackbar(key)
     }
 
-    return (
+    return usePortalShadowRoot((container) => (
         <SnackbarProvider
             ref={ref}
             maxSnack={30}
@@ -280,9 +281,10 @@ export const CustomSnackbarProvider = memo<
                 variantInfo: classes.info,
                 variantWarning: classes.warning,
             }}
+            domRoot={container}
             {...rest}
         />
-    )
+    ))
 })
 
 export interface ShowSnackbarOptions

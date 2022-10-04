@@ -87,6 +87,8 @@ export enum SourceType {
     X2Y2 = 'X2Y2',
     MagicEden = 'MagicEden',
     Element = 'Element',
+    Solsea = 'Solsea',
+    Solanart = 'Solanart',
 
     // Rarity
     RaritySniper = 'RaritySniper',
@@ -886,8 +888,8 @@ export interface Connection<
     /** Transfer non-fungible token to */
     transferNonFungibleToken(
         address: string | undefined,
-        recipient: string,
         tokenId: string,
+        recipient: string,
         amount: string,
         schema?: SchemaType,
         initial?: Web3ConnectionOptions,

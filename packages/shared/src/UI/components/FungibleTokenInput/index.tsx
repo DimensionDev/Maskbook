@@ -92,7 +92,7 @@ export const FungibleTokenInput = memo<FungibleTokenInputProps>(
                 onMaxClick={() => {
                     if (!token) return
                     const amount = new BigNumber(maxAmount ?? balance).dividedBy(maxAmountShares).decimalPlaces(0, 1)
-                    onAmountChange(formatBalance(amount, token.decimals, maxAmountSignificant) ?? '0')
+                    onAmountChange(formatBalance(amount, token.decimals, maxAmountSignificant, true) ?? '0')
                 }}
                 balance={balance}
                 required

@@ -14,10 +14,11 @@ interface InitialState {
     chainId: Web3Helper.ChainIdAll
     tokenId: string
     tokenAddress: string
+    origin?: string
 }
 
 function useContext(initialState?: InitialState) {
-    const { pluginID, chainId, tokenId, tokenAddress } = initialState ?? {}
+    const { pluginID, chainId, tokenId, tokenAddress, origin } = initialState ?? {}
     const [sourceType, setSourceType] = useState(SourceType.NFTScan)
 
     const asset = useNonFungibleAsset(pluginID, tokenAddress, tokenId, {
@@ -36,6 +37,8 @@ function useContext(initialState?: InitialState) {
     return {
         pluginID,
         chainId,
+
+        origin,
 
         sourceType,
         setSourceType,

@@ -3,7 +3,7 @@ import { TradeProvider } from '@masknet/public-api'
 import { ChainId, chainResolver, NetworkType } from '@masknet/web3-shared-evm'
 
 export async function getAvailableTraderProviders(chainId: ChainId) {
-    const networkType = chainResolver.chainNetworkType(chainId)
+    const networkType = chainResolver.networkType(chainId)
     if (!networkType) return []
     switch (networkType) {
         case NetworkType.Ethereum:

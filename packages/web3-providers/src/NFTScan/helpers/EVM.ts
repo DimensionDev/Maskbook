@@ -88,7 +88,6 @@ export function createNonFungibleAsset(
 ): NonFungibleAsset<ChainId, SchemaType> {
     const payload = getJSON<EVM.Payload>(asset.metadata_json)
     const contractName = asset.contract_name
-    const name = payload?.name || asset.name || contractName || ''
     const description = payload?.description
     const uri = asset.nftscan_uri ?? asset.image_uri
     const mediaURL = resolveResourceURL(uri)
@@ -131,7 +130,8 @@ export function createNonFungibleAsset(
             : undefined,
         metadata: {
             chainId,
-            name: first(name.split('#')) ?? '',
+            name:
+                first([payload?.name, asset.name, contractName].find((x) => x && !x.startsWith('#'))?.split('#')) ?? '',
             symbol,
             description,
             imageURL: mediaURL,

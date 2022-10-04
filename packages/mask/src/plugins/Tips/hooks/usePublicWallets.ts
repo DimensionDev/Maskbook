@@ -6,9 +6,8 @@ import { useEffect, useMemo } from 'react'
 import { useAsyncRetry } from 'react-use'
 import { MaskMessages } from '../../../utils/index.js'
 import type { TipsAccount } from '../types/index.js'
-import { useTipsSetting } from './useTipsSetting.js'
 
-export function usePublicWallets(personaPubkey?: string): TipsAccount[] {
+export function usePublicWallets(personaPubkey?: string, defaultAddress?: string): TipsAccount[] {
     const { value: nextIdWallets, retry: queryWallets } = useAsyncRetry(async (): Promise<TipsAccount[]> => {
         if (!personaPubkey) return EMPTY_LIST
 
@@ -28,8 +27,6 @@ export function usePublicWallets(personaPubkey?: string): TipsAccount[] {
         return wallets
     }, [personaPubkey])
 
-    const { value: TipsSetting } = useTipsSetting(personaPubkey)
-
     useEffect(() => {
         return MaskMessages.events.ownProofChanged.on(() => {
             queryWallets()
@@ -38,17 +35,14 @@ export function usePublicWallets(personaPubkey?: string): TipsAccount[] {
 
     return useMemo(() => {
         const result: TipsAccount[] =
-            nextIdWallets
-                ?.filter((x) => !TipsSetting?.hiddenAddresses?.some((y) => isSameAddress(y, x.address)) ?? true)
-                .sort((a, z) => {
-                    if (!a.last_checked_at || !z.last_checked_at) return 1
-                    if (isGreaterThan(a.last_checked_at, z.last_checked_at)) {
-                        return isSameAddress(z.address, TipsSetting?.defaultAddress) ? 1 : -1
-                    }
+            nextIdWallets?.sort((a, z) => {
+                if (!a.last_checked_at || !z.last_checked_at) return 1
+                if (isGreaterThan(a.last_checked_at, z.last_checked_at)) {
+                    return isSameAddress(z.address, defaultAddress) ? 1 : -1
+                }
 
-                    return isSameAddress(a.address, TipsSetting?.defaultAddress) ? -1 : 1
-                }) ?? EMPTY_LIST
-
+                return isSameAddress(a.address, defaultAddress) ? -1 : 1
+            }) ?? EMPTY_LIST
         return uniqBy(result, (x) => x.address)
-    }, [nextIdWallets, TipsSetting?.hiddenAddresses])
+    }, [nextIdWallets, defaultAddress])
 }

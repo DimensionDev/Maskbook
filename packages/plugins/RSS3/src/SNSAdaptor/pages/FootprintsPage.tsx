@@ -1,6 +1,6 @@
 import { Icons } from '@masknet/icons'
 import { CollectionDetailCard, useWeb3ProfileHiddenSettings } from '@masknet/shared'
-import { EMPTY_LIST } from '@masknet/shared-base'
+import { EMPTY_LIST, joinKeys } from '@masknet/shared-base'
 import { CollectionType, RSS3BaseAPI } from '@masknet/web3-providers'
 import { Box, BoxProps, Typography } from '@mui/material'
 import { differenceWith } from 'lodash-unified'
@@ -37,11 +37,11 @@ export const FootprintsPage = memo(function FootprintsPage({
 
     const footprints = useMemo(() => {
         if (!hiddenList.length) return allFootprints
-        return differenceWith(
-            allFootprints,
-            hiddenList,
-            (footprint, id) => footprint.actions[0].index.toString() === id,
-        )
+        return differenceWith(allFootprints, hiddenList, (footprint, id) => {
+            const metadata = footprint.actions[0].metadata
+            if (!metadata) return false
+            return joinKeys(metadata.contract_address, metadata.id) === id
+        })
     }, [allFootprints, hiddenList])
 
     const [selectedFootprint, setSelectedFootprint] = useState<RSS3BaseAPI.Footprint | undefined>()

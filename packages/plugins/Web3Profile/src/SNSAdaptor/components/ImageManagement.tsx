@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../locales/index.js'
 import { WalletAssetsCard } from './WalletAssets.js'
@@ -107,7 +107,7 @@ export function ImageManagement(props: ImageManagementProps) {
     } = props
     const [settingAddress, setSettingAddress] = useState<WalletTypes>()
     const [imageListOpen, setImageListOpen] = useState(false)
-    const addresses = getAddressesByStatus(accountList, status)
+    const addresses = useMemo(() => getAddressesByStatus(accountList, status) ?? EMPTY_LIST, [accountList, status])
 
     const handleOpenSettingDialog = useCallback(
         () =>
@@ -123,6 +123,10 @@ export function ImageManagement(props: ImageManagementProps) {
     const openPopupsWindow = async () => {
         await context.openPopupWindow(PopupRoutes.ConnectWallet)
     }
+    const collectionList = useMemo(() => {
+        return addresses.find((address) => isSameAddress(address.address, settingAddress?.address))?.collections
+    }, [addresses, settingAddress?.address])
+
     return (
         <InjectedDialog
             title={CurrentStatusMap[status].title}
@@ -133,7 +137,7 @@ export function ImageManagement(props: ImageManagementProps) {
             onClose={onClose}>
             <DialogContent className={classes.content}>
                 <div>
-                    {addresses?.length ? (
+                    {addresses.length ? (
                         addresses.map((address) => (
                             <WalletAssetsCard
                                 key={address.address}
@@ -168,10 +172,7 @@ export function ImageManagement(props: ImageManagementProps) {
                     accountId={accountId}
                     onClose={() => setImageListOpen(false)}
                     retryData={getWalletHiddenRetry}
-                    collectionList={
-                        addresses?.find((address) => isSameAddress(address?.address, settingAddress?.address))
-                            ?.collections
-                    }
+                    collectionList={collectionList}
                 />
             </DialogContent>
         </InjectedDialog>

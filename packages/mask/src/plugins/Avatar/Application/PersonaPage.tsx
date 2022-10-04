@@ -66,7 +66,7 @@ export function PersonaPage(props: PersonaPageProps) {
 
     return (
         <>
-            <DialogContent sx={{ flex: 1, height: 450, padding: 2 }}>
+            <DialogContent sx={{ flex: 1, height: 464, padding: 2 }}>
                 {loading ? (
                     <Stack justifyContent="center" alignItems="center">
                         <LoadingBase />

@@ -1,4 +1,4 @@
-import { getAvatarId } from './user.js'
+import { Twitter } from '@masknet/web3-providers'
 
 // cspell:disable-next
 const ClipPath = 'url("#hex-hw-shapeclip-clipconfig")'
@@ -23,7 +23,7 @@ export function getInjectNodeInfo(ele: HTMLElement) {
 
     const dom = imgEle.parentNode?.firstChild as HTMLElement
     if (dom) dom.style.borderRadius = '100%'
-    const avatarId = getAvatarId((imgEle as HTMLImageElement).src)
+    const avatarId = Twitter.getAvatarId(imgEle.src)
     if (!avatarId) return
 
     return { element: nftDom, width, height, avatarId, isTwitterNFT }

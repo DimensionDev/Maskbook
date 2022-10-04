@@ -102,7 +102,7 @@ export type CheckSecurityDialogEvent =
 
 export type ApplicationDialogEvent = {
     open: boolean
-    application: string
+    pluginID: string
 }
 
 export interface SettingsDialogEvent {
@@ -127,6 +127,7 @@ export type NonFungibleTokenDialogEvent =
           chainId: number
           tokenId: string
           tokenAddress: string
+          origin?: 'pfp' | 'web3-profile-card' | 'web3-profile-tab' | 'unknown'
       }
     | {
           open: false

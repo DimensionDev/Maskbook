@@ -24,6 +24,7 @@ const useStyles = makeStyles()((theme) => ({
         padding: theme.spacing(1.25, 1.5),
         [`& > .${inputBaseClasses.input}`]: {
             paddingTop: `${theme.spacing(2.75)}!important`,
+            paddingBottom: '0px !important',
             flex: 2,
             paddingLeft: '0px !important',
             fontSize: 18,

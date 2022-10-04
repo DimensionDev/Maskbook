@@ -578,6 +578,10 @@ export namespace Plugin.SNSAdaptor {
         category?: 'dapp' | 'other'
 
         nextIdRequired?: boolean
+        /**
+         * One plugin may has multiple part. E.g. Tips requires connected wallet, but Tips setting not.
+         */
+        entryWalletConnectedNotRequired?: boolean
 
         /**
          * Display using an eye-catching card and unable to be unlisted.

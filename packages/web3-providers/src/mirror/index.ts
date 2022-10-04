@@ -1,6 +1,7 @@
 import formatDateTime from 'date-fns/format'
 import fromUnixTime from 'date-fns/fromUnixTime'
 import type { MirrorBaseAPI, Writer, Publisher } from '../types'
+import { EMPTY_LIST } from '@masknet/shared-base'
 
 const MIRROR_API_URL = 'https://mirror-api.com/graphql'
 
@@ -9,7 +10,7 @@ interface EntryResponse {
     arweaveTransactionRequest: {
         transactionId: string
     }
-    collaborators?: Writer[]
+    collaborators: Writer[]
     publisher: {
         member: Writer
         project: Writer
@@ -75,28 +76,31 @@ export class MirrorAPI implements MirrorBaseAPI.Provider {
         }
 
         const publisher = INIT_DATA?.props?.pageProps?.__APOLLO_STATE__?.[`entry:${digest}`]?.publisher
-        if (!publisher) {
+        const collaborators =
+            INIT_DATA?.props?.pageProps?.__APOLLO_STATE__?.[`entry:${digest}`]?.collaborators ?? EMPTY_LIST
+
+        if (!publisher && !collaborators.length) {
             // get publisher from api
             const post = await this.getPost(digest)
             if (!post) return null
 
             return {
                 author: post.author,
-                coAuthors: post.coAuthors,
+                coAuthors: post.collaborators,
             }
         } else {
             // get publisher from local
             return {
                 author: {
-                    address: publisher?.project?.__ref.replace('ProjectType:', '') as string,
-                    ...getAuthorDetail(publisher?.project?.__ref.replace('ProjectType:', '') as string),
+                    address: publisher?.member.__ref?.replace('ProjectType:', '') as string,
+                    ...getAuthorDetail(publisher?.member?.__ref?.replace('ProjectType:', '') as string),
                 },
                 coAuthors: [
-                    {
-                        address: publisher?.member.__ref.replace('ProjectType:', '') as string,
-                        ...getAuthorDetail(publisher?.member?.__ref.replace('ProjectType:', '') as string),
-                    },
-                ],
+                    ...collaborators.map((x: any) => ({
+                        address: x.__ref?.replace('ProjectType:', '') as string,
+                        ...getAuthorDetail(x.__ref?.replace('ProjectType:', '') as string),
+                    })),
+                ].filter((x) => !!x.address),
             }
         }
     }
@@ -194,9 +198,8 @@ export class MirrorAPI implements MirrorBaseAPI.Provider {
         return {
             transactionId: response.entry.arweaveTransactionRequest.transactionId,
             digest: response.entry.digest,
-            author: response.entry.publisher.project,
-            coAuthors: [response.entry.publisher.member],
-            collaborators: response.entry.collaborators,
+            author: response.entry.publisher.member,
+            collaborators: response.entry.collaborators ?? EMPTY_LIST,
             collection: {
                 chainId: response.entry.writingNFT.network.chainId,
                 name: response.entry.writingNFT.name,

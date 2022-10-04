@@ -5,26 +5,34 @@ import { Box, useTheme } from '@mui/material'
 import { useImageURL } from '../../../hooks/useImageURL.js'
 
 const useStyles = makeStyles()((theme) => ({
-    container: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
+    container: {},
     circle: {
         color: parseColor(theme.palette.maskColor.main).setAlpha(0.5).toRgbString(),
+    },
+    image: {
+        display: 'block',
     },
     failImage: {
         width: 30,
         height: 30,
     },
-    spinContainer: {
+    fallbackContainer: {
+        width: '100%',
+        height: '100%',
+        inset: 0,
+        margin: 'auto',
+        position: 'absolute',
         display: 'flex',
         alignItems: 'center',
-        position: 'relative',
+        justifyContent: 'center',
+    },
+    spinnerContainer: {
+        width: 24,
+        height: 24,
     },
 }))
 
-interface ImageProps
+export interface ImageProps
     extends ImgHTMLAttributes<HTMLImageElement>,
         withClasses<'container' | 'fallbackImage' | 'imageLoading'> {
     fallback?: URL | string | JSX.Element
@@ -41,7 +49,7 @@ export function Image({ fallback, disableSpinner, classes: externalClasses, onCl
     if (loadingImageURL && !disableSpinner) {
         return (
             <Box className={classes.container}>
-                <Box className={classes.spinContainer}>
+                <Box className={classNames(classes.fallbackContainer, classes.spinnerContainer)}>
                     <LoadingBase />
                 </Box>
             </Box>
@@ -51,12 +59,23 @@ export function Image({ fallback, disableSpinner, classes: externalClasses, onCl
     if (imageURL && !failed) {
         return (
             <Box className={classes.container} onClick={onClick}>
-                <img loading="lazy" decoding="async" {...rest} src={imageURL} onError={() => setFailed(true)} />
+                <img
+                    className={classes.image}
+                    loading="lazy"
+                    decoding="async"
+                    {...rest}
+                    src={imageURL}
+                    onError={() => setFailed(true)}
+                />
             </Box>
         )
     }
     if (fallback && !(fallback instanceof URL) && typeof fallback !== 'string') {
-        return fallback
+        return (
+            <Box className={classes.container}>
+                <Box className={classes.fallbackContainer}>{fallback}</Box>
+            </Box>
+        )
     }
 
     const fallbackImageURL =
@@ -67,13 +86,15 @@ export function Image({ fallback, disableSpinner, classes: externalClasses, onCl
 
     return (
         <Box className={classes.container} onClick={onClick}>
-            <img
-                loading="lazy"
-                decoding="async"
-                {...rest}
-                src={fallbackImageURL}
-                className={classNames(classes.failImage, classes.fallbackImage)}
-            />
+            <Box className={classes.fallbackContainer}>
+                <img
+                    loading="lazy"
+                    decoding="async"
+                    {...rest}
+                    src={fallbackImageURL}
+                    className={classNames(classes.image, classes.failImage, classes.fallbackImage)}
+                />
+            </Box>
         </Box>
     )
 }

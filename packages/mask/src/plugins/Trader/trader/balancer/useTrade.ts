@@ -1,9 +1,8 @@
-import { useDoubleBlockBeatRetry } from '@masknet/plugin-infra/web3'
+import { useChainId, useDoubleBlockBeatRetry } from '@masknet/plugin-infra/web3'
 import { ChainId, isNativeTokenAddress, SchemaType, useTokenConstants } from '@masknet/web3-shared-evm'
 import { BALANCER_SWAP_TYPE } from '../../constants/index.js'
 import { PluginTraderRPC } from '../../messages.js'
 import { SwapResponse, TradeStrategy } from '../../types/index.js'
-import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 import { FungibleToken, NetworkPluginID, isZero } from '@masknet/web3-shared-base'
 
@@ -14,7 +13,7 @@ export function useTrade(
     inputToken?: FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>,
     outputToken?: FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>,
 ): AsyncStateRetry<SwapResponse | null> {
-    const { targetChainId } = TargetChainIdContext.useContainer()
+    const targetChainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const { WNATIVE_ADDRESS } = useTokenConstants(targetChainId)
 
     return useDoubleBlockBeatRetry(

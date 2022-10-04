@@ -48,7 +48,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     connectWallet: {
         '& > .MuiButton-startIcon': {
-            display: 'block',
+            lineHeight: 1,
         },
     },
 }))
@@ -161,7 +161,7 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
         )
     }
 
-    if (!chainIdValid && !expectedChainAllowed)
+    if (!chainIdValid && !expectedChainAllowed && !switchChainWithoutPopup)
         return renderBox(
             <>
                 {!props.hiddenConnectButton ? (

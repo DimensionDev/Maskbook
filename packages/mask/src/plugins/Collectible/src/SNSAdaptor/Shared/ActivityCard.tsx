@@ -1,15 +1,15 @@
 import { makeStyles } from '@masknet/theme'
-import formatDistanceToNow from 'date-fns/formatDistanceToNow'
+import formatDistanceToNowStrict from 'date-fns/formatDistanceToNowStrict'
 import { Typography, Link } from '@mui/material'
 import { useWeb3State } from '@masknet/plugin-infra/web3'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { NonFungibleTokenEvent, formatBalance, isZero, isValidTimestamp } from '@masknet/web3-shared-base'
 import { Icons } from '@masknet/icons'
+import { NonFungibleTokenEvent, formatBalance, isZero, isValidTimestamp } from '@masknet/web3-shared-base'
 import { ActivityType } from '../../types.js'
 import { useI18N } from '../../../../../utils/index.js'
 
 const useStyles = makeStyles()((theme) => ({
-    wrapper: {
+    root: {
         width: '100%',
         display: 'flex',
         flexDirection: 'column',
@@ -17,9 +17,9 @@ const useStyles = makeStyles()((theme) => ({
         boxSizing: 'border-box',
         gap: 12,
         borderRadius: 8,
-        // there is no public bg have to hardcode
-        background: '#fff',
-        boxShadow: '0px 0px 20px rgba(0, 0, 0, 0.05)',
+        color: theme.palette.maskColor.second,
+        backgroundColor: theme.palette.maskColor.bg,
+        position: 'relative',
     },
     flex: {
         width: '100%',
@@ -31,7 +31,7 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 20,
         lineHeight: '24px',
         fontWeight: 700,
-        color: theme.palette.maskColor.publicMain,
+        color: theme.palette.maskColor.main,
     },
     highlight: {
         // there is no public highlight color, temp hardcode
@@ -41,12 +41,13 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         alignItems: 'center',
         gap: 4,
+        marginRight: theme.spacing(2),
     },
     salePriceText: {
         fontSize: 18,
         lineHeight: '22px',
         fontWeight: 700,
-        color: theme.palette.maskColor.publicMain,
+        color: theme.palette.maskColor.main,
     },
     textBase: {
         display: 'flex',
@@ -55,20 +56,23 @@ const useStyles = makeStyles()((theme) => ({
         lineHeight: '18px',
         color: theme.palette.maskColor.publicSecond,
         '& > strong': {
-            color: theme.palette.maskColor.publicMain,
+            color: theme.palette.maskColor.main,
             margin: '0px 8px',
         },
     },
     link: {
-        color: theme.palette.maskColor.publicMain,
+        color: theme.palette.maskColor.main,
         fontSize: 14,
         display: 'flex',
         alignItems: 'center',
         cursor: 'pointer',
         marginLeft: 4,
+        top: theme.spacing(1.8),
+        right: theme.spacing(1),
+        position: 'absolute',
     },
     fallbackSymbol: {
-        color: theme.palette.maskColor.publicMain,
+        color: theme.palette.maskColor.main,
         fontWeight: 700,
         fontSize: 12,
         lineHeight: '14px',
@@ -89,7 +93,7 @@ export function ActivityCard(props: ActivityCardProps) {
     const { Others } = useWeb3State()
 
     return (
-        <div className={classes.wrapper}>
+        <div className={classes.root}>
             <div className={classes.flex}>
                 <Typography
                     className={type === ActivityType.Sale ? cx(classes.title, classes.highlight) : classes.title}>
@@ -100,7 +104,12 @@ export function ActivityCard(props: ActivityCardProps) {
                     !isZero(activity.priceInToken.amount) && (
                         <div className={classes.salePrice}>
                             {(activity.paymentToken?.logoURL && (
-                                <img width={24} height={24} src={activity.priceInToken.token.logoURL} alt="" />
+                                <img
+                                    width={24}
+                                    height={24}
+                                    src={activity.priceInToken.token.logoURL}
+                                    alt={activity.priceInToken.token.symbol}
+                                />
                             )) || (
                                 <Typography className={classes.fallbackSymbol}>
                                     {activity.priceInToken.token.symbol || activity.priceInToken.token.name}
@@ -138,9 +147,8 @@ export function ActivityCard(props: ActivityCardProps) {
                             </strong>
                         </>
                     )}
-
                     {isValidTimestamp(activity.timestamp) &&
-                        formatDistanceToNow(new Date(activity.timestamp!), {
+                        formatDistanceToNowStrict(new Date(activity.timestamp!), {
                             addSuffix: true,
                         })}
                     {activity.hash && (

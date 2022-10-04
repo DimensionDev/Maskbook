@@ -12,7 +12,6 @@ import {
     ThemeOptions,
     InputBase as MuiInputBase,
     switchClasses,
-    tooltipClasses,
     alertClasses,
     linearProgressClasses,
     selectClasses,
@@ -659,8 +658,8 @@ export const Radio = (mode: PaletteMode, colors: MaskColor): ThemeOptions => ({
         MuiRadio: {
             defaultProps: {
                 size: 'medium',
-                icon: <Icons.RadioButtonUnChecked />,
-                checkedIcon: <Icons.RadioButtonChecked />,
+                icon: <Icons.RadioButtonUnChecked size={20} />,
+                checkedIcon: <Icons.RadioButtonChecked size={20} />,
                 disableRipple: true,
             },
             styleOverrides: {
@@ -811,6 +810,19 @@ export const InputBase = (mode: PaletteMode, colors: MaskColor) => ({
                         },
                         [`&.${inputBaseClasses.adornedEnd}:last-child`]: {
                             paddingRight: 14,
+                        },
+                    },
+                },
+                {
+                    props: {
+                        error: true,
+                    },
+                    style: {
+                        outline: `2px solid ${alpha(colors.maskColor.danger, 0.2)}`,
+                        border: `1px solid ${alpha(colors.maskColor.danger, 0.5)}`,
+                        [`&.${inputBaseClasses.focused}`]: {
+                            outline: `2px solid ${alpha(colors.maskColor.danger, 0.2)}`,
+                            border: `1px solid ${alpha(colors.maskColor.danger, 0.5)}`,
                         },
                     },
                 },
@@ -982,24 +994,22 @@ export const Tooltip = (mode: PaletteMode, colors: MaskColor) => ({
             },
             styleOverrides: {
                 tooltip: {
+                    maxWidth: 300,
                     padding: 10,
                     fontSize: 14,
                     borderRadius: 4,
                     lineHeight: '18px',
                     backgroundColor: colors.maskColor.tips,
                     color: colors.maskColor.bottom,
+                    boxShadow:
+                        mode === 'dark' ? '0px 0px 20px rgba(255, 255, 255, 0.12)' : '0px 0px 20px rgba(0, 0, 0, 0.05)',
+                    '& > *': {
+                        fontSize: 14,
+                        lineHeight: '18px',
+                    },
                 },
                 arrow: {
                     color: colors.maskColor.tips,
-                },
-                popper: {
-                    // `variants` can't override placement prop, So here we use css selector.
-                    [`&[data-popper-placement*="top-start"] .${tooltipClasses.arrow}`]: {
-                        transform: 'translate3d(10px, 0, 0)!important',
-                    },
-                    [`&[data-popper-placement*="top-end"] .${tooltipClasses.arrow}`]: {
-                        transform: 'translate3d(300px, 0, 0)!important',
-                    },
                 },
             },
         },

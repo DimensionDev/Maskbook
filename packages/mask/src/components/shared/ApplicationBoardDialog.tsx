@@ -87,6 +87,7 @@ export function ApplicationBoardDialog() {
             <InjectedDialog
                 open={open}
                 maxWidth="sm"
+                isOnBack={openSettings && !quickMode}
                 onClose={closeDialog}
                 titleTabs={
                     openSettings ? (

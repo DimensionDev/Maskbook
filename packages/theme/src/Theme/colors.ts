@@ -46,6 +46,7 @@ export const MaskColors = {
             publicTwitter: '#1D9BF0',
             publicThirdMain: '#F3F3F4',
             publicBg: '#F9F9F9',
+            publicInput: '#F2F6FA',
             borderSecondary: '#d2dbe0',
         },
         shadow: {

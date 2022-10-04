@@ -30,7 +30,7 @@ export function useTipValidate({
                 return [false, t.token_insufficient_balance()]
         } else if (pluginId === NetworkPluginID.PLUGIN_EVM) {
             if (!tokenId || !tokenAddress) return [false]
-        } else if (!tokenId) {
+        } else if (pluginId === NetworkPluginID.PLUGIN_SOLANA && !tokenAddress) {
             return [false]
         }
         return [true]

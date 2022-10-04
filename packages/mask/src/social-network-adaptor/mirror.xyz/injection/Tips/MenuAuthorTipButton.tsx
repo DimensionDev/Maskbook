@@ -58,10 +58,12 @@ function AuthorTipsButtonWrapper() {
             {
                 pluginId,
                 address: visitingIdentity.identifier.userId,
-                name: `(${visitingIdentity.nickname}) ${Others?.formatAddress(visitingIdentity.identifier.userId, 4)}`,
+                name: visitingIdentity.nickname
+                    ? `(${visitingIdentity.nickname}) ${Others?.formatAddress(visitingIdentity.identifier.userId, 4)}`
+                    : visitingIdentity.identifier.userId,
             },
         ]
-    }, [visitingIdentity])
+    }, [visitingIdentity, Others?.formatAddress])
 
     const component = useMemo(() => {
         const Component = createInjectHooksRenderer(
@@ -76,7 +78,7 @@ function AuthorTipsButtonWrapper() {
                 tipsAccounts={tipsAccounts}
             />
         )
-    }, [visitingIdentity.identifier])
+    }, [visitingIdentity.identifier, tipsAccounts])
 
     if (!component || !visitingIdentity.identifier || isMinimal) return null
 

@@ -35,8 +35,11 @@ const useStyles = makeStyles()((theme) => {
             alignItems: 'center',
             border: `1px solid ${theme.palette.divider}`,
             borderRadius: 99,
-            padding: '8px 12px',
+            width: 93,
+            height: 26,
             cursor: 'pointer',
+            justifyContent: 'center',
+            marginLeft: 6,
         },
         section: {
             display: 'flex',
@@ -81,6 +84,7 @@ const useStyles = makeStyles()((theme) => {
             fontWeight: 700,
         },
         estimateGas: {
+            fontSize: 14,
             color: theme.palette.text.third,
         },
         menuItemBorder: {
@@ -226,7 +230,7 @@ export function SelectGasSettingsToolbarUI({
     return gasOptions && !isZero(gasFee) ? (
         <Box className={classes.section}>
             <Typography className={classes.title}>Gas fee</Typography>
-            <div className={classes.gasSection}>
+            <Typography className={classes.gasSection} component="div">
                 <FormattedBalance
                     value={gasFee}
                     decimals={nativeToken.decimals ?? 0}
@@ -242,7 +246,7 @@ export function SelectGasSettingsToolbarUI({
                     <Icons.Candle width={12} height={12} />
                 </div>
                 {menu}
-            </div>
+            </Typography>
         </Box>
     ) : null
 }

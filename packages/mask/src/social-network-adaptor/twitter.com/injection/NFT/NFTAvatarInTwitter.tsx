@@ -10,7 +10,6 @@ import { makeStyles } from '@masknet/theme'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI.js'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import { getAvatarId } from '../../utils/user.js'
 import { NFTBadge } from '../../../../plugins/Avatar/SNSAdaptor/NFTBadge.js'
 import { useAsync, useLocation, useUpdateEffect, useWindowSize } from 'react-use'
 import { rainbowBorderKeyFrames } from '../../../../plugins/Avatar/SNSAdaptor/RainbowBox.js'
@@ -19,14 +18,13 @@ import { usePersonaNFTAvatar } from '../../../../plugins/Avatar/hooks/usePersona
 import { useAccount } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { Box, Typography } from '@mui/material'
-import { openWindow } from '@masknet/shared-base-ui'
 import { useWallet } from '../../../../plugins/Avatar/hooks/useWallet.js'
 import { useNFT, useSaveNFTAvatar } from '../../../../plugins/Avatar/hooks/index.js'
 import { NFTCardStyledAssetPlayer, useShowConfirm } from '@masknet/shared'
 import type { AvatarMetaDB } from '../../../../plugins/Avatar/types.js'
 import { EnhanceableSite, NFTAvatarEvent, CrossIsolationMessages } from '@masknet/shared-base'
 import { activatedSocialNetworkUI } from '../../../../social-network/ui.js'
-import { NFTAvatar } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatar.js'
+import { Twitter } from '@masknet/web3-providers'
 
 export function injectNFTAvatarInTwitter(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchTwitterAvatarSelector())
@@ -71,7 +69,7 @@ function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
     const identity = useCurrentVisitingIdentity()
     const { value: nftAvatar } = usePersonaNFTAvatar(
         identity.identifier?.userId ?? '',
-        getAvatarId(identity.avatar),
+        Twitter.getAvatarId(identity.avatar),
         '',
         RSS3_KEY_SNS.TWITTER,
     )
@@ -83,6 +81,7 @@ function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
         nftAvatar?.tokenId,
         nftAvatar?.pluginId,
         nftAvatar?.chainId,
+        nftAvatar?.ownerAddress,
     )
 
     const windowSize = useWindowSize()
@@ -91,7 +90,7 @@ function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
     const [updatedAvatar, setUpdatedAvatar] = useState(false)
 
     const showAvatar = useMemo(
-        () => !!nftAvatar?.avatarId && getAvatarId(identity.avatar) === nftAvatar.avatarId,
+        () => !!nftAvatar?.avatarId && Twitter.getAvatarId(identity.avatar) === nftAvatar.avatarId,
         [nftAvatar?.avatarId, identity.avatar],
     )
 
@@ -113,13 +112,13 @@ function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
     // After the avatar is set, it cannot be saved immediately,
     // and must wait until the avatar of twitter gets updated
     useAsync(async () => {
-        if (!account || !NFTAvatar) return
+        if (!account || !nftAvatar) return
         if (!identity.identifier) return
 
         if (!NFTEvent?.address || !NFTEvent?.tokenId) {
             MaskMessages.events.NFTAvatarTimelineUpdated.sendToAll({
                 userId: identity.identifier.userId,
-                avatarId: getAvatarId(identity.avatar ?? ''),
+                avatarId: Twitter.getAvatarId(identity.avatar ?? ''),
                 address: '',
                 tokenId: '',
                 schema: SchemaType.ERC721,
@@ -133,7 +132,7 @@ function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
             account,
             {
                 ...NFTEvent,
-                avatarId: getAvatarId(identity.avatar ?? ''),
+                avatarId: Twitter.getAvatarId(identity.avatar ?? ''),
             } as AvatarMetaDB,
             identity.identifier.network as EnhanceableSite,
             RSS3_KEY_SNS.TWITTER,
@@ -166,7 +165,7 @@ function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
         MaskMessages.events.NFTAvatarTimelineUpdated.sendToAll(
             (avatar ?? {
                 userId: identity.identifier.userId,
-                avatarId: getAvatarId(identity.avatar ?? ''),
+                avatarId: Twitter.getAvatarId(identity.avatar ?? ''),
                 address: '',
                 tokenId: '',
                 schema: SchemaType.ERC721,
@@ -237,17 +236,15 @@ function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
             event.stopPropagation()
             event.preventDefault()
 
-            // TODO: refactor NFTCard and Collectible to support multiple networks
-            if (nftAvatar.chainId !== ChainId.Mainnet || nftAvatar.pluginId !== NetworkPluginID.PLUGIN_EVM) {
-                if (nftInfo?.permalink) openWindow(nftInfo.permalink)
-                return
-            }
+            if (!nftAvatar.pluginId || !nftAvatar.chainId) return
+
             CrossIsolationMessages.events.nonFungibleTokenDialogEvent.sendToLocal({
                 open: true,
                 pluginID: nftAvatar.pluginId,
                 chainId: nftAvatar.chainId,
                 tokenId: nftAvatar.tokenId,
                 tokenAddress: nftAvatar.address,
+                origin: 'pfp',
             })
         }
 
@@ -261,7 +258,7 @@ function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
     const handler = () => {
         const avatar = searchAvatarSelector().evaluate()?.getAttribute('src')
         if (!avatar || !nftAvatar?.avatarId) return
-        setUpdatedAvatar(!!nftAvatar?.avatarId && getAvatarId(avatar ?? '') === nftAvatar.avatarId)
+        setUpdatedAvatar(!!nftAvatar?.avatarId && Twitter.getAvatarId(avatar ?? '') === nftAvatar.avatarId)
     }
 
     new MutationObserverWatcher(searchAvatarMetaSelector())

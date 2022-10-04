@@ -22,7 +22,7 @@ export async function setDefaultMaskAccount() {
 }
 
 export async function updateMaskAccount(options: { account?: string; chainId?: ChainId; networkType?: NetworkType }) {
-    if (options.chainId && !options.networkType) options.networkType = chainResolver.chainNetworkType(options.chainId)
+    if (options.chainId && !options.networkType) options.networkType = chainResolver.networkType(options.chainId)
     if (!options.chainId && options.networkType) options.chainId = networkResolver.networkChainId(options.networkType)
 
     const { account, chainId, networkType } = options

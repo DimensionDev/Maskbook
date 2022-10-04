@@ -31,7 +31,7 @@ export function NFTInfo(props: NFTInfoProps) {
             placement="top"
             title={
                 tooltip ? (
-                    <Typography style={{ padding: '6px 12px', whiteSpace: 'nowrap' }} fontSize={12}>
+                    <Typography style={{ whiteSpace: 'nowrap' }} fontSize={12}>
                         {tooltip}
                     </Typography>
                 ) : (
