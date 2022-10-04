@@ -2,7 +2,7 @@ import React, { useCallback, useEffect } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { Box, Divider, Skeleton } from '@mui/material'
 import { GasOptionType, NetworkPluginID } from '@masknet/web3-shared-base'
-import { ChainId, formatGweiToWei, GasOption, Transaction } from '@masknet/web3-shared-evm'
+import type { ChainId, GasOption, Transaction } from '@masknet/web3-shared-evm'
 import { useWeb3State } from '@masknet/plugin-infra/web3'
 import { GasOption as GasOptionItem } from './GasOption.js'
 import { SettingsContext } from './Context.js'
@@ -52,11 +52,11 @@ export function GasOptionSelector(props: GasOptionSelectorProps) {
             onChange?.(
                 isEIP1559
                     ? {
-                          maxFeePerGas: formatGweiToWei(option.suggestedMaxFeePerGas).toFixed(),
-                          maxPriorityFeePerGas: formatGweiToWei(option.suggestedMaxPriorityFeePerGas).toFixed(),
+                          maxFeePerGas: option.suggestedMaxFeePerGas,
+                          maxPriorityFeePerGas: option.suggestedMaxPriorityFeePerGas,
                       }
                     : {
-                          gasPrice: formatGweiToWei(option.suggestedMaxFeePerGas).toFixed(),
+                          gasPrice: option.suggestedMaxFeePerGas,
                       },
             )
         },
