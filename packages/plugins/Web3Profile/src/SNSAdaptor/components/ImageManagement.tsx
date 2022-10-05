@@ -6,7 +6,7 @@ import { CrossIsolationMessages, EMPTY_LIST, PersonaInformation, PopupRoutes } f
 import { ImageListDialog } from './ImageList.js'
 import { InjectedDialog, WalletTypes } from '@masknet/shared'
 import { Box, Button, DialogContent } from '@mui/material'
-import { IdentityResolved } from '@masknet/plugin-infra'
+import type { IdentityResolved } from '@masknet/plugin-infra'
 import { PluginID } from '@masknet/shared-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import type { AccountType } from '../types.js'

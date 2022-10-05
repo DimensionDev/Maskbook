@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { Box, Divider, Skeleton } from '@mui/material'
-import { GasOptionType } from '@masknet/web3-shared-base'
+import type { GasOptionType } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import type { ChainId, GasOption, Transaction } from '@masknet/web3-shared-evm'
 import { useWeb3State } from '@masknet/web3-hooks-base'

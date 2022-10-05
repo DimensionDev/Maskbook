@@ -1,7 +1,6 @@
 import { Trans } from 'react-i18next'
 import { WalletIcon } from '@masknet/shared'
-
-import { NetworkPluginID } from '@masknet/shared-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 import { Box, Card, Typography, Paper, Link } from '@mui/material'

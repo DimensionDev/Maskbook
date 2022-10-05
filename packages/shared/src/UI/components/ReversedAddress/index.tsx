@@ -1,6 +1,5 @@
 import { memo } from 'react'
-
-import { NetworkPluginID } from '@masknet/shared-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
 import { useReverseAddress, useWeb3State } from '@masknet/web3-hooks-base'
 import { Typography, TypographyProps } from '@mui/material'
 

@@ -1,5 +1,5 @@
 import { Icons } from '@masknet/icons'
-import { Plugin } from '@masknet/plugin-infra'
+import type { Plugin } from '@masknet/plugin-infra'
 import { PluginID } from '@masknet/shared-base'
 import { PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
 import { ApplicationEntry, PublicWalletSetting } from '@masknet/shared'
