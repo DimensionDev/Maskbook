@@ -297,6 +297,9 @@ importers:
       '@masknet/shared-base-ui':
         specifier: workspace:*
         version: link:../shared-base-ui
+      '@masknet/sns-hooks-base':
+        specifier: workspace:*
+        version: link:../sns-hooks/base
       '@masknet/storybook-shared':
         specifier: workspace:*
         version: link:../storybook-shared
@@ -645,6 +648,9 @@ importers:
       '@masknet/shared-base-ui':
         specifier: workspace:*
         version: link:../shared-base-ui
+      '@masknet/sns-hooks-base':
+        specifier: workspace:*
+        version: link:../sns-hooks/base
       '@masknet/theme':
         specifier: workspace:*
         version: link:../theme
@@ -2190,6 +2196,27 @@ importers:
       uuid:
         specifier: ^8.3.2
         version: 8.3.2
+
+  packages/sns-hooks/base:
+    dependencies:
+      '@masknet/plugin-infra':
+        specifier: workspace:*
+        version: link:../../plugin-infra
+      '@masknet/shared-base':
+        specifier: workspace:*
+        version: link:../../shared-base
+      bignumber.js:
+        specifier: 9.0.2
+        version: 9.0.2
+      date-fns:
+        specifier: ^2.28.0
+        version: 2.28.0
+      react-use:
+        specifier: ^17.4.0
+        version: 17.4.0
+      urlcat:
+        specifier: ^2.0.4
+        version: 2.0.4_fggwetex7eobhq3hztj4obsulu
 
   packages/storybook-shared:
     devDependencies:

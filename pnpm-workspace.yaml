@@ -2,6 +2,7 @@ packages:
   - 'packages/*'
   - 'packages/plugins/*'
   - 'packages/polyfills/types'
+  - 'packages/sns-hooks/base'
   - 'packages/web3-constants'
   - 'packages/web3-contracts'
   - 'packages/web3-helpers'

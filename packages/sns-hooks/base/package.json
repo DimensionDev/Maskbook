@@ -1,0 +1,20 @@
+{
+  "name": "@masknet/sns-hooks-base",
+  "private": true,
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "webpack": "./src/index.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "types": "./dist/index.d.ts",
+  "dependencies": {
+    "@masknet/plugin-infra": "workspace:*",
+    "@masknet/shared-base": "workspace:*",
+    "bignumber.js": "9.0.2",
+    "date-fns": "^2.28.0",
+    "react-use": "^17.4.0",
+    "urlcat": "^2.0.4"
+  }
+}

@@ -44,6 +44,7 @@
     "@masknet/shared-base-ui": "workspace:*",
     "@masknet/theme": "workspace:*",
     "@masknet/typed-message": "workspace:*",
+    "@masknet/sns-hooks-base": "workspace:*",
     "@masknet/web3-constants": "workspace:*",
     "@masknet/web3-contracts": "workspace:*",
     "@masknet/web3-helpers": "workspace:*",

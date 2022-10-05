@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { useAsync, useAsyncRetry } from 'react-use'
 import { Subscription, useSubscription } from 'use-subscription'
 import { first, isEqual } from 'lodash-unified'
@@ -10,7 +11,6 @@ import type { SocialIdentity } from '@masknet/web3-shared-base'
 import { activatedSocialNetworkUI, globalUIState } from '../../social-network/index.js'
 import Services from '../../extension/service.js'
 import { MaskMessages, sortPersonaBindings } from '../../utils/index.js'
-import { useEffect } from 'react'
 
 async function queryPersonaFromDB(identityResolved: IdentityResolved) {
     if (!identityResolved.identifier) return
