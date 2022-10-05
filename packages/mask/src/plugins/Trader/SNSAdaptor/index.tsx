@@ -1,4 +1,5 @@
-import { Plugin, PluginID } from '@masknet/plugin-infra'
+import { Plugin } from '@masknet/plugin-infra'
+import { PluginID } from '@masknet/shared-base'
 import { base } from '../base.js'
 import { TraderDialog } from './trader/TraderDialog.js'
 import { SearchResultInspector } from './trending/SearchResultInspector.js'

@@ -7,7 +7,8 @@ import { useSwapParameters as useTradeParameters } from './useTradeParameters.js
 import { swapErrorToUserReadableMessage } from '../../helpers/index.js'
 import type { SwapCall, Trade, TradeComputed } from '../../types/index.js'
 import { useAccount, useChainId, useWeb3Connection } from '@masknet/web3-hooks-base'
-import { NetworkPluginID, ZERO } from '@masknet/web3-shared-base'
+import { ZERO } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 
 interface FailedCall {
     parameters: SwapParameters

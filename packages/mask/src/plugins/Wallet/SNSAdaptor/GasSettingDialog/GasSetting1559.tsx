@@ -1,8 +1,8 @@
-import { z as zod } from 'zod'
-import { zodResolver } from '@hookform/resolvers/zod'
 import { FC, memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { useUpdateEffect } from 'react-use'
 import { Controller, useForm } from 'react-hook-form'
+import { z as zod } from 'zod'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { ActionButton } from '@masknet/theme'
 import { formatGweiToEther, formatGweiToWei, formatWeiToEther, useTokenConstants } from '@masknet/web3-shared-evm'
 import { Typography } from '@mui/material'
@@ -12,6 +12,7 @@ import { isEmpty, noop } from 'lodash-unified'
 import { useI18N } from '../../../../utils/index.js'
 import { useGasSettingStyles } from './useGasSettingStyles.js'
 import type { GasSettingProps } from './types.js'
+import { NetworkPluginID } from '@masknet/shared-base'
 import {
     GasOptionType,
     isGreaterThan,
@@ -20,7 +21,6 @@ import {
     isLessThanOrEqualTo,
     isPositive,
     multipliedBy,
-    NetworkPluginID,
     toFixed,
 } from '@masknet/web3-shared-base'
 import { useChainId, useFungibleTokenPrice, useGasOptions } from '@masknet/web3-hooks-base'

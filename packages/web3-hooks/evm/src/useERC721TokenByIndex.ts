@@ -1,6 +1,7 @@
 import { useAsync } from 'react-use'
 import type { AsyncState } from 'react-use/lib/useAsyncFn'
-import { NetworkPluginID, NonFungibleToken } from '@masknet/web3-shared-base'
+import type { NonFungibleToken } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { useChainId } from '@masknet/web3-hooks-base'
 import { useERC721TokenContract } from './useERC721TokenContract.js'

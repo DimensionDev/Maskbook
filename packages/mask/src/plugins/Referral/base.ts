@@ -1,4 +1,5 @@
-import { type Plugin, PluginID } from '@masknet/plugin-infra'
+import { type Plugin } from '@masknet/plugin-infra'
+import { PluginID } from '@masknet/shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 

@@ -4,7 +4,8 @@ import { BALANCER_SWAP_TYPE } from '../../constants/index.js'
 import { PluginTraderRPC } from '../../messages.js'
 import { SwapResponse, TradeStrategy } from '../../types/index.js'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
-import { FungibleToken, NetworkPluginID, isZero } from '@masknet/web3-shared-base'
+import { FungibleToken, isZero } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 
 export function useTrade(
     strategy: TradeStrategy,

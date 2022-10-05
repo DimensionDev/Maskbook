@@ -3,13 +3,8 @@ import { Box, Button, IconButton, Link, Popover, Stack, Typography } from '@mui/
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useAsync, useUpdateEffect } from 'react-use'
 import { v4 as uuid } from 'uuid'
-import {
-    isSameAddress,
-    NonFungibleToken,
-    NonFungibleTokenContract,
-    multipliedBy,
-    NetworkPluginID,
-} from '@masknet/web3-shared-base'
+import { isSameAddress, NonFungibleToken, NonFungibleTokenContract, multipliedBy } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import {
     SchemaType,
     formatWeiToEther,

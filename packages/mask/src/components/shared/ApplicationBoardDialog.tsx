@@ -13,7 +13,8 @@ import { useI18N } from '../../utils/index.js'
 import { Icons } from '@masknet/icons'
 import { PersonaSelectPanelDialog } from './PersonaSelectPanel/PersonaSelectPanelDialog.js'
 import { PluginNextIDMessages } from '../../plugins/NextID/messages.js'
-import type { PluginID } from '@masknet/plugin-infra'
+import type {} from '@masknet/plugin-infra'
+import { PluginID } from '@masknet/shared-base'
 
 const useStyles = makeStyles<{
     openSettings: boolean

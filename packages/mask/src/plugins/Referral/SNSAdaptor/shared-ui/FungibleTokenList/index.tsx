@@ -14,13 +14,8 @@ import {
     useWeb3State,
 } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import {
-    CurrencyType,
-    currySameAddress,
-    FungibleToken,
-    isSameAddress,
-    NetworkPluginID,
-} from '@masknet/web3-shared-base'
+import { CurrencyType, currySameAddress, FungibleToken, isSameAddress } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { getFungibleTokenItem } from './FungibleTokenItem.js'
 import { EMPTY_LIST } from '@masknet/shared-base'
 

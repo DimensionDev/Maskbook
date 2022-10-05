@@ -5,7 +5,8 @@ import { useAsyncFn } from 'react-use'
 import type { TransactionConfig } from 'web3-core'
 import type { GasOptionConfig } from '@masknet/web3-shared-evm'
 import type { SwapOOSuccessResponse, TradeComputed } from '../../types/index.js'
-import { NetworkPluginID, ZERO } from '@masknet/web3-shared-base'
+import { ZERO } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { useAccount, useChainId, useWeb3Connection } from '@masknet/web3-hooks-base'
 
 export function useTradeCallback(
