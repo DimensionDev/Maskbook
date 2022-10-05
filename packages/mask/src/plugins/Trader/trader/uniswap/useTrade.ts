@@ -1,4 +1,5 @@
-import { FungibleToken, isZero, NetworkPluginID } from '@masknet/web3-shared-base'
+import { FungibleToken, isZero } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { TradeStrategy } from '../../types/index.js'
 import { toUniswapCurrencyAmount, toUniswapCurrency } from '../../helpers/index.js'
 import { useV2BestTradeExactIn, useV2BestTradeExactOut } from './useV2BestTrade.js'

@@ -1,5 +1,6 @@
 import { useAsyncRetry } from 'react-use'
-import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
+import { isSameAddress } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { useTokenConstants } from '@masknet/web3-shared-evm'
 import { useAccount, useChainId } from '@masknet/web3-hooks-base'
 import { toTokenIdentifier } from '../utils.js'

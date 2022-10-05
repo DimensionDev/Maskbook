@@ -10,7 +10,8 @@ import { currentMaskWalletAccountSettings } from '../../../../../shared/legacy-s
 import { ChainIcon, useMenuConfig, WalletIcon } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
 import { WalletRPC } from '../../../../plugins/Wallet/messages.js'
-import { NetworkDescriptor, NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkDescriptor } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     root: {

@@ -7,7 +7,8 @@ import type { TradeProvider } from '@masknet/public-api'
 import { useGetTradeContext } from '../useGetTradeContext.js'
 import { MulticallStateType, useMultipleContractSingleData } from '@masknet/web3-hooks-evm'
 import { useTargetBlockNumber } from '../useTargetBlockNumber.js'
-import { isZero, NetworkPluginID } from '@masknet/web3-shared-base'
+import { isZero } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { useChainId } from '@masknet/web3-hooks-base'
 
 export enum PoolState {

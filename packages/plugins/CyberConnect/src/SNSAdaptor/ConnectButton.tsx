@@ -1,6 +1,7 @@
 import { useEffect, useState, useCallback } from 'react'
 import { LoadingBase, makeStyles, MaskColorVar } from '@masknet/theme'
-import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
+import { isSameAddress } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { useAccount, useWeb3, useCurrentWeb3NetworkPluginID } from '@masknet/web3-hooks-base'
 import CyberConnect, { Env } from '@cyberlab/cyberconnect'
 import { PluginCyberConnectRPC } from '../messages.js'

@@ -1,6 +1,7 @@
 import { EMPTY_LIST, NextIDPlatform } from '@masknet/shared-base'
 import { NextIDProof } from '@masknet/web3-providers'
-import { isSameAddress, isGreaterThan, NetworkPluginID } from '@masknet/web3-shared-base'
+import { isSameAddress, isGreaterThan } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { uniqBy } from 'lodash-unified'
 import { useEffect, useMemo } from 'react'
 import { useAsyncRetry } from 'react-use'

@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import type { NetworkPluginID } from '@masknet/web3-shared-base'
+import type {} from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { useFungibleTokenBalance } from './useFungibleTokenBalance.js'
 import { useFungibleToken } from './useFungibleToken.js'
 

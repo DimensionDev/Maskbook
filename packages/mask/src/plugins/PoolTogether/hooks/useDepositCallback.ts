@@ -1,5 +1,6 @@
 import { useAccount, useChainId, useWeb3Connection } from '@masknet/web3-hooks-base'
-import { FungibleToken, NetworkPluginID } from '@masknet/web3-shared-base'
+import { FungibleToken } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { ChainId, encodeContractTransaction, SchemaType } from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
 import { useAsyncFn } from 'react-use'

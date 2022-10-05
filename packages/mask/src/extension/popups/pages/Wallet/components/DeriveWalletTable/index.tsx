@@ -18,7 +18,8 @@ import { Icons } from '@masknet/icons'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { useWeb3 } from '@masknet/web3-hooks-base'
 import { useI18N } from '../../../../../../utils/index.js'
-import { formatBalance, NetworkPluginID } from '@masknet/web3-shared-base'
+import { formatBalance } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 
 const useStyles = makeStyles()({
     header: {

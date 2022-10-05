@@ -1,7 +1,8 @@
 import { useAsyncFn } from 'react-use'
 import { useAccount, useChainId } from '@masknet/web3-hooks-base'
 import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
-import { isGreaterThan, isZero, NetworkPluginID } from '@masknet/web3-shared-base'
+import { isGreaterThan, isZero } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { GasConfig, TransactionEventType, isValidAddress } from '@masknet/web3-shared-evm'
 import { useERC20TokenContract } from './useERC20TokenContract.js'
 

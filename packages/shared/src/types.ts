@@ -1,4 +1,5 @@
-import type { NetworkPluginID } from '@masknet/web3-shared-base'
+import type {} from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import type { CollectionType } from '@masknet/web3-providers'
 

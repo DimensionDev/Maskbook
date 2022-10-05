@@ -10,7 +10,8 @@ import ERC20ABI from '@masknet/web3-contracts/abis/ERC20.json'
 import { roundValue, toChainAddressEthers } from '../../helpers/index.js'
 import { ReferralRPC } from '../../messages.js'
 import type { FungibleTokenDetailed } from '../../types.js'
-import type { NetworkPluginID } from '@masknet/web3-shared-base'
+import type {} from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 
 async function resolveReferralFarmsV1Address() {

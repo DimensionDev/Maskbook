@@ -15,7 +15,8 @@ import { ApplicationEntry } from '@masknet/shared'
 import { CrossIsolationMessages } from '@masknet/shared-base'
 import { ClaimAllDialog } from './ClaimAllDialog.js'
 import { useFungibleToken } from '@masknet/web3-hooks-base'
-import { formatBalance, NetworkPluginID } from '@masknet/web3-shared-base'
+import { formatBalance } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { Trans } from 'react-i18next'
 
 const useStyles = makeStyles()((theme) => ({
