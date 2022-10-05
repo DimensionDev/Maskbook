@@ -1,6 +1,6 @@
 import { Card, Link } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { useWeb3State } from '@masknet/plugin-infra/web3'
+import { useWeb3State } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { NFTCardStyledAssetPlayer } from '@masknet/shared'
 import type { NetworkPluginID, NonFungibleAsset, SourceType, Wallet } from '@masknet/web3-shared-base'

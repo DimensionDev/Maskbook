@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { PluginID } from '@masknet/plugin-infra'
 import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
-import { PluginWeb3ContextProvider, useChainId, useChainIdValid } from '@masknet/plugin-infra/web3'
+import { PluginWeb3ContextProvider, useChainId, useChainIdValid } from '@masknet/web3-hooks-base'
 import { ChainId, isNativeTokenAddress, SchemaType } from '@masknet/web3-shared-evm'
 import { DialogContent, dialogTitleClasses, IconButton } from '@mui/material'
 import { InjectedDialog, useSelectAdvancedSettings } from '@masknet/shared'

@@ -1,4 +1,4 @@
-import { useAccount, useWeb3State } from '@masknet/plugin-infra/web3'
+import { useAccount, useWeb3State } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { FungibleToken, NetworkPluginID, rightShift } from '@masknet/web3-shared-base'
 import { useAsyncFn } from 'react-use'

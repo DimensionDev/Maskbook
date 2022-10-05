@@ -1,12 +1,12 @@
 import classNames from 'classnames'
 import { makeStyles } from '@masknet/theme'
 import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
-import { SelectedIcon } from '../assets/selected.js'
+import { SelectedIcon } from '../assets/SelectedIcon.js'
 import type { AllChainsNonFungibleToken } from '../types.js'
 import { Box, Tooltip, useTheme } from '@mui/material'
 import { Image } from '@masknet/shared'
 import { mask_avatar_dark, mask_avatar_light } from '../constants.js'
-import { useWeb3State } from '@masknet/plugin-infra/web3'
+import { useWeb3State } from '@masknet/web3-hooks-base'
 
 const useStyles = makeStyles()((theme) => ({
     root: {

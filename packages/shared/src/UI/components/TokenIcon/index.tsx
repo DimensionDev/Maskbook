@@ -1,7 +1,7 @@
 import { useAsyncRetry } from 'react-use'
 import { first } from 'lodash-unified'
 import type { AvatarProps } from '@mui/material'
-import { useChainId, useWeb3Hub } from '@masknet/plugin-infra/web3'
+import { useChainId, useWeb3Hub } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { NetworkPluginID, TokenType } from '@masknet/web3-shared-base'
 import { EMPTY_LIST } from '@masknet/shared-base'

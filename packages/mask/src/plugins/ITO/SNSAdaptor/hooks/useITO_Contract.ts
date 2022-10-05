@@ -5,7 +5,7 @@ import type { ITO } from '@masknet/web3-contracts/types/ITO'
 import type { ITO2 } from '@masknet/web3-contracts/types/ITO2'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { useITOConstants, ChainId } from '@masknet/web3-shared-evm'
-import { useContract } from '@masknet/plugin-infra/web3-evm'
+import { useContract } from '@masknet/web3-hooks-evm'
 
 export function useITO_Contract(chainId?: ChainId, contractAddress?: string) {
     const { ITO_CONTRACT_ADDRESS, ITO2_CONTRACT_ADDRESS } = useITOConstants(chainId)

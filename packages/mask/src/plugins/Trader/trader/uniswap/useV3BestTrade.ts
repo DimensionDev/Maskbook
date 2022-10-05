@@ -7,9 +7,9 @@ import { encodeRouteToPath, Route, Trade } from '@uniswap/v3-sdk'
 import { useQuoterContract } from '../../contracts/uniswap/useQuoterContract.js'
 import { useAllV3Routes } from './useAllV3Routes.js'
 import { DEFAULT_MULTICALL_GAS_LIMIT } from '../../constants/index.js'
-import { useSingleContractMultipleData } from '@masknet/plugin-infra/web3-evm'
+import { useSingleContractMultipleData } from '@masknet/web3-hooks-evm'
 import { useTargetBlockNumber } from '../useTargetBlockNumber.js'
-import { useChainId } from '@masknet/plugin-infra/web3'
+import { useChainId } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 export enum V3TradeState {

@@ -19,7 +19,7 @@ import { ActivityList } from '../components/ActivityList/index.js'
 import { openWindow } from '@masknet/shared-base-ui'
 import { useTitle } from '../../../hook/useTitle.js'
 import { formatBalance, formatCurrency, isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
-import { useNativeToken, useWallet } from '@masknet/plugin-infra/web3'
+import { useNativeToken, useWallet } from '@masknet/web3-hooks-base'
 
 const useStyles = makeStyles()({
     content: {

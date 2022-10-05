@@ -4,8 +4,8 @@ import BigNumber from 'bignumber.js'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { FungibleToken, NetworkPluginID, toFixed } from '@masknet/web3-shared-base'
 import { ChainId, encodeContractTransaction, SchemaType, useGitcoinConstants } from '@masknet/web3-shared-evm'
-import { useAccount, useChainId, useWeb3Connection } from '@masknet/plugin-infra/web3'
-import { useBulkCheckoutContract } from '../contracts/useBulkCheckoutWallet.js'
+import { useAccount, useChainId, useWeb3Connection } from '@masknet/web3-hooks-base'
+import { useBulkCheckoutContract } from './useBulkCheckoutWallet.js'
 
 /**
  * A callback for donate gitcoin grant

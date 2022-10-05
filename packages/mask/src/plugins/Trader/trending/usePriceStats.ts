@@ -3,7 +3,7 @@ import type { Currency } from '../types/index.js'
 import type { DataProvider } from '@masknet/public-api'
 import { isUndefined } from 'lodash-unified'
 import { PluginTraderRPC } from '../messages.js'
-import { useChainId } from '@masknet/plugin-infra/web3'
+import { useChainId } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { TrendingAPI } from '@masknet/web3-providers'
 

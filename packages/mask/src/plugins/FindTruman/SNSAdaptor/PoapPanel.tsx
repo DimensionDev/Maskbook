@@ -4,7 +4,7 @@ import { fetchUserPoap } from '../Worker/apis/index.js'
 import { Box, Button, Grid, Skeleton, Typography } from '@mui/material'
 import { useContext } from 'react'
 import { FindTrumanContext } from '../context.js'
-import { useAccount } from '@masknet/plugin-infra/web3'
+import { useAccount } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { Image } from '@masknet/shared'
 

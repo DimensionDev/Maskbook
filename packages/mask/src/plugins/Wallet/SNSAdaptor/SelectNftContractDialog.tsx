@@ -16,7 +16,7 @@ import {
     useNonFungibleCollections,
     useNonFungibleTokenContract,
     useNonFungibleTokenBalance,
-} from '@masknet/plugin-infra/web3'
+} from '@masknet/web3-hooks-base'
 import { NetworkPluginID, NonFungibleTokenContract } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({

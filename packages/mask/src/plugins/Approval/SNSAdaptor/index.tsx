@@ -1,9 +1,9 @@
+import { useState } from 'react'
 import type { Plugin } from '@masknet/plugin-infra'
-import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
+import { TargetChainIdContext } from '@masknet/web3-hooks-evm'
 import { ApplicationEntry } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
 import { PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
-import { useState } from 'react'
 import { base } from '../base.js'
 import { ApprovalDialog } from './ApprovalDialog.js'
 

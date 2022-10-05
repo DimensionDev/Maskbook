@@ -5,14 +5,14 @@ import { LoadingBase, makeStyles } from '@masknet/theme'
 import QueryBuilderIcon from '@mui/icons-material/QueryBuilder'
 import VerifiedUserIcon from '@mui/icons-material/VerifiedUser'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { ChainId } from '@masknet/web3-shared-evm'
 import { useI18N as useBaseI18N } from '../../../utils/index.js'
 import { useI18N } from '../locales/index.js'
 import { useGrant } from '../hooks/useGrant.js'
 import { PluginGitcoinMessages } from '../messages.js'
 import { usePostLink } from '../../../components/DataSource/usePostInfo.js'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { ChainId } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({
     root: {

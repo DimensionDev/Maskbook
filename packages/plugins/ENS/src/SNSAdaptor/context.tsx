@@ -1,6 +1,6 @@
 import { createContext, PropsWithChildren, FC } from 'react'
 import { useAsync } from 'react-use'
-import { useLookupAddress, PluginWeb3ContextProvider, PluginIDContextProvider } from '@masknet/plugin-infra/web3'
+import { useLookupAddress, PluginWeb3ContextProvider, PluginIDContextProvider } from '@masknet/web3-hooks-base'
 import { NextIDPlatform, BindingProof } from '@masknet/shared-base'
 import { NextIDProof } from '@masknet/web3-providers'
 import { ChainId, resolveNonFungibleTokenIdFromEnsDomain } from '@masknet/web3-shared-evm'

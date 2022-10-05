@@ -4,9 +4,9 @@ import type { TradeComputed } from '../types/index.js'
 import type { NativeTokenWrapper } from './native/useTradeComputed.js'
 import { TradeStrategy } from '../types/index.js'
 import type { AsyncState } from 'react-use/lib/useAsyncFn'
-import { useAccount, useWeb3Connection } from '@masknet/plugin-infra/web3'
+import { useAccount, useWeb3Connection } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { useNativeTokenWrapperContract } from '@masknet/plugin-infra/web3-evm'
+import { useNativeTokenWrapperContract } from '@masknet/web3-hooks-evm'
 import BigNumber from 'bignumber.js'
 
 export function useNativeTradeGasLimit(

@@ -7,7 +7,7 @@ import { useAsyncRetry } from 'react-use'
 import { PluginTraderRPC } from '../../messages.js'
 import { TradeProvider } from '@masknet/public-api'
 import { useGreatThanSlippageSetting } from './hooks/useGreatThanSlippageSetting.js'
-import { useChainId, useNativeTokenPrice } from '@masknet/plugin-infra/web3'
+import { useChainId, useNativeTokenPrice } from '@masknet/web3-hooks-base'
 import { DefaultTraderPlaceholderUI, TraderInfoUI } from './components/TraderInfoUI.js'
 
 export interface TraderInfoProps {

@@ -1,7 +1,7 @@
 import { makeStyles } from '@masknet/theme'
 import formatDistanceToNowStrict from 'date-fns/formatDistanceToNowStrict'
 import { Typography, Link } from '@mui/material'
-import { useWeb3State } from '@masknet/plugin-infra/web3'
+import { useWeb3State } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { Icons } from '@masknet/icons'
 import { NonFungibleTokenEvent, formatBalance, isZero, isValidTimestamp } from '@masknet/web3-shared-base'

@@ -1,5 +1,5 @@
 import { Icons } from '@masknet/icons'
-import { useNetworkDescriptor } from '@masknet/plugin-infra/web3'
+import { useNetworkDescriptor } from '@masknet/web3-hooks-base'
 import { FormattedAddress, TokenIcon, useSnackbarCallback, WalletIcon } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainId, formatEthereumAddress } from '@masknet/web3-shared-evm'

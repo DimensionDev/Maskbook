@@ -25,7 +25,7 @@ import { isNativeTokenWrapper } from '../helpers/index.js'
 import { useGetTradeContext } from './useGetTradeContext.js'
 import type { GasOptionConfig } from '@masknet/web3-shared-evm'
 import type { AsyncFnReturn } from 'react-use/lib/useAsyncFn'
-import { useChainId } from '@masknet/plugin-infra/web3'
+import { useChainId } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 export function useTradeCallback(

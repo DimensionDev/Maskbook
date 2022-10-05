@@ -36,7 +36,7 @@ import { PluginTraderMessages } from '../../messages.js'
 import Services from '../../../../extension/service.js'
 import { PluginID, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
 import { useIsMinimalModeDashBoard } from '@masknet/plugin-infra/dashboard'
-import { PluginWeb3ActualContextProvider, useChainId } from '@masknet/plugin-infra/web3'
+import { PluginWeb3ActualContextProvider, useChainId } from '@masknet/web3-hooks-base'
 
 const useStyles = makeStyles<{
     isDashboard: boolean

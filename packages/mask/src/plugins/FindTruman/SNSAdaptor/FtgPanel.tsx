@@ -8,9 +8,9 @@ import FusionFtg from './FusionFtg.js'
 import { useContext } from 'react'
 import { FindTrumanContext } from '../context.js'
 import { getPartName } from './PartsPanel.js'
-import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
+import { useAccount, useChainId } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { useERC721TokenContract } from '@masknet/plugin-infra/web3-evm'
+import { useERC721TokenContract } from '@masknet/web3-hooks-evm'
 import { Image } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({

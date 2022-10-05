@@ -4,7 +4,7 @@ import { makeStyles, useStylesExtends } from '@masknet/theme'
 import CheckIcon from '@mui/icons-material/Check'
 import type { DefaultComponentProps } from '@mui/material/OverridableComponent'
 import { formatEthereumAddress, Wallet } from '@masknet/web3-shared-evm'
-import { useBlockie } from '@masknet/plugin-infra/web3'
+import { useBlockie } from '@masknet/web3-hooks-base'
 import { useI18N } from '../../../utils/index.js'
 
 const useStyle = makeStyles()((theme) => ({

@@ -1,5 +1,5 @@
 import { Icons } from '@masknet/icons'
-import { useChainId, useWeb3State } from '@masknet/plugin-infra/web3'
+import { useChainId, useWeb3State } from '@masknet/web3-hooks-base'
 import { makeStyles } from '@masknet/theme'
 import { isSameAddress, NetworkPluginID, SocialAddressType } from '@masknet/web3-shared-base'
 import { Link, MenuItem, Select, Tooltip, TooltipProps, Typography } from '@mui/material'

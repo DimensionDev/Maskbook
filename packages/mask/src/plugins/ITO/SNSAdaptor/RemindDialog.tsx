@@ -6,7 +6,7 @@ import { FormattedAddress, TokenIcon } from '@masknet/shared'
 import { useI18N } from '../../../utils/index.js'
 import { ChainId, formatEthereumAddress, explorerResolver, networkResolver, SchemaType } from '@masknet/web3-shared-evm'
 import { SwapStatus } from './SwapGuide.js'
-import { useNetworkType } from '@masknet/plugin-infra/web3'
+import { useNetworkType } from '@masknet/web3-hooks-base'
 import { FungibleToken, NetworkPluginID } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({

@@ -1,5 +1,5 @@
 import { Icons } from '@masknet/icons'
-import { useWeb3State } from '@masknet/plugin-infra/web3'
+import { useWeb3State } from '@masknet/web3-hooks-base'
 import { ImageIcon, useIsImageURL } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { isSameAddress, NetworkPluginID, NonFungibleToken } from '@masknet/web3-shared-base'

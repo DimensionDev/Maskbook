@@ -1,5 +1,5 @@
 import { ChangeEvent, memo, useCallback, useMemo } from 'react'
-import { useWeb3State } from '@masknet/plugin-infra/web3'
+import { useWeb3State } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { formatBalance, FungibleToken } from '@masknet/web3-shared-base'
 import { FungibleTokenInputUI } from './UI.js'

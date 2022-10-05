@@ -11,7 +11,7 @@ import { WalletMessages, WalletRPC } from '../../../../plugins/Wallet/messages.j
 import SelectWallet from './SelectWallet/index.js'
 import { useWalletLockStatus } from './hooks/useWalletLockStatus.js'
 import { WalletHeader } from './components/WalletHeader/index.js'
-import { useChainId, useWallet, useWeb3State } from '@masknet/plugin-infra/web3'
+import { useChainId, useWallet, useWeb3State } from '@masknet/web3-hooks-base'
 import { NetworkPluginID, TransactionDescriptorType } from '@masknet/web3-shared-base'
 import { EthereumMethodType, getPayloadConfig } from '@masknet/web3-shared-evm'
 

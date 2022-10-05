@@ -1,17 +1,17 @@
 import { useState } from 'react'
+import { useAsync } from 'react-use'
 import { ListItem, List, Typography, Link, Avatar } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { ActionButton } from '@masknet/theme'
 import type { ChainId, NetworkType, SchemaType } from '@masknet/web3-shared-evm'
-import { useERC20TokenApproveCallback } from '@masknet/plugin-infra/web3-evm'
-import { useAccount, useWeb3State, useNetworkDescriptor, useWeb3Hub } from '@masknet/plugin-infra/web3'
+import { useERC20TokenApproveCallback } from '@masknet/web3-hooks-evm'
+import { useAccount, useWeb3State, useNetworkDescriptor, useWeb3Hub } from '@masknet/web3-hooks-base'
 import { NetworkPluginID, NetworkDescriptor, isGreaterThan, FungibleTokenSpender } from '@masknet/web3-shared-base'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
 import { useI18N } from '../locales/index.js'
 import { useStyles } from './useStyles.js'
 import { ApprovalLoadingContent } from './ApprovalLoadingContent.js'
 import { ApprovalEmptyContent } from './ApprovalEmptyContent.js'
-import { useAsync } from 'react-use'
 
 export function ApprovalTokenContent({ chainId }: { chainId: ChainId }) {
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)

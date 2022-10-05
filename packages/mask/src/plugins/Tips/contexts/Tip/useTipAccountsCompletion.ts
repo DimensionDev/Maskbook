@@ -1,4 +1,4 @@
-import { useChainId, useWeb3State } from '@masknet/plugin-infra/web3'
+import { useChainId, useWeb3State } from '@masknet/web3-hooks-base'
 import { useEffect, useMemo, useState } from 'react'
 import type { TipsAccount } from '../../types/index.js'
 

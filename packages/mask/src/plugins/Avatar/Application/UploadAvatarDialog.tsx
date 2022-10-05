@@ -10,7 +10,7 @@ import { useI18N } from '../locales/i18n_generated'
 import { context } from '../context.js'
 import { useSubscription } from 'use-subscription'
 import type { NetworkPluginID } from '@masknet/web3-shared-base'
-import { useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
+import { useCurrentWeb3NetworkPluginID } from '@masknet/web3-hooks-base'
 import { AvatarInfo, useSave } from '../hooks/save/useSave.js'
 import type { AllChainsNonFungibleToken } from '../types.js'
 

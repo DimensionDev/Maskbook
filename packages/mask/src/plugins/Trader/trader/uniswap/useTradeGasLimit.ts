@@ -1,5 +1,5 @@
 import type { Trade, TradeComputed, SwapCall } from '../../types/index.js'
-import { useAccount, useChainId, useWeb3Connection } from '@masknet/plugin-infra/web3'
+import { useAccount, useChainId, useWeb3Connection } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useSwapParameters as useTradeParameters } from './useTradeParameters.js'
 import type { TradeProvider } from '@masknet/public-api'

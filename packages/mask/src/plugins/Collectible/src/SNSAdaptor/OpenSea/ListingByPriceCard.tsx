@@ -17,7 +17,7 @@ import {
     useCurrentWeb3NetworkPluginID,
     useFungibleTokenWatched,
     useWeb3State,
-} from '@masknet/plugin-infra/web3'
+} from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { ActionButtonPromise } from '../../../../../extension/options-page/DashboardComponents/ActionButton.js'
 import { useOpenSea } from './hooks/useOpenSea.js'

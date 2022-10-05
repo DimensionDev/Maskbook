@@ -1,5 +1,5 @@
 import { useCallback, FC, useState, useMemo } from 'react'
-import { useCurrentWeb3NetworkPluginID, useNativeTokenAddress } from '@masknet/plugin-infra/web3'
+import { useCurrentWeb3NetworkPluginID, useNativeTokenAddress } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { FungibleTokenList, useSharedI18N } from '@masknet/shared'
 import { EMPTY_LIST, EnhanceableSite, isDashboardPage } from '@masknet/shared-base'

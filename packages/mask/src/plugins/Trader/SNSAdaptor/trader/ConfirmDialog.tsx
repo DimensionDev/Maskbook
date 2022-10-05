@@ -11,7 +11,7 @@ import {
     NetworkPluginID,
 } from '@masknet/web3-shared-base'
 import { currentSlippageSettings } from '../../settings.js'
-import { useNativeTokenPrice, useFungibleTokenPrice, useChainId } from '@masknet/plugin-infra/web3'
+import { useNativeTokenPrice, useFungibleTokenPrice, useChainId } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useGreatThanSlippageSetting } from './hooks/useGreatThanSlippageSetting.js'
 import { PluginTraderMessages } from '../../messages.js'

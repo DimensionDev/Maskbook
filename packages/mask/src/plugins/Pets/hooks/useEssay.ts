@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useAsync } from 'react-use'
-import { useWeb3State } from '@masknet/plugin-infra/web3'
+import { useWeb3State } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import type { User } from '../types.js'
 import { ImageType, ShowMeta, EssayRSSNode } from './../types.js'

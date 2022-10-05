@@ -4,7 +4,7 @@ import { isGreaterThan, isLessThan, multipliedBy, NetworkPluginID, leftShift } f
 import { MINIMUM_AMOUNT } from '../../../constants/index.js'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { AllProviderTradeContext } from '../../../trader/useAllProviderTradeContext.js'
-import { useFungibleToken, useFungibleTokenPrice, useNativeTokenPrice } from '@masknet/plugin-infra/web3'
+import { useFungibleToken, useFungibleTokenPrice, useNativeTokenPrice } from '@masknet/web3-hooks-base'
 
 export function useSortedTrades(traders: TradeInfo[], chainId: ChainId, gasPrice?: string) {
     const { value: nativeToken } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, '', { chainId })

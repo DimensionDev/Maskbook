@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useAccount, useChainId, useWeb3Hub } from '@masknet/plugin-infra/web3'
+import { useAccount, useChainId, useWeb3Hub } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { makeStyles, ShadowRootMenu } from '@masknet/theme'
 import { Hub, OrderSide, resolveSourceTypeName, SourceType } from '@masknet/web3-shared-base'

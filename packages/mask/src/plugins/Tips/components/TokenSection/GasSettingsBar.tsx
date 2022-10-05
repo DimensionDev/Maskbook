@@ -1,4 +1,4 @@
-import { useGasPrice, useNativeTokenPrice, useWeb3State } from '@masknet/plugin-infra/web3'
+import { useGasPrice, useNativeTokenPrice, useWeb3State } from '@masknet/web3-hooks-base'
 import { SelectGasSettingsToolbar } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import {

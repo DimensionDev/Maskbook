@@ -11,7 +11,7 @@ import {
     UserPollStatus,
     UserStoryStatus,
 } from '../types.js'
-import { useAccount } from '@masknet/plugin-infra/web3'
+import { useAccount } from '@masknet/web3-hooks-base'
 import { useEffect, useState } from 'react'
 import {
     fetchPollResult,

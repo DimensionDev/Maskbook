@@ -15,7 +15,7 @@ import {
     useWeb3State,
     useDefaultChainId,
     useRecentTransactions,
-} from '@masknet/plugin-infra/web3'
+} from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { Icons } from '@masknet/icons'
 import type { WalletDescriptionProps } from './WalletDescription.js'

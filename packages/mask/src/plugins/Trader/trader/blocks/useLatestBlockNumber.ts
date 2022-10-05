@@ -1,7 +1,7 @@
 import { useAsyncRetry } from 'react-use'
 import { getPastTimestamps } from '../../helpers/blocks.js'
 import { PluginTraderRPC } from '../../messages.js'
-import { useChainId } from '@masknet/plugin-infra/web3'
+import { useChainId } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 /**

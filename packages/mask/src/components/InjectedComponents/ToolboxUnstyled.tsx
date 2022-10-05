@@ -22,7 +22,7 @@ import {
     useReverseAddress,
     useChainIdMainnet,
     useRecentTransactions,
-} from '@masknet/plugin-infra/web3'
+} from '@masknet/web3-hooks-base'
 import { useCallback } from 'react'
 import { WalletIcon, MaskIcon } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'

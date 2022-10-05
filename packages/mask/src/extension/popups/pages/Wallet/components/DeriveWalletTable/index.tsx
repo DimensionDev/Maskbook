@@ -1,5 +1,6 @@
 import { memo } from 'react'
 import { useAsync } from 'react-use'
+import { range } from 'lodash-unified'
 import {
     Table,
     TableCell,
@@ -15,10 +16,9 @@ import { makeStyles } from '@masknet/theme'
 import { FormattedAddress, FormattedBalance } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
+import { useWeb3 } from '@masknet/web3-hooks-base'
 import { useI18N } from '../../../../../../utils/index.js'
-import { useWeb3 } from '@masknet/plugin-infra/web3'
 import { formatBalance, NetworkPluginID } from '@masknet/web3-shared-base'
-import { range } from 'lodash-unified'
 
 const useStyles = makeStyles()({
     header: {

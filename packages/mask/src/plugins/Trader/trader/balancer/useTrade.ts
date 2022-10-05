@@ -1,4 +1,4 @@
-import { useChainId, useDoubleBlockBeatRetry } from '@masknet/plugin-infra/web3'
+import { useChainId, useDoubleBlockBeatRetry } from '@masknet/web3-hooks-base'
 import { ChainId, isNativeTokenAddress, SchemaType, useTokenConstants } from '@masknet/web3-shared-evm'
 import { BALANCER_SWAP_TYPE } from '../../constants/index.js'
 import { PluginTraderRPC } from '../../messages.js'

@@ -1,11 +1,11 @@
+import { getRegisteredWeb3Networks } from '@masknet/plugin-infra'
 import {
-    getRegisteredWeb3Networks,
     useAccount,
     useChainId,
     useCurrentWeb3NetworkPluginID,
     useNetworkDescriptor,
     useWallets,
-} from '@masknet/plugin-infra/web3'
+} from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { DashboardRoutes, relativeRouteOf, CrossIsolationMessages } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'

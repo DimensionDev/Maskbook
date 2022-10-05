@@ -4,7 +4,7 @@ import type { Coin, TagType } from '../types/index.js'
 import type { DataProvider } from '@masknet/public-api'
 import { useCurrentCurrency } from './useCurrentCurrency.js'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { useChainId, useFungibleToken } from '@masknet/plugin-infra/web3'
+import { useChainId, useFungibleToken } from '@masknet/web3-hooks-base'
 
 export function useTrendingByKeyword(tagType: TagType, keyword: string, dataProvider: DataProvider) {
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)

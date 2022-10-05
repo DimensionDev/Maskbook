@@ -3,7 +3,7 @@ import { PluginTraderRPC } from '../../messages.js'
 import { SwapBancorRequest, TradeStrategy } from '../../types/index.js'
 import { useSlippageTolerance } from './useSlippageTolerance.js'
 import { FungibleToken, leftShift, NetworkPluginID } from '@masknet/web3-shared-base'
-import { useAccount, useChainId, useDoubleBlockBeatRetry } from '@masknet/plugin-infra/web3'
+import { useAccount, useChainId, useDoubleBlockBeatRetry } from '@masknet/web3-hooks-base'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 
 export function useTrade(

@@ -7,7 +7,7 @@ import {
     createInjectHooksRenderer,
 } from '@masknet/plugin-infra/content-script'
 import { NextIDPlatform, EMPTY_LIST, PopupRoutes, CrossIsolationMessages } from '@masknet/shared-base'
-import { useAvailablePlugins } from '@masknet/plugin-infra/web3'
+import { useAvailablePlugins } from '@masknet/plugin-infra'
 import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import { first } from 'lodash-unified'
 import { TabContext } from '@mui/lab'

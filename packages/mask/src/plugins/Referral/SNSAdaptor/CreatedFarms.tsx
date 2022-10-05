@@ -1,5 +1,5 @@
 import { useAsync } from 'react-use'
-import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
+import { useAccount, useChainId } from '@masknet/web3-hooks-base'
 import { getMaskColor, LoadingBase, makeStyles } from '@masknet/theme'
 import { Grid, Typography, Box, Button } from '@mui/material'
 import { EMPTY_LIST } from '@masknet/shared-base'
