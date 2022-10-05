@@ -10,7 +10,7 @@ import {
     TransactionWatcherState as Web3TransactionWatcherState,
     RecentTransaction,
 } from '@masknet/web3-shared-base'
-import type { Plugin } from '../types.js'
+import type { Plugin } from '@masknet/plugin-infra'
 
 interface TransactionWatcherItem<ChainId, Transaction> {
     at: number

@@ -1,3 +1,4 @@
+import type { PartialRequired } from '@masknet/shared-base'
 import { HubOptions, SourceType, CurrencyType, createPredicate } from '@masknet/web3-shared-base'
 
 export class HubStateBaseClient<ChainId> {
@@ -11,7 +12,7 @@ export class HubStateBaseClient<ChainId> {
     protected getOptions(
         initial?: HubOptions<ChainId>,
         overrides?: Partial<HubOptions<ChainId>>,
-    ): PartialRequired<Required<HubOptions<ChainId>>, 'chainId' | 'account'> {
+    ): PartialRequired<HubOptions<ChainId>, 'chainId' | 'account'> {
         return {
             chainId: this.chainId,
             account: this.account,

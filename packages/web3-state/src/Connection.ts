@@ -1,7 +1,7 @@
 import { memoize } from 'lodash-unified'
 import type { Subscription } from 'use-subscription'
 import type { Connection, ConnectionOptions, ConnectionState as Web3ConnectionState } from '@masknet/web3-shared-base'
-import type { Plugin } from '../types.js'
+import type { Plugin } from '@masknet/plugin-infra'
 
 export class ConnectionState<
     ChainId,

@@ -3,7 +3,7 @@ import type { Subscription } from 'use-subscription'
 import { delay } from '@dimensiondev/kit'
 import { getSiteType, mapSubscription, mergeSubscription, StorageObject } from '@masknet/shared-base'
 import type { Account, WalletProvider, ProviderState as Web3ProviderState } from '@masknet/web3-shared-base'
-import type { Plugin } from '../types.js'
+import type { Plugin } from '@masknet/plugin-infra'
 
 export interface ProviderStorage<Account, ProviderType extends string> {
     account: Account

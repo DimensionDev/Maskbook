@@ -1,7 +1,7 @@
 import type { Subscription } from 'use-subscription'
 import { mapSubscription, mergeSubscription, StorageItem } from '@masknet/shared-base'
 import type { RiskWarningState as Web3RiskWarningState } from '@masknet/web3-shared-base'
-import type { Plugin } from '../types.js'
+import type { Plugin } from '@masknet/plugin-infra'
 
 interface ConfirmationBook {
     [key: string]: boolean

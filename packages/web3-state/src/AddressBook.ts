@@ -2,7 +2,7 @@ import { uniqBy } from 'lodash-unified'
 import type { Subscription } from 'use-subscription'
 import { mapSubscription, mergeSubscription, StorageItem } from '@masknet/shared-base'
 import type { AddressBookState as Web3AddressBookState } from '@masknet/web3-shared-base'
-import type { Plugin } from '../types.js'
+import type { Plugin } from '@masknet/plugin-infra'
 
 export class AddressBookState<
     ChainId extends number,
