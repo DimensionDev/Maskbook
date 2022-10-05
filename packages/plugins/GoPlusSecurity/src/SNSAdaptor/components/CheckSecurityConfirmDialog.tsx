@@ -1,6 +1,5 @@
-import { PluginID } from '@masknet/shared-base'
 import { InjectedDialog } from '@masknet/shared'
-import { CrossIsolationMessages } from '@masknet/shared-base'
+import { CrossIsolationMessages, PluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { Button, DialogContent, Stack, Typography } from '@mui/material'
 import { useEffect, useState } from 'react'
