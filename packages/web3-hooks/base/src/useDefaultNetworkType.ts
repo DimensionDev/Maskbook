@@ -1,4 +1,4 @@
-import type { NetworkPluginID } from '@masknet/shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { NetworkType as EVM_NetworkType } from '@masknet/web3-shared-evm'
 import { NetworkType as FlowNetworkType } from '@masknet/web3-shared-flow'
 import { NetworkType as SolanaNetworkType } from '@masknet/web3-shared-solana'

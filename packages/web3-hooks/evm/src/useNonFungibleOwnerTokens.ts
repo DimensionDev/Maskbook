@@ -1,8 +1,8 @@
 import { useRef } from 'react'
 import { useAsyncRetry } from 'react-use'
-import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import { NonFungibleToken } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
+import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import type { NonFungibleToken } from '@masknet/web3-shared-base'
 import { useWeb3Connection } from '@masknet/web3-hooks-base'
 
 import { useERC721TokenContract } from './useERC721TokenContract.js'

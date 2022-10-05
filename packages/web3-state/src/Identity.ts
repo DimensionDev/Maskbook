@@ -4,7 +4,7 @@ import type {
     SocialIdentity,
     IdentityServiceState as Web3SocialIdentityState,
 } from '@masknet/web3-shared-base'
-import { NetworkPluginID } from '@masknet/shared-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
 import { EMPTY_LIST } from '@masknet/shared-base'
 
 export class IdentityServiceState implements Web3SocialIdentityState {
