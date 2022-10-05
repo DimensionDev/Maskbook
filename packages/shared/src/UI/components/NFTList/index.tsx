@@ -2,7 +2,7 @@ import { useChainId, useCurrentWeb3NetworkPluginID, useWeb3State } from '@maskne
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { ElementAnchor, Linking, NFTCardStyledAssetPlayer, RetryHint } from '@masknet/shared'
 import { LoadingBase, makeStyles } from '@masknet/theme'
-import type { NetworkPluginID } from '@masknet/shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { isSameAddress, NonFungibleToken } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { Checkbox, List, ListItem, Radio, Stack, Typography } from '@mui/material'

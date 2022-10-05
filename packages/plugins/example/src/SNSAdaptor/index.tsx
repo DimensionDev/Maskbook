@@ -1,5 +1,5 @@
 /* eslint @dimensiondev/unicode/specific-set: ["error", { "only": "code" }] */
-import { Plugin } from '@masknet/plugin-infra'
+import type { Plugin } from '@masknet/plugin-infra'
 import { PluginID } from '@masknet/shared-base'
 import { Typography } from '@mui/material'
 import { base } from '../base.js'

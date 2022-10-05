@@ -1,5 +1,6 @@
 import type { Plugin } from '@masknet/plugin-infra'
-import { SocialIdentity, SocialAddress, NetworkPluginID, SocialAddressType } from '@masknet/web3-shared-base'
+import { SocialIdentity, SocialAddress, SocialAddressType } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { IdentityServiceState } from '@masknet/web3-state'
 import { ChainId, formatAddress, isValidAddress } from '@masknet/web3-shared-solana'
 import { SolanaRPC } from '../messages.js'
