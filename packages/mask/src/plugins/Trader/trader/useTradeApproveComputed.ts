@@ -1,10 +1,11 @@
 import { useMemo } from 'react'
 import { ChainId, createERC20Token, SchemaType } from '@masknet/web3-shared-evm'
-import { FungibleToken, NetworkPluginID, ZERO } from '@masknet/web3-shared-base'
+import { FungibleToken, ZERO } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { useChainId } from '@masknet/web3-hooks-base'
 import { TradeProvider } from '@masknet/public-api'
 import type { SwapQuoteResponse, TradeComputed } from '../types/index.js'
 import { useGetTradeContext } from './useGetTradeContext.js'
-import { useChainId } from '@masknet/web3-hooks-base'
 
 export function useTradeApproveComputed(
     trade: TradeComputed<unknown> | null,

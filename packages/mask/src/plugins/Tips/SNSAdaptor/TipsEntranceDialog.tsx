@@ -1,15 +1,16 @@
 import { useWeb3State } from '@masknet/web3-hooks-base'
 import { InjectedDialog, useSnackbarCallback } from '@masknet/shared'
-import { PluginID } from '@masknet/shared-base'
 import {
     NextIDPlatform,
     CrossIsolationMessages,
     EMPTY_LIST,
     formatPersonaFingerprint,
     PopupRoutes,
+    PluginID,
+    NetworkPluginID,
 } from '@masknet/shared-base'
 import { LoadingBase, makeStyles, useCustomSnackbar, ActionButton } from '@masknet/theme'
-import { NetworkPluginID, isSameAddress, isGreaterThan } from '@masknet/web3-shared-base'
+import { isSameAddress, isGreaterThan } from '@masknet/web3-shared-base'
 import { DialogContent, DialogActions, Avatar, Typography } from '@mui/material'
 import { delay } from '@dimensiondev/kit'
 import { sortBy, last } from 'lodash-unified'

@@ -16,7 +16,8 @@ import { useClaimCallback } from '../hooks/useClaimCallback.js'
 import { useRefundCallback } from '../hooks/useRefundCallback.js'
 import { OperationFooter } from './OperationFooter.js'
 import { useStyles } from './useStyles.js'
-import { NetworkPluginID, formatBalance } from '@masknet/web3-shared-base'
+import { formatBalance } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { useAccount, useNetworkType, useWeb3 } from '@masknet/web3-hooks-base'
 
 export interface RedPacketProps {

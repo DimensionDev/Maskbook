@@ -1,15 +1,16 @@
+import { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react'
+import { v4 as uuid } from 'uuid'
+import classNames from 'classnames'
+import Web3Utils from 'web3-utils'
+import formatDateTime from 'date-fns/format'
 import { SchemaType, formatAmount, useITOConstants, ChainId } from '@masknet/web3-shared-evm'
-import { isGreaterThan, isZero, NetworkPluginID, FungibleToken, leftShift } from '@masknet/web3-shared-base'
+import { isGreaterThan, isZero, FungibleToken, leftShift } from '@masknet/web3-shared-base'
 import { TokenIcon } from '@masknet/shared'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { Box, Stack, Typography, InputBase, inputBaseClasses } from '@mui/material'
 import { makeStyles, useStylesExtends, ActionButton, LoadingBase } from '@masknet/theme'
 import CheckIcon from '@mui/icons-material/Check'
 import UnCheckIcon from '@mui/icons-material/Close'
-import classNames from 'classnames'
-import formatDateTime from 'date-fns/format'
-import { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react'
-import { v4 as uuid } from 'uuid'
-import Web3Utils from 'web3-utils'
 import {
     useCurrentIdentity,
     useCurrentLinkedPersona,
