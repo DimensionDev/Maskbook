@@ -26,7 +26,7 @@ import { useI18N } from '../../utils/index.js'
 import { WalletMessages } from '../../plugins/Wallet/messages.js'
 import { WalletIcon } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
-import type {} from '@masknet/web3-shared-base'
+
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
 

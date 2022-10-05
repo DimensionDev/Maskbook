@@ -2,7 +2,7 @@ import { useState, useMemo } from 'react'
 import { useAsync, useAsyncFn } from 'react-use'
 import type { AbiItem } from 'web3-utils'
 import BigNumber from 'bignumber.js'
-import { isLessThan, rightShift, NetworkPluginID, ZERO, formatBalance, formatCurrency } from '@masknet/web3-shared-base'
+import { isLessThan, rightShift, ZERO, formatBalance, formatCurrency } from '@masknet/web3-shared-base'
 import { LoadingBase } from '@masknet/theme'
 import {
     createContract,
@@ -33,7 +33,7 @@ import { DialogActions, DialogContent, Typography } from '@mui/material'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base.js'
 import { activatedSocialNetworkUI } from '../../../social-network/index.js'
 import { ActionButtonPromise } from '../../../extension/options-page/DashboardComponents/ActionButton.js'
-import { createLookupTableResolver } from '@masknet/shared-base'
+import { createLookupTableResolver, NetworkPluginID } from '@masknet/shared-base'
 
 export interface SavingsFormDialogProps {
     chainId: number

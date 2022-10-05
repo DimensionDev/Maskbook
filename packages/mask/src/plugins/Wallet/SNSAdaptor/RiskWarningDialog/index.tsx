@@ -6,7 +6,7 @@ import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { DialogActions, DialogContent, Typography } from '@mui/material'
 import { getMaskColor, makeStyles, useCustomSnackbar, ActionButton } from '@masknet/theme'
 import { useWeb3State } from '@masknet/web3-hooks-base'
-import type {} from '@masknet/web3-shared-base'
+
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useI18N, useMatchXS } from '../../../../utils/index.js'
 import { WalletMessages } from '../../messages.js'

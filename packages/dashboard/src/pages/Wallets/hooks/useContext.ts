@@ -1,5 +1,5 @@
 import { createContainer } from 'unstated-next'
-import type {} from '@masknet/web3-shared-base'
+
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useFungibleAssets, useAccount, useChainId } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'

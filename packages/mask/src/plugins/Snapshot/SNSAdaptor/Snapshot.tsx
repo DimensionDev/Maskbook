@@ -1,4 +1,5 @@
 import { useContext } from 'react'
+import Color from 'color'
 import { Box, Tab, Avatar, Typography, Chip } from '@mui/material'
 import { makeStyles, MaskTabList, ShadowRootTooltip, useTabs } from '@masknet/theme'
 import { SnapshotContext } from '../context.js'
@@ -7,9 +8,9 @@ import { ProposalTab } from './ProposalTab.js'
 import { ProgressTab } from './ProgressTab.js'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
 import { useChainId } from '@masknet/web3-hooks-base'
-import { NetworkPluginID, resolveIPFS_URL } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { resolveIPFS_URL } from '@masknet/web3-shared-base'
 import { TabContext, TabPanel } from '@mui/lab'
-import Color from 'color'
 import { useI18N } from '../../../utils/index.js'
 
 const useStyles = makeStyles()((theme) => {

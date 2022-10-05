@@ -1,6 +1,6 @@
 import { useWeb3Connection } from '@masknet/web3-hooks-base'
 import type { BindingProof, ECKeyIdentifier, EnhanceableSite } from '@masknet/shared-base'
-import type {} from '@masknet/web3-shared-base'
+
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useCallback } from 'react'
 import { activatedSocialNetworkUI } from '../../../../social-network/index.js'

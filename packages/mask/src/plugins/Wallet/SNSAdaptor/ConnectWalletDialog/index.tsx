@@ -6,7 +6,7 @@ import { makeStyles } from '@masknet/theme'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { useWeb3State } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import type {} from '@masknet/web3-shared-base'
+
 import { NetworkPluginID } from '@masknet/shared-base'
 import { WalletMessages } from '../../messages.js'
 import { ConnectionProgress } from './ConnectionProgress.js'

@@ -4,7 +4,7 @@ import type { ChainId } from '@masknet/web3-shared-evm'
 import { Interface } from '@ethersproject/abi'
 import type { Availability } from '../../types.js'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import type {} from '@masknet/web3-shared-base'
+
 import { NetworkPluginID } from '@masknet/shared-base'
 
 const interFaceV1 = new Interface(ITO_ABI)

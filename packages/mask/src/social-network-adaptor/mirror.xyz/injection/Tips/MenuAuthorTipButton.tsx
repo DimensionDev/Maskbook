@@ -1,14 +1,13 @@
+import { useMemo } from 'react'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import {
     createInjectHooksRenderer,
     Plugin,
-    PluginID,
     useActivatedPluginsSNSAdaptor,
     useIsMinimalMode,
 } from '@masknet/plugin-infra/content-script'
-import { EMPTY_LIST } from '@masknet/shared-base'
+import { EMPTY_LIST, PluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
-import { useMemo } from 'react'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI.js'
 import type { TipsAccount } from '../../../../plugins/Tips/types/tip.js'
 import { createReactRootShadowed, startWatch } from '../../../../utils/index.js'

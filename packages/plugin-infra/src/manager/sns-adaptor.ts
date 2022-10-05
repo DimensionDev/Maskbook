@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import { useSubscription, Subscription } from 'use-subscription'
 import { unreachable } from '@dimensiondev/kit'
-import type {} from '@masknet/web3-shared-base'
+
 import { NetworkPluginID } from '@masknet/shared-base'
 import { createManager } from './manage.js'
 import { getPluginDefine } from './store.js'

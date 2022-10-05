@@ -9,7 +9,7 @@ import type { BindingProof } from '@masknet/shared-base'
 import { useI18N } from '../locales/i18n_generated'
 import { context } from '../context.js'
 import { useSubscription } from 'use-subscription'
-import type {} from '@masknet/web3-shared-base'
+
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useCurrentWeb3NetworkPluginID } from '@masknet/web3-hooks-base'
 import { AvatarInfo, useSave } from '../hooks/save/useSave.js'

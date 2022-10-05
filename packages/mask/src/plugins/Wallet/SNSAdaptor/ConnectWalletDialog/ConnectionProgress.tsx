@@ -1,6 +1,6 @@
 import { Trans } from 'react-i18next'
 import { WalletIcon } from '@masknet/shared'
-import type {} from '@masknet/web3-shared-base'
+
 import { NetworkPluginID } from '@masknet/shared-base'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'

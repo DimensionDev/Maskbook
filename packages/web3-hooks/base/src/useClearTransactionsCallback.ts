@@ -1,5 +1,5 @@
 import { useCallback } from 'react'
-import type {} from '@masknet/web3-shared-base'
+
 import { NetworkPluginID } from '@masknet/shared-base'
 import { getSubscriptionCurrentValue } from '@masknet/shared-base'
 import { useAccount } from './useAccount.js'

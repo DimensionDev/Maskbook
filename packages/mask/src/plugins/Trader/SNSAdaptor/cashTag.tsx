@@ -3,7 +3,7 @@ import { TagType } from '../types/index.js'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import type { Plugin } from '@masknet/plugin-infra'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import type {} from '@masknet/web3-shared-base'
+
 import { NetworkPluginID } from '@masknet/shared-base'
 
 export const enhanceTag: Plugin.SNSAdaptor.Definition<ChainId>['enhanceTag'] = {
