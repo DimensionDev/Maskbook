@@ -6,6 +6,7 @@ import {
     HubOptions,
     NonFungibleAsset,
     TokenType,
+    SourceType,
 } from '@masknet/web3-shared-base'
 import { ChainId, getContractAddress, SchemaType } from '@masknet/web3-shared-flow'
 import type { NonFungibleTokenAPI } from '../../types/index.js'
@@ -49,6 +50,7 @@ function createNonFungibleToken(chainId: ChainId, asset: AlchemyNFT_FLOW): NonFu
             name: asset?.contract?.name ?? '',
             symbol: '',
         },
+        source: SourceType.Alchemy_FLOW,
     }
 }
 
@@ -97,6 +99,7 @@ function createNonFungibleAsset(
                 value: x.value,
             }))
             ?.filter((trait) => FILTER_WORDS?.findIndex((name) => name === trait.type) === -1),
+        source: SourceType.Alchemy_FLOW,
     }
 }
 

@@ -87,6 +87,7 @@ function createNFTCollection(collection: Collection): NonFungibleTokenContract<C
         schema: SchemaType.NonFungible,
         logoURL: collection.image,
         iconURL: collection.image,
+        source: SourceType.MagicEden,
     }
 }
 
@@ -138,6 +139,7 @@ export class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
                 type: x.trait_type,
                 value: x.value,
             })),
+            source: SourceType.MagicEden,
         }
     }
 
@@ -186,6 +188,7 @@ export class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
                     iconURL: '',
                     verified: false,
                 },
+                source: SourceType.MagicEden,
             }
         })
         return createPageable(data ?? EMPTY_LIST, createIndicator(indicator))
@@ -295,6 +298,7 @@ export class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
             address: '',
             symbol: collection.symbol,
             iconURL: resolveIPFS_URL(collection.image),
+            source: SourceType.MagicEden,
         }))
 
         return createPageable(

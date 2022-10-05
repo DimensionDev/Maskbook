@@ -90,6 +90,7 @@ function createAsset(chainId: ChainId, asset: RaribleNFTItemMapResponse): NonFun
             verified: !asset.deleted,
             createdAt: new Date(asset.mintedAt).getTime(),
         },
+        source: SourceType.Rarible,
     }
 }
 

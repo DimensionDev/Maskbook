@@ -28,11 +28,14 @@ function getCSRFToken() {
     return value
 }
 
-const scriptCache = new LRUCache<string, any>({
+const scriptCache = new LRUCache<string, Promise<Response> | string>({
     max: 10,
     ttl: 300_000,
 })
-async function fetchContent(url: string) {
+
+async function fetchContent(url?: string) {
+    if (!url) return
+
     const hit: Promise<Response> = scriptCache.get(url) ?? fetch(url)
 
     if (scriptCache.get(url) !== hit) scriptCache.set(url, hit)
@@ -42,7 +45,7 @@ async function fetchContent(url: string) {
     const response = (await hit).clone()
     if (!response.ok) {
         scriptCache.delete(url)
-        return ''
+        return
     }
     const content = await response.text()
     scriptCache.set(url, content)
@@ -51,6 +54,8 @@ async function fetchContent(url: string) {
 
 async function getTokens(operationName?: string) {
     const swContent = await fetchContent('https://twitter.com/sw.js')
+    if (!swContent) throw new Error('Failed to fetch manifest script.')
+
     const [mainContent, nftContent] = await Promise.all([
         fetchContent(getScriptURL(swContent, 'main')),
         fetchContent(getScriptURL(swContent, 'bundle.UserNft')),
@@ -151,14 +156,13 @@ export class TwitterAPI implements TwitterBaseAPI.Provider {
     }
     async getSettings() {
         const { bearerToken, csrfToken } = await getTokens()
-        if (!bearerToken || !csrfToken) return
         return getSettings(bearerToken, csrfToken)
     }
     async getUserNftContainer(screenName: string) {
         const { bearerToken, queryToken, csrfToken } = await getTokens()
-        if (!bearerToken || !queryToken || !csrfToken) return
         const result = await getUserNftContainer(screenName, queryToken, bearerToken, csrfToken)
-        if (!result?.data?.user?.result?.has_nft_avatar) return
+        if (!result?.data?.user?.result?.has_nft_avatar) throw new Error('No NFT avatar.')
+
         return {
             address: result.data.user.result.nft_avatar_metadata.smart_contract.address,
             token_id: result.data.user.result.nft_avatar_metadata.token_id,
@@ -166,9 +170,7 @@ export class TwitterAPI implements TwitterBaseAPI.Provider {
     }
 
     async uploadUserAvatar(screenName: string, image: File | Blob): Promise<TwitterBaseAPI.TwitterResult> {
-        const { bearerToken, queryToken, csrfToken } = await getTokens()
-        if (!bearerToken || !queryToken || !csrfToken) throw new Error('Token Error')
-
+        const { bearerToken, csrfToken } = await getTokens()
         const headers = {
             authorization: `Bearer ${bearerToken}`,
             'x-csrf-token': csrfToken,

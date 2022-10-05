@@ -154,6 +154,7 @@ export class ChainbaseNonFungibleTokenAPI implements NonFungibleTokenAPI.Provide
                 name: nft.contract_name,
                 symbol: nft.contract_symbol,
             },
+            source: SourceType.Chainbase,
         }
     }
 
@@ -171,6 +172,7 @@ export class ChainbaseNonFungibleTokenAPI implements NonFungibleTokenAPI.Provide
             address,
             tokenId,
             link: this.createNonFungibleTokenPermalink(chainId, address, tokenId),
+            source: SourceType.Chainbase,
         }
     }
 
@@ -186,6 +188,7 @@ export class ChainbaseNonFungibleTokenAPI implements NonFungibleTokenAPI.Provide
             symbol: metadata.symbol,
             schema: SchemaType.ERC721,
             owner: metadata.owner,
+            source: SourceType.Chainbase,
         }
     }
 
@@ -197,6 +200,7 @@ export class ChainbaseNonFungibleTokenAPI implements NonFungibleTokenAPI.Provide
             symbol: nft.contract_symbol,
             slug: nft.contract_symbol,
             address: nft.contract_address,
+            source: SourceType.Chainbase,
         }
     }
 
