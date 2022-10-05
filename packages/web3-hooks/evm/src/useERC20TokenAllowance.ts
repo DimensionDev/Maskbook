@@ -1,9 +1,7 @@
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { useAccount } from '../useAccount.js'
-import { useBeatRetry } from '../useBeat.js'
-import { useChainId } from '../useChainId.js'
+import { useAccount, useChainId, useBeatRetry } from '@masknet/web3-hooks-base'
 import { useERC20TokenContract } from './useERC20TokenContract.js'
 
 export function useERC20TokenAllowance(

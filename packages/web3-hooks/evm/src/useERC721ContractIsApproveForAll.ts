@@ -1,8 +1,8 @@
 import { useAsyncRetry } from 'react-use'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { useChainId } from '@masknet/web3-hooks-base'
 import { safeNonPayableTransactionCall } from '@masknet/web3-shared-evm'
 import { useERC721TokenContract } from './useERC721TokenContract.js'
-import { useChainId } from '../useChainId.js'
 
 /**
  * @param contractAddress NFT contract address.

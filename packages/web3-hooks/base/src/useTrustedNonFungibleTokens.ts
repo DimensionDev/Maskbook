@@ -2,8 +2,8 @@ import { useMemo } from 'react'
 import { useSubscription } from 'use-subscription'
 import type { NetworkPluginID } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
+import { EMPTY_ARRAY } from '@masknet/shared-base'
 import { useWeb3State } from './useWeb3State.js'
-import { EMPTY_ARRAY } from '../utils/subscription.js'
 
 export function useTrustedNonFungibleTokens<S extends 'all' | void = void, T extends NetworkPluginID = NetworkPluginID>(
     pluginID?: T,

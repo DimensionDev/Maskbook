@@ -16,6 +16,7 @@
     { "path": "./packages/encryption/tsconfig.tests.json" },
     { "path": "./packages/typed-message/tests/tsconfig.json" },
     { "path": "./packages/shared-base/tsconfig.tests.json" },
+    { "path": "./packages/web3-hooks/base/tsconfig.tests.json" },
     { "path": "./packages/web3-shared/base/tsconfig.tests.json" },
     // All plugins should be type checked too
     { "path": "./packages/plugins" }

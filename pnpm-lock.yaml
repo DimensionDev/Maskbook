@@ -2296,6 +2296,9 @@ importers:
       '@masknet/encryption':
         specifier: workspace:*
         version: link:../../encryption
+      '@masknet/plugin-infra':
+        specifier: workspace:*
+        version: link:../../plugin-infra
       '@masknet/shared-base':
         specifier: workspace:*
         version: link:../../shared-base

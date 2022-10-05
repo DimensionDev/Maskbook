@@ -3,8 +3,8 @@ import useAsyncRetry from 'react-use/lib/useAsyncRetry'
 import { noop } from 'lodash-unified'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
-import { useWeb3State } from './useWeb3State.js'
 import { useAccount } from './useAccount.js'
+import { useWeb3State } from './useWeb3State.js'
 import { useWeb3Connection } from './useWeb3Connection.js'
 
 export function useFungibleTokenBalance<S extends 'all' | void = void, T extends NetworkPluginID = NetworkPluginID>(

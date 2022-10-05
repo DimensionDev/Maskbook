@@ -1,6 +1,6 @@
 import { useAsyncRetry } from 'react-use'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { useChainId } from '../useChainId.js'
+import { useChainId } from '@masknet/web3-hooks-base'
 import { useERC20TokenContract } from './useERC20TokenContract.js'
 
 export function useERC20TokenTotalSupply(address?: string) {

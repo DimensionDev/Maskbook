@@ -3,9 +3,7 @@ import { EthereumAddress } from 'wallet.ts'
 import { toHex } from 'web3-utils'
 import { isGreaterThan, isZero, NetworkPluginID } from '@masknet/web3-shared-base'
 import { GasConfig, TransactionEventType } from '@masknet/web3-shared-evm'
-import { useWeb3 } from '../useWeb3.js'
-import { useChainId } from '../useChainId.js'
-import { useAccount } from '../useAccount.js'
+import { useAccount, useChainId, useWeb3 } from '@masknet/web3-hooks-base'
 
 export function useNativeTransferCallback() {
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)

@@ -1,10 +1,9 @@
 import { useAsyncFn } from 'react-use'
+import { useAccount, useChainId } from '@masknet/web3-hooks-base'
 import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
 import { isGreaterThan, isZero, NetworkPluginID } from '@masknet/web3-shared-base'
 import { GasConfig, TransactionEventType, isValidAddress } from '@masknet/web3-shared-evm'
 import { useERC20TokenContract } from './useERC20TokenContract.js'
-import { useAccount } from '../useAccount.js'
-import { useChainId } from '../useChainId.js'
 
 export function useERC20TokenTransferCallback(address?: string, amount?: string, recipient?: string) {
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)

@@ -1,8 +1,7 @@
-import { useBalance } from '../useBalance.js'
 import BigNumber from 'bignumber.js'
-import { useGasConfig } from './useGasConfig.js'
-import { useChainId } from '../useChainId.js'
+import { useBalance, useChainId } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { useGasConfig } from './useGasConfig.js'
 
 export function useTransactionValue(originalValue: BigNumber.Value | undefined, gas: number | undefined) {
     const { value: balance = '0' } = useBalance(NetworkPluginID.PLUGIN_EVM)

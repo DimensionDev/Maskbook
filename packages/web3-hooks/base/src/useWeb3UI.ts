@@ -1,7 +1,7 @@
 import type { NetworkPluginID } from '@masknet/web3-shared-base'
-import { useCurrentWeb3NetworkPluginID } from './useContext.js'
-import { useActivatedPluginWeb3UI } from '../hooks/useActivatedPluginWeb3UI.js'
+import { useActivatedPluginWeb3UI } from '@masknet/plugin-infra'
 import type { Web3Helper } from '@masknet/web3-helpers'
+import { useCurrentWeb3NetworkPluginID } from './useContext.js'
 
 export function useWeb3UI<S extends 'all' | void = void, T extends NetworkPluginID = NetworkPluginID>(
     expectedPluginID?: T,

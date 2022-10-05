@@ -6,5 +6,10 @@
     "tsBuildInfoFile": "./dist/src.tsbuildinfo"
   },
   "include": ["./src", "./src/**/*.json"],
-  "references": [{ "path": "../../shared-base" }, { "path": "../../injected-script/sdk" }]
+  "references": [
+    { "path": "../../plugin-infra" },
+    { "path": "../../web3-shared/base" },
+    { "path": "../../shared-base" },
+    { "path": "../../injected-script/sdk" }
+  ]
 }

@@ -7,12 +7,10 @@ import {
     encodeContractTransaction,
     UnboxTransactionObject,
 } from '@masknet/web3-shared-evm'
+import { useChainId, useWeb3, useWeb3Connection } from '@masknet/web3-hooks-base'
 import type { BaseContract, NonPayableTx } from '@masknet/web3-contracts/types/types'
 import type { Multicall } from '@masknet/web3-contracts/types/Multicall'
 import { useMulticallContract } from './useMulticallContract.js'
-import { useChainId } from '../useChainId.js'
-import { useWeb3 } from '../useWeb3.js'
-import { useWeb3Connection } from '../useWeb3Connection.js'
 
 // #region types
 // [target, gasLimit, callData]

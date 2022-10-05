@@ -1,8 +1,8 @@
 import type { NetworkPluginID } from '@masknet/web3-shared-base'
-import { useCurrentWeb3NetworkPluginID } from './useContext.js'
-import { getPluginDefine } from '../manager/store.js'
-import { useChainId } from './useChainId.js'
+import { getPluginDefine } from '@masknet/plugin-infra'
 import type { Web3Helper } from '@masknet/web3-helpers'
+import { useCurrentWeb3NetworkPluginID } from './useContext.js'
+import { useChainId } from './useChainId.js'
 
 export function useChainDescriptor<T extends NetworkPluginID>(
     expectedPluginID?: T,
