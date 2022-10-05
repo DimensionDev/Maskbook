@@ -9,7 +9,7 @@ import { PluginUnlockProtocolRPC } from '../messages.js'
 import { SelectRecipientsUnlockDialogUI } from './SelectRecipientsUnlockDialog.js'
 import { useCompositionContext } from '@masknet/plugin-infra/content-script'
 import { makeStyles } from '@masknet/theme'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 
 interface UnlockProtocolDialogProps extends withClasses<'wrapper'> {
     open: boolean

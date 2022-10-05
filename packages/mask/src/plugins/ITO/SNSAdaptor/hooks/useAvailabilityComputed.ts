@@ -6,7 +6,7 @@ import { useAvailability } from './useAvailability.js'
 import { useQualification } from './useQualification.js'
 import { ITO_CONTRACT_BASE_TIMESTAMP } from '../../constants.js'
 import { useChainId } from '@masknet/web3-hooks-base'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 
 export function useAvailabilityComputed(payload: JSON_PayloadInMask | JSON_PayloadFromChain) {
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)

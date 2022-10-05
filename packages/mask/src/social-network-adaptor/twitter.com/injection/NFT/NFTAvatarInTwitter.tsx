@@ -16,7 +16,7 @@ import { rainbowBorderKeyFrames } from '../../../../plugins/Avatar/SNSAdaptor/Ra
 import { RSS3_KEY_SNS } from '../../../../plugins/Avatar/constants.js'
 import { usePersonaNFTAvatar } from '../../../../plugins/Avatar/hooks/usePersonaNFTAvatar.js'
 import { useAccount } from '@masknet/web3-hooks-base'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { Box, Typography } from '@mui/material'
 import { useWallet } from '../../../../plugins/Avatar/hooks/useWallet.js'
 import { useNFT, useSaveNFTAvatar } from '../../../../plugins/Avatar/hooks/index.js'

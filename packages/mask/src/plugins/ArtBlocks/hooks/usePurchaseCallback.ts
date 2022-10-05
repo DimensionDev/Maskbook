@@ -1,7 +1,7 @@
 import { useAsyncFn } from 'react-use'
 import BigNumber from 'bignumber.js'
 import { useAccount, useWeb3Connection } from '@masknet/web3-hooks-base'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { ChainId, encodeContractTransaction, SchemaType } from '@masknet/web3-shared-evm'
 import { useArtBlocksContract } from './useArtBlocksContract.js'
 

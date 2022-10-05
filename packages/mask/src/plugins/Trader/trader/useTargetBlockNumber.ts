@@ -2,7 +2,7 @@ import { useAsync } from 'react-use'
 import type { AsyncState } from 'react-use/lib/useAsyncFn'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { useChainId, useWeb3Connection } from '@masknet/web3-hooks-base'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 
 export function useTargetBlockNumber(targetChainId?: ChainId): AsyncState<number> {
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)

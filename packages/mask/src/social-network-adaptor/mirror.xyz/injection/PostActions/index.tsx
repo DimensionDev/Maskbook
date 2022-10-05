@@ -10,7 +10,7 @@ import { Flags } from '../../../../../shared/index.js'
 import { createReactRootShadowed } from '../../../../utils'
 import { noop } from 'lodash-unified'
 import { PluginIDContextProvider, useWeb3State } from '@masknet/web3-hooks-base'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 
 const ActionsRenderer = createInjectHooksRenderer(
     useActivatedPluginsSNSAdaptor.visibility.useNotMinimalMode,

@@ -7,7 +7,7 @@ import { useLastRecognizedIdentity } from '../../../components/DataSource/useAct
 import { useNFT } from '../hooks/index.js'
 import { useNFTContainerAtTwitter } from '../hooks/useNFTContainerAtTwitter.js'
 import { formatPrice, formatText } from '../utils/index.js'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { useAccount } from '@masknet/web3-hooks-base'
 

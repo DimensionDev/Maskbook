@@ -1,7 +1,7 @@
 import { Icons } from '@masknet/icons'
 import type { Plugin } from '@masknet/plugin-infra/content-script'
 import type { EnhanceableSite } from '@masknet/shared-base'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { Box } from '@mui/material'
 import { Trans } from 'react-i18next'
 import { base } from '../base.js'

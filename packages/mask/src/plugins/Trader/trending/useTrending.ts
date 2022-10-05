@@ -3,7 +3,7 @@ import { PluginTraderRPC } from '../messages.js'
 import type { Coin, TagType } from '../types/index.js'
 import type { DataProvider } from '@masknet/public-api'
 import { useCurrentCurrency } from './useCurrentCurrency.js'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { useChainId, useFungibleToken } from '@masknet/web3-hooks-base'
 
 export function useTrendingByKeyword(tagType: TagType, keyword: string, dataProvider: DataProvider) {

@@ -7,7 +7,7 @@ import { DialogContent, Typography } from '@mui/material'
 import { InjectedDialog } from '@masknet/shared'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 
 import { useI18N } from '../locales/index.js'
 import { PluginReferralMessages, ReferralRPC } from '../messages.js'

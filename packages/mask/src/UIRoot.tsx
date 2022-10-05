@@ -12,7 +12,7 @@ import { pluginIDSettings } from './../shared/legacy-settings/settings.js'
 import { getBackgroundColor } from './utils/index.js'
 import { isTwitter } from './social-network-adaptor/twitter.com/base.js'
 import { MaskThemeProvider } from '@masknet/theme'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 
 const identity = (jsx: React.ReactNode) => jsx as JSX.Element
 function compose(init: React.ReactNode, ...f: Array<(children: React.ReactNode) => JSX.Element>) {

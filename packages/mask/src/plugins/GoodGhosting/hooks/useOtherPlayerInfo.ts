@@ -3,7 +3,7 @@ import { useAsyncRetry } from 'react-use'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 import { useSingleContractMultipleData } from '@masknet/web3-hooks-evm'
 import { useChainId } from '@masknet/web3-hooks-base'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { useGoodGhostingContract } from '../contracts/useGoodGhostingContract.js'
 import type { GoodGhostingInfo, Player } from '../types.js'
 

@@ -27,7 +27,7 @@ import {
 } from '../Worker/apis/index.js'
 import getUnixTime from 'date-fns/getUnixTime'
 import { useConst } from './hooks/useConst.js'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 
 export interface PostInspectorProps {
     url: string

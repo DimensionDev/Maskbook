@@ -7,7 +7,7 @@ import { Typography, Box, Tab, Tabs, Grid, Divider } from '@mui/material'
 import { TabContext, TabPanel } from '@mui/lab'
 import { v4 as uuid } from 'uuid'
 import { EMPTY_LIST, CrossIsolationMessages } from '@masknet/shared-base'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 
 import { useI18N } from '../locales/index.js'
 import { PluginReferralMessages, SelectTokenUpdated, ReferralRPC } from '../messages.js'

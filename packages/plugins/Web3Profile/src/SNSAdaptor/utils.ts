@@ -1,7 +1,7 @@
 import type { CollectionTypes, WalletsCollection, WalletTypes } from '@masknet/shared'
 import { BindingProof, joinKeys, NextIDPlatform, PersonaInformation } from '@masknet/shared-base'
 import { AlchemyEVM, NextIDStorage, RSS3 } from '@masknet/web3-providers'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { ChainId, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
 import { compact, uniqBy } from 'lodash-unified'
 import { isSameAddress } from '../../../../web3-shared/base/src/utils/index.js'

@@ -4,7 +4,7 @@ import { MobileStepper, Button, Box, Paper, Typography, Skeleton, Link } from '@
 import { KeyboardArrowLeft, KeyboardArrowRight, OpenInNew } from '@mui/icons-material'
 import { makeStyles } from '@masknet/theme'
 import { useChainId } from '@masknet/web3-hooks-base'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { resolveImageLinkOnArtBlocks, resolveTokenLinkOnArtBlocks } from '../pipes/index.js'
 import { buildTokenId } from '../utils.js'
 import type { Project } from '../types.js'

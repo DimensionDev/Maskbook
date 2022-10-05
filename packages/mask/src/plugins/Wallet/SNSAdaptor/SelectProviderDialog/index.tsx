@@ -12,7 +12,7 @@ import { hasNativeAPI, nativeAPI } from '../../../../../shared/native-rpc/index.
 import { PluginProviderRender } from './PluginProviderRender.js'
 import { pluginIDSettings } from '../../../../../shared/legacy-settings/settings.js'
 import { getSiteType, isDashboardPage } from '@masknet/shared-base'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     content: {

@@ -5,7 +5,7 @@ import type { NativeTokenWrapper } from './native/useTradeComputed.js'
 import { TradeStrategy } from '../types/index.js'
 import type { AsyncState } from 'react-use/lib/useAsyncFn'
 import { useAccount, useWeb3Connection } from '@masknet/web3-hooks-base'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { useNativeTokenWrapperContract } from '@masknet/web3-hooks-evm'
 import BigNumber from 'bignumber.js'
 

@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { useChainId } from '@masknet/web3-hooks-base'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { usePostInfoDetails } from '@masknet/plugin-infra/content-script'
 import { RedPacket } from './RedPacket/index.js'
 import { RedPacketRPC } from '../messages.js'

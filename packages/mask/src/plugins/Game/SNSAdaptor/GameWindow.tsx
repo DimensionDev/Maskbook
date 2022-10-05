@@ -7,7 +7,7 @@ import { getCurrentIdentifier } from '../../../social-network-adaptor/utils.js'
 import { useLocation } from 'react-use'
 import { useChainId, useAccount } from '@masknet/web3-hooks-base'
 import type { GameInfo, GameNFT } from '../types.js'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import urlcat from 'urlcat'
 import { EnhanceableSite } from '@masknet/shared-base'
 

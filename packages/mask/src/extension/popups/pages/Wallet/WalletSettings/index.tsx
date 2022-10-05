@@ -10,7 +10,7 @@ import { useChainId, useWallet } from '@masknet/web3-hooks-base'
 import { WalletContext } from '../hooks/useWalletContext.js'
 import { Navigator } from '../../../components/Navigator/index.js'
 import { useTitle } from '../../../hook/useTitle.js'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     header: {

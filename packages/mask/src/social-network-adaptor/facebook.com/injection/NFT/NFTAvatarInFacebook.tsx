@@ -16,7 +16,7 @@ import { InMemoryStorages } from '../../../../../shared/index.js'
 import { RSS3_KEY_SNS } from '../../../../plugins/Avatar/constants.js'
 import { useAccount } from '@masknet/web3-hooks-base'
 import { useWallet } from '../../../../plugins/Avatar/hooks/useWallet.js'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 
 export function injectNFTAvatarInFacebook(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchFacebookAvatarSelector())

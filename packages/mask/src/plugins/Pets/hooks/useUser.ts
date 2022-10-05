@@ -4,7 +4,7 @@ import type { User } from '../types.js'
 import { useCurrentVisitingIdentity, useLastRecognizedIdentity } from '../../../components/DataSource/useActivatedUI.js'
 import { PetsPluginID } from '../constants.js'
 import { useAccount, useWeb3State } from '@masknet/web3-hooks-base'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 
 export function useUser() {
     const [user, setUser] = useState<User>({ userId: '', address: '' })

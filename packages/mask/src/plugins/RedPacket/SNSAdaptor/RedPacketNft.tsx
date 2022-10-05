@@ -17,7 +17,7 @@ import { isFacebook } from '../../../social-network-adaptor/facebook.com/base.js
 import { NFTCardStyledAssetPlayer } from '@masknet/shared'
 import { openWindow } from '@masknet/shared-base-ui'
 import { useAccount, useNetworkType, useWeb3 } from '@masknet/web3-hooks-base'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { Icons } from '@masknet/icons'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
 

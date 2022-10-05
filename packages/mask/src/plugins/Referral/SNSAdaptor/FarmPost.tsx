@@ -8,7 +8,7 @@ import type { Web3 } from '@masknet/web3-shared-evm'
 import { TokenIcon } from '@masknet/shared'
 import { Button, Card, Grid, Typography, Box } from '@mui/material'
 import { usePluginWrapper } from '@masknet/plugin-infra/content-script'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 
 import type { ReferralMetaData } from '../types.js'
 import { MASK_REFERRER, META_KEY, SWAP_CHAIN_ID } from '../constants.js'

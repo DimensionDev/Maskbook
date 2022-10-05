@@ -4,7 +4,7 @@ import type { GoodGhostingInfo } from '../types.js'
 import { getPlayerStatus, PlayerStatus } from '../utils.js'
 import type { TransactionReceipt } from 'web3-core'
 import { useAccount, useChainId } from '@masknet/web3-hooks-base'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 
 export function useJoinGame(info: GoodGhostingInfo) {
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)

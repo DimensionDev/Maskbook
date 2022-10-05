@@ -3,7 +3,7 @@ import { MEDIA_VIEWER_URL } from '@masknet/shared'
 import { resolveIPFS_URL } from '@masknet/web3-shared-base'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { ImageType } from './types.js'
-import { PluginID } from '@masknet/plugin-infra'
+import { PluginID } from '@masknet/shared-base'
 
 export const PetsPluginID = PluginID.Pets
 export const TWITTER = 'twitter.com'

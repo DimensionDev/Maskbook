@@ -4,7 +4,7 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import { useUpdateEffect } from 'react-use'
 import { Trader } from '../../../../../plugins/Trader/SNSAdaptor/trader/Trader.js'
 import { PopupRoutes } from '@masknet/shared-base'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { createERC20Token, createNativeToken, isNativeTokenAddress } from '@masknet/web3-shared-evm'
 
 export function SwapBox() {

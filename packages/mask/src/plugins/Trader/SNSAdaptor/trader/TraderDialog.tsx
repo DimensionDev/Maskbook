@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { PluginID } from '@masknet/plugin-infra'
+import { PluginID } from '@masknet/shared-base'
 import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
 import { PluginWeb3ContextProvider, useChainId, useChainIdValid } from '@masknet/web3-hooks-base'
 import { ChainId, isNativeTokenAddress, SchemaType } from '@masknet/web3-shared-evm'

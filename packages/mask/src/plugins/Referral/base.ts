@@ -1,5 +1,5 @@
 import { type Plugin, PluginID } from '@masknet/plugin-infra'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 
 import { META_KEY } from './constants.js'

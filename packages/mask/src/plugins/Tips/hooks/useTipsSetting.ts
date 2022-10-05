@@ -1,4 +1,4 @@
-import { PluginID } from '@masknet/plugin-infra'
+import { PluginID } from '@masknet/shared-base'
 import { useWeb3State } from '@masknet/web3-hooks-base'
 import { BindingProof, NextIDPlatform } from '@masknet/shared-base'
 import { useAsyncRetry } from 'react-use'

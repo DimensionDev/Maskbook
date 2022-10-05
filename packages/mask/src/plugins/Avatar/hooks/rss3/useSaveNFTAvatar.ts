@@ -1,5 +1,5 @@
 import type { EnhanceableSite } from '@masknet/shared-base'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { useCallback } from 'react'
 import type { RSS3_KEY_SNS } from '../../constants.js'
 import type { AvatarMetaDB } from '../../types.js'

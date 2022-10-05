@@ -1,7 +1,7 @@
 import { useEffect, useMemo } from 'react'
 import { CrossIsolationMessages, EMPTY_LIST } from '@masknet/shared-base'
 import { useHiddenAddressSetting, useSocialAddressListAll } from '@masknet/web3-hooks-base'
-import { PluginID } from '@masknet/plugin-infra'
+import { PluginID } from '@masknet/shared-base'
 import {
     currySameAddress,
     NetworkPluginID,

@@ -11,7 +11,7 @@ import { useGetTradeContext } from '../useGetTradeContext.js'
 import { useMultipleContractSingleData } from '@masknet/web3-hooks-evm'
 import { useTargetBlockNumber } from '../useTargetBlockNumber.js'
 import { useChainId } from '@masknet/web3-hooks-base'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 
 export enum PairState {
     NOT_EXISTS = 0,

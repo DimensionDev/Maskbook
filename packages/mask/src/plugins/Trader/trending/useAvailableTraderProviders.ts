@@ -4,7 +4,7 @@ import type { TradeProvider } from '@masknet/public-api'
 import type { AsyncState } from 'react-use/lib/useAsyncFn'
 import { PluginTraderRPC } from '../messages.js'
 import type { TagType } from '../types/index.js'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { useChainId } from '@masknet/web3-hooks-base'
 
 export function useAvailableTraderProviders(

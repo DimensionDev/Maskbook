@@ -4,7 +4,7 @@ import { useLookupAddress, PluginWeb3ContextProvider, PluginIDContextProvider } 
 import { NextIDPlatform, BindingProof } from '@masknet/shared-base'
 import { NextIDProof } from '@masknet/web3-providers'
 import { ChainId, resolveNonFungibleTokenIdFromEnsDomain } from '@masknet/web3-shared-evm'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { uniqBy } from 'lodash-unified'
 
 interface ENSContextProps {

@@ -1,5 +1,5 @@
 import { ImageTemplateTypes, socialNetworkEncoder } from '@masknet/encryption'
-import { PluginID } from '@masknet/plugin-infra'
+import { PluginID } from '@masknet/shared-base'
 import type { ProfileIdentifier } from '@masknet/shared-base'
 import type { Meta } from '@masknet/typed-message'
 import { useCallback } from 'react'
