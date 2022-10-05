@@ -54,7 +54,7 @@ async function fetchContent(url?: string) {
 
 async function getTokens(operationName?: string) {
     const swContent = await fetchContent('https://twitter.com/sw.js')
-    if (!swContent) throw new Error('Failed to fetch mainfest script.')
+    if (!swContent) throw new Error('Failed to fetch manifest script.')
 
     const [mainContent, nftContent] = await Promise.all([
         fetchContent(getScriptURL(swContent, 'main')),
