@@ -1,5 +1,6 @@
 import { getEnumAsArray } from '@dimensiondev/kit'
-import { NetworkPluginID, EnhanceableSite, ExtensionSite } from '@masknet/shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { EnhanceableSite, ExtensionSite } from '@masknet/shared-base'
 import { ChainDescriptor, createFungibleToken, NetworkDescriptor, ProviderDescriptor } from '@masknet/web3-shared-base'
 import { ChainId, NetworkType, ProviderType, SchemaType } from '../types.js'
 import { getTokenConstant } from './constants.js'

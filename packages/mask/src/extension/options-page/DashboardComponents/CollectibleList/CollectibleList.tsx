@@ -1,6 +1,7 @@
 import { useWeb3State } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { NetworkPluginID, NonFungibleAsset, SourceType } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { NonFungibleAsset, SourceType } from '@masknet/web3-shared-base'
 import { Box, Button, Tooltip, Typography } from '@mui/material'
 import { useCallback, useMemo, useRef } from 'react'
 import { useI18N } from '../../../../utils/index.js'

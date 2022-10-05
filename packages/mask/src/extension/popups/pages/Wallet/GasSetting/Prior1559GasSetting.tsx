@@ -1,5 +1,6 @@
 import { makeStyles } from '@masknet/theme'
-import { GasOptionType, isLessThan, NetworkPluginID, pow10, TransactionDescriptorType } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { GasOptionType, isLessThan, pow10, TransactionDescriptorType } from '@masknet/web3-shared-base'
 import { memo, useEffect, useMemo, useState } from 'react'
 import { useI18N } from '../../../../../utils/index.js'
 import { useAsync, useAsyncFn, useUpdateEffect } from 'react-use'

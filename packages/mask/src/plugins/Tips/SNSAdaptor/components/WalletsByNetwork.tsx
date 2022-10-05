@@ -4,7 +4,8 @@ import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import { useI18N } from '../../locales/index.js'
 import { WalletItem } from './WalletItem.js'
-import { NetworkPluginID, isSameAddress } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { isSameAddress } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     container: {

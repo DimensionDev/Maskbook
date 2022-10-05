@@ -14,16 +14,9 @@ import {
     useNativeTokenPrice,
 } from '@masknet/web3-hooks-base'
 import { FormattedAddress, TokenAmountPanel, useSelectFungibleToken } from '@masknet/shared'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { MaskColorVar, MaskTextField } from '@masknet/theme'
-import {
-    TokenType,
-    FungibleToken,
-    isGreaterThan,
-    isZero,
-    multipliedBy,
-    NetworkPluginID,
-    rightShift,
-} from '@masknet/web3-shared-base'
+import { TokenType, FungibleToken, isGreaterThan, isZero, multipliedBy, rightShift } from '@masknet/web3-shared-base'
 import {
     addGasMargin,
     SchemaType,

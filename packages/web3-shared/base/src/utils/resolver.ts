@@ -1,6 +1,7 @@
 import urlcat from 'urlcat'
 import { ChainDescriptor, CurrencyType, NetworkDescriptor, ProviderDescriptor, SourceType } from '../specs/index.js'
-import { createLookupTableResolver, NetworkPluginID, NextIDPlatform } from '@masknet/shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { createLookupTableResolver, NextIDPlatform } from '@masknet/shared-base'
 
 export interface ExplorerRoutes {
     addressPathname?: string

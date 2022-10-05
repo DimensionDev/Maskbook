@@ -11,7 +11,8 @@ import { useWeb3Connection, useWallets } from '@masknet/web3-hooks-base'
 import { PopupRoutes } from '@masknet/shared-base'
 import { useTitle } from '../../../hook/useTitle.js'
 import { EthereumMethodType } from '@masknet/web3-shared-evm'
-import { NetworkPluginID, isSameAddress } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { isSameAddress } from '@masknet/web3-shared-base'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages.js'
 
 const useStyles = makeStyles()(() => ({

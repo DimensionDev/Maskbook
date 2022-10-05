@@ -7,7 +7,8 @@ import {
     SchemaType,
     ChainId,
 } from '@masknet/web3-shared-evm'
-import { formatBalance, FungibleToken, leftShift, NetworkPluginID, ONE } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { formatBalance, FungibleToken, leftShift, ONE } from '@masknet/web3-shared-base'
 import { Grid, IconButton, Link, Paper, Typography, Box } from '@mui/material'
 import { makeStyles, ActionButton } from '@masknet/theme'
 import LaunchIcon from '@mui/icons-material/Launch'

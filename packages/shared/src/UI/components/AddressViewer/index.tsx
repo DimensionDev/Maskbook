@@ -1,7 +1,8 @@
 import { getMaskColor, makeStyles } from '@masknet/theme'
 import { Box, Link, Typography, Tooltip } from '@mui/material'
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined'
-import { NetworkPluginID, SocialAddress, SocialAddressType } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { SocialAddress, SocialAddressType } from '@masknet/web3-shared-base'
 import { formatEthereumAddress, ChainId, explorerResolver } from '@masknet/web3-shared-evm'
 import { useSharedI18N } from '../../../index.js'
 
