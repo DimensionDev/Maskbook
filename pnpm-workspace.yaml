@@ -13,4 +13,3 @@ packages:
   - 'packages/web3-shared/flow'
   - 'packages/web3-shared/solana'
   - 'packages/web3-state'
-  
