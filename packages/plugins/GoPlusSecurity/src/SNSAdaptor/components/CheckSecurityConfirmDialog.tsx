@@ -1,8 +1,8 @@
+import { useEffect, useState } from 'react'
 import { InjectedDialog } from '@masknet/shared'
 import { CrossIsolationMessages, PluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { Button, DialogContent, Stack, Typography } from '@mui/material'
-import { useEffect, useState } from 'react'
 import { useI18N } from '../../locales/index.js'
 import { context } from '../context.js'
 
