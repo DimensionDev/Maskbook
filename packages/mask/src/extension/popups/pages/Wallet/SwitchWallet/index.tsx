@@ -9,7 +9,7 @@ import { WalletRPC } from '../../../../../plugins/Wallet/messages.js'
 import { WalletItem } from './WalletItem.js'
 import { MAX_WALLET_LIMIT } from '@masknet/shared'
 import classNames from 'classnames'
-import { useWallet, useWalletPrimary, useWallets } from '@masknet/plugin-infra/web3'
+import { useWallet, useWalletPrimary, useWallets } from '@masknet/web3-hooks-base'
 import { Services } from '../../../../service.js'
 
 const useStyles = makeStyles()({

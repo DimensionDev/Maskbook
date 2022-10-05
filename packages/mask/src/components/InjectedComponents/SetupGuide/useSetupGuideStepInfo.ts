@@ -23,6 +23,7 @@ export const useSetupGuideStepInfo = (destinedPersona: PersonaIdentifier) => {
     const platform = ui.configuration.nextIDConfig?.platform as NextIDPlatform
 
     // #region parse setup status
+    const lastPinExtensionSetting = useValueRef(userPinExtension)
     const _lastSettingState = useValueRef(currentSetupGuideStatus[ui.networkIdentifier])
     const lastSettingState = useMemo<SetupGuideContext>(() => {
         try {
@@ -89,7 +90,7 @@ export const useSetupGuideStepInfo = (destinedPersona: PersonaIdentifier) => {
         // Not set status
         if (!lastSettingState.status) {
             // Should show pin extension when not set
-            if (!userPinExtension.value) {
+            if (!lastPinExtensionSetting) {
                 return composeInfo(SetupGuideStep.PinExtension, 'doing')
             } else {
                 return composeInfo(SetupGuideStep.Close, 'close')
@@ -123,5 +124,5 @@ export const useSetupGuideStepInfo = (destinedPersona: PersonaIdentifier) => {
 
         // Default
         return composeInfo(SetupGuideStep.Close, 'done')
-    }, [lastSettingState, persona, username, ui.networkIdentifier, platform, userPinExtension.value, composeInfo])
+    }, [lastSettingState, persona, username, ui.networkIdentifier, platform, lastPinExtensionSetting, composeInfo])
 }

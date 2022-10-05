@@ -4,13 +4,8 @@ import { useLocation, useMatch, useNavigate } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'
 import type { ChainId, NetworkType } from '@masknet/web3-shared-evm'
 import { WalletHeaderUI } from './UI.js'
-import {
-    getRegisteredWeb3Networks,
-    useAccount,
-    useChainId,
-    useProviderType,
-    useWallet,
-} from '@masknet/plugin-infra/web3'
+import { getRegisteredWeb3Networks } from '@masknet/plugin-infra'
+import { useAccount, useChainId, useProviderType, useWallet } from '@masknet/web3-hooks-base'
 import { Flags } from '../../../../../../../shared/index.js'
 import { MenuItem, Typography } from '@mui/material'
 import { useMenuConfig, WalletIcon, ChainIcon } from '@masknet/shared'

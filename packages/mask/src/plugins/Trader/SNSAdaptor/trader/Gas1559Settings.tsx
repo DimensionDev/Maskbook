@@ -22,7 +22,7 @@ import {
     toFixed,
 } from '@masknet/web3-shared-base'
 import { isDashboardPage } from '@masknet/shared-base'
-import { useGasOptions } from '@masknet/plugin-infra/web3'
+import { useGasOptions } from '@masknet/web3-hooks-base'
 
 const useStyles = makeStyles<{
     isDashboard: boolean

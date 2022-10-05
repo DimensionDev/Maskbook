@@ -26,7 +26,7 @@ import { decodeRegionCode, encodeRegionCode, regionCodes, useRegionSelect } from
 import { AdvanceSettingData, AdvanceSetting } from './AdvanceSetting.js'
 import { ExchangeTokenPanelGroup } from './ExchangeTokenPanelGroup.js'
 import { RegionSelect } from './RegionSelect.js'
-import { useAccount, useFungibleTokenBalance } from '@masknet/plugin-infra/web3'
+import { useAccount, useFungibleTokenBalance } from '@masknet/web3-hooks-base'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
 
 const useStyles = makeStyles()((theme) => {
@@ -58,8 +58,8 @@ const useStyles = makeStyles()((theme) => {
         },
         inputLabel: {
             position: 'absolute',
-            left: 8,
-            top: 8,
+            left: 12,
+            top: 10,
             fontSize: 13,
             lineHeight: '18px',
             color: theme.palette.maskColor.second,
@@ -414,14 +414,7 @@ export function CreateForm(props: CreateFormProps) {
                     endAdornment={
                         tokenAndAmount?.token ? (
                             <Box className={classes.tokenAdornment}>
-                                <TokenIcon
-                                    classes={{ icon: classes.tokenIcon }}
-                                    chainId={tokenAndAmount.token.chainId}
-                                    address={tokenAndAmount.token.address}
-                                    name={tokenAndAmount.token.name}
-                                    symbol={tokenAndAmount.token.symbol}
-                                    logoURL={tokenAndAmount.token.logoURL}
-                                />
+                                <TokenIcon classes={{ icon: classes.tokenIcon }} {...tokenAndAmount.token} />
                                 <Typography>{tokenAndAmount.token?.symbol}</Typography>
                             </Box>
                         ) : null

@@ -2,7 +2,7 @@ import { memo } from 'react'
 import { Button, Stack } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { FungibleTokenList } from '@masknet/shared'
-import { useBlockedFungibleTokens } from '@masknet/plugin-infra/web3'
+import { useBlockedFungibleTokens } from '@masknet/web3-hooks-base'
 import { useI18N } from '../../../../../utils/index.js'
 import { useNavigate } from 'react-router-dom'
 import { useTitle } from '../../../hook/useTitle.js'
@@ -37,20 +37,24 @@ const useStyles = makeStyles()((theme) => ({
         lineHeight: '20px',
         backgroundColor: '#F7F9FA',
     },
-    list: {
-        marginTop: theme.spacing(4),
-        scrollbarWidth: 'none',
-        '&::-webkit-scrollbar': {
-            display: 'none',
+    channel: {
+        flex: 1,
+        '& > div': {
+            flex: 1,
+            display: 'flex',
+            flexDirection: 'column',
         },
     },
-    placeholder: {
-        textAlign: 'center',
-        height: 288,
-        boxSizing: 'border-box',
+    listBox: {
+        flex: 1,
     },
     wrapper: {
+        height: '374px!important',
         paddingTop: theme.spacing(2),
+    },
+    input: {
+        fontSize: 12,
+        background: '#F7F9FA',
     },
 }))
 
@@ -67,12 +71,13 @@ const AddToken = memo(() => {
         <>
             <div className={classes.content}>
                 <FungibleTokenList
-                    classes={{ list: classes.list, placeholder: classes.placeholder }}
+                    classes={{ channel: classes.channel, listBox: classes.listBox }}
                     blacklist={blackList.map((x) => x.address)}
                     FixedSizeListProps={{ height: 340, itemSize: rowSize + 16, className: classes.wrapper }}
+                    SearchTextFieldProps={{ className: classes.input }}
                 />
             </div>
-            <Stack height="100%" sx={{ px: 2, pb: 2 }} justifyContent="center" alignItems="center">
+            <Stack sx={{ p: 2 }} justifyContent="center" alignItems="center">
                 <Button fullWidth className={classes.button} onClick={() => navigate(-1)}>
                     {t('popups_wallet_go_back')}
                 </Button>

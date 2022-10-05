@@ -1,7 +1,7 @@
-import { useAccount, useChainId, useWeb3Connection } from '@masknet/plugin-infra/web3'
+import { useAsyncFn } from 'react-use'
+import { useAccount, useChainId, useWeb3Connection } from '@masknet/web3-hooks-base'
 import { NetworkPluginID, toFixed } from '@masknet/web3-shared-base'
 import { encodeContractTransaction, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
-import { useAsyncFn } from 'react-use'
 import { useCryptoArtAI_Contract } from './useCryptoArtAI_Contract.js'
 
 export function usePlaceBidCallback(is24Auction: boolean, editionNumber: string) {

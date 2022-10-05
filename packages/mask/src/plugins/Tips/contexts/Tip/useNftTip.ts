@@ -1,14 +1,14 @@
-import { useAccount, useChainId, useWeb3State } from '@masknet/plugin-infra/web3'
+import { useAsyncFn } from 'react-use'
+import { useAccount, useChainId, useWeb3State } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import type { TipTuple } from './type.js'
-import { useAsyncFn } from 'react-use'
 
 export function useNftTip<T extends NetworkPluginID>(
     pluginId: T,
     recipient: string,
-    tokenId: string | null,
-    contractAddress?: string,
+    contractAddress: string,
+    tokenId?: string | null,
     options?: Web3Helper.Web3ConnectionOptions<T>,
 ): TipTuple {
     const { Token, Connection } = useWeb3State<'all'>(pluginId)
@@ -24,17 +24,17 @@ export function useNftTip<T extends NetworkPluginID>(
     }
     const [{ loading: isTransferring }, sendTip] = useAsyncFn(async () => {
         const connection = await Connection?.getConnection?.()
-        if (!tokenId || !connection) return
-        if (pluginId === NetworkPluginID.PLUGIN_EVM && !contractAddress) return
+        if (!connection || !contractAddress) return
+        if (pluginId === NetworkPluginID.PLUGIN_EVM && !tokenId) return
         const txid = await connection.transferNonFungibleToken(
             contractAddress,
+            tokenId ?? '',
             recipient,
-            tokenId,
             '1',
             undefined,
             connectionOptions,
         )
-        const tokenDetailed = await connection?.getNonFungibleToken(contractAddress ?? '', tokenId, undefined, {
+        const tokenDetailed = await connection?.getNonFungibleToken(contractAddress, tokenId ?? '', undefined, {
             chainId,
             account,
         })

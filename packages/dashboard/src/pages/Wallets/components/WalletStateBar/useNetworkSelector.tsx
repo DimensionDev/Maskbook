@@ -10,7 +10,7 @@ import {
     useProviderDescriptor,
     useWeb3State,
     useWeb3UI,
-} from '@masknet/plugin-infra/web3'
+} from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 
 const useStyles = makeStyles()((theme) => ({

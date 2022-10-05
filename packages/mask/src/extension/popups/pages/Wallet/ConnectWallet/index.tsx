@@ -7,13 +7,8 @@ import { useNavigate } from 'react-router-dom'
 import { ExtensionSite, PopupRoutes } from '@masknet/shared-base'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainId, ProviderType } from '@masknet/web3-shared-evm'
-import {
-    getRegisteredWeb3Networks,
-    getRegisteredWeb3Providers,
-    useWeb3State,
-    useWeb3UI,
-    useWallets,
-} from '@masknet/plugin-infra/web3'
+import { useWeb3State, useWeb3UI, useWallets } from '@masknet/web3-hooks-base'
+import { getRegisteredWeb3Networks, getRegisteredWeb3Providers } from '@masknet/plugin-infra'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useTitle } from '../../../hook/useTitle.js'
 import { useI18N } from '../../../../../utils/index.js'

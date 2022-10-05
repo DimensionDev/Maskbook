@@ -1,7 +1,7 @@
 import type { FC } from 'react'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { chainResolver } from '@masknet/web3-shared-evm'
-import { useChainId } from '@masknet/plugin-infra/web3'
+import { useChainId } from '@masknet/web3-hooks-base'
 import { GasSetting1559 } from './GasSetting1559.js'
 import { Prior1559GasSetting } from './Prior1559GasSetting.js'
 import type { GasSettingProps } from './types.js'

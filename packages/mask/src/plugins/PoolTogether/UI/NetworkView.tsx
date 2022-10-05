@@ -1,4 +1,4 @@
-import { useNetworkDescriptor } from '@masknet/plugin-infra/web3'
+import { useNetworkDescriptor } from '@masknet/web3-hooks-base'
 import { ChainId, chainResolver } from '@masknet/web3-shared-evm'
 import { Typography } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'

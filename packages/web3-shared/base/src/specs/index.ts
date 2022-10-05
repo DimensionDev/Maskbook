@@ -82,6 +82,8 @@ export enum SourceType {
     X2Y2 = 'X2Y2',
     MagicEden = 'MagicEden',
     Element = 'Element',
+    Solsea = 'Solsea',
+    Solanart = 'Solanart',
 
     // Rarity
     RaritySniper = 'RaritySniper',
@@ -730,6 +732,7 @@ export interface ConnectionOptions<ChainId, ProviderType, Transaction> {
 }
 export interface Connection<
     ChainId,
+    AddressType,
     SchemaType,
     ProviderType,
     Signature,
@@ -749,8 +752,10 @@ export interface Connection<
     getWeb3Provider(initial?: Web3ConnectionOptions): Promise<Web3Provider>
     /** Get gas price */
     getGasPrice(initial?: Web3ConnectionOptions): Promise<string>
+    /** Get address type of given address. */
+    getAddressType(address: string, initial?: Web3ConnectionOptions): Promise<AddressType | undefined>
     /** Get schema type of given token address. */
-    getTokenSchema(address: string, initial?: Web3ConnectionOptions): Promise<SchemaType | undefined>
+    getSchemaType(address: string, initial?: Web3ConnectionOptions): Promise<SchemaType | undefined>
     /** Get a native fungible token. */
     getNativeToken(initial?: Web3ConnectionOptions): Promise<FungibleToken<ChainId, SchemaType>>
     /** Get a fungible token. */
@@ -878,8 +883,8 @@ export interface Connection<
     /** Transfer non-fungible token to */
     transferNonFungibleToken(
         address: string | undefined,
-        recipient: string,
         tokenId: string,
+        recipient: string,
         amount: string,
         schema?: SchemaType,
         initial?: Web3ConnectionOptions,
@@ -1285,6 +1290,7 @@ export interface ProviderState<ChainId, ProviderType, NetworkType> {
 }
 export interface ConnectionState<
     ChainId,
+    AddressType,
     SchemaType,
     ProviderType,
     Signature,
@@ -1299,6 +1305,7 @@ export interface ConnectionState<
     Web3ConnectionOptions = ConnectionOptions<ChainId, ProviderType, Transaction>,
     Web3Connection = Connection<
         ChainId,
+        AddressType,
         SchemaType,
         ProviderType,
         Signature,
@@ -1344,7 +1351,6 @@ export interface OthersState<ChainId, SchemaType, ProviderType, NetworkType, Tra
     isValidAddress(address?: string): boolean
     isZeroAddress(address?: string): boolean
     isNativeTokenAddress(address?: string): boolean
-    isSameAddress(address?: string, otherAddress?: string): boolean
     isNativeTokenSchemaType(schemaType?: SchemaType): boolean
     isFungibleTokenSchemaType(schemaType?: SchemaType): boolean
     isNonFungibleTokenSchemaType(schemaType?: SchemaType): boolean
@@ -1378,6 +1384,7 @@ export interface BlockNumberNotifierState<ChainId> {
 
 export interface Web3State<
         ChainId,
+        AddressType,
         SchemaType,
         ProviderType,
         NetworkType,
@@ -1407,6 +1414,7 @@ export interface Web3State<
         TransactionWatcher?: TransactionWatcherState<ChainId, Transaction>
         Connection?: ConnectionState<
             ChainId,
+            AddressType,
             SchemaType,
             ProviderType,
             Signature,

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useAccount, useChainId, useWeb3Hub } from '@masknet/plugin-infra/web3'
+import { useAccount, useChainId, useWeb3Hub } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { makeStyles, ShadowRootMenu } from '@masknet/theme'
 import { Hub, OrderSide, resolveSourceTypeName, SourceType } from '@masknet/web3-shared-base'
@@ -138,7 +138,7 @@ export function HubContent(props: HubContentProps) {
                                 size="small"
                                 onClick={(e) => setAnchorEl(e.currentTarget)}
                                 endIcon={<Icons.ArrowDownRound size={14} />}>
-                                {sourceType ? resolveSourceTypeName(sourceType) : 'NOT PROVIDER'}
+                                {sourceType ? resolveSourceTypeName(sourceType) : 'NO PROVIDER'}
                             </Button>
                             <ShadowRootMenu
                                 anchorEl={anchorEl}

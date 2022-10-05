@@ -47,8 +47,8 @@ const sns: Plugin.SNSAdaptor.Definition = {
                     const clickHandler = () => setOpen(true)
 
                     useEffect(() => {
-                        return CrossIsolationMessages.events.applicationDialogEvent.on(({ open, application }) => {
-                            if (application !== PluginID.Tips) return
+                        return CrossIsolationMessages.events.applicationDialogEvent.on(({ open, pluginID }) => {
+                            if (pluginID !== PluginID.Tips) return
                             setOpen(open)
                         })
                     }, [])
@@ -77,6 +77,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 iconFilterColor,
                 appBoardSortingDefaultPriority: 9,
                 nextIdRequired: true,
+                entryWalletConnectedNotRequired: true,
             }
         })(),
     ],

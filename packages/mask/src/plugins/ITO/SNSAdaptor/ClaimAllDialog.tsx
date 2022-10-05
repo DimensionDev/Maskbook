@@ -4,7 +4,7 @@ import {
     useFungibleToken,
     useCurrentWeb3NetworkPluginID,
     useFungibleTokens,
-} from '@masknet/plugin-infra/web3'
+} from '@masknet/web3-hooks-base'
 import { PluginID, useActivatedPlugin } from '@masknet/plugin-infra/dom'
 import { useState, useLayoutEffect, useRef, useCallback } from 'react'
 import { flatten, uniq } from 'lodash-unified'

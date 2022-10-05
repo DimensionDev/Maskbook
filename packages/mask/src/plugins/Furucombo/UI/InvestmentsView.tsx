@@ -108,6 +108,7 @@ const useStyles = makeStyles()((theme) => ({
         },
     },
     pagination: {
+        height: 68,
         '& .MuiIconButton-root, .MuiTablePagination-select, .MuiTablePagination-, .MuiTablePagination-selectLabel': {
             color: 'white',
             fontFamily: 'inherit',
@@ -119,6 +120,9 @@ const useStyles = makeStyles()((theme) => ({
         '& .MuiTablePagination-menuItem': {
             color: 'black',
             fontFamily: 'inherit',
+        },
+        '& .MuiInputBase-colorPrimary': {
+            background: '#26292C',
         },
     },
     invest: {
@@ -133,6 +137,12 @@ const useStyles = makeStyles()((theme) => ({
             color: '#212529',
             border: '1px solid #393b4a',
         },
+    },
+    selectIcon: {
+        position: 'static',
+    },
+    select: {
+        background: '#26292C',
     },
 }))
 
@@ -259,6 +269,7 @@ export function InvestmentsView(props: InvestmentsProps) {
                                 },
                                 native: true,
                             }}
+                            classes={{ selectIcon: classes.selectIcon, select: classes.select }}
                             onPageChange={handleChangePage}
                             onRowsPerPageChange={handleChangeRowsPerPage}
                             ActionsComponent={TablePaginationActions}

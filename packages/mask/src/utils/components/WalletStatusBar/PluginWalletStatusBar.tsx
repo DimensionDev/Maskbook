@@ -1,15 +1,15 @@
 import {
-    useChainId,
     useCurrentWeb3NetworkPluginID,
     useProviderDescriptor,
     useRecentTransactions,
     useNetworkDescriptor,
-    useAccount,
     useWallet,
     useReverseAddress,
     useWeb3State,
     useProviderType,
-} from '@masknet/plugin-infra/web3'
+    useChainId,
+    useAccount,
+} from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'

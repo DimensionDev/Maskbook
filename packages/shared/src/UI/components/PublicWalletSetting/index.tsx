@@ -10,7 +10,7 @@ import {
     NextIDPlatform,
     PopupRoutes,
 } from '@masknet/shared-base'
-import { useHiddenAddressSetting, useWeb3State } from '@masknet/plugin-infra/web3'
+import { useHiddenAddressSetting, useWeb3State } from '@masknet/web3-hooks-base'
 import { PluginID } from '@masknet/plugin-infra'
 import { WalletSettingCard } from '@masknet/shared'
 import { useAsyncFn, useUpdateEffect } from 'react-use'
@@ -118,9 +118,9 @@ export const PublicWalletSetting = memo<PublicWalletSettingProps>(
                     NextIDPlatform.NextID,
                     currentPersona,
                 )
-                const prevResult = storage.get<PublicWalletSettingType>(PluginID.Web3Profile)
+                const prevResult = storage.get<PublicWalletSettingType>(pluginId)
 
-                await storage.set<PublicWalletSettingType>(PluginID.Web3Profile, {
+                await storage.set<PublicWalletSettingType>(pluginId, {
                     ...prevResult,
                     hiddenAddresses: uniq(addresses),
                 })
@@ -139,7 +139,7 @@ export const PublicWalletSetting = memo<PublicWalletSettingProps>(
                     autoHideDuration: 2000,
                 })
             }
-        }, [Storage, currentPersona, addresses])
+        }, [Storage, currentPersona, addresses, pluginId])
 
         useUpdateEffect(() => {
             if (!hiddenAddresses) return

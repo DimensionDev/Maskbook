@@ -6,7 +6,7 @@ import { makeStyles } from '@masknet/theme'
 import { PostInspector } from './PostInspector.js'
 import { Trans } from 'react-i18next'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
-import { parseURL } from '@masknet/shared-base'
+import { parseURLs } from '@masknet/shared-base'
 import { Icons } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => {
@@ -52,7 +52,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
         const link = useMemo(() => {
             const x = extractTextFromTypedMessage(props.message)
             if (x.none) return null
-            return parseURL(x.val).find(isSnapshotURL)
+            return parseURLs(x.val).find(isSnapshotURL)
         }, [props.message])
         if (!link) return null
         return <Renderer url={link} />

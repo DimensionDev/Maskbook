@@ -1,6 +1,6 @@
 import { createContainer } from 'unstated-next'
 import type { NetworkPluginID } from '@masknet/web3-shared-base'
-import { useFungibleAssets, useAccount, useChainId } from '@masknet/plugin-infra/web3'
+import { useFungibleAssets, useAccount, useChainId } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 
 function useContext(initialState?: { account?: string; chainId?: Web3Helper.ChainIdAll; pluginID?: NetworkPluginID }) {
@@ -14,7 +14,6 @@ function useContext(initialState?: { account?: string; chainId?: Web3Helper.Chai
     return {
         account,
         chainId,
-
         fungibleAssets,
     }
 }

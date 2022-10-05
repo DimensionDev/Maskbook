@@ -21,7 +21,7 @@ import { useITO_Contract } from './useITO_Contract.js'
 import { useQualificationContract } from './useQualificationContract.js'
 import type { JSON_PayloadInMask } from '../../types.js'
 import { checkAvailability } from '../utils/checkAvailability.js'
-import { useAccount, useChainId, useWeb3Connection } from '@masknet/plugin-infra/web3'
+import { useAccount, useChainId, useWeb3Connection } from '@masknet/web3-hooks-base'
 
 export function useSwapCallback(
     payload: JSON_PayloadInMask,

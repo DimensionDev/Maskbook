@@ -6,7 +6,7 @@ import { LoadingBase, makeStyles, useStylesExtends } from '@masknet/theme'
 import { Box, Button, List, ListItem, Skeleton, Typography } from '@mui/material'
 import { useI18N } from '../../../utils/index.js'
 import { AddNFT } from './AddNFT.js'
-import { useAccount, useChainId, useCurrentWeb3NetworkPluginID, useNonFungibleAssets } from '@masknet/plugin-infra/web3'
+import { useAccount, useChainId, useCurrentWeb3NetworkPluginID, useNonFungibleAssets } from '@masknet/web3-hooks-base'
 import { ElementAnchor, ReversedAddress } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
@@ -127,7 +127,7 @@ export function NFTAvatar(props: NFTAvatarProps) {
             pluginId: pluginID,
         })
         setSelectedToken(undefined)
-    }, [onChange, selectedToken])
+    }, [onChange, selectedToken, pluginID])
 
     const onAddClick = useCallback((token: AllChainsNonFungibleToken) => {
         setSelectedToken(token)

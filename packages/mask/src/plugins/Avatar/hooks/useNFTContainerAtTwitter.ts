@@ -6,5 +6,5 @@ export function useNFTContainerAtTwitter(screenName?: string): AsyncState<{ addr
     return useAsyncRetry(async () => {
         if (!screenName) return
         return Twitter.getUserNftContainer(screenName)
-    }, [Twitter, screenName])
+    }, [screenName])
 }

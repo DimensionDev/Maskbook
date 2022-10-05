@@ -3,11 +3,11 @@ import { LoadingBase, makeStyles } from '@masknet/theme'
 import { Box, DialogActions, DialogContent, Stack, Typography } from '@mui/material'
 import { useCallback, useState } from 'react'
 import { useSubscription } from 'use-subscription'
-import { CloseIcon } from '../assets/close.js'
+import { CloseIcon } from '../assets/CloseIcon.js'
 import { context } from '../context.js'
 import { useI18N } from '../locales/index.js'
 import { PersonaItem } from './PersonaItem.js'
-import { InfoIcon } from '../assets/info.js'
+import { InfoIcon } from '../assets/InfoIcon.js'
 import { usePersonasFromDB } from '../../../components/DataSource/usePersonasFromDB.js'
 import type { AllChainsNonFungibleToken } from '../types.js'
 import { PersonaAction } from '@masknet/shared'
@@ -66,7 +66,7 @@ export function PersonaPage(props: PersonaPageProps) {
 
     return (
         <>
-            <DialogContent sx={{ flex: 1, height: 450, padding: 2 }}>
+            <DialogContent sx={{ flex: 1, height: 464, padding: 2 }}>
                 {loading ? (
                     <Stack justifyContent="center" alignItems="center">
                         <LoadingBase />

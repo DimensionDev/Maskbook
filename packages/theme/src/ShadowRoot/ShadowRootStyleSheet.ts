@@ -191,7 +191,7 @@ function insertRuleSpeedy(sheet: CSSStyleSheet, rule: string) {
         if (
             process.env.NODE_ENV !== 'production' &&
             // cspell:ignore focusring
-            !/:(-moz-placeholder|-moz-focus-inner|-moz-focusring|-ms-input-placeholder|-moz-read-write|-moz-read-only|-ms-clear){/.test(
+            !/:(-moz-placeholder|-moz-focus-inner|-moz-focusring|-ms-input-placeholder|-moz-read-write|-moz-read-only|-ms-clear|-ms-expand){/.test(
                 rule,
             )
         ) {

@@ -15,7 +15,7 @@ import {
     Typography,
 } from '@mui/material'
 import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary.js'
-import { useFungibleTokenWatched } from '@masknet/plugin-infra/web3'
+import { useFungibleTokenWatched } from '@masknet/web3-hooks-base'
 import { usePostLink } from '../../../components/DataSource/usePostInfo.js'
 import { activatedSocialNetworkUI } from '../../../social-network/index.js'
 import { isFacebook } from '../../../social-network-adaptor/facebook.com/base.js'

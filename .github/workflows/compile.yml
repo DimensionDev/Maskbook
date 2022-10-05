@@ -7,6 +7,10 @@ on:
   pull_request:
     branches: [master, develop*, released]
 
+permissions:
+  contents: read
+  packages: read
+
 # Cancels all previous workflow runs for pull requests that have not completed.
 concurrency:
   # The concurrency group contains the workflow name and the branch name for
@@ -45,12 +49,6 @@ jobs:
           restore-keys: ext-${{ hashFiles('pnpm-lock.yaml') }}
       - run: pnpm install
       - run: npx gulp build-ci
-      - name: Upload `MaskNetwork.base.zip`
-        uses: actions/upload-artifact@v3
-        with:
-          name: MaskNetwork.base.zip
-          path: masknetwork.base.zip
-          if-no-files-found: error
       - name: Upload `MaskNetwork.chromium.zip`
         uses: actions/upload-artifact@v3
         with:

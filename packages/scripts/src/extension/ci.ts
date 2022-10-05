@@ -17,8 +17,6 @@ export const ciBuild: TaskFunction = series(
     },
     parallel(
         parallel(
-            // zip base version to zip
-            zipTo(BUILD_PATH, 'MaskNetwork.base.zip'),
             // Chrome version is the same with base version
             zipTo(BUILD_PATH, 'MaskNetwork.chromium.zip'),
         ),

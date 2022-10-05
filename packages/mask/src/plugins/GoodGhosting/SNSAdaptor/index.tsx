@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import { type Plugin, usePluginWrapper, usePostInfoDetails } from '@masknet/plugin-infra/content-script'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
-import { parseURL } from '@masknet/shared-base'
+import { parseURLs } from '@masknet/shared-base'
 import { Icons } from '@masknet/icons'
 import { Trans } from 'react-i18next'
 import { PreviewCard } from '../UI/PreviewCard.js'
@@ -19,7 +19,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
         const link = useMemo(() => {
             const x = extractTextFromTypedMessage(props.message)
             if (x.none) return null
-            return parseURL(x.val).find(isGoodGhosting)
+            return parseURLs(x.val).find(isGoodGhosting)
         }, [props.message])
         if (!link) return null
         return <Renderer url={link} />

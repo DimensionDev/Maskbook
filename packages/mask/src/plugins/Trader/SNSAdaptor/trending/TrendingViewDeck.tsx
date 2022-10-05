@@ -1,6 +1,6 @@
 import { Icons } from '@masknet/icons'
 import { PluginID, useActivatedPluginsSNSAdaptor, useIsMinimalMode } from '@masknet/plugin-infra/content-script'
-import { useAccount } from '@masknet/plugin-infra/web3'
+import { useAccount } from '@masknet/web3-hooks-base'
 import { DataProvider } from '@masknet/public-api'
 import {
     FormattedCurrency,

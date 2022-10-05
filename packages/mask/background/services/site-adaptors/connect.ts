@@ -7,12 +7,14 @@ import { definedSiteAdaptors } from '../../../shared/site-adaptors/definitions.j
 import { requestSiteAdaptorsPermission } from '../helper/request-permission.js'
 import stringify from 'json-stable-stringify'
 
-export async function getSupportedSites(): Promise<
+export async function getSupportedSites(options: { isSocialNetwork?: boolean } = {}): Promise<
     Array<{
         networkIdentifier: string
     }>
 > {
-    return [...definedSiteAdaptors.values()].map((x) => ({ networkIdentifier: x.networkIdentifier }))
+    return [...definedSiteAdaptors.values()]
+        .filter((x) => (options.isSocialNetwork === undefined ? true : x.isSocialNetwork === options.isSocialNetwork))
+        .map((x) => ({ networkIdentifier: x.networkIdentifier }))
 }
 
 export async function setupSite(network: string, newTab: boolean) {
@@ -36,6 +38,7 @@ export async function connectSite(
     network: string,
     type?: 'local' | 'nextID',
     profile?: ProfileIdentifier,
+    openInNewTab = true,
 ) {
     const worker = definedSiteAdaptors.get(network)
     if (!worker) return
@@ -51,6 +54,9 @@ export async function connectSite(
 
     await delay(100)
     // #endregion
-
-    await openOrActiveTab(worker.homepage)
+    if (openInNewTab) {
+        await browser.tabs.create({ active: true, url: worker.homepage })
+    } else {
+        await openOrActiveTab(worker.homepage)
+    }
 }

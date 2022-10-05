@@ -1,10 +1,11 @@
 import { Card, Link } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { useWeb3State } from '@masknet/plugin-infra/web3'
+import { useWeb3State } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { NFTCardStyledAssetPlayer } from '@masknet/shared'
-import type { NetworkPluginID, NonFungibleAsset, SocialAddress, SourceType, Wallet } from '@masknet/web3-shared-base'
+import type { NetworkPluginID, NonFungibleAsset, SourceType, Wallet } from '@masknet/web3-shared-base'
 import { ActionsBarNFT } from '../ActionsBarNFT.js'
+import { memo } from 'react'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -65,31 +66,27 @@ export interface CollectibleCardProps {
     link?: string
     readonly?: boolean
     renderOrder: number
-    address?: SocialAddress<NetworkPluginID>
+    pluginID?: NetworkPluginID
+    disableLink?: boolean
+    showNetworkIcon?: boolean
 }
 
-export function CollectibleCard({
+export const CollectibleCard = memo(function CollectibleCard({
     className,
     wallet,
     asset,
     readonly,
     renderOrder,
-    address,
+    pluginID,
+    disableLink,
+    showNetworkIcon,
     ...rest
 }: CollectibleCardProps) {
     const { classes, cx } = useStyles()
     const { Others } = useWeb3State()
 
-    return (
-        <Link
-            target="_blank"
-            rel="noopener noreferrer"
-            href={
-                asset.link ??
-                Others?.explorerResolver.nonFungibleTokenLink?.(asset.chainId, asset.address, asset.tokenId)
-            }
-            className={cx(classes.linkWrapper, className)}
-            {...rest}>
+    const content = (
+        <>
             <div className={classes.blocker} />
             <Card className={classes.root}>
                 {readonly || !wallet ? null : (
@@ -102,15 +99,31 @@ export function CollectibleCard({
                     url={asset.metadata?.mediaURL || asset.metadata?.imageURL}
                     renderOrder={renderOrder}
                     tokenId={asset.tokenId}
-                    address={address}
+                    pluginID={pluginID}
                     classes={{
                         fallbackImage: classes.fallbackImage,
                         wrapper: classes.wrapper,
                         imgWrapper: classes.wrapper,
                     }}
-                    showNetwork
+                    showNetwork={showNetworkIcon}
                 />
             </Card>
+        </>
+    )
+
+    if (disableLink) return <div className={cx(classes.linkWrapper, className)}>{content}</div>
+
+    return (
+        <Link
+            target="_blank"
+            rel="noopener noreferrer"
+            href={
+                asset.link ??
+                Others?.explorerResolver.nonFungibleTokenLink?.(asset.chainId, asset.address, asset.tokenId)
+            }
+            className={cx(classes.linkWrapper, className)}
+            {...rest}>
+            {content}
         </Link>
     )
-}
+})

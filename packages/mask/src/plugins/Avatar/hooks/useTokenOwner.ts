@@ -1,6 +1,6 @@
 import { useAsyncRetry } from 'react-use'
 import { isValidAddress, SchemaType } from '@masknet/web3-shared-evm'
-import { useWeb3Connection } from '@masknet/plugin-infra/web3'
+import { useWeb3Connection } from '@masknet/web3-hooks-base'
 import { activatedSocialNetworkUI } from '../../../social-network/index.js'
 import { EMPTY_LIST, EnhanceableSite, NextIDPlatform } from '@masknet/shared-base'
 import type { NetworkPluginID, SocialIdentity } from '@masknet/web3-shared-base'

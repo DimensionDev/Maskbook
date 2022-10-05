@@ -7,6 +7,7 @@ import {
     HubOptions,
     NonFungibleAsset,
     resolveResourceURL,
+    SourceType,
     TokenType,
 } from '@masknet/web3-shared-base'
 import { ChainId, ChainId as ChainId_EVM, SchemaType as SchemaType_EVM } from '@masknet/web3-shared-evm'
@@ -74,6 +75,7 @@ function createNonFungibleToken(
             slug: '',
             description: asset.metadata.description || asset.description,
         },
+        source: SourceType.Alchemy_EVM,
     }
 }
 
@@ -136,6 +138,7 @@ function createNonFungibleAsset(
             type: x.trait_type,
             value: x.value,
         })),
+        source: SourceType.Alchemy_EVM,
     }
 }
 

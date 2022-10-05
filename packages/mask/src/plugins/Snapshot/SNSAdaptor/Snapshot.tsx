@@ -1,12 +1,12 @@
 import { useContext } from 'react'
 import { Box, Tab, Avatar, Typography, Chip } from '@mui/material'
-import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
+import { makeStyles, MaskTabList, ShadowRootTooltip, useTabs } from '@masknet/theme'
 import { SnapshotContext } from '../context.js'
 import { useProposal } from './hooks/useProposal.js'
 import { ProposalTab } from './ProposalTab.js'
 import { ProgressTab } from './ProgressTab.js'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
-import { useChainId } from '@masknet/plugin-infra/web3'
+import { useChainId } from '@masknet/web3-hooks-base'
 import { NetworkPluginID, resolveIPFS_URL } from '@masknet/web3-shared-base'
 import { TabContext, TabPanel } from '@mui/lab'
 import Color from 'color'
@@ -72,6 +72,14 @@ const useStyles = makeStyles()((theme) => {
             width: 48,
             height: 48,
         },
+        shadowRootTooltip: {},
+        tooltip: {
+            backgroundColor: theme.palette.maskColor.publicMain,
+            color: theme.palette.maskColor.white,
+        },
+        arrow: {
+            color: theme.palette.maskColor.publicMain,
+        },
     }
 })
 
@@ -82,13 +90,6 @@ export function Snapshot() {
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const [currentTab, onChange, tabs] = useTabs('Proposal', 'Progress')
     const { t } = useI18N()
-    const renderTab = () => {
-        const tabMap = {
-            [tabs.Proposal]: <ProposalTab />,
-            [tabs.Progress]: <ProgressTab />,
-        }
-        return tabMap[currentTab]
-    }
 
     const Tabs = [
         {
@@ -106,10 +107,26 @@ export function Snapshot() {
             <Box className={classes.header}>
                 <Avatar src={resolveIPFS_URL(proposal.space.avatar)} className={classes.avatar} />
                 <Box className={classes.title}>
-                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <Typography fontSize={18} fontWeight="bold">
-                            {proposal.space.name}
-                        </Typography>
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                        <ShadowRootTooltip
+                            PopperProps={{
+                                disablePortal: true,
+                            }}
+                            title={
+                                <Typography fontSize={18} fontWeight="bold">
+                                    {proposal.space.name}
+                                </Typography>
+                            }
+                            placement="top"
+                            classes={{ tooltip: classes.tooltip, arrow: classes.arrow }}
+                            arrow>
+                            <Typography
+                                fontSize={18}
+                                fontWeight="bold"
+                                sx={{ width: 150, whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden' }}>
+                                {proposal.space.name}
+                            </Typography>
+                        </ShadowRootTooltip>
                         <Box sx={{ display: 'flex' }}>
                             <Typography
                                 fontSize={14}
@@ -122,12 +139,22 @@ export function Snapshot() {
                             </Typography>
                         </Box>
                     </Box>
-                    <Typography
-                        fontSize={14}
-                        fontWeight="700"
-                        sx={{ width: 334, whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden' }}>
-                        {proposal.title}
-                    </Typography>
+
+                    <ShadowRootTooltip
+                        PopperProps={{
+                            disablePortal: true,
+                        }}
+                        title={<Typography className={classes.shadowRootTooltip}>{proposal.title}</Typography>}
+                        placement="top"
+                        classes={{ tooltip: classes.tooltip, arrow: classes.arrow }}
+                        arrow>
+                        <Typography
+                            fontSize={14}
+                            fontWeight="700"
+                            sx={{ width: 300, whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden' }}>
+                            {proposal.title}
+                        </Typography>
+                    </ShadowRootTooltip>
                 </Box>
                 <Box>
                     <Chip

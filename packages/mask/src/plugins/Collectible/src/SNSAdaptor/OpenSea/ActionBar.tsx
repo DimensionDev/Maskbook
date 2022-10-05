@@ -1,6 +1,6 @@
 import { Box } from '@mui/material'
 import { makeStyles, ActionButton } from '@masknet/theme'
-import { useAccount } from '@masknet/plugin-infra/web3'
+import { useAccount } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
 import { useI18N } from '../../../../../utils/index.js'

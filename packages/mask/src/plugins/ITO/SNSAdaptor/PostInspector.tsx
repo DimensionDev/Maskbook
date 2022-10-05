@@ -5,7 +5,7 @@ import { usePoolPayload } from './hooks/usePoolPayload.js'
 import type { JSON_PayloadInMask } from '../types.js'
 import { ITO, ITO_Error, ITO_Loading } from './ITO.js'
 import { NetworkPluginID, FungibleToken, TokenType } from '@masknet/web3-shared-base'
-import { useChainId, useFungibleToken, useFungibleTokens } from '@masknet/plugin-infra/web3'
+import { useChainId, useFungibleToken, useFungibleTokens } from '@masknet/web3-hooks-base'
 
 export interface PostInspectorProps {
     payload: JSON_PayloadInMask

@@ -25,7 +25,7 @@ import {
     useFungibleTokensFromTokenList,
     useTrustedFungibleTokens,
     useWeb3State,
-} from '@masknet/plugin-infra/web3'
+} from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import {
     CurrencyType,
@@ -45,7 +45,7 @@ import { Icons } from '@masknet/icons'
 const DEFAULT_LIST_HEIGHT = 300
 const SEARCH_KEYS = ['address', 'symbol', 'name']
 
-export interface FungibleTokenListProps<T extends NetworkPluginID> extends withClasses<'list' | 'placeholder'> {
+export interface FungibleTokenListProps<T extends NetworkPluginID> extends withClasses<'channel' | 'bar' | 'listBox'> {
     pluginID?: T
     chainId?: Web3Helper.Definition[T]['ChainId']
     whitelist?: string[]
@@ -71,6 +71,8 @@ const useStyles = makeStyles()((theme) => ({
         left: 0,
         right: 0,
     },
+    listBox: {},
+    wrapper: {},
 }))
 
 const Content = memo(({ message, height }: { message: ReactNode; height?: number | string }) => {
@@ -109,7 +111,7 @@ export const FungibleTokenList = forwardRef(
         } = props
 
         const t = useSharedI18N()
-        const { classes } = useStyles()
+        const { classes } = useStyles(undefined, { props: { classes: props.classes } })
 
         // #region control mode
         const [mode, setMode] = useState(TokenListMode.List)
@@ -408,6 +410,7 @@ export const FungibleTokenList = forwardRef(
                     searchKey={SEARCH_KEYS}
                     disableSearch={!!props.disableSearch}
                     itemKey="address"
+                    classes={{ listBox: classes.listBox }}
                     itemRender={itemRender}
                     placeholder={getPlaceholder()}
                     FixedSizeListProps={FixedSizeListProps}

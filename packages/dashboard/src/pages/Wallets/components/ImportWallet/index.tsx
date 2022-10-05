@@ -1,10 +1,10 @@
 import { memo } from 'react'
+import { TabContext, TabPanel } from '@mui/lab'
 import { Button, styled, FilledInput, Tab } from '@mui/material'
 import { makeStyles, ButtonGroupTabList, useTabs } from '@masknet/theme'
 import { DesktopMnemonicConfirm } from '../../../../components/Mnemonic/index.js'
 import { MaskAlert } from '../../../../components/MaskAlert/index.js'
 import { useDashboardI18N } from '../../../../locales/index.js'
-import { TabContext, TabPanel } from '@mui/lab'
 
 const Container = styled('div')`
     display: flex;

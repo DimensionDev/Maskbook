@@ -53,7 +53,7 @@ export class ERC20Descriptor implements TransactionDescriptor {
                 parameters?.value &&
                 !parameters?.tokenId
             ) {
-                const schemaType = await connection?.getTokenSchema(context.to ?? '', { chainId: context.chainId })
+                const schemaType = await connection?.getSchemaType(context.to ?? '', { chainId: context.chainId })
                 if (schemaType === SchemaType.ERC721) return
                 const token = await connection?.getFungibleToken(context.to ?? '', {
                     chainId: context.chainId,

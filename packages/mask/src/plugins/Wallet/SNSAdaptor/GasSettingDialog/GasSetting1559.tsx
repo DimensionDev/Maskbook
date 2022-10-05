@@ -23,7 +23,7 @@ import {
     NetworkPluginID,
     toFixed,
 } from '@masknet/web3-shared-base'
-import { useChainId, useFungibleTokenPrice, useGasOptions } from '@masknet/plugin-infra/web3'
+import { useChainId, useFungibleTokenPrice, useGasOptions } from '@masknet/web3-hooks-base'
 
 const HIGH_FEE_WARNING_MULTIPLIER = 1.5
 

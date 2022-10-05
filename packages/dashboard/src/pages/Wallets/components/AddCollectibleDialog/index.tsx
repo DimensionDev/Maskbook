@@ -15,7 +15,7 @@ import {
     useTrustedNonFungibleTokens,
     useCurrentWeb3NetworkPluginID,
     useWeb3Hub,
-} from '@masknet/plugin-infra/web3'
+} from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import type { ChainId } from '@masknet/web3-shared-evm'
 

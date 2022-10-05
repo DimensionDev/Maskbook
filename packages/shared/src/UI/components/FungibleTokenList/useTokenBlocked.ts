@@ -1,4 +1,4 @@
-import { useBlockedFungibleTokens, useTrustedFungibleTokens } from '@masknet/plugin-infra/web3'
+import { useBlockedFungibleTokens, useTrustedFungibleTokens } from '@masknet/web3-hooks-base'
 import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
 

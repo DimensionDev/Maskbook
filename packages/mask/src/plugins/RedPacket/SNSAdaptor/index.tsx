@@ -24,7 +24,7 @@ import { Trans } from 'react-i18next'
 import { Icons } from '@masknet/icons'
 import { CrossIsolationMessages } from '@masknet/shared-base'
 import { ApplicationEntry } from '@masknet/shared'
-import { useFungibleToken } from '@masknet/plugin-infra/web3'
+import { useFungibleToken } from '@masknet/web3-hooks-base'
 import { NetworkPluginID, formatBalance } from '@masknet/web3-shared-base'
 
 function Render(

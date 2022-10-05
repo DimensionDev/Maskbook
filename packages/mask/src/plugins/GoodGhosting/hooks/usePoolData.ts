@@ -1,5 +1,5 @@
-import { useERC20TokenContract } from '@masknet/plugin-infra/web3-evm'
-import { useChainId, useFungibleToken, useFungibleAssets } from '@masknet/plugin-infra/web3'
+import { useERC20TokenContract } from '@masknet/web3-hooks-evm'
+import { useChainId, useFungibleToken, useFungibleAssets } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { DAI, WNATIVE as WETH } from '@masknet/web3-shared-evm'
 import { useState } from 'react'

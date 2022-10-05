@@ -88,7 +88,6 @@ export function createNonFungibleAsset(
 ): NonFungibleAsset<ChainId, SchemaType> {
     const payload = getJSON<EVM.Payload>(asset.metadata_json)
     const contractName = asset.contract_name
-    const name = payload?.name || asset.name || contractName || ''
     const description = payload?.description
     const uri = asset.nftscan_uri ?? asset.image_uri
     const mediaURL = resolveResourceURL(uri)
@@ -131,7 +130,8 @@ export function createNonFungibleAsset(
             : undefined,
         metadata: {
             chainId,
-            name: first(name.split('#')) ?? '',
+            name:
+                first([payload?.name, asset.name, contractName].find((x) => x && !x.startsWith('#'))?.split('#')) ?? '',
             symbol,
             description,
             imageURL: mediaURL,
@@ -159,6 +159,7 @@ export function createNonFungibleAsset(
             verified: false,
             createdAt: asset.mint_timestamp,
         },
+        source: SourceType.NFTScan,
     }
 }
 
@@ -177,6 +178,7 @@ export function createNonFungibleCollectionFromGroup(
         description: group.description || payload?.description,
         iconURL: group.logo_url,
         tokensTotal: group.assets.length,
+        source: SourceType.NFTScan,
     }
 }
 
@@ -194,6 +196,7 @@ export function createNonFungibleCollectionFromCollection(
         description: collection.description,
         iconURL: collection.logo_url,
         verified: collection.verified,
+        source: SourceType.NFTScan,
     }
 }
 
@@ -210,6 +213,7 @@ export function createNonFungibleTokenContract(
         iconURL: collection.logo_url,
         logoURL: collection.logo_url,
         owner: collection.owner,
+        source: SourceType.NFTScan,
     }
 }
 

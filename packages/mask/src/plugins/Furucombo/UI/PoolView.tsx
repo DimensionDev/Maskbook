@@ -1,4 +1,4 @@
-import { useAccount, useChainIdMatched } from '@masknet/plugin-infra/web3'
+import { useAccount, useChainIdMatched } from '@masknet/web3-hooks-base'
 import { makeStyles } from '@masknet/theme'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { Button, Divider, Grid, Typography, Container } from '@mui/material'

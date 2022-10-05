@@ -143,7 +143,6 @@ export function InjectedDialog(props: InjectedDialogProps) {
         if (isOpenFromApplicationBoard) {
             CrossIsolationMessages.events.compositionDialogEvent.sendToLocal({ open: false, reason: 'timeline' })
         }
-
         onClose?.()
     }, [isOpenFromApplicationBoard, onClose])
 

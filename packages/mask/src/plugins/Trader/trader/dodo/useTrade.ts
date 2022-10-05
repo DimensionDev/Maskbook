@@ -9,8 +9,7 @@ import { PluginTraderRPC } from '../../messages.js'
 import type { SwapRouteData, TradeStrategy } from '../../types/index.js'
 import { useSlippageTolerance } from './useSlippageTolerance.js'
 import { first } from 'lodash-unified'
-import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
-import { useAccount, useDoubleBlockBeatRetry } from '@masknet/plugin-infra/web3'
+import { useAccount, useChainId, useDoubleBlockBeatRetry } from '@masknet/web3-hooks-base'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 import { FungibleToken, NetworkPluginID, isZero } from '@masknet/web3-shared-base'
 
@@ -24,7 +23,7 @@ export function useTrade(
 ): AsyncStateRetry<SwapRouteData | null> {
     const slippageSetting = useSlippageTolerance()
     const slippage = temporarySlippage || slippageSetting
-    const { targetChainId: chainId } = TargetChainIdContext.useContainer()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const { RPC_URLS } = useRPCConstants(chainId)
     const providerURL = first(RPC_URLS)
     const { DODO_ETH_ADDRESS } = useTraderConstants(chainId)

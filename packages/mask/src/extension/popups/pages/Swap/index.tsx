@@ -4,7 +4,7 @@ import { SharedContextProvider } from '@masknet/shared'
 import { SwapBox } from './SwapBox/index.js'
 import { useI18N } from '../../../../utils/index.js'
 import { useSwapPageTheme } from '../../../../utils/theme/useSwapPageTheme.js'
-import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
+import { TargetChainIdContext } from '@masknet/web3-hooks-evm'
 import { AllProviderTradeContext } from '../../../../plugins/Trader/trader/useAllProviderTradeContext.js'
 import { NetworkSelector } from '../../components/NetworkSelector/index.js'
 

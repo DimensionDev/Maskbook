@@ -1,3 +1,7 @@
+import { FC, useEffect, useMemo, useState } from 'react'
+import { Trans } from 'react-i18next'
+import { useUpdateEffect } from 'react-use'
+import { first, uniqBy } from 'lodash-unified'
 import { Icons } from '@masknet/icons'
 import {
     createInjectHooksRenderer,
@@ -5,17 +9,15 @@ import {
     useActivatedPluginsSNSAdaptor,
     usePluginI18NField,
 } from '@masknet/plugin-infra/content-script'
-import { PluginWeb3ContextProvider, useAvailablePlugins, useSocialAddressListAll } from '@masknet/plugin-infra/web3'
+import { useAvailablePlugins } from '@masknet/plugin-infra'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { LoadingBase, makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import { isSameAddress, NetworkPluginID, SocialIdentity } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
+import { useSocialAddressListBySettings } from '@masknet/shared'
 import { TabContext } from '@mui/lab'
 import { Tab, Typography } from '@mui/material'
-import { first, uniqBy } from 'lodash-unified'
-import { FC, useEffect, useMemo, useState } from 'react'
-import { Trans } from 'react-i18next'
-import { useUpdateEffect } from 'react-use'
+import { PluginWeb3ContextProvider } from '@masknet/web3-hooks-base'
 import { MaskMessages, sorter, useLocationChange } from '../../../utils/index.js'
 import { ProfileCardTitle } from './ProfileCardTitle.js'
 
@@ -164,7 +166,7 @@ export const ProfileCard: FC<Props> = ({ identity, ...rest }) => {
         value: socialAddressList = EMPTY_LIST,
         loading: loadingSocialAddressList,
         retry: retrySocialAddress,
-    } = useSocialAddressListAll(identity, undefined, sorter)
+    } = useSocialAddressListBySettings(identity, undefined, sorter)
 
     const availableSocialAddressList = useMemo(() => {
         return uniqBy(

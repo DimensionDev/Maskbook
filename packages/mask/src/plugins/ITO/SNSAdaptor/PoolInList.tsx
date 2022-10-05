@@ -26,7 +26,7 @@ import { useDestructCallback } from './hooks/useDestructCallback.js'
 import { omit } from 'lodash-unified'
 import { useSubscription } from 'use-subscription'
 import { PersistentStorages } from '../../../../shared/index.js'
-import { useAccount, useFungibleToken, useFungibleTokens } from '@masknet/plugin-infra/web3'
+import { useAccount, useFungibleToken, useFungibleTokens } from '@masknet/web3-hooks-base'
 import { useCallback } from 'react'
 
 const useStyles = makeStyles()((theme) => {

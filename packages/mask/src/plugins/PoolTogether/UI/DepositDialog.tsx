@@ -15,7 +15,7 @@ import { useDepositCallback } from '../hooks/useDepositCallback.js'
 import { PluginPoolTogetherMessages } from '../messages.js'
 import type { Pool } from '../types.js'
 import { calculateOdds, getPrizePeriod } from '../utils.js'
-import { useAccount, useFungibleTokenBalance } from '@masknet/plugin-infra/web3'
+import { useAccount, useFungibleTokenBalance } from '@masknet/web3-hooks-base'
 import { CrossIsolationMessages } from '@masknet/shared-base'
 
 const rainbow_animation = keyframes`

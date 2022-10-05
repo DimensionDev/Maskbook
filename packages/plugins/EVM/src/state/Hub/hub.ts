@@ -1,5 +1,5 @@
 import { mixin } from '@masknet/shared-base'
-import { HubStateBaseClient, HubStateFungibleClient, HubStateNonFungibleClient } from '@masknet/plugin-infra/web3'
+import { HubStateBaseClient, HubStateFungibleClient, HubStateNonFungibleClient } from '@masknet/web3-state'
 import {
     AlchemyEVM,
     DeBank,
@@ -22,6 +22,7 @@ import {
     R2D2,
     PriceAPI,
     CF,
+    CoinGeckoPriceEVM,
 } from '@masknet/web3-providers'
 import { SourceType, HubOptions, Pageable, CurrencyType, Transaction } from '@masknet/web3-shared-base'
 import { ChainId, chainResolver, SchemaType } from '@masknet/web3-shared-evm'
@@ -75,8 +76,9 @@ class HubFungibleClient extends HubStateFungibleClient<ChainId, SchemaType> {
                 [SourceType.Rabby]: Rabby,
                 [SourceType.R2D2]: R2D2,
                 [SourceType.CF]: CF,
+                [SourceType.CoinGecko]: CoinGeckoPriceEVM,
             },
-            [DeBank, Zerion, Rabby, R2D2, CF],
+            [DeBank, Zerion, Rabby, R2D2, CF, CoinGeckoPriceEVM],
             initial,
         )
     }

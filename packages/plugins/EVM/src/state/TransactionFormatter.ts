@@ -7,7 +7,7 @@ import {
     TransactionDescriptor as TransactionDescriptorBase,
     TransactionDescriptorType,
 } from '@masknet/web3-shared-base'
-import { TransactionFormatterState } from '@masknet/plugin-infra/web3'
+import { TransactionFormatterState } from '@masknet/web3-state'
 import {
     ChainId,
     getData,

@@ -12,6 +12,8 @@
     { "path": "../../shared" },
     { "path": "../../shared-base" },
     { "path": "../../shared-base-ui" },
+    { "path": "../../web3-hooks/base" },
+    { "path": "../../web3-hooks/evm" },
     { "path": "../../web3-shared/base" },
     { "path": "../../web3-shared/evm" },
     { "path": "../../web3-providers" },

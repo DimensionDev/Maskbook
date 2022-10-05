@@ -17,7 +17,7 @@ import { Fragment, useCallback, useState, useEffect } from 'react'
 import { PluginWalletStatusBar, useI18N } from '../../../utils/index.js'
 import type { PoolSettings } from './hooks/useFill.js'
 import { decodeRegionCode, regionCodes } from './hooks/useRegion.js'
-import { useChainId } from '@masknet/plugin-infra/web3'
+import { useChainId } from '@masknet/web3-hooks-base'
 
 const useSwapItemStyles = makeStyles()({
     root: {

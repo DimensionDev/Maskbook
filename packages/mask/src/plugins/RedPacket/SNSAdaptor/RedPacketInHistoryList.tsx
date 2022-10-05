@@ -5,7 +5,6 @@ import BigNumber from 'bignumber.js'
 import classNames from 'classnames'
 import { Box, ListItem, Typography, Popper, useMediaQuery, Theme } from '@mui/material'
 import { makeStyles, ActionButton } from '@masknet/theme'
-import { omit, pick } from 'lodash-unified'
 import { TokenIcon } from '@masknet/shared'
 import { ChainId, SchemaType, useRedPacketConstants } from '@masknet/web3-shared-evm'
 import REDPACKET_ABI from '@masknet/web3-contracts/abis/HappyRedPacketV4.json'
@@ -17,7 +16,7 @@ import { StyledLinearProgress } from '../../ITO/SNSAdaptor/StyledLinearProgress.
 import { RedPacketJSONPayload, RedPacketJSONPayloadFromChain, RedPacketStatus } from '../types.js'
 import { useAvailabilityComputed } from './hooks/useAvailabilityComputed.js'
 import { useRefundCallback } from './hooks/useRefundCallback.js'
-import { useAccount, useChainId, useFungibleToken, useWeb3Connection } from '@masknet/plugin-infra/web3'
+import { useAccount, useChainId, useFungibleToken, useWeb3Connection } from '@masknet/web3-hooks-base'
 import { formatBalance, FungibleToken, NetworkPluginID, isSameAddress } from '@masknet/web3-shared-base'
 
 const interFace = new Interface(REDPACKET_ABI)
@@ -238,7 +237,7 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
     const { value: tokenDetailed } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, tokenAddress ?? '')
 
     const historyToken = {
-        ...pick(tokenDetailed ?? (patchedHistory as RedPacketJSONPayload).token, ['decimals', 'symbol']),
+        ...(tokenDetailed ?? (patchedHistory as RedPacketJSONPayload).token),
         address: tokenAddress,
     } as FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>
 
@@ -247,7 +246,7 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
             await refundCallback()
             revalidateAvailability()
         }
-        if (canSend) onSelect(removeUselessSendParams({ ...patchedHistory, token: historyToken }))
+        if (canSend) onSelect({ ...patchedHistory, token: historyToken })
     }, [onSelect, refundCallback, canRefund, canSend, patchedHistory, historyToken])
 
     // #region password lost tips
@@ -379,11 +378,4 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
             </Box>
         </ListItem>
     )
-}
-
-function removeUselessSendParams(payload: RedPacketJSONPayload): RedPacketJSONPayload {
-    return {
-        ...omit(payload, ['block_number', 'claimers']),
-        token: omit(payload.token, ['logoURI']) as FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>,
-    }
 }

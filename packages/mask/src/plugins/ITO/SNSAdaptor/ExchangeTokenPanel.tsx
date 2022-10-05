@@ -7,7 +7,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { useSelectFungibleToken, FungibleTokenInput } from '@masknet/shared'
 import { useI18N } from '../../../utils/index.js'
 import { FungibleToken, NetworkPluginID } from '@masknet/web3-shared-base'
-import { useFungibleTokenBalance } from '@masknet/plugin-infra/web3'
+import { useFungibleTokenBalance } from '@masknet/web3-hooks-base'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -134,6 +134,7 @@ export function ExchangeTokenPanel(props: ExchangeTokenPanelProps) {
                 disabled={!exchangeToken}
                 placeholder={!exchangeToken ? t('plugin_ito_placeholder_when_token_unselected') : placeholder || '0.0'}
                 disableMax
+                disableBalance={disableBalance}
             />
             {showAdd ? (
                 <IconButton size="large" onClick={onAdd} className={classes.button}>

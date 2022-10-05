@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import { type Plugin, usePostInfoDetails, usePluginWrapper } from '@masknet/plugin-infra/content-script'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
-import { parseURL } from '@masknet/shared-base'
+import { parseURLs } from '@masknet/shared-base'
 import { Icons } from '@masknet/icons'
 import { base } from '../base.js'
 import { PoolView } from '../UI/PoolView.js'
@@ -29,7 +29,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
         const links = useMemo(() => {
             const x = extractTextFromTypedMessage(props.message)
             if (x.none) return null
-            return parseURL(x.val)
+            return parseURLs(x.val)
         }, [props.message])
         if (!links) return null
         const pool = getPoolFromLinks(links)

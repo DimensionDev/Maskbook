@@ -5,7 +5,7 @@ import {
     useNonFungibleOrders,
     useNonFungibleEvents,
     useNonFungibleRarity,
-} from '@masknet/plugin-infra/web3'
+} from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { NetworkPluginID, SourceType } from '@masknet/web3-shared-base'
 
@@ -14,10 +14,11 @@ interface InitialState {
     chainId: Web3Helper.ChainIdAll
     tokenId: string
     tokenAddress: string
+    origin?: string
 }
 
 function useContext(initialState?: InitialState) {
-    const { pluginID, chainId, tokenId, tokenAddress } = initialState ?? {}
+    const { pluginID, chainId, tokenId, tokenAddress, origin } = initialState ?? {}
     const [sourceType, setSourceType] = useState(SourceType.NFTScan)
 
     const asset = useNonFungibleAsset(pluginID, tokenAddress, tokenId, {
@@ -36,6 +37,8 @@ function useContext(initialState?: InitialState) {
     return {
         pluginID,
         chainId,
+
+        origin,
 
         sourceType,
         setSourceType,

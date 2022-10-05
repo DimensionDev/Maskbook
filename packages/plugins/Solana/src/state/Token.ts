@@ -1,6 +1,6 @@
 import type { Subscription } from 'use-subscription'
 import type { Plugin } from '@masknet/plugin-infra'
-import { TokenState, TokenStorage } from '@masknet/plugin-infra/web3'
+import { TokenState, TokenStorage } from '@masknet/web3-state'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { ChainId, formatAddress, isValidAddress, SchemaType } from '@masknet/web3-shared-solana'
 

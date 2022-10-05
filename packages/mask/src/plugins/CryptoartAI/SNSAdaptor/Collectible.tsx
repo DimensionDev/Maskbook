@@ -15,9 +15,10 @@ import { PluginSkeleton } from './PluginSkeleton.js'
 import { TabState, TransactionType } from '../types/index.js'
 import { resolveAssetLinkOnCryptoartAI, resolveWebLinkOnCryptoartAI } from '../pipes/index.js'
 import { ActionBar } from './ActionBar.js'
-import { useChainId } from '@masknet/plugin-infra/web3'
+import { useChainId } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
+import { PLUGIN_NAME } from '../constants.js'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -69,6 +70,9 @@ const useStyles = makeStyles()((theme) => {
                 fontWeight: 300,
             },
         },
+        failedText: {
+            color: theme.palette.maskColor.dark,
+        },
     }
 })
 
@@ -100,16 +104,27 @@ export function Collectible(props: CollectibleProps) {
     if (!asset.value)
         return (
             <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center">
-                <Typography color="textPrimary" sx={{ marginTop: 8, marginBottom: 8 }}>
-                    Failed to load your collectible on CRYPTOART.AI.
+                <Typography className={classes.failedText} sx={{ marginTop: 8, marginBottom: 8 }}>
+                    {t('plugin_collectible_failed_load', { source: PLUGIN_NAME })}
                 </Typography>
                 <Button
-                    color="primary"
                     size="small"
-                    variant="text"
-                    onClick={() => asset.retry()}
-                    sx={{ marginTop: 1.5 }}>
-                    Refresh
+                    variant="roundedContained"
+                    sx={{
+                        width: 254,
+                        height: 40,
+                        backgroundColor: (theme) => theme.palette.maskColor.publicMain,
+                        color: (theme) => theme.palette.maskColor.white,
+                        fontSize: 14,
+                        fontWeight: 700,
+                        marginBottom: 4,
+                        marginTop: 2,
+                        '&:hover': {
+                            backgroundColor: (theme) => theme.palette.maskColor.publicMain,
+                        },
+                    }}
+                    onClick={() => asset.retry()}>
+                    {t('plugin_collectible_refresh')}
                 </Button>
             </Box>
         )

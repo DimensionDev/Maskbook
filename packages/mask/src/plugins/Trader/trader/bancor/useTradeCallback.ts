@@ -3,14 +3,13 @@ import { useMemo } from 'react'
 import { useAsyncFn } from 'react-use'
 import stringify from 'json-stable-stringify'
 import { NetworkPluginID, ZERO } from '@masknet/web3-shared-base'
-import { useAccount, useWeb3Connection } from '@masknet/plugin-infra/web3'
+import { useAccount, useChainId, useWeb3Connection } from '@masknet/web3-hooks-base'
 import type { GasOptionConfig } from '@masknet/web3-shared-evm'
 import { PluginTraderRPC } from '../../messages.js'
 import type { SwapBancorRequest, TradeComputed } from '../../types/index.js'
-import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
 
 export function useTradeCallback(tradeComputed: TradeComputed<SwapBancorRequest> | null, gasConfig?: GasOptionConfig) {
-    const { targetChainId: chainId } = TargetChainIdContext.useContainer()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, { chainId })
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
 

@@ -9,13 +9,8 @@ import { WalletRPC } from '../../../../../plugins/Wallet/messages.js'
 import { useI18N } from '../../../../../utils/index.js'
 import Services from '../../../../service.js'
 import { WalletItem } from './WalletItem.js'
-import {
-    useAccount,
-    useChainIdValid,
-    useWallets,
-    getRegisteredWeb3Networks,
-    useChainId,
-} from '@masknet/plugin-infra/web3'
+import { useAccount, useChainIdValid, useWallets, useChainId } from '@masknet/web3-hooks-base'
+import { getRegisteredWeb3Networks } from '@masknet/plugin-infra'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { ChainIcon, WalletIcon } from '@masknet/shared'
 import { PopupRoutes } from '@masknet/shared-base'

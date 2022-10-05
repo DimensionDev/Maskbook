@@ -3,8 +3,7 @@ import { SchemaType, GasOptionConfig, useTraderConstants, encodeContractTransact
 import { useAsyncFn } from 'react-use'
 import { SLIPPAGE_DEFAULT } from '../../constants/index.js'
 import { SwapResponse, TradeComputed, TradeStrategy } from '../../types/index.js'
-import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
-import { useAccount, useWeb3Connection } from '@masknet/plugin-infra/web3'
+import { useAccount, useChainId, useWeb3Connection } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useTradeAmount } from './useTradeAmount.js'
 
@@ -15,7 +14,7 @@ export function useTradeCallback(
     gasConfig?: GasOptionConfig,
 ) {
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const { targetChainId: chainId } = TargetChainIdContext.useContainer()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const { BALANCER_ETH_ADDRESS } = useTraderConstants(chainId)
     const connection = useWeb3Connection()
     const tradeAmount = useTradeAmount(trade, allowedSlippage)

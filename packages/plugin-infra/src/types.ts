@@ -27,8 +27,9 @@ import type {
     Web3EnableRequirement,
     Web3UI,
     Web3State,
+    SocialAddressType,
 } from '@masknet/web3-shared-base'
-import type { ChainId, SchemaType, Transaction } from '@masknet/web3-shared-evm'
+import type { ChainId as ChainIdEVM, Transaction as TransactionEVM } from '@masknet/web3-shared-evm'
 import type { Emitter } from '@servie/events'
 import type { UnboundedRegistry } from '@dimensiondev/holoflows-kit'
 
@@ -79,6 +80,7 @@ export declare namespace Plugin {
      */
     export interface DeferredDefinition<
         ChainId = unknown,
+        AddressType = unknown,
         SchemaType = unknown,
         ProviderType = unknown,
         NetworkType = unknown,
@@ -92,11 +94,12 @@ export declare namespace Plugin {
         TransactionParameter = unknown,
         Web3 = unknown,
         Web3Provider = unknown,
-    > extends Shared.Definition<ChainId, ProviderType, NetworkType> {
+    > extends Shared.Definition<ChainId, SchemaType, ProviderType, NetworkType> {
         /** Load the SNSAdaptor part of the plugin. */
         SNSAdaptor?: Loader<
             SNSAdaptor.Definition<
                 ChainId,
+                AddressType,
                 SchemaType,
                 ProviderType,
                 NetworkType,
@@ -116,6 +119,7 @@ export declare namespace Plugin {
         Dashboard?: Loader<
             Dashboard.Definition<
                 ChainId,
+                AddressType,
                 SchemaType,
                 ProviderType,
                 NetworkType,
@@ -166,7 +170,7 @@ export namespace Plugin.Shared {
             payload: JsonRpcPayload,
             options?: {
                 account?: string
-                chainId?: ChainId
+                chainId?: ChainIdEVM
                 popupsWindow?: boolean
             },
         ): Promise<JsonRpcResponse>
@@ -204,7 +208,7 @@ export namespace Plugin.Shared {
         generateSignResult(signer: ECKeyIdentifier, message: string): Promise<PersonaSignResult>
 
         /** Sign transaction */
-        signTransaction(address: string, transaction: Transaction): Promise<string>
+        signTransaction(address: string, transaction: TransactionEVM): Promise<string>
         /** Sign personal message, aka. eth.personal.sign() */
         signPersonalMessage(address: string, message: string): Promise<string>
         /** Sign typed data */
@@ -221,7 +225,12 @@ export namespace Plugin.Shared {
         /** Remove a old wallet */
         removeWallet(id: string, password?: string): Promise<void>
     }
-    export interface Definition<ChainId = unknown, ProviderType = unknown, NetworkType = unknown> {
+    export interface Definition<
+        ChainId = unknown,
+        SchemaType = unknown,
+        ProviderType = unknown,
+        NetworkType = unknown,
+    > {
         /**
          * ID of the plugin. It should be unique.
          * @example "com.mask.wallet"
@@ -391,6 +400,7 @@ export namespace Plugin.SNSAdaptor {
     }
     export interface Definition<
         ChainId = unknown,
+        AddressType = unknown,
         SchemaType = unknown,
         ProviderType = unknown,
         NetworkType = unknown,
@@ -423,6 +433,7 @@ export namespace Plugin.SNSAdaptor {
         /** This is the context of the currently chosen network. */
         Web3State?: Web3State<
             ChainId,
+            AddressType,
             SchemaType,
             ProviderType,
             NetworkType,
@@ -568,6 +579,10 @@ export namespace Plugin.SNSAdaptor {
         category?: 'dapp' | 'other'
 
         nextIdRequired?: boolean
+        /**
+         * One plugin may has multiple part. E.g. Tips requires connected wallet, but Tips setting not.
+         */
+        entryWalletConnectedNotRequired?: boolean
 
         /**
          * Display using an eye-catching card and unable to be unlisted.
@@ -645,10 +660,25 @@ export namespace Plugin.SNSAdaptor {
         FocusingPost = 'focusing-post',
         Post = 'post',
         Profile = 'profile',
+        MirrorMenu = 'mirror-menu',
+        MirrorEntry = 'mirror-entry',
+    }
+    export interface TipsAccount {
+        pluginId: NetworkPluginID
+        address: string
+        name?: string
+        type?: SocialAddressType
+        /** Verified by NextId. */
+        verified?: boolean
+        /** From SNS profile */
+        isSocialAddress?: boolean
+        last_checked_at?: string
     }
     export interface TipsRealmOptions {
         identity?: ProfileIdentifier
         slot: TipsSlot
+        tipsAccounts?: TipsAccount[]
+        onStatusUpdate?(disabled: boolean): void
     }
     export interface TipsRealm {
         ID: string
@@ -799,6 +829,7 @@ export namespace Plugin.Dashboard {
     // As you can see we currently don't have so much use case for an API here.
     export interface Definition<
         ChainId = unknown,
+        AddressType = unknown,
         SchemaType = unknown,
         ProviderType = unknown,
         NetworkType = unknown,
@@ -821,6 +852,7 @@ export namespace Plugin.Dashboard {
         /** This is the context of the currently chosen network. */
         Web3State?: Web3State<
             ChainId,
+            AddressType,
             SchemaType,
             ProviderType,
             NetworkType,

@@ -34,7 +34,6 @@ export enum NetworkPluginID {
     Tips = 'com.maskbook.tip',
     Transak = 'com.maskbook.transak',
     Valuables = 'com.maskbook.tweet',
-    DAO = 'money.juicebox',
     Debugger = 'io.mask.debugger',
     Example = 'io.mask.example',
     RSS3 = 'bio.rss3',

@@ -33,7 +33,7 @@ import { useI18N } from '../locales/index.js'
 import { ImageLoader } from './ImageLoader.js'
 import { petShowSettings } from '../settings.js'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
-import { useWeb3Connection, useWeb3State } from '@masknet/plugin-infra/web3'
+import { useWeb3Connection, useWeb3State } from '@masknet/web3-hooks-base'
 import { Icons } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => ({

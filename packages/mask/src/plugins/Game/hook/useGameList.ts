@@ -1,5 +1,5 @@
 import { useAsync } from 'react-use'
-import { useWeb3State } from '@masknet/plugin-infra/web3'
+import { useWeb3State } from '@masknet/web3-hooks-base'
 import { useGameConstants } from '@masknet/web3-shared-evm'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { NetworkPluginID } from '@masknet/web3-shared-base'

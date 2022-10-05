@@ -1,9 +1,9 @@
 import ENS from 'ethjs-ens'
 import type { Plugin } from '@masknet/plugin-infra'
+import { IdentityServiceState } from '@masknet/web3-state'
 import { NetworkPluginID, SocialIdentity, SocialAddress, SocialAddressType } from '@masknet/web3-shared-base'
 import { EMPTY_LIST, EnhanceableSite, getSiteType, NextIDPlatform } from '@masknet/shared-base'
 import { ChainId, isValidAddress, isZeroAddress, ProviderType } from '@masknet/web3-shared-evm'
-import { IdentityServiceState } from '@masknet/plugin-infra/web3'
 import { KeyValue, NextIDProof, RSS3 } from '@masknet/web3-providers'
 import { Providers } from './Connection/provider.js'
 

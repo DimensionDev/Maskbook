@@ -1,4 +1,4 @@
-import { useNonFungibleAsset } from '@masknet/plugin-infra/web3'
+import { useNonFungibleAsset } from '@masknet/web3-hooks-base'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import { NetworkPluginID, NonFungibleTokenContract, SourceType } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'

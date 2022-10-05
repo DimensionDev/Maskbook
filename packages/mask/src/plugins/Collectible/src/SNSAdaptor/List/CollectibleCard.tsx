@@ -1,12 +1,18 @@
-import { Card, Link } from '@mui/material'
+import { useCallback } from 'react'
+import { Box, Card } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { NFTCardStyledAssetPlayer } from '@masknet/shared'
-import { useWeb3State } from '@masknet/plugin-infra/web3'
+import { AssetPreviewer, NetworkIcon } from '@masknet/shared'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import type { NetworkPluginID, NonFungibleAsset, SocialAddress, SourceType, Wallet } from '@masknet/web3-shared-base'
+import type { NetworkPluginID, NonFungibleAsset } from '@masknet/web3-shared-base'
+import { CrossIsolationMessages } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
+        position: 'relative',
+        display: 'block',
+        cursor: 'pointer',
+    },
+    card: {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -36,77 +42,45 @@ const useStyles = makeStyles()((theme) => ({
         width: 30,
         height: 30,
     },
-    wrapper: {
-        width: '100% !important',
-        height: '100% !important',
-        background:
-            theme.palette.mode === 'light'
-                ? 'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.9) 100%), linear-gradient(90deg, rgba(98, 152, 234, 0.2) 1.03%, rgba(98, 152, 234, 0.2) 1.04%, rgba(98, 126, 234, 0.2) 100%)'
-                : 'linear-gradient(180deg, #202020 0%, #181818 100%)',
-    },
     blocker: {
         position: 'absolute',
         zIndex: 2,
         width: '100%',
         height: '100%',
     },
-    linkWrapper: {
-        position: 'relative',
-        display: 'block',
-    },
 }))
 
 export interface CollectibleCardProps {
     className?: string
-    provider: SourceType
-    wallet?: Wallet
+    pluginID?: NetworkPluginID
     asset: NonFungibleAsset<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
-    link?: string
-    readonly?: boolean
-    renderOrder: number
-    address?: SocialAddress<NetworkPluginID>
 }
 
-export function CollectibleCard({
-    className,
-    wallet,
-    asset,
-    readonly,
-    renderOrder,
-    address,
-    ...rest
-}: CollectibleCardProps) {
+export function CollectibleCard({ className, pluginID, asset }: CollectibleCardProps) {
     const { classes, cx } = useStyles()
-    const { Others } = useWeb3State()
+    const onClick = useCallback(() => {
+        if (!asset.chainId || !pluginID) return
+        CrossIsolationMessages.events.nonFungibleTokenDialogEvent.sendToLocal({
+            open: true,
+            chainId: asset.chainId,
+            pluginID,
+            tokenId: asset.tokenId,
+            tokenAddress: asset.address,
+        })
+    }, [pluginID, asset.chainId, asset.tokenId, asset.address])
 
     return (
-        <Link
-            target="_blank"
-            rel="noopener noreferrer"
-            href={
-                asset.link ??
-                Others?.explorerResolver.nonFungibleTokenLink?.(asset.chainId, asset.address, asset.tokenId)
-            }
-            className={cx(classes.linkWrapper, className)}
-            {...rest}>
+        <Box className={cx(classes.root, className)} onClick={onClick}>
             <div className={classes.blocker} />
-            <Card className={classes.root}>
-                <NFTCardStyledAssetPlayer
-                    contractAddress={asset.address}
-                    chainId={asset.chainId}
-                    isImageOnly
-                    url={asset.metadata?.mediaURL || asset.metadata?.imageURL}
-                    renderOrder={renderOrder}
-                    tokenId={asset.tokenId}
-                    address={address}
+            <Card className={classes.card}>
+                <AssetPreviewer
                     classes={{
                         fallbackImage: classes.fallbackImage,
-                        wrapper: classes.wrapper,
-                        imgWrapper: classes.wrapper,
                     }}
-                    showNetwork
+                    url={asset.metadata?.imageURL}
+                    icon={pluginID ? <NetworkIcon pluginID={pluginID} chainId={asset.chainId} /> : null}
                 />
             </Card>
-        </Link>
+        </Box>
     )
 }

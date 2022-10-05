@@ -1,5 +1,5 @@
 import { EMPTY_LIST } from '@masknet/shared-base'
-import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
+import { TargetChainIdContext } from '@masknet/web3-hooks-evm'
 import { useAvailableDataProviders } from '../../trending/useAvailableDataProviders.js'
 import { TagType } from '../../types/index.js'
 import { TrendingView } from './TrendingView.js'
