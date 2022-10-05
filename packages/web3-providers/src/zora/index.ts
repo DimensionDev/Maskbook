@@ -101,6 +101,7 @@ export class ZoraAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType
                   }
                 : undefined,
             ownerId: token.owner,
+            source: SourceType.Zora,
         }
     }
 
@@ -116,6 +117,7 @@ export class ZoraAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType
             slug: collection.entity.symbol ?? 'UNKNOWN',
             description: collection.entity.description ?? collection.description,
             schema: SchemaType.ERC721,
+            source: SourceType.Zora,
         }
     }
 

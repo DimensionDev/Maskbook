@@ -105,7 +105,7 @@ export function CardDialogContent(props: CardDialogContentProps) {
                             <span className={classes.buttonText}>{t('plugin_collectibles_pfp_button')}</span>
                         </Button>
                     </ConnectPersonaBoundary>
-                ) : asset.value.link && asset.value?.source ? (
+                ) : asset.value.link && asset.value.source ? (
                     <Button
                         sx={{ display: 'flex', alignItems: 'center' }}
                         variant="contained"

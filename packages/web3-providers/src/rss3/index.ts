@@ -4,6 +4,7 @@ import {
     createPageable,
     HubOptions,
     resolveResourceURL,
+    SourceType,
     TokenType,
 } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
@@ -124,6 +125,7 @@ export class RSS3API implements RSS3BaseAPI.Provider, NonFungibleTokenAPI.Provid
                         name: asset.info.collection ?? '',
                         slug: '',
                     },
+                    source: SourceType.RSS3,
                 }
             })
             .filter((x) => x.chainId === chainId)
