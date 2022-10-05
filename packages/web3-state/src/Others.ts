@@ -9,7 +9,7 @@ import {
     ProviderDescriptor,
     OthersState as Web3OthersState,
 } from '@masknet/web3-shared-base'
-import type { Plugin } from '../types.js'
+import type { Plugin } from '@masknet/plugin-infra'
 
 export class OthersState<ChainId, SchemaType, ProviderType, NetworkType, Transaction>
     implements Web3OthersState<ChainId, SchemaType, ProviderType, NetworkType, Transaction>

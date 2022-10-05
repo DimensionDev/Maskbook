@@ -327,6 +327,9 @@ importers:
       '@masknet/web3-shared-solana':
         specifier: workspace:*
         version: link:../web3-shared/solana
+      '@masknet/web3-state':
+        specifier: workspace:*
+        version: link:../web3-state
       '@msgpack/msgpack':
         specifier: ^2.8.0
         version: 2.8.0
@@ -678,6 +681,9 @@ importers:
       '@masknet/web3-shared-solana':
         specifier: workspace:*
         version: link:../web3-shared/solana
+      '@masknet/web3-state':
+        specifier: workspace:*
+        version: link:../web3-state
       '@metamask/eth-sig-util':
         specifier: ^4.0.0
         version: 4.0.0
@@ -1310,6 +1316,9 @@ importers:
       '@masknet/web3-shared-flow':
         specifier: workspace:*
         version: link:../../web3-shared/flow
+      '@masknet/web3-state':
+        specifier: workspace:*
+        version: link:../../web3-state
       '@metamask/eth-sig-util':
         specifier: ^4.0.0
         version: 4.0.0
@@ -1464,6 +1473,9 @@ importers:
       '@masknet/web3-shared-flow':
         specifier: workspace:*
         version: link:../../web3-shared/flow
+      '@masknet/web3-state':
+        specifier: workspace:*
+        version: link:../../web3-state
       '@servie/events':
         specifier: ^3.0.0
         version: 3.0.0
@@ -1663,6 +1675,9 @@ importers:
       '@masknet/web3-shared-solana':
         specifier: workspace:*
         version: link:../../web3-shared/solana
+      '@masknet/web3-state':
+        specifier: workspace:*
+        version: link:../../web3-state
       '@metaplex-foundation/mpl-token-metadata':
         specifier: ^1.1.0
         version: 1.1.0
@@ -2737,6 +2752,37 @@ importers:
       urlcat:
         specifier: ^2.0.4
         version: 2.0.4_fggwetex7eobhq3hztj4obsulu
+
+  packages/web3-state:
+    dependencies:
+      '@masknet/plugin-infra':
+        specifier: workspace:*
+        version: link:../plugin-infra
+      '@masknet/shared-base':
+        specifier: workspace:*
+        version: link:../shared-base
+      '@masknet/web3-shared-base':
+        specifier: workspace:*
+        version: link:../web3-shared/base
+      '@servie/events':
+        specifier: ^3.0.0
+        version: 3.0.0
+      '@types/use-subscription':
+        specifier: ^1.0.0
+        version: 1.0.0
+      lru-cache:
+        specifier: ^7.10.1
+        version: 7.10.1
+      use-subscription:
+        specifier: 1.6.0
+        version: 1.6.0
+      web3-core-helpers:
+        specifier: 1.7.5
+        version: 1.7.5
+    devDependencies:
+      mock-socket:
+        specifier: ^9.1.2
+        version: 9.1.2
 
 packages:
 

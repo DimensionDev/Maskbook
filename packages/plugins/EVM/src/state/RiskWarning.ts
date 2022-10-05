@@ -1,6 +1,6 @@
 import type { Subscription } from 'use-subscription'
 import type { Plugin } from '@masknet/plugin-infra'
-import { RiskWarningState } from '@masknet/plugin-infra/web3'
+import { RiskWarningState } from '@masknet/web3-state'
 import { RiskWarning as RiskWarningAPI } from '@masknet/web3-providers'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 

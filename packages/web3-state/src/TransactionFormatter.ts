@@ -1,4 +1,4 @@
-import type { Plugin } from '../types.js'
+import type { Plugin } from '@masknet/plugin-infra'
 import type {
     TransactionContext,
     TransactionDescriptor,

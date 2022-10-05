@@ -1,7 +1,7 @@
 import type { Subscription } from 'use-subscription'
 import { mapSubscription, mergeSubscription, StorageItem } from '@masknet/shared-base'
 import type { NameServiceState as Web3NameServiceState } from '@masknet/web3-shared-base'
-import type { Plugin } from '../types.js'
+import type { Plugin } from '@masknet/plugin-infra'
 
 export interface NameServiceResolver<ChainId> {
     /** get address of domain name */

@@ -47,6 +47,7 @@
     "@masknet/web3-constants": "workspace:*",
     "@masknet/web3-contracts": "workspace:*",
     "@masknet/web3-helpers": "workspace:*",
+    "@masknet/web3-state": "workspace:*",
     "@masknet/web3-providers": "workspace:*",
     "@masknet/web3-hooks-base": "workspace:*",
     "@masknet/web3-hooks-evm": "workspace:*",

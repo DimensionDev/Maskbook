@@ -1,6 +1,6 @@
 import type { Subscription } from 'use-subscription'
 import type { Wallet, WalletState as Web3WalletState } from '@masknet/web3-shared-base'
-import type { Plugin } from '../types.js'
+import type { Plugin } from '@masknet/plugin-infra'
 
 export class WalletState implements Web3WalletState {
     public wallets?: Subscription<Wallet[]>

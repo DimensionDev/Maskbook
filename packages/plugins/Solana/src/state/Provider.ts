@@ -1,6 +1,6 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { isSameAddress } from '@masknet/web3-shared-base'
-import { ProviderState } from '@masknet/plugin-infra/web3'
+import { ProviderState } from '@masknet/web3-state'
 import {
     isValidChainId,
     isValidAddress,

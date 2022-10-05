@@ -8,7 +8,7 @@ import {
     TokenType,
     TokenState as Web3TokenState,
 } from '@masknet/web3-shared-base'
-import type { Plugin } from '../types.js'
+import type { Plugin } from '@masknet/plugin-infra'
 
 export interface TokenStorage<ChainId, SchemaType> {
     fungibleTokenList: Record<string, Array<FungibleToken<ChainId, SchemaType>>>
