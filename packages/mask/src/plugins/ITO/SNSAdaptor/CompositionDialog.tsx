@@ -1,6 +1,6 @@
-import { PluginID, useActivatedPlugin, useCompositionContext } from '@masknet/plugin-infra/content-script'
+import { useActivatedPlugin, useCompositionContext } from '@masknet/plugin-infra/content-script'
 import { InjectedDialog, InjectedDialogProps, useOpenShareTxDialog } from '@masknet/shared'
-import { EMPTY_LIST, EnhanceableSite } from '@masknet/shared-base'
+import { PluginID, EMPTY_LIST, EnhanceableSite } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
 import { ChainId, useITOConstants } from '@masknet/web3-shared-evm'

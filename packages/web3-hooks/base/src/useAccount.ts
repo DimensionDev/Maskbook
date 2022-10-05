@@ -1,7 +1,7 @@
 import { useSubscription } from 'use-subscription'
 import { UNDEFINED } from '@masknet/shared-base'
 
-import { NetworkPluginID } from '@masknet/shared-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
 import { useWeb3State } from './useWeb3State.js'
 import { useCurrentWeb3NetworkAccount } from './useContext.js'
 

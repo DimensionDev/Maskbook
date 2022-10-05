@@ -1,7 +1,7 @@
 /// <reference types="web3" />
 import { useAsyncRetry } from 'react-use'
 
-import { NetworkPluginID } from '@masknet/shared-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useAccount } from './useAccount.js'
 import { useChainId } from './useChainId.js'

@@ -1,6 +1,6 @@
 import { useSubscription } from 'use-subscription'
 
-import { NetworkPluginID } from '@masknet/shared-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
 import { EMPTY_ENTRY } from '@masknet/shared-base'
 import { useWeb3State } from './useWeb3State.js'
 

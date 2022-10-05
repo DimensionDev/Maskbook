@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import { useSubscription } from 'use-subscription'
 
-import { NetworkPluginID } from '@masknet/shared-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { EMPTY_ARRAY } from '@masknet/shared-base'
 import { useWeb3State } from './useWeb3State.js'

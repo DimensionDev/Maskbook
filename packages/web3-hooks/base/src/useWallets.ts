@@ -1,7 +1,7 @@
 import { useSubscription } from 'use-subscription'
 import { EMPTY_ARRAY } from '@masknet/shared-base'
 
-import { NetworkPluginID } from '@masknet/shared-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
 import { useWeb3State } from './useWeb3State.js'
 
 export function useWallets<T extends NetworkPluginID>(pluginID?: T) {

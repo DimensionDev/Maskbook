@@ -1,21 +1,20 @@
-import { useI18N, MaskMessages } from '../../utils/index.js'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useAsyncRetry } from 'react-use'
+import { first } from 'lodash-unified'
 import { InjectedDialog } from '@masknet/shared'
 import {
-    PluginID,
     useActivatedPluginsSNSAdaptor,
     usePluginI18NField,
     createInjectHooksRenderer,
 } from '@masknet/plugin-infra/content-script'
-import { NextIDPlatform, EMPTY_LIST, PopupRoutes, CrossIsolationMessages } from '@masknet/shared-base'
+import { PluginID, NextIDPlatform, EMPTY_LIST, PopupRoutes, CrossIsolationMessages } from '@masknet/shared-base'
 import { useAvailablePlugins } from '@masknet/plugin-infra'
 import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
-import { first } from 'lodash-unified'
 import { TabContext } from '@mui/lab'
 import { DialogContent, Tab } from '@mui/material'
-import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Icons } from '@masknet/icons'
 import { NextIDProof } from '@masknet/web3-providers'
-import { useAsyncRetry } from 'react-use'
+import { useI18N, MaskMessages } from '../../utils/index.js'
 import Services from '../../extension/service.js'
 
 const useStyles = makeStyles()((theme) => ({
