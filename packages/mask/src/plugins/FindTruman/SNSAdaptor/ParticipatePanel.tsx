@@ -1,4 +1,4 @@
-import { useAccount } from '@masknet/plugin-infra/web3'
+import { useAccount } from '@masknet/web3-hooks-base'
 import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import { useAsyncRetry } from 'react-use'
 import {

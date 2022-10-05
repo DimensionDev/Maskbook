@@ -1,4 +1,4 @@
-import { useWeb3Connection } from '@masknet/plugin-infra/web3'
+import { useWeb3Connection } from '@masknet/web3-hooks-base'
 import type { BindingProof, ECKeyIdentifier, EnhanceableSite } from '@masknet/shared-base'
 import type { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useCallback } from 'react'

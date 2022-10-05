@@ -46,9 +46,9 @@ import {
     useNativeToken,
     useNativeTokenPrice,
     useWeb3Connection,
-} from '@masknet/plugin-infra/web3'
+} from '@masknet/web3-hooks-base'
 import { Icons } from '@masknet/icons'
-import { useGasLimit, useNonFungibleOwnerTokens, useTokenTransferCallback } from '@masknet/plugin-infra/web3-evm'
+import { useGasLimit, useNonFungibleOwnerTokens, useTokenTransferCallback } from '@masknet/web3-hooks-evm'
 
 const useStyles = makeStyles()((theme) => ({
     disabled: {

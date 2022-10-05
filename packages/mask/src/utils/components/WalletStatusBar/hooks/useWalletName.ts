@@ -5,7 +5,7 @@ import {
     useWeb3State,
     useProviderType,
     useProviderDescriptor,
-} from '@masknet/plugin-infra/web3'
+} from '@masknet/web3-hooks-base'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { useMemo } from 'react'
 import { resolveNetworkWalletName, NetworkPluginID } from '@masknet/web3-shared-base'

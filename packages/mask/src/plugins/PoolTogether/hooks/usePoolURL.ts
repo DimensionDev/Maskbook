@@ -1,4 +1,4 @@
-import { useChainId } from '@masknet/plugin-infra/web3'
+import { useChainId } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { APP_URL, COMMUNITY_URL } from '../constants.js'

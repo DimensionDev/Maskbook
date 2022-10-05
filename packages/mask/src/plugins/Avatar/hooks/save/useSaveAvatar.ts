@@ -1,5 +1,5 @@
 import { useCallback } from 'react'
-import { useWeb3State } from '@masknet/plugin-infra/web3'
+import { useWeb3State } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import type { EnhanceableSite } from '@masknet/shared-base'
 import { useSaveAddress } from './useSaveAddress.js'

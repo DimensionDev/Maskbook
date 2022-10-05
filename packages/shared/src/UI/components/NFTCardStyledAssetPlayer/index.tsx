@@ -1,4 +1,4 @@
-import { useNetworkDescriptor, useNonFungibleToken } from '@masknet/plugin-infra/web3'
+import { useNetworkDescriptor, useNonFungibleToken } from '@masknet/web3-hooks-base'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { NetworkPluginID } from '@masknet/web3-shared-base'

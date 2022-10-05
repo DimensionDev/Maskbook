@@ -1,5 +1,5 @@
 import { Button, Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@mui/material'
-import { useChainId } from '@masknet/plugin-infra/web3'
+import { useChainId } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../../utils/index.js'

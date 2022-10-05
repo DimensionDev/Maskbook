@@ -19,7 +19,7 @@ import {
     useFungibleTokenPrice,
     useNativeToken,
     useWeb3,
-} from '@masknet/plugin-infra/web3'
+} from '@masknet/web3-hooks-base'
 import { FungibleTokenInput, FormattedCurrency, InjectedDialog, TokenIcon, useOpenShareTxDialog } from '@masknet/shared'
 import type { AaveLendingPoolAddressProvider } from '@masknet/web3-contracts/types/AaveLendingPoolAddressProvider'
 import AaveLendingPoolAddressProviderABI from '@masknet/web3-contracts/abis/AaveLendingPoolAddressProvider.json'

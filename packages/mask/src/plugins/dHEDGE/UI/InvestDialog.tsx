@@ -1,7 +1,7 @@
 import { InjectedDialog, useOpenShareTxDialog, useSelectFungibleToken, FungibleTokenInput } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles, ActionButton } from '@masknet/theme'
-import { useAccount, useFungibleTokenBalance } from '@masknet/plugin-infra/web3'
+import { useAccount, useFungibleTokenBalance } from '@masknet/web3-hooks-base'
 import { formatBalance, FungibleToken, isZero, NetworkPluginID, rightShift } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { DialogActions, DialogContent } from '@mui/material'

@@ -1,4 +1,4 @@
-import { useChainId, useWeb3Connection } from '@masknet/plugin-infra/web3'
+import { useChainId, useWeb3Connection } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { encodeContractTransaction } from '@masknet/web3-shared-evm'
 import { useState } from 'react'

@@ -1,15 +1,15 @@
+import { useMemo } from 'react'
+import { v4 as uuid } from 'uuid'
+import classNames from 'classnames'
 import type { Keyframes } from '@emotion/serialize'
 import { keyframes, makeStyles, useStylesExtends } from '@masknet/theme'
-import classNames from 'classnames'
 import { useLastRecognizedIdentity } from '../../../components/DataSource/useActivatedUI.js'
 import { useNFT } from '../hooks/index.js'
 import { useNFTContainerAtTwitter } from '../hooks/useNFTContainerAtTwitter.js'
 import { formatPrice, formatText } from '../utils/index.js'
-import { v4 as uuid } from 'uuid'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
-import { useAccount } from '@masknet/plugin-infra/web3'
-import { useMemo } from 'react'
+import { useAccount } from '@masknet/web3-hooks-base'
 
 // from twitter page
 const ViewBoxWidth = 200

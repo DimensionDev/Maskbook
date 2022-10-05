@@ -22,7 +22,7 @@ import { useDashboardI18N } from '../../locales/index.js'
 import { MaskColorVar } from '@masknet/theme'
 import { DashboardRoutes } from '@masknet/shared-base'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
+import { useCurrentWeb3NetworkPluginID } from '@masknet/web3-hooks-base'
 
 const ListItemLinkUnStyled = ({
     to,

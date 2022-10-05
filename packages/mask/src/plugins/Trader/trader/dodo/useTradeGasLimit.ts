@@ -5,7 +5,7 @@ import type { SwapRouteData, TradeComputed } from '../../types/index.js'
 import type { TransactionConfig } from 'web3-core'
 import type { AsyncState } from 'react-use/lib/useAsyncFn'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { useAccount, useChainId, useWeb3Connection } from '@masknet/plugin-infra/web3'
+import { useAccount, useChainId, useWeb3Connection } from '@masknet/web3-hooks-base'
 import BigNumber from 'bignumber.js'
 
 export function useTradeGasLimit(tradeComputed: TradeComputed<SwapRouteData> | null): AsyncState<number> {

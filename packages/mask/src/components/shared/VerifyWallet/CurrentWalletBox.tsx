@@ -4,7 +4,7 @@ import {
     useProviderDescriptor,
     useReverseAddress,
     useWeb3State,
-} from '@masknet/plugin-infra/web3'
+} from '@masknet/web3-hooks-base'
 import { FormattedAddress, WalletIcon } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { Account, NetworkPluginID } from '@masknet/web3-shared-base'

@@ -1,4 +1,4 @@
-import { useWeb3State } from '@masknet/plugin-infra/web3'
+import { useWeb3State } from '@masknet/web3-hooks-base'
 import { CollectionTypes, InjectedDialog, WalletTypes } from '@masknet/shared'
 import { EMPTY_LIST, NextIDPlatform, PersonaInformation } from '@masknet/shared-base'
 import { makeStyles, useStylesExtends } from '@masknet/theme'

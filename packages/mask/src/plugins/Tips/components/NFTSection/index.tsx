@@ -1,5 +1,5 @@
 import { Icons } from '@masknet/icons'
-import { useAccount, useNonFungibleAssets } from '@masknet/plugin-infra/web3'
+import { useAccount, useNonFungibleAssets } from '@masknet/web3-hooks-base'
 import { ElementAnchor, RetryHint } from '@masknet/shared'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { LoadingBase, makeStyles } from '@masknet/theme'

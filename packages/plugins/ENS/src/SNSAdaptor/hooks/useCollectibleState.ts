@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { createContainer } from 'unstated-next'
 import type { CollectibleToken } from '../../types'
-import { useNonFungibleOrders } from '@masknet/plugin-infra/web3'
+import { useNonFungibleOrders } from '@masknet/web3-hooks-base'
 import { NetworkPluginID, SourceType } from '@masknet/web3-shared-base'
 import { ENS_CONTRACT_ADDRESS } from '../../constants.js'
 

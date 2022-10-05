@@ -1,5 +1,5 @@
 import { compact } from 'lodash-unified'
-import { useChainId } from '@masknet/plugin-infra/web3'
+import { useChainId } from '@masknet/web3-hooks-base'
 import { NetworkPluginID, isSameAddress } from '@masknet/web3-shared-base'
 import { ChainId, networkResolver, NetworkType } from '@masknet/web3-shared-evm'
 import { RedPacketJSONPayload, RedPacketStatus } from '../../types.js'

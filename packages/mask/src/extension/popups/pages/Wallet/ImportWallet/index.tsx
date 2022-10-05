@@ -18,7 +18,7 @@ import { getDerivableAccounts } from '../../../../../plugins/Wallet/services/ind
 import { PageHeader } from '../components/PageHeader/index.js'
 import { PasswordField } from '../../../components/PasswordField/index.js'
 import { currentMaskWalletAccountSettings } from '../../../../../../shared/legacy-settings/wallet-settings.js'
-import { useWeb3Connection } from '@masknet/plugin-infra/web3'
+import { useWeb3Connection } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useTitle } from '../../../hook/useTitle.js'
 

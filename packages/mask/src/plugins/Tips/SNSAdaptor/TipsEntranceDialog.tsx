@@ -1,4 +1,4 @@
-import { useWeb3State } from '@masknet/plugin-infra/web3'
+import { useWeb3State } from '@masknet/web3-hooks-base'
 import { InjectedDialog, useSnackbarCallback } from '@masknet/shared'
 import { PluginID } from '@masknet/plugin-infra'
 import {

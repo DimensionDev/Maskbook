@@ -1,8 +1,8 @@
-import { useAccount, useWeb3Connection } from '@masknet/plugin-infra/web3'
+import { useAsyncFn } from 'react-use'
+import BigNumber from 'bignumber.js'
+import { useAccount, useWeb3Connection } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainId, encodeContractTransaction, SchemaType } from '@masknet/web3-shared-evm'
-import BigNumber from 'bignumber.js'
-import { useAsyncFn } from 'react-use'
 import { useArtBlocksContract } from './useArtBlocksContract.js'
 
 export function usePurchaseCallback(chainId: ChainId, projectId: string, amount: string, schema = SchemaType.Native) {

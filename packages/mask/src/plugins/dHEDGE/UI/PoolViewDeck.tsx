@@ -1,5 +1,5 @@
 import { explorerResolver } from '@masknet/web3-shared-evm'
-import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
+import { useAccount, useChainId } from '@masknet/web3-hooks-base'
 import { Avatar, Button, Grid, Link, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import BigNumber from 'bignumber.js'

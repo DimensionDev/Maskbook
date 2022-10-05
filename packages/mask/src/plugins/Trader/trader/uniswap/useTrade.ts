@@ -5,7 +5,7 @@ import { useV2BestTradeExactIn, useV2BestTradeExactOut } from './useV2BestTrade.
 import { useV3BestTradeExactIn, useV3BestTradeExactOut } from './useV3BestTrade.js'
 import type { TradeProvider } from '@masknet/public-api'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import { useChainId } from '@masknet/plugin-infra/web3'
+import { useChainId } from '@masknet/web3-hooks-base'
 
 function useTrade(
     strategy: TradeStrategy = TradeStrategy.ExactIn,

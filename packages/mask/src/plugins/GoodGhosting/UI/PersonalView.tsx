@@ -9,7 +9,7 @@ import type { GoodGhostingInfo, Player } from '../types.js'
 import { getPlayerStatus, isGameActionError, PlayerStatus } from '../utils.js'
 import BigNumber from 'bignumber.js'
 import { FormattedBalance } from '@masknet/shared'
-import { useChainId } from '@masknet/plugin-infra/web3'
+import { useChainId } from '@masknet/web3-hooks-base'
 import { formatBalance, NetworkPluginID } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({

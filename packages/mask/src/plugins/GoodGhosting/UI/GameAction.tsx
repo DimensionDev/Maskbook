@@ -9,7 +9,7 @@ import { GameActionDialog } from './GameActionDialog.js'
 import { useGameToken } from '../hooks/usePoolData.js'
 import { isGameActionError } from '../utils.js'
 import { formatBalance, NetworkPluginID } from '@masknet/web3-shared-base'
-import { useChainId, useFungibleToken } from '@masknet/plugin-infra/web3'
+import { useChainId, useFungibleToken } from '@masknet/web3-hooks-base'
 
 const useStyles = makeStyles()((theme) => ({
     button: {

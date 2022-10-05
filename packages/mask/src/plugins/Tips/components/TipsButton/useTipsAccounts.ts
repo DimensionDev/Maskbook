@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { useCurrentWeb3NetworkPluginID, useSocialAddressListAll } from '@masknet/plugin-infra/web3'
+import { useCurrentWeb3NetworkPluginID, useSocialAddressListAll } from '@masknet/web3-hooks-base'
 import { isSameAddress, NetworkPluginID, SocialAddressType } from '@masknet/web3-shared-base'
 import type { IdentityResolved } from '@masknet/plugin-infra'
 import { EMPTY_LIST } from '@masknet/shared-base'

@@ -1,4 +1,4 @@
-import { useChainId, useFungibleToken, useNonFungibleTokenContract } from '@masknet/plugin-infra/web3'
+import { useChainId, useFungibleToken, useNonFungibleTokenContract } from '@masknet/web3-hooks-base'
 import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
 import type { GasOptionConfig } from '@masknet/web3-shared-evm'
 import { FC, memo, useCallback, useContext, useEffect, useMemo, useState } from 'react'

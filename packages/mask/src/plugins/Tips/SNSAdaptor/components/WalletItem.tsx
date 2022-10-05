@@ -1,5 +1,5 @@
 import { Icons } from '@masknet/icons'
-import { useReverseAddress, useWallets, useWeb3State } from '@masknet/plugin-infra/web3'
+import { useReverseAddress, useWallets, useWeb3State } from '@masknet/web3-hooks-base'
 import { FormattedAddress, useSnackbarCallback } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'

@@ -3,7 +3,7 @@ import { makeStyles } from '@masknet/theme'
 import { Box, Divider, Skeleton } from '@mui/material'
 import { GasOptionType, NetworkPluginID } from '@masknet/web3-shared-base'
 import type { ChainId, GasOption, Transaction } from '@masknet/web3-shared-evm'
-import { useWeb3State } from '@masknet/plugin-infra/web3'
+import { useWeb3State } from '@masknet/web3-hooks-base'
 import { GasOption as GasOptionItem } from './GasOption.js'
 import { SettingsContext } from './Context.js'
 

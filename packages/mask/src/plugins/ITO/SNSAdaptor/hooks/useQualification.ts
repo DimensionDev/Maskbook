@@ -1,5 +1,5 @@
 import { useAsyncRetry } from 'react-use'
-import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
+import { useAccount, useChainId } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useQualificationContract } from './useQualificationContract.js'
 

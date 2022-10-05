@@ -9,7 +9,7 @@ import { ExpandMore } from '@mui/icons-material'
 import { toHex } from 'web3-utils'
 import BigNumber from 'bignumber.js'
 import { isDashboardPage } from '@masknet/shared-base'
-import { useChainId, useFungibleToken, useGasOptions, useNativeTokenPrice } from '@masknet/plugin-infra/web3'
+import { useChainId, useFungibleToken, useGasOptions, useNativeTokenPrice } from '@masknet/web3-hooks-base'
 import { GasOptionType, NetworkPluginID } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles<{

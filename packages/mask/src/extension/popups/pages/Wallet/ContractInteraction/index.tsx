@@ -25,7 +25,7 @@ import {
     useReverseAddress,
     useSchemaType,
     useWeb3State,
-} from '@masknet/plugin-infra/web3'
+} from '@masknet/web3-hooks-base'
 import {
     formatBalance,
     formatCurrency,

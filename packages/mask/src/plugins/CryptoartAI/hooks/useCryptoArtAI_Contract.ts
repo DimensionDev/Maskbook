@@ -6,7 +6,7 @@ import type { CryptoArtAIKnownOriginDigitalAssetV2 } from '@masknet/web3-contrac
 import type { CryptoArtAIArtistAcceptingBidsV2 } from '@masknet/web3-contracts/types/CryptoArtAIArtistAcceptingBidsV2'
 import type { CryptoArtAICANFTMarket } from '@masknet/web3-contracts/types/CryptoArtAICANFTMarket'
 import { ChainId, useCryptoArtAIConstants } from '@masknet/web3-shared-evm'
-import { useContract } from '@masknet/plugin-infra/web3-evm'
+import { useContract } from '@masknet/web3-hooks-evm'
 
 export function useCryptoArtAI_Contract(chainId?: ChainId) {
     const { KNOWN_ORIGIN_DIGITAL_ASSET_V2, ARTIST_ACCEPTING_BIDS_V2, CANFT_MARKET } = useCryptoArtAIConstants()

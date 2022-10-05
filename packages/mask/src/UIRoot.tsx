@@ -1,6 +1,7 @@
 import { Suspense } from 'react'
 import { StyledEngineProvider, Theme } from '@mui/material'
-import { PluginsWeb3ContextProvider, useAllPluginsWeb3State } from '@masknet/plugin-infra/web3'
+import { useAllPluginsWeb3State } from '@masknet/plugin-infra'
+import { PluginsWeb3ContextProvider } from '@masknet/web3-hooks-base'
 import { I18NextProviderHMR, SharedContextProvider } from '@masknet/shared'
 import { ErrorBoundary, ErrorBoundaryBuildInfoContext, useValueRef } from '@masknet/shared-base-ui'
 import { getSiteType, i18NextInstance } from '@masknet/shared-base'

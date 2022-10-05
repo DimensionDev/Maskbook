@@ -306,6 +306,12 @@ importers:
       '@masknet/web3-helpers':
         specifier: workspace:*
         version: link:../web3-helpers
+      '@masknet/web3-hooks-base':
+        specifier: workspace:*
+        version: link:../web3-hooks/base
+      '@masknet/web3-hooks-evm':
+        specifier: workspace:*
+        version: link:../web3-hooks/evm
       '@masknet/web3-providers':
         specifier: workspace:*
         version: link:../web3-providers
@@ -651,6 +657,12 @@ importers:
       '@masknet/web3-helpers':
         specifier: workspace:*
         version: link:../web3-helpers
+      '@masknet/web3-hooks-base':
+        specifier: workspace:*
+        version: link:../web3-hooks/base
+      '@masknet/web3-hooks-evm':
+        specifier: workspace:*
+        version: link:../web3-hooks/evm
       '@masknet/web3-providers':
         specifier: workspace:*
         version: link:../web3-providers
@@ -1133,6 +1145,9 @@ importers:
       '@masknet/typed-message':
         specifier: workspace:*
         version: link:../../typed-message
+      '@masknet/web3-hooks-base':
+        specifier: workspace:*
+        version: link:../../web3-hooks/base
       '@masknet/web3-shared-base':
         specifier: workspace:*
         version: link:../../web3-shared/base
@@ -1169,6 +1184,12 @@ importers:
       '@masknet/theme':
         specifier: workspace:*
         version: link:../../theme
+      '@masknet/web3-hooks-base':
+        specifier: workspace:*
+        version: link:../../web3-hooks/base
+      '@masknet/web3-hooks-evm':
+        specifier: workspace:*
+        version: link:../../web3-hooks/evm
       '@masknet/web3-providers':
         specifier: workspace:*
         version: link:../../web3-providers
@@ -1217,6 +1238,12 @@ importers:
       '@masknet/theme':
         specifier: workspace:*
         version: link:../../theme
+      '@masknet/web3-hooks-base':
+        specifier: workspace:*
+        version: link:../../web3-hooks/base
+      '@masknet/web3-hooks-evm':
+        specifier: workspace:*
+        version: link:../../web3-hooks/evm
       '@masknet/web3-providers':
         specifier: workspace:*
         version: link:../../web3-providers
@@ -1474,6 +1501,12 @@ importers:
       '@masknet/theme':
         specifier: workspace:*
         version: link:../../theme
+      '@masknet/web3-hooks-base':
+        specifier: workspace:*
+        version: link:../../web3-hooks/base
+      '@masknet/web3-hooks-evm':
+        specifier: workspace:*
+        version: link:../../web3-hooks/evm
       '@masknet/web3-providers':
         specifier: workspace:*
         version: link:../../web3-providers
@@ -1513,6 +1546,12 @@ importers:
       '@masknet/theme':
         specifier: workspace:*
         version: link:../../theme
+      '@masknet/web3-hooks-base':
+        specifier: workspace:*
+        version: link:../../web3-hooks/base
+      '@masknet/web3-hooks-evm':
+        specifier: workspace:*
+        version: link:../../web3-hooks/evm
       '@masknet/web3-providers':
         specifier: workspace:*
         version: link:../../web3-providers
@@ -1730,6 +1769,12 @@ importers:
       '@masknet/theme':
         specifier: workspace:*
         version: link:../../theme
+      '@masknet/web3-hooks-base':
+        specifier: workspace:*
+        version: link:../../web3-hooks/base
+      '@masknet/web3-hooks-evm':
+        specifier: workspace:*
+        version: link:../../web3-hooks/evm
       '@masknet/web3-providers':
         specifier: workspace:*
         version: link:../../web3-providers
@@ -2290,39 +2335,15 @@ importers:
 
   packages/web3-hooks/base:
     dependencies:
-      '@dimensiondev/mask-wallet-core':
-        specifier: 0.1.0-20211013082857-eb62e5f
-        version: 0.1.0-20211013082857-eb62e5f
-      '@masknet/encryption':
-        specifier: workspace:*
-        version: link:../../encryption
       '@masknet/plugin-infra':
         specifier: workspace:*
         version: link:../../plugin-infra
       '@masknet/shared-base':
         specifier: workspace:*
         version: link:../../shared-base
-      '@masknet/shared-base-ui':
-        specifier: workspace:*
-        version: link:../../shared-base-ui
-      '@masknet/theme':
-        specifier: workspace:*
-        version: link:../../theme
-      '@masknet/typed-message':
-        specifier: workspace:*
-        version: link:../../typed-message
-      '@masknet/web3-constants':
-        specifier: workspace:*
-        version: link:../../web3-constants
-      '@masknet/web3-contracts':
-        specifier: workspace:*
-        version: link:../../web3-contracts
       '@masknet/web3-helpers':
         specifier: workspace:*
         version: link:../../web3-helpers
-      '@masknet/web3-providers':
-        specifier: workspace:*
-        version: link:../../web3-providers
       '@masknet/web3-shared-base':
         specifier: workspace:*
         version: link:../../web3-shared/base
@@ -2335,18 +2356,12 @@ importers:
       '@masknet/web3-shared-solana':
         specifier: workspace:*
         version: link:../../web3-shared/solana
-      '@servie/events':
-        specifier: ^3.0.0
-        version: 3.0.0
       '@types/ethereum-blockies':
         specifier: ^0.1.0
         version: 0.1.0
       '@types/use-subscription':
         specifier: ^1.0.0
         version: 1.0.0
-      async-call-rpc:
-        specifier: ^6.1.5
-        version: 6.1.5
       bignumber.js:
         specifier: ^9.0.2
         version: 9.1.0
@@ -2359,54 +2374,18 @@ importers:
       react-use:
         specifier: ^17.4.0
         version: 17.4.0
-      unstated-next:
-        specifier: ^1.1.0
-        version: 1.1.0
-      urlcat:
-        specifier: ^2.0.4
-        version: 2.0.4_fggwetex7eobhq3hztj4obsulu
       use-subscription:
         specifier: 1.6.0
         version: 1.6.0
-      wallet.ts:
-        specifier: ^1.0.1
-        version: 1.0.1
       web3:
-        specifier: 1.7.5
-        version: 1.7.5
-      web3-core:
-        specifier: 1.7.5
-        version: 1.7.5
-      web3-core-helpers:
-        specifier: 1.7.5
-        version: 1.7.5
-      web3-utils:
         specifier: 1.7.5
         version: 1.7.5
 
   packages/web3-hooks/evm:
     dependencies:
-      '@dimensiondev/mask-wallet-core':
-        specifier: 0.1.0-20211013082857-eb62e5f
-        version: 0.1.0-20211013082857-eb62e5f
-      '@masknet/encryption':
-        specifier: workspace:*
-        version: link:../../encryption
       '@masknet/shared-base':
         specifier: workspace:*
         version: link:../../shared-base
-      '@masknet/shared-base-ui':
-        specifier: workspace:*
-        version: link:../../shared-base-ui
-      '@masknet/theme':
-        specifier: workspace:*
-        version: link:../../theme
-      '@masknet/typed-message':
-        specifier: workspace:*
-        version: link:../../typed-message
-      '@masknet/web3-constants':
-        specifier: workspace:*
-        version: link:../../web3-constants
       '@masknet/web3-contracts':
         specifier: workspace:*
         version: link:../../web3-contracts
@@ -2416,9 +2395,6 @@ importers:
       '@masknet/web3-hooks-base':
         specifier: workspace:*
         version: link:../base
-      '@masknet/web3-providers':
-        specifier: workspace:*
-        version: link:../../web3-providers
       '@masknet/web3-shared-base':
         specifier: workspace:*
         version: link:../../web3-shared/base
@@ -2431,39 +2407,15 @@ importers:
       '@masknet/web3-shared-solana':
         specifier: workspace:*
         version: link:../../web3-shared/solana
-      '@servie/events':
-        specifier: ^3.0.0
-        version: 3.0.0
-      '@types/ethereum-blockies':
-        specifier: ^0.1.0
-        version: 0.1.0
-      '@types/use-subscription':
-        specifier: ^1.0.0
-        version: 1.0.0
-      async-call-rpc:
-        specifier: ^6.1.5
-        version: 6.1.5
       bignumber.js:
         specifier: ^9.0.2
         version: 9.1.0
-      ethereum-blockies:
-        specifier: ^0.1.1
-        version: 0.1.1
-      lru-cache:
-        specifier: ^7.10.1
-        version: 7.10.1
       react-use:
         specifier: ^17.4.0
         version: 17.4.0
       unstated-next:
         specifier: ^1.1.0
         version: 1.1.0
-      urlcat:
-        specifier: ^2.0.4
-        version: 2.0.4_fggwetex7eobhq3hztj4obsulu
-      use-subscription:
-        specifier: 1.6.0
-        version: 1.6.0
       wallet.ts:
         specifier: ^1.0.1
         version: 1.0.1
@@ -2471,9 +2423,6 @@ importers:
         specifier: 1.7.5
         version: 1.7.5
       web3-core:
-        specifier: 1.7.5
-        version: 1.7.5
-      web3-core-helpers:
         specifier: 1.7.5
         version: 1.7.5
       web3-utils:

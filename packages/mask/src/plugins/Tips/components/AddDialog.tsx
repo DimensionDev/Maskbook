@@ -4,8 +4,8 @@ import {
     useNetworkDescriptors,
     useWeb3Connection,
     useWeb3State,
-} from '@masknet/plugin-infra/web3'
-import { useERC721TokenContract } from '@masknet/plugin-infra/web3-evm'
+} from '@masknet/web3-hooks-base'
+import { useERC721TokenContract } from '@masknet/web3-hooks-evm'
 import { ImageIcon, InjectedDialog, InjectedDialogProps } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { isSameAddress, NetworkPluginID, NonFungibleToken } from '@masknet/web3-shared-base'

@@ -13,7 +13,7 @@ import CheckIcon from '@mui/icons-material/Check'
 import { useUpdate } from 'react-use'
 import { findLastIndex, uniq } from 'lodash-unified'
 import { NFT_RED_PACKET_MAX_SHARES } from '../constants.js'
-import { useAccount, useChainId, useWeb3Connection } from '@masknet/plugin-infra/web3'
+import { useAccount, useChainId, useWeb3Connection } from '@masknet/web3-hooks-base'
 
 interface StyleProps {
     isSelectSharesExceed: boolean

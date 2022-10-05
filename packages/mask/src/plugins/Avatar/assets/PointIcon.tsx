@@ -1,4 +1,5 @@
 import { createIcon } from '@masknet/icons'
+
 export const PointIcon = createIcon(
     'PointIcon',
     <g>

@@ -23,7 +23,7 @@ import { isEmpty } from 'lodash-unified'
 import { useNavigate } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'
 import { toHex } from 'web3-utils'
-import { useChainId, useGasOptions, useNativeToken, useNativeTokenPrice, useWeb3 } from '@masknet/plugin-infra/web3'
+import { useChainId, useGasOptions, useNativeToken, useNativeTokenPrice, useWeb3 } from '@masknet/web3-hooks-base'
 
 const useStyles = makeStyles()((theme) => ({
     options: {

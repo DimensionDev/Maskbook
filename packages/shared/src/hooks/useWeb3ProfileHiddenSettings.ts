@@ -1,4 +1,4 @@
-import { useWeb3State } from '@masknet/plugin-infra/web3'
+import { useWeb3State } from '@masknet/web3-hooks-base'
 import { PluginID } from '@masknet/plugin-infra'
 import { NextIDPlatform, EMPTY_LIST } from '@masknet/shared-base'
 import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'

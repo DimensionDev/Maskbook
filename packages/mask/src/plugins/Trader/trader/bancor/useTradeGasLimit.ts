@@ -4,7 +4,7 @@ import type { AsyncState } from 'react-use/lib/useAsyncFn'
 import { pick } from 'lodash-unified'
 import type { SwapBancorRequest, TradeComputed } from '../../types/index.js'
 import { PluginTraderRPC } from '../../messages.js'
-import { useAccount, useChainId, useWeb3Connection } from '@masknet/plugin-infra/web3'
+import { useAccount, useChainId, useWeb3Connection } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import BigNumber from 'bignumber.js'
 

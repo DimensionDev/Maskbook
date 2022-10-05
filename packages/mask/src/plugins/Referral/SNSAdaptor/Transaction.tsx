@@ -1,6 +1,6 @@
 import { makeStyles, ActionButton, LoadingBase } from '@masknet/theme'
 import { explorerResolver } from '@masknet/web3-shared-evm'
-import { useChainId } from '@masknet/plugin-infra/web3'
+import { useChainId } from '@masknet/web3-hooks-base'
 import { Grid, Typography, Link } from '@mui/material'
 import DoneIcon from '@mui/icons-material/Done'
 import { NetworkPluginID } from '@masknet/web3-shared-base'

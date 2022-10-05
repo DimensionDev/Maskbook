@@ -2,7 +2,7 @@ import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useUpdateEffect } from 'react-use'
 import BigNumber from 'bignumber.js'
 import { Icons } from '@masknet/icons'
-import { useGasLimit, useTokenTransferCallback } from '@masknet/plugin-infra/web3-evm'
+import { useGasLimit, useTokenTransferCallback } from '@masknet/web3-hooks-evm'
 import {
     useChainId,
     useFungibleTokenBalance,
@@ -12,7 +12,7 @@ import {
     useWeb3State,
     useNativeToken,
     useNativeTokenPrice,
-} from '@masknet/plugin-infra/web3'
+} from '@masknet/web3-hooks-base'
 import { FormattedAddress, TokenAmountPanel, useSelectFungibleToken } from '@masknet/shared'
 import { MaskColorVar, MaskTextField } from '@masknet/theme'
 import {

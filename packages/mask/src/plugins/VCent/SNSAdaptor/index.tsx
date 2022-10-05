@@ -4,7 +4,7 @@ import { usePostInfoDetails } from '@masknet/plugin-infra/content-script'
 import VCentDialog from './TweetDialog.js'
 import { base } from '../base.js'
 import { Icons } from '@masknet/icons'
-import { PluginWeb3ContextProvider } from '@masknet/plugin-infra/web3'
+import { PluginWeb3ContextProvider } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 

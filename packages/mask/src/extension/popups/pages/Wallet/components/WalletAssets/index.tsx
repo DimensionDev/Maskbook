@@ -11,7 +11,7 @@ import { useContainer } from 'unstated-next'
 import { WalletContext } from '../../hooks/useWalletContext.js'
 import { LoadingPlaceholder } from '../../../../components/LoadingPlaceholder/index.js'
 import { Navigator } from '../../../../components/Navigator/index.js'
-import { useWallet } from '@masknet/plugin-infra/web3'
+import { useWallet } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()({

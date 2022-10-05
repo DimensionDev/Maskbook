@@ -1,5 +1,5 @@
 import { Icons } from '@masknet/icons'
-import { useChainId } from '@masknet/plugin-infra/web3'
+import { useChainId } from '@masknet/web3-hooks-base'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
 import { TransactionType, useRedPacketConstants } from '@masknet/web3-shared-evm'

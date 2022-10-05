@@ -1,4 +1,4 @@
-import { PluginIDContextProvider, PluginWeb3ContextProvider } from '@masknet/plugin-infra/web3'
+import { PluginIDContextProvider, PluginWeb3ContextProvider } from '@masknet/web3-hooks-base'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { isEqual } from 'lodash-unified'

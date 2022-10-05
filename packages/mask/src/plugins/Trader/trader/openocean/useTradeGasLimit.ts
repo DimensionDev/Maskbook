@@ -5,7 +5,7 @@ import { pick } from 'lodash-unified'
 import BigNumber from 'bignumber.js'
 import type { TransactionConfig } from 'web3-core'
 import type { SwapOOData, TradeComputed } from '../../types/index.js'
-import { useAccount, useChainId, useWeb3Connection } from '@masknet/plugin-infra/web3'
+import { useAccount, useChainId, useWeb3Connection } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 export function useTradeGasLimit(tradeComputed: TradeComputed<SwapOOData> | null): AsyncState<number> {

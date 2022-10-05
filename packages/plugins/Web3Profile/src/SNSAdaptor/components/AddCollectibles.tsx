@@ -10,7 +10,7 @@ import {
     useCurrentWeb3NetworkPluginID,
     useWeb3Connection,
     useWeb3Hub,
-} from '@masknet/plugin-infra/web3'
+} from '@masknet/web3-hooks-base'
 import type { NetworkPluginID, NonFungibleToken } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({

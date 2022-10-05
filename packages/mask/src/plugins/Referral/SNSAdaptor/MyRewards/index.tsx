@@ -1,6 +1,6 @@
 import { useAsync } from 'react-use'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
+import { useAccount, useChainId } from '@masknet/web3-hooks-base'
 import { Grid, Typography } from '@mui/material'
 
 import { useI18N } from '../../locales/index.js'

@@ -1,4 +1,4 @@
-import { PluginWeb3ActualContextProvider } from '@masknet/plugin-infra/web3'
+import { PluginWeb3ActualContextProvider } from '@masknet/web3-hooks-base'
 import { InjectedDialog } from '@masknet/shared'
 import { ActionButton, makeStyles, MaskTabList } from '@masknet/theme'
 import { NetworkPluginID, NonFungibleAsset } from '@masknet/web3-shared-base'

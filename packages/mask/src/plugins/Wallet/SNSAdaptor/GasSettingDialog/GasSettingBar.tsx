@@ -8,7 +8,7 @@ import { Box, IconButton, Typography } from '@mui/material'
 import { WalletMessages } from '../../messages.js'
 import { TokenPrice } from '../../../../components/shared/TokenPrice.js'
 import { GasOptionType, multipliedBy, NetworkPluginID } from '@masknet/web3-shared-base'
-import { useChainId, useFungibleToken, useGasPrice } from '@masknet/plugin-infra/web3'
+import { useChainId, useFungibleToken, useGasPrice } from '@masknet/web3-hooks-base'
 
 export interface GasSettingBarProps {
     gasLimit: number

@@ -37,7 +37,7 @@ import {
     YUMISWAP_CUSTOM_BASES,
 } from '../constants/index.js'
 import { unreachable } from '@dimensiondev/kit'
-import { useChainId } from '@masknet/plugin-infra/web3'
+import { useChainId } from '@masknet/web3-hooks-base'
 
 export function useGetTradeContext(tradeProvider?: TradeProvider) {
     const chainId = useChainId()

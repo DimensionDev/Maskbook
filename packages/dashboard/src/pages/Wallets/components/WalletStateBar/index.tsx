@@ -12,7 +12,7 @@ import {
     useReverseAddress,
     useRecentTransactions,
     useAccount,
-} from '@masknet/plugin-infra/web3'
+} from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { PluginMessages } from '../../../../API.js'
 import { useDashboardI18N } from '../../../../locales/index.js'

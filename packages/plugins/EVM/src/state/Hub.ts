@@ -1,7 +1,7 @@
 import type { CurrencyType, SourceType } from '@masknet/web3-shared-base'
-import { HubState } from '@masknet/plugin-infra/web3'
 import type { ChainId, GasOption, SchemaType } from '@masknet/web3-shared-evm'
 import type { Plugin } from '@masknet/plugin-infra'
+import { HubState } from '@masknet/plugin-infra/web3'
 import type { Subscription } from 'use-subscription'
 import { createHub } from './Hub/hub.js'
 

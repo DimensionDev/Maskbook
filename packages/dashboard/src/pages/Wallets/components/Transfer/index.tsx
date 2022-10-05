@@ -10,7 +10,7 @@ import { TransferERC721 } from './TransferERC721.js'
 import { TransferTab } from './types.js'
 import { FungibleToken, NetworkPluginID } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import { useNativeToken } from '@masknet/plugin-infra/web3'
+import { useNativeToken } from '@masknet/web3-hooks-base'
 
 const assetTabs = [TransferTab.Token, TransferTab.Collectibles] as const
 

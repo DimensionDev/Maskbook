@@ -27,7 +27,7 @@ import { useAvailableTraderProviders } from '../trending/useAvailableTraderProvi
 import { useNativeTradeGasLimit } from './useNativeTradeGasLimit.js'
 import type { TradeComputed } from '../types/index.js'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import { useChainId } from '@masknet/plugin-infra/web3'
+import { useChainId } from '@masknet/web3-hooks-base'
 
 export function useAllTradeComputed(
     inputAmount: string,

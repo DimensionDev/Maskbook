@@ -14,7 +14,7 @@ import { useI18N } from '../../../../../utils/index.js'
 import { useUnconfirmedRequest } from '../../Wallet/hooks/useUnConfirmedRequest.js'
 import { PopupContext } from '../../../hook/usePopupContext.js'
 import { Account, isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
-import { useReverseAddress, useWallets, useWeb3Connection, useWeb3State } from '@masknet/plugin-infra/web3'
+import { useReverseAddress, useWallets, useWeb3Connection, useWeb3State } from '@masknet/web3-hooks-base'
 import { MaskMessages } from '../../../../../../shared/messages.js'
 
 const useStyles = makeStyles()((theme) => ({

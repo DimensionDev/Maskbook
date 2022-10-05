@@ -1,4 +1,4 @@
-import { useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
+import { useCurrentWeb3NetworkPluginID } from '@masknet/web3-hooks-base'
 import { makeStyles } from '@masknet/theme'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { Box, BoxProps, Button, FormControl } from '@mui/material'

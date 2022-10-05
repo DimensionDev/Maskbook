@@ -1,4 +1,4 @@
-import { useAccount } from '@masknet/plugin-infra/web3'
+import { useAccount } from '@masknet/web3-hooks-base'
 import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
 import { FungibleToken, multipliedBy, NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'

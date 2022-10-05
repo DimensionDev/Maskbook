@@ -1,4 +1,4 @@
-import { useAccount, useWeb3State } from '@masknet/plugin-infra/web3'
+import { useAccount, useWeb3State } from '@masknet/web3-hooks-base'
 import ERC20ABI from '@masknet/web3-contracts/abis/ERC20.json'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import type { ERC20 } from '@masknet/web3-contracts/types/ERC20'

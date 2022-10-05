@@ -1,7 +1,7 @@
 import { useEffect, useMemo } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { EMPTY_LIST } from '@masknet/shared-base'
-import { useSocialAddressListAll } from '@masknet/plugin-infra/web3'
+import { useSocialAddressListAll } from '@masknet/web3-hooks-base'
 import {
     useActivatedPluginsSNSAdaptor,
     createInjectHooksRenderer,

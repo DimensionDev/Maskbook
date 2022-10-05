@@ -6,7 +6,7 @@ import {
     usePluginI18NField,
     PluginID,
 } from '@masknet/plugin-infra/content-script'
-import { useChainId, useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
+import { useChainId, useCurrentWeb3NetworkPluginID } from '@masknet/web3-hooks-base'
 import { ErrorBoundary } from '@masknet/shared-base-ui'
 import { Result } from 'ts-results'
 import { ClickableChip } from '../shared/SelectRecipients/ClickableChip.js'

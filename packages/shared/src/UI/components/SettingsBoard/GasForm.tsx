@@ -8,7 +8,7 @@ import { Icons } from '@masknet/icons'
 import { useSharedI18N } from '@masknet/shared'
 import { ChainId, formatWeiToGwei, GasOption, Transaction } from '@masknet/web3-shared-evm'
 import { formatBalance, GasOptionType, isPositive, isZero, NetworkPluginID, scale10 } from '@masknet/web3-shared-base'
-import { useWeb3State } from '@masknet/plugin-infra/web3'
+import { useWeb3State } from '@masknet/web3-hooks-base'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useGasSchema } from './hooks/index.js'
 

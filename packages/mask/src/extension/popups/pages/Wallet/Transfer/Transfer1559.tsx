@@ -51,11 +51,11 @@ import {
     useWeb3State,
     useWeb3Connection,
     useGasOptions,
-} from '@masknet/plugin-infra/web3'
+} from '@masknet/web3-hooks-base'
 import { AccountItem } from './AccountItem.js'
 import { TransferAddressError } from '../type.js'
 import { useI18N } from '../../../../../utils/index.js'
-import { useGasLimit, useTokenTransferCallback } from '@masknet/plugin-infra/web3-evm'
+import { useGasLimit, useTokenTransferCallback } from '@masknet/web3-hooks-evm'
 
 const useStyles = makeStyles()({
     container: {

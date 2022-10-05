@@ -14,7 +14,7 @@ import {
     useReverseAddress,
     useLookupAddress,
     useWeb3State,
-} from '@masknet/plugin-infra/web3'
+} from '@masknet/web3-hooks-base'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useSelectAdvancedSettings, useSelectFungibleToken } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'

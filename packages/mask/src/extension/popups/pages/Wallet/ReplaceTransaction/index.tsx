@@ -24,7 +24,7 @@ import {
     useNativeTokenPrice,
     useChainIdSupport,
     useWeb3Connection,
-} from '@masknet/plugin-infra/web3'
+} from '@masknet/web3-hooks-base'
 import { useTitle } from '../../../hook/useTitle.js'
 
 const useStyles = makeStyles()({

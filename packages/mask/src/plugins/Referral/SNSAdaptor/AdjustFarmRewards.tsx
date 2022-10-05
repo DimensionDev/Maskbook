@@ -4,7 +4,7 @@ import { Chip, Grid, InputAdornment, TextField, Typography } from '@mui/material
 import { makeStyles, useCustomSnackbar, ActionButton } from '@masknet/theme'
 import { Box } from '@mui/system'
 import { formatBalance, NetworkPluginID } from '@masknet/web3-shared-base'
-import { useAccount, useChainId, useWeb3, useFungibleTokenBalance, useWeb3Connection } from '@masknet/plugin-infra/web3'
+import { useAccount, useChainId, useWeb3, useFungibleTokenBalance, useWeb3Connection } from '@masknet/web3-hooks-base'
 
 import { AdjustFarmRewardsInterface, TransactionStatus, PagesType, FungibleTokenDetailed } from '../types.js'
 import { useI18N } from '../locales/index.js'

@@ -14,7 +14,7 @@ import { makeStyles } from '@masknet/theme'
 import { isMobileFacebook } from '../../utils/isMobile.js'
 import { InMemoryStorages } from '../../../../../shared/index.js'
 import { RSS3_KEY_SNS } from '../../../../plugins/Avatar/constants.js'
-import { useAccount } from '@masknet/plugin-infra/web3'
+import { useAccount } from '@masknet/web3-hooks-base'
 import { useWallet } from '../../../../plugins/Avatar/hooks/useWallet.js'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 

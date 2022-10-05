@@ -3,13 +3,8 @@ import { makeStyles } from '@masknet/theme'
 import { DialogContent } from '@mui/material'
 import { openWindow, useRemoteControlledDialog, useValueRef } from '@masknet/shared-base-ui'
 import { InjectedDialog } from '@masknet/shared'
-import {
-    getRegisteredWeb3Networks,
-    getRegisteredWeb3Providers,
-    useNetworkDescriptor,
-    useWeb3State,
-    useWeb3UI,
-} from '@masknet/plugin-infra/web3'
+import { getRegisteredWeb3Networks, getRegisteredWeb3Providers } from '@masknet/plugin-infra'
+import { useNetworkDescriptor, useWeb3State, useWeb3UI } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useI18N } from '../../../../utils/i18n-next-ui.js'
 import { WalletMessages } from '../../messages.js'

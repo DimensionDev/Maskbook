@@ -1,7 +1,7 @@
 import { useScrollBottomEvent } from '@masknet/shared-base-ui'
 import { makeStyles, LoadingBase } from '@masknet/theme'
 import classNames from 'classnames'
-import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
+import { useAccount, useChainId } from '@masknet/web3-hooks-base'
 import { NetworkPluginID, NonFungibleTokenContract } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { List, Popper, Typography, Box } from '@mui/material'
