@@ -83,6 +83,7 @@ function createNonFungibleAssetFromToken(
             type: x.displayType,
             value: x.value,
         })),
+        source: SourceType.LooksRare,
     }
 }
 
@@ -98,6 +99,7 @@ function createNonFungibleContractFromCollection(
         address: collection.address,
         schema: collection.type === 'ERC1155' ? SchemaType.ERC1155 : SchemaType.ERC721,
         owner: collection.owner,
+        source: SourceType.LooksRare,
     }
 }
 

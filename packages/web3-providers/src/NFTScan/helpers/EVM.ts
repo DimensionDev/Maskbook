@@ -159,6 +159,7 @@ export function createNonFungibleAsset(
             verified: false,
             createdAt: asset.mint_timestamp,
         },
+        source: SourceType.NFTScan,
     }
 }
 
@@ -177,6 +178,7 @@ export function createNonFungibleCollectionFromGroup(
         description: group.description || payload?.description,
         iconURL: group.logo_url,
         tokensTotal: group.assets.length,
+        source: SourceType.NFTScan,
     }
 }
 
@@ -194,6 +196,7 @@ export function createNonFungibleCollectionFromCollection(
         description: collection.description,
         iconURL: collection.logo_url,
         verified: collection.verified,
+        source: SourceType.NFTScan,
     }
 }
 
@@ -210,6 +213,7 @@ export function createNonFungibleTokenContract(
         iconURL: collection.logo_url,
         logoURL: collection.logo_url,
         owner: collection.owner,
+        source: SourceType.NFTScan,
     }
 }
 
