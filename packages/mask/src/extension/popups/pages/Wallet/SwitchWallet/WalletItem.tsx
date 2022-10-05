@@ -1,8 +1,9 @@
 import { memo, useCallback } from 'react'
+import { useHover } from 'react-use'
 import { makeStyles } from '@masknet/theme'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { Wallet } from '@masknet/web3-shared-base'
+import type { Wallet } from '@masknet/web3-shared-base'
 import { useReverseAddress, useWeb3State } from '@masknet/web3-hooks-base'
 import { Icons } from '@masknet/icons'
 import { ListItem, ListItemText, Typography } from '@mui/material'
@@ -11,7 +12,6 @@ import { CopyIconButton } from '../../../components/CopyIconButton/index.js'
 import { useNavigate } from 'react-router-dom'
 import { WalletContext } from '../hooks/useWalletContext.js'
 import { PopupRoutes } from '@masknet/shared-base'
-import { useHover } from 'react-use'
 
 const useStyles = makeStyles()({
     item: {

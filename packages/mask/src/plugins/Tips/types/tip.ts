@@ -1,5 +1,5 @@
 import type { SocialAddressType } from '@masknet/web3-shared-base'
-import { NetworkPluginID } from '@masknet/shared-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
 
 export enum TipsType {
     Tokens = 'tokens',

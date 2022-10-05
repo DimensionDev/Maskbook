@@ -11,8 +11,7 @@ import {
     useWeb3Connection,
     useWeb3Hub,
 } from '@masknet/web3-hooks-base'
-
-import { NetworkPluginID } from '@masknet/shared-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
 import type { AllChainsNonFungibleToken } from '../types.js'
 
 const useStyles = makeStyles()((theme) => ({

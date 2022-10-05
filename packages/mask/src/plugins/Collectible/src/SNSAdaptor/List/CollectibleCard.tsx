@@ -4,8 +4,7 @@ import { makeStyles } from '@masknet/theme'
 import { AssetPreviewer, NetworkIcon } from '@masknet/shared'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import type { NonFungibleAsset } from '@masknet/web3-shared-base'
-import { NetworkPluginID } from '@masknet/shared-base'
-import { CrossIsolationMessages } from '@masknet/shared-base'
+import { CrossIsolationMessages, NetworkPluginID } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     root: {

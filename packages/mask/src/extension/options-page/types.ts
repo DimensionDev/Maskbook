@@ -1,6 +1,5 @@
 import type { NextIDPlatform } from '@masknet/shared-base'
-
-import { NetworkPluginID } from '@masknet/shared-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
 
 type CollectionKey = `${string}_${string}`

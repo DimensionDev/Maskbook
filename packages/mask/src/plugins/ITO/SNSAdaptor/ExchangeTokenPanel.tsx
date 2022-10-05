@@ -6,7 +6,7 @@ import { IconButton, Paper } from '@mui/material'
 import { useCallback, useEffect, useState } from 'react'
 import { useSelectFungibleToken, FungibleTokenInput } from '@masknet/shared'
 import { useI18N } from '../../../utils/index.js'
-import { FungibleToken } from '@masknet/web3-shared-base'
+import type { FungibleToken } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useFungibleTokenBalance } from '@masknet/web3-hooks-base'
 

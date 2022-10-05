@@ -1,8 +1,7 @@
+import { useCallback } from 'react'
 import { useWeb3Connection } from '@masknet/web3-hooks-base'
 import type { BindingProof, ECKeyIdentifier, EnhanceableSite } from '@masknet/shared-base'
-
-import { NetworkPluginID } from '@masknet/shared-base'
-import { useCallback } from 'react'
+import type { NetworkPluginID } from '@masknet/shared-base'
 import { activatedSocialNetworkUI } from '../../../../social-network/index.js'
 import type { NextIDAvatarMeta } from '../../types.js'
 import { useSaveAvatar } from './useSaveAvatar.js'
