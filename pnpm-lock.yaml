@@ -1742,6 +1742,9 @@ importers:
       '@masknet/shared':
         specifier: workspace:*
         version: link:../../shared
+      '@masknet/shared-base':
+        specifier: workspace:*
+        version: link:../../shared-base
       '@masknet/theme':
         specifier: workspace:*
         version: link:../../theme
@@ -1826,6 +1829,9 @@ importers:
       '@masknet/plugin-infra':
         specifier: workspace:*
         version: link:../../plugin-infra
+      '@masknet/shared-base':
+        specifier: workspace:*
+        version: link:../../shared-base
       ts-results:
         specifier: ^3.3.0
         version: 3.3.0_g2bdan7o336xxsymnx5nlozu2m
