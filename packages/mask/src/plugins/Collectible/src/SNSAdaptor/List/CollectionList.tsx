@@ -4,12 +4,11 @@ import { Icons } from '@masknet/icons'
 import { ElementAnchor, RetryHint, useWeb3ProfileHiddenSettings } from '@masknet/shared'
 import { useNonFungibleAssets, useTrustedNonFungibleTokens } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { EMPTY_LIST, EMPTY_OBJECT, joinKeys } from '@masknet/shared-base'
+import { EMPTY_LIST, EMPTY_OBJECT, NetworkPluginID, joinKeys } from '@masknet/shared-base'
 import { LoadingBase } from '@masknet/theme'
 import { CollectionType } from '@masknet/web3-providers'
 import {
     isSameAddress,
-    NetworkPluginID,
     NonFungibleAsset,
     NonFungibleCollection,
     SocialAddress,

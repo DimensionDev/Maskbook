@@ -1,5 +1,5 @@
 import { useChainId, useChainIdValid, useCurrentWeb3NetworkPluginID, useDefaultChainId } from '@masknet/web3-hooks-base'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { useEffect, useState } from 'react'
 import { createContainer } from 'unstated-next'
 

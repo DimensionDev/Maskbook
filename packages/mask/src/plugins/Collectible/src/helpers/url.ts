@@ -1,6 +1,7 @@
 import { ChainId as ChainIdEVM } from '@masknet/web3-shared-evm'
 import { ChainId as ChainIdSolana } from '@masknet/web3-shared-solana'
-import { NetworkPluginID, SourceType } from '@masknet/web3-shared-base'
+import { SourceType } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import type { CollectiblePayload } from '../types.js'
 
 const ZORA_COLLECTION_ADDRESS = '0xabEFBc9fD2F806065b4f3C237d4b59D9A97Bcac7'

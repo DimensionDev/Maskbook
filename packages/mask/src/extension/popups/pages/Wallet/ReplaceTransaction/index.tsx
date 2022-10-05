@@ -16,7 +16,8 @@ import { isEmpty } from 'lodash-unified'
 import { useAsync, useAsyncFn } from 'react-use'
 import { useContainer } from 'unstated-next'
 import { WalletContext } from '../hooks/useWalletContext.js'
-import { isLessThanOrEqualTo, isPositive, multipliedBy, NetworkPluginID } from '@masknet/web3-shared-base'
+import { isLessThanOrEqualTo, isPositive, multipliedBy } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import {
     useChainId,
     useWeb3State,

@@ -4,7 +4,7 @@ import { SUPPORTED_CHAIN_ID_LIST } from './constants.js'
 import { pick } from 'lodash-unified'
 import { useAsync } from 'react-use'
 import { useAccount, useChainId, useWeb3Connection } from '@masknet/web3-hooks-base'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import BigNumber from 'bignumber.js'
 
 export function useTradeGasLimit(tradeComputed: TradeComputed<SwapQuoteResponse> | null) {

@@ -17,7 +17,8 @@ import { RedPacketJSONPayload, RedPacketJSONPayloadFromChain, RedPacketStatus } 
 import { useAvailabilityComputed } from './hooks/useAvailabilityComputed.js'
 import { useRefundCallback } from './hooks/useRefundCallback.js'
 import { useAccount, useChainId, useFungibleToken, useWeb3Connection } from '@masknet/web3-hooks-base'
-import { formatBalance, FungibleToken, NetworkPluginID, isSameAddress } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { formatBalance, FungibleToken, isSameAddress } from '@masknet/web3-shared-base'
 
 const interFace = new Interface(REDPACKET_ABI)
 

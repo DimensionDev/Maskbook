@@ -2,14 +2,8 @@ import { useValueRef } from '@masknet/shared-base-ui'
 import type { TradeComputed } from '../../types/index.js'
 import { createNativeToken, formatUSD, formatWeiToEther, GasOptionConfig } from '@masknet/web3-shared-evm'
 import { useCallback, useMemo, useState } from 'react'
-import {
-    formatBalance,
-    formatCurrency,
-    FungibleToken,
-    leftShift,
-    multipliedBy,
-    NetworkPluginID,
-} from '@masknet/web3-shared-base'
+import { formatBalance, formatCurrency, FungibleToken, leftShift, multipliedBy } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { currentSlippageSettings } from '../../settings.js'
 import { useNativeTokenPrice, useFungibleTokenPrice, useChainId } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'

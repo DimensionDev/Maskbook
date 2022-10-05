@@ -1,7 +1,7 @@
 import { Icons } from '@masknet/icons'
 import { useNetworkDescriptor } from '@masknet/web3-hooks-base'
 import { FormattedAddress, TokenIcon, useSnackbarCallback, WalletIcon } from '@masknet/shared'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { ChainId, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { Box, IconButton, Stack, Typography, useTheme } from '@mui/material'
 import { useCopyToClipboard } from 'react-use'

@@ -5,7 +5,7 @@ import type { ChainId, Web3 } from '@masknet/web3-shared-evm'
 import { useWeb3 } from '@masknet/web3-hooks-base'
 import { useCustomSnackbar } from '@masknet/theme'
 import { Typography, Button, Box } from '@mui/material'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 
 import { useI18N } from '../../locales/index.js'
 import { roundValue } from '../../helpers/index.js'

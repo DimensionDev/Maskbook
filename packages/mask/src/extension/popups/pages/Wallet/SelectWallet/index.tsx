@@ -2,7 +2,8 @@ import { memo, useCallback, useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { first } from 'lodash-unified'
 import { makeStyles } from '@masknet/theme'
-import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
+import { isSameAddress } from '@masknet/web3-shared-base'
+import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { ChainId, ProviderType } from '@masknet/web3-shared-evm'
 import { Button, List, Typography } from '@mui/material'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages.js'
@@ -13,7 +14,6 @@ import { useAccount, useChainIdValid, useWallets, useChainId } from '@masknet/we
 import { getRegisteredWeb3Networks } from '@masknet/plugin-infra'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { ChainIcon, WalletIcon } from '@masknet/shared'
-import { PopupRoutes } from '@masknet/shared-base'
 
 const useStyles = makeStyles()({
     content: {

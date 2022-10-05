@@ -5,16 +5,15 @@ import { first, uniqBy } from 'lodash-unified'
 import { Icons } from '@masknet/icons'
 import {
     createInjectHooksRenderer,
-    PluginID,
     useActivatedPluginsSNSAdaptor,
     usePluginI18NField,
 } from '@masknet/plugin-infra/content-script'
 import { useAvailablePlugins } from '@masknet/plugin-infra'
-import { EMPTY_LIST } from '@masknet/shared-base'
-import { LoadingBase, makeStyles, MaskTabList, useTabs } from '@masknet/theme'
-import { isSameAddress, NetworkPluginID, SocialIdentity } from '@masknet/web3-shared-base'
-import { ChainId } from '@masknet/web3-shared-evm'
 import { useSocialAddressListBySettings } from '@masknet/shared'
+import { EMPTY_LIST, PluginID, NetworkPluginID } from '@masknet/shared-base'
+import { LoadingBase, makeStyles, MaskTabList, useTabs } from '@masknet/theme'
+import { isSameAddress, SocialIdentity } from '@masknet/web3-shared-base'
+import { ChainId } from '@masknet/web3-shared-evm'
 import { TabContext } from '@mui/lab'
 import { Tab, Typography } from '@mui/material'
 import { PluginWeb3ContextProvider } from '@masknet/web3-hooks-base'

@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
-import { PluginID } from '@masknet/plugin-infra'
+import { useUpdateEffect } from 'react-use'
+import { PluginID, NetworkPluginID, isDashboardPage, CrossIsolationMessages } from '@masknet/shared-base'
 import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
 import { PluginWeb3ContextProvider, useChainId, useChainIdValid } from '@masknet/web3-hooks-base'
 import { ChainId, isNativeTokenAddress, SchemaType } from '@masknet/web3-shared-evm'
@@ -11,12 +12,10 @@ import { Trader, TraderRef, TraderProps } from './Trader.js'
 import { useI18N } from '../../../../utils/index.js'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { NetworkTab } from '../../../../components/shared/NetworkTab.js'
-import { useUpdateEffect } from 'react-use'
-import { NetworkPluginID, createFungibleToken } from '@masknet/web3-shared-base'
+import { createFungibleToken } from '@masknet/web3-shared-base'
 import { Icons } from '@masknet/icons'
 import { currentSlippageSettings } from '../../settings.js'
 import { MIN_GAS_LIMIT } from '../../constants/index.js'
-import { isDashboardPage, CrossIsolationMessages } from '@masknet/shared-base'
 
 const isDashboard = isDashboardPage()
 

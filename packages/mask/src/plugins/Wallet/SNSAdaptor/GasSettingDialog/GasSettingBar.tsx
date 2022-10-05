@@ -7,7 +7,8 @@ import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
 import { Box, IconButton, Typography } from '@mui/material'
 import { WalletMessages } from '../../messages.js'
 import { TokenPrice } from '../../../../components/shared/TokenPrice.js'
-import { GasOptionType, multipliedBy, NetworkPluginID } from '@masknet/web3-shared-base'
+import { GasOptionType, multipliedBy } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { useChainId, useFungibleToken, useGasPrice } from '@masknet/web3-hooks-base'
 
 export interface GasSettingBarProps {

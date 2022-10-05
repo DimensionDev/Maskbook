@@ -9,7 +9,7 @@ import { useI18N } from '../locales/index.js'
 import { PetShareDialog } from './PetShareDialog.js'
 import { PetSetDialog } from './PetSetDialog.js'
 import { useWeb3State } from '@masknet/web3-hooks-base'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { usePetConstants } from '@masknet/web3-shared-evm'
 import type { ConfigRSSNode } from '../types.js'
 

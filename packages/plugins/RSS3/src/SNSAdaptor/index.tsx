@@ -1,6 +1,7 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { PluginIDContextProvider } from '@masknet/web3-hooks-base'
-import { NetworkPluginID, SocialAddress, SocialIdentity } from '@masknet/web3-shared-base'
+import type { SocialAddress, SocialIdentity } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { base } from '../base.js'
 import { PLUGIN_ID } from '../constants.js'
 import { setupContext } from './context.js'

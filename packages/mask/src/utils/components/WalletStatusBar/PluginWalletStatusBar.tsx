@@ -1,3 +1,4 @@
+import { memo, PropsWithChildren, useCallback, useMemo } from 'react'
 import {
     useCurrentWeb3NetworkPluginID,
     useProviderDescriptor,
@@ -13,11 +14,11 @@ import {
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { NetworkPluginID, TransactionStatusType } from '@masknet/web3-shared-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
+import { TransactionStatusType } from '@masknet/web3-shared-base'
 import { Box, Button } from '@mui/material'
 import { useI18N } from '../../i18n-next-ui.js'
 import { Icons } from '@masknet/icons'
-import { memo, PropsWithChildren, useCallback, useMemo } from 'react'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { WalletDescription } from './WalletDescription.js'
 import { Action } from './Action.js'

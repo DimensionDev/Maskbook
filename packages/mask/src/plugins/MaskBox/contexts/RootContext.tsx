@@ -1,5 +1,5 @@
 import type { ChainId } from '@masknet/web3-shared-evm'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { PluginWeb3ContextProvider, PluginIDContextProvider } from '@masknet/web3-hooks-base'
 import type { FC, PropsWithChildren } from 'react'
 

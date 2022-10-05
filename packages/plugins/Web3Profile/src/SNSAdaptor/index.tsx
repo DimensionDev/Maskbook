@@ -1,13 +1,13 @@
-import { Plugin, PluginID } from '@masknet/plugin-infra'
+import { useEffect } from 'react'
+import { Trans } from 'react-i18next'
+import type { Plugin } from '@masknet/plugin-infra'
+import { PluginID, CrossIsolationMessages } from '@masknet/shared-base'
 import { ApplicationEntry, PublicWalletSetting } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
 import { base } from '../base.js'
 import { Web3ProfileDialog } from './components/Web3ProfileDialog.js'
 import { setupContext } from './context.js'
 import { PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
-import { Trans } from 'react-i18next'
-import { CrossIsolationMessages } from '@masknet/shared-base'
-import { useEffect } from 'react'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,

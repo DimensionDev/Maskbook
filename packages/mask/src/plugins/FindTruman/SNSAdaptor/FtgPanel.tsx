@@ -9,7 +9,7 @@ import { useContext } from 'react'
 import { FindTrumanContext } from '../context.js'
 import { getPartName } from './PartsPanel.js'
 import { useAccount, useChainId } from '@masknet/web3-hooks-base'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { useERC721TokenContract } from '@masknet/web3-hooks-evm'
 import { Image } from '@masknet/shared'
 

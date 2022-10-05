@@ -1,6 +1,6 @@
 import { useChainId } from '@masknet/web3-hooks-base'
 import { makeStyles } from '@masknet/theme'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { explorerResolver } from '@masknet/web3-shared-evm'
 import DoneIcon from '@mui/icons-material/Done'
 import { Link, Typography } from '@mui/material'

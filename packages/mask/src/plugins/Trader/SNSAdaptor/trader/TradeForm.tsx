@@ -4,14 +4,7 @@ import { makeStyles, MaskColorVar, useStylesExtends, ActionButton } from '@maskn
 import { InputTokenPanel } from './InputTokenPanel.js'
 import { alpha, Box, chipClasses, Collapse, IconButton, lighten, Typography } from '@mui/material'
 import { ChainId, formatWeiToEther, GasOptionConfig, SchemaType, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
-import {
-    FungibleToken,
-    isLessThan,
-    NetworkPluginID,
-    rightShift,
-    multipliedBy,
-    leftShift,
-} from '@masknet/web3-shared-base'
+import { FungibleToken, isLessThan, rightShift, multipliedBy, leftShift } from '@masknet/web3-shared-base'
 import TuneIcon from '@mui/icons-material/Tune'
 import { TokenPanelType, TradeInfo } from '../../types/index.js'
 import BigNumber from 'bignumber.js'
@@ -27,14 +20,14 @@ import { EthereumERC20TokenApprovedBoundary } from '../../../../web3/UI/Ethereum
 import { useTradeApproveComputed } from '../../trader/useTradeApproveComputed.js'
 import { ChainBoundary } from '../../../../web3/UI/ChainBoundary.js'
 import { useUpdateEffect } from 'react-use'
-import { isDashboardPage, isPopupPage, PopupRoutes } from '@masknet/shared-base'
+import { isDashboardPage, isPopupPage, PopupRoutes, PluginID, NetworkPluginID } from '@masknet/shared-base'
 import { AllProviderTradeContext } from '../../trader/useAllProviderTradeContext.js'
 import { WalletConnectedBoundary } from '../../../../web3/UI/WalletConnectedBoundary.js'
 import { TokenSecurityBoundary } from '../../../../web3/UI/TokenSecurityBoundary.js'
 import { currentSlippageSettings } from '../../settings.js'
 import { PluginTraderMessages } from '../../messages.js'
 import Services from '../../../../extension/service.js'
-import { PluginID, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
+import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
 import { useIsMinimalModeDashBoard } from '@masknet/plugin-infra/dashboard'
 import { PluginWeb3ActualContextProvider, useChainId } from '@masknet/web3-hooks-base'
 

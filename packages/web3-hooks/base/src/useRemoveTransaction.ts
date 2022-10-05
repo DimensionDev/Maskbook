@@ -1,5 +1,5 @@
 import { useCallback } from 'react'
-import type { NetworkPluginID } from '@masknet/web3-shared-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
 import { useAccount } from './useAccount.js'
 import { useChainId } from './useChainId.js'
 import { useWeb3State } from './useWeb3State.js'

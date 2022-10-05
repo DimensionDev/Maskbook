@@ -1,12 +1,8 @@
 import { useEffect, useMemo } from 'react'
 import { makeStyles } from '@masknet/theme'
-import { EMPTY_LIST } from '@masknet/shared-base'
+import { EMPTY_LIST, PluginID } from '@masknet/shared-base'
 import { useSocialAddressListAll } from '@masknet/web3-hooks-base'
-import {
-    useActivatedPluginsSNSAdaptor,
-    createInjectHooksRenderer,
-    PluginID,
-} from '@masknet/plugin-infra/content-script'
+import { useActivatedPluginsSNSAdaptor, createInjectHooksRenderer } from '@masknet/plugin-infra/content-script'
 import { MaskMessages } from '../../utils/index.js'
 import { useCurrentVisitingIdentity } from '../DataSource/useActivatedUI.js'
 

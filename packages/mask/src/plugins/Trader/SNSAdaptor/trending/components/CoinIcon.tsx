@@ -1,6 +1,7 @@
-import { TokenIcon } from '@masknet/shared'
-import { NetworkPluginID, TokenType } from '@masknet/web3-shared-base'
 import type { FC } from 'react'
+import { TokenIcon } from '@masknet/shared'
+import type { TokenType } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 
 export interface CoinIconProps {
     type: TokenType

@@ -10,7 +10,8 @@ import { getPlayerStatus, isGameActionError, PlayerStatus } from '../utils.js'
 import BigNumber from 'bignumber.js'
 import { FormattedBalance } from '@masknet/shared'
 import { useChainId } from '@masknet/web3-hooks-base'
-import { formatBalance, NetworkPluginID } from '@masknet/web3-shared-base'
+import { formatBalance } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     infoRow: {

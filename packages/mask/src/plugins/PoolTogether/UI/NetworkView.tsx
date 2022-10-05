@@ -3,7 +3,7 @@ import { ChainId, chainResolver } from '@masknet/web3-shared-evm'
 import { Typography } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { ImageIcon } from '@masknet/shared'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     root: {

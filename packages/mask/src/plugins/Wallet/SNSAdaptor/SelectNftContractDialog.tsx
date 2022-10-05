@@ -1,14 +1,16 @@
 import { useCallback, useMemo, useState } from 'react'
 import { EthereumAddress } from 'wallet.ts'
+import Fuse from 'fuse.js'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import { Avatar, Box, DialogContent, Link, List, ListItem, Typography } from '@mui/material'
 import { SchemaType, explorerResolver, ChainId } from '@masknet/web3-shared-evm'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { InjectedDialog } from '@masknet/shared'
+import { NetworkPluginID } from '@masknet/shared-base'
 import OpenInNewIcon from '@mui/icons-material/OpenInNew'
+import type { NonFungibleTokenContract } from '@masknet/web3-shared-base'
 import { WalletMessages } from '../messages.js'
 import { useI18N } from '../../../utils/index.js'
-import Fuse from 'fuse.js'
 import { SearchInput } from '../../../extension/options-page/DashboardComponents/SearchInput.js'
 import {
     useChainId,
@@ -17,7 +19,6 @@ import {
     useNonFungibleTokenContract,
     useNonFungibleTokenBalance,
 } from '@masknet/web3-hooks-base'
-import { NetworkPluginID, NonFungibleTokenContract } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     search: {

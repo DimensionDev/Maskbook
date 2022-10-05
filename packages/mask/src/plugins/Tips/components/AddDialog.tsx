@@ -1,3 +1,6 @@
+import { FC, useCallback, useEffect, useMemo, useState } from 'react'
+import { useAsyncFn } from 'react-use'
+import { EthereumAddress } from 'wallet.ts'
 import {
     useAccount,
     useChainId,
@@ -7,13 +10,11 @@ import {
 } from '@masknet/web3-hooks-base'
 import { useERC721TokenContract } from '@masknet/web3-hooks-evm'
 import { ImageIcon, InjectedDialog, InjectedDialogProps } from '@masknet/shared'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
-import { isSameAddress, NetworkPluginID, NonFungibleToken } from '@masknet/web3-shared-base'
+import { isSameAddress, NonFungibleToken } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { Button, DialogContent, FormControl, InputBase, Typography } from '@mui/material'
-import { FC, useCallback, useEffect, useMemo, useState } from 'react'
-import { useAsyncFn } from 'react-use'
-import { EthereumAddress } from 'wallet.ts'
 import { useI18N } from '../locales/index.js'
 
 const useStyles = makeStyles()((theme) => ({

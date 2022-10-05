@@ -9,7 +9,7 @@ import {
 } from '../../constants.js'
 import { useQualificationContract } from './useQualificationContract.js'
 import { useAccount, useChainId } from '@masknet/web3-hooks-base'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { useERC165 } from '@masknet/web3-hooks-evm'
 
 export function useQualificationVerify(address?: string, ito_address?: string) {

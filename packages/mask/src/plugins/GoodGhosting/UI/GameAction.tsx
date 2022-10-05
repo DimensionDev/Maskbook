@@ -8,7 +8,8 @@ import type { GoodGhostingInfo } from '../types.js'
 import { GameActionDialog } from './GameActionDialog.js'
 import { useGameToken } from '../hooks/usePoolData.js'
 import { isGameActionError } from '../utils.js'
-import { formatBalance, NetworkPluginID } from '@masknet/web3-shared-base'
+import { formatBalance } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { useChainId, useFungibleToken } from '@masknet/web3-hooks-base'
 
 const useStyles = makeStyles()((theme) => ({

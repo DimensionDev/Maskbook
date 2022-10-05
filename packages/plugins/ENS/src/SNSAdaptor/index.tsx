@@ -1,4 +1,5 @@
-import { Plugin, PluginID } from '@masknet/plugin-infra'
+import { Plugin } from '@masknet/plugin-infra'
+import { PluginID } from '@masknet/shared-base'
 import { Trans } from 'react-i18next'
 import { Icons } from '@masknet/icons'
 import { base } from '../base'

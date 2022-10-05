@@ -1,6 +1,7 @@
 import { useCallback, useMemo } from 'react'
 import { useAsyncFn } from 'react-use'
-import { isLessThan, NetworkPluginID, toFixed, isZero } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { isLessThan, toFixed, isZero } from '@masknet/web3-shared-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { useChainId, useAccount, useWeb3Connection, useFungibleTokenBalance } from '@masknet/web3-hooks-base'
 import { useERC20TokenContract } from './useERC20TokenContract.js'

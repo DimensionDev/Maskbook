@@ -8,7 +8,7 @@ import { useAccount, useChainId } from '@masknet/web3-hooks-base'
 import { PluginUnlockProtocolRPC } from '../messages.js'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
 import { usePluginWrapper } from '@masknet/plugin-infra/dom'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 
 interface UnlockProtocolInPostProps {
     message: TypedMessage

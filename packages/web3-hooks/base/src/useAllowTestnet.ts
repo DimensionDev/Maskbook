@@ -1,6 +1,5 @@
 import { useSubscription } from 'use-subscription'
-import { FALSE, TRUE } from '@masknet/shared-base'
-import type { NetworkPluginID } from '@masknet/web3-shared-base'
+import { FALSE, TRUE, NetworkPluginID } from '@masknet/shared-base'
 import { useWeb3State } from './useWeb3State.js'
 
 export function useAllowTestnet<T extends NetworkPluginID>(pluginID?: T) {

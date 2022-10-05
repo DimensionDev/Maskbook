@@ -5,7 +5,8 @@ import { pick } from 'lodash-unified'
 import stringify from 'json-stable-stringify'
 import { useAccount, useChainId, useWeb3Connection } from '@masknet/web3-hooks-base'
 import type { SwapRouteSuccessResponse, TradeComputed } from '../../types/index.js'
-import { NetworkPluginID, ZERO } from '@masknet/web3-shared-base'
+import { ZERO } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import type { GasOptionConfig } from '@masknet/web3-shared-evm'
 
 export function useTradeCallback(

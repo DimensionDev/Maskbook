@@ -5,7 +5,7 @@ import { Box, Button, Grid, Skeleton, Typography } from '@mui/material'
 import { useContext } from 'react'
 import { FindTrumanContext } from '../context.js'
 import { useAccount } from '@masknet/web3-hooks-base'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { Image } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme, props) => ({

@@ -1,7 +1,7 @@
 import { delay } from '@dimensiondev/kit'
 import type { NormalizedBackup } from '@masknet/backup-format'
-import { activatedPluginsWorker, PluginID, registeredPlugins } from '@masknet/plugin-infra/background-worker'
-import { ProfileIdentifier, RelationFavor } from '@masknet/shared-base'
+import { activatedPluginsWorker, registeredPlugins } from '@masknet/plugin-infra/background-worker'
+import { PluginID, ProfileIdentifier, RelationFavor } from '@masknet/shared-base'
 import { MaskMessages } from '../../../shared/messages.js'
 import {
     consistentPersonaDBWriteAccess,

@@ -1,7 +1,7 @@
 import { useAsync } from 'react-use'
 import { GoPlusLabs } from '@masknet/web3-providers'
 import { useNetworkDescriptors } from '@masknet/web3-hooks-base'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 
 const unIntegrationChainLogos: Record<number, URL> = {
     128: new URL('../../assets/chain-heco.png', import.meta.url),

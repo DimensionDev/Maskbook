@@ -1,6 +1,7 @@
 import classNames from 'classnames'
 import { NFTCardStyledAssetPlayer } from '@masknet/shared'
-import { NetworkPluginID, isSameAddress, NonFungibleToken, NonFungibleTokenContract } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { isSameAddress, NonFungibleToken, NonFungibleTokenContract } from '@masknet/web3-shared-base'
 import { SchemaType, formatTokenId, ChainId } from '@masknet/web3-shared-evm'
 import { useI18N as useBaseI18N } from '../../../utils/index.js'
 import { Translate, useI18N } from '../locales/index.js'

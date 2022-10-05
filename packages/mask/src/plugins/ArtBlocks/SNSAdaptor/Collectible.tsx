@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Tab, Tabs, Paper, Card, CardHeader, CardContent, Link, Typography, Avatar, Box } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { useChainId } from '@masknet/web3-hooks-base'
 import { useI18N } from '../../../utils/index.js'
 import { CollectionView } from './CollectionView.js'

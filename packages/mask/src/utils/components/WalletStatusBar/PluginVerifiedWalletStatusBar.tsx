@@ -1,11 +1,13 @@
+import { memo, PropsWithChildren, useCallback, useMemo, useState } from 'react'
+import { useUpdateEffect } from 'react-use'
+import { first, omit } from 'lodash-unified'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { Box, Button, Divider, ListItemIcon, MenuItem, Typography } from '@mui/material'
-import { memo, PropsWithChildren, useCallback, useMemo, useState } from 'react'
 import { useI18N } from '../../i18n-next-ui.js'
 import { Action } from './Action.js'
 import { useStatusBarStyles } from './styles.js'
-import { BindingProof, PopupRoutes } from '@masknet/shared-base'
+import { BindingProof, PopupRoutes, NetworkPluginID } from '@masknet/shared-base'
 import {
     useAccount,
     useCurrentWeb3NetworkPluginID,
@@ -19,19 +21,12 @@ import {
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { Icons } from '@masknet/icons'
 import type { WalletDescriptionProps } from './WalletDescription.js'
-import { first, omit } from 'lodash-unified'
 import { useWalletName } from './hooks/useWalletName.js'
 import { WalletDescription } from './WalletDescription.js'
-import {
-    isSameAddress,
-    NetworkPluginID,
-    resolveNextID_NetworkPluginID,
-    TransactionStatusType,
-} from '@masknet/web3-shared-base'
+import { isSameAddress, resolveNextID_NetworkPluginID, TransactionStatusType } from '@masknet/web3-shared-base'
 import { WalletMenuItem } from './WalletMenuItem.js'
 import { useMenu } from '@masknet/shared'
 import Services from '../../../extension/service.js'
-import { useUpdateEffect } from 'react-use'
 
 interface PluginVerifiedWalletStatusBarProps extends PropsWithChildren<{}> {
     verifiedWallets: BindingProof[]

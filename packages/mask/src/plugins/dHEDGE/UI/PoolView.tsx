@@ -9,7 +9,7 @@ import { PoolStats } from './PoolStats.js'
 import { PoolViewDeck } from './PoolViewDeck.js'
 import { useChainId } from '@masknet/web3-hooks-base'
 import { ChainId } from '@masknet/web3-shared-evm'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
 
 const useStyles = makeStyles()((theme) => ({

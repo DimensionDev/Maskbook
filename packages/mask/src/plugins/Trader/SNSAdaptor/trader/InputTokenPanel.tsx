@@ -1,8 +1,9 @@
 import { memo, useMemo } from 'react'
-import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { useFungibleTokenPrice } from '@masknet/web3-hooks-base'
-import { FungibleToken, NetworkPluginID } from '@masknet/web3-shared-base'
+import type { FungibleToken } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { InputTokenPanelUI } from './components/InputTokenPanelUI.js'
 import type { SelectTokenChipProps } from '@masknet/shared'
 

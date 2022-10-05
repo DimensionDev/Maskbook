@@ -1,10 +1,9 @@
-import { useChainId } from '@masknet/web3-hooks-base'
 import { useMemo } from 'react'
-import { useNavigate, useLocation } from 'react-router-dom'
 import { useUpdateEffect } from 'react-use'
+import { useNavigate, useLocation } from 'react-router-dom'
+import { useChainId } from '@masknet/web3-hooks-base'
 import { Trader } from '../../../../../plugins/Trader/SNSAdaptor/trader/Trader.js'
-import { PopupRoutes } from '@masknet/shared-base'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { PopupRoutes, NetworkPluginID } from '@masknet/shared-base'
 import { createERC20Token, createNativeToken, isNativeTokenAddress } from '@masknet/web3-shared-evm'
 
 export function SwapBox() {

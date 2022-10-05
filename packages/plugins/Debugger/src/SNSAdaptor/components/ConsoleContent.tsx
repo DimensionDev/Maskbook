@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Button, Checkbox, FormControlLabel, Table, TableBody, TableCell, TableRow, Typography } from '@mui/material'
 import { getEnumAsArray } from '@dimensiondev/kit'
-import { PluginID } from '@masknet/plugin-infra'
+import { PluginID } from '@masknet/shared-base'
 import {
     useAccount,
     useBalance,

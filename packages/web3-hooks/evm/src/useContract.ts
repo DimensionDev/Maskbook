@@ -1,7 +1,6 @@
 import { useMemo } from 'react'
 import type { AbiItem } from 'web3-utils'
-import { EMPTY_LIST } from '@masknet/shared-base'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import { ChainId, createContract } from '@masknet/web3-shared-evm'
 import type { BaseContract } from '@masknet/web3-contracts/types/types'
 import { useWeb3 } from '@masknet/web3-hooks-base'

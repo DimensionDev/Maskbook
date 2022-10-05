@@ -3,7 +3,7 @@ import { MenuItem, Stack, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
 import { useMenu, WalletIcon } from '@masknet/shared'
-import type { NetworkPluginID } from '@masknet/web3-shared-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
 import {
     useChainId,
     useNetworkDescriptors,

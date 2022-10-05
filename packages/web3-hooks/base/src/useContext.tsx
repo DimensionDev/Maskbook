@@ -1,6 +1,5 @@
 import React, { createContext, ReactNode, useContext } from 'react'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { EMPTY_OBJECT } from '@masknet/shared-base'
+import { EMPTY_OBJECT, NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useActualAccount } from './useAccount.js'
 import { useActualChainId } from './useChainId.js'

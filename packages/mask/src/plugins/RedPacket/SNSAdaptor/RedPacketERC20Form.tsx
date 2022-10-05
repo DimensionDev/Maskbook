@@ -1,18 +1,18 @@
+import { ChangeEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import BigNumber from 'bignumber.js'
+import { omit } from 'lodash-unified'
 import { makeStyles, useStylesExtends, ActionButton } from '@masknet/theme'
 import {
     FungibleToken,
     isGreaterThan,
     isZero,
     multipliedBy,
-    NetworkPluginID,
     rightShift,
     formatBalance,
 } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType, useRedPacketConstants } from '@masknet/web3-shared-evm'
 import { MenuItem, Select, Box, InputBase, Typography } from '@mui/material'
-import BigNumber from 'bignumber.js'
-import { omit } from 'lodash-unified'
-import { ChangeEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { useSelectFungibleToken, FungibleTokenInput } from '@masknet/shared'
 import { useCurrentIdentity, useCurrentLinkedPersona } from '../../../components/DataSource/useActivatedUI.js'
 import { useI18N } from '../locales/index.js'

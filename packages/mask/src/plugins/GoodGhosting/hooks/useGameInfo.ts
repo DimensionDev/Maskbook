@@ -9,7 +9,7 @@ import addSeconds from 'date-fns/addSeconds'
 import Services from '../../../extension/service.js'
 import { useAccount, useChainId } from '@masknet/web3-hooks-base'
 import { useSingleContractMultipleData } from '@masknet/web3-hooks-evm'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 
 export function useGameContractAddress(id: string) {
     const { GOOD_GHOSTING_CONTRACT_ADDRESS_FILE } = useGoodGhostingConstants()

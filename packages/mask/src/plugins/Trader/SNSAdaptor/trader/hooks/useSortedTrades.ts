@@ -1,10 +1,11 @@
-import type { TradeInfo } from '../../../types/index.js'
 import { useMemo } from 'react'
-import { isGreaterThan, isLessThan, multipliedBy, NetworkPluginID, leftShift } from '@masknet/web3-shared-base'
-import { MINIMUM_AMOUNT } from '../../../constants/index.js'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { isGreaterThan, isLessThan, multipliedBy, leftShift } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import { AllProviderTradeContext } from '../../../trader/useAllProviderTradeContext.js'
 import { useFungibleToken, useFungibleTokenPrice, useNativeTokenPrice } from '@masknet/web3-hooks-base'
+import { MINIMUM_AMOUNT } from '../../../constants/index.js'
+import type { TradeInfo } from '../../../types/index.js'
+import { AllProviderTradeContext } from '../../../trader/useAllProviderTradeContext.js'
 
 export function useSortedTrades(traders: TradeInfo[], chainId: ChainId, gasPrice?: string) {
     const { value: nativeToken } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, '', { chainId })

@@ -13,7 +13,8 @@ import { z as zod } from 'zod'
 import { useI18N } from '../../../../utils/index.js'
 import type { GasSettingProps } from './types.js'
 import { useGasSettingStyles } from './useGasSettingStyles.js'
-import { GasOptionType, NetworkPluginID, pow10 } from '@masknet/web3-shared-base'
+import { GasOptionType, pow10 } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { useChainId, useGasOptions, useNativeTokenPrice } from '@masknet/web3-hooks-base'
 
 const minGasPriceOfChain: ChainIdOptionalRecord<BigNumber.Value> = {

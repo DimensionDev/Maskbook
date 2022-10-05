@@ -1,7 +1,7 @@
 import { useAsyncFn, useUpdateEffect } from 'react-use'
 import { useCustomSnackbar } from '@masknet/theme'
 import { useWeb3Connection } from '@masknet/web3-hooks-base'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { useI18N } from '../locales/index.js'
 
 export const useWalletSign = (message?: string, address?: string) => {

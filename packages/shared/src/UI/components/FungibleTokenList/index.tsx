@@ -10,7 +10,7 @@ import {
     useState,
 } from 'react'
 import { uniqBy } from 'lodash-unified'
-import { EMPTY_LIST, EMPTY_OBJECT } from '@masknet/shared-base'
+import { EMPTY_LIST, EMPTY_OBJECT, NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles, MaskFixedSizeListProps, MaskTextFieldProps, SearchableList } from '@masknet/theme'
 import { Box, Stack, Typography } from '@mui/material'
 import { useSharedI18N } from '../../../locales/index.js'
@@ -34,7 +34,6 @@ import {
     isSameAddress,
     leftShift,
     minus,
-    NetworkPluginID,
     toZero,
 } from '@masknet/web3-shared-base'
 import { getFungibleTokenItem } from './FungibleTokenItem.js'

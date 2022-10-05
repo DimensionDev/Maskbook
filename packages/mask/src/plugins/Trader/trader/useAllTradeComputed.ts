@@ -1,5 +1,5 @@
-import { EMPTY_LIST } from '@masknet/shared-base'
-import { FungibleToken, multipliedBy, NetworkPluginID, pow10 } from '@masknet/web3-shared-base'
+import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
+import { FungibleToken, multipliedBy, pow10 } from '@masknet/web3-shared-base'
 import { useTrade as useNativeTokenTrade } from './native/useTrade.js'
 import { useTradeComputed as useNativeTokenTradeComputed } from './native/useTradeComputed.js'
 import { SwapOOData, TagType, TradeInfo, TradeStrategy } from '../types/index.js'

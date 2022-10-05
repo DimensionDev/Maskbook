@@ -9,8 +9,8 @@ import {
     isLessThanOrEqualTo,
     isPositive,
     multipliedBy,
-    NetworkPluginID,
 } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { useWeb3State } from '@masknet/web3-hooks-base'
 
 const HIGH_FEE_WARNING_MULTIPLIER = 1.5

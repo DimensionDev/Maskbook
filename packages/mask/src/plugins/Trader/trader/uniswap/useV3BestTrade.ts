@@ -10,7 +10,7 @@ import { DEFAULT_MULTICALL_GAS_LIMIT } from '../../constants/index.js'
 import { useSingleContractMultipleData } from '@masknet/web3-hooks-evm'
 import { useTargetBlockNumber } from '../useTargetBlockNumber.js'
 import { useChainId } from '@masknet/web3-hooks-base'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 
 export enum V3TradeState {
     LOADING = 0,

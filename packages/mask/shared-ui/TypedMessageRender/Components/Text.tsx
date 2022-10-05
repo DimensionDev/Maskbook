@@ -3,7 +3,7 @@ import { Typography, Link as MaterialLink } from '@mui/material'
 import type { RenderFragmentsContextType } from '@masknet/typed-message/dom'
 import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
 import { useChainId } from '@masknet/web3-hooks-base'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 
 export const Container = memo(function Container(props: PropsWithChildren<{}>) {
     return (

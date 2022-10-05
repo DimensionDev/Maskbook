@@ -6,7 +6,7 @@ import { useI18N } from '../../../../../utils/index.js'
 import { GasSetting1559 } from './GasSetting1559.js'
 import { Prior1559GasSetting } from './Prior1559GasSetting.js'
 import { useChainId } from '@masknet/web3-hooks-base'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { useTitle } from '../../../hook/useTitle.js'
 
 const useStyles = makeStyles()(() => ({

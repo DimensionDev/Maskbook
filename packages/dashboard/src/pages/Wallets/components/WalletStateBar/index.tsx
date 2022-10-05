@@ -17,7 +17,8 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import { PluginMessages } from '../../../../API.js'
 import { useDashboardI18N } from '../../../../locales/index.js'
 import { useNetworkSelector } from './useNetworkSelector.js'
-import { NetworkPluginID, TransactionStatusType } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { TransactionStatusType } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     bar: {

@@ -1,12 +1,6 @@
 import { getEnumAsArray } from '@dimensiondev/kit'
-import { EnhanceableSite, ExtensionSite } from '@masknet/shared-base'
-import {
-    ChainDescriptor,
-    createFungibleToken,
-    NetworkDescriptor,
-    NetworkPluginID,
-    ProviderDescriptor,
-} from '@masknet/web3-shared-base'
+import { EnhanceableSite, ExtensionSite, NetworkPluginID } from '@masknet/shared-base'
+import { ChainDescriptor, createFungibleToken, NetworkDescriptor, ProviderDescriptor } from '@masknet/web3-shared-base'
 import { ChainId, NetworkType, ProviderType, SchemaType } from '../types.js'
 
 const PLUGIN_ID = NetworkPluginID.PLUGIN_FLOW

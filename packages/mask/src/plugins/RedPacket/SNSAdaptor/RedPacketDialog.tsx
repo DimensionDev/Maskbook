@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { useCompositionContext } from '@masknet/plugin-infra/content-script'
 import { useAccount, useChainId, useWeb3Connection } from '@masknet/web3-hooks-base'
 import { InjectedDialog } from '@masknet/shared'

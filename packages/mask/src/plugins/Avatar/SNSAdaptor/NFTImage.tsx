@@ -1,6 +1,7 @@
 import classNames from 'classnames'
 import { makeStyles } from '@masknet/theme'
-import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
+import { isSameAddress } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { SelectedIcon } from '../assets/SelectedIcon.js'
 import type { AllChainsNonFungibleToken } from '../types.js'
 import { Box, Tooltip, useTheme } from '@mui/material'

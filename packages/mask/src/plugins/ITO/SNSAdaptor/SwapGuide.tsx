@@ -1,4 +1,5 @@
-import { ZERO, NetworkPluginID, FungibleToken } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { ZERO, FungibleToken } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType, isNativeTokenAddress } from '@masknet/web3-shared-evm'
 import { DialogContent } from '@mui/material'
 import { makeStyles } from '@masknet/theme'

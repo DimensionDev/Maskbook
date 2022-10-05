@@ -8,7 +8,7 @@ import { FormattedAddress, Markdown } from '@masknet/shared'
 import { ChainId, chainResolver, explorerResolver, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { Account } from './Account.js'
 import { resolveWebLinkOnCryptoartAI } from '../pipes/index.js'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { useChainId } from '@masknet/web3-hooks-base'
 
 const useStyles = makeStyles()((theme) => {

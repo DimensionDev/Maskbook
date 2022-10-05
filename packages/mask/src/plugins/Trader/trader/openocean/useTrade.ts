@@ -12,7 +12,8 @@ import { useSlippageTolerance } from './useSlippageTolerance.js'
 import { OPENOCEAN_SUPPORTED_CHAINS } from './constants.js'
 import { useAccount, useChainId, useDoubleBlockBeatRetry } from '@masknet/web3-hooks-base'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
-import { FungibleToken, NetworkPluginID, isZero } from '@masknet/web3-shared-base'
+import { FungibleToken, isZero } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 
 export function useTrade(
     strategy: TradeStrategy,

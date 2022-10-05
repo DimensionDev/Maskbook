@@ -1,6 +1,5 @@
 import { Icons } from '@masknet/icons'
-import { PluginID } from '@masknet/plugin-infra'
-import { CrossIsolationMessages } from '@masknet/shared-base'
+import { PluginID, CrossIsolationMessages } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { Button, Stack, Typography } from '@mui/material'
 import { memo, useCallback } from 'react'

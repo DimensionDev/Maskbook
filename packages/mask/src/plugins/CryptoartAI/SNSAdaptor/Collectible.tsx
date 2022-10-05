@@ -16,7 +16,7 @@ import { TabState, TransactionType } from '../types/index.js'
 import { resolveAssetLinkOnCryptoartAI, resolveWebLinkOnCryptoartAI } from '../pipes/index.js'
 import { ActionBar } from './ActionBar.js'
 import { useChainId } from '@masknet/web3-hooks-base'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
 import { PLUGIN_NAME } from '../constants.js'
 

@@ -29,8 +29,8 @@ import {
     isLessThanOrEqualTo,
     isSameAddress,
     multipliedBy,
-    NetworkPluginID,
 } from '@masknet/web3-shared-base'
+import { NetworkPluginID, EMPTY_LIST } from '@masknet/shared-base'
 import {
     useAccount,
     useBalance,
@@ -39,7 +39,6 @@ import {
     useFungibleTokens,
     useNonFungibleTokenContract,
 } from '@masknet/web3-hooks-base'
-import { EMPTY_LIST } from '@masknet/shared-base'
 
 function useContext(initialState?: { boxId: string; hashRoot: string }) {
     const now = new Date()

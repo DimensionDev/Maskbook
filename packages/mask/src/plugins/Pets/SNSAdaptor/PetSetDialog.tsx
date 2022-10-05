@@ -1,6 +1,7 @@
 import { useState, useMemo, ReactNode } from 'react'
 import { useTimeout } from 'react-use'
-import { Constant, NetworkPluginID } from '@masknet/web3-shared-base'
+import type { Constant } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import {
     makeStyles,

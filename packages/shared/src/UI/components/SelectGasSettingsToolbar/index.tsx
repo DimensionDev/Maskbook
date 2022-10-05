@@ -3,7 +3,6 @@ import BigNumber from 'bignumber.js'
 import { useMenuConfig, FormattedBalance, useSharedI18N, useSelectAdvancedSettings } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import {
-    NetworkPluginID,
     GasOptionType,
     multipliedBy,
     isZero,
@@ -11,6 +10,7 @@ import {
     FungibleToken,
     formatCurrency,
 } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { formatEtherToGwei, formatWeiToEther, formatWeiToGwei, GasOptionConfig } from '@masknet/web3-shared-evm'
 import { Typography, MenuItem, Box } from '@mui/material'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -20,7 +20,7 @@ import { SettingsContext } from '../SettingsBoard/Context.js'
 
 interface SelectGasSettingsToolbarProps<T extends NetworkPluginID = NetworkPluginID> {
     pluginID?: T
-    chainId?: Web3Helper.Definition[T]['ChainId']
+    chainId?: Web3Helper.ChainIdAll
     nativeToken: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
     nativeTokenPrice: number
     gasLimit: number
