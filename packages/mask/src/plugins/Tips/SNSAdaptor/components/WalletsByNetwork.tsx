@@ -1,7 +1,6 @@
 import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
-import type { BindingProof } from '@masknet/shared-base'
-import type { NetworkPluginID } from '@masknet/shared-base'
+import type { BindingProof, NetworkPluginID } from '@masknet/shared-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { networkMap } from '../../hooks/useSupportedNetworks.js'
 import { useI18N } from '../../locales/index.js'

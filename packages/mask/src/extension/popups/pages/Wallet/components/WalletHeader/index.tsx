@@ -1,7 +1,7 @@
 import { memo, useCallback, useMemo } from 'react'
 import { useLocation, useMatch, useNavigate } from 'react-router-dom'
 import { makeStyles } from '@masknet/theme'
-import { PopupRoutes } from '@masknet/shared-base'
+import { PopupRoutes, NetworkPluginID } from '@masknet/shared-base'
 import type { ChainId, NetworkType } from '@masknet/web3-shared-evm'
 import { WalletHeaderUI } from './UI.js'
 import { getRegisteredWeb3Networks } from '@masknet/plugin-infra'
@@ -13,7 +13,6 @@ import { currentMaskWalletAccountSettings } from '../../../../../../../shared/le
 import { WalletRPC } from '../../../../../../plugins/Wallet/messages.js'
 import { NormalHeader } from '../../../../components/NormalHeader/index.js'
 import type { NetworkDescriptor } from '@masknet/web3-shared-base'
-import { NetworkPluginID } from '@masknet/shared-base'
 import Services from '../../../../../service.js'
 import { useConnected } from '../../hooks/useConnected.js'
 

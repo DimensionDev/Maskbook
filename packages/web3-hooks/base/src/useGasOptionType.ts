@@ -1,7 +1,6 @@
 import { useSubscription } from 'use-subscription'
-import { createConstantSubscription } from '@masknet/shared-base'
+import { createConstantSubscription, NetworkPluginID } from '@masknet/shared-base'
 import { GasOptionType } from '@masknet/web3-shared-base'
-import type { NetworkPluginID } from '@masknet/shared-base'
 import { useWeb3State } from './useWeb3State.js'
 
 export function useGasOptionType<T extends NetworkPluginID>(pluginID?: T) {

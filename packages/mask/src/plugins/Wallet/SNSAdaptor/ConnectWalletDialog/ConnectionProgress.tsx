@@ -1,6 +1,7 @@
 import { Trans } from 'react-i18next'
+import { Icons } from '@masknet/icons'
 import { WalletIcon } from '@masknet/shared'
-import type { NetworkPluginID } from '@masknet/shared-base'
+import { isDashboardPage, NetworkPluginID } from '@masknet/shared-base'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 import { Box, Card, Typography, Paper, Link } from '@mui/material'
@@ -8,8 +9,6 @@ import { useStylesExtends, makeStyles, MaskColorVar, ActionButton, LoadingBase }
 import { useProviderDescriptor, useNetworkDescriptor, useWeb3State } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useI18N } from '../../../../utils/index.js'
-import { Icons } from '@masknet/icons'
-import { isDashboardPage } from '@masknet/shared-base'
 
 const useStyles = makeStyles<{
     contentBackground?: string

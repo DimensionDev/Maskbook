@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react'
+import urlcat from 'urlcat'
 import classNames from 'classnames'
 import { styled } from '@mui/material/styles'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
@@ -7,9 +8,7 @@ import { getCurrentIdentifier } from '../../../social-network-adaptor/utils.js'
 import { useLocation } from 'react-use'
 import { useChainId, useAccount } from '@masknet/web3-hooks-base'
 import type { GameInfo, GameNFT } from '../types.js'
-import { NetworkPluginID } from '@masknet/shared-base'
-import urlcat from 'urlcat'
-import { EnhanceableSite } from '@masknet/shared-base'
+import { NetworkPluginID, EnhanceableSite } from '@masknet/shared-base'
 
 const useStyles = makeStyles()(() => ({
     root: {

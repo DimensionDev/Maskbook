@@ -1,5 +1,4 @@
-import { PluginID } from '@masknet/shared-base'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { PluginID, NetworkPluginID } from '@masknet/shared-base'
 
 export const PLUGIN_META_KEY = NetworkPluginID.PLUGIN_SOLANA
 export const PLUGIN_ID = PluginID.Solana

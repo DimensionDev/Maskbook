@@ -3,8 +3,7 @@ import { Button, ListItemIcon, MenuItem } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { useI18N } from '../../i18n-next-ui.js'
 import { resolveNextID_NetworkPluginID } from '@masknet/web3-shared-base'
-import type { NetworkPluginID } from '@masknet/shared-base'
-import type { NextIDPlatform } from '@masknet/shared-base'
+import type { NetworkPluginID, NextIDPlatform } from '@masknet/shared-base'
 import { useWalletName } from './hooks/useWalletName.js'
 import {
     useCurrentWeb3NetworkPluginID,

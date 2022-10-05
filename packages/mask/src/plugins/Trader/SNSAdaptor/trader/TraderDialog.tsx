@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { useUpdateEffect } from 'react-use'
-import { PluginID, NetworkPluginID } from '@masknet/shared-base'
+import { PluginID, NetworkPluginID, isDashboardPage, CrossIsolationMessages } from '@masknet/shared-base'
 import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
 import { PluginWeb3ContextProvider, useChainId, useChainIdValid } from '@masknet/web3-hooks-base'
 import { ChainId, isNativeTokenAddress, SchemaType } from '@masknet/web3-shared-evm'
@@ -16,7 +16,6 @@ import { createFungibleToken } from '@masknet/web3-shared-base'
 import { Icons } from '@masknet/icons'
 import { currentSlippageSettings } from '../../settings.js'
 import { MIN_GAS_LIMIT } from '../../constants/index.js'
-import { isDashboardPage, CrossIsolationMessages } from '@masknet/shared-base'
 
 const isDashboard = isDashboardPage()
 

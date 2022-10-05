@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { NFTListDialog } from './NFTListDialog.js'
 import { InjectedDialog } from '@masknet/shared'
 import { UploadAvatarDialog } from './UploadAvatarDialog.js'
-import { BindingProof, CrossIsolationMessages } from '@masknet/shared-base'
+import { PluginID, BindingProof, CrossIsolationMessages } from '@masknet/shared-base'
 import { useAccount } from '@masknet/web3-hooks-base'
 import { AllChainsNonFungibleToken, PFP_TYPE, SelectTokenInfo } from '../types.js'
 import { PersonaPage } from './PersonaPage.js'
@@ -11,7 +11,6 @@ import { useI18N } from '../locales/i18n_generated'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { makeStyles, useTabs } from '@masknet/theme'
 import { TabContext } from '@mui/lab'
-import { PluginID } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     root: {

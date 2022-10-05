@@ -1,5 +1,4 @@
 import { useCallback } from 'react'
-
 import type { NetworkPluginID } from '@masknet/shared-base'
 import { useAccount } from './useAccount.js'
 import { useChainId } from './useChainId.js'

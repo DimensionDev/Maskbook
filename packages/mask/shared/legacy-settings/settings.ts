@@ -1,8 +1,7 @@
 import { isEqual } from 'lodash-unified'
 import { Appearance } from '@masknet/theme'
 import { LanguageOptions } from '@masknet/public-api'
-import { EnhanceableSite, ExtensionSite, updateLanguage } from '@masknet/shared-base'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { EnhanceableSite, ExtensionSite, updateLanguage, NetworkPluginID } from '@masknet/shared-base'
 import { LaunchPage } from './types.js'
 import {
     createGlobalSettings,

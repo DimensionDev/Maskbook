@@ -10,7 +10,7 @@ export enum NetworkPluginID {
 /**
  * All integrated Plugin IDs
  */
- export enum PluginID {
+export enum PluginID {
     EVM = 'com.mask.evm',
     Flow = 'com.mask.flow',
     Solana = 'com.mask.solana',

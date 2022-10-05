@@ -1,6 +1,6 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { base } from '@masknet/plugin-wallet'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { ExtensionSite, getSiteType, NetworkPluginID } from '@masknet/shared-base'
 import { SelectNftContractDialog } from '../SNSAdaptor/SelectNftContractDialog.js'
 import { SelectProviderDialog } from '../SNSAdaptor/SelectProviderDialog/index.js'
 import { WalletStatusDialog } from '../SNSAdaptor/WalletStatusDialog/index.js'
@@ -9,7 +9,6 @@ import { WalletRiskWarningDialog } from '../SNSAdaptor/RiskWarningDialog/index.j
 import { GasSettingDialog } from '../SNSAdaptor/GasSettingDialog/index.js'
 import { TransactionSnackbar } from '../SNSAdaptor/TransactionSnackbar/index.js'
 import { WalletConnectQRCodeDialog } from '../SNSAdaptor/WalletConnectQRCodeDialog/index.js'
-import { ExtensionSite, getSiteType } from '@masknet/shared-base'
 
 const dashboard: Plugin.Dashboard.Definition = {
     ...base,

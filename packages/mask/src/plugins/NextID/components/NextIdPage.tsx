@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import { useAsyncRetry } from 'react-use'
-import { PopupRoutes, EMPTY_LIST } from '@masknet/shared-base'
+import { PluginID, PopupRoutes, EMPTY_LIST } from '@masknet/shared-base'
 import { NextIDProof } from '@masknet/web3-providers'
 import { useCurrentVisitingIdentity, useLastRecognizedIdentity } from '../../../components/DataSource/useActivatedUI.js'
 import { useCurrentPersonaConnectStatus } from '../../../components/DataSource/usePersonaConnectStatus.js'
@@ -15,7 +15,6 @@ import {
     SelectConnectPersonaAction,
 } from './Actions/index.js'
 import { PluginCardFrameMini } from '@masknet/shared'
-import { PluginID } from '@masknet/shared-base'
 import { ThemeProvider } from '@mui/material'
 import { makeStyles, MaskLightTheme } from '@masknet/theme'
 

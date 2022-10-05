@@ -1,5 +1,4 @@
-import { PluginID } from '@masknet/shared-base'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { PluginID, NetworkPluginID } from '@masknet/shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 
 export const NFT_AVATAR_JSON_SERVER = 'https://configuration.r2d2.to/com.maskbook.avatar.json'

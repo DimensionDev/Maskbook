@@ -8,11 +8,10 @@ import { useI18N } from '../../../utils/index.js'
 import { AddNFT } from './AddNFT.js'
 import { useAccount, useChainId, useCurrentWeb3NetworkPluginID, useNonFungibleAssets } from '@masknet/web3-hooks-base'
 import { ElementAnchor, ReversedAddress } from '@masknet/shared'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { NetworkPluginID, EMPTY_LIST } from '@masknet/shared-base'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
 import type { AllChainsNonFungibleToken, SelectTokenInfo } from '../types.js'
 import type { ChainId } from '@masknet/web3-shared-evm'
-import { EMPTY_LIST } from '@masknet/shared-base'
 import { NFTImage } from './NFTImage.js'
 
 const useStyles = makeStyles()((theme) => ({

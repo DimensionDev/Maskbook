@@ -4,7 +4,7 @@ import { makeStyles } from '@masknet/theme'
 import { TabContext, TabPanel } from '@mui/lab'
 import { AssetsList } from '../AssetsList/index.js'
 import { useNavigate } from 'react-router-dom'
-import { PopupRoutes } from '@masknet/shared-base'
+import { PopupRoutes, NetworkPluginID } from '@masknet/shared-base'
 import { ActivityList } from '../ActivityList/index.js'
 import { useI18N } from '../../../../../../utils/index.js'
 import { useContainer } from 'unstated-next'
@@ -12,7 +12,6 @@ import { WalletContext } from '../../hooks/useWalletContext.js'
 import { LoadingPlaceholder } from '../../../../components/LoadingPlaceholder/index.js'
 import { Navigator } from '../../../../components/Navigator/index.js'
 import { useWallet } from '@masknet/web3-hooks-base'
-import { NetworkPluginID } from '@masknet/shared-base'
 
 const useStyles = makeStyles()({
     content: {
