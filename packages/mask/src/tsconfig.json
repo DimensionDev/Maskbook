@@ -7,7 +7,7 @@
     "emitDeclarationOnly": true,
     "lib": ["ES2022"]
   },
-  "include": ["./", "./**/*.json", "../../social-network-infra/src/hooks/useConnectedPersonas.ts"],
+  "include": ["./", "./**/*.json", "../../social-network-infra/src/hooks/usePersonasConnected.ts"],
 
   // ! Note: mask/ depends dashboard/ on source-code level
   // !       but dashboard/ depends mask/ on type level

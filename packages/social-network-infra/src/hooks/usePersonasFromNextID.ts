@@ -1,42 +1,24 @@
 import { useAsyncRetry } from 'react-use'
 import { NextIDProof } from '@masknet/web3-providers'
 import type { IdentityResolved } from '@masknet/plugin-infra/content-script'
-import { useSocialNetwork } from './useContext.js'
+import { useSocialNetworkConfiguration } from './useContext.js'
+import { sortPersonaBindings } from '../utils/index.js'
 
 /**
- * Get all bound personas around the identity.
+ * Get all bound personas around the identity from the NextID service.
  * @param identityResolved
  * @returns
  */
-export function usePersonaFromNextID(identityResolved: IdentityResolved) {
-    const socialNetwork = useSocialNetwork()
-    const platform = socialNetwork.configuration.nextIDConfig?.platform
+export function usePersonasFromNextID(identityResolved: IdentityResolved | undefined) {
+    const platform = useSocialNetworkConfiguration((x) => x.nextIDConfig?.platform)
 
     return useAsyncRetry(async () => {
         if (!platform) return
-        if (!identityResolved.identifier) return
-        return NextIDProof.queryAllExistedBindingsByPlatform(platform, identityResolved.identifier.userId)
-    }, [socialNetwork, identityResolved.identifier?.userId, NextIDProof])
+        if (!identityResolved?.identifier) return
+        const bindings = await NextIDProof.queryAllExistedBindingsByPlatform(
+            platform,
+            identityResolved.identifier.userId,
+        )
+        return bindings?.sort((a, b) => sortPersonaBindings(a, b, identityResolved.identifier?.userId.toLowerCase()))
+    }, [platform, identityResolved?.identifier?.toText()])
 }
-
-// import { useEffect } from 'react'
-// import { useAsyncRetry } from 'react-use'
-// import { EMPTY_LIST } from '@masknet/shared-base'
-// import { NextIDProof } from '@masknet/web3-providers'
-// import { MaskMessages } from '../../utils/index.js'
-// import { activatedSocialNetworkUI } from '../../social-network/index.js'
-
-// /**
-//  * Get all personas bound with the given identity from NextID service
-//  */
-// export function usePersonasFromNextID(
-//     userId?: string,
-//     platform = activatedSocialNetworkUI.configuration.nextIDConfig?.platform,
-// ) {
-//     const asyncRetry = useAsyncRetry(async () => {
-//         if (!platform || !userId) return EMPTY_LIST
-//         return NextIDProof.queryAllExistedBindingsByPlatform(platform, userId)
-//     }, [platform, userId])
-//     useEffect(() => MaskMessages.events.ownProofChanged.on(asyncRetry.retry), [asyncRetry.retry])
-//     return asyncRetry
-// }

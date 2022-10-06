@@ -1,49 +1,35 @@
 import { useEffect } from 'react'
 import { useAsyncRetry } from 'react-use'
-import { first } from 'lodash-unified'
 import type { IdentityResolved } from '@masknet/plugin-infra/content-script'
-import type { NextIDPlatform } from '@masknet/shared-base'
 import type { SocialIdentity } from '@masknet/web3-shared-base'
-import { useIsOwnerIdentity } from './useIsOwnerIdentity.js'
-import { NextIDProof } from '@masknet/web3-providers'
-import { useMessages, useSocialNetwork } from './useContext.js'
-
-async function queryPersonasFromNextID(platform: NextIDPlatform, identityResolved: IdentityResolved) {
-    if (!identityResolved.identifier) return
-    return NextIDProof.queryAllExistedBindingsByPlatform(platform, identityResolved.identifier.userId)
-}
-
-async function queryPersonaFromDB(identityResolved: IdentityResolved) {
-    if (!identityResolved.identifier) return
-    return Services.Identity.queryPersonaByProfile(identityResolved.identifier)
-}
+import { useIdentityOwned } from './useIdentityOwned.js'
+import { useMessages, useSocialNetworkConfiguration } from './useContext.js'
+import { usePersonaFromDB } from './usePersonaFromDB.js'
+import { usePersonaFromNextID } from './usePersonaFromNextID.js'
 
 /**
  * Get the social identity of the given identity
  */
-export function useSocialIdentity(identity: IdentityResolved | null | undefined) {
-    const socialNetwork = useSocialNetwork()
+export function useSocialIdentity(identityResolved: IdentityResolved | undefined) {
+    const platform = useSocialNetworkConfiguration((x) => x.nextIDConfig?.platform)
     const messages = useMessages()
-    const isOwner = useIsOwnerIdentity(identity)
-    const platform = socialNetwork.configuration.nextIDConfig?.platform
+    const isOwner = useIdentityOwned(identityResolved)
+    const { value: personaFromDB } = usePersonaFromDB(identityResolved)
+    const { value: personaFromNextID } = usePersonaFromNextID(identityResolved)
 
-    const result = useAsyncRetry<SocialIdentity | undefined>(async () => {
-        if (!identity) return
+    const asyncResult = useAsyncRetry<SocialIdentity | undefined>(async () => {
+        if (!identityResolved) return
         if (!platform) return
-        const bindings = await queryPersonasFromNextID(platform, identity)
-        const persona = await queryPersonaFromDB(identity)
-        const personaBindings =
-            bindings?.filter((x) => x.persona === persona?.identifier.publicKeyAsHex.toLowerCase()) ?? []
         return {
-            ...identity,
+            ...identityResolved,
             isOwner,
-            publicKey: persona?.identifier.publicKeyAsHex,
-            hasBinding: personaBindings.length > 0,
-            binding: first(personaBindings),
+            publicKey: personaFromDB?.identifier.publicKeyAsHex,
+            hasBinding: !!personaFromNextID,
+            binding: personaFromNextID,
         }
-    }, [isOwner, identity, platform])
+    }, [isOwner, identityResolved, platform, personaFromDB?.identifier.toText(), personaFromNextID?.persona])
 
-    useEffect(() => messages.events.ownProofChanged.on(result.retry), [messages, result.retry])
+    useEffect(() => messages.events.ownProofChanged.on(asyncResult.retry), [messages, asyncResult.retry])
 
-    return result
+    return asyncResult
 }

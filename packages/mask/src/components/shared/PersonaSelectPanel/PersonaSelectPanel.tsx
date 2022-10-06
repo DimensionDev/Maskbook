@@ -11,7 +11,7 @@ import {
 } from '@masknet/shared-base'
 import { useAsyncFn, useCopyToClipboard } from 'react-use'
 import { useLastRecognizedIdentity } from '../../DataSource/useActivatedUI.js'
-import { useConnectedPersonas } from '../../../../../social-network-infra/src/hooks/useConnectedPersonas.js'
+import { useConnectedPersonas } from '../../../../../social-network-infra/src/hooks/usePersonasConnected.js'
 import Services from '../../../extension/service.js'
 import { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { useNextIDVerify } from '../../DataSource/useNextIDVerify.js'

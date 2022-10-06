@@ -1,6 +1,12 @@
 import { createContext, useContext } from 'react'
 import type { WebExtensionMessage } from '@dimensiondev/holoflows-kit'
-import type { ECKeyIdentifier, MaskEvents, PersonaInformation, ProfileIdentifier } from '@masknet/shared-base'
+import type {
+    ECKeyIdentifier,
+    MaskEvents,
+    PersonaIdentifier,
+    PersonaInformation,
+    ProfileIdentifier,
+} from '@masknet/shared-base'
 import type { SocialNetworkUI } from '../types.js'
 
 export interface SocialNetworkContext {
@@ -9,7 +15,9 @@ export interface SocialNetworkContext {
     messages: WebExtensionMessage<MaskEvents>
     services: {
         queryPersona: (key: ECKeyIdentifier) => Promise<PersonaInformation | undefined>
+        getPersonaAvatars: (keys: ECKeyIdentifier[]) => Promise<Map<ProfileIdentifier | PersonaIdentifier, string>>
         queryPersonaByProfile: (identifier: ProfileIdentifier) => Promise<PersonaInformation | undefined>
+        queryOwnedPersonaInformation: (initializedOnly: boolean) => Promise<PersonaInformation[]>
     }
 }
 
@@ -21,6 +29,13 @@ export function useGlobalState() {
 
 export function useSocialNetwork() {
     return useContext(SocialNetworkContext).activatedSocialNetwork
+}
+
+export function useSocialNetworkConfiguration<T>(
+    preidcate: (configuration: SocialNetworkUI.Configuration.Define) => T,
+): T {
+    const socialNetwork = useSocialNetwork()
+    return preidcate(socialNetwork.configuration)
 }
 
 export function useMessages() {

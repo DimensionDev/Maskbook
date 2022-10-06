@@ -1,16 +1,18 @@
-import { useSubscription } from 'use-subscription'
-import { createSubscriptionFromAsyncSuspense } from '@masknet/shared-base'
-import Services from '../../extension/service.js'
-import { MaskMessages } from '../../utils/messages.js'
-
-const personas = createSubscriptionFromAsyncSuspense(
-    () => Services.Identity.queryOwnedPersonaInformation(true),
-    MaskMessages.events.ownPersonaChanged.on,
-)
+import { useEffect } from 'react'
+import { useAsyncRetry } from 'react-use'
+import { useServices, useMessages } from './useContext.js'
 
 /**
  * Get all owned personas from DB
  */
 export function usePersonasFromDB() {
-    return useSubscription(personas)
+    const messages = useMessages()
+    const services = useServices()
+    const asyncResult = useAsyncRetry(async () => {
+        return services.queryOwnedPersonaInformation(true)
+    }, [services])
+
+    useEffect(() => messages.events.ownPersonaChanged.on(() => asyncResult.retry()), [messages, asyncResult.retry])
+
+    return asyncResult
 }

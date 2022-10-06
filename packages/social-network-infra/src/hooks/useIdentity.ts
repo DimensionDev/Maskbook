@@ -1,7 +1,11 @@
-export function useSocialIdentityByUseId(userId?: string) {
-    const { value: identity } = useAsync(async () => {
+import { useAsyncRetry } from 'react-use'
+import { useSocialNetwork } from './useContext.js'
+
+export function useIdentity(userId?: string) {
+    const socialNetwork = useSocialNetwork()
+    
+    return useAsyncRetry(async () => {
         if (!userId) return
-        return activatedSocialNetworkUI.utils.getIdentity?.(userId)
-    }, [userId])
-    return useSocialIdentity(identity)
+        return socialNetwork.utils.getIdentity?.(userId)
+    }, [userId, socialNetwork])
 }
