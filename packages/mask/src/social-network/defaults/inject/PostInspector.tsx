@@ -1,10 +1,10 @@
 import { memo } from 'react'
+import { noop } from 'lodash-unified'
 import type { DOMProxy } from '@dimensiondev/holoflows-kit'
 import { type PostInfo, PostInfoProvider } from '@masknet/plugin-infra/content-script'
 import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot.js'
 import { PostInspector, PostInspectorProps } from '../../../components/InjectedComponents/PostInspector.js'
 import { makeStyles } from '@masknet/theme'
-import { noop } from 'lodash-unified'
 
 export function injectPostInspectorDefault<T extends string>(
     config: InjectPostInspectorDefaultConfig = {},

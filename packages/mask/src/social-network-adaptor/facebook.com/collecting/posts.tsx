@@ -1,5 +1,5 @@
 import { DOMProxy, LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import type { SocialNetworkUI as Next } from '../../../social-network/types.js'
+import type { SocialNetworkUI as Next } from '@masknet/social-network-infra'
 import { creator } from '../../../social-network/utils.js'
 import { isMobileFacebook } from '../utils/isMobile.js'
 import { getProfileIdentifierAtFacebook } from '../utils/getProfileIdentifier.js'

@@ -2,7 +2,7 @@ import { twitterBase } from './twitter.com/base.js'
 import { facebookBase } from './facebook.com/base.js'
 import { instagramBase } from './instagram.com/base.js'
 import { CurrentSNSNetwork } from '@masknet/plugin-infra'
-import type { SocialNetwork } from '../social-network/types.js'
+import type { SocialNetwork } from '@masknet/social-network-infra'
 import { activatedSocialNetworkUI, globalUIState } from '../social-network/index.js'
 import type { PersonaIdentifier, ProfileIdentifier } from '@masknet/shared-base'
 

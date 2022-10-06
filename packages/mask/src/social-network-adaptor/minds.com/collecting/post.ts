@@ -7,7 +7,7 @@ import {
     makeTypedMessageImage,
 } from '@masknet/typed-message'
 import { ProfileIdentifier } from '@masknet/shared-base'
-import type { SocialNetworkUI as Next } from '../../../social-network/types.js'
+import type { SocialNetworkUI as Next } from '@masknet/social-network-infra'
 import { creator } from '../../../social-network/utils.js'
 import { createRefsForCreatePostContext } from '../../../social-network/utils/create-post-context.js'
 import { untilElementAvailable } from '../../../utils/dom.js'

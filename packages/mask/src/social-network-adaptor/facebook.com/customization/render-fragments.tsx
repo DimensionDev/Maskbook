@@ -1,6 +1,6 @@
-import { DefaultRenderFragments, RenderFragmentsContextType } from '@masknet/typed-message/dom'
 import { memo } from 'react'
 import { Link } from '@mui/material'
+import { DefaultRenderFragments, RenderFragmentsContextType } from '@masknet/typed-message/dom'
 import { useTagEnhancer } from '../../../../shared-ui/TypedMessageRender/Components/Text.js'
 
 function Hash(props: RenderFragmentsContextType.HashLinkProps | RenderFragmentsContextType.CashLinkProps) {

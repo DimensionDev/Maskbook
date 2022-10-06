@@ -1,7 +1,7 @@
 import { delay } from '@dimensiondev/kit'
 import { EnhanceableSite } from '@masknet/shared-base'
 import { Mirror, Writer } from '@masknet/web3-providers'
-import type { SocialNetworkUI } from '../../../social-network/types'
+import type { SocialNetworkUI } from '@masknet/social-network-infra'
 import { creator } from '../../../social-network/utils'
 import { formatWriter, getMirrorUserId } from './utils.js'
 

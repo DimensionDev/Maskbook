@@ -1,4 +1,4 @@
-import type { SocialNetworkUI } from '../../social-network/types.js'
+import type { SocialNetworkUI } from '@masknet/social-network-infra'
 import { stateCreator } from '../../social-network/utils.js'
 import { facebookBase } from './base.js'
 import { facebookShared } from './shared.js'

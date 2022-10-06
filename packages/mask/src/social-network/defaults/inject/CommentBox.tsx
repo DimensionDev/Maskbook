@@ -1,9 +1,9 @@
 import { memo, useCallback } from 'react'
+import { makeStyles } from '@masknet/theme'
 import { type PostInfo, usePostInfoDetails, usePostInfo, PostInfoProvider } from '@masknet/plugin-infra/content-script'
 import { DOMProxy, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { CommentBox, CommentBoxProps } from '../../../components/InjectedComponents/CommentBox.js'
 import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot.js'
-import { makeStyles } from '@masknet/theme'
 import { MaskMessages } from '../../../utils/messages.js'
 import { startWatch } from '../../../utils/watcher.js'
 

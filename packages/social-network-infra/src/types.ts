@@ -31,7 +31,7 @@ export declare namespace SocialNetwork {
         isValidUsername?(username: string): boolean
         /** Handle share */
         share?(text: string): void
-        createPostContext: (actions: PostContextSNSActions) => (creation: PostContextCreation) => PostContext
+        createPostContext: (creation: PostContextCreation) => PostContext
         getUserIdentity?(useId: string): Promise<SocialIdentity | undefined>
     }
     export interface Shared {

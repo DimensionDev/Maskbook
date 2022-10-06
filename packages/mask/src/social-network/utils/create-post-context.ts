@@ -1,3 +1,5 @@
+import type { Subscription } from 'use-subscription'
+import { difference } from 'lodash-unified'
 import { ValueRef } from '@dimensiondev/holoflows-kit'
 import type {
     PostContext,
@@ -26,11 +28,9 @@ import {
     PostIVIdentifier,
     EnhanceableSite,
 } from '@masknet/shared-base'
-import type { Subscription } from 'use-subscription'
 import { activatedSocialNetworkUI } from '../ui.js'
 import { resolveFacebookLink } from '../../social-network-adaptor/facebook.com/utils/resolveFacebookLink.js'
 import type { SupportedPayloadVersions } from '@masknet/encryption'
-import { difference } from 'lodash-unified'
 
 export function createSNSAdaptorSpecializedPostContext(create: PostContextSNSActions) {
     return function createPostContext(opt: PostContextCreation): PostContext {

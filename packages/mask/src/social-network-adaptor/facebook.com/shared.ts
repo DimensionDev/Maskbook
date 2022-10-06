@@ -1,10 +1,10 @@
-import type { SocialNetwork } from '../../social-network/types.js'
+import type { SocialNetwork } from '@masknet/social-network-infra'
+import type { PostIdentifier } from '@masknet/shared-base'
+import { openWindow } from '@masknet/shared-base-ui'
 import { facebookBase } from './base.js'
 import { getPostUrlAtFacebook, isValidFacebookUsername } from './utils/parse-username.js'
-import type { PostIdentifier } from '@masknet/shared-base'
 import { hasPayloadLike } from '../../utils/index.js'
 import { createSNSAdaptorSpecializedPostContext } from '../../social-network/utils/create-post-context.js'
-import { openWindow } from '@masknet/shared-base-ui'
 import { FacebookAdaptor } from '../../../shared/site-adaptors/implementations/facebook.com.js'
 
 const getPostURL = (post: PostIdentifier): URL | null => {

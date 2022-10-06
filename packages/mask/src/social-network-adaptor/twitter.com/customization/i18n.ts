@@ -1,4 +1,4 @@
-import type { SocialNetworkUI } from '../../../social-network/index.js'
+import type { SocialNetworkUI } from '@masknet/social-network-infra'
 import { languages } from '../locales/languages.js'
 
 export const i18NOverwriteTwitter: SocialNetworkUI.Customization.I18NOverwrite = {

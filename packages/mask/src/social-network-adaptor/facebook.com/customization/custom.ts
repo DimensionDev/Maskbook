@@ -1,10 +1,10 @@
+import { useMemo } from 'react'
+import produce, { setAutoFreeze } from 'immer'
 import { ValueRef } from '@dimensiondev/holoflows-kit'
 import { PaletteMode, Theme, unstable_createMuiStrictModeTheme } from '@mui/material'
-import produce, { setAutoFreeze } from 'immer'
-import { useMemo } from 'react'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { createSubscriptionFromValueRef } from '@masknet/shared-base'
-import type { SocialNetworkUI } from '../../../social-network/index.js'
+import type { SocialNetworkUI } from '@masknet/social-network-infra'
 import { fromRGB, isDark, shade, toRGB } from '../../../utils/theme/index.js'
 
 const primaryColorRef = new ValueRef(toRGB([29, 161, 242]))

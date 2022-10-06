@@ -1,4 +1,5 @@
-import { SocialNetworkUI, stateCreator } from '../../social-network/index.js'
+import { stateCreator } from '../../social-network/index.js'
+import type { SocialNetworkUI } from '@masknet/social-network-infra'
 import { instagramShared } from './shared.js'
 import { instagramBase } from './base.js'
 import { IdentityProviderInstagram } from './collecting/identity-provider.js'
