@@ -12,8 +12,9 @@
   "dependencies": {
     "@types/use-subscription": "^1.0.0",
     "@masknet/plugin-infra": "workspace:*",
-    "@masknet/shared-base": "workspace:*",
     "@masknet/shared": "workspace:*",
+    "@masknet/shared-base": "workspace:*",
+    "@masknet/shared-base-ui": "workspace:*",
     "@masknet/encryption": "workspace:*",
     "@masknet/typed-message": "workspace:*",
     "@masknet/web3-hooks-base": "workspace:*",

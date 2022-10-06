@@ -645,6 +645,9 @@ importers:
       '@masknet/shared-base-ui':
         specifier: workspace:*
         version: link:../shared-base-ui
+      '@masknet/social-network-infra':
+        specifier: workspace:*
+        version: link:../social-network-infra
       '@masknet/theme':
         specifier: workspace:*
         version: link:../theme

@@ -1,6 +1,6 @@
 import { ProfileIdentifier } from '@masknet/shared-base'
 import { Twitter } from '@masknet/web3-providers'
-import type { SocialIdentity } from '@masknet/web3-shared-base'
+import type { IdentityResolved } from '@masknet/plugin-infra/content-script'
 import { isNull } from 'lodash-unified'
 import type { SocialNetwork } from '@masknet/social-network-infra'
 import { collectNodeText } from '../../../utils/index.js'
@@ -66,7 +66,7 @@ export const getAvatar = () => {
     return ''
 }
 
-export async function getUserIdentity(twitterId: string): Promise<SocialIdentity | undefined> {
+export async function getUserIdentity(twitterId: string): Promise<IdentityResolved | undefined> {
     const user = await Twitter.getUserByScreenName(twitterId)
     if (!user?.legacy) return
 

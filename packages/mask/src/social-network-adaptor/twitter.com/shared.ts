@@ -1,10 +1,10 @@
 import { PostIdentifier, ProfileIdentifier } from '@masknet/shared-base'
+import { TwitterDecoder } from '@masknet/encryption'
 import { openWindow } from '@masknet/shared-base-ui'
 import type { SocialNetwork } from '@masknet/social-network-infra'
 import { createSNSAdaptorSpecializedPostContext } from '../../social-network/utils/create-post-context.js'
 import { hasPayloadLike } from '../../utils/index.js'
 import { twitterBase } from './base.js'
-import { TwitterDecoder } from '@masknet/encryption'
 import { getUserIdentity, usernameValidator } from './utils/user.js'
 import { TwitterAdaptor } from '../../../shared/site-adaptors/implementations/twitter.com.js'
 
@@ -45,6 +45,6 @@ export const twitterShared: SocialNetwork.Shared & SocialNetwork.Base = {
             },
             getURLFromPostIdentifier: getPostURL,
         }),
-        getUserIdentity,
+        getIdentity: getUserIdentity,
     },
 }

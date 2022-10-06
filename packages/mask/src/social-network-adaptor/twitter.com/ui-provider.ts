@@ -1,4 +1,5 @@
-import { globalUIState, SocialNetworkUI, stateCreator } from '../../social-network/index.js'
+import type { SocialNetworkUI } from '@masknet/social-network-infra'
+import { globalUIState, stateCreator } from '../../social-network/index.js'
 import { twitterBase } from './base.js'
 import getSearchedKeywordAtTwitter from './collecting/getSearchedKeyword.js'
 import { twitterShared } from './shared.js'

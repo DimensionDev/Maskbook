@@ -10,6 +10,6 @@ export const mirrorShared: SocialNetwork.Shared & SocialNetwork.Base = {
         createPostContext: createSNSAdaptorSpecializedPostContext({
             hasPayloadLike,
         }),
-        getUserIdentity,
+        getIdentity: getUserIdentity,
     },
 }
