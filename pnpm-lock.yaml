@@ -297,9 +297,6 @@ importers:
       '@masknet/shared-base-ui':
         specifier: workspace:*
         version: link:../shared-base-ui
-      '@masknet/sns-hooks-base':
-        specifier: workspace:*
-        version: link:../sns-hooks/base
       '@masknet/storybook-shared':
         specifier: workspace:*
         version: link:../storybook-shared
@@ -648,9 +645,6 @@ importers:
       '@masknet/shared-base-ui':
         specifier: workspace:*
         version: link:../shared-base-ui
-      '@masknet/sns-hooks-base':
-        specifier: workspace:*
-        version: link:../sns-hooks/base
       '@masknet/theme':
         specifier: workspace:*
         version: link:../theme
@@ -2197,14 +2191,32 @@ importers:
         specifier: ^8.3.2
         version: 8.3.2
 
-  packages/sns-hooks/base:
+  packages/social-network-infra:
     dependencies:
+      '@masknet/encryption':
+        specifier: workspace:*
+        version: link:../encryption
       '@masknet/plugin-infra':
         specifier: workspace:*
-        version: link:../../plugin-infra
+        version: link:../plugin-infra
+      '@masknet/shared':
+        specifier: workspace:*
+        version: link:../shared
       '@masknet/shared-base':
         specifier: workspace:*
-        version: link:../../shared-base
+        version: link:../shared-base
+      '@masknet/typed-message':
+        specifier: workspace:*
+        version: link:../typed-message
+      '@masknet/web3-hooks-base':
+        specifier: workspace:*
+        version: link:../web3-hooks/base
+      '@masknet/web3-shared-base':
+        specifier: workspace:*
+        version: link:../web3-shared/base
+      '@types/use-subscription':
+        specifier: ^1.0.0
+        version: 1.0.0
       bignumber.js:
         specifier: 9.0.2
         version: 9.0.2
@@ -2217,6 +2229,9 @@ importers:
       urlcat:
         specifier: ^2.0.4
         version: 2.0.4_fggwetex7eobhq3hztj4obsulu
+      use-subscription:
+        specifier: 1.6.0
+        version: 1.6.0
 
   packages/storybook-shared:
     devDependencies:

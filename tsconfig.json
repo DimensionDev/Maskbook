@@ -80,7 +80,6 @@
       "@masknet/theme": ["./packages/theme/src"],
       // @masknet/web3-constants is not listed. It is not a TS project (only contains JSON files).
       // @masknet/web3-contracts is not listed. It is not a TS project (only contains generated JSON and .d.ts files).
-      "@masknet/sns-hooks-base": ["./packages/sns-hooks/base/src"],
       "@masknet/web3-helpers": ["./packages/web3-helpers/src"],
       "@masknet/web3-providers": ["./packages/web3-providers/src"],
       "@masknet/web3-state": ["./packages/web3-state/src"],
@@ -92,6 +91,7 @@
       "@masknet/web3-shared-solana": ["./packages/web3-shared/solana/src"],
       "@masknet/typed-message": ["./packages/typed-message/base"],
       "@masknet/typed-message/dom": ["./packages/typed-message/dom"],
+      "@masknet/social-network-infra": ["./packages/social-network-infra/src"],
       "@masknet/sandboxed-plugin-runtime": ["./packages/sandboxed-plugin-runtime/src/runtime/export.ts"],
       "@masknet/sandboxed-plugin-runtime/background": ["./packages/sandboxed-plugin-runtime/src/background"],
       "@masknet/sandboxed-plugin-runtime/site-adaptor": ["./packages/sandboxed-plugin-runtime/src/site-adaptor"],
