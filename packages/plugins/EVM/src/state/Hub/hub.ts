@@ -43,6 +43,7 @@ class Hub extends HubStateBaseClient<ChainId> implements EVM_Hub {
             if (chainId === ChainId.Astar) return await AstarGas.getGasOptions(options.chainId)
             return await DeBank.getGasOptions(options.chainId)
         } catch (error) {
+            console.log({ error })
             return EthereumWeb3.getGasOptions(options.chainId)
         }
     }
