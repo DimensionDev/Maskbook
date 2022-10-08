@@ -53,7 +53,7 @@ export async function encodeContractTransaction(
         nonce: overrides?.nonce ? toHex(overrides.nonce) : undefined,
         chainId: overrides?.chainId ? toHex(overrides.chainId) : undefined,
     }
-
+    console.log({ tx })
     if (!tx.gas) {
         tx.gas = await transaction.estimateGas({
             from: tx.from as string | undefined,
@@ -75,6 +75,7 @@ export async function sendTransaction(
 ) {
     if (!contract || !transaction) throw new Error('Invalid contract or transaction.')
     const tx = await encodeContractTransaction(contract, transaction, overrides)
+    console.log({ tx })
     const receipt = await transaction.send(tx as PayableTx)
     return receipt?.transactionHash ?? ''
 }

@@ -160,7 +160,7 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings, version:
             redPacketContract.methods.create_red_packet(...params),
             config,
         )
-
+        console.log({ tx, config })
         const hash = await connection.sendTransaction(tx)
         const receipt = await connection.getTransactionReceipt(hash)
         if (receipt) {
