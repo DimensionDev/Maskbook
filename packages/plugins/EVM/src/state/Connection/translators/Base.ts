@@ -53,6 +53,7 @@ export class Base implements Translator {
                     config.gasPrice = toHex(formatGweiToWei(normalOption.suggestedMaxFeePerGas).toFixed(0))
                 }
             }
+            console.log({ config })
         } catch (err) {
             console.error(err)
         }
