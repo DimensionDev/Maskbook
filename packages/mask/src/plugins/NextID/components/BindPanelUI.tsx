@@ -29,7 +29,6 @@ const useStyles = makeStyles()((theme) => ({
     name: {
         display: 'flex',
         alignItems: 'center',
-        fontSize: 14,
         color: theme.palette.text.primary,
         fontWeight: 500,
     },

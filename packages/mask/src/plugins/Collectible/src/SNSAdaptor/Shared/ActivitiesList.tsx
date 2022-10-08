@@ -24,7 +24,6 @@ const useStyles = makeStyles()((theme) => ({
         height: 36,
     },
     emptyText: {
-        fontSize: 14,
         color: theme.palette.maskColor.publicSecond,
     },
 }))

@@ -56,21 +56,7 @@ const useStyles = makeStyles()((theme) => ({
     between: {
         justifyContent: 'space-between',
     },
-    popper: {
-        overflow: 'visible',
-        padding: 6,
-    },
-    popperText: {
-        fontSize: 14,
-        fontWeight: 700,
-        lineHeight: '18px',
-        display: 'flex',
-        alignItems: 'center',
-        gap: 4,
-        cursor: 'pointer',
-    },
     optionTitle: {
-        fontSize: 14,
         lineHeight: '18px',
         color: theme.palette.text.secondary,
         marginRight: 12,

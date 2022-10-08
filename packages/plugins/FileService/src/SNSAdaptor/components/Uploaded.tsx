@@ -36,7 +36,6 @@ const useStyles = makeStyles()({
         whiteSpace: 'nowrap',
     },
     meta: {
-        fontSize: 14,
         lineHeight: 1.71,
         color: '#5D6F88',
         textAlign: 'center',

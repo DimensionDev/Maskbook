@@ -117,23 +117,11 @@ const useStyles = makeStyles()((theme) => ({
     },
     cancelButton: {},
     sendButton: {},
-    snackBarText: {
-        fontSize: 14,
-    },
-    snackBarLink: {
-        color: 'white',
-    },
     openIcon: {
         display: 'flex',
         width: 18,
         height: 18,
         marginLeft: 2,
-    },
-    snackBar: {
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        transform: 'translateY(1px)',
     },
     fallbackImage: {
         minHeight: '0 !important',

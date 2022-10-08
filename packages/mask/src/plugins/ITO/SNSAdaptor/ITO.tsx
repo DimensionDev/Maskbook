@@ -134,7 +134,6 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
     },
     fromText: {
         opacity: 0.6,
-        fontSize: 14,
     },
     rationWrap: {
         marginBottom: theme.spacing(1),

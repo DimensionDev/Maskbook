@@ -88,7 +88,6 @@ const useStyles = makeStyles()((theme) => {
             fontSize: 16,
         },
         info: {
-            fontSize: 14,
             color: theme.palette.mode === 'light' ? '#5B7083' : '#c3cbd2',
             [smallQuery]: {
                 fontSize: 13,

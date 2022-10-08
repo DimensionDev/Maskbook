@@ -55,13 +55,11 @@ const useStyles = makeStyles<{
     accountName: {
         color: !isDashboardPage() ? theme.palette.maskColor.dark : textColor,
         fontWeight: 700,
-        fontSize: 14,
         marginRight: 5,
         lineHeight: '18px',
     },
     balance: {
         color: !isDashboardPage() ? theme.palette.maskColor.dark : textColor,
-        fontSize: 14,
         paddingTop: 2,
         lineHeight: '18px',
     },

@@ -83,7 +83,6 @@ const useStyles = makeStyles()({
     name: {
         display: 'flex',
         alignItems: 'center',
-        fontSize: 14,
         color: '#1C68F3',
         fontWeight: 500,
     },

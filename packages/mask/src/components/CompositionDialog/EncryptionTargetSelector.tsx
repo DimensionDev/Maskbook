@@ -12,7 +12,6 @@ import { ConnectPersonaBoundary } from '../shared/ConnectPersonaBoundary.js'
 
 const useStyles = makeStyles()((theme) => ({
     optionTitle: {
-        fontSize: 14,
         lineHeight: '18px',
         color: theme.palette.text.secondary,
         marginRight: 12,
@@ -21,15 +20,6 @@ const useStyles = makeStyles()((theme) => ({
         overflow: 'visible',
         boxShadow: '0px 0px 16px 0px rgba(101, 119, 134, 0.2)',
         borderRadius: 4,
-    },
-    popperText: {
-        fontSize: 14,
-        fontWeight: 700,
-        lineHeight: '18px',
-        display: 'flex',
-        alignItems: 'center',
-        gap: 4,
-        cursor: 'pointer',
     },
     item: {
         display: 'flex',
@@ -42,14 +32,8 @@ const useStyles = makeStyles()((theme) => ({
         margin: '8px 0',
     },
     mainTitle: {
-        fontSize: 14,
         color: theme.palette.text.primary,
         fontWeight: 700,
-    },
-    subTitle: {
-        fontSize: 14,
-        color: theme.palette.text.secondary,
-        whiteSpace: 'nowrap',
     },
     paper: {
         width: 280,
@@ -65,7 +49,6 @@ const useStyles = makeStyles()((theme) => ({
         boxSizing: 'border-box',
     },
     create: {
-        fontSize: 14,
         cursor: 'pointer',
         fontWeight: 700,
         color: theme.palette.primary.main,
@@ -128,7 +111,6 @@ export function EncryptionTargetSelector(props: EncryptionTargetSelectorProps) {
     return (
         <>
             <Typography className={classes.optionTitle}>{t('post_dialog_visible_to')}</Typography>
-
             <PopoverListTrigger
                 selected={props.target}
                 selectedTitle={selectedTitle()}

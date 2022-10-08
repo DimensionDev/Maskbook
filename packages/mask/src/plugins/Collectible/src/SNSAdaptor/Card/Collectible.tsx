@@ -78,7 +78,6 @@ const useStyles = makeStyles()((theme) => {
             },
         },
         subtitle: {
-            fontSize: 14,
             marginRight: theme.spacing(0.5),
             maxHeight: '3rem',
             overflow: 'hidden',

@@ -27,7 +27,6 @@ const useStyles = makeStyles()((theme) => ({
     },
     infoRow: {
         marginBottom: 8,
-        fontSize: 14,
         fontWeight: 400,
         color: theme.palette.maskColor.main,
     },

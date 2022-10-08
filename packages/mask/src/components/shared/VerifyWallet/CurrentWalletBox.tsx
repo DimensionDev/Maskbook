@@ -30,7 +30,6 @@ const useStyles = makeStyles()((theme) => ({
         marginLeft: theme.spacing(1),
     },
     accountName: {
-        fontSize: 14,
         marginRight: 4,
         fontWeight: 'bold',
         lineHeight: '18px',
@@ -128,18 +127,15 @@ export function CurrentWalletBox(props: CurrentWalletBox) {
                                 : providerDescriptor?.name}
                         </Typography>
                     ) : (
-                        <>
-                            <Typography className={classes.accountName}>
-                                {walletName ?? providerDescriptor?.name}
-                            </Typography>
-                        </>
+                        <Typography className={classes.accountName}>
+                            {walletName ?? providerDescriptor?.name}
+                        </Typography>
                     )}
                 </div>
                 <div className={classes.infoRow}>
                     <Typography className={classes.address} variant="body2" title={account}>
                         <FormattedAddress address={account} size={4} formatter={Others?.formatAddress} />
                     </Typography>
-
                     <Link
                         className={classes.link}
                         href={Others?.explorerResolver.addressLink?.(wallet.chainId, account) ?? ''}
