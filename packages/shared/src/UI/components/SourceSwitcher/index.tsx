@@ -13,7 +13,6 @@ const useStyles = makeStyles()((theme) => {
         },
         sourceNote: {
             color: theme.palette.maskColor.secondaryDark,
-            fontSize: 14,
             fontWeight: 700,
         },
         sourceMenu: {
@@ -21,7 +20,6 @@ const useStyles = makeStyles()((theme) => {
             fontWeight: 700,
         },
         sourceName: {
-            fontSize: 14,
             fontWeight: 700,
             color: theme.palette.mode === 'dark' ? '' : theme.palette.maskColor.publicMain,
         },

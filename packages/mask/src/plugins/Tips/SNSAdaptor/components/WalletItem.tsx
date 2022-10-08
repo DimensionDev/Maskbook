@@ -29,7 +29,6 @@ const useStyles = makeStyles()((theme) => ({
     },
     accountName: {
         fontWeight: 700,
-        fontSize: 14,
         marginRight: 6,
     },
     address: {

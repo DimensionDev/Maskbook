@@ -73,7 +73,6 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         padding: theme.spacing(1, 2),
         gap: 2,
-        fontSize: 14,
         fontWeight: 600,
         margin: theme.spacing(2, 'auto', 1),
         cursor: 'pointer',

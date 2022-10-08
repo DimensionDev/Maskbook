@@ -29,14 +29,12 @@ const useStyles = makeStyles()((theme) => ({
         cursor: 'pointer',
     },
     commonFlexBox: {
-        fontSize: 14,
         display: 'flex',
         alignItems: 'center',
         gap: theme.spacing(0.5),
     },
     empty: {
         height: '100px',
-        fontSize: 14,
         color: theme.palette.text.secondary,
         lineHeight: '100px',
         textAlign: 'center',
@@ -48,7 +46,6 @@ const useStyles = makeStyles()((theme) => ({
     link: {
         color: theme.palette.maskColor.main,
         fontWeight: 700,
-        fontSize: 14,
         lineHeight: '18px',
         cursor: 'pointer',
         marginLeft: theme.spacing(1.25),

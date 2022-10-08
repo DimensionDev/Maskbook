@@ -17,7 +17,6 @@ const useStyles = makeStyles()(() => ({
     },
     content: {
         marginTop: 8,
-        fontSize: 14,
         lineHeight: '20px',
         color: '#536471',
         textAlign: 'center',

@@ -31,7 +31,6 @@ const useStyles = makeStyles()((theme) => {
             width: '100%',
         },
         title: {
-            fontSize: 14,
             fontWeight: 400,
         },
         link: {

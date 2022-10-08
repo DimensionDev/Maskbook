@@ -72,14 +72,12 @@ const useStyles = makeStyles()((theme) => ({
         columnGap: 4,
     },
     nickname: {
-        fontSize: 14,
         lineHeight: '18px',
         fontWeight: 700,
     },
     fingerprint: {
         display: 'flex',
         alignItems: 'center',
-        fontSize: 14,
         lineHeight: '18px',
         color: theme.palette.maskColor.third,
     },

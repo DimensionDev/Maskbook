@@ -16,10 +16,6 @@ const useStyles = makeStyles()({
         backgroundColor: '#EFF5FF',
         color: '#1C68F3',
     },
-    title: {
-        fontSize: 14,
-        lineHeight: '20px',
-    },
     content: {
         flex: 1,
         display: 'flex',

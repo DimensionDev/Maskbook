@@ -41,7 +41,6 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         justifyContent: 'center',
         gas: 6,
-        fontSize: 14,
         textAlign: 'center',
         padding: 12,
         cursor: 'pointer',

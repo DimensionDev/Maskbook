@@ -149,9 +149,8 @@ const useStyles = makeStyles()((theme) => {
             fontWeight: 700,
             zIndex: 2,
         },
-        powerBy: {
+        powered: {
             color: theme.palette.text.secondary,
-            fontSize: 14,
             fontWeight: 700,
         },
     }
@@ -252,7 +251,7 @@ export const ProfileCard: FC<Props> = ({ identity, ...rest }) => {
                 </div>
                 <div className={classes.content}>{component}</div>
                 <div className={classes.footer}>
-                    <Typography variant="body1" className={classes.powerBy}>
+                    <Typography variant="body1" className={classes.powered}>
                         <Trans
                             i18nKey="powered_by_whom"
                             values={{ whom: 'RSS3' }}

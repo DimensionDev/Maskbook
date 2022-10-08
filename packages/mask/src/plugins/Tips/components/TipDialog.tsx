@@ -40,11 +40,6 @@ const useStyles = makeStyles()((theme) => ({
     recipient: {
         margin: theme.spacing(1, 2, 0),
     },
-    abstractTabWrapper: {
-        width: '100%',
-        paddingBottom: theme.spacing(1),
-        flexShrink: 0,
-    },
     tabPanel: {
         flexGrow: 1,
         overflow: 'auto',
@@ -54,64 +49,6 @@ const useStyles = makeStyles()((theme) => ({
         height: '100%',
         paddingTop: theme.spacing(2),
         boxSizing: 'border-box',
-    },
-    tab: {
-        height: 36,
-        minHeight: 36,
-    },
-    tabPaper: {
-        backgroundColor: 'inherit',
-    },
-    tabs: {
-        height: 36,
-        minHeight: 36,
-        margin: '0 auto',
-        borderRadius: 4,
-    },
-    fallbackImage: {
-        width: 64,
-        height: 64,
-    },
-    walletChip: {
-        marginLeft: 'auto',
-        height: 40,
-        boxSizing: 'border-box',
-        display: 'flex',
-        alignItems: 'center',
-        backgroundColor: theme.palette.background.default,
-        padding: theme.spacing(0.5, 1),
-        borderRadius: 99,
-    },
-    wallet: {
-        marginLeft: theme.spacing(1),
-    },
-    walletTitle: {
-        marginLeft: theme.spacing(1),
-        lineHeight: '18px',
-        height: 18,
-        fontSize: 14,
-        fontWeight: 'bold',
-    },
-    walletAddress: {
-        height: 12,
-        display: 'flex',
-        alignItems: 'center',
-        fontSize: 10,
-        color: theme.palette.text.secondary,
-    },
-    changeWalletButton: {
-        marginLeft: theme.spacing(0.5),
-        display: 'flex',
-        alignItems: 'center',
-        cursor: 'pointer',
-    },
-    link: {
-        cursor: 'pointer',
-        lineHeight: '10px',
-        marginTop: 2,
-        '&:hover': {
-            textDecoration: 'none',
-        },
     },
 }))
 

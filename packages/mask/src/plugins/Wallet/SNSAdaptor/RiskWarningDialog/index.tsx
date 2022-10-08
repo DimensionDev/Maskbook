@@ -59,7 +59,6 @@ const useStyles = makeStyles()((theme) => ({
         paddingBottom: theme.spacing(1),
     },
     article: {
-        fontSize: 14,
         lineHeight: '18px',
         fontWeight: 400,
         marginBottom: theme.spacing(2),

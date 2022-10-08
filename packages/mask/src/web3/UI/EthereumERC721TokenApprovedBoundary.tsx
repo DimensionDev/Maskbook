@@ -9,26 +9,7 @@ import {
     useERC721ContractSetApproveForAllCallback,
 } from '@masknet/plugin-infra/web3-evm'
 
-const useStyles = makeStyles()(() => ({
-    snackBarText: {
-        fontSize: 14,
-    },
-    snackBarLink: {
-        color: 'white',
-    },
-    openIcon: {
-        display: 'flex',
-        width: 18,
-        height: 18,
-        marginLeft: 2,
-    },
-    snackBar: {
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        transform: 'translateY(1px)',
-    },
-}))
+const useStyles = makeStyles()(() => ({}))
 
 export interface EthereumERC712TokenApprovedBoundaryProps extends withClasses<'approveButton'> {
     children?: React.ReactNode

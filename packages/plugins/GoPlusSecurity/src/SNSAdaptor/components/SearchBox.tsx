@@ -90,7 +90,7 @@ export const SearchBox = memo<SearchBoxProps>(({ onSearch }) => {
                             gap={1}
                             width="100%">
                             <WalletIcon mainIcon={chain?.icon} size={18} />
-                            <Typography sx={{ fontSize: 14 }}>{getChainName(chain)}</Typography>
+                            <Typography>{getChainName(chain)}</Typography>
                         </Stack>
                     </MenuItem>
                 )

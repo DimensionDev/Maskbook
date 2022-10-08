@@ -1,4 +1,4 @@
-import { Image, NFTCardStyledAssetPlayer, ReversedAddress } from '@masknet/shared'
+import { AssetPreviewer, Image, ReversedAddress } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { RSS3BaseAPI } from '@masknet/web3-providers'
 import { isSameAddress } from '@masknet/web3-shared-base'
@@ -69,7 +69,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-const { Tag, Type, MaskNetworkMap } = RSS3BaseAPI
+const { Tag, Type } = RSS3BaseAPI
 export interface FeedCardProps extends Omit<BoxProps, 'onSelect'> {
     feed: RSS3BaseAPI.Activity
     address?: string
@@ -148,15 +148,10 @@ export const FeedCard = memo(({ feed, address, onSelect, className, ...rest }: F
             if (action.metadata && !('value' in action.metadata)) return
             return (
                 <Card className={classes.img}>
-                    <NFTCardStyledAssetPlayer
-                        contractAddress={action.metadata?.contract_address}
-                        chainId={MaskNetworkMap[feed.network ?? 'ethereum']}
+                    <AssetPreviewer
                         url={action.metadata?.image}
-                        tokenId={action.metadata?.value}
                         classes={{
                             fallbackImage: classes.fallbackImage,
-                            wrapper: classes.img,
-                            iframe: classes.img,
                         }}
                     />
                 </Card>

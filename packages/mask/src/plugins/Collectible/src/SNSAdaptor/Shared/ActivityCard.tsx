@@ -52,7 +52,6 @@ const useStyles = makeStyles()((theme) => ({
     textBase: {
         display: 'flex',
         alignItems: 'center',
-        fontSize: 14,
         lineHeight: '18px',
         color: theme.palette.maskColor.publicSecond,
         '& > strong': {
