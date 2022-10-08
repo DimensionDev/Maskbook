@@ -117,14 +117,14 @@ async function getTransactionList(address: string, scope: string, page?: number,
     )) as ZerionTransactionResponseBody
 }
 
-async function getNonFugibleAsset(account: string, address: string, tokenId: string, scope: string) {
+async function getNonFungibleAsset(account: string, address: string, tokenId: string) {
     return (await subscribeFromZerion(
         {
             namespace: 'address',
             socket: createSocket(),
         },
         {
-            scope: [scope],
+            scope: ['nft'],
             payload: {
                 address: account,
                 nft_asset_code: `${address}:${tokenId}`,
@@ -133,14 +133,14 @@ async function getNonFugibleAsset(account: string, address: string, tokenId: str
     )) as ZerionNonFungibleTokenResponseBody
 }
 
-async function getNonFugibleAssets(address: string, scope: string, page?: number, size = 20) {
+async function getNonFungibleAssets(address: string, page?: number, size = 20, contract_address?: string) {
     return (await subscribeFromZerion(
         { namespace: 'address', socket: createSocket() },
         {
-            scope: [scope],
+            scope: ['nft'],
             payload: {
                 address,
-                contract_addresses: [],
+                contract_addresses: contract_address ? [contract_address] : [],
                 mode: 'nft',
                 nft_limit: size,
                 nft_offset: (page ?? 0) * size,
@@ -248,7 +248,8 @@ export class ZerionNonFungibleTokenAPI implements NonFungibleTokenAPI.Provider<C
     }
 
     async getAsset(address: string, tokenId: string, { chainId = ChainId.Mainnet, account }: HubOptions<ChainId> = {}) {
-        const response = await getNonFugibleAsset(account, address, tokenId, 'nft')
+        if (!account) return
+        const response = await getNonFungibleAsset(account, address, tokenId)
         if (!response.payload.nft.length) return
         const payload = first(response.payload.nft)
         if (!payload) return
@@ -258,8 +259,23 @@ export class ZerionNonFungibleTokenAPI implements NonFungibleTokenAPI.Provider<C
         account: string,
         { chainId = ChainId.Mainnet, indicator, size }: HubOptions<ChainId, HubIndicator> = {},
     ) {
-        const response = await getNonFugibleAssets(account, 'nft', indicator?.index, size)
+        const response = await getNonFungibleAssets(account, indicator?.index, size)
         if (!response.payload.nft.length) return createPageable(EMPTY_LIST, createIndicator(indicator))
+        const assets = response.payload.nft.map((x) => this.createNonFungibleTokenAssetFromNFT(chainId, x))
+
+        return createPageable(
+            assets,
+            createIndicator(indicator),
+            assets.length ? createNextIndicator(indicator) : undefined,
+        )
+    }
+
+    async getAssetsByCollection(
+        address: string,
+        { chainId = ChainId.Mainnet, indicator, size, account }: HubOptions<ChainId, HubIndicator> = {},
+    ) {
+        if (!account) return createPageable(EMPTY_LIST, createIndicator(indicator))
+        const response = await getNonFungibleAssets(account, indicator?.index, size, address)
         const assets = response.payload.nft.map((x) => this.createNonFungibleTokenAssetFromNFT(chainId, x))
 
         return createPageable(
