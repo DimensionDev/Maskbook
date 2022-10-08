@@ -3,6 +3,11 @@ export type SocketNameSpace = {
     socket: SocketIOClient.Socket
 }
 
+export enum SocketRequestType {
+    SUBSCRIBE = 'subscribe',
+    GET = 'GET',
+}
+
 export type SocketRequestAssetScope = 'assets' | 'bsc-assets' | 'polygon-assets'
 
 export type SocketRequestBody = {
@@ -112,6 +117,59 @@ export interface ZerionTransactionItem {
     meta?: string
 }
 
+export interface ZerionNonFungibleAsset {
+    asset_code: string
+    symbol: string
+    contract_address: string
+    token_id: string
+    interface: string
+    preview: {
+        url: string
+        meta: {
+            type: string
+        }
+    }
+    detail: {
+        url: string
+        meta: {
+            type: string
+        }
+    }
+    name: string
+    type: string
+    tags: any
+    last_price: any
+    buy_now_price: any
+    floor_price: number
+    total_last_price: any
+    total_floor_price: number
+    is_displayable: boolean
+    is_verified: boolean
+    collection: {
+        name: string
+        description: string
+        icon_url: string
+    }
+    collection_info: {
+        slug: string
+        name: string
+        description: string
+        icon_url: string
+    }
+    changed_at: number
+}
+
+export interface ZerionNonFungibleTokenItem {
+    id: string
+    section: string
+    section_tokens_count: number
+    standard: string
+    value?: string
+    displayed_on_chart: boolean
+    amount: string
+    asset: ZerionNonFungibleAsset
+}
+
 export interface ZerionTransactionResponseBody extends SocketResponseBody {
     meta: {
         status: string
@@ -124,6 +182,24 @@ export interface ZerionTransactionResponseBody extends SocketResponseBody {
     }
     payload: {
         transactions: ZerionTransactionItem[]
+    }
+}
+
+export interface ZerionNonFungibleTokenResponseBody extends SocketResponseBody {
+    meta: {
+        status: string
+        addresses: string[]
+        collection_slugs: string[]
+        contract_addresses: string[]
+        currency: string
+        mode: string
+        next_nft_offset: number
+        nft_limit: number
+        nft_offset: number
+        sorted_by: string
+    }
+    payload: {
+        nft: ZerionNonFungibleTokenItem[]
     }
 }
 
