@@ -4,6 +4,7 @@ import {
     AlchemyEVM,
     DeBank,
     EthereumWeb3,
+    MetaSwap,
     AstarGas,
     NFTScanNonFungibleTokenEVM,
     OpenSea,
@@ -34,7 +35,7 @@ class Hub extends HubStateBaseClient<ChainId> implements EVM_Hub {
         })
         try {
             const isEIP1559 = chainResolver.isSupport(options.chainId, 'EIP1559')
-            if (isEIP1559 && chainId !== ChainId.Astar) return await EthereumWeb3.getGasOptions(options.chainId)
+            if (isEIP1559 && chainId !== ChainId.Astar) return await MetaSwap.getGasOptions(options.chainId)
             if (chainId === ChainId.Astar) return await AstarGas.getGasOptions(options.chainId)
             return EthereumWeb3.getGasOptions(options.chainId)
         } catch (error) {
