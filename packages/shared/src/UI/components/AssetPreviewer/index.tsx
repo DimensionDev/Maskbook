@@ -6,7 +6,6 @@ const useStyles = makeStyles()((theme) => ({
     root: {
         width: '100%',
         height: '100%',
-        position: 'relative',
     },
     imageContainer: {
         height: '100%',

@@ -1,9 +1,9 @@
-import { NFTCardStyledAssetPlayer } from '@masknet/shared'
+import { forwardRef, HTMLProps, memo } from 'react'
+import formatDateTime from 'date-fns/format'
+import { AssetPreviewer } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import type { RSS3BaseAPI } from '@masknet/web3-providers'
 import { Card, Typography } from '@mui/material'
-import formatDateTime from 'date-fns/format'
-import { forwardRef, HTMLProps, memo } from 'react'
 import { RSS3_DEFAULT_IMAGE } from '../../constants.js'
 import { useI18N } from '../../locales/index.js'
 
@@ -65,12 +65,10 @@ export const FootprintCard = memo(
             return (
                 <div className={cx(classes.card, className)} {...rest} ref={ref} onClick={() => onSelect?.(footprint)}>
                     <Card className={classes.img}>
-                        <NFTCardStyledAssetPlayer
+                        <AssetPreviewer
                             url={action.metadata?.image || RSS3_DEFAULT_IMAGE}
                             classes={{
                                 fallbackImage: classes.fallbackImage,
-                                wrapper: classes.img,
-                                iframe: classes.img,
                             }}
                         />
                     </Card>
