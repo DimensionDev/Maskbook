@@ -49,7 +49,7 @@ export class TransactionState<ChainId, Transaction> implements Web3TransactionSt
             this.transactions = mapSubscription(
                 mergeSubscription(this.subscriptions.chainId, this.subscriptions.account, this.storage.subscription),
                 ([chainId, account, transactionStorage]) =>
-                    transactionStorage[chainId][this.options.formatAddress(account)] ?? [],
+                    transactionStorage[chainId]?.[this.options.formatAddress(account)] ?? [],
             )
         }
     }
