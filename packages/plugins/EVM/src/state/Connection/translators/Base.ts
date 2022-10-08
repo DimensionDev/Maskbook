@@ -24,7 +24,7 @@ export class Base implements Translator {
             })
             const options = await hub?.getGasOptions?.(context.chainId)
             const { [GasOptionType.SLOW]: slowOption, [GasOptionType.NORMAL]: normalOption } = options ?? {}
-
+            console.log({ normalOption })
             if (chainResolver.isSupport(context.chainId, 'EIP1559')) {
                 delete config.gasPrice
 
