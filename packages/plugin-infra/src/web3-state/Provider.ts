@@ -1,7 +1,13 @@
 import { clone, first } from 'lodash-unified'
 import type { Subscription } from 'use-subscription'
 import { delay } from '@dimensiondev/kit'
-import { getSiteType, mapSubscription, mergeSubscription, StorageObject } from '@masknet/shared-base'
+import {
+    getSiteType,
+    isConnectionSiteType,
+    mapSubscription,
+    mergeSubscription,
+    StorageObject,
+} from '@masknet/shared-base'
 import type { Account, WalletProvider, ProviderState as Web3ProviderState } from '@masknet/web3-shared-base'
 import type { Plugin } from '../types.js'
 
@@ -18,7 +24,7 @@ export class ProviderState<
     Web3,
 > implements Web3ProviderState<ChainId, ProviderType, NetworkType>
 {
-    protected site = getSiteType()
+    protected site = isConnectionSiteType() ? 'popup-connection' : getSiteType()
     protected storage: StorageObject<ProviderStorage<Account<ChainId>, ProviderType>> = null!
 
     public account?: Subscription<string>
@@ -39,7 +45,7 @@ export class ProviderState<
             getNetworkTypeFromChainId(chainId: ChainId): NetworkType
         },
     ) {
-        const site = getSiteType()
+        const site = isConnectionSiteType() ? 'popup-connection' : getSiteType()
         const defaultValue = {
             account: {
                 account: '',
