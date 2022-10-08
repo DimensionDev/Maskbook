@@ -4,7 +4,6 @@ import { flatten, compact, chunk } from 'lodash-unified'
 import { DialogActions, DialogContent, Tab } from '@mui/material'
 import { isDashboardPage, EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles, MaskColorVar, MaskTabList, useTabs } from '@masknet/theme'
-import { TargetChainIdContext } from '@masknet/web3-hooks-evm'
 import { createContract, ChainId, SchemaType, getAaveConstants, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
 import { PluginWalletStatusBar, useI18N } from '../../../utils/index.js'
 import { InjectedDialog } from '@masknet/shared'
@@ -20,7 +19,7 @@ import { AAVEProtocol } from '../protocols/AAVEProtocol.js'
 import { LDO_PAIRS } from '../constants.js'
 import type { AbiItem } from 'web3-utils'
 import { TabContext, TabPanel } from '@mui/lab'
-import { useChainId, useFungibleTokens, useWeb3 } from '@masknet/web3-hooks-base'
+import { PluginWeb3ContextProvider, useChainId, useFungibleTokens, useWeb3 } from '@masknet/web3-hooks-base'
 import type { FungibleToken } from '@masknet/web3-shared-base'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
 
@@ -133,7 +132,7 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
     const [currentTab, onChange, tabs] = useTabs('Deposit', 'Withdraw')
 
     return (
-        <TargetChainIdContext.Provider>
+        <PluginWeb3ContextProvider value={{ chainId: ChainId.Mainnet }} pluginID={NetworkPluginID.PLUGIN_EVM}>
             <AllProviderTradeContext.Provider>
                 <TabContext value={currentTab}>
                     <InjectedDialog
@@ -207,6 +206,6 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
                     />
                 ) : null}
             </AllProviderTradeContext.Provider>
-        </TargetChainIdContext.Provider>
+        </PluginWeb3ContextProvider>
     )
 }

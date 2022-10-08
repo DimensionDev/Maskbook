@@ -1,17 +1,16 @@
 import { useState } from 'react'
-import { DialogContent, Button, Tab } from '@mui/material'
+import { Button, DialogContent, Tab } from '@mui/material'
 import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import { TabContext } from '@mui/lab'
-import { useCurrentWeb3NetworkPluginID } from '@masknet/web3-hooks-base'
-import { TargetChainIdContext } from '@masknet/web3-hooks-evm'
+import { useChainId, useCurrentWeb3NetworkPluginID } from '@masknet/web3-hooks-base'
 import { InjectedDialog } from '@masknet/shared'
 import { NetworkTab } from '../../../components/shared/NetworkTab.js'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { ChainId, chainResolver, NetworkType } from '@masknet/web3-shared-evm'
-import { PluginID, NetworkPluginID } from '@masknet/shared-base'
+import { NetworkPluginID, PluginID } from '@masknet/shared-base'
 import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
 import { useI18N } from '../locales/index.js'
-import { useI18N as useBaseI18n, PluginWalletStatusBar } from '../../../utils/index.js'
+import { PluginWalletStatusBar, useI18N as useBaseI18n } from '../../../utils/index.js'
 import { WalletMessages } from '../../../plugins/Wallet/messages.js'
 import { ApprovalEmptyContent } from './ApprovalEmptyContent.js'
 import { ApprovalTokenContent } from './ApprovalTokenContent.js'
@@ -129,7 +128,7 @@ function ApprovalWrapper(props: ApprovalWrapperProps) {
     const { tab } = props
     const { t: tr } = useBaseI18n()
     const t = useI18N()
-    const { targetChainId: chainId } = TargetChainIdContext.useContainer()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const [networkTabChainId, setNetworkTabChainId] = useState<ChainId>(chainId)
     const approvalDefinition = useActivatedPlugin(PluginID.Approval, 'any')
     const pluginId = useCurrentWeb3NetworkPluginID()

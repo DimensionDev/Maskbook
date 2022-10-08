@@ -1,11 +1,13 @@
 import { useState } from 'react'
 import type { Plugin } from '@masknet/plugin-infra'
-import { TargetChainIdContext } from '@masknet/web3-hooks-evm'
 import { ApplicationEntry } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
 import { PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
 import { base } from '../base.js'
 import { ApprovalDialog } from './ApprovalDialog.js'
+import { PluginWeb3ContextProvider } from '@masknet/web3-hooks-base'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { ChainId } from '@masknet/web3-shared-evm'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -34,9 +36,11 @@ const sns: Plugin.SNSAdaptor.Definition = {
                                 }
                             />
                             {open ? (
-                                <TargetChainIdContext.Provider>
+                                <PluginWeb3ContextProvider
+                                    value={{ chainId: ChainId.Mainnet }}
+                                    pluginID={NetworkPluginID.PLUGIN_EVM}>
                                     <ApprovalDialog open onClose={() => setOpen(false)} />
-                                </TargetChainIdContext.Provider>
+                                </PluginWeb3ContextProvider>
                             ) : null}
                         </>
                     )

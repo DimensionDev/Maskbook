@@ -4,9 +4,11 @@ import { SharedContextProvider } from '@masknet/shared'
 import { SwapBox } from './SwapBox/index.js'
 import { useI18N } from '../../../../utils/index.js'
 import { useSwapPageTheme } from '../../../../utils/theme/useSwapPageTheme.js'
-import { TargetChainIdContext } from '@masknet/web3-hooks-evm'
 import { AllProviderTradeContext } from '../../../../plugins/Trader/trader/useAllProviderTradeContext.js'
 import { NetworkSelector } from '../../components/NetworkSelector/index.js'
+import { PluginWeb3ContextProvider } from '@masknet/web3-hooks-base'
+import { ChainId } from '@masknet/web3-shared-evm'
+import { NetworkPluginID } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -74,11 +76,13 @@ export default function SwapPage() {
                             <NetworkSelector />
                         </header>
                         <main className={classes.main}>
-                            <TargetChainIdContext.Provider>
+                            <PluginWeb3ContextProvider
+                                value={{ chainId: ChainId.Mainnet }}
+                                pluginID={NetworkPluginID.PLUGIN_EVM}>
                                 <AllProviderTradeContext.Provider>
                                     <SwapBox />
                                 </AllProviderTradeContext.Provider>
-                            </TargetChainIdContext.Provider>
+                            </PluginWeb3ContextProvider>
                         </main>
                     </div>
                 </div>
