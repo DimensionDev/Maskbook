@@ -2,7 +2,7 @@ import type { Subscription } from 'use-subscription'
 import { getEnumAsArray } from '@dimensiondev/kit'
 import type { Plugin } from '@masknet/plugin-infra'
 import { TransactionState } from '@masknet/web3-state'
-import { ChainId, formatAddress } from '@masknet/web3-shared-flow'
+import { ChainId, formatAddress, isValidChainId } from '@masknet/web3-shared-flow'
 import type { MutateOptions } from '@blocto/fcl'
 
 export class Transaction extends TransactionState<ChainId, MutateOptions> {
@@ -19,6 +19,7 @@ export class Transaction extends TransactionState<ChainId, MutateOptions> {
             subscriptions,
             {
                 formatAddress,
+                isValidChainId,
             },
         )
     }
