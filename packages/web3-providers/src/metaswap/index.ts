@@ -12,7 +12,7 @@ export class MetaSwapAPI implements GasOptionAPI.Provider<ChainId, GasOption> {
             urlcat(METASWAP_API, '/networks/:chainId/suggestedGasFees', { chainId }),
         )
         const result = (await response.json()) as EstimateSuggestResponse
-
+        console.log({ result })
         return {
             [GasOptionType.FAST]: {
                 estimatedBaseFee: result.estimatedBaseFee ?? '0',
