@@ -2,7 +2,12 @@ import type { Subscription } from 'use-subscription'
 import { getEnumAsArray } from '@dimensiondev/kit'
 import type { Plugin } from '@masknet/plugin-infra'
 import { TransactionState } from '@masknet/plugin-infra/web3'
-import { ChainId, Transaction as EVM_Transaction, formatEthereumAddress } from '@masknet/web3-shared-evm'
+import {
+    ChainId,
+    Transaction as EVM_Transaction,
+    formatEthereumAddress,
+    isValidChainId,
+} from '@masknet/web3-shared-evm'
 
 export class Transaction extends TransactionState<ChainId, EVM_Transaction> {
     constructor(
@@ -18,6 +23,7 @@ export class Transaction extends TransactionState<ChainId, EVM_Transaction> {
             subscriptions,
             {
                 formatAddress: formatEthereumAddress,
+                isValidChainId,
             },
         )
     }
