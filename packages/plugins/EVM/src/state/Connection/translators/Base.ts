@@ -1,7 +1,7 @@
 import BigNumber from 'bignumber.js'
 import { toHex } from 'web3-utils'
-import { GasOptionType, isLessThan, toFixed } from '@masknet/web3-shared-base'
-import { addGasMargin, chainResolver, formatWeiToGwei } from '@masknet/web3-shared-evm'
+import { GasOptionType, isLessThan } from '@masknet/web3-shared-base'
+import { addGasMargin, chainResolver, formatGweiToWei, formatWeiToGwei } from '@masknet/web3-shared-evm'
 import type { Context, Translator } from '../types.js'
 import { Web3StateSettings } from '../../../settings/index.js'
 import { isReadOnlyMethod } from '../connection.js'
@@ -36,8 +36,10 @@ export class Base implements Translator {
                         slowOption.suggestedMaxPriorityFeePerGas,
                     )
                 ) {
-                    config.maxFeePerGas = toHex(toFixed(normalOption.suggestedMaxFeePerGas, 0))
-                    config.maxPriorityFeePerGas = toHex(toFixed(normalOption.suggestedMaxPriorityFeePerGas, 0))
+                    config.maxFeePerGas = toHex(formatGweiToWei(normalOption.suggestedMaxFeePerGas).toFixed(0))
+                    config.maxPriorityFeePerGas = toHex(
+                        formatGweiToWei(normalOption.suggestedMaxPriorityFeePerGas).toFixed(0),
+                    )
                 }
             } else {
                 delete config.maxFeePerGas
@@ -48,7 +50,7 @@ export class Base implements Translator {
                     normalOption &&
                     isLessThan((config.gasPrice as string) ?? 0, slowOption.suggestedMaxFeePerGas)
                 ) {
-                    config.gasPrice = toHex(toFixed(normalOption.suggestedMaxFeePerGas, 0))
+                    config.gasPrice = toHex(formatGweiToWei(normalOption.suggestedMaxFeePerGas).toFixed(0))
                 }
             }
         } catch (err) {
