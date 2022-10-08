@@ -256,6 +256,7 @@ export class TwitterAPI implements TwitterBaseAPI.Provider {
                 withSuperFollowsUserFields: true,
             }),
             features: JSON.stringify({
+                verified_phone_label_enabled: false,
                 responsive_web_graphql_timeline_navigation_enabled: false,
             }),
         })
