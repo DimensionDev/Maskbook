@@ -31,7 +31,6 @@ const useStyles = makeStyles()((theme) => {
         },
         caption: {
             color: theme.palette.maskColor.second,
-            fontSize: 14,
             fontWeight: 700,
             margin: theme.spacing(1, 0, 1.5),
         },

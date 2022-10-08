@@ -2,7 +2,7 @@ import { makeStyles } from '@masknet/theme'
 
 export const useTabStyles = makeStyles()((theme) => ({
     root: {
-        fontSize: '1rem',
+        fontSize: 14,
     },
 }))
 

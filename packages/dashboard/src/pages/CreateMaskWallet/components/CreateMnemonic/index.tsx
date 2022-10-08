@@ -32,7 +32,6 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         justifyContent: 'flex-end',
         marginTop: 24,
-        fontSize: 14,
         lineHeight: '20px',
         width: '100%',
         color: MaskColorVar.linkText,

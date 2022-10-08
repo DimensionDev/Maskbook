@@ -25,12 +25,10 @@ const useStyles = makeStyles()((theme) => {
         },
         additions: {
             fontWeight: 700,
-            fontSize: 14,
         },
         label: {
             color: theme.palette.maskColor.second,
             fontWeight: 700,
-            fontSize: 14,
         },
         price: {
             fontWeight: 700,

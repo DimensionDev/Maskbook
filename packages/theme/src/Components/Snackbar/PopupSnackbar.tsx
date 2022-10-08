@@ -28,7 +28,6 @@ const useStyles = makeStyles()(() => ({
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        fontSize: 14,
         lineHeight: '18px',
     },
     title: {
