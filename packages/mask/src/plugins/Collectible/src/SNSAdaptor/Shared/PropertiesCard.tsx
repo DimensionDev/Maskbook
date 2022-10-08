@@ -95,15 +95,11 @@ export function PropertiesCard(props: PropertiesCardProps) {
                 {asset.traits?.map((x) => {
                     return (
                         <div key={x.type} className={classes.traitsItem}>
-                            <Typography className={classes.traitTitle} >
-                                {x.type}
-                            </Typography>
-                            <Typography className={classes.traitValue}  title={x.value}>
+                            <Typography className={classes.traitTitle}>{x.type}</Typography>
+                            <Typography className={classes.traitValue} title={x.value}>
                                 {x.value}
                             </Typography>
-                            <Typography className={classes.traitRarity} >
-                                ({x.rarity ?? '-%'})
-                            </Typography>
+                            <Typography className={classes.traitRarity}>({x.rarity ?? '-%'})</Typography>
                         </div>
                     )
                 })}
