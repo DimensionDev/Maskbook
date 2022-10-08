@@ -34,6 +34,7 @@ export class TransactionState<ChainId, Transaction> implements Web3TransactionSt
         },
         protected options: {
             formatAddress(a: string): string
+            isValidChainId(chainId: ChainId): boolean
         },
     ) {
         const defaultValue = Object.fromEntries(chainIds.map((x) => [x, {}])) as TransactionStorage<
@@ -48,8 +49,10 @@ export class TransactionState<ChainId, Transaction> implements Web3TransactionSt
         if (this.subscriptions.chainId && this.subscriptions.account) {
             this.transactions = mapSubscription(
                 mergeSubscription(this.subscriptions.chainId, this.subscriptions.account, this.storage.subscription),
-                ([chainId, account, transactionStorage]) =>
-                    transactionStorage[chainId][this.options.formatAddress(account)] ?? [],
+                ([chainId, account, transactionStorage]) => {
+                    if (!this.options.isValidChainId(chainId)) return []
+                    return transactionStorage[chainId][this.options.formatAddress(account)] ?? []
+                },
             )
         }
     }
