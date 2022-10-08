@@ -4,7 +4,7 @@ import type { RedPacketJSONPayload } from '../../types.js'
 import { pick, omit } from 'lodash-unified'
 
 export function reduceUselessPayloadInfo(payload: RedPacketJSONPayload): RedPacketJSONPayload {
-    const token = pick(payload.token, ['decimals', 'symbol', 'address']) as FungibleToken<
+    const token = pick(payload.token, ['decimals', 'symbol', 'address', 'chainId']) as FungibleToken<
         ChainId,
         SchemaType.Native | SchemaType.ERC20
     >
