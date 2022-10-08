@@ -33,7 +33,6 @@ const useStyles = makeStyles()((theme) => ({
     },
     swapLimitText: {
         color: theme.palette.mode === 'dark' ? '#fff' : '#15181B',
-        fontSize: 14,
         width: 'fit-content',
     },
     swapLimitSlider: {

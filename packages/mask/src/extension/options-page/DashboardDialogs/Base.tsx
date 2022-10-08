@@ -159,7 +159,6 @@ const useDashboardDialogWrapperStyles = makeStyles<DashboardDialogWrapperProps>(
     },
     secondary: {
         lineHeight: 1.75,
-        fontSize: 14,
         textAlign: 'center',
         wordBreak: 'break-word',
         marginBottom: 18,

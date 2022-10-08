@@ -20,7 +20,7 @@ const useStyles = makeStyles()((theme) => ({
         justifyContent: 'space-between',
         color: theme.palette.text.secondary,
         marginBottom: '12px',
-        fontSize: '1rem',
+        fontSize: 14,
     },
     total: {
         fontWeight: 600,

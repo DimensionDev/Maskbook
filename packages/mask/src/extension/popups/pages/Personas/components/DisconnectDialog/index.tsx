@@ -17,7 +17,6 @@ const useStyles = makeStyles()((theme) => ({
     },
     content: {
         marginTop: 24,
-        fontSize: 14,
         lineHeight: '20px',
         color: '#536471',
     },

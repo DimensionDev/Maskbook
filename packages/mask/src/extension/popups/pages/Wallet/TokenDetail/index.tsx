@@ -34,7 +34,6 @@ const useStyles = makeStyles()({
         marginBottom: 4,
     },
     balance: {
-        fontSize: 14,
         lineHeight: '20px',
         color: '#1C68F3',
         fontWeight: 600,

@@ -69,7 +69,6 @@ const useStyles = makeStyles()((theme, props) => ({
         width: '100%',
     },
     loading: {
-        fontSize: 14,
         color: theme.palette.text.primary,
         lineHeight: '18px',
         marginTop: 12,

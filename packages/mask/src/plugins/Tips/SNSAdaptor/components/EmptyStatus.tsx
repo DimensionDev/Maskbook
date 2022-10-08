@@ -35,7 +35,6 @@ const useStyles = makeStyles()((theme) => ({
     },
     badge: {
         cursor: 'pointer',
-        fontSize: 14,
         color: 'rgba(7, 16, 27, 1)',
         fontWeight: 500,
     },
@@ -82,7 +81,7 @@ export const EmptyStatus = memo(({ toAdd }: EmptyStatusProps) => {
                     <Typography sx={{ fontSize: 16, fontWeight: 700 }}>Tips</Typography>
                 </div>
                 <div className={classes.provided}>
-                    <Typography sx={{ fontSize: 14 }}>Provided by</Typography>
+                    <Typography>Provided by</Typography>
                     <Typography className={classes.badge}>Mask Network</Typography>
                     <a href="https://mask.io" className={classes.linkIcon} target="_blank">
                         <Icons.LinkOut size={16} />
@@ -96,9 +95,7 @@ export const EmptyStatus = memo(({ toAdd }: EmptyStatusProps) => {
             />
             <div className={classes.actionBtn} onClick={toAdd}>
                 <Icons.ConnectWallet size={18} />
-                <Typography sx={{ fontSize: 14, lineHeight: 18, fontWeight: 700 }}>
-                    {t.tip_connect_your_wallet()}
-                </Typography>
+                <Typography sx={{ lineHeight: 18, fontWeight: 700 }}>{t.tip_connect_your_wallet()}</Typography>
             </div>
         </div>
     )

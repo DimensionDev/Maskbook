@@ -41,7 +41,6 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: 4,
     },
     alertTitle: {
-        fontSize: 14,
         lineHeight: '18px',
     },
     placeholder: {
@@ -54,7 +53,6 @@ const useStyles = makeStyles()((theme) => ({
     },
     placeholderText: {
         color: theme.palette.maskColor.second,
-        fontSize: 14,
         lineHeight: '18px',
     },
     placeholderIcon: {

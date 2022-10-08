@@ -19,7 +19,6 @@ const useStyles = makeStyles()((theme) => {
         },
         accountName: {
             marginLeft: theme.spacing(0.5),
-            fontSize: 14,
             lineHeight: 1,
         },
         relativeTime: {
@@ -38,7 +37,6 @@ const useStyles = makeStyles()((theme) => {
         content: {
             display: 'flex',
             alignItems: 'center',
-            fontSize: 14,
             lineHeight: 1,
         },
         ethPrice: {

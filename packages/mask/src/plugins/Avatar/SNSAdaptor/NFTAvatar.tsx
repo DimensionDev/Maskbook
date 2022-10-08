@@ -20,7 +20,6 @@ const useStyles = makeStyles()((theme) => ({
         padding: 0,
         display: 'flex',
         justifyContent: 'space-between',
-        fontSize: 14,
         alignItems: 'center',
     },
     account: {

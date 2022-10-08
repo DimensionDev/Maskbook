@@ -32,7 +32,6 @@ const useStyles = makeStyles()((theme) => {
     return {
         unit: {
             color: theme.palette.maskColor.third,
-            fontSize: 14,
         },
         textfield: {
             '& input[type=number]': {
@@ -47,7 +46,6 @@ const useStyles = makeStyles()((theme) => {
         },
         caption: {
             color: theme.palette.maskColor.second,
-            fontSize: 14,
             fontWeight: 700,
             margin: theme.spacing(1, 0, 1.5),
         },

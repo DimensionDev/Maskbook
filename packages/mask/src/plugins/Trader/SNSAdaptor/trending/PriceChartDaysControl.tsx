@@ -8,7 +8,6 @@ const useStyles = makeStyles()((theme) => ({
     root: {
         background: theme.palette.background.input,
         borderRadius: 28,
-        fontSize: 14,
         padding: theme.spacing(0.5),
     },
     active: {

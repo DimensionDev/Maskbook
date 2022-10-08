@@ -39,7 +39,6 @@ const useStyles = makeStyles()((theme) => ({
         paddingRight: theme.spacing(3),
     },
     hit: {
-        fontSize: 14,
         fontWeight: 300,
         borderRadius: 8,
         backgroundColor: theme.palette.background.default,
@@ -297,7 +296,7 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
                 </Grid>
                 <Grid item xs={12}>
                     <Paper className={classes.hit}>
-                        <Typography variant="body1" align="center" style={{ fontSize: 14, lineHeight: '20px' }}>
+                        <Typography variant="body1" align="center" style={{ lineHeight: '20px' }}>
                             {t.hint()}
                         </Typography>
                     </Paper>

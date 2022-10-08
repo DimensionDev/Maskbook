@@ -25,7 +25,6 @@ const useStyles = makeStyles()({
         boxSizing: 'border-box',
     },
     selected: {
-        fontSize: 14,
         lineHeight: '18px',
         fontWeight: 700,
     },

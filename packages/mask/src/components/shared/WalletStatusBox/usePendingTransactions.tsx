@@ -20,16 +20,13 @@ const useStyles = makeStyles()((theme) => ({
     pendingSummary: {
         cursor: 'default',
         color: theme.palette.maskColor.warn,
-        fontSize: 14,
     },
     noPendingTransactions: {
         padding: theme.spacing(1, 0),
-        fontSize: 14,
         lineHeight: '18px',
         fontWeight: 700,
     },
     clearAll: {
-        fontSize: 14,
         cursor: 'pointer',
         color: theme.palette.mode === 'light' ? MaskColorVar.blue : theme.palette.common.white,
     },

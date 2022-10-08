@@ -1,32 +1,19 @@
 import { memo } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Button, Stack } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { FungibleTokenList } from '@masknet/shared'
 import { useBlockedFungibleTokens } from '@masknet/web3-hooks-base'
 import { useI18N } from '../../../../../utils/index.js'
-import { useNavigate } from 'react-router-dom'
 import { useTitle } from '../../../hook/useTitle.js'
 import { useRowSize } from '../../../../../../../shared/src/contexts/components/useRowSize.js'
 
 const useStyles = makeStyles()((theme) => ({
-    header: {
-        padding: '10px 16px',
-        backgroundColor: '#EFF5FF',
-        color: '#1C68F3',
-        fontSize: 14,
-        lineHeight: '20px',
-    },
     content: {
         flex: 1,
         padding: '16px 16px 0 16px',
         display: 'flex',
         flexDirection: 'column',
-    },
-    label: {
-        color: '#1C68F3',
-        fontSize: 12,
-        lineHeight: '16px',
-        marginBottom: 10,
     },
     button: {
         fontWeight: 600,

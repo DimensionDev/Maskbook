@@ -28,9 +28,7 @@ const useStyles = makeStyles<{
             pointerEvents: 'auto',
         },
     },
-
     userInfo: {
-        fontSize: 14,
         marginLeft: 16,
         flex: 1,
     },

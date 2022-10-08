@@ -48,7 +48,6 @@ const useStyles = makeStyles()((theme) => ({
         gap: theme.spacing(0.5),
         alignItems: 'center',
         lineHeight: '20px',
-        fontSize: 14,
         color: theme.palette.maskColor.second,
     },
     symbol: {

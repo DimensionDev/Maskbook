@@ -34,7 +34,6 @@ const useStyles = makeStyles()((theme) => {
         description: {
             marginTop: theme.spacing(1),
             marginBottom: theme.spacing(1),
-            fontSize: 14,
             whiteSpace: 'pre-line',
         },
         meta_row: {

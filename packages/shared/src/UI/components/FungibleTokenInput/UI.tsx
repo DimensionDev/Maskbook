@@ -95,7 +95,6 @@ const useStyles = makeStyles()((theme) => ({
         whiteSpace: 'nowrap',
         textOverflow: 'ellipsis',
         overflow: 'hidden',
-        fontSize: 14,
         color: theme.palette.maskColor.main,
         lineHeight: '18px',
         fontWeight: 700,

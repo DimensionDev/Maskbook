@@ -59,11 +59,6 @@ const useStyles = makeStyles<{
             borderRadius: 12,
             padding: 12,
         },
-        balance: {
-            fontSize: 14,
-            lineHeight: '20px',
-            color: theme.palette.text.primary,
-        },
         amount: {
             marginLeft: 10,
         },

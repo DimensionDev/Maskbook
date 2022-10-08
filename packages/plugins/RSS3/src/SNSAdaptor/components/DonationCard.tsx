@@ -36,7 +36,6 @@ const useStyles = makeStyles()((theme) => ({
     },
     date: {
         color: theme.palette.maskColor.main,
-        fontSize: 14,
         fontWeight: 400,
         whiteSpace: 'nowrap',
         overflow: 'hidden',
@@ -53,7 +52,6 @@ const useStyles = makeStyles()((theme) => ({
         textOverflow: 'ellipsis',
     },
     activity: {
-        fontSize: 14,
         fontWeight: 400,
         fontColor: theme.palette.maskColor.main,
     },

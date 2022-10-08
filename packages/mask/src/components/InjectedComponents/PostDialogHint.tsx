@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import { IconButton, Tooltip } from '@mui/material'
+import { IconButton, Tooltip, Typography } from '@mui/material'
 import { useStylesExtends, makeStyles } from '@masknet/theme'
 import { useI18N } from '../../utils/index.js'
 import { isMobileFacebook } from '../../social-network-adaptor/facebook.com/utils/isMobile.js'
@@ -26,7 +26,6 @@ const useStyles = makeStyles()((theme) => ({
         padding: isMobileFacebook ? 0 : '7px',
     },
     text: {
-        fontSize: 14,
         color: '#606770',
         marginLeft: theme.spacing(1),
     },
@@ -87,7 +86,7 @@ export const PostDialogHint = memo(function PostDialogHintUI(props: PostDialogHi
     return isMobileFacebook ? (
         <div className={classes.wrapper} onClick={onHintButtonClicked}>
             <EntryIconButton size={size} onHintButtonClicked={() => undefined} />
-            <span className={classes.text}>{t('post_modal_hint__button')}</span>
+            <Typography className={classes.text}>{t('post_modal_hint__button')}</Typography>
         </div>
     ) : (
         <div className={classes.buttonTransform}>

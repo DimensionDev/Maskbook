@@ -163,14 +163,12 @@ const useStyles = makeStyles()({
         fontWeight: 500,
     },
     domainName: {
-        fontSize: 14,
         fontWeight: 600,
         lineHeight: '20px',
         color: '#000000',
     },
     registeredAddress: {
         color: '#7B8192',
-        fontSize: 14,
         lineHeight: '20px',
     },
     menu: {

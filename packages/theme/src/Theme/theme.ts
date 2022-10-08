@@ -61,6 +61,13 @@ function MaskTheme(mode: PaletteMode) {
                         },
                     },
                 },
+                MuiTypography: {
+                    styleOverrides: {
+                        root: {
+                            fontSize: 14,
+                        },
+                    },
+                },
             },
         },
         mode === 'dark'

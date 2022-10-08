@@ -31,7 +31,6 @@ const useStyles = makeStyles()((theme) => ({
         marginRight: 6,
     },
     address: {
-        fontSize: 14,
         marginRight: theme.spacing(1),
         color: theme.palette.text.secondary,
         display: 'inline-block',

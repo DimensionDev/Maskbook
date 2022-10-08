@@ -42,7 +42,6 @@ const useStyles = makeStyles<{
         fontWeight: 700,
     },
     error: {
-        fontSize: 14,
         paddingRight: theme.spacing(1),
     },
     progressIcon: {
@@ -50,7 +49,6 @@ const useStyles = makeStyles<{
         color: theme.palette.common.white,
     },
     progress: {
-        fontSize: 14,
         color: theme.palette.common.black,
     },
     warningTriangleIcon: {

@@ -17,7 +17,6 @@ const useStyles = makeStyles()(() => ({
         paddingBottom: 10,
         display: 'flex',
         justifyContent: 'space-between',
-        fontSize: 14,
     },
     sub: {
         paddingLeft: 30,

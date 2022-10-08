@@ -56,13 +56,11 @@ const useStyles = makeStyles()((theme) => {
         },
         gasSection: {
             display: 'flex',
-            fontSize: 14,
             lineHeight: '18px',
             fontWeight: 700,
             alignItems: 'center',
         },
         text: {
-            fontSize: 14,
             lineHeight: '18px',
             fontWeight: 700,
             display: 'flex',
@@ -80,11 +78,9 @@ const useStyles = makeStyles()((theme) => {
             },
         },
         title: {
-            fontSize: 14,
             fontWeight: 700,
         },
         estimateGas: {
-            fontSize: 14,
             color: theme.palette.text.third,
         },
         menuItemBorder: {
@@ -93,7 +89,6 @@ const useStyles = makeStyles()((theme) => {
         gasUSDPrice: {
             fontWeight: 700,
             margin: '0px 4px',
-            fontSize: 14,
         },
     }
 })

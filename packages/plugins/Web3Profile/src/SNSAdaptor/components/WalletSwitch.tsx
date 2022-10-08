@@ -28,7 +28,6 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
     },
     accountName: {
-        fontSize: 14,
         fontWeight: 700,
     },
     address: {

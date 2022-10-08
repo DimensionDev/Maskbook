@@ -30,7 +30,6 @@ const useStyles = makeStyles()((theme) => {
             },
         },
         title: {
-            fontSize: 14,
             fontWeight: 'bold',
             '&:before': {
                 content: 'counter(steps) ". "',

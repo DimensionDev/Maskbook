@@ -35,7 +35,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     bold: {
         fontWeight: 'bold',
-        fontSize: '1.1rem',
+        fontSize: 16,
     },
     wrapper: {
         padding: theme.spacing(2),
@@ -60,7 +60,7 @@ const useStyles = makeStyles()((theme) => ({
         flexDirection: 'column',
         justifyContent: 'space-between',
         height: 45,
-        marginLeft: '1rem',
+        marginLeft: 14,
     },
     tokenSymbol: {
         color: theme.palette.mode === 'dark' ? '#fff' : '#15181B',

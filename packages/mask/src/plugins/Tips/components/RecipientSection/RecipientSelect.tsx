@@ -26,7 +26,6 @@ const useStyles = makeStyles<void, 'icon' | 'tooltip' | 'pluginIcon' | 'text'>()
         },
         text: {
             fontWeight: 700,
-            fontSize: 14,
             fontFamily: 'Helvetica',
             marginLeft: theme.spacing(0.5),
         },

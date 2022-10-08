@@ -42,11 +42,6 @@ const useStyles = makeStyles()({
         display: 'flex',
         alignItems: 'center',
     },
-    name: {
-        fontSize: 14,
-        color: '#1C68F3',
-        fontWeight: 500,
-    },
     text: {
         marginLeft: 4,
     },

@@ -8,12 +8,10 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
     },
     mainTitle: {
-        fontSize: 14,
         color: theme.palette.text.primary,
         fontWeight: 700,
     },
     subTitle: {
-        fontSize: 14,
         color: theme.palette.text.secondary,
         whiteSpace: 'nowrap',
     },

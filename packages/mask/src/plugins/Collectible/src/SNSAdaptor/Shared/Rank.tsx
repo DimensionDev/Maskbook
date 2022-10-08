@@ -6,7 +6,6 @@ const useStyles = makeStyles()((theme) => ({
         boxSizing: 'border-box',
         borderRadius: 8,
         padding: '4px 8px',
-        fontSize: 14,
         lineHeight: '18px',
         background: 'linear-gradient(89.76deg, #AA60EC 0.24%, #FFC846 99.83%)',
         fontWeight: 700,

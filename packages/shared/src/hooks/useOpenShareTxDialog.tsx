@@ -28,9 +28,7 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 18,
         marginTop: theme.spacing(1),
     },
-    secondary: {
-        fontSize: 14,
-    },
+    secondary: {},
 }))
 
 interface ShareTransactionOptions {

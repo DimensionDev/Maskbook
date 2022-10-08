@@ -32,14 +32,12 @@ const useStyles = makeStyles()((theme) => ({
     },
     methodName: {
         fontWeight: 500,
-        fontSize: 14,
         textTransform: 'capitalize',
         textOverflow: 'ellipsis',
         overflow: 'hidden',
         whiteSpace: 'nowrap',
     },
     timestamp: {
-        fontSize: 14,
         lineHeight: '18px',
     },
     cell: {
@@ -50,7 +48,6 @@ const useStyles = makeStyles()((theme) => ({
         boxSizing: 'border-box',
     },
     linkText: {
-        fontSize: 14,
         lineHeight: '18px',
     },
     link: {
@@ -64,7 +61,6 @@ const useStyles = makeStyles()((theme) => ({
         marginLeft: theme.spacing(0.5),
     },
     clear: {
-        fontSize: 14,
         color: MaskColorVar.blue,
         cursor: 'pointer',
     },

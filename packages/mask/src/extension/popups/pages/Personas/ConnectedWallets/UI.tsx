@@ -54,7 +54,6 @@ const useStyles = makeStyles()(() => ({
         flex: 1,
     },
     name: {
-        fontSize: 14,
         lineHeight: '18px',
         color: '#0F1419',
         fontWeight: 700,

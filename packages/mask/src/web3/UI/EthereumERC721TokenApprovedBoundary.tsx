@@ -6,26 +6,7 @@ import { EthereumAddress } from 'wallet.ts'
 import type { NonFungibleTokenContract } from '@masknet/web3-shared-base'
 import { useERC721ContractIsApproveForAll, useERC721ContractSetApproveForAllCallback } from '@masknet/web3-hooks-evm'
 
-const useStyles = makeStyles()(() => ({
-    snackBarText: {
-        fontSize: 14,
-    },
-    snackBarLink: {
-        color: 'white',
-    },
-    openIcon: {
-        display: 'flex',
-        width: 18,
-        height: 18,
-        marginLeft: 2,
-    },
-    snackBar: {
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        transform: 'translateY(1px)',
-    },
-}))
+const useStyles = makeStyles()(() => ({}))
 
 export interface EthereumERC712TokenApprovedBoundaryProps extends withClasses<'approveButton'> {
     children?: React.ReactNode

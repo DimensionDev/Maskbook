@@ -5,7 +5,9 @@ import { Box, useTheme } from '@mui/material'
 import { useImageURL } from '../../../hooks/useImageURL.js'
 
 const useStyles = makeStyles()((theme) => ({
-    container: {},
+    container: {
+        position: 'relative',
+    },
     circle: {
         color: parseColor(theme.palette.maskColor.main).setAlpha(0.5).toRgbString(),
     },

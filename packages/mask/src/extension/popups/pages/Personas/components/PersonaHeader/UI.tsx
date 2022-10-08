@@ -36,7 +36,6 @@ const useStyles = makeStyles()((theme) => ({
     },
     nickname: {
         color: '#07101B',
-        fontSize: 14,
         lineHeight: '18px',
         fontWeight: 700,
     },

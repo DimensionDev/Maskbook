@@ -77,7 +77,6 @@ const useStyles = makeStyles<{
         backgroundColor: 'inherit',
     },
     accordingTitle: {
-        fontSize: 14,
         lineHeight: '20px',
     },
     controller: {
