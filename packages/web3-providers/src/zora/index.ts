@@ -10,6 +10,7 @@ import {
     HubOptions,
     NonFungibleAsset,
     NonFungibleCollection,
+    resolveNonFungibleTokenEventActivityType,
     NonFungibleTokenEvent,
     NonFungibleTokenOrder,
     OrderSide,
@@ -173,7 +174,7 @@ export class ZoraAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType
 
         return {
             id: event.transactionInfo.transactionHash ?? `${event.transactionInfo.blockNumber}_${event.tokenId}`,
-            type: event.eventType,
+            type: resolveNonFungibleTokenEventActivityType(event.eventType),
             chainId,
             quantity: '1',
             from: {

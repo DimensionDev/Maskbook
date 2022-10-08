@@ -7,6 +7,7 @@ import {
     HubOptions,
     NonFungibleToken,
     NonFungibleTokenContract,
+    NonFungibleTokenEventActivityType,
     OrderSide,
     TokenType,
     resolveIPFS_URL,
@@ -234,7 +235,7 @@ export class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
                     address: activity.buyerReferral,
                 },
                 quantity: '1',
-                type: '',
+                type: NonFungibleTokenEventActivityType.Transfer,
                 source: SourceType.MagicEden,
             }
         })

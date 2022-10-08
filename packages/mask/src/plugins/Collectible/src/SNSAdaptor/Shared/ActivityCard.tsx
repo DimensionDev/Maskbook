@@ -4,8 +4,13 @@ import { Typography, Link } from '@mui/material'
 import { useWeb3State } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { Icons } from '@masknet/icons'
-import { NonFungibleTokenEvent, formatBalance, isZero, isValidTimestamp } from '@masknet/web3-shared-base'
-import { ActivityType } from '../../types.js'
+import {
+    NonFungibleTokenEvent,
+    formatBalance,
+    isZero,
+    isValidTimestamp,
+    NonFungibleTokenEventActivityType,
+} from '@masknet/web3-shared-base'
 import { useI18N } from '../../../../../utils/index.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -82,12 +87,12 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface ActivityCardProps {
-    type: ActivityType
     activity: NonFungibleTokenEvent<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
 }
 
 export function ActivityCard(props: ActivityCardProps) {
-    const { activity, type } = props
+    const { activity } = props
+    const { type } = activity
     const { t } = useI18N()
     const { classes, cx } = useStyles()
     const { Others } = useWeb3State()
@@ -96,10 +101,16 @@ export function ActivityCard(props: ActivityCardProps) {
         <div className={classes.root}>
             <div className={classes.flex}>
                 <Typography
-                    className={type === ActivityType.Sale ? cx(classes.title, classes.highlight) : classes.title}>
+                    className={
+                        type === NonFungibleTokenEventActivityType.Sale
+                            ? cx(classes.title, classes.highlight)
+                            : classes.title
+                    }>
                     {type}
                 </Typography>
-                {![ActivityType.Mint, ActivityType.CancelOffer].includes(type) &&
+                {![NonFungibleTokenEventActivityType.Mint, NonFungibleTokenEventActivityType.CancelOffer].includes(
+                    type,
+                ) &&
                     activity.priceInToken &&
                     !isZero(activity.priceInToken.amount) && (
                         <div className={classes.salePrice}>

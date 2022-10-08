@@ -8,6 +8,7 @@ import {
     NonFungibleAsset,
     NonFungibleTokenContract,
     NonFungibleTokenEvent,
+    resolveNonFungibleTokenEventActivityType,
     NonFungibleTokenOrder,
     NonFungibleTokenStats,
     OrderSide,
@@ -107,7 +108,7 @@ function createNonFungibleEventFromEvent(chainId: ChainId, event: Event): NonFun
     return {
         id: event.id.toString(),
         chainId,
-        type: event.type,
+        type: resolveNonFungibleTokenEventActivityType(event.type),
         assetPermalink: urlcat('https://looksrare.org/collections/:address/:tokenId', {
             address: event.token?.collectionAddress ?? event.collection?.address,
             tokenId: event.token?.tokenId,

@@ -12,6 +12,7 @@ import {
     NonFungibleTokenEvent,
     resolveCrossOriginURL,
     resolveResourceURL,
+    resolveNonFungibleTokenEventActivityType,
     scale10,
     SourceType,
     TokenType,
@@ -227,7 +228,7 @@ export function createNonFungibleTokenEvent(
         id: transaction.hash,
         quantity: transaction.amount,
         timestamp: transaction.timestamp,
-        type: transaction.event_type,
+        type: resolveNonFungibleTokenEventActivityType(transaction.event_type),
         hash: transaction.hash,
         from: {
             address: transaction.from,

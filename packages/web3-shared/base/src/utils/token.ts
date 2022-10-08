@@ -6,6 +6,7 @@ import {
     NonFungibleTokenContract,
     NonFungibleTokenMetadata,
     TokenType,
+    NonFungibleTokenEventActivityType,
 } from '../specs/index.js'
 import type { Constants } from './types.js'
 
@@ -137,4 +138,17 @@ export function createFungibleTokensFromConstants<T extends Constants<string>, C
             )
         })
     }
+}
+
+export const resolveNonFungibleTokenEventActivityType = (type?: string) => {
+    if (!type) return NonFungibleTokenEventActivityType.Transfer
+    const type_ = type.toLowerCase()
+    if (['created', 'mint'].includes(type_)) return NonFungibleTokenEventActivityType.Mint
+    if (['successful'].includes(type_)) return NonFungibleTokenEventActivityType.Sale
+    if (['offer', 'offer_entered', 'bid_withdrawn', 'bid_entered'].includes(type_))
+        return NonFungibleTokenEventActivityType.Offer
+    if (['cancel_offer'].includes(type_)) return NonFungibleTokenEventActivityType.CancelOffer
+    if (['list'].includes(type_)) return NonFungibleTokenEventActivityType.List
+    if (['sale'].includes(type_)) return NonFungibleTokenEventActivityType.Sale
+    return NonFungibleTokenEventActivityType.Transfer
 }

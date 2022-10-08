@@ -7,6 +7,7 @@ import {
     NonFungibleTokenEvent,
     NonFungibleTokenOrder,
     OrderSide,
+    resolveNonFungibleTokenEventActivityType,
     TokenType,
     createPageable,
     createIndicator,
@@ -136,7 +137,7 @@ function createEvent(chainId: ChainId, history: RaribleHistory): NonFungibleToke
         chainId,
         from: createAccount(history.from ?? history.seller ?? history.owner ?? history.maker),
         to: createAccount(history.buyer),
-        type: history['@type'],
+        type: resolveNonFungibleTokenEventActivityType(history['@type']),
         assetPermalink:
             history.nft?.type.contract && history.nft?.type.tokenId
                 ? createRaribleLink(history.nft.type.contract, history.nft.type.tokenId)

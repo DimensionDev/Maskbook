@@ -5,6 +5,7 @@ import {
     NonFungibleAsset,
     NonFungibleCollection,
     NonFungibleTokenContract,
+    resolveNonFungibleTokenEventActivityType,
     NonFungibleTokenEvent,
     resolveIPFS_URL,
     scale10,
@@ -153,7 +154,7 @@ export function createNonFungibleTokenEvent(
         id: transaction.hash,
         quantity: '1',
         timestamp: transaction.timestamp ?? 0,
-        type: transaction.event_type ?? '',
+        type: resolveNonFungibleTokenEventActivityType(transaction.event_type),
         hash: transaction.hash,
         from: transaction.source
             ? {
