@@ -12,8 +12,8 @@ export class MetaSwapAPI implements GasOptionAPI.Provider<ChainId, GasOption> {
             urlcat(METASWAP_API, '/networks/:chainId/suggestedGasFees', { chainId }),
         )
         const result = (await response.json()) as EstimateSuggestResponse
-        console.log({ result })
-        return {
+
+        const options = {
             [GasOptionType.FAST]: {
                 estimatedBaseFee: result.estimatedBaseFee ?? '0',
                 estimatedSeconds: 15,
@@ -36,5 +36,7 @@ export class MetaSwapAPI implements GasOptionAPI.Provider<ChainId, GasOption> {
                 suggestedMaxPriorityFeePerGas: result.low?.suggestedMaxPriorityFeePerGas ?? '0',
             },
         }
+        console.log({ result, options })
+        return options
     }
 }
