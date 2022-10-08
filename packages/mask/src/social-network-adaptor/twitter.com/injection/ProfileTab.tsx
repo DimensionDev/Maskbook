@@ -18,7 +18,7 @@ import { ProfileTab } from '../../../components/InjectedComponents/ProfileTab.js
 
 function getStyleProps() {
     const EMPTY_STYLE = {} as CSSStyleDeclaration
-    const eleTab = searchProfileTabSelector().evaluate()?.querySelector('div') as Element
+    const eleTab = searchProfileTabSelector().evaluate()?.querySelector<Element>('div')
     const style = eleTab ? window.getComputedStyle(eleTab) : EMPTY_STYLE
     const eleNewTweetButton = searchNewTweetButtonSelector().evaluate()
     const newTweetButtonColorStyle = eleNewTweetButton ? window.getComputedStyle(eleNewTweetButton) : EMPTY_STYLE
@@ -113,10 +113,11 @@ async function hideTwitterActivatedContent() {
     // hide the activated indicator
     const tabList = searchProfileTabListSelector().evaluate()
     tabList.map((v) => {
-        const _v = v.querySelector('div') as HTMLDivElement
-        _v.style.color = style.color
-        const line = v.querySelector('div > div') as HTMLDivElement
-        line.style.display = 'none'
+        const _v = v.querySelector<HTMLDivElement>('div')
+        if (_v) _v.style.color = style.color
+
+        const line = v.querySelector<HTMLDivElement>('div > div')
+        if (line) line.style.display = 'none'
         v.addEventListener('click', v.closest('#open-nft-button') ? nameTagClickHandler : tabClickHandler)
     })
 
@@ -140,16 +141,16 @@ async function hideTwitterActivatedContent() {
 }
 
 function resetTwitterActivatedContent() {
-    const eleTab = searchProfileTabSelector().evaluate()?.querySelector('div') as Element
+    const eleTab = searchProfileTabSelector().evaluate()?.querySelector<Element>('div')
     const loseConnectionEle = searchProfileTabLoseConnectionPageSelector().evaluate()
     if (!eleTab) return
 
     const tabList = searchProfileTabListSelector().evaluate()
     tabList.map((v) => {
-        const _v = v.querySelector('div') as HTMLDivElement
-        _v.style.color = ''
-        const line = v.querySelector('div > div') as HTMLDivElement
-        line.style.display = ''
+        const _v = v.querySelector<HTMLDivElement>('div')
+        if (_v) _v.style.color = ''
+        const line = v.querySelector<HTMLDivElement>('div > div')
+        if (line) line.style.display = ''
         v.removeEventListener('click', v.closest('#open-nft-button') ? nameTagClickHandler : tabClickHandler)
     })
 
