@@ -191,7 +191,7 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
         }
         payload.current.contract_address = contractAddress
         payload.current.contract_version = contract_version
-        payload.current.network = chainResolver.chainName(chainId)
+        payload.current.network = chainResolver.networkType(chainId)
     }, [chainId, networkType, contract_version])
 
     return (
