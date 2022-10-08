@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useAsync } from 'react-use'
-import { GasOptionConfig, formatGweiToWei, ChainId } from '@masknet/web3-shared-evm'
-import { GasOptionType } from '@masknet/web3-shared-base'
+import type { GasOptionConfig, ChainId } from '@masknet/web3-shared-evm'
+import { GasOptionType, toFixed } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useGasOptions, useWeb3State } from '@masknet/web3-hooks-base'
 
@@ -14,12 +14,11 @@ export function useGasConfig(chainId: ChainId) {
     const { value: gasOptions_ } = useGasOptions(NetworkPluginID.PLUGIN_EVM)
     const { value: gasPrice } = useAsync(async () => {
         try {
-            const maxFeePerGas = formatGweiToWei(
-                gasOptions_?.[GasOptionType.NORMAL]?.suggestedMaxFeePerGas ?? 0,
-            ).toFixed(0)
-            const maxPriorityFeePerGas = formatGweiToWei(
+            const maxFeePerGas = toFixed(gasOptions_?.[GasOptionType.NORMAL]?.suggestedMaxFeePerGas ?? 0, 0)
+            const maxPriorityFeePerGas = toFixed(
                 gasOptions_?.[GasOptionType.NORMAL]?.suggestedMaxPriorityFeePerGas ?? 0,
-            ).toFixed(0)
+                0,
+            )
 
             setGasConfig(
                 isEIP1559
