@@ -73,12 +73,7 @@ export function SelectTokenListPanel(props: SelectTokenPanelProps) {
                         onTokenChange(x)
                     }}>
                     <ListItemIcon>
-                        <TokenIcon
-                            classes={{ icon: classes.icon }}
-                            address={x.address}
-                            name={x.name}
-                            logoURL={x.logoURL}
-                        />
+                        <TokenIcon className={classes.icon} address={x.address} name={x.name} logoURL={x.logoURL} />
                     </ListItemIcon>
                     <Typography variant="inherit">{x.symbol}</Typography>
                     <ListItemIcon className={classes.check}>
@@ -166,7 +161,7 @@ export function SelectTokenListPanel(props: SelectTokenPanelProps) {
                             {token?.address ? (
                                 <>
                                     <TokenIcon
-                                        classes={{ icon: classes.icon }}
+                                        className={classes.icon}
                                         address={token?.address}
                                         name={token?.name}
                                         logoURL={token?.logoURL}

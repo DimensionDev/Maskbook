@@ -81,7 +81,7 @@ export const FungibleTokenTableRow = memo<TokenTableRowProps>(({ asset, onSend, 
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     <Box position="relative">
                         <TokenIcon
-                            classes={{ icon: classes.icon }}
+                            className={classes.icon}
                             address={asset.address}
                             name={asset.name}
                             chainId={asset.chainId}

@@ -685,7 +685,7 @@ export const Transfer1559TransferUI = memo<Transfer1559UIProps>(
                                                         onClick={openAssetMenu}
                                                         icon={
                                                             <TokenIcon
-                                                                classes={{ icon: classes.icon }}
+                                                                className={classes.icon}
                                                                 address={selectedAsset.address ?? ''}
                                                                 name={selectedAsset.name}
                                                                 symbol={selectedAsset.symbol}

@@ -415,7 +415,7 @@ export function CreateForm(props: CreateFormProps) {
                     endAdornment={
                         tokenAndAmount?.token ? (
                             <Box className={classes.tokenAdornment}>
-                                <TokenIcon classes={{ icon: classes.tokenIcon }} {...tokenAndAmount.token} />
+                                <TokenIcon className={classes.tokenIcon} {...tokenAndAmount.token} />
                                 <Typography>{tokenAndAmount.token?.symbol}</Typography>
                             </Box>
                         ) : null

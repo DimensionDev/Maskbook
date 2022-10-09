@@ -204,7 +204,7 @@ export const getFungibleTokenItem = <T extends NetworkPluginID>(
                     disabled={selected && mode === TokenListMode.List}>
                     <ListItemIcon>
                         <TokenIcon
-                            classes={{ icon: classes.icon }}
+                            className={classes.icon}
                             chainId={chainId}
                             address={address}
                             name={name}

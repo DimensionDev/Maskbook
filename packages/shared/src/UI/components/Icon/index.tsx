@@ -1,36 +1,37 @@
 import { memo, useState } from 'react'
 import { Avatar, AvatarProps, useTheme } from '@mui/material'
-import { makeStyles, useStylesExtends } from '@masknet/theme'
-import NO_IMAGE_COLOR from './constants.js'
+import { makeStyles } from '@masknet/theme'
+import { name2Image } from './name2Image.js'
 
 const useStyles = makeStyles()((theme) => ({
     icon: {
         margin: 0,
         borderRadius: '50%',
+        color: theme.palette.maskColor.dark,
+        backgroundSize: 'cover',
     },
 }))
 
-export interface IconProps extends withClasses<'icon'> {
+export interface IconProps {
     name?: string
     logoURL?: string
+    className?: string
     AvatarProps?: Partial<AvatarProps>
 }
 
 export const Icon = memo<IconProps>((props) => {
-    const { logoURL, AvatarProps, name } = props
+    const { logoURL, AvatarProps, name, className } = props
     const [error, setError] = useState(false)
 
-    // add background color to no-img token icon
-    const defaultBackgroundColorNumber = name?.split('')?.reduce((total, cur) => total + Number(cur?.charCodeAt(0)), 0)
-    const defaultBackgroundColor = defaultBackgroundColorNumber
-        ? NO_IMAGE_COLOR[defaultBackgroundColorNumber % 5]
-        : undefined
-    const classes = useStylesExtends(useStyles(), props)
+    const defaultBackgroundImage = name2Image(name)
+    const { classes, cx } = useStyles()
     const theme = useTheme()
+
+    const showImage = logoURL && !error
 
     return (
         <Avatar
-            className={classes.icon}
+            className={cx(classes.icon, className)}
             src={logoURL}
             {...AvatarProps}
             imgProps={{
@@ -40,7 +41,8 @@ export const Icon = memo<IconProps>((props) => {
             }}
             sx={{
                 ...AvatarProps?.sx,
-                backgroundColor: logoURL && !error ? theme.palette.common.white : defaultBackgroundColor,
+                backgroundImage: `url("${defaultBackgroundImage}")`,
+                backgroundColor: showImage ? theme.palette.common.white : undefined,
             }}>
             {name?.slice(0, 1).toUpperCase()}
         </Avatar>

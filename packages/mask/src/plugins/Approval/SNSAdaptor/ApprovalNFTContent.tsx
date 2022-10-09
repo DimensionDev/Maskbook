@@ -90,7 +90,7 @@ function ApprovalNFTItem(props: ApprovalNFTItemProps) {
                             address={spender.contract.address}
                             name={spender.contract.name}
                             logoURL={contractDetailed?.iconURL}
-                            classes={{ icon: classes.logoIcon }}
+                            className={classes.logoIcon}
                             tokenType={TokenType.NonFungible}
                         />
 

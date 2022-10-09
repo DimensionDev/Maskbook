@@ -141,7 +141,7 @@ export function RemindDialog(props: RemindDialogProps) {
             </section>
             <section className={classNames(classes.wrapper, classes.tokenWrapper)}>
                 <TokenIcon
-                    classes={{ icon: classes.tokenIcon }}
+                    className={classes.tokenIcon}
                     chainId={token.chainId}
                     address={token.address}
                     name={token.name}

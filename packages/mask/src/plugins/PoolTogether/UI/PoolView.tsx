@@ -242,7 +242,7 @@ export function PoolView(props: PoolProps) {
             <Grid item container direction="column" className={classes.metaPrize}>
                 <Grid container item className={classes.metaTitle}>
                     <Grid item>
-                        <TokenIcon address={token.address} name={token.symbol} classes={{ icon: classes.icon }} />
+                        <TokenIcon address={token.address} name={token.symbol} className={classes.icon} />
                     </Grid>
                     <Grid item>
                         <Typography className={classes.prize} variant="h4" fontWeight="fontWeightBold">
@@ -282,7 +282,7 @@ export function PoolView(props: PoolProps) {
                                 <TokenIcon
                                     address={tokenFaucetDripToken.address}
                                     name={tokenFaucetDripToken.symbol}
-                                    classes={{ icon: classes.poolIcon }}
+                                    className={classes.poolIcon}
                                 />
                                 {t('plugin_pooltogether_apr', {
                                     apr: tokenFaucet.apr?.toFixed(2) ?? 0,

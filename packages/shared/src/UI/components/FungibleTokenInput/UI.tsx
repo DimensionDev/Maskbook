@@ -177,7 +177,7 @@ export const FungibleTokenInputUI = memo<FungibleTokenInputUIProps>(
                                             className={classes.chip}
                                             icon={
                                                 <TokenIcon
-                                                    classes={{ icon: classes.tokenIcon }}
+                                                    className={classes.tokenIcon}
                                                     address={token.address}
                                                     name={token.name}
                                                     chainId={token.chainId}

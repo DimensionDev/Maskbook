@@ -123,11 +123,11 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
                 variant="contained"
                 startIcon={
                     <TokenIcon
+                        className={classes.icon}
                         address={token.address}
                         chainId={token.chainId}
                         name={token.name}
                         disableDefaultIcon
-                        classes={{ icon: classes.icon }}
                     />
                 }
                 endIcon={

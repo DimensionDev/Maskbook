@@ -187,7 +187,7 @@ export const NftRedPacketHistoryItem: FC<NftRedPacketHistoryItemProps> = memo(
             <ListItem className={classes.root}>
                 <Box className={classes.box}>
                     <TokenIcon
-                        classes={{ icon: classes.icon }}
+                        className={classes.icon}
                         address={contractDetailed?.address ?? ''}
                         name={contractDetailed?.name ?? '-'}
                         logoURL={
