@@ -1,5 +1,5 @@
 import urlcat from 'urlcat'
-import type { MindBaseAPI } from '../types/minds.js'
+import type { MindBaseAPI } from '../types/Minds.js'
 
 export class MindsAPI implements MindBaseAPI.Provider {
     async getUserByScreenName(screenName?: string) {
