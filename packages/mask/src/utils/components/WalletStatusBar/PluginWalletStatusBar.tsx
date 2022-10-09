@@ -1,3 +1,4 @@
+import { memo, PropsWithChildren, useCallback, useMemo } from 'react'
 import {
     useCurrentWeb3NetworkPluginID,
     useProviderDescriptor,
@@ -17,7 +18,6 @@ import { NetworkPluginID, TransactionStatusType } from '@masknet/web3-shared-bas
 import { Box, Button } from '@mui/material'
 import { useI18N } from '../../i18n-next-ui.js'
 import { Icons } from '@masknet/icons'
-import { memo, PropsWithChildren, useCallback, useMemo } from 'react'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { WalletDescription } from './WalletDescription.js'
 import { Action } from './Action.js'
