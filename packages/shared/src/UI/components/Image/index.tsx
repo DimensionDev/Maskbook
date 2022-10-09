@@ -6,6 +6,8 @@ import { useImageURL } from '../../../hooks/useImageURL.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
+        width: '100%',
+        height: '100%',
         position: 'relative',
     },
     circle: {
