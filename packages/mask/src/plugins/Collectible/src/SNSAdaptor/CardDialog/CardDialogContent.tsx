@@ -26,7 +26,7 @@ export function CardDialogContent(props: CardDialogContentProps) {
     const { currentTab } = props
     const { classes } = useStyles()
     const { t } = useBaseI18n()
-    const { asset, orders, events, origin } = Context.useContainer()
+    const { asset, orders, events, origin, pluginID, chainId } = Context.useContainer()
     const currentVisitingIdentity = useCurrentVisitingIdentity()
     const isOwnerIdentity = useIsOwnerIdentity(currentVisitingIdentity)
 
