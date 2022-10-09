@@ -1,11 +1,16 @@
+export enum SocketRequestNameSpace {
+    Address = 'address',
+    Assets = 'assets',
+}
+
 export type SocketNameSpace = {
-    namespace: string
+    namespace: SocketRequestNameSpace
     socket: SocketIOClient.Socket
 }
 
 export enum SocketRequestType {
     SUBSCRIBE = 'subscribe',
-    GET = 'GET',
+    GET = 'get',
 }
 
 export type SocketRequestAssetScope = 'assets' | 'bsc-assets' | 'polygon-assets'
@@ -137,12 +142,12 @@ export interface ZerionNonFungibleAsset {
     }
     name: string
     type: string
-    tags: any
-    last_price: any
-    buy_now_price: any
+    tags?: string[]
+    last_price?: number
+    buy_now_price?: number
     floor_price: number
-    total_last_price: any
-    total_floor_price: number
+    total_last_price?: number
+    total_floor_price?: number
     is_displayable: boolean
     is_verified: boolean
     collection: {
@@ -200,6 +205,56 @@ export interface ZerionNonFungibleTokenResponseBody extends SocketResponseBody {
     }
     payload: {
         nft: ZerionNonFungibleTokenItem[]
+    }
+}
+
+export interface RelevantUrl {
+    name: string
+    url: string
+}
+
+export interface ZerionNonFungibleTokenInfoBody extends SocketResponseBody {
+    payload: {
+        'nft-info': {
+            asset: ZerionNonFungibleAsset
+            attributes: Array<{ key: string; value: string }>
+            collection: {
+                name: string
+                description: string
+                icon_url: string
+            }
+            collection_info: {
+                slug: string
+                name: string
+                description: string
+                icon_url: string
+            }
+            description: string
+            relevant_urls: RelevantUrl[]
+        }
+    }
+}
+export interface ZerionNonFungibleCollection {
+    collection_id: string
+    name: string
+    icon_url: string
+    description: string
+    floor_price: number
+    nfts_count: number
+    num_owners: number
+    one_day_volume: number
+    seven_day_volume: number
+    thirty_day_volume: number
+    one_day_change: number
+    total_volume: number
+    market_cap: number
+    banner_image_url: string
+    relevant_urls: RelevantUrl[]
+    created_date?: string
+}
+export interface ZerionNonFungibleCollectionBody extends SocketResponseBody {
+    payload: {
+        'nft-collection-info': ZerionNonFungibleCollection
     }
 }
 

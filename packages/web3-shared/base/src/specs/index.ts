@@ -994,7 +994,7 @@ export interface HubNonFungible<ChainId, SchemaType, GasOption, Web3HubOptions =
         address: string,
         tokenId: string,
         initial?: Web3HubOptions,
-    ) => Promise<PriceInToken<ChainId, SchemaType>>
+    ) => Promise<PriceInToken<ChainId, SchemaType> | undefined>
     /** Get a non-fungible contract. */
     getNonFungibleTokenContract?: (
         address: string,

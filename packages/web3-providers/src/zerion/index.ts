@@ -12,8 +12,9 @@ import {
     SourceType,
     createNextIndicator,
     HubIndicator,
+    scale10,
 } from '@masknet/web3-shared-base'
-import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import { ChainId, createNativeToken, SchemaType } from '@masknet/web3-shared-evm'
 import {
     SocketRequestBody,
     SocketNameSpace,
@@ -23,6 +24,10 @@ import {
     SocketRequestType,
     ZerionNonFungibleTokenResponseBody,
     ZerionNonFungibleTokenItem,
+    ZerionNonFungibleTokenInfoBody,
+    ZerionNonFungibleCollection,
+    ZerionNonFungibleCollectionBody,
+    SocketRequestNameSpace,
 } from './type.js'
 import { formatAsset, formatTransactions } from './format.js'
 import type { FungibleTokenAPI, HistoryAPI, NonFungibleTokenAPI } from '../types/index.js'
@@ -37,10 +42,10 @@ const ZERION_NFT_DETAIL_URL = 'https://app.zerion.io/nfts/'
 
 let socket: SocketIOClient.Socket | null = null
 
-function createSocket() {
+function createSocket(namespace: SocketRequestNameSpace = SocketRequestNameSpace.Address) {
     if (socket?.connected) return socket
     if (socket) socket.removeAllListeners()
-    return (socket = io(`${ZERION_API}/address`, {
+    return (socket = io(`${ZERION_API}/${namespace}`, {
         transports: ['websocket'],
         query: {
             api_token: ZERION_TOKEN,
@@ -85,7 +90,7 @@ function subscribeFromZerion(
 async function getAssetsList(address: string, scope: string) {
     return (await subscribeFromZerion(
         {
-            namespace: 'address',
+            namespace: SocketRequestNameSpace.Address,
             socket: createSocket(),
         },
         {
@@ -101,7 +106,7 @@ async function getAssetsList(address: string, scope: string) {
 async function getTransactionList(address: string, scope: string, page?: number, size = 30) {
     return (await subscribeFromZerion(
         {
-            namespace: 'address',
+            namespace: SocketRequestNameSpace.Address,
             socket: createSocket(),
         },
         {
@@ -120,7 +125,7 @@ async function getTransactionList(address: string, scope: string, page?: number,
 async function getNonFungibleAsset(account: string, address: string, tokenId: string) {
     return (await subscribeFromZerion(
         {
-            namespace: 'address',
+            namespace: SocketRequestNameSpace.Address,
             socket: createSocket(),
         },
         {
@@ -135,7 +140,7 @@ async function getNonFungibleAsset(account: string, address: string, tokenId: st
 
 async function getNonFungibleAssets(address: string, page?: number, size = 20, contract_address?: string) {
     return (await subscribeFromZerion(
-        { namespace: 'address', socket: createSocket() },
+        { namespace: SocketRequestNameSpace.Address, socket: createSocket() },
         {
             scope: ['nft'],
             payload: {
@@ -150,6 +155,33 @@ async function getNonFungibleAssets(address: string, page?: number, size = 20, c
     )) as ZerionNonFungibleTokenResponseBody
 }
 
+async function getNonFungibleCollection(slug: string) {
+    return (await subscribeFromZerion(
+        {
+            namespace: SocketRequestNameSpace.Assets,
+            socket: createSocket(SocketRequestNameSpace.Assets),
+        },
+        {
+            scope: ['nft-collection-info'],
+            payload: {
+                collection_slug: slug,
+            },
+        },
+    )) as ZerionNonFungibleCollectionBody
+}
+
+async function getNonFungibleInfo(address: string, tokenId: string) {
+    return (await subscribeFromZerion(
+        { namespace: SocketRequestNameSpace.Assets, socket: createSocket(SocketRequestNameSpace.Assets) },
+        {
+            scope: ['nft-info'],
+            payload: {
+                asset_code: `${address}:${tokenId}`,
+                currency: 'eth',
+            },
+        },
+    )) as ZerionNonFungibleTokenInfoBody
+}
 const filterAssetType = ['compound', 'trash', 'uniswap', 'uniswap-v2', 'nft']
 
 const zerionChainIdResolver = createLookupTableResolver<string, ChainId | undefined>(
@@ -218,6 +250,17 @@ export class ZerionAPI
 }
 
 export class ZerionNonFungibleTokenAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
+    createNonFungibleCollectionFromCollectionData(chainId: ChainId, collection: ZerionNonFungibleCollection) {
+        return {
+            chainId,
+            scheme: SchemaType.ERC721,
+            name: collection.name,
+            slug: collection.collection_id,
+            description: collection.description,
+            iconURL: collection.icon_url,
+            source: SourceType.Zerion,
+        }
+    }
     createNonFungibleTokenPermalink(address?: string, tokenId?: string) {
         if (!address || !tokenId) return
         return ZERION_NFT_DETAIL_URL + `${address}:${tokenId}`
@@ -283,5 +326,17 @@ export class ZerionNonFungibleTokenAPI implements NonFungibleTokenAPI.Provider<C
             createIndicator(indicator),
             assets.length ? createNextIndicator(indicator) : undefined,
         )
+    }
+
+    async getFloorPrice(address: string, tokenId: string, { chainId = ChainId.Mainnet }: HubOptions<ChainId> = {}) {
+        const response = await getNonFungibleInfo(address, tokenId)
+
+        if (!response.payload['nft-info'].asset.floor_price) return
+
+        const nativeToken = createNativeToken(chainId)
+        return {
+            amount: scale10(response.payload['nft-info'].asset.floor_price, nativeToken.decimals).toFixed(0),
+            token: nativeToken,
+        }
     }
 }
