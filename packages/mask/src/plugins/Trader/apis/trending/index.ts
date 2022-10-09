@@ -149,7 +149,11 @@ export async function getAvailableDataProviders(chainId: ChainId, type?: TagType
             .map((y) => y.value)
     const checked = await Promise.all(
         getEnumAsArray(DataProvider)
-            .filter((x) => (x.value === DataProvider.UniswapInfo ? networkType === NetworkType.Ethereum : true))
+            .filter(
+                (x) =>
+                    (x.value === DataProvider.UniswapInfo ? networkType === NetworkType.Ethereum : true) &&
+                    x.value !== DataProvider.NFTScan,
+            )
             .map(
                 async (x) =>
                     [
