@@ -397,7 +397,7 @@ export interface NonFungibleTokenOrder<ChainId, SchemaType> {
     source?: SourceType
 }
 
-export enum NonFungibleTokenEventActivityType {
+export enum ActivityType {
     Transfer = 'Transfer',
     Mint = 'Mint',
     Sale = 'Sale',
@@ -410,7 +410,7 @@ export interface NonFungibleTokenEvent<ChainId, SchemaType> {
     /** chain Id */
     chainId: ChainId
     /** event type */
-    type: NonFungibleTokenEventActivityType
+    type: ActivityType
     /** permalink of asset */
     assetPermalink?: string
     /** name of asset */

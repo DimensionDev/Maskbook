@@ -5,7 +5,6 @@ import {
     NonFungibleAsset,
     NonFungibleCollection,
     NonFungibleTokenContract,
-    resolveNonFungibleTokenEventActivityType,
     NonFungibleTokenEvent,
     resolveIPFS_URL,
     scale10,
@@ -14,7 +13,7 @@ import {
 } from '@masknet/web3-shared-base'
 import { NFTSCAN_BASE_SOLANA, NFTSCAN_URL } from '../constants.js'
 import type { Solana } from '../types/index.js'
-import { getJSON } from '../../helpers.js'
+import { resolveNonFungibleTokenEventActivityType, getJSON } from '../../helpers.js'
 
 export function createPermalink(chainId: ChainId, address?: string) {
     if (!address) return

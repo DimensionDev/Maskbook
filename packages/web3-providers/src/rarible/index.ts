@@ -7,7 +7,6 @@ import {
     NonFungibleTokenEvent,
     NonFungibleTokenOrder,
     OrderSide,
-    resolveNonFungibleTokenEventActivityType,
     TokenType,
     createPageable,
     createIndicator,
@@ -20,7 +19,7 @@ import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { RaribleEventType, RaribleOrder, RaribleHistory, RaribleNFTItemMapResponse } from './types.js'
 import { RaribleURL } from './constants.js'
 import type { NonFungibleTokenAPI } from '../types/index.js'
-import { getPaymentToken } from '../helpers.js'
+import { resolveNonFungibleTokenEventActivityType, getPaymentToken } from '../helpers.js'
 
 const resolveRaribleBlockchain = createLookupTableResolver<number, string>(
     {

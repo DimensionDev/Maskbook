@@ -8,7 +8,6 @@ import {
     NonFungibleAsset,
     NonFungibleTokenContract,
     NonFungibleTokenEvent,
-    resolveNonFungibleTokenEventActivityType,
     NonFungibleTokenOrder,
     NonFungibleTokenStats,
     OrderSide,
@@ -20,6 +19,7 @@ import { EMPTY_LIST } from '@masknet/shared-base'
 import { ChainId, createERC20Token, formatWeiToEther, SchemaType } from '@masknet/web3-shared-evm'
 import type { NonFungibleTokenAPI } from '../types/index.js'
 import type { Collection, Event, Order, Stats, Token } from './types.js'
+import { resolveNonFungibleTokenEventActivityType } from '../helpers.js'
 import { LOOKSRARE_API_URL, LOOKSRARE_PAGE_SIZE } from './constants.js'
 
 async function fetchFromLooksRare<T>(chainId: ChainId, url: string) {

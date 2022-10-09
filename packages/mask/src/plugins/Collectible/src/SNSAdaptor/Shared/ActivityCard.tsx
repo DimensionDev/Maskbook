@@ -4,13 +4,7 @@ import { Typography, Link } from '@mui/material'
 import { useWeb3State } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { Icons } from '@masknet/icons'
-import {
-    NonFungibleTokenEvent,
-    formatBalance,
-    isZero,
-    isValidTimestamp,
-    NonFungibleTokenEventActivityType,
-} from '@masknet/web3-shared-base'
+import { NonFungibleTokenEvent, formatBalance, isZero, isValidTimestamp, ActivityType } from '@masknet/web3-shared-base'
 import { useI18N } from '../../../../../utils/index.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -101,16 +95,10 @@ export function ActivityCard(props: ActivityCardProps) {
         <div className={classes.root}>
             <div className={classes.flex}>
                 <Typography
-                    className={
-                        type === NonFungibleTokenEventActivityType.Sale
-                            ? cx(classes.title, classes.highlight)
-                            : classes.title
-                    }>
+                    className={type === ActivityType.Sale ? cx(classes.title, classes.highlight) : classes.title}>
                     {type}
                 </Typography>
-                {![NonFungibleTokenEventActivityType.Mint, NonFungibleTokenEventActivityType.CancelOffer].includes(
-                    type,
-                ) &&
+                {![ActivityType.Mint, ActivityType.CancelOffer].includes(type) &&
                     activity.priceInToken &&
                     !isZero(activity.priceInToken.amount) && (
                         <div className={classes.salePrice}>
