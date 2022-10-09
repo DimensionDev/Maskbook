@@ -11,6 +11,7 @@ export function useTextResize(shouldEnable: boolean) {
         if (!element || !enable) return
 
         const updateFontSize = () => {
+            const length = Array.from(element.innerText).length
             let fontSize = 1
             if (length < 45) fontSize = 1.5
             else if (length < 80) fontSize = 1.2
