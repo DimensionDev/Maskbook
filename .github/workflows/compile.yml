@@ -3,7 +3,7 @@ name: Compile
 on:
   push:
     tags: ["v*"]
-    branches: [master, develop*, released]
+    branches: [master, hotfix*, develop*, release*, released]
   pull_request:
     branches: [master, develop*, released]
 
