@@ -2,7 +2,7 @@ import { abortSignalTimeout, delay } from '@dimensiondev/kit'
 import { inputText, pasteText } from '@masknet/injected-script'
 import { newPostButtonSelector, postEditorDraftContentSelector } from '../utils/selector.js'
 import type { SocialNetworkUI } from '../../../social-network/index.js'
-import { getEditorContent, hasEditor, hasFocus, isCompose } from '../utils/postBox.js'
+import { getEditorContent, hasFocus } from '../utils/postBox.js'
 import { untilElementAvailable } from '../../../utils/dom.js'
 import { isMobileTwitter } from '../utils/isMobile.js'
 import { MaskMessages } from '../../../utils/messages.js'
@@ -20,7 +20,7 @@ export const pasteTextToCompositionTwitter: SocialNetworkUI.AutomationCapabiliti
                 if (abort.aborted) throw new Error('Aborted')
             }
 
-            if (!isCompose() && !hasEditor() && opt?.reason !== 'reply') {
+            if (opt?.reason !== 'reply') {
                 // open tweet window
                 await untilElementAvailable(newPostButtonSelector())
                 newPostButtonSelector().evaluate()!.click()
