@@ -19,7 +19,7 @@ import {
 import { ChainId, createContract, getRPCConstants, SchemaType, WNATIVE } from '@masknet/web3-shared-evm'
 import { NFTSCAN_BASE, NFTSCAN_LOGO_BASE, NFTSCAN_URL } from '../constants.js'
 import type { EVM } from '../types/EVM.js'
-import { getJSON, getPaymentToken } from '../../helpers.js'
+import { getJSON, resolveNonFungibleTokenEventActivityType, getPaymentToken } from '../../helpers.js'
 
 type NFTScanChainId = ChainId.Mainnet | ChainId.Matic | ChainId.BSC | ChainId.Arbitrum | ChainId.Optimism
 
@@ -227,7 +227,7 @@ export function createNonFungibleTokenEvent(
         id: transaction.hash,
         quantity: transaction.amount,
         timestamp: transaction.timestamp,
-        type: transaction.event_type,
+        type: resolveNonFungibleTokenEventActivityType(transaction.event_type),
         hash: transaction.hash,
         from: {
             address: transaction.from,

@@ -19,7 +19,7 @@ import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { RaribleEventType, RaribleOrder, RaribleHistory, RaribleNFTItemMapResponse } from './types.js'
 import { RaribleURL } from './constants.js'
 import type { NonFungibleTokenAPI } from '../types/index.js'
-import { getPaymentToken } from '../helpers.js'
+import { resolveNonFungibleTokenEventActivityType, getPaymentToken } from '../helpers.js'
 
 const resolveRaribleBlockchain = createLookupTableResolver<number, string>(
     {
@@ -136,7 +136,7 @@ function createEvent(chainId: ChainId, history: RaribleHistory): NonFungibleToke
         chainId,
         from: createAccount(history.from ?? history.seller ?? history.owner ?? history.maker),
         to: createAccount(history.buyer),
-        type: history['@type'],
+        type: resolveNonFungibleTokenEventActivityType(history['@type']),
         assetPermalink:
             history.nft?.type.contract && history.nft?.type.tokenId
                 ? createRaribleLink(history.nft.type.contract, history.nft.type.tokenId)
