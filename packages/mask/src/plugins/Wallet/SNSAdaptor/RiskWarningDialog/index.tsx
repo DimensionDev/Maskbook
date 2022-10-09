@@ -5,14 +5,13 @@ import { InjectedDialog } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { DialogActions, DialogContent, Typography } from '@mui/material'
 import { getMaskColor, makeStyles, useCustomSnackbar, ActionButton } from '@masknet/theme'
-import { useWeb3State } from '@masknet/plugin-infra/web3'
-import type { NetworkPluginID } from '@masknet/web3-shared-base'
+import { isDashboardPage, NetworkPluginID } from '@masknet/shared-base'
+import { Icons } from '@masknet/icons'
+import { useWeb3State } from '@masknet/web3-hooks-base'
 import { useI18N, useMatchXS } from '../../../../utils/index.js'
 import { WalletMessages } from '../../messages.js'
 import { WalletStatusBox } from '../../../../components/shared/WalletStatusBox/index.js'
 import { ActionButtonPromise } from '../../../../extension/options-page/DashboardComponents/ActionButton.js'
-import { isDashboardPage } from '@masknet/shared-base'
-import { Icons } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {

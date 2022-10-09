@@ -1,6 +1,7 @@
 import type { Plugin } from '@masknet/plugin-infra'
-import { IdentityServiceState } from '@masknet/plugin-infra/web3'
-import { SocialIdentity, SocialAddress, NetworkPluginID, SocialAddressType } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { IdentityServiceState } from '@masknet/web3-state'
+import { SocialIdentity, SocialAddress, SocialAddressType } from '@masknet/web3-shared-base'
 import { isValidAddress } from '@masknet/web3-shared-flow'
 
 function getFlowAddress(bio: string) {

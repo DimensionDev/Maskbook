@@ -8,9 +8,9 @@ import {
     QUALIFICATION_HAS_LUCKY_INTERFACE_ID,
 } from '../../constants.js'
 import { useQualificationContract } from './useQualificationContract.js'
-import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { useERC165 } from '@masknet/plugin-infra/web3-evm'
+import { useAccount, useChainId } from '@masknet/web3-hooks-base'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { useERC165 } from '@masknet/web3-hooks-evm'
 
 export function useQualificationVerify(address?: string, ito_address?: string) {
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)

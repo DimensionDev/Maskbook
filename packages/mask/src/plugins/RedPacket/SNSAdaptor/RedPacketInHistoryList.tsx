@@ -16,8 +16,9 @@ import { StyledLinearProgress } from '../../ITO/SNSAdaptor/StyledLinearProgress.
 import { RedPacketJSONPayload, RedPacketJSONPayloadFromChain, RedPacketStatus } from '../types.js'
 import { useAvailabilityComputed } from './hooks/useAvailabilityComputed.js'
 import { useRefundCallback } from './hooks/useRefundCallback.js'
-import { useAccount, useChainId, useFungibleToken, useWeb3Connection } from '@masknet/plugin-infra/web3'
-import { formatBalance, FungibleToken, NetworkPluginID, isSameAddress } from '@masknet/web3-shared-base'
+import { useAccount, useChainId, useFungibleToken, useWeb3Connection } from '@masknet/web3-hooks-base'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { formatBalance, FungibleToken, isSameAddress } from '@masknet/web3-shared-base'
 
 const interFace = new Interface(REDPACKET_ABI)
 

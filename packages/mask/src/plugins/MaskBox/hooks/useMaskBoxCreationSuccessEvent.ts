@@ -3,8 +3,8 @@ import { useAsyncRetry } from 'react-use'
 import type { CreationSuccess } from '@masknet/web3-contracts/types/MaskBox'
 import { useMaskBoxConstants } from '@masknet/web3-shared-evm'
 import { useMaskBoxContract } from './useMaskBoxContract.js'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { useWeb3Connection } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { useWeb3Connection } from '@masknet/web3-hooks-base'
 
 // dynamically set the block range window size
 const FRAGMENT_SIZE = 3000

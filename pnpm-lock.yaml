@@ -306,6 +306,12 @@ importers:
       '@masknet/web3-helpers':
         specifier: workspace:*
         version: link:../web3-helpers
+      '@masknet/web3-hooks-base':
+        specifier: workspace:*
+        version: link:../web3-hooks/base
+      '@masknet/web3-hooks-evm':
+        specifier: workspace:*
+        version: link:../web3-hooks/evm
       '@masknet/web3-providers':
         specifier: workspace:*
         version: link:../web3-providers
@@ -321,6 +327,9 @@ importers:
       '@masknet/web3-shared-solana':
         specifier: workspace:*
         version: link:../web3-shared/solana
+      '@masknet/web3-state':
+        specifier: workspace:*
+        version: link:../web3-state
       '@msgpack/msgpack':
         specifier: ^2.8.0
         version: 2.8.0
@@ -651,6 +660,12 @@ importers:
       '@masknet/web3-helpers':
         specifier: workspace:*
         version: link:../web3-helpers
+      '@masknet/web3-hooks-base':
+        specifier: workspace:*
+        version: link:../web3-hooks/base
+      '@masknet/web3-hooks-evm':
+        specifier: workspace:*
+        version: link:../web3-hooks/evm
       '@masknet/web3-providers':
         specifier: workspace:*
         version: link:../web3-providers
@@ -666,6 +681,9 @@ importers:
       '@masknet/web3-shared-solana':
         specifier: workspace:*
         version: link:../web3-shared/solana
+      '@masknet/web3-state':
+        specifier: workspace:*
+        version: link:../web3-state
       '@metamask/eth-sig-util':
         specifier: ^4.0.0
         version: 4.0.0
@@ -1133,6 +1151,9 @@ importers:
       '@masknet/typed-message':
         specifier: workspace:*
         version: link:../../typed-message
+      '@masknet/web3-hooks-base':
+        specifier: workspace:*
+        version: link:../../web3-hooks/base
       '@masknet/web3-shared-base':
         specifier: workspace:*
         version: link:../../web3-shared/base
@@ -1169,6 +1190,12 @@ importers:
       '@masknet/theme':
         specifier: workspace:*
         version: link:../../theme
+      '@masknet/web3-hooks-base':
+        specifier: workspace:*
+        version: link:../../web3-hooks/base
+      '@masknet/web3-hooks-evm':
+        specifier: workspace:*
+        version: link:../../web3-hooks/evm
       '@masknet/web3-providers':
         specifier: workspace:*
         version: link:../../web3-providers
@@ -1217,6 +1244,12 @@ importers:
       '@masknet/theme':
         specifier: workspace:*
         version: link:../../theme
+      '@masknet/web3-hooks-base':
+        specifier: workspace:*
+        version: link:../../web3-hooks/base
+      '@masknet/web3-hooks-evm':
+        specifier: workspace:*
+        version: link:../../web3-hooks/evm
       '@masknet/web3-providers':
         specifier: workspace:*
         version: link:../../web3-providers
@@ -1283,6 +1316,9 @@ importers:
       '@masknet/web3-shared-flow':
         specifier: workspace:*
         version: link:../../web3-shared/flow
+      '@masknet/web3-state':
+        specifier: workspace:*
+        version: link:../../web3-state
       '@metamask/eth-sig-util':
         specifier: ^4.0.0
         version: 4.0.0
@@ -1437,6 +1473,9 @@ importers:
       '@masknet/web3-shared-flow':
         specifier: workspace:*
         version: link:../../web3-shared/flow
+      '@masknet/web3-state':
+        specifier: workspace:*
+        version: link:../../web3-state
       '@servie/events':
         specifier: ^3.0.0
         version: 3.0.0
@@ -1474,6 +1513,12 @@ importers:
       '@masknet/theme':
         specifier: workspace:*
         version: link:../../theme
+      '@masknet/web3-hooks-base':
+        specifier: workspace:*
+        version: link:../../web3-hooks/base
+      '@masknet/web3-hooks-evm':
+        specifier: workspace:*
+        version: link:../../web3-hooks/evm
       '@masknet/web3-providers':
         specifier: workspace:*
         version: link:../../web3-providers
@@ -1513,6 +1558,12 @@ importers:
       '@masknet/theme':
         specifier: workspace:*
         version: link:../../theme
+      '@masknet/web3-hooks-base':
+        specifier: workspace:*
+        version: link:../../web3-hooks/base
+      '@masknet/web3-hooks-evm':
+        specifier: workspace:*
+        version: link:../../web3-hooks/evm
       '@masknet/web3-providers':
         specifier: workspace:*
         version: link:../../web3-providers
@@ -1624,12 +1675,15 @@ importers:
       '@masknet/web3-shared-solana':
         specifier: workspace:*
         version: link:../../web3-shared/solana
+      '@masknet/web3-state':
+        specifier: workspace:*
+        version: link:../../web3-state
       '@metaplex-foundation/mpl-token-metadata':
         specifier: ^1.1.0
         version: 1.1.0
       '@metaplex/js':
         specifier: ^4.11.7
-        version: 4.11.7_3hthoayrtz7bowcduhtflwhjdu
+        version: 4.11.7
       '@project-serum/sol-wallet-adapter':
         specifier: ^0.2.6
         version: 0.2.6_@solana+web3.js@1.44.2
@@ -1688,6 +1742,9 @@ importers:
       '@masknet/shared':
         specifier: workspace:*
         version: link:../../shared
+      '@masknet/shared-base':
+        specifier: workspace:*
+        version: link:../../shared-base
       '@masknet/theme':
         specifier: workspace:*
         version: link:../../theme
@@ -1730,6 +1787,12 @@ importers:
       '@masknet/theme':
         specifier: workspace:*
         version: link:../../theme
+      '@masknet/web3-hooks-base':
+        specifier: workspace:*
+        version: link:../../web3-hooks/base
+      '@masknet/web3-hooks-evm':
+        specifier: workspace:*
+        version: link:../../web3-hooks/evm
       '@masknet/web3-providers':
         specifier: workspace:*
         version: link:../../web3-providers
@@ -1766,6 +1829,9 @@ importers:
       '@masknet/plugin-infra':
         specifier: workspace:*
         version: link:../../plugin-infra
+      '@masknet/shared-base':
+        specifier: workspace:*
+        version: link:../../shared-base
       ts-results:
         specifier: ^3.3.0
         version: 3.3.0_g2bdan7o336xxsymnx5nlozu2m
@@ -1954,6 +2020,12 @@ importers:
       '@masknet/web3-helpers':
         specifier: workspace:*
         version: link:../web3-helpers
+      '@masknet/web3-hooks-base':
+        specifier: workspace:*
+        version: link:../web3-hooks/base
+      '@masknet/web3-hooks-evm':
+        specifier: workspace:*
+        version: link:../web3-hooks/evm
       '@masknet/web3-providers':
         specifier: workspace:*
         version: link:../web3-providers
@@ -2282,6 +2354,102 @@ importers:
         specifier: workspace:*
         version: link:../web3-shared/solana
 
+  packages/web3-hooks/base:
+    dependencies:
+      '@masknet/plugin-infra':
+        specifier: workspace:*
+        version: link:../../plugin-infra
+      '@masknet/shared-base':
+        specifier: workspace:*
+        version: link:../../shared-base
+      '@masknet/web3-helpers':
+        specifier: workspace:*
+        version: link:../../web3-helpers
+      '@masknet/web3-shared-base':
+        specifier: workspace:*
+        version: link:../../web3-shared/base
+      '@masknet/web3-shared-evm':
+        specifier: workspace:*
+        version: link:../../web3-shared/evm
+      '@masknet/web3-shared-flow':
+        specifier: workspace:*
+        version: link:../../web3-shared/flow
+      '@masknet/web3-shared-solana':
+        specifier: workspace:*
+        version: link:../../web3-shared/solana
+      '@types/ethereum-blockies':
+        specifier: ^0.1.0
+        version: 0.1.0
+      '@types/use-subscription':
+        specifier: ^1.0.0
+        version: 1.0.0
+      bignumber.js:
+        specifier: ^9.0.2
+        version: 9.1.0
+      ethereum-blockies:
+        specifier: ^0.1.1
+        version: 0.1.1
+      lru-cache:
+        specifier: ^7.10.1
+        version: 7.10.1
+      react-use:
+        specifier: ^17.4.0
+        version: 17.4.0
+      use-subscription:
+        specifier: 1.6.0
+        version: 1.6.0
+      web3:
+        specifier: 1.7.5
+        version: 1.7.5
+
+  packages/web3-hooks/evm:
+    dependencies:
+      '@masknet/shared-base':
+        specifier: workspace:*
+        version: link:../../shared-base
+      '@masknet/web3-contracts':
+        specifier: workspace:*
+        version: link:../../web3-contracts
+      '@masknet/web3-helpers':
+        specifier: workspace:*
+        version: link:../../web3-helpers
+      '@masknet/web3-hooks-base':
+        specifier: workspace:*
+        version: link:../base
+      '@masknet/web3-shared-base':
+        specifier: workspace:*
+        version: link:../../web3-shared/base
+      '@masknet/web3-shared-evm':
+        specifier: workspace:*
+        version: link:../../web3-shared/evm
+      '@masknet/web3-shared-flow':
+        specifier: workspace:*
+        version: link:../../web3-shared/flow
+      '@masknet/web3-shared-solana':
+        specifier: workspace:*
+        version: link:../../web3-shared/solana
+      bignumber.js:
+        specifier: ^9.0.2
+        version: 9.1.0
+      react-use:
+        specifier: ^17.4.0
+        version: 17.4.0
+      unstated-next:
+        specifier: ^1.1.0
+        version: 1.1.0
+      wallet.ts:
+        specifier: ^1.0.1
+        version: 1.0.1
+      web3:
+        specifier: 1.7.5
+        version: 1.7.5
+      web3-core:
+        specifier: 1.7.5
+        version: 1.7.5
+      web3-utils:
+        specifier: 1.7.5
+        version: 1.7.5
+
   packages/web3-providers:
     dependencies:
       '@dimensiondev/mask-wallet-core':
@@ -2319,7 +2487,7 @@ importers:
         version: 1.1.0
       '@metaplex/js':
         specifier: ^4.11.7
-        version: 4.11.7_3hthoayrtz7bowcduhtflwhjdu
+        version: 4.11.7
       '@solana/buffer-layout':
         specifier: ^4.0.0
         version: 4.0.0
@@ -2590,6 +2758,37 @@ importers:
       urlcat:
         specifier: ^2.0.4
         version: 2.0.4_fggwetex7eobhq3hztj4obsulu
+
+  packages/web3-state:
+    dependencies:
+      '@masknet/plugin-infra':
+        specifier: workspace:*
+        version: link:../plugin-infra
+      '@masknet/shared-base':
+        specifier: workspace:*
+        version: link:../shared-base
+      '@masknet/web3-shared-base':
+        specifier: workspace:*
+        version: link:../web3-shared/base
+      '@servie/events':
+        specifier: ^3.0.0
+        version: 3.0.0
+      '@types/use-subscription':
+        specifier: ^1.0.0
+        version: 1.0.0
+      lru-cache:
+        specifier: ^7.10.1
+        version: 7.10.1
+      use-subscription:
+        specifier: 1.6.0
+        version: 1.6.0
+      web3-core-helpers:
+        specifier: 1.7.5
+        version: 1.7.5
+    devDependencies:
+      mock-socket:
+        specifier: ^9.1.2
+        version: 9.1.2
 
 packages:
 
@@ -5395,8 +5594,8 @@ packages:
       '@cspell/dict-docker': 1.1.1
       '@cspell/dict-dotnet': 2.0.1
       '@cspell/dict-elixir': 2.0.1
-      '@cspell/dict-en-gb': 1.1.33
       '@cspell/dict-en_us': 2.3.0
+      '@cspell/dict-en-gb': 1.1.33
       '@cspell/dict-filetypes': 2.1.1
       '@cspell/dict-fonts': 2.0.1
       '@cspell/dict-fullstack': 2.0.6
@@ -5443,8 +5642,8 @@ packages:
       '@cspell/dict-docker': 1.1.1
       '@cspell/dict-dotnet': 2.0.1
       '@cspell/dict-elixir': 2.0.1
-      '@cspell/dict-en-gb': 1.1.33
       '@cspell/dict-en_us': 2.3.3
+      '@cspell/dict-en-gb': 1.1.33
       '@cspell/dict-filetypes': 2.1.1
       '@cspell/dict-fonts': 2.1.0
       '@cspell/dict-fullstack': 2.0.6
@@ -5685,13 +5884,13 @@ packages:
     resolution: {integrity: sha512-4Qy4/JSzyk+f4LTsALERTwTjXGh2kRNHj+eVpLWF1oSJeTC2CQ8iZeKlQoIZa0zXcwbw/RYBpfiDJIXSqeI+Og==}
     hasBin: true
     dependencies:
-      3id-did-provider: 1.1.1
       '@3id/connect': 0.2.5
       '@ceramicnetwork/3id-did-resolver': 1.4.16
       '@ceramicnetwork/blockchain-utils-linking': 1.5.5
       '@ceramicnetwork/http-client': 1.5.7
       '@ceramicstudio/idx': 0.12.2
       '@stablelib/sha256': 1.0.1
+      3id-did-provider: 1.1.1
       bs58: 4.0.1
       idb: 7.0.0
       key-did-resolver: 1.4.4
@@ -5804,13 +6003,13 @@ packages:
     dev: false
 
   /@dimensiondev/mask-wallet-core/0.1.0-20211013082857-eb62e5f:
-    resolution: {integrity: sha512-2d7v1/z9Khw4O7J7oBNKLBo7BONd7ZE2gpw34uHVtdG9i0aEz+LSRappgNTZyUZ/+TRJ7ZgAf+Dbeql1oPMvNA==, tarball: download/@dimensiondev/mask-wallet-core/0.1.0-20211013082857-eb62e5f/18071bcb96269e2a8175867950285a4b236a387c232e108ae0672a36649e33bc}
+    resolution: {integrity: sha512-2d7v1/z9Khw4O7J7oBNKLBo7BONd7ZE2gpw34uHVtdG9i0aEz+LSRappgNTZyUZ/+TRJ7ZgAf+Dbeql1oPMvNA==, tarball: download/@DimensionDev/mask-wallet-core/0.1.0-20211013082857-eb62e5f/04f14f2d88766a9ab098a686785f824270c5ed90}
     peerDependencies:
       protobufjs: '>= 6.10 < 7'
     dev: false
 
   /@dimensiondev/mask-wallet-core/0.1.0-20211013082857-eb62e5f_protobufjs@6.11.2:
-    resolution: {integrity: sha512-2d7v1/z9Khw4O7J7oBNKLBo7BONd7ZE2gpw34uHVtdG9i0aEz+LSRappgNTZyUZ/+TRJ7ZgAf+Dbeql1oPMvNA==, tarball: download/@dimensiondev/mask-wallet-core/0.1.0-20211013082857-eb62e5f/18071bcb96269e2a8175867950285a4b236a387c232e108ae0672a36649e33bc}
+    resolution: {integrity: sha512-2d7v1/z9Khw4O7J7oBNKLBo7BONd7ZE2gpw34uHVtdG9i0aEz+LSRappgNTZyUZ/+TRJ7ZgAf+Dbeql1oPMvNA==, tarball: download/@DimensionDev/mask-wallet-core/0.1.0-20211013082857-eb62e5f/04f14f2d88766a9ab098a686785f824270c5ed90}
     peerDependencies:
       protobufjs: '>= 6.10 < 7'
     dependencies:
@@ -7475,18 +7674,14 @@ packages:
       - utf-8-validate
     dev: false
 
-  /@metaplex/js/4.11.7_3hthoayrtz7bowcduhtflwhjdu:
+  /@metaplex/js/4.11.7:
     resolution: {integrity: sha512-/8X04VEHMfWF84H2DZwLY3yg0xq75vgt/VtLuChTm8iUHkj99Whnq0NLTe0OqfhiEV0qFvT5dbLFh7x2CZqrEQ==}
     deprecated: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
-    peerDependencies:
-      '@metaplex-foundation/mpl-token-metadata': ^0.0.2
-      '@solana/spl-token': ^0.1.8
-      '@solana/web3.js': ^1.30.2
     dependencies:
       '@metaplex-foundation/mpl-auction': 0.0.2
       '@metaplex-foundation/mpl-core': 0.0.2
       '@metaplex-foundation/mpl-metaplex': 0.0.5
-      '@metaplex-foundation/mpl-token-metadata': 1.1.0
+      '@metaplex-foundation/mpl-token-metadata': 0.0.2
       '@metaplex-foundation/mpl-token-vault': 0.0.2
       '@solana/spl-token': 0.1.8
       '@solana/web3.js': 1.44.2
@@ -15619,8 +15814,8 @@ packages:
     engines: {node: '>=10'}
     hasBin: true
     dependencies:
-      JSONStream: 1.3.5
       is-text-path: 1.0.1
+      JSONStream: 1.3.5
       lodash: 4.17.21
       meow: 8.1.2
       split2: 3.2.2
@@ -18417,7 +18612,7 @@ packages:
     dev: false
 
   /ethereum-blockies/0.1.1:
-    resolution: {integrity: sha1-h5/pWd7vSSp6krQ9w0ro3C7lkfw=}
+    resolution: {integrity: sha512-ED+noMZ6z7RrzzhvrQna1L30C27MX+ZsdB5c/d5vygXtHjEyAQjQS2TgCYhPxs+z3U+u2YQsL9PiRkNl1f+ugg==}
     dev: false
 
   /ethereum-bloom-filters/1.0.10:
@@ -18707,7 +18902,7 @@ packages:
     dev: false
 
   /ethjs-unit/0.1.6:
-    resolution: {integrity: sha1-xmWSHkduh7ziqdWIpv4EBbLEFpk=}
+    resolution: {integrity: sha512-/Sn9Y0oKl0uqQuvgFk/zQgR7aw1g36qX/jzSQ5lSwlO0GigPymk4eGQfeNTD03w1dPOqfz8V77Cy43jH56pagw==}
     engines: {node: '>=6.5.0', npm: '>=3'}
     dependencies:
       bn.js: 4.11.6
@@ -19497,18 +19692,6 @@ packages:
     peerDependenciesMeta:
       debug:
         optional: true
-
-  /follow-redirects/1.15.1_debug@4.3.4:
-    resolution: {integrity: sha512-yLAMQs+k0b2m7cVxpS1VKJVvoz7SS9Td1zss3XRwXj+ZDH00RJgnuLx7E44wx02kQLrdM3aOOy+FpzS7+8OizA==}
-    engines: {node: '>=4.0'}
-    peerDependencies:
-      debug: '*'
-    peerDependenciesMeta:
-      debug:
-        optional: true
-    dependencies:
-      debug: 4.3.4_supports-color@6.1.0
-    dev: false
 
   /for-each/0.3.3:
     resolution: {integrity: sha512-jqYfLp7mo9vIyQf8ykW2v7A+2N4QjeCeI5+Dz9XraiO1ign81wjiH7Fb9vSOWvQfNtmSa4H2RoQTrrXivdUZmw==}
@@ -20882,7 +21065,7 @@ packages:
     engines: {node: '>=8.0.0'}
     dependencies:
       eventemitter3: 4.0.7
-      follow-redirects: 1.15.1_debug@4.3.4
+      follow-redirects: 1.15.1
       requires-port: 1.0.0
     transitivePeerDependencies:
       - debug
@@ -21079,7 +21262,7 @@ packages:
     patched: true
 
   /immutable/3.8.1:
-    resolution: {integrity: sha1-IAgH8Rqw9ycQ6khVQt4IgHX2jNI=}
+    resolution: {integrity: sha512-0R2q5f83L0h+zizu3lAA3ZR/mzEl04U1jVVXIqf2rQbZs9eX5YGtx1EFQuuJJHzVXH10ur6hGKehR8yBOQmZlQ==}
     engines: {node: '>=0.10.0'}
     dev: false
 
@@ -21627,7 +21810,7 @@ packages:
       is-extglob: 2.1.1
 
   /is-hex-prefixed/1.0.0:
-    resolution: {integrity: sha1-fY035q135dEnFIkTxXPggtd39VQ=}
+    resolution: {integrity: sha512-WvtOiug1VFrE9v1Cydwm+FnXd3+w9GaeVUss5W4v/SLy3UW00vP+6iNF2SdnfiBoLy4bTqVdkftNGTUeOFVsbA==}
     engines: {node: '>=6.5.0', npm: '>=3'}
 
   /is-hexadecimal/1.0.4:
@@ -21844,7 +22027,7 @@ packages:
     dependencies:
       available-typed-arrays: 1.0.5
       call-bind: 1.0.2
-      es-abstract: 1.20.1
+      es-abstract: 1.20.2
       foreach: 2.0.5
       has-tostringtag: 1.0.0
 
@@ -22103,13 +22286,13 @@ packages:
       '@types/lodash': 4.14.182
       '@types/node': 18.7.4
       '@types/ws': 7.4.7
-      JSONStream: 1.3.5
       commander: 2.20.3
       delay: 5.0.0
       es6-promisify: 5.0.0
       eyes: 0.1.8
       isomorphic-ws: 4.0.1_ws@7.5.7
       json-stringify-safe: 5.0.1
+      JSONStream: 1.3.5
       lodash: 4.17.21
       uuid: 3.4.0
       ws: 7.5.7
@@ -22719,7 +22902,7 @@ packages:
     dev: false
 
   /level-ws/0.0.0:
-    resolution: {integrity: sha1-Ny5RIXeSSgBCSwtDrvK7QkltIos=}
+    resolution: {integrity: sha512-XUTaO/+Db51Uiyp/t7fCMGVFOTdtLS/NIACxE/GHsij15mKzxksZifKVjlXDF41JMUP/oM1Oc4YNGdKnc3dVLw==}
     dependencies:
       readable-stream: 1.0.34
       xtend: 2.1.2
@@ -22997,7 +23180,7 @@ packages:
     dev: false
 
   /lodash.unescape/4.0.1:
-    resolution: {integrity: sha1-vyJJiGzlFM2hEvrpIYzcBlIR/Jw=}
+    resolution: {integrity: sha512-DhhGRshNS1aX6s5YdBE3njCCouPgnG29ebyHvImlZzXZf2SHgt+J08DHgytTPnpywNbO1Y8mNUFyQuIDBq2JZg==}
     dev: false
 
   /lodash.uniq/4.5.0:
@@ -24289,7 +24472,7 @@ packages:
     engines: {node: '>=0.10.0'}
 
   /number-to-bn/1.7.0:
-    resolution: {integrity: sha1-uzYjWS9+X54AMLGXe9QaDFP+HqA=}
+    resolution: {integrity: sha512-wsJ9gfSz1/s4ZsJN01lyonwuxA1tml6X1yBDnfpMglypcBRFZZkus26EdPSlqS5GJfYddVZa22p3VNb3z5m5Ig==}
     engines: {node: '>=6.5.0', npm: '>=3'}
     dependencies:
       bn.js: 4.11.6
@@ -24448,7 +24631,7 @@ packages:
     dev: false
 
   /oboe/2.1.5:
-    resolution: {integrity: sha1-VVQoTFQ6ImbXo48X4HOCH73jk80=}
+    resolution: {integrity: sha512-zRFWiF+FoicxEs3jNI/WYUrVEgA7DeET/InK0XQuudGHRg8iIob3cNPrJTKaz4004uaA9Pbe+Dwa8iluhjLZWA==}
     dependencies:
       http-https: 1.0.0
 
@@ -28336,7 +28519,7 @@ packages:
     dev: true
 
   /strip-hex-prefix/1.0.0:
-    resolution: {integrity: sha1-DF8VX+8RUTczd96du1iNoFUA428=}
+    resolution: {integrity: sha512-q8d4ue7JGEiVcypji1bALTos+0pWtyGlivAWyPuTkHzuTCJqrK9sWxYQZUq6Nq3cuyv3bm734IhHvHtGGURU6A==}
     engines: {node: '>=6.5.0', npm: '>=3'}
     dependencies:
       is-hex-prefixed: 1.0.0
@@ -30395,7 +30578,7 @@ packages:
     resolution: {integrity: sha512-1f7JWgYPYpTsQU1nPNMRMQ7Ee2Db9xaUJdfHxRNZBX6/VkisjQMomc0T7VerlJyMzuz0UiYT0PJqbKJ830RYYA==}
     engines: {node: '>= 12.0.0'}
     dependencies:
-      bn.js: 5.2.0
+      bn.js: 5.2.1
       bs58: 4.0.1
       elliptic: 6.5.4
       keccak: 3.0.2
@@ -31425,7 +31608,7 @@ packages:
     dependencies:
       available-typed-arrays: 1.0.5
       call-bind: 1.0.2
-      es-abstract: 1.20.1
+      es-abstract: 1.20.2
       foreach: 2.0.5
       has-tostringtag: 1.0.0
       is-typed-array: 1.1.8
@@ -32109,12 +32292,12 @@ packages:
     name: wyvern-js
     version: 3.2.0
     dependencies:
-      0x.js: 0.29.2
       '@0xproject/abi-gen': 0.1.2
       '@0xproject/assert': 0.0.11
       '@0xproject/json-schemas': 0.7.24
       '@0xproject/utils': 0.1.3
       '@0xproject/web3-wrapper': 0.1.14
+      0x.js: 0.29.2
       bn.js: 4.12.0
       ethereumjs-abi: github.com/ProjectWyvern/ethereumjs-abi/3d2d89641a6ad5984929b6ca4b646452ec74f73d
       ethereumjs-util: 5.2.1
@@ -32129,7 +32312,6 @@ packages:
     name: wyvern-js
     version: 3.2.0
     dependencies:
-      0x.js: 0.29.2
       '@0xproject/abi-gen': 0.1.7
       '@0xproject/assert': 0.0.11
       '@0xproject/json-schemas': 0.7.24
@@ -32138,6 +32320,7 @@ packages:
       '@0xproject/web3-wrapper': 0.1.14
       '@types/lodash': 4.14.184
       '@types/node': 18.7.4
+      0x.js: 0.29.2
       awesome-typescript-loader: 3.5.0_typescript@2.9.2
       bn.js: 4.12.0
       ethereumjs-abi: github.com/ProjectWyvern/ethereumjs-abi/3d2d89641a6ad5984929b6ca4b646452ec74f73d
@@ -32166,7 +32349,6 @@ packages:
     name: wyvern-js
     version: 3.2.0
     dependencies:
-      0x.js: 0.29.2
       '@0xproject/abi-gen': 0.1.7
       '@0xproject/assert': 0.0.11
       '@0xproject/json-schemas': 0.7.24
@@ -32175,6 +32357,7 @@ packages:
       '@0xproject/web3-wrapper': 0.1.14
       '@types/lodash': 4.14.184
       '@types/node': 18.7.4
+      0x.js: 0.29.2
       awesome-typescript-loader: 3.5.0_typescript@2.9.2
       bn.js: 4.12.0
       ethereumjs-abi: github.com/ProjectWyvern/ethereumjs-abi/3d2d89641a6ad5984929b6ca4b646452ec74f73d

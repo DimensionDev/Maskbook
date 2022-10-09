@@ -4,9 +4,9 @@ import { usePoolTogetherTicketContracts } from '../contracts/usePoolTogetherTick
 import type { PoolTogetherTicket } from '@masknet/web3-contracts/types/PoolTogetherTicket'
 import { useAsyncRetry } from 'react-use'
 import type { AccountPool, Pool } from '../types.js'
-import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { useMultipleContractSingleData } from '@masknet/plugin-infra/web3-evm'
+import { useAccount, useChainId } from '@masknet/web3-hooks-base'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { useMultipleContractSingleData } from '@masknet/web3-hooks-evm'
 
 /**
  * A callback for getting account balances of ticket pools

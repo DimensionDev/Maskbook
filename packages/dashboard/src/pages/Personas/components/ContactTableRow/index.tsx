@@ -1,5 +1,5 @@
-import type { RelationProfile } from '@masknet/shared-base'
 import { memo, useCallback } from 'react'
+import { useAsyncFn } from 'react-use'
 import { Box, TableCell, TableRow, Typography, Avatar, useTheme } from '@mui/material'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
@@ -7,9 +7,8 @@ import { Services } from '../../../../API.js'
 import { useDashboardI18N } from '../../../../locales/index.js'
 import { useAddContactToFavorite, useRemoveContactFromFavorite } from '../../hooks/useFavoriteContact.js'
 import { PersonaContext } from '../../hooks/usePersonaContext.js'
-import { useAsyncFn } from 'react-use'
 import { LoadingButton } from '@mui/lab'
-import { generateContactAvatarColor } from '@masknet/shared-base'
+import { generateContactAvatarColor, RelationProfile } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     favorite: {

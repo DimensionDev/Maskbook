@@ -1,9 +1,8 @@
-import { useWeb3State } from '@masknet/plugin-infra/web3'
-import { PluginID } from '@masknet/plugin-infra'
-import { NextIDPlatform, EMPTY_LIST } from '@masknet/shared-base'
-import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
-import { useAsync } from 'react-use'
 import { useMemo } from 'react'
+import { useAsync } from 'react-use'
+import { useWeb3State } from '@masknet/web3-hooks-base'
+import { NextIDPlatform, EMPTY_LIST, PluginID, NetworkPluginID } from '@masknet/shared-base'
+import { isSameAddress } from '@masknet/web3-shared-base'
 import type { CollectionType } from '@masknet/web3-providers'
 import type { Web3ProfileStorage } from '../types.js'
 

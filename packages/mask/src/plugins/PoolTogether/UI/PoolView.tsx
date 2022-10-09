@@ -12,8 +12,8 @@ import { NetworkView } from './NetworkView.js'
 import { useI18N } from '../../../utils/index.js'
 import { TokenIcon } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { useChainId, useFungibleToken, useCurrentWeb3NetworkPluginID, useAccount } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { useChainId, useFungibleToken, useCurrentWeb3NetworkPluginID, useAccount } from '@masknet/web3-hooks-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     root: {

@@ -21,7 +21,7 @@ import {
     useChainId,
     useCurrentWeb3NetworkPluginID,
     useFungibleTokenWatched,
-} from '@masknet/plugin-infra/web3'
+} from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { UnreviewedWarnings } from './UnreviewedWarnings.js'
 import { useI18N } from '../../../../../utils/index.js'

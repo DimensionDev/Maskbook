@@ -7,6 +7,7 @@ import {
     HubOptions,
     NonFungibleToken,
     NonFungibleTokenContract,
+    ActivityType,
     OrderSide,
     TokenType,
     resolveIPFS_URL,
@@ -49,7 +50,7 @@ function createNFTToken(
         ownerId: token.owner,
         type: TokenType.NonFungible,
         schema: SchemaType.NonFungible,
-        tokenId: token.mintAddress,
+        tokenId: '',
         address: token.mintAddress,
         metadata: {
             chainId,
@@ -163,7 +164,7 @@ export class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
                 }),
                 type: TokenType.NonFungible,
                 schema: SchemaType.NonFungible,
-                tokenId: token.mintAddress,
+                tokenId: '',
                 address: token.mintAddress,
                 metadata: {
                     chainId,
@@ -187,7 +188,6 @@ export class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
                     description: '',
                     iconURL: '',
                     verified: false,
-                    address: token.mintAddress,
                 },
                 source: SourceType.MagicEden,
             }
@@ -235,7 +235,7 @@ export class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
                     address: activity.buyerReferral,
                 },
                 quantity: '1',
-                type: '',
+                type: ActivityType.Transfer,
                 source: SourceType.MagicEden,
             }
         })

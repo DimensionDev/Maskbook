@@ -1,5 +1,5 @@
-import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { useAccount, useChainId } from '@masknet/web3-hooks-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { useAsyncRetry } from 'react-use'
 import { useMaskITO_Contract } from './useMaskITO_Contract.js'
 

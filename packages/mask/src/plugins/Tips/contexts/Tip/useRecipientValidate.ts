@@ -1,4 +1,4 @@
-import { useAddressType } from '@masknet/plugin-infra/web3'
+import { useAddressType } from '@masknet/web3-hooks-base'
 import { GoPlusLabs } from '@masknet/web3-providers'
 import { AddressType } from '@masknet/web3-shared-evm'
 import { useMemo } from 'react'

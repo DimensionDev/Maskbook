@@ -1,6 +1,7 @@
 import { ChainId as ChainIdEVM } from '@masknet/web3-shared-evm'
 import { ChainId as ChainIdSolana } from '@masknet/web3-shared-solana'
-import { NetworkPluginID, SourceType } from '@masknet/web3-shared-base'
+import { SourceType } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import type { CollectiblePayload } from '../types.js'
 
 const ZORA_COLLECTION_ADDRESS = '0xabEFBc9fD2F806065b4f3C237d4b59D9A97Bcac7'
@@ -181,7 +182,7 @@ export function getPayloadFromURL(url?: string): CollectiblePayload | undefined 
                     rule.provider === SourceType.Zora
                         ? matched[1].replace('zora', ZORA_COLLECTION_ADDRESS)
                         : matched[1],
-                tokenId: rule.pluginID === NetworkPluginID.PLUGIN_SOLANA ? matched[1] : matched[2],
+                tokenId: rule.pluginID === NetworkPluginID.PLUGIN_SOLANA ? '' : matched[2],
             }
         }
     }

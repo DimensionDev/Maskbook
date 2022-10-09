@@ -3,6 +3,7 @@ import { LoadingBase, makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { Typography, Box } from '@mui/material'
 import { memo, useCallback, useMemo, useState } from 'react'
 import {
+    PluginID,
     BindingProof,
     CrossIsolationMessages,
     ECKeyIdentifier,
@@ -10,8 +11,7 @@ import {
     NextIDPlatform,
     PopupRoutes,
 } from '@masknet/shared-base'
-import { useHiddenAddressSetting, useWeb3State } from '@masknet/plugin-infra/web3'
-import { PluginID } from '@masknet/plugin-infra'
+import { useHiddenAddressSetting, useWeb3State } from '@masknet/web3-hooks-base'
 import { WalletSettingCard } from '@masknet/shared'
 import { useAsyncFn, useUpdateEffect } from 'react-use'
 

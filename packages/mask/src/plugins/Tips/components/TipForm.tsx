@@ -1,6 +1,6 @@
-import { useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
+import { useCurrentWeb3NetworkPluginID } from '@masknet/web3-hooks-base'
 import { makeStyles } from '@masknet/theme'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { Box, BoxProps, Button, FormControl } from '@mui/material'
 import classnames from 'classnames'
 import { FC, memo, useState } from 'react'

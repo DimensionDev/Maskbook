@@ -1,4 +1,4 @@
-import { useFungibleTokenPrice } from '@masknet/plugin-infra/web3'
+import { useFungibleTokenPrice } from '@masknet/web3-hooks-base'
 import { TokenIcon } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { formatCurrency } from '@masknet/web3-shared-base'

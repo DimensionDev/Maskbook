@@ -8,6 +8,7 @@ import type {
     ECKeyIdentifier,
     NextIDPersonaBindings,
     NextIDPlatform,
+    NetworkPluginID
 } from '@masknet/shared-base'
 import type { api } from '@dimensiondev/mask-wallet-core/proto'
 import type {
@@ -32,12 +33,6 @@ export type Color =
     | `#${string}${string}${string}${string}${string}${string}`
     | `#${string}${string}${string}`
     | `hsl(${number}, ${number}%, ${number}%)`
-
-export enum NetworkPluginID {
-    PLUGIN_EVM = 'com.mask.evm',
-    PLUGIN_FLOW = 'com.mask.flow',
-    PLUGIN_SOLANA = 'com.mask.solana',
-}
 
 export enum CurrencyType {
     NATIVE = 'native',
@@ -402,12 +397,20 @@ export interface NonFungibleTokenOrder<ChainId, SchemaType> {
     source?: SourceType
 }
 
+export enum ActivityType {
+    Transfer = 'Transfer',
+    Mint = 'Mint',
+    Sale = 'Sale',
+    Offer = 'Offer',
+    List = 'List',
+    CancelOffer= 'CancelOffer',
+}
 export interface NonFungibleTokenEvent<ChainId, SchemaType> {
     id: string
     /** chain Id */
     chainId: ChainId
     /** event type */
-    type: string
+    type: ActivityType
     /** permalink of asset */
     assetPermalink?: string
     /** name of asset */
@@ -888,8 +891,8 @@ export interface Connection<
     /** Transfer non-fungible token to */
     transferNonFungibleToken(
         address: string | undefined,
-        recipient: string,
         tokenId: string,
+        recipient: string,
         amount: string,
         schema?: SchemaType,
         initial?: Web3ConnectionOptions,

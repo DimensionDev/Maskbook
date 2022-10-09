@@ -1,6 +1,6 @@
 import { Icons } from '@masknet/icons'
-import { PluginID, useActivatedPluginsSNSAdaptor, useIsMinimalMode } from '@masknet/plugin-infra/content-script'
-import { useAccount } from '@masknet/plugin-infra/web3'
+import { useActivatedPluginsSNSAdaptor, useIsMinimalMode } from '@masknet/plugin-infra/content-script'
+import { useAccount } from '@masknet/web3-hooks-base'
 import { DataProvider } from '@masknet/public-api'
 import {
     FormattedCurrency,
@@ -10,11 +10,11 @@ import {
     SourceSwitcher,
     FootnoteMenuOption,
 } from '@masknet/shared'
-import { EMPTY_LIST } from '@masknet/shared-base'
+import { EMPTY_LIST, PluginID, NetworkPluginID } from '@masknet/shared-base'
 import { useRemoteControlledDialog, useValueRef } from '@masknet/shared-base-ui'
 import { makeStyles, MaskColors, useStylesExtends } from '@masknet/theme'
 import type { TrendingAPI } from '@masknet/web3-providers'
-import { formatCurrency, NetworkPluginID, TokenType, SourceType } from '@masknet/web3-shared-base'
+import { formatCurrency, TokenType, SourceType } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { Avatar, Button, CardContent, IconButton, Paper, Stack, Typography, useTheme } from '@mui/material'
 import { Box } from '@mui/system'

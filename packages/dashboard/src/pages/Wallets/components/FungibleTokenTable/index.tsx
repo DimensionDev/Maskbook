@@ -7,7 +7,7 @@ import { useDashboardI18N } from '../../../../locales/index.js'
 import { EmptyPlaceholder } from '../EmptyPlaceholder/index.js'
 import { LoadingPlaceholder } from '../../../../components/LoadingPlaceholder/index.js'
 import { FungibleTokenTableRow } from '../FungibleTokenTableRow/index.js'
-import { DashboardRoutes, EMPTY_LIST, CrossIsolationMessages } from '@masknet/shared-base'
+import { NetworkPluginID, DashboardRoutes, EMPTY_LIST, CrossIsolationMessages } from '@masknet/shared-base'
 import {
     CurrencyType,
     FungibleAsset,
@@ -15,10 +15,9 @@ import {
     isLessThan,
     leftShift,
     minus,
-    NetworkPluginID,
     toZero,
 } from '@masknet/web3-shared-base'
-import { useCurrentWeb3NetworkPluginID, useNativeToken } from '@masknet/plugin-infra/web3'
+import { useCurrentWeb3NetworkPluginID, useNativeToken } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { isNativeTokenAddress } from '@masknet/web3-shared-evm'
 import { useContainer } from 'unstated-next'

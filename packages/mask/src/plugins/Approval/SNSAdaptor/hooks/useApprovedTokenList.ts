@@ -1,12 +1,12 @@
 import { useAsyncRetry } from 'react-use'
 import urlcat from 'urlcat'
-import { ChainId, chainResolver } from '@masknet/web3-shared-evm'
 import { omit } from 'lodash-unified'
+import { EMPTY_LIST } from '@masknet/shared-base'
+import { ChainId, chainResolver } from '@masknet/web3-shared-evm'
+import { isSameAddress } from '@masknet/web3-shared-base'
 import { resolveNetworkOnRabby } from '../pipes.js'
 import type { TokenSpender, RawTokenInfo } from '../types.js'
-import { EMPTY_LIST } from '@masknet/shared-base'
 import { useAllMaskDappContractInfo } from './useAllMaskDappContractInfo.js'
-import { isSameAddress } from '@masknet/web3-shared-base'
 
 const API_URL = 'https://api.rabby.io/v1/user/token_authorized_list'
 

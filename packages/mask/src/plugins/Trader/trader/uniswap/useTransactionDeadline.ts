@@ -2,8 +2,8 @@ import { useMemo } from 'react'
 import BigNumber from 'bignumber.js'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { DEFAULT_TRANSACTION_DEADLINE, L2_TRANSACTION_DEADLINE } from '../../constants/index.js'
-import { useBlockTimestamp, useChainId } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { useBlockTimestamp, useChainId } from '@masknet/web3-hooks-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 
 export function useTransactionDeadline() {
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)

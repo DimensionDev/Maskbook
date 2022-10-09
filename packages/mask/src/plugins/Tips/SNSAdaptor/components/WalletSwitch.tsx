@@ -3,9 +3,10 @@ import { Link, Switch, Typography } from '@mui/material'
 import { FormattedAddress } from '@masknet/shared'
 import { useI18N } from '../../../../utils/index.js'
 import { ExternalLink } from 'react-feather'
-import { useWeb3State } from '@masknet/plugin-infra/web3'
+import { useWeb3State } from '@masknet/web3-hooks-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
-import { NetworkPluginID, resolveNetworkWalletName } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { resolveNetworkWalletName } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     currentAccount: {

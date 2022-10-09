@@ -1,7 +1,7 @@
 import { Icons } from '@masknet/icons'
 import { ElementAnchor, RetryHint } from '@masknet/shared'
 import { LoadingBase, makeStyles } from '@masknet/theme'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { Box, List, ListItem, Stack, Typography } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { supportPluginIds } from '../constants.js'

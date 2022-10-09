@@ -1,20 +1,18 @@
+import { useMemo } from 'react'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import {
     createInjectHooksRenderer,
     Plugin,
-    PluginID,
     useActivatedPluginsSNSAdaptor,
     useIsMinimalMode,
 } from '@masknet/plugin-infra/content-script'
-import { EMPTY_LIST } from '@masknet/shared-base'
+import { EMPTY_LIST, PluginID, NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
-import { useMemo } from 'react'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI.js'
 import type { TipsAccount } from '../../../../plugins/Tips/types/tip.js'
 import { createReactRootShadowed, startWatch } from '../../../../utils/index.js'
 import { menuAuthorSelector as selector } from '../../utils/selectors.js'
-import { PluginIDContextProvider, useCurrentWeb3NetworkPluginID, useWeb3State } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { PluginIDContextProvider, useCurrentWeb3NetworkPluginID, useWeb3State } from '@masknet/web3-hooks-base'
 
 export function injectTipsButtonOnMenu(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(selector())

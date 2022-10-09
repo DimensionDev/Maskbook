@@ -1,4 +1,4 @@
-import { useAccount } from '@masknet/plugin-infra/web3'
+import { useAccount } from '@masknet/web3-hooks-base'
 import { formatTokenId } from '@masknet/web3-shared-evm'
 import { makeStyles } from '@masknet/theme'
 import { useControlledDialog } from '../../../utils/index.js'

@@ -4,14 +4,13 @@ import { DialogContent } from '@mui/material'
 import { InjectedDialog } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { useWeb3State } from '@masknet/plugin-infra/web3'
+import { useWeb3State } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import type { NetworkPluginID } from '@masknet/web3-shared-base'
+import { getSiteType, NetworkPluginID } from '@masknet/shared-base'
 import { WalletMessages } from '../../messages.js'
 import { ConnectionProgress } from './ConnectionProgress.js'
 import { useI18N } from '../../../../utils/index.js'
 import { pluginIDSettings } from '../../../../../shared/legacy-settings/settings.js'
-import { getSiteType } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     content: {

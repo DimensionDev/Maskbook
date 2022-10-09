@@ -13,8 +13,9 @@ import { usePlaceBidCallback } from '../hooks/usePlaceBidCallback.js'
 import { activatedSocialNetworkUI } from '../../../social-network/index.js'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base.js'
 import { isFacebook } from '../../../social-network-adaptor/facebook.com/base.js'
-import { formatBalance, leftShift, NetworkPluginID } from '@masknet/web3-shared-base'
-import { useChainId, useFungibleTokenWatched } from '@masknet/plugin-infra/web3'
+import { formatBalance, leftShift } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { useChainId, useFungibleTokenWatched } from '@masknet/web3-hooks-base'
 import { resolveAssetLinkOnCryptoartAI, resolvePaymentTokensOnCryptoartAI } from '../pipes/index.js'
 
 const useStyles = makeStyles()((theme) => {

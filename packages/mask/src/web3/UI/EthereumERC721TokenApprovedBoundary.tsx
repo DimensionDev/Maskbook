@@ -4,10 +4,7 @@ import { makeStyles, useStylesExtends, ActionButtonProps, ActionButton } from '@
 import { useMemo } from 'react'
 import { EthereumAddress } from 'wallet.ts'
 import type { NonFungibleTokenContract } from '@masknet/web3-shared-base'
-import {
-    useERC721ContractIsApproveForAll,
-    useERC721ContractSetApproveForAllCallback,
-} from '@masknet/plugin-infra/web3-evm'
+import { useERC721ContractIsApproveForAll, useERC721ContractSetApproveForAllCallback } from '@masknet/web3-hooks-evm'
 
 const useStyles = makeStyles()(() => ({}))
 

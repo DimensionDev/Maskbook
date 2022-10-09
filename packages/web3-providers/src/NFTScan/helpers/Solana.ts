@@ -13,7 +13,7 @@ import {
 } from '@masknet/web3-shared-base'
 import { NFTSCAN_BASE_SOLANA, NFTSCAN_URL } from '../constants.js'
 import type { Solana } from '../types/index.js'
-import { getJSON } from '../../helpers.js'
+import { resolveNonFungibleTokenEventActivityType, getJSON } from '../../helpers.js'
 
 export function createPermalink(chainId: ChainId, address?: string) {
     if (!address) return
@@ -53,7 +53,7 @@ export function createNonFungibleAsset(chainId: ChainId, asset: Solana.Asset): N
         id: asset.token_address,
         chainId,
         link: createPermalink(chainId, asset.token_address),
-        tokenId: asset.token_address,
+        tokenId: '',
         type: TokenType.NonFungible,
         address: asset.token_address,
         schema,
@@ -153,7 +153,7 @@ export function createNonFungibleTokenEvent(
         id: transaction.hash,
         quantity: '1',
         timestamp: transaction.timestamp ?? 0,
-        type: transaction.event_type ?? '',
+        type: resolveNonFungibleTokenEventActivityType(transaction.event_type),
         hash: transaction.hash,
         from: transaction.source
             ? {

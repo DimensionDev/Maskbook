@@ -10,9 +10,10 @@ import {
     useChainId,
     useSingleBlockBeatRetry,
     useWeb3State,
-} from '@masknet/plugin-infra/web3'
+} from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { GasOptionType, NetworkPluginID } from '@masknet/web3-shared-base'
+import { GasOptionType } from '@masknet/web3-shared-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
 import { GasSettingsType } from './types/index.js'
 
 const DEFAULT_SLIPPAGE_TOLERANCE = 0.5

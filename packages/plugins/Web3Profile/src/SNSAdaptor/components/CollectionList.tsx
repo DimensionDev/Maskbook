@@ -1,8 +1,9 @@
 import { List, ListItem } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { NFTImageCollectibleAvatar, CollectionTypes } from '@masknet/shared'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import { NetworkPluginID, TokenType } from '@masknet/web3-shared-base'
+import { TokenType } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({}))
 

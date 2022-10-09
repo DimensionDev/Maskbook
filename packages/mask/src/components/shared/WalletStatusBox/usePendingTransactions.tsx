@@ -2,7 +2,7 @@ import {
     useClearTransactionsCallback,
     useRemoveTransactionCallback,
     useRecentTransactions,
-} from '@masknet/plugin-infra/web3'
+} from '@masknet/web3-hooks-base'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { TransactionStatusType } from '@masknet/web3-shared-base'
 import { Typography } from '@mui/material'

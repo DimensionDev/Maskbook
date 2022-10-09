@@ -1,5 +1,5 @@
 import { LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { useAccount } from '@masknet/plugin-infra/web3'
+import { useAccount } from '@masknet/web3-hooks-base'
 import { makeStyles } from '@masknet/theme'
 import { max } from 'lodash-unified'
 import { useEffect, useMemo, useState } from 'react'

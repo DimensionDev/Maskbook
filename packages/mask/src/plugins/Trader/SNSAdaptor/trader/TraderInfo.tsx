@@ -1,13 +1,14 @@
 import { memo, useMemo } from 'react'
+import { useAsyncRetry } from 'react-use'
 import type { TradeInfo } from '../../types/index.js'
 import { createNativeToken, formatPercentage, formatUSD, formatWeiToEther } from '@masknet/web3-shared-evm'
 import { resolveTradeProviderName } from '../../pipes.js'
-import { multipliedBy, NetworkPluginID, formatBalance, ZERO } from '@masknet/web3-shared-base'
-import { useAsyncRetry } from 'react-use'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { multipliedBy, formatBalance, ZERO } from '@masknet/web3-shared-base'
 import { PluginTraderRPC } from '../../messages.js'
 import { TradeProvider } from '@masknet/public-api'
 import { useGreatThanSlippageSetting } from './hooks/useGreatThanSlippageSetting.js'
-import { useChainId, useNativeTokenPrice } from '@masknet/plugin-infra/web3'
+import { useChainId, useNativeTokenPrice } from '@masknet/web3-hooks-base'
 import { DefaultTraderPlaceholderUI, TraderInfoUI } from './components/TraderInfoUI.js'
 
 export interface TraderInfoProps {

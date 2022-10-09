@@ -1,6 +1,9 @@
-import { makeStyles } from '@masknet/theme'
-import { GasOptionType, isLessThan, NetworkPluginID, pow10, TransactionDescriptorType } from '@masknet/web3-shared-base'
 import { memo, useEffect, useMemo, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import BigNumber from 'bignumber.js'
+import { makeStyles } from '@masknet/theme'
+import { PopupRoutes, NetworkPluginID } from '@masknet/shared-base'
+import { GasOptionType, isLessThan, pow10, TransactionDescriptorType } from '@masknet/web3-shared-base'
 import { useI18N } from '../../../../../utils/index.js'
 import { useAsync, useAsyncFn, useUpdateEffect } from 'react-use'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages.js'
@@ -12,7 +15,6 @@ import {
     formatWeiToGwei,
     ChainIdOptionalRecord,
 } from '@masknet/web3-shared-evm'
-import BigNumber from 'bignumber.js'
 import { z as zod } from 'zod'
 import { Controller, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -20,10 +22,8 @@ import { Typography } from '@mui/material'
 import { StyledInput } from '../../../components/StyledInput/index.js'
 import { LoadingButton } from '@mui/lab'
 import { isEmpty } from 'lodash-unified'
-import { useNavigate } from 'react-router-dom'
-import { PopupRoutes } from '@masknet/shared-base'
 import { toHex } from 'web3-utils'
-import { useChainId, useGasOptions, useNativeToken, useNativeTokenPrice, useWeb3 } from '@masknet/plugin-infra/web3'
+import { useChainId, useGasOptions, useNativeToken, useNativeTokenPrice, useWeb3 } from '@masknet/web3-hooks-base'
 
 const useStyles = makeStyles()((theme) => ({
     options: {

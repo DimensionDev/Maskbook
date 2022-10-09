@@ -1,4 +1,4 @@
-import { PluginID } from '@masknet/plugin-infra'
+import { PluginID } from '@masknet/shared-base'
 import FindTrumanConstPromise from './SNSAdaptor/ConstPromise.js'
 
 export const FIND_TRUMAN_PLUGIN_NAME = 'FindTruman'

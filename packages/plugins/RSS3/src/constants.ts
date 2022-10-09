@@ -1,4 +1,4 @@
-import { PluginID } from '@masknet/plugin-infra'
+import { PluginID } from '@masknet/shared-base'
 import { resolveIPFS_URL } from '@masknet/web3-shared-base'
 
 export const PLUGIN_ID = PluginID.RSS3

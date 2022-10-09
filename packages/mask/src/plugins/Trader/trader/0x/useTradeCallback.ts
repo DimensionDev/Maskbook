@@ -6,8 +6,9 @@ import type { TransactionConfig } from 'web3-core'
 import type { GasOptionConfig } from '@masknet/web3-shared-evm'
 import type { SwapQuoteResponse, TradeComputed } from '../../types/index.js'
 import { SUPPORTED_CHAIN_ID_LIST } from './constants.js'
-import { NetworkPluginID, ZERO } from '@masknet/web3-shared-base'
-import { useAccount, useChainId, useWeb3Connection } from '@masknet/plugin-infra/web3'
+import { ZERO } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { useAccount, useChainId, useWeb3Connection } from '@masknet/web3-hooks-base'
 
 export function useTradeCallback(tradeComputed: TradeComputed<SwapQuoteResponse> | null, gasConfig?: GasOptionConfig) {
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)

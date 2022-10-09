@@ -1,3 +1,5 @@
+import { useMemo } from 'react'
+import type { NetworkPluginID } from '@masknet/shared-base'
 import {
     useWallet,
     useAccount,
@@ -5,10 +7,9 @@ import {
     useWeb3State,
     useProviderType,
     useProviderDescriptor,
-} from '@masknet/plugin-infra/web3'
+} from '@masknet/web3-hooks-base'
 import { ProviderType } from '@masknet/web3-shared-evm'
-import { useMemo } from 'react'
-import { resolveNetworkWalletName, NetworkPluginID } from '@masknet/web3-shared-base'
+import { resolveNetworkWalletName } from '@masknet/web3-shared-base'
 
 export const useWalletName = (
     expectedAccount?: string,

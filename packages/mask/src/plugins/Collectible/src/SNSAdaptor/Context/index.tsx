@@ -1,13 +1,14 @@
 import { useState } from 'react'
 import { createContainer } from 'unstated-next'
+import type { NetworkPluginID } from '@masknet/shared-base'
 import {
     useNonFungibleAsset,
     useNonFungibleOrders,
     useNonFungibleEvents,
     useNonFungibleRarity,
-} from '@masknet/plugin-infra/web3'
+} from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { NetworkPluginID, SourceType } from '@masknet/web3-shared-base'
+import { SourceType } from '@masknet/web3-shared-base'
 
 interface InitialState {
     parentPluginID: NetworkPluginID

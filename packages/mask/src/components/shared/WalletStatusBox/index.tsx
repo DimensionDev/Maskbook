@@ -9,7 +9,7 @@ import {
     useWeb3State,
     useWeb3Connection,
     useBalance,
-} from '@masknet/plugin-infra/web3'
+} from '@masknet/web3-hooks-base'
 import { FormattedAddress, useSnackbarCallback, WalletIcon } from '@masknet/shared'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { isDashboardPage } from '@masknet/shared-base'

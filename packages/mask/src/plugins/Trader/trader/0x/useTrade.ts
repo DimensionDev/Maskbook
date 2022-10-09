@@ -4,9 +4,10 @@ import { ZRX_AFFILIATE_ADDRESS } from '../../constants/index.js'
 import { PluginTraderRPC } from '../../messages.js'
 import { SwapQuoteResponse, TradeStrategy } from '../../types/index.js'
 import { useSlippageTolerance } from '../0x/useSlippageTolerance.js'
-import { useAccount, useChainId, useDoubleBlockBeatRetry, useNetworkType } from '@masknet/plugin-infra/web3'
+import { useAccount, useChainId, useDoubleBlockBeatRetry, useNetworkType } from '@masknet/web3-hooks-base'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
-import { FungibleToken, NetworkPluginID, isZero } from '@masknet/web3-shared-base'
+import { FungibleToken, isZero } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 
 const NATIVE_TOKEN_ADDRESS = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
 

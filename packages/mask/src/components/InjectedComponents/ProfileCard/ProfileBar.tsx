@@ -1,18 +1,13 @@
-import { Icons } from '@masknet/icons'
-import { useChainId, useWeb3State } from '@masknet/plugin-infra/web3'
-import { AddressItem, useSnackbarCallback } from '@masknet/shared'
-import { makeStyles, ShadowRootMenu } from '@masknet/theme'
-import {
-    isSameAddress,
-    NetworkPluginID,
-    SocialAddress,
-    SocialAddressType,
-    SocialIdentity,
-} from '@masknet/web3-shared-base'
-import { ChainId } from '@masknet/web3-shared-evm'
-import { Box, Link, MenuItem, Typography } from '@mui/material'
 import { HTMLProps, memo, useEffect, useRef, useState } from 'react'
 import { useCopyToClipboard } from 'react-use'
+import { Icons } from '@masknet/icons'
+import { useChainId, useWeb3State } from '@masknet/web3-hooks-base'
+import { AddressItem, useSnackbarCallback } from '@masknet/shared'
+import type { NetworkPluginID } from '@masknet/shared-base'
+import { makeStyles, ShadowRootMenu } from '@masknet/theme'
+import { isSameAddress, SocialAddress, SocialAddressType, SocialIdentity } from '@masknet/web3-shared-base'
+import { ChainId } from '@masknet/web3-shared-evm'
+import { Box, Link, MenuItem, Typography } from '@mui/material'
 import { v4 as uuid } from 'uuid'
 import { useI18N } from '../../../utils/index.js'
 import { AvatarDecoration } from './AvatarDecoration'

@@ -1,11 +1,10 @@
 import { makeStyles } from '@masknet/theme'
 import formatDistanceToNowStrict from 'date-fns/formatDistanceToNowStrict'
 import { Typography, Link } from '@mui/material'
-import { useWeb3State } from '@masknet/plugin-infra/web3'
+import { useWeb3State } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { Icons } from '@masknet/icons'
-import { NonFungibleTokenEvent, formatBalance, isZero, isValidTimestamp } from '@masknet/web3-shared-base'
-import { ActivityType } from '../../types.js'
+import { NonFungibleTokenEvent, formatBalance, isZero, isValidTimestamp, ActivityType } from '@masknet/web3-shared-base'
 import { useI18N } from '../../../../../utils/index.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -81,12 +80,12 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface ActivityCardProps {
-    type: ActivityType
     activity: NonFungibleTokenEvent<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
 }
 
 export function ActivityCard(props: ActivityCardProps) {
-    const { activity, type } = props
+    const { activity } = props
+    const { type } = activity
     const { t } = useI18N()
     const { classes, cx } = useStyles()
     const { Others } = useWeb3State()

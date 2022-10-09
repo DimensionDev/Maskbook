@@ -7,7 +7,7 @@ import { useI18N } from '../../../../utils/index.js'
 import { CollectibleListContext } from '../../DashboardComponents/CollectibleList/index.js'
 import { DashboardDialogCore, DashboardDialogWrapper, WrappedDialogProps } from '../Base.js'
 import type { NonFungibleToken } from '@masknet/web3-shared-base'
-import { useTokenTransferCallback } from '@masknet/plugin-infra/web3-evm'
+import { useTokenTransferCallback } from '@masknet/web3-hooks-evm'
 import { Image, useOpenShareTxDialog, MaskIconOutlined } from '@masknet/shared'
 
 const useTransferDialogStylesNFT = makeStyles()((theme) => ({

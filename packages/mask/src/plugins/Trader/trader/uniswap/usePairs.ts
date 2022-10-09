@@ -3,15 +3,14 @@ import { useAsyncRetry } from 'react-use'
 import { numberToHex } from 'web3-utils'
 import { Pair } from '@uniswap/v2-sdk'
 import { CurrencyAmount, Token } from '@uniswap/sdk-core'
-import { EMPTY_LIST } from '@masknet/shared-base'
+import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import { getPairAddress } from '../../helpers/index.js'
 import { usePairContracts } from '../../contracts/uniswap/usePairContract.js'
 import type { TradeProvider } from '@masknet/public-api'
 import { useGetTradeContext } from '../useGetTradeContext.js'
-import { useMultipleContractSingleData } from '@masknet/plugin-infra/web3-evm'
+import { useMultipleContractSingleData } from '@masknet/web3-hooks-evm'
 import { useTargetBlockNumber } from '../useTargetBlockNumber.js'
-import { useChainId } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { useChainId } from '@masknet/web3-hooks-base'
 
 export enum PairState {
     NOT_EXISTS = 0,

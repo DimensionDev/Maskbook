@@ -1,13 +1,12 @@
 import { useEffect, useState } from 'react'
+import { CrossIsolationMessages, NetworkPluginID } from '@masknet/shared-base'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import {
     PluginIDContextProvider,
     PluginWeb3ContextProvider,
     useChainIdValid,
     useCurrentWeb3NetworkPluginID,
-} from '@masknet/plugin-infra/web3'
-import type { Web3Helper } from '@masknet/web3-helpers'
-import { CrossIsolationMessages } from '@masknet/shared-base'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+} from '@masknet/web3-hooks-base'
 import { CardDialog } from './CardDialog/CardDialog.js'
 import { Context } from './Context/index.js'
 

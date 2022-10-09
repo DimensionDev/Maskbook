@@ -1,5 +1,5 @@
 import { useAsyncFn } from 'react-use'
-import { useNativeTokenWrapperCallback } from '@masknet/plugin-infra/web3-evm'
+import { useNativeTokenWrapperCallback } from '@masknet/web3-hooks-evm'
 import { SchemaType, GasOptionConfig, ChainId } from '@masknet/web3-shared-evm'
 import { TradeComputed, TradeStrategy } from '../../types/index.js'
 import type { NativeTokenWrapper } from './useTradeComputed.js'

@@ -10,7 +10,7 @@ import { TransactionSnackbar } from './TransactionSnackbar/index.js'
 import { ApplicationBoardDialog } from '../../../components/shared/ApplicationBoardDialog.js'
 import { WalletConnectQRCodeDialog } from './WalletConnectQRCodeDialog/index.js'
 import { getEnumAsArray } from '@dimensiondev/kit'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { LeavePageConfirmDialog } from '../../../components/shared/LeavePageConfirmDialog.js'
 
 const sns: Plugin.SNSAdaptor.Definition = {

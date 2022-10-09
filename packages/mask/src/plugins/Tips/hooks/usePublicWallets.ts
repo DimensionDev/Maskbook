@@ -1,9 +1,9 @@
-import { EMPTY_LIST, NextIDPlatform } from '@masknet/shared-base'
-import { NextIDProof } from '@masknet/web3-providers'
-import { isSameAddress, isGreaterThan, NetworkPluginID } from '@masknet/web3-shared-base'
-import { uniqBy } from 'lodash-unified'
 import { useEffect, useMemo } from 'react'
 import { useAsyncRetry } from 'react-use'
+import { uniqBy } from 'lodash-unified'
+import { EMPTY_LIST, NextIDPlatform, NetworkPluginID } from '@masknet/shared-base'
+import { NextIDProof } from '@masknet/web3-providers'
+import { isSameAddress, isGreaterThan } from '@masknet/web3-shared-base'
 import { MaskMessages } from '../../../utils/index.js'
 import type { TipsAccount } from '../types/index.js'
 

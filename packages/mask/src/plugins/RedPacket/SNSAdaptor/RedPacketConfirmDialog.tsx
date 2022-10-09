@@ -9,7 +9,7 @@ import {
     useWeb3,
     useNativeToken,
     useNativeTokenAddress,
-} from '@masknet/plugin-infra/web3'
+} from '@masknet/web3-hooks-base'
 import { chainResolver, explorerResolver, isNativeTokenAddress, useRedPacketConstants } from '@masknet/web3-shared-evm'
 import { Grid, Link, Paper, Typography } from '@mui/material'
 import { makeStyles, ActionButton } from '@masknet/theme'
@@ -17,8 +17,9 @@ import LaunchIcon from '@mui/icons-material/Launch'
 import { FormattedBalance, useOpenShareTxDialog } from '@masknet/shared'
 import { useI18N } from '../locales/index.js'
 import { RedPacketSettings, useCreateCallback, useCreateParams } from './hooks/useCreateCallback.js'
-import { useTransactionValue } from '@masknet/plugin-infra/web3-evm'
-import { NetworkPluginID, formatBalance, isSameAddress } from '@masknet/web3-shared-base'
+import { useTransactionValue } from '@masknet/web3-hooks-evm'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { formatBalance, isSameAddress } from '@masknet/web3-shared-base'
 import type { RedPacketJSONPayload, RedPacketRecord } from '../types.js'
 import { RedPacketRPC } from '../messages.js'
 import { PluginWalletStatusBar } from '../../../utils/index.js'

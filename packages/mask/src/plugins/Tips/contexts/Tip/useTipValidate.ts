@@ -1,6 +1,7 @@
-import { useAccount, useFungibleTokenBalance } from '@masknet/plugin-infra/web3'
-import { isGreaterThan, isLessThanOrEqualTo, NetworkPluginID, rightShift } from '@masknet/web3-shared-base'
 import { useMemo } from 'react'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { useAccount, useFungibleTokenBalance } from '@masknet/web3-hooks-base'
+import { isGreaterThan, isLessThanOrEqualTo, rightShift } from '@masknet/web3-shared-base'
 import { useI18N } from '../../locales/index.js'
 import { TipsType, ValidationTuple } from '../../types'
 import { TargetRuntimeContext } from '../TargetRuntimeContext.js'
@@ -30,7 +31,7 @@ export function useTipValidate({
                 return [false, t.token_insufficient_balance()]
         } else if (pluginId === NetworkPluginID.PLUGIN_EVM) {
             if (!tokenId || !tokenAddress) return [false]
-        } else if (pluginId === NetworkPluginID.PLUGIN_SOLANA && !tokenId) {
+        } else if (pluginId === NetworkPluginID.PLUGIN_SOLANA && !tokenAddress) {
             return [false]
         }
         return [true]

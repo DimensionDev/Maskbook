@@ -1,4 +1,4 @@
-import { PluginID } from '@masknet/plugin-infra'
+import { PluginID } from '@masknet/shared-base'
 import { escapeRegExp } from 'lodash-unified'
 
 export const POOLTOGETHER_PLUGIN_ID = PluginID.PoolTogether

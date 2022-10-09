@@ -1,13 +1,14 @@
 import { useMemo } from 'react'
 import BigNumber from 'bignumber.js'
+import formatDistanceStrict from 'date-fns/formatDistanceStrict'
+import addSeconds from 'date-fns/addSeconds'
 import { makeStyles } from '@masknet/theme'
 import { GasOptionType, getLocale } from '@masknet/web3-shared-base'
 import { useSharedI18N } from '@masknet/shared'
 import { Typography, useTheme } from '@mui/material'
 import { CheckCircle, RadioButtonUnchecked } from '@mui/icons-material'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import formatDistanceStrict from 'date-fns/formatDistanceStrict'
-import addSeconds from 'date-fns/addSeconds'
+import { formatWeiToGwei } from '@masknet/web3-shared-evm'
 import type { SupportedLanguages } from '@masknet/public-api'
 import { SettingsContext } from './Context.js'
 
@@ -77,7 +78,7 @@ export function GasOption(props: GasOptionProps) {
             </Typography>
             <Typography className={classes.amount}>
                 {t.gas_settings_gas_option_amount_in_gwei({
-                    amount: new BigNumber(option.suggestedMaxFeePerGas).toFixed(2),
+                    amount: new BigNumber(formatWeiToGwei(option.suggestedMaxFeePerGas)).toFixed(2),
                 })}
             </Typography>
         </div>

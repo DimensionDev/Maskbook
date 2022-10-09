@@ -2,12 +2,12 @@ import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import { NonFungibleTokenOrder, formatBalance, formatCurrency, isValidTimestamp } from '@masknet/web3-shared-base'
-import { useWeb3State } from '@masknet/plugin-infra/web3'
+import { useWeb3State } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { Icons } from '@masknet/icons'
+import { TokenIcon } from '@masknet/shared'
 import { useI18N } from '../../../../../utils/index.js'
 import { CollectibleProviderIcon } from './CollectibleProviderIcon.js'
-import { TokenIcon } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     wrapper: {

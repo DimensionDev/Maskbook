@@ -3,8 +3,8 @@ import { SchemaType, GasOptionConfig, useTraderConstants, encodeContractTransact
 import { useAsyncFn } from 'react-use'
 import { SLIPPAGE_DEFAULT } from '../../constants/index.js'
 import { SwapResponse, TradeComputed, TradeStrategy } from '../../types/index.js'
-import { useAccount, useChainId, useWeb3Connection } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { useAccount, useChainId, useWeb3Connection } from '@masknet/web3-hooks-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { useTradeAmount } from './useTradeAmount.js'
 
 export function useTradeCallback(

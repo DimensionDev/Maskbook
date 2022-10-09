@@ -7,15 +7,7 @@ import {
     ChainId,
     SchemaType,
 } from '@masknet/web3-shared-evm'
-import {
-    isZero,
-    ZERO,
-    isGreaterThan,
-    NetworkPluginID,
-    isSameAddress,
-    formatBalance,
-    FungibleToken,
-} from '@masknet/web3-shared-base'
+import { isZero, ZERO, isGreaterThan, isSameAddress, formatBalance, FungibleToken } from '@masknet/web3-shared-base'
 import { Box, Card, Link, Typography } from '@mui/material'
 import { makeStyles, ActionButton } from '@masknet/theme'
 import OpenInNewIcon from '@mui/icons-material/OpenInNew'
@@ -23,7 +15,7 @@ import { BigNumber } from 'bignumber.js'
 import classNames from 'classnames'
 import formatDateTime from 'date-fns/format'
 import { startCase } from 'lodash-unified'
-import { EnhanceableSite } from '@masknet/shared-base'
+import { EnhanceableSite, NetworkPluginID } from '@masknet/shared-base'
 import { usePostLink } from '../../../components/DataSource/usePostInfo.js'
 import { TokenIcon, useOpenShareTxDialog } from '@masknet/shared'
 import { activatedSocialNetworkUI } from '../../../social-network/index.js'
@@ -41,7 +33,7 @@ import { StyledLinearProgress } from './StyledLinearProgress.js'
 import { SwapGuide, SwapStatus } from './SwapGuide.js'
 import { isFacebook } from '../../../social-network-adaptor/facebook.com/base.js'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base.js'
-import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
+import { useAccount, useChainId } from '@masknet/web3-hooks-base'
 import { Icons } from '@masknet/icons'
 import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary.js'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'

@@ -1,4 +1,4 @@
-import { PluginID } from '@masknet/plugin-infra'
+import { PluginID } from '@masknet/shared-base'
 import { SourceType } from '@masknet/web3-shared-base'
 
 export const PLUGIN_NAME = 'Collectibles'

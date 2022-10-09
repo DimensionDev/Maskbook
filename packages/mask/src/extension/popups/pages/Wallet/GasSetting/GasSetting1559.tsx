@@ -1,20 +1,20 @@
 import { z as zod } from 'zod'
 import { memo, useEffect, useMemo, useState } from 'react'
 import { useAsync, useAsyncFn, useUpdateEffect } from 'react-use'
+import { useNavigate } from 'react-router-dom'
+import { Controller, useForm } from 'react-hook-form'
+import BigNumber from 'bignumber.js'
+import { isEmpty } from 'lodash-unified'
 import { makeStyles } from '@masknet/theme'
 import { formatGweiToEther, formatGweiToWei } from '@masknet/web3-shared-evm'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages.js'
-import BigNumber from 'bignumber.js'
 import { useI18N } from '../../../../../utils/index.js'
-import { Controller, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Typography } from '@mui/material'
 import { StyledInput } from '../../../components/StyledInput/index.js'
 import { LoadingButton } from '@mui/lab'
-import { isEmpty } from 'lodash-unified'
 import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest.js'
-import { useNavigate } from 'react-router-dom'
-import { PopupRoutes } from '@masknet/shared-base'
+import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { toHex, fromWei } from 'web3-utils'
 import {
     GasOptionType,
@@ -24,11 +24,10 @@ import {
     isLessThanOrEqualTo,
     isPositive,
     multipliedBy,
-    NetworkPluginID,
     toFixed,
     TransactionDescriptorType,
 } from '@masknet/web3-shared-base'
-import { useChainId, useGasOptions, useNativeToken, useNativeTokenPrice, useWeb3 } from '@masknet/plugin-infra/web3'
+import { useChainId, useGasOptions, useNativeToken, useNativeTokenPrice, useWeb3 } from '@masknet/web3-hooks-base'
 
 const useStyles = makeStyles()((theme) => ({
     options: {

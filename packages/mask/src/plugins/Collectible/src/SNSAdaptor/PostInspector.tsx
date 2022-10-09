@@ -2,7 +2,7 @@ import {
     PluginIDContextProvider,
     PluginWeb3ContextProvider,
     useCurrentWeb3NetworkPluginID,
-} from '@masknet/plugin-infra/web3'
+} from '@masknet/web3-hooks-base'
 import { MaskLightTheme } from '@masknet/theme'
 import { ThemeProvider } from '@mui/material'
 import type { CollectiblePayload } from '../types.js'
