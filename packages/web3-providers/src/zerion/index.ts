@@ -118,8 +118,12 @@ export class ZerionNonFungibleTokenAPI implements NonFungibleTokenAPI.Provider<C
             },
             metadata: {
                 chainId,
-                name: nft.asset.collection.name,
+                name: nft.asset.name,
                 symbol: nft.asset.symbol,
+                imageURL: nft.asset.preview.url,
+                mediaURL: nft.asset.detail.url,
+                mediaType: nft.asset.detail.meta.type,
+                source: SourceType.Zerion,
             },
             source: SourceType.Zerion,
             link: this.createNonFungibleTokenPermalink(nft.asset.contract_address, nft.asset.token_id),
