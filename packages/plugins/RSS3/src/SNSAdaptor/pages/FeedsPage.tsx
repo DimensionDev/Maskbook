@@ -5,7 +5,6 @@ import { makeStyles } from '@masknet/theme'
 import { RSS3 } from '@masknet/web3-providers'
 import { Box, BoxProps } from '@mui/material'
 import { useI18N } from '../../locales/index.js'
-import type { RSS3Feed } from '../../types.js'
 import { FeedCard } from '../components/FeedCard.js'
 import { StatusBox } from '../components/StatusBox.js'
 
