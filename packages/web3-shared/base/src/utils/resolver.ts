@@ -265,9 +265,9 @@ export const resolveLocalURL = (url: string): string => {
 /**
  * Remove query from IPFS url, as it is not needed
  * and will increase requests sometimes.
- * For example https://ipfs.io/ipfs/<same-cid>?id=67891 and  https://ipfs.io/ipfs/<same-cid>?id=67892
+ * For example https://ipfs.io/ipfs/<same-cid>?id=67891 and https://ipfs.io/ipfs/<same-cid>?id=67892
  * are set to two different NFTs, but according to the same CID,
- * they are exactly the some.
+ * they are exactly the same.
  */
 const trimQuery = (url: string) => {
     return url.replace(/\?.+$/, '')
