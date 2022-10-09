@@ -1,5 +1,10 @@
 import { useEffect, useState } from 'react'
-import { PluginIDContextProvider, PluginWeb3ContextProvider, useChainIdValid } from '@masknet/plugin-infra/web3'
+import {
+    PluginIDContextProvider,
+    PluginWeb3ContextProvider,
+    useChainIdValid,
+    useCurrentWeb3NetworkPluginID,
+} from '@masknet/plugin-infra/web3'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { CrossIsolationMessages } from '@masknet/shared-base'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
@@ -9,6 +14,7 @@ import { Context } from './Context/index.js'
 export interface DialogInspectorProps {}
 
 export function DialogInspector(props: DialogInspectorProps) {
+    const parentPluginID = useCurrentWeb3NetworkPluginID()
     const [open, setOpen] = useState(false)
     const [pluginID, setPluginID] = useState<NetworkPluginID>()
     const [chainId, setChainId] = useState<Web3Helper.ChainIdAll>()
@@ -60,6 +66,7 @@ export function DialogInspector(props: DialogInspectorProps) {
                 }}>
                 <Context.Provider
                     initialState={{
+                        parentPluginID,
                         pluginID,
                         chainId,
                         tokenId: tokenId!,

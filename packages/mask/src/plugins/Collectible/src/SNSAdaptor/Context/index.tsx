@@ -10,6 +10,7 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import { NetworkPluginID, SourceType } from '@masknet/web3-shared-base'
 
 interface InitialState {
+    parentPluginID: NetworkPluginID
     pluginID: NetworkPluginID
     chainId: Web3Helper.ChainIdAll
     tokenId: string
@@ -19,7 +20,7 @@ interface InitialState {
 }
 
 function useContext(initialState?: InitialState) {
-    const { pluginID, chainId, tokenId, tokenAddress, ownerAddress, origin } = initialState ?? {}
+    const { parentPluginID, pluginID, chainId, tokenId, tokenAddress, ownerAddress, origin } = initialState ?? {}
     const [sourceType, setSourceType] = useState(SourceType.NFTScan)
 
     const asset = useNonFungibleAsset(pluginID, tokenAddress, tokenId, {
@@ -40,6 +41,8 @@ function useContext(initialState?: InitialState) {
     })
 
     return {
+        parentPluginID,
+
         pluginID,
         chainId,
 
