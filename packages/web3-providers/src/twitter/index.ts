@@ -216,6 +216,7 @@ export class TwitterAPI implements TwitterBaseAPI.Provider {
             }),
             features: JSON.stringify({
                 responsive_web_graphql_timeline_navigation_enabled: false,
+                verified_phone_label_enabled: false,
             }),
         })
         const cacheKey = `${bearerToken}/${csrfToken}/${url}`
