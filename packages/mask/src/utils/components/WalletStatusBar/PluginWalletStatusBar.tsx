@@ -23,7 +23,7 @@ import { WalletDescription } from './WalletDescription.js'
 import { Action } from './Action.js'
 import { useStatusBarStyles } from './styles.js'
 
-interface WalletStatusBarProps<T extends NetworkPluginID> extends PropsWithChildren<{}> {
+export interface WalletStatusBarProps<T extends NetworkPluginID> extends PropsWithChildren<{}> {
     className?: string
     onClick?: (ev: React.MouseEvent<HTMLDivElement>) => void
     expectedPluginID?: T
