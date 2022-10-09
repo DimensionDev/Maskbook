@@ -13,6 +13,7 @@ export function DialogInspector(props: DialogInspectorProps) {
     const [chainId, setChainId] = useState<Web3Helper.ChainIdAll>()
     const [tokenId, setTokenId] = useState<string>()
     const [tokenAddress, setTokenAddress] = useState<string>()
+    const [ownerAddress, setOwnerAddress] = useState<string>()
     const [originType, setOriginType] = useState<string>()
     const chainIdValid = useChainIdValid(pluginID, chainId)
 
@@ -26,8 +27,9 @@ export function DialogInspector(props: DialogInspectorProps) {
                 if (!ev.open) return
                 setPluginID(ev.pluginID)
                 setChainId(ev.chainId)
-                setTokenAddress(ev.tokenAddress)
                 setTokenId(ev.tokenId)
+                setTokenAddress(ev.tokenAddress)
+                setOwnerAddress(ev.ownerAddress)
                 setOriginType(ev.origin ?? 'unknown')
                 setOpen(ev.open)
             }),
@@ -44,6 +46,10 @@ export function DialogInspector(props: DialogInspectorProps) {
         if (!tokenId) return null
     }
 
+    if (pluginID === NetworkPluginID.PLUGIN_FLOW) {
+        if (!ownerAddress || !tokenAddress || !tokenId) return null
+    }
+
     return (
         <PluginIDContextProvider value={pluginID}>
             <PluginWeb3ContextProvider
@@ -57,6 +63,7 @@ export function DialogInspector(props: DialogInspectorProps) {
                         chainId,
                         tokenId: tokenId!,
                         tokenAddress: tokenAddress!,
+                        ownerAddress,
                         origin: originType,
                     }}>
                     <CardDialog open={open} setOpen={setOpen} />

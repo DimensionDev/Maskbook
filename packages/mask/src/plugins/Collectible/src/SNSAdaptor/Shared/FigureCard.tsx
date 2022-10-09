@@ -23,6 +23,11 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: 20,
         overflow: 'hidden',
     },
+    previewer: {
+        inset: 0,
+        margin: 'auto',
+        position: 'absolute',
+    },
     nameSm: {
         fontSize: 16,
         fontWeight: 700,
@@ -38,9 +43,7 @@ const useStyles = makeStyles()((theme) => ({
         gap: 6,
         marginTop: 12,
     },
-    image: {
-        height: 'auto !important',
-    },
+    image: {},
     fallbackImage: {
         width: '100% !important',
         height: '100% !important',
@@ -67,14 +70,16 @@ export function FigureCard(props: FigureCardProps) {
     return (
         <div className={classes.root}>
             <div className={classes.body}>
-                <AssetPreviewer
-                    classes={{
-                        root: classes.image,
-                        fallbackImage: classes.fallbackImage,
-                    }}
-                    url={asset.metadata?.imageURL}
-                    fallbackImage={new URL('../../assets/FallbackImage.svg', import.meta.url)}
-                />
+                <div className={classes.previewer}>
+                    <AssetPreviewer
+                        classes={{
+                            root: classes.image,
+                            fallbackImage: classes.fallbackImage,
+                        }}
+                        url={asset.metadata?.imageURL}
+                        fallbackImage={new URL('../../assets/FallbackImage.svg', import.meta.url)}
+                    />
+                </div>
             </div>
             <Typography className={timeline ? cx(classes.nameSm, classes.unset) : classes.nameSm}>
                 {asset.metadata?.name ?? '-'}

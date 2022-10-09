@@ -15,24 +15,29 @@ interface InitialState {
     chainId: Web3Helper.ChainIdAll
     tokenId: string
     tokenAddress: string
+    ownerAddress?: string
     origin?: string
 }
 
 function useContext(initialState?: InitialState) {
-    const { pluginID, chainId, tokenId, tokenAddress, origin } = initialState ?? {}
+    const { pluginID, chainId, tokenId, tokenAddress, ownerAddress, origin } = initialState ?? {}
     const [sourceType, setSourceType] = useState(SourceType.NFTScan)
 
     const asset = useNonFungibleAsset(pluginID, tokenAddress, tokenId, {
         chainId,
+        account: ownerAddress,
     })
     const orders = useNonFungibleOrders(pluginID, tokenAddress, tokenId, {
         chainId,
+        account: ownerAddress,
     })
     const events = useNonFungibleEvents(pluginID, tokenAddress, tokenId, {
         chainId,
+        account: ownerAddress,
     })
     const rarity = useNonFungibleRarity(pluginID, tokenAddress, tokenId, {
         chainId,
+        account: ownerAddress,
     })
 
     return {

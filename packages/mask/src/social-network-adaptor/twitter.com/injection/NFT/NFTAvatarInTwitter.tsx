@@ -243,6 +243,7 @@ function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
                 chainId: nftAvatar.chainId,
                 tokenId: nftAvatar.tokenId,
                 tokenAddress: nftAvatar.address,
+                ownerAddress: nftAvatar.ownerAddress,
                 origin: 'pfp',
             })
         }
