@@ -36,12 +36,9 @@ export function useTipsAccounts(
                 }
             })
 
-        const list =
-            pluginId === NetworkPluginID.PLUGIN_EVM
-                ? [...publicWallets, ...addresses, ...fromSocialAddresses].filter(
-                      (x) => !TipsSetting?.hiddenAddresses?.some((y) => isSameAddress(y, x.address)),
-                  )
-                : fromSocialAddresses
+        const list = [...publicWallets, ...addresses, ...fromSocialAddresses].filter(
+            (x) => !TipsSetting?.hiddenAddresses?.some((y) => isSameAddress(y, x.address)),
+        )
 
         return uniqBy(list, (v) => v.pluginId + v.address.toLowerCase())
     }, [pluginId, publicWallets, addresses, socialAddressList, TipsSetting?.hiddenAddresses])
