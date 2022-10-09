@@ -4,7 +4,7 @@ import { LoadingBase, makeStyles, parseColor, useStylesExtends } from '@masknet/
 import { Box, useTheme } from '@mui/material'
 import { useImageURL } from '../../../hooks/useImageURL.js'
 
-const useStyles = makeStyles()((theme) => ({
+const useStyles = makeStyles<void, 'floatingContainer'>()((theme, _, refs) => ({
     container: {
         width: '100%',
         height: '100%',
@@ -20,7 +20,7 @@ const useStyles = makeStyles()((theme) => ({
         width: 30,
         height: 30,
     },
-    fallbackContainer: {
+    floatingContainer: {
         width: '100%',
         height: '100%',
         inset: 0,
@@ -30,9 +30,13 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         justifyContent: 'center',
     },
-    spinnerContainer: {
-        width: 24,
-        height: 24,
+    failed: {
+        [`.${refs.floatingContainer}`]: {
+            background:
+                theme.palette.mode === 'light'
+                    ? 'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.9) 100%), linear-gradient(90deg, rgba(98, 152, 234, 0.2) 1.03%, rgba(98, 152, 234, 0.2) 1.04%, rgba(98, 126, 234, 0.2) 100%)'
+                    : undefined,
+        },
     },
 }))
 
@@ -53,7 +57,7 @@ export function Image({ fallback, disableSpinner, classes: externalClasses, onCl
     if (loadingImageURL && !disableSpinner) {
         return (
             <Box className={classes.container}>
-                <Box className={classNames(classes.fallbackContainer, classes.spinnerContainer)}>
+                <Box className={classes.floatingContainer}>
                     <LoadingBase />
                 </Box>
             </Box>
@@ -76,8 +80,8 @@ export function Image({ fallback, disableSpinner, classes: externalClasses, onCl
     }
     if (fallback && !(fallback instanceof URL) && typeof fallback !== 'string') {
         return (
-            <Box className={classes.container}>
-                <Box className={classes.fallbackContainer}>{fallback}</Box>
+            <Box className={classNames(classes.container, classes.failed)}>
+                <Box className={classes.floatingContainer}>{fallback}</Box>
             </Box>
         )
     }
@@ -85,12 +89,12 @@ export function Image({ fallback, disableSpinner, classes: externalClasses, onCl
     const fallbackImageURL =
         fallback?.toString() ??
         (theme.palette.mode === 'dark'
-            ? new URL('./nft_token_fallback_dark.png', import.meta.url).toString()
-            : new URL('./nft_token_fallback.png', import.meta.url).toString())
+            ? new URL('./mask-dark.png', import.meta.url).toString()
+            : new URL('./mask-light.png', import.meta.url).toString())
 
     return (
-        <Box className={classes.container} onClick={onClick}>
-            <Box className={classes.fallbackContainer}>
+        <Box className={classNames(classes.container, classes.failed)} onClick={onClick}>
+            <Box className={classes.floatingContainer}>
                 <img
                     loading="lazy"
                     decoding="async"

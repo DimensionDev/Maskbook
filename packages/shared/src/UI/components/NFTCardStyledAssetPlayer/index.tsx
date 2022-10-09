@@ -64,8 +64,8 @@ interface Props extends withClasses<'fallbackImage' | 'iframe' | 'wrapper' | 'lo
     pluginID?: NetworkPluginID
 }
 
-const assetPlayerFallbackImageDark = new URL('../Image/nft_token_fallback_dark.png', import.meta.url)
-const assetPlayerFallbackImageLight = new URL('../Image/nft_token_fallback.png', import.meta.url)
+const fallbackImageDark = new URL('../Image/mask-dark.png', import.meta.url)
+const fallbackImageLight = new URL('../Image/mask-light.png', import.meta.url)
 
 export function NFTCardStyledAssetPlayer(props: Props) {
     const {
@@ -96,8 +96,7 @@ export function NFTCardStyledAssetPlayer(props: Props) {
     const urlComputed = url || tokenDetailed?.metadata?.imageURL || tokenDetailed?.metadata?.mediaURL
     const { value: isImageURL = true } = useIsImageURL(urlComputed)
 
-    const fallbackImageURL =
-        fallbackImage ?? (theme.palette.mode === 'dark' ? assetPlayerFallbackImageDark : assetPlayerFallbackImageLight)
+    const fallbackImageURL = fallbackImage ?? (theme.palette.mode === 'dark' ? fallbackImageDark : fallbackImageLight)
 
     const networkDescriptor = useNetworkDescriptor(pluginID)
 
