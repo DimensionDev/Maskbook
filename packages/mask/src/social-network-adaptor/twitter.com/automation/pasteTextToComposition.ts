@@ -21,7 +21,7 @@ export const pasteTextToCompositionTwitter: SocialNetworkUI.AutomationCapabiliti
             }
 
             // Workaround: To open the compose dialog even if it's already opened(UX insensitivity)
-            //  to set the editor element to be the right `document.activeElement`.
+            //  to set the editor element as the correct `document.activeElement`.
             if (opt?.reason !== 'reply') {
                 // open tweet window
                 await untilElementAvailable(newPostButtonSelector())
