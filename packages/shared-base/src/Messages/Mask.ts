@@ -127,6 +127,7 @@ export type NonFungibleTokenDialogEvent =
           chainId: number
           tokenId: string
           tokenAddress: string
+          ownerAddress?: string
           origin?: 'pfp' | 'web3-profile-card' | 'web3-profile-tab' | 'unknown'
       }
     | {
