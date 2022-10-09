@@ -1,3 +1,3 @@
-import { fromNPMTask } from '../utils'
-import { resolve } from 'path'
-export const [buildSentry] = fromNPMTask(resolve(__dirname, '../../../sentry'), 'sentry', 'Build sentry.')
+import { fromNPMTask, PKG_PATH } from '../utils/index.js'
+
+export const [buildSentry] = fromNPMTask(new URL('sentry', PKG_PATH), 'build-sentry', 'Build sentry.')
