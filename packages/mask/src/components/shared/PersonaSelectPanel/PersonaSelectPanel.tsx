@@ -98,7 +98,7 @@ export const PersonaSelectPanel = memo<PersonaSelectPanelProps>((props) => {
     const { setDialog: setCreatePersonaConfirmDialog } = useRemoteControlledDialog(MaskMessages.events.openPageConfirm)
 
     useEffect(() => {
-        if (personas.length || !finishTarget || loading) return
+        if (personas.length || !finishTarget || loading || error) return
 
         onClose?.()
         setCreatePersonaConfirmDialog({
@@ -109,7 +109,7 @@ export const PersonaSelectPanel = memo<PersonaSelectPanelProps>((props) => {
             title: t('applications_create_persona_title'),
             actionHint: t('applications_create_persona_action'),
         })
-    }, [personas.length, finishTarget, loading])
+    }, [personas.length, finishTarget, loading, error])
 
     const actionButton = useMemo(() => {
         let isConnected = true

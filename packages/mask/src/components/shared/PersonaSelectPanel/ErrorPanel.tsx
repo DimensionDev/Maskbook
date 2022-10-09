@@ -27,7 +27,7 @@ export const ErrorPanel = ({ onRetry }: ErrorPanelProps) => {
         <Stack className={classes.root} justifyContent="center" height="100%">
             <Stack justifyContent="center" height="100%" gap={1.5} alignItems="center">
                 <Typography>{t('persona_load_failed')}</Typography>
-                <Button color="primary" onClick={onRetry}>
+                <Button color="primary" sx={{ borderRadius: 20 }} onClick={onRetry}>
                     {t('reload')}
                 </Button>
             </Stack>
