@@ -11,8 +11,8 @@ import {
     SnackbarAction,
     OptionsObject,
 } from 'notistack'
-import { Typography, IconButton, alpha } from '@mui/material'
 import classnames from 'classnames'
+import { Typography, IconButton, alpha } from '@mui/material'
 import { Close as CloseIcon } from '@mui/icons-material'
 import WarningIcon from '@mui/icons-material/Warning'
 import InfoIcon from '@mui/icons-material/Info'
@@ -25,11 +25,11 @@ export { PopupSnackbarProvider, usePopupCustomSnackbar } from './PopupSnackbar.j
 export { SnackbarProvider, useSnackbar } from 'notistack'
 export type { VariantType, OptionsObject, SnackbarKey, SnackbarMessage } from 'notistack'
 
-interface StyleProps {
+export interface StyleProps {
     offsetY?: number
 }
 
-const useStyles = makeStyles<StyleProps, 'title' | 'message'>()((theme, { offsetY }, refs) => {
+export const useStyles = makeStyles<StyleProps, 'title' | 'message'>()((theme, { offsetY }, refs) => {
     const spinningAnimationKeyFrames = keyframes`
         to {
           transform: rotate(360deg)

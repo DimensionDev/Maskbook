@@ -171,9 +171,7 @@ export function PluginProviderRender({
         <>
             <Box className={classes.root}>
                 <section className={classes.section}>
-                    <Typography className={classes.title} variant="h2" component="h2">
-                        {t('plugin_wallet_choose_network')}
-                    </Typography>
+                    <Typography className={classes.title}>{t('plugin_wallet_choose_network')}</Typography>
                     <List className={classes.list}>
                         {networks
                             ?.filter((x) => x.isMainnet)
@@ -192,9 +190,7 @@ export function PluginProviderRender({
                     </List>
                 </section>
                 <section className={classes.section}>
-                    <Typography className={classes.title} variant="h2" component="h2">
-                        {t('plugin_wallet_choose_wallet')}
-                    </Typography>
+                    <Typography className={classes.title}>{t('plugin_wallet_choose_wallet')}</Typography>
                     <List className={classes.wallets}>
                         {providers
                             .filter((x) => x.providerAdaptorPluginID === undeterminedPluginID)

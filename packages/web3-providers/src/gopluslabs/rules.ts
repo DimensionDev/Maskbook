@@ -1,5 +1,5 @@
-import { SecurityKey, SecurityMessageLevel } from './constants.js'
 import parseInt from 'lodash-es/parseInt'
+import { SecurityKey, SecurityMessageLevel } from './constants.js'
 import type { SecurityAPI } from '../types/Security.js'
 
 export type I18nOptions = 'rate' | 'quantity'
