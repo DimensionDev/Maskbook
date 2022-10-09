@@ -1,4 +1,3 @@
-import io from 'socket.io-client'
 import { first, unionWith } from 'lodash-unified'
 import { getEnumAsArray } from '@dimensiondev/kit'
 import {
@@ -13,191 +12,28 @@ import {
     createNextIndicator,
     HubIndicator,
     scale10,
+    GasOptionType,
+    toFixed,
 } from '@masknet/web3-shared-base'
-import { ChainId, createNativeToken, SchemaType } from '@masknet/web3-shared-evm'
-import {
-    SocketRequestBody,
-    SocketNameSpace,
-    SocketResponseBody,
-    ZerionTransactionResponseBody,
-    ZerionAssetResponseBody,
-    SocketRequestType,
-    ZerionNonFungibleTokenResponseBody,
-    ZerionNonFungibleTokenItem,
-    ZerionNonFungibleTokenInfoBody,
-    ZerionNonFungibleCollection,
-    ZerionNonFungibleCollectionBody,
-    SocketRequestNameSpace,
-} from './type.js'
+import { ChainId, createNativeToken, GasOption, SchemaType } from '@masknet/web3-shared-evm'
+import type { ZerionNonFungibleTokenItem, ZerionNonFungibleCollection, ZerionCoin } from './type.js'
 import { formatAsset, formatTransactions } from './format.js'
-import type { FungibleTokenAPI, HistoryAPI, NonFungibleTokenAPI } from '../types/index.js'
+import type { FungibleTokenAPI, GasOptionAPI, HistoryAPI, NonFungibleTokenAPI, TrendingAPI } from '../types/index.js'
 import { getAllEVMNativeAssets } from '../helpers.js'
-import { createLookupTableResolver, EMPTY_LIST } from '@masknet/shared-base'
-
-const ZERION_API = 'wss://api-v4.zerion.io'
-// cspell:disable-next-line
-const ZERION_TOKEN = 'Mask.yEUEfDnoxgLBwNEcYPVussxxjdrGwapj'
+import { EMPTY_LIST } from '@masknet/shared-base'
+import {
+    getAssetsList,
+    getCoinsByKeyword,
+    getGasOptions,
+    getNonFungibleAsset,
+    getNonFungibleAssets,
+    getNonFungibleInfo,
+    getTransactionList,
+    zerionChainIdResolver,
+} from './base-api.js'
 
 const ZERION_NFT_DETAIL_URL = 'https://app.zerion.io/nfts/'
-
-let socket: SocketIOClient.Socket | null = null
-
-function createSocket(namespace: SocketRequestNameSpace = SocketRequestNameSpace.Address) {
-    if (socket?.connected) return socket
-    if (socket) socket.removeAllListeners()
-    return (socket = io(`${ZERION_API}/${namespace}`, {
-        transports: ['websocket'],
-        query: {
-            api_token: ZERION_TOKEN,
-        },
-        // disable the auto reconnection
-        reconnection: false,
-    }))
-}
-
-function verify(request: SocketRequestBody, response: any) {
-    // each value in request payload must be found in response meta
-    return Object.keys(request.payload).every((key) => {
-        const requestValue = request.payload[key]
-        const responseMetaValue = response.meta[key]
-        if (typeof requestValue === 'object') {
-            return JSON.stringify(requestValue) === JSON.stringify(responseMetaValue)
-        }
-        if (typeof requestValue === 'string') {
-            return responseMetaValue.toLowerCase() === requestValue.toLowerCase()
-        }
-        return responseMetaValue === requestValue
-    })
-}
-
-function subscribeFromZerion(
-    socketNamespace: SocketNameSpace,
-    requestBody: SocketRequestBody,
-    type = SocketRequestType.SUBSCRIBE,
-) {
-    return new Promise<SocketResponseBody>((resolve) => {
-        const { socket, namespace } = socketNamespace
-        const model = requestBody.scope[0]
-        socket.emit(type, requestBody)
-        socket.on(`received ${namespace} ${model}`, (data: SocketResponseBody) => {
-            if (verify(requestBody, data)) {
-                resolve(data)
-            }
-        })
-    })
-}
-
-async function getAssetsList(address: string, scope: string) {
-    return (await subscribeFromZerion(
-        {
-            namespace: SocketRequestNameSpace.Address,
-            socket: createSocket(),
-        },
-        {
-            scope: [scope],
-            payload: {
-                address,
-                currency: 'usd',
-            },
-        },
-    )) as ZerionAssetResponseBody
-}
-
-async function getTransactionList(address: string, scope: string, page?: number, size = 30) {
-    return (await subscribeFromZerion(
-        {
-            namespace: SocketRequestNameSpace.Address,
-            socket: createSocket(),
-        },
-        {
-            scope: [scope],
-            payload: {
-                address,
-                currency: 'usd',
-                transactions_limit: size,
-                transactions_offset: (page ?? 0) * size,
-                transactions_search_query: '',
-            },
-        },
-    )) as ZerionTransactionResponseBody
-}
-
-async function getNonFungibleAsset(account: string, address: string, tokenId: string) {
-    return (await subscribeFromZerion(
-        {
-            namespace: SocketRequestNameSpace.Address,
-            socket: createSocket(),
-        },
-        {
-            scope: ['nft'],
-            payload: {
-                address: account,
-                nft_asset_code: `${address}:${tokenId}`,
-            },
-        },
-    )) as ZerionNonFungibleTokenResponseBody
-}
-
-async function getNonFungibleAssets(address: string, page?: number, size = 20, contract_address?: string) {
-    return (await subscribeFromZerion(
-        { namespace: SocketRequestNameSpace.Address, socket: createSocket() },
-        {
-            scope: ['nft'],
-            payload: {
-                address,
-                contract_addresses: contract_address ? [contract_address] : [],
-                mode: 'nft',
-                nft_limit: size,
-                nft_offset: (page ?? 0) * size,
-            },
-        },
-        SocketRequestType.GET,
-    )) as ZerionNonFungibleTokenResponseBody
-}
-
-async function getNonFungibleCollection(slug: string) {
-    return (await subscribeFromZerion(
-        {
-            namespace: SocketRequestNameSpace.Assets,
-            socket: createSocket(SocketRequestNameSpace.Assets),
-        },
-        {
-            scope: ['nft-collection-info'],
-            payload: {
-                collection_slug: slug,
-            },
-        },
-    )) as ZerionNonFungibleCollectionBody
-}
-
-async function getNonFungibleInfo(address: string, tokenId: string) {
-    return (await subscribeFromZerion(
-        { namespace: SocketRequestNameSpace.Assets, socket: createSocket(SocketRequestNameSpace.Assets) },
-        {
-            scope: ['nft-info'],
-            payload: {
-                asset_code: `${address}:${tokenId}`,
-                currency: 'eth',
-            },
-        },
-    )) as ZerionNonFungibleTokenInfoBody
-}
 const filterAssetType = ['compound', 'trash', 'uniswap', 'uniswap-v2', 'nft']
-
-const zerionChainIdResolver = createLookupTableResolver<string, ChainId | undefined>(
-    {
-        ethereum: ChainId.Mainnet,
-        optimism: ChainId.Optimism,
-        fantom: ChainId.Fantom,
-        avalanche: ChainId.Avalanche,
-        arbitrum: ChainId.Arbitrum,
-        aurora: ChainId.Aurora,
-        'binance-smart-chain': ChainId.BSC,
-        xdai: ChainId.xDai,
-        polygon: ChainId.Matic,
-    },
-    () => undefined,
-)
 
 export class ZerionAPI
     implements FungibleTokenAPI.Provider<ChainId, SchemaType>, HistoryAPI.Provider<ChainId, SchemaType>
@@ -337,6 +173,63 @@ export class ZerionNonFungibleTokenAPI implements NonFungibleTokenAPI.Provider<C
         return {
             amount: scale10(response.payload['nft-info'].asset.floor_price, nativeToken.decimals).toFixed(0),
             token: nativeToken,
+        }
+    }
+}
+
+export class ZerionTrendingAPI implements TrendingAPI.Provider<ChainId> {
+    createCoinFromData(data: ZerionCoin) {
+        return {
+            id: data.asset.id,
+            name: data.asset.name,
+            symbol: data.asset.symbol,
+            type: TokenType.Fungible,
+            decimals: data.asset.decimals,
+        }
+    }
+    getCoinTrending(chainId: ChainId, id: string, currency: TrendingAPI.Currency): Promise<TrendingAPI.Trending> {
+        throw new Error('Method not implemented.')
+    }
+    getCurrencies(): Promise<TrendingAPI.Currency[]> {
+        throw new Error('Method not implemented.')
+    }
+    getPriceStats(
+        chainId: ChainId,
+        coinId: string,
+        currency: TrendingAPI.Currency,
+        days: number,
+    ): Promise<TrendingAPI.Stat[]> {
+        throw new Error('Method not implemented.')
+    }
+    async getCoins(keyword?: string): Promise<TrendingAPI.Coin[]> {
+        if (!keyword) return EMPTY_LIST
+        const response = await getCoinsByKeyword(keyword)
+
+        if (!response?.payload?.info?.length) return EMPTY_LIST
+
+        return response.payload.info.filter((x) => !x.asset.type).map(this.createCoinFromData)
+    }
+}
+
+export class ZerionGasAPI implements GasOptionAPI.Provider<ChainId, GasOption> {
+    async getGasOptions(chainId: ChainId): Promise<Record<GasOptionType, GasOption>> {
+        const result = await getGasOptions(chainId)
+        return {
+            [GasOptionType.FAST]: {
+                estimatedSeconds: 15,
+                suggestedMaxFeePerGas: toFixed(result?.fast),
+                suggestedMaxPriorityFeePerGas: '0',
+            },
+            [GasOptionType.NORMAL]: {
+                estimatedSeconds: 30,
+                suggestedMaxFeePerGas: toFixed(result?.standard),
+                suggestedMaxPriorityFeePerGas: '0',
+            },
+            [GasOptionType.SLOW]: {
+                estimatedSeconds: 60,
+                suggestedMaxFeePerGas: toFixed(result?.slow),
+                suggestedMaxPriorityFeePerGas: '0',
+            },
         }
     }
 }

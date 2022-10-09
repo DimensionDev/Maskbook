@@ -1,6 +1,7 @@
 export enum SocketRequestNameSpace {
     Address = 'address',
     Assets = 'assets',
+    Gas = 'gas',
 }
 
 export type SocketNameSpace = {
@@ -274,4 +275,56 @@ export interface ZerionAssetResponseBody extends SocketResponseBody {
         status: string
     }
     payload: Partial<ZerionAssetResponseBodyPayload>
+}
+
+export interface ZerionCoinAsset {
+    id: string
+    asset_code: string
+    name: string
+    symbol: string
+    decimals: number
+    implementations: Record<string, { address: string; decimals: number }>
+    type: any
+    icon_url: string
+    price: {
+        changed_at: number
+        relative_change_24h: number
+        value: number
+    }
+    is_displayable: boolean
+    is_verified: boolean
+}
+export interface ZerionCoin {
+    asset: ZerionCoinAsset
+    title: string
+    subtitle: string
+    tagline: any
+    market_cap: number
+    total_supply: number
+    circulating_supply: number
+    relative_changes: Record<string, number | null>
+    tags: string[]
+}
+
+export interface ZerionCoinResponseBody extends SocketResponseBody {
+    payload: {
+        info: ZerionCoin[]
+    }
+}
+
+export interface ZerionGasOption {
+    info: {
+        classic: {
+            fast: number
+            rapid: number
+            slow: number
+            standard: number
+        }
+    }
+}
+
+export interface ZerionGasResponseBody extends SocketResponseBody {
+    payload: {
+        ['chain-prices']: Record<string, ZerionGasOption>
+    }
 }

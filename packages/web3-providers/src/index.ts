@@ -16,7 +16,7 @@ import { TwitterAPI } from './twitter/index.js'
 import { R2D2API } from './r2d2/index.js'
 import { InstagramAPI } from './instagram/index.js'
 import { DeBankAPI } from './debank/index.js'
-import { ZerionAPI, ZerionNonFungibleTokenAPI } from './zerion/index.js'
+import { ZerionAPI, ZerionGasAPI, ZerionNonFungibleTokenAPI, ZerionTrendingAPI } from './zerion/index.js'
 import { MetaSwapAPI } from './metaswap/index.js'
 import { AstarAPI } from './astar/index.js'
 import { GoPlusLabsAPI } from './gopluslabs/index.js'
@@ -97,3 +97,5 @@ export const ChainbaseNonFungibleToken = new ChainbaseNonFungibleTokenAPI()
 // Zerion
 export const Zerion = new ZerionAPI()
 export const ZerionNonFungibleToken = new ZerionNonFungibleTokenAPI()
+export const ZerionTrending = new ZerionTrendingAPI()
+export const ZerionGas = new ZerionGasAPI()
