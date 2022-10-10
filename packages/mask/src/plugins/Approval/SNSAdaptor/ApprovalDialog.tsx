@@ -1,10 +1,10 @@
-import { useState } from 'react'
+import { useContext } from 'react'
 import { Button, DialogContent, Tab } from '@mui/material'
 import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import { TabContext } from '@mui/lab'
-import { useChainId, useCurrentWeb3NetworkPluginID } from '@masknet/web3-hooks-base'
+import { useCurrentWeb3NetworkPluginID } from '@masknet/web3-hooks-base'
 import { InjectedDialog } from '@masknet/shared'
-import { NetworkTab } from '../../../components/shared/NetworkTab.js'
+import { NetworkTab, NetworkTabContext, NetworkTabContextProvider } from '../../../components/shared/NetworkTab.js'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { ChainId, chainResolver, NetworkType } from '@masknet/web3-shared-evm'
 import { NetworkPluginID, PluginID } from '@masknet/shared-base'
@@ -113,7 +113,9 @@ export function ApprovalDialog({ open, onClose }: ApprovalDialogProps) {
                     </MaskTabList>
                 }>
                 <DialogContent className={classes.dialogContent}>
-                    <ApprovalWrapper tab={currentTab} />
+                    <NetworkTabContextProvider pluginID={NetworkPluginID.PLUGIN_EVM} value={ChainId.Mainnet}>
+                        <ApprovalWrapper tab={currentTab} />
+                    </NetworkTabContextProvider>
                 </DialogContent>
             </InjectedDialog>
         </TabContext>
@@ -128,8 +130,7 @@ function ApprovalWrapper(props: ApprovalWrapperProps) {
     const { tab } = props
     const { t: tr } = useBaseI18n()
     const t = useI18N()
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
-    const [networkTabChainId, setNetworkTabChainId] = useState<ChainId>(chainId)
+    const { chainId: networkTabChainId } = useContext(NetworkTabContext)
     const approvalDefinition = useActivatedPlugin(PluginID.Approval, 'any')
     const pluginId = useCurrentWeb3NetworkPluginID()
     const chainIdList =
@@ -145,17 +146,12 @@ function ApprovalWrapper(props: ApprovalWrapperProps) {
             {pluginId === NetworkPluginID.PLUGIN_EVM ? (
                 <>
                     <div className={classes.abstractTabWrapper}>
-                        <NetworkTab
-                            chainId={networkTabChainId}
-                            setChainId={setNetworkTabChainId}
-                            classes={{
+                        <NetworkTab classes={{
                                 tab: classes.tab,
                                 tabPanel: classes.tabPanel,
                                 indicator: classes.indicator,
                                 tabPaper: classes.tabPaper,
-                            }}
-                            chains={chainIdList?.filter(Boolean) as ChainId[]}
-                        />
+                            }} chains={chainIdList?.filter(Boolean) as ChainId[]} />
                     </div>
                     <section className={classes.contentWrapper}>
                         {tab === Tabs.tokens ? (
