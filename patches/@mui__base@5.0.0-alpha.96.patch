@@ -1,0 +1,158 @@
+diff --git a/ModalUnstyled/ModalManager.js b/ModalUnstyled/ModalManager.js
+index 532d7900e9cbb8c99132d072cdb9bbb158e47127..5bd4a1823871b621a65e11c32cf0c0c6bb82cb33 100644
+--- a/ModalUnstyled/ModalManager.js
++++ b/ModalUnstyled/ModalManager.js
+@@ -87,16 +87,20 @@ function handleContainer(containerInfo, props) {
+ 
+     let scrollContainer;
+ 
+-    if (container.parentNode instanceof DocumentFragment) {
+-      scrollContainer = ownerDocument(container).body;
++    if (props.scrollContainer) {
++      scrollContainer = props.scrollContainer
+     } else {
+-      // Improve Gatsby support
+-      // https://css-tricks.com/snippets/css/force-vertical-scrollbar/
+-      const parent = container.parentElement;
+-      const containerWindow = ownerWindow(container);
+-      scrollContainer = (parent == null ? void 0 : parent.nodeName) === 'HTML' && containerWindow.getComputedStyle(parent).overflowY === 'scroll' ? parent : container;
+-    } // Block the scroll even if no scrollbar is visible to account for mobile keyboard
+-    // screensize shrink.
++      if (container.parentNode instanceof DocumentFragment) {
++        scrollContainer = ownerDocument(container).body;
++      } else {
++        // Improve Gatsby support
++        // https://css-tricks.com/snippets/css/force-vertical-scrollbar/
++        const parent = container.parentElement;
++        const containerWindow = ownerWindow(container);
++        scrollContainer = (parent == null ? void 0 : parent.nodeName) === 'HTML' && containerWindow.getComputedStyle(parent).overflowY === 'scroll' ? parent : container;
++      } // Block the scroll even if no scrollbar is visible to account for mobile keyboard
++      // screensize shrink.
++    }
+ 
+ 
+     restoreStyle.push({
+diff --git a/ModalUnstyled/ModalUnstyled.js b/ModalUnstyled/ModalUnstyled.js
+index 036eac7a6fbb204cbe021843a53236fe64333496..27295560cc92494b13068743bd613b0d8accf770 100644
+--- a/ModalUnstyled/ModalUnstyled.js
++++ b/ModalUnstyled/ModalUnstyled.js
+@@ -101,7 +101,8 @@ const ModalUnstyled = /*#__PURE__*/React.forwardRef(function ModalUnstyled(props
+ 
+   const handleMounted = () => {
+     manager.mount(getModal(), {
+-      disableScrollLock
++      disableScrollLock,
++      scrollContainer: props.scrollContainer
+     }); // Fix a bug on Chrome where the scroll isn't initially 0.
+ 
+     modalRef.current.scrollTop = 0;
+diff --git a/legacy/ModalUnstyled/ModalUnstyled.js b/legacy/ModalUnstyled/ModalUnstyled.js
+index 0909ef3e072b1864f99fc7ec3086b7acb7dc99aa..e730d7e6bfbdf9428e0748b546d0cc65cc1f4429 100644
+--- a/legacy/ModalUnstyled/ModalUnstyled.js
++++ b/legacy/ModalUnstyled/ModalUnstyled.js
+@@ -110,7 +110,8 @@ var ModalUnstyled = /*#__PURE__*/React.forwardRef(function ModalUnstyled(props,
+ 
+   var handleMounted = function handleMounted() {
+     manager.mount(getModal(), {
+-      disableScrollLock: disableScrollLock
++      disableScrollLock,
++      scrollContainer: props.scrollContainer
+     }); // Fix a bug on Chrome where the scroll isn't initially 0.
+ 
+     modalRef.current.scrollTop = 0;
+diff --git a/modern/ModalUnstyled/ModalManager.js b/modern/ModalUnstyled/ModalManager.js
+index 2a5614b978ce2dd2e54be7e9d9985afd846681b2..fac051dc90a4610989dca73f7e2d19ab2ddd6ad9 100644
+--- a/modern/ModalUnstyled/ModalManager.js
++++ b/modern/ModalUnstyled/ModalManager.js
+@@ -87,16 +87,20 @@ function handleContainer(containerInfo, props) {
+ 
+     let scrollContainer;
+ 
+-    if (container.parentNode instanceof DocumentFragment) {
+-      scrollContainer = ownerDocument(container).body;
++    if (props.scrollContainer) {
++      scrollContainer = props.scrollContainer
+     } else {
+-      // Improve Gatsby support
+-      // https://css-tricks.com/snippets/css/force-vertical-scrollbar/
+-      const parent = container.parentElement;
+-      const containerWindow = ownerWindow(container);
+-      scrollContainer = parent?.nodeName === 'HTML' && containerWindow.getComputedStyle(parent).overflowY === 'scroll' ? parent : container;
+-    } // Block the scroll even if no scrollbar is visible to account for mobile keyboard
+-    // screensize shrink.
++      if (container.parentNode instanceof DocumentFragment) {
++        scrollContainer = ownerDocument(container).body;
++      } else {
++        // Improve Gatsby support
++        // https://css-tricks.com/snippets/css/force-vertical-scrollbar/
++        const parent = container.parentElement;
++        const containerWindow = ownerWindow(container);
++        scrollContainer = parent?.nodeName === 'HTML' && containerWindow.getComputedStyle(parent).overflowY === 'scroll' ? parent : container;
++      } // Block the scroll even if no scrollbar is visible to account for mobile keyboard
++      // screensize shrink.
++    }
+ 
+ 
+     restoreStyle.push({
+diff --git a/modern/ModalUnstyled/ModalUnstyled.js b/modern/ModalUnstyled/ModalUnstyled.js
+index 3d7328e7c1736648e81554e21212235e88480a1a..66c7709341d26ddc32a90ab31434d3b350f12e02 100644
+--- a/modern/ModalUnstyled/ModalUnstyled.js
++++ b/modern/ModalUnstyled/ModalUnstyled.js
+@@ -99,7 +99,8 @@ const ModalUnstyled = /*#__PURE__*/React.forwardRef(function ModalUnstyled(props
+ 
+   const handleMounted = () => {
+     manager.mount(getModal(), {
+-      disableScrollLock
++      disableScrollLock,
++      scrollContainer: props.scrollContainer
+     }); // Fix a bug on Chrome where the scroll isn't initially 0.
+ 
+     modalRef.current.scrollTop = 0;
+diff --git a/node/ModalUnstyled/ModalManager.js b/node/ModalUnstyled/ModalManager.js
+index b858d9550bc1b1b155348670d6cc294a2fd53245..5a5ebd1b7ae408abbd486aaa6dd5595f40a85911 100644
+--- a/node/ModalUnstyled/ModalManager.js
++++ b/node/ModalUnstyled/ModalManager.js
+@@ -95,16 +95,20 @@ function handleContainer(containerInfo, props) {
+ 
+     let scrollContainer;
+ 
+-    if (container.parentNode instanceof DocumentFragment) {
+-      scrollContainer = (0, _utils.unstable_ownerDocument)(container).body;
++    if (props.scrollContainer) {
++      scrollContainer = props.scrollContainer
+     } else {
+-      // Improve Gatsby support
+-      // https://css-tricks.com/snippets/css/force-vertical-scrollbar/
+-      const parent = container.parentElement;
+-      const containerWindow = (0, _utils.unstable_ownerWindow)(container);
+-      scrollContainer = (parent == null ? void 0 : parent.nodeName) === 'HTML' && containerWindow.getComputedStyle(parent).overflowY === 'scroll' ? parent : container;
+-    } // Block the scroll even if no scrollbar is visible to account for mobile keyboard
+-    // screensize shrink.
++      if (container.parentNode instanceof DocumentFragment) {
++        scrollContainer = (0, _utils.unstable_ownerDocument)(container).body;
++      } else {
++        // Improve Gatsby support
++        // https://css-tricks.com/snippets/css/force-vertical-scrollbar/
++        const parent = container.parentElement;
++        const containerWindow = (0, _utils.unstable_ownerWindow)(container);
++        scrollContainer = (parent == null ? void 0 : parent.nodeName) === 'HTML' && containerWindow.getComputedStyle(parent).overflowY === 'scroll' ? parent : container;
++      } // Block the scroll even if no scrollbar is visible to account for mobile keyboard
++      // screensize shrink.
++    }
+ 
+ 
+     restoreStyle.push({
+diff --git a/node/ModalUnstyled/ModalUnstyled.js b/node/ModalUnstyled/ModalUnstyled.js
+index 28241d051f54fee4d5863d5945ceca1dac51aef5..5563a94ba057335a3db40b8c301e6e4b27a460fa 100644
+--- a/node/ModalUnstyled/ModalUnstyled.js
++++ b/node/ModalUnstyled/ModalUnstyled.js
+@@ -124,7 +124,8 @@ const ModalUnstyled = /*#__PURE__*/React.forwardRef(function ModalUnstyled(props
+ 
+   const handleMounted = () => {
+     manager.mount(getModal(), {
+-      disableScrollLock
++      disableScrollLock,
++      scrollContainer: props.scrollContainer
+     }); // Fix a bug on Chrome where the scroll isn't initially 0.
+ 
+     modalRef.current.scrollTop = 0;
