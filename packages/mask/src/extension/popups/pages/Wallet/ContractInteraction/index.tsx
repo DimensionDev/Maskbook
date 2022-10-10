@@ -110,7 +110,7 @@ const useStyles = makeStyles()(() => ({
         width: 24,
         height: 24,
     },
-    amount: {
+    tokenDescription: {
         flex: 1,
         fontSize: 18,
         color: '#15181B',
@@ -175,6 +175,7 @@ const ContractInteraction = memo(() => {
         amount,
         contractAddress,
         isNativeTokenInteraction,
+        tokenDescription,
     } = useMemo(() => {
         const type = request?.formatterTransaction?.type
         if (!type) return {}
@@ -186,20 +187,6 @@ const ContractInteraction = memo(() => {
                 if (methods?.length) {
                     for (const method of methods) {
                         const parameters = method.parameters
-
-                        if (method.name === 'approve' || method.name === 'setApprovalForAll') {
-                            return {
-                                isNativeTokenInteraction: false,
-                                typeName: request.formatterTransaction?.title,
-                                tokenAddress: request.computedPayload?.to,
-                                to: request.computedPayload?.to,
-                                gas: request.computedPayload?.gas,
-                                gasPrice: request.computedPayload?.gasPrice,
-                                maxFeePerGas: request.computedPayload?.maxFeePerGas,
-                                maxPriorityFeePerGas: request.computedPayload?.maxPriorityFeePerGas,
-                                amount: parameters?.value,
-                            }
-                        }
 
                         if (
                             (method.name === 'transfer' || method.name === 'transferFrom') &&
@@ -225,8 +212,9 @@ const ContractInteraction = memo(() => {
                     isNativeTokenInteraction: transactionDescription?.tokenInAddress
                         ? isNativeTokenAddress(transactionDescription?.tokenInAddress)
                         : true,
-                    typeName: t('popups_wallet_contract_interaction'),
-                    tokenAddress: transactionDescription?.tokenInAddress ?? request.computedPayload?.to,
+                    typeName: transactionDescription?.title ?? t('popups_wallet_contract_interaction'),
+                    tokenAddress: transactionDescription?.tokenInAddress,
+                    tokenDescription: transactionDescription?.tokenDescription,
                     to: request.computedPayload?.to,
                     gas: request.computedPayload?.gas,
                     gasPrice: request.computedPayload?.gasPrice,
@@ -345,7 +333,7 @@ const ContractInteraction = memo(() => {
     ) : (
         <>
             <main className={classes.container}>
-                <div className={classes.info}>
+                <div className={classes.info} style={{ marginBottom: 20 }}>
                     <Typography className={classes.title}>{typeName}</Typography>
                     {domain && Others?.formatDomainName ? (
                         <Typography className={classes.domain}>{Others?.formatDomainName(domain)}</Typography>
@@ -360,35 +348,35 @@ const ContractInteraction = memo(() => {
                     </Typography>
                 </div>
                 <div className={classes.content}>
-                    <div className={classes.item} style={{ marginTop: 20, marginBottom: 30 }}>
-                        <TokenIcon
-                            address={(isNativeTokenInteraction ? nativeToken?.address : token?.address) ?? ''}
-                            chainId={chainId}
-                            name={(isNativeTokenInteraction ? nativeToken?.name : token?.name) ?? ''}
-                            className={classes.tokenIcon}
-                        />
-                        {tokenDecimals !== undefined ? (
-                            <>
-                                <Typography className={classes.amount}>
-                                    {leftShift(tokenAmount, tokenDecimals).gt(pow10(9)) ? (
-                                        t('popups_wallet_token_infinite_unlock')
-                                    ) : (
+                    {tokenAddress ? (
+                        <div className={classes.item} style={{ marginBottom: 30 }}>
+                            <TokenIcon
+                                address={(isNativeTokenInteraction ? nativeToken?.address : token?.address) ?? ''}
+                                chainId={chainId}
+                                name={(isNativeTokenInteraction ? nativeToken?.name : token?.name) ?? ''}
+                                className={classes.tokenIcon}
+                            />
+                            {tokenDescription ? (
+                                <Typography className={classes.tokenDescription}>{tokenDescription}</Typography>
+                            ) : tokenDecimals !== undefined ? (
+                                <>
+                                    <Typography className={classes.tokenDescription}>
                                         <FormattedBalance
                                             value={tokenAmount}
                                             decimals={tokenDecimals}
                                             significant={4}
                                             formatter={formatBalance}
                                         />
-                                    )}
-                                </Typography>
-                                <Typography>
-                                    {!isGreaterThan(tokenValueUSD, pow10(9)) ? (
-                                        <FormattedCurrency value={tokenValueUSD} formatter={formatCurrency} />
-                                    ) : null}
-                                </Typography>
-                            </>
-                        ) : null}
-                    </div>
+                                    </Typography>
+                                    <Typography>
+                                        {!isGreaterThan(tokenValueUSD, pow10(9)) ? (
+                                            <FormattedCurrency value={tokenValueUSD} formatter={formatCurrency} />
+                                        ) : null}
+                                    </Typography>
+                                </>
+                            ) : null}
+                        </div>
+                    ) : null}
 
                     <div className={classes.item}>
                         <Typography className={classes.label}>

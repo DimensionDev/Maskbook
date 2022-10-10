@@ -549,6 +549,8 @@ export interface TransactionDescriptor<ChainId, Transaction> {
     tokenInAddress?: string
     /** The amount of the token leveraged to swap other tokens */
     tokenInAmount?: string
+    /** The custom token description */    
+    tokenDescription?: string
     /** The original transaction object */
     _tx: Transaction
 }

@@ -106,6 +106,8 @@ export class RedPacketDescriptor extends DescriptorWithTransactionDecodedReceipt
                 const tokenAmountDescription = getTokenAmountDescription(method.parameters?._total_tokens, token)
                 return {
                     chainId: context.chainId,
+                    tokenInAddress: token?.address,
+                    tokenInAmount: method?.parameters?._total_tokens,
                     title: i18NextInstance.t('plugin_red_packet_create_with_token_title'),
                     description: i18NextInstance.t('plugin_red_packet_create_with_token'),
                     successfulDescription: i18NextInstance.t('plugin_red_packet_create_with_token_success', {
