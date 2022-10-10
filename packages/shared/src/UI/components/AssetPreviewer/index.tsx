@@ -28,8 +28,8 @@ export interface AssetPreviewerProps extends withClasses<'root' | 'fallbackImage
     icon?: React.ReactNode
 }
 
-const ASSET_PLAYER_FALLBACK_DARK = new URL('../Image/nft_token_fallback_dark.png', import.meta.url)
-const ASSET_PLAYER_FALLBACK_LIGHT = new URL('../Image/nft_token_fallback.png', import.meta.url)
+const ASSET_PLAYER_FALLBACK_DARK = new URL('../Image/mask-dark.png', import.meta.url)
+const ASSET_PLAYER_FALLBACK_LIGHT = new URL('../Image/mask-light.png', import.meta.url)
 
 export function AssetPreviewer(props: AssetPreviewerProps) {
     const { fallbackImage, url, icon } = props

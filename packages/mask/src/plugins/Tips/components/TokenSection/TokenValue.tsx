@@ -68,7 +68,7 @@ export const TokenValue: FC<Props> = ({ className, ...rest }) => {
                     {amount}
                 </Typography>
                 <TokenIcon
-                    classes={{ icon: classes.tokenIcon }}
+                    className={classes.tokenIcon}
                     pluginID={pluginId}
                     chainId={chainId}
                     name={token.name}

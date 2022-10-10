@@ -513,7 +513,7 @@ export const Prior1559TransferUI = memo<Prior1559TransferUIProps>(
                                                         onClick={openAssetMenu}
                                                         icon={
                                                             <TokenIcon
-                                                                classes={{ icon: classes.icon }}
+                                                                className={classes.icon}
                                                                 address={selectedAsset.address ?? ''}
                                                                 name={selectedAsset.name}
                                                                 symbol={selectedAsset.symbol}

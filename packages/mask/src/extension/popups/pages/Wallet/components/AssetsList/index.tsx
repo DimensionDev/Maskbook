@@ -116,7 +116,7 @@ export const AssetsListUI = memo<AssetsListUIProps>(({ isExpand, dataSource, onI
                     return (
                         <ListItem key={index} className={classes.item} onClick={() => onItemClick(asset)}>
                             <TokenIcon
-                                classes={{ icon: classes.tokenIcon }}
+                                className={classes.tokenIcon}
                                 address={asset.address}
                                 name={asset.name}
                                 chainId={asset.chainId}

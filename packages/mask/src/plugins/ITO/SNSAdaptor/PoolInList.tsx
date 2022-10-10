@@ -237,7 +237,7 @@ export function PoolInList(props: PoolInListProps) {
             <Card className={classes.root} variant="outlined">
                 <Box className={classes.iconbar}>
                     <TokenIcon
-                        classes={{ icon: classes.icon }}
+                        className={classes.icon}
                         address={poolToken.address}
                         name={poolToken.symbol}
                         logoURL={poolToken.logoURL}

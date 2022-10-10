@@ -365,7 +365,7 @@ const ContractInteraction = memo(() => {
                             address={(isNativeTokenInteraction ? nativeToken?.address : token?.address) ?? ''}
                             chainId={chainId}
                             name={(isNativeTokenInteraction ? nativeToken?.name : token?.name) ?? ''}
-                            classes={{ icon: classes.tokenIcon }}
+                            className={classes.tokenIcon}
                         />
                         {tokenDecimals !== undefined ? (
                             <>

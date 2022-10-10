@@ -264,7 +264,7 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
         <ListItem className={classes.root}>
             <Box className={classes.box}>
                 <TokenIcon
-                    classes={{ icon: classes.icon }}
+                    className={classes.icon}
                     address={historyToken?.address ?? ''}
                     name={historyToken?.name}
                     logoURL={historyToken?.logoURL}

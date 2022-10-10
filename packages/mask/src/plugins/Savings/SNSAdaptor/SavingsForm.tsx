@@ -277,9 +277,9 @@ export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFo
                     <div className={classes.infoRow}>
                         <Typography variant="body2" className={classes.infoRowLeft}>
                             <TokenIcon
+                                className={classes.rowImage}
                                 address={protocol.bareToken.address}
                                 logoURL={protocol.bareToken.logoURL}
-                                classes={{ icon: classes.rowImage }}
                                 chainId={protocol.bareToken.chainId}
                                 name={protocol.bareToken.name}
                             />

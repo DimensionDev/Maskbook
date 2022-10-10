@@ -101,11 +101,11 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity, tokenInfo, t
                 <Stack direction="row" spacing={0.8}>
                     {tokenSecurity?.token_name ? (
                         <TokenIcon
-                            classes={{ icon: classes.icon }}
-                            address={tokenSecurity?.contract ?? ''}
-                            name={tokenSecurity?.token_name}
+                            className={classes.icon}
+                            address={tokenSecurity.contract ?? ''}
+                            name={tokenSecurity.token_name}
                             logoURL={tokenInfo?.logoURL}
-                            chainId={tokenSecurity?.chainId}
+                            chainId={tokenSecurity.chainId}
                         />
                     ) : (
                         <Icons.DefaultToken size={48} />

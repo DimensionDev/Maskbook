@@ -198,7 +198,7 @@ const TokenItem = ({ price, token, exchangeToken }: TokenItemProps) => {
     return (
         <>
             <TokenIcon
-                classes={{ icon: classes.tokenIcon }}
+                className={classes.tokenIcon}
                 address={exchangeToken.address}
                 logoURL={exchangeToken.logoURL}
                 chainId={token.chainId}
