@@ -8,8 +8,8 @@ import { FormattedAddress, Markdown } from '@masknet/shared'
 import { ChainId, chainResolver, explorerResolver, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { Account } from './Account.js'
 import { resolveWebLinkOnCryptoartAI } from '../pipes/index.js'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { useChainId } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { useChainId } from '@masknet/web3-hooks-base'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -26,19 +26,6 @@ const useStyles = makeStyles()((theme) => {
         description: {
             fontSize: 14,
             wordBreak: 'break-all',
-        },
-        trait_content: {
-            display: 'grid',
-            gridTemplateColumns: 'repeat(2,1fr)',
-            gap: theme.spacing(2),
-        },
-        trait: {
-            padding: theme.spacing(2),
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            fontSize: 14,
-            fontWeight: 600,
         },
         chain_row: {
             display: 'flex',

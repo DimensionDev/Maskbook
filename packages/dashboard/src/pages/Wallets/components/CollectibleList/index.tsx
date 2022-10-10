@@ -3,9 +3,9 @@ import { useNavigate } from 'react-router-dom'
 import { uniqBy } from 'lodash-unified'
 import { Box, Button, Stack } from '@mui/material'
 import { LoadingBase, makeStyles } from '@masknet/theme'
-import { isSameAddress, NetworkPluginID, NonFungibleAsset, NonFungibleToken } from '@masknet/web3-shared-base'
+import { DashboardRoutes, EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
+import { isSameAddress, NonFungibleAsset, NonFungibleToken } from '@masknet/web3-shared-base'
 import { LoadingPlaceholder } from '../../../../components/LoadingPlaceholder/index.js'
-import { DashboardRoutes, EMPTY_LIST } from '@masknet/shared-base'
 import { EmptyPlaceholder } from '../EmptyPlaceholder/index.js'
 import { CollectibleCard } from '../CollectibleCard/index.js'
 import { useDashboardI18N } from '../../../../locales/index.js'
@@ -15,7 +15,7 @@ import {
     useCurrentWeb3NetworkPluginID,
     useNonFungibleAssets,
     useTrustedNonFungibleTokens,
-} from '@masknet/plugin-infra/web3'
+} from '@masknet/web3-hooks-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { ElementAnchor } from '@masknet/shared'

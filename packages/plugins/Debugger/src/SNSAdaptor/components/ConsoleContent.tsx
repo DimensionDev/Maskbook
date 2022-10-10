@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Button, Checkbox, FormControlLabel, Table, TableBody, TableCell, TableRow, Typography } from '@mui/material'
 import { getEnumAsArray } from '@dimensiondev/kit'
-import { PluginID } from '@masknet/plugin-infra'
+import { PluginID } from '@masknet/shared-base'
 import {
     useAccount,
     useBalance,
@@ -14,7 +14,7 @@ import {
     useReverseAddress,
     useLookupAddress,
     useWeb3State,
-} from '@masknet/plugin-infra/web3'
+} from '@masknet/web3-hooks-base'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useSelectAdvancedSettings, useSelectFungibleToken } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'

@@ -3,7 +3,7 @@ import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { unreachable } from '@dimensiondev/kit'
 import { useI18N } from '../../utils/index.js'
 import type { FungibleToken } from '@masknet/web3-shared-base'
-import { ApproveStateType, useERC20TokenApproveCallback } from '@masknet/plugin-infra/web3-evm'
+import { ApproveStateType, useERC20TokenApproveCallback } from '@masknet/web3-hooks-evm'
 import { TokenIcon } from '@masknet/shared'
 import { HelpOutline } from '@mui/icons-material'
 import React, { useCallback } from 'react'
@@ -123,11 +123,11 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
                 variant="contained"
                 startIcon={
                     <TokenIcon
+                        className={classes.icon}
                         address={token.address}
                         chainId={token.chainId}
                         name={token.name}
                         disableDefaultIcon
-                        classes={{ icon: classes.icon }}
                     />
                 }
                 endIcon={

@@ -6,9 +6,9 @@ import type { GasOptionConfig } from '@masknet/web3-shared-evm'
 import { useSwapParameters as useTradeParameters } from './useTradeParameters.js'
 import { swapErrorToUserReadableMessage } from '../../helpers/index.js'
 import type { SwapCall, Trade, TradeComputed } from '../../types/index.js'
-import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
-import { useAccount, useWeb3Connection } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID, ZERO } from '@masknet/web3-shared-base'
+import { useAccount, useChainId, useWeb3Connection } from '@masknet/web3-hooks-base'
+import { ZERO } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 
 interface FailedCall {
     parameters: SwapParameters
@@ -35,7 +35,7 @@ export function useTradeCallback(
     gasConfig?: GasOptionConfig,
     allowedSlippage?: number,
 ) {
-    const { targetChainId } = TargetChainIdContext.useContainer()
+    const targetChainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, { chainId: targetChainId })
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const tradeParameters = useTradeParameters(trade, tradeProvider, allowedSlippage)

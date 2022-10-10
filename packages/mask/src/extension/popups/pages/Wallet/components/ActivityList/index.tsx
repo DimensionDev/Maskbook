@@ -7,18 +7,17 @@ import { useContainer } from 'unstated-next'
 import { Button, Link, List } from '@mui/material'
 import {
     isSameAddress,
-    NetworkPluginID,
     RecentTransactionComputed,
     TransactionDescriptor,
     TransactionDescriptorType,
 } from '@masknet/web3-shared-base'
 import type { ChainId, Transaction } from '@masknet/web3-shared-evm'
-import { EMPTY_LIST, PopupRoutes } from '@masknet/shared-base'
+import { EMPTY_LIST, PopupRoutes, NetworkPluginID } from '@masknet/shared-base'
 import { WalletContext } from '../../hooks/useWalletContext.js'
 import { useI18N } from '../../../../../../utils/index.js'
 import { ReplaceType } from '../../type.js'
 import { ActivityListItem } from './ActivityListItem.js'
-import { useChainId, useWeb3State } from '@masknet/plugin-infra/web3'
+import { useChainId, useWeb3State } from '@masknet/web3-hooks-base'
 import { isNativeTokenAddress } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()({

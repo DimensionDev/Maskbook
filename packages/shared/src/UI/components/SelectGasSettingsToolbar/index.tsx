@@ -1,8 +1,8 @@
 import { useEffect, useState, useMemo, useCallback } from 'react'
+import BigNumber from 'bignumber.js'
 import { useMenuConfig, FormattedBalance, useSharedI18N, useSelectAdvancedSettings } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import {
-    NetworkPluginID,
     GasOptionType,
     multipliedBy,
     isZero,
@@ -10,17 +10,17 @@ import {
     FungibleToken,
     formatCurrency,
 } from '@masknet/web3-shared-base'
-import { formatEtherToGwei, formatGweiToWei, formatWeiToEther, GasOptionConfig } from '@masknet/web3-shared-evm'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { formatEtherToGwei, formatWeiToEther, formatWeiToGwei, GasOptionConfig } from '@masknet/web3-shared-evm'
 import { Typography, MenuItem, Box } from '@mui/material'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { useChainId, useCurrentWeb3NetworkPluginID, useWeb3State } from '@masknet/plugin-infra/web3'
+import { useChainId, useCurrentWeb3NetworkPluginID, useWeb3State } from '@masknet/web3-hooks-base'
 import { Icons } from '@masknet/icons'
 import { SettingsContext } from '../SettingsBoard/Context.js'
-import BigNumber from 'bignumber.js'
 
 interface SelectGasSettingsToolbarProps<T extends NetworkPluginID = NetworkPluginID> {
     pluginID?: T
-    chainId?: Web3Helper.Definition[T]['ChainId']
+    chainId?: Web3Helper.ChainIdAll
     nativeToken: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
     nativeTokenPrice: number
     gasLimit: number
@@ -35,8 +35,11 @@ const useStyles = makeStyles()((theme) => {
             alignItems: 'center',
             border: `1px solid ${theme.palette.divider}`,
             borderRadius: 99,
-            padding: '8px 12px',
+            width: 93,
+            height: 26,
             cursor: 'pointer',
+            justifyContent: 'center',
+            marginLeft: 6,
         },
         section: {
             display: 'flex',
@@ -53,13 +56,11 @@ const useStyles = makeStyles()((theme) => {
         },
         gasSection: {
             display: 'flex',
-            fontSize: 14,
             lineHeight: '18px',
             fontWeight: 700,
             alignItems: 'center',
         },
         text: {
-            fontSize: 14,
             lineHeight: '18px',
             fontWeight: 700,
             display: 'flex',
@@ -77,7 +78,6 @@ const useStyles = makeStyles()((theme) => {
             },
         },
         title: {
-            fontSize: 14,
             fontWeight: 700,
         },
         estimateGas: {
@@ -89,7 +89,6 @@ const useStyles = makeStyles()((theme) => {
         gasUSDPrice: {
             fontWeight: 700,
             margin: '0px 4px',
-            fontSize: 14,
         },
     }
 })
@@ -115,7 +114,7 @@ export function SelectGasSettingsToolbarUI({
     const { gasOptions, GAS_OPTION_NAMES } = SettingsContext.useContainer()
     const t = useSharedI18N()
     const [isCustomGas, setIsCustomGas] = useState(false)
-    const [currentGasOptionType, setCurrentGasOptionType] = useState<GasOptionType>(GasOptionType.SLOW)
+    const [currentGasOptionType, setCurrentGasOptionType] = useState<GasOptionType>(GasOptionType.NORMAL)
     const { classes, cx, theme } = useStyles()
     const chainId = useChainId()
     const { Others } = useWeb3State<'all'>()
@@ -161,8 +160,8 @@ export function SelectGasSettingsToolbarUI({
         if (!currentGasOption || isCustomGas) return
 
         setGasConfigCallback(
-            formatGweiToWei(currentGasOption.suggestedMaxFeePerGas).toString(),
-            formatGweiToWei(currentGasOption.suggestedMaxPriorityFeePerGas).toString(),
+            currentGasOption.suggestedMaxFeePerGas,
+            currentGasOption.suggestedMaxPriorityFeePerGas,
             currentGasOption.suggestedMaxPriorityFeePerGas,
         )
     }, [currentGasOption, isCustomGas, setGasConfigCallback])
@@ -180,10 +179,10 @@ export function SelectGasSettingsToolbarUI({
                     }}>
                     <Typography className={classes.title}>{GAS_OPTION_NAMES[type as GasOptionType]}</Typography>
                     <Typography className={classes.estimateGas}>
-                        {new BigNumber(option.suggestedMaxFeePerGas).gt(0)
-                            ? `${new BigNumber(option.suggestedMaxFeePerGas).toFixed(2)}Gwei`
-                            : new BigNumber(option.estimatedBaseFee ?? 0).gt(0)
-                            ? `${formatEtherToGwei(option.estimatedBaseFee!).toFixed(2)}Gwei`
+                        {!isZero(option.suggestedMaxFeePerGas)
+                            ? `${formatWeiToGwei(option.suggestedMaxFeePerGas).toFixed(2)} Gwei`
+                            : !isZero(option.estimatedBaseFee ?? 0)
+                            ? `${formatEtherToGwei(option.estimatedBaseFee!).toFixed(2)} Gwei`
                             : ''}
                     </Typography>
                 </MenuItem>
@@ -225,8 +224,8 @@ export function SelectGasSettingsToolbarUI({
 
     return gasOptions && !isZero(gasFee) ? (
         <Box className={classes.section}>
-            <Typography className={classes.title}>Gas fee</Typography>
-            <div className={classes.gasSection}>
+            <Typography className={classes.title}>{t.gas_settings_label_gas_fee()}</Typography>
+            <Typography className={classes.gasSection} component="div">
                 <FormattedBalance
                     value={gasFee}
                     decimals={nativeToken.decimals ?? 0}
@@ -242,7 +241,7 @@ export function SelectGasSettingsToolbarUI({
                     <Icons.Candle width={12} height={12} />
                 </div>
                 {menu}
-            </div>
+            </Typography>
         </Box>
     ) : null
 }

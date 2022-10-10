@@ -1,8 +1,8 @@
 import { useMemo } from 'react'
 import { Trans } from 'react-i18next'
-import { usePostInfoDetails, Plugin, usePluginWrapper, PluginID } from '@masknet/plugin-infra/content-script'
+import { usePostInfoDetails, Plugin, usePluginWrapper } from '@masknet/plugin-infra/content-script'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
-import { parseURL } from '@masknet/shared-base'
+import { parseURLs, PluginID } from '@masknet/shared-base'
 import { Icons } from '@masknet/icons'
 import { PreviewCard } from './PreviewCard.js'
 import { base } from '../base.js'
@@ -18,7 +18,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
         const link = useMemo(() => {
             const x = extractTextFromTypedMessage(props.message)
             if (x.none) return null
-            return parseURL(x.val).find(isGitcoin)
+            return parseURLs(x.val).find(isGitcoin)
         }, [props.message])
         if (!link) return null
         return <Renderer url={link} />

@@ -1,7 +1,7 @@
-import { useNetworkDescriptor, useNonFungibleToken } from '@masknet/plugin-infra/web3'
+import { useNetworkDescriptor, useNonFungibleToken } from '@masknet/web3-hooks-base'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { NETWORK_DESCRIPTORS } from '@masknet/web3-shared-evm'
 import { useTheme } from '@mui/material'
 import classNames from 'classnames'
@@ -64,8 +64,8 @@ interface Props extends withClasses<'fallbackImage' | 'iframe' | 'wrapper' | 'lo
     pluginID?: NetworkPluginID
 }
 
-const assetPlayerFallbackImageDark = new URL('../Image/nft_token_fallback_dark.png', import.meta.url)
-const assetPlayerFallbackImageLight = new URL('../Image/nft_token_fallback.png', import.meta.url)
+const fallbackImageDark = new URL('../Image/mask-dark.png', import.meta.url)
+const fallbackImageLight = new URL('../Image/mask-light.png', import.meta.url)
 
 export function NFTCardStyledAssetPlayer(props: Props) {
     const {
@@ -96,8 +96,7 @@ export function NFTCardStyledAssetPlayer(props: Props) {
     const urlComputed = url || tokenDetailed?.metadata?.imageURL || tokenDetailed?.metadata?.mediaURL
     const { value: isImageURL = true } = useIsImageURL(urlComputed)
 
-    const fallbackImageURL =
-        fallbackImage ?? (theme.palette.mode === 'dark' ? assetPlayerFallbackImageDark : assetPlayerFallbackImageLight)
+    const fallbackImageURL = fallbackImage ?? (theme.palette.mode === 'dark' ? fallbackImageDark : fallbackImageLight)
 
     const networkDescriptor = useNetworkDescriptor(pluginID)
 

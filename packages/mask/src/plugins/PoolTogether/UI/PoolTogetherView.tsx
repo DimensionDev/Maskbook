@@ -1,7 +1,7 @@
 import { Icons } from '@masknet/icons'
 import { DarkColor } from '@masknet/theme/base'
 import { ChainId, usePoolTogetherConstants } from '@masknet/web3-shared-evm'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { Box, Card, CardContent, Paper, Tab, Tabs, Typography } from '@mui/material'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import React, { useState, useEffect } from 'react'

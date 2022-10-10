@@ -2,8 +2,8 @@ import { useState, useContext, createContext, PropsWithChildren, useMemo, useRef
 import { makeStyles, getMaskColor } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
-import { useCurrentWeb3NetworkPluginID, useAccount, useChainId } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { useCurrentWeb3NetworkPluginID, useAccount, useChainId } from '@masknet/web3-hooks-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { getCurrentSNSNetwork } from '../../social-network-adaptor/utils.js'
 import { activatedSocialNetworkUI } from '../../social-network/index.js'
 import { useI18N } from '../../utils/index.js'
@@ -142,7 +142,8 @@ function ApplicationBoardContent(props: Props) {
                         entry,
                         enabled: isSNSEnabled,
                         pluginId: ID,
-                        isWalletConnectedRequired: !account && isWalletConnectedRequired,
+                        isWalletConnectedRequired:
+                            !account && isWalletConnectedRequired && !entry.entryWalletConnectedNotRequired,
                         isWalletConnectedEVMRequired: Boolean(
                             account && currentWeb3Network !== NetworkPluginID.PLUGIN_EVM && isWalletConnectedRequired,
                         ),

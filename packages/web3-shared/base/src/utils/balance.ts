@@ -1,12 +1,17 @@
 import BigNumber from 'bignumber.js'
 import { pow10 } from './number.js'
 
-export function formatBalance(rawValue: BigNumber.Value = '0', decimals = 0, significant = decimals) {
+export function formatBalance(
+    rawValue: BigNumber.Value = '0',
+    decimals = 0,
+    significant = decimals,
+    isPrecise = false,
+) {
     let balance = new BigNumber(rawValue)
     if (balance.isNaN()) return '0'
 
     const base = pow10(decimals) // 10n ** decimals
-    if (balance.div(base).lt(pow10(-6)) && balance.isGreaterThan(0)) return '<0.000001'
+    if (balance.div(base).lt(pow10(-6)) && balance.isGreaterThan(0) && !isPrecise) return '<0.000001'
 
     const negative = balance.isNegative() // balance < 0n
     if (negative) balance = balance.absoluteValue() // balance * -1n

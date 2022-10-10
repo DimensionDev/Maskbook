@@ -1,18 +1,18 @@
+import { ChangeEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import BigNumber from 'bignumber.js'
+import { omit } from 'lodash-unified'
 import { makeStyles, useStylesExtends, ActionButton } from '@masknet/theme'
 import {
     FungibleToken,
     isGreaterThan,
     isZero,
     multipliedBy,
-    NetworkPluginID,
     rightShift,
     formatBalance,
 } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType, useRedPacketConstants } from '@masknet/web3-shared-evm'
 import { MenuItem, Select, Box, InputBase, Typography } from '@mui/material'
-import BigNumber from 'bignumber.js'
-import { omit } from 'lodash-unified'
-import { ChangeEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { useSelectFungibleToken, FungibleTokenInput } from '@masknet/shared'
 import { useCurrentIdentity, useCurrentLinkedPersona } from '../../../components/DataSource/useActivatedUI.js'
 import { useI18N } from '../locales/index.js'
@@ -21,7 +21,7 @@ import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC
 import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary.js'
 import { RED_PACKET_DEFAULT_SHARES, RED_PACKET_MAX_SHARES, RED_PACKET_MIN_SHARES } from '../constants.js'
 import type { RedPacketSettings } from './hooks/useCreateCallback.js'
-import { useAccount, useChainId, useFungibleToken, useFungibleTokenBalance } from '@masknet/plugin-infra/web3'
+import { useAccount, useChainId, useFungibleToken, useFungibleTokenBalance } from '@masknet/web3-hooks-base'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
 
 // seconds of 1 day
@@ -280,7 +280,11 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
                                 ActionButtonProps={{
                                     size: 'medium',
                                 }}
-                                token={token?.schema === SchemaType.ERC20 ? token : undefined}
+                                token={
+                                    token?.schema === SchemaType.ERC20 && totalAmount.gt(0) && !validationMessage
+                                        ? token
+                                        : undefined
+                                }
                                 spender={HAPPY_RED_PACKET_ADDRESS_V4}>
                                 <ActionButton
                                     size="large"

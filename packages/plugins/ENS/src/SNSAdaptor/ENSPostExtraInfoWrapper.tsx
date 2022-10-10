@@ -1,5 +1,5 @@
 import type { FC, PropsWithChildren } from 'react'
-import { PluginID } from '@masknet/plugin-infra'
+import { PluginID } from '@masknet/shared-base'
 import { PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
 import { MaskPostExtraInfoWrapper } from '@masknet/shared'
 import { base } from '../base'

@@ -4,8 +4,9 @@ import BigNumber from 'bignumber.js'
 import { chainResolver, formatGweiToWei } from '@masknet/web3-shared-evm'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { WalletMessages } from '@masknet/plugin-wallet'
-import { useChainId, useGasOptions, useGasPrice } from '@masknet/plugin-infra/web3'
-import { GasOptionType, NetworkPluginID } from '@masknet/web3-shared-base'
+import { useChainId, useGasOptions, useGasPrice } from '@masknet/web3-hooks-base'
+import { GasOptionType } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 
 export const useGasConfig = (gasLimit: number, minGasLimit: number) => {
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)

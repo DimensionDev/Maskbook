@@ -1,6 +1,7 @@
 import { useI18N } from '../../../utils/index.js'
-import { NetworkPluginID, isSameAddress } from '@masknet/web3-shared-base'
-import { useAccount } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { isSameAddress } from '@masknet/web3-shared-base'
+import { useAccount } from '@masknet/web3-hooks-base'
 
 export interface AccountProps {
     address?: string

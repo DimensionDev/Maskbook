@@ -5,8 +5,9 @@ import { useI18N } from '../../locales/index.js'
 import { useState } from 'react'
 import { ChainId, explorerResolver, NETWORK_DESCRIPTORS } from '@masknet/web3-shared-evm'
 import { Icons } from '@masknet/icons'
-import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
-import { useWeb3State } from '@masknet/plugin-infra/web3'
+import { isSameAddress } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { useWeb3State } from '@masknet/web3-hooks-base'
 
 const useStyles = makeStyles()((theme) => ({
     currentAccount: {
@@ -27,7 +28,6 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
     },
     accountName: {
-        fontSize: 14,
         fontWeight: 700,
     },
     address: {

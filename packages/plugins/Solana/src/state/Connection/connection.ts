@@ -196,14 +196,14 @@ class Connection implements BaseConnection {
     }
     transferNonFungibleToken(
         address: string,
+        tokenId: string,
         recipient: string,
-        mintAddress: string,
         amount: string,
         schema?: SchemaType,
         initial?: SolanaWeb3ConnectionOptions,
     ): Promise<string> {
         const options = this.getOptions(initial)
-        return this.transferSplToken(mintAddress, recipient, amount, options)
+        return this.transferSplToken(address, recipient, amount, options)
     }
     getGasPrice(initial?: SolanaWeb3ConnectionOptions): Promise<string> {
         throw new Error('Method not implemented.')

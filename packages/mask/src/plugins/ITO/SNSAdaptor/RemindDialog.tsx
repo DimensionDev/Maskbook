@@ -6,8 +6,9 @@ import { FormattedAddress, TokenIcon } from '@masknet/shared'
 import { useI18N } from '../../../utils/index.js'
 import { ChainId, formatEthereumAddress, explorerResolver, networkResolver, SchemaType } from '@masknet/web3-shared-evm'
 import { SwapStatus } from './SwapGuide.js'
-import { useNetworkType } from '@masknet/plugin-infra/web3'
-import { FungibleToken, NetworkPluginID } from '@masknet/web3-shared-base'
+import { useNetworkType } from '@masknet/web3-hooks-base'
+import type { FungibleToken } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     reminderText: {
@@ -34,7 +35,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     bold: {
         fontWeight: 'bold',
-        fontSize: '1.1rem',
+        fontSize: 16,
     },
     wrapper: {
         padding: theme.spacing(2),
@@ -59,7 +60,7 @@ const useStyles = makeStyles()((theme) => ({
         flexDirection: 'column',
         justifyContent: 'space-between',
         height: 45,
-        marginLeft: '1rem',
+        marginLeft: 14,
     },
     tokenSymbol: {
         color: theme.palette.mode === 'dark' ? '#fff' : '#15181B',
@@ -140,7 +141,7 @@ export function RemindDialog(props: RemindDialogProps) {
             </section>
             <section className={classNames(classes.wrapper, classes.tokenWrapper)}>
                 <TokenIcon
-                    classes={{ icon: classes.tokenIcon }}
+                    className={classes.tokenIcon}
                     chainId={token.chainId}
                     address={token.address}
                     name={token.name}

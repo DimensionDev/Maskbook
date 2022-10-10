@@ -1,9 +1,9 @@
-import { useControlledDialog, useI18N } from '../../../utils/index.js'
 import { makeStyles, ActionButton } from '@masknet/theme'
 import { Box } from '@mui/material'
+import type { ChainId } from '@masknet/web3-shared-evm'
 import { PurchaseDialog } from './PurchaseDialog.js'
 import type { Project } from '../types.js'
-import type { ChainId } from '@masknet/web3-shared-evm'
+import { useControlledDialog, useI18N } from '../../../utils/index.js'
 
 const useStyles = makeStyles()((theme) => {
     return {

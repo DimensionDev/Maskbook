@@ -1,16 +1,27 @@
 import type { Plugin } from '@masknet/plugin-infra'
-import { SocialIdentity, SocialAddress, NetworkPluginID, SocialAddressType } from '@masknet/web3-shared-base'
-import { IdentityServiceState } from '@masknet/plugin-infra/web3'
+import { SocialIdentity, SocialAddress, SocialAddressType } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { IdentityServiceState } from '@masknet/web3-state'
 import { ChainId, formatAddress, isValidAddress } from '@masknet/web3-shared-solana'
 import { SolanaRPC } from '../messages.js'
 
 const SOL_RE = /\S{1,256}\.sol\b/
 
-function getSolanaName(twitterId: string, nickname: string, bio: string) {
-    const [matched] = nickname.match(SOL_RE) ?? bio.match(SOL_RE) ?? []
+function getSolanaAddress(bio: string) {
+    const addressMatched = bio.match(/\b\w{32,44}\b/)
+    const address = addressMatched?.[0]
+    if (address && !address.startsWith('0x') && isValidAddress(address)) return address
+    return
+}
 
-    if (matched) return matched
-    return twitterId && !twitterId.endsWith('.sol') ? `${twitterId}.sol` : twitterId
+function getSolanaDomain(nickname: string, bio: string) {
+    const [matched] = nickname.match(SOL_RE) ?? bio.match(SOL_RE) ?? []
+    return matched
+}
+
+function getSolanaDomainAddress(domain: string) {
+    if (!domain) return
+    return SolanaRPC.lookup(ChainId.Mainnet, domain)
 }
 
 export class IdentityService extends IdentityServiceState {
@@ -19,14 +30,13 @@ export class IdentityService extends IdentityServiceState {
     }
 
     protected override async getFromRemote(identity: SocialIdentity) {
-        const { identifier, bio = '', nickname = '' } = identity
-        const addressMatched = bio.match(/\b\w{32,44}\b/)
-        const address = addressMatched?.[0]
-        const solanaName = getSolanaName(identifier?.userId ?? '', nickname, bio)
-        const solanaDomainAddress = await SolanaRPC.lookup(ChainId.Mainnet, solanaName)
+        const { bio = '', nickname = '' } = identity
+        const address = getSolanaAddress(bio)
+        const domain = getSolanaDomain(nickname, bio)
+        const domainAddress = domain ? await getSolanaDomainAddress(domain) : undefined
 
         return [
-            address && !address.startsWith('0x') && isValidAddress(address)
+            address
                 ? {
                       networkSupporterPluginID: NetworkPluginID.PLUGIN_SOLANA,
                       type: SocialAddressType.ADDRESS,
@@ -34,12 +44,12 @@ export class IdentityService extends IdentityServiceState {
                       address,
                   }
                 : null,
-            solanaDomainAddress
+            domainAddress
                 ? {
                       networkSupporterPluginID: NetworkPluginID.PLUGIN_SOLANA,
                       type: SocialAddressType.SOL,
-                      label: solanaName,
-                      address: solanaDomainAddress,
+                      label: domain,
+                      address: domainAddress,
                   }
                 : null,
         ].filter(Boolean) as Array<SocialAddress<NetworkPluginID.PLUGIN_SOLANA>>

@@ -70,7 +70,7 @@ export const CollectionIcon = memo<CollectionIconProps>(({ collection, onClick, 
                     />
                 ) : (
                     <Icon
-                        classes={{ icon: classes.collectionImg }}
+                        className={classes.collectionImg}
                         name={collection?.name ?? collection?.symbol ?? 'Unknown'}
                     />
                 )}

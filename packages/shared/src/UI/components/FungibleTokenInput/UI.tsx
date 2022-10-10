@@ -95,7 +95,6 @@ const useStyles = makeStyles()((theme) => ({
         whiteSpace: 'nowrap',
         textOverflow: 'ellipsis',
         overflow: 'hidden',
-        fontSize: 14,
         color: theme.palette.maskColor.main,
         lineHeight: '18px',
         fontWeight: 700,
@@ -178,7 +177,7 @@ export const FungibleTokenInputUI = memo<FungibleTokenInputUIProps>(
                                             className={classes.chip}
                                             icon={
                                                 <TokenIcon
-                                                    classes={{ icon: classes.tokenIcon }}
+                                                    className={classes.tokenIcon}
                                                     address={token.address}
                                                     name={token.name}
                                                     chainId={token.chainId}

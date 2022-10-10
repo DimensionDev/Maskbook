@@ -6,7 +6,7 @@ import { TargetRuntimeContext, useTip } from '../../contexts/index.js'
 import { TipsType } from '../../types/tip.js'
 import { Icons } from '@masknet/icons'
 import { useI18N } from '../../locales/index.js'
-import { useNonFungibleAsset, useWeb3State } from '@masknet/plugin-infra/web3'
+import { useNonFungibleAsset, useWeb3State } from '@masknet/web3-hooks-base'
 import { SourceType } from '@masknet/web3-shared-base'
 import { CollectibleCard } from '../../../../extension/options-page/DashboardComponents/CollectibleList/CollectibleCard.js'
 

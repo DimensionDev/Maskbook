@@ -18,8 +18,8 @@ import { PasswordField } from '../../../components/PasswordField/index.js'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages.js'
 import { LoadingButton } from '@mui/lab'
 import { currentPersonaIdentifier } from '../../../../../../shared/legacy-settings/settings.js'
-import { useWeb3State } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { useWeb3State } from '@masknet/web3-hooks-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 
 const useStyles = makeStyles()({
     container: {

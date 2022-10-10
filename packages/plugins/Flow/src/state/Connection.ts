@@ -1,7 +1,7 @@
 import type { Subscription } from 'use-subscription'
 import type { CurrentUserObject } from '@blocto/fcl'
 import type { Plugin } from '@masknet/plugin-infra'
-import { ConnectionState } from '@masknet/plugin-infra/web3'
+import { ConnectionState } from '@masknet/web3-state'
 import type {
     ChainId,
     ProviderType,

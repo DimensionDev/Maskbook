@@ -36,7 +36,6 @@ const useStyles = makeStyles<{
         cursor: 'pointer',
     },
     warningText: {
-        fontSize: 14,
         lineHeight: '18px',
         position: 'absolute',
         bottom: 10,
@@ -55,7 +54,6 @@ const useStyles = makeStyles<{
     },
     cost: {
         color: isDashboard ? MaskColorVar.normalText : theme.palette.maskColor?.second,
-        fontSize: 14,
         lineHeight: '18px',
         marginTop: 8,
         display: 'flex',

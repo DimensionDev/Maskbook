@@ -1,5 +1,5 @@
 import { memo, useCallback, useEffect, useMemo, useState } from 'react'
-import { I18NFunction, useI18N } from '../../../../utils/index.js'
+import { isEmpty } from 'lodash-unified'
 import { Accordion, AccordionDetails, AccordionSummary, Box, TextField, Typography } from '@mui/material'
 import { makeStyles, MaskColorVar, ActionButton } from '@masknet/theme'
 import { formatGweiToWei, GasOptionConfig } from '@masknet/web3-shared-evm'
@@ -10,7 +10,6 @@ import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { ExpandMore } from '@mui/icons-material'
 import { fromWei, toHex } from 'web3-utils'
-import { isEmpty } from 'lodash-unified'
 import {
     GasOptionType,
     isGreaterThan,
@@ -18,11 +17,11 @@ import {
     isLessThanOrEqualTo,
     isPositive,
     multipliedBy,
-    NetworkPluginID,
     toFixed,
 } from '@masknet/web3-shared-base'
-import { isDashboardPage } from '@masknet/shared-base'
-import { useGasOptions } from '@masknet/plugin-infra/web3'
+import { isDashboardPage, NetworkPluginID } from '@masknet/shared-base'
+import { useGasOptions } from '@masknet/web3-hooks-base'
+import { I18NFunction, useI18N } from '../../../../utils/index.js'
 
 const useStyles = makeStyles<{
     isDashboard: boolean
@@ -100,7 +99,6 @@ const useStyles = makeStyles<{
         backgroundColor: 'inherit',
     },
     accordingTitle: {
-        fontSize: 14,
         lineHeight: '20px',
     },
     controller: {

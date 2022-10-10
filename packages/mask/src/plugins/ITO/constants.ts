@@ -1,4 +1,4 @@
-import { PluginID } from '@masknet/plugin-infra'
+import { PluginID } from '@masknet/shared-base'
 
 export const ITO_PluginID = PluginID.ITO
 export const ITO_MetaKey_1 = `${PluginID.ITO}:1`

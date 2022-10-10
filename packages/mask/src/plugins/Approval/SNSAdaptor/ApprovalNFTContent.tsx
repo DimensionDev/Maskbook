@@ -1,6 +1,6 @@
 import { useState } from 'react'
+import { useAsync } from 'react-use'
 import { ListItem, List, Typography, Link } from '@mui/material'
-import { useERC721ContractSetApproveForAllCallback } from '@masknet/plugin-infra/web3-evm'
 import { TokenIcon } from '@masknet/shared'
 import { ChainId, NetworkType, SchemaType } from '@masknet/web3-shared-evm'
 import { Icons } from '@masknet/icons'
@@ -11,14 +11,15 @@ import {
     useNetworkDescriptor,
     useNonFungibleTokenContract,
     useWeb3Hub,
-} from '@masknet/plugin-infra/web3'
-import { NetworkPluginID, NetworkDescriptor, TokenType, NonFungibleContractSpender } from '@masknet/web3-shared-base'
+} from '@masknet/web3-hooks-base'
+import { useERC721ContractSetApproveForAllCallback } from '@masknet/web3-hooks-evm'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { NetworkDescriptor, TokenType, NonFungibleContractSpender } from '@masknet/web3-shared-base'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
 import { useI18N } from '../locales/index.js'
 import { useStyles } from './useStyles.js'
 import { ApprovalLoadingContent } from './ApprovalLoadingContent.js'
 import { ApprovalEmptyContent } from './ApprovalEmptyContent.js'
-import { useAsync } from 'react-use'
 
 export function ApprovalNFTContent({ chainId }: { chainId: ChainId }) {
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
@@ -89,7 +90,7 @@ function ApprovalNFTItem(props: ApprovalNFTItemProps) {
                             address={spender.contract.address}
                             name={spender.contract.name}
                             logoURL={contractDetailed?.iconURL}
-                            classes={{ icon: classes.logoIcon }}
+                            className={classes.logoIcon}
                             tokenType={TokenType.NonFungible}
                         />
 

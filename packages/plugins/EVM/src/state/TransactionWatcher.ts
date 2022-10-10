@@ -1,7 +1,7 @@
 import type { Subscription } from 'use-subscription'
 import { getEnumAsArray } from '@dimensiondev/kit'
 import type { Plugin } from '@masknet/plugin-infra'
-import { TransactionWatcherState } from '@masknet/plugin-infra/web3'
+import { TransactionWatcherState } from '@masknet/web3-state'
 import { ChainId, Transaction } from '@masknet/web3-shared-evm'
 import { RecentTransaction, TransactionStatusType } from '@masknet/web3-shared-base'
 import { TransactionCheckers } from './TransactionWatcher/checker.js'

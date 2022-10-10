@@ -3,21 +3,15 @@ import { makeStyles } from '@masknet/theme'
 import { DialogContent } from '@mui/material'
 import { openWindow, useRemoteControlledDialog, useValueRef } from '@masknet/shared-base-ui'
 import { InjectedDialog } from '@masknet/shared'
-import {
-    getRegisteredWeb3Networks,
-    getRegisteredWeb3Providers,
-    useNetworkDescriptor,
-    useWeb3State,
-    useWeb3UI,
-} from '@masknet/plugin-infra/web3'
+import { getRegisteredWeb3Networks, getRegisteredWeb3Providers } from '@masknet/plugin-infra'
+import { useNetworkDescriptor, useWeb3State, useWeb3UI } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useI18N } from '../../../../utils/i18n-next-ui.js'
 import { WalletMessages } from '../../messages.js'
 import { hasNativeAPI, nativeAPI } from '../../../../../shared/native-rpc/index.js'
 import { PluginProviderRender } from './PluginProviderRender.js'
 import { pluginIDSettings } from '../../../../../shared/legacy-settings/settings.js'
-import { getSiteType, isDashboardPage } from '@masknet/shared-base'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { getSiteType, isDashboardPage, NetworkPluginID } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     content: {

@@ -1,7 +1,7 @@
 import type { Subscription } from 'use-subscription'
 import { getEnumAsArray } from '@dimensiondev/kit'
 import type { Plugin } from '@masknet/plugin-infra'
-import { NameServiceState } from '@masknet/plugin-infra/web3'
+import { NameServiceState } from '@masknet/web3-state'
 import { ChainId, formatEthereumAddress, isValidAddress, isZeroAddress } from '@masknet/web3-shared-evm'
 import { ENS_Resolver } from './NameService/ENS.js'
 

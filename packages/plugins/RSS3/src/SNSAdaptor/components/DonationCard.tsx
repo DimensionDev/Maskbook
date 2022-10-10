@@ -1,12 +1,13 @@
-import { useReverseAddress, useWeb3State } from '@masknet/plugin-infra/web3'
-import { NFTCardStyledAssetPlayer } from '@masknet/shared'
-import { makeStyles } from '@masknet/theme'
-import type { RSS3BaseAPI } from '@masknet/web3-providers'
-import type { NetworkPluginID, SocialAddress } from '@masknet/web3-shared-base'
-import { Card, Typography } from '@mui/material'
+import { HTMLProps, memo } from 'react'
 import classnames from 'classnames'
 import formatDateTime from 'date-fns/format'
-import { HTMLProps, memo } from 'react'
+import { useReverseAddress, useWeb3State } from '@masknet/web3-hooks-base'
+import { NFTCardStyledAssetPlayer } from '@masknet/shared'
+import type { NetworkPluginID } from '@masknet/shared-base'
+import { makeStyles } from '@masknet/theme'
+import type { RSS3BaseAPI } from '@masknet/web3-providers'
+import type { SocialAddress } from '@masknet/web3-shared-base'
+import { Card, Typography } from '@mui/material'
 import { RSS3_DEFAULT_IMAGE } from '../../constants.js'
 import { useI18N } from '../../locales/index.js'
 
@@ -35,7 +36,6 @@ const useStyles = makeStyles()((theme) => ({
     },
     date: {
         color: theme.palette.maskColor.main,
-        fontSize: 14,
         fontWeight: 400,
         whiteSpace: 'nowrap',
         overflow: 'hidden',
@@ -52,7 +52,6 @@ const useStyles = makeStyles()((theme) => ({
         textOverflow: 'ellipsis',
     },
     activity: {
-        fontSize: 14,
         fontWeight: 400,
         fontColor: theme.palette.maskColor.main,
     },

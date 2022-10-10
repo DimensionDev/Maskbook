@@ -1,24 +1,24 @@
-import { Icons } from '@masknet/icons'
-import {
-    createInjectHooksRenderer,
-    PluginID,
-    useActivatedPluginsSNSAdaptor,
-    usePluginI18NField,
-} from '@masknet/plugin-infra/content-script'
-import { PluginWeb3ContextProvider, useAvailablePlugins } from '@masknet/plugin-infra/web3'
-import { EMPTY_LIST } from '@masknet/shared-base'
-import { LoadingBase, makeStyles, MaskTabList, useTabs } from '@masknet/theme'
-import { isSameAddress, NetworkPluginID, SocialIdentity } from '@masknet/web3-shared-base'
-import { ChainId } from '@masknet/web3-shared-evm'
-import { TabContext } from '@mui/lab'
-import { Tab, Typography } from '@mui/material'
-import { first, uniqBy } from 'lodash-unified'
 import { FC, useEffect, useMemo, useState } from 'react'
 import { Trans } from 'react-i18next'
 import { useUpdateEffect } from 'react-use'
+import { first, uniqBy } from 'lodash-unified'
+import { Icons } from '@masknet/icons'
+import {
+    createInjectHooksRenderer,
+    useActivatedPluginsSNSAdaptor,
+    usePluginI18NField,
+} from '@masknet/plugin-infra/content-script'
+import { useAvailablePlugins } from '@masknet/plugin-infra'
+import { useSocialAddressListBySettings } from '@masknet/shared'
+import { EMPTY_LIST, PluginID, NetworkPluginID } from '@masknet/shared-base'
+import { LoadingBase, makeStyles, MaskTabList, useTabs } from '@masknet/theme'
+import { isSameAddress, SocialIdentity } from '@masknet/web3-shared-base'
+import { ChainId } from '@masknet/web3-shared-evm'
+import { TabContext } from '@mui/lab'
+import { Tab, Typography } from '@mui/material'
+import { PluginWeb3ContextProvider } from '@masknet/web3-hooks-base'
 import { MaskMessages, sorter, useLocationChange } from '../../../utils/index.js'
 import { ProfileCardTitle } from './ProfileCardTitle.js'
-import { useSocialAddressListBySettings } from '@masknet/shared'
 
 interface Props extends withClasses<'text' | 'button' | 'root'> {
     identity: SocialIdentity
@@ -149,9 +149,8 @@ const useStyles = makeStyles()((theme) => {
             fontWeight: 700,
             zIndex: 2,
         },
-        powerBy: {
+        powered: {
             color: theme.palette.text.secondary,
-            fontSize: 14,
             fontWeight: 700,
         },
     }
@@ -252,7 +251,7 @@ export const ProfileCard: FC<Props> = ({ identity, ...rest }) => {
                 </div>
                 <div className={classes.content}>{component}</div>
                 <div className={classes.footer}>
-                    <Typography variant="body1" className={classes.powerBy}>
+                    <Typography variant="body1" className={classes.powered}>
                         <Trans
                             i18nKey="powered_by_whom"
                             values={{ whom: 'RSS3' }}

@@ -1,10 +1,6 @@
-import {
-    useActivatedPluginsSNSAdaptor,
-    Plugin,
-    PluginI18NFieldRender,
-    PluginID,
-} from '@masknet/plugin-infra/content-script'
 import { useMemo, useState, useCallback, useRef } from 'react'
+import { useActivatedPluginsSNSAdaptor, Plugin, PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
+import type { PluginID } from '@masknet/shared-base'
 import { List, ListItem, Typography } from '@mui/material'
 import { makeStyles, getMaskColor, ShadowRootTooltip } from '@masknet/theme'
 import { useI18N } from '../../utils/index.js'

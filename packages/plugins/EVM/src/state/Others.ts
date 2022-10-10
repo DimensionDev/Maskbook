@@ -1,5 +1,5 @@
 import type { Plugin } from '@masknet/plugin-infra'
-import { OthersState } from '@masknet/plugin-infra/web3'
+import { OthersState } from '@masknet/web3-state'
 import {
     isValidDomain,
     isValidAddress,

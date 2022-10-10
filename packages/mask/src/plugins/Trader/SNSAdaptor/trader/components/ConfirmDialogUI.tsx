@@ -58,7 +58,6 @@ const useStyles = makeStyles<{
         },
     },
     label: {
-        fontSize: 14,
         fontWeight: 700,
         lineHeight: '18px',
         color: theme.palette.maskColor?.second,
@@ -67,7 +66,6 @@ const useStyles = makeStyles<{
         display: 'flex',
         alignItems: 'center',
         columnGap: 8,
-        fontSize: 14,
         fontWeight: 700,
         lineHeight: '18px',
     },
@@ -163,7 +161,6 @@ const useStyles = makeStyles<{
         color: `${isDashboard ? MaskColorVar.redMain : theme.palette.maskColor?.danger}!important`,
     },
     edit: {
-        fontSize: 14,
         lineHeight: '18px',
         color: isDashboard ? theme.palette.primary.main : theme.palette.maskColor?.primary,
         marginRight: 4,
@@ -328,7 +325,7 @@ export const ConfirmDialogUI = memo<ConfirmDialogUIProps>(
                         <Box>
                             <Typography component="div" className={classes.symbol}>
                                 <TokenIcon
-                                    classes={{ icon: classes.tokenIcon }}
+                                    className={classes.tokenIcon}
                                     address={inputToken.address}
                                     name={inputToken.name}
                                     symbol={inputToken.symbol}
@@ -367,7 +364,7 @@ export const ConfirmDialogUI = memo<ConfirmDialogUIProps>(
                         <Box>
                             <Typography component="div" className={classes.symbol}>
                                 <TokenIcon
-                                    classes={{ icon: classes.tokenIcon }}
+                                    className={classes.tokenIcon}
                                     chainId={outputToken.chainId}
                                     address={outputToken.address}
                                     name={outputToken.name}

@@ -7,7 +7,7 @@ import { formatGweiToWei, formatWeiToEther, SchemaType, isNativeTokenAddress } f
 import { FormattedBalance, FormattedCurrency, TokenIcon } from '@masknet/shared'
 import { Link, Typography } from '@mui/material'
 import { useI18N } from '../../../../../utils/index.js'
-import { PopupRoutes } from '@masknet/shared-base'
+import { PopupRoutes, NetworkPluginID } from '@masknet/shared-base'
 import { LoadingButton } from '@mui/lab'
 import { unreachable } from '@dimensiondev/kit'
 import BigNumber from 'bignumber.js'
@@ -25,13 +25,12 @@ import {
     useReverseAddress,
     useSchemaType,
     useWeb3State,
-} from '@masknet/plugin-infra/web3'
+} from '@masknet/web3-hooks-base'
 import {
     formatBalance,
     formatCurrency,
     isGreaterThan,
     leftShift,
-    NetworkPluginID,
     pow10,
     TransactionDescriptorType,
     ZERO,
@@ -366,7 +365,7 @@ const ContractInteraction = memo(() => {
                             address={(isNativeTokenInteraction ? nativeToken?.address : token?.address) ?? ''}
                             chainId={chainId}
                             name={(isNativeTokenInteraction ? nativeToken?.name : token?.name) ?? ''}
-                            classes={{ icon: classes.tokenIcon }}
+                            className={classes.tokenIcon}
                         />
                         {tokenDecimals !== undefined ? (
                             <>

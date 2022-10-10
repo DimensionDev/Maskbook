@@ -16,8 +16,8 @@ import { isTwitter } from '../../../social-network-adaptor/twitter.com/base.js'
 import { isFacebook } from '../../../social-network-adaptor/facebook.com/base.js'
 import { NFTCardStyledAssetPlayer } from '@masknet/shared'
 import { openWindow } from '@masknet/shared-base-ui'
-import { useAccount, useNetworkType, useWeb3 } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { useAccount, useNetworkType, useWeb3 } from '@masknet/web3-hooks-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { Icons } from '@masknet/icons'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
 
@@ -167,24 +167,6 @@ const useStyles = makeStyles()((theme) => ({
     badgeText: {
         fontSize: 12,
     },
-    snackBarText: {
-        fontSize: 14,
-    },
-    snackBarLink: {
-        color: 'white',
-    },
-    openIcon: {
-        display: 'flex',
-        width: 18,
-        height: 18,
-        marginLeft: 2,
-    },
-    snackBar: {
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        transform: 'translateY(1px)',
-    },
     loadingTokenImg: {
         opacity: 0.4,
     },
@@ -214,12 +196,13 @@ const useStyles = makeStyles()((theme) => ({
         width: 220,
     },
     errorButton: {
-        borderColor: 'white',
+        background: theme.palette.common.black,
         minHeight: 30,
         width: 100,
         marginTop: 16,
+        whiteSpace: 'nowrap',
         '&:hover': {
-            borderColor: 'white',
+            background: theme.palette.common.black,
         },
     },
     ellipsis: {

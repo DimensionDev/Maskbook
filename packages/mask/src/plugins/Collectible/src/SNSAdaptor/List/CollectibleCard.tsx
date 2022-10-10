@@ -1,10 +1,10 @@
 import { useCallback } from 'react'
 import { Box, Card } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { AssetPreviewer } from '@masknet/shared'
+import { AssetPreviewer, NetworkIcon } from '@masknet/shared'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import type { NetworkPluginID, NonFungibleAsset } from '@masknet/web3-shared-base'
-import { CrossIsolationMessages } from '@masknet/shared-base'
+import type { NonFungibleAsset } from '@masknet/web3-shared-base'
+import { CrossIsolationMessages, NetworkPluginID } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -78,10 +78,7 @@ export function CollectibleCard({ className, pluginID, asset }: CollectibleCardP
                         fallbackImage: classes.fallbackImage,
                     }}
                     url={asset.metadata?.imageURL}
-                    NetworkIconProps={{
-                        pluginID,
-                        chainId: asset.chainId,
-                    }}
+                    icon={pluginID ? <NetworkIcon pluginID={pluginID} chainId={asset.chainId} /> : null}
                 />
             </Card>
         </Box>

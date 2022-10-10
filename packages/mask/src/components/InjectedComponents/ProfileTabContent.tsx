@@ -1,23 +1,23 @@
+import { useEffect, useMemo, useRef, useState } from 'react'
+import { useUpdateEffect } from 'react-use'
+import { first, uniqBy } from 'lodash-unified'
 import { Icons } from '@masknet/icons'
 import {
     createInjectHooksRenderer,
-    PluginID,
     useActivatedPluginsSNSAdaptor,
     useIsMinimalMode,
     usePluginI18NField,
 } from '@masknet/plugin-infra/content-script'
-import { useAvailablePlugins, useHiddenAddressSetting } from '@masknet/plugin-infra/web3'
+import { useAvailablePlugins } from '@masknet/plugin-infra'
+import { useHiddenAddressSetting } from '@masknet/web3-hooks-base'
 import { AddressItem, PluginCardFrameMini, useSocialAddressListBySettings } from '@masknet/shared'
-import { CrossIsolationMessages, EMPTY_LIST, NextIDPlatform } from '@masknet/shared-base'
+import { CrossIsolationMessages, EMPTY_LIST, NextIDPlatform, PluginID, NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles, MaskLightTheme, MaskTabList, ShadowRootMenu, useStylesExtends, useTabs } from '@masknet/theme'
-import { isSameAddress, NetworkPluginID, SocialAddress, SocialAddressType } from '@masknet/web3-shared-base'
+import { isSameAddress, SocialAddress, SocialAddressType } from '@masknet/web3-shared-base'
 import { TabContext } from '@mui/lab'
 import { Button, Link, MenuItem, Stack, Tab, ThemeProvider, Typography } from '@mui/material'
-import { first, uniqBy } from 'lodash-unified'
-import { useEffect, useMemo, useState } from 'react'
-import { useUpdateEffect } from 'react-use'
-import { activatedSocialNetworkUI } from '../../social-network/index.js'
 import { isTwitter } from '../../social-network-adaptor/twitter.com/base.js'
+import { activatedSocialNetworkUI } from '../../social-network/index.js'
 import { MaskMessages, sorter, useI18N, useLocationChange } from '../../utils/index.js'
 import { useCurrentVisitingSocialIdentity } from '../DataSource/useActivatedUI.js'
 import { useCurrentPersonaConnectStatus } from '../DataSource/usePersonaConnectStatus.js'
@@ -153,7 +153,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
 
     const [hidden, setHidden] = useState(true)
     const [selectedAddress, setSelectedAddress] = useState<SocialAddress<NetworkPluginID> | undefined>()
-    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
+    const [menuOpen, setMenuOpen] = useState(false)
     const {
         value: personaStatus,
         loading: loadingPersonaStatus,
@@ -278,7 +278,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     }, [currentVisitingUserId])
 
     useEffect(() => {
-        const listener = () => setAnchorEl(null)
+        const listener = () => setMenuOpen(false)
 
         window.addEventListener('scroll', listener, false)
 
@@ -287,10 +287,10 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         }
     }, [])
 
-    const onOpen = (event: React.MouseEvent<HTMLButtonElement>) => setAnchorEl(event.currentTarget)
+    const buttonRef = useRef<HTMLButtonElement>(null)
     const onSelect = (option: SocialAddress<NetworkPluginID>) => {
         setSelectedAddress(option)
-        setAnchorEl(null)
+        setMenuOpen(false)
     }
     const handleOpenDialog = () => {
         CrossIsolationMessages.events.web3ProfileDialogEvent.sendToAll({
@@ -347,7 +347,8 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         )
     }
 
-    if (socialAddressList.length === 0 && !showNextID && !hiddenAddress?.length) {
+    // Maybe should merge in NextIdPage
+    if (socialAddressList.length === 0 && !showNextID && !isTwitterPlatform) {
         return (
             <ThemeProvider theme={MaskLightTheme}>
                 <div className={classes.root}>
@@ -389,10 +390,15 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
                         <div className={classes.title}>
                             <div className={classes.walletItem}>
                                 <Button
-                                    id="demo-positioned-button"
+                                    id="wallets"
                                     variant="text"
                                     size="small"
-                                    onClick={onOpen}
+                                    ref={buttonRef}
+                                    onClick={(event) => {
+                                        event.preventDefault()
+                                        event.stopPropagation()
+                                        setMenuOpen(true)
+                                    }}
                                     className={classes.walletButton}>
                                     <AddressItem
                                         linkIconClassName={classes.mainLinkIcon}
@@ -406,13 +412,14 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
                                     <Icons.ArrowDrop className={classes.arrowDropIcon} />
                                 </Button>
                                 <ShadowRootMenu
-                                    anchorEl={anchorEl}
-                                    open={Boolean(anchorEl)}
+                                    anchorEl={buttonRef.current}
+                                    open={menuOpen}
+                                    disableScrollLock
                                     PaperProps={{
                                         className: classes.addressMenu,
                                     }}
-                                    aria-labelledby="demo-positioned-button"
-                                    onClose={() => setAnchorEl(null)}>
+                                    aria-labelledby="wallets"
+                                    onClose={() => setMenuOpen(false)}>
                                     {uniqBy(socialAddressList ?? [], (x) => x.address.toLowerCase()).map((x) => {
                                         return (
                                             <MenuItem

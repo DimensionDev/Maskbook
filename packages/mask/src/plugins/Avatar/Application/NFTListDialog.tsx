@@ -2,14 +2,14 @@ import { Dispatch, SetStateAction, useCallback, useEffect, useMemo, useState } f
 import { first, uniqBy } from 'lodash-unified'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { ChainId } from '@masknet/web3-shared-evm'
-import { isSameAddress, NetworkPluginID, isGreaterThan } from '@masknet/web3-shared-base'
+import { NetworkPluginID, BindingProof, EMPTY_LIST } from '@masknet/shared-base'
+import { isSameAddress, isGreaterThan } from '@masknet/web3-shared-base'
 import { Box, Button, DialogActions, DialogContent, Stack, Typography } from '@mui/material'
 import { AddNFT } from '../SNSAdaptor/AddNFT.js'
-import { BindingProof, EMPTY_LIST } from '@masknet/shared-base'
 import { AllChainsNonFungibleToken, PFP_TYPE, SelectTokenInfo } from '../types.js'
 import { useI18N } from '../locales/index.js'
 import { SUPPORTED_CHAIN_IDS, supportPluginIds } from '../constants.js'
-import { useAccount, useChainId, useCurrentWeb3NetworkPluginID, useNonFungibleAssets } from '@masknet/plugin-infra/web3'
+import { useAccount, useChainId, useCurrentWeb3NetworkPluginID, useNonFungibleAssets } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { toPNG } from '../utils/index.js'
 import { NFTListPage } from './NFTListPage.js'
@@ -234,11 +234,12 @@ export function NFTListDialog(props: NFTListDialogProps) {
                 token: selectedToken,
                 pluginId: selectedPluginId,
             })
-            setDisabled(false)
             onNext()
         } catch (error) {
             showSnackbar(String(error), { variant: 'error' })
             return
+        } finally {
+            setDisabled(false)
         }
     }, [selectedToken, selectedAccount, selectedPluginId])
 

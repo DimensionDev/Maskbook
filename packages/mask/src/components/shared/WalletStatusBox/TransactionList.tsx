@@ -1,7 +1,7 @@
 import { FC, forwardRef, useCallback, useMemo, useState, useEffect } from 'react'
 import { useAsync } from 'react-use'
 import { Icons } from '@masknet/icons'
-import { useChainId, useWeb3State } from '@masknet/plugin-infra/web3'
+import { useChainId, useWeb3State } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { isSameAddress, RecentTransactionComputed, TransactionStatusType, Transaction } from '@masknet/web3-shared-base'
@@ -32,14 +32,12 @@ const useStyles = makeStyles()((theme) => ({
     },
     methodName: {
         fontWeight: 500,
-        fontSize: 14,
         textTransform: 'capitalize',
         textOverflow: 'ellipsis',
         overflow: 'hidden',
         whiteSpace: 'nowrap',
     },
     timestamp: {
-        fontSize: 14,
         lineHeight: '18px',
     },
     cell: {
@@ -50,7 +48,6 @@ const useStyles = makeStyles()((theme) => ({
         boxSizing: 'border-box',
     },
     linkText: {
-        fontSize: 14,
         lineHeight: '18px',
     },
     link: {
@@ -64,7 +61,6 @@ const useStyles = makeStyles()((theme) => ({
         marginLeft: theme.spacing(0.5),
     },
     clear: {
-        fontSize: 14,
         color: MaskColorVar.blue,
         cursor: 'pointer',
     },

@@ -26,7 +26,6 @@ const useStyles = makeStyles()((theme) => ({
         marginBottom: theme.spacing(1),
     },
     description: {
-        fontSize: 14,
         fontWeight: 300,
     },
 }))

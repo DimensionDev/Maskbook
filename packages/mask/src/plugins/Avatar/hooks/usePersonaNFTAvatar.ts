@@ -1,12 +1,11 @@
-import type { EnhanceableSite } from '@masknet/shared-base'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import LRU from 'lru-cache'
 import { useAsyncRetry } from 'react-use'
+import { EnhanceableSite, NetworkPluginID } from '@masknet/shared-base'
 import { activatedSocialNetworkUI } from '../../../social-network/index.js'
 import type { RSS3_KEY_SNS } from '../constants.js'
 import type { AvatarMetaDB, NextIDAvatarMeta } from '../types.js'
 import { getNFTAvatarByUserId } from '../utils/index.js'
 import { useGetNFTAvatar } from './useGetNFTAvatar.js'
-import LRU from 'lru-cache'
 
 const cache = new LRU<string, Promise<NextIDAvatarMeta | undefined>>({
     max: 500,

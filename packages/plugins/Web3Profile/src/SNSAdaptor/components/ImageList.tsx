@@ -1,15 +1,16 @@
-import { Box, Button, DialogActions, DialogContent, Typography } from '@mui/material'
+import { useWeb3State } from '@masknet/web3-hooks-base'
+import { CollectionTypes, InjectedDialog, WalletTypes } from '@masknet/shared'
+import { EMPTY_LIST, NextIDPlatform, PersonaInformation, NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
+import { isSameAddress, NonFungibleToken } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
-import { useWeb3State } from '@masknet/plugin-infra/web3'
-import { useEffect, useState } from 'react'
-import { useI18N } from '../../locales/index.js'
-import { PLUGIN_ID } from '../../constants.js'
-import { InjectedDialog, CollectionTypes, WalletTypes } from '@masknet/shared'
-import { PersonaInformation, NextIDPlatform } from '@masknet/shared-base'
-import { NetworkPluginID, NonFungibleToken } from '@masknet/web3-shared-base'
-import { AddNFT } from './AddCollectibles.js'
+import { Box, Button, DialogActions, DialogContent, Typography } from '@mui/material'
 import classNames from 'classnames'
+import { isEqual, sortBy } from 'lodash-unified'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import { PLUGIN_ID } from '../../constants.js'
+import { useI18N } from '../../locales/index.js'
+import { AddNFT } from './AddCollectibles.js'
 import { CollectionList } from './CollectionList.js'
 
 const useStyles = makeStyles()((theme) => {
@@ -141,50 +142,44 @@ export function ImageListDialog(props: ImageListDialogProps) {
         title,
         accountId,
         currentPersona,
-        collectionList,
+        collectionList = EMPTY_LIST,
     } = props
     const t = useI18N()
     const { Storage } = useWeb3State()
     const classes = useStylesExtends(useStyles(), props)
-    const [unListedCollections, setUnListedCollections] = useState<CollectionTypes[]>([])
-    const [listedCollections, setListedCollections] = useState<CollectionTypes[]>([])
-    const [confirmButtonDisabled, setConfirmButtonDisabled] = useState(true)
     const [open_, setOpen_] = useState(false)
 
+    const unlistedKeys = collectionList.filter((x) => x.hidden).map((x) => x.key)
+    const [pendingUnlistedKeys, setPendingUnlistedKeys] = useState(unlistedKeys ?? EMPTY_LIST)
+    const confirmButtonDisabled = isEqual(sortBy(unlistedKeys), sortBy(pendingUnlistedKeys))
+
+    const unListedCollections = useMemo(
+        () => collectionList.filter((x) => pendingUnlistedKeys.includes(x.key)),
+        [collectionList, pendingUnlistedKeys],
+    )
+    const listedCollections = useMemo(
+        () => collectionList.filter((x) => !pendingUnlistedKeys.includes(x.key)),
+        [collectionList, pendingUnlistedKeys],
+    )
+
     useEffect(() => {
-        setListedCollections(collectionList?.filter((collection) => !collection?.hidden) || [])
-        setUnListedCollections(collectionList?.filter((collection) => collection?.hidden) || [])
-        setConfirmButtonDisabled(true)
+        setPendingUnlistedKeys(collectionList?.filter((x) => x.hidden).map((x) => x.key) ?? EMPTY_LIST)
     }, [collectionList, open])
 
-    const unList = (key: string | undefined) => {
-        if (!key) return
-        if (confirmButtonDisabled) setConfirmButtonDisabled(false)
-        const unListingCollection = listedCollections?.find((collection) => collection?.key === key)
-        if (unListingCollection) {
-            setUnListedCollections((pre) => [...pre, unListingCollection])
-        }
-        const currentListed = [...listedCollections]
-        setListedCollections(currentListed?.filter((collection) => collection?.key !== key))
-    }
-    const list = (key: string | undefined) => {
-        if (!key) return
-        if (confirmButtonDisabled) setConfirmButtonDisabled(false)
-        const listingCollection = unListedCollections?.find((collection) => collection?.key === key)
-        if (listingCollection) {
-            setListedCollections((pre) => [...pre, listingCollection])
-        }
+    const unList = useCallback((key: string) => {
+        setPendingUnlistedKeys((keys) => [...keys, key])
+    }, [])
 
-        const currentUnListed = [...unListedCollections]
-        setUnListedCollections(currentUnListed?.filter((collection) => collection?.key !== key))
-    }
+    const list = useCallback((key: string) => {
+        setPendingUnlistedKeys((keys) => keys.filter((x) => x !== key))
+    }, [])
 
     const onConfirm = async () => {
-        if (!currentPersona?.identifier.publicKeyAsHex) return
+        if (!currentPersona?.identifier.publicKeyAsHex || isSameAddress(address.address, ZERO_ADDRESS)) return
         const patch = {
             unListedCollections: {
                 [address.address]: {
-                    [title]: unListedCollections?.map((x) => x?.key),
+                    [title]: pendingUnlistedKeys,
                 },
             },
         }
@@ -197,7 +192,7 @@ export function ImageListDialog(props: ImageListDialogProps) {
             onClose()
             retryData()
         } catch (err) {
-            console.log({ err })
+            console.log('Failed to update settings', err)
         }
     }
 

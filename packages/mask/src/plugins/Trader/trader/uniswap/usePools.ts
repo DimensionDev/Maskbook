@@ -5,9 +5,11 @@ import type { Token, Currency } from '@uniswap/sdk-core'
 import { usePoolContracts } from '../../contracts/uniswap/usePoolContract.js'
 import type { TradeProvider } from '@masknet/public-api'
 import { useGetTradeContext } from '../useGetTradeContext.js'
-import { TargetChainIdContext, MulticallStateType, useMultipleContractSingleData } from '@masknet/plugin-infra/web3-evm'
+import { MulticallStateType, useMultipleContractSingleData } from '@masknet/web3-hooks-evm'
 import { useTargetBlockNumber } from '../useTargetBlockNumber.js'
 import { isZero } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { useChainId } from '@masknet/web3-hooks-base'
 
 export enum PoolState {
     LOADING = 0,
@@ -20,7 +22,7 @@ export function usePools(
     tradeProvider: TradeProvider,
     poolKeys: Array<[Currency | undefined, Currency | undefined, FeeAmount | undefined]>,
 ): Array<[PoolState, Pool | null]> {
-    const { targetChainId: chainId } = TargetChainIdContext.useContainer()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const context = useGetTradeContext(tradeProvider)
 
     const transformed: Array<[Token, Token, FeeAmount] | null> = useMemo(() => {

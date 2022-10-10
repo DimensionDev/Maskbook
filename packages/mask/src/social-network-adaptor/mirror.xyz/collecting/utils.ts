@@ -1,5 +1,7 @@
 import { ProfileIdentifier } from '@masknet/shared-base'
 import type { Writer } from '@masknet/web3-providers'
+import { formatEthereumAddress } from '@masknet/web3-shared-evm'
+import { last } from 'lodash-unified'
 import urlcat from 'urlcat'
 import { mirrorBase } from '../base.js'
 
@@ -11,7 +13,9 @@ export function formatWriter(writer: Writer) {
         nickname: writer.displayName,
         bio: writer.description,
         homepage: writer.domain || getMirrorProfileUrl(writer.address),
-        identifier: ProfileIdentifier.of(mirrorBase.networkIdentifier, writer.address).unwrapOr(undefined),
+        identifier: ProfileIdentifier.of(mirrorBase.networkIdentifier, formatEthereumAddress(writer.address)).unwrapOr(
+            undefined,
+        ),
     }
 }
 
@@ -35,4 +39,29 @@ export function getMirrorPageType(url?: string) {
     if (MIRROR_ENTRY_ID.test((urlSplits[urlSplits.length - 1] ?? '').trim())) return MirrorPageType.Post
 
     return MirrorPageType.Profile
+}
+
+export function getMirrorUserId(href?: string) {
+    if (!href) return null
+
+    const urlObj = new URL(href)
+    const url = urlObj.href.replace(urlObj.search, '').replace(/\/$/, '')
+
+    const pageType = getMirrorPageType(url)
+
+    // If dashboard, get from local storage
+    if (pageType === MirrorPageType.Dashboard) return localStorage.getItem('mirror.userAddress') as string | null
+
+    let tempURL = url
+    if (pageType === MirrorPageType.Collection) {
+        tempURL = url.replace(/\/collection(.*)/, '')
+    }
+    if (pageType === MirrorPageType.Post) {
+        tempURL = url.replace(/\/[\w|-]{43}/i, '')
+    }
+
+    const ens = last(tempURL.match(/https:\/\/mirror.xyz\/(.*)/))
+    if (ens) return ens
+
+    return last(tempURL.match(/https:\/\/(.*)\.mirror\.xyz/)) as string | null
 }

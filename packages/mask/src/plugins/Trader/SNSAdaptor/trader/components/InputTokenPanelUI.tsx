@@ -17,7 +17,7 @@ const useStyles = makeStyles<{
         background: `${isDashboard ? MaskColorVar.primaryBackground2 : theme.palette.maskColor?.input}!important`,
         border: `1px solid ${isDashboard ? MaskColorVar.lineLight : theme.palette.maskColor?.line}`,
         position: 'relative',
-        height: 115,
+        minHeight: 115,
         outline: 'none!important',
         '& input': {
             padding: 11,
@@ -25,7 +25,6 @@ const useStyles = makeStyles<{
         },
     },
     balance: {
-        fontSize: 14,
         fontWeight: 700,
         lineHeight: '18px',
         color: isDashboard ? theme.palette.text.primary : theme.palette.maskColor?.second,
@@ -34,7 +33,6 @@ const useStyles = makeStyles<{
     amount: {
         marginLeft: 10,
         color: !isDashboard ? theme.palette.maskColor?.primary : undefined,
-        fontSize: 14,
         fontWeight: 700,
     },
     input: {
@@ -61,7 +59,6 @@ const useStyles = makeStyles<{
         padding: '0 6px',
     },
     label: {
-        fontSize: 14,
         fontWeight: 700,
         lineHeight: '18px',
         color: theme.palette.maskColor?.second,
@@ -70,7 +67,6 @@ const useStyles = makeStyles<{
         left: 12,
     },
     price: {
-        fontSize: 14,
         lineHeight: '20px',
         position: 'absolute',
         bottom: 12,

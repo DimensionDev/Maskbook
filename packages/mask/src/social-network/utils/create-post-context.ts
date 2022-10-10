@@ -16,7 +16,7 @@ import {
     ALL_EVENTS,
     ObservableMap,
     ObservableSet,
-    parseURL,
+    parseURLs,
     PostIdentifier,
     ProfileIdentifier,
     createSubscriptionFromValueRef,
@@ -43,7 +43,7 @@ export function createSNSAdaptorSpecializedPostContext(create: PostContextSNSAct
             const links = new ValueRef<string[]>(EMPTY_LIST)
 
             function evaluate() {
-                const text = parseURL(extractTextFromTypedMessage(opt.rawMessage.getCurrentValue()).unwrapOr(''))
+                const text = parseURLs(extractTextFromTypedMessage(opt.rawMessage.getCurrentValue()).unwrapOr(''))
                     .concat(opt.postMentionedLinksProvider?.getCurrentValue() || EMPTY_LIST)
                     .map(isFacebook ? resolveFacebookLink : (x: string) => x)
                 if (difference(text, links.value).length === 0) return

@@ -54,6 +54,11 @@ export function multipliedBy(a: BigNumber.Value, b: BigNumber.Value) {
     return new BigNumber(a).multipliedBy(b)
 }
 
+/** a + b */
+export function plus(a: BigNumber.Value, b: BigNumber.Value) {
+    return new BigNumber(a).plus(b)
+}
+
 /** a - b */
 export function minus(a: BigNumber.Value, b: BigNumber.Value) {
     return new BigNumber(a).minus(b)

@@ -1,4 +1,4 @@
-import { PluginID } from '@masknet/plugin-infra'
+import { PluginID } from '@masknet/shared-base'
 import { ChainId, createNativeToken } from '@masknet/web3-shared-evm'
 
 export const PLUGIN_NAME = 'CRYPTOART.AI'

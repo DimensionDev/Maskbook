@@ -15,17 +15,14 @@ import { useAsync, useLocation, useUpdateEffect, useWindowSize } from 'react-use
 import { rainbowBorderKeyFrames } from '../../../../plugins/Avatar/SNSAdaptor/RainbowBox.js'
 import { RSS3_KEY_SNS } from '../../../../plugins/Avatar/constants.js'
 import { usePersonaNFTAvatar } from '../../../../plugins/Avatar/hooks/usePersonaNFTAvatar.js'
-import { useAccount } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { useAccount } from '@masknet/web3-hooks-base'
 import { Box, Typography } from '@mui/material'
-import { openWindow } from '@masknet/shared-base-ui'
 import { useWallet } from '../../../../plugins/Avatar/hooks/useWallet.js'
 import { useNFT, useSaveNFTAvatar } from '../../../../plugins/Avatar/hooks/index.js'
 import { NFTCardStyledAssetPlayer, useShowConfirm } from '@masknet/shared'
 import type { AvatarMetaDB } from '../../../../plugins/Avatar/types.js'
-import { EnhanceableSite, NFTAvatarEvent, CrossIsolationMessages } from '@masknet/shared-base'
+import { NetworkPluginID, EnhanceableSite, NFTAvatarEvent, CrossIsolationMessages } from '@masknet/shared-base'
 import { activatedSocialNetworkUI } from '../../../../social-network/ui.js'
-import { NFTAvatar } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatar.js'
 import { Twitter } from '@masknet/web3-providers'
 
 export function injectNFTAvatarInTwitter(signal: AbortSignal) {
@@ -83,6 +80,7 @@ function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
         nftAvatar?.tokenId,
         nftAvatar?.pluginId,
         nftAvatar?.chainId,
+        nftAvatar?.ownerAddress,
     )
 
     const windowSize = useWindowSize()
@@ -113,7 +111,7 @@ function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
     // After the avatar is set, it cannot be saved immediately,
     // and must wait until the avatar of twitter gets updated
     useAsync(async () => {
-        if (!account || !NFTAvatar) return
+        if (!account || !nftAvatar) return
         if (!identity.identifier) return
 
         if (!NFTEvent?.address || !NFTEvent?.tokenId) {
@@ -237,17 +235,16 @@ function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
             event.stopPropagation()
             event.preventDefault()
 
-            // TODO: refactor NFTCard and Collectible to support multiple networks
-            if (nftAvatar.chainId !== ChainId.Mainnet || nftAvatar.pluginId !== NetworkPluginID.PLUGIN_EVM) {
-                if (nftInfo?.permalink) openWindow(nftInfo.permalink)
-                return
-            }
+            if (!nftAvatar.pluginId || !nftAvatar.chainId) return
+
             CrossIsolationMessages.events.nonFungibleTokenDialogEvent.sendToLocal({
                 open: true,
                 pluginID: nftAvatar.pluginId,
                 chainId: nftAvatar.chainId,
                 tokenId: nftAvatar.tokenId,
                 tokenAddress: nftAvatar.address,
+                ownerAddress: nftAvatar.ownerAddress,
+                origin: 'pfp',
             })
         }
 

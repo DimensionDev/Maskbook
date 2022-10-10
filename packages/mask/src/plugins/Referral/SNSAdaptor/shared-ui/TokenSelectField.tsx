@@ -58,7 +58,7 @@ export function TokenSelectField({ label, token, disabled, style, onClick }: Tok
 
                     startAdornment: token && (
                         <InputAdornment position="start">
-                            <TokenIcon {...token} classes={classes} />
+                            <TokenIcon {...token} className={classes.icon} />
                         </InputAdornment>
                     ),
                     endAdornment: (

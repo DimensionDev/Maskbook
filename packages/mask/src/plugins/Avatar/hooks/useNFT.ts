@@ -1,16 +1,18 @@
 import { ChainId } from '@masknet/web3-shared-evm'
 import { useAsyncRetry } from 'react-use'
-import { useWeb3Hub, useWeb3State } from '@masknet/plugin-infra/web3'
-import { formatBalance, CurrencyType, NetworkPluginID } from '@masknet/web3-shared-base'
+import { useWeb3Hub, useWeb3State } from '@masknet/web3-hooks-base'
+import { formatBalance, CurrencyType } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import type { NFTInfo } from '../types.js'
 
 export function useNFT(
     account: string,
-    address: string | undefined,
-    tokenId: string | undefined,
+    address?: string,
+    tokenId?: string,
     pluginId: NetworkPluginID = NetworkPluginID.PLUGIN_EVM,
     chainId: ChainId = ChainId.Mainnet,
+    ownerAddress?: string,
 ) {
     const { Others, Connection } = useWeb3State<'all'>(pluginId ?? NetworkPluginID.PLUGIN_EVM)
     const hub = useWeb3Hub<'all'>(pluginId, {
@@ -27,6 +29,7 @@ export function useNFT(
             connection?.getNonFungibleToken(address, tokenId),
             hub?.getNonFungibleAsset?.(address, tokenId, {
                 chainId,
+                account: ownerAddress,
             }),
         ])
 
@@ -55,5 +58,5 @@ export function useNFT(
             slug: token ? undefined : asset?.collection?.slug,
             permalink,
         } as NFTInfo
-    }, [hub?.getNonFungibleAsset, Connection?.getConnection, address, tokenId, Others, chainId])
+    }, [hub?.getNonFungibleAsset, Connection?.getConnection, address, tokenId, Others, chainId, ownerAddress])
 }

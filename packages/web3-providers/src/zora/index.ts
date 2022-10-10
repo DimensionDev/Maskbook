@@ -28,6 +28,7 @@ import {
     TransferEventProperty,
     V3AskEventProperty,
 } from './types.js'
+import { resolveNonFungibleTokenEventActivityType } from '../helpers.js'
 import type { NonFungibleTokenAPI } from '../types/index.js'
 import { GetCollectionsByKeywordQuery, GetEventsQuery, GetTokenQuery } from './queries.js'
 import { ZORA_MAINNET_GRAPHQL_URL } from './constants.js'
@@ -101,6 +102,7 @@ export class ZoraAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType
                   }
                 : undefined,
             ownerId: token.owner,
+            source: SourceType.Zora,
         }
     }
 
@@ -116,6 +118,7 @@ export class ZoraAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType
             slug: collection.entity.symbol ?? 'UNKNOWN',
             description: collection.entity.description ?? collection.description,
             schema: SchemaType.ERC721,
+            source: SourceType.Zora,
         }
     }
 
@@ -171,7 +174,7 @@ export class ZoraAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType
 
         return {
             id: event.transactionInfo.transactionHash ?? `${event.transactionInfo.blockNumber}_${event.tokenId}`,
-            type: event.eventType,
+            type: resolveNonFungibleTokenEventActivityType(event.eventType),
             chainId,
             quantity: '1',
             from: {

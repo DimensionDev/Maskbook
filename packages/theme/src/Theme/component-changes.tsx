@@ -12,7 +12,6 @@ import {
     ThemeOptions,
     InputBase as MuiInputBase,
     switchClasses,
-    tooltipClasses,
     alertClasses,
     linearProgressClasses,
     selectClasses,
@@ -1002,6 +1001,8 @@ export const Tooltip = (mode: PaletteMode, colors: MaskColor) => ({
                     lineHeight: '18px',
                     backgroundColor: colors.maskColor.tips,
                     color: colors.maskColor.bottom,
+                    boxShadow:
+                        mode === 'dark' ? '0px 0px 20px rgba(255, 255, 255, 0.12)' : '0px 0px 20px rgba(0, 0, 0, 0.05)',
                     '& > *': {
                         fontSize: 14,
                         lineHeight: '18px',
@@ -1009,15 +1010,6 @@ export const Tooltip = (mode: PaletteMode, colors: MaskColor) => ({
                 },
                 arrow: {
                     color: colors.maskColor.tips,
-                },
-                popper: {
-                    // `variants` can't override placement prop, So here we use css selector.
-                    [`&[data-popper-placement*="top-start"] .${tooltipClasses.arrow}`]: {
-                        transform: 'translate3d(10px, 0, 0)!important',
-                    },
-                    [`&[data-popper-placement*="top-end"] .${tooltipClasses.arrow}`]: {
-                        transform: 'translate3d(300px, 0, 0)!important',
-                    },
                 },
             },
         },

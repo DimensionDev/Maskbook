@@ -81,6 +81,7 @@
     "gas_settings_custom": "Custom",
     "gas_settings_tab_basic": "Basic",
     "gas_settings_tab_advanced": "Advanced",
+    "gas_settings_label_gas_fee": "Gas Fee",
     "gas_settings_label_gas_price": "Gas Price",
     "gas_settings_label_gas_limit": "Gas Limit",
     "gas_settings_label_max_priority_fee": "Max Priority Fee",

@@ -1,8 +1,9 @@
-import { useWeb3State } from '@masknet/plugin-infra/web3'
+import { useWeb3State } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { NetworkPluginID, NonFungibleAsset, SourceType } from '@masknet/web3-shared-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
+import { NonFungibleAsset, SourceType } from '@masknet/web3-shared-base'
 import { Box, Button, Tooltip, Typography } from '@mui/material'
-import { useCallback, useMemo } from 'react'
+import { useCallback, useMemo, useRef } from 'react'
 import { useI18N } from '../../../../utils/index.js'
 import { ChangeEventOptions, CollectibleItem, SelectableProps } from './CollectibleItem.js'
 import { CollectibleListContext } from './CollectibleListContext.js'
@@ -68,9 +69,11 @@ export function CollectibleList(props: CollectibleListProps) {
         [multiple, availableKeys, value],
     )
 
+    const listRef = useRef<typeof Box>(null)
+
     return (
         <CollectibleListContext.Provider value={{ collectiblesRetry: retry }}>
-            <Box className={classes.list}>
+            <Box className={classes.list} ref={listRef}>
                 {loading && <LoadingSkeleton className={classes.root} />}
                 {error || (collectibles.length === 0 && !loading) ? (
                     <Box className={classes.text}>
@@ -98,9 +101,19 @@ export function CollectibleList(props: CollectibleListProps) {
                                     disableInteractive
                                     PopperProps={{
                                         disablePortal: true,
+                                        placement: 'top',
                                         popperOptions: {
                                             strategy: 'absolute',
                                         },
+                                        modifiers: [
+                                            {
+                                                name: 'preventOverflow',
+                                                options: {
+                                                    rootBoundary: listRef.current,
+                                                    boundary: listRef.current,
+                                                },
+                                            },
+                                        ],
                                     }}
                                     arrow>
                                     <CollectibleItem

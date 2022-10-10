@@ -19,7 +19,7 @@ import {
 import { ChainId, createContract, getRPCConstants, SchemaType, WNATIVE } from '@masknet/web3-shared-evm'
 import { NFTSCAN_BASE, NFTSCAN_LOGO_BASE, NFTSCAN_URL } from '../constants.js'
 import type { EVM } from '../types/EVM.js'
-import { getJSON, getPaymentToken } from '../../helpers.js'
+import { getJSON, resolveNonFungibleTokenEventActivityType, getPaymentToken } from '../../helpers.js'
 
 type NFTScanChainId = ChainId.Mainnet | ChainId.Matic | ChainId.BSC | ChainId.Arbitrum | ChainId.Optimism
 
@@ -88,7 +88,6 @@ export function createNonFungibleAsset(
 ): NonFungibleAsset<ChainId, SchemaType> {
     const payload = getJSON<EVM.Payload>(asset.metadata_json)
     const contractName = asset.contract_name
-    const name = payload?.name || asset.name || contractName || ''
     const description = payload?.description
     const uri = asset.nftscan_uri ?? asset.image_uri
     const mediaURL = resolveResourceURL(uri)
@@ -131,7 +130,8 @@ export function createNonFungibleAsset(
             : undefined,
         metadata: {
             chainId,
-            name: first(name.split('#')) ?? '',
+            name:
+                first([payload?.name, asset.name, contractName].find((x) => x && !x.startsWith('#'))?.split('#')) ?? '',
             symbol,
             description,
             imageURL: mediaURL,
@@ -159,6 +159,7 @@ export function createNonFungibleAsset(
             verified: false,
             createdAt: asset.mint_timestamp,
         },
+        source: SourceType.NFTScan,
     }
 }
 
@@ -177,6 +178,7 @@ export function createNonFungibleCollectionFromGroup(
         description: group.description || payload?.description,
         iconURL: group.logo_url,
         tokensTotal: group.assets.length,
+        source: SourceType.NFTScan,
     }
 }
 
@@ -194,6 +196,7 @@ export function createNonFungibleCollectionFromCollection(
         description: collection.description,
         iconURL: collection.logo_url,
         verified: collection.verified,
+        source: SourceType.NFTScan,
     }
 }
 
@@ -210,6 +213,7 @@ export function createNonFungibleTokenContract(
         iconURL: collection.logo_url,
         logoURL: collection.logo_url,
         owner: collection.owner,
+        source: SourceType.NFTScan,
     }
 }
 
@@ -223,7 +227,7 @@ export function createNonFungibleTokenEvent(
         id: transaction.hash,
         quantity: transaction.amount,
         timestamp: transaction.timestamp,
-        type: transaction.event_type,
+        type: resolveNonFungibleTokenEventActivityType(transaction.event_type),
         hash: transaction.hash,
         from: {
             address: transaction.from,

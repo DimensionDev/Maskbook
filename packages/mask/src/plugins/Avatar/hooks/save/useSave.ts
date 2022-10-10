@@ -1,6 +1,5 @@
-import type { BindingProof, ECKeyIdentifier } from '@masknet/shared-base'
+import { NetworkPluginID, BindingProof, ECKeyIdentifier } from '@masknet/shared-base'
 import type { TwitterBaseAPI } from '@masknet/web3-providers'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { useAsyncFn } from 'react-use'
 import type { AllChainsNonFungibleToken, NextIDAvatarMeta } from '../../types.js'
@@ -34,6 +33,7 @@ export function useSave(pluginId: NetworkPluginID, chainId: ChainId) {
                 imageUrl: data.imageUrl,
                 avatarId: data.avatarId,
                 address: token.contract?.address ?? '',
+                ownerAddress: account,
                 tokenId: token.tokenId || token.id,
                 chainId: (token.contract?.chainId ?? ChainId.Mainnet) as ChainId,
                 schema: (token.contract?.schema ?? SchemaType.ERC721) as SchemaType,

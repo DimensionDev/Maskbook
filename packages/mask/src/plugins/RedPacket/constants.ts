@@ -1,4 +1,4 @@
-import { PluginID } from '@masknet/plugin-infra'
+import { PluginID } from '@masknet/shared-base'
 
 // Note: if the latest version has been changed, please update packages/mask/src/components/CompositionDialog/useSubmit.ts
 /**

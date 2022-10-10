@@ -14,8 +14,8 @@ export interface MainProps {
     accountList?: AccountType[]
 }
 export function Main(props: MainProps) {
-    const t = useI18N()
     const { openImageSetting, currentVisitingProfile, accountList } = props
+    const t = useI18N()
     if (!accountList?.length) {
         return (
             <Box justifyContent="center" alignItems="center" height="100%">
@@ -27,10 +27,10 @@ export function Main(props: MainProps) {
         <div>
             {accountList.map((account) => (
                 <PlatformCard
+                    key={account.identity}
                     openImageSetting={(status: CURRENT_STATUS) => {
                         openImageSetting(status, account.identity)
                     }}
-                    key={account.identity}
                     account={account}
                     currentPersona={currentVisitingProfile}
                     isCurrent={account.identity === currentVisitingProfile?.identifier?.userId?.toLowerCase()}

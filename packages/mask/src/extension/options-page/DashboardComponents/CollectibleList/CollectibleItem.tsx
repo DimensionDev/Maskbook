@@ -1,4 +1,4 @@
-import { useWeb3State } from '@masknet/plugin-infra/web3'
+import { useWeb3State } from '@masknet/web3-hooks-base'
 import { makeStyles } from '@masknet/theme'
 import { Checkbox, Radio, Skeleton, Typography } from '@mui/material'
 import { forwardRef, HTMLProps, memo } from 'react'
@@ -45,10 +45,6 @@ const useStyles = makeStyles()((theme) => ({
         right: 0,
         padding: 6,
         zIndex: 9,
-        '& [data-icon]': {
-            width: 20,
-            height: 20,
-        },
     },
 }))
 
@@ -129,7 +125,7 @@ export const CollectibleItem = memo(
                         </Typography>
                     </div>
                 ) : null}
-                {selectable ? <SelectableButton className={classes.select} value={value} checked={!!checked} /> : null}
+                {checked ? <SelectableButton className={classes.select} value={value} checked /> : null}
             </div>
         )
     }),

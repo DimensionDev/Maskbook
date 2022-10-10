@@ -32,7 +32,6 @@ const useStyles = makeStyles()((theme) => ({
         textAlign: 'center',
     },
     title: {
-        fontSize: 14,
         lineHeight: '22px',
         color: theme.palette.text.primary,
         fontWeight: 500,
@@ -44,7 +43,6 @@ const useStyles = makeStyles()((theme) => ({
         flexDirection: 'column',
         gap: 16,
     },
-
     button: {
         padding: '8px 0',
         width: '100%',

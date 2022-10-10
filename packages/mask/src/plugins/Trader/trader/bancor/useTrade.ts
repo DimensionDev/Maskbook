@@ -2,9 +2,9 @@ import { useTraderConstants, ChainId, isNativeTokenAddress, SchemaType } from '@
 import { PluginTraderRPC } from '../../messages.js'
 import { SwapBancorRequest, TradeStrategy } from '../../types/index.js'
 import { useSlippageTolerance } from './useSlippageTolerance.js'
-import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
-import { FungibleToken, leftShift, NetworkPluginID } from '@masknet/web3-shared-base'
-import { useAccount, useDoubleBlockBeatRetry } from '@masknet/plugin-infra/web3'
+import { FungibleToken, leftShift } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { useAccount, useChainId, useDoubleBlockBeatRetry } from '@masknet/web3-hooks-base'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 
 export function useTrade(
@@ -17,7 +17,7 @@ export function useTrade(
 ): AsyncStateRetry<SwapBancorRequest | null> {
     const slippageSetting = useSlippageTolerance()
     const slippage = temporarySlippage || slippageSetting
-    const { targetChainId: chainId } = TargetChainIdContext.useContainer()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const { BANCOR_ETH_ADDRESS } = useTraderConstants(chainId)
     const user = useAccount(NetworkPluginID.PLUGIN_EVM)
 

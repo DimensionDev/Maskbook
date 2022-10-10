@@ -25,7 +25,7 @@ const useStyles = makeStyles()((theme) => ({
         lineHeight: '24px',
         fontWeight: 700,
         marginBottom: 12,
-        color: theme.palette.maskColor.main,
+        color: theme.palette.maskColor.publicMain,
     },
     content: {
         width: '100%',
@@ -39,7 +39,6 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         flexDirection: 'column',
         gap: 8,
-        fontSize: 14,
         lineHeight: '18px',
         color: theme.palette.maskColor.main,
         fontWeight: 700,
@@ -49,6 +48,10 @@ const useStyles = makeStyles()((theme) => ({
         boxSizing: 'border-box',
     },
     traitTitle: {
+        whiteSpace: 'nowrap',
+        display: 'inline-block',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
         fontWeight: 400,
         color: theme.palette.maskColor.second,
     },
@@ -57,6 +60,7 @@ const useStyles = makeStyles()((theme) => ({
         whiteSpace: 'nowrap',
         overflow: 'hidden',
     },
+    traitRarity: {},
     unset: {
         color: 'unset',
     },
@@ -95,7 +99,7 @@ export function PropertiesCard(props: PropertiesCardProps) {
                             <Typography className={classes.traitValue} title={x.value}>
                                 {x.value}
                             </Typography>
-                            <Typography>({x.rarity ?? '-%'})</Typography>
+                            <Typography className={classes.traitRarity}>({x.rarity ?? '-%'})</Typography>
                         </div>
                     )
                 })}

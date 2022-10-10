@@ -1,11 +1,13 @@
+import { useCallback, useMemo } from 'react'
+import { useBoolean } from 'react-use'
+import { PluginWeb3ActualContextProvider } from '@masknet/web3-hooks-base'
 import { InjectedDialog } from '@masknet/shared'
-import { ActionButton, makeStyles, MaskTabList, useTabs } from '@masknet/theme'
-import { NetworkPluginID, NonFungibleAsset } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { ActionButton, makeStyles, MaskTabList } from '@masknet/theme'
+import type { NonFungibleAsset } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { TabContext, TabPanel } from '@mui/lab'
 import { DialogContent, Tab } from '@mui/material'
-import { useCallback, useMemo } from 'react'
-import { useBoolean } from 'react-use'
 import { activatedSocialNetworkUI } from '../../../social-network/index.js'
 import { PluginWalletStatusBar } from '../../../utils/index.js'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
@@ -18,7 +20,6 @@ import { NetworkSection } from './NetworkSection/index.js'
 import { NFTSection } from './NFTSection/index.js'
 import { RecipientSection } from './RecipientSection/index.js'
 import { TokenSection } from './TokenSection/index.js'
-import { PluginWeb3ActualContextProvider } from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()((theme) => ({
     dialog: {
@@ -40,11 +41,6 @@ const useStyles = makeStyles()((theme) => ({
     recipient: {
         margin: theme.spacing(1, 2, 0),
     },
-    abstractTabWrapper: {
-        width: '100%',
-        paddingBottom: theme.spacing(1),
-        flexShrink: 0,
-    },
     tabPanel: {
         flexGrow: 1,
         overflow: 'auto',
@@ -54,64 +50,6 @@ const useStyles = makeStyles()((theme) => ({
         height: '100%',
         paddingTop: theme.spacing(2),
         boxSizing: 'border-box',
-    },
-    tab: {
-        height: 36,
-        minHeight: 36,
-    },
-    tabPaper: {
-        backgroundColor: 'inherit',
-    },
-    tabs: {
-        height: 36,
-        minHeight: 36,
-        margin: '0 auto',
-        borderRadius: 4,
-    },
-    fallbackImage: {
-        width: 64,
-        height: 64,
-    },
-    walletChip: {
-        marginLeft: 'auto',
-        height: 40,
-        boxSizing: 'border-box',
-        display: 'flex',
-        alignItems: 'center',
-        backgroundColor: theme.palette.background.default,
-        padding: theme.spacing(0.5, 1),
-        borderRadius: 99,
-    },
-    wallet: {
-        marginLeft: theme.spacing(1),
-    },
-    walletTitle: {
-        marginLeft: theme.spacing(1),
-        lineHeight: '18px',
-        height: 18,
-        fontSize: 14,
-        fontWeight: 'bold',
-    },
-    walletAddress: {
-        height: 12,
-        display: 'flex',
-        alignItems: 'center',
-        fontSize: 10,
-        color: theme.palette.text.secondary,
-    },
-    changeWalletButton: {
-        marginLeft: theme.spacing(0.5),
-        display: 'flex',
-        alignItems: 'center',
-        cursor: 'pointer',
-    },
-    link: {
-        cursor: 'pointer',
-        lineHeight: '10px',
-        marginTop: 2,
-        '&:hover': {
-            textDecoration: 'none',
-        },
     },
 }))
 
@@ -165,14 +103,11 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
         return message
     }, [amount, isTokenTip, nonFungibleTokenContract?.name, token, recipient, recipientSnsId, t])
 
-    const [currentTab, onChange, tabs] = useTabs(TipsType.Tokens, TipsType.Collectibles)
-    const onTabChange: typeof onChange = useCallback(
-        (_, value) => {
-            setTipType(value as TipsType)
-            onChange(_, value)
-        },
-        [onChange],
-    )
+    const currentTab = isTokenTip ? TipsType.Tokens : TipsType.Collectibles
+    const onTabChange = useCallback((_: unknown, value: TipsType) => {
+        setTipType(value)
+    }, [])
+
     const buttonLabel = isSending ? t.sending_tip() : isValid || !validateMessage ? t.send_tip() : validateMessage
 
     const handleConfirm = useCallback(() => {
@@ -208,17 +143,17 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
                 title={t.tips()}
                 titleTabs={
                     <MaskTabList variant="base" onChange={onTabChange} aria-label="Tips">
-                        <Tab label={t.tips_tab_tokens()} value={tabs.tokens} />
-                        <Tab label={t.tips_tab_collectibles()} value={tabs.collectibles} />
+                        <Tab label={t.tips_tab_tokens()} value={TipsType.Tokens} />
+                        <Tab label={t.tips_tab_collectibles()} value={TipsType.Collectibles} />
                     </MaskTabList>
                 }>
                 <DialogContent className={classes.content}>
                     <NetworkSection />
                     <RecipientSection className={classes.recipient} />
-                    <TabPanel value={tabs.tokens} className={classes.tabPanel}>
+                    <TabPanel value={TipsType.Tokens} className={classes.tabPanel}>
                         <TokenSection className={classes.section} />
                     </TabPanel>
-                    <TabPanel value={tabs.collectibles} className={classes.tabPanel} style={{ padding: 0 }}>
+                    <TabPanel value={TipsType.Collectibles} className={classes.tabPanel} style={{ padding: 0 }}>
                         <NFTSection className={classes.section} />
                     </TabPanel>
                     <PluginWeb3ActualContextProvider>

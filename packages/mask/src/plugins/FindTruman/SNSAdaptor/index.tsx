@@ -4,7 +4,7 @@ import { Skeleton } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { type Plugin, usePostInfoDetails, usePluginWrapper } from '@masknet/plugin-infra/content-script'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
-import { parseURL } from '@masknet/shared-base'
+import { parseURLs } from '@masknet/shared-base'
 import { Trans } from 'react-i18next'
 import { Icons } from '@masknet/icons'
 import { PostInspector } from './PostInspector.js'
@@ -76,7 +76,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
         const link = useMemo(() => {
             const x = extractTextFromTypedMessage(props.message)
             if (x.none) return null
-            return parseURL(x.val).find(isFindTrumanURL)
+            return parseURLs(x.val).find(isFindTrumanURL)
         }, [props.message])
         if (!link) return null
         return <Renderer url={link} />

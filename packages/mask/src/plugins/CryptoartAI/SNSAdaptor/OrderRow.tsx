@@ -1,10 +1,10 @@
+import { truncate } from 'lodash-unified'
 import { Avatar, Link, TableCell, TableRow, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { Account } from './Account.js'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../utils/index.js'
 import { resolveWebLinkOnCryptoartAI } from '../pipes/index.js'
-import { truncate } from 'lodash-unified'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -19,7 +19,6 @@ const useStyles = makeStyles()((theme) => {
         },
         accountName: {
             marginLeft: theme.spacing(0.5),
-            fontSize: 14,
             lineHeight: 1,
         },
         relativeTime: {
@@ -38,7 +37,6 @@ const useStyles = makeStyles()((theme) => {
         content: {
             display: 'flex',
             alignItems: 'center',
-            fontSize: 14,
             lineHeight: 1,
         },
         ethPrice: {

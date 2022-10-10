@@ -2,7 +2,7 @@ import { useState, useMemo } from 'react'
 import { useAsync, useAsyncFn } from 'react-use'
 import type { AbiItem } from 'web3-utils'
 import BigNumber from 'bignumber.js'
-import { isLessThan, rightShift, NetworkPluginID, ZERO, formatBalance, formatCurrency } from '@masknet/web3-shared-base'
+import { isLessThan, rightShift, ZERO, formatBalance, formatCurrency } from '@masknet/web3-shared-base'
 import { LoadingBase } from '@masknet/theme'
 import {
     createContract,
@@ -19,7 +19,7 @@ import {
     useFungibleTokenPrice,
     useNativeToken,
     useWeb3,
-} from '@masknet/plugin-infra/web3'
+} from '@masknet/web3-hooks-base'
 import { FungibleTokenInput, FormattedCurrency, InjectedDialog, TokenIcon, useOpenShareTxDialog } from '@masknet/shared'
 import type { AaveLendingPoolAddressProvider } from '@masknet/web3-contracts/types/AaveLendingPoolAddressProvider'
 import AaveLendingPoolAddressProviderABI from '@masknet/web3-contracts/abis/AaveLendingPoolAddressProvider.json'
@@ -33,7 +33,7 @@ import { DialogActions, DialogContent, Typography } from '@mui/material'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base.js'
 import { activatedSocialNetworkUI } from '../../../social-network/index.js'
 import { ActionButtonPromise } from '../../../extension/options-page/DashboardComponents/ActionButton.js'
-import { createLookupTableResolver } from '@masknet/shared-base'
+import { createLookupTableResolver, NetworkPluginID } from '@masknet/shared-base'
 
 export interface SavingsFormDialogProps {
     chainId: number
@@ -277,9 +277,9 @@ export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFo
                     <div className={classes.infoRow}>
                         <Typography variant="body2" className={classes.infoRowLeft}>
                             <TokenIcon
+                                className={classes.rowImage}
                                 address={protocol.bareToken.address}
                                 logoURL={protocol.bareToken.logoURL}
-                                classes={{ icon: classes.rowImage }}
                                 chainId={protocol.bareToken.chainId}
                                 name={protocol.bareToken.name}
                             />

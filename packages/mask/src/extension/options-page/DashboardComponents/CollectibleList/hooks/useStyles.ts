@@ -37,17 +37,7 @@ export const useStyles = makeStyles<CollectibleGridProps>()((theme, { columns = 
         },
         list: {
             overflow: 'auto',
-            '::-webkit-scrollbar': {
-                backgroundColor: 'transparent',
-                width: 20,
-            },
-            '::-webkit-scrollbar-thumb': {
-                borderRadius: '20px',
-                width: 5,
-                border: '7px solid rgba(0, 0, 0, 0)',
-                backgroundColor: theme.palette.maskColor.secondaryLine,
-                backgroundClip: 'padding-box',
-            },
+            position: 'relative',
         },
         sidebar: {
             width: 30,

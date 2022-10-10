@@ -1,11 +1,10 @@
 import { makeStyles } from '@masknet/theme'
 import formatDistanceToNowStrict from 'date-fns/formatDistanceToNowStrict'
 import { Typography, Link } from '@mui/material'
-import { useWeb3State } from '@masknet/plugin-infra/web3'
+import { useWeb3State } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { Icons } from '@masknet/icons'
-import { NonFungibleTokenEvent, formatBalance, isZero, isValidTimestamp } from '@masknet/web3-shared-base'
-import { ActivityType } from '../../types.js'
+import { NonFungibleTokenEvent, formatBalance, isZero, isValidTimestamp, ActivityType } from '@masknet/web3-shared-base'
 import { useI18N } from '../../../../../utils/index.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -19,7 +18,6 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: 8,
         color: theme.palette.maskColor.second,
         backgroundColor: theme.palette.maskColor.bg,
-        boxShadow: '0px 0px 20px rgba(0, 0, 0, 0.05)',
         position: 'relative',
     },
     flex: {
@@ -35,12 +33,14 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.maskColor.main,
     },
     highlight: {
-        color: theme.palette.maskColor.second,
+        // there is no public highlight color, temp hardcode
+        color: '#1C68F3',
     },
     salePrice: {
         display: 'flex',
         alignItems: 'center',
         gap: 4,
+        marginRight: theme.spacing(2),
     },
     salePriceText: {
         fontSize: 18,
@@ -51,7 +51,6 @@ const useStyles = makeStyles()((theme) => ({
     textBase: {
         display: 'flex',
         alignItems: 'center',
-        fontSize: 14,
         lineHeight: '18px',
         color: theme.palette.maskColor.publicSecond,
         '& > strong': {
@@ -66,8 +65,8 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         cursor: 'pointer',
         marginLeft: 4,
-        top: 8,
-        right: 8,
+        top: theme.spacing(1.8),
+        right: theme.spacing(1),
         position: 'absolute',
     },
     fallbackSymbol: {
@@ -81,12 +80,12 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface ActivityCardProps {
-    type: ActivityType
     activity: NonFungibleTokenEvent<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
 }
 
 export function ActivityCard(props: ActivityCardProps) {
-    const { activity, type } = props
+    const { activity } = props
+    const { type } = activity
     const { t } = useI18N()
     const { classes, cx } = useStyles()
     const { Others } = useWeb3State()
@@ -146,7 +145,6 @@ export function ActivityCard(props: ActivityCardProps) {
                             </strong>
                         </>
                     )}
-
                     {isValidTimestamp(activity.timestamp) &&
                         formatDistanceToNowStrict(new Date(activity.timestamp!), {
                             addSuffix: true,

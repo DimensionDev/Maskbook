@@ -1,14 +1,9 @@
 import type { Appearance, LanguageOptions } from '@masknet/public-api'
 import type { SerializableTypedMessages } from '@masknet/typed-message'
 import type { ProfileIdentifier, PersonaIdentifier } from '../Identifier/index.js'
+import type { NetworkPluginID } from '../Plugin/index.js'
 import type { RelationFavor } from '../Persona/type.js'
 import type { EnhanceableSite, ExtensionSite } from '../Site/index.js'
-
-enum NetworkPluginID {
-    PLUGIN_EVM = 'com.mask.evm',
-    PLUGIN_FLOW = 'com.mask.flow',
-    PLUGIN_SOLANA = 'com.mask.solana',
-}
 
 export interface MaskSettingsEvents {
     appearanceSettings: Appearance
@@ -102,7 +97,7 @@ export type CheckSecurityDialogEvent =
 
 export type ApplicationDialogEvent = {
     open: boolean
-    application: string
+    pluginID: string
 }
 
 export interface SettingsDialogEvent {
@@ -127,6 +122,8 @@ export type NonFungibleTokenDialogEvent =
           chainId: number
           tokenId: string
           tokenAddress: string
+          ownerAddress?: string
+          origin?: 'pfp' | 'web3-profile-card' | 'web3-profile-tab' | 'unknown'
       }
     | {
           open: false
