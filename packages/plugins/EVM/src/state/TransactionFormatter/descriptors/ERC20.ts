@@ -30,9 +30,15 @@ export class ERC20Descriptor implements TransactionDescriptor {
                             description: i18NextInstance.t('plugin_infra_descriptor_token_revoke', {
                                 symbol: token?.symbol ?? 'token',
                             }),
-                            tokenDescription: token?.symbol ?? 'token',
-                            successfulDescription: i18NextInstance.t('plugin_infra_descriptor_token_revoke_success'),
-                            failedDescription: i18NextInstance.t('plugin_infra_descriptor_token_revoke_fail'),
+                            popup: {
+                                tokenDescription: token?.symbol ?? 'token',
+                            },
+                            snackbar: {
+                                successfulDescription: i18NextInstance.t(
+                                    'plugin_infra_descriptor_token_revoke_success',
+                                ),
+                                failedDescription: i18NextInstance.t('plugin_infra_descriptor_token_revoke_fail'),
+                            },
                         }
                     }
 
@@ -44,13 +50,17 @@ export class ERC20Descriptor implements TransactionDescriptor {
                         description: i18NextInstance.t('plugin_infra_descriptor_token_approve', {
                             tokenAmountDescription: getTokenAmountDescription(parameters?.value, token),
                         }),
-                        tokenDescription: leftShift(parameters?.value, token?.decimals).gt(pow10(9))
-                            ? i18NextInstance.t('popups_wallet_token_infinite_unlock')
-                            : undefined,
-                        successfulDescription: i18NextInstance.t('plugin_infra_descriptor_token_approve_success', {
-                            tokenAmountDescription: getTokenAmountDescription(parameters?.value, token),
-                        }),
-                        failedDescription: i18NextInstance.t('plugin_infra_descriptor_token_fail'),
+                        popup: {
+                            tokenDescription: leftShift(parameters?.value, token?.decimals).gt(pow10(9))
+                                ? i18NextInstance.t('popups_wallet_token_infinite_unlock')
+                                : undefined,
+                        },
+                        snackbar: {
+                            successfulDescription: i18NextInstance.t('plugin_infra_descriptor_token_approve_success', {
+                                tokenAmountDescription: getTokenAmountDescription(parameters?.value, token),
+                            }),
+                            failedDescription: i18NextInstance.t('plugin_infra_descriptor_token_fail'),
+                        },
                     }
             }
 
@@ -73,10 +83,12 @@ export class ERC20Descriptor implements TransactionDescriptor {
                     description: i18NextInstance.t('plugin_infra_descriptor_token_transfer', {
                         tokenAmountDescription: getTokenAmountDescription(parameters?.value, token),
                     }),
-                    successfulDescription: i18NextInstance.t('plugin_infra_descriptor_token_transfer_success', {
-                        tokenAmountDescription: getTokenAmountDescription(parameters?.value, token),
-                    }),
-                    failedDescription: i18NextInstance.t('plugin_infra_descriptor_token_transfer_fail'),
+                    snackbar: {
+                        successfulDescription: i18NextInstance.t('plugin_infra_descriptor_token_transfer_success', {
+                            tokenAmountDescription: getTokenAmountDescription(parameters?.value, token),
+                        }),
+                        failedDescription: i18NextInstance.t('plugin_infra_descriptor_token_transfer_fail'),
+                    },
                 }
             }
         }

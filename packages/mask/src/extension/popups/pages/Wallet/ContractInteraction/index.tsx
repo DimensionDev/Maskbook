@@ -185,7 +185,7 @@ const ContractInteraction = memo(() => {
                         : true,
                     typeName: transactionDescription?.title ?? t('popups_wallet_contract_interaction'),
                     tokenAddress: transactionDescription?.tokenInAddress,
-                    tokenDescription: transactionDescription?.tokenDescription,
+                    tokenDescription: transactionDescription?.popup?.tokenDescription,
                     to: request.computedPayload?.to,
                     gas: request.computedPayload?.gas,
                     gasPrice: request.computedPayload?.gasPrice,
