@@ -1,0 +1,126 @@
+diff --git a/ModalUnstyled/ModalManager.d.ts b/ModalUnstyled/ModalManager.d.ts
+index 9fd0ec291cb1fe4f326bb32f5976520f5c65016d..1dd68f641ce0311b91d284e7217dda09da630db9 100644
+--- a/ModalUnstyled/ModalManager.d.ts
++++ b/ModalUnstyled/ModalManager.d.ts
+@@ -1,5 +1,6 @@
+ export interface ManagedModalProps {
+     disableScrollLock?: boolean;
++    scrollContainer?: Element;
+ }
+ export declare function ariaHidden(element: Element, show: boolean): void;
+ interface Modal {
+diff --git a/ModalUnstyled/ModalManager.js b/ModalUnstyled/ModalManager.js
+index 532d7900e9cbb8c99132d072cdb9bbb158e47127..732a4a23997940ea55b0eccaac9875c683e58732 100644
+--- a/ModalUnstyled/ModalManager.js
++++ b/ModalUnstyled/ModalManager.js
+@@ -87,7 +87,9 @@ function handleContainer(containerInfo, props) {
+ 
+     let scrollContainer;
+ 
+-    if (container.parentNode instanceof DocumentFragment) {
++    if (props.scrollContainer) {
++      scrollContainer = props.scrollContainer
++    } else if (container.parentNode instanceof DocumentFragment) {
+       scrollContainer = ownerDocument(container).body;
+     } else {
+       // Improve Gatsby support
+diff --git a/ModalUnstyled/ModalUnstyled.js b/ModalUnstyled/ModalUnstyled.js
+index 35bba11d796242845460d31d7df00185d6e32032..4434e13538294b7a494fcd6515753f34656c9970 100644
+--- a/ModalUnstyled/ModalUnstyled.js
++++ b/ModalUnstyled/ModalUnstyled.js
+@@ -67,6 +67,7 @@ const ModalUnstyled = /*#__PURE__*/React.forwardRef(function ModalUnstyled(props
+     disablePortal = false,
+     disableRestoreFocus = false,
+     disableScrollLock = false,
++    scrollContainer,
+     hideBackdrop = false,
+     keepMounted = false,
+     // private
+@@ -101,7 +102,8 @@ const ModalUnstyled = /*#__PURE__*/React.forwardRef(function ModalUnstyled(props
+ 
+   const handleMounted = () => {
+     manager.mount(getModal(), {
+-      disableScrollLock
++      disableScrollLock,
++      scrollContainer,
+     }); // Fix a bug on Chrome where the scroll isn't initially 0.
+ 
+     modalRef.current.scrollTop = 0;
+diff --git a/ModalUnstyled/ModalUnstyled.types.d.ts b/ModalUnstyled/ModalUnstyled.types.d.ts
+index fb39cc325d7a7f721a324bd7b488dcfa3b8c8c96..dfe0fa4a22b95c6be4d2d21ab2af961a5a9a03f3 100644
+--- a/ModalUnstyled/ModalUnstyled.types.d.ts
++++ b/ModalUnstyled/ModalUnstyled.types.d.ts
+@@ -44,6 +44,7 @@ export interface ModalUnstyledOwnProps {
+      * so it's simply `document.body` most of the time.
+      */
+     container?: PortalProps['container'];
++    scrollContainer?: Element;
+     /**
+      * If `true`, the modal will not automatically shift focus to itself when it opens, and
+      * replace it to the last focused element when it closes.
+diff --git a/legacy/ModalUnstyled/ModalManager.js b/legacy/ModalUnstyled/ModalManager.js
+index bd7544dccf949b70551e31e41592ce00a4dc829d..96ac399908a83ba8a573f96821c3f35f760dc374 100644
+--- a/legacy/ModalUnstyled/ModalManager.js
++++ b/legacy/ModalUnstyled/ModalManager.js
+@@ -92,7 +92,9 @@ function handleContainer(containerInfo, props) {
+ 
+     var scrollContainer;
+ 
+-    if (container.parentNode instanceof DocumentFragment) {
++    if (props.scrollContainer) {
++      scrollContainer = props.scrollContainer;
++    } else if (container.parentNode instanceof DocumentFragment) {
+       scrollContainer = ownerDocument(container).body;
+     } else {
+       // Improve Gatsby support
+diff --git a/legacy/ModalUnstyled/ModalUnstyled.js b/legacy/ModalUnstyled/ModalUnstyled.js
+index d08d33e66f7e614437f6fb43965e216f636c9686..ce04cddc0db64fdadcae62c9b29484810224146d 100644
+--- a/legacy/ModalUnstyled/ModalUnstyled.js
++++ b/legacy/ModalUnstyled/ModalUnstyled.js
+@@ -110,7 +110,8 @@ var ModalUnstyled = /*#__PURE__*/React.forwardRef(function ModalUnstyled(props,
+ 
+   var handleMounted = function handleMounted() {
+     manager.mount(getModal(), {
+-      disableScrollLock: disableScrollLock
++      disableScrollLock: disableScrollLock,
++      scrollContainer: props.scrollContainer,
+     }); // Fix a bug on Chrome where the scroll isn't initially 0.
+ 
+     modalRef.current.scrollTop = 0;
+diff --git a/modern/ModalUnstyled/ModalManager.js b/modern/ModalUnstyled/ModalManager.js
+index 2a5614b978ce2dd2e54be7e9d9985afd846681b2..f853a458a69b9346a8a3c1d2dead12753db72374 100644
+--- a/modern/ModalUnstyled/ModalManager.js
++++ b/modern/ModalUnstyled/ModalManager.js
+@@ -87,7 +87,9 @@ function handleContainer(containerInfo, props) {
+ 
+     let scrollContainer;
+ 
+-    if (container.parentNode instanceof DocumentFragment) {
++    if (props.scrollContainer) {
++      scrollContainer = props.scrollContainer;
++    } else if (container.parentNode instanceof DocumentFragment) {
+       scrollContainer = ownerDocument(container).body;
+     } else {
+       // Improve Gatsby support
+diff --git a/modern/ModalUnstyled/ModalUnstyled.js b/modern/ModalUnstyled/ModalUnstyled.js
+index 95e6813091cbe48670ba30944c1c4f693bf599ce..4e362a4c2a5394baa0f1688346d614f7268f5731 100644
+--- a/modern/ModalUnstyled/ModalUnstyled.js
++++ b/modern/ModalUnstyled/ModalUnstyled.js
+@@ -65,6 +65,7 @@ const ModalUnstyled = /*#__PURE__*/React.forwardRef(function ModalUnstyled(props
+     disablePortal = false,
+     disableRestoreFocus = false,
+     disableScrollLock = false,
++    scrollContainer,
+     hideBackdrop = false,
+     keepMounted = false,
+     // private
+@@ -99,7 +100,8 @@ const ModalUnstyled = /*#__PURE__*/React.forwardRef(function ModalUnstyled(props
+ 
+   const handleMounted = () => {
+     manager.mount(getModal(), {
+-      disableScrollLock
++      disableScrollLock,
++      scrollContainer,
+     }); // Fix a bug on Chrome where the scroll isn't initially 0.
+ 
+     modalRef.current.scrollTop = 0;

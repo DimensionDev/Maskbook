@@ -94,7 +94,8 @@
       "cross-fetch": "3.1.5",
       "cross-blob": "3.0.1",
       "i18next-translation-parser>html-parse-stringify2": "github:locize/html-parse-stringify2#d463109433b2c49c74a081044f54b2a6a1ccad7c",
-      "web3@0.20.7>bignumber.js": "git+https://github.com/frozeman/bignumber.js-nolookahead.git#57692b3ecfc98bbdd6b3a516cb2353652ea49934"
+      "web3@0.20.7>bignumber.js": "git+https://github.com/frozeman/bignumber.js-nolookahead.git#57692b3ecfc98bbdd6b3a516cb2353652ea49934",
+      "@mui/base": "5.0.0-alpha.100"
     },
     "override comments": {
       "ipfs-utils": "see https://github.com/ipfs/js-ipfs-utils/issues/158",
@@ -133,7 +134,7 @@
       "@emotion/use-insertion-effect-with-fallbacks@1.0.0": "patches/@emotion__use-insertion-effect-with-fallbacks@1.0.0.patch",
       "@emotion/cache@11.10.3": "patches/@emotion__cache@11.10.3.patch",
       "@emotion/react@11.10.4": "patches/@emotion__react@11.10.4.patch",
-      "@mui/base@5.0.0-alpha.96": "patches/@mui__base@5.0.0-alpha.96.patch"
+      "@mui/base@5.0.0-alpha.100": "patches/@mui__base@5.0.0-alpha.100.patch"
     }
   }
 }
