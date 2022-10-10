@@ -1,4 +1,4 @@
-import React, { createContext, ReactNode, useContext } from 'react'
+import React, { createContext, ReactNode, useContext, useState } from 'react'
 import { EMPTY_OBJECT, NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useActualAccount } from './useAccount.js'
@@ -8,14 +8,17 @@ import { useActualProviderType } from './useProviderType.js'
 
 interface Web3Context<T extends NetworkPluginID> {
     account?: string
+    networkPluginId?: T
     chainId?: Web3Helper.Definition[T]['ChainId']
+    setChainId?: (chainId: Web3Helper.Definition[T]['ChainId']) => void
     networkType?: Web3Helper.Definition[T]['NetworkType']
     providerType?: Web3Helper.Definition[T]['ProviderType']
 }
 
 const PluginIDContext = createContext(NetworkPluginID.PLUGIN_EVM)
 
-const PluginWeb3Context = createContext<Web3Context<NetworkPluginID>>(EMPTY_OBJECT)
+// Avoid use this context directly
+export const PluginWeb3Context = createContext<Web3Context<NetworkPluginID>>(EMPTY_OBJECT)
 
 const PluginsWeb3Context = createContext<Record<NetworkPluginID, Web3Helper.Web3State<NetworkPluginID>>>(null!)
 
@@ -24,13 +27,14 @@ export function PluginIDContextProvider({ value, children }: React.ProviderProps
 }
 
 export function PluginWeb3ContextProvider<T extends NetworkPluginID>({
-    pluginID,
     value,
     children,
 }: {
     pluginID: T
-} & React.ProviderProps<Web3Context<T>>) {
-    return <PluginWeb3Context.Provider value={value} children={children} />
+} & React.ProviderProps<Omit<Web3Context<T>, 'setChainId'>>) {
+    const [chainId, setChainId] = useState<Web3Helper.Definition[T]['ChainId'] | undefined>(value.chainId)
+
+    return <PluginWeb3Context.Provider value={{ ...value, setChainId, chainId }} children={children} />
 }
 
 export function PluginWeb3ActualContextProvider({ children }: { children: ReactNode | undefined }) {

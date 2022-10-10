@@ -1,4 +1,5 @@
 import {
+    PluginWeb3Context,
     PluginWeb3ContextProvider,
     useCurrentWeb3NetworkPluginID,
     useDefaultChainId,
@@ -22,16 +23,16 @@ interface NetworkTabProps<T extends NetworkPluginID>
 
 export function NetworkTab<T extends NetworkPluginID = NetworkPluginID.PLUGIN_EVM>(props: NetworkTabProps<T>) {
     const { chains } = props
-    const { chainId, setChainId, networkId } = useContext(NetworkTabContext)
+    const { chainId, setChainId, networkPluginId } = useContext(PluginWeb3Context)
 
-    const networks = useNetworkDescriptors(networkId)
+    const networks = useNetworkDescriptors(networkPluginId)
     const usedNetworks = networks.filter((x) => chains.find((c) => c === x.chainId))
     const networkIds = usedNetworks.map((x) => x.chainId.toString())
-    const [currentTab, , , setTab] = useTabs(chainId.toString() ?? networkIds[0], ...networkIds)
+    const [currentTab, , , setTab] = useTabs(chainId?.toString() ?? networkIds[0], ...networkIds)
 
     useUpdateEffect(() => {
         setTab((prev) => {
-            if (prev !== chainId.toString()) return chainId.toString()
+            if (chainId && prev !== chainId?.toString()) return chainId.toString()
             return prev
         })
     }, [chainId])
@@ -41,7 +42,7 @@ export function NetworkTab<T extends NetworkPluginID = NetworkPluginID.PLUGIN_EV
             <MaskTabList
                 variant="flexible"
                 onChange={(_, v) => {
-                    setChainId(Number.parseInt(v, 10))
+                    setChainId?.(Number.parseInt(v, 10))
                     setTab(v)
                 }}
                 aria-label="Network Tabs">
