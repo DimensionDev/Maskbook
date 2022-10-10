@@ -27,6 +27,7 @@ export const buildBaseExtension: TaskFunction = buildExtensionFlag('default', {
 })
 
 export async function extensionWatch(f: Function | BuildFlagsExtended) {
+    buildSentry
     buildPolyfill()
     buildSentry()
     buildGun()

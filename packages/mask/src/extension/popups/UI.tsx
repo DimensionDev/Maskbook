@@ -26,7 +26,6 @@ const RequestPermissionPage = lazy(() => import('./RequestPermission/index.js'))
 const PermissionAwareRedirect = lazy(() => import('./PermissionAwareRedirect/index.js'))
 const ThirdPartyRequestPermission = lazy(() => import('./ThirdPartyRequestPermission/index.js'))
 
-initLogs('popup')
 const PluginRender = createInjectHooksRenderer(useActivatedPluginsDashboard, (x) => x.GlobalInjection)
 function PluginRenderDelayed() {
     const [canRenderPlugin, setRenderPlugins] = useState(false)
