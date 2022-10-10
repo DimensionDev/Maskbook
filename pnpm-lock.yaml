@@ -60,9 +60,6 @@ patchedDependencies:
   '@mui/base@5.0.0-alpha.100':
     hash: cc7k56pam6cgsdxwjuynldgftq
     path: patches/@mui__base@5.0.0-alpha.100.patch
-  '@mui/material@5.10.8':
-    hash: 6rfobm7r4pzzqotrijne5wm7xu
-    path: patches/@mui__material@5.10.8.patch
 
 importers:
 
@@ -100,7 +97,7 @@ importers:
         version: 5.0.0-alpha.102_pzot3t7mjiyawwkac3hvgkgggu
       '@mui/material':
         specifier: 5.10.8
-        version: 5.10.8_6rfobm7r4pzzqotrijne5wm7xu_pmt7mohamriu6nuiv5xnts3qce
+        version: 5.10.8_pmt7mohamriu6nuiv5xnts3qce
       '@mui/system':
         specifier: 5.10.8
         version: 5.10.8_vwwef2nvz4gdxxvg6n4jd3cdiy
@@ -7707,7 +7704,7 @@ packages:
         optional: true
     dependencies:
       '@babel/runtime': 7.19.0
-      '@mui/material': 5.10.8_6rfobm7r4pzzqotrijne5wm7xu_pmt7mohamriu6nuiv5xnts3qce
+      '@mui/material': 5.10.8_pmt7mohamriu6nuiv5xnts3qce
       '@types/react': 18.0.17
       react: 18.2.0
     dev: false
@@ -7740,7 +7737,7 @@ packages:
       '@emotion/react': 11.10.4_obcydjbogyjam4qag626nceajy_ug65io7jkbhmo4fihdmbrh3ina
       '@emotion/styled': 11.10.4_4qlqmspomoqctzkikkhvhnn3qu
       '@mui/base': 5.0.0-alpha.100_cc7k56pam6cgsdxwjuynldgftq_zxljzmqdrxwnuenbkrz77w74uy
-      '@mui/material': 5.10.8_6rfobm7r4pzzqotrijne5wm7xu_pmt7mohamriu6nuiv5xnts3qce
+      '@mui/material': 5.10.8_pmt7mohamriu6nuiv5xnts3qce
       '@mui/system': 5.10.8_vwwef2nvz4gdxxvg6n4jd3cdiy
       '@mui/types': 7.2.0_@types+react@18.0.17
       '@mui/utils': 5.10.6_react@18.2.0
@@ -7752,7 +7749,7 @@ packages:
       react-is: 18.2.0
     dev: false
 
-  /@mui/material/5.10.8_6rfobm7r4pzzqotrijne5wm7xu_pmt7mohamriu6nuiv5xnts3qce:
+  /@mui/material/5.10.8_pmt7mohamriu6nuiv5xnts3qce:
     resolution: {integrity: sha512-sF/Ka0IJjGXV52zoT4xAWEqXVRjNYbIjATo9L4Q5oQC5iJpGrKJFY16uNtWWB0+vp/nayAuPGZHrxtV+t3ecdQ==}
     engines: {node: '>=12.0.0'}
     peerDependencies:
@@ -7791,7 +7788,6 @@ packages:
       react-is: 18.2.0
       react-transition-group: 4.4.5_biqbaboplfbrettd7655fr4n2y
     dev: false
-    patched: true
 
   /@mui/private-theming/5.10.6_ug65io7jkbhmo4fihdmbrh3ina:
     resolution: {integrity: sha512-I/W0QyTLRdEx6py3lKAquKO/rNF/7j+nIOM/xCyI9kU0fcotVTcTY08mKMsS6vrzdWpi6pAkD0wP0KwWy5R5VA==}
