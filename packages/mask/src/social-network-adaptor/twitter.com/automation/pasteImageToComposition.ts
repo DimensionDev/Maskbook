@@ -9,7 +9,7 @@ export function pasteImageToCompositionTwitter(hasSucceed: () => Promise<boolean
     const pasteImage = pasteImageToCompositionDefault(hasSucceed)
     return async function (
         url: string | Blob,
-        data: SocialNetworkUI.AutomationCapabilities.NativeCompositionAttachImageOptions,
+        options: SocialNetworkUI.AutomationCapabilities.NativeCompositionAttachImageOptions,
     ) {
         const interval = 500
         // get focus
@@ -20,6 +20,6 @@ export function pasteImageToCompositionTwitter(hasSucceed: () => Promise<boolean
             i.evaluate()!.focus()
             await delay(interval)
         }
-        pasteImage(url, data)
+        pasteImage(url, options)
     }
 }
