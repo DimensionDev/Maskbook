@@ -19,7 +19,7 @@ export function Main(props: MainProps) {
     if (!accountList?.length) {
         return (
             <Box justifyContent="center" alignItems="center" height="100%">
-                <Empty content={t.account_empty()} />
+                <Empty showIcon content={t.account_empty()} />
             </Box>
         )
     }

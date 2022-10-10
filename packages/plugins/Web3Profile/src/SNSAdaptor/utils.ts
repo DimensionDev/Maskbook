@@ -12,47 +12,22 @@ import { AlchemyEVM, NextIDStorage, RSS3 } from '@masknet/web3-providers'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { ChainId, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
 import { PLUGIN_ID } from '../constants.js'
-import type { Collection, HiddenConfig, PersonaKV } from './types.js'
+import type { Collection, UnlistConfig, PersonaKV } from './types.js'
 
-export const formatPublicKey = (publicKey?: string) => {
-    return `${publicKey?.slice(0, 6)}...${publicKey?.slice(-6)}`
-}
-
-export const mergeList = (listA: WalletTypes[], listB: WalletTypes[]) => {
-    return listA.map((item) => {
-        const listBCollection = listB.find((itemB) => isSameAddress(itemB.address, item.address))?.collections
-        return {
-            ...item,
-            collections: [...(item?.collections ?? []), ...(listBCollection ?? [])],
-        }
-    })
-}
-
-const deduplicateArray = (listA?: WalletTypes[], listB?: WalletTypes[]) => {
+const removeUnlistedWallets = (listA?: WalletTypes[], listB?: WalletTypes[]) => {
     if (!listA?.length) return []
     if (!listB?.length) return [...listA]
     return listA.filter((l2) => !listB.some((l1) => isSameAddress(l2.address, l1.address)))
-}
-
-const addHiddenToArray = (listA?: CollectionTypes[], listB?: string[]) => {
-    if (!listA?.length) return []
-    if (!listB?.length) return [...listA]
-    return listA.map((x) => {
-        return {
-            ...x,
-            hidden: listB.includes(x.key),
-        }
-    })
 }
 
 export const getWalletList = (
     accounts: BindingProof[],
     wallets: WalletTypes[],
     allPersona: PersonaInformation[],
-    hiddenConfig: HiddenConfig | undefined,
-    footprints?: Collection[],
-    donations?: Collection[],
-    NFTs?: Collection[],
+    unlistConfig: UnlistConfig | undefined,
+    footprints: Collection[] = [],
+    donations: Collection[] = [],
+    NFTs: Collection[] = [],
 ) => {
     if (accounts?.length === 0) return EMPTY_LIST
     const allLinkedProfiles = allPersona?.flatMap((persona) => persona.linkedProfiles)
@@ -72,31 +47,21 @@ export const getWalletList = (
         (x) => x.platform + x.identity,
     )
     return detailedAccounts.map((detailedAccount) => {
-        const hiddenWallet = hiddenConfig?.wallets?.[detailedAccount.identity]
-        const hiddenCollection = hiddenConfig?.collections?.[detailedAccount.identity]
+        const unlistedWallet = unlistConfig?.wallets?.[detailedAccount.identity]
         return {
             ...detailedAccount,
             walletList: {
-                NFTs: deduplicateArray(wallets, hiddenWallet?.NFTs).map((wallet) => ({
+                NFTs: removeUnlistedWallets(wallets, unlistedWallet?.NFTs).map((wallet) => ({
                     ...wallet,
-                    collections: addHiddenToArray(
-                        NFTs?.find((NFT) => isSameAddress(NFT.address, wallet.address))?.collections,
-                        hiddenCollection?.[wallet.address]?.NFTs,
-                    ),
+                    collections: NFTs?.find((x) => isSameAddress(x.address, wallet.address))?.collections,
                 })),
-                donations: deduplicateArray(wallets, hiddenWallet?.donations).map((wallet) => ({
+                donations: removeUnlistedWallets(wallets, unlistedWallet?.donations).map((wallet) => ({
                     ...wallet,
-                    collections: addHiddenToArray(
-                        donations?.find((donation) => isSameAddress(donation.address, wallet.address))?.collections,
-                        hiddenCollection?.[wallet.address]?.Donations,
-                    ),
+                    collections: donations?.find((x) => isSameAddress(x.address, wallet.address))?.collections,
                 })),
-                footprints: deduplicateArray(wallets, hiddenWallet?.footprints).map((wallet) => ({
+                footprints: removeUnlistedWallets(wallets, unlistedWallet?.footprints).map((wallet) => ({
                     ...wallet,
-                    collections: addHiddenToArray(
-                        footprints?.find((footprint) => isSameAddress(footprint.address, wallet.address))?.collections,
-                        hiddenCollection?.[wallet.address]?.Footprints,
-                    ),
+                    collections: footprints?.find((x) => isSameAddress(x.address, wallet.address))?.collections,
                 })),
             } as WalletsCollection,
         }
@@ -179,14 +144,15 @@ export const getNFTList = async (walletList: WalletTypes[], chainIds: ChainId[])
     return collections
 }
 
-export const getWalletHiddenConfig = async (publicKey: string): Promise<HiddenConfig | undefined> => {
+export const getWalletHiddenConfig = async (publicKey: string): Promise<UnlistConfig | undefined> => {
     if (!publicKey) return
 
     const res = await NextIDStorage.get<PersonaKV>(publicKey)
     if (!res.ok) return
 
-    const wallets: HiddenConfig['wallets'] = {}
-    const collections: HiddenConfig['collections'] = {}
+    const wallets: UnlistConfig['wallets'] = {}
+    const collections: UnlistConfig['collections'] = {}
+
     res.val.proofs
         ?.filter((x) => x.platform === NextIDPlatform.Twitter)
         ?.forEach((y) => {

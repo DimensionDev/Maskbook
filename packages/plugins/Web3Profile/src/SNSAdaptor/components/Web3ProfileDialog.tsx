@@ -151,20 +151,23 @@ export function Web3ProfileDialog() {
                     currentVisitingProfile={currentVisitingProfile}
                     accountList={accountList}
                 />
-                <ImageManagement
-                    currentPersona={currentPersona}
-                    account={accountList.find((x) => x.identity === accountId)}
-                    status={scene}
-                    onClose={() => {
-                        setImageManageOpen(false)
-                        setScene(Scene.Main)
-                    }}
-                    open={imageManageOpen}
-                    accountId={accountId}
-                    currentVisitingProfile={currentVisitingProfile}
-                    allWallets={wallets}
-                    getWalletHiddenRetry={retryGetWalletHiddenList}
-                />
+                {accountId && imageManageOpen ? (
+                    <ImageManagement
+                        open
+                        currentPersona={currentPersona}
+                        account={accountList.find((x) => x.identity === accountId)}
+                        scene={scene as Exclude<Scene, Scene.Main>}
+                        onClose={() => {
+                            setImageManageOpen(false)
+                            setScene(Scene.Main)
+                        }}
+                        accountId={accountId}
+                        currentVisitingProfile={currentVisitingProfile}
+                        allWallets={wallets}
+                        getWalletHiddenRetry={retryGetWalletHiddenList}
+                        unlistCollectionConfig={hiddenConfig?.collections?.[accountId]}
+                    />
+                ) : null}
             </DialogContent>
             {currentPersona ? (
                 <DialogActions className={classes.actions}>

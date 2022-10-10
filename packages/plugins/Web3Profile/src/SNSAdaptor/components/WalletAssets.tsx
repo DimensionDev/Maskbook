@@ -107,7 +107,8 @@ export interface WalletAssetsCardProps extends withClasses<never | 'root'> {
     networkIcon?: URL
     address: WalletTypes
     onSetting: () => void
-    collectionList?: CollectionTypes[]
+    collections?: CollectionTypes[]
+    hasUnlisted?: boolean
     collectionName?: string
 }
 
@@ -118,15 +119,13 @@ const enum LOAD_STATUS {
 }
 
 export function WalletAssetsCard(props: WalletAssetsCardProps) {
-    const { address, onSetting, collectionList, collectionName } = props
+    const { address, onSetting, collections: collectionList, collectionName, hasUnlisted } = props
     const t = useI18N()
     const classes = useStylesExtends(useStyles(), props)
     const chainId = ChainId.Mainnet
 
     const [loadStatus, setLoadStatus] = useState(
-        collectionList && collectionList?.filter((collection) => !collection?.hidden)?.length > 8
-            ? LOAD_STATUS.Necessary
-            : LOAD_STATUS.Unnecessary,
+        (collectionList?.length || 0) > 8 ? LOAD_STATUS.Necessary : LOAD_STATUS.Unnecessary,
     )
 
     const { Others } = useWeb3State(address?.networkPluginID ?? NetworkPluginID.PLUGIN_EVM)
@@ -134,15 +133,12 @@ export function WalletAssetsCard(props: WalletAssetsCardProps) {
     const iconURL = NETWORK_DESCRIPTORS.find((network) => network?.chainId === ChainId.Mainnet)?.icon
 
     const collections = useMemo(() => {
-        const filterCollections = collectionList?.filter((collection) => !collection?.hidden)
-        if (!filterCollections?.length) return EMPTY_LIST
-        if (filterCollections.length > 8 && loadStatus !== LOAD_STATUS.Finish) {
-            return filterCollections.slice(0, 8)
+        if (!collectionList?.length) return EMPTY_LIST
+        if (collectionList.length > 8 && loadStatus !== LOAD_STATUS.Finish) {
+            return collectionList.slice(0, 8)
         }
-        return filterCollections
+        return collectionList
     }, [loadStatus, collectionList])
-
-    const hasHiddenCollection = collectionList && collectionList?.filter((collection) => collection.hidden).length > 0
 
     const loadIcon = useMemo(() => {
         if (loadStatus === LOAD_STATUS.Necessary)
@@ -158,7 +154,7 @@ export function WalletAssetsCard(props: WalletAssetsCardProps) {
 
     return (
         <Card className={classes.wrapper}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <Box display="flex" justifyContent="space-between" alignItems="center">
                 <div className={classes.walletInfo}>
                     <PersonaImageIcon icon={iconURL} size={20} borderRadius="99px" />
                     <Typography className={classes.walletName}>
@@ -182,9 +178,9 @@ export function WalletAssetsCard(props: WalletAssetsCardProps) {
                     )}
                     <Icons.Edit2 size={20} onClick={onSetting} className={classes.editIcon} />
                 </div>
-            </div>
+            </Box>
 
-            {collectionList?.some((collection) => !collection?.hidden) ? (
+            {collections.length ? (
                 <Box className={classes.listBox}>
                     <CollectionList
                         classes={{ list: classes.list, collectionWrap: classes.imageIconWrapper }}
@@ -197,9 +193,8 @@ export function WalletAssetsCard(props: WalletAssetsCardProps) {
             ) : (
                 <Box>
                     <Empty
-                        showIcon={false}
                         content={
-                            hasHiddenCollection
+                            hasUnlisted
                                 ? t.all_collection_hidden({
                                       collection: collectionName ?? SceneMap[Scene.NFTSetting].title,
                                   })

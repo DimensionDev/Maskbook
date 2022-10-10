@@ -94,7 +94,7 @@ export interface AlchemyNFT_EVM {
     timeLastUpdated: string
 }
 
-export interface HiddenConfig {
+export interface UnlistConfig {
     wallets: { [identity in string]: WalletsCollection }
     collections: {
         [identity in string]: {

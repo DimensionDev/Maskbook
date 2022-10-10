@@ -131,17 +131,30 @@ export interface ImageListDialogProps extends withClasses<never | 'root'> {
     collectionList?: CollectionTypes[]
     accountId?: string
     retryData: () => void
+    unlistedKeys: string[]
 }
 
 export function ImageListDialog(props: ImageListDialogProps) {
-    const { wallet, open, onClose, retryData, title, accountId, currentPersona, collectionList = EMPTY_LIST } = props
+    const {
+        wallet,
+        open,
+        onClose,
+        retryData,
+        title,
+        accountId,
+        currentPersona,
+        collectionList = EMPTY_LIST,
+        unlistedKeys,
+    } = props
     const t = useI18N()
     const { Storage } = useWeb3State()
     const classes = useStylesExtends(useStyles(), props)
     const [addNFTOpen, setAddNFTOpen] = useState(false)
 
-    const unlistedKeys = collectionList.filter((x) => x.hidden).map((x) => x.key)
-    const [pendingUnlistedKeys, setPendingUnlistedKeys] = useState(unlistedKeys ?? EMPTY_LIST)
+    const [pendingUnlistedKeys, setPendingUnlistedKeys] = useState(unlistedKeys)
+    useEffect(() => {
+        setPendingUnlistedKeys(unlistedKeys)
+    }, [unlistedKeys, open])
     const confirmButtonDisabled = isEqual(sortBy(unlistedKeys), sortBy(pendingUnlistedKeys))
 
     const unListedCollections = useMemo(
@@ -152,10 +165,6 @@ export function ImageListDialog(props: ImageListDialogProps) {
         () => collectionList.filter((x) => !pendingUnlistedKeys.includes(x.key)),
         [collectionList, pendingUnlistedKeys],
     )
-
-    useEffect(() => {
-        setPendingUnlistedKeys(collectionList?.filter((x) => x.hidden).map((x) => x.key) ?? EMPTY_LIST)
-    }, [collectionList, open])
 
     const unList = useCallback((key: string) => {
         setPendingUnlistedKeys((keys) => [...keys, key])
@@ -172,17 +181,16 @@ export function ImageListDialog(props: ImageListDialogProps) {
             isSameAddress(wallet.address, ZERO_ADDRESS)
         )
             return
-        const patch = {
-            unListedCollections: {
-                [wallet.address]: {
-                    [title]: pendingUnlistedKeys,
-                },
-            },
-        }
         try {
             if (!Storage || !accountId) return
+            const patch = {
+                unListedCollections: {
+                    [wallet.address]: {
+                        [title]: pendingUnlistedKeys,
+                    },
+                },
+            }
             const storage = Storage.createNextIDStorage(accountId, NextIDPlatform.Twitter, currentPersona.identifier)
-
             await storage.set(PLUGIN_ID, patch)
 
             onClose()
