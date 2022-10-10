@@ -35,6 +35,7 @@ import { SolanaFungibleAPI, SolanaNonFungibleAPI } from './solana/index.js'
 import { FlowFungibleAPI } from './flow/index.js'
 import { CF_API } from './cf/index.js'
 import { MirrorAPI } from './mirror/index.js'
+import { MindsAPI } from './minds/index.js'
 
 export * from './helpers.js'
 export * from './types/index.js'
@@ -55,6 +56,7 @@ export const RiskWarning = new RiskWarningAPI()
 export const RSS3 = new RSS3API()
 export const KeyValue = new KeyValueAPI()
 export const Twitter = new TwitterAPI()
+export const Minds = new MindsAPI()
 export const Instagram = new InstagramAPI()
 export const GoPlusLabs = new GoPlusLabsAPI()
 export const R2D2 = new R2D2API()
