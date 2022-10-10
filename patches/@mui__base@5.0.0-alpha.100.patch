@@ -10,9 +10,18 @@ index 9fd0ec291cb1fe4f326bb32f5976520f5c65016d..1dd68f641ce0311b91d284e7217dda09
  export declare function ariaHidden(element: Element, show: boolean): void;
  interface Modal {
 diff --git a/ModalUnstyled/ModalManager.js b/ModalUnstyled/ModalManager.js
-index 532d7900e9cbb8c99132d072cdb9bbb158e47127..732a4a23997940ea55b0eccaac9875c683e58732 100644
+index 532d7900e9cbb8c99132d072cdb9bbb158e47127..4b241432607f43f922156d251c34096b4e178338 100644
 --- a/ModalUnstyled/ModalManager.js
 +++ b/ModalUnstyled/ModalManager.js
+@@ -60,7 +60,7 @@ function findIndexOf(items, callback) {
+ 
+ function handleContainer(containerInfo, props) {
+   const restoreStyle = [];
+-  const container = containerInfo.container;
++  const container = props.scrollContainer || containerInfo.container;
+ 
+   if (!props.disableScrollLock) {
+     if (isOverflowing(container)) {
 @@ -87,7 +87,9 @@ function handleContainer(containerInfo, props) {
  
      let scrollContainer;
@@ -25,9 +34,17 @@ index 532d7900e9cbb8c99132d072cdb9bbb158e47127..732a4a23997940ea55b0eccaac9875c6
      } else {
        // Improve Gatsby support
 diff --git a/ModalUnstyled/ModalUnstyled.js b/ModalUnstyled/ModalUnstyled.js
-index 35bba11d796242845460d31d7df00185d6e32032..4434e13538294b7a494fcd6515753f34656c9970 100644
+index 35bba11d796242845460d31d7df00185d6e32032..6261973427314d3d5f1419541dc78375c3074b40 100644
 --- a/ModalUnstyled/ModalUnstyled.js
 +++ b/ModalUnstyled/ModalUnstyled.js
+@@ -1,6 +1,6 @@
+ import _extends from "@babel/runtime/helpers/esm/extends";
+ import _objectWithoutPropertiesLoose from "@babel/runtime/helpers/esm/objectWithoutPropertiesLoose";
+-const _excluded = ["children", "classes", "closeAfterTransition", "component", "components", "componentsProps", "container", "disableAutoFocus", "disableEnforceFocus", "disableEscapeKeyDown", "disablePortal", "disableRestoreFocus", "disableScrollLock", "hideBackdrop", "keepMounted", "manager", "onBackdropClick", "onClose", "onKeyDown", "open", "onTransitionEnter", "onTransitionExited"];
++const _excluded = ["children", "classes", "closeAfterTransition", "component", "components", "componentsProps", "container", "disableAutoFocus", "disableEnforceFocus", "disableEscapeKeyDown", "disablePortal", "disableRestoreFocus", "disableScrollLock", "scrollContainer", "hideBackdrop", "keepMounted", "manager", "onBackdropClick", "onClose", "onKeyDown", "open", "onTransitionEnter", "onTransitionExited"];
+ import * as React from 'react';
+ import PropTypes from 'prop-types';
+ import { elementAcceptingRef, HTMLElementType, unstable_ownerDocument as ownerDocument, unstable_useForkRef as useForkRef, unstable_createChainedFunction as createChainedFunction, unstable_useEventCallback as useEventCallback } from '@mui/utils';
 @@ -67,6 +67,7 @@ const ModalUnstyled = /*#__PURE__*/React.forwardRef(function ModalUnstyled(props
      disablePortal = false,
      disableRestoreFocus = false,
@@ -59,9 +76,18 @@ index fb39cc325d7a7f721a324bd7b488dcfa3b8c8c96..dfe0fa4a22b95c6be4d2d21ab2af961a
       * If `true`, the modal will not automatically shift focus to itself when it opens, and
       * replace it to the last focused element when it closes.
 diff --git a/legacy/ModalUnstyled/ModalManager.js b/legacy/ModalUnstyled/ModalManager.js
-index bd7544dccf949b70551e31e41592ce00a4dc829d..96ac399908a83ba8a573f96821c3f35f760dc374 100644
+index bd7544dccf949b70551e31e41592ce00a4dc829d..61d05249b690b4e82736b90fb6dc03195276d979 100644
 --- a/legacy/ModalUnstyled/ModalManager.js
 +++ b/legacy/ModalUnstyled/ModalManager.js
+@@ -65,7 +65,7 @@ function findIndexOf(items, callback) {
+ 
+ function handleContainer(containerInfo, props) {
+   var restoreStyle = [];
+-  var container = containerInfo.container;
++  var container = props.scrollContainer || containerInfo.container;
+ 
+   if (!props.disableScrollLock) {
+     if (isOverflowing(container)) {
 @@ -92,7 +92,9 @@ function handleContainer(containerInfo, props) {
  
      var scrollContainer;
@@ -74,9 +100,18 @@ index bd7544dccf949b70551e31e41592ce00a4dc829d..96ac399908a83ba8a573f96821c3f35f
      } else {
        // Improve Gatsby support
 diff --git a/legacy/ModalUnstyled/ModalUnstyled.js b/legacy/ModalUnstyled/ModalUnstyled.js
-index d08d33e66f7e614437f6fb43965e216f636c9686..ce04cddc0db64fdadcae62c9b29484810224146d 100644
+index d08d33e66f7e614437f6fb43965e216f636c9686..509f5d01840863a5ff7eee93a36068a428f9b42e 100644
 --- a/legacy/ModalUnstyled/ModalUnstyled.js
 +++ b/legacy/ModalUnstyled/ModalUnstyled.js
+@@ -85,7 +85,7 @@ var ModalUnstyled = /*#__PURE__*/React.forwardRef(function ModalUnstyled(props,
+       open = props.open,
+       onTransitionEnter = props.onTransitionEnter,
+       onTransitionExited = props.onTransitionExited,
+-      other = _objectWithoutProperties(props, ["children", "classes", "closeAfterTransition", "component", "components", "componentsProps", "container", "disableAutoFocus", "disableEnforceFocus", "disableEscapeKeyDown", "disablePortal", "disableRestoreFocus", "disableScrollLock", "hideBackdrop", "keepMounted", "manager", "onBackdropClick", "onClose", "onKeyDown", "open", "onTransitionEnter", "onTransitionExited"]);
++      other = _objectWithoutProperties(props, ["children", "classes", "closeAfterTransition", "component", "components", "componentsProps", "container", "disableAutoFocus", "disableEnforceFocus", "disableEscapeKeyDown", "disablePortal", "disableRestoreFocus", "disableScrollLock", "scrollContainer", "hideBackdrop", "keepMounted", "manager", "onBackdropClick", "onClose", "onKeyDown", "open", "onTransitionEnter", "onTransitionExited"]);
+ 
+   var _React$useState = React.useState(true),
+       exited = _React$useState[0],
 @@ -110,7 +110,8 @@ var ModalUnstyled = /*#__PURE__*/React.forwardRef(function ModalUnstyled(props,
  
    var handleMounted = function handleMounted() {
@@ -88,9 +123,18 @@ index d08d33e66f7e614437f6fb43965e216f636c9686..ce04cddc0db64fdadcae62c9b2948481
  
      modalRef.current.scrollTop = 0;
 diff --git a/modern/ModalUnstyled/ModalManager.js b/modern/ModalUnstyled/ModalManager.js
-index 2a5614b978ce2dd2e54be7e9d9985afd846681b2..f853a458a69b9346a8a3c1d2dead12753db72374 100644
+index 2a5614b978ce2dd2e54be7e9d9985afd846681b2..0d9f88f468d5cb3212f3a8ce45e827258f5e0549 100644
 --- a/modern/ModalUnstyled/ModalManager.js
 +++ b/modern/ModalUnstyled/ModalManager.js
+@@ -60,7 +60,7 @@ function findIndexOf(items, callback) {
+ 
+ function handleContainer(containerInfo, props) {
+   const restoreStyle = [];
+-  const container = containerInfo.container;
++  const container = props.scrollContainer || containerInfo.container;
+ 
+   if (!props.disableScrollLock) {
+     if (isOverflowing(container)) {
 @@ -87,7 +87,9 @@ function handleContainer(containerInfo, props) {
  
      let scrollContainer;
@@ -103,9 +147,17 @@ index 2a5614b978ce2dd2e54be7e9d9985afd846681b2..f853a458a69b9346a8a3c1d2dead1275
      } else {
        // Improve Gatsby support
 diff --git a/modern/ModalUnstyled/ModalUnstyled.js b/modern/ModalUnstyled/ModalUnstyled.js
-index 95e6813091cbe48670ba30944c1c4f693bf599ce..4e362a4c2a5394baa0f1688346d614f7268f5731 100644
+index 95e6813091cbe48670ba30944c1c4f693bf599ce..3065df9831c9122c79b754856d84efdd1707d0c6 100644
 --- a/modern/ModalUnstyled/ModalUnstyled.js
 +++ b/modern/ModalUnstyled/ModalUnstyled.js
+@@ -1,6 +1,6 @@
+ import _extends from "@babel/runtime/helpers/esm/extends";
+ import _objectWithoutPropertiesLoose from "@babel/runtime/helpers/esm/objectWithoutPropertiesLoose";
+-const _excluded = ["children", "classes", "closeAfterTransition", "component", "components", "componentsProps", "container", "disableAutoFocus", "disableEnforceFocus", "disableEscapeKeyDown", "disablePortal", "disableRestoreFocus", "disableScrollLock", "hideBackdrop", "keepMounted", "manager", "onBackdropClick", "onClose", "onKeyDown", "open", "onTransitionEnter", "onTransitionExited"];
++const _excluded = ["children", "classes", "closeAfterTransition", "component", "components", "componentsProps", "container", "disableAutoFocus", "disableEnforceFocus", "disableEscapeKeyDown", "disablePortal", "disableRestoreFocus", "disableScrollLock", "scrollContainer", "hideBackdrop", "keepMounted", "manager", "onBackdropClick", "onClose", "onKeyDown", "open", "onTransitionEnter", "onTransitionExited"];
+ import * as React from 'react';
+ import PropTypes from 'prop-types';
+ import { elementAcceptingRef, HTMLElementType, unstable_ownerDocument as ownerDocument, unstable_useForkRef as useForkRef, unstable_createChainedFunction as createChainedFunction, unstable_useEventCallback as useEventCallback } from '@mui/utils';
 @@ -65,6 +65,7 @@ const ModalUnstyled = /*#__PURE__*/React.forwardRef(function ModalUnstyled(props
      disablePortal = false,
      disableRestoreFocus = false,
@@ -124,3 +176,16 @@ index 95e6813091cbe48670ba30944c1c4f693bf599ce..4e362a4c2a5394baa0f1688346d614f7
      }); // Fix a bug on Chrome where the scroll isn't initially 0.
  
      modalRef.current.scrollTop = 0;
+diff --git a/node/ModalUnstyled/ModalManager.js b/node/ModalUnstyled/ModalManager.js
+index b858d9550bc1b1b155348670d6cc294a2fd53245..8d538cd1db4d89d94b152f5150ddeb4247bae937 100644
+--- a/node/ModalUnstyled/ModalManager.js
++++ b/node/ModalUnstyled/ModalManager.js
+@@ -68,7 +68,7 @@ function findIndexOf(items, callback) {
+ 
+ function handleContainer(containerInfo, props) {
+   const restoreStyle = [];
+-  const container = containerInfo.container;
++  const container = props.scrollContainer || containerInfo.container;
+ 
+   if (!props.disableScrollLock) {
+     if (isOverflowing(container)) {

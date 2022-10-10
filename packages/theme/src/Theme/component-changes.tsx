@@ -18,7 +18,9 @@ import {
 } from '@mui/material'
 import type { MaskColor } from './colors.js'
 
-export const Button = (mode: PaletteMode, colors: MaskColor): ThemeOptions => ({
+type ThemeOverride = (mode: PaletteMode, colors: MaskColor) => ThemeOptions
+// this override extends the mui theme and cannot fit ThemeOptions
+export const Button = (mode: PaletteMode, colors: MaskColor) => ({
     components: {
         MuiButton: {
             defaultProps: {
@@ -653,7 +655,7 @@ export const Button = (mode: PaletteMode, colors: MaskColor): ThemeOptions => ({
     },
 })
 
-export const Radio = (mode: PaletteMode, colors: MaskColor): ThemeOptions => ({
+export const Radio: ThemeOverride = (mode, colors) => ({
     components: {
         MuiRadio: {
             defaultProps: {
@@ -683,7 +685,7 @@ export const Radio = (mode: PaletteMode, colors: MaskColor): ThemeOptions => ({
     },
 })
 
-export const Checkbox = (mode: PaletteMode, colors: MaskColor) => ({
+export const Checkbox: ThemeOverride = (mode, colors) => ({
     components: {
         MuiCheckbox: {
             defaultProps: {
@@ -894,7 +896,7 @@ export const InputBase = (mode: PaletteMode, colors: MaskColor) => ({
     },
 })
 
-export const Select = (mode: PaletteMode, colors: MaskColor) => ({
+export const Select: ThemeOverride = (mode, colors) => ({
     components: {
         MuiSelect: {
             defaultProps: {
@@ -913,7 +915,7 @@ export const Select = (mode: PaletteMode, colors: MaskColor) => ({
     },
 })
 
-export const Slider = (mode: PaletteMode, colors: MaskColor) => ({
+export const Slider: ThemeOverride = (mode, colors) => ({
     components: {
         MuiSlider: {
             styleOverrides: {
@@ -929,7 +931,7 @@ export const Slider = (mode: PaletteMode, colors: MaskColor) => ({
     },
 })
 
-export const Switch = (mode: PaletteMode, colors: MaskColor) => ({
+export const Switch: ThemeOverride = (mode, colors) => ({
     components: {
         MuiSwitch: {
             defaultProps: {
@@ -986,7 +988,7 @@ export const Switch = (mode: PaletteMode, colors: MaskColor) => ({
     },
 })
 
-export const Tooltip = (mode: PaletteMode, colors: MaskColor) => ({
+export const Tooltip: ThemeOverride = (mode, colors) => ({
     components: {
         MuiTooltip: {
             defaultProps: {
@@ -1016,7 +1018,7 @@ export const Tooltip = (mode: PaletteMode, colors: MaskColor) => ({
     },
 })
 
-export const Alert = (mode: PaletteMode, colors: MaskColor) => ({
+export const Alert: ThemeOverride = (mode, colors) => ({
     components: {
         MuiAlert: {
             defaultProps: {
@@ -1063,7 +1065,7 @@ export const Alert = (mode: PaletteMode, colors: MaskColor) => ({
     },
 })
 
-export const LinearProgress = (mode: PaletteMode, colors: MaskColor) => ({
+export const LinearProgress: ThemeOverride = (mode, colors) => ({
     components: {
         MuiLinearProgress: {
             styleOverrides: {
@@ -1079,3 +1081,17 @@ export const LinearProgress = (mode: PaletteMode, colors: MaskColor) => ({
         },
     },
 })
+
+export const Modal: ThemeOverride = (mode, colors) => {
+    let needHTMLBeTheScrollContainer = false
+    try {
+        needHTMLBeTheScrollContainer = document.documentElement && location.origin.includes('twitter.com')
+    } catch {}
+    return {
+        components: {
+            MuiModal: {
+                defaultProps: { scrollContainer: needHTMLBeTheScrollContainer ? document.documentElement : undefined },
+            },
+        },
+    }
+}

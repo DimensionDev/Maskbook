@@ -150,7 +150,6 @@ export function InjectedDialog(props: InjectedDialogProps) {
         <IncreaseStack>
             <Dialog
                 container={container}
-                scrollContainer={document.documentElement}
                 fullScreen={fullScreen}
                 classes={dialogClasses}
                 scroll="paper"
