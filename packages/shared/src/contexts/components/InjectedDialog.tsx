@@ -90,9 +90,9 @@ export type InjectedDialogClassKey =
 export interface InjectedDialogProps extends Omit<DialogProps, 'onClose' | 'title' | 'classes'> {
     classes?: Partial<Record<InjectedDialogClassKey, string>>
     onClose?(): void
-    title?: React.ReactChild
-    titleTail?: React.ReactChild | null
-    titleTabs?: React.ReactChild | null
+    title?: React.ReactNode
+    titleTail?: React.ReactNode | null
+    titleTabs?: React.ReactNode | null
     disableBackdropClick?: boolean
     disableTitleBorder?: boolean
     isOpenFromApplicationBoard?: boolean
@@ -150,7 +150,6 @@ export function InjectedDialog(props: InjectedDialogProps) {
         <IncreaseStack>
             <Dialog
                 container={container}
-                // @ts-expect-error
                 scrollContainer={document.documentElement}
                 fullScreen={fullScreen}
                 classes={dialogClasses}
