@@ -8,7 +8,8 @@ on:
     branches: [master, develop*, released]
 
 permissions:
-  contents: read
+  contents: read|write
+  pull-requests: read
   packages: read
 
 # Cancels all previous workflow runs for pull requests that have not completed.
