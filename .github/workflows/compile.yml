@@ -8,7 +8,7 @@ on:
     branches: [master, develop*, released]
 
 permissions:
-  contents: read|write
+  contents: write
   pull-requests: read
   packages: read
 
