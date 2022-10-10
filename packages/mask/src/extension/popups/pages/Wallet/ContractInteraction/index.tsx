@@ -3,7 +3,7 @@ import { useAsync, useAsyncFn, useUpdateEffect } from 'react-use'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { makeStyles } from '@masknet/theme'
 import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest.js'
-import { formatGweiToWei, formatWeiToEther, SchemaType, isNativeTokenAddress } from '@masknet/web3-shared-evm'
+import { formatGweiToWei, formatWeiToEther, isNativeTokenAddress } from '@masknet/web3-shared-evm'
 import { FormattedBalance, FormattedCurrency, TokenIcon } from '@masknet/shared'
 import { Link, Typography } from '@mui/material'
 import { useI18N } from '../../../../../utils/index.js'
@@ -23,7 +23,6 @@ import {
     useNativeTokenPrice,
     useNetworkType,
     useReverseAddress,
-    useSchemaType,
     useWeb3State,
 } from '@masknet/web3-hooks-base'
 import {
@@ -33,7 +32,6 @@ import {
     leftShift,
     pow10,
     TransactionDescriptorType,
-    ZERO,
 } from '@masknet/web3-shared-base'
 import { CopyIconButton } from '../../../components/CopyIconButton/index.js'
 import { useTitle } from '../../../hook/useTitle.js'
@@ -173,7 +171,6 @@ const ContractInteraction = memo(() => {
         maxFeePerGas,
         maxPriorityFeePerGas,
         amount,
-        contractAddress,
         isNativeTokenInteraction,
         tokenDescription,
     } = useMemo(() => {
@@ -182,32 +179,6 @@ const ContractInteraction = memo(() => {
 
         switch (type) {
             case TransactionDescriptorType.INTERACTION:
-                const methods = request.transactionContext?.methods
-
-                if (methods?.length) {
-                    for (const method of methods) {
-                        const parameters = method.parameters
-
-                        if (
-                            (method.name === 'transfer' || method.name === 'transferFrom') &&
-                            parameters?.to &&
-                            parameters?.value
-                        ) {
-                            return {
-                                isNativeTokenInteraction: false,
-                                typeName: t('popups_wallet_contract_interaction_transfer'),
-                                tokenAddress: request.computedPayload?.to,
-                                to: parameters?.to as string,
-                                gas: request.computedPayload?.gas,
-                                gasPrice: request.computedPayload?.gasPrice,
-                                maxFeePerGas: request.computedPayload?.maxFeePerGas,
-                                maxPriorityFeePerGas: request.computedPayload?.maxPriorityFeePerGas,
-                                amount: parameters?.value,
-                                contractAddress: request.computedPayload?.to,
-                            }
-                        }
-                    }
-                }
                 return {
                     isNativeTokenInteraction: transactionDescription?.tokenInAddress
                         ? isNativeTokenAddress(transactionDescription?.tokenInAddress)
@@ -242,8 +213,6 @@ const ContractInteraction = memo(() => {
                 unreachable(type)
         }
     }, [request, t, transactionDescription])
-
-    const { value: contractType } = useSchemaType(NetworkPluginID.PLUGIN_EVM, contractAddress)
 
     // token detailed
     const { value: nativeToken } = useNativeToken(NetworkPluginID.PLUGIN_EVM)
@@ -307,12 +276,9 @@ const ContractInteraction = memo(() => {
 
     const { value: nativeTokenPrice } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM)
 
-    const tokenValueUSD =
-        contractType && [SchemaType.ERC721, SchemaType.ERC1155].includes(contractType)
-            ? ZERO
-            : leftShift(tokenAmount, tokenDecimals)
-                  .times((!isNativeTokenInteraction ? tokenPrice : nativeTokenPrice) ?? 0)
-                  .toString()
+    const tokenValueUSD = leftShift(tokenAmount, tokenDecimals)
+        .times((!isNativeTokenInteraction ? tokenPrice : nativeTokenPrice) ?? 0)
+        .toString()
 
     const totalUSD = new BigNumber(formatWeiToEther(gasFee))
         .times(nativeTokenPrice ?? 0)
