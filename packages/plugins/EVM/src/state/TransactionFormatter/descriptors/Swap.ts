@@ -329,9 +329,7 @@ export class SwapDescriptor implements TransactionDescriptor {
                     return {
                         chainId: context.chainId,
                         title: 'Swap Token',
-                        snackbar: {
-                            description: 'Swap with UniSwap V3',
-                        },
+                        description: 'Swap with UniSwap V3',
                     }
                 }
             }
