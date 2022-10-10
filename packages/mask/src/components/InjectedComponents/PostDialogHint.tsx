@@ -1,6 +1,6 @@
 import { memo } from 'react'
-import { IconButton, Tooltip, Typography } from '@mui/material'
-import { useStylesExtends, makeStyles } from '@masknet/theme'
+import { IconButton, Typography } from '@mui/material'
+import { useStylesExtends, makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { useI18N } from '../../utils/index.js'
 import { isMobileFacebook } from '../../social-network-adaptor/facebook.com/utils/isMobile.js'
 import { MaskSharpIcon, MaskIconInMinds } from '@masknet/shared'
@@ -52,13 +52,13 @@ const EntryIconButton = memo((props: PostDialogHintUIProps) => {
     const classes = useStylesExtends(useStyles(), props)
 
     const getEntry = () => (
-        <Tooltip
-            title="Mask Network"
+        <ShadowRootTooltip
+            title={t('mask_network')}
             classes={{ tooltip: classes.tooltip }}
             placement={tooltip?.placement}
             disableHoverListener={tooltip?.disabled}
             PopperProps={{
-                disablePortal: true,
+                disablePortal: false,
             }}>
             <IconButton
                 size="large"
@@ -66,7 +66,7 @@ const EntryIconButton = memo((props: PostDialogHintUIProps) => {
                 onClick={props.onHintButtonClicked}>
                 {ICON_MAP?.[props?.iconType ?? 'default']}
             </IconButton>
-        </Tooltip>
+        </ShadowRootTooltip>
     )
 
     return disableGuideTip ? (
