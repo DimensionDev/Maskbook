@@ -132,6 +132,7 @@ const twitterUI: SocialNetworkUI.Definition = {
         nativeCommentBox: undefined,
         nativeCompositionDialog: {
             appendText: pasteTextToCompositionTwitter,
+            // TODO: make a better way to detect
             attachImage: pasteImageToCompositionTwitter(() => false),
         },
         redirect: {
