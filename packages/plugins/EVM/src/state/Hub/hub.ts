@@ -23,6 +23,7 @@ import {
     PriceAPI,
     CF,
     CoinGeckoPriceEVM,
+    ZerionNonFungibleToken,
 } from '@masknet/web3-providers'
 import { SourceType, HubOptions, Pageable, CurrencyType, Transaction } from '@masknet/web3-shared-base'
 import { ChainId, chainResolver, SchemaType } from '@masknet/web3-shared-evm'
@@ -93,6 +94,7 @@ class HubNonFungibleClient extends HubStateNonFungibleClient<ChainId, SchemaType
             | TokenListAPI.Provider<ChainId, SchemaType>
         >(
             {
+                [SourceType.Zerion]: ZerionNonFungibleToken,
                 [SourceType.NFTScan]: NFTScanNonFungibleTokenEVM,
                 [SourceType.Rarible]: Rarible,
                 [SourceType.OpenSea]: OpenSea,
@@ -104,8 +106,30 @@ class HubNonFungibleClient extends HubStateNonFungibleClient<ChainId, SchemaType
                 [SourceType.R2D2]: R2D2,
             },
             options.chainId === ChainId.Mainnet
-                ? [NFTScanNonFungibleTokenEVM, Rarible, OpenSea, AlchemyEVM, LooksRare, Zora, Gem, Rabby, R2D2]
-                : [NFTScanNonFungibleTokenEVM, Rarible, AlchemyEVM, OpenSea, LooksRare, Zora, Gem, Rabby, R2D2],
+                ? [
+                      ZerionNonFungibleToken,
+                      NFTScanNonFungibleTokenEVM,
+                      Rarible,
+                      OpenSea,
+                      AlchemyEVM,
+                      LooksRare,
+                      Zora,
+                      Gem,
+                      Rabby,
+                      R2D2,
+                  ]
+                : [
+                      ZerionNonFungibleToken,
+                      NFTScanNonFungibleTokenEVM,
+                      Rarible,
+                      AlchemyEVM,
+                      OpenSea,
+                      LooksRare,
+                      Zora,
+                      Gem,
+                      Rabby,
+                      R2D2,
+                  ],
             initial,
         )
     }
