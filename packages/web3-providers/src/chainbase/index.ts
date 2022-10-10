@@ -30,7 +30,7 @@ import {
 import type { ENSRecord, FT, FT_Price, NFT, NFT_FloorPrice, NFT_Metadata, NFT_TransferEvent, Tx } from './types.js'
 import type { FungibleTokenAPI, HistoryAPI, NonFungibleTokenAPI } from '../types/index.js'
 import { CHAINBASE_API_URL } from './constants.js'
-import type { DomianAPI } from '../types/Domain.js'
+import type { DomainAPI } from '../types/Domain.js'
 import LRUCache from 'lru-cache'
 import { first } from 'lodash-unified'
 import { formatAddress } from '@masknet/web3-shared-solana'
@@ -88,7 +88,7 @@ const domainCache = new LRUCache<ChainId, Record<string, string>>({
     ttl: 300_000,
 })
 
-export class ChainBaseDomainAPI implements DomianAPI.Provider<ChainId, SchemaType> {
+export class ChainBaseDomainAPI implements DomainAPI.Provider<ChainId> {
     private async getAddress(name: string, chainId: ChainId) {
         const response = await fetchFromChainbase<ENSRecord[]>(
             urlcat('/v1/ens/records', { chain_id: chainId, domain: name }),

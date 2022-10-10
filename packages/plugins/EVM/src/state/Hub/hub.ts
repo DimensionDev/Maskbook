@@ -81,7 +81,7 @@ class HubFungibleClient extends HubStateFungibleClient<ChainId, SchemaType> {
                 [SourceType.CF]: CF,
                 [SourceType.CoinGecko]: CoinGeckoPriceEVM,
             },
-            [ChainbaseFungibleToken, DeBank, Zerion, Rabby, R2D2, CF, CoinGeckoPriceEVM],
+            [DeBank, Zerion, ChainbaseFungibleToken, Rabby, R2D2, CF, CoinGeckoPriceEVM],
             initial,
         )
     }
