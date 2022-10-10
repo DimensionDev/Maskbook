@@ -8,7 +8,7 @@ import { InjectedDialog, WalletTypes } from '@masknet/shared'
 import { Box, Button, DialogContent } from '@mui/material'
 import type { IdentityResolved } from '@masknet/plugin-infra'
 import { isSameAddress } from '@masknet/web3-shared-base'
-import type { AccountType, UnlistConfig } from '../types.js'
+import type { AccountType, UnlistedConfig } from '../types.js'
 import { Empty } from './Empty.js'
 import { context } from '../context.js'
 import { Icons } from '@masknet/icons'
@@ -98,7 +98,7 @@ export interface ImageManagementProps {
     accountId?: string
     allWallets?: WalletTypes[]
     getWalletHiddenRetry: () => void
-    unlistCollectionConfig?: UnlistConfig['collections'][string]
+    unlistedCollectionConfig?: UnlistedConfig['collections'][string]
 }
 export function ImageManagement({
     scene,
@@ -109,7 +109,7 @@ export function ImageManagement({
     allWallets = EMPTY_LIST,
     account,
     getWalletHiddenRetry,
-    unlistCollectionConfig,
+    unlistedCollectionConfig: unlistCollectionConfig,
 }: ImageManagementProps) {
     const t = useI18N()
     const { classes } = useStyles()

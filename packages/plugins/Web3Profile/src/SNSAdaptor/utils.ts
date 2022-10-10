@@ -12,7 +12,7 @@ import { AlchemyEVM, NextIDStorage, RSS3 } from '@masknet/web3-providers'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { ChainId, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
 import { PLUGIN_ID } from '../constants.js'
-import type { Collection, UnlistConfig, PersonaKV } from './types.js'
+import type { Collection, UnlistedConfig, PersonaKV } from './types.js'
 
 const removeUnlistedWallets = (listA?: WalletTypes[], listB?: WalletTypes[]) => {
     if (!listA?.length) return []
@@ -24,7 +24,7 @@ export const getWalletList = (
     accounts: BindingProof[],
     wallets: WalletTypes[],
     allPersona: PersonaInformation[],
-    unlistConfig: UnlistConfig | undefined,
+    unlistConfig: UnlistedConfig | undefined,
     footprints: Collection[] = [],
     donations: Collection[] = [],
     NFTs: Collection[] = [],
@@ -144,14 +144,14 @@ export const getNFTList = async (walletList: WalletTypes[], chainIds: ChainId[])
     return collections
 }
 
-export const getWalletHiddenConfig = async (publicKey: string): Promise<UnlistConfig | undefined> => {
+export const getUnlistedConfig = async (publicKey: string): Promise<UnlistedConfig | undefined> => {
     if (!publicKey) return
 
     const res = await NextIDStorage.get<PersonaKV>(publicKey)
     if (!res.ok) return
 
-    const wallets: UnlistConfig['wallets'] = {}
-    const collections: UnlistConfig['collections'] = {}
+    const wallets: UnlistedConfig['wallets'] = {}
+    const collections: UnlistedConfig['collections'] = {}
 
     res.val.proofs
         ?.filter((x) => x.platform === NextIDPlatform.Twitter)

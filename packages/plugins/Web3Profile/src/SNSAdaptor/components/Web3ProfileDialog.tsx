@@ -11,8 +11,8 @@ import { useEffect, useMemo, useState } from 'react'
 import { useAsyncRetry } from 'react-use'
 import { SceneMap, Scene } from '../../constants.js'
 import { context } from '../context.js'
-import { useAllPersonas, useCurrentPersona, useLastRecognizedProfile } from '../hooks/usePersona.js'
-import { getDonationList, getFootprintList, getNFTList, getWalletHiddenConfig, getWalletList } from '../utils.js'
+import { useAllPersonas, useCurrentPersona, useLastRecognizedProfile } from '../hooks'
+import { getDonationList, getFootprintList, getNFTList, getUnlistedConfig, getWalletList } from '../utils.js'
 import { ImageManagement } from './ImageManagement.js'
 import { Main } from './Main.js'
 
@@ -107,7 +107,7 @@ export function Web3ProfileDialog() {
 
     const { value: hiddenConfig, retry: retryGetWalletHiddenList } = useAsyncRetry(async () => {
         if (!personaPublicKey) return
-        return getWalletHiddenConfig(personaPublicKey)
+        return getUnlistedConfig(personaPublicKey)
     }, [personaPublicKey])
 
     const accountArr = useMemo(
@@ -165,7 +165,7 @@ export function Web3ProfileDialog() {
                         currentVisitingProfile={currentVisitingProfile}
                         allWallets={wallets}
                         getWalletHiddenRetry={retryGetWalletHiddenList}
-                        unlistCollectionConfig={hiddenConfig?.collections?.[accountId]}
+                        unlistedCollectionConfig={hiddenConfig?.collections?.[accountId]}
                     />
                 ) : null}
             </DialogContent>

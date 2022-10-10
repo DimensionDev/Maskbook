@@ -50,7 +50,7 @@ export interface AddNFTProps {
     expectedPluginID: NetworkPluginID
 }
 export function AddNFT(props: AddNFTProps) {
-    const { onClose, open, onAddClick, title, chainId, account, expectedPluginID } = props
+    const { onClose, open, onAddClick, title, chainId, expectedPluginID } = props
     const t = useI18N()
     const { classes } = useStyles()
     const [address, setAddress] = useState('')
@@ -58,9 +58,9 @@ export function AddNFT(props: AddNFTProps) {
     const [message, setMessage] = useState('')
     const [checking, toggleChecking] = useState(false)
     const currentPluginId = useCurrentWeb3NetworkPluginID(expectedPluginID)
-    const _account = useAccount(expectedPluginID, account)
+    const account = useAccount(expectedPluginID, props.account)
     const currentChainId = useChainId(expectedPluginID, chainId)
-    const hub = useWeb3Hub(currentPluginId, { chainId: currentChainId, account: _account })
+    const hub = useWeb3Hub(currentPluginId, { chainId: currentChainId, account })
     const connection = useWeb3Connection(currentPluginId)
 
     const onClick = useCallback(async () => {
@@ -100,7 +100,7 @@ export function AddNFT(props: AddNFTProps) {
                 return
             }
 
-            const isOwner = await connection?.getNonFungibleTokenOwnership(address, tokenId, _account, undefined, {
+            const isOwner = await connection?.getNonFungibleTokenOwnership(address, tokenId, account, undefined, {
                 chainId: currentChainId,
             })
 
@@ -118,7 +118,7 @@ export function AddNFT(props: AddNFTProps) {
             toggleChecking(false)
             return
         }
-    }, [tokenId, address, onAddClick, onClose, currentChainId, hub, _account, connection])
+    }, [tokenId, address, onAddClick, onClose, currentChainId, hub, account, connection])
 
     const onAddressChange = useCallback((address: string) => {
         setMessage('')
@@ -146,8 +146,7 @@ export function AddNFT(props: AddNFTProps) {
                 </Button>
                 <div className={classes.input}>
                     <InputBase
-                        // Workaround for pure-react-carousel bug:
-                        // https://stackoverflow.com/questions/70434847/not-able-to-type-anything-in-input-field-inside-pure-react-carousel
+                        // Workaround for pure-react-carousel bug: https://stackoverflow.com/q/70434847
                         onClick={(e) => e.currentTarget.getElementsByTagName('input')[0].focus()}
                         sx={{ width: '100%' }}
                         placeholder={t.plugin_avatar_input_token_address()}
