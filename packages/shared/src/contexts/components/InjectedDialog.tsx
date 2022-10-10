@@ -150,7 +150,7 @@ export function InjectedDialog(props: InjectedDialogProps) {
         <IncreaseStack>
             <Dialog
                 container={container}
-                // @ts-ignore
+                // @ts-expect-error
                 scrollContainer={document.documentElement}
                 fullScreen={fullScreen}
                 classes={dialogClasses}
@@ -163,7 +163,6 @@ export function InjectedDialog(props: InjectedDialogProps) {
                     if (reason === 'backdropClick' && disableBackdropClick) return
                     !props.isOnBack ? closeBothCompositionDialog() : onClose?.()
                 }}
-                onBackdropClick={disableBackdropClick ? void 0 : onClose}
                 BackdropProps={{
                     classes: {
                         root: dialogBackdropRoot,
@@ -215,8 +214,7 @@ export function InjectedDialog(props: InjectedDialogProps) {
 function CopyElementWithNewProps<T>(
     children: React.ReactNode,
     Target: React.ComponentType<T>,
-    // @ts-ignore
-    extraClasses: T['classes'],
+    extraClasses: T extends { classes?: infer Q } ? Q : never,
 ) {
     return (
         Children.map(children, (child: any) =>
