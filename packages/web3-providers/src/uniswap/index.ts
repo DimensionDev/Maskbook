@@ -23,11 +23,7 @@ export class UniSwapAPI implements TrendingAPI.Provider<ChainId> {
         return getAllCoinsByKeyword(chainId, keyword)
     }
 
-    async getCoinTrendingById(
-        chainId: ChainId,
-        id: string,
-        currency: TrendingAPI.Currency,
-    ): Promise<TrendingAPI.Trending> {
+    async getCoinTrending(chainId: ChainId, id: string, currency: TrendingAPI.Currency): Promise<TrendingAPI.Trending> {
         const { token, marketInfo, tickersInfo } = await BaseAPI.getCoinInfo(chainId, id)
         return {
             currency,
@@ -49,14 +45,6 @@ export class UniSwapAPI implements TrendingAPI.Provider<ChainId> {
             tickers: tickersInfo,
             lastUpdated: '',
         }
-    }
-
-    getCoinTrendingByKeyword(
-        chainId: ChainId,
-        keyword: string,
-        currency: TrendingAPI.Currency,
-    ): Promise<TrendingAPI.Trending> {
-        throw new Error('Method not implemented.')
     }
 
     getCoinPriceStats(

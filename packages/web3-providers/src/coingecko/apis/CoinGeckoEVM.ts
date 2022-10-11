@@ -9,12 +9,14 @@ import { getAllCoins, getCoinInfo, getPriceStats as getStats, getTokenPrice, get
 import { COINGECKO_URL_BASE } from '../constants.js'
 import { resolveChain } from '../helper.js'
 import type { Platform } from '../type.js'
+import { FuseTrendingAPI } from '../../fuse/index.js'
 
 export class CoinGeckoTrendingEVM_API implements TrendingAPI.Provider<ChainId> {
+    private fuse = new FuseTrendingAPI()
+
     private async getSupportedPlatform() {
         const requestPath = `${COINGECKO_URL_BASE}/asset_platforms`
         const response = await fetchJSON<Platform[]>(requestPath)
-
         return response.filter((x) => x.id && x.chain_identifier) ?? []
     }
 
@@ -23,15 +25,12 @@ export class CoinGeckoTrendingEVM_API implements TrendingAPI.Provider<ChainId> {
         return coins.map((coin) => ({ ...coin, type: TokenType.Fungible }))
     }
 
-    getCoinsByKeyword(chainId: ChainId, keyword: string): Promise<TrendingAPI.Coin[]> {
-        throw new Error('Method not implemented.')
+    async getCoinsByKeyword(chainId: ChainId, keyword: string): Promise<TrendingAPI.Coin[]> {
+        const coins = await this.fuse.getSearchableItems(this.getAllCoins)
+        return coins.search(keyword).map((x) => x.item)
     }
 
-    async getCoinTrendingById(
-        chainId: ChainId,
-        id: string,
-        currency: TrendingAPI.Currency,
-    ): Promise<TrendingAPI.Trending> {
+    async getCoinTrending(chainId: ChainId, id: string, currency: TrendingAPI.Currency): Promise<TrendingAPI.Trending> {
         const info = await getCoinInfo(id)
         if ('error' in info) throw new Error(info.error)
 
@@ -119,14 +118,6 @@ export class CoinGeckoTrendingEVM_API implements TrendingAPI.Provider<ChainId> {
                 updated: new Date(x.timestamp),
             })),
         }
-    }
-
-    getCoinTrendingByKeyword(
-        chainId: ChainId,
-        keyword: string,
-        currency: TrendingAPI.Currency,
-    ): Promise<TrendingAPI.Trending> {
-        throw new Error('Method not implemented.')
     }
 
     async getCoinPriceStats(

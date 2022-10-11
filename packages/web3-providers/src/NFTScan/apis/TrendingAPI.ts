@@ -99,7 +99,7 @@ export class NFTScanTrendingAPI implements TrendingAPI.Provider<ChainId> {
         return records.map((x) => [x.time, x.price])
     }
 
-    async getCoinTrendingById(
+    async getCoinTrending(
         chainId: ChainId,
         /** address as id */ id: string,
         currency: TrendingAPI.Currency,
@@ -205,13 +205,5 @@ export class NFTScanTrendingAPI implements TrendingAPI.Provider<ChainId> {
             },
             tickers,
         }
-    }
-
-    getCoinTrendingByKeyword(
-        chainId: ChainId,
-        keyword: string,
-        currency: TrendingAPI.Currency,
-    ): Promise<TrendingAPI.Trending> {
-        throw new Error('Method not implemented.')
     }
 }
