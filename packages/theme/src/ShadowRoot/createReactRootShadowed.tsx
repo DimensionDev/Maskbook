@@ -19,10 +19,10 @@ export interface CreateRenderInShadowRootHostConfig {
      * ! This is not a security boundary !
      */
     preventEventPropagationList: Array<keyof HTMLElementEventMap>
-    wrapJSX?(jsx: React.ReactChild): React.ReactChild
+    wrapJSX?(jsx: React.ReactNode): React.ReactNode
 }
 export interface ReactRootShadowed {
-    render(jsx: React.ReactChild): void
+    render(jsx: React.ReactNode): void
     // do not name it as unmount otherwise it might be compatible with ReactDOM's Root interface.
     destroy(): void
 }
@@ -37,7 +37,7 @@ export function createReactRootShadowedPartial(hostConfig: CreateRenderInShadowR
         shadowRoot: ShadowRoot,
         options: RenderInShadowRootOptions = {},
     ): ReactRootShadowed {
-        let jsx: React.ReactChild = ''
+        let jsx: React.ReactNode = ''
         let root: ReactRootShadowed | null = null
         function tryRender(): void {
             if (options.signal?.aborted) return
@@ -57,7 +57,7 @@ export function createReactRootShadowedPartial(hostConfig: CreateRenderInShadowR
 }
 
 function mount(
-    jsx: React.ReactChild,
+    jsx: React.ReactNode,
     shadow: ShadowRoot,
     options: RenderInShadowRootOptions,
     { preventEventPropagationList, wrapJSX }: CreateRenderInShadowRootHostConfig,
@@ -100,7 +100,7 @@ function mount(
             root!.render(getJSX(jsx))
         },
     }
-    function getJSX(jsx: React.ReactChild) {
+    function getJSX(jsx: React.ReactNode) {
         return (
             <StrictMode>
                 <PreventEventPropagationListContext.Provider value={preventEventPropagationList}>
