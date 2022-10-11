@@ -43,11 +43,13 @@ export class SwapDescriptor implements TransactionDescriptor {
                     description: `Swap ${getTokenAmountDescription(context.value, nativeToken)} for ${
                         outputToken?.symbol ?? ''
                     }.`,
-                    successfulDescription: `Swap ${getTokenAmountDescription(
-                        context.value,
-                        nativeToken,
-                    )} for ${getTokenAmountDescription(parameters!.amountOutMin, outputToken)} successfully.`,
-                    failedDescription: `Failed to swap ${outputToken?.symbol ?? ''}.`,
+                    snackbar: {
+                        successfulDescription: `Swap ${getTokenAmountDescription(
+                            context.value,
+                            nativeToken,
+                        )} for ${getTokenAmountDescription(parameters!.amountOutMin, outputToken)} successfully.`,
+                        failedDescription: `Failed to swap ${outputToken?.symbol ?? ''}.`,
+                    },
                 }
             }
 
@@ -66,11 +68,13 @@ export class SwapDescriptor implements TransactionDescriptor {
                     description: `Swap ${getTokenAmountDescription(parameters!.amountIn, outputToken)} for ${
                         nativeToken?.symbol ?? ''
                     }.`,
-                    successfulDescription: `Swap ${getTokenAmountDescription(
-                        parameters!.amountIn,
-                        outputToken,
-                    )} for ${getTokenAmountDescription(parameters!.amountOutMin, nativeToken)} successfully.`,
-                    failedDescription: `Failed to swap ${nativeToken?.symbol ?? ''}.`,
+                    snackbar: {
+                        successfulDescription: `Swap ${getTokenAmountDescription(
+                            parameters!.amountIn,
+                            outputToken,
+                        )} for ${getTokenAmountDescription(parameters!.amountOutMin, nativeToken)} successfully.`,
+                        failedDescription: `Failed to swap ${nativeToken?.symbol ?? ''}.`,
+                    },
                 }
             }
 
@@ -91,11 +95,13 @@ export class SwapDescriptor implements TransactionDescriptor {
                     description: `Swap ${getTokenAmountDescription(parameters!.amountIn, tokenIn)} for ${
                         tokenOut?.symbol ?? ''
                     }.`,
-                    successfulDescription: `Swap ${getTokenAmountDescription(
-                        parameters!.amountIn,
-                        tokenIn,
-                    )} for ${getTokenAmountDescription(parameters!.amountOutMin, tokenOut)} successfully.`,
-                    failedDescription: `Failed to swap ${tokenOut?.symbol ?? ''}.`,
+                    snackbar: {
+                        successfulDescription: `Swap ${getTokenAmountDescription(
+                            parameters!.amountIn,
+                            tokenIn,
+                        )} for ${getTokenAmountDescription(parameters!.amountOutMin, tokenOut)} successfully.`,
+                        failedDescription: `Failed to swap ${tokenOut?.symbol ?? ''}.`,
+                    },
                 }
             }
 
@@ -121,11 +127,13 @@ export class SwapDescriptor implements TransactionDescriptor {
                     description: `Swap ${getTokenAmountDescription(parameters!.fromTokenAmount, tokenIn)} for ${
                         tokenOut?.symbol ?? ''
                     }.`,
-                    successfulDescription: `Swap ${getTokenAmountDescription(
-                        parameters!.fromTokenAmount,
-                        tokenIn,
-                    )} for ${getTokenAmountDescription(parameters!.minReturnAmount, tokenOut)} successfully.`,
-                    failedDescription: `Failed to swap ${tokenOut?.symbol ?? ''}.`,
+                    snackbar: {
+                        successfulDescription: `Swap ${getTokenAmountDescription(
+                            parameters!.fromTokenAmount,
+                            tokenIn,
+                        )} for ${getTokenAmountDescription(parameters!.minReturnAmount, tokenOut)} successfully.`,
+                        failedDescription: `Failed to swap ${tokenOut?.symbol ?? ''}.`,
+                    },
                 }
             }
 
@@ -146,11 +154,13 @@ export class SwapDescriptor implements TransactionDescriptor {
                     description: `Swap ${getTokenAmountDescription(parameters!.fromTokenAmount, tokenIn)} for ${
                         tokenOut?.symbol ?? ''
                     }.`,
-                    successfulDescription: `Swap ${getTokenAmountDescription(
-                        parameters!.fromTokenAmount,
-                        tokenIn,
-                    )} for ${getTokenAmountDescription(parameters!.minReturnAmount, tokenOut)} successfully.`,
-                    failedDescription: `Failed to swap ${tokenOut?.symbol ?? ''}.`,
+                    snackbar: {
+                        successfulDescription: `Swap ${getTokenAmountDescription(
+                            parameters!.fromTokenAmount,
+                            tokenIn,
+                        )} for ${getTokenAmountDescription(parameters!.minReturnAmount, tokenOut)} successfully.`,
+                        failedDescription: `Failed to swap ${tokenOut?.symbol ?? ''}.`,
+                    },
                 }
             }
 
@@ -186,11 +196,13 @@ export class SwapDescriptor implements TransactionDescriptor {
                     description: `Swap ${getTokenAmountDescription(_parameters[1].amount, tokenIn)} for ${
                         tokenOut?.symbol ?? ''
                     }.`,
-                    successfulDescription: `Swap ${getTokenAmountDescription(
-                        _parameters[1].amount,
-                        tokenIn,
-                    )} for ${getTokenAmountDescription(parameters!.minReturnAmount, tokenOut)} successfully.`,
-                    failedDescription: `Failed to swap ${tokenOut?.symbol ?? ''}.`,
+                    snackbar: {
+                        successfulDescription: `Swap ${getTokenAmountDescription(
+                            _parameters[1].amount,
+                            tokenIn,
+                        )} for ${getTokenAmountDescription(parameters!.minReturnAmount, tokenOut)} successfully.`,
+                        failedDescription: `Failed to swap ${tokenOut?.symbol ?? ''}.`,
+                    },
                 }
             }
 
@@ -210,16 +222,18 @@ export class SwapDescriptor implements TransactionDescriptor {
                 return {
                     chainId: context.chainId,
                     title: 'Swap Token',
+                    tokenInAddress: tokenIn?.address,
+                    tokenInAmount: parameters.inputTokenAmount,
                     description: `Swap ${getTokenAmountDescription(parameters.inputTokenAmount, tokenIn)} for ${
                         tokenOut?.symbol ?? ''
                     }.`,
-                    tokenInAddress: tokenIn?.address,
-                    tokenInAmount: parameters.inputTokenAmount,
-                    successfulDescription: `Swap ${getTokenAmountDescription(
-                        parameters.inputTokenAmount,
-                        tokenIn,
-                    )} for ${getTokenAmountDescription(parameters!.minOutputTokenAmount, tokenOut)} successfully.`,
-                    failedDescription: `Failed to swap ${tokenOut?.symbol ?? ''}.`,
+                    snackbar: {
+                        successfulDescription: `Swap ${getTokenAmountDescription(
+                            parameters.inputTokenAmount,
+                            tokenIn,
+                        )} for ${getTokenAmountDescription(parameters!.minOutputTokenAmount, tokenOut)} successfully.`,
+                        failedDescription: `Failed to swap ${tokenOut?.symbol ?? ''}.`,
+                    },
                 }
             }
             // Bancor
@@ -241,16 +255,18 @@ export class SwapDescriptor implements TransactionDescriptor {
                 return {
                     chainId: context.chainId,
                     title: 'Swap Token',
+                    tokenInAddress: tokenIn?.address,
+                    tokenInAmount: parameters._amount,
                     description: `Swap ${getTokenAmountDescription(parameters._amount, tokenIn)} for ${
                         tokenOut?.symbol ?? ''
                     }.`,
-                    tokenInAddress: tokenIn?.address,
-                    tokenInAmount: parameters._amount,
-                    successfulDescription: `Swap ${getTokenAmountDescription(
-                        parameters._amount,
-                        tokenIn,
-                    )} for ${getTokenAmountDescription(parameters!._minReturn, tokenOut)} successfully.`,
-                    failedDescription: `Failed to swap ${tokenOut?.symbol ?? ''}.`,
+                    snackbar: {
+                        successfulDescription: `Swap ${getTokenAmountDescription(
+                            parameters._amount,
+                            tokenIn,
+                        )} for ${getTokenAmountDescription(parameters!._minReturn, tokenOut)} successfully.`,
+                        failedDescription: `Failed to swap ${tokenOut?.symbol ?? ''}.`,
+                    },
                 }
             }
             // Uniswap V3
@@ -296,16 +312,18 @@ export class SwapDescriptor implements TransactionDescriptor {
                     return {
                         chainId: context.chainId,
                         title: 'Swap Token',
+                        tokenInAddress: tokenIn?.address,
+                        tokenInAmount: amountIn,
                         description: `Swap ${getTokenAmountDescription(amountIn, tokenIn)} for ${
                             tokenOut?.symbol ?? ''
                         }.`,
-                        tokenInAddress: tokenIn?.address,
-                        tokenInAmount: amountIn,
-                        successfulDescription: `Swap ${getTokenAmountDescription(
-                            amountIn,
-                            tokenIn,
-                        )} for ${getTokenAmountDescription(amountOutMinimum, tokenOut)} successfully.`,
-                        failedDescription: `Failed to swap ${tokenOut?.symbol ?? ''}.`,
+                        snackbar: {
+                            successfulDescription: `Swap ${getTokenAmountDescription(
+                                amountIn,
+                                tokenIn,
+                            )} for ${getTokenAmountDescription(amountOutMinimum, tokenOut)} successfully.`,
+                            failedDescription: `Failed to swap ${tokenOut?.symbol ?? ''}.`,
+                        },
                     }
                 } catch {
                     return {
@@ -333,16 +351,18 @@ export class SwapDescriptor implements TransactionDescriptor {
                 return {
                     chainId: context.chainId,
                     title: 'Swap Token',
+                    tokenInAddress: tokenIn?.address,
+                    tokenInAmount: parameters.sellAmount,
                     description: `Swap ${getTokenAmountDescription(parameters.sellAmount, tokenIn)} for ${
                         tokenOut?.symbol ?? ''
                     }.`,
-                    tokenInAddress: tokenIn?.address,
-                    tokenInAmount: parameters.sellAmount,
-                    successfulDescription: `Swap ${getTokenAmountDescription(
-                        parameters.sellAmount,
-                        tokenIn,
-                    )} for ${getTokenAmountDescription(parameters!.minBuyAmount, tokenOut)} successfully.`,
-                    failedDescription: `Failed to swap ${tokenOut?.symbol ?? ''}.`,
+                    snackbar: {
+                        successfulDescription: `Swap ${getTokenAmountDescription(
+                            parameters.sellAmount,
+                            tokenIn,
+                        )} for ${getTokenAmountDescription(parameters!.minBuyAmount, tokenOut)} successfully.`,
+                        failedDescription: `Failed to swap ${tokenOut?.symbol ?? ''}.`,
+                    },
                 }
             }
 
@@ -359,16 +379,18 @@ export class SwapDescriptor implements TransactionDescriptor {
                 return {
                     chainId: context.chainId,
                     title: `${actionName} Token`,
+                    tokenInAddress: tokenIn?.address,
+                    tokenInAmount: amount,
                     description: `${actionName} ${getTokenAmountDescription(amount, tokenIn)} for ${
                         tokenOut?.symbol ?? ''
                     }.`,
-                    tokenInAddress: tokenIn?.address,
-                    tokenInAmount: amount,
-                    successfulDescription: `${actionName} ${getTokenAmountDescription(
-                        amount,
-                        tokenIn,
-                    )} for ${getTokenAmountDescription(amount, tokenOut)} successfully.`,
-                    failedDescription: `Failed to ${actionName} ${tokenOut?.symbol ?? ''}.`,
+                    snackbar: {
+                        successfulDescription: `${actionName} ${getTokenAmountDescription(
+                            amount,
+                            tokenIn,
+                        )} for ${getTokenAmountDescription(amount, tokenOut)} successfully.`,
+                        failedDescription: `Failed to ${actionName} ${tokenOut?.symbol ?? ''}.`,
+                    },
                 }
             }
 
@@ -389,11 +411,13 @@ export class SwapDescriptor implements TransactionDescriptor {
                     description: `Swap ${getTokenAmountDescription(parameters!.amountIn, tokenIn)} for ${
                         tokenOut?.symbol ?? ''
                     }.`,
-                    successfulDescription: `Swap ${getTokenAmountDescription(
-                        parameters!.amountIn,
-                        tokenIn,
-                    )} for ${getTokenAmountDescription(parameters!.amountOutMin, tokenOut)} successfully.`,
-                    failedDescription: `Failed to swap ${tokenOut?.symbol ?? ''}.`,
+                    snackbar: {
+                        successfulDescription: `Swap ${getTokenAmountDescription(
+                            parameters!.amountIn,
+                            tokenIn,
+                        )} for ${getTokenAmountDescription(parameters!.amountOutMin, tokenOut)} successfully.`,
+                        failedDescription: `Failed to swap ${tokenOut?.symbol ?? ''}.`,
+                    },
                 }
             }
         }

@@ -36,13 +36,15 @@ export class ERC721Descriptor implements TransactionDescriptor {
                             symbol,
                             action: 'Unlock',
                         }),
-                        successfulDescription: i18NextInstance.t('plugin_infra_descriptor_nft_approve_success', {
-                            symbol,
-                            action: 'Unlock',
-                        }),
-                        failedDescription: i18NextInstance.t('plugin_infra_descriptor_nft_approve_fail', {
-                            action: 'unlock',
-                        }),
+                        snackbar: {
+                            successfulDescription: i18NextInstance.t('plugin_infra_descriptor_nft_approve_success', {
+                                symbol,
+                                action: 'Unlock',
+                            }),
+                            failedDescription: i18NextInstance.t('plugin_infra_descriptor_nft_approve_fail', {
+                                action: 'unlock',
+                            }),
+                        },
                     }
                 }
                 case 'setApprovalForAll': {
@@ -60,19 +62,21 @@ export class ERC721Descriptor implements TransactionDescriptor {
                             symbol,
                             action,
                         }),
-                        successfulDescription:
-                            parameters?.approved === false
-                                ? i18NextInstance.t('plugin_infra_descriptor_nft_revoke_success', {
-                                      symbol,
-                                      action,
-                                  })
-                                : i18NextInstance.t('plugin_infra_descriptor_nft_approve_success', {
-                                      symbol,
-                                      action,
-                                  }),
-                        failedDescription: i18NextInstance.t('plugin_infra_descriptor_nft_approve_fail', {
-                            action: action.toLowerCase(),
-                        }),
+                        snackbar: {
+                            successfulDescription:
+                                parameters?.approved === false
+                                    ? i18NextInstance.t('plugin_infra_descriptor_nft_revoke_success', {
+                                          symbol,
+                                          action,
+                                      })
+                                    : i18NextInstance.t('plugin_infra_descriptor_nft_approve_success', {
+                                          symbol,
+                                          action,
+                                      }),
+                            failedDescription: i18NextInstance.t('plugin_infra_descriptor_nft_approve_fail', {
+                                action: action.toLowerCase(),
+                            }),
+                        },
                     }
                 }
                 case 'transferFrom':
@@ -83,10 +87,12 @@ export class ERC721Descriptor implements TransactionDescriptor {
                         chainId: context.chainId,
                         title: i18NextInstance.t('plugin_infra_descriptor_nft_transfer_title'),
                         description: i18NextInstance.t('plugin_infra_descriptor_nft_transfer', { symbol }),
-                        successfulDescription: i18NextInstance.t('plugin_infra_descriptor_nft_transfer_success', {
-                            symbol,
-                        }),
-                        failedDescription: i18NextInstance.t('plugin_infra_descriptor_nft_transfer_fail'),
+                        snackbar: {
+                            successfulDescription: i18NextInstance.t('plugin_infra_descriptor_nft_transfer_success', {
+                                symbol,
+                            }),
+                            failedDescription: i18NextInstance.t('plugin_infra_descriptor_nft_transfer_fail'),
+                        },
                     }
                 }
                 default:

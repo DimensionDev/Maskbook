@@ -3,7 +3,7 @@ import { useAsync, useAsyncFn, useUpdateEffect } from 'react-use'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { makeStyles } from '@masknet/theme'
 import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest.js'
-import { formatGweiToWei, formatWeiToEther, SchemaType, isNativeTokenAddress } from '@masknet/web3-shared-evm'
+import { formatGweiToWei, formatWeiToEther, isNativeTokenAddress } from '@masknet/web3-shared-evm'
 import { FormattedBalance, FormattedCurrency, TokenIcon } from '@masknet/shared'
 import { Link, Typography } from '@mui/material'
 import { useI18N } from '../../../../../utils/index.js'
@@ -23,7 +23,6 @@ import {
     useNativeTokenPrice,
     useNetworkType,
     useReverseAddress,
-    useSchemaType,
     useWeb3State,
 } from '@masknet/web3-hooks-base'
 import {
@@ -33,7 +32,6 @@ import {
     leftShift,
     pow10,
     TransactionDescriptorType,
-    ZERO,
 } from '@masknet/web3-shared-base'
 import { CopyIconButton } from '../../../components/CopyIconButton/index.js'
 import { useTitle } from '../../../hook/useTitle.js'
@@ -110,7 +108,7 @@ const useStyles = makeStyles()(() => ({
         width: 24,
         height: 24,
     },
-    amount: {
+    tokenDescription: {
         flex: 1,
         fontSize: 18,
         color: '#15181B',
@@ -173,60 +171,21 @@ const ContractInteraction = memo(() => {
         maxFeePerGas,
         maxPriorityFeePerGas,
         amount,
-        contractAddress,
         isNativeTokenInteraction,
+        tokenDescription,
     } = useMemo(() => {
         const type = request?.formatterTransaction?.type
         if (!type) return {}
 
         switch (type) {
             case TransactionDescriptorType.INTERACTION:
-                const methods = request.transactionContext?.methods
-
-                if (methods?.length) {
-                    for (const method of methods) {
-                        const parameters = method.parameters
-
-                        if (method.name === 'approve' || method.name === 'setApprovalForAll') {
-                            return {
-                                isNativeTokenInteraction: false,
-                                typeName: request.formatterTransaction?.title,
-                                tokenAddress: request.computedPayload?.to,
-                                to: request.computedPayload?.to,
-                                gas: request.computedPayload?.gas,
-                                gasPrice: request.computedPayload?.gasPrice,
-                                maxFeePerGas: request.computedPayload?.maxFeePerGas,
-                                maxPriorityFeePerGas: request.computedPayload?.maxPriorityFeePerGas,
-                                amount: parameters?.value,
-                            }
-                        }
-
-                        if (
-                            (method.name === 'transfer' || method.name === 'transferFrom') &&
-                            parameters?.to &&
-                            parameters?.value
-                        ) {
-                            return {
-                                isNativeTokenInteraction: false,
-                                typeName: t('popups_wallet_contract_interaction_transfer'),
-                                tokenAddress: request.computedPayload?.to,
-                                to: parameters?.to as string,
-                                gas: request.computedPayload?.gas,
-                                gasPrice: request.computedPayload?.gasPrice,
-                                maxFeePerGas: request.computedPayload?.maxFeePerGas,
-                                maxPriorityFeePerGas: request.computedPayload?.maxPriorityFeePerGas,
-                                amount: parameters?.value,
-                                contractAddress: request.computedPayload?.to,
-                            }
-                        }
-                    }
-                }
                 return {
                     isNativeTokenInteraction: transactionDescription?.tokenInAddress
                         ? isNativeTokenAddress(transactionDescription?.tokenInAddress)
                         : true,
-                    typeName: t('popups_wallet_contract_interaction'),
-                    tokenAddress: transactionDescription?.tokenInAddress ?? request.computedPayload?.to,
+                    typeName: transactionDescription?.title ?? t('popups_wallet_contract_interaction'),
+                    tokenAddress: transactionDescription?.tokenInAddress,
+                    tokenDescription: transactionDescription?.popup?.tokenDescription,
                     to: request.computedPayload?.to,
                     gas: request.computedPayload?.gas,
                     gasPrice: request.computedPayload?.gasPrice,
@@ -254,8 +213,6 @@ const ContractInteraction = memo(() => {
                 unreachable(type)
         }
     }, [request, t, transactionDescription])
-
-    const { value: contractType } = useSchemaType(NetworkPluginID.PLUGIN_EVM, contractAddress)
 
     // token detailed
     const { value: nativeToken } = useNativeToken(NetworkPluginID.PLUGIN_EVM)
@@ -319,12 +276,9 @@ const ContractInteraction = memo(() => {
 
     const { value: nativeTokenPrice } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM)
 
-    const tokenValueUSD =
-        contractType && [SchemaType.ERC721, SchemaType.ERC1155].includes(contractType)
-            ? ZERO
-            : leftShift(tokenAmount, tokenDecimals)
-                  .times((!isNativeTokenInteraction ? tokenPrice : nativeTokenPrice) ?? 0)
-                  .toString()
+    const tokenValueUSD = leftShift(tokenAmount, tokenDecimals)
+        .times((!isNativeTokenInteraction ? tokenPrice : nativeTokenPrice) ?? 0)
+        .toString()
 
     const totalUSD = new BigNumber(formatWeiToEther(gasFee))
         .times(nativeTokenPrice ?? 0)
@@ -345,7 +299,7 @@ const ContractInteraction = memo(() => {
     ) : (
         <>
             <main className={classes.container}>
-                <div className={classes.info}>
+                <div className={classes.info} style={{ marginBottom: 20 }}>
                     <Typography className={classes.title}>{typeName}</Typography>
                     {domain && Others?.formatDomainName ? (
                         <Typography className={classes.domain}>{Others?.formatDomainName(domain)}</Typography>
@@ -360,35 +314,35 @@ const ContractInteraction = memo(() => {
                     </Typography>
                 </div>
                 <div className={classes.content}>
-                    <div className={classes.item} style={{ marginTop: 20, marginBottom: 30 }}>
-                        <TokenIcon
-                            address={(isNativeTokenInteraction ? nativeToken?.address : token?.address) ?? ''}
-                            chainId={chainId}
-                            name={(isNativeTokenInteraction ? nativeToken?.name : token?.name) ?? ''}
-                            className={classes.tokenIcon}
-                        />
-                        {tokenDecimals !== undefined ? (
-                            <>
-                                <Typography className={classes.amount}>
-                                    {leftShift(tokenAmount, tokenDecimals).gt(pow10(9)) ? (
-                                        t('popups_wallet_token_infinite_unlock')
-                                    ) : (
+                    {tokenAddress ? (
+                        <div className={classes.item} style={{ marginBottom: 30 }}>
+                            <TokenIcon
+                                address={(isNativeTokenInteraction ? nativeToken?.address : token?.address) ?? ''}
+                                chainId={chainId}
+                                name={(isNativeTokenInteraction ? nativeToken?.name : token?.name) ?? ''}
+                                className={classes.tokenIcon}
+                            />
+                            {tokenDescription ? (
+                                <Typography className={classes.tokenDescription}>{tokenDescription}</Typography>
+                            ) : tokenDecimals !== undefined ? (
+                                <>
+                                    <Typography className={classes.tokenDescription}>
                                         <FormattedBalance
                                             value={tokenAmount}
                                             decimals={tokenDecimals}
                                             significant={4}
                                             formatter={formatBalance}
                                         />
-                                    )}
-                                </Typography>
-                                <Typography>
-                                    {!isGreaterThan(tokenValueUSD, pow10(9)) ? (
-                                        <FormattedCurrency value={tokenValueUSD} formatter={formatCurrency} />
-                                    ) : null}
-                                </Typography>
-                            </>
-                        ) : null}
-                    </div>
+                                    </Typography>
+                                    <Typography>
+                                        {!isGreaterThan(tokenValueUSD, pow10(9)) ? (
+                                            <FormattedCurrency value={tokenValueUSD} formatter={formatCurrency} />
+                                        ) : null}
+                                    </Typography>
+                                </>
+                            ) : null}
+                        </div>
+                    ) : null}
 
                     <div className={classes.item}>
                         <Typography className={classes.label}>
