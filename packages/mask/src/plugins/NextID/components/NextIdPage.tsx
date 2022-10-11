@@ -81,7 +81,11 @@ export function NextIdPage() {
             )
         }
 
-        return <AddWalletPersonaAction disabled={statusLoading} onAddWallet={handleAddWallets} />
+        return (
+            <PluginEnableBoundary pluginId={PluginID.Web3Profile} classes={{ root: classes.enablePluginRoot }}>
+                <AddWalletPersonaAction disabled={statusLoading} onAddWallet={handleAddWallets} />
+            </PluginEnableBoundary>
+        )
     }, [isOwn, t, statusLoading, handleAddWallets, personaConnectStatus])
 
     if (loadingBindings || loadingPersona) {
