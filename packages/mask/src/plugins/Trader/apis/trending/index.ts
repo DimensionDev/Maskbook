@@ -10,11 +10,11 @@ import { isBlockedAddress, isBlockedId, isBlockedKeyword, resolveAlias, resolveC
 export async function getCoins(dataProvider: DataProvider): Promise<Coin[]> {
     switch (dataProvider) {
         case DataProvider.CoinGecko:
-            return CoinGeckoTrendingEVM.getCoins()
+            return CoinGeckoTrendingEVM.getAllCoins()
         case DataProvider.CoinMarketCap:
-            return CoinMarketCap.getCoins()
+            return CoinMarketCap.getAllCoins()
         case DataProvider.UniswapInfo:
-            return UniSwap.getCoins()
+            return UniSwap.getAllCoins()
         case DataProvider.NFTScan:
             return []
         default:
@@ -31,7 +31,7 @@ export async function getCoinsByKeyword(
         case DataProvider.UniswapInfo:
             return UniSwap.getCoinsByKeyword(chainId, keyword)
         case DataProvider.NFTScan:
-            return keyword ? NFTScanTrending.getCoins(keyword) : []
+            return keyword ? NFTScanTrending.getCoinsByKeyword(chainId, keyword) : []
         default:
             return []
     }
@@ -153,13 +153,13 @@ export async function getCoinTrendingById(
 ): Promise<Trending> {
     switch (dataProvider) {
         case DataProvider.CoinGecko:
-            return CoinGeckoTrendingEVM.getCoinTrending(chainId, id, currency)
+            return CoinGeckoTrendingEVM.getCoinTrendingById(chainId, id, currency)
         case DataProvider.CoinMarketCap:
-            return CoinMarketCap.getCoinTrending(chainId, id, currency)
+            return CoinMarketCap.getCoinTrendingById(chainId, id, currency)
         case DataProvider.UniswapInfo:
-            return UniSwap.getCoinTrending(chainId, id, currency)
+            return UniSwap.getCoinTrendingById(chainId, id, currency)
         case DataProvider.NFTScan:
-            return NFTScanTrending.getCoinTrending(chainId, id, currency)
+            return NFTScanTrending.getCoinTrendingById(chainId, id, currency)
         default:
             unreachable(dataProvider)
     }
@@ -195,18 +195,18 @@ export async function getPriceStats(
 ): Promise<Stat[]> {
     switch (dataProvider) {
         case DataProvider.CoinGecko:
-            return CoinGeckoTrendingEVM.getPriceStats(
+            return CoinGeckoTrendingEVM.getCoinPriceStats(
                 chainId,
                 id,
                 currency,
                 days === TrendingAPI.Days.MAX ? 11430 : days,
             )
         case DataProvider.CoinMarketCap:
-            return CoinMarketCap.getPriceStats(chainId, id, currency, days)
+            return CoinMarketCap.getCoinPriceStats(chainId, id, currency, days)
         case DataProvider.UniswapInfo:
-            return UniSwap.getPriceStats(chainId, id, currency, days)
+            return UniSwap.getCoinPriceStats(chainId, id, currency, days)
         case DataProvider.NFTScan:
-            return NFTScanTrending.getPriceStats(chainId, id, currency, days)
+            return NFTScanTrending.getCoinPriceStats(chainId, id, currency, days)
         default:
             return []
     }
