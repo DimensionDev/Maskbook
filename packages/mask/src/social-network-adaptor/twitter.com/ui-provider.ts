@@ -1,3 +1,4 @@
+/* eslint-disable tss-unused-classes/unused-classes */
 import { globalUIState, SocialNetworkUI, stateCreator } from '../../social-network/index.js'
 import { twitterBase } from './base.js'
 import getSearchedKeywordAtTwitter from './collecting/getSearchedKeyword.js'

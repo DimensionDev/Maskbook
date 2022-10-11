@@ -49,6 +49,6 @@
         "prefer-const": "warn",
         "use-isnan": "error",
         "unused-imports/no-unused-imports-ts": "error",
-        "tss-unused-classes/unused-classes": "warn"
+        "tss-unused-classes/unused-classes": "error"
     }
 }

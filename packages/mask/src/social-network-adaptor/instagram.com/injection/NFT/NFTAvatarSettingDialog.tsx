@@ -84,7 +84,12 @@ export function NFTAvatarSettingDialog() {
         <DialogStackingProvider>
             <InjectedDialog keepMounted open={open} onClose={onClose} title={t('set_nft_profile_photo')}>
                 <DialogContent style={{ padding: 16 }}>
-                    <NFTAvatar onChange={onChange} classes={classes} />
+                    <NFTAvatar
+                        onChange={onChange}
+                        classes={{
+                            root: classes.root,
+                        }}
+                    />
                 </DialogContent>
             </InjectedDialog>
         </DialogStackingProvider>

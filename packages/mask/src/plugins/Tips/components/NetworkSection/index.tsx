@@ -41,7 +41,11 @@ export const NetworkSection: FC<Props> = () => {
     return (
         <div className={classes.abstractTabWrapper}>
             <NetworkTab
-                classes={classes}
+                classes={{
+                    tab: classes.tab,
+                    tabs: classes.tabs,
+                    tabPaper: classes.tabPaper,
+                }}
                 networkId={pluginId}
                 chainId={targetChainId}
                 setChainId={setTargetChainId}

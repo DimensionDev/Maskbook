@@ -1,3 +1,4 @@
+/* eslint-disable tss-unused-classes/unused-classes */
 import { makeStyles } from '@masknet/theme'
 import { injectCommentBoxDefaultFactory } from '../../../social-network/defaults/index.js'
 import { pasteToCommentBoxMinds } from '../automation/pasteToCommentBoxMinds.js'

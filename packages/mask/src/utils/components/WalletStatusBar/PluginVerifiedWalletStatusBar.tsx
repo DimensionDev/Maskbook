@@ -3,11 +3,10 @@ import { useUpdateEffect } from 'react-use'
 import { first, omit } from 'lodash-unified'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { Box, Button, Divider, ListItemIcon, MenuItem, Typography } from '@mui/material'
+import { alpha, Box, Button, Divider, ListItemIcon, MenuItem, Typography } from '@mui/material'
 import { useI18N } from '../../i18n-next-ui.js'
 import { Action } from './Action.js'
-import { useStatusBarStyles } from './styles.js'
-import { BindingProof, PopupRoutes, NetworkPluginID } from '@masknet/shared-base'
+import { BindingProof, PopupRoutes, NetworkPluginID, isDashboardPage } from '@masknet/shared-base'
 import {
     useAccount,
     useCurrentWeb3NetworkPluginID,
@@ -27,6 +26,33 @@ import { isSameAddress, resolveNextID_NetworkPluginID, TransactionStatusType } f
 import { WalletMenuItem } from './WalletMenuItem.js'
 import { useMenu } from '@masknet/shared'
 import Services from '../../../extension/service.js'
+import { makeStyles, MaskColorVar } from '@masknet/theme'
+
+const isDashboard = isDashboardPage()
+
+const useStyles = makeStyles()((theme) => ({
+    root: {
+        boxSizing: 'content-box',
+        display: 'flex',
+        backgroundColor: isDashboard ? MaskColorVar.mainBackground : alpha(theme.palette.maskColor.bottom, 0.8),
+        boxShadow:
+            theme.palette.mode === 'dark'
+                ? '0px 0px 20px rgba(255, 255, 255, 0.12)'
+                : '0px 0px 20px rgba(0, 0, 0, 0.05)',
+        backdropFilter: 'blur(16px)',
+        padding: theme.spacing(2),
+        borderRadius: '0 0 12px 12px',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        flex: 1,
+        maxHeight: 40,
+    },
+    connection: {
+        width: 18,
+        height: 18,
+        marginRight: 8,
+    },
+}))
 
 interface PluginVerifiedWalletStatusBarProps extends PropsWithChildren<{}> {
     verifiedWallets: BindingProof[]
@@ -41,7 +67,7 @@ export const PluginVerifiedWalletStatusBar = memo<PluginVerifiedWalletStatusBarP
 
         const account = useAccount()
 
-        const { classes, cx } = useStatusBarStyles()
+        const { classes, cx } = useStyles()
 
         const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
             WalletMessages.events.selectProviderDialogUpdated,

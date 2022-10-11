@@ -1,3 +1,4 @@
+/* eslint-disable tss-unused-classes/unused-classes */
 import { Icons } from '@masknet/icons'
 import { memo } from 'react'
 import { makeStyles } from '../../UIHelper/index.js'

@@ -70,7 +70,6 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => {
                 borderTop: 'unset',
             },
         },
-        line: {},
         icon: {
             [`@media (min-width: ${theme.breakpoints.values.sm}px)`]: {
                 height: props.fontSize,
@@ -196,7 +195,11 @@ export function ProfileTabAtInstagram() {
         <ProfileTab
             title="Web3"
             icon={<Icons.Collectible className={classes.icon} />}
-            classes={classes}
+            classes={{
+                root: classes.root,
+                button: classes.button,
+                selected: classes.selected,
+            }}
             reset={reset}
             clear={clear}
         />

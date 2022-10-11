@@ -1,3 +1,4 @@
+/* eslint-disable tss-unused-classes/unused-classes */
 import type { SocialNetworkUI } from '../../social-network/types.js'
 import { stateCreator } from '../../social-network/utils.js'
 import { facebookBase } from './base.js'

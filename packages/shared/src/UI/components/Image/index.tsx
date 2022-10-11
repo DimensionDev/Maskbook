@@ -1,6 +1,6 @@
 import { ImgHTMLAttributes, useState } from 'react'
 import classNames from 'classnames'
-import { LoadingBase, makeStyles, parseColor, useStylesExtends } from '@masknet/theme'
+import { LoadingBase, makeStyles, useStylesExtends } from '@masknet/theme'
 import { Box, useTheme } from '@mui/material'
 import { useImageURL } from '../../../hooks/useImageURL.js'
 
@@ -9,9 +9,6 @@ const useStyles = makeStyles<void, 'floatingContainer'>()((theme, _, refs) => ({
         width: '100%',
         height: '100%',
         position: 'relative',
-    },
-    circle: {
-        color: parseColor(theme.palette.maskColor.main).setAlpha(0.5).toRgbString(),
     },
     image: {
         display: 'block',

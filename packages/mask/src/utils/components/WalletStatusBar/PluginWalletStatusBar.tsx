@@ -1,5 +1,5 @@
 import { memo, PropsWithChildren, useCallback, useMemo } from 'react'
-import { Box, Button } from '@mui/material'
+import { alpha, Box, Button } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import {
     useCurrentWeb3NetworkPluginID,
@@ -16,13 +16,39 @@ import {
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import type { NetworkPluginID } from '@masknet/shared-base'
+import { isDashboardPage, NetworkPluginID } from '@masknet/shared-base'
 import { TransactionStatusType } from '@masknet/web3-shared-base'
 import { useI18N } from '../../i18n-next-ui.js'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { WalletDescription } from './WalletDescription.js'
 import { Action } from './Action.js'
-import { useStatusBarStyles } from './styles.js'
+import { makeStyles, MaskColorVar } from '@masknet/theme'
+
+const isDashboard = isDashboardPage()
+
+export const useStyles = makeStyles()((theme) => ({
+    root: {
+        boxSizing: 'content-box',
+        display: 'flex',
+        backgroundColor: isDashboard ? MaskColorVar.mainBackground : alpha(theme.palette.maskColor.bottom, 0.8),
+        boxShadow:
+            theme.palette.mode === 'dark'
+                ? '0px 0px 20px rgba(255, 255, 255, 0.12)'
+                : '0px 0px 20px rgba(0, 0, 0, 0.05)',
+        backdropFilter: 'blur(16px)',
+        padding: theme.spacing(2),
+        borderRadius: '0 0 12px 12px',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        flex: 1,
+        maxHeight: 40,
+    },
+    connection: {
+        width: 18,
+        height: 18,
+        marginRight: 8,
+    },
+}))
 
 export interface WalletStatusBarProps<T extends NetworkPluginID> extends PropsWithChildren<{}> {
     className?: string
@@ -34,7 +60,7 @@ export interface WalletStatusBarProps<T extends NetworkPluginID> extends PropsWi
 export const PluginWalletStatusBar = memo<WalletStatusBarProps<NetworkPluginID>>(
     ({ className, onClick, expectedPluginID, expectedChainId, children }) => {
         const { t } = useI18N()
-        const { classes, cx } = useStatusBarStyles()
+        const { classes, cx } = useStyles()
 
         const pluginID = useCurrentWeb3NetworkPluginID()
         const account = useAccount(pluginID)

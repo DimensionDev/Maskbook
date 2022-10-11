@@ -33,9 +33,10 @@ import { SponsoredFarmIcon } from './shared-ui/icons/SponsoredFarm.js'
 import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary.js'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
 
-import { useTabStyles } from './styles.js'
-
 const useStyles = makeStyles()((theme) => ({
+    root: {
+        fontSize: 14,
+    },
     container: {
         flex: 1,
         height: '100%',
@@ -62,7 +63,6 @@ export function ReferToFarm(props: PageInterface) {
     const { value: linkedPersona } = useCurrentLinkedPersona()
 
     const { classes } = useStyles()
-    const { classes: tabClasses } = useTabStyles()
 
     const [tab, setTab] = useState(TabsReferAndBuy.NEW)
     const [token, setToken] = useState<FungibleTokenDetailed>()
@@ -171,8 +171,12 @@ export function ReferToFarm(props: PageInterface) {
                     variant="fullWidth"
                     onChange={(e, v) => setTab(v)}
                     aria-label="persona-post-contacts-button-group">
-                    <Tab value={TabsReferAndBuy.NEW} label={t.tab_new()} classes={tabClasses} />
-                    <Tab value={TabsReferAndBuy.MY_REWARDS} label={t.tab_my_rewards()} classes={tabClasses} />
+                    <Tab value={TabsReferAndBuy.NEW} label={t.tab_new()} classes={{ root: classes.root }} />
+                    <Tab
+                        value={TabsReferAndBuy.MY_REWARDS}
+                        label={t.tab_my_rewards()}
+                        classes={{ root: classes.root }}
+                    />
                 </Tabs>
                 <TabPanel value={TabsReferAndBuy.NEW} className={classes.tab}>
                     <Typography fontWeight={600} variant="h6" marginBottom="12px">

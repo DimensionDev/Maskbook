@@ -7,8 +7,68 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
 import { openWindow } from '@masknet/shared-base-ui'
 import { NextIdBadge } from './NextIdBadge'
 import type { BindingProof } from '@masknet/shared-base'
-import useStyles from './useStyles'
 import { useI18N } from '../locales'
+import { makeStyles } from '@masknet/theme'
+
+interface StyleProps {
+    isMenuScroll?: boolean
+}
+
+const useStyles = makeStyles<StyleProps>()((theme, { isMenuScroll = false }) => {
+    return {
+        nextIdVerifiedTwitterName: {
+            color: theme.palette.maskColor.dark,
+            fontWeight: 700,
+            marginLeft: 4,
+            fontSize: 16,
+        },
+        more: {
+            cursor: 'pointer',
+            marginLeft: 'auto',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+        },
+        socialAccountListItem: {
+            width: 193,
+            padding: '12px 6px',
+            margin: isMenuScroll ? '6px 0 6px 12px' : '6px 12px',
+            display: 'flex',
+            alignItems: 'center',
+            borderRadius: 12,
+            '&:hover': {
+                background: theme.palette.background.default,
+            },
+        },
+        menuItemNextIdIcon: {
+            display: 'flex',
+            marginLeft: 'auto',
+        },
+        accountNameInList: {
+            maxWidth: 120,
+            color: theme.palette.text.primary,
+            textOverflow: 'ellipsis',
+            overflow: 'hidden',
+        },
+        menu: {
+            maxHeight: 296,
+            background: theme.palette.maskColor.bottom,
+            scrollbarColor: `${theme.palette.maskColor.secondaryLine} ${theme.palette.maskColor.secondaryLine}`,
+            scrollbarWidth: 'thin',
+            '::-webkit-scrollbar': {
+                backgroundColor: 'transparent',
+                width: 19,
+            },
+            '::-webkit-scrollbar-thumb': {
+                borderRadius: '20px',
+                width: 4,
+                border: '7px solid rgba(0, 0, 0, 0)',
+                backgroundColor: theme.palette.maskColor.secondaryLine,
+                backgroundClip: 'padding-box',
+            },
+        },
+    }
+})
 
 interface SocialAccountListProps {
     validNextIdTwitterBindings: BindingProof[]

@@ -72,5 +72,13 @@ function OpenNFTAvatarEditProfileButtonInFaceBook() {
 
     const { classes } = useStyles(style)
 
-    return <NFTAvatarButton classes={classes} onClick={openNFTAvatarSettingDialog} showSetting={false} />
+    return (
+        <NFTAvatarButton
+            classes={{
+                root: classes.root,
+            }}
+            onClick={openNFTAvatarSettingDialog}
+            showSetting={false}
+        />
+    )
 }

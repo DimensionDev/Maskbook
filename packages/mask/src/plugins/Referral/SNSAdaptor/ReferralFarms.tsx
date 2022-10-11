@@ -8,8 +8,6 @@ import { PageInterface, PagesType, TabsReferralFarms } from '../types.js'
 
 import { ReferToFarmIcon, CreateFarmIcon, BuyToFarmIcon } from './shared-ui/icons/index.js'
 
-import { useTabStyles } from './styles.js'
-
 const useStyles = makeStyles()((theme) => ({
     root: {
         display: 'flex',
@@ -18,6 +16,9 @@ const useStyles = makeStyles()((theme) => ({
         position: 'relative',
         height: '100%',
         borderRadius: 8,
+    },
+    tabRoot: {
+        fontSize: 14,
     },
     container: {
         flex: 1,
@@ -76,7 +77,6 @@ export function Type({ name, onClick, icon }: TypeProps) {
 export function ReferralFarms(props: PageInterface) {
     const t = useI18N()
     const { classes } = useStyles()
-    const { classes: tabClasses } = useTabStyles()
 
     const [tab, setTab] = useState(TabsReferralFarms.TOKENS)
 
@@ -114,8 +114,12 @@ export function ReferralFarms(props: PageInterface) {
                         variant="fullWidth"
                         onChange={(e, v) => setTab(v)}
                         aria-label="persona-post-contacts-button-group">
-                        <Tab value={TabsReferralFarms.TOKENS} label="Crypto Tokens" classes={tabClasses} />
-                        <Tab value={TabsReferralFarms.NFTs} label="NFTs" classes={tabClasses} disabled />
+                        <Tab
+                            value={TabsReferralFarms.TOKENS}
+                            label="Crypto Tokens"
+                            classes={{ root: classes.tabRoot }}
+                        />
+                        <Tab value={TabsReferralFarms.NFTs} label="NFTs" classes={{ root: classes.tabRoot }} disabled />
                     </Tabs>
                     <TabPanel value={TabsReferralFarms.TOKENS} className={classes.tab}>
                         <Grid container spacing="20px">

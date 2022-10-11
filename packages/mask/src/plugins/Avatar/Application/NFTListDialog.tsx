@@ -67,9 +67,6 @@ const useStyles = makeStyles()((theme) => ({
         flexShrink: 0,
         position: 'absolute',
     },
-    tableTabWrapper: {
-        padding: theme.spacing(2),
-    },
     tab: {
         height: 36,
         minHeight: 36,
@@ -93,11 +90,6 @@ const useStyles = makeStyles()((theme) => ({
     },
     tabPanel: {
         marginTop: theme.spacing(3),
-    },
-    divider: {
-        borderColor: theme.palette.mode === 'dark' ? '#2F3336' : '#F2F5F6',
-        marginLeft: 16,
-        marginRight: 16,
     },
     noWallet: {
         display: 'flex',
@@ -271,7 +263,13 @@ export function NFTListDialog(props: NFTListDialogProps) {
                                     chains={SUPPORTED_CHAIN_IDS}
                                     chainId={actualChainId}
                                     setChainId={setChainId}
-                                    classes={classes}
+                                    classes={{
+                                        tab: classes.tab,
+                                        tabs: classes.tabs,
+                                        tabPanel: classes.tabPanel,
+                                        tabPaper: classes.tabPaper,
+                                        indicator: classes.indicator,
+                                    }}
                                     networkId={selectedPluginId}
                                 />
                             </div>

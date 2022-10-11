@@ -25,18 +25,6 @@ const useStyles = makeStyles()((theme) => ({
         width: '95%',
         margin: theme.spacing(1, 0, 2, 0.8),
     },
-    list: {
-        scrollbarWidth: 'none',
-        '&::-webkit-scrollbar': {
-            display: 'none',
-        },
-    },
-    placeholder: {
-        textAlign: 'center',
-        height: 288,
-        paddingTop: theme.spacing(14),
-        boxSizing: 'border-box',
-    },
     searchBox: {
         height: 400,
         width: '100%',
@@ -82,9 +70,6 @@ const useStyles = makeStyles()((theme) => ({
     },
     addressText: {
         fontSize: 12,
-    },
-    addressNoImage: {
-        left: '16px !important',
     },
     dialogContent: {
         height: 560,

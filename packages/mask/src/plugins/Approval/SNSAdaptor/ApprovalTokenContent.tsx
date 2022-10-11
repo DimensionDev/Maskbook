@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useAsync } from 'react-use'
 import { ListItem, List, Typography, Link, Avatar } from '@mui/material'
 import { Icons } from '@masknet/icons'
-import { ActionButton } from '@masknet/theme'
+import { ActionButton, makeStyles, parseColor } from '@masknet/theme'
 import type { ChainId, NetworkType, SchemaType } from '@masknet/web3-shared-evm'
 import { useERC20TokenApproveCallback } from '@masknet/web3-hooks-evm'
 import { useAccount, useWeb3State, useNetworkDescriptor, useWeb3Hub } from '@masknet/web3-hooks-base'
@@ -10,9 +10,131 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import { NetworkDescriptor, isGreaterThan, FungibleTokenSpender } from '@masknet/web3-shared-base'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
 import { useI18N } from '../locales/index.js'
-import { useStyles } from './useStyles.js'
 import { ApprovalLoadingContent } from './ApprovalLoadingContent.js'
 import { ApprovalEmptyContent } from './ApprovalEmptyContent.js'
+
+export const useStyles = makeStyles<{ listItemBackground?: string; listItemBackgroundIcon?: string } | void>()(
+    (theme, props) => ({
+        approvalContentWrapper: {
+            flexGrow: 1,
+            width: 565,
+            paddingTop: 8,
+            marginLeft: 16,
+            display: 'flex',
+            flexDirection: 'column',
+        },
+        listItemWrapper: {
+            width: '100%',
+            height: 90,
+            padding: 0,
+            marginTop: 4,
+            background: theme.palette.common.white,
+            borderRadius: 8,
+            marginBottom: theme.spacing(1),
+        },
+        listItem: {
+            width: '100%',
+            height: 90,
+            padding: 12,
+            borderRadius: 8,
+            marginBottom: 0,
+            background: props?.listItemBackground ?? theme.palette.background.default,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            '&:before': {
+                position: 'absolute',
+                content: '""',
+                top: 30,
+                left: 381,
+                zIndex: 0,
+                width: 114,
+                opacity: 0.2,
+                height: 61,
+                filter: 'blur(1.5px)',
+                background: props?.listItemBackgroundIcon,
+                backgroundRepeat: 'no-repeat',
+                backgroundSize: '114px 114px',
+            },
+        },
+        listItemInfo: {
+            display: 'flex',
+            justifyContent: 'space-between',
+            flexDirection: 'column',
+            '& > div': {
+                display: 'flex',
+            },
+        },
+        logoIcon: {
+            borderRadius: 999,
+            width: 18,
+            height: 18,
+            marginRight: '4px !important',
+        },
+        spenderLogoIcon: {
+            width: 16,
+            height: 16,
+            marginRight: 4,
+        },
+        link: {
+            width: 16,
+            height: 16,
+        },
+        linkOutIcon: {
+            color: theme.palette.maskColor.secondaryDark,
+            marginLeft: 2,
+        },
+        spenderMaskLogoIcon: {
+            display: 'inline-block',
+            marginRight: 4,
+            width: 16,
+            height: 16,
+            '& > svg': {
+                width: 16,
+                height: 16,
+            },
+            '& > span': {
+                width: 16,
+                height: 16,
+            },
+        },
+        contractInfo: {
+            display: 'flex',
+            alignItems: 'center',
+        },
+        primaryText: {
+            fontSize: 14,
+            fontWeight: 700,
+            marginRight: 4,
+            color: theme.palette.maskColor.dark,
+        },
+        secondaryText: {
+            fontSize: 14,
+            fontWeight: 400,
+            marginRight: 4,
+            color: theme.palette.maskColor.secondaryDark,
+        },
+        button: {
+            width: 80,
+            height: 32,
+            fontSize: 12,
+            color: theme.palette.common.white,
+            background: theme.palette.common.black,
+            flex: 'initial !important',
+            '&:disabled': {
+                color: theme.palette.common.white,
+            },
+            '&:hover': {
+                color: theme.palette.common.white,
+                background: theme.palette.common.black,
+                boxShadow: `0 8px 25px ${parseColor(theme.palette.common.black).setAlpha(0.3).toRgbString()}`,
+            },
+        },
+        chainBoundary: {
+            width: 'auto !important',
+        },
+    }),
+)
 
 export function ApprovalTokenContent({ chainId }: { chainId: ChainId }) {
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)

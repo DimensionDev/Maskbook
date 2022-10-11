@@ -29,18 +29,6 @@ const useStyles = makeStyles<StyleProps>()((theme, { compact, isDashboard }) => 
             display: 'none',
         },
     },
-    list: {
-        scrollbarWidth: 'none',
-        '&::-webkit-scrollbar': {
-            display: 'none',
-        },
-    },
-    placeholder: {
-        textAlign: 'center',
-        height: 288,
-        paddingTop: theme.spacing(14),
-        boxSizing: 'border-box',
-    },
     search: {
         backgroundColor: isDashboard ? 'transparent !important' : theme.palette.maskColor.input,
         border: `solid 1px ${MaskColorVar.twitterBorderLine}`,

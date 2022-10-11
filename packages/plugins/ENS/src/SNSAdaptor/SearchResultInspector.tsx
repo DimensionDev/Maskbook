@@ -2,7 +2,6 @@ import { useContext, useState } from 'react'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { SourceType } from '@masknet/web3-shared-base'
 import { Box, Typography, Link } from '@mui/material'
-import useStyles from './useStyles'
 import { useI18N } from '../locales'
 import { Icons } from '@masknet/icons'
 import { EmptyContent } from './EmptyContent'
@@ -14,6 +13,71 @@ import { CollectibleState } from './hooks/useCollectibleState'
 import { NextIdBadge } from './NextIdBadge'
 import { SocialAccountList } from './SocialAccountList'
 import { ENSPostExtraInfoWrapper } from './ENSPostExtraInfoWrapper'
+import { makeStyles } from '@masknet/theme'
+
+interface StyleProps {
+    isMenuScroll?: boolean
+}
+
+const useStyles = makeStyles<StyleProps>()((theme) => {
+    return {
+        root: {
+            padding: theme.spacing(0, 2),
+        },
+        coverCard: {
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            height: 256,
+            marginBottom: 12,
+            backgroundImage: `url(${new URL('./assets/ENSCover.svg', import.meta.url)})`,
+            backgroundSize: 'contain',
+        },
+        coverText: {
+            fontSize: 24,
+            fontWeight: 700,
+            width: '100%',
+            textAlign: 'center',
+            color: theme.palette.common.white,
+        },
+        nextIdVerified: {
+            display: 'flex',
+            alignItems: 'center',
+            margin: '0px 12px 28px',
+        },
+        nextIdVerifiedTitle: {
+            color: theme.palette.maskColor.secondaryDark,
+            marginRight: 12,
+            fontSize: 16,
+        },
+        nextIdVerifiedTwitterName: {
+            color: theme.palette.maskColor.dark,
+            fontWeight: 700,
+            marginLeft: 4,
+            fontSize: 16,
+        },
+        rightSpace: {
+            marginRight: 12,
+        },
+        link: {
+            display: 'flex',
+            alignItems: 'center',
+            textDecoration: 'none !important',
+        },
+        bindingsWrapper: {
+            display: 'grid',
+            gridAutoFlow: 'column',
+            width: 300,
+            alignItems: 'center',
+            overflow: 'hidden',
+        },
+        badge: {
+            display: 'flex',
+            marginRight: 12,
+            alignItems: 'center',
+        },
+    }
+})
 
 export function SearchResultInspectorContent() {
     const t = useI18N()

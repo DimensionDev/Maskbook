@@ -16,7 +16,6 @@ import { ATTRACE_FEE_PERCENT } from '../constants.js'
 import { adjustFarmRewards } from './utils/referralFarm.js'
 import { ReferralRPC } from '../messages.js'
 import { FarmTokenDetailed } from './shared-ui/FarmTokenDetailed.js'
-import { useSharedStyles } from './styles.js'
 
 const useStyles = makeStyles()((theme) => ({
     valueCol: {
@@ -46,6 +45,17 @@ const useStyles = makeStyles()((theme) => ({
             margin: 0,
         },
     },
+    maxChip: {
+        border: '1px solid #1D9BF0',
+        background: 'transparent',
+        borderRadius: '8px',
+        height: '24px',
+        marginLeft: '8px',
+        color: '#1D9BF0',
+        '&:hover': {
+            color: theme.palette.mode === 'dark' ? '#000000' : '#ffffff',
+        },
+    },
 }))
 
 export function AdjustFarmRewards(props: AdjustFarmRewardsInterface) {
@@ -53,7 +63,6 @@ export function AdjustFarmRewards(props: AdjustFarmRewardsInterface) {
 
     const t = useI18N()
     const { classes } = useStyles()
-    const { classes: sharedClasses } = useSharedStyles()
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM)
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
@@ -326,7 +335,7 @@ export function AdjustFarmRewards(props: AdjustFarmRewardsInterface) {
                                                 label="MAX"
                                                 clickable
                                                 color="primary"
-                                                className={sharedClasses.maxChip}
+                                                className={classes.maxChip}
                                                 variant="outlined"
                                                 onClick={() => setTotalFarmReward(balance)}
                                             />

@@ -47,3 +47,8 @@ export interface Proof {
     identity: string
     content?: Record<string, Patch>
 }
+
+export interface CollectibleGridProps {
+    columns?: number
+    gap?: string | number
+}

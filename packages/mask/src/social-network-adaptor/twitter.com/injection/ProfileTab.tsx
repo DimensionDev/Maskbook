@@ -178,7 +178,11 @@ export function ProfileTabAtTwitter() {
     return hidden ? null : (
         <ProfileTab
             title="Web3"
-            classes={classes}
+            classes={{
+                root: classes.root,
+                button: classes.button,
+                selected: classes.selected,
+            }}
             reset={resetTwitterActivatedContent}
             clear={hideTwitterActivatedContent}
             children={<div className={classes.line} />}
