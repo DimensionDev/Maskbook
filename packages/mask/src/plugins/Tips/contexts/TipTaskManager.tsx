@@ -1,12 +1,14 @@
-import { PluginIDContextProvider, PluginWeb3ContextProvider } from '@masknet/web3-hooks-base'
 import { EMPTY_LIST } from '@masknet/shared-base'
+import { PluginIDContextProvider, PluginWeb3ContextProvider } from '@masknet/web3-hooks-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { isEqual } from 'lodash-unified'
 import { FC, useCallback, useEffect, useState } from 'react'
-import { TargetRuntimeContext, TipTaskProvider } from '../contexts/index.js'
+import { TipDialog } from '../components/index.js'
 import { PluginTipsMessages } from '../messages.js'
 import type { TipTask } from '../types/index.js'
-import { TipDialog } from './TipDialog.js'
+import { TargetRuntimeContext } from './TargetRuntimeContext.js'
+import { TipTaskProvider } from './Tip/TipTaskProvider.js'
+import { TipsTransactionProvider } from './TipsTransaction.js'
 
 let id = 0
 
@@ -46,12 +48,14 @@ export const TipTaskManager: FC<React.PropsWithChildren<{}>> = ({ children }) =>
                 const tipsAccount = task.addresses.find((x) => isSameAddress(x.address, task.recipient))
                 const taskSession = (
                     <TipTaskProvider key={task.id} task={task}>
-                        <TipDialog open key={task.id} onClose={() => removeTask(task)} />
+                        <TipsTransactionProvider>
+                            <TipDialog open key={task.id} onClose={() => removeTask(task)} />
+                        </TipsTransactionProvider>
                     </TipTaskProvider>
                 )
 
                 return tipsAccount?.pluginId ? (
-                    <PluginIDContextProvider key={task.id} value={tipsAccount?.pluginId}>
+                    <PluginIDContextProvider key={task.id} value={tipsAccount.pluginId}>
                         {taskSession}
                     </PluginIDContextProvider>
                 ) : (

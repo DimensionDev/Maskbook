@@ -24,6 +24,7 @@ export interface TipContextOptions {
     setNonFungibleTokenAddress: Dispatch<SetStateAction<string>>
     sendTip: () => Promise<string | undefined>
     isSending: boolean
+    isDirty: boolean
     storedTokens: Array<NonFungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>
     reset: () => void
     setGasOption: Dispatch<SetStateAction<GasOptionConfig | undefined>>
@@ -52,6 +53,7 @@ export const TipContext = createContext<TipContextOptions>({
     setNonFungibleTokenAddress: noop,
     sendTip: noop as () => Promise<string | undefined>,
     isSending: false,
+    isDirty: false,
     storedTokens: [],
     reset: noop,
     setGasOption: noop,

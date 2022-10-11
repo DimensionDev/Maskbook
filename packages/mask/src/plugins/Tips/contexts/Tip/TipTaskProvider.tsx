@@ -1,8 +1,8 @@
-import { useChainId, useFungibleToken, useNonFungibleTokenContract } from '@masknet/web3-hooks-base'
+import { useAccount, useChainId, useFungibleToken, useNonFungibleTokenContract } from '@masknet/web3-hooks-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import type { GasOptionConfig } from '@masknet/web3-shared-evm'
-import { FC, memo, useCallback, useContext, useEffect, useMemo, useState } from 'react'
+import { Dispatch, FC, memo, SetStateAction, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { useSubscription } from 'use-subscription'
 import { getStorage } from '../../storage/index.js'
 import { TipTask, TipsType, TipsAccount } from '../../types/index.js'
@@ -29,6 +29,18 @@ function useRecipients(tipsAccounts: TipsAccount[], pluginId: NetworkPluginID) {
     return recipients
 }
 
+function useDirtyDetection(deps: any[]): [boolean, Dispatch<SetStateAction<boolean>>] {
+    const [isDirty, setIsDirty] = useState(false)
+    const { pluginId } = TargetRuntimeContext.useContainer()
+    const account = useAccount(pluginId)
+
+    useEffect(() => {
+        setIsDirty(true)
+    }, [account, ...deps])
+
+    return [isDirty, setIsDirty]
+}
+
 export const TipTaskProvider: FC<React.PropsWithChildren<Props>> = memo(({ children, task }) => {
     const { targetChainId, pluginId, setPluginId } = TargetRuntimeContext.useContainer()
     const [_recipientAddress, setRecipient] = useState<string>(task.recipient ?? '')
@@ -40,8 +52,8 @@ export const TipTaskProvider: FC<React.PropsWithChildren<Props>> = memo(({ child
     const { value: nativeTokenDetailed = null } = useFungibleToken(pluginId, undefined, {
         chainId: targetChainId,
     })
-    const [token, setToken] = useState<TipContextOptions['token']>(nativeTokenDetailed)
-    const selectedToken = token ?? nativeTokenDetailed
+    const [userSelectedToken, setToken] = useState<TipContextOptions['token']>(nativeTokenDetailed)
+    const token = userSelectedToken ?? nativeTokenDetailed
     const [nonFungibleTokenId, setNonFungibleTokenId] = useState<TipContextOptions['nonFungibleTokenId']>(null)
     const storedTokens = useSubscription(getStorage().addedTokens.subscription)
     const validation = useTipValidate({ tipType, amount, token, nonFungibleTokenId, nonFungibleTokenAddress })
@@ -67,6 +79,7 @@ export const TipTaskProvider: FC<React.PropsWithChildren<Props>> = memo(({ child
     )
 
     const sendTipTuple = tipType === TipsType.Tokens ? tokenTipTuple : nftTipTuple
+    const [isDirty, setIsDirty] = useDirtyDetection([tipType, recipientAddress, chainId, amount, token])
     const isSending = sendTipTuple[0]
     const sendTip = sendTipTuple[1]
     const recipient = recipients.find((x) => isSameAddress(x.address, recipientAddress))
@@ -79,7 +92,12 @@ export const TipTaskProvider: FC<React.PropsWithChildren<Props>> = memo(({ child
 
     useEffect(reset, [targetChainId])
 
-    const contextValue = useMemo(() => {
+    const wrappedSendTip = useCallback(() => {
+        setIsDirty(false)
+        return sendTip()
+    }, [sendTip])
+
+    const contextValue = useMemo((): TipContextOptions => {
         return {
             recipient,
             recipientSnsId: task.recipientSnsId || '',
@@ -88,7 +106,7 @@ export const TipTaskProvider: FC<React.PropsWithChildren<Props>> = memo(({ child
             recipients,
             tipType,
             setTipType,
-            token: selectedToken,
+            token,
             setToken,
             amount,
             setAmount,
@@ -97,8 +115,10 @@ export const TipTaskProvider: FC<React.PropsWithChildren<Props>> = memo(({ child
             nonFungibleTokenContract: nonFungibleTokenContract || null,
             nonFungibleTokenAddress,
             setNonFungibleTokenAddress,
-            sendTip,
-            isSending,
+            sendTip: wrappedSendTip,
+            // Respect to dirty status, reset if it's dirty
+            isSending: isDirty ? false : isSending,
+            isDirty,
             storedTokens: storedTokens.filter((t) => t.contract?.chainId === chainId),
             reset,
             gasOption,
@@ -119,8 +139,8 @@ export const TipTaskProvider: FC<React.PropsWithChildren<Props>> = memo(({ child
         nonFungibleTokenId,
         nonFungibleTokenContract,
         nonFungibleTokenAddress,
-        selectedToken,
-        sendTip,
+        token,
+        wrappedSendTip,
         isSending,
         reset,
         gasOption,
@@ -137,10 +157,6 @@ export const TipTaskProvider: FC<React.PropsWithChildren<Props>> = memo(({ child
             setPluginId(NetworkPluginID.PLUGIN_EVM)
         }
     }, [recipient?.pluginId])
-
-    useEffect(() => {
-        setToken(nativeTokenDetailed)
-    }, [nativeTokenDetailed])
 
     return <TipContext.Provider value={contextValue}>{children}</TipContext.Provider>
 })
