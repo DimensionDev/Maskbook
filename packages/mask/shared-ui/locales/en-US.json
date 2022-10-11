@@ -514,7 +514,6 @@
     "plugin_trader_price_impact_too_high_tips": "High Price impact！More than {{impact}} drop！",
     "plugin_trader_confirm_swap": "Confirm Swap",
     "plugin_trader_update": "Update",
-
     "plugin_trader_price_impact": "Price Impact",
     "plugin_trader_price_image_value": "Price Impact (-{{percent}})",
     "plugin_trader_slippage_warning": "You may receive 10% less with this level of slippage tolerance.",
@@ -1115,7 +1114,7 @@
     "popups_wallet_gas_fee_settings_low": "Low",
     "popups_wallet_gas_fee_settings_medium": "Medium",
     "popups_wallet_gas_fee_settings_high": "High",
-    "popups_wallet_gas_fee_settings_usd": " ≈ ${{usd}}",
+    "popups_wallet_gas_fee_settings_usd": " ≈ {{usd}}",
     "popups_wallet_gas_fee_settings_gas_limit": "Gas Limit",
     "popups_wallet_gas_fee_settings_max_priority_fee": "Max priority fee",
     "popups_wallet_gas_fee_settings_max_fee": "Max fee",
