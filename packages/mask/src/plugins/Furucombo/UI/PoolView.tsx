@@ -76,9 +76,6 @@ const useStyles = makeStyles()((theme) => ({
         height: 19,
         width: 19,
     },
-    tooltip: {
-        backgroundColor: 'white',
-    },
 }))
 
 interface PoolProps {

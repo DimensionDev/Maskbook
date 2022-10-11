@@ -46,9 +46,6 @@ const useStyles = makeStyles()((theme) => ({
     icon: {
         color: theme.palette.text.primary,
     },
-    close: {
-        color: '#FFF',
-    },
     brands: {
         marginTop: theme.spacing(1),
         '& > *': {

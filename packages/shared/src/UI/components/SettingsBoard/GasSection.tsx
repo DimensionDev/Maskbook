@@ -16,10 +16,6 @@ import { GasSettingsType } from './types/index.js'
 const useStyles = makeStyles()((theme) => {
     return {
         root: {},
-        paper: {
-            boxShadow: `0px 0px 20px 0px ${theme.palette.mode === 'dark' ? '#FFFFFF1F' : '#0000000D'}`,
-            backdropFilter: 'blur(16px)',
-        },
         tabs: {
             overflow: 'visible',
         },

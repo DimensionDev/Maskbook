@@ -44,21 +44,6 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => {
             minHeight: 'auto',
             width: '100%',
         },
-        footer: {
-            marginTop: theme.spacing(2),
-            zIndex: 1,
-        },
-        sourceNote: {
-            fontSize: 10,
-            marginRight: theme.spacing(1),
-        },
-        footLink: {
-            cursor: 'pointer',
-            marginRight: theme.spacing(0.5),
-            '&:last-child': {
-                marginRight: 0,
-            },
-        },
         tokenCardWrapper: {
             width: '100%',
             color: 'white',
@@ -193,9 +178,6 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => {
             zIndex: 2,
             paddingBottom: theme.spacing(2),
             backgroundColor: theme.palette.background.paper,
-        },
-        walletStatusBox: {
-            margin: theme.spacing(3, 'auto'),
         },
     }
 })

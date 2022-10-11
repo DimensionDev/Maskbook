@@ -24,17 +24,10 @@ import { useOpenSea } from './hooks/useOpenSea.js'
 
 const useStyles = makeStyles()((theme) => {
     return {
-        content: {},
         footer: {
             display: 'flex',
             justifyContent: 'flex-end',
             padding: 0,
-        },
-        panel: {
-            marginTop: theme.spacing(2),
-            '&:first-child': {
-                marginTop: 0,
-            },
         },
         label: {
             marginTop: theme.spacing(1.5),

@@ -13,12 +13,6 @@ import { useWallet, useWalletPrimary, useWallets } from '@masknet/web3-hooks-bas
 import { Services } from '../../../../service.js'
 
 const useStyles = makeStyles()({
-    header: {
-        padding: 10,
-        display: 'flex',
-        marginBottom: 1,
-        backgroundColor: '#ffffff',
-    },
     content: {
         overflow: 'auto',
         backgroundColor: '#F7F9FA',
@@ -30,20 +24,6 @@ const useStyles = makeStyles()({
         padding: 0,
         height: 'calc(100vh - 168px)',
         overflow: 'auto',
-    },
-    item: {
-        padding: 10,
-        borderBottom: '1px solid #F7F9FA',
-        cursor: 'pointer',
-    },
-    address: {
-        fontSize: 12,
-        color: '#1C68F3',
-        display: 'flex',
-        alignItems: 'center',
-    },
-    text: {
-        marginLeft: 4,
     },
     controller: {
         display: 'grid',

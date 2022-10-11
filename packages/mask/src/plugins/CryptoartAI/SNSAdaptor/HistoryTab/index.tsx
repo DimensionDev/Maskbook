@@ -16,9 +16,6 @@ const useStyles = makeStyles()((theme) => {
         content: {
             padding: '0 !important',
         },
-        spacer: {
-            flex: 0,
-        },
         empty: {
             display: 'flex',
             flexDirection: 'column',

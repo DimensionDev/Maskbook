@@ -18,12 +18,6 @@ const useStyles = makeStyles()((theme) => ({
         justifyContent: 'space-between',
         alignItems: 'center',
     },
-    menu: {
-        maxHeight: 466,
-        '&::-webkit-scrollbar': {
-            display: 'none',
-        },
-    },
     action: {
         background: 'rgba(255, 255, 255, 0.8)',
         borderRadius: 99,

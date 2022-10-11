@@ -27,12 +27,6 @@ const useStyles = makeStyles()((theme) => ({
         fontWeight: 700,
         fontSize: 18,
     },
-    root: {
-        width: '600px',
-    },
-    detectionCard: {
-        backgroundColor: theme.palette.background.default,
-    },
     detectionCollection: {
         overflowY: 'auto',
         '&::-webkit-scrollbar': {

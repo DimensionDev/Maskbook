@@ -11,13 +11,6 @@ const useStyles = makeStyles()((theme) => ({
         padding: `0 ${theme.spacing(1)}`,
         textAlign: 'right',
     },
-    text: {
-        paddingTop: 36,
-        paddingBottom: 36,
-        '& > p': {
-            color: getMaskColor(theme).textPrimary,
-        },
-    },
     icon: {
         color: getMaskColor(theme).textPrimary,
     },

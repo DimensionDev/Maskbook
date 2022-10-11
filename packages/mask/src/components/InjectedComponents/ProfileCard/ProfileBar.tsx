@@ -46,9 +46,6 @@ const useStyles = makeStyles<void, 'avatarDecoration'>()((theme, _, refs) => ({
         },
     },
     avatarDecoration: {},
-    avatarMiniBorder: {
-        transform: 'none',
-    },
     description: {
         height: 40,
         marginLeft: 10,

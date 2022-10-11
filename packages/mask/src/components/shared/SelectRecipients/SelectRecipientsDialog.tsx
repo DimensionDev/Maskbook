@@ -18,12 +18,6 @@ const useStyles = makeStyles()((theme) => ({
         minWidth: 400,
         overflow: 'hidden',
     },
-    content: {
-        padding: '0 !important',
-    },
-    title: {
-        marginLeft: 6,
-    },
     inputRoot: {
         padding: '4px 10px',
         borderRadius: 8,

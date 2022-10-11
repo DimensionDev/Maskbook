@@ -30,15 +30,6 @@ import { useI18N } from '../../utils/index.js'
 import { WalletMessages } from '../../plugins/Wallet/messages.js'
 
 const useStyles = makeStyles()((theme) => ({
-    action: {
-        textAlign: 'center',
-        margin: theme.spacing(1),
-        width: '100%',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginBottom: 48,
-    },
     tooltip: {
         background: theme.palette.common.black,
         color: theme.palette.common.white,

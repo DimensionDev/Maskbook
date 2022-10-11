@@ -148,10 +148,6 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
     actionButton: {
         width: '100%',
     },
-    textProviderErr: {
-        color: '#EB5757',
-        marginTop: theme.spacing(1),
-    },
     loadingITO: {
         marginTop: 260,
         textAlign: 'center',
@@ -174,14 +170,6 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
     },
     textInOneLine: {
         whiteSpace: 'nowrap',
-    },
-    claimDate: {
-        marginTop: 16,
-        color: '#F4212E',
-    },
-    grid: {
-        width: '100%',
-        margin: 0,
     },
 }))
 

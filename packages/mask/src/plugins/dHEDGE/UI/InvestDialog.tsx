@@ -19,9 +19,6 @@ import type { Pool } from '../types.js'
 import { PluginWalletStatusBar } from '../../../utils/index.js'
 
 const useStyles = makeStyles()((theme) => ({
-    paper: {
-        width: '450px !important',
-    },
     form: {
         '& > *': {
             margin: theme.spacing(1, 0),
@@ -29,11 +26,6 @@ const useStyles = makeStyles()((theme) => ({
     },
     root: {
         margin: theme.spacing(2, 0),
-    },
-    tip: {
-        fontSize: 12,
-        color: theme.palette.text.secondary,
-        padding: theme.spacing(2, 2, 0, 2),
     },
     button: {
         margin: 0,

@@ -25,31 +25,6 @@ const useStyles = makeStyles()({
         backgroundColor: '#ffffff',
         padding: 0,
     },
-    item: {
-        padding: 14,
-        borderBottom: '1px solid #F7F9FA',
-        cursor: 'pointer',
-    },
-    loader: {
-        fill: '#FFB915',
-    },
-    interaction: {
-        stroke: '#1C68F3',
-        fill: 'none',
-    },
-    description: {
-        color: '#000000',
-        fontSize: 12,
-        lineHeight: '16px',
-        fontWeight: 600,
-    },
-    secondaryDesc: {
-        color: '#7B8192',
-        fontSize: 12,
-        lineHeight: '16px',
-        fontWeight: 600,
-        marginTop: 2,
-    },
     buttonContainer: {
         padding: 16,
     },
@@ -62,15 +37,7 @@ const useStyles = makeStyles()({
         borderRadius: 20,
         backgroundColor: '#ffffff',
     },
-    button: {
-        fontWeight: 600,
-        fontSize: 14,
-        color: '#ffffff',
-        lineHeight: '20px',
-        padding: '3px 0',
-        borderRadius: 15,
-        backgroundColor: '#1C68F3',
-    },
+
     empty: {
         display: 'flex',
         justifyContent: 'center',

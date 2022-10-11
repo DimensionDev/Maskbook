@@ -11,35 +11,6 @@ import { RedPacketNftMetaKey } from '../constants.js'
 import { useCurrentIdentity, useCurrentLinkedPersona } from '../../../components/DataSource/useActivatedUI.js'
 
 const useStyles = makeStyles()((theme) => ({
-    tab: {
-        height: 36,
-        minHeight: 36,
-        fontWeight: 300,
-    },
-    tabs: {
-        height: 36,
-        minHeight: 36,
-        margin: '0 auto',
-        borderRadius: 4,
-        backgroundColor: theme.palette.background.default,
-        '& .Mui-selected': {
-            color: theme.palette.primary.contrastText,
-            backgroundColor: theme.palette.primary.main,
-        },
-    },
-    indicator: {
-        display: 'none',
-    },
-    tabPanel: {
-        marginTop: theme.spacing(3),
-    },
-    img: {
-        width: 20,
-        marginRight: 4,
-    },
-    labelWrapper: {
-        display: 'flex',
-    },
     tabWrapper: {
         padding: theme.spacing(0, 2, 0, 2),
     },

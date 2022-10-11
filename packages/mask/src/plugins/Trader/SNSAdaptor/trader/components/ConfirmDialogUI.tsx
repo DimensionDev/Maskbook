@@ -146,17 +146,6 @@ const useStyles = makeStyles<{
             theme.palette.mode === 'dark' ? 0.12 : 0.05,
         )}`,
     },
-    accept: {
-        backgroundColor: isDashboard
-            ? MaskColorVar.primary.alpha(0.1)
-            : parseColor(theme.palette.maskColor?.primary).setAlpha(0.1).toRgbString(),
-        color: isDashboard ? MaskColorVar.primary : theme.palette.maskColor?.primary,
-        fontWeight: 700,
-        fontSize: 12,
-        lineHeight: '16px',
-        padding: '10px 16px',
-        borderRadius: 20,
-    },
     danger: {
         color: `${isDashboard ? MaskColorVar.redMain : theme.palette.maskColor?.danger}!important`,
     },

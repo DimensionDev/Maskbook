@@ -35,12 +35,6 @@ const useStyles = makeStyles()((theme) => ({
         overflow: 'auto',
         padding: theme.spacing(3, 0),
     },
-    tabs: {
-        width: '288px',
-    },
-    subtitle: {
-        margin: '12px 0 24px',
-    },
     typeNote: {
         marginBottom: '24px',
         '& b': {

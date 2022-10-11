@@ -31,9 +31,6 @@ export interface TipsEntranceDialogProps {
     onClose: () => void
 }
 const useStyles = makeStyles()((theme) => ({
-    walletBtn: {
-        fontSize: 14,
-    },
     alertBox: {
         marginBottom: '20px',
     },
@@ -50,11 +47,6 @@ const useStyles = makeStyles()((theme) => ({
         position: 'relative',
         boxSizing: 'border-box',
         minHeight: 544,
-    },
-    btnContainer: {
-        position: 'absolute',
-        right: 16,
-        maxWidth: '30%',
     },
     loading: {
         position: 'absolute',

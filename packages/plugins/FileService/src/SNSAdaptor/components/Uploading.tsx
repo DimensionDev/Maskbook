@@ -23,15 +23,6 @@ const useStyles = makeStyles()({
         paddingTop: 18,
         paddingBottom: 18,
     },
-    name: {
-        fontSize: 16,
-        lineHeight: 1.75,
-        textAlign: 'center',
-        color: '#3B3B3B',
-        overflow: 'hidden',
-        textOverflow: 'ellipsis',
-        whiteSpace: 'nowrap',
-    },
 })
 
 interface RouteState {

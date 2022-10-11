@@ -17,13 +17,6 @@ import { UserProvider } from '../Settings/hooks/UserContext.js'
 import { useNavigate } from 'react-router-dom'
 
 const useStyles = makeStyles()((theme) => ({
-    tabPanel: {
-        padding: 0,
-        flex: 1,
-    },
-    label: {
-        width: 'auto',
-    },
     tab: {
         flex: 1,
         display: 'flex',

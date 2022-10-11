@@ -28,9 +28,6 @@ interface StyleProps {
 }
 
 const useStyles = makeStyles<StyleProps>()((theme, { reason }) => ({
-    buttonText: {
-        margin: 0,
-    },
     buttonTransform: {
         ...(reason === 'timeline' ? { width: '40px', transform: 'translateX(200px) translateY(-78px)' } : {}),
     },

@@ -9,10 +9,6 @@ import { Box, Skeleton, Tooltip, TooltipProps } from '@mui/material'
 import classNames from 'classnames'
 
 const useStyles = makeStyles<{ networkPluginID: NetworkPluginID }>()((theme, props) => ({
-    root: {
-        paddingTop: props.networkPluginID === NetworkPluginID.PLUGIN_EVM ? 60 : 16,
-    },
-
     itemRoot: {
         position: 'relative',
         display: 'flex',
@@ -38,23 +34,6 @@ const useStyles = makeStyles<{ networkPluginID: NetworkPluginID }>()((theme, pro
         border: `1px solid ${theme.palette.primary.main}`,
         borderRadius: 12,
     },
-    list: {
-        gridGap: 13,
-        display: 'grid',
-        gridTemplateColumns: 'repeat(5, 1fr)',
-        padding: '0 16px 50px 16px',
-    },
-
-    nftItem: {
-        position: 'relative',
-        cursor: 'pointer',
-        display: 'flex',
-        padding: 0,
-        flexDirection: 'column',
-        borderRadius: 12,
-        userSelect: 'none',
-        justifyContent: 'center',
-    },
     skeleton: {
         width: 126,
         height: 126,
@@ -70,15 +49,6 @@ const useStyles = makeStyles<{ networkPluginID: NetworkPluginID }>()((theme, pro
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        borderRadius: 12,
-    },
-    image: {
-        width: 126,
-        height: 126,
-        objectFit: 'cover',
-        boxSizing: 'border-box',
-        background:
-            'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.9) 100%), linear-gradient(90deg, rgba(98, 152, 234, 0.2) 1.03%, rgba(98, 152, 234, 0.2) 1.04%, rgba(98, 126, 234, 0.2) 100%)',
         borderRadius: 12,
     },
     maskIcon: {

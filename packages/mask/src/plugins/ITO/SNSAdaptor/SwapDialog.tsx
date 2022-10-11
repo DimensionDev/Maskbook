@@ -24,7 +24,6 @@ import { useChainId, useFungibleToken, useFungibleTokenBalance, useWeb3State } f
 
 const useStyles = makeStyles()((theme) => ({
     button: {},
-    providerBar: {},
     swapLimitWrap: {
         display: 'flex',
         justifyContent: 'space-between',
@@ -56,9 +55,6 @@ const useStyles = makeStyles()((theme) => ({
     remindText: {
         fontSize: 10,
         marginTop: theme.spacing(1),
-    },
-    loading: {
-        color: theme.palette.text.primary,
     },
 }))
 

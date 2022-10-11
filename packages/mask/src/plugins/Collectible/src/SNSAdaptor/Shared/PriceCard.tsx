@@ -55,9 +55,6 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         alignItems: 'flex-end',
     },
-    textSm: {
-        fontSize: 24,
-    },
 }))
 
 export interface PriceCardProps {

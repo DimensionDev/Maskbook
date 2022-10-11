@@ -45,11 +45,6 @@ const useStyles = makeStyles<{ backgroundGradient?: string; borderRadius?: strin
                 alignItems: 'center',
                 padding: 15,
             },
-            title: {
-                display: 'flex',
-                flexDirection: 'column',
-                paddingLeft: theme.spacing(1.5),
-            },
             provider: {
                 display: 'flex',
                 alignItems: 'center',

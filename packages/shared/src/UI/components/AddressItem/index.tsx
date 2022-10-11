@@ -16,10 +16,6 @@ const useStyles = makeStyles()((theme) => ({
         },
         lineHeight: 0,
     },
-    linkIcon: {
-        color: theme.palette.maskColor.second,
-        margin: '0px 2px 0 2px',
-    },
 }))
 
 export interface AddressItemProps {

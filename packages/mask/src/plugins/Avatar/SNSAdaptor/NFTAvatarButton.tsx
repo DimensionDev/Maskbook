@@ -21,11 +21,6 @@ const useStyles = makeStyles()((theme) => ({
         height: 14,
         marginLeft: 2,
     },
-    text: {
-        display: 'flex',
-        alignItems: 'center',
-        marginLeft: 4,
-    },
     icon: {
         color: theme.palette.text.buttonText,
     },

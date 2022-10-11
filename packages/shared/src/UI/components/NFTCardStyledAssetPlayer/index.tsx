@@ -23,10 +23,6 @@ const useStyles = makeStyles()((theme) => ({
     imageContainer: {
         height: '100%',
     },
-    loadingPlaceholder: {
-        height: 160,
-        width: 120,
-    },
     fallbackImage: {
         height: 64,
         width: 64,

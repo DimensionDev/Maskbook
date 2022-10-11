@@ -69,10 +69,6 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.text.primary,
         fontSize: 18,
     },
-    line: {
-        display: 'flex',
-        padding: theme.spacing(1),
-    },
     data: {
         padding: theme.spacing(1),
         textAlign: 'right',
@@ -84,26 +80,10 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.text.secondary,
         wordBreak: 'keep-all',
     },
-    button: {
-        padding: theme.spacing(2),
-        [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
-            padding: theme.spacing(0, 0, 1, 0),
-        },
-    },
     link: {
         padding: 0,
         marginLeft: theme.spacing(0.5),
         marginTop: 2,
-    },
-    gasEstimation: {
-        display: 'flex',
-        justifyContent: 'flex-end',
-        alignItems: 'center',
-        cursor: 'pointer',
-        '& > p': {
-            marginRight: 5,
-            color: theme.palette.mode === 'light' ? '#7B8192' : '#6F767C',
-        },
     },
     grid: {
         '& div': {

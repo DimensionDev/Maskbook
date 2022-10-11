@@ -11,9 +11,6 @@ import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import type { IFollowIdentity } from '../Worker/apis/index.js'
 
 const useStyles = makeStyles()((theme) => ({
-    tabContext: {
-        marginTop: '20px',
-    },
     tabPanel: {
         height: '400px',
         overflow: 'auto',

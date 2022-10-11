@@ -15,10 +15,6 @@ const useStyles = makeStyles()((theme) => ({
         border: `1px solid ${MaskColorVar.blue.alpha(0.1)}`,
         color: MaskColorVar.primary,
     },
-    nickname: {
-        margin: theme.spacing(0, 1.5),
-        lineHeight: 1.375,
-    },
 }))
 
 interface PersonaStateBarProps {

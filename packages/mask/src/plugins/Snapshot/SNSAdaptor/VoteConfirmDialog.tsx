@@ -16,9 +16,6 @@ const useStyles = makeStyles()((theme) => ({
         marginLeft: theme.spacing(1),
         textDecoration: 'none !important',
     },
-    loading: {
-        color: theme.palette.background.paper,
-    },
     field: {
         color: theme.palette.maskColor.second,
     },
@@ -31,9 +28,6 @@ const useStyles = makeStyles()((theme) => ({
     },
     button: {
         margin: 16,
-    },
-    arrow: {
-        color: theme.palette.maskColor.publicMain,
     },
 }))
 

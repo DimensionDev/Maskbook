@@ -27,12 +27,6 @@ const useStyles = makeStyles()((theme) => ({
         zIndex: 1,
         backgroundColor: `${theme.palette.background.paper} !important`,
     },
-    placeholderIcon: {
-        color: theme.palette.mode === 'dark' ? 'rgb(255, 255, 255)' : 'rgb(15, 20, 25)',
-        width: 64,
-        height: 64,
-        opacity: 0.1,
-    },
     fallbackImage: {
         minHeight: '0 !important',
         maxWidth: 'none',

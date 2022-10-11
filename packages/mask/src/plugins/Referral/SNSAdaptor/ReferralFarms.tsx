@@ -19,10 +19,6 @@ const useStyles = makeStyles()((theme) => ({
         height: '100%',
         borderRadius: 8,
     },
-    walletStatusBox: {
-        width: 535,
-        margin: '24px auto',
-    },
     container: {
         flex: 1,
         height: '100%',
@@ -32,9 +28,6 @@ const useStyles = makeStyles()((theme) => ({
         height: '100%',
         overflow: 'auto',
         padding: `${theme.spacing(3)} 0`,
-    },
-    tabs: {
-        width: '288px',
     },
 }))
 
@@ -47,11 +40,6 @@ const useStylesType = makeStyles()((theme) => ({
         height: '100px',
         borderRadius: '8px',
         background: theme.palette.background.default,
-    },
-    img: {
-        width: 40,
-        marginRight: 4,
-        justifyContent: 'center',
     },
     name: {
         fontSize: '0.938rem',

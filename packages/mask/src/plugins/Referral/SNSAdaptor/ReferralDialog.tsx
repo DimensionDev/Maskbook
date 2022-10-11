@@ -26,10 +26,6 @@ interface ReferralDialogProps {
 const useStyles = makeStyles<{
     hideBackBtn?: boolean
 }>()((theme, { hideBackBtn = false }) => ({
-    walletStatusBox: {
-        width: 535,
-        margin: '24px auto',
-    },
     content: {
         fontFamily: theme.typography.fontFamily,
         fontWeight: 400,
