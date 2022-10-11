@@ -1,5 +1,6 @@
 import { first, unionWith } from 'lodash-unified'
 import { getEnumAsArray } from '@dimensiondev/kit'
+import { EMPTY_LIST } from '@masknet/shared-base'
 import {
     Transaction,
     HubOptions,
@@ -20,7 +21,6 @@ import type { ZerionNonFungibleTokenItem, ZerionNonFungibleCollection, ZerionCoi
 import { formatAsset, formatTransactions } from './format.js'
 import type { FungibleTokenAPI, GasOptionAPI, HistoryAPI, NonFungibleTokenAPI, TrendingAPI } from '../types/index.js'
 import { getAllEVMNativeAssets } from '../helpers.js'
-import { EMPTY_LIST } from '@masknet/shared-base'
 import {
     getAssetsList,
     getCoinsByKeyword,
@@ -182,7 +182,7 @@ export class ZerionNonFungibleTokenAPI implements NonFungibleTokenAPI.Provider<C
 }
 
 export class ZerionTrendingAPI implements TrendingAPI.Provider<ChainId> {
-    createCoinFromData(data: ZerionCoin) {
+    private createCoinFromData(data: ZerionCoin) {
         return {
             id: data.asset.id,
             name: data.asset.name,
@@ -191,24 +191,35 @@ export class ZerionTrendingAPI implements TrendingAPI.Provider<ChainId> {
             decimals: data.asset.decimals,
         }
     }
-    getCoinTrending(chainId: ChainId, id: string, currency: TrendingAPI.Currency): Promise<TrendingAPI.Trending> {
-        throw new Error('Method not implemented.')
-    }
-    getPriceStats(
-        chainId: ChainId,
-        coinId: string,
-        currency: TrendingAPI.Currency,
-        days: number,
-    ): Promise<TrendingAPI.Stat[]> {
-        throw new Error('Method not implemented.')
-    }
-    async getCoins(keyword?: string): Promise<TrendingAPI.Coin[]> {
+    async getAllCoins(keyword?: string): Promise<TrendingAPI.Coin[]> {
         if (!keyword) return EMPTY_LIST
         const response = await getCoinsByKeyword(keyword)
 
         if (!response?.payload?.info?.length) return EMPTY_LIST
 
         return response.payload.info.filter((x) => !x.asset.type).map(this.createCoinFromData)
+    }
+
+    getCoinsByKeyword(chainId: ChainId, keyword: string): Promise<TrendingAPI.Coin[]> {
+        throw new Error('Method not implemented.')
+    }
+    getCoinTrendingById(chainId: ChainId, id: string, currency: TrendingAPI.Currency): Promise<TrendingAPI.Trending> {
+        throw new Error('Method not implemented.')
+    }
+    getCoinTrendingByKeyword(
+        chainId: ChainId,
+        keyword: string,
+        currency: TrendingAPI.Currency,
+    ): Promise<TrendingAPI.Trending> {
+        throw new Error('Method not implemented.')
+    }
+    getCoinPriceStats(
+        chainId: ChainId,
+        coinId: string,
+        currency: TrendingAPI.Currency,
+        days: number,
+    ): Promise<TrendingAPI.Stat[]> {
+        throw new Error('Method not implemented.')
     }
 }
 

@@ -210,23 +210,7 @@ export async function getLatestMarketPairs(id: string, currency: string) {
 // #endregion
 
 export class CoinMarketCapAPI implements TrendingAPI.Provider<ChainId> {
-    async getCoins(): Promise<TrendingAPI.Coin[]> {
-        const response = await fetchJSON<ResultData<Coin[]>>(
-            `${CMC_V1_BASE_URL}/cryptocurrency/map?aux=status,platform&listing_status=active,untracked&sort=cmc_rank`,
-            { cache: 'force-cache' },
-        )
-        if (!response.data) return []
-        return response.data
-            .filter((x) => x.status === 'active')
-            .map((x) => ({
-                id: String(x.id),
-                name: x.name,
-                symbol: x.symbol,
-                type: TokenType.Fungible,
-                contract_address: x.platform?.name === 'Ethereum' ? x.platform.token_address : undefined,
-            }))
-    }
-    async getHistorical(
+    private async getHistorical(
         id: string,
         currency: string,
         startDate: Date,
@@ -248,7 +232,33 @@ export class CoinMarketCapAPI implements TrendingAPI.Provider<ChainId> {
 
         return response.data
     }
-    async getCoinTrending(chainId: ChainId, id: string, currency: TrendingAPI.Currency): Promise<TrendingAPI.Trending> {
+
+    async getAllCoins(): Promise<TrendingAPI.Coin[]> {
+        const response = await fetchJSON<ResultData<Coin[]>>(
+            `${CMC_V1_BASE_URL}/cryptocurrency/map?aux=status,platform&listing_status=active,untracked&sort=cmc_rank`,
+            { cache: 'force-cache' },
+        )
+        if (!response.data) return []
+        return response.data
+            .filter((x) => x.status === 'active')
+            .map((x) => ({
+                id: String(x.id),
+                name: x.name,
+                symbol: x.symbol,
+                type: TokenType.Fungible,
+                contract_address: x.platform?.name === 'Ethereum' ? x.platform.token_address : undefined,
+            }))
+    }
+
+    getCoinsByKeyword(chainId: ChainId, keyword: string): Promise<TrendingAPI.Coin[]> {
+        throw new Error('Method not implemented.')
+    }
+
+    async getCoinTrendingById(
+        chainId: ChainId,
+        id: string,
+        currency: TrendingAPI.Currency,
+    ): Promise<TrendingAPI.Trending> {
         const currencyName = currency.name.toUpperCase()
         const [{ data: coinInfo, status }, { data: quotesInfo }, { data: market }] = await Promise.all([
             getCoinInfo(id),
@@ -342,7 +352,15 @@ export class CoinMarketCapAPI implements TrendingAPI.Provider<ChainId> {
         return trending
     }
 
-    async getPriceStats(
+    getCoinTrendingByKeyword(
+        chainId: ChainId,
+        keyword: string,
+        currency: TrendingAPI.Currency,
+    ): Promise<TrendingAPI.Trending> {
+        throw new Error('Method not implemented.')
+    }
+
+    async getCoinPriceStats(
         chainId: ChainId,
         coinId: string,
         currency: TrendingAPI.Currency,
