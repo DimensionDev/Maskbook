@@ -48,11 +48,7 @@ export class CoinGeckoTrendingEVM_API implements TrendingAPI.Provider<ChainId> {
         return coins.search(keyword).map((x) => x.item)
     }
 
-    async getCoinTrendingById(
-        chainId: ChainId,
-        id: string,
-        currency: TrendingAPI.Currency,
-    ): Promise<TrendingAPI.Trending> {
+    async getCoinTrending(chainId: ChainId, id: string, currency: TrendingAPI.Currency): Promise<TrendingAPI.Trending> {
         const info = await getCoinInfo(id)
         if ('error' in info) throw new Error(info.error)
 
@@ -140,14 +136,6 @@ export class CoinGeckoTrendingEVM_API implements TrendingAPI.Provider<ChainId> {
                 updated: new Date(x.timestamp),
             })),
         }
-    }
-
-    getCoinTrendingByKeyword(
-        chainId: ChainId,
-        keyword: string,
-        currency: TrendingAPI.Currency,
-    ): Promise<TrendingAPI.Trending> {
-        throw new Error('Method not implemented.')
     }
 
     async getCoinPriceStats(

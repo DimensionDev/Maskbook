@@ -276,11 +276,7 @@ export class CoinMarketCapAPI implements TrendingAPI.Provider<ChainId> {
         return coins.search(keyword).map((x) => x.item)
     }
 
-    async getCoinTrendingById(
-        chainId: ChainId,
-        id: string,
-        currency: TrendingAPI.Currency,
-    ): Promise<TrendingAPI.Trending> {
+    async getCoinTrending(chainId: ChainId, id: string, currency: TrendingAPI.Currency): Promise<TrendingAPI.Trending> {
         const currencyName = currency.name.toUpperCase()
         const [{ data: coinInfo, status }, { data: quotesInfo }, { data: market }] = await Promise.all([
             getCoinInfo(id),
@@ -372,14 +368,6 @@ export class CoinMarketCapAPI implements TrendingAPI.Provider<ChainId> {
                 price_change_percentage_7d_in_currency: quotesInfo_.quote[currencyName].percent_change_7d,
             }
         return trending
-    }
-
-    getCoinTrendingByKeyword(
-        chainId: ChainId,
-        keyword: string,
-        currency: TrendingAPI.Currency,
-    ): Promise<TrendingAPI.Trending> {
-        throw new Error('Method not implemented.')
     }
 
     async getCoinPriceStats(

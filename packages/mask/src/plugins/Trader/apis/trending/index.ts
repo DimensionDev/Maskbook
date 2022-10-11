@@ -73,7 +73,7 @@ export async function getAvailableCoins(chainId: ChainId, keyword: string, type:
 // #endregion
 
 // #region get trending info
-export async function getCoinTrendingById(
+export async function getCoinTrending(
     chainId: ChainId,
     id: string,
     currency: Currency,
@@ -81,13 +81,13 @@ export async function getCoinTrendingById(
 ): Promise<Trending> {
     switch (dataProvider) {
         case DataProvider.CoinGecko:
-            return CoinGeckoTrendingEVM.getCoinTrendingById(chainId, id, currency)
+            return CoinGeckoTrendingEVM.getCoinTrending(chainId, id, currency)
         case DataProvider.CoinMarketCap:
-            return CoinMarketCap.getCoinTrendingById(chainId, id, currency)
+            return CoinMarketCap.getCoinTrending(chainId, id, currency)
         case DataProvider.UniswapInfo:
-            return UniSwap.getCoinTrendingById(chainId, id, currency)
+            return UniSwap.getCoinTrending(chainId, id, currency)
         case DataProvider.NFTScan:
-            return NFTScanTrending.getCoinTrendingById(chainId, id, currency)
+            return NFTScanTrending.getCoinTrending(chainId, id, currency)
         default:
             unreachable(dataProvider)
     }
@@ -109,7 +109,7 @@ export async function getCoinTrendingByKeyword(
     if (!coin) return null
 
     const coinId = resolveCoinId(chainId, resolveKeyword(chainId, keyword, dataProvider), dataProvider) ?? coin.id
-    return getCoinTrendingById(chainId, coinId, currency, dataProvider)
+    return getCoinTrending(chainId, coinId, currency, dataProvider)
 }
 // #endregion
 

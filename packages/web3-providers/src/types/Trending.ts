@@ -172,9 +172,7 @@ export namespace TrendingAPI {
         /** Get all related coins with a keyword. */
         getCoinsByKeyword: (chainId: ChainId, keyword: string) => Promise<Coin[]>
         /** Get coin trending information by id. */
-        getCoinTrendingById: (chainId: ChainId, id: string, currency: Currency) => Promise<Trending>
-        /** Get coin trending information by keyword. */
-        getCoinTrendingByKeyword: (chainId: ChainId, keyword: string, currency: Currency) => Promise<Trending>
+        getCoinTrending: (chainId: ChainId, id: string, currency: Currency) => Promise<Trending>
         /** Get coin price stats by id. */
         getCoinPriceStats: (chainId: ChainId, id: string, currency: Currency, days: number) => Promise<Stat[]>
     }
