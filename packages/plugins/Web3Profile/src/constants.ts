@@ -5,16 +5,12 @@ export const PLUGIN_DESCRIPTION = 'Choose and showcase your Web3 footprints on T
 export const PLUGIN_NAME = 'Web3 Profile'
 
 export enum Scene {
-    Main = 1,
     NFTSetting = 2,
     DonationsSetting = 3,
     FootprintsSetting = 4,
 }
 
 export const SceneMap = {
-    [Scene.Main]: {
-        title: 'Web3 Profile',
-    },
     [Scene.NFTSetting]: {
         title: 'NFTs',
     },

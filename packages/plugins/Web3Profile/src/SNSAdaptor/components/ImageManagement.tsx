@@ -60,7 +60,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-const getWalletsByStatus = (account: AccountType | undefined, scene: Exclude<Scene, Scene.Main>) => {
+const getWalletsByStatus = (account: AccountType | undefined, scene: Scene) => {
     if (!account) return EMPTY_LIST
     let wallets
     if (scene === Scene.DonationsSetting) wallets = account.walletList?.donations
@@ -89,7 +89,7 @@ const sceneToCollectionCategoryMap = {
 } as const
 
 export interface ImageManagementProps {
-    scene: Exclude<Scene, Scene.Main>
+    scene: Scene
     currentPersona?: PersonaInformation
     open: boolean
     onClose: () => void
@@ -109,7 +109,7 @@ export function ImageManagement({
     allWallets = EMPTY_LIST,
     account,
     getWalletHiddenRetry,
-    unlistedCollectionConfig: unlistCollectionConfig,
+    unlistedCollectionConfig,
 }: ImageManagementProps) {
     const t = useI18N()
     const { classes } = useStyles()
@@ -134,10 +134,10 @@ export function ImageManagement({
         await context.openPopupWindow(PopupRoutes.ConnectWallet)
     }
     const unlistedKeys = useMemo(() => {
-        if (!unlistCollectionConfig || !settingWallet) return EMPTY_LIST
-        const field = sceneToCollectionCategoryMap[scene as Exclude<Scene, Scene.Main>]
-        return unlistCollectionConfig[settingWallet.address][field]
-    }, [unlistCollectionConfig, scene])
+        if (!unlistedCollectionConfig || !settingWallet?.address) return EMPTY_LIST
+        const field = sceneToCollectionCategoryMap[scene]
+        return unlistedCollectionConfig?.[settingWallet.address]?.[field] || EMPTY_LIST
+    }, [unlistedCollectionConfig, settingWallet?.address, scene])
 
     return (
         <InjectedDialog
@@ -151,7 +151,7 @@ export function ImageManagement({
                 <div>
                     {wallets.length ? (
                         wallets.map((wallet) => {
-                            const unlistedKeys = unlistCollectionConfig?.[wallet.address]?.[categoryField] ?? []
+                            const unlistedKeys = unlistedCollectionConfig?.[wallet.address]?.[categoryField] ?? []
                             const collections = wallet.collections.filter((x) => !unlistedKeys.includes(x.key))
                             return (
                                 <WalletAssetsCard
@@ -162,7 +162,7 @@ export function ImageManagement({
                                         setImageListOpen(true)
                                     }}
                                     collections={collections}
-                                    address={wallet}
+                                    wallet={wallet}
                                     hasUnlisted={unlistedKeys.length > 0}
                                 />
                             )

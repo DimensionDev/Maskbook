@@ -13,7 +13,7 @@ import { useI18N } from '../../locales/index.js'
 import { AddNFT } from './AddCollectibles.js'
 import { CollectionList } from './CollectionList.js'
 
-const useStyles = makeStyles()((theme) => {
+const useStyles = makeStyles<void, 'list'>()((theme, _, refs) => {
     return {
         walletInfo: {
             display: 'flex',
@@ -118,6 +118,9 @@ const useStyles = makeStyles()((theme) => {
             flexWrap: 'wrap',
             height: 170,
             justifyContent: 'center',
+            [`.${refs.list}`]: {
+                paddingBottom: 30,
+            },
         },
     }
 })
@@ -152,6 +155,7 @@ export function ImageListDialog(props: ImageListDialogProps) {
     const [addNFTOpen, setAddNFTOpen] = useState(false)
 
     const [pendingUnlistedKeys, setPendingUnlistedKeys] = useState(unlistedKeys)
+
     useEffect(() => {
         setPendingUnlistedKeys(unlistedKeys)
     }, [unlistedKeys, open])

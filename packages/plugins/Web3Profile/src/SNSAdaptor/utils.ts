@@ -24,7 +24,7 @@ export const getWalletList = (
     accounts: BindingProof[],
     wallets: WalletTypes[],
     allPersona: PersonaInformation[],
-    unlistConfig: UnlistedConfig | undefined,
+    unlistedConfig: UnlistedConfig | undefined,
     footprints: Collection[] = [],
     donations: Collection[] = [],
     NFTs: Collection[] = [],
@@ -47,7 +47,7 @@ export const getWalletList = (
         (x) => x.platform + x.identity,
     )
     return detailedAccounts.map((detailedAccount) => {
-        const unlistedWallet = unlistConfig?.wallets?.[detailedAccount.identity]
+        const unlistedWallet = unlistedConfig?.wallets?.[detailedAccount.identity]
         return {
             ...detailedAccount,
             walletList: {

@@ -10,6 +10,7 @@ import { sortBy } from 'lodash-unified'
 import { useEffect, useMemo, useState } from 'react'
 import { useAsyncRetry } from 'react-use'
 import { SceneMap, Scene } from '../../constants.js'
+import { useI18N } from '../../locales/i18n_generated.js'
 import { context } from '../context.js'
 import { useAllPersonas, useCurrentPersona, useLastRecognizedProfile } from '../hooks'
 import { getDonationList, getFootprintList, getNFTList, getUnlistedConfig, getWalletList } from '../utils.js'
@@ -52,9 +53,9 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export function Web3ProfileDialog() {
+    const t = useI18N()
     const classes = useStylesExtends(useStyles(), {})
-    const [scene, setScene] = useState(Scene.Main)
-    const [imageManageOpen, setImageManageOpen] = useState(false)
+    const [scene, setScene] = useState<Scene>()
     const [accountId, setAccountId] = useState<string>()
 
     const [open, setOpen] = useState(false)
@@ -132,7 +133,7 @@ export function Web3ProfileDialog() {
     return (
         <InjectedDialog
             classes={{ dialogContent: classes.content }}
-            title={SceneMap[scene].title}
+            title={scene ? SceneMap[scene].title : t.web3_profile()}
             fullWidth={false}
             open={open}
             isOnBack
@@ -142,24 +143,22 @@ export function Web3ProfileDialog() {
             onClose={() => setOpen(false)}>
             <DialogContent className={classes.content}>
                 <Main
-                    openImageSetting={(status, accountId) => {
-                        setScene(status)
-                        setImageManageOpen(true)
+                    openImageSetting={(scene, accountId) => {
+                        setScene(scene)
                         setAccountId(accountId)
                     }}
                     persona={currentPersona}
                     currentVisitingProfile={currentVisitingProfile}
                     accountList={accountList}
                 />
-                {accountId && imageManageOpen ? (
+                {accountId && scene ? (
                     <ImageManagement
                         open
                         currentPersona={currentPersona}
                         account={accountList.find((x) => x.identity === accountId)}
-                        scene={scene as Exclude<Scene, Scene.Main>}
+                        scene={scene}
                         onClose={() => {
-                            setImageManageOpen(false)
-                            setScene(Scene.Main)
+                            setScene(undefined)
                         }}
                         accountId={accountId}
                         currentVisitingProfile={currentVisitingProfile}

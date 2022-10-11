@@ -9,7 +9,7 @@ import { useI18N } from '../../locales/index.js'
 
 export interface MainProps {
     persona?: PersonaInformation
-    openImageSetting: (status: Scene, account: string) => void
+    openImageSetting: (scene: Scene, account: string) => void
     currentVisitingProfile?: IdentityResolved
     accountList?: AccountType[]
 }
@@ -28,8 +28,8 @@ export function Main(props: MainProps) {
             {accountList.map((account) => (
                 <PlatformCard
                     key={account.identity}
-                    openImageSetting={(status: Scene) => {
-                        openImageSetting(status, account.identity)
+                    openImageSetting={(scene: Scene) => {
+                        openImageSetting(scene, account.identity)
                     }}
                     account={account}
                     currentPersona={currentVisitingProfile}
