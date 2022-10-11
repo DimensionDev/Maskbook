@@ -84,6 +84,7 @@ export async function r2d2Fetch(input: RequestInfo, init?: RequestInit): Promise
             [async () => (await originalFetch(url, info)).blob(), async () => fetchImageViaDOM(url)],
             null,
         )
+
         return new Response(blob, {
             headers: {
                 'Content-Type': 'image/png',

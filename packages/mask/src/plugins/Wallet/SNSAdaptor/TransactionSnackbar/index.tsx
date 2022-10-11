@@ -126,7 +126,7 @@ export function TransactionSnackbar<T extends NetworkPluginID>({ pluginID }: Tra
                         target="_blank"
                         rel="noopener noreferrer">
                         {progress.status === TransactionStatusType.SUCCEED
-                            ? computed.successfulDescription ?? computed.description
+                            ? computed.snackbar?.successfulDescription ?? computed.description
                             : computed.description}{' '}
                         <Icons.LinkOut size={16} sx={{ ml: 0.5 }} />
                     </Link>
@@ -139,7 +139,7 @@ export function TransactionSnackbar<T extends NetworkPluginID>({ pluginID }: Tra
         const transaction = errorInfo?.request?.params?.[0] as Web3Helper.Definition[T]['Transaction'] | undefined
         const computed = transaction ? await TransactionFormatter?.formatTransaction?.(chainId, transaction) : undefined
         const title = computed?.title ?? errorInfo?.error.message
-        const message = computed?.failedDescription
+        const message = computed?.snackbar?.failedDescription
 
         if (!title) return
 

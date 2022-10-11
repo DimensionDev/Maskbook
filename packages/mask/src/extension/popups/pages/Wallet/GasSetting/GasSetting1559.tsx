@@ -6,7 +6,7 @@ import { Controller, useForm } from 'react-hook-form'
 import BigNumber from 'bignumber.js'
 import { isEmpty } from 'lodash-unified'
 import { makeStyles } from '@masknet/theme'
-import { formatGweiToEther, formatGweiToWei } from '@masknet/web3-shared-evm'
+import { formatGweiToEther, formatGweiToWei, formatWeiToEther } from '@masknet/web3-shared-evm'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages.js'
 import { useI18N } from '../../../../../utils/index.js'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -17,6 +17,7 @@ import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest.js'
 import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { toHex, fromWei } from 'web3-utils'
 import {
+    formatCurrency,
     GasOptionType,
     isGreaterThan,
     isGreaterThanOrEqualTo,
@@ -27,7 +28,7 @@ import {
     toFixed,
     TransactionDescriptorType,
 } from '@masknet/web3-shared-base'
-import { useChainId, useGasOptions, useNativeToken, useNativeTokenPrice, useWeb3 } from '@masknet/web3-hooks-base'
+import { useGasOptions, useNativeToken, useNativeTokenPrice, useWeb3 } from '@masknet/web3-hooks-base'
 
 const useStyles = makeStyles()((theme) => ({
     options: {
@@ -106,7 +107,6 @@ export const GasSetting1559 = memo(() => {
     const { t } = useI18N()
     const { classes } = useStyles()
     const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM)
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const navigate = useNavigate()
     const [selected, setOption] = useState<number | null>(null)
     const [getGasLimitError, setGetGasLimitError] = useState(false)
@@ -344,10 +344,13 @@ export const GasSetting1559 = memo(() => {
                         </Typography>
                         <Typography className={classes.gasUSD}>
                             {t('popups_wallet_gas_fee_settings_usd', {
-                                usd: formatGweiToEther(content?.suggestedMaxFeePerGas ?? 0)
-                                    .times(nativeTokenPrice)
-                                    .times(21000)
-                                    .toPrecision(3),
+                                usd: formatCurrency(
+                                    formatWeiToEther(content?.suggestedMaxFeePerGas ?? 0)
+                                        .times(nativeTokenPrice)
+                                        .times(21000),
+                                    'USD',
+                                    { boundaries: { min: 0.01 } },
+                                ),
                             })}
                         </Typography>
                     </div>

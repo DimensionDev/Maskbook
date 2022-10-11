@@ -22,13 +22,12 @@ export function CollectionList(props: CollectionListProps) {
         <List className={classes.list}>
             {collections.map((collection) => (
                 <ListItem
-                    data-url={collection.imageURL ?? ''}
-                    key={collection?.key}
+                    key={collection.key}
                     className={classes.collectionWrap}
                     onClick={() => onList?.(collection.key)}>
                     <NFTImageCollectibleAvatar
                         showNetwork={showNetwork}
-                        pluginId={collection?.platform ?? NetworkPluginID.PLUGIN_EVM}
+                        pluginId={collection?.networkPluginID ?? NetworkPluginID.PLUGIN_EVM}
                         size={size}
                         token={{
                             ...collection,

@@ -6,6 +6,7 @@ import { twitterShared } from './shared.js'
 import { InitAutonomousStateProfiles } from '../../social-network/defaults/state/InitProfiles.js'
 import { openComposeBoxTwitter } from './automation/openComposeBox.js'
 import { pasteTextToCompositionTwitter } from './automation/pasteTextToComposition.js'
+import { pasteImageToCompositionTwitter } from './automation/pasteImageToComposition.js'
 import { gotoNewsFeedPageTwitter } from './automation/gotoNewsFeedPage.js'
 import { gotoProfilePageTwitter } from './automation/gotoProfilePage.js'
 import { IdentityProviderTwitter, CurrentVisitingIdentityProviderTwitter } from './collecting/identity.js'
@@ -22,7 +23,6 @@ import { injectSetupPromptAtTwitter } from './injection/SetupPrompt.js'
 import { injectPostBoxComposed } from './injection/inject.js'
 import { createTaskStartSetupGuideDefault } from '../../social-network/defaults/inject/StartSetupGuide.js'
 import { injectMaskUserBadgeAtTwitter } from './injection/MaskIcon.js'
-import { pasteImageToCompositionDefault } from '../../social-network/defaults/automation/AttachImageToComposition.js'
 import { injectPostInspectorAtTwitter } from './injection/PostInspector.js'
 import { injectPostActionsAtTwitter } from './injection/PostActions/index.js'
 import { EnhanceableSite, NextIDPlatform, ProfileIdentifier } from '@masknet/shared-base'
@@ -134,7 +134,7 @@ const twitterUI: SocialNetworkUI.Definition = {
         nativeCompositionDialog: {
             appendText: pasteTextToCompositionTwitter,
             // TODO: make a better way to detect
-            attachImage: pasteImageToCompositionDefault(() => false),
+            attachImage: pasteImageToCompositionTwitter(() => false),
         },
         redirect: {
             newsFeed: gotoNewsFeedPageTwitter,

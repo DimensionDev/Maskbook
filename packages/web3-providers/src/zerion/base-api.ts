@@ -60,7 +60,7 @@ function verify(request: SocketRequestBody, response: any) {
             return JSON.stringify(requestValue) === JSON.stringify(responseMetaValue)
         }
         if (typeof requestValue === 'string') {
-            return responseMetaValue.toLowerCase() === requestValue.toLowerCase()
+            return responseMetaValue?.toLowerCase() === requestValue?.toLowerCase()
         }
         return responseMetaValue === requestValue
     })

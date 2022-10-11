@@ -539,18 +539,25 @@ export interface TransactionDescriptor<ChainId, Transaction> {
     type: TransactionDescriptorType
     /** a transaction title. */
     title: string
-    /** a human-readable description. */
-    description?: string
-    /** a human-readable description for successful transaction. */
-    successfulDescription?: string
-    /** a human-readable description for failed transaction. */
-    failedDescription?: string
+    /** The original transaction object */
+    _tx: Transaction    
     /** The address of the token leveraged to swap other tokens */
     tokenInAddress?: string
     /** The amount of the token leveraged to swap other tokens */
-    tokenInAmount?: string
-    /** The original transaction object */
-    _tx: Transaction
+    tokenInAmount?: string 
+    /** a human-readable description. */
+    description?: string    
+    snackbar?: {   
+        /** a human-readable description for successful transaction. */
+        successfulDescription?: string
+        /** a human-readable description for failed transaction. */
+        failedDescription?: string
+    }
+    popup?: {
+        /** The custom token description */    
+        tokenDescription?: string
+    }
+
 }
 
 export interface TransactionContext<ChainId, Parameter = string | undefined> {

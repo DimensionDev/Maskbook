@@ -1,9 +1,9 @@
+import urlcat from 'urlcat'
+import { compact } from 'lodash-unified'
 import { DataProvider } from '@masknet/public-api'
 import { createLookupTableResolver, EMPTY_LIST } from '@masknet/shared-base'
 import { TokenType } from '@masknet/web3-shared-base'
-import { ChainId } from '@masknet/web3-shared-evm'
-import urlcat from 'urlcat'
-import { compact } from 'lodash-unified'
+import type { ChainId } from '@masknet/web3-shared-evm'
 import { LooksRareLogo, OpenSeaLogo } from '../../resources/index.js'
 import { TrendingAPI } from '../../types/index.js'
 import { NFTSCAN_API } from '../constants.js'
@@ -63,7 +63,11 @@ export class NFTScanTrendingAPI implements TrendingAPI.Provider<ChainId> {
         return response.data?.result ?? EMPTY_LIST
     }
 
-    async getCoins(keyword: string, chainId = ChainId.Mainnet): Promise<TrendingAPI.Coin[]> {
+    getAllCoins(): Promise<TrendingAPI.Coin[]> {
+        return Promise.resolve(EMPTY_LIST)
+    }
+
+    async getCoinsByKeyword(chainId: ChainId, keyword: string): Promise<TrendingAPI.Coin[]> {
         if (!keyword) return EMPTY_LIST
         const nfts = await this.searchNftPlatformName(keyword)
 
@@ -84,11 +88,7 @@ export class NFTScanTrendingAPI implements TrendingAPI.Provider<ChainId> {
         return coins.filter((x) => x.symbol)
     }
 
-    async getCurrencies(): Promise<TrendingAPI.Currency[]> {
-        throw new Error('Not implemented yet.')
-    }
-
-    async getPriceStats(
+    async getCoinPriceStats(
         chainId: ChainId,
         coinId: string,
         currency: TrendingAPI.Currency,
@@ -99,7 +99,7 @@ export class NFTScanTrendingAPI implements TrendingAPI.Provider<ChainId> {
         return records.map((x) => [x.time, x.price])
     }
 
-    async getCoinTrending(
+    async getCoinTrendingById(
         chainId: ChainId,
         /** address as id */ id: string,
         currency: TrendingAPI.Currency,
@@ -205,5 +205,13 @@ export class NFTScanTrendingAPI implements TrendingAPI.Provider<ChainId> {
             },
             tickers,
         }
+    }
+
+    getCoinTrendingByKeyword(
+        chainId: ChainId,
+        keyword: string,
+        currency: TrendingAPI.Currency,
+    ): Promise<TrendingAPI.Trending> {
+        throw new Error('Method not implemented.')
     }
 }

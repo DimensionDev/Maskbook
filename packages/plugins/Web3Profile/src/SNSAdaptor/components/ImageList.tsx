@@ -1,6 +1,6 @@
 import { useWeb3State } from '@masknet/web3-hooks-base'
 import { CollectionTypes, InjectedDialog, WalletTypes } from '@masknet/shared'
-import { EMPTY_LIST, NextIDPlatform, PersonaInformation, NetworkPluginID } from '@masknet/shared-base'
+import { EMPTY_LIST, NextIDPlatform, PersonaInformation } from '@masknet/shared-base'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { isSameAddress, NonFungibleToken } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
@@ -13,7 +13,7 @@ import { useI18N } from '../../locales/index.js'
 import { AddNFT } from './AddCollectibles.js'
 import { CollectionList } from './CollectionList.js'
 
-const useStyles = makeStyles()((theme) => {
+const useStyles = makeStyles<void, 'list'>()((theme, _, refs) => {
     return {
         collectionWrap: {
             position: 'relative',
@@ -100,12 +100,15 @@ const useStyles = makeStyles()((theme) => {
             flexWrap: 'wrap',
             height: 170,
             justifyContent: 'center',
+            [`.${refs.list}`]: {
+                paddingBottom: 30,
+            },
         },
     }
 })
 
 export interface ImageListDialogProps extends withClasses<never | 'root'> {
-    address?: WalletTypes
+    wallet: WalletTypes
     open: boolean
     onClose: () => void
     title: string
@@ -113,11 +116,12 @@ export interface ImageListDialogProps extends withClasses<never | 'root'> {
     collectionList?: CollectionTypes[]
     accountId?: string
     retryData: () => void
+    unlistedKeys: string[]
 }
 
 export function ImageListDialog(props: ImageListDialogProps) {
     const {
-        address = { address: ZERO_ADDRESS },
+        wallet,
         open,
         onClose,
         retryData,
@@ -125,14 +129,18 @@ export function ImageListDialog(props: ImageListDialogProps) {
         accountId,
         currentPersona,
         collectionList = EMPTY_LIST,
+        unlistedKeys,
     } = props
     const t = useI18N()
     const { Storage } = useWeb3State()
     const classes = useStylesExtends(useStyles(), props)
-    const [open_, setOpen_] = useState(false)
+    const [addNFTOpen, setAddNFTOpen] = useState(false)
 
-    const unlistedKeys = collectionList.filter((x) => x.hidden).map((x) => x.key)
-    const [pendingUnlistedKeys, setPendingUnlistedKeys] = useState(unlistedKeys ?? EMPTY_LIST)
+    const [pendingUnlistedKeys, setPendingUnlistedKeys] = useState(unlistedKeys)
+
+    useEffect(() => {
+        setPendingUnlistedKeys(unlistedKeys)
+    }, [unlistedKeys, open])
     const confirmButtonDisabled = isEqual(sortBy(unlistedKeys), sortBy(pendingUnlistedKeys))
 
     const unListedCollections = useMemo(
@@ -144,10 +152,6 @@ export function ImageListDialog(props: ImageListDialogProps) {
         [collectionList, pendingUnlistedKeys],
     )
 
-    useEffect(() => {
-        setPendingUnlistedKeys(collectionList?.filter((x) => x.hidden).map((x) => x.key) ?? EMPTY_LIST)
-    }, [collectionList, open])
-
     const unList = useCallback((key: string) => {
         setPendingUnlistedKeys((keys) => [...keys, key])
     }, [])
@@ -157,18 +161,22 @@ export function ImageListDialog(props: ImageListDialogProps) {
     }, [])
 
     const onConfirm = async () => {
-        if (!currentPersona?.identifier.publicKeyAsHex || isSameAddress(address.address, ZERO_ADDRESS)) return
-        const patch = {
-            unListedCollections: {
-                [address.address]: {
-                    [title]: pendingUnlistedKeys,
-                },
-            },
-        }
+        if (
+            !currentPersona?.identifier.publicKeyAsHex ||
+            !wallet?.address ||
+            isSameAddress(wallet.address, ZERO_ADDRESS)
+        )
+            return
         try {
             if (!Storage || !accountId) return
+            const patch = {
+                unListedCollections: {
+                    [wallet.address]: {
+                        [title]: pendingUnlistedKeys,
+                    },
+                },
+            }
             const storage = Storage.createNextIDStorage(accountId, NextIDPlatform.Twitter, currentPersona.identifier)
-
             await storage.set(PLUGIN_ID, patch)
 
             onClose()
@@ -202,7 +210,7 @@ export function ImageListDialog(props: ImageListDialogProps) {
                         <Typography sx={{ fontSize: '16px', fontWeight: 700 }}>{t.listed()}</Typography>
                     </Box>
                     <Box className={classNames(classes.listedBox, classes.scrollBar)}>
-                        {listedCollections && listedCollections.length > 0 ? (
+                        {listedCollections?.length > 0 ? (
                             <CollectionList
                                 classes={{ list: classes.list, collectionWrap: classes.collectionWrap }}
                                 onList={unList}
@@ -220,7 +228,7 @@ export function ImageListDialog(props: ImageListDialogProps) {
                         <Typography sx={{ fontSize: '16px', fontWeight: 700, padding: 2 }}>{t.unlisted()}</Typography>
                     </Box>
                     <Box className={classNames(classes.unlistedBox, classes.scrollBar)}>
-                        {unListedCollections && unListedCollections.length > 0 ? (
+                        {unListedCollections.length > 0 ? (
                             <CollectionList
                                 classes={{ list: classes.list, collectionWrap: classes.collectionWrap }}
                                 onList={list}
@@ -228,20 +236,20 @@ export function ImageListDialog(props: ImageListDialogProps) {
                             />
                         ) : (
                             <Typography className={classes.unListedEmpty}>
-                                {listedCollections && listedCollections?.length > 0
+                                {listedCollections?.length > 0
                                     ? t.no_unlisted_collection({ collection: title })
                                     : (!collectionList || collectionList?.length === 0) && t.no_items_found()}
                             </Typography>
                         )}
                     </Box>
                     <AddNFT
-                        account={address.address}
+                        account={wallet.address}
                         chainId={ChainId.Mainnet}
                         title={t.add_collectible()}
-                        open={open_}
-                        onClose={() => setOpen_(false)}
+                        open={addNFTOpen}
+                        onClose={() => setAddNFTOpen(false)}
                         onAddClick={onAddClick}
-                        expectedPluginID={address?.platform ?? NetworkPluginID.PLUGIN_EVM}
+                        expectedPluginID={wallet.networkPluginID}
                     />
                 </div>
             </DialogContent>

@@ -1,10 +1,10 @@
 import getUnixTime from 'date-fns/getUnixTime'
-import { TrendingAPI } from '../types/index.js'
 import { TokenType } from '@masknet/web3-shared-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
+import { DataProvider } from '@masknet/public-api'
+import { TrendingAPI } from '../types/index.js'
 import { BTC_FIRST_LEGER_DATE, CMC_STATIC_BASE_URL, CMC_V1_BASE_URL, THIRD_PARTY_V1_BASE_URL } from './constants.js'
 import { getCommunityLink, isMirroredKeyword, resolveChainIdByName } from './helper.js'
-import { DataProvider } from '@masknet/public-api'
 import type { Coin, ResultData, Status } from './type.js'
 import { fetchJSON } from '../helpers.js'
 
@@ -210,23 +210,7 @@ export async function getLatestMarketPairs(id: string, currency: string) {
 // #endregion
 
 export class CoinMarketCapAPI implements TrendingAPI.Provider<ChainId> {
-    async getCoins(): Promise<TrendingAPI.Coin[]> {
-        const response = await fetchJSON<ResultData<Coin[]>>(
-            `${CMC_V1_BASE_URL}/cryptocurrency/map?aux=status,platform&listing_status=active,untracked&sort=cmc_rank`,
-            { cache: 'force-cache' },
-        )
-        if (!response.data) return []
-        return response.data
-            .filter((x) => x.status === 'active')
-            .map((x) => ({
-                id: String(x.id),
-                name: x.name,
-                symbol: x.symbol,
-                type: TokenType.Fungible,
-                contract_address: x.platform?.name === 'Ethereum' ? x.platform.token_address : undefined,
-            }))
-    }
-    async getHistorical(
+    private async getHistorical(
         id: string,
         currency: string,
         startDate: Date,
@@ -248,10 +232,33 @@ export class CoinMarketCapAPI implements TrendingAPI.Provider<ChainId> {
 
         return response.data
     }
-    getCurrencies(): Promise<TrendingAPI.Currency[]> {
-        return Promise.resolve([])
+
+    async getAllCoins(): Promise<TrendingAPI.Coin[]> {
+        const response = await fetchJSON<ResultData<Coin[]>>(
+            `${CMC_V1_BASE_URL}/cryptocurrency/map?aux=status,platform&listing_status=active,untracked&sort=cmc_rank`,
+            { cache: 'force-cache' },
+        )
+        if (!response.data) return []
+        return response.data
+            .filter((x) => x.status === 'active')
+            .map((x) => ({
+                id: String(x.id),
+                name: x.name,
+                symbol: x.symbol,
+                type: TokenType.Fungible,
+                contract_address: x.platform?.name === 'Ethereum' ? x.platform.token_address : undefined,
+            }))
     }
-    async getCoinTrending(chainId: ChainId, id: string, currency: TrendingAPI.Currency): Promise<TrendingAPI.Trending> {
+
+    getCoinsByKeyword(chainId: ChainId, keyword: string): Promise<TrendingAPI.Coin[]> {
+        throw new Error('Method not implemented.')
+    }
+
+    async getCoinTrendingById(
+        chainId: ChainId,
+        id: string,
+        currency: TrendingAPI.Currency,
+    ): Promise<TrendingAPI.Trending> {
         const currencyName = currency.name.toUpperCase()
         const [{ data: coinInfo, status }, { data: quotesInfo }, { data: market }] = await Promise.all([
             getCoinInfo(id),
@@ -345,7 +352,15 @@ export class CoinMarketCapAPI implements TrendingAPI.Provider<ChainId> {
         return trending
     }
 
-    async getPriceStats(
+    getCoinTrendingByKeyword(
+        chainId: ChainId,
+        keyword: string,
+        currency: TrendingAPI.Currency,
+    ): Promise<TrendingAPI.Trending> {
+        throw new Error('Method not implemented.')
+    }
+
+    async getCoinPriceStats(
         chainId: ChainId,
         coinId: string,
         currency: TrendingAPI.Currency,
