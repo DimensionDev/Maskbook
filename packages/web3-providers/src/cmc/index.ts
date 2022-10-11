@@ -1,10 +1,10 @@
 import getUnixTime from 'date-fns/getUnixTime'
-import { TrendingAPI } from '../types/index.js'
 import { TokenType } from '@masknet/web3-shared-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
+import { DataProvider } from '@masknet/public-api'
+import { TrendingAPI } from '../types/index.js'
 import { BTC_FIRST_LEGER_DATE, CMC_STATIC_BASE_URL, CMC_V1_BASE_URL, THIRD_PARTY_V1_BASE_URL } from './constants.js'
 import { getCommunityLink, isMirroredKeyword, resolveChainIdByName } from './helper.js'
-import { DataProvider } from '@masknet/public-api'
 import type { Coin, ResultData, Status } from './type.js'
 import { fetchJSON } from '../helpers.js'
 
@@ -247,9 +247,6 @@ export class CoinMarketCapAPI implements TrendingAPI.Provider<ChainId> {
         })
 
         return response.data
-    }
-    getCurrencies(): Promise<TrendingAPI.Currency[]> {
-        return Promise.resolve([])
     }
     async getCoinTrending(chainId: ChainId, id: string, currency: TrendingAPI.Currency): Promise<TrendingAPI.Trending> {
         const currencyName = currency.name.toUpperCase()

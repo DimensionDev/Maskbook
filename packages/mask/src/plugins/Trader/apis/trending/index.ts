@@ -1,30 +1,11 @@
+import { first, groupBy } from 'lodash-unified'
 import { getEnumAsArray, unreachable } from '@dimensiondev/kit'
 import { DataProvider } from '@masknet/public-api'
 import { CoinGeckoTrendingEVM, CoinMarketCap, NFTScanTrending, TrendingAPI, UniSwap } from '@masknet/web3-providers'
 import { ChainId, chainResolver, NetworkType } from '@masknet/web3-shared-evm'
-import { first, groupBy } from 'lodash-unified'
 import { CRYPTOCURRENCY_MAP_EXPIRES_AT } from '../../constants/index.js'
-import type { Coin, CommunityUrls, Currency, Stat, TagType, Trending } from '../../types/index.js'
+import type { Coin, Currency, Stat, TagType, Trending } from '../../types/index.js'
 import { isBlockedAddress, isBlockedId, isBlockedKeyword, resolveAlias, resolveCoinId } from './hotfix.js'
-
-/**
- * Get supported currencies of specific data provider
- * @param dataProvider
- */
-export async function getCurrencies(dataProvider: DataProvider): Promise<Currency[]> {
-    switch (dataProvider) {
-        case DataProvider.CoinGecko:
-            return CoinGeckoTrendingEVM.getCurrencies()
-        case DataProvider.CoinMarketCap:
-            return CoinMarketCap.getCurrencies()
-        case DataProvider.UniswapInfo:
-            return UniSwap.getCurrencies()
-        case DataProvider.NFTScan:
-            throw new Error('Not implemented yet.')
-        default:
-            unreachable(dataProvider)
-    }
-}
 
 export async function getCoins(dataProvider: DataProvider): Promise<Coin[]> {
     switch (dataProvider) {
@@ -57,7 +38,7 @@ export async function getCoinsByKeyword(
 }
 
 // #region check a specific coin is available on specific data provider
-const coinNamespace = new Map<
+const ns = new Map<
     DataProvider,
     {
         // all of supported symbols
@@ -74,13 +55,13 @@ async function updateCache(chainId: ChainId, dataProvider: DataProvider, keyword
         // uniswap update cache with keyword
         if (dataProvider === DataProvider.UniswapInfo || dataProvider === DataProvider.NFTScan) {
             if (!keyword) return
-            if (!coinNamespace.has(dataProvider))
-                coinNamespace.set(dataProvider, {
+            if (!ns.has(dataProvider))
+                ns.set(dataProvider, {
                     supportedSymbolsSet: new Set(),
                     supportedSymbolIdsMap: new Map(),
                     lastUpdated: new Date(),
                 })
-            const cache = coinNamespace.get(dataProvider)!
+            const cache = ns.get(dataProvider)!
             const coins = (await getCoinsByKeyword(chainId, dataProvider, keyword)).filter(
                 (x) => !isBlockedId(chainId, x.id, dataProvider),
             )
@@ -95,7 +76,7 @@ async function updateCache(chainId: ChainId, dataProvider: DataProvider, keyword
         // other providers fetch all of supported coins
         const coins = (await getCoins(dataProvider)).filter((x) => !isBlockedId(chainId, x.id, dataProvider))
         const coinsGrouped = groupBy(coins, (x) => x.symbol.toLowerCase())
-        coinNamespace.set(dataProvider, {
+        ns.set(dataProvider, {
             supportedSymbolsSet: new Set<string>(Object.keys(coinsGrouped)),
             supportedSymbolIdsMap: new Map(Object.entries(coinsGrouped).map(([symbol, coins]) => [symbol, coins])),
             lastUpdated: new Date(),
@@ -106,22 +87,11 @@ async function updateCache(chainId: ChainId, dataProvider: DataProvider, keyword
 }
 
 function isCacheExpired(dataProvider: DataProvider) {
-    const lastUpdated = coinNamespace.get(dataProvider)?.lastUpdated.getTime() ?? 0
+    const lastUpdated = ns.get(dataProvider)?.lastUpdated.getTime() ?? 0
     return Date.now() - lastUpdated > CRYPTOCURRENCY_MAP_EXPIRES_AT
 }
 
-function getCommunityLink(links: string[]): CommunityUrls {
-    return links.map((x) => {
-        if (x.includes('twitter')) return { type: 'twitter', link: x }
-        if (x.includes('t.me')) return { type: 'telegram', link: x }
-        if (x.includes('facebook')) return { type: 'facebook', link: x }
-        if (x.includes('discord')) return { type: 'discord', link: x }
-        if (x.includes('reddit')) return { type: 'reddit', link: x }
-        return { type: 'other', link: x }
-    })
-}
-
-export async function checkAvailabilityOnDataProvider(
+async function checkAvailabilityOnDataProvider(
     chainId: ChainId,
     keyword: string,
     type: TagType,
@@ -132,10 +102,10 @@ export async function checkAvailabilityOnDataProvider(
     if (dataProvider === DataProvider.UniswapInfo || dataProvider === DataProvider.NFTScan)
         await updateCache(chainId, dataProvider, keyword)
     // cache never built before update in blocking way
-    else if (!coinNamespace.has(dataProvider)) await updateCache(chainId, dataProvider, keyword)
+    else if (!ns.has(dataProvider)) await updateCache(chainId, dataProvider, keyword)
     // data fetched before update in non-blocking way
     else if (isCacheExpired(dataProvider)) updateCache(chainId, dataProvider, keyword)
-    const symbols = coinNamespace.get(dataProvider)?.supportedSymbolsSet
+    const symbols = ns.get(dataProvider)?.supportedSymbolsSet
     return symbols?.has(resolveAlias(chainId, keyword, dataProvider).toLowerCase()) ?? false
 }
 
@@ -168,14 +138,14 @@ export async function getAvailableDataProviders(chainId: ChainId, type?: TagType
 
 export async function getAvailableCoins(chainId: ChainId, keyword: string, type: TagType, dataProvider: DataProvider) {
     if (!(await checkAvailabilityOnDataProvider(chainId, keyword, type, dataProvider))) return []
-    const ids = coinNamespace.get(dataProvider)?.supportedSymbolIdsMap
+    const ids = ns.get(dataProvider)?.supportedSymbolIdsMap
     const alias = resolveAlias(chainId, keyword, dataProvider).toLowerCase()
     return ids?.get(alias)?.filter((x) => !isBlockedAddress(chainId, x.address || x.contract_address || '')) ?? []
 }
 // #endregion
 
 // #region get trending info
-async function getCoinTrending(
+export async function getCoinTrendingById(
     chainId: ChainId,
     id: string,
     currency: Currency,
@@ -193,15 +163,6 @@ async function getCoinTrending(
         default:
             unreachable(dataProvider)
     }
-}
-
-export async function getCoinTrendingById(
-    chainId: ChainId,
-    id: string,
-    currency: Currency,
-    dataProvider: DataProvider,
-) {
-    return getCoinTrending(chainId, id, currency, dataProvider)
 }
 
 export async function getCoinTrendingByKeyword(
