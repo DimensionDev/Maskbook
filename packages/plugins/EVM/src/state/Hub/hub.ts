@@ -23,6 +23,8 @@ import {
     PriceAPI,
     CF,
     CoinGeckoPriceEVM,
+    ChainbaseFungibleToken,
+    ChainbaseNonFungibleToken,
     ZerionNonFungibleToken,
 } from '@masknet/web3-providers'
 import { SourceType, HubOptions, Pageable, CurrencyType, Transaction } from '@masknet/web3-shared-base'
@@ -72,6 +74,7 @@ class HubFungibleClient extends HubStateFungibleClient<ChainId, SchemaType> {
                 PriceAPI.Provider<ChainId>
         >(
             {
+                [SourceType.Chainbase]: ChainbaseFungibleToken,
                 [SourceType.DeBank]: DeBank,
                 [SourceType.Zerion]: Zerion,
                 [SourceType.Rabby]: Rabby,
@@ -79,7 +82,7 @@ class HubFungibleClient extends HubStateFungibleClient<ChainId, SchemaType> {
                 [SourceType.CF]: CF,
                 [SourceType.CoinGecko]: CoinGeckoPriceEVM,
             },
-            [DeBank, Zerion, Rabby, R2D2, CF, CoinGeckoPriceEVM],
+            [DeBank, Zerion, ChainbaseFungibleToken, Rabby, R2D2, CF, CoinGeckoPriceEVM],
             initial,
         )
     }
@@ -94,6 +97,7 @@ class HubNonFungibleClient extends HubStateNonFungibleClient<ChainId, SchemaType
             | TokenListAPI.Provider<ChainId, SchemaType>
         >(
             {
+                [SourceType.Chainbase]: ChainbaseNonFungibleToken,
                 [SourceType.Zerion]: ZerionNonFungibleToken,
                 [SourceType.NFTScan]: NFTScanNonFungibleTokenEVM,
                 [SourceType.Rarible]: Rarible,
