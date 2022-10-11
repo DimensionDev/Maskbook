@@ -194,9 +194,6 @@ export class ZerionTrendingAPI implements TrendingAPI.Provider<ChainId> {
     getCoinTrending(chainId: ChainId, id: string, currency: TrendingAPI.Currency): Promise<TrendingAPI.Trending> {
         throw new Error('Method not implemented.')
     }
-    getCurrencies(): Promise<TrendingAPI.Currency[]> {
-        throw new Error('Method not implemented.')
-    }
     getPriceStats(
         chainId: ChainId,
         coinId: string,

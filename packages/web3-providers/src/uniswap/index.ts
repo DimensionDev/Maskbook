@@ -67,17 +67,6 @@ export class UniSwapAPI implements TrendingAPI.Provider<ChainId> {
         return Promise.resolve([])
     }
 
-    getCurrencies(): Promise<TrendingAPI.Currency[]> {
-        return Promise.resolve([
-            {
-                id: 'usd',
-                name: 'USD',
-                symbol: '$',
-                description: 'Unite State Dollar',
-            },
-        ])
-    }
-
     getCoinsByKeyword(chainId: ChainId, keyword: string): Promise<TrendingAPI.Coin[]> {
         return getAllCoinsByKeyword(chainId, keyword)
     }

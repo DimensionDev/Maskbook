@@ -1,28 +1,26 @@
+import { uniq, uniqBy } from 'lodash-unified'
 import { DataProvider } from '@masknet/public-api'
 import { HubIndicator, HubOptions, TokenType } from '@masknet/web3-shared-base'
 import { ChainId, getCoinGeckoConstants, isNativeTokenAddress, isValidAddress } from '@masknet/web3-shared-evm'
-import { uniq, uniqBy } from 'lodash-unified'
 import { getCommunityLink, isMirroredKeyword, resolveChainId, resolveCoinAddress } from '../../cmc/helper.js'
 import { fetchJSON } from '../../helpers.js'
 import type { PriceAPI, TrendingAPI } from '../../types/index.js'
-import {
-    getAllCoins,
-    getAllCurrencies,
-    getCoinInfo,
-    getPriceStats as getStats,
-    getTokenPrice,
-    getTokenPriceByCoinId,
-} from './base.js'
+import { getAllCoins, getCoinInfo, getPriceStats as getStats, getTokenPrice, getTokenPriceByCoinId } from './base.js'
 import { COINGECKO_URL_BASE } from '../constants.js'
 import { resolveChain } from '../helper.js'
 import type { Platform } from '../type.js'
 
 export class CoinGeckoTrendingEVM_API implements TrendingAPI.Provider<ChainId> {
-    async getSupportedPlatform() {
+    private async getSupportedPlatform() {
         const requestPath = `${COINGECKO_URL_BASE}/asset_platforms`
         const response = await fetchJSON<Platform[]>(requestPath)
 
         return response.filter((x) => x.id && x.chain_identifier) ?? []
+    }
+
+    async getCoins(): Promise<TrendingAPI.Coin[]> {
+        const coins = await getAllCoins()
+        return coins.map((coin) => ({ ...coin, type: TokenType.Fungible }))
     }
 
     async getCoinTrending(chainId: ChainId, id: string, currency: TrendingAPI.Currency): Promise<TrendingAPI.Trending> {
@@ -113,19 +111,6 @@ export class CoinGeckoTrendingEVM_API implements TrendingAPI.Provider<ChainId> {
                 updated: new Date(x.timestamp),
             })),
         }
-    }
-
-    async getCoins(): Promise<TrendingAPI.Coin[]> {
-        const coins = await getAllCoins()
-        return coins.map((coin) => ({ ...coin, type: TokenType.Fungible }))
-    }
-
-    async getCurrencies(): Promise<TrendingAPI.Currency[]> {
-        const currencies = await getAllCurrencies()
-        return currencies.map((x) => ({
-            id: x,
-            name: x.toUpperCase(),
-        }))
     }
 
     async getPriceStats(

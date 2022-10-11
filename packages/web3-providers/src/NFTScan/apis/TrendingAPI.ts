@@ -1,9 +1,9 @@
+import urlcat from 'urlcat'
+import { compact } from 'lodash-unified'
 import { DataProvider } from '@masknet/public-api'
 import { createLookupTableResolver, EMPTY_LIST } from '@masknet/shared-base'
 import { TokenType } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
-import urlcat from 'urlcat'
-import { compact } from 'lodash-unified'
 import { LooksRareLogo, OpenSeaLogo } from '../../resources/index.js'
 import { TrendingAPI } from '../../types/index.js'
 import { NFTSCAN_API } from '../constants.js'
@@ -82,10 +82,6 @@ export class NFTScanTrendingAPI implements TrendingAPI.Provider<ChainId> {
             }),
         )
         return coins.filter((x) => x.symbol)
-    }
-
-    async getCurrencies(): Promise<TrendingAPI.Currency[]> {
-        throw new Error('Not implemented yet.')
     }
 
     async getPriceStats(
