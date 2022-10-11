@@ -93,3 +93,19 @@ export interface AlchemyNFT_EVM {
     }
     timeLastUpdated: string
 }
+
+export interface UnlistedConfig {
+    wallets: { [identity in string]: WalletsCollection }
+    collections: {
+        [identity in string]: {
+            [address in string]: {
+                /** key list */
+                Donations: string[]
+                /** key list */
+                Footprints: string[]
+                /** key list */
+                NFTs: string[]
+            }
+        }
+    }
+}
