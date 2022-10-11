@@ -19,12 +19,18 @@ export interface RestoreUnconfirmedBackupOptions {
     action: 'confirm' | 'wallet'
 }
 
-export async function restoreUnconfirmedBackup({ id, action }: RestoreUnconfirmedBackupOptions): Promise<void> {
+export async function restoreUnconfirmedBackup(
+    { id, action }: RestoreUnconfirmedBackupOptions,
+    // should pass true when restore for merge backup
+    temporary?: boolean,
+): Promise<void> {
     const backup = unconfirmedBackup.get(id)
     if (!backup) throw new Error('Backup not found')
 
-    const granted = await requestHostPermission(backup.settings.grantedHostPermissions)
-    if (!granted) return
+    if (!temporary) {
+        const granted = await requestHostPermission(backup.settings.grantedHostPermissions)
+        if (!granted) return
+    }
 
     if (action === 'confirm') await restoreNormalizedBackup(backup)
     else if (action === 'wallet') await openPopupWindow(PopupRoutes.WalletRecovered, { backupId: id })
