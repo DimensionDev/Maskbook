@@ -14,8 +14,8 @@ const useStyles = makeStyles<{
 }>()((theme, props) => ({
     root: {
         paddingTop: props.networkPluginID === NetworkPluginID.PLUGIN_EVM ? 60 : 16,
+        width: '100%',
     },
-
     button: {
         textAlign: 'center',
         paddingTop: theme.spacing(1),
@@ -38,6 +38,7 @@ const useStyles = makeStyles<{
         padding: 0,
         flexDirection: 'column',
         borderRadius: 8,
+        minHeight: 100,
         userSelect: 'none',
         justifyContent: 'center',
     },

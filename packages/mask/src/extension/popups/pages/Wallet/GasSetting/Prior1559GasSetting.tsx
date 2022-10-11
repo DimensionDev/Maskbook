@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import BigNumber from 'bignumber.js'
 import { makeStyles } from '@masknet/theme'
 import { PopupRoutes, NetworkPluginID } from '@masknet/shared-base'
-import { GasOptionType, isLessThan, pow10, TransactionDescriptorType } from '@masknet/web3-shared-base'
+import { formatCurrency, GasOptionType, isLessThan, pow10, TransactionDescriptorType } from '@masknet/web3-shared-base'
 import { useI18N } from '../../../../../utils/index.js'
 import { useAsync, useAsyncFn, useUpdateEffect } from 'react-use'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages.js'
@@ -11,9 +11,9 @@ import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest.js'
 import {
     ChainId,
     formatGweiToWei,
-    formatGweiToEther,
     formatWeiToGwei,
     ChainIdOptionalRecord,
+    formatWeiToEther,
 } from '@masknet/web3-shared-evm'
 import { z as zod } from 'zod'
 import { Controller, useForm } from 'react-hook-form'
@@ -103,7 +103,6 @@ export const Prior1559GasSetting = memo(() => {
     const { value: gasOptions_ } = useGasOptions(NetworkPluginID.PLUGIN_EVM)
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const { value, loading: getValueLoading } = useUnconfirmedRequest()
-    const [getGasLimitError, setGetGasLimitError] = useState(false)
     const navigate = useNavigate()
     const [selected, setOption] = useState<number | null>(null)
     const { value: nativeToken } = useNativeToken(NetworkPluginID.PLUGIN_EVM)
@@ -253,11 +252,6 @@ export const Prior1559GasSetting = memo(() => {
         }
     }, [value, getValueLoading])
 
-    // #region If the estimate gas be 0, Set error
-    useUpdateEffect(() => {
-        if (!getGasLimitError) setError('gasLimit', { message: 'Cant not get estimate gas from contract' })
-    }, [getGasLimitError])
-
     return (
         <>
             {options ? (
@@ -273,10 +267,13 @@ export const Prior1559GasSetting = memo(() => {
                             </Typography>
                             <Typography className={classes.gasUSD}>
                                 {t('popups_wallet_gas_fee_settings_usd', {
-                                    usd: formatGweiToEther(gasPrice)
-                                        .times(nativeTokenPrice)
-                                        .times(minGasLimit || 21000)
-                                        .toPrecision(3),
+                                    usd: formatCurrency(
+                                        formatWeiToEther(gasPrice)
+                                            .times(nativeTokenPrice)
+                                            .times(minGasLimit || 21000),
+                                        'USD',
+                                        { boundaries: { min: 0.01 } },
+                                    ),
                                 })}
                             </Typography>
                         </div>
