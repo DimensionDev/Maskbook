@@ -1,9 +1,9 @@
 // DO NOT import React in this file. This file is also used by worker.
-import type { Plugin, PluginID } from '../types.js'
 import { memoize } from 'lodash-unified'
-import type { Web3Helper } from '@masknet/web3-helpers'
 import type { Subscription } from 'use-subscription'
-import type { NetworkPluginID } from '@masknet/web3-shared-base'
+import type { PluginID, NetworkPluginID } from '@masknet/shared-base'
+import type { Web3Helper } from '@masknet/web3-helpers'
+import type { Plugin } from '../types.js'
 
 const __registered = new Map<PluginID, Plugin.DeferredDefinition>()
 const listeners = new Set<onNewPluginRegisteredListener>()
@@ -29,6 +29,7 @@ export function getPluginDefine(id: PluginID | NetworkPluginID) {
 
 export function registerPlugin<
     ChainId = unknown,
+    AddressType = unknown,
     SchemaType = unknown,
     ProviderType = unknown,
     NetworkType = unknown,
@@ -45,6 +46,7 @@ export function registerPlugin<
 >(
     def: Plugin.DeferredDefinition<
         ChainId,
+        AddressType,
         SchemaType,
         ProviderType,
         NetworkType,

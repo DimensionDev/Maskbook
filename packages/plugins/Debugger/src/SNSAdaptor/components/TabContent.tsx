@@ -1,5 +1,6 @@
 import { makeStyles } from '@masknet/theme'
-import type { NetworkPluginID, SocialAddress, SocialIdentity } from '@masknet/web3-shared-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
+import type { SocialAddress, SocialIdentity } from '@masknet/web3-shared-base'
 import { List, ListItem, ListItemText, Table, TableBody, TableCell, TableRow, Typography } from '@mui/material'
 
 export interface TabContentProps {

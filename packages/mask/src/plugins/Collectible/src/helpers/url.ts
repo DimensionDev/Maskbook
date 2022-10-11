@@ -1,6 +1,7 @@
 import { ChainId as ChainIdEVM } from '@masknet/web3-shared-evm'
 import { ChainId as ChainIdSolana } from '@masknet/web3-shared-solana'
-import { NetworkPluginID, SourceType } from '@masknet/web3-shared-base'
+import { SourceType } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import type { CollectiblePayload } from '../types.js'
 
 const ZORA_COLLECTION_ADDRESS = '0xabEFBc9fD2F806065b4f3C237d4b59D9A97Bcac7'
@@ -122,12 +123,32 @@ const RULES = [
         chainId: ChainIdEVM.Matic,
         provider: SourceType.Element,
     },
+
+    // magic eden
     {
-        hosts: ['element.market', 'www.element.market'],
-        pathname: /^\/assets\/avalanche\/(0x[\dA-Fa-f]{40})\/(\d+)/,
-        pluginID: NetworkPluginID.PLUGIN_EVM,
-        chainId: ChainIdEVM.Avalanche,
-        provider: SourceType.Element,
+        hosts: ['magiceden.io'],
+        pathname: /^\/item-details\/(\w+)/,
+        pluginID: NetworkPluginID.PLUGIN_SOLANA,
+        chainId: ChainIdSolana.Mainnet,
+        provider: SourceType.MagicEden,
+    },
+
+    // solsea
+    {
+        hosts: ['solsea.io'],
+        pathname: /^\/n\/(\w+)/,
+        pluginID: NetworkPluginID.PLUGIN_SOLANA,
+        chainId: ChainIdSolana.Mainnet,
+        provider: SourceType.Solsea,
+    },
+
+    // solanart
+    {
+        hosts: ['solanart.io'],
+        pathname: /^\/nft\/(\w+)/,
+        pluginID: NetworkPluginID.PLUGIN_SOLANA,
+        chainId: ChainIdSolana.Mainnet,
+        provider: SourceType.Solanart,
     },
 ]
 
@@ -161,7 +182,7 @@ export function getPayloadFromURL(url?: string): CollectiblePayload | undefined 
                     rule.provider === SourceType.Zora
                         ? matched[1].replace('zora', ZORA_COLLECTION_ADDRESS)
                         : matched[1],
-                tokenId: rule.pluginID === NetworkPluginID.PLUGIN_SOLANA ? matched[1] : matched[2],
+                tokenId: rule.pluginID === NetworkPluginID.PLUGIN_SOLANA ? '' : matched[2],
             }
         }
     }

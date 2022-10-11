@@ -2,13 +2,15 @@ import { Trans } from 'react-i18next'
 import { Icons } from '@masknet/icons'
 import { Box } from '@mui/material'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
-import { NetworkPluginID, SocialAddressType } from '@masknet/web3-shared-base'
+import { PluginIDContextProvider } from '@masknet/web3-hooks-base'
+import { SocialAddressType } from '@masknet/web3-shared-base'
+import { NetworkPluginID, parseURLs } from '@masknet/shared-base'
 import { type Plugin, usePostInfoDetails, usePluginWrapper } from '@masknet/plugin-infra/content-script'
 import { PostInspector } from './PostInspector.js'
 import { base } from '../base.js'
-import { getPayloadFromURL, getPayloadFromURLs } from '../helpers/index.js'
+import { getPayloadFromURLs } from '../helpers/index.js'
 import { setupContext } from '../context.js'
-import { PLUGIN_ID, PLUGIN_WRAPPER_TITLE } from '../constants.js'
+import { PLUGIN_ID, PLUGIN_NAME } from '../constants.js'
 import { DialogInspector } from './DialogInspector.js'
 import { CollectionList } from './List/CollectionList.js'
 
@@ -19,7 +21,11 @@ const TabConfig: Plugin.SNSAdaptor.ProfileTab = {
     UI: {
         TabContent({ socialAddress, identity }) {
             if (!socialAddress) return null
-            return <CollectionList addressName={socialAddress} persona={identity?.publicKey} profile={identity} />
+            return (
+                <PluginIDContextProvider value={socialAddress.networkSupporterPluginID}>
+                    <CollectionList socialAddress={socialAddress} persona={identity?.publicKey} profile={identity} />
+                </PluginIDContextProvider>
+            )
         },
     },
     Utils: {
@@ -69,7 +75,8 @@ const sns: Plugin.SNSAdaptor.Definition = {
         return payload ? <PostInspector payload={payload} /> : null
     },
     DecryptedInspector(props) {
-        const payload = getPayloadFromURL(extractTextFromTypedMessage(props.message, { linkAsText: true }).unwrapOr(''))
+        const links = parseURLs(extractTextFromTypedMessage(props.message, { linkAsText: true }).unwrapOr(''))
+        const payload = getPayloadFromURLs(links)
         usePluginWrapper(!!payload)
         return payload ? <PostInspector payload={payload} /> : null
     },
@@ -83,11 +90,13 @@ const sns: Plugin.SNSAdaptor.Definition = {
                     if (!socialAddress) return null
                     return (
                         <Box pr={1.5}>
-                            <CollectionList
-                                addressName={socialAddress}
-                                persona={identity?.publicKey}
-                                profile={identity}
-                            />
+                            <PluginIDContextProvider value={socialAddress.networkSupporterPluginID}>
+                                <CollectionList
+                                    socialAddress={socialAddress}
+                                    persona={identity?.publicKey}
+                                    profile={identity}
+                                />
+                            </PluginIDContextProvider>
                         </Box>
                     )
                 },
@@ -112,7 +121,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
         },
     ],
     wrapperProps: {
-        title: PLUGIN_WRAPPER_TITLE,
+        title: PLUGIN_NAME,
         icon: <Icons.ApplicationNFT size={24} />,
     },
 }

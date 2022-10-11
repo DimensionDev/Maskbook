@@ -1,17 +1,17 @@
 import { Suspense } from 'react'
 import { StyledEngineProvider, Theme } from '@mui/material'
-import { PluginsWeb3ContextProvider, useAllPluginsWeb3State } from '@masknet/plugin-infra/web3'
+import { useAllPluginsWeb3State } from '@masknet/plugin-infra'
+import { PluginsWeb3ContextProvider } from '@masknet/web3-hooks-base'
 import { I18NextProviderHMR, SharedContextProvider } from '@masknet/shared'
+import { MaskThemeProvider } from '@masknet/theme'
 import { ErrorBoundary, ErrorBoundaryBuildInfoContext, useValueRef } from '@masknet/shared-base-ui'
-import { getSiteType, i18NextInstance } from '@masknet/shared-base'
+import { getSiteType, i18NextInstance, NetworkPluginID } from '@masknet/shared-base'
 import { buildInfoMarkdown } from './utils/BuildInfoMarkdown.js'
 import { activatedSocialNetworkUI } from './social-network/index.js'
 import { isFacebook } from './social-network-adaptor/facebook.com/base.js'
 import { pluginIDSettings } from './../shared/legacy-settings/settings.js'
 import { getBackgroundColor } from './utils/index.js'
 import { isTwitter } from './social-network-adaptor/twitter.com/base.js'
-import { MaskThemeProvider } from '@masknet/theme'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 const identity = (jsx: React.ReactNode) => jsx as JSX.Element
 function compose(init: React.ReactNode, ...f: Array<(children: React.ReactNode) => JSX.Element>) {

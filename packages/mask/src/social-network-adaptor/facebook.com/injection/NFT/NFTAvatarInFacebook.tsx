@@ -1,9 +1,9 @@
+import { useEffect, useLayoutEffect, useMemo, useState } from 'react'
+import { max, pickBy } from 'lodash-unified'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { searchFacebookAvatarOnMobileSelector, searchFacebookAvatarSelector } from '../../utils/selector.js'
 import { createReactRootShadowed, MaskMessages, startWatch } from '../../../../utils/index.js'
-import { useEffect, useLayoutEffect, useMemo, useState } from 'react'
-import type { EnhanceableSite, NFTAvatarEvent } from '@masknet/shared-base'
-import { max, pickBy } from 'lodash-unified'
+import { EnhanceableSite, NFTAvatarEvent, NetworkPluginID } from '@masknet/shared-base'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI.js'
 import { useAsync, useLocation, useWindowSize } from 'react-use'
 import type { AvatarMetaDB } from '../../../../plugins/Avatar/types.js'
@@ -14,9 +14,8 @@ import { makeStyles } from '@masknet/theme'
 import { isMobileFacebook } from '../../utils/isMobile.js'
 import { InMemoryStorages } from '../../../../../shared/index.js'
 import { RSS3_KEY_SNS } from '../../../../plugins/Avatar/constants.js'
-import { useAccount } from '@masknet/plugin-infra/web3'
+import { useAccount } from '@masknet/web3-hooks-base'
 import { useWallet } from '../../../../plugins/Avatar/hooks/useWallet.js'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 export function injectNFTAvatarInFacebook(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchFacebookAvatarSelector())

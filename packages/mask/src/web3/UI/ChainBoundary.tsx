@@ -6,28 +6,28 @@ import {
     useCurrentWeb3NetworkPluginID,
     useAccount,
     useNetworkDescriptor,
-    useChainId,
     useAllowTestnet,
-    useProviderType,
     useWeb3State,
     useWeb3Connection,
     useChainIdValid,
     useProviderDescriptor,
-} from '@masknet/plugin-infra/web3'
+    useChainId,
+    useProviderType,
+} from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { delay } from '@dimensiondev/kit'
+import { WalletIcon } from '@masknet/shared'
+import { Icons } from '@masknet/icons'
+import type { NetworkPluginID } from '@masknet/shared-base'
+import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
 import {
     ActionButtonPromise,
     ActionButtonPromiseProps,
 } from '../../extension/options-page/DashboardComponents/ActionButton.js'
 import { useI18N } from '../../utils/index.js'
 import { WalletMessages } from '../../plugins/Wallet/messages.js'
-import { WalletIcon } from '@masknet/shared'
-import { Icons } from '@masknet/icons'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
 
 const useStyles = makeStyles()((theme) => ({
     action: {
@@ -48,7 +48,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     connectWallet: {
         '& > .MuiButton-startIcon': {
-            display: 'block',
+            lineHeight: 1,
         },
     },
 }))
@@ -100,7 +100,7 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
     const chainIdValid = useChainIdValid(actualPluginID)
 
     const expectedChainName = expectedOthers?.chainResolver.chainName(expectedChainId)
-    const expectedNetworkDescriptor = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, expectedChainId)
+    const expectedNetworkDescriptor = useNetworkDescriptor(expectedPluginID, expectedChainId)
     const expectedChainAllowed = expectedOthers?.chainResolver.isValid(expectedChainId, expectedAllowTestnet)
 
     const isPluginIDMatched = actualPluginID === expectedPluginID
@@ -161,7 +161,7 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
         )
     }
 
-    if (!chainIdValid && !expectedChainAllowed)
+    if (!chainIdValid && !expectedChainAllowed && !switchChainWithoutPopup)
         return renderBox(
             <>
                 {!props.hiddenConnectButton ? (

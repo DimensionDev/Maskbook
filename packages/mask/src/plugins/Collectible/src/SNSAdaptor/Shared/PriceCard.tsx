@@ -20,8 +20,11 @@ const useStyles = makeStyles()((theme) => ({
         width: '100%',
         justifyContent: 'space-between',
     },
+    textPrimary: {
+        color: theme.palette.maskColor.publicMain,
+        fontWeight: 700,
+    },
     textBase: {
-        fontSize: 14,
         color: theme.palette.maskColor.publicSecond,
         '& > strong': {
             color: theme.palette.maskColor.publicMain,
@@ -64,8 +67,8 @@ export interface PriceCardProps {
 
 export function PriceCard(props: PriceCardProps) {
     const { asset, topOffer } = props
-    const { classes } = useStyles()
     const { t } = useI18N()
+    const { classes } = useStyles()
 
     if (!asset.priceInToken) return null
 
@@ -81,7 +84,7 @@ export function PriceCard(props: PriceCardProps) {
     return (
         <div className={classes.wrapper}>
             <div className={classes.header}>
-                <Typography className={classes.textBase}>{t('price')}</Typography>
+                <Typography className={classes.textPrimary}>{t('price')}</Typography>
                 {asset.auction?.endAt && !isZero(asset.auction.endAt) && (
                     <Typography className={classes.textBase}>
                         {t('plugin_collectible_time_left')}
@@ -101,7 +104,7 @@ export function PriceCard(props: PriceCardProps) {
             </div>
             {topOffer && (
                 <div className={classes.offerBox}>
-                    <Typography className={classes.textBase}>{t('plugin_collectible_top_offer')}</Typography>
+                    <Typography className={classes.textPrimary}>{t('plugin_collectible_top_offer')}</Typography>
                     {(topOffer.priceInToken?.token.logoURL && (
                         <img width={18} height={18} src={topOffer.priceInToken?.token.logoURL} alt="" />
                     )) ||

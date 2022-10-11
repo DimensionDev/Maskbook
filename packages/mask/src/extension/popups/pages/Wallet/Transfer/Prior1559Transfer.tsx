@@ -1,8 +1,11 @@
 import { memo, ReactElement, SyntheticEvent, useCallback, useMemo, useRef, useState } from 'react'
-import { useI18N } from '../../../../../utils/index.js'
+import { ChevronDown } from 'react-feather'
+import { useNavigate } from 'react-router-dom'
 import { z as zod } from 'zod'
 import BigNumber from 'bignumber.js'
+import { noop } from 'lodash-unified'
 import { EthereumAddress } from 'wallet.ts'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { formatGweiToWei, formatEthereumAddress, ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import {
     isZero,
@@ -12,7 +15,6 @@ import {
     rightShift,
     isSameAddress,
     formatBalance,
-    NetworkPluginID,
     FungibleAsset,
     GasOptionType,
 } from '@masknet/web3-shared-base'
@@ -23,22 +25,14 @@ import { Box, Button, Chip, Collapse, MenuItem, Popover, Typography } from '@mui
 import { StyledInput } from '../../../components/StyledInput/index.js'
 import { Icons } from '@masknet/icons'
 import { FormattedAddress, FormattedBalance, TokenIcon, useMenuConfig } from '@masknet/shared'
-import { ChevronDown } from 'react-feather'
-import { noop } from 'lodash-unified'
+import { toHex } from 'web3-utils'
 import { makeStyles } from '@masknet/theme'
 import { ExpandMore } from '@mui/icons-material'
-import { useNavigate } from 'react-router-dom'
 import { LoadingButton } from '@mui/lab'
-import { toHex } from 'web3-utils'
 import { TransferAddressError } from '../type.js'
-import {
-    useChainId,
-    useFungibleTokenBalance,
-    useWallet,
-    useWeb3Connection,
-    useWeb3Hub,
-} from '@masknet/plugin-infra/web3'
-import { useGasLimit, useTokenTransferCallback } from '@masknet/plugin-infra/web3-evm'
+import { useChainId, useFungibleTokenBalance, useWallet, useWeb3Connection, useWeb3Hub } from '@masknet/web3-hooks-base'
+import { useGasLimit, useTokenTransferCallback } from '@masknet/web3-hooks-evm'
+import { useI18N } from '../../../../../utils/index.js'
 
 const useStyles = makeStyles()({
     container: {
@@ -519,7 +513,7 @@ export const Prior1559TransferUI = memo<Prior1559TransferUIProps>(
                                                         onClick={openAssetMenu}
                                                         icon={
                                                             <TokenIcon
-                                                                classes={{ icon: classes.icon }}
+                                                                className={classes.icon}
                                                                 address={selectedAsset.address ?? ''}
                                                                 name={selectedAsset.name}
                                                                 symbol={selectedAsset.symbol}

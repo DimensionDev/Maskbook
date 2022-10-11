@@ -1,9 +1,9 @@
 import { useAsyncFn } from 'react-use'
 import Web3Utils from 'web3-utils'
 import { EthereumAddress } from 'wallet.ts'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { encodeContractTransaction, decodeEvents } from '@masknet/web3-shared-evm'
-import { useAccount, useChainId, useWeb3Connection, useWeb3 } from '@masknet/plugin-infra/web3'
+import { useAccount, useChainId, useWeb3Connection, useWeb3 } from '@masknet/web3-hooks-base'
 import type { NftRedPacket } from '@masknet/web3-contracts/types/NftRedPacket'
 import { useNftRedPacketContract } from './useNftRedPacketContract.js'
 

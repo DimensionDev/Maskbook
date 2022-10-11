@@ -1,10 +1,8 @@
 import { Icons } from '@masknet/icons'
-import { useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
-import { EMPTY_LIST, NextIDPlatform, ProfileIdentifier } from '@masknet/shared-base'
-import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
+import { useCurrentWeb3NetworkPluginID } from '@masknet/web3-hooks-base'
+import { EMPTY_LIST, NextIDPlatform, ProfileIdentifier, NetworkPluginID } from '@masknet/shared-base'
+import { makeStyles } from '@masknet/theme'
 import { NextIDProof } from '@masknet/web3-providers'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
-import type { TooltipProps } from '@mui/material'
 import { FC, HTMLProps, MouseEventHandler, useCallback, useEffect, useMemo } from 'react'
 import { useAsyncRetry } from 'react-use'
 import { MaskMessages } from '../../../../../shared/index.js'
@@ -14,7 +12,6 @@ import {
 } from '../../../../components/DataSource/useActivatedUI.js'
 import { activatedSocialNetworkUI } from '../../../../social-network/index.js'
 import { useProfilePublicKey } from '../../hooks/useProfilePublicKey.js'
-import { useI18N } from '../../locales/index.js'
 import { PluginTipsMessages } from '../../messages.js'
 import type { TipsAccount } from '../../types/index.js'
 import { useTipsAccounts } from './useTipsAccounts.js'
@@ -23,7 +20,7 @@ interface Props extends HTMLProps<HTMLDivElement> {
     addresses?: TipsAccount[]
     recipient?: TipsAccount['address']
     receiver?: ProfileIdentifier
-    tooltipProps?: Partial<TooltipProps>
+    onStatusUpdate?(disabled: boolean): void
 }
 
 const useStyles = makeStyles()({
@@ -34,28 +31,19 @@ const useStyles = makeStyles()({
         alignItems: 'center',
         fontFamily: '-apple-system, system-ui, sans-serif',
     },
-    tooltip: {
-        backgroundColor: 'rgb(102,102,102)',
-        color: 'white',
-        marginTop: '0 !important',
-    },
-    disabled: {
-        opacity: 0.4,
-        cursor: 'default',
-    },
 })
 
+// TODO: reduce re-render
 export const TipButton: FC<Props> = ({
     className,
     receiver,
     addresses = EMPTY_LIST,
     recipient,
     children,
-    tooltipProps,
+    onStatusUpdate,
     ...rest
 }) => {
     const { classes, cx } = useStyles()
-    const t = useI18N()
 
     const platform = activatedSocialNetworkUI.configuration.nextIDConfig?.platform as NextIDPlatform
     const { value: persona, loading: loadingPersona } = useProfilePublicKey(receiver)
@@ -68,12 +56,12 @@ export const TipButton: FC<Props> = ({
         loading: loadingVerifyInfo,
         retry: retryLoadVerifyInfo,
     } = useAsyncRetry(async () => {
-        if (pluginId !== NetworkPluginID.PLUGIN_EVM) return true
+        if (pluginId !== NetworkPluginID.PLUGIN_EVM || !platform) return true
         if (!personaPubkey || !receiverUserId) return false
         return NextIDProof.queryIsBound(personaPubkey, platform, receiverUserId, true)
     }, [pluginId, personaPubkey, platform, receiverUserId])
     const visitingIdentity = useCurrentVisitingIdentity()
-    const { value: identity } = useSocialIdentityByUseId(receiver?.userId)
+    const { value: identity } = useSocialIdentityByUseId(receiverUserId)
 
     const isVisitingUser = visitingIdentity.identifier?.userId === receiverUserId
     const isRuntimeAvailable = useMemo(() => {
@@ -94,6 +82,9 @@ export const TipButton: FC<Props> = ({
 
     const isChecking = loadingPersona || loadingVerifyInfo
     const disabled = isChecking || !isAccountVerified || tipsAccounts.length === 0 || !isRuntimeAvailable
+    useEffect(() => {
+        onStatusUpdate?.(disabled)
+    }, [disabled])
 
     const createTipTask: MouseEventHandler<HTMLDivElement> = useCallback(
         async (evt) => {
@@ -111,6 +102,7 @@ export const TipButton: FC<Props> = ({
     )
 
     useEffect(() => {
+        if (!receiverUserId || !tipsAccounts.length) return
         PluginTipsMessages.tipTaskUpdate.sendToLocal({
             recipient,
             recipientSnsId: receiverUserId,
@@ -118,27 +110,12 @@ export const TipButton: FC<Props> = ({
         })
     }, [recipient, receiverUserId, tipsAccounts])
 
-    const dom = (
-        <div
-            className={cx(className, classes.tipButton, disabled ? classes.disabled : null)}
-            {...rest}
-            role="button"
-            onClick={createTipTask}>
+    if (disabled) return null
+
+    return (
+        <div className={cx(className, classes.tipButton)} {...rest} role="button" onClick={createTipTask}>
             <Icons.TipCoin />
             {children}
         </div>
     )
-
-    if (disabled)
-        return (
-            <ShadowRootTooltip
-                classes={{ tooltip: classes.tooltip }}
-                title={isChecking ? '' : t.tip_wallets_missed()}
-                placement="bottom"
-                arrow={false}
-                {...tooltipProps}>
-                {dom}
-            </ShadowRootTooltip>
-        )
-    return dom
 }

@@ -1,4 +1,4 @@
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { ChainId as ChainId_EVM } from '@masknet/web3-shared-evm'
 import { ChainId as ChainId_FLOW } from '@masknet/web3-shared-flow'
 

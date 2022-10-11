@@ -8,6 +8,7 @@ import type {
     ECKeyIdentifier,
     NextIDPersonaBindings,
     NextIDPlatform,
+    NetworkPluginID
 } from '@masknet/shared-base'
 import type { api } from '@dimensiondev/mask-wallet-core/proto'
 import type {
@@ -32,12 +33,6 @@ export type Color =
     | `#${string}${string}${string}${string}${string}${string}`
     | `#${string}${string}${string}`
     | `hsl(${number}, ${number}%, ${number}%)`
-
-export enum NetworkPluginID {
-    PLUGIN_EVM = 'com.mask.evm',
-    PLUGIN_FLOW = 'com.mask.flow',
-    PLUGIN_SOLANA = 'com.mask.solana',
-}
 
 export enum CurrencyType {
     NATIVE = 'native',
@@ -87,6 +82,8 @@ export enum SourceType {
     X2Y2 = 'X2Y2',
     MagicEden = 'MagicEden',
     Element = 'Element',
+    Solsea = 'Solsea',
+    Solanart = 'Solanart',
 
     // Rarity
     RaritySniper = 'RaritySniper',
@@ -400,12 +397,20 @@ export interface NonFungibleTokenOrder<ChainId, SchemaType> {
     source?: SourceType
 }
 
+export enum ActivityType {
+    Transfer = 'Transfer',
+    Mint = 'Mint',
+    Sale = 'Sale',
+    Offer = 'Offer',
+    List = 'List',
+    CancelOffer= 'CancelOffer',
+}
 export interface NonFungibleTokenEvent<ChainId, SchemaType> {
     id: string
     /** chain Id */
     chainId: ChainId
     /** event type */
-    type: string
+    type: ActivityType
     /** permalink of asset */
     assetPermalink?: string
     /** name of asset */
@@ -534,18 +539,25 @@ export interface TransactionDescriptor<ChainId, Transaction> {
     type: TransactionDescriptorType
     /** a transaction title. */
     title: string
-    /** a human-readable description. */
-    description?: string
-    /** a human-readable description for successful transaction. */
-    successfulDescription?: string
-    /** a human-readable description for failed transaction. */
-    failedDescription?: string
+    /** The original transaction object */
+    _tx: Transaction    
     /** The address of the token leveraged to swap other tokens */
     tokenInAddress?: string
     /** The amount of the token leveraged to swap other tokens */
-    tokenInAmount?: string
-    /** The original transaction object */
-    _tx: Transaction
+    tokenInAmount?: string 
+    /** a human-readable description. */
+    description?: string    
+    snackbar?: {   
+        /** a human-readable description for successful transaction. */
+        successfulDescription?: string
+        /** a human-readable description for failed transaction. */
+        failedDescription?: string
+    }
+    popup?: {
+        /** The custom token description */    
+        tokenDescription?: string
+    }
+
 }
 
 export interface TransactionContext<ChainId, Parameter = string | undefined> {
@@ -735,6 +747,7 @@ export interface ConnectionOptions<ChainId, ProviderType, Transaction> {
 }
 export interface Connection<
     ChainId,
+    AddressType,
     SchemaType,
     ProviderType,
     Signature,
@@ -754,8 +767,10 @@ export interface Connection<
     getWeb3Provider(initial?: Web3ConnectionOptions): Promise<Web3Provider>
     /** Get gas price */
     getGasPrice(initial?: Web3ConnectionOptions): Promise<string>
+    /** Get address type of given address. */
+    getAddressType(address: string, initial?: Web3ConnectionOptions): Promise<AddressType | undefined>
     /** Get schema type of given token address. */
-    getTokenSchema(address: string, initial?: Web3ConnectionOptions): Promise<SchemaType | undefined>
+    getSchemaType(address: string, initial?: Web3ConnectionOptions): Promise<SchemaType | undefined>
     /** Get a native fungible token. */
     getNativeToken(initial?: Web3ConnectionOptions): Promise<FungibleToken<ChainId, SchemaType>>
     /** Get a fungible token. */
@@ -883,8 +898,8 @@ export interface Connection<
     /** Transfer non-fungible token to */
     transferNonFungibleToken(
         address: string | undefined,
-        recipient: string,
         tokenId: string,
+        recipient: string,
         amount: string,
         schema?: SchemaType,
         initial?: Web3ConnectionOptions,
@@ -994,7 +1009,7 @@ export interface HubNonFungible<ChainId, SchemaType, GasOption, Web3HubOptions =
         address: string,
         tokenId: string,
         initial?: Web3HubOptions,
-    ) => Promise<PriceInToken<ChainId, SchemaType>>
+    ) => Promise<PriceInToken<ChainId, SchemaType> | undefined>
     /** Get a non-fungible contract. */
     getNonFungibleTokenContract?: (
         address: string,
@@ -1290,6 +1305,7 @@ export interface ProviderState<ChainId, ProviderType, NetworkType> {
 }
 export interface ConnectionState<
     ChainId,
+    AddressType,
     SchemaType,
     ProviderType,
     Signature,
@@ -1304,6 +1320,7 @@ export interface ConnectionState<
     Web3ConnectionOptions = ConnectionOptions<ChainId, ProviderType, Transaction>,
     Web3Connection = Connection<
         ChainId,
+        AddressType,
         SchemaType,
         ProviderType,
         Signature,
@@ -1349,7 +1366,6 @@ export interface OthersState<ChainId, SchemaType, ProviderType, NetworkType, Tra
     isValidAddress(address?: string): boolean
     isZeroAddress(address?: string): boolean
     isNativeTokenAddress(address?: string): boolean
-    isSameAddress(address?: string, otherAddress?: string): boolean
     isNativeTokenSchemaType(schemaType?: SchemaType): boolean
     isFungibleTokenSchemaType(schemaType?: SchemaType): boolean
     isNonFungibleTokenSchemaType(schemaType?: SchemaType): boolean
@@ -1383,6 +1399,7 @@ export interface BlockNumberNotifierState<ChainId> {
 
 export interface Web3State<
         ChainId,
+        AddressType,
         SchemaType,
         ProviderType,
         NetworkType,
@@ -1412,6 +1429,7 @@ export interface Web3State<
         TransactionWatcher?: TransactionWatcherState<ChainId, Transaction>
         Connection?: ConnectionState<
             ChainId,
+            AddressType,
             SchemaType,
             ProviderType,
             Signature,

@@ -1,4 +1,4 @@
-import { PluginID } from '@masknet/plugin-infra'
+import { PluginID } from '@masknet/shared-base'
 
 export const PLUGIN_ID = PluginID.MaskBox
 export const RSS3_ENDPOINT = 'https://hub.pass3.me'

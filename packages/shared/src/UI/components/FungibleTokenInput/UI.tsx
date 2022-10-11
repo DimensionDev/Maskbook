@@ -24,7 +24,11 @@ const useStyles = makeStyles()((theme) => ({
         padding: theme.spacing(1.25, 1.5),
         [`& > .${inputBaseClasses.input}`]: {
             paddingTop: `${theme.spacing(2.75)}!important`,
+            paddingBottom: '0px !important',
             flex: 2,
+            paddingLeft: '0px !important',
+            fontSize: 18,
+            fontWeight: 700,
         },
     },
     title: {
@@ -91,7 +95,6 @@ const useStyles = makeStyles()((theme) => ({
         whiteSpace: 'nowrap',
         textOverflow: 'ellipsis',
         overflow: 'hidden',
-        fontSize: 14,
         color: theme.palette.maskColor.main,
         lineHeight: '18px',
         fontWeight: 700,
@@ -138,7 +141,7 @@ export const FungibleTokenInputUI = memo<FungibleTokenInputUIProps>(
                 fullWidth
                 startAdornment={<Typography className={cx(classes.label, classes.title)}>{label}</Typography>}
                 endAdornment={
-                    <Box className={classes.control}>
+                    <Box className={classes.control} justifyContent={disableBalance ? 'flex-end' : undefined}>
                         {!disableBalance ? (
                             <Typography className={classes.label} display="flex" alignItems="center">
                                 {isNative ? t.available_balance() : t.balance()}:
@@ -174,7 +177,7 @@ export const FungibleTokenInputUI = memo<FungibleTokenInputUIProps>(
                                             className={classes.chip}
                                             icon={
                                                 <TokenIcon
-                                                    classes={{ icon: classes.tokenIcon }}
+                                                    className={classes.tokenIcon}
                                                     address={token.address}
                                                     name={token.name}
                                                     chainId={token.chainId}

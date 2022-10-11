@@ -2,9 +2,8 @@ import { makeStyles } from '@masknet/theme'
 import { Box, Typography, ListItemButton } from '@mui/material'
 import { NFTAvatar } from './NFTAvatar.js'
 import { NFTInfo } from './NFTInfo.js'
-import { MoreIcon } from '../assets/more.js'
+import { MoreIcon } from '../assets/MoreIcon.js'
 import { RSS3_KEY_SNS } from '../constants.js'
-import { getAvatarId } from '../../../social-network-adaptor/twitter.com/utils/user.js'
 import { useCallback, useMemo } from 'react'
 import type { BindingProof } from '@masknet/shared-base'
 import { usePersonaNFTAvatar } from '../hooks/usePersonaNFTAvatar.js'
@@ -12,6 +11,7 @@ import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { TokenType } from '@masknet/web3-shared-base'
 import type { AllChainsNonFungibleToken } from '../types.js'
 import { useI18N } from '../locales/index.js'
+import { Twitter } from '@masknet/web3-providers'
 
 const useStyles = makeStyles<{
     disabled: boolean
@@ -28,9 +28,7 @@ const useStyles = makeStyles<{
             pointerEvents: 'auto',
         },
     },
-
     userInfo: {
-        fontSize: 14,
         marginLeft: 16,
         flex: 1,
     },
@@ -53,7 +51,7 @@ export function PersonaItem(props: PersonaItemProps) {
 
     const { value: _avatar, loading } = usePersonaNFTAvatar(
         userId,
-        getAvatarId(avatar) ?? '',
+        Twitter.getAvatarId(avatar) ?? '',
         persona,
         RSS3_KEY_SNS.TWITTER,
     )

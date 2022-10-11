@@ -62,12 +62,12 @@ export function DebounceButton(_props: DebounceButtonProps) {
 
 export interface ActionButtonPromiseProps extends ButtonProps {
     executor: () => Promise<ActionButtonPromiseState | undefined | void>
-    init: React.ReactChild
-    complete: React.ReactChild
+    init: React.ReactNode
+    complete: React.ReactNode
     completeOnClick?: 'use executor' | (() => void)
-    waiting: React.ReactChild
+    waiting: React.ReactNode
     waitingOnClick?: () => ActionButtonPromiseState
-    failed?: React.ReactChild
+    failed?: React.ReactNode
     failedButtonStyle?: string
     failedOnClick?: 'use executor' | (() => void)
     completeIcon?: React.ReactNode

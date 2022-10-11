@@ -8,6 +8,7 @@ import {
     createIndicator,
     createNextIndicator,
     NonFungibleTokenEvent,
+    ActivityType,
     NonFungibleTokenContract,
     SourceType,
 } from '@masknet/web3-shared-base'
@@ -71,7 +72,7 @@ export class X2Y2API implements NonFungibleTokenAPI.Provider<ChainId, SchemaType
         return {
             id: event.id.toString(),
             chainId: ChainId.Mainnet,
-            type: event.type,
+            type: ActivityType.List,
             assetPermalink: this.createPermalink(address, tokenId),
             quantity: '1',
             hash: event.order.item_hash,

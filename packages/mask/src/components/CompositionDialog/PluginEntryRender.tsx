@@ -1,19 +1,20 @@
+import { useCallback, useState, useRef, forwardRef, memo, useImperativeHandle, useMemo } from 'react'
+import { Trans } from 'react-i18next'
+import { Result } from 'ts-results'
 import {
     useActivatedPluginsSNSAdaptor,
     Plugin,
     PluginI18NFieldRender,
     usePluginI18NField,
-    PluginID,
 } from '@masknet/plugin-infra/content-script'
-import { ErrorBoundary } from '@masknet/shared-base-ui'
-import { Result } from 'ts-results'
-import { ClickableChip } from '../shared/SelectRecipients/ClickableChip.js'
+import { DialogContent } from '@mui/material'
 import { makeStyles, MaskDialog } from '@masknet/theme'
-import { useCallback, useState, useRef, forwardRef, memo, useImperativeHandle, useMemo } from 'react'
-import { Trans } from 'react-i18next'
+import { PluginID } from '@masknet/shared-base'
+import { ErrorBoundary } from '@masknet/shared-base-ui'
+import { ClickableChip } from '../shared/SelectRecipients/ClickableChip.js'
 import { usePluginHostPermissionCheck } from '../DataSource/usePluginHostPermission.js'
 import { PossiblePluginSuggestionUISingle } from '../InjectedComponents/DisabledPluginSuggestion.js'
-import { DialogContent } from '@mui/material'
+
 const useStyles = makeStyles()((theme) => ({
     sup: {
         paddingLeft: 2,

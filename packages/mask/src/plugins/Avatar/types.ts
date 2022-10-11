@@ -1,5 +1,6 @@
 import type { Web3Helper } from '@masknet/web3-helpers'
-import type { NetworkPluginID, NonFungibleToken } from '@masknet/web3-shared-base'
+import type { NonFungibleToken } from '@masknet/web3-shared-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 
 export interface AvatarMetaDB {
@@ -10,6 +11,7 @@ export interface AvatarMetaDB {
     chainId?: ChainId
     schema?: SchemaType
     pluginId?: NetworkPluginID
+    ownerAddress?: string
 }
 
 export interface NFT {

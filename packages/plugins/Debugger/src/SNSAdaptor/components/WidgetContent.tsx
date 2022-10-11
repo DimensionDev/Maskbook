@@ -1,5 +1,5 @@
 import { Box, Paper, Typography } from '@mui/material'
-import { useAvailablePlugins } from '@masknet/plugin-infra/web3'
+import { useAvailablePlugins } from '@masknet/plugin-infra'
 import { PluginI18NFieldRender, useActivatedPluginsSNSAdaptor, Widget } from '@masknet/plugin-infra/content-script'
 
 export interface WidgetContentProps {

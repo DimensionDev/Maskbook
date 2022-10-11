@@ -1,8 +1,7 @@
 import { useCallback } from 'react'
-import { useWeb3State } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { useWeb3State } from '@masknet/web3-hooks-base'
+import { NetworkPluginID, EnhanceableSite } from '@masknet/shared-base'
 import { NFT_AVATAR_DB_NAME } from '../../constants.js'
-import type { EnhanceableSite } from '@masknet/shared-base'
 import type { AddressStorageV2 } from '../../types.js'
 
 export function useSaveAddress(pluginId?: NetworkPluginID) {

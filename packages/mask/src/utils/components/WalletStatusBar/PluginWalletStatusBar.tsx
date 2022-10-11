@@ -1,52 +1,50 @@
+import { memo, PropsWithChildren, useCallback, useMemo } from 'react'
+import { Box, Button } from '@mui/material'
+import { Icons } from '@masknet/icons'
 import {
-    useChainId,
     useCurrentWeb3NetworkPluginID,
     useProviderDescriptor,
     useRecentTransactions,
     useNetworkDescriptor,
-    useAccount,
     useWallet,
     useReverseAddress,
     useWeb3State,
     useProviderType,
-} from '@masknet/plugin-infra/web3'
+    useChainId,
+    useAccount,
+} from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { NetworkPluginID, TransactionStatusType } from '@masknet/web3-shared-base'
-import { Box, Button } from '@mui/material'
+import type { NetworkPluginID } from '@masknet/shared-base'
+import { TransactionStatusType } from '@masknet/web3-shared-base'
 import { useI18N } from '../../i18n-next-ui.js'
-import { Icons } from '@masknet/icons'
-import { memo, PropsWithChildren, useCallback, useMemo } from 'react'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { WalletDescription } from './WalletDescription.js'
 import { Action } from './Action.js'
 import { useStatusBarStyles } from './styles.js'
 
-interface WalletStatusBarProps<T extends NetworkPluginID> extends PropsWithChildren<{}> {
+export interface WalletStatusBarProps<T extends NetworkPluginID> extends PropsWithChildren<{}> {
     className?: string
-    onClick?: (ev: React.MouseEvent<HTMLDivElement>) => void
     expectedPluginID?: T
     expectedChainId?: Web3Helper.Definition[T]['ChainId']
+    onClick?: (ev: React.MouseEvent<HTMLDivElement>) => void
 }
 
 export const PluginWalletStatusBar = memo<WalletStatusBarProps<NetworkPluginID>>(
     ({ className, onClick, expectedPluginID, expectedChainId, children }) => {
         const { t } = useI18N()
-        const currentPluginId = useCurrentWeb3NetworkPluginID()
-
-        const account = useAccount()
-        const wallet = useWallet()
-
-        const chainId = useChainId()
         const { classes, cx } = useStatusBarStyles()
 
+        const pluginID = useCurrentWeb3NetworkPluginID()
+        const account = useAccount(pluginID)
+        const wallet = useWallet(pluginID)
+        const chainId = useChainId(pluginID)
         const providerDescriptor = useProviderDescriptor()
-
         const providerType = useProviderType()
-        const networkDescriptor = useNetworkDescriptor(currentPluginId, chainId)
+        const networkDescriptor = useNetworkDescriptor(pluginID, chainId)
         const expectedNetworkDescriptor = useNetworkDescriptor(expectedPluginID, expectedChainId)
-        const { value: domain } = useReverseAddress(currentPluginId, account)
+        const { value: domain } = useReverseAddress(pluginID, account)
         const { Others } = useWeb3State()
 
         const { setDialog: setSelectProviderDialog } = useRemoteControlledDialog(
@@ -64,14 +62,13 @@ export const PluginWalletStatusBar = memo<WalletStatusBarProps<NetworkPluginID>>
             WalletMessages.events.walletStatusDialogUpdated,
         )
 
-        const pendingTransactions = useRecentTransactions(currentPluginId, TransactionStatusType.NOT_DEPEND)
+        const pendingTransactions = useRecentTransactions(pluginID, TransactionStatusType.NOT_DEPEND)
 
         const walletName = useMemo(() => {
             if (domain) return domain
             if (providerType === ProviderType.MaskWallet && wallet?.name) return wallet?.name
-
             return providerDescriptor?.name || Others?.formatAddress(account, 4)
-        }, [providerType, domain, wallet?.name, providerDescriptor?.name, Others?.formatAddress, account])
+        }, [account, domain, providerType, wallet?.name, providerDescriptor?.name, Others?.formatAddress])
 
         if (!account) {
             return (

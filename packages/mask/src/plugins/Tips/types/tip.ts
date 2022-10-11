@@ -1,12 +1,20 @@
-export enum TipType {
-    Token = 'token',
-    NFT = 'nft',
+import type { SocialAddressType } from '@masknet/web3-shared-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
+
+export enum TipsType {
+    Tokens = 'tokens',
+    Collectibles = 'collectibles',
 }
 
 export interface TipsAccount {
+    pluginId: NetworkPluginID
     address: string
     name?: string
+    type?: SocialAddressType
+    /** Verified by NextId. */
     verified?: boolean
+    /** From SNS profile */
+    isSocialAddress?: boolean
     last_checked_at?: string
 }
 export interface TipTask {

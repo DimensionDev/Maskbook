@@ -1,4 +1,5 @@
-import { ZERO, NetworkPluginID, FungibleToken } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { ZERO, FungibleToken } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType, isNativeTokenAddress } from '@masknet/web3-shared-evm'
 import { DialogContent } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
@@ -10,7 +11,7 @@ import { RemindDialog } from './RemindDialog.js'
 import { ShareDialog } from './ShareDialog.js'
 import { SwapDialog, SwapDialogProps } from './SwapDialog.js'
 import { UnlockDialog } from './UnlockDialog.js'
-import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
+import { useAccount, useChainId } from '@masknet/web3-hooks-base'
 
 export enum SwapStatus {
     Remind = 0,

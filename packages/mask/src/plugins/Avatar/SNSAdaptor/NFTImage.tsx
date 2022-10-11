@@ -1,12 +1,13 @@
 import classNames from 'classnames'
 import { makeStyles } from '@masknet/theme'
-import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
-import { SelectedIcon } from '../assets/selected.js'
+import { isSameAddress } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { SelectedIcon } from '../assets/SelectedIcon.js'
 import type { AllChainsNonFungibleToken } from '../types.js'
 import { Box, Tooltip, useTheme } from '@mui/material'
 import { Image } from '@masknet/shared'
 import { mask_avatar_dark, mask_avatar_light } from '../constants.js'
-import { useWeb3State } from '@masknet/plugin-infra/web3'
+import { useWeb3State } from '@masknet/web3-hooks-base'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -18,7 +19,7 @@ const useStyles = makeStyles()((theme) => ({
         right: 5,
         width: 20,
         height: 20,
-        color: theme.palette.primary.main,
+        color: theme.palette.maskColor.primary,
     },
     image: {
         width: 100,
@@ -29,7 +30,7 @@ const useStyles = makeStyles()((theme) => ({
         border: '1px solid transparent',
     },
     selected: {
-        border: `1px solid ${theme.palette.primary.main}`,
+        border: `1px solid ${theme.palette.maskColor.primary}`,
         borderRadius: 8,
     },
     imageLoading: {
@@ -49,6 +50,9 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         display: 'flex',
     },
+    tooltip: {
+        whiteSpace: 'nowrap',
+    },
 }))
 
 interface NFTImageProps {
@@ -65,7 +69,7 @@ function isSameNFT(pluginId: NetworkPluginID, a: AllChainsNonFungibleToken, b?: 
               a.contract?.chainId &&
               a.contract?.chainId === b?.contract?.chainId &&
               a.tokenId === b?.tokenId
-        : a.tokenId === b?.tokenId
+        : a.tokenId === b?.tokenId && a.id === b.id
 }
 
 export function NFTImage(props: NFTImageProps) {
@@ -77,10 +81,12 @@ export function NFTImage(props: NFTImageProps) {
     const name = token.collection?.name || token.contract?.name
     const uiTokenId = Others?.formatTokenId(token.tokenId, 4) ?? `#${token.tokenId}`
     const title = name ? `${name} ${uiTokenId}` : token.metadata?.name ?? ''
+
     return (
         <Tooltip
             title={title}
             arrow
+            classes={{ tooltip: classes.tooltip }}
             disableInteractive
             placement="top"
             PopperProps={{ disablePortal: true, popperOptions: { strategy: 'absolute' } }}>

@@ -1,33 +1,32 @@
-import { Icons } from '@masknet/icons'
-import { PluginID, useActivatedPlugin } from '@masknet/plugin-infra/dom'
-import { useChainId, useCurrentWeb3NetworkPluginID, useNonFungibleAsset } from '@masknet/plugin-infra/web3'
-import { InjectedDialog } from '@masknet/shared'
-import { EMPTY_LIST } from '@masknet/shared-base'
-import { makeStyles } from '@masknet/theme'
-import type { NonFungibleAsset } from '@masknet/web3-shared-base'
-import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import { DialogContent, Typography } from '@mui/material'
 import { useCallback, useMemo } from 'react'
 import { useBoolean } from 'react-use'
-import { NetworkTab } from '../../../components/shared/NetworkTab.js'
+import { PluginWeb3ActualContextProvider } from '@masknet/web3-hooks-base'
+import { InjectedDialog } from '@masknet/shared'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { ActionButton, makeStyles, MaskTabList } from '@masknet/theme'
+import type { NonFungibleAsset } from '@masknet/web3-shared-base'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import { TabContext, TabPanel } from '@mui/lab'
+import { DialogContent, Tab } from '@mui/material'
 import { activatedSocialNetworkUI } from '../../../social-network/index.js'
+import { PluginWalletStatusBar } from '../../../utils/index.js'
+import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
 import { TargetRuntimeContext, useTip } from '../contexts/index.js'
 import { useI18N } from '../locales/index.js'
-import { TipType } from '../types/index.js'
+import { TipsType } from '../types/index.js'
 import { AddDialog } from './AddDialog.js'
 import { ConfirmModal } from './common/ConfirmModal.js'
-import { NFTItem } from './NFTSection/index.js'
-import { TipForm } from './TipForm.js'
+import { NetworkSection } from './NetworkSection/index.js'
+import { NFTSection } from './NFTSection/index.js'
+import { RecipientSection } from './RecipientSection/index.js'
+import { TokenSection } from './TokenSection/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     dialog: {
         width: 600,
+        height: 620,
+        overflow: 'hidden',
         backgroundImage: 'none',
-    },
-    dialogTitle: {
-        height: 60,
-        paddingTop: '0 !important',
-        paddingBottom: '0 !important',
     },
     content: {
         display: 'flex',
@@ -37,90 +36,20 @@ const useStyles = makeStyles()((theme) => ({
             display: 'none',
         },
         padding: 0,
+        height: 528,
     },
-    abstractTabWrapper: {
-        width: '100%',
-        paddingBottom: theme.spacing(1),
-        flexShrink: 0,
+    recipient: {
+        margin: theme.spacing(1, 2, 0),
     },
-    tab: {
-        height: 36,
-        minHeight: 36,
-    },
-    tabPaper: {
-        backgroundColor: 'inherit',
-    },
-    tabs: {
-        height: 36,
-        minHeight: 36,
-        margin: '0 auto',
-        borderRadius: 4,
-    },
-    tipForm: {
-        padding: 0,
+    tabPanel: {
         flexGrow: 1,
         overflow: 'auto',
+        padding: theme.spacing(0, 2),
     },
-    nftContainer: {
-        height: 100,
-        width: 100,
-    },
-    nftMessage: {
-        textAlign: 'center',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-    },
-    nftMessageText: {
-        fontSize: 18,
-        color: '#3DC233',
-        marginTop: theme.spacing(3),
-        lineHeight: '30px',
-    },
-    fallbackImage: {
-        width: 64,
-        height: 64,
-    },
-    walletChip: {
-        marginLeft: 'auto',
-        height: 40,
+    section: {
+        height: '100%',
+        paddingTop: theme.spacing(2),
         boxSizing: 'border-box',
-        display: 'flex',
-        alignItems: 'center',
-        backgroundColor: theme.palette.background.default,
-        padding: theme.spacing(0.5, 1),
-        borderRadius: 99,
-    },
-    wallet: {
-        marginLeft: theme.spacing(1),
-    },
-    walletTitle: {
-        marginLeft: theme.spacing(1),
-        lineHeight: '18px',
-        height: 18,
-        fontSize: 14,
-        fontWeight: 'bold',
-    },
-    walletAddress: {
-        height: 12,
-        display: 'flex',
-        alignItems: 'center',
-        fontSize: 10,
-        color: theme.palette.text.secondary,
-    },
-    changeWalletButton: {
-        marginLeft: theme.spacing(0.5),
-        display: 'flex',
-        alignItems: 'center',
-        cursor: 'pointer',
-    },
-    link: {
-        cursor: 'pointer',
-        lineHeight: '10px',
-        marginTop: 2,
-        '&:hover': {
-            textDecoration: 'none',
-        },
     },
 }))
 
@@ -130,29 +59,31 @@ export interface TipDialogProps {
 }
 
 export function TipDialog({ open = false, onClose }: TipDialogProps) {
-    const pluginID = useCurrentWeb3NetworkPluginID()
-    const tipDefinition = useActivatedPlugin(PluginID.NextID, 'any')
-    const chainIdList = tipDefinition?.enableRequirement.web3?.[pluginID]?.supportedChainIds ?? EMPTY_LIST
     const t = useI18N()
     const { classes } = useStyles()
 
     const [addTokenDialogIsOpen, openAddTokenDialog] = useBoolean(false)
     const [confirmModalIsOpen, openConfirmModal] = useBoolean(false)
-    const { targetChainId, setTargetChainId } = TargetRuntimeContext.useContainer()
     const {
         tipType,
+        setTipType,
         amount,
         token,
-        recipientSnsId,
+        isSending,
         recipient,
+        recipientAddress,
+        recipientSnsId,
         nonFungibleTokenContract,
-        nonFungibleTokenId,
         setNonFungibleTokenAddress,
         setNonFungibleTokenId,
         reset,
+        sendTip,
+        validation: [isValid, validateMessage],
     } = useTip()
+    const { targetChainId, pluginId } = TargetRuntimeContext.useContainer()
 
-    const isTokenTip = tipType === TipType.Token
+    const isTokenTip = tipType === TipsType.Tokens
+    const enableShare = !!activatedSocialNetworkUI.utils.share
     const shareText = useMemo(() => {
         const promote = t.tip_mask_promote()
         const message = isTokenTip
@@ -160,46 +91,29 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
                   amount,
                   symbol: token?.symbol || 'token',
                   recipientSnsId,
-                  recipient,
+                  recipient: recipientAddress,
                   promote,
               })
             : t.tip_nft_share_post({
                   name: nonFungibleTokenContract?.name || 'NFT',
                   recipientSnsId,
-                  recipient,
+                  recipient: recipientAddress,
                   promote,
               })
         return message
     }, [amount, isTokenTip, nonFungibleTokenContract?.name, token, recipient, recipientSnsId, t])
 
-    const { value: nonFungibleToken } = useNonFungibleAsset(
-        undefined,
-        nonFungibleTokenContract?.address,
-        nonFungibleTokenId ?? '',
-    )
+    const currentTab = isTokenTip ? TipsType.Tokens : TipsType.Collectibles
+    const onTabChange = useCallback((_: unknown, value: TipsType) => {
+        setTipType(value)
+    }, [])
 
-    const chainId = useChainId()
-    const successMessage = useMemo(() => {
-        if (isTokenTip) return t.send_tip_successfully()
-        if (nonFungibleToken)
-            return (
-                <div className={classes.nftMessage}>
-                    <div className={classes.nftContainer}>
-                        <NFTItem token={nonFungibleToken} />
-                    </div>
-                    <Typography className={classes.nftMessageText}>
-                        {t.send_specific_tip_successfully({
-                            amount: '1',
-                            name: nonFungibleToken.contract?.name || 'NFT',
-                        })}
-                    </Typography>
-                </div>
-            )
-        return t.send_tip_successfully()
-    }, [t, chainId, isTokenTip, classes.nftMessage, nonFungibleToken])
+    const buttonLabel = isSending ? t.sending_tip() : isValid || !validateMessage ? t.send_tip() : validateMessage
 
     const handleConfirm = useCallback(() => {
-        activatedSocialNetworkUI.utils.share?.(shareText)
+        if (enableShare) {
+            activatedSocialNetworkUI.utils.share?.(shareText)
+        }
         openConfirmModal(false)
         onClose?.()
     }, [shareText, onClose])
@@ -210,31 +124,54 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
         openAddTokenDialog(false)
     }, [])
 
+    const send = useCallback(async () => {
+        const hash = await sendTip()
+        if (typeof hash !== 'string') return
+        openConfirmModal(true)
+    }, [sendTip])
+
+    const expectedPluginID = [NetworkPluginID.PLUGIN_EVM, NetworkPluginID.PLUGIN_SOLANA].includes(pluginId)
+        ? pluginId
+        : NetworkPluginID.PLUGIN_EVM
+
     return (
-        <>
+        <TabContext value={currentTab}>
             <InjectedDialog
                 open={open}
                 onClose={onClose}
-                classes={{ dialogTitle: classes.dialogTitle, paper: classes.dialog }}
-                title={t.tips()}>
+                classes={{ paper: classes.dialog }}
+                title={t.tips()}
+                titleTabs={
+                    <MaskTabList variant="base" onChange={onTabChange} aria-label="Tips">
+                        <Tab label={t.tips_tab_tokens()} value={TipsType.Tokens} />
+                        <Tab label={t.tips_tab_collectibles()} value={TipsType.Collectibles} />
+                    </MaskTabList>
+                }>
                 <DialogContent className={classes.content}>
-                    {chainIdList.length ? (
-                        <div className={classes.abstractTabWrapper}>
-                            <NetworkTab
-                                classes={classes}
-                                chainId={targetChainId}
-                                setChainId={setTargetChainId}
-                                chains={chainIdList}
-                            />
-                        </div>
-                    ) : null}
-                    <TipForm
-                        className={classes.tipForm}
-                        onAddToken={() => openAddTokenDialog(true)}
-                        onSent={() => {
-                            openConfirmModal(true)
-                        }}
-                    />
+                    <NetworkSection />
+                    <RecipientSection className={classes.recipient} />
+                    <TabPanel value={TipsType.Tokens} className={classes.tabPanel}>
+                        <TokenSection className={classes.section} />
+                    </TabPanel>
+                    <TabPanel value={TipsType.Collectibles} className={classes.tabPanel} style={{ padding: 0 }}>
+                        <NFTSection className={classes.section} />
+                    </TabPanel>
+                    <PluginWeb3ActualContextProvider>
+                        <PluginWalletStatusBar expectedPluginID={expectedPluginID} expectedChainId={targetChainId}>
+                            <ChainBoundary
+                                expectedPluginID={expectedPluginID}
+                                expectedChainId={targetChainId}
+                                noSwitchNetworkTip
+                                switchChainWithoutPopup
+                                ActionButtonPromiseProps={{
+                                    fullWidth: true,
+                                }}>
+                                <ActionButton fullWidth disabled={!isValid || isSending} onClick={send}>
+                                    {buttonLabel}
+                                </ActionButton>
+                            </ChainBoundary>
+                        </PluginWalletStatusBar>
+                    </PluginWeb3ActualContextProvider>
                 </DialogContent>
             </InjectedDialog>
             <ConfirmModal
@@ -245,12 +182,10 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
                     reset()
                     onClose?.()
                 }}
-                icon={isTokenTip ? <Icons.Success size={64} /> : null}
-                message={successMessage}
-                confirmText={t.tip_share()}
+                confirmText={enableShare ? t.tip_share() : t.tip_success_ok()}
                 onConfirm={handleConfirm}
             />
             <AddDialog open={addTokenDialogIsOpen} onClose={() => openAddTokenDialog(false)} onAdd={handleAddToken} />
-        </>
+        </TabContext>
     )
 }

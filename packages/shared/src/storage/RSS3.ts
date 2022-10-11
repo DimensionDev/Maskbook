@@ -1,7 +1,8 @@
-import type { Storage, NetworkPluginID } from '@masknet/web3-shared-base'
+import LRU from 'lru-cache'
+import type { Storage } from '@masknet/web3-shared-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { RSS3 } from '@masknet/web3-providers'
-import LRU from 'lru-cache'
 
 const caches = new Map<string, LRU<string, unknown>>()
 export class RSS3Storage implements Storage {

@@ -3,8 +3,8 @@ import { useAsyncRetry } from 'react-use'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages.js'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { getPayloadConfig } from '@masknet/web3-shared-evm'
-import { useChainId, useWeb3State } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { useChainId, useWeb3State } from '@masknet/web3-hooks-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 
 export const useUnconfirmedRequest = () => {
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)

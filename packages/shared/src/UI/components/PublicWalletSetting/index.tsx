@@ -3,6 +3,7 @@ import { LoadingBase, makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { Typography, Box } from '@mui/material'
 import { memo, useCallback, useMemo, useState } from 'react'
 import {
+    PluginID,
     BindingProof,
     CrossIsolationMessages,
     ECKeyIdentifier,
@@ -10,8 +11,7 @@ import {
     NextIDPlatform,
     PopupRoutes,
 } from '@masknet/shared-base'
-import { useHiddenAddressSetting, useWeb3State } from '@masknet/plugin-infra/web3'
-import { PluginID } from '@masknet/plugin-infra'
+import { useHiddenAddressSetting, useWeb3State } from '@masknet/web3-hooks-base'
 import { WalletSettingCard } from '@masknet/shared'
 import { useAsyncFn, useUpdateEffect } from 'react-use'
 
@@ -41,7 +41,6 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: 4,
     },
     alertTitle: {
-        fontSize: 14,
         lineHeight: '18px',
     },
     placeholder: {
@@ -54,7 +53,6 @@ const useStyles = makeStyles()((theme) => ({
     },
     placeholderText: {
         color: theme.palette.maskColor.second,
-        fontSize: 14,
         lineHeight: '18px',
     },
     placeholderIcon: {
@@ -118,9 +116,9 @@ export const PublicWalletSetting = memo<PublicWalletSettingProps>(
                     NextIDPlatform.NextID,
                     currentPersona,
                 )
-                const prevResult = storage.get<PublicWalletSettingType>(PluginID.Web3Profile)
+                const prevResult = storage.get<PublicWalletSettingType>(pluginId)
 
-                await storage.set<PublicWalletSettingType>(PluginID.Web3Profile, {
+                await storage.set<PublicWalletSettingType>(pluginId, {
                     ...prevResult,
                     hiddenAddresses: uniq(addresses),
                 })
@@ -139,7 +137,7 @@ export const PublicWalletSetting = memo<PublicWalletSettingProps>(
                     autoHideDuration: 2000,
                 })
             }
-        }, [Storage, currentPersona, addresses])
+        }, [Storage, currentPersona, addresses, pluginId])
 
         useUpdateEffect(() => {
             if (!hiddenAddresses) return

@@ -17,7 +17,6 @@ const useStyles = makeStyles()((theme) => ({
     },
     content: {
         marginTop: 24,
-        fontSize: 14,
         lineHeight: '20px',
         color: '#536471',
     },
@@ -68,10 +67,10 @@ export const DisconnectDialog = memo<DisconnectDialogProps>(
         return (
             <Dialog open={open}>
                 <DialogContent>
-                    <Typography className={classes.title}>{t('popups_persona_disconnect_confirmation')}</Typography>
+                    <Typography className={classes.title}>{t('popups_new_persona_disconnect_confirmation')}</Typography>
                     <Typography className={classes.content}>
                         <Trans
-                            i18nKey="popups_persona_disconnect_confirmation_description"
+                            i18nKey="popups_new_persona_disconnect_confirmation_description"
                             components={{ br: <br />, li: <li /> }}
                         />
                     </Typography>

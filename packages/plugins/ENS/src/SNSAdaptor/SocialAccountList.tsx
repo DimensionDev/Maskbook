@@ -1,4 +1,6 @@
 import { useMenuConfig } from '@masknet/shared'
+import { useWindowScroll } from 'react-use'
+import { useEffect } from 'react'
 import { Icons } from '@masknet/icons'
 import { Box, Typography, MenuItem } from '@mui/material'
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
@@ -9,21 +11,21 @@ import useStyles from './useStyles'
 import { useI18N } from '../locales'
 
 interface SocialAccountListProps {
-    restOfValidNextIdTwitterBindings: BindingProof[]
+    validNextIdTwitterBindings: BindingProof[]
 }
 
-export function SocialAccountList({ restOfValidNextIdTwitterBindings }: SocialAccountListProps) {
+export function SocialAccountList({ validNextIdTwitterBindings }: SocialAccountListProps) {
     const t = useI18N()
-    const { classes, cx } = useStyles()
-
-    const [menu, openMenu] = useMenuConfig(
-        restOfValidNextIdTwitterBindings.map((x, i) => (
+    const { classes, cx, theme } = useStyles({ isMenuScroll: validNextIdTwitterBindings.length > 5 })
+    const position = useWindowScroll()
+    const [menu, openMenu, closeMenu] = useMenuConfig(
+        validNextIdTwitterBindings.map((x, i) => (
             <MenuItem
                 className={classes.socialAccountListItem}
                 disabled={false}
                 key={i}
                 onClick={() => openWindow(`https://twitter.com/${x.identity}`)}>
-                <Icons.TwitterRound />
+                <Icons.TwitterRoundWithNoBorder width={20} height={20} />
                 <Typography className={cx(classes.nextIdVerifiedTwitterName, classes.accountNameInList)}>
                     {x.identity}
                 </Typography>
@@ -43,10 +45,12 @@ export function SocialAccountList({ restOfValidNextIdTwitterBindings }: SocialAc
                 horizontal: 'right',
             },
             PaperProps: {
-                style: { maxHeight: 296 },
+                className: classes.menu,
             },
         },
     )
+
+    useEffect(closeMenu, [position])
 
     return (
         <>

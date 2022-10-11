@@ -65,6 +65,13 @@ const base: ThemeOptions = {
                 },
             },
         },
+        MuiTypography: {
+            styleOverrides: {
+                root: {
+                    fontSize: 14,
+                },
+            },
+        },
     },
 }
 const lightThemePatch: Partial<ThemeOptions> = {

@@ -1,7 +1,8 @@
 import type { RequestArguments } from 'web3-core'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
+import type { NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import type { NetworkPluginID, WalletProvider } from '@masknet/web3-shared-base'
+import type { WalletProvider } from '@masknet/web3-shared-base'
 import type {
     Web3,
     ChainId,

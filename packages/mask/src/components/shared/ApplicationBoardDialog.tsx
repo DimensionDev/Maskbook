@@ -1,19 +1,18 @@
+import { useState, useCallback } from 'react'
 import { DialogContent, Tab } from '@mui/material'
 import { TabContext, TabPanel } from '@mui/lab'
-import { useState, useCallback } from 'react'
-import { ApplicationSettingPluginSwitch } from './ApplicationSettingPluginSwitch.js'
-import { ApplicationSettingPluginList } from './ApplicationSettingPluginList.js'
 import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import { InjectedDialog } from '@masknet/shared'
-import { CrossIsolationMessages } from '@masknet/shared-base'
+import { Icons } from '@masknet/icons'
+import { ApplicationSettingPluginSwitch } from './ApplicationSettingPluginSwitch.js'
+import { ApplicationSettingPluginList } from './ApplicationSettingPluginList.js'
+import { CrossIsolationMessages, PluginID } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { ApplicationBoard } from './ApplicationBoard.js'
 import { WalletMessages } from '../../plugins/Wallet/messages.js'
 import { useI18N } from '../../utils/index.js'
-import { Icons } from '@masknet/icons'
 import { PersonaSelectPanelDialog } from './PersonaSelectPanel/PersonaSelectPanelDialog.js'
 import { PluginNextIDMessages } from '../../plugins/NextID/messages.js'
-import type { PluginID } from '@masknet/plugin-infra'
 
 const useStyles = makeStyles<{
     openSettings: boolean
@@ -87,6 +86,7 @@ export function ApplicationBoardDialog() {
             <InjectedDialog
                 open={open}
                 maxWidth="sm"
+                isOnBack={openSettings && !quickMode}
                 onClose={closeDialog}
                 titleTabs={
                     openSettings ? (

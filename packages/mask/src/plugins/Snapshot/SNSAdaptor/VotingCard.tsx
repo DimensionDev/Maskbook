@@ -1,21 +1,21 @@
-import { useContext, useState, useEffect } from 'react'
+import { useContext, useState, useEffect, useMemo } from 'react'
 import classNames from 'classnames'
 import { Box, Button, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { SnapshotContext } from '../context.js'
-import { toChecksumAddress } from 'web3-utils'
-import { useAccount, useChainId, useWeb3Connection, useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { useAccount, useChainId, useWeb3Connection, useCurrentWeb3NetworkPluginID } from '@masknet/web3-hooks-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { useSnackbarCallback } from '@masknet/shared'
 import { useI18N } from '../../../utils/index.js'
-import { PluginSnapshotRPC } from '../messages.js'
 import { SnapshotCard } from './SnapshotCard.js'
 import { useProposal } from './hooks/useProposal.js'
 import { usePower } from './hooks/usePower.js'
 import { VoteConfirmDialog } from './VoteConfirmDialog.js'
 import { useRetry } from './hooks/useRetry.js'
-import { SNAPSHOT_VOTE_DOMAIN } from '../constants.js'
+import { toChecksumAddress } from 'web3-utils'
+import { SNAPSHOT_VOTE_DOMAIN } from '../constants'
 import { getSnapshotVoteType } from '../utils.js'
+import { PluginSnapshotRPC } from '../messages'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -59,10 +59,20 @@ export function VotingCard() {
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const { value: power } = usePower(identifier)
     const choices = proposal.choices
-    const [choice, setChoice] = useState(0)
+    const [choices_, setChoices_] = useState<number[]>([])
     const [open, setOpen] = useState(false)
     const [loading, setLoading] = useState(false)
 
+    const messageText = (text: string) => (
+        <Box>
+            <Typography fontSize={14} fontWeight={700}>
+                {t('plugin_snapshot_vote')}
+            </Typography>
+            <Typography fontSize={14} fontWeight={400}>
+                {text}
+            </Typography>
+        </Box>
+    )
     const networkPluginId = useCurrentWeb3NetworkPluginID()
     const retry = useRetry()
     const onVoteConfirm = useSnackbarCallback(
@@ -73,14 +83,11 @@ export function VotingCard() {
                 space: identifier.space,
                 timestamp: Math.floor(Date.now() / 1000),
                 proposal: identifier.id,
-                choice: proposal.type === 'single-choice' ? choice : [choice],
+                choice: proposal.type === 'single-choice' ? choices_[0] : choices_,
                 metadata: JSON.stringify({}),
             }
-
             const domain = SNAPSHOT_VOTE_DOMAIN
-
             const types = getSnapshotVoteType(proposal.type)
-
             const data = {
                 message,
                 domain,
@@ -102,12 +109,10 @@ export function VotingCard() {
                 'typedDataSign',
                 { account: toChecksumAddress(account) },
             )
-
             const body = JSON.stringify({ data, sig, address: toChecksumAddress(account) })
-
             return PluginSnapshotRPC.vote(body)
         },
-        [choice, identifier, account, proposal, connection, chainId],
+        [choices_, identifier, account, proposal, connection, chainId],
         () => {
             setLoading(false)
             setOpen(false)
@@ -115,14 +120,32 @@ export function VotingCard() {
         },
         (_err: Error) => setLoading(false),
         void 0,
-        t('plugin_snapshot_vote_success'),
+        messageText(t('plugin_snapshot_vote_success')),
+        messageText(t('plugin_snapshot_vote_failed')),
     )
 
     useEffect(() => {
         setOpen(false)
     }, [account, power, setOpen])
 
-    const disabled = choice === 0 || !account || !power
+    const onClick = (n: number) => {
+        if (proposal.type === 'single-choice') {
+            setChoices_((d) => [n])
+            return
+        }
+        if (choices_.includes(n)) setChoices_((d) => d.filter((x) => x !== n))
+        else setChoices_((d) => [...d, n])
+    }
+
+    const disabled = choices_.length === 0 || !account || !power
+    const choiceText = useMemo(() => {
+        let text = ''
+        for (const i of choices_) {
+            text += choices[i - 1]
+            if (i < choices_.length) text += ','
+        }
+        return text
+    }, [choices_])
     return account && networkPluginId === NetworkPluginID.PLUGIN_EVM ? (
         <SnapshotCard title={t('plugin_snapshot_vote_title')}>
             <Box className={classes.buttons}>
@@ -131,11 +154,11 @@ export function VotingCard() {
                         variant="roundedContained"
                         fullWidth
                         key={i}
-                        onClick={() => setChoice(i + 1)}
+                        onClick={() => onClick(i + 1)}
                         className={classNames([
                             classes.button,
                             classes.choiceButton,
-                            ...(choice === i + 1 ? [classes.buttonActive] : []),
+                            ...(choices_.includes(i + 1) ? [classes.buttonActive] : []),
                         ])}>
                         <Typography
                             fontWeight={700}
@@ -162,11 +185,12 @@ export function VotingCard() {
                 open={open}
                 loading={loading}
                 onClose={() => setOpen(false)}
-                choiceText={choices[choice - 1]}
+                choiceText={choiceText}
                 snapshot={proposal.snapshot}
                 powerSymbol={proposal.space.symbol}
                 power={power}
                 onVoteConfirm={onVoteConfirm}
+                chainId={proposal.chainId}
             />
         </SnapshotCard>
     ) : null

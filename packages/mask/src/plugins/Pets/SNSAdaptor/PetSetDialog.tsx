@@ -1,6 +1,7 @@
 import { useState, useMemo, ReactNode } from 'react'
 import { useTimeout } from 'react-use'
-import { Constant, NetworkPluginID } from '@masknet/web3-shared-base'
+import type { Constant } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import {
     makeStyles,
@@ -33,7 +34,7 @@ import { useI18N } from '../locales/index.js'
 import { ImageLoader } from './ImageLoader.js'
 import { petShowSettings } from '../settings.js'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
-import { useWeb3Connection, useWeb3State } from '@masknet/plugin-infra/web3'
+import { useWeb3Connection, useWeb3State } from '@masknet/web3-hooks-base'
 import { Icons } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => ({

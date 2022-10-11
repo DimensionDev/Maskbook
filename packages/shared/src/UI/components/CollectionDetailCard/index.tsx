@@ -113,12 +113,10 @@ const useStyles = makeStyles()((theme) => ({
         padding: 12,
     },
     traitValue: {
-        fontSize: 14,
         fontWeight: 700,
         color: theme.palette.maskColor.main,
     },
     secondText: {
-        fontSize: 14,
         fontWeight: 400,
         color: theme.palette.maskColor.second,
     },

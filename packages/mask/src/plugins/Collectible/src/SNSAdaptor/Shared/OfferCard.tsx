@@ -2,12 +2,12 @@ import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import { NonFungibleTokenOrder, formatBalance, formatCurrency, isValidTimestamp } from '@masknet/web3-shared-base'
-import { useWeb3State } from '@masknet/plugin-infra/web3'
+import { useWeb3State } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { Icons } from '@masknet/icons'
+import { TokenIcon } from '@masknet/shared'
 import { useI18N } from '../../../../../utils/index.js'
 import { CollectibleProviderIcon } from './CollectibleProviderIcon.js'
-import { TokenIcon } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     wrapper: {
@@ -49,7 +49,6 @@ const useStyles = makeStyles()((theme) => ({
     fallbackSymbol: {
         color: theme.palette.maskColor.publicMain,
         fontWeight: 700,
-        fontSize: 14,
         lineHeight: '18px',
         display: 'flex',
         alignItems: 'flex-end',
@@ -99,7 +98,7 @@ export function OfferCard(props: OfferCardProps) {
                         ))}
                     <div className={classes.flex}>
                         <Typography className={classes.textBase}>
-                            <strong style={{ fontSize: 14 }}>
+                            <strong>
                                 {formatBalance(offer.priceInToken?.amount, offer.priceInToken?.token.decimals || 18, 6)}
                             </strong>
                             {offer.priceInToken ? (
@@ -118,7 +117,7 @@ export function OfferCard(props: OfferCardProps) {
 
                     <Typography className={classes.textBase} style={{ marginRight: 6 }}>
                         {(offer.maker?.address && (
-                            <strong style={{ fontSize: 14, margin: '0px 4px' }}>
+                            <strong style={{ margin: '0px 4px' }}>
                                 {Others?.formatAddress(offer.maker.address, 4)}
                             </strong>
                         )) ||

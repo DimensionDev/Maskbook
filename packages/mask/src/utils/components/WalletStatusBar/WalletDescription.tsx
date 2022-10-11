@@ -22,12 +22,10 @@ const useStyles = makeStyles()((theme) => ({
         columnGap: 4,
         color: theme.palette.maskColor.main,
         fontWeight: 700,
-        fontSize: 14,
         lineHeight: '18px',
     },
     address: {
         color: theme.palette.maskColor.second,
-        fontSize: 14,
         lineHeight: '18px',
         display: 'flex',
         alignItems: 'center',
@@ -41,7 +39,6 @@ const useStyles = makeStyles()((theme) => ({
         padding: '2px 4px',
         backgroundColor: alpha(theme.palette.maskColor.warn, 0.1),
         color: theme.palette.maskColor.warn,
-        fontSize: 14,
         lineHeight: '18px',
     },
     progress: {

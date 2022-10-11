@@ -1,15 +1,16 @@
-import { useWeb3State } from '@masknet/plugin-infra/web3'
+import { useWeb3State } from '@masknet/web3-hooks-base'
 import { InjectedDialog, useSnackbarCallback } from '@masknet/shared'
-import { PluginID } from '@masknet/plugin-infra'
 import {
     NextIDPlatform,
     CrossIsolationMessages,
     EMPTY_LIST,
     formatPersonaFingerprint,
     PopupRoutes,
+    PluginID,
+    NetworkPluginID,
 } from '@masknet/shared-base'
 import { LoadingBase, makeStyles, useCustomSnackbar, ActionButton } from '@masknet/theme'
-import { NetworkPluginID, isSameAddress, isGreaterThan } from '@masknet/web3-shared-base'
+import { isSameAddress, isGreaterThan } from '@masknet/web3-shared-base'
 import { DialogContent, DialogActions, Avatar, Typography } from '@mui/material'
 import { delay } from '@dimensiondev/kit'
 import { sortBy, last } from 'lodash-unified'
@@ -72,14 +73,12 @@ const useStyles = makeStyles()((theme) => ({
         columnGap: 4,
     },
     nickname: {
-        fontSize: 14,
         lineHeight: '18px',
         fontWeight: 700,
     },
     fingerprint: {
         display: 'flex',
         alignItems: 'center',
-        fontSize: 14,
         lineHeight: '18px',
         color: theme.palette.maskColor.third,
     },
@@ -194,8 +193,8 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
     const openConnectWallet = useCallback(() => Services.Helper.openPopupWindow(PopupRoutes.ConnectWallet), [])
 
     useEffect(() => {
-        return CrossIsolationMessages.events.walletSettingsDialogEvent.on((x) => {
-            if (x === PluginID.Tips) retrySetting()
+        return CrossIsolationMessages.events.walletSettingsDialogEvent.on(({ pluginID }) => {
+            if (pluginID === PluginID.Tips) retrySetting()
         })
     }, [retrySetting])
 

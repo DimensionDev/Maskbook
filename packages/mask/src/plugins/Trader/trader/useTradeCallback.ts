@@ -23,9 +23,10 @@ import { useExchangeProxyContract } from '../contracts/balancer/useExchangeProxy
 import type { NativeTokenWrapper } from './native/useTradeComputed.js'
 import { isNativeTokenWrapper } from '../helpers/index.js'
 import { useGetTradeContext } from './useGetTradeContext.js'
-import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
 import type { GasOptionConfig } from '@masknet/web3-shared-evm'
 import type { AsyncFnReturn } from 'react-use/lib/useAsyncFn'
+import { useChainId } from '@masknet/web3-hooks-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 
 export function useTradeCallback(
     provider?: TradeProvider,
@@ -35,7 +36,7 @@ export function useTradeCallback(
 ): AsyncFnReturn<() => Promise<string | undefined>> {
     // trade context
     const context = useGetTradeContext(provider)
-    const { targetChainId } = TargetChainIdContext.useContainer()
+    const targetChainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     // create trade computed
     const isNativeTokenWrapper_ = isNativeTokenWrapper(tradeComputed ?? null)
     const tradeComputedForUniswapV2Like =

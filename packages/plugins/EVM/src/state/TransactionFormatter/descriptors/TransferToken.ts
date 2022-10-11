@@ -19,10 +19,12 @@ export class TransferTokenDescriptor {
             description: i18NextInstance.t('plugin_infra_descriptor_token_transfer', {
                 tokenAmountDescription: getTokenAmountDescription(context.value, token),
             }),
-            successfulDescription: i18NextInstance.t('plugin_infra_descriptor_token_transfer_success', {
-                tokenAmountDescription: getTokenAmountDescription(context.value, token),
-            }),
-            failedDescription: i18NextInstance.t('plugin_infra_descriptor_token_transfer_fail'),
+            snackbar: {
+                successfulDescription: i18NextInstance.t('plugin_infra_descriptor_token_transfer_success', {
+                    tokenAmountDescription: getTokenAmountDescription(context.value, token),
+                }),
+                failedDescription: i18NextInstance.t('plugin_infra_descriptor_token_transfer_fail'),
+            },
         }
     }
 }

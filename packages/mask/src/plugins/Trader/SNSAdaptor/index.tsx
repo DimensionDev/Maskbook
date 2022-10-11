@@ -1,15 +1,15 @@
-import { Plugin, PluginID } from '@masknet/plugin-infra'
+import { Trans } from 'react-i18next'
+import type { Plugin } from '@masknet/plugin-infra'
 import { base } from '../base.js'
 import { TraderDialog } from './trader/TraderDialog.js'
 import { SearchResultInspector } from './trending/SearchResultInspector.js'
-import { Trans } from 'react-i18next'
 import { TagInspector } from './trending/TagInspector.js'
 import { enhanceTag } from './cashTag.js'
 import { ApplicationEntry } from '@masknet/shared'
-import { CrossIsolationMessages } from '@masknet/shared-base'
 import { Icons } from '@masknet/icons'
-import { setupStorage, storageDefaultValue } from '../storage/index.js'
+import { CrossIsolationMessages, PluginID } from '@masknet/shared-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
+import { setupStorage, storageDefaultValue } from '../storage/index.js'
 
 const sns: Plugin.SNSAdaptor.Definition<
     ChainId,

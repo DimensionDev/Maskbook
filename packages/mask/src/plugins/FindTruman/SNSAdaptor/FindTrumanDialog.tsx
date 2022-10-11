@@ -7,12 +7,12 @@ import ParticipatePanel from './ParticipatePanel.js'
 import { useContext } from 'react'
 import type { FindTrumanI18nFunction } from '../types.js'
 import { FindTrumanContext } from '../context.js'
-import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
+import { useAccount, useChainId } from '@masknet/web3-hooks-base'
 import { useConst } from './hooks/useConst.js'
 import IntroductionPanel from './IntroductionPanel.js'
 import { PluginWalletStatusBar, useI18N } from '../../../utils/index.js'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme, props) => ({
     wrapper: {

@@ -1,7 +1,7 @@
 import { memo, useCallback, useState } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { ChainId, explorerResolver, formatEthereumAddress } from '@masknet/web3-shared-evm'
-import { useNetworkDescriptor } from '@masknet/plugin-infra/web3'
+import { useNetworkDescriptor } from '@masknet/web3-hooks-base'
 import { FormattedAddress, ImageIcon } from '@masknet/shared'
 import { Button, Link, Typography } from '@mui/material'
 import { CopyIconButton } from '../../../components/CopyIconButton/index.js'
@@ -9,7 +9,7 @@ import { Icons } from '@masknet/icons'
 import type { ConnectedWalletInfo } from '../type.js'
 import { DisconnectWalletDialog } from '../components/DisconnectWalletDialog/index.js'
 import { useI18N } from '../../../../../utils/index.js'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 
 const useStyles = makeStyles()(() => ({
     container: {
@@ -54,7 +54,6 @@ const useStyles = makeStyles()(() => ({
         flex: 1,
     },
     name: {
-        fontSize: 14,
         lineHeight: '18px',
         color: '#0F1419',
         fontWeight: 700,

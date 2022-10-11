@@ -1,7 +1,7 @@
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import { Link, Typography } from '@mui/material'
-import { useWeb3State } from '@masknet/plugin-infra/web3'
+import { useWeb3State } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { SourceType } from '@masknet/web3-shared-base'
 import { useI18N } from '../../../../../utils/index.js'
@@ -15,7 +15,7 @@ const PLATFORM_COSTS: {
 }
 
 const useStyles = makeStyles()((theme) => ({
-    wrapper: {
+    root: {
         width: '100%',
         display: 'flex',
         flexDirection: 'column',
@@ -23,7 +23,7 @@ const useStyles = makeStyles()((theme) => ({
         boxSizing: 'border-box',
         gap: 8,
         borderRadius: 12,
-        background: theme.palette.maskColor.bg,
+        backgroundColor: theme.palette.maskColor.bg,
     },
     listItem: {
         width: '100%',
@@ -33,7 +33,6 @@ const useStyles = makeStyles()((theme) => ({
         textTransform: 'capitalize',
     },
     title: {
-        fontSize: 14,
         color: theme.palette.maskColor.second,
     },
     content: {
@@ -75,13 +74,13 @@ export function DetailsCard(props: DetailsCardProps) {
             value: `${Number.parseInt(asset.contract?.creatorEarning || '0', 10) / 100}%` ?? '0',
         },
         {
-            title: t('plugin_collectible_platform_costs', { platform: sourceType ?? SourceType.OpenSea }),
+            title: t('plugin_collectible_platform_costs', { platform: sourceType ?? SourceType.NFTScan }),
             value: sourceType && PLATFORM_COSTS[sourceType] ? `${PLATFORM_COSTS[sourceType]}%` : '-',
         },
     ]
 
     return (
-        <div className={classes.wrapper}>
+        <div className={classes.root}>
             {infoConfigMapping.map((x) => {
                 return (
                     <div key={x.title} className={classes.listItem}>
@@ -91,7 +90,13 @@ export function DetailsCard(props: DetailsCardProps) {
                             {x.link && (
                                 <Link
                                     className={classes.link}
-                                    href={Others?.explorerResolver.addressLink?.(asset.chainId, asset.address) ?? ''}
+                                    href={
+                                        Others?.explorerResolver.nonFungibleTokenLink?.(
+                                            asset.chainId,
+                                            asset.address,
+                                            asset.tokenId,
+                                        ) ?? ''
+                                    }
                                     target="_blank"
                                     rel="noopener noreferrer">
                                     <Icons.LinkOut size={16} />

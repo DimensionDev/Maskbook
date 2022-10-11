@@ -1,11 +1,12 @@
+import { memo } from 'react'
+import { useAsyncFn } from 'react-use'
 import { Icons } from '@masknet/icons'
-import { PluginID, useIsMinimalMode } from '@masknet/plugin-infra/content-script'
+import type { PluginID } from '@masknet/shared-base'
+import { useIsMinimalMode } from '@masknet/plugin-infra/content-script'
 import { makeStyles, LoadingBase, useStylesExtends } from '@masknet/theme'
 import { Button, Typography } from '@mui/material'
-import { memo } from 'react'
 import Services from '../../extension/service.js'
 import { useI18N } from '../../utils/index.js'
-import { useAsyncFn } from 'react-use'
 
 const useStyles = makeStyles()((theme) => ({
     root: {

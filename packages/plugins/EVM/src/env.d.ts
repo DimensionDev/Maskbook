@@ -6,5 +6,10 @@ declare module 'ethjs-ens' {
         constructor(options: { provider: Provider; network: number }) {}
         lookup(name: string): Promise<string>
         reverse(address: string): Promise<string>
+        resolveAddressForNode(node: string): Promise<string>
     }
+}
+
+declare module '@ensdomains/eth-ens-namehash' {
+    export function hash(name: string): string
 }

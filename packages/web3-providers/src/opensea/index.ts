@@ -38,7 +38,7 @@ import {
 } from './types.js'
 import { getOrderUSDPrice } from './utils.js'
 import { OPENSEA_ACCOUNT_URL, OPENSEA_API_URL } from './constants.js'
-import { getPaymentToken } from '../helpers.js'
+import { resolveNonFungibleTokenEventActivityType, getPaymentToken } from '../helpers.js'
 
 async function fetchFromOpenSea<T>(url: string, chainId: ChainId, init?: RequestInit) {
     if (![ChainId.Mainnet, ChainId.Rinkeby, ChainId.Matic].includes(chainId)) return
@@ -204,7 +204,7 @@ function createEvent(chainId: ChainId, event: OpenSeaAssetEvent): NonFungibleTok
         to: createAccount(event.to_account ?? event.winner_account),
         id: event.id,
         chainId,
-        type: event.event_type,
+        type: resolveNonFungibleTokenEventActivityType(event.event_type),
         assetPermalink: event.asset.permalink,
         quantity: event.quantity,
         hash: event.transaction?.transaction_hash,

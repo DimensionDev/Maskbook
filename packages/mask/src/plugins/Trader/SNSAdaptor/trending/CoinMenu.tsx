@@ -23,7 +23,6 @@ const useStyles = makeStyles()((theme) => ({
     },
     groupName: {
         height: 18,
-        fontSize: 14,
         fontWeight: 'bold',
         padding: theme.spacing(0, 2),
     },

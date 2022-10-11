@@ -17,6 +17,7 @@ export default defineConfig({
             '@masknet/web3-shared-flow': createURL('./packages/web3-shared/flow/src/index.ts'),
             '@masknet/public-api': createURL('./packages/public-api/src/index.ts'),
             '@masknet/typed-message': createURL('./packages/typed-message/base/index.ts'),
+            '@masknet/encryption': createURL('./packages/encryption/src/index.ts'),
         },
     },
 })

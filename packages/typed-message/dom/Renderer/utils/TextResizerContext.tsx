@@ -16,6 +16,9 @@ export function useTextResize(shouldEnable: boolean) {
             if (length < 45) fontSize = 1.5
             else if (length < 80) fontSize = 1.2
 
+            // reset twitter font size to inherit from the root node.
+            if (location.href.includes('twitter.com')) fontSize = 1
+
             element.style.fontSize = `${fontSize}rem`
         }
         updateFontSize()

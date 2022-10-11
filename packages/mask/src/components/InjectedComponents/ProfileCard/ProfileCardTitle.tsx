@@ -1,10 +1,10 @@
+import { FC, HTMLProps, useMemo } from 'react'
 import { Icons } from '@masknet/icons'
-import { PluginID } from '@masknet/plugin-infra'
+import { PluginID, NetworkPluginID } from '@masknet/shared-base'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
-import { NetworkPluginID, SocialAddress, SocialAddressType, SocialIdentity } from '@masknet/web3-shared-base'
-import { FC, HTMLProps, useMemo } from 'react'
+import { SocialAddress, SocialAddressType, SocialIdentity } from '@masknet/web3-shared-base'
 import { TipButton } from '../../../plugins/Tips/components/index.js'
 import type { TipsAccount } from '../../../plugins/Tips/types/index.js'
 import { ProfileBar } from './ProfileBar.js'
@@ -64,12 +64,15 @@ export const ProfileCardTitle: FC<Props> = ({
             },
         })
     }
-    const tipAccounts: TipsAccount[] = useMemo(() => {
-        return socialAddressList.map((x) => ({
-            address: x.address,
-            name: x.label,
-            verified: x.type === SocialAddressType.NEXT_ID,
-        }))
+    const tipAccounts = useMemo(() => {
+        return socialAddressList.map(
+            (x): TipsAccount => ({
+                pluginId: x.networkSupporterPluginID,
+                address: x.address,
+                name: x.label,
+                verified: x.type === SocialAddressType.NEXT_ID,
+            }),
+        )
     }, [socialAddressList])
 
     return (

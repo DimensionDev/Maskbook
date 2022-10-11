@@ -2,7 +2,7 @@ import { type Plugin, usePostInfoDetails, usePluginWrapper } from '@masknet/plug
 import { base } from '../base.js'
 import { Icons } from '@masknet/icons'
 import { useMemo } from 'react'
-import { parseURL } from '@masknet/shared-base'
+import { parseURLs } from '@masknet/shared-base'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import Profile from './Profile.js'
 
@@ -20,7 +20,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
         const link = useMemo(() => {
             const x = extractTextFromTypedMessage(props.message)
             if (x.none) return null
-            return parseURL(x.val).find(isCyberConnectUrl)
+            return parseURLs(x.val).find(isCyberConnectUrl)
         }, [props.message])
         if (!link) return null
         return <Renderer url={link} />

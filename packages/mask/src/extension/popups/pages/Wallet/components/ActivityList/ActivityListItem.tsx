@@ -1,8 +1,8 @@
 import { memo, useMemo } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { Box, Button, ListItem, ListItemText, Typography } from '@mui/material'
+import { NetworkPluginID } from '@masknet/shared-base'
 import {
-    NetworkPluginID,
     RecentTransactionComputed,
     TransactionDescriptor,
     TransactionDescriptorType,
@@ -12,7 +12,7 @@ import type { ChainId, Transaction } from '@masknet/web3-shared-evm'
 import { Icons } from '@masknet/icons'
 import formatDateTime from 'date-fns/format'
 import { useI18N } from '../../../../../../utils/index.js'
-import { useReverseAddress, useWeb3State } from '@masknet/plugin-infra/web3'
+import { useReverseAddress, useWeb3State } from '@masknet/web3-hooks-base'
 
 const useStyles = makeStyles()({
     item: {

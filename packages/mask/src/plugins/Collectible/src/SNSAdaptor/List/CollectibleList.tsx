@@ -1,25 +1,25 @@
-import { useWeb3State } from '@masknet/plugin-infra/web3'
+import { useWeb3State } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { CollectibleGridProps, useStyles } from './hooks/useStyles.js'
-import { NetworkPluginID, NonFungibleAsset, SocialAddress, SourceType } from '@masknet/web3-shared-base'
+import type { NonFungibleAsset } from '@masknet/web3-shared-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
 import { Box, Button, Tooltip, Typography } from '@mui/material'
+import { CollectibleGridProps, useStyles } from './hooks/useStyles.js'
 import { CollectibleItem } from './CollectibleItem.js'
 import { CollectibleListContext } from './CollectibleListContext.js'
 import { LoadingSkeleton } from './LoadingSkeleton.js'
 import { useI18N } from '../../../../../utils/index.js'
 
 export interface CollectibleListProps extends withClasses<'empty' | 'button'>, CollectibleGridProps {
-    address: SocialAddress<NetworkPluginID>
+    pluginID: NetworkPluginID
     collectibles: Array<NonFungibleAsset<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>
     error?: string
     loading: boolean
     retry(): void
-    readonly?: boolean
     hasRetry?: boolean
 }
 
 export function CollectibleList(props: CollectibleListProps) {
-    const { address, collectibles, columns, gap, loading, retry, error, readonly, hasRetry = true } = props
+    const { pluginID, collectibles, columns, gap, loading, retry, error, hasRetry = true } = props
     const { t } = useI18N()
     const { classes } = useStyles({ columns, gap }, { props: { classes: props.classes } })
     const { Others } = useWeb3State()
@@ -58,11 +58,8 @@ export function CollectibleList(props: CollectibleListProps) {
                                     arrow>
                                     <CollectibleItem
                                         className={classes.collectibleItem}
-                                        renderOrder={index}
+                                        pluginID={pluginID}
                                         asset={token}
-                                        provider={SourceType.OpenSea}
-                                        readonly={readonly}
-                                        address={address}
                                     />
                                 </Tooltip>
                             )

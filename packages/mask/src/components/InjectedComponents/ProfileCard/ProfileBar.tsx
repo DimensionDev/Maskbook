@@ -1,25 +1,20 @@
-import { Icons } from '@masknet/icons'
-import { useChainId, useWeb3State } from '@masknet/plugin-infra/web3'
-import { AddressItem, useSnackbarCallback } from '@masknet/shared'
-import { makeStyles, ShadowRootMenu } from '@masknet/theme'
-import {
-    isSameAddress,
-    NetworkPluginID,
-    SocialAddress,
-    SocialAddressType,
-    SocialIdentity,
-} from '@masknet/web3-shared-base'
-import { ChainId } from '@masknet/web3-shared-evm'
-import { Box, Link, MenuItem, Typography } from '@mui/material'
 import { HTMLProps, memo, useEffect, useRef, useState } from 'react'
 import { useCopyToClipboard } from 'react-use'
+import { Icons } from '@masknet/icons'
+import { useChainId, useWeb3State } from '@masknet/web3-hooks-base'
+import { AddressItem, useSnackbarCallback } from '@masknet/shared'
+import type { NetworkPluginID } from '@masknet/shared-base'
+import { makeStyles, ShadowRootMenu } from '@masknet/theme'
+import { isSameAddress, SocialAddress, SocialAddressType, SocialIdentity } from '@masknet/web3-shared-base'
+import { ChainId } from '@masknet/web3-shared-evm'
+import { Box, Link, MenuItem, Typography } from '@mui/material'
 import { v4 as uuid } from 'uuid'
-import { NFTAvatarMiniClip } from '../../../plugins/Avatar/SNSAdaptor/NFTAvatarClip.js'
 import { useI18N } from '../../../utils/index.js'
+import { AvatarDecoration } from './AvatarDecoration'
 
 const MENU_ITEM_HEIGHT = 40
 const MENU_LIST_PADDING = 8
-const useStyles = makeStyles()((theme) => ({
+const useStyles = makeStyles<void, 'avatarDecoration'>()((theme, _, refs) => ({
     root: {
         display: 'flex',
         alignItems: 'center',
@@ -35,17 +30,22 @@ const useStyles = makeStyles()((theme) => ({
         justifyContent: 'center',
         filter: 'drop-shadow(0px 6px 12px rgba(28, 104, 243, 0.2))',
         backdropFilter: 'blur(16px)',
-        overflow: 'hidden',
         '& img': {
             position: 'absolute',
             borderRadius: '100%',
             // Adjust to fit the rainbow border.
             transform: 'scale(0.94, 0.96) translate(0, 1px)',
         },
+        [`& .${refs.avatarDecoration}`]: {
+            position: 'absolute',
+            left: 0,
+            top: 0,
+            width: '100%',
+            height: '100%',
+            transform: 'scale(1)',
+        },
     },
-    avatarClip: {
-        position: 'absolute',
-    },
+    avatarDecoration: {},
     avatarMiniBorder: {
         transform: 'none',
     },
@@ -125,7 +125,7 @@ export const ProfileBar = memo<ProfileBarProps>(
         const { classes, theme, cx } = useStyles()
         const { t } = useI18N()
         const containerRef = useRef<HTMLDivElement>(null)
-        const { current: avatarClipId } = useRef<string>(uuid())
+        const { current: avatarClipPathId } = useRef<string>(uuid())
 
         const [, copyToClipboard] = useCopyToClipboard()
 
@@ -157,15 +157,14 @@ export const ProfileBar = memo<ProfileBarProps>(
                         width={40}
                         alt={identity.nickname}
                         style={{
-                            WebkitClipPath: `url(#${avatarClipId}-clip-path)`,
+                            WebkitClipPath: `url(#${avatarClipPathId}-clip-path)`,
                         }}
                     />
-                    <NFTAvatarMiniClip
-                        id={avatarClipId}
-                        className={classes.avatarClip}
-                        height={40}
-                        width={40}
-                        screenName={identity.identifier?.userId}
+                    <AvatarDecoration
+                        className={classes.avatarDecoration}
+                        clipPathId={avatarClipPathId}
+                        userId={identity.identifier?.userId}
+                        size={40}
                     />
                 </div>
                 <Box className={classes.description}>

@@ -1,5 +1,6 @@
-import { useChainId } from '@masknet/plugin-infra/web3'
-import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
+import { useChainId } from '@masknet/web3-hooks-base'
+import { isSameAddress } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { LoadingBase, makeStyles, MaskColorVar } from '@masknet/theme'
 import { Card, CardContent, Tabs, Tab, Typography, Paper, Button, Stack } from '@mui/material'
 import { useState } from 'react'

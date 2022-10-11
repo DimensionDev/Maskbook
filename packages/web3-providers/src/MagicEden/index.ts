@@ -7,6 +7,7 @@ import {
     HubOptions,
     NonFungibleToken,
     NonFungibleTokenContract,
+    ActivityType,
     OrderSide,
     TokenType,
     resolveIPFS_URL,
@@ -49,7 +50,7 @@ function createNFTToken(
         ownerId: token.owner,
         type: TokenType.NonFungible,
         schema: SchemaType.NonFungible,
-        tokenId: token.mintAddress,
+        tokenId: '',
         address: token.mintAddress,
         metadata: {
             chainId,
@@ -87,6 +88,7 @@ function createNFTCollection(collection: Collection): NonFungibleTokenContract<C
         schema: SchemaType.NonFungible,
         logoURL: collection.image,
         iconURL: collection.image,
+        source: SourceType.MagicEden,
     }
 }
 
@@ -138,6 +140,7 @@ export class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
                 type: x.trait_type,
                 value: x.value,
             })),
+            source: SourceType.MagicEden,
         }
     }
 
@@ -161,7 +164,7 @@ export class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
                 }),
                 type: TokenType.NonFungible,
                 schema: SchemaType.NonFungible,
-                tokenId: token.mintAddress,
+                tokenId: '',
                 address: token.mintAddress,
                 metadata: {
                     chainId,
@@ -185,8 +188,8 @@ export class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
                     description: '',
                     iconURL: '',
                     verified: false,
-                    address: token.mintAddress,
                 },
+                source: SourceType.MagicEden,
             }
         })
         return createPageable(data ?? EMPTY_LIST, createIndicator(indicator))
@@ -232,7 +235,7 @@ export class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
                     address: activity.buyerReferral,
                 },
                 quantity: '1',
-                type: '',
+                type: ActivityType.Transfer,
                 source: SourceType.MagicEden,
             }
         })
@@ -296,6 +299,7 @@ export class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
             address: '',
             symbol: collection.symbol,
             iconURL: resolveIPFS_URL(collection.image),
+            source: SourceType.MagicEden,
         }))
 
         return createPageable(

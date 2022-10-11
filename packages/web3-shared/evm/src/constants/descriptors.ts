@@ -1,16 +1,10 @@
 import { getEnumAsArray } from '@dimensiondev/kit'
-import {
-    ChainDescriptor,
-    NetworkDescriptor,
-    NetworkPluginID,
-    ProviderDescriptor,
-    TokenType,
-} from '@masknet/web3-shared-base'
+import { ChainDescriptor, NetworkDescriptor, ProviderDescriptor, TokenType } from '@masknet/web3-shared-base'
+import { EnhanceableSite, ExtensionSite, isFirefox, NetworkPluginID } from '@masknet/shared-base'
 import CHAINS from './chains.json'
 import { ChainId, NetworkType, ProviderType, SchemaType } from '../types/index.js'
 import { getTokenConstant } from './constants.js'
 import { ZERO_ADDRESS } from './primitives.js'
-import { EnhanceableSite, ExtensionSite, isFirefox } from '@masknet/shared-base'
 
 const PLUGIN_ID = NetworkPluginID.PLUGIN_EVM
 

@@ -16,7 +16,6 @@ const useStyles = makeStyles()((theme) => ({
         paddingLeft: 10,
     },
     heading: {
-        fontSize: 14,
         lineHeight: 1.1,
         color: theme.palette.text.primary,
         marginTop: 0,

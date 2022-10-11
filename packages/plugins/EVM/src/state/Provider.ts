@@ -1,5 +1,5 @@
 import type { Plugin } from '@masknet/plugin-infra'
-import { ProviderState } from '@masknet/plugin-infra/web3'
+import { ProviderState } from '@masknet/web3-state'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import {
     ChainId,
@@ -26,8 +26,7 @@ export class Provider extends ProviderState<ChainId, ProviderType, NetworkType, 
             getDefaultChainId,
             getDefaultNetworkType,
             getDefaultProviderType,
-            getNetworkTypeFromChainId: (chainId: ChainId) =>
-                chainResolver.chainNetworkType(chainId) ?? NetworkType.Ethereum,
+            getNetworkTypeFromChainId: (chainId: ChainId) => chainResolver.networkType(chainId) ?? NetworkType.Ethereum,
         })
     }
 

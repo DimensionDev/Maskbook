@@ -6,7 +6,7 @@ import { z as zod } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { LoadingButton, TabContext, TabPanel } from '@mui/lab'
 import { useNavigate } from 'react-router-dom'
-import { PopupRoutes } from '@masknet/shared-base'
+import { PopupRoutes, NetworkPluginID } from '@masknet/shared-base'
 import { JsonFileBox } from '../components/JsonFileBox/index.js'
 import { StyledInput } from '../../../components/StyledInput/index.js'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages.js'
@@ -18,8 +18,7 @@ import { getDerivableAccounts } from '../../../../../plugins/Wallet/services/ind
 import { PageHeader } from '../components/PageHeader/index.js'
 import { PasswordField } from '../../../components/PasswordField/index.js'
 import { currentMaskWalletAccountSettings } from '../../../../../../shared/legacy-settings/wallet-settings.js'
-import { useWeb3Connection } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { useWeb3Connection } from '@masknet/web3-hooks-base'
 import { useTitle } from '../../../hook/useTitle.js'
 
 const useStyles = makeStyles()({

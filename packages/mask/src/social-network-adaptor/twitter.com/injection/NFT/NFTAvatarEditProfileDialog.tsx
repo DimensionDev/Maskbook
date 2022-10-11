@@ -1,5 +1,4 @@
-import { PluginID } from '@masknet/plugin-infra'
-import { CrossIsolationMessages } from '@masknet/shared-base'
+import { PluginID, CrossIsolationMessages } from '@masknet/shared-base'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { makeStyles } from '@masknet/theme'
 import { NFTAvatarButton } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatarButton'
@@ -31,7 +30,7 @@ function OpenNFTAvatarEditProfileButtonInTwitter() {
     const clickHandler = () => {
         CrossIsolationMessages.events.applicationDialogEvent.sendToLocal({
             open: true,
-            application: PluginID.Avatar,
+            pluginID: PluginID.Avatar,
         })
     }
 

@@ -1,5 +1,6 @@
 import { Icons } from '@masknet/icons'
-import { Plugin, PluginID } from '@masknet/plugin-infra'
+import type { Plugin } from '@masknet/plugin-infra'
+import { PluginID, CrossIsolationMessages } from '@masknet/shared-base'
 import { PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
 import { ApplicationEntry, PublicWalletSetting } from '@masknet/shared'
 import { MaskColorVar } from '@masknet/theme'
@@ -11,7 +12,6 @@ import { TipTaskManager } from '../components/index.js'
 import { RootContext } from '../contexts/index.js'
 import { setupStorage, storageDefaultValue } from '../storage/index.js'
 import { TipsEntranceDialog } from './TipsEntranceDialog.js'
-import { CrossIsolationMessages } from '@masknet/shared-base'
 import { TipsRealmContent } from './components/TipsRealmContent/index.js'
 
 const sns: Plugin.SNSAdaptor.Definition = {
@@ -47,8 +47,8 @@ const sns: Plugin.SNSAdaptor.Definition = {
                     const clickHandler = () => setOpen(true)
 
                     useEffect(() => {
-                        return CrossIsolationMessages.events.applicationDialogEvent.on(({ open, application }) => {
-                            if (application !== PluginID.Tips) return
+                        return CrossIsolationMessages.events.applicationDialogEvent.on(({ open, pluginID }) => {
+                            if (pluginID !== PluginID.Tips) return
                             setOpen(open)
                         })
                     }, [])
@@ -77,6 +77,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 iconFilterColor,
                 appBoardSortingDefaultPriority: 9,
                 nextIdRequired: true,
+                entryWalletConnectedNotRequired: true,
             }
         })(),
     ],

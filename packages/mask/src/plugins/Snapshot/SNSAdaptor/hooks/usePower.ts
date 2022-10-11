@@ -1,6 +1,6 @@
 import { useAsyncRetry } from 'react-use'
-import { useAccount } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { useAccount } from '@masknet/web3-hooks-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { PluginSnapshotRPC } from '../../messages.js'
 import type { ProposalIdentifier } from '../../types.js'
 import { useProposal } from './useProposal.js'

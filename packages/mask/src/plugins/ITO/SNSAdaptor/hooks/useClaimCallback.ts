@@ -1,5 +1,6 @@
-import { useAccount, useChainId, useWeb3Connection } from '@masknet/plugin-infra/web3'
-import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
+import { useAccount, useChainId, useWeb3Connection } from '@masknet/web3-hooks-base'
+import { isSameAddress } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { encodeContractTransaction, useITOConstants } from '@masknet/web3-shared-evm'
 import stringify from 'json-stable-stringify'
 import { useAsyncFn } from 'react-use'

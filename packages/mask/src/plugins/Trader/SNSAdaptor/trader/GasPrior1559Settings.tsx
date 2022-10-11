@@ -1,16 +1,16 @@
 import { memo, useCallback, useMemo, useState } from 'react'
 import { useUpdateEffect } from 'react-use'
+import classnames from 'classnames'
+import { toHex } from 'web3-utils'
+import BigNumber from 'bignumber.js'
 import { formatGweiToEther, formatGweiToWei, formatWeiToGwei, GasOptionConfig } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../../utils/index.js'
 import { Accordion, AccordionDetails, AccordionSummary, Box, TextField, Typography } from '@mui/material'
 import { makeStyles, MaskColorVar, ActionButton } from '@masknet/theme'
-import classnames from 'classnames'
 import { ExpandMore } from '@mui/icons-material'
-import { toHex } from 'web3-utils'
-import BigNumber from 'bignumber.js'
-import { isDashboardPage } from '@masknet/shared-base'
-import { useChainId, useFungibleToken, useGasOptions, useNativeTokenPrice } from '@masknet/plugin-infra/web3'
-import { GasOptionType, NetworkPluginID } from '@masknet/web3-shared-base'
+import { isDashboardPage, NetworkPluginID } from '@masknet/shared-base'
+import { useChainId, useFungibleToken, useGasOptions, useNativeTokenPrice } from '@masknet/web3-hooks-base'
+import { GasOptionType } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles<{
     isDashboard: boolean
@@ -77,7 +77,6 @@ const useStyles = makeStyles<{
         backgroundColor: 'inherit',
     },
     accordingTitle: {
-        fontSize: 14,
         lineHeight: '20px',
     },
     controller: {

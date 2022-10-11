@@ -140,7 +140,7 @@ export async function checkAvailabilityOnDataProvider(
 }
 
 export async function getAvailableDataProviders(chainId: ChainId, type?: TagType, keyword?: string) {
-    const networkType = chainResolver.chainNetworkType(chainId)
+    const networkType = chainResolver.networkType(chainId)
     const isMainnet = chainResolver.isMainnet(chainId)
     if (!isMainnet) return []
     if (!type || !keyword)

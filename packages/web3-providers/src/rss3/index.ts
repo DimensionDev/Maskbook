@@ -4,11 +4,12 @@ import {
     createPageable,
     HubOptions,
     resolveResourceURL,
+    SourceType,
     TokenType,
 } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import RSS3 from 'rss3-next'
-import urlcat from 'urlcat'
+import urlcat, { query } from 'urlcat'
 import { fetchJSON } from '../helpers.js'
 import { NonFungibleTokenAPI, RSS3BaseAPI } from '../types/index.js'
 import { NEW_RSS3_ENDPOINT, RSS3_ENDPOINT, TAG, TYPE } from './constants.js'
@@ -124,6 +125,7 @@ export class RSS3API implements RSS3BaseAPI.Provider, NonFungibleTokenAPI.Provid
                         name: asset.info.collection ?? '',
                         slug: '',
                     },
+                    source: SourceType.RSS3,
                 }
             })
             .filter((x) => x.chainId === chainId)
@@ -136,11 +138,13 @@ export class RSS3API implements RSS3BaseAPI.Provider, NonFungibleTokenAPI.Provid
     async getWeb3Feeds(address: string, { indicator, size = 100 }: HubOptions<ChainId> = {}) {
         if (!address) return createPageable([], createIndicator(indicator))
         const tags = [RSS3BaseAPI.Tag.Donation, RSS3BaseAPI.Tag.Collectible, RSS3BaseAPI.Tag.Transaction]
-        const url = urlcat(NEW_RSS3_ENDPOINT, `/:address?tag=${tags.join('&tag=')}`, {
-            address,
+        const queryString = `tag=${tags.join('&tag=')}&${query({
             limit: size,
-            cursor: indicator?.id,
+            cursor: indicator?.id ?? '',
             include_poap: true,
+        })}`
+        const url = urlcat(NEW_RSS3_ENDPOINT, `/:address?${queryString}`, {
+            address,
         })
         const { result, cursor } = await fetchJSON<{
             result: RSS3BaseAPI.Activity[]
