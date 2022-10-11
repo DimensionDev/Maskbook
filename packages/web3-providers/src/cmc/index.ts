@@ -1,3 +1,4 @@
+import Fuse from 'fuse.js'
 import getUnixTime from 'date-fns/getUnixTime'
 import { TokenType } from '@masknet/web3-shared-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
@@ -210,6 +211,8 @@ export async function getLatestMarketPairs(id: string, currency: string) {
 // #endregion
 
 export class CoinMarketCapAPI implements TrendingAPI.Provider<ChainId> {
+    private searchableCoins: Fuse<TrendingAPI.Coin> | null = null
+
     private async getHistorical(
         id: string,
         currency: string,
@@ -233,6 +236,24 @@ export class CoinMarketCapAPI implements TrendingAPI.Provider<ChainId> {
         return response.data
     }
 
+    private async getSearchableCoins() {
+        if (!this.searchableCoins) {
+            const coins = await this.getAllCoins()
+            this.searchableCoins = new Fuse<TrendingAPI.Coin>(coins, {
+                keys: [
+                    { name: 'name', weight: 0.5 },
+                    { name: 'symbol', weight: 0.8 },
+                ],
+                isCaseSensitive: false,
+                ignoreLocation: true,
+                shouldSort: true,
+                threshold: 0.45,
+                minMatchCharLength: 3,
+            })
+        }
+        return this.searchableCoins
+    }
+
     async getAllCoins(): Promise<TrendingAPI.Coin[]> {
         const response = await fetchJSON<ResultData<Coin[]>>(
             `${CMC_V1_BASE_URL}/cryptocurrency/map?aux=status,platform&listing_status=active,untracked&sort=cmc_rank`,
@@ -250,8 +271,9 @@ export class CoinMarketCapAPI implements TrendingAPI.Provider<ChainId> {
             }))
     }
 
-    getCoinsByKeyword(chainId: ChainId, keyword: string): Promise<TrendingAPI.Coin[]> {
-        throw new Error('Method not implemented.')
+    async getCoinsByKeyword(chainId: ChainId, keyword: string): Promise<TrendingAPI.Coin[]> {
+        const coins = await this.getSearchableCoins()
+        return coins.search(keyword).map((x) => x.item)
     }
 
     async getCoinTrendingById(

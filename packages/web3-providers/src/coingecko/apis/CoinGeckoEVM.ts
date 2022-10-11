@@ -1,3 +1,4 @@
+import Fuse from 'fuse.js'
 import { uniq, uniqBy } from 'lodash-unified'
 import { DataProvider } from '@masknet/public-api'
 import { HubIndicator, HubOptions, TokenType } from '@masknet/web3-shared-base'
@@ -11,10 +12,29 @@ import { resolveChain } from '../helper.js'
 import type { Platform } from '../type.js'
 
 export class CoinGeckoTrendingEVM_API implements TrendingAPI.Provider<ChainId> {
+    private searchableCoins: Fuse<TrendingAPI.Coin> | null = null
+
+    private async getSearchableCoins() {
+        if (!this.searchableCoins) {
+            const coins = await this.getAllCoins()
+            this.searchableCoins = new Fuse<TrendingAPI.Coin>(coins, {
+                keys: [
+                    { name: 'name', weight: 0.5 },
+                    { name: 'symbol', weight: 0.8 },
+                ],
+                isCaseSensitive: false,
+                ignoreLocation: true,
+                shouldSort: true,
+                threshold: 0.45,
+                minMatchCharLength: 3,
+            })
+        }
+        return this.searchableCoins
+    }
+
     private async getSupportedPlatform() {
         const requestPath = `${COINGECKO_URL_BASE}/asset_platforms`
         const response = await fetchJSON<Platform[]>(requestPath)
-
         return response.filter((x) => x.id && x.chain_identifier) ?? []
     }
 
@@ -23,8 +43,9 @@ export class CoinGeckoTrendingEVM_API implements TrendingAPI.Provider<ChainId> {
         return coins.map((coin) => ({ ...coin, type: TokenType.Fungible }))
     }
 
-    getCoinsByKeyword(chainId: ChainId, keyword: string): Promise<TrendingAPI.Coin[]> {
-        throw new Error('Method not implemented.')
+    async getCoinsByKeyword(chainId: ChainId, keyword: string): Promise<TrendingAPI.Coin[]> {
+        const coins = await this.getSearchableCoins()
+        return coins.search(keyword).map((x) => x.item)
     }
 
     async getCoinTrendingById(
