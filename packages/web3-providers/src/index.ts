@@ -41,6 +41,7 @@ import { FlowFungibleAPI } from './flow/index.js'
 import { CF_API } from './cf/index.js'
 import { MirrorAPI } from './mirror/index.js'
 import { MindsAPI } from './minds/index.js'
+import { FuseTrendingAPI } from './fuse/index.js'
 
 export * from './helpers.js'
 export * from './types/index.js'
@@ -107,3 +108,6 @@ export const Zerion = new ZerionAPI()
 export const ZerionNonFungibleToken = new ZerionNonFungibleTokenAPI()
 export const ZerionTrending = new ZerionTrendingAPI()
 export const ZerionGas = new ZerionGasAPI()
+
+// Fuse
+export const FuseTrending = new FuseTrendingAPI()
