@@ -117,7 +117,7 @@ export function NFTListPage(props: NFTListPageProps) {
                 <Typography className={classes.placeholderText}>{t.loading()}</Typography>
             </Box>
         )
-    if (children) return <>{children}</>
+
     return (
         <Box className={classes.root}>
             <List className={classes.list}>
