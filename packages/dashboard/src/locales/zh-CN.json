@@ -106,7 +106,7 @@
     "wallets_history": "历史记录",
     "settings": "设置",
     "gas_fee": "交易手续费",
-    "transfer_cost": "花费 {{gasFee}} {{symbol}} ≈ {{usd}} 美元",
+    "transfer_cost": "花费 {{gasFee}} {{symbol}} ≈ ${{usd}}",
     "done": "完成!",
     "labs": "D.Market",
     "wallet_transactions_pending": "待定中",
