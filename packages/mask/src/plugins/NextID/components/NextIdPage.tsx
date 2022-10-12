@@ -61,7 +61,7 @@ export function NextIdPage() {
 
         if (!personaConnectStatus.hasPersona || !personaConnectStatus.connected || !personaConnectStatus.verified) {
             return (
-                <PluginEnableBoundary pluginId={PluginID.Web3Profile} classes={{ root: classes.enablePluginRoot }}>
+                <>
                     {(() => {
                         if (!personaConnectStatus.hasPersona)
                             return (
@@ -77,15 +77,11 @@ export function NextIdPage() {
 
                         return <AddWalletPersonaAction disabled={statusLoading} onAddWallet={handleAddWallets} />
                     })()}
-                </PluginEnableBoundary>
+                </>
             )
         }
 
-        return (
-            <PluginEnableBoundary pluginId={PluginID.Web3Profile} classes={{ root: classes.enablePluginRoot }}>
-                <AddWalletPersonaAction disabled={statusLoading} onAddWallet={handleAddWallets} />
-            </PluginEnableBoundary>
-        )
+        return <AddWalletPersonaAction disabled={statusLoading} onAddWallet={handleAddWallets} />
     }, [isOwn, t, statusLoading, handleAddWallets, personaConnectStatus])
 
     if (loadingBindings || loadingPersona) {
@@ -95,7 +91,11 @@ export function NextIdPage() {
     return (
         <>
             <PluginCardFrameMini>
-                <ThemeProvider theme={MaskLightTheme}>{getActionComponent}</ThemeProvider>
+                <ThemeProvider theme={MaskLightTheme}>
+                    <PluginEnableBoundary pluginId={PluginID.Web3Profile} classes={{ root: classes.enablePluginRoot }}>
+                        {getActionComponent}
+                    </PluginEnableBoundary>
+                </ThemeProvider>
             </PluginCardFrameMini>
             {openBindDialog && currentPersona && isOwn && (
                 <BindDialog
