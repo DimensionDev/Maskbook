@@ -8,14 +8,12 @@ import type { NonFungibleAsset } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { TabContext, TabPanel } from '@mui/lab'
 import { DialogContent, Tab } from '@mui/material'
-import { activatedSocialNetworkUI } from '../../../social-network/index.js'
 import { PluginWalletStatusBar } from '../../../utils/index.js'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
-import { TargetRuntimeContext, useTip } from '../contexts/index.js'
+import { TargetRuntimeContext, useCreateTipsTransaction, useTip } from '../contexts/index.js'
 import { useI18N } from '../locales/index.js'
 import { TipsType } from '../types/index.js'
 import { AddDialog } from './AddDialog.js'
-import { ConfirmModal } from './common/ConfirmModal.js'
 import { NetworkSection } from './NetworkSection/index.js'
 import { NFTSection } from './NFTSection/index.js'
 import { RecipientSection } from './RecipientSection/index.js'
@@ -63,27 +61,26 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
     const { classes } = useStyles()
 
     const [addTokenDialogIsOpen, openAddTokenDialog] = useBoolean(false)
-    const [confirmModalIsOpen, openConfirmModal] = useBoolean(false)
     const {
         tipType,
         setTipType,
         amount,
         token,
         isSending,
+        isDirty,
         recipient,
         recipientAddress,
         recipientSnsId,
         nonFungibleTokenContract,
         setNonFungibleTokenAddress,
+        nonFungibleTokenId,
         setNonFungibleTokenId,
-        reset,
         sendTip,
         validation: [isValid, validateMessage],
     } = useTip()
     const { targetChainId, pluginId } = TargetRuntimeContext.useContainer()
 
     const isTokenTip = tipType === TipsType.Tokens
-    const enableShare = !!activatedSocialNetworkUI.utils.share
     const shareText = useMemo(() => {
         const promote = t.tip_mask_promote()
         const message = isTokenTip
@@ -110,29 +107,30 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
 
     const buttonLabel = isSending ? t.sending_tip() : isValid || !validateMessage ? t.send_tip() : validateMessage
 
-    const handleConfirm = useCallback(() => {
-        if (enableShare) {
-            activatedSocialNetworkUI.utils.share?.(shareText)
-        }
-        openConfirmModal(false)
-        onClose?.()
-    }, [shareText, onClose])
-
     const handleAddToken = useCallback((token: NonFungibleAsset<ChainId, SchemaType>) => {
         setNonFungibleTokenAddress(token.address ?? '')
         setNonFungibleTokenId(token.tokenId)
         openAddTokenDialog(false)
     }, [])
 
+    const createTipsTx = useCreateTipsTransaction()
     const send = useCallback(async () => {
         const hash = await sendTip()
         if (typeof hash !== 'string') return
-        openConfirmModal(true)
-    }, [sendTip])
+        await createTipsTx({
+            shareText,
+            amount,
+            tipType,
+            token,
+            nonFungibleTokenContract,
+            nonFungibleTokenId,
+        })
+    }, [sendTip, createTipsTx, shareText, amount, tipType, token, nonFungibleTokenContract, nonFungibleTokenId])
 
     const expectedPluginID = [NetworkPluginID.PLUGIN_EVM, NetworkPluginID.PLUGIN_SOLANA].includes(pluginId)
         ? pluginId
         : NetworkPluginID.PLUGIN_EVM
+    const submitDisabled = (!isValid || isSending) && !isDirty
 
     return (
         <TabContext value={currentTab}>
@@ -166,7 +164,7 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
                                 ActionButtonPromiseProps={{
                                     fullWidth: true,
                                 }}>
-                                <ActionButton fullWidth disabled={!isValid || isSending} onClick={send}>
+                                <ActionButton fullWidth disabled={submitDisabled} onClick={send}>
                                     {buttonLabel}
                                 </ActionButton>
                             </ChainBoundary>
@@ -174,17 +172,6 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
                     </PluginWeb3ActualContextProvider>
                 </DialogContent>
             </InjectedDialog>
-            <ConfirmModal
-                title={t.tips()}
-                open={confirmModalIsOpen}
-                onClose={() => {
-                    openConfirmModal(false)
-                    reset()
-                    onClose?.()
-                }}
-                confirmText={enableShare ? t.tip_share() : t.tip_success_ok()}
-                onConfirm={handleConfirm}
-            />
             <AddDialog open={addTokenDialogIsOpen} onClose={() => openAddTokenDialog(false)} onAdd={handleAddToken} />
         </TabContext>
     )

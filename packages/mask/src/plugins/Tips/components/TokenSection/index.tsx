@@ -25,7 +25,7 @@ interface Props extends HTMLProps<HTMLDivElement> {}
 const ETH_GAS_LIMIT = 21000
 export const TokenSection: FC<Props> = ({ className, ...rest }) => {
     const { classes, cx } = useStyles()
-    const { token, setToken, amount, setAmount, isSending } = useTip()
+    const { token, setToken, amount, setAmount } = useTip()
     const { targetChainId: chainId, pluginId } = TargetRuntimeContext.useContainer()
     const account = useAccount()
 
@@ -69,7 +69,6 @@ export const TokenSection: FC<Props> = ({ className, ...rest }) => {
                 maxAmountSignificant={6}
                 onAmountChange={setAmount}
                 balance={tokenBalance}
-                disabled={isSending}
                 onSelectToken={onSelectTokenChipClick}
             />
             {pluginId === NetworkPluginID.PLUGIN_EVM ? <GasSettingsBar /> : null}

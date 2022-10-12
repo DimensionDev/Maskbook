@@ -217,7 +217,7 @@ export const RecipientSelect: FC<Props> = memo(({ className }) => {
     const t = useI18N()
     const { classes, cx } = useStyles()
     const selectRef = useRef(null)
-    const { recipient, recipients, setRecipient, isSending } = useTip()
+    const { recipient, recipients, setRecipient } = useTip()
     const recipientAddress = recipient?.address
     const { Others } = useWeb3State()
     const chainId = useChainId()
@@ -227,7 +227,6 @@ export const RecipientSelect: FC<Props> = memo(({ className }) => {
             className={cx(classes.root, className)}
             ref={selectRef}
             value={recipientAddress}
-            disabled={isSending}
             classes={{ select: classes.select }}
             onChange={(e) => {
                 setRecipient(e.target.value)
