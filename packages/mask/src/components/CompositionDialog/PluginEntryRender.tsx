@@ -93,7 +93,7 @@ function getPluginEntryDisabledDialog(define: Plugin.Shared.Definition) {
             return (
                 <MaskDialog title="Grant permission" open={props.open} onClose={props.onClose}>
                     <DialogContent>
-                        <PossiblePluginSuggestionUISingle define={define} lackHostPermission />
+                        <PossiblePluginSuggestionUISingle define={define} />
                     </DialogContent>
                 </MaskDialog>
             )

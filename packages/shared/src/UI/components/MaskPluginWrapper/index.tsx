@@ -173,6 +173,7 @@ export const MaskPostExtraPluginWrapper: PluginWrapperComponent<Plugin.SNSAdapto
                 publisher={publisher ? <PluginI18NFieldRender pluginID={ID} field={publisher.name} /> : undefined}
                 publisherLink={publisher?.link}
                 children={props.children}
+                lackHostPermission={props.lackHostPermission}
             />
         )
     },

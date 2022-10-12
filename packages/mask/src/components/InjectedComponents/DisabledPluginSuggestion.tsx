@@ -1,4 +1,4 @@
-import { useCallback } from 'react'
+import { ReactNode, useCallback } from 'react'
 import type { Option } from 'ts-results'
 import {
     useActivatedPluginsSNSAdaptor,
@@ -15,7 +15,6 @@ import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import Services from '../../extension/service.js'
 import { useI18N } from '../../utils/index.js'
 import { useSubscription } from 'use-subscription'
-import { usePluginHostPermissionCheck } from '../DataSource/usePluginHostPermission.js'
 
 function useDisabledPlugins() {
     const activated = new Set(useActivatedPluginsSNSAdaptor('any').map((x) => x.ID))
@@ -61,7 +60,7 @@ export function PossiblePluginSuggestionPostInspector() {
 export function PossiblePluginSuggestionUI(props: { plugins: Plugin.Shared.Definition[] }) {
     const { plugins } = props
     const _plugins = useActivatedPluginsSNSAdaptor('any')
-    const lackPermission = usePluginHostPermissionCheck(plugins)
+    // const lackPermission = usePluginHostPermissionCheck(plugins)
     if (!plugins.length) return null
     return (
         <>
@@ -70,7 +69,7 @@ export function PossiblePluginSuggestionUI(props: { plugins: Plugin.Shared.Defin
                     define={define}
                     key={define.ID}
                     wrapperProps={_plugins.find((y) => y.ID === define.ID)?.wrapperProps}
-                    lackHostPermission={lackPermission?.has(define.ID)}
+                    // lackHostPermission={lackPermission?.has(define.ID)}
                 />
             ))}
         </>
@@ -78,17 +77,19 @@ export function PossiblePluginSuggestionUI(props: { plugins: Plugin.Shared.Defin
 }
 
 export function PossiblePluginSuggestionUISingle(props: {
-    lackHostPermission?: boolean | undefined
+    lackHostPermission?: boolean
     define: Plugin.Shared.Definition
     wrapperProps?: Plugin.SNSAdaptor.PluginWrapperProps | undefined
+    content?: ReactNode
 }) {
-    const { define, lackHostPermission, wrapperProps } = props
+    const { define, lackHostPermission, wrapperProps, content } = props
     const { t } = useI18N()
     const theme = useTheme()
     const onClick = useCallback(() => {
-        Services.Settings.setPluginMinimalModeEnabled(define.ID, false)
         if (lackHostPermission && define.enableRequirement.host_permissions) {
             Services.Helper.requestHostPermission(define.enableRequirement.host_permissions)
+        } else {
+            Services.Settings.setPluginMinimalModeEnabled(define.ID, false)
         }
     }, [lackHostPermission, define])
 
@@ -103,11 +104,10 @@ export function PossiblePluginSuggestionUISingle(props: {
             }
             publisherLink={define.publisher?.link}
             wrapperProps={wrapperProps}
-            lackHostPermission={lackHostPermission}
             action={
                 <Button
                     size="small"
-                    startIcon={<Icons.Plugin size={18} />}
+                    startIcon={lackHostPermission ? <Icons.KeySquare /> : <Icons.Plugin size={18} />}
                     variant="roundedDark"
                     onClick={onClick}
                     sx={{
@@ -124,10 +124,10 @@ export function PossiblePluginSuggestionUISingle(props: {
                             backgroundColor: theme.palette.maskColor.dark,
                         },
                     }}>
-                    {lackHostPermission ? 'Grant permission' : t('plugin_enables')}
+                    {lackHostPermission ? t('authorization') : t('plugin_enables')}
                 </Button>
             }
-            content={<Rectangle style={{ paddingLeft: 8, marginBottom: 42 }} />}
+            content={content ?? <Rectangle style={{ paddingLeft: 8, marginBottom: 42 }} />}
         />
     )
 }

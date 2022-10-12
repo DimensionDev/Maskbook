@@ -66,12 +66,6 @@ export function createManager<
         // plugin default minimal mode is false
         else result = !!definition.inMinimalModeByDefault
 
-        if (definition.enableRequirement.host_permissions) {
-            if (!(await _host.permission.hasPermission(definition.enableRequirement.host_permissions))) {
-                result = true
-            }
-        }
-
         result ? minimalModePluginIDs.add(id) : minimalModePluginIDs.delete(id)
     }
 
@@ -84,7 +78,6 @@ export function createManager<
             def.i18n && addI18NResource(id, def.i18n)
             checkRequirementAndStartOrStop()
         })
-        const removeListener4 = permission.events.on('changed', checkRequirementAndStartOrStop)
 
         signal.addEventListener(
             'abort',
@@ -93,7 +86,6 @@ export function createManager<
                 removeListener1()
                 removeListener2()
                 removeListener3()
-                removeListener4()
             },
             { once: true },
         )
@@ -102,6 +94,7 @@ export function createManager<
             plugin.i18n && addI18NResource(plugin.ID, plugin.i18n)
         }
         checkRequirementAndStartOrStop().catch(console.error)
+
         async function checkRequirementAndStartOrStop() {
             for (const [id] of registeredPlugins.getCurrentValue()) {
                 if (await meetRequirement(id)) activatePlugin(id).catch(console.error)

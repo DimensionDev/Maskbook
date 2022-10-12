@@ -22,3 +22,14 @@ export function usePluginHostPermissionCheck(plugins: Plugin.Shared.Definition[]
     useEffect(() => MaskMessages.events.hostPermissionChanged.on(retry), [retry])
     return lackPermission
 }
+
+export function useCheckPermissions(permissions: string[]) {
+    const asyncResult = useAsyncRetry(async () => {
+        if (!permissions.length) return true
+        return Services.Helper.hasHostPermission(permissions)
+    }, [permissions])
+
+    useEffect(() => MaskMessages.events.hostPermissionChanged.on(asyncResult.retry), [asyncResult.retry])
+
+    return asyncResult
+}

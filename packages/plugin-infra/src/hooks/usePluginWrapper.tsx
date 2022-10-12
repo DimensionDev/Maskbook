@@ -6,6 +6,7 @@ export type PluginWrapperComponent<T extends Plugin.Shared.Definition = Plugin.S
         React.PropsWithChildren<
             RefAttributes<PluginWrapperMethods> & {
                 definition: T
+                lackHostPermission?: boolean
             }
         >
     >

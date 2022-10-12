@@ -18,15 +18,10 @@ import { PluginCardFrameMini } from '@masknet/shared'
 import { ThemeProvider } from '@mui/material'
 import { makeStyles, MaskLightTheme } from '@masknet/theme'
 
-const useStyles = makeStyles()((theme) => ({
-    enablePluginRoot: {
-        marginTop: 80,
-    },
-}))
+const useStyles = makeStyles()((theme) => ({}))
 
 export function NextIdPage() {
     const t = useI18N()
-    const { classes } = useStyles()
 
     const currentProfileIdentifier = useLastRecognizedIdentity()
     const visitingPersonaIdentifier = useCurrentVisitingIdentity()
@@ -61,7 +56,7 @@ export function NextIdPage() {
 
         if (!personaConnectStatus.hasPersona || !personaConnectStatus.connected || !personaConnectStatus.verified) {
             return (
-                <PluginEnableBoundary pluginId={PluginID.Web3Profile} classes={{ root: classes.enablePluginRoot }}>
+                <PluginEnableBoundary pluginId={PluginID.Web3Profile}>
                     {(() => {
                         if (!personaConnectStatus.hasPersona)
                             return (
@@ -82,7 +77,7 @@ export function NextIdPage() {
         }
 
         return (
-            <PluginEnableBoundary pluginId={PluginID.Web3Profile} classes={{ root: classes.enablePluginRoot }}>
+            <PluginEnableBoundary pluginId={PluginID.Web3Profile}>
                 <AddWalletPersonaAction disabled={statusLoading} onAddWallet={handleAddWallets} />
             </PluginEnableBoundary>
         )
