@@ -353,7 +353,7 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
                         {t.pets_powered_by()}
                     </Typography>
                     <Typography color="textPrimary" fontSize={14} fontWeight={700}>
-                        MintTeam
+                        NFF
                     </Typography>
                     <Icons.Pets className={classes.icon} />
                     <Typography fontSize={14} color="textSecondary" fontWeight={700} className={classes.des}>
