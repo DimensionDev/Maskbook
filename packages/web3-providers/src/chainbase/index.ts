@@ -198,7 +198,7 @@ export class ChainbaseFungibleTokenAPI implements FungibleTokenAPI.Provider<Chai
     }
 
     async getFungibleTokenPrice(chainId: ChainId, address: string) {
-        if (isNativeTokenAddress(address) || !isValidAddress(address)) return 0
+        if (isNativeTokenAddress(address) || !isValidAddress(address)) return undefined
         const data = await fetchFromChainbase<FT_Price>(
             urlcat('/v1/token/price', { chain_id: chainId, contract_address: address }),
         )

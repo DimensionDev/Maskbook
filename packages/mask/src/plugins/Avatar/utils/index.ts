@@ -7,7 +7,13 @@ import type { NextIDPlatform } from '@masknet/shared-base'
 import type { NextIDAvatarMeta } from '../types.js'
 import { PLUGIN_ID } from '../constants.js'
 import { sortPersonaBindings } from '../../../utils/index.js'
-import { isLocaleResource, resolveResourceURL } from '@masknet/web3-shared-base'
+import {
+    attemptUntil,
+    fetchImageViaHTTP,
+    isLocaleResource,
+    resolveCrossOriginURL,
+    resolveResourceURL,
+} from '@masknet/web3-shared-base'
 
 export async function getImage(image: string): Promise<string> {
     const blob = await Services.Helper.fetch(image)
@@ -23,10 +29,9 @@ function blobToBase64(blob: Blob) {
 }
 
 async function fetchImage(url: string) {
-    if (isLocaleResource(url)) return
-    const fetch = globalThis.r2d2Fetch ?? globalThis.fetch
-    const response = await fetch(url)
-    return response.blob()
+    const resolvedURL = resolveCrossOriginURL(url)
+    if (!resolvedURL) return fetchImageViaHTTP(url)
+    return attemptUntil([async () => fetchImageViaHTTP(resolvedURL), async () => fetchImageViaHTTP(url)], null)
 }
 
 export async function toPNG(image: string) {
