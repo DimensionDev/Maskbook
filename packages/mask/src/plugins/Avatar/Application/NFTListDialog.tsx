@@ -376,9 +376,9 @@ export function NFTListDialog(props: NFTListDialogProps) {
                             fontSize={14}
                             fontWeight="bold"
                             color={(theme) => theme.palette.maskColor.main}>
-                            MintTeam
+                            NFF
                         </Typography>
-                        <Icons.NonFungibleFriends style={{ paddingRight: 4 }} />
+                        <Icons.Pets style={{ paddingRight: 4 }} />
                         <Typography
                             style={{ paddingRight: 4 }}
                             variant="body1"
