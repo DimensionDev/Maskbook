@@ -255,7 +255,7 @@ export const Prior1559GasSetting = memo(() => {
                             className={selected === index ? classes.selected : undefined}>
                             <Typography className={classes.optionsTitle}>{title}</Typography>
                             <Typography className={classes.optionsContent}>
-                                {Number(gasPrice ?? 0).toString()} Gwei
+                                {formatWeiToGwei(gasPrice ?? 0).toString()} Gwei
                             </Typography>
                             <Typography className={classes.gasUSD}>
                                 {t('popups_wallet_gas_fee_settings_usd', {

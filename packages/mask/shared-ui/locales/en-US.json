@@ -281,7 +281,7 @@
     "recent_transaction_failed": "Failed",
     "recent_transaction_cancelled": "Cancelled",
     "wallet_balance": "Balance",
-    "wallet_balance_eth": "Balance(ETH)",
+    "wallet_balance_eth": "Balance({{symbol}})",
     "wallet_new": "New Wallet",
     "wallet_status_pending_one": "{{count}} Pending",
     "wallet_status_pending_other": "{{count}} Pendings",

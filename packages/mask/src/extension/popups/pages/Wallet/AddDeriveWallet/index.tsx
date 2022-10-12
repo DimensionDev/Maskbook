@@ -8,7 +8,7 @@ import { WalletRPC } from '../../../../../plugins/Wallet/messages.js'
 import { DeriveWalletTable } from '../components/DeriveWalletTable/index.js'
 import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { currySameAddress, HD_PATH_WITHOUT_INDEX_ETHEREUM } from '@masknet/web3-shared-base'
-import { useWallets } from '@masknet/web3-hooks-base'
+import { useNativeToken, useWallets } from '@masknet/web3-hooks-base'
 import { useI18N } from '../../../../../utils/index.js'
 import { LoadingButton } from '@mui/lab'
 import { currentMaskWalletAccountSettings } from '../../../../../../shared/legacy-settings/wallet-settings.js'
@@ -56,6 +56,7 @@ const AddDeriveWallet = memo(() => {
     const { t } = useI18N()
     const navigate = useNavigate()
     const location = useLocation()
+    const { value: nativeToken } = useNativeToken()
     const state = location.state as any as
         | {
               mnemonic?: string
@@ -146,6 +147,7 @@ const AddDeriveWallet = memo(() => {
                     dataSource={dataSource}
                     onCheck={onCheck}
                     confirmLoading={confirmLoading}
+                    symbol={nativeToken?.symbol ?? 'ETH'}
                 />
             </TableContainer>
             {!loading ? (
