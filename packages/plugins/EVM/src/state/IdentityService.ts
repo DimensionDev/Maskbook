@@ -121,6 +121,11 @@ export class IdentityService extends IdentityServiceState {
         return this.createSocialAddress(SocialAddressType.ENS, await ens.lookup(name), name)
     }
 
+    /** Read a social address from MaskX */
+    private async getSocialAddressFromMaskX({ nickname = '' }: SocialIdentity) {
+        return
+    }
+
     override async getFromRemote(identity: SocialIdentity, includes?: SocialAddressType[]) {
         const allSettled = await Promise.allSettled([
             this.getSocialAddressFromBio(identity),
@@ -128,6 +133,7 @@ export class IdentityService extends IdentityServiceState {
             this.getSocialAddressFromRSS3(identity),
             this.getSocialAddressFromNextID(identity),
             this.getSocialAddressFromKV(identity),
+            this.getSocialAddressFromMaskX(identity),
         ])
         return allSettled.flatMap((x) => (x.status === 'fulfilled' ? x.value : undefined)).filter(Boolean) as Array<
             SocialAddress<NetworkPluginID.PLUGIN_EVM>
