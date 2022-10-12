@@ -10,5 +10,3 @@ export const networkMap: Record<NetworkPluginID, SupportedNetworkMap> = {
     [NetworkPluginID.PLUGIN_FLOW]: { name: 'Solana Chain', icon: Icons.Flow },
     [NetworkPluginID.PLUGIN_SOLANA]: { name: 'Flow Chain', icon: Icons.Solana },
 }
-
-// todo provide a function to support when Next.ID supports Flow and Solana

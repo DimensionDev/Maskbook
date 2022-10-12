@@ -12,11 +12,7 @@ export interface FeedPageProps extends BoxProps {
     address?: string
 }
 
-const useStyles = makeStyles()(() => ({
-    normalCard: {
-        cursor: 'default',
-    },
-}))
+const useStyles = makeStyles()(() => ({}))
 
 export const FeedsPage = memo(function FeedsPage({ address, ...rest }: FeedPageProps) {
     const { classes } = useStyles()

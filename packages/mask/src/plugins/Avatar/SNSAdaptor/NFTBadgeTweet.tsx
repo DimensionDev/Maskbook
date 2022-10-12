@@ -1,11 +1,6 @@
-import { makeStyles } from '@masknet/theme'
 import { useLastRecognizedIdentity } from '../../../components/DataSource/useActivatedUI.js'
 import { NFTBadgeTimeline } from './NFTBadgeTimeline.js'
 import type { RSS3_KEY_SNS } from '../constants.js'
-
-const useStyles = makeStyles()((theme) => ({
-    root: {},
-}))
 
 interface NFTBadgeTweetProps {
     avatarId: string

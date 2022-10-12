@@ -17,9 +17,6 @@ import { useDonateCallback } from '../hooks/useDonateCallback.js'
 import { PluginGitcoinMessages } from '../messages.js'
 
 const useStyles = makeStyles()((theme) => ({
-    paper: {
-        width: '450px !important',
-    },
     form: {
         '& > *': {
             margin: theme.spacing(1, 0),
@@ -103,11 +100,13 @@ export function DonateDialog(props: DonateDialogProps) {
     const donate = useCallback(async () => {
         const hash = await donateCallback()
         if (typeof hash !== 'string') return
+
         const cashTag = isTwitter(activatedSocialNetworkUI) ? '$' : ''
         const shareText = token
             ? t.share_text({
                   balance: formatBalance(amount, token?.decimals),
                   symbol: `${cashTag}${token?.symbol || ''}`,
+                  promote: t.promote(),
               })
             : ''
         await openShareTxDialog({

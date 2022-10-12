@@ -30,9 +30,6 @@ const useStyles = makeStyles<{
     withinRiskWarningDialog?: boolean
     textColor?: string
 }>()((theme, { contentBackground, disableChange, withinRiskWarningDialog, textColor }) => ({
-    content: {
-        padding: theme.spacing(2, 3, 3),
-    },
     currentAccount: {
         padding: theme.spacing(0, 1.5),
         marginBottom: withinRiskWarningDialog ? '7px' : theme.spacing(2),
@@ -77,19 +74,10 @@ const useStyles = makeStyles<{
             backgroundColor: theme.palette.maskColor.dark,
         },
     },
-    address: {
-        fontSize: 16,
-        marginRight: theme.spacing(1),
-        display: 'inline-block',
-    },
     link: {
         fontSize: 14,
         display: 'flex',
         alignItems: 'center',
-    },
-    twitterProviderBorder: {
-        width: 14,
-        height: 14,
     },
     connectButtonWrapper: {
         display: 'flex',

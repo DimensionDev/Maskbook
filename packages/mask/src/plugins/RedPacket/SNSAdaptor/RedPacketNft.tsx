@@ -26,11 +26,6 @@ const useStyles = makeStyles()((theme) => ({
         position: 'relative',
         width: '100%',
     },
-    actions: {
-        paddingTop: theme.spacing(2),
-        display: 'flex',
-        justifyContent: 'center',
-    },
     card: {
         display: 'flex',
         flexDirection: 'column',
@@ -43,15 +38,6 @@ const useStyles = makeStyles()((theme) => ({
         backgroundImage: `url(${new URL('./assets/background.png', import.meta.url)})`,
         backgroundSize: 'cover',
         backgroundRepeat: 'no-repeat',
-    },
-    loadingCard: {
-        width: '100%',
-        height: 360,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    loadingCardImg: {
-        width: 200,
     },
     title: {
         textAlign: 'left',
@@ -70,10 +56,6 @@ const useStyles = makeStyles()((theme) => ({
         paddingTop: 40,
         color: '#FAD85A',
         width: '100%',
-    },
-    claim: {
-        textAlign: 'center',
-        marginTop: theme.spacing(1),
     },
     button: {
         backgroundColor: theme.palette.maskColor.dark,
@@ -124,10 +106,6 @@ const useStyles = makeStyles()((theme) => ({
             overflow: 'hidden',
         },
     },
-    tokenImg: {
-        width: '100%',
-        borderRadius: 6,
-    },
     claimedText: {
         fontSize: 18,
         fontWeight: 500,
@@ -166,26 +144,6 @@ const useStyles = makeStyles()((theme) => ({
     },
     badgeText: {
         fontSize: 12,
-    },
-    loadingTokenImg: {
-        opacity: 0.4,
-    },
-    tokenImgSpinner: {
-        position: 'absolute',
-        opacity: 0.4,
-        top: 65,
-        left: 40,
-        width: 30,
-        height: 30,
-    },
-    loadingText: {
-        textAlign: 'center',
-        fontSize: 24,
-    },
-    loadingWrapper: {
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
     },
     errorCard: {
         height: 360,

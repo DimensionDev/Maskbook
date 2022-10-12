@@ -165,5 +165,5 @@ function NFTAvatarListInFaceBookMobile() {
         [identity],
     )
 
-    return <NFTAvatar onChange={onChange} classes={classes} />
+    return <NFTAvatar onChange={onChange} classes={{ root: classes.root }} />
 }

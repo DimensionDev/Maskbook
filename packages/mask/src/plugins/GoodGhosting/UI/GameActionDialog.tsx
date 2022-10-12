@@ -12,12 +12,6 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import { useFungibleTokenBalance } from '@masknet/web3-hooks-base'
 
 const useStyles = makeStyles()((theme) => ({
-    content: {
-        width: '100%',
-        display: 'flex',
-        flexDirection: 'column',
-        boxSizing: 'border-box',
-    },
     button: {
         width: '60%',
         minHeight: 39,

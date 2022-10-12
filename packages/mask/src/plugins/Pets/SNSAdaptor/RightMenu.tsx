@@ -63,52 +63,6 @@ const useStyles = makeStyles()(() => ({
         opacity: '1 !important',
         pointerEvents: 'auto',
     },
-    menuItem: {
-        borderTop: '1px solid #f1f1f1',
-    },
-    icon: {
-        position: 'absolute',
-        top: '50%',
-        right: '20px',
-        transform: 'translateY(-50%)',
-        height: '16px',
-        width: 'auto',
-    },
-    itemBox: {
-        padding: '8px !important',
-        backgroundColor: 'transparent !important',
-        boxShadow: 'none !important',
-        '&>ul': {
-            display: 'block',
-            margin: 0,
-            padding: '20px',
-            fontSize: '12px',
-            color: '#444',
-            boxSizing: 'border-box',
-            boxShadow: '0 0 8px rgba(0,0,0,.1)',
-            fontWeight: 500,
-            backgroundColor: '#fff',
-            borderRadius: '12px',
-            position: 'absolute',
-            bottom: 0,
-            left: '8px',
-            '&>li': {
-                listStyle: 'none',
-                padding: '4px 0',
-            },
-        },
-    },
-    link: {
-        color: '#ccc',
-        transition: 'color 200ms',
-        '&:hover': {
-            color: '#444',
-        },
-    },
-    normal: {
-        fontWeight: 'normal',
-        color: '#777',
-    },
 }))
 
 function RightMenu(props: Props) {

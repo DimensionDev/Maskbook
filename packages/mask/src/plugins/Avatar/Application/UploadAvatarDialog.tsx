@@ -81,7 +81,7 @@ export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
 
     const onSave = useCallback(async () => {
         if (!editor || !account || !token || !currentPersona?.identifier || !proof) return
-        editor.getImage().toBlob(async (blob) => {
+        editor.getImageScaledToCanvas().toBlob(async (blob) => {
             if (!blob) return
             setDisabled(true)
             const avatarData = await uploadAvatar(blob, proof.identity)

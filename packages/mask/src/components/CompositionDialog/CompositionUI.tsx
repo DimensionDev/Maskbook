@@ -35,9 +35,6 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         flexWrap: 'wrap',
     },
-    sup: {
-        paddingLeft: 2,
-    },
     actions: {
         position: 'absolute',
         bottom: 0,

@@ -19,17 +19,6 @@ const useStyles = makeStyles()({
         padding: '16px 10px',
         backgroundColor: '#ffffff',
     },
-    header: {
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-    },
-    title: {
-        fontSize: 12,
-        color: '#151818',
-        lineHeight: 1.5,
-        fontWeight: 500,
-    },
     path: {
         marginTop: 26,
         marginBottom: 16,
@@ -51,15 +40,6 @@ const useStyles = makeStyles()({
         justifyContent: 'center',
         alignItems: 'center',
         gap: 4,
-    },
-    paginationIcon: {
-        border: '1px solid #E4E8F1',
-        borderRadius: 4,
-        fontSize: 20,
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        padding: 4,
     },
     toolbar: {
         padding: 0,

@@ -57,14 +57,6 @@ const useStyles = makeStyles()((theme) => ({
     inputOption: {
         margin: theme.spacing(4, 0, 0),
     },
-    inputBorder: {
-        borderRadius: theme.spacing(1),
-        padding: theme.spacing(1),
-    },
-    inputArea: {
-        borderRadius: theme.spacing(1),
-        padding: theme.spacing(2),
-    },
     menuItem: {
         width: '100%',
     },
@@ -99,14 +91,6 @@ const useStyles = makeStyles()((theme) => ({
         maxWidth: '260px',
         overflow: 'hidden',
     },
-    prevBox: {
-        margin: theme.spacing(2, 0, 0),
-        border: '1px dashed #ccc',
-        borderRadius: 4,
-        height: 'calc(100% - 16px)',
-        boxSizing: 'border-box',
-        padding: 4,
-    },
     boxPaper: {
         backgroundColor: theme.palette.mode === 'dark' ? '#1B1E38' : '#FFFFFF',
         marginBottom: 10,
@@ -114,9 +98,6 @@ const useStyles = makeStyles()((theme) => ({
     },
     icon: {
         margin: theme.spacing(0, 1),
-    },
-    RSS3Icon: {
-        color: theme.palette.mode === 'light' ? '#000' : '#fff',
     },
     arrowIcon: {
         width: 22.5,
@@ -372,7 +353,7 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
                         {t.pets_powered_by()}
                     </Typography>
                     <Typography color="textPrimary" fontSize={14} fontWeight={700}>
-                        MintTeam
+                        NFF
                     </Typography>
                     <Icons.Pets className={classes.icon} />
                     <Typography fontSize={14} color="textSecondary" fontWeight={700} className={classes.des}>

@@ -6,7 +6,7 @@
     "env": {
         "node": true
     },
-    "plugins": ["unused-imports"],
+    "plugins": ["unused-imports", "tss-unused-classes"],
     "rules": {
         "constructor-super": "error",
         "dot-notation": "error",
@@ -48,6 +48,7 @@
         "no-template-curly-in-string": "error",
         "prefer-const": "warn",
         "use-isnan": "error",
-        "unused-imports/no-unused-imports-ts": "error"
+        "unused-imports/no-unused-imports-ts": "error",
+        "tss-unused-classes/unused-classes": "error"
     }
 }

@@ -30,7 +30,7 @@ const TimelineRainbow = memo(
                     avatarId={avatarId}
                     width={width}
                     height={height}
-                    classes={classes}
+                    classes={{ root: classes.root }}
                     snsKey={RSS3_KEY_SNS.FACEBOOK}
                 />
             </div>

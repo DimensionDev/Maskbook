@@ -1,6 +1,6 @@
 import classNames from 'classnames'
 import { useCallback, useMemo } from 'react'
-import { Card, Typography } from '@mui/material'
+import { Card, keyframes, Typography } from '@mui/material'
 import { ChainId, chainResolver, networkResolver } from '@masknet/web3-shared-evm'
 import { useOpenShareTxDialog } from '@masknet/shared'
 import { usePostLink } from '../../../../components/DataSource/usePostInfo.js'
@@ -15,10 +15,105 @@ import { useAvailabilityComputed } from '../hooks/useAvailabilityComputed.js'
 import { useClaimCallback } from '../hooks/useClaimCallback.js'
 import { useRefundCallback } from '../hooks/useRefundCallback.js'
 import { OperationFooter } from './OperationFooter.js'
-import { useStyles } from './useStyles.js'
 import { formatBalance } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useAccount, useNetworkType, useWeb3 } from '@masknet/web3-hooks-base'
+import { makeStyles } from '@masknet/theme'
+
+export const useStyles = makeStyles()((theme) => {
+    const spinningAnimationKeyFrames = keyframes`
+to {
+  transform: rotate(360deg)
+}`
+    return {
+        root: {
+            borderRadius: theme.spacing(1),
+            padding: theme.spacing(3),
+            background: '#DB0632',
+            position: 'relative',
+            display: 'flex',
+            color: theme.palette.common.white,
+            flexDirection: 'column',
+            justifyContent: 'space-between',
+            height: 335,
+            boxSizing: 'border-box',
+            backgroundImage: `url(${new URL('./cover.png', import.meta.url)})`,
+            backgroundSize: 'contain',
+            [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
+                padding: theme.spacing(1, 1.5),
+                height: 202,
+            },
+            width: '100%',
+        },
+        header: {
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'flex-start',
+        },
+        content: {
+            display: 'flex',
+            flex: 1,
+            flexDirection: 'column',
+            alignItems: 'flex-start',
+            justifyContent: 'space-between',
+        },
+        bottomContent: {
+            width: '100%',
+            display: 'flex',
+            justifyContent: 'space-between',
+            flexWrap: 'wrap',
+        },
+        myStatus: {
+            fontSize: 14,
+            color: '#FAD85A',
+            fontWeight: 'bold',
+            [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
+                fontSize: 14,
+                left: 12,
+                bottom: 8,
+            },
+        },
+        from: {
+            fontSize: '14px',
+            color: '#FFFFFF',
+            fontWeight: 'bold',
+            [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
+                fontSize: 14,
+                right: 12,
+                bottom: 8,
+            },
+        },
+        label: {
+            borderRadius: theme.spacing(1),
+            padding: theme.spacing(0.2, 1),
+            background: 'rgba(0, 0, 0, 0.2)',
+            textTransform: 'capitalize',
+            position: 'absolute',
+            right: 12,
+            top: 8,
+        },
+        words: {
+            color: '#FAD85A',
+            fontSize: 20,
+            whiteSpace: 'pre',
+            textOverflow: 'ellipsis',
+            overflow: 'hidden',
+            width: '85%',
+            minWidth: 300,
+            [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
+                fontSize: 14,
+            },
+        },
+        fullWidthBox: {
+            width: '100%',
+        },
+        loadingText: {
+            textAlign: 'center',
+            fontSize: 24,
+            marginTop: 210,
+        },
+    }
+})
 
 export interface RedPacketProps {
     payload: RedPacketJSONPayload

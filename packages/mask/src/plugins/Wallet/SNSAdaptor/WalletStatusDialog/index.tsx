@@ -23,21 +23,6 @@ const useStyles = makeStyles()((theme) => ({
         borderTop: `1px solid ${theme.palette.divider}`,
         justifyContent: 'flex-start',
     },
-    walletStatusWrapper: {
-        marginRight: 16,
-    },
-    address: {
-        fontSize: 16,
-        marginRight: theme.spacing(1),
-        display: 'inline-block',
-    },
-    subTitle: {
-        fontSize: 18,
-        lineHeight: '24px',
-        fontWeight: 600,
-        marginBottom: 11.5,
-        color: theme.palette.text.primary,
-    },
     inVisible: {
         visibility: 'hidden',
     },

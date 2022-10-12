@@ -43,16 +43,11 @@ const useStyles = makeStyles()((theme) => ({
         justifyContent: 'space-around',
         flexDirection: 'row',
     },
-    setNFTAvatar: {},
     skeleton: {
         width: 100,
         height: 100,
         objectFit: 'cover',
         boxSizing: 'border-box',
-    },
-    skeletonBox: {
-        marginLeft: 'auto',
-        marginRight: 'auto',
     },
     error: {
         display: 'flex',

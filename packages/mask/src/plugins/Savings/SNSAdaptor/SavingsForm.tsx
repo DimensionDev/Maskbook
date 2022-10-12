@@ -3,7 +3,7 @@ import { useAsync, useAsyncFn } from 'react-use'
 import type { AbiItem } from 'web3-utils'
 import BigNumber from 'bignumber.js'
 import { isLessThan, rightShift, ZERO, formatBalance, formatCurrency } from '@masknet/web3-shared-base'
-import { LoadingBase } from '@masknet/theme'
+import { LoadingBase, makeStyles } from '@masknet/theme'
 import {
     createContract,
     createERC20Token,
@@ -27,13 +27,55 @@ import { PluginWalletStatusBar, useI18N } from '../../../utils/index.js'
 import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary.js'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
 import { ProtocolType, SavingsProtocol, TabType } from '../types.js'
-import { useStyles } from './SavingsFormStyles.js'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary.js'
 import { DialogActions, DialogContent, Typography } from '@mui/material'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base.js'
 import { activatedSocialNetworkUI } from '../../../social-network/index.js'
 import { ActionButtonPromise } from '../../../extension/options-page/DashboardComponents/ActionButton.js'
 import { createLookupTableResolver, NetworkPluginID } from '@masknet/shared-base'
+
+export const useStyles = makeStyles()((theme, props) => ({
+    containerWrap: {
+        padding: 0,
+        fontFamily: theme.typography.fontFamily,
+    },
+    inputWrap: {
+        position: 'relative',
+        width: '100%',
+        margin: theme.spacing(1.25, 0),
+    },
+    tokenValueUSD: {
+        padding: '0 0 10px 0',
+    },
+    infoRow: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        padding: '0 0 15px 0',
+    },
+    infoRowLeft: {
+        display: 'flex',
+        alignItems: 'center',
+    },
+    infoRowRight: {
+        fontWeight: 'bold',
+    },
+    rowImage: {
+        width: '24px',
+        height: '24px',
+        margin: '0 5px 0 0',
+    },
+    button: {},
+    disabledButton: {},
+    connectWallet: {
+        marginTop: 0,
+    },
+    gasFee: {
+        padding: '0 0 0 5px',
+        fontSize: 11,
+        opacity: 0.5,
+    },
+}))
 
 export interface SavingsFormDialogProps {
     chainId: number

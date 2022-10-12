@@ -106,21 +106,6 @@ const useStyles = makeStyles<{
         gridTemplateColumns: 'repeat(2, 1fr)',
         gap: 24,
     },
-    button: {
-        fontSize: 18,
-        lineHeight: '22px',
-        fontWeight: 600,
-        padding: '13px 0',
-        height: 48,
-        borderRadius: isDashboard ? 8 : 24,
-    },
-    cancelButton: {
-        backgroundColor: !isDashboard ? theme.palette.background.default : undefined,
-        color: !isDashboard ? theme.palette.text.strong : undefined,
-        '&:hover': {
-            backgroundColor: !isDashboard ? `${theme.palette.background.default}!important` : undefined,
-        },
-    },
 }))
 
 function defineSchema(t: I18NFunction) {

@@ -18,9 +18,6 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         justifyContent: 'center',
     },
-    adornment: {
-        color: theme.palette.text.secondary,
-    },
 }))
 
 export interface ExchangeTokenPanelGroupProps {

@@ -71,7 +71,6 @@ const useStyles = makeStyles()((theme) => ({
         right: 0,
     },
     listBox: {},
-    wrapper: {},
 }))
 
 const Content = memo(({ message, height }: { message: ReactNode; height?: number | string }) => {

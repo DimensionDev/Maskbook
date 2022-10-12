@@ -11,26 +11,6 @@ import { Image } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => {
     return {
-        root: {
-            color: 'inherit',
-            fontSize: 'inherit',
-            fontFamily: 'sans-serif',
-            '& p': {
-                margin: 0,
-            },
-            '& p + p': {
-                marginTop: theme.spacing(0.5),
-            },
-            '& h1, & h2, & h3, & h4, & h5, & h6': {
-                fontSize: 14,
-            },
-            '& img': {
-                maxWidth: '100%',
-            },
-            '& a': {
-                color: theme.palette.text.primary,
-            },
-        },
         card: {
             borderRadius: '6px',
             ':not(:last-child)': {
@@ -48,7 +28,6 @@ interface EncryptionCardProps {
 export default function EncryptionCard(props: EncryptionCardProps) {
     const { clueId } = props
 
-    const { classes } = useStyles()
     const { address, t } = useContext(FindTrumanContext)
     const [flipped, setFlipped] = useState(false)
     const [backImgHeight, setBackImgHeight] = useState(0)

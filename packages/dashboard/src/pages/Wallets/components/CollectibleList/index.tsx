@@ -30,11 +30,6 @@ const useStyles = makeStyles()({
         justifyContent: 'space-between',
     },
     card: {},
-    footer: {
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
 })
 
 interface CollectibleListProps {

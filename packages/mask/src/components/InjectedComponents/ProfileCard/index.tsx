@@ -56,48 +56,6 @@ const useStyles = makeStyles()((theme) => {
             boxSizing: 'border-box',
             flexShrink: 0,
         },
-        walletItem: {
-            display: 'flex',
-            alignItems: 'center',
-            fontSize: 18,
-            fontWeight: 700,
-        },
-        menuItem: {
-            display: 'flex',
-            alignItems: 'center',
-            flexGrow: 1,
-            justifyContent: 'space-between',
-        },
-        addressMenu: {
-            maxHeight: 192,
-            width: 248,
-            backgroundColor: theme.palette.maskColor.bottom,
-        },
-        addressItem: {
-            display: 'flex',
-            alignItems: 'center',
-        },
-        link: {
-            cursor: 'pointer',
-            marginTop: 2,
-            zIndex: 1,
-            '&:hover': {
-                textDecoration: 'none',
-            },
-        },
-        settingLink: {
-            cursor: 'pointer',
-            marginTop: 4,
-            zIndex: 1,
-            '&:hover': {
-                textDecoration: 'none',
-            },
-        },
-        linkIcon: {
-            color: theme.palette.maskColor.second,
-            fontSize: '20px',
-            margin: '4px 2px 0 2px',
-        },
         content: {
             position: 'relative',
             flexGrow: 1,
@@ -110,28 +68,6 @@ const useStyles = makeStyles()((theme) => {
             position: 'relative',
             paddingTop: 0,
             marginTop: theme.spacing(2),
-        },
-        addressLabel: {
-            color: theme.palette.maskColor.dark,
-            fontSize: 18,
-            fontWeight: 700,
-        },
-        arrowDropIcon: {
-            color: theme.palette.maskColor.dark,
-        },
-        selectedIcon: {
-            color: theme.palette.maskColor.primary,
-        },
-        linkOutIcon: {
-            color: theme.palette.maskColor.secondaryDark,
-        },
-        mainLinkIcon: {
-            margin: '0px 2px',
-            color: theme.palette.maskColor.secondaryDark,
-        },
-        secondLinkIcon: {
-            margin: '4px 2px 0 2px',
-            color: theme.palette.maskColor.secondaryDark,
         },
         footer: {
             position: 'absolute',

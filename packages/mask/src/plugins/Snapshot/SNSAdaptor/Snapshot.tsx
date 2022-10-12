@@ -15,12 +15,6 @@ import { useI18N } from '../../../utils/index.js'
 
 const useStyles = makeStyles()((theme) => {
     return {
-        root: {
-            '--contentHeight': '400px',
-            '--tabHeight': '35px',
-            width: '100%',
-            padding: 0,
-        },
         header: {
             gap: theme.spacing(2),
             display: 'flex',

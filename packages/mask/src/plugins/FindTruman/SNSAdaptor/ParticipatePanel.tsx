@@ -36,9 +36,6 @@ const useStyles = makeStyles()((theme, props) => ({
         marginBottom: theme.spacing(2),
         borderRadius: '8px',
     },
-    title: {
-        marginBottom: theme.spacing(2),
-    },
     buttons: {
         padding: theme.spacing(2),
     },
@@ -46,10 +43,6 @@ const useStyles = makeStyles()((theme, props) => ({
         '&:not(:last-child)': {
             marginBottom: theme.spacing(2),
         },
-    },
-    tabPaneWrapper: {
-        width: '100%',
-        marginBottom: '24px',
     },
     tabPane: {
         width: 535,

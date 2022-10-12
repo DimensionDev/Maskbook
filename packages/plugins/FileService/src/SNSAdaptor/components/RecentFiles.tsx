@@ -29,24 +29,6 @@ const useStyles = makeStyles()((theme) => ({
         lineHeight: 1.2,
         color: theme.palette.primary.contrastText,
     },
-}))
-
-const useItemStyles = makeStyles()({
-    root: {
-        padding: 0,
-        paddingBottom: 10,
-        userSelect: 'none',
-        cursor: 'pointer',
-    },
-})
-
-const useItemIconStyles = makeStyles()({
-    root: {
-        minWidth: 32,
-    },
-})
-
-const useItemTextStyles = makeStyles()((theme) => ({
     root: {
         margin: 0,
         marginLeft: 3,
@@ -64,6 +46,15 @@ const useItemTextStyles = makeStyles()((theme) => ({
         lineHeight: 1.2,
         color: theme.palette.text.secondary,
     },
+    itemRoot: {
+        padding: 0,
+        paddingBottom: 10,
+        userSelect: 'none',
+        cursor: 'pointer',
+    },
+    itemIconRoot: {
+        minWidth: 32,
+    },
 }))
 
 interface Props {
@@ -75,19 +66,20 @@ export const RecentFiles: React.FC<Props> = ({ files, onMore }) => {
     const t = useI18N()
     const navigate = useNavigate()
     const { classes } = useStyles()
-    const { classes: itemClasses } = useItemStyles()
-    const { classes: itemIconClasses } = useItemIconStyles()
-    const { classes: itemTextClasses } = useItemTextStyles()
     const onClick = (info: FileInfo) => () => {
         navigate(FileRouter.Uploaded, { state: info })
     }
     const renderItem = (file: FileInfo, index: number) => (
-        <ListItem classes={itemClasses} key={index} onClick={onClick(file)}>
-            <ListItemIcon classes={itemIconClasses}>
+        <ListItem classes={{ root: classes.itemRoot }} key={index} onClick={onClick(file)}>
+            <ListItemIcon classes={{ root: classes.itemIconRoot }}>
                 <File width={32} height={32} />
             </ListItemIcon>
             <ListItemText
-                classes={itemTextClasses}
+                classes={{
+                    root: classes.root,
+                    primary: classes.primary,
+                    secondary: classes.secondary,
+                }}
                 primary={file.name}
                 secondary={formatDateTime(file.createdAt, 'yyyy-MM-dd HH:mm')}
             />

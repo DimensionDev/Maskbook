@@ -22,7 +22,6 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
 import { Linking, useMenuConfig } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
-    root: {},
     container: {
         borderRadius: 0,
         backgroundColor: 'transparent',

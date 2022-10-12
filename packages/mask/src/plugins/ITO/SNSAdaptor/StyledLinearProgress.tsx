@@ -15,5 +15,13 @@ const useStyles = makeStyles()((_theme) => ({
 
 export function StyledLinearProgress(props: LinearProgressProps) {
     const { classes } = useStyles()
-    return <LinearProgress classes={classes} {...props} />
+    return (
+        <LinearProgress
+            classes={{
+                root: classes.root,
+                bar: classes.bar,
+            }}
+            {...props}
+        />
+    )
 }

@@ -17,17 +17,6 @@ const useStyles = makeStyles()((theme) => ({
     infoRow: {
         paddingBottom: theme.spacing(1),
     },
-    circularDataSection: {
-        paddingTop: theme.spacing(2),
-    },
-    circularDataWrapper: {
-        minWidth: '80px',
-    },
-    circularData: {
-        padding: theme.spacing(1),
-        maxWidth: '100px',
-        margin: 'auto',
-    },
     withdraw: {
         marginTop: theme.spacing(5),
         textAlign: 'center',

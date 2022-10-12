@@ -4,10 +4,6 @@ import { useI18N } from '../locales/i18n_generated'
 
 const useStyles = makeStyles()(() => ({
     root: {},
-    nft: {
-        display: 'flex',
-        alignItems: 'center',
-    },
     tip: {
         maxWidth: 'none',
     },

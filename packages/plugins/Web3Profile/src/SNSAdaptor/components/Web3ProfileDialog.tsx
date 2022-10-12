@@ -27,20 +27,6 @@ const useStyles = makeStyles()((theme) => ({
             display: 'none',
         },
     },
-    link: {
-        color: theme.palette.text.primary,
-        fontSize: 14,
-        display: 'flex',
-        alignItems: 'center',
-        marginLeft: '4px',
-    },
-    linkIcon: {
-        marginRight: theme.spacing(1),
-        color: '#6E767D',
-    },
-    card: {
-        overflow: 'scroll',
-    },
     actions: {
         padding: '0px !important',
         backgroundColor: theme.palette.background.paper,

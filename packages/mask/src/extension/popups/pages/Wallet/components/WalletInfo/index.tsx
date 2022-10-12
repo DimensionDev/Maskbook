@@ -54,11 +54,6 @@ const useStyles = makeStyles()({
         height: 24,
         marginRight: 4,
     },
-    tick: {
-        fontSize: 12,
-        stroke: '#77E0B5',
-        marginLeft: 4,
-    },
 })
 
 export const WalletInfo = memo(() => {

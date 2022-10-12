@@ -1,8 +1,9 @@
-import { LoadingBase, makeStyles } from '@masknet/theme'
-import { InjectedDialog } from '@masknet/shared'
-import { Button, DialogActions, DialogContent, InputAdornment, InputBase, Typography } from '@mui/material'
-import Fuse from 'fuse.js'
 import { useEffect, useMemo, useState } from 'react'
+import Fuse from 'fuse.js'
+import { InjectedDialog } from '@masknet/shared'
+import { LoadingBase, makeStyles } from '@masknet/theme'
+import { Icons } from '@masknet/icons'
+import { Button, DialogActions, DialogContent, InputAdornment, InputBase, Typography } from '@mui/material'
 import type {
     ProfileInformation as Profile,
     ProfileInformation,
@@ -10,19 +11,12 @@ import type {
 } from '@masknet/shared-base'
 import { useI18N } from '../../../utils/index.js'
 import { ProfileInList } from './ProfileInList.js'
-import { Icons } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
         minHeight: 400,
         minWidth: 400,
         overflow: 'hidden',
-    },
-    content: {
-        padding: '0 !important',
-    },
-    title: {
-        marginLeft: 6,
     },
     inputRoot: {
         padding: '4px 10px',

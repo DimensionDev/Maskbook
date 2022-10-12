@@ -14,15 +14,7 @@ const useStyles = makeStyles<{
 }>()((theme, props) => ({
     root: {
         paddingTop: props.networkPluginID === NetworkPluginID.PLUGIN_EVM ? 60 : 16,
-    },
-
-    button: {
-        textAlign: 'center',
-        paddingTop: theme.spacing(1),
-        display: 'flex',
-        justifyContent: 'space-around',
-        flexDirection: 'row',
-        color: '#1D9BF0',
+        width: '100%',
     },
     list: {
         gridGap: '12px 17px',
@@ -38,28 +30,9 @@ const useStyles = makeStyles<{
         padding: 0,
         flexDirection: 'column',
         borderRadius: 8,
+        minHeight: 100,
         userSelect: 'none',
         justifyContent: 'center',
-    },
-    skeleton: {
-        width: 100,
-        height: 100,
-        objectFit: 'cover',
-        boxSizing: 'border-box',
-    },
-    skeletonBox: {
-        marginLeft: 'auto',
-        marginRight: 'auto',
-    },
-    image: {
-        width: 100,
-        height: 100,
-        objectFit: 'cover',
-        boxSizing: 'border-box',
-        '&:hover': {
-            border: `1px solid ${theme.palette.primary.main}`,
-        },
-        borderRadius: 8,
     },
     placeholder: {
         display: 'flex',
@@ -116,7 +89,7 @@ export function NFTListPage(props: NFTListPageProps) {
                 <Typography className={classes.placeholderText}>{t.loading()}</Typography>
             </Box>
         )
-    if (children) return <>{children}</>
+
     return (
         <Box className={classes.root}>
             <List className={classes.list}>

@@ -1,7 +1,7 @@
 import { Box, IconButton, Paper, Typography } from '@mui/material'
 import classNames from 'classnames'
 import CloseIcon from '@mui/icons-material/Close'
-import { makeStyles, MaskColorVar } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 import { SetupGuideStep } from '../../../../shared/legacy-settings/types.js'
 
 interface ContentUIProps {
@@ -25,7 +25,6 @@ const useStyles = makeStyles()((theme) => ({
         justifyContent: 'center',
         flexDirection: 'column',
     },
-    tip: {},
 }))
 
 function ContentUI(props: ContentUIProps) {
@@ -73,65 +72,16 @@ export const useWizardDialogStyles = makeStyles()((theme) => ({
         },
         overflow: 'hidden',
     },
-    button: {
-        minWidth: 150,
-        height: 40,
-        minHeight: 40,
-        marginLeft: 0,
-        marginTop: 0,
-        [theme.breakpoints.down('sm')]: {
-            width: '100%',
-        },
-        fontSize: 14,
-        wordBreak: 'keep-all',
-        '&,&:hover': {
-            color: `${MaskColorVar.twitterButtonText} !important`,
-            background: `${MaskColorVar.twitterButton} !important`,
-        },
-    },
     close: {
         color: theme.palette.text.primary,
         position: 'absolute',
         right: 10,
         top: 10,
     },
-    tip: {
-        fontSize: 16,
-        fontWeight: 500,
-        lineHeight: '22px',
-        paddingTop: 16,
-    },
-    label: {
-        fontSize: 16,
-        fontWeight: 400,
-        lineHeight: '22px',
-    },
     header: {
         height: 40,
     },
     content: {},
-    connection: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-around',
-    },
-    connectItem: {
-        flex: 1,
-        height: 75,
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-    },
-    line: {
-        width: 100,
-        height: 1,
-        borderTop: `dashed 1px  ${MaskColorVar.borderSecondary}`,
-    },
-    name: {
-        fontSize: 16,
-        fontWeight: 500,
-    },
     footer: {},
 }))
 

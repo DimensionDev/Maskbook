@@ -36,39 +36,10 @@ const useStyles = makeStyles()((theme) => ({
     input: {
         flex: 1,
     },
-
-    tip: {
-        fontSize: 12,
-        color: theme.palette.text.secondary,
-    },
     button: {
         margin: 0,
         padding: 0,
         height: 40,
-    },
-    selectShrinkLabel: {
-        top: 6,
-        backgroundColor: theme.palette.background.paper,
-        paddingLeft: 2,
-        paddingRight: 7,
-        transform: 'translate(17px, -10px) scale(0.75) !important',
-    },
-    inputShrinkLabel: {
-        transform: 'translate(17px, -3px) scale(0.75) !important',
-    },
-    label: {
-        textAlign: 'left',
-        color: theme.palette.text.secondary,
-    },
-    gasEstimation: {
-        display: 'flex',
-        justifyContent: 'flex-end',
-        alignItems: 'center',
-        cursor: 'pointer',
-        '& > p': {
-            marginRight: 5,
-            color: theme.palette.mode === 'light' ? '#7B8192' : '#6F767C',
-        },
     },
     unlockContainer: {
         margin: 0,

@@ -26,7 +26,6 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => {
             justifyContent: 'space-between',
             flexDirection: 'column',
         },
-        balance: {},
         title: {},
         wrapper: {
             display: 'flex',

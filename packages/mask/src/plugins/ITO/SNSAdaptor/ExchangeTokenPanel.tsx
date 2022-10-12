@@ -11,22 +11,10 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import { useFungibleTokenBalance } from '@masknet/web3-hooks-base'
 
 const useStyles = makeStyles()((theme) => ({
-    root: {
-        width: '100%',
-    },
     line: {
         margin: theme.spacing(1),
         display: 'flex',
         backgroundColor: theme.palette.maskColor.bottom,
-    },
-    input: {
-        flex: 1,
-        paddingTop: theme.spacing(1),
-        paddingBottom: theme.spacing(1),
-    },
-    flow: {
-        margin: theme.spacing(1),
-        textAlign: 'center',
     },
     button: {
         margin: theme.spacing(1),

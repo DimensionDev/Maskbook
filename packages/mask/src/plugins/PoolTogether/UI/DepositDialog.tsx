@@ -37,12 +37,6 @@ const useStyles = makeStyles()((theme) => ({
             margin: theme.spacing(1, 0),
         },
     },
-
-    tip: {
-        fontSize: 12,
-        color: theme.palette.text.secondary,
-        padding: theme.spacing(2, 2, 0, 2),
-    },
     button: {
         margin: theme.spacing(1.5, 0, 0),
         padding: 12,

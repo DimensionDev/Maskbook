@@ -9,7 +9,6 @@ import urlcat from 'urlcat'
 import { openWindow } from '@masknet/shared-base-ui'
 
 const useStyles = makeStyles()({
-    container: { display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' },
     grid: { width: '100%' },
     icon: { fontSize: 45 },
 })

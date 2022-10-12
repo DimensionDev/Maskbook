@@ -128,7 +128,11 @@ export function ProfileTabAtFacebook() {
     return (
         <ProfileTab
             title="Web3"
-            classes={classes}
+            classes={{
+                root: classes.root,
+                button: classes.button,
+                selected: classes.selected,
+            }}
             reset={reset}
             clear={clear}
             children={<div className={classes.line} />}

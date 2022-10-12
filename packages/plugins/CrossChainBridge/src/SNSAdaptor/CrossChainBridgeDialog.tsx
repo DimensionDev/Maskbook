@@ -6,9 +6,6 @@ import { openWindow } from '@masknet/shared-base-ui'
 import { InjectedDialog } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
-    root: {
-        width: 600,
-    },
     content: {
         maxHeight: 510,
         padding: theme.spacing(2),

@@ -34,11 +34,6 @@ const useStyles = makeStyles()((theme, props) => ({
             marginBottom: 0,
         },
     },
-    tableItem: {
-        display: 'flex',
-        background: theme.palette.mode === 'light' ? '#F6F8F8' : '#17191D',
-        borderRadius: theme.spacing(1),
-    },
     tableCell: {
         display: 'flex',
         alignItems: 'center',

@@ -66,18 +66,6 @@ const useStyles = makeStyles()((theme) => ({
             backgroundClip: 'padding-box',
         },
     },
-    list: {
-        flexGrow: 1,
-        maxHeight: 400,
-        overflow: 'auto',
-        borderRadius: 4,
-    },
-    errorMessage: {
-        marginTop: theme.spacing(3),
-        fontSize: 12,
-        color: theme.palette.error.main,
-        marginBottom: theme.spacing(3),
-    },
     addButton: {
         marginLeft: 'auto',
         cursor: 'pointer',

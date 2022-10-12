@@ -39,10 +39,6 @@ const useStyles = makeStyles()((theme) => ({
             color: theme.palette.maskColor.publicMain,
         },
     },
-    currencyIcon: {
-        width: 24,
-        height: 24,
-    },
     symbol: {
         marginLeft: theme.spacing(0.2),
     },

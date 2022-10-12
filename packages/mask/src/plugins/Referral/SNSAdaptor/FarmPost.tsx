@@ -49,9 +49,6 @@ const useStyles = makeStyles()(() => ({
             width: 'calc( 100% - 8px)',
         },
     },
-    switchButtonBox: {
-        width: '100%',
-    },
 }))
 
 export function FarmPost(props: FarmPostProps) {

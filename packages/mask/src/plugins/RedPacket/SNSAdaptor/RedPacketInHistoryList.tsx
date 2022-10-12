@@ -25,14 +25,6 @@ const interFace = new Interface(REDPACKET_ABI)
 const useStyles = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
     return {
-        primary: {
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-        },
-        secondary: {
-            fontSize: 12,
-        },
         message: {
             whiteSpace: 'nowrap',
             overflow: 'hidden',
@@ -48,10 +40,6 @@ const useStyles = makeStyles()((theme) => {
         span: {
             maxWidth: 350,
             display: 'inline-flex',
-        },
-        time: {
-            fontSize: 12,
-            color: theme.palette.text.secondary,
         },
         root: {
             borderRadius: 10,

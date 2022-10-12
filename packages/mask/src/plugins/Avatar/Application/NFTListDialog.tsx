@@ -19,24 +19,6 @@ import { Icons } from '@masknet/icons'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
 
 const useStyles = makeStyles()((theme) => ({
-    AddressNames: {
-        position: 'absolute',
-        top: 10,
-        right: 10,
-    },
-
-    button: {
-        width: 88,
-        height: 32,
-        borderRadius: 999,
-        backgroundColor: theme.palette.maskColor.main,
-        color: theme.palette.maskColor.bottom,
-        marginTop: 22,
-    },
-    AddCollectiblesButton: {
-        fontWeight: 600,
-        color: '#1D9BF0',
-    },
     actions: {
         backgroundColor: theme.palette.mode === 'dark' ? 'black' : 'white',
         position: 'absolute',
@@ -79,36 +61,11 @@ const useStyles = makeStyles()((theme) => ({
         flex: 1,
         rowGap: 12,
     },
-    skeleton: {
-        width: 97,
-        height: 97,
-        objectFit: 'cover',
-        borderRadius: '100%',
-        boxSizing: 'border-box',
-        padding: 6,
-        margin: theme.spacing(0.5, 1),
-    },
-    skeletonBox: {
-        marginLeft: 'auto',
-        marginRight: 'auto',
-    },
-    gallery: {
-        display: 'flex',
-        flexFlow: 'row wrap',
-        overflowY: 'auto',
-        '&::-webkit-scrollbar': {
-            display: 'none',
-        },
-    },
-
     abstractTabWrapper: {
         width: '100%',
         flex: 1,
         flexShrink: 0,
         position: 'absolute',
-    },
-    tableTabWrapper: {
-        padding: theme.spacing(2),
     },
     tab: {
         height: 36,
@@ -133,11 +90,6 @@ const useStyles = makeStyles()((theme) => ({
     },
     tabPanel: {
         marginTop: theme.spacing(3),
-    },
-    divider: {
-        borderColor: theme.palette.mode === 'dark' ? '#2F3336' : '#F2F5F6',
-        marginLeft: 16,
-        marginRight: 16,
     },
     noWallet: {
         display: 'flex',
@@ -311,7 +263,13 @@ export function NFTListDialog(props: NFTListDialogProps) {
                                     chains={SUPPORTED_CHAIN_IDS}
                                     chainId={actualChainId}
                                     setChainId={setChainId}
-                                    classes={classes}
+                                    classes={{
+                                        tab: classes.tab,
+                                        tabs: classes.tabs,
+                                        tabPanel: classes.tabPanel,
+                                        tabPaper: classes.tabPaper,
+                                        indicator: classes.indicator,
+                                    }}
                                     networkId={selectedPluginId}
                                 />
                             </div>
@@ -376,9 +334,9 @@ export function NFTListDialog(props: NFTListDialogProps) {
                             fontSize={14}
                             fontWeight="bold"
                             color={(theme) => theme.palette.maskColor.main}>
-                            MintTeam
+                            NFF
                         </Typography>
-                        <Icons.NonFungibleFriends style={{ paddingRight: 4 }} />
+                        <Icons.Pets style={{ paddingRight: 4 }} />
                         <Typography
                             style={{ paddingRight: 4 }}
                             variant="body1"

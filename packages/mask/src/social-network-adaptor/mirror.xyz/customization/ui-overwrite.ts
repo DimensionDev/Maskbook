@@ -1,3 +1,4 @@
+/* eslint-disable tss-unused-classes/unused-classes */
 import { makeStyles } from '@masknet/theme'
 
 export const useInjectedDialogClassesOverwriteMirror = makeStyles()((theme) => {

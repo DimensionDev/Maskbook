@@ -91,10 +91,6 @@ const useStyles = makeStyles()((theme) => ({
     themeColor: {
         color: theme.palette.maskColor.highlight,
     },
-    linkLogo: {
-        width: 24,
-        height: 24,
-    },
     icons: {
         margin: '16px 0 16px 0',
         display: 'flex',

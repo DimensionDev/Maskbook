@@ -23,10 +23,6 @@ const useStyles = makeStyles()((theme) => {
         markdown: {
             margin: theme.spacing(1, 0),
         },
-        description: {
-            fontSize: 14,
-            wordBreak: 'break-all',
-        },
         chain_row: {
             display: 'flex',
             justifyContent: 'space-between',

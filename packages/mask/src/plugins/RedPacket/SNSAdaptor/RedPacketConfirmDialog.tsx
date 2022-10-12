@@ -51,27 +51,6 @@ const useStyles = makeStyles()((theme) => ({
         justifyContent: 'flex-end',
         alignItems: 'center',
     },
-    data: {
-        textAlign: 'right',
-        color: theme.palette.text.primary,
-    },
-    label: {
-        textAlign: 'left',
-        color: theme.palette.text.secondary,
-    },
-    button: {
-        padding: theme.spacing(2),
-    },
-    gasEstimation: {
-        display: 'flex',
-        justifyContent: 'flex-end',
-        alignItems: 'center',
-        cursor: 'pointer',
-        '& > p': {
-            marginRight: 5,
-            color: theme.palette.mode === 'light' ? '#7B8192' : '#6F767C',
-        },
-    },
     ellipsis: {
         textOverflow: 'ellipsis',
         overflow: 'hidden',

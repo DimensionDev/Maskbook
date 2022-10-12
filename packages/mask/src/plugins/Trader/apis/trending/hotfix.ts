@@ -115,7 +115,7 @@ getEnumAsArray(ChainId).map(({ value: chainId }) => {
     NETWORK_ID_MAP[DataProvider.CoinMarketCap][chainId] = getCoinMarketCapConstants(chainId).CHAIN_ID ?? ''
 })
 
-export function resolveAlias(chainId: ChainId, keyword: string, dataProvider: DataProvider) {
+export function resolveKeyword(chainId: ChainId, keyword: string, dataProvider: DataProvider) {
     if (dataProvider === DataProvider.UniswapInfo || dataProvider === DataProvider.NFTScan) return keyword
     return KEYWORD_ALIAS_MAP[dataProvider][chainId]?.[keyword.toUpperCase()] ?? keyword
 }

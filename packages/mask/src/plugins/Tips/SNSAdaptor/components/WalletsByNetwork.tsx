@@ -24,10 +24,6 @@ const useStyles = makeStyles()((theme) => ({
         overflowY: 'auto',
         gap: 12,
     },
-    settingIcon: {
-        fontSize: 16,
-        cursor: 'pointer',
-    },
     commonFlexBox: {
         display: 'flex',
         alignItems: 'center',

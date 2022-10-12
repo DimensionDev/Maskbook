@@ -44,21 +44,6 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => {
             minHeight: 'auto',
             width: '100%',
         },
-        footer: {
-            marginTop: theme.spacing(2),
-            zIndex: 1,
-        },
-        sourceNote: {
-            fontSize: 10,
-            marginRight: theme.spacing(1),
-        },
-        footLink: {
-            cursor: 'pointer',
-            marginRight: theme.spacing(0.5),
-            '&:last-child': {
-                marginRight: 0,
-            },
-        },
         tokenCardWrapper: {
             width: '100%',
             color: 'white',
@@ -115,10 +100,6 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => {
         },
         content: {
             marginBottom: theme.spacing(2),
-        },
-        contentTitle: {
-            fontSize: 18,
-            fontWeight: 300,
         },
         tab: {
             height: 36,
@@ -194,9 +175,6 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => {
             paddingBottom: theme.spacing(2),
             backgroundColor: theme.palette.background.paper,
         },
-        walletStatusBox: {
-            margin: theme.spacing(3, 'auto'),
-        },
     }
 })
 
@@ -264,7 +242,17 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
             <InjectedDialog open={open} onClose={onClose} title={t('plugin_ito_claim_all_dialog_title')}>
                 <DialogContent className={classes.wrapper}>
                     <div className={classes.abstractTabWrapper}>
-                        <NetworkTab chainId={chainId} setChainId={setChainId} classes={classes} chains={chainIdList} />
+                        <NetworkTab
+                            chainId={chainId}
+                            setChainId={setChainId}
+                            classes={{
+                                tab: classes.tab,
+                                tabs: classes.tabs,
+                                tabPanel: classes.tabPanel,
+                                indicator: classes.indicator,
+                            }}
+                            chains={chainIdList}
+                        />
                     </div>
                     <div className={classes.contentWrapper} ref={DialogRef}>
                         {loading || initLoading || !swappedTokens ? (

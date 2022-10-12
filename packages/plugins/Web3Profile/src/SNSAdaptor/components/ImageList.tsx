@@ -15,19 +15,6 @@ import { CollectionList } from './CollectionList.js'
 
 const useStyles = makeStyles<void, 'list'>()((theme, _, refs) => {
     return {
-        walletInfo: {
-            display: 'flex',
-            alignItems: 'center',
-        },
-        titleTailButton: {
-            marginLeft: 'auto',
-            justifyContent: 'center',
-        },
-        walletName: {
-            fontSize: '16px',
-            fontWeight: 400,
-            marginLeft: '4px',
-        },
         collectionWrap: {
             position: 'relative',
             cursor: 'pointer',
@@ -80,11 +67,6 @@ const useStyles = makeStyles<void, 'list'>()((theme, _, refs) => {
             gridTemplateColumns: 'repeat(7, 64px)',
             gridTemplateRows: 64,
             padding: '0 16px',
-        },
-        AddCollectiblesButton: {
-            fontWeight: 600,
-            color: '#1D9BF0',
-            display: 'none',
         },
         unListedEmpty: {
             color: theme.palette.maskColor.third,
