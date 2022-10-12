@@ -1,16 +1,12 @@
 import { Icons } from '@masknet/icons'
 import { useCurrentWeb3NetworkPluginID } from '@masknet/web3-hooks-base'
-import { EMPTY_LIST, NextIDPlatform, ProfileIdentifier, NetworkPluginID } from '@masknet/shared-base'
+import { EMPTY_LIST, ProfileIdentifier, NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
-import { NextIDProof } from '@masknet/web3-providers'
 import { FC, HTMLProps, MouseEventHandler, useCallback, useEffect, useMemo } from 'react'
-import { useAsyncRetry } from 'react-use'
-import { MaskMessages } from '../../../../../shared/index.js'
 import {
     useCurrentVisitingIdentity,
     useSocialIdentityByUseId,
 } from '../../../../components/DataSource/useActivatedUI.js'
-import { activatedSocialNetworkUI } from '../../../../social-network/index.js'
 import { useProfilePublicKey } from '../../hooks/useProfilePublicKey.js'
 import { PluginTipsMessages } from '../../messages.js'
 import type { TipsAccount } from '../../types/index.js'
@@ -45,21 +41,11 @@ export const TipButton: FC<Props> = ({
 }) => {
     const { classes, cx } = useStyles()
 
-    const platform = activatedSocialNetworkUI.configuration.nextIDConfig?.platform as NextIDPlatform
-    const { value: persona, loading: loadingPersona } = useProfilePublicKey(receiver)
+    const { value: personaPubkey, loading: loadingPersona } = useProfilePublicKey(receiver)
     const receiverUserId = receiver?.userId
-    const personaPubkey = persona?.publicKeyAsHex
 
     const pluginId = useCurrentWeb3NetworkPluginID()
-    const {
-        value: isAccountVerified,
-        loading: loadingVerifyInfo,
-        retry: retryLoadVerifyInfo,
-    } = useAsyncRetry(async () => {
-        if (pluginId !== NetworkPluginID.PLUGIN_EVM || !platform) return true
-        if (!personaPubkey || !receiverUserId) return false
-        return NextIDProof.queryIsBound(personaPubkey, platform, receiverUserId, true)
-    }, [pluginId, personaPubkey, platform, receiverUserId])
+
     const visitingIdentity = useCurrentVisitingIdentity()
     const { value: identity } = useSocialIdentityByUseId(receiverUserId)
 
@@ -74,14 +60,10 @@ export const TipButton: FC<Props> = ({
         return false
     }, [pluginId, isVisitingUser])
 
-    useEffect(() => {
-        return MaskMessages.events.ownProofChanged.on(retryLoadVerifyInfo)
-    }, [])
-
     const tipsAccounts = useTipsAccounts(identity, personaPubkey, addresses)
 
-    const isChecking = loadingPersona || loadingVerifyInfo
-    const disabled = isChecking || !isAccountVerified || tipsAccounts.length === 0 || !isRuntimeAvailable
+    const isChecking = loadingPersona
+    const disabled = isChecking || tipsAccounts.length === 0 || !isRuntimeAvailable
     useEffect(() => {
         onStatusUpdate?.(disabled)
     }, [disabled])
