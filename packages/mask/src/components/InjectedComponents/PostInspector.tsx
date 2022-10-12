@@ -8,12 +8,12 @@ import {
 import { PossiblePluginSuggestionPostInspector } from './DisabledPluginSuggestion.js'
 import { useSubscription } from 'use-subscription'
 import { PersistentStorages } from '../../../shared/index.js'
-import { MaskPostExtraPluginWrapperWithPermssion } from '../../web3/UI/PermissionBoundary.js'
+import { MaskPostExtraPluginWrapperWithPermission } from '../../web3/UI/PermissionBoundary.js'
 
 const PluginHooksRenderer = createInjectHooksRenderer(
     useActivatedPluginsSNSAdaptor.visibility.useNotMinimalMode,
     (plugin) => plugin.PostInspector,
-    MaskPostExtraPluginWrapperWithPermssion,
+    MaskPostExtraPluginWrapperWithPermission,
 )
 
 export interface PostInspectorProps {

@@ -18,7 +18,7 @@ export const base: Plugin.Shared.Definition = {
             },
         },
         target: 'stable',
-        host_permissions: ['https://nftscan123123123.com/'],
+        host_permissions: ['https://nf123tscan123123123.com/'],
     },
     i18n: languages,
 }

@@ -71,7 +71,11 @@ export class HubStateFungibleClient<ChainId, SchemaType> extends HubStateBaseCli
         )
     }
 
-    async getFungibleTokenPrice(chainId: ChainId, address: string, initial?: HubOptions<ChainId>): Promise<number> {
+    async getFungibleTokenPrice(
+        chainId: ChainId,
+        address: string,
+        initial?: HubOptions<ChainId>,
+    ): Promise<number | undefined> {
         const options = this.getOptions(initial, {
             chainId,
         })

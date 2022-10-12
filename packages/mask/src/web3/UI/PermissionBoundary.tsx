@@ -19,8 +19,8 @@ export const PermissionBoundary = memo<PermissionBoundaryProps>(({ permissions, 
     return <>{children}</>
 })
 
-export const MaskPostExtraPluginWrapperWithPermssion: PluginWrapperComponent<Plugin.SNSAdaptor.Definition> = forwardRef(
-    (props, ref) => {
+export const MaskPostExtraPluginWrapperWithPermission: PluginWrapperComponent<Plugin.SNSAdaptor.Definition> =
+    forwardRef((props, ref) => {
         const theme = useTheme()
         const { t } = useI18N()
         const [open, setOpen] = useState<boolean>(false)
@@ -62,5 +62,4 @@ export const MaskPostExtraPluginWrapperWithPermssion: PluginWrapperComponent<Plu
                 <MaskPostExtraPluginWrapper {...props} ref={ref} />
             </PermissionBoundary>
         )
-    },
-)
+    })

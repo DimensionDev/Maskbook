@@ -6,7 +6,7 @@ import { Controller, useForm } from 'react-hook-form'
 import BigNumber from 'bignumber.js'
 import { isEmpty } from 'lodash-unified'
 import { makeStyles } from '@masknet/theme'
-import { formatGweiToEther, formatGweiToWei, formatWeiToEther } from '@masknet/web3-shared-evm'
+import { formatGweiToEther, formatGweiToWei, formatWeiToEther, formatWeiToGwei } from '@masknet/web3-shared-evm'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages.js'
 import { useI18N } from '../../../../../utils/index.js'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -337,7 +337,7 @@ export const GasSetting1559 = memo(() => {
                         className={selected === index ? classes.selected : undefined}>
                         <Typography className={classes.optionsTitle}>{title}</Typography>
                         <Typography component="div" className={classes.optionsContent}>
-                            {toFixed(content?.suggestedMaxFeePerGas, 2)}
+                            {formatWeiToGwei(content?.suggestedMaxFeePerGas ?? 0).toFixed(2)}
                             <Typography variant="inherit" component="span">
                                 {t('wallet_transfer_gwei')}
                             </Typography>
