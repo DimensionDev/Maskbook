@@ -975,7 +975,7 @@ export interface HubFungible<ChainId, SchemaType, GasOption, Web3HubOptions = Hu
         initial?: Web3HubOptions,
     ) => Promise<Array<FungibleToken<ChainId, SchemaType>>>
     /** Get price of a fungible token. */
-    getFungibleTokenPrice?: (chainId: ChainId, address: string, initial?: Web3HubOptions) => Promise<number>
+    getFungibleTokenPrice?: (chainId: ChainId, address: string, initial?: Web3HubOptions) => Promise<number | undefined>
     /** Get token icon URLs that point to a fungible token. */
     getFungibleTokenIconURLs?: (chainId: ChainId, address: string, initial?: Web3HubOptions) => Promise<string[]>
     /** Get spenders of a fungible token approved by the given account. */
