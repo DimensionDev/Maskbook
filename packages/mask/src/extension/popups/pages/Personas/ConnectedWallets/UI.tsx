@@ -72,9 +72,6 @@ const useStyles = makeStyles()(() => ({
         cursor: 'pointer',
         color: '#767F8D',
     },
-    delete: {
-        cursor: 'pointer',
-    },
     placeholder: {
         display: 'flex',
         justifyContent: 'center',

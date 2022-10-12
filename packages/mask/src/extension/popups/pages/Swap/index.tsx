@@ -10,9 +10,6 @@ import { NetworkSelector } from '../../components/NetworkSelector/index.js'
 
 const useStyles = makeStyles()((theme) => {
     return {
-        walletStateBar: {
-            color: theme.palette.grey['900'],
-        },
         page: {
             minHeight: '100vh',
             maxWidth: '100vw',

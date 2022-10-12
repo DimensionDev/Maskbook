@@ -25,17 +25,6 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: '8px',
         marginBottom: '24px',
     },
-    walletStatusBox: {
-        width: 535,
-        margin: '24px auto',
-    },
-    img: {
-        height: 60,
-        width: 60,
-        justifyContent: 'center',
-        display: 'flex',
-        marginBottom: '16px',
-    },
     smallText: {
         fontSize: '15px',
     },

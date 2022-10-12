@@ -44,10 +44,6 @@ const useStyles = makeStyles()((theme) => {
         column: {
             flexDirection: 'column',
         },
-        flow: {
-            margin: theme.spacing(1),
-            textAlign: 'center',
-        },
         input: {
             position: 'relative',
             height: 66,
@@ -65,13 +61,6 @@ const useStyles = makeStyles()((theme) => {
             lineHeight: '18px',
             color: theme.palette.maskColor.second,
             whiteSpace: 'nowrap',
-        },
-        label: {
-            paddingLeft: theme.spacing(2),
-        },
-        tip: {
-            fontSize: 12,
-            color: theme.palette.text.secondary,
         },
         date: {
             margin: theme.spacing(1),
@@ -108,11 +97,6 @@ const useStyles = makeStyles()((theme) => {
         qualStartTime: {
             padding: '0 16px',
             opacity: 0.8,
-        },
-        field: {
-            flex: 1,
-            padding: theme.spacing(1),
-            marginTop: theme.spacing(1),
         },
         controller: {
             position: 'sticky',

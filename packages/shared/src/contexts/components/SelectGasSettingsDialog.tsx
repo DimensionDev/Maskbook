@@ -3,7 +3,7 @@ import { useChainId, useCurrentWeb3NetworkPluginID } from '@masknet/web3-hooks-b
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useSharedI18N } from '@masknet/shared'
 import { isDashboardPage, NetworkPluginID } from '@masknet/shared-base'
-import { makeStyles, MaskColorVar } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 import { DialogContent } from '@mui/material'
 import { InjectedDialog } from '../components/index.js'
 import { SettingsBoard } from '../../UI/components/SettingsBoard/index.js'
@@ -23,22 +23,6 @@ const useStyles = makeStyles<StyleProps>()((theme, { compact }) => ({
     content: {
         padding: theme.spacing(3, 2),
         paddingTop: 0,
-    },
-    list: {
-        scrollbarWidth: 'none',
-        '&::-webkit-scrollbar': {
-            display: 'none',
-        },
-    },
-    placeholder: {
-        textAlign: 'center',
-        height: 288,
-        paddingTop: theme.spacing(14),
-        boxSizing: 'border-box',
-    },
-    search: {
-        backgroundColor: 'transparent !important',
-        border: `solid 1px ${MaskColorVar.twitterBorderLine}`,
     },
 }))
 

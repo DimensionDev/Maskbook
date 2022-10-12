@@ -59,15 +59,6 @@ const useStyles = makeStyles()((theme) => ({
         fontWeight: 700,
         marginLeft: 4,
     },
-    domain: {
-        fontSize: 16,
-        lineHeight: '18px',
-        marginLeft: 6,
-        padding: 4,
-        borderRadius: 8,
-        backgroundColor: '#ffffff',
-        color: theme.palette.common.black,
-    },
     disabled: {
         cursor: 'default',
         color: theme.palette.maskColor.third,

@@ -187,7 +187,9 @@ export function TraderDialog() {
                         chainId={chainId}
                         /* @ts-ignore */
                         setChainId={setChainId}
-                        classes={classes}
+                        classes={{
+                            indicator: classes.indicator,
+                        }}
                         chains={chainIdList}
                         networkId={NetworkPluginID.PLUGIN_EVM}
                     />

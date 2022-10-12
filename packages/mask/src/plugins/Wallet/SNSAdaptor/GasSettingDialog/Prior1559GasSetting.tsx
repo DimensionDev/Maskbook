@@ -12,10 +12,10 @@ import { z as zod } from 'zod'
 // import { StyledInput } from '../../../../extension/popups/components/StyledInput'
 import { useI18N } from '../../../../utils/index.js'
 import type { GasSettingProps } from './types.js'
-import { useGasSettingStyles } from './useGasSettingStyles.js'
 import { GasOptionType, pow10 } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useChainId, useGasOptions, useNativeTokenPrice } from '@masknet/web3-hooks-base'
+import { makeStyles } from '@masknet/theme'
 
 const minGasPriceOfChain: ChainIdOptionalRecord<BigNumber.Value> = {
     [ChainId.BSC]: pow10(9).multipliedBy(5),
@@ -24,9 +24,59 @@ const minGasPriceOfChain: ChainIdOptionalRecord<BigNumber.Value> = {
     [ChainId.Astar]: pow10(9).multipliedBy(5), // 5 Gwei
 }
 
+const useStyles = makeStyles()((theme) => ({
+    options: {
+        display: 'grid',
+        gridTemplateColumns: 'repeat(3,1fr)',
+        gap: 10,
+        cursor: 'pointer',
+        width: '100%',
+        overflowX: 'scroll',
+        '& > *': {
+            backgroundColor: theme.palette.mode === 'dark' ? '#212442' : '#f7f9fa',
+            borderRadius: 8,
+            padding: 10,
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'space-between',
+        },
+    },
+    optionsTitle: {
+        color: '#7B8192',
+        fontSize: 16,
+        lineHeight: '22px',
+    },
+    gasUSD: {
+        color: '#7B8192',
+        fontSize: 12,
+        lineHeight: '14px',
+        wordBreak: 'break-all',
+    },
+    label: {
+        color: theme.palette.primary.main,
+        fontSize: 12,
+        lineHeight: '16px',
+        margin: '10px 0',
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
+    selected: {
+        backgroundColor: theme.palette.primary.main,
+        '& > *': {
+            color: theme.palette.primary.contrastText,
+        },
+    },
+    button: {
+        marginTop: 10,
+        padding: '9px 10px',
+        borderRadius: 20,
+    },
+}))
+
 export const Prior1559GasSetting: FC<GasSettingProps> = memo(
     ({ gasLimit, minGasLimit = 0, gasOptionType = GasOptionType.NORMAL, onConfirm = noop }) => {
-        const { classes } = useGasSettingStyles()
+        const { classes } = useStyles()
         const { t } = useI18N()
         const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
         const [selectedGasOption, setGasOptionType] = useState<GasOptionType | null>(gasOptionType)

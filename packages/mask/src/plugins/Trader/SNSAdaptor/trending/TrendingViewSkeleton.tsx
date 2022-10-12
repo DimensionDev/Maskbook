@@ -14,9 +14,6 @@ const useStyles = makeStyles()((theme) => ({
         paddingTop: 0,
         paddingBottom: 0,
     },
-    footer: {
-        justifyContent: 'space-between',
-    },
 }))
 
 export interface TrendingViewSkeletonProps extends withClasses<'content' | 'footer'> {

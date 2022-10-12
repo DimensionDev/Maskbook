@@ -12,10 +12,6 @@ const useStyles = makeStyles()((theme) => ({
     confirmation: {
         padding: '45px 36px 40px',
     },
-    heading: {
-        fontSize: '20px',
-        fontWeight: 600,
-    },
     title: {
         margin: '12px 0 8px',
         fontSize: '18px',

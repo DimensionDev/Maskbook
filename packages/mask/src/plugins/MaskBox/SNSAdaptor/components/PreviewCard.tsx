@@ -57,7 +57,7 @@ const useTabsStyles = makeStyles()((theme) => ({
 export interface PreviewCardProps {}
 
 export function PreviewCard(props: PreviewCardProps) {
-    const { classes: tabClasses } = useTabsStyles()
+    const { classes } = useTabsStyles()
     const state = useState(CardTab.Articles)
     const chainId = useChainId()
     const [openDrawDialog, setOpenDrawDialog] = useState(false)
@@ -188,7 +188,7 @@ export function PreviewCard(props: PreviewCardProps) {
             },
         ],
         state,
-        classes: tabClasses,
+        classes: { tab: classes.tab, tabs: classes.tabs, indicator: classes.indicator, tabPanel: classes.tabPanel },
     }
 
     return (
@@ -223,7 +223,7 @@ export function PreviewCard(props: PreviewCardProps) {
                     ActionButtonPromiseProps={{ variant: 'roundedDark' }}>
                     <WalletConnectedBoundary
                         ActionButtonProps={{ size: 'medium', variant: 'roundedDark' }}
-                        classes={{ button: tabClasses.button }}>
+                        classes={{ button: classes.button }}>
                         <ActionButton
                             loading={isOpening}
                             size="medium"

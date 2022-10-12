@@ -35,25 +35,11 @@ const useStyles = makeStyles()((theme) => {
         hidden: {
             display: 'none',
         },
-        active: {
-            display: 'block',
-        },
         buttonPrev: {
             marginRight: theme.spacing(0.5),
         },
         buttonNext: {
             marginLeft: theme.spacing(0.5),
-        },
-        tokenTitle: {
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-        },
-        tokenLinks: {
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            width: 65,
         },
         tokenIdRedirectionIcon: {
             verticalAlign: 'text-bottom',

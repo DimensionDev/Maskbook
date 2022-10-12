@@ -55,19 +55,11 @@ const useStyles = makeStyles()((theme) => ({
     optionsContent: {
         fontSize: 11,
     },
-    gasPrice: {
-        fontSize: 12,
-        lineHeight: '16px',
-    },
     gasUSD: {
         color: '#7B8192',
         fontSize: 12,
         lineHeight: '14px',
         wordBreak: 'break-all',
-    },
-    or: {
-        display: 'flex',
-        justifyContent: 'center',
     },
     label: {
         color: theme.palette.primary.main,

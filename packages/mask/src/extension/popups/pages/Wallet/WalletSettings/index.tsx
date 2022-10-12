@@ -12,12 +12,6 @@ import { Navigator } from '../../../components/Navigator/index.js'
 import { useTitle } from '../../../hook/useTitle.js'
 
 const useStyles = makeStyles()((theme) => ({
-    header: {
-        padding: 10,
-        borderBottom: '1px solid #F7F9FA',
-        display: 'flex',
-        alignItems: 'center',
-    },
     content: {
         flex: 1,
         backgroundColor: '#F7F9FA',
@@ -39,13 +33,6 @@ const useStyles = makeStyles()((theme) => ({
         lineHeight: 1.5,
         fontWeight: 700,
         fontSize: 16,
-    },
-    address: {
-        fontSize: 12,
-        lineHeight: '16px',
-        color: '#1C68F3',
-        display: 'flex',
-        alignItems: 'center',
     },
 }))
 

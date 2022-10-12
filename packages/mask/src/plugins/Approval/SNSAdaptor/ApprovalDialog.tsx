@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { DialogContent, Button, Tab } from '@mui/material'
-import { MaskTabList, useTabs } from '@masknet/theme'
+import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import { TabContext } from '@mui/lab'
 import { useCurrentWeb3NetworkPluginID } from '@masknet/web3-hooks-base'
 import { TargetChainIdContext } from '@masknet/web3-hooks-evm'
@@ -13,10 +13,76 @@ import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
 import { useI18N } from '../locales/index.js'
 import { useI18N as useBaseI18n, PluginWalletStatusBar } from '../../../utils/index.js'
 import { WalletMessages } from '../../../plugins/Wallet/messages.js'
-import { useStyles } from './useStyles.js'
 import { ApprovalEmptyContent } from './ApprovalEmptyContent.js'
 import { ApprovalTokenContent } from './ApprovalTokenContent.js'
 import { ApprovalNFTContent } from './ApprovalNFTContent.js'
+
+const useStyles = makeStyles<{ listItemBackground?: string; listItemBackgroundIcon?: string } | void>()(
+    (theme, props) => ({
+        dialogRoot: {
+            width: 600,
+            height: 620,
+            overflowX: 'hidden',
+        },
+        dialogContent: {
+            width: 600,
+            background: theme.palette.maskColor.bottom,
+            padding: 0,
+            margin: 'auto',
+            overflowX: 'hidden',
+        },
+        contentWrapper: {
+            width: 602,
+            padding: 0,
+            overflowY: 'auto',
+            overflowX: 'hidden',
+            height: '100%',
+            '::-webkit-scrollbar': {
+                backgroundColor: 'transparent',
+                width: 18,
+            },
+            '::-webkit-scrollbar-thumb': {
+                borderRadius: '20px',
+                width: 5,
+                border: '7px solid rgba(0, 0, 0, 0)',
+                backgroundColor: theme.palette.maskColor.secondaryLine,
+                backgroundClip: 'padding-box',
+            },
+        },
+        dialogTitle: {
+            '& > p': {
+                overflow: 'visible',
+            },
+        },
+        abstractTabWrapper: {
+            width: '100%',
+            paddingBottom: theme.spacing(2),
+        },
+        tab: {
+            height: 36,
+            minHeight: 36,
+        },
+        tabPaper: {
+            backgroundColor: 'inherit',
+        },
+        indicator: {
+            display: 'none',
+        },
+        tabPanel: {
+            marginTop: 12,
+        },
+        approvalWrapper: {
+            display: 'flex',
+            flexDirection: 'column',
+            width: '100%',
+            height: '100%',
+        },
+        footer: {
+            position: 'sticky',
+            bottom: 0,
+        },
+    }),
+)
 
 export interface ApprovalDialogProps {
     open: boolean
@@ -83,7 +149,12 @@ function ApprovalWrapper(props: ApprovalWrapperProps) {
                         <NetworkTab
                             chainId={networkTabChainId}
                             setChainId={setNetworkTabChainId}
-                            classes={classes}
+                            classes={{
+                                tab: classes.tab,
+                                tabPanel: classes.tabPanel,
+                                indicator: classes.indicator,
+                                tabPaper: classes.tabPaper,
+                            }}
                             chains={chainIdList?.filter(Boolean) as ChainId[]}
                         />
                     </div>

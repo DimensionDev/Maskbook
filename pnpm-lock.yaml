@@ -201,6 +201,9 @@ importers:
       eslint-plugin-react-hooks:
         specifier: ^4.6.0
         version: 4.6.0_eslint@8.23.0
+      eslint-plugin-tss-unused-classes:
+        specifier: ^0.0.4
+        version: 0.0.4_eslint@8.23.0
       eslint-plugin-unicorn:
         specifier: ^43.0.2
         version: 43.0.2_eslint@8.23.0
@@ -18172,6 +18175,14 @@ packages:
       resolve: 2.0.0-next.4
       semver: 6.3.0
       string.prototype.matchall: 4.0.7
+    dev: true
+
+  /eslint-plugin-tss-unused-classes/0.0.4_eslint@8.23.0:
+    resolution: {integrity: sha512-QwT1wcG0hM00wOcRKqdIDi4WkUOb55flySNGcvICJoGxXcH9Uk49jy0+UFZOVyUIMOYUVkCFLk02Mq+i5hrc7g==}
+    peerDependencies:
+      eslint: ^7.14.0 || ^8.0.0
+    dependencies:
+      eslint: 8.23.0
     dev: true
 
   /eslint-plugin-unicorn/43.0.2_eslint@8.23.0:

@@ -55,12 +55,6 @@ const useStyles = makeStyles()(() => ({
         lineHeight: '24px',
         fontWeight: 500,
     },
-    spender: {
-        color: '#15181B',
-        fontSize: 16,
-        lineHeight: '22px',
-        margin: '10px 0',
-    },
     secondary: {
         color: '#7B8192',
         fontSize: 12,

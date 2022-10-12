@@ -22,9 +22,11 @@ import { MyRewards } from './MyRewards/index.js'
 import { TokenSelectField } from './shared-ui/TokenSelectField.js'
 import { RewardDataWidget } from './shared-ui/RewardDataWidget.js'
 import { SponsoredFarmIcon } from './shared-ui/icons/SponsoredFarm.js'
-import { useTabStyles } from './styles.js'
 
 const useStyles = makeStyles()((theme) => ({
+    root: {
+        fontSize: 14,
+    },
     container: {
         flex: 1,
         height: '100%',
@@ -34,12 +36,6 @@ const useStyles = makeStyles()((theme) => ({
         height: '100%',
         overflow: 'auto',
         padding: theme.spacing(3, 0),
-    },
-    tabs: {
-        width: '288px',
-    },
-    subtitle: {
-        margin: '12px 0 24px',
     },
     typeNote: {
         marginBottom: '24px',
@@ -53,7 +49,6 @@ const useStyles = makeStyles()((theme) => ({
 export function BuyToFarm(props: PageInterface) {
     const t = useI18N()
     const { classes } = useStyles()
-    const { classes: tabClasses } = useTabStyles()
     const currentChainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const requiredChainId = getRequiredChainId(currentChainId)
     const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM)
@@ -149,8 +144,12 @@ export function BuyToFarm(props: PageInterface) {
                     variant="fullWidth"
                     onChange={(e, v) => setTab(v)}
                     aria-label="persona-post-contacts-button-group">
-                    <Tab value={TabsReferAndBuy.NEW} label={t.tab_new()} classes={tabClasses} />
-                    <Tab value={TabsReferAndBuy.MY_REWARDS} label={t.tab_my_rewards()} classes={tabClasses} />
+                    <Tab value={TabsReferAndBuy.NEW} label={t.tab_new()} classes={{ root: classes.root }} />
+                    <Tab
+                        value={TabsReferAndBuy.MY_REWARDS}
+                        label={t.tab_my_rewards()}
+                        classes={{ root: classes.root }}
+                    />
                 </Tabs>
                 <TabPanel value={TabsReferAndBuy.NEW} className={classes.tab}>
                     <Typography fontWeight={600} variant="h6" marginBottom="12px">

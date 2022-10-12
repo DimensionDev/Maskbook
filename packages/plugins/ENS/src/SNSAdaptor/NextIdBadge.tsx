@@ -1,9 +1,24 @@
 import { Icons } from '@masknet/icons'
-import { ShadowRootTooltip } from '@masknet/theme'
+import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { Typography, Link } from '@mui/material'
 import { Trans } from 'react-i18next'
-import useStyles from './useStyles'
 
+interface StyleProps {
+    isMenuScroll?: boolean
+}
+
+const useStyles = makeStyles<StyleProps>()((theme, { isMenuScroll = false }) => {
+    return {
+        nextIdLink: {
+            color: theme.palette.maskColor.primary,
+            textDecoration: 'none !important',
+        },
+        tooltip: {
+            backgroundColor: theme.palette.maskColor.publicMain,
+            color: theme.palette.maskColor.white,
+        },
+    }
+})
 export function NextIdBadge({ variant, rightBoundary }: { variant?: 'dark' | 'light'; rightBoundary?: number }) {
     const { classes } = useStyles({})
 

@@ -26,9 +26,6 @@ const useStyles = makeStyles()({
         flexDirection: 'column',
         overflow: 'auto',
     },
-    addToken: {
-        padding: 16,
-    },
     button: {
         fontWeight: 600,
         backgroundColor: '#ffffff',

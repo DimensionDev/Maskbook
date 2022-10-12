@@ -15,10 +15,6 @@ const useStyles = makeStyles()((theme) => {
         root: {
             padding: theme.spacing(2),
         },
-        content: {
-            paddingTop: theme.spacing(0),
-            paddingBottom: `${theme.spacing(0)} !important`,
-        },
         container: {
             padding: theme.spacing(1),
         },
@@ -27,9 +23,6 @@ const useStyles = makeStyles()((theme) => {
         },
         nameRedirectionLink: {
             marginLeft: theme.spacing(0.5),
-        },
-        bold: {
-            fontWeight: 'bold',
         },
         description: {
             marginTop: theme.spacing(1),

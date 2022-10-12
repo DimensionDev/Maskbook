@@ -9,7 +9,6 @@ const useStyles = makeStyles<void, 'selected'>()((theme, _, refs) => {
     const inactiveColor = isDark ? theme.palette.grey['50'] : MaskColorVar.twitterBg
     const selected = {}
     return {
-        folderTabs: {},
         selected,
         tabList: {
             display: 'flex',

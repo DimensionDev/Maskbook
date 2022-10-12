@@ -6,7 +6,6 @@ import { makeStyles, useCustomSnackbar, ActionButton } from '@masknet/theme'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { v4 as uuid } from 'uuid'
-import { blue } from '@mui/material/colors'
 import { Typography, Box, Tab, Tabs, Grid, Divider } from '@mui/material'
 import { TabContext, TabPanel } from '@mui/lab'
 import { CrossIsolationMessages, EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
@@ -34,14 +33,10 @@ import { SponsoredFarmIcon } from './shared-ui/icons/SponsoredFarm.js'
 import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary.js'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
 
-import { useTabStyles } from './styles.js'
-
 const useStyles = makeStyles()((theme) => ({
-    walletStatusBox: {
-        width: 535,
-        margin: '24px auto',
+    root: {
+        fontSize: 14,
     },
-
     container: {
         flex: 1,
         height: '100%',
@@ -51,25 +46,6 @@ const useStyles = makeStyles()((theme) => ({
         height: '100%',
         overflow: 'auto',
         padding: `${theme.spacing(3)} 0`,
-    },
-    tabs: {
-        width: '288px',
-    },
-    chip: {
-        width: '150px',
-        height: '40px',
-        flexDirection: 'row',
-    },
-    linkText: {
-        color: blue[50],
-    },
-    heading: {
-        fontSize: '20px',
-        fontWeight: 'bold',
-    },
-    icon: {
-        maxWidth: '20px',
-        maxHeight: '20px',
     },
 }))
 
@@ -87,7 +63,6 @@ export function ReferToFarm(props: PageInterface) {
     const { value: linkedPersona } = useCurrentLinkedPersona()
 
     const { classes } = useStyles()
-    const { classes: tabClasses } = useTabStyles()
 
     const [tab, setTab] = useState(TabsReferAndBuy.NEW)
     const [token, setToken] = useState<FungibleTokenDetailed>()
@@ -196,8 +171,12 @@ export function ReferToFarm(props: PageInterface) {
                     variant="fullWidth"
                     onChange={(e, v) => setTab(v)}
                     aria-label="persona-post-contacts-button-group">
-                    <Tab value={TabsReferAndBuy.NEW} label={t.tab_new()} classes={tabClasses} />
-                    <Tab value={TabsReferAndBuy.MY_REWARDS} label={t.tab_my_rewards()} classes={tabClasses} />
+                    <Tab value={TabsReferAndBuy.NEW} label={t.tab_new()} classes={{ root: classes.root }} />
+                    <Tab
+                        value={TabsReferAndBuy.MY_REWARDS}
+                        label={t.tab_my_rewards()}
+                        classes={{ root: classes.root }}
+                    />
                 </Tabs>
                 <TabPanel value={TabsReferAndBuy.NEW} className={classes.tab}>
                     <Typography fontWeight={600} variant="h6" marginBottom="12px">

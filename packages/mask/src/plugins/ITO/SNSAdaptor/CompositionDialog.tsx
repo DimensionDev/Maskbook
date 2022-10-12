@@ -252,7 +252,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
                                 <NetworkTab
                                     chainId={chainId}
                                     setChainId={setChainId}
-                                    classes={classes}
+                                    classes={{ tabs: classes.tabs }}
                                     chains={chainIdList}
                                 />
                             </div>

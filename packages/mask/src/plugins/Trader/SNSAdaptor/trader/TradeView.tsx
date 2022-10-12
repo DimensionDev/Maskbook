@@ -12,15 +12,6 @@ const useStyles = makeStyles()((theme) => {
             position: 'relative',
             boxSizing: 'border-box',
         },
-        actions: {},
-        settings: {
-            zIndex: 1,
-            top: 0,
-            right: theme.spacing(3),
-            bottom: 0,
-            left: theme.spacing(3),
-            position: 'absolute',
-        },
         trade: {
             padding: `${theme.spacing(0, 2)}!important`,
             margin: '0 !important',

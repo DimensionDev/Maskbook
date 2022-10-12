@@ -10,24 +10,8 @@ import React, { useCallback } from 'react'
 import { noop } from 'lodash-unified'
 
 const useStyles = makeStyles()((theme) => ({
-    container: {},
     button: {
         whiteSpace: 'nowrap',
-    },
-    buttonLabel: {
-        display: 'block',
-        fontWeight: 'inherit',
-        transform: 'translateY(-4px)',
-    },
-    buttonAmount: {
-        fontSize: 10,
-        fontWeight: 300,
-        transform: 'translateY(12px)',
-        position: 'absolute',
-    },
-    children: {
-        marginTop: 8,
-        width: '100%',
     },
     icon: {
         width: 18,
@@ -37,15 +21,6 @@ const useStyles = makeStyles()((theme) => ({
         width: 18,
         height: 18,
         color: theme.palette.maskColor?.second,
-    },
-    tooltip: {
-        padding: 10,
-        textAlign: 'left',
-        fontSize: 14,
-        lineHeight: '18px',
-        color: theme.palette.maskColor.bottom,
-        whiteSpace: 'normal',
-        backgroundColor: theme.palette.maskColor.tips,
     },
 }))
 

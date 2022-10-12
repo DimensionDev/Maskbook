@@ -40,35 +40,11 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         alignItems: 'center',
     },
-    paper: {
-        borderRadius: 4,
-        boxShadow:
-            theme.palette.mode === 'dark'
-                ? 'rgba(255, 255, 255, 0.2) 0 0 15px, rgba(255, 255, 255, 0.15) 0 0 3px 1px'
-                : 'rgba(101, 119, 134, 0.2) 0 0 15px, rgba(101, 119, 134, 0.15) 0 0 3px 1px',
-        backgroundImage: 'none',
-    },
-    menuItem: {
-        paddingTop: theme.spacing(2),
-        paddingBottom: theme.spacing(2),
-    },
-    menuText: {
-        marginLeft: 12,
-        fontSize: 15,
-        color: theme.palette.mode === 'dark' ? 'rgb(216, 216, 216)' : 'rgb(15, 20, 25)',
-        paddingRight: theme.spacing(2),
-    },
+
     chainIcon: {
         fontSize: 18,
         width: 18,
         height: 18,
-    },
-    iconWrapper: {
-        display: 'flex',
-        alignItems: 'baseline',
-    },
-    maskFilledIcon: {
-        marginRight: 6,
     },
 }))
 export interface ToolboxHintProps {

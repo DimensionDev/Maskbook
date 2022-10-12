@@ -8,9 +8,6 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: 6.25,
         margin: 3.75,
     },
-    border: {
-        border: `1px solid ${theme.palette.background.paper}`,
-    },
 }))
 export interface ChainIconProps extends withClasses<'point'> {
     color: string

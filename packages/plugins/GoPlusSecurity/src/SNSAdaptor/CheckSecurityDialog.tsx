@@ -17,9 +17,6 @@ import { NetworkPluginID, CrossIsolationMessages } from '@masknet/shared-base'
 import { useFungibleToken, useFungibleTokenPrice } from '@masknet/web3-hooks-base'
 
 const useStyles = makeStyles()((theme) => ({
-    root: {
-        width: 600,
-    },
     content: {
         height: 510,
         maxHeight: 510,

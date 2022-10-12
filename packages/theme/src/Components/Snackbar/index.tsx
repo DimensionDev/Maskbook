@@ -165,6 +165,7 @@ export const useStyles = makeStyles<StyleProps, 'title' | 'message'>()((theme, {
                 color: '#ffffff',
             },
         },
+        // eslint-disable-next-line tss-unused-classes/unused-classes
         default: defaultVariant,
         success,
         error,

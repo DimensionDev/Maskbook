@@ -36,15 +36,6 @@ import { TrendingCard, TrendingCardProps } from './TrendingCard.js'
 
 const useStyles = makeStyles()((theme) => {
     return {
-        root: {
-            width: '100%',
-            boxShadow: 'none',
-            borderRadius: 0,
-            marginBottom: theme.spacing(2),
-            '&::-webkit-scrollbar': {
-                display: 'none',
-            },
-        },
         content: {
             paddingTop: 0,
             paddingBottom: '0 !important',
@@ -57,10 +48,6 @@ const useStyles = makeStyles()((theme) => {
             paddingBottom: theme.spacing(6.5),
             background:
                 'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%), linear-gradient(90deg, rgba(28, 104, 243, 0.2) 0%, rgba(69, 163, 251, 0.2) 100%), #FFFFFF;',
-        },
-        header: {
-            display: 'flex',
-            position: 'relative',
         },
         headline: {
             marginTop: 30,
@@ -90,7 +77,6 @@ const useStyles = makeStyles()((theme) => {
             marginLeft: theme.spacing(0.5),
             marginRight: theme.spacing(0.5),
         },
-        buy: {},
         rank: {
             display: 'inline-flex',
             padding: theme.spacing(0.25, 0.5),
@@ -104,10 +90,6 @@ const useStyles = makeStyles()((theme) => {
             width: 24,
             height: 24,
             backgroundColor: theme.palette.common.white,
-        },
-        avatarFallback: {
-            width: 24,
-            height: 24,
         },
         buyButton: {
             background: theme.palette.maskColor.dark,

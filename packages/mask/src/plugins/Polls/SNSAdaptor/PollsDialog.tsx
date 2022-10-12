@@ -62,9 +62,6 @@ const useNewPollStyles = makeStyles()((theme) => ({
         left: '50%',
         top: '50%',
     },
-    whiteColor: {
-        color: '#fff',
-    },
 }))
 
 interface NewPollProps {

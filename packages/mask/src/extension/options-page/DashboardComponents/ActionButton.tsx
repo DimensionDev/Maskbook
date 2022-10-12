@@ -1,3 +1,4 @@
+/* eslint-disable tss-unused-classes/unused-classes */
 import { useState, useCallback } from 'react'
 import { Button, CircularProgress } from '@mui/material'
 import { makeStyles, ActionButton } from '@masknet/theme'
@@ -7,7 +8,26 @@ import ErrorIcon from '@mui/icons-material/Error'
 import { red, green } from '@mui/material/colors'
 import classNames from 'classnames'
 import { useDebounce, useAsyncFn, useUpdateEffect } from 'react-use'
-import { useErrorStyles } from '../../../utils/theme/index.js'
+
+const useErrorStyles = makeStyles()((theme) => {
+    const dark = theme.palette.mode === 'dark'
+    return {
+        containedPrimary: {
+            backgroundColor: dark ? red[500] : red[900],
+            '&:hover': {
+                backgroundColor: dark ? red[900] : red[700],
+            },
+        },
+        outlinedPrimary: {
+            borderColor: dark ? red[500] : red[900],
+            color: dark ? red[500] : red[900],
+            '&:hover': {
+                borderColor: dark ? red[900] : red[700],
+            },
+        },
+    }
+})
+
 const circle = <CircularProgress color="inherit" size={18} />
 
 interface DebounceButtonProps extends Omit<ButtonProps, 'color' | 'onClick'> {

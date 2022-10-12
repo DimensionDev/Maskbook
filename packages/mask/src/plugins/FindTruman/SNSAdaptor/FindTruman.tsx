@@ -34,50 +34,8 @@ const useStyles = makeStyles()((theme) => {
             padding: 0,
             position: 'relative',
         },
-        content: {
-            width: '100%',
-            minHeight: 'var(--contentHeight)',
-            display: 'flex',
-            flexDirection: 'column',
-            padding: '0 !important',
-        },
-        body: {
-            flex: 1,
-            maxHeight: 'calc(var(--contentHeight) - var(--tabHeight))',
-            overflow: 'auto',
-            scrollbarWidth: 'none',
-            '&::-webkit-scrollbar': {
-                display: 'none',
-            },
-        },
-        tabs: {
-            height: 'var(--tabHeight)',
-            width: '100%',
-            minHeight: 'unset',
-            borderTop: `solid 1px ${theme.palette.divider}`,
-            borderBottom: `solid 1px ${theme.palette.divider}`,
-        },
-        tab: {
-            height: 'var(--tabHeight)',
-            minHeight: 'unset',
-            minWidth: 'unset',
-        },
-        subtitle: {
-            fontSize: 12,
-            marginRight: theme.spacing(0.5),
-        },
         title: {
             fontSize: '1.25rem',
-        },
-        subheader: {
-            fontSize: '0.875rem',
-        },
-        tip: {
-            padding: theme.spacing(1),
-            backgroundColor: '#fff',
-        },
-        tipArrow: {
-            color: '#fff',
         },
         critical: {
             color: 'rgba(255,255,255,.9)',
