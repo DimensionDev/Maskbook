@@ -5,6 +5,7 @@ import { banSlash } from './utils.js'
 
 const instance = new WeakSet()
 const id: Record<string, Record<string, ProfileIdentifier>> = Object.create(null)
+
 /**
  * Refers to a profile on a network.
  */
@@ -24,7 +25,7 @@ export class ProfileIdentifier extends Identifier {
     }
 
     // ! "network" and "userId" cannot be renamed because they're stored in the database in it's object form.
-    declare readonly network: string
+    declare readonly network: EnhanceableSite
     declare readonly userId: string
     private constructor(network: string, userID: string) {
         if (network === EnhanceableSite.Localhost && userID === '$unknown') {
@@ -41,7 +42,7 @@ export class ProfileIdentifier extends Identifier {
         banSlash(network)
         banSlash(userID)
         super()
-        this.network = network
+        this.network = network as EnhanceableSite
         this.userId = userID
         Object.freeze(this)
         networkCache[userID] = this
