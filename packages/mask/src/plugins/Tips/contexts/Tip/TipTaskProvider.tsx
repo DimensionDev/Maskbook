@@ -42,7 +42,10 @@ function useDirtyDetection(deps: any[]): [boolean, Dispatch<SetStateAction<boole
 }
 
 export const TipTaskProvider: FC<React.PropsWithChildren<Props>> = memo(({ children, task }) => {
-    const { targetChainId, pluginId, setPluginId } = TargetRuntimeContext.useContainer()
+    const targetChainId = useCurrentWeb3NetworkChainId()
+    const pluginId = useCurrentWeb3NetworkPluginID()
+    const { setPluginId } = TargetRuntimeContext.useContainer()
+
     const [_recipientAddress, setRecipient] = useState<string>(task.recipient ?? '')
     const recipients = useRecipients(pluginId, task.accounts)
     const [tipType, setTipType] = useState<TipsType>(TipsType.Tokens)
