@@ -4,6 +4,7 @@ import { useI18N } from '../../../../../utils/index.js'
 import { ConnectedWalletsUI } from './UI.js'
 import { PersonaContext } from '../hooks/usePersonaContext.js'
 import { useChainId, useWallets, useWeb3State } from '@masknet/web3-hooks-base'
+import { ChainId } from '@masknet/web3-shared-evm'
 import { isSameAddress, isGreaterThan } from '@masknet/web3-shared-base'
 import { NetworkPluginID, NextIDAction, NextIDPlatform, PopupRoutes } from '@masknet/shared-base'
 import { useAsync, useAsyncFn } from 'react-use'
@@ -32,7 +33,7 @@ const ConnectedWallets = memo(() => {
         const results = await Promise.all(
             proofs.map(async (x) => {
                 if (x.platform === NextIDPlatform.Ethereum) {
-                    const domain = await NameService?.reverse?.(chainId, x.identity)
+                    const domain = await NameService?.reverse?.(ChainId.Mainnet, x.identity)
 
                     if (domain)
                         return {
