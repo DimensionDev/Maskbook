@@ -1,4 +1,5 @@
 import {
+    Box,
     Link,
     Stack,
     Table,
@@ -9,7 +10,7 @@ import {
     TableRow,
     Typography,
 } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { FormattedCurrency } from '@masknet/shared'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { formatCurrency, TokenType } from '@masknet/web3-shared-base'
@@ -50,6 +51,13 @@ const useStyles = makeStyles()((theme) => ({
         paddingTop: theme.spacing(10),
         paddingBottom: theme.spacing(10),
         borderStyle: 'none',
+    },
+    pair: {
+        whiteSpace: 'nowrap',
+        textOverflow: 'ellipsis',
+        overflow: 'hidden',
+        maxWidth: 100,
+        width: 100,
     },
 }))
 
@@ -104,17 +112,26 @@ export function TickersTable({ dataProvider, tickers, coinType }: TickersTablePr
                 if (!ticker.base_name || !ticker.target_name) return null
                 const formatted = formatEthereumAddress(ticker.base_name, 2)
                 return (
-                    <Link
-                        color={(theme) => theme.palette.maskColor?.primary}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        href={ticker.trade_url}>
-                        <Typography component="span" title={formatted !== ticker.base_name ? ticker.base_name : ''}>
-                            {formatted}
-                        </Typography>
-                        <span>/</span>
-                        <Typography component="span">{formatEthereumAddress(ticker.target_name, 2)}</Typography>
-                    </Link>
+                    <ShadowRootTooltip
+                        placement="top-start"
+                        title={`${formatted} / ${formatEthereumAddress(ticker.target_name, 2)}`}
+                        arrow>
+                        <Box className={classes.pair}>
+                            <Link
+                                color={(theme) => theme.palette.maskColor?.primary}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                href={ticker.trade_url}>
+                                <Typography
+                                    component="span"
+                                    title={formatted !== ticker.base_name ? ticker.base_name : ''}>
+                                    {formatted}
+                                </Typography>
+                                <span>/</span>
+                                <Typography component="span">{formatEthereumAddress(ticker.target_name, 2)}</Typography>
+                            </Link>
+                        </Box>
+                    </ShadowRootTooltip>
                 )
             })(),
             price: price ? <FormattedCurrency value={price} sign={currency} formatter={formatCurrency} /> : null,
