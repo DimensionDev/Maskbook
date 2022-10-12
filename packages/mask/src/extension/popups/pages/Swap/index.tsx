@@ -77,8 +77,7 @@ export default function SwapPage() {
                         </header>
                         <main className={classes.main}>
                             <PluginWeb3ContextProvider
-                                value={{ chainId: ChainId.Mainnet }}
-                                pluginID={NetworkPluginID.PLUGIN_EVM}>
+                                value={{ chainId: ChainId.Mainnet, networkPluginId: NetworkPluginID.PLUGIN_EVM }}>
                                 <AllProviderTradeContext.Provider>
                                     <SwapBox />
                                 </AllProviderTradeContext.Provider>

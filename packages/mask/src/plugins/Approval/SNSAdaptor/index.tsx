@@ -37,8 +37,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                             />
                             {open ? (
                                 <PluginWeb3ContextProvider
-                                    value={{ chainId: ChainId.Mainnet }}
-                                    pluginID={NetworkPluginID.PLUGIN_EVM}>
+                                    value={{ chainId: ChainId.Mainnet, networkPluginId: NetworkPluginID.PLUGIN_EVM }}>
                                     <ApprovalDialog open onClose={() => setOpen(false)} />
                                 </PluginWeb3ContextProvider>
                             ) : null}

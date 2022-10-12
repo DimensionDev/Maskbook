@@ -1,10 +1,10 @@
 import { useMemo, useState } from 'react'
 import { useAsync, useUpdateEffect } from 'react-use'
-import { flatten, compact, chunk } from 'lodash-unified'
+import { chunk, compact, flatten } from 'lodash-unified'
 import { DialogActions, DialogContent, Tab } from '@mui/material'
-import { isDashboardPage, EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
+import { EMPTY_LIST, isDashboardPage, NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles, MaskColorVar, MaskTabList, useTabs } from '@masknet/theme'
-import { createContract, ChainId, SchemaType, getAaveConstants, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
+import { ChainId, createContract, getAaveConstants, SchemaType, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
 import { PluginWalletStatusBar, useI18N } from '../../../utils/index.js'
 import { InjectedDialog } from '@masknet/shared'
 import { AllProviderTradeContext } from '../../Trader/trader/useAllProviderTradeContext.js'
@@ -132,7 +132,7 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
     const [currentTab, onChange, tabs] = useTabs('Deposit', 'Withdraw')
 
     return (
-        <PluginWeb3ContextProvider value={{ chainId: ChainId.Mainnet }} pluginID={NetworkPluginID.PLUGIN_EVM}>
+        <PluginWeb3ContextProvider value={{ chainId: ChainId.Mainnet, networkPluginId: NetworkPluginID.PLUGIN_EVM }}>
             <AllProviderTradeContext.Provider>
                 <TabContext value={currentTab}>
                     <InjectedDialog
@@ -151,18 +151,13 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
                         <DialogContent style={{ padding: 0, overflowX: 'hidden' }}>
                             <>
                                 <div className={classes.abstractTabWrapper}>
-                                    <NetworkTab
-                                        chainId={chainId}
-                                        setChainId={setChainId}
-                                        classes={{
+                                    <NetworkTab classes={{
                                             tab: classes.tab,
                                             tabs: classes.tabs,
                                             tabPaper: classes.tabPaper,
                                             tabPanel: classes.tabPanel,
                                             indicator: classes.indicator,
-                                        }}
-                                        chains={chains.filter(Boolean) as ChainId[]}
-                                    />
+                                        }} chains={chains.filter(Boolean) as ChainId[]} />
                                 </div>
                                 <div className={classes.tableTabWrapper}>
                                     <TabPanel style={{ padding: '8px 0 0 0' }} value={tabs.Deposit}>

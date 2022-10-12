@@ -16,7 +16,7 @@ export function SearchResultInspector({ keyword }: SearchResultInspectorProps) {
 
     if (!name || !dataProviders?.length) return null
     return (
-        <PluginWeb3ContextProvider value={{ chainId: ChainId.Mainnet }} pluginID={NetworkPluginID.PLUGIN_EVM}>
+        <PluginWeb3ContextProvider value={{ chainId: ChainId.Mainnet, networkPluginId: NetworkPluginID.PLUGIN_EVM }}>
             <TrendingView isPopper={false} name={name} tagType={type_} dataProviders={dataProviders} />
         </PluginWeb3ContextProvider>
     )

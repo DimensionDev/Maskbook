@@ -23,15 +23,15 @@ export const PluginWeb3Context = createContext<Web3Context<NetworkPluginID>>(EMP
 const PluginsWeb3Context = createContext<Record<NetworkPluginID, Web3Helper.Web3State<NetworkPluginID>>>(null!)
 
 export function PluginIDContextProvider({ value, children }: React.ProviderProps<NetworkPluginID>) {
+    console.log('------------------useContext PluginIDContextProvider')
+    console.log(value)
     return <PluginIDContext.Provider value={value}>{children}</PluginIDContext.Provider>
 }
 
 export function PluginWeb3ContextProvider<T extends NetworkPluginID>({
     value,
     children,
-}: {
-    pluginID: T
-} & React.ProviderProps<Omit<Web3Context<T>, 'setChainId'>>) {
+}: React.ProviderProps<Omit<Web3Context<T>, 'setChainId'>>) {
     const [chainId, setChainId] = useState<Web3Helper.Definition[T]['ChainId'] | undefined>(value.chainId)
 
     return <PluginWeb3Context.Provider value={{ ...value, setChainId, chainId }} children={children} />
