@@ -107,6 +107,7 @@ export function DonateDialog(props: DonateDialogProps) {
                   balance: formatBalance(amount, token?.decimals),
                   symbol: `${cashTag}${token?.symbol || ''}`,
                   promote: t.promote(),
+                  project_name: title,
               })
             : ''
         await openShareTxDialog({
