@@ -38,7 +38,10 @@ export function ProfileTab(props: ProfileTabProps) {
         switchToTab()
     })
 
-    useLocationChange(() => {
+    useLocationChange((e) => {
+        const isSearching = (e?.currentTarget as Window)?.document?.activeElement?.ariaLabel === 'Search query'
+        if (isSearching) return
+
         MaskMessages.events.profileTabUpdated.sendToLocal({ show: false })
         setActive(false)
         reset()
