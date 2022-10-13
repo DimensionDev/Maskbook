@@ -1,4 +1,7 @@
 {
+    "approve": "Approve",
+    "authorization_descriptions": "Mask Network requires you to authorize the following websites before using it.",
+    "domain_request": "Domain Request",
     "available_balance": "Available Balance",
     "snackbar_done": "Done",
     "import": "Import",
