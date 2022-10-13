@@ -18,15 +18,10 @@ import { PluginCardFrameMini } from '@masknet/shared'
 import { ThemeProvider } from '@mui/material'
 import { makeStyles, MaskLightTheme } from '@masknet/theme'
 
-const useStyles = makeStyles()((theme) => ({
-    enablePluginRoot: {
-        marginTop: 80,
-    },
-}))
+const useStyles = makeStyles()((theme) => ({}))
 
 export function NextIdPage() {
     const t = useI18N()
-    const { classes } = useStyles()
 
     const currentProfileIdentifier = useLastRecognizedIdentity()
     const visitingPersonaIdentifier = useCurrentVisitingIdentity()
@@ -92,9 +87,7 @@ export function NextIdPage() {
         <>
             <PluginCardFrameMini>
                 <ThemeProvider theme={MaskLightTheme}>
-                    <PluginEnableBoundary pluginId={PluginID.Web3Profile} classes={{ root: classes.enablePluginRoot }}>
-                        {getActionComponent}
-                    </PluginEnableBoundary>
+                    <PluginEnableBoundary pluginId={PluginID.Web3Profile}>{getActionComponent}</PluginEnableBoundary>
                 </ThemeProvider>
             </PluginCardFrameMini>
             {openBindDialog && currentPersona && isOwn && (

@@ -321,6 +321,12 @@ export namespace Plugin.Shared {
         networks: SupportedNetworksDeclare
         /** The Web3 Network this plugin supports */
         web3?: Web3EnableRequirement
+        /**
+         * Requested origins.
+         * Only put necessary permissions here.
+         * https://developer.chrome.com/docs/extensions/mv3/match_patterns/
+         */
+        host_permissions?: string[]
     }
     export interface SupportedNetworksDeclare {
         /**
@@ -1161,6 +1167,11 @@ export namespace Plugin.__Host {
         addI18NResource(pluginID: string, resources: Plugin.Shared.I18NResource): void
         createContext(id: string, signal: AbortSignal): Context
         signal?: AbortSignal
+        permission: PermissionReporter
+    }
+    export interface PermissionReporter {
+        hasPermission(host_permission: string[]): Promise<boolean>
+        events: Emitter<{ changed: [] }>
     }
     export interface EnabledStatusReporter {
         isEnabled(id: string): BooleanPreference | Promise<BooleanPreference>

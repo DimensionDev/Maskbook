@@ -6,12 +6,12 @@ import {
     useDisabledPluginSuggestionFromMeta,
     useDisabledPluginSuggestionFromPost,
 } from './DisabledPluginSuggestion.js'
-import { MaskPostExtraPluginWrapper } from '@masknet/shared'
+import { MaskPostExtraPluginWrapperWithPermission } from '../../web3/UI/PermissionBoundary.js'
 
 const Decrypted = createInjectHooksRenderer(
     useActivatedPluginsSNSAdaptor.visibility.useNotMinimalMode,
     (x) => x.DecryptedInspector,
-    MaskPostExtraPluginWrapper,
+    MaskPostExtraPluginWrapperWithPermission,
 )
 export function DecryptedUI_PluginRendererWithSuggestion(props: MetadataRenderProps) {
     const a = useDisabledPluginSuggestionFromMeta(props.metadata)

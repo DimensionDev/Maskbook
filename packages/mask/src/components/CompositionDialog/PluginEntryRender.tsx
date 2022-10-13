@@ -2,17 +2,20 @@ import { useCallback, useState, useRef, forwardRef, memo, useImperativeHandle, u
 import { Trans } from 'react-i18next'
 import { Result } from 'ts-results'
 import {
-    useActivatedPluginSNSAdaptor_Web3Supported,
     useActivatedPluginsSNSAdaptor,
     Plugin,
     PluginI18NFieldRender,
     usePluginI18NField,
 } from '@masknet/plugin-infra/content-script'
+import { Box, DialogContent, Typography } from '@mui/material'
+import { ActionButton, makeStyles } from '@masknet/theme'
 import { PluginID } from '@masknet/shared-base'
-import { useChainId, useCurrentWeb3NetworkPluginID } from '@masknet/web3-hooks-base'
 import { ErrorBoundary } from '@masknet/shared-base-ui'
 import { ClickableChip } from '../shared/SelectRecipients/ClickableChip.js'
-import { makeStyles } from '@masknet/theme'
+import { useGrantPermissions, usePluginHostPermissionCheck } from '../DataSource/usePluginHostPermission.js'
+import { useI18N } from '../../utils'
+import { InjectedDialog } from '@masknet/shared'
+import { Icons } from '@masknet/icons'
 const useStyles = makeStyles()((theme) => ({
     sup: {
         paddingLeft: 2,
@@ -35,42 +38,107 @@ export const PluginEntryRender = memo(
     >((props, ref) => {
         const [trackPluginRef] = useSetPluginEntryRenderRef(ref)
         const pluginField = usePluginI18NField()
-        const chainId = useChainId()
-        const pluginID = useCurrentWeb3NetworkPluginID()
-        // TODO: remove this line if it does not have side effects
-        useActivatedPluginSNSAdaptor_Web3Supported(chainId, pluginID)
-        const result = [...useActivatedPluginsSNSAdaptor('any')]
-            .sort((plugin) => {
-                // TODO: support priority order
-                if (plugin.ID === PluginID.RedPacket || plugin.ID === PluginID.ITO) return -1
-                return 1
-            })
-            .map((plugin) =>
-                Result.wrap(() => {
-                    const entry = plugin.CompositionDialogEntry
-                    const unstable = plugin.enableRequirement.target !== 'stable'
-                    const ID = plugin.ID
-                    if (!entry) return null
-                    const extra: ExtraPluginProps = { unstable, id: ID, readonly: props.readonly }
+        const plugins = [...useActivatedPluginsSNSAdaptor('any')].sort((plugin) => {
+            // TODO: support priority order
+            if (plugin.ID === PluginID.RedPacket || plugin.ID === PluginID.ITO) return -1
+            return 1
+        })
+        const lackPermission = usePluginHostPermissionCheck(plugins)
+        const result = plugins.map((plugin) =>
+            Result.wrap(() => {
+                const entry = plugin.CompositionDialogEntry
+                const unstable = plugin.enableRequirement.target !== 'stable'
+                const ID = plugin.ID
+                if (!entry) return null
+                const extra: ExtraPluginProps = { unstable, id: ID, readonly: props.readonly }
+                if (lackPermission?.has(ID)) {
                     return (
                         <ErrorBoundary subject={`Plugin "${pluginField(ID, plugin.name)}"`} key={plugin.ID}>
-                            {'onClick' in entry ? (
-                                <CustomEntry {...entry} {...extra} ref={trackPluginRef(ID)} />
-                            ) : (
-                                <DialogEntry
-                                    {...entry}
-                                    {...extra}
-                                    ref={trackPluginRef(ID)}
-                                    isOpenFromApplicationBoard={props.isOpenFromApplicationBoard}
-                                />
-                            )}
+                            <DialogEntry
+                                label={entry.label}
+                                {...extra}
+                                dialog={getPluginEntryDisabledDialog(plugin)}
+                                ref={trackPluginRef(ID)}
+                                isOpenFromApplicationBoard={props.isOpenFromApplicationBoard}
+                            />
                         </ErrorBoundary>
                     )
-                }).unwrapOr(null),
-            )
+                }
+                return (
+                    <ErrorBoundary subject={`Plugin "${pluginField(ID, plugin.name)}"`} key={plugin.ID}>
+                        {'onClick' in entry ? (
+                            <CustomEntry {...entry} {...extra} ref={trackPluginRef(ID)} />
+                        ) : (
+                            <DialogEntry
+                                {...entry}
+                                {...extra}
+                                ref={trackPluginRef(ID)}
+                                isOpenFromApplicationBoard={props.isOpenFromApplicationBoard}
+                            />
+                        )}
+                    </ErrorBoundary>
+                )
+            }).unwrapOr(null),
+        )
         return <>{result}</>
     }),
 )
+
+const usePermissionDialogStyles = makeStyles()((theme) => ({
+    root: {
+        width: 384,
+        padding: theme.spacing(1),
+    },
+    dialogTitle: {
+        background: theme.palette.maskColor.bottom,
+    },
+    description: {
+        fontSize: 14,
+        lineHeight: '18px',
+        color: theme.palette.maskColor.main,
+    },
+}))
+
+const cache = new Map<
+    Plugin.Shared.Definition,
+    React.ComponentType<Plugin.SNSAdaptor.CompositionDialogEntry_DialogProps>
+>()
+function getPluginEntryDisabledDialog(define: Plugin.Shared.Definition) {
+    if (!cache.has(define)) {
+        cache.set(define, (props: Plugin.SNSAdaptor.CompositionDialogEntry_DialogProps) => {
+            const { t } = useI18N()
+            const { classes } = usePermissionDialogStyles()
+            const [, onGrant] = useGrantPermissions(define.enableRequirement.host_permissions)
+            return (
+                <InjectedDialog
+                    classes={{ paper: classes.root, dialogTitle: classes.dialogTitle }}
+                    title="Domain Request"
+                    open={props.open}
+                    onClose={props.onClose}
+                    maxWidth="sm"
+                    titleBarIconStyle="close">
+                    <DialogContent>
+                        <Typography className={classes.description}>
+                            {t('authorization_descriptions')}
+                            <Typography>{define.enableRequirement.host_permissions?.join(',')}</Typography>
+                        </Typography>
+
+                        <Box display="flex" justifyContent="center">
+                            <ActionButton
+                                startIcon={<Icons.Approve size={18} />}
+                                variant="roundedDark"
+                                onClick={onGrant}
+                                sx={{ mt: 10, width: '80%' }}>
+                                {t('approve')}
+                            </ActionButton>
+                        </Box>
+                    </DialogContent>
+                </InjectedDialog>
+            )
+        })
+    }
+    return cache.get(define)!
+}
 
 function useSetPluginEntryRenderRef(ref: React.ForwardedRef<PluginEntryRenderRef>) {
     const pluginRefs = useRef<Record<string, PluginRef | undefined | null>>({})
