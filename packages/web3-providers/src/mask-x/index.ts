@@ -1,5 +1,3 @@
-import type { MaskXBaseAPI } from "../types/MaskX.js";
+import type { MaskX_BaseAPI } from '../types/MaskX.js'
 
-export class MaskXAPI implements MaskXBaseAPI.Provider {
-
-}
+export class MaskX_API implements MaskX_BaseAPI.Provider {}
