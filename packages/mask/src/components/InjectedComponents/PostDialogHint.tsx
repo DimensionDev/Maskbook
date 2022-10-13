@@ -26,7 +26,7 @@ const useStyles = makeStyles()((theme) => ({
         padding: isMobileFacebook ? 0 : '7px',
     },
     text: {
-        color: '#606770',
+        color: theme.palette.grey[300],
         marginLeft: theme.spacing(1),
     },
     wrapper: {
@@ -34,10 +34,7 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         width: '100%',
         padding: '8px 10px',
-        borderBottom: '1px solid #dadde1',
-    },
-    tooltip: {
-        color: 'white',
+        borderBottom: `1px solid ${theme.palette.divider}`,
     },
 }))
 
@@ -54,12 +51,12 @@ const EntryIconButton = memo((props: PostDialogHintUIProps) => {
     const getEntry = () => (
         <ShadowRootTooltip
             title={t('mask_network')}
-            classes={{ tooltip: classes.tooltip }}
             placement={tooltip?.placement}
             disableHoverListener={tooltip?.disabled}
             PopperProps={{
                 disablePortal: false,
-            }}>
+            }}
+            arrow>
             <IconButton
                 size="large"
                 className={classNames(classes.button, classes.iconButton)}
