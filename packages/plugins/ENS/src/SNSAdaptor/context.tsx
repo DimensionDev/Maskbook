@@ -38,7 +38,7 @@ export function ENSProvider({ children, domain }: PropsWithChildren<SearchResult
         loading: isLoading,
         error,
         retry,
-    } = useLookupAddress(NetworkPluginID.PLUGIN_EVM, domain, ChainId.Mainnet)
+    } = useLookupAddress(domain, NetworkPluginID.PLUGIN_EVM, ChainId.Mainnet)
     const isError = !!error
     const tokenId = resolveNonFungibleTokenIdFromEnsDomain(domain)
     const { value: ids } = useAsync(

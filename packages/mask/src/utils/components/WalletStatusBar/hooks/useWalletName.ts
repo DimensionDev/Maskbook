@@ -19,7 +19,7 @@ export const useWalletName = (
     const account = useAccount(expectedPluginId, expectedAccount)
     const wallet = useWallet(expectedPluginId)
 
-    const { value: domain } = useReverseAddress(expectedPluginId, account)
+    const { value: domain } = useReverseAddress(account, expectedPluginId)
 
     const { Others } = useWeb3State(expectedPluginId)
     const providerDescriptor = useProviderDescriptor(expectedPluginId)

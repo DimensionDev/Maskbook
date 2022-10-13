@@ -125,7 +125,7 @@ export function WalletAssetsCard(props: WalletAssetsCardProps) {
         return collectionList
     }, [loadAll, collectionList])
 
-    const { value: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, wallet.address)
+    const { value: domain } = useReverseAddress(wallet.address, NetworkPluginID.PLUGIN_EVM)
 
     return (
         <Card className={classes.wrapper}>

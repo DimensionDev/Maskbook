@@ -51,8 +51,8 @@ export function ConsoleContent(props: ConsoleContentProps) {
 
     const [quickMode, setQuickMode] = useState(true)
     const { setDialog } = useRemoteControlledDialog(WalletMessages.events.ApplicationDialogUpdated)
-    const { value: reversedName, retry: retryReversedName } = useReverseAddress(pluginID, account)
-    const { value: lookedAddress, retry: retryLookedAddress } = useLookupAddress(pluginID, reversedName)
+    const { value: reversedName, retry: retryReversedName } = useReverseAddress(account)
+    const { value: lookedAddress, retry: retryLookedAddress } = useLookupAddress(reversedName ?? '')
 
     const { showSnackbar } = useCustomSnackbar()
     const table: Array<{ name: string; content: JSX.Element }> = [

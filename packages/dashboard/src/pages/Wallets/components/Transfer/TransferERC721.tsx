@@ -131,7 +131,7 @@ export const TransferERC721 = memo(() => {
         value: registeredAddress = '',
         error: resolveDomainError,
         loading: resolveDomainLoading,
-    } = useLookupAddress(NetworkPluginID.PLUGIN_EVM, allFormFields.recipient)
+    } = useLookupAddress(allFormFields.recipient, NetworkPluginID.PLUGIN_EVM)
     // #endregion
 
     // #region check contract address and account address

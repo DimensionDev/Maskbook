@@ -94,8 +94,8 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
     const { items, disabledItems, onSearch } = props
     const [_search, setSearch] = useState('')
     const { value: registeredAddress = '', loading: resolveDomainLoading } = useLookupAddress(
-        NetworkPluginID.PLUGIN_EVM,
         _search,
+        NetworkPluginID.PLUGIN_EVM,
     )
 
     const search = registeredAddress || _search
