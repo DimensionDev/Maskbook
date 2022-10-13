@@ -1,12 +1,11 @@
-import type { ChainId } from '@masknet/web3-shared-evm'
 import type { NameServiceResolver } from '@masknet/web3-state'
 
-export class ENS_Resolver implements NameServiceResolver<ChainId> {
-    async lookup(chainId: ChainId, name: string) {
+export class BSC_Resolver implements NameServiceResolver {
+    async lookup(name: string) {
         return ''
     }
 
-    async reverse(chainId: ChainId, address: string) {
+    async reverse(address: string) {
         return ''
     }
 }

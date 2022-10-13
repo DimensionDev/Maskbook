@@ -81,7 +81,7 @@ export const WalletStateBar = memo(() => {
 
     const [menu, openMenu] = useNetworkSelector()
 
-    const { value: domain } = useReverseAddress(account, NetworkPluginID.PLUGIN_EVM)
+    const { value: domain } = useReverseAddress(account)
 
     if (!account) {
         return <Button onClick={openConnectWalletDialog}>{t.wallets_connect_wallet_connect()}</Button>

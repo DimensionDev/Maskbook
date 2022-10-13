@@ -5,7 +5,7 @@ import type { NameServiceResolver } from '@masknet/web3-state'
 import { Web3StateSettings } from '../../settings/index.js'
 import { Providers } from '../Connection/provider.js'
 
-export class ENS_Resolver implements NameServiceResolver<ChainId> {
+export class ENS_Resolver implements NameServiceResolver {
     private ens: ENS | null = null
 
     private async createENS() {
@@ -20,10 +20,8 @@ export class ENS_Resolver implements NameServiceResolver<ChainId> {
         return this.ens
     }
 
-    async lookup(chainId: ChainId, name: string) {
-        const web3 = await Web3StateSettings.value.Connection?.getWeb3?.({
-            chainId,
-        })
+    async lookup(name: string) {
+        const web3 = await Web3StateSettings.value.Connection?.getWeb3?.()
 
         try {
             const ens = await this.createENS()
@@ -36,7 +34,7 @@ export class ENS_Resolver implements NameServiceResolver<ChainId> {
         }
     }
 
-    async reverse(chainId: ChainId, address: string) {
+    async reverse(address: string) {
         try {
             const ens = await this.createENS()
             const name = await ens.reverse(address)

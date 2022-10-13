@@ -10,7 +10,7 @@ import { ChainId, createClientEndpoint, SchemaType } from '@masknet/web3-shared-
 import type { RpcOptions } from './types.js'
 
 export async function requestRPC<T = unknown>(chainId: ChainId, options: RpcOptions): Promise<T> {
-    const response = await globalThis.fetch(createClientEndpoint(chainId), {
+    const response = await globalThis.fetch(createClientEndpoint(), {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

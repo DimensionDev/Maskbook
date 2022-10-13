@@ -14,6 +14,6 @@ export function useReverseAddress<T extends NetworkPluginID>(
 
     return useAsyncRetry(async () => {
         if (!chainId || !address || !Others?.isValidAddress?.(address) || !NameService) return
-        return NameService.reverse?.(chainId, address)
-    }, [address, chainId, NameService])
+        return NameService.reverse?.(address)
+    }, [address, NameService])
 }

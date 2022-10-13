@@ -80,7 +80,7 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
         value: registeredAddress = '',
         error: resolveDomainError,
         loading: resolveDomainLoading,
-    } = useLookupAddress(address, NetworkPluginID.PLUGIN_EVM)
+    } = useLookupAddress(address)
     // #endregion
 
     // transfer amount

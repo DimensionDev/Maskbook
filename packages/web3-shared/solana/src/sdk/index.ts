@@ -7,10 +7,10 @@ const Endpoints: Record<ChainId, string> = {
     [ChainId.Devnet]: 'https://api.devnet.solana.com',
 }
 
-export function createClientEndpoint(chainId: ChainId) {
-    return Endpoints[chainId]
+export function createClientEndpoint(chainId?: ChainId) {
+    return Endpoints[chainId ?? ChainId.Mainnet]
 }
 
-export function createClient(chainId: ChainId) {
+export function createClient(chainId?: ChainId) {
     return new Connection(createClientEndpoint(chainId))
 }

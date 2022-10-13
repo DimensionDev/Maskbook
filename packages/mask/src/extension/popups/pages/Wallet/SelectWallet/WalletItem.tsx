@@ -54,7 +54,7 @@ export interface WalletItemProps {
 export const WalletItem = memo<WalletItemProps>(({ wallet, onClick, isSelected }) => {
     const { classes } = useStyles()
     const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
-    const { value: domain } = useReverseAddress(wallet.address, NetworkPluginID.PLUGIN_EVM)
+    const { value: domain } = useReverseAddress(wallet.address)
 
     return (
         <ListItem className={classes.item} onClick={onClick}>

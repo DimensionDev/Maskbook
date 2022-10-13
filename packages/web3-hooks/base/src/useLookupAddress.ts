@@ -14,6 +14,6 @@ export function useLookupAddress<T extends NetworkPluginID>(
 
     return useAsyncRetry(async () => {
         if (!chainId || !domain || !Others?.isValidDomain?.(domain) || !NameService) return
-        return NameService.lookup?.(chainId, domain)
+        return NameService.lookup?.(domain)
     }, [chainId, domain, NameService, Others])
 }
