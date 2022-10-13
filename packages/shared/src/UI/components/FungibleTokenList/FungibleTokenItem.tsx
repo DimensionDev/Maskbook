@@ -170,7 +170,7 @@ export const getFungibleTokenItem = <T extends NetworkPluginID>(
                 <Typography className={classes.balance}>
                     {balance === undefined ? (
                         <LoadingBase size={24} />
-                    ) : (
+                    ) : balance === '' ? null : (
                         <FormattedBalance
                             value={balance}
                             decimals={decimals}

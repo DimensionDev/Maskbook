@@ -2,9 +2,9 @@ name: Linters and tests
 
 on:
   push:
-    branches: [master, hotfix*, develop*, release*, released]
+    branches: [master, develop, released, hotfix/*, release/*]
   pull_request:
-    branches: [master, develop*, released]
+    branches: [master, develop, released]
 
 permissions:
   contents: read

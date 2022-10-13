@@ -12,7 +12,6 @@ export const base: Plugin.Shared.Definition<ChainId> = {
         architecture: { app: false, web: true },
         networks: { type: 'opt-out', networks: {} },
         target: 'stable',
-        host_permissions: ['https://testba1234.com/'],
     },
     experimentalMark: true,
     i18n: languages,

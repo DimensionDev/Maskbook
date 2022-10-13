@@ -21,6 +21,7 @@ import {
     useCurrentWeb3NetworkPluginID,
     useFungibleAssets,
     useFungibleToken,
+    useFungibleTokenBalance,
     useFungibleTokensBalance,
     useFungibleTokensFromTokenList,
     useTrustedFungibleTokens,
@@ -314,6 +315,10 @@ export const FungibleTokenList = forwardRef(
         const { value: searchedToken, loading: searchingToken } = useFungibleToken(pluginID, searchedTokenAddress, {
             chainId,
         })
+        const { value: tokenBalance = '' } = useFungibleTokenBalance(pluginID, searchedToken?.address, {
+            chainId,
+            account,
+        })
         // #endregion
 
         const getPlaceholder = () => {
@@ -394,13 +399,16 @@ export const FungibleTokenList = forwardRef(
         return (
             <Stack className={classes.channel}>
                 <SearchableList<
-                    FungibleToken<Web3Helper.Definition[T]['ChainId'], Web3Helper.Definition[T]['SchemaType']>
+                    FungibleToken<Web3Helper.Definition[T]['ChainId'], Web3Helper.Definition[T]['SchemaType']> & {
+                        balance?: string
+                    }
                 >
                     onSelect={handleSelect}
                     onSearch={setKeyword}
                     data={
                         searchedToken && isSameAddress(searchedToken.address, searchedTokenAddress)
-                            ? [searchedToken]
+                            ? // balance field work for case: user search someone token by contract and whitelist is empty.
+                              [{ ...searchedToken, balance: tokenBalance }]
                             : mode === TokenListMode.List
                             ? sortedFungibleTokensForList
                             : sortedFungibleTokensForManage
