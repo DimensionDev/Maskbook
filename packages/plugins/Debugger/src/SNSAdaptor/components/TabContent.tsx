@@ -1,6 +1,7 @@
 import { makeStyles } from '@masknet/theme'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import type { SocialAddress, SocialIdentity } from '@masknet/web3-shared-base'
+import { useSocialAddressListAll } from '@masknet/web3-hooks-base'
 import { List, ListItem, ListItemText, Table, TableBody, TableCell, TableRow, Typography } from '@mui/material'
 
 export interface TabContentProps {
@@ -16,6 +17,7 @@ const useStyles = makeStyles()({
 
 export function TabContent({ identity, socialAddress }: TabContentProps) {
     const { classes } = useStyles()
+    const { value: socialAddressList } = useSocialAddressListAll(identity)
 
     const renderIdentity = () => {
         return (
@@ -48,18 +50,41 @@ export function TabContent({ identity, socialAddress }: TabContentProps) {
         )
     }
 
-    const renderAddressNames = () => {
+    const renderAddressName = () => {
         return (
             <List dense>
                 {socialAddress &&
                     [socialAddress].map((x) => (
                         <ListItem key={`${x.type}_${x.address}`}>
                             <ListItemText
-                                primary={<Typography color="textPrimary">{x.type}</Typography>}
+                                primary={
+                                    <Typography color="textPrimary">
+                                        {x.type} - {x.label}
+                                    </Typography>
+                                }
                                 secondary={x.address}
                             />
                         </ListItem>
                     ))}
+            </List>
+        )
+    }
+
+    const renderAllAddressNames = () => {
+        return (
+            <List dense>
+                {socialAddressList?.map((x) => (
+                    <ListItem key={`${x.type}_${x.address}`}>
+                        <ListItemText
+                            primary={
+                                <Typography color="textPrimary">
+                                    {x.type} - {x.label}
+                                </Typography>
+                            }
+                            secondary={x.address}
+                        />
+                    </ListItem>
+                ))}
             </List>
         )
     }
@@ -79,10 +104,18 @@ export function TabContent({ identity, socialAddress }: TabContentProps) {
                     <TableRow>
                         <TableCell>
                             <Typography variant="body2" whiteSpace="nowrap">
-                                Found Address Names
+                                Address Name
                             </Typography>
                         </TableCell>
-                        <TableCell>{renderAddressNames()}</TableCell>
+                        <TableCell>{renderAddressName()}</TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell>
+                            <Typography variant="body2" whiteSpace="nowrap">
+                                All Address Names
+                            </Typography>
+                        </TableCell>
+                        <TableCell>{renderAllAddressNames()}</TableCell>
                     </TableRow>
                 </TableBody>
             </Table>

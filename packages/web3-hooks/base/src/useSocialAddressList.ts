@@ -16,7 +16,7 @@ export function useSocialAddressList<T extends NetworkPluginID>(
 
     return useAsyncRetry(async () => {
         if (!identity?.identifier?.userId || !IdentityService?.lookup) return EMPTY_LIST
-        const listOfAddress = (await IdentityService.lookup(identity)) ?? EMPTY_LIST
+        const listOfAddress = await IdentityService.lookup(identity)
         const sorted = sorter && listOfAddress.length ? listOfAddress.sort(sorter) : listOfAddress
         return includes?.length ? sorted.filter((x) => includes.includes(x.type)) : sorted
     }, [identity?.identifier?.userId, includes?.join(), sorter, IdentityService?.lookup])
