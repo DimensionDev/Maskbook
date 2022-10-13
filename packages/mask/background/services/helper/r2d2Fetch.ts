@@ -55,7 +55,6 @@ const AlchemyMatchers: Array<[string, AlchemyProxies]> = [
 
 const WorkerMatchers: Array<[string, R2d2Workers]> = [
     ['https://api.opensea.io', R2d2Workers.opensea],
-    ['https://gitcoin.co', R2d2Workers.gitcoin],
     ['https://web-api.coinmarketcap.com', R2d2Workers.coinMarketCap],
     ['https://api.gopluslabs.io', R2d2Workers.goPlusLabs],
     ['https://api.coingecko.com', R2d2Workers.coingecko],

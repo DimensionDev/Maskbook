@@ -1,12 +1,10 @@
 import type { PluginWrapperComponent, Plugin, PluginWrapperMethods } from '@masknet/plugin-infra/content-script'
-import { MaskPostExtraPluginWrapper } from '@masknet/shared'
+import { MaskPostExtraPluginWrapper, useSharedI18N } from '@masknet/shared'
 import { Typography, useTheme } from '@mui/material'
-import { noop } from 'lodash-unified'
 import { forwardRef, memo, PropsWithChildren, ReactElement, useImperativeHandle, useMemo, useState } from 'react'
 import type { AsyncState } from 'react-use/lib/useAsyncFn.js'
 import { useCheckPermissions, useGrantPermissions } from '../../components/DataSource/usePluginHostPermission.js'
 import { PossiblePluginSuggestionUISingle } from '../../components/InjectedComponents/DisabledPluginSuggestion.js'
-import { useI18N } from '../../utils'
 export interface PermissionBoundaryProps extends PropsWithChildren<{}> {
     permissions: string[]
     fallback?:
@@ -19,24 +17,29 @@ export const PermissionBoundary = memo<PermissionBoundaryProps>(({ permissions, 
 
     const [grantState, onGrant] = useGrantPermissions(permissions)
 
-    if (!hasPermissions && fallback) return typeof fallback === 'function' ? fallback(grantState, onGrant) : fallback
+    if (!hasPermissions && fallback && permissions.length)
+        return typeof fallback === 'function' ? fallback(grantState, onGrant) : fallback
 
     return <>{children}</>
 })
 
 export const MaskPostExtraPluginWrapperWithPermission: PluginWrapperComponent<Plugin.SNSAdaptor.Definition> =
     forwardRef((props, ref) => {
+        const [postWrapperRef, setRef] = useState<PluginWrapperMethods | null>(null)
         const theme = useTheme()
-        const { t } = useI18N()
+        const t = useSharedI18N()
         const [open, setOpen] = useState<boolean>(false)
 
         const refItem = useMemo((): PluginWrapperMethods => {
             return {
-                setWidth: noop,
-                setWrap: setOpen,
-                setWrapperName: noop,
+                setWidth: (width) => postWrapperRef?.setWidth(width),
+                setWrap: (open) => {
+                    setOpen(open)
+                    postWrapperRef?.setWrap(open)
+                },
+                setWrapperName: (name) => postWrapperRef?.setWrapperName(name),
             }
-        }, [])
+        }, [postWrapperRef])
 
         useImperativeHandle(ref, () => refItem, [refItem])
         return (
@@ -55,8 +58,8 @@ export const MaskPostExtraPluginWrapperWithPermission: PluginWrapperComponent<Pl
                                     marginBottom={3.25}
                                     textAlign="left"
                                     px="18px">
-                                    {t('authorization_descriptions')}
-                                    <Typography component="p">
+                                    {t.authorization_descriptions()}
+                                    <Typography component="div">
                                         {props.definition.enableRequirement.host_permissions?.join(',')}
                                     </Typography>
                                 </Typography>
@@ -64,7 +67,12 @@ export const MaskPostExtraPluginWrapperWithPermission: PluginWrapperComponent<Pl
                         />
                     ) : undefined
                 }>
-                <MaskPostExtraPluginWrapper {...props} ref={ref} />
+                <MaskPostExtraPluginWrapper
+                    {...props}
+                    ref={(methods) => {
+                        if (methods) setRef(methods)
+                    }}
+                />
             </PermissionBoundary>
         )
     })
