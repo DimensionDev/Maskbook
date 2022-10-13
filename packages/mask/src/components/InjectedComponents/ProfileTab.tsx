@@ -1,11 +1,11 @@
 import { ReactElement, useCallback, useEffect, useState } from 'react'
+import { useMount } from 'react-use'
 import classnames from 'classnames'
+import { get } from 'lodash-unified'
 import { Typography } from '@mui/material'
 import { MaskMessages, useMatchXS, useLocationChange } from '../../utils/index.js'
 import { isTwitter } from '../../social-network-adaptor/twitter.com/base.js'
 import { activatedSocialNetworkUI } from '../../social-network/index.js'
-import { useMount } from 'react-use'
-import { get } from 'lodash-unified'
 
 export interface ProfileTabProps extends withClasses<'tab' | 'button' | 'selected'> {
     clear(): void
@@ -16,8 +16,6 @@ export interface ProfileTabProps extends withClasses<'tab' | 'button' | 'selecte
     title: string
     icon?: React.ReactNode
 }
-
-const searchBoxSearchInputTextId = 'SearchBox_Search_Input'
 
 export function ProfileTab(props: ProfileTabProps) {
     const { reset, clear, children, classes, title } = props
@@ -43,9 +41,7 @@ export function ProfileTab(props: ProfileTabProps) {
 
     useLocationChange((e) => {
         const testId = get(e, 'currentTarget.document.activeElement.dataset.testid')
-        const isSearching = testId === searchBoxSearchInputTextId
-
-        if (isSearching) return
+        if (testId === 'SearchBox_Search_Input') return
 
         MaskMessages.events.profileTabUpdated.sendToLocal({ show: false })
         setActive(false)
