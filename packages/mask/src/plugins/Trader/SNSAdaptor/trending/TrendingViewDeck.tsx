@@ -38,7 +38,6 @@ import { getCurrentPreferredCoinIdSettings } from '../../settings.js'
 import { setStorage } from '../../storage/index.js'
 import type { Coin, Currency, Stat } from '../../types/index.js'
 import { CoinMenu } from './CoinMenu.js'
-import { CoinSafetyAlert } from './CoinSafetyAlert.js'
 import { CoinIcon } from './components/index.js'
 import { PluginHeader } from './PluginHeader.js'
 import { PriceChanged } from './PriceChanged.js'
@@ -319,7 +318,6 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                 </Stack>
             </ThemeProvider>
             <CardContent className={classes.content}>
-                {dataProvider === DataProvider.UniswapInfo && <CoinSafetyAlert coin={trending.coin} />}
                 <Paper className={classes.body} elevation={0}>
                     {children}
                 </Paper>
