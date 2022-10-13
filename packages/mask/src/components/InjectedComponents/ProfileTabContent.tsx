@@ -23,6 +23,7 @@ import { useCurrentVisitingSocialIdentity } from '../DataSource/useActivatedUI.j
 import { useCurrentPersonaConnectStatus } from '../DataSource/usePersonaConnectStatus.js'
 import { ConnectPersonaBoundary } from '../shared/ConnectPersonaBoundary.js'
 import { WalletSettingEntry } from './ProfileTab/WalletSettingEntry'
+import { isFacebook } from '../../social-network-adaptor/facebook.com/base.js'
 
 function getTabContent(tabId?: string) {
     return createInjectHooksRenderer(useActivatedPluginsSNSAdaptor.visibility.useAnyMode, (x) => {
@@ -35,7 +36,7 @@ const MENU_ITEM_HEIGHT = 40
 const MENU_LIST_PADDING = 8
 const useStyles = makeStyles()((theme) => ({
     root: {
-        width: isTwitter(activatedSocialNetworkUI) ? 'auto' : 876,
+        width: isFacebook(activatedSocialNetworkUI) ? 876 : 'auto',
     },
     container: {
         background:
