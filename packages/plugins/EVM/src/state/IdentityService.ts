@@ -12,7 +12,7 @@ import {
     createLookupTableResolver,
 } from '@masknet/shared-base'
 import { ChainId, isValidAddress, isZeroAddress, ProviderType } from '@masknet/web3-shared-evm'
-import { KeyValue, MaskX, MaskX_BaseAPI, NextIDProof, RSS3 } from '@masknet/web3-providers'
+import { KeyValue, MaskX, MaskX_BaseAPI, NextIDProof } from '@masknet/web3-providers'
 import { Providers } from './Connection/provider.js'
 
 const ENS_RE = /\S{1,256}\.(eth|kred|xyz|luxe)\b/i
