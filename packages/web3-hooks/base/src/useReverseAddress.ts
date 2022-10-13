@@ -1,19 +1,19 @@
 import { useAsyncRetry } from 'react-use'
-import { NetworkPluginID } from '@masknet/shared-base'
-import { ChainId } from '@masknet/web3-shared-evm'
+import type { Web3Helper } from '@masknet/web3-helpers'
+import type { NetworkPluginID } from '@masknet/shared-base'
+import { useChainId } from './useChainId.js'
 import { useWeb3State } from './useWeb3State.js'
 
-export function useReverseAddress<T extends NetworkPluginID>(pluginID?: T, address?: string) {
+export function useReverseAddress<T extends NetworkPluginID>(
+    pluginID?: T,
+    address?: string,
+    expectedChainId?: Web3Helper.Definition[T]['ChainId'],
+) {
+    const chainId = useChainId(pluginID, expectedChainId)
     const { NameService, Others } = useWeb3State(pluginID)
 
     return useAsyncRetry(async () => {
-        if (
-            !address ||
-            !Others?.isValidAddress?.(address) ||
-            !NameService ||
-            (pluginID && pluginID !== NetworkPluginID.PLUGIN_EVM)
-        )
-            return
-        return NameService.reverse?.(ChainId.Mainnet, address)
-    }, [address, NameService, pluginID])
+        if (!chainId || !address || !Others?.isValidAddress?.(address) || !NameService) return
+        return NameService.reverse?.(chainId, address)
+    }, [address, chainId, NameService])
 }
