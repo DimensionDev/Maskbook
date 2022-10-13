@@ -149,6 +149,7 @@ export class IdentityService extends IdentityServiceState {
             .filter((x) => {
                 if (!isValidAddress(x.web3_addr)) return false
                 try {
+                    // detect if a valid data source
                     resolveMaskXAddressType(x.source)
                     return true
                 } catch {
