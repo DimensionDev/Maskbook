@@ -21,7 +21,6 @@ export class ENS_Resolver implements NameServiceResolver<ChainId> {
     }
 
     async lookup(chainId: ChainId, name: string) {
-        if (chainId !== ChainId.Mainnet) return
         const web3 = await Web3StateSettings.value.Connection?.getWeb3?.({
             chainId,
         })
@@ -38,8 +37,6 @@ export class ENS_Resolver implements NameServiceResolver<ChainId> {
     }
 
     async reverse(chainId: ChainId, address: string) {
-        if (chainId !== ChainId.Mainnet) return
-
         try {
             const ens = await this.createENS()
             const name = await ens.reverse(address)
