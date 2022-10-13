@@ -16,6 +16,7 @@ export const base: Plugin.Shared.Definition = {
             type: 'opt-out',
             networks: {
                 [CurrentSNSNetwork.Facebook]: false,
+                [CurrentSNSNetwork.Minds]: false,
             },
         },
         target: 'stable',
