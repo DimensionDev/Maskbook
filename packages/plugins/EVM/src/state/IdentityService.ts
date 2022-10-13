@@ -1,4 +1,5 @@
 import ENS from 'ethjs-ens'
+import { uniqBy } from 'lodash-unified'
 import type { Plugin } from '@masknet/plugin-infra'
 import { IdentityServiceState } from '@masknet/web3-state'
 import { SocialIdentity, SocialAddress, SocialAddressType } from '@masknet/web3-shared-base'
@@ -16,19 +17,10 @@ import { Providers } from './Connection/provider.js'
 
 const ENS_RE = /\S{1,256}\.(eth|kred|xyz|luxe)\b/i
 const ADDRESS_FULL = /0x\w{40,}/i
-// xxx.cheers.bio xxx.rss3.bio
-const RSS3_URL_RE = /https?:\/\/(?<name>[\w.]+)\.(rss3|cheers)\.bio/i
-const RSS3_RNS_RE = /(?<name>[\w.]+)\.rss3/i
 
 function getENSName(nickname: string, bio: string) {
     const [matched] = nickname.match(ENS_RE) ?? bio.match(ENS_RE) ?? []
     return matched
-}
-
-function getRSS3Id(nickname: string, profileURL: string, bio: string) {
-    const matched =
-        nickname.match(RSS3_RNS_RE) || profileURL.match(RSS3_URL_RE) || bio.match(RSS3_URL_RE) || bio.match(RSS3_RNS_RE)
-    return matched?.groups?.name
 }
 
 function getAddress(text: string) {
@@ -100,14 +92,6 @@ export class IdentityService extends IdentityServiceState {
             .filter(Boolean) as Array<SocialAddress<NetworkPluginID.PLUGIN_EVM>>
     }
 
-    /** Read a social address from bio when it contains a RSS3 ID. */
-    private async getSocialAddressFromRSS3({ nickname = '', homepage = '', bio = '' }: SocialIdentity) {
-        const RSS3Id = getRSS3Id(nickname, homepage, bio)
-        if (!RSS3Id) return
-        const info = await RSS3.getNameInfo(RSS3Id)
-        return this.createSocialAddress(SocialAddressType.RSS3, info?.address ?? '', `${RSS3Id}.rss3`)
-    }
-
     /** Read a social address from KV service. */
     private async getSocialAddressFromKV({ identifier }: SocialIdentity) {
         const address = await KeyValue.createJSON_Storage<
@@ -163,13 +147,13 @@ export class IdentityService extends IdentityServiceState {
         const allSettled = await Promise.allSettled([
             this.getSocialAddressFromBio(identity),
             this.getSocialAddressFromENS(identity),
-            this.getSocialAddressFromRSS3(identity),
             this.getSocialAddressFromKV(identity),
             this.getSocialAddressesFromNextID(identity),
             this.getSocialAddressesFromMaskX(identity),
         ])
-        return allSettled.flatMap((x) => (x.status === 'fulfilled' ? x.value : undefined)).filter(Boolean) as Array<
-            SocialAddress<NetworkPluginID.PLUGIN_EVM>
-        >
+        const identities = allSettled
+            .flatMap((x) => (x.status === 'fulfilled' ? x.value : []))
+            .filter(Boolean) as Array<SocialAddress<NetworkPluginID.PLUGIN_EVM>>
+        return uniqBy(identities, (x) => `${x.type}_${x.label}_${x.address.toLowerCase()}`)
     }
 }
