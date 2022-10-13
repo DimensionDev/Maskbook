@@ -2,9 +2,16 @@ import ENS from 'ethjs-ens'
 import type { Plugin } from '@masknet/plugin-infra'
 import { IdentityServiceState } from '@masknet/web3-state'
 import { SocialIdentity, SocialAddress, SocialAddressType } from '@masknet/web3-shared-base'
-import { NetworkPluginID, EMPTY_LIST, EnhanceableSite, getSiteType, NextIDPlatform } from '@masknet/shared-base'
+import {
+    NetworkPluginID,
+    EMPTY_LIST,
+    EnhanceableSite,
+    getSiteType,
+    NextIDPlatform,
+    createLookupTableResolver,
+} from '@masknet/shared-base'
 import { ChainId, isValidAddress, isZeroAddress, ProviderType } from '@masknet/web3-shared-evm'
-import { KeyValue, NextIDProof, RSS3 } from '@masknet/web3-providers'
+import { KeyValue, MaskX, MaskX_BaseAPI, NextIDProof, RSS3 } from '@masknet/web3-providers'
 import { Providers } from './Connection/provider.js'
 
 const ENS_RE = /\S{1,256}\.(eth|kred|xyz|luxe)\b/i
@@ -46,6 +53,18 @@ async function getWalletAddressesFromNextID(userId?: string, publicKey?: string)
     )
 }
 
+const resolveMaskXAddressType = createLookupTableResolver<MaskX_BaseAPI.SourceType, SocialAddressType>(
+    {
+        [MaskX_BaseAPI.SourceType.CyberConnect]: SocialAddressType.CyberConnect,
+        [MaskX_BaseAPI.SourceType.Leaderboard]: SocialAddressType.Leaderboard,
+        [MaskX_BaseAPI.SourceType.Sybil]: SocialAddressType.Sybil,
+        [MaskX_BaseAPI.SourceType.RSS3]: SocialAddressType.RSS3,
+    },
+    (x) => {
+        throw new Error(`Unknown source type: ${x}`)
+    },
+)
+
 export class IdentityService extends IdentityServiceState {
     constructor(protected context: Plugin.Shared.SharedUIContext) {
         super()
@@ -74,7 +93,7 @@ export class IdentityService extends IdentityServiceState {
     }
 
     /** Read a social address from NextID. */
-    private async getSocialAddressFromNextID({ identifier, publicKey }: SocialIdentity) {
+    private async getSocialAddressesFromNextID({ identifier, publicKey }: SocialIdentity) {
         const listOfAddress = await getWalletAddressesFromNextID(identifier?.userId, publicKey)
         return listOfAddress
             .map((x) => this.createSocialAddress(SocialAddressType.NEXT_ID, x.identity))
@@ -122,8 +141,21 @@ export class IdentityService extends IdentityServiceState {
     }
 
     /** Read a social address from MaskX */
-    private async getSocialAddressFromMaskX({ nickname = '' }: SocialIdentity) {
-        return
+    private async getSocialAddressesFromMaskX({ identifier }: SocialIdentity) {
+        const userId = identifier?.userId
+        if (!userId) return
+        const response = await MaskX.getIdentitiesExact(userId, MaskX_BaseAPI.PlatformType.Twitter)
+        return response.records
+            .filter((x) => {
+                if (!isValidAddress(x.web3_addr)) return false
+                try {
+                    resolveMaskXAddressType(x.source)
+                    return true
+                } catch {
+                    return false
+                }
+            })
+            .map((y) => this.createSocialAddress(resolveMaskXAddressType(y.source), y.web3_addr, y.sns_handle))
     }
 
     override async getFromRemote(identity: SocialIdentity, includes?: SocialAddressType[]) {
@@ -131,9 +163,9 @@ export class IdentityService extends IdentityServiceState {
             this.getSocialAddressFromBio(identity),
             this.getSocialAddressFromENS(identity),
             this.getSocialAddressFromRSS3(identity),
-            this.getSocialAddressFromNextID(identity),
             this.getSocialAddressFromKV(identity),
-            this.getSocialAddressFromMaskX(identity),
+            this.getSocialAddressesFromNextID(identity),
+            this.getSocialAddressesFromMaskX(identity),
         ])
         return allSettled.flatMap((x) => (x.status === 'fulfilled' ? x.value : undefined)).filter(Boolean) as Array<
             SocialAddress<NetworkPluginID.PLUGIN_EVM>

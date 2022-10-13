@@ -29,8 +29,8 @@ export namespace MaskX_BaseAPI {
     }
 
     export interface Options {
-        size: number
-        page: number
+        size?: number
+        page?: number
     }
 
     export interface Response {
@@ -44,7 +44,7 @@ export namespace MaskX_BaseAPI {
     export interface Provider {
         /** Get identities by precisely matching the identity id. */
         getIdentitiesExact(handle: string, platform: PlatformType, options?: Options): Promise<Response>
-        /** Get identities by fuzzy searcching the identity id. */
+        /** Get identities by fuzzy searching the identity id. */
         getIdentitiesFuzzy(handle: string, platform: PlatformType, options?: Options): Promise<Response>
         /** Get all included identities. */
         getAllIdentities(options?: Options): Promise<Response>
