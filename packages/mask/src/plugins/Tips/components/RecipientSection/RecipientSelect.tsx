@@ -1,9 +1,9 @@
 import { Icons } from '@masknet/icons'
 import { useChainId, useWeb3State } from '@masknet/web3-hooks-base'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { isSameAddress, SocialAddressType } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { Link, MenuItem, Select, Tooltip, TooltipProps, Typography } from '@mui/material'
+import { Link, MenuItem, Select, TooltipProps, Typography } from '@mui/material'
 import { FC, memo, useRef } from 'react'
 import { useTip } from '../../contexts/index.js'
 import { Translate, useI18N } from '../../locales/index.js'
@@ -140,7 +140,7 @@ interface AddressSourceTooltipProps extends Omit<TooltipProps, 'title'> {
 const SourceTooltip: FC<AddressSourceTooltipProps> = ({ platform, source, children }) => {
     const { classes } = useStyles()
     return (
-        <Tooltip
+        <ShadowRootTooltip
             classes={{ tooltip: classes.tooltip }}
             disableInteractive
             title={
@@ -170,12 +170,9 @@ const SourceTooltip: FC<AddressSourceTooltipProps> = ({ platform, source, childr
                     )}
                 </Typography>
             }
-            arrow
-            PopperProps={{
-                disablePortal: true,
-            }}>
+            arrow>
             {children}
-        </Tooltip>
+        </ShadowRootTooltip>
     )
 }
 
