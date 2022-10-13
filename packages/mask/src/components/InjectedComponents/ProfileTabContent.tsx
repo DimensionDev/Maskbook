@@ -12,7 +12,15 @@ import { useAvailablePlugins } from '@masknet/plugin-infra'
 import { useHiddenAddressSetting } from '@masknet/web3-hooks-base'
 import { AddressItem, PluginCardFrameMini, useSocialAddressListBySettings } from '@masknet/shared'
 import { CrossIsolationMessages, EMPTY_LIST, NextIDPlatform, PluginID, NetworkPluginID } from '@masknet/shared-base'
-import { makeStyles, MaskLightTheme, MaskTabList, ShadowRootMenu, useStylesExtends, useTabs } from '@masknet/theme'
+import {
+    ActionButton,
+    makeStyles,
+    MaskLightTheme,
+    MaskTabList,
+    ShadowRootMenu,
+    useStylesExtends,
+    useTabs,
+} from '@masknet/theme'
 import { isSameAddress, SocialAddress, SocialAddressType } from '@masknet/web3-shared-base'
 import { TabContext } from '@mui/lab'
 import { Button, Link, MenuItem, Stack, Tab, ThemeProvider, Typography } from '@mui/material'
@@ -23,6 +31,7 @@ import { useCurrentVisitingSocialIdentity } from '../DataSource/useActivatedUI.j
 import { useCurrentPersonaConnectStatus } from '../DataSource/usePersonaConnectStatus.js'
 import { ConnectPersonaBoundary } from '../shared/ConnectPersonaBoundary.js'
 import { WalletSettingEntry } from './ProfileTab/WalletSettingEntry'
+import { useGrantPermissions, usePluginHostPermissionCheck } from '../DataSource/usePluginHostPermission.js'
 
 function getTabContent(tabId?: string) {
     return createInjectHooksRenderer(useActivatedPluginsSNSAdaptor.visibility.useAnyMode, (x) => {
@@ -239,6 +248,12 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         return <Component identity={currentVisitingSocialIdentity} socialAddress={selectedAddress} />
     }, [componentTabId, currentVisitingSocialIdentity?.publicKey, selectedAddress])
 
+    const lackHostPermission = usePluginHostPermissionCheck(activatedPlugins.filter((x) => x.ProfileCardTabs?.length))
+
+    const lackPluginId = first(lackHostPermission ? [...lackHostPermission] : [])
+    const lackPluginDefine = activatedPlugins.find((x) => x.ID === lackPluginId)
+
+    const [, onGrant] = useGrantPermissions(lackPluginDefine?.enableRequirement.host_permissions)
     useLocationChange(() => {
         onChange(undefined, first(tabs)?.id)
     })
@@ -281,6 +296,25 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     }
 
     if (hidden) return null
+
+    if (lackHostPermission?.size) {
+        return (
+            <ThemeProvider theme={MaskLightTheme}>
+                <div className={classes.root}>
+                    <PluginCardFrameMini>
+                        <Typography>{t('authorization_descriptions')}</Typography>
+                        <ActionButton
+                            onClick={onGrant}
+                            variant="roundedDark"
+                            sx={{ mt: 10 }}
+                            startIcon={<Icons.Approve size={18} />}>
+                            Approve
+                        </ActionButton>
+                    </PluginCardFrameMini>
+                </div>
+            </ThemeProvider>
+        )
+    }
 
     if (
         !currentVisitingUserId ||

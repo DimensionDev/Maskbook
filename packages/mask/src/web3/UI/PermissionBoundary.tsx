@@ -3,23 +3,21 @@ import { MaskPostExtraPluginWrapper } from '@masknet/shared'
 import { Typography, useTheme } from '@mui/material'
 import { noop } from 'lodash-unified'
 import { forwardRef, memo, PropsWithChildren, ReactElement, useImperativeHandle, useMemo, useState } from 'react'
-import { useAsyncFn } from 'react-use'
 import type { AsyncState } from 'react-use/lib/useAsyncFn.js'
-import { useCheckPermissions } from '../../components/DataSource/usePluginHostPermission.js'
+import { useCheckPermissions, useGrantPermissions } from '../../components/DataSource/usePluginHostPermission.js'
 import { PossiblePluginSuggestionUISingle } from '../../components/InjectedComponents/DisabledPluginSuggestion.js'
-import Services from '../../extension/service.js'
 import { useI18N } from '../../utils'
 export interface PermissionBoundaryProps extends PropsWithChildren<{}> {
     permissions: string[]
-    fallback?: ReactElement | ((grantState: AsyncState<void>, onGrantPermissions: () => Promise<void>) => ReactElement)
+    fallback?:
+        | ReactElement
+        | ((grantState: AsyncState<boolean>, onGrantPermissions: () => Promise<boolean | undefined>) => ReactElement)
 }
 
 export const PermissionBoundary = memo<PermissionBoundaryProps>(({ permissions, fallback, children }) => {
     const { value: hasPermissions = true } = useCheckPermissions(permissions)
 
-    const [grantState, onGrant] = useAsyncFn(async () => {
-        Services.Helper.requestHostPermission(permissions)
-    }, [permissions])
+    const [grantState, onGrant] = useGrantPermissions(permissions)
 
     if (!hasPermissions && fallback) return typeof fallback === 'function' ? fallback(grantState, onGrant) : fallback
 

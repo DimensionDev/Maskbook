@@ -7,14 +7,15 @@ import {
     PluginI18NFieldRender,
     usePluginI18NField,
 } from '@masknet/plugin-infra/content-script'
-import { DialogContent } from '@mui/material'
-import { makeStyles, MaskDialog } from '@masknet/theme'
+import { Box, DialogContent, Typography } from '@mui/material'
+import { ActionButton, makeStyles } from '@masknet/theme'
 import { PluginID } from '@masknet/shared-base'
 import { ErrorBoundary } from '@masknet/shared-base-ui'
 import { ClickableChip } from '../shared/SelectRecipients/ClickableChip.js'
-import { usePluginHostPermissionCheck } from '../DataSource/usePluginHostPermission.js'
-import { PossiblePluginSuggestionUISingle } from '../InjectedComponents/DisabledPluginSuggestion.js'
-
+import { useGrantPermissions, usePluginHostPermissionCheck } from '../DataSource/usePluginHostPermission.js'
+import { useI18N } from '../../utils'
+import { InjectedDialog } from '@masknet/shared'
+import { Icons } from '@masknet/icons'
 const useStyles = makeStyles()((theme) => ({
     sup: {
         paddingLeft: 2,
@@ -83,6 +84,21 @@ export const PluginEntryRender = memo(
     }),
 )
 
+const usePermissionDialogStyles = makeStyles()((theme) => ({
+    root: {
+        width: 384,
+        padding: theme.spacing(1),
+    },
+    dialogTitle: {
+        background: theme.palette.maskColor.bottom,
+    },
+    description: {
+        fontSize: 14,
+        lineHeight: '18px',
+        color: theme.palette.maskColor.main,
+    },
+}))
+
 const cache = new Map<
     Plugin.Shared.Definition,
     React.ComponentType<Plugin.SNSAdaptor.CompositionDialogEntry_DialogProps>
@@ -90,12 +106,34 @@ const cache = new Map<
 function getPluginEntryDisabledDialog(define: Plugin.Shared.Definition) {
     if (!cache.has(define)) {
         cache.set(define, (props: Plugin.SNSAdaptor.CompositionDialogEntry_DialogProps) => {
+            const { t } = useI18N()
+            const { classes } = usePermissionDialogStyles()
+            const [, onGrant] = useGrantPermissions(define.enableRequirement.host_permissions)
             return (
-                <MaskDialog title="Grant permission" open={props.open} onClose={props.onClose}>
+                <InjectedDialog
+                    classes={{ paper: classes.root, dialogTitle: classes.dialogTitle }}
+                    title="Domain Request"
+                    open={props.open}
+                    onClose={props.onClose}
+                    maxWidth="sm"
+                    titleBarIconStyle="close">
                     <DialogContent>
-                        <PossiblePluginSuggestionUISingle define={define} />
+                        <Typography className={classes.description}>
+                            {t('authorization_descriptions')}
+                            <Typography>{define.enableRequirement.host_permissions?.join(',')}</Typography>
+                        </Typography>
+
+                        <Box display="flex" justifyContent="center">
+                            <ActionButton
+                                startIcon={<Icons.Approve size={18} />}
+                                variant="roundedDark"
+                                onClick={onGrant}
+                                sx={{ mt: 10, width: '80%' }}>
+                                {t('approve')}
+                            </ActionButton>
+                        </Box>
                     </DialogContent>
-                </MaskDialog>
+                </InjectedDialog>
             )
         })
     }

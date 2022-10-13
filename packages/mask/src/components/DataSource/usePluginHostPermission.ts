@@ -1,6 +1,6 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { useEffect } from 'react'
-import { useAsyncRetry } from 'react-use'
+import { useAsyncFn, useAsyncRetry } from 'react-use'
 import Services from '../../extension/service.js'
 import { MaskMessages } from '../../utils/messages.js'
 
@@ -32,4 +32,11 @@ export function useCheckPermissions(permissions: string[]) {
     useEffect(() => MaskMessages.events.hostPermissionChanged.on(asyncResult.retry), [asyncResult.retry])
 
     return asyncResult
+}
+
+export function useGrantPermissions(permissions?: string[]) {
+    return useAsyncFn(async () => {
+        if (!permissions?.length) return
+        return Services.Helper.requestHostPermission(permissions)
+    }, [permissions])
 }

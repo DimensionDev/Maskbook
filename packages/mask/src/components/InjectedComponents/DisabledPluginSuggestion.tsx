@@ -107,7 +107,7 @@ export function PossiblePluginSuggestionUISingle(props: {
             action={
                 <Button
                     size="small"
-                    startIcon={lackHostPermission ? <Icons.KeySquare /> : <Icons.Plugin size={18} />}
+                    startIcon={lackHostPermission ? <Icons.Approve size={18} /> : <Icons.Plugin size={18} />}
                     variant="roundedDark"
                     onClick={onClick}
                     sx={{
@@ -124,7 +124,7 @@ export function PossiblePluginSuggestionUISingle(props: {
                             backgroundColor: theme.palette.maskColor.dark,
                         },
                     }}>
-                    {lackHostPermission ? t('authorization') : t('plugin_enables')}
+                    {lackHostPermission ? t('approve') : t('plugin_enables')}
                 </Button>
             }
             content={content ?? <Rectangle style={{ paddingLeft: 8, marginBottom: 42 }} />}
