@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useState } from 'react'
+import { NetworkPluginID } from '@masknet/shared-base'
 import Fuse from 'fuse.js'
 import { InjectedDialog } from '@masknet/shared'
+import { useLookupAddress } from '@masknet/web3-hooks-base'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
 import { Button, DialogActions, DialogContent, InputAdornment, InputBase, Typography } from '@mui/material'
@@ -90,7 +92,13 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
     const { t } = useI18N()
     const { classes, cx } = useStyles()
     const { items, disabledItems, onSearch } = props
-    const [search, setSearch] = useState('')
+    const [_search, setSearch] = useState('')
+    const { value: registeredAddress = '', loading: resolveDomainLoading } = useLookupAddress(
+        NetworkPluginID.PLUGIN_EVM,
+        _search,
+    )
+
+    const search = registeredAddress || _search
 
     useEffect(() => {
         setSearch('')
@@ -124,7 +132,7 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
                     classes={{
                         focused: classes.inputFocused,
                     }}
-                    value={search}
+                    value={_search}
                     onKeyUp={(e) => {
                         if (e.code !== 'Enter') return
                         onSearch(search)
@@ -138,7 +146,7 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
                     }
                     placeholder={t('post_dialog_share_with_input_placeholder')}
                 />
-                {props.loading ? (
+                {props.loading || resolveDomainLoading ? (
                     <div className={cx(classes.empty, classes.mainText)}>
                         <LoadingBase />
                         <Typography>{t('loading')}</Typography>
