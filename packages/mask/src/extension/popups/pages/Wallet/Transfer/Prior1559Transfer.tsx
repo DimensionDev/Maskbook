@@ -30,7 +30,14 @@ import { makeStyles } from '@masknet/theme'
 import { ExpandMore } from '@mui/icons-material'
 import { LoadingButton } from '@mui/lab'
 import { TransferAddressError } from '../type.js'
-import { useChainId, useFungibleTokenBalance, useWallet, useWeb3Connection, useWeb3Hub } from '@masknet/web3-hooks-base'
+import {
+    useChainId,
+    useFungibleTokenBalance,
+    useWallet,
+    useWeb3Connection,
+    useWeb3Hub,
+    useCurrentWeb3NetworkPluginID,
+} from '@masknet/web3-hooks-base'
 import { useGasLimit, useTokenTransferCallback } from '@masknet/web3-hooks-evm'
 import { useI18N } from '../../../../../utils/index.js'
 
@@ -152,6 +159,7 @@ export interface Prior1559TransferProps {
 export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, openAssetMenu, otherWallets }) => {
     const { t } = useI18N()
     const { classes } = useStyles()
+    const currentPluginId = useCurrentWeb3NetworkPluginID()
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
     const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
@@ -215,7 +223,7 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
 
         methods.clearErrors('address')
 
-        if (address.includes('.eth')) {
+        if (address.includes('.eth') && currentPluginId !== NetworkPluginID.PLUGIN_EVM) {
             setAddressTip({
                 type: TransferAddressError.NETWORK_NOT_SUPPORT,
                 message: t('wallet_transfer_error_no_support_ens'),
@@ -239,7 +247,7 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
                 message: t('wallet_transfer_error_is_contract_address'),
             })
         }
-    }, [address, EthereumAddress.isValid, methods.clearErrors, connection])
+    }, [address, EthereumAddress.isValid, methods.clearErrors, connection, currentPluginId])
 
     // #region Set default gas price
     useAsync(async () => {
