@@ -124,6 +124,9 @@ export enum SocialAddressType {
     TWITTER_BLUE = 'TWITTER_BLUE',
     NEXT_ID = 'NEXT_ID',
     SOL = 'SOL',
+    CyberConnect = 'CYBER_CONNECT',
+    Leaderboard = 'ETH_LEADERBOARD',
+    Sybil = 'SYBIL',
 }
 
 export enum StorageProviderType {
