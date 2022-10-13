@@ -29,7 +29,7 @@ export class SavingsDescriptor implements TransactionDescriptor {
                     tokenInAmount: context.value,
                     title: i18NextInstance.t('plugin_infra_descriptor_token_deposit_title'),
                     description: i18NextInstance.t('plugin_infra_descriptor_token_deposit', {
-                        symbol: token?.symbol ?? 'token',
+                        tokenAmountDescription: getTokenAmountDescription(context.value, token),
                     }),
                     snackbar: {
                         successfulDescription: i18NextInstance.t('plugin_infra_descriptor_token_deposit_success', {
@@ -54,7 +54,7 @@ export class SavingsDescriptor implements TransactionDescriptor {
                     tokenInAmount: parameters?.amount,
                     title: i18NextInstance.t('plugin_infra_descriptor_token_deposit_title'),
                     description: i18NextInstance.t('plugin_infra_descriptor_token_deposit', {
-                        symbol: token?.symbol ?? 'token',
+                        tokenAmountDescription: getTokenAmountDescription(parameters?.amount, token),
                     }),
                     snackbar: {
                         successfulDescription: i18NextInstance.t('plugin_infra_descriptor_token_deposit_success', {
@@ -78,7 +78,7 @@ export class SavingsDescriptor implements TransactionDescriptor {
                     tokenInAmount: parameters?.amount,
                     title: i18NextInstance.t('plugin_infra_descriptor_token_withdraw_title'),
                     description: i18NextInstance.t('plugin_infra_descriptor_token_withdraw', {
-                        symbol: token?.symbol ?? 'token',
+                        tokenAmountDescription: getTokenAmountDescription(parameters?.amount, token),
                     }),
                     snackbar: {
                         successfulDescription: i18NextInstance.t('plugin_infra_descriptor_token_withdraw_success', {
