@@ -44,7 +44,7 @@ export function useNFT(
         const amount = asset?.priceInToken
             ? formatBalance(asset.priceInToken.amount, asset.priceInToken.token.decimals)
             : asset?.price?.[CurrencyType.USD] ?? '0'
-        const name = metadata?.name ?? contract?.name ?? ''
+        const name = metadata?.name || contract?.name || ''
         const imageURL = metadata?.imageURL
         const permalink = asset?.link ?? Others?.explorerResolver.nonFungibleTokenLink(chainId, address, tokenId)
 
