@@ -10,17 +10,9 @@ import {
 } from '@masknet/plugin-infra/content-script'
 import { useAvailablePlugins } from '@masknet/plugin-infra'
 import { useHiddenAddressSetting } from '@masknet/web3-hooks-base'
-import { AddressItem, PluginCardFrameMini, useSocialAddressListBySettings } from '@masknet/shared'
+import { AddressItem, GrantPermissions, PluginCardFrameMini, useSocialAddressListBySettings } from '@masknet/shared'
 import { CrossIsolationMessages, EMPTY_LIST, NextIDPlatform, PluginID, NetworkPluginID } from '@masknet/shared-base'
-import {
-    ActionButton,
-    makeStyles,
-    MaskLightTheme,
-    MaskTabList,
-    ShadowRootMenu,
-    useStylesExtends,
-    useTabs,
-} from '@masknet/theme'
+import { makeStyles, MaskLightTheme, MaskTabList, ShadowRootMenu, useStylesExtends, useTabs } from '@masknet/theme'
 import { isSameAddress, SocialAddress, SocialAddressType } from '@masknet/web3-shared-base'
 import { TabContext } from '@mui/lab'
 import { Button, Link, MenuItem, Stack, Tab, ThemeProvider, Typography } from '@mui/material'
@@ -303,14 +295,10 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
             <ThemeProvider theme={MaskLightTheme}>
                 <div className={classes.root}>
                     <PluginCardFrameMini>
-                        <Typography>{t('authorization_descriptions')}</Typography>
-                        <ActionButton
-                            onClick={onGrant}
-                            variant="roundedDark"
-                            sx={{ mt: 10 }}
-                            startIcon={<Icons.Approve size={18} />}>
-                            Approve
-                        </ActionButton>
+                        <GrantPermissions
+                            permissions={lackPluginDefine?.enableRequirement.host_permissions ?? []}
+                            onGrant={onGrant}
+                        />
                     </PluginCardFrameMini>
                 </div>
             </ThemeProvider>
