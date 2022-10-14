@@ -1,4 +1,3 @@
-import ENS from 'ethjs-ens'
 import { uniqBy } from 'lodash-unified'
 import type { Plugin } from '@masknet/plugin-infra'
 import { IdentityServiceState } from '@masknet/web3-state'
@@ -11,9 +10,10 @@ import {
     NextIDPlatform,
     createLookupTableResolver,
 } from '@masknet/shared-base'
-import { ChainId, isEmptyHex, isValidAddress, isZeroAddress, ProviderType } from '@masknet/web3-shared-evm'
-import { ChainbaseDomain, KeyValue, MaskX, MaskX_BaseAPI, NextIDProof } from '@masknet/web3-providers'
-import { Providers } from './Connection/provider.js'
+import { isValidAddress, isZeroAddress } from '@masknet/web3-shared-evm'
+import { KeyValue, MaskX, MaskX_BaseAPI, NextIDProof } from '@masknet/web3-providers'
+import { ENS_Resolver } from './NameService/ENS.js'
+import { ChainbaseResolver } from './NameService/Chainbase.js'
 
 const ENS_RE = /[^\t\n\v()[\]]{1,256}\.(eth|kred|xyz|luxe)\b/i
 const ADDRESS_FULL = /0x\w{40,}/i
@@ -113,31 +113,13 @@ export class IdentityService extends IdentityServiceState {
     private async getSocialAddressFromENS({ nickname = '', bio = '' }: SocialIdentity) {
         const name = getENSName(nickname, bio)
         if (!name) return
-        const web3 = await Providers.Maskbook.createWeb3({
-            chainId: ChainId.Mainnet,
-        })
-        try {
-            const provider = await Providers[ProviderType.MaskWallet].createWeb3Provider({
-                chainId: ChainId.Mainnet,
-            })
-            const ens = new ENS({
-                provider,
-                network: ChainId.Mainnet,
-            })
 
-            const lookupAddress = await attemptUntil(
-                [() => ens.lookup(name), () => ChainbaseDomain.lookup(name, ChainId.Mainnet)],
-                undefined,
-            )
-            if (!lookupAddress) return
-            const address =
-                isZeroAddress(lookupAddress) || isEmptyHex(lookupAddress)
-                    ? await web3.eth.ens.registry.getOwner(name)
-                    : lookupAddress
-            return this.createSocialAddress(SocialAddressType.ENS, address, name)
-        } catch {
-            return web3.eth.ens.registry.getOwner(name)
-        }
+        return attemptUntil(
+            [new ENS_Resolver(), new ChainbaseResolver()].map((resolver) => {
+                return async () => resolver.lookup(name)
+            }),
+            undefined,
+        )
     }
 
     /** Read a social address from MaskX */
