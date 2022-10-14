@@ -1,68 +1,10 @@
-import { GrayscaleAlgorithm, TransformAlgorithm, encode, decode } from '@dimensiondev/stego-js'
+import { TransformAlgorithm, encode, decode } from '@dimensiondev/stego-js'
 import type { EncodeOptions } from '@dimensiondev/stego-js'
 import { omit } from 'lodash-unified'
 import { getDimension } from './utils.js'
+import { currentUsingPreset, defaultOptions, findPreset } from './presets.js'
 
 export { GrayscaleAlgorithm, AlgorithmVersion } from '@dimensiondev/stego-js'
-
-interface Dimension {
-    width: number
-    height: number
-}
-interface Preset extends Dimension {
-    mask: string
-    deprecated?: string
-    options?: Partial<EncodeOptions>
-}
-export const currentUsingPreset: Preset = {
-    width: 1200,
-    height: 681,
-    mask: new URL('./masks/mask-v2.png', import.meta.url).toString(),
-}
-const dimensionPreset: Preset[] = [
-    {
-        deprecated: 'legacy post',
-        width: 1024,
-        height: 1240,
-        mask: new URL('./masks/mask-v1.png', import.meta.url).toString(),
-    },
-    currentUsingPreset,
-    {
-        width: 1200,
-        height: 680,
-        mask: new URL('./masks/mask-transparent.png', import.meta.url).toString(),
-        options: {
-            cropEdgePixels: true,
-        },
-    },
-    {
-        deprecated: 'event election 2020',
-        width: 1000,
-        height: 558,
-        mask: new URL('./masks/mask-transparent.png', import.meta.url).toString(),
-    },
-    {
-        deprecated: 'old NFT',
-        width: 1000,
-        height: 560,
-        mask: new URL('./masks/mask-v4.png', import.meta.url).toString(),
-    },
-]
-
-const defaultOptions = {
-    size: 8,
-    narrow: 0,
-    copies: 3,
-    tolerance: 128,
-    exhaustPixels: true,
-    cropEdgePixels: false,
-    fakeMaskPixels: false,
-    grayscaleAlgorithm: GrayscaleAlgorithm.NONE,
-    transformAlgorithm: TransformAlgorithm.FFT1D,
-}
-
-const isSameDimension = (dimension: Dimension, otherDimension: Dimension) =>
-    dimension.width === otherDimension.width && dimension.height === otherDimension.height
 
 export interface SteganographyIO {
     downloadImage: (url: string) => Promise<ArrayBuffer>
@@ -88,7 +30,7 @@ export type DecodeImageOptions = SteganographyIO & Partial<EncodeOptions> & Pick
 
 async function inner(buf: ArrayBuffer, options: DecodeImageOptions) {
     const dimension = getDimension(buf)
-    const preset = dimensionPreset.find((d) => isSameDimension(d, dimension))
+    const preset = findPreset(dimension)
     if (!preset) return ''
     return decode(buf, await options.downloadImage(preset.mask), {
         ...defaultOptions,

@@ -1,8 +1,9 @@
 /* eslint-disable no-bitwise */
 import { getImageType } from '@dimensiondev/stego-js'
+import type { Dimension } from './presets.js'
 
 /** @internal */
-export function getDimension(buf: ArrayBuffer) {
+export function getDimension(buf: ArrayBuffer): Dimension {
     const fallback = {
         width: 0,
         height: 0,
