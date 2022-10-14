@@ -5,6 +5,7 @@ import type { NameServiceState as Web3NameServiceState } from '@masknet/web3-sha
 import type { Plugin } from '@masknet/plugin-infra'
 
 export interface NameServiceResolver {
+    get id(): NameServiceID
     /** get address of domain name */
     lookup?: (domain: string) => Promise<string | undefined>
     /** get domain name of address */
@@ -23,7 +24,6 @@ export class NameServiceState<
     constructor(
         protected context: Plugin.Shared.SharedContext,
         protected resolver: NameServiceResolver,
-        protected nameServiceID: NameServiceID,
         protected options: {
             isValidName(a: string): boolean
             isValidAddress(a: string): boolean
@@ -43,8 +43,8 @@ export class NameServiceState<
         const formattedAddress = this.options.formatAddress(address)
         await this.storage.setValue({
             ...all,
-            [this.nameServiceID]: {
-                ...all[this.nameServiceID],
+            [this.resolver.id]: {
+                ...all[this.resolver.id],
                 [formattedAddress]: name,
                 [name]: formattedAddress,
             },
@@ -57,8 +57,8 @@ export class NameServiceState<
         const formattedAddress = this.options.formatAddress(address)
         await this.storage.setValue({
             ...all,
-            [this.nameServiceID]: {
-                ...all[this.nameServiceID],
+            [this.resolver.id]: {
+                ...all[this.resolver.id],
                 [name]: formattedAddress,
                 [formattedAddress]: name,
             },
@@ -68,7 +68,7 @@ export class NameServiceState<
     async lookup(name: string) {
         if (!name) return
 
-        const address = this.storage.value[this.nameServiceID][name] || (await this.resolver.lookup?.(name))
+        const address = this.storage.value[this.resolver.id][name] || (await this.resolver.lookup?.(name))
 
         if (address && this.options.isValidAddress(address)) {
             const formattedAddress = this.options.formatAddress(address)
@@ -82,7 +82,7 @@ export class NameServiceState<
         if (!this.options.isValidAddress(address)) return
 
         const name =
-            this.storage.value[this.nameServiceID][this.options.formatAddress(address)] ||
+            this.storage.value[this.resolver.id][this.options.formatAddress(address)] ||
             (await this.resolver.reverse?.(address))
 
         if (name) {
