@@ -29,7 +29,7 @@ export const GrantPermissions = memo<GrantPermissionsProps>(({ permissions, onGr
                 <Typography component="div">{permissions.join(',')}</Typography>
             </Typography>
             <ActionButton
-                startIcon={<Icons.Approve size={18} />}
+                startIcon={<Icons.Approve size={18} sx={{ lineHeight: 1 }} />}
                 variant="roundedDark"
                 onClick={onGrant}
                 className={classes.action}>
