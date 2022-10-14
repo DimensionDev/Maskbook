@@ -91,14 +91,13 @@ const domainCache = new LRUCache<ChainId, Record<string, string>>({
 
 export class ChainBaseDomainAPI implements DomainAPI.Provider<ChainId> {
     private async getAddress(name: string, chainId: ChainId) {
-        const response = await fetchFromChainbase<ENSRecord[]>(
+        const response = await fetchFromChainbase<ENSRecord>(
             urlcat('/v1/ens/records', { chain_id: chainId, domain: name }),
         )
+
         if (!response) return
 
-        const record = first(response)
-
-        return record?.address
+        return response.address
     }
 
     private async getName(address: string, chainId: ChainId) {
