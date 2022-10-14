@@ -39,14 +39,17 @@ export const CollectibleItem = forwardRef<HTMLDivElement, CollectibleItemProps>(
     const { classes, cx } = useStyles()
     const { Others } = useWeb3State()
 
-    const name = asset.metadata?.name || asset.contract?.name
+    const name = asset.contract?.name || asset.metadata?.name
+    const uiTokenId = Others?.formatTokenId(asset.tokenId, 4) ?? `#${asset.tokenId}`
+    const title = name ? `${name} ${uiTokenId}` : asset.metadata?.name ?? ''
+
     return (
         <div className={cx(classes.card, className)} {...rest} ref={ref}>
             <CollectibleCard className={classes.collectibleCard} pluginID={pluginID} asset={asset} />
-            {name ? (
+            {title ? (
                 <div className={classes.description}>
                     <Typography className={classes.name} color="textPrimary" variant="body2">
-                        {name}
+                        {title}
                     </Typography>
                 </div>
             ) : null}
