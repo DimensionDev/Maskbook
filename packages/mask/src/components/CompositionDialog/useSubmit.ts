@@ -8,7 +8,7 @@ import { isFacebook } from '../../social-network-adaptor/facebook.com/base.js'
 import { isTwitter } from '../../social-network-adaptor/twitter.com/base.js'
 import { I18NFunction, useI18N } from '../../utils/index.js'
 import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI.js'
-import { SteganographyTextPayload } from '../InjectedComponents/SteganographyTextPayload.js'
+import { SteganographyPayload } from './SteganographyPayload.js'
 import type { SubmitComposition } from './CompositionUI.js'
 
 export function useSubmit(onClose: () => void, reason: 'timeline' | 'popup' | 'reply') {
@@ -28,19 +28,22 @@ export function useSubmit(onClose: () => void, reason: 'timeline' | 'popup' | 'r
                 lastRecognizedIdentity?.identifier ?? fallbackProfile,
                 activatedSocialNetworkUI.encryptionNetwork,
             )
-            const encrypted = socialNetworkEncoder(activatedSocialNetworkUI.encryptionNetwork, rawEncrypted)
-            const decoratedText = decorateEncryptedText(encrypted, t, content.meta)
 
             if (encode === 'image') {
+                let encrypted: string | Uint8Array
+
+                if (typeof rawEncrypted === 'string')
+                    encrypted = socialNetworkEncoder(activatedSocialNetworkUI.encryptionNetwork, rawEncrypted)
+                else encrypted = rawEncrypted
+
+                const decoratedText = decorateEncryptedText('', t, content.meta)
                 const defaultText = t('additional_post_box__steganography_post_pre', {
                     random: new Date().toLocaleString(),
                 })
-                if (decoratedText) {
-                    await pasteImage(decoratedText.replace(encrypted, ''), encrypted, reason)
-                } else {
-                    await pasteImage(defaultText, encrypted, reason)
-                }
+                await pasteImage(decoratedText || defaultText, encrypted, reason)
             } else {
+                const encrypted = socialNetworkEncoder(activatedSocialNetworkUI.encryptionNetwork, rawEncrypted)
+                const decoratedText = decorateEncryptedText(encrypted, t, content.meta)
                 pasteTextEncode(decoratedText ?? t('additional_post_box__encrypted_post_pre', { encrypted }), reason)
             }
             onClose()
@@ -55,8 +58,12 @@ function pasteTextEncode(text: string, reason: 'timeline' | 'popup' | 'reply') {
         reason,
     })
 }
-async function pasteImage(relatedTextPayload: string, encrypted: string, reason: 'timeline' | 'popup' | 'reply') {
-    const img = await SteganographyTextPayload(encrypted)
+async function pasteImage(
+    relatedTextPayload: string,
+    encrypted: string | Uint8Array,
+    reason: 'timeline' | 'popup' | 'reply',
+) {
+    const img = await SteganographyPayload(encrypted)
     // Don't await this, otherwise the dialog won't disappear
     activatedSocialNetworkUI.automation.nativeCompositionDialog!.attachImage!(img, {
         recover: true,
