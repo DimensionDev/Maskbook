@@ -11,9 +11,9 @@ import {
     Box,
     useTheme,
 } from '@mui/material'
+import { ProviderType } from '@masknet/web3-shared-evm'
 import { TransactionStatusType } from '@masknet/web3-shared-base'
 import {
-    useNetworkDescriptor,
     useProviderDescriptor,
     useAccount,
     useChainColor,
@@ -118,7 +118,6 @@ function ToolboxHintForWallet(props: ToolboxHintProps) {
     const { openWallet, isWalletValid, walletTitle, chainColor, shouldDisplayChainIndicator } = useToolbox()
 
     const theme = useTheme()
-    const networkDescriptor = useNetworkDescriptor()
     const providerDescriptor = useProviderDescriptor()
 
     return (
@@ -126,12 +125,11 @@ function ToolboxHintForWallet(props: ToolboxHintProps) {
             <Container>
                 <ListItemButton onClick={openWallet}>
                     <ListItemIcon>
-                        {isWalletValid ? (
+                        {isWalletValid && providerDescriptor?.type !== ProviderType.MaskWallet ? (
                             <WalletIcon
                                 size={iconSize}
                                 badgeSize={badgeSize}
                                 mainIcon={providerDescriptor?.icon} // switch the icon to meet design
-                                badgeIcon={networkDescriptor?.icon}
                                 badgeIconBorderColor={theme.palette.background.paper}
                             />
                         ) : (
