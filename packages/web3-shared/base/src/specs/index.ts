@@ -1215,7 +1215,7 @@ export interface NameServiceResolver {
 
 export interface NameServiceState<ChainId> {
     /** create name resolver */
-    createResolver: (chainId: ChainId) => NameServiceResolver
+    createResolvers: (chainId: ChainId) => NameServiceResolver[]
     /** get address of domain name */
     lookup?: (chainId: ChainId, domain: string) => Promise<string | undefined>
     /** get domain name of address */

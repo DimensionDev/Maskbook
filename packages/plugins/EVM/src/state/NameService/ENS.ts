@@ -1,8 +1,8 @@
 import ENS from 'ethjs-ens'
 import namehash from '@ensdomains/eth-ens-namehash'
 import { NameServiceID } from '@masknet/shared-base'
-import { ChainId, ProviderType, isZeroAddress, isEmptyHex } from '@masknet/web3-shared-evm'
 import type { NameServiceResolver } from '@masknet/web3-shared-base'
+import { ChainId, ProviderType, isZeroAddress, isEmptyHex } from '@masknet/web3-shared-evm'
 import { Web3StateSettings } from '../../settings/index.js'
 import { Providers } from '../Connection/provider.js'
 

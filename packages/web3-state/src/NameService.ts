@@ -2,7 +2,7 @@ import type { Subscription } from 'use-subscription'
 import { getEnumAsArray } from '@dimensiondev/kit'
 import type { Plugin } from '@masknet/plugin-infra'
 import { StorageItem, NameServiceID } from '@masknet/shared-base'
-import type { NameServiceState as Web3NameServiceState, NameServiceResolver } from '@masknet/web3-shared-base'
+import { attemptUntil, NameServiceResolver, NameServiceState as Web3NameServiceState } from '@masknet/web3-shared-base'
 
 export class NameServiceState<
     ChainId extends number,
@@ -58,30 +58,38 @@ export class NameServiceState<
 
     async lookup(chainId: ChainId, name: string) {
         if (!name) return
-        const resolver = this.createResolver(chainId)
-        const address = this.storage.value[resolver.id][name] || (await resolver.lookup?.(name))
-        if (address && this.options.isValidAddress(address)) {
-            const formattedAddress = this.options.formatAddress(address)
-            await this.addAddress(resolver.id, name, formattedAddress)
-            return formattedAddress
-        }
-        return
+        const callbacks = this.createResolvers(chainId).map((resolver) => {
+            return async () => {
+                const address = this.storage.value[resolver.id][name] || (await resolver.lookup?.(name))
+                if (address && this.options.isValidAddress(address)) {
+                    const formattedAddress = this.options.formatAddress(address)
+                    await this.addAddress(resolver.id, name, formattedAddress)
+                    return formattedAddress
+                }
+                return
+            }
+        })
+        return attemptUntil(callbacks, undefined)
     }
 
     async reverse(chainId: ChainId, address: string) {
         if (!this.options.isValidAddress(address)) return
-        const resolver = this.createResolver(chainId)
-        const name =
-            this.storage.value[resolver.id][this.options.formatAddress(address)] || (await resolver.reverse?.(address))
-
-        if (name) {
-            await this.addName(resolver.id, address, name)
-            return name
-        }
-        return
+        const callbacks = this.createResolvers(chainId).map((resolver) => {
+            return async () => {
+                const name =
+                    this.storage.value[resolver.id][this.options.formatAddress(address)] ||
+                    (await resolver.reverse?.(address))
+                if (name) {
+                    await this.addName(resolver.id, address, name)
+                    return name
+                }
+                return
+            }
+        })
+        return attemptUntil(callbacks, undefined)
     }
 
-    createResolver(chainId: ChainId): NameServiceResolver {
+    createResolvers(chainId: ChainId): NameServiceResolver[] {
         throw new Error('Method not implemented.')
     }
 }
