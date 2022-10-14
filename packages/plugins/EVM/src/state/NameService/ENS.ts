@@ -2,11 +2,11 @@ import ENS from 'ethjs-ens'
 import namehash from '@ensdomains/eth-ens-namehash'
 import { NameServiceID } from '@masknet/shared-base'
 import { ChainId, ProviderType, isZeroAddress, isEmptyHex } from '@masknet/web3-shared-evm'
-import type { NameServiceResolver } from '@masknet/web3-state'
+import type { NameServiceResolver } from '@masknet/web3-shared-base'
 import { Web3StateSettings } from '../../settings/index.js'
 import { Providers } from '../Connection/provider.js'
 
-export class ENS_Resolver implements NameServiceResolver {
+export class ENS_Resolver implements NameServiceResolver<ChainId> {
     private ens: ENS | null = null
 
     public get id() {

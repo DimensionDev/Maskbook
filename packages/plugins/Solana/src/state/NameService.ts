@@ -11,10 +11,14 @@ export class NameService extends NameServiceState<ChainId> {
             chainId?: Subscription<ChainId>
         },
     ) {
-        super(context!, new BonfidaResolver(), {
+        super(context!, {
             isValidName: (x) => isValidDomain(x),
             isValidAddress: (x) => isValidAddress(x) && !isZeroAddress(x),
             formatAddress,
         })
+    }
+
+    override createResolver() {
+        return new BonfidaResolver()
     }
 }

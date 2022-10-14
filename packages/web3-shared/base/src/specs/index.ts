@@ -8,6 +8,7 @@ import type {
     ECKeyIdentifier,
     NextIDPersonaBindings,
     NextIDPlatform,
+    NameServiceID,
     NetworkPluginID
 } from '@masknet/shared-base'
 import type { api } from '@dimensiondev/mask-wallet-core/proto'
@@ -1203,11 +1204,22 @@ export interface IdentityServiceState {
     /** Find all social addresses related to the given identity. */
     lookup(identity: SocialIdentity): Promise<Array<SocialAddress<NetworkPluginID>>>
 }
-export interface NameServiceState<ChainId> {
+
+export interface NameServiceResolver<ChainId> {
+    get id(): NameServiceID
     /** get address of domain name */
-    lookup?: (domain: string) => Promise<string | undefined>
+    lookup?: (domain: string, chainId?: ChainId) => Promise<string | undefined>
     /** get domain name of address */
-    reverse?: (address: string) => Promise<string | undefined>
+    reverse?: (address: string, chainId?: ChainId) => Promise<string | undefined>
+}
+
+export interface NameServiceState<ChainId> {
+    /** create name resolver */
+    createResolver: (chainId?: ChainId) => NameServiceResolver<ChainId>
+    /** get address of domain name */
+    lookup?: (domain: string, chainId?: ChainId) => Promise<string | undefined>
+    /** get domain name of address */
+    reverse?: (address: string, chainId?: ChainId) => Promise<string | undefined>
 }
 export interface TokenState<ChainId, SchemaType> {
     /** The user trusted fungible tokens. */

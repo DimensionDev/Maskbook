@@ -1,16 +1,8 @@
 import type { Subscription } from 'use-subscription'
 import { getEnumAsArray } from '@dimensiondev/kit'
 import { StorageItem, NameServiceID } from '@masknet/shared-base'
-import type { NameServiceState as Web3NameServiceState } from '@masknet/web3-shared-base'
+import type { NameServiceState as Web3NameServiceState, NameServiceResolver } from '@masknet/web3-shared-base'
 import type { Plugin } from '@masknet/plugin-infra'
-
-export interface NameServiceResolver {
-    get id(): NameServiceID
-    /** get address of domain name */
-    lookup?: (domain: string) => Promise<string | undefined>
-    /** get domain name of address */
-    reverse?: (address: string) => Promise<string | undefined>
-}
 
 export class NameServiceState<
     ChainId extends number,
@@ -19,11 +11,11 @@ export class NameServiceState<
 > implements Web3NameServiceState<ChainId>
 {
     protected storage: StorageItem<DomainBooks> = null!
+    public resolver: NameServiceResolver<ChainId> = null!
     public domainBook?: Subscription<DomainBook>
 
     constructor(
         protected context: Plugin.Shared.SharedContext,
-        protected resolver: NameServiceResolver,
         protected options: {
             isValidName(a: string): boolean
             isValidAddress(a: string): boolean
@@ -65,9 +57,9 @@ export class NameServiceState<
         })
     }
 
-    async lookup(name: string) {
+    async lookup(name: string, chainId?: ChainId) {
         if (!name) return
-
+        this.resolver = this.createResolver(chainId)
         const address = this.storage.value[this.resolver.id][name] || (await this.resolver.lookup?.(name))
 
         if (address && this.options.isValidAddress(address)) {
@@ -78,9 +70,9 @@ export class NameServiceState<
         return
     }
 
-    async reverse(address: string) {
+    async reverse(address: string, chainId?: ChainId) {
         if (!this.options.isValidAddress(address)) return
-
+        this.resolver = this.createResolver(chainId)
         const name =
             this.storage.value[this.resolver.id][this.options.formatAddress(address)] ||
             (await this.resolver.reverse?.(address))
@@ -90,5 +82,23 @@ export class NameServiceState<
             return name
         }
         return
+    }
+
+    createResolver(chainId?: ChainId): NameServiceResolver<ChainId> {
+        return new ResolverToBeOverride()
+    }
+}
+
+class ResolverToBeOverride<ChainId extends number> implements NameServiceResolver<ChainId> {
+    public get id() {
+        return NameServiceID.EVM
+    }
+
+    async lookup(name: string) {
+        return ''
+    }
+
+    async reverse(address: string) {
+        return ''
     }
 }
