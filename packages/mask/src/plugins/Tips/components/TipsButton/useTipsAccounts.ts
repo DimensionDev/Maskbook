@@ -24,7 +24,7 @@ export function useTipsAccounts(
                     supportedAddressTypes: [x.type],
                 })),
             ].filter((x) => !TipsSetting?.hiddenAddresses?.some((y) => isSameAddress(y, x.address))),
-            (x) => `${x.networkSupporterPluginID}_${x.address.toLowerCase()}`,
+            (x) => `${x.pluginID}_${x.address.toLowerCase()}`,
         )
         return Object.entries(accountsGrouped).map(([, group]) => {
             return group.reduce(

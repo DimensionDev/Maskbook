@@ -242,7 +242,7 @@ export const RecipientSelect: FC<Props> = memo(({ className }) => {
             }}>
             {recipients.map((tipsAccount) => (
                 <MenuItem className={classes.menuItem} key={tipsAccount.address} value={tipsAccount.address}>
-                    <PluginIcon pluginID={tipsAccount.networkSupporterPluginID} />
+                    <PluginIcon pluginID={tipsAccount.pluginID} />
                     <Typography component="span" className={classes.text}>
                         {tipsAccount.label || tipsAccount.address}
                     </Typography>

@@ -22,8 +22,8 @@ function useRecipients(pluginID: NetworkPluginID, tipsAccounts: SocialAccount[])
     const _recipients = useTipAccountsCompletion(tipsAccounts)
     const recipients = useMemo(() => {
         return [..._recipients].sort((a, z) => {
-            if (a.networkSupporterPluginID === z.networkSupporterPluginID) return 0
-            return a.networkSupporterPluginID === pluginID ? -1 : 1
+            if (a.pluginID === z.pluginID) return 0
+            return a.pluginID === pluginID ? -1 : 1
         })
     }, [_recipients, pluginID])
     return recipients
@@ -151,12 +151,12 @@ export const TipTaskProvider: FC<React.PropsWithChildren<Props>> = memo(({ child
     ])
 
     useEffect(() => {
-        if (recipient?.networkSupporterPluginID) {
-            setPluginId(recipient.networkSupporterPluginID)
+        if (recipient?.pluginID) {
+            setPluginId(recipient.pluginID)
         } else {
             setPluginId(NetworkPluginID.PLUGIN_EVM)
         }
-    }, [recipient?.networkSupporterPluginID])
+    }, [recipient?.pluginID])
 
     return <TipContext.Provider value={contextValue}>{children}</TipContext.Provider>
 })

@@ -30,7 +30,7 @@ export function PostActions() {
             // In Mirror, then profile identifier is wallet address
             accounts={[
                 {
-                    networkSupporterPluginID: NetworkPluginID.PLUGIN_EVM,
+                    pluginID: NetworkPluginID.PLUGIN_EVM,
                     address: identifier.userId,
                     label: nickname
                         ? `(${nickname}) ${Others?.formatAddress(identifier.userId, 4)}`

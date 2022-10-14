@@ -22,7 +22,7 @@ const TabConfig: Plugin.SNSAdaptor.ProfileTab = {
         TabContent({ socialAddress, identity }) {
             if (!socialAddress) return null
             return (
-                <PluginIDContextProvider value={socialAddress.networkSupporterPluginID}>
+                <PluginIDContextProvider value={socialAddress.pluginID}>
                     <CollectionList socialAddress={socialAddress} persona={identity?.publicKey} profile={identity} />
                 </PluginIDContextProvider>
             )
@@ -90,7 +90,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                     if (!socialAddress) return null
                     return (
                         <Box pr={1.5}>
-                            <PluginIDContextProvider value={socialAddress.networkSupporterPluginID}>
+                            <PluginIDContextProvider value={socialAddress.pluginID}>
                                 <CollectionList
                                     socialAddress={socialAddress}
                                     persona={identity?.publicKey}
@@ -104,7 +104,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             Utils: {
                 ...TabConfig.Utils,
                 shouldDisplay(identity, socialAddress) {
-                    return socialAddress?.networkSupporterPluginID === NetworkPluginID.PLUGIN_EVM
+                    return socialAddress?.pluginID === NetworkPluginID.PLUGIN_EVM
                 },
             },
         },

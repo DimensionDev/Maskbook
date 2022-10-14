@@ -8,7 +8,7 @@ import { setupContext } from './context.js'
 import { DonationPage, FeedsPage, FeedPageProps, FootprintPageProps, FootprintsPage } from './pages/index.js'
 
 function shouldDisplay(identity?: SocialIdentity, addressName?: SocialAddress<NetworkPluginID>) {
-    return addressName?.networkSupporterPluginID === NetworkPluginID.PLUGIN_EVM
+    return addressName?.pluginID === NetworkPluginID.PLUGIN_EVM
 }
 
 const DonationsTabConfig: Plugin.SNSAdaptor.ProfileTab = {

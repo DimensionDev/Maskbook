@@ -54,8 +54,8 @@ export const TipTaskManager: FC<React.PropsWithChildren<{}>> = ({ children }) =>
                     </TipTaskProvider>
                 )
 
-                return tipsAccount?.networkSupporterPluginID ? (
-                    <PluginIDContextProvider key={task.id} value={tipsAccount.networkSupporterPluginID}>
+                return tipsAccount?.pluginID ? (
+                    <PluginIDContextProvider key={task.id} value={tipsAccount.pluginID}>
                         {taskSession}
                     </PluginIDContextProvider>
                 ) : (

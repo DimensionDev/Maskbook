@@ -69,7 +69,7 @@ export class IdentityService extends IdentityServiceState {
     ): SocialAddress<NetworkPluginID.PLUGIN_EVM> | undefined {
         if (isValidAddress(address) && !isZeroAddress(address))
             return {
-                networkSupporterPluginID: NetworkPluginID.PLUGIN_EVM,
+                pluginID: NetworkPluginID.PLUGIN_EVM,
                 type,
                 label,
                 address,

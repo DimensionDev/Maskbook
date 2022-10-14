@@ -168,7 +168,7 @@ export interface SocialIdentity {
 
 export interface SocialAddress<PluginID> {
     /** The ID of a plugin that the address belongs to */
-    networkSupporterPluginID: PluginID
+    pluginID: PluginID
     /** The data source type */
     type: SocialAddressType
     /** The address in hex string */

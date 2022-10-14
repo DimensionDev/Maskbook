@@ -38,7 +38,7 @@ export class IdentityService extends IdentityServiceState {
         return [
             address
                 ? {
-                      networkSupporterPluginID: NetworkPluginID.PLUGIN_SOLANA,
+                      pluginID: NetworkPluginID.PLUGIN_SOLANA,
                       type: SocialAddressType.ADDRESS,
                       label: formatAddress(address, 4),
                       address,
@@ -46,7 +46,7 @@ export class IdentityService extends IdentityServiceState {
                 : null,
             domainAddress
                 ? {
-                      networkSupporterPluginID: NetworkPluginID.PLUGIN_SOLANA,
+                      pluginID: NetworkPluginID.PLUGIN_SOLANA,
                       type: SocialAddressType.SOL,
                       label: domain,
                       address: domainAddress,
