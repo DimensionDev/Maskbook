@@ -1,19 +1,13 @@
 import type { Subscription } from 'use-subscription'
-import { mapSubscription, mergeSubscription, StorageItem } from '@masknet/shared-base'
-import type { NameServiceState as Web3NameServiceState } from '@masknet/web3-shared-base'
+import { getEnumAsArray } from '@dimensiondev/kit'
 import type { Plugin } from '@masknet/plugin-infra'
-
-export interface NameServiceResolver<ChainId> {
-    /** get address of domain name */
-    lookup?: (chainId: ChainId, domain: string) => Promise<string | undefined>
-    /** get domain name of address */
-    reverse?: (chainId: ChainId, address: string) => Promise<string | undefined>
-}
+import { StorageItem, NameServiceID } from '@masknet/shared-base'
+import type { NameServiceState as Web3NameServiceState, NameServiceResolver } from '@masknet/web3-shared-base'
 
 export class NameServiceState<
     ChainId extends number,
     DomainBook extends Record<string, string> = Record<string, string>,
-    DomainBooks extends Record<ChainId, DomainBook> = Record<ChainId, DomainBook>,
+    DomainBooks extends Record<NameServiceID, DomainBook> = Record<NameServiceID, DomainBook>,
 > implements Web3NameServiceState<ChainId>
 {
     protected storage: StorageItem<DomainBooks> = null!
@@ -21,53 +15,41 @@ export class NameServiceState<
 
     constructor(
         protected context: Plugin.Shared.SharedContext,
-        protected resolver: NameServiceResolver<ChainId>,
-        protected chainIds: ChainId[],
-        protected subscriptions: {
-            chainId?: Subscription<ChainId>
-        },
         protected options: {
             isValidName(a: string): boolean
             isValidAddress(a: string): boolean
             formatAddress(a: string): string
         },
     ) {
-        const defaultValue = Object.fromEntries(chainIds.map((x) => [x, {}])) as DomainBooks
-        const { storage } = context.createKVStorage('memory', {}).createSubScope('NameService', {
+        const defaultValue = Object.fromEntries(getEnumAsArray(NameServiceID).map((x) => [x.value, {}])) as DomainBooks
+        const { storage } = context.createKVStorage('memory', {}).createSubScope('NameServiceV2', {
             value: defaultValue,
         })
         this.storage = storage.value
-
-        if (this.subscriptions.chainId) {
-            this.domainBook = mapSubscription(
-                mergeSubscription(this.subscriptions.chainId, this.storage.subscription),
-                ([chainId, domainBook]) => domainBook[chainId],
-            )
-        }
     }
 
-    private async addName(chainId: ChainId, address: string, name: string) {
+    private async addName(id: NameServiceID, address: string, name: string) {
         if (!this.options.isValidAddress(address)) return
         const all = this.storage.value
         const formattedAddress = this.options.formatAddress(address)
         await this.storage.setValue({
             ...all,
-            [chainId]: {
-                ...all[chainId],
+            [id]: {
+                ...all[id],
                 [formattedAddress]: name,
                 [name]: formattedAddress,
             },
         })
     }
 
-    private async addAddress(chainId: ChainId, name: string, address: string) {
+    private async addAddress(id: NameServiceID, name: string, address: string) {
         if (!this.options.isValidAddress(address)) return
         const all = this.storage.value
         const formattedAddress = this.options.formatAddress(address)
         await this.storage.setValue({
             ...all,
-            [chainId]: {
-                ...all[chainId],
+            [id]: {
+                ...all[id],
                 [name]: formattedAddress,
                 [formattedAddress]: name,
             },
@@ -76,12 +58,11 @@ export class NameServiceState<
 
     async lookup(chainId: ChainId, name: string) {
         if (!name) return
-
-        const address = this.storage.value[chainId][name] || (await this.resolver.lookup?.(chainId, name))
-
+        const resolver = this.createResolver(chainId)
+        const address = this.storage.value[resolver.id][name] || (await resolver.lookup?.(name))
         if (address && this.options.isValidAddress(address)) {
             const formattedAddress = this.options.formatAddress(address)
-            await this.addAddress(chainId, name, formattedAddress)
+            await this.addAddress(resolver.id, name, formattedAddress)
             return formattedAddress
         }
         return
@@ -89,15 +70,18 @@ export class NameServiceState<
 
     async reverse(chainId: ChainId, address: string) {
         if (!this.options.isValidAddress(address)) return
-
+        const resolver = this.createResolver(chainId)
         const name =
-            this.storage.value[chainId][this.options.formatAddress(address)] ||
-            (await this.resolver.reverse?.(chainId, address))
+            this.storage.value[resolver.id][this.options.formatAddress(address)] || (await resolver.reverse?.(address))
 
         if (name) {
-            await this.addName(chainId, address, name)
+            await this.addName(resolver.id, address, name)
             return name
         }
         return
+    }
+
+    createResolver(chainId: ChainId): NameServiceResolver {
+        throw new Error('Method not implemented.')
     }
 }

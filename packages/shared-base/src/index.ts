@@ -1,6 +1,7 @@
 export * from './Identifier/index.js'
 export * from './Messages/Mask.js'
 export * from './Messages/Shared.js'
+export * from './NameService/index.js'
 export * from './NextID/index.js'
 export * from './NextID/type.js'
 export * from './Persona/type.js'

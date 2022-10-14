@@ -1,12 +1,17 @@
 import ENS from 'ethjs-ens'
 import namehash from '@ensdomains/eth-ens-namehash'
+import { NameServiceID } from '@masknet/shared-base'
 import { ChainId, ProviderType, isZeroAddress, isEmptyHex } from '@masknet/web3-shared-evm'
-import type { NameServiceResolver } from '@masknet/web3-state'
+import type { NameServiceResolver } from '@masknet/web3-shared-base'
 import { Web3StateSettings } from '../../settings/index.js'
 import { Providers } from '../Connection/provider.js'
 
-export class ENS_Resolver implements NameServiceResolver<ChainId> {
+export class ENS_Resolver implements NameServiceResolver {
     private ens: ENS | null = null
+
+    public get id() {
+        return NameServiceID.ENS
+    }
 
     private async createENS() {
         if (this.ens) return this.ens
@@ -20,9 +25,9 @@ export class ENS_Resolver implements NameServiceResolver<ChainId> {
         return this.ens
     }
 
-    async lookup(chainId: ChainId, name: string) {
+    async lookup(name: string) {
         const web3 = await Web3StateSettings.value.Connection?.getWeb3?.({
-            chainId,
+            chainId: ChainId.Mainnet,
         })
 
         try {
@@ -36,7 +41,7 @@ export class ENS_Resolver implements NameServiceResolver<ChainId> {
         }
     }
 
-    async reverse(chainId: ChainId, address: string) {
+    async reverse(address: string) {
         try {
             const ens = await this.createENS()
             const name = await ens.reverse(address)
