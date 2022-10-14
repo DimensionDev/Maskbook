@@ -1,18 +1,18 @@
 import { memo } from 'react'
+import { useAsync, useAsyncFn } from 'react-use'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { compact } from 'lodash-unified'
+import { useChainId, useWallets, useWeb3State } from '@masknet/web3-hooks-base'
+import { isSameAddress, isGreaterThan } from '@masknet/web3-shared-base'
+import { NetworkPluginID, NextIDAction, NextIDPlatform, PopupRoutes } from '@masknet/shared-base'
+import { usePopupCustomSnackbar } from '@masknet/theme'
+import { NextIDProof } from '@masknet/web3-providers'
 import { useTitle } from '../../../hook/useTitle.js'
 import { useI18N } from '../../../../../utils/index.js'
 import { ConnectedWalletsUI } from './UI.js'
 import { PersonaContext } from '../hooks/usePersonaContext.js'
-import { useChainId, useWallets, useWeb3State } from '@masknet/web3-hooks-base'
-import { isSameAddress, isGreaterThan } from '@masknet/web3-shared-base'
-import { NetworkPluginID, NextIDAction, NextIDPlatform, PopupRoutes } from '@masknet/shared-base'
-import { useAsync, useAsyncFn } from 'react-use'
-import { compact } from 'lodash-unified'
 import type { ConnectedWalletInfo } from '../type.js'
-import { NextIDProof } from '@masknet/web3-providers'
 import Service from '../../../../service.js'
-import { usePopupCustomSnackbar } from '@masknet/theme'
-import { useLocation, useNavigate } from 'react-router-dom'
 import { MaskMessages } from '../../../../../../shared/messages.js'
 
 const ConnectedWallets = memo(() => {
@@ -32,7 +32,7 @@ const ConnectedWallets = memo(() => {
         const results = await Promise.all(
             proofs.map(async (x) => {
                 if (x.platform === NextIDPlatform.Ethereum) {
-                    const domain = await NameService?.reverse?.(x.identity, chainId)
+                    const domain = await NameService?.reverse?.(chainId, x.identity)
 
                     if (domain)
                         return {

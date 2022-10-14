@@ -11,7 +11,6 @@ export class NameServiceState<
 > implements Web3NameServiceState<ChainId>
 {
     protected storage: StorageItem<DomainBooks> = null!
-    public resolver: NameServiceResolver<ChainId> = null!
     public domainBook?: Subscription<DomainBook>
 
     constructor(
@@ -29,76 +28,60 @@ export class NameServiceState<
         this.storage = storage.value
     }
 
-    private async addName(address: string, name: string) {
+    private async addName(id: NameServiceID, address: string, name: string) {
         if (!this.options.isValidAddress(address)) return
         const all = this.storage.value
         const formattedAddress = this.options.formatAddress(address)
         await this.storage.setValue({
             ...all,
-            [this.resolver.id]: {
-                ...all[this.resolver.id],
+            [id]: {
+                ...all[id],
                 [formattedAddress]: name,
                 [name]: formattedAddress,
             },
         })
     }
 
-    private async addAddress(name: string, address: string) {
+    private async addAddress(id: NameServiceID, name: string, address: string) {
         if (!this.options.isValidAddress(address)) return
         const all = this.storage.value
         const formattedAddress = this.options.formatAddress(address)
         await this.storage.setValue({
             ...all,
-            [this.resolver.id]: {
-                ...all[this.resolver.id],
+            [id]: {
+                ...all[id],
                 [name]: formattedAddress,
                 [formattedAddress]: name,
             },
         })
     }
 
-    async lookup(name: string, chainId?: ChainId) {
+    async lookup(chainId: ChainId, name: string) {
         if (!name) return
-        this.resolver = this.createResolver(chainId)
-        const address = this.storage.value[this.resolver.id][name] || (await this.resolver.lookup?.(name))
-
+        const resolver = this.createResolver(chainId)
+        const address = this.storage.value[resolver.id][name] || (await resolver.lookup?.(name))
         if (address && this.options.isValidAddress(address)) {
             const formattedAddress = this.options.formatAddress(address)
-            await this.addAddress(name, formattedAddress)
+            await this.addAddress(resolver.id, name, formattedAddress)
             return formattedAddress
         }
         return
     }
 
-    async reverse(address: string, chainId?: ChainId) {
+    async reverse(chainId: ChainId, address: string) {
         if (!this.options.isValidAddress(address)) return
-        this.resolver = this.createResolver(chainId)
+        const resolver = this.createResolver(chainId)
         const name =
-            this.storage.value[this.resolver.id][this.options.formatAddress(address)] ||
-            (await this.resolver.reverse?.(address))
+            this.storage.value[resolver.id][this.options.formatAddress(address)] || (await resolver.reverse?.(address))
 
         if (name) {
-            await this.addName(address, name)
+            await this.addName(resolver.id, address, name)
             return name
         }
         return
     }
 
-    createResolver(chainId?: ChainId): NameServiceResolver<ChainId> {
-        return new ResolverToBeOverride()
-    }
-}
-
-class ResolverToBeOverride<ChainId extends number> implements NameServiceResolver<ChainId> {
-    public get id() {
-        return NameServiceID.EVM
-    }
-
-    async lookup(name: string) {
-        return ''
-    }
-
-    async reverse(address: string) {
-        return ''
+    createResolver(chainId: ChainId): NameServiceResolver {
+        throw new Error('Method not implemented.')
     }
 }
