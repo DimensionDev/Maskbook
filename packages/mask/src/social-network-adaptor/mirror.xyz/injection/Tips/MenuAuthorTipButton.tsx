@@ -54,7 +54,7 @@ function AuthorTipsButtonWrapper() {
         if (!visitingIdentity?.identifier) return EMPTY_LIST
         return [
             {
-                pluginID: pluginID,
+                pluginID,
                 address: visitingIdentity.identifier.userId,
                 label: visitingIdentity.nickname
                     ? `(${visitingIdentity.nickname}) ${Others?.formatAddress(visitingIdentity.identifier.userId, 4)}`
