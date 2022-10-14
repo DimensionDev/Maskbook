@@ -1,4 +1,4 @@
-import { encode, decode, GrayscaleAlgorithm } from '@dimensiondev/stego-js'
+import { encode, decode, GrayscaleAlgorithm, DEFAULT_MASK } from '@dimensiondev/stego-js'
 import type { EncodeOptions } from '@dimensiondev/stego-js'
 import { getDimension } from './utils.js'
 import { getPreset, findPreset } from './presets.js'
@@ -36,7 +36,7 @@ export async function steganographyEncodeImage(buf: ArrayBuffer, options: Encode
     const text = typeof data === 'string' ? data : encodeArrayBuffer(data)
 
     return new Uint8Array(
-        await encode(buf, await downloadImage(preset.mask), {
+        await encode(buf, preset.mask ? await downloadImage(preset.mask) : new Uint8Array(DEFAULT_MASK), {
             ...preset.options,
             ...optionalOptions,
             text,
@@ -53,10 +53,14 @@ export async function steganographyDecodeImage(image: Blob | string, options: De
     const dimension = getDimension(buffer)
     const preset = findPreset(dimension)
     if (!preset) return null
-    const result = decode(buffer, await options.downloadImage(preset.mask), {
-        ...preset.options,
-        pass: options.password,
-    })
+    const result = decode(
+        buffer,
+        preset.mask ? await options.downloadImage(preset.mask) : new Uint8Array(DEFAULT_MASK),
+        {
+            ...preset.options,
+            pass: options.password,
+        },
+    )
     if (preset.type === 'raw') return new Uint8Array(decodeArrayBuffer(await result))
     return result
 }

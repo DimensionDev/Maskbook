@@ -10,7 +10,7 @@ export interface Dimension {
 
 /** @internal */
 export interface Preset extends Dimension {
-    mask: string
+    mask: string | null
     type: 'string' | 'raw'
     description: string
     options: Omit<EncodeOptions, 'text'>
@@ -54,9 +54,8 @@ const Preset2022: Preset = {
     type: 'raw',
     description: 'the preset we used for payload V38',
     width: 1200,
-    height: 690,
-    // TODO: change a new picture?
-    mask: new URL('./masks/mask-v2.png', import.meta.url).toString(),
+    height: 671,
+    mask: null,
     options: libV2AlgrDefaults,
 }
 
