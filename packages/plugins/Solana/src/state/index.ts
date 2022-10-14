@@ -26,9 +26,7 @@ export function createWeb3State(context: Plugin.Shared.SharedUIContext): SolanaW
             currencyType: Settings_.currencyType,
         }),
         IdentityService: new IdentityService(context),
-        NameService: new NameService(context, {
-            chainId: Provider_.chainId,
-        }),
+        NameService: new NameService(context),
         Settings: Settings_,
         Transaction: new Transaction(context, {
             chainId: Provider_.chainId,

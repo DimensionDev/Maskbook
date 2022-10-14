@@ -4,6 +4,6 @@
 export enum NameServiceID {
     ENS = 'com.mask.ns.ens',
     BNS = 'com.mask.ns.bns',
-    Flown = 'com.mask.ns.flown',
+    Flowns = 'com.mask.ns.flowns',
     Bonfida = 'com.mask.ns.bonfida',
 }

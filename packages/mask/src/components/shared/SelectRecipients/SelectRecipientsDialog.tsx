@@ -93,6 +93,7 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
     const { items, disabledItems, onSearch } = props
     const [_search, setSearch] = useState('')
     const { value: registeredAddress = '', loading: resolveDomainLoading } = useLookupAddress(undefined, _search)
+
     const search = registeredAddress || _search
 
     useEffect(() => {

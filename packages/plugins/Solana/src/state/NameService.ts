@@ -18,7 +18,7 @@ export class NameService extends NameServiceState<ChainId> {
         })
     }
 
-    override createResolver() {
+    override createResolver(chainId: ChainId) {
         return new BonfidaResolver()
     }
 }

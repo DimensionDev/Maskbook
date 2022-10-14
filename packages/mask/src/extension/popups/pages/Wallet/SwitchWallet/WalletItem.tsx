@@ -3,7 +3,7 @@ import { useHover } from 'react-use'
 import { useNavigate } from 'react-router-dom'
 import { makeStyles } from '@masknet/theme'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
-import { PopupRoutes } from '@masknet/shared-base'
+import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import type { Wallet } from '@masknet/web3-shared-base'
 import { useReverseAddress, useWeb3State } from '@masknet/web3-hooks-base'
 import { Icons } from '@masknet/icons'
@@ -69,8 +69,8 @@ export interface WalletItemProps {
 
 export const WalletItem = memo<WalletItemProps>(({ wallet, onClick, isSelected }) => {
     const { classes } = useStyles()
-    const { Others } = useWeb3State()
-    const { value: domain } = useReverseAddress(undefined, wallet.address)
+    const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
+    const { value: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, wallet.address)
     const navigate = useNavigate()
     const { setSelectedWallet } = WalletContext.useContainer()
 

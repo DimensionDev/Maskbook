@@ -1,8 +1,8 @@
 import type { Subscription } from 'use-subscription'
 import { getEnumAsArray } from '@dimensiondev/kit'
+import type { Plugin } from '@masknet/plugin-infra'
 import { StorageItem, NameServiceID } from '@masknet/shared-base'
 import type { NameServiceState as Web3NameServiceState, NameServiceResolver } from '@masknet/web3-shared-base'
-import type { Plugin } from '@masknet/plugin-infra'
 
 export class NameServiceState<
     ChainId extends number,

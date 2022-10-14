@@ -26,7 +26,9 @@ export class ENS_Resolver implements NameServiceResolver {
     }
 
     async lookup(name: string) {
-        const web3 = await Web3StateSettings.value.Connection?.getWeb3?.()
+        const web3 = await Web3StateSettings.value.Connection?.getWeb3?.({
+            chainId: ChainId.Mainnet,
+        })
 
         try {
             const ens = await this.createENS()

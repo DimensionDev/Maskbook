@@ -1,5 +1,5 @@
-import { useChainId, useWeb3State } from '@masknet/web3-hooks-base'
 import { useEffect, useMemo, useState } from 'react'
+import { useChainId, useWeb3State } from '@masknet/web3-hooks-base'
 import type { TipsAccount } from '../../types/index.js'
 
 /**
@@ -13,7 +13,7 @@ export function useTipAccountsCompletion(tipAccounts: TipsAccount[]) {
     useEffect(() => {
         if (!NameService?.reverse) return
         tipAccounts.forEach(async ({ address, name: originalName }) => {
-            if (originalName || !chainId) return
+            if (originalName) return
 
             const name = await NameService.reverse!(chainId, address)
             if (!name) return
