@@ -9,6 +9,8 @@ import { LoadingSkeleton } from './LoadingSkeleton.js'
 import { useI18N } from '../../../../../utils/index.js'
 import { makeStyles } from '@masknet/theme'
 import type { CollectibleGridProps } from '../../../../../extension/options-page/types.js'
+import { HTMLProps, useState } from 'react'
+import type { CollectibleCardProps } from './CollectibleCard.js'
 
 export const useStyles = makeStyles<CollectibleGridProps>()((theme, { columns = 3, gap = 2 }) => {
     const gapIsNumber = typeof gap === 'number'
@@ -20,9 +22,6 @@ export const useStyles = makeStyles<CollectibleGridProps>()((theme, { columns = 
             gridGap: gapIsNumber ? theme.spacing(gap) : gap,
             padding: gapIsNumber ? theme.spacing(0, gap, 0) : `0 ${gap} 0`,
             boxSizing: 'border-box',
-        },
-        collectibleItem: {
-            overflowX: 'hidden',
         },
         text: {
             display: 'flex',
@@ -53,7 +52,7 @@ export interface CollectibleListProps extends withClasses<'empty' | 'button'>, C
 }
 
 export function CollectibleList(props: CollectibleListProps) {
-    const { pluginID, collectibles, columns, gap, loading, retry, error, hasRetry = true } = props
+    const { collectibles, columns, gap, loading, retry, error, hasRetry = true } = props
     const { t } = useI18N()
     const { classes } = useStyles({ columns, gap }, { props: { classes: props.classes } })
     const { Others } = useWeb3State()
@@ -73,34 +72,60 @@ export function CollectibleList(props: CollectibleListProps) {
                     </Box>
                 ) : (
                     <Box className={classes.root}>
-                        {collectibles.map((token, index) => {
-                            const name = token.contract?.name || token.metadata?.name
-                            const uiTokenId = Others?.formatTokenId(token.tokenId, 4) ?? `#${token.tokenId}`
-                            const title = name ? `${name} ${uiTokenId}` : token.metadata?.name ?? ''
-                            return (
-                                <Tooltip
-                                    key={index}
-                                    title={title}
-                                    placement="top"
-                                    disableInteractive
-                                    PopperProps={{
-                                        disablePortal: true,
-                                        popperOptions: {
-                                            strategy: 'absolute',
-                                        },
-                                    }}
-                                    arrow>
-                                    <CollectibleItem
-                                        className={classes.collectibleItem}
-                                        pluginID={pluginID}
-                                        asset={token}
-                                    />
-                                </Tooltip>
-                            )
-                        })}
+                        {collectibles.map((token, index) => (
+                            <CollectibleItemTooltip key={index} asset={token} />
+                        ))}
                     </Box>
                 )}
             </Box>
         </CollectibleListContext.Provider>
+    )
+}
+
+const useCollectibleItemTooltipStyles = makeStyles()(() => ({
+    collectibleItem: {
+        overflowX: 'hidden',
+    },
+}))
+interface CollectibleItemTooltipProps extends HTMLProps<HTMLDivElement>, CollectibleCardProps {}
+function CollectibleItemTooltip(props: CollectibleItemTooltipProps) {
+    const { asset, pluginID } = props
+    const { Others } = useWeb3State()
+    const { classes } = useCollectibleItemTooltipStyles()
+    const [showTooltip, setShowTooltip] = useState(false)
+    const name = asset.contract?.name || asset.metadata?.name
+    const uiTokenId = Others?.formatTokenId(asset.tokenId, 4) ?? `#${asset.tokenId}`
+    const title = name ? `${name} ${uiTokenId}` : asset.metadata?.name ?? ''
+
+    return (
+        <>
+            {showTooltip ? (
+                <Tooltip
+                    title={title}
+                    placement="top"
+                    disableInteractive
+                    PopperProps={{
+                        disablePortal: true,
+                        popperOptions: {
+                            strategy: 'absolute',
+                        },
+                    }}
+                    arrow>
+                    <CollectibleItem
+                        showTooltip={setShowTooltip}
+                        className={classes.collectibleItem}
+                        pluginID={pluginID}
+                        asset={asset}
+                    />
+                </Tooltip>
+            ) : (
+                <CollectibleItem
+                    showTooltip={setShowTooltip}
+                    className={classes.collectibleItem}
+                    pluginID={pluginID}
+                    asset={asset}
+                />
+            )}
+        </>
     )
 }

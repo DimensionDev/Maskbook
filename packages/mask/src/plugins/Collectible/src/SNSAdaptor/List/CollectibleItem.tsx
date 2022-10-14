@@ -1,4 +1,4 @@
-import { forwardRef, HTMLProps } from 'react'
+import { forwardRef, HTMLProps, useEffect, useRef } from 'react'
 import { useWeb3State } from '@masknet/web3-hooks-base'
 import { makeStyles } from '@masknet/theme'
 import { Skeleton, Typography } from '@mui/material'
@@ -32,23 +32,30 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-interface CollectibleItemProps extends HTMLProps<HTMLDivElement>, CollectibleCardProps {}
+interface CollectibleItemProps extends HTMLProps<HTMLDivElement>, CollectibleCardProps {
+    showTooltip?: (show: boolean) => void
+}
 
 export const CollectibleItem = forwardRef<HTMLDivElement, CollectibleItemProps>((props: CollectibleItemProps, ref) => {
-    const { className, asset, pluginID, ...rest } = props
+    const { className, asset, pluginID, showTooltip, ...rest } = props
     const { classes, cx } = useStyles()
     const { Others } = useWeb3State()
-
+    const textRef = useRef<HTMLDivElement>(null)
     const name = asset.contract?.name || asset.metadata?.name
     const uiTokenId = Others?.formatTokenId(asset.tokenId, 4) ?? `#${asset.tokenId}`
     const title = name ? `${name} ${uiTokenId}` : asset.metadata?.name ?? ''
+
+    useEffect(() => {
+        if (!textRef.current) return
+        showTooltip?.(textRef.current.offsetWidth !== textRef.current.scrollWidth)
+    }, [textRef.current])
 
     return (
         <div className={cx(classes.card, className)} {...rest} ref={ref}>
             <CollectibleCard className={classes.collectibleCard} pluginID={pluginID} asset={asset} />
             {title ? (
                 <div className={classes.description}>
-                    <Typography className={classes.name} color="textPrimary" variant="body2">
+                    <Typography ref={textRef} className={classes.name} color="textPrimary" variant="body2">
                         {title}
                     </Typography>
                 </div>
