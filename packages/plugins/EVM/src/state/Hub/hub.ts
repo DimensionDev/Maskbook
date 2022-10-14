@@ -111,8 +111,8 @@ class HubNonFungibleClient extends HubStateNonFungibleClient<ChainId, SchemaType
             },
             options.chainId === ChainId.Mainnet
                 ? [
-                      ZerionNonFungibleToken,
                       NFTScanNonFungibleTokenEVM,
+                      ZerionNonFungibleToken,
                       Rarible,
                       OpenSea,
                       AlchemyEVM,
@@ -123,8 +123,8 @@ class HubNonFungibleClient extends HubStateNonFungibleClient<ChainId, SchemaType
                       R2D2,
                   ]
                 : [
-                      ZerionNonFungibleToken,
                       NFTScanNonFungibleTokenEVM,
+                      ZerionNonFungibleToken,
                       Rarible,
                       AlchemyEVM,
                       OpenSea,
