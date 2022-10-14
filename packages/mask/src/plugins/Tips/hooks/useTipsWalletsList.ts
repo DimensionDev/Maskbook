@@ -20,10 +20,13 @@ export function useTipsWalletsList(
         const result = proofs.map((x) => {
             x.isDefault = 0
             x.isPublic = 1
-            const matched = bindings?.find((proof) => isSameAddress(x.identity, proof.identity))
+            const matched = bindings as any as {
+                defaultAddress: string
+                hiddenAddresses: string[]
+            }
             if (matched) {
-                x.isDefault = matched.isDefault
-                x.isPublic = matched.isPublic
+                x.isDefault = matched.defaultAddress === x.identity ? 1 : 0
+                x.isPublic = matched.hiddenAddresses.some((y) => isSameAddress(y, x.identity)) ? 0 : 1
             }
             return x
         })
