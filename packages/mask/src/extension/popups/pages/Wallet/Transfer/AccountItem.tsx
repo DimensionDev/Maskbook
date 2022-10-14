@@ -37,7 +37,7 @@ export interface AccountItemProps {
 export const AccountItem = memo<AccountItemProps>(({ account, onClick }) => {
     const { classes } = useStyles()
     const { Others } = useWeb3State()
-    const { value: domain } = useReverseAddress(account.address)
+    const { value: domain } = useReverseAddress(undefined, account.address)
 
     return (
         <MenuItem className={classes.menuItem} onClick={onClick}>

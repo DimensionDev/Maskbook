@@ -129,7 +129,7 @@ export function WalletStatusBox(props: WalletStatusBox) {
     const { value: nativeToken, loading: loadingNativeToken } = useNativeToken()
     const networkDescriptor = useNetworkDescriptor()
     const { Others } = useWeb3State()
-    const { value: domain } = useReverseAddress(account)
+    const { value: domain } = useReverseAddress(undefined, account)
 
     // #region copy addr to clipboard
     const [, copyToClipboard] = useCopyToClipboard()

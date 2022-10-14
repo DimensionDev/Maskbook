@@ -70,7 +70,7 @@ export const PluginWalletStatusBar = memo<WalletStatusBarProps<NetworkPluginID>>
         const providerType = useProviderType()
         const networkDescriptor = useNetworkDescriptor(pluginID, chainId)
         const expectedNetworkDescriptor = useNetworkDescriptor(expectedPluginID, expectedChainId)
-        const { value: domain } = useReverseAddress(account)
+        const { value: domain } = useReverseAddress(undefined, account)
         const { Others } = useWeb3State()
 
         const { setDialog: setSelectProviderDialog } = useRemoteControlledDialog(

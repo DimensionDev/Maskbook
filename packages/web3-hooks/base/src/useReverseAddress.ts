@@ -5,8 +5,8 @@ import { useChainId } from './useChainId.js'
 import { useWeb3State } from './useWeb3State.js'
 
 export function useReverseAddress<T extends NetworkPluginID>(
-    address: string,
     pluginID?: T,
+    address?: string,
     expectedChainId?: Web3Helper.Definition[T]['ChainId'],
 ) {
     const chainId = useChainId(pluginID, expectedChainId)

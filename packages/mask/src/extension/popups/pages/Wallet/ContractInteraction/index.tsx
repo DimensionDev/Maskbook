@@ -286,7 +286,7 @@ const ContractInteraction = memo(() => {
     }, [request, requestLoading])
 
     useTitle(typeName ?? t('popups_wallet_contract_interaction'))
-    const { value: domain } = useReverseAddress(to ?? '')
+    const { value: domain } = useReverseAddress(undefined, to)
 
     return requestLoading ? (
         <LoadingPlaceholder />

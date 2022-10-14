@@ -5,8 +5,8 @@ import { useChainId } from './useChainId.js'
 import { useWeb3State } from './useWeb3State.js'
 
 export function useLookupAddress<T extends NetworkPluginID>(
-    domain: string,
     pluginId?: T,
+    domain?: string,
     expectedChainId?: Web3Helper.Definition[T]['ChainId'],
 ) {
     const chainId = useChainId(pluginId, expectedChainId)

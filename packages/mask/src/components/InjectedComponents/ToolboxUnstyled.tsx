@@ -189,7 +189,7 @@ function useToolbox() {
 
     const isWalletValid = !!account && chainIdValid
 
-    const { value: domain } = useReverseAddress(account)
+    const { value: domain } = useReverseAddress(undefined, account)
 
     function renderButtonText() {
         if (!account) return t('plugin_wallet_connect_wallet')

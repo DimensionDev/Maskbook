@@ -60,7 +60,7 @@ export const WalletInfo = memo(() => {
     const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
     const navigate = useNavigate()
     const address = new URLSearchParams(useLocation().search).get('address')
-    const { value: domain } = useReverseAddress(address ?? wallet?.address ?? '')
+    const { value: domain } = useReverseAddress(undefined, address ?? wallet?.address)
     const { Others } = useWeb3State()
 
     const excludePath = useMatch(PopupRoutes.WalletSettings)

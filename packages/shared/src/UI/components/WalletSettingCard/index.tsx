@@ -23,7 +23,7 @@ export const WalletSettingCard = memo<WalletSettingCardProps>(({ wallet, checked
     const chainId = useDefaultChainId(networkPluginId)
     const networkDescriptor = useNetworkDescriptor(networkPluginId, chainId)
     const { Others } = useWeb3State(networkPluginId)
-    const { value: domain } = useReverseAddress(wallet.identity, networkPluginId)
+    const { value: domain } = useReverseAddress(networkPluginId, wallet.identity)
 
     const walletName = useMemo(() => {
         if (domain) return domain

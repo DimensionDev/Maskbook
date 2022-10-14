@@ -72,7 +72,7 @@ const useStyles = makeStyles()((theme) => ({
 export const DonationCard = memo(({ donation, socialAddress, onSelect, className, ...rest }: DonationCardProps) => {
     const { classes } = useStyles()
     const t = useI18N()
-    const { value: domain } = useReverseAddress(socialAddress.address, socialAddress.networkSupporterPluginID)
+    const { value: domain } = useReverseAddress(socialAddress.networkSupporterPluginID, socialAddress.address)
     const { Others } = useWeb3State(socialAddress.networkSupporterPluginID)
     const reversedAddress =
         !domain || !Others?.formatDomainName
