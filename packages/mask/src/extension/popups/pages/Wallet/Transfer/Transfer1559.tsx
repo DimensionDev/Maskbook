@@ -307,7 +307,7 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
         value: registeredAddress = '',
         error: resolveDomainError,
         loading: resolveDomainLoading,
-    } = useLookupAddress(undefined, address)
+    } = useLookupAddress(NetworkPluginID.PLUGIN_EVM, address)
     // #endregion
 
     // #region check address or registered address type

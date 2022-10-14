@@ -33,7 +33,12 @@ export const ENSContext = createContext<ENSContextProps>({
 })
 
 export function ENSProvider({ children, domain }: PropsWithChildren<SearchResultInspectorProps>) {
-    const { value: reversedAddress, loading: isLoading, error, retry } = useLookupAddress(undefined, domain)
+    const {
+        value: reversedAddress,
+        loading: isLoading,
+        error,
+        retry,
+    } = useLookupAddress(NetworkPluginID.PLUGIN_EVM, domain)
     const isError = !!error
     const tokenId = resolveNonFungibleTokenIdFromEnsDomain(domain)
     const { value: ids } = useAsync(

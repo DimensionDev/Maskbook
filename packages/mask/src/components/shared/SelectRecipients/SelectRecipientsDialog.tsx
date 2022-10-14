@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import Fuse from 'fuse.js'
 import { InjectedDialog } from '@masknet/shared'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { useLookupAddress } from '@masknet/web3-hooks-base'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
@@ -92,7 +93,10 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
     const { classes, cx } = useStyles()
     const { items, disabledItems, onSearch } = props
     const [_search, setSearch] = useState('')
-    const { value: registeredAddress = '', loading: resolveDomainLoading } = useLookupAddress(undefined, _search)
+    const { value: registeredAddress = '', loading: resolveDomainLoading } = useLookupAddress(
+        NetworkPluginID.PLUGIN_EVM,
+        _search,
+    )
     const search = registeredAddress || _search
 
     useEffect(() => {
