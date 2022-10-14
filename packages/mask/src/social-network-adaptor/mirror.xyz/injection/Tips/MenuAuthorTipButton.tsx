@@ -50,7 +50,7 @@ function AuthorTipsButtonWrapper() {
     const pluginID = useCurrentWeb3NetworkPluginID()
     const { Others } = useWeb3State()
 
-    const tipsAccounts = useMemo((): SocialAccount[] => {
+    const accounts = useMemo((): SocialAccount[] => {
         if (!visitingIdentity?.identifier) return EMPTY_LIST
         return [
             {
@@ -73,10 +73,10 @@ function AuthorTipsButtonWrapper() {
             <Component
                 identity={visitingIdentity.identifier}
                 slot={Plugin.SNSAdaptor.TipsSlot.MirrorMenu}
-                accounts={tipsAccounts}
+                accounts={accounts}
             />
         )
-    }, [visitingIdentity.identifier, tipsAccounts])
+    }, [visitingIdentity.identifier, accounts])
 
     if (!component || !visitingIdentity.identifier || isMinimal) return null
 

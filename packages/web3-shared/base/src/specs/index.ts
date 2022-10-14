@@ -178,7 +178,6 @@ export interface SocialAddress<PluginID> {
 }
 
 export interface SocialAccount extends Omit<SocialAddress<NetworkPluginID>, 'type'> {
-    updatedAt?: string
     supportedAddressTypes?: SocialAddressType[]
 }
 

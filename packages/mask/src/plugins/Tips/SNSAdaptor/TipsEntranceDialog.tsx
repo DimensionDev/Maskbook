@@ -128,7 +128,6 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
                 if (isGreaterThan(a.last_checked_at, z.last_checked_at)) {
                     return isSameAddress(z.identity, defaultAddress) ? 1 : -1
                 }
-
                 return isSameAddress(a.identity, defaultAddress) ? -1 : 1
             })
     }, [defaultAddress, bindingWallets, TipsSetting?.hiddenAddresses])
