@@ -83,6 +83,8 @@ export async function* decryptionWithSocialNetworkDecoding(
         })
         if (typeof result === 'string') {
             decoded = socialNetworkDecoder(context.currentSocialNetwork, result)[0]
+        } else if (result === null) {
+            return yield new DecryptError(DecryptErrorReasons.NoPayloadFound, undefined)
         } else {
             decoded = result
         }

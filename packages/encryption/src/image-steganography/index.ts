@@ -52,7 +52,7 @@ export async function steganographyDecodeImage(image: Blob | string, options: De
     const buffer = typeof image === 'string' ? await options.downloadImage(image) : await image.arrayBuffer()
     const dimension = getDimension(buffer)
     const preset = findPreset(dimension)
-    if (!preset) return ''
+    if (!preset) return null
     const result = decode(buffer, await options.downloadImage(preset.mask), {
         ...preset.options,
         pass: options.password,
