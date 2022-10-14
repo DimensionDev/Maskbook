@@ -8,6 +8,7 @@ import type {
     ECKeyIdentifier,
     NextIDPersonaBindings,
     NextIDPlatform,
+    NameServiceID,
     NetworkPluginID
 } from '@masknet/shared-base'
 import type { api } from '@dimensiondev/mask-wallet-core/proto'
@@ -1203,7 +1204,18 @@ export interface IdentityServiceState {
     /** Find all social addresses related to the given identity. */
     lookup(identity: SocialIdentity): Promise<Array<SocialAddress<NetworkPluginID>>>
 }
+
+export interface NameServiceResolver {
+    get id(): NameServiceID
+    /** get address of domain name */
+    lookup?: (domain: string) => Promise<string | undefined>
+    /** get domain name of address */
+    reverse?: (address: string) => Promise<string | undefined>
+}
+
 export interface NameServiceState<ChainId> {
+    /** create name resolver */
+    createResolvers: (chainId: ChainId) => NameServiceResolver[]
     /** get address of domain name */
     lookup?: (chainId: ChainId, domain: string) => Promise<string | undefined>
     /** get domain name of address */

@@ -36,7 +36,7 @@ import {
     ChainbaseHistoryAPI,
     ChainbaseFungibleTokenAPI,
     ChainbaseNonFungibleTokenAPI,
-    ChainBaseDomainAPI,
+    ChainbaseDomainAPI,
 } from './chainbase/index.js'
 import { SolanaFungibleAPI, SolanaNonFungibleAPI } from './solana/index.js'
 import { FlowFungibleAPI } from './flow/index.js'
@@ -105,7 +105,7 @@ export const NFTScanNonFungibleTokenSolana = new NFTScanNonFungibleTokenAPI_Sola
 export const ChainbaseHistory = new ChainbaseHistoryAPI()
 export const ChainbaseFungibleToken = new ChainbaseFungibleTokenAPI()
 export const ChainbaseNonFungibleToken = new ChainbaseNonFungibleTokenAPI()
-export const ChainbaseDomain = new ChainBaseDomainAPI()
+export const ChainbaseDomain = new ChainbaseDomainAPI()
 
 // Zerion
 export const Zerion = new ZerionAPI()

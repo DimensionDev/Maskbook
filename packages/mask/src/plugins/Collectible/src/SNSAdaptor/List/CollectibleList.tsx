@@ -1,8 +1,7 @@
-import { useWeb3State } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import type { NonFungibleAsset } from '@masknet/web3-shared-base'
 import type { NetworkPluginID } from '@masknet/shared-base'
-import { Box, Button, Tooltip, Typography } from '@mui/material'
+import { Box, Button, Typography } from '@mui/material'
 import { CollectibleItem } from './CollectibleItem.js'
 import { CollectibleListContext } from './CollectibleListContext.js'
 import { LoadingSkeleton } from './LoadingSkeleton.js'
@@ -56,7 +55,6 @@ export function CollectibleList(props: CollectibleListProps) {
     const { pluginID, collectibles, columns, gap, loading, retry, error, hasRetry = true } = props
     const { t } = useI18N()
     const { classes } = useStyles({ columns, gap }, { props: { classes: props.classes } })
-    const { Others } = useWeb3State()
 
     return (
         <CollectibleListContext.Provider value={{ collectiblesRetry: retry }}>
@@ -73,31 +71,14 @@ export function CollectibleList(props: CollectibleListProps) {
                     </Box>
                 ) : (
                     <Box className={classes.root}>
-                        {collectibles.map((token, index) => {
-                            const name = token.metadata?.name || token.contract?.name
-                            const uiTokenId = Others?.formatTokenId(token.tokenId, 4) ?? `#${token.tokenId}`
-                            const title = name ? `${name} ${uiTokenId}` : token.metadata?.name ?? ''
-                            return (
-                                <Tooltip
-                                    key={index}
-                                    title={title}
-                                    placement="top"
-                                    disableInteractive
-                                    PopperProps={{
-                                        disablePortal: true,
-                                        popperOptions: {
-                                            strategy: 'absolute',
-                                        },
-                                    }}
-                                    arrow>
-                                    <CollectibleItem
-                                        className={classes.collectibleItem}
-                                        pluginID={pluginID}
-                                        asset={token}
-                                    />
-                                </Tooltip>
-                            )
-                        })}
+                        {collectibles.map((token, index) => (
+                            <CollectibleItem
+                                key={index}
+                                className={classes.collectibleItem}
+                                pluginID={pluginID}
+                                asset={token}
+                            />
+                        ))}
                     </Box>
                 )}
             </Box>

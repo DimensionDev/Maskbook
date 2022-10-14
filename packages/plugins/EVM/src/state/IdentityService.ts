@@ -1,8 +1,7 @@
-import ENS from 'ethjs-ens'
 import { uniqBy } from 'lodash-unified'
 import type { Plugin } from '@masknet/plugin-infra'
 import { IdentityServiceState } from '@masknet/web3-state'
-import { SocialIdentity, SocialAddress, SocialAddressType } from '@masknet/web3-shared-base'
+import { SocialIdentity, SocialAddress, SocialAddressType, attemptUntil } from '@masknet/web3-shared-base'
 import {
     NetworkPluginID,
     EMPTY_LIST,
@@ -11,11 +10,12 @@ import {
     NextIDPlatform,
     createLookupTableResolver,
 } from '@masknet/shared-base'
-import { ChainId, isValidAddress, isZeroAddress, ProviderType } from '@masknet/web3-shared-evm'
+import { isValidAddress, isZeroAddress } from '@masknet/web3-shared-evm'
 import { KeyValue, MaskX, MaskX_BaseAPI, NextIDProof } from '@masknet/web3-providers'
-import { Providers } from './Connection/provider.js'
+import { ENS_Resolver } from './NameService/ENS.js'
+import { ChainbaseResolver } from './NameService/Chainbase.js'
 
-const ENS_RE = /\S{1,256}\.(eth|kred|xyz|luxe)\b/i
+const ENS_RE = /[^\t\n\v()[\]]{1,256}\.(eth|kred|xyz|luxe)\b/i
 const ADDRESS_FULL = /0x\w{40,}/i
 
 function getENSName(nickname: string, bio: string) {
@@ -114,14 +114,12 @@ export class IdentityService extends IdentityServiceState {
         const name = getENSName(nickname, bio)
         if (!name) return
 
-        const provider = await Providers[ProviderType.MaskWallet].createWeb3Provider({
-            chainId: ChainId.Mainnet,
-        })
-        const ens = new ENS({
-            provider,
-            network: ChainId.Mainnet,
-        })
-        return this.createSocialAddress(SocialAddressType.ENS, await ens.lookup(name), name)
+        return attemptUntil(
+            [new ENS_Resolver(), new ChainbaseResolver()].map((resolver) => {
+                return async () => resolver.lookup(name)
+            }),
+            undefined,
+        )
     }
 
     /** Read a social address from MaskX */
