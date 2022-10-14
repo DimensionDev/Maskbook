@@ -6,7 +6,7 @@ import BigNumber from 'bignumber.js'
 import { noop } from 'lodash-unified'
 import { EthereumAddress } from 'wallet.ts'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { formatGweiToWei, formatEthereumAddress, ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import { formatGweiToWei, formatEthereumAddress, ChainId, SchemaType, formatWeiToGwei } from '@masknet/web3-shared-evm'
 import {
     isZero,
     isGreaterThan,
@@ -255,7 +255,7 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
 
         const gasPrice = methods.getValues('gasPrice')
         if (gasOptions && !gasPrice) {
-            const gasPrice = new BigNumber(gasOptions[GasOptionType.FAST].suggestedMaxFeePerGas)
+            const gasPrice = formatWeiToGwei(gasOptions[GasOptionType.FAST].suggestedMaxFeePerGas)
             methods.setValue('gasPrice', gasPrice.toString())
         }
     }, [methods.setValue, methods.getValues, chainId, hub])

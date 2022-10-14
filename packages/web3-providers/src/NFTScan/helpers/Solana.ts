@@ -6,6 +6,7 @@ import {
     NonFungibleCollection,
     NonFungibleTokenContract,
     NonFungibleTokenEvent,
+    resolveCrossOriginURL,
     resolveIPFS_URL,
     scale10,
     SourceType,
@@ -20,6 +21,12 @@ export function createPermalink(chainId: ChainId, address?: string) {
     return urlcat('https://solana.nftscan.com', '/:address', {
         address,
     })
+}
+
+export async function fetchFromNFTScan<T>(url: string) {
+    const response = await fetch(resolveCrossOriginURL(url)!)
+    const json = await response.json()
+    return json as T
 }
 
 export async function fetchFromNFTScanV2<T>(chainId: ChainId, pathname: string, init?: RequestInit) {

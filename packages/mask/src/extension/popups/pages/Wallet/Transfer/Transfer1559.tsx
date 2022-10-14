@@ -2,7 +2,7 @@ import { memo, ReactElement, SyntheticEvent, useCallback, useMemo, useRef, useSt
 import { useAsync, useAsyncFn, useUpdateEffect } from 'react-use'
 import { useNavigate } from 'react-router-dom'
 import { ChevronDown } from 'react-feather'
-import { noop } from 'lodash-unified'
+import { mapValues, noop } from 'lodash-unified'
 import { z as zod } from 'zod'
 import { EthereumAddress } from 'wallet.ts'
 import BigNumber from 'bignumber.js'
@@ -13,10 +13,12 @@ import {
     formatEthereumAddress,
     formatGweiToEther,
     formatGweiToWei,
+    formatWeiToGwei,
     SchemaType,
 } from '@masknet/web3-shared-evm'
 import {
     formatBalance,
+    formatCurrency,
     FungibleAsset,
     isGreaterThan,
     isGreaterThanOrEqualTo,
@@ -207,9 +209,17 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
         chainId: nativeToken?.chainId,
     })
 
-    const { value: estimateGasFees } = useGasOptions(NetworkPluginID.PLUGIN_EVM, {
+    const { value: gasOptions } = useGasOptions(NetworkPluginID.PLUGIN_EVM, {
         chainId,
     })
+
+    const estimateGasFees = useMemo(() => {
+        return mapValues(gasOptions, (option) => ({
+            ...option,
+            suggestedMaxFeePerGas: formatWeiToGwei(option.suggestedMaxFeePerGas),
+            suggestedMaxPriorityFeePerGas: formatWeiToGwei(option.suggestedMaxPriorityFeePerGas),
+        }))
+    }, [gasOptions])
 
     const schema = useMemo(() => {
         return zod
@@ -733,10 +743,13 @@ export const Transfer1559TransferUI = memo<Transfer1559UIProps>(
                         </Typography>
                         <Typography component="span" className={classes.price}>
                             {t('popups_wallet_gas_fee_settings_usd', {
-                                usd: formatGweiToEther(Number(maxPriorityFeePerGas) ?? 0)
-                                    .times(etherPrice)
-                                    .times(gasLimit)
-                                    .toPrecision(3),
+                                usd: formatCurrency(
+                                    formatGweiToEther(Number(maxPriorityFeePerGas) ?? 0)
+                                        .times(etherPrice)
+                                        .times(gasLimit),
+                                    'USD',
+                                    { boundaries: { min: 0.01 } },
+                                ),
                             })}
                         </Typography>
                     </Typography>
@@ -760,10 +773,13 @@ export const Transfer1559TransferUI = memo<Transfer1559UIProps>(
                         </Typography>
                         <Typography component="span" className={classes.price}>
                             {t('popups_wallet_gas_fee_settings_usd', {
-                                usd: formatGweiToEther(Number(maxFeePerGas) ?? 0)
-                                    .times(etherPrice)
-                                    .times(gasLimit)
-                                    .toPrecision(3),
+                                usd: formatCurrency(
+                                    formatGweiToEther(Number(maxFeePerGas) ?? 0)
+                                        .times(etherPrice)
+                                        .times(gasLimit),
+                                    'USD',
+                                    { boundaries: { min: 0.01 } },
+                                ),
                             })}
                         </Typography>
                     </Typography>

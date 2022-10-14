@@ -40,9 +40,7 @@ export function createWeb3State(context: Plugin.Shared.SharedUIContext): EVM_Web
             currencyType: Settings_.currencyType,
         }),
         IdentityService: new IdentityService(context),
-        NameService: new NameService(context, {
-            chainId: Provider_.chainId,
-        }),
+        NameService: new NameService(context),
         RiskWarning: new RiskWarning(context, {
             account: Provider_.account,
         }),

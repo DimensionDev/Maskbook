@@ -748,6 +748,7 @@
     "plugin_collectible_platform_costs": "{{platform}} Platform costs",
     "plugin_collectible_contract_address": "Contract Address",
     "plugin_collectible_token_id": "Token ID",
+    "plugin_collectible_mint_address": "Mint Address",
     "plugin_collectible_block_chain": "Blockchain",
     "plugin_collectible_create_by": "Created by",
     "plugin_collectible_owned_by": "Owned by",

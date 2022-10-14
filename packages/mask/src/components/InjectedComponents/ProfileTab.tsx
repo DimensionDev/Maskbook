@@ -1,7 +1,6 @@
 import { ReactElement, useCallback, useEffect, useState } from 'react'
 import { useMount } from 'react-use'
 import classnames from 'classnames'
-import { get } from 'lodash-unified'
 import { Typography } from '@mui/material'
 import { MaskMessages, useMatchXS, useLocationChange } from '../../utils/index.js'
 import { isTwitter } from '../../social-network-adaptor/twitter.com/base.js'
@@ -39,8 +38,8 @@ export function ProfileTab(props: ProfileTabProps) {
         switchToTab()
     })
 
-    useLocationChange((e) => {
-        const testId = get(e, 'currentTarget.document.activeElement.dataset.testid')
+    useLocationChange(() => {
+        const testId = (document.activeElement as HTMLElement | null)?.dataset?.testid
         if (testId === 'SearchBox_Search_Input') return
 
         MaskMessages.events.profileTabUpdated.sendToLocal({ show: false })

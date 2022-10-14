@@ -107,7 +107,13 @@ export function PossiblePluginSuggestionUISingle(props: {
             action={
                 <Button
                     size="small"
-                    startIcon={lackHostPermission ? <Icons.Approve size={18} /> : <Icons.Plugin size={18} />}
+                    startIcon={
+                        lackHostPermission ? (
+                            <Icons.Approve size={18} sx={{ lineHeight: 1 }} />
+                        ) : (
+                            <Icons.Plugin size={18} sx={{ lineHeight: 1 }} />
+                        )
+                    }
                     variant="roundedDark"
                     onClick={onClick}
                     sx={{
@@ -117,8 +123,6 @@ export function PossiblePluginSuggestionUISingle(props: {
                         height: '36px',
                         fontSize: 14,
                         fontWeight: 700,
-                        paddingTop: 1,
-                        paddingBottom: 1.125,
                         lineHeight: 1.5,
                         '&:hover': {
                             backgroundColor: theme.palette.maskColor.dark,
