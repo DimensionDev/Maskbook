@@ -77,7 +77,7 @@ export function PropertiesCard(props: PropertiesCardProps) {
     const { classes, cx } = useStyles()
     const { t } = useI18N()
 
-    if (!props.asset.traits?.length) return null
+    if (!asset.traits?.length) return null
 
     return (
         <div className={classes.wrapper}>
@@ -99,7 +99,9 @@ export function PropertiesCard(props: PropertiesCardProps) {
                             <Typography className={classes.traitValue} title={x.value}>
                                 {x.value}
                             </Typography>
-                            <Typography className={classes.traitRarity}>({x.rarity ?? '-%'})</Typography>
+                            {typeof x.rarity === 'string' ? (
+                                <Typography className={classes.traitRarity}>({x.rarity})</Typography>
+                            ) : null}
                         </div>
                     )
                 })}

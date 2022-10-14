@@ -18,6 +18,6 @@ export function useNonFungibleRarity<S extends 'all' | void = void, T extends Ne
 
     return useAsyncRetry(async () => {
         if (!hub) return
-        return hub.getNonFungibleRarity?.(address ?? '', id ?? '', options)
+        return hub.getNonFungibleRarity?.(address || '', id || '', options)
     }, [address, id, hub])
 }

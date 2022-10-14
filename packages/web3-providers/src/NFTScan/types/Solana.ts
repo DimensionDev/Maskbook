@@ -1,3 +1,8 @@
+interface RarityAttribute {
+    attributes_name: string
+    attributes_value: string
+    percentage: `${number}%`
+}
 export namespace Solana {
     export interface Account {
         address: string
@@ -103,5 +108,49 @@ export namespace Solana {
         twitter?: string
         verified?: boolean
         website?: string
+    }
+
+    /** Not official documented */
+    export interface BasicInfo {
+        launch_foundry_address: null
+        fee: number
+        link: string
+        last_sell_price: string | null
+        description: string
+        // cspell:ignore wedsite
+        wedsite: string | null
+        instagram: string | null
+        medium: string | null
+        /** mime type */
+        type: string
+        /** url */
+        cover: string
+        /** url */
+        nft_platform_logo: string
+        twitter: string | null
+        nft_value: number
+        /** Solana pubkey */
+        creator_address: string
+        transaction_time: number
+        /** meta json */
+        json: string
+        email: string | null
+        owner: string | null
+        last_sell_hash: string | null
+        /** Solana pubkey */
+        tx_interact_program: string
+        github: string | null
+        telegram: string | null
+        /** Solana pubkey */
+        holder_address: string
+        /** Solana pubkey */
+        token_address: string
+        tx_hash: string
+        owners_count: number
+        collection: string
+        nft_name: string
+        discord: null
+        blockNumber: number
+        attributes: RarityAttribute[]
     }
 }
