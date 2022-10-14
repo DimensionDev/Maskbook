@@ -17,7 +17,7 @@ const useStyles = makeStyles()({
 
 export function TabContent({ identity, socialAddress }: TabContentProps) {
     const { classes } = useStyles()
-    const { value: socialAddressList } = useSocialAddressListAll(identity)
+    const { value: socialAddressList, loading: loadingSocialAddressList } = useSocialAddressListAll(identity)
 
     const renderIdentity = () => {
         return (
@@ -71,6 +71,14 @@ export function TabContent({ identity, socialAddress }: TabContentProps) {
     }
 
     const renderAllAddressNames = () => {
+        if (loadingSocialAddressList)
+            return (
+                <List dense>
+                    <ListItem>
+                        <ListItemText primary={<Typography color="textPrimary">Loading...</Typography>} />
+                    </ListItem>
+                </List>
+            )
         return (
             <List dense>
                 {socialAddressList?.map((x) => (
