@@ -1,20 +1,20 @@
+import { FC, HTMLProps, MouseEventHandler, useCallback, useEffect, useMemo } from 'react'
+import { makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
 import { useCurrentWeb3NetworkPluginID } from '@masknet/web3-hooks-base'
 import { EMPTY_LIST, ProfileIdentifier, NetworkPluginID } from '@masknet/shared-base'
-import { makeStyles } from '@masknet/theme'
-import { FC, HTMLProps, MouseEventHandler, useCallback, useEffect, useMemo } from 'react'
+import type { SocialAccount } from '@masknet/web3-shared-base'
 import {
     useCurrentVisitingIdentity,
     useSocialIdentityByUseId,
 } from '../../../../components/DataSource/useActivatedUI.js'
 import { useProfilePublicKey } from '../../hooks/useProfilePublicKey.js'
 import { PluginTipsMessages } from '../../messages.js'
-import type { TipsAccount } from '../../types/index.js'
 import { useTipsAccounts } from './useTipsAccounts.js'
 
 interface Props extends HTMLProps<HTMLDivElement> {
-    addresses?: TipsAccount[]
-    recipient?: TipsAccount['address']
+    accounts?: SocialAccount[]
+    recipient?: string
     receiver?: ProfileIdentifier
     onStatusUpdate?(disabled: boolean): void
 }
@@ -33,7 +33,7 @@ const useStyles = makeStyles()({
 export const TipButton: FC<Props> = ({
     className,
     receiver,
-    addresses = EMPTY_LIST,
+    accounts = EMPTY_LIST,
     recipient,
     children,
     onStatusUpdate,
@@ -60,7 +60,7 @@ export const TipButton: FC<Props> = ({
         return false
     }, [pluginId, isVisitingUser])
 
-    const tipsAccounts = useTipsAccounts(identity, personaPubkey, addresses)
+    const tipsAccounts = useTipsAccounts(identity, personaPubkey, accounts)
 
     const isChecking = loadingPersona
     const disabled = isChecking || tipsAccounts.length === 0 || !isRuntimeAvailable
@@ -77,7 +77,7 @@ export const TipButton: FC<Props> = ({
             PluginTipsMessages.tipTask.sendToLocal({
                 recipient,
                 recipientSnsId: receiverUserId,
-                addresses: tipsAccounts,
+                accounts: tipsAccounts,
             })
         },
         [disabled, recipient, tipsAccounts, receiverUserId],
@@ -88,7 +88,7 @@ export const TipButton: FC<Props> = ({
         PluginTipsMessages.tipTaskUpdate.sendToLocal({
             recipient,
             recipientSnsId: receiverUserId,
-            addresses: tipsAccounts,
+            accounts: tipsAccounts,
         })
     }, [recipient, receiverUserId, tipsAccounts])
 

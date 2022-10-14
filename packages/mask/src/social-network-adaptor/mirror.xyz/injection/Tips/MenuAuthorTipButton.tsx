@@ -9,10 +9,10 @@ import {
 import { EMPTY_LIST, PluginID, NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI.js'
-import type { TipsAccount } from '../../../../plugins/Tips/types/tip.js'
 import { createReactRootShadowed, startWatch } from '../../../../utils/index.js'
 import { menuAuthorSelector as selector } from '../../utils/selectors.js'
 import { PluginIDContextProvider, useCurrentWeb3NetworkPluginID, useWeb3State } from '@masknet/web3-hooks-base'
+import type { SocialAccount } from '@masknet/web3-shared-base'
 
 export function injectTipsButtonOnMenu(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(selector())
@@ -47,16 +47,16 @@ function AuthorTipsButtonWrapper() {
 
     const visitingIdentity = useCurrentVisitingIdentity()
     const isMinimal = useIsMinimalMode(PluginID.Tips)
-    const pluginId = useCurrentWeb3NetworkPluginID()
+    const pluginID = useCurrentWeb3NetworkPluginID()
     const { Others } = useWeb3State()
 
-    const tipsAccounts = useMemo((): TipsAccount[] => {
+    const tipsAccounts = useMemo((): SocialAccount[] => {
         if (!visitingIdentity?.identifier) return EMPTY_LIST
         return [
             {
-                pluginId,
+                networkSupporterPluginID: pluginID,
                 address: visitingIdentity.identifier.userId,
-                name: visitingIdentity.nickname
+                label: visitingIdentity.nickname
                     ? `(${visitingIdentity.nickname}) ${Others?.formatAddress(visitingIdentity.identifier.userId, 4)}`
                     : visitingIdentity.identifier.userId,
             },
@@ -73,7 +73,7 @@ function AuthorTipsButtonWrapper() {
             <Component
                 identity={visitingIdentity.identifier}
                 slot={Plugin.SNSAdaptor.TipsSlot.MirrorMenu}
-                tipsAccounts={tipsAccounts}
+                accounts={tipsAccounts}
             />
         )
     }, [visitingIdentity.identifier, tipsAccounts])

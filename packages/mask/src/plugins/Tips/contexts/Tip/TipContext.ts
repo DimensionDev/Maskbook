@@ -1,18 +1,23 @@
 import type { Web3Helper } from '@masknet/web3-helpers'
-import type { FungibleToken, NonFungibleToken, NonFungibleTokenContract } from '@masknet/web3-shared-base'
+import type {
+    FungibleToken,
+    NonFungibleToken,
+    NonFungibleTokenContract,
+    SocialAccount,
+} from '@masknet/web3-shared-base'
 import type { GasOptionConfig } from '@masknet/web3-shared-evm'
 import { noop } from 'lodash-unified'
 import { createContext, Dispatch, SetStateAction } from 'react'
-import { TipsAccount, TipsType, ValidationTuple } from '../../types/index.js'
+import { TipsType, ValidationTuple } from '../../types/index.js'
 
 export interface TipContextOptions {
-    recipient: TipsAccount | undefined
+    recipient: SocialAccount | undefined
     recipientSnsId: string
     recipientAddress: string
     setRecipient: Dispatch<SetStateAction<string>>
     tipType: TipsType
     setTipType: Dispatch<SetStateAction<TipsType>>
-    recipients: TipsAccount[]
+    recipients: SocialAccount[]
     token: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll> | null
     setToken: Dispatch<SetStateAction<FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll> | null>>
     amount: string

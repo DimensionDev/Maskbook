@@ -1,11 +1,11 @@
+import { Dispatch, FC, memo, SetStateAction, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { useAccount, useChainId, useFungibleToken, useNonFungibleTokenContract } from '@masknet/web3-hooks-base'
-import { isSameAddress } from '@masknet/web3-shared-base'
+import { isSameAddress, SocialAccount } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import type { GasOptionConfig } from '@masknet/web3-shared-evm'
-import { Dispatch, FC, memo, SetStateAction, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { useSubscription } from 'use-subscription'
 import { getStorage } from '../../storage/index.js'
-import { TipTask, TipsType, TipsAccount } from '../../types/index.js'
+import { TipTask, TipsType } from '../../types/index.js'
 import { TargetRuntimeContext } from '../TargetRuntimeContext.js'
 import { TipContextOptions, TipContext } from './TipContext.js'
 import { useTipAccountsCompletion } from './useTipAccountsCompletion.js'
@@ -18,14 +18,14 @@ interface Props {
     task: TipTask
 }
 
-function useRecipients(tipsAccounts: TipsAccount[], pluginId: NetworkPluginID) {
+function useRecipients(pluginID: NetworkPluginID, tipsAccounts: SocialAccount[]) {
     const _recipients = useTipAccountsCompletion(tipsAccounts)
     const recipients = useMemo(() => {
         return [..._recipients].sort((a, z) => {
-            if (a.pluginId === z.pluginId) return 0
-            return a.pluginId === pluginId ? -1 : 1
+            if (a.networkSupporterPluginID === z.networkSupporterPluginID) return 0
+            return a.networkSupporterPluginID === pluginID ? -1 : 1
         })
-    }, [_recipients, pluginId])
+    }, [_recipients, pluginID])
     return recipients
 }
 
@@ -44,7 +44,7 @@ function useDirtyDetection(deps: any[]): [boolean, Dispatch<SetStateAction<boole
 export const TipTaskProvider: FC<React.PropsWithChildren<Props>> = memo(({ children, task }) => {
     const { targetChainId, pluginId, setPluginId } = TargetRuntimeContext.useContainer()
     const [_recipientAddress, setRecipient] = useState<string>(task.recipient ?? '')
-    const recipients = useRecipients(task.addresses, pluginId)
+    const recipients = useRecipients(pluginId, task.accounts)
     const [tipType, setTipType] = useState<TipsType>(TipsType.Tokens)
     const [amount, setAmount] = useState('')
     const chainId = useChainId()
@@ -151,12 +151,12 @@ export const TipTaskProvider: FC<React.PropsWithChildren<Props>> = memo(({ child
     ])
 
     useEffect(() => {
-        if (recipient?.pluginId) {
-            setPluginId(recipient.pluginId)
+        if (recipient?.networkSupporterPluginID) {
+            setPluginId(recipient.networkSupporterPluginID)
         } else {
             setPluginId(NetworkPluginID.PLUGIN_EVM)
         }
-    }, [recipient?.pluginId])
+    }, [recipient?.networkSupporterPluginID])
 
     return <TipContext.Provider value={contextValue}>{children}</TipContext.Provider>
 })

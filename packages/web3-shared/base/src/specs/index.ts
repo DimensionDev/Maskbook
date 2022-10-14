@@ -177,6 +177,11 @@ export interface SocialAddress<PluginID> {
     label: string
 }
 
+export interface SocialAccount extends Omit<SocialAddress<NetworkPluginID>, 'type'> {
+    updatedAt?: string
+    supportedAddressTypes?: SocialAddressType[]
+}
+
 export type Price = {
     [key in CurrencyType]?: string
 }

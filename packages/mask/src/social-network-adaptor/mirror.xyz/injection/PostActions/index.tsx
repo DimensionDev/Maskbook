@@ -28,16 +28,20 @@ export function PostActions() {
     return (
         <ActionsRenderer
             // In Mirror, then profile identifier is wallet address
-            tipsAccounts={[
+            accounts={[
                 {
-                    pluginId: NetworkPluginID.PLUGIN_EVM,
+                    networkSupporterPluginID: NetworkPluginID.PLUGIN_EVM,
                     address: identifier.userId,
-                    name: nickname ? `(${nickname}) ${Others?.formatAddress(identifier.userId, 4)}` : identifier.userId,
+                    label: nickname
+                        ? `(${nickname}) ${Others?.formatAddress(identifier.userId, 4)}`
+                        : identifier.userId,
                 },
                 ...(coAuthors?.map((x) => ({
-                    pluginId: NetworkPluginID.PLUGIN_EVM,
+                    networkSupporterPluginID: NetworkPluginID.PLUGIN_EVM,
                     address: x.author.userId,
-                    name: x.nickname ? `(${x.nickname}) ${Others?.formatAddress(x.author.userId, 4)}` : x.author.userId,
+                    label: x.nickname
+                        ? `(${x.nickname}) ${Others?.formatAddress(x.author.userId, 4)}`
+                        : x.author.userId,
                 })) ?? []),
             ]}
             identity={identifier}
