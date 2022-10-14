@@ -94,7 +94,6 @@ export class ChainbaseDomainAPI implements DomainAPI.Provider<ChainId> {
         const response = await fetchFromChainbase<ENSRecord>(
             urlcat('/v1/ens/records', { chain_id: chainId, domain: name }),
         )
-
         if (!response) return
 
         return response.address
