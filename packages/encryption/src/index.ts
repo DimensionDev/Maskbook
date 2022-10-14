@@ -52,7 +52,6 @@ export { socialNetworkEncoder, socialNetworkDecoder, TwitterDecoder } from './so
 export {
     type DecodeImageOptions,
     type EncodeImageOptions,
-    type ImageTemplateTypes,
     type SteganographyIO,
     steganographyDecodeImage,
     steganographyEncodeImage,

@@ -5,8 +5,6 @@ import { getDimension } from './utils.js'
 
 export { GrayscaleAlgorithm, AlgorithmVersion } from '@dimensiondev/stego-js'
 
-export type ImageTemplateTypes = 'v2'
-
 interface Dimension {
     width: number
     height: number
@@ -14,8 +12,12 @@ interface Dimension {
 interface Preset extends Dimension {
     mask: string
     deprecated?: string
-    template?: ImageTemplateTypes
     options?: Partial<EncodeOptions>
+}
+export const currentUsingPreset: Preset = {
+    width: 1200,
+    height: 681,
+    mask: new URL('./masks/mask-v2.png', import.meta.url).toString(),
 }
 const dimensionPreset: Preset[] = [
     {
@@ -24,12 +26,7 @@ const dimensionPreset: Preset[] = [
         height: 1240,
         mask: new URL('./masks/mask-v1.png', import.meta.url).toString(),
     },
-    {
-        width: 1200,
-        height: 681,
-        template: 'v2',
-        mask: new URL('./masks/mask-v2.png', import.meta.url).toString(),
-    },
+    currentUsingPreset,
     {
         width: 1200,
         height: 680,
@@ -72,13 +69,11 @@ export interface SteganographyIO {
 }
 export type EncodeImageOptions = SteganographyIO &
     Partial<EncodeOptions> &
-    Pick<EncodeOptions, 'text' | 'pass' | 'version'> & {
-        template?: ImageTemplateTypes
-    }
+    Pick<EncodeOptions, 'text' | 'pass' | 'version'>
 
 export async function steganographyEncodeImage(buf: ArrayBuffer, options: EncodeImageOptions) {
-    const { template, downloadImage } = options
-    const preset = dimensionPreset.find((d) => d.template && d.template === template)
+    const { downloadImage } = options
+    const preset = currentUsingPreset
     if (!preset) throw new Error('Failed to find preset.')
     return new Uint8Array(
         await encode(buf, await downloadImage(preset.mask), {
