@@ -25,7 +25,7 @@ export function useTipsWalletsList(
                 hiddenAddresses: string[]
             }
             if (matched) {
-                x.isDefault = matched.defaultAddress === x.identity ? 1 : 0
+                x.isDefault = isSameAddress(matched.defaultAddress, x.identity) ? 1 : 0
                 x.isPublic = matched.hiddenAddresses.some((y) => isSameAddress(y, x.identity)) ? 0 : 1
             }
             return x
