@@ -2,7 +2,7 @@ import { encode, decode, GrayscaleAlgorithm } from '@dimensiondev/stego-js'
 import type { EncodeOptions } from '@dimensiondev/stego-js'
 import { getDimension } from './utils.js'
 import { getPreset, findPreset } from './presets.js'
-import { encodeArrayBuffer } from '@dimensiondev/kit'
+import { decodeArrayBuffer, encodeArrayBuffer } from '@dimensiondev/kit'
 
 export { GrayscaleAlgorithm, AlgorithmVersion } from '@dimensiondev/stego-js'
 
@@ -28,6 +28,11 @@ export async function steganographyEncodeImage(buf: ArrayBuffer, options: Encode
     const optionalOptions: Partial<Readwrite<EncodeOptions>> = {}
     if (grayscaleAlgorithm) optionalOptions.grayscaleAlgorithm = grayscaleAlgorithm
 
+    if (preset.type === 'string' && typeof data !== 'string')
+        throw new TypeError('The chosen preset must be used with string')
+    if (preset.type === 'raw' && typeof data === 'string')
+        throw new TypeError('The chosen preset must be used with Uint8Array')
+
     const text = typeof data === 'string' ? data : encodeArrayBuffer(data)
 
     return new Uint8Array(
@@ -40,15 +45,18 @@ export async function steganographyEncodeImage(buf: ArrayBuffer, options: Encode
     )
 }
 
-export type DecodeImageOptions = SteganographyIO & Partial<EncodeOptions> & Pick<EncodeOptions, 'pass'>
-
+export interface DecodeImageOptions extends SteganographyIO {
+    password: string
+}
 export async function steganographyDecodeImage(image: Blob | string, options: DecodeImageOptions) {
     const buffer = typeof image === 'string' ? await options.downloadImage(image) : await image.arrayBuffer()
     const dimension = getDimension(buffer)
     const preset = findPreset(dimension)
     if (!preset) return ''
-    return decode(buffer, await options.downloadImage(preset.mask), {
+    const result = decode(buffer, await options.downloadImage(preset.mask), {
         ...preset.options,
-        ...options,
+        pass: options.password,
     })
+    if (preset.type === 'raw') return new Uint8Array(decodeArrayBuffer(await result))
+    return result
 }
