@@ -56,7 +56,7 @@ export {
     steganographyDecodeImage,
     steganographyEncodeImage,
     GrayscaleAlgorithm,
-    AlgorithmVersion,
+    SteganographyPreset,
 } from './image-steganography/index.js'
 
 // TODO: remove them in the future
