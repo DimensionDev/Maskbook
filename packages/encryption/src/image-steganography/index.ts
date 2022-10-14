@@ -1,11 +1,10 @@
-import { GrayscaleAlgorithm } from '@dimensiondev/stego-js/cjs/grayscale.js'
-import { TransformAlgorithm } from '@dimensiondev/stego-js/cjs/transform.js'
-import { encode, decode } from '@dimensiondev/stego-js/cjs/dom.js'
-import type { EncodeOptions } from '@dimensiondev/stego-js/cjs/stego.js'
+import { GrayscaleAlgorithm, TransformAlgorithm, encode, decode } from '@dimensiondev/stego-js'
+import type { EncodeOptions } from '@dimensiondev/stego-js'
 import { omit } from 'lodash-unified'
 import { getDimension } from './utils.js'
 
-export { GrayscaleAlgorithm } from '@dimensiondev/stego-js/cjs/grayscale.js'
+export { GrayscaleAlgorithm, AlgorithmVersion } from '@dimensiondev/stego-js'
+
 export type ImageTemplateTypes = 'v2'
 
 interface Dimension {
@@ -73,7 +72,7 @@ export interface SteganographyIO {
 }
 export type EncodeImageOptions = SteganographyIO &
     Partial<EncodeOptions> &
-    Pick<EncodeOptions, 'text' | 'pass'> & {
+    Pick<EncodeOptions, 'text' | 'pass' | 'version'> & {
         template?: ImageTemplateTypes
     }
 
@@ -90,7 +89,7 @@ export async function steganographyEncodeImage(buf: ArrayBuffer, options: Encode
     )
 }
 
-export type DecodeImageOptions = SteganographyIO & Partial<EncodeOptions> & Pick<EncodeOptions, 'pass'>
+export type DecodeImageOptions = SteganographyIO & Partial<EncodeOptions> & Pick<EncodeOptions, 'pass' | 'version'>
 
 async function inner(buf: ArrayBuffer, options: DecodeImageOptions) {
     const dimension = getDimension(buf)

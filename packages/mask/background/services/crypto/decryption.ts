@@ -13,6 +13,7 @@ import {
     DecryptError,
     DecryptErrorReasons,
     DecryptReportedInfo,
+    AlgorithmVersion,
 } from '@masknet/encryption'
 import {
     AESCryptoKey,
@@ -80,6 +81,7 @@ export async function* decryptionWithSocialNetworkDecoding(
         const result = await steganographyDecodeImage(encoded.image, {
             pass: context.authorHint.toText(),
             downloadImage,
+            version: AlgorithmVersion.V1,
         })
         decoded = socialNetworkDecoder(context.currentSocialNetwork, result)[0]
     }

@@ -1,4 +1,4 @@
-import { GrayscaleAlgorithm, type ImageTemplateTypes } from '@masknet/encryption'
+import { AlgorithmVersion, GrayscaleAlgorithm, type ImageTemplateTypes } from '@masknet/encryption'
 import Services from '../../extension/service.js'
 import { ImagePayloadURLs } from '../../resources/image-payload/index.js'
 import { activatedSocialNetworkUI } from '../../social-network/index.js'
@@ -13,6 +13,7 @@ export async function SteganographyTextPayload(template: ImageTemplateTypes, tex
         template,
         grayscaleAlgorithm:
             activatedSocialNetworkUI.configuration.steganography?.grayscaleAlgorithm ?? GrayscaleAlgorithm.NONE,
+        version: AlgorithmVersion.V1,
     })
     const blob = new Blob([secretImage], { type: 'image/png' })
     return blob
