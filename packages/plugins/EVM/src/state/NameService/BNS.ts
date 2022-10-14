@@ -3,7 +3,7 @@ import { NameServiceID } from '@masknet/shared-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
 
 // TODO: implement
-export class BNS_Resolver implements NameServiceResolver<ChainId> {
+export class BNS_Resolver implements NameServiceResolver {
     public get id() {
         return NameServiceID.BSC
     }

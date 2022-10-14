@@ -1205,21 +1205,21 @@ export interface IdentityServiceState {
     lookup(identity: SocialIdentity): Promise<Array<SocialAddress<NetworkPluginID>>>
 }
 
-export interface NameServiceResolver<ChainId> {
+export interface NameServiceResolver {
     get id(): NameServiceID
     /** get address of domain name */
-    lookup?: (domain: string, chainId?: ChainId) => Promise<string | undefined>
+    lookup?: (domain: string) => Promise<string | undefined>
     /** get domain name of address */
-    reverse?: (address: string, chainId?: ChainId) => Promise<string | undefined>
+    reverse?: (address: string) => Promise<string | undefined>
 }
 
 export interface NameServiceState<ChainId> {
     /** create name resolver */
-    createResolver: (chainId?: ChainId) => NameServiceResolver<ChainId>
+    createResolver: (chainId: ChainId) => NameServiceResolver
     /** get address of domain name */
-    lookup?: (domain: string, chainId?: ChainId) => Promise<string | undefined>
+    lookup?: (chainId: ChainId, domain: string) => Promise<string | undefined>
     /** get domain name of address */
-    reverse?: (address: string, chainId?: ChainId) => Promise<string | undefined>
+    reverse?: (chainId: ChainId, address: string) => Promise<string | undefined>
 }
 export interface TokenState<ChainId, SchemaType> {
     /** The user trusted fungible tokens. */

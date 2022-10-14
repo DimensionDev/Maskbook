@@ -6,11 +6,11 @@ import type { NameServiceResolver } from '@masknet/web3-shared-base'
 import { Web3StateSettings } from '../../settings/index.js'
 import { Providers } from '../Connection/provider.js'
 
-export class ENS_Resolver implements NameServiceResolver<ChainId> {
+export class ENS_Resolver implements NameServiceResolver {
     private ens: ENS | null = null
 
     public get id() {
-        return NameServiceID.EVM
+        return NameServiceID.ENS
     }
 
     private async createENS() {
