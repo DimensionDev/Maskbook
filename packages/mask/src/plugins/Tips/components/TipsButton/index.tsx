@@ -2,8 +2,7 @@ import { FC, HTMLProps, MouseEventHandler, useCallback, useEffect, useMemo } fro
 import { makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
 import { useCurrentWeb3NetworkPluginID } from '@masknet/web3-hooks-base'
-import { EMPTY_LIST, ProfileIdentifier, NetworkPluginID } from '@masknet/shared-base'
-import type { SocialAccount } from '@masknet/web3-shared-base'
+import { ProfileIdentifier, NetworkPluginID } from '@masknet/shared-base'
 import {
     useCurrentVisitingIdentity,
     useSocialIdentityByUseId,
@@ -13,7 +12,6 @@ import { PluginTipsMessages } from '../../messages.js'
 import { useTipsAccounts } from './useTipsAccounts.js'
 
 interface Props extends HTMLProps<HTMLDivElement> {
-    accounts?: SocialAccount[]
     recipient?: string
     receiver?: ProfileIdentifier
     onStatusUpdate?(disabled: boolean): void
@@ -30,40 +28,30 @@ const useStyles = makeStyles()({
 })
 
 // TODO: reduce re-render
-export const TipButton: FC<Props> = ({
-    className,
-    receiver,
-    accounts = EMPTY_LIST,
-    recipient,
-    children,
-    onStatusUpdate,
-    ...rest
-}) => {
+export const TipButton: FC<Props> = ({ className, receiver, recipient, children, onStatusUpdate, ...rest }) => {
     const { classes, cx } = useStyles()
 
     const { value: personaPubkey, loading: loadingPersona } = useProfilePublicKey(receiver)
     const receiverUserId = receiver?.userId
 
-    const pluginId = useCurrentWeb3NetworkPluginID()
-
+    const pluginID = useCurrentWeb3NetworkPluginID()
     const visitingIdentity = useCurrentVisitingIdentity()
     const { value: identity } = useSocialIdentityByUseId(receiverUserId)
 
     const isVisitingUser = visitingIdentity.identifier?.userId === receiverUserId
     const isRuntimeAvailable = useMemo(() => {
-        switch (pluginId) {
+        switch (pluginID) {
             case NetworkPluginID.PLUGIN_EVM:
                 return true
             case NetworkPluginID.PLUGIN_SOLANA:
                 return isVisitingUser
         }
         return false
-    }, [pluginId, isVisitingUser])
+    }, [pluginID, isVisitingUser])
 
-    const tipsAccounts = useTipsAccounts(identity, personaPubkey, accounts)
+    const accounts = useTipsAccounts(identity, personaPubkey)
+    const disabled = loadingPersona || accounts.length === 0 || !isRuntimeAvailable
 
-    const isChecking = loadingPersona
-    const disabled = isChecking || tipsAccounts.length === 0 || !isRuntimeAvailable
     useEffect(() => {
         onStatusUpdate?.(disabled)
     }, [disabled])
@@ -73,24 +61,24 @@ export const TipButton: FC<Props> = ({
             evt.stopPropagation()
             evt.preventDefault()
             if (disabled) return
-            if (!tipsAccounts.length || !receiverUserId) return
+            if (!accounts.length || !receiverUserId) return
             PluginTipsMessages.tipTask.sendToLocal({
                 recipient,
                 recipientSnsId: receiverUserId,
-                accounts: tipsAccounts,
+                accounts,
             })
         },
-        [disabled, recipient, tipsAccounts, receiverUserId],
+        [disabled, recipient, accounts, receiverUserId],
     )
 
     useEffect(() => {
-        if (!receiverUserId || !tipsAccounts.length) return
+        if (!receiverUserId || !accounts.length) return
         PluginTipsMessages.tipTaskUpdate.sendToLocal({
             recipient,
             recipientSnsId: receiverUserId,
-            accounts: tipsAccounts,
+            accounts,
         })
-    }, [recipient, receiverUserId, tipsAccounts])
+    }, [recipient, receiverUserId, accounts])
 
     if (disabled) return null
 

@@ -114,12 +114,14 @@ export class IdentityService extends IdentityServiceState {
         const name = getENSName(nickname, bio)
         if (!name) return
 
-        return attemptUntil(
+        const address = await attemptUntil(
             [new ENS_Resolver(), new ChainbaseResolver()].map((resolver) => {
                 return async () => resolver.lookup(name)
             }),
             undefined,
         )
+        if (!address) return
+        return this.createSocialAddress(SocialAddressType.ENS, address, nickname)
     }
 
     /** Read a social address from MaskX */

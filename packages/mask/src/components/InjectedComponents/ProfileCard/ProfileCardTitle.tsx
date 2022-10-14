@@ -84,11 +84,7 @@ export const ProfileCardTitle: FC<Props> = ({
                     {identity.isOwner ? (
                         <Icons.Gear onClick={handleOpenDialog} className={classes.gearIcon} />
                     ) : (
-                        <TipButton
-                            className={classes.tipButton}
-                            receiver={identity.identifier}
-                            accounts={tipAccounts}
-                        />
+                        <TipButton className={classes.tipButton} receiver={identity.identifier} />
                     )}
                 </div>
             </ProfileBar>

@@ -116,18 +116,13 @@ export enum TransactionDescriptorType {
 export enum SocialAddressType {
     ADDRESS = 'ADDRESS',
     ENS = 'ENS',
-    UNS = 'UNS',
-    DNS = 'DNS',
     RSS3 = 'RSS3',
-    KV = 'KV',
-    GUN = 'GUN',
-    THE_GRAPH = 'THE_GRAPH',
-    TWITTER_BLUE = 'TWITTER_BLUE',
-    NEXT_ID = 'NEXT_ID',
     SOL = 'SOL',
-    CyberConnect = 'CYBER_CONNECT',
-    Leaderboard = 'ETH_LEADERBOARD',
-    Sybil = 'SYBIL',
+    KV = 'KV',
+    NEXT_ID = 'NEXT_ID',
+    CyberConnect = 'CyberConnect',
+    Leaderboard = '.eth Leaderboard',
+    Sybil = 'Sybil',
 }
 
 export enum StorageProviderType {

@@ -33,23 +33,11 @@ const TabConfig: Plugin.SNSAdaptor.ProfileTab = {
             if (a.type === SocialAddressType.ENS) return -1
             if (z.type === SocialAddressType.ENS) return 1
 
-            if (a.type === SocialAddressType.UNS) return -1
-            if (z.type === SocialAddressType.UNS) return 1
-
-            if (a.type === SocialAddressType.DNS) return -1
-            if (z.type === SocialAddressType.DNS) return 1
-
             if (a.type === SocialAddressType.RSS3) return -1
             if (z.type === SocialAddressType.RSS3) return 1
 
             if (a.type === SocialAddressType.ADDRESS) return -1
             if (z.type === SocialAddressType.ADDRESS) return 1
-
-            if (a.type === SocialAddressType.GUN) return -1
-            if (z.type === SocialAddressType.GUN) return 1
-
-            if (a.type === SocialAddressType.THE_GRAPH) return -1
-            if (z.type === SocialAddressType.THE_GRAPH) return 1
 
             return 0
         },

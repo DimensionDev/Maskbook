@@ -17,7 +17,7 @@ const addressCache = new LRUCache<string, CacheValue>({
  */
 export function useSocialAddressListAll(
     identity?: SocialIdentity,
-    typeWhitelist?: SocialAddressType[],
+    includes?: SocialAddressType[],
     sorter?: (a: SocialAddress<NetworkPluginID>, z: SocialAddress<NetworkPluginID>) => number,
 ) {
     // TODO: to add flow
@@ -44,6 +44,6 @@ export function useSocialAddressListAll(
             addressCache.delete(cacheKey)
         }
         const sorted = sorter && listOfAddress.length ? listOfAddress.sort(sorter) : listOfAddress
-        return typeWhitelist?.length ? sorted.filter((x) => typeWhitelist.includes(x.type)) : sorted
-    }, [identity, sorter, typeWhitelist?.join(), EVM_IdentityService?.lookup, SolanaIdentityService?.lookup])
+        return includes?.length ? sorted.filter((x) => includes.includes(x.type)) : sorted
+    }, [identity, sorter, includes?.join(), EVM_IdentityService?.lookup, SolanaIdentityService?.lookup])
 }
