@@ -43,7 +43,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
         Utils: {
             shouldDisplay(_, socialAddresses) {
                 if (!socialAddresses?.length) return false
-                return !!socialAddresses.filter((x) => x.networkSupporterPluginID === NetworkPluginID.PLUGIN_EVM).length
+                return !!socialAddresses.filter((x) => x.pluginID === NetworkPluginID.PLUGIN_EVM).length
             },
         },
     },

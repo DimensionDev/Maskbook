@@ -38,7 +38,7 @@ export function AddressItem({
     disableLinkIcon,
 }: AddressItemProps) {
     const { classes } = useStyles()
-    const { Others } = useWeb3State(socialAddress?.networkSupporterPluginID)
+    const { Others } = useWeb3State(socialAddress?.pluginID)
 
     if (!socialAddress) return null
 
@@ -50,7 +50,7 @@ export function AddressItem({
                 <ReversedAddress
                     TypographyProps={TypographyProps}
                     address={socialAddress.address}
-                    pluginId={socialAddress.networkSupporterPluginID}
+                    pluginId={socialAddress.pluginID}
                 />
             ) : (
                 <Typography {...TypographyProps}>{socialAddress.label}</Typography>

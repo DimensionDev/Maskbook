@@ -1,4 +1,8 @@
+import { useCallback, useMemo, useState, useEffect } from 'react'
+import { useCopyToClipboard, useAsyncFn, useAsyncRetry, useUpdateEffect } from 'react-use'
+import { sortBy, last } from 'lodash-unified'
 import { useWeb3State } from '@masknet/web3-hooks-base'
+import { Icons } from '@masknet/icons'
 import { InjectedDialog, useSnackbarCallback } from '@masknet/shared'
 import {
     NextIDPlatform,
@@ -13,15 +17,11 @@ import { LoadingBase, makeStyles, useCustomSnackbar, ActionButton } from '@maskn
 import { isSameAddress, isGreaterThan } from '@masknet/web3-shared-base'
 import { DialogContent, DialogActions, Avatar, Typography } from '@mui/material'
 import { delay } from '@dimensiondev/kit'
-import { sortBy, last } from 'lodash-unified'
-import { useCopyToClipboard, useAsyncFn, useAsyncRetry, useUpdateEffect } from 'react-use'
-import { useCallback, useMemo, useState, useEffect } from 'react'
 import Services from '../../../extension/service.js'
 import { useProvedWallets } from '../hooks/useProvedWallets.js'
 import { useI18N } from '../locales/index.js'
 import { VerifyAlertLine } from './components/VerifyAlertLine.js'
 import { WalletsByNetwork } from './components/WalletsByNetwork.js'
-import { Icons } from '@masknet/icons'
 import { useTipsSetting } from '../hooks/useTipsSetting.js'
 import type { TipsSettingType } from '../types/index.js'
 import { MaskMessages } from '../../../utils/index.js'
@@ -128,7 +128,6 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
                 if (isGreaterThan(a.last_checked_at, z.last_checked_at)) {
                     return isSameAddress(z.identity, defaultAddress) ? 1 : -1
                 }
-
                 return isSameAddress(a.identity, defaultAddress) ? -1 : 1
             })
     }, [defaultAddress, bindingWallets, TipsSetting?.hiddenAddresses])

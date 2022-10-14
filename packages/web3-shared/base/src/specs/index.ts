@@ -116,18 +116,13 @@ export enum TransactionDescriptorType {
 export enum SocialAddressType {
     ADDRESS = 'ADDRESS',
     ENS = 'ENS',
-    UNS = 'UNS',
-    DNS = 'DNS',
     RSS3 = 'RSS3',
-    KV = 'KV',
-    GUN = 'GUN',
-    THE_GRAPH = 'THE_GRAPH',
-    TWITTER_BLUE = 'TWITTER_BLUE',
-    NEXT_ID = 'NEXT_ID',
     SOL = 'SOL',
-    CyberConnect = 'CYBER_CONNECT',
-    Leaderboard = 'ETH_LEADERBOARD',
-    Sybil = 'SYBIL',
+    KV = 'KV',
+    NEXT_ID = 'NEXT_ID',
+    CyberConnect = 'CyberConnect',
+    Leaderboard = '.eth Leaderboard',
+    Sybil = 'Sybil',
 }
 
 export enum StorageProviderType {
@@ -168,13 +163,17 @@ export interface SocialIdentity {
 
 export interface SocialAddress<PluginID> {
     /** The ID of a plugin that the address belongs to */
-    networkSupporterPluginID: PluginID
+    pluginID: PluginID
     /** The data source type */
     type: SocialAddressType
     /** The address in hex string */
     address: string
     /** A human readable address title */
     label: string
+}
+
+export interface SocialAccount extends Omit<SocialAddress<NetworkPluginID>, 'type'> {
+    supportedAddressTypes?: SocialAddressType[]
 }
 
 export type Price = {

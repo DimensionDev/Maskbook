@@ -27,7 +27,7 @@ import type {
     Web3EnableRequirement,
     Web3UI,
     Web3State,
-    SocialAddressType,
+    SocialAccount,
 } from '@masknet/web3-shared-base'
 import type { ChainId as ChainIdEVM, Transaction as TransactionEVM } from '@masknet/web3-shared-evm'
 import type { Emitter } from '@servie/events'
@@ -669,21 +669,10 @@ export namespace Plugin.SNSAdaptor {
         MirrorMenu = 'mirror-menu',
         MirrorEntry = 'mirror-entry',
     }
-    export interface TipsAccount {
-        pluginId: NetworkPluginID
-        address: string
-        name?: string
-        type?: SocialAddressType
-        /** Verified by NextId. */
-        verified?: boolean
-        /** From SNS profile */
-        isSocialAddress?: boolean
-        last_checked_at?: string
-    }
     export interface TipsRealmOptions {
         identity?: ProfileIdentifier
         slot: TipsSlot
-        tipsAccounts?: TipsAccount[]
+        accounts?: SocialAccount[]
         onStatusUpdate?(disabled: boolean): void
     }
     export interface TipsRealm {

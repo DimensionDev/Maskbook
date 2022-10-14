@@ -112,7 +112,7 @@ export function CollectionList({ socialAddress, persona, profile, gridProps = EM
         next: nextPage,
         error,
         retry: retryFetchCollectible,
-    } = useNonFungibleAssets(socialAddress.networkSupporterPluginID, undefined, { account })
+    } = useNonFungibleAssets(socialAddress.pluginID, undefined, { account })
 
     const { isHiddenAddress, hiddenList } = useWeb3ProfileHiddenSettings(
         profile?.identifier?.userId.toLowerCase(),
@@ -203,7 +203,7 @@ export function CollectionList({ socialAddress, persona, profile, gridProps = EM
                             </Box>
                         )}
                         <CollectibleList
-                            pluginID={socialAddress.networkSupporterPluginID}
+                            pluginID={socialAddress.pluginID}
                             retry={retryFetchCollectible}
                             collectibles={renderCollectibles}
                             loading={renderCollectibles.length === 0}

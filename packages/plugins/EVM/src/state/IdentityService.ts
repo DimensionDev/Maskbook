@@ -69,7 +69,7 @@ export class IdentityService extends IdentityServiceState {
     ): SocialAddress<NetworkPluginID.PLUGIN_EVM> | undefined {
         if (isValidAddress(address) && !isZeroAddress(address))
             return {
-                networkSupporterPluginID: NetworkPluginID.PLUGIN_EVM,
+                pluginID: NetworkPluginID.PLUGIN_EVM,
                 type,
                 label,
                 address,
@@ -114,12 +114,14 @@ export class IdentityService extends IdentityServiceState {
         const name = getENSName(nickname, bio)
         if (!name) return
 
-        return attemptUntil(
+        const address = await attemptUntil(
             [new ENS_Resolver(), new ChainbaseResolver()].map((resolver) => {
                 return async () => resolver.lookup(name)
             }),
             undefined,
         )
+        if (!address) return
+        return this.createSocialAddress(SocialAddressType.ENS, address, nickname)
     }
 
     /** Read a social address from MaskX */

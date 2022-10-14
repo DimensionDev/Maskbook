@@ -1,3 +1,5 @@
+import { noop } from 'lodash-unified'
+import { Plugin } from '@masknet/plugin-infra'
 import {
     createInjectHooksRenderer,
     PostInfo,
@@ -5,12 +7,10 @@ import {
     useActivatedPluginsSNSAdaptor,
     usePostInfoDetails,
 } from '@masknet/plugin-infra/content-script'
-import { Plugin } from '@masknet/plugin-infra'
-import { Flags } from '../../../../../shared/index.js'
-import { createReactRootShadowed } from '../../../../utils'
-import { noop } from 'lodash-unified'
 import { PluginIDContextProvider, useWeb3State } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
+import { Flags } from '../../../../../shared/index.js'
+import { createReactRootShadowed } from '../../../../utils'
 
 const ActionsRenderer = createInjectHooksRenderer(
     useActivatedPluginsSNSAdaptor.visibility.useNotMinimalMode,
@@ -28,16 +28,20 @@ export function PostActions() {
     return (
         <ActionsRenderer
             // In Mirror, then profile identifier is wallet address
-            tipsAccounts={[
+            accounts={[
                 {
-                    pluginId: NetworkPluginID.PLUGIN_EVM,
+                    pluginID: NetworkPluginID.PLUGIN_EVM,
                     address: identifier.userId,
-                    name: nickname ? `(${nickname}) ${Others?.formatAddress(identifier.userId, 4)}` : identifier.userId,
+                    label: nickname
+                        ? `(${nickname}) ${Others?.formatAddress(identifier.userId, 4)}`
+                        : identifier.userId,
                 },
                 ...(coAuthors?.map((x) => ({
-                    pluginId: NetworkPluginID.PLUGIN_EVM,
+                    pluginID: NetworkPluginID.PLUGIN_EVM,
                     address: x.author.userId,
-                    name: x.nickname ? `(${x.nickname}) ${Others?.formatAddress(x.author.userId, 4)}` : x.author.userId,
+                    label: x.nickname
+                        ? `(${x.nickname}) ${Others?.formatAddress(x.author.userId, 4)}`
+                        : x.author.userId,
                 })) ?? []),
             ]}
             identity={identifier}

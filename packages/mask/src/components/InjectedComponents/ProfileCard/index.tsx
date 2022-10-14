@@ -104,7 +104,7 @@ export const ProfileCard: FC<Props> = ({ identity, ...rest }) => {
 
     const availableSocialAddressList = useMemo(() => {
         return uniqBy(
-            socialAddressList.filter((x) => x.networkSupporterPluginID === NetworkPluginID.PLUGIN_EVM),
+            socialAddressList.filter((x) => x.pluginID === NetworkPluginID.PLUGIN_EVM),
             (x) => x.address.toLowerCase(),
         )
     }, [socialAddressList])

@@ -22,7 +22,7 @@ export class IdentityService extends IdentityServiceState {
         return [
             address
                 ? {
-                      networkSupporterPluginID: NetworkPluginID.PLUGIN_FLOW,
+                      pluginID: NetworkPluginID.PLUGIN_FLOW,
                       type: SocialAddressType.ADDRESS,
                       label: address,
                       address,
