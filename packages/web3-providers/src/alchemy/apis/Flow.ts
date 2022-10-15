@@ -10,11 +10,10 @@ import {
 } from '@masknet/web3-shared-base'
 import { ChainId, getContractAddress, SchemaType } from '@masknet/web3-shared-flow'
 import type { NonFungibleTokenAPI } from '../../types/index.js'
-import { fetchJSON } from '../../helpers.js'
+import { fetchJSON, getNFTName } from '../../helpers.js'
 import { Alchemy_FLOW_NetworkMap, FILTER_WORDS } from '../constants.js'
 import type { AlchemyNFT_FLOW, AlchemyResponse_FLOW, AlchemyResponse_FLOW_Metadata } from '../types.js'
 import { formatAlchemyTokenId, formatAlchemyTokenAddress } from '../helpers.js'
-import { first } from 'lodash-unified'
 
 function createNonFungibleTokenImageURL(asset: AlchemyNFT_FLOW | AlchemyResponse_FLOW_Metadata) {
     return (
@@ -38,7 +37,7 @@ function createNonFungibleToken(chainId: ChainId, asset: AlchemyNFT_FLOW): NonFu
         address,
         metadata: {
             chainId,
-            name: first((asset?.contract?.name ?? '').split('#')) ?? '',
+            name: getNFTName(asset?.contract?.name),
             symbol: '',
             description: asset.description,
             imageURL: createNonFungibleTokenImageURL(asset),
@@ -71,7 +70,7 @@ function createNonFungibleAsset(
         address,
         metadata: {
             chainId,
-            name: (first(metadata.contract?.name.split('#')) ?? '').replace(` ${tokenId}`, ''),
+            name: getNFTName(metadata.contract?.name, tokenId),
             symbol: '',
             description: metadata.description,
             imageURL: createNonFungibleTokenImageURL(metadata),

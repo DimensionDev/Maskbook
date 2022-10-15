@@ -1,5 +1,5 @@
 import urlcat from 'urlcat'
-import { first, uniqBy } from 'lodash-unified'
+import { uniqBy } from 'lodash-unified'
 import BigNumber from 'bignumber.js'
 import getUnixTime from 'date-fns/getUnixTime'
 import { EMPTY_LIST } from '@masknet/shared-base'
@@ -38,7 +38,7 @@ import {
 } from './types.js'
 import { getOrderUSDPrice } from './utils.js'
 import { OPENSEA_ACCOUNT_URL, OPENSEA_API_URL } from './constants.js'
-import { resolveNonFungibleTokenEventActivityType, getPaymentToken } from '../helpers.js'
+import { resolveNonFungibleTokenEventActivityType, getPaymentToken, getNFTName } from '../helpers.js'
 
 async function fetchFromOpenSea<T>(url: string, chainId: ChainId, init?: RequestInit) {
     if (![ChainId.Mainnet, ChainId.Rinkeby, ChainId.Matic].includes(chainId)) return
@@ -91,7 +91,7 @@ function createNFTToken(chainId: ChainId, asset: OpenSeaAssetResponse): NonFungi
         address: asset.token_address ?? asset.asset_contract.address,
         metadata: {
             chainId,
-            name: (first((asset.name ?? asset.collection.name).split('#')) ?? '').replace(` ${asset.token_id}`, ''),
+            name: getNFTName(asset.name ?? asset.collection.name, asset.token_id),
             symbol: asset.asset_contract.symbol,
             description: asset.description,
             imageURL:

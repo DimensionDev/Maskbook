@@ -24,7 +24,7 @@ import type {
     TokenActivity,
     WalletOffer,
 } from './types.js'
-import { first } from 'lodash-unified'
+import { getNFTName } from '../helpers.js'
 
 async function fetchFromMagicEden<T>(chainId: ChainId, path: string) {
     if (chainId !== ChainId.Mainnet) return
@@ -55,7 +55,7 @@ function createNFTToken(
         address: token.mintAddress,
         metadata: {
             chainId,
-            name: first(token.name.split('#')) ?? '',
+            name: getNFTName(token.name),
             symbol: collection.symbol,
             description: collection.description,
             imageURL: token.image || token.animationUrl,
@@ -169,7 +169,7 @@ export class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
                 address: token.mintAddress,
                 metadata: {
                     chainId,
-                    name: first(token?.title.split('#')) ?? '',
+                    name: getNFTName(token?.title),
                     symbol: '',
                     imageURL: resolveIPFS_URL(token.img),
                     mediaURL: resolveIPFS_URL(token.img),

@@ -13,8 +13,7 @@ import {
 } from '@masknet/web3-shared-base'
 import { NFTSCAN_BASE_SOLANA, NFTSCAN_URL } from '../constants.js'
 import type { Solana } from '../types/index.js'
-import { resolveNonFungibleTokenEventActivityType, getJSON } from '../../helpers.js'
-import { first } from 'lodash-unified'
+import { resolveNonFungibleTokenEventActivityType, getJSON, getNFTName } from '../../helpers.js'
 
 export function createPermalink(chainId: ChainId, address?: string) {
     if (!address) return
@@ -82,7 +81,7 @@ export function createNonFungibleAsset(chainId: ChainId, asset: Solana.Asset): N
             : undefined,
         metadata: {
             chainId,
-            name: first(name.split('#')) ?? '',
+            name: getNFTName(name),
             symbol,
             description,
             imageURL: mediaURL,
