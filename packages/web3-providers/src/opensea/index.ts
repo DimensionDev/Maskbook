@@ -1,5 +1,5 @@
 import urlcat from 'urlcat'
-import { uniqBy } from 'lodash-unified'
+import { first, uniqBy } from 'lodash-unified'
 import BigNumber from 'bignumber.js'
 import getUnixTime from 'date-fns/getUnixTime'
 import { EMPTY_LIST } from '@masknet/shared-base'
@@ -91,7 +91,7 @@ function createNFTToken(chainId: ChainId, asset: OpenSeaAssetResponse): NonFungi
         address: asset.token_address ?? asset.asset_contract.address,
         metadata: {
             chainId,
-            name: asset.name ?? asset.collection.name,
+            name: (first((asset.name ?? asset.collection.name).split('#')) ?? '').replace(` ${asset.token_id}`, ''),
             symbol: asset.asset_contract.symbol,
             description: asset.description,
             imageURL:

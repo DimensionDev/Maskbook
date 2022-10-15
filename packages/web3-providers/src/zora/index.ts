@@ -33,6 +33,7 @@ import type { NonFungibleTokenAPI } from '../types/index.js'
 import { GetCollectionsByKeywordQuery, GetEventsQuery, GetTokenQuery } from './queries.js'
 import { ZORA_MAINNET_GRAPHQL_URL } from './constants.js'
 import type { Variables } from 'graphql-request/dist/types'
+import { first } from 'lodash-unified'
 
 export class ZoraAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
     private client = new GraphQLClient(ZORA_MAINNET_GRAPHQL_URL)
@@ -77,6 +78,9 @@ export class ZoraAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType
             },
             metadata: {
                 ...shared,
+                name: (
+                    first((token.name ?? token.tokenContract?.name ?? token.collectionName ?? '').split('#')) ?? ''
+                ).replace(` ${token.tokenId}`, ''),
             },
             traits:
                 token.attributes

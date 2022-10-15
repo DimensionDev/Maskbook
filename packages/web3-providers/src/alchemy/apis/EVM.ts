@@ -56,7 +56,7 @@ function createNonFungibleToken(
         link: createNonFungibleTokenLink(chainId, contractAddress, tokenId),
         metadata: {
             chainId,
-            name: asset.metadata.name ?? asset.title,
+            name: first((asset.metadata.name ?? asset.title)?.split('#')) ?? '',
             description: asset.metadata.description || asset.description,
             imageURL: resolveResourceURL(imageURL),
             mediaURL: resolveResourceURL(mediaURL),
@@ -96,10 +96,15 @@ function createNonFungibleAsset(
         address: metaDataResponse.contract?.address,
         metadata: {
             chainId,
-            name:
-                contractMetadataResponse?.contractMetadata.name ??
-                metaDataResponse.metadata?.name ??
-                metaDataResponse.title,
+            name: (
+                first(
+                    (
+                        contractMetadataResponse?.contractMetadata.name ??
+                        metaDataResponse.metadata?.name ??
+                        metaDataResponse.title
+                    ).split('#'),
+                ) ?? ''
+            ).replace(` ${tokenId}`, ''),
             symbol: contractMetadataResponse?.contractMetadata?.symbol ?? '',
             description: metaDataResponse.description,
             imageURL:

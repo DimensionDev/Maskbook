@@ -118,7 +118,7 @@ export class ZerionNonFungibleTokenAPI implements NonFungibleTokenAPI.Provider<C
             },
             metadata: {
                 chainId,
-                name: first(nft.asset.name.split('#')) ?? '',
+                name: (first(nft.asset.name.split('#')) ?? '').replace(` ${nft.asset.token_id}`, ''),
                 symbol: nft.asset.symbol,
                 imageURL: nft.asset.preview.url,
                 mediaURL: nft.asset.detail.url,

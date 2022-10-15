@@ -130,8 +130,9 @@ export function createNonFungibleAsset(
             : undefined,
         metadata: {
             chainId,
-            name:
-                first([payload?.name, asset.name, contractName].find((x) => x && !x.startsWith('#'))?.split('#')) ?? '',
+            name: (
+                first([payload?.name, asset.name, contractName].find((x) => x && !x.startsWith('#'))?.split('#')) ?? ''
+            ).replace(` ${asset.token_id}`, ''),
             symbol,
             description,
             imageURL: mediaURL,

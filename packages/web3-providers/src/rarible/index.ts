@@ -70,7 +70,7 @@ function createAsset(chainId: ChainId, asset: RaribleNFTItemMapResponse): NonFun
         traits: asset?.meta?.attributes.map(({ key, value }) => ({ type: key, value })) ?? [],
         metadata: {
             chainId,
-            name: asset.meta?.name ?? '',
+            name: (first((asset.meta?.name ?? '').split('#')) ?? '').replace(` ${asset.tokenId}`, ''),
             description: asset.meta?.description,
             imageURL: asset.meta?.content?.find((x) => x['@type'] === 'IMAGE' && x.representation === 'PREVIEW')?.url,
             mediaURL: asset.meta?.content?.find((x) => x['@type'] === 'IMAGE' && x.representation === 'ORIGINAL')?.url,

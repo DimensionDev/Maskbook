@@ -39,10 +39,9 @@ export const CollectibleItem = forwardRef<HTMLDivElement, CollectibleItemProps>(
     const { classes, cx } = useStyles()
     const { Others } = useWeb3State()
     const textRef = useRef<HTMLDivElement>(null)
-    const name = asset.contract?.name || asset.metadata?.name
-    const uiTokenId = Others?.formatTokenId(asset.tokenId, 4) ?? `#${asset.tokenId}`
+    const name = asset.metadata?.name || asset.contract?.name
+    const uiTokenId = asset.tokenId ? Others?.formatTokenId(asset.tokenId, 4) ?? `#${asset.tokenId}` : ''
     const title = name ? `${name} ${uiTokenId}` : asset.metadata?.name ?? ''
-
     const showTooltip = !!textRef.current && textRef.current.offsetWidth !== textRef.current.scrollWidth
 
     return (

@@ -14,6 +14,7 @@ import type { NonFungibleTokenAPI } from '../../types/index.js'
 import type { GetProgramAccountsResponse } from '../types.js'
 import { fetchJSON } from '../../helpers.js'
 import { requestRPC } from '../helpers.js'
+import { first } from 'lodash-unified'
 
 interface ExternalMetadata {
     name: string
@@ -83,7 +84,7 @@ async function getNonFungibleAssets(
             },
             metadata: {
                 chainId,
-                name: metadata.data.data.name,
+                name: first(metadata.data.data.name.split('#')) ?? '',
                 symbol: metadata.data.data.symbol,
                 description: externalMeta?.description,
                 mediaURL: externalMeta?.animation ?? externalMeta?.image ?? '',

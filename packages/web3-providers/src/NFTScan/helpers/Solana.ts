@@ -14,6 +14,7 @@ import {
 import { NFTSCAN_BASE_SOLANA, NFTSCAN_URL } from '../constants.js'
 import type { Solana } from '../types/index.js'
 import { resolveNonFungibleTokenEventActivityType, getJSON } from '../../helpers.js'
+import { first } from 'lodash-unified'
 
 export function createPermalink(chainId: ChainId, address?: string) {
     if (!address) return
@@ -81,7 +82,7 @@ export function createNonFungibleAsset(chainId: ChainId, asset: Solana.Asset): N
             : undefined,
         metadata: {
             chainId,
-            name,
+            name: first(name.split('#')) ?? '',
             symbol,
             description,
             imageURL: mediaURL,
