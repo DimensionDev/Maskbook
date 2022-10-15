@@ -19,7 +19,7 @@ import {
 import { ChainId, createContract, getRPCConstants, SchemaType, WNATIVE } from '@masknet/web3-shared-evm'
 import { NFTSCAN_BASE, NFTSCAN_LOGO_BASE, NFTSCAN_URL } from '../constants.js'
 import type { EVM } from '../types/EVM.js'
-import { getJSON, resolveNonFungibleTokenEventActivityType, getPaymentToken } from '../../helpers.js'
+import { getJSON, resolveNonFungibleTokenEventActivityType, getPaymentToken, getNFTName } from '../../helpers.js'
 
 type NFTScanChainId = ChainId.Mainnet | ChainId.Matic | ChainId.BSC | ChainId.Arbitrum | ChainId.Optimism
 
@@ -130,9 +130,10 @@ export function createNonFungibleAsset(
             : undefined,
         metadata: {
             chainId,
-            name: (
-                first([payload?.name, asset.name, contractName].find((x) => x && !x.startsWith('#'))?.split('#')) ?? ''
-            ).replace(` ${asset.token_id}`, ''),
+            name: getNFTName(
+                [payload?.name, asset.name, contractName].find((x) => x && !x.startsWith('#')),
+                asset.token_id,
+            ),
             symbol,
             description,
             imageURL: mediaURL,
