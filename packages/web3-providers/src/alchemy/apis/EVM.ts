@@ -12,7 +12,7 @@ import {
 } from '@masknet/web3-shared-base'
 import { ChainId, ChainId as ChainId_EVM, SchemaType as SchemaType_EVM } from '@masknet/web3-shared-evm'
 import type { NonFungibleTokenAPI } from '../../types/index.js'
-import { fetchJSON } from '../../helpers.js'
+import { fetchJSON, getNFTName } from '../../helpers.js'
 import { Alchemy_EVM_NetworkMap } from '../constants.js'
 import type {
     AlchemyNFT_EVM,
@@ -56,7 +56,7 @@ function createNonFungibleToken(
         link: createNonFungibleTokenLink(chainId, contractAddress, tokenId),
         metadata: {
             chainId,
-            name: asset.metadata.name ?? asset.title,
+            name: getNFTName(asset.metadata.name ?? asset.title),
             description: asset.metadata.description || asset.description,
             imageURL: resolveResourceURL(imageURL),
             mediaURL: resolveResourceURL(mediaURL),
@@ -96,10 +96,12 @@ function createNonFungibleAsset(
         address: metaDataResponse.contract?.address,
         metadata: {
             chainId,
-            name:
+            name: getNFTName(
                 contractMetadataResponse?.contractMetadata.name ??
-                metaDataResponse.metadata?.name ??
-                metaDataResponse.title,
+                    metaDataResponse.metadata?.name ??
+                    metaDataResponse.title,
+                tokenId,
+            ),
             symbol: contractMetadataResponse?.contractMetadata?.symbol ?? '',
             description: metaDataResponse.description,
             imageURL:

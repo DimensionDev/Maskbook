@@ -18,6 +18,7 @@ import {
     WNATIVE,
 } from '@masknet/web3-shared-evm'
 import { FungibleAsset, isSameAddress, ActivityType } from '@masknet/web3-shared-base'
+import { first } from 'lodash-unified'
 
 export async function fetchJSON<T = unknown>(
     requestInfo: string,
@@ -72,4 +73,10 @@ export const resolveNonFungibleTokenEventActivityType = (type?: string) => {
     if (['list'].includes(type_)) return ActivityType.List
     if (['sale'].includes(type_)) return ActivityType.Sale
     return ActivityType.Transfer
+}
+
+export function getNFTName(name?: string, tokenId?: string) {
+    if (!name) return ''
+    const _name = (first(name.split('#')) ?? '').trim()
+    return tokenId ? _name.replace(` ${tokenId}`, '').trim() : _name
 }
