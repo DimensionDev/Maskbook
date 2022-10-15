@@ -77,6 +77,6 @@ export const resolveNonFungibleTokenEventActivityType = (type?: string) => {
 
 export function getNFTName(name?: string, tokenId?: string) {
     if (!name) return ''
-    const _name = first(name.split('#')) ?? ''
-    return tokenId ? _name.replace(` ${tokenId}`, '') : _name
+    const _name = (first(name.split('#')) ?? '').trim()
+    return tokenId ? _name.replace(` ${tokenId}`, '').trim() : _name
 }
