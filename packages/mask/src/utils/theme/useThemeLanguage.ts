@@ -1,9 +1,9 @@
 // ! This file is used during SSR. DO NOT import new files that does not work in SSR
 
+import { startTransition, useEffect } from 'react'
 import { LanguageOptions, SupportedLanguages } from '@masknet/public-api'
 import { jaJP, koKR, zhTW, zhCN, enUS, Localization } from '@mui/material/locale/index'
 import { updateLanguage } from '@masknet/shared-base'
-import { startTransition, useEffect } from 'react'
 
 const langs: Record<SupportedLanguages, Localization> = {
     [SupportedLanguages.enUS]: enUS,

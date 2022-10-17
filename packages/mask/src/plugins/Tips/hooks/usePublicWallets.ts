@@ -32,7 +32,7 @@ export function usePublicWallets(personaPubkey: string | undefined): TipAccount[
         if (!configuredTipsWallets) return null
 
         const tipWallets = first(
-            proofs.map((x) => x.content[PluginId.Tips]?.filter((y) => y.platform === NextIDPlatform.Ethereum)),
+            proofs.map((x) => x.content[PluginId.Tips]?.filter?.((y) => y.platform === NextIDPlatform.Ethereum)),
         )
         if (!tipWallets) return null
         return tipWallets
