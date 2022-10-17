@@ -12,7 +12,7 @@ export function useTipsAccounts(identity: IdentityResolved | undefined, personaP
     const { value: socialAccounts = EMPTY_LIST } = useSocialAccountsAll(identity)
     const publicWallets = usePublicWallets(identity)
     return useMemo(() => {
-        const list = uniqBy([...socialAccounts, ...publicWallets], (x) => x.address)
+        const list = uniqBy([...socialAccounts, ...publicWallets], (x) => x.address.toLowerCase())
         return list.filter((x) => !TipsSetting?.hiddenAddresses?.some((y) => isSameAddress(y, x.address)))
     }, [socialAccounts, publicWallets, TipsSetting?.hiddenAddresses])
 }
