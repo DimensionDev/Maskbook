@@ -20,7 +20,7 @@ export function getBackupPreviewInfo(json: NormalizedBackup.Data): BackupPreview
     } catch {}
 
     return {
-        personas: json.personas.size,
+        personas: [...json.personas.values()].filter((persona) => persona.linkedProfiles.size === 0).length,
         accounts: sumBy([...json.personas.values()], (persona) => persona.linkedProfiles.size),
         posts: json.posts.size,
         contacts: json.profiles.size,
