@@ -28,6 +28,5 @@
     "__plugin_name": "File Service",
     "__plugin_description": "Decentralized file storage, permanently. Upload and share files to your Mask friends on top of Arweave Network.",
     "provider_arweave": "Arweave",
-    "provider_ipfs": "IPFS",
-    "provider_swarm": "Swarm"
+    "provider_ipfs": "IPFS"
 }
