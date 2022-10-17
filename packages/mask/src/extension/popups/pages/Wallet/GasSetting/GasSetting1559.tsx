@@ -6,7 +6,7 @@ import { Controller, useForm } from 'react-hook-form'
 import BigNumber from 'bignumber.js'
 import { isEmpty } from 'lodash-unified'
 import { makeStyles } from '@masknet/theme'
-import { formatGweiToEther, formatGweiToWei, formatWeiToEther, formatWeiToGwei } from '@masknet/web3-shared-evm'
+import { formatGweiToWei, formatWeiToEther, formatWeiToGwei } from '@masknet/web3-shared-evm'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages.js'
 import { useI18N } from '../../../../../utils/index.js'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -385,10 +385,13 @@ export const GasSetting1559 = memo(() => {
                     </Typography>
                     <Typography component="span" className={classes.price}>
                         {t('popups_wallet_gas_fee_settings_usd', {
-                            usd: formatGweiToEther(Number(maxPriorityFeePerGas) ?? 0)
-                                .times(nativeTokenPrice)
-                                .times(gasLimit)
-                                .toPrecision(3),
+                            usd: formatCurrency(
+                                formatWeiToEther(Number(maxPriorityFeePerGas) ?? 0)
+                                    .times(nativeTokenPrice)
+                                    .times(gasLimit),
+                                'USD',
+                                { boundaries: { min: 0.01 } },
+                            ),
                         })}
                     </Typography>
                 </Typography>
@@ -417,10 +420,13 @@ export const GasSetting1559 = memo(() => {
                     </Typography>
                     <Typography component="span" className={classes.price}>
                         {t('popups_wallet_gas_fee_settings_usd', {
-                            usd: formatGweiToEther(Number(maxFeePerGas) ?? 0)
-                                .times(nativeTokenPrice)
-                                .times(gasLimit)
-                                .toPrecision(3),
+                            usd: formatCurrency(
+                                formatWeiToEther(Number(maxFeePerGas) ?? 0)
+                                    .times(nativeTokenPrice)
+                                    .times(gasLimit),
+                                'USD',
+                                { boundaries: { min: 0.01 } },
+                            ),
                         })}
                     </Typography>
                 </Typography>
