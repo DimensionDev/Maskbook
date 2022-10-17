@@ -1,14 +1,14 @@
-import { memo, ReactNode } from 'react'
-import { makeStyles } from '@masknet/theme'
-import { InjectedDialog } from '../../../contexts/index.js'
-import { useSharedI18N } from '../../../locales/index.js'
-import { Box, Card, DialogContent, Link, Typography } from '@mui/material'
-import { CollectionType, RSS3BaseAPI } from '@masknet/web3-providers'
 import { Icons } from '@masknet/icons'
-import { ChainId, explorerResolver, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
 import { NFTCardStyledAssetPlayer } from '@masknet/shared'
 import { EMPTY_LIST } from '@masknet/shared-base'
-import formatDistanceToNow from 'date-fns/formatDistanceToNow'
+import { makeStyles } from '@masknet/theme'
+import { CollectionType, RSS3BaseAPI } from '@masknet/web3-providers'
+import { ChainId, explorerResolver } from '@masknet/web3-shared-evm'
+import { Box, Card, DialogContent, Link, Typography } from '@mui/material'
+import formatDateTime from 'date-fns/format'
+import { memo, ReactNode } from 'react'
+import { InjectedDialog } from '../../../contexts/index.js'
+import { useSharedI18N } from '../../../locales/index.js'
 
 interface CollectionDetailCardProps {
     img?: string
@@ -220,39 +220,43 @@ export const CollectionDetailCard = memo<CollectionDetailCardProps>(
                                 {t.contributions()}
                             </Typography>
                             <Typography fontSize="16px" fontWeight={700} marginBottom="16px">
-                                {1}
+                                1
                             </Typography>
                             <div className={classes.txItem}>
                                 <Typography className={classes.donationAmount}>
                                     {tokenAmount} {tokenSymbol}
                                 </Typography>
-                                <div className={classes.dayBox}>
-                                    {formatDistanceToNow(new Date(time ?? 0))} {t.ago()}
-                                    <Link
-                                        className={classes.linkBox}
-                                        target="_blank"
-                                        href={explorerResolver.transactionLink(ChainId.Mainnet, hash ?? ZERO_ADDRESS)}>
-                                        <Icons.LinkOut size={18} className={classes.linkOutIcon} />
-                                    </Link>
-                                </div>
+                                {time ? (
+                                    <div className={classes.dayBox}>
+                                        {formatDateTime(new Date(time), 'yyyy-MM-dd HH:mm:ss')}
+                                        {hash ? (
+                                            <Link
+                                                className={classes.linkBox}
+                                                target="_blank"
+                                                href={explorerResolver.transactionLink(ChainId.Mainnet, hash)}>
+                                                <Icons.LinkOut size={18} className={classes.linkOutIcon} />
+                                            </Link>
+                                        ) : null}
+                                    </div>
+                                ) : null}
                             </div>
                         </>
                     ) : null}
-                    {attributes.length > 0 && (
-                        <Typography fontSize="16px" fontWeight={700}>
-                            {t.properties()}
-                        </Typography>
-                    )}
-                    {attributes.length > 0 && (
-                        <Box className={classes.traitsBox}>
-                            {attributes.map((trait) => (
-                                <div key={trait.trait_type} className={classes.traitItem}>
-                                    <Typography className={classes.secondText}>{trait.trait_type}</Typography>
-                                    <Typography className={classes.traitValue}>{trait.value}</Typography>
-                                </div>
-                            ))}
-                        </Box>
-                    )}
+                    {attributes.length ? (
+                        <>
+                            <Typography fontSize="16px" fontWeight={700}>
+                                {t.properties()}
+                            </Typography>
+                            <Box className={classes.traitsBox}>
+                                {attributes.map((trait) => (
+                                    <div key={trait.trait_type} className={classes.traitItem}>
+                                        <Typography className={classes.secondText}>{trait.trait_type}</Typography>
+                                        <Typography className={classes.traitValue}>{trait.value}</Typography>
+                                    </div>
+                                ))}
+                            </Box>
+                        </>
+                    ) : null}
                 </DialogContent>
             </InjectedDialog>
         )

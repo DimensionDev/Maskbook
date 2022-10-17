@@ -4,7 +4,7 @@ import { RSS3BaseAPI } from '@masknet/web3-providers'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { ZERO_ADDRESS } from '@masknet/web3-shared-evm'
 import { Box, BoxProps, Card, Typography } from '@mui/material'
-import formatDistanceToNow from 'date-fns/formatDistanceToNow'
+import formatDateTime from 'date-fns/format'
 import { memo, useMemo } from 'react'
 import { useI18N } from '../../locales/index.js'
 import type { RSS3Feed } from '../../types.js'
@@ -169,8 +169,9 @@ export const FeedCard = memo(({ feed, address, onSelect, className, ...rest }: F
                 RSS3BaseAPI.Tag.Transaction,
                 RSS3BaseAPI.Type.Transfer
             >
+            const standard = action.metadata?.standard
             const logo = action.metadata?.image
-            return logo ? (
+            return logo && standard !== 'ERC-20' ? (
                 <Card className={classes.img}>
                     <AssetPreviewer
                         url={logo}
@@ -194,7 +195,7 @@ export const FeedCard = memo(({ feed, address, onSelect, className, ...rest }: F
                         <ReversedAddress TypographyProps={{ display: 'inline' }} address={address!} /> {feedAction}
                     </span>{' '}
                     <span className={classes.time}>
-                        {formatDistanceToNow(new Date(feed.timestamp))} {t.ago()}
+                        {formatDateTime(new Date(feed.timestamp), 'yyyy-MM-dd HH:mm:ss')}
                     </span>
                 </Typography>
                 <Box className={classes.collection}>
@@ -204,7 +205,7 @@ export const FeedCard = memo(({ feed, address, onSelect, className, ...rest }: F
                     <Typography className={classes.summary}>{normalizedFeed.description}</Typography>
                 </Box>
             </div>
-            <Box className={classes.media}>{logo}</Box>
+            {logo ? <Box className={classes.media}>{logo}</Box> : null}
         </Box>
     )
 })

@@ -90,7 +90,7 @@ export namespace RSS3BaseAPI {
         collection?: string
         description?: string
         contract_address: string
-        standard: 'ERC-20' | 'Native' | string
+        standard: 'ERC-20' | 'Native' | 'ERC-721' | string
     }
     interface SwapMetadata {
         /**
