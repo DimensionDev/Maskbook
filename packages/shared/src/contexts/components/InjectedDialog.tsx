@@ -142,6 +142,7 @@ export function InjectedDialog(props: InjectedDialogProps) {
 
     const closeBothCompositionDialog = useCallback(() => {
         if (isOpenFromApplicationBoard) {
+            CrossIsolationMessages.events.compositionDialogEvent.sendToLocal({ open: false, reason: 'popup' })
             CrossIsolationMessages.events.compositionDialogEvent.sendToLocal({ open: false, reason: 'timeline' })
         }
         onClose?.()
