@@ -1,3 +1,4 @@
+/* cspell:disable */
 import { attemptUntil, fetchImageViaDOM } from '@masknet/web3-shared-base'
 
 const R2D2_ROOT_URL = 'r2d2.to'
@@ -38,15 +39,13 @@ const HOTFIX_RPC_URLS = [
 const { fetch: originalFetch } = globalThis
 
 async function squashedFetch(request: RequestInfo, init?: RequestInit): Promise<Response> {
+    console.log('DEBUG: squashedFetch')
+    console.log(request)
+
     const cache = await caches.open('r2d2')
     const hit = await cache.match(request)
     if (hit) {
         console.log('DEBUG: hit')
-        console.log({
-            request,
-            hit,
-        })
-        return hit
     }
 
     const response = await originalFetch(request, init)
