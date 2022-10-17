@@ -1,33 +1,64 @@
 import { attemptUntil, fetchImageViaDOM } from '@masknet/web3-shared-base'
 
-/* cspell:disable */
 const R2D2_ROOT_URL = 'r2d2.to'
 
 const INFURA_IPFS_ROOT_URL = 'ipfs.infura.io'
 
 const HOTFIX_RPC_URLS = [
-    'infura.io',
+    'mainnet.infura.io',
+    'ropsten.infura.io',
+    'rinkeby.infura.io',
+    'kovan.infura.io',
+    'goerli.infura.io',
+    'polygon-mainnet.infura.io',
+    'polygon-mumbai.infura.io',
     'quiknode.pro',
     'binance.org',
-    'aurora.dev',
-    'onfinality.io',
-    'arbitrum.io',
-    'celo.org',
-    'ftm.tools',
-    'gnosischain.com',
-    'avax.network',
-    'optimism.io',
+    'polygon-rpc.com',
+    'mainnet.aurora.dev',
+    'testnet.aurora.dev',
+    'astar.api.onfinality.io',
+    'rpc.astar.network',
+    'arb1.arbitrum.io',
+    'rinkeby.arbitrum.io',
+    'forno.celo.org',
+    'rpc.ftm.tools',
+    'rpc.gnosischain.com',
+    'api.avax.network',
+    'mainnet.optimism.io',
+    'kovan.optimism.io',
+    'goerli.optimism.io',
     'harmony.one',
     'hmny.io',
-    'hermesdefi.io',
-    'pokt.network',
-    'confluxrpc.com',
+    'rpc.hermesdefi.io',
+    'gateway.pokt.network',
+    'evm.confluxrpc.com',
 ]
 
 const { fetch: originalFetch } = globalThis
 
-async function squashedFetch(input: RequestInfo, init?: RequestInit): Promise<Response> {
-    return new Response()
+async function squashedFetch(request: RequestInfo, init?: RequestInit): Promise<Response> {
+    const cache = await caches.open('r2d2')
+    const hit = await cache.match(request)
+    if (hit) {
+        console.log('DEBUG: hit')
+        console.log({
+            request,
+            hit,
+        })
+        return hit
+    }
+
+    const response = await originalFetch(request, init)
+    if (response.ok && response.status === 200) {
+        await cache.put(request, response)
+
+        // keep cache for 1s
+        setTimeout(async () => {
+            await cache.delete(request)
+        }, 1000)
+    }
+    return response
 }
 
 /**
