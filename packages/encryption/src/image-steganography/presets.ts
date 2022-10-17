@@ -43,7 +43,7 @@ const libV2AlgrDefaults: Omit<EncodeOptions, 'text'> = {
 
 const Preset2021: Preset = {
     type: 'string',
-    description: 'the preset we used for payload V37',
+    description: 'the preset we used for payload V38',
     width: 1200,
     height: 681,
     mask: new URL('./masks/mask-v2.png', import.meta.url).toString(),
@@ -52,7 +52,7 @@ const Preset2021: Preset = {
 
 const Preset2022: Preset = {
     type: 'raw',
-    description: 'the preset we used for payload V38',
+    description: 'the preset we used for payload V37',
     width: 1200,
     height: 671,
     mask: null,
