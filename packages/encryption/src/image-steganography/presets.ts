@@ -63,7 +63,7 @@ const dimensionPreset: readonly Preset[] = [
     Preset2021,
     Preset2022,
     {
-        type: 'raw',
+        type: 'string',
         description: 'legacy post',
         width: 1024,
         height: 1240,
@@ -71,7 +71,7 @@ const dimensionPreset: readonly Preset[] = [
         options: libV1AlgrDefaults,
     },
     {
-        type: 'raw',
+        type: 'string',
         description: 'legacy post',
         width: 1200,
         height: 680,
@@ -82,7 +82,7 @@ const dimensionPreset: readonly Preset[] = [
         },
     },
     {
-        type: 'raw',
+        type: 'string',
         description: 'used in event election 2020',
         width: 1000,
         height: 558,
@@ -90,7 +90,7 @@ const dimensionPreset: readonly Preset[] = [
         options: libV1AlgrDefaults,
     },
     {
-        type: 'raw',
+        type: 'string',
         description: 'old NFT',
         width: 1000,
         height: 560,
