@@ -9,7 +9,6 @@ import {
     usePluginI18NField,
 } from '@masknet/plugin-infra/content-script'
 import { useAvailablePlugins } from '@masknet/plugin-infra'
-import { useHiddenAddressSetting } from '@masknet/web3-hooks-base'
 import { AddressItem, GrantPermissions, PluginCardFrameMini, useSocialAddressListBySettings } from '@masknet/shared'
 import { CrossIsolationMessages, EMPTY_LIST, NextIDPlatform, PluginID, NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles, MaskLightTheme, MaskTabList, ShadowRootMenu, useStylesExtends, useTabs } from '@masknet/theme'
@@ -161,11 +160,6 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         error: loadSocialAddressListError,
         retry: retrySocialAddress,
     } = useSocialAddressListBySettings(currentVisitingSocialIdentity, undefined, sorter)
-
-    const { value: hiddenAddress } = useHiddenAddressSetting(
-        PluginID.Web3Profile,
-        personaStatus?.currentPersona?.identifier?.publicKeyAsHex,
-    )
 
     useEffect(() => {
         return MaskMessages.events.ownProofChanged.on(() => {

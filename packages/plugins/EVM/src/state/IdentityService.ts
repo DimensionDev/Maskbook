@@ -121,7 +121,7 @@ export class IdentityService extends IdentityServiceState {
             undefined,
         )
         if (!address) return
-        return this.createSocialAddress(SocialAddressType.ENS, address, nickname)
+        return this.createSocialAddress(SocialAddressType.ENS, address, name)
     }
 
     /** Read a social address from MaskX */
