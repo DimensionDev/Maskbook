@@ -1,1 +1,1 @@
-export const COINGECKO_URL_BASE = 'https://api.coingecko.com/api/v3'
+export const COINGECKO_URL_BASE = 'https://coingecko-agent.r2d2.to/api/v3'
