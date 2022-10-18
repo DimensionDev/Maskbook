@@ -16,7 +16,7 @@ export async function getCoinsByKeyword(
         case DataProvider.CoinGecko:
             return CoinGeckoTrendingEVM.getCoinsByKeyword(chainId, keyword)
         case DataProvider.CoinMarketCap:
-            return CoinGeckoTrendingEVM.getCoinsByKeyword(chainId, keyword)
+            return CoinMarketCap.getCoinsByKeyword(chainId, keyword)
         case DataProvider.UniswapInfo:
             return UniSwap.getCoinsByKeyword(chainId, keyword)
         case DataProvider.NFTScan:
