@@ -5,9 +5,9 @@ import { defer } from '@dimensiondev/kit'
 import WalletConnect from '@walletconnect/client'
 import type { ITxData } from '@walletconnect/types'
 import { ChainId, chainResolver, EthereumMethodType, isValidAddress, ProviderType } from '@masknet/web3-shared-evm'
+import type { Account } from '@masknet/web3-shared-base'
 import { BaseProvider } from './Base.js'
 import type { EVM_Provider } from '../types.js'
-import type { Account } from '@masknet/web3-shared-base'
 import { SharedContextSettings } from '../../../settings/index.js'
 
 interface SessionPayload {

@@ -1,4 +1,4 @@
-import { first, method } from 'lodash-unified'
+import { first } from 'lodash-unified'
 import { AbiItem, numberToHex, toHex, toNumber } from 'web3-utils'
 import type { RequestArguments, SignedTransaction, TransactionReceipt } from 'web3-core'
 import { getSubscriptionCurrentValue, PartialRequired } from '@masknet/shared-base'
@@ -143,9 +143,9 @@ class Connection implements EVM_Connection {
                                                 : options.providerType
                                         ]
 
-                                    // make sure that the provider is connected before sending the transaction
                                     if (context.method === EthereumMethodType.ETH_SEND_TRANSACTION) {
-                                        await provider.switchChain(options.chainId)
+                                        // make sure that the provider is connected before sending the transaction
+                                        await this.Provider?.connect(options.chainId, options.providerType)
                                     }
 
                                     const web3Provider = await provider.createWeb3Provider({
