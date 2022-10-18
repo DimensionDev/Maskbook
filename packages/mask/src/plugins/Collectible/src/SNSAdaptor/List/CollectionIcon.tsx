@@ -41,7 +41,8 @@ export const CollectionIcon = memo<CollectionIconProps>(({ collection, onClick, 
     const { classes } = useStyles()
 
     const name = collection?.name ?? collection?.symbol ?? 'Unknown'
-    const fallback = <Icon className={classes.collectionImg} name={name} />
+    // CollectionIcon should not display a character
+    const fallback = <Icon className={classes.collectionImg} name={name} label="" />
     return (
         <Tooltip
             placement="right-end"
