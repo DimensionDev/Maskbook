@@ -190,7 +190,7 @@ export function useCurrentPersonaConnectStatus() {
             return {
                 action: openPersonListDialog,
                 currentPersona,
-                connected: false,
+                connected: true,
                 hasPersona: true,
             }
         }
