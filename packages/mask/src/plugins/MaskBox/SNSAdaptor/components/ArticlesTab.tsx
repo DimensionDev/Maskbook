@@ -16,9 +16,6 @@ const useStyles = makeStyles()((theme) => ({
         boxSizing: 'border-box',
         border: `solid 1px ${theme.palette.divider}`,
     },
-    footer: {
-        margin: theme.spacing(2.75, 0),
-    },
     hero: {
         display: 'flex',
         alignItems: 'center',
@@ -26,13 +23,6 @@ const useStyles = makeStyles()((theme) => ({
         width: '100%',
         height: 360,
         objectFit: 'scale-down',
-    },
-    name: {
-        whiteSpace: 'nowrap',
-        maxWidth: '50%',
-        display: 'inline-block',
-        overflow: 'hidden',
-        textOverflow: 'ellipsis',
     },
     icon: {
         color: theme.palette.mode === 'dark' ? 'rgb(255, 255, 255)' : 'rgb(15, 20, 25)',
