@@ -165,6 +165,9 @@ export function ConnectionContent(props: ConnectionContentProps) {
                             <Button size="small" onClick={() => onTransferCallback(EVM_ProviderType.WalletConnect)}>
                                 Transfer with WalletConnect
                             </Button>
+                            <Button size="small" onClick={() => onTransferCallback(EVM_ProviderType.Fortmatic)}>
+                                Transfer with Fortmatic
+                            </Button>
                         </TableCell>
                     </TableRow>
                     <TableRow>
