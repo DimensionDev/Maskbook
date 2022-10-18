@@ -1,4 +1,4 @@
-import { ImgHTMLAttributes, useState } from 'react'
+import { ImgHTMLAttributes, useEffect, useState } from 'react'
 import classNames from 'classnames'
 import { LoadingBase, makeStyles, useStylesExtends } from '@masknet/theme'
 import { Box, useTheme } from '@mui/material'
@@ -42,14 +42,23 @@ export interface ImageProps
         withClasses<'container' | 'fallbackImage' | 'imageLoading'> {
     fallback?: URL | string | JSX.Element
     disableSpinner?: boolean
+    setLoadedImageStatus?: (success: boolean) => void
 }
 
-export function Image({ fallback, disableSpinner, classes: externalClasses, onClick, ...rest }: ImageProps) {
+export function Image({
+    fallback,
+    disableSpinner,
+    classes: externalClasses,
+    onClick,
+    setLoadedImageStatus,
+    ...rest
+}: ImageProps) {
     const classes = useStylesExtends(useStyles(), { classes: externalClasses })
     const theme = useTheme()
     const [failed, setFailed] = useState(false)
 
     const { value: imageURL, loading: loadingImageURL } = useImageURL(rest.src)
+    useEffect(() => setLoadedImageStatus?.(!!imageURL), [imageURL])
 
     if (loadingImageURL && !disableSpinner) {
         return (

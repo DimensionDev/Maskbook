@@ -8,6 +8,7 @@ import { Box, Tooltip, useTheme } from '@mui/material'
 import { Image } from '@masknet/shared'
 import { mask_avatar_dark, mask_avatar_light } from '../constants.js'
 import { useWeb3State } from '@masknet/web3-hooks-base'
+import { useState } from 'react'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -77,7 +78,7 @@ export function NFTImage(props: NFTImageProps) {
     const { classes } = useStyles()
     const theme = useTheme()
     const { Others } = useWeb3State()
-
+    const [imageLoad, setImageLoad] = useState(false)
     const name = token.collection?.name || token.contract?.name
     const uiTokenId = Others?.formatTokenId(token.tokenId, 4) ?? `#${token.tokenId}`
     const title = name ? `${name} ${uiTokenId}` : token.metadata?.name ?? ''
@@ -103,8 +104,9 @@ export function NFTImage(props: NFTImageProps) {
                         classes.image,
                         isSameNFT(pluginId, token, selectedToken) ? classes.selected : '',
                     )}
+                    setLoadedImageStatus={setImageLoad}
                 />
-                {showBadge && isSameNFT(pluginId, token, selectedToken) ? (
+                {imageLoad && showBadge && isSameNFT(pluginId, token, selectedToken) ? (
                     <SelectedIcon className={classes.icon} />
                 ) : null}
             </Box>
