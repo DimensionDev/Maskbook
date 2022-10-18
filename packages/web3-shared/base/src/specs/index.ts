@@ -739,10 +739,10 @@ export interface TransactionChecker<ChainId, Transaction> {
 }
 
 export interface ConnectionOptions<ChainId, ProviderType, Transaction> {
-    /** Designate the sub-network id of the transaction. */
-    chainId?: ChainId
     /** Designate the signer of the transaction. */
     account?: string
+    /** Designate the sub-network id of the transaction. */
+    chainId?: ChainId
     /** Designate the provider to handle the transaction. */
     providerType?: ProviderType
     /** Fragments to merge into the transaction. */
