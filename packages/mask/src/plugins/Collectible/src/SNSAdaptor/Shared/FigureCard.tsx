@@ -82,8 +82,13 @@ export function FigureCard(props: FigureCardProps) {
                 </div>
             </div>
             <Typography className={timeline ? cx(classes.nameSm, classes.unset) : classes.nameSm}>
-                {asset.metadata?.name || asset.contract?.name || '-'}{' '}
-                {pluginID !== NetworkPluginID.PLUGIN_SOLANA ? Others?.formatTokenId(asset.tokenId) : null}
+                {asset.metadata?.name
+                    ? asset.metadata.name
+                    : asset.contract?.name
+                    ? `${asset.contract?.name} ${
+                          pluginID !== NetworkPluginID.PLUGIN_SOLANA ? Others?.formatTokenId(asset.tokenId) : null
+                      }`
+                    : '-'}
             </Typography>
             {!hideSubTitle && (
                 <div className={classes.nameLgBox}>

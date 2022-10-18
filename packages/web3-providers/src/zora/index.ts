@@ -28,7 +28,7 @@ import {
     TransferEventProperty,
     V3AskEventProperty,
 } from './types.js'
-import { getNFTName, resolveNonFungibleTokenEventActivityType } from '../helpers.js'
+import { getNFTAllName, resolveNonFungibleTokenEventActivityType } from '../helpers.js'
 import type { NonFungibleTokenAPI } from '../types/index.js'
 import { GetCollectionsByKeywordQuery, GetEventsQuery, GetTokenQuery } from './queries.js'
 import { ZORA_MAINNET_GRAPHQL_URL } from './constants.js'
@@ -77,7 +77,7 @@ export class ZoraAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType
             },
             metadata: {
                 ...shared,
-                name: getNFTName(token.name ?? token.tokenContract?.name ?? token.collectionName, token.tokenId),
+                name: getNFTAllName(shared.name ?? '', shared.name, token.tokenId),
             },
             traits:
                 token.attributes

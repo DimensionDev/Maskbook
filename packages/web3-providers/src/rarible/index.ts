@@ -19,7 +19,7 @@ import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { RaribleEventType, RaribleOrder, RaribleHistory, RaribleNFTItemMapResponse } from './types.js'
 import { RaribleURL } from './constants.js'
 import type { NonFungibleTokenAPI } from '../types/index.js'
-import { resolveNonFungibleTokenEventActivityType, getPaymentToken, getNFTName } from '../helpers.js'
+import { resolveNonFungibleTokenEventActivityType, getPaymentToken, getNFTAllName } from '../helpers.js'
 
 const resolveRaribleBlockchain = createLookupTableResolver<number, string>(
     {
@@ -70,7 +70,7 @@ function createAsset(chainId: ChainId, asset: RaribleNFTItemMapResponse): NonFun
         traits: asset?.meta?.attributes.map(({ key, value }) => ({ type: key, value })) ?? [],
         metadata: {
             chainId,
-            name: getNFTName(asset.meta?.name, asset.tokenId),
+            name: getNFTAllName(asset.meta?.name ?? '', asset.meta?.name, asset.tokenId),
             description: asset.meta?.description,
             imageURL: asset.meta?.content?.find((x) => x['@type'] === 'IMAGE' && x.representation === 'PREVIEW')?.url,
             mediaURL: asset.meta?.content?.find((x) => x['@type'] === 'IMAGE' && x.representation === 'ORIGINAL')?.url,
