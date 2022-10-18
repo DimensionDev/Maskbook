@@ -1,6 +1,7 @@
 import { first } from 'lodash-unified'
 import { AbiItem, numberToHex, toHex, toNumber } from 'web3-utils'
 import type { RequestArguments, SignedTransaction, TransactionReceipt } from 'web3-core'
+import { delay } from '@dimensiondev/kit'
 import { getSubscriptionCurrentValue, PartialRequired } from '@masknet/shared-base'
 import type { ERC20 } from '@masknet/web3-contracts/types/ERC20'
 import type { ERC20Bytes32 } from '@masknet/web3-contracts/types/ERC20Bytes32'
@@ -144,6 +145,11 @@ class Connection implements EVM_Connection {
                                         ]
 
                                     if (context.method === EthereumMethodType.ETH_SEND_TRANSACTION) {
+                                        if (options.providerType === ProviderType.MaskWallet) {
+                                            await provider.switchChain(options.chainId)
+                                            // the settings stay in the background, other pages need a delay to sync
+                                            await delay(1500)
+                                        }
                                         // make sure that the provider is connected before sending the transaction
                                         await this.Provider?.connect(options.chainId, options.providerType)
                                     }
