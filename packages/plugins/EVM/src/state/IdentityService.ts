@@ -10,10 +10,11 @@ import {
     NextIDPlatform,
     createLookupTableResolver,
 } from '@masknet/shared-base'
-import { isValidAddress, isZeroAddress } from '@masknet/web3-shared-evm'
-import { KeyValue, MaskX, MaskX_BaseAPI, NextIDProof } from '@masknet/web3-providers'
+import { ChainId, isValidAddress, isZeroAddress } from '@masknet/web3-shared-evm'
+import { KeyValue, MaskX, MaskX_BaseAPI, NextIDProof, Twitter } from '@masknet/web3-providers'
 import { ENS_Resolver } from './NameService/ENS.js'
 import { ChainbaseResolver } from './NameService/Chainbase.js'
+import { Web3StateSettings } from '../settings/index.js'
 
 const ENS_RE = /[^\t\n\v()[\]]{1,256}\.(eth|kred|xyz|luxe)\b/i
 const ADDRESS_FULL = /0x\w{40,}/i
@@ -37,11 +38,8 @@ function getNextIDPlatform() {
 async function getWalletAddressesFromNextID(userId?: string, publicKey?: string) {
     if (!userId || !publicKey) return EMPTY_LIST
     const bindings = await NextIDProof.queryAllExistedBindingsByPlatform(getNextIDPlatform(), userId)
-
-    const binding = bindings.find((binding) => binding.persona.toLowerCase() === publicKey.toLowerCase())
-    return (
-        binding?.proofs.filter((x) => x.platform === NextIDPlatform.Ethereum && isValidAddress(x.identity)) ??
-        EMPTY_LIST
+    return bindings.flatMap((x) =>
+        x.proofs.filter((y) => y.platform === NextIDPlatform.Ethereum && isValidAddress(y.identity)),
     )
 }
 
@@ -66,6 +64,8 @@ export class IdentityService extends IdentityServiceState {
         type: SocialAddressType,
         address: string,
         label = address,
+        updatedAt?: string,
+        createdAt?: string,
     ): SocialAddress<NetworkPluginID.PLUGIN_EVM> | undefined {
         if (isValidAddress(address) && !isZeroAddress(address))
             return {
@@ -73,6 +73,8 @@ export class IdentityService extends IdentityServiceState {
                 type,
                 label,
                 address,
+                updatedAt,
+                createdAt,
             }
         return
     }
@@ -88,7 +90,9 @@ export class IdentityService extends IdentityServiceState {
     private async getSocialAddressesFromNextID({ identifier, publicKey }: SocialIdentity) {
         const listOfAddress = await getWalletAddressesFromNextID(identifier?.userId, publicKey)
         return listOfAddress
-            .map((x) => this.createSocialAddress(SocialAddressType.NEXT_ID, x.identity))
+            .map((x) =>
+                this.createSocialAddress(SocialAddressType.NEXT_ID, x.identity, x.latest_checked_at, x.created_at),
+            )
             .filter(Boolean) as Array<SocialAddress<NetworkPluginID.PLUGIN_EVM>>
     }
 
@@ -124,6 +128,19 @@ export class IdentityService extends IdentityServiceState {
         return this.createSocialAddress(SocialAddressType.ENS, address, name)
     }
 
+    /** Read a social address from Twitter Blue. */
+    private async getSocialAddressFromTwitterBlue({ identifier }: SocialIdentity) {
+        const userId = identifier?.userId
+        if (!userId) return
+        const response = await Twitter.getUserNftContainer(userId)
+        const connection = await Web3StateSettings.value.Connection?.getConnection?.({
+            chainId: ChainId.Mainnet,
+        })
+        const ownerAddress = await connection?.getNonFungibleTokenOwner(response.address, response.token_id)
+        if (!ownerAddress || !isValidAddress(ownerAddress)) return
+        return this.createSocialAddress(SocialAddressType.TwitterBlue, ownerAddress)
+    }
+
     /** Read a social address from MaskX */
     private async getSocialAddressesFromMaskX({ identifier }: SocialIdentity) {
         const userId = identifier?.userId
@@ -148,9 +165,14 @@ export class IdentityService extends IdentityServiceState {
             this.getSocialAddressFromBio(identity),
             this.getSocialAddressFromENS(identity),
             this.getSocialAddressFromKV(identity),
+            this.getSocialAddressFromTwitterBlue(identity),
             this.getSocialAddressesFromNextID(identity),
             this.getSocialAddressesFromMaskX(identity),
         ])
+
+        console.log('DEBUG: get from response')
+        console.log(allSettled)
+
         const identities = allSettled
             .flatMap((x) => (x.status === 'fulfilled' ? x.value : []))
             .filter(Boolean) as Array<SocialAddress<NetworkPluginID.PLUGIN_EVM>>
