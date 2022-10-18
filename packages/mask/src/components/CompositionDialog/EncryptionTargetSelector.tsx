@@ -38,6 +38,7 @@ const useStyles = makeStyles()((theme) => ({
         cursor: 'pointer',
         fontWeight: 700,
         color: theme.palette.primary.main,
+        textAlign: 'right',
     },
     rightIcon: {
         marginLeft: 'auto',
