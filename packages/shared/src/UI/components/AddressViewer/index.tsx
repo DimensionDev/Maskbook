@@ -38,6 +38,7 @@ export function AddressViewer({ identityAddress }: AddressViewerProps) {
         [SocialAddressType.RSS3]: t.address_viewer_address_name_rns(),
         [SocialAddressType.KV]: t.address_viewer_address_name_address(),
         [SocialAddressType.NEXT_ID]: t.address_viewer_address_name_address(),
+        [SocialAddressType.TwitterBlue]: t.address_viewer_address_name_address(),
         [SocialAddressType.SOL]: t.address_viewer_address_name_sol(),
         [SocialAddressType.CyberConnect]: t.address_viewer_address_name_cyberconnect(),
         [SocialAddressType.Leaderboard]: t.address_viewer_address_name_leaderboard(),

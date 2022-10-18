@@ -177,13 +177,28 @@ const TipsAccountSource: FC<{ account: SocialAccount }> = ({ account }) => {
               }
             : undefined
 
-    const domainSocialAddressType = [SocialAddressType.ENS, SocialAddressType.RSS3, SocialAddressType.SOL].find((x) =>
-        account.supportedAddressTypes?.includes(x),
-    )
+    const fromNextID = account.supportedAddressTypes?.includes(SocialAddressType.NEXT_ID)
+    const fromTwitter = [
+        SocialAddressType.ENS,
+        SocialAddressType.RSS3,
+        SocialAddressType.SOL,
+        SocialAddressType.TwitterBlue,
+    ].find((x) => account.supportedAddressTypes?.includes(x))
+
+    if (fromNextID) {
+        return (
+            <SourceTooltip platform={AddressPlatform.NextId}>
+                <Icons.NextIDMini
+                    className={cx(classes.actionIcon, classes.icon)}
+                    style={{ ...iconStyle, width: 32, height: 18 }}
+                />
+            </SourceTooltip>
+        )
+    }
 
     return (
         <>
-            {account.supportedAddressTypes?.includes(SocialAddressType.NEXT_ID) ? (
+            {fromNextID ? (
                 <SourceTooltip platform={AddressPlatform.NextId}>
                     <Icons.NextIDMini
                         className={cx(classes.actionIcon, classes.icon)}
@@ -192,8 +207,8 @@ const TipsAccountSource: FC<{ account: SocialAccount }> = ({ account }) => {
                 </SourceTooltip>
             ) : null}
 
-            {domainSocialAddressType ? (
-                <SourceTooltip platform={AddressPlatform.Twitter} type={domainSocialAddressType}>
+            {fromTwitter ? (
+                <SourceTooltip platform={AddressPlatform.Twitter} type={fromTwitter}>
                     <Icons.TwitterRound
                         className={cx(classes.actionIcon, classes.icon, classes.twitterIcon)}
                         style={iconStyle}
