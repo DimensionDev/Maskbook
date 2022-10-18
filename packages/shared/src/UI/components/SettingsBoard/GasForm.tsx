@@ -7,7 +7,7 @@ import { Grid, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { useSharedI18N } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { ChainId, formatWeiToGwei, GasOption, Transaction } from '@masknet/web3-shared-evm'
+import { ChainId, formatGweiToWei, formatWeiToGwei, GasOption, Transaction } from '@masknet/web3-shared-evm'
 import { formatBalance, GasOptionType, isPositive, isZero, scale10 } from '@masknet/web3-shared-base'
 import { useWeb3State } from '@masknet/web3-hooks-base'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -160,11 +160,11 @@ export function GasForm(props: GasFormProps) {
         const payload = isEIP1559
             ? {
                   gas: gasLimit,
-                  maxFeePerGas,
-                  maxPriorityFeePerGas,
+                  maxFeePerGas: formatGweiToWei(maxFeePerGas).toString(),
+                  maxPriorityFeePerGas: formatGweiToWei(maxPriorityFeePerGas).toString(),
               }
             : {
-                  gasPrice,
+                  gasPrice: formatGweiToWei(gasPrice).toString(),
               }
         onChange?.(!errorCenter && !errorBottom ? payload : undefined)
     }, [errorCenter, errorBottom, isEIP1559, gasLimit, gasPrice, maxFeePerGas, maxPriorityFeePerGas, gasOptions])

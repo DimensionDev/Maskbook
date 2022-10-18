@@ -6,7 +6,7 @@ import { Controller, useForm } from 'react-hook-form'
 import BigNumber from 'bignumber.js'
 import { isEmpty } from 'lodash-unified'
 import { makeStyles } from '@masknet/theme'
-import { formatGweiToWei, formatWeiToEther, formatWeiToGwei } from '@masknet/web3-shared-evm'
+import { formatGweiToEther, formatGweiToWei, formatWeiToEther, formatWeiToGwei } from '@masknet/web3-shared-evm'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages.js'
 import { useI18N } from '../../../../../utils/index.js'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -253,21 +253,26 @@ export const GasSetting1559 = memo(() => {
     useEffect(() => {
         if (selected === null) return
         const { content } = options[selected]
-        setValue('maxPriorityFeePerGas', new BigNumber(content?.suggestedMaxPriorityFeePerGas ?? 0).toString() ?? '')
-        setValue('maxFeePerGas', new BigNumber(content?.suggestedMaxFeePerGas ?? 0).toString() ?? '')
+        setValue('maxPriorityFeePerGas', formatWeiToGwei(content?.suggestedMaxPriorityFeePerGas ?? 0).toString() ?? '')
+        setValue('maxFeePerGas', formatWeiToGwei(content?.suggestedMaxFeePerGas ?? 0).toString() ?? '')
     }, [selected, setValue, options])
     // #endregion
 
     const [{ loading }, handleConfirm] = useAsyncFn(
         async (data: zod.infer<typeof schema>) => {
             if (!value) return
-            const config = value.payload.params!.map((param) => ({
-                ...param,
-                gas: toHex(new BigNumber(data.gasLimit).toString()),
-                maxPriorityFeePerGas: toHex(formatGweiToWei(data.maxPriorityFeePerGas).toFixed(0)),
-                maxFeePerGas: toHex(formatGweiToWei(data.maxFeePerGas).toFixed(0)),
-            }))
+            const config = value.payload.params!.map((param) =>
+                param === 'latest'
+                    ? param
+                    : {
+                          ...param,
+                          gas: toHex(new BigNumber(data.gasLimit).toString()),
+                          maxPriorityFeePerGas: toHex(formatGweiToWei(data.maxPriorityFeePerGas).toFixed(0)),
+                          maxFeePerGas: toHex(formatGweiToWei(data.maxFeePerGas).toFixed(0)),
+                      },
+            )
 
+            console.log(config)
             await WalletRPC.updateUnconfirmedRequest({
                 ...value.payload,
                 params: config,
@@ -284,11 +289,16 @@ export const GasSetting1559 = memo(() => {
     // #region These are additional form rules that need to be prompted for but do not affect the validation of the form
     const maxPriorFeeHelperText = useMemo(() => {
         if (getGasOptionsLoading) return undefined
-        if (isLessThan(maxPriorityFeePerGas, gasOptions?.[GasOptionType.SLOW]?.suggestedMaxPriorityFeePerGas ?? 0))
+        if (
+            isLessThan(
+                formatGweiToWei(maxPriorityFeePerGas),
+                gasOptions?.[GasOptionType.SLOW]?.suggestedMaxPriorityFeePerGas ?? 0,
+            )
+        )
             return t('wallet_transfer_error_max_priority_gas_fee_too_low')
         if (
             isGreaterThan(
-                maxPriorityFeePerGas,
+                formatGweiToWei(maxPriorityFeePerGas),
                 multipliedBy(
                     gasOptions?.[GasOptionType.FAST]?.suggestedMaxPriorityFeePerGas ?? 0,
                     HIGH_FEE_WARNING_MULTIPLIER,
@@ -301,11 +311,11 @@ export const GasSetting1559 = memo(() => {
 
     const maxFeeGasHelperText = useMemo(() => {
         if (getGasOptionsLoading) return undefined
-        if (isLessThan(maxFeePerGas, gasOptions?.[GasOptionType.SLOW]?.estimatedBaseFee ?? 0))
+        if (isLessThan(formatGweiToWei(maxFeePerGas), gasOptions?.[GasOptionType.SLOW]?.estimatedBaseFee ?? 0))
             return t('wallet_transfer_error_max_fee_too_low')
         if (
             isGreaterThan(
-                maxFeePerGas,
+                formatGweiToWei(maxFeePerGas),
                 multipliedBy(gasOptions?.[GasOptionType.FAST]?.suggestedMaxFeePerGas ?? 0, HIGH_FEE_WARNING_MULTIPLIER),
             )
         )
@@ -347,7 +357,7 @@ export const GasSetting1559 = memo(() => {
                                 usd: formatCurrency(
                                     formatWeiToEther(content?.suggestedMaxFeePerGas ?? 0)
                                         .times(nativeTokenPrice)
-                                        .times(21000),
+                                        .times(gasLimit ?? 21000),
                                     'USD',
                                     { boundaries: { min: 0.01 } },
                                 ),
@@ -386,7 +396,7 @@ export const GasSetting1559 = memo(() => {
                     <Typography component="span" className={classes.price}>
                         {t('popups_wallet_gas_fee_settings_usd', {
                             usd: formatCurrency(
-                                formatWeiToEther(Number(maxPriorityFeePerGas) ?? 0)
+                                formatGweiToEther(Number(maxPriorityFeePerGas) ?? 0)
                                     .times(nativeTokenPrice)
                                     .times(gasLimit),
                                 'USD',
@@ -421,7 +431,7 @@ export const GasSetting1559 = memo(() => {
                     <Typography component="span" className={classes.price}>
                         {t('popups_wallet_gas_fee_settings_usd', {
                             usd: formatCurrency(
-                                formatWeiToEther(Number(maxFeePerGas) ?? 0)
+                                formatGweiToEther(Number(maxFeePerGas) ?? 0)
                                     .times(nativeTokenPrice)
                                     .times(gasLimit),
                                 'USD',
