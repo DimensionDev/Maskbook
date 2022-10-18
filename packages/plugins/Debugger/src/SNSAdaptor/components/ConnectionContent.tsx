@@ -40,7 +40,7 @@ export function ConnectionContent(props: ConnectionContentProps) {
                 '100',
                 undefined,
                 {
-                    chainId: ChainId.Matic,
+                    chainId: ChainId.BSC,
                     providerType,
                 },
             )
