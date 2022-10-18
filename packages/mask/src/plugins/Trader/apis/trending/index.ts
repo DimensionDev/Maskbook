@@ -40,7 +40,6 @@ async function checkAvailabilityOnDataProvider(
 export async function getAvailableDataProviders(chainId: ChainId, type?: TagType, keyword?: string) {
     const networkType = chainResolver.networkType(chainId)
     const isMainnet = chainResolver.isMainnet(chainId)
-    if (!isMainnet) return EMPTY_LIST
     if (!type || !keyword)
         return getEnumAsArray(DataProvider)
             .filter((x) => (isMainnet ? true : x.value !== DataProvider.UniswapInfo))

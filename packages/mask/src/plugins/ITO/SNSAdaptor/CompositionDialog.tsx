@@ -6,7 +6,7 @@ import { makeStyles } from '@masknet/theme'
 import { ChainId, useITOConstants } from '@masknet/web3-shared-evm'
 import { DialogContent } from '@mui/material'
 import { omit, set } from 'lodash-unified'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useState } from 'react'
 import Web3Utils from 'web3-utils'
 import { useCurrentIdentity, useCurrentLinkedPersona } from '../../../components/DataSource/useActivatedUI.js'
 import { activatedSocialNetworkUI } from '../../../social-network/index.js'
@@ -19,7 +19,13 @@ import { ConfirmDialog } from './ConfirmDialog.js'
 import { CreateForm } from './CreateForm.js'
 import { payloadOutMask } from './helpers.js'
 import { PoolList } from './PoolList.js'
-import { useAccount, useChainId, useCurrentWeb3NetworkPluginID, useWeb3Connection } from '@masknet/web3-hooks-base'
+import {
+    useAccount,
+    useChainId,
+    useCurrentWeb3NetworkPluginID,
+    useWeb3Connection,
+    useChainIdValid,
+} from '@masknet/web3-hooks-base'
 import { PoolSettings, useFillCallback } from './hooks/useFill.js'
 import { Icons } from '@masknet/icons'
 import { NetworkTab } from '../../../components/shared/NetworkTab.js'
@@ -73,7 +79,9 @@ export function CompositionDialog(props: CompositionDialogProps) {
     const { t } = useI18N()
 
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const currentChainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const chainIdValid = useChainIdValid(NetworkPluginID.PLUGIN_EVM)
+    const _currentChainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const currentChainId = chainIdValid ? _currentChainId : ChainId.Mainnet
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, { chainId: currentChainId })
     const { classes } = useStyles({ snsId: activatedSocialNetworkUI.networkIdentifier })
     const { attachMetadata, dropMetadata } = useCompositionContext()
@@ -227,10 +235,6 @@ export function CompositionDialog(props: CompositionDialogProps) {
 
     // #endregion
 
-    useEffect(() => {
-        if (!ITO2_CONTRACT_ADDRESS) onClose()
-    }, [ITO2_CONTRACT_ADDRESS, onClose])
-
     return (
         <InjectedDialog
             titleTail={
@@ -259,7 +263,6 @@ export function CompositionDialog(props: CompositionDialogProps) {
                             <CreateForm
                                 onNext={onNext}
                                 chainId={chainId}
-                                onClose={onClose}
                                 origin={poolSettings}
                                 onChangePoolSettings={setPoolSettings}
                             />
