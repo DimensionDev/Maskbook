@@ -9,7 +9,7 @@ import {
     useWeb3State,
     useWeb3Connection,
     useBalance,
-} from '@masknet/plugin-infra/web3'
+} from '@masknet/web3-hooks-base'
 import { FormattedAddress, useSnackbarCallback, WalletIcon } from '@masknet/shared'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { isDashboardPage } from '@masknet/shared-base'
@@ -30,9 +30,6 @@ const useStyles = makeStyles<{
     withinRiskWarningDialog?: boolean
     textColor?: string
 }>()((theme, { contentBackground, disableChange, withinRiskWarningDialog, textColor }) => ({
-    content: {
-        padding: theme.spacing(2, 3, 3),
-    },
     currentAccount: {
         padding: theme.spacing(0, 1.5),
         marginBottom: withinRiskWarningDialog ? '7px' : theme.spacing(2),
@@ -55,13 +52,11 @@ const useStyles = makeStyles<{
     accountName: {
         color: !isDashboardPage() ? theme.palette.maskColor.dark : textColor,
         fontWeight: 700,
-        fontSize: 14,
         marginRight: 5,
         lineHeight: '18px',
     },
     balance: {
         color: !isDashboardPage() ? theme.palette.maskColor.dark : textColor,
-        fontSize: 14,
         paddingTop: 2,
         lineHeight: '18px',
     },
@@ -79,19 +74,10 @@ const useStyles = makeStyles<{
             backgroundColor: theme.palette.maskColor.dark,
         },
     },
-    address: {
-        fontSize: 16,
-        marginRight: theme.spacing(1),
-        display: 'inline-block',
-    },
     link: {
         fontSize: 14,
         display: 'flex',
         alignItems: 'center',
-    },
-    twitterProviderBorder: {
-        width: 14,
-        height: 14,
     },
     connectButtonWrapper: {
         display: 'flex',

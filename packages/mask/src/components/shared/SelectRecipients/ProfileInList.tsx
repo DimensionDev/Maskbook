@@ -15,6 +15,7 @@ const useStyles = makeStyles()((theme) => ({
         maxWidth: 'calc(50% - 6px)',
         padding: '0 0 0 8px',
         borderRadius: 8,
+        cursor: 'pointer',
     },
     overflow: {
         textOverflow: 'ellipsis',
@@ -86,7 +87,7 @@ export interface ProfileInListProps {
     highlightText?: string
     selected?: boolean
     disabled?: boolean
-    onChange: (ev: React.MouseEvent<HTMLButtonElement>, checked: boolean) => void
+    onChange: (ev: React.MouseEvent<HTMLElement>, checked: boolean) => void
 }
 export function ProfileInList(props: ProfileInListProps) {
     const { t } = useI18N()
@@ -121,13 +122,11 @@ export function ProfileInList(props: ProfileInListProps) {
         return `${t('select_friends_dialog_persona_connect')} ${mentions.join(', ')}.`
     })()
 
-    const onClick = useCallback(
-        (ev: React.MouseEvent<HTMLButtonElement>) => props.onChange(ev, !props.selected),
-        [props],
-    )
+    const onClick = useCallback((ev: React.MouseEvent<HTMLElement>) => props.onChange(ev, !props.selected), [props])
     const textToHighlight = formatPersonaFingerprint(profile.linkedPersona?.rawPublicKey?.toUpperCase() ?? '', 3)
     return (
         <ListItem
+            onClick={onClick}
             disabled={props.disabled}
             className={props.selected ? cx(classes.root, classes.highLightBg) : classes.root}>
             <ListItemAvatar classes={{ root: classes.avatarBox }}>
@@ -168,7 +167,7 @@ export function ProfileInList(props: ProfileInListProps) {
                     </div>
                 }
             />
-            <Checkbox onClick={onClick} checked={!!props.selected} color="primary" />
+            <Checkbox checked={!!props.selected} color="primary" />
         </ListItem>
     )
 }

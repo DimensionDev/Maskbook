@@ -1,10 +1,6 @@
-import {
-    useActivatedPluginsSNSAdaptor,
-    Plugin,
-    PluginI18NFieldRender,
-    PluginID,
-} from '@masknet/plugin-infra/content-script'
 import { useMemo, useState, useCallback, useRef } from 'react'
+import { useActivatedPluginsSNSAdaptor, Plugin, PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
+import type { PluginID } from '@masknet/shared-base'
 import { List, ListItem, Typography } from '@mui/material'
 import { makeStyles, getMaskColor, ShadowRootTooltip } from '@masknet/theme'
 import { useI18N } from '../../utils/index.js'
@@ -72,12 +68,6 @@ const useStyles = makeStyles<{
         ...(iconFilterColor
             ? { filter: `drop-shadow(0px 6px 12px ${iconFilterColor})`, backdropFilter: 'blur(16px)' }
             : {}),
-    },
-    loadingWrapper: {
-        display: 'flex',
-        height: 400,
-        justifyContent: 'center',
-        alignItems: 'center',
     },
     unlisted: {
         fontSize: 18,

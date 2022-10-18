@@ -7,7 +7,7 @@ import { useI18N } from '../../../utils/index.js'
 import { usePluginWrapper } from '@masknet/plugin-infra/content-script'
 import { Icons } from '@masknet/icons'
 import { ImageIcon } from '@masknet/shared'
-import { useNetworkDescriptor } from '@masknet/plugin-infra/web3'
+import { useNetworkDescriptor } from '@masknet/web3-hooks-base'
 import { VALUABLES_VCENT_URL } from '../constants'
 import urlcat from 'urlcat'
 

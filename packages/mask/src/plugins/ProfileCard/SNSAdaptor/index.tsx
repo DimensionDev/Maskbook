@@ -1,9 +1,8 @@
-import { Icons } from '@masknet/icons'
-import type { Plugin } from '@masknet/plugin-infra/content-script'
-import type { EnhanceableSite } from '@masknet/shared-base'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { Box } from '@mui/material'
 import { Trans } from 'react-i18next'
+import { Icons } from '@masknet/icons'
+import type { Plugin } from '@masknet/plugin-infra'
+import { EnhanceableSite, NetworkPluginID } from '@masknet/shared-base'
+import { Box } from '@mui/material'
 import { base } from '../base.js'
 import { PLUGIN_ID, SNS_RSS3_FIELD_KEY_MAP } from '../constants.js'
 import { setupContext } from '../context.js'
@@ -44,7 +43,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
         Utils: {
             shouldDisplay(_, socialAddresses) {
                 if (!socialAddresses?.length) return false
-                return !!socialAddresses.filter((x) => x.networkSupporterPluginID === NetworkPluginID.PLUGIN_EVM).length
+                return !!socialAddresses.filter((x) => x.pluginID === NetworkPluginID.PLUGIN_EVM).length
             },
         },
     },

@@ -91,10 +91,6 @@ const useStyles = makeStyles()((theme) => ({
     themeColor: {
         color: theme.palette.maskColor.highlight,
     },
-    linkLogo: {
-        width: 24,
-        height: 24,
-    },
     icons: {
         margin: '16px 0 16px 0',
         display: 'flex',
@@ -113,12 +109,10 @@ const useStyles = makeStyles()((theme) => ({
         padding: 12,
     },
     traitValue: {
-        fontSize: 14,
         fontWeight: 700,
         color: theme.palette.maskColor.main,
     },
     secondText: {
-        fontSize: 14,
         fontWeight: 400,
         color: theme.palette.maskColor.second,
     },

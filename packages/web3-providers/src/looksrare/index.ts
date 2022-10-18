@@ -19,6 +19,7 @@ import { EMPTY_LIST } from '@masknet/shared-base'
 import { ChainId, createERC20Token, formatWeiToEther, SchemaType } from '@masknet/web3-shared-evm'
 import type { NonFungibleTokenAPI } from '../types/index.js'
 import type { Collection, Event, Order, Stats, Token } from './types.js'
+import { resolveNonFungibleTokenEventActivityType } from '../helpers.js'
 import { LOOKSRARE_API_URL, LOOKSRARE_PAGE_SIZE } from './constants.js'
 
 async function fetchFromLooksRare<T>(chainId: ChainId, url: string) {
@@ -83,6 +84,7 @@ function createNonFungibleAssetFromToken(
             type: x.displayType,
             value: x.value,
         })),
+        source: SourceType.LooksRare,
     }
 }
 
@@ -98,6 +100,7 @@ function createNonFungibleContractFromCollection(
         address: collection.address,
         schema: collection.type === 'ERC1155' ? SchemaType.ERC1155 : SchemaType.ERC721,
         owner: collection.owner,
+        source: SourceType.LooksRare,
     }
 }
 
@@ -105,7 +108,7 @@ function createNonFungibleEventFromEvent(chainId: ChainId, event: Event): NonFun
     return {
         id: event.id.toString(),
         chainId,
-        type: event.type,
+        type: resolveNonFungibleTokenEventActivityType(event.type),
         assetPermalink: urlcat('https://looksrare.org/collections/:address/:tokenId', {
             address: event.token?.collectionAddress ?? event.collection?.address,
             tokenId: event.token?.tokenId,

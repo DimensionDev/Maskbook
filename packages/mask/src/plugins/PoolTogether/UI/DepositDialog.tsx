@@ -1,7 +1,8 @@
 import { InjectedDialog, useOpenShareTxDialog, useSelectFungibleToken, FungibleTokenInput } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { keyframes, makeStyles, ActionButton } from '@masknet/theme'
-import { FungibleToken, isZero, NetworkPluginID, rightShift } from '@masknet/web3-shared-base'
+import { CrossIsolationMessages, NetworkPluginID } from '@masknet/shared-base'
+import { FungibleToken, isZero, rightShift } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
 import { DialogContent, Grid, Typography } from '@mui/material'
 import { useCallback, useEffect, useMemo, useState } from 'react'
@@ -15,8 +16,7 @@ import { useDepositCallback } from '../hooks/useDepositCallback.js'
 import { PluginPoolTogetherMessages } from '../messages.js'
 import type { Pool } from '../types.js'
 import { calculateOdds, getPrizePeriod } from '../utils.js'
-import { useAccount, useFungibleTokenBalance } from '@masknet/plugin-infra/web3'
-import { CrossIsolationMessages } from '@masknet/shared-base'
+import { useAccount, useFungibleTokenBalance } from '@masknet/web3-hooks-base'
 
 const rainbow_animation = keyframes`
     0% {
@@ -36,12 +36,6 @@ const useStyles = makeStyles()((theme) => ({
         '& > *': {
             margin: theme.spacing(1, 0),
         },
-    },
-
-    tip: {
-        fontSize: 12,
-        color: theme.palette.text.secondary,
-        padding: theme.spacing(2, 2, 0, 2),
     },
     button: {
         margin: theme.spacing(1.5, 0, 0),

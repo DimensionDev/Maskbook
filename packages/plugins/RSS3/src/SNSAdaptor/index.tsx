@@ -1,13 +1,14 @@
 import type { Plugin } from '@masknet/plugin-infra'
-import { PluginIDContextProvider } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID, SocialAddress, SocialIdentity } from '@masknet/web3-shared-base'
+import { PluginIDContextProvider } from '@masknet/web3-hooks-base'
+import type { SocialAddress, SocialIdentity } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { base } from '../base.js'
 import { PLUGIN_ID } from '../constants.js'
 import { setupContext } from './context.js'
 import { DonationPage, FeedsPage, FeedPageProps, FootprintPageProps, FootprintsPage } from './pages/index.js'
 
 function shouldDisplay(identity?: SocialIdentity, addressName?: SocialAddress<NetworkPluginID>) {
-    return addressName?.networkSupporterPluginID === NetworkPluginID.PLUGIN_EVM
+    return addressName?.pluginID === NetworkPluginID.PLUGIN_EVM
 }
 
 const DonationsTabConfig: Plugin.SNSAdaptor.ProfileTab = {
@@ -74,7 +75,7 @@ const createActivitiesTabConfig = (props: FeedPageProps): Plugin.SNSAdaptor.Prof
             TabContent: ({ socialAddress }) => {
                 return (
                     <PluginIDContextProvider value={NetworkPluginID.PLUGIN_EVM}>
-                        <FeedsPage address={socialAddress?.address} disableViewDetails {...props} />
+                        <FeedsPage address={socialAddress?.address} {...props} />
                     </PluginIDContextProvider>
                 )
             },
@@ -88,7 +89,6 @@ const createActivitiesTabConfig = (props: FeedPageProps): Plugin.SNSAdaptor.Prof
 const ActivitiesTabConfig: Plugin.SNSAdaptor.ProfileTab = createActivitiesTabConfig({})
 const ActivitiesTabConfigInProfileCard: Plugin.SNSAdaptor.ProfileTab = createActivitiesTabConfig({
     p: 1.5,
-    disableViewDetails: true,
 })
 
 const sns: Plugin.SNSAdaptor.Definition = {

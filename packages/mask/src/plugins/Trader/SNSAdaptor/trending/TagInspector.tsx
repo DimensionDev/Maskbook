@@ -4,7 +4,7 @@ import { TagType } from '../../types/index.js'
 import type { DataProvider } from '@masknet/public-api'
 import { TrendingView } from './TrendingView.js'
 import { useAvailableDataProviders } from '../../trending/useAvailableDataProviders.js'
-import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
+import { TargetChainIdContext } from '@masknet/web3-hooks-evm'
 
 export interface TagInspectorProps {}
 

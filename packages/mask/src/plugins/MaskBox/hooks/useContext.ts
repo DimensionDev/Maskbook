@@ -8,7 +8,7 @@ import { omit, clamp, first, uniq } from 'lodash-unified'
 import BigNumber from 'bignumber.js'
 import { createContainer } from 'unstated-next'
 import { unreachable } from '@dimensiondev/kit'
-import { useERC20TokenAllowance } from '@masknet/plugin-infra/web3-evm'
+import { useERC20TokenAllowance } from '@masknet/web3-hooks-evm'
 import { useMaskBoxConstants, isZeroAddress, SchemaType, isNativeTokenAddress } from '@masknet/web3-shared-evm'
 import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
 import { BoxInfo, BoxState } from '../type.js'
@@ -29,8 +29,8 @@ import {
     isLessThanOrEqualTo,
     isSameAddress,
     multipliedBy,
-    NetworkPluginID,
 } from '@masknet/web3-shared-base'
+import { NetworkPluginID, EMPTY_LIST } from '@masknet/shared-base'
 import {
     useAccount,
     useBalance,
@@ -38,8 +38,7 @@ import {
     useFungibleTokenBalance,
     useFungibleTokens,
     useNonFungibleTokenContract,
-} from '@masknet/plugin-infra/web3'
-import { EMPTY_LIST } from '@masknet/shared-base'
+} from '@masknet/web3-hooks-base'
 
 function useContext(initialState?: { boxId: string; hashRoot: string }) {
     const now = new Date()

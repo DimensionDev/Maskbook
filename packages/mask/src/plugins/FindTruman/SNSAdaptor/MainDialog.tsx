@@ -3,7 +3,7 @@ import { makeStyles } from '@masknet/theme'
 import { useContext, useEffect, useState } from 'react'
 import { useI18N } from '../../../utils/index.js'
 import { InjectedDialog, InjectedDialogProps, Image } from '@masknet/shared'
-import { useAccount } from '@masknet/plugin-infra/web3'
+import { useAccount } from '@masknet/web3-hooks-base'
 import { fetchConst, fetchUserParticipatedStoryStatus } from '../Worker/apis/index.js'
 import type { UserStoryStatus, FindTrumanConst } from '../types.js'
 import { BorderLinearProgress } from './ResultCard.js'
@@ -16,17 +16,6 @@ interface Props extends InjectedDialogProps {
 
 const useStyles = makeStyles()((theme) => {
     return {
-        actions: {
-            alignSelf: 'center',
-        },
-        button: {
-            borderRadius: 26,
-            marginTop: 24,
-            fontSize: 16,
-            lineHeight: 2.5,
-            paddingLeft: 35,
-            paddingRight: 35,
-        },
         card: {
             borderRadius: '6px',
             marginBottom: '16px',

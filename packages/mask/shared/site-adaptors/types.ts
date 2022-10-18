@@ -12,5 +12,7 @@ export declare namespace SiteAdaptor {
         getProfilePage: null | ((profile: ProfileIdentifier) => URL | null)
         getShareLinkURL: null | ((text: string) => URL)
         notReadyForProduction?: boolean
+        /** Whether this provider need to connect persona */
+        isSocialNetwork?: boolean
     }
 }

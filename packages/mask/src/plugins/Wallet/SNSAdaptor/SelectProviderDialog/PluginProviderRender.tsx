@@ -2,10 +2,10 @@ import { useMemo } from 'react'
 import { first } from 'lodash-unified'
 import { Icons } from '@masknet/icons'
 import { ImageIcon } from '@masknet/shared'
-import { getSiteType } from '@masknet/shared-base'
-import { useWeb3State } from '@masknet/plugin-infra/web3'
+import { getSiteType, NetworkPluginID } from '@masknet/shared-base'
+import { useWeb3State } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import type { NetworkIconClickBaitProps, NetworkPluginID, ProviderIconClickBaitProps } from '@masknet/web3-shared-base'
+import type { NetworkIconClickBaitProps, ProviderIconClickBaitProps } from '@masknet/web3-shared-base'
 import { makeStyles } from '@masknet/theme'
 import { Box, List, ListItem, Typography } from '@mui/material'
 import { useI18N } from '../../../../utils/index.js'
@@ -30,7 +30,6 @@ const useStyles = makeStyles()((theme) => {
             },
         },
         title: {
-            fontSize: 14,
             fontWeight: 'bold',
             '&:before': {
                 content: 'counter(steps) ". "',
@@ -72,12 +71,6 @@ const useStyles = makeStyles()((theme) => {
             backgroundColor: theme.palette.background.paper,
             borderRadius: '50%',
             color: theme.palette.maskColor.success,
-        },
-        alert: {
-            fontSize: 12,
-            display: 'flex',
-            alignItems: 'center',
-            marginTop: theme.spacing(1),
         },
         wallets: {
             width: '100%',
@@ -172,9 +165,7 @@ export function PluginProviderRender({
         <>
             <Box className={classes.root}>
                 <section className={classes.section}>
-                    <Typography className={classes.title} variant="h2" component="h2">
-                        {t('plugin_wallet_choose_network')}
-                    </Typography>
+                    <Typography className={classes.title}>{t('plugin_wallet_choose_network')}</Typography>
                     <List className={classes.list}>
                         {networks
                             ?.filter((x) => x.isMainnet)
@@ -193,9 +184,7 @@ export function PluginProviderRender({
                     </List>
                 </section>
                 <section className={classes.section}>
-                    <Typography className={classes.title} variant="h2" component="h2">
-                        {t('plugin_wallet_choose_wallet')}
-                    </Typography>
+                    <Typography className={classes.title}>{t('plugin_wallet_choose_wallet')}</Typography>
                     <List className={classes.wallets}>
                         {providers
                             .filter((x) => x.providerAdaptorPluginID === undeterminedPluginID)

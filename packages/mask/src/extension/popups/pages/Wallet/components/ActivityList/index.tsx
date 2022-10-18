@@ -7,49 +7,23 @@ import { useContainer } from 'unstated-next'
 import { Button, Link, List } from '@mui/material'
 import {
     isSameAddress,
-    NetworkPluginID,
     RecentTransactionComputed,
     TransactionDescriptor,
     TransactionDescriptorType,
 } from '@masknet/web3-shared-base'
 import type { ChainId, Transaction } from '@masknet/web3-shared-evm'
-import { EMPTY_LIST, PopupRoutes } from '@masknet/shared-base'
+import { EMPTY_LIST, PopupRoutes, NetworkPluginID } from '@masknet/shared-base'
 import { WalletContext } from '../../hooks/useWalletContext.js'
 import { useI18N } from '../../../../../../utils/index.js'
 import { ReplaceType } from '../../type.js'
 import { ActivityListItem } from './ActivityListItem.js'
-import { useChainId, useWeb3State } from '@masknet/plugin-infra/web3'
+import { useChainId, useWeb3State } from '@masknet/web3-hooks-base'
 import { isNativeTokenAddress } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()({
     list: {
         backgroundColor: '#ffffff',
         padding: 0,
-    },
-    item: {
-        padding: 14,
-        borderBottom: '1px solid #F7F9FA',
-        cursor: 'pointer',
-    },
-    loader: {
-        fill: '#FFB915',
-    },
-    interaction: {
-        stroke: '#1C68F3',
-        fill: 'none',
-    },
-    description: {
-        color: '#000000',
-        fontSize: 12,
-        lineHeight: '16px',
-        fontWeight: 600,
-    },
-    secondaryDesc: {
-        color: '#7B8192',
-        fontSize: 12,
-        lineHeight: '16px',
-        fontWeight: 600,
-        marginTop: 2,
     },
     buttonContainer: {
         padding: 16,
@@ -63,15 +37,7 @@ const useStyles = makeStyles()({
         borderRadius: 20,
         backgroundColor: '#ffffff',
     },
-    button: {
-        fontWeight: 600,
-        fontSize: 14,
-        color: '#ffffff',
-        lineHeight: '20px',
-        padding: '3px 0',
-        borderRadius: 15,
-        backgroundColor: '#1C68F3',
-    },
+
     empty: {
         display: 'flex',
         justifyContent: 'center',

@@ -10,7 +10,7 @@ import {
     useCurrentWeb3NetworkPluginID,
     useNativeTokenBalance,
     useRiskWarningApproved,
-} from '@masknet/plugin-infra/web3'
+} from '@masknet/web3-hooks-base'
 
 const useStyles = makeStyles()((theme) => ({
     button: {

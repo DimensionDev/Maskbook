@@ -11,7 +11,7 @@ import {
     useCurrentWeb3NetworkPluginID,
     useFungibleTokenWatched,
     useWeb3State,
-} from '@masknet/plugin-infra/web3'
+} from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { PluginWalletStatusBar, useI18N } from '../../../../../utils/index.js'
 import { SelectTokenAmountPanel } from '../../../../ITO/SNSAdaptor/SelectTokenAmountPanel.js'
@@ -33,7 +33,6 @@ const useStyles = makeStyles()((theme) => ({
             marginTop: 0,
         },
     },
-    label: {},
     button: {
         margin: 0,
         padding: 0,

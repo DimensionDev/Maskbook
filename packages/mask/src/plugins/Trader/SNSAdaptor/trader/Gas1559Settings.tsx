@@ -1,5 +1,5 @@
 import { memo, useCallback, useEffect, useMemo, useState } from 'react'
-import { I18NFunction, useI18N } from '../../../../utils/index.js'
+import { isEmpty } from 'lodash-unified'
 import { Accordion, AccordionDetails, AccordionSummary, Box, TextField, Typography } from '@mui/material'
 import { makeStyles, MaskColorVar, ActionButton } from '@masknet/theme'
 import { formatGweiToWei, GasOptionConfig } from '@masknet/web3-shared-evm'
@@ -10,7 +10,6 @@ import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { ExpandMore } from '@mui/icons-material'
 import { fromWei, toHex } from 'web3-utils'
-import { isEmpty } from 'lodash-unified'
 import {
     GasOptionType,
     isGreaterThan,
@@ -18,11 +17,11 @@ import {
     isLessThanOrEqualTo,
     isPositive,
     multipliedBy,
-    NetworkPluginID,
     toFixed,
 } from '@masknet/web3-shared-base'
-import { isDashboardPage } from '@masknet/shared-base'
-import { useGasOptions } from '@masknet/plugin-infra/web3'
+import { isDashboardPage, NetworkPluginID } from '@masknet/shared-base'
+import { useGasOptions } from '@masknet/web3-hooks-base'
+import { I18NFunction, useI18N } from '../../../../utils/index.js'
 
 const useStyles = makeStyles<{
     isDashboard: boolean
@@ -100,28 +99,12 @@ const useStyles = makeStyles<{
         backgroundColor: 'inherit',
     },
     accordingTitle: {
-        fontSize: 14,
         lineHeight: '20px',
     },
     controller: {
         display: 'grid',
         gridTemplateColumns: 'repeat(2, 1fr)',
         gap: 24,
-    },
-    button: {
-        fontSize: 18,
-        lineHeight: '22px',
-        fontWeight: 600,
-        padding: '13px 0',
-        height: 48,
-        borderRadius: isDashboard ? 8 : 24,
-    },
-    cancelButton: {
-        backgroundColor: !isDashboard ? theme.palette.background.default : undefined,
-        color: !isDashboard ? theme.palette.text.strong : undefined,
-        '&:hover': {
-            backgroundColor: !isDashboard ? `${theme.palette.background.default}!important` : undefined,
-        },
     },
 }))
 

@@ -7,15 +7,6 @@ interface ModelViewProps extends HTMLProps<HTMLDivElement> {
 }
 
 const useStyles = makeStyles()((theme) => ({
-    body: {
-        display: 'flex',
-        justifyContent: 'center',
-    },
-    player: {
-        maxWidth: '90%',
-        maxHeight: '90%',
-        border: 'none',
-    },
     errorPlaceholder: {
         padding: '82px 0',
         backgroundColor: theme.palette.background.default,
@@ -57,7 +48,13 @@ const ModelView: FC<ModelViewProps> = ({ source, ...rest }) => {
                     options={{
                         playsInline: true,
                     }}
-                    classes={classes}
+                    classes={{
+                        errorPlaceholder: classes.errorPlaceholder,
+                        errorIcon: classes.errorIcon,
+                        loadingPlaceholder: classes.loadingPlaceholder,
+                        loadingIcon: classes.loadingIcon,
+                        iframe: classes.iframe,
+                    }}
                     showIframeFromInit
                 />
             </div>

@@ -1,34 +1,17 @@
-import { Tooltip } from '@mui/material'
-import { makeStyles, useStylesExtends, ActionButton, ActionButtonProps } from '@masknet/theme'
+import { makeStyles, useStylesExtends, ActionButton, ActionButtonProps, ShadowRootTooltip } from '@masknet/theme'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { unreachable } from '@dimensiondev/kit'
 import { useI18N } from '../../utils/index.js'
 import type { FungibleToken } from '@masknet/web3-shared-base'
-import { ApproveStateType, useERC20TokenApproveCallback } from '@masknet/plugin-infra/web3-evm'
+import { ApproveStateType, useERC20TokenApproveCallback } from '@masknet/web3-hooks-evm'
 import { TokenIcon } from '@masknet/shared'
 import { HelpOutline } from '@mui/icons-material'
 import React, { useCallback } from 'react'
 import { noop } from 'lodash-unified'
 
 const useStyles = makeStyles()((theme) => ({
-    container: {},
     button: {
         whiteSpace: 'nowrap',
-    },
-    buttonLabel: {
-        display: 'block',
-        fontWeight: 'inherit',
-        transform: 'translateY(-4px)',
-    },
-    buttonAmount: {
-        fontSize: 10,
-        fontWeight: 300,
-        transform: 'translateY(12px)',
-        position: 'absolute',
-    },
-    children: {
-        marginTop: 8,
-        width: '100%',
     },
     icon: {
         width: 18,
@@ -38,15 +21,6 @@ const useStyles = makeStyles()((theme) => ({
         width: 18,
         height: 18,
         color: theme.palette.maskColor?.second,
-    },
-    tooltip: {
-        padding: 10,
-        textAlign: 'left',
-        fontSize: 14,
-        lineHeight: '18px',
-        color: theme.palette.maskColor.bottom,
-        whiteSpace: 'normal',
-        backgroundColor: theme.palette.maskColor.tips,
     },
 }))
 
@@ -124,31 +98,27 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
                 variant="contained"
                 startIcon={
                     <TokenIcon
+                        className={classes.icon}
                         address={token.address}
                         chainId={token.chainId}
                         name={token.name}
                         disableDefaultIcon
-                        classes={{ icon: classes.icon }}
                     />
                 }
                 endIcon={
-                    <Tooltip
-                        classes={{
-                            tooltip: classes.tooltip,
-                        }}
-                        PopperProps={{
-                            disablePortal: true,
-                        }}
+                    <ShadowRootTooltip
                         title={t('plugin_wallet_token_infinite_unlock_tips', {
                             provider: contractName,
                             symbol: token.symbol,
                         })}
                         placement="top"
                         arrow
+                        leaveDelay={2000}
+                        disableInteractive
                         disableFocusListener
                         disableTouchListener>
                         <HelpOutline className={classes.helpIcon} />
-                    </Tooltip>
+                    </ShadowRootTooltip>
                 }
                 onClick={onApprove}
                 {...props.ActionButtonProps}>

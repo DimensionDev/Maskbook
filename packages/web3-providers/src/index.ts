@@ -16,7 +16,9 @@ import { TwitterAPI } from './twitter/index.js'
 import { R2D2API } from './r2d2/index.js'
 import { InstagramAPI } from './instagram/index.js'
 import { DeBankAPI } from './debank/index.js'
-import { ZerionAPI } from './zerion/index.js'
+import { ZerionAPI, ZerionGasAPI, ZerionNonFungibleTokenAPI, ZerionTrendingAPI } from './zerion/index.js'
+import { MaskAPI } from './mask/index.js'
+import { MaskX_API } from './mask-x/index.js'
 import { MetaSwapAPI } from './metaswap/index.js'
 import { AstarAPI } from './astar/index.js'
 import { GoPlusLabsAPI } from './gopluslabs/index.js'
@@ -30,11 +32,18 @@ import { UniSwapAPI } from './uniswap/index.js'
 import { RabbyAPI } from './rabby/index.js'
 import { GemAPI } from './gem/index.js'
 import { X2Y2API } from './x2y2/index.js'
-import { ChainbaseHistoryAPI, ChainbaseFungibleTokenAPI, ChainbaseNonFungibleTokenAPI } from './chainbase/index.js'
+import {
+    ChainbaseHistoryAPI,
+    ChainbaseFungibleTokenAPI,
+    ChainbaseNonFungibleTokenAPI,
+    ChainbaseDomainAPI,
+} from './chainbase/index.js'
 import { SolanaFungibleAPI, SolanaNonFungibleAPI } from './solana/index.js'
 import { FlowFungibleAPI } from './flow/index.js'
 import { CF_API } from './cf/index.js'
 import { MirrorAPI } from './mirror/index.js'
+import { MindsAPI } from './minds/index.js'
+import { FuseTrendingAPI } from './fuse/index.js'
 
 export * from './helpers.js'
 export * from './types/index.js'
@@ -55,11 +64,14 @@ export const RiskWarning = new RiskWarningAPI()
 export const RSS3 = new RSS3API()
 export const KeyValue = new KeyValueAPI()
 export const Twitter = new TwitterAPI()
+export const Mask = new MaskAPI()
+export const MaskX = new MaskX_API()
+export const Minds = new MindsAPI()
 export const Instagram = new InstagramAPI()
 export const GoPlusLabs = new GoPlusLabsAPI()
 export const R2D2 = new R2D2API()
 export const DeBank = new DeBankAPI()
-export const Zerion = new ZerionAPI()
+
 export const MetaSwap = new MetaSwapAPI()
 export const AstarGas = new AstarAPI()
 export const NextIDStorage = new NextIDStorageAPI()
@@ -93,3 +105,13 @@ export const NFTScanNonFungibleTokenSolana = new NFTScanNonFungibleTokenAPI_Sola
 export const ChainbaseHistory = new ChainbaseHistoryAPI()
 export const ChainbaseFungibleToken = new ChainbaseFungibleTokenAPI()
 export const ChainbaseNonFungibleToken = new ChainbaseNonFungibleTokenAPI()
+export const ChainbaseDomain = new ChainbaseDomainAPI()
+
+// Zerion
+export const Zerion = new ZerionAPI()
+export const ZerionNonFungibleToken = new ZerionNonFungibleTokenAPI()
+export const ZerionTrending = new ZerionTrendingAPI()
+export const ZerionGas = new ZerionGasAPI()
+
+// Fuse
+export const FuseTrending = new FuseTrendingAPI()

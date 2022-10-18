@@ -2,8 +2,8 @@ import { useCallback, useEffect, useState } from 'react'
 import { NFTListDialog } from './NFTListDialog.js'
 import { InjectedDialog } from '@masknet/shared'
 import { UploadAvatarDialog } from './UploadAvatarDialog.js'
-import { BindingProof, CrossIsolationMessages } from '@masknet/shared-base'
-import { useAccount } from '@masknet/plugin-infra/web3'
+import { PluginID, BindingProof, CrossIsolationMessages } from '@masknet/shared-base'
+import { useAccount } from '@masknet/web3-hooks-base'
 import { AllChainsNonFungibleToken, PFP_TYPE, SelectTokenInfo } from '../types.js'
 import { PersonaPage } from './PersonaPage.js'
 import { DialogContent } from '@mui/material'
@@ -11,7 +11,6 @@ import { useI18N } from '../locales/i18n_generated'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { makeStyles, useTabs } from '@masknet/theme'
 import { TabContext } from '@mui/lab'
-import { PluginID } from '@masknet/plugin-infra'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -43,8 +42,8 @@ export function NFTAvatarDialog() {
     const { classes } = useStyles()
 
     useEffect(() => {
-        return CrossIsolationMessages.events.applicationDialogEvent.on(({ open, application }) => {
-            if (application !== PluginID.Avatar) return
+        return CrossIsolationMessages.events.applicationDialogEvent.on(({ open, pluginID }) => {
+            if (pluginID !== PluginID.Avatar) return
             setOpen(open)
         })
     }, [])

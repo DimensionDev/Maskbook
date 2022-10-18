@@ -1,6 +1,6 @@
-import { useAccount, useChainIdMatched } from '@masknet/plugin-infra/web3'
+import { useAccount, useChainIdMatched } from '@masknet/web3-hooks-base'
 import { makeStyles } from '@masknet/theme'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { Button, Divider, Grid, Typography, Container } from '@mui/material'
 import { FurucomboIcon } from '../../../resources/FurucomboIcon.js'
 import { useI18N } from '../../../utils/index.js'
@@ -75,9 +75,6 @@ const useStyles = makeStyles()((theme) => ({
         padding: theme.spacing(0.35),
         height: 19,
         width: 19,
-    },
-    tooltip: {
-        backgroundColor: 'white',
     },
 }))
 

@@ -10,12 +10,6 @@ import { WalletIcon } from '@masknet/shared'
 import { useSupportedChains } from '../hooks/useSupportedChains.js'
 
 const useStyles = makeStyles()((theme) => ({
-    root: {
-        width: '600px',
-    },
-    content: {
-        width: '552px',
-    },
     option: {
         background: theme.palette.maskColor.input,
     },
@@ -35,7 +29,6 @@ const useStyles = makeStyles()((theme) => ({
     searchButton: {
         borderRadius: 8,
     },
-    menu: {},
     search: {
         background: theme.palette.maskColor.input,
         height: 40,
@@ -90,7 +83,7 @@ export const SearchBox = memo<SearchBoxProps>(({ onSearch }) => {
                             gap={1}
                             width="100%">
                             <WalletIcon mainIcon={chain?.icon} size={18} />
-                            <Typography sx={{ fontSize: 14 }}>{getChainName(chain)}</Typography>
+                            <Typography>{getChainName(chain)}</Typography>
                         </Stack>
                     </MenuItem>
                 )

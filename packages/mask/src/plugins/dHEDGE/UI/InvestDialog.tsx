@@ -1,8 +1,9 @@
 import { InjectedDialog, useOpenShareTxDialog, useSelectFungibleToken, FungibleTokenInput } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles, ActionButton } from '@masknet/theme'
-import { useAccount, useFungibleTokenBalance } from '@masknet/plugin-infra/web3'
-import { formatBalance, FungibleToken, isZero, NetworkPluginID, rightShift } from '@masknet/web3-shared-base'
+import { useAccount, useFungibleTokenBalance } from '@masknet/web3-hooks-base'
+import { CrossIsolationMessages, NetworkPluginID } from '@masknet/shared-base'
+import { formatBalance, FungibleToken, isZero, rightShift } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { DialogActions, DialogContent } from '@mui/material'
 import { useCallback, useMemo, useState, useEffect } from 'react'
@@ -12,16 +13,12 @@ import { isTwitter } from '../../../social-network-adaptor/twitter.com/base.js'
 import { useI18N } from '../../../utils/i18n-next-ui.js'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary.js'
 import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary.js'
-import { CrossIsolationMessages } from '@masknet/shared-base'
 import { useInvestCallback } from '../hooks/useInvestCallback.js'
 import { PluginDHedgeMessages } from '../messages.js'
 import type { Pool } from '../types.js'
 import { PluginWalletStatusBar } from '../../../utils/index.js'
 
 const useStyles = makeStyles()((theme) => ({
-    paper: {
-        width: '450px !important',
-    },
     form: {
         '& > *': {
             margin: theme.spacing(1, 0),
@@ -29,11 +26,6 @@ const useStyles = makeStyles()((theme) => ({
     },
     root: {
         margin: theme.spacing(2, 0),
-    },
-    tip: {
-        fontSize: 12,
-        color: theme.palette.text.secondary,
-        padding: theme.spacing(2, 2, 0, 2),
     },
     button: {
         margin: 0,

@@ -1,4 +1,4 @@
-import { useBlockie } from '@masknet/plugin-infra/web3'
+import { useBlockie } from '@masknet/web3-hooks-base'
 import { Avatar, AvatarProps } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 

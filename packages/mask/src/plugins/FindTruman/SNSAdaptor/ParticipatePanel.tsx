@@ -1,4 +1,4 @@
-import { useAccount } from '@masknet/plugin-infra/web3'
+import { useAccount } from '@masknet/web3-hooks-base'
 import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import { useAsyncRetry } from 'react-use'
 import {
@@ -36,9 +36,6 @@ const useStyles = makeStyles()((theme, props) => ({
         marginBottom: theme.spacing(2),
         borderRadius: '8px',
     },
-    title: {
-        marginBottom: theme.spacing(2),
-    },
     buttons: {
         padding: theme.spacing(2),
     },
@@ -46,10 +43,6 @@ const useStyles = makeStyles()((theme, props) => ({
         '&:not(:last-child)': {
             marginBottom: theme.spacing(2),
         },
-    },
-    tabPaneWrapper: {
-        width: '100%',
-        marginBottom: '24px',
     },
     tabPane: {
         width: 535,

@@ -1,20 +1,21 @@
+import { useState, useLayoutEffect, useRef, useCallback } from 'react'
+import classNames from 'classnames'
+import { flatten, uniq } from 'lodash-unified'
+import formatDateTime from 'date-fns/format'
 import {
     useAccount,
     useChainId,
     useFungibleToken,
     useCurrentWeb3NetworkPluginID,
     useFungibleTokens,
-} from '@masknet/plugin-infra/web3'
-import { PluginID, useActivatedPlugin } from '@masknet/plugin-infra/dom'
-import { useState, useLayoutEffect, useRef, useCallback } from 'react'
-import { flatten, uniq } from 'lodash-unified'
-import formatDateTime from 'date-fns/format'
+} from '@masknet/web3-hooks-base'
+import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
 import { SnackbarProvider, makeStyles, ActionButton, LoadingBase } from '@masknet/theme'
 import { InjectedDialog, FormattedBalance, useOpenShareTxDialog } from '@masknet/shared'
 import { DialogContent, Typography, List, ListItem, useTheme, DialogActions } from '@mui/material'
-import { formatBalance, NetworkPluginID, isSameAddress, FungibleToken } from '@masknet/web3-shared-base'
+import { PluginID, NetworkPluginID } from '@masknet/shared-base'
+import { formatBalance, isSameAddress, FungibleToken } from '@masknet/web3-shared-base'
 import { useITOConstants, ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import classNames from 'classnames'
 import { NetworkTab } from '../../../components/shared/NetworkTab.js'
 import { PluginWalletStatusBar, useI18N } from '../../../utils/index.js'
 import { useClaimAll } from './hooks/useClaimAll.js'
@@ -42,21 +43,6 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => {
             margin: '0 auto',
             minHeight: 'auto',
             width: '100%',
-        },
-        footer: {
-            marginTop: theme.spacing(2),
-            zIndex: 1,
-        },
-        sourceNote: {
-            fontSize: 10,
-            marginRight: theme.spacing(1),
-        },
-        footLink: {
-            cursor: 'pointer',
-            marginRight: theme.spacing(0.5),
-            '&:last-child': {
-                marginRight: 0,
-            },
         },
         tokenCardWrapper: {
             width: '100%',
@@ -114,10 +100,6 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => {
         },
         content: {
             marginBottom: theme.spacing(2),
-        },
-        contentTitle: {
-            fontSize: 18,
-            fontWeight: 300,
         },
         tab: {
             height: 36,
@@ -193,9 +175,6 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => {
             paddingBottom: theme.spacing(2),
             backgroundColor: theme.palette.background.paper,
         },
-        walletStatusBox: {
-            margin: theme.spacing(3, 'auto'),
-        },
     }
 })
 
@@ -263,7 +242,17 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
             <InjectedDialog open={open} onClose={onClose} title={t('plugin_ito_claim_all_dialog_title')}>
                 <DialogContent className={classes.wrapper}>
                     <div className={classes.abstractTabWrapper}>
-                        <NetworkTab chainId={chainId} setChainId={setChainId} classes={classes} chains={chainIdList} />
+                        <NetworkTab
+                            chainId={chainId}
+                            setChainId={setChainId}
+                            classes={{
+                                tab: classes.tab,
+                                tabs: classes.tabs,
+                                tabPanel: classes.tabPanel,
+                                indicator: classes.indicator,
+                            }}
+                            chains={chainIdList}
+                        />
                     </div>
                     <div className={classes.contentWrapper} ref={DialogRef}>
                         {loading || initLoading || !swappedTokens ? (

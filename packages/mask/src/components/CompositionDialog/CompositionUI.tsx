@@ -35,9 +35,6 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         flexWrap: 'wrap',
     },
-    sup: {
-        paddingLeft: 2,
-    },
     actions: {
         position: 'absolute',
         bottom: 0,
@@ -56,21 +53,7 @@ const useStyles = makeStyles()((theme) => ({
     between: {
         justifyContent: 'space-between',
     },
-    popper: {
-        overflow: 'visible',
-        padding: 6,
-    },
-    popperText: {
-        fontSize: 14,
-        fontWeight: 700,
-        lineHeight: '18px',
-        display: 'flex',
-        alignItems: 'center',
-        gap: 4,
-        cursor: 'pointer',
-    },
     optionTitle: {
-        fontSize: 14,
         lineHeight: '18px',
         color: theme.palette.text.secondary,
         marginRight: 12,

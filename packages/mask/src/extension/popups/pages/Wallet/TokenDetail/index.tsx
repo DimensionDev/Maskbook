@@ -2,7 +2,7 @@ import { memo, useCallback } from 'react'
 import { useAsync } from 'react-use'
 import { ArrowDownCircle, ArrowUpCircle } from 'react-feather'
 import { useNavigate } from 'react-router-dom'
-import { PopupRoutes } from '@masknet/shared-base'
+import { PopupRoutes, NetworkPluginID } from '@masknet/shared-base'
 import { Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useContainer } from 'unstated-next'
@@ -18,8 +18,8 @@ import urlcat from 'urlcat'
 import { ActivityList } from '../components/ActivityList/index.js'
 import { openWindow } from '@masknet/shared-base-ui'
 import { useTitle } from '../../../hook/useTitle.js'
-import { formatBalance, formatCurrency, isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
-import { useNativeToken, useWallet } from '@masknet/plugin-infra/web3'
+import { formatBalance, formatCurrency, isSameAddress } from '@masknet/web3-shared-base'
+import { useNativeToken, useWallet } from '@masknet/web3-hooks-base'
 
 const useStyles = makeStyles()({
     content: {
@@ -34,7 +34,6 @@ const useStyles = makeStyles()({
         marginBottom: 4,
     },
     balance: {
-        fontSize: 14,
         lineHeight: '20px',
         color: '#1C68F3',
         fontWeight: 600,
@@ -119,7 +118,7 @@ const TokenDetail = memo(() => {
         <>
             <div className={classes.content}>
                 <TokenIcon
-                    classes={{ icon: classes.tokenIcon }}
+                    className={classes.tokenIcon}
                     address={currentToken.address}
                     name={currentToken.name}
                     chainId={currentToken.chainId}

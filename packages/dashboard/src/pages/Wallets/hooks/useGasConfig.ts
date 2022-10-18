@@ -1,11 +1,12 @@
 import { useEffect, useMemo, useState } from 'react'
 import { toHex } from 'web3-utils'
 import BigNumber from 'bignumber.js'
-import { chainResolver, formatGweiToWei } from '@masknet/web3-shared-evm'
+import { chainResolver } from '@masknet/web3-shared-evm'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { WalletMessages } from '@masknet/plugin-wallet'
-import { useChainId, useGasOptions, useGasPrice } from '@masknet/plugin-infra/web3'
-import { GasOptionType, NetworkPluginID } from '@masknet/web3-shared-base'
+import { useChainId, useGasOptions, useGasPrice } from '@masknet/web3-hooks-base'
+import { GasOptionType } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 
 export const useGasConfig = (gasLimit: number, minGasLimit: number) => {
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
@@ -47,10 +48,10 @@ export const useGasConfig = (gasLimit: number, minGasLimit: number) => {
         if (is1559Supported) {
             const gasLevel = gasOptions.normal
             setMaxFee((oldVal) => {
-                return !oldVal ? formatGweiToWei(gasLevel?.suggestedMaxFeePerGas ?? '0') : oldVal
+                return !oldVal ? gasLevel?.suggestedMaxFeePerGas ?? '0' : oldVal
             })
             setPriorityFee((oldVal) => {
-                return !oldVal ? formatGweiToWei(gasLevel?.suggestedMaxPriorityFeePerGas ?? '0') : oldVal
+                return !oldVal ? gasLevel?.suggestedMaxPriorityFeePerGas ?? '0' : oldVal
             })
         } else {
             setCustomGasPrice((oldVal) => (!oldVal ? gasOptions.normal.suggestedMaxFeePerGas : oldVal))
@@ -61,8 +62,8 @@ export const useGasConfig = (gasLimit: number, minGasLimit: number) => {
         if (!gasOptions) return
         if (is1559Supported) {
             const gasLevel = gasOptions.normal
-            setMaxFee(formatGweiToWei(gasLevel?.suggestedMaxFeePerGas ?? 0))
-            setPriorityFee(formatGweiToWei(gasLevel?.suggestedMaxPriorityFeePerGas ?? 0))
+            setMaxFee(gasLevel?.suggestedMaxFeePerGas ?? 0)
+            setPriorityFee(gasLevel?.suggestedMaxPriorityFeePerGas ?? 0)
         } else {
             setCustomGasPrice(gasOptions.normal.suggestedMaxFeePerGas)
         }
@@ -75,7 +76,7 @@ export const useGasConfig = (gasLimit: number, minGasLimit: number) => {
                   maxFeePerGas: toHex(new BigNumber(maxFee).integerValue().toFixed()),
                   maxPriorityFeePerGas: toHex(new BigNumber(priorityFee).integerValue().toFixed()),
               }
-            : { gas: gasLimit_, gasPrice: toHex(formatGweiToWei(gasPrice).toString()) }
+            : { gas: gasLimit_, gasPrice: toHex(gasPrice.toString()) }
     }, [is1559Supported, gasLimit_, maxFee, priorityFee, gasPrice, chainId])
 
     return {

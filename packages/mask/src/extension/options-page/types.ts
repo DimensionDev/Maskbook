@@ -1,5 +1,4 @@
-import type { NextIDPlatform } from '@masknet/shared-base'
-import type { NetworkPluginID } from '@masknet/web3-shared-base'
+import type { NextIDPlatform, NetworkPluginID } from '@masknet/shared-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
 
 type CollectionKey = `${string}_${string}`
@@ -47,4 +46,9 @@ export interface Proof {
     platform: NextIDPlatform
     identity: string
     content?: Record<string, Patch>
+}
+
+export interface CollectibleGridProps {
+    columns?: number
+    gap?: string | number
 }

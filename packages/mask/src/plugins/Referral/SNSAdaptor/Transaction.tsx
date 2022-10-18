@@ -1,9 +1,9 @@
 import { makeStyles, ActionButton, LoadingBase } from '@masknet/theme'
 import { explorerResolver } from '@masknet/web3-shared-evm'
-import { useChainId } from '@masknet/plugin-infra/web3'
+import { useChainId } from '@masknet/web3-hooks-base'
 import { Grid, Typography, Link } from '@mui/material'
 import DoneIcon from '@mui/icons-material/Done'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 
 import { TransactionStatus, TransactionDialogInterface, ChainId } from '../types.js'
 import { useI18N } from '../locales/index.js'
@@ -11,10 +11,6 @@ import { useI18N } from '../locales/index.js'
 const useStyles = makeStyles()((theme) => ({
     confirmation: {
         padding: '45px 36px 40px',
-    },
-    heading: {
-        fontSize: '20px',
-        fontWeight: 600,
     },
     title: {
         margin: '12px 0 8px',

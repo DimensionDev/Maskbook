@@ -19,7 +19,7 @@ import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { RaribleEventType, RaribleOrder, RaribleHistory, RaribleNFTItemMapResponse } from './types.js'
 import { RaribleURL } from './constants.js'
 import type { NonFungibleTokenAPI } from '../types/index.js'
-import { getPaymentToken } from '../helpers.js'
+import { resolveNonFungibleTokenEventActivityType, getPaymentToken, getNFTName } from '../helpers.js'
 
 const resolveRaribleBlockchain = createLookupTableResolver<number, string>(
     {
@@ -70,7 +70,7 @@ function createAsset(chainId: ChainId, asset: RaribleNFTItemMapResponse): NonFun
         traits: asset?.meta?.attributes.map(({ key, value }) => ({ type: key, value })) ?? [],
         metadata: {
             chainId,
-            name: asset.meta?.name ?? '',
+            name: getNFTName(asset.meta?.name, asset.tokenId),
             description: asset.meta?.description,
             imageURL: asset.meta?.content?.find((x) => x['@type'] === 'IMAGE' && x.representation === 'PREVIEW')?.url,
             mediaURL: asset.meta?.content?.find((x) => x['@type'] === 'IMAGE' && x.representation === 'ORIGINAL')?.url,
@@ -90,6 +90,7 @@ function createAsset(chainId: ChainId, asset: RaribleNFTItemMapResponse): NonFun
             verified: !asset.deleted,
             createdAt: new Date(asset.mintedAt).getTime(),
         },
+        source: SourceType.Rarible,
     }
 }
 
@@ -135,7 +136,7 @@ function createEvent(chainId: ChainId, history: RaribleHistory): NonFungibleToke
         chainId,
         from: createAccount(history.from ?? history.seller ?? history.owner ?? history.maker),
         to: createAccount(history.buyer),
-        type: history['@type'],
+        type: resolveNonFungibleTokenEventActivityType(history['@type']),
         assetPermalink:
             history.nft?.type.contract && history.nft?.type.tokenId
                 ? createRaribleLink(history.nft.type.contract, history.nft.type.tokenId)

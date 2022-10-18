@@ -29,10 +29,6 @@ const useStyles = makeStyles()((theme) => ({
         border: '2px solid #1D9BF0',
         borderRadius: '50%',
     },
-    imageLoading: {
-        width: 24,
-        height: 24,
-    },
 }))
 
 export interface CollectionIconProps {
@@ -70,7 +66,7 @@ export const CollectionIcon = memo<CollectionIconProps>(({ collection, onClick, 
                     />
                 ) : (
                     <Icon
-                        classes={{ icon: classes.collectionImg }}
+                        className={classes.collectionImg}
                         name={collection?.name ?? collection?.symbol ?? 'Unknown'}
                     />
                 )}

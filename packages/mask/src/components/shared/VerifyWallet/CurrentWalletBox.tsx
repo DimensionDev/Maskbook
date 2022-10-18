@@ -4,10 +4,11 @@ import {
     useProviderDescriptor,
     useReverseAddress,
     useWeb3State,
-} from '@masknet/plugin-infra/web3'
+} from '@masknet/web3-hooks-base'
 import { FormattedAddress, WalletIcon } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
-import { Account, NetworkPluginID } from '@masknet/web3-shared-base'
+import type { Account } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { ChainId, ProviderType } from '@masknet/web3-shared-evm'
 import { Button, Link, Typography } from '@mui/material'
 import { ExternalLink } from 'react-feather'
@@ -30,7 +31,6 @@ const useStyles = makeStyles()((theme) => ({
         marginLeft: theme.spacing(1),
     },
     accountName: {
-        fontSize: 14,
         marginRight: 4,
         fontWeight: 'bold',
         lineHeight: '18px',
@@ -72,24 +72,11 @@ const useStyles = makeStyles()((theme) => ({
     linkIcon: {
         marginRight: theme.spacing(1),
     },
-    twitterProviderBorder: {
-        width: 14,
-        height: 14,
-    },
     connectButtonWrapper: {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
         margin: theme.spacing(2, 0),
-    },
-    domain: {
-        fontSize: 16,
-        lineHeight: '18px',
-        marginLeft: 6,
-        padding: 4,
-        borderRadius: 8,
-        backgroundColor: '#ffffff',
-        color: theme.palette.common.black,
     },
 }))
 interface CurrentWalletBox {
@@ -128,18 +115,15 @@ export function CurrentWalletBox(props: CurrentWalletBox) {
                                 : providerDescriptor?.name}
                         </Typography>
                     ) : (
-                        <>
-                            <Typography className={classes.accountName}>
-                                {walletName ?? providerDescriptor?.name}
-                            </Typography>
-                        </>
+                        <Typography className={classes.accountName}>
+                            {walletName ?? providerDescriptor?.name}
+                        </Typography>
                     )}
                 </div>
                 <div className={classes.infoRow}>
                     <Typography className={classes.address} variant="body2" title={account}>
                         <FormattedAddress address={account} size={4} formatter={Others?.formatAddress} />
                     </Typography>
-
                     <Link
                         className={classes.link}
                         href={Others?.explorerResolver.addressLink?.(wallet.chainId, account) ?? ''}

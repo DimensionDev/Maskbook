@@ -39,9 +39,6 @@ const useStyles = makeStyles()((theme) => {
                 height: 140,
             },
         },
-        loading: {
-            boxShadow: 'none',
-        },
         claimedBadge: {
             position: 'absolute',
             left: 0,
@@ -61,15 +58,6 @@ const useStyles = makeStyles()((theme) => {
             [smallQuery]: {
                 height: 60,
                 width: 60,
-            },
-        },
-        media: {
-            width: 120,
-            height: 160,
-            objectFit: 'cover',
-            [smallQuery]: {
-                width: 90,
-                height: 120,
             },
         },
         name: {

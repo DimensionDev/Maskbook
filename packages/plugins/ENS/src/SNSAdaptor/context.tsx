@@ -1,11 +1,10 @@
 import { createContext, PropsWithChildren, FC } from 'react'
 import { useAsync } from 'react-use'
-import { useLookupAddress, PluginWeb3ContextProvider, PluginIDContextProvider } from '@masknet/plugin-infra/web3'
-import { NextIDPlatform, BindingProof } from '@masknet/shared-base'
-import { NextIDProof } from '@masknet/web3-providers'
-import { ChainId, resolveNonFungibleTokenIdFromEnsDomain } from '@masknet/web3-shared-evm'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { uniqBy } from 'lodash-unified'
+import { NextIDProof } from '@masknet/web3-providers'
+import { useLookupAddress, PluginWeb3ContextProvider, PluginIDContextProvider } from '@masknet/web3-hooks-base'
+import { NetworkPluginID, NextIDPlatform, BindingProof } from '@masknet/shared-base'
+import { ChainId, resolveNonFungibleTokenIdFromEnsDomain } from '@masknet/web3-shared-evm'
 
 interface ENSContextProps {
     isLoading: boolean
@@ -22,7 +21,6 @@ interface ENSContextProps {
 
 export const ENSContext = createContext<ENSContextProps>({
     isLoading: true,
-
     firstValidNextIdTwitterBinding: undefined,
     restOfValidNextIdTwitterBindings: [],
     validNextIdTwitterBindings: [],
@@ -39,7 +37,7 @@ export function ENSProvider({ children, domain }: PropsWithChildren<SearchResult
         loading: isLoading,
         error,
         retry,
-    } = useLookupAddress(NetworkPluginID.PLUGIN_EVM, domain, ChainId.Mainnet)
+    } = useLookupAddress(NetworkPluginID.PLUGIN_EVM, domain)
     const isError = !!error
     const tokenId = resolveNonFungibleTokenIdFromEnsDomain(domain)
     const { value: ids } = useAsync(

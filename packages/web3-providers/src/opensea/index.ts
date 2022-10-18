@@ -26,7 +26,7 @@ import {
     SourceType,
 } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType, createNativeToken, createERC20Token } from '@masknet/web3-shared-evm'
-import type { NonFungibleTokenAPI, TrendingAPI } from '../types/index.js'
+import type { NonFungibleTokenAPI } from '../types/index.js'
 import {
     OpenSeaAssetContract,
     OpenSeaAssetEvent,
@@ -38,7 +38,7 @@ import {
 } from './types.js'
 import { getOrderUSDPrice } from './utils.js'
 import { OPENSEA_ACCOUNT_URL, OPENSEA_API_URL } from './constants.js'
-import { getPaymentToken } from '../helpers.js'
+import { resolveNonFungibleTokenEventActivityType, getPaymentToken, getNFTName } from '../helpers.js'
 
 async function fetchFromOpenSea<T>(url: string, chainId: ChainId, init?: RequestInit) {
     if (![ChainId.Mainnet, ChainId.Rinkeby, ChainId.Matic].includes(chainId)) return
@@ -91,7 +91,7 @@ function createNFTToken(chainId: ChainId, asset: OpenSeaAssetResponse): NonFungi
         address: asset.token_address ?? asset.asset_contract.address,
         metadata: {
             chainId,
-            name: asset.name ?? asset.collection.name,
+            name: getNFTName(asset.name ?? asset.collection.name, asset.token_id),
             symbol: asset.asset_contract.symbol,
             description: asset.description,
             imageURL:
@@ -204,7 +204,7 @@ function createEvent(chainId: ChainId, event: OpenSeaAssetEvent): NonFungibleTok
         to: createAccount(event.to_account ?? event.winner_account),
         id: event.id,
         chainId,
-        type: event.event_type,
+        type: resolveNonFungibleTokenEventActivityType(event.event_type),
         assetPermalink: event.asset.permalink,
         quantity: event.quantity,
         hash: event.transaction?.transaction_hash,
@@ -452,9 +452,5 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
             floorPrice: stats.floor_price,
             count24h: stats.one_day_sales,
         }
-    }
-
-    async getCoinTrending(chainId: ChainId, id: string, currency: TrendingAPI.Currency): Promise<TrendingAPI.Trending> {
-        throw new Error('Not implemented yet.')
     }
 }

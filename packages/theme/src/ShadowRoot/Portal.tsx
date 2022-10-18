@@ -28,14 +28,14 @@ export function setupPortalShadowRoot(init: ShadowRootInit) {
  *      />
  * ))
  */
-export function usePortalShadowRoot(renderer: (container: HTMLElement | undefined) => null | JSX.Element) {
+export function usePortalShadowRoot<T>(renderer: (container: HTMLElement | undefined) => T): T {
     const disabled = useRef(useContext(DisableShadowRootContext)).current
     // we ignore the changes on this property during multiple render
     // so we can violates the React hooks rule and still be safe.
     if (disabled) return renderer(undefined)
 
     const sheets = useContext(StyleSheetsContext)
-    const signal = useRef<AbortController>(null!)
+    const signal = useRef<AbortController | null>(null)
     const preventEventPropagationList = useContext(PreventEventPropagationListContext)
     const { container } = useRefInit(() => {
         signal.current = new AbortController()

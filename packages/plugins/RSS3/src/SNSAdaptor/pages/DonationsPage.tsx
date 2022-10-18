@@ -1,24 +1,18 @@
-import { Icons } from '@masknet/icons'
-import { CollectionDetailCard, useWeb3ProfileHiddenSettings } from '@masknet/shared'
-import { EMPTY_LIST } from '@masknet/shared-base'
-import { makeStyles } from '@masknet/theme'
-import { CollectionType, RSS3BaseAPI } from '@masknet/web3-providers'
-import type { NetworkPluginID, SocialAddress } from '@masknet/web3-shared-base'
-import { ZERO_ADDRESS } from '@masknet/web3-shared-evm'
-import { Box, List, ListItem, Typography } from '@mui/material'
 import { useMemo, useState } from 'react'
 import { differenceWith } from 'lodash-unified'
+import { Icons } from '@masknet/icons'
+import { CollectionDetailCard, useWeb3ProfileHiddenSettings } from '@masknet/shared'
+import { EMPTY_LIST, NetworkPluginID, joinKeys } from '@masknet/shared-base'
+import { makeStyles } from '@masknet/theme'
+import { CollectionType, RSS3BaseAPI } from '@masknet/web3-providers'
+import type { SocialAddress } from '@masknet/web3-shared-base'
+import { ZERO_ADDRESS } from '@masknet/web3-shared-evm'
+import { Box, List, ListItem, Typography } from '@mui/material'
 import { useI18N } from '../../locales/index.js'
 import { DonationCard, StatusBox } from '../components/index.js'
 import { useDonations } from '../hooks/index.js'
 
 const useStyles = makeStyles()((theme) => ({
-    statusBox: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginTop: theme.spacing(6),
-    },
     list: {
         display: 'grid',
         gridTemplateColumns: 'repeat(1, 1fr)',
@@ -31,15 +25,6 @@ const useStyles = makeStyles()((theme) => ({
     donationCard: {
         width: '100%',
         overflow: 'auto',
-    },
-    address: {
-        color: theme.palette.primary.main,
-    },
-    link: {
-        width: '100%',
-        '&:hover': {
-            textDecoration: 'none',
-        },
     },
 }))
 
@@ -62,7 +47,11 @@ export function DonationPage({ socialAddress, publicKey, userId }: DonationPageP
 
     const donations = useMemo(() => {
         if (!hiddenList.length) return allDonations
-        return differenceWith(allDonations, hiddenList, (donation, id) => donation.actions[0].index.toString() === id)
+        return differenceWith(
+            allDonations,
+            hiddenList,
+            (donation, id) => joinKeys(donation.hash, donation.actions[0].index) === id,
+        )
     }, [hiddenList, allDonations])
 
     const [selectedDonation, setSelectedDonation] = useState<RSS3BaseAPI.Donation>()

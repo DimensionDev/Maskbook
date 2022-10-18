@@ -1,8 +1,8 @@
 import { FormattedAddress } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { formatEthereumAddress, formatWeiToEther, chainResolver, explorerResolver } from '@masknet/web3-shared-evm'
-import { useChainId, useWeb3State } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { useChainId, useWeb3State } from '@masknet/web3-hooks-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { OpenInNew } from '@mui/icons-material'
 import { Typography, Box, Link } from '@mui/material'
 import BigNumber from 'bignumber.js'
@@ -15,10 +15,6 @@ const useStyles = makeStyles()((theme) => {
         root: {
             padding: theme.spacing(2),
         },
-        content: {
-            paddingTop: theme.spacing(0),
-            paddingBottom: `${theme.spacing(0)} !important`,
-        },
         container: {
             padding: theme.spacing(1),
         },
@@ -28,13 +24,9 @@ const useStyles = makeStyles()((theme) => {
         nameRedirectionLink: {
             marginLeft: theme.spacing(0.5),
         },
-        bold: {
-            fontWeight: 'bold',
-        },
         description: {
             marginTop: theme.spacing(1),
             marginBottom: theme.spacing(1),
-            fontSize: 14,
             whiteSpace: 'pre-line',
         },
         meta_row: {

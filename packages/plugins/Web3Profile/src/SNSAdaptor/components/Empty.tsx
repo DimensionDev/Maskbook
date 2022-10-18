@@ -22,11 +22,11 @@ interface EmptyProps {
     showIcon?: boolean
 }
 
-export function Empty({ content, showIcon = true }: EmptyProps) {
+export function Empty({ content, showIcon }: EmptyProps) {
     const { classes } = useStyles()
     return (
         <div className={classes.wrapper}>
-            {showIcon && <Icons.EmptySimple size={36} />}
+            {showIcon ? <Icons.EmptySimple size={36} /> : null}
             <Typography className={classes.content}>{content}</Typography>
         </div>
     )

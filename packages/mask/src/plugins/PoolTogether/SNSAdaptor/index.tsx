@@ -1,6 +1,6 @@
 import { Icons } from '@masknet/icons'
 import { usePluginWrapper, usePostInfoDetails, type Plugin } from '@masknet/plugin-infra/content-script'
-import { parseURL } from '@masknet/shared-base'
+import { parseURLs } from '@masknet/shared-base'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import { useMemo } from 'react'
 import { Trans } from 'react-i18next'
@@ -18,7 +18,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
         const link = useMemo(() => {
             const x = extractTextFromTypedMessage(props.message)
             if (x.none) return null
-            return parseURL(x.val).find(isPoolTogetherUrl)
+            return parseURLs(x.val).find(isPoolTogetherUrl)
         }, [props.message])
         if (!link) return null
         return <Renderer url={link} />

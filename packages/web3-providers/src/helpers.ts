@@ -17,7 +17,8 @@ import {
     WBTC,
     WNATIVE,
 } from '@masknet/web3-shared-evm'
-import { FungibleAsset, isSameAddress } from '@masknet/web3-shared-base'
+import { FungibleAsset, isSameAddress, ActivityType } from '@masknet/web3-shared-base'
+import { first } from 'lodash-unified'
 
 export async function fetchJSON<T = unknown>(
     requestInfo: string,
@@ -60,4 +61,22 @@ export function getPaymentToken(chainId: ChainId, token?: { name?: string; symbo
             x.symbol.toLowerCase() === token.symbol?.toLowerCase() ||
             isSameAddress(x.address, token.address),
     )
+}
+
+export const resolveNonFungibleTokenEventActivityType = (type?: string) => {
+    if (!type) return ActivityType.Transfer
+    const type_ = type.toLowerCase()
+    if (['created', 'mint'].includes(type_)) return ActivityType.Mint
+    if (['successful'].includes(type_)) return ActivityType.Sale
+    if (['offer', 'offer_entered', 'bid_withdrawn', 'bid_entered'].includes(type_)) return ActivityType.Offer
+    if (['cancel_offer'].includes(type_)) return ActivityType.CancelOffer
+    if (['list'].includes(type_)) return ActivityType.List
+    if (['sale'].includes(type_)) return ActivityType.Sale
+    return ActivityType.Transfer
+}
+
+export function getNFTName(name?: string, tokenId?: string) {
+    if (!name) return ''
+    const _name = (first(name.split('#')) ?? '').trim()
+    return tokenId ? _name.replace(` ${tokenId}`, '').trim() : _name
 }

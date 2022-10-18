@@ -5,8 +5,9 @@ import { TokenIcon } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles, ActionButton } from '@masknet/theme'
 import { WalletMessages } from '@masknet/plugin-wallet'
-import { NetworkPluginID, NonFungibleTokenContract } from '@masknet/web3-shared-base'
-import { useAccount, useNonFungibleTokenContract } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID } from '@masknet/shared-base'
+import type { NonFungibleTokenContract } from '@masknet/web3-shared-base'
+import { useAccount, useNonFungibleTokenContract } from '@masknet/web3-hooks-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { Box, ListItem, Typography } from '@mui/material'
 import { dateTimeFormat } from '../../ITO/assets/formatDate.js'
@@ -31,14 +32,6 @@ const useStyles = makeStyles()((theme) => {
                 padding: theme.spacing(2, 1.5),
             },
         },
-        primary: {
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-        },
-        secondary: {
-            fontSize: 12,
-        },
         message: {
             whiteSpace: 'nowrap',
             overflow: 'hidden',
@@ -46,18 +39,6 @@ const useStyles = makeStyles()((theme) => {
             [smallQuery]: {
                 whiteSpace: 'normal',
             },
-        },
-        strong: {
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-        },
-        span: {
-            maxWidth: 350,
-            display: 'inline-flex',
-        },
-        time: {
-            fontSize: 12,
-            color: theme.palette.text.secondary,
         },
         box: {
             display: 'flex',
@@ -88,7 +69,6 @@ const useStyles = makeStyles()((theme) => {
             fontSize: 16,
         },
         info: {
-            fontSize: 14,
             color: theme.palette.mode === 'light' ? '#5B7083' : '#c3cbd2',
             [smallQuery]: {
                 fontSize: 13,
@@ -187,7 +167,7 @@ export const NftRedPacketHistoryItem: FC<NftRedPacketHistoryItemProps> = memo(
             <ListItem className={classes.root}>
                 <Box className={classes.box}>
                     <TokenIcon
-                        classes={{ icon: classes.icon }}
+                        className={classes.icon}
                         address={contractDetailed?.address ?? ''}
                         name={contractDetailed?.name ?? '-'}
                         logoURL={

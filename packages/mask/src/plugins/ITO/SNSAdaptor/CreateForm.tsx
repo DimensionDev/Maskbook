@@ -1,15 +1,16 @@
+import { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react'
+import { v4 as uuid } from 'uuid'
+import classNames from 'classnames'
+import Web3Utils from 'web3-utils'
+import formatDateTime from 'date-fns/format'
 import { SchemaType, formatAmount, useITOConstants, ChainId } from '@masknet/web3-shared-evm'
-import { isGreaterThan, isZero, NetworkPluginID, FungibleToken, leftShift } from '@masknet/web3-shared-base'
+import { isGreaterThan, isZero, FungibleToken, leftShift } from '@masknet/web3-shared-base'
 import { TokenIcon } from '@masknet/shared'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { Box, Stack, Typography, InputBase, inputBaseClasses } from '@mui/material'
 import { makeStyles, useStylesExtends, ActionButton, LoadingBase } from '@masknet/theme'
 import CheckIcon from '@mui/icons-material/Check'
 import UnCheckIcon from '@mui/icons-material/Close'
-import classNames from 'classnames'
-import formatDateTime from 'date-fns/format'
-import { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react'
-import { v4 as uuid } from 'uuid'
-import Web3Utils from 'web3-utils'
 import {
     useCurrentIdentity,
     useCurrentLinkedPersona,
@@ -26,7 +27,7 @@ import { decodeRegionCode, encodeRegionCode, regionCodes, useRegionSelect } from
 import { AdvanceSettingData, AdvanceSetting } from './AdvanceSetting.js'
 import { ExchangeTokenPanelGroup } from './ExchangeTokenPanelGroup.js'
 import { RegionSelect } from './RegionSelect.js'
-import { useAccount, useFungibleTokenBalance } from '@masknet/plugin-infra/web3'
+import { useAccount, useFungibleTokenBalance } from '@masknet/web3-hooks-base'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
 
 const useStyles = makeStyles()((theme) => {
@@ -43,10 +44,6 @@ const useStyles = makeStyles()((theme) => {
         column: {
             flexDirection: 'column',
         },
-        flow: {
-            margin: theme.spacing(1),
-            textAlign: 'center',
-        },
         input: {
             position: 'relative',
             height: 66,
@@ -58,19 +55,12 @@ const useStyles = makeStyles()((theme) => {
         },
         inputLabel: {
             position: 'absolute',
-            left: 8,
-            top: 8,
+            left: 12,
+            top: 10,
             fontSize: 13,
             lineHeight: '18px',
             color: theme.palette.maskColor.second,
             whiteSpace: 'nowrap',
-        },
-        label: {
-            paddingLeft: theme.spacing(2),
-        },
-        tip: {
-            fontSize: 12,
-            color: theme.palette.text.secondary,
         },
         date: {
             margin: theme.spacing(1),
@@ -107,11 +97,6 @@ const useStyles = makeStyles()((theme) => {
         qualStartTime: {
             padding: '0 16px',
             opacity: 0.8,
-        },
-        field: {
-            flex: 1,
-            padding: theme.spacing(1),
-            marginTop: theme.spacing(1),
         },
         controller: {
             position: 'sticky',
@@ -414,14 +399,7 @@ export function CreateForm(props: CreateFormProps) {
                     endAdornment={
                         tokenAndAmount?.token ? (
                             <Box className={classes.tokenAdornment}>
-                                <TokenIcon
-                                    classes={{ icon: classes.tokenIcon }}
-                                    chainId={tokenAndAmount.token.chainId}
-                                    address={tokenAndAmount.token.address}
-                                    name={tokenAndAmount.token.name}
-                                    symbol={tokenAndAmount.token.symbol}
-                                    logoURL={tokenAndAmount.token.logoURL}
-                                />
+                                <TokenIcon className={classes.tokenIcon} {...tokenAndAmount.token} />
                                 <Typography>{tokenAndAmount.token?.symbol}</Typography>
                             </Box>
                         ) : null

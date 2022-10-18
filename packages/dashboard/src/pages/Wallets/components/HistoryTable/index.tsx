@@ -7,10 +7,10 @@ import { LoadingPlaceholder } from '../../../../components/LoadingPlaceholder/in
 import { EmptyPlaceholder } from '../EmptyPlaceholder/index.js'
 import { HistoryTableRow } from '../HistoryTableRow/index.js'
 import { noop } from 'lodash-unified'
-import { useAccount, useTransactions } from '@masknet/plugin-infra/web3'
+import { useAccount, useTransactions } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { NetworkPluginID, Transaction } from '@masknet/web3-shared-base'
-import { EMPTY_LIST } from '@masknet/shared-base'
+import { NetworkPluginID, EMPTY_LIST } from '@masknet/shared-base'
+import type { Transaction } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({
@@ -30,19 +30,6 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-    },
-    paginationItem: {
-        borderRadius: 4,
-        border: `1px solid ${MaskColorVar.lineLight}`,
-        color: MaskColorVar.textPrimary,
-        '&.Mui-selected': {
-            backgroundColor: MaskColorVar.blue,
-            color: '#ffffff',
-            border: 'none',
-            '&:hover': {
-                backgroundColor: MaskColorVar.blue,
-            },
-        },
     },
 }))
 

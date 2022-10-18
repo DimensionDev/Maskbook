@@ -1,10 +1,10 @@
 import { memo } from 'react'
 import { MenuItem, Typography } from '@mui/material'
 import { FormattedAddress } from '@masknet/shared'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { makeStyles } from '@masknet/theme'
-import { useReverseAddress, useWeb3State } from '@masknet/plugin-infra/web3'
+import { useReverseAddress, useWeb3State } from '@masknet/web3-hooks-base'
 
 const useStyles = makeStyles()({
     menuItem: {

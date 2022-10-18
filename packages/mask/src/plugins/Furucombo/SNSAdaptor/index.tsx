@@ -3,7 +3,7 @@ import { Trans } from 'react-i18next'
 import { type Plugin, usePluginWrapper, usePostInfoDetails } from '@masknet/plugin-infra/content-script'
 import { base } from '../base.js'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
-import { parseURL } from '@masknet/shared-base'
+import { parseURLs } from '@masknet/shared-base'
 import { Icons } from '@masknet/icons'
 import { FurucomboView } from '../UI/FurucomboView.js'
 
@@ -17,7 +17,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
         const link = useMemo(() => {
             const x = extractTextFromTypedMessage(props.message)
             if (x.none) return null
-            return parseURL(x.val).find(isFurucomboLink)
+            return parseURLs(x.val).find(isFurucomboLink)
         }, [props.message])
         if (!link) return null
         return <Renderer url={link} />

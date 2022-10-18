@@ -1,23 +1,17 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { DialogContent } from '@mui/material'
 import { openWindow, useRemoteControlledDialog, useValueRef } from '@masknet/shared-base-ui'
 import { InjectedDialog } from '@masknet/shared'
-import {
-    getRegisteredWeb3Networks,
-    getRegisteredWeb3Providers,
-    useNetworkDescriptor,
-    useWeb3State,
-    useWeb3UI,
-} from '@masknet/plugin-infra/web3'
+import { getRegisteredWeb3Networks, getRegisteredWeb3Providers } from '@masknet/plugin-infra'
+import { useNetworkDescriptor, useWeb3State, useWeb3UI } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useI18N } from '../../../../utils/i18n-next-ui.js'
 import { WalletMessages } from '../../messages.js'
 import { hasNativeAPI, nativeAPI } from '../../../../../shared/native-rpc/index.js'
 import { PluginProviderRender } from './PluginProviderRender.js'
 import { pluginIDSettings } from '../../../../../shared/legacy-settings/settings.js'
-import { getSiteType, isDashboardPage } from '@masknet/shared-base'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { getSiteType, isDashboardPage, NetworkPluginID } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -100,23 +94,25 @@ export function SelectProviderDialog(props: SelectProviderDialogProps) {
         [Others, Provider, closeDialog, walletConnectedCallback],
     )
 
-    // not available for the native app
+    const isDashboard = isDashboardPage()
+    const selectedNetworks = useMemo(
+        () =>
+            isDashboard ? networks.filter((x) => x.networkSupporterPluginID === NetworkPluginID.PLUGIN_EVM) : networks,
+        [isDashboard, networks],
+    )
+    const selectedProviders = useMemo(
+        () =>
+            isDashboard ? providers.filter((x) => x.providerAdaptorPluginID === NetworkPluginID.PLUGIN_EVM) : providers,
+        [isDashboard, networks],
+    )
     if (hasNativeAPI) return null
 
     return (
         <InjectedDialog title={t('plugin_wallet_select_provider_dialog_title')} open={open} onClose={closeDialog}>
             <DialogContent className={classes.content}>
                 <PluginProviderRender
-                    networks={
-                        isDashboardPage()
-                            ? networks.filter((x) => x.networkSupporterPluginID === NetworkPluginID.PLUGIN_EVM)
-                            : networks
-                    }
-                    providers={
-                        isDashboardPage()
-                            ? providers.filter((x) => x.providerAdaptorPluginID === NetworkPluginID.PLUGIN_EVM)
-                            : providers
-                    }
+                    networks={selectedNetworks}
+                    providers={selectedProviders}
                     undeterminedPluginID={undeterminedPluginID}
                     supportedNetworkList={supportedNetworkList}
                     undeterminedNetworkID={undeterminedNetworkID}

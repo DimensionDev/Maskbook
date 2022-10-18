@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import { Tab, Tabs, Paper, Card, CardHeader, CardContent, Link, Typography, Avatar, Box } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { useChainId } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { useChainId } from '@masknet/web3-hooks-base'
 import { useI18N } from '../../../utils/index.js'
 import { CollectionView } from './CollectionView.js'
 import { DetailsView } from './DetailsView.js'
@@ -28,28 +28,6 @@ const useStyles = makeStyles()((theme) => {
         },
         content: {
             padding: '0 !important',
-        },
-        footer: {
-            marginTop: -1,
-            zIndex: 1,
-            position: 'relative',
-            borderTop: `solid 1px ${theme.palette.divider}`,
-            justifyContent: 'space-between',
-        },
-        sourceNote: {
-            fontSize: 10,
-            marginRight: theme.spacing(1),
-        },
-        footLink: {
-            cursor: 'pointer',
-            marginRight: theme.spacing(0.5),
-            '&:last-child': {
-                marginRight: 0,
-            },
-        },
-        mask: {
-            width: 40,
-            height: 10,
         },
     }
 })

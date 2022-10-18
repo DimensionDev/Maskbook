@@ -2,7 +2,6 @@ import { type Plugin, usePluginWrapper, usePostInfoDetails } from '@masknet/plug
 import { uniq } from 'lodash-unified'
 import { Trans } from 'react-i18next'
 import { checkUrl, getAssetInfoFromURL, getRelevantUrl } from '../utils.js'
-
 import { base } from '../base.js'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import { Collectible } from './Collectible.js'

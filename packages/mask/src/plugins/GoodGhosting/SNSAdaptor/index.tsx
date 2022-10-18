@@ -1,14 +1,13 @@
 import { useMemo } from 'react'
+import { Trans } from 'react-i18next'
 import { type Plugin, usePluginWrapper, usePostInfoDetails } from '@masknet/plugin-infra/content-script'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
-import { parseURL } from '@masknet/shared-base'
+import { NetworkPluginID, parseURLs } from '@masknet/shared-base'
 import { Icons } from '@masknet/icons'
-import { Trans } from 'react-i18next'
 import { PreviewCard } from '../UI/PreviewCard.js'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { base } from '../base.js'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 const isGoodGhosting = (x: string): boolean => /^https:\/\/goodghosting.com/.test(x)
 
@@ -19,7 +18,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
         const link = useMemo(() => {
             const x = extractTextFromTypedMessage(props.message)
             if (x.none) return null
-            return parseURL(x.val).find(isGoodGhosting)
+            return parseURLs(x.val).find(isGoodGhosting)
         }, [props.message])
         if (!link) return null
         return <Renderer url={link} />

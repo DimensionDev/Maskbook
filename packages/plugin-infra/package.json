@@ -8,16 +8,6 @@
       "webpack": "./src/entry.ts",
       "default": "./dist/entry.js"
     },
-    "./web3": {
-      "types": "./dist/entry-web3.d.ts",
-      "webpack": "./src/entry-web3.ts",
-      "default": "./dist/entry-web3.js"
-    },
-    "./web3-evm": {
-      "types": "./dist/entry-web3-evm.d.ts",
-      "webpack": "./src/entry-web3-evm.ts",
-      "default": "./dist/entry-web3-evm.js"
-    },
     "./dom": {
       "types": "./dist/entry-dom.d.ts",
       "webpack": "./src/entry-dom.ts",
@@ -42,12 +32,6 @@
   "types": "./dist/entry.d.ts",
   "typesVersions": {
     "*": {
-      "web3": [
-        "./dist/entry-web3.d.ts"
-      ],
-      "web3-evm": [
-        "./dist/entry-web3-evm.d.ts"
-      ],
       "dom": [
         "./dist/entry-dom.d.ts"
       ],

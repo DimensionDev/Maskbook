@@ -1,9 +1,12 @@
 import { memo, ReactElement, SyntheticEvent, useCallback, useMemo, useRef, useState } from 'react'
-import { useI18N } from '../../../../../utils/index.js'
+import { ChevronDown } from 'react-feather'
+import { useNavigate } from 'react-router-dom'
 import { z as zod } from 'zod'
 import BigNumber from 'bignumber.js'
+import { noop } from 'lodash-unified'
 import { EthereumAddress } from 'wallet.ts'
-import { formatGweiToWei, formatEthereumAddress, ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { formatGweiToWei, formatEthereumAddress, ChainId, SchemaType, formatWeiToGwei } from '@masknet/web3-shared-evm'
 import {
     isZero,
     isGreaterThan,
@@ -12,7 +15,6 @@ import {
     rightShift,
     isSameAddress,
     formatBalance,
-    NetworkPluginID,
     FungibleAsset,
     GasOptionType,
 } from '@masknet/web3-shared-base'
@@ -23,13 +25,10 @@ import { Box, Button, Chip, Collapse, MenuItem, Popover, Typography } from '@mui
 import { StyledInput } from '../../../components/StyledInput/index.js'
 import { Icons } from '@masknet/icons'
 import { FormattedAddress, FormattedBalance, TokenIcon, useMenuConfig } from '@masknet/shared'
-import { ChevronDown } from 'react-feather'
-import { noop } from 'lodash-unified'
+import { toHex } from 'web3-utils'
 import { makeStyles } from '@masknet/theme'
 import { ExpandMore } from '@mui/icons-material'
-import { useNavigate } from 'react-router-dom'
 import { LoadingButton } from '@mui/lab'
-import { toHex } from 'web3-utils'
 import { TransferAddressError } from '../type.js'
 import {
     useChainId,
@@ -37,8 +36,10 @@ import {
     useWallet,
     useWeb3Connection,
     useWeb3Hub,
-} from '@masknet/plugin-infra/web3'
-import { useGasLimit, useTokenTransferCallback } from '@masknet/plugin-infra/web3-evm'
+    useCurrentWeb3NetworkPluginID,
+} from '@masknet/web3-hooks-base'
+import { useGasLimit, useTokenTransferCallback } from '@masknet/web3-hooks-evm'
+import { useI18N } from '../../../../../utils/index.js'
 
 const useStyles = makeStyles()({
     container: {
@@ -158,6 +159,7 @@ export interface Prior1559TransferProps {
 export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, openAssetMenu, otherWallets }) => {
     const { t } = useI18N()
     const { classes } = useStyles()
+    const currentPluginId = useCurrentWeb3NetworkPluginID()
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
     const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
@@ -221,7 +223,7 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
 
         methods.clearErrors('address')
 
-        if (address.includes('.eth')) {
+        if (address.includes('.eth') && currentPluginId !== NetworkPluginID.PLUGIN_EVM) {
             setAddressTip({
                 type: TransferAddressError.NETWORK_NOT_SUPPORT,
                 message: t('wallet_transfer_error_no_support_ens'),
@@ -245,7 +247,7 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
                 message: t('wallet_transfer_error_is_contract_address'),
             })
         }
-    }, [address, EthereumAddress.isValid, methods.clearErrors, connection])
+    }, [address, EthereumAddress.isValid, methods.clearErrors, connection, currentPluginId])
 
     // #region Set default gas price
     useAsync(async () => {
@@ -253,7 +255,7 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
 
         const gasPrice = methods.getValues('gasPrice')
         if (gasOptions && !gasPrice) {
-            const gasPrice = new BigNumber(gasOptions[GasOptionType.FAST].suggestedMaxFeePerGas)
+            const gasPrice = formatWeiToGwei(gasOptions[GasOptionType.FAST].suggestedMaxFeePerGas)
             methods.setValue('gasPrice', gasPrice.toString())
         }
     }, [methods.setValue, methods.getValues, chainId, hub])
@@ -519,7 +521,7 @@ export const Prior1559TransferUI = memo<Prior1559TransferUIProps>(
                                                         onClick={openAssetMenu}
                                                         icon={
                                                             <TokenIcon
-                                                                classes={{ icon: classes.icon }}
+                                                                className={classes.icon}
                                                                 address={selectedAsset.address ?? ''}
                                                                 name={selectedAsset.name}
                                                                 symbol={selectedAsset.symbol}

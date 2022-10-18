@@ -1,11 +1,12 @@
 import { memo, useCallback, useMemo } from 'react'
 import { Link, ListItem, ListItemIcon, ListItemText, Typography } from '@mui/material'
-import { formatBalance, FungibleToken, NetworkPluginID } from '@masknet/web3-shared-base'
+import { formatBalance, FungibleToken } from '@masknet/web3-shared-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
 import { TokenIcon } from '../TokenIcon/index.js'
 import { Icons } from '@masknet/icons'
 import { makeStyles, MaskLoadingButton, LoadingBase } from '@masknet/theme'
 import { useSharedI18N } from '../../../locales/index.js'
-import { useWeb3State } from '@masknet/plugin-infra/web3'
+import { useWeb3State } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { TokenListMode } from './type.js'
 import { SettingSwitch } from '../SettingSwitch/index.js'
@@ -47,7 +48,6 @@ const useStyles = makeStyles()((theme) => ({
         gap: theme.spacing(0.5),
         alignItems: 'center',
         lineHeight: '20px',
-        fontSize: 14,
         color: theme.palette.maskColor.second,
     },
     symbol: {
@@ -170,7 +170,7 @@ export const getFungibleTokenItem = <T extends NetworkPluginID>(
                 <Typography className={classes.balance}>
                     {balance === undefined ? (
                         <LoadingBase size={24} />
-                    ) : (
+                    ) : balance === '' ? null : (
                         <FormattedBalance
                             value={balance}
                             decimals={decimals}
@@ -204,7 +204,7 @@ export const getFungibleTokenItem = <T extends NetworkPluginID>(
                     disabled={selected && mode === TokenListMode.List}>
                     <ListItemIcon>
                         <TokenIcon
-                            classes={{ icon: classes.icon }}
+                            className={classes.icon}
                             chainId={chainId}
                             address={address}
                             name={name}

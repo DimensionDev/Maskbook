@@ -1,4 +1,6 @@
 import urlcat from 'urlcat'
+import LRUCache from 'lru-cache'
+import { first } from 'lodash-unified'
 import {
     createIndicator,
     createNextIndicator,
@@ -10,6 +12,7 @@ import {
     NonFungibleCollection,
     NonFungibleTokenContract,
     NonFungibleTokenEvent,
+    ActivityType,
     Pageable,
     scale10,
     SourceType,
@@ -17,10 +20,21 @@ import {
     Transaction,
 } from '@masknet/web3-shared-base'
 import { EMPTY_LIST } from '@masknet/shared-base'
-import { ChainId, createNativeToken, explorerResolver, SchemaType, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
-import type { FT, NFT, NFT_FloorPrice, NFT_Metadata, NFT_TransferEvent, Tx } from './types.js'
+import {
+    ChainId,
+    createNativeToken,
+    explorerResolver,
+    formatEthereumAddress,
+    isNativeTokenAddress,
+    isValidAddress,
+    SchemaType,
+    ZERO_ADDRESS,
+} from '@masknet/web3-shared-evm'
+import { formatAddress } from '@masknet/web3-shared-solana'
+import type { ENSRecord, FT, FT_Price, NFT, NFT_FloorPrice, NFT_Metadata, NFT_TransferEvent, Tx } from './types.js'
 import type { FungibleTokenAPI, HistoryAPI, NonFungibleTokenAPI } from '../types/index.js'
 import { CHAINBASE_API_URL } from './constants.js'
+import type { DomainAPI } from '../types/Domain.js'
 
 async function fetchFromChainbase<T>(pathname: string) {
     const response = await globalThis.fetch(urlcat(CHAINBASE_API_URL, pathname))
@@ -70,6 +84,70 @@ export class ChainbaseHistoryAPI implements HistoryAPI.Provider<ChainId, SchemaT
     }
 }
 
+const domainCache = new LRUCache<ChainId, Record<string, string>>({
+    max: 100,
+    ttl: 300_000,
+})
+
+export class ChainbaseDomainAPI implements DomainAPI.Provider<ChainId> {
+    private async getAddress(name: string, chainId: ChainId) {
+        const response = await fetchFromChainbase<ENSRecord>(
+            urlcat('/v1/ens/records', { chain_id: chainId, domain: name }),
+        )
+        if (!response) return
+
+        return response.address
+    }
+
+    private async getName(address: string, chainId: ChainId) {
+        const response = await fetchFromChainbase<ENSRecord[]>(
+            urlcat('/v1/ens/reverse', { chain_id: chainId, address }),
+        )
+
+        if (!response) return
+
+        const record = first(response)
+
+        return record?.name
+    }
+
+    private addName(name: string, address: string, chainId: ChainId) {
+        const formattedAddress = formatEthereumAddress(address)
+        const cache = domainCache.get(chainId)
+
+        domainCache.set(chainId, {
+            ...cache,
+            [name]: formattedAddress,
+            [formattedAddress]: name,
+        })
+    }
+
+    async lookup(name: string, chainId: ChainId): Promise<string | undefined> {
+        if (!name) return
+        const address = domainCache.get(chainId)?.[name] || (await this.getAddress(name, chainId))
+
+        if (address && isValidAddress(address)) {
+            this.addName(name, address, chainId)
+            const formattedAddress = formatEthereumAddress(address)
+            return formattedAddress
+        }
+
+        return
+    }
+
+    async reverse(address: string, chainId: ChainId): Promise<string | undefined> {
+        if (!address || !isValidAddress(address)) return
+
+        const name = domainCache.get(chainId)?.[formatAddress(address)] || (await this.getName(address, chainId))
+
+        if (name) {
+            this.addName(name, address, chainId)
+            return name
+        }
+        return
+    }
+}
+
 export class ChainbaseFungibleTokenAPI implements FungibleTokenAPI.Provider<ChainId, SchemaType> {
     createFungibleAssetFromFT(chainId: ChainId, token: FT) {
         return {
@@ -116,6 +194,15 @@ export class ChainbaseFungibleTokenAPI implements FungibleTokenAPI.Provider<Chai
             assets.length ? createNextIndicator(indicator) : undefined,
         )
     }
+
+    async getFungibleTokenPrice(chainId: ChainId, address: string) {
+        if (isNativeTokenAddress(address) || !isValidAddress(address)) return undefined
+        const data = await fetchFromChainbase<FT_Price>(
+            urlcat('/v1/token/price', { chain_id: chainId, contract_address: address }),
+        )
+
+        return data?.price ?? 0
+    }
 }
 
 export class ChainbaseNonFungibleTokenAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
@@ -154,6 +241,7 @@ export class ChainbaseNonFungibleTokenAPI implements NonFungibleTokenAPI.Provide
                 name: nft.contract_name,
                 symbol: nft.contract_symbol,
             },
+            source: SourceType.Chainbase,
         }
     }
 
@@ -171,6 +259,7 @@ export class ChainbaseNonFungibleTokenAPI implements NonFungibleTokenAPI.Provide
             address,
             tokenId,
             link: this.createNonFungibleTokenPermalink(chainId, address, tokenId),
+            source: SourceType.Chainbase,
         }
     }
 
@@ -186,6 +275,7 @@ export class ChainbaseNonFungibleTokenAPI implements NonFungibleTokenAPI.Provide
             symbol: metadata.symbol,
             schema: SchemaType.ERC721,
             owner: metadata.owner,
+            source: SourceType.Chainbase,
         }
     }
 
@@ -197,6 +287,7 @@ export class ChainbaseNonFungibleTokenAPI implements NonFungibleTokenAPI.Provide
             symbol: nft.contract_symbol,
             slug: nft.contract_symbol,
             address: nft.contract_address,
+            source: SourceType.Chainbase,
         }
     }
 
@@ -209,7 +300,7 @@ export class ChainbaseNonFungibleTokenAPI implements NonFungibleTokenAPI.Provide
             chainId,
             id: event.transaction_hash,
             quantity: '1',
-            type: 'transfer',
+            type: ActivityType.Transfer,
             assetPermalink: this.createNonFungibleTokenPermalink(chainId, address, event.token_id),
             hash: event.transaction_hash,
             timestamp: new Date(event.block_timestamp).getTime(),
@@ -254,7 +345,7 @@ export class ChainbaseNonFungibleTokenAPI implements NonFungibleTokenAPI.Provide
             urlcat('/v1/nft/metadata', {
                 chain_id: chainId,
                 contract_address: address.toLowerCase(),
-                tokenId,
+                token_id: tokenId,
             }),
         )
         if (!metadata) return
@@ -306,7 +397,7 @@ export class ChainbaseNonFungibleTokenAPI implements NonFungibleTokenAPI.Provide
             urlcat('/v1/nft/metadata', {
                 chain_id: chainId,
                 contract_address: address.toLowerCase(),
-                tokenId: 1,
+                token_id: 1,
             }),
         )
         if (!metadata) return

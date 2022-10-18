@@ -25,18 +25,7 @@ const useStyles = makeStyles()({
         paddingTop: 18,
         paddingBottom: 18,
     },
-    name: {
-        fontSize: 16,
-        lineHeight: 1.75,
-        color: '#3B3B3B',
-        textAlign: 'center',
-        overflow: 'hidden',
-        textOverflow: 'ellipsis',
-        width: 400,
-        whiteSpace: 'nowrap',
-    },
     meta: {
-        fontSize: 14,
         lineHeight: 1.71,
         color: '#5D6F88',
         textAlign: 'center',

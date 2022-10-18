@@ -1,7 +1,8 @@
 import urlcat from 'urlcat'
 import type BigNumber from 'bignumber.js'
 import { first } from 'lodash-unified'
-import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
+import { isSameAddress } from '@masknet/web3-shared-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
 import { ChainId, chainResolver, getExplorerConstants, getRedPacketConstants } from '@masknet/web3-shared-evm'
 import { Interface } from '@ethersproject/abi'
 import type { RedPacketJSONPayloadFromChain } from '../../types.js'
@@ -83,7 +84,7 @@ export async function getRedPacketHistory(
                 duration: decodedInputParam._duration.toNumber() * 1000,
                 block_number: Number(txType.blockNumber),
                 contract_version: 4,
-                network: chainResolver.chainNetworkType(chainId),
+                network: chainResolver.networkType(chainId),
                 token_address: decodedInputParam._token_addr,
                 sender: {
                     address: senderAddress,

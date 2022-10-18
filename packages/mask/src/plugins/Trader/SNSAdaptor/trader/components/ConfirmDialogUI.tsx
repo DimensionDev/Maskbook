@@ -58,7 +58,6 @@ const useStyles = makeStyles<{
         },
     },
     label: {
-        fontSize: 14,
         fontWeight: 700,
         lineHeight: '18px',
         color: theme.palette.maskColor?.second,
@@ -67,7 +66,6 @@ const useStyles = makeStyles<{
         display: 'flex',
         alignItems: 'center',
         columnGap: 8,
-        fontSize: 14,
         fontWeight: 700,
         lineHeight: '18px',
     },
@@ -148,22 +146,10 @@ const useStyles = makeStyles<{
             theme.palette.mode === 'dark' ? 0.12 : 0.05,
         )}`,
     },
-    accept: {
-        backgroundColor: isDashboard
-            ? MaskColorVar.primary.alpha(0.1)
-            : parseColor(theme.palette.maskColor?.primary).setAlpha(0.1).toRgbString(),
-        color: isDashboard ? MaskColorVar.primary : theme.palette.maskColor?.primary,
-        fontWeight: 700,
-        fontSize: 12,
-        lineHeight: '16px',
-        padding: '10px 16px',
-        borderRadius: 20,
-    },
     danger: {
         color: `${isDashboard ? MaskColorVar.redMain : theme.palette.maskColor?.danger}!important`,
     },
     edit: {
-        fontSize: 14,
         lineHeight: '18px',
         color: isDashboard ? theme.palette.primary.main : theme.palette.maskColor?.primary,
         marginRight: 4,
@@ -328,7 +314,7 @@ export const ConfirmDialogUI = memo<ConfirmDialogUIProps>(
                         <Box>
                             <Typography component="div" className={classes.symbol}>
                                 <TokenIcon
-                                    classes={{ icon: classes.tokenIcon }}
+                                    className={classes.tokenIcon}
                                     address={inputToken.address}
                                     name={inputToken.name}
                                     symbol={inputToken.symbol}
@@ -367,7 +353,7 @@ export const ConfirmDialogUI = memo<ConfirmDialogUIProps>(
                         <Box>
                             <Typography component="div" className={classes.symbol}>
                                 <TokenIcon
-                                    classes={{ icon: classes.tokenIcon }}
+                                    className={classes.tokenIcon}
                                     chainId={outputToken.chainId}
                                     address={outputToken.address}
                                     name={outputToken.name}

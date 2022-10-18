@@ -7,9 +7,9 @@ import type { GameMetaData, GoodGhostingInfo, Player, TimelineEvent } from '../t
 import { useI18N } from '../../../utils/index.js'
 import addSeconds from 'date-fns/addSeconds'
 import Services from '../../../extension/service.js'
-import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
-import { useSingleContractMultipleData } from '@masknet/plugin-infra/web3-evm'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { useAccount, useChainId } from '@masknet/web3-hooks-base'
+import { useSingleContractMultipleData } from '@masknet/web3-hooks-evm'
+import { NetworkPluginID } from '@masknet/shared-base'
 
 export function useGameContractAddress(id: string) {
     const { GOOD_GHOSTING_CONTRACT_ADDRESS_FILE } = useGoodGhostingConstants()

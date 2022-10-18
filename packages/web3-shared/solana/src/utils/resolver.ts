@@ -8,7 +8,7 @@ import { CHAIN_DESCRIPTORS, NETWORK_DESCRIPTORS, PROVIDER_DESCRIPTORS } from '..
 
 export const chainResolver = createChainResolver(CHAIN_DESCRIPTORS)
 export const explorerResolver = createExplorerResolver(CHAIN_DESCRIPTORS, {
-    nonFungibleTokenPathname: '/address/:tokenId',
+    nonFungibleTokenPathname: '/address/:address',
 })
 export const networkResolver = createNetworkResolver(NETWORK_DESCRIPTORS)
 export const providerResolver = createProviderResolver(PROVIDER_DESCRIPTORS)

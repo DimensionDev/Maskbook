@@ -15,9 +15,7 @@ export interface SelectProfileDialogProps {
     onSelect: (people: Profile[]) => Promise<void>
 }
 const useStyles = makeStyles()({
-    title: { paddingBottom: 0 },
     content: { padding: '0 12px' },
-    progress: { marginRight: 6 },
 })
 
 export function SelectProfileDialog(props: SelectProfileDialogProps) {

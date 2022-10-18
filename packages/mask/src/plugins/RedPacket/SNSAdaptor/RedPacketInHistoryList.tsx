@@ -16,22 +16,15 @@ import { StyledLinearProgress } from '../../ITO/SNSAdaptor/StyledLinearProgress.
 import { RedPacketJSONPayload, RedPacketJSONPayloadFromChain, RedPacketStatus } from '../types.js'
 import { useAvailabilityComputed } from './hooks/useAvailabilityComputed.js'
 import { useRefundCallback } from './hooks/useRefundCallback.js'
-import { useAccount, useChainId, useFungibleToken, useWeb3Connection } from '@masknet/plugin-infra/web3'
-import { formatBalance, FungibleToken, NetworkPluginID, isSameAddress } from '@masknet/web3-shared-base'
+import { useAccount, useChainId, useFungibleToken, useWeb3Connection } from '@masknet/web3-hooks-base'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { formatBalance, FungibleToken, isSameAddress } from '@masknet/web3-shared-base'
 
 const interFace = new Interface(REDPACKET_ABI)
 
 const useStyles = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
     return {
-        primary: {
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-        },
-        secondary: {
-            fontSize: 12,
-        },
         message: {
             whiteSpace: 'nowrap',
             overflow: 'hidden',
@@ -47,10 +40,6 @@ const useStyles = makeStyles()((theme) => {
         span: {
             maxWidth: 350,
             display: 'inline-flex',
-        },
-        time: {
-            fontSize: 12,
-            color: theme.palette.text.secondary,
         },
         root: {
             borderRadius: 10,
@@ -98,7 +87,6 @@ const useStyles = makeStyles()((theme) => {
             fontSize: 16,
         },
         info: {
-            fontSize: 14,
             color: theme.palette.mode === 'light' ? '#5B7083' : '#c3cbd2',
             [smallQuery]: {
                 fontSize: 13,
@@ -264,7 +252,7 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
         <ListItem className={classes.root}>
             <Box className={classes.box}>
                 <TokenIcon
-                    classes={{ icon: classes.icon }}
+                    className={classes.icon}
                     address={historyToken?.address ?? ''}
                     name={historyToken?.name}
                     logoURL={historyToken?.logoURL}

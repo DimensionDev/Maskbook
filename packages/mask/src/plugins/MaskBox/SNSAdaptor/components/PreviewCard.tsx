@@ -1,5 +1,6 @@
 import { useCallback, useMemo, useState } from 'react'
-import { useWeb3State, useNetworkDescriptor, useChainId } from '@masknet/plugin-infra/web3'
+import { useChainId, useNetworkDescriptor, useWeb3State } from '@masknet/web3-hooks-base'
+import type { ChainId } from '@masknet/web3-shared-evm'
 import { useContainer } from 'unstated-next'
 import { makeStyles, ActionButton, LoadingBase, useTabs, MaskTabList } from '@masknet/theme'
 import { Box, Button, Paper, Tab, Typography, useTheme } from '@mui/material'
@@ -10,14 +11,13 @@ import { ArticlesTab } from './ArticlesTab.js'
 import { DetailsTab } from './DetailsTab.js'
 import { DrawDialog } from './DrawDialog.js'
 import { DrawResultDialog } from './DrawResultDialog.js'
-import { useTransactionCallback } from '@masknet/plugin-infra/web3-evm'
+import { useTransactionCallback } from '@masknet/web3-hooks-evm'
 import { ChainBoundary } from '../../../../web3/UI/ChainBoundary.js'
-import { formatBalance, NetworkPluginID } from '@masknet/web3-shared-base'
-
+import { formatBalance } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { useI18N } from '../../locales/index.js'
 import { TabContext, TabPanel } from '@mui/lab'
 import { ImageIcon, TokenIcon } from '@masknet/shared'
-import type { ChainId } from '@masknet/web3-shared-evm'
 
 const useTabsStyles = makeStyles()((theme) => ({
     button: {
@@ -111,7 +111,7 @@ const useTabsStyles = makeStyles()((theme) => ({
 export interface PreviewCardProps {}
 
 export function PreviewCard(props: PreviewCardProps) {
-    const { classes: tabClasses } = useTabsStyles()
+    const { classes } = useTabsStyles()
     const state = useState(CardTab.Articles)
     const [openDrawDialog, setOpenDrawDialog] = useState(false)
     const [openDrawResultDialog, setOpenDrawResultDialog] = useState(false)
@@ -245,20 +245,20 @@ export function PreviewCard(props: PreviewCardProps) {
     return (
         <>
             <TabContext value={currentTab}>
-                <Box className={tabClasses.header}>
-                    <Box className={tabClasses.imgBox}>
+                <Box className={classes.header}>
+                    <Box className={classes.imgBox}>
                         <TokenIcon
                             address={boxInfo.tokenAddress ?? ''}
                             name={boxInfo.name}
                             chainId={chainId}
                             AvatarProps={{ sx: { width: 48, height: 48 } }}
                         />
-                        <Box className={tabClasses.iconBox}>
-                            <ImageIcon size={24} icon={networkDescriptor?.icon} classes={{ icon: tabClasses.icon }} />
+                        <Box className={classes.iconBox}>
+                            <ImageIcon size={24} icon={networkDescriptor?.icon} classes={{ icon: classes.icon }} />
                         </Box>
                     </Box>
                     <Box sx={{ flex: 1 }}>
-                        <Typography className={tabClasses.name} color="textPrimary">
+                        <Typography className={classes.name} color="textPrimary">
                             {boxInfo.name}
                         </Typography>
                         <Box sx={{ flex: 1, display: 'flex', flexDirection: 'row' }}>
@@ -299,22 +299,22 @@ export function PreviewCard(props: PreviewCardProps) {
                         </Box>
                     </Box>
                     {boxState === BoxState.READY ? (
-                        <Typography className={tabClasses.active}>{t.active()}</Typography>
+                        <Typography className={classes.active}>{t.active()}</Typography>
                     ) : null}
                 </Box>
-                <Box className={tabClasses.body}>
+                <Box className={classes.body}>
                     <MaskTabList variant="base" aria-label="maskbox" onChange={onChange}>
                         {Tabs.map((x) => (
                             <Tab
                                 key={x.value}
                                 value={x.value}
                                 label={x.label}
-                                className={x.value === currentTab ? tabClasses.tabActive : tabClasses.tab}
+                                className={x.value === currentTab ? classes.tabActive : classes.tab}
                             />
                         ))}
                     </MaskTabList>
                 </Box>
-                <Paper className={tabClasses.content}>
+                <Paper className={classes.content}>
                     <TabPanel value={tabs.Articles} key={tabs.Articles} sx={{ padding: 0 }}>
                         {boxInfo ? <ArticlesTab boxInfo={boxInfo} boxMetadata={boxMetadata} /> : null}
                     </TabPanel>
@@ -330,7 +330,7 @@ export function PreviewCard(props: PreviewCardProps) {
                         ActionButtonPromiseProps={{ variant: 'roundedDark' }}>
                         <WalletConnectedBoundary
                             ActionButtonProps={{ size: 'medium', variant: 'roundedDark' }}
-                            classes={{ button: tabClasses.button }}>
+                            classes={{ button: classes.button }}>
                             <ActionButton
                                 loading={isOpening}
                                 size="medium"

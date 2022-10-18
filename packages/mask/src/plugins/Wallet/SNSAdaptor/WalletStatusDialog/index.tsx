@@ -4,9 +4,8 @@ import ErrorIcon from '@mui/icons-material/Error'
 import { makeStyles } from '@masknet/theme'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { InjectedDialog } from '@masknet/shared'
-import { CrossIsolationMessages } from '@masknet/shared-base'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { useChainIdValid } from '@masknet/plugin-infra/web3'
+import { CrossIsolationMessages, NetworkPluginID } from '@masknet/shared-base'
+import { useChainIdValid } from '@masknet/web3-hooks-base'
 import { WalletStatusBox } from '../../../../components/shared/WalletStatusBox/index.js'
 import { useI18N } from '../../../../utils/index.js'
 import { WalletMessages } from '../../messages.js'
@@ -23,21 +22,6 @@ const useStyles = makeStyles()((theme) => ({
         padding: theme.spacing(2),
         borderTop: `1px solid ${theme.palette.divider}`,
         justifyContent: 'flex-start',
-    },
-    walletStatusWrapper: {
-        marginRight: 16,
-    },
-    address: {
-        fontSize: 16,
-        marginRight: theme.spacing(1),
-        display: 'inline-block',
-    },
-    subTitle: {
-        fontSize: 18,
-        lineHeight: '24px',
-        fontWeight: 600,
-        marginBottom: 11.5,
-        color: theme.palette.text.primary,
     },
     inVisible: {
         visibility: 'hidden',

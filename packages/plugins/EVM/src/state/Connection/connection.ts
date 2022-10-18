@@ -285,8 +285,8 @@ class Connection implements EVM_Connection {
     }
     async transferNonFungibleToken(
         address: string,
-        recipient: string,
         tokenId: string,
+        recipient: string,
         amount?: string,
         schema?: SchemaType,
         initial?: EVM_Web3ConnectionOptions,
@@ -317,7 +317,7 @@ class Connection implements EVM_Connection {
     }
     async getAddressType(address: string, initial?: EVM_Web3ConnectionOptions): Promise<AddressType | undefined> {
         if (!isValidAddress(address)) return
-        const code = await this.getCode(address)
+        const code = await this.getCode(address, initial)
         return code === '0x' ? AddressType.ExternalOwned : AddressType.Contract
     }
     async getSchemaType(address: string, initial?: EVM_Web3ConnectionOptions): Promise<SchemaType | undefined> {
@@ -802,6 +802,8 @@ class Connection implements EVM_Connection {
                             from: options.account,
                             ...transaction,
                             value: transaction.value ? toHex(transaction.value) : undefined,
+                            // rpc hack, alchemy rpc must pass gas parameter
+                            gas: options.chainId === ChainId.Astar ? '0x135168' : undefined,
                         },
                     ],
                 },

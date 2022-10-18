@@ -5,11 +5,10 @@ import { makeStyles } from '@masknet/theme'
 import { MoreHoriz } from '@mui/icons-material'
 import { Icons } from '@masknet/icons'
 import { FormattedAddress } from '@masknet/shared'
-import { PopupRoutes } from '@masknet/shared-base'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { PopupRoutes, NetworkPluginID } from '@masknet/shared-base'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { CopyIconButton } from '../../../../components/CopyIconButton/index.js'
-import { useReverseAddress, useWallet, useWeb3State } from '@masknet/plugin-infra/web3'
+import { useReverseAddress, useWallet, useWeb3State } from '@masknet/web3-hooks-base'
 
 const useStyles = makeStyles()({
     container: {
@@ -54,11 +53,6 @@ const useStyles = makeStyles()({
         width: 24,
         height: 24,
         marginRight: 4,
-    },
-    tick: {
-        fontSize: 12,
-        stroke: '#77E0B5',
-        marginLeft: 4,
     },
 })
 

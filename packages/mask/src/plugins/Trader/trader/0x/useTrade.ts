@@ -4,10 +4,10 @@ import { ZRX_AFFILIATE_ADDRESS } from '../../constants/index.js'
 import { PluginTraderRPC } from '../../messages.js'
 import { SwapQuoteResponse, TradeStrategy } from '../../types/index.js'
 import { useSlippageTolerance } from '../0x/useSlippageTolerance.js'
-import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
-import { useAccount, useDoubleBlockBeatRetry, useNetworkType } from '@masknet/plugin-infra/web3'
+import { useAccount, useChainId, useDoubleBlockBeatRetry, useNetworkType } from '@masknet/web3-hooks-base'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
-import { FungibleToken, NetworkPluginID, isZero } from '@masknet/web3-shared-base'
+import { FungibleToken, isZero } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 
 const NATIVE_TOKEN_ADDRESS = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
 
@@ -47,8 +47,7 @@ export function useTrade(
 ): AsyncStateRetry<SwapQuoteResponse | null> {
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const networkType = useNetworkType(NetworkPluginID.PLUGIN_EVM)
-    const { targetChainId } = TargetChainIdContext.useContainer()
-
+    const targetChainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const slippageSetting = useSlippageTolerance()
     const slippage = temporarySlippage || slippageSetting
     return useDoubleBlockBeatRetry(
@@ -60,10 +59,10 @@ export function useTrade(
             if (isZero(outputAmount) && !isExactIn) return null
 
             const sellToken = isNativeTokenAddress(inputToken.address)
-                ? getNativeTokenLabel(chainResolver.chainNetworkType(targetChainId) ?? networkType)
+                ? getNativeTokenLabel(chainResolver.networkType(targetChainId) ?? networkType)
                 : inputToken.address
             const buyToken = isNativeTokenAddress(outputToken.address)
-                ? getNativeTokenLabel(chainResolver.chainNetworkType(targetChainId) ?? networkType)
+                ? getNativeTokenLabel(chainResolver.networkType(targetChainId) ?? networkType)
                 : outputToken.address
             return PluginTraderRPC.swapQuote(
                 {
@@ -76,7 +75,7 @@ export function useTrade(
                     slippagePercentage: slippage,
                     affiliateAddress: ZRX_AFFILIATE_ADDRESS,
                 },
-                chainResolver.chainNetworkType(targetChainId) ?? networkType,
+                chainResolver.networkType(targetChainId) ?? networkType,
             )
         },
         [

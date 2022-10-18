@@ -9,23 +9,13 @@ import type { GoodGhostingInfo, Player } from '../types.js'
 import { getPlayerStatus, isGameActionError, PlayerStatus } from '../utils.js'
 import BigNumber from 'bignumber.js'
 import { FormattedBalance } from '@masknet/shared'
-import { useChainId } from '@masknet/plugin-infra/web3'
-import { formatBalance, NetworkPluginID } from '@masknet/web3-shared-base'
+import { useChainId } from '@masknet/web3-hooks-base'
+import { formatBalance } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     infoRow: {
         paddingBottom: theme.spacing(1),
-    },
-    circularDataSection: {
-        paddingTop: theme.spacing(2),
-    },
-    circularDataWrapper: {
-        minWidth: '80px',
-    },
-    circularData: {
-        padding: theme.spacing(1),
-        maxWidth: '100px',
-        margin: 'auto',
     },
     withdraw: {
         marginTop: theme.spacing(5),

@@ -10,11 +10,8 @@ import {
 import { I18NextProviderHMR, SharedContextProvider } from '@masknet/shared'
 import { ErrorBoundary } from '@masknet/shared-base-ui'
 import { createInjectHooksRenderer, useActivatedPluginsDashboard } from '@masknet/plugin-infra/dashboard'
-import {
-    PluginsWeb3ContextProvider,
-    useAllPluginsWeb3State,
-    useCurrentWeb3NetworkPluginID,
-} from '@masknet/plugin-infra/web3'
+import { useAllPluginsWeb3State } from '@masknet/plugin-infra'
+import { PluginsWeb3ContextProvider, useCurrentWeb3NetworkPluginID } from '@masknet/web3-hooks-base'
 import { i18NextInstance, queryRemoteI18NBundle } from '@masknet/shared-base'
 
 import '../utils/kv-storage.js'

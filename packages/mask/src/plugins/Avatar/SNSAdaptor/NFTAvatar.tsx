@@ -6,13 +6,12 @@ import { LoadingBase, makeStyles, useStylesExtends } from '@masknet/theme'
 import { Box, Button, List, ListItem, Skeleton, Typography } from '@mui/material'
 import { useI18N } from '../../../utils/index.js'
 import { AddNFT } from './AddNFT.js'
-import { useAccount, useChainId, useCurrentWeb3NetworkPluginID, useNonFungibleAssets } from '@masknet/plugin-infra/web3'
+import { useAccount, useChainId, useCurrentWeb3NetworkPluginID, useNonFungibleAssets } from '@masknet/web3-hooks-base'
 import { ElementAnchor, ReversedAddress } from '@masknet/shared'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID, EMPTY_LIST } from '@masknet/shared-base'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
 import type { AllChainsNonFungibleToken, SelectTokenInfo } from '../types.js'
 import type { ChainId } from '@masknet/web3-shared-evm'
-import { EMPTY_LIST } from '@masknet/shared-base'
 import { NFTImage } from './NFTImage.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -21,7 +20,6 @@ const useStyles = makeStyles()((theme) => ({
         padding: 0,
         display: 'flex',
         justifyContent: 'space-between',
-        fontSize: 14,
         alignItems: 'center',
     },
     account: {
@@ -45,16 +43,11 @@ const useStyles = makeStyles()((theme) => ({
         justifyContent: 'space-around',
         flexDirection: 'row',
     },
-    setNFTAvatar: {},
     skeleton: {
         width: 100,
         height: 100,
         objectFit: 'cover',
         boxSizing: 'border-box',
-    },
-    skeletonBox: {
-        marginLeft: 'auto',
-        marginRight: 'auto',
     },
     error: {
         display: 'flex',
@@ -127,7 +120,7 @@ export function NFTAvatar(props: NFTAvatarProps) {
             pluginId: pluginID,
         })
         setSelectedToken(undefined)
-    }, [onChange, selectedToken])
+    }, [onChange, selectedToken, pluginID])
 
     const onAddClick = useCallback((token: AllChainsNonFungibleToken) => {
         setSelectedToken(token)

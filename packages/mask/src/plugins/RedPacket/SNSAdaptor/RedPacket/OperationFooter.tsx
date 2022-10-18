@@ -1,16 +1,37 @@
-import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
+import { useAccount, useChainId } from '@masknet/web3-hooks-base'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
-import { ActionButton } from '@masknet/theme'
-import { Box, useTheme } from '@mui/material'
+import { ActionButton, makeStyles } from '@masknet/theme'
+import { Box, keyframes, useTheme } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { useI18N as useBaseI18n } from '../../../../utils/index.js'
 import { useI18N } from '../../locales/index.js'
 import { ChainBoundary } from '../../../../web3/UI/ChainBoundary.js'
 import { WalletConnectedBoundary } from '../../../../web3/UI/WalletConnectedBoundary.js'
-import { useStyles } from './useStyles.js'
+
+export const useStyles = makeStyles()((theme) => {
+    const spinningAnimationKeyFrames = keyframes`
+to {
+  transform: rotate(360deg)
+}`
+    return {
+        footer: {
+            width: '100%',
+            display: 'flex',
+            gap: theme.spacing(2),
+            justifyContent: 'center',
+            '& button': {
+                flexBasis: 'auto',
+            },
+            [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
+                flexDirection: 'column',
+                gap: theme.spacing(1),
+            },
+        },
+    }
+})
 
 interface OperationFooterProps {
     chainId?: ChainId

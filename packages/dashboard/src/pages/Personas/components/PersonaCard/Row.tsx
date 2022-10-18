@@ -32,8 +32,8 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 18,
         padding: 0,
         position: 'absolute',
-        right: '-1rem',
-        top: '-1rem',
+        right: -14,
+        top: -14,
         [theme.breakpoints.down('md')]: {
             right: 0,
             top: 0,

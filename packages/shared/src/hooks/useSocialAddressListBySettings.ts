@@ -1,14 +1,7 @@
-import { CrossIsolationMessages, EMPTY_LIST } from '@masknet/shared-base'
-import { useHiddenAddressSetting, useSocialAddressListAll } from '@masknet/plugin-infra/web3'
-import { PluginID } from '@masknet/plugin-infra'
-import {
-    currySameAddress,
-    NetworkPluginID,
-    SocialAddress,
-    SocialAddressType,
-    SocialIdentity,
-} from '@masknet/web3-shared-base'
 import { useEffect, useMemo } from 'react'
+import { PluginID, NetworkPluginID, CrossIsolationMessages, EMPTY_LIST } from '@masknet/shared-base'
+import { useHiddenAddressSetting, useSocialAddressListAll } from '@masknet/web3-hooks-base'
+import { currySameAddress, SocialAddress, SocialAddressType, SocialIdentity } from '@masknet/web3-shared-base'
 
 export const useSocialAddressListBySettings = (
     identity?: SocialIdentity,

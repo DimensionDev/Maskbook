@@ -28,11 +28,9 @@ const useStyles = makeStyles()(() => ({
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        fontSize: 14,
         lineHeight: '18px',
     },
     title: {
-        fontSize: 14,
         lineHeight: '18px',
         padding: '0 8px',
     },
@@ -44,6 +42,7 @@ const useStyles = makeStyles()(() => ({
         background: 'rgba(255, 53, 69, 0.5)',
         color: '#ffffff',
     },
+    // eslint-disable-next-line tss-unused-classes/unused-classes
     default: {},
     warning: {},
     info: {},
@@ -64,6 +63,8 @@ export const PopupSnackbarProvider = memo<SnackbarProviderProps>(({ ...rest }) =
                 containerRoot: classes.container,
                 variantSuccess: classes.success,
                 variantError: classes.error,
+                variantInfo: classes.info,
+                variantWarning: classes.warning,
             }}
             {...rest}
         />

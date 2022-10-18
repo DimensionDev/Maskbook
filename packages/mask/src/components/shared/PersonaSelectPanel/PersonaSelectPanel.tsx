@@ -24,6 +24,7 @@ import { PersonaItemUI } from './PersonaItemUI.js'
 import { useCurrentPersona } from '../../DataSource/usePersonaConnectStatus.js'
 import { delay } from '@dimensiondev/kit'
 import { Icons } from '@masknet/icons'
+import { ErrorPanel } from './ErrorPanel'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -67,7 +68,7 @@ export const PersonaSelectPanel = memo<PersonaSelectPanelProps>((props) => {
 
     const [, handleVerifyNextID] = useNextIDVerify()
     const currentProfileIdentify = useLastRecognizedIdentity()
-    const { value: personas = EMPTY_LIST, loading, error } = useConnectedPersonas()
+    const { value: personas = EMPTY_LIST, loading, error, retry } = useConnectedPersonas()
 
     const { closeDialog: closeApplicationBoard } = useRemoteControlledDialog(
         WalletMessages.events.ApplicationDialogUpdated,
@@ -97,7 +98,7 @@ export const PersonaSelectPanel = memo<PersonaSelectPanelProps>((props) => {
     const { setDialog: setCreatePersonaConfirmDialog } = useRemoteControlledDialog(MaskMessages.events.openPageConfirm)
 
     useEffect(() => {
-        if (personas.length || !finishTarget || loading) return
+        if (personas.length || !finishTarget || loading || error) return
 
         onClose?.()
         setCreatePersonaConfirmDialog({
@@ -108,7 +109,7 @@ export const PersonaSelectPanel = memo<PersonaSelectPanelProps>((props) => {
             title: t('applications_create_persona_title'),
             actionHint: t('applications_create_persona_action'),
         })
-    }, [personas.length, finishTarget, loading])
+    }, [personas.length, finishTarget, loading, error])
 
     const actionButton = useMemo(() => {
         let isConnected = true
@@ -147,7 +148,7 @@ export const PersonaSelectPanel = memo<PersonaSelectPanelProps>((props) => {
             if (finishTarget) {
                 CrossIsolationMessages.events.applicationDialogEvent.sendToLocal({
                     open: true,
-                    application: finishTarget,
+                    pluginID: finishTarget,
                 })
             }
 
@@ -206,35 +207,38 @@ export const PersonaSelectPanel = memo<PersonaSelectPanelProps>((props) => {
         copyToClipboard(p.persona.identifier.rawPublicKey)
         showSnackbar(t('applications_persona_copy'), { variant: 'success' })
     }
+    if (loading) {
+        return (
+            <Stack justifyContent="center" alignItems="center" height="100%">
+                <LoadingBase width={24} height={24} />
+            </Stack>
+        )
+    }
+
+    if (error) {
+        return <ErrorPanel onRetry={retry} />
+    }
 
     return (
-        <>
-            {loading ? (
-                <Stack justifyContent="center" alignItems="center" height="100%">
-                    <LoadingBase width={24} height={24} />
-                </Stack>
-            ) : (
-                <Stack height="100%" justifyContent="space-between">
-                    <Stack gap={1.5} className={classes.items}>
-                        {personas.map((x) => {
-                            return (
-                                <PersonaItemUI
-                                    key={x.persona.identifier.toText()}
-                                    data={x}
-                                    onCopy={(e) => onCopyPersonsPublicKey(e, x)}
-                                    onClick={() => onSelectPersona(x)}
-                                    currentPersona={selectedPersona}
-                                    currentPersonaIdentifier={currentPersonaIdentifier}
-                                    currentProfileIdentify={currentProfileIdentify}
-                                    classes={{ unchecked: props.classes?.unchecked }}
-                                />
-                            )
-                        })}
-                    </Stack>
-                    <Stack>{actionButton}</Stack>
-                </Stack>
-            )}
-        </>
+        <Stack height="100%" justifyContent="space-between">
+            <Stack gap={1.5} className={classes.items}>
+                {personas.map((x) => {
+                    return (
+                        <PersonaItemUI
+                            key={x.persona.identifier.toText()}
+                            data={x}
+                            onCopy={(e) => onCopyPersonsPublicKey(e, x)}
+                            onClick={() => onSelectPersona(x)}
+                            currentPersona={selectedPersona}
+                            currentPersonaIdentifier={currentPersonaIdentifier}
+                            currentProfileIdentify={currentProfileIdentify}
+                            classes={{ unchecked: props.classes?.unchecked }}
+                        />
+                    )
+                })}
+            </Stack>
+            <Stack>{actionButton}</Stack>
+        </Stack>
     )
 })
 

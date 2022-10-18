@@ -1,14 +1,14 @@
+import urlcat from 'urlcat'
+import { compact } from 'lodash-unified'
 import { DataProvider } from '@masknet/public-api'
 import { createLookupTableResolver, EMPTY_LIST } from '@masknet/shared-base'
 import { TokenType } from '@masknet/web3-shared-base'
-import { ChainId } from '@masknet/web3-shared-evm'
-import urlcat from 'urlcat'
-import { compact } from 'lodash-unified'
+import type { ChainId } from '@masknet/web3-shared-evm'
 import { LooksRareLogo, OpenSeaLogo } from '../../resources/index.js'
 import { TrendingAPI } from '../../types/index.js'
 import { NFTSCAN_API } from '../constants.js'
 import type { EVM, Response } from '../types/index.js'
-import { fetchFromNFTScan, getContractSymbol } from '../helpers/EVM.js'
+import { fetchFromNFTScan, fetchFromNFTScanV2, getContractSymbol } from '../helpers/EVM.js'
 import { LooksRareAPI } from '../../looksrare/index.js'
 import { OpenSeaAPI } from '../../opensea/index.js'
 
@@ -34,20 +34,27 @@ export class NFTScanTrendingAPI implements TrendingAPI.Provider<ChainId> {
     private looksrare = new LooksRareAPI()
     private opensea = new OpenSeaAPI()
 
-    private async getNftPlatformInfo(address: string): Promise<EVM.NFTPlatformInfo> {
-        const url = urlcat(NFTSCAN_API, '/nftscan/getNftPlatformInfo', {
-            keyword: address,
+    private async getCollection(chainId: ChainId, address: string): Promise<EVM.Collection | undefined> {
+        const path = urlcat('/api/v2/collections/:address', {
+            address,
+            contract_address: address,
         })
-        const response = await fetchFromNFTScan<Response<EVM.NFTPlatformInfo>>(url)
-        return response.data
+        const response = await fetchFromNFTScanV2<Response<EVM.Collection>>(chainId, path)
+        return response?.data
     }
 
-    private async searchNftPlatformName(keyword: string): Promise<EVM.SearchNFTPlatformNameResult[]> {
-        const url = urlcat(NFTSCAN_API, '/nftscan/searchNftPlatformName', {
-            keyword,
+    private async searchNFTCollection(chainId: ChainId, keyword: string): Promise<EVM.Collection[]> {
+        const path = '/api/v2/collections/filters'
+        const response = await fetchFromNFTScanV2<Response<EVM.Collection[]>>(chainId, path, {
+            method: 'POST',
+            body: JSON.stringify({
+                symbol: keyword,
+                sort_direction: 'desc',
+                sort_field: 'floor_price',
+                name_fuzzy_search: true,
+            }),
         })
-        const response = await fetchFromNFTScan<Response<EVM.SearchNFTPlatformNameResult[]>>(url)
-        return response.data ?? EMPTY_LIST
+        return response?.data ?? EMPTY_LIST
     }
 
     private async getContractVolumeAndFloorByRange(
@@ -63,32 +70,27 @@ export class NFTScanTrendingAPI implements TrendingAPI.Provider<ChainId> {
         return response.data?.result ?? EMPTY_LIST
     }
 
-    async getCoins(keyword: string, chainId = ChainId.Mainnet): Promise<TrendingAPI.Coin[]> {
+    getAllCoins(): Promise<TrendingAPI.Coin[]> {
+        return Promise.resolve(EMPTY_LIST)
+    }
+
+    async getCoinsByKeyword(chainId: ChainId, keyword: string): Promise<TrendingAPI.Coin[]> {
         if (!keyword) return EMPTY_LIST
-        const nfts = await this.searchNftPlatformName(keyword)
+        const nfts = await this.searchNFTCollection(chainId, keyword)
 
-        const coins = await Promise.all(
-            nfts.map(async (nft): Promise<TrendingAPI.Coin> => {
-                const symbol = await getContractSymbol(nft.address, chainId)
-                return {
-                    id: nft.address,
-                    name: nft.platform,
-                    symbol,
-                    type: TokenType.NonFungible,
-                    address: nft.address,
-                    contract_address: nft.address,
-                    image_url: nft.image,
-                }
-            }),
-        )
-        return coins.filter((x) => x.symbol)
+        const coins: TrendingAPI.Coin[] = nfts.map((nft) => ({
+            id: nft.contract_address,
+            name: nft.name,
+            symbol: nft.symbol,
+            type: TokenType.NonFungible,
+            address: nft.contract_address,
+            contract_address: nft.contract_address,
+            image_url: nft.logo_url,
+        }))
+        return coins
     }
 
-    async getCurrencies(): Promise<TrendingAPI.Currency[]> {
-        throw new Error('Not implemented yet.')
-    }
-
-    async getPriceStats(
+    async getCoinPriceStats(
         chainId: ChainId,
         coinId: string,
         currency: TrendingAPI.Currency,
@@ -104,21 +106,22 @@ export class NFTScanTrendingAPI implements TrendingAPI.Provider<ChainId> {
         /** address as id */ id: string,
         currency: TrendingAPI.Currency,
     ): Promise<TrendingAPI.Trending> {
-        const platformInfo = await this.getNftPlatformInfo(id)
-        if (!platformInfo) {
+        const collection = await this.getCollection(chainId, id)
+        if (!collection) {
             throw new Error(`NFTSCAN: Can not find token by address ${id}`)
         }
+        const address = collection.contract_address
         const [symbol, openseaStats, looksrareStats] = await Promise.all([
             getContractSymbol(id, chainId),
-            this.opensea.getStats(platformInfo.address).catch(() => null),
-            this.looksrare.getStats(platformInfo.address).catch(() => null),
+            this.opensea.getStats(address).catch(() => null),
+            this.looksrare.getStats(address).catch(() => null),
         ])
         const tickers: TrendingAPI.Ticker[] = compact([
             openseaStats
                 ? {
                       logo_url: OpenSeaLogo,
                       // TODO
-                      trade_url: `https://opensea.io/assets/ethereum/${platformInfo.address}`,
+                      trade_url: `https://opensea.io/assets/ethereum/${address}`,
                       market_name: NonFungibleMarketplace.OpenSea,
                       volume_24h: openseaStats.volume24h,
                       floor_price: openseaStats.floorPrice,
@@ -128,7 +131,7 @@ export class NFTScanTrendingAPI implements TrendingAPI.Provider<ChainId> {
             looksrareStats
                 ? {
                       logo_url: LooksRareLogo,
-                      trade_url: `https://looksrare.org/collections/${platformInfo.address}`,
+                      trade_url: `https://looksrare.org/collections/${address}`,
                       market_name: NonFungibleMarketplace.LooksRare,
                       volume_24h: looksrareStats.volume24h,
                       floor_price: looksrareStats.floorPrice,
@@ -139,22 +142,22 @@ export class NFTScanTrendingAPI implements TrendingAPI.Provider<ChainId> {
         return {
             lastUpdated: new Date().toJSON(),
             dataProvider: DataProvider.NFTScan,
-            contracts: [{ chainId, address: platformInfo.address }],
+            contracts: [{ chainId, address }],
             currency,
             coin: {
                 id,
-                name: platformInfo.name,
+                name: collection.name,
                 symbol,
-                address: platformInfo.address,
-                contract_address: platformInfo.address,
+                address,
+                contract_address: address,
                 type: TokenType.NonFungible,
-                description: platformInfo.description,
-                image_url: platformInfo.image,
-                home_urls: compact([platformInfo.website]),
+                description: collection.description,
+                image_url: collection.logo_url,
+                home_urls: compact([collection.website]),
                 community_urls: [
                     {
                         type: 'twitter',
-                        link: platformInfo.twitter && `https://twitter.com/${platformInfo.twitter}`,
+                        link: collection.twitter && `https://twitter.com/${collection.twitter}`,
                     },
                     {
                         type: 'facebook',
@@ -163,45 +166,45 @@ export class NFTScanTrendingAPI implements TrendingAPI.Provider<ChainId> {
                     },
                     {
                         type: 'discord',
-                        link: platformInfo.discord,
+                        link: collection.discord,
                     },
                     {
                         type: 'instagram',
-                        link: platformInfo.instagram && `https://www.instagram.com/${platformInfo.instagram}`,
+                        link: collection.instagram && `https://www.instagram.com/${collection.instagram}`,
                     },
                     {
                         type: 'medium',
-                        link: platformInfo.medium && `https://medium.com/@${platformInfo.medium}`,
+                        link: collection.medium && `https://medium.com/@${collection.medium}`,
                     },
                     {
                         type: 'reddit',
-                        link: platformInfo.reddit,
+                        link: collection.reddit,
                     },
                     {
                         type: 'telegram',
-                        link: platformInfo.reddit,
+                        link: collection.telegram,
                     },
                     {
                         type: 'youtube',
-                        link: platformInfo.youtube,
+                        link: collection.youtube,
                     },
                     {
                         type: 'github',
-                        link: platformInfo.github,
+                        link: collection.github,
                     },
                 ].filter((x) => x.link) as TrendingAPI.CommunityUrls,
             },
             market: {
-                total_supply: platformInfo.total,
-                current_price: platformInfo.floorPrice,
-                floor_price: platformInfo.floorPrice,
-                highest_price: platformInfo.highestPrice,
-                owners_count: platformInfo.ownersCount,
-                royalty: platformInfo.royalty,
-                total_24h: platformInfo.trendingTotal_24h,
-                volume_24h: platformInfo.trendingVolume_24h,
-                average_volume_24h: platformInfo.trendingVolumeAverage_24h,
-                volume_all: platformInfo.trendingVolume_all,
+                total_supply: collection.items_total,
+                current_price: collection.floor_price,
+                floor_price: collection.floor_price,
+                highest_price: undefined,
+                owners_count: collection.owners_total,
+                royalty: collection.royalty?.toString(),
+                total_24h: undefined,
+                volume_24h: undefined,
+                average_volume_24h: undefined,
+                volume_all: undefined,
             },
             tickers,
         }

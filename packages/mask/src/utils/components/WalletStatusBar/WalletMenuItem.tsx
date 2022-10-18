@@ -1,9 +1,9 @@
+import { memo } from 'react'
 import { Button, ListItemIcon, MenuItem } from '@mui/material'
 import { Icons } from '@masknet/icons'
-import { memo } from 'react'
 import { useI18N } from '../../i18n-next-ui.js'
-import { resolveNextID_NetworkPluginID, NetworkPluginID } from '@masknet/web3-shared-base'
-import type { NextIDPlatform } from '@masknet/shared-base'
+import { resolveNextID_NetworkPluginID } from '@masknet/web3-shared-base'
+import type { NetworkPluginID, NextIDPlatform } from '@masknet/shared-base'
 import { useWalletName } from './hooks/useWalletName.js'
 import {
     useCurrentWeb3NetworkPluginID,
@@ -12,7 +12,7 @@ import {
     useNetworkDescriptor,
     useProviderDescriptor,
     useWeb3State,
-} from '@masknet/plugin-infra/web3'
+} from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { WalletDescription, WalletDescriptionProps } from './WalletDescription.js'
 

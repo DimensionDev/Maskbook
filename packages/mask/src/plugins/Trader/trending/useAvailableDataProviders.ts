@@ -1,6 +1,6 @@
 import { useAsync } from 'react-use'
-import { useChainId } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { useChainId } from '@masknet/web3-hooks-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { PluginTraderRPC } from '../messages.js'
 import type { TagType } from '../types/index.js'
 import type { DataProvider } from '@masknet/public-api'

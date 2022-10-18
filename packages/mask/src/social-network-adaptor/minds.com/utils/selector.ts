@@ -30,7 +30,8 @@ export const postEditorDraftContentSelector = () => {
     return querySelector<HTMLElement>('m-composer__modal m-composer__textarea textarea.m-composerTextarea__message')
 }
 
-export const handleSelector = () => querySelector<HTMLScriptElement, true>('.m-user-menu ul li a:first-child')
+export const handleSelector = () =>
+    querySelector<HTMLScriptElement, true>('.m-sidebarNavigation ul > li:nth-child(8) a span')
 
 export const selfInfoSelectors = () => ({
     handle: handleSelector().map((x) => x.innerText.replace(/@/, '').trim()),

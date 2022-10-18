@@ -1,9 +1,8 @@
 import { useAsync } from 'react-use'
-import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
+import { useAccount, useChainId } from '@masknet/web3-hooks-base'
 import { getMaskColor, LoadingBase, makeStyles } from '@masknet/theme'
 import { Grid, Typography, Box, Button } from '@mui/material'
-import { EMPTY_LIST } from '@masknet/shared-base'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 
 import { useI18N } from '../locales/index.js'
 import { PageInterface, PagesType, FarmDetailed } from '../types.js'
@@ -13,8 +12,6 @@ import { ReferralRPC } from '../messages.js'
 import { AccordionFarm } from './shared-ui/AccordionFarm.js'
 import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary.js'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
-
-import { useSharedStyles, useMyFarmsStyles } from './styles.js'
 
 const useStyles = makeStyles()((theme) => ({
     buttonWithdraw: {
@@ -27,6 +24,49 @@ const useStyles = makeStyles()((theme) => ({
     viewStatsDisabled: {
         marginRight: '8px',
     },
+    msg: {
+        width: '100%',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: '12px',
+        background: theme.palette.background.default,
+        padding: '12px 0',
+        color: theme.palette.text.strong,
+        fontWeight: 500,
+        textAlign: 'center',
+    },
+    container: {
+        lineHeight: '22px',
+        fontWeight: 300,
+        '& > div::-webkit-scrollbar': {
+            width: '7px',
+        },
+        '& > div::-webkit-scrollbar-track': {
+            boxShadow: 'inset 0 0 6px rgba(0,0,0,0.00)',
+            webkitBoxShadow: 'inset 0 0 6px rgba(0,0,0,0.00)',
+        },
+        '& > div::-webkit-scrollbar-thumb': {
+            borderRadius: '4px',
+            backgroundColor: theme.palette.background.default,
+        },
+    },
+    col: {
+        color: theme.palette.text.secondary,
+        fontWeight: 500,
+    },
+    content: {
+        height: 320,
+        overflowY: 'scroll',
+        marginTop: 20,
+        color: theme.palette.text.strong,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+    },
+    heading: {
+        paddingRight: '27px',
+    },
 }))
 
 type FarmListProps = {
@@ -38,13 +78,12 @@ type FarmListProps = {
 function FarmList({ loading, error, farms, onAdjustRewardButtonClick }: FarmListProps) {
     const t = useI18N()
     const { classes } = useStyles()
-    const { classes: sharedClasses } = useSharedStyles()
 
     if (loading) return <LoadingBase size={50} />
 
-    if (error) return <Typography className={sharedClasses.msg}>{t.blockchain_error_referral_farms()}</Typography>
+    if (error) return <Typography className={classes.msg}>{t.blockchain_error_referral_farms()}</Typography>
 
-    if (!farms.length) return <Typography className={sharedClasses.msg}>{t.no_created_farm()}</Typography>
+    if (!farms.length) return <Typography className={classes.msg}>{t.no_created_farm()}</Typography>
 
     return (
         <>
@@ -83,7 +122,7 @@ function FarmList({ loading, error, farms, onAdjustRewardButtonClick }: FarmList
 
 export function CreatedFarms(props: PageInterface) {
     const t = useI18N()
-    const { classes: myFarmsClasses } = useMyFarmsStyles()
+    const { classes } = useStyles()
     const currentChainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const requiredChainId = getRequiredChainId(currentChainId)
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
@@ -111,16 +150,16 @@ export function CreatedFarms(props: PageInterface) {
     return (
         <ChainBoundary expectedChainId={requiredChainId} expectedPluginID={NetworkPluginID.PLUGIN_EVM}>
             <WalletConnectedBoundary offChain>
-                <div className={myFarmsClasses.container}>
-                    <Grid container justifyContent="space-between" rowSpacing="20px" className={myFarmsClasses.heading}>
-                        <Grid item xs={8} className={myFarmsClasses.col}>
+                <div className={classes.container}>
+                    <Grid container justifyContent="space-between" rowSpacing="20px" className={classes.heading}>
+                        <Grid item xs={8} className={classes.col}>
                             {t.referral_farm()}
                         </Grid>
-                        <Grid item xs={4} className={myFarmsClasses.col}>
+                        <Grid item xs={4} className={classes.col}>
                             {t.total_rewards()}
                         </Grid>
                     </Grid>
-                    <div className={myFarmsClasses.content}>
+                    <div className={classes.content}>
                         <FarmList
                             loading={loading}
                             error={error}

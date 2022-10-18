@@ -10,12 +10,11 @@ import {
     useCurrentWeb3NetworkPluginID,
     useWeb3Connection,
     useWeb3Hub,
-} from '@masknet/plugin-infra/web3'
-import type { NetworkPluginID } from '@masknet/web3-shared-base'
+} from '@masknet/web3-hooks-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
 import type { AllChainsNonFungibleToken } from '../types.js'
 
 const useStyles = makeStyles()((theme) => ({
-    root: {},
     addNFT: {
         position: 'absolute',
         right: 20,

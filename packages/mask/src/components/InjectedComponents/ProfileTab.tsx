@@ -1,4 +1,5 @@
 import { ReactElement, useCallback, useEffect, useState } from 'react'
+import { useMount } from 'react-use'
 import classnames from 'classnames'
 import { Typography } from '@mui/material'
 import { MaskMessages, useMatchXS, useLocationChange } from '../../utils/index.js'
@@ -20,15 +21,27 @@ export function ProfileTab(props: ProfileTabProps) {
     const [active, setActive] = useState(false)
     const isMobile = useMatchXS()
 
-    const onClick = useCallback(() => {
-        // Change the url hashtag to trigger `locationchange` event from e.g. 'hostname/medias#web3 => hostname/medias'
-        isTwitter(activatedSocialNetworkUI) && location.assign('#web3')
+    const switchToTab = useCallback(() => {
         MaskMessages.events.profileTabUpdated.sendToLocal({ show: true })
         setActive(true)
         clear()
     }, [clear])
 
+    const onClick = useCallback(() => {
+        // Change the url hashtag to trigger `locationchange` event from e.g. 'hostname/medias#web3 => hostname/medias'
+        isTwitter(activatedSocialNetworkUI) && location.assign('#web3')
+        switchToTab()
+    }, [switchToTab])
+
+    useMount(() => {
+        if (location.hash !== '#web3' || active) return
+        switchToTab()
+    })
+
     useLocationChange(() => {
+        const testId = (document.activeElement as HTMLElement | null)?.dataset?.testid
+        if (testId === 'SearchBox_Search_Input') return
+
         MaskMessages.events.profileTabUpdated.sendToLocal({ show: false })
         setActive(false)
         reset()

@@ -1,8 +1,8 @@
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { Trader, TraderProps } from './Trader.js'
 import { AllProviderTradeContext } from '../../trader/useAllProviderTradeContext.js'
-import { useChainId } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { useChainId } from '@masknet/web3-hooks-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -11,15 +11,6 @@ const useStyles = makeStyles()((theme) => {
             paddingTop: theme.spacing(2),
             position: 'relative',
             boxSizing: 'border-box',
-        },
-        actions: {},
-        settings: {
-            zIndex: 1,
-            top: 0,
-            right: theme.spacing(3),
-            bottom: 0,
-            left: theme.spacing(3),
-            position: 'absolute',
         },
         trade: {
             padding: `${theme.spacing(0, 2)}!important`,

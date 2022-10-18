@@ -16,10 +16,10 @@ import { RedpacketNftConfirmDialog } from './RedpacketNftConfirmDialog.js'
 import { NFTCardStyledAssetPlayer } from '@masknet/shared'
 import { NFTSelectOption } from '../types.js'
 import { NFT_RED_PACKET_MAX_SHARES } from '../constants.js'
-import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
-import { useNonFungibleOwnerTokens } from '@masknet/plugin-infra/web3-evm'
-import { NetworkPluginID, NonFungibleTokenContract, NonFungibleToken } from '@masknet/web3-shared-base'
-import { EMPTY_LIST } from '@masknet/shared-base'
+import { useAccount, useChainId } from '@masknet/web3-hooks-base'
+import { useNonFungibleOwnerTokens } from '@masknet/web3-hooks-evm'
+import { NetworkPluginID, EMPTY_LIST } from '@masknet/shared-base'
+import type { NonFungibleTokenContract, NonFungibleToken } from '@masknet/web3-shared-base'
 import { PluginWalletStatusBar } from '../../../utils/index.js'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
 
@@ -36,6 +36,8 @@ const useStyles = makeStyles()((theme) => {
             margin: theme.spacing(1, 0, 2, 0),
         },
         nftNameWrapper: {
+            position: 'absolute',
+            bottom: 0,
             width: '100%',
             background: theme.palette.background.paper,
             borderBottomRightRadius: 8,
@@ -49,20 +51,6 @@ const useStyles = makeStyles()((theme) => {
             whiteSpace: 'nowrap',
             overflow: 'hidden',
             textOverflow: 'ellipsis',
-        },
-        inputShrinkLabel: {
-            transform: 'translate(17px, -3px) scale(0.75) !important',
-        },
-        input: {
-            flex: 1,
-            padding: theme.spacing(0.5),
-        },
-        tip: {
-            fontSize: 17,
-            marginBottom: theme.spacing(2),
-        },
-        nftImg: {
-            maxWidth: '100%',
         },
         tokenSelector: {
             display: 'grid',
@@ -188,9 +176,6 @@ const useStyles = makeStyles()((theme) => {
         approveAllTip: {
             color: '#FF5F5F',
             margin: '16px 4px 24px 4px',
-        },
-        unapprovedTip: {
-            color: theme.palette.grey[500],
         },
         disabledSelector: {
             opacity: 0.5,

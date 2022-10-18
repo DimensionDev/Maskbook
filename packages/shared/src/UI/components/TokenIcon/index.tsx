@@ -1,14 +1,15 @@
-import { useAsyncRetry } from 'react-use'
-import { first } from 'lodash-unified'
-import type { AvatarProps } from '@mui/material'
-import { useChainId, useWeb3Hub } from '@masknet/plugin-infra/web3'
+import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { NetworkPluginID, TokenType } from '@masknet/web3-shared-base'
-import { EMPTY_LIST } from '@masknet/shared-base'
-import { useImageBase64 } from '../../../hooks/useImageBase64.js'
+import { useChainId, useWeb3Hub } from '@masknet/web3-hooks-base'
+import { TokenType } from '@masknet/web3-shared-base'
+import type { AvatarProps } from '@mui/material'
+import { compact, first } from 'lodash-unified'
+import { useAsyncRetry } from 'react-use'
+import { useImageURL } from '../../../hooks/useImageURL.js'
 import { Icon } from '../Icon/index.js'
 
-export interface TokenIconProps extends withClasses<'icon'> {
+export interface TokenIconProps {
+    className?: string
     pluginID?: NetworkPluginID
     chainId?: Web3Helper.ChainIdAll
     address: string
@@ -27,7 +28,7 @@ export function TokenIcon(props: TokenIconProps) {
         name,
         symbol,
         AvatarProps,
-        classes,
+        className,
         tokenType = TokenType.Fungible,
         disableDefaultIcon,
     } = props
@@ -42,19 +43,19 @@ export function TokenIcon(props: TokenIconProps) {
         const key = address ? [chainId, address].join('/') : logoURL
         return {
             key,
-            urls: [logoURL, ...(logoURLs ?? [])].filter(Boolean) as string[],
+            urls: compact([logoURL, ...(logoURLs ?? [])]),
         }
-    }, [chainId, address, isNFT, logoURL, hub])
+    }, [chainId, address, isNFT, logoURL, hub?.getNonFungibleTokenIconURLs, hub?.getFungibleTokenIconURLs])
     const { urls = EMPTY_LIST, key } = value ?? {}
     const originalUrl = first(urls)
-    const accessibleUrl = useImageBase64(key, originalUrl)
+    const { value: accessibleUrl } = useImageURL(originalUrl)
 
     if (!accessibleUrl && originalUrl && disableDefaultIcon) return null
 
     return (
         <Icon
             key={key}
-            classes={classes}
+            className={className}
             name={symbol ?? name}
             logoURL={isNFT ? logoURL : accessibleUrl || originalUrl}
             AvatarProps={AvatarProps}

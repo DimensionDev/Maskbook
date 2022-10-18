@@ -1,9 +1,9 @@
+import { truncate } from 'lodash-unified'
 import { Avatar, Link, TableCell, TableRow, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { Account } from '../Account.js'
 import type { ChainId } from '@masknet/web3-shared-evm'
+import { Account } from '../Account.js'
 import { resolveWebLinkOnCryptoartAI } from '../../pipes/index.js'
-import { truncate } from 'lodash-unified'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -17,15 +17,6 @@ const useStyles = makeStyles()((theme) => {
         },
         accountName: {
             marginLeft: theme.spacing(0.5),
-        },
-        relativeTime: {
-            whiteSpace: 'nowrap',
-        },
-        token: {
-            objectFit: 'contain',
-            width: 18,
-            height: 18,
-            marginRight: theme.spacing(0.5),
         },
         content: {
             display: 'flex',

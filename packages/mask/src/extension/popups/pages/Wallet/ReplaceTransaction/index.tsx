@@ -16,7 +16,8 @@ import { isEmpty } from 'lodash-unified'
 import { useAsync, useAsyncFn } from 'react-use'
 import { useContainer } from 'unstated-next'
 import { WalletContext } from '../hooks/useWalletContext.js'
-import { isLessThanOrEqualTo, isPositive, multipliedBy, NetworkPluginID } from '@masknet/web3-shared-base'
+import { isLessThanOrEqualTo, isPositive, multipliedBy } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import {
     useChainId,
     useWeb3State,
@@ -24,13 +25,10 @@ import {
     useNativeTokenPrice,
     useChainIdSupport,
     useWeb3Connection,
-} from '@masknet/plugin-infra/web3'
+} from '@masknet/web3-hooks-base'
 import { useTitle } from '../../../hook/useTitle.js'
 
 const useStyles = makeStyles()({
-    container: {
-        padding: 16,
-    },
     label: {
         color: '#1C68F3',
         fontSize: 12,

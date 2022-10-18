@@ -1,3 +1,4 @@
+/* eslint-disable tss-unused-classes/unused-classes */
 import { EnhanceableSite, isDashboardPage, CrossIsolationMessages } from '@masknet/shared-base'
 import { ErrorBoundary, useValueRef } from '@masknet/shared-base-ui'
 import { omit } from 'lodash-unified'
@@ -90,9 +91,9 @@ export type InjectedDialogClassKey =
 export interface InjectedDialogProps extends Omit<DialogProps, 'onClose' | 'title' | 'classes'> {
     classes?: Partial<Record<InjectedDialogClassKey, string>>
     onClose?(): void
-    title?: React.ReactChild
-    titleTail?: React.ReactChild | null
-    titleTabs?: React.ReactChild | null
+    title?: React.ReactNode
+    titleTail?: React.ReactNode | null
+    titleTabs?: React.ReactNode | null
     disableBackdropClick?: boolean
     disableTitleBorder?: boolean
     isOpenFromApplicationBoard?: boolean
@@ -141,9 +142,17 @@ export function InjectedDialog(props: InjectedDialogProps) {
 
     const closeBothCompositionDialog = useCallback(() => {
         if (isOpenFromApplicationBoard) {
-            CrossIsolationMessages.events.compositionDialogEvent.sendToLocal({ open: false, reason: 'timeline' })
+            CrossIsolationMessages.events.compositionDialogEvent.sendToLocal({
+                open: false,
+                reason: 'popup',
+                options: { isOpenFromApplicationBoard },
+            })
+            CrossIsolationMessages.events.compositionDialogEvent.sendToLocal({
+                open: false,
+                reason: 'timeline',
+                options: { isOpenFromApplicationBoard },
+            })
         }
-
         onClose?.()
     }, [isOpenFromApplicationBoard, onClose])
 
@@ -162,7 +171,6 @@ export function InjectedDialog(props: InjectedDialogProps) {
                     if (reason === 'backdropClick' && disableBackdropClick) return
                     !props.isOnBack ? closeBothCompositionDialog() : onClose?.()
                 }}
-                onBackdropClick={disableBackdropClick ? void 0 : onClose}
                 BackdropProps={{
                     classes: {
                         root: dialogBackdropRoot,
@@ -214,8 +222,7 @@ export function InjectedDialog(props: InjectedDialogProps) {
 function CopyElementWithNewProps<T>(
     children: React.ReactNode,
     Target: React.ComponentType<T>,
-    // @ts-ignore
-    extraClasses: T['classes'],
+    extraClasses: T extends { classes?: infer Q } ? Q : never,
 ) {
     return (
         Children.map(children, (child: any) =>

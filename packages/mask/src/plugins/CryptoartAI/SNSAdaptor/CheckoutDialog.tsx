@@ -10,8 +10,9 @@ import { usePurchaseCallback } from '../hooks/usePurchaseCallback.js'
 import { activatedSocialNetworkUI } from '../../../social-network/index.js'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base.js'
 import { isFacebook } from '../../../social-network-adaptor/facebook.com/base.js'
-import { useChainId, useFungibleTokenWatched } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID, formatBalance, leftShift } from '@masknet/web3-shared-base'
+import { useChainId, useFungibleTokenWatched } from '@masknet/web3-hooks-base'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { formatBalance, leftShift } from '@masknet/web3-shared-base'
 import { PluginWalletStatusBar, useI18N } from '../../../utils/index.js'
 import { resolveAssetLinkOnCryptoartAI, resolvePaymentTokensOnCryptoartAI } from '../pipes/index.js'
 
@@ -24,17 +25,6 @@ const useStyles = makeStyles()((theme) => {
             display: 'flex',
             justifyContent: 'flex-end',
             padding: 0,
-        },
-        panel: {
-            marginTop: theme.spacing(2),
-            '&:first-child': {
-                marginTop: 0,
-            },
-        },
-        label: {},
-        buttons: {
-            width: '100%',
-            margin: `0 ${theme.spacing(-0.5)}`,
         },
         button: {
             flex: 1,

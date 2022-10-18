@@ -1,10 +1,10 @@
-import type { BindingProof } from '@masknet/shared-base'
-import { networkMap } from '../../hooks/useSupportedNetworks.js'
 import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
+import type { BindingProof, NetworkPluginID } from '@masknet/shared-base'
+import { isSameAddress } from '@masknet/web3-shared-base'
+import { networkMap } from '../../hooks/useSupportedNetworks.js'
 import { useI18N } from '../../locales/index.js'
 import { WalletItem } from './WalletItem.js'
-import { NetworkPluginID, isSameAddress } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -24,19 +24,13 @@ const useStyles = makeStyles()((theme) => ({
         overflowY: 'auto',
         gap: 12,
     },
-    settingIcon: {
-        fontSize: 16,
-        cursor: 'pointer',
-    },
     commonFlexBox: {
-        fontSize: 14,
         display: 'flex',
         alignItems: 'center',
         gap: theme.spacing(0.5),
     },
     empty: {
         height: '100px',
-        fontSize: 14,
         color: theme.palette.text.secondary,
         lineHeight: '100px',
         textAlign: 'center',
@@ -48,7 +42,6 @@ const useStyles = makeStyles()((theme) => ({
     link: {
         color: theme.palette.maskColor.main,
         fontWeight: 700,
-        fontSize: 14,
         lineHeight: '18px',
         cursor: 'pointer',
         marginLeft: theme.spacing(1.25),

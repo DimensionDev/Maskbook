@@ -1,19 +1,14 @@
-import { PluginID, useIsMinimalMode } from '@masknet/plugin-infra/content-script'
-import {
-    useChainId,
-    useChainIdValid,
-    useNetworkType,
-    useNonFungibleAssetsByCollection,
-} from '@masknet/plugin-infra/web3'
+import { useIsMinimalMode } from '@masknet/plugin-infra/content-script'
+import { useChainId, useChainIdValid, useNetworkType, useNonFungibleAssetsByCollection } from '@masknet/web3-hooks-base'
 import { DataProvider } from '@masknet/public-api'
 import { NFTList } from '@masknet/shared'
-import { EMPTY_LIST } from '@masknet/shared-base'
-import { ActionButton, makeStyles, MaskTabList, useTabs } from '@masknet/theme'
+import { EMPTY_LIST, PluginID, NetworkPluginID } from '@masknet/shared-base'
+import { ActionButton, makeStyles, MaskLightTheme, MaskTabList, useTabs } from '@masknet/theme'
 import { TrendingAPI } from '@masknet/web3-providers'
-import { createFungibleToken, NetworkPluginID, TokenType } from '@masknet/web3-shared-base'
+import { createFungibleToken, TokenType } from '@masknet/web3-shared-base'
 import { isNativeTokenAddress, isNativeTokenSymbol, SchemaType } from '@masknet/web3-shared-evm'
 import { TabContext } from '@mui/lab'
-import { Link, Stack, Tab } from '@mui/material'
+import { Link, Stack, Tab, ThemeProvider } from '@mui/material'
 import { Box, useTheme } from '@mui/system'
 import { compact } from 'lodash-unified'
 import { useEffect, useMemo, useState } from 'react'
@@ -274,10 +269,12 @@ export function TrendingView(props: TrendingViewProps) {
     // #region display loading skeleton
     if (!currency || !trending || loadingTrending)
         return (
-            <TrendingViewSkeleton
-                classes={{ footer: classes.footerSkeleton }}
-                TrendingCardProps={{ classes: { root: classes.root } }}
-            />
+            <ThemeProvider theme={MaskLightTheme}>
+                <TrendingViewSkeleton
+                    classes={{ footer: classes.footerSkeleton }}
+                    TrendingCardProps={{ classes: { root: classes.root } }}
+                />
+            </ThemeProvider>
         )
     // #endregion
 

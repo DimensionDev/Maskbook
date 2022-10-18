@@ -4,11 +4,11 @@ import React, { useEffect, useState } from 'react'
 import { useI18N } from '../../../utils/index.js'
 import { paywallUrl } from '../constants.js'
 import { renderWithUnlockProtocolMetadata, UnlockProtocolMetadataReader } from '../helpers.js'
-import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
+import { useAccount, useChainId } from '@masknet/web3-hooks-base'
 import { PluginUnlockProtocolRPC } from '../messages.js'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
 import { usePluginWrapper } from '@masknet/plugin-infra/dom'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 
 interface UnlockProtocolInPostProps {
     message: TypedMessage

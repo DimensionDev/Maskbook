@@ -1,27 +1,26 @@
-import ENS from 'ethjs-ens'
+import { uniqBy } from 'lodash-unified'
 import type { Plugin } from '@masknet/plugin-infra'
-import { NetworkPluginID, SocialIdentity, SocialAddress, SocialAddressType } from '@masknet/web3-shared-base'
-import { EMPTY_LIST, EnhanceableSite, getSiteType, NextIDPlatform } from '@masknet/shared-base'
-import { ChainId, isValidAddress, isZeroAddress, ProviderType } from '@masknet/web3-shared-evm'
-import { IdentityServiceState } from '@masknet/plugin-infra/web3'
-import { KeyValue, NextIDProof, RSS3 } from '@masknet/web3-providers'
-import { Providers } from './Connection/provider.js'
+import { IdentityServiceState } from '@masknet/web3-state'
+import { SocialIdentity, SocialAddress, SocialAddressType, attemptUntil } from '@masknet/web3-shared-base'
+import {
+    NetworkPluginID,
+    EMPTY_LIST,
+    EnhanceableSite,
+    getSiteType,
+    NextIDPlatform,
+    createLookupTableResolver,
+} from '@masknet/shared-base'
+import { isValidAddress, isZeroAddress } from '@masknet/web3-shared-evm'
+import { KeyValue, MaskX, MaskX_BaseAPI, NextIDProof } from '@masknet/web3-providers'
+import { ENS_Resolver } from './NameService/ENS.js'
+import { ChainbaseResolver } from './NameService/Chainbase.js'
 
-const ENS_RE = /\S{1,256}\.(eth|kred|xyz|luxe)\b/i
+const ENS_RE = /[^\t\n\v()[\]]{1,256}\.(eth|kred|xyz|luxe)\b/i
 const ADDRESS_FULL = /0x\w{40,}/i
-// xxx.cheers.bio xxx.rss3.bio
-const RSS3_URL_RE = /https?:\/\/(?<name>[\w.]+)\.(rss3|cheers)\.bio/i
-const RSS3_RNS_RE = /(?<name>[\w.]+)\.rss3/i
 
 function getENSName(nickname: string, bio: string) {
     const [matched] = nickname.match(ENS_RE) ?? bio.match(ENS_RE) ?? []
     return matched
-}
-
-function getRSS3Id(nickname: string, profileURL: string, bio: string) {
-    const matched =
-        nickname.match(RSS3_RNS_RE) || profileURL.match(RSS3_URL_RE) || bio.match(RSS3_URL_RE) || bio.match(RSS3_RNS_RE)
-    return matched?.groups?.name
 }
 
 function getAddress(text: string) {
@@ -46,6 +45,18 @@ async function getWalletAddressesFromNextID(userId?: string, publicKey?: string)
     )
 }
 
+const resolveMaskXAddressType = createLookupTableResolver<MaskX_BaseAPI.SourceType, SocialAddressType>(
+    {
+        [MaskX_BaseAPI.SourceType.CyberConnect]: SocialAddressType.CyberConnect,
+        [MaskX_BaseAPI.SourceType.Leaderboard]: SocialAddressType.Leaderboard,
+        [MaskX_BaseAPI.SourceType.Sybil]: SocialAddressType.Sybil,
+        [MaskX_BaseAPI.SourceType.RSS3]: SocialAddressType.RSS3,
+    },
+    (x) => {
+        throw new Error(`Unknown source type: ${x}`)
+    },
+)
+
 export class IdentityService extends IdentityServiceState {
     constructor(protected context: Plugin.Shared.SharedUIContext) {
         super()
@@ -58,7 +69,7 @@ export class IdentityService extends IdentityServiceState {
     ): SocialAddress<NetworkPluginID.PLUGIN_EVM> | undefined {
         if (isValidAddress(address) && !isZeroAddress(address))
             return {
-                networkSupporterPluginID: NetworkPluginID.PLUGIN_EVM,
+                pluginID: NetworkPluginID.PLUGIN_EVM,
                 type,
                 label,
                 address,
@@ -74,19 +85,11 @@ export class IdentityService extends IdentityServiceState {
     }
 
     /** Read a social address from NextID. */
-    private async getSocialAddressFromNextID({ identifier, publicKey }: SocialIdentity) {
+    private async getSocialAddressesFromNextID({ identifier, publicKey }: SocialIdentity) {
         const listOfAddress = await getWalletAddressesFromNextID(identifier?.userId, publicKey)
         return listOfAddress
             .map((x) => this.createSocialAddress(SocialAddressType.NEXT_ID, x.identity))
             .filter(Boolean) as Array<SocialAddress<NetworkPluginID.PLUGIN_EVM>>
-    }
-
-    /** Read a social address from bio when it contains a RSS3 ID. */
-    private async getSocialAddressFromRSS3({ nickname = '', homepage = '', bio = '' }: SocialIdentity) {
-        const RSS3Id = getRSS3Id(nickname, homepage, bio)
-        if (!RSS3Id) return
-        const info = await RSS3.getNameInfo(RSS3Id)
-        return this.createSocialAddress(SocialAddressType.RSS3, info?.address ?? '', `${RSS3Id}.rss3`)
     }
 
     /** Read a social address from KV service. */
@@ -111,26 +114,46 @@ export class IdentityService extends IdentityServiceState {
         const name = getENSName(nickname, bio)
         if (!name) return
 
-        const provider = await Providers[ProviderType.MaskWallet].createWeb3Provider({
-            chainId: ChainId.Mainnet,
-        })
-        const ens = new ENS({
-            provider,
-            network: ChainId.Mainnet,
-        })
-        return this.createSocialAddress(SocialAddressType.ENS, await ens.lookup(name), name)
+        const address = await attemptUntil(
+            [new ENS_Resolver(), new ChainbaseResolver()].map((resolver) => {
+                return async () => resolver.lookup(name)
+            }),
+            undefined,
+        )
+        if (!address) return
+        return this.createSocialAddress(SocialAddressType.ENS, address, nickname)
+    }
+
+    /** Read a social address from MaskX */
+    private async getSocialAddressesFromMaskX({ identifier }: SocialIdentity) {
+        const userId = identifier?.userId
+        if (!userId) return
+        const response = await MaskX.getIdentitiesExact(userId, MaskX_BaseAPI.PlatformType.Twitter)
+        return response.records
+            .filter((x) => {
+                if (!isValidAddress(x.web3_addr)) return false
+                try {
+                    // detect if a valid data source
+                    resolveMaskXAddressType(x.source)
+                    return true
+                } catch {
+                    return false
+                }
+            })
+            .map((y) => this.createSocialAddress(resolveMaskXAddressType(y.source), y.web3_addr, y.sns_handle))
     }
 
     override async getFromRemote(identity: SocialIdentity, includes?: SocialAddressType[]) {
         const allSettled = await Promise.allSettled([
             this.getSocialAddressFromBio(identity),
             this.getSocialAddressFromENS(identity),
-            this.getSocialAddressFromRSS3(identity),
-            this.getSocialAddressFromNextID(identity),
             this.getSocialAddressFromKV(identity),
+            this.getSocialAddressesFromNextID(identity),
+            this.getSocialAddressesFromMaskX(identity),
         ])
-        return allSettled.flatMap((x) => (x.status === 'fulfilled' ? x.value : undefined)).filter(Boolean) as Array<
-            SocialAddress<NetworkPluginID.PLUGIN_EVM>
-        >
+        const identities = allSettled
+            .flatMap((x) => (x.status === 'fulfilled' ? x.value : []))
+            .filter(Boolean) as Array<SocialAddress<NetworkPluginID.PLUGIN_EVM>>
+        return uniqBy(identities, (x) => `${x.type}_${x.label}_${x.address.toLowerCase()}`)
     }
 }

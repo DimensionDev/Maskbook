@@ -4,10 +4,6 @@ import { useI18N } from '../locales/i18n_generated'
 
 const useStyles = makeStyles()(() => ({
     root: {},
-    nft: {
-        display: 'flex',
-        alignItems: 'center',
-    },
     tip: {
         maxWidth: 'none',
     },
@@ -31,7 +27,7 @@ export function NFTInfo(props: NFTInfoProps) {
             placement="top"
             title={
                 tooltip ? (
-                    <Typography style={{ padding: '6px 12px', whiteSpace: 'nowrap' }} fontSize={12}>
+                    <Typography style={{ whiteSpace: 'nowrap' }} fontSize={12}>
                         {tooltip}
                     </Typography>
                 ) : (

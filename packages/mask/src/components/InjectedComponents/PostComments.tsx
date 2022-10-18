@@ -23,7 +23,7 @@ const useStyle = makeStyles()({
 })
 export type PostCommentDecryptedProps = React.PropsWithChildren<{ ChipProps?: ChipProps }>
 export function PostCommentDecrypted(props: PostCommentDecryptedProps) {
-    const chipClasses = useStylesExtends(useStyle(), props.ChipProps || {})
+    const classes = useStylesExtends(useStyle(), props.ChipProps || {})
     return (
         <>
             <Chip
@@ -32,7 +32,7 @@ export function PostCommentDecrypted(props: PostCommentDecryptedProps) {
                 label={props.children}
                 color="secondary"
                 {...props.ChipProps}
-                classes={chipClasses}
+                classes={{ root: classes.root, label: classes.label }}
             />
         </>
     )

@@ -1,4 +1,4 @@
-import { Image, NFTCardStyledAssetPlayer, ReversedAddress } from '@masknet/shared'
+import { AssetPreviewer, ReversedAddress } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { RSS3BaseAPI } from '@masknet/web3-providers'
 import { isSameAddress } from '@masknet/web3-shared-base'
@@ -33,20 +33,12 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.maskColor.third,
         marginLeft: 10,
     },
-
     summary: {
         textOverflow: 'ellipsis',
         maxWidth: '400px',
         overflow: 'hidden',
         whiteSpace: 'nowrap',
         color: theme.palette.maskColor.main,
-    },
-    defaultImage: {
-        background: theme.palette.maskColor.modalTitleBg,
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: 12,
     },
     fallbackImage: {
         minHeight: '0 !important',
@@ -63,17 +55,18 @@ const useStyles = makeStyles()((theme) => ({
         width: 64,
         height: 64,
         flexShrink: 0,
+        position: 'relative',
     },
     action: {
         color: theme.palette.maskColor.main,
     },
 }))
 
-const { Tag, Type, MaskNetworkMap } = RSS3BaseAPI
+const { Tag, Type } = RSS3BaseAPI
 export interface FeedCardProps extends Omit<BoxProps, 'onSelect'> {
     feed: RSS3BaseAPI.Activity
     address?: string
-    onSelect: (feed: RSS3Feed) => void
+    onSelect?: (feed: RSS3Feed) => void
 }
 
 export const FeedCard = memo(({ feed, address, onSelect, className, ...rest }: FeedCardProps) => {
@@ -148,15 +141,10 @@ export const FeedCard = memo(({ feed, address, onSelect, className, ...rest }: F
             if (action.metadata && !('value' in action.metadata)) return
             return (
                 <Card className={classes.img}>
-                    <NFTCardStyledAssetPlayer
-                        contractAddress={action.metadata?.contract_address}
-                        chainId={MaskNetworkMap[feed.network ?? 'ethereum']}
+                    <AssetPreviewer
                         url={action.metadata?.image}
-                        tokenId={action.metadata?.value}
                         classes={{
                             fallbackImage: classes.fallbackImage,
-                            wrapper: classes.img,
-                            iframe: classes.img,
                         }}
                     />
                 </Card>
@@ -165,7 +153,16 @@ export const FeedCard = memo(({ feed, address, onSelect, className, ...rest }: F
         if (feed.tag === Tag.Donation) {
             const action = feed.actions[0] as RSS3BaseAPI.ActionGeneric<RSS3BaseAPI.Tag.Donation>
             const logo = action.metadata?.logo
-            return logo ? <Image className={classes.img} src={logo} /> : null
+            return logo ? (
+                <Card className={classes.img}>
+                    <AssetPreviewer
+                        url={logo}
+                        classes={{
+                            fallbackImage: classes.fallbackImage,
+                        }}
+                    />
+                </Card>
+            ) : null
         }
         if (feed.tag === Tag.Transaction && feed.type === Type.Transfer) {
             const action = feed.actions[0] as RSS3BaseAPI.ActionGeneric<
@@ -173,7 +170,16 @@ export const FeedCard = memo(({ feed, address, onSelect, className, ...rest }: F
                 RSS3BaseAPI.Type.Transfer
             >
             const logo = action.metadata?.image
-            return logo ? <Image className={classes.img} src={logo} /> : null
+            return logo ? (
+                <Card className={classes.img}>
+                    <AssetPreviewer
+                        url={logo}
+                        classes={{
+                            fallbackImage: classes.fallbackImage,
+                        }}
+                    />
+                </Card>
+            ) : null
         }
         return null
     }, [feed])
@@ -181,7 +187,7 @@ export const FeedCard = memo(({ feed, address, onSelect, className, ...rest }: F
     const normalizedFeed = useNormalizeFeed(feed)
 
     return (
-        <Box className={cx(classes.wrapper, className)} {...rest} onClick={() => onSelect(normalizedFeed)}>
+        <Box className={cx(classes.wrapper, className)} {...rest} onClick={() => onSelect?.(normalizedFeed)}>
             <div className={classes.texts}>
                 <Typography component="div">
                     <span className={classes.action}>

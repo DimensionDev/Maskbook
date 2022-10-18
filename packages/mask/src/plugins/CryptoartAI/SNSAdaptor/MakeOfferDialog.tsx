@@ -13,8 +13,9 @@ import { usePlaceBidCallback } from '../hooks/usePlaceBidCallback.js'
 import { activatedSocialNetworkUI } from '../../../social-network/index.js'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base.js'
 import { isFacebook } from '../../../social-network-adaptor/facebook.com/base.js'
-import { formatBalance, leftShift, NetworkPluginID } from '@masknet/web3-shared-base'
-import { useChainId, useFungibleTokenWatched } from '@masknet/plugin-infra/web3'
+import { formatBalance, leftShift } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { useChainId, useFungibleTokenWatched } from '@masknet/web3-hooks-base'
 import { resolveAssetLinkOnCryptoartAI, resolvePaymentTokensOnCryptoartAI } from '../pipes/index.js'
 
 const useStyles = makeStyles()((theme) => {
@@ -32,13 +33,6 @@ const useStyles = makeStyles()((theme) => {
             justifyContent: 'flex-end',
             padding: theme.spacing(0, 2, 2),
         },
-        panel: {
-            marginTop: theme.spacing(2),
-            '&:first-child': {
-                marginTop: 0,
-            },
-        },
-        label: {},
         buttons: {
             width: '100%',
             margin: `0 ${theme.spacing(-0.5)}`,
@@ -46,9 +40,6 @@ const useStyles = makeStyles()((theme) => {
         button: {
             flex: 1,
             margin: `${theme.spacing(1.5)} ${theme.spacing(0.5)} 0`,
-        },
-        markdown: {
-            margin: theme.spacing(1, 0),
         },
         mediaContent: {
             display: 'flex',

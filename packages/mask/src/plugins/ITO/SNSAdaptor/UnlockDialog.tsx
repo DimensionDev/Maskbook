@@ -1,5 +1,6 @@
 import { makeStyles, ActionButton } from '@masknet/theme'
-import { formatBalance, FungibleToken, isGreaterThan, NetworkPluginID, rightShift } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { formatBalance, FungibleToken, isGreaterThan, rightShift } from '@masknet/web3-shared-base'
 import { useCallback, useState } from 'react'
 import { SchemaType, formatEthereumAddress, explorerResolver, useITOConstants, ChainId } from '@masknet/web3-shared-evm'
 import { Link, Typography } from '@mui/material'
@@ -8,7 +9,7 @@ import { useSelectFungibleToken, FungibleTokenInput } from '@masknet/shared'
 import { useI18N } from '../../../utils/index.js'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary.js'
 import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary.js'
-import { useChainId, useFungibleTokenBalance } from '@masknet/plugin-infra/web3'
+import { useChainId, useFungibleTokenBalance } from '@masknet/web3-hooks-base'
 
 function isMoreThanMillion(allowance: string, decimals: number) {
     return isGreaterThan(allowance, `100000000000e${decimals}`) // 100 billion

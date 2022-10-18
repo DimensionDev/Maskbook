@@ -1,16 +1,16 @@
-import { ChainId } from '../types.js'
 import { Connection } from '@solana/web3.js'
+import { ChainId } from '../types.js'
 
 const Endpoints: Record<ChainId, string> = {
-    [ChainId.Mainnet]: 'https://solana--mainnet.datahub.figment.io/apikey/30d4290fe1f4fcf371a9e27c513d099f',
+    [ChainId.Mainnet]: 'https://solana-mainnet.phantom.app/YBPpkkN4g91xDiAnTE9r0RcMkjg0sKUIWvAfoFVJ',
     [ChainId.Testnet]: 'https://api.testnet.solana.com',
     [ChainId.Devnet]: 'https://api.devnet.solana.com',
 }
 
-export function createClientEndpoint(chainId: ChainId) {
+export function createClientEndpoint(chainId = ChainId.Mainnet) {
     return Endpoints[chainId]
 }
 
-export function createClient(chainId: ChainId) {
+export function createClient(chainId = ChainId.Mainnet) {
     return new Connection(createClientEndpoint(chainId))
 }

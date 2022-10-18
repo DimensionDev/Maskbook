@@ -1,18 +1,18 @@
+import formatDateTime from 'date-fns/format'
+import isAfter from 'date-fns/isAfter'
+import isValidDate from 'date-fns/isValid'
 import { Icons } from '@masknet/icons'
 import { Markdown } from '@masknet/shared'
 import { LoadingBase, makeStyles, MaskColorVar, MaskTabList, useTabs } from '@masknet/theme'
 import { resolveSourceTypeName } from '@masknet/web3-shared-base'
 import { TabContext } from '@mui/lab'
 import { Box, Button, CardContent, CardHeader, Paper, Tab, Typography } from '@mui/material'
-import formatDateTime from 'date-fns/format'
-import isAfter from 'date-fns/isAfter'
-import isValidDate from 'date-fns/isValid'
 import { SUPPORTED_PROVIDERS } from '../../constants.js'
 import { CollectiblePaper } from './CollectiblePaper.js'
 import { LinkingAvatar } from '../Shared/LinkingAvatar.js'
 import { AboutTab } from './tabs/AboutTab.js'
-import { ActivityTab } from './tabs/ActivityTab.js'
-import { DetailTab } from './tabs/DetailTab.js'
+import { ActivitiesTab } from './tabs/ActivitiesTab.js'
+import { DetailsTab } from './tabs/DetailsTab.js'
 import { OffersTab } from './tabs/OffersTab.js'
 import { Context } from '../Context/index.js'
 import { useI18N, useSwitcher } from '../../../../../utils/index.js'
@@ -34,10 +34,11 @@ const useStyles = makeStyles()((theme) => {
         },
         header: {
             alignItems: 'unset',
+            padding: 10,
         },
         body: {
             flex: 1,
-            backgroundColor: theme.palette.maskColor.white,
+            backgroundColor: theme.palette.maskColor.bg,
             overflow: 'auto',
             maxHeight: 800,
             borderRadius: '0 0 12px 12px',
@@ -47,24 +48,10 @@ const useStyles = makeStyles()((theme) => {
             },
             background: '#fff !important',
         },
-        footer: {
-            marginTop: -1,
-            zIndex: 1,
-            position: 'relative',
-            borderTop: `solid 1px ${theme.palette.divider}`,
-            justifyContent: 'space-between',
-        },
-        tabs: {
-            height: 'var(--tabHeight)',
-            width: '100%',
-            minHeight: 'unset',
-            borderTop: `solid 1px ${theme.palette.divider}`,
-            borderBottom: `solid 1px ${theme.palette.divider}`,
-        },
         tab: {
             whiteSpace: 'nowrap',
             background: 'transparent',
-            color: theme.palette.maskColor.publicMain,
+            color: theme.palette.maskColor.publicSecond,
             '&:hover': {
                 background: 'transparent',
             },
@@ -77,29 +64,11 @@ const useStyles = makeStyles()((theme) => {
             },
         },
         subtitle: {
-            fontSize: 14,
             marginRight: theme.spacing(0.5),
-            maxHeight: '3.5rem',
+            maxHeight: '3rem',
             overflow: 'hidden',
             wordBreak: 'break-word',
             color: theme.palette.maskColor.publicSecond,
-        },
-        description: {
-            fontSize: 12,
-            '& > strong': {
-                color: theme.palette.text.primary,
-                fontWeight: 300,
-            },
-        },
-        footMenu: {
-            color: theme.palette.text.secondary,
-            fontSize: 10,
-            display: 'flex',
-            alignItems: 'center',
-        },
-        footName: {
-            color: theme.palette.text.primary,
-            marginLeft: theme.spacing(0.5),
         },
         countdown: {
             fontSize: 12,
@@ -110,19 +79,14 @@ const useStyles = makeStyles()((theme) => {
             backgroundColor: '#eb5757',
             padding: theme.spacing(0.5, 2),
         },
-        loading: {
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            height: '100%',
-            padding: theme.spacing(8, 0),
-        },
         markdown: {
-            textOverflow: 'ellipsis',
-            webkitBoxOrient: 'vertical',
-            webkitLineClamp: '3',
+            overflow: 'hidden',
             '& > p': {
+                display: 'inline',
                 color: `${theme.palette.maskColor.publicSecond} !important`,
+            },
+            '& hr': {
+                display: 'none',
             },
             '& a': {
                 color: `${theme.palette.maskColor.publicMain} !important`,
@@ -153,7 +117,7 @@ export function Collectible(props: CollectibleProps) {
         true,
     )
     // #endregion
-    const [currentTab, onChange, tabs] = useTabs('about', 'details', 'offers', 'activity')
+    const [currentTab, onChange, tabs] = useTabs('about', 'details', 'offers', 'activities')
     if (asset.loading)
         return (
             <Box
@@ -173,7 +137,7 @@ export function Collectible(props: CollectibleProps) {
         return (
             <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center">
                 <Typography color={MaskColorVar.textPluginColor} sx={{ marginTop: 8, marginBottom: 8 }}>
-                    Failed to load your collectible on {resolveSourceTypeName(sourceType)}.
+                    {t('plugin_collectible_failed_load', { source: resolveSourceTypeName(sourceType) })}
                 </Typography>
                 <Box alignItems="center" sx={{ padding: 1, display: 'flex', flexDirection: 'row', width: '100%' }}>
                     <Box sx={{ flex: 1, padding: 1 }}> {CollectibleProviderSwitcher}</Box>
@@ -191,9 +155,9 @@ export function Collectible(props: CollectibleProps) {
     const renderTab = () => {
         const tabMap = {
             [tabs.about]: <AboutTab asset={asset} />,
-            [tabs.details]: <DetailTab asset={asset} />,
+            [tabs.details]: <DetailsTab asset={asset} />,
             [tabs.offers]: <OffersTab offers={orders} />,
-            [tabs.activity]: <ActivityTab events={events} />,
+            [tabs.activities]: <ActivitiesTab events={events} />,
         }
 
         return tabMap[currentTab] || null
@@ -202,7 +166,7 @@ export function Collectible(props: CollectibleProps) {
         { value: tabs.about, label: t('plugin_collectible_about') },
         { value: tabs.details, label: t('plugin_collectible_details') },
         { value: tabs.offers, label: t('plugin_collectible_offers') },
-        { value: tabs.activity, label: t('plugin_collectible_activity') },
+        { value: tabs.activities, label: t('plugin_collectible_activities') },
     ]
 
     return (
@@ -223,7 +187,9 @@ export function Collectible(props: CollectibleProps) {
                     title={
                         <Typography style={{ display: 'flex', alignItems: 'center' }}>
                             <span className={classes.cardTitle}>{_asset.metadata?.name || '-'}</span>
-                            {_asset.collection?.verified ? <Icons.VerifiedCollection sx={{ marginLeft: 0.5 }} /> : null}
+                            {_asset.collection?.verified ? (
+                                <Icons.VerifiedCollection size={20} sx={{ marginLeft: 0.5 }} />
+                            ) : null}
                         </Typography>
                     }
                     subheader={
@@ -254,7 +220,9 @@ export function Collectible(props: CollectibleProps) {
                             ))}
                         </MaskTabList>
                     </TabContext>
-                    <Paper className={classes.body}>{renderTab()}</Paper>
+                    <Paper className={classes.body} elevation={0}>
+                        {renderTab()}
+                    </Paper>
                 </CardContent>
             </CollectiblePaper>
             {endDate && isValidDate(endDate) && isAfter(endDate, Date.now()) && (

@@ -1,28 +1,30 @@
+import { useEffect, useMemo, useRef, useState } from 'react'
+import { useUpdateEffect } from 'react-use'
+import { first, uniqBy } from 'lodash-unified'
 import { Icons } from '@masknet/icons'
 import {
     createInjectHooksRenderer,
-    PluginID,
     useActivatedPluginsSNSAdaptor,
     useIsMinimalMode,
     usePluginI18NField,
 } from '@masknet/plugin-infra/content-script'
-import { useAvailablePlugins, useHiddenAddressSetting } from '@masknet/plugin-infra/web3'
-import { AddressItem, PluginCardFrameMini, useSocialAddressListBySettings } from '@masknet/shared'
-import { CrossIsolationMessages, EMPTY_LIST, NextIDPlatform } from '@masknet/shared-base'
+import { useAvailablePlugins } from '@masknet/plugin-infra'
+import { useHiddenAddressSetting } from '@masknet/web3-hooks-base'
+import { AddressItem, GrantPermissions, PluginCardFrameMini, useSocialAddressListBySettings } from '@masknet/shared'
+import { CrossIsolationMessages, EMPTY_LIST, NextIDPlatform, PluginID, NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles, MaskLightTheme, MaskTabList, ShadowRootMenu, useStylesExtends, useTabs } from '@masknet/theme'
-import { isSameAddress, NetworkPluginID, SocialAddress, SocialAddressType } from '@masknet/web3-shared-base'
+import { isSameAddress, SocialAddress, SocialAddressType } from '@masknet/web3-shared-base'
 import { TabContext } from '@mui/lab'
 import { Button, Link, MenuItem, Stack, Tab, ThemeProvider, Typography } from '@mui/material'
-import { first, uniqBy } from 'lodash-unified'
-import { useEffect, useMemo, useState } from 'react'
-import { useUpdateEffect } from 'react-use'
-import { activatedSocialNetworkUI } from '../../social-network/index.js'
 import { isTwitter } from '../../social-network-adaptor/twitter.com/base.js'
+import { activatedSocialNetworkUI } from '../../social-network/index.js'
 import { MaskMessages, sorter, useI18N, useLocationChange } from '../../utils/index.js'
 import { useCurrentVisitingSocialIdentity } from '../DataSource/useActivatedUI.js'
 import { useCurrentPersonaConnectStatus } from '../DataSource/usePersonaConnectStatus.js'
 import { ConnectPersonaBoundary } from '../shared/ConnectPersonaBoundary.js'
 import { WalletSettingEntry } from './ProfileTab/WalletSettingEntry'
+import { isFacebook } from '../../social-network-adaptor/facebook.com/base.js'
+import { useGrantPermissions, usePluginHostPermissionCheck } from '../DataSource/usePluginHostPermission.js'
 
 function getTabContent(tabId?: string) {
     return createInjectHooksRenderer(useActivatedPluginsSNSAdaptor.visibility.useAnyMode, (x) => {
@@ -35,7 +37,7 @@ const MENU_ITEM_HEIGHT = 40
 const MENU_LIST_PADDING = 8
 const useStyles = makeStyles()((theme) => ({
     root: {
-        width: isTwitter(activatedSocialNetworkUI) ? 'auto' : 876,
+        width: isFacebook(activatedSocialNetworkUI) ? 876 : 'auto',
     },
     container: {
         background:
@@ -71,14 +73,6 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         alignItems: 'center',
     },
-    link: {
-        cursor: 'pointer',
-        marginTop: 2,
-        zIndex: 0,
-        '&:hover': {
-            textDecoration: 'none',
-        },
-    },
     settingLink: {
         cursor: 'pointer',
         marginTop: 4,
@@ -86,11 +80,6 @@ const useStyles = makeStyles()((theme) => ({
         '&:hover': {
             textDecoration: 'none',
         },
-    },
-    linkIcon: {
-        color: theme.palette.maskColor.second,
-        fontSize: '20px',
-        margin: '4px 2px 0 2px',
     },
     content: {
         position: 'relative',
@@ -111,11 +100,6 @@ const useStyles = makeStyles()((theme) => ({
     tabs: {
         display: 'flex',
         position: 'relative',
-    },
-    addressLabel: {
-        color: theme.palette.maskColor.dark,
-        fontSize: 18,
-        fontWeight: 700,
     },
     arrowDropIcon: {
         color: theme.palette.maskColor.dark,
@@ -153,7 +137,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
 
     const [hidden, setHidden] = useState(true)
     const [selectedAddress, setSelectedAddress] = useState<SocialAddress<NetworkPluginID> | undefined>()
-    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
+    const [menuOpen, setMenuOpen] = useState(false)
     const {
         value: personaStatus,
         loading: loadingPersonaStatus,
@@ -257,6 +241,12 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         return <Component identity={currentVisitingSocialIdentity} socialAddress={selectedAddress} />
     }, [componentTabId, currentVisitingSocialIdentity?.publicKey, selectedAddress])
 
+    const lackHostPermission = usePluginHostPermissionCheck(activatedPlugins.filter((x) => x.ProfileCardTabs?.length))
+
+    const lackPluginId = first(lackHostPermission ? [...lackHostPermission] : [])
+    const lackPluginDefine = activatedPlugins.find((x) => x.ID === lackPluginId)
+
+    const [, onGrant] = useGrantPermissions(lackPluginDefine?.enableRequirement.host_permissions)
     useLocationChange(() => {
         onChange(undefined, first(tabs)?.id)
     })
@@ -278,7 +268,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     }, [currentVisitingUserId])
 
     useEffect(() => {
-        const listener = () => setAnchorEl(null)
+        const listener = () => setMenuOpen(false)
 
         window.addEventListener('scroll', listener, false)
 
@@ -287,10 +277,10 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         }
     }, [])
 
-    const onOpen = (event: React.MouseEvent<HTMLButtonElement>) => setAnchorEl(event.currentTarget)
+    const buttonRef = useRef<HTMLButtonElement>(null)
     const onSelect = (option: SocialAddress<NetworkPluginID>) => {
         setSelectedAddress(option)
-        setAnchorEl(null)
+        setMenuOpen(false)
     }
     const handleOpenDialog = () => {
         CrossIsolationMessages.events.web3ProfileDialogEvent.sendToAll({
@@ -299,6 +289,21 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     }
 
     if (hidden) return null
+
+    if (lackHostPermission?.size) {
+        return (
+            <ThemeProvider theme={MaskLightTheme}>
+                <div className={classes.root}>
+                    <PluginCardFrameMini>
+                        <GrantPermissions
+                            permissions={lackPluginDefine?.enableRequirement.host_permissions ?? []}
+                            onGrant={onGrant}
+                        />
+                    </PluginCardFrameMini>
+                </div>
+            </ThemeProvider>
+        )
+    }
 
     if (
         !currentVisitingUserId ||
@@ -347,7 +352,8 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         )
     }
 
-    if (socialAddressList.length === 0 && !showNextID && !hiddenAddress?.length) {
+    // Maybe should merge in NextIdPage
+    if (socialAddressList.length === 0 && !showNextID && !isTwitterPlatform) {
         return (
             <ThemeProvider theme={MaskLightTheme}>
                 <div className={classes.root}>
@@ -389,10 +395,15 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
                         <div className={classes.title}>
                             <div className={classes.walletItem}>
                                 <Button
-                                    id="demo-positioned-button"
+                                    id="wallets"
                                     variant="text"
                                     size="small"
-                                    onClick={onOpen}
+                                    ref={buttonRef}
+                                    onClick={(event) => {
+                                        event.preventDefault()
+                                        event.stopPropagation()
+                                        setMenuOpen(true)
+                                    }}
                                     className={classes.walletButton}>
                                     <AddressItem
                                         linkIconClassName={classes.mainLinkIcon}
@@ -406,13 +417,14 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
                                     <Icons.ArrowDrop className={classes.arrowDropIcon} />
                                 </Button>
                                 <ShadowRootMenu
-                                    anchorEl={anchorEl}
-                                    open={Boolean(anchorEl)}
+                                    anchorEl={buttonRef.current}
+                                    open={menuOpen}
+                                    disableScrollLock
                                     PaperProps={{
                                         className: classes.addressMenu,
                                     }}
-                                    aria-labelledby="demo-positioned-button"
-                                    onClose={() => setAnchorEl(null)}>
+                                    aria-labelledby="wallets"
+                                    onClose={() => setMenuOpen(false)}>
                                     {uniqBy(socialAddressList ?? [], (x) => x.address.toLowerCase()).map((x) => {
                                         return (
                                             <MenuItem

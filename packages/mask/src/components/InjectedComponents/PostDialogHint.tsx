@@ -1,6 +1,6 @@
 import { memo } from 'react'
-import { IconButton, Tooltip } from '@mui/material'
-import { useStylesExtends, makeStyles } from '@masknet/theme'
+import { IconButton, Typography } from '@mui/material'
+import { useStylesExtends, makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { useI18N } from '../../utils/index.js'
 import { isMobileFacebook } from '../../social-network-adaptor/facebook.com/utils/isMobile.js'
 import { MaskSharpIcon, MaskIconInMinds } from '@masknet/shared'
@@ -26,8 +26,7 @@ const useStyles = makeStyles()((theme) => ({
         padding: isMobileFacebook ? 0 : '7px',
     },
     text: {
-        fontSize: 14,
-        color: '#606770',
+        color: theme.palette.grey[300],
         marginLeft: theme.spacing(1),
     },
     wrapper: {
@@ -35,10 +34,7 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         width: '100%',
         padding: '8px 10px',
-        borderBottom: '1px solid #dadde1',
-    },
-    tooltip: {
-        color: 'white',
+        borderBottom: `1px solid ${theme.palette.divider}`,
     },
 }))
 
@@ -53,21 +49,21 @@ const EntryIconButton = memo((props: PostDialogHintUIProps) => {
     const classes = useStylesExtends(useStyles(), props)
 
     const getEntry = () => (
-        <Tooltip
-            title="Mask Network"
-            classes={{ tooltip: classes.tooltip }}
+        <ShadowRootTooltip
+            title={t('mask_network')}
             placement={tooltip?.placement}
             disableHoverListener={tooltip?.disabled}
             PopperProps={{
-                disablePortal: true,
-            }}>
+                disablePortal: false,
+            }}
+            arrow>
             <IconButton
                 size="large"
                 className={classNames(classes.button, classes.iconButton)}
                 onClick={props.onHintButtonClicked}>
                 {ICON_MAP?.[props?.iconType ?? 'default']}
             </IconButton>
-        </Tooltip>
+        </ShadowRootTooltip>
     )
 
     return disableGuideTip ? (
@@ -87,7 +83,7 @@ export const PostDialogHint = memo(function PostDialogHintUI(props: PostDialogHi
     return isMobileFacebook ? (
         <div className={classes.wrapper} onClick={onHintButtonClicked}>
             <EntryIconButton size={size} onHintButtonClicked={() => undefined} />
-            <span className={classes.text}>{t('post_modal_hint__button')}</span>
+            <Typography className={classes.text}>{t('post_modal_hint__button')}</Typography>
         </div>
     ) : (
         <div className={classes.buttonTransform}>

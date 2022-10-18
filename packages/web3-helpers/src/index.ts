@@ -1,10 +1,10 @@
+import { NetworkPluginID } from '@masknet/shared-base'
 import type {
     Connection,
     ConnectionOptions,
     Hub,
     HubOptions,
     NetworkDescriptor,
-    NetworkPluginID,
     ConnectionState,
     ProviderDescriptor,
     ProviderState,

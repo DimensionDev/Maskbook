@@ -7,7 +7,7 @@ import {
     useReverseAddress,
     useWallets,
     useWeb3State,
-} from '@masknet/plugin-infra/web3'
+} from '@masknet/web3-hooks-base'
 import { WalletSettingCardUI } from './UI.js'
 
 interface WalletSettingCardProps {

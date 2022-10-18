@@ -1,6 +1,6 @@
 import { Button, Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@mui/material'
-import { useChainId } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { useChainId } from '@masknet/web3-hooks-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../../utils/index.js'
 import { CollectibleTab } from '../CollectibleTab.js'
@@ -15,9 +15,6 @@ const useStyles = makeStyles()((theme) => {
         },
         content: {
             padding: '0 !important',
-        },
-        spacer: {
-            flex: 0,
         },
         empty: {
             display: 'flex',

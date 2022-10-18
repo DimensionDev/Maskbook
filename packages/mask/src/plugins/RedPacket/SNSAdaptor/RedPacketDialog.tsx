@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { useCompositionContext } from '@masknet/plugin-infra/content-script'
-import { useAccount, useChainId, useWeb3Connection } from '@masknet/plugin-infra/web3'
+import { useAccount, useChainId, useWeb3Connection } from '@masknet/web3-hooks-base'
 import { InjectedDialog } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
@@ -27,13 +27,6 @@ import { RedPacketERC20Form } from './RedPacketERC20Form.js'
 import { RedPacketERC721Form } from './RedPacketERC721Form.js'
 
 const useStyles = makeStyles()((theme) => ({
-    content: {
-        position: 'relative',
-        paddingTop: 50,
-    },
-    tabs: {
-        borderBottom: `1px solid ${theme.palette.divider}`,
-    },
     dialogContent: {
         padding: 0,
         '::-webkit-scrollbar': {
@@ -41,30 +34,6 @@ const useStyles = makeStyles()((theme) => ({
         },
 
         overflowX: 'hidden',
-    },
-    tabPaper: {
-        position: 'sticky',
-        top: 0,
-        zIndex: 5000,
-    },
-    indicator: {
-        display: 'none',
-    },
-    tab: {
-        maxWidth: 120,
-    },
-    focusTab: {
-        borderBottom: `2px solid ${theme.palette.primary.main}`,
-    },
-    flexContainer: {
-        justifyContent: 'space-around',
-    },
-    labelWrapper: {
-        display: 'flex',
-    },
-    img: {
-        width: 20,
-        marginRight: 4,
     },
 }))
 
@@ -194,7 +163,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                     ) : null
                 }
                 titleTabs={
-                    step === CreateRedPacketPageStep.NewRedPacketPage ? (
+                    step === CreateRedPacketPageStep.NewRedPacketPage && !openNFTConfirmDialog ? (
                         <MaskTabList variant="base" onChange={onChange} aria-label="Redpacket">
                             <Tab label={t.erc20_tab_title()} value={tabs.tokens} />
                             <Tab label={t.erc721_tab_title()} value={tabs.collectibles} />

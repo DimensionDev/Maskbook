@@ -1,6 +1,6 @@
-import { useAccount, useChainId, useWeb3Connection } from '@masknet/plugin-infra/web3'
+import { useAccount, useChainId, useWeb3Connection } from '@masknet/web3-hooks-base'
 import type { NftRedPacket } from '@masknet/web3-contracts/types/NftRedPacket'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { encodeContractTransaction } from '@masknet/web3-shared-evm'
 import { useAsyncFn } from 'react-use'
 import { useNftRedPacketContract } from './useNftRedPacketContract.js'

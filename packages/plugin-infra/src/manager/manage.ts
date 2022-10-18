@@ -1,7 +1,7 @@
-import { ObservableSet } from '@masknet/shared-base'
-import { Emitter } from '@servie/events'
 import { noop } from 'lodash-unified'
-import { BooleanPreference, Plugin, PluginID } from '../types.js'
+import { ObservableSet, PluginID } from '@masknet/shared-base'
+import { Emitter } from '@servie/events'
+import { BooleanPreference, Plugin } from '../types.js'
 import { getPluginDefine, onNewPluginRegistered, registeredPlugins } from './store.js'
 
 // Plugin state machine
@@ -55,11 +55,25 @@ export function createManager<
         events,
     }
 
+    async function updateCompositedMinimalMode(id: string) {
+        const definition = await __getDefinition(id as PluginID)
+        if (!definition) return
+
+        const settings = await _host.minimalMode.isEnabled(id)
+        let result: boolean
+        if (settings === BooleanPreference.True) result = true
+        else if (settings === BooleanPreference.False) result = false
+        // plugin default minimal mode is false
+        else result = !!definition.inMinimalModeByDefault
+
+        result ? minimalModePluginIDs.add(id) : minimalModePluginIDs.delete(id)
+    }
+
     function startDaemon(host: Plugin.__Host.Host<Context>, extraCheck?: (id: PluginID) => boolean) {
         _host = host
-        const { signal = new AbortController().signal, addI18NResource, minimalMode } = _host
-        const removeListener1 = minimalMode.events.on('enabled', (id) => minimalModePluginIDs.add(id))
-        const removeListener2 = minimalMode.events.on('disabled', (id) => minimalModePluginIDs.delete(id))
+        const { signal = new AbortController().signal, addI18NResource, minimalMode, permission } = _host
+        const removeListener1 = minimalMode.events.on('enabled', (id) => updateCompositedMinimalMode(id))
+        const removeListener2 = minimalMode.events.on('disabled', (id) => updateCompositedMinimalMode(id))
         const removeListener3 = onNewPluginRegistered((id, def) => {
             def.i18n && addI18NResource(id, def.i18n)
             checkRequirementAndStartOrStop()
@@ -80,6 +94,7 @@ export function createManager<
             plugin.i18n && addI18NResource(plugin.ID, plugin.i18n)
         }
         checkRequirementAndStartOrStop().catch(console.error)
+
         async function checkRequirementAndStartOrStop() {
             for (const [id] of registeredPlugins.getCurrentValue()) {
                 if (await meetRequirement(id)) activatePlugin(id).catch(console.error)
@@ -107,15 +122,7 @@ export function createManager<
         const definition = await __getDefinition(id)
         if (!definition) return
 
-        Promise.resolve(_host.minimalMode.isEnabled(id)).then((enabled) => {
-            let result: boolean
-            if (enabled === BooleanPreference.True) result = true
-            else if (enabled === BooleanPreference.False) result = false
-            // plugin default minimal mode is false
-            else result = !!definition.inMinimalModeByDefault
-
-            result ? minimalModePluginIDs.add(id) : minimalModePluginIDs.delete(id)
-        }, noop)
+        updateCompositedMinimalMode(id).catch(noop)
         if (definition.enableRequirement.target !== 'stable' && !definition.experimentalMark) {
             console.warn(
                 `[@masknet/plugin-infra] Plugin ${id} is not enabled in stable release, expected it's "experimentalMark" to be true.`,

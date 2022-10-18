@@ -1,3 +1,4 @@
+import { memo, ReactNode, useEffect, useState } from 'react'
 import { Box, DialogActions, DialogContent, Stack } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../locales/index.js'
@@ -11,15 +12,11 @@ import { DefaultPlaceholder } from './components/DefaultPlaceholder.js'
 import { NotFound } from './components/NotFound.js'
 import { ChainId, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
 import { InjectedDialog } from '@masknet/shared'
-import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
-import { useFungibleToken, useFungibleTokenPrice } from '@masknet/plugin-infra/web3'
-import { memo, ReactNode, useEffect, useState } from 'react'
-import { CrossIsolationMessages } from '@masknet/shared-base'
+import { isSameAddress } from '@masknet/web3-shared-base'
+import { NetworkPluginID, CrossIsolationMessages } from '@masknet/shared-base'
+import { useFungibleToken, useFungibleTokenPrice } from '@masknet/web3-hooks-base'
 
 const useStyles = makeStyles()((theme) => ({
-    root: {
-        width: 600,
-    },
     content: {
         height: 510,
         maxHeight: 510,

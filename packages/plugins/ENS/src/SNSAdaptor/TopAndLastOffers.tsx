@@ -17,17 +17,6 @@ const useStyles = makeStyles()((theme) => ({
             margin: '0 2px',
         },
     },
-    priceZone: {
-        display: 'flex',
-        alignItems: 'center',
-        gap: 24,
-        margin: '20px 0',
-    },
-    priceText: {
-        fontSize: 36,
-        fontWeight: 700,
-        color: theme.palette.maskColor.publicMain,
-    },
     offerBox: {
         display: 'flex',
         alignItems: 'center',
@@ -41,9 +30,6 @@ const useStyles = makeStyles()((theme) => ({
         lineHeight: '20px',
         display: 'flex',
         alignItems: 'flex-end',
-    },
-    textSm: {
-        fontSize: 24,
     },
     offerBoxWrapper: {
         display: 'flex',

@@ -7,15 +7,12 @@ import { TrendingCard, TrendingCardProps } from './TrendingCard.js'
 const useStyles = makeStyles()((theme) => ({
     root: {
         padding: theme.spacing(2),
-        background: theme.palette.background.modalTitle,
+        background: theme.palette.maskColor.modalTitleBg,
     },
     content: {
         height: 162,
         paddingTop: 0,
         paddingBottom: 0,
-    },
-    footer: {
-        justifyContent: 'space-between',
     },
 }))
 

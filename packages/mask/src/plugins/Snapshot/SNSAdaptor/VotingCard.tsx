@@ -3,19 +3,19 @@ import classNames from 'classnames'
 import { Box, Button, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { SnapshotContext } from '../context.js'
-import { toChecksumAddress } from 'web3-utils'
-import { useAccount, useChainId, useWeb3Connection, useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { useAccount, useChainId, useWeb3Connection, useCurrentWeb3NetworkPluginID } from '@masknet/web3-hooks-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { useSnackbarCallback } from '@masknet/shared'
 import { useI18N } from '../../../utils/index.js'
-import { PluginSnapshotRPC } from '../messages.js'
 import { SnapshotCard } from './SnapshotCard.js'
 import { useProposal } from './hooks/useProposal.js'
 import { usePower } from './hooks/usePower.js'
 import { VoteConfirmDialog } from './VoteConfirmDialog.js'
 import { useRetry } from './hooks/useRetry.js'
-import { SNAPSHOT_VOTE_DOMAIN } from '../constants.js'
+import { toChecksumAddress } from 'web3-utils'
+import { SNAPSHOT_VOTE_DOMAIN } from '../constants'
 import { getSnapshotVoteType } from '../utils.js'
+import { PluginSnapshotRPC } from '../messages'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -63,6 +63,16 @@ export function VotingCard() {
     const [open, setOpen] = useState(false)
     const [loading, setLoading] = useState(false)
 
+    const messageText = (text: string) => (
+        <Box>
+            <Typography fontSize={14} fontWeight={700}>
+                {t('plugin_snapshot_vote')}
+            </Typography>
+            <Typography fontSize={14} fontWeight={400}>
+                {text}
+            </Typography>
+        </Box>
+    )
     const networkPluginId = useCurrentWeb3NetworkPluginID()
     const retry = useRetry()
     const onVoteConfirm = useSnackbarCallback(
@@ -76,11 +86,8 @@ export function VotingCard() {
                 choice: proposal.type === 'single-choice' ? choices_[0] : choices_,
                 metadata: JSON.stringify({}),
             }
-
             const domain = SNAPSHOT_VOTE_DOMAIN
-
             const types = getSnapshotVoteType(proposal.type)
-
             const data = {
                 message,
                 domain,
@@ -102,9 +109,7 @@ export function VotingCard() {
                 'typedDataSign',
                 { account: toChecksumAddress(account) },
             )
-
             const body = JSON.stringify({ data, sig, address: toChecksumAddress(account) })
-
             return PluginSnapshotRPC.vote(body)
         },
         [choices_, identifier, account, proposal, connection, chainId],
@@ -115,7 +120,8 @@ export function VotingCard() {
         },
         (_err: Error) => setLoading(false),
         void 0,
-        t('plugin_snapshot_vote_success'),
+        messageText(t('plugin_snapshot_vote_success')),
+        messageText(t('plugin_snapshot_vote_failed')),
     )
 
     useEffect(() => {

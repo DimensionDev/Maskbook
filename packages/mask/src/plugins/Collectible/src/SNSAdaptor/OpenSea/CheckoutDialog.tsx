@@ -21,7 +21,7 @@ import {
     useChainId,
     useCurrentWeb3NetworkPluginID,
     useFungibleTokenWatched,
-} from '@masknet/plugin-infra/web3'
+} from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { UnreviewedWarnings } from './UnreviewedWarnings.js'
 import { useI18N } from '../../../../../utils/index.js'
@@ -39,12 +39,6 @@ const useStyles = makeStyles()((theme) => {
             display: 'flex',
             justifyContent: 'flex-end',
             padding: theme.spacing(0, 2, 2),
-        },
-        panel: {
-            marginTop: theme.spacing(2),
-            '&:first-child': {
-                marginTop: 0,
-            },
         },
         label: {},
         buttons: {

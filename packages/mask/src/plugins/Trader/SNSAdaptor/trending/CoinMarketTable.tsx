@@ -7,9 +7,6 @@ import type { Trending } from '../../types/index.js'
 import { useI18N } from '../../../../utils/index.js'
 
 const useStyles = makeStyles()((theme) => ({
-    root: {
-        padding: theme.spacing(2),
-    },
     container: {
         borderRadius: 0,
         boxSizing: 'border-box',

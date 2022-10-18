@@ -22,6 +22,7 @@ interface PluginWrapperProps extends React.PropsWithChildren<{}> {
     publisher?: JSX.Element
     wrapperProps?: Plugin.SNSAdaptor.PluginWrapperProps
     publisherLink?: string
+    lackHostPermission?: boolean
 }
 
 const useStyles = makeStyles<{ backgroundGradient?: string; borderRadius?: string; margin?: string }>()(
@@ -44,11 +45,6 @@ const useStyles = makeStyles<{ backgroundGradient?: string; borderRadius?: strin
                 display: 'flex',
                 alignItems: 'center',
                 padding: 15,
-            },
-            title: {
-                display: 'flex',
-                flexDirection: 'column',
-                paddingLeft: theme.spacing(1.5),
             },
             provider: {
                 display: 'flex',
@@ -107,7 +103,7 @@ export function MaskPostExtraInfoWrapper(props: PluginWrapperProps) {
                 {main}
                 {publisherLink ? (
                     <Link href={publisherLink} underline="none" target="_blank" rel="noopener">
-                        <Icons.Provider size={16} style={{ marginLeft: 4 }} />
+                        <Icons.Provider size={18} style={{ marginLeft: 4 }} />
                     </Link>
                 ) : null}
             </Box>
@@ -177,6 +173,7 @@ export const MaskPostExtraPluginWrapper: PluginWrapperComponent<Plugin.SNSAdapto
                 publisher={publisher ? <PluginI18NFieldRender pluginID={ID} field={publisher.name} /> : undefined}
                 publisherLink={publisher?.link}
                 children={props.children}
+                lackHostPermission={props.lackHostPermission}
             />
         )
     },

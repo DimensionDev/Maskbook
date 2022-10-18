@@ -1,10 +1,10 @@
 import { useCallback, FC, useState, useMemo } from 'react'
-import { useCurrentWeb3NetworkPluginID, useNativeTokenAddress } from '@masknet/plugin-infra/web3'
+import { useCurrentWeb3NetworkPluginID, useNativeTokenAddress } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { FungibleTokenList, useSharedI18N } from '@masknet/shared'
-import { EMPTY_LIST, EnhanceableSite, isDashboardPage } from '@masknet/shared-base'
+import { EMPTY_LIST, EnhanceableSite, isDashboardPage, NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import type { FungibleToken, NetworkPluginID } from '@masknet/web3-shared-base'
+import type { FungibleToken } from '@masknet/web3-shared-base'
 import { DialogContent, Theme, useMediaQuery } from '@mui/material'
 import { useBaseUIRuntime } from '../base/index.js'
 import { InjectedDialog } from '../components/index.js'
@@ -28,18 +28,6 @@ const useStyles = makeStyles<StyleProps>()((theme, { compact, isDashboard }) => 
         '&::-webkit-scrollbar': {
             display: 'none',
         },
-    },
-    list: {
-        scrollbarWidth: 'none',
-        '&::-webkit-scrollbar': {
-            display: 'none',
-        },
-    },
-    placeholder: {
-        textAlign: 'center',
-        height: 288,
-        paddingTop: theme.spacing(14),
-        boxSizing: 'border-box',
     },
     search: {
         backgroundColor: isDashboard ? 'transparent !important' : theme.palette.maskColor.input,
@@ -129,7 +117,6 @@ export const SelectFungibleTokenDialog: FC<SelectFungibleTokenDialogProps> = ({
             <DialogContent classes={{ root: classes.content }}>
                 <FungibleTokenList
                     ref={onRefChange}
-                    classes={{ list: classes.list, placeholder: classes.placeholder }}
                     pluginID={pluginId}
                     chainId={chainId}
                     tokens={tokens ?? []}

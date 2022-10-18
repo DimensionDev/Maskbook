@@ -1,15 +1,10 @@
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import BigNumber from 'bignumber.js'
 import { openWindow } from '@masknet/shared-base-ui'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { useSelectFungibleToken, useOpenShareTxDialog, FungibleTokenInput } from '@masknet/shared'
 import { makeStyles, useStylesExtends, ActionButton } from '@masknet/theme'
-import {
-    leftShift,
-    NetworkPluginID,
-    rightShift,
-    ZERO,
-    FungibleToken,
-    currySameAddress,
-    formatBalance,
-} from '@masknet/web3-shared-base'
+import { leftShift, rightShift, ZERO, FungibleToken, currySameAddress, formatBalance } from '@masknet/web3-shared-base'
 import {
     ChainId,
     SchemaType,
@@ -18,8 +13,6 @@ import {
     explorerResolver,
 } from '@masknet/web3-shared-evm'
 import { Slider, Typography } from '@mui/material'
-import BigNumber from 'bignumber.js'
-import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useI18N } from '../../../utils/index.js'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary.js'
 import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary.js'
@@ -27,11 +20,10 @@ import type { JSON_PayloadInMask } from '../types.js'
 import { useQualificationVerify } from './hooks/useQualificationVerify.js'
 import { useSwapCallback } from './hooks/useSwapCallback.js'
 import { SwapStatus } from './SwapGuide.js'
-import { useChainId, useFungibleToken, useFungibleTokenBalance, useWeb3State } from '@masknet/plugin-infra/web3'
+import { useChainId, useFungibleToken, useFungibleTokenBalance, useWeb3State } from '@masknet/web3-hooks-base'
 
 const useStyles = makeStyles()((theme) => ({
     button: {},
-    providerBar: {},
     swapLimitWrap: {
         display: 'flex',
         justifyContent: 'space-between',
@@ -40,7 +32,6 @@ const useStyles = makeStyles()((theme) => ({
     },
     swapLimitText: {
         color: theme.palette.mode === 'dark' ? '#fff' : '#15181B',
-        fontSize: 14,
         width: 'fit-content',
     },
     swapLimitSlider: {
@@ -64,9 +55,6 @@ const useStyles = makeStyles()((theme) => ({
     remindText: {
         fontSize: 10,
         marginTop: theme.spacing(1),
-    },
-    loading: {
-        color: theme.palette.text.primary,
     },
 }))
 

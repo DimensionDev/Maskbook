@@ -3,6 +3,7 @@ import type { GrayscaleAlgorithm, SocialNetworkEnum } from '@masknet/encryption'
 import type { IdentityResolved, PostInfo } from '@masknet/plugin-infra/content-script'
 import type {
     EncryptionTargetType,
+    EnhanceableSite,
     NextIDPlatform,
     ObservableWeakMap,
     PersonaIdentifier,
@@ -38,7 +39,7 @@ export declare namespace SocialNetwork {
          *
          * !!! THIS SHOULD NOT BE USED TO CONSTRUCT A NEW ProfileIdentifier !!!
          */
-        networkIdentifier: string
+        networkIdentifier: EnhanceableSite
         encryptionNetwork: SocialNetworkEnum
         /**
          * This field _will_ be overwritten by SocialNetworkUI.permissions
@@ -267,6 +268,7 @@ export namespace SocialNetworkUI {
         export interface Define {
             nextIDConfig?: NextIDConfig
             steganography?: SteganographyConfig
+            tipsConfig?: TipsConfig
         }
         export interface SteganographyConfig {
             grayscaleAlgorithm?: GrayscaleAlgorithm
@@ -280,6 +282,9 @@ export namespace SocialNetworkUI {
             enable?: boolean
             platform: NextIDPlatform
             collectVerificationPost: (keyword: string) => PostIdentifier | null
+        }
+        export interface TipsConfig {
+            enableUserGuide?: boolean
         }
     }
 }

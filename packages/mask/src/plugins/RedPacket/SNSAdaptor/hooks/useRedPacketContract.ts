@@ -1,4 +1,4 @@
-import { useContract } from '@masknet/plugin-infra/web3-evm'
+import { useContract } from '@masknet/web3-hooks-evm'
 import HappyRedPacketV1ABI from '@masknet/web3-contracts/abis/HappyRedPacketV1.json'
 import HappyRedPacketV2ABI from '@masknet/web3-contracts/abis/HappyRedPacketV2.json'
 import HappyRedPacketV3ABI from '@masknet/web3-contracts/abis/HappyRedPacketV3.json'

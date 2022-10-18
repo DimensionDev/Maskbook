@@ -8,6 +8,8 @@ import type {
     ECKeyIdentifier,
     NextIDPersonaBindings,
     NextIDPlatform,
+    NameServiceID,
+    NetworkPluginID
 } from '@masknet/shared-base'
 import type { api } from '@dimensiondev/mask-wallet-core/proto'
 import type {
@@ -32,12 +34,6 @@ export type Color =
     | `#${string}${string}${string}${string}${string}${string}`
     | `#${string}${string}${string}`
     | `hsl(${number}, ${number}%, ${number}%)`
-
-export enum NetworkPluginID {
-    PLUGIN_EVM = 'com.mask.evm',
-    PLUGIN_FLOW = 'com.mask.flow',
-    PLUGIN_SOLANA = 'com.mask.solana',
-}
 
 export enum CurrencyType {
     NATIVE = 'native',
@@ -87,6 +83,8 @@ export enum SourceType {
     X2Y2 = 'X2Y2',
     MagicEden = 'MagicEden',
     Element = 'Element',
+    Solsea = 'Solsea',
+    Solanart = 'Solanart',
 
     // Rarity
     RaritySniper = 'RaritySniper',
@@ -118,15 +116,13 @@ export enum TransactionDescriptorType {
 export enum SocialAddressType {
     ADDRESS = 'ADDRESS',
     ENS = 'ENS',
-    UNS = 'UNS',
-    DNS = 'DNS',
     RSS3 = 'RSS3',
-    KV = 'KV',
-    GUN = 'GUN',
-    THE_GRAPH = 'THE_GRAPH',
-    TWITTER_BLUE = 'TWITTER_BLUE',
-    NEXT_ID = 'NEXT_ID',
     SOL = 'SOL',
+    KV = 'KV',
+    NEXT_ID = 'NEXT_ID',
+    CyberConnect = 'CyberConnect',
+    Leaderboard = '.eth Leaderboard',
+    Sybil = 'Sybil',
 }
 
 export enum StorageProviderType {
@@ -167,13 +163,17 @@ export interface SocialIdentity {
 
 export interface SocialAddress<PluginID> {
     /** The ID of a plugin that the address belongs to */
-    networkSupporterPluginID: PluginID
+    pluginID: PluginID
     /** The data source type */
     type: SocialAddressType
     /** The address in hex string */
     address: string
     /** A human readable address title */
     label: string
+}
+
+export interface SocialAccount extends Omit<SocialAddress<NetworkPluginID>, 'type'> {
+    supportedAddressTypes?: SocialAddressType[]
 }
 
 export type Price = {
@@ -400,12 +400,20 @@ export interface NonFungibleTokenOrder<ChainId, SchemaType> {
     source?: SourceType
 }
 
+export enum ActivityType {
+    Transfer = 'Transfer',
+    Mint = 'Mint',
+    Sale = 'Sale',
+    Offer = 'Offer',
+    List = 'List',
+    CancelOffer= 'CancelOffer',
+}
 export interface NonFungibleTokenEvent<ChainId, SchemaType> {
     id: string
     /** chain Id */
     chainId: ChainId
     /** event type */
-    type: string
+    type: ActivityType
     /** permalink of asset */
     assetPermalink?: string
     /** name of asset */
@@ -534,18 +542,25 @@ export interface TransactionDescriptor<ChainId, Transaction> {
     type: TransactionDescriptorType
     /** a transaction title. */
     title: string
-    /** a human-readable description. */
-    description?: string
-    /** a human-readable description for successful transaction. */
-    successfulDescription?: string
-    /** a human-readable description for failed transaction. */
-    failedDescription?: string
+    /** The original transaction object */
+    _tx: Transaction    
     /** The address of the token leveraged to swap other tokens */
     tokenInAddress?: string
     /** The amount of the token leveraged to swap other tokens */
-    tokenInAmount?: string
-    /** The original transaction object */
-    _tx: Transaction
+    tokenInAmount?: string 
+    /** a human-readable description. */
+    description?: string    
+    snackbar?: {   
+        /** a human-readable description for successful transaction. */
+        successfulDescription?: string
+        /** a human-readable description for failed transaction. */
+        failedDescription?: string
+    }
+    popup?: {
+        /** The custom token description */    
+        tokenDescription?: string
+    }
+
 }
 
 export interface TransactionContext<ChainId, Parameter = string | undefined> {
@@ -886,8 +901,8 @@ export interface Connection<
     /** Transfer non-fungible token to */
     transferNonFungibleToken(
         address: string | undefined,
-        recipient: string,
         tokenId: string,
+        recipient: string,
         amount: string,
         schema?: SchemaType,
         initial?: Web3ConnectionOptions,
@@ -963,7 +978,7 @@ export interface HubFungible<ChainId, SchemaType, GasOption, Web3HubOptions = Hu
         initial?: Web3HubOptions,
     ) => Promise<Array<FungibleToken<ChainId, SchemaType>>>
     /** Get price of a fungible token. */
-    getFungibleTokenPrice?: (chainId: ChainId, address: string, initial?: Web3HubOptions) => Promise<number>
+    getFungibleTokenPrice?: (chainId: ChainId, address: string, initial?: Web3HubOptions) => Promise<number | undefined>
     /** Get token icon URLs that point to a fungible token. */
     getFungibleTokenIconURLs?: (chainId: ChainId, address: string, initial?: Web3HubOptions) => Promise<string[]>
     /** Get spenders of a fungible token approved by the given account. */
@@ -997,7 +1012,7 @@ export interface HubNonFungible<ChainId, SchemaType, GasOption, Web3HubOptions =
         address: string,
         tokenId: string,
         initial?: Web3HubOptions,
-    ) => Promise<PriceInToken<ChainId, SchemaType>>
+    ) => Promise<PriceInToken<ChainId, SchemaType> | undefined>
     /** Get a non-fungible contract. */
     getNonFungibleTokenContract?: (
         address: string,
@@ -1188,7 +1203,18 @@ export interface IdentityServiceState {
     /** Find all social addresses related to the given identity. */
     lookup(identity: SocialIdentity): Promise<Array<SocialAddress<NetworkPluginID>>>
 }
+
+export interface NameServiceResolver {
+    get id(): NameServiceID
+    /** get address of domain name */
+    lookup?: (domain: string) => Promise<string | undefined>
+    /** get domain name of address */
+    reverse?: (address: string) => Promise<string | undefined>
+}
+
 export interface NameServiceState<ChainId> {
+    /** create name resolver */
+    createResolvers: (chainId: ChainId) => NameServiceResolver[]
     /** get address of domain name */
     lookup?: (chainId: ChainId, domain: string) => Promise<string | undefined>
     /** get domain name of address */
@@ -1354,7 +1380,6 @@ export interface OthersState<ChainId, SchemaType, ProviderType, NetworkType, Tra
     isValidAddress(address?: string): boolean
     isZeroAddress(address?: string): boolean
     isNativeTokenAddress(address?: string): boolean
-    isSameAddress(address?: string, otherAddress?: string): boolean
     isNativeTokenSchemaType(schemaType?: SchemaType): boolean
     isFungibleTokenSchemaType(schemaType?: SchemaType): boolean
     isNonFungibleTokenSchemaType(schemaType?: SchemaType): boolean

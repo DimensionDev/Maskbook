@@ -16,7 +16,6 @@ import { FlexibleTab } from './FlexibleTab.js'
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
 import { useClickAway, useWindowSize } from 'react-use'
 import { RoundTab } from './RoundTab.js'
-import { get } from 'lodash-unified'
 
 type MaskTabVariant = 'base' | 'flexible' | 'round'
 const defaultTabSize = 38
@@ -234,8 +233,8 @@ export const MaskTabList = forwardRef<HTMLDivElement, MaskTabListProps>((props, 
             top: 0,
             bottom: 0,
         }
-        const pointerX = get(event, 'x', 0)
-        const pointerY = get(event, 'y', 0)
+        const pointerX = (event as MouseEvent).x ?? 0
+        const pointerY = (event as MouseEvent).y ?? 0
 
         if (pointerX > right || pointerX < left || pointerY < top || pointerY > bottom) handleToggle(false)
     })

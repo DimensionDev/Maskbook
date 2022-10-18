@@ -1,4 +1,6 @@
 import { useMemo, useCallback, useState } from 'react'
+import { useAsync } from 'react-use'
+import classNames from 'classnames'
 import { makeStyles, ActionButton } from '@masknet/theme'
 import {
     formatEthereumAddress,
@@ -9,8 +11,8 @@ import {
     formatTokenId,
 } from '@masknet/web3-shared-evm'
 import { NFTCardStyledAssetPlayer } from '@masknet/shared'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import classNames from 'classnames'
 import { Grid, Link, Typography, List, DialogContent, ListItem, Box } from '@mui/material'
 import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary.js'
 import LaunchIcon from '@mui/icons-material/Launch'
@@ -22,9 +24,8 @@ import { useCompositionContext } from '@masknet/plugin-infra/content-script'
 import { RedPacketNftMetaKey } from '../constants.js'
 import { WalletMessages } from '../../Wallet/messages.js'
 import { RedPacketRPC } from '../messages.js'
-import { useAccount, useChainId, useWallet, useWeb3 } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID, NonFungibleTokenContract, NonFungibleToken } from '@masknet/web3-shared-base'
-import { useAsync } from 'react-use'
+import { useAccount, useChainId, useWallet, useWeb3 } from '@masknet/web3-hooks-base'
+import type { NonFungibleTokenContract, NonFungibleToken } from '@masknet/web3-shared-base'
 import Services from '../../../extension/service.js'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
 
@@ -41,10 +42,6 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'flex-end',
-    },
-    message: {
-        borderLeft: '2px solid red',
-        paddingLeft: theme.spacing(0.5),
     },
     text: {
         fontSize: 16,
@@ -88,10 +85,9 @@ const useStyles = makeStyles()((theme) => ({
         height: 195,
         overflow: 'hidden',
     },
-    nftImg: {
-        maxWidth: '100%',
-    },
     nftNameWrapper: {
+        position: 'absolute',
+        bottom: 0,
         width: '100%',
         background: theme.palette.background.paper,
         borderBottomRightRadius: 8,
@@ -106,33 +102,11 @@ const useStyles = makeStyles()((theme) => ({
         overflow: 'hidden',
         textOverflow: 'ellipsis',
     },
-    buttonWrapper: {
-        marginTop: 0,
-    },
     button: {
         minHeight: 36,
         height: 36,
     },
-    cancelButton: {},
     sendButton: {},
-    snackBarText: {
-        fontSize: 14,
-    },
-    snackBarLink: {
-        color: 'white',
-    },
-    openIcon: {
-        display: 'flex',
-        width: 18,
-        height: 18,
-        marginLeft: 2,
-    },
-    snackBar: {
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        transform: 'translateY(1px)',
-    },
     fallbackImage: {
         minHeight: '0 !important',
         maxWidth: 'none',

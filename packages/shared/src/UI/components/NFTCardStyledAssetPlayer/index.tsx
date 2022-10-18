@@ -1,15 +1,15 @@
-import { useMemo } from 'react'
-import classNames from 'classnames'
-import { useTheme } from '@mui/material'
+import { useNetworkDescriptor, useNonFungibleToken } from '@masknet/web3-hooks-base'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
-import { NETWORK_DESCRIPTORS } from '@masknet/web3-shared-evm'
-import { useNetworkDescriptor, useNonFungibleToken } from '@masknet/plugin-infra/web3'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { NetworkPluginID, SocialAddress } from '@masknet/web3-shared-base'
-import { AssetPlayer } from '../AssetPlayer/index.js'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { NETWORK_DESCRIPTORS } from '@masknet/web3-shared-evm'
+import { useTheme } from '@mui/material'
+import classNames from 'classnames'
+import { useMemo } from 'react'
 import { useIsImageURL } from '../../../hooks/index.js'
-import { ImageIcon } from '../ImageIcon/index.js'
+import { AssetPlayer } from '../AssetPlayer/index.js'
 import { Image } from '../Image/index.js'
+import { ImageIcon } from '../ImageIcon/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     wrapper: {
@@ -22,10 +22,6 @@ const useStyles = makeStyles()((theme) => ({
     },
     imageContainer: {
         height: '100%',
-    },
-    loadingPlaceholder: {
-        height: 160,
-        width: 120,
     },
     fallbackImage: {
         height: 64,
@@ -45,7 +41,7 @@ const useStyles = makeStyles()((theme) => ({
     networkIcon: {
         position: 'absolute',
         top: 6,
-        right: 6,
+        left: 6,
     },
 }))
 
@@ -61,11 +57,11 @@ interface Props extends withClasses<'fallbackImage' | 'iframe' | 'wrapper' | 'lo
     setERC721TokenName?: (name: string) => void
     setSourceType?: (type: string) => void
     showNetwork?: boolean
-    address?: SocialAddress<NetworkPluginID>
+    pluginID?: NetworkPluginID
 }
 
-const assetPlayerFallbackImageDark = new URL('../Image/nft_token_fallback_dark.png', import.meta.url)
-const assetPlayerFallbackImageLight = new URL('../Image/nft_token_fallback.png', import.meta.url)
+const fallbackImageDark = new URL('../Image/mask-dark.png', import.meta.url)
+const fallbackImageLight = new URL('../Image/mask-light.png', import.meta.url)
 
 export function NFTCardStyledAssetPlayer(props: Props) {
     const {
@@ -76,7 +72,7 @@ export function NFTCardStyledAssetPlayer(props: Props) {
         fallbackImage,
         fallbackResourceLoader,
         url,
-        address,
+        pluginID,
         setERC721TokenName,
         renderOrder,
         setSourceType,
@@ -94,21 +90,22 @@ export function NFTCardStyledAssetPlayer(props: Props) {
         },
     )
     const urlComputed = url || tokenDetailed?.metadata?.imageURL || tokenDetailed?.metadata?.mediaURL
-    const { value: isImageURL = true } = useIsImageURL(urlComputed)
+    const { value: isImageURL = true, loading: loadingIsImageURL } = useIsImageURL(urlComputed)
 
-    const fallbackImageURL =
-        fallbackImage ?? (theme.palette.mode === 'dark' ? assetPlayerFallbackImageDark : assetPlayerFallbackImageLight)
+    const fallbackImageURL = fallbackImage ?? (theme.palette.mode === 'dark' ? fallbackImageDark : fallbackImageLight)
 
-    const networkDescriptor = useNetworkDescriptor(address?.networkSupporterPluginID)
+    const networkDescriptor = useNetworkDescriptor(pluginID)
 
     const networkIcon = useMemo(() => {
-        if (address?.networkSupporterPluginID === NetworkPluginID.PLUGIN_EVM) {
+        if (pluginID === NetworkPluginID.PLUGIN_EVM) {
             return NETWORK_DESCRIPTORS.find((network) => network?.chainId === chainId)?.icon
         }
         return networkDescriptor?.icon
-    }, [networkDescriptor])
+    }, [networkDescriptor?.icon, pluginID])
 
-    if (isImageURL || isImageOnly) {
+    if (loadingIsImageURL) return null
+
+    if (isImageURL || isImageOnly || !urlComputed) {
         return (
             <div className={classes.imgWrapper}>
                 <Image
@@ -122,7 +119,7 @@ export function NFTCardStyledAssetPlayer(props: Props) {
                     src={urlComputed}
                     fallback={fallbackImageURL}
                 />
-                {showNetwork && <ImageIcon icon={networkIcon} size={20} classes={{ icon: classes.networkIcon }} />}
+                {showNetwork && <ImageIcon icon={networkIcon} size={24} classes={{ icon: classes.networkIcon }} />}
             </div>
         )
     }

@@ -1,4 +1,4 @@
-import urlcat from 'urlcat'
+import { EMPTY_LIST } from '@masknet/shared-base'
 import {
     createIndicator,
     createNextIndicator,
@@ -8,28 +8,47 @@ import {
     NonFungibleCollection,
     NonFungibleTokenContract,
     NonFungibleTokenEvent,
+    NonFungibleTokenTrait,
     Pageable,
 } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType } from '@masknet/web3-shared-solana'
-import { EMPTY_LIST } from '@masknet/shared-base'
+import urlcat from 'urlcat'
 import type { NonFungibleTokenAPI } from '../../types/index.js'
+import { NFTSCAN_SOLANA_API } from '../constants.js'
 import {
     createNonFungibleAsset,
     createNonFungibleCollection,
     createNonFungibleTokenContract,
     createNonFungibleTokenEvent,
+    fetchFromNFTScan,
     fetchFromNFTScanV2,
 } from '../helpers/Solana.js'
-import type { Solana, PageableResponse, Response } from '../types/index.js'
+import type { PageableResponse, Response, Solana } from '../types/index.js'
 
 export class NFTScanNonFungibleTokenAPI_Solana implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
+    private async getAssetTraits(mintAddress: string): Promise<NonFungibleTokenTrait[]> {
+        const url = urlcat(NFTSCAN_SOLANA_API, '/nftscan/getNFTBasicInfo', {
+            token_address: mintAddress,
+        })
+        const { data: basicInfo } = await fetchFromNFTScan<Response<Solana.BasicInfo>>(url)
+
+        return basicInfo.attributes.map((x) => ({
+            type: x.attributes_name,
+            value: x.attributes_value,
+            rarity: x.percentage,
+        }))
+    }
     async getAsset(address: string, _: string, { chainId = ChainId.Mainnet }: HubOptions<ChainId> = {}) {
         const path = urlcat('/api/sol/assets/:address', {
             address,
         })
         const response = await fetchFromNFTScanV2<Response<Solana.Asset>>(chainId, path)
         if (!response?.data) return
-        return createNonFungibleAsset(chainId, response.data)
+        const traits = await this.getAssetTraits(address)
+        const asset = createNonFungibleAsset(chainId, response.data)
+        // prefer traits from the getNFTBasicInfo API, since it provides rarities
+        asset.traits = traits
+        return asset
     }
 
     async getAssets(account: string, { chainId = ChainId.Mainnet, indicator, size = 20 }: HubOptions<ChainId> = {}) {

@@ -16,8 +16,8 @@ import { isTwitter } from '../../../social-network-adaptor/twitter.com/base.js'
 import { isFacebook } from '../../../social-network-adaptor/facebook.com/base.js'
 import { NFTCardStyledAssetPlayer } from '@masknet/shared'
 import { openWindow } from '@masknet/shared-base-ui'
-import { useAccount, useNetworkType, useWeb3 } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { useAccount, useNetworkType, useWeb3 } from '@masknet/web3-hooks-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { Icons } from '@masknet/icons'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
 
@@ -25,11 +25,6 @@ const useStyles = makeStyles()((theme) => ({
     root: {
         position: 'relative',
         width: '100%',
-    },
-    actions: {
-        paddingTop: theme.spacing(2),
-        display: 'flex',
-        justifyContent: 'center',
     },
     card: {
         display: 'flex',
@@ -43,15 +38,6 @@ const useStyles = makeStyles()((theme) => ({
         backgroundImage: `url(${new URL('./assets/background.png', import.meta.url)})`,
         backgroundSize: 'cover',
         backgroundRepeat: 'no-repeat',
-    },
-    loadingCard: {
-        width: '100%',
-        height: 360,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    loadingCardImg: {
-        width: 200,
     },
     title: {
         textAlign: 'left',
@@ -70,10 +56,6 @@ const useStyles = makeStyles()((theme) => ({
         paddingTop: 40,
         color: '#FAD85A',
         width: '100%',
-    },
-    claim: {
-        textAlign: 'center',
-        marginTop: theme.spacing(1),
     },
     button: {
         backgroundColor: theme.palette.maskColor.dark,
@@ -124,10 +106,6 @@ const useStyles = makeStyles()((theme) => ({
             overflow: 'hidden',
         },
     },
-    tokenImg: {
-        width: '100%',
-        borderRadius: 6,
-    },
     claimedText: {
         fontSize: 18,
         fontWeight: 500,
@@ -167,44 +145,6 @@ const useStyles = makeStyles()((theme) => ({
     badgeText: {
         fontSize: 12,
     },
-    snackBarText: {
-        fontSize: 14,
-    },
-    snackBarLink: {
-        color: 'white',
-    },
-    openIcon: {
-        display: 'flex',
-        width: 18,
-        height: 18,
-        marginLeft: 2,
-    },
-    snackBar: {
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        transform: 'translateY(1px)',
-    },
-    loadingTokenImg: {
-        opacity: 0.4,
-    },
-    tokenImgSpinner: {
-        position: 'absolute',
-        opacity: 0.4,
-        top: 65,
-        left: 40,
-        width: 30,
-        height: 30,
-    },
-    loadingText: {
-        textAlign: 'center',
-        fontSize: 24,
-    },
-    loadingWrapper: {
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
     errorCard: {
         height: 360,
         justifyContent: 'center',
@@ -214,12 +154,13 @@ const useStyles = makeStyles()((theme) => ({
         width: 220,
     },
     errorButton: {
-        borderColor: 'white',
+        background: theme.palette.common.black,
         minHeight: 30,
         width: 100,
         marginTop: 16,
+        whiteSpace: 'nowrap',
         '&:hover': {
-            borderColor: 'white',
+            background: theme.palette.common.black,
         },
     },
     ellipsis: {

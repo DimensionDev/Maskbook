@@ -1,7 +1,8 @@
 import { getMaskColor, makeStyles } from '@masknet/theme'
 import { Box, Link, Typography, Tooltip } from '@mui/material'
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined'
-import { NetworkPluginID, SocialAddress, SocialAddressType } from '@masknet/web3-shared-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
+import { SocialAddress, SocialAddressType } from '@masknet/web3-shared-base'
 import { formatEthereumAddress, ChainId, explorerResolver } from '@masknet/web3-shared-evm'
 import { useSharedI18N } from '../../../index.js'
 
@@ -9,13 +10,6 @@ const useStyles = makeStyles()((theme) => ({
     root: {
         padding: `0 ${theme.spacing(1)}`,
         textAlign: 'right',
-    },
-    text: {
-        paddingTop: 36,
-        paddingBottom: 36,
-        '& > p': {
-            color: getMaskColor(theme).textPrimary,
-        },
     },
     icon: {
         color: getMaskColor(theme).textPrimary,
@@ -41,15 +35,13 @@ export function AddressViewer({ identityAddress }: AddressViewerProps) {
     const typeMap: Record<SocialAddressType, string> = {
         [SocialAddressType.ADDRESS]: t.address_viewer_address_name_address(),
         [SocialAddressType.ENS]: t.address_viewer_address_name_ens(),
-        [SocialAddressType.UNS]: t.address_viewer_address_name_uns(),
-        [SocialAddressType.DNS]: t.address_viewer_address_name_dns(),
         [SocialAddressType.RSS3]: t.address_viewer_address_name_rns(),
         [SocialAddressType.KV]: t.address_viewer_address_name_address(),
-        [SocialAddressType.GUN]: t.address_viewer_address_name_address(),
         [SocialAddressType.NEXT_ID]: t.address_viewer_address_name_address(),
-        [SocialAddressType.THE_GRAPH]: t.address_viewer_address_name_address(),
-        [SocialAddressType.TWITTER_BLUE]: t.address_viewer_address_name_twitter(),
         [SocialAddressType.SOL]: t.address_viewer_address_name_sol(),
+        [SocialAddressType.CyberConnect]: t.address_viewer_address_name_cyberconnect(),
+        [SocialAddressType.Leaderboard]: t.address_viewer_address_name_leaderboard(),
+        [SocialAddressType.Sybil]: t.address_viewer_address_name_sybil(),
     }
 
     const rulesTipMap = [

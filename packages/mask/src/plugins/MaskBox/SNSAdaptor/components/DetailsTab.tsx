@@ -29,7 +29,6 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.maskColor.dark,
     },
     content: {
-        fontSize: 14,
         lineHeight: '24px',
         whiteSpace: 'pre-line',
         color: theme.palette.maskColor.dark,

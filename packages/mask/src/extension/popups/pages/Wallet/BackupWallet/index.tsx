@@ -4,7 +4,7 @@ import { Button, styled, Tab, tabClasses, Tabs, tabsClasses, Typography } from '
 import { makeStyles } from '@masknet/theme'
 import { TabContext, TabPanel } from '@mui/lab'
 import { Icons } from '@masknet/icons'
-import { useWallet } from '@masknet/plugin-infra/web3'
+import { useWallet } from '@masknet/web3-hooks-base'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages.js'
 import { useI18N } from '../../../../../utils/index.js'
 import { PasswordField } from '../../../components/PasswordField/index.js'
@@ -16,17 +16,6 @@ import { encodeText } from '@dimensiondev/kit'
 import { MimeTypes } from '@masknet/shared-base'
 
 const useStyles = makeStyles()({
-    header: {
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        padding: '16px 10px',
-    },
-    title: {
-        color: '#15181B',
-        fontSize: 12,
-        fontHeight: '16px',
-    },
     content: {
         flex: 1,
         backgroundColor: '#F7F9FA',

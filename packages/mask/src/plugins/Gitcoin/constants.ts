@@ -1,4 +1,4 @@
-import { PluginID } from '@masknet/plugin-infra'
+import { PluginID } from '@masknet/shared-base'
 
 export const PLUGIN_ID = PluginID.Gitcoin
 export const PLUGIN_META_KEY = `${PluginID.Gitcoin}:1`

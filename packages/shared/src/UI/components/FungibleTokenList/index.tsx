@@ -10,7 +10,7 @@ import {
     useState,
 } from 'react'
 import { uniqBy } from 'lodash-unified'
-import { EMPTY_LIST, EMPTY_OBJECT } from '@masknet/shared-base'
+import { EMPTY_LIST, EMPTY_OBJECT, NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles, MaskFixedSizeListProps, MaskTextFieldProps, SearchableList } from '@masknet/theme'
 import { Box, Stack, Typography } from '@mui/material'
 import { useSharedI18N } from '../../../locales/index.js'
@@ -21,11 +21,12 @@ import {
     useCurrentWeb3NetworkPluginID,
     useFungibleAssets,
     useFungibleToken,
+    useFungibleTokenBalance,
     useFungibleTokensBalance,
     useFungibleTokensFromTokenList,
     useTrustedFungibleTokens,
     useWeb3State,
-} from '@masknet/plugin-infra/web3'
+} from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import {
     CurrencyType,
@@ -34,7 +35,6 @@ import {
     isSameAddress,
     leftShift,
     minus,
-    NetworkPluginID,
     toZero,
 } from '@masknet/web3-shared-base'
 import { getFungibleTokenItem } from './FungibleTokenItem.js'
@@ -45,7 +45,7 @@ import { Icons } from '@masknet/icons'
 const DEFAULT_LIST_HEIGHT = 300
 const SEARCH_KEYS = ['address', 'symbol', 'name']
 
-export interface FungibleTokenListProps<T extends NetworkPluginID> extends withClasses<'list' | 'placeholder'> {
+export interface FungibleTokenListProps<T extends NetworkPluginID> extends withClasses<'channel' | 'bar' | 'listBox'> {
     pluginID?: T
     chainId?: Web3Helper.Definition[T]['ChainId']
     whitelist?: string[]
@@ -71,6 +71,7 @@ const useStyles = makeStyles()((theme) => ({
         left: 0,
         right: 0,
     },
+    listBox: {},
 }))
 
 const Content = memo(({ message, height }: { message: ReactNode; height?: number | string }) => {
@@ -109,7 +110,7 @@ export const FungibleTokenList = forwardRef(
         } = props
 
         const t = useSharedI18N()
-        const { classes } = useStyles()
+        const { classes } = useStyles(undefined, { props: { classes: props.classes } })
 
         // #region control mode
         const [mode, setMode] = useState(TokenListMode.List)
@@ -314,6 +315,10 @@ export const FungibleTokenList = forwardRef(
         const { value: searchedToken, loading: searchingToken } = useFungibleToken(pluginID, searchedTokenAddress, {
             chainId,
         })
+        const { value: tokenBalance = '' } = useFungibleTokenBalance(pluginID, searchedToken?.address, {
+            chainId,
+            account,
+        })
         // #endregion
 
         const getPlaceholder = () => {
@@ -394,13 +399,16 @@ export const FungibleTokenList = forwardRef(
         return (
             <Stack className={classes.channel}>
                 <SearchableList<
-                    FungibleToken<Web3Helper.Definition[T]['ChainId'], Web3Helper.Definition[T]['SchemaType']>
+                    FungibleToken<Web3Helper.Definition[T]['ChainId'], Web3Helper.Definition[T]['SchemaType']> & {
+                        balance?: string
+                    }
                 >
                     onSelect={handleSelect}
                     onSearch={setKeyword}
                     data={
                         searchedToken && isSameAddress(searchedToken.address, searchedTokenAddress)
-                            ? [searchedToken]
+                            ? // balance field work for case: user search someone token by contract and whitelist is empty.
+                              [{ ...searchedToken, balance: tokenBalance }]
                             : mode === TokenListMode.List
                             ? sortedFungibleTokensForList
                             : sortedFungibleTokensForManage
@@ -408,6 +416,7 @@ export const FungibleTokenList = forwardRef(
                     searchKey={SEARCH_KEYS}
                     disableSearch={!!props.disableSearch}
                     itemKey="address"
+                    classes={{ listBox: classes.listBox }}
                     itemRender={itemRender}
                     placeholder={getPlaceholder()}
                     FixedSizeListProps={FixedSizeListProps}

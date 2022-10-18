@@ -7,21 +7,13 @@ import type { Qualification } from '@masknet/web3-contracts/types/Qualification'
 import type { Qualification2 } from '@masknet/web3-contracts/types/Qualification2'
 import type { PayableTx } from '@masknet/web3-contracts/types/types'
 import { ChainId, SchemaType, TransactionEventType, useITOConstants } from '@masknet/web3-shared-evm'
-import {
-    isSameAddress,
-    isPositive,
-    isZero,
-    NetworkPluginID,
-    toFixed,
-    FungibleToken,
-    currySameAddress,
-} from '@masknet/web3-shared-base'
-import { fromHex, toHex } from '@masknet/shared-base'
+import { isSameAddress, isPositive, isZero, toFixed, FungibleToken, currySameAddress } from '@masknet/web3-shared-base'
+import { fromHex, toHex, NetworkPluginID } from '@masknet/shared-base'
 import { useITO_Contract } from './useITO_Contract.js'
 import { useQualificationContract } from './useQualificationContract.js'
 import type { JSON_PayloadInMask } from '../../types.js'
 import { checkAvailability } from '../utils/checkAvailability.js'
-import { useAccount, useChainId, useWeb3Connection } from '@masknet/plugin-infra/web3'
+import { useAccount, useChainId, useWeb3Connection } from '@masknet/web3-hooks-base'
 
 export function useSwapCallback(
     payload: JSON_PayloadInMask,
