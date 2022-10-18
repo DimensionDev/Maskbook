@@ -7,6 +7,7 @@ import {
     ChainId,
     ChainId as EVM_ChainId,
     ProviderType as EVM_ProviderType,
+    ProviderType,
     useTokenConstants,
 } from '@masknet/web3-shared-evm'
 import { ChainId as SolanaChainId, ProviderType as SolanaProviderType } from '@masknet/web3-shared-solana'
@@ -37,6 +38,11 @@ export function ConnectionContent(props: ConnectionContentProps) {
             NATIVE_TOKEN_ADDRESS,
             '0x790116d0685eB197B886DAcAD9C247f785987A4a',
             '100',
+            undefined,
+            {
+                chainId: ChainId.Matic,
+                providerType: ProviderType.MetaMask,
+            },
         )
     }, [connection])
 

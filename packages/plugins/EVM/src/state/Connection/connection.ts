@@ -145,12 +145,7 @@ class Connection implements EVM_Connection {
 
                                     // make sure that the provider is connected before sending the transaction
                                     if (context.method === EthereumMethodType.ETH_SEND_TRANSACTION) {
-                                        const { chainId, account } = await provider.connect(options.chainId)
-
-                                        if (chainId !== options.chainId || !isSameAddress(account, options.account)) {
-                                            context.abort(new Error('The state of provider changed, please try again.'))
-                                            break
-                                        }
+                                        await provider.switchChain(options.chainId)
                                     }
 
                                     const web3Provider = await provider.createWeb3Provider({
