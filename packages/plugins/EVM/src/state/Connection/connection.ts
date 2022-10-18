@@ -1,6 +1,7 @@
+import { first, method } from 'lodash-unified'
 import { AbiItem, numberToHex, toHex, toNumber } from 'web3-utils'
-import { first } from 'lodash-unified'
 import type { RequestArguments, SignedTransaction, TransactionReceipt } from 'web3-core'
+import { getSubscriptionCurrentValue, PartialRequired } from '@masknet/shared-base'
 import type { ERC20 } from '@masknet/web3-contracts/types/ERC20'
 import type { ERC20Bytes32 } from '@masknet/web3-contracts/types/ERC20Bytes32'
 import type { ERC165 } from '@masknet/web3-contracts/types/ERC165'
@@ -60,7 +61,6 @@ import { Providers } from './provider.js'
 import type { ERC1155Metadata, ERC721Metadata, EVM_Connection, EVM_Web3ConnectionOptions } from './types.js'
 import { getReceiptStatus } from './utils.js'
 import { Web3StateSettings } from '../../settings/index.js'
-import { getSubscriptionCurrentValue, PartialRequired } from '@masknet/shared-base'
 
 const EMPTY_STRING = Promise.resolve('')
 const ZERO = Promise.resolve(0)
@@ -105,6 +105,18 @@ class Connection implements EVM_Connection {
         private context?: Plugin.Shared.SharedUIContext,
     ) {}
 
+    private get Provider() {
+        return Web3StateSettings.value.Provider
+    }
+
+    private get Transaction() {
+        return Web3StateSettings.value.Transaction
+    }
+
+    private get TransactionWatcher() {
+        return Web3StateSettings.value.TransactionWatcher
+    }
+
     // Hijack RPC requests and process them with koa like middleware
     private get hijackedRequest() {
         return <T extends unknown>(requestArguments: RequestArguments, initial?: EVM_Web3ConnectionOptions) => {
@@ -118,30 +130,38 @@ class Connection implements EVM_Connection {
                         try {
                             switch (context.method) {
                                 case EthereumMethodType.MASK_LOGIN:
-                                    context.write(
-                                        await Web3StateSettings.value.Provider?.connect(
-                                            options.chainId,
-                                            options.providerType,
-                                        ),
-                                    )
+                                    context.write(await this.Provider?.connect(options.chainId, options.providerType))
                                     break
                                 case EthereumMethodType.MASK_LOGOUT:
-                                    context.write(
-                                        await Web3StateSettings.value.Provider?.disconnect(options.providerType),
-                                    )
+                                    context.write(await this.Provider?.disconnect(options.providerType))
                                     break
-                                default:
-                                    const web3Provider = await Providers[
-                                        isReadOnlyMethod(context.method)
-                                            ? ProviderType.MaskWallet
-                                            : options.providerType
-                                    ].createWeb3Provider({
+                                default: {
+                                    const provider =
+                                        Providers[
+                                            isReadOnlyMethod(context.method)
+                                                ? ProviderType.MaskWallet
+                                                : options.providerType
+                                        ]
+
+                                    // make sure that the provider is connected before sending the transaction
+                                    if (context.method === EthereumMethodType.ETH_SEND_TRANSACTION) {
+                                        const { chainId, account } = await provider.connect(options.chainId)
+
+                                        if (chainId !== options.chainId || !isSameAddress(account, options.account)) {
+                                            context.abort(new Error('The state of provider changed, please try again.'))
+                                            break
+                                        }
+                                    }
+
+                                    const web3Provider = await provider.createWeb3Provider({
                                         account: options.account,
                                         chainId: options.chainId,
                                     })
 
                                     // send request and set result in the context
                                     context.write((await web3Provider.request(context.requestArguments)) as T)
+                                    break
+                                }
                             }
                         } catch (error) {
                             context.abort(error)
@@ -990,19 +1010,18 @@ class Connection implements EVM_Connection {
         )
 
         return new Promise<string>((resolve, reject) => {
-            const { Transaction, TransactionWatcher } = Web3StateSettings.value
-            if (!Transaction || !TransactionWatcher) reject(new Error('No context found.'))
+            if (!this.Transaction || !this.TransactionWatcher) reject(new Error('No context found.'))
 
             const onProgress = async (id: string, status: TransactionStatusType, transaction?: Transaction) => {
                 if (status === TransactionStatusType.NOT_DEPEND) return
-                const transactions = await getSubscriptionCurrentValue(() => Transaction?.transactions)
+                const transactions = await getSubscriptionCurrentValue(() => this.Transaction?.transactions)
                 const currentTransaction = transactions?.find((x) => {
                     const hashes = Object.keys(x.candidates)
                     return hashes.includes(hash) && hashes.includes(id)
                 })
                 if (currentTransaction) resolve(currentTransaction.indexId)
             }
-            TransactionWatcher?.emitter.on('progress', onProgress)
+            this.TransactionWatcher?.emitter.on('progress', onProgress)
         })
     }
 
