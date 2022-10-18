@@ -90,10 +90,9 @@ export function NFTListPage(props: NFTListPageProps) {
             </Box>
         )
 
-    // is empty
-    if (children) {
-        return <>{children}</>
-    }
+    // return empty list prompt when there is no nft in wallet
+    if (children) return <>{children}</>
+
     return (
         <Box className={classes.root}>
             <List className={classes.list}>
