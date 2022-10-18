@@ -7,7 +7,6 @@ import { ChainId, chainResolver, getRPCConstants, ProviderType } from '@masknet/
 import { createLookupTableResolver } from '@masknet/shared-base'
 import type { EVM_Provider } from '../types.js'
 import { BaseProvider } from './Base.js'
-import { resolveCrossOriginURL } from '@masknet/web3-shared-base'
 
 // #region create in-page fortmatic provider
 

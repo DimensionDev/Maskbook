@@ -1,4 +1,4 @@
-import { EthereumMethodType, isRiskMethod, ProviderType } from '@masknet/web3-shared-evm'
+import { EthereumMethodType, isRiskMethod } from '@masknet/web3-shared-evm'
 import type { Context, Middleware } from '../types.js'
 
 export class MetaMask implements Middleware<Context> {
