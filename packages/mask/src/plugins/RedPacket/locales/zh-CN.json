@@ -38,7 +38,6 @@
     "name": "红包",
     "next": "下一步",
     "nft_approve_all_tip": "注意：在选择批准所有NFT时，合约中的所有NFT都将被授权默认销售，包括随后转移的NFT。",
-    "nft_unapproved_tip": "您其余的 NFT 将在发送红包24小时后收回。",
     "nft_select_partially_option": "选择部分",
     "nft_select_all_option": "全部 ({{total}} NFT)",
     "nft_search_placeholder": "Token ID可用逗号分隔，例如：1224, 7873",
