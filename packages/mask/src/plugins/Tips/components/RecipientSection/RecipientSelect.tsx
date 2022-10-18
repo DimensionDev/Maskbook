@@ -2,7 +2,7 @@ import { FC, memo, useRef } from 'react'
 import { Icons } from '@masknet/icons'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { Link, MenuItem, Select, TooltipProps, Typography } from '@mui/material'
-import { useChainId, useDefaultChainId, useWeb3State } from '@masknet/web3-hooks-base'
+import { useDefaultChainId, useWeb3State } from '@masknet/web3-hooks-base'
 import { isSameAddress, SocialAccount, SocialAddressType } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useTip } from '../../contexts/index.js'
@@ -177,7 +177,6 @@ const TipsAccountSource: FC<{ account: SocialAccount }> = ({ account }) => {
               }
             : undefined
 
-    const fromNextID = account.supportedAddressTypes?.includes(SocialAddressType.NEXT_ID)
     const fromTwitter = [
         SocialAddressType.ENS,
         SocialAddressType.RSS3,
@@ -185,20 +184,9 @@ const TipsAccountSource: FC<{ account: SocialAccount }> = ({ account }) => {
         SocialAddressType.TwitterBlue,
     ].find((x) => account.supportedAddressTypes?.includes(x))
 
-    if (fromNextID) {
-        return (
-            <SourceTooltip platform={AddressPlatform.NextId}>
-                <Icons.NextIDMini
-                    className={cx(classes.actionIcon, classes.icon)}
-                    style={{ ...iconStyle, width: 32, height: 18 }}
-                />
-            </SourceTooltip>
-        )
-    }
-
     return (
         <>
-            {fromNextID ? (
+            {account.supportedAddressTypes?.includes(SocialAddressType.NEXT_ID) ? (
                 <SourceTooltip platform={AddressPlatform.NextId}>
                     <Icons.NextIDMini
                         className={cx(classes.actionIcon, classes.icon)}
@@ -220,7 +208,7 @@ const TipsAccountSource: FC<{ account: SocialAccount }> = ({ account }) => {
                 <SourceTooltip platform={AddressPlatform.Twitter} type={SocialAddressType.CyberConnect}>
                     <Icons.CyberConnect
                         className={cx(classes.actionIcon, classes.icon)}
-                        style={{ ...iconStyle, width: 32, height: 18 }}
+                        style={{ ...iconStyle, width: 18, height: 18 }}
                     />
                 </SourceTooltip>
             ) : null}
@@ -229,7 +217,7 @@ const TipsAccountSource: FC<{ account: SocialAccount }> = ({ account }) => {
                 <SourceTooltip platform={AddressPlatform.Twitter} type={SocialAddressType.Leaderboard}>
                     <Icons.Leaderboard
                         className={cx(classes.actionIcon, classes.icon)}
-                        style={{ ...iconStyle, width: 32, height: 18 }}
+                        style={{ ...iconStyle, width: 18, height: 18 }}
                     />
                 </SourceTooltip>
             ) : null}
@@ -238,7 +226,7 @@ const TipsAccountSource: FC<{ account: SocialAccount }> = ({ account }) => {
                 <SourceTooltip platform={AddressPlatform.Twitter} type={SocialAddressType.Sybil}>
                     <Icons.Sybil
                         className={cx(classes.actionIcon, classes.icon)}
-                        style={{ ...iconStyle, width: 32, height: 18 }}
+                        style={{ ...iconStyle, width: 18, height: 18 }}
                     />
                 </SourceTooltip>
             ) : null}
