@@ -5,7 +5,7 @@ import { ChainId } from '@masknet/web3-shared-evm'
 
 export class ChainbaseResolver implements NameServiceResolver {
     get id(): NameServiceID {
-        return NameServiceID.Chainbase
+        return NameServiceID.ENS
     }
 
     async lookup(name: string) {
