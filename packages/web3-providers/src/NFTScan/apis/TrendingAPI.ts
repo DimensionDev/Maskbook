@@ -48,6 +48,7 @@ export class NFTScanTrendingAPI implements TrendingAPI.Provider<ChainId> {
         const response = await fetchFromNFTScanV2<Response<EVM.Collection[]>>(chainId, path, {
             method: 'POST',
             body: JSON.stringify({
+                name: keyword,
                 symbol: keyword,
                 sort_direction: 'desc',
                 sort_field: 'floor_price',
