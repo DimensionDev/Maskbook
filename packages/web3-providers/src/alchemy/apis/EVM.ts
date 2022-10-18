@@ -86,8 +86,8 @@ function createNonFungibleAsset(
     ownersResponse?: AlchemyResponse_EVM_Owners,
 ): NonFungibleAsset<ChainId_EVM, SchemaType_EVM> {
     const tokenId = formatAlchemyTokenId(metaDataResponse.id.tokenId)
-    const name =
-        contractMetadataResponse?.contractMetadata.name || metaDataResponse.metadata?.name || metaDataResponse.title
+    const contractName = contractMetadataResponse?.contractMetadata.name || metaDataResponse.metadata?.name || ''
+
     return {
         id: `${metaDataResponse.contract.address}_${tokenId}`,
         chainId,
@@ -98,7 +98,7 @@ function createNonFungibleAsset(
         address: metaDataResponse.contract?.address,
         metadata: {
             chainId,
-            name: getNFTAllName(name, name, tokenId),
+            name: getNFTAllName(contractName, metaDataResponse.title, tokenId),
             symbol: contractMetadataResponse?.contractMetadata?.symbol ?? '',
             description: metaDataResponse.description,
             imageURL:
@@ -114,12 +114,12 @@ function createNonFungibleAsset(
                     ? SchemaType_EVM.ERC721
                     : SchemaType_EVM.ERC1155,
             address: metaDataResponse.contract?.address,
-            name,
+            name: contractName,
             symbol: contractMetadataResponse?.contractMetadata?.symbol ?? '',
         },
         collection: {
             chainId,
-            name,
+            name: contractName,
             slug: contractMetadataResponse?.contractMetadata?.symbol || '',
             description: metaDataResponse.description,
         },

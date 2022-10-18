@@ -1,5 +1,4 @@
 import { forwardRef, HTMLProps, useRef } from 'react'
-import { useWeb3State } from '@masknet/web3-hooks-base'
 import { makeStyles } from '@masknet/theme'
 import { Skeleton, Tooltip, Typography } from '@mui/material'
 import { CollectibleCard, CollectibleCardProps } from './CollectibleCard.js'
@@ -37,18 +36,15 @@ interface CollectibleItemProps extends HTMLProps<HTMLDivElement>, CollectibleCar
 export const CollectibleItem = forwardRef<HTMLDivElement, CollectibleItemProps>((props: CollectibleItemProps, ref) => {
     const { className, asset, pluginID, ...rest } = props
     const { classes, cx } = useStyles()
-    const { Others } = useWeb3State()
     const textRef = useRef<HTMLDivElement>(null)
-    const name = asset.metadata?.name
-    const uiTokenId = asset.tokenId ? Others?.formatTokenId(asset.tokenId, 4) ?? `#${asset.tokenId}` : ''
-    const title = name ? name : asset.contract?.name && uiTokenId ? `${asset.contract.name} #${uiTokenId}` : ''
+    const name = asset.metadata?.name ?? ''
     const showTooltip = !!textRef.current && textRef.current.offsetWidth !== textRef.current.scrollWidth
 
     return (
         <>
             {showTooltip ? (
                 <Tooltip
-                    title={title}
+                    title={name}
                     placement="top"
                     disableInteractive
                     PopperProps={{
@@ -60,10 +56,10 @@ export const CollectibleItem = forwardRef<HTMLDivElement, CollectibleItemProps>(
                     arrow>
                     <div className={cx(classes.card, className)} {...rest} ref={ref}>
                         <CollectibleCard className={classes.collectibleCard} pluginID={pluginID} asset={asset} />
-                        {title ? (
+                        {name ? (
                             <div className={classes.description}>
                                 <Typography ref={textRef} className={classes.name} color="textPrimary" variant="body2">
-                                    {title}
+                                    {name}
                                 </Typography>
                             </div>
                         ) : null}
@@ -72,10 +68,10 @@ export const CollectibleItem = forwardRef<HTMLDivElement, CollectibleItemProps>(
             ) : (
                 <div className={cx(classes.card, className)} {...rest} ref={ref}>
                     <CollectibleCard className={classes.collectibleCard} pluginID={pluginID} asset={asset} />
-                    {title ? (
+                    {name ? (
                         <div className={classes.description}>
                             <Typography ref={textRef} className={classes.name} color="textPrimary" variant="body2">
-                                {title}
+                                {name}
                             </Typography>
                         </div>
                     ) : null}
