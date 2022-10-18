@@ -151,6 +151,11 @@ export class IdentityService extends IdentityServiceState {
             this.getSocialAddressesFromNextID(identity),
             this.getSocialAddressesFromMaskX(identity),
         ])
+
+        console.log('DEBUG: get from response')
+        console.log(allSettled)
+
+
         const identities = allSettled
             .flatMap((x) => (x.status === 'fulfilled' ? x.value : []))
             .filter(Boolean) as Array<SocialAddress<NetworkPluginID.PLUGIN_EVM>>
