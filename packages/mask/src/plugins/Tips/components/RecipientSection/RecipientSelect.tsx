@@ -2,7 +2,7 @@ import { FC, memo, useRef } from 'react'
 import { Icons } from '@masknet/icons'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { Link, MenuItem, Select, TooltipProps, Typography } from '@mui/material'
-import { useChainId, useWeb3State } from '@masknet/web3-hooks-base'
+import { useChainId, useDefaultChainId, useWeb3State } from '@masknet/web3-hooks-base'
 import { isSameAddress, SocialAccount, SocialAddressType } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useTip } from '../../contexts/index.js'
@@ -231,17 +231,33 @@ const TipsAccountSource: FC<{ account: SocialAccount }> = ({ account }) => {
     )
 }
 
+const ExternalLink: FC<{ account: SocialAccount }> = ({ account }) => {
+    const t = useI18N()
+    const { classes, cx } = useStyles()
+    const { Others } = useWeb3State(account.pluginID)
+    const chainId = useDefaultChainId(account.pluginID)
+
+    return (
+        <Link
+            className={cx(classes.link, classes.actionIcon, classes.icon)}
+            onClick={(e) => e.stopPropagation()}
+            href={Others?.explorerResolver.addressLink(chainId, account.address) ?? ''}
+            target="_blank"
+            title={t.view_on_explorer()}
+            rel="noopener noreferrer">
+            <Icons.LinkOut size={20} />
+        </Link>
+    )
+}
+
 interface Props {
     className?: string
 }
 export const RecipientSelect: FC<Props> = memo(({ className }) => {
-    const t = useI18N()
     const { classes, cx } = useStyles()
     const selectRef = useRef(null)
     const { recipient, recipients, setRecipient } = useTip()
     const recipientAddress = recipient?.address
-    const { Others } = useWeb3State()
-    const chainId = useChainId()
 
     return (
         <Select
@@ -273,15 +289,7 @@ export const RecipientSelect: FC<Props> = memo(({ className }) => {
                     <Typography component="span" className={classes.text}>
                         {account.label || account.address}
                     </Typography>
-                    <Link
-                        className={cx(classes.link, classes.actionIcon, classes.icon)}
-                        onClick={(e) => e.stopPropagation()}
-                        href={Others?.explorerResolver.addressLink(chainId, account.address) ?? ''}
-                        target="_blank"
-                        title={t.view_on_explorer()}
-                        rel="noopener noreferrer">
-                        <Icons.LinkOut size={20} />
-                    </Link>
+                    <ExternalLink account={account} />
                     <TipsAccountSource account={account} />
                     {isSameAddress(account.address, recipientAddress) ? (
                         <Icons.CheckCircle className={cx(classes.checkIcon, classes.icon)} />
