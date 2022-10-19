@@ -3,16 +3,19 @@ import { Avatar, AvatarProps, useTheme } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { name2Image } from './name2Image.js'
 
-const useStyles = makeStyles()((theme) => ({
+const useStyles = makeStyles<Pick<IconProps, 'size'>>()((theme, { size }) => ({
     icon: {
         margin: 0,
         borderRadius: '50%',
         color: theme.palette.maskColor.dark,
         backgroundSize: 'cover',
+        height: size,
+        width: size,
     },
 }))
 
 export interface IconProps {
+    size?: number | string
     name?: string
     label?: string
     logoURL?: string
@@ -21,11 +24,11 @@ export interface IconProps {
 }
 
 export const Icon = memo<IconProps>((props) => {
-    const { logoURL, AvatarProps, name, label, className } = props
+    const { logoURL, AvatarProps, size, name, label, className } = props
     const [error, setError] = useState(false)
 
     const defaultBackgroundImage = name2Image(name)
-    const { classes, cx } = useStyles()
+    const { classes, cx } = useStyles({ size })
     const theme = useTheme()
 
     const showImage = logoURL && !error
