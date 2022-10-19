@@ -17,7 +17,7 @@ export function decodeAddress(initData: string | Buffer) {
 }
 
 export function formatAddress(address: string, size = 0) {
-    if (!isValidAddress(address)) return address
+    if (!isValidAddress(address, false)) return address
     if (size === 0 || size >= 22) return address
     return `${address.slice(0, Math.max(0, size))}...${address.slice(-size)}`
 }
@@ -39,11 +39,12 @@ export function formatTokenId(tokenId = '', size_ = 4) {
     return `#${head}...${tail}`
 }
 
-export function isValidAddress(address?: string) {
+export function isValidAddress(address?: string, strict?: boolean) {
     const length = address?.length
-    if (!length) return false
+    if (!length || length < 32 || length > 44) return false
     try {
-        return length >= 32 && length <= 44 && !!bs58.decode(address)
+        const buffer = bs58.decode(address)
+        return strict === false ? true : Web3.PublicKey.isOnCurve(buffer)
     } catch {
         return false
     }
