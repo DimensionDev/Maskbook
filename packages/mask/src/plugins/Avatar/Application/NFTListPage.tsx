@@ -32,12 +32,6 @@ const useStyles = makeStyles<{
         userSelect: 'none',
         justifyContent: 'center',
     },
-    nftImage: {
-        borderRadius: 8,
-        width: '100%',
-        height: '100%',
-        overflow: 'hidden',
-    },
     placeholder: {
         display: 'flex',
         flex: 1,
@@ -94,23 +88,24 @@ export function NFTListPage(props: NFTListPageProps) {
             </Box>
         )
 
+    // return empty list prompt when there is no nft in wallet
+    if (children) return <>{children}</>
+
     return (
         <Box className={classes.root}>
             <List className={classes.list}>
-                {children ??
-                    tokens.map((token: AllChainsNonFungibleToken, i) => (
-                        <ListItem key={i} className={classes.nftItem}>
-                            <NFTImage
-                                key={i}
-                                className={classes.nftImage}
-                                pluginId={pluginId}
-                                showBadge
-                                token={token}
-                                selectedToken={selectedToken}
-                                onClick={(token) => _onChange(token)}
-                            />
-                        </ListItem>
-                    ))}
+                {tokens.map((token: AllChainsNonFungibleToken, i) => (
+                    <ListItem key={i} className={classes.nftItem}>
+                        <NFTImage
+                            key={i}
+                            pluginId={pluginId}
+                            showBadge
+                            token={token}
+                            selectedToken={selectedToken}
+                            onClick={(token) => _onChange(token)}
+                        />
+                    </ListItem>
+                ))}
             </List>
             {loadError && !loadFinish && tokens.length && (
                 <Stack py={1} style={{ gridColumnStart: 1, gridColumnEnd: 6 }}>
