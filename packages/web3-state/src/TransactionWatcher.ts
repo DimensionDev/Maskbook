@@ -9,7 +9,7 @@ import {
     WatchEvents,
     TransactionWatcherState as Web3TransactionWatcherState,
     RecentTransaction,
-    RecognizedError,
+    RecognizableError,
 } from '@masknet/web3-shared-base'
 import type { Plugin } from '@masknet/plugin-infra'
 
@@ -247,7 +247,7 @@ export class TransactionWatcherState<ChainId, Transaction>
         await this.getWatcher(chainId).unwatchTransaction(chainId, id)
     }
 
-    async notifyError(error: RecognizedError, request: JsonRpcPayload) {
+    async notifyError(error: RecognizableError, request: JsonRpcPayload) {
         this.emitter.emit('error', error, request)
     }
 
