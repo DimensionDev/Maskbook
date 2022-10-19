@@ -84,7 +84,11 @@ export function getNFTName(name?: string, tokenId?: string) {
 export function getNFTAllName(contractName: string, name?: string, tokenId?: string) {
     const _name = getNFTName(name, tokenId)
     if (!_name)
-        return tokenId && contractName ? `${contractName} #${tokenId}` : !contractName && tokenId ? `#${tokenId}` : ''
+        return tokenId && contractName
+            ? `${contractName} #${tokenId}`
+            : !contractName && tokenId
+            ? `#${tokenId}`
+            : contractName
     if (_name.endsWith('.eth')) return `ENS #${_name}`
     return contractName && contractName.toLowerCase() !== _name.toLowerCase() ? `${contractName} #${_name}` : _name
 }
