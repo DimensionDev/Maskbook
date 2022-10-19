@@ -1227,5 +1227,5 @@
     "plugin_enables": "Enable plugins",
     "show_wallet_setting_intro": "Please select the wallet to activate the function after saving the settings.",
     "show_wallet_setting_button": "Go to Settings",
-    "web3_profile_no_social_address_list": "Can’t find valid user’s address data source."
+    "web3_profile_no_social_address_list": "Can’t find a valid user address data source."
 }
