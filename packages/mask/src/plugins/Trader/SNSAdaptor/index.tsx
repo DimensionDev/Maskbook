@@ -7,9 +7,10 @@ import { TagInspector } from './trending/TagInspector.js'
 import { enhanceTag } from './cashTag.js'
 import { ApplicationEntry } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
-import { CrossIsolationMessages, PluginID } from '@masknet/shared-base'
-import type { ChainId } from '@masknet/web3-shared-evm'
+import { CrossIsolationMessages, NetworkPluginID, PluginID } from '@masknet/shared-base'
+import { ChainId } from '@masknet/web3-shared-evm'
 import { setupStorage, storageDefaultValue } from '../storage/index.js'
+import { PluginWeb3ContextProvider } from '@masknet/web3-hooks-base'
 
 const sns: Plugin.SNSAdaptor.Definition<
     ChainId,
@@ -44,7 +45,9 @@ const sns: Plugin.SNSAdaptor.Definition<
         return (
             <>
                 <TagInspector />
-                <TraderDialog />
+                <PluginWeb3ContextProvider value={{ chainId: ChainId.Mainnet, pluginID: NetworkPluginID.PLUGIN_EVM }}>
+                    <TraderDialog />
+                </PluginWeb3ContextProvider>
             </>
         )
     },

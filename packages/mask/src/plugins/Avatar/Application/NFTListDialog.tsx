@@ -261,8 +261,6 @@ export function NFTListDialog(props: NFTListDialogProps) {
                             <div className={classes.abstractTabWrapper}>
                                 <NetworkTab
                                     chains={SUPPORTED_CHAIN_IDS}
-                                    chainId={actualChainId}
-                                    setChainId={setChainId}
                                     classes={{
                                         tab: classes.tab,
                                         tabs: classes.tabs,
@@ -270,7 +268,6 @@ export function NFTListDialog(props: NFTListDialogProps) {
                                         tabPaper: classes.tabPaper,
                                         indicator: classes.indicator,
                                     }}
-                                    networkId={selectedPluginId}
                                 />
                             </div>
                         ) : null}

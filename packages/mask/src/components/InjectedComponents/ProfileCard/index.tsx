@@ -10,7 +10,7 @@ import {
 } from '@masknet/plugin-infra/content-script'
 import { useAvailablePlugins } from '@masknet/plugin-infra'
 import { useSocialAddressListBySettings } from '@masknet/shared'
-import { EMPTY_LIST, PluginID, NetworkPluginID } from '@masknet/shared-base'
+import { EMPTY_LIST, NetworkPluginID, PluginID } from '@masknet/shared-base'
 import { LoadingBase, makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import { isSameAddress, SocialIdentity } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
@@ -164,7 +164,7 @@ export const ProfileCard: FC<Props> = ({ identity, ...rest }) => {
         )
 
     return (
-        <PluginWeb3ContextProvider pluginID={NetworkPluginID.PLUGIN_EVM} value={{ chainId: ChainId.Mainnet }}>
+        <PluginWeb3ContextProvider value={{ chainId: ChainId.Mainnet, pluginID: NetworkPluginID.PLUGIN_EVM }}>
             <div className={classes.root}>
                 <div className={classes.header}>
                     <ProfileCardTitle

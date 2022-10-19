@@ -252,12 +252,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
                     !showHistory ? (
                         <>
                             <div className={classes.abstractTabWrapper}>
-                                <NetworkTab
-                                    chainId={chainId}
-                                    setChainId={setChainId}
-                                    classes={{ tabs: classes.tabs }}
-                                    chains={chainIdList}
-                                />
+                                <NetworkTab classes={{ tabs: classes.tabs }} chains={chainIdList} />
                             </div>
                             <CreateForm
                                 onNext={onNext}

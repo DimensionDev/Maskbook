@@ -1,11 +1,11 @@
-import { useAccount, useWeb3State } from '@masknet/web3-hooks-base'
+import { useAccount, useCurrentWeb3NetworkChainId, useWeb3State } from '@masknet/web3-hooks-base'
 import ERC20ABI from '@masknet/web3-contracts/abis/ERC20.json'
 import { NetworkPluginID } from '@masknet/shared-base'
 import type { ERC20 } from '@masknet/web3-contracts/types/ERC20'
 import { createContract, isNativeTokenAddress } from '@masknet/web3-shared-evm'
 import { useAsync } from 'react-use'
 import { AbiItem, toHex } from 'web3-utils'
-import { TargetRuntimeContext, useTip } from '../../contexts'
+import { useTip } from '../../contexts'
 import { TipsType } from '../../types'
 
 const MIN_GAS_LIMIT = 21000
@@ -13,7 +13,7 @@ const MIN_GAS_LIMIT = 21000
 export function useGasLimit(fallback = 50000) {
     const { Connection } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const { tipType, token, amount, recipientAddress } = useTip()
-    const { targetChainId: chainId } = TargetRuntimeContext.useContainer()
+    const chainId = useCurrentWeb3NetworkChainId(NetworkPluginID.PLUGIN_EVM)
     const account = useAccount()
 
     return useAsync(async () => {
