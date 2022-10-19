@@ -31,6 +31,7 @@ const isReversible = (type?: SocialAddressType) => {
         SocialAddressType.KV,
         SocialAddressType.ADDRESS,
         SocialAddressType.NEXT_ID,
+        SocialAddressType.TwitterBlue,
         SocialAddressType.CyberConnect,
         SocialAddressType.Leaderboard,
         SocialAddressType.Sybil,
@@ -57,7 +58,7 @@ export function AddressItem({
                     pluginId={socialAddress.pluginID}
                 />
             ) : (
-                <Typography {...TypographyProps}>{socialAddress.label}</Typography>
+                <Typography {...TypographyProps}>{Others?.formatAddress(socialAddress.address, 4)}</Typography>
             )}
             {disableLinkIcon ? null : (
                 <Link
