@@ -18,7 +18,7 @@ export function ConnectionDialog(props: ConnectionDialogProps) {
                     <PluginWeb3ContextProvider
                         value={{
                             chainId: ChainId.Mainnet,
-                            networkPluginId: NetworkPluginID.PLUGIN_EVM,
+                            networkPluginID: NetworkPluginID.PLUGIN_EVM,
                         }}>
                         <ConnectionContent onClose={closeDialog} />
                     </PluginWeb3ContextProvider>

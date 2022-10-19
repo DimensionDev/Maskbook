@@ -15,9 +15,9 @@ interface NetworkTabProps<T extends NetworkPluginID>
 
 export function NetworkTab<T extends NetworkPluginID = NetworkPluginID.PLUGIN_EVM>(props: NetworkTabProps<T>) {
     const { chains } = props
-    const { chainId, setChainId, networkPluginId } = useContext(PluginWeb3Context)
+    const { chainId, setChainId, networkPluginID } = useContext(PluginWeb3Context)
 
-    const networks = useNetworkDescriptors(networkPluginId)
+    const networks = useNetworkDescriptors(networkPluginID)
     const usedNetworks = networks.filter((x) => chains.find((c) => c === x.chainId))
     const networkIds = usedNetworks.map((x) => x.chainId.toString())
     const [currentTab, , , setTab] = useTabs(chainId?.toString() ?? networkIds[0], ...networkIds)
@@ -34,7 +34,7 @@ export function NetworkTab<T extends NetworkPluginID = NetworkPluginID.PLUGIN_EV
             <MaskTabList
                 variant="flexible"
                 onChange={(_, v) => {
-                    setChainId?.(Number.parseInt(v, 10))
+                    setChainId(Number.parseInt(v, 10))
                     setTab(v)
                 }}
                 aria-label="Network Tabs">

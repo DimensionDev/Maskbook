@@ -12,7 +12,7 @@ const dashboard: Plugin.Dashboard.Definition<ChainId> = {
         return (
             <>
                 <PluginWeb3ContextProvider
-                    value={{ chainId: ChainId.Mainnet, networkPluginId: NetworkPluginID.PLUGIN_EVM }}>
+                    value={{ chainId: ChainId.Mainnet, networkPluginID: NetworkPluginID.PLUGIN_EVM }}>
                     <TraderDialog />
                 </PluginWeb3ContextProvider>
             </>

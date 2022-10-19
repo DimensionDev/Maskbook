@@ -10,7 +10,7 @@ interface Props {
 export const RootContext: FC<PropsWithChildren<Props>> = ({ children, chainId }) => {
     return (
         <PluginIDContextProvider value={NetworkPluginID.PLUGIN_EVM}>
-            <PluginWeb3ContextProvider value={{ chainId, networkPluginId: NetworkPluginID.PLUGIN_EVM }}>
+            <PluginWeb3ContextProvider value={{ chainId, networkPluginID: NetworkPluginID.PLUGIN_EVM }}>
                 {children}
             </PluginWeb3ContextProvider>
         </PluginIDContextProvider>

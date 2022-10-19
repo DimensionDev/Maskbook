@@ -18,7 +18,7 @@ export function ConsoleDialog(props: ConsoleDialogProps) {
                     <PluginWeb3ContextProvider
                         value={{
                             chainId: ChainId.Mainnet,
-                            networkPluginId: NetworkPluginID.PLUGIN_EVM,
+                            networkPluginID: NetworkPluginID.PLUGIN_EVM,
                         }}>
                         <ConsoleContent onClose={closeDialog} />
                     </PluginWeb3ContextProvider>
