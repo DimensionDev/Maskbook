@@ -194,14 +194,16 @@ export function WalletStatusBox(props: WalletStatusBox) {
                             onClick={onCopy}>
                             <Icons.Copy className={classNames(classes.icon, classes.copyIcon)} />
                         </Link>
-                        <Link
-                            className={classes.link}
-                            href={Others?.explorerResolver.addressLink?.(chainId, account) ?? ''}
-                            target="_blank"
-                            title={t('plugin_wallet_view_on_explorer')}
-                            rel="noopener noreferrer">
-                            <Icons.LinkOut className={classNames(classes.icon, classes.linkIcon)} />
-                        </Link>
+                        {chainIdValid ? (
+                            <Link
+                                className={classes.link}
+                                href={Others?.explorerResolver.addressLink?.(chainId, account) ?? ''}
+                                target="_blank"
+                                title={t('plugin_wallet_view_on_explorer')}
+                                rel="noopener noreferrer">
+                                <Icons.LinkOut className={classNames(classes.icon, classes.linkIcon)} />
+                            </Link>
+                        ) : null}
                     </div>
 
                     {props.withinRiskWarningDialog ? null : (
