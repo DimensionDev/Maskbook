@@ -1,12 +1,10 @@
 import { AttachmentOptions, LandingPageMetadata, Provider, ProviderAgent } from '../types.js'
 import arweave from './arweave.js'
 import ipfs from './ipfs.js'
-import swarm from './swarm.js'
 
 const allProviders: Record<Provider, ProviderAgent> = {
     [Provider.arweave]: arweave,
     [Provider.ipfs]: ipfs,
-    [Provider.swarm]: swarm,
 }
 
 export async function makeAttachment(provider: Provider, options: AttachmentOptions) {

@@ -86,7 +86,7 @@ export class NameServiceState<
                 return
             }
         })
-        return attemptUntil(callbacks, undefined)
+        return attemptUntil(callbacks, undefined, true)
     }
 
     createResolvers(chainId: ChainId): NameServiceResolver[] {

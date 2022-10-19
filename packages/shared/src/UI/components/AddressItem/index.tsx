@@ -27,8 +27,14 @@ export interface AddressItemProps {
 
 const isReversible = (type?: SocialAddressType) => {
     if (!type) return false
-    const reversible = [SocialAddressType.KV, SocialAddressType.ADDRESS, SocialAddressType.NEXT_ID].includes(type)
-    return reversible
+    return [
+        SocialAddressType.KV,
+        SocialAddressType.ADDRESS,
+        SocialAddressType.NEXT_ID,
+        SocialAddressType.CyberConnect,
+        SocialAddressType.Leaderboard,
+        SocialAddressType.Sybil,
+    ].includes(type)
 }
 
 export function AddressItem({
@@ -42,11 +48,9 @@ export function AddressItem({
 
     if (!socialAddress) return null
 
-    const reversible = isReversible(socialAddress.type)
-
     return (
         <>
-            {reversible ? (
+            {isReversible(socialAddress.type) ? (
                 <ReversedAddress
                     TypographyProps={TypographyProps}
                     address={socialAddress.address}

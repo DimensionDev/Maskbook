@@ -5,7 +5,6 @@ import { makeStyles } from '@masknet/theme'
 import { Image, Icon } from '@masknet/shared'
 import { isSameAddress, NonFungibleCollection } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { Icons } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => ({
     collectionWrap: {
@@ -14,6 +13,7 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: '50%',
         background: 'rgba(229,232,235,1)',
         cursor: 'pointer',
+        overflow: 'hidden',
     },
     collectionImg: {
         objectFit: 'cover',
@@ -40,6 +40,9 @@ export interface CollectionIconProps {
 export const CollectionIcon = memo<CollectionIconProps>(({ collection, onClick, selectedCollection }) => {
     const { classes } = useStyles()
 
+    const name = collection?.name ?? collection?.symbol ?? 'Unknown'
+    // CollectionIcon should not display a character
+    const fallback = <Icon className={classes.collectionImg} name={name} label="" />
     return (
         <Tooltip
             placement="right-end"
@@ -61,14 +64,11 @@ export const CollectionIcon = memo<CollectionIconProps>(({ collection, onClick, 
                         height={24}
                         className={classes.collectionImg}
                         src={collection?.iconURL}
-                        fallback={<Icons.MaskPlaceholder size={24} />}
+                        fallback={fallback}
                         disableSpinner
                     />
                 ) : (
-                    <Icon
-                        className={classes.collectionImg}
-                        name={collection?.name ?? collection?.symbol ?? 'Unknown'}
-                    />
+                    fallback
                 )}
             </Box>
         </Tooltip>

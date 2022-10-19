@@ -47,8 +47,9 @@ export class ENS_Resolver implements NameServiceResolver {
             const name = await ens.reverse(address)
             if (!name.endsWith('.eth')) return
             return name
-        } catch {
-            return
+        } catch (error: unknown) {
+            if (error instanceof Error && error.message === 'ENS name not defined.') return
+            throw error
         }
     }
 }

@@ -123,6 +123,7 @@ export enum SocialAddressType {
     CyberConnect = 'CyberConnect',
     Leaderboard = '.eth Leaderboard',
     Sybil = 'Sybil',
+    TwitterBlue = 'TwitterBlue',
 }
 
 export enum StorageProviderType {
@@ -170,6 +171,10 @@ export interface SocialAddress<PluginID> {
     address: string
     /** A human readable address title */
     label: string
+    /** Last updated timestamp (unix timestamp) */
+    updatedAt?: string
+    /** Create timestamp (unix timestamp) */
+    createdAt?: string
 }
 
 export interface SocialAccount extends Omit<SocialAddress<NetworkPluginID>, 'type'> {
@@ -739,10 +744,10 @@ export interface TransactionChecker<ChainId, Transaction> {
 }
 
 export interface ConnectionOptions<ChainId, ProviderType, Transaction> {
-    /** Designate the sub-network id of the transaction. */
-    chainId?: ChainId
     /** Designate the signer of the transaction. */
     account?: string
+    /** Designate the sub-network id of the transaction. */
+    chainId?: ChainId
     /** Designate the provider to handle the transaction. */
     providerType?: ProviderType
     /** Fragments to merge into the transaction. */

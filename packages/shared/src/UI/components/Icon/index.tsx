@@ -14,13 +14,14 @@ const useStyles = makeStyles()((theme) => ({
 
 export interface IconProps {
     name?: string
+    label?: string
     logoURL?: string
     className?: string
     AvatarProps?: Partial<AvatarProps>
 }
 
 export const Icon = memo<IconProps>((props) => {
-    const { logoURL, AvatarProps, name, className } = props
+    const { logoURL, AvatarProps, name, label, className } = props
     const [error, setError] = useState(false)
 
     const defaultBackgroundImage = name2Image(name)
@@ -44,7 +45,7 @@ export const Icon = memo<IconProps>((props) => {
                 backgroundImage: `url("${defaultBackgroundImage}")`,
                 backgroundColor: showImage ? theme.palette.common.white : undefined,
             }}>
-            {name?.slice(0, 1).toUpperCase()}
+            {label ?? name?.slice(0, 1).toUpperCase()}
         </Avatar>
     )
 })

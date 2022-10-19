@@ -24,12 +24,10 @@ const useStyles = makeStyles<{
     },
 
     nftItem: {
-        position: 'relative',
         cursor: 'pointer',
         display: 'flex',
         padding: 0,
         flexDirection: 'column',
-        borderRadius: 8,
         minHeight: 100,
         userSelect: 'none',
         justifyContent: 'center',
