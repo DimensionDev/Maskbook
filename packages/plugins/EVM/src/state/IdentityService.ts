@@ -176,8 +176,6 @@ export class IdentityService extends IdentityServiceState {
         const identities = allSettled
             .flatMap((x) => (x.status === 'fulfilled' ? x.value : []))
             .filter(Boolean) as Array<SocialAddress<NetworkPluginID.PLUGIN_EVM>>
-        console.log('------------------')
-        console.log(identities)
         return uniqBy(identities, (x) => `${x.type}_${x.label}_${x.address.toLowerCase()}`)
     }
 }
