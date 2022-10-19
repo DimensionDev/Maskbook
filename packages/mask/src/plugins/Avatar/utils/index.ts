@@ -1,12 +1,5 @@
-import { isNull } from 'lodash-unified'
-import Services from '../../../extension/service.js'
-import { NextIDProof, NextIDStorage } from '@masknet/web3-providers'
 import BigNumber from 'bignumber.js'
-import { activatedSocialNetworkUI } from '../../../social-network/index.js'
-import type { NextIDPlatform } from '@masknet/shared-base'
-import type { NextIDAvatarMeta } from '../types.js'
-import { PLUGIN_ID } from '../constants.js'
-import { sortPersonaBindings } from '../../../utils/index.js'
+import { isNull } from 'lodash-unified'
 import {
     attemptUntil,
     fetchImageViaHTTP,
@@ -14,6 +7,13 @@ import {
     resolveCrossOriginURL,
     resolveResourceURL,
 } from '@masknet/web3-shared-base'
+import type { NextIDPlatform } from '@masknet/shared-base'
+import Services from '../../../extension/service.js'
+import { NextIDProof, NextIDStorage } from '@masknet/web3-providers'
+import { activatedSocialNetworkUI } from '../../../social-network/index.js'
+import type { NextIDAvatarMeta } from '../types.js'
+import { PLUGIN_ID } from '../constants.js'
+import { sortPersonaBindings } from '../../../utils/index.js'
 
 export async function getImage(image: string): Promise<string> {
     const blob = await Services.Helper.fetch(image)

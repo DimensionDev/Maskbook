@@ -9,9 +9,10 @@ import {
     getSiteType,
     NextIDPlatform,
     createLookupTableResolver,
+    PluginID,
 } from '@masknet/shared-base'
 import { ChainId, isValidAddress, isZeroAddress } from '@masknet/web3-shared-evm'
-import { KeyValue, MaskX, MaskX_BaseAPI, NextIDProof, RSS3, Twitter } from '@masknet/web3-providers'
+import { KeyValue, MaskX, MaskX_BaseAPI, NextIDProof, NextIDStorage, RSS3, Twitter } from '@masknet/web3-providers'
 import { ENS_Resolver } from './NameService/ENS.js'
 import { ChainbaseResolver } from './NameService/Chainbase.js'
 import { Web3StateSettings } from '../settings/index.js'
@@ -95,16 +96,6 @@ export class IdentityService extends IdentityServiceState {
         return this.createSocialAddress(SocialAddressType.Address, address)
     }
 
-    /** Read a social address from NextID. */
-    private async getSocialAddressesFromNextID({ identifier, publicKey }: SocialIdentity) {
-        const listOfAddress = await getWalletAddressesFromNextID(identifier?.userId, publicKey)
-        return compact(
-            listOfAddress.map((x) =>
-                this.createSocialAddress(SocialAddressType.NEXT_ID, x.identity, x.latest_checked_at, x.created_at),
-            ),
-        )
-    }
-
     /** Read a social address from bio when it contains a RSS3 ID. */
     private async getSocialAddressFromRSS3({ nickname = '', homepage = '', bio = '' }: SocialIdentity) {
         const ids = getRSS3Ids(nickname, homepage, bio)
@@ -119,8 +110,8 @@ export class IdentityService extends IdentityServiceState {
         return compact(allSettled.map((x) => (x.status === 'fulfilled' ? x.value : undefined)).filter(Boolean))
     }
 
-    /** Read a social address from KV service. */
-    private async getSocialAddressFromKV({ identifier }: SocialIdentity) {
+    /** Read a social address from avatar KV storage. */
+    private async getSocialAddressFromAvatarKV({ identifier }: SocialIdentity) {
         const address = await KeyValue.createJSON_Storage<
             Record<
                 NetworkPluginID,
@@ -134,6 +125,32 @@ export class IdentityService extends IdentityServiceState {
             .then((x) => x?.[NetworkPluginID.PLUGIN_EVM].address ?? '')
 
         return this.createSocialAddress(SocialAddressType.KV, address)
+    }
+
+    /** Read a social address from avatar NextID storage. */
+    private async getSocialAddressFromAvatarNextID({ identifier, publicKey }: SocialIdentity) {
+        const userId = identifier?.userId
+        if (!userId || !publicKey) return
+
+        const response = await NextIDStorage.getByIdentity<{ ownerAddress?: string }>(
+            publicKey,
+            NextIDPlatform.Twitter,
+            userId.toLowerCase(),
+            PluginID.Avatar,
+        )
+
+        if (!response.ok || !response.val.ownerAddress) return
+        return this.createSocialAddress(SocialAddressType.NEXT_ID, response.val.ownerAddress)
+    }
+
+    /** Read a social address from NextID. */
+    private async getSocialAddressesFromNextID({ identifier, publicKey }: SocialIdentity) {
+        const listOfAddress = await getWalletAddressesFromNextID(identifier?.userId, publicKey)
+        return compact(
+            listOfAddress.map((x) =>
+                this.createSocialAddress(SocialAddressType.NEXT_ID, x.identity, x.latest_checked_at, x.created_at),
+            ),
+        )
     }
 
     /** Read a social address from nickname, bio if them contain a ENS. */
@@ -160,6 +177,7 @@ export class IdentityService extends IdentityServiceState {
     private async getSocialAddressFromTwitterBlue({ identifier }: SocialIdentity) {
         const userId = identifier?.userId
         if (!userId) return
+
         const response = await Twitter.getUserNftContainer(userId)
         const connection = await Web3StateSettings.value.Connection?.getConnection?.({
             chainId: ChainId.Mainnet,
@@ -173,6 +191,7 @@ export class IdentityService extends IdentityServiceState {
     private async getSocialAddressesFromMaskX({ identifier }: SocialIdentity) {
         const userId = identifier?.userId
         if (!userId) return
+
         const response = await MaskX.getIdentitiesExact(userId, MaskX_BaseAPI.PlatformType.Twitter)
         return response.records
             .filter((x) => {
@@ -192,7 +211,8 @@ export class IdentityService extends IdentityServiceState {
         const allSettled = await Promise.allSettled([
             this.getSocialAddressFromBio(identity),
             this.getSocialAddressFromENS(identity),
-            this.getSocialAddressFromKV(identity),
+            this.getSocialAddressFromAvatarKV(identity),
+            this.getSocialAddressFromAvatarNextID(identity),
             this.getSocialAddressFromRSS3(identity),
             this.getSocialAddressFromTwitterBlue(identity),
             this.getSocialAddressesFromNextID(identity),
