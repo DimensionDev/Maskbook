@@ -18,7 +18,6 @@ import {
     WNATIVE,
 } from '@masknet/web3-shared-evm'
 import { FungibleAsset, isSameAddress, ActivityType } from '@masknet/web3-shared-base'
-import { first } from 'lodash-unified'
 
 export async function fetchJSON<T = unknown>(
     requestInfo: string,
@@ -75,20 +74,25 @@ export const resolveNonFungibleTokenEventActivityType = (type?: string) => {
     return ActivityType.Transfer
 }
 
-export function getNFTName(name?: string, tokenId?: string) {
-    if (!name) return ''
-    const firstName = (first(name.split('#')) ?? '').trim()
-    return tokenId ? firstName.replace(tokenId, '').trim() : firstName
-}
-
 export function getNFTAllName(contractName: string, name?: string, tokenId?: string) {
-    const _name = getNFTName(name, tokenId)
-    if (!_name)
+    if (!name)
         return tokenId && contractName
             ? `${contractName} #${tokenId}`
             : !contractName && tokenId
             ? `#${tokenId}`
             : contractName
-    if (_name.endsWith('.eth')) return `ENS #${_name}`
-    return contractName && contractName.toLowerCase() !== _name.toLowerCase() ? `${contractName} #${_name}` : _name
+
+    const [first, next] = name.split('#').map((x) => x.trim())
+    if (first && next) return `${first} #${next}`
+    if (first.endsWith('.eth')) return `ENS #${first}`
+    if (!first && next) return contractName ? `${contractName} #${next}` : `#${next}`
+
+    if (contractName && tokenId)
+        return contractName.toLowerCase() === first.toLowerCase()
+            ? `${contractName} #${tokenId}`
+            : `${contractName} #${first}`
+    if (!contractName && !tokenId) return first
+    if (!contractName && tokenId) return `${first} #${tokenId}`
+
+    return `${contractName} #${first}`
 }

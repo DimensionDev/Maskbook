@@ -1,32 +1,29 @@
 import { describe, test, expect } from 'vitest'
-import { getNFTAllName, getNFTName } from '../src/helpers.js'
-
-describe('helpers util test', () => {
-    test.each([
-        { name: '', tokenId: '', expected: '' },
-        { name: 'abc', tokenId: '', expected: 'abc' },
-        { name: 'abc #123', tokenId: '123', expected: 'abc' },
-        { name: 'abc #123', tokenId: '', expected: 'abc' },
-        { name: '#123', tokenId: '', expected: '' },
-        { name: 'abc 123', tokenId: '123', expected: 'abc' },
-    ])('.format($name)', ({ name, tokenId, expected }) => {
-        expect(getNFTName(name, tokenId)).toBe(expected)
-    })
-})
+import { getNFTAllName } from '../src/helpers.js'
 
 describe('helpers util test', () => {
     test.each([
         { contract: 'contract', name: '', tokenId: '', expected: 'contract' },
-        { contract: 'contract', name: '', tokenId: '123', expected: 'contract #123' },
         { contract: '', name: '', tokenId: '123', expected: '#123' },
-        { contract: 'contract', name: 'abc', tokenId: '', expected: 'contract #abc' },
-        { contract: 'contract', name: 'abc #123', tokenId: '123', expected: 'contract #abc' },
-        { contract: 'contract', name: 'abc #123', tokenId: '', expected: 'contract #abc' },
-        { contract: 'contract', name: 'abc 123', tokenId: '123', expected: 'contract #abc' },
-        { contract: 'contract', name: 'abc 123', tokenId: '', expected: 'contract #abc 123' },
-        { contract: 'contract', name: 'abc.eth', tokenId: '123', expected: 'ENS #abc.eth' },
-        { contract: 'abc', name: 'abc', tokenId: '', expected: 'abc' },
+
+        { contract: 'contract', name: 'abc #123', tokenId: '123', expected: 'abc #123' },
+
+        { contract: '', name: 'abc #123', tokenId: '', expected: 'abc #123' },
+        { contract: 'contract', name: 'abc.eth', tokenId: '', expected: 'ENS #abc.eth' },
+        { contract: '', name: 'abc.eth', tokenId: '123', expected: 'ENS #abc.eth' },
+
+        { contract: 'contract', name: '#123', tokenId: '123', expected: 'contract #123' },
+        { contract: '', name: '#123', tokenId: '123', expected: '#123' },
+        { contract: 'contract', name: '#123', tokenId: '', expected: 'contract #123' },
+        { contract: '', name: '#123', tokenId: '', expected: '#123' },
+
+        { contract: 'abc', name: 'abc', tokenId: '123', expected: 'abc #123' },
+        { contract: 'contract', name: 'abc', tokenId: '123', expected: 'contract #abc' },
+
         { contract: '', name: 'abc', tokenId: '', expected: 'abc' },
+        { contract: '', name: 'abc', tokenId: '123', expected: 'abc #123' },
+
+        { contract: 'contract', name: 'abc', tokenId: '', expected: 'contract #abc' },
     ])('.format($name)', ({ contract, name, tokenId, expected }) => {
         expect(getNFTAllName(contract, name, tokenId)).toBe(expected)
     })

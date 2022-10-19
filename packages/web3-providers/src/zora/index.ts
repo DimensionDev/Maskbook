@@ -54,7 +54,7 @@ export class ZoraAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType
         const shared = {
             chainId,
             address: token.tokenContract?.collectionAddress ?? token.collectionAddress,
-            name: token.tokenContract?.name ?? token.name ?? token.collectionName ?? 'Unknown Token',
+            name: token.tokenContract?.name ?? token.collectionName ?? '',
             symbol: token.tokenContract?.symbol ?? 'UNKNOWN',
             schema: SchemaType.ERC721,
         }
@@ -77,7 +77,7 @@ export class ZoraAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType
             },
             metadata: {
                 ...shared,
-                name: getNFTAllName(shared.name ?? '', shared.name, token.tokenId),
+                name: getNFTAllName(shared.name ?? '', token.name, token.tokenId),
             },
             traits:
                 token.attributes

@@ -56,7 +56,7 @@ function createNonFungibleToken(
         link: createNonFungibleTokenLink(chainId, contractAddress, tokenId),
         metadata: {
             chainId,
-            name: getNFTAllName(asset.metadata.name, asset.metadata.name ?? asset.title, tokenId),
+            name: getNFTAllName(asset.metadata.name || asset.title, asset.metadata.name || asset.title, tokenId),
             description: asset.metadata.description || asset.description,
             imageURL: resolveResourceURL(imageURL),
             mediaURL: resolveResourceURL(mediaURL),
