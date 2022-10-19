@@ -36,6 +36,7 @@ export function useGasLimit(
                 return erc20Contract?.methods.transfer(recipient, amount ?? 0).estimateGas({
                     from: account,
                 })
+            case SchemaType.SBT:
             case SchemaType.ERC721:
                 return erc721Contract?.methods.transferFrom(account, recipient, tokenId ?? '').estimateGas({
                     from: account,

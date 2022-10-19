@@ -14,6 +14,7 @@ export function useTokenTransferCallback(type: SchemaType, address: string) {
             return r1
         case SchemaType.ERC20:
             return r2
+        case SchemaType.SBT:
         case SchemaType.ERC721:
             return r3
         case SchemaType.ERC1155:
