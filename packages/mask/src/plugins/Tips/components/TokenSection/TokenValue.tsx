@@ -44,7 +44,7 @@ interface Props extends HTMLProps<HTMLDivElement> {}
 export const TokenValue: FC<Props> = ({ className, ...rest }) => {
     const { classes, cx } = useStyles()
     const { token, amount } = useTip()
-    const pluginID = useCurrentWeb3NetworkPluginID(NetworkPluginID.PLUGIN_EVM)
+    const pluginID = useCurrentWeb3NetworkPluginID()
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const { value: tokenPrice = 0 } = useFungibleTokenPrice(NetworkPluginID.PLUGIN_EVM, token?.address, { chainId })
 
