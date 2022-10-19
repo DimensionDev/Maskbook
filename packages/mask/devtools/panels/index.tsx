@@ -45,12 +45,18 @@ async function onInit() {
     components ??= await createPanel('\u269B\uFE0F Components')
     profiler ??= await createPanel('\u269B\uFE0F Profile')
 
+    let needsToSyncElementSelection = false
+
     function Host() {
         const [componentRef, setComponentRef] = useState<HTMLElement | undefined>(getMountPoint(componentsWindow))
         const [profilerRef, setProfilerRef] = useState<HTMLElement | undefined>(getMountPoint(profilerWindow))
         const [tab, setTab] = useState<TabID | undefined>(undefined)
         useEffect(() => {
             const a = (window: Window) => {
+                if (needsToSyncElementSelection) {
+                    needsToSyncElementSelection = false
+                    bridge.send('syncSelectionFromNativeElementsPanel')
+                }
                 componentsWindow = window
                 setComponentRef(getMountPoint(window))
                 setTab('components')
@@ -102,11 +108,7 @@ async function onInit() {
         if (rendererID !== null) {
             bridge.send('viewAttributeSource', { id, path, rendererID })
             setTimeout(() => {
-                browser.devtools.inspectedWindow.eval(
-                    'window.$attribute && inspect($attribute)',
-                    // @ts-expect-error
-                    { useContentScriptContext: true },
-                )
+                evalInContentScript('window.$attribute && inspect($attribute)')
             }, 100)
         }
     }
@@ -116,8 +118,7 @@ async function onInit() {
         if (rendererID !== null) {
             bridge.send('viewElementSource', { id, rendererID })
             setTimeout(() => {
-                browser.devtools.inspectedWindow.eval(
-                    `
+                evalInContentScript(`
                     if (window.$type !== null) {
                         if ($type && $type.prototype && $type.prototype.isReactComponent) {
                             // inspect Component.render, not constructor
@@ -127,10 +128,7 @@ async function onInit() {
                             inspect($type);
                         }
                     }
-                `,
-                    // @ts-expect-error
-                    { useContentScriptContext: true },
-                )
+                `)
             }, 100)
         }
     }
@@ -145,19 +143,41 @@ async function onInit() {
         signal,
     })
 
+    async function setReactSelectionFromBrowser() {
+        const [didSelectionChange] = await evalInContentScript(`
+            if (window.__REACT_DEVTOOLS_GLOBAL_HOOK__?.$0 !== $0) {
+                window.__REACT_DEVTOOLS_GLOBAL_HOOK__.$0 = $0
+                true
+            } else {
+                false
+            }
+        `)
+        if (didSelectionChange) needsToSyncElementSelection = true
+    }
+
     function onRefresh() {
         flushSync(() => root.unmount())
         container.remove()
         browser.devtools.network.onNavigated.removeListener(onRefresh)
+        ;(browser.devtools.panels as any).elements.onSelectionChanged.removeListener(setReactSelectionFromBrowser)
         abort.abort()
         onInit()
     }
     browser.devtools.network.onNavigated.addListener(onRefresh)
+    ;(browser.devtools.panels as any).elements.onSelectionChanged.addListener(setReactSelectionFromBrowser)
 }
 onInit()
 
 function createPanel(name: string) {
     return browser.devtools.panels.create(name + ' (\u{1F3AD})', '128x128.png', 'empty.html')
+}
+
+function evalInContentScript(script: string) {
+    return browser.devtools.inspectedWindow.eval(
+        script,
+        // @ts-expect-error
+        { useContentScriptContext: true },
+    )
 }
 
 function getMountPoint(window: Window | undefined) {
