@@ -708,9 +708,13 @@ export interface ProviderEvents<ChainId, ProviderType> {
     disconnect: [ProviderType]
 }
 
+export interface RecognizedError extends Error {
+    isRecognized?: boolean
+}
+
 export interface WatchEvents<Transaction> {
     /** Emit when error occur */
-    error: [Error, JsonRpcPayload]
+    error: [RecognizedError, JsonRpcPayload]
     /** Emit when the watched transaction status updated. */
     progress: [string, TransactionStatusType, Transaction | undefined]
 }
