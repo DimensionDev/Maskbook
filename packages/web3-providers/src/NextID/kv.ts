@@ -2,12 +2,12 @@
  * Document url: https://github.com/nextdotid/kv_server/blob/develop/docs/api.apib
  */
 import urlcat from 'urlcat'
+import { compact } from 'lodash-unified'
+import { Err, Ok, Result } from 'ts-results'
 import type { NextIDStoragePayload, NextIDPlatform } from '@masknet/shared-base'
 import { deleteCache, fetchJSON } from './helper.js'
-import { Err, Ok, Result } from 'ts-results'
 import type { NextIDBaseAPI } from '../types/index.js'
 import { KV_BASE_URL_DEV, KV_BASE_URL_PROD } from './constants.js'
-import { compact } from 'lodash-unified'
 
 interface CreatePayloadResponse {
     uuid: string
