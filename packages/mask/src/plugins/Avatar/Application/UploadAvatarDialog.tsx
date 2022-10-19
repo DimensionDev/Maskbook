@@ -67,6 +67,7 @@ async function uploadAvatar(blob: Blob, userId: string): Promise<AvatarInfo | un
 
 export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
     const { image, account, token, onClose, onBack, proof, isBindAccount = false, pluginId } = props
+    const t = useI18N()
     const currentPluginId = useCurrentWeb3NetworkPluginID(pluginId)
     const { classes } = useStyles()
     const identifier = useSubscription(context.currentVisitingProfile)
@@ -75,7 +76,6 @@ export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
     const { showSnackbar } = useCustomSnackbar()
     const [disabled, setDisabled] = useState(false)
     const { currentPersona } = usePersonaConnectStatus()
-    const t = useI18N()
 
     const [, saveAvatar] = useSave(currentPluginId, (token?.chainId ?? ChainId.Mainnet) as ChainId)
 
