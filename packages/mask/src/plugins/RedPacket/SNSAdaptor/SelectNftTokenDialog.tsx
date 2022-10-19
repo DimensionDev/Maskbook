@@ -85,7 +85,7 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
     tokenSelector: {
         display: 'grid',
         gridTemplateColumns: 'repeat(4, 1fr)',
-        gap: 16,
+        gap: 12,
         width: '100%',
         height: 305,
         overflowY: 'auto',
@@ -126,7 +126,7 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         position: 'absolute',
         bottom: 0,
         marginLeft: 8,
-        minHeight: 35,
+        minHeight: 30,
         whiteSpace: 'nowrap',
         textOverflow: 'ellipsis',
         overflow: 'hidden',
@@ -240,7 +240,7 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         alignItems: 'center',
     },
     assetImgWrapper: {
-        maxHeight: 155,
+        maxHeight: 145,
     },
 }))
 
