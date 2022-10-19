@@ -1,8 +1,8 @@
-import { MaskMessages, useI18N } from '../../../../utils/index.js'
 import { useCallback, useState } from 'react'
+import { useMount } from 'react-use'
+import { MaskMessages, useI18N } from '../../../../utils/index.js'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI.js'
 import { toPNG } from '../../../../plugins/Avatar/utils/index.js'
-import { useMount } from 'react-use'
 import { getAvatarId } from '../../utils/user.js'
 import { InjectedDialog } from '@masknet/shared'
 import { DialogContent } from '@mui/material'
@@ -26,7 +26,7 @@ export function NFTAvatarSettingDialog() {
     const { classes } = useStyles()
     const account = useAccount()
     const identity = useCurrentVisitingIdentity()
-    const pluginId = useCurrentWeb3NetworkPluginID()
+    const pluginID = useCurrentWeb3NetworkPluginID()
     const saveNFTAvatar = useSaveNFTAvatar()
 
     const onChange = useCallback(
@@ -51,7 +51,7 @@ export function NFTAvatarSettingDialog() {
                     },
                     identity.identifier.network as EnhanceableSite,
                     RSS3_KEY_SNS.INSTAGRAM,
-                    pluginId,
+                    pluginID,
                 )
 
                 if (!avatarInfo) {

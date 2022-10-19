@@ -19,7 +19,7 @@ interface Task extends TipTask {
 
 export const TipTaskManager: FC<React.PropsWithChildren<{}>> = ({ children }) => {
     const [tasks, setTasks] = useState<Task[]>(EMPTY_LIST)
-    const { pluginId } = TargetRuntimeContext.useContainer()
+    const { pluginID: pluginId } = TargetRuntimeContext.useContainer()
 
     const removeTask = useCallback((task: Task) => {
         setTasks((list) => list.filter((t) => t.id !== task.id))

@@ -3,11 +3,11 @@ import { useState } from 'react'
 import { createContainer } from 'unstated-next'
 
 function useTargetPluginId() {
-    const [expectedPluginId, setExpectedPluginId] = useState<NetworkPluginID>(NetworkPluginID.PLUGIN_EVM)
+    const [expectedPluginID, setExpectedPluginID] = useState<NetworkPluginID>(NetworkPluginID.PLUGIN_EVM)
 
     return {
-        pluginId: expectedPluginId,
-        setPluginId: setExpectedPluginId,
+        pluginID: expectedPluginID,
+        setPluginID: setExpectedPluginID,
     }
 }
 

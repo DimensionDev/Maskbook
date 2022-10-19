@@ -94,16 +94,16 @@ export const NFTSection: FC<Props> = ({ className, onEmpty, ...rest }) => {
     const account = useAccount()
 
     const chainId = useChainId()
-    const pluginId = useCurrentWeb3NetworkPluginID()
+    const pluginID = useCurrentWeb3NetworkPluginID()
     const {
         value: fetchedTokens = EMPTY_LIST,
         done,
         next,
         loading,
         error: loadError,
-    } = useNonFungibleAssets(pluginId, undefined, { chainId })
+    } = useNonFungibleAssets(pluginID, undefined, { chainId })
 
-    const isEvm = pluginId === NetworkPluginID.PLUGIN_EVM
+    const isEvm = pluginID === NetworkPluginID.PLUGIN_EVM
     const tokens = useMemo(() => {
         return uniqWith(
             fetchedTokens,

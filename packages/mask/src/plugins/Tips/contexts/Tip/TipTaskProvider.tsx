@@ -37,7 +37,7 @@ function useRecipients(pluginID: NetworkPluginID, tipsAccounts: SocialAccount[])
 
 function useDirtyDetection(deps: any[]): [boolean, Dispatch<SetStateAction<boolean>>] {
     const [isDirty, setIsDirty] = useState(false)
-    const { pluginId } = TargetRuntimeContext.useContainer()
+    const { pluginID: pluginId } = TargetRuntimeContext.useContainer()
     const account = useAccount(pluginId)
 
     useEffect(() => {
@@ -49,16 +49,16 @@ function useDirtyDetection(deps: any[]): [boolean, Dispatch<SetStateAction<boole
 
 export const TipTaskProvider: FC<React.PropsWithChildren<Props>> = memo(({ children, task }) => {
     const targetChainId = useChainId()
-    const pluginId = useCurrentWeb3NetworkPluginID()
-    const { setPluginId } = TargetRuntimeContext.useContainer()
+    const pluginID = useCurrentWeb3NetworkPluginID()
+    const { setPluginID: setPluginId } = TargetRuntimeContext.useContainer()
 
     const [_recipientAddress, setRecipient] = useState<string>(task.recipient ?? '')
-    const recipients = useRecipients(pluginId, task.accounts)
+    const recipients = useRecipients(pluginID, task.accounts)
     const [tipType, setTipType] = useState<TipsType>(TipsType.Tokens)
     const [amount, setAmount] = useState('')
     const chainId = useChainId()
     const [nonFungibleTokenAddress, setNonFungibleTokenAddress] = useState<string>('')
-    const { value: nativeTokenDetailed = null } = useFungibleToken(pluginId, undefined, {
+    const { value: nativeTokenDetailed = null } = useFungibleToken(pluginID, undefined, {
         chainId: targetChainId,
     })
     const [userSelectedToken, setToken] = useState<TipContextOptions['token']>(nativeTokenDetailed)
@@ -67,20 +67,20 @@ export const TipTaskProvider: FC<React.PropsWithChildren<Props>> = memo(({ child
     const storedTokens = useSubscription(getStorage().addedTokens.subscription)
     const validation = useTipValidate({ tipType, amount, token, nonFungibleTokenId, nonFungibleTokenAddress })
 
-    const { value: nonFungibleTokenContract } = useNonFungibleTokenContract(pluginId, nonFungibleTokenAddress)
+    const { value: nonFungibleTokenContract } = useNonFungibleTokenContract(pluginID, nonFungibleTokenAddress)
 
     const [gasOption, setGasOption] = useState<GasOptionConfig>()
     const connectionOptions =
-        pluginId === NetworkPluginID.PLUGIN_EVM
+        pluginID === NetworkPluginID.PLUGIN_EVM
             ? {
                   overrides: gasOption,
               }
             : undefined
     const recipientAddress = _recipientAddress || task.recipient || recipients[0]?.address
     const { loading: validatingRecipient, validation: recipientValidation } = useRecipientValidate(recipientAddress)
-    const tokenTipTuple = useTokenTip(pluginId, recipientAddress, token, amount, connectionOptions)
+    const tokenTipTuple = useTokenTip(pluginID, recipientAddress, token, amount, connectionOptions)
     const nftTipTuple = useNftTip(
-        pluginId,
+        pluginID,
         recipientAddress,
         nonFungibleTokenAddress,
         nonFungibleTokenId,

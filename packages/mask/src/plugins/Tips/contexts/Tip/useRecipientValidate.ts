@@ -9,8 +9,8 @@ import type { ValidationTuple } from '../../types'
 export function useRecipientValidate(recipientAddress: string): { loading: boolean; validation: ValidationTuple } {
     const t = useI18N()
     const chainId = useChainId()
-    const pluginId = useCurrentWeb3NetworkPluginID()
-    const { value: addressType, loading } = useAddressType(pluginId, recipientAddress, {
+    const pluginID = useCurrentWeb3NetworkPluginID()
+    const { value: addressType, loading } = useAddressType(pluginID, recipientAddress, {
         chainId,
     })
     const { value: security } = useAsync(async () => {
