@@ -19,8 +19,8 @@ import { Web3StateSettings } from '../settings/index.js'
 const ENS_RE = /[^\t\n\v()[\]]{1,256}\.(eth|kred|xyz|luxe)\b/i
 const ADDRESS_FULL = /0x\w{40,}/i
 
-function getENSName(username: string, nickname: string, bio: string) {
-    const [matched] = username.match(ENS_RE) ?? nickname.match(ENS_RE) ?? bio.match(ENS_RE) ?? []
+function getENSName(userId: string, nickname: string, bio: string) {
+    const [matched] = userId.match(ENS_RE) ?? nickname.match(ENS_RE) ?? bio.match(ENS_RE) ?? []
     return matched
 }
 
@@ -79,21 +79,6 @@ export class IdentityService extends IdentityServiceState {
         return
     }
 
-    /** Read a social address from username. */
-    private async getSocialAddressFromUsername({ identifier }: SocialIdentity) {
-        if (!identifier?.userId) return
-        const name = getENSName(identifier.userId, '', '')
-        if (!name) return
-        const address = await attemptUntil(
-            [new ENS_Resolver(), new ChainbaseResolver()].map((resolver) => {
-                return async () => resolver.lookup(name)
-            }),
-            undefined,
-        )
-        if (!address) return
-        return this.createSocialAddress(SocialAddressType.ENS, address, name)
-    }
-
     /** Read a social address from bio. */
     private async getSocialAddressFromBio({ bio = '' }: SocialIdentity) {
         const address = getAddress(bio)
@@ -129,8 +114,8 @@ export class IdentityService extends IdentityServiceState {
     }
 
     /** Read a social address from nickname, bio if them contain a ENS. */
-    private async getSocialAddressFromENS({ nickname = '', bio = '' }: SocialIdentity) {
-        const name = getENSName('', nickname, bio)
+    private async getSocialAddressFromENS({ identifier, nickname = '', bio = '' }: SocialIdentity) {
+        const name = getENSName(identifier?.userId ?? '', nickname, bio)
         if (!name) return
 
         const address = await attemptUntil(
@@ -183,7 +168,6 @@ export class IdentityService extends IdentityServiceState {
             this.getSocialAddressFromTwitterBlue(identity),
             this.getSocialAddressesFromNextID(identity),
             this.getSocialAddressesFromMaskX(identity),
-            this.getSocialAddressFromUsername(identity),
         ])
 
         console.log('DEBUG: get from response')
