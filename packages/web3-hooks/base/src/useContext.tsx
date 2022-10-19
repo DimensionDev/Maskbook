@@ -15,6 +15,7 @@ interface Web3Context<T extends NetworkPluginID> {
 
     setChainId?: (chainId: Web3Helper.Definition[T]['ChainId']) => void
     setAccount?: (account: string) => void
+    setNetworkType?: (provider: Web3Helper.Definition[T]['NetworkType']) => void
     setProviderType?: (provider: Web3Helper.Definition[T]['ProviderType']) => void
 }
 
@@ -35,13 +36,26 @@ export function PluginWeb3ContextProvider<T extends NetworkPluginID>({
 }: React.ProviderProps<Omit<Web3Context<T>, 'setChainId'>>) {
     const [chainId, setChainId] = useState<Web3Helper.Definition[T]['ChainId'] | undefined>(value.chainId)
     const [account, setAccount] = useState<string | undefined>(value.account)
+    const [networkType, setNetworkType] = useState<Web3Helper.Definition[T]['NetworkType'] | undefined>(
+        value.networkType,
+    )
     const [providerType, setProviderType] = useState<Web3Helper.Definition[T]['ProviderType'] | undefined>(
         value.providerType,
     )
 
     return (
         <PluginWeb3Context.Provider
-            value={{ ...value, setChainId, chainId, account, setAccount, providerType, setProviderType }}
+            value={{
+                ...value,
+                setChainId,
+                chainId,
+                account,
+                setAccount,
+                providerType,
+                setProviderType,
+                networkType,
+                setNetworkType,
+            }}
             children={children}
         />
     )
