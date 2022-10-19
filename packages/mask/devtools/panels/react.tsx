@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react'
 import type { TabID } from 'react-devtools-inline/commons.js'
 import { flushSync } from 'react-dom'
 import { createRoot } from 'react-dom/client'
-import { DevtoolsMessage } from '../shared.js'
-import { initialize, createBridge, DevtoolsProps, Wall, createStore } from 'react-devtools-inline/frontend'
+import { DevtoolsMessage, ReactDevToolsWall } from '../shared.js'
+import { initialize, createBridge, DevtoolsProps, createStore } from 'react-devtools-inline/frontend'
 import type { ComponentType } from 'react'
 import { attachListener, createPanel, evalInContentScript } from './utils.js'
 
@@ -33,14 +33,7 @@ let componentsWindow: Window
 let profilerWindow: Window
 
 export async function startReactDevTools(signal: AbortSignal) {
-    const wall: Wall = {
-        listen: DevtoolsMessage.events._.on,
-        send(event, payload, transferable) {
-            if (transferable) throw new TypeError('transferable is not supported')
-            DevtoolsMessage.events._.sendByBroadcast({ event, payload })
-        },
-    }
-    const bridge = createBridge(null!, wall)
+    const bridge = createBridge(null!, ReactDevToolsWall)
     const store = createStore(bridge, {
         // @ts-expect-error
         isProfiling: false,

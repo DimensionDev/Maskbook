@@ -1,4 +1,5 @@
 import { WebExtensionMessage } from '@dimensiondev/holoflows-kit'
+import type { Wall } from 'react-devtools-inline/frontend.js'
 
 export interface DevtoolsMessage {
     _: any
@@ -15,3 +16,11 @@ export interface DevtoolsMessage {
 export const DevtoolsMessage = new WebExtensionMessage<DevtoolsMessage>({
     domain: 'devtools',
 })
+
+export const ReactDevToolsWall: Wall = {
+    listen: DevtoolsMessage.events._.on,
+    send(event, payload, transferable) {
+        if (transferable) throw new TypeError('transferable is not supported')
+        DevtoolsMessage.events._.sendByBroadcast({ event, payload })
+    },
+}
