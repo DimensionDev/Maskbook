@@ -41,6 +41,12 @@ export function getError(error: unknown, response?: JsonRpcResponse | null, fall
         if (message.includes('User denied transaction signature.')) return 'Transaction was rejected!'
         if (message.includes('transaction underpriced')) return 'Transaction underpriced.'
         if (
+            message.includes('The NFT is bounded to your soul, you cannot transfer it!') ||
+            message.match(/Please go to .* for mint/)
+        ) {
+            return 'This NFT can not be transferred.'
+        }
+        if (
             typeof code === 'number' &&
             (code === JSON_RPC_ERROR_CODE.INTERNAL_ERROR ||
                 (code <= JSON_RPC_ERROR_CODE.SERVER_ERROR_RANGE_START &&
