@@ -1,4 +1,4 @@
-import { PluginWeb3Context, useNetworkDescriptors } from '@masknet/web3-hooks-base'
+import { useNetworkDescriptors } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { MaskTabList, useTabs } from '@masknet/theme'
 import type { NetworkPluginID } from '@masknet/shared-base'
@@ -6,25 +6,26 @@ import TabContext from '@mui/lab/TabContext'
 import { Stack, Tab, Typography } from '@mui/material'
 import { WalletIcon } from '@masknet/shared'
 import { useUpdateEffect } from 'react-use'
-import React, { useContext } from 'react'
 
 interface NetworkTabProps<T extends NetworkPluginID>
     extends withClasses<'tab' | 'tabs' | 'tabPanel' | 'indicator' | 'focusTab' | 'tabPaper'> {
     chains: Array<Web3Helper.Definition[T]['ChainId']>
+    setChainId: (chainId: Web3Helper.Definition[T]['ChainId']) => void
+    chainId: Web3Helper.Definition[T]['ChainId']
+    networkId?: NetworkPluginID
 }
 
 export function NetworkTab<T extends NetworkPluginID = NetworkPluginID.PLUGIN_EVM>(props: NetworkTabProps<T>) {
-    const { chains } = props
-    const { chainId, setChainId, pluginID } = useContext(PluginWeb3Context)
+    const { chainId, setChainId, chains, networkId } = props
 
-    const networks = useNetworkDescriptors(pluginID)
+    const networks = useNetworkDescriptors(networkId)
     const usedNetworks = networks.filter((x) => chains.find((c) => c === x.chainId))
     const networkIds = usedNetworks.map((x) => x.chainId.toString())
-    const [currentTab, , , setTab] = useTabs(chainId?.toString() ?? networkIds[0], ...networkIds)
+    const [currentTab, , , setTab] = useTabs(chainId.toString() ?? networkIds[0], ...networkIds)
 
     useUpdateEffect(() => {
         setTab((prev) => {
-            if (chainId && prev !== chainId?.toString()) return chainId.toString()
+            if (prev !== chainId.toString()) return chainId.toString()
             return prev
         })
     }, [chainId])

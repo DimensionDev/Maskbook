@@ -1,17 +1,11 @@
 import { FC, HTMLProps, useCallback, useMemo } from 'react'
 import BigNumber from 'bignumber.js'
-import {
-    useAccount,
-    useCurrentWeb3NetworkChainId,
-    useCurrentWeb3NetworkPluginID,
-    useFungibleTokenBalance,
-    useGasPrice,
-} from '@masknet/web3-hooks-base'
+import { useAccount, useFungibleTokenBalance, useGasPrice } from '@masknet/web3-hooks-base'
 import { useGasConfig } from '@masknet/web3-hooks-evm'
 import { useSelectFungibleToken, FungibleTokenInput } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { ChainId, isNativeTokenAddress } from '@masknet/web3-shared-evm'
-import { useTip } from '../../contexts/index.js'
+import { isNativeTokenAddress } from '@masknet/web3-shared-evm'
+import { TargetRuntimeContext, useTip } from '../../contexts/index.js'
 import { GasSettingsBar } from './GasSettingsBar.js'
 import { TokenValue } from './TokenValue.js'
 import { makeStyles } from '@masknet/theme'
@@ -32,8 +26,7 @@ const ETH_GAS_LIMIT = 21000
 export const TokenSection: FC<Props> = ({ className, ...rest }) => {
     const { classes, cx } = useStyles()
     const { token, setToken, amount, setAmount } = useTip()
-    const chainId = useCurrentWeb3NetworkChainId()
-    const pluginId = useCurrentWeb3NetworkPluginID()
+    const { targetChainId: chainId, pluginId } = TargetRuntimeContext.useContainer()
     const account = useAccount()
 
     // balance
@@ -41,8 +34,8 @@ export const TokenSection: FC<Props> = ({ className, ...rest }) => {
         chainId,
         account,
     })
-    const { gasPrice } = useGasConfig(chainId as ChainId)
-    const { value: defaultGasPrice = '1' } = useGasPrice(NetworkPluginID.PLUGIN_EVM, { chainId: chainId as ChainId })
+    const { gasPrice } = useGasConfig(chainId)
+    const { value: defaultGasPrice = '1' } = useGasPrice(NetworkPluginID.PLUGIN_EVM, { chainId })
     const isNativeToken = useMemo(() => isNativeTokenAddress(token?.address), [token?.address])
 
     const maxAmount = useMemo(() => {

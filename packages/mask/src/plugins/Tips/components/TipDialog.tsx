@@ -1,10 +1,6 @@
 import { useCallback, useMemo } from 'react'
 import { useBoolean } from 'react-use'
-import {
-    PluginWeb3ActualContextProvider,
-    useCurrentWeb3NetworkChainId,
-    useCurrentWeb3NetworkPluginID,
-} from '@masknet/web3-hooks-base'
+import { PluginWeb3ActualContextProvider } from '@masknet/web3-hooks-base'
 import { InjectedDialog } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { ActionButton, makeStyles, MaskTabList } from '@masknet/theme'
@@ -14,7 +10,7 @@ import { TabContext, TabPanel } from '@mui/lab'
 import { DialogContent, Tab } from '@mui/material'
 import { PluginWalletStatusBar } from '../../../utils/index.js'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
-import { useCreateTipsTransaction, useTip } from '../contexts/index.js'
+import { TargetRuntimeContext, useCreateTipsTransaction, useTip } from '../contexts/index.js'
 import { useI18N } from '../locales/index.js'
 import { TipsType } from '../types/index.js'
 import { AddDialog } from './AddDialog.js'
@@ -82,8 +78,7 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
         sendTip,
         validation: [isValid, validateMessage],
     } = useTip()
-    const targetChainId = useCurrentWeb3NetworkChainId()
-    const pluginId = useCurrentWeb3NetworkPluginID()
+    const { targetChainId, pluginId } = TargetRuntimeContext.useContainer()
 
     const isTokenTip = tipType === TipsType.Tokens
     const shareText = useMemo(() => {
@@ -163,7 +158,7 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
                         <PluginWalletStatusBar expectedPluginID={expectedPluginID} expectedChainId={targetChainId}>
                             <ChainBoundary
                                 expectedPluginID={expectedPluginID}
-                                expectedChainId={targetChainId!}
+                                expectedChainId={targetChainId}
                                 noSwitchNetworkTip
                                 switchChainWithoutPopup
                                 ActionButtonPromiseProps={{

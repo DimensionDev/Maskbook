@@ -29,9 +29,9 @@ export function PostInspector(props: PostInspectorProps) {
                 }}>
                 <PluginIDContextProvider value={token.pluginID}>
                     <PluginWeb3ContextProvider
+                        pluginID={token.pluginID}
                         value={{
                             chainId: token.chainId,
-                            pluginID: token.pluginID,
                         }}>
                         <Collectible />
                     </PluginWeb3ContextProvider>
