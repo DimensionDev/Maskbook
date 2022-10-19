@@ -8,9 +8,6 @@ const useStyles = makeStyles()((theme) => ({
         height: '100%',
         position: 'relative',
     },
-    imageContainer: {
-        height: '100%',
-    },
     fallbackImage: {
         height: 64,
         width: 64,
@@ -41,7 +38,6 @@ export function AssetPreviewer(props: AssetPreviewerProps) {
         <div className={classes.root}>
             <Image
                 classes={{
-                    container: classes.imageContainer,
                     fallbackImage: classes.fallbackImage,
                 }}
                 width="100%"
