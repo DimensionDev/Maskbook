@@ -38,28 +38,6 @@ const HOTFIX_RPC_URLS = [
 
 const { fetch: originalFetch } = globalThis
 
-async function squashedFetch(request: RequestInfo, init?: RequestInit): Promise<Response> {
-    console.log('DEBUG: squashedFetch')
-    console.log(request)
-
-    const cache = await caches.open('r2d2')
-    const hit = await cache.match(request)
-    if (hit) {
-        console.log('DEBUG: hit')
-    }
-
-    const response = await originalFetch(request, init)
-    if (response.ok && response.status === 200) {
-        await cache.put(request, response)
-
-        // keep cache for 1s
-        setTimeout(async () => {
-            await cache.delete(request)
-        }, 1000)
-    }
-    return response
-}
-
 /**
  * Why use r2d2 fetch: some third api provider will be block in Firefox and protect api key
  * @returns fetch response
@@ -73,7 +51,7 @@ export async function r2d2Fetch(input: RequestInfo, init?: RequestInit): Promise
     // hotfix image requests
     if (request.method === 'GET' && request.headers.get('accept')?.includes('image/')) {
         const blob = await attemptUntil<Blob | null>(
-            [async () => (await squashedFetch(url, request)).blob(), async () => fetchImageViaDOM(url)],
+            [async () => (await originalFetch(url, request)).blob(), async () => fetchImageViaDOM(url)],
             null,
         )
 
@@ -85,17 +63,17 @@ export async function r2d2Fetch(input: RequestInfo, init?: RequestInit): Promise
     }
 
     // r2d2
-    if (url.includes(R2D2_ROOT_URL)) return squashedFetch(request, init)
+    if (url.includes(R2D2_ROOT_URL)) return originalFetch(request, init)
 
     // infura ipfs
-    if (url.includes(INFURA_IPFS_ROOT_URL)) return squashedFetch(request, init)
+    if (url.includes(INFURA_IPFS_ROOT_URL)) return originalFetch(request, init)
 
     // hotfix rpc requests lost content-type header
     if (request.method === 'POST' && HOTFIX_RPC_URLS.some((x) => url.includes(x)))
-        return squashedFetch(request, { ...init, headers: { ...request?.headers, 'Content-Type': 'application/json' } })
+        return originalFetch(request, { ...init, headers: { ...request?.headers, 'Content-Type': 'application/json' } })
 
     // fallback
-    return squashedFetch(request, init)
+    return originalFetch(request, init)
 }
 
 Reflect.set(globalThis, 'r2d2Fetch', r2d2Fetch)
