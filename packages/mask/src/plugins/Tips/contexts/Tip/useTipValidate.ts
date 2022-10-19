@@ -1,14 +1,10 @@
 import { useMemo } from 'react'
 import { NetworkPluginID } from '@masknet/shared-base'
-import {
-    useAccount,
-    useCurrentWeb3NetworkPluginID,
-    useCurrentWeb3NetworkChainId,
-    useFungibleTokenBalance,
-} from '@masknet/web3-hooks-base'
+import { useAccount, useFungibleTokenBalance } from '@masknet/web3-hooks-base'
 import { isGreaterThan, isLessThanOrEqualTo, rightShift } from '@masknet/web3-shared-base'
 import { useI18N } from '../../locales/index.js'
 import { TipsType, ValidationTuple } from '../../types'
+import { TargetRuntimeContext } from '../TargetRuntimeContext.js'
 import type { TipContextOptions } from './TipContext.js'
 
 type TipValidateOptions = Pick<
@@ -24,8 +20,7 @@ export function useTipValidate({
     nonFungibleTokenAddress: tokenAddress,
 }: TipValidateOptions): ValidationTuple {
     const account = useAccount()
-    const chainId = useCurrentWeb3NetworkChainId()
-    const pluginId = useCurrentWeb3NetworkPluginID()
+    const { pluginId, targetChainId: chainId } = TargetRuntimeContext.useContainer()
     const { value: balance = '0' } = useFungibleTokenBalance(pluginId, token?.address, { chainId, account })
     const t = useI18N()
 

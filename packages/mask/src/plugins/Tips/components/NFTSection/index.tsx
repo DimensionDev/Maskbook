@@ -1,10 +1,5 @@
 import { Icons } from '@masknet/icons'
-import {
-    useAccount,
-    useCurrentWeb3NetworkChainId,
-    useCurrentWeb3NetworkPluginID,
-    useNonFungibleAssets,
-} from '@masknet/web3-hooks-base'
+import { useAccount, useNonFungibleAssets } from '@masknet/web3-hooks-base'
 import { ElementAnchor, RetryHint } from '@masknet/shared'
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import { LoadingBase, makeStyles } from '@masknet/theme'
@@ -16,9 +11,9 @@ import { uniqWith } from 'lodash-unified'
 import { FC, HTMLProps, useCallback, useMemo } from 'react'
 import { useBoolean } from 'react-use'
 import { CollectibleList } from '../../../../extension/options-page/DashboardComponents/CollectibleList/index.js'
+import { TargetRuntimeContext, useTip } from '../../contexts/index.js'
 import { useI18N } from '../../locales/index.js'
 import { AddDialog } from '../AddDialog.js'
-import { useTip } from '../../contexts/index.js'
 
 export * from './NFTList.js'
 
@@ -98,8 +93,7 @@ export const NFTSection: FC<Props> = ({ className, onEmpty, ...rest }) => {
     const selectedKey = tokenAddress || tokenId ? `${tokenAddress}_${tokenId}` : undefined
     const account = useAccount()
 
-    const chainId = useCurrentWeb3NetworkChainId()
-    const pluginId = useCurrentWeb3NetworkPluginID()
+    const { targetChainId: chainId, pluginId } = TargetRuntimeContext.useContainer()
     const {
         value: fetchedTokens = EMPTY_LIST,
         done,
