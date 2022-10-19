@@ -9,7 +9,7 @@
         },
         "provider": {
             "type": "string",
-            "enum": ["arweave", "ipfs", "swarm"],
+            "enum": ["arweave", "ipfs"],
             "title": "provider"
         },
         "id": {

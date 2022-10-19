@@ -124,22 +124,20 @@ export function ActivityCard(props: ActivityCardProps) {
                     )}
             </div>
             <div className={classes.flex}>
-                <Typography className={classes.textBase}>
-                    {activity.from && (
-                        <>
-                            {t('plugin_collectible_from')}
-                            <strong>
-                                {activity.from.nickname ||
-                                    (activity.from.address ? Others?.formatAddress(activity.from.address, 4) : '-')}
-                            </strong>
-                        </>
-                    )}
-                </Typography>
+                {activity.from && (
+                    <Typography className={classes.textBase}>
+                        {t('plugin_collectible_from')}
+                        <strong title={activity.from.address}>
+                            {activity.from.nickname ||
+                                (activity.from.address ? Others?.formatAddress(activity.from.address, 4) : '-')}
+                        </strong>
+                    </Typography>
+                )}
                 <Typography className={classes.textBase}>
                     {activity.to && (
                         <>
                             {t('plugin_collectible_to')}
-                            <strong>
+                            <strong title={activity.to.address}>
                                 {activity.to.nickname ||
                                     (activity.to.address ? Others?.formatAddress(activity.to.address, 4) : '-')}
                             </strong>

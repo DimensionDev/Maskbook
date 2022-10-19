@@ -115,7 +115,7 @@ function ToolboxHintForWallet(props: ToolboxHintProps) {
         mini,
     } = props
     const { classes } = useStyles()
-    const { openWallet, isWalletValid, walletTitle, chainColor, shouldDisplayChainIndicator } = useToolbox()
+    const { openWallet, walletTitle, chainColor, shouldDisplayChainIndicator, account } = useToolbox()
 
     const theme = useTheme()
     const providerDescriptor = useProviderDescriptor()
@@ -125,7 +125,7 @@ function ToolboxHintForWallet(props: ToolboxHintProps) {
             <Container>
                 <ListItemButton onClick={openWallet}>
                     <ListItemIcon>
-                        {isWalletValid && providerDescriptor?.type !== ProviderType.MaskWallet ? (
+                        {!!account && providerDescriptor?.type !== ProviderType.MaskWallet ? (
                             <WalletIcon
                                 size={iconSize}
                                 badgeSize={badgeSize}
@@ -185,13 +185,10 @@ function useToolbox() {
     )
     // #endregion
 
-    const isWalletValid = !!account && chainIdValid
-
     const { value: domain } = useReverseAddress(undefined, account)
 
     function renderButtonText() {
         if (!account) return t('plugin_wallet_connect_wallet')
-        if (!chainIdValid) return t('plugin_wallet_wrong_network')
         if (pendingTransactions.length <= 0)
             return Others?.formatDomainName?.(domain) || Others?.formatAddress?.(account, 4) || account
         return (
@@ -208,17 +205,17 @@ function useToolbox() {
 
     const openWallet = useCallback(() => {
         if (hasNativeAPI) return nativeAPI?.api.misc_openCreateWalletView()
-        return isWalletValid ? openWalletStatusDialog() : openSelectProviderDialog()
-    }, [openWalletStatusDialog, openSelectProviderDialog, isWalletValid, hasNativeAPI])
+        return account ? openWalletStatusDialog() : openSelectProviderDialog()
+    }, [openWalletStatusDialog, openSelectProviderDialog, account, hasNativeAPI])
 
     const walletTitle = renderButtonText()
 
     const shouldDisplayChainIndicator = account && chainIdValid && !chainIdMainnet
     return {
         openWallet,
-        isWalletValid,
         walletTitle,
         shouldDisplayChainIndicator,
         chainColor,
+        account,
     }
 }

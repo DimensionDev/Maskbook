@@ -226,16 +226,18 @@ function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
     }, [location.pathname, showAvatar, updatedAvatar])
 
     useUpdateEffect(() => {
+        if (!showAvatar) return
+
         const linkParentDom = searchTwitterAvatarLinkSelector().evaluate()?.closest('div')
-        if (!nftAvatar || !linkParentDom || !showAvatar) return
+        if (!linkParentDom) return
 
         const handler = (event: MouseEvent) => {
-            if (!nftAvatar.tokenId || !nftAvatar.address) return
+            if (!nftAvatar?.tokenId || !nftAvatar?.address) return
 
             event.stopPropagation()
             event.preventDefault()
 
-            if (!nftAvatar.pluginId || !nftAvatar.chainId) return
+            if (!nftAvatar?.pluginId || !nftAvatar.chainId) return
 
             CrossIsolationMessages.events.nonFungibleTokenDialogEvent.sendToLocal({
                 open: true,
@@ -248,11 +250,18 @@ function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
             })
         }
 
+        const clean = () => {
+            linkParentDom.removeEventListener('click', handler, true)
+        }
+
+        if (!nftAvatar) {
+            clean()
+            return
+        }
+
         linkParentDom.addEventListener('click', handler, true)
 
-        return () => {
-            linkParentDom.removeEventListener('click', handler)
-        }
+        return clean
     }, [nftAvatar, showAvatar, nftInfo])
 
     const handler = () => {

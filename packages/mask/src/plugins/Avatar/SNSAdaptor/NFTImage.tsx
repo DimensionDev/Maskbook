@@ -12,6 +12,8 @@ import { useWeb3State } from '@masknet/web3-hooks-base'
 const useStyles = makeStyles()((theme) => ({
     root: {
         position: 'relative',
+        width: 100,
+        height: 100,
     },
     icon: {
         position: 'absolute',
@@ -56,6 +58,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 interface NFTImageProps {
+    className?: string
     pluginId: NetworkPluginID
     showBadge?: boolean
     token: AllChainsNonFungibleToken
@@ -73,11 +76,10 @@ function isSameNFT(pluginId: NetworkPluginID, a: AllChainsNonFungibleToken, b?: 
 }
 
 export function NFTImage(props: NFTImageProps) {
-    const { token, onClick, selectedToken, showBadge = false, pluginId } = props
-    const { classes } = useStyles()
+    const { className, token, onClick, selectedToken, showBadge = false, pluginId } = props
+    const { classes, cx } = useStyles()
     const theme = useTheme()
     const { Others } = useWeb3State()
-
     const name = token.collection?.name || token.contract?.name
     const uiTokenId = Others?.formatTokenId(token.tokenId, 4) ?? `#${token.tokenId}`
     const title = name ? `${name} ${uiTokenId}` : token.metadata?.name ?? ''
@@ -90,7 +92,7 @@ export function NFTImage(props: NFTImageProps) {
             disableInteractive
             placement="top"
             PopperProps={{ disablePortal: true, popperOptions: { strategy: 'absolute' } }}>
-            <Box className={classes.root} data-src={token.metadata?.imageURL}>
+            <Box className={cx(classes.root, className)}>
                 <Image
                     fallback={theme.palette.mode === 'dark' ? mask_avatar_dark : mask_avatar_light}
                     classes={{

@@ -7,7 +7,7 @@ import { Composition } from '../../../components/CompositionDialog/Composition.j
 import { isMobileFacebook } from '../utils/isMobile.js'
 import { PostDialogHint } from '../../../components/InjectedComponents/PostDialogHint.js'
 import { startWatch } from '../../../utils/watcher.js'
-import { taskOpenComposeBoxFacebook } from '../automation/openComposeBox.js'
+import { taskOpenComposeBoxFacebook, taskCloseNativeComposeBoxFacebook } from '../automation/openComposeBox.js'
 
 let composeBox: LiveSelector<Element>
 
@@ -55,7 +55,10 @@ export function injectCompositionFacebook(signal: AbortSignal) {
         'abort',
         CrossIsolationMessages.events.compositionDialogEvent.on((data) => {
             if (data.reason === 'popup') return
-            if (data.open === false) return
+            if (data.open === false) {
+                if (data.options?.isOpenFromApplicationBoard) taskCloseNativeComposeBoxFacebook()
+                return
+            }
             taskOpenComposeBoxFacebook(data.content || '', data.options)
         }),
     )

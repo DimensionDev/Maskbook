@@ -38,7 +38,6 @@ export const resolveGatewayAPI = createLookupTableResolver<Provider, string>(
     {
         [Provider.arweave]: 'https://arweave.net',
         [Provider.ipfs]: 'https://mask.infura-ipfs.io/ipfs',
-        [Provider.swarm]: 'https://gateway-proxy-bee-6-0.gateway.ethswarm.org/bzz',
     },
     () => 'Unknown provider',
 )

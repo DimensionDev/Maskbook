@@ -191,12 +191,13 @@ export const PluginVerifiedWalletStatusBar = memo<PluginVerifiedWalletStatusBarP
                 />
             )),
             <MenuItem key="Wallet Setting" onClick={openPopupWindow}>
-                <ListItemIcon>
-                    <Icons.WalletSetting size={24} />
-                </ListItemIcon>
-                <Typography fontSize={14} fontWeight={700}>
-                    {t('connected_wallet_settings')}
-                </Typography>
+                <ListItemIcon />
+                <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                    <Icons.WalletSetting size={30} sx={{ marginRight: 2 }} />
+                    <Typography fontSize={14} fontWeight={700}>
+                        {t('connected_wallet_settings')}
+                    </Typography>
+                </Box>
             </MenuItem>,
         )
 

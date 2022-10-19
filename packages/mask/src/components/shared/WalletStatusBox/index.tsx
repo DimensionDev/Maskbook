@@ -9,6 +9,7 @@ import {
     useWeb3State,
     useWeb3Connection,
     useBalance,
+    useChainIdValid,
 } from '@masknet/web3-hooks-base'
 import { FormattedAddress, useSnackbarCallback, WalletIcon } from '@masknet/shared'
 import { ProviderType } from '@masknet/web3-shared-evm'
@@ -125,6 +126,7 @@ export function WalletStatusBox(props: WalletStatusBox) {
     const chainId = useChainId()
     const account = useAccount()
     const wallet = useWallet()
+    const chainIdValid = useChainIdValid()
     const { value: balance = '0', loading: loadingBalance } = useBalance()
     const { value: nativeToken, loading: loadingNativeToken } = useNativeToken()
     const networkDescriptor = useNetworkDescriptor()
@@ -170,7 +172,7 @@ export function WalletStatusBox(props: WalletStatusBox) {
                     size={30}
                     badgeSize={12}
                     mainIcon={providerDescriptor?.icon}
-                    badgeIcon={networkDescriptor?.icon}
+                    badgeIcon={chainIdValid ? networkDescriptor?.icon : undefined}
                 />
                 <div className={classes.accountInfo}>
                     {ProviderType.MaskWallet === providerDescriptor?.type ? (

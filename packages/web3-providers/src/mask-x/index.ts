@@ -21,13 +21,19 @@ export class MaskX_API implements MaskX_BaseAPI.Provider {
         return {
             ...response,
             records: response.records.map((x) => {
-                if (x.source !== MaskX_BaseAPI.SourceType.RSS3) return x
-
-                const handle = x.sns_handle.toLowerCase()
-                return {
-                    ...x,
-                    // add .rss3 suffix
-                    sns_handle: handle.endsWith('.rss3') ? handle : `${handle}.rss`,
+                switch (x.source) {
+                    case MaskX_BaseAPI.SourceType.RSS3:
+                        const handle = x.sns_handle.toLowerCase()
+                        return {
+                            ...x,
+                            // add .rss3 suffix
+                            sns_handle: handle.endsWith('.rss3') ? handle : `${handle}.rss`,
+                        }
+                    default:
+                        return {
+                            ...x,
+                            sns_handle: x.web3_addr,
+                        }
                 }
             }),
         }
