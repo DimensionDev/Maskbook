@@ -61,9 +61,7 @@ export function NFTBadge(props: NFTBadgeProps) {
                     hasRainbow={hasRainbow}
                     borderSize={borderSize}
                     fontSize={9}
-                    text={`${formatText(nftInfo.name ?? '', avatar.tokenId)} ${
-                        nftInfo.slug?.toLowerCase() === 'ens' ? 'ENS' : ''
-                    }`}
+                    text={formatText(nftInfo.name ?? '', avatar.tokenId)}
                     price={formatPrice(nftInfo.amount ?? '0', nftInfo.symbol ?? 'ETH')}
                 />
             </Link>
