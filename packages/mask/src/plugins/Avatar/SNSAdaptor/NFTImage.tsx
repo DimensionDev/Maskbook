@@ -12,6 +12,8 @@ import { useWeb3State } from '@masknet/web3-hooks-base'
 const useStyles = makeStyles()((theme) => ({
     root: {
         position: 'relative',
+        width: 100,
+        height: 100,
     },
     icon: {
         position: 'absolute',
@@ -78,7 +80,6 @@ export function NFTImage(props: NFTImageProps) {
     const { classes, cx } = useStyles()
     const theme = useTheme()
     const { Others } = useWeb3State()
-
     const name = token.collection?.name || token.contract?.name
     const uiTokenId = Others?.formatTokenId(token.tokenId, 4) ?? `#${token.tokenId}`
     const title = name ? `${name} ${uiTokenId}` : token.metadata?.name ?? ''
