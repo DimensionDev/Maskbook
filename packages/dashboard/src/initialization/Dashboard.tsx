@@ -10,7 +10,6 @@ import {
 import { I18NextProviderHMR, SharedContextProvider } from '@masknet/shared'
 import { ErrorBoundary } from '@masknet/shared-base-ui'
 import { createInjectHooksRenderer, useActivatedPluginsDashboard } from '@masknet/plugin-infra/dashboard'
-import { useAllPluginsWeb3State } from '@masknet/plugin-infra'
 import { PluginsWeb3ContextProvider, useCurrentWeb3NetworkPluginID } from '@masknet/web3-hooks-base'
 import { i18NextInstance, queryRemoteI18NBundle } from '@masknet/shared-base'
 
@@ -26,7 +25,6 @@ const PluginRender = createInjectHooksRenderer(useActivatedPluginsDashboard, (x)
 
 export default function DashboardRoot() {
     const pluginID = useCurrentWeb3NetworkPluginID()
-    const PluginsWeb3State = useAllPluginsWeb3State()
 
     useEffect(queryRemoteI18NBundle(Services.Helper.queryRemoteI18NBundle), [])
 
@@ -44,7 +42,7 @@ export default function DashboardRoot() {
     // #endregion
 
     return (
-        <PluginsWeb3ContextProvider pluginID={pluginID} value={PluginsWeb3State}>
+        <PluginsWeb3ContextProvider value={pluginID}>
             <I18NextProviderHMR i18n={i18NextInstance}>
                 <StyledEngineProvider injectFirst>
                     <ThemeProvider theme={theme}>
