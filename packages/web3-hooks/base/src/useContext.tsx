@@ -15,7 +15,7 @@ interface Web3Context<T extends NetworkPluginID> {
 
     setChainId?: (chainId: Web3Helper.Definition[T]['ChainId']) => void
     setAccount?: (account: string) => void
-    setProvider?: (provider: Web3Helper.Definition[T]['ProviderType']) => void
+    setProviderType?: (provider: Web3Helper.Definition[T]['ProviderType']) => void
 }
 
 const PluginIDContext = createContext(NetworkPluginID.PLUGIN_EVM)
