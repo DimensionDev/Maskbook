@@ -187,10 +187,7 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
             </>,
         )
 
-    if (isMatched) {
-        console.log({ c: props.children })
-        return <>{props.children}</>
-    }
+    if (isMatched) return <>{props.children}</>
 
     if (!isPluginIDMatched) {
         return renderBox(

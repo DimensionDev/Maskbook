@@ -80,8 +80,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
 
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const chainIdValid = useChainIdValid(NetworkPluginID.PLUGIN_EVM)
-    const _currentChainId = useChainId(NetworkPluginID.PLUGIN_EVM)
-    const currentChainId = chainIdValid ? _currentChainId : ChainId.Mainnet
+    const currentChainId = useChainId(NetworkPluginID.PLUGIN_EVM, chainIdValid ? undefined : ChainId.Mainnet)
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, { chainId: currentChainId })
     const { classes } = useStyles({ snsId: activatedSocialNetworkUI.networkIdentifier })
     const { attachMetadata, dropMetadata } = useCompositionContext()
