@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import type { TabID } from 'react-devtools-inline/commons.js'
 import { flushSync } from 'react-dom'
 import { createRoot } from 'react-dom/client'
 import { DevtoolsMessage } from '../shared.js'
@@ -48,14 +49,17 @@ async function onInit() {
     function Host() {
         const [componentRef, setComponentRef] = useState<HTMLElement | undefined>(getMountPoint(componentsWindow))
         const [profilerRef, setProfilerRef] = useState<HTMLElement | undefined>(getMountPoint(profilerWindow))
+        const [tab, setTab] = useState<TabID | undefined>(undefined)
         useEffect(() => {
             const a = (window: Window) => {
                 componentsWindow = window
                 setComponentRef(getMountPoint(window))
+                setTab('components')
             }
             const b = (window: Window) => {
                 profilerWindow = window
                 setProfilerRef(getMountPoint(window))
+                setTab('profiler')
             }
             components.onShown.addListener(a)
             profiler.onShown.addListener(b)
@@ -80,8 +84,8 @@ async function onInit() {
                 enabledInspectedElementContextMenu
                 viewAttributeSourceFunction={viewAttributeSourceFunction}
                 viewElementSourceFunction={viewElementSourceFunction}
-                // To be done: overrideTab
-                // @ts-expect-error DT type missing props.
+                overrideTab={tab}
+                // @ts-expect-error Following props are not in the DT types
                 viewUrlSourceFunction={
                     'openResource' in browser.devtools.panels
                         ? (url: string, line: number, col: number) =>
