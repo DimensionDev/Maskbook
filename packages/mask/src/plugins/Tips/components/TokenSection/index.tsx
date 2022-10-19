@@ -2,7 +2,7 @@ import { FC, HTMLProps, useCallback, useMemo } from 'react'
 import BigNumber from 'bignumber.js'
 import {
     useAccount,
-    useCurrentWeb3NetworkChainId,
+    useChainId,
     useCurrentWeb3NetworkPluginID,
     useFungibleTokenBalance,
     useGasPrice,
@@ -32,12 +32,12 @@ const ETH_GAS_LIMIT = 21000
 export const TokenSection: FC<Props> = ({ className, ...rest }) => {
     const { classes, cx } = useStyles()
     const { token, setToken, amount, setAmount } = useTip()
-    const chainId = useCurrentWeb3NetworkChainId()
-    const pluginId = useCurrentWeb3NetworkPluginID()
+    const chainId = useChainId()
     const account = useAccount()
+    const pluginID = useCurrentWeb3NetworkPluginID()
 
     // balance
-    const { value: tokenBalance = '0' } = useFungibleTokenBalance(pluginId, token?.address, {
+    const { value: tokenBalance = '0' } = useFungibleTokenBalance(pluginID, token?.address, {
         chainId,
         account,
     })
@@ -78,7 +78,7 @@ export const TokenSection: FC<Props> = ({ className, ...rest }) => {
                 balance={tokenBalance}
                 onSelectToken={onSelectTokenChipClick}
             />
-            {pluginId === NetworkPluginID.PLUGIN_EVM ? <GasSettingsBar /> : null}
+            {pluginID === NetworkPluginID.PLUGIN_EVM ? <GasSettingsBar /> : null}
             <TokenValue className={classes.tokenValue} />
         </div>
     )

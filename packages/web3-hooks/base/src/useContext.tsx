@@ -1,5 +1,5 @@
 import React, { createContext, ReactNode, useContext, useState } from 'react'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { EMPTY_OBJECT, NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useActualAccount } from './useAccount.js'
 import { useActualChainId } from './useChainId.js'
@@ -7,31 +7,20 @@ import { useActualNetworkType } from './useNetworkType.js'
 import { useActualProviderType } from './useProviderType.js'
 
 interface Web3Context<T extends NetworkPluginID> {
-    account?: string
     pluginID?: T
-    chainId?: Web3Helper.Definition[T]['ChainId']
-    networkType?: Web3Helper.Definition[T]['NetworkType']
-    providerType?: Web3Helper.Definition[T]['ProviderType']
-
-    setChainId: (chainId: Web3Helper.Definition[T]['ChainId']) => void
-    setAccount: (account: string) => void
-    setNetworkType: (provider: Web3Helper.Definition[T]['NetworkType']) => void
-    setProviderType: (provider: Web3Helper.Definition[T]['ProviderType']) => void
+    account?: string
+    chainId?: Web3Helper.ChainIdAll
+    networkType?: Web3Helper.NetworkTypeAll
+    providerType?: Web3Helper.ProviderTypeAll
+    setAccount?: (account: string) => void
+    setChainId?: (chainId: Web3Helper.ChainIdAll) => void
+    setNetworkType?: (provider: Web3Helper.NetworkTypeAll) => void
+    setProviderType?: (provider: Web3Helper.ProviderTypeAll) => void
 }
 
 const PluginIDContext = createContext(NetworkPluginID.PLUGIN_EVM)
 
-const web3ContextInitialState = {
-    setAccount: null!,
-    setChainId: null!,
-    setNetworkType: null!,
-    setProviderType: null!,
-}
-
-// Avoid use this context directly
-export const PluginWeb3Context = createContext<Web3Context<NetworkPluginID>>(web3ContextInitialState)
-
-const PluginsWeb3Context = createContext<Record<NetworkPluginID, Web3Helper.Web3State<NetworkPluginID>>>(null!)
+export const PluginWeb3Context = createContext<Web3Context<NetworkPluginID>>(null!)
 
 export function PluginIDContextProvider({ value, children }: React.ProviderProps<NetworkPluginID>) {
     return <PluginIDContext.Provider value={value}>{children}</PluginIDContext.Provider>
@@ -41,26 +30,22 @@ export function PluginWeb3ContextProvider<T extends NetworkPluginID>({
     value,
     children,
 }: React.ProviderProps<Omit<Web3Context<T>, 'setChainId' | 'setAccount' | 'setNetworkType' | 'setProviderType'>>) {
-    const [chainId, setChainId] = useState<Web3Helper.Definition[T]['ChainId'] | undefined>(value.chainId)
-    const [account, setAccount] = useState<string | undefined>(value.account)
-    const [networkType, setNetworkType] = useState<Web3Helper.Definition[T]['NetworkType'] | undefined>(
-        value.networkType,
-    )
-    const [providerType, setProviderType] = useState<Web3Helper.Definition[T]['ProviderType'] | undefined>(
-        value.providerType,
-    )
+    const [chainId, setChainId] = useState(value.chainId)
+    const [account, setAccount] = useState(value.account)
+    const [networkType, setNetworkType] = useState(value.networkType)
+    const [providerType, setProviderType] = useState(value.providerType)
 
     return (
         <PluginWeb3Context.Provider
             value={{
                 ...value,
-                setChainId,
                 chainId,
                 account,
-                setAccount,
                 providerType,
-                setProviderType,
                 networkType,
+                setAccount,
+                setChainId,
+                setProviderType,
                 setNetworkType,
             }}
             children={children}
@@ -75,21 +60,13 @@ export function PluginWeb3ActualContextProvider({ children }: { children: ReactN
         networkType: useActualNetworkType(),
         providerType: useActualProviderType(),
     }
-    return <PluginWeb3Context.Provider value={{ ...value, ...web3ContextInitialState }} children={children} />
+    return <PluginWeb3Context.Provider value={value} children={children} />
 }
 
-export function PluginsWeb3ContextProvider<T extends NetworkPluginID>({
-    pluginID,
-    value,
-    children,
-}: {
-    pluginID: T
-} & React.ProviderProps<Record<NetworkPluginID, Web3Helper.Web3State<T>>>) {
+export function PluginsWeb3ContextProvider({ value, children }: React.ProviderProps<NetworkPluginID>) {
     return (
-        <PluginIDContext.Provider value={pluginID}>
-            <PluginsWeb3Context.Provider value={value}>
-                <PluginWeb3Context.Provider value={null!} children={children} />
-            </PluginsWeb3Context.Provider>
+        <PluginIDContext.Provider value={value}>
+            <PluginWeb3Context.Provider value={EMPTY_OBJECT} children={children} />
         </PluginIDContext.Provider>
     )
 }

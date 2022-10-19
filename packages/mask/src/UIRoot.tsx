@@ -1,6 +1,5 @@
 import { Suspense } from 'react'
 import { StyledEngineProvider, Theme } from '@mui/material'
-import { useAllPluginsWeb3State } from '@masknet/plugin-infra'
 import { PluginsWeb3ContextProvider } from '@masknet/web3-hooks-base'
 import { I18NextProviderHMR, SharedContextProvider } from '@masknet/shared'
 import { MaskThemeProvider } from '@masknet/theme'
@@ -35,7 +34,6 @@ export interface MaskUIRootProps extends React.PropsWithChildren<{}> {
 export function MaskUIRoot({ children, kind, useTheme, fallback }: MaskUIRootProps) {
     const site = getSiteType()
     const pluginIDs = useValueRef(pluginIDSettings)
-    const PluginsWeb3State = useAllPluginsWeb3State()
 
     return compose(
         children,
@@ -43,11 +41,7 @@ export function MaskUIRoot({ children, kind, useTheme, fallback }: MaskUIRootPro
         (jsx) => <ErrorBoundaryBuildInfoContext.Provider value={buildInfoMarkdown} children={jsx} />,
         (jsx) => <ErrorBoundary children={jsx} />,
         (jsx) => (
-            <PluginsWeb3ContextProvider
-                pluginID={site ? pluginIDs[site] : NetworkPluginID.PLUGIN_EVM}
-                value={PluginsWeb3State}
-                children={jsx}
-            />
+            <PluginsWeb3ContextProvider value={site ? pluginIDs[site] : NetworkPluginID.PLUGIN_EVM} children={jsx} />
         ),
         (jsx) => <I18NextProviderHMR i18n={i18NextInstance} children={jsx} />,
         kind === 'page' ? (jsx) => <StyledEngineProvider injectFirst children={jsx} /> : identity,

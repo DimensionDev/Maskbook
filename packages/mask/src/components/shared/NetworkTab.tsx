@@ -1,12 +1,12 @@
+import React, { useContext } from 'react'
+import { useUpdateEffect } from 'react-use'
 import { PluginWeb3Context, useNetworkDescriptors } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { MaskTabList, useTabs } from '@masknet/theme'
+import { WalletIcon } from '@masknet/shared'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import TabContext from '@mui/lab/TabContext'
 import { Stack, Tab, Typography } from '@mui/material'
-import { WalletIcon } from '@masknet/shared'
-import { useUpdateEffect } from 'react-use'
-import React, { useContext } from 'react'
 
 interface NetworkTabProps<T extends NetworkPluginID>
     extends withClasses<'tab' | 'tabs' | 'tabPanel' | 'indicator' | 'focusTab' | 'tabPaper'> {
@@ -34,7 +34,7 @@ export function NetworkTab<T extends NetworkPluginID = NetworkPluginID.PLUGIN_EV
             <MaskTabList
                 variant="flexible"
                 onChange={(_, v) => {
-                    setChainId(Number.parseInt(v, 10))
+                    setChainId?.(Number.parseInt(v, 10))
                     setTab(v)
                 }}
                 aria-label="Network Tabs">

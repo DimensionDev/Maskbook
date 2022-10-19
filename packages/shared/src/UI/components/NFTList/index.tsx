@@ -171,9 +171,9 @@ export const NFTList: FC<Props> = ({
         },
         [onChange],
     )
-    const pluginId = useCurrentWeb3NetworkPluginID()
+    const pluginID = useCurrentWeb3NetworkPluginID()
     const includes: (pairs: NFTKeyPair[], pair: NFTKeyPair) => boolean =
-        pluginId === NetworkPluginID.PLUGIN_EVM
+        pluginID === NetworkPluginID.PLUGIN_EVM
             ? (pairs, pair) => {
                   return !!pairs.find(([address, tokenId]) => isSameAddress(address, pair[0]) && tokenId === pair[1])
               }

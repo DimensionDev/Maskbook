@@ -2,8 +2,8 @@ import { useMemo } from 'react'
 import { NetworkPluginID } from '@masknet/shared-base'
 import {
     useAccount,
+    useChainId,
     useCurrentWeb3NetworkPluginID,
-    useCurrentWeb3NetworkChainId,
     useFungibleTokenBalance,
 } from '@masknet/web3-hooks-base'
 import { isGreaterThan, isLessThanOrEqualTo, rightShift } from '@masknet/web3-shared-base'
@@ -24,9 +24,9 @@ export function useTipValidate({
     nonFungibleTokenAddress: tokenAddress,
 }: TipValidateOptions): ValidationTuple {
     const account = useAccount()
-    const chainId = useCurrentWeb3NetworkChainId()
-    const pluginId = useCurrentWeb3NetworkPluginID()
-    const { value: balance = '0' } = useFungibleTokenBalance(pluginId, token?.address, { chainId, account })
+    const chainId = useChainId()
+    const pluginID = useCurrentWeb3NetworkPluginID()
+    const { value: balance = '0' } = useFungibleTokenBalance(pluginID, token?.address, { chainId, account })
     const t = useI18N()
 
     const result: ValidationTuple = useMemo(() => {
@@ -34,13 +34,13 @@ export function useTipValidate({
             if (!amount || isLessThanOrEqualTo(amount, 0)) return [false]
             if (isGreaterThan(rightShift(amount, token?.decimals), balance))
                 return [false, t.token_insufficient_balance()]
-        } else if (pluginId === NetworkPluginID.PLUGIN_EVM) {
+        } else if (pluginID === NetworkPluginID.PLUGIN_EVM) {
             if (!tokenId || !tokenAddress) return [false]
-        } else if (pluginId === NetworkPluginID.PLUGIN_SOLANA && !tokenAddress) {
+        } else if (pluginID === NetworkPluginID.PLUGIN_SOLANA && !tokenAddress) {
             return [false]
         }
         return [true]
-    }, [tipType, amount, token?.decimals, balance, pluginId, tokenId, tokenAddress, t])
+    }, [tipType, amount, token?.decimals, balance, pluginID, tokenId, tokenAddress, t])
 
     return result
 }
