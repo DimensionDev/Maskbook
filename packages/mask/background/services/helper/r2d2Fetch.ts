@@ -38,6 +38,28 @@ const HOTFIX_RPC_URLS = [
 
 const { fetch: originalFetch } = globalThis
 
+async function squashedFetch(request: RequestInfo, init?: RequestInit): Promise<Response> {
+    console.log('DEBUG: squashedFetch')
+    console.log(request)
+
+    const cache = await caches.open('r2d2')
+    const hit = await cache.match(request)
+    if (hit) {
+        console.log('DEBUG: hit')
+    }
+
+    const response = await originalFetch(request, init)
+    if (response.ok && response.status === 200) {
+        await cache.put(request, response)
+
+        // keep cache for 1s
+        setTimeout(async () => {
+            await cache.delete(request)
+        }, 1000)
+    }
+    return response
+}
+
 /**
  * Why use r2d2 fetch: some third api provider will be block in Firefox and protect api key
  * @returns fetch response
