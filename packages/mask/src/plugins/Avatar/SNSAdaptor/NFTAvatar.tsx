@@ -117,7 +117,7 @@ export function NFTAvatar(props: NFTAvatarProps) {
             account,
             token: selectedToken,
             image: selectedToken.metadata?.imageURL ?? '',
-            pluginID: pluginID,
+            pluginID,
         })
         setSelectedToken(undefined)
     }, [onChange, selectedToken, pluginID])

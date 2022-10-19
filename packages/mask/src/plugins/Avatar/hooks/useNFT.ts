@@ -7,10 +7,10 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import type { NFTInfo } from '../types.js'
 
 export function useNFT(
-    pluginID: NetworkPluginID = NetworkPluginID.PLUGIN_EVM,
     account: string,
     address?: string,
     tokenId?: string,
+    pluginID: NetworkPluginID = NetworkPluginID.PLUGIN_EVM,
     chainId: ChainId = ChainId.Mainnet,
     ownerAddress?: string,
 ) {
