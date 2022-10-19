@@ -24,7 +24,6 @@ const registerOnStyleChange = (() => {
     watcher.observe(document.head, { characterData: true, childList: true, subtree: true })
     return registerOnStyleChange
 })()
-const hookNamesModuleLoaderFunction = () => import('react-devtools-inline/hookNames' as any)
 
 let components: browser.devtools.panels.ExtensionPanel
 let profiler: browser.devtools.panels.ExtensionPanel
@@ -75,7 +74,9 @@ async function onInit() {
                 browserTheme={(browser.devtools.panels as any).themeName === 'dark' ? 'dark' : 'light'}
                 componentsPortalContainer={componentRef}
                 profilerPortalContainer={profilerRef}
-                hookNamesModuleLoaderFunction={hookNamesModuleLoaderFunction}
+                // Note: we're not providing this ability because without source map it is useless.
+                //       and the default result (unminified) is good enough.
+                // hookNamesModuleLoaderFunction={() => import('react-devtools-inline/hookNames' as any)}
                 showTabBar={false}
                 // Note: since this function is used to fetch the JS file and parse it,
                 // we don't need to care about the network cost because it's all local.
