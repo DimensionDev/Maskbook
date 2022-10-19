@@ -3,8 +3,8 @@ import emitFile from '@nice-labs/emit-file-webpack-plugin'
 import { cloneDeep } from 'lodash-unified'
 import { NormalizedFlags } from './flags'
 
-type ManifestV2 = typeof import('../src/manifest.json') & { key?: string }
-type ManifestV3 = typeof import('../src/manifest-v3.json') & { key?: string }
+type ManifestV2 = typeof import('../src/manifest.json') & { key?: string; devtools_page?: string; applications?: any }
+type ManifestV3 = typeof import('../src/manifest-v3.json') & { key?: string; devtools_page?: string }
 
 export function emitManifestFile(flags: NormalizedFlags) {
     return emitFile({
@@ -29,6 +29,10 @@ function modify(manifest: ManifestV2 | ManifestV3, flags: NormalizedFlags) {
     if (flags.mode === 'development') {
         manifest.name += ' (dev)'
         stableDevelopmentExtensionID(manifest)
+    }
+
+    if (flags.devtools) {
+        manifest.devtools_page = 'devtools-background.html'
     }
 
     if (manifest.manifest_version === 2) modify_2(manifest as ManifestV2, flags)
