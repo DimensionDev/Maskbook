@@ -18,7 +18,7 @@ export function WidgetDialog(props: WidgetDialogProps) {
                     <PluginWeb3ContextProvider
                         value={{
                             chainId: ChainId.Mainnet,
-                            networkPluginID: NetworkPluginID.PLUGIN_EVM,
+                            pluginID: NetworkPluginID.PLUGIN_EVM,
                         }}>
                         <WidgetContent onClose={closeDialog} />
                     </PluginWeb3ContextProvider>

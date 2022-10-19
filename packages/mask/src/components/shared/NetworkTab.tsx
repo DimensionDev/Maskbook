@@ -15,9 +15,9 @@ interface NetworkTabProps<T extends NetworkPluginID>
 
 export function NetworkTab<T extends NetworkPluginID = NetworkPluginID.PLUGIN_EVM>(props: NetworkTabProps<T>) {
     const { chains } = props
-    const { chainId, setChainId, networkPluginID } = useContext(PluginWeb3Context)
+    const { chainId, setChainId, pluginID } = useContext(PluginWeb3Context)
 
-    const networks = useNetworkDescriptors(networkPluginID)
+    const networks = useNetworkDescriptors(pluginID)
     const usedNetworks = networks.filter((x) => chains.find((c) => c === x.chainId))
     const networkIds = usedNetworks.map((x) => x.chainId.toString())
     const [currentTab, , , setTab] = useTabs(chainId?.toString() ?? networkIds[0], ...networkIds)

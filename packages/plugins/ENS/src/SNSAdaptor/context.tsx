@@ -79,8 +79,7 @@ export function ENSProvider({ children, domain }: PropsWithChildren<SearchResult
 export const RootContext: FC<PropsWithChildren<{}>> = ({ children }) => {
     return (
         <PluginIDContextProvider value={NetworkPluginID.PLUGIN_EVM}>
-            <PluginWeb3ContextProvider
-                value={{ chainId: ChainId.Mainnet, networkPluginID: NetworkPluginID.PLUGIN_EVM }}>
+            <PluginWeb3ContextProvider value={{ chainId: ChainId.Mainnet, pluginID: NetworkPluginID.PLUGIN_EVM }}>
                 {children}
             </PluginWeb3ContextProvider>
         </PluginIDContextProvider>

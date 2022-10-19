@@ -164,7 +164,7 @@ export const ProfileCard: FC<Props> = ({ identity, ...rest }) => {
         )
 
     return (
-        <PluginWeb3ContextProvider value={{ chainId: ChainId.Mainnet, networkPluginID: NetworkPluginID.PLUGIN_EVM }}>
+        <PluginWeb3ContextProvider value={{ chainId: ChainId.Mainnet, pluginID: NetworkPluginID.PLUGIN_EVM }}>
             <div className={classes.root}>
                 <div className={classes.header}>
                     <ProfileCardTitle

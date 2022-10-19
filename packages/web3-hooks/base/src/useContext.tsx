@@ -8,7 +8,7 @@ import { useActualProviderType } from './useProviderType.js'
 
 interface Web3Context<T extends NetworkPluginID> {
     account?: string
-    networkPluginID?: T
+    pluginID?: T
     chainId?: Web3Helper.Definition[T]['ChainId']
     networkType?: Web3Helper.Definition[T]['NetworkType']
     providerType?: Web3Helper.Definition[T]['ProviderType']
@@ -88,7 +88,7 @@ export function PluginsWeb3ContextProvider<T extends NetworkPluginID>({
     return (
         <PluginIDContext.Provider value={pluginID}>
             <PluginsWeb3Context.Provider value={value}>
-                <PluginWeb3Context.Provider value={web3ContextInitialState} children={children} />
+                <PluginWeb3Context.Provider value={null!} children={children} />
             </PluginsWeb3Context.Provider>
         </PluginIDContext.Provider>
     )

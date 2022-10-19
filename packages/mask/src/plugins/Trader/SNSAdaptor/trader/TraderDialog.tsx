@@ -181,7 +181,7 @@ export function TraderDialog() {
                         chains={chainIdList}
                     />
                 </div>
-                <PluginWeb3ContextProvider value={{ chainId, networkPluginID: NetworkPluginID.PLUGIN_EVM }}>
+                <PluginWeb3ContextProvider value={{ chainId, pluginID: NetworkPluginID.PLUGIN_EVM }}>
                     <AllProviderTradeContext.Provider>
                         <Trader
                             {...traderProps}

@@ -144,7 +144,7 @@ export function CardDialogContent(props: CardDialogContentProps) {
             </div>
 
             <PluginIDContextProvider value={parentPluginID}>
-                <PluginWeb3ContextProvider value={{ networkPluginID: parentPluginID }}>
+                <PluginWeb3ContextProvider value={{ pluginID: parentPluginID }}>
                     <PluginWalletStatusBar
                         className={classes.footer}
                         expectedPluginID={pluginID}

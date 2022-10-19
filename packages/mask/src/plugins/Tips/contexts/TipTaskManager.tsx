@@ -56,7 +56,7 @@ export const TipTaskManager: FC<React.PropsWithChildren<{}>> = ({ children }) =>
                         <PluginWeb3ContextProvider
                             value={{
                                 chainId: ChainId.Mainnet,
-                                networkPluginID: tipsAccount?.pluginID ?? NetworkPluginID.PLUGIN_EVM,
+                                pluginID: tipsAccount?.pluginID ?? NetworkPluginID.PLUGIN_EVM,
                             }}>
                             <TipTaskProvider key={task.id} task={task}>
                                 <TipsTransactionProvider>

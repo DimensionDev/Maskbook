@@ -21,7 +21,7 @@ export function TagInspector(props: TagInspectorProps) {
         [],
     )
     return (
-        <PluginWeb3ContextProvider value={{ chainId: ChainId.Mainnet, networkPluginID: NetworkPluginID.PLUGIN_EVM }}>
+        <PluginWeb3ContextProvider value={{ chainId: ChainId.Mainnet, pluginID: NetworkPluginID.PLUGIN_EVM }}>
             <TrendingPopper>{createTrendingView}</TrendingPopper>
         </PluginWeb3ContextProvider>
     )
