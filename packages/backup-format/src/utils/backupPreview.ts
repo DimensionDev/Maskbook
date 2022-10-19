@@ -1,5 +1,5 @@
 import type { NormalizedBackup } from '@masknet/backup-format'
-import { sumBy } from 'lodash-unified'
+import { flatten, sumBy } from 'lodash-unified'
 
 export interface BackupPreview {
     personas: number
@@ -19,11 +19,17 @@ export function getBackupPreviewInfo(json: NormalizedBackup.Data): BackupPreview
         files = Number((json.plugins?.['com.maskbook.fileservice'] as any)?.length || 0)
     } catch {}
 
+    const ownerPersonas = [...json.personas.values()].filter((persona) => !persona.privateKey.none)
+    const ownerProfiles = flatten(ownerPersonas.map((persona) => [...persona.linkedProfiles.keys()])).map((item) =>
+        item.toText(),
+    )
+
     return {
-        personas: [...json.personas.values()].filter((persona) => persona.linkedProfiles.size === 0).length,
-        accounts: sumBy([...json.personas.values()], (persona) => persona.linkedProfiles.size),
+        personas: json.personas.size,
+        accounts: sumBy(ownerPersonas, (persona) => persona.linkedProfiles.size),
         posts: json.posts.size,
-        contacts: json.profiles.size,
+        contacts: [...json.profiles.values()].filter((profile) => !ownerProfiles.includes(profile.identifier.toText()))
+            .length,
         relations: json.relations.length,
         files,
         wallets: json.wallets.length,
