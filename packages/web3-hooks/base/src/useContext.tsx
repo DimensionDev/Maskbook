@@ -23,8 +23,6 @@ export const PluginWeb3Context = createContext<Web3Context<NetworkPluginID>>(EMP
 const PluginsWeb3Context = createContext<Record<NetworkPluginID, Web3Helper.Web3State<NetworkPluginID>>>(null!)
 
 export function PluginIDContextProvider({ value, children }: React.ProviderProps<NetworkPluginID>) {
-    console.log('------------------useContext PluginIDContextProvider')
-    console.log(value)
     return <PluginIDContext.Provider value={value}>{children}</PluginIDContext.Provider>
 }
 

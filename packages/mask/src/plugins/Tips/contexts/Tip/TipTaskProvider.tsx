@@ -1,5 +1,12 @@
 import { Dispatch, FC, memo, SetStateAction, useCallback, useContext, useEffect, useMemo, useState } from 'react'
-import { useAccount, useChainId, useFungibleToken, useNonFungibleTokenContract } from '@masknet/web3-hooks-base'
+import {
+    useAccount,
+    useChainId,
+    useCurrentWeb3NetworkChainId,
+    useCurrentWeb3NetworkPluginID,
+    useFungibleToken,
+    useNonFungibleTokenContract,
+} from '@masknet/web3-hooks-base'
 import { isSameAddress, SocialAccount } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import type { GasOptionConfig } from '@masknet/web3-shared-evm'
