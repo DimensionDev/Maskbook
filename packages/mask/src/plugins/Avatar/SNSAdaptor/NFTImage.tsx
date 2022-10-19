@@ -76,7 +76,7 @@ function isSameNFT(pluginID: NetworkPluginID, a: AllChainsNonFungibleToken, b?: 
 }
 
 export function NFTImage(props: NFTImageProps) {
-    const { className, token, onClick, selectedToken, showBadge = false, pluginID: pluginId } = props
+    const { className, token, onClick, selectedToken, showBadge = false, pluginID } = props
     const { classes, cx } = useStyles()
     const theme = useTheme()
     const { Others } = useWeb3State()
@@ -103,10 +103,10 @@ export function NFTImage(props: NFTImageProps) {
                     src={token.metadata?.imageURL ?? ''}
                     className={classNames(
                         classes.image,
-                        isSameNFT(pluginId, token, selectedToken) ? classes.selected : '',
+                        isSameNFT(pluginID, token, selectedToken) ? classes.selected : '',
                     )}
                 />
-                {showBadge && isSameNFT(pluginId, token, selectedToken) ? (
+                {showBadge && isSameNFT(pluginID, token, selectedToken) ? (
                     <SelectedIcon className={classes.icon} />
                 ) : null}
             </Box>

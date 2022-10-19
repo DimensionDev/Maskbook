@@ -59,8 +59,8 @@ interface NFTListPageProps {
 }
 
 export function NFTListPage(props: NFTListPageProps) {
-    const { onChange, tokenInfo, tokens, children, pluginID: pluginId, nextPage, loadError, loadFinish } = props
-    const { classes } = useStyles({ networkPluginID: pluginId })
+    const { onChange, tokenInfo, tokens, children, pluginID, nextPage, loadError, loadFinish } = props
+    const { classes } = useStyles({ networkPluginID: pluginID })
     const [selectedToken, setSelectedToken] = useState<AllChainsNonFungibleToken | undefined>(tokenInfo)
     const t = useI18N()
 
@@ -72,7 +72,7 @@ export function NFTListPage(props: NFTListPageProps) {
 
     useEffect(() => setSelectedToken(tokenInfo), [tokenInfo])
 
-    if (!supportPluginIds.includes(pluginId)) {
+    if (!supportPluginIds.includes(pluginID)) {
         return (
             <Box className={classes.placeholder}>
                 <Icons.EmptySimple variant="light" size={36} />
@@ -98,7 +98,7 @@ export function NFTListPage(props: NFTListPageProps) {
                     <ListItem key={i} className={classes.nftItem}>
                         <NFTImage
                             key={i}
-                            pluginID={pluginId}
+                            pluginID={pluginID}
                             showBadge
                             token={token}
                             selectedToken={selectedToken}
