@@ -74,7 +74,7 @@ export const resolveNonFungibleTokenEventActivityType = (type?: string) => {
     return ActivityType.Transfer
 }
 
-export function getNFTAllName(contractName: string, name?: string, tokenId?: string) {
+export function getNFTFullName(contractName: string, name?: string, tokenId?: string) {
     if (!name)
         return tokenId && contractName
             ? `${contractName} #${tokenId}`

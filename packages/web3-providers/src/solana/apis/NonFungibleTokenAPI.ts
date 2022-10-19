@@ -12,7 +12,7 @@ import {
 import { ChainId, SchemaType } from '@masknet/web3-shared-solana'
 import type { NonFungibleTokenAPI } from '../../types/index.js'
 import type { GetProgramAccountsResponse } from '../types.js'
-import { fetchJSON, getNFTAllName } from '../../helpers.js'
+import { fetchJSON, getNFTFullName } from '../../helpers.js'
 import { requestRPC } from '../helpers.js'
 
 interface ExternalMetadata {
@@ -83,7 +83,7 @@ async function getNonFungibleAssets(
             },
             metadata: {
                 chainId,
-                name: getNFTAllName(metadata.data.data.name, metadata.data.data.name),
+                name: getNFTFullName(metadata.data.data.name, metadata.data.data.name),
                 symbol: metadata.data.data.symbol,
                 description: externalMeta?.description,
                 mediaURL: externalMeta?.animation ?? externalMeta?.image ?? '',

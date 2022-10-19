@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'vitest'
-import { getNFTAllName } from '../src/helpers.js'
+import { getNFTFullName } from '../src/helpers.js'
 
 describe('helpers util test', () => {
     test.each([
@@ -25,6 +25,6 @@ describe('helpers util test', () => {
 
         { contract: 'contract', name: 'abc', tokenId: '', expected: 'contract #abc' },
     ])('.format($name)', ({ contract, name, tokenId, expected }) => {
-        expect(getNFTAllName(contract, name, tokenId)).toBe(expected)
+        expect(getNFTFullName(contract, name, tokenId)).toBe(expected)
     })
 })
