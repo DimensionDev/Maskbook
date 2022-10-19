@@ -60,6 +60,9 @@ patchedDependencies:
   '@mui/base@5.0.0-alpha.100':
     hash: cc7k56pam6cgsdxwjuynldgftq
     path: patches/@mui__base@5.0.0-alpha.100.patch
+  react-devtools-inline@4.26.1:
+    hash: hwgysjvr6z2cxm432x7dqpfunu
+    path: patches/react-devtools-inline@4.26.1.patch
 
 importers:
 

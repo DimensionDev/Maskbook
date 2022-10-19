@@ -1,7 +1,7 @@
 import { WebExtensionMessage } from '@dimensiondev/holoflows-kit'
 
 export interface DevtoolsMessage {
-    _: { event: any; payload: any }
+    _: any
     // The discovery has the following possibilities:
     // 1. The content script is loaded before the devtools panel is opened.
     //    In this case, the handshake will be: activateBackend => _
@@ -9,6 +9,8 @@ export interface DevtoolsMessage {
     //    In this case, the handshake will be: helloFromBackend => activateBackend => _
     activateBackend: void
     helloFromBackend: void
+    //
+    farewell: void
 }
 export const DevtoolsMessage = new WebExtensionMessage<DevtoolsMessage>({
     domain: 'devtools',

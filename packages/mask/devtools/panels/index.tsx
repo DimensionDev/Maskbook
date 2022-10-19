@@ -140,6 +140,11 @@ async function onInit() {
     document.body.appendChild(container)
     root.render(<Host />)
 
+    window.addEventListener('beforeunload', () => DevtoolsMessage.events.farewell.sendByBroadcast(), {
+        once: true,
+        signal,
+    })
+
     function onRefresh() {
         flushSync(() => root.unmount())
         container.remove()
