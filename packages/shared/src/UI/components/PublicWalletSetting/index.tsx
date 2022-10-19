@@ -15,7 +15,6 @@ import {
 } from '@masknet/shared-base'
 import { useHiddenAddressSetting, useWeb3State } from '@masknet/web3-hooks-base'
 import { WalletSettingCard } from '@masknet/shared'
-
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { useSharedI18N } from '../../../locales'
 import { SettingActions } from './SettingActions.js'
@@ -71,17 +70,17 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 interface PublicWalletSettingProps {
-    onClose: () => void
-    onOpenPopup: (route?: PopupRoutes, params?: Record<string, any>) => void
+    pluginID: PluginID
     bindingWallets?: BindingProof[]
     currentPersona?: ECKeyIdentifier
-    pluginID: PluginID
+    onClose: () => void
+    onOpenPopup: (route?: PopupRoutes, params?: Record<string, any>) => void
 }
 
 export const PublicWalletSetting = memo<PublicWalletSettingProps>(
     ({ onClose, bindingWallets, currentPersona, pluginID, onOpenPopup }) => {
-        const { classes } = useStyles()
         const t = useSharedI18N()
+        const { classes } = useStyles()
         const { Storage } = useWeb3State()
 
         const [addresses, setAddresses] = useState<string[]>([])

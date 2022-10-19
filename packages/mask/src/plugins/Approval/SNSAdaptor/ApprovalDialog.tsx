@@ -128,9 +128,9 @@ function ApprovalWrapper(props: ApprovalWrapperProps) {
     const { t: tr } = useBaseI18n()
     const t = useI18N()
 
-    const networkTabChainId = useChainId(NetworkPluginID.PLUGIN_EVM)
-    const approvalDefinition = useActivatedPlugin(PluginID.Approval, 'any')
     const pluginID = useCurrentWeb3NetworkPluginID()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const approvalDefinition = useActivatedPlugin(PluginID.Approval, 'any')
     const chainIdList =
         approvalDefinition?.enableRequirement.web3?.[NetworkPluginID.PLUGIN_EVM]?.supportedChainIds ?? []
 
@@ -156,9 +156,9 @@ function ApprovalWrapper(props: ApprovalWrapperProps) {
                     </div>
                     <section className={classes.contentWrapper}>
                         {tab === Tabs.tokens ? (
-                            <ApprovalTokenContent chainId={networkTabChainId} />
+                            <ApprovalTokenContent chainId={chainId} />
                         ) : (
-                            <ApprovalNFTContent chainId={networkTabChainId} />
+                            <ApprovalNFTContent chainId={chainId} />
                         )}
                     </section>
                 </>

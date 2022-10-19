@@ -87,7 +87,7 @@ export function NextIdPage() {
         <>
             <PluginCardFrameMini>
                 <ThemeProvider theme={MaskLightTheme}>
-                    <PluginEnableBoundary pluginId={PluginID.Web3Profile}>{getActionComponent}</PluginEnableBoundary>
+                    <PluginEnableBoundary pluginID={PluginID.Web3Profile}>{getActionComponent}</PluginEnableBoundary>
                 </ThemeProvider>
             </PluginCardFrameMini>
             {openBindDialog && currentPersona && isOwn && (

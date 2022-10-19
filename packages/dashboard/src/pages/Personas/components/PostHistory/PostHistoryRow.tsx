@@ -35,48 +35,48 @@ const parseFileServiceMessage = (body: any) => {
 const SUPPORT_PLUGIN: Record<
     string,
     {
-        pluginId: null | string
+        pluginID: null | string
         icon: ReactNode
         messageParse: (body: any) => ReactNode
     }
 > = {
     text: {
-        pluginId: null,
+        pluginID: null,
         icon: <Icons.Message />,
         messageParse: () => null,
     },
     'com.maskbook.fileservice:1': {
-        pluginId: null,
+        pluginID: null,
         icon: <Icons.FileMessage />,
         messageParse: parseFileServiceMessage,
     },
     'com.maskbook.fileservice:2': {
-        pluginId: null,
+        pluginID: null,
         icon: <Icons.FileMessage />,
         messageParse: parseFileServiceMessage,
     },
     'com.maskbook.red_packet:1': {
-        pluginId: PluginID.RedPacket,
+        pluginID: PluginID.RedPacket,
         icon: <Icons.RedPacket />,
         messageParse: (body: any) => body.sender.message,
     },
     'com.maskbook.red_packet_nft:1': {
-        pluginId: PluginID.RedPacket,
+        pluginID: PluginID.RedPacket,
         icon: <Icons.NFTRedPacket />,
         messageParse: (body: { message: string }) => body.message,
     },
     'com.maskbook.ito:1': {
-        pluginId: PluginID.ITO,
+        pluginID: PluginID.ITO,
         icon: <Icons.ITO />,
         messageParse: (body: any) => body.message.split(MSG_DELIMITER)[1],
     },
     'com.maskbook.ito:2': {
-        pluginId: PluginID.ITO,
+        pluginID: PluginID.ITO,
         icon: <Icons.ITO />,
         messageParse: (body: any) => body.message.split(MSG_DELIMITER)[1],
     },
     'com.maskbook.poll:1': {
-        pluginId: PluginID.Poll,
+        pluginID: PluginID.Poll,
         icon: <Icons.Poll />,
         messageParse: (body: any) => body.question,
     },
@@ -123,7 +123,7 @@ export const PostHistoryRow = memo(({ post, network }: PostHistoryRowProps) => {
 
         if (!meta.length) return null
         const pluginName = meta[0][0]
-        const pluginId = SUPPORT_PLUGIN[pluginName]?.pluginId
+        const pluginId = SUPPORT_PLUGIN[pluginName]?.pluginID
 
         if (!pluginId) return null
         const handler = () => Services.SocialNetwork.openSNSAndActivatePlugin(`https://${identifier.network}`, pluginId)

@@ -1,6 +1,6 @@
-import { NetworkPluginID } from '@masknet/shared-base'
 import { useState } from 'react'
 import { createContainer } from 'unstated-next'
+import { NetworkPluginID } from '@masknet/shared-base'
 
 function useTargetPluginId() {
     const [expectedPluginID, setExpectedPluginID] = useState<NetworkPluginID>(NetworkPluginID.PLUGIN_EVM)

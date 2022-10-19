@@ -8,7 +8,7 @@ import { PersistentStorages } from '../../../shared/index.js'
 
 export interface Application {
     entry: Plugin.SNSAdaptor.ApplicationEntry
-    pluginId: PluginID
+    pluginID: PluginID
     enabled?: boolean
     isWalletConnectedRequired?: boolean
     isWalletConnectedEVMRequired?: boolean
@@ -93,7 +93,7 @@ export function ApplicationSettingPluginList() {
             .flatMap(({ ID, ApplicationEntries: entries }) =>
                 (entries ?? [])
                     .filter((entry) => entry.appBoardSortingDefaultPriority && !entry.recommendFeature)
-                    .map((entry) => ({ entry, pluginId: ID })),
+                    .map((entry) => ({ entry, pluginID: ID })),
             )
             .sort((a, b) => {
                 return (a.entry.appBoardSortingDefaultPriority ?? 0) - (b.entry.appBoardSortingDefaultPriority ?? 0)
@@ -186,7 +186,7 @@ function AppListItem(props: AppListItemProps) {
             }}
             title={
                 <Typography>
-                    <PluginI18NFieldRender field={application.entry.name} pluginID={application.pluginId} />
+                    <PluginI18NFieldRender field={application.entry.name} pluginID={application.pluginID} />
                 </Typography>
             }
             placement="bottom"

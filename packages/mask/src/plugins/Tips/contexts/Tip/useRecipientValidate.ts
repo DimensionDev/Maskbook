@@ -2,19 +2,20 @@ import { useMemo } from 'react'
 import { useAsync } from 'react-use'
 import { useAddressType, useChainId, useCurrentWeb3NetworkPluginID } from '@masknet/web3-hooks-base'
 import { GoPlusLabs } from '@masknet/web3-providers'
-import { AddressType, ChainId } from '@masknet/web3-shared-evm'
+import { AddressType } from '@masknet/web3-shared-evm'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { useI18N } from '../../locales'
 import type { ValidationTuple } from '../../types'
 
 export function useRecipientValidate(recipientAddress: string): { loading: boolean; validation: ValidationTuple } {
     const t = useI18N()
-    const chainId = useChainId()
-    const pluginID = useCurrentWeb3NetworkPluginID()
+    const pluginID = useCurrentWeb3NetworkPluginID(NetworkPluginID.PLUGIN_EVM)
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const { value: addressType, loading } = useAddressType(pluginID, recipientAddress, {
         chainId,
     })
     const { value: security } = useAsync(async () => {
-        return GoPlusLabs.getAddressSecurity(chainId as ChainId, recipientAddress)
+        return GoPlusLabs.getAddressSecurity(chainId, recipientAddress)
     }, [chainId, recipientAddress])
 
     const isMaliciousAddress = security && Object.values(security).filter((x) => x === '1').length > 0

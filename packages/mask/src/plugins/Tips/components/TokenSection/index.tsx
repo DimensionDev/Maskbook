@@ -11,10 +11,10 @@ import { useGasConfig } from '@masknet/web3-hooks-evm'
 import { useSelectFungibleToken, FungibleTokenInput } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { ChainId, isNativeTokenAddress } from '@masknet/web3-shared-evm'
+import { makeStyles } from '@masknet/theme'
 import { useTip } from '../../contexts/index.js'
 import { GasSettingsBar } from './GasSettingsBar.js'
 import { TokenValue } from './TokenValue.js'
-import { makeStyles } from '@masknet/theme'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -29,12 +29,13 @@ const useStyles = makeStyles()((theme) => ({
 interface Props extends HTMLProps<HTMLDivElement> {}
 
 const ETH_GAS_LIMIT = 21000
+
 export const TokenSection: FC<Props> = ({ className, ...rest }) => {
     const { classes, cx } = useStyles()
     const { token, setToken, amount, setAmount } = useTip()
-    const chainId = useChainId()
-    const account = useAccount()
-    const pluginID = useCurrentWeb3NetworkPluginID()
+    const pluginID = useCurrentWeb3NetworkPluginID(NetworkPluginID.PLUGIN_EVM)
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
 
     // balance
     const { value: tokenBalance = '0' } = useFungibleTokenBalance(pluginID, token?.address, {
@@ -42,7 +43,7 @@ export const TokenSection: FC<Props> = ({ className, ...rest }) => {
         account,
     })
     const { gasPrice } = useGasConfig(chainId as ChainId)
-    const { value: defaultGasPrice = '1' } = useGasPrice(NetworkPluginID.PLUGIN_EVM, { chainId: chainId as ChainId })
+    const { value: defaultGasPrice = '1' } = useGasPrice(NetworkPluginID.PLUGIN_EVM, { chainId })
     const isNativeToken = useMemo(() => isNativeTokenAddress(token?.address), [token?.address])
 
     const maxAmount = useMemo(() => {
