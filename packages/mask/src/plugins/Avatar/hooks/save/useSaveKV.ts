@@ -5,9 +5,9 @@ import { activatedSocialNetworkUI } from '../../../../social-network/index.js'
 import type { NextIDAvatarMeta } from '../../types.js'
 import { useSaveAvatar } from './useSaveAvatar.js'
 
-export function useSaveKV(pluginId: NetworkPluginID) {
-    const connection = useWeb3Connection<'all'>(pluginId)
-    const saveAvatar = useSaveAvatar(pluginId)
+export function useSaveKV(pluginID: NetworkPluginID) {
+    const connection = useWeb3Connection<'all'>(pluginID)
+    const saveAvatar = useSaveAvatar(pluginID)
 
     return useCallback(
         async (info: NextIDAvatarMeta, account: string, persona: ECKeyIdentifier, proof: BindingProof) => {

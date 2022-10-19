@@ -795,7 +795,7 @@ export namespace Plugin.SNSAdaptor {
                 onOpenPopup: (route?: PopupRoutes, params?: Record<string, any>) => void
                 bindingWallets?: BindingProof[]
                 currentPersona?: ECKeyIdentifier
-                pluginId: PluginID
+                pluginID: PluginID
             }>
         }
     }

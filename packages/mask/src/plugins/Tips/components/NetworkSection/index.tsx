@@ -1,7 +1,7 @@
+import type { FC, HTMLProps } from 'react'
 import { PluginID, EMPTY_LIST } from '@masknet/shared-base'
 import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
 import { makeStyles } from '@masknet/theme'
-import type { FC, HTMLProps } from 'react'
 import { NetworkTab } from '../../../../components/shared/NetworkTab'
 import { TargetRuntimeContext } from '../../contexts'
 
@@ -32,9 +32,9 @@ interface Props extends HTMLProps<HTMLDivElement> {}
 export const NetworkSection: FC<Props> = () => {
     const { classes } = useStyles()
 
-    const { pluginId, targetChainId, setTargetChainId } = TargetRuntimeContext.useContainer()
+    const { pluginID, targetChainId, setTargetChainId } = TargetRuntimeContext.useContainer()
     const tipDefinition = useActivatedPlugin(PluginID.Tips, 'any')
-    const chainIdList = tipDefinition?.enableRequirement.web3?.[pluginId]?.supportedChainIds ?? EMPTY_LIST
+    const chainIdList = tipDefinition?.enableRequirement.web3?.[pluginID]?.supportedChainIds ?? EMPTY_LIST
 
     if (!chainIdList.length) return null
 
@@ -46,7 +46,7 @@ export const NetworkSection: FC<Props> = () => {
                     tabs: classes.tabs,
                     tabPaper: classes.tabPaper,
                 }}
-                networkId={pluginId}
+                networkId={pluginID}
                 chainId={targetChainId}
                 setChainId={setTargetChainId}
                 chains={chainIdList}

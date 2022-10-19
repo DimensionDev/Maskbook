@@ -12,14 +12,14 @@ const createInMemoryKVStorage = createKVStorageHost(inMemoryBackend, MaskMessage
 
 export const InMemoryStorages = {
     Plugin: createInMemoryKVStorage('plugin', {}),
-    FacebookNFTEventOnMobile: createInMemoryKVStorage('FacebookNFTEventOnMobile', {
+    FacebookNFTEventOnMobile: createInMemoryKVStorage('FacebookNFTEventMobile', {
         userId: '',
         avatarId: '',
         address: '',
         tokenId: '',
         schema: 1,
         chainId: 1,
-        pluginId: '',
+        pluginID: '',
     }),
 }
 

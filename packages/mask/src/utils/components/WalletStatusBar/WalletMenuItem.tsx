@@ -17,7 +17,7 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import { WalletDescription, WalletDescriptionProps } from './WalletDescription.js'
 
 interface WalletMenuItemProps {
-    onSelect?: (value: WalletDescriptionProps, chainId: Web3Helper.ChainIdAll, pluginId: NetworkPluginID) => void
+    onSelect?: (value: WalletDescriptionProps, chainId: Web3Helper.ChainIdAll, pluginID: NetworkPluginID) => void
     address: string
     selected?: boolean
     verified?: boolean
@@ -29,17 +29,17 @@ export const WalletMenuItem = memo<WalletMenuItemProps>(
     ({ address, selected, onChangeWallet, platform, onSelect, verified }) => {
         const { t } = useI18N()
 
-        const pluginId = useCurrentWeb3NetworkPluginID(platform ? resolveNextID_NetworkPluginID(platform) : undefined)
+        const pluginID = useCurrentWeb3NetworkPluginID(platform ? resolveNextID_NetworkPluginID(platform) : undefined)
         const currentChainId = useChainId()
-        const defaultChainId = useDefaultChainId(pluginId)
+        const defaultChainId = useDefaultChainId(pluginID)
         const chainId = platform ? defaultChainId : currentChainId
 
-        const name = useWalletName(address, pluginId, !!platform)
+        const name = useWalletName(address, pluginID, !!platform)
 
-        const { Others } = useWeb3State(pluginId)
+        const { Others } = useWeb3State(pluginID)
 
         const providerDescriptor = useProviderDescriptor()
-        const networkDescriptor = useNetworkDescriptor(pluginId, chainId)
+        const networkDescriptor = useNetworkDescriptor(pluginID, chainId)
         const formattedAddress = Others?.formatAddress(address, 4)
         const addressLink = Others?.explorerResolver.addressLink?.(chainId, address)
 
@@ -55,7 +55,7 @@ export const WalletMenuItem = memo<WalletMenuItemProps>(
         }
 
         return (
-            <MenuItem value={address} onClick={() => onSelect?.(descriptionProps, chainId, pluginId)}>
+            <MenuItem value={address} onClick={() => onSelect?.(descriptionProps, chainId, pluginID)}>
                 {/* TODO: replace to radio */}
                 <ListItemIcon>
                     {selected ? (

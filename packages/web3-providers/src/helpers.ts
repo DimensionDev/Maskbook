@@ -62,19 +62,7 @@ export function getPaymentToken(chainId: ChainId, token?: { name?: string; symbo
     )
 }
 
-export const resolveNonFungibleTokenEventActivityType = (type?: string) => {
-    if (!type) return ActivityType.Transfer
-    const type_ = type.toLowerCase()
-    if (['created', 'mint'].includes(type_)) return ActivityType.Mint
-    if (['successful'].includes(type_)) return ActivityType.Sale
-    if (['offer', 'offer_entered', 'bid_withdrawn', 'bid_entered'].includes(type_)) return ActivityType.Offer
-    if (['cancel_offer'].includes(type_)) return ActivityType.CancelOffer
-    if (['list'].includes(type_)) return ActivityType.List
-    if (['sale'].includes(type_)) return ActivityType.Sale
-    return ActivityType.Transfer
-}
-
-export function getNFTFullName(contractName: string, name?: string, tokenId?: string) {
+export function getAssetFullName(contractName: string, name?: string, tokenId?: string) {
     if (!name)
         return tokenId && contractName
             ? `${contractName} #${tokenId}`
@@ -95,4 +83,16 @@ export function getNFTFullName(contractName: string, name?: string, tokenId?: st
     if (!contractName && tokenId) return `${first} #${tokenId}`
 
     return `${contractName} #${first}`
+}
+
+export const resolveNonFungibleTokenEventActivityType = (type?: string) => {
+    if (!type) return ActivityType.Transfer
+    const type_ = type.toLowerCase()
+    if (['created', 'mint'].includes(type_)) return ActivityType.Mint
+    if (['successful'].includes(type_)) return ActivityType.Sale
+    if (['offer', 'offer_entered', 'bid_withdrawn', 'bid_entered'].includes(type_)) return ActivityType.Offer
+    if (['cancel_offer'].includes(type_)) return ActivityType.CancelOffer
+    if (['list'].includes(type_)) return ActivityType.List
+    if (['sale'].includes(type_)) return ActivityType.Sale
+    return ActivityType.Transfer
 }

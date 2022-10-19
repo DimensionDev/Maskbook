@@ -43,7 +43,7 @@ export function ApplicationBoardDialog() {
         ApplicationSettingTabs.pluginSwitch,
     )
 
-    const [focusPluginId, setFocusPluginId] = useState<PluginID>()
+    const [focusPluginID, setFocusPluginID] = useState<PluginID>()
     const [quickMode, setQuickMode] = useState(false)
 
     const { open, closeDialog: closeBoard } = useRemoteControlledDialog(
@@ -53,7 +53,7 @@ export function ApplicationBoardDialog() {
             setOpenSettings(true)
             setQuickMode(evt.settings.quickMode ?? false)
             setTab(ApplicationSettingTabs.pluginSwitch)
-            setFocusPluginId(evt.settings?.switchTab?.focusPluginId)
+            setFocusPluginID(evt.settings?.switchTab?.focusPluginID)
         },
     )
 
@@ -61,7 +61,7 @@ export function ApplicationBoardDialog() {
         setOpenSettings(false)
         setQuickMode(false)
         setTab(ApplicationSettingTabs.pluginList)
-        setFocusPluginId(undefined)
+        setFocusPluginID(undefined)
     }, [])
 
     const { open: openPersonaSelectPanelDialog } = useRemoteControlledDialog(
@@ -109,7 +109,7 @@ export function ApplicationBoardDialog() {
                                 <ApplicationSettingPluginList />
                             </TabPanel>
                             <TabPanel value={tabs.pluginSwitch} style={{ padding: 0 }}>
-                                <ApplicationSettingPluginSwitch focusPluginId={focusPluginId} />
+                                <ApplicationSettingPluginSwitch focusPluginID={focusPluginID} />
                             </TabPanel>
                         </>
                     ) : (

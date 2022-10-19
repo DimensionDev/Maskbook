@@ -90,7 +90,7 @@ export const ConfirmModal: FC<ConfirmModalProps> = ({
     const { Others } = useWeb3State()
     const { classes } = useStyles()
     const t = useI18N()
-    const { pluginId } = TargetRuntimeContext.useContainer()
+    const { pluginID } = TargetRuntimeContext.useContainer()
     confirmText = confirmText || 'Confirm'
     const isTokenTip = tipType === TipsType.Tokens
     const { value: nonFungibleToken } = useNonFungibleAsset(
@@ -136,7 +136,7 @@ export const ConfirmModal: FC<ConfirmModalProps> = ({
                                         readonly
                                         disableLink
                                         renderOrder={0}
-                                        pluginID={pluginId}
+                                        pluginID={pluginID}
                                     />
                                 </div>
                                 <div className={classes.nftName}>

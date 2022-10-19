@@ -58,7 +58,7 @@ export const ProfileCardTitle: FC<Props> = ({
             settings: {
                 quickMode: true,
                 switchTab: {
-                    focusPluginId: PluginID.Web3ProfileCard,
+                    focusPluginID: PluginID.Web3ProfileCard,
                 },
             },
         })

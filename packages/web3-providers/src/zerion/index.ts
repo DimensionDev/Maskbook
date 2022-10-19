@@ -20,7 +20,7 @@ import { ChainId, createNativeToken, GasOption, SchemaType } from '@masknet/web3
 import type { ZerionNonFungibleTokenItem, ZerionNonFungibleCollection, ZerionCoin } from './type.js'
 import { formatAsset, formatTransactions } from './format.js'
 import type { FungibleTokenAPI, GasOptionAPI, HistoryAPI, NonFungibleTokenAPI, TrendingAPI } from '../types/index.js'
-import { getAllEVMNativeAssets, getNFTFullName } from '../helpers.js'
+import { getAllEVMNativeAssets, getAssetFullName } from '../helpers.js'
 import {
     getAssetsList,
     getCoinsByKeyword,
@@ -118,7 +118,7 @@ export class ZerionNonFungibleTokenAPI implements NonFungibleTokenAPI.Provider<C
             },
             metadata: {
                 chainId,
-                name: getNFTFullName(nft.asset.collection.name, nft.asset.name, nft.asset.token_id),
+                name: getAssetFullName(nft.asset.collection.name, nft.asset.name, nft.asset.token_id),
                 symbol: nft.asset.symbol,
                 imageURL: nft.asset.preview.url,
                 mediaURL: nft.asset.detail.url,

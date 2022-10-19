@@ -1,14 +1,13 @@
-import { Button, DialogActions, DialogContent, Slider } from '@mui/material'
-import AvatarEditor from 'react-avatar-editor'
-import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { useCallback, useState } from 'react'
+import AvatarEditor from 'react-avatar-editor'
+import { useSubscription } from 'use-subscription'
+import { Button, DialogActions, DialogContent, Slider } from '@mui/material'
+import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { Twitter } from '@masknet/web3-providers'
-import { ChainId } from '@masknet/web3-shared-evm'
 import { usePersonaConnectStatus } from '../../../components/DataSource/usePersonaConnectStatus.js'
 import type { BindingProof, NetworkPluginID } from '@masknet/shared-base'
 import { useI18N } from '../locales/i18n_generated'
 import { context } from '../context.js'
-import { useSubscription } from 'use-subscription'
 import { useCurrentWeb3NetworkPluginID } from '@masknet/web3-hooks-base'
 import { AvatarInfo, useSave } from '../hooks/save/useSave.js'
 import type { AllChainsNonFungibleToken } from '../types.js'
@@ -46,7 +45,7 @@ interface UploadAvatarDialogProps {
     image?: string | File
     token?: AllChainsNonFungibleToken
     proof?: BindingProof
-    pluginId?: NetworkPluginID
+    pluginID?: NetworkPluginID
     onBack: () => void
     onClose: () => void
 }
@@ -66,9 +65,9 @@ async function uploadAvatar(blob: Blob, userId: string): Promise<AvatarInfo | un
 }
 
 export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
-    const { image, account, token, onClose, onBack, proof, isBindAccount = false, pluginId } = props
+    const { image, account, token, onClose, onBack, proof, isBindAccount = false, pluginID } = props
     const t = useI18N()
-    const currentPluginId = useCurrentWeb3NetworkPluginID(pluginId)
+    const currentPluginID = useCurrentWeb3NetworkPluginID(pluginID)
     const { classes } = useStyles()
     const identifier = useSubscription(context.currentVisitingProfile)
     const [editor, setEditor] = useState<AvatarEditor | null>(null)
@@ -77,7 +76,7 @@ export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
     const [disabled, setDisabled] = useState(false)
     const { currentPersona } = usePersonaConnectStatus()
 
-    const [, saveAvatar] = useSave(currentPluginId, (token?.chainId ?? ChainId.Mainnet) as ChainId)
+    const [, saveAvatar] = useSave(currentPluginID)
 
     const onSave = useCallback(async () => {
         if (!editor || !account || !token || !currentPersona?.identifier || !proof) return

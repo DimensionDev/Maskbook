@@ -1,9 +1,9 @@
-import { pluginId } from './constants.js'
+import { PLUGIN_ID } from './constants.js'
 import { createPluginMessage, createPluginRPC } from '@masknet/plugin-infra'
 
-const UnlockProtocolMessage = createPluginMessage(pluginId)
+const UnlockProtocolMessage = createPluginMessage(PLUGIN_ID)
 export const PluginUnlockProtocolRPC = createPluginRPC(
-    pluginId,
+    PLUGIN_ID,
     () => import('./Services.js'),
     UnlockProtocolMessage.rpc,
 )

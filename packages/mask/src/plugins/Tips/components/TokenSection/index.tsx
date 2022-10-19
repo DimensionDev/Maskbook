@@ -26,11 +26,11 @@ const ETH_GAS_LIMIT = 21000
 export const TokenSection: FC<Props> = ({ className, ...rest }) => {
     const { classes, cx } = useStyles()
     const { token, setToken, amount, setAmount } = useTip()
-    const { targetChainId: chainId, pluginId } = TargetRuntimeContext.useContainer()
+    const { targetChainId: chainId, pluginID } = TargetRuntimeContext.useContainer()
     const account = useAccount()
 
     // balance
-    const { value: tokenBalance = '0' } = useFungibleTokenBalance(pluginId, token?.address, {
+    const { value: tokenBalance = '0' } = useFungibleTokenBalance(pluginID, token?.address, {
         chainId,
         account,
     })
@@ -71,7 +71,7 @@ export const TokenSection: FC<Props> = ({ className, ...rest }) => {
                 balance={tokenBalance}
                 onSelectToken={onSelectTokenChipClick}
             />
-            {pluginId === NetworkPluginID.PLUGIN_EVM ? <GasSettingsBar /> : null}
+            {pluginID === NetworkPluginID.PLUGIN_EVM ? <GasSettingsBar /> : null}
             <TokenValue className={classes.tokenValue} />
         </div>
     )

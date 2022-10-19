@@ -1,7 +1,9 @@
+import { memo, useCallback, useMemo, useState } from 'react'
+import { useAsyncFn, useUpdateEffect } from 'react-use'
+import { differenceWith, uniq } from 'lodash-unified'
 import { Icons } from '@masknet/icons'
 import { LoadingBase, makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { Typography, Box } from '@mui/material'
-import { memo, useCallback, useMemo, useState } from 'react'
 import {
     PluginID,
     BindingProof,
@@ -13,9 +15,6 @@ import {
 } from '@masknet/shared-base'
 import { useHiddenAddressSetting, useWeb3State } from '@masknet/web3-hooks-base'
 import { WalletSettingCard } from '@masknet/shared'
-import { useAsyncFn, useUpdateEffect } from 'react-use'
-
-import { differenceWith, uniq } from 'lodash-unified'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { useSharedI18N } from '../../../locales'
 import { SettingActions } from './SettingActions.js'
@@ -75,11 +74,11 @@ interface PublicWalletSettingProps {
     onOpenPopup: (route?: PopupRoutes, params?: Record<string, any>) => void
     bindingWallets?: BindingProof[]
     currentPersona?: ECKeyIdentifier
-    pluginId: PluginID
+    pluginID: PluginID
 }
 
 export const PublicWalletSetting = memo<PublicWalletSettingProps>(
-    ({ onClose, bindingWallets, currentPersona, pluginId, onOpenPopup }) => {
+    ({ onClose, bindingWallets, currentPersona, pluginID, onOpenPopup }) => {
         const { classes } = useStyles()
         const t = useSharedI18N()
         const { Storage } = useWeb3State()
@@ -88,7 +87,7 @@ export const PublicWalletSetting = memo<PublicWalletSettingProps>(
         const [showAlert, setShowAlert] = useState(true)
         const { showSnackbar } = useCustomSnackbar()
 
-        const { value: hiddenAddresses, loading } = useHiddenAddressSetting(pluginId, currentPersona?.publicKeyAsHex)
+        const { value: hiddenAddresses, loading } = useHiddenAddressSetting(pluginID, currentPersona?.publicKeyAsHex)
 
         const onSwitchChange = useCallback((address: string) => {
             setAddresses((prev) => {
@@ -116,9 +115,9 @@ export const PublicWalletSetting = memo<PublicWalletSettingProps>(
                     NextIDPlatform.NextID,
                     currentPersona,
                 )
-                const prevResult = storage.get<PublicWalletSettingType>(pluginId)
+                const prevResult = storage.get<PublicWalletSettingType>(pluginID)
 
-                await storage.set<PublicWalletSettingType>(pluginId, {
+                await storage.set<PublicWalletSettingType>(pluginID, {
                     ...prevResult,
                     hiddenAddresses: uniq(addresses),
                 })
@@ -128,7 +127,7 @@ export const PublicWalletSetting = memo<PublicWalletSettingProps>(
                     message: t.wallet_set_up_successfully(),
                     autoHideDuration: 2000,
                 })
-                CrossIsolationMessages.events.walletSettingsDialogEvent.sendToAll({ pluginID: pluginId })
+                CrossIsolationMessages.events.walletSettingsDialogEvent.sendToAll({ pluginID })
                 onClose()
             } catch {
                 showSnackbar(t.save_failed(), {
@@ -137,7 +136,7 @@ export const PublicWalletSetting = memo<PublicWalletSettingProps>(
                     autoHideDuration: 2000,
                 })
             }
-        }, [Storage, currentPersona, addresses, pluginId])
+        }, [Storage, currentPersona, addresses, pluginID])
 
         useUpdateEffect(() => {
             if (!hiddenAddresses) return
@@ -156,8 +155,8 @@ export const PublicWalletSetting = memo<PublicWalletSettingProps>(
                 [PluginID.Web3Profile]: t.add_wallet_web3_profile(),
             }
 
-            return mapping[pluginId] ?? t.add_wallet_web3_profile()
-        }, [pluginId, t])
+            return mapping[pluginID] ?? t.add_wallet_web3_profile()
+        }, [pluginID, t])
 
         if (loading) {
             return (

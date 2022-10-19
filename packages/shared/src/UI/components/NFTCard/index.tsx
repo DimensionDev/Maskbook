@@ -65,7 +65,7 @@ interface NFTImageCollectibleAvatarProps {
     token: NonFungibleToken<ChainId, SchemaType>
     onChange?: (token: NonFungibleToken<ChainId, SchemaType>) => void
     selectedToken?: NonFungibleToken<ChainId, SchemaType>
-    pluginId: NetworkPluginID
+    pluginID: NetworkPluginID
     size?: number
     showNetwork?: boolean
 }
@@ -91,11 +91,11 @@ export function NFTImageCollectibleAvatar({
     token,
     onChange,
     selectedToken,
-    pluginId,
+    pluginID,
     size = 126,
     showNetwork = false,
 }: NFTImageCollectibleAvatarProps) {
-    const { classes } = useStyles({ networkPluginID: pluginId })
+    const { classes } = useStyles({ networkPluginID: pluginID })
     const { value: isImageToken, loading } = useIsImageURL(token.metadata?.imageURL)
     const { Others } = useWeb3State()
 
@@ -117,7 +117,7 @@ export function NFTImageCollectibleAvatar({
     return isImageToken ? (
         <NFTImage
             title={title}
-            pluginId={pluginId}
+            pluginID={pluginID}
             size={size}
             showBadge
             token={token}
@@ -136,7 +136,7 @@ export function NFTImageCollectibleAvatar({
 
 interface NFTImageProps {
     title: string
-    pluginId: NetworkPluginID
+    pluginID: NetworkPluginID
     showBadge?: boolean
     token: NonFungibleToken<ChainId, SchemaType>
     selectedToken?: NonFungibleToken<ChainId, SchemaType>
@@ -146,11 +146,11 @@ interface NFTImageProps {
 }
 
 function isSameNFT(
-    pluginId: NetworkPluginID,
+    pluginID: NetworkPluginID,
     a: NonFungibleToken<ChainId, SchemaType>,
     b?: NonFungibleToken<ChainId, SchemaType>,
 ) {
-    return pluginId !== NetworkPluginID.PLUGIN_SOLANA
+    return pluginID !== NetworkPluginID.PLUGIN_SOLANA
         ? isSameAddress(a.contract?.address, b?.contract?.address) &&
               a.contract?.chainId &&
               a.contract?.chainId === b?.contract?.chainId &&
@@ -165,11 +165,11 @@ export function NFTImage(props: NFTImageProps) {
         selectedToken,
         title,
         showBadge = false,
-        pluginId,
+        pluginID,
         size = 126,
         showNetwork = false,
     } = props
-    const { classes } = useStyles({ networkPluginID: pluginId })
+    const { classes } = useStyles({ networkPluginID: pluginID })
     const iconURL = NETWORK_DESCRIPTORS.find((network) => network?.chainId === token.chainId)?.icon
 
     return (
@@ -181,12 +181,12 @@ export function NFTImage(props: NFTImageProps) {
                     style={{ width: size, height: size }}
                     className={classNames(
                         classes.itemImage,
-                        isSameNFT(pluginId, token, selectedToken) ? classes.itemSelected : '',
+                        isSameNFT(pluginID, token, selectedToken) ? classes.itemSelected : '',
                     )}
                 />
                 {showNetwork && <ImageIcon classes={{ icon: classes.networkIcon }} icon={iconURL} size={20} />}
 
-                {showBadge && isSameNFT(pluginId, token, selectedToken) ? (
+                {showBadge && isSameNFT(pluginID, token, selectedToken) ? (
                     <Icons.Selected className={classes.itemIcon} />
                 ) : null}
             </Box>

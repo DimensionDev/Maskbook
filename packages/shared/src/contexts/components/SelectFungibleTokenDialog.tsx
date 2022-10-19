@@ -75,7 +75,7 @@ export const SelectFungibleTokenDialog: FC<SelectFungibleTokenDialogProps> = ({
     const t = useSharedI18N()
     const { networkIdentifier } = useBaseUIRuntime()
     const compact = networkIdentifier === EnhanceableSite.Minds
-    const pluginId = useCurrentWeb3NetworkPluginID(pluginID)
+    const currentPluginID = useCurrentWeb3NetworkPluginID(pluginID)
     const { classes } = useStyles({ compact, isDashboard })
     const isMdScreen = useMediaQuery<Theme>((theme) => theme.breakpoints.down('md'))
 
@@ -85,7 +85,7 @@ export const SelectFungibleTokenDialog: FC<SelectFungibleTokenDialogProps> = ({
         getCurrentMode(): TokenListMode
     }>()
 
-    const nativeTokenAddress = useNativeTokenAddress(pluginId)
+    const nativeTokenAddress = useNativeTokenAddress(currentPluginID)
 
     const onRefChange = useCallback(
         (node: { updateMode(mode: TokenListMode): void; getCurrentMode(): TokenListMode }) => {
@@ -117,7 +117,7 @@ export const SelectFungibleTokenDialog: FC<SelectFungibleTokenDialogProps> = ({
             <DialogContent classes={{ root: classes.content }}>
                 <FungibleTokenList
                     ref={onRefChange}
-                    pluginID={pluginId}
+                    pluginID={currentPluginID}
                     chainId={chainId}
                     tokens={tokens ?? []}
                     whitelist={whitelist}

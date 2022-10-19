@@ -91,8 +91,8 @@ export const BindPanelUI = memo<BindPanelUIProps>(
     ({ onPersonaSign, onWalletSign, currentPersona, signature, isBound, title, onClose, open, isCurrentAccount }) => {
         const t = useI18N()
         const { classes } = useStyles()
-        const pluginId = useCurrentWeb3NetworkPluginID()
-        const isSupported = SUPPORTED_PLUGINS.includes(pluginId)
+        const pluginID = useCurrentWeb3NetworkPluginID()
+        const isSupported = SUPPORTED_PLUGINS.includes(pluginID)
 
         const isWalletSigned = !!signature.wallet.value
         const isPersonaSigned = !!signature.persona.value

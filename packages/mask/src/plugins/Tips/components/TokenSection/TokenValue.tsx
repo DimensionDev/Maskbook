@@ -43,9 +43,9 @@ interface Props extends HTMLProps<HTMLDivElement> {}
 export const TokenValue: FC<Props> = ({ className, ...rest }) => {
     const { classes, cx } = useStyles()
     const { token, amount } = useTip()
-    const { targetChainId: chainId, pluginId } = TargetRuntimeContext.useContainer()
+    const { targetChainId: chainId, pluginID } = TargetRuntimeContext.useContainer()
 
-    const { value: tokenPrice = 0 } = useFungibleTokenPrice(pluginId, token?.address, { chainId })
+    const { value: tokenPrice = 0 } = useFungibleTokenPrice(pluginID, token?.address, { chainId })
 
     const priceUSD = useMemo(() => {
         if (!tokenPrice || !amount) return
@@ -69,7 +69,7 @@ export const TokenValue: FC<Props> = ({ className, ...rest }) => {
                 </Typography>
                 <TokenIcon
                     className={classes.tokenIcon}
-                    pluginID={pluginId}
+                    pluginID={pluginID}
                     chainId={chainId}
                     name={token.name}
                     address={token.address}

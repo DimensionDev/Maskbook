@@ -26,7 +26,7 @@ export function NFTAvatarSettingDialog() {
     const { classes } = useStyles()
     const account = useAccount()
     const identity = useCurrentVisitingIdentity()
-    const pluginId = useCurrentWeb3NetworkPluginID()
+    const pluginID = useCurrentWeb3NetworkPluginID()
     const saveNFTAvatar = useSaveNFTAvatar()
 
     const onChange = useCallback(
@@ -47,11 +47,11 @@ export function NFTAvatarSettingDialog() {
                         avatarId,
                         chainId: (info.token.chainId ?? ChainId.Mainnet) as ChainId,
                         schema: (info.token.schema ?? SchemaType.ERC721) as SchemaType,
-                        pluginId: info.pluginId,
+                        pluginID: info.pluginID,
                     },
                     identity.identifier.network as EnhanceableSite,
                     RSS3_KEY_SNS.INSTAGRAM,
-                    pluginId,
+                    pluginID,
                 )
 
                 if (!avatarInfo) {
