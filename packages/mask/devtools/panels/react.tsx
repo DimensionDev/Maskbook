@@ -45,7 +45,7 @@ export async function startReactDevTools(signal: AbortSignal) {
         // @ts-expect-error
         isProfiling: false,
         supportsReloadAndProfile: false,
-        supportsProfiling: false,
+        supportsProfiling: true,
         supportsTimeline: true,
         supportsTraceUpdates: true,
         supportsNativeInspection: true,
