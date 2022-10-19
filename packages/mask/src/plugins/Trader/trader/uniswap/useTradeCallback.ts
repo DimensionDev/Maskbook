@@ -116,14 +116,19 @@ export function useTradeCallback(
         } = bestCallOption
 
         try {
-            const hash = await connection.sendTransaction({
-                from: account,
-                to: address,
-                data: calldata,
-                ...('gasEstimate' in bestCallOption ? { gas: bestCallOption.gasEstimate.toFixed() } : {}),
-                ...(!value || /^0x0*$/.test(value) ? {} : { value }),
-                ...gasConfig,
-            })
+            const hash = await connection.sendTransaction(
+                {
+                    from: account,
+                    to: address,
+                    data: calldata,
+                    ...('gasEstimate' in bestCallOption ? { gas: bestCallOption.gasEstimate.toFixed() } : {}),
+                    ...(!value || /^0x0*$/.test(value) ? {} : { value }),
+                    ...gasConfig,
+                },
+                {
+                    chainId: targetChainId,
+                },
+            )
             const receipt = await connection.getTransactionReceipt(hash)
             return receipt?.transactionHash
         } catch (error: any) {
@@ -136,5 +141,5 @@ export function useTradeCallback(
                     : 'Transaction rejected.',
             )
         }
-    }, [connection, account, tradeParameters, gasConfig])
+    }, [connection, account, tradeParameters, gasConfig, targetChainId])
 }
