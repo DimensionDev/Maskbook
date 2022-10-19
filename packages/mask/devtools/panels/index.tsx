@@ -79,8 +79,8 @@ async function onInit() {
                 fetchFileWithCaching={(url) => fetch(url).then((x) => x.text())}
                 enabledInspectedElementContextMenu
                 viewAttributeSourceFunction={viewAttributeSourceFunction}
+                viewElementSourceFunction={viewElementSourceFunction}
                 // To be done: overrideTab
-                //             viewElementSourceFunction
                 // @ts-expect-error DT type missing props.
                 viewUrlSourceFunction={
                     'openResource' in browser.devtools.panels
@@ -99,6 +99,30 @@ async function onInit() {
             setTimeout(() => {
                 browser.devtools.inspectedWindow.eval(
                     'window.$attribute && inspect($attribute)',
+                    // @ts-expect-error
+                    { useContentScriptContext: true },
+                )
+            }, 100)
+        }
+    }
+
+    function viewElementSourceFunction(id: number) {
+        const rendererID = store.getRendererIDForElement(id)
+        if (rendererID !== null) {
+            bridge.send('viewElementSource', { id, rendererID })
+            setTimeout(() => {
+                browser.devtools.inspectedWindow.eval(
+                    `
+                    if (window.$type !== null) {
+                        if ($type && $type.prototype && $type.prototype.isReactComponent) {
+                            // inspect Component.render, not constructor
+                            inspect($type.prototype.render);
+                        } else {
+                            // inspect Functional Component
+                            inspect($type);
+                        }
+                    }
+                `,
                     // @ts-expect-error
                     { useContentScriptContext: true },
                 )
