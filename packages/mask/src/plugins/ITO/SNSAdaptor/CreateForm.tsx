@@ -118,13 +118,12 @@ const useStyles = makeStyles()((theme) => {
 export interface CreateFormProps extends withClasses<never> {
     onChangePoolSettings: (pollSettings: PoolSettings) => void
     onNext: () => void
-    onClose: () => void
     origin?: PoolSettings
     chainId: ChainId
 }
 
 export function CreateForm(props: CreateFormProps) {
-    const { onChangePoolSettings, onNext, origin, onClose, chainId } = props
+    const { onChangePoolSettings, onNext, origin, chainId } = props
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
 
@@ -230,10 +229,6 @@ export function CreateForm(props: CreateFormProps) {
         if (!advanceSettingData.delayUnlocking) setUnlockTime(new Date())
         if (!advanceSettingData.IPRegion) setRegions(regionCodes)
     }, [advanceSettingData])
-
-    useEffect(() => {
-        if (!ITO2_CONTRACT_ADDRESS || !DEFAULT_QUALIFICATION2_ADDRESS) onClose()
-    }, [ITO2_CONTRACT_ADDRESS, DEFAULT_QUALIFICATION2_ADDRESS, onClose])
 
     useEffect(() => {
         const [first, ...rest] = tokenAndAmounts
