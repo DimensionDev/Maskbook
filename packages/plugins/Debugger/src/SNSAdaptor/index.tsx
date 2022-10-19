@@ -134,8 +134,8 @@ const sns: Plugin.SNSAdaptor.Definition = {
             },
             Utils: {
                 sorter(a, z) {
-                    if (a.type === SocialAddressType.ADDRESS) return 1
-                    if (z.type === SocialAddressType.ADDRESS) return -1
+                    if (a.type === SocialAddressType.Address) return 1
+                    if (z.type === SocialAddressType.Address) return -1
 
                     return 0
                 },
