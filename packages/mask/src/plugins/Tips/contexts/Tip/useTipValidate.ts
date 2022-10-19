@@ -20,8 +20,8 @@ export function useTipValidate({
     nonFungibleTokenAddress: tokenAddress,
 }: TipValidateOptions): ValidationTuple {
     const account = useAccount()
-    const { pluginId, targetChainId: chainId } = TargetRuntimeContext.useContainer()
-    const { value: balance = '0' } = useFungibleTokenBalance(pluginId, token?.address, { chainId, account })
+    const { pluginID, targetChainId: chainId } = TargetRuntimeContext.useContainer()
+    const { value: balance = '0' } = useFungibleTokenBalance(pluginID, token?.address, { chainId, account })
     const t = useI18N()
 
     const result: ValidationTuple = useMemo(() => {
@@ -29,13 +29,13 @@ export function useTipValidate({
             if (!amount || isLessThanOrEqualTo(amount, 0)) return [false]
             if (isGreaterThan(rightShift(amount, token?.decimals), balance))
                 return [false, t.token_insufficient_balance()]
-        } else if (pluginId === NetworkPluginID.PLUGIN_EVM) {
+        } else if (pluginID === NetworkPluginID.PLUGIN_EVM) {
             if (!tokenId || !tokenAddress) return [false]
-        } else if (pluginId === NetworkPluginID.PLUGIN_SOLANA && !tokenAddress) {
+        } else if (pluginID === NetworkPluginID.PLUGIN_SOLANA && !tokenAddress) {
             return [false]
         }
         return [true]
-    }, [tipType, amount, token?.decimals, balance, pluginId, tokenId, tokenAddress, t])
+    }, [tipType, amount, token?.decimals, balance, pluginID, tokenId, tokenAddress, t])
 
     return result
 }

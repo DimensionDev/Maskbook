@@ -78,7 +78,7 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
         sendTip,
         validation: [isValid, validateMessage],
     } = useTip()
-    const { targetChainId, pluginId } = TargetRuntimeContext.useContainer()
+    const { targetChainId, pluginID } = TargetRuntimeContext.useContainer()
 
     const isTokenTip = tipType === TipsType.Tokens
     const shareText = useMemo(() => {
@@ -127,8 +127,8 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
         })
     }, [sendTip, createTipsTx, shareText, amount, tipType, token, nonFungibleTokenContract, nonFungibleTokenId])
 
-    const expectedPluginID = [NetworkPluginID.PLUGIN_EVM, NetworkPluginID.PLUGIN_SOLANA].includes(pluginId)
-        ? pluginId
+    const expectedPluginID = [NetworkPluginID.PLUGIN_EVM, NetworkPluginID.PLUGIN_SOLANA].includes(pluginID)
+        ? pluginID
         : NetworkPluginID.PLUGIN_EVM
     const submitDisabled = (!isValid || isSending) && !isDirty
 

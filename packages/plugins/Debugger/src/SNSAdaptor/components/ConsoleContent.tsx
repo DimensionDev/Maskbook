@@ -45,7 +45,7 @@ export function ConsoleContent(props: ConsoleContentProps) {
 
     const onSelectGasSettings = useSelectAdvancedSettings(pluginID)
 
-    const [pluginId, setPluginId] = useState<PluginID>(PluginID.RSS3)
+    const [pluginID, setPluginID] = useState<PluginID>(PluginID.RSS3)
     const plugins = getEnumAsArray(PluginID) as Array<{ key: PluginID; value: string }>
 
     const [quickMode, setQuickMode] = useState(true)
@@ -164,7 +164,7 @@ export function ConsoleContent(props: ConsoleContentProps) {
             name: 'Plugin Settings',
             content: (
                 <>
-                    <select onChange={(event) => setPluginId(event.target.value as PluginID)}>
+                    <select onChange={(event) => setPluginID(event.target.value as PluginID)}>
                         {plugins.map((x) => (
                             <option key={x.value} value={x.value}>
                                 {x.key}
@@ -190,7 +190,7 @@ export function ConsoleContent(props: ConsoleContentProps) {
                                 settings: {
                                     quickMode,
                                     switchTab: {
-                                        focusPluginId: pluginId,
+                                        focusPluginId: pluginID,
                                     },
                                 },
                             })

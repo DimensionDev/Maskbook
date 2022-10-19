@@ -10,7 +10,7 @@ export interface AvatarMetaDB {
     avatarId: string
     chainId?: ChainId
     schema?: SchemaType
-    pluginId?: NetworkPluginID
+    pluginID?: NetworkPluginID
     ownerAddress?: string
 }
 
@@ -29,7 +29,7 @@ export interface SelectTokenInfo {
     account: string
     token: AllChainsNonFungibleToken
     image: string
-    pluginId: NetworkPluginID
+    pluginID: NetworkPluginID
 }
 
 export interface NextIDAvatarMeta extends AvatarMetaDB {

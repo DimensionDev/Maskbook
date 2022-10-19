@@ -70,7 +70,7 @@ function NFTAvatarInFacebook() {
         storage?.address ?? account,
         nftAvatar?.address,
         nftAvatar?.tokenId,
-        nftAvatar?.pluginId ?? NetworkPluginID.PLUGIN_EVM,
+        nftAvatar?.pluginID ?? NetworkPluginID.PLUGIN_EVM,
         nftAvatar?.chainId,
     )
 
@@ -149,7 +149,7 @@ function NFTAvatarInFacebook() {
                         address: storages.address.value,
                         avatarId: getAvatarId(identity.avatar ?? ''),
                         chainId: storages.chainId.value,
-                        pluginId: storages.pluginId.value,
+                        pluginID: storages.pluginID.value,
                         schema: storages.schema.value,
                     } as AvatarMetaDB,
                     identity.identifier.network as EnhanceableSite,

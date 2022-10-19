@@ -69,7 +69,7 @@ export interface NextIDStorageInfo<T = unknown> {
 }
 export interface NextIDStorageProofs<T> {
     content: {
-        // pluginId
+        // pluginID
         [index: string]: T
     }
     identity: string

@@ -18,9 +18,9 @@ interface CreatePayloadResponse {
 const BASE_URL =
     process.env.channel === 'stable' && process.env.NODE_ENV === 'production' ? KV_BASE_URL_PROD : KV_BASE_URL_DEV
 
-function formatPatchData(pluginId: string, data: unknown) {
+function formatPatchData(pluginID: string, data: unknown) {
     return {
-        [pluginId]: data,
+        [pluginID]: data,
     }
 }
 
@@ -34,7 +34,7 @@ export class NextIDStorageAPI implements NextIDBaseAPI.Storage {
         personaPublicKey: string,
         platform: NextIDPlatform,
         identity: string,
-        pluginId: string,
+        pluginID: string,
     ): Promise<Result<T, string>> {
         interface Proof {
             platform: NextIDPlatform
@@ -55,13 +55,13 @@ export class NextIDStorageAPI implements NextIDBaseAPI.Storage {
             .filter((x) => x.platform === platform)
             .filter((x) => x.identity === identity.toLowerCase())
         if (!proofs.length) return Err('Not found')
-        return Ok(proofs[0].content[pluginId])
+        return Ok(proofs[0].content[pluginID])
     }
 
     async getAllByIdentity<T>(
         platform: NextIDPlatform,
         identity: string,
-        pluginId: string,
+        pluginID: string,
     ): Promise<Result<T[], string>> {
         interface Proof {
             avatar: string
@@ -79,7 +79,7 @@ export class NextIDStorageAPI implements NextIDBaseAPI.Storage {
 
         if (!response.ok) return Err('User not found')
 
-        const result = compact(response.val.values.map((x) => x.content[pluginId]))
+        const result = compact(response.val.values.map((x) => x.content[pluginID]))
         return Ok(result)
     }
     async get<T>(personaPublicKey: string): Promise<Result<T, string>> {
@@ -91,7 +91,7 @@ export class NextIDStorageAPI implements NextIDBaseAPI.Storage {
      * @param platform
      * @param identity
      * @param patchData
-     * @param pluginId
+     * @param pluginID
      *
      * We choose [RFC 7396](https://www.rfc-editor.org/rfc/rfc7396) standard for KV modifying.
      */
@@ -100,13 +100,13 @@ export class NextIDStorageAPI implements NextIDBaseAPI.Storage {
         platform: NextIDPlatform,
         identity: string,
         patchData: unknown,
-        pluginId: string,
+        pluginID: string,
     ): Promise<Result<NextIDStoragePayload, string>> {
         const requestBody = {
             persona: personaPublicKey,
             platform,
             identity,
-            patch: formatPatchData(pluginId, patchData),
+            patch: formatPatchData(pluginID, patchData),
         }
 
         const response = await fetchJSON<CreatePayloadResponse>(urlcat(BASE_URL, '/v1/kv/payload'), {
@@ -130,7 +130,7 @@ export class NextIDStorageAPI implements NextIDBaseAPI.Storage {
      * @param identity
      * @param createdAt
      * @param patchData
-     * @param pluginId
+     * @param pluginID
      *
      * We choose [RFC 7396](https://www.rfc-editor.org/rfc/rfc7396) standard for KV modifying.
      */
@@ -142,7 +142,7 @@ export class NextIDStorageAPI implements NextIDBaseAPI.Storage {
         identity: string,
         createdAt: string,
         patchData: unknown,
-        pluginId: string,
+        pluginID: string,
     ): Promise<Result<T, string>> {
         const requestBody = {
             uuid,
@@ -150,7 +150,7 @@ export class NextIDStorageAPI implements NextIDBaseAPI.Storage {
             platform,
             identity,
             signature,
-            patch: formatPatchData(pluginId, patchData),
+            patch: formatPatchData(pluginID, patchData),
             created_at: createdAt,
         }
 

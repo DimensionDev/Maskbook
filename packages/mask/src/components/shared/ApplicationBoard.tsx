@@ -106,7 +106,7 @@ function ApplicationBoardContent(props: Props) {
                     return ApplicationEntries.map((entry) => ({
                         entry,
                         enabled: isSNSEnabled,
-                        pluginId: ID,
+                        pluginID: ID,
                         isWalletConnectedRequired:
                             !account && isWalletConnectedRequired && !entry.entryWalletConnectedNotRequired,
                         isWalletConnectedEVMRequired: Boolean(
@@ -208,7 +208,7 @@ function RenderEntryComponent({
         if (!application.entry.nextIdRequired) return
         if (ApplicationEntryStatus.isPersonaCreated === false) return ApplicationEntryStatus.personaAction as () => void
         if (ApplicationEntryStatus.shouldVerifyNextId)
-            return () => ApplicationEntryStatus.personaAction?.(application.pluginId)
+            return () => ApplicationEntryStatus.personaAction?.(application.pluginID)
         return
     }, [setSelectProviderDialog, ApplicationEntryStatus, application])
 

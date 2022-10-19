@@ -1,12 +1,12 @@
 import { NetworkPluginID } from '@masknet/shared-base'
 import type { Plugin } from '@masknet/plugin-infra'
 import { ChainId } from '@masknet/web3-shared-evm'
-import { pluginDescription, pluginName, pluginId, pluginMetaKey } from './constants.js'
+import { PLUGIN_DESCRIPTION, PLUGIN_NAME, PLUGIN_ID, PLUGIN_META_KEY } from './constants.js'
 
 export const base: Plugin.Shared.Definition = {
-    ID: pluginId,
-    name: { fallback: pluginName },
-    description: { fallback: pluginDescription },
+    ID: PLUGIN_ID,
+    name: { fallback: PLUGIN_NAME },
+    description: { fallback: PLUGIN_DESCRIPTION },
     publisher: { name: { fallback: 'Zubin Choudhary' }, link: 'https://www.iamzub.in' },
     enableRequirement: {
         architecture: { app: true, web: true },
@@ -21,6 +21,6 @@ export const base: Plugin.Shared.Definition = {
         },
     },
     contribution: {
-        metadataKeys: new Set([pluginMetaKey]),
+        metadataKeys: new Set([PLUGIN_META_KEY]),
     },
 }

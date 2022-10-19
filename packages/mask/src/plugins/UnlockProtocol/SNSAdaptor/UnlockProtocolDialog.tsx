@@ -3,7 +3,7 @@ import { DialogActions, DialogContent, DialogProps, Chip, Button, InputBase } fr
 import { useEffect, useState } from 'react'
 import { InjectedDialog } from '@masknet/shared'
 import { useI18N } from '../../../utils/index.js'
-import { pluginMetaKey } from '../constants.js'
+import { PLUGIN_META_KEY } from '../constants.js'
 import type { UnlockLocks } from '../types.js'
 import { PluginUnlockProtocolRPC } from '../messages.js'
 import { SelectRecipientsUnlockDialogUI } from './SelectRecipientsUnlockDialog.js'
@@ -74,9 +74,9 @@ export default function UnlockProtocolDialog(props: UnlockProtocolDialogProps) {
                             post: encryption.encrypted,
                         }
                         if (data) {
-                            attachMetadata(pluginMetaKey, JSON.parse(JSON.stringify(data)))
+                            attachMetadata(PLUGIN_META_KEY, JSON.parse(JSON.stringify(data)))
                         } else {
-                            dropMetadata(pluginMetaKey)
+                            dropMetadata(PLUGIN_META_KEY)
                         }
                         props.onClose()
                     } else {

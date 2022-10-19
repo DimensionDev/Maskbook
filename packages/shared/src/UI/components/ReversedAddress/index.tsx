@@ -5,7 +5,7 @@ import { Typography, TypographyProps } from '@mui/material'
 
 export interface ReverseAddressProps {
     address: string
-    pluginId?: NetworkPluginID
+    pluginID?: NetworkPluginID
     domainSize?: number
     size?: number
     TypographyProps?: TypographyProps
@@ -13,9 +13,9 @@ export interface ReverseAddressProps {
 }
 
 export const ReversedAddress = memo<ReverseAddressProps>(
-    ({ address, pluginId, domainSize, size = 4, TypographyProps = { fontSize: '14px', fontWeight: 700 } }) => {
-        const { value: domain } = useReverseAddress(pluginId, address)
-        const { Others } = useWeb3State(pluginId)
+    ({ address, pluginID, domainSize, size = 4, TypographyProps = { fontSize: '14px', fontWeight: 700 } }) => {
+        const { value: domain } = useReverseAddress(pluginID, address)
+        const { Others } = useWeb3State(pluginID)
 
         if (!domain || !Others?.formatDomainName)
             return <Typography {...TypographyProps}>{Others?.formatAddress?.(address, size) ?? address}</Typography>

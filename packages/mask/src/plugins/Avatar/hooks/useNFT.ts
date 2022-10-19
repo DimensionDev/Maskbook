@@ -7,15 +7,15 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import type { NFTInfo } from '../types.js'
 
 export function useNFT(
+    pluginID: NetworkPluginID = NetworkPluginID.PLUGIN_EVM,
     account: string,
     address?: string,
     tokenId?: string,
-    pluginId: NetworkPluginID = NetworkPluginID.PLUGIN_EVM,
     chainId: ChainId = ChainId.Mainnet,
     ownerAddress?: string,
 ) {
-    const { Others, Connection } = useWeb3State<'all'>(pluginId ?? NetworkPluginID.PLUGIN_EVM)
-    const hub = useWeb3Hub<'all'>(pluginId, {
+    const { Others, Connection } = useWeb3State<'all'>(pluginID)
+    const hub = useWeb3Hub<'all'>(pluginID, {
         chainId,
         account,
     })

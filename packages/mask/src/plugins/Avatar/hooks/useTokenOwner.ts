@@ -7,13 +7,13 @@ import { useGetAddress } from './useGetAddress.js'
 import { activatedSocialNetworkUI } from '../../../social-network/index.js'
 
 export function useCheckTokenOwner(
-    pluginId: NetworkPluginID,
+    pluginID: NetworkPluginID,
     address: string,
     tokenId: string,
     schemaType: SchemaType,
     socialIdentity?: SocialIdentity,
 ) {
-    const connection = useWeb3Connection(pluginId)
+    const connection = useWeb3Connection(pluginID)
     const getAddress = useGetAddress()
 
     return useAsyncRetry(async () => {

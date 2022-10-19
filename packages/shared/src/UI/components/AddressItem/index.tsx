@@ -55,7 +55,7 @@ export function AddressItem({
                 <ReversedAddress
                     TypographyProps={TypographyProps}
                     address={socialAddress.address}
-                    pluginId={socialAddress.pluginID}
+                    pluginID={socialAddress.pluginID}
                 />
             ) : (
                 <Typography {...TypographyProps}>{Others?.formatAddress(socialAddress.address, 4)}</Typography>

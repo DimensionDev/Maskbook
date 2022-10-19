@@ -132,7 +132,7 @@ function ApprovalWrapper(props: ApprovalWrapperProps) {
     const { targetChainId: chainId } = TargetChainIdContext.useContainer()
     const [networkTabChainId, setNetworkTabChainId] = useState<ChainId>(chainId)
     const approvalDefinition = useActivatedPlugin(PluginID.Approval, 'any')
-    const pluginId = useCurrentWeb3NetworkPluginID()
+    const pluginID = useCurrentWeb3NetworkPluginID()
     const chainIdList =
         approvalDefinition?.enableRequirement.web3?.[NetworkPluginID.PLUGIN_EVM]?.supportedChainIds ?? []
 
@@ -143,7 +143,7 @@ function ApprovalWrapper(props: ApprovalWrapperProps) {
 
     return (
         <div className={classes.approvalWrapper}>
-            {pluginId === NetworkPluginID.PLUGIN_EVM ? (
+            {pluginID === NetworkPluginID.PLUGIN_EVM ? (
                 <>
                     <div className={classes.abstractTabWrapper}>
                         <NetworkTab
@@ -185,7 +185,7 @@ function ApprovalWrapper(props: ApprovalWrapperProps) {
                         })
                     }}
                     fullWidth>
-                    {pluginId === NetworkPluginID.PLUGIN_EVM
+                    {pluginID === NetworkPluginID.PLUGIN_EVM
                         ? tr('wallet_status_button_change')
                         : tr('wallet_status_button_change_to_evm')}
                 </Button>

@@ -78,7 +78,7 @@ function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
         storage?.address ?? account,
         nftAvatar?.address,
         nftAvatar?.tokenId,
-        nftAvatar?.pluginId,
+        nftAvatar?.pluginID,
         nftAvatar?.chainId,
         nftAvatar?.ownerAddress,
     )
@@ -237,11 +237,11 @@ function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
             event.stopPropagation()
             event.preventDefault()
 
-            if (!nftAvatar?.pluginId || !nftAvatar.chainId) return
+            if (!nftAvatar?.pluginID || !nftAvatar.chainId) return
 
             CrossIsolationMessages.events.nonFungibleTokenDialogEvent.sendToLocal({
                 open: true,
-                pluginID: nftAvatar.pluginId,
+                pluginID: nftAvatar.pluginID,
                 chainId: nftAvatar.chainId,
                 tokenId: nftAvatar.tokenId,
                 tokenAddress: nftAvatar.address,

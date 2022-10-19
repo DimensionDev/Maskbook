@@ -19,20 +19,20 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 interface PluginEnableBoundaryProps extends withClasses<'root'> {
-    pluginId: PluginID
+    pluginID: PluginID
     children: React.ReactNode
 }
 export const PluginEnableBoundary = memo<PluginEnableBoundaryProps>((props) => {
     const { t } = useI18N()
-    const { children, pluginId } = props
+    const { children, pluginID } = props
     const classes = useStylesExtends(useStyles(), props)
 
-    const disabled = useIsMinimalMode(pluginId)
+    const disabled = useIsMinimalMode(pluginID)
     const plugins = useActivatedPluginsSNSAdaptor(true)
 
     const [{ loading }, onEnablePlugin] = useAsyncFn(async () => {
-        await Services.Settings.setPluginMinimalModeEnabled(pluginId, false)
-    }, [pluginId])
+        await Services.Settings.setPluginMinimalModeEnabled(pluginID, false)
+    }, [pluginID])
 
     if (disabled) {
         return (
