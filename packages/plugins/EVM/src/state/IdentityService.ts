@@ -18,8 +18,8 @@ import { ChainbaseResolver } from './NameService/Chainbase.js'
 const ENS_RE = /[^\t\n\v()[\]]{1,256}\.(eth|kred|xyz|luxe)\b/i
 const ADDRESS_FULL = /0x\w{40,}/i
 
-function getENSName(nickname: string, bio: string) {
-    const [matched] = nickname.match(ENS_RE) ?? bio.match(ENS_RE) ?? []
+function getENSName(username: string, nickname: string, bio: string) {
+    const [matched] = username.match(ENS_RE) ?? nickname.match(ENS_RE) ?? bio.match(ENS_RE) ?? []
     return matched
 }
 
@@ -77,6 +77,21 @@ export class IdentityService extends IdentityServiceState {
         return
     }
 
+    /** Read a social address from username. */
+    private async getSocialAddressFromUsername({ identifier }: SocialIdentity) {
+        if (!identifier?.userId) return
+        const name = getENSName(identifier.userId, '', '')
+        if (!name) return
+        const address = await attemptUntil(
+            [new ENS_Resolver(), new ChainbaseResolver()].map((resolver) => {
+                return async () => resolver.lookup(name)
+            }),
+            undefined,
+        )
+        if (!address) return
+        return this.createSocialAddress(SocialAddressType.ENS, address, name)
+    }
+
     /** Read a social address from bio. */
     private async getSocialAddressFromBio({ bio = '' }: SocialIdentity) {
         const address = getAddress(bio)
@@ -111,7 +126,7 @@ export class IdentityService extends IdentityServiceState {
 
     /** Read a social address from nickname, bio if them contain a ENS. */
     private async getSocialAddressFromENS({ nickname = '', bio = '' }: SocialIdentity) {
-        const name = getENSName(nickname, bio)
+        const name = getENSName('', nickname, bio)
         if (!name) return
 
         const address = await attemptUntil(
@@ -150,10 +165,13 @@ export class IdentityService extends IdentityServiceState {
             this.getSocialAddressFromKV(identity),
             this.getSocialAddressesFromNextID(identity),
             this.getSocialAddressesFromMaskX(identity),
+            this.getSocialAddressFromUsername(identity),
         ])
         const identities = allSettled
             .flatMap((x) => (x.status === 'fulfilled' ? x.value : []))
             .filter(Boolean) as Array<SocialAddress<NetworkPluginID.PLUGIN_EVM>>
+        console.log('------------------')
+        console.log(identities)
         return uniqBy(identities, (x) => `${x.type}_${x.label}_${x.address.toLowerCase()}`)
     }
 }
