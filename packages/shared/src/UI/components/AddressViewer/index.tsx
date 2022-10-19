@@ -33,7 +33,7 @@ export function AddressViewer({ identityAddress }: AddressViewerProps) {
     const { type, label, address } = identityAddress
 
     const typeMap: Record<SocialAddressType, string> = {
-        [SocialAddressType.ADDRESS]: t.address_viewer_address_name_address(),
+        [SocialAddressType.Address]: t.address_viewer_address_name_address(),
         [SocialAddressType.ENS]: t.address_viewer_address_name_ens(),
         [SocialAddressType.RSS3]: t.address_viewer_address_name_rns(),
         [SocialAddressType.KV]: t.address_viewer_address_name_address(),

@@ -1,18 +1,18 @@
 import { useCallback } from 'react'
-import type { NonPayableTx, PayableTx } from '@masknet/web3-contracts/types/types'
 import { isLessThan, isZero } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { ChainId, GasOptionConfig, TransactionEventType } from '@masknet/web3-shared-evm'
-import { useAccount } from '@masknet/web3-hooks-base'
+import { ChainId, encodeContractTransaction, GasOptionConfig } from '@masknet/web3-shared-evm'
+import { useAccount, useWeb3Connection } from '@masknet/web3-hooks-base'
 import { useNativeTokenWrapperContract } from './useWrappedEtherContract.js'
 
 export function useNativeTokenWrapperCallback(chainId?: ChainId) {
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const wrapperContract = useNativeTokenWrapperContract(chainId)
+    const connection = useWeb3Connection()
 
     const wrapCallback = useCallback(
         async (amount: string, gasConfig?: GasOptionConfig) => {
-            if (!wrapperContract || !amount) {
+            if (!connection || !wrapperContract || !amount) {
                 return
             }
 
@@ -23,37 +23,24 @@ export function useNativeTokenWrapperCallback(chainId?: ChainId) {
             const config = {
                 from: account,
                 value: amount,
-                gas: await wrapperContract.methods
-                    .deposit()
-                    .estimateGas({
-                        from: account,
-                        value: amount,
-                    })
-                    .catch((error) => {
-                        throw error
-                    }),
                 ...gasConfig,
             }
 
+            const tx = await encodeContractTransaction(wrapperContract, wrapperContract.methods.deposit(), config)
+
             // send transaction and wait for hash
-            return new Promise<string>((resolve, reject) => {
-                wrapperContract.methods
-                    .deposit()
-                    .send(config as PayableTx)
-                    .on(TransactionEventType.CONFIRMATION, (_, receipt) => {
-                        resolve(receipt.transactionHash)
-                    })
-                    .on(TransactionEventType.ERROR, (error) => {
-                        reject(error)
-                    })
-            })
+            const hash = await connection.sendTransaction(tx)
+
+            const receipt = await connection.getTransactionReceipt(hash)
+
+            return receipt?.transactionHash
         },
-        [account, wrapperContract],
+        [account, wrapperContract, chainId],
     )
 
     const unwrapCallback = useCallback(
         async (all = true, amount = '0', gasConfig?: GasOptionConfig) => {
-            if (!wrapperContract || !amount) {
+            if (!connection || !wrapperContract || !amount) {
                 return
             }
 
@@ -74,30 +61,23 @@ export function useNativeTokenWrapperCallback(chainId?: ChainId) {
             const withdrawAmount = all ? wethBalance : amount
             const config = {
                 from: account,
-                gas: await wrapperContract.methods
-                    .withdraw(withdrawAmount)
-                    .estimateGas({
-                        from: account,
-                    })
-                    .catch((error) => {
-                        throw error
-                    }),
                 ...gasConfig,
             }
+
+            const tx = await encodeContractTransaction(
+                wrapperContract,
+                wrapperContract.methods.withdraw(withdrawAmount),
+                config,
+            )
+
             // send transaction and wait for hash
-            return new Promise<string>((resolve, reject) => {
-                wrapperContract.methods
-                    .withdraw(withdrawAmount)
-                    .send(config as NonPayableTx)
-                    .on(TransactionEventType.CONFIRMATION, (_, receipt) => {
-                        resolve(receipt.transactionHash)
-                    })
-                    .on(TransactionEventType.ERROR, (error) => {
-                        reject(error)
-                    })
-            })
+
+            const hash = await connection.sendTransaction(tx, { chainId })
+            const receipt = await connection.getTransactionReceipt(hash)
+
+            return receipt?.transactionHash
         },
-        [account, wrapperContract],
+        [account, wrapperContract, chainId],
     )
 
     return [wrapCallback, unwrapCallback] as const

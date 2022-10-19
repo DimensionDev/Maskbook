@@ -114,7 +114,7 @@ export enum TransactionDescriptorType {
 }
 
 export enum SocialAddressType {
-    ADDRESS = 'ADDRESS',
+    Address = 'Address',
     ENS = 'ENS',
     RSS3 = 'RSS3',
     SOL = 'SOL',
@@ -708,9 +708,13 @@ export interface ProviderEvents<ChainId, ProviderType> {
     disconnect: [ProviderType]
 }
 
+export interface RecognizableError extends Error {
+    isRecognized?: boolean
+}
+
 export interface WatchEvents<Transaction> {
     /** Emit when error occur */
-    error: [Error, JsonRpcPayload]
+    error: [RecognizableError, JsonRpcPayload]
     /** Emit when the watched transaction status updated. */
     progress: [string, TransactionStatusType, Transaction | undefined]
 }

@@ -64,7 +64,9 @@ export function useERC20TokenApproveCallback(
                 return
             }
 
-            const hash = await connection?.approveFungibleToken(address, spender, useExact ? amount : MaxUint256)
+            const hash = await connection?.approveFungibleToken(address, spender, useExact ? amount : MaxUint256, {
+                chainId,
+            })
             const receipt = await connection.getTransactionReceipt(hash)
 
             if (receipt) {
@@ -73,7 +75,7 @@ export function useERC20TokenApproveCallback(
                 revalidateAllowance()
             }
         },
-        [account, amount, spender, address, erc20Contract, approveStateType, connection],
+        [account, amount, spender, address, erc20Contract, approveStateType, connection, chainId],
     )
 
     const resetCallback = useCallback(() => {

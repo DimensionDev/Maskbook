@@ -28,6 +28,7 @@ export const formatSchemaType = createLookupTableResolver<SchemaType, string>(
         [SchemaType.ERC20]: 'ERC20',
         [SchemaType.ERC721]: 'ERC721',
         [SchemaType.ERC1155]: 'ERC1155',
+        [SchemaType.SBT]: 'SBT',
     },
     '',
 )

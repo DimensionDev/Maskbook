@@ -1,6 +1,6 @@
 import { memo, useCallback } from 'react'
 import { useAsyncFn } from 'react-use'
-import { Box, TableCell, TableRow, Typography, Avatar, useTheme } from '@mui/material'
+import { Box, TableCell, TableRow, Typography, useTheme } from '@mui/material'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
 import { Services } from '../../../../API.js'
@@ -8,7 +8,8 @@ import { useDashboardI18N } from '../../../../locales/index.js'
 import { useAddContactToFavorite, useRemoveContactFromFavorite } from '../../hooks/useFavoriteContact.js'
 import { PersonaContext } from '../../hooks/usePersonaContext.js'
 import { LoadingButton } from '@mui/lab'
-import { generateContactAvatarColor, RelationProfile } from '@masknet/shared-base'
+import type { RelationProfile } from '@masknet/shared-base'
+import { Image, Icon } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     favorite: {
@@ -19,6 +20,15 @@ const useStyles = makeStyles()((theme) => ({
     },
     avatarContainer: {
         position: 'relative',
+        width: 48,
+        height: 48,
+        borderRadius: '50%',
+    },
+    avatar: {
+        width: 48,
+        height: 48,
+        borderRadius: '50%',
+        overflow: 'hidden',
     },
     maskIcon: {
         position: 'absolute',
@@ -103,7 +113,7 @@ export interface ContactTableRowUIProps {
 const SPACE_POINT = 32
 
 export const ContactTableRowUI = memo<ContactTableRowUIProps>(
-    ({ contact, index, handleClickStar, handleClickInvite, theme, loading }) => {
+    ({ contact, index, handleClickStar, handleClickInvite, loading }) => {
         const t = useDashboardI18N()
         const { classes } = useStyles()
         const [first, last] = contact.name.split(' ')
@@ -123,20 +133,23 @@ export const ContactTableRowUI = memo<ContactTableRowUIProps>(
                             ) : null}
                         </Box>
                         <Box className={classes.avatarContainer}>
-                            <Avatar
+                            <Image
+                                className={classes.avatar}
+                                classes={{ container: classes.avatar }}
                                 aria-label={contact.name}
                                 src={contact.avatar}
-                                sx={{
-                                    backgroundColor: generateContactAvatarColor(contact.identifier.toText(), theme),
-                                    width: 48,
-                                    height: 48,
-                                }}>
-                                {/* To support emoji */}
-                                {String.fromCodePoint(
-                                    first.codePointAt(0) ?? SPACE_POINT,
-                                    last?.codePointAt(0) ?? SPACE_POINT,
-                                )}
-                            </Avatar>
+                                fallback={
+                                    <Icon
+                                        className={classes.avatar}
+                                        name={contact.name}
+                                        // To support emoji
+                                        label={String.fromCodePoint(
+                                            first.codePointAt(0) ?? SPACE_POINT,
+                                            last?.codePointAt(0) ?? SPACE_POINT,
+                                        )}
+                                    />
+                                }
+                            />
                             {contact.fingerprint ? <Icons.MaskBlue className={classes.maskIcon} /> : null}
                         </Box>
                         <Box className={classes.info}>

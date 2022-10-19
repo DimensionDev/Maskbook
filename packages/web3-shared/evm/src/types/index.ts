@@ -106,6 +106,7 @@ export enum SchemaType {
     ERC20 = 2,
     ERC721 = 3,
     ERC1155 = 4,
+    SBT = 5,
 }
 
 export interface EIP1559GasConfig {

@@ -25,8 +25,7 @@ export function usePersonaNFTAvatar(userId: string, avatarId: string, persona: s
         if (!userId) return
         const key = `${userId}-${activatedSocialNetworkUI.networkIdentifier}`
         if (!cache.has(key)) cache.set(key, getNFTAvatarForCache(userId, snsKey, avatarId, persona, getNFTAvatar))
-        const v = cache.get(key)
-        return v
+        return cache.get(key)
     }, [userId, getNFTAvatar, avatarId, activatedSocialNetworkUI.networkIdentifier])
 }
 

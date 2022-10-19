@@ -344,25 +344,32 @@ class Connection implements EVM_Connection {
     async getSchemaType(address: string, initial?: EVM_Web3ConnectionOptions): Promise<SchemaType | undefined> {
         const options = this.getOptions(initial)
         const ERC165_INTERFACE_ID = '0x01ffc9a7'
-        const ERC721_ENUMERABLE_INTERFACE_ID = '0x780e9d63'
-        const ERC1155_ENUMERABLE_INTERFACE_ID = '0xd9b67a26'
+        const EIP5516_INTERFACE_ID = '0x8314f22b'
+        const EIP5192_INTERFACE_ID = '0xb45a3c0e'
+        const ERC721_INTERFACE_ID = '0x80ac58cd'
+        const ERC1155_INTERFACE_ID = '0xd9b67a26'
 
         try {
             const erc165Contract = await this.getWeb3Contract<ERC165>(address, ERC165ABI as AbiItem[], options)
 
-            const isERC165 = await erc165Contract?.methods
-                .supportsInterface(ERC165_INTERFACE_ID)
-                .call({ from: options.account })
+            const [isERC165, isERC721] = await Promise.all([
+                erc165Contract?.methods.supportsInterface(ERC165_INTERFACE_ID).call({ from: options.account }),
+                erc165Contract?.methods.supportsInterface(ERC721_INTERFACE_ID).call({ from: options.account }),
+            ])
 
-            const isERC721 = await erc165Contract?.methods
-                .supportsInterface(ERC721_ENUMERABLE_INTERFACE_ID)
-                .call({ from: options.account })
             if (isERC165 && isERC721) return SchemaType.ERC721
 
             const isERC1155 = await erc165Contract?.methods
-                .supportsInterface(ERC1155_ENUMERABLE_INTERFACE_ID)
+                .supportsInterface(ERC1155_INTERFACE_ID)
                 .call({ from: options.account })
             if (isERC165 && isERC1155) return SchemaType.ERC1155
+
+            const [isEIP5516, isEIP5192] = await Promise.all([
+                erc165Contract?.methods.supportsInterface(EIP5516_INTERFACE_ID).call({ from: options.account }),
+                erc165Contract?.methods.supportsInterface(EIP5192_INTERFACE_ID).call({ from: options.account }),
+            ])
+
+            if (isEIP5516 || isEIP5192) return SchemaType.SBT
 
             const isERC20 = (await this.getCode(address, options)) !== '0x'
             if (isERC20) return SchemaType.ERC20

@@ -90,7 +90,7 @@ export function useTradeCallback(
         )
 
         // send transaction and wait for hash
-        const hash = await connection.sendTransaction(tx)
+        const hash = await connection.sendTransaction(tx, { chainId })
         const receipt = await connection.getTransactionReceipt(hash)
 
         return receipt?.transactionHash

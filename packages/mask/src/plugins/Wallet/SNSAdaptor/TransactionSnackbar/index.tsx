@@ -4,7 +4,7 @@ import { useAsync } from 'react-use'
 import { Link } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { NetworkPluginID, createLookupTableResolver } from '@masknet/shared-base'
-import { TransactionStatusType } from '@masknet/web3-shared-base'
+import { TransactionStatusType, RecognizableError } from '@masknet/web3-shared-base'
 import { useWeb3State, useChainId } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { makeStyles, ShowSnackbarOptions, SnackbarKey, SnackbarMessage, useCustomSnackbar } from '@masknet/theme'
@@ -28,7 +28,7 @@ export function TransactionSnackbar<T extends NetworkPluginID>({ pluginID }: Tra
     const chainId = useChainId(pluginID)
     const [errorInfo, setErrorInfo] = useState<
         | {
-              error: Error
+              error: RecognizableError
               request: JsonRpcPayload
           }
         | undefined
@@ -138,8 +138,8 @@ export function TransactionSnackbar<T extends NetworkPluginID>({ pluginID }: Tra
     useAsync(async () => {
         const transaction = errorInfo?.request?.params?.[0] as Web3Helper.Definition[T]['Transaction'] | undefined
         const computed = transaction ? await TransactionFormatter?.formatTransaction?.(chainId, transaction) : undefined
-        const title = computed?.title ?? errorInfo?.error.message
-        const message = computed?.snackbar?.failedDescription
+        const title = computed?.title
+        const message = errorInfo?.error.isRecognized ? errorInfo?.error.message : computed?.snackbar?.failedDescription
 
         if (!title) return
 

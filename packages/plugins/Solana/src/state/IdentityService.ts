@@ -39,7 +39,7 @@ export class IdentityService extends IdentityServiceState {
             address
                 ? {
                       pluginID: NetworkPluginID.PLUGIN_SOLANA,
-                      type: SocialAddressType.ADDRESS,
+                      type: SocialAddressType.Address,
                       label: formatAddress(address, 4),
                       address,
                   }

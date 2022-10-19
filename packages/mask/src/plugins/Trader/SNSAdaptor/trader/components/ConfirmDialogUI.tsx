@@ -20,6 +20,7 @@ import { ArrowDownward } from '@mui/icons-material'
 import { Icons } from '@masknet/icons'
 import { ONE_BIPS, MIN_SLIPPAGE, MAX_SLIPPAGE } from '../../../constants/index.js'
 import { useUpdateEffect } from 'react-use'
+import { PluginWeb3ActualContextProvider } from '@masknet/web3-hooks-base'
 
 const useStyles = makeStyles<{
     isDashboard: boolean
@@ -494,11 +495,13 @@ export const ConfirmDialogUI = memo<ConfirmDialogUIProps>(
                 </DialogContent>
 
                 <DialogActions className={classes.actions}>
-                    <PluginWalletStatusBar>
-                        <Button disabled={staled || priceUpdated} fullWidth onClick={onConfirm}>
-                            {t('plugin_trader_confirm_swap')}
-                        </Button>
-                    </PluginWalletStatusBar>
+                    <PluginWeb3ActualContextProvider>
+                        <PluginWalletStatusBar>
+                            <Button disabled={staled || priceUpdated} fullWidth onClick={onConfirm}>
+                                {t('plugin_trader_confirm_swap')}
+                            </Button>
+                        </PluginWalletStatusBar>
+                    </PluginWeb3ActualContextProvider>
                 </DialogActions>
             </InjectedDialog>
         )

@@ -1,4 +1,4 @@
-import { uniqBy } from 'lodash-unified'
+import { compact, uniqBy } from 'lodash-unified'
 import type { Plugin } from '@masknet/plugin-infra'
 import { IdentityServiceState } from '@masknet/web3-state'
 import { SocialIdentity, SocialAddress, SocialAddressType, attemptUntil } from '@masknet/web3-shared-base'
@@ -11,17 +11,26 @@ import {
     createLookupTableResolver,
 } from '@masknet/shared-base'
 import { ChainId, isValidAddress, isZeroAddress } from '@masknet/web3-shared-evm'
-import { KeyValue, MaskX, MaskX_BaseAPI, NextIDProof, Twitter } from '@masknet/web3-providers'
+import { KeyValue, MaskX, MaskX_BaseAPI, NextIDProof, RSS3, Twitter } from '@masknet/web3-providers'
 import { ENS_Resolver } from './NameService/ENS.js'
 import { ChainbaseResolver } from './NameService/Chainbase.js'
 import { Web3StateSettings } from '../settings/index.js'
 
 const ENS_RE = /[^\t\n\v()[\]]{1,256}\.(eth|kred|xyz|luxe)\b/i
 const ADDRESS_FULL = /0x\w{40,}/i
+const RSS3_URL_RE = /https?:\/\/(?<name>[\w.]+)\.(rss3|cheers)\.bio/
+const RSS3_RNS_RE = /(?<name>[\w.]+)\.rss3/
 
-function getENSName(nickname: string, bio: string) {
-    const [matched] = nickname.match(ENS_RE) ?? bio.match(ENS_RE) ?? []
-    return matched
+function getENSNames(userId: string, nickname: string, bio: string) {
+    return [userId.match(ENS_RE), nickname.match(ENS_RE), bio.match(ENS_RE)]
+        .map((result) => result?.[0] ?? '')
+        .filter(Boolean)
+}
+
+function getRSS3Ids(nickname: string, profileURL: string, bio: string) {
+    return [nickname.match(RSS3_RNS_RE), profileURL.match(RSS3_URL_RE), bio.match(RSS3_URL_RE), bio.match(RSS3_RNS_RE)]
+        .map((result) => result?.groups?.name ?? '')
+        .filter(Boolean)
 }
 
 function getAddress(text: string) {
@@ -83,17 +92,31 @@ export class IdentityService extends IdentityServiceState {
     private async getSocialAddressFromBio({ bio = '' }: SocialIdentity) {
         const address = getAddress(bio)
         if (!address) return
-        return this.createSocialAddress(SocialAddressType.ADDRESS, address)
+        return this.createSocialAddress(SocialAddressType.Address, address)
     }
 
     /** Read a social address from NextID. */
     private async getSocialAddressesFromNextID({ identifier, publicKey }: SocialIdentity) {
         const listOfAddress = await getWalletAddressesFromNextID(identifier?.userId, publicKey)
-        return listOfAddress
-            .map((x) =>
+        return compact(
+            listOfAddress.map((x) =>
                 this.createSocialAddress(SocialAddressType.NEXT_ID, x.identity, x.latest_checked_at, x.created_at),
-            )
-            .filter(Boolean) as Array<SocialAddress<NetworkPluginID.PLUGIN_EVM>>
+            ),
+        )
+    }
+
+    /** Read a social address from bio when it contains a RSS3 ID. */
+    private async getSocialAddressFromRSS3({ nickname = '', homepage = '', bio = '' }: SocialIdentity) {
+        const ids = getRSS3Ids(nickname, homepage, bio)
+        if (!ids.length) return
+
+        const allSettled = await Promise.allSettled(
+            ids.map(async (id) => {
+                const info = await RSS3.getNameInfo(id)
+                return this.createSocialAddress(SocialAddressType.RSS3, info?.address ?? '', `${id}.rss3`)
+            }),
+        )
+        return compact(allSettled.map((x) => (x.status === 'fulfilled' ? x.value : undefined)).filter(Boolean))
     }
 
     /** Read a social address from KV service. */
@@ -114,18 +137,23 @@ export class IdentityService extends IdentityServiceState {
     }
 
     /** Read a social address from nickname, bio if them contain a ENS. */
-    private async getSocialAddressFromENS({ nickname = '', bio = '' }: SocialIdentity) {
-        const name = getENSName(nickname, bio)
-        if (!name) return
+    private async getSocialAddressFromENS({ identifier, nickname = '', bio = '' }: SocialIdentity) {
+        const names = getENSNames(identifier?.userId ?? '', nickname, bio)
+        if (!names.length) return
 
-        const address = await attemptUntil(
-            [new ENS_Resolver(), new ChainbaseResolver()].map((resolver) => {
-                return async () => resolver.lookup(name)
+        const allSettled = await Promise.allSettled(
+            names.map(async (name) => {
+                const address = await attemptUntil(
+                    [new ENS_Resolver(), new ChainbaseResolver()].map((resolver) => {
+                        return async () => resolver.lookup(name)
+                    }),
+                    undefined,
+                )
+                if (!address) return
+                return this.createSocialAddress(SocialAddressType.ENS, address, name)
             }),
-            undefined,
         )
-        if (!address) return
-        return this.createSocialAddress(SocialAddressType.ENS, address, name)
+        return compact(allSettled.map((x) => (x.status === 'fulfilled' ? x.value : undefined)).filter(Boolean))
     }
 
     /** Read a social address from Twitter Blue. */
@@ -141,7 +169,7 @@ export class IdentityService extends IdentityServiceState {
         return this.createSocialAddress(SocialAddressType.TwitterBlue, ownerAddress)
     }
 
-    /** Read a social address from MaskX */
+    /** Read social addresses from MaskX */
     private async getSocialAddressesFromMaskX({ identifier }: SocialIdentity) {
         const userId = identifier?.userId
         if (!userId) return
@@ -165,14 +193,11 @@ export class IdentityService extends IdentityServiceState {
             this.getSocialAddressFromBio(identity),
             this.getSocialAddressFromENS(identity),
             this.getSocialAddressFromKV(identity),
+            this.getSocialAddressFromRSS3(identity),
             this.getSocialAddressFromTwitterBlue(identity),
             this.getSocialAddressesFromNextID(identity),
             this.getSocialAddressesFromMaskX(identity),
         ])
-
-        console.log('DEBUG: get from response')
-        console.log(allSettled)
-
         const identities = allSettled
             .flatMap((x) => (x.status === 'fulfilled' ? x.value : []))
             .filter(Boolean) as Array<SocialAddress<NetworkPluginID.PLUGIN_EVM>>
