@@ -23,6 +23,7 @@ const registerOnStyleChange = (() => {
     watcher.observe(document.head, { characterData: true, childList: true, subtree: true })
     return registerOnStyleChange
 })()
+const hookNamesModuleLoaderFunction = () => import('react-devtools-inline/hookNames' as any)
 
 let components: browser.devtools.panels.ExtensionPanel
 let profiler: browser.devtools.panels.ExtensionPanel
@@ -32,7 +33,7 @@ let profilerWindow: Window
 async function onInit() {
     const abort = new AbortController()
     const signal = abort.signal
-    const ReactDevTools = createReactDevTools()
+    const { ReactDevTools, store, bridge } = createReactDevTools()
     DevtoolsMessage.events.helloFromBackend.on(() => DevtoolsMessage.events.activateBackend.sendByBroadcast(), {
         signal,
         once: true,
@@ -70,8 +71,39 @@ async function onInit() {
                 browserTheme={(browser.devtools.panels as any).themeName === 'dark' ? 'dark' : 'light'}
                 componentsPortalContainer={componentRef}
                 profilerPortalContainer={profilerRef}
+                hookNamesModuleLoaderFunction={hookNamesModuleLoaderFunction}
+                showTabBar={false}
+                // Note: since this function is used to fetch the JS file and parse it,
+                // we don't need to care about the network cost because it's all local.
+                // Note: it seems it is fetching mock source URL (webpack-internal://) which makes it useless.
+                fetchFileWithCaching={(url) => fetch(url).then((x) => x.text())}
+                enabledInspectedElementContextMenu
+                viewAttributeSourceFunction={viewAttributeSourceFunction}
+                // To be done: overrideTab
+                //             viewElementSourceFunction
+                // @ts-expect-error DT type missing props.
+                viewUrlSourceFunction={
+                    'openResource' in browser.devtools.panels
+                        ? (url: string, line: number, col: number) =>
+                              (browser.devtools.panels as any).openResource(url, line, col)
+                        : undefined
+                }
             />
         )
+    }
+
+    function viewAttributeSourceFunction(id: number, path: Array<string | number>) {
+        const rendererID = store.getRendererIDForElement(id)
+        if (rendererID !== null) {
+            bridge.send('viewAttributeSource', { id, path, rendererID })
+            setTimeout(() => {
+                browser.devtools.inspectedWindow.eval(
+                    'window.$attribute && inspect($attribute)',
+                    // @ts-expect-error
+                    { useContentScriptContext: true },
+                )
+            }, 100)
+        }
     }
 
     const container = document.createElement('main')
