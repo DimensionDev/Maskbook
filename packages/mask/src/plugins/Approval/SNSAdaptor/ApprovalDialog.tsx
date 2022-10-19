@@ -144,12 +144,15 @@ function ApprovalWrapper(props: ApprovalWrapperProps) {
             {pluginId === NetworkPluginID.PLUGIN_EVM ? (
                 <>
                     <div className={classes.abstractTabWrapper}>
-                        <NetworkTab classes={{
+                        <NetworkTab
+                            classes={{
                                 tab: classes.tab,
                                 tabPanel: classes.tabPanel,
                                 indicator: classes.indicator,
                                 tabPaper: classes.tabPaper,
-                            }} chains={chainIdList?.filter(Boolean) as ChainId[]} />
+                            }}
+                            chains={chainIdList?.filter(Boolean) as ChainId[]}
+                        />
                     </div>
                     <section className={classes.contentWrapper}>
                         {tab === Tabs.tokens ? (

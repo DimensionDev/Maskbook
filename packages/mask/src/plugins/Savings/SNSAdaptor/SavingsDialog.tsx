@@ -151,13 +151,16 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
                         <DialogContent style={{ padding: 0, overflowX: 'hidden' }}>
                             <>
                                 <div className={classes.abstractTabWrapper}>
-                                    <NetworkTab classes={{
+                                    <NetworkTab
+                                        classes={{
                                             tab: classes.tab,
                                             tabs: classes.tabs,
                                             tabPaper: classes.tabPaper,
                                             tabPanel: classes.tabPanel,
                                             indicator: classes.indicator,
-                                        }} chains={chains.filter(Boolean) as ChainId[]} />
+                                        }}
+                                        chains={chains.filter(Boolean) as ChainId[]}
+                                    />
                                 </div>
                                 <div className={classes.tableTabWrapper}>
                                     <TabPanel style={{ padding: '8px 0 0 0' }} value={tabs.Deposit}>

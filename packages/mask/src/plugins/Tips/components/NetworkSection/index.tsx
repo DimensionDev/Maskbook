@@ -40,11 +40,14 @@ export const NetworkSection: FC<Props> = () => {
 
     return (
         <div className={classes.abstractTabWrapper}>
-            <NetworkTab classes={{
+            <NetworkTab
+                classes={{
                     tab: classes.tab,
                     tabs: classes.tabs,
                     tabPaper: classes.tabPaper,
-                }} chains={chainIdList} />
+                }}
+                chains={chainIdList}
+            />
         </div>
     )
 }

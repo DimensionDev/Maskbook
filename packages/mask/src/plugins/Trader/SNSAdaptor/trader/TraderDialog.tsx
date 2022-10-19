@@ -174,9 +174,12 @@ export function TraderDialog() {
             className={classes.dialog}>
             <DialogContent className={classes.content}>
                 <div className={classes.abstractTabWrapper}>
-                    <NetworkTab classes={{
+                    <NetworkTab
+                        classes={{
                             indicator: classes.indicator,
-                        }} chains={chainIdList} />
+                        }}
+                        chains={chainIdList}
+                    />
                 </div>
                 <PluginWeb3ContextProvider value={{ chainId, networkPluginId: NetworkPluginID.PLUGIN_EVM }}>
                     <AllProviderTradeContext.Provider>
