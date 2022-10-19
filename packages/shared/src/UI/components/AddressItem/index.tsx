@@ -29,7 +29,7 @@ const isReversible = (type?: SocialAddressType) => {
     if (!type) return false
     return [
         SocialAddressType.KV,
-        SocialAddressType.ADDRESS,
+        SocialAddressType.Address,
         SocialAddressType.NEXT_ID,
         SocialAddressType.TwitterBlue,
         SocialAddressType.CyberConnect,

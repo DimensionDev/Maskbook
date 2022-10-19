@@ -1,7 +1,7 @@
+import { useAsyncFn } from 'react-use'
 import { NetworkPluginID, BindingProof, ECKeyIdentifier } from '@masknet/shared-base'
 import type { TwitterBaseAPI } from '@masknet/web3-providers'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import { useAsyncFn } from 'react-use'
 import type { AllChainsNonFungibleToken, NextIDAvatarMeta } from '../../types.js'
 import { useSaveKV } from './useSaveKV.js'
 import { useSaveToNextID } from './useSaveToNextID.js'

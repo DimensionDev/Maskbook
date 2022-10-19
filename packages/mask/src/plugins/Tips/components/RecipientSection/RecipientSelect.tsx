@@ -178,6 +178,7 @@ const TipsAccountSource: FC<{ account: SocialAccount }> = ({ account }) => {
             : undefined
 
     const fromTwitter = [
+        SocialAddressType.Address,
         SocialAddressType.ENS,
         SocialAddressType.RSS3,
         SocialAddressType.SOL,

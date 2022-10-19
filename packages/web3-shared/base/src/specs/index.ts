@@ -114,7 +114,7 @@ export enum TransactionDescriptorType {
 }
 
 export enum SocialAddressType {
-    ADDRESS = 'ADDRESS',
+    Address = 'Address',
     ENS = 'ENS',
     RSS3 = 'RSS3',
     SOL = 'SOL',
