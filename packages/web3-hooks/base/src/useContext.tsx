@@ -9,13 +9,13 @@ import { useActualProviderType } from './useProviderType.js'
 interface Web3Context<T extends NetworkPluginID> {
     pluginID?: T
     account?: string
-    chainId?: Web3Helper.Definition[T]['ChainId']
-    networkType?: Web3Helper.Definition[T]['NetworkType']
-    providerType?: Web3Helper.Definition[T]['ProviderType']
+    chainId?: Web3Helper.ChainIdAll
+    networkType?: Web3Helper.NetworkTypeAll
+    providerType?: Web3Helper.ProviderTypeAll
     setAccount?: (account: string) => void
-    setChainId?: (chainId: Web3Helper.Definition[T]['ChainId']) => void
-    setNetworkType?: (provider: Web3Helper.Definition[T]['NetworkType']) => void
-    setProviderType?: (provider: Web3Helper.Definition[T]['ProviderType']) => void
+    setChainId?: (chainId: Web3Helper.ChainIdAll) => void
+    setNetworkType?: (provider: Web3Helper.NetworkTypeAll) => void
+    setProviderType?: (provider: Web3Helper.ProviderTypeAll) => void
 }
 
 const PluginIDContext = createContext(NetworkPluginID.PLUGIN_EVM)

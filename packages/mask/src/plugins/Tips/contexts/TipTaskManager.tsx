@@ -19,7 +19,7 @@ interface Task extends TipTask {
 
 export const TipTaskManager: FC<React.PropsWithChildren<{}>> = ({ children }) => {
     const [tasks, setTasks] = useState<Task[]>(EMPTY_LIST)
-    const { pluginID: pluginId } = TargetRuntimeContext.useContainer()
+    const { pluginID } = TargetRuntimeContext.useContainer()
 
     const removeTask = useCallback((task: Task) => {
         setTasks((list) => list.filter((t) => t.id !== task.id))
@@ -52,7 +52,7 @@ export const TipTaskManager: FC<React.PropsWithChildren<{}>> = ({ children }) =>
                 return (
                     <PluginIDContextProvider
                         key={task.id}
-                        value={pluginId ?? tipsAccount?.pluginID ?? NetworkPluginID.PLUGIN_EVM}>
+                        value={pluginID ?? tipsAccount?.pluginID ?? NetworkPluginID.PLUGIN_EVM}>
                         <PluginWeb3ContextProvider
                             value={{
                                 chainId: ChainId.Mainnet,

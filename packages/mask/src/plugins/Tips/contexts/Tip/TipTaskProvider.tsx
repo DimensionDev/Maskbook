@@ -37,8 +37,8 @@ function useRecipients(pluginID: NetworkPluginID, tipsAccounts: SocialAccount[])
 
 function useDirtyDetection(deps: any[]): [boolean, Dispatch<SetStateAction<boolean>>] {
     const [isDirty, setIsDirty] = useState(false)
-    const { pluginID: pluginId } = TargetRuntimeContext.useContainer()
-    const account = useAccount(pluginId)
+    const { pluginID } = TargetRuntimeContext.useContainer()
+    const account = useAccount(pluginID)
 
     useEffect(() => {
         setIsDirty(true)
