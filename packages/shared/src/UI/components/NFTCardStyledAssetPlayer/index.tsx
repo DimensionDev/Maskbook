@@ -90,7 +90,7 @@ export function NFTCardStyledAssetPlayer(props: Props) {
         },
     )
     const urlComputed = url || tokenDetailed?.metadata?.imageURL || tokenDetailed?.metadata?.mediaURL
-    const { value: isImageURL = true } = useIsImageURL(urlComputed)
+    const { value: isImageURL = true, loading: loadingIsImageURL } = useIsImageURL(urlComputed)
 
     const fallbackImageURL = fallbackImage ?? (theme.palette.mode === 'dark' ? fallbackImageDark : fallbackImageLight)
 
@@ -103,7 +103,9 @@ export function NFTCardStyledAssetPlayer(props: Props) {
         return networkDescriptor?.icon
     }, [networkDescriptor?.icon, pluginID])
 
-    if (isImageURL || isImageOnly) {
+    if (loadingIsImageURL) return null
+
+    if (isImageURL || isImageOnly || !urlComputed) {
         return (
             <div className={classes.imgWrapper}>
                 <Image

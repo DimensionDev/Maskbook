@@ -74,9 +74,12 @@ export default class FortmaticProvider extends BaseProvider implements EVM_Provi
     }
 
     private createFortmatic(chainId: ChainIdFortmatic) {
-        const rpcUrl = first(getRPCConstants(chainId).RPC_URLS)
+        const rpcUrl = first(getRPCConstants(chainId).RPC_URLS_OFFICIAL)
         if (!rpcUrl) throw new Error('Failed to create provider.')
-        return new Fortmatic(resolveAPI_Key(chainId), { chainId, rpcUrl })
+        return new Fortmatic(resolveAPI_Key(chainId), {
+            chainId,
+            rpcUrl,
+        })
     }
 
     private createProvider() {
@@ -93,9 +96,11 @@ export default class FortmaticProvider extends BaseProvider implements EVM_Provi
         return fm.user.login()
     }
 
-    private logout() {
+    private async logout() {
         const fm = this.createFortmatic(this.chainId)
-        return fm.user.logout()
+        const loggedIn = await fm.user.isLoggedIn()
+        if (loggedIn) fm.user.logout()
+        return
     }
 
     override async switchChain(chainId?: ChainId): Promise<void> {

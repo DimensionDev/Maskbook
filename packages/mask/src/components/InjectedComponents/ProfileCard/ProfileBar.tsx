@@ -19,7 +19,6 @@ const useStyles = makeStyles<void, 'avatarDecoration'>()((theme, _, refs) => ({
         display: 'flex',
         alignItems: 'center',
         columnGap: 4,
-        cursor: 'pointer',
     },
     avatar: {
         position: 'relative',

@@ -24,15 +24,19 @@ const useStyles = makeStyles<{
     },
 
     nftItem: {
-        position: 'relative',
         cursor: 'pointer',
         display: 'flex',
         padding: 0,
         flexDirection: 'column',
-        borderRadius: 8,
         minHeight: 100,
         userSelect: 'none',
         justifyContent: 'center',
+    },
+    nftImage: {
+        borderRadius: 8,
+        width: '100%',
+        height: '100%',
+        overflow: 'hidden',
     },
     placeholder: {
         display: 'flex',
@@ -98,6 +102,7 @@ export function NFTListPage(props: NFTListPageProps) {
                         <ListItem key={i} className={classes.nftItem}>
                             <NFTImage
                                 key={i}
+                                className={classes.nftImage}
                                 pluginId={pluginId}
                                 showBadge
                                 token={token}
