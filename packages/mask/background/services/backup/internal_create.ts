@@ -15,6 +15,7 @@ export interface InternalBackupOptions {
     noPersonas?: boolean
     noProfiles?: boolean
     onlyForPersona?: PersonaIdentifier
+    allProfile?: boolean
 }
 /**
  * @internal
@@ -22,7 +23,7 @@ export interface InternalBackupOptions {
  */
 // TODO: use a single readonly transaction in this operation.
 export async function createNewBackup(options: InternalBackupOptions): Promise<NormalizedBackup.Data> {
-    const { noPersonas, noPosts, noProfiles, noWallets, onlyForPersona } = options
+    const { noPersonas, noPosts, noProfiles, noWallets, onlyForPersona, allProfile } = options
     const file = createEmptyNormalizedBackup()
     const { meta, personas, posts, profiles, relations, settings } = file
 
@@ -34,7 +35,7 @@ export async function createNewBackup(options: InternalBackupOptions): Promise<N
 
     await Promise.allSettled([
         noPersonas || backupPersonas(onlyForPersona ? [onlyForPersona] : undefined),
-        noProfiles || backupProfiles(onlyForPersona),
+        noProfiles || backupProfiles(onlyForPersona, allProfile),
         (noPersonas && noProfiles) || backupAllRelations(),
         noPosts || backupPosts(),
         noWallets || internal_wallet_backup().then((w) => (file.wallets = w)),
@@ -103,9 +104,9 @@ export async function createNewBackup(options: InternalBackupOptions): Promise<N
         }
     }
 
-    async function backupProfiles(of?: PersonaIdentifier) {
+    async function backupProfiles(of?: PersonaIdentifier, all = false) {
         const data = await queryProfilesDB({
-            hasLinkedPersona: true,
+            hasLinkedPersona: !all,
         })
         for (const profile of data) {
             if (of) {
