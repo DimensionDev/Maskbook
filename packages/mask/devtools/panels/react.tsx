@@ -46,8 +46,9 @@ export async function startReactDevTools(signal: AbortSignal) {
         isProfiling: false,
         supportsReloadAndProfile: false,
         supportsProfiling: false,
-        supportsTimeline: false,
+        supportsTimeline: true,
         supportsTraceUpdates: true,
+        supportsNativeInspection: true,
     })
 
     // Note: since we manually passed bridge and wall, the first argument is unused in the implementation
@@ -137,6 +138,15 @@ export async function startReactDevTools(signal: AbortSignal) {
 
     // Send farewell message when closed
     window.addEventListener('beforeunload', () => DevtoolsMessage.events.farewell.sendByBroadcast(), { signal })
+
+    // when click "inspect DOM"
+    bridge.addListener('syncSelectionToNativeElementsPanel', () => {
+        evalInContentScript<boolean>(`
+            if (window.__REACT_DEVTOOLS_GLOBAL_HOOK__.$0 !== $0) {
+                inspect(__REACT_DEVTOOLS_GLOBAL_HOOK__.$0)
+            }
+        `)
+    })
 
     // When select an element in DOM panel, track it in devtools.
     {
