@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { compact } from 'lodash-unified'
 import { DialogContent, Button, Tab } from '@mui/material'
 import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import { TabContext } from '@mui/lab'
@@ -133,8 +134,9 @@ function ApprovalWrapper(props: ApprovalWrapperProps) {
     const [networkTabChainId, setNetworkTabChainId] = useState<ChainId>(chainId)
     const approvalDefinition = useActivatedPlugin(PluginID.Approval, 'any')
     const pluginID = useCurrentWeb3NetworkPluginID()
-    const chainIdList =
-        approvalDefinition?.enableRequirement.web3?.[NetworkPluginID.PLUGIN_EVM]?.supportedChainIds ?? []
+    const chainIdList = compact(
+        approvalDefinition?.enableRequirement.web3?.[NetworkPluginID.PLUGIN_EVM]?.supportedChainIds ?? [],
+    )
 
     const { classes } = useStyles()
     const { setDialog: setSelectProviderDialog } = useRemoteControlledDialog(
@@ -155,7 +157,7 @@ function ApprovalWrapper(props: ApprovalWrapperProps) {
                                 indicator: classes.indicator,
                                 tabPaper: classes.tabPaper,
                             }}
-                            chains={chainIdList?.filter(Boolean) as ChainId[]}
+                            chains={chainIdList}
                         />
                     </div>
                     <section className={classes.contentWrapper}>

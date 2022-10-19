@@ -17,15 +17,13 @@ const PluginIDContext = createContext(NetworkPluginID.PLUGIN_EVM)
 
 const PluginWeb3Context = createContext<Web3Context<NetworkPluginID>>(EMPTY_OBJECT)
 
-const PluginsWeb3Context = createContext<Record<NetworkPluginID, Web3Helper.Web3State<NetworkPluginID>>>(null!)
-
 export function PluginIDContextProvider({ value, children }: React.ProviderProps<NetworkPluginID>) {
     return <PluginIDContext.Provider value={value}>{children}</PluginIDContext.Provider>
 }
 
 export function PluginWeb3ContextProvider<T extends NetworkPluginID>({
-    pluginID,
     value,
+    pluginID,
     children,
 }: {
     pluginID: T
@@ -43,18 +41,10 @@ export function PluginWeb3ActualContextProvider({ children }: { children: ReactN
     return <PluginWeb3Context.Provider value={value} children={children} />
 }
 
-export function PluginsWeb3ContextProvider<T extends NetworkPluginID>({
-    pluginID,
-    value,
-    children,
-}: {
-    pluginID: T
-} & React.ProviderProps<Record<NetworkPluginID, Web3Helper.Web3State<T>>>) {
+export function PluginsWeb3ContextProvider({ value, children }: React.ProviderProps<NetworkPluginID>) {
     return (
-        <PluginIDContext.Provider value={pluginID}>
-            <PluginsWeb3Context.Provider value={value}>
-                <PluginWeb3Context.Provider value={EMPTY_OBJECT} children={children} />
-            </PluginsWeb3Context.Provider>
+        <PluginIDContext.Provider value={value}>
+            <PluginWeb3Context.Provider value={EMPTY_OBJECT} children={children} />
         </PluginIDContext.Provider>
     )
 }
