@@ -48,18 +48,18 @@ const useStyles = makeStyles<{
 }))
 
 interface NFTListPageProps {
+    pluginID: NetworkPluginID
     tokenInfo?: AllChainsNonFungibleToken
     tokens: AllChainsNonFungibleToken[]
-    onChange?: (token: AllChainsNonFungibleToken) => void
     children?: React.ReactElement
-    pluginId: NetworkPluginID
-    nextPage(): void
     loadFinish: boolean
     loadError?: boolean
+    nextPage(): void
+    onChange?: (token: AllChainsNonFungibleToken) => void
 }
 
 export function NFTListPage(props: NFTListPageProps) {
-    const { onChange, tokenInfo, tokens, children, pluginId, nextPage, loadError, loadFinish } = props
+    const { onChange, tokenInfo, tokens, children, pluginID: pluginId, nextPage, loadError, loadFinish } = props
     const { classes } = useStyles({ networkPluginID: pluginId })
     const [selectedToken, setSelectedToken] = useState<AllChainsNonFungibleToken | undefined>(tokenInfo)
     const t = useI18N()
@@ -98,7 +98,7 @@ export function NFTListPage(props: NFTListPageProps) {
                     <ListItem key={i} className={classes.nftItem}>
                         <NFTImage
                             key={i}
-                            pluginId={pluginId}
+                            pluginID={pluginId}
                             showBadge
                             token={token}
                             selectedToken={selectedToken}

@@ -5,16 +5,16 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import type { TipTuple } from './type.js'
 
 export function useNftTip<T extends NetworkPluginID>(
-    pluginId: T,
+    pluginID: T,
     recipient: string,
     contractAddress: string,
     tokenId?: string | null,
     options?: Web3Helper.Web3ConnectionOptions<T>,
 ): TipTuple {
-    const { Token, Connection } = useWeb3State<'all'>(pluginId)
+    const { Token, Connection } = useWeb3State<'all'>(pluginID)
     const chainId = useChainId()
 
-    const account = useAccount(pluginId)
+    const account = useAccount(pluginID)
     const connectionOptions = {
         account,
         ...options,
@@ -25,7 +25,7 @@ export function useNftTip<T extends NetworkPluginID>(
     const [{ loading: isTransferring }, sendTip] = useAsyncFn(async () => {
         const connection = await Connection?.getConnection?.()
         if (!connection || !contractAddress) return
-        if (pluginId === NetworkPluginID.PLUGIN_EVM && !tokenId) return
+        if (pluginID === NetworkPluginID.PLUGIN_EVM && !tokenId) return
         const txid = await connection.transferNonFungibleToken(
             contractAddress,
             tokenId ?? '',
@@ -42,7 +42,7 @@ export function useNftTip<T extends NetworkPluginID>(
             await Token?.removeToken?.(account, tokenDetailed)
         }
         return txid
-    }, [account, tokenId, pluginId, Connection, contractAddress, recipient, JSON.stringify(connectionOptions)])
+    }, [account, tokenId, pluginID, Connection, contractAddress, recipient, JSON.stringify(connectionOptions)])
 
     return [isTransferring, sendTip]
 }

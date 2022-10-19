@@ -17,13 +17,13 @@ async function queryCurrentPersona(identityResolved: IdentityResolved) {
 }
 
 export function useCheckTokenOwner(
-    pluginId: NetworkPluginID,
+    pluginID: NetworkPluginID,
     address: string,
     tokenId: string,
     schemaType: SchemaType,
     socialIdentity?: SocialIdentity,
 ) {
-    const connection = useWeb3Connection(pluginId)
+    const connection = useWeb3Connection(pluginID)
 
     const getAddress = useGetAddress()
 

@@ -117,7 +117,7 @@ export function NFTAvatar(props: NFTAvatarProps) {
             account,
             token: selectedToken,
             image: selectedToken.metadata?.imageURL ?? '',
-            pluginId: pluginID,
+            pluginID: pluginID,
         })
         setSelectedToken(undefined)
     }, [onChange, selectedToken, pluginID])
@@ -190,7 +190,7 @@ export function NFTAvatar(props: NFTAvatarProps) {
                                     <ListItem className={classes.nftItem} key={i}>
                                         <NFTImage
                                             key={i}
-                                            pluginId={NetworkPluginID.PLUGIN_EVM}
+                                            pluginID={NetworkPluginID.PLUGIN_EVM}
                                             showBadge
                                             token={token}
                                             selectedToken={selectedToken}

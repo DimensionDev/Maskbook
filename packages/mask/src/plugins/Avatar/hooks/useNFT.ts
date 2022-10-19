@@ -1,5 +1,5 @@
-import { ChainId } from '@masknet/web3-shared-evm'
 import { useAsyncRetry } from 'react-use'
+import { ChainId } from '@masknet/web3-shared-evm'
 import { useWeb3Hub, useWeb3State } from '@masknet/web3-hooks-base'
 import { formatBalance, CurrencyType } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
@@ -10,12 +10,12 @@ export function useNFT(
     account: string,
     address?: string,
     tokenId?: string,
-    pluginId: NetworkPluginID = NetworkPluginID.PLUGIN_EVM,
+    pluginID: NetworkPluginID = NetworkPluginID.PLUGIN_EVM,
     chainId: ChainId = ChainId.Mainnet,
     ownerAddress?: string,
 ) {
-    const { Others, Connection } = useWeb3State<'all'>(pluginId ?? NetworkPluginID.PLUGIN_EVM)
-    const hub = useWeb3Hub<'all'>(pluginId, {
+    const { Others, Connection } = useWeb3State<'all'>(pluginID)
+    const hub = useWeb3Hub<'all'>(pluginID, {
         chainId,
         account,
     })

@@ -17,7 +17,7 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import { WalletDescription, WalletDescriptionProps } from './WalletDescription.js'
 
 interface WalletMenuItemProps {
-    onSelect?: (value: WalletDescriptionProps, chainId: Web3Helper.ChainIdAll, pluginId: NetworkPluginID) => void
+    onSelect?: (value: WalletDescriptionProps, chainId: Web3Helper.ChainIdAll, pluginID: NetworkPluginID) => void
     address: string
     selected?: boolean
     verified?: boolean

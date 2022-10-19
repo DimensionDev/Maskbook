@@ -59,15 +59,15 @@ const useStyles = makeStyles()((theme) => ({
 
 interface NFTImageProps {
     className?: string
-    pluginId: NetworkPluginID
+    pluginID: NetworkPluginID
     showBadge?: boolean
     token: AllChainsNonFungibleToken
     selectedToken?: AllChainsNonFungibleToken
     onClick: (token: AllChainsNonFungibleToken) => void
 }
 
-function isSameNFT(pluginId: NetworkPluginID, a: AllChainsNonFungibleToken, b?: AllChainsNonFungibleToken) {
-    return pluginId !== NetworkPluginID.PLUGIN_SOLANA
+function isSameNFT(pluginID: NetworkPluginID, a: AllChainsNonFungibleToken, b?: AllChainsNonFungibleToken) {
+    return pluginID !== NetworkPluginID.PLUGIN_SOLANA
         ? isSameAddress(a.contract?.address, b?.contract?.address) &&
               a.contract?.chainId &&
               a.contract?.chainId === b?.contract?.chainId &&
@@ -76,7 +76,7 @@ function isSameNFT(pluginId: NetworkPluginID, a: AllChainsNonFungibleToken, b?: 
 }
 
 export function NFTImage(props: NFTImageProps) {
-    const { className, token, onClick, selectedToken, showBadge = false, pluginId } = props
+    const { className, token, onClick, selectedToken, showBadge = false, pluginID: pluginId } = props
     const { classes, cx } = useStyles()
     const theme = useTheme()
     const { Others } = useWeb3State()

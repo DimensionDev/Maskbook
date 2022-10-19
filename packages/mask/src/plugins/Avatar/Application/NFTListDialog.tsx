@@ -159,9 +159,9 @@ export function NFTListDialog(props: NFTListDialogProps) {
     useEffect(() => setSelectedToken(undefined), [actualChainId])
 
     const { showSnackbar } = useCustomSnackbar()
-    const onChangeWallet = (address: string, pluginId: NetworkPluginID, chainId: Web3Helper.ChainIdAll) => {
+    const onChangeWallet = (address: string, pluginID: NetworkPluginID, chainId: Web3Helper.ChainIdAll) => {
         setSelectedAccount(address)
-        setSelectedPluginId(pluginId)
+        setSelectedPluginId(pluginID)
         setChainId(chainId as ChainId)
         setSelectedToken(undefined)
     }
@@ -184,7 +184,7 @@ export function NFTListDialog(props: NFTListDialogProps) {
                 image: URL.createObjectURL(image),
                 account: selectedAccount,
                 token: selectedToken,
-                pluginId: selectedPluginId,
+                pluginID: selectedPluginId,
             })
             onNext()
         } catch (error) {
@@ -273,7 +273,7 @@ export function NFTListDialog(props: NFTListDialogProps) {
                         ) : null}
 
                         <NFTListPage
-                            pluginId={selectedPluginId}
+                            pluginID={selectedPluginId}
                             tokens={tokensInList}
                             tokenInfo={selectedToken}
                             onChange={onChangeToken}

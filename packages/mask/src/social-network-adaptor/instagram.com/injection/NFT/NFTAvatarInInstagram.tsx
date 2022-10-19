@@ -55,7 +55,7 @@ function NFTAvatarInInstagram() {
         storage?.address ?? account,
         nftAvatar?.address,
         nftAvatar?.tokenId,
-        nftAvatar?.pluginId,
+        nftAvatar?.pluginID,
         nftAvatar?.chainId,
     )
 

@@ -57,8 +57,8 @@ const useStyles = makeStyles()((theme) => ({
 interface PluginVerifiedWalletStatusBarProps extends PropsWithChildren<{}> {
     verifiedWallets: BindingProof[]
     className?: string
-    onChange?: (address: string, pluginId: NetworkPluginID, chainId: Web3Helper.ChainIdAll) => void
     expectedAddress: string
+    onChange?: (address: string, pluginID: NetworkPluginID, chainId: Web3Helper.ChainIdAll) => void
 }
 
 export const PluginVerifiedWalletStatusBar = memo<PluginVerifiedWalletStatusBarProps>(
@@ -149,12 +149,12 @@ export const PluginVerifiedWalletStatusBar = memo<PluginVerifiedWalletStatusBarP
         const [descriptionProps, setDescriptionProps] = useState<WalletDescriptionProps>(description)
 
         const onSelect = useCallback(
-            (props: WalletDescriptionProps, chainId: Web3Helper.ChainIdAll, pluginId: NetworkPluginID) => {
+            (props: WalletDescriptionProps, chainId: Web3Helper.ChainIdAll, pluginID: NetworkPluginID) => {
                 setDescriptionProps(props)
 
                 if (!props.address) return
 
-                onChange?.(props.address, pluginId, chainId)
+                onChange?.(props.address, pluginID, chainId)
             },
             [setDescriptionProps, onChange],
         )
