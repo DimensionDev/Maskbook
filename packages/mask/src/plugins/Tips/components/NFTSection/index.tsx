@@ -1,10 +1,5 @@
 import { Icons } from '@masknet/icons'
-import {
-    useAccount,
-    useCurrentWeb3NetworkChainId,
-    useCurrentWeb3NetworkPluginID,
-    useNonFungibleAssets,
-} from '@masknet/web3-hooks-base'
+import { useAccount, useChainId, useCurrentWeb3NetworkPluginID, useNonFungibleAssets } from '@masknet/web3-hooks-base'
 import { ElementAnchor, RetryHint } from '@masknet/shared'
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import { LoadingBase, makeStyles } from '@masknet/theme'
@@ -98,7 +93,7 @@ export const NFTSection: FC<Props> = ({ className, onEmpty, ...rest }) => {
     const selectedKey = tokenAddress || tokenId ? `${tokenAddress}_${tokenId}` : undefined
     const account = useAccount()
 
-    const chainId = useCurrentWeb3NetworkChainId()
+    const chainId = useChainId()
     const pluginId = useCurrentWeb3NetworkPluginID()
     const {
         value: fetchedTokens = EMPTY_LIST,

@@ -2,7 +2,6 @@ import { Dispatch, FC, memo, SetStateAction, useCallback, useContext, useEffect,
 import {
     useAccount,
     useChainId,
-    useCurrentWeb3NetworkChainId,
     useCurrentWeb3NetworkPluginID,
     useFungibleToken,
     useNonFungibleTokenContract,
@@ -49,7 +48,7 @@ function useDirtyDetection(deps: any[]): [boolean, Dispatch<SetStateAction<boole
 }
 
 export const TipTaskProvider: FC<React.PropsWithChildren<Props>> = memo(({ children, task }) => {
-    const targetChainId = useCurrentWeb3NetworkChainId()
+    const targetChainId = useChainId()
     const pluginId = useCurrentWeb3NetworkPluginID()
     const { setPluginId } = TargetRuntimeContext.useContainer()
 

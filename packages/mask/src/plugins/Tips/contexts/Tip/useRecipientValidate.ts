@@ -1,14 +1,14 @@
-import { useAddressType, useCurrentWeb3NetworkChainId, useCurrentWeb3NetworkPluginID } from '@masknet/web3-hooks-base'
-import { GoPlusLabs } from '@masknet/web3-providers'
-import { AddressType, ChainId } from '@masknet/web3-shared-evm'
 import { useMemo } from 'react'
 import { useAsync } from 'react-use'
+import { useAddressType, useChainId, useCurrentWeb3NetworkPluginID } from '@masknet/web3-hooks-base'
+import { GoPlusLabs } from '@masknet/web3-providers'
+import { AddressType, ChainId } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../locales'
 import type { ValidationTuple } from '../../types'
 
 export function useRecipientValidate(recipientAddress: string): { loading: boolean; validation: ValidationTuple } {
     const t = useI18N()
-    const chainId = useCurrentWeb3NetworkChainId()
+    const chainId = useChainId()
     const pluginId = useCurrentWeb3NetworkPluginID()
     const { value: addressType, loading } = useAddressType(pluginId, recipientAddress, {
         chainId,

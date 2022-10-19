@@ -1,8 +1,4 @@
-import {
-    useCurrentWeb3NetworkChainId,
-    useCurrentWeb3NetworkPluginID,
-    useFungibleTokenPrice,
-} from '@masknet/web3-hooks-base'
+import { useChainId, useCurrentWeb3NetworkPluginID, useFungibleTokenPrice } from '@masknet/web3-hooks-base'
 import { TokenIcon } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { formatCurrency } from '@masknet/web3-shared-base'
@@ -48,7 +44,7 @@ interface Props extends HTMLProps<HTMLDivElement> {}
 export const TokenValue: FC<Props> = ({ className, ...rest }) => {
     const { classes, cx } = useStyles()
     const { token, amount } = useTip()
-    const chainId = useCurrentWeb3NetworkChainId()
+    const chainId = useChainId()
     const pluginId = useCurrentWeb3NetworkPluginID()
 
     const { value: tokenPrice = 0 } = useFungibleTokenPrice(pluginId, token?.address, { chainId: chainId as ChainId })

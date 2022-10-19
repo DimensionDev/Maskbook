@@ -1,10 +1,6 @@
 import { useCallback, useMemo } from 'react'
 import { useBoolean } from 'react-use'
-import {
-    PluginWeb3ActualContextProvider,
-    useCurrentWeb3NetworkChainId,
-    useCurrentWeb3NetworkPluginID,
-} from '@masknet/web3-hooks-base'
+import { PluginWeb3ActualContextProvider, useChainId, useCurrentWeb3NetworkPluginID } from '@masknet/web3-hooks-base'
 import { InjectedDialog } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { ActionButton, makeStyles, MaskTabList } from '@masknet/theme'
@@ -82,8 +78,8 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
         sendTip,
         validation: [isValid, validateMessage],
     } = useTip()
-    const targetChainId = useCurrentWeb3NetworkChainId()
-    const pluginId = useCurrentWeb3NetworkPluginID()
+    const pluginID = useCurrentWeb3NetworkPluginID()
+    const chainId = useChainId()
 
     const isTokenTip = tipType === TipsType.Tokens
     const shareText = useMemo(() => {
@@ -132,8 +128,8 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
         })
     }, [sendTip, createTipsTx, shareText, amount, tipType, token, nonFungibleTokenContract, nonFungibleTokenId])
 
-    const expectedPluginID = [NetworkPluginID.PLUGIN_EVM, NetworkPluginID.PLUGIN_SOLANA].includes(pluginId)
-        ? pluginId
+    const expectedPluginID = [NetworkPluginID.PLUGIN_EVM, NetworkPluginID.PLUGIN_SOLANA].includes(pluginID)
+        ? pluginID
         : NetworkPluginID.PLUGIN_EVM
     const submitDisabled = (!isValid || isSending) && !isDirty
 
@@ -160,10 +156,10 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
                         <NFTSection className={classes.section} />
                     </TabPanel>
                     <PluginWeb3ActualContextProvider>
-                        <PluginWalletStatusBar expectedPluginID={expectedPluginID} expectedChainId={targetChainId}>
+                        <PluginWalletStatusBar expectedPluginID={expectedPluginID} expectedChainId={chainId}>
                             <ChainBoundary
                                 expectedPluginID={expectedPluginID}
-                                expectedChainId={targetChainId!}
+                                expectedChainId={chainId!}
                                 noSwitchNetworkTip
                                 switchChainWithoutPopup
                                 ActionButtonPromiseProps={{

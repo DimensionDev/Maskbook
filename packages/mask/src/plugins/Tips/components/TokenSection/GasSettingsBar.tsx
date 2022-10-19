@@ -1,4 +1,4 @@
-import { useCurrentWeb3NetworkChainId, useGasPrice, useNativeTokenPrice, useWeb3State } from '@masknet/web3-hooks-base'
+import { useChainId, useGasPrice, useNativeTokenPrice, useWeb3State } from '@masknet/web3-hooks-base'
 import { SelectGasSettingsToolbar } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import {
@@ -18,7 +18,7 @@ export function GasSettingsBar() {
     const { token, setGasOption, gasOption } = useTip()
     const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const isNativeToken = isNativeTokenAddress(token?.address)
-    const chainId = useCurrentWeb3NetworkChainId(NetworkPluginID.PLUGIN_EVM)
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const { value: nativeTokenPrice = 0 } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM, {
         chainId,
     })

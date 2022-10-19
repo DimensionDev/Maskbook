@@ -2,7 +2,7 @@ import { FC, HTMLProps, useCallback, useMemo } from 'react'
 import BigNumber from 'bignumber.js'
 import {
     useAccount,
-    useCurrentWeb3NetworkChainId,
+    useChainId,
     useCurrentWeb3NetworkPluginID,
     useFungibleTokenBalance,
     useGasPrice,
@@ -32,7 +32,7 @@ const ETH_GAS_LIMIT = 21000
 export const TokenSection: FC<Props> = ({ className, ...rest }) => {
     const { classes, cx } = useStyles()
     const { token, setToken, amount, setAmount } = useTip()
-    const chainId = useCurrentWeb3NetworkChainId()
+    const chainId = useChainId()
     const pluginId = useCurrentWeb3NetworkPluginID()
     const account = useAccount()
 
