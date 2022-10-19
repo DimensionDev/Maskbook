@@ -141,7 +141,7 @@ export class IdentityService extends IdentityServiceState {
         return this.createSocialAddress(SocialAddressType.TwitterBlue, ownerAddress)
     }
 
-    /** Read a social address from MaskX */
+    /** Read social addresses from MaskX */
     private async getSocialAddressesFromMaskX({ identifier }: SocialIdentity) {
         const userId = identifier?.userId
         if (!userId) return
