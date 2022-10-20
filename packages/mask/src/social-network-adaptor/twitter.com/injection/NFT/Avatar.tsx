@@ -27,7 +27,7 @@ function _(main: () => LiveSelector<HTMLElement, false>, signal: AbortSignal) {
                 const info = getInjectNodeInfo(ele.firstChild as HTMLElement)
                 if (!info) return
 
-                const proxy = DOMProxy({ afterShadowRootInit: { mode: 'closed' } })
+                const proxy = DOMProxy({ afterShadowRootInit: { mode: process.env.shadowRootMode } })
                 proxy.realCurrent = info.element.firstChild as HTMLElement
 
                 const root = createReactRootShadowed(proxy.afterShadow, { signal })

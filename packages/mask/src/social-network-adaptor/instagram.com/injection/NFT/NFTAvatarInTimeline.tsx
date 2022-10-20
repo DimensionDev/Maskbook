@@ -57,7 +57,7 @@ function _(selector: () => LiveSelector<HTMLImageElement, false>, signal: AbortS
 
                 if (!info) return
 
-                const proxy = DOMProxy({ afterShadowRootInit: { mode: 'closed' } })
+                const proxy = DOMProxy({ afterShadowRootInit: { mode: process.env.shadowRootMode } })
                 proxy.realCurrent = info.element
 
                 const root = createReactRootShadowed(proxy.afterShadow, { signal })

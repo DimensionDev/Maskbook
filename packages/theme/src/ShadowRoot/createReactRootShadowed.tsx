@@ -2,7 +2,7 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { noop } from 'lodash-unified'
 import { ShadowRootStyleProvider } from './ShadowRootStyleProvider.js'
-import { PreventEventPropagationListContext } from './Contexts.js'
+import { PreventEventPropagationListContext, stopPropagation } from './Contexts.js'
 
 export interface RenderInShadowRootOptions {
     /** Root tag. @default "main" */
@@ -81,11 +81,8 @@ function mount(
     const signal = controller.signal
 
     // prevent event popup
-    {
-        const stop = (e: Event): void => e.stopPropagation()
-        for (const each of preventEventPropagationList) {
-            container.addEventListener(each, stop, { signal })
-        }
+    for (const each of preventEventPropagationList) {
+        container.addEventListener(each, stopPropagation, { signal })
     }
 
     const root = createRoot(container)

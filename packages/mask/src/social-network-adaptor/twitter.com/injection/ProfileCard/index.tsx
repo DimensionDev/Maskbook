@@ -13,7 +13,7 @@ import { useControlProfileCard } from './useControlProfileCard.js'
 
 export function injectProfileCardHolder(signal: AbortSignal) {
     const root = document.createElement('div')
-    root.attachShadow({ mode: 'open' })
+    root.attachShadow({ mode: process.env.shadowRootMode })
     document.body.appendChild(root)
     if (!root.shadowRoot) {
         throw new Error('Can not inject a holder for ProfileCard')

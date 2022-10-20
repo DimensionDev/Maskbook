@@ -186,6 +186,7 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
             })(),
             new EnvironmentPlugin({
                 NODE_ENV: mode,
+                shadowRootMode: devtools ? 'open' : 'closed',
                 NODE_DEBUG: false,
                 WEB3_CONSTANTS_RPC: process.env.WEB3_CONSTANTS_RPC ?? '',
             }),

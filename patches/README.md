@@ -27,3 +27,4 @@
 ## Other problems
 
 - emotion-js: SSR rendering does not work on browser. <https://github.com/emotion-js/emotion/issues/2691>
+- react-devtools-inline: <https://github.com/facebook/react/pull/25510> and <https://github.com/facebook/react/pull/25518>
