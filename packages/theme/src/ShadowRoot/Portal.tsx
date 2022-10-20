@@ -1,7 +1,12 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { useRef, forwardRef, useContext } from 'react'
 import type { PopperProps } from '@mui/material'
-import { DisableShadowRootContext, PreventEventPropagationListContext, StyleSheetsContext } from './Contexts.js'
+import {
+    DisableShadowRootContext,
+    PreventEventPropagationListContext,
+    stopPropagation,
+    StyleSheetsContext,
+} from './Contexts.js'
 
 let mountingPoint: HTMLDivElement
 let mountingShadowRoot: ShadowRoot
@@ -43,11 +48,10 @@ export function usePortalShadowRoot<T>(renderer: (container: HTMLElement | undef
 
         const root = document.createElement('div')
         root.dataset.portalShadowRoot = ''
-        const shadow = root.attachShadow({ mode: 'open' })
+        const shadow = root.attachShadow({ mode: process.env.shadowRootMode })
 
-        const stop = (e: Event): void => e.stopPropagation()
         for (const each of preventEventPropagationList) {
-            shadow.addEventListener(each, stop, { signal: signal.current.signal })
+            shadow.addEventListener(each, stopPropagation, { signal: signal.current.signal })
         }
 
         const container = shadow.appendChild(document.createElement('main'))

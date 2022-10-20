@@ -6,6 +6,7 @@ declare module NodeJS {
         readonly channel: 'stable' | 'beta' | 'insider'
         readonly architecture: 'web' | 'app'
         readonly manifest: '2' | '3'
+        readonly shadowRootMode: 'open' | 'closed'
 
         /**
          * Debug flags

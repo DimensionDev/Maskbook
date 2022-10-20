@@ -7,5 +7,5 @@
       "module": "CommonJS"
     }
   },
-  "references": [{ "path": "./src" }]
+  "references": [{ "path": "./src" }, { "path": "./devtools" }]
 }

@@ -16,7 +16,7 @@ const captureEvents: Array<keyof HTMLElementEventMap> = [
     'change',
 ]
 export const setupShadowRootPortal = () => {
-    const shadow = setupPortalShadowRoot({ mode: 'closed' })
+    const shadow = setupPortalShadowRoot({ mode: process.env.shadowRootMode })
     createReactRootShadowed(shadow, { key: 'css-vars' }).render(<CSSVariableInjector />)
 }
 
