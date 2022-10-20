@@ -171,7 +171,7 @@ export const RecipientSelect: FC<Props> = memo(({ className }) => {
                         {account.label || account.address}
                     </Typography>
                     <ExternalLink account={account} />
-                    <AccountIcon account={account} />
+                    <AccountIcon socialAccount={account} />
                     {isSameAddress(account.address, recipientAddress) ? (
                         <Icons.CheckCircle className={cx(classes.checkIcon, classes.icon)} />
                     ) : null}

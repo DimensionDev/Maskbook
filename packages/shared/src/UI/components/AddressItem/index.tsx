@@ -1,15 +1,14 @@
+import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import { Link, Typography, TypographyProps } from '@mui/material'
 import type { NetworkPluginID } from '@masknet/shared-base'
-import { SocialAddress, SocialAddressType } from '@masknet/web3-shared-base'
-import { Icons } from '@masknet/icons'
 import { useWeb3State } from '@masknet/web3-hooks-base'
+import { isSameAddress, SocialAccount, SocialAddress } from '@masknet/web3-shared-base'
 import { ReversedAddress } from '../../../index.js'
 
 const useStyles = makeStyles()((theme) => ({
     link: {
         cursor: 'pointer',
-        marginTop: 2,
         zIndex: 1,
         '&:hover': {
             textDecoration: 'none',
@@ -19,23 +18,10 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface AddressItemProps {
-    socialAddress?: SocialAddress<NetworkPluginID>
+    socialAddress?: Omit<SocialAddress<NetworkPluginID>, 'type'>
     TypographyProps?: TypographyProps
     linkIconClassName?: string
     disableLinkIcon?: boolean
-}
-
-const isReversible = (type?: SocialAddressType) => {
-    if (!type) return false
-    return [
-        SocialAddressType.KV,
-        SocialAddressType.Address,
-        SocialAddressType.NEXT_ID,
-        SocialAddressType.TwitterBlue,
-        SocialAddressType.CyberConnect,
-        SocialAddressType.Leaderboard,
-        SocialAddressType.Sybil,
-    ].includes(type)
 }
 
 export function AddressItem({
@@ -51,14 +37,14 @@ export function AddressItem({
 
     return (
         <>
-            {isReversible(socialAddress.type) ? (
+            {isSameAddress(socialAddress.address, socialAddress.label) ? (
                 <ReversedAddress
                     TypographyProps={TypographyProps}
                     address={socialAddress.address}
                     pluginID={socialAddress.pluginID}
                 />
             ) : (
-                <Typography {...TypographyProps}>{Others?.formatAddress(socialAddress.address, 4)}</Typography>
+                <Typography {...TypographyProps}>{Others?.formatAddress(socialAddress.label, 4)}</Typography>
             )}
             {disableLinkIcon ? null : (
                 <Link
