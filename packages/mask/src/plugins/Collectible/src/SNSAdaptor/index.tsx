@@ -19,25 +19,25 @@ const TabConfig: Plugin.SNSAdaptor.ProfileTab = {
     label: 'NFTs',
     priority: 1,
     UI: {
-        TabContent({ socialAccount: socialAddress, identity }) {
-            if (!socialAddress) return null
+        TabContent({ socialAccount, identity }) {
+            if (!socialAccount) return null
             return (
-                <PluginIDContextProvider value={socialAddress.pluginID}>
-                    <CollectionList socialAddress={socialAddress} persona={identity?.publicKey} profile={identity} />
+                <PluginIDContextProvider value={socialAccount.pluginID}>
+                    <CollectionList socialAccount={socialAccount} persona={identity?.publicKey} profile={identity} />
                 </PluginIDContextProvider>
             )
         },
     },
     Utils: {
         sorter: (a, z) => {
-            if (a.type === SocialAddressType.ENS) return -1
-            if (z.type === SocialAddressType.ENS) return 1
+            if (a.supportedAddressTypes?.includes(SocialAddressType.ENS)) return -1
+            if (z.supportedAddressTypes?.includes(SocialAddressType.ENS)) return 1
 
-            if (a.type === SocialAddressType.RSS3) return -1
-            if (z.type === SocialAddressType.RSS3) return 1
+            if (a.supportedAddressTypes?.includes(SocialAddressType.RSS3)) return -1
+            if (z.supportedAddressTypes?.includes(SocialAddressType.RSS3)) return 1
 
-            if (a.type === SocialAddressType.Address) return -1
-            if (z.type === SocialAddressType.Address) return 1
+            if (a.supportedAddressTypes?.includes(SocialAddressType.Address)) return -1
+            if (z.supportedAddressTypes?.includes(SocialAddressType.Address)) return 1
 
             return 0
         },
@@ -74,13 +74,13 @@ const sns: Plugin.SNSAdaptor.Definition = {
             ...TabConfig,
             priority: 2,
             UI: {
-                TabContent({ socialAccount: socialAddress, identity }) {
-                    if (!socialAddress) return null
+                TabContent({ socialAccount, identity }) {
+                    if (!socialAccount) return null
                     return (
                         <Box pr={1.5}>
-                            <PluginIDContextProvider value={socialAddress.pluginID}>
+                            <PluginIDContextProvider value={socialAccount.pluginID}>
                                 <CollectionList
-                                    socialAddress={socialAddress}
+                                    socialAccount={socialAccount}
                                     persona={identity?.publicKey}
                                     profile={identity}
                                 />
@@ -91,8 +91,8 @@ const sns: Plugin.SNSAdaptor.Definition = {
             },
             Utils: {
                 ...TabConfig.Utils,
-                shouldDisplay(identity, socialAddress) {
-                    return socialAddress?.pluginID === NetworkPluginID.PLUGIN_EVM
+                shouldDisplay(identity, socialAccount) {
+                    return socialAccount?.pluginID === NetworkPluginID.PLUGIN_EVM
                 },
             },
         },

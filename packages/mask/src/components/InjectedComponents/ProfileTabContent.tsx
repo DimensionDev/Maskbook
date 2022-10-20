@@ -409,7 +409,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
                                             fontWeight: 700,
                                             color: (theme) => theme.palette.maskColor.dark,
                                         }}
-                                        socialAddress={selectedSocialAccount}
+                                        socialAccount={selectedSocialAccount}
                                     />
                                     <Icons.ArrowDrop className={classes.arrowDropIcon} />
                                 </Button>
@@ -431,7 +431,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
                                                 onClick={() => onSelect(x.address)}>
                                                 <div className={classes.addressItem}>
                                                     <AddressItem
-                                                        socialAddress={x}
+                                                        socialAccount={x}
                                                         linkIconClassName={classes.secondLinkIcon}
                                                     />
                                                     <AccountIcon socialAccount={x} />

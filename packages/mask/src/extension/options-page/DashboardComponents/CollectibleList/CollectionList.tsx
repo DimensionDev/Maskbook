@@ -2,14 +2,14 @@ import { Icons } from '@masknet/icons'
 import { useNonFungibleAssets, useTrustedNonFungibleTokens } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { ElementAnchor, RetryHint, useWeb3ProfileHiddenSettings } from '@masknet/shared'
-import { EMPTY_LIST, EMPTY_OBJECT, NetworkPluginID } from '@masknet/shared-base'
+import { EMPTY_LIST, EMPTY_OBJECT } from '@masknet/shared-base'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import { CollectionType } from '@masknet/web3-providers'
 import {
     isSameAddress,
     NonFungibleAsset,
     NonFungibleCollection,
-    SocialAddress,
+    SocialAccount,
     SocialIdentity,
 } from '@masknet/web3-shared-base'
 import { Box, Button, Stack, Typography, styled } from '@mui/material'
@@ -84,19 +84,19 @@ const AllButton = styled(Button)(({ theme }) => ({
 }))
 
 export interface CollectionListProps {
-    socialAddress: SocialAddress<NetworkPluginID>
+    socialAccount: SocialAccount
     persona?: string
     profile?: SocialIdentity
     gridProps?: CollectibleGridProps
 }
 
-export function CollectionList({ socialAddress, persona, profile, gridProps = EMPTY_OBJECT }: CollectionListProps) {
+export function CollectionList({ socialAccount, persona, profile, gridProps = EMPTY_OBJECT }: CollectionListProps) {
     const { t } = useI18N()
     const { classes } = useStyles(gridProps)
     const [selectedCollection, setSelectedCollection] = useState<
         NonFungibleCollection<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll> | undefined
     >()
-    const { address: account } = socialAddress
+    const { address: account } = socialAccount
 
     useEffect(() => {
         setSelectedCollection(undefined)
@@ -112,7 +112,7 @@ export function CollectionList({ socialAddress, persona, profile, gridProps = EM
         next: nextPage,
         error,
         retry: retryFetchCollectible,
-    } = useNonFungibleAssets(socialAddress.pluginID, undefined, { account })
+    } = useNonFungibleAssets(socialAccount.pluginID, undefined, { account })
 
     const userId = profile?.identifier?.userId.toLowerCase()
 
@@ -198,7 +198,7 @@ export function CollectionList({ socialAddress, persona, profile, gridProps = EM
                             </Box>
                         )}
                         <CollectibleList
-                            pluginID={socialAddress.pluginID}
+                            pluginID={socialAccount.pluginID}
                             retry={retryFetchCollectible}
                             collectibles={renderCollectibles}
                             loading={renderCollectibles.length === 0}

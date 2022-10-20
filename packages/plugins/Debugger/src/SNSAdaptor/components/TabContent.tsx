@@ -1,12 +1,11 @@
 import { makeStyles } from '@masknet/theme'
-import type { NetworkPluginID } from '@masknet/shared-base'
-import type { SocialAddress, SocialIdentity } from '@masknet/web3-shared-base'
+import type { SocialAccount, SocialIdentity } from '@masknet/web3-shared-base'
 import { useSocialAccountsAll } from '@masknet/web3-hooks-base'
 import { List, ListItem, ListItemText, Table, TableBody, TableCell, TableRow, Typography } from '@mui/material'
 
 export interface TabContentProps {
     identity?: SocialIdentity
-    socialAddress?: SocialAddress<NetworkPluginID>
+    socialAccount?: SocialAccount
 }
 
 const useStyles = makeStyles()({
@@ -15,7 +14,7 @@ const useStyles = makeStyles()({
     },
 })
 
-export function TabContent({ identity, socialAddress }: TabContentProps) {
+export function TabContent({ identity, socialAccount }: TabContentProps) {
     const { classes } = useStyles()
     const { value: socialAccounts, loading: loadingSocialAccounts } = useSocialAccountsAll(identity)
 
@@ -53,13 +52,13 @@ export function TabContent({ identity, socialAddress }: TabContentProps) {
     const renderAddressName = () => {
         return (
             <List dense>
-                {socialAddress &&
-                    [socialAddress].map((x) => (
-                        <ListItem key={`${x.type}_${x.address}`}>
+                {socialAccount &&
+                    [socialAccount].map((x) => (
+                        <ListItem key={`${x.pluginID}_${x.address}`}>
                             <ListItemText
                                 primary={
                                     <Typography color="textPrimary">
-                                        {x.type} - {x.label}
+                                        {x.pluginID} - {x.label}
                                     </Typography>
                                 }
                                 secondary={x.address}

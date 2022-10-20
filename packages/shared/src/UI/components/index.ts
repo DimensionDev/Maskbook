@@ -1,6 +1,5 @@
 export * from './AccountIcon/index.js'
 export * from './AddressItem/index.js'
-export * from './AddressViewer/index.js'
 export * from './ApplicationEntry/index.js'
 export * from './AssetPlayer/index.js'
 export * from './AssetPreviewer/index.js'

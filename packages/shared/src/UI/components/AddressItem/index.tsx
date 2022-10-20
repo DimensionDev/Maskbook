@@ -1,9 +1,8 @@
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import { Link, Typography, TypographyProps } from '@mui/material'
-import type { NetworkPluginID } from '@masknet/shared-base'
 import { useWeb3State } from '@masknet/web3-hooks-base'
-import { isSameAddress, SocialAddress } from '@masknet/web3-shared-base'
+import { isSameAddress, SocialAccount } from '@masknet/web3-shared-base'
 import { ReversedAddress } from '../../../index.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -18,38 +17,38 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface AddressItemProps {
-    socialAddress?: Omit<SocialAddress<NetworkPluginID>, 'type'>
+    socialAccount?: SocialAccount
     TypographyProps?: TypographyProps
     linkIconClassName?: string
     disableLinkIcon?: boolean
 }
 
 export function AddressItem({
-    socialAddress,
+    socialAccount,
     TypographyProps = { fontSize: '14px', fontWeight: 700 },
     linkIconClassName,
     disableLinkIcon,
 }: AddressItemProps) {
     const { classes } = useStyles()
-    const { Others } = useWeb3State(socialAddress?.pluginID)
+    const { Others } = useWeb3State(socialAccount?.pluginID)
 
-    if (!socialAddress) return null
+    if (!socialAccount) return null
 
     return (
         <>
-            {isSameAddress(socialAddress.address, socialAddress.label) ? (
+            {isSameAddress(socialAccount.address, socialAccount.label) ? (
                 <ReversedAddress
                     TypographyProps={TypographyProps}
-                    address={socialAddress.address}
-                    pluginID={socialAddress.pluginID}
+                    address={socialAccount.address}
+                    pluginID={socialAccount.pluginID}
                 />
             ) : (
-                <Typography {...TypographyProps}>{Others?.formatAddress(socialAddress.label, 4)}</Typography>
+                <Typography {...TypographyProps}>{Others?.formatAddress(socialAccount.label, 4)}</Typography>
             )}
             {disableLinkIcon ? null : (
                 <Link
                     className={classes.link}
-                    href={Others?.explorerResolver.addressLink(Others?.getDefaultChainId(), socialAddress.address)}
+                    href={Others?.explorerResolver.addressLink(Others?.getDefaultChainId(), socialAccount.address)}
                     target="_blank"
                     rel="noopener noreferrer">
                     <Icons.LinkOut size={20} className={linkIconClassName} />

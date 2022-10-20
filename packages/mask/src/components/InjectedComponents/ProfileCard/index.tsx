@@ -161,7 +161,7 @@ export const ProfileCard: FC<Props> = ({ identity, ...rest }) => {
             <div className={classes.root}>
                 <div className={classes.header}>
                     <ProfileCardTitle
-                        socialAddressList={socialAddressList}
+                        socialAccounts={socialAddressList}
                         address={activeAddress}
                         onAddressChange={setSelectedAddress}
                         identity={identity}

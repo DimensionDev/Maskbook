@@ -1,7 +1,7 @@
 import { useEffect, useMemo } from 'react'
-import { PluginID, NetworkPluginID, CrossIsolationMessages, EMPTY_LIST } from '@masknet/shared-base'
+import { PluginID, CrossIsolationMessages, EMPTY_LIST } from '@masknet/shared-base'
 import { useHiddenAddressSetting, useSocialAccountsAll } from '@masknet/web3-hooks-base'
-import { currySameAddress, SocialAddress, SocialAddressType, SocialIdentity } from '@masknet/web3-shared-base'
+import { currySameAddress, SocialAccount, SocialAddressType, SocialIdentity } from '@masknet/web3-shared-base'
 
 export const useSocialAccountsBySettings = (
     identity?: SocialIdentity,
