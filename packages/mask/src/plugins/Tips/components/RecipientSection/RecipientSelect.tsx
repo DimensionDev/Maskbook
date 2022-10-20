@@ -1,14 +1,15 @@
 import { FC, memo, useRef } from 'react'
 import { Icons } from '@masknet/icons'
-import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
-import { Link, MenuItem, Select, TooltipProps, Typography } from '@mui/material'
+import { makeStyles } from '@masknet/theme'
+import { AccountIcon } from '@masknet/shared'
+import { Link, MenuItem, Select, Typography } from '@mui/material'
 import { useDefaultChainId, useWeb3State } from '@masknet/web3-hooks-base'
-import { isSameAddress, SocialAccount, SocialAddressType } from '@masknet/web3-shared-base'
+import { isSameAddress, SocialAccount } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useTip } from '../../contexts/index.js'
-import { Translate, useI18N } from '../../locales/index.js'
+import { useI18N } from '../../locales/index.js'
 
-const useStyles = makeStyles<void, 'icon' | 'tooltip' | 'pluginIcon' | 'text'>()((theme, _, refs) => {
+const useStyles = makeStyles<void, 'icon' | 'pluginIcon' | 'text'>()((theme, _, refs) => {
     return {
         root: {
             height: 40,
@@ -66,16 +67,10 @@ const useStyles = makeStyles<void, 'icon' | 'tooltip' | 'pluginIcon' | 'text'>()
             marginLeft: theme.spacing(0.5),
             color: theme.palette.maskColor.main,
         },
-        twitterIcon: {
-            borderRadius: '50%',
-        },
         checkIcon: {
             marginLeft: 'auto',
             color: '#60DFAB',
             filter: 'drop-shadow(0px 4px 10px rgba(28, 104, 243, 0.2))',
-        },
-        tooltip: {
-            maxWidth: 'unset',
         },
     }
 })
@@ -115,124 +110,6 @@ const PluginIcon = ({ pluginID }: { pluginID: NetworkPluginID }) => {
         ),
     }
     return mapping[pluginID]
-}
-
-enum AddressPlatform {
-    Facebook = 'facebook',
-    Twitter = 'twitter',
-    NextId = 'next_id',
-}
-
-interface AddressSourceTooltipProps extends Omit<TooltipProps, 'title'> {
-    type?: SocialAddressType
-    platform?: AddressPlatform
-}
-
-const SourceTooltip: FC<AddressSourceTooltipProps> = ({ platform, type, children }) => {
-    const { classes } = useStyles()
-    return (
-        <ShadowRootTooltip
-            classes={{ tooltip: classes.tooltip }}
-            disableInteractive
-            title={
-                <Typography fontSize={14} lineHeight="18px">
-                    {type ? (
-                        <Translate.source_tooltip
-                            values={{ source: type ?? '' }}
-                            components={{
-                                Link: (
-                                    <Typography component="span" color={(theme) => theme.palette.maskColor.primary} />
-                                ),
-                            }}
-                            context={platform}>
-                            {children}
-                        </Translate.source_tooltip>
-                    ) : (
-                        <Translate.source_tooltip_only
-                            values={{ context: platform! }}
-                            components={{
-                                Link: (
-                                    <Typography component="span" color={(theme) => theme.palette.maskColor.primary} />
-                                ),
-                            }}
-                            context={platform!}>
-                            {children}
-                        </Translate.source_tooltip_only>
-                    )}
-                </Typography>
-            }
-            arrow>
-            {children}
-        </ShadowRootTooltip>
-    )
-}
-
-const TipsAccountSource: FC<{ account: SocialAccount }> = ({ account }) => {
-    const { classes, cx, theme } = useStyles()
-    const iconStyle =
-        theme.palette.mode === 'light'
-            ? {
-                  boxShadow: '0px 6px 12px rgba(28, 104, 243, 0.2)',
-                  backdropFilter: 'blur(8px)',
-              }
-            : undefined
-
-    const fromTwitter = [
-        SocialAddressType.Address,
-        SocialAddressType.ENS,
-        SocialAddressType.RSS3,
-        SocialAddressType.SOL,
-        SocialAddressType.TwitterBlue,
-    ].find((x) => account.supportedAddressTypes?.includes(x))
-
-    return (
-        <>
-            {account.supportedAddressTypes?.includes(SocialAddressType.NEXT_ID) ? (
-                <SourceTooltip platform={AddressPlatform.NextId}>
-                    <Icons.NextIDMini
-                        className={cx(classes.actionIcon, classes.icon)}
-                        style={{ ...iconStyle, width: 32, height: 18 }}
-                    />
-                </SourceTooltip>
-            ) : null}
-
-            {fromTwitter ? (
-                <SourceTooltip platform={AddressPlatform.Twitter} type={fromTwitter}>
-                    <Icons.TwitterRound
-                        className={cx(classes.actionIcon, classes.icon, classes.twitterIcon)}
-                        style={iconStyle}
-                    />
-                </SourceTooltip>
-            ) : null}
-
-            {account.supportedAddressTypes?.includes(SocialAddressType.CyberConnect) ? (
-                <SourceTooltip platform={AddressPlatform.Twitter} type={SocialAddressType.CyberConnect}>
-                    <Icons.CyberConnect
-                        className={cx(classes.actionIcon, classes.icon)}
-                        style={{ ...iconStyle, width: 18, height: 18 }}
-                    />
-                </SourceTooltip>
-            ) : null}
-
-            {account.supportedAddressTypes?.includes(SocialAddressType.Leaderboard) ? (
-                <SourceTooltip platform={AddressPlatform.Twitter} type={SocialAddressType.Leaderboard}>
-                    <Icons.Leaderboard
-                        className={cx(classes.actionIcon, classes.icon)}
-                        style={{ ...iconStyle, width: 18, height: 18 }}
-                    />
-                </SourceTooltip>
-            ) : null}
-
-            {account.supportedAddressTypes?.includes(SocialAddressType.Sybil) ? (
-                <SourceTooltip platform={AddressPlatform.Twitter} type={SocialAddressType.Sybil}>
-                    <Icons.Sybil
-                        className={cx(classes.actionIcon, classes.icon)}
-                        style={{ ...iconStyle, width: 18, height: 18 }}
-                    />
-                </SourceTooltip>
-            ) : null}
-        </>
-    )
 }
 
 const ExternalLink: FC<{ account: SocialAccount }> = ({ account }) => {
@@ -294,7 +171,7 @@ export const RecipientSelect: FC<Props> = memo(({ className }) => {
                         {account.label || account.address}
                     </Typography>
                     <ExternalLink account={account} />
-                    <TipsAccountSource account={account} />
+                    <AccountIcon account={account} />
                     {isSameAddress(account.address, recipientAddress) ? (
                         <Icons.CheckCircle className={cx(classes.checkIcon, classes.icon)} />
                     ) : null}
