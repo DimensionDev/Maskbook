@@ -76,6 +76,7 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
                 }
                 if (devtools) {
                     // Note: when devtools is enabled, we will install react-refresh/runtime manually to keep the correct react global hook installation order.
+                    // https://github.com/pmmmwh/react-refresh-webpack-plugin/issues/680
                     alias[require.resolve('@pmmmwh/react-refresh-webpack-plugin/client/ReactRefreshEntry.js')] =
                         require.resolve('./package-overrides/null.js')
                 }

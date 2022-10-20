@@ -9,7 +9,7 @@ export interface DevtoolsMessage {
     //    In this case, the handshake will be: activateBackend => _
     // 2. The devtools is loaded, and the page refreshes.
     //    In this case, the handshake will be: helloFromBackend => activateBackend => _
-    activateBackend: void
+    activateBackend: string
     helloFromBackend: void
     //
     farewell: void

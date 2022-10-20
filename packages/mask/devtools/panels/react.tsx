@@ -52,11 +52,10 @@ export async function startReactDevTools(signal: AbortSignal) {
     // Note: DT type is wrong
     // @ts-expect-error
     const ReactDevTools: ComponentType<Partial<DevtoolsProps>> = initialize(null!, { bridge, store })
-    DevtoolsMessage.events.helloFromBackend.on(() => DevtoolsMessage.events.activateBackend.sendByBroadcast(), {
+    DevtoolsMessage.events.helloFromBackend.on(() => DevtoolsMessage.events.activateBackend.sendByBroadcast(id), {
         signal,
-        once: true,
     })
-    DevtoolsMessage.events.activateBackend.sendByBroadcast()
+    DevtoolsMessage.events.activateBackend.sendByBroadcast(id)
 
     // If this is the first open, we wait for devtools message to show UI.
     if (!components)

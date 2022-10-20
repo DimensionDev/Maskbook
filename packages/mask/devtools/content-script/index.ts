@@ -9,9 +9,11 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 let bridge: Bridge<any, any> | undefined = undefined
-DevtoolsMessage.events.activateBackend.on(() => {
+DevtoolsMessage.events.activateBackend.on((id) => {
     if (bridge) return
-    bridge = createBridge(window, createReactDevToolsWall(String(Reflect.get(globalThis, GLOBAL_ID_KEY))))
+    const localID = String(Reflect.get(globalThis, GLOBAL_ID_KEY))
+    if (localID !== id) return
+    bridge = createBridge(window, createReactDevToolsWall(localID))
     activate(window, { bridge })
 })
 DevtoolsMessage.events.helloFromBackend.sendByBroadcast()
