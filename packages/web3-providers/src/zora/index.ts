@@ -77,7 +77,7 @@ export class ZoraAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType
             },
             metadata: {
                 ...shared,
-                name: getAssetFullName(shared.name ?? '', token.name, token.tokenId),
+                name: getAssetFullName(shared.address, shared.name ?? '', token.name, token.tokenId),
             },
             traits:
                 token.attributes

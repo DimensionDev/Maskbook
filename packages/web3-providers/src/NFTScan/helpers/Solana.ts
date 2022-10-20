@@ -88,7 +88,7 @@ export function createNonFungibleAsset(chainId: ChainId, asset: Solana.Asset): N
             : undefined,
         metadata: {
             chainId,
-            name: getAssetFullName(name, name),
+            name: getAssetFullName(asset.token_address, name, name),
             symbol,
             description,
             imageURL: mediaURL,

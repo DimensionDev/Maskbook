@@ -83,7 +83,7 @@ async function getNonFungibleAssets(
             },
             metadata: {
                 chainId,
-                name: getAssetFullName(metadata.data.data.name, metadata.data.data.name),
+                name: getAssetFullName(pubkey, metadata.data.data.name, metadata.data.data.name),
                 symbol: metadata.data.data.symbol,
                 description: externalMeta?.description,
                 mediaURL: externalMeta?.animation ?? externalMeta?.image ?? '',
