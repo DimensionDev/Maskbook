@@ -56,7 +56,12 @@ function createNonFungibleToken(
         link: createNonFungibleTokenLink(chainId, contractAddress, tokenId),
         metadata: {
             chainId,
-            name: getAssetFullName(asset.metadata.name || asset.title, asset.metadata.name || asset.title, tokenId),
+            name: getAssetFullName(
+                asset.contract.address,
+                asset.metadata.name || asset.title,
+                asset.metadata.name || asset.title,
+                tokenId,
+            ),
             description: asset.metadata.description || asset.description,
             imageURL: resolveResourceURL(imageURL),
             mediaURL: resolveResourceURL(mediaURL),
@@ -98,7 +103,7 @@ function createNonFungibleAsset(
         address: metaDataResponse.contract?.address,
         metadata: {
             chainId,
-            name: getAssetFullName(contractName, metaDataResponse.title, tokenId),
+            name: getAssetFullName(metaDataResponse.contract?.address, contractName, metaDataResponse.title, tokenId),
             symbol: contractMetadataResponse?.contractMetadata?.symbol ?? '',
             description: metaDataResponse.description,
             imageURL:

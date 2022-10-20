@@ -37,7 +37,7 @@ function createNonFungibleToken(chainId: ChainId, asset: AlchemyNFT_FLOW): NonFu
         address,
         metadata: {
             chainId,
-            name: getAssetFullName(asset?.contract?.name ?? '', asset?.contract?.name, tokenId),
+            name: getAssetFullName(address, asset?.contract?.name ?? '', asset?.contract?.name, tokenId),
             symbol: '',
             description: asset.description,
             imageURL: createNonFungibleTokenImageURL(asset),
@@ -70,7 +70,7 @@ function createNonFungibleAsset(
         address,
         metadata: {
             chainId,
-            name: getAssetFullName(metadata.contract?.name ?? '', metadata.contract?.name, tokenId),
+            name: getAssetFullName(address, metadata.contract?.name ?? '', metadata.contract?.name, tokenId),
             symbol: '',
             description: metadata.description,
             imageURL: createNonFungibleTokenImageURL(metadata),

@@ -98,6 +98,9 @@ export function createNonFungibleAsset(
     const schema = asset.erc_type === 'erc1155' ? SchemaType.ERC1155 : SchemaType.ERC721
     const symbol = asset.contract_name
 
+    if (asset.name.endsWith('.eth')) {
+        console.log(asset)
+    }
     return {
         id: asset.contract_address,
         chainId,
@@ -131,7 +134,7 @@ export function createNonFungibleAsset(
             : undefined,
         metadata: {
             chainId,
-            name: getAssetFullName(contractName, payload?.name || asset.name, asset.token_id),
+            name: getAssetFullName(asset.contract_address, contractName, payload?.name || asset.name, asset.token_id),
             symbol,
             description,
             imageURL: mediaURL,

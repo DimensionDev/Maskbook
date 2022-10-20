@@ -4,6 +4,7 @@ import { isPopupPage } from '@masknet/shared-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { getRedPacketConstants, getTokenConstant, ZERO_ADDRESS } from '../constants/index.js'
 import { ChainId, NetworkType, ProviderType } from '../types/index.js'
+import { ENS_CONTRACT_ADDRESS } from '../constants/ens.js'
 
 export function isEmptyHex(hex?: string) {
     return !hex || ['0x', '0x0'].includes(hex)
@@ -76,4 +77,8 @@ export function getNativeTokenAddress(chainId = ChainId.Mainnet) {
 
 export function getMaskTokenAddress(chainId = ChainId.Mainnet) {
     return getTokenConstant(chainId, 'MASK_ADDRESS') ?? ''
+}
+
+export function isENS(contract_address: string) {
+    return isSameAddress(contract_address, ENS_CONTRACT_ADDRESS)
 }
