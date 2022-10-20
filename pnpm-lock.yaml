@@ -45,9 +45,6 @@ patchedDependencies:
   '@ethersphere/bee-js@5.0.0':
     hash: g3xomw7pzn5koufm6j4gkm6n5m
     path: patches/@ethersphere__bee-js@5.0.0.patch
-  ses@0.15.21:
-    hash: lq4kk43v4s6s25oynz2zdgllxe
-    path: patches/ses@0.15.21.patch
   '@emotion/use-insertion-effect-with-fallbacks@1.0.0':
     hash: ewwh6qko3asynoh7f6o5yjipdy
     path: patches/@emotion__use-insertion-effect-with-fallbacks@1.0.0.patch
@@ -63,6 +60,9 @@ patchedDependencies:
   react-devtools-inline@4.26.1:
     hash: fpee2mntbhrd2bberabvpkyh5q
     path: patches/react-devtools-inline@4.26.1.patch
+  ses@0.16.0:
+    hash: k64fstgnrckhcwwbxafxqywjdy
+    path: patches/ses@0.16.0.patch
 
 importers:
 
@@ -138,8 +138,8 @@ importers:
         specifier: ^11.18.6
         version: 11.18.6_nbywyqdaegmp44owaabhnleet4
       ses:
-        specifier: 0.15.21
-        version: 0.15.21_lq4kk43v4s6s25oynz2zdgllxe
+        specifier: 0.16.0
+        version: 0.16.0_k64fstgnrckhcwwbxafxqywjdy
       ts-results:
         specifier: 3.3.0
         version: 3.3.0_g2bdan7o336xxsymnx5nlozu2m
@@ -979,7 +979,7 @@ importers:
         version: 5.5.0_webpack@5.74.0
       react-devtools-inline:
         specifier: ^4.26.1
-        version: 4.26.1
+        version: 4.26.1_fpee2mntbhrd2bberabvpkyh5q
       react-refresh:
         specifier: ^0.14.0
         version: 0.14.0
@@ -25962,12 +25962,13 @@ packages:
       - supports-color
     dev: false
 
-  /react-devtools-inline/4.26.1:
+  /react-devtools-inline/4.26.1_fpee2mntbhrd2bberabvpkyh5q:
     resolution: {integrity: sha512-FlgH57k9wz7gq+FZauYMptDR5XRmc0cdBiXRFdiqlMYENCjMtWybS9hV+6Bp8bkxKDxUgszUx7LV03oQ9pa84Q==}
     dependencies:
       source-map-js: 0.6.2
       sourcemap-codec: 1.4.8
     dev: true
+    patched: true
 
   /react-dnd-html5-backend/16.0.1:
     resolution: {integrity: sha512-Wu3dw5aDJmOGw8WjH1I1/yTH+vlXEL4vmjk5p+MHxP8HuHJS1lAGeIdG/hze1AvNeXWo/JgULV87LyQOr+r5jw==}
@@ -27543,8 +27544,8 @@ packages:
       - supports-color
     dev: false
 
-  /ses/0.15.21_lq4kk43v4s6s25oynz2zdgllxe:
-    resolution: {integrity: sha512-Ee+ShLtk+pygy9hKr8RhyStQI+MfQFt7Tk98/iIvFqF5M4dpJTd2dYNMuTL+J803djxcFGyjHopwqkX+10fa3g==}
+  /ses/0.16.0_k64fstgnrckhcwwbxafxqywjdy:
+    resolution: {integrity: sha512-2oKCzl3W24aNqBifLWWEh3OGd+78+SY1GVKWP5ogrqBOjs3X1trwE2akx5pX4M1MFExqXoJGav1CmCq2KBMqOg==}
     dev: false
     patched: true
 
