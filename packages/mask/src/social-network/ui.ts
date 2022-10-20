@@ -46,6 +46,7 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
     assertNotEnvironment(Environment.ManifestBackground)
 
     console.log('Activating provider', ui_deferred.networkIdentifier)
+    setupShadowRootPortal()
     const ui = (activatedSocialNetworkUI = await loadSocialNetworkUI(ui_deferred.networkIdentifier))
 
     sharedUINetworkIdentifier.value = ui_deferred.networkIdentifier
@@ -161,8 +162,6 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
 
     // TODO: receive the signal
     if (Flags.sandboxedPluginRuntime) import('./sandboxed-plugin.js')
-
-    setupShadowRootPortal()
 
     function i18nOverwrite() {
         const i18n = ui.customization.i18nOverwrite || {}
