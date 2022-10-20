@@ -162,6 +162,10 @@ export interface SocialIdentity {
     binding?: NextIDPersonaBindings
 }
 
+/**
+ * The smallest unit of a social account. This type only for internal usage.
+ * The SocialAccount serves for UI usage.
+ */
 export interface SocialAddress<PluginID> {
     /** The ID of a plugin that the address belongs to */
     pluginID: PluginID
@@ -177,6 +181,10 @@ export interface SocialAddress<PluginID> {
     createdAt?: string
 }
 
+/**
+ * The social account that merged from multiple social addresses.
+ * This type only for UI usage. 
+ */
 export interface SocialAccount extends Omit<SocialAddress<NetworkPluginID>, 'type'> {
     supportedAddressTypes?: SocialAddressType[]
 }
