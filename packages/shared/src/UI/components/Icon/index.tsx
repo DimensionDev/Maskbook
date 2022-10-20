@@ -18,13 +18,14 @@ export interface IconProps {
     size?: number | string
     name?: string
     label?: string
+    disableLabel?: boolean
     logoURL?: string
     className?: string
     AvatarProps?: Partial<AvatarProps>
 }
 
 export const Icon = memo<IconProps>((props) => {
-    const { logoURL, AvatarProps, size, name, label, className } = props
+    const { logoURL, AvatarProps, size, name, label, disableLabel, className } = props
     const [error, setError] = useState(false)
 
     const defaultBackgroundImage = name2Image(name)
@@ -48,7 +49,8 @@ export const Icon = memo<IconProps>((props) => {
                 backgroundImage: `url("${defaultBackgroundImage}")`,
                 backgroundColor: showImage ? theme.palette.common.white : undefined,
             }}>
-            {label ?? name?.slice(0, 1).toUpperCase()}
+            {/* Will fallback to default avatar icon if it's null */}
+            {disableLabel ? '' : label ?? name?.slice(0, 1).toUpperCase()}
         </Avatar>
     )
 })

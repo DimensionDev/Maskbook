@@ -129,7 +129,6 @@ interface ApprovalWrapperProps {
 function ApprovalWrapper(props: ApprovalWrapperProps) {
     const { tab } = props
     const { t: tr } = useBaseI18n()
-    const t = useI18N()
     const { targetChainId: chainId } = TargetChainIdContext.useContainer()
     const [networkTabChainId, setNetworkTabChainId] = useState<ChainId>(chainId)
     const approvalDefinition = useActivatedPlugin(PluginID.Approval, 'any')
