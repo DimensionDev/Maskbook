@@ -46,6 +46,7 @@
     "load_retry": "crwdns17244:0crwdne17244:0",
     "powered_by": "crwdns17746:0crwdne17746:0",
     "copied": "crwdns18350:0crwdne18350:0",
+    "copy_wallet_address_success": "crwdns18840:0crwdne18840:0",
     "go_plus": "crwdns17748:0crwdne17748:0",
     "rss3": "crwdns18310:0crwdne18310:0",
     "mask_network": "crwdns18312:0crwdne18312:0",
@@ -72,6 +73,7 @@
     "attention_item": "crwdns17778:0{{quantity}}crwdne17778:0",
     "change": "crwdns17568:0crwdne17568:0",
     "connect_your_wallet": "crwdns17570:0crwdne17570:0",
+    "connected_wallet_settings": "crwdns18842:0crwdne18842:0",
     "wallet_settings": "crwdns17572:0crwdne17572:0",
     "pending": "crwdns17574:0crwdne17574:0",
     "gas_settings_title": "crwdns17576:0crwdne17576:0",
@@ -118,10 +120,12 @@
     "plugin_card_frame_default_provided_by": "crwdns18796:0crwdne18796:0",
     "plugin_card_frame_default_provided_by_value": "crwdns18798:0crwdne18798:0",
     "plugin_card_frame_loading": "crwdns18800:0crwdne18800:0",
+    "plugin_wallet_connect_a_wallet": "crwdns18844:0crwdne18844:0",
     "save": "crwdns18802:0crwdne18802:0",
     "cancel": "crwdns18804:0crwdne18804:0",
     "add_wallet": "crwdns18806:0crwdne18806:0",
     "wallet_setting_hint": "crwdns18808:0crwdne18808:0",
+    "wallet_status_button_change": "crwdns18846:0crwdne18846:0",
     "add_wallet_tips": "crwdns18810:0crwdne18810:0",
     "add_wallet_web3_profile": "crwdns18812:0crwdne18812:0",
     "save_successfully": "crwdns18814:0crwdne18814:0",
@@ -136,5 +140,6 @@
     "source_tooltip$facebook": "crwdns18832:0{{source}}crwdne18832:0",
     "source_tooltip_only$facebook": "crwdns18834:0crwdne18834:0",
     "source_tooltip$next_id": "crwdns18836:0crwdne18836:0",
-    "source_tooltip_only$next_id": "crwdns18838:0crwdne18838:0"
+    "source_tooltip_only$next_id": "crwdns18838:0crwdne18838:0",
+    "recent_transaction_pending": "crwdns18848:0crwdne18848:0"
 }
