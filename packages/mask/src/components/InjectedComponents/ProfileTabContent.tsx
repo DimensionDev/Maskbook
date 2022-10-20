@@ -64,7 +64,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     addressMenu: {
         maxHeight: MENU_ITEM_HEIGHT * 9 + MENU_LIST_PADDING * 2,
-        width: 248,
+        minWidth: 320,
         backgroundColor: theme.palette.maskColor.bottom,
     },
     menuItem: {
@@ -78,6 +78,7 @@ const useStyles = makeStyles()((theme) => ({
     addressItem: {
         display: 'flex',
         alignItems: 'center',
+        marginRight: theme.spacing(2),
     },
     settingLink: {
         cursor: 'pointer',
