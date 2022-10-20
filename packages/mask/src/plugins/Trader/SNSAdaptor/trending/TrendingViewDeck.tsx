@@ -226,7 +226,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                                     name={coin.name}
                                                     symbol={coin.symbol}
                                                     address={coin.address}
-                                                    logoUrl={coin.image_url}
+                                                    logoURL={coin.image_url}
                                                     size={20}
                                                 />
                                             </Avatar>

@@ -1,33 +1,36 @@
 import { describe, test, expect } from 'vitest'
-import { getNFTAllName, getNFTName } from '../src/helpers.js'
+import { getAssetFullName } from '../src/helpers.js'
 
 describe('helpers util test', () => {
     test.each([
-        { name: '', tokenId: '', expected: '' },
-        { name: 'abc', tokenId: '', expected: 'abc' },
-        { name: 'abc #123', tokenId: '123', expected: 'abc' },
-        { name: 'abc #123', tokenId: '', expected: 'abc' },
-        { name: '#123', tokenId: '', expected: '' },
-        { name: 'abc 123', tokenId: '123', expected: 'abc' },
-    ])('.format($name)', ({ name, tokenId, expected }) => {
-        expect(getNFTName(name, tokenId)).toBe(expected)
-    })
-})
+        { address: '', contract: 'contract', name: '', tokenId: '', expected: 'contract' },
+        { address: '', contract: '', name: '', tokenId: '123', expected: '#123' },
 
-describe('helpers util test', () => {
-    test.each([
-        { contract: 'contract', name: '', tokenId: '', expected: 'contract' },
-        { contract: 'contract', name: '', tokenId: '123', expected: 'contract #123' },
-        { contract: '', name: '', tokenId: '123', expected: '#123' },
-        { contract: 'contract', name: 'abc', tokenId: '', expected: 'contract #abc' },
-        { contract: 'contract', name: 'abc #123', tokenId: '123', expected: 'contract #abc' },
-        { contract: 'contract', name: 'abc #123', tokenId: '', expected: 'contract #abc' },
-        { contract: 'contract', name: 'abc 123', tokenId: '123', expected: 'contract #abc' },
-        { contract: 'contract', name: 'abc 123', tokenId: '', expected: 'contract #abc 123' },
-        { contract: 'contract', name: 'abc.eth', tokenId: '123', expected: 'ENS #abc.eth' },
-        { contract: 'abc', name: 'abc', tokenId: '', expected: 'abc' },
-        { contract: '', name: 'abc', tokenId: '', expected: 'abc' },
-    ])('.format($name)', ({ contract, name, tokenId, expected }) => {
-        expect(getNFTAllName(contract, name, tokenId)).toBe(expected)
+        { address: '', contract: 'contract', name: 'abc #123', tokenId: '123', expected: 'abc #123' },
+
+        { address: '', contract: '', name: 'abc #123', tokenId: '', expected: 'abc #123' },
+
+        { address: '', contract: 'contract', name: '#123', tokenId: '123', expected: 'contract #123' },
+        { address: '', contract: '', name: '#123', tokenId: '123', expected: '#123' },
+        { address: '', contract: 'contract', name: '#123', tokenId: '', expected: 'contract #123' },
+        { address: '', contract: '', name: '#123', tokenId: '', expected: '#123' },
+
+        {
+            address: '0x57f1887a8BF19b14fC0dF6Fd9B2acc9Af147eA85',
+            contract: 'abc',
+            name: 'abc',
+            tokenId: '123',
+            expected: 'ENS #abc',
+        },
+
+        { address: '', contract: 'abc', name: 'abc', tokenId: '123', expected: 'abc #123' },
+        { address: '', contract: 'contract', name: 'abc', tokenId: '123', expected: 'contract #abc' },
+
+        { address: '', contract: '', name: 'abc', tokenId: '', expected: 'abc' },
+        { address: '', contract: '', name: 'abc', tokenId: '123', expected: 'abc #123' },
+
+        { address: '', contract: 'contract', name: 'abc', tokenId: '', expected: 'contract #abc' },
+    ])('.format($name)', ({ address, contract, name, tokenId, expected }) => {
+        expect(getAssetFullName(address, contract, name, tokenId)).toBe(expected)
     })
 })

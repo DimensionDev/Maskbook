@@ -1,14 +1,13 @@
 import { HTMLProps, memo, useEffect, useRef, useState } from 'react'
 import { useCopyToClipboard } from 'react-use'
-import { Icons } from '@masknet/icons'
-import { useChainId, useWeb3State } from '@masknet/web3-hooks-base'
-import { AddressItem, useSnackbarCallback } from '@masknet/shared'
-import type { NetworkPluginID } from '@masknet/shared-base'
-import { makeStyles, ShadowRootMenu } from '@masknet/theme'
-import { isSameAddress, SocialAddress, SocialAddressType, SocialIdentity } from '@masknet/web3-shared-base'
-import { ChainId } from '@masknet/web3-shared-evm'
-import { Box, Link, MenuItem, Typography } from '@mui/material'
 import { v4 as uuid } from 'uuid'
+import { Icons } from '@masknet/icons'
+import { Box, Link, MenuItem, Typography } from '@mui/material'
+import { useChainId, useWeb3State } from '@masknet/web3-hooks-base'
+import { AccountIcon, AddressItem, useSnackbarCallback } from '@masknet/shared'
+import { makeStyles, ShadowRootMenu } from '@masknet/theme'
+import { isSameAddress, SocialAccount, SocialIdentity } from '@masknet/web3-shared-base'
+import { ChainId } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../utils/index.js'
 import { AvatarDecoration } from './AvatarDecoration'
 
@@ -96,7 +95,6 @@ const useStyles = makeStyles<void, 'avatarDecoration'>()((theme, _, refs) => ({
         alignItems: 'center',
     },
     secondLinkIcon: {
-        margin: '4px 2px 0 2px',
         color: theme.palette.maskColor.secondaryDark,
     },
     selectedIcon: {
@@ -106,7 +104,7 @@ const useStyles = makeStyles<void, 'avatarDecoration'>()((theme, _, refs) => ({
 
 export interface ProfileBarProps extends HTMLProps<HTMLDivElement> {
     identity: SocialIdentity
-    socialAddressList: Array<SocialAddress<NetworkPluginID>>
+    socialAccounts: SocialAccount[]
     address?: string
     onAddressChange?: (address: string) => void
 }
@@ -117,7 +115,7 @@ export interface ProfileBarProps extends HTMLProps<HTMLDivElement> {
  * - Wallets
  */
 export const ProfileBar = memo<ProfileBarProps>(
-    ({ socialAddressList, address, identity, onAddressChange, className, children, ...rest }) => {
+    ({ socialAccounts, address, identity, onAddressChange, className, children, ...rest }) => {
         const { classes, theme, cx } = useStyles()
         const { t } = useI18N()
         const containerRef = useRef<HTMLDivElement>(null)
@@ -142,7 +140,7 @@ export const ProfileBar = memo<ProfileBarProps>(
                 window.removeEventListener('scroll', closeMenu, false)
             }
         }, [])
-        const selectedAddress = socialAddressList.find((x) => isSameAddress(x.address, address))
+        const selectedAddress = socialAccounts.find((x) => isSameAddress(x.address, address))
 
         return (
             <Box className={cx(classes.root, className)} {...rest} ref={containerRef}>
@@ -170,7 +168,7 @@ export const ProfileBar = memo<ProfileBarProps>(
                     {address ? (
                         <div className={classes.addressRow}>
                             <AddressItem
-                                socialAddress={selectedAddress}
+                                socialAccount={selectedAddress}
                                 disableLinkIcon
                                 TypographyProps={{ className: classes.address }}
                             />
@@ -202,7 +200,7 @@ export const ProfileBar = memo<ProfileBarProps>(
                         className: classes.addressMenu,
                     }}
                     onClose={() => setWalletMenuOpen(false)}>
-                    {socialAddressList.map((x) => {
+                    {socialAccounts.map((x) => {
                         return (
                             <MenuItem
                                 className={classes.menuItem}
@@ -213,8 +211,8 @@ export const ProfileBar = memo<ProfileBarProps>(
                                     onAddressChange?.(x.address)
                                 }}>
                                 <div className={classes.addressItem}>
-                                    <AddressItem socialAddress={x} linkIconClassName={classes.secondLinkIcon} />
-                                    {x.type === SocialAddressType.NEXT_ID && <Icons.Verified />}
+                                    <AddressItem socialAccount={x} linkIconClassName={classes.secondLinkIcon} />
+                                    <AccountIcon socialAccount={x} />
                                 </div>
                                 {isSameAddress(address, x.address) && (
                                     <Icons.CheckCircle className={classes.selectedIcon} />

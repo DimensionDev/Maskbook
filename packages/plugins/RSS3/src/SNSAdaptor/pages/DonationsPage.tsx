@@ -2,10 +2,10 @@ import { useMemo, useState } from 'react'
 import { differenceWith } from 'lodash-unified'
 import { Icons } from '@masknet/icons'
 import { CollectionDetailCard, useWeb3ProfileHiddenSettings } from '@masknet/shared'
-import { EMPTY_LIST, NetworkPluginID, joinKeys } from '@masknet/shared-base'
+import { EMPTY_LIST, joinKeys } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { CollectionType, RSS3BaseAPI } from '@masknet/web3-providers'
-import type { SocialAddress } from '@masknet/web3-shared-base'
+import type { SocialAccount } from '@masknet/web3-shared-base'
 import { ZERO_ADDRESS } from '@masknet/web3-shared-evm'
 import { Box, List, ListItem, Typography } from '@mui/material'
 import { useI18N } from '../../locales/index.js'
@@ -29,18 +29,18 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface DonationPageProps {
-    socialAddress?: SocialAddress<NetworkPluginID>
+    socialAccount?: SocialAccount
     userId?: string
     publicKey?: string
 }
 
-export function DonationPage({ socialAddress, publicKey, userId }: DonationPageProps) {
+export function DonationPage({ socialAccount, publicKey, userId }: DonationPageProps) {
     const { classes } = useStyles()
     const t = useI18N()
-    const { value: allDonations = EMPTY_LIST, loading } = useDonations(socialAddress?.address ?? ZERO_ADDRESS)
+    const { value: allDonations = EMPTY_LIST, loading } = useDonations(socialAccount?.address ?? ZERO_ADDRESS)
 
     const { isHiddenAddress, hiddenList } = useWeb3ProfileHiddenSettings(userId, publicKey, {
-        address: socialAddress?.address,
+        address: socialAccount?.address,
         hiddenAddressesKey: 'donations',
         collectionKey: CollectionType.Donations,
     })
@@ -64,7 +64,7 @@ export function DonationPage({ socialAddress, publicKey, userId }: DonationPageP
         )
     }
 
-    if (isHiddenAddress || !socialAddress) {
+    if (isHiddenAddress || !socialAccount) {
         return (
             <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" height={400}>
                 <Icons.EmptySimple size={32} />
@@ -84,7 +84,7 @@ export function DonationPage({ socialAddress, publicKey, userId }: DonationPageP
                             onSelect={setSelectedDonation}
                             className={classes.donationCard}
                             donation={donation}
-                            socialAddress={socialAddress}
+                            socialAccount={socialAccount}
                         />
                     </ListItem>
                 ))}

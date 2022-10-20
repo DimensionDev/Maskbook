@@ -33,7 +33,7 @@ const useStyles = makeStyles()({
 
 export function ConsoleContent(props: ConsoleContentProps) {
     const { classes } = useStyles()
-    const pluginID = useCurrentWeb3NetworkPluginID()
+    const currentPluginID = useCurrentWeb3NetworkPluginID()
     const { Others } = useWeb3State()
     const account = useAccount()
     const chainId = useChainId()
@@ -43,15 +43,15 @@ export function ConsoleContent(props: ConsoleContentProps) {
     const { value: blockNumber = 0 } = useBlockNumber()
     const { value: blockTimestamp = 0 } = useBlockTimestamp()
 
-    const onSelectGasSettings = useSelectAdvancedSettings(pluginID)
+    const onSelectGasSettings = useSelectAdvancedSettings(currentPluginID)
 
-    const [pluginId, setPluginId] = useState<PluginID>(PluginID.RSS3)
+    const [pluginID, setPluginID] = useState<PluginID>(PluginID.RSS3)
     const plugins = getEnumAsArray(PluginID) as Array<{ key: PluginID; value: string }>
 
     const [quickMode, setQuickMode] = useState(true)
     const { setDialog } = useRemoteControlledDialog(WalletMessages.events.ApplicationDialogUpdated)
-    const { value: reversedName, retry: retryReversedName } = useReverseAddress(pluginID, account)
-    const { value: lookedAddress, retry: retryLookedAddress } = useLookupAddress(pluginID, reversedName)
+    const { value: reversedName, retry: retryReversedName } = useReverseAddress(currentPluginID, account)
+    const { value: lookedAddress, retry: retryLookedAddress } = useLookupAddress(currentPluginID, reversedName)
 
     const { showSnackbar } = useCustomSnackbar()
     const table: Array<{ name: string; content: JSX.Element }> = [
@@ -61,7 +61,7 @@ export function ConsoleContent(props: ConsoleContentProps) {
         },
         {
             name: 'PluginID',
-            content: <Typography variant="body2">{pluginID}</Typography>,
+            content: <Typography variant="body2">{currentPluginID}</Typography>,
         },
         {
             name: 'Network Type',
@@ -164,7 +164,7 @@ export function ConsoleContent(props: ConsoleContentProps) {
             name: 'Plugin Settings',
             content: (
                 <>
-                    <select onChange={(event) => setPluginId(event.target.value as PluginID)}>
+                    <select onChange={(event) => setPluginID(event.target.value as PluginID)}>
                         {plugins.map((x) => (
                             <option key={x.value} value={x.value}>
                                 {x.key}
@@ -190,7 +190,7 @@ export function ConsoleContent(props: ConsoleContentProps) {
                                 settings: {
                                     quickMode,
                                     switchTab: {
-                                        focusPluginId: pluginId,
+                                        focusPluginID: pluginID,
                                     },
                                 },
                             })

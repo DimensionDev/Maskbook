@@ -38,7 +38,7 @@ import {
 } from './types.js'
 import { getOrderUSDPrice } from './utils.js'
 import { OPENSEA_ACCOUNT_URL, OPENSEA_API_URL } from './constants.js'
-import { resolveNonFungibleTokenEventActivityType, getPaymentToken, getNFTAllName } from '../helpers.js'
+import { resolveNonFungibleTokenEventActivityType, getPaymentToken, getAssetFullName } from '../helpers.js'
 
 async function fetchFromOpenSea<T>(url: string, chainId: ChainId, init?: RequestInit) {
     if (![ChainId.Mainnet, ChainId.Rinkeby, ChainId.Matic].includes(chainId)) return
@@ -91,7 +91,8 @@ function createNFTToken(chainId: ChainId, asset: OpenSeaAssetResponse): NonFungi
         address: asset.token_address ?? asset.asset_contract.address,
         metadata: {
             chainId,
-            name: getNFTAllName(
+            name: getAssetFullName(
+                asset.token_address ?? asset.asset_contract.address,
                 asset.name ?? asset.collection.name,
                 asset.name ?? asset.collection.name,
                 asset.token_id,

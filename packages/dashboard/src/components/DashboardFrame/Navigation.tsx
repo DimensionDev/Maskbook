@@ -111,7 +111,7 @@ export function Navigation({ onClose }: NavigationProps) {
     const isLargeScreen = useMediaQuery<Theme>((theme) => theme.breakpoints.up('lg'))
     const t = useDashboardI18N()
     const mode = useTheme().palette.mode
-    const currentPluginId = useCurrentWeb3NetworkPluginID()
+    const pluginID = useCurrentWeb3NetworkPluginID()
 
     const onExpand = (e: React.MouseEvent<HTMLElement>) => {
         e.stopPropagation()
@@ -155,12 +155,12 @@ export function Navigation({ onClose }: NavigationProps) {
                     <ListItemLink to={DashboardRoutes.Wallets}>
                         <ListSubTextItem inset primary={t.wallets_assets()} />
                     </ListItemLink>
-                    {currentPluginId === NetworkPluginID.PLUGIN_EVM && (
+                    {pluginID === NetworkPluginID.PLUGIN_EVM && (
                         <ListItemLink to={DashboardRoutes.WalletsTransfer}>
                             <ListSubTextItem inset primary={t.wallets_transfer()} />
                         </ListItemLink>
                     )}
-                    {currentPluginId === NetworkPluginID.PLUGIN_EVM && (
+                    {pluginID === NetworkPluginID.PLUGIN_EVM && (
                         <ListItemLink to={DashboardRoutes.WalletsHistory}>
                             <ListSubTextItem inset primary={t.wallets_history()} />
                         </ListItemLink>

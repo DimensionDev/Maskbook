@@ -49,6 +49,9 @@ const useStyles = makeStyles()((theme) => ({
     symbol: {
         marginLeft: theme.spacing(0.5),
     },
+    coinIcon: {
+        fontSize: 10,
+    },
     checkedIcon: {
         filter: 'drop-shadow(0px 4px 10px rgba(28, 104, 243, 0.2))',
         color: theme.palette.maskColor.primary,
@@ -81,11 +84,13 @@ const TokenMenuList: FC<TokenMenuListProps> = ({ options, type, value, onSelect 
                         onClick={() => onSelect(x.coin.type, x.value)}>
                         {x.coin.address ? (
                             <CoinIcon
+                                className={classes.coinIcon}
                                 type={x.coin.type}
                                 address={x.coin.address}
                                 name={x.coin.name}
+                                label=""
                                 symbol={x.coin.symbol}
-                                logoUrl={x.coin.image_url}
+                                logoURL={x.coin.image_url}
                                 size={20}
                             />
                         ) : null}

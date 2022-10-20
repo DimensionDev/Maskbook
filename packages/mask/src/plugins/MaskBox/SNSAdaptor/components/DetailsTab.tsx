@@ -6,7 +6,7 @@ const useStyles = makeStyles()((theme) => ({
     main: {
         height: 360,
         overflow: 'auto',
-        marginBottom: theme.spacing(2.75),
+        padding: theme.spacing(2),
     },
     section: {
         margin: theme.spacing(4, 0),

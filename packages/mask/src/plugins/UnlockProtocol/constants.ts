@@ -1,10 +1,10 @@
 import { PluginID } from '@masknet/shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 
-export const pluginName = 'Unlock Protocol'
-export const pluginDescription = 'Post content behind a secure paywall'
-export const pluginId = PluginID.UnlockProtocol
-export const pluginMetaKey = `${pluginId}:1`
+export const PLUGIN_NAME = 'Unlock Protocol'
+export const PLUGIN_DESCRIPTION = 'Post content behind a secure paywall'
+export const PLUGIN_ID = PluginID.UnlockProtocol
+export const PLUGIN_META_KEY = `${PLUGIN_ID}:1`
 
 export const graphEndpointKeyVal = {
     [ChainId.Mainnet]: 'https://api.thegraph.com/subgraphs/name/unlock-protocol/unlock',

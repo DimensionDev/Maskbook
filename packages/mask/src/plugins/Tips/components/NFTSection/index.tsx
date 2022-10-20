@@ -1,3 +1,7 @@
+import { FC, HTMLProps, useCallback, useMemo } from 'react'
+import { useBoolean } from 'react-use'
+import classnames from 'classnames'
+import { uniqWith } from 'lodash-unified'
 import { Icons } from '@masknet/icons'
 import { useAccount, useChainId, useCurrentWeb3NetworkPluginID, useNonFungibleAssets } from '@masknet/web3-hooks-base'
 import { ElementAnchor, RetryHint } from '@masknet/shared'
@@ -6,10 +10,6 @@ import { LoadingBase, makeStyles } from '@masknet/theme'
 import { isSameAddress, NonFungibleAsset } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { FormControl, Typography } from '@mui/material'
-import classnames from 'classnames'
-import { uniqWith } from 'lodash-unified'
-import { FC, HTMLProps, useCallback, useMemo } from 'react'
-import { useBoolean } from 'react-use'
 import { CollectibleList } from '../../../../extension/options-page/DashboardComponents/CollectibleList/index.js'
 import { useI18N } from '../../locales/index.js'
 import { AddDialog } from '../AddDialog.js'
@@ -95,6 +95,7 @@ export const NFTSection: FC<Props> = ({ className, onEmpty, ...rest }) => {
 
     const chainId = useChainId()
     const pluginID = useCurrentWeb3NetworkPluginID()
+
     const {
         value: fetchedTokens = EMPTY_LIST,
         done,

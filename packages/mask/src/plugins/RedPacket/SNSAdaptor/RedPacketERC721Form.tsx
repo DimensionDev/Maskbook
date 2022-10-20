@@ -13,14 +13,13 @@ import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline'
 import { RedpacketMessagePanel } from './RedpacketMessagePanel.js'
 import { SelectNftTokenDialog, OrderedERC721Token } from './SelectNftTokenDialog.js'
 import { RedpacketNftConfirmDialog } from './RedpacketNftConfirmDialog.js'
-import { NFTCardStyledAssetPlayer } from '@masknet/shared'
+import { NFTCardStyledAssetPlayer, PluginWalletStatusBar } from '@masknet/shared'
 import { NFTSelectOption } from '../types.js'
 import { NFT_RED_PACKET_MAX_SHARES } from '../constants.js'
-import { useAccount, useChainId } from '@masknet/web3-hooks-base'
+import { useAccount, useChainId, PluginWeb3ActualContextProvider } from '@masknet/web3-hooks-base'
 import { useNonFungibleOwnerTokens } from '@masknet/web3-hooks-evm'
 import { NetworkPluginID, EMPTY_LIST } from '@masknet/shared-base'
 import type { NonFungibleTokenContract, NonFungibleToken } from '@masknet/web3-shared-base'
-import { PluginWalletStatusBar } from '../../../utils/index.js'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
 
 const useStyles = makeStyles()((theme) => {
@@ -391,28 +390,27 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
             </Box>
             <Box style={{ position: 'absolute', bottom: 0, width: '100%' }}>
                 <PluginWalletStatusBar>
-                    <ChainBoundary
-                        expectedPluginID={NetworkPluginID.PLUGIN_EVM}
-                        expectedChainId={chainId}
-                        forceShowingWrongNetworkButton>
-                        <WalletConnectedBoundary>
-                            <EthereumERC721TokenApprovedBoundary
-                                validationMessage={validationMessage}
-                                owner={account}
-                                contractDetailed={contract}
-                                classes={{ approveButton: classes.approveButton }}
-                                operator={RED_PACKET_NFT_ADDRESS}>
-                                <ActionButton
-                                    style={{ height: 40, padding: 0, margin: 0 }}
-                                    size="large"
-                                    disabled={!!validationMessage}
-                                    fullWidth
-                                    onClick={() => setOpenNFTConfirmDialog(true)}>
-                                    {t.next()}
-                                </ActionButton>
-                            </EthereumERC721TokenApprovedBoundary>
-                        </WalletConnectedBoundary>
-                    </ChainBoundary>
+                    <PluginWeb3ActualContextProvider>
+                        <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={chainId}>
+                            <WalletConnectedBoundary>
+                                <EthereumERC721TokenApprovedBoundary
+                                    validationMessage={validationMessage}
+                                    owner={account}
+                                    contractDetailed={contract}
+                                    classes={{ approveButton: classes.approveButton }}
+                                    operator={RED_PACKET_NFT_ADDRESS}>
+                                    <ActionButton
+                                        style={{ height: 40, padding: 0, margin: 0 }}
+                                        size="large"
+                                        disabled={!!validationMessage}
+                                        fullWidth
+                                        onClick={() => setOpenNFTConfirmDialog(true)}>
+                                        {t.next()}
+                                    </ActionButton>
+                                </EthereumERC721TokenApprovedBoundary>
+                            </WalletConnectedBoundary>
+                        </ChainBoundary>
+                    </PluginWeb3ActualContextProvider>
                 </PluginWalletStatusBar>
             </Box>
         </>

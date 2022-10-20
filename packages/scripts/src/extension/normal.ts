@@ -124,4 +124,6 @@ export interface BuildFlags {
     /** @default false */
     reproducibleBuild?: boolean
     outputPath?: string
+    /** @default true */
+    devtools?: boolean
 }

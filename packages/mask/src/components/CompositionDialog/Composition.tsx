@@ -131,7 +131,7 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
                         recipients={recipients}
                         maxLength={560}
                         onSubmit={onSubmit_}
-                        supportImageEncoding={version === -37 ? false : networkSupport?.text ?? false}
+                        supportImageEncoding={networkSupport?.text ?? false}
                         supportTextEncoding={networkSupport?.image ?? false}
                         e2eEncryptionDisabled={isE2E_Disabled}
                         isOpenFromApplicationBoard={isOpenFromApplicationBoard}

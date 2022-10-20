@@ -158,7 +158,7 @@ export function PoolTogetherView(props: PoolTogetherViewProps) {
                 <ChainBoundary
                     expectedPluginID={NetworkPluginID.PLUGIN_EVM}
                     expectedChainId={ChainId.Mainnet}
-                    predicate={(pluginId, chainId) => [ChainId.Mainnet, ChainId.Matic].includes(chainId)}
+                    predicate={(pluginID, chainId) => [ChainId.Mainnet, ChainId.Matic].includes(chainId)}
                 />
             </Box>
         </>

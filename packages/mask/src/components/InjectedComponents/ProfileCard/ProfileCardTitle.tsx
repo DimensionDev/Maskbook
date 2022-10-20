@@ -1,10 +1,10 @@
 import type { FC, HTMLProps } from 'react'
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
-import { PluginID, NetworkPluginID } from '@masknet/shared-base'
+import { PluginID } from '@masknet/shared-base'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import type { SocialAddress, SocialIdentity } from '@masknet/web3-shared-base'
+import type { SocialAccount, SocialIdentity } from '@masknet/web3-shared-base'
 import { TipButton } from '../../../plugins/Tips/components/index.js'
 import { ProfileBar } from './ProfileBar.js'
 
@@ -38,13 +38,13 @@ const useStyles = makeStyles()((theme) => {
 
 interface Props extends HTMLProps<HTMLDivElement> {
     identity: SocialIdentity
-    socialAddressList: Array<SocialAddress<NetworkPluginID>>
+    socialAccounts: SocialAccount[]
     address?: string
     onAddressChange?(address: string): void
 }
 export const ProfileCardTitle: FC<Props> = ({
     className,
-    socialAddressList,
+    socialAccounts,
     address,
     identity,
     onAddressChange,
@@ -58,7 +58,7 @@ export const ProfileCardTitle: FC<Props> = ({
             settings: {
                 quickMode: true,
                 switchTab: {
-                    focusPluginId: PluginID.Web3ProfileCard,
+                    focusPluginID: PluginID.Web3ProfileCard,
                 },
             },
         })
@@ -69,7 +69,7 @@ export const ProfileCardTitle: FC<Props> = ({
             <ProfileBar
                 className={classes.profileBar}
                 identity={identity}
-                socialAddressList={socialAddressList}
+                socialAccounts={socialAccounts}
                 address={address}
                 onAddressChange={onAddressChange}>
                 <div className={classes.settingItem}>

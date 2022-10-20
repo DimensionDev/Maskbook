@@ -21,7 +21,7 @@ export async function injectAvatar(signal: AbortSignal) {
                 const twitterId = getTwitterId(ele)
                 if (!twitterId) return
 
-                const proxy = DOMProxy({ afterShadowRootInit: { mode: 'closed' } })
+                const proxy = DOMProxy({ afterShadowRootInit: { mode: process.env.shadowRootMode } })
                 proxy.realCurrent = ele.firstChild as HTMLElement
                 const identity = await getUserIdentity(twitterId)
                 const isSuggestion = ele.closest('[data-testid=UserCell]')

@@ -1,8 +1,8 @@
-import { FormattedBalance, FormattedCurrency, InjectedDialog, TokenIcon } from '@masknet/shared'
+import { FormattedBalance, FormattedCurrency, InjectedDialog, TokenIcon, PluginWalletStatusBar } from '@masknet/shared'
 import { isDashboardPage } from '@masknet/shared-base'
 import { makeStyles, MaskColorVar, parseColor } from '@masknet/theme'
 import { memo, useCallback, useEffect, useMemo, useState } from 'react'
-import { PluginWalletStatusBar, useI18N } from '../../../../../utils/index.js'
+import { useI18N } from '../../../../../utils/index.js'
 import type { TradeComputed } from '../../../types/index.js'
 import type BigNumber from 'bignumber.js'
 import {

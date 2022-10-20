@@ -1,3 +1,4 @@
+import { compact } from 'lodash-unified'
 import type { Plugin } from '@masknet/plugin-infra'
 import { SocialIdentity, SocialAddress, SocialAddressType } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
@@ -35,7 +36,7 @@ export class IdentityService extends IdentityServiceState {
         const domain = getSolanaDomain(nickname, bio)
         const domainAddress = domain ? await getSolanaDomainAddress(domain) : undefined
 
-        return [
+        return compact<SocialAddress<NetworkPluginID.PLUGIN_SOLANA>>([
             address
                 ? {
                       pluginID: NetworkPluginID.PLUGIN_SOLANA,
@@ -43,15 +44,15 @@ export class IdentityService extends IdentityServiceState {
                       label: formatAddress(address, 4),
                       address,
                   }
-                : null,
+                : undefined,
             domainAddress
                 ? {
                       pluginID: NetworkPluginID.PLUGIN_SOLANA,
                       type: SocialAddressType.SOL,
-                      label: domain,
+                      label: domain ?? domainAddress,
                       address: domainAddress,
                   }
-                : null,
-        ].filter(Boolean) as Array<SocialAddress<NetworkPluginID.PLUGIN_SOLANA>>
+                : undefined,
+        ])
     }
 }

@@ -1,7 +1,7 @@
 import { memo } from 'react'
 import { Button, ListItemIcon, MenuItem } from '@mui/material'
 import { Icons } from '@masknet/icons'
-import { useI18N } from '../../i18n-next-ui.js'
+import { useSharedI18N } from '../../../locales/index.js'
 import { resolveNextID_NetworkPluginID } from '@masknet/web3-shared-base'
 import type { NetworkPluginID, NextIDPlatform } from '@masknet/shared-base'
 import { useWalletName } from './hooks/useWalletName.js'
@@ -27,19 +27,19 @@ interface WalletMenuItemProps {
 
 export const WalletMenuItem = memo<WalletMenuItemProps>(
     ({ address, selected, onChangeWallet, platform, onSelect, verified }) => {
-        const { t } = useI18N()
+        const t = useSharedI18N()
 
-        const pluginId = useCurrentWeb3NetworkPluginID(platform ? resolveNextID_NetworkPluginID(platform) : undefined)
+        const pluginID = useCurrentWeb3NetworkPluginID(platform ? resolveNextID_NetworkPluginID(platform) : undefined)
         const currentChainId = useChainId()
-        const defaultChainId = useDefaultChainId(pluginId)
+        const defaultChainId = useDefaultChainId(pluginID)
         const chainId = platform ? defaultChainId : currentChainId
 
-        const name = useWalletName(address, pluginId, !!platform)
+        const name = useWalletName(address, pluginID, !!platform)
 
-        const { Others } = useWeb3State(pluginId)
+        const { Others } = useWeb3State(pluginID)
 
         const providerDescriptor = useProviderDescriptor()
-        const networkDescriptor = useNetworkDescriptor(pluginId, chainId)
+        const networkDescriptor = useNetworkDescriptor(pluginID, chainId)
         const formattedAddress = Others?.formatAddress(address, 4)
         const addressLink = Others?.explorerResolver.addressLink?.(chainId, address)
 
@@ -55,7 +55,7 @@ export const WalletMenuItem = memo<WalletMenuItemProps>(
         }
 
         return (
-            <MenuItem value={address} onClick={() => onSelect?.(descriptionProps, chainId, pluginId)}>
+            <MenuItem value={address} onClick={() => onSelect?.(descriptionProps, chainId, pluginID)}>
                 {/* TODO: replace to radio */}
                 <ListItemIcon>
                     {selected ? (
@@ -70,7 +70,7 @@ export const WalletMenuItem = memo<WalletMenuItemProps>(
                 <WalletDescription {...descriptionProps} />
                 {onChangeWallet ? (
                     <Button size="medium" variant="roundedContained" onClick={onChangeWallet} sx={{ marginLeft: 4 }}>
-                        {t('wallet_status_button_change')}
+                        {t.wallet_status_button_change()}
                     </Button>
                 ) : null}
             </MenuItem>

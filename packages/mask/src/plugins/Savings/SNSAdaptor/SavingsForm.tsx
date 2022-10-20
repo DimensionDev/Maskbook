@@ -20,10 +20,17 @@ import {
     useNativeToken,
     useWeb3,
 } from '@masknet/web3-hooks-base'
-import { FungibleTokenInput, FormattedCurrency, InjectedDialog, TokenIcon, useOpenShareTxDialog } from '@masknet/shared'
+import {
+    FungibleTokenInput,
+    FormattedCurrency,
+    InjectedDialog,
+    TokenIcon,
+    useOpenShareTxDialog,
+    PluginWalletStatusBar,
+} from '@masknet/shared'
 import type { AaveLendingPoolAddressProvider } from '@masknet/web3-contracts/types/AaveLendingPoolAddressProvider'
 import AaveLendingPoolAddressProviderABI from '@masknet/web3-contracts/abis/AaveLendingPoolAddressProvider.json'
-import { PluginWalletStatusBar, useI18N } from '../../../utils/index.js'
+import { useI18N } from '../../../utils/index.js'
 import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary.js'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
 import { ProtocolType, SavingsProtocol, TabType } from '../types.js'

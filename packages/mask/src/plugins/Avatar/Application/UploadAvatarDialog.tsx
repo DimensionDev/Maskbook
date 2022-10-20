@@ -45,7 +45,7 @@ interface UploadAvatarDialogProps {
     image?: string | File
     token?: AllChainsNonFungibleToken
     proof?: BindingProof
-    pluginId?: NetworkPluginID
+    pluginID?: NetworkPluginID
     onBack: () => void
     onClose: () => void
 }
@@ -65,10 +65,10 @@ async function uploadAvatar(blob: Blob, userId: string): Promise<AvatarInfo | un
 }
 
 export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
-    const { image, account, token, onClose, onBack, proof, isBindAccount = false, pluginId } = props
+    const { image, account, token, onClose, onBack, proof, isBindAccount = false, pluginID } = props
     const t = useI18N()
     const { classes } = useStyles()
-    const currentPluginId = useCurrentWeb3NetworkPluginID(pluginId)
+    const currentPluginID = useCurrentWeb3NetworkPluginID(pluginID)
     const identifier = useSubscription(context.currentVisitingProfile)
     const [editor, setEditor] = useState<AvatarEditor | null>(null)
     const [scale, setScale] = useState(1)
@@ -76,7 +76,7 @@ export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
     const [disabled, setDisabled] = useState(false)
     const { currentPersona } = usePersonaConnectStatus()
 
-    const [, saveAvatar] = useSave(currentPluginId)
+    const [, saveAvatar] = useSave(currentPluginID)
 
     const onSave = useCallback(async () => {
         if (!editor || !account || !token || !currentPersona?.identifier || !proof) return

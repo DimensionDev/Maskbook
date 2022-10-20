@@ -33,8 +33,8 @@ export const NetworkSection: FC<Props> = () => {
     const { classes } = useStyles()
 
     const pluginID = useCurrentWeb3NetworkPluginID()
-    const tipDefinition = useActivatedPlugin(PluginID.Tips, 'any')
-    const chainIdList = tipDefinition?.enableRequirement.web3?.[pluginID]?.supportedChainIds ?? EMPTY_LIST
+    const definition = useActivatedPlugin(PluginID.Tips, 'any')
+    const chainIdList = definition?.enableRequirement.web3?.[pluginID]?.supportedChainIds ?? EMPTY_LIST
 
     if (!chainIdList.length) return null
 

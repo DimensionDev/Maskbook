@@ -123,10 +123,10 @@ export const PostHistoryRow = memo(({ post, network }: PostHistoryRowProps) => {
 
         if (!meta.length) return null
         const pluginName = meta[0][0]
-        const pluginId = SUPPORT_PLUGIN[pluginName]?.pluginID
+        const pluginID = SUPPORT_PLUGIN[pluginName]?.pluginID
 
-        if (!pluginId) return null
-        const handler = () => Services.SocialNetwork.openSNSAndActivatePlugin(`https://${identifier.network}`, pluginId)
+        if (!pluginID) return null
+        const handler = () => Services.SocialNetwork.openSNSAndActivatePlugin(`https://${identifier.network}`, pluginID)
 
         return (
             <Button color="secondary" variant="rounded" onClick={handler} sx={{ fontSize: 12 }}>

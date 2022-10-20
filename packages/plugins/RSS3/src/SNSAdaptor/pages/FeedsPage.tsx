@@ -1,7 +1,6 @@
 import { memo } from 'react'
 import { useAsyncRetry } from 'react-use'
 import { EMPTY_LIST } from '@masknet/shared-base'
-import { makeStyles } from '@masknet/theme'
 import { RSS3 } from '@masknet/web3-providers'
 import { Box, BoxProps } from '@mui/material'
 import { useI18N } from '../../locales/index.js'
@@ -12,10 +11,7 @@ export interface FeedPageProps extends BoxProps {
     address?: string
 }
 
-const useStyles = makeStyles()(() => ({}))
-
 export const FeedsPage = memo(function FeedsPage({ address, ...rest }: FeedPageProps) {
-    const { classes } = useStyles()
     const t = useI18N()
     const { value: feeds = EMPTY_LIST, loading } = useAsyncRetry(async () => {
         if (!address) return EMPTY_LIST

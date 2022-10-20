@@ -50,7 +50,7 @@ function useDirtyDetection(deps: any[]): [boolean, Dispatch<SetStateAction<boole
 export const TipTaskProvider: FC<React.PropsWithChildren<Props>> = memo(({ children, task }) => {
     const targetChainId = useChainId()
     const pluginID = useCurrentWeb3NetworkPluginID()
-    const { setPluginID: setPluginId } = TargetRuntimeContext.useContainer()
+    const { setPluginID } = TargetRuntimeContext.useContainer()
 
     const [_recipientAddress, setRecipient] = useState<string>(task.recipient ?? '')
     const recipients = useRecipients(pluginID, task.accounts)
@@ -161,9 +161,9 @@ export const TipTaskProvider: FC<React.PropsWithChildren<Props>> = memo(({ child
 
     useEffect(() => {
         if (recipient?.pluginID) {
-            setPluginId(recipient.pluginID)
+            setPluginID(recipient.pluginID)
         } else {
-            setPluginId(NetworkPluginID.PLUGIN_EVM)
+            setPluginID(NetworkPluginID.PLUGIN_EVM)
         }
     }, [recipient?.pluginID])
 

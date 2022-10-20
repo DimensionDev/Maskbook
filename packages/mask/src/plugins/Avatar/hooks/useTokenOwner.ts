@@ -14,6 +14,7 @@ export function useCheckTokenOwner(
     socialIdentity?: SocialIdentity,
 ) {
     const connection = useWeb3Connection(pluginID)
+    const getAddress = useGetAddress()
 
     return useAsyncRetry(async () => {
         if (!socialIdentity?.identifier?.userId || socialIdentity?.identifier.userId === '$unknown') return

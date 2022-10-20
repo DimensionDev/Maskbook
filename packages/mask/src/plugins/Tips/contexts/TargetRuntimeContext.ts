@@ -3,11 +3,11 @@ import { createContainer } from 'unstated-next'
 import { NetworkPluginID } from '@masknet/shared-base'
 
 function useTargetPluginId() {
-    const [expectedPluginID, setExpectedPluginID] = useState<NetworkPluginID>(NetworkPluginID.PLUGIN_EVM)
+    const [pluginID, setPluginID] = useState<NetworkPluginID>(NetworkPluginID.PLUGIN_EVM)
 
     return {
-        pluginID: expectedPluginID,
-        setPluginID: setExpectedPluginID,
+        pluginID,
+        setPluginID,
     }
 }
 

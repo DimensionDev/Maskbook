@@ -113,7 +113,7 @@ export function NFTAvatarDialog() {
                             account={selectedTokenInfo?.account}
                             image={selectedTokenInfo?.image}
                             token={selectedTokenInfo?.token}
-                            pluginId={selectedTokenInfo?.pluginID}
+                            pluginID={selectedTokenInfo?.pluginID}
                             onBack={onBack}
                             onClose={onClose}
                         />

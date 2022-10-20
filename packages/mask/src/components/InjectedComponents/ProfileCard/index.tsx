@@ -1,7 +1,7 @@
 import { FC, useEffect, useMemo, useState } from 'react'
 import { Trans } from 'react-i18next'
 import { useUpdateEffect } from 'react-use'
-import { first, uniqBy } from 'lodash-unified'
+import { first } from 'lodash-unified'
 import { Icons } from '@masknet/icons'
 import {
     createInjectHooksRenderer,
@@ -9,8 +9,8 @@ import {
     usePluginI18NField,
 } from '@masknet/plugin-infra/content-script'
 import { useAvailablePlugins } from '@masknet/plugin-infra'
-import { useSocialAddressListBySettings } from '@masknet/shared'
-import { EMPTY_LIST, NetworkPluginID, PluginID } from '@masknet/shared-base'
+import { useSocialAccountsBySettings } from '@masknet/shared'
+import { EMPTY_LIST, PluginID, NetworkPluginID } from '@masknet/shared-base'
 import { LoadingBase, makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import { isSameAddress, SocialIdentity } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
@@ -62,6 +62,9 @@ const useStyles = makeStyles()((theme) => {
             backgroundColor: theme.palette.maskColor.bottom,
             overflow: 'auto',
             paddingBottom: 48,
+            '::-webkit-scrollbar': {
+                display: 'none',
+            },
         },
         tabs: {
             display: 'flex',
@@ -97,24 +100,18 @@ export const ProfileCard: FC<Props> = ({ identity, ...rest }) => {
 
     const translate = usePluginI18NField()
     const {
-        value: socialAddressList = EMPTY_LIST,
-        loading: loadingSocialAddressList,
+        value: socialAccounts = EMPTY_LIST,
+        loading: loadingSocialAccounts,
         retry: retrySocialAddress,
-    } = useSocialAddressListBySettings(identity, undefined, sorter)
-
-    const availableSocialAddressList = useMemo(() => {
-        return uniqBy(
-            socialAddressList.filter((x) => x.pluginID === NetworkPluginID.PLUGIN_EVM),
-            (x) => x.address.toLowerCase(),
-        )
-    }, [socialAddressList])
+    } = useSocialAccountsBySettings(identity, undefined, sorter)
 
     const [selectedAddress, setSelectedAddress] = useState<string>()
-    const firstAddress = first(availableSocialAddressList)?.address
+    const firstAddress = first(socialAccounts)?.address
     const activeAddress = selectedAddress ?? firstAddress
-    const selectedSocialAddress = useMemo(() => {
-        return availableSocialAddressList.find((x) => isSameAddress(x.address, activeAddress))
-    }, [activeAddress, availableSocialAddressList])
+    const selectedSocialAccount = useMemo(
+        () => socialAccounts.find((x) => isSameAddress(x.address, activeAddress)),
+        [activeAddress, socialAccounts],
+    )
 
     const userId = identity.identifier?.userId
 
@@ -130,7 +127,7 @@ export const ProfileCard: FC<Props> = ({ identity, ...rest }) => {
             .flatMap((x) => x.ProfileCardTabs?.map((y) => ({ ...y, pluginID: x.ID })) ?? EMPTY_LIST)
             .filter((x) => {
                 const isAllowed = x.pluginID === PluginID.RSS3 || x.pluginID === PluginID.Collectible
-                const shouldDisplay = x.Utils?.shouldDisplay?.(identity, selectedSocialAddress) ?? true
+                const shouldDisplay = x.Utils?.shouldDisplay?.(identity, selectedSocialAccount) ?? true
                 return isAllowed && shouldDisplay
             })
             .sort((a, z) => a.priority - z.priority)
@@ -145,8 +142,8 @@ export const ProfileCard: FC<Props> = ({ identity, ...rest }) => {
     const component = useMemo(() => {
         const Component = getTabContent(currentTab)
 
-        return <Component identity={identity} socialAddress={selectedSocialAddress} />
-    }, [currentTab, identity?.publicKey, selectedSocialAddress])
+        return <Component identity={identity} socialAccount={selectedSocialAccount} />
+    }, [currentTab, identity?.publicKey, selectedSocialAccount])
 
     useLocationChange(() => {
         onChange(undefined, first(tabs)?.id)
@@ -156,7 +153,7 @@ export const ProfileCard: FC<Props> = ({ identity, ...rest }) => {
         onChange(undefined, first(tabs)?.id)
     }, [userId])
 
-    if (!userId || loadingSocialAddressList)
+    if (!userId || loadingSocialAccounts)
         return (
             <div className={cx(classes.root, classes.loading)}>
                 <LoadingBase />
@@ -168,7 +165,7 @@ export const ProfileCard: FC<Props> = ({ identity, ...rest }) => {
             <div className={classes.root}>
                 <div className={classes.header}>
                     <ProfileCardTitle
-                        socialAddressList={availableSocialAddressList}
+                        socialAccounts={socialAccounts}
                         address={activeAddress}
                         onAddressChange={setSelectedAddress}
                         identity={identity}

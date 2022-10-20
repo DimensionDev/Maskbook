@@ -2,6 +2,7 @@ import { FC, useCallback, useEffect, useState } from 'react'
 import { isEqual } from 'lodash-unified'
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import { PluginIDContextProvider, PluginWeb3ContextProvider } from '@masknet/web3-hooks-base'
+import { ChainId } from '@masknet/web3-shared-evm'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { TipDialog } from '../components/index.js'
 import { PluginTipsMessages } from '../messages.js'
@@ -9,7 +10,6 @@ import type { TipTask } from '../types/index.js'
 import { TargetRuntimeContext } from './TargetRuntimeContext.js'
 import { TipTaskProvider } from './Tip/TipTaskProvider.js'
 import { TipsTransactionProvider } from './TipsTransaction.js'
-import { ChainId } from '@masknet/web3-shared-evm'
 
 let id = 0
 

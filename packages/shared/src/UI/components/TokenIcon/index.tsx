@@ -4,34 +4,20 @@ import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useChainId, useWeb3Hub } from '@masknet/web3-hooks-base'
 import { TokenType } from '@masknet/web3-shared-base'
-import type { AvatarProps } from '@mui/material'
 import { useImageURL } from '../../../hooks/useImageURL.js'
-import { Icon } from '../Icon/index.js'
+import { Icon, IconProps } from '../Icon/index.js'
 
-export interface TokenIconProps {
-    className?: string
+export interface TokenIconProps extends IconProps {
     pluginID?: NetworkPluginID
     chainId?: Web3Helper.ChainIdAll
     address: string
-    name: string
     symbol?: string
-    logoURL?: string
     tokenType?: TokenType
     disableDefaultIcon?: boolean
-    AvatarProps?: Partial<AvatarProps>
 }
 
 export function TokenIcon(props: TokenIconProps) {
-    const {
-        address,
-        logoURL,
-        name,
-        symbol,
-        AvatarProps,
-        className,
-        tokenType = TokenType.Fungible,
-        disableDefaultIcon,
-    } = props
+    const { address, logoURL, name, symbol, tokenType = TokenType.Fungible, disableDefaultIcon, ...rest } = props
 
     const chainId = useChainId(props.pluginID, props.chainId)
     const hub = useWeb3Hub(props.pluginID)
@@ -52,13 +38,5 @@ export function TokenIcon(props: TokenIconProps) {
 
     if (!accessibleUrl && originalUrl && disableDefaultIcon) return null
 
-    return (
-        <Icon
-            key={key}
-            className={className}
-            name={symbol ?? name}
-            logoURL={isNFT ? logoURL : accessibleUrl || originalUrl}
-            AvatarProps={AvatarProps}
-        />
-    )
+    return <Icon key={key} {...rest} logoURL={isNFT ? logoURL : accessibleUrl || originalUrl} name={symbol ?? name} />
 }

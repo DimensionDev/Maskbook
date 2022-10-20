@@ -13,7 +13,7 @@ export type ApplicationDialogEvent = {
         // closing the Setting dialog will not return to ApplicationBoard normal dialog
         quickMode?: boolean
         switchTab?: {
-            focusPluginId?: PluginID
+            focusPluginID?: PluginID
         }
     }
 }
