@@ -92,6 +92,7 @@ function createNFTToken(chainId: ChainId, asset: OpenSeaAssetResponse): NonFungi
         metadata: {
             chainId,
             name: getAssetFullName(
+                asset.token_address ?? asset.asset_contract.address,
                 asset.name ?? asset.collection.name,
                 asset.name ?? asset.collection.name,
                 asset.token_id,

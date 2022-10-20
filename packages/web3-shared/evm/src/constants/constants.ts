@@ -26,6 +26,8 @@ import Aave from '@masknet/web3-constants/evm/aave.json'
 import Lido from '@masknet/web3-constants/evm/lido.json'
 import Game from '@masknet/web3-constants/evm/game.json'
 import Pet from '@masknet/web3-constants/evm/pet.json'
+import ens from '@masknet/web3-constants/evm/ens.json'
+
 import {
     transformAllHook,
     transformHook,
@@ -186,3 +188,5 @@ export const getPetConstant = transform(ChainId, Pet)
 export const getPetConstants = transformAll(ChainId, Pet)
 export const usePetConstant = transformHook(getPetConstants)
 export const usePetConstants = transformAllHook(getPetConstants)
+
+export const getENSConstants = transformAll(ChainId, ens)
