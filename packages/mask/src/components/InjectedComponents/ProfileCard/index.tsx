@@ -62,6 +62,9 @@ const useStyles = makeStyles()((theme) => {
             backgroundColor: theme.palette.maskColor.bottom,
             overflow: 'auto',
             paddingBottom: 48,
+            '::-webkit-scrollbar': {
+                display: 'none',
+            },
         },
         tabs: {
             display: 'flex',
