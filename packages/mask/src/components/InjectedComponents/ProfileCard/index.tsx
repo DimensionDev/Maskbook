@@ -1,7 +1,7 @@
 import { FC, useEffect, useMemo, useState } from 'react'
 import { Trans } from 'react-i18next'
 import { useUpdateEffect } from 'react-use'
-import { first, uniqBy } from 'lodash-unified'
+import { first } from 'lodash-unified'
 import { Icons } from '@masknet/icons'
 import {
     createInjectHooksRenderer,
@@ -102,19 +102,12 @@ export const ProfileCard: FC<Props> = ({ identity, ...rest }) => {
         retry: retrySocialAddress,
     } = useSocialAddressListBySettings(identity, undefined, sorter)
 
-    const availableSocialAddressList = useMemo(() => {
-        return uniqBy(
-            socialAddressList.filter((x) => x.pluginID === NetworkPluginID.PLUGIN_EVM),
-            (x) => x.address.toLowerCase(),
-        )
-    }, [socialAddressList])
-
     const [selectedAddress, setSelectedAddress] = useState<string>()
-    const firstAddress = first(availableSocialAddressList)?.address
+    const firstAddress = first(socialAddressList)?.address
     const activeAddress = selectedAddress ?? firstAddress
     const selectedSocialAddress = useMemo(() => {
-        return availableSocialAddressList.find((x) => isSameAddress(x.address, activeAddress))
-    }, [activeAddress, availableSocialAddressList])
+        return socialAddressList.find((x) => isSameAddress(x.address, activeAddress))
+    }, [activeAddress, socialAddressList])
 
     const userId = identity.identifier?.userId
 
@@ -168,7 +161,7 @@ export const ProfileCard: FC<Props> = ({ identity, ...rest }) => {
             <div className={classes.root}>
                 <div className={classes.header}>
                     <ProfileCardTitle
-                        socialAddressList={availableSocialAddressList}
+                        socialAddressList={socialAddressList}
                         address={activeAddress}
                         onAddressChange={setSelectedAddress}
                         identity={identity}

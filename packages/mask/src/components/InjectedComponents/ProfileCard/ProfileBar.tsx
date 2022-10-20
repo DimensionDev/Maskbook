@@ -1,14 +1,14 @@
 import { HTMLProps, memo, useEffect, useRef, useState } from 'react'
 import { useCopyToClipboard } from 'react-use'
+import { v4 as uuid } from 'uuid'
 import { Icons } from '@masknet/icons'
-import { useChainId, useWeb3State } from '@masknet/web3-hooks-base'
-import { AddressItem, useSnackbarCallback } from '@masknet/shared'
+import { Box, Link, MenuItem, Typography } from '@mui/material'
+import { useChainId, useSocialAccounts, useWeb3State } from '@masknet/web3-hooks-base'
+import { AccountIcon, AddressItem, useSnackbarCallback } from '@masknet/shared'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles, ShadowRootMenu } from '@masknet/theme'
-import { isSameAddress, SocialAddress, SocialAddressType, SocialIdentity } from '@masknet/web3-shared-base'
+import { isSameAddress, SocialAddress, SocialIdentity } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
-import { Box, Link, MenuItem, Typography } from '@mui/material'
-import { v4 as uuid } from 'uuid'
 import { useI18N } from '../../../utils/index.js'
 import { AvatarDecoration } from './AvatarDecoration'
 
@@ -96,7 +96,6 @@ const useStyles = makeStyles<void, 'avatarDecoration'>()((theme, _, refs) => ({
         alignItems: 'center',
     },
     secondLinkIcon: {
-        margin: '4px 2px 0 2px',
         color: theme.palette.maskColor.secondaryDark,
     },
     selectedIcon: {
@@ -133,6 +132,7 @@ export const ProfileBar = memo<ProfileBarProps>(
 
         const { Others } = useWeb3State()
         const chainId = useChainId()
+        const socialAccounts = useSocialAccounts(socialAddressList)
 
         const [walletMenuOpen, setWalletMenuOpen] = useState(false)
         useEffect(() => {
@@ -202,7 +202,7 @@ export const ProfileBar = memo<ProfileBarProps>(
                         className: classes.addressMenu,
                     }}
                     onClose={() => setWalletMenuOpen(false)}>
-                    {socialAddressList.map((x) => {
+                    {socialAccounts.map((x) => {
                         return (
                             <MenuItem
                                 className={classes.menuItem}
@@ -214,7 +214,7 @@ export const ProfileBar = memo<ProfileBarProps>(
                                 }}>
                                 <div className={classes.addressItem}>
                                     <AddressItem socialAddress={x} linkIconClassName={classes.secondLinkIcon} />
-                                    {x.type === SocialAddressType.NEXT_ID && <Icons.Verified />}
+                                    <AccountIcon socialAccount={x} />
                                 </div>
                                 {isSameAddress(address, x.address) && (
                                     <Icons.CheckCircle className={classes.selectedIcon} />

@@ -63,14 +63,6 @@
     "view_on_explorer": "crwdns16522:0crwdne16522:0",
     "tips_guide_description": "crwdns18724:0crwdne18724:0",
     "tips_guide_action": "crwdns18726:0crwdne18726:0",
-    "source_tooltip": "crwdns18728:0{{source}}crwdne18728:0",
-    "source_tooltip$twitter": "crwdns18730:0{{source}}crwdne18730:0",
-    "source_tooltip_only": "crwdns18732:0crwdne18732:0",
-    "source_tooltip_only$twitter": "crwdns18734:0crwdne18734:0",
-    "source_tooltip$facebook": "crwdns18736:0{{source}}crwdne18736:0",
-    "source_tooltip_only$facebook": "crwdns18738:0crwdne18738:0",
-    "source_tooltip$next_id": "crwdns18740:0crwdne18740:0",
-    "source_tooltip_only$next_id": "crwdns18742:0crwdne18742:0",
     "nft_amount": "crwdns18744:0{{count}}crwdne18744:0",
     "congratulations": "crwdns18746:0crwdne18746:0"
 }

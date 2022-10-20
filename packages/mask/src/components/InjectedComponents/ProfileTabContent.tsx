@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useUpdateEffect } from 'react-use'
-import { first, uniqBy } from 'lodash-unified'
+import { first } from 'lodash-unified'
 import { Icons } from '@masknet/icons'
 import {
     createInjectHooksRenderer,
@@ -9,10 +9,16 @@ import {
     usePluginI18NField,
 } from '@masknet/plugin-infra/content-script'
 import { useAvailablePlugins } from '@masknet/plugin-infra'
-import { AddressItem, GrantPermissions, PluginCardFrameMini, useSocialAddressListBySettings } from '@masknet/shared'
-import { CrossIsolationMessages, EMPTY_LIST, NextIDPlatform, PluginID, NetworkPluginID } from '@masknet/shared-base'
+import {
+    AccountIcon,
+    AddressItem,
+    GrantPermissions,
+    PluginCardFrameMini,
+    useSocialAddressListBySettings,
+} from '@masknet/shared'
+import { CrossIsolationMessages, EMPTY_LIST, NextIDPlatform, PluginID } from '@masknet/shared-base'
 import { makeStyles, MaskLightTheme, MaskTabList, ShadowRootMenu, useStylesExtends, useTabs } from '@masknet/theme'
-import { isSameAddress, SocialAddress, SocialAddressType } from '@masknet/web3-shared-base'
+import { isSameAddress } from '@masknet/web3-shared-base'
 import { TabContext } from '@mui/lab'
 import { Button, Link, MenuItem, Stack, Tab, ThemeProvider, Typography } from '@mui/material'
 import { isTwitter } from '../../social-network-adaptor/twitter.com/base.js'
@@ -24,6 +30,7 @@ import { ConnectPersonaBoundary } from '../shared/ConnectPersonaBoundary.js'
 import { WalletSettingEntry } from './ProfileTab/WalletSettingEntry'
 import { isFacebook } from '../../social-network-adaptor/facebook.com/base.js'
 import { useGrantPermissions, usePluginHostPermissionCheck } from '../DataSource/usePluginHostPermission.js'
+import { useSocialAccounts } from '@masknet/web3-hooks-base'
 
 function getTabContent(tabId?: string) {
     return createInjectHooksRenderer(useActivatedPluginsSNSAdaptor.visibility.useAnyMode, (x) => {
@@ -117,7 +124,6 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.maskColor.secondaryDark,
     },
     secondLinkIcon: {
-        margin: '4px 2px 0 2px',
         color: theme.palette.maskColor.second,
     },
     reload: {
@@ -135,7 +141,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     const translate = usePluginI18NField()
 
     const [hidden, setHidden] = useState(true)
-    const [selectedAddress, setSelectedAddress] = useState<SocialAddress<NetworkPluginID> | undefined>()
+    const [selectedAddress, setSelectedAddress] = useState<string | undefined>()
     const [menuOpen, setMenuOpen] = useState(false)
     const {
         value: personaStatus,
@@ -161,6 +167,11 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         retry: retrySocialAddress,
     } = useSocialAddressListBySettings(currentVisitingSocialIdentity, undefined, sorter)
 
+    const socialAccounts = useSocialAccounts(socialAddressList)
+    const selectedSocialAddress = useMemo(() => {
+        return socialAddressList.find((x) => isSameAddress(x.address, selectedAddress))
+    }, [socialAddressList, selectedAddress])
+
     useEffect(() => {
         return MaskMessages.events.ownProofChanged.on(() => {
             retryIdentity()
@@ -175,7 +186,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     }, [retryIdentity])
 
     useEffect(() => {
-        setSelectedAddress(first(socialAddressList))
+        setSelectedAddress(first(socialAddressList)?.address)
     }, [socialAddressList])
 
     const activatedPlugins = useActivatedPluginsSNSAdaptor('any')
@@ -183,7 +194,8 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         return plugins
             .flatMap((x) => x.ProfileTabs?.map((y) => ({ ...y, pluginID: x.ID })) ?? EMPTY_LIST)
             .filter((x) => {
-                const shouldDisplay = x.Utils?.shouldDisplay?.(currentVisitingSocialIdentity, selectedAddress) ?? true
+                const shouldDisplay =
+                    x.Utils?.shouldDisplay?.(currentVisitingSocialIdentity, selectedSocialAddress) ?? true
                 return x.pluginID !== PluginID.NextID && shouldDisplay
             })
             .sort((a, z) => {
@@ -232,8 +244,8 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         const Component = getTabContent(componentTabId)
         if (!Component) return null
 
-        return <Component identity={currentVisitingSocialIdentity} socialAddress={selectedAddress} />
-    }, [componentTabId, currentVisitingSocialIdentity?.publicKey, selectedAddress])
+        return <Component identity={currentVisitingSocialIdentity} socialAddress={selectedSocialAddress} />
+    }, [componentTabId, currentVisitingSocialIdentity?.publicKey, selectedSocialAddress])
 
     const lackHostPermission = usePluginHostPermissionCheck(activatedPlugins.filter((x) => x.ProfileCardTabs?.length))
 
@@ -272,8 +284,8 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     }, [])
 
     const buttonRef = useRef<HTMLButtonElement>(null)
-    const onSelect = (option: SocialAddress<NetworkPluginID>) => {
-        setSelectedAddress(option)
+    const onSelect = (address: string) => {
+        setSelectedAddress(address)
         setMenuOpen(false)
     }
     const handleOpenDialog = () => {
@@ -406,7 +418,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
                                             fontWeight: 700,
                                             color: (theme) => theme.palette.maskColor.dark,
                                         }}
-                                        socialAddress={selectedAddress}
+                                        socialAddress={selectedSocialAddress}
                                     />
                                     <Icons.ArrowDrop className={classes.arrowDropIcon} />
                                 </Button>
@@ -419,21 +431,21 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
                                     }}
                                     aria-labelledby="wallets"
                                     onClose={() => setMenuOpen(false)}>
-                                    {uniqBy(socialAddressList ?? [], (x) => x.address.toLowerCase()).map((x) => {
+                                    {socialAccounts.map((x) => {
                                         return (
                                             <MenuItem
                                                 className={classes.menuItem}
                                                 key={x.address}
                                                 value={x.address}
-                                                onClick={() => onSelect(x)}>
+                                                onClick={() => onSelect(x.address)}>
                                                 <div className={classes.addressItem}>
                                                     <AddressItem
                                                         socialAddress={x}
                                                         linkIconClassName={classes.secondLinkIcon}
                                                     />
-                                                    {x?.type === SocialAddressType.NEXT_ID && <Icons.Verified />}
+                                                    <AccountIcon socialAccount={x} />
                                                 </div>
-                                                {isSameAddress(selectedAddress?.address, x.address) && (
+                                                {isSameAddress(selectedAddress, x.address) && (
                                                     <Icons.CheckCircle className={classes.selectedIcon} />
                                                 )}
                                             </MenuItem>
