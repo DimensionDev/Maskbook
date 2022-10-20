@@ -95,7 +95,7 @@ export async function startReactDevTools(signal: AbortSignal) {
                 componentsPortalContainer={componentRef}
                 profilerPortalContainer={profilerRef}
                 // Note: we're not providing this ability because without source map it is useless.
-                //       and the default result (unminified) is good enough.
+                //       and the default result (not minified) is good enough.
                 // hookNamesModuleLoaderFunction={() => import('react-devtools-inline/hookNames' as any)}
                 showTabBar={false}
                 // Note: since this function is used to fetch the JS file and parse it,
