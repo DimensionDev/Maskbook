@@ -9,13 +9,19 @@ describe('helpers util test', () => {
         { address: '', contract: 'contract', name: 'abc #123', tokenId: '123', expected: 'abc #123' },
 
         { address: '', contract: '', name: 'abc #123', tokenId: '', expected: 'abc #123' },
-        { address: '', contract: 'contract', name: 'abc.eth', tokenId: '', expected: 'ENS #abc.eth' },
-        { address: '', contract: '', name: 'abc.eth', tokenId: '123', expected: 'ENS #abc.eth' },
 
         { address: '', contract: 'contract', name: '#123', tokenId: '123', expected: 'contract #123' },
         { address: '', contract: '', name: '#123', tokenId: '123', expected: '#123' },
         { address: '', contract: 'contract', name: '#123', tokenId: '', expected: 'contract #123' },
         { address: '', contract: '', name: '#123', tokenId: '', expected: '#123' },
+
+        {
+            address: '0x57f1887a8BF19b14fC0dF6Fd9B2acc9Af147eA85',
+            contract: 'abc',
+            name: 'abc',
+            tokenId: '123',
+            expected: 'ENS #abc',
+        },
 
         { address: '', contract: 'abc', name: 'abc', tokenId: '123', expected: 'abc #123' },
         { address: '', contract: 'contract', name: 'abc', tokenId: '123', expected: 'contract #abc' },
