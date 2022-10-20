@@ -60,7 +60,7 @@ export function ToolboxHintAtTwitter(props: { category: 'wallet' | 'application'
 export function ProfileLinkAtTwitter() {
     const { t } = useI18N()
     const onHintButtonClicked = useCallback(() => {
-        CrossIsolationMessages.events.requestComposition.sendToLocal({ reason: 'timeline', open: true })
+        CrossIsolationMessages.events.compositionDialogEvent.sendToLocal({ reason: 'timeline', open: true })
     }, [])
     return (
         <>
