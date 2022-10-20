@@ -6,10 +6,6 @@ import { SharedTrans } from '../../../index.js'
 
 const useStyles = makeStyles<void, 'icon' | 'tooltip'>()((theme) => {
     return {
-        root: {
-            height: 40,
-            flexGrow: 1,
-        },
         icon: {
             width: 20,
             height: 20,

@@ -3,7 +3,7 @@ import { makeStyles } from '@masknet/theme'
 import { Link, Typography, TypographyProps } from '@mui/material'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import { useWeb3State } from '@masknet/web3-hooks-base'
-import { isSameAddress, SocialAccount, SocialAddress } from '@masknet/web3-shared-base'
+import { isSameAddress, SocialAddress } from '@masknet/web3-shared-base'
 import { ReversedAddress } from '../../../index.js'
 
 const useStyles = makeStyles()((theme) => ({

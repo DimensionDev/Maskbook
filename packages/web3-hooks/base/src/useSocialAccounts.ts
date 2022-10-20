@@ -1,14 +1,12 @@
 import { useMemo } from 'react'
 import { compact, first, groupBy } from 'lodash-unified'
 import type { NetworkPluginID } from '@masknet/shared-base'
-import { SocialAccount, SocialAddress, SocialAddressType,  } from '@masknet/web3-shared-base'
+import { SocialAccount, SocialAddress, SocialAddressType } from '@masknet/web3-shared-base'
 
 /**
  * Get all social addresses under of all networks.
  */
-export function useSocialAccounts(
-    socialAddressList: Array<SocialAddress<NetworkPluginID>>
-) {
+export function useSocialAccounts(socialAddressList: Array<SocialAddress<NetworkPluginID>>) {
     return useMemo(() => {
         const accountsGrouped = groupBy(socialAddressList, (x) => `${x.pluginID}_${x.address.toLowerCase()}`)
         return Object.entries(accountsGrouped).map<SocialAccount>(([, group]) => {
