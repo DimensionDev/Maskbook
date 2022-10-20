@@ -21,7 +21,7 @@ import './clean-hmr'
 export function createConfiguration(rawFlags: BuildFlags): Configuration {
     const normalizedFlags = normalizeBuildFlags(rawFlags)
     const { sourceMapKind, lockdown } = computedBuildFlags(normalizedFlags)
-    const { hmr, mode, profiling, reactRefresh, readonlyCache, reproducibleBuild, runtime, outputPath } =
+    const { hmr, mode, profiling, reactRefresh, devtools, readonlyCache, reproducibleBuild, runtime, outputPath } =
         normalizedFlags
 
     const distFolder = (() => {
@@ -71,8 +71,14 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
                     // https://github.com/near/near-api-js/issues/833
                     alias['error-polyfill'] = require.resolve('./package-overrides/null.js')
                 }
-                if (profiling) {
-                    alias['scheduler/tracing'] = 'scheduler/tracing-profiling'
+                if (profiling || (mode === 'production' && devtools)) {
+                    alias['react-dom$'] = 'react-dom/profiling'
+                }
+                if (devtools) {
+                    // Note: when devtools is enabled, we will install react-refresh/runtime manually to keep the correct react global hook installation order.
+                    // https://github.com/pmmmwh/react-refresh-webpack-plugin/issues/680
+                    alias[require.resolve('@pmmmwh/react-refresh-webpack-plugin/client/ReactRefreshEntry.js')] =
+                        require.resolve('./package-overrides/null.js')
                 }
                 return alias
             })(),
@@ -181,6 +187,7 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
             })(),
             new EnvironmentPlugin({
                 NODE_ENV: mode,
+                shadowRootMode: devtools ? 'open' : 'closed',
                 NODE_DEBUG: false,
                 WEB3_CONSTANTS_RPC: process.env.WEB3_CONSTANTS_RPC ?? '',
             }),
@@ -290,6 +297,12 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
         }),
         addHTMLEntry({ chunks: ['debug'], filename: 'debug.html', lockdown }),
     )
+    if (devtools) {
+        entries.devtools = normalizeEntryDescription(join(__dirname, '../devtools/panels/index.tsx'))
+        baseConfig.plugins!.push(
+            addHTMLEntry({ chunks: ['devtools'], filename: 'devtools-background.html', lockdown: false }),
+        )
+    }
     // background
     if (runtime.manifest === 3) {
         entries.background = {
@@ -310,7 +323,7 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
         )
     }
     for (const entry in entries) {
-        if (entry !== 'background') {
+        if (entry !== 'background' && entry !== 'devtools') {
             withReactDevTools(entries[entry])
         }
         with_iOSPatch(entries[entry])
@@ -319,11 +332,8 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
     return baseConfig
 
     function withReactDevTools(entry: EntryDescription) {
-        // https://github.com/facebook/react/issues/20377 React-devtools conflicts with react-refresh
-        if (reactRefresh) return
-        if (!profiling) return
-
-        entry.import = joinEntryItem(join(__dirname, './package-overrides/react-devtools.js'), entry.import)
+        if (!devtools) return
+        entry.import = joinEntryItem(join(__dirname, '../devtools/content-script/index.ts'), entry.import)
     }
     function with_iOSPatch(entry: EntryDescription) {
         if (runtime.engine === 'safari' && runtime.architecture === 'app') {

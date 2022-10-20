@@ -25,7 +25,7 @@ export function ShadowRootIsolation({
         if (!dom) return
         if (dom.shadowRoot) return
 
-        const shadow = dom.attachShadow({ mode: 'open' })
+        const shadow = dom.attachShadow({ mode: process.env.shadowRootMode })
         shadow.appendChild(container.current!)
     }, [dom])
 

@@ -19,7 +19,9 @@ export function injectPageInspectorDefault<T extends string>(
     })
 
     return function injectPageInspector(signal: AbortSignal) {
-        const dom = document.body.appendChild(document.createElement('div')).attachShadow({ mode: 'closed' })
+        const dom = document.body
+            .appendChild(document.createElement('div'))
+            .attachShadow({ mode: process.env.shadowRootMode })
 
         createReactRootShadowed(dom, { signal, key: 'page-inspector' }).render(<PageInspectorDefault />)
     }

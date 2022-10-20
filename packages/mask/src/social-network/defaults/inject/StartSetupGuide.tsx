@@ -9,7 +9,9 @@ function UI({ unmount, persona }: { unmount: () => void; persona: PersonaIdentif
 export function createTaskStartSetupGuideDefault() {
     let shadowRoot: ShadowRoot
     return (signal: AbortSignal, for_: PersonaIdentifier) => {
-        shadowRoot ??= document.body.appendChild(document.createElement('div')).attachShadow({ mode: 'closed' })
+        shadowRoot ??= document.body
+            .appendChild(document.createElement('div'))
+            .attachShadow({ mode: process.env.shadowRootMode })
 
         const root = createReactRootShadowed(shadowRoot, { signal, key: 'setup-guide' })
         root.render(<UI persona={for_} unmount={() => root.destroy()} />)
