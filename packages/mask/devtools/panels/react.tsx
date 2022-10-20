@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import type { TabID } from 'react-devtools-inline/commons.js'
 import { flushSync } from 'react-dom'
 import { createRoot } from 'react-dom/client'
-import { DevtoolsMessage, ReactDevToolsWall } from '../shared.js'
+import { DevtoolsMessage, createReactDevToolsWall, GLOBAL_ID_KEY } from '../shared.js'
 import { initialize, createBridge, DevtoolsProps, createStore } from 'react-devtools-inline/frontend'
 import type { ComponentType } from 'react'
 import { attachListener, createPanel, evalInContentScript } from './utils.js'
@@ -33,7 +33,12 @@ let componentsWindow: Window
 let profilerWindow: Window
 
 export async function startReactDevTools(signal: AbortSignal) {
-    const bridge = createBridge(null!, ReactDevToolsWall)
+    const id = Math.random().toString(36)
+    await evalInContentScript(`
+        globalThis.${GLOBAL_ID_KEY} = ${JSON.stringify(id)}
+    `)
+    const wall = createReactDevToolsWall(id)
+    const bridge = createBridge(null!, wall)
     const store = createStore(bridge, {
         // @ts-expect-error
         isProfiling: false,
@@ -55,7 +60,8 @@ export async function startReactDevTools(signal: AbortSignal) {
     DevtoolsMessage.events.activateBackend.sendByBroadcast()
 
     // If this is the first open, we wait for devtools message to show UI.
-    if (!components) await new Promise((resolve) => DevtoolsMessage.events._.on(resolve, { once: true, signal }))
+    if (!components)
+        await new Promise((resolve) => DevtoolsMessage.events[`_${id}`].on(resolve, { once: true, signal }))
     components ??= await createPanel('\u269B\uFE0F Components')
     profiler ??= await createPanel('\u269B\uFE0F Profile')
 
