@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { startTransition, useDeferredValue, useEffect, useMemo, useState } from 'react'
 import Fuse from 'fuse.js'
 import { InjectedDialog } from '@masknet/shared'
 import { useLookupAddress } from '@masknet/web3-hooks-base'
@@ -92,7 +92,10 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
     const { classes, cx } = useStyles()
     const { items, disabledItems, onSearch } = props
     const [_search, setSearch] = useState('')
-    const { value: registeredAddress = '', loading: resolveDomainLoading } = useLookupAddress(undefined, _search)
+    const { value: registeredAddress = '', loading: resolveDomainLoading } = useLookupAddress(
+        undefined,
+        useDeferredValue(_search),
+    )
 
     const search = registeredAddress || _search
 
@@ -131,7 +134,7 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
                     value={_search}
                     onKeyUp={(e) => {
                         if (e.code !== 'Enter') return
-                        onSearch(search)
+                        startTransition(() => onSearch(search))
                     }}
                     onChange={(e) => setSearch(e.target.value)}
                     onBlur={() => onSearch(search)}
