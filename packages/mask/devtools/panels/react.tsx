@@ -5,7 +5,7 @@ import { createRoot } from 'react-dom/client'
 import { DevtoolsMessage, createReactDevToolsWall, GLOBAL_ID_KEY } from '../shared.js'
 import { initialize, createBridge, DevtoolsProps, createStore } from 'react-devtools-inline/frontend'
 import type { ComponentType } from 'react'
-import { attachListener, createPanel, evalInContentScript } from './utils.js'
+import { attachListener, createPanel, devtoolsEval } from './utils.js'
 
 const registerOnStyleChange = (() => {
     let lastText = ''
@@ -33,10 +33,9 @@ let componentsWindow: Window
 let profilerWindow: Window
 
 export async function startReactDevTools(signal: AbortSignal) {
+    const runInContentScript = (await devtoolsEval<string>('location.href', false)).startsWith('http')
     const id = Math.random().toString(36)
-    await evalInContentScript(`
-        globalThis.${GLOBAL_ID_KEY} = ${JSON.stringify(id)}
-    `)
+    await devtoolsEval(`globalThis.${GLOBAL_ID_KEY} = ${JSON.stringify(id)}`, runInContentScript)
     const wall = createReactDevToolsWall(id)
     const bridge = createBridge(null!, wall)
     const store = createStore(bridge, {
@@ -140,11 +139,13 @@ export async function startReactDevTools(signal: AbortSignal) {
 
     // when click "inspect DOM"
     bridge.addListener('syncSelectionToNativeElementsPanel', () => {
-        evalInContentScript<boolean>(`
+        devtoolsEval<boolean>(
+            `
             if (window.__REACT_DEVTOOLS_GLOBAL_HOOK__.$0 !== $0) {
                 inspect(__REACT_DEVTOOLS_GLOBAL_HOOK__.$0)
-            }
-        `)
+            }`,
+            runInContentScript,
+        )
     })
 
     // When select an element in DOM panel, track it in devtools.
@@ -153,14 +154,15 @@ export async function startReactDevTools(signal: AbortSignal) {
             signal,
         })
         async function setReactSelectionFromBrowser() {
-            const didSelectionChange = await evalInContentScript<boolean>(`
-            if (window.__REACT_DEVTOOLS_GLOBAL_HOOK__?.$0 !== $0) {
-                window.__REACT_DEVTOOLS_GLOBAL_HOOK__.$0 = $0
-                true
-            } else {
-                false
-            }
-        `)
+            const didSelectionChange = await devtoolsEval<boolean>(
+                `if (window.__REACT_DEVTOOLS_GLOBAL_HOOK__?.$0 !== $0) {
+                    window.__REACT_DEVTOOLS_GLOBAL_HOOK__.$0 = $0
+                    true
+                } else {
+                    false
+                }`,
+                runInContentScript,
+            )
             if (didSelectionChange) needsToSyncElementSelection = true
         }
     }
@@ -170,7 +172,7 @@ export async function startReactDevTools(signal: AbortSignal) {
         if (rendererID !== null) {
             bridge.send('viewAttributeSource', { id, path, rendererID })
             setTimeout(() => {
-                evalInContentScript('window.$attribute && inspect($attribute)')
+                devtoolsEval('window.$attribute && inspect($attribute)', runInContentScript)
             }, 100)
         }
     }
@@ -180,8 +182,8 @@ export async function startReactDevTools(signal: AbortSignal) {
         if (rendererID !== null) {
             bridge.send('viewElementSource', { id, rendererID })
             setTimeout(() => {
-                evalInContentScript(`
-                    if (window.$type !== null) {
+                devtoolsEval(
+                    `if (window.$type !== null) {
                         if ($type && $type.prototype && $type.prototype.isReactComponent) {
                             // inspect Component.render, not constructor
                             inspect($type.prototype.render);
@@ -189,8 +191,9 @@ export async function startReactDevTools(signal: AbortSignal) {
                             // inspect Functional Component
                             inspect($type);
                         }
-                    }
-                `)
+                    }`,
+                    runInContentScript,
+                )
             }, 100)
         }
     }

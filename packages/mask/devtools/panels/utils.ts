@@ -1,9 +1,9 @@
 // https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/devtools/inspectedWindow/eval
-export async function evalInContentScript<T>(script: string): Promise<T> {
+export async function devtoolsEval<T>(script: string, runInContentScript: boolean): Promise<T> {
     const [result, exception] = await browser.devtools.inspectedWindow.eval(
         script,
         // @ts-expect-error
-        { useContentScriptContext: true },
+        runInContentScript ? { useContentScriptContext: true } : undefined,
     )
     if (exception) {
         if ('isException' in exception) throw new EvalError(exception.value)
