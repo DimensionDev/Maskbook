@@ -9,6 +9,7 @@ import {
     useAllowTestnet,
     useWeb3State,
     useWeb3Connection,
+    useChainIdValid,
     useProviderDescriptor,
     useChainId,
     useProviderType,
@@ -55,6 +56,7 @@ export interface ChainBoundaryProps<T extends NetworkPluginID> extends withClass
     noSwitchNetworkTip?: boolean
     hiddenConnectButton?: boolean
     switchChainWithoutPopup?: boolean
+    forceShowingWrongNetworkButton?: boolean
     children?: React.ReactNode
     ActionButtonPromiseProps?: Partial<ActionButtonPromiseProps>
 }
@@ -66,6 +68,7 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
         expectedChainId,
         expectedAccount,
         switchChainWithoutPopup = false,
+        forceShowingWrongNetworkButton = false,
         predicate = (actualPluginID, actualChainId) =>
             actualPluginID === expectedPluginID && actualChainId === expectedChainId,
     } = props
@@ -87,6 +90,8 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
     const { Others: expectedOthers } = useWeb3State(expectedPluginID)
     const expectedConnection = useWeb3Connection(expectedPluginID)
     const expectedAllowTestnet = useAllowTestnet(expectedPluginID)
+
+    const chainIdValid = useChainIdValid(actualPluginID)
 
     const expectedChainName = expectedOthers?.chainResolver.chainName(expectedChainId)
     const expectedNetworkDescriptor = useNetworkDescriptor(expectedPluginID, expectedChainId)
@@ -150,6 +155,21 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
             </ShadowRootTooltip>
         )
     }
+
+    if (!chainIdValid && !expectedChainAllowed && !switchChainWithoutPopup && forceShowingWrongNetworkButton)
+        return renderBox(
+            <>
+                {!props.hiddenConnectButton ? (
+                    <ActionButton
+                        fullWidth
+                        startIcon={<Icons.ConnectWallet size={18} />}
+                        onClick={openSelectProviderDialog}
+                        {...props.ActionButtonPromiseProps}>
+                        {t('plugin_wallet_wrong_network')}
+                    </ActionButton>
+                ) : null}
+            </>,
+        )
 
     if (!account)
         return renderBox(
