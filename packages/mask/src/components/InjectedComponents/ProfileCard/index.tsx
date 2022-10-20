@@ -108,7 +108,7 @@ export const ProfileCard: FC<Props> = ({ identity, ...rest }) => {
     const [selectedAddress, setSelectedAddress] = useState<string>()
     const firstAddress = first(socialAccounts)?.address
     const activeAddress = selectedAddress ?? firstAddress
-    const selectedSocialAddress = useMemo(
+    const selectedSocialAccount = useMemo(
         () => socialAccounts.find((x) => isSameAddress(x.address, activeAddress)),
         [activeAddress, socialAccounts],
     )
@@ -127,7 +127,7 @@ export const ProfileCard: FC<Props> = ({ identity, ...rest }) => {
             .flatMap((x) => x.ProfileCardTabs?.map((y) => ({ ...y, pluginID: x.ID })) ?? EMPTY_LIST)
             .filter((x) => {
                 const isAllowed = x.pluginID === PluginID.RSS3 || x.pluginID === PluginID.Collectible
-                const shouldDisplay = x.Utils?.shouldDisplay?.(identity, selectedSocialAddress) ?? true
+                const shouldDisplay = x.Utils?.shouldDisplay?.(identity, selectedSocialAccount) ?? true
                 return isAllowed && shouldDisplay
             })
             .sort((a, z) => a.priority - z.priority)
@@ -142,8 +142,8 @@ export const ProfileCard: FC<Props> = ({ identity, ...rest }) => {
     const component = useMemo(() => {
         const Component = getTabContent(currentTab)
 
-        return <Component identity={identity} socialAccount={selectedSocialAddress} />
-    }, [currentTab, identity?.publicKey, selectedSocialAddress])
+        return <Component identity={identity} socialAccount={selectedSocialAccount} />
+    }, [currentTab, identity?.publicKey, selectedSocialAccount])
 
     useLocationChange(() => {
         onChange(undefined, first(tabs)?.id)
@@ -161,7 +161,7 @@ export const ProfileCard: FC<Props> = ({ identity, ...rest }) => {
         )
 
     return (
-        <PluginWeb3ContextProvider pluginID={NetworkPluginID.PLUGIN_EVM} value={{ chainId: ChainId.Mainnet }}>
+        <PluginWeb3ContextProvider value={{ chainId: ChainId.Mainnet, pluginID: NetworkPluginID.PLUGIN_EVM }}>
             <div className={classes.root}>
                 <div className={classes.header}>
                     <ProfileCardTitle

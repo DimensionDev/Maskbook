@@ -191,9 +191,8 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
     const chainIdList = ITO_Definition?.enableRequirement.web3?.[pluginID]?.supportedChainIds ?? []
     const DialogRef = useRef<HTMLDivElement>(null)
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const currentChainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
 
-    const [chainId, setChainId] = useState(chainIdList.includes(currentChainId) ? currentChainId : ChainId.Mainnet)
     const { value: _swappedTokens, loading: _loading, retry } = useClaimAll(account, chainId)
     const { value: swappedTokensWithDetailed = [], loading: loadingTokenDetailed } = useFungibleTokens(
         NetworkPluginID.PLUGIN_EVM,
@@ -243,8 +242,6 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
                 <DialogContent className={classes.wrapper}>
                     <div className={classes.abstractTabWrapper}>
                         <NetworkTab
-                            chainId={chainId}
-                            setChainId={setChainId}
                             classes={{
                                 tab: classes.tab,
                                 tabs: classes.tabs,

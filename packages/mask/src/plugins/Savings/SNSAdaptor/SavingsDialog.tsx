@@ -1,13 +1,12 @@
 import { useMemo, useState } from 'react'
 import { useAsync, useUpdateEffect } from 'react-use'
-import { flatten, compact, chunk } from 'lodash-unified'
+import { chunk, compact, flatten } from 'lodash-unified'
 import { DialogActions, DialogContent, Tab } from '@mui/material'
-import { isDashboardPage, EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
+import { EMPTY_LIST, isDashboardPage, NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles, MaskColorVar, MaskTabList, useTabs } from '@masknet/theme'
-import { TargetChainIdContext } from '@masknet/web3-hooks-evm'
-import { createContract, ChainId, SchemaType, getAaveConstants, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
+import { ChainId, createContract, getAaveConstants, SchemaType, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
+import { InjectedDialog, PluginWalletStatusBar } from '@masknet/shared'
 import { useI18N } from '../../../utils/index.js'
-import { PluginWalletStatusBar, InjectedDialog } from '@masknet/shared'
 import { AllProviderTradeContext } from '../../Trader/trader/useAllProviderTradeContext.js'
 import { NetworkTab } from '../../../components/shared/NetworkTab.js'
 import { SavingsProtocol, TabType } from '../types.js'
@@ -20,7 +19,7 @@ import { AAVEProtocol } from '../protocols/AAVEProtocol.js'
 import { LDO_PAIRS } from '../constants.js'
 import type { AbiItem } from 'web3-utils'
 import { TabContext, TabPanel } from '@mui/lab'
-import { useChainId, useFungibleTokens, useWeb3 } from '@masknet/web3-hooks-base'
+import { PluginWeb3ContextProvider, useChainId, useFungibleTokens, useWeb3 } from '@masknet/web3-hooks-base'
 import type { FungibleToken } from '@masknet/web3-shared-base'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
 
@@ -133,7 +132,7 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
     const [currentTab, onChange, tabs] = useTabs('Deposit', 'Withdraw')
 
     return (
-        <TargetChainIdContext.Provider>
+        <PluginWeb3ContextProvider value={{ chainId: ChainId.Mainnet, pluginID: NetworkPluginID.PLUGIN_EVM }}>
             <AllProviderTradeContext.Provider>
                 <TabContext value={currentTab}>
                     <InjectedDialog
@@ -153,8 +152,6 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
                             <>
                                 <div className={classes.abstractTabWrapper}>
                                     <NetworkTab
-                                        chainId={chainId}
-                                        setChainId={setChainId}
                                         classes={{
                                             tab: classes.tab,
                                             tabs: classes.tabs,
@@ -207,6 +204,6 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
                     />
                 ) : null}
             </AllProviderTradeContext.Provider>
-        </TargetChainIdContext.Provider>
+        </PluginWeb3ContextProvider>
     )
 }

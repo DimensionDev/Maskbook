@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { HashRouter } from 'react-router-dom'
 import { CssBaseline, ThemeProvider, StyledEngineProvider, Theme } from '@mui/material'
 import {
@@ -18,7 +19,6 @@ import '../utils/kv-storage.js'
 import { Pages } from '../pages/routes.js'
 import { useAppearance } from '../pages/Personas/api.js'
 import { PersonaContext } from '../pages/Personas/hooks/usePersonaContext.js'
-import { useEffect } from 'react'
 import { Services } from '../API.js'
 
 const PluginRender = createInjectHooksRenderer(useActivatedPluginsDashboard, (x) => x.GlobalInjection)

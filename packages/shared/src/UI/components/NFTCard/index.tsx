@@ -1,3 +1,4 @@
+import classNames from 'classnames'
 import { Icons } from '@masknet/icons'
 import { useWeb3State } from '@masknet/web3-hooks-base'
 import { ImageIcon, useIsImageURL } from '@masknet/shared'
@@ -6,7 +7,6 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import { isSameAddress, NonFungibleToken } from '@masknet/web3-shared-base'
 import { ChainId, NETWORK_DESCRIPTORS, SchemaType } from '@masknet/web3-shared-evm'
 import { Box, Skeleton, Tooltip, TooltipProps } from '@mui/material'
-import classNames from 'classnames'
 
 const useStyles = makeStyles<{ networkPluginID: NetworkPluginID }>()((theme, props) => ({
     itemRoot: {

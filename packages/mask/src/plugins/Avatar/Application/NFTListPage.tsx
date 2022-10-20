@@ -48,14 +48,14 @@ const useStyles = makeStyles<{
 }))
 
 interface NFTListPageProps {
+    pluginID: NetworkPluginID
     tokenInfo?: AllChainsNonFungibleToken
     tokens: AllChainsNonFungibleToken[]
-    onChange?: (token: AllChainsNonFungibleToken) => void
     children?: React.ReactElement
-    pluginID: NetworkPluginID
-    nextPage(): void
     loadFinish: boolean
     loadError?: boolean
+    nextPage(): void
+    onChange?: (token: AllChainsNonFungibleToken) => void
 }
 
 export function NFTListPage(props: NFTListPageProps) {

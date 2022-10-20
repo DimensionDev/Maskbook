@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from 'react'
-import { useUpdateEffect } from 'react-use'
 import { PluginID, NetworkPluginID, isDashboardPage, CrossIsolationMessages } from '@masknet/shared-base'
 import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
 import { PluginWeb3ContextProvider, useChainId, useChainIdValid } from '@masknet/web3-hooks-base'
@@ -75,10 +74,11 @@ export function TraderDialog() {
     const chainIdList = traderDefinition?.enableRequirement.web3?.[NetworkPluginID.PLUGIN_EVM]?.supportedChainIds ?? []
     const { t } = useI18N()
     const { classes } = useStyles()
-    const currentChainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const chainIdValid = useChainIdValid(NetworkPluginID.PLUGIN_EVM)
+
     const [traderProps, setTraderProps] = useState<TraderProps>()
-    const [chainId, setChainId] = useState<ChainId>(currentChainId)
     const chainIdRef = useRef<ChainId>(chainId)
     const [open, setOpen] = useState(false)
 
@@ -129,19 +129,10 @@ export function TraderDialog() {
         if (!chainIdValid) setOpen(false)
     }, [chainIdValid])
 
-    useUpdateEffect(() => {
-        if (currentChainId) {
-            setChainId(currentChainId)
-        }
-    }, [currentChainId])
-
     return (
         <InjectedDialog
             open={open}
             onClose={() => {
-                if (currentChainId) {
-                    setChainId(currentChainId)
-                }
                 setTraderProps(undefined)
                 setOpen(false)
             }}
@@ -184,17 +175,13 @@ export function TraderDialog() {
             <DialogContent className={classes.content}>
                 <div className={classes.abstractTabWrapper}>
                     <NetworkTab
-                        chainId={chainId}
-                        /* @ts-ignore */
-                        setChainId={setChainId}
                         classes={{
                             indicator: classes.indicator,
                         }}
                         chains={chainIdList}
-                        networkId={NetworkPluginID.PLUGIN_EVM}
                     />
                 </div>
-                <PluginWeb3ContextProvider pluginID={NetworkPluginID.PLUGIN_EVM} value={{ chainId }}>
+                <PluginWeb3ContextProvider value={{ chainId, pluginID: NetworkPluginID.PLUGIN_EVM }}>
                     <AllProviderTradeContext.Provider>
                         <Trader
                             {...traderProps}

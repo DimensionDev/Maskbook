@@ -4,7 +4,9 @@ import { TagType } from '../../types/index.js'
 import type { DataProvider } from '@masknet/public-api'
 import { TrendingView } from './TrendingView.js'
 import { useAvailableDataProviders } from '../../trending/useAvailableDataProviders.js'
-import { TargetChainIdContext } from '@masknet/web3-hooks-evm'
+import { PluginWeb3ContextProvider } from '@masknet/web3-hooks-base'
+import { ChainId } from '@masknet/web3-shared-evm'
+import { NetworkPluginID } from '@masknet/shared-base'
 
 export interface TagInspectorProps {}
 
@@ -19,8 +21,8 @@ export function TagInspector(props: TagInspectorProps) {
         [],
     )
     return (
-        <TargetChainIdContext.Provider>
+        <PluginWeb3ContextProvider value={{ chainId: ChainId.Mainnet, pluginID: NetworkPluginID.PLUGIN_EVM }}>
             <TrendingPopper>{createTrendingView}</TrendingPopper>
-        </TargetChainIdContext.Provider>
+        </PluginWeb3ContextProvider>
     )
 }

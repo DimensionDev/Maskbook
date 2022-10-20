@@ -1,15 +1,13 @@
-import { useState } from 'react'
 import { compact } from 'lodash-unified'
 import { DialogContent, Button, Tab } from '@mui/material'
 import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import { TabContext } from '@mui/lab'
 import { PluginWalletStatusBar, InjectedDialog } from '@masknet/shared'
-import { useCurrentWeb3NetworkPluginID } from '@masknet/web3-hooks-base'
-import { TargetChainIdContext } from '@masknet/web3-hooks-evm'
+import { useChainId, useCurrentWeb3NetworkPluginID } from '@masknet/web3-hooks-base'
 import { NetworkTab } from '../../../components/shared/NetworkTab.js'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { ChainId, chainResolver, NetworkType } from '@masknet/web3-shared-evm'
-import { PluginID, NetworkPluginID } from '@masknet/shared-base'
+import { NetworkPluginID, PluginID } from '@masknet/shared-base'
 import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
 import { useI18N } from '../locales/index.js'
 import { useI18N as useBaseI18n } from '../../../utils/index.js'
@@ -129,11 +127,11 @@ interface ApprovalWrapperProps {
 function ApprovalWrapper(props: ApprovalWrapperProps) {
     const { tab } = props
     const { t: tr } = useBaseI18n()
-    const { targetChainId: chainId } = TargetChainIdContext.useContainer()
-    const [networkTabChainId, setNetworkTabChainId] = useState<ChainId>(chainId)
-    const approvalDefinition = useActivatedPlugin(PluginID.Approval, 'any')
+
     const pluginID = useCurrentWeb3NetworkPluginID()
-    const chainIdList = compact(
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const approvalDefinition = useActivatedPlugin(PluginID.Approval, 'any')
+    const chainIdList = compact<ChainId>(
         approvalDefinition?.enableRequirement.web3?.[NetworkPluginID.PLUGIN_EVM]?.supportedChainIds ?? [],
     )
 
@@ -148,8 +146,6 @@ function ApprovalWrapper(props: ApprovalWrapperProps) {
                 <>
                     <div className={classes.abstractTabWrapper}>
                         <NetworkTab
-                            chainId={networkTabChainId}
-                            setChainId={setNetworkTabChainId}
                             classes={{
                                 tab: classes.tab,
                                 tabPanel: classes.tabPanel,
@@ -161,9 +157,9 @@ function ApprovalWrapper(props: ApprovalWrapperProps) {
                     </div>
                     <section className={classes.contentWrapper}>
                         {tab === Tabs.tokens ? (
-                            <ApprovalTokenContent chainId={networkTabChainId} />
+                            <ApprovalTokenContent chainId={chainId} />
                         ) : (
-                            <ApprovalNFTContent chainId={networkTabChainId} />
+                            <ApprovalNFTContent chainId={chainId} />
                         )}
                     </section>
                 </>

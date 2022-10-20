@@ -1,12 +1,12 @@
 import { Icons } from '@masknet/icons'
 import { InjectedDialog, InjectedDialogProps } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
-import { useNonFungibleAsset, useWeb3State } from '@masknet/web3-hooks-base'
+import { useCurrentWeb3NetworkPluginID, useNonFungibleAsset, useWeb3State } from '@masknet/web3-hooks-base'
 import { SourceType } from '@masknet/web3-shared-base'
 import { Box, Button, DialogActions, DialogContent, Typography } from '@mui/material'
 import type { FC, PropsWithChildren } from 'react'
 import { CollectibleCard } from '../../../../extension/options-page/DashboardComponents/CollectibleList/CollectibleCard.js'
-import { TargetRuntimeContext, TipContextOptions } from '../../contexts'
+import type { TipContextOptions } from '../../contexts'
 import { useI18N } from '../../locales/index.js'
 import { TipsType } from '../../types/tip.js'
 
@@ -90,7 +90,7 @@ export const ConfirmModal: FC<ConfirmModalProps> = ({
     const { Others } = useWeb3State()
     const { classes } = useStyles()
     const t = useI18N()
-    const { pluginID } = TargetRuntimeContext.useContainer()
+    const pluginID = useCurrentWeb3NetworkPluginID()
     confirmText = confirmText || 'Confirm'
     const isTokenTip = tipType === TipsType.Tokens
     const { value: nonFungibleToken } = useNonFungibleAsset(

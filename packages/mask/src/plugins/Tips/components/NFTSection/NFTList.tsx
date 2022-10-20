@@ -126,6 +126,7 @@ export const NFTList: FC<Props> = ({
     loadError,
 }) => {
     const { classes } = useStyles()
+    const pluginID = useCurrentWeb3NetworkPluginID()
 
     const isRadio = limit === 1
     const reachedLimit = selectedPairs.length >= limit
@@ -136,7 +137,6 @@ export const NFTList: FC<Props> = ({
         },
         [onChange, isRadio, reachedLimit],
     )
-    const pluginID = useCurrentWeb3NetworkPluginID()
     const includes =
         pluginID === NetworkPluginID.PLUGIN_EVM
             ? (pairs: TipNFTKeyPair[], pair: TipNFTKeyPair): boolean => {

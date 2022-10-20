@@ -88,7 +88,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const chainIdValid = useChainIdValid(NetworkPluginID.PLUGIN_EVM, chainId)
     const approvalDefinition = useActivatedPlugin(PluginID.Approval, 'any')
-    const chainIdList = compact(
+    const chainIdList = compact<ChainId>(
         approvalDefinition?.enableRequirement.web3?.[NetworkPluginID.PLUGIN_EVM]?.supportedChainIds ?? [],
     )
     const [networkTabChainId, setNetworkTabChainId] = useState<ChainId>(
@@ -188,7 +188,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     const [currentTab, onChange, tabs] = useTabs('tokens', 'collectibles')
 
     return (
-        <PluginWeb3ContextProvider pluginID={NetworkPluginID.PLUGIN_EVM} value={{ chainId: networkTabChainId }}>
+        <PluginWeb3ContextProvider value={{ chainId: networkTabChainId }}>
             <TabContext value={currentTab}>
                 <InjectedDialog
                     isOpenFromApplicationBoard={props.isOpenFromApplicationBoard}
@@ -215,8 +215,6 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                             <>
                                 <div className={classes.abstractTabWrapper}>
                                     <NetworkTab
-                                        chainId={networkTabChainId}
-                                        setChainId={setNetworkTabChainId}
                                         classes={{
                                             tab: classes.tab,
                                             tabPanel: classes.tabPanel,

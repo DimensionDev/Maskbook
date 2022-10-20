@@ -56,9 +56,9 @@ const useStyles = makeStyles()((theme) => ({
 interface PluginVerifiedWalletStatusBarProps extends PropsWithChildren<{}> {
     verifiedWallets: BindingProof[]
     className?: string
+    expectedAddress: string
     openPopupWindow: () => void
     onChange?: (address: string, pluginID: NetworkPluginID, chainId: Web3Helper.ChainIdAll) => void
-    expectedAddress: string
 }
 
 export const PluginVerifiedWalletStatusBar = memo<PluginVerifiedWalletStatusBarProps>(

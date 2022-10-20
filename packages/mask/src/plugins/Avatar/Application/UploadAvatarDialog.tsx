@@ -67,8 +67,8 @@ async function uploadAvatar(blob: Blob, userId: string): Promise<AvatarInfo | un
 export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
     const { image, account, token, onClose, onBack, proof, isBindAccount = false, pluginID } = props
     const t = useI18N()
-    const currentPluginID = useCurrentWeb3NetworkPluginID(pluginID)
     const { classes } = useStyles()
+    const currentPluginID = useCurrentWeb3NetworkPluginID(pluginID)
     const identifier = useSubscription(context.currentVisitingProfile)
     const [editor, setEditor] = useState<AvatarEditor | null>(null)
     const [scale, setScale] = useState(1)
