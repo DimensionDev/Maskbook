@@ -14,7 +14,7 @@ export function useSocialAccounts(socialAddressList: Array<SocialAddress<Network
                 pluginID: group[0].pluginID,
                 address: group[0].address,
                 label:
-                    first(group.find((x) => x.type === SocialAddressType.NEXT_ID)?.address) ??
+                    group.find((x) => x.type === SocialAddressType.NEXT_ID)?.address ??
                     first(
                         compact(
                             [SocialAddressType.ENS, SocialAddressType.RSS3, SocialAddressType.SOL].map(

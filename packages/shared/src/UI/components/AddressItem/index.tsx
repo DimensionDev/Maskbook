@@ -44,7 +44,7 @@ export function AddressItem({
                     pluginID={socialAddress.pluginID}
                 />
             ) : (
-                <Typography {...TypographyProps}>{Others?.formatAddress(socialAddress.label, 4)}</Typography>
+                <Typography {...TypographyProps}>{socialAddress.label}</Typography>
             )}
             {disableLinkIcon ? null : (
                 <Link
