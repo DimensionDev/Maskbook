@@ -18,7 +18,7 @@ import { WalletMessages } from '@masknet/plugin-wallet'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { isDashboardPage, NetworkPluginID } from '@masknet/shared-base'
 import { TransactionStatusType } from '@masknet/web3-shared-base'
-import { useI18N } from '../../i18n-next-ui.js'
+import { useSharedI18N } from '../../../locales/index.js'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { WalletDescription } from './WalletDescription.js'
 import { Action } from './Action.js'
@@ -59,7 +59,7 @@ export interface WalletStatusBarProps<T extends NetworkPluginID> extends PropsWi
 
 export const PluginWalletStatusBar = memo<WalletStatusBarProps<NetworkPluginID>>(
     ({ className, onClick, expectedPluginID, expectedChainId, children }) => {
-        const { t } = useI18N()
+        const t = useSharedI18N()
         const { classes, cx } = useStyles()
 
         const pluginID = useCurrentWeb3NetworkPluginID()
@@ -100,7 +100,7 @@ export const PluginWalletStatusBar = memo<WalletStatusBarProps<NetworkPluginID>>
             return (
                 <Box className={cx(classes.root, className)}>
                     <Button fullWidth onClick={openSelectProviderDialog}>
-                        <Icons.ConnectWallet className={classes.connection} /> {t('plugin_wallet_connect_a_wallet')}
+                        <Icons.ConnectWallet className={classes.connection} /> {t.plugin_wallet_connect_a_wallet()}
                     </Button>
                 </Box>
             )

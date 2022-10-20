@@ -4,9 +4,9 @@ import { first, omit } from 'lodash-unified'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { alpha, Box, Button, Divider, ListItemIcon, MenuItem, Typography } from '@mui/material'
-import { useI18N } from '../../i18n-next-ui.js'
+import { useSharedI18N } from '../../../locales/index.js'
 import { Action } from './Action.js'
-import { BindingProof, PopupRoutes, NetworkPluginID, isDashboardPage } from '@masknet/shared-base'
+import { BindingProof, NetworkPluginID, isDashboardPage } from '@masknet/shared-base'
 import {
     useAccount,
     useCurrentWeb3NetworkPluginID,
@@ -25,7 +25,6 @@ import { WalletDescription } from './WalletDescription.js'
 import { isSameAddress, resolveNextID_NetworkPluginID, TransactionStatusType } from '@masknet/web3-shared-base'
 import { WalletMenuItem } from './WalletMenuItem.js'
 import { useMenu } from '@masknet/shared'
-import Services from '../../../extension/service.js'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 
 const isDashboard = isDashboardPage()
@@ -57,13 +56,14 @@ const useStyles = makeStyles()((theme) => ({
 interface PluginVerifiedWalletStatusBarProps extends PropsWithChildren<{}> {
     verifiedWallets: BindingProof[]
     className?: string
+    openPopupWindow: () => void
     onChange?: (address: string, pluginID: NetworkPluginID, chainId: Web3Helper.ChainIdAll) => void
     expectedAddress: string
 }
 
 export const PluginVerifiedWalletStatusBar = memo<PluginVerifiedWalletStatusBarProps>(
-    ({ className, children, verifiedWallets, onChange, expectedAddress }) => {
-        const { t } = useI18N()
+    ({ className, children, verifiedWallets, onChange, expectedAddress, openPopupWindow }) => {
+        const t = useSharedI18N()
 
         const account = useAccount()
 
@@ -76,12 +76,6 @@ export const PluginVerifiedWalletStatusBar = memo<PluginVerifiedWalletStatusBarP
         const { openDialog: openWalletStatusDialog } = useRemoteControlledDialog(
             WalletMessages.events.walletStatusDialogUpdated,
         )
-
-        const openPopupWindow = useCallback(() => {
-            Services.Helper.openPopupWindow(PopupRoutes.ConnectedWallets, {
-                internal: true,
-            })
-        }, [])
 
         // exclude current account
         const wallets = verifiedWallets.filter((x) => !isSameAddress(x.identity, account))
@@ -175,7 +169,7 @@ export const PluginVerifiedWalletStatusBar = memo<PluginVerifiedWalletStatusBarP
                         fullWidth
                         onClick={openSelectProviderDialog}
                         sx={{ minWidth: 311 }}>
-                        {t('connect_your_wallet')}
+                        {t.connect_your_wallet()}
                     </Button>
                 </MenuItem>
             ),
@@ -195,7 +189,7 @@ export const PluginVerifiedWalletStatusBar = memo<PluginVerifiedWalletStatusBarP
                 <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                     <Icons.WalletSetting size={30} sx={{ marginRight: 2 }} />
                     <Typography fontSize={14} fontWeight={700}>
-                        {t('connected_wallet_settings')}
+                        {t.connected_wallet_settings()}
                     </Typography>
                 </Box>
             </MenuItem>,
@@ -209,7 +203,7 @@ export const PluginVerifiedWalletStatusBar = memo<PluginVerifiedWalletStatusBarP
             return (
                 <Box className={cx(classes.root, className)}>
                     <Button fullWidth onClick={openSelectProviderDialog}>
-                        <Icons.ConnectWallet className={classes.connection} /> {t('plugin_wallet_connect_a_wallet')}
+                        <Icons.ConnectWallet className={classes.connection} /> {t.plugin_wallet_connect_a_wallet()}
                     </Button>
                 </Box>
             )

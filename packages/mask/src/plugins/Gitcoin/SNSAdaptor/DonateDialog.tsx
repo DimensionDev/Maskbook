@@ -1,5 +1,11 @@
 import { useCallback, useMemo, useState } from 'react'
-import { InjectedDialog, useOpenShareTxDialog, useSelectFungibleToken, FungibleTokenInput } from '@masknet/shared'
+import {
+    InjectedDialog,
+    useOpenShareTxDialog,
+    useSelectFungibleToken,
+    FungibleTokenInput,
+    PluginWalletStatusBar,
+} from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles, useStylesExtends, ActionButton } from '@masknet/theme'
 import { NetworkPluginID } from '@masknet/shared-base'
@@ -10,7 +16,7 @@ import { DialogActions, DialogContent, Link, Typography } from '@mui/material'
 import { activatedSocialNetworkUI } from '../../../social-network/index.js'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base.js'
 import { Translate, useI18N } from '../locales/index.js'
-import { PluginWalletStatusBar, useI18N as useBaseI18N } from '../../../utils/index.js'
+import { useI18N as useBaseI18N } from '../../../utils/index.js'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary.js'
 import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary.js'
 import { useDonateCallback } from '../hooks/useDonateCallback.js'
