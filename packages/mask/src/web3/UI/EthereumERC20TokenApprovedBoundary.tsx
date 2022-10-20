@@ -9,13 +9,16 @@ import { HelpOutline } from '@mui/icons-material'
 import React, { useCallback } from 'react'
 import { noop } from 'lodash-unified'
 
-const useStyles = makeStyles()((theme) => ({
+const useStyles = makeStyles<void, 'icon'>()((theme, _, refs) => ({
+    icon: {},
     button: {
         whiteSpace: 'nowrap',
-    },
-    icon: {
-        width: 18,
-        height: 18,
+        // increase selector priority over button's
+        [`.${refs.icon}`]: {
+            width: 18,
+            height: 18,
+            fontSize: 10,
+        },
     },
     helpIcon: {
         width: 18,

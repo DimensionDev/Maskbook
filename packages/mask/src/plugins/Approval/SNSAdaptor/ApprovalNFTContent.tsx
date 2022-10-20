@@ -211,6 +211,7 @@ function ApprovalNFTItem(props: ApprovalNFTItemProps) {
                         <TokenIcon
                             address={spender.contract.address}
                             name={spender.contract.name}
+                            label=""
                             logoURL={contractDetailed?.iconURL}
                             className={classes.logoIcon}
                             tokenType={TokenType.NonFungible}

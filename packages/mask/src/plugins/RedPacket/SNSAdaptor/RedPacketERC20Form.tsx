@@ -21,7 +21,13 @@ import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC
 import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary.js'
 import { RED_PACKET_DEFAULT_SHARES, RED_PACKET_MAX_SHARES, RED_PACKET_MIN_SHARES } from '../constants.js'
 import type { RedPacketSettings } from './hooks/useCreateCallback.js'
-import { useAccount, useChainId, useFungibleToken, useFungibleTokenBalance } from '@masknet/web3-hooks-base'
+import {
+    useAccount,
+    useFungibleToken,
+    useFungibleTokenBalance,
+    useChainId,
+    PluginWeb3ActualContextProvider,
+} from '@masknet/web3-hooks-base'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
 
 // seconds of 1 day
@@ -129,11 +135,9 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
     }, [token])
 
     // balance
-    const { value: tokenBalance = '0', loading: loadingTokenBalance } = useFungibleTokenBalance(
-        NetworkPluginID.PLUGIN_EVM,
-        token?.address ?? '',
-        { chainId },
-    )
+    const { value: tokenBalance = '0' } = useFungibleTokenBalance(NetworkPluginID.PLUGIN_EVM, token?.address ?? '', {
+        chainId,
+    })
     // #endregion
 
     const validationMessage = useMemo(() => {
@@ -242,35 +246,34 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
             </Box>
             <Box style={{ width: '100%' }}>
                 <PluginWalletStatusBar>
-                    <ChainBoundary
-                        expectedPluginID={NetworkPluginID.PLUGIN_EVM}
-                        expectedChainId={chainId}
-                        forceShowingWrongNetworkButton>
-                        <WalletConnectedBoundary>
-                            <EthereumERC20TokenApprovedBoundary
-                                onlyInfiniteUnlock
-                                amount={totalAmount.toFixed()}
-                                classes={{ container: classes.unlockContainer }}
-                                ActionButtonProps={{
-                                    size: 'medium',
-                                }}
-                                token={
-                                    token?.schema === SchemaType.ERC20 && totalAmount.gt(0) && !validationMessage
-                                        ? token
-                                        : undefined
-                                }
-                                spender={HAPPY_RED_PACKET_ADDRESS_V4}>
-                                <ActionButton
-                                    size="large"
-                                    className={classes.button}
-                                    fullWidth
-                                    disabled={!!validationMessage}
-                                    onClick={onClick}>
-                                    {validationMessage || t.next()}
-                                </ActionButton>
-                            </EthereumERC20TokenApprovedBoundary>
-                        </WalletConnectedBoundary>
-                    </ChainBoundary>
+                    <PluginWeb3ActualContextProvider>
+                        <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={chainId}>
+                            <WalletConnectedBoundary>
+                                <EthereumERC20TokenApprovedBoundary
+                                    onlyInfiniteUnlock
+                                    amount={totalAmount.toFixed()}
+                                    classes={{ container: classes.unlockContainer }}
+                                    ActionButtonProps={{
+                                        size: 'medium',
+                                    }}
+                                    token={
+                                        token?.schema === SchemaType.ERC20 && totalAmount.gt(0) && !validationMessage
+                                            ? token
+                                            : undefined
+                                    }
+                                    spender={HAPPY_RED_PACKET_ADDRESS_V4}>
+                                    <ActionButton
+                                        size="large"
+                                        className={classes.button}
+                                        fullWidth
+                                        disabled={!!validationMessage}
+                                        onClick={onClick}>
+                                        {validationMessage || t.next()}
+                                    </ActionButton>
+                                </EthereumERC20TokenApprovedBoundary>
+                            </WalletConnectedBoundary>
+                        </ChainBoundary>
+                    </PluginWeb3ActualContextProvider>
                 </PluginWalletStatusBar>
             </Box>
         </>
