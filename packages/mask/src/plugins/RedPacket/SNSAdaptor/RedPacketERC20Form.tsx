@@ -26,7 +26,7 @@ import {
     useFungibleToken,
     useFungibleTokenBalance,
     useChainId,
-    PluginWeb3ContextProvider,
+    PluginWeb3ActualContextProvider,
 } from '@masknet/web3-hooks-base'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
 
@@ -246,7 +246,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
             </Box>
             <Box style={{ width: '100%' }}>
                 <PluginWalletStatusBar>
-                    <PluginWeb3ContextProvider pluginID={NetworkPluginID.PLUGIN_EVM} value={{ chainId: undefined }}>
+                    <PluginWeb3ActualContextProvider>
                         <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={chainId}>
                             <WalletConnectedBoundary>
                                 <EthereumERC20TokenApprovedBoundary
@@ -273,7 +273,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
                                 </EthereumERC20TokenApprovedBoundary>
                             </WalletConnectedBoundary>
                         </ChainBoundary>
-                    </PluginWeb3ContextProvider>
+                    </PluginWeb3ActualContextProvider>
                 </PluginWalletStatusBar>
             </Box>
         </>

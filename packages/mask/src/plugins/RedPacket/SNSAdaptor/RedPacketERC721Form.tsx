@@ -16,7 +16,7 @@ import { RedpacketNftConfirmDialog } from './RedpacketNftConfirmDialog.js'
 import { NFTCardStyledAssetPlayer } from '@masknet/shared'
 import { NFTSelectOption } from '../types.js'
 import { NFT_RED_PACKET_MAX_SHARES } from '../constants.js'
-import { useAccount, useChainId, PluginWeb3ContextProvider } from '@masknet/web3-hooks-base'
+import { useAccount, useChainId, PluginWeb3ActualContextProvider } from '@masknet/web3-hooks-base'
 import { useNonFungibleOwnerTokens } from '@masknet/web3-hooks-evm'
 import { NetworkPluginID, EMPTY_LIST } from '@masknet/shared-base'
 import type { NonFungibleTokenContract, NonFungibleToken } from '@masknet/web3-shared-base'
@@ -391,7 +391,7 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
             </Box>
             <Box style={{ position: 'absolute', bottom: 0, width: '100%' }}>
                 <PluginWalletStatusBar>
-                    <PluginWeb3ContextProvider pluginID={NetworkPluginID.PLUGIN_EVM} value={{ chainId: undefined }}>
+                    <PluginWeb3ActualContextProvider>
                         <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={chainId}>
                             <WalletConnectedBoundary>
                                 <EthereumERC721TokenApprovedBoundary
@@ -411,7 +411,7 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                                 </EthereumERC721TokenApprovedBoundary>
                             </WalletConnectedBoundary>
                         </ChainBoundary>
-                    </PluginWeb3ContextProvider>
+                    </PluginWeb3ActualContextProvider>
                 </PluginWalletStatusBar>
             </Box>
         </>
