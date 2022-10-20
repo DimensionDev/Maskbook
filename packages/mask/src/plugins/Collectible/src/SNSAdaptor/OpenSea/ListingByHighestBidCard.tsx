@@ -4,6 +4,7 @@ import { Card, CardActions, CardContent, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { isZero, isLessThan } from '@masknet/web3-shared-base'
 import formatDateTime from 'date-fns/format'
+import { PluginWalletStatusBar } from '@masknet/shared'
 import getUnixTime from 'date-fns/getUnixTime'
 import {
     useAccount,
@@ -13,7 +14,7 @@ import {
     useWeb3State,
 } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { PluginWalletStatusBar, useI18N } from '../../../../../utils/index.js'
+import { useI18N } from '../../../../../utils/index.js'
 import { SelectTokenAmountPanel } from '../../../../ITO/SNSAdaptor/SelectTokenAmountPanel.js'
 import { WalletConnectedBoundary } from '../../../../../web3/UI/WalletConnectedBoundary.js'
 import { DateTimePanel } from '../../../../../web3/UI/DateTimePanel.js'

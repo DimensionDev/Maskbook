@@ -8,6 +8,7 @@ import {
     createNativeToken,
     DAI,
     HUSD,
+    isENSContractAddress,
     NETWORK_DESCRIPTORS,
     RARI,
     SchemaType,
@@ -62,17 +63,17 @@ export function getPaymentToken(chainId: ChainId, token?: { name?: string; symbo
     )
 }
 
-export function getAssetFullName(contractName: string, name?: string, tokenId?: string) {
+export function getAssetFullName(contract_address: string, contractName: string, name?: string, tokenId?: string) {
     if (!name)
         return tokenId && contractName
             ? `${contractName} #${tokenId}`
             : !contractName && tokenId
             ? `#${tokenId}`
             : contractName
+    if (isENSContractAddress(contract_address)) return `ENS #${name}`
 
     const [first, next] = name.split('#').map((x) => x.trim())
     if (first && next) return `${first} #${next}`
-    if (first.endsWith('.eth')) return `ENS #${first}`
     if (!first && next) return contractName ? `${contractName} #${next}` : `#${next}`
 
     if (contractName && tokenId)

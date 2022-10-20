@@ -55,7 +55,7 @@ function createNFTToken(
         address: token.mintAddress,
         metadata: {
             chainId,
-            name: getAssetFullName(collection.name, token.name, ''),
+            name: getAssetFullName(token.mintAddress, collection.name, token.name, ''),
             symbol: collection.symbol,
             description: collection.description,
             imageURL: token.image || token.animationUrl,
@@ -169,7 +169,7 @@ export class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
                 address: token.mintAddress,
                 metadata: {
                     chainId,
-                    name: getAssetFullName(token.collectionName, token?.title, ''),
+                    name: getAssetFullName(token.mintAddress, token.collectionName, token?.title, ''),
                     symbol: '',
                     imageURL: resolveIPFS_URL(token.img),
                     mediaURL: resolveIPFS_URL(token.img),

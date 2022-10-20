@@ -1,4 +1,4 @@
-import { FormattedAddress, FormattedBalance } from '@masknet/shared'
+import { FormattedAddress, FormattedBalance, PluginWalletStatusBar } from '@masknet/shared'
 import {
     formatEthereumAddress,
     isNativeTokenAddress,
@@ -15,7 +15,7 @@ import LaunchIcon from '@mui/icons-material/Launch'
 import RepeatIcon from '@mui/icons-material/Repeat'
 import formatDateTime from 'date-fns/format'
 import { Fragment, useCallback, useState, useEffect } from 'react'
-import { PluginWalletStatusBar, useI18N } from '../../../utils/index.js'
+import { useI18N } from '../../../utils/index.js'
 import type { PoolSettings } from './hooks/useFill.js'
 import { decodeRegionCode, regionCodes } from './hooks/useRegion.js'
 import { useChainId } from '@masknet/web3-hooks-base'

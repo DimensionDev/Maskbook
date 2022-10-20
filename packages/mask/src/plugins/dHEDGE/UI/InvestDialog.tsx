@@ -1,4 +1,10 @@
-import { InjectedDialog, useOpenShareTxDialog, useSelectFungibleToken, FungibleTokenInput } from '@masknet/shared'
+import {
+    InjectedDialog,
+    useOpenShareTxDialog,
+    useSelectFungibleToken,
+    FungibleTokenInput,
+    PluginWalletStatusBar,
+} from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles, ActionButton } from '@masknet/theme'
 import { useAccount, useFungibleTokenBalance } from '@masknet/web3-hooks-base'
@@ -16,7 +22,6 @@ import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundar
 import { useInvestCallback } from '../hooks/useInvestCallback.js'
 import { PluginDHedgeMessages } from '../messages.js'
 import type { Pool } from '../types.js'
-import { PluginWalletStatusBar } from '../../../utils/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     form: {

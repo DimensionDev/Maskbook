@@ -131,7 +131,7 @@ export function createNonFungibleAsset(
             : undefined,
         metadata: {
             chainId,
-            name: getAssetFullName(contractName, payload?.name || asset.name, asset.token_id),
+            name: getAssetFullName(asset.contract_address, contractName, payload?.name || asset.name, asset.token_id),
             symbol,
             description,
             imageURL: mediaURL,

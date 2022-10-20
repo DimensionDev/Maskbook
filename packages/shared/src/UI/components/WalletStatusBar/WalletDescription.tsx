@@ -4,7 +4,7 @@ import { alpha, Box, Link, Typography } from '@mui/material'
 import { WalletIcon, useSnackbarCallback } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
 import { useCopyToClipboard } from 'react-use'
-import { useI18N } from '../../i18n-next-ui.js'
+import { useSharedI18N } from '../../../locales/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -80,14 +80,14 @@ export const WalletDescription = memo<WalletDescriptionProps>(
         verified,
     }) => {
         const { classes } = useStyles()
-        const { t } = useI18N()
+        const t = useSharedI18N()
 
         const [, copyToClipboard] = useCopyToClipboard()
 
         const onCopy = useSnackbarCallback({
             executor: async () => copyToClipboard(address ?? ''),
             deps: [],
-            successText: t('copy_success'),
+            successText: t.copy_wallet_address_success(),
         })
 
         return (
@@ -126,7 +126,7 @@ export const WalletDescription = memo<WalletDescriptionProps>(
                                     e.stopPropagation()
                                     onPendingClick?.()
                                 }}>
-                                {t('recent_transaction_pending')}
+                                {t.recent_transaction_pending()}
                                 <LoadingBase size={12} className={classes.progress} />
                             </span>
                         ) : null}
