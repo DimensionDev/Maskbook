@@ -7,7 +7,7 @@ const useStyles = makeStyles<Pick<IconProps, 'size'>>()((theme, { size }) => ({
     icon: {
         margin: 0,
         borderRadius: '50%',
-        color: theme.palette.maskColor.dark,
+        color: `${theme.palette.maskColor.dark} !important`,
         backgroundSize: 'cover',
         height: size,
         width: size,
