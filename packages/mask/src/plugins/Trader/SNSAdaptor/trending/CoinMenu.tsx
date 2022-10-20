@@ -88,7 +88,7 @@ const TokenMenuList: FC<TokenMenuListProps> = ({ options, type, value, onSelect 
                                 type={x.coin.type}
                                 address={x.coin.address}
                                 name={x.coin.name}
-                                disableLabel
+                                label=""
                                 symbol={x.coin.symbol}
                                 logoURL={x.coin.image_url}
                                 size={20}
