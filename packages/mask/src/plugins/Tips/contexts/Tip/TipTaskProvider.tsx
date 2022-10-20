@@ -12,7 +12,6 @@ import type { GasOptionConfig } from '@masknet/web3-shared-evm'
 import { useSubscription } from 'use-subscription'
 import { getStorage } from '../../storage/index.js'
 import { TipTask, TipsType } from '../../types/index.js'
-import { TargetRuntimeContext } from '../TargetRuntimeContext.js'
 import { TipContextOptions, TipContext } from './TipContext.js'
 import { useTipAccountsCompletion } from './useTipAccountsCompletion.js'
 import { useNftTip } from './useNftTip.js'
@@ -37,7 +36,7 @@ function useRecipients(pluginID: NetworkPluginID, tipsAccounts: SocialAccount[])
 
 function useDirtyDetection(deps: any[]): [boolean, Dispatch<SetStateAction<boolean>>] {
     const [isDirty, setIsDirty] = useState(false)
-    const { pluginID } = TargetRuntimeContext.useContainer()
+    const pluginID = useCurrentWeb3NetworkPluginID()
     const account = useAccount(pluginID)
 
     useEffect(() => {
