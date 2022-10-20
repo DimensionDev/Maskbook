@@ -3,11 +3,10 @@ import { useCopyToClipboard } from 'react-use'
 import { v4 as uuid } from 'uuid'
 import { Icons } from '@masknet/icons'
 import { Box, Link, MenuItem, Typography } from '@mui/material'
-import { useChainId, useSocialAccounts, useWeb3State } from '@masknet/web3-hooks-base'
+import { useChainId, useWeb3State } from '@masknet/web3-hooks-base'
 import { AccountIcon, AddressItem, useSnackbarCallback } from '@masknet/shared'
-import type { NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles, ShadowRootMenu } from '@masknet/theme'
-import { isSameAddress, SocialAddress, SocialIdentity } from '@masknet/web3-shared-base'
+import { isSameAddress, SocialAccount, SocialIdentity } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../utils/index.js'
 import { AvatarDecoration } from './AvatarDecoration'
@@ -105,7 +104,7 @@ const useStyles = makeStyles<void, 'avatarDecoration'>()((theme, _, refs) => ({
 
 export interface ProfileBarProps extends HTMLProps<HTMLDivElement> {
     identity: SocialIdentity
-    socialAddressList: Array<SocialAddress<NetworkPluginID>>
+    socialAccounts: SocialAccount[]
     address?: string
     onAddressChange?: (address: string) => void
 }
@@ -116,7 +115,7 @@ export interface ProfileBarProps extends HTMLProps<HTMLDivElement> {
  * - Wallets
  */
 export const ProfileBar = memo<ProfileBarProps>(
-    ({ socialAddressList, address, identity, onAddressChange, className, children, ...rest }) => {
+    ({ socialAccounts, address, identity, onAddressChange, className, children, ...rest }) => {
         const { classes, theme, cx } = useStyles()
         const { t } = useI18N()
         const containerRef = useRef<HTMLDivElement>(null)
@@ -132,7 +131,6 @@ export const ProfileBar = memo<ProfileBarProps>(
 
         const { Others } = useWeb3State()
         const chainId = useChainId()
-        const socialAccounts = useSocialAccounts(socialAddressList)
 
         const [walletMenuOpen, setWalletMenuOpen] = useState(false)
         useEffect(() => {
@@ -142,7 +140,7 @@ export const ProfileBar = memo<ProfileBarProps>(
                 window.removeEventListener('scroll', closeMenu, false)
             }
         }, [])
-        const selectedAddress = socialAddressList.find((x) => isSameAddress(x.address, address))
+        const selectedAddress = socialAccounts.find((x) => isSameAddress(x.address, address))
 
         return (
             <Box className={cx(classes.root, className)} {...rest} ref={containerRef}>
@@ -170,7 +168,7 @@ export const ProfileBar = memo<ProfileBarProps>(
                     {address ? (
                         <div className={classes.addressRow}>
                             <AddressItem
-                                socialAddress={selectedAddress}
+                                socialAccount={selectedAddress}
                                 disableLinkIcon
                                 TypographyProps={{ className: classes.address }}
                             />
@@ -213,7 +211,7 @@ export const ProfileBar = memo<ProfileBarProps>(
                                     onAddressChange?.(x.address)
                                 }}>
                                 <div className={classes.addressItem}>
-                                    <AddressItem socialAddress={x} linkIconClassName={classes.secondLinkIcon} />
+                                    <AddressItem socialAccount={x} linkIconClassName={classes.secondLinkIcon} />
                                     <AccountIcon socialAccount={x} />
                                 </div>
                                 {isSameAddress(address, x.address) && (

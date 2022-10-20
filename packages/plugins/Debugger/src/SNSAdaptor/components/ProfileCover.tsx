@@ -1,6 +1,5 @@
 import { makeStyles } from '@masknet/theme'
-import type { SocialAddress, SocialIdentity } from '@masknet/web3-shared-base'
-import type { NetworkPluginID } from '@masknet/shared-base'
+import type { SocialAccount, SocialIdentity } from '@masknet/web3-shared-base'
 import { Typography } from '@mui/material'
 
 const useStyles = makeStyles()(() => ({
@@ -16,7 +15,7 @@ const useStyles = makeStyles()(() => ({
 
 export interface TabContentProps {
     identity?: SocialIdentity
-    socialAddressList?: SocialAddress<NetworkPluginID>
+    socialAccounts?: SocialAccount[]
 }
 
 export function ProfileCover() {

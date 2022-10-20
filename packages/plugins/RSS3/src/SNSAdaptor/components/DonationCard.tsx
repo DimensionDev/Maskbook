@@ -3,17 +3,16 @@ import classnames from 'classnames'
 import formatDateTime from 'date-fns/format'
 import { useReverseAddress, useWeb3State } from '@masknet/web3-hooks-base'
 import { NFTCardStyledAssetPlayer } from '@masknet/shared'
-import type { NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import type { RSS3BaseAPI } from '@masknet/web3-providers'
-import type { SocialAddress } from '@masknet/web3-shared-base'
+import type { SocialAccount } from '@masknet/web3-shared-base'
 import { Card, Typography } from '@mui/material'
 import { RSS3_DEFAULT_IMAGE } from '../../constants.js'
 import { useI18N } from '../../locales/index.js'
 
 export interface DonationCardProps extends Omit<HTMLProps<HTMLDivElement>, 'onSelect'> {
     donation: RSS3BaseAPI.Donation
-    socialAddress: SocialAddress<NetworkPluginID>
+    socialAccount: SocialAccount
     onSelect: (donation: RSS3BaseAPI.Donation) => void
 }
 
@@ -69,14 +68,14 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export const DonationCard = memo(({ donation, socialAddress, onSelect, className, ...rest }: DonationCardProps) => {
+export const DonationCard = memo(({ donation, socialAccount, onSelect, className, ...rest }: DonationCardProps) => {
     const { classes } = useStyles()
     const t = useI18N()
-    const { value: domain } = useReverseAddress(socialAddress.pluginID, socialAddress.address)
-    const { Others } = useWeb3State(socialAddress.pluginID)
+    const { value: domain } = useReverseAddress(socialAccount.pluginID, socialAccount.address)
+    const { Others } = useWeb3State(socialAccount.pluginID)
     const reversedAddress =
         !domain || !Others?.formatDomainName
-            ? Others?.formatAddress?.(socialAddress.address, 5) ?? socialAddress.address
+            ? Others?.formatAddress?.(socialAccount.address, 5) ?? socialAccount.address
             : Others.formatDomainName(domain)
 
     const date = donation.timestamp ? formatDateTime(new Date(donation.timestamp), 'MMM dd, yyyy') : '--'

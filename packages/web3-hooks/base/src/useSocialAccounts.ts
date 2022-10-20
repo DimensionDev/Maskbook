@@ -1,30 +1,22 @@
-import { useMemo } from 'react'
-import { compact, first, groupBy } from 'lodash-unified'
-import type { NetworkPluginID } from '@masknet/shared-base'
-import { SocialAccount, SocialAddress, SocialAddressType } from '@masknet/web3-shared-base'
+import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
+import type { SocialAddress, SocialAddressType, SocialIdentity } from '@masknet/web3-shared-base'
+import { useSocialAddresses } from './useSocialAddresses.js'
+import { useSocialAccountsFrom } from './useSocialAccountsFrom.js'
 
 /**
- * Get all social addresses under of all networks.
+ * Get all social addresses under the given network.
  */
-export function useSocialAccounts(socialAddressList: Array<SocialAddress<NetworkPluginID>>) {
-    return useMemo(() => {
-        const accountsGrouped = groupBy(socialAddressList, (x) => `${x.pluginID}_${x.address.toLowerCase()}`)
-        return Object.entries(accountsGrouped).map<SocialAccount>(([, group]) => {
-            return {
-                pluginID: group[0].pluginID,
-                address: group[0].address,
-                label:
-                    group.find((x) => x.type === SocialAddressType.NEXT_ID)?.address ??
-                    first(
-                        compact(
-                            [SocialAddressType.ENS, SocialAddressType.RSS3, SocialAddressType.SOL].map(
-                                (x) => group.find((y) => y.type === x)?.label,
-                            ),
-                        ),
-                    ) ??
-                    group[0].label,
-                supportedAddressTypes: group.map((x) => x.type),
-            }
-        })
-    }, [socialAddressList])
+export function useSocialAccounts<T extends NetworkPluginID>(
+    pluginID?: T,
+    identity?: SocialIdentity,
+    includes?: SocialAddressType[],
+    sorter?: <V = T>(a: SocialAddress<V>, z: SocialAddress<V>) => number,
+) {
+    const { value: socialAddressList = EMPTY_LIST, ...rest } = useSocialAddresses(pluginID, identity, includes, sorter)
+    const socialAccounts = useSocialAccountsFrom(socialAddressList)
+
+    return {
+        ...rest,
+        value: socialAccounts,
+    }
 }

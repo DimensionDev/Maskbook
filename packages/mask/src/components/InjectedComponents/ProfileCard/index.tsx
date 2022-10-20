@@ -9,7 +9,7 @@ import {
     usePluginI18NField,
 } from '@masknet/plugin-infra/content-script'
 import { useAvailablePlugins } from '@masknet/plugin-infra'
-import { useSocialAddressListBySettings } from '@masknet/shared'
+import { useSocialAccountsBySettings } from '@masknet/shared'
 import { EMPTY_LIST, PluginID, NetworkPluginID } from '@masknet/shared-base'
 import { LoadingBase, makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import { isSameAddress, SocialIdentity } from '@masknet/web3-shared-base'
@@ -100,17 +100,18 @@ export const ProfileCard: FC<Props> = ({ identity, ...rest }) => {
 
     const translate = usePluginI18NField()
     const {
-        value: socialAddressList = EMPTY_LIST,
-        loading: loadingSocialAddressList,
+        value: socialAccounts = EMPTY_LIST,
+        loading: loadingSocialAccounts,
         retry: retrySocialAddress,
-    } = useSocialAddressListBySettings(identity, undefined, sorter)
+    } = useSocialAccountsBySettings(identity, undefined, sorter)
 
     const [selectedAddress, setSelectedAddress] = useState<string>()
-    const firstAddress = first(socialAddressList)?.address
+    const firstAddress = first(socialAccounts)?.address
     const activeAddress = selectedAddress ?? firstAddress
-    const selectedSocialAddress = useMemo(() => {
-        return socialAddressList.find((x) => isSameAddress(x.address, activeAddress))
-    }, [activeAddress, socialAddressList])
+    const selectedSocialAddress = useMemo(
+        () => socialAccounts.find((x) => isSameAddress(x.address, activeAddress)),
+        [activeAddress, socialAccounts],
+    )
 
     const userId = identity.identifier?.userId
 
@@ -141,7 +142,7 @@ export const ProfileCard: FC<Props> = ({ identity, ...rest }) => {
     const component = useMemo(() => {
         const Component = getTabContent(currentTab)
 
-        return <Component identity={identity} socialAddress={selectedSocialAddress} />
+        return <Component identity={identity} socialAccount={selectedSocialAddress} />
     }, [currentTab, identity?.publicKey, selectedSocialAddress])
 
     useLocationChange(() => {
@@ -152,7 +153,7 @@ export const ProfileCard: FC<Props> = ({ identity, ...rest }) => {
         onChange(undefined, first(tabs)?.id)
     }, [userId])
 
-    if (!userId || loadingSocialAddressList)
+    if (!userId || loadingSocialAccounts)
         return (
             <div className={cx(classes.root, classes.loading)}>
                 <LoadingBase />
@@ -164,7 +165,7 @@ export const ProfileCard: FC<Props> = ({ identity, ...rest }) => {
             <div className={classes.root}>
                 <div className={classes.header}>
                     <ProfileCardTitle
-                        socialAddressList={socialAddressList}
+                        socialAccounts={socialAccounts}
                         address={activeAddress}
                         onAddressChange={setSelectedAddress}
                         identity={identity}

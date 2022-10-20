@@ -1,3 +1,4 @@
+import { compact } from 'lodash-unified'
 import type { Plugin } from '@masknet/plugin-infra'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { IdentityServiceState } from '@masknet/web3-state'
@@ -19,7 +20,7 @@ export class IdentityService extends IdentityServiceState {
     protected override async getFromRemote({ bio = '' }: SocialIdentity) {
         const address = getFlowAddress(bio)
 
-        return [
+        return compact<SocialAddress<NetworkPluginID.PLUGIN_FLOW>>([
             address
                 ? {
                       pluginID: NetworkPluginID.PLUGIN_FLOW,
@@ -28,6 +29,6 @@ export class IdentityService extends IdentityServiceState {
                       address,
                   }
                 : null,
-        ].filter(Boolean) as Array<SocialAddress<NetworkPluginID.PLUGIN_FLOW>>
+        ])
     }
 }
