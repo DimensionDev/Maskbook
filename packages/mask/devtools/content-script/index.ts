@@ -1,10 +1,12 @@
 import { initialize, activate, createBridge, Bridge } from 'react-devtools-inline/backend'
 import { DevtoolsMessage, ReactDevToolsWall } from '../shared.js'
-// @ts-expect-error
-import { injectIntoGlobalHook } from 'react-refresh/runtime'
 
 initialize(window)
-injectIntoGlobalHook(window)
+if (process.env.NODE_ENV === 'development') {
+    // @ts-expect-error
+    const { injectIntoGlobalHook } = require('react-refresh/runtime')
+    injectIntoGlobalHook(window)
+}
 
 let bridge: Bridge<any, any> | undefined = undefined
 DevtoolsMessage.events.activateBackend.on(() => {
