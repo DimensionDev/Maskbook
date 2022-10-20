@@ -73,12 +73,12 @@ function AccountTooltips({ platform, type, children }: AccountTooltipsProps) {
     )
 }
 
-export interface AccountIconProps {
+export interface AccountIconProps extends withClasses<'icon'> {
     socialAccount: SocialAccount
 }
 
-export function AccountIcon({ socialAccount }: AccountIconProps) {
-    const { classes, cx, theme } = useStyles()
+export function AccountIcon({ socialAccount, classes: externalClasses }: AccountIconProps) {
+    const { classes, cx, theme } = useStyles(undefined, { props: { classes: externalClasses } })
 
     const { supportedAddressTypes } = socialAccount
     if (!supportedAddressTypes?.length) return null
