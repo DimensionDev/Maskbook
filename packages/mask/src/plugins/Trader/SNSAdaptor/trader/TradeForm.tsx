@@ -1,5 +1,12 @@
 import { memo, useCallback, useMemo, useRef, useState } from 'react'
-import { PluginWalletStatusBar, useI18N } from '../../../../utils/index.js'
+import { useI18N } from '../../../../utils/index.js'
+import {
+    PluginWalletStatusBar,
+    SelectTokenChip,
+    TokenSecurityBar,
+    useSelectAdvancedSettings,
+    useTokenSecurity,
+} from '@masknet/shared'
 import { makeStyles, MaskColorVar, useStylesExtends, ActionButton } from '@masknet/theme'
 import { InputTokenPanel } from './InputTokenPanel.js'
 import { alpha, Box, chipClasses, Collapse, IconButton, lighten, Typography } from '@mui/material'
@@ -9,7 +16,6 @@ import TuneIcon from '@mui/icons-material/Tune'
 import { TokenPanelType, TradeInfo } from '../../types/index.js'
 import BigNumber from 'bignumber.js'
 import { first, noop } from 'lodash-unified'
-import { SelectTokenChip, TokenSecurityBar, useSelectAdvancedSettings, useTokenSecurity } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
 import classnames from 'classnames'
 import { isNativeTokenWrapper } from '../../helpers/index.js'

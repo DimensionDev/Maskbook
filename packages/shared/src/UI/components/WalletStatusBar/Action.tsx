@@ -1,6 +1,6 @@
 import { memo, PropsWithChildren, useLayoutEffect, useRef, useState } from 'react'
 import { Box, Button } from '@mui/material'
-import { useI18N } from '../../i18n-next-ui.js'
+import { useSharedI18N } from '../../../locales/index.js'
 
 interface ActionProps extends PropsWithChildren<{}> {
     openSelectWalletDialog: () => void
@@ -8,7 +8,7 @@ interface ActionProps extends PropsWithChildren<{}> {
 
 export const Action = memo<ActionProps>(({ children, openSelectWalletDialog }) => {
     const ref = useRef<HTMLDivElement>()
-    const { t } = useI18N()
+    const t = useSharedI18N()
     const [emptyChildren, setEmptyChildren] = useState(false)
 
     useLayoutEffect(() => {
@@ -22,7 +22,7 @@ export const Action = memo<ActionProps>(({ children, openSelectWalletDialog }) =
     return (
         <Box display="flex" columnGap={16} minWidth={276} ref={ref}>
             <Button fullWidth onClick={openSelectWalletDialog} style={{ display: !emptyChildren ? 'none' : undefined }}>
-                {t('wallet_status_button_change')}
+                {t.wallet_status_button_change()}
             </Button>
             {children}
         </Box>

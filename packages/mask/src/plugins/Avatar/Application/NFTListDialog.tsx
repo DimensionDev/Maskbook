@@ -2,7 +2,7 @@ import { Dispatch, SetStateAction, useCallback, useEffect, useMemo, useState } f
 import { first, uniqBy } from 'lodash-unified'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { ChainId } from '@masknet/web3-shared-evm'
-import { NetworkPluginID, BindingProof, EMPTY_LIST } from '@masknet/shared-base'
+import { NetworkPluginID, BindingProof, EMPTY_LIST, PopupRoutes } from '@masknet/shared-base'
 import { isSameAddress, isGreaterThan } from '@masknet/web3-shared-base'
 import { Box, Button, DialogActions, DialogContent, Stack, Typography } from '@mui/material'
 import { AddNFT } from '../SNSAdaptor/AddNFT.js'
@@ -12,9 +12,10 @@ import { SUPPORTED_CHAIN_IDS, supportPluginIds } from '../constants.js'
 import { useAccount, useChainId, useCurrentWeb3NetworkPluginID, useNonFungibleAssets } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { toPNG } from '../utils/index.js'
+import Services from '../../../extension/service.js'
 import { NFTListPage } from './NFTListPage.js'
+import { PluginVerifiedWalletStatusBar } from '@masknet/shared'
 import { NetworkTab } from '../../../components/shared/NetworkTab.js'
-import { PluginVerifiedWalletStatusBar } from '../../../utils/components/WalletStatusBar/PluginVerifiedWalletStatusBar.js'
 import { Icons } from '@masknet/icons'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
 
@@ -252,6 +253,12 @@ export function NFTListDialog(props: NFTListDialogProps) {
         return isGreaterThan(a.last_checked_at, z.last_checked_at) ? -1 : 1
     })
 
+    const openPopupWindow = useCallback(() => {
+        Services.Helper.openPopupWindow(PopupRoutes.ConnectedWallets, {
+            internal: true,
+        })
+    }, [])
+
     return (
         <>
             <DialogContent className={classes.content}>
@@ -359,6 +366,7 @@ export function NFTListDialog(props: NFTListDialogProps) {
                 </Stack>
 
                 <PluginVerifiedWalletStatusBar
+                    openPopupWindow={openPopupWindow}
                     verifiedWallets={walletItems}
                     onChange={onChangeWallet}
                     expectedAddress={selectedAccount}>
