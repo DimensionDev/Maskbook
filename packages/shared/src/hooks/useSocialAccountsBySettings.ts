@@ -11,8 +11,8 @@ export const useSocialAccountsBySettings = (
     const {
         value: socialAccounts = EMPTY_LIST,
         loading: loadingSocialAccounts,
-        error: loadSocialAccountListError,
-        retry: retrySocialAddress,
+        error: loadSocialAccountsError,
+        retry: retrySocialAccounts,
     } = useSocialAccountsAll(identity, typeWhitelist, sorter)
 
     const {
@@ -41,7 +41,7 @@ export const useSocialAccountsBySettings = (
     return {
         value: addresses,
         loading: loadingSocialAccounts || loadingHiddenAddress,
-        error: loadSocialAccountListError || loadingHiddenAddressError,
-        retry: retrySocialAddress || retryLoadHiddenAddress,
+        error: loadSocialAccountsError || loadingHiddenAddressError,
+        retry: retrySocialAccounts || retryLoadHiddenAddress,
     }
 }

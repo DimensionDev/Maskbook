@@ -97,17 +97,18 @@ export const ProfileCard: FC<Props> = ({ identity, ...rest }) => {
 
     const translate = usePluginI18NField()
     const {
-        value: socialAddressList = EMPTY_LIST,
-        loading: loadingSocialAddressList,
+        value: socialAccounts = EMPTY_LIST,
+        loading: loadingSocialAccounts,
         retry: retrySocialAddress,
     } = useSocialAccountsBySettings(identity, undefined, sorter)
 
     const [selectedAddress, setSelectedAddress] = useState<string>()
-    const firstAddress = first(socialAddressList)?.address
+    const firstAddress = first(socialAccounts)?.address
     const activeAddress = selectedAddress ?? firstAddress
-    const selectedSocialAddress = useMemo(() => {
-        return socialAddressList.find((x) => isSameAddress(x.address, activeAddress))
-    }, [activeAddress, socialAddressList])
+    const selectedSocialAddress = useMemo(
+        () => socialAccounts.find((x) => isSameAddress(x.address, activeAddress)),
+        [activeAddress, socialAccounts],
+    )
 
     const userId = identity.identifier?.userId
 
@@ -149,7 +150,7 @@ export const ProfileCard: FC<Props> = ({ identity, ...rest }) => {
         onChange(undefined, first(tabs)?.id)
     }, [userId])
 
-    if (!userId || loadingSocialAddressList)
+    if (!userId || loadingSocialAccounts)
         return (
             <div className={cx(classes.root, classes.loading)}>
                 <LoadingBase />
@@ -161,7 +162,7 @@ export const ProfileCard: FC<Props> = ({ identity, ...rest }) => {
             <div className={classes.root}>
                 <div className={classes.header}>
                     <ProfileCardTitle
-                        socialAccounts={socialAddressList}
+                        socialAccounts={socialAccounts}
                         address={activeAddress}
                         onAddressChange={setSelectedAddress}
                         identity={identity}

@@ -767,13 +767,13 @@ export namespace Plugin.SNSAdaptor {
              */
             shouldDisplay?(identity?: SocialIdentity, socialAccount?: SocialAccount[]): boolean
             /**
-             * Filter social address
+             * Filter social account
              */
-            filterSocialAddress?(x: SocialAccount): boolean
+            filterSocialAccount?(x: SocialAccount): boolean
             /**
-             * Sort social address in expected order
+             * Sort social account in expected order
              */
-            sortSocialAddress?(a: SocialAccount, z: SocialAccount): number
+            sortSocialAccount?(a: SocialAccount, z: SocialAccount): number
         }
     }
 
