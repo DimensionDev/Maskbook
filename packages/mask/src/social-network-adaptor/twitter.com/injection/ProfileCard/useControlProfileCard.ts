@@ -58,7 +58,6 @@ export function useControlProfileCard(holderRef: RefObject<HTMLDivElement>) {
             }
             const { badgeBounding: bounding } = event
             const reachedBottomBoundary = bounding.bottom + CARD_HEIGHT > window.innerHeight
-            const reachedRightBoundary = bounding.right + CARD_WIDTH > window.innerWidth
             let x = Math.max(bounding.left + bounding.width / 2 - CARD_WIDTH / 2, 0)
             let y = bounding.top + bounding.height
             if (reachedBottomBoundary) {
@@ -70,7 +69,8 @@ export function useControlProfileCard(holderRef: RefObject<HTMLDivElement>) {
                     y = bounding.top - CARD_HEIGHT
                 }
             }
-            if (reachedRightBoundary) {
+            // reached right boundary
+            if (x + CARD_WIDTH > window.innerWidth) {
                 x = bounding.left - CARD_WIDTH
             }
             // Prefer to show top left corner of the card.
