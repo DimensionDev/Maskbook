@@ -71,8 +71,8 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
                     // https://github.com/near/near-api-js/issues/833
                     alias['error-polyfill'] = require.resolve('./package-overrides/null.js')
                 }
-                if (profiling) {
-                    alias['scheduler/tracing'] = 'scheduler/tracing-profiling'
+                if (profiling || (mode === 'production' && devtools)) {
+                    alias['react-dom$'] = 'react-dom/profiling'
                 }
                 if (devtools) {
                     // Note: when devtools is enabled, we will install react-refresh/runtime manually to keep the correct react global hook installation order.
