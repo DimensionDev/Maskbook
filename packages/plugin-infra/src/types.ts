@@ -18,7 +18,6 @@ import type {
     NetworkPluginID,
 } from '@masknet/shared-base'
 import type {
-    SocialAddress,
     ChainDescriptor,
     NetworkDescriptor,
     ProviderDescriptor,
