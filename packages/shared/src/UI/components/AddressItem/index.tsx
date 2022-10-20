@@ -1,6 +1,6 @@
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
-import { Link,  TypographyProps } from '@mui/material'
+import { Link, TypographyProps } from '@mui/material'
 import { useWeb3State } from '@masknet/web3-hooks-base'
 import type { SocialAccount } from '@masknet/web3-shared-base'
 import { ReversedAddress } from '../../../index.js'
