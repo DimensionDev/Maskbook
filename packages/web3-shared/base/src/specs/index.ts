@@ -1217,6 +1217,8 @@ export interface Web3StorageServiceState {
 }
 
 export interface IdentityServiceState {
+    /** Merge many social addresses into a social account. Don't overwrite it in sub-classes. */
+    __mergeSocialAddressesAll__(socialAddresses: Array<SocialAddress<NetworkPluginID>>): SocialAccount[]
     /** Find all social addresses related to the given identity. */
     lookup(identity: SocialIdentity): Promise<Array<SocialAddress<NetworkPluginID>>>
 }

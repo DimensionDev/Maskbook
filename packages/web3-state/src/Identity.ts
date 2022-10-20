@@ -1,8 +1,11 @@
 import LRU from 'lru-cache'
-import type {
+import { groupBy, first, compact } from 'lodash-unified'
+import {
     SocialAddress,
     SocialIdentity,
     IdentityServiceState as Web3SocialIdentityState,
+    SocialAddressType,
+    SocialAccount,
 } from '@masknet/web3-shared-base'
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 
@@ -44,5 +47,24 @@ export class IdentityServiceState implements Web3SocialIdentityState {
         }
 
         return fromRemote
+    }
+
+    __mergeSocialAddressesAll__(socialAddresses: Array<SocialAddress<NetworkPluginID>>) {
+        const accountsGrouped = groupBy(socialAddresses, (x) => `${x.pluginID}_${x.address.toLowerCase()}`)
+        return Object.entries(accountsGrouped).map<SocialAccount>(([, group]) => {
+            return {
+                pluginID: group[0].pluginID,
+                address: group[0].address,
+                label:
+                    first(
+                        compact(
+                            [SocialAddressType.ENS, SocialAddressType.RSS3, SocialAddressType.SOL].map(
+                                (x) => group.find((y) => y.type === x)?.label,
+                            ),
+                        ),
+                    ) ?? group[0].label,
+                supportedAddressTypes: group.map((x) => x.type),
+            }
+        })
     }
 }

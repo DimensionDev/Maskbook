@@ -6,7 +6,7 @@ import { useWeb3State } from './useWeb3State.js'
 /**
  * Get all social addresses under a specific network.
  */
-export function useSocialAddressList<T extends NetworkPluginID>(
+export function useSocialAddresses<T extends NetworkPluginID>(
     pluginID?: T,
     identity?: SocialIdentity,
     includes?: SocialAddressType[],

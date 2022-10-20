@@ -15,7 +15,7 @@ const addressCache = new LRUCache<string, CacheValue>({
 /**
  * Get all social addresses under of all networks.
  */
-export function useSocialAddressListAll(
+export function useSocialAddressesAll(
     identity?: SocialIdentity,
     includes?: SocialAddressType[],
     sorter?: (a: SocialAddress<NetworkPluginID>, z: SocialAddress<NetworkPluginID>) => number,
