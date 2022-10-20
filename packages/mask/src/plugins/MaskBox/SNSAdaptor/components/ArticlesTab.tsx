@@ -1,4 +1,4 @@
-import { Box, Typography } from '@mui/material'
+import { Box } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { BoxInfo, BoxMetadata, MediaType } from '../../type.js'
 import { MaskSharpIconOfSize } from '@masknet/shared'
@@ -6,8 +6,7 @@ import { Video } from '../../../../components/shared/Video.js'
 
 const useStyles = makeStyles()((theme) => ({
     main: {
-        paddingLeft: 16,
-        paddingRight: 16,
+        padding: 16,
     },
     body: {
         width: '100%',
@@ -17,9 +16,6 @@ const useStyles = makeStyles()((theme) => ({
         boxSizing: 'border-box',
         border: `solid 1px ${theme.palette.divider}`,
     },
-    footer: {
-        margin: theme.spacing(2.75, 0),
-    },
     hero: {
         display: 'flex',
         alignItems: 'center',
@@ -27,13 +23,6 @@ const useStyles = makeStyles()((theme) => ({
         width: '100%',
         height: 360,
         objectFit: 'scale-down',
-    },
-    name: {
-        whiteSpace: 'nowrap',
-        maxWidth: '50%',
-        display: 'inline-block',
-        overflow: 'hidden',
-        textOverflow: 'ellipsis',
     },
     icon: {
         color: theme.palette.mode === 'dark' ? 'rgb(255, 255, 255)' : 'rgb(15, 20, 25)',
@@ -74,14 +63,6 @@ export function ArticlesTab(props: ArticlesTabProps) {
                             return <img className={classes.hero} src={boxMetadata.mediaUrl} />
                     }
                 })()}
-            </Box>
-            <Box className={classes.footer} display="flex" alignItems="center" justifyContent="space-between">
-                <Typography className={classes.name} color="textPrimary">
-                    {boxInfo.name}
-                </Typography>
-                <Typography color="textPrimary">
-                    {boxInfo.sold}/{boxInfo.total}
-                </Typography>
             </Box>
         </Box>
     )
