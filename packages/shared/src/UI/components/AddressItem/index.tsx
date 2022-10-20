@@ -1,9 +1,9 @@
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
-import { Link, Typography, TypographyProps } from '@mui/material'
+import { Link, TypographyProps } from '@mui/material'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import { useWeb3State } from '@masknet/web3-hooks-base'
-import { isSameAddress, SocialAddress } from '@masknet/web3-shared-base'
+import type { SocialAddress } from '@masknet/web3-shared-base'
 import { ReversedAddress } from '../../../index.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -37,15 +37,11 @@ export function AddressItem({
 
     return (
         <>
-            {isSameAddress(socialAddress.address, socialAddress.label) ? (
-                <ReversedAddress
-                    TypographyProps={TypographyProps}
-                    address={socialAddress.address}
-                    pluginID={socialAddress.pluginID}
-                />
-            ) : (
-                <Typography {...TypographyProps}>{socialAddress.label}</Typography>
-            )}
+            <ReversedAddress
+                TypographyProps={TypographyProps}
+                address={socialAddress.address}
+                pluginID={socialAddress.pluginID}
+            />
             {disableLinkIcon ? null : (
                 <Link
                     className={classes.link}
