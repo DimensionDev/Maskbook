@@ -15,18 +15,17 @@ import {
 } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { ProviderType } from '@masknet/web3-shared-evm'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { delay } from '@dimensiondev/kit'
-import { WalletIcon } from '@masknet/shared'
+import { useGlobalDialogController, WalletIcon } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
-import type { NetworkPluginID } from '@masknet/shared-base'
+import { GlobalDialogRoutes, NetworkPluginID } from '@masknet/shared-base'
 import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
 import {
     ActionButtonPromise,
     ActionButtonPromiseProps,
 } from '../../extension/options-page/DashboardComponents/ActionButton.js'
 import { useI18N } from '../../utils/index.js'
-import { WalletMessages } from '../../plugins/Wallet/messages.js'
+import type { SelectProviderDialogEvent } from '@masknet/plugin-wallet'
 
 const useStyles = makeStyles()((theme) => ({
     tooltip: {
@@ -95,14 +94,11 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
     const isPluginIDMatched = actualPluginID === expectedPluginID
     const isMatched = predicate(actualPluginID, actualChainId)
 
-    const { setDialog: setSelectProviderDialog } = useRemoteControlledDialog(
-        WalletMessages.events.selectProviderDialogUpdated,
-    )
+    const { openGlobalDialog } = useGlobalDialogController()
 
     const openSelectProviderDialog = useCallback(() => {
-        setSelectProviderDialog({
-            open: true,
-            network: expectedNetworkDescriptor,
+        openGlobalDialog<SelectProviderDialogEvent>(GlobalDialogRoutes.SelectProvider, {
+            state: { network: expectedNetworkDescriptor },
         })
     }, [expectedNetworkDescriptor])
 
@@ -111,9 +107,8 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
         await delay(1000)
 
         if (!isPluginIDMatched || actualProviderType === ProviderType.WalletConnect) {
-            setSelectProviderDialog({
-                open: true,
-                network: expectedNetworkDescriptor,
+            openGlobalDialog<SelectProviderDialogEvent>(GlobalDialogRoutes.SelectProvider, {
+                state: { network: expectedNetworkDescriptor },
             })
             return 'init'
         }

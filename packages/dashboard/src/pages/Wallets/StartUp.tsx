@@ -3,8 +3,9 @@ import { Icons } from '@masknet/icons'
 import { useDashboardI18N } from '../../locales/index.js'
 import { Paper, Stack, Box } from '@mui/material'
 import { ActionCard } from '../../components/ActionCard/index.js'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { PluginMessages } from '../../API.js'
+import { useGlobalDialogController } from '@masknet/shared'
+import { useCallback } from 'react'
+import { GlobalDialogRoutes } from '@masknet/shared-base'
 
 const Container = styled('div')`
     display: flex;
@@ -16,10 +17,12 @@ const Container = styled('div')`
 
 export function StartUp() {
     const t = useDashboardI18N()
-    const { openDialog: openConnectWalletDialog } = useRemoteControlledDialog(
-        PluginMessages.Wallet.events.selectProviderDialogUpdated,
-    )
 
+    const { openGlobalDialog } = useGlobalDialogController()
+
+    const openConnectWalletDialog = useCallback(() => {
+        openGlobalDialog(GlobalDialogRoutes.SelectProvider)
+    }, [openGlobalDialog])
     return (
         <Container>
             <Paper variant="background" sx={{ width: '100%', height: '100%' }}>

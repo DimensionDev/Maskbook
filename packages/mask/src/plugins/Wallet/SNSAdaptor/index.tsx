@@ -10,7 +10,7 @@ import { TransactionSnackbar } from './TransactionSnackbar/index.js'
 import { ApplicationBoardDialog } from '../../../components/shared/ApplicationBoardDialog.js'
 import { WalletConnectQRCodeDialog } from './WalletConnectQRCodeDialog/index.js'
 import { getEnumAsArray } from '@dimensiondev/kit'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { GlobalDialogRoutes, NetworkPluginID, PluginID } from '@masknet/shared-base'
 import { LeavePageConfirmDialog } from '../../../components/shared/LeavePageConfirmDialog.js'
 
 const sns: Plugin.SNSAdaptor.Definition = {
@@ -19,9 +19,9 @@ const sns: Plugin.SNSAdaptor.Definition = {
     GlobalInjection() {
         return (
             <>
-                <SelectProviderDialog />
+                {/* <SelectProviderDialog /> */}
                 <SelectNftContractDialog />
-                <WalletStatusDialog />
+                {/* <WalletStatusDialog /> */}
                 <ApplicationBoardDialog />
                 <ConnectWalletDialog />
                 <WalletRiskWarningDialog />
@@ -34,6 +34,30 @@ const sns: Plugin.SNSAdaptor.Definition = {
             </>
         )
     },
+    GlobalDialogCotnents: [
+        {
+            ID: PluginID.Wallet,
+            path: GlobalDialogRoutes.WalletStatus,
+            label: {
+                i18nKey: 'wallet_account',
+                fallback: 'Wallet Account',
+            },
+            UI: {
+                DialogContent: WalletStatusDialog,
+            },
+        },
+        {
+            ID: PluginID.Wallet,
+            path: GlobalDialogRoutes.SelectProvider,
+            label: {
+                i18nKey: 'connect_wallet',
+                fallback: 'Connect Wallet',
+            },
+            UI: {
+                DialogContent: SelectProviderDialog,
+            },
+        },
+    ],
 }
 
 export default sns

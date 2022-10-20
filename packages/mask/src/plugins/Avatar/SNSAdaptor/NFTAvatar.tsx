@@ -1,14 +1,12 @@
 import { useCallback, useState } from 'react'
 import { range, uniqBy } from 'lodash-unified'
-import { WalletMessages } from '@masknet/plugin-wallet'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { LoadingBase, makeStyles, useStylesExtends } from '@masknet/theme'
 import { Box, Button, List, ListItem, Skeleton, Typography } from '@mui/material'
 import { useI18N } from '../../../utils/index.js'
 import { AddNFT } from './AddNFT.js'
 import { useAccount, useChainId, useCurrentWeb3NetworkPluginID, useNonFungibleAssets } from '@masknet/web3-hooks-base'
-import { ElementAnchor, ReversedAddress } from '@masknet/shared'
-import { NetworkPluginID, EMPTY_LIST } from '@masknet/shared-base'
+import { ElementAnchor, ReversedAddress, useGlobalDialogController } from '@masknet/shared'
+import { NetworkPluginID, EMPTY_LIST, GlobalDialogRoutes } from '@masknet/shared-base'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
 import type { AllChainsNonFungibleToken, SelectTokenInfo } from '../types.js'
 import type { ChainId } from '@masknet/web3-shared-evm'
@@ -127,10 +125,11 @@ export function NFTAvatar(props: NFTAvatarProps) {
         setCollectibles_((tokens) => uniqBy([token, ...tokens], (x) => x.contract?.address && x.tokenId))
     }, [])
 
-    const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
-        WalletMessages.events.selectProviderDialogUpdated,
-    )
+    const { openGlobalDialog } = useGlobalDialogController()
 
+    const openSelectProviderDialog = useCallback(() => {
+        openGlobalDialog(GlobalDialogRoutes.SelectProvider)
+    }, [])
     const LoadStatus = (
         <List className={classes.list}>
             {range(8).map((i) => (

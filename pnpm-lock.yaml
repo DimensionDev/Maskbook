@@ -878,8 +878,8 @@ importers:
         specifier: 7.31.1
         version: 7.31.1
       react-router-dom:
-        specifier: ^6.3.0
-        version: 6.3.0
+        specifier: 6.4.2
+        version: 6.4.2
       react-transition-group:
         specifier: ^4.4.5
         version: 4.4.5
@@ -8391,6 +8391,11 @@ packages:
         optional: true
     dependencies:
       '@react-hookz/deep-equal': 1.0.2
+    dev: false
+
+  /@remix-run/router/1.0.2:
+    resolution: {integrity: sha512-GRSOFhJzjGN+d4sKHTMSvNeUPoZiDHWmRnXfzaxrqe7dE/Nzlc8BiMSJdLDESZlndM7jIUrZ/F4yWqVYlI0rwQ==}
+    engines: {node: '>=14'}
     dev: false
 
   /@rgba-image/common/0.1.13:
@@ -26384,6 +26389,22 @@ packages:
       react-router: 6.3.0
     dev: false
 
+  /react-router-dom/6.4.2:
+    resolution: {integrity: sha512-yM1kjoTkpfjgczPrcyWrp+OuQMyB1WleICiiGfstnQYo/S8hPEEnVjr/RdmlH6yKK4Tnj1UGXFSa7uwAtmDoLQ==}
+    engines: {node: '>=14'}
+    peerDependencies:
+      react: '>=16.8 || 0.0.0-experimental-9cdf8a99e-20221018'
+      react-dom: '>=16.8 || 0.0.0-experimental-9cdf8a99e-20221018'
+    peerDependenciesMeta:
+      react:
+        optional: true
+      react-dom:
+        optional: true
+    dependencies:
+      '@remix-run/router': 1.0.2
+      react-router: 6.4.2
+    dev: false
+
   /react-router/6.3.0:
     resolution: {integrity: sha512-7Wh1DzVQ+tlFjkeo+ujvjSqSJmkt1+8JO+T5xklPlgrh70y7ogx75ODRW0ThWhY7S+6yEDks8TYrtQe/aoboBQ==}
     peerDependencies:
@@ -26393,6 +26414,18 @@ packages:
         optional: true
     dependencies:
       history: 5.3.0
+    dev: false
+
+  /react-router/6.4.2:
+    resolution: {integrity: sha512-Rb0BAX9KHhVzT1OKhMvCDMw776aTYM0DtkxqUBP8dNBom3mPXlfNs76JNGK8wKJ1IZEY1+WGj+cvZxHVk/GiKw==}
+    engines: {node: '>=14'}
+    peerDependencies:
+      react: '>=16.8 || 0.0.0-experimental-9cdf8a99e-20221018'
+    peerDependenciesMeta:
+      react:
+        optional: true
+    dependencies:
+      '@remix-run/router': 1.0.2
     dev: false
 
   /react-to-print/2.14.7:
@@ -29969,7 +30002,7 @@ packages:
     dependencies:
       source-map: 0.5.7
       uglify-js: 2.8.29
-      webpack: 3.12.0
+      webpack: 3.12.0_webpack-cli@4.10.0
       webpack-sources: 1.4.3
     dev: false
 

@@ -116,7 +116,7 @@
     "react-feather": "^2.0.9",
     "react-highlight-words": "^0.18.0",
     "react-hook-form": "7.31.1",
-    "react-router-dom": "^6.3.0",
+    "react-router-dom": "6.4.2",
     "react-transition-group": "^4.4.5",
     "react-use": "^17.4.0",
     "react-virtualized-auto-sizer": "^1.0.6",

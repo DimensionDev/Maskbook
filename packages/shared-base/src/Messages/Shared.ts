@@ -10,6 +10,7 @@ import type {
     SettingsDialogEvent,
     NonFungibleTokenDialogEvent,
     WalletSettingsDialogEvent,
+    GlobalDialogEvent,
 } from './Mask.js'
 
 /**
@@ -38,4 +39,5 @@ export interface CrossIsolationEvents {
     profileCardEvent: ProfileCardEvent
     nonFungibleTokenDialogEvent: NonFungibleTokenDialogEvent
     walletSettingsDialogEvent: WalletSettingsDialogEvent
+    openGlobalDialog: GlobalDialogEvent
 }

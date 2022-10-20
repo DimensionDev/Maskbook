@@ -11,19 +11,18 @@ import {
     useBalance,
     useChainIdValid,
 } from '@masknet/web3-hooks-base'
-import { FormattedAddress, useSnackbarCallback, WalletIcon } from '@masknet/shared'
+import { FormattedAddress, useGlobalDialogController, useSnackbarCallback, WalletIcon } from '@masknet/shared'
 import { ProviderType } from '@masknet/web3-shared-evm'
-import { isDashboardPage } from '@masknet/shared-base'
+import { isDashboardPage, GlobalDialogRoutes } from '@masknet/shared-base'
 import { formatBalance } from '@masknet/web3-shared-base'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { getMaskColor, makeStyles } from '@masknet/theme'
-import { Button, Link, Typography, useTheme } from '@mui/material'
+import { Button, DialogContent, Link, Typography, useTheme } from '@mui/material'
 import classNames from 'classnames'
 import { Icons } from '@masknet/icons'
 import { useCopyToClipboard } from 'react-use'
-import { WalletMessages } from '../../../plugins/Wallet/messages.js'
 import { useI18N } from '../../../utils/index.js'
 import { usePendingTransactions } from './usePendingTransactions.js'
+import { useCallback } from 'react'
 
 const useStyles = makeStyles<{
     contentBackground?: string
@@ -149,115 +148,123 @@ export function WalletStatusBox(props: WalletStatusBox) {
     // #endregion
 
     // #region change provider
-    const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
-        WalletMessages.events.selectProviderDialogUpdated,
-    )
+    const { openGlobalDialog } = useGlobalDialogController()
 
-    const { closeDialog: closeWalletStatusDialog } = useRemoteControlledDialog(
-        WalletMessages.events.walletStatusDialogUpdated,
-    )
+    const openSelectProviderDialog = useCallback(() => {
+        openGlobalDialog(GlobalDialogRoutes.SelectProvider)
+    }, [openGlobalDialog])
     // #endregion
 
     const { summary: pendingSummary, transactionList } = usePendingTransactions()
 
-    return account ? (
-        <>
-            <section
-                className={classNames(
-                    classes.statusBox,
-                    classes.currentAccount,
-                    isDashboardPage() ? classes.dashboardBackground : '',
-                )}>
-                <WalletIcon
-                    size={30}
-                    badgeSize={12}
-                    mainIcon={providerDescriptor?.icon}
-                    badgeIcon={chainIdValid ? networkDescriptor?.icon : undefined}
-                />
-                <div className={classes.accountInfo}>
-                    {ProviderType.MaskWallet === providerDescriptor?.type ? (
-                        <Typography className={classes.accountName}>{wallet?.name}</Typography>
-                    ) : null}
-                    <div className={classes.infoRow}>
-                        <Typography className={classes.accountName}>
-                            {domain && Others?.formatDomainName ? (
-                                Others.formatDomainName(domain)
-                            ) : (
-                                <FormattedAddress address={account} size={4} formatter={Others?.formatAddress} />
+    return (
+        <DialogContent>
+            {account ? (
+                <>
+                    <section
+                        className={classNames(
+                            classes.statusBox,
+                            classes.currentAccount,
+                            isDashboardPage() ? classes.dashboardBackground : '',
+                        )}>
+                        <WalletIcon
+                            size={30}
+                            badgeSize={12}
+                            mainIcon={providerDescriptor?.icon}
+                            badgeIcon={chainIdValid ? networkDescriptor?.icon : undefined}
+                        />
+                        <div className={classes.accountInfo}>
+                            {ProviderType.MaskWallet === providerDescriptor?.type ? (
+                                <Typography className={classes.accountName}>{wallet?.name}</Typography>
+                            ) : null}
+                            <div className={classes.infoRow}>
+                                <Typography className={classes.accountName}>
+                                    {domain && Others?.formatDomainName ? (
+                                        Others.formatDomainName(domain)
+                                    ) : (
+                                        <FormattedAddress
+                                            address={account}
+                                            size={4}
+                                            formatter={Others?.formatAddress}
+                                        />
+                                    )}
+                                </Typography>
+                                <Link
+                                    className={classes.link}
+                                    underline="none"
+                                    component="button"
+                                    title={t('wallet_status_button_copy_address')}
+                                    onClick={onCopy}>
+                                    <Icons.Copy className={classNames(classes.icon, classes.copyIcon)} />
+                                </Link>
+                                {chainIdValid ? (
+                                    <Link
+                                        className={classes.link}
+                                        href={Others?.explorerResolver.addressLink?.(chainId, account) ?? ''}
+                                        target="_blank"
+                                        title={t('plugin_wallet_view_on_explorer')}
+                                        rel="noopener noreferrer">
+                                        <Icons.LinkOut className={classNames(classes.icon, classes.linkIcon)} />
+                                    </Link>
+                                ) : null}
+                            </div>
+
+                            {props.withinRiskWarningDialog ? null : (
+                                <div className={classes.infoRow}>
+                                    <Typography className={classes.balance}>
+                                        {loadingNativeToken || loadingBalance
+                                            ? '-'
+                                            : `${formatBalance(balance, nativeToken?.decimals, 3)} ${
+                                                  nativeToken?.symbol
+                                              }`}
+                                    </Typography>
+                                </div>
                             )}
-                        </Typography>
-                        <Link
-                            className={classes.link}
-                            underline="none"
-                            component="button"
-                            title={t('wallet_status_button_copy_address')}
-                            onClick={onCopy}>
-                            <Icons.Copy className={classNames(classes.icon, classes.copyIcon)} />
-                        </Link>
-                        {chainIdValid ? (
-                            <Link
-                                className={classes.link}
-                                href={Others?.explorerResolver.addressLink?.(chainId, account) ?? ''}
-                                target="_blank"
-                                title={t('plugin_wallet_view_on_explorer')}
-                                rel="noopener noreferrer">
-                                <Icons.LinkOut className={classNames(classes.icon, classes.linkIcon)} />
-                            </Link>
-                        ) : null}
-                    </div>
-
-                    {props.withinRiskWarningDialog ? null : (
-                        <div className={classes.infoRow}>
-                            <Typography className={classes.balance}>
-                                {loadingNativeToken || loadingBalance
-                                    ? '-'
-                                    : `${formatBalance(balance, nativeToken?.decimals, 3)} ${nativeToken?.symbol}`}
-                            </Typography>
                         </div>
-                    )}
-                </div>
 
-                {!props.disableChange && (
-                    <section>
-                        <Button
-                            className={classNames(classes.actionButton)}
-                            variant="contained"
-                            size="small"
-                            onClick={async () => {
-                                props.closeDialog?.()
-                                closeWalletStatusDialog()
-                                await connection?.disconnect()
-                                openSelectProviderDialog()
-                            }}>
-                            {t('plugin_wallet_disconnect')}
-                        </Button>
-                        <Button
-                            className={classNames(classes.actionButton)}
-                            variant="contained"
-                            size="small"
-                            onClick={openSelectProviderDialog}>
-                            {t('wallet_status_button_change')}
-                        </Button>
+                        {!props.disableChange && (
+                            <section>
+                                <Button
+                                    className={classNames(classes.actionButton)}
+                                    variant="contained"
+                                    size="small"
+                                    onClick={async () => {
+                                        props.closeDialog?.()
+                                        // closeWalletStatusDialog()
+                                        await connection?.disconnect()
+                                        openSelectProviderDialog()
+                                    }}>
+                                    {t('plugin_wallet_disconnect')}
+                                </Button>
+                                <Button
+                                    className={classNames(classes.actionButton)}
+                                    variant="contained"
+                                    size="small"
+                                    onClick={openSelectProviderDialog}>
+                                    {t('wallet_status_button_change')}
+                                </Button>
+                            </section>
+                        )}
                     </section>
-                )}
-            </section>
-            {props.showPendingTransaction ? (
-                <div>
-                    {pendingSummary}
-                    {transactionList}
-                </div>
-            ) : null}
-        </>
-    ) : (
-        <section className={classes.connectButtonWrapper}>
-            <Button
-                className={classNames(classes.actionButton)}
-                color="primary"
-                variant="contained"
-                size="small"
-                onClick={openSelectProviderDialog}>
-                {t('plugin_wallet_on_connect')}
-            </Button>
-        </section>
+                    {props.showPendingTransaction ? (
+                        <div>
+                            {pendingSummary}
+                            {transactionList}
+                        </div>
+                    ) : null}
+                </>
+            ) : (
+                <section className={classes.connectButtonWrapper}>
+                    <Button
+                        className={classNames(classes.actionButton)}
+                        color="primary"
+                        variant="contained"
+                        size="small"
+                        onClick={openSelectProviderDialog}>
+                        {t('plugin_wallet_on_connect')}
+                    </Button>
+                </section>
+            )}
+        </DialogContent>
     )
 }

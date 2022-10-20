@@ -22,7 +22,7 @@ export interface WalletTypes {
     address: string
     networkPluginID: NetworkPluginID
     updateTime?: string
-    collections: CollectionTypes[]
+    collections?: CollectionTypes[]
 }
 
 export interface WalletsCollection {

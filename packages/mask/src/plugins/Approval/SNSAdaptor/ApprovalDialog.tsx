@@ -2,19 +2,18 @@ import { compact } from 'lodash-unified'
 import { DialogContent, Button, Tab } from '@mui/material'
 import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import { TabContext } from '@mui/lab'
-import { PluginWalletStatusBar, InjectedDialog } from '@masknet/shared'
+import { PluginWalletStatusBar, InjectedDialog, useGlobalDialogController } from '@masknet/shared'
 import { useChainId, useCurrentWeb3NetworkPluginID } from '@masknet/web3-hooks-base'
 import { NetworkTab } from '../../../components/shared/NetworkTab.js'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { ChainId, chainResolver, NetworkType } from '@masknet/web3-shared-evm'
-import { NetworkPluginID, PluginID } from '@masknet/shared-base'
+import { GlobalDialogRoutes, NetworkPluginID, PluginID } from '@masknet/shared-base'
 import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
 import { useI18N } from '../locales/index.js'
 import { useI18N as useBaseI18n } from '../../../utils/index.js'
-import { WalletMessages } from '../../../plugins/Wallet/messages.js'
 import { ApprovalEmptyContent } from './ApprovalEmptyContent.js'
 import { ApprovalTokenContent } from './ApprovalTokenContent.js'
 import { ApprovalNFTContent } from './ApprovalNFTContent.js'
+import type { SelectProviderDialogEvent } from '@masknet/plugin-wallet'
 
 const useStyles = makeStyles<{ listItemBackground?: string; listItemBackgroundIcon?: string } | void>()(
     (theme, props) => ({
@@ -136,9 +135,8 @@ function ApprovalWrapper(props: ApprovalWrapperProps) {
     )
 
     const { classes } = useStyles()
-    const { setDialog: setSelectProviderDialog } = useRemoteControlledDialog(
-        WalletMessages.events.selectProviderDialogUpdated,
-    )
+
+    const { openGlobalDialog } = useGlobalDialogController()
 
     return (
         <div className={classes.approvalWrapper}>
@@ -171,14 +169,15 @@ function ApprovalWrapper(props: ApprovalWrapperProps) {
                     variant="contained"
                     size="medium"
                     onClick={() => {
-                        setSelectProviderDialog({
-                            open: true,
-                            supportedNetworkList: chainIdList
-                                ?.map((chainId) => {
-                                    const x = chainResolver.networkType(chainId)
-                                    return x
-                                })
-                                .filter((x) => Boolean(x)) as NetworkType[],
+                        openGlobalDialog<SelectProviderDialogEvent>(GlobalDialogRoutes.SelectProvider, {
+                            state: {
+                                supportedNetworkList: chainIdList
+                                    ?.map((chainId) => {
+                                        const x = chainResolver.networkType(chainId)
+                                        return x
+                                    })
+                                    .filter((x) => Boolean(x)) as NetworkType[],
+                            },
                         })
                     }}
                     fullWidth>

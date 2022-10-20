@@ -1,9 +1,8 @@
-import React, { FC, memo } from 'react'
+import React, { FC, memo, useCallback } from 'react'
 import { Box, Button, Stack, Typography } from '@mui/material'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { makeStyles, MaskColorVar, LoadingBase } from '@masknet/theme'
-import { FormattedAddress, WalletIcon } from '@masknet/shared'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { FormattedAddress, useGlobalDialogController, WalletIcon } from '@masknet/shared'
 import {
     useNetworkDescriptor,
     useProviderDescriptor,
@@ -14,10 +13,9 @@ import {
     useAccount,
 } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { PluginMessages } from '../../../../API.js'
 import { useDashboardI18N } from '../../../../locales/index.js'
 import { useNetworkSelector } from './useNetworkSelector.js'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { GlobalDialogRoutes, NetworkPluginID } from '@masknet/shared-base'
 import { TransactionStatusType } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
@@ -71,13 +69,15 @@ export const WalletStateBar = memo(() => {
     const providerDescriptor = useProviderDescriptor()
     const pendingTransactions = useRecentTransactions(NetworkPluginID.PLUGIN_EVM, TransactionStatusType.NOT_DEPEND)
 
-    const { openDialog: openWalletStatusDialog } = useRemoteControlledDialog(
-        PluginMessages.Wallet.events.walletStatusDialogUpdated,
-    )
+    const { openGlobalDialog } = useGlobalDialogController()
 
-    const { openDialog: openConnectWalletDialog } = useRemoteControlledDialog(
-        PluginMessages.Wallet.events.selectProviderDialogUpdated,
-    )
+    const openWalletStatusDialog = useCallback(() => {
+        openGlobalDialog(GlobalDialogRoutes.WalletStatus)
+    }, [openGlobalDialog])
+
+    const openConnectWalletDialog = useCallback(() => {
+        openGlobalDialog(GlobalDialogRoutes.SelectProvider)
+    }, [openGlobalDialog])
 
     const [menu, openMenu] = useNetworkSelector()
 

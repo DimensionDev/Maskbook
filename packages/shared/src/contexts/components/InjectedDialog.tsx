@@ -99,6 +99,7 @@ export interface InjectedDialogProps extends Omit<DialogProps, 'onClose' | 'titl
     isOpenFromApplicationBoard?: boolean
     isOnBack?: boolean
     titleBarIconStyle?: 'auto' | 'back' | 'close'
+    withCheck?: boolean
 }
 
 export function InjectedDialog(props: InjectedDialogProps) {
@@ -134,6 +135,7 @@ export function InjectedDialog(props: InjectedDialogProps) {
         titleTail = null,
         disableTitleBorder,
         isOpenFromApplicationBoard,
+        withCheck = true,
         ...rest
     } = props
     const actions = CopyElementWithNewProps(children, DialogActions, { root: dialogActions })
@@ -212,8 +214,14 @@ export function InjectedDialog(props: InjectedDialogProps) {
                     {/* There is a .MuiDialogTitle+.MuiDialogContent selector that provides paddingTop: 0 */}
                     {/* Add an empty span here to revert this effect. */}
                     <span />
-                    {content}
-                    {actions}
+                    {withCheck ? (
+                        <>
+                            {content}
+                            {actions}
+                        </>
+                    ) : (
+                        children
+                    )}
                 </ErrorBoundary>
             </Dialog>
         </IncreaseStack>

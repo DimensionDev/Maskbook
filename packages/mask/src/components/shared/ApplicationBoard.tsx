@@ -3,18 +3,18 @@ import { makeStyles, getMaskColor } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
 import { useCurrentWeb3NetworkPluginID, useAccount, useChainId } from '@masknet/web3-hooks-base'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { GlobalDialogRoutes, NetworkPluginID } from '@masknet/shared-base'
 import { getCurrentSNSNetwork } from '../../social-network-adaptor/utils.js'
 import { activatedSocialNetworkUI } from '../../social-network/index.js'
 import { useI18N } from '../../utils/index.js'
 import { Application, getUnlistedApp } from './ApplicationSettingPluginList.js'
 import { ApplicationRecommendArea } from './ApplicationRecommendArea.js'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { useCurrentPersonaConnectStatus } from '../DataSource/usePersonaConnectStatus.js'
 import { usePersonaAgainstSNSConnectStatus } from '../DataSource/usePersonaAgainstSNSConnectStatus.js'
-import { WalletMessages } from '../../plugins/Wallet/messages.js'
 import { PersonaContext } from '../../extension/popups/pages/Personas/hooks/usePersonaContext.js'
 import { useTimeout } from 'react-use'
+import { useGlobalDialogController } from '@masknet/shared'
+import type { SelectProviderDialogEvent } from '@masknet/plugin-wallet'
 
 const useStyles = makeStyles<{
     shouldScroll: boolean
@@ -186,9 +186,8 @@ function RenderEntryComponent({
 }) {
     const Entry = application.entry.RenderEntryComponent!
     const { t } = useI18N()
-    const { setDialog: setSelectProviderDialog } = useRemoteControlledDialog(
-        WalletMessages.events.selectProviderDialogUpdated,
-    )
+
+    const { openGlobalDialog } = useGlobalDialogController()
 
     const ApplicationEntryStatus = useContext(ApplicationEntryStatusContext)
 
@@ -203,14 +202,16 @@ function RenderEntryComponent({
     const clickHandler = useMemo(() => {
         if (application.isWalletConnectedRequired || application.isWalletConnectedEVMRequired) {
             return (walletConnectedCallback?: () => void) =>
-                setSelectProviderDialog({ open: true, walletConnectedCallback })
+                openGlobalDialog<SelectProviderDialogEvent>(GlobalDialogRoutes.SelectProvider, {
+                    state: { walletConnectedCallback },
+                })
         }
         if (!application.entry.nextIdRequired) return
         if (ApplicationEntryStatus.isPersonaCreated === false) return ApplicationEntryStatus.personaAction as () => void
         if (ApplicationEntryStatus.shouldVerifyNextId)
             return () => ApplicationEntryStatus.personaAction?.(application.pluginID)
         return
-    }, [setSelectProviderDialog, ApplicationEntryStatus, application])
+    }, [ApplicationEntryStatus, application])
 
     // #endregion
 

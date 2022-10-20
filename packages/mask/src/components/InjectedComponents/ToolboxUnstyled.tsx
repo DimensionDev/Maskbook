@@ -24,7 +24,7 @@ import {
     useRecentTransactions,
 } from '@masknet/web3-hooks-base'
 import { useCallback } from 'react'
-import { WalletIcon, MaskIcon } from '@masknet/shared'
+import { WalletIcon, MaskIcon, useGlobalDialogController } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { WalletMessages } from '../../plugins/Wallet/messages.js'
 import { useI18N } from '../../utils/index.js'
@@ -33,6 +33,7 @@ import GuideStep from '../GuideStep/index.js'
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord'
+import { GlobalDialogRoutes } from '../../../../shared-base/src/Routes/GlobalDialogRoutes.js'
 
 const useStyles = makeStyles()((theme) => ({
     title: {
@@ -177,12 +178,7 @@ function useToolbox() {
     // #endregion
 
     // #region Wallet
-    const { openDialog: openWalletStatusDialog } = useRemoteControlledDialog(
-        WalletMessages.events.walletStatusDialogUpdated,
-    )
-    const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
-        WalletMessages.events.selectProviderDialogUpdated,
-    )
+    const { openGlobalDialog } = useGlobalDialogController()
     // #endregion
 
     const { value: domain } = useReverseAddress(undefined, account)
@@ -205,8 +201,8 @@ function useToolbox() {
 
     const openWallet = useCallback(() => {
         if (hasNativeAPI) return nativeAPI?.api.misc_openCreateWalletView()
-        return account ? openWalletStatusDialog() : openSelectProviderDialog()
-    }, [openWalletStatusDialog, openSelectProviderDialog, account, hasNativeAPI])
+        return openGlobalDialog(account ? GlobalDialogRoutes.WalletStatus : GlobalDialogRoutes.SelectProvider)
+    }, [openGlobalDialog, account, hasNativeAPI])
 
     const walletTitle = renderButtonText()
 

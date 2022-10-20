@@ -113,6 +113,8 @@ export namespace SocialNetworkUI {
             profileTabContent?(signal: AbortSignal): void
             /** Inject UI to the setting dialog */
             PluginSettingsDialog?(signal: AbortSignal): void
+            /** Inject UI to the global dialog */
+            GlobalDialog?(signal: AbortSignal): void
             setupWizard?(signal: AbortSignal, for_: PersonaIdentifier): void
             openNFTAvatarSettingDialog?(): void
 

@@ -1,7 +1,5 @@
 import { useAccount, useChainId } from '@masknet/web3-hooks-base'
-import { WalletMessages } from '@masknet/plugin-wallet'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { GlobalDialogRoutes, NetworkPluginID } from '@masknet/shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import { Box, keyframes, useTheme } from '@mui/material'
@@ -10,6 +8,8 @@ import { useI18N as useBaseI18n } from '../../../../utils/index.js'
 import { useI18N } from '../../locales/index.js'
 import { ChainBoundary } from '../../../../web3/UI/ChainBoundary.js'
 import { WalletConnectedBoundary } from '../../../../web3/UI/WalletConnectedBoundary.js'
+import { useGlobalDialogController } from '@masknet/shared'
+import { useCallback } from 'react'
 
 export const useStyles = makeStyles()((theme) => {
     const spinningAnimationKeyFrames = keyframes`
@@ -59,9 +59,11 @@ export function OperationFooter({
     const theme = useTheme()
 
     // #region remote controlled select provider dialog
-    const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
-        WalletMessages.events.selectProviderDialogUpdated,
-    )
+    const { openGlobalDialog } = useGlobalDialogController()
+
+    const openSelectProviderDialog = useCallback(() => {
+        openGlobalDialog(GlobalDialogRoutes.SelectProvider)
+    }, [])
     // #endregion
 
     const ObtainButton = () => {

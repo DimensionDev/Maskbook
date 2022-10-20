@@ -18,17 +18,11 @@ export type ApplicationDialogEvent = {
     }
 }
 
-export type SelectProviderDialogEvent =
-    | {
-          open: true
-          walletConnectedCallback?: () => void
-          supportedNetworkList?: Array<Web3Helper.NetworkDescriptorAll['type']>
-          network?: Web3Helper.NetworkDescriptorAll
-      }
-    | {
-          open: false
-          address?: string
-      }
+export type SelectProviderDialogEvent = {
+    walletConnectedCallback?: () => void
+    supportedNetworkList?: Array<Web3Helper.NetworkDescriptorAll['type']>
+    network?: Web3Helper.NetworkDescriptorAll
+}
 
 export type WalletConnectQRCodeDialogEvent =
     | {
@@ -49,10 +43,6 @@ export type ConnectWalletDialogEvent =
     | {
           open: false
       }
-
-export type WalletStatusDialogEvent = {
-    open: boolean
-}
 
 export type GasSettingDialogEvent = {
     open: boolean
@@ -95,19 +85,9 @@ export interface SocketMessageUpdatedEvent {
 
 export interface WalletMessage {
     /**
-     * Select provider dialog
-     */
-    selectProviderDialogUpdated: SelectProviderDialogEvent
-
-    /**
      * Connect wallet dialog
      */
     connectWalletDialogUpdated: ConnectWalletDialogEvent
-
-    /**
-     * Wallet status dialog
-     */
-    walletStatusDialogUpdated: WalletStatusDialogEvent
 
     /**
      * Application dialog

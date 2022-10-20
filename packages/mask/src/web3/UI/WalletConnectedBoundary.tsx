@@ -11,6 +11,9 @@ import {
     useNativeTokenBalance,
     useRiskWarningApproved,
 } from '@masknet/web3-hooks-base'
+import { useGlobalDialogController } from '@masknet/shared'
+import { useCallback } from 'react'
+import { GlobalDialogRoutes } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     button: {
@@ -42,9 +45,12 @@ export function WalletConnectedBoundary(props: WalletConnectedBoundaryProps) {
     const { setDialog: setRiskWarningDialog } = useRemoteControlledDialog(
         WalletMessages.events.walletRiskWarningDialogUpdated,
     )
-    const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
-        WalletMessages.events.selectProviderDialogUpdated,
-    )
+
+    const { openGlobalDialog } = useGlobalDialogController()
+
+    const openSelectProviderDialog = useCallback(() => {
+        openGlobalDialog(GlobalDialogRoutes.SelectProvider)
+    }, [openGlobalDialog])
 
     const buttonClass = classNames(classNames(classes.button, classes.connectWallet))
 

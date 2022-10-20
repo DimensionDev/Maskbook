@@ -1,8 +1,8 @@
 import { forwardRef, useCallback, useEffect, useImperativeHandle, useState, useMemo } from 'react'
 import { useUnmount, useUpdateEffect } from 'react-use'
 import { delay } from '@dimensiondev/kit'
-import { useOpenShareTxDialog, useSelectFungibleToken } from '@masknet/shared'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { useGlobalDialogController, useOpenShareTxDialog, useSelectFungibleToken } from '@masknet/shared'
+import { GlobalDialogRoutes, NetworkPluginID } from '@masknet/shared-base'
 import { FungibleToken, formatBalance } from '@masknet/web3-shared-base'
 import { ChainId, createNativeToken, GasOptionConfig, SchemaType } from '@masknet/web3-shared-evm'
 import { useGasConfig } from '@masknet/web3-hooks-evm'
@@ -20,8 +20,6 @@ import { ConfirmDialog } from './ConfirmDialog.js'
 import { useSortedTrades } from './hooks/useSortedTrades.js'
 import { useUpdateBalance } from './hooks/useUpdateBalance.js'
 import { TradeForm } from './TradeForm.js'
-import { WalletMessages } from '../../../Wallet/messages.js'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 
 export interface TraderProps extends withClasses<'root'> {
     defaultInputCoin?: FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>
@@ -45,9 +43,11 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
     const chainIdValid = useChainIdValid(NetworkPluginID.PLUGIN_EVM)
     const t = useI18N()
 
-    const { openDialog: openConnectWalletDialog } = useRemoteControlledDialog(
-        WalletMessages.events.selectProviderDialogUpdated,
-    )
+    const { openGlobalDialog } = useGlobalDialogController()
+
+    const openConnectWalletDialog = useCallback(() => {
+        openGlobalDialog(GlobalDialogRoutes.SelectProvider)
+    }, [])
 
     // #region trade state
     const {

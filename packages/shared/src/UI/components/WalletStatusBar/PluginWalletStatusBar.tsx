@@ -14,15 +14,14 @@ import {
     useAccount,
 } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { WalletMessages } from '@masknet/plugin-wallet'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { isDashboardPage, NetworkPluginID } from '@masknet/shared-base'
+import { GlobalDialogRoutes, isDashboardPage, NetworkPluginID } from '@masknet/shared-base'
 import { TransactionStatusType } from '@masknet/web3-shared-base'
 import { useSharedI18N } from '../../../locales/index.js'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { WalletDescription } from './WalletDescription.js'
 import { Action } from './Action.js'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
+import { useGlobalDialogController } from '../../../hooks/useGlobalDialogController.js'
 
 const isDashboard = isDashboardPage()
 
@@ -73,21 +72,17 @@ export const PluginWalletStatusBar = memo<WalletStatusBarProps<NetworkPluginID>>
         const { value: domain } = useReverseAddress(pluginID, account)
         const { Others } = useWeb3State()
 
-        const { setDialog: setSelectProviderDialog } = useRemoteControlledDialog(
-            WalletMessages.events.selectProviderDialogUpdated,
-        )
-
         const openSelectProviderDialog = useCallback(() => {
-            setSelectProviderDialog({
-                open: true,
-                network: expectedNetworkDescriptor,
+            openGlobalDialog<{ network?: Web3Helper.NetworkDescriptorAll }>(GlobalDialogRoutes.SelectProvider, {
+                state: { network: expectedNetworkDescriptor },
             })
         }, [expectedNetworkDescriptor])
 
-        const { openDialog: openWalletStatusDialog } = useRemoteControlledDialog(
-            WalletMessages.events.walletStatusDialogUpdated,
-        )
+        const { openGlobalDialog } = useGlobalDialogController()
 
+        const openWalletStatusDialog = useCallback(() => {
+            openGlobalDialog(GlobalDialogRoutes.WalletStatus)
+        }, [openGlobalDialog])
         const pendingTransactions = useRecentTransactions(pluginID, TransactionStatusType.NOT_DEPEND)
 
         const walletName = useMemo(() => {

@@ -31,6 +31,7 @@ import type {
 import type { ChainId as ChainIdEVM, Transaction as TransactionEVM } from '@masknet/web3-shared-evm'
 import type { Emitter } from '@servie/events'
 import type { UnboundedRegistry } from '@dimensiondev/holoflows-kit'
+import type { ComponentType } from 'react'
 
 export declare namespace Plugin {
     /**
@@ -468,6 +469,8 @@ export namespace Plugin.SNSAdaptor {
         ProfileCover?: ProfileCover[]
         /** This UI will be rendered as tab on the setting dialog */
         SettingTabs?: SettingTab[]
+        /** This UI will be rendered as a route on the global dialog */
+        GlobalDialogCotnents?: GlobalDialogContent[]
         /** This UI will be rendered components on the avatar realm */
         AvatarRealm?: AvatarRealm
         /** This UI will be shared across plugins */
@@ -796,6 +799,18 @@ export namespace Plugin.SNSAdaptor {
                 currentPersona?: ECKeyIdentifier
                 pluginID: PluginID
             }>
+        }
+    }
+
+    export interface GlobalDialogContent {
+        ID: PluginID
+        /**
+         * The name of global dialog title
+         */
+        label: I18NStringField
+        path: string
+        UI: {
+            DialogContent: ComponentType<{ closeDialog?: () => void }>
         }
     }
 

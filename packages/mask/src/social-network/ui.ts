@@ -108,6 +108,7 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
     ui.injection.profileCard?.(signal)
 
     ui.injection.PluginSettingsDialog?.(signal)
+    ui.injection.GlobalDialog?.(signal)
 
     // Update user avatar
     ui.collecting.currentVisitingIdentityProvider?.recognized.addListener((ref) => {

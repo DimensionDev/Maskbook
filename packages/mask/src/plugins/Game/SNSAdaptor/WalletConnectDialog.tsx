@@ -5,7 +5,7 @@ import DialogContent from '@mui/material/DialogContent'
 import { useCustomSnackbar, makeStyles } from '@masknet/theme'
 import { useAccount, useChainId, useCurrentWeb3NetworkPluginID } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { InjectedDialog, PluginWalletStatusBar } from '@masknet/shared'
+import { InjectedDialog, PluginWalletStatusBar, useGlobalDialogController } from '@masknet/shared'
 import { PluginGameMessages } from '../messages.js'
 import GameList from './GameList.js'
 import GameWindow from './GameWindow.js'
@@ -79,9 +79,7 @@ const WalletConnectDialog = () => {
         setGameShow(true)
     }
 
-    const { closeDialog: closeWalletDialog } = useRemoteControlledDialog(
-        WalletMessages.events.walletStatusDialogUpdated,
-    )
+    const { closeGlobalDialog: closeWalletDialog } = useGlobalDialogController()
 
     const [isShareShow, setShareShow] = useState(false)
     const handleGameShare = () => setShareShow(true)

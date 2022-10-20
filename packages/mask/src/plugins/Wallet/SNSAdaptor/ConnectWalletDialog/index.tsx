@@ -1,29 +1,14 @@
 import { useState } from 'react'
 import { useAsyncRetry } from 'react-use'
-import { DialogContent } from '@mui/material'
-import { InjectedDialog } from '@masknet/shared'
-import { makeStyles } from '@masknet/theme'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { useWeb3State } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { getSiteType, NetworkPluginID } from '@masknet/shared-base'
 import { WalletMessages } from '../../messages.js'
 import { ConnectionProgress } from './ConnectionProgress.js'
-import { useI18N } from '../../../../utils/index.js'
 import { pluginIDSettings } from '../../../../../shared/legacy-settings/settings.js'
 
-const useStyles = makeStyles()((theme) => ({
-    content: {
-        padding: theme.spacing(2),
-    },
-    dialog: {
-        minHeight: 'auto !important',
-    },
-}))
-
 export function ConnectWalletDialog() {
-    const { classes } = useStyles()
-    const { t } = useI18N()
     const [pluginID, setPluginID] = useState<NetworkPluginID>()
     const [providerType, setProviderType] = useState<Web3Helper.Definition[NetworkPluginID]['ProviderType']>()
     const [networkType, setNetworkType] = useState<Web3Helper.Definition[NetworkPluginID]['NetworkType']>()
@@ -80,21 +65,11 @@ export function ConnectWalletDialog() {
     if (!pluginID || !providerType || !networkType) return null
 
     return (
-        <InjectedDialog
-            title={t('plugin_wallet_dialog_title')}
-            open={open}
-            classes={{
-                paper: classes.dialog,
-            }}
-            onClose={() => setConnectWalletDialog({ open: false })}>
-            <DialogContent className={classes.content}>
-                <ConnectionProgress
-                    pluginID={pluginID}
-                    providerType={providerType}
-                    networkType={networkType}
-                    connection={connection}
-                />
-            </DialogContent>
-        </InjectedDialog>
+        <ConnectionProgress
+            pluginID={pluginID}
+            providerType={providerType}
+            networkType={networkType}
+            connection={connection}
+        />
     )
 }

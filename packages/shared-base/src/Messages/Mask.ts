@@ -161,6 +161,15 @@ export interface OpenPageConfirmEvent {
     position?: 'center' | 'top-right'
 }
 
+export interface GlobalDialogEvent {
+    open: boolean
+    to: string
+    options?: {
+        replace?: boolean
+        state?: any
+    }
+}
+
 export interface NFTAvatarEvent {
     userId: string
     avatarId: string

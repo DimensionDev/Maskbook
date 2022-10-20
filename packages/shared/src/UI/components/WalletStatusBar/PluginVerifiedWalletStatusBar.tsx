@@ -1,12 +1,10 @@
 import { memo, PropsWithChildren, useCallback, useMemo, useState } from 'react'
 import { useUpdateEffect } from 'react-use'
 import { first, omit } from 'lodash-unified'
-import { WalletMessages } from '@masknet/plugin-wallet'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { alpha, Box, Button, Divider, ListItemIcon, MenuItem, Typography } from '@mui/material'
 import { useSharedI18N } from '../../../locales/index.js'
 import { Action } from './Action.js'
-import { BindingProof, NetworkPluginID, isDashboardPage } from '@masknet/shared-base'
+import { BindingProof, NetworkPluginID, isDashboardPage, GlobalDialogRoutes } from '@masknet/shared-base'
 import {
     useAccount,
     useCurrentWeb3NetworkPluginID,
@@ -24,7 +22,7 @@ import { useWalletName } from './hooks/useWalletName.js'
 import { WalletDescription } from './WalletDescription.js'
 import { isSameAddress, resolveNextID_NetworkPluginID, TransactionStatusType } from '@masknet/web3-shared-base'
 import { WalletMenuItem } from './WalletMenuItem.js'
-import { useMenu } from '@masknet/shared'
+import { useGlobalDialogController, useMenu } from '@masknet/shared'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 
 const isDashboard = isDashboardPage()
@@ -69,13 +67,15 @@ export const PluginVerifiedWalletStatusBar = memo<PluginVerifiedWalletStatusBarP
 
         const { classes, cx } = useStyles()
 
-        const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
-            WalletMessages.events.selectProviderDialogUpdated,
-        )
+        const { openGlobalDialog } = useGlobalDialogController()
 
-        const { openDialog: openWalletStatusDialog } = useRemoteControlledDialog(
-            WalletMessages.events.walletStatusDialogUpdated,
-        )
+        const openSelectProviderDialog = useCallback(() => {
+            openGlobalDialog(GlobalDialogRoutes.SelectProvider)
+        }, [])
+
+        const openWalletStatusDialog = useCallback(() => {
+            openGlobalDialog(GlobalDialogRoutes.WalletStatus)
+        }, [])
 
         // exclude current account
         const wallets = verifiedWallets.filter((x) => !isSameAddress(x.identity, account))

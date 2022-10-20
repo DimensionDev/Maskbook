@@ -2,16 +2,16 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { DialogContent } from '@mui/material'
 import { openWindow, useRemoteControlledDialog, useValueRef } from '@masknet/shared-base-ui'
-import { InjectedDialog } from '@masknet/shared'
 import { getRegisteredWeb3Networks, getRegisteredWeb3Providers } from '@masknet/plugin-infra'
 import { useNetworkDescriptor, useWeb3State, useWeb3UI } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { useI18N } from '../../../../utils/i18n-next-ui.js'
 import { WalletMessages } from '../../messages.js'
 import { hasNativeAPI, nativeAPI } from '../../../../../shared/native-rpc/index.js'
 import { PluginProviderRender } from './PluginProviderRender.js'
 import { pluginIDSettings } from '../../../../../shared/legacy-settings/settings.js'
 import { getSiteType, isDashboardPage, NetworkPluginID } from '@masknet/shared-base'
+import { useLocation } from 'react-router-dom'
+import type { SelectProviderDialogEvent } from '@masknet/plugin-wallet'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -23,27 +23,30 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface SelectProviderDialogProps {}
+export interface SelectProviderDialogProps {
+    closeDialog?: () => void
+}
 
-export function SelectProviderDialog(props: SelectProviderDialogProps) {
-    const { t } = useI18N()
+export function SelectProviderDialog({ closeDialog }: SelectProviderDialogProps) {
     const { classes } = useStyles()
+    const location = useLocation()
+    const state = location.state as SelectProviderDialogEvent | undefined
     const [walletConnectedCallback, setWalletConnectedCallback] = useState<(() => void) | undefined>()
     const [supportedNetworkList, setSupportedNetworkList] = useState<
         Array<Web3Helper.NetworkDescriptorAll['type']> | undefined
     >()
     const network = useNetworkDescriptor()
     const [undeterminedNetworkID, setUndeterminedNetworkID] = useState(network?.ID)
-    // #region remote controlled dialog logic
-    const { open, closeDialog } = useRemoteControlledDialog(WalletMessages.events.selectProviderDialogUpdated, (ev) => {
-        if (!ev.open) return
-        setWalletConnectedCallback(() => ev.walletConnectedCallback)
-        setSupportedNetworkList(ev.supportedNetworkList)
-        if (ev.network) {
-            setUndeterminedNetworkID(ev.network.ID)
-            setUndeterminedPluginID(ev.network.networkSupporterPluginID)
+
+    useEffect(() => {
+        setWalletConnectedCallback(() => state?.walletConnectedCallback)
+        setSupportedNetworkList(state?.supportedNetworkList)
+        if (state?.network) {
+            setUndeterminedNetworkID(state?.network.ID)
+            setUndeterminedNetworkID(state?.network.networkSupporterPluginID)
         }
-    })
+    }, [state])
+    // #region remote controlled dialog logic
     const { setDialog: setConnectWalletDialog } = useRemoteControlledDialog(
         WalletMessages.events.connectWalletDialogUpdated,
     )
@@ -80,8 +83,6 @@ export function SelectProviderDialog(props: SelectProviderDialogProps) {
                 return
             }
 
-            closeDialog()
-
             // TODO:
             // refactor to use react-router-dom
             setConnectWalletDialog({
@@ -108,20 +109,18 @@ export function SelectProviderDialog(props: SelectProviderDialogProps) {
     if (hasNativeAPI) return null
 
     return (
-        <InjectedDialog title={t('plugin_wallet_select_provider_dialog_title')} open={open} onClose={closeDialog}>
-            <DialogContent className={classes.content}>
-                <PluginProviderRender
-                    networks={selectedNetworks}
-                    providers={selectedProviders}
-                    undeterminedPluginID={undeterminedPluginID}
-                    supportedNetworkList={supportedNetworkList}
-                    undeterminedNetworkID={undeterminedNetworkID}
-                    onNetworkIconClicked={onNetworkIconClicked}
-                    onProviderIconClicked={onProviderIconClicked}
-                    NetworkIconClickBait={NetworkIconClickBait}
-                    ProviderIconClickBait={ProviderIconClickBait}
-                />
-            </DialogContent>
-        </InjectedDialog>
+        <DialogContent className={classes.content}>
+            <PluginProviderRender
+                networks={selectedNetworks}
+                providers={selectedProviders}
+                undeterminedPluginID={undeterminedPluginID}
+                supportedNetworkList={supportedNetworkList}
+                undeterminedNetworkID={undeterminedNetworkID}
+                onNetworkIconClicked={onNetworkIconClicked}
+                onProviderIconClicked={onProviderIconClicked}
+                NetworkIconClickBait={NetworkIconClickBait}
+                ProviderIconClickBait={ProviderIconClickBait}
+            />
+        </DialogContent>
     )
 }

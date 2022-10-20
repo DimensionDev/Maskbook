@@ -4,9 +4,9 @@ import { Popper, ClickAwayListener, PopperProps, Fade } from '@mui/material'
 import type { DataProvider } from '@masknet/public-api'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { PluginTraderMessages } from '../../messages.js'
-import { WalletMessages } from '../../../Wallet/messages.js'
 import type { TagType } from '../../types/index.js'
 import { PluginTransakMessages } from '../../../Transak/messages.js'
+import { CrossIsolationMessages } from '@masknet/shared-base'
 
 export interface TrendingPopperProps {
     children?: (name: string, type: TagType, dataProviders: DataProvider[], reposition?: () => void) => React.ReactNode
@@ -27,8 +27,8 @@ export function TrendingPopper(props: TrendingPopperProps) {
 
     // #region select token and provider dialog could be opened by trending view
     const onFreezed = useCallback((ev: { open: boolean }) => setFreezed(ev.open), [])
-    useRemoteControlledDialog(WalletMessages.events.walletStatusDialogUpdated, onFreezed)
-    useRemoteControlledDialog(WalletMessages.events.selectProviderDialogUpdated, onFreezed)
+
+    useRemoteControlledDialog(CrossIsolationMessages.events.openGlobalDialog, onFreezed)
     useRemoteControlledDialog(PluginTransakMessages.buyTokenDialogUpdated, onFreezed)
     useRemoteControlledDialog(PluginTraderMessages.swapSettingsUpdated, onFreezed)
     // #endregion
