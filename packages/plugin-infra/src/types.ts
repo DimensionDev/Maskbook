@@ -639,7 +639,7 @@ export namespace Plugin.SNSAdaptor {
             Decorator: InjectUI<{
                 identity?: SocialIdentity
                 persona?: string
-                socialAddressList?: Array<SocialAddress<NetworkPluginID>>
+                socialAccounts?: SocialAccount[]
             }>
             /**
              * The injected avatar settings button component
@@ -647,7 +647,7 @@ export namespace Plugin.SNSAdaptor {
             Settings?: InjectUI<{
                 identity?: SocialIdentity
                 persona?: string
-                socialAddressList?: Array<SocialAddress<NetworkPluginID>>
+                socialAccounts?: SocialAccount[]
             }>
         }
         Utils?: {
@@ -656,7 +656,7 @@ export namespace Plugin.SNSAdaptor {
              */
             shouldDisplay?(
                 identity?: SocialIdentity,
-                addressNames?: Array<SocialAddress<NetworkPluginID>>,
+                socialAccounts?: SocialAccount[],
                 sourceType?: AvatarRealmSourceType,
             ): boolean
         }
@@ -721,22 +721,22 @@ export namespace Plugin.SNSAdaptor {
              */
             TabContent: InjectUI<{
                 identity?: SocialIdentity
-                socialAddress?: SocialAddress<NetworkPluginID>
+                socialAccount?: SocialAccount
             }>
         }
         Utils?: {
             /**
              * If it returns false, this tab will not be displayed.
              */
-            shouldDisplay?(identity?: SocialIdentity, addressName?: SocialAddress<NetworkPluginID>): boolean
+            shouldDisplay?(identity?: SocialIdentity, socialAccount?: SocialAccount): boolean
             /**
              * Filter social address.
              */
-            filter?: (x: SocialAddress<NetworkPluginID>) => boolean
+            filter?: (x: SocialAccount) => boolean
             /**
              * Sort social address in expected order.
              */
-            sorter?: (a: SocialAddress<NetworkPluginID>, z: SocialAddress<NetworkPluginID>) => number
+            sorter?: (a: SocialAccount, z: SocialAccount) => number
         }
     }
     export interface ProfileCover {
@@ -758,22 +758,22 @@ export namespace Plugin.SNSAdaptor {
              */
             Cover: InjectUI<{
                 identity?: SocialIdentity
-                socialAddressList?: Array<SocialAddress<NetworkPluginID>>
+                socialAccounts?: SocialAccount[]
             }>
         }
         Utils: {
             /**
              * If it returns false, this cover will not be displayed
              */
-            shouldDisplay?(identity?: SocialIdentity, addressNames?: Array<SocialAddress<NetworkPluginID>>): boolean
+            shouldDisplay?(identity?: SocialIdentity, socialAccount?: SocialAccount[]): boolean
             /**
              * Filter social address
              */
-            filterSocialAddress?(x: SocialAddress<NetworkPluginID>): boolean
+            filterSocialAddress?(x: SocialAccount): boolean
             /**
              * Sort social address in expected order
              */
-            sortSocialAddress?(a: SocialAddress<NetworkPluginID>, z: SocialAddress<NetworkPluginID>): number
+            sortSocialAddress?(a: SocialAccount, z: SocialAccount): number
         }
     }
 

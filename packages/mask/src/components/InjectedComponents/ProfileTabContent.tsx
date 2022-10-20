@@ -14,7 +14,7 @@ import {
     AddressItem,
     GrantPermissions,
     PluginCardFrameMini,
-    useSocialAddressListBySettings,
+    useSocialAccountsBySettings,
 } from '@masknet/shared'
 import { CrossIsolationMessages, EMPTY_LIST, NextIDPlatform, PluginID } from '@masknet/shared-base'
 import { makeStyles, MaskLightTheme, MaskTabList, ShadowRootMenu, useStylesExtends, useTabs } from '@masknet/theme'
@@ -30,7 +30,6 @@ import { ConnectPersonaBoundary } from '../shared/ConnectPersonaBoundary.js'
 import { WalletSettingEntry } from './ProfileTab/WalletSettingEntry'
 import { isFacebook } from '../../social-network-adaptor/facebook.com/base.js'
 import { useGrantPermissions, usePluginHostPermissionCheck } from '../DataSource/usePluginHostPermission.js'
-import { useSocialAccounts } from '@masknet/web3-hooks-base'
 
 function getTabContent(tabId?: string) {
     return createInjectHooksRenderer(useActivatedPluginsSNSAdaptor.visibility.useAnyMode, (x) => {
@@ -161,23 +160,22 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     const isOwnerIdentity = currentVisitingSocialIdentity?.isOwner
 
     const {
-        value: socialAddressList = EMPTY_LIST,
-        loading: loadingSocialAddressList,
-        error: loadSocialAddressListError,
-        retry: retrySocialAddress,
-    } = useSocialAddressListBySettings(currentVisitingSocialIdentity, undefined, sorter)
+        value: socialAccounts = EMPTY_LIST,
+        loading: loadingSocialAccounts,
+        error: loadSocialAccounts,
+        retry: retrySocialAccounts,
+    } = useSocialAccountsBySettings(currentVisitingSocialIdentity, undefined, sorter)
 
-    const socialAccounts = useSocialAccounts(socialAddressList)
-    const selectedSocialAddress = useMemo(() => {
-        return socialAddressList.find((x) => isSameAddress(x.address, selectedAddress))
-    }, [socialAddressList, selectedAddress])
+    const selectedSocialAccount = useMemo(() => {
+        return socialAccounts.find((x) => isSameAddress(x.address, selectedAddress))
+    }, [socialAccounts, selectedAddress])
 
     useEffect(() => {
         return MaskMessages.events.ownProofChanged.on(() => {
             retryIdentity()
-            retrySocialAddress()
+            retrySocialAccounts()
         })
-    }, [retrySocialAddress, retryIdentity])
+    }, [retrySocialAccounts, retryIdentity])
 
     useEffect(() => {
         return MaskMessages.events.ownPersonaChanged.on(() => {
@@ -186,8 +184,8 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     }, [retryIdentity])
 
     useEffect(() => {
-        setSelectedAddress(first(socialAddressList)?.address)
-    }, [socialAddressList])
+        setSelectedAddress(first(socialAccounts)?.address)
+    }, [socialAccounts])
 
     const activatedPlugins = useActivatedPluginsSNSAdaptor('any')
     const displayPlugins = useAvailablePlugins(activatedPlugins, (plugins) => {
@@ -195,7 +193,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
             .flatMap((x) => x.ProfileTabs?.map((y) => ({ ...y, pluginID: x.ID })) ?? EMPTY_LIST)
             .filter((x) => {
                 const shouldDisplay =
-                    x.Utils?.shouldDisplay?.(currentVisitingSocialIdentity, selectedSocialAddress) ?? true
+                    x.Utils?.shouldDisplay?.(currentVisitingSocialIdentity, selectedSocialAccount) ?? true
                 return x.pluginID !== PluginID.NextID && shouldDisplay
             })
             .sort((a, z) => {
@@ -236,7 +234,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
             // the owner persona and sns verified on next ID but not verify the wallet
             doesOwnerHaveNoAddress ||
             // the visiting persona not have social address list
-            (!isOwnerIdentity && !socialAddressList.length))
+            (!isOwnerIdentity && !socialAccounts.length))
 
     const componentTabId = showNextID ? `${PluginID.NextID}_tabContent` : currentTab
 
@@ -244,8 +242,8 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         const Component = getTabContent(componentTabId)
         if (!Component) return null
 
-        return <Component identity={currentVisitingSocialIdentity} socialAddress={selectedSocialAddress} />
-    }, [componentTabId, currentVisitingSocialIdentity?.publicKey, selectedSocialAddress])
+        return <Component identity={currentVisitingSocialIdentity} socialAccount={selectedSocialAccount} />
+    }, [componentTabId, currentVisitingSocialIdentity?.publicKey, selectedSocialAccount])
 
     const lackHostPermission = usePluginHostPermissionCheck(activatedPlugins.filter((x) => x.ProfileCardTabs?.length))
 
@@ -311,12 +309,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         )
     }
 
-    if (
-        !currentVisitingUserId ||
-        loadingSocialAddressList ||
-        loadingCurrentVisitingSocialIdentity ||
-        loadingPersonaStatus
-    )
+    if (!currentVisitingUserId || loadingSocialAccounts || loadingCurrentVisitingSocialIdentity || loadingPersonaStatus)
         return (
             <ThemeProvider theme={MaskLightTheme}>
                 <div className={classes.root}>
@@ -326,15 +319,13 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         )
 
     if (
-        (loadCurrentVisitingSocialIdentityError ||
-            (isOwnerIdentity && loadPersonaStatusError) ||
-            loadSocialAddressListError) &&
-        socialAddressList.length === 0
+        (loadCurrentVisitingSocialIdentityError || (isOwnerIdentity && loadPersonaStatusError) || loadSocialAccounts) &&
+        socialAccounts.length === 0
     ) {
         const handleClick = () => {
             if (loadPersonaStatusError) retryLoadPersonaStatus()
             if (loadCurrentVisitingSocialIdentityError) retryIdentity()
-            if (loadSocialAddressListError) retrySocialAddress()
+            if (loadSocialAccounts) retrySocialAccounts()
         }
         return (
             <ThemeProvider theme={MaskLightTheme}>
@@ -359,7 +350,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     }
 
     // Maybe should merge in NextIdPage
-    if (socialAddressList.length === 0 && !showNextID && !isTwitterPlatform) {
+    if (socialAccounts.length === 0 && !showNextID && !isTwitterPlatform) {
         return (
             <ThemeProvider theme={MaskLightTheme}>
                 <div className={classes.root}>
@@ -379,7 +370,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         )
     }
 
-    if (!socialAddressList.length && !showNextID) {
+    if (!socialAccounts.length && !showNextID) {
         return (
             <ThemeProvider theme={MaskLightTheme}>
                 <div className={classes.root}>
@@ -418,7 +409,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
                                             fontWeight: 700,
                                             color: (theme) => theme.palette.maskColor.dark,
                                         }}
-                                        socialAddress={selectedSocialAddress}
+                                        socialAddress={selectedSocialAccount}
                                     />
                                     <Icons.ArrowDrop className={classes.arrowDropIcon} />
                                 </Button>

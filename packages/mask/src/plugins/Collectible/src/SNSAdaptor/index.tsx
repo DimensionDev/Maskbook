@@ -19,7 +19,7 @@ const TabConfig: Plugin.SNSAdaptor.ProfileTab = {
     label: 'NFTs',
     priority: 1,
     UI: {
-        TabContent({ socialAddress, identity }) {
+        TabContent({ socialAccount: socialAddress, identity }) {
             if (!socialAddress) return null
             return (
                 <PluginIDContextProvider value={socialAddress.pluginID}>
@@ -74,7 +74,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             ...TabConfig,
             priority: 2,
             UI: {
-                TabContent({ socialAddress, identity }) {
+                TabContent({ socialAccount: socialAddress, identity }) {
                     if (!socialAddress) return null
                     return (
                         <Box pr={1.5}>

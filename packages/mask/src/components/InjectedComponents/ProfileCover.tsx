@@ -1,9 +1,7 @@
-import { useEffect, useMemo } from 'react'
+import { useMemo } from 'react'
 import { makeStyles } from '@masknet/theme'
-import { EMPTY_LIST, PluginID } from '@masknet/shared-base'
-import { useSocialAddressListAll } from '@masknet/web3-hooks-base'
+import { PluginID } from '@masknet/shared-base'
 import { useActivatedPluginsSNSAdaptor, createInjectHooksRenderer } from '@masknet/plugin-infra/content-script'
-import { MaskMessages } from '../../utils/index.js'
 import { useCurrentVisitingIdentity } from '../DataSource/useActivatedUI.js'
 
 export interface ProfileCoverProps extends withClasses<'root'> {}
@@ -18,19 +16,7 @@ const useStyles = makeStyles()(() => ({
 }))
 export function ProfileCover(props: ProfileCoverProps) {
     const { classes } = useStyles(undefined, { props: { classes: props.classes } })
-    const activatedPlugins = useActivatedPluginsSNSAdaptor('any')
-
     const currentVisitingIdentity = useCurrentVisitingIdentity()
-
-    const {
-        value: socialAddressList = EMPTY_LIST,
-        loading: loadingSocialAddressList,
-        retry: reloadSocialAddress,
-    } = useSocialAddressListAll(currentVisitingIdentity)
-
-    useEffect(() => {
-        return MaskMessages.events.ownProofChanged.on(reloadSocialAddress)
-    }, [reloadSocialAddress])
 
     // TODO: Multi-plugin rendering support
     const component = useMemo(() => {

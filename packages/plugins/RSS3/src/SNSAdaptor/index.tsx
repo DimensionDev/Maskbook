@@ -16,7 +16,7 @@ const DonationsTabConfig: Plugin.SNSAdaptor.ProfileTab = {
     label: 'Donations',
     priority: 1,
     UI: {
-        TabContent: ({ socialAddress, identity }) => {
+        TabContent: ({ socialAccount: socialAddress, identity }) => {
             return (
                 <PluginIDContextProvider value={NetworkPluginID.PLUGIN_EVM}>
                     <DonationPage
@@ -41,7 +41,7 @@ const createFootprintsTabConfig = (
         label: 'Footprints',
         priority: 2,
         UI: {
-            TabContent: ({ socialAddress, identity }) => {
+            TabContent: ({ socialAccount: socialAddress, identity }) => {
                 return (
                     <PluginIDContextProvider value={NetworkPluginID.PLUGIN_EVM}>
                         <FootprintsPage
@@ -72,7 +72,7 @@ const createActivitiesTabConfig = (props: FeedPageProps): Plugin.SNSAdaptor.Prof
         label: 'Activities',
         priority: 3,
         UI: {
-            TabContent: ({ socialAddress }) => {
+            TabContent: ({ socialAccount: socialAddress }) => {
                 return (
                     <PluginIDContextProvider value={NetworkPluginID.PLUGIN_EVM}>
                         <FeedsPage address={socialAddress?.address} {...props} />

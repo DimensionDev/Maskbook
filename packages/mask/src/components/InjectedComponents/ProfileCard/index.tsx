@@ -9,7 +9,7 @@ import {
     usePluginI18NField,
 } from '@masknet/plugin-infra/content-script'
 import { useAvailablePlugins } from '@masknet/plugin-infra'
-import { useSocialAddressListBySettings } from '@masknet/shared'
+import { useSocialAccountsBySettings } from '@masknet/shared'
 import { EMPTY_LIST, PluginID, NetworkPluginID } from '@masknet/shared-base'
 import { LoadingBase, makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import { isSameAddress, SocialIdentity } from '@masknet/web3-shared-base'
@@ -100,7 +100,7 @@ export const ProfileCard: FC<Props> = ({ identity, ...rest }) => {
         value: socialAddressList = EMPTY_LIST,
         loading: loadingSocialAddressList,
         retry: retrySocialAddress,
-    } = useSocialAddressListBySettings(identity, undefined, sorter)
+    } = useSocialAccountsBySettings(identity, undefined, sorter)
 
     const [selectedAddress, setSelectedAddress] = useState<string>()
     const firstAddress = first(socialAddressList)?.address
@@ -138,7 +138,7 @@ export const ProfileCard: FC<Props> = ({ identity, ...rest }) => {
     const component = useMemo(() => {
         const Component = getTabContent(currentTab)
 
-        return <Component identity={identity} socialAddress={selectedSocialAddress} />
+        return <Component identity={identity} socialAccount={selectedSocialAddress} />
     }, [currentTab, identity?.publicKey, selectedSocialAddress])
 
     useLocationChange(() => {

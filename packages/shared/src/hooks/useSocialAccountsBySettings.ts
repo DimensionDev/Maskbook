@@ -1,19 +1,19 @@
 import { useEffect, useMemo } from 'react'
 import { PluginID, NetworkPluginID, CrossIsolationMessages, EMPTY_LIST } from '@masknet/shared-base'
-import { useHiddenAddressSetting, useSocialAddressListAll } from '@masknet/web3-hooks-base'
+import { useHiddenAddressSetting, useSocialAccountsAll } from '@masknet/web3-hooks-base'
 import { currySameAddress, SocialAddress, SocialAddressType, SocialIdentity } from '@masknet/web3-shared-base'
 
-export const useSocialAddressListBySettings = (
+export const useSocialAccountsBySettings = (
     identity?: SocialIdentity,
     typeWhitelist?: SocialAddressType[],
-    sorter?: (a: SocialAddress<NetworkPluginID>, z: SocialAddress<NetworkPluginID>) => number,
+    sorter?: (a: SocialAccount, z: SocialAccount) => number,
 ) => {
     const {
-        value: socialAddressList = EMPTY_LIST,
-        loading: loadingSocialAddressList,
-        error: loadSocialAddressListError,
+        value: socialAccounts = EMPTY_LIST,
+        loading: loadingSocialAccounts,
+        error: loadSocialAccountListError,
         retry: retrySocialAddress,
-    } = useSocialAddressListAll(identity, typeWhitelist, sorter)
+    } = useSocialAccountsAll(identity, typeWhitelist, sorter)
 
     const {
         value: hiddenAddress,
@@ -23,14 +23,14 @@ export const useSocialAddressListBySettings = (
     } = useHiddenAddressSetting(PluginID.Web3Profile, identity?.publicKey)
 
     const addresses = useMemo(() => {
-        if (loadingSocialAddressList || loadingHiddenAddress) return EMPTY_LIST
-        if (!hiddenAddress || !hiddenAddress.length) return socialAddressList
+        if (loadingSocialAccounts || loadingHiddenAddress) return EMPTY_LIST
+        if (!hiddenAddress || !hiddenAddress.length) return socialAccounts
 
-        return socialAddressList.filter((x) => {
-            if (x.type !== SocialAddressType.NEXT_ID) return true
+        return socialAccounts.filter((x) => {
+            if (!x.supportedAddressTypes?.includes(SocialAddressType.NEXT_ID)) return true
             return !hiddenAddress.some(currySameAddress(x.address))
         })
-    }, [socialAddressList, hiddenAddress, loadingSocialAddressList, loadingHiddenAddress])
+    }, [socialAccounts, hiddenAddress, loadingSocialAccounts, loadingHiddenAddress])
 
     useEffect(() => {
         return CrossIsolationMessages.events.walletSettingsDialogEvent.on(({ pluginID }) => {
@@ -40,8 +40,8 @@ export const useSocialAddressListBySettings = (
 
     return {
         value: addresses,
-        loading: loadingSocialAddressList || loadingHiddenAddress,
-        error: loadSocialAddressListError || loadingHiddenAddressError,
+        loading: loadingSocialAccounts || loadingHiddenAddress,
+        error: loadSocialAccountListError || loadingHiddenAddressError,
         retry: retrySocialAddress || retryLoadHiddenAddress,
     }
 }
