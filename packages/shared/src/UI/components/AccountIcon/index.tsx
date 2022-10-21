@@ -74,12 +74,16 @@ function AccountTooltips({ platform, type, children }: AccountTooltipsProps) {
     )
 }
 
-export interface AccountIconProps {
+export interface AccountIconProps extends withClasses<'icon'> {
     socialAccount: SocialAccount
 }
 
-export function AccountIcon({ socialAccount }: AccountIconProps) {
-    const { classes, cx, theme } = useStyles()
+export function AccountIcon({ socialAccount, classes: externalClasses }: AccountIconProps) {
+    const { classes, cx, theme } = useStyles(undefined, { props: { classes: externalClasses } })
+
+    const { supportedAddressTypes } = socialAccount
+    if (!supportedAddressTypes?.length) return null
+
     const iconStyle =
         theme.palette.mode === 'light'
             ? {
@@ -94,11 +98,11 @@ export function AccountIcon({ socialAccount }: AccountIconProps) {
         SocialAddressType.RSS3,
         SocialAddressType.SOL,
         SocialAddressType.TwitterBlue,
-    ].find((x) => socialAccount.supportedAddressTypes?.includes(x))
+    ].find((x) => supportedAddressTypes.includes(x))
 
     return (
         <>
-            {socialAccount.supportedAddressTypes?.includes(SocialAddressType.NEXT_ID) ? (
+            {supportedAddressTypes.includes(SocialAddressType.NEXT_ID) ? (
                 <AccountTooltips platform={AddressPlatform.NextId}>
                     <Linking
                         href={resolveSocialAddressLink(SocialAddressType.NEXT_ID)}
@@ -120,40 +124,43 @@ export function AccountIcon({ socialAccount }: AccountIconProps) {
                 </AccountTooltips>
             ) : null}
 
-            {socialAccount.supportedAddressTypes?.includes(SocialAddressType.CyberConnect) ? (
+            {supportedAddressTypes.includes(SocialAddressType.CyberConnect) ? (
                 <AccountTooltips platform={AddressPlatform.Twitter} type={SocialAddressType.CyberConnect}>
                     <Linking
                         href={resolveSocialAddressLink(SocialAddressType.CyberConnect)}
                         LinkProps={{ className: classes.link }}>
                         <Icons.CyberConnect
                             className={cx(classes.actionIcon, classes.icon)}
-                            style={{ ...iconStyle, width: 18, height: 18 }}
+                            size={18}
+                            style={iconStyle}
                         />
                     </Linking>
                 </AccountTooltips>
             ) : null}
 
-            {socialAccount.supportedAddressTypes?.includes(SocialAddressType.Leaderboard) ? (
+            {supportedAddressTypes.includes(SocialAddressType.Leaderboard) ? (
                 <AccountTooltips platform={AddressPlatform.Twitter} type={SocialAddressType.Leaderboard}>
                     <Linking
                         href={resolveSocialAddressLink(SocialAddressType.Leaderboard)}
                         LinkProps={{ className: classes.link }}>
                         <Icons.Leaderboard
                             className={cx(classes.actionIcon, classes.icon)}
-                            style={{ ...iconStyle, width: 18, height: 18 }}
+                            size={18}
+                            style={iconStyle}
                         />
                     </Linking>
                 </AccountTooltips>
             ) : null}
 
-            {socialAccount.supportedAddressTypes?.includes(SocialAddressType.Sybil) ? (
+            {supportedAddressTypes.includes(SocialAddressType.Sybil) ? (
                 <AccountTooltips platform={AddressPlatform.Twitter} type={SocialAddressType.Sybil}>
                     <Linking
                         href={resolveSocialAddressLink(SocialAddressType.Sybil)}
                         LinkProps={{ className: classes.link }}>
                         <Icons.Sybil
                             className={cx(classes.actionIcon, classes.icon)}
-                            style={{ ...iconStyle, width: 18, height: 18 }}
+                            size={18}
+                            style={iconStyle}
                         />
                     </Linking>
                 </AccountTooltips>
