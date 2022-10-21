@@ -33,7 +33,7 @@ const useStyles = makeStyles()({
 
 export function ConsoleContent(props: ConsoleContentProps) {
     const { classes } = useStyles()
-    const currentPluginID = useCurrentWeb3NetworkPluginID()
+    const { pluginID: currentPluginId } = usePluginIDContext()
     const { Others } = useWeb3State()
     const account = useAccount()
     const chainId = useChainId()

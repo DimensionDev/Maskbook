@@ -52,7 +52,7 @@ import {
     useWeb3State,
     useWeb3Connection,
     useGasOptions,
-    useCurrentWeb3NetworkPluginID,
+    usePluginIDContext,
 } from '@masknet/web3-hooks-base'
 import { AccountItem } from './AccountItem.js'
 import { TransferAddressError } from '../type.js'
@@ -189,10 +189,9 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
     const { t } = useI18N()
     const { classes } = useStyles()
 
-    const currentPluginId = useCurrentWeb3NetworkPluginID()
+    const { pluginID } = usePluginIDContext()
     const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
-    const network = useNetworkType(NetworkPluginID.PLUGIN_EVM)
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
     const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const { value: nativeToken } = useFungibleToken(NetworkPluginID.PLUGIN_EVM)
@@ -323,7 +322,7 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
     // #region check address or registered address type
     useAsync(async () => {
         // Only ethereum currently supports ens
-        if (address.includes('.eth') && currentPluginId !== NetworkPluginID.PLUGIN_EVM) {
+        if (address.includes('.eth') && pluginID !== NetworkPluginID.PLUGIN_EVM) {
             setAddressTip({
                 type: TransferAddressError.NETWORK_NOT_SUPPORT,
                 message: t('wallet_transfer_error_no_support_ens'),
@@ -365,7 +364,7 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
         }
     }, [
         address,
-        currentPluginId,
+        pluginID,
         EthereumAddress.isValid,
         registeredAddress,
         methods.clearErrors,

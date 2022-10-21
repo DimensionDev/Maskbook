@@ -39,7 +39,7 @@ export function useSettingsContext(initial?: {
     disableSlippageTolerance?: boolean
 }) {
     const t = useSharedI18N()
-    const pluginID = useCurrentWeb3NetworkPluginID(initial?.pluginID)
+    const { pluginID } = usePluginIDContext(initial?.pluginID)
     const chainId = useChainId(pluginID, initial?.chainId)
     const { Others } = useWeb3State<'all'>(pluginID)
     const [transactionOptions, setTransactionOptions] = useState<Partial<Web3Helper.TransactionAll> | null>(

@@ -62,7 +62,7 @@ export function ListingByHighestBidCard(props: ListingByHighestBidCardProps) {
     const { classes } = useStyles()
 
     const { Others } = useWeb3State()
-    const pluginID = useCurrentWeb3NetworkPluginID()
+    const { pluginID } = usePluginIDContext()
     const { amount, token, balance, setAmount, setAddress } = useFungibleTokenWatched(
         pluginID,
         first(paymentTokens)?.address,

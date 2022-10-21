@@ -1,6 +1,6 @@
 import { FC, HTMLProps, useMemo } from 'react'
 import BigNumber from 'bignumber.js'
-import { useChainId, useCurrentWeb3NetworkPluginID, useFungibleTokenPrice } from '@masknet/web3-hooks-base'
+import { useChainId, useFungibleTokenPrice } from '@masknet/web3-hooks-base'
 import { TokenIcon } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { NetworkPluginID } from '@masknet/shared-base'
@@ -44,7 +44,7 @@ interface Props extends HTMLProps<HTMLDivElement> {}
 export const TokenValue: FC<Props> = ({ className, ...rest }) => {
     const { classes, cx } = useStyles()
     const { token, amount } = useTip()
-    const pluginID = useCurrentWeb3NetworkPluginID()
+    const { pluginID } = usePluginIDContext()
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const { value: tokenPrice = 0 } = useFungibleTokenPrice(NetworkPluginID.PLUGIN_EVM, token?.address, { chainId })
 

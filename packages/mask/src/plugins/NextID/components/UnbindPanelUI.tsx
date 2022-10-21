@@ -8,7 +8,7 @@ import { useI18N } from '../locales/index.js'
 import { getMaskColor, makeStyles, MaskColorVar, LoadingBase } from '@masknet/theme'
 import { InjectedDialog } from '@masknet/shared'
 import { formatPersonaFingerprint, NetworkPluginID, PersonaInformation } from '@masknet/shared-base'
-import { useCurrentWeb3NetworkPluginID } from '@masknet/web3-hooks-base'
+import { usePluginIDContext } from '@masknet/web3-hooks-base'
 import AbstractTab, { AbstractTabProps } from '../../../components/shared/AbstractTab.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -94,7 +94,7 @@ export const UnbindPanelUI = memo<BindPanelUIProps>(
     ({ onPersonaSign, onWalletSign, currentPersona, signature, isBound, title, onClose, open, isCurrentAccount }) => {
         const t = useI18N()
         const { classes } = useStyles()
-        const pluginID = useCurrentWeb3NetworkPluginID()
+        const { pluginID } = usePluginIDContext()
         const isSupported = SUPPORTED_PLUGINS.includes(pluginID)
 
         const isWalletSigned = !!signature.wallet.value

@@ -3,7 +3,7 @@ import classNames from 'classnames'
 import { Box, Button, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { SnapshotContext } from '../context.js'
-import { useAccount, useChainId, useWeb3Connection, useCurrentWeb3NetworkPluginID } from '@masknet/web3-hooks-base'
+import { useAccount, useChainId, useWeb3Connection } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useSnackbarCallback } from '@masknet/shared'
 import { useI18N } from '../../../utils/index.js'
@@ -73,7 +73,7 @@ export function VotingCard() {
             </Typography>
         </Box>
     )
-    const networkPluginId = useCurrentWeb3NetworkPluginID()
+    const { pluginID } = usePluginIDContext()
     const retry = useRetry()
     const onVoteConfirm = useSnackbarCallback(
         async () => {
@@ -146,7 +146,7 @@ export function VotingCard() {
         }
         return text
     }, [choices_])
-    return account && networkPluginId === NetworkPluginID.PLUGIN_EVM ? (
+    return account && pluginID === NetworkPluginID.PLUGIN_EVM ? (
         <SnapshotCard title={t('plugin_snapshot_vote_title')}>
             <Box className={classes.buttons}>
                 {choices.map((choiceText, i) => (

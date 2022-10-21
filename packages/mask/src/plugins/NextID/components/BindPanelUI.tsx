@@ -7,7 +7,7 @@ import DoneIcon from '@mui/icons-material/Done'
 import { useI18N } from '../locales/index.js'
 import { getMaskColor, makeStyles, MaskColorVar, LoadingBase } from '@masknet/theme'
 import { InjectedDialog } from '@masknet/shared'
-import { useCurrentWeb3NetworkPluginID } from '@masknet/web3-hooks-base'
+import { usePluginIDContext } from '@masknet/web3-hooks-base'
 import { formatPersonaFingerprint, NetworkPluginID, PersonaInformation } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
@@ -91,7 +91,7 @@ export const BindPanelUI = memo<BindPanelUIProps>(
     ({ onPersonaSign, onWalletSign, currentPersona, signature, isBound, title, onClose, open, isCurrentAccount }) => {
         const t = useI18N()
         const { classes } = useStyles()
-        const pluginID = useCurrentWeb3NetworkPluginID()
+        const { pluginID } = usePluginIDContext()
         const isSupported = SUPPORTED_PLUGINS.includes(pluginID)
 
         const isWalletSigned = !!signature.wallet.value

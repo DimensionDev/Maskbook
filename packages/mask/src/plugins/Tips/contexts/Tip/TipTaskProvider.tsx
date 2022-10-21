@@ -2,9 +2,9 @@ import { Dispatch, FC, memo, SetStateAction, useCallback, useContext, useEffect,
 import {
     useAccount,
     useChainId,
-    useCurrentWeb3NetworkPluginID,
     useFungibleToken,
     useNonFungibleTokenContract,
+    usePluginIDContext,
 } from '@masknet/web3-hooks-base'
 import { isSameAddress, SocialAccount } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
@@ -36,7 +36,7 @@ function useRecipients(pluginID: NetworkPluginID, tipsAccounts: SocialAccount[])
 
 function useDirtyDetection(deps: any[]): [boolean, Dispatch<SetStateAction<boolean>>] {
     const [isDirty, setIsDirty] = useState(false)
-    const pluginID = useCurrentWeb3NetworkPluginID()
+    const { pluginID } = usePluginIDContext()
     const account = useAccount(pluginID)
 
     useEffect(() => {
@@ -48,8 +48,7 @@ function useDirtyDetection(deps: any[]): [boolean, Dispatch<SetStateAction<boole
 
 export const TipTaskProvider: FC<React.PropsWithChildren<Props>> = memo(({ children, task }) => {
     const targetChainId = useChainId()
-    const pluginID = useCurrentWeb3NetworkPluginID()
-    const { setPluginID } = TargetRuntimeContext.useContainer()
+    const { pluginID, setPluginID } = usePluginIDContext()
 
     const [_recipientAddress, setRecipient] = useState<string>(task.recipient ?? '')
     const recipients = useRecipients(pluginID, task.accounts)

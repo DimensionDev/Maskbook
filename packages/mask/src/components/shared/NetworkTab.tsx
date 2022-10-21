@@ -1,6 +1,5 @@
-import React, { useContext } from 'react'
 import { useUpdateEffect } from 'react-use'
-import { PluginWeb3Context, useNetworkDescriptors } from '@masknet/web3-hooks-base'
+import { useNetworkDescriptors, usePluginIDContext, useWeb3Context } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { MaskTabList, useTabs } from '@masknet/theme'
 import { WalletIcon } from '@masknet/shared'
@@ -15,7 +14,8 @@ interface NetworkTabProps<T extends NetworkPluginID>
 
 export function NetworkTab<T extends NetworkPluginID = NetworkPluginID.PLUGIN_EVM>(props: NetworkTabProps<T>) {
     const { chains } = props
-    const { chainId, setChainId, pluginID } = useContext(PluginWeb3Context)
+    const { pluginID } = usePluginIDContext()
+    const { chainId, setChainId } = useWeb3Context()
 
     const networks = useNetworkDescriptors(pluginID)
     const usedNetworks = networks.filter((x) => chains.find((c) => c === x.chainId))

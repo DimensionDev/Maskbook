@@ -80,7 +80,7 @@ export const PluginVerifiedWalletStatusBar = memo<PluginVerifiedWalletStatusBarP
         // exclude current account
         const wallets = verifiedWallets.filter((x) => !isSameAddress(x.identity, account))
 
-        const currentPluginId = useCurrentWeb3NetworkPluginID()
+        const { pluginID: currentPluginId } = usePluginIDContext()
 
         const selectedWallet = wallets.find((x) => isSameAddress(x.identity, expectedAddress))
 

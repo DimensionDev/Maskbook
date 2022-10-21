@@ -84,7 +84,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
 
-    const pluginID = useCurrentWeb3NetworkPluginID()
+    const { pluginID } = usePluginIDContext()
     const account = useAccount()
     const chainId = useChainId()
     const opensea = useOpenSea(pluginID, chainId)

@@ -29,7 +29,7 @@ export const WalletMenuItem = memo<WalletMenuItemProps>(
     ({ address, selected, onChangeWallet, platform, onSelect, verified }) => {
         const t = useSharedI18N()
 
-        const pluginID = useCurrentWeb3NetworkPluginID(platform ? resolveNextID_NetworkPluginID(platform) : undefined)
+        const { pluginID } = usePluginIDContext(platform ? resolveNextID_NetworkPluginID(platform) : undefined)
         const currentChainId = useChainId()
         const defaultChainId = useDefaultChainId(pluginID)
         const chainId = platform ? defaultChainId : currentChainId

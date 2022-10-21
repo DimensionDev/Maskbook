@@ -34,7 +34,7 @@ import { PluginTraderMessages } from '../../messages.js'
 import Services from '../../../../extension/service.js'
 import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
 import { useIsMinimalModeDashBoard } from '@masknet/plugin-infra/dashboard'
-import { PluginWeb3ActualContextProvider, useChainId } from '@masknet/web3-hooks-base'
+import { Web3ActualContextProvider, useChainId } from '@masknet/web3-hooks-base'
 
 const useStyles = makeStyles<{
     isDashboard: boolean
@@ -548,7 +548,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                     </Box>
                 ) : null}
                 <Box className={classes.stateBar}>
-                    <PluginWeb3ActualContextProvider>
+                    <Web3ActualContextProvider>
                         <PluginWalletStatusBar onClick={isPopup ? openSelectWalletPopup : undefined}>
                             <WalletConnectedBoundary offChain>
                                 <EthereumERC20TokenApprovedBoundary
@@ -608,7 +608,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                                 </EthereumERC20TokenApprovedBoundary>
                             </WalletConnectedBoundary>
                         </PluginWalletStatusBar>
-                    </PluginWeb3ActualContextProvider>
+                    </Web3ActualContextProvider>
                 </Box>
             </>
         )

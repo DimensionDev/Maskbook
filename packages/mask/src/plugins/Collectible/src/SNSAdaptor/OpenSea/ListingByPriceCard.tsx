@@ -58,7 +58,7 @@ export interface ListingByPriceCardProps {
 
 export function ListingByPriceCard(props: ListingByPriceCardProps) {
     const { asset, paymentTokens, open, onClose } = props
-    const pluginID = useCurrentWeb3NetworkPluginID()
+    const { pluginID } = usePluginIDContext()
     const { amount, token, balance, setAmount, setAddress } = useFungibleTokenWatched(
         pluginID,
         first(paymentTokens)?.address,

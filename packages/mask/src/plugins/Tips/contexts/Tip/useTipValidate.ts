@@ -25,7 +25,7 @@ export function useTipValidate({
 }: TipValidateOptions): ValidationTuple {
     const account = useAccount()
     const chainId = useChainId()
-    const pluginID = useCurrentWeb3NetworkPluginID()
+    const { pluginID } = usePluginIDContext()
     const { value: balance = '0' } = useFungibleTokenBalance(pluginID, token?.address, { chainId, account })
     const t = useI18N()
 

@@ -3,7 +3,7 @@ import { CrossIsolationMessages, NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import {
     PluginIDContextProvider,
-    PluginWeb3ContextProvider,
+    Web3ContextProvider,
     useChainIdValid,
     useCurrentWeb3NetworkPluginID,
 } from '@masknet/web3-hooks-base'
@@ -13,7 +13,7 @@ import { Context } from './Context/index.js'
 export interface DialogInspectorProps {}
 
 export function DialogInspector(props: DialogInspectorProps) {
-    const parentPluginID = useCurrentWeb3NetworkPluginID()
+    const { pluginID: parentPluginID } = usePluginIDContext()
     const [open, setOpen] = useState(false)
     const [pluginID, setPluginID] = useState<NetworkPluginID>()
     const [chainId, setChainId] = useState<Web3Helper.ChainIdAll>()
@@ -58,7 +58,7 @@ export function DialogInspector(props: DialogInspectorProps) {
 
     return (
         <PluginIDContextProvider value={pluginID}>
-            <PluginWeb3ContextProvider
+            <Web3ContextProvider
                 value={{
                     chainId,
                     pluginID,
@@ -75,7 +75,7 @@ export function DialogInspector(props: DialogInspectorProps) {
                     }}>
                     <CardDialog open={open} setOpen={setOpen} />
                 </Context.Provider>
-            </PluginWeb3ContextProvider>
+            </Web3ContextProvider>
         </PluginIDContextProvider>
     )
 }

@@ -33,7 +33,7 @@ export function WalletConnectedBoundary(props: WalletConnectedBoundaryProps) {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
 
-    const pluginID = useCurrentWeb3NetworkPluginID()
+    const { pluginID } = usePluginIDContext()
     const account = useAccount()
     const chainIdValid = useChainId()
     const nativeTokenBalance = useNativeTokenBalance()

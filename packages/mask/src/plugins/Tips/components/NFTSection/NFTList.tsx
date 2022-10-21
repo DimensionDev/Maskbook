@@ -1,4 +1,4 @@
-import { useChainId, useCurrentWeb3NetworkPluginID, useWeb3State } from '@masknet/web3-hooks-base'
+import { useChainId, useWeb3State } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { ElementAnchor, NFTCardStyledAssetPlayer, RetryHint } from '@masknet/shared'
 import { LoadingBase, makeStyles } from '@masknet/theme'
@@ -126,7 +126,7 @@ export const NFTList: FC<Props> = ({
     loadError,
 }) => {
     const { classes } = useStyles()
-    const pluginID = useCurrentWeb3NetworkPluginID()
+    const { pluginID } = usePluginIDContext()
 
     const isRadio = limit === 1
     const reachedLimit = selectedPairs.length >= limit

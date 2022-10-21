@@ -62,7 +62,7 @@ export const PluginWalletStatusBar = memo<WalletStatusBarProps<NetworkPluginID>>
         const t = useSharedI18N()
         const { classes, cx } = useStyles()
 
-        const pluginID = useCurrentWeb3NetworkPluginID()
+        const { pluginID } = usePluginIDContext()
         const account = useAccount(pluginID)
         const wallet = useWallet(pluginID)
         const chainId = useChainId(pluginID)
