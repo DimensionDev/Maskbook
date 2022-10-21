@@ -1,6 +1,6 @@
-import type { NetworkPluginID } from "@masknet/shared-base"
-import type { Web3Helper } from "@masknet/web3-helpers"
-import { useChainContext } from "./useContext.js"
+import type { NetworkPluginID } from '@masknet/shared-base'
+import type { Web3Helper } from '@masknet/web3-helpers'
+import { useChainContext } from './useContext.js'
 
 export function useCurrentWeb3NetworkAccount<T extends NetworkPluginID>(pluginID?: T) {
     const web3 = useChainContext()
