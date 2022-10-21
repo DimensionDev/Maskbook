@@ -11,16 +11,21 @@ interface NetworkContext {
     setPluginID: (pluginID: NetworkPluginID) => void
 }
 
-interface ChainContext {
+interface ChainContext<T extends NetworkPluginID = NetworkPluginID> {
     account?: string
-    chainId?: Web3Helper.ChainIdAll
-    networkType?: Web3Helper.NetworkTypeAll
-    providerType?: Web3Helper.ProviderTypeAll
+    chainId?: Web3Helper.Definition[T]['ChainId']
+    networkType?: Web3Helper.Definition[T]['NetworkType']
+    providerType?: Web3Helper.Definition[T]['ProviderType']
     setAccount?: (account: string) => void
-    setChainId?: (chainId: Web3Helper.ChainIdAll) => void
-    setNetworkType?: (provider: Web3Helper.NetworkTypeAll) => void
-    setProviderType?: (provider: Web3Helper.ProviderTypeAll) => void
+    setChainId?: (chainId: Web3Helper.Definition[T]['ChainId']) => void
+    setNetworkType?: (provider: Web3Helper.Definition[T]['NetworkType']) => void
+    setProviderType?: (provider: Web3Helper.Definition[T]['ProviderType']) => void
 }
+
+type ChainContextDefaults<T extends NetworkPluginID = NetworkPluginID> = Omit<
+    ChainContext<T>,
+    'setChainId' | 'setAccount' | 'setNetworkType' | 'setProviderType'
+>
 
 const NetworkContext = createContext<NetworkContext>(null!)
 
@@ -39,10 +44,7 @@ export function NetworkContextProvider({ value, children }: React.ProviderProps<
     )
 }
 
-export function ChainContextProvider({
-    value,
-    children,
-}: React.ProviderProps<Omit<ChainContext, 'setChainId' | 'setAccount' | 'setNetworkType' | 'setProviderType'>>) {
+export function ChainContextProvider({ value, children }: React.ProviderProps<ChainContextDefaults>) {
     const [chainId, setChainId] = useState(value.chainId)
     const [account, setAccount] = useState(value.account)
     const [networkType, setNetworkType] = useState(value.networkType)
@@ -84,23 +86,18 @@ export function Web3ContextProvider({ value, children }: React.ProviderProps<Net
     )
 }
 
-export function useNetworkContext<T extends NetworkPluginID = NetworkPluginID>(expectedPluginID?: T) {
+export function useNetworkContext<T extends NetworkPluginID = NetworkPluginID>(defaults?: T) {
     const context = useContext(NetworkContext)
     return {
         ...context,
-        pluginID: (expectedPluginID ?? context.pluginID) as T,
+        pluginID: (defaults ?? context.pluginID) as T,
     }
 }
 
-export function useChainContext(expectedWeb3?: {
-    account?: string
-    chainId?: Web3Helper.ChainIdAll
-    networkType?: Web3Helper.NetworkTypeAll
-    providerType?: Web3Helper.ProviderTypeAll
-}) {
+export function useChainContext<T extends NetworkPluginID = NetworkPluginID>(defaults?: ChainContextDefaults) {
     const context = useContext(ChainContext)
     return {
         ...context,
-        ...expectedWeb3,
-    }
+        ...defaults,
+    } as ChainContext<T>
 }
