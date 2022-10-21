@@ -2,7 +2,8 @@ import { Icons } from '@masknet/icons'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { resolveSocialAddressLink, SocialAccount, SocialAddressType } from '@masknet/web3-shared-base'
 import { TooltipProps, Typography } from '@mui/material'
-import { Linking, SharedTrans } from '../../../index.js'
+import { Linking } from '../../../index.js'
+import { useSharedI18N } from '../../../locales'
 
 const useStyles = makeStyles<void, 'icon' | 'tooltip'>()((theme) => {
     return {
@@ -19,7 +20,7 @@ const useStyles = makeStyles<void, 'icon' | 'tooltip'>()((theme) => {
             marginLeft: theme.spacing(0.5),
             color: theme.palette.maskColor.main,
         },
-        twitterIcon: {
+        roundedIcon: {
             borderRadius: '50%',
         },
         tooltip: {
@@ -41,31 +42,17 @@ interface AccountTooltipsProps extends Omit<TooltipProps, 'title'> {
 
 function AccountTooltips({ platform, type, children }: AccountTooltipsProps) {
     const { classes } = useStyles()
+    const t = useSharedI18N()
     return (
         <ShadowRootTooltip
             classes={{ tooltip: classes.tooltip }}
             disableInteractive
             title={
                 <Typography fontSize={14} lineHeight="18px">
-                    {type ? (
-                        <SharedTrans.source_tooltip
-                            values={{ source: type ?? '' }}
-                            components={{
-                                Link: <Typography component="span" />,
-                            }}
-                            context={platform}>
-                            {children}
-                        </SharedTrans.source_tooltip>
-                    ) : (
-                        <SharedTrans.source_tooltip_only
-                            values={{ context: platform! }}
-                            components={{
-                                Link: <Typography component="span" />,
-                            }}
-                            context={platform!}>
-                            {children}
-                        </SharedTrans.source_tooltip_only>
-                    )}
+                    {t.source_tooltip({
+                        source: type ?? '',
+                        context: platform,
+                    })}
                 </Typography>
             }
             arrow>
@@ -103,63 +90,79 @@ export function AccountIcon({ socialAccount, classes: externalClasses }: Account
     return (
         <>
             {supportedAddressTypes.includes(SocialAddressType.NEXT_ID) ? (
-                <AccountTooltips platform={AddressPlatform.NextId}>
-                    <Linking
-                        href={resolveSocialAddressLink(SocialAddressType.NEXT_ID)}
-                        LinkProps={{ className: classes.link }}>
+                <Linking
+                    href={resolveSocialAddressLink(SocialAddressType.NEXT_ID)}
+                    LinkProps={{ className: classes.link }}>
+                    <AccountTooltips platform={AddressPlatform.NextId}>
                         <Icons.NextIDMini
                             className={cx(classes.actionIcon, classes.icon)}
                             style={{ ...iconStyle, width: 32, height: 18 }}
                         />
-                    </Linking>
-                </AccountTooltips>
+                    </AccountTooltips>
+                </Linking>
             ) : null}
 
             {fromTwitter ? (
                 <AccountTooltips platform={AddressPlatform.Twitter} type={fromTwitter}>
                     <Icons.TwitterRound
-                        className={cx(classes.actionIcon, classes.icon, classes.twitterIcon)}
+                        className={cx(classes.actionIcon, classes.icon, classes.roundedIcon)}
                         style={iconStyle}
                     />
                 </AccountTooltips>
             ) : null}
 
+            {supportedAddressTypes.includes(SocialAddressType.RSS3) ? (
+                <Linking
+                    href={resolveSocialAddressLink(SocialAddressType.RSS3)}
+                    LinkProps={{ className: classes.link }}>
+                    <AccountTooltips
+                        platform={fromTwitter ? AddressPlatform.Twitter : undefined}
+                        type={SocialAddressType.RSS3}>
+                        <Icons.RSS3 className={cx(classes.actionIcon, classes.icon)} size={18} style={iconStyle} />
+                    </AccountTooltips>
+                </Linking>
+            ) : null}
+
             {supportedAddressTypes.includes(SocialAddressType.CyberConnect) ? (
-                <AccountTooltips platform={AddressPlatform.Twitter} type={SocialAddressType.CyberConnect}>
-                    <Linking
-                        href={resolveSocialAddressLink(SocialAddressType.CyberConnect)}
-                        LinkProps={{ className: classes.link }}>
+                <Linking
+                    href={resolveSocialAddressLink(SocialAddressType.CyberConnect)}
+                    LinkProps={{ className: classes.link }}>
+                    <AccountTooltips type={SocialAddressType.CyberConnect}>
                         <Icons.CyberConnect
                             className={cx(classes.actionIcon, classes.icon)}
                             size={18}
                             style={iconStyle}
                         />
-                    </Linking>
-                </AccountTooltips>
+                    </AccountTooltips>
+                </Linking>
             ) : null}
 
             {supportedAddressTypes.includes(SocialAddressType.Leaderboard) ? (
-                <AccountTooltips platform={AddressPlatform.Twitter} type={SocialAddressType.Leaderboard}>
-                    <Linking
-                        href={resolveSocialAddressLink(SocialAddressType.Leaderboard)}
-                        LinkProps={{ className: classes.link }}>
+                <Linking
+                    href={resolveSocialAddressLink(SocialAddressType.Leaderboard)}
+                    LinkProps={{ className: classes.link }}>
+                    <AccountTooltips type={SocialAddressType.Leaderboard}>
                         <Icons.Leaderboard
                             className={cx(classes.actionIcon, classes.icon)}
                             size={18}
                             style={iconStyle}
                         />
-                    </Linking>
-                </AccountTooltips>
+                    </AccountTooltips>
+                </Linking>
             ) : null}
 
             {supportedAddressTypes.includes(SocialAddressType.Sybil) ? (
-                <AccountTooltips platform={AddressPlatform.Twitter} type={SocialAddressType.Sybil}>
-                    <Linking
-                        href={resolveSocialAddressLink(SocialAddressType.Sybil)}
-                        LinkProps={{ className: classes.link }}>
-                        <Icons.Sybil className={cx(classes.actionIcon, classes.icon)} size={18} style={iconStyle} />
-                    </Linking>
-                </AccountTooltips>
+                <Linking
+                    href={resolveSocialAddressLink(SocialAddressType.Sybil)}
+                    LinkProps={{ className: classes.link }}>
+                    <AccountTooltips type={SocialAddressType.Sybil}>
+                        <Icons.Sybil
+                            className={cx(classes.actionIcon, classes.icon, classes.roundedIcon)}
+                            size={18}
+                            style={iconStyle}
+                        />
+                    </AccountTooltips>
+                </Linking>
             ) : null}
         </>
     )
