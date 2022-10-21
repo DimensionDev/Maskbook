@@ -52,7 +52,20 @@ async function fetchContent(url?: string) {
     return content
 }
 
-async function getTokens(operationName?: string) {
+type Tokens = {
+    bearerToken: string
+    queryToken: string
+    csrfToken: string
+    queryId: string | undefined
+}
+const tokenCache = new LRUCache<'tokens', Tokens>({
+    max: 10,
+    ttl: 300_000,
+})
+async function getTokens(operationName?: string): Promise<Tokens> {
+    let tokens: Tokens | undefined = tokenCache.get('tokens')
+    if (tokens) return tokens
+
     const swContent = await fetchContent('https://twitter.com/sw.js')
     if (!swContent) throw new Error('Failed to fetch manifest script.')
 
@@ -67,13 +80,15 @@ async function getTokens(operationName?: string) {
     const queryId = operationName
         ? getScriptContentMatched(mainContent ?? '', new RegExp(`queryId:"([^"]+)",operationName:"${operationName}"`))
         : undefined
-
-    return {
+    tokens = {
         bearerToken,
         queryToken,
         csrfToken,
         queryId,
     }
+    tokenCache.set('tokens', tokens)
+
+    return tokens
 }
 
 async function getUserNftContainer(
