@@ -18,7 +18,6 @@ export function ConsoleDialog(props: ConsoleDialogProps) {
                     <ChainContextProvider
                         value={{
                             chainId: ChainId.Mainnet,
-                            pluginID: NetworkPluginID.PLUGIN_EVM,
                         }}>
                         <ConsoleContent onClose={closeDialog} />
                     </ChainContextProvider>

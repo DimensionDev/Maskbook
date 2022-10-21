@@ -18,7 +18,6 @@ export function ConnectionDialog(props: ConnectionDialogProps) {
                     <ChainContextProvider
                         value={{
                             chainId: ChainId.Mainnet,
-                            pluginID: NetworkPluginID.PLUGIN_EVM,
                         }}>
                         <ConnectionContent onClose={closeDialog} />
                     </ChainContextProvider>
