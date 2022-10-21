@@ -1,5 +1,12 @@
 import urlcat from 'urlcat'
-import { ChainDescriptor, CurrencyType, NetworkDescriptor, ProviderDescriptor, SourceType } from '../specs/index.js'
+import {
+    ChainDescriptor,
+    CurrencyType,
+    NetworkDescriptor,
+    ProviderDescriptor,
+    SocialAddressType,
+    SourceType,
+} from '../specs/index.js'
 import { NetworkPluginID, createLookupTableResolver, NextIDPlatform } from '@masknet/shared-base'
 
 export interface ExplorerRoutes {
@@ -158,6 +165,22 @@ export function createProviderResolver<ChainId, ProviderType>(
         providerDownloadLink: (providerType: ProviderType) => getProviderDescriptor(providerType)?.downloadLink,
     }
 }
+
+export const resolveSocialAddressLink = createLookupTableResolver<SocialAddressType, string>(
+    {
+        [SocialAddressType.Address]: '',
+        [SocialAddressType.ENS]: 'https://ens.domains/',
+        [SocialAddressType.RSS3]: 'https://rss3.bio/',
+        [SocialAddressType.SOL]: 'https://naming.bonfida.org/',
+        [SocialAddressType.KV]: 'https://next.id/',
+        [SocialAddressType.NEXT_ID]: 'https://next.id/',
+        [SocialAddressType.CyberConnect]: 'https://cyberconnect.me/',
+        [SocialAddressType.Leaderboard]: 'https://ethleaderboard.xyz/',
+        [SocialAddressType.Sybil]: 'https://sybil.org/',
+        [SocialAddressType.TwitterBlue]: '',
+    },
+    () => '',
+)
 
 export const resolveSourceTypeName = createLookupTableResolver<SourceType, string>(
     {
