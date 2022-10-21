@@ -79,6 +79,10 @@ export interface AccountIconProps {
 
 export function AccountIcon({ socialAccount }: AccountIconProps) {
     const { classes, cx, theme } = useStyles()
+
+    const { supportedAddressTypes } = socialAccount
+    if (!supportedAddressTypes?.length) return null
+
     const iconStyle =
         theme.palette.mode === 'light'
             ? {
@@ -93,11 +97,11 @@ export function AccountIcon({ socialAccount }: AccountIconProps) {
         SocialAddressType.RSS3,
         SocialAddressType.SOL,
         SocialAddressType.TwitterBlue,
-    ].find((x) => socialAccount.supportedAddressTypes?.includes(x))
+    ].find((x) => supportedAddressTypes.includes(x))
 
     return (
         <>
-            {socialAccount.supportedAddressTypes?.includes(SocialAddressType.NEXT_ID) ? (
+            {supportedAddressTypes.includes(SocialAddressType.NEXT_ID) ? (
                 <AccountTooltips platform={AddressPlatform.NextId}>
                     <Icons.NextIDMini
                         className={cx(classes.actionIcon, classes.icon)}
@@ -115,30 +119,21 @@ export function AccountIcon({ socialAccount }: AccountIconProps) {
                 </AccountTooltips>
             ) : null}
 
-            {socialAccount.supportedAddressTypes?.includes(SocialAddressType.CyberConnect) ? (
+            {supportedAddressTypes.includes(SocialAddressType.CyberConnect) ? (
                 <AccountTooltips platform={AddressPlatform.Twitter} type={SocialAddressType.CyberConnect}>
-                    <Icons.CyberConnect
-                        className={cx(classes.actionIcon, classes.icon)}
-                        style={{ ...iconStyle, width: 18, height: 18 }}
-                    />
+                    <Icons.CyberConnect className={cx(classes.actionIcon, classes.icon)} size={18} style={iconStyle} />
                 </AccountTooltips>
             ) : null}
 
-            {socialAccount.supportedAddressTypes?.includes(SocialAddressType.Leaderboard) ? (
+            {supportedAddressTypes.includes(SocialAddressType.Leaderboard) ? (
                 <AccountTooltips platform={AddressPlatform.Twitter} type={SocialAddressType.Leaderboard}>
-                    <Icons.Leaderboard
-                        className={cx(classes.actionIcon, classes.icon)}
-                        style={{ ...iconStyle, width: 18, height: 18 }}
-                    />
+                    <Icons.Leaderboard className={cx(classes.actionIcon, classes.icon)} size={18} style={iconStyle} />
                 </AccountTooltips>
             ) : null}
 
-            {socialAccount.supportedAddressTypes?.includes(SocialAddressType.Sybil) ? (
+            {supportedAddressTypes.includes(SocialAddressType.Sybil) ? (
                 <AccountTooltips platform={AddressPlatform.Twitter} type={SocialAddressType.Sybil}>
-                    <Icons.Sybil
-                        className={cx(classes.actionIcon, classes.icon)}
-                        style={{ ...iconStyle, width: 18, height: 18 }}
-                    />
+                    <Icons.Sybil size={18} className={cx(classes.actionIcon, classes.icon)} style={{ ...iconStyle }} />
                 </AccountTooltips>
             ) : null}
         </>
