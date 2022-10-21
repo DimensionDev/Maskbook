@@ -20,7 +20,7 @@ export function NetworkTab<T extends NetworkPluginID = NetworkPluginID.PLUGIN_EV
     const networks = useNetworkDescriptors(pluginID)
     const usedNetworks = networks.filter((x) => chains.find((c) => c === x.chainId))
     const networkIds = usedNetworks.map((x) => x.chainId.toString())
-    const [currentTab, , , setTab] = useTabs(chainId?.toString() ?? networkIds[0], ...networkIds)
+    const [tab, , , setTab] = useTabs(chainId?.toString() ?? networkIds[0], ...networkIds)
 
     useUpdateEffect(() => {
         setTab((prev) => {
@@ -30,7 +30,7 @@ export function NetworkTab<T extends NetworkPluginID = NetworkPluginID.PLUGIN_EV
     }, [chainId])
 
     return (
-        <TabContext value={currentTab}>
+        <TabContext value={tab}>
             <MaskTabList
                 variant="flexible"
                 onChange={(_, v) => {
@@ -50,7 +50,7 @@ export function NetworkTab<T extends NetworkPluginID = NetworkPluginID.PLUGIN_EV
                                     <Typography
                                         variant="body2"
                                         fontSize={14}
-                                        fontWeight={currentTab === x.chainId.toString() ? 700 : 400}>
+                                        fontWeight={tab === x.chainId.toString() ? 700 : 400}>
                                         {x.shortName ?? x.name}
                                     </Typography>
                                 </Stack>

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { PluginID, NetworkPluginID, isDashboardPage, CrossIsolationMessages } from '@masknet/shared-base'
 import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
-import { ChainContextProvider, useChainId, useChainIdValid } from '@masknet/web3-hooks-base'
+import { ChainContextProvider, NetworkContextProvider, useChainId, useChainIdValid } from '@masknet/web3-hooks-base'
 import { ChainId, isNativeTokenAddress, SchemaType } from '@masknet/web3-shared-evm'
 import { DialogContent, dialogTitleClasses, IconButton } from '@mui/material'
 import { InjectedDialog, useSelectAdvancedSettings } from '@masknet/shared'
@@ -181,16 +181,18 @@ export function TraderDialog() {
                         chains={chainIdList}
                     />
                 </div>
-                <ChainContextProvider value={{ chainId, pluginID: NetworkPluginID.PLUGIN_EVM }}>
-                    <AllProviderTradeContext.Provider>
-                        <Trader
-                            {...traderProps}
-                            chainId={chainId}
-                            classes={{ root: classes.tradeRoot }}
-                            ref={tradeRef}
-                        />
-                    </AllProviderTradeContext.Provider>
-                </ChainContextProvider>
+                <NetworkContextProvider value={NetworkPluginID.PLUGIN_EVM}>
+                    <ChainContextProvider value={{ chainId }}>
+                        <AllProviderTradeContext.Provider>
+                            <Trader
+                                {...traderProps}
+                                chainId={chainId}
+                                classes={{ root: classes.tradeRoot }}
+                                ref={tradeRef}
+                            />
+                        </AllProviderTradeContext.Provider>
+                    </ChainContextProvider>
+                </NetworkContextProvider>
             </DialogContent>
         </InjectedDialog>
     )

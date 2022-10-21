@@ -4,7 +4,7 @@ import { Button, Typography } from '@mui/material'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
 import { PluginWalletStatusBar } from '@masknet/shared'
-import { PluginID, NetworkPluginID, CrossIsolationMessages } from '@masknet/shared-base'
+import { PluginID, NetworkPluginID, CrossIsolationMessages, EMPTY_OBJECT } from '@masknet/shared-base'
 import { resolveSourceTypeName } from '@masknet/web3-shared-base'
 import { NetworkContextProvider, ChainContextProvider } from '@masknet/web3-hooks-base'
 import { useI18N as useBaseI18n } from '../../../../../utils/index.js'
@@ -145,7 +145,7 @@ export function CardDialogContent(props: CardDialogContentProps) {
             </div>
 
             <NetworkContextProvider value={parentPluginID}>
-                <ChainContextProvider value={{ pluginID: parentPluginID }}>
+                <ChainContextProvider value={EMPTY_OBJECT}>
                     <PluginWalletStatusBar
                         className={classes.footer}
                         expectedPluginID={pluginID}

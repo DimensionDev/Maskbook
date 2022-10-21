@@ -5,7 +5,7 @@ import { Icons } from '@masknet/icons'
 import { PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
 import { base } from '../base.js'
 import { ApprovalDialog } from './ApprovalDialog.js'
-import { ChainContextProvider } from '@masknet/web3-hooks-base'
+import { ChainContextProvider, NetworkContextProvider } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 
@@ -36,10 +36,11 @@ const sns: Plugin.SNSAdaptor.Definition = {
                                 }
                             />
                             {open ? (
-                                <ChainContextProvider
-                                    value={{ chainId: ChainId.Mainnet, pluginID: NetworkPluginID.PLUGIN_EVM }}>
-                                    <ApprovalDialog open onClose={() => setOpen(false)} />
-                                </ChainContextProvider>
+                                <NetworkContextProvider value={NetworkPluginID.PLUGIN_EVM}>
+                                    <ChainContextProvider value={{ chainId: ChainId.Mainnet }}>
+                                        <ApprovalDialog open onClose={() => setOpen(false)} />
+                                    </ChainContextProvider>
+                                </NetworkContextProvider>
                             ) : null}
                         </>
                     )
