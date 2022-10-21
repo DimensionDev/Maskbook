@@ -5,7 +5,6 @@ import {
     ChainContextProvider,
     NetworkContextProvider,
     useChainContext,
-    useChainId,
     useChainIdValid,
 } from '@masknet/web3-hooks-base'
 import { ChainId, isNativeTokenAddress, SchemaType } from '@masknet/web3-shared-evm'

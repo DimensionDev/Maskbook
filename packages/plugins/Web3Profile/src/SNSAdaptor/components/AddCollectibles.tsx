@@ -5,7 +5,7 @@ import { Button, DialogContent, InputBase, Typography } from '@mui/material'
 import { InjectedDialog } from '@masknet/shared'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import { useI18N } from '../../locales/index.js'
-import { useAccount, useChainId, useNetworkContext, useWeb3Connection, useWeb3Hub } from '@masknet/web3-hooks-base'
+import { useChainContext, useNetworkContext, useWeb3Connection, useWeb3Hub } from '@masknet/web3-hooks-base'
 import type { NonFungibleToken } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
@@ -51,8 +51,10 @@ export function AddNFT(props: AddNFTProps) {
     const [message, setMessage] = useState('')
     const [checking, toggleChecking] = useState(false)
     const { pluginID: currentPluginId } = useNetworkContext(expectedPluginID)
-    const currentAccount = useAccount(expectedPluginID, props.account)
-    const currentChainId = useChainId(expectedPluginID, chainId)
+    const { account: currentAccount, chainId: currentChainId } = useChainContext({
+        account: props.account,
+        chainId,
+    })
     const hub = useWeb3Hub(currentPluginId, { chainId: currentChainId, account: currentAccount })
     const connection = useWeb3Connection(currentPluginId)
 

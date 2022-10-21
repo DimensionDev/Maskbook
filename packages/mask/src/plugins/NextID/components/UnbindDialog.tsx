@@ -2,7 +2,7 @@ import { memo, useCallback, useState } from 'react'
 import { useI18N } from '../locales/index.js'
 import { useAsyncRetry } from 'react-use'
 import { isSameAddress } from '@masknet/web3-shared-base'
-import { useAccount } from '@masknet/web3-hooks-base'
+import { useChainContext } from '@masknet/web3-hooks-base'
 import { NetworkPluginID, Binding, PersonaInformation, NextIDAction, NextIDPlatform } from '@masknet/shared-base'
 import { useCustomSnackbar } from '@masknet/theme'
 import { usePersonaSign } from '../hooks/usePersonaSign.js'
@@ -23,7 +23,7 @@ interface VerifyWalletDialogProps {
 }
 
 export const UnbindDialog = memo<VerifyWalletDialogProps>(({ unbindAddress, onClose, persona, onUnBound, bounds }) => {
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const t = useI18N()
 
     const [openSecondDialog, setSecondDialog] = useState(false)

@@ -22,7 +22,7 @@ import { TabContext, TabPanel } from '@mui/lab'
 import {
     ChainContextProvider,
     NetworkContextProvider,
-    useChainId,
+    useChainContext,
     useFungibleTokens,
     useWeb3,
 } from '@masknet/web3-hooks-base'
@@ -78,7 +78,7 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
     const isDashboard = isDashboardPage()
     const { classes } = useStyles({ isDashboard })
 
-    const currentChainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { chainId: currentChainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const [chainId, setChainId] = useState<ChainId>(ChainId.Mainnet)
     const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM, { chainId })
 

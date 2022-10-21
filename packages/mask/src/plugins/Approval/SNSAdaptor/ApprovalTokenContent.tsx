@@ -5,7 +5,7 @@ import { Icons } from '@masknet/icons'
 import { ActionButton, makeStyles, parseColor } from '@masknet/theme'
 import type { ChainId, NetworkType, SchemaType } from '@masknet/web3-shared-evm'
 import { useERC20TokenApproveCallback } from '@masknet/web3-hooks-evm'
-import { useAccount, useWeb3State, useNetworkDescriptor, useWeb3Hub } from '@masknet/web3-hooks-base'
+import { useChainContext, useWeb3State, useNetworkDescriptor, useWeb3Hub } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { NetworkDescriptor, isGreaterThan, FungibleTokenSpender } from '@masknet/web3-shared-base'
 import { ChainBoundary } from '@masknet/shared'
@@ -137,7 +137,7 @@ export const useStyles = makeStyles<{ listItemBackground?: string; listItemBackg
 )
 
 export function ApprovalTokenContent({ chainId }: { chainId: ChainId }) {
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const hub = useWeb3Hub(NetworkPluginID.PLUGIN_EVM, { chainId })
 
     const { value: spenders, loading } = useAsync(

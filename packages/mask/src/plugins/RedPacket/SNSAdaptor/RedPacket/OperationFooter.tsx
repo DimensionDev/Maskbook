@@ -1,4 +1,4 @@
-import { useAccount, useChainId } from '@masknet/web3-hooks-base'
+import { useChainContext } from '@masknet/web3-hooks-base'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { NetworkPluginID } from '@masknet/shared-base'
@@ -54,8 +54,7 @@ export function OperationFooter({
     const { classes } = useStyles()
     const { t: tr } = useBaseI18n()
     const t = useI18N()
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const chainIdValid = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { account, chainId: currentChainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const theme = useTheme()
 
     // #region remote controlled select provider dialog
@@ -74,7 +73,7 @@ export function OperationFooter({
                 </ActionButton>
             )
         }
-        if (!chainIdValid) {
+        if (!currentChainId) {
             return (
                 <ActionButton disabled fullWidth variant="roundedDark">
                     {tr('plugin_wallet_invalid_network')}

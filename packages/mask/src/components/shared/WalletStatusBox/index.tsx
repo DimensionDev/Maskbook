@@ -1,6 +1,5 @@
 import {
-    useAccount,
-    useChainId,
+    useChainContext,
     useNetworkDescriptor,
     useProviderDescriptor,
     useReverseAddress,
@@ -123,8 +122,7 @@ export function WalletStatusBox(props: WalletStatusBox) {
     })
 
     const connection = useWeb3Connection()
-    const chainId = useChainId()
-    const account = useAccount()
+    const { account, chainId } = useChainContext()
     const wallet = useWallet()
     const chainIdValid = useChainIdValid()
     const { value: balance = '0', loading: loadingBalance } = useBalance()

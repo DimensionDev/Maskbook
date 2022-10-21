@@ -1,7 +1,7 @@
 import { FormattedAddress } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { formatEthereumAddress, formatWeiToEther, chainResolver, explorerResolver } from '@masknet/web3-shared-evm'
-import { useChainId, useWeb3State } from '@masknet/web3-hooks-base'
+import { useChainContext, useWeb3State } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { OpenInNew } from '@mui/icons-material'
 import { Typography, Box, Link } from '@mui/material'
@@ -48,7 +48,7 @@ export function DetailsView(props: DetailsViewProps) {
     const { classes } = useStyles()
     const { project } = props
     const { t } = useI18N()
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
 
     const artistName = ` ${project.artistName}`

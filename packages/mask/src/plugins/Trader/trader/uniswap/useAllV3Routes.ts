@@ -3,8 +3,8 @@ import type { Currency } from '@uniswap/sdk-core'
 import { Pool, Route } from '@uniswap/v3-sdk'
 import { useV3SwapPools } from './useV3SwapPools.js'
 import { useSingleHopOnly } from './useSingleHopOnly.js'
-import { useChainId } from '@masknet/web3-hooks-base'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { useChainContext } from '@masknet/web3-hooks-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
 
 function computeAllRoutes(
     currencyIn: Currency,
@@ -59,7 +59,7 @@ export function useAllV3Routes(
     loading: boolean
     routes: Array<Route<Currency, Currency>>
 } {
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { pools, loading: poolsLoading } = useV3SwapPools(currencyIn, currencyOut)
     const singleHopOnly = useSingleHopOnly()
 

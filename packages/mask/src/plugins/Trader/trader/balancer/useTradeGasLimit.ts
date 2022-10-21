@@ -1,6 +1,7 @@
-import type { SwapResponse, TradeComputed } from '../../types/index.js'
 import { useAsync } from 'react-use'
 import type { AsyncState } from 'react-use/lib/useAsyncFn'
+import BigNumber from 'bignumber.js'
+import type { SwapResponse, TradeComputed } from '../../types/index.js'
 import { TradeStrategy } from '../../types/index.js'
 import { encodeContractTransaction, SchemaType, useTraderConstants } from '@masknet/web3-shared-evm'
 import { useExchangeProxyContract } from '../../contracts/balancer/useExchangeProxyContract.js'
@@ -8,12 +9,10 @@ import type { ExchangeProxy } from '@masknet/web3-contracts/types/ExchangeProxy'
 import { useTradeAmount } from './useTradeAmount.js'
 import { SLIPPAGE_DEFAULT } from '../../constants/index.js'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { useAccount, useChainId, useWeb3Connection } from '@masknet/web3-hooks-base'
-import BigNumber from 'bignumber.js'
+import { useChainContext, useWeb3Connection } from '@masknet/web3-hooks-base'
 
 export function useTradeGasLimit(trade: TradeComputed<SwapResponse> | null): AsyncState<number> {
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const targetChainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { account, chainId: targetChainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const exchangeProxyContract = useExchangeProxyContract(targetChainId)
     const { BALANCER_ETH_ADDRESS } = useTraderConstants(targetChainId)
     const tradeAmount = useTradeAmount(trade, SLIPPAGE_DEFAULT)

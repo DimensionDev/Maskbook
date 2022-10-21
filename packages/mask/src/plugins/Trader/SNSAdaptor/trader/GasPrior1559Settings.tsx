@@ -9,7 +9,7 @@ import { Accordion, AccordionDetails, AccordionSummary, Box, TextField, Typograp
 import { makeStyles, MaskColorVar, ActionButton } from '@masknet/theme'
 import { ExpandMore } from '@mui/icons-material'
 import { isDashboardPage, NetworkPluginID } from '@masknet/shared-base'
-import { useChainId, useFungibleToken, useGasOptions, useNativeTokenPrice } from '@masknet/web3-hooks-base'
+import { useChainContext, useFungibleToken, useGasOptions, useNativeTokenPrice } from '@masknet/web3-hooks-base'
 import { GasOptionType } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles<{
@@ -95,7 +95,7 @@ interface GasPrior1559SettingsProps {
 
 export const GasPrior1559Settings = memo<GasPrior1559SettingsProps>(
     ({ onCancel, onSave: onSave_, gasConfig, onSaveSlippage }) => {
-        const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+        const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
         const { value: gasOptions_ } = useGasOptions(NetworkPluginID.PLUGIN_EVM)
         const isDashboard = isDashboardPage()
         const { classes } = useStyles({ isDashboard })

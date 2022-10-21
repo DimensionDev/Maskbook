@@ -5,7 +5,7 @@ import { Link } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { NetworkPluginID, createLookupTableResolver } from '@masknet/shared-base'
 import { TransactionStatusType, RecognizableError } from '@masknet/web3-shared-base'
-import { useWeb3State, useChainId } from '@masknet/web3-hooks-base'
+import { useWeb3State, useChainContext } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { makeStyles, ShowSnackbarOptions, SnackbarKey, SnackbarMessage, useCustomSnackbar } from '@masknet/theme'
 import { useI18N } from '../../../../utils/index.js'
@@ -25,7 +25,7 @@ export function TransactionSnackbar<T extends NetworkPluginID>({ pluginID }: Tra
     const { showSnackbar, closeSnackbar } = useCustomSnackbar()
     const snackbarKeyRef = useRef<SnackbarKey>()
 
-    const chainId = useChainId(pluginID)
+    const { chainId } = useChainContext()
     const [errorInfo, setErrorInfo] = useState<
         | {
               error: RecognizableError

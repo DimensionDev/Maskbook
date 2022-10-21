@@ -27,7 +27,7 @@ import { useAvailableTraderProviders } from '../trending/useAvailableTraderProvi
 import { useNativeTradeGasLimit } from './useNativeTradeGasLimit.js'
 import type { TradeComputed } from '../types/index.js'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import { useChainId } from '@masknet/web3-hooks-base'
+import { useChainContext } from '@masknet/web3-hooks-base'
 
 export function useAllTradeComputed(
     inputAmount: string,
@@ -35,7 +35,7 @@ export function useAllTradeComputed(
     outputToken?: FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>,
     temporarySlippage?: number,
 ): TradeInfo[] {
-    const targetChainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { chainId: targetChainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const inputTokenProduct = pow10(inputToken?.decimals ?? 0)
     const inputAmount_ = multipliedBy(inputAmount || '0', inputTokenProduct)
         .integerValue()

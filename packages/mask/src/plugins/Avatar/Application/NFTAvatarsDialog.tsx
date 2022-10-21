@@ -3,7 +3,7 @@ import { NFTListDialog } from './NFTListDialog.js'
 import { InjectedDialog } from '@masknet/shared'
 import { UploadAvatarDialog } from './UploadAvatarDialog.js'
 import { PluginID, BindingProof, CrossIsolationMessages } from '@masknet/shared-base'
-import { useAccount } from '@masknet/web3-hooks-base'
+import { useChainContext } from '@masknet/web3-hooks-base'
 import { AllChainsNonFungibleToken, PFP_TYPE, SelectTokenInfo } from '../types.js'
 import { PersonaPage } from './PersonaPage.js'
 import { DialogContent } from '@mui/material'
@@ -30,7 +30,7 @@ enum CreateNFTAvatarStep {
 
 export function NFTAvatarDialog() {
     const [open, setOpen] = useState(false)
-    const account = useAccount()
+    const { account } = useChainContext()
     const [step, setStep] = useState(CreateNFTAvatarStep.Persona)
     const [wallets, setWallets] = useState<BindingProof[]>()
 

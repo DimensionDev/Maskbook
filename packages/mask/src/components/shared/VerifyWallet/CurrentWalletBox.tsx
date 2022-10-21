@@ -1,5 +1,5 @@
 import {
-    useAccount,
+    useChainContext,
     useNetworkDescriptor,
     useProviderDescriptor,
     useReverseAddress,
@@ -94,8 +94,9 @@ export function CurrentWalletBox(props: CurrentWalletBox) {
     const { providerType } = wallet
     const providerDescriptor = useProviderDescriptor(NetworkPluginID.PLUGIN_EVM, providerType)
     const networkDescriptor = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM)
-    const frontAccount = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const account = notInPop ? frontAccount : wallet.account
+    const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>({
+        account: notInPop ? undefined : wallet.account,
+    })
     const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const { value: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, wallet.account)
     return account ? (

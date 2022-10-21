@@ -3,13 +3,13 @@ import { first, uniqBy } from 'lodash-unified'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { NetworkPluginID, BindingProof, EMPTY_LIST, PopupRoutes } from '@masknet/shared-base'
-import { isSameAddress, isGreaterThan } from '@masknet/web3-shared-base'
+import { isGreaterThan } from '@masknet/web3-shared-base'
 import { Box, Button, DialogActions, DialogContent, Stack, Typography } from '@mui/material'
 import { AddNFT } from '../SNSAdaptor/AddNFT.js'
 import { AllChainsNonFungibleToken, PFP_TYPE, SelectTokenInfo } from '../types.js'
 import { useI18N } from '../locales/index.js'
 import { SUPPORTED_CHAIN_IDS, supportPluginIds } from '../constants.js'
-import { useAccount, useChainId, useNonFungibleAssets, useNetworkContext } from '@masknet/web3-hooks-base'
+import { useChainContext, useNonFungibleAssets, useNetworkContext } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { toPNG } from '../utils/index.js'
 import Services from '../../../extension/service.js'
@@ -100,10 +100,6 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-function isSameToken(token?: AllChainsNonFungibleToken, tokenInfo?: AllChainsNonFungibleToken) {
-    if (!token && !tokenInfo) return false
-    return isSameAddress(token?.address, tokenInfo?.address) && token?.tokenId === tokenInfo?.tokenId
-}
 export interface NFTListDialogProps {
     onNext: () => void
     tokenInfo?: AllChainsNonFungibleToken
@@ -119,8 +115,7 @@ export function NFTListDialog(props: NFTListDialogProps) {
     const { classes } = useStyles()
 
     const { pluginID } = useNetworkContext()
-    const account = useAccount(pluginID)
-    const currentChainId = useChainId(pluginID)
+    const { account, chainId: currentChainId } = useChainContext()
 
     const [chainId, setChainId] = useState<ChainId>((currentChainId ?? ChainId.Mainnet) as ChainId)
     const [selectedPluginId, setSelectedPluginId] = useState(pluginID ?? NetworkPluginID.PLUGIN_EVM)

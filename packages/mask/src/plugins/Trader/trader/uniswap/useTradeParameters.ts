@@ -3,8 +3,8 @@ import JSBI from 'jsbi'
 import { Percent, TradeType } from '@uniswap/sdk-core'
 import { Router, Trade as V2Trade } from '@uniswap/v2-sdk'
 import { SLIPPAGE_DEFAULT } from '../../constants/index.js'
-import { useAccount, useChainId } from '@masknet/web3-hooks-base'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { useChainContext } from '@masknet/web3-hooks-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
 import type { SwapCall, Trade, TradeComputed } from '../../types/index.js'
 import { SwapRouter } from '@uniswap/v3-sdk'
 import { useRouterV2Contract } from '../../contracts/uniswap/useRouterV2Contract.js'
@@ -57,9 +57,8 @@ export function useSwapParameters(
     tradeProvider?: TradeProvider,
     allowedSlippage: number = SLIPPAGE_DEFAULT,
 ) {
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const { account, chainId: targetChainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const context = useGetTradeContext(tradeProvider)
-    const targetChainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const deadline = useTransactionDeadline()
     const routerV2Contract = useRouterV2Contract(targetChainId, context?.ROUTER_CONTRACT_ADDRESS)
     const swapRouterContract = useSwapRouterContract(targetChainId, context?.ROUTER_CONTRACT_ADDRESS)

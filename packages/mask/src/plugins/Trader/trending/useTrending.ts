@@ -1,13 +1,13 @@
 import { useAsync } from 'react-use'
 import type { DataProvider } from '@masknet/public-api'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { useChainId, useFungibleToken } from '@masknet/web3-hooks-base'
+import { useChainContext, useFungibleToken } from '@masknet/web3-hooks-base'
 import { PluginTraderRPC } from '../messages.js'
 import type { Coin, TagType } from '../types/index.js'
 import { useCurrentCurrency } from './useCurrentCurrency.js'
 
 export function useTrendingByKeyword(tagType: TagType, keyword: string, dataProvider: DataProvider) {
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const currency = useCurrentCurrency(dataProvider)
     const {
         value: trending,
@@ -41,7 +41,7 @@ export function useTrendingByKeyword(tagType: TagType, keyword: string, dataProv
 }
 
 export function useTrendingById(id: string, dataProvider: DataProvider) {
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const currency = useCurrentCurrency(dataProvider)
     const {
         value: trending,

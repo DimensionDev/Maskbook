@@ -23,7 +23,7 @@ import { useCompositionContext } from '@masknet/plugin-infra/content-script'
 import { RedPacketNftMetaKey } from '../constants.js'
 import { WalletMessages } from '../../Wallet/messages.js'
 import { RedPacketRPC } from '../messages.js'
-import { useAccount, useChainId, useWallet, useWeb3 } from '@masknet/web3-hooks-base'
+import { useChainContext, useWallet, useWeb3 } from '@masknet/web3-hooks-base'
 import type { NonFungibleTokenContract, NonFungibleToken } from '@masknet/web3-shared-base'
 import Services from '../../../extension/service.js'
 
@@ -132,8 +132,7 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
     const { classes } = useStyles()
     const { onClose, message, contract, tokenList } = props
     const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM)
     const { attachMetadata } = useCompositionContext()
 

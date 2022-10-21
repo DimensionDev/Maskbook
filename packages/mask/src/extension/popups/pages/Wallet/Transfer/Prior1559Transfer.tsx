@@ -31,7 +31,7 @@ import { ExpandMore } from '@mui/icons-material'
 import { LoadingButton } from '@mui/lab'
 import { TransferAddressError } from '../type.js'
 import {
-    useChainId,
+    useChainContext,
     useFungibleTokenBalance,
     useWallet,
     useWeb3Connection,
@@ -162,7 +162,7 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
     const { pluginID: currentPluginId } = useNetworkContext()
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
     const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const hub = useWeb3Hub(NetworkPluginID.PLUGIN_EVM)
     const [minGasLimitContext, setMinGasLimitContext] = useState(0)
     const navigate = useNavigate()

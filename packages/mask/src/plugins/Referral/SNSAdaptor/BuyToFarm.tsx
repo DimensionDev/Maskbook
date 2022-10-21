@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react'
 import { useAsync } from 'react-use'
-import { useAccount, useChainId, useWeb3 } from '@masknet/web3-hooks-base'
+import { useChainContext, useWeb3 } from '@masknet/web3-hooks-base'
 import { makeStyles, useCustomSnackbar, ActionButton } from '@masknet/theme'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { Typography, Box, Tab, Tabs, Grid, Divider } from '@mui/material'
@@ -49,10 +49,9 @@ const useStyles = makeStyles()((theme) => ({
 export function BuyToFarm(props: PageInterface) {
     const t = useI18N()
     const { classes } = useStyles()
-    const currentChainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { account, chainId: currentChainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const requiredChainId = getRequiredChainId(currentChainId)
     const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM)
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const { showSnackbar } = useCustomSnackbar()
 
     const [tab, setTab] = useState(TabsReferAndBuy.NEW)

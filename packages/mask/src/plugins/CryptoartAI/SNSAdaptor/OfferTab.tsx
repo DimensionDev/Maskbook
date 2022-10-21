@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import { Box, Button, Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@mui/material'
-import { useChainId } from '@masknet/web3-hooks-base'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { useChainContext } from '@masknet/web3-hooks-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../utils/index.js'
 import { CollectibleState } from '../hooks/useCollectibleState.js'
@@ -51,7 +51,7 @@ const useStyles = makeStyles()((theme) => {
 export function OfferTab() {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { asset, offers } = CollectibleState.useContainer()
 
     const assetSource = useMemo(() => {

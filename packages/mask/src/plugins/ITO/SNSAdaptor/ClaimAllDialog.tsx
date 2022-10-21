@@ -2,13 +2,7 @@ import { useState, useLayoutEffect, useRef, useCallback } from 'react'
 import classNames from 'classnames'
 import { flatten, uniq } from 'lodash-unified'
 import formatDateTime from 'date-fns/format'
-import {
-    useAccount,
-    useChainId,
-    useFungibleToken,
-    useNetworkContext,
-    useFungibleTokens,
-} from '@masknet/web3-hooks-base'
+import { useChainContext, useFungibleToken, useNetworkContext, useFungibleTokens } from '@masknet/web3-hooks-base'
 import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
 import { SnackbarProvider, makeStyles, ActionButton, LoadingBase } from '@masknet/theme'
 import {
@@ -195,8 +189,7 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
     const { pluginID } = useNetworkContext()
     const chainIdList = ITO_Definition?.enableRequirement.web3?.[pluginID]?.supportedChainIds ?? []
     const DialogRef = useRef<HTMLDivElement>(null)
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
     const { value: _swappedTokens, loading: _loading, retry } = useClaimAll(account, chainId)
     const { value: swappedTokensWithDetailed = [], loading: loadingTokenDetailed } = useFungibleTokens(

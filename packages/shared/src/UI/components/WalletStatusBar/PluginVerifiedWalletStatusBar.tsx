@@ -8,9 +8,8 @@ import { useSharedI18N } from '../../../locales/index.js'
 import { Action } from './Action.js'
 import { BindingProof, NetworkPluginID, isDashboardPage } from '@masknet/shared-base'
 import {
-    useAccount,
+    useChainContext,
     useNetworkContext,
-    useChainId,
     useNetworkDescriptor,
     useProviderDescriptor,
     useWeb3State,
@@ -64,10 +63,9 @@ interface PluginVerifiedWalletStatusBarProps extends PropsWithChildren<{}> {
 export const PluginVerifiedWalletStatusBar = memo<PluginVerifiedWalletStatusBarProps>(
     ({ className, children, verifiedWallets, onChange, expectedAddress, openPopupWindow }) => {
         const t = useSharedI18N()
-
-        const account = useAccount()
-
         const { classes, cx } = useStyles()
+
+        const { account, chainId } = useChainContext()
 
         const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
             WalletMessages.events.selectProviderDialogUpdated,
@@ -104,7 +102,6 @@ export const PluginVerifiedWalletStatusBar = memo<PluginVerifiedWalletStatusBarP
         )
 
         const { Others } = useWeb3State(defaultPluginId)
-        const chainId = useChainId(defaultPluginId)
         const defaultChainId = useDefaultChainId(defaultPluginId)
 
         const providerDescriptor = useProviderDescriptor(defaultPluginId)

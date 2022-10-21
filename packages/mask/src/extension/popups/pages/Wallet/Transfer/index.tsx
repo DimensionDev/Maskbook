@@ -7,7 +7,7 @@ import { useContainer } from 'unstated-next'
 import { WalletContext } from '../hooks/useWalletContext.js'
 import { Transfer1559 } from './Transfer1559.js'
 import { Prior1559Transfer } from './Prior1559Transfer.js'
-import { useChainId, useWallets } from '@masknet/web3-hooks-base'
+import { useChainContext, useWallets } from '@masknet/web3-hooks-base'
 import { formatBalance } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useI18N } from '../../../../../utils/index.js'
@@ -31,7 +31,7 @@ const useStyles = makeStyles()({
 const Transfer = memo(() => {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const wallets = useWallets(NetworkPluginID.PLUGIN_EVM)
     const { assets, currentToken } = useContainer(WalletContext)
     const [selectedAsset, setSelectedAsset] = useState(currentToken)

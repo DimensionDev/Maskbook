@@ -15,7 +15,7 @@ import { ProviderType } from '@masknet/web3-shared-evm'
 import { TransactionStatusType } from '@masknet/web3-shared-base'
 import {
     useProviderDescriptor,
-    useAccount,
+    useChainContext,
     useChainColor,
     useChainIdValid,
     useWeb3State,
@@ -166,7 +166,7 @@ function ToolboxHintForWallet(props: ToolboxHintProps) {
 
 function useToolbox() {
     const { t } = useI18N()
-    const account = useAccount()
+    const { account } = useChainContext()
     const chainColor = useChainColor()
     const chainIdValid = useChainIdValid()
     const chainIdMainnet = useChainIdMainnet()

@@ -11,7 +11,7 @@ import { useDashboardI18N } from '../../../../locales/index.js'
 import {
     useWeb3Connection,
     useNonFungibleTokenContract,
-    useAccount,
+    useChainContext,
     useWeb3State,
     useTrustedNonFungibleTokens,
     useWeb3Hub,
@@ -38,7 +38,7 @@ enum FormErrorType {
 
 export const AddCollectibleDialog = memo<AddCollectibleDialogProps>(({ open, onClose, selectedNetwork }) => {
     const { pluginID } = useNetworkContext()
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { Token } = useWeb3State<'all'>()
     const trustedNonFungibleTokens = useTrustedNonFungibleTokens(pluginID)
     const hub = useWeb3Hub()

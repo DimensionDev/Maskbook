@@ -1,6 +1,6 @@
 import BigNumber from 'bignumber.js'
 import { useAsyncFn } from 'react-use'
-import { useAccount, useChainId, useWeb3Connection } from '@masknet/web3-hooks-base'
+import { useChainContext, useWeb3Connection } from '@masknet/web3-hooks-base'
 import type { FungibleToken } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { ChainId, encodeContractTransaction, SchemaType } from '@masknet/web3-shared-evm'
@@ -21,8 +21,7 @@ export function useDepositCallback(
     referrer: string,
     token?: FungibleToken<ChainId, SchemaType>,
 ) {
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const poolContract = usePoolTogetherPoolContract(chainId, address)
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
 

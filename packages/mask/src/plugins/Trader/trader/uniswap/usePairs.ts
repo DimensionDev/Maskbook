@@ -10,7 +10,7 @@ import type { TradeProvider } from '@masknet/public-api'
 import { useGetTradeContext } from '../useGetTradeContext.js'
 import { useMultipleContractSingleData } from '@masknet/web3-hooks-evm'
 import { useTargetBlockNumber } from '../useTargetBlockNumber.js'
-import { useChainId } from '@masknet/web3-hooks-base'
+import { useChainContext } from '@masknet/web3-hooks-base'
 
 export enum PairState {
     NOT_EXISTS = 0,
@@ -23,7 +23,7 @@ export type TokenPair = [Token, Token]
 export function usePairs(tradeProvider: TradeProvider, tokenPairs: readonly TokenPair[]) {
     const context = useGetTradeContext(tradeProvider)
 
-    const targetChainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { chainId: targetChainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
     const listOfPairAddress = useMemo(() => {
         if (!context) return EMPTY_LIST

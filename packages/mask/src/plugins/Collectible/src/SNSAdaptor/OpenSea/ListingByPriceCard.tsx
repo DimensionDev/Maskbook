@@ -12,13 +12,7 @@ import { SelectTokenAmountPanel } from '../../../../ITO/SNSAdaptor/SelectTokenAm
 import { WalletConnectedBoundary } from '../../../../../web3/UI/WalletConnectedBoundary.js'
 import { DateTimePanel } from '../../../../../web3/UI/DateTimePanel.js'
 import { toAsset, isWyvernSchemaName } from '../../helpers/index.js'
-import {
-    useAccount,
-    useChainId,
-    useNetworkContext,
-    useFungibleTokenWatched,
-    useWeb3State,
-} from '@masknet/web3-hooks-base'
+import { useChainContext, useNetworkContext, useFungibleTokenWatched, useWeb3State } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useOpenSea } from './hooks/useOpenSea.js'
 
@@ -65,8 +59,7 @@ export function ListingByPriceCard(props: ListingByPriceCardProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
 
-    const account = useAccount()
-    const chainId = useChainId()
+    const { account, chainId } = useChainContext()
     const opensea = useOpenSea(pluginID, chainId)
     const { Others } = useWeb3State()
 
