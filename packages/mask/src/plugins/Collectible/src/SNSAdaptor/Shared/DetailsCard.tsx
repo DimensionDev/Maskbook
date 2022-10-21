@@ -37,7 +37,7 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.maskColor.second,
     },
     content: {
-        maxWidth: '40%',
+        maxWidth: '60%',
         overflow: 'hidden',
         textOverflow: 'ellipsis',
         whiteSpace: 'nowrap',
