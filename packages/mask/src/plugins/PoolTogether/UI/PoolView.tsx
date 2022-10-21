@@ -5,7 +5,7 @@ import { LoadingBase, makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
 import { TokenIcon } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { useChainId, useFungibleToken, useAccount, usePluginContext } from '@masknet/web3-hooks-base'
+import { useChainId, useFungibleToken, useAccount, useNetworkContext } from '@masknet/web3-hooks-base'
 import { usePoolURL } from '../hooks/usePoolURL.js'
 import type { Pool } from '../types.js'
 import { CountdownView } from './CountdownView.js'
@@ -142,7 +142,7 @@ export function PoolView(props: PoolProps) {
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const [prize, setPrize] = useState('TBD')
     const [period, setPeriod] = useState('Custom Period')
-    const { pluginID } = usePluginContext()
+    const { pluginID } = useNetworkContext()
 
     // #region pool token
     const {

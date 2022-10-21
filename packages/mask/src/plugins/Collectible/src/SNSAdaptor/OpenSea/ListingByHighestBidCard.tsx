@@ -9,7 +9,7 @@ import getUnixTime from 'date-fns/getUnixTime'
 import {
     useAccount,
     useChainId,
-    usePluginContext,
+    useNetworkContext,
     useFungibleTokenWatched,
     useWeb3State,
 } from '@masknet/web3-hooks-base'
@@ -62,7 +62,7 @@ export function ListingByHighestBidCard(props: ListingByHighestBidCardProps) {
     const { classes } = useStyles()
 
     const { Others } = useWeb3State()
-    const { pluginID } = usePluginContext()
+    const { pluginID } = useNetworkContext()
     const { amount, token, balance, setAmount, setAddress } = useFungibleTokenWatched(
         pluginID,
         first(paymentTokens)?.address,

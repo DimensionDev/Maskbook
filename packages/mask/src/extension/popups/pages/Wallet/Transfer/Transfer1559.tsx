@@ -52,7 +52,7 @@ import {
     useWeb3State,
     useWeb3Connection,
     useGasOptions,
-    usePluginContext,
+    useNetworkContext,
 } from '@masknet/web3-hooks-base'
 import { AccountItem } from './AccountItem.js'
 import { TransferAddressError } from '../type.js'
@@ -189,7 +189,7 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
     const { t } = useI18N()
     const { classes } = useStyles()
 
-    const { pluginID } = usePluginContext()
+    const { pluginID } = useNetworkContext()
     const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)

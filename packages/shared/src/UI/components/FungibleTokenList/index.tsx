@@ -18,7 +18,7 @@ import {
     useAccount,
     useBlockedFungibleTokens,
     useChainId,
-    usePluginContext,
+    useNetworkContext,
     useFungibleAssets,
     useFungibleToken,
     useFungibleTokenBalance,
@@ -137,14 +137,11 @@ export const FungibleTokenList = forwardRef(
         )
         // #endregion
 
-        const { pluginID } = usePluginContext(props.pluginID) as T
+        const { pluginID } = useNetworkContext<T>(props.pluginID)
         const account = useAccount(pluginID)
         const chainId = useChainId(pluginID, props.chainId)
         const { Token, Others } = useWeb3State<'all'>(pluginID)
-        const { value: fungibleTokens = EMPTY_LIST, loading: loadingFungibleTokens } = useFungibleTokensFromTokenList(
-            pluginID,
-            { chainId },
-        )
+        const { value: fungibleTokens = EMPTY_LIST } = useFungibleTokensFromTokenList(pluginID, { chainId })
         const trustedFungibleTokens = useTrustedFungibleTokens(pluginID, undefined, chainId)
         const blockedFungibleTokens = useBlockedFungibleTokens(pluginID)
         const nativeToken = useMemo(() => Others?.chainResolver.nativeCurrency(chainId), [chainId])

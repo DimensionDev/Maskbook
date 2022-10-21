@@ -21,7 +21,7 @@ import { Icons } from '@masknet/icons'
 import { useDashboardI18N } from '../../locales/index.js'
 import { MaskColorVar } from '@masknet/theme'
 import { DashboardRoutes, NetworkPluginID } from '@masknet/shared-base'
-import { usePluginContext } from '@masknet/web3-hooks-base'
+import { useNetworkContext } from '@masknet/web3-hooks-base'
 
 const ListItemLinkUnStyled = ({
     to,
@@ -111,7 +111,7 @@ export function Navigation({ onClose }: NavigationProps) {
     const isLargeScreen = useMediaQuery<Theme>((theme) => theme.breakpoints.up('lg'))
     const t = useDashboardI18N()
     const mode = useTheme().palette.mode
-    const { pluginID } = usePluginContext()
+    const { pluginID } = useNetworkContext()
 
     const onExpand = (e: React.MouseEvent<HTMLElement>) => {
         e.stopPropagation()

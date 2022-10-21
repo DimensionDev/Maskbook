@@ -9,7 +9,7 @@ import {
 import { EMPTY_LIST, PluginID, NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import type { SocialAccount } from '@masknet/web3-shared-base'
-import { NetworkContextProvider, useWeb3State, usePluginContext } from '@masknet/web3-hooks-base'
+import { NetworkContextProvider, useWeb3State, useNetworkContext } from '@masknet/web3-hooks-base'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI.js'
 import { createReactRootShadowed, startWatch } from '../../../../utils/index.js'
 import { menuAuthorSelector as selector } from '../../utils/selectors.js'
@@ -47,7 +47,7 @@ function AuthorTipsButtonWrapper() {
 
     const visitingIdentity = useCurrentVisitingIdentity()
     const isMinimal = useIsMinimalMode(PluginID.Tips)
-    const { pluginID } = usePluginContext()
+    const { pluginID } = useNetworkContext()
     const { Others } = useWeb3State()
 
     const accounts = useMemo((): SocialAccount[] => {

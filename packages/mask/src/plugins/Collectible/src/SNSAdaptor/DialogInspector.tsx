@@ -5,7 +5,7 @@ import {
     NetworkContextProvider,
     ChainContextProvider,
     useChainIdValid,
-    usePluginContext,
+    useNetworkContext,
 } from '@masknet/web3-hooks-base'
 import { CardDialog } from './CardDialog/CardDialog.js'
 import { Context } from './Context/index.js'
@@ -13,7 +13,7 @@ import { Context } from './Context/index.js'
 export interface DialogInspectorProps {}
 
 export function DialogInspector(props: DialogInspectorProps) {
-    const { pluginID: parentPluginID } = usePluginContext()
+    const { pluginID: parentPluginID } = useNetworkContext()
     const [open, setOpen] = useState(false)
     const [pluginID, setPluginID] = useState<NetworkPluginID>()
     const [chainId, setChainId] = useState<Web3Helper.ChainIdAll>()

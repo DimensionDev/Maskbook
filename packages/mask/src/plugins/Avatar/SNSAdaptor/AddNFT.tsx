@@ -4,7 +4,7 @@ import type { ChainId } from '@masknet/web3-shared-evm'
 import { Button, DialogContent, InputBase, Typography } from '@mui/material'
 import { InjectedDialog } from '@masknet/shared'
 import { useI18N } from '../../../utils/index.js'
-import { useAccount, useChainId, usePluginContext, useWeb3Connection, useWeb3Hub } from '@masknet/web3-hooks-base'
+import { useAccount, useChainId, useNetworkContext, useWeb3Connection, useWeb3Hub } from '@masknet/web3-hooks-base'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import type { AllChainsNonFungibleToken } from '../types.js'
 
@@ -45,7 +45,7 @@ export function AddNFT(props: AddNFTProps) {
     const [tokenId, setTokenId] = useState('')
     const [message, setMessage] = useState('')
     const [checking, toggleChecking] = useState(false)
-    const { pluginID: currentPluginId } = usePluginContext(expectedPluginID)
+    const { pluginID: currentPluginId } = useNetworkContext(expectedPluginID)
     const _account = useAccount(expectedPluginID, account)
     const currentChainId = useChainId(expectedPluginID, chainId)
     const hub = useWeb3Hub(currentPluginId, { chainId: currentChainId, account: _account })

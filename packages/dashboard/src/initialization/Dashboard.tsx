@@ -11,7 +11,7 @@ import {
 import { I18NextProviderHMR, SharedContextProvider } from '@masknet/shared'
 import { ErrorBoundary } from '@masknet/shared-base-ui'
 import { createInjectHooksRenderer, useActivatedPluginsDashboard } from '@masknet/plugin-infra/dashboard'
-import { Web3ContextProvider, usePluginContext } from '@masknet/web3-hooks-base'
+import { Web3ContextProvider, useNetworkContext } from '@masknet/web3-hooks-base'
 import { i18NextInstance, queryRemoteI18NBundle } from '@masknet/shared-base'
 
 import '../utils/kv-storage.js'
@@ -24,7 +24,7 @@ import { Services } from '../API.js'
 const PluginRender = createInjectHooksRenderer(useActivatedPluginsDashboard, (x) => x.GlobalInjection)
 
 export default function DashboardRoot() {
-    const { pluginID } = usePluginContext()
+    const { pluginID } = useNetworkContext()
 
     useEffect(queryRemoteI18NBundle(Services.Helper.queryRemoteI18NBundle), [])
 

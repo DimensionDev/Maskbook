@@ -36,7 +36,7 @@ import {
     useWallet,
     useWeb3Connection,
     useWeb3Hub,
-    usePluginContext,
+    useNetworkContext,
 } from '@masknet/web3-hooks-base'
 import { useGasLimit, useTokenTransferCallback } from '@masknet/web3-hooks-evm'
 import { useI18N } from '../../../../../utils/index.js'
@@ -159,7 +159,7 @@ export interface Prior1559TransferProps {
 export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, openAssetMenu, otherWallets }) => {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const { pluginID: currentPluginId } = usePluginContext()
+    const { pluginID: currentPluginId } = useNetworkContext()
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
     const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)

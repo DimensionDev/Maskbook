@@ -16,7 +16,7 @@ import type { Order } from 'opensea-js/lib/types'
 import { InjectedDialog } from '@masknet/shared'
 import { CrossIsolationMessages } from '@masknet/shared-base'
 import { isGreaterThan } from '@masknet/web3-shared-base'
-import { useAccount, useChainId, usePluginContext, useFungibleTokenWatched } from '@masknet/web3-hooks-base'
+import { useAccount, useChainId, useNetworkContext, useFungibleTokenWatched } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { UnreviewedWarnings } from './UnreviewedWarnings.js'
 import { useI18N } from '../../../../../utils/index.js'
@@ -59,7 +59,7 @@ export function CheckoutDialog(props: CheckoutDialogProps) {
     const isVerified = asset?.collection?.verified ?? false
     const { t } = useI18N()
     const { classes } = useStyles()
-    const { pluginID } = usePluginContext()
+    const { pluginID } = useNetworkContext()
     const account = useAccount()
     const chainId = useChainId()
     const opensea = useOpenSea(pluginID, chainId)

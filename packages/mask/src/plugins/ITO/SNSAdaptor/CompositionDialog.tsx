@@ -19,7 +19,7 @@ import { ConfirmDialog } from './ConfirmDialog.js'
 import { CreateForm } from './CreateForm.js'
 import { payloadOutMask } from './helpers.js'
 import { PoolList } from './PoolList.js'
-import { useAccount, useChainId, usePluginContext, useWeb3Connection, useChainIdValid } from '@masknet/web3-hooks-base'
+import { useAccount, useChainId, useNetworkContext, useWeb3Connection, useChainIdValid } from '@masknet/web3-hooks-base'
 import { PoolSettings, useFillCallback } from './hooks/useFill.js'
 import { Icons } from '@masknet/icons'
 import { NetworkTab } from '../../../components/shared/NetworkTab.js'
@@ -78,7 +78,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, { chainId: currentChainId })
     const { classes } = useStyles({ snsId: activatedSocialNetworkUI.networkIdentifier })
     const { attachMetadata, dropMetadata } = useCompositionContext()
-    const { pluginID } = usePluginContext()
+    const { pluginID } = useNetworkContext()
     const ITO_Definition = useActivatedPlugin(PluginID.ITO, 'any')
     const chainIdList = ITO_Definition?.enableRequirement.web3?.[pluginID]?.supportedChainIds ?? EMPTY_LIST
     const [chainId, setChainId] = useState<ChainId>(currentChainId)

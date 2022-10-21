@@ -7,7 +7,7 @@ import { isZero } from '@masknet/web3-shared-base'
 import {
     useAccount,
     useChainId,
-    usePluginContext,
+    useNetworkContext,
     useNativeTokenBalance,
     useRiskWarningApproved,
 } from '@masknet/web3-hooks-base'
@@ -33,7 +33,7 @@ export function WalletConnectedBoundary(props: WalletConnectedBoundaryProps) {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
 
-    const { pluginID } = usePluginContext()
+    const { pluginID } = useNetworkContext()
     const account = useAccount()
     const chainIdValid = useChainId()
     const nativeTokenBalance = useNativeTokenBalance()

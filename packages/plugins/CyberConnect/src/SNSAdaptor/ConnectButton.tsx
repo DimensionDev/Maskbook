@@ -3,7 +3,7 @@ import { useAsync } from 'react-use'
 import { LoadingBase, makeStyles, MaskColorVar } from '@masknet/theme'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { useAccount, useWeb3, usePluginContext } from '@masknet/web3-hooks-base'
+import { useAccount, useWeb3, useNetworkContext } from '@masknet/web3-hooks-base'
 import CyberConnect, { Env } from '@cyberlab/cyberconnect'
 import { useTheme, Typography } from '@mui/material'
 import { PluginCyberConnectRPC } from '../messages.js'
@@ -97,7 +97,7 @@ export default function ConnectButton({
     const [cc, setCC] = useState<CyberConnect | null>(null)
     const [isFollowing, setFollowing] = useState(false)
     const [isLoading, setLoading] = useState(false)
-    const { pluginID } = usePluginContext()
+    const { pluginID } = useNetworkContext()
 
     useAsync(async () => {
         if (isSameAddress(myAddress, address)) return

@@ -22,7 +22,7 @@ import { CrossIsolationMessages, NetworkPluginID } from '@masknet/shared-base'
 import {
     useAccount,
     useChainId,
-    usePluginContext,
+    useNetworkContext,
     useFungibleTokenWatched,
     useWeb3State,
 } from '@masknet/web3-hooks-base'
@@ -84,7 +84,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
 
-    const { pluginID } = usePluginContext()
+    const { pluginID } = useNetworkContext()
     const account = useAccount()
     const chainId = useChainId()
     const opensea = useOpenSea(pluginID, chainId)

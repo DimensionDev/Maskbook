@@ -17,7 +17,7 @@ import {
     minus,
     toZero,
 } from '@masknet/web3-shared-base'
-import { usePluginContext, useNativeToken } from '@masknet/web3-hooks-base'
+import { useNetworkContext, useNativeToken } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { isNativeTokenAddress } from '@masknet/web3-shared-evm'
 import { useContainer } from 'unstated-next'
@@ -228,7 +228,7 @@ export interface TokenTableUIProps {
 export const TokenTableUI = memo<TokenTableUIProps>(({ onSwap, onSend, isLoading, isExpand, isEmpty, dataSource }) => {
     const t = useDashboardI18N()
     const { classes } = useStyles()
-    const { pluginID: currentPluginId } = usePluginContext()
+    const { pluginID: currentPluginId } = useNetworkContext()
 
     return (
         <>

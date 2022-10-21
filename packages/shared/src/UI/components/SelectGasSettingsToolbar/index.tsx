@@ -14,7 +14,7 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import { formatEtherToGwei, formatWeiToEther, formatWeiToGwei, GasOptionConfig } from '@masknet/web3-shared-evm'
 import { Typography, MenuItem, Box } from '@mui/material'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { useChainId, useWeb3State, usePluginContext } from '@masknet/web3-hooks-base'
+import { useChainId, useWeb3State, useNetworkContext } from '@masknet/web3-hooks-base'
 import { Icons } from '@masknet/icons'
 import { SettingsContext } from '../SettingsBoard/Context.js'
 
@@ -94,7 +94,7 @@ const useStyles = makeStyles()((theme) => {
 })
 
 export function SelectGasSettingsToolbar(props: SelectGasSettingsToolbarProps) {
-    const { pluginID } = usePluginContext(props.pluginID)
+    const { pluginID } = useNetworkContext(props.pluginID)
     const chainId = useChainId(pluginID, props.chainId)
 
     return (

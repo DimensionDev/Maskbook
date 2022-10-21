@@ -1,4 +1,4 @@
-import { NetworkContextProvider, usePluginContext, ChainContextProvider } from '@masknet/web3-hooks-base'
+import { NetworkContextProvider, useNetworkContext, ChainContextProvider } from '@masknet/web3-hooks-base'
 import { MaskLightTheme } from '@masknet/theme'
 import { ThemeProvider } from '@mui/material'
 import type { CollectiblePayload } from '../types.js'
@@ -11,7 +11,7 @@ export interface PostInspectorProps {
 
 export function PostInspector(props: PostInspectorProps) {
     const token = props.payload
-    const { pluginID } = usePluginContext()
+    const { pluginID } = useNetworkContext()
 
     return (
         <ThemeProvider theme={MaskLightTheme}>

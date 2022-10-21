@@ -3,7 +3,7 @@ import { useBoolean } from 'react-use'
 import classnames from 'classnames'
 import { uniqWith } from 'lodash-unified'
 import { Icons } from '@masknet/icons'
-import { useAccount, useChainId, useNonFungibleAssets, usePluginContext } from '@masknet/web3-hooks-base'
+import { useAccount, useChainId, useNonFungibleAssets, useNetworkContext } from '@masknet/web3-hooks-base'
 import { ElementAnchor, RetryHint } from '@masknet/shared'
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import { LoadingBase, makeStyles } from '@masknet/theme'
@@ -94,7 +94,7 @@ export const NFTSection: FC<Props> = ({ className, onEmpty, ...rest }) => {
     const account = useAccount()
 
     const chainId = useChainId()
-    const { pluginID } = usePluginContext()
+    const { pluginID } = useNetworkContext()
 
     const {
         value: fetchedTokens = EMPTY_LIST,
