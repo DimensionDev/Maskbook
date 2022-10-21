@@ -28,7 +28,7 @@ import { roundValue, getRequiredChainId } from '../helpers/index.js'
 import { runCreateERC20PairFarm } from './utils/referralFarm.js'
 
 import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary.js'
-import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
+import { ChainBoundary } from '@masknet/shared'
 import { CreatedFarms } from './CreatedFarms.js'
 import { TokenSelectField } from './shared-ui/TokenSelectField.js'
 

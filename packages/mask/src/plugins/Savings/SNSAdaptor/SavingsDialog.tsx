@@ -5,7 +5,7 @@ import { DialogActions, DialogContent, Tab } from '@mui/material'
 import { EMPTY_LIST, isDashboardPage, NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles, MaskColorVar, MaskTabList, useTabs } from '@masknet/theme'
 import { ChainId, createContract, getAaveConstants, SchemaType, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
-import { InjectedDialog, PluginWalletStatusBar } from '@masknet/shared'
+import { InjectedDialog, PluginWalletStatusBar , ChainBoundary } from '@masknet/shared'
 import { useI18N } from '../../../utils/index.js'
 import { AllProviderTradeContext } from '../../Trader/trader/useAllProviderTradeContext.js'
 import { NetworkTab } from '../../../components/shared/NetworkTab.js'
@@ -21,7 +21,6 @@ import type { AbiItem } from 'web3-utils'
 import { TabContext, TabPanel } from '@mui/lab'
 import { PluginWeb3ContextProvider, useChainId, useFungibleTokens, useWeb3 } from '@masknet/web3-hooks-base'
 import type { FungibleToken } from '@masknet/web3-shared-base'
-import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
 
 const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }) => ({
     abstractTabWrapper: {

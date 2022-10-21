@@ -13,14 +13,13 @@ import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline'
 import { RedpacketMessagePanel } from './RedpacketMessagePanel.js'
 import { SelectNftTokenDialog, OrderedERC721Token } from './SelectNftTokenDialog.js'
 import { RedpacketNftConfirmDialog } from './RedpacketNftConfirmDialog.js'
-import { NFTCardStyledAssetPlayer, PluginWalletStatusBar } from '@masknet/shared'
+import { NFTCardStyledAssetPlayer, PluginWalletStatusBar, ChainBoundary } from '@masknet/shared'
 import { NFTSelectOption } from '../types.js'
 import { NFT_RED_PACKET_MAX_SHARES } from '../constants.js'
 import { useAccount, useChainId, PluginWeb3ActualContextProvider } from '@masknet/web3-hooks-base'
 import { useNonFungibleOwnerTokens } from '@masknet/web3-hooks-evm'
 import { NetworkPluginID, EMPTY_LIST } from '@masknet/shared-base'
 import type { NonFungibleTokenContract, NonFungibleToken } from '@masknet/web3-shared-base'
-import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
 
 const useStyles = makeStyles()((theme) => {
     return {

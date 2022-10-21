@@ -5,7 +5,7 @@ import DialogContent from '@mui/material/DialogContent'
 import { useCustomSnackbar, makeStyles } from '@masknet/theme'
 import { useAccount, useChainId, useCurrentWeb3NetworkPluginID } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { InjectedDialog, PluginWalletStatusBar } from '@masknet/shared'
+import { InjectedDialog, PluginWalletStatusBar, ChainBoundary } from '@masknet/shared'
 import { PluginGameMessages } from '../messages.js'
 import GameList from './GameList.js'
 import GameWindow from './GameWindow.js'
@@ -14,7 +14,6 @@ import { WalletMessages } from '../../Wallet/messages.js'
 import type { GameInfo, GameNFT } from '../types.js'
 import { useI18N } from '../locales/index.js'
 import { alpha, DialogActions } from '@mui/material'
-import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
 
 export const ConnectContext = createContainer(() => {
     const [isGameShow, setGameShow] = useState(false)

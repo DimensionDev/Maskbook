@@ -6,7 +6,7 @@ import { paywallUrl } from '../constants.js'
 import { renderWithUnlockProtocolMetadata, UnlockProtocolMetadataReader } from '../helpers.js'
 import { useAccount, useChainId } from '@masknet/web3-hooks-base'
 import { PluginUnlockProtocolRPC } from '../messages.js'
-import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
+import { ChainBoundary } from '@masknet/shared'
 import { usePluginWrapper } from '@masknet/plugin-infra/dom'
 import { NetworkPluginID } from '@masknet/shared-base'
 

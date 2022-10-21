@@ -13,7 +13,7 @@ import {
 } from '@mui/material'
 import { makeStyles, ActionButton } from '@masknet/theme'
 import type { Order } from 'opensea-js/lib/types'
-import { InjectedDialog } from '@masknet/shared'
+import { InjectedDialog, ActionButtonPromise } from '@masknet/shared'
 import { CrossIsolationMessages } from '@masknet/shared-base'
 import { isGreaterThan } from '@masknet/web3-shared-base'
 import {
@@ -25,7 +25,6 @@ import {
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { UnreviewedWarnings } from './UnreviewedWarnings.js'
 import { useI18N } from '../../../../../utils/index.js'
-import { ActionButtonPromise } from '../../../../../extension/options-page/DashboardComponents/ActionButton.js'
 import { WalletConnectedBoundary } from '../../../../../web3/UI/WalletConnectedBoundary.js'
 import { CheckoutOrder } from './CheckoutOrder.js'
 import { useOpenSea } from './hooks/useOpenSea.js'

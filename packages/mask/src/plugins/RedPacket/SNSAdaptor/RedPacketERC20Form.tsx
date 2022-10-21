@@ -13,7 +13,7 @@ import {
 import { ChainId, SchemaType, useRedPacketConstants } from '@masknet/web3-shared-evm'
 import { MenuItem, Select, Box, InputBase, Typography } from '@mui/material'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { useSelectFungibleToken, FungibleTokenInput, PluginWalletStatusBar } from '@masknet/shared'
+import { useSelectFungibleToken, FungibleTokenInput, PluginWalletStatusBar, ChainBoundary } from '@masknet/shared'
 import { useCurrentIdentity, useCurrentLinkedPersona } from '../../../components/DataSource/useActivatedUI.js'
 import { useI18N } from '../locales/index.js'
 import { useI18N as useBaseI18n } from '../../../utils/index.js'
@@ -28,7 +28,6 @@ import {
     useChainId,
     PluginWeb3ActualContextProvider,
 } from '@masknet/web3-hooks-base'
-import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
 
 // seconds of 1 day
 const duration = 60 * 60 * 24

@@ -9,7 +9,7 @@ import { useControlledDialog } from '../../../../../utils/hooks/useControlledDia
 import { MakeOfferDialog } from './MakeOfferDialog.js'
 import { PostListingDialog } from './PostListingDialog.js'
 import { CheckoutDialog } from './CheckoutDialog.js'
-import { ChainBoundary } from '../../../../../web3/UI/ChainBoundary.js'
+import { ChainBoundary } from '@masknet/shared'
 import { useAssetOrder } from './hooks/useAssetOrder.js'
 import { Context } from '../Context/index.js'
 

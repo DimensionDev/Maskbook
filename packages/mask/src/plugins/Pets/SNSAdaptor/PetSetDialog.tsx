@@ -29,11 +29,10 @@ import { initMeta, initCollection, GLB3DIcon, PetsPluginID } from '../constants.
 import { PreviewBox } from './PreviewBox.js'
 import { PetMetaDB, FilterContract, OwnerERC721TokenInfo, ImageType } from '../types.js'
 import { useUser, useNFTs } from '../hooks/index.js'
-import { PluginWalletStatusBar } from '@masknet/shared'
+import { PluginWalletStatusBar, ChainBoundary } from '@masknet/shared'
 import { useI18N } from '../locales/index.js'
 import { ImageLoader } from './ImageLoader.js'
 import { petShowSettings } from '../settings.js'
-import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
 import { useWeb3Connection, useWeb3State } from '@masknet/web3-hooks-base'
 import { Icons } from '@masknet/icons'
 

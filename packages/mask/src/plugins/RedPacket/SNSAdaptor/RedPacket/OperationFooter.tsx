@@ -8,7 +8,7 @@ import { Box, keyframes, useTheme } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { useI18N as useBaseI18n } from '../../../../utils/index.js'
 import { useI18N } from '../../locales/index.js'
-import { ChainBoundary } from '../../../../web3/UI/ChainBoundary.js'
+import { ChainBoundary } from '@masknet/shared'
 import { WalletConnectedBoundary } from '../../../../web3/UI/WalletConnectedBoundary.js'
 
 export const useStyles = makeStyles()((theme) => {
