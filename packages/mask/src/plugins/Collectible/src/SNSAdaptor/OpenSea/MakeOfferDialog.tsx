@@ -17,7 +17,7 @@ import {
     DialogActions,
 } from '@mui/material'
 import { makeStyles, ActionButton } from '@masknet/theme'
-import { InjectedDialog, PluginWalletStatusBar } from '@masknet/shared'
+import { InjectedDialog, PluginWalletStatusBar, ActionButtonPromise, ChainBoundary } from '@masknet/shared'
 import { CrossIsolationMessages, NetworkPluginID } from '@masknet/shared-base'
 import {
     useAccount,
@@ -29,12 +29,10 @@ import {
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { UnreviewedWarnings } from './UnreviewedWarnings.js'
 import { useI18N } from '../../../../../utils/index.js'
-import { ActionButtonPromise } from '../../../../../extension/options-page/DashboardComponents/ActionButton.js'
 import { DateTimePanel } from '../../../../../web3/UI/DateTimePanel.js'
 import { toAsset, isWyvernSchemaName } from '../../helpers/index.js'
 import { CurrencyType, rightShift, ZERO } from '@masknet/web3-shared-base'
 import { SelectTokenListPanel } from './SelectTokenListPanel.js'
-import { ChainBoundary } from '../../../../../web3/UI/ChainBoundary.js'
 import { useOpenSea } from './hooks/useOpenSea.js'
 
 const useStyles = makeStyles()((theme) => {

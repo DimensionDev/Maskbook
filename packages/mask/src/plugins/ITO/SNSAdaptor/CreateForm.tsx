@@ -5,7 +5,7 @@ import Web3Utils from 'web3-utils'
 import formatDateTime from 'date-fns/format'
 import { SchemaType, formatAmount, useITOConstants, ChainId } from '@masknet/web3-shared-evm'
 import { isGreaterThan, isZero, FungibleToken, leftShift } from '@masknet/web3-shared-base'
-import { TokenIcon, PluginWalletStatusBar } from '@masknet/shared'
+import { TokenIcon, PluginWalletStatusBar, ChainBoundary } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { Box, Stack, Typography, InputBase, inputBaseClasses } from '@mui/material'
 import { makeStyles, useStylesExtends, ActionButton, LoadingBase } from '@masknet/theme'
@@ -28,7 +28,6 @@ import { AdvanceSettingData, AdvanceSetting } from './AdvanceSetting.js'
 import { ExchangeTokenPanelGroup } from './ExchangeTokenPanelGroup.js'
 import { RegionSelect } from './RegionSelect.js'
 import { useAccount, useFungibleTokenBalance } from '@masknet/web3-hooks-base'
-import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
 
 const useStyles = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`

@@ -10,7 +10,7 @@ import { useAccount, useChainId, useWeb3, useFungibleTokenBalance, useWeb3Connec
 import { AdjustFarmRewardsInterface, TransactionStatus, PagesType, FungibleTokenDetailed } from '../types.js'
 import { useI18N } from '../locales/index.js'
 import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary.js'
-import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
+import { ChainBoundary } from '@masknet/shared'
 import { roundValue, getRequiredChainId } from '../helpers/index.js'
 import { ATTRACE_FEE_PERCENT } from '../constants.js'
 import { adjustFarmRewards } from './utils/referralFarm.js'

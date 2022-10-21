@@ -10,7 +10,7 @@ import { usePool, usePools } from '../hooks/usePools.js'
 import type { Pool } from '../types.js'
 import { Account } from './Account.js'
 import { PoolsView } from './PoolsView.js'
-import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
+import { ChainBoundary } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     root: {

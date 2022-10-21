@@ -12,12 +12,11 @@ import { DetailsTab } from './DetailsTab.js'
 import { DrawDialog } from './DrawDialog.js'
 import { DrawResultDialog } from './DrawResultDialog.js'
 import { useTransactionCallback } from '@masknet/web3-hooks-evm'
-import { ChainBoundary } from '../../../../web3/UI/ChainBoundary.js'
+import { ChainBoundary, ImageIcon, TokenIcon } from '@masknet/shared'
 import { formatBalance } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useI18N } from '../../locales/index.js'
 import { TabContext, TabPanel } from '@mui/lab'
-import { ImageIcon, TokenIcon } from '@masknet/shared'
 
 const useTabsStyles = makeStyles()((theme) => ({
     button: {

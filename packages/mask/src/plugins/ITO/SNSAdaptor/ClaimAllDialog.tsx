@@ -11,7 +11,13 @@ import {
 } from '@masknet/web3-hooks-base'
 import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
 import { SnackbarProvider, makeStyles, ActionButton, LoadingBase } from '@masknet/theme'
-import { InjectedDialog, FormattedBalance, useOpenShareTxDialog, PluginWalletStatusBar } from '@masknet/shared'
+import {
+    InjectedDialog,
+    FormattedBalance,
+    useOpenShareTxDialog,
+    PluginWalletStatusBar,
+    ChainBoundary,
+} from '@masknet/shared'
 import { DialogContent, Typography, List, ListItem, useTheme, DialogActions } from '@mui/material'
 import { PluginID, NetworkPluginID } from '@masknet/shared-base'
 import { formatBalance, isSameAddress, FungibleToken } from '@masknet/web3-shared-base'
@@ -21,7 +27,6 @@ import { useI18N } from '../../../utils/index.js'
 import { useClaimAll } from './hooks/useClaimAll.js'
 import { useClaimCallback } from './hooks/useClaimCallback.js'
 import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary.js'
-import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
 import type { SwappedTokenType } from '../types.js'
 
 interface StyleProps {

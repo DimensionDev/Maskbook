@@ -10,7 +10,7 @@ import {
     isNativeTokenAddress,
     formatTokenId,
 } from '@masknet/web3-shared-evm'
-import { NFTCardStyledAssetPlayer, PluginWalletStatusBar } from '@masknet/shared'
+import { NFTCardStyledAssetPlayer, PluginWalletStatusBar, ChainBoundary } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { Grid, Link, Typography, List, DialogContent, ListItem, Box } from '@mui/material'
@@ -26,7 +26,6 @@ import { RedPacketRPC } from '../messages.js'
 import { useAccount, useChainId, useWallet, useWeb3 } from '@masknet/web3-hooks-base'
 import type { NonFungibleTokenContract, NonFungibleToken } from '@masknet/web3-shared-base'
 import Services from '../../../extension/service.js'
-import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {

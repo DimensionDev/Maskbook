@@ -11,7 +11,7 @@ import { ReferralRPC } from '../messages.js'
 
 import { AccordionFarm } from './shared-ui/AccordionFarm.js'
 import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary.js'
-import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
+import { ChainBoundary } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     buttonWithdraw: {

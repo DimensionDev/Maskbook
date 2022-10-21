@@ -4,7 +4,7 @@ import { Card, CardActions, CardContent, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { isZero, isLessThan } from '@masknet/web3-shared-base'
 import formatDateTime from 'date-fns/format'
-import { PluginWalletStatusBar } from '@masknet/shared'
+import { PluginWalletStatusBar, ActionButtonPromise } from '@masknet/shared'
 import getUnixTime from 'date-fns/getUnixTime'
 import {
     useAccount,
@@ -18,7 +18,7 @@ import { useI18N } from '../../../../../utils/index.js'
 import { SelectTokenAmountPanel } from '../../../../ITO/SNSAdaptor/SelectTokenAmountPanel.js'
 import { WalletConnectedBoundary } from '../../../../../web3/UI/WalletConnectedBoundary.js'
 import { DateTimePanel } from '../../../../../web3/UI/DateTimePanel.js'
-import { ActionButtonPromise } from '../../../../../extension/options-page/DashboardComponents/ActionButton.js'
+
 import { useOpenSea } from './hooks/useOpenSea.js'
 import { isWyvernSchemaName, toAsset } from '../../helpers/index.js'
 

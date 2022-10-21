@@ -14,7 +14,7 @@ import { chainResolver, explorerResolver, isNativeTokenAddress, useRedPacketCons
 import { Grid, Link, Paper, Typography } from '@mui/material'
 import { makeStyles, ActionButton } from '@masknet/theme'
 import LaunchIcon from '@mui/icons-material/Launch'
-import { FormattedBalance, useOpenShareTxDialog, PluginWalletStatusBar } from '@masknet/shared'
+import { FormattedBalance, useOpenShareTxDialog, PluginWalletStatusBar, ChainBoundary } from '@masknet/shared'
 import { useI18N } from '../locales/index.js'
 import { RedPacketSettings, useCreateCallback, useCreateParams } from './hooks/useCreateCallback.js'
 import { useTransactionValue } from '@masknet/web3-hooks-evm'
@@ -22,7 +22,6 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import { formatBalance, isSameAddress } from '@masknet/web3-shared-base'
 import type { RedPacketJSONPayload, RedPacketRecord } from '../types.js'
 import { RedPacketRPC } from '../messages.js'
-import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
 
 const useStyles = makeStyles()((theme) => ({
     link: {

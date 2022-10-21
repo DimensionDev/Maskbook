@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from 'react'
 import { Avatar, Box, Button, CardContent, CardHeader, Link, Paper, Tab, Tabs, Typography } from '@mui/material'
-import { Markdown } from '@masknet/shared'
+import { Markdown, ChainBoundary } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { Trans } from 'react-i18next'
 import VerifiedUserIcon from '@mui/icons-material/VerifiedUser'
@@ -17,7 +17,6 @@ import { resolveAssetLinkOnCryptoartAI, resolveWebLinkOnCryptoartAI } from '../p
 import { ActionBar } from './ActionBar.js'
 import { useChainId } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
 import { PLUGIN_NAME } from '../constants.js'
 
 const useStyles = makeStyles()((theme) => {
