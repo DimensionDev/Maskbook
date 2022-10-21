@@ -1,5 +1,4 @@
 import { Icons } from '@masknet/icons'
-import { useWeb3State } from '@masknet/web3-hooks-base'
 import { ImageIcon, useIsImageURL } from '@masknet/shared'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { NetworkPluginID } from '@masknet/shared-base'
@@ -93,7 +92,6 @@ export function NFTImageCollectibleAvatar({
 }: NFTImageCollectibleAvatarProps) {
     const { classes } = useStyles({ networkPluginID: pluginID })
     const { value: isImageToken, loading } = useIsImageURL(token.metadata?.imageURL)
-    const { Others } = useWeb3State()
 
     if (loading)
         return (
@@ -107,9 +105,7 @@ export function NFTImageCollectibleAvatar({
             </div>
         )
 
-    const name = token.collection?.name || token.contract?.name
-    const uiTokenId = Others?.formatTokenId(token.tokenId, 4) ?? `#${token.tokenId}`
-    const title = name ? (name.match(/#\d+$/) ? name : `${name} ${uiTokenId}`) : token.metadata?.name ?? ''
+    const title = token.metadata?.name || ''
     return isImageToken ? (
         <NFTImage
             title={title}
