@@ -105,13 +105,7 @@ export function DetailsCard(props: DetailsCardProps) {
                             {x.link && (
                                 <Link
                                     className={classes.link}
-                                    href={
-                                        Others?.explorerResolver.nonFungibleTokenLink?.(
-                                            asset.chainId,
-                                            asset.address,
-                                            asset.tokenId,
-                                        ) ?? ''
-                                    }
+                                    href={Others?.explorerResolver.addressLink?.(asset.chainId, asset.address) ?? ''}
                                     target="_blank"
                                     rel="noopener noreferrer">
                                     <Icons.LinkOut size={16} />
