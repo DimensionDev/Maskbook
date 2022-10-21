@@ -41,7 +41,7 @@ export class MaskX_API implements MaskX_BaseAPI.Provider {
         } catch (error) {
             return {
                 ...identity,
-                sns_handle: `${handle}.rss3`,
+                sns_handle: identity.web3_addr,
             }
         }
     }
