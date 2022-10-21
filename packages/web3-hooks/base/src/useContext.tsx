@@ -88,7 +88,7 @@ export function useNetworkContext<T extends NetworkPluginID = NetworkPluginID>(e
     const context = useContext(NetworkContext)
     return {
         ...context,
-        pluginID: expectedPluginID ?? context.pluginID,
+        pluginID: (expectedPluginID ?? context.pluginID) as T,
     }
 }
 
