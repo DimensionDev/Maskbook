@@ -18,7 +18,6 @@ import { useI18N } from '../../../../../utils/index.js'
 import { SelectTokenAmountPanel } from '../../../../ITO/SNSAdaptor/SelectTokenAmountPanel.js'
 import { WalletConnectedBoundary } from '../../../../../web3/UI/WalletConnectedBoundary.js'
 import { DateTimePanel } from '../../../../../web3/UI/DateTimePanel.js'
-
 import { useOpenSea } from './hooks/useOpenSea.js'
 import { isWyvernSchemaName, toAsset } from '../../helpers/index.js'
 

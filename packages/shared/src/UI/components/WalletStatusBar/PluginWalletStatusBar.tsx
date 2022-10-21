@@ -64,8 +64,8 @@ export const PluginWalletStatusBar = memo<WalletStatusBarProps<NetworkPluginID>>
 
         const { pluginID } = useNetworkContext()
         const account = useAccount(pluginID)
-        const wallet = useWallet(pluginID)
         const chainId = useChainId(pluginID)
+        const wallet = useWallet(pluginID)
         const providerDescriptor = useProviderDescriptor()
         const providerType = useProviderType()
         const networkDescriptor = useNetworkDescriptor(pluginID, chainId)

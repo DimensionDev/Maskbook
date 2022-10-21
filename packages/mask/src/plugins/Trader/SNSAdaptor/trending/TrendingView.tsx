@@ -1,11 +1,5 @@
 import { useIsMinimalMode } from '@masknet/plugin-infra/content-script'
-import {
-    useChainContext,
-    useChainId,
-    useChainIdValid,
-    useNetworkType,
-    useNonFungibleAssetsByCollection,
-} from '@masknet/web3-hooks-base'
+import { useChainContext, useChainIdValid, useNonFungibleAssetsByCollection } from '@masknet/web3-hooks-base'
 import { DataProvider } from '@masknet/public-api'
 import { NFTList } from '@masknet/shared'
 import { EMPTY_LIST, PluginID, NetworkPluginID } from '@masknet/shared-base'

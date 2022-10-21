@@ -16,7 +16,7 @@ import { RedpacketNftConfirmDialog } from './RedpacketNftConfirmDialog.js'
 import { NFTCardStyledAssetPlayer, PluginWalletStatusBar, ChainBoundary } from '@masknet/shared'
 import { NFTSelectOption } from '../types.js'
 import { NFT_RED_PACKET_MAX_SHARES } from '../constants.js'
-import { useChainContext } from '@masknet/web3-hooks-base'
+import { ActualChainContextProvider, useChainContext } from '@masknet/web3-hooks-base'
 import { useNonFungibleOwnerTokens } from '@masknet/web3-hooks-evm'
 import { NetworkPluginID, EMPTY_LIST } from '@masknet/shared-base'
 import type { NonFungibleTokenContract, NonFungibleToken } from '@masknet/web3-shared-base'
@@ -388,25 +388,27 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
             </Box>
             <Box style={{ position: 'absolute', bottom: 0, width: '100%' }}>
                 <PluginWalletStatusBar>
-                    <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={chainId}>
-                        <WalletConnectedBoundary>
-                            <EthereumERC721TokenApprovedBoundary
-                                validationMessage={validationMessage}
-                                owner={account}
-                                contractDetailed={contract}
-                                classes={{ approveButton: classes.approveButton }}
-                                operator={RED_PACKET_NFT_ADDRESS}>
-                                <ActionButton
-                                    style={{ height: 40, padding: 0, margin: 0 }}
-                                    size="large"
-                                    disabled={!!validationMessage}
-                                    fullWidth
-                                    onClick={() => setOpenNFTConfirmDialog(true)}>
-                                    {t.next()}
-                                </ActionButton>
-                            </EthereumERC721TokenApprovedBoundary>
-                        </WalletConnectedBoundary>
-                    </ChainBoundary>
+                    <ActualChainContextProvider>
+                        <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={chainId}>
+                            <WalletConnectedBoundary>
+                                <EthereumERC721TokenApprovedBoundary
+                                    validationMessage={validationMessage}
+                                    owner={account}
+                                    contractDetailed={contract}
+                                    classes={{ approveButton: classes.approveButton }}
+                                    operator={RED_PACKET_NFT_ADDRESS}>
+                                    <ActionButton
+                                        style={{ height: 40, padding: 0, margin: 0 }}
+                                        size="large"
+                                        disabled={!!validationMessage}
+                                        fullWidth
+                                        onClick={() => setOpenNFTConfirmDialog(true)}>
+                                        {t.next()}
+                                    </ActionButton>
+                                </EthereumERC721TokenApprovedBoundary>
+                            </WalletConnectedBoundary>
+                        </ChainBoundary>
+                    </ActualChainContextProvider>
                 </PluginWalletStatusBar>
             </Box>
         </>
