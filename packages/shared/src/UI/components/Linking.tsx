@@ -1,4 +1,5 @@
 import { Link, LinkProps, Typography, TypographyProps } from '@mui/material'
+import { ForwardedRef, forwardRef } from 'react'
 
 export interface LinkingProps {
     href?: string
@@ -7,7 +8,7 @@ export interface LinkingProps {
     TypographyProps?: Partial<TypographyProps>
 }
 
-export function Linking(props: LinkingProps) {
+export const Linking = forwardRef<HTMLAnchorElement | HTMLSpanElement, LinkingProps>(function Linking(props, ref) {
     const { href, LinkProps, TypographyProps, children } = props
     try {
         const { hostname } = new URL(href ?? '')
@@ -17,7 +18,8 @@ export function Linking(props: LinkingProps) {
                 target="_blank"
                 rel="noopener noreferrer"
                 href={props.href}
-                {...LinkProps}>
+                {...LinkProps}
+                ref={ref as ForwardedRef<HTMLAnchorElement>}>
                 {children ? (
                     children
                 ) : (
@@ -29,7 +31,7 @@ export function Linking(props: LinkingProps) {
         )
     } catch {
         return (
-            <span className={LinkProps?.className} title={LinkProps?.title}>
+            <span className={LinkProps?.className} title={LinkProps?.title} ref={ref as ForwardedRef<HTMLSpanElement>}>
                 {children ? (
                     children
                 ) : (
@@ -40,4 +42,4 @@ export function Linking(props: LinkingProps) {
             </span>
         )
     }
-}
+})
