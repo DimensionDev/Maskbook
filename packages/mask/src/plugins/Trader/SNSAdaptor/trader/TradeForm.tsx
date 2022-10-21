@@ -1,4 +1,5 @@
 import { memo, useCallback, useMemo, useRef, useState } from 'react'
+import { useUpdateEffect } from 'react-use'
 import { useI18N } from '../../../../utils/index.js'
 import {
     PluginWalletStatusBar,
@@ -24,8 +25,8 @@ import { MINIMUM_AMOUNT, MIN_GAS_LIMIT } from '../../constants/index.js'
 import { resolveTradeProviderName } from '../../pipes.js'
 import { EthereumERC20TokenApprovedBoundary } from '../../../../web3/UI/EthereumERC20TokenApprovedBoundary.js'
 import { useTradeApproveComputed } from '../../trader/useTradeApproveComputed.js'
-import { useUpdateEffect } from 'react-use'
 import { isDashboardPage, isPopupPage, PopupRoutes, PluginID, NetworkPluginID } from '@masknet/shared-base'
+import { useChainId } from '@masknet/web3-hooks-base'
 import { AllProviderTradeContext } from '../../trader/useAllProviderTradeContext.js'
 import { WalletConnectedBoundary } from '../../../../web3/UI/WalletConnectedBoundary.js'
 import { TokenSecurityBoundary } from '../../../../web3/UI/TokenSecurityBoundary.js'
@@ -34,7 +35,6 @@ import { PluginTraderMessages } from '../../messages.js'
 import Services from '../../../../extension/service.js'
 import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
 import { useIsMinimalModeDashBoard } from '@masknet/plugin-infra/dashboard'
-import { ActualChainContextProvider, useChainId } from '@masknet/web3-hooks-base'
 
 const useStyles = makeStyles<{
     isDashboard: boolean
@@ -548,67 +548,65 @@ export const TradeForm = memo<AllTradeFormProps>(
                     </Box>
                 ) : null}
                 <Box className={classes.stateBar}>
-                    <ActualChainContextProvider>
-                        <PluginWalletStatusBar onClick={isPopup ? openSelectWalletPopup : undefined}>
-                            <WalletConnectedBoundary offChain>
-                                <EthereumERC20TokenApprovedBoundary
-                                    onlyInfiniteUnlock
-                                    spender={approveAddress}
-                                    amount={approveAmount.toFixed()}
-                                    classes={{ container: classes.unlockContainer }}
-                                    contractName={
-                                        focusedTrade?.provider ? resolveTradeProviderName(focusedTrade.provider) : ''
+                    <PluginWalletStatusBar onClick={isPopup ? openSelectWalletPopup : undefined}>
+                        <WalletConnectedBoundary offChain>
+                            <EthereumERC20TokenApprovedBoundary
+                                onlyInfiniteUnlock
+                                spender={approveAddress}
+                                amount={approveAmount.toFixed()}
+                                classes={{ container: classes.unlockContainer }}
+                                contractName={
+                                    focusedTrade?.provider ? resolveTradeProviderName(focusedTrade.provider) : ''
+                                }
+                                infiniteUnlockContent={t('plugin_trader_unlock_symbol', {
+                                    symbol: approveToken?.symbol,
+                                })}
+                                expectedChainId={chainId}
+                                token={
+                                    !isNativeTokenWrapper(focusedTrade?.value ?? null) &&
+                                    approveToken?.schema === SchemaType.ERC20 &&
+                                    !!approveAmount.toNumber()
+                                        ? approveToken
+                                        : undefined
+                                }
+                                ActionButtonProps={{
+                                    color: 'primary',
+                                    style: { borderRadius: 8 },
+                                    size: 'medium',
+                                }}>
+                                <TokenSecurityBoundary
+                                    tokenInfo={{
+                                        name: tokenSecurityInfo?.token_name ?? '--',
+                                        chainId: tokenSecurityInfo?.chainId ?? ChainId.Mainnet,
+                                        contract: tokenSecurityInfo?.contract ?? ZERO_ADDRESS,
+                                    }}
+                                    disabled={
+                                        focusedTrade?.loading ||
+                                        !focusedTrade?.value ||
+                                        !!validationMessage ||
+                                        isSwapping
                                     }
-                                    infiniteUnlockContent={t('plugin_trader_unlock_symbol', {
-                                        symbol: approveToken?.symbol,
-                                    })}
-                                    expectedChainId={chainId}
-                                    token={
-                                        !isNativeTokenWrapper(focusedTrade?.value ?? null) &&
-                                        approveToken?.schema === SchemaType.ERC20 &&
-                                        !!approveAmount.toNumber()
-                                            ? approveToken
-                                            : undefined
-                                    }
-                                    ActionButtonProps={{
-                                        color: 'primary',
-                                        style: { borderRadius: 8 },
-                                        size: 'medium',
-                                    }}>
-                                    <TokenSecurityBoundary
-                                        tokenInfo={{
-                                            name: tokenSecurityInfo?.token_name ?? '--',
-                                            chainId: tokenSecurityInfo?.chainId ?? ChainId.Mainnet,
-                                            contract: tokenSecurityInfo?.contract ?? ZERO_ADDRESS,
-                                        }}
+                                    onSwap={onSwap}
+                                    showTokenSecurity={isTokenSecurityEnable && isRisky}>
+                                    <ActionButton
+                                        fullWidth
+                                        loading={isSwapping}
+                                        variant="contained"
                                         disabled={
                                             focusedTrade?.loading ||
                                             !focusedTrade?.value ||
                                             !!validationMessage ||
                                             isSwapping
                                         }
-                                        onSwap={onSwap}
-                                        showTokenSecurity={isTokenSecurityEnable && isRisky}>
-                                        <ActionButton
-                                            fullWidth
-                                            loading={isSwapping}
-                                            variant="contained"
-                                            disabled={
-                                                focusedTrade?.loading ||
-                                                !focusedTrade?.value ||
-                                                !!validationMessage ||
-                                                isSwapping
-                                            }
-                                            classes={{ root: classes.button, disabled: classes.disabledButton }}
-                                            color="primary"
-                                            onClick={onSwap}>
-                                            {validationMessage || nativeWrapMessage}
-                                        </ActionButton>
-                                    </TokenSecurityBoundary>
-                                </EthereumERC20TokenApprovedBoundary>
-                            </WalletConnectedBoundary>
-                        </PluginWalletStatusBar>
-                    </ActualChainContextProvider>
+                                        classes={{ root: classes.button, disabled: classes.disabledButton }}
+                                        color="primary"
+                                        onClick={onSwap}>
+                                        {validationMessage || nativeWrapMessage}
+                                    </ActionButton>
+                                </TokenSecurityBoundary>
+                            </EthereumERC20TokenApprovedBoundary>
+                        </WalletConnectedBoundary>
+                    </PluginWalletStatusBar>
                 </Box>
             </>
         )

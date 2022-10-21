@@ -1,10 +1,6 @@
-import React, { createContext, ReactNode, useContext, useState } from 'react'
+import React, { createContext, useContext, useState } from 'react'
 import { EMPTY_OBJECT, NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { useActualAccount } from './useAccount.js'
-import { useActualChainId } from './useChainId.js'
-import { useActualNetworkType } from './useNetworkType.js'
-import { useActualProviderType } from './useProviderType.js'
 
 interface NetworkContext {
     pluginID: NetworkPluginID
@@ -66,16 +62,6 @@ export function ChainContextProvider({ value, children }: React.ProviderProps<Ch
             children={children}
         />
     )
-}
-
-export function ActualChainContextProvider({ children }: { children: ReactNode | undefined }) {
-    const value = {
-        account: useActualAccount(),
-        chainId: useActualChainId(),
-        networkType: useActualNetworkType(),
-        providerType: useActualProviderType(),
-    }
-    return <ChainContext.Provider value={value} children={children} />
 }
 
 export function Web3ContextProvider({ value, children }: React.ProviderProps<NetworkPluginID>) {
