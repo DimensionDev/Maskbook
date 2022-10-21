@@ -13,7 +13,7 @@ import {
 } from '@masknet/shared-base'
 import { KVStorage } from '@masknet/shared'
 import { ChainId, isValidAddress, isZeroAddress } from '@masknet/web3-shared-evm'
-import { KeyValue, MaskX, MaskX_BaseAPI, NextIDProof, NextIDStorage, RSS3, Twitter } from '@masknet/web3-providers'
+import { MaskX, MaskX_BaseAPI, NextIDProof, NextIDStorage, RSS3, Twitter } from '@masknet/web3-providers'
 import { ENS_Resolver } from './NameService/ENS.js'
 import { ChainbaseResolver } from './NameService/Chainbase.js'
 import { Web3StateSettings } from '../settings/index.js'

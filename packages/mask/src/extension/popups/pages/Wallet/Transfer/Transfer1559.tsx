@@ -47,7 +47,6 @@ import {
     useFungibleTokenBalance,
     useLookupAddress,
     useNativeTokenPrice,
-    useNetworkType,
     useWallet,
     useWeb3State,
     useWeb3Connection,

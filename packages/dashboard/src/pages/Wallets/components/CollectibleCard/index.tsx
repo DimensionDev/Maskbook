@@ -6,7 +6,7 @@ import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useDashboardI18N } from '../../../../locales/index.js'
 import { ChangeNetworkTip } from '../FungibleTokenTableRow/ChangeNetworkTip.js'
-import { useChainId, useNetworkDescriptor, useNetworkContext, useWeb3State } from '@masknet/web3-hooks-base'
+import { useChainId, useNetworkContext, useWeb3State } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 
 const useStyles = makeStyles()((theme) => ({

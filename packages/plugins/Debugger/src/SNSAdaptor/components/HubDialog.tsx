@@ -18,7 +18,6 @@ export function HubDialog(props: HubDialogProps) {
                     <ChainContextProvider
                         value={{
                             chainId: ChainId.Mainnet,
-                            pluginID: NetworkPluginID.PLUGIN_EVM,
                         }}>
                         <HubContent onClose={closeDialog} />
                     </ChainContextProvider>
