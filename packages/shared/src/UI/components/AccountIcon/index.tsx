@@ -157,11 +157,7 @@ export function AccountIcon({ socialAccount, classes: externalClasses }: Account
                     <Linking
                         href={resolveSocialAddressLink(SocialAddressType.Sybil)}
                         LinkProps={{ className: classes.link }}>
-                        <Icons.Sybil
-                            className={cx(classes.actionIcon, classes.icon)}
-                            size={18}
-                            style={iconStyle}
-                        />
+                        <Icons.Sybil className={cx(classes.actionIcon, classes.icon)} size={18} style={iconStyle} />
                     </Linking>
                 </AccountTooltips>
             ) : null}
