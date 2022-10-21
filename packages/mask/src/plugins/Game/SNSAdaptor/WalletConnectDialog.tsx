@@ -2,8 +2,9 @@ import { useState } from 'react'
 import { createContainer } from 'unstated-next'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import DialogContent from '@mui/material/DialogContent'
+import { alpha, DialogActions } from '@mui/material'
 import { useCustomSnackbar, makeStyles } from '@masknet/theme'
-import { useAccount, useChainId, useCurrentWeb3NetworkPluginID } from '@masknet/web3-hooks-base'
+import { useAccount, useChainId, useNetworkContext } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { InjectedDialog, PluginWalletStatusBar, ChainBoundary } from '@masknet/shared'
 import { PluginGameMessages } from '../messages.js'
@@ -13,7 +14,6 @@ import GameShareDialog from './GameShareDialog.js'
 import { WalletMessages } from '../../Wallet/messages.js'
 import type { GameInfo, GameNFT } from '../types.js'
 import { useI18N } from '../locales/index.js'
-import { alpha, DialogActions } from '@mui/material'
 
 export const ConnectContext = createContainer(() => {
     const [isGameShow, setGameShow] = useState(false)
@@ -47,9 +47,9 @@ const WalletConnectDialog = () => {
     const t = useI18N()
     const { classes } = useStyles()
     const { showSnackbar } = useCustomSnackbar()
+    const { pluginID } = useNetworkContext()
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const currentPluginId = useCurrentWeb3NetworkPluginID()
     const { isGameShow, setGameShow, tokenProps, setTokenProps, gameInfo, setGameInfo } = ConnectContext.useContainer()
 
     const { open, closeDialog } = useRemoteControlledDialog(PluginGameMessages.events.gameDialogUpdated, (ev) => {
@@ -64,7 +64,7 @@ const WalletConnectDialog = () => {
     }
 
     const handleGameOpen = (gameInfo: GameInfo) => {
-        if (currentPluginId !== NetworkPluginID.PLUGIN_EVM) {
+        if (pluginID !== NetworkPluginID.PLUGIN_EVM) {
             showSnackbar(t.game_list_play_evm_error(), { variant: 'error' })
             return
         }

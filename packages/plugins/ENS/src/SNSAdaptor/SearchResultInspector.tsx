@@ -8,7 +8,7 @@ import { EmptyContent } from './EmptyContent'
 import { LoadingContent } from './LoadingContent'
 import { LoadFailedContent } from './LoadFailedContent'
 import { TopAndLastOffers } from './TopAndLastOffers'
-import { ENSProvider, ENSContext, SearchResultInspectorProps, RootContext } from './context'
+import { ENSProvider, ENSContext, SearchResultInspectorProps } from './context'
 import { CollectibleState } from './hooks/useCollectibleState'
 import { NextIdBadge } from './NextIdBadge'
 import { SocialAccountList } from './SocialAccountList'
@@ -158,10 +158,8 @@ export function SearchResultInspectorContent() {
 
 export function SearchResultInspector(props: SearchResultInspectorProps) {
     return (
-        <RootContext>
-            <ENSProvider {...props}>
-                <SearchResultInspectorContent />
-            </ENSProvider>
-        </RootContext>
+        <ENSProvider {...props}>
+            <SearchResultInspectorContent />
+        </ENSProvider>
     )
 }
