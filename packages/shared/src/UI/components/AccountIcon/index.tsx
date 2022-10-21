@@ -20,7 +20,7 @@ const useStyles = makeStyles<void, 'icon' | 'tooltip'>()((theme) => {
             marginLeft: theme.spacing(0.5),
             color: theme.palette.maskColor.main,
         },
-        twitterIcon: {
+        roundedIcon: {
             borderRadius: '50%',
         },
         tooltip: {
@@ -33,7 +33,6 @@ enum AddressPlatform {
     Facebook = 'facebook',
     Twitter = 'twitter',
     NextId = 'next_id',
-    RSS3 = 'rss3',
 }
 
 interface AccountTooltipsProps extends Omit<TooltipProps, 'title'> {
@@ -50,14 +49,10 @@ function AccountTooltips({ platform, type, children }: AccountTooltipsProps) {
             disableInteractive
             title={
                 <Typography fontSize={14} lineHeight="18px">
-                    {type
-                        ? t.source_tooltip({
-                              source: type ?? '',
-                              context: platform,
-                          })
-                        : t.source_tooltip_only({
-                              context: platform!,
-                          })}
+                    {t.source_tooltip({
+                        source: type ?? '',
+                        context: platform,
+                    })}
                 </Typography>
             }
             arrow>
@@ -107,30 +102,32 @@ export function AccountIcon({ socialAccount, classes: externalClasses }: Account
                 </Linking>
             ) : null}
 
+            {fromTwitter ? (
+                <AccountTooltips platform={AddressPlatform.Twitter} type={fromTwitter}>
+                    <Icons.TwitterRound
+                        className={cx(classes.actionIcon, classes.icon, classes.roundedIcon)}
+                        style={iconStyle}
+                    />
+                </AccountTooltips>
+            ) : null}
+
             {supportedAddressTypes.includes(SocialAddressType.RSS3) ? (
                 <Linking
                     href={resolveSocialAddressLink(SocialAddressType.RSS3)}
                     LinkProps={{ className: classes.link }}>
-                    <AccountTooltips platform={AddressPlatform.RSS3}>
+                    <AccountTooltips
+                        platform={fromTwitter ? AddressPlatform.Twitter : undefined}
+                        type={SocialAddressType.RSS3}>
                         <Icons.RSS3 className={cx(classes.actionIcon, classes.icon)} size={18} style={iconStyle} />
                     </AccountTooltips>
                 </Linking>
-            ) : null}
-
-            {fromTwitter ? (
-                <AccountTooltips platform={AddressPlatform.Twitter} type={fromTwitter}>
-                    <Icons.TwitterRound
-                        className={cx(classes.actionIcon, classes.icon, classes.twitterIcon)}
-                        style={iconStyle}
-                    />
-                </AccountTooltips>
             ) : null}
 
             {supportedAddressTypes.includes(SocialAddressType.CyberConnect) ? (
                 <Linking
                     href={resolveSocialAddressLink(SocialAddressType.CyberConnect)}
                     LinkProps={{ className: classes.link }}>
-                    <AccountTooltips platform={AddressPlatform.Twitter} type={SocialAddressType.CyberConnect}>
+                    <AccountTooltips type={SocialAddressType.CyberConnect}>
                         <Icons.CyberConnect
                             className={cx(classes.actionIcon, classes.icon)}
                             size={18}
@@ -144,7 +141,7 @@ export function AccountIcon({ socialAccount, classes: externalClasses }: Account
                 <Linking
                     href={resolveSocialAddressLink(SocialAddressType.Leaderboard)}
                     LinkProps={{ className: classes.link }}>
-                    <AccountTooltips platform={AddressPlatform.Twitter} type={SocialAddressType.Leaderboard}>
+                    <AccountTooltips type={SocialAddressType.Leaderboard}>
                         <Icons.Leaderboard
                             className={cx(classes.actionIcon, classes.icon)}
                             size={18}
@@ -158,8 +155,12 @@ export function AccountIcon({ socialAccount, classes: externalClasses }: Account
                 <Linking
                     href={resolveSocialAddressLink(SocialAddressType.Sybil)}
                     LinkProps={{ className: classes.link }}>
-                    <AccountTooltips platform={AddressPlatform.Twitter} type={SocialAddressType.Sybil}>
-                        <Icons.Sybil className={cx(classes.actionIcon, classes.icon)} size={18} style={iconStyle} />
+                    <AccountTooltips type={SocialAddressType.Sybil}>
+                        <Icons.Sybil
+                            className={cx(classes.actionIcon, classes.icon, classes.roundedIcon)}
+                            size={18}
+                            style={iconStyle}
+                        />
                     </AccountTooltips>
                 </Linking>
             ) : null}
