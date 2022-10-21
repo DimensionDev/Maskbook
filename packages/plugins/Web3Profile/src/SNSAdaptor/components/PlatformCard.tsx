@@ -92,19 +92,28 @@ export function PlatformCard(props: PlatformCardProps) {
                     title={t.NFTs()}
                     onClick={() => openImageSetting(Scene.NFTSetting)}
                     walletsNum={walletsCount}
-                    collectionNum={account.walletList.NFTs.reduce((acc, cur) => acc + cur.collections.length, 0)}
+                    collectionNum={account.walletList.NFTs.reduce(
+                        (acc, cur) => acc + (cur.collections?.length ?? 0),
+                        0,
+                    )}
                 />
                 <CollectionItem
                     title={t.footprints()}
                     onClick={() => openImageSetting(Scene.FootprintsSetting)}
                     walletsNum={walletsCount}
-                    collectionNum={account.walletList.footprints.reduce((pre, cur) => pre + cur.collections.length, 0)}
+                    collectionNum={account.walletList.footprints.reduce(
+                        (pre, cur) => pre + (cur.collections?.length ?? 0),
+                        0,
+                    )}
                 />
                 <CollectionItem
                     title={t.donations()}
                     onClick={() => openImageSetting(Scene.DonationsSetting)}
                     walletsNum={walletsCount}
-                    collectionNum={account.walletList.donations.reduce((pre, cur) => pre + cur.collections.length, 0)}
+                    collectionNum={account.walletList.donations.reduce(
+                        (pre, cur) => pre + (cur.collections?.length ?? 0),
+                        0,
+                    )}
                 />
             </Stack>
         </Card>
