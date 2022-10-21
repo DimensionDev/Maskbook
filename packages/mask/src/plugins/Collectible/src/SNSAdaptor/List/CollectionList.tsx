@@ -64,12 +64,12 @@ export const useStyles = makeStyles<CollectibleGridProps>()((theme, { columns = 
             minHeight: 24,
             minWidth: 24,
             lineHeight: '24px',
-            background: theme.palette.primary.main,
+            background: theme.palette.maskColor.primary,
             color: '#ffffff',
             fontSize: 10,
             opacity: 1,
             '&:hover': {
-                background: theme.palette.primary.main,
+                background: theme.palette.maskColor.primary,
             },
         },
         collectionButton: {
