@@ -8,7 +8,7 @@ import {
     useBlockNumber,
     useBlockTimestamp,
     useChainId,
-    useCurrentWeb3NetworkPluginID,
+    usePluginIDContext,
     useNetworkType,
     useProviderType,
     useReverseAddress,

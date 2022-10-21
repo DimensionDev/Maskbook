@@ -1,12 +1,12 @@
 import { useEffect, useState, useCallback } from 'react'
+import { useAsync } from 'react-use'
 import { LoadingBase, makeStyles, MaskColorVar } from '@masknet/theme'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { useAccount, useWeb3 } from '@masknet/web3-hooks-base'
+import { useAccount, useWeb3, usePluginIDContext } from '@masknet/web3-hooks-base'
 import CyberConnect, { Env } from '@cyberlab/cyberconnect'
-import { PluginCyberConnectRPC } from '../messages.js'
 import { useTheme, Typography } from '@mui/material'
-import { useAsync } from 'react-use'
+import { PluginCyberConnectRPC } from '../messages.js'
 
 const useStyles = makeStyles()(() => ({
     button: {

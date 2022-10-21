@@ -22,7 +22,7 @@ import { PoolList } from './PoolList.js'
 import {
     useAccount,
     useChainId,
-    useCurrentWeb3NetworkPluginID,
+    usePluginIDContext,
     useWeb3Connection,
     useChainIdValid,
 } from '@masknet/web3-hooks-base'

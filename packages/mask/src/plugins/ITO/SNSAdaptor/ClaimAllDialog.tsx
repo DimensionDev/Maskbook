@@ -6,7 +6,7 @@ import {
     useAccount,
     useChainId,
     useFungibleToken,
-    useCurrentWeb3NetworkPluginID,
+    usePluginIDContext,
     useFungibleTokens,
 } from '@masknet/web3-hooks-base'
 import { useActivatedPlugin } from '@masknet/plugin-infra/dom'

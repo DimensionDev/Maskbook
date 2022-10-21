@@ -1,4 +1,4 @@
-import { PluginIDContextProvider, Web3ContextProvider } from '@masknet/web3-hooks-base'
+import { PluginIDContextProvider, usePluginIDContext, Web3ContextProvider } from '@masknet/web3-hooks-base'
 import { MaskLightTheme } from '@masknet/theme'
 import { ThemeProvider } from '@mui/material'
 import type { CollectiblePayload } from '../types.js'

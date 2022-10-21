@@ -12,6 +12,6 @@ const DEFAULT_CHAIN_ID: Record<NetworkPluginID, Web3Helper.Definition[NetworkPlu
 }
 
 export function useDefaultChainId<T extends NetworkPluginID>(expectedPluginID?: T) {
-    const { pluginID } = usePluginIDContext(expectedPluginID) as T
+    const { pluginID } = usePluginIDContext<T>(expectedPluginID)
     return DEFAULT_CHAIN_ID[pluginID]
 }

@@ -6,6 +6,6 @@ import { usePluginIDContext } from './useContext.js'
 export function useWeb3State<S extends 'all' | void = void, T extends NetworkPluginID = NetworkPluginID>(
     expectedPluginID?: T,
 ) {
-    const { pluginID } = usePluginIDContext(expectedPluginID) as T
+    const { pluginID } = usePluginIDContext<T>(expectedPluginID)
     return useActivatedPluginWeb3State(pluginID) as Web3Helper.Web3StateScope<S, T>
 }

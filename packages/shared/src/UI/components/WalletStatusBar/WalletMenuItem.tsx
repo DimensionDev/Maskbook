@@ -6,7 +6,7 @@ import { resolveNextID_NetworkPluginID } from '@masknet/web3-shared-base'
 import type { NetworkPluginID, NextIDPlatform } from '@masknet/shared-base'
 import { useWalletName } from './hooks/useWalletName.js'
 import {
-    useCurrentWeb3NetworkPluginID,
+    usePluginIDContext,
     useChainId,
     useDefaultChainId,
     useNetworkDescriptor,

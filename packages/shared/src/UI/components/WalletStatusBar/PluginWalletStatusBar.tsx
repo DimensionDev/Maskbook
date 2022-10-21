@@ -2,7 +2,7 @@ import { memo, PropsWithChildren, useCallback, useMemo } from 'react'
 import { alpha, Box, Button } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import {
-    useCurrentWeb3NetworkPluginID,
+    usePluginIDContext,
     useProviderDescriptor,
     useRecentTransactions,
     useNetworkDescriptor,

@@ -8,11 +8,11 @@ import {
 } from '@masknet/plugin-infra/content-script'
 import { EMPTY_LIST, PluginID, NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
+import type { SocialAccount } from '@masknet/web3-shared-base'
+import { PluginIDContextProvider, useWeb3State, usePluginIDContext } from '@masknet/web3-hooks-base'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI.js'
 import { createReactRootShadowed, startWatch } from '../../../../utils/index.js'
 import { menuAuthorSelector as selector } from '../../utils/selectors.js'
-import { PluginIDContextProvider, useWeb3State } from '@masknet/web3-hooks-base'
-import type { SocialAccount } from '@masknet/web3-shared-base'
 
 export function injectTipsButtonOnMenu(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(selector())

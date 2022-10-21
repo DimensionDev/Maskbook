@@ -1,6 +1,6 @@
 import { useCallback, useMemo } from 'react'
 import { useBoolean } from 'react-use'
-import { Web3ActualContextProvider, useChainId } from '@masknet/web3-hooks-base'
+import { Web3ActualContextProvider, useChainId, usePluginIDContext } from '@masknet/web3-hooks-base'
 import { InjectedDialog, PluginWalletStatusBar } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { ActionButton, makeStyles, MaskTabList } from '@masknet/theme'

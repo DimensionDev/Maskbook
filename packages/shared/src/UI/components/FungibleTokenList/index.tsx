@@ -18,7 +18,7 @@ import {
     useAccount,
     useBlockedFungibleTokens,
     useChainId,
-    useCurrentWeb3NetworkPluginID,
+    usePluginIDContext,
     useFungibleAssets,
     useFungibleToken,
     useFungibleTokenBalance,

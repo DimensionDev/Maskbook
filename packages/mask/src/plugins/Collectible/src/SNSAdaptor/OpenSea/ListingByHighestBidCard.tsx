@@ -9,7 +9,7 @@ import getUnixTime from 'date-fns/getUnixTime'
 import {
     useAccount,
     useChainId,
-    useCurrentWeb3NetworkPluginID,
+    usePluginIDContext,
     useFungibleTokenWatched,
     useWeb3State,
 } from '@masknet/web3-hooks-base'

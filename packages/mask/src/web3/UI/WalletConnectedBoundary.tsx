@@ -7,7 +7,7 @@ import { isZero } from '@masknet/web3-shared-base'
 import {
     useAccount,
     useChainId,
-    useCurrentWeb3NetworkPluginID,
+    usePluginIDContext,
     useNativeTokenBalance,
     useRiskWarningApproved,
 } from '@masknet/web3-hooks-base'

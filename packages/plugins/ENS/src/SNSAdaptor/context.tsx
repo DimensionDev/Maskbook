@@ -2,7 +2,7 @@ import { createContext, FC, PropsWithChildren } from 'react'
 import { useAsync } from 'react-use'
 import { uniqBy } from 'lodash-unified'
 import { NextIDProof } from '@masknet/web3-providers'
-import { PluginIDContextProvider, PluginWeb3ContextProvider, useLookupAddress } from '@masknet/web3-hooks-base'
+import { PluginIDContextProvider, useLookupAddress, Web3ContextProvider } from '@masknet/web3-hooks-base'
 import { BindingProof, NetworkPluginID, NextIDPlatform } from '@masknet/shared-base'
 import { ChainId, resolveNonFungibleTokenIdFromEnsDomain } from '@masknet/web3-shared-evm'
 
@@ -79,9 +79,7 @@ export function ENSProvider({ children, domain }: PropsWithChildren<SearchResult
 export const RootContext: FC<PropsWithChildren<{}>> = ({ children }) => {
     return (
         <PluginIDContextProvider value={NetworkPluginID.PLUGIN_EVM}>
-            <PluginWeb3ContextProvider value={{ chainId: ChainId.Mainnet, pluginID: NetworkPluginID.PLUGIN_EVM }}>
-                {children}
-            </PluginWeb3ContextProvider>
+            <Web3ContextProvider value={{ chainId: ChainId.Mainnet }}>{children}</Web3ContextProvider>
         </PluginIDContextProvider>
     )
 }

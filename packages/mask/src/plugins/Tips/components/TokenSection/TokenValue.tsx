@@ -1,6 +1,6 @@
 import { FC, HTMLProps, useMemo } from 'react'
 import BigNumber from 'bignumber.js'
-import { useChainId, useFungibleTokenPrice } from '@masknet/web3-hooks-base'
+import { useChainId, useFungibleTokenPrice, usePluginIDContext } from '@masknet/web3-hooks-base'
 import { TokenIcon } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { NetworkPluginID } from '@masknet/shared-base'

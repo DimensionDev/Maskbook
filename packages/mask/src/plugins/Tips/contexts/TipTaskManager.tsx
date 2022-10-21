@@ -7,7 +7,6 @@ import { isSameAddress } from '@masknet/web3-shared-base'
 import { TipDialog } from '../components/index.js'
 import { PluginTipsMessages } from '../messages.js'
 import type { TipTask } from '../types/index.js'
-import { TargetRuntimeContext } from './TargetRuntimeContext.js'
 import { TipTaskProvider } from './Tip/TipTaskProvider.js'
 import { TipsTransactionProvider } from './TipsTransaction.js'
 
@@ -19,7 +18,6 @@ interface Task extends TipTask {
 
 export const TipTaskManager: FC<React.PropsWithChildren<{}>> = ({ children }) => {
     const [tasks, setTasks] = useState<Task[]>(EMPTY_LIST)
-    const { pluginID } = TargetRuntimeContext.useContainer()
 
     const removeTask = useCallback((task: Task) => {
         setTasks((list) => list.filter((t) => t.id !== task.id))
@@ -50,13 +48,10 @@ export const TipTaskManager: FC<React.PropsWithChildren<{}>> = ({ children }) =>
                 const tipsAccount = task.accounts.find((x) => isSameAddress(x.address, task.recipient))
 
                 return (
-                    <PluginIDContextProvider
-                        key={task.id}
-                        value={pluginID ?? tipsAccount?.pluginID ?? NetworkPluginID.PLUGIN_EVM}>
+                    <PluginIDContextProvider key={task.id} value={tipsAccount?.pluginID ?? NetworkPluginID.PLUGIN_EVM}>
                         <Web3ContextProvider
                             value={{
                                 chainId: ChainId.Mainnet,
-                                pluginID: tipsAccount?.pluginID ?? NetworkPluginID.PLUGIN_EVM,
                             }}>
                             <TipTaskProvider key={task.id} task={task}>
                                 <TipsTransactionProvider>

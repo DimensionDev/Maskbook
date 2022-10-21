@@ -158,10 +158,8 @@ export function SearchResultInspectorContent() {
 
 export function SearchResultInspector(props: SearchResultInspectorProps) {
     return (
-        <RootContext>
-            <ENSProvider {...props}>
-                <SearchResultInspectorContent />
-            </ENSProvider>
-        </RootContext>
+        <ENSProvider {...props}>
+            <SearchResultInspectorContent />
+        </ENSProvider>
     )
 }

@@ -18,9 +18,9 @@ import {
     FungibleAsset,
     GasOptionType,
 } from '@masknet/web3-shared-base'
+import { useAsync, useAsyncFn, useUpdateEffect } from 'react-use'
 import { Controller, FormProvider, useForm, useFormContext } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useAsync, useAsyncFn, useUpdateEffect } from 'react-use'
 import { Box, Button, Chip, Collapse, MenuItem, Popover, Typography } from '@mui/material'
 import { StyledInput } from '../../../components/StyledInput/index.js'
 import { Icons } from '@masknet/icons'
@@ -36,7 +36,7 @@ import {
     useWallet,
     useWeb3Connection,
     useWeb3Hub,
-    useCurrentWeb3NetworkPluginID,
+    usePluginIDContext,
 } from '@masknet/web3-hooks-base'
 import { useGasLimit, useTokenTransferCallback } from '@masknet/web3-hooks-evm'
 import { useI18N } from '../../../../../utils/index.js'

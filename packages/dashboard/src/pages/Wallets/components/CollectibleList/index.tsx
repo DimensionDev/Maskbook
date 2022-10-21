@@ -12,7 +12,7 @@ import { useDashboardI18N } from '../../../../locales/index.js'
 import { TransferTab } from '../Transfer/index.js'
 import {
     useAccount,
-    useCurrentWeb3NetworkPluginID,
+    usePluginIDContext,
     useNonFungibleAssets,
     useTrustedNonFungibleTokens,
 } from '@masknet/web3-hooks-base'

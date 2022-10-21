@@ -14,7 +14,7 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import { formatEtherToGwei, formatWeiToEther, formatWeiToGwei, GasOptionConfig } from '@masknet/web3-shared-evm'
 import { Typography, MenuItem, Box } from '@mui/material'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { useChainId, useWeb3State } from '@masknet/web3-hooks-base'
+import { useChainId, useWeb3State, usePluginIDContext } from '@masknet/web3-hooks-base'
 import { Icons } from '@masknet/icons'
 import { SettingsContext } from '../SettingsBoard/Context.js'
 

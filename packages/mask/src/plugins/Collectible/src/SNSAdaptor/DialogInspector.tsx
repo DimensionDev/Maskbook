@@ -5,7 +5,7 @@ import {
     PluginIDContextProvider,
     Web3ContextProvider,
     useChainIdValid,
-    useCurrentWeb3NetworkPluginID,
+    usePluginIDContext,
 } from '@masknet/web3-hooks-base'
 import { CardDialog } from './CardDialog/CardDialog.js'
 import { Context } from './Context/index.js'

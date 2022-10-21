@@ -84,7 +84,7 @@ export function GlobalWeb3ContextProvider({ value, children }: React.ProviderPro
     )
 }
 
-export function usePluginIDContext(expectedPluginID?: NetworkPluginID) {
+export function usePluginIDContext<T extends NetworkPluginID = NetworkPluginID>(expectedPluginID?: T) {
     const context = useContext(PluginIDContext)
     return {
         ...context,

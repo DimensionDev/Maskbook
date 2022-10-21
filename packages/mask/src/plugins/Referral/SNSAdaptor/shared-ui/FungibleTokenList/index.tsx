@@ -6,7 +6,7 @@ import { useSharedI18N } from '@masknet/shared'
 import {
     useAccount,
     useChainId,
-    useCurrentWeb3NetworkPluginID,
+    usePluginIDContext,
     useFungibleAssets,
     useFungibleToken,
     useFungibleTokensFromTokenList,

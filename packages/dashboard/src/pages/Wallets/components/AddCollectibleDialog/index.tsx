@@ -1,11 +1,11 @@
 import { FormEvent, memo, useCallback, useEffect, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
+import { z } from 'zod'
 import { EthereumAddress } from 'wallet.ts'
 import { MaskDialog, MaskTextField } from '@masknet/theme'
 import { Box, Button, DialogActions, DialogContent } from '@mui/material'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useDashboardI18N } from '../../../../locales/index.js'
 import {
@@ -14,8 +14,8 @@ import {
     useAccount,
     useWeb3State,
     useTrustedNonFungibleTokens,
-    useCurrentWeb3NetworkPluginID,
     useWeb3Hub,
+    usePluginIDContext,
 } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import type { ChainId } from '@masknet/web3-shared-evm'

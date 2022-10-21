@@ -15,7 +15,7 @@ import { toAsset, isWyvernSchemaName } from '../../helpers/index.js'
 import {
     useAccount,
     useChainId,
-    useCurrentWeb3NetworkPluginID,
+    usePluginIDContext,
     useFungibleTokenWatched,
     useWeb3State,
 } from '@masknet/web3-hooks-base'

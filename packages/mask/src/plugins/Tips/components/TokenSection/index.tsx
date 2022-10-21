@@ -3,7 +3,7 @@ import BigNumber from 'bignumber.js'
 import {
     useAccount,
     useChainId,
-    useCurrentWeb3NetworkPluginID,
+    usePluginIDContext,
     useFungibleTokenBalance,
     useGasPrice,
 } from '@masknet/web3-hooks-base'

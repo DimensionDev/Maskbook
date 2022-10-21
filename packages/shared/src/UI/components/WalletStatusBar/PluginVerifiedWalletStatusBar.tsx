@@ -9,7 +9,7 @@ import { Action } from './Action.js'
 import { BindingProof, NetworkPluginID, isDashboardPage } from '@masknet/shared-base'
 import {
     useAccount,
-    useCurrentWeb3NetworkPluginID,
+    usePluginIDContext,
     useChainId,
     useNetworkDescriptor,
     useProviderDescriptor,

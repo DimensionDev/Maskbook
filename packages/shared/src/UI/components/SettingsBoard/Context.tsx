@@ -6,7 +6,7 @@ import { createContainer } from 'unstated-next'
 import { useSharedI18N } from '@masknet/shared'
 import {
     useGasOptions,
-    useCurrentWeb3NetworkPluginID,
+    usePluginIDContext,
     useChainId,
     useSingleBlockBeatRetry,
     useWeb3State,
