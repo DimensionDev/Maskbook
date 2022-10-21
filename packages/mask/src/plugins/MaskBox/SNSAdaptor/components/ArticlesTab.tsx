@@ -25,7 +25,7 @@ const useStyles = makeStyles()((theme) => ({
         objectFit: 'scale-down',
     },
     icon: {
-        color: theme.palette.mode === 'dark' ? 'rgb(255, 255, 255)' : 'rgb(15, 20, 25)',
+        color: 'rgb(15, 20, 25)',
         width: 64,
         height: 64,
         opacity: 0.1,
