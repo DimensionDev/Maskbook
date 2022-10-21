@@ -97,6 +97,10 @@ const useStyles = makeStyles()((theme) => {
             lineHeight: '20px',
             fontWeight: 700,
             color: theme.palette.maskColor.publicMain,
+            whiteSpace: 'nowrap',
+            textOverflow: 'ellipsis',
+            overflow: 'hidden',
+            width: 420,
         },
     }
 })
@@ -186,7 +190,7 @@ export function Collectible(props: CollectibleProps) {
                     }
                     title={
                         <Typography style={{ display: 'flex', alignItems: 'center' }}>
-                            <span className={classes.cardTitle}>{_asset.metadata?.name || '-'}</span>
+                            <Typography className={classes.cardTitle}>{_asset.metadata?.name || '-'}</Typography>
                             {_asset.collection?.verified ? (
                                 <Icons.VerifiedCollection size={20} sx={{ marginLeft: 0.5 }} />
                             ) : null}
