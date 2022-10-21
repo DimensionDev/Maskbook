@@ -24,7 +24,7 @@ interface ChainContext {
 
 const NetworkContext = createContext<NetworkContext>(null!)
 
-const Web3Context = createContext<ChainContext>(null!)
+const ChainContext = createContext<ChainContext>(null!)
 
 export function NetworkContextProvider({ value, children }: React.ProviderProps<NetworkPluginID>) {
     const [pluginID, setPluginID] = useState(value)
@@ -49,7 +49,7 @@ export function ChainContextProvider({
     const [providerType, setProviderType] = useState(value.providerType)
 
     return (
-        <Web3Context.Provider
+        <ChainContext.Provider
             value={{
                 ...value,
                 chainId,
@@ -73,7 +73,7 @@ export function ActualChainContextProvider({ children }: { children: ReactNode |
         networkType: useActualNetworkType(),
         providerType: useActualProviderType(),
     }
-    return <Web3Context.Provider value={value} children={children} />
+    return <ChainContext.Provider value={value} children={children} />
 }
 
 export function Web3ContextProvider({ value, children }: React.ProviderProps<NetworkPluginID>) {
@@ -98,7 +98,7 @@ export function useChainContext(expectedWeb3?: {
     networkType?: Web3Helper.NetworkTypeAll
     providerType?: Web3Helper.ProviderTypeAll
 }) {
-    const context = useContext(Web3Context)
+    const context = useContext(ChainContext)
     return {
         ...context,
         ...expectedWeb3,
