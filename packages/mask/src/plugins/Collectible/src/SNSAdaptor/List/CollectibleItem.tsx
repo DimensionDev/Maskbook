@@ -41,43 +41,28 @@ export const CollectibleItem = forwardRef<HTMLDivElement, CollectibleItemProps>(
     const showTooltip = !!textRef.current && textRef.current.offsetWidth !== textRef.current.scrollWidth
 
     return (
-        <>
-            {showTooltip ? (
-                <Tooltip
-                    title={name}
-                    placement="top"
-                    disableInteractive
-                    PopperProps={{
-                        disablePortal: true,
-                        popperOptions: {
-                            strategy: 'absolute',
-                        },
-                    }}
-                    arrow>
-                    <div className={cx(classes.card, className)} {...rest} ref={ref}>
-                        <CollectibleCard className={classes.collectibleCard} pluginID={pluginID} asset={asset} />
-                        {name ? (
-                            <div className={classes.description}>
-                                <Typography ref={textRef} className={classes.name} color="textPrimary" variant="body2">
-                                    {name}
-                                </Typography>
-                            </div>
-                        ) : null}
+        <Tooltip
+            title={showTooltip ? name : undefined}
+            placement="top"
+            disableInteractive
+            PopperProps={{
+                disablePortal: true,
+                popperOptions: {
+                    strategy: 'absolute',
+                },
+            }}
+            arrow>
+            <div className={cx(classes.card, className)} {...rest} ref={ref}>
+                <CollectibleCard className={classes.collectibleCard} pluginID={pluginID} asset={asset} />
+                {name ? (
+                    <div className={classes.description}>
+                        <Typography ref={textRef} className={classes.name} color="textPrimary" variant="body2">
+                            {name}
+                        </Typography>
                     </div>
-                </Tooltip>
-            ) : (
-                <div className={cx(classes.card, className)} {...rest} ref={ref}>
-                    <CollectibleCard className={classes.collectibleCard} pluginID={pluginID} asset={asset} />
-                    {name ? (
-                        <div className={classes.description}>
-                            <Typography ref={textRef} className={classes.name} color="textPrimary" variant="body2">
-                                {name}
-                            </Typography>
-                        </div>
-                    ) : null}
-                </div>
-            )}
-        </>
+                ) : null}
+            </div>
+        </Tooltip>
     )
 })
 
