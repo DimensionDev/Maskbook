@@ -34,7 +34,7 @@ const useTabsStyles = makeStyles()((theme) => ({
     tab: {
         whiteSpace: 'nowrap',
         background: 'transparent',
-        color: theme.palette.maskColor.second,
+        color: theme.palette.maskColor.publicSecond,
         '&:hover': {
             background: 'transparent',
         },
@@ -76,7 +76,7 @@ const useTabsStyles = makeStyles()((theme) => ({
         position: 'relative',
     },
     name: {
-        color: theme.palette.maskColor.main,
+        color: theme.palette.maskColor.publicMain,
         fontSize: 18,
         fontWeight: 700,
     },
@@ -258,41 +258,43 @@ export function PreviewCard(props: PreviewCardProps) {
                         </Box>
                     </Box>
                     <Box sx={{ flex: 1 }}>
-                        <Typography className={classes.name} color="textPrimary">
-                            {boxInfo.name}
-                        </Typography>
+                        <Typography className={classes.name}>{boxInfo.name}</Typography>
                         <Box sx={{ flex: 1, display: 'flex', flexDirection: 'row' }}>
                             <Box sx={{ flex: 1, display: 'flex', flexDirection: 'row' }}>
                                 <Typography
                                     sx={{ paddingRight: 1 }}
-                                    color={theme.palette.maskColor.second}
+                                    color={theme.palette.maskColor.publicSecond}
                                     fontSize={14}
                                     fontWeight={400}>
                                     {t.sold()}
                                 </Typography>
-                                <Typography color="textPrimary" fontSize={14} fontWeight="bold">
+                                <Typography color={theme.palette.maskColor.publicMain} fontSize={14} fontWeight="bold">
                                     {boxInfo.sold}/{boxInfo.total}
                                 </Typography>
                                 <Typography
                                     sx={{ paddingRight: 1, paddingLeft: 1 }}
-                                    color={theme.palette.maskColor.second}
+                                    color={theme.palette.maskColor.publicSecond}
                                     fontSize={14}
                                     fontWeight={400}>
                                     {t.limit()}
                                 </Typography>
-                                <Typography color="textPrimary" fontSize={14} fontWeight="bold">
+                                <Typography color={theme.palette.maskColor.publicMain} fontSize={14} fontWeight="bold">
                                     1
                                 </Typography>
                             </Box>
                             <Box sx={{ display: 'flex', flexDirection: 'row' }}>
                                 <Typography
                                     sx={{ paddingRight: 1 }}
-                                    color={theme.palette.maskColor.second}
+                                    color={theme.palette.maskColor.publicSecond}
                                     fontSize={14}
                                     fontWeight={400}>
                                     {t.by()}
                                 </Typography>
-                                <Typography color="textPrimary" fontSize={14} fontWeight="bold" title={boxInfo.creator}>
+                                <Typography
+                                    color={theme.palette.maskColor.publicMain}
+                                    fontSize={14}
+                                    fontWeight="bold"
+                                    title={boxInfo.creator}>
                                     {Others?.formatAddress(boxInfo.creator, 4)}
                                 </Typography>
                             </Box>
