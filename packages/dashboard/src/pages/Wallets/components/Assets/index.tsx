@@ -1,5 +1,5 @@
 import { memo, useEffect, useState } from 'react'
-import { useCurrentWeb3NetworkPluginID } from '@masknet/web3-hooks-base'
+import { useNetworkContext } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { makeStyles, useTabs } from '@masknet/theme'
 import { TabContext, TabList, TabPanel } from '@mui/lab'
@@ -39,7 +39,7 @@ export interface AssetsProps {
 
 export const Assets = memo<AssetsProps>(({ network }) => {
     const t = useDashboardI18N()
-    const pluginID = useCurrentWeb3NetworkPluginID()
+    const { pluginID } = useNetworkContext()
     const { classes } = useStyles()
     const assetTabsLabel: Record<AssetTab, string> = {
         [AssetTab.Token]: t.wallets_assets_token(),

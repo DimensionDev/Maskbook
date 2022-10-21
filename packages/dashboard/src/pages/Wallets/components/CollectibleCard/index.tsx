@@ -6,7 +6,7 @@ import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useDashboardI18N } from '../../../../locales/index.js'
 import { ChangeNetworkTip } from '../FungibleTokenTableRow/ChangeNetworkTip.js'
-import { useChainId, useCurrentWeb3NetworkPluginID, useNetworkDescriptor, useWeb3State } from '@masknet/web3-hooks-base'
+import { useChainId, useNetworkContext, useWeb3State } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 
 const useStyles = makeStyles()((theme) => ({
@@ -88,9 +88,8 @@ export const CollectibleCard = memo<CollectibleCardProps>(({ asset, onSend, rend
     const { Others } = useWeb3State()
     const [isHoveringTooltip, setHoveringTooltip] = useState(false)
     const isHovering = useHoverDirty(ref)
-    const networkDescriptor = useNetworkDescriptor(undefined, asset.contract?.chainId)
     const isOnCurrentChain = useMemo(() => chainId === asset.contract?.chainId, [chainId, asset])
-    const currentPluginId = useCurrentWeb3NetworkPluginID()
+    const { pluginID: currentPluginId } = useNetworkContext()
 
     useEffect(() => {
         setHoveringTooltip(false)

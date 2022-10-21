@@ -1,7 +1,7 @@
 import { FC, HTMLProps, MouseEventHandler, useCallback, useEffect, useMemo } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
-import { useCurrentWeb3NetworkPluginID } from '@masknet/web3-hooks-base'
+import { useNetworkContext } from '@masknet/web3-hooks-base'
 import { ProfileIdentifier, NetworkPluginID } from '@masknet/shared-base'
 import {
     useCurrentVisitingIdentity,
@@ -34,7 +34,7 @@ export const TipButton: FC<Props> = ({ className, receiver, recipient, children,
     const { value: personaPubkey, loading: loadingPersona } = useProfilePublicKey(receiver)
     const receiverUserId = receiver?.userId
 
-    const pluginID = useCurrentWeb3NetworkPluginID()
+    const { pluginID } = useNetworkContext()
     const visitingIdentity = useCurrentVisitingIdentity()
     const { value: identity } = useSocialIdentityByUseId(receiverUserId)
 

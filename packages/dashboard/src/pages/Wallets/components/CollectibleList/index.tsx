@@ -12,7 +12,7 @@ import { useDashboardI18N } from '../../../../locales/index.js'
 import { TransferTab } from '../Transfer/index.js'
 import {
     useAccount,
-    useCurrentWeb3NetworkPluginID,
+    useNetworkContext,
     useNonFungibleAssets,
     useTrustedNonFungibleTokens,
 } from '@masknet/web3-hooks-base'
@@ -67,7 +67,7 @@ export const CollectibleList = memo<CollectibleListProps>(({ selectedChain }) =>
         if (next) next()
     }, [next])
 
-    const currentPluginId = useCurrentWeb3NetworkPluginID()
+    const { pluginID: currentPluginId } = useNetworkContext()
     const onSend = useCallback(
         (
             detail: NonFungibleToken<

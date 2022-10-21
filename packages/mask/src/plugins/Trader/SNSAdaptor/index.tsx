@@ -10,7 +10,7 @@ import { Icons } from '@masknet/icons'
 import { CrossIsolationMessages, NetworkPluginID, PluginID } from '@masknet/shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { setupStorage, storageDefaultValue } from '../storage/index.js'
-import { PluginWeb3ContextProvider } from '@masknet/web3-hooks-base'
+import { ChainContextProvider, NetworkContextProvider } from '@masknet/web3-hooks-base'
 
 const sns: Plugin.SNSAdaptor.Definition<
     ChainId,
@@ -45,9 +45,11 @@ const sns: Plugin.SNSAdaptor.Definition<
         return (
             <>
                 <TagInspector />
-                <PluginWeb3ContextProvider value={{ chainId: ChainId.Mainnet, pluginID: NetworkPluginID.PLUGIN_EVM }}>
-                    <TraderDialog />
-                </PluginWeb3ContextProvider>
+                <NetworkContextProvider value={NetworkPluginID.PLUGIN_EVM}>
+                    <ChainContextProvider value={{ chainId: ChainId.Mainnet }}>
+                        <TraderDialog />
+                    </ChainContextProvider>
+                </NetworkContextProvider>
             </>
         )
     },

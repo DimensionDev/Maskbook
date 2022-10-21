@@ -3,7 +3,7 @@ import { UNDEFINED, NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useWeb3State } from './useWeb3State.js'
 import { useDefaultChainId } from './useDefaultChainId.js'
-import { useCurrentWeb3NetworkChainId } from './useContext.js'
+import { useCurrentWeb3NetworkChainId } from './useChainContext.js'
 
 export function useChainId<S extends 'all' | void = void, T extends NetworkPluginID = NetworkPluginID>(
     pluginID?: T,

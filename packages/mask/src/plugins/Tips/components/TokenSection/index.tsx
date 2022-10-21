@@ -3,7 +3,7 @@ import BigNumber from 'bignumber.js'
 import {
     useAccount,
     useChainId,
-    useCurrentWeb3NetworkPluginID,
+    useNetworkContext,
     useFungibleTokenBalance,
     useGasPrice,
 } from '@masknet/web3-hooks-base'
@@ -33,7 +33,7 @@ const ETH_GAS_LIMIT = 21000
 export const TokenSection: FC<Props> = ({ className, ...rest }) => {
     const { classes, cx } = useStyles()
     const { token, setToken, amount, setAmount } = useTip()
-    const pluginID = useCurrentWeb3NetworkPluginID()
+    const { pluginID } = useNetworkContext()
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
 
