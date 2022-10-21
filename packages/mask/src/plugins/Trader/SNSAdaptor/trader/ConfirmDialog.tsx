@@ -5,7 +5,7 @@ import { useCallback, useMemo, useState } from 'react'
 import { formatBalance, formatCurrency, FungibleToken, leftShift, multipliedBy } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { currentSlippageSettings } from '../../settings.js'
-import { useNativeTokenPrice, useFungibleTokenPrice, useChainId } from '@masknet/web3-hooks-base'
+import { useNativeTokenPrice, useFungibleTokenPrice, useChainContext } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useGreatThanSlippageSetting } from './hooks/useGreatThanSlippageSetting.js'
 import { PluginTraderMessages } from '../../messages.js'
@@ -31,7 +31,7 @@ const PERCENT_DENOMINATOR = 10000
 
 export function ConfirmDialog(props: ConfirmDialogProps) {
     const { inputToken, outputToken, gas, gasPrice, trade, onConfirm, gasConfig } = props
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { setTemporarySlippage } = AllProviderTradeContext.useContainer()
 
     const [priceImpactDialogOpen, setPriceImpactDialogOpen] = useState(false)

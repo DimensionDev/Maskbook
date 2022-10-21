@@ -85,5 +85,5 @@ export function useChainContext<T extends NetworkPluginID = NetworkPluginID>(def
     return {
         ...context,
         ...defaults,
-    } as ChainContext<T>
+    } as Required<ChainContext<T>>
 }

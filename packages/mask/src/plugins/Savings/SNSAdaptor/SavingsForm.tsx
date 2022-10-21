@@ -14,7 +14,7 @@ import {
     isNativeTokenAddress,
 } from '@masknet/web3-shared-evm'
 import {
-    useAccount,
+    useChainContext,
     useFungibleTokenBalance,
     useFungibleTokenPrice,
     useNativeToken,
@@ -104,7 +104,7 @@ export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFo
     const { classes } = useStyles()
 
     const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM, { chainId })
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const [inputAmount, setInputAmount] = useState('')
     const [estimatedGas, setEstimatedGas] = useState<BigNumber.Value>(ZERO)
 

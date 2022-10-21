@@ -1,7 +1,13 @@
 import { useEffect, useRef, useState } from 'react'
 import { PluginID, NetworkPluginID, isDashboardPage, CrossIsolationMessages } from '@masknet/shared-base'
 import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
-import { ChainContextProvider, NetworkContextProvider, useChainId, useChainIdValid } from '@masknet/web3-hooks-base'
+import {
+    ChainContextProvider,
+    NetworkContextProvider,
+    useChainContext,
+    useChainId,
+    useChainIdValid,
+} from '@masknet/web3-hooks-base'
 import { ChainId, isNativeTokenAddress, SchemaType } from '@masknet/web3-shared-evm'
 import { DialogContent, dialogTitleClasses, IconButton } from '@mui/material'
 import { InjectedDialog, useSelectAdvancedSettings } from '@masknet/shared'
@@ -75,8 +81,8 @@ export function TraderDialog() {
     const { t } = useI18N()
     const { classes } = useStyles()
 
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
-    const chainIdValid = useChainIdValid(NetworkPluginID.PLUGIN_EVM)
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+    const chainIdValid = useChainIdValid(NetworkPluginID.PLUGIN_EVM, chainId)
 
     const [traderProps, setTraderProps] = useState<TraderProps>()
     const chainIdRef = useRef<ChainId>(chainId)

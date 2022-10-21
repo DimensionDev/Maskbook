@@ -26,7 +26,7 @@ import { resolveTradeProviderName } from '../../pipes.js'
 import { EthereumERC20TokenApprovedBoundary } from '../../../../web3/UI/EthereumERC20TokenApprovedBoundary.js'
 import { useTradeApproveComputed } from '../../trader/useTradeApproveComputed.js'
 import { isDashboardPage, isPopupPage, PopupRoutes, PluginID, NetworkPluginID } from '@masknet/shared-base'
-import { useChainId } from '@masknet/web3-hooks-base'
+import { useChainContext } from '@masknet/web3-hooks-base'
 import { AllProviderTradeContext } from '../../trader/useAllProviderTradeContext.js'
 import { WalletConnectedBoundary } from '../../../../web3/UI/WalletConnectedBoundary.js'
 import { TokenSecurityBoundary } from '../../../../web3/UI/TokenSecurityBoundary.js'
@@ -238,7 +238,7 @@ export const TradeForm = memo<AllTradeFormProps>(
         const { t } = useI18N()
         const styles = useStyles({ isDashboard, isPopup })
         const classes = useStylesExtends(styles, props)
-        const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+        const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
         const { isSwapping, allTradeComputed } = AllProviderTradeContext.useContainer()
         const [isExpand, setExpand] = useState(false)
 

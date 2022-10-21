@@ -165,13 +165,15 @@ export const NFTList: FC<Props> = ({
     const isRadio = limit === 1
     const reachedLimit = selectedPairs && selectedPairs.length >= limit
 
+    const { pluginID } = useNetworkContext()
+    const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
+
     const toggleItem = useCallback(
         (currentId: string | null, contractAddress?: string) => {
             onChange?.(currentId, contractAddress)
         },
         [onChange],
     )
-    const { pluginID } = useNetworkContext()
     const includes: (pairs: NFTKeyPair[], pair: NFTKeyPair) => boolean =
         pluginID === NetworkPluginID.PLUGIN_EVM
             ? (pairs, pair) => {
@@ -182,7 +184,6 @@ export const NFTList: FC<Props> = ({
               }
 
     const SelectComponent = isRadio ? Radio : Checkbox
-    const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
 
     return (
         <>

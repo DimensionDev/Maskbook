@@ -1,5 +1,11 @@
 import { useIsMinimalMode } from '@masknet/plugin-infra/content-script'
-import { useChainId, useChainIdValid, useNetworkType, useNonFungibleAssetsByCollection } from '@masknet/web3-hooks-base'
+import {
+    useChainContext,
+    useChainId,
+    useChainIdValid,
+    useNetworkType,
+    useNonFungibleAssetsByCollection,
+} from '@masknet/web3-hooks-base'
 import { DataProvider } from '@masknet/public-api'
 import { NFTList } from '@masknet/shared'
 import { EMPTY_LIST, PluginID, NetworkPluginID } from '@masknet/shared-base'
@@ -117,14 +123,13 @@ export function TrendingView(props: TrendingViewProps) {
 
     const { t } = useI18N()
     const { classes } = useStyles({ isPopper })
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const theme = useTheme()
     const isMinimalMode = useIsMinimalMode(PluginID.Trader)
     const dataProvider = useCurrentDataProvider(dataProviders)
     const [tabIndex, setTabIndex] = useState(dataProvider !== DataProvider.UniswapInfo ? 1 : 0)
-    const chainIdValid = useChainIdValid(NetworkPluginID.PLUGIN_EVM)
+    const { chainId, networkType } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+    const chainIdValid = useChainIdValid(NetworkPluginID.PLUGIN_EVM, chainId)
     // #region track network type
-    const networkType = useNetworkType(NetworkPluginID.PLUGIN_EVM)
     useEffect(() => setTabIndex(0), [networkType])
     // #endregion
 

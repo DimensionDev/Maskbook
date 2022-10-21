@@ -1,5 +1,5 @@
 import { useCallback } from 'react'
-import { useAccount, useChainId, useWeb3Connection, useNetworkContext } from '@masknet/web3-hooks-base'
+import { useWeb3Connection, useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { makeStyles } from '@masknet/theme'
 import { NetworkPluginID } from '@masknet/shared-base'
@@ -27,8 +27,7 @@ export function ConnectionContent(props: ConnectionContentProps) {
     const { classes } = useStyles()
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
     const { pluginID } = useNetworkContext()
-    const chainId = useChainId()
-    const account = useAccount()
+    const { account, chainId } = useChainContext()
     const connection = useWeb3Connection()
 
     const onTransferCallback = useCallback(
