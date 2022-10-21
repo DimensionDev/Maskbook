@@ -73,7 +73,8 @@ export function createChainResolver<ChainId, SchemaType, NetworkType>(
         networkType: (chainId?: ChainId) => getChainDescriptor(chainId)?.type,
         explorerURL: (chainId?: ChainId) => getChainDescriptor(chainId)?.explorerURL,
         nativeCurrency: (chainId?: ChainId) => getChainDescriptor(chainId)?.nativeCurrency,
-        isValid: (chainId?: ChainId, testnet = false) => getChainDescriptor(chainId)?.network === 'mainnet' || testnet,
+        isValid: (chainId?: ChainId, testnet = false) =>
+            getChainDescriptor(chainId) && (getChainDescriptor(chainId)?.network === 'mainnet' || testnet),
         isMainnet: (chainId?: ChainId) => getChainDescriptor(chainId)?.network === 'mainnet',
         isSupport: (chainId?: ChainId, feature?: string) =>
             !!(feature && getChainDescriptor(chainId)?.features?.includes(feature)),

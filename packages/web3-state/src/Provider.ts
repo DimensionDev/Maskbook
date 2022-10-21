@@ -131,7 +131,6 @@ export class ProviderState<
 
         if (accountCopied.account !== '' && !this.options.isValidAddress(accountCopied.account))
             delete accountCopied.account
-        if (!this.options.isValidChainId(accountCopied.chainId ?? 0)) delete accountCopied.chainId
 
         const needToUpdateAccount =
             accountCopied.account === '' || !this.options.isSameAddress(account_.account, account.account)

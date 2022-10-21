@@ -87,7 +87,7 @@ export function PoolView(props: PoolProps) {
     const { t } = useI18N()
     const { category, chainId, address, name, protocol, liquidity, apy, angels } = props.investable
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const isValidChainId = useChainIdMatched(NetworkPluginID.PLUGIN_EVM, chainId)
+    const isChainIdMatched = useChainIdMatched(NetworkPluginID.PLUGIN_EVM, chainId)
 
     const displayRewardIcon = (rewardToken: Token) => {
         if (rewardToken.symbol === 'WMATIC') return <WmaticIcon />
@@ -115,7 +115,7 @@ export function PoolView(props: PoolProps) {
                         </Grid>
                     </Grid>
                     <Grid item>
-                        {isValidChainId && account ? (
+                        {isChainIdMatched && account ? (
                             <Button
                                 size="small"
                                 className={classes.invest}
