@@ -2,7 +2,7 @@ import { memo, PropsWithChildren, useCallback, useMemo } from 'react'
 import { alpha, Box, Button } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import {
-    usePluginIDContext,
+    usePluginContext,
     useProviderDescriptor,
     useRecentTransactions,
     useNetworkDescriptor,
@@ -62,7 +62,7 @@ export const PluginWalletStatusBar = memo<WalletStatusBarProps<NetworkPluginID>>
         const t = useSharedI18N()
         const { classes, cx } = useStyles()
 
-        const { pluginID } = usePluginIDContext()
+        const { pluginID } = usePluginContext()
         const account = useAccount(pluginID)
         const wallet = useWallet(pluginID)
         const chainId = useChainId(pluginID)

@@ -1,5 +1,5 @@
 import { useCallback, FC, useState, useMemo } from 'react'
-import { usePluginIDContext, useNativeTokenAddress } from '@masknet/web3-hooks-base'
+import { usePluginContext, useNativeTokenAddress } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { FungibleTokenList, useSharedI18N } from '@masknet/shared'
 import { EMPTY_LIST, EnhanceableSite, isDashboardPage, NetworkPluginID } from '@masknet/shared-base'
@@ -75,7 +75,7 @@ export const SelectFungibleTokenDialog: FC<SelectFungibleTokenDialogProps> = ({
     const t = useSharedI18N()
     const { networkIdentifier } = useBaseUIRuntime()
     const compact = networkIdentifier === EnhanceableSite.Minds
-    const { pluginID: currentPluginID } = usePluginIDContext(pluginID)
+    const { pluginID: currentPluginID } = usePluginContext(pluginID)
     const { classes } = useStyles({ compact, isDashboard })
     const isMdScreen = useMediaQuery<Theme>((theme) => theme.breakpoints.down('md'))
 

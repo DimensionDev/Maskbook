@@ -15,7 +15,7 @@ import { toAsset, isWyvernSchemaName } from '../../helpers/index.js'
 import {
     useAccount,
     useChainId,
-    usePluginIDContext,
+    usePluginContext,
     useFungibleTokenWatched,
     useWeb3State,
 } from '@masknet/web3-hooks-base'
@@ -58,7 +58,7 @@ export interface ListingByPriceCardProps {
 
 export function ListingByPriceCard(props: ListingByPriceCardProps) {
     const { asset, paymentTokens, open, onClose } = props
-    const { pluginID } = usePluginIDContext()
+    const { pluginID } = usePluginContext()
     const { amount, token, balance, setAmount, setAddress } = useFungibleTokenWatched(
         pluginID,
         first(paymentTokens)?.address,

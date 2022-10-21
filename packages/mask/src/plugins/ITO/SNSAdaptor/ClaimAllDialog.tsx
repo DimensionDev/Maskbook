@@ -2,13 +2,7 @@ import { useState, useLayoutEffect, useRef, useCallback } from 'react'
 import classNames from 'classnames'
 import { flatten, uniq } from 'lodash-unified'
 import formatDateTime from 'date-fns/format'
-import {
-    useAccount,
-    useChainId,
-    useFungibleToken,
-    usePluginIDContext,
-    useFungibleTokens,
-} from '@masknet/web3-hooks-base'
+import { useAccount, useChainId, useFungibleToken, usePluginContext, useFungibleTokens } from '@masknet/web3-hooks-base'
 import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
 import { SnackbarProvider, makeStyles, ActionButton, LoadingBase } from '@masknet/theme'
 import { InjectedDialog, FormattedBalance, useOpenShareTxDialog, PluginWalletStatusBar } from '@masknet/shared'
@@ -187,7 +181,7 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
     const { t } = useI18N()
     const { open, onClose } = props
     const ITO_Definition = useActivatedPlugin(PluginID.ITO, 'any')
-    const { pluginID } = usePluginIDContext()
+    const { pluginID } = usePluginContext()
     const chainIdList = ITO_Definition?.enableRequirement.web3?.[pluginID]?.supportedChainIds ?? []
     const DialogRef = useRef<HTMLDivElement>(null)
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)

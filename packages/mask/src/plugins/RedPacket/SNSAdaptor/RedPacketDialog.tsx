@@ -7,7 +7,7 @@ import {
     useChainId,
     useWeb3Connection,
     useChainIdValid,
-    Web3ContextProvider,
+    ChainContextProvider,
 } from '@masknet/web3-hooks-base'
 import { InjectedDialog } from '@masknet/shared'
 import { ChainId } from '@masknet/web3-shared-evm'
@@ -188,7 +188,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     const [currentTab, onChange, tabs] = useTabs('tokens', 'collectibles')
 
     return (
-        <Web3ContextProvider value={{ chainId: networkTabChainId }}>
+        <ChainContextProvider value={{ chainId: networkTabChainId }}>
             <TabContext value={currentTab}>
                 <InjectedDialog
                     isOpenFromApplicationBoard={props.isOpenFromApplicationBoard}
@@ -270,6 +270,6 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                     </DialogContent>
                 </InjectedDialog>
             </TabContext>
-        </Web3ContextProvider>
+        </ChainContextProvider>
     )
 }

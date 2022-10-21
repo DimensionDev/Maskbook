@@ -3,7 +3,7 @@ import classnames from 'classnames'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { ElementAnchor, NFTCardStyledAssetPlayer, RetryHint } from '@masknet/shared'
-import { useChainId, useWeb3State, usePluginIDContext } from '@masknet/web3-hooks-base'
+import { useChainId, useWeb3State, usePluginContext } from '@masknet/web3-hooks-base'
 import { isSameAddress, NonFungibleToken } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { Checkbox, List, ListItem, Radio, Stack, Tooltip } from '@mui/material'
@@ -126,7 +126,7 @@ export const NFTList: FC<Props> = ({
     loadError,
 }) => {
     const { classes } = useStyles()
-    const { pluginID } = usePluginIDContext()
+    const { pluginID } = usePluginContext()
 
     const isRadio = limit === 1
     const reachedLimit = selectedPairs.length >= limit

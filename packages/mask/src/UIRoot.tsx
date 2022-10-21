@@ -1,6 +1,6 @@
 import { Suspense } from 'react'
 import { StyledEngineProvider, Theme } from '@mui/material'
-import { GlobalWeb3ContextProvider } from '@masknet/web3-hooks-base'
+import { Web3ContextProvider } from '@masknet/web3-hooks-base'
 import { I18NextProviderHMR, SharedContextProvider } from '@masknet/shared'
 import { MaskThemeProvider } from '@masknet/theme'
 import { ErrorBoundary, ErrorBoundaryBuildInfoContext, useValueRef } from '@masknet/shared-base-ui'
@@ -40,9 +40,7 @@ export function MaskUIRoot({ children, kind, useTheme, fallback }: MaskUIRootPro
         (jsx) => <Suspense fallback={null} children={jsx} />,
         (jsx) => <ErrorBoundaryBuildInfoContext.Provider value={buildInfoMarkdown} children={jsx} />,
         (jsx) => <ErrorBoundary children={jsx} />,
-        (jsx) => (
-            <GlobalWeb3ContextProvider value={site ? pluginIDs[site] : NetworkPluginID.PLUGIN_EVM} children={jsx} />
-        ),
+        (jsx) => <Web3ContextProvider value={site ? pluginIDs[site] : NetworkPluginID.PLUGIN_EVM} children={jsx} />,
         (jsx) => <I18NextProviderHMR i18n={i18NextInstance} children={jsx} />,
         kind === 'page' ? (jsx) => <StyledEngineProvider injectFirst children={jsx} /> : identity,
         (jsx) => (

@@ -3,7 +3,7 @@ import classNames from 'classnames'
 import { toChecksumAddress } from 'web3-utils'
 import { Box, Button, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { useAccount, useChainId, useWeb3Connection, usePluginIDContext } from '@masknet/web3-hooks-base'
+import { useAccount, useChainId, useWeb3Connection, usePluginContext } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useSnackbarCallback } from '@masknet/shared'
 import { useI18N } from '../../../utils/index.js'
@@ -73,7 +73,7 @@ export function VotingCard() {
             </Typography>
         </Box>
     )
-    const { pluginID } = usePluginIDContext()
+    const { pluginID } = usePluginContext()
     const retry = useRetry()
     const onVoteConfirm = useSnackbarCallback(
         async () => {

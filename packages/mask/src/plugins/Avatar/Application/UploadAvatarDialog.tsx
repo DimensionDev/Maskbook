@@ -8,7 +8,7 @@ import { usePersonaConnectStatus } from '../../../components/DataSource/usePerso
 import type { BindingProof, NetworkPluginID } from '@masknet/shared-base'
 import { useI18N } from '../locales/i18n_generated'
 import { context } from '../context.js'
-import { usePluginIDContext } from '@masknet/web3-hooks-base'
+import { usePluginContext } from '@masknet/web3-hooks-base'
 import { AvatarInfo, useSave } from '../hooks/save/useSave.js'
 import type { AllChainsNonFungibleToken } from '../types.js'
 
@@ -68,7 +68,7 @@ export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
     const { image, account, token, onClose, onBack, proof, isBindAccount = false, pluginID } = props
     const t = useI18N()
     const { classes } = useStyles()
-    const { pluginID: currentPluginID } = usePluginIDContext(pluginID)
+    const { pluginID: currentPluginID } = usePluginContext(pluginID)
     const identifier = useSubscription(context.currentVisitingProfile)
     const [editor, setEditor] = useState<AvatarEditor | null>(null)
     const [scale, setScale] = useState(1)

@@ -1,5 +1,5 @@
 import { useCallback } from 'react'
-import { useAccount, useChainId, useWeb3Connection, usePluginIDContext } from '@masknet/web3-hooks-base'
+import { useAccount, useChainId, useWeb3Connection, usePluginContext } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { makeStyles } from '@masknet/theme'
 import { NetworkPluginID } from '@masknet/shared-base'
@@ -26,7 +26,7 @@ const useStyles = makeStyles()({
 export function ConnectionContent(props: ConnectionContentProps) {
     const { classes } = useStyles()
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
-    const { pluginID } = usePluginIDContext()
+    const { pluginID } = usePluginContext()
     const chainId = useChainId()
     const account = useAccount()
     const connection = useWeb3Connection()

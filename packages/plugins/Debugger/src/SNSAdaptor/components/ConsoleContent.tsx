@@ -8,7 +8,7 @@ import {
     useBlockNumber,
     useBlockTimestamp,
     useChainId,
-    usePluginIDContext,
+    usePluginContext,
     useNetworkType,
     useProviderType,
     useReverseAddress,
@@ -33,7 +33,7 @@ const useStyles = makeStyles()({
 
 export function ConsoleContent(props: ConsoleContentProps) {
     const { classes } = useStyles()
-    const { pluginID: currentPluginId } = usePluginIDContext()
+    const { pluginID: currentPluginId } = usePluginContext()
     const { Others } = useWeb3State()
     const account = useAccount()
     const chainId = useChainId()

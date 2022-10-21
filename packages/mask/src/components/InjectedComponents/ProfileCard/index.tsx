@@ -16,7 +16,7 @@ import { isSameAddress, SocialIdentity } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { TabContext } from '@mui/lab'
 import { Tab, Typography } from '@mui/material'
-import { Web3ContextProvider } from '@masknet/web3-hooks-base'
+import { ChainContextProvider } from '@masknet/web3-hooks-base'
 import { MaskMessages, sorter, useLocationChange } from '../../../utils/index.js'
 import { ProfileCardTitle } from './ProfileCardTitle.js'
 
@@ -161,7 +161,7 @@ export const ProfileCard: FC<Props> = ({ identity, ...rest }) => {
         )
 
     return (
-        <Web3ContextProvider value={{ chainId: ChainId.Mainnet, pluginID: NetworkPluginID.PLUGIN_EVM }}>
+        <ChainContextProvider value={{ chainId: ChainId.Mainnet, pluginID: NetworkPluginID.PLUGIN_EVM }}>
             <div className={classes.root}>
                 <div className={classes.header}>
                     <ProfileCardTitle
@@ -204,6 +204,6 @@ export const ProfileCard: FC<Props> = ({ identity, ...rest }) => {
                     <Icons.RSS3 size={24} sx={{ ml: '12px' }} />
                 </div>
             </div>
-        </Web3ContextProvider>
+        </ChainContextProvider>
     )
 }

@@ -15,7 +15,7 @@ import {
     useWeb3State,
     useTrustedNonFungibleTokens,
     useWeb3Hub,
-    usePluginIDContext,
+    usePluginContext,
 } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import type { ChainId } from '@masknet/web3-shared-evm'
@@ -37,7 +37,7 @@ enum FormErrorType {
 }
 
 export const AddCollectibleDialog = memo<AddCollectibleDialogProps>(({ open, onClose, selectedNetwork }) => {
-    const { pluginID } = usePluginIDContext()
+    const { pluginID } = usePluginContext()
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const { Token } = useWeb3State<'all'>()
     const trustedNonFungibleTokens = useTrustedNonFungibleTokens(pluginID)

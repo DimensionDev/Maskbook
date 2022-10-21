@@ -2,7 +2,7 @@ import { Icons } from '@masknet/icons'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { usePluginIDContext, useWeb3State } from '@masknet/web3-hooks-base'
+import { usePluginContext, useWeb3State } from '@masknet/web3-hooks-base'
 import { SourceType } from '@masknet/web3-shared-base'
 import { Link, Typography } from '@mui/material'
 import { useI18N } from '../../../../../utils/index.js'
@@ -64,7 +64,7 @@ export function DetailsCard(props: DetailsCardProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
     const { Others } = useWeb3State()
-    const { pluginID } = usePluginIDContext()
+    const { pluginID } = usePluginContext()
 
     const infos: Array<{ title: string; value?: string; link?: boolean }> = []
     if (pluginID === NetworkPluginID.PLUGIN_SOLANA) {

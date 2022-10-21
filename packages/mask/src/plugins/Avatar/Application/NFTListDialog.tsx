@@ -9,7 +9,7 @@ import { AddNFT } from '../SNSAdaptor/AddNFT.js'
 import { AllChainsNonFungibleToken, PFP_TYPE, SelectTokenInfo } from '../types.js'
 import { useI18N } from '../locales/index.js'
 import { SUPPORTED_CHAIN_IDS, supportPluginIds } from '../constants.js'
-import { useAccount, useChainId, useNonFungibleAssets, usePluginIDContext } from '@masknet/web3-hooks-base'
+import { useAccount, useChainId, useNonFungibleAssets, usePluginContext } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { toPNG } from '../utils/index.js'
 import Services from '../../../extension/service.js'
@@ -119,7 +119,7 @@ export function NFTListDialog(props: NFTListDialogProps) {
     const { onNext, wallets = EMPTY_LIST, onSelected, tokenInfo, pfpType, selectedAccount, setSelectedAccount } = props
     const { classes } = useStyles()
 
-    const { pluginID } = usePluginIDContext()
+    const { pluginID } = usePluginContext()
     const account = useAccount(pluginID)
     const currentChainId = useChainId(pluginID)
 

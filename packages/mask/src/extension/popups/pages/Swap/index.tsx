@@ -6,7 +6,7 @@ import { useI18N } from '../../../../utils/index.js'
 import { useSwapPageTheme } from '../../../../utils/theme/useSwapPageTheme.js'
 import { AllProviderTradeContext } from '../../../../plugins/Trader/trader/useAllProviderTradeContext.js'
 import { NetworkSelector } from '../../components/NetworkSelector/index.js'
-import { Web3ContextProvider } from '@masknet/web3-hooks-base'
+import { ChainContextProvider } from '@masknet/web3-hooks-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { NetworkPluginID } from '@masknet/shared-base'
 
@@ -76,12 +76,12 @@ export default function SwapPage() {
                             <NetworkSelector />
                         </header>
                         <main className={classes.main}>
-                            <Web3ContextProvider
+                            <ChainContextProvider
                                 value={{ chainId: ChainId.Mainnet, pluginID: NetworkPluginID.PLUGIN_EVM }}>
                                 <AllProviderTradeContext.Provider>
                                     <SwapBox />
                                 </AllProviderTradeContext.Provider>
-                            </Web3ContextProvider>
+                            </ChainContextProvider>
                         </main>
                     </div>
                 </div>

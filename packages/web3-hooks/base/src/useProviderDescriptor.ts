@@ -2,13 +2,13 @@ import type { NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { getPluginDefine } from '@masknet/plugin-infra'
 import { useProviderType } from './useProviderType.js'
-import { usePluginIDContext } from './useContext.js'
+import { usePluginContext } from './useContext.js'
 
 export function useProviderDescriptor<S extends 'all' | void = void, T extends NetworkPluginID = NetworkPluginID>(
     expectedPluginID?: T,
     expectedProviderTypeOrID?: string,
 ) {
-    const { pluginID } = usePluginIDContext(expectedPluginID)
+    const { pluginID } = usePluginContext(expectedPluginID)
     const providerType = useProviderType(pluginID)
 
     return getPluginDefine(pluginID)?.declareWeb3Providers?.find((x) =>

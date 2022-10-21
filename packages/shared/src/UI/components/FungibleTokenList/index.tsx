@@ -18,7 +18,7 @@ import {
     useAccount,
     useBlockedFungibleTokens,
     useChainId,
-    usePluginIDContext,
+    usePluginContext,
     useFungibleAssets,
     useFungibleToken,
     useFungibleTokenBalance,
@@ -137,7 +137,7 @@ export const FungibleTokenList = forwardRef(
         )
         // #endregion
 
-        const { pluginID } = usePluginIDContext(props.pluginID) as T
+        const { pluginID } = usePluginContext(props.pluginID) as T
         const account = useAccount(pluginID)
         const chainId = useChainId(pluginID, props.chainId)
         const { Token, Others } = useWeb3State<'all'>(pluginID)

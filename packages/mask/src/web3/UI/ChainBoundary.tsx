@@ -3,7 +3,7 @@ import { useAsyncFn } from 'react-use'
 import { Box, Typography } from '@mui/material'
 import { makeStyles, MaskColorVar, ShadowRootTooltip, useStylesExtends, ActionButton } from '@masknet/theme'
 import {
-    usePluginIDContext,
+    usePluginContext,
     useAccount,
     useNetworkDescriptor,
     useAllowTestnet,
@@ -73,7 +73,7 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
 
-    const { pluginID: actualPluginID } = usePluginIDContext()
+    const { pluginID: actualPluginID } = usePluginContext()
     const plugin = useActivatedPlugin(actualPluginID, 'any')
     const expectedPlugin = useActivatedPlugin(expectedPluginID, 'any')
 

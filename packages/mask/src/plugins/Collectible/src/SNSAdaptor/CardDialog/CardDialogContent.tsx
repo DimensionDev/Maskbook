@@ -6,7 +6,7 @@ import { Icons } from '@masknet/icons'
 import { PluginWalletStatusBar } from '@masknet/shared'
 import { PluginID, NetworkPluginID, CrossIsolationMessages } from '@masknet/shared-base'
 import { resolveSourceTypeName } from '@masknet/web3-shared-base'
-import { PluginIDContextProvider, Web3ContextProvider } from '@masknet/web3-hooks-base'
+import { NetworkContextProvider, ChainContextProvider } from '@masknet/web3-hooks-base'
 import { useI18N as useBaseI18n } from '../../../../../utils/index.js'
 import { AboutTab } from './tabs/AboutTab.js'
 import { OffersTab } from './tabs/OffersTab.js'
@@ -144,8 +144,8 @@ export function CardDialogContent(props: CardDialogContentProps) {
                 </div>
             </div>
 
-            <PluginIDContextProvider value={parentPluginID}>
-                <Web3ContextProvider value={{ pluginID: parentPluginID }}>
+            <NetworkContextProvider value={parentPluginID}>
+                <ChainContextProvider value={{ pluginID: parentPluginID }}>
                     <PluginWalletStatusBar
                         className={classes.footer}
                         expectedPluginID={pluginID}
@@ -184,8 +184,8 @@ export function CardDialogContent(props: CardDialogContentProps) {
                             <div />
                         )}
                     </PluginWalletStatusBar>
-                </Web3ContextProvider>
-            </PluginIDContextProvider>
+                </ChainContextProvider>
+            </NetworkContextProvider>
         </div>
     )
 }
