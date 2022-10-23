@@ -11,8 +11,8 @@ import {
 import { I18NextProviderHMR, SharedContextProvider } from '@masknet/shared'
 import { ErrorBoundary } from '@masknet/shared-base-ui'
 import { createInjectHooksRenderer, useActivatedPluginsDashboard } from '@masknet/plugin-infra/dashboard'
-import { Web3ContextProvider, useNetworkContext } from '@masknet/web3-hooks-base'
-import { i18NextInstance, queryRemoteI18NBundle } from '@masknet/shared-base'
+import { Web3ContextProvider } from '@masknet/web3-hooks-base'
+import { i18NextInstance, NetworkPluginID, queryRemoteI18NBundle } from '@masknet/shared-base'
 
 import '../utils/kv-storage.js'
 
@@ -24,8 +24,6 @@ import { Services } from '../API.js'
 const PluginRender = createInjectHooksRenderer(useActivatedPluginsDashboard, (x) => x.GlobalInjection)
 
 export default function DashboardRoot() {
-    const { pluginID } = useNetworkContext()
-
     useEffect(queryRemoteI18NBundle(Services.Helper.queryRemoteI18NBundle), [])
 
     // #region theme
@@ -42,7 +40,7 @@ export default function DashboardRoot() {
     // #endregion
 
     return (
-        <Web3ContextProvider value={pluginID}>
+        <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM }}>
             <I18NextProviderHMR i18n={i18NextInstance}>
                 <StyledEngineProvider injectFirst>
                     <ThemeProvider theme={theme}>

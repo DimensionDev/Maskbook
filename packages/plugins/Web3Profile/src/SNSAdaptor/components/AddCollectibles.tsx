@@ -50,13 +50,13 @@ export function AddNFT(props: AddNFTProps) {
     const [tokenId, setTokenId] = useState('')
     const [message, setMessage] = useState('')
     const [checking, toggleChecking] = useState(false)
-    const { pluginID: currentPluginId } = useNetworkContext(expectedPluginID)
+    const { pluginID: currentPluginID } = useNetworkContext(expectedPluginID)
     const { account: currentAccount, chainId: currentChainId } = useChainContext({
         account: props.account,
         chainId,
     })
-    const hub = useWeb3Hub(currentPluginId, { chainId: currentChainId, account: currentAccount })
-    const connection = useWeb3Connection(currentPluginId)
+    const hub = useWeb3Hub(currentPluginID, { chainId: currentChainId, account: currentAccount })
+    const connection = useWeb3Connection(currentPluginID)
 
     const onClick = useCallback(async () => {
         if (!address) {

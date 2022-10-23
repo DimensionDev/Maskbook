@@ -78,7 +78,7 @@ export const PluginVerifiedWalletStatusBar = memo<PluginVerifiedWalletStatusBarP
         // exclude current account
         const wallets = verifiedWallets.filter((x) => !isSameAddress(x.identity, account))
 
-        const { pluginID: currentPluginId } = useNetworkContext()
+        const { pluginID: currentPluginID } = useNetworkContext()
 
         const selectedWallet = wallets.find((x) => isSameAddress(x.identity, expectedAddress))
 
@@ -93,7 +93,7 @@ export const PluginVerifiedWalletStatusBar = memo<PluginVerifiedWalletStatusBarP
 
         const isNextIdWallet = !account || !isSameAddress(account, expectedAddress)
 
-        const defaultPluginId = isNextIdWallet ? pluginIdByDefaultVerifiedWallet : currentPluginId
+        const defaultPluginId = isNextIdWallet ? pluginIdByDefaultVerifiedWallet : currentPluginID
 
         const defaultWalletName = useWalletName(
             isNextIdWallet ? defaultVerifiedWallet?.identity : account,
@@ -107,7 +107,7 @@ export const PluginVerifiedWalletStatusBar = memo<PluginVerifiedWalletStatusBarP
         const providerDescriptor = useProviderDescriptor(defaultPluginId)
         const networkDescriptor = useNetworkDescriptor(defaultPluginId)
 
-        const pendingTransactions = useRecentTransactions(currentPluginId, TransactionStatusType.NOT_DEPEND)
+        const pendingTransactions = useRecentTransactions(currentPluginID, TransactionStatusType.NOT_DEPEND)
 
         // actual address
         const walletIdentity = !isNextIdWallet ? account : defaultVerifiedWallet?.identity
