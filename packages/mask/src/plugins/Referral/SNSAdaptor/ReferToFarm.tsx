@@ -51,17 +51,16 @@ const useStyles = makeStyles()((theme) => ({
 
 export function ReferToFarm(props: PageInterface) {
     const t = useI18N()
+    const { classes } = useStyles()
+    const { showSnackbar } = useCustomSnackbar()
+    const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM)
     const { account, chainId: currentChainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const requiredChainId = getRequiredChainId(currentChainId)
-    const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM)
-    const { showSnackbar } = useCustomSnackbar()
     const { closeDialog: closeApplicationBoardDialog } = useRemoteControlledDialog(
         WalletMessages.events.ApplicationDialogUpdated,
     )
     const currentIdentity = useCurrentIdentity()
     const { value: linkedPersona } = useCurrentLinkedPersona()
-
-    const { classes } = useStyles()
 
     const [tab, setTab] = useState(TabsReferAndBuy.NEW)
     const [token, setToken] = useState<FungibleTokenDetailed>()

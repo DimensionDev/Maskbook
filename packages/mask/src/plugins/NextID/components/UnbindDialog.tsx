@@ -1,6 +1,6 @@
 import { memo, useCallback, useState } from 'react'
-import { useI18N } from '../locales/index.js'
 import { useAsyncRetry } from 'react-use'
+import { useI18N } from '../locales/index.js'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { NetworkPluginID, Binding, PersonaInformation, NextIDAction, NextIDPlatform } from '@masknet/shared-base'
@@ -23,17 +23,15 @@ interface VerifyWalletDialogProps {
 }
 
 export const UnbindDialog = memo<VerifyWalletDialogProps>(({ unbindAddress, onClose, persona, onUnBound, bounds }) => {
-    const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const t = useI18N()
 
-    const [openSecondDialog, setSecondDialog] = useState(false)
-
     const { showSnackbar } = useCustomSnackbar()
-    const currentIdentifier = persona.identifier
+    const [openSecondDialog, setSecondDialog] = useState(false)
+    const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const isBound = !!bounds.find((x) => isSameAddress(x.identity, unbindAddress))
 
     const { value: message } = useBindPayload(NextIDAction.Delete, unbindAddress, persona.identifier.publicKeyAsHex)
-    const [personaSignState, handlePersonaSign] = usePersonaSign(message?.signPayload, currentIdentifier)
+    const [personaSignState, handlePersonaSign] = usePersonaSign(message?.signPayload, persona.identifier)
     const [walletSignState, handleWalletSign] = useWalletSign(message?.signPayload, unbindAddress)
 
     useAsyncRetry(async () => {

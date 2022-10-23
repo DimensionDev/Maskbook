@@ -22,8 +22,7 @@ export type TokenPair = [Token, Token]
 
 export function usePairs(tradeProvider: TradeProvider, tokenPairs: readonly TokenPair[]) {
     const context = useGetTradeContext(tradeProvider)
-
-    const { chainId: targetChainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
     const listOfPairAddress = useMemo(() => {
         if (!context) return EMPTY_LIST
@@ -36,22 +35,22 @@ export function usePairs(tradeProvider: TradeProvider, tokenPairs: readonly Toke
         )
     }, [context, tokenPairs])
 
-    const { value: targetBlockNumber } = useTargetBlockNumber(targetChainId)
+    const { value: targetBlockNumber } = useTargetBlockNumber(chainId)
 
     // get reserves for each pair
-    const contracts = usePairContracts(targetChainId, [...new Set(listOfPairAddress.filter(Boolean) as string[])])
+    const contracts = usePairContracts(chainId, [...new Set(listOfPairAddress.filter(Boolean) as string[])])
 
     const [results, calls, _, callback] = useMultipleContractSingleData(
         contracts,
         Array.from<'getReserves'>({ length: contracts.length }).fill('getReserves'),
         [],
-        targetChainId,
+        chainId,
         targetBlockNumber,
     )
 
     const asyncResults = useAsyncRetry(
-        () => callback(calls, { chainId: numberToHex(targetChainId) }),
-        [calls, callback, targetChainId],
+        () => callback(calls, { chainId: numberToHex(chainId) }),
+        [calls, callback, chainId],
     )
 
     // compose reserves from multicall results

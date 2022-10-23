@@ -38,12 +38,12 @@ export interface TraderRef {
 
 export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, ref) => {
     const { defaultOutputCoin, chainId: targetChainId, defaultInputCoin, settings = false } = props
+    const t = useI18N()
     const [focusedTrade, setFocusTrade] = useState<TradeInfo>()
     const { chainId, account } = useChainContext<NetworkPluginID.PLUGIN_EVM>({
         chainId: targetChainId,
     })
     const chainIdValid = useChainIdValid(NetworkPluginID.PLUGIN_EVM, chainId)
-    const t = useI18N()
 
     const { openDialog: openConnectWalletDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectProviderDialogUpdated,

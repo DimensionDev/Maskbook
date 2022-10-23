@@ -29,13 +29,13 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 export interface AddNFTProps {
+    expectedPluginID: NetworkPluginID
     account?: string
-    onClose: () => void
     chainId?: ChainId
-    onAddClick?: (token: AllChainsNonFungibleToken) => void
     open: boolean
     title?: string
-    expectedPluginID: NetworkPluginID
+    onClose: () => void
+    onAddClick?: (token: AllChainsNonFungibleToken) => void
 }
 export function AddNFT(props: AddNFTProps) {
     const { onClose, open, onAddClick, title, chainId, account, expectedPluginID } = props

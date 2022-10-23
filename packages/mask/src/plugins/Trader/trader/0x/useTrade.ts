@@ -45,7 +45,7 @@ export function useTrade(
     outputToken?: FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>,
     temporarySlippage?: number,
 ): AsyncStateRetry<SwapQuoteResponse | null> {
-    const { account, chainId: targetChainId, networkType } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+    const { account, chainId, networkType } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const slippageSetting = useSlippageTolerance()
     const slippage = temporarySlippage || slippageSetting
     return useDoubleBlockBeatRetry(
@@ -57,10 +57,10 @@ export function useTrade(
             if (isZero(outputAmount) && !isExactIn) return null
 
             const sellToken = isNativeTokenAddress(inputToken.address)
-                ? getNativeTokenLabel(chainResolver.networkType(targetChainId) ?? networkType)
+                ? getNativeTokenLabel(chainResolver.networkType(chainId) ?? networkType)
                 : inputToken.address
             const buyToken = isNativeTokenAddress(outputToken.address)
-                ? getNativeTokenLabel(chainResolver.networkType(targetChainId) ?? networkType)
+                ? getNativeTokenLabel(chainResolver.networkType(chainId) ?? networkType)
                 : outputToken.address
             return PluginTraderRPC.swapQuote(
                 {
@@ -73,7 +73,7 @@ export function useTrade(
                     slippagePercentage: slippage,
                     affiliateAddress: ZRX_AFFILIATE_ADDRESS,
                 },
-                chainResolver.networkType(targetChainId) ?? networkType,
+                chainResolver.networkType(chainId) ?? networkType,
             )
         },
         [
@@ -85,7 +85,7 @@ export function useTrade(
             inputToken?.address,
             outputToken?.address,
             slippage,
-            targetChainId,
+            chainId,
         ],
     )
 }

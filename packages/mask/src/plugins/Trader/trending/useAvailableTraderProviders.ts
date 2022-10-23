@@ -12,8 +12,9 @@ export function useAvailableTraderProviders(
     keyword?: string,
     targetChainId?: ChainId,
 ): AsyncState<TradeProvider[]> {
-    const { chainId: currentChainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const chainId = targetChainId ?? currentChainId
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>({
+        chainId: targetChainId,
+    })
     return useAsync(async () => {
         return PluginTraderRPC.getAvailableTraderProviders(chainId)
     }, [chainId, type, keyword])

@@ -29,8 +29,8 @@ export function useV3BestTradeExactIn(
     amountIn?: CurrencyAmount<Currency>,
     currencyOut?: Currency,
 ): AsyncStateRetry<Trade<Currency, Currency, TradeType.EXACT_INPUT> | null> {
-    const { chainId: targetChainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const quoterContract = useQuoterContract(targetChainId)
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+    const quoterContract = useQuoterContract(chainId)
     const { routes, loading: routesLoading } = useAllV3Routes(amountIn?.currency, currencyOut)
     const quoteExactInInputs = useMemo(() => {
         try {
@@ -46,14 +46,14 @@ export function useV3BestTradeExactIn(
         }
     }, [amountIn, routes])
 
-    const { value: blockNumber } = useTargetBlockNumber(targetChainId)
+    const { value: blockNumber } = useTargetBlockNumber(chainId)
 
     const [quotesResults, quotesCalls, , quotesCallback] = useSingleContractMultipleData(
         quoterContract,
         Array.from<'quoteExactInput'>({ length: quoteExactInInputs.length }).fill('quoteExactInput'),
         quoteExactInInputs,
         DEFAULT_MULTICALL_GAS_LIMIT,
-        targetChainId,
+        chainId,
         blockNumber,
     )
     const {
@@ -155,8 +155,8 @@ export function useV3BestTradeExactOut(
     amountOut?: CurrencyAmount<Currency>,
 ): AsyncStateRetry<Trade<Currency, Currency, TradeType.EXACT_OUTPUT> | null> {
     const { routes, loading: routesLoading } = useAllV3Routes(currencyIn, amountOut?.currency)
-    const { chainId: targetChainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const quoterContract = useQuoterContract(targetChainId)
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+    const quoterContract = useQuoterContract(chainId)
     const quoteExactOutInputs = useMemo(() => {
         try {
             return routes.map(
@@ -171,14 +171,14 @@ export function useV3BestTradeExactOut(
         }
     }, [amountOut, routes])
 
-    const { value: blockNumber } = useTargetBlockNumber(targetChainId)
+    const { value: blockNumber } = useTargetBlockNumber(chainId)
 
     const [quotesResults, quotesCalls, , quotesCallback] = useSingleContractMultipleData(
         quoterContract,
         Array.from<'quoteExactOutput'>({ length: quoteExactOutInputs.length }).fill('quoteExactOutput'),
         quoteExactOutInputs,
         DEFAULT_MULTICALL_GAS_LIMIT,
-        targetChainId,
+        chainId,
         blockNumber,
     )
     const {

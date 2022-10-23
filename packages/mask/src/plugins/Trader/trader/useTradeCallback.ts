@@ -36,7 +36,7 @@ export function useTradeCallback(
 ): AsyncFnReturn<() => Promise<string | undefined>> {
     // trade context
     const context = useGetTradeContext(provider)
-    const { chainId: targetChainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     // create trade computed
     const isNativeTokenWrapper_ = isNativeTokenWrapper(tradeComputed ?? null)
     const tradeComputedForUniswapV2Like =
@@ -61,7 +61,7 @@ export function useTradeCallback(
     const uniswapV3Like = useUniswapCallback(tradeComputedForUniswapV3Like, provider, gasConfig, allowedSlippage)
 
     // balancer
-    const exchangeProxyContract = useExchangeProxyContract(targetChainId)
+    const exchangeProxyContract = useExchangeProxyContract(chainId)
     const balancer = useBalancerCallback(
         provider === TradeProvider.BALANCER ? tradeComputedForBalancer : null,
         exchangeProxyContract,
@@ -82,7 +82,7 @@ export function useTradeCallback(
     const nativeTokenWrapper = useNativeTokenWrapperCallback(
         tradeComputed as TradeComputed<NativeTokenWrapper>,
         gasConfig,
-        targetChainId,
+        chainId,
     )
     if (isNativeTokenWrapper_) return nativeTokenWrapper
 

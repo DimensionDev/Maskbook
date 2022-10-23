@@ -56,10 +56,10 @@ export function FarmPost(props: FarmPostProps) {
     const { payload } = props
     const farmChainId = payload.referral_token_chain_id
 
+    const t = useI18N()
     const { classes } = useStyles()
     const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM)
     const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const t = useI18N()
     const currentIdentity = useCurrentIdentity()
     const { value: linkedPersona } = useCurrentLinkedPersona()
     const { showSnackbar } = useCustomSnackbar()

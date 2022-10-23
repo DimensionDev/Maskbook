@@ -2,16 +2,16 @@ import { useMemo } from 'react'
 import JSBI from 'jsbi'
 import { Percent, TradeType } from '@uniswap/sdk-core'
 import { Router, Trade as V2Trade } from '@uniswap/v2-sdk'
-import { SLIPPAGE_DEFAULT } from '../../constants/index.js'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import type { NetworkPluginID } from '@masknet/shared-base'
-import type { SwapCall, Trade, TradeComputed } from '../../types/index.js'
 import { SwapRouter } from '@uniswap/v3-sdk'
+import { TradeProvider } from '@masknet/public-api'
+import { SLIPPAGE_DEFAULT } from '../../constants/index.js'
+import type { SwapCall, Trade, TradeComputed } from '../../types/index.js'
 import { useRouterV2Contract } from '../../contracts/uniswap/useRouterV2Contract.js'
 import { useSwapRouterContract } from '../../contracts/uniswap/useSwapRouterContract.js'
 import { useTransactionDeadline } from './useTransactionDeadline.js'
 import { useGetTradeContext } from '../useGetTradeContext.js'
-import { TradeProvider } from '@masknet/public-api'
 
 const UNISWAP_BIPS_BASE = JSBI.BigInt(10000)
 
@@ -57,11 +57,11 @@ export function useSwapParameters(
     tradeProvider?: TradeProvider,
     allowedSlippage: number = SLIPPAGE_DEFAULT,
 ) {
-    const { account, chainId: targetChainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const context = useGetTradeContext(tradeProvider)
     const deadline = useTransactionDeadline()
-    const routerV2Contract = useRouterV2Contract(targetChainId, context?.ROUTER_CONTRACT_ADDRESS)
-    const swapRouterContract = useSwapRouterContract(targetChainId, context?.ROUTER_CONTRACT_ADDRESS)
+    const routerV2Contract = useRouterV2Contract(chainId, context?.ROUTER_CONTRACT_ADDRESS)
+    const swapRouterContract = useSwapRouterContract(chainId, context?.ROUTER_CONTRACT_ADDRESS)
 
     return useMemo<SwapCall[]>(() => {
         if (!account || !trade?.trade_ || !deadline) return []

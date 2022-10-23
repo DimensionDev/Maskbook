@@ -12,9 +12,9 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import { useChainContext, useWeb3Connection } from '@masknet/web3-hooks-base'
 
 export function useTradeGasLimit(trade: TradeComputed<SwapResponse> | null): AsyncState<number> {
-    const { account, chainId: targetChainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const exchangeProxyContract = useExchangeProxyContract(targetChainId)
-    const { BALANCER_ETH_ADDRESS } = useTraderConstants(targetChainId)
+    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+    const exchangeProxyContract = useExchangeProxyContract(chainId)
+    const { BALANCER_ETH_ADDRESS } = useTraderConstants(chainId)
     const tradeAmount = useTradeAmount(trade, SLIPPAGE_DEFAULT)
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
 
