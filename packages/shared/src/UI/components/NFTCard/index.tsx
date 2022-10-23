@@ -1,7 +1,7 @@
 import { Icons } from '@masknet/icons'
 import { ImageIcon, useIsImageURL } from '@masknet/shared'
-import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { NetworkPluginID } from '@masknet/shared-base'
+import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { isSameAddress, NonFungibleToken } from '@masknet/web3-shared-base'
 import { ChainId, NETWORK_DESCRIPTORS, SchemaType } from '@masknet/web3-shared-evm'
 import { Box, Skeleton, TooltipProps } from '@mui/material'
@@ -105,7 +105,7 @@ export function NFTImageCollectibleAvatar({
             </div>
         )
 
-    const title = token.metadata?.name || ''
+    const title = token.collection?.name || token.contract?.name || ''
     return isImageToken ? (
         <NFTImage
             title={title}
