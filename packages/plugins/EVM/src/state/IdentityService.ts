@@ -193,18 +193,39 @@ export class IdentityService extends IdentityServiceState {
         if (!userId) return
 
         const response = await MaskX.getIdentitiesExact(userId, MaskX_BaseAPI.PlatformType.Twitter)
-        return response.records
-            .filter((x) => {
-                if (!isValidAddress(x.web3_addr)) return false
+        const results = response.records.filter((x) => {
+            if (!isValidAddress(x.web3_addr)) return false
+            try {
+                // detect if a valid data source
+                resolveMaskXAddressType(x.source)
+                return true
+            } catch {
+                return false
+            }
+        })
+
+        const allSettled = await Promise.allSettled(
+            results.map(async (y) => {
                 try {
-                    // detect if a valid data source
-                    resolveMaskXAddressType(x.source)
-                    return true
+                    const name = await attemptUntil(
+                        [new ENS_Resolver(), new ChainbaseResolver()].map((resolver) => {
+                            return async () => resolver.reverse(y.web3_addr)
+                        }),
+                        undefined,
+                        true,
+                    )
+
+                    return this.createSocialAddress(
+                        resolveMaskXAddressType(y.source),
+                        y.web3_addr,
+                        name ?? y.sns_handle,
+                    )
                 } catch {
-                    return false
+                    return this.createSocialAddress(resolveMaskXAddressType(y.source), y.web3_addr, y.sns_handle)
                 }
-            })
-            .map((y) => this.createSocialAddress(resolveMaskXAddressType(y.source), y.web3_addr, y.sns_handle))
+            }),
+        )
+        return compact(allSettled.map((x) => (x.status === 'fulfilled' ? x.value : undefined)))
     }
 
     override async getFromRemote(identity: SocialIdentity, includes?: SocialAddressType[]) {
