@@ -85,7 +85,7 @@ export function computeCacheKey(flags: Required<BuildFlags>, computedFlags: Comp
         flags.mode,
         computedFlags.supportDynamicImport, // it will generate different code
         computedFlags.reactProductionProfiling, // it will affect module resolution of react-dom
-        flags.devtools, // it will affect module resolution of @pmmmwh/react-refresh-webpack-plugin/client/ReactRefreshEntry.js
+        flags.devtools, // it will affect module resolution of react-refresh-webpack-plugin/client/ReactRefreshEntry.js
         flags.reactRefresh, // it will affect all TSX files
     ].join('-')
 }
