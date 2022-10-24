@@ -12,7 +12,7 @@ import RSS3 from 'rss3-next'
 import urlcat, { query } from 'urlcat'
 import { fetchJSON } from '../helpers.js'
 import { NonFungibleTokenAPI, RSS3BaseAPI } from '../types/index.js'
-import { NEW_RSS3_ENDPOINT, RSS3_ENDPOINT, TAG, TYPE } from './constants.js'
+import { NEW_RSS3_ENDPOINT, TAG, TYPE } from './constants.js'
 
 type RSS3Result<T> = {
     cursor?: string
@@ -28,7 +28,7 @@ export class RSS3API implements RSS3BaseAPI.Provider, NonFungibleTokenAPI.Provid
         },
     ): RSS3 {
         return new RSS3({
-            endpoint: RSS3_ENDPOINT,
+            endpoint: NEW_RSS3_ENDPOINT,
             address,
             sign,
         })
@@ -90,7 +90,7 @@ export class RSS3API implements RSS3BaseAPI.Provider, NonFungibleTokenAPI.Provid
     async getProfileInfo(address: string) {
         if (!address) return
 
-        const url = urlcat(RSS3_ENDPOINT, '/:address', { address })
+        const url = urlcat(NEW_RSS3_ENDPOINT, '/:address', { address })
         const rsp = await fetchJSON<{
             profile: RSS3BaseAPI.ProfileInfo
         }>(url)
@@ -100,7 +100,7 @@ export class RSS3API implements RSS3BaseAPI.Provider, NonFungibleTokenAPI.Provid
         if (chainId !== ChainId.Mainnet && chainId !== ChainId.Matic)
             return createPageable([], createIndicator(indicator))
 
-        const url = urlcat(RSS3_ENDPOINT, '/assets/list', {
+        const url = urlcat(NEW_RSS3_ENDPOINT, '/assets/list', {
             personaID: address,
             type: RSS3BaseAPI.AssetType.NFT,
         })
