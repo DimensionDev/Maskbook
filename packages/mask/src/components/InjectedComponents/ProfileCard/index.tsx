@@ -101,10 +101,14 @@ export const ProfileCard: FC<Props> = ({ identity, ...rest }) => {
 
     const translate = usePluginI18NField()
     const {
-        value: socialAddressList = EMPTY_LIST,
+        value: allSocialAddressList = EMPTY_LIST,
         loading: loadingSocialAddressList,
         retry: retrySocialAddress,
     } = useSocialAddressListBySettings(identity, undefined, sorter)
+    const socialAddressList = useMemo(
+        () => allSocialAddressList.filter((x) => x.pluginID === NetworkPluginID.PLUGIN_EVM),
+        [allSocialAddressList],
+    )
 
     const [selectedAddress, setSelectedAddress] = useState<string>()
     const firstAddress = first(socialAddressList)?.address

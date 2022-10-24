@@ -194,7 +194,13 @@ export class IdentityService extends IdentityServiceState {
 
         const response = await MaskX.getIdentitiesExact(userId, MaskX_BaseAPI.PlatformType.Twitter)
         const results = response.records.filter((x) => {
-            if (!isValidAddress(x.web3_addr)) return false
+            if (
+                !isValidAddress(x.web3_addr) ||
+                // temporarily hide rss3
+                x.source === MaskX_BaseAPI.SourceType.RSS3
+            )
+                return false
+
             try {
                 // detect if a valid data source
                 resolveMaskXAddressType(x.source)
