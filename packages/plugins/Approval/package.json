@@ -1,5 +1,5 @@
 {
-  "name": "@masknet/plugin-ens",
+  "name": "@masknet/plugin-approval",
   "private": true,
   "exports": {
     ".": {
@@ -18,8 +18,10 @@
     "@masknet/web3-shared-base": "workspace:*",
     "@masknet/web3-shared-evm": "workspace:*",
     "@masknet/web3-providers": "workspace:*",
+    "@masknet/plugin-wallet":  "workspace:*",
     "@masknet/theme": "workspace:*",
     "react-use": "^17.4.0",
+    "urlcat": "^2.0.4",
     "bignumber.js": "9.1.0",
     "unstated-next": "^1.1.0",
     "opensea-js": "^1.2.7"

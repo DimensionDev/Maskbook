@@ -133,6 +133,7 @@
     "cancel": "Cancel",
     "add_wallet": "Add Wallet",
     "wallet_setting_hint": "Toggle the button to manage wallet display settings.",
+    "wallet_status_button_change_to_evm": "Change to EVM wallet",
     "wallet_status_button_change": "Change",
     "add_wallet_tips": "Please add wallets to receive tips",
     "add_wallet_web3_profile": "No connected wallet, please add wallet.",

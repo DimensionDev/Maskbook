@@ -1,5 +1,5 @@
 import { useActivatedPlugin, useCompositionContext } from '@masknet/plugin-infra/content-script'
-import { InjectedDialog, InjectedDialogProps, useOpenShareTxDialog } from '@masknet/shared'
+import { InjectedDialog, InjectedDialogProps, useOpenShareTxDialog, NetworkTab } from '@masknet/shared'
 import { PluginID, EMPTY_LIST, EnhanceableSite, NetworkPluginID } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
@@ -22,7 +22,6 @@ import { PoolList } from './PoolList.js'
 import { useChainContext, useNetworkContext, useWeb3Connection, useChainIdValid } from '@masknet/web3-hooks-base'
 import { PoolSettings, useFillCallback } from './hooks/useFill.js'
 import { Icons } from '@masknet/icons'
-import { NetworkTab } from '../../../components/shared/NetworkTab.js'
 
 interface StyleProps {
     snsId: string
