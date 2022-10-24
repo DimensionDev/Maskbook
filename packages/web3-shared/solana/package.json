@@ -17,7 +17,7 @@
     "@solana/web3.js": "^1.44.2",
     "@toruslabs/solana-embed": "^0.1.6",
     "@types/bs58": "^4.0.1",
-    "bignumber.js": "9.0.2",
+    "bignumber.js": "9.1.0",
     "bs58": "^4.0.1",
     "buffer": "^6.0.3",
     "react-use": "^17.4.0",

@@ -28,7 +28,7 @@
     "@walletconnect/client": "^1.7.5",
     "@walletconnect/qrcode-modal": "^1.7.5",
     "@walletconnect/types": "^1.7.7",
-    "bignumber.js": "^9.0.2",
+    "bignumber.js": "9.1.0",
     "ethereumjs-util": "^7.1.0",
     "@ensdomains/eth-ens-namehash": "^2.0.15",
     "ethjs-ens": "^2.0.1",
