@@ -3,7 +3,6 @@ import {
     createNextIndicator,
     createPageable,
     HubOptions,
-    resolveResourceURL,
     SourceType,
     TokenType,
 } from '@masknet/web3-shared-base'
@@ -13,6 +12,7 @@ import urlcat, { query } from 'urlcat'
 import { fetchJSON } from '../helpers.js'
 import { NonFungibleTokenAPI, RSS3BaseAPI } from '../types/index.js'
 import { NEW_RSS3_ENDPOINT, RSS3_ENDPOINT, TAG, TYPE } from './constants.js'
+import { normalizedFeed } from './helpers.js'
 
 type RSS3Result<T> = {
     cursor?: string
@@ -133,6 +133,7 @@ export class RSS3API implements RSS3BaseAPI.Provider, NonFungibleTokenAPI.Provid
     }
 
     /**
+     * @deprecated
      * Get feeds in tags of donation, collectible and transaction
      */
     async getWeb3Feeds(address: string, { indicator, size = 100 }: HubOptions<ChainId> = {}) {
@@ -150,18 +151,22 @@ export class RSS3API implements RSS3BaseAPI.Provider, NonFungibleTokenAPI.Provid
             result: RSS3BaseAPI.Activity[]
             cursor?: string
         }>(url)
-        result.forEach((activity) => {
-            activity.actions.forEach((action) => {
-                if (!action.metadata) return
-                if ('image' in action.metadata) {
-                    action.metadata.image = resolveResourceURL(action.metadata.image)!
-                } else if ('token' in action.metadata) {
-                    action.metadata.token.image = resolveResourceURL(action.metadata.token.image)!
-                } else if ('logo' in action.metadata) {
-                    action.metadata.logo = resolveResourceURL(action.metadata.logo)!
-                }
-            })
+        result.forEach(normalizedFeed)
+        return createPageable(result, createIndicator(indicator), createNextIndicator(indicator, cursor))
+    }
+    async getAllNotes(address: string, { indicator, size = 500 }: HubOptions<ChainId> = {}) {
+        if (!address) return createPageable([], createIndicator(indicator))
+        const url = urlcat(NEW_RSS3_ENDPOINT, '/:address', {
+            address,
+            limit: size,
+            cursor: indicator?.id ?? '',
+            include_poap: true,
         })
+        const { result, cursor } = await fetchJSON<{
+            result: RSS3BaseAPI.Web3Feed[]
+            cursor?: string
+        }>(url)
+        result.forEach(normalizedFeed)
         return createPageable(result, createIndicator(indicator), createNextIndicator(indicator, cursor))
     }
 }

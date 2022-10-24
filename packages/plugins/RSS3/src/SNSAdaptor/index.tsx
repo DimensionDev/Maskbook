@@ -5,7 +5,7 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import { base } from '../base.js'
 import { PLUGIN_ID } from '../constants.js'
 import { setupContext } from './context.js'
-import { DonationPage, FeedsPage, FeedPageProps, FootprintPageProps, FootprintsPage } from './pages/index.js'
+import { DonationPage, FeedsPage, FeedPageProps } from './pages/index.js'
 
 function shouldDisplay(identity?: SocialIdentity, socialAccount?: SocialAccount) {
     return socialAccount?.pluginID === NetworkPluginID.PLUGIN_EVM
@@ -14,7 +14,7 @@ function shouldDisplay(identity?: SocialIdentity, socialAccount?: SocialAccount)
 const DonationsTabConfig: Plugin.SNSAdaptor.ProfileTab = {
     ID: `${PLUGIN_ID}_donations`,
     label: 'Donations',
-    priority: 1,
+    priority: 2,
     UI: {
         TabContent: ({ socialAccount, identity }) => {
             return (
@@ -33,44 +33,11 @@ const DonationsTabConfig: Plugin.SNSAdaptor.ProfileTab = {
     },
 }
 
-const createFootprintsTabConfig = (
-    props: Omit<FootprintPageProps, 'address' | 'publicKey' | 'userId'>,
-): Plugin.SNSAdaptor.ProfileTab => {
-    return {
-        ID: `${PLUGIN_ID}_footprints`,
-        label: 'Footprints',
-        priority: 2,
-        UI: {
-            TabContent: ({ socialAccount, identity }) => {
-                return (
-                    <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM }}>
-                        <FootprintsPage
-                            address={socialAccount?.address ?? ''}
-                            publicKey={identity?.publicKey}
-                            userId={identity?.identifier?.userId ?? ''}
-                            {...props}
-                        />
-                    </Web3ContextProvider>
-                )
-            },
-        },
-        Utils: {
-            shouldDisplay,
-        },
-    }
-}
-const FootprintsTabConfig: Plugin.SNSAdaptor.ProfileTab = createFootprintsTabConfig({})
-const FootprintsTabConfigInProfileCard: Plugin.SNSAdaptor.ProfileTab = createFootprintsTabConfig({
-    p: 1.5,
-    layout: 'grid',
-    collectionName: 'POAPs',
-})
-
 const createActivitiesTabConfig = (props: FeedPageProps): Plugin.SNSAdaptor.ProfileTab => {
     return {
         ID: `${PLUGIN_ID}_feeds`,
         label: 'Activities',
-        priority: 3,
+        priority: 1,
         UI: {
             TabContent: ({ socialAccount }) => {
                 return (
@@ -91,16 +58,27 @@ const ActivitiesTabConfigInProfileCard: Plugin.SNSAdaptor.ProfileTab = createAct
     p: 1.5,
 })
 
+const SocialTabConfig: Plugin.SNSAdaptor.ProfileTab = {
+    ID: `${PLUGIN_ID}_social`,
+    label: 'Social',
+    priority: 3,
+    UI: {
+        TabContent: ({ socialAccount }) => {
+            return <div>social: {socialAccount?.address}</div>
+        },
+    },
+    Utils: {
+        shouldDisplay,
+    },
+}
+
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
     init(signal, context) {
         setupContext(context)
     },
-    ProfileTabs: [DonationsTabConfig, FootprintsTabConfig, ActivitiesTabConfig],
-    ProfileCardTabs: [
-        { ...ActivitiesTabConfigInProfileCard, priority: 1 },
-        { ...FootprintsTabConfigInProfileCard, label: 'POAPs', priority: 3 },
-    ],
+    ProfileTabs: [DonationsTabConfig, ActivitiesTabConfig, SocialTabConfig],
+    ProfileCardTabs: [{ ...ActivitiesTabConfigInProfileCard, priority: 1 }, SocialTabConfig],
 }
 
 export default sns
