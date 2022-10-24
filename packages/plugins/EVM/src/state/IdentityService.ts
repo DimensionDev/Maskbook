@@ -196,8 +196,11 @@ export class IdentityService extends IdentityServiceState {
         const results = response.records.filter((x) => {
             if (
                 !isValidAddress(x.web3_addr) ||
-                // temporarily hide rss3
-                x.source === MaskX_BaseAPI.SourceType.RSS3
+                ![
+                    MaskX_BaseAPI.SourceType.CyberConnect,
+                    MaskX_BaseAPI.SourceType.Leaderboard,
+                    MaskX_BaseAPI.SourceType.Sybil,
+                ].includes(x.source)
             )
                 return false
 
