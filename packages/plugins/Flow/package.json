@@ -21,7 +21,7 @@
     "@masknet/web3-shared-evm": "workspace:*",
     "@masknet/web3-shared-flow": "workspace:*",
     "@servie/events": "^3.0.0",
-    "bignumber.js": "^9.0.2",
+    "bignumber.js": "9.1.0",
     "date-fns": "^2.28.0",
     "react-use": "^17.4.0"
   },

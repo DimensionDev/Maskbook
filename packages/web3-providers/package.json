@@ -28,7 +28,7 @@
     "@solana/spl-token-registry": "^0.2.1301",
     "@solana/web3.js": "^1.44.2",
     "@types/socket.io-client": "^1.4.36",
-    "bignumber.js": "9.0.2",
+    "bignumber.js": "9.1.0",
     "date-fns": "^2.28.0",
     "graphql-request": "^3.4.0",
     "fuse.js": "^6.6.2",

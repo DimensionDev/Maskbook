@@ -18,7 +18,7 @@
     "@toruslabs/torus-embed": "^1.22.6",
     "@walletconnect/client": "^1.7.5",
     "@walletconnect/qrcode-modal": "^1.7.5",
-    "bignumber.js": "9.0.2",
+    "bignumber.js": "9.1.0",
     "ethereum-blockies": "^0.1.1",
     "fortmatic": "^2.2.1",
     "fuse.js": "^6.6.2",

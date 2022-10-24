@@ -80,7 +80,7 @@
     "anchorme": "^2.1.2",
     "assert": "^2.0.0",
     "async-call-rpc": "^6.1.5",
-    "bignumber.js": "^9.0.2",
+    "bignumber.js": "9.1.0",
     "bip39": "^3.0.2",
     "buffer": "^6.0.3",
     "classnames": "^2.3.1",
