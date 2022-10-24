@@ -144,6 +144,9 @@ export default function GuideStep({
         if (step !== total) {
             userGuideStatus[ui.networkIdentifier].value = String(step + 1)
         }
+        if (step === total - 1) {
+            document.body.scrollIntoView()
+        }
     }
 
     const onTry = () => {
