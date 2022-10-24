@@ -31,7 +31,7 @@ const NetworkContext = createContext<NetworkContext>(null!)
 
 const ChainContext = createContext<ChainContext>(null!)
 
-export function NetworkContextProvider({ value, children }: React.ProviderProps<NetworkPluginID>) {
+function NetworkContextProvider({ value, children }: React.ProviderProps<NetworkPluginID>) {
     const [pluginID, setPluginID] = useState<NetworkPluginID>()
     return (
         <NetworkContext.Provider
@@ -44,7 +44,7 @@ export function NetworkContextProvider({ value, children }: React.ProviderProps<
     )
 }
 
-export function ChainContextProvider({ value, children }: React.ProviderProps<ChainContextDefaults>) {
+function ChainContextProvider({ value, children }: React.ProviderProps<ChainContextDefaults>) {
     const { pluginID } = useNetworkContext()
     const globalAccount = useAccount(pluginID)
     const globalChainId = useChainId(pluginID)

@@ -2,7 +2,7 @@ import { useCallback, useState } from 'react'
 import { compact } from 'lodash-unified'
 import { NetworkPluginID, PluginID } from '@masknet/shared-base'
 import { useCompositionContext } from '@masknet/plugin-infra/content-script'
-import { useChainContext, useWeb3Connection, useChainIdValid, ChainContextProvider } from '@masknet/web3-hooks-base'
+import { useChainContext, useWeb3Connection, useChainIdValid, Web3ContextProvider } from '@masknet/web3-hooks-base'
 import { InjectedDialog, NetworkTab } from '@masknet/shared'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
@@ -180,7 +180,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     const [currentTab, onChange, tabs] = useTabs('tokens', 'collectibles')
 
     return (
-        <ChainContextProvider value={{ chainId: networkTabChainId }}>
+        <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM, chainId: networkTabChainId }}>
             <TabContext value={currentTab}>
                 <InjectedDialog
                     isOpenFromApplicationBoard={props.isOpenFromApplicationBoard}
@@ -262,6 +262,6 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                     </DialogContent>
                 </InjectedDialog>
             </TabContext>
-        </ChainContextProvider>
+        </Web3ContextProvider>
     )
 }

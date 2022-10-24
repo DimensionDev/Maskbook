@@ -1,5 +1,5 @@
 import type { Plugin } from '@masknet/plugin-infra'
-import { NetworkContextProvider } from '@masknet/web3-hooks-base'
+import { Web3ContextProvider } from '@masknet/web3-hooks-base'
 import type { SocialAccount, SocialIdentity } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { base } from '../base.js'
@@ -18,13 +18,13 @@ const DonationsTabConfig: Plugin.SNSAdaptor.ProfileTab = {
     UI: {
         TabContent: ({ socialAccount, identity }) => {
             return (
-                <NetworkContextProvider value={NetworkPluginID.PLUGIN_EVM}>
+                <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM }}>
                     <DonationPage
                         socialAccount={socialAccount}
                         userId={identity?.identifier?.userId}
                         publicKey={identity?.publicKey}
                     />
-                </NetworkContextProvider>
+                </Web3ContextProvider>
             )
         },
     },
@@ -43,14 +43,14 @@ const createFootprintsTabConfig = (
         UI: {
             TabContent: ({ socialAccount, identity }) => {
                 return (
-                    <NetworkContextProvider value={NetworkPluginID.PLUGIN_EVM}>
+                    <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM }}>
                         <FootprintsPage
                             address={socialAccount?.address ?? ''}
                             publicKey={identity?.publicKey}
                             userId={identity?.identifier?.userId ?? ''}
                             {...props}
                         />
-                    </NetworkContextProvider>
+                    </Web3ContextProvider>
                 )
             },
         },
@@ -74,9 +74,9 @@ const createActivitiesTabConfig = (props: FeedPageProps): Plugin.SNSAdaptor.Prof
         UI: {
             TabContent: ({ socialAccount }) => {
                 return (
-                    <NetworkContextProvider value={NetworkPluginID.PLUGIN_EVM}>
+                    <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM }}>
                         <FeedsPage address={socialAccount?.address} {...props} />
-                    </NetworkContextProvider>
+                    </Web3ContextProvider>
                 )
             },
         },
