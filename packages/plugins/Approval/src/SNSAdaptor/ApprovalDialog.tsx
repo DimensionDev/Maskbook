@@ -2,16 +2,14 @@ import { compact } from 'lodash-unified'
 import { DialogContent, Button, Tab } from '@mui/material'
 import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import { TabContext } from '@mui/lab'
-import { PluginWalletStatusBar, InjectedDialog } from '@masknet/shared'
+import { PluginWalletStatusBar, InjectedDialog, useSharedI18N, NetworkTab } from '@masknet/shared'
 import { useChainId, useNetworkContext } from '@masknet/web3-hooks-base'
-import { NetworkTab } from '../../../components/shared/NetworkTab.js'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { ChainId, chainResolver, NetworkType } from '@masknet/web3-shared-evm'
 import { NetworkPluginID, PluginID } from '@masknet/shared-base'
 import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
 import { useI18N } from '../locales/index.js'
-import { useI18N as useBaseI18n } from '../../../utils/index.js'
-import { WalletMessages } from '../../../plugins/Wallet/messages.js'
+import { WalletMessages } from '@masknet/plugin-wallet'
 import { ApprovalEmptyContent } from './ApprovalEmptyContent.js'
 import { ApprovalTokenContent } from './ApprovalTokenContent.js'
 import { ApprovalNFTContent } from './ApprovalNFTContent.js'
@@ -126,7 +124,7 @@ interface ApprovalWrapperProps {
 
 function ApprovalWrapper(props: ApprovalWrapperProps) {
     const { tab } = props
-    const { t: tr } = useBaseI18n()
+    const t = useSharedI18N()
 
     const { pluginID } = useNetworkContext()
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
@@ -183,8 +181,8 @@ function ApprovalWrapper(props: ApprovalWrapperProps) {
                     }}
                     fullWidth>
                     {pluginID === NetworkPluginID.PLUGIN_EVM
-                        ? tr('wallet_status_button_change')
-                        : tr('wallet_status_button_change_to_evm')}
+                        ? t.wallet_status_button_change()
+                        : t.wallet_status_button_change_to_evm()}
                 </Button>
             </PluginWalletStatusBar>
         </div>
