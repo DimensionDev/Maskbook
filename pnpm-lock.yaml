@@ -592,6 +592,9 @@ importers:
       '@masknet/injected-script':
         specifier: workspace:*
         version: link:../injected-script
+      '@masknet/plugin-approval':
+        specifier: workspace:*
+        version: link:../plugins/Approval
       '@masknet/plugin-cross-chain-bridge':
         specifier: workspace:*
         version: link:../plugins/CrossChainBridge
