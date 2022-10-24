@@ -810,7 +810,7 @@ export namespace Plugin.SNSAdaptor {
         label: I18NStringField
         path: string
         UI: {
-            DialogContent: ComponentType<{ closeDialog?: () => void }>
+            DialogContent: ComponentType<{ closeDialog: () => void }>
         }
     }
 

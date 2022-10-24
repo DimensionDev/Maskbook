@@ -1,17 +1,17 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { DialogContent } from '@mui/material'
-import { openWindow, useRemoteControlledDialog, useValueRef } from '@masknet/shared-base-ui'
+import { openWindow, useValueRef } from '@masknet/shared-base-ui'
 import { getRegisteredWeb3Networks, getRegisteredWeb3Providers } from '@masknet/plugin-infra'
 import { useNetworkDescriptor, useWeb3State, useWeb3UI } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { WalletMessages } from '../../messages.js'
 import { hasNativeAPI, nativeAPI } from '../../../../../shared/native-rpc/index.js'
 import { PluginProviderRender } from './PluginProviderRender.js'
 import { pluginIDSettings } from '../../../../../shared/legacy-settings/settings.js'
-import { getSiteType, isDashboardPage, NetworkPluginID } from '@masknet/shared-base'
+import { getSiteType, GlobalDialogRoutes, isDashboardPage, NetworkPluginID } from '@masknet/shared-base'
 import { useLocation } from 'react-router-dom'
-import type { SelectProviderDialogEvent } from '@masknet/plugin-wallet'
+import type { ConnectWalletDialogEvent, SelectProviderDialogEvent } from '@masknet/plugin-wallet'
+import { useGlobalDialogController } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -24,13 +24,13 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface SelectProviderDialogProps {
-    closeDialog?: () => void
+    closeDialog: () => void
 }
 
 export function SelectProviderDialog({ closeDialog }: SelectProviderDialogProps) {
     const { classes } = useStyles()
     const location = useLocation()
-    const state = location.state as SelectProviderDialogEvent | undefined
+    const state = location.state as SelectProviderDialogEvent
     const [walletConnectedCallback, setWalletConnectedCallback] = useState<(() => void) | undefined>()
     const [supportedNetworkList, setSupportedNetworkList] = useState<
         Array<Web3Helper.NetworkDescriptorAll['type']> | undefined
@@ -39,18 +39,16 @@ export function SelectProviderDialog({ closeDialog }: SelectProviderDialogProps)
     const [undeterminedNetworkID, setUndeterminedNetworkID] = useState(network?.ID)
 
     useEffect(() => {
-        setWalletConnectedCallback(() => state?.walletConnectedCallback)
-        setSupportedNetworkList(state?.supportedNetworkList)
-        if (state?.network) {
-            setUndeterminedNetworkID(state?.network.ID)
-            setUndeterminedNetworkID(state?.network.networkSupporterPluginID)
+        if (!state) return
+        setWalletConnectedCallback(() => state.walletConnectedCallback)
+        setSupportedNetworkList(state.supportedNetworkList)
+        if (state.network) {
+            setUndeterminedNetworkID(state.network.ID)
+            setUndeterminedNetworkID(state.network.networkSupporterPluginID)
         }
     }, [state])
-    // #region remote controlled dialog logic
-    const { setDialog: setConnectWalletDialog } = useRemoteControlledDialog(
-        WalletMessages.events.connectWalletDialogUpdated,
-    )
-    // #endregion
+
+    const { openGlobalDialog } = useGlobalDialogController()
 
     // #region native app
     useEffect(() => {
@@ -83,16 +81,11 @@ export function SelectProviderDialog({ closeDialog }: SelectProviderDialogProps)
                 return
             }
 
-            // TODO:
-            // refactor to use react-router-dom
-            setConnectWalletDialog({
-                open: true,
-                network,
-                provider,
-                walletConnectedCallback,
+            openGlobalDialog<ConnectWalletDialogEvent>(GlobalDialogRoutes.ConnectWallet, {
+                state: { network, provider, walletConnectedCallback },
             })
         },
-        [Others, Provider, closeDialog, walletConnectedCallback],
+        [Others, Provider, closeDialog, walletConnectedCallback, openGlobalDialog],
     )
 
     const isDashboard = isDashboardPage()

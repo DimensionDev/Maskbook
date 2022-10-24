@@ -23,7 +23,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 <SelectNftContractDialog />
                 {/* <WalletStatusDialog /> */}
                 <ApplicationBoardDialog />
-                <ConnectWalletDialog />
+                {/* <ConnectWalletDialog /> */}
                 <WalletRiskWarningDialog />
                 <GasSettingDialog />
                 {getEnumAsArray(NetworkPluginID).map(({ key, value: pluginID }) => (
@@ -55,6 +55,17 @@ const sns: Plugin.SNSAdaptor.Definition = {
             },
             UI: {
                 DialogContent: SelectProviderDialog,
+            },
+        },
+        {
+            ID: PluginID.Wallet,
+            path: GlobalDialogRoutes.ConnectWallet,
+            label: {
+                i18nKey: 'wallet_account',
+                fallback: 'Wallet Account',
+            },
+            UI: {
+                DialogContent: ConnectWalletDialog,
             },
         },
     ],
