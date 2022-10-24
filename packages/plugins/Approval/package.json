@@ -18,6 +18,7 @@
     "@masknet/web3-shared-base": "workspace:*",
     "@masknet/web3-shared-evm": "workspace:*",
     "@masknet/web3-providers": "workspace:*",
+    "@masknet/plugin-wallet":  "workspace:*",
     "@masknet/theme": "workspace:*",
     "react-use": "^17.4.0",
     "urlcat": "^2.0.4",

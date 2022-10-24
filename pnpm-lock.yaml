@@ -1131,6 +1131,9 @@ importers:
       '@masknet/plugin-infra':
         specifier: workspace:*
         version: link:../../plugin-infra
+      '@masknet/plugin-wallet':
+        specifier: workspace:*
+        version: link:../Wallet
       '@masknet/shared':
         specifier: workspace:*
         version: link:../../shared
