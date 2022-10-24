@@ -14,8 +14,7 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import { toPNG } from '../utils/index.js'
 import Services from '../../../extension/service.js'
 import { NFTListPage } from './NFTListPage.js'
-import { PluginVerifiedWalletStatusBar, ChainBoundary } from '@masknet/shared'
-import { NetworkTab } from '../../../components/shared/NetworkTab.js'
+import { PluginVerifiedWalletStatusBar, ChainBoundary, NetworkTab } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => ({

@@ -17,12 +17,12 @@ import {
     useOpenShareTxDialog,
     PluginWalletStatusBar,
     ChainBoundary,
+    NetworkTab,
 } from '@masknet/shared'
 import { DialogContent, Typography, List, ListItem, useTheme, DialogActions } from '@mui/material'
 import { PluginID, NetworkPluginID } from '@masknet/shared-base'
 import { formatBalance, isSameAddress, FungibleToken } from '@masknet/web3-shared-base'
 import { useITOConstants, ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import { NetworkTab } from '../../../components/shared/NetworkTab.js'
 import { useI18N } from '../../../utils/index.js'
 import { useClaimAll } from './hooks/useClaimAll.js'
 import { useClaimCallback } from './hooks/useClaimCallback.js'

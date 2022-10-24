@@ -9,7 +9,7 @@ import {
     useChainIdValid,
     ChainContextProvider,
 } from '@masknet/web3-hooks-base'
-import { InjectedDialog } from '@masknet/shared'
+import { InjectedDialog, NetworkTab } from '@masknet/shared'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
@@ -24,7 +24,6 @@ import {
 import { useI18N } from '../locales/index.js'
 import { useI18N as useBaseI18N } from '../../../utils/index.js'
 import { reduceUselessPayloadInfo } from './utils/reduceUselessPayloadInfo.js'
-import { NetworkTab } from '../../../components/shared/NetworkTab.js'
 import { WalletMessages } from '../../Wallet/messages.js'
 import { RedPacketMetaKey } from '../constants.js'
 import { DialogTabs, RedPacketJSONPayload } from '../types.js'

@@ -3,7 +3,7 @@ import { PluginID, EMPTY_LIST } from '@masknet/shared-base'
 import { useNetworkContext } from '@masknet/web3-hooks-base'
 import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
 import { makeStyles } from '@masknet/theme'
-import { NetworkTab } from '../../../../components/shared/NetworkTab'
+import { NetworkTab } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     abstractTabWrapper: {
