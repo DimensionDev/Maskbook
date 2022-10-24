@@ -133,6 +133,7 @@
     "cancel": "crwdns18804:0crwdne18804:0",
     "add_wallet": "crwdns18806:0crwdne18806:0",
     "wallet_setting_hint": "crwdns18808:0crwdne18808:0",
+    "wallet_status_button_change_to_evm": "crwdns18880:0crwdne18880:0",
     "wallet_status_button_change": "crwdns18846:0crwdne18846:0",
     "add_wallet_tips": "crwdns18810:0crwdne18810:0",
     "add_wallet_web3_profile": "crwdns18812:0crwdne18812:0",
