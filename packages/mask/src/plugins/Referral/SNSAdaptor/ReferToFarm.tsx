@@ -31,7 +31,7 @@ import { TokenSelectField } from './shared-ui/TokenSelectField.js'
 import { RewardDataWidget } from './shared-ui/RewardDataWidget.js'
 import { SponsoredFarmIcon } from './shared-ui/icons/SponsoredFarm.js'
 import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary.js'
-import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
+import { ChainBoundary } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     root: {

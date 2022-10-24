@@ -1,9 +1,9 @@
 import { useContext, useState, useEffect, useMemo } from 'react'
 import classNames from 'classnames'
+import { toChecksumAddress } from 'web3-utils'
 import { Box, Button, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { SnapshotContext } from '../context.js'
-import { useAccount, useChainId, useWeb3Connection, useCurrentWeb3NetworkPluginID } from '@masknet/web3-hooks-base'
+import { useAccount, useChainId, useWeb3Connection, useNetworkContext } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useSnackbarCallback } from '@masknet/shared'
 import { useI18N } from '../../../utils/index.js'
@@ -12,7 +12,7 @@ import { useProposal } from './hooks/useProposal.js'
 import { usePower } from './hooks/usePower.js'
 import { VoteConfirmDialog } from './VoteConfirmDialog.js'
 import { useRetry } from './hooks/useRetry.js'
-import { toChecksumAddress } from 'web3-utils'
+import { SnapshotContext } from '../context.js'
 import { SNAPSHOT_VOTE_DOMAIN } from '../constants'
 import { getSnapshotVoteType } from '../utils.js'
 import { PluginSnapshotRPC } from '../messages'
@@ -73,7 +73,7 @@ export function VotingCard() {
             </Typography>
         </Box>
     )
-    const networkPluginId = useCurrentWeb3NetworkPluginID()
+    const { pluginID } = useNetworkContext()
     const retry = useRetry()
     const onVoteConfirm = useSnackbarCallback(
         async () => {
@@ -146,7 +146,7 @@ export function VotingCard() {
         }
         return text
     }, [choices_])
-    return account && networkPluginId === NetworkPluginID.PLUGIN_EVM ? (
+    return account && pluginID === NetworkPluginID.PLUGIN_EVM ? (
         <SnapshotCard title={t('plugin_snapshot_vote_title')}>
             <Box className={classes.buttons}>
                 {choices.map((choiceText, i) => (

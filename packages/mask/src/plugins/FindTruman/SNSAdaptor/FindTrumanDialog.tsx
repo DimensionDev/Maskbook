@@ -1,6 +1,6 @@
 import { Box, DialogActions, DialogContent, Tab, Typography } from '@mui/material'
 import { TabContext, TabPanel } from '@mui/lab'
-import { InjectedDialog, PluginWalletStatusBar } from '@masknet/shared'
+import { InjectedDialog, PluginWalletStatusBar, ChainBoundary } from '@masknet/shared'
 import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import AssetsPanel from './AssetsPanel.js'
 import ParticipatePanel from './ParticipatePanel.js'
@@ -11,7 +11,6 @@ import { useAccount, useChainId } from '@masknet/web3-hooks-base'
 import { useConst } from './hooks/useConst.js'
 import IntroductionPanel from './IntroductionPanel.js'
 import { useI18N } from '../../../utils/index.js'
-import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
 import { NetworkPluginID } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme, props) => ({

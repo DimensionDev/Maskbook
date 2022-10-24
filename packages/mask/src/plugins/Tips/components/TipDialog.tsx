@@ -1,14 +1,13 @@
 import { useCallback, useMemo } from 'react'
 import { useBoolean } from 'react-use'
-import { PluginWeb3ActualContextProvider, useChainId, useCurrentWeb3NetworkPluginID } from '@masknet/web3-hooks-base'
-import { InjectedDialog, PluginWalletStatusBar } from '@masknet/shared'
+import { ActualChainContextProvider, useChainId, useNetworkContext } from '@masknet/web3-hooks-base'
+import { InjectedDialog, PluginWalletStatusBar, ChainBoundary } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { ActionButton, makeStyles, MaskTabList } from '@masknet/theme'
 import type { NonFungibleAsset } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { TabContext, TabPanel } from '@mui/lab'
 import { DialogContent, Tab } from '@mui/material'
-import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
 import { useCreateTipsTransaction, useTip } from '../contexts/index.js'
 import { useI18N } from '../locales/index.js'
 import { TipsType } from '../types/index.js'
@@ -77,7 +76,7 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
         sendTip,
         validation: [isValid, validateMessage],
     } = useTip()
-    const pluginID = useCurrentWeb3NetworkPluginID()
+    const { pluginID } = useNetworkContext()
     const chainId = useChainId()
 
     const isTokenTip = tipType === TipsType.Tokens
@@ -154,7 +153,7 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
                     <TabPanel value={TipsType.Collectibles} className={classes.tabPanel} style={{ padding: 0 }}>
                         <NFTSection className={classes.section} />
                     </TabPanel>
-                    <PluginWeb3ActualContextProvider>
+                    <ActualChainContextProvider>
                         <PluginWalletStatusBar expectedPluginID={expectedPluginID} expectedChainId={chainId}>
                             <ChainBoundary
                                 expectedPluginID={expectedPluginID}
@@ -169,7 +168,7 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
                                 </ActionButton>
                             </ChainBoundary>
                         </PluginWalletStatusBar>
-                    </PluginWeb3ActualContextProvider>
+                    </ActualChainContextProvider>
                 </DialogContent>
             </InjectedDialog>
             <AddDialog open={addTokenDialogIsOpen} onClose={() => openAddTokenDialog(false)} onAdd={handleAddToken} />

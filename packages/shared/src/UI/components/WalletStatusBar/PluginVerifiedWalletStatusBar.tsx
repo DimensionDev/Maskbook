@@ -9,7 +9,7 @@ import { Action } from './Action.js'
 import { BindingProof, NetworkPluginID, isDashboardPage } from '@masknet/shared-base'
 import {
     useAccount,
-    useCurrentWeb3NetworkPluginID,
+    useNetworkContext,
     useChainId,
     useNetworkDescriptor,
     useProviderDescriptor,
@@ -80,7 +80,7 @@ export const PluginVerifiedWalletStatusBar = memo<PluginVerifiedWalletStatusBarP
         // exclude current account
         const wallets = verifiedWallets.filter((x) => !isSameAddress(x.identity, account))
 
-        const currentPluginId = useCurrentWeb3NetworkPluginID()
+        const { pluginID: currentPluginId } = useNetworkContext()
 
         const selectedWallet = wallets.find((x) => isSameAddress(x.identity, expectedAddress))
 

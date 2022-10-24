@@ -5,13 +5,7 @@ import { Button, DialogContent, InputBase, Typography } from '@mui/material'
 import { InjectedDialog } from '@masknet/shared'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import { useI18N } from '../../locales/index.js'
-import {
-    useAccount,
-    useChainId,
-    useCurrentWeb3NetworkPluginID,
-    useWeb3Connection,
-    useWeb3Hub,
-} from '@masknet/web3-hooks-base'
+import { useAccount, useChainId, useNetworkContext, useWeb3Connection, useWeb3Hub } from '@masknet/web3-hooks-base'
 import type { NonFungibleToken } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
@@ -56,10 +50,10 @@ export function AddNFT(props: AddNFTProps) {
     const [tokenId, setTokenId] = useState('')
     const [message, setMessage] = useState('')
     const [checking, toggleChecking] = useState(false)
-    const currentPluginId = useCurrentWeb3NetworkPluginID(expectedPluginID)
-    const account = useAccount(expectedPluginID, props.account)
+    const { pluginID: currentPluginId } = useNetworkContext(expectedPluginID)
+    const currentAccount = useAccount(expectedPluginID, props.account)
     const currentChainId = useChainId(expectedPluginID, chainId)
-    const hub = useWeb3Hub(currentPluginId, { chainId: currentChainId, account })
+    const hub = useWeb3Hub(currentPluginId, { chainId: currentChainId, account: currentAccount })
     const connection = useWeb3Connection(currentPluginId)
 
     const onClick = useCallback(async () => {
@@ -99,9 +93,15 @@ export function AddNFT(props: AddNFTProps) {
                 return
             }
 
-            const isOwner = await connection?.getNonFungibleTokenOwnership(address, tokenId, account, undefined, {
-                chainId: currentChainId,
-            })
+            const isOwner = await connection?.getNonFungibleTokenOwnership(
+                address,
+                tokenId,
+                currentAccount,
+                undefined,
+                {
+                    chainId: currentChainId,
+                },
+            )
 
             if (!isOwner) {
                 setMessage(t.nft_owner_hint())
@@ -117,7 +117,7 @@ export function AddNFT(props: AddNFTProps) {
             toggleChecking(false)
             return
         }
-    }, [tokenId, address, onAddClick, onClose, currentChainId, hub, account, connection])
+    }, [tokenId, address, onAddClick, onClose, currentChainId, hub, currentAccount, connection])
 
     const onAddressChange = useCallback((address: string) => {
         setMessage('')

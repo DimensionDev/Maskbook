@@ -2,7 +2,7 @@ import { InjectedDialog } from '@masknet/shared'
 import { DialogContent } from '@mui/material'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { PluginIDContextProvider, PluginWeb3ContextProvider } from '@masknet/web3-hooks-base'
+import { NetworkContextProvider, ChainContextProvider } from '@masknet/web3-hooks-base'
 import { WidgetContent } from './WidgetContent.js'
 import { useRemoteControlledDialog } from '../../../../../shared-base-ui/src/hooks/index.js'
 import { PluginDebuggerMessages } from '../../messages.js'
@@ -14,15 +14,14 @@ export function WidgetDialog(props: WidgetDialogProps) {
     return (
         <InjectedDialog title="Widgets" fullWidth open={open} onClose={closeDialog}>
             <DialogContent>
-                <PluginIDContextProvider value={NetworkPluginID.PLUGIN_EVM}>
-                    <PluginWeb3ContextProvider
+                <NetworkContextProvider value={NetworkPluginID.PLUGIN_EVM}>
+                    <ChainContextProvider
                         value={{
                             chainId: ChainId.Mainnet,
-                            pluginID: NetworkPluginID.PLUGIN_EVM,
                         }}>
                         <WidgetContent onClose={closeDialog} />
-                    </PluginWeb3ContextProvider>
-                </PluginIDContextProvider>
+                    </ChainContextProvider>
+                </NetworkContextProvider>
             </DialogContent>
         </InjectedDialog>
     )

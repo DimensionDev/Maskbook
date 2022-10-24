@@ -1,12 +1,12 @@
 import { FC, useCallback } from 'react'
 import { noop } from 'lodash-unified'
 import classnames from 'classnames'
-import { useChainId, useCurrentWeb3NetworkPluginID, useWeb3State } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { ElementAnchor, Linking, NFTCardStyledAssetPlayer, RetryHint } from '@masknet/shared'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { isSameAddress, NonFungibleToken } from '@masknet/web3-shared-base'
+import { useChainId, useWeb3State, useNetworkContext } from '@masknet/web3-hooks-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { Checkbox, List, ListItem, Radio, Stack, Typography } from '@mui/material'
 
@@ -171,7 +171,7 @@ export const NFTList: FC<Props> = ({
         },
         [onChange],
     )
-    const pluginID = useCurrentWeb3NetworkPluginID()
+    const { pluginID } = useNetworkContext()
     const includes: (pairs: NFTKeyPair[], pair: NFTKeyPair) => boolean =
         pluginID === NetworkPluginID.PLUGIN_EVM
             ? (pairs, pair) => {

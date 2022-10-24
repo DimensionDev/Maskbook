@@ -2,7 +2,7 @@ import { useState, useContext, createContext, PropsWithChildren, useMemo, useRef
 import { makeStyles, getMaskColor } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
-import { useCurrentWeb3NetworkPluginID, useAccount, useChainId } from '@masknet/web3-hooks-base'
+import { useAccount, useChainId, useNetworkContext } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { getCurrentSNSNetwork } from '../../social-network-adaptor/utils.js'
 import { activatedSocialNetworkUI } from '../../social-network/index.js'
@@ -89,7 +89,7 @@ export function ApplicationBoard(props: Props) {
 function ApplicationBoardContent(props: Props) {
     const { t } = useI18N()
     const snsAdaptorPlugins = useActivatedPluginsSNSAdaptor('any')
-    const currentWeb3Network = useCurrentWeb3NetworkPluginID()
+    const { pluginID: currentWeb3Network } = useNetworkContext()
     const chainId = useChainId()
     const account = useAccount()
     const popperBoundaryRef = useRef<HTMLElement | null>(null)

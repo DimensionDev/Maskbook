@@ -13,14 +13,13 @@ import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline'
 import { RedpacketMessagePanel } from './RedpacketMessagePanel.js'
 import { SelectNftTokenDialog, OrderedERC721Token } from './SelectNftTokenDialog.js'
 import { RedpacketNftConfirmDialog } from './RedpacketNftConfirmDialog.js'
-import { NFTCardStyledAssetPlayer, PluginWalletStatusBar } from '@masknet/shared'
+import { NFTCardStyledAssetPlayer, PluginWalletStatusBar, ChainBoundary } from '@masknet/shared'
 import { NFTSelectOption } from '../types.js'
 import { NFT_RED_PACKET_MAX_SHARES } from '../constants.js'
-import { useAccount, useChainId, PluginWeb3ActualContextProvider } from '@masknet/web3-hooks-base'
+import { useAccount, useChainId, ActualChainContextProvider } from '@masknet/web3-hooks-base'
 import { useNonFungibleOwnerTokens } from '@masknet/web3-hooks-evm'
 import { NetworkPluginID, EMPTY_LIST } from '@masknet/shared-base'
 import type { NonFungibleTokenContract, NonFungibleToken } from '@masknet/web3-shared-base'
-import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -390,7 +389,7 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
             </Box>
             <Box style={{ position: 'absolute', bottom: 0, width: '100%' }}>
                 <PluginWalletStatusBar>
-                    <PluginWeb3ActualContextProvider>
+                    <ActualChainContextProvider>
                         <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={chainId}>
                             <WalletConnectedBoundary>
                                 <EthereumERC721TokenApprovedBoundary
@@ -410,7 +409,7 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                                 </EthereumERC721TokenApprovedBoundary>
                             </WalletConnectedBoundary>
                         </ChainBoundary>
-                    </PluginWeb3ActualContextProvider>
+                    </ActualChainContextProvider>
                 </PluginWalletStatusBar>
             </Box>
         </>

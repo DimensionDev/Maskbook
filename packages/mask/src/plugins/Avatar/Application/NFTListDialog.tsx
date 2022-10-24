@@ -9,15 +9,14 @@ import { AddNFT } from '../SNSAdaptor/AddNFT.js'
 import { AllChainsNonFungibleToken, PFP_TYPE, SelectTokenInfo } from '../types.js'
 import { useI18N } from '../locales/index.js'
 import { SUPPORTED_CHAIN_IDS, supportPluginIds } from '../constants.js'
-import { useAccount, useChainId, useCurrentWeb3NetworkPluginID, useNonFungibleAssets } from '@masknet/web3-hooks-base'
+import { useAccount, useChainId, useNonFungibleAssets, useNetworkContext } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { toPNG } from '../utils/index.js'
 import Services from '../../../extension/service.js'
 import { NFTListPage } from './NFTListPage.js'
-import { PluginVerifiedWalletStatusBar } from '@masknet/shared'
+import { PluginVerifiedWalletStatusBar, ChainBoundary } from '@masknet/shared'
 import { NetworkTab } from '../../../components/shared/NetworkTab.js'
 import { Icons } from '@masknet/icons'
-import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
 
 const useStyles = makeStyles()((theme) => ({
     actions: {
@@ -119,12 +118,12 @@ export function NFTListDialog(props: NFTListDialogProps) {
     const { onNext, wallets = EMPTY_LIST, onSelected, tokenInfo, pfpType, selectedAccount, setSelectedAccount } = props
     const { classes } = useStyles()
 
-    const currentPluginId = useCurrentWeb3NetworkPluginID()
-    const account = useAccount(currentPluginId)
-    const currentChainId = useChainId(currentPluginId)
+    const { pluginID } = useNetworkContext()
+    const account = useAccount(pluginID)
+    const currentChainId = useChainId(pluginID)
 
     const [chainId, setChainId] = useState<ChainId>((currentChainId ?? ChainId.Mainnet) as ChainId)
-    const [selectedPluginId, setSelectedPluginId] = useState(currentPluginId ?? NetworkPluginID.PLUGIN_EVM)
+    const [selectedPluginId, setSelectedPluginId] = useState(pluginID ?? NetworkPluginID.PLUGIN_EVM)
 
     const [open_, setOpen_] = useState(false)
 
@@ -205,8 +204,8 @@ export function NFTListDialog(props: NFTListDialogProps) {
     }, [account, wallets, showSnackbar])
 
     useEffect(() => {
-        setSelectedPluginId(currentPluginId)
-    }, [currentPluginId])
+        setSelectedPluginId(pluginID)
+    }, [pluginID])
 
     useEffect(() => {
         setChainId(currentChainId as ChainId)

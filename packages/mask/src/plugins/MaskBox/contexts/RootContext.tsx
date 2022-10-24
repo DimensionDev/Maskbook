@@ -1,7 +1,7 @@
+import type { FC, PropsWithChildren } from 'react'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { PluginIDContextProvider, PluginWeb3ContextProvider } from '@masknet/web3-hooks-base'
-import type { FC, PropsWithChildren } from 'react'
+import { NetworkContextProvider, ChainContextProvider } from '@masknet/web3-hooks-base'
 
 interface Props {
     chainId: ChainId
@@ -9,10 +9,8 @@ interface Props {
 
 export const RootContext: FC<PropsWithChildren<Props>> = ({ children, chainId }) => {
     return (
-        <PluginIDContextProvider value={NetworkPluginID.PLUGIN_EVM}>
-            <PluginWeb3ContextProvider value={{ chainId, pluginID: NetworkPluginID.PLUGIN_EVM }}>
-                {children}
-            </PluginWeb3ContextProvider>
-        </PluginIDContextProvider>
+        <NetworkContextProvider value={NetworkPluginID.PLUGIN_EVM}>
+            <ChainContextProvider value={{ chainId }}>{children}</ChainContextProvider>
+        </NetworkContextProvider>
     )
 }

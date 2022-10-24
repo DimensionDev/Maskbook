@@ -1,13 +1,12 @@
 import { FC, useCallback, useEffect, useState } from 'react'
 import { isEqual } from 'lodash-unified'
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
-import { PluginIDContextProvider, PluginWeb3ContextProvider } from '@masknet/web3-hooks-base'
+import { NetworkContextProvider, ChainContextProvider } from '@masknet/web3-hooks-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { TipDialog } from '../components/index.js'
 import { PluginTipsMessages } from '../messages.js'
 import type { TipTask } from '../types/index.js'
-import { TargetRuntimeContext } from './TargetRuntimeContext.js'
 import { TipTaskProvider } from './Tip/TipTaskProvider.js'
 import { TipsTransactionProvider } from './TipsTransaction.js'
 
@@ -19,7 +18,6 @@ interface Task extends TipTask {
 
 export const TipTaskManager: FC<React.PropsWithChildren<{}>> = ({ children }) => {
     const [tasks, setTasks] = useState<Task[]>(EMPTY_LIST)
-    const { pluginID } = TargetRuntimeContext.useContainer()
 
     const removeTask = useCallback((task: Task) => {
         setTasks((list) => list.filter((t) => t.id !== task.id))
@@ -50,21 +48,18 @@ export const TipTaskManager: FC<React.PropsWithChildren<{}>> = ({ children }) =>
                 const tipsAccount = task.accounts.find((x) => isSameAddress(x.address, task.recipient))
 
                 return (
-                    <PluginIDContextProvider
-                        key={task.id}
-                        value={pluginID ?? tipsAccount?.pluginID ?? NetworkPluginID.PLUGIN_EVM}>
-                        <PluginWeb3ContextProvider
+                    <NetworkContextProvider key={task.id} value={tipsAccount?.pluginID ?? NetworkPluginID.PLUGIN_EVM}>
+                        <ChainContextProvider
                             value={{
                                 chainId: ChainId.Mainnet,
-                                pluginID: tipsAccount?.pluginID ?? NetworkPluginID.PLUGIN_EVM,
                             }}>
                             <TipTaskProvider key={task.id} task={task}>
                                 <TipsTransactionProvider>
                                     <TipDialog open key={task.id} onClose={() => removeTask(task)} />
                                 </TipsTransactionProvider>
                             </TipTaskProvider>
-                        </PluginWeb3ContextProvider>
-                    </PluginIDContextProvider>
+                        </ChainContextProvider>
+                    </NetworkContextProvider>
                 )
             })}
             {children}

@@ -13,19 +13,13 @@ import {
 } from '@mui/material'
 import { makeStyles, ActionButton } from '@masknet/theme'
 import type { Order } from 'opensea-js/lib/types'
-import { InjectedDialog } from '@masknet/shared'
+import { InjectedDialog, ActionButtonPromise } from '@masknet/shared'
 import { CrossIsolationMessages } from '@masknet/shared-base'
 import { isGreaterThan } from '@masknet/web3-shared-base'
-import {
-    useAccount,
-    useChainId,
-    useCurrentWeb3NetworkPluginID,
-    useFungibleTokenWatched,
-} from '@masknet/web3-hooks-base'
+import { useAccount, useChainId, useNetworkContext, useFungibleTokenWatched } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { UnreviewedWarnings } from './UnreviewedWarnings.js'
 import { useI18N } from '../../../../../utils/index.js'
-import { ActionButtonPromise } from '../../../../../extension/options-page/DashboardComponents/ActionButton.js'
 import { WalletConnectedBoundary } from '../../../../../web3/UI/WalletConnectedBoundary.js'
 import { CheckoutOrder } from './CheckoutOrder.js'
 import { useOpenSea } from './hooks/useOpenSea.js'
@@ -64,7 +58,7 @@ export function CheckoutDialog(props: CheckoutDialogProps) {
     const isVerified = asset?.collection?.verified ?? false
     const { t } = useI18N()
     const { classes } = useStyles()
-    const pluginID = useCurrentWeb3NetworkPluginID()
+    const { pluginID } = useNetworkContext()
     const account = useAccount()
     const chainId = useChainId()
     const opensea = useOpenSea(pluginID, chainId)

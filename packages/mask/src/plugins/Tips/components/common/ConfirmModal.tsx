@@ -1,7 +1,7 @@
 import { Icons } from '@masknet/icons'
 import { InjectedDialog, InjectedDialogProps } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
-import { useCurrentWeb3NetworkPluginID, useNonFungibleAsset, useWeb3State } from '@masknet/web3-hooks-base'
+import { useNetworkContext, useNonFungibleAsset, useWeb3State } from '@masknet/web3-hooks-base'
 import { SourceType } from '@masknet/web3-shared-base'
 import { Box, Button, DialogActions, DialogContent, Typography } from '@mui/material'
 import type { FC, PropsWithChildren } from 'react'
@@ -90,7 +90,7 @@ export const ConfirmModal: FC<ConfirmModalProps> = ({
     const { Others } = useWeb3State()
     const { classes } = useStyles()
     const t = useI18N()
-    const pluginID = useCurrentWeb3NetworkPluginID()
+    const { pluginID } = useNetworkContext()
     confirmText = confirmText || 'Confirm'
     const isTokenTip = tipType === TipsType.Tokens
     const { value: nonFungibleToken } = useNonFungibleAsset(

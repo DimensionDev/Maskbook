@@ -6,7 +6,7 @@ import { useSharedI18N } from '@masknet/shared'
 import {
     useAccount,
     useChainId,
-    useCurrentWeb3NetworkPluginID,
+    useNetworkContext,
     useFungibleAssets,
     useFungibleToken,
     useFungibleTokensFromTokenList,
@@ -61,7 +61,7 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
 
     const t = useSharedI18N()
     const tReferral = useI18N()
-    const pluginID = useCurrentWeb3NetworkPluginID(props.pluginID)
+    const { pluginID } = useNetworkContext(props.pluginID)
     const account = useAccount()
     const chainId = useChainId(pluginID, props.chainId)
     const { Token, Others } = useWeb3State() as Web3Helper.Web3StateAll

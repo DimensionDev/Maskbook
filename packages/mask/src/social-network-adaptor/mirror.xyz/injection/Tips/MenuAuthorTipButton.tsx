@@ -8,19 +8,19 @@ import {
 } from '@masknet/plugin-infra/content-script'
 import { EMPTY_LIST, PluginID, NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
+import type { SocialAccount } from '@masknet/web3-shared-base'
+import { NetworkContextProvider, useWeb3State, useNetworkContext } from '@masknet/web3-hooks-base'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI.js'
 import { createReactRootShadowed, startWatch } from '../../../../utils/index.js'
 import { menuAuthorSelector as selector } from '../../utils/selectors.js'
-import { PluginIDContextProvider, useCurrentWeb3NetworkPluginID, useWeb3State } from '@masknet/web3-hooks-base'
-import type { SocialAccount } from '@masknet/web3-shared-base'
 
 export function injectTipsButtonOnMenu(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(selector())
     startWatch(watcher, signal)
     createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(
-        <PluginIDContextProvider value={NetworkPluginID.PLUGIN_EVM}>
+        <NetworkContextProvider value={NetworkPluginID.PLUGIN_EVM}>
             <AuthorTipsButtonWrapper />
-        </PluginIDContextProvider>,
+        </NetworkContextProvider>,
     )
 }
 
@@ -47,7 +47,7 @@ function AuthorTipsButtonWrapper() {
 
     const visitingIdentity = useCurrentVisitingIdentity()
     const isMinimal = useIsMinimalMode(PluginID.Tips)
-    const pluginID = useCurrentWeb3NetworkPluginID()
+    const { pluginID } = useNetworkContext()
     const { Others } = useWeb3State()
 
     const accounts = useMemo((): SocialAccount[] => {

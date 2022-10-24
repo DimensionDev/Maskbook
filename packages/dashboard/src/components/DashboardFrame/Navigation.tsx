@@ -1,3 +1,5 @@
+import { useContext } from 'react'
+import { useMatch, useNavigate } from 'react-router-dom'
 import {
     List,
     ListItem as MuiListItem,
@@ -14,14 +16,12 @@ import {
     useTheme,
 } from '@mui/material'
 import { ExpandLess, ExpandMore } from '@mui/icons-material'
-import { useContext } from 'react'
-import { useMatch, useNavigate } from 'react-router-dom'
 import { DashboardContext } from './context.js'
 import { Icons } from '@masknet/icons'
 import { useDashboardI18N } from '../../locales/index.js'
 import { MaskColorVar } from '@masknet/theme'
 import { DashboardRoutes, NetworkPluginID } from '@masknet/shared-base'
-import { useCurrentWeb3NetworkPluginID } from '@masknet/web3-hooks-base'
+import { useNetworkContext } from '@masknet/web3-hooks-base'
 
 const ListItemLinkUnStyled = ({
     to,
@@ -111,7 +111,7 @@ export function Navigation({ onClose }: NavigationProps) {
     const isLargeScreen = useMediaQuery<Theme>((theme) => theme.breakpoints.up('lg'))
     const t = useDashboardI18N()
     const mode = useTheme().palette.mode
-    const pluginID = useCurrentWeb3NetworkPluginID()
+    const { pluginID } = useNetworkContext()
 
     const onExpand = (e: React.MouseEvent<HTMLElement>) => {
         e.stopPropagation()

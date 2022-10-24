@@ -17,7 +17,7 @@ import { MASK_REFERRER, SWAP_CHAIN_ID } from '../constants.js'
 import { TabsReferAndBuy, TransactionStatus, PageInterface, PagesType, FungibleTokenDetailed } from '../types.js'
 
 import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary.js'
-import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
+import { ChainBoundary } from '@masknet/shared'
 import { MyRewards } from './MyRewards/index.js'
 import { TokenSelectField } from './shared-ui/TokenSelectField.js'
 import { RewardDataWidget } from './shared-ui/RewardDataWidget.js'

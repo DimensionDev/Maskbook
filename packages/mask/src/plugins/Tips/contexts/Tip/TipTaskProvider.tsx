@@ -2,9 +2,9 @@ import { Dispatch, FC, memo, SetStateAction, useCallback, useContext, useEffect,
 import {
     useAccount,
     useChainId,
-    useCurrentWeb3NetworkPluginID,
     useFungibleToken,
     useNonFungibleTokenContract,
+    useNetworkContext,
 } from '@masknet/web3-hooks-base'
 import { isSameAddress, SocialAccount } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
@@ -12,7 +12,6 @@ import type { GasOptionConfig } from '@masknet/web3-shared-evm'
 import { useSubscription } from 'use-subscription'
 import { getStorage } from '../../storage/index.js'
 import { TipTask, TipsType } from '../../types/index.js'
-import { TargetRuntimeContext } from '../TargetRuntimeContext.js'
 import { TipContextOptions, TipContext } from './TipContext.js'
 import { useTipAccountsCompletion } from './useTipAccountsCompletion.js'
 import { useNftTip } from './useNftTip.js'
@@ -37,7 +36,7 @@ function useRecipients(pluginID: NetworkPluginID, tipsAccounts: SocialAccount[])
 
 function useDirtyDetection(deps: any[]): [boolean, Dispatch<SetStateAction<boolean>>] {
     const [isDirty, setIsDirty] = useState(false)
-    const { pluginID } = TargetRuntimeContext.useContainer()
+    const { pluginID } = useNetworkContext()
     const account = useAccount(pluginID)
 
     useEffect(() => {
@@ -49,8 +48,7 @@ function useDirtyDetection(deps: any[]): [boolean, Dispatch<SetStateAction<boole
 
 export const TipTaskProvider: FC<React.PropsWithChildren<Props>> = memo(({ children, task }) => {
     const targetChainId = useChainId()
-    const pluginID = useCurrentWeb3NetworkPluginID()
-    const { setPluginID } = TargetRuntimeContext.useContainer()
+    const { pluginID, setPluginID } = useNetworkContext()
 
     const [_recipientAddress, setRecipient] = useState<string>(task.recipient ?? '')
     const recipients = useRecipients(pluginID, task.accounts)
