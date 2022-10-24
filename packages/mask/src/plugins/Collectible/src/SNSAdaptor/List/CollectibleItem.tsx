@@ -1,4 +1,4 @@
-import { forwardRef, HTMLProps, useRef } from 'react'
+import { forwardRef, HTMLProps, useRef, useLayoutEffect, useState } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { Skeleton, Tooltip, Typography } from '@mui/material'
 import { CollectibleCard, CollectibleCardProps } from './CollectibleCard.js'
@@ -40,8 +40,13 @@ export const CollectibleItem = forwardRef<HTMLDivElement, CollectibleItemProps>(
     const { className, asset, pluginID, ...rest } = props
     const { classes, cx } = useStyles()
     const textRef = useRef<HTMLDivElement>(null)
+    const [showTooltip, setShowTooltip] = useState(false)
     const name = asset.metadata?.name ?? ''
-    const showTooltip = !!textRef.current && textRef.current.offsetWidth !== textRef.current.scrollWidth
+    useLayoutEffect(() => {
+        if (textRef.current) {
+            setShowTooltip(textRef.current.offsetWidth !== textRef.current.scrollWidth)
+        }
+    }, [textRef.current])
 
     return (
         <Tooltip
