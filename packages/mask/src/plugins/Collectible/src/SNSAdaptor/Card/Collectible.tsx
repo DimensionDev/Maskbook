@@ -43,10 +43,10 @@ const useStyles = makeStyles()((theme) => {
             maxHeight: 800,
             borderRadius: '0 0 12px 12px',
             scrollbarWidth: 'none',
+            background: '#fff !important',
             '&::-webkit-scrollbar': {
                 display: 'none',
             },
-            background: '#fff !important',
         },
         tab: {
             whiteSpace: 'nowrap',

@@ -16,6 +16,9 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         flexDirection: 'column',
         gap: 24,
+        '&::-webkit-scrollbar': {
+            display: 'none',
+        },
     },
 }))
 

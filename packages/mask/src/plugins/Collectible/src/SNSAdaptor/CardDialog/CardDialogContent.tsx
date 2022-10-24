@@ -45,6 +45,9 @@ const useStyles = makeStyles<{ listItemBackground?: string; listItemBackgroundIc
             width: 'calc( 100% - 336px)',
             marginLeft: 36,
             overflowY: 'auto',
+            '&::-webkit-scrollbar': {
+                display: 'none',
+            },
         },
         emptyText: {
             color: theme.palette.text.secondary,
