@@ -29,6 +29,9 @@ const useStyles = makeStyles()((theme) => ({
         minHeight: '1em',
         textIndent: '8px',
     },
+    hidden: {
+        visibility: 'hidden',
+    },
 }))
 
 interface CollectibleItemProps extends HTMLProps<HTMLDivElement>, CollectibleCardProps {}
@@ -54,13 +57,11 @@ export const CollectibleItem = forwardRef<HTMLDivElement, CollectibleItemProps>(
             arrow>
             <div className={cx(classes.card, className)} {...rest} ref={ref}>
                 <CollectibleCard className={classes.collectibleCard} pluginID={pluginID} asset={asset} />
-                {name ? (
-                    <div className={classes.description}>
-                        <Typography ref={textRef} className={classes.name} color="textPrimary" variant="body2">
-                            {name}
-                        </Typography>
-                    </div>
-                ) : null}
+                <div className={cx(classes.description, name ? '' : classes.hidden)}>
+                    <Typography ref={textRef} className={classes.name} color="textPrimary" variant="body2">
+                        {name}
+                    </Typography>
+                </div>
             </div>
         </Tooltip>
     )
