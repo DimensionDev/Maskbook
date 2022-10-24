@@ -14,6 +14,6 @@ if (process.argv[2] === '--' || process.argv[2] === '\\--') {
     })
     process.exit(await awaitChildProcess(child))
 } else {
-    const builder = await extensionWatch(extensionArgsParser())
+    const builder = await extensionWatch(extensionArgsParser('development'))
     if (builder) process.exit(builder)
 }
