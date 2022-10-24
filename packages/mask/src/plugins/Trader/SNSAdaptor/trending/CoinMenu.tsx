@@ -82,18 +82,16 @@ const TokenMenuList: FC<TokenMenuListProps> = ({ options, type, value, onSelect 
                         selected={selected}
                         key={`${x.coin.type}/${x.value}`}
                         onClick={() => onSelect(x.coin.type, x.value)}>
-                        {x.coin.address ? (
-                            <CoinIcon
-                                className={classes.coinIcon}
-                                type={x.coin.type}
-                                address={x.coin.address}
-                                name={x.coin.name}
-                                label=""
-                                symbol={x.coin.symbol}
-                                logoURL={x.coin.image_url}
-                                size={20}
-                            />
-                        ) : null}
+                        <CoinIcon
+                            className={classes.coinIcon}
+                            type={x.coin.type}
+                            address={x.coin.address}
+                            name={x.coin.name}
+                            label=""
+                            symbol={x.coin.symbol}
+                            logoURL={x.coin.image_url}
+                            size={20}
+                        />
                         <Typography className={classes.symbol}>{x.coin.market_cap_rank}</Typography>
                         <Stack className={classes.itemText}>
                             <Typography

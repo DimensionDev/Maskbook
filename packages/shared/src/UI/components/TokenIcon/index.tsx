@@ -10,7 +10,7 @@ import { Icon, IconProps } from '../Icon/index.js'
 export interface TokenIconProps extends IconProps {
     pluginID?: NetworkPluginID
     chainId?: Web3Helper.ChainIdAll
-    address: string
+    address?: string
     symbol?: string
     tokenType?: TokenType
     disableDefaultIcon?: boolean
@@ -23,6 +23,11 @@ export function TokenIcon(props: TokenIconProps) {
     const hub = useWeb3Hub(props.pluginID)
     const isNFT = tokenType === TokenType.NonFungible
     const { value } = useAsyncRetry(async () => {
+        if (!address)
+            return {
+                key: logoURL,
+                urls: [],
+            }
         const logoURLs = isNFT
             ? await hub?.getNonFungibleTokenIconURLs?.(chainId, address)
             : await hub?.getFungibleTokenIconURLs?.(chainId, address).catch(() => [])
@@ -36,7 +41,7 @@ export function TokenIcon(props: TokenIconProps) {
     const originalUrl = first(urls)
     const { value: accessibleUrl } = useImageURL(originalUrl)
 
-    if (!accessibleUrl && originalUrl && disableDefaultIcon) return null
+    if (disableDefaultIcon) return null
 
     return <Icon key={key} {...rest} logoURL={isNFT ? logoURL : accessibleUrl || originalUrl} name={symbol ?? name} />
 }
