@@ -3,7 +3,7 @@ import { useAsyncRetry } from 'react-use'
 import { noop } from 'lodash-unified'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { useChainId } from './useChainId.js'
+import { useChainContext } from './useContext.js'
 import { useWeb3Connection } from './useWeb3Connection.js'
 import { useWeb3State } from './useWeb3State.js'
 
@@ -11,7 +11,7 @@ export function useBlockNumber<S extends 'all' | void = void, T extends NetworkP
     pluginID?: T,
     options?: Web3Helper.Web3ConnectionOptionsScope<S, T>,
 ) {
-    const chainId = useChainId(pluginID, options?.chainId)
+    const { chainId } = useChainContext({ chainId: options?.chainId })
     const connection = useWeb3Connection(pluginID, options)
     const { BlockNumberNotifier } = useWeb3State(pluginID)
 

@@ -1,4 +1,4 @@
-import { useChainId, useWeb3Connection } from '@masknet/web3-hooks-base'
+import { useChainContext, useWeb3Connection } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { encodeContractTransaction } from '@masknet/web3-shared-evm'
 import { useState } from 'react'
@@ -6,7 +6,7 @@ import { useAsyncFn } from 'react-use'
 import { useRedPacketContract } from './useRedPacketContract.js'
 
 export function useRefundCallback(version: number, from: string, id?: string) {
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const [isRefunded, setIsRefunded] = useState(false)
     const redPacketContract = useRedPacketContract(chainId, version)
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)

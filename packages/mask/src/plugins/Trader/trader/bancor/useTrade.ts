@@ -4,7 +4,7 @@ import { SwapBancorRequest, TradeStrategy } from '../../types/index.js'
 import { useSlippageTolerance } from './useSlippageTolerance.js'
 import { FungibleToken, leftShift } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { useAccount, useChainId, useDoubleBlockBeatRetry } from '@masknet/web3-hooks-base'
+import { useChainContext, useDoubleBlockBeatRetry } from '@masknet/web3-hooks-base'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 
 export function useTrade(
@@ -17,9 +17,8 @@ export function useTrade(
 ): AsyncStateRetry<SwapBancorRequest | null> {
     const slippageSetting = useSlippageTolerance()
     const slippage = temporarySlippage || slippageSetting
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { chainId, account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { BANCOR_ETH_ADDRESS } = useTraderConstants(chainId)
-    const user = useAccount(NetworkPluginID.PLUGIN_EVM)
 
     const inputAmount = leftShift(inputAmountWei, inputToken?.decimals).toFixed()
     const outputAmount = leftShift(outputAmountWei, outputToken?.decimals).toFixed()
@@ -48,11 +47,20 @@ export function useTrade(
                 fromAmount: isExactIn ? inputAmount : void 0,
                 toAmount: isExactIn ? void 0 : outputAmount,
                 slippage,
-                user,
+                user: account,
                 chainId: chainId as ChainId.Mainnet | ChainId.Ropsten,
                 minimumReceived: '',
             })
         },
-        [strategy, inputAmountWei, outputAmountWei, inputToken?.address, outputToken?.address, slippage, user, chainId],
+        [
+            strategy,
+            inputAmountWei,
+            outputAmountWei,
+            inputToken?.address,
+            outputToken?.address,
+            slippage,
+            account,
+            chainId,
+        ],
     )
 }

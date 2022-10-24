@@ -1,15 +1,15 @@
 import { useMemo } from 'react'
 import { useUpdateEffect } from 'react-use'
 import { useNavigate, useLocation } from 'react-router-dom'
-import { useChainId } from '@masknet/web3-hooks-base'
-import { Trader } from '../../../../../plugins/Trader/SNSAdaptor/trader/Trader.js'
+import { useChainContext } from '@masknet/web3-hooks-base'
 import { PopupRoutes, NetworkPluginID } from '@masknet/shared-base'
 import { createERC20Token, createNativeToken, isNativeTokenAddress } from '@masknet/web3-shared-evm'
+import { Trader } from '../../../../../plugins/Trader/SNSAdaptor/trader/Trader.js'
 
 export function SwapBox() {
     const location = useLocation()
     const navigate = useNavigate()
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
     const coin = useMemo(() => {
         if (!location.search) return undefined

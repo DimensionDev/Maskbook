@@ -9,7 +9,7 @@ import { useNFTContainerAtTwitter } from '../hooks/useNFTContainerAtTwitter.js'
 import { formatPrice, formatText } from '../utils/index.js'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
-import { useAccount } from '@masknet/web3-hooks-base'
+import { useChainContext } from '@masknet/web3-hooks-base'
 
 // from twitter page
 const ViewBoxWidth = 200
@@ -150,7 +150,7 @@ export function NFTAvatarClip(props: NFTAvatarClipProps) {
     const id = useMemo(() => props.id ?? uuid(), [props.id])
     const classes = useStylesExtends(useStyles(), props)
     const { loading, value: avatarMetadata } = useNFTContainerAtTwitter(screenName)
-    const account = useAccount()
+    const { account } = useChainContext()
     const { value = { amount: '0', symbol: 'ETH', name: '', slug: '' }, loading: loadingNFT } = useNFT(
         account,
         avatarMetadata?.address,

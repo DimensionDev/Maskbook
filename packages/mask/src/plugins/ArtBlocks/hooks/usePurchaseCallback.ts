@@ -1,12 +1,12 @@
 import { useAsyncFn } from 'react-use'
 import BigNumber from 'bignumber.js'
-import { useAccount, useWeb3Connection } from '@masknet/web3-hooks-base'
+import { useChainContext, useWeb3Connection } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { ChainId, encodeContractTransaction, SchemaType } from '@masknet/web3-shared-evm'
 import { useArtBlocksContract } from './useArtBlocksContract.js'
 
 export function usePurchaseCallback(chainId: ChainId, projectId: string, amount: string, schema = SchemaType.Native) {
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
     const genArt721MinterContract = useArtBlocksContract(chainId)
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, { chainId })

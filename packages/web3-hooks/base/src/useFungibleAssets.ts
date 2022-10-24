@@ -11,8 +11,7 @@ import {
     toZero,
 } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { useAccount } from './useAccount.js'
-import { useChainId } from './useChainId.js'
+import { useChainContext } from './useContext.js'
 import { useWeb3Hub } from './useWeb3Hub.js'
 import { useWeb3State } from './useWeb3State.js'
 import { useTrustedFungibleTokens } from './useTrustedFungibleTokens.js'
@@ -23,8 +22,7 @@ export function useFungibleAssets<S extends 'all' | void = void, T extends Netwo
     schemaType?: Web3Helper.SchemaTypeScope<S, T>,
     options?: Web3Helper.Web3HubOptionsScope<S, T>,
 ) {
-    const account = useAccount(pluginID, options?.account)
-    const chainId = useChainId(pluginID, options?.chainId)
+    const { account, chainId } = useChainContext({ account: options?.account, chainId: options?.chainId })
     const hub = useWeb3Hub(pluginID, options)
     const trustedTokens = useTrustedFungibleTokens(pluginID)
     const blockedTokens = useBlockedFungibleTokens(pluginID)

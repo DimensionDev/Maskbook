@@ -16,7 +16,7 @@ import { isSameAddress, SocialIdentity } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { TabContext } from '@mui/lab'
 import { Tab, Typography } from '@mui/material'
-import { ChainContextProvider, NetworkContextProvider } from '@masknet/web3-hooks-base'
+import { Web3ContextProvider } from '@masknet/web3-hooks-base'
 import { MaskMessages, sorter, useLocationChange } from '../../../utils/index.js'
 import { ProfileCardTitle } from './ProfileCardTitle.js'
 
@@ -161,51 +161,49 @@ export const ProfileCard: FC<Props> = ({ identity, ...rest }) => {
         )
 
     return (
-        <NetworkContextProvider value={NetworkPluginID.PLUGIN_EVM}>
-            <ChainContextProvider value={{ chainId: ChainId.Mainnet }}>
-                <div className={classes.root}>
-                    <div className={classes.header}>
-                        <ProfileCardTitle
-                            socialAccounts={socialAccounts}
-                            address={activeAddress}
-                            onAddressChange={setSelectedAddress}
-                            identity={identity}
-                        />
-                        {tabs.length > 0 && (
-                            <div className={classes.tabs}>
-                                <TabContext value={currentTab}>
-                                    <MaskTabList variant="base" onChange={onChange} aria-label="Web3Tabs">
-                                        {tabs.map((tab) => (
-                                            <Tab key={tab.id} label={tab.label} value={tab.id} />
-                                        ))}
-                                    </MaskTabList>
-                                </TabContext>
-                            </div>
-                        )}
-                    </div>
-                    <div className={classes.content}>{component}</div>
-                    <div className={classes.footer}>
-                        <Typography variant="body1" className={classes.powered}>
-                            <Trans
-                                i18nKey="powered_by_whom"
-                                values={{ whom: 'RSS3' }}
-                                components={{
-                                    span: (
-                                        <Typography
-                                            fontWeight={700}
-                                            fontSize="inherit"
-                                            variant="body1"
-                                            component="strong"
-                                            color={(theme) => theme.palette.text.primary}
-                                        />
-                                    ),
-                                }}
-                            />
-                        </Typography>
-                        <Icons.RSS3 size={24} sx={{ ml: '12px' }} />
-                    </div>
+        <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM, chainId: ChainId.Mainnet }}>
+            <div className={classes.root}>
+                <div className={classes.header}>
+                    <ProfileCardTitle
+                        socialAccounts={socialAccounts}
+                        address={activeAddress}
+                        onAddressChange={setSelectedAddress}
+                        identity={identity}
+                    />
+                    {tabs.length > 0 && (
+                        <div className={classes.tabs}>
+                            <TabContext value={currentTab}>
+                                <MaskTabList variant="base" onChange={onChange} aria-label="Web3Tabs">
+                                    {tabs.map((tab) => (
+                                        <Tab key={tab.id} label={tab.label} value={tab.id} />
+                                    ))}
+                                </MaskTabList>
+                            </TabContext>
+                        </div>
+                    )}
                 </div>
-            </ChainContextProvider>
-        </NetworkContextProvider>
+                <div className={classes.content}>{component}</div>
+                <div className={classes.footer}>
+                    <Typography variant="body1" className={classes.powered}>
+                        <Trans
+                            i18nKey="powered_by_whom"
+                            values={{ whom: 'RSS3' }}
+                            components={{
+                                span: (
+                                    <Typography
+                                        fontWeight={700}
+                                        fontSize="inherit"
+                                        variant="body1"
+                                        component="strong"
+                                        color={(theme) => theme.palette.text.primary}
+                                    />
+                                ),
+                            }}
+                        />
+                    </Typography>
+                    <Icons.RSS3 size={24} sx={{ ml: '12px' }} />
+                </div>
+            </div>
+        </Web3ContextProvider>
     )
 }

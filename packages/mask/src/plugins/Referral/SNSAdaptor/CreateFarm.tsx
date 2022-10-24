@@ -4,7 +4,7 @@ import { WalletMessages } from '@masknet/plugin-wallet'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { formatBalance } from '@masknet/web3-shared-base'
 import { CrossIsolationMessages, NetworkPluginID } from '@masknet/shared-base'
-import { useAccount, useChainId, useWeb3, useFungibleTokenBalance, useWeb3Connection } from '@masknet/web3-hooks-base'
+import { useChainContext, useWeb3, useFungibleTokenBalance, useWeb3Connection } from '@masknet/web3-hooks-base'
 import { makeTypedMessageText } from '@masknet/typed-message'
 import { makeStyles, useCustomSnackbar, ActionButton } from '@masknet/theme'
 import { useCompositionContext } from '@masknet/plugin-infra/content-script'
@@ -87,10 +87,9 @@ const useStyles = makeStyles()((theme) => ({
 export function CreateFarm(props: PageInterface) {
     const t = useI18N()
     const { classes } = useStyles()
-    const currentChainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { account, chainId: currentChainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const requiredChainId = getRequiredChainId(currentChainId)
     const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM)
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const { attachMetadata, dropMetadata } = useCompositionContext()
     const currentIdentity = useCurrentIdentity()
     const { value: linkedPersona } = useCurrentLinkedPersona()

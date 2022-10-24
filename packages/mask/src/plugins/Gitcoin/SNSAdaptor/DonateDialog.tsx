@@ -11,7 +11,7 @@ import { makeStyles, useStylesExtends, ActionButton } from '@masknet/theme'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { formatBalance, FungibleToken, rightShift } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType, useGitcoinConstants } from '@masknet/web3-shared-evm'
-import { useAccount, useChainId, useFungibleToken, useFungibleTokenBalance } from '@masknet/web3-hooks-base'
+import { useChainContext, useFungibleToken, useFungibleTokenBalance } from '@masknet/web3-hooks-base'
 import { DialogActions, DialogContent, Link, Typography } from '@mui/material'
 import { activatedSocialNetworkUI } from '../../../social-network/index.js'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base.js'
@@ -57,8 +57,7 @@ export function DonateDialog(props: DonateDialogProps) {
     const [postLink, setPostLink] = useState<string | URL>('')
 
     // context
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const nativeTokenDetailed = useFungibleToken(NetworkPluginID.PLUGIN_EVM)
 
     const { BULK_CHECKOUT_ADDRESS } = useGitcoinConstants(chainId)

@@ -40,7 +40,12 @@ export function MaskUIRoot({ children, kind, useTheme, fallback }: MaskUIRootPro
         (jsx) => <Suspense fallback={null} children={jsx} />,
         (jsx) => <ErrorBoundaryBuildInfoContext.Provider value={buildInfoMarkdown} children={jsx} />,
         (jsx) => <ErrorBoundary children={jsx} />,
-        (jsx) => <Web3ContextProvider value={site ? pluginIDs[site] : NetworkPluginID.PLUGIN_EVM} children={jsx} />,
+        (jsx) => (
+            <Web3ContextProvider
+                value={{ pluginID: site ? pluginIDs[site] : NetworkPluginID.PLUGIN_EVM }}
+                children={jsx}
+            />
+        ),
         (jsx) => <I18NextProviderHMR i18n={i18NextInstance} children={jsx} />,
         kind === 'page' ? (jsx) => <StyledEngineProvider injectFirst children={jsx} /> : identity,
         (jsx) => (

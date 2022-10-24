@@ -3,7 +3,7 @@ import { unreachable } from '@dimensiondev/kit'
 import type { AsyncState } from 'react-use/lib/useAsyncFn'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { SchemaType } from '@masknet/web3-shared-evm'
-import { useAccount, useChainId, useWeb3 } from '@masknet/web3-hooks-base'
+import { useChainContext, useWeb3 } from '@masknet/web3-hooks-base'
 import { useERC20TokenContract } from './useERC20TokenContract.js'
 import { useERC721TokenContract } from './useERC721TokenContract.js'
 
@@ -15,8 +15,7 @@ export function useGasLimit(
     tokenId?: string,
 ): AsyncState<number> {
     const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM)
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const erc20Contract = useERC20TokenContract(chainId, contractAddress)
     const erc721Contract = useERC721TokenContract(chainId, contractAddress)
 

@@ -9,7 +9,7 @@ import { WalletMessages } from '../../messages.js'
 import { TokenPrice } from '../../../../components/shared/TokenPrice.js'
 import { GasOptionType, multipliedBy } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { useChainId, useFungibleToken, useGasPrice } from '@masknet/web3-hooks-base'
+import { useChainContext, useFungibleToken, useGasPrice } from '@masknet/web3-hooks-base'
 
 export interface GasSettingBarProps {
     gasLimit: number
@@ -22,7 +22,7 @@ export interface GasSettingBarProps {
 export function GasSettingBar(props: GasSettingBarProps) {
     const { gasLimit, gasPrice, maxFee, priorityFee, onChange } = props
 
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { value: nativeTokenDetailed } = useFungibleToken(NetworkPluginID.PLUGIN_EVM)
     const { value: gasPriceDefault = '0' } = useGasPrice(NetworkPluginID.PLUGIN_EVM)
 

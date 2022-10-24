@@ -1,6 +1,6 @@
 import { useCallback, useMemo } from 'react'
 import { useBoolean } from 'react-use'
-import { ActualChainContextProvider, useChainId, useNetworkContext } from '@masknet/web3-hooks-base'
+import { ActualChainContextProvider, useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
 import { InjectedDialog, PluginWalletStatusBar, ChainBoundary } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { ActionButton, makeStyles, MaskTabList } from '@masknet/theme'
@@ -77,7 +77,7 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
         validation: [isValid, validateMessage],
     } = useTip()
     const { pluginID } = useNetworkContext()
-    const chainId = useChainId()
+    const { chainId } = useChainContext()
 
     const isTokenTip = tipType === TipsType.Tokens
     const shareText = useMemo(() => {

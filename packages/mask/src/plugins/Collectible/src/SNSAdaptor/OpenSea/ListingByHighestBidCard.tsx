@@ -6,19 +6,12 @@ import { isZero, isLessThan } from '@masknet/web3-shared-base'
 import formatDateTime from 'date-fns/format'
 import { PluginWalletStatusBar, ActionButtonPromise } from '@masknet/shared'
 import getUnixTime from 'date-fns/getUnixTime'
-import {
-    useAccount,
-    useChainId,
-    useNetworkContext,
-    useFungibleTokenWatched,
-    useWeb3State,
-} from '@masknet/web3-hooks-base'
+import { useChainContext, useNetworkContext, useFungibleTokenWatched, useWeb3State } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useI18N } from '../../../../../utils/index.js'
 import { SelectTokenAmountPanel } from '../../../../ITO/SNSAdaptor/SelectTokenAmountPanel.js'
 import { WalletConnectedBoundary } from '../../../../../web3/UI/WalletConnectedBoundary.js'
 import { DateTimePanel } from '../../../../../web3/UI/DateTimePanel.js'
-
 import { useOpenSea } from './hooks/useOpenSea.js'
 import { isWyvernSchemaName, toAsset } from '../../helpers/index.js'
 
@@ -68,8 +61,7 @@ export function ListingByHighestBidCard(props: ListingByHighestBidCardProps) {
         first(paymentTokens)?.address,
     )
 
-    const account = useAccount()
-    const chainId = useChainId()
+    const { account, chainId } = useChainContext()
     const opensea = useOpenSea(pluginID, chainId)
 
     const [reservePrice, setReservePrice] = useState('')

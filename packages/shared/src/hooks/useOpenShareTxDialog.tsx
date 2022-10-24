@@ -1,6 +1,6 @@
-import { useChainId } from '@masknet/web3-hooks-base'
+import { useChainContext } from '@masknet/web3-hooks-base'
 import { makeStyles } from '@masknet/theme'
-import { NetworkPluginID } from '@masknet/shared-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
 import { explorerResolver } from '@masknet/web3-shared-evm'
 import DoneIcon from '@mui/icons-material/Done'
 import { Link, Typography } from '@mui/material'
@@ -46,7 +46,7 @@ type ShareTransactionProps = Omit<ShareTransactionOptions, 'title' | 'onShare'>
 const ShareTransaction: FC<ShareTransactionProps> = memo(({ message, content, hash }) => {
     const { classes } = useStyles()
     const t = useSharedI18N()
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const link = explorerResolver.transactionLink(chainId, hash)
     return (
         <div className={classes.content}>

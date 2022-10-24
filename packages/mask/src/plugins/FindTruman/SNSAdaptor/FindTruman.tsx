@@ -21,7 +21,7 @@ import CompletionCard from './CompletionCard.js'
 import { Icons } from '@masknet/icons'
 import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary.js'
 import { ChainBoundary } from '@masknet/shared'
-import { useChainId } from '@masknet/web3-hooks-base'
+import { useChainContext } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => {
@@ -110,7 +110,7 @@ export function getPostTypeTitle(t: FindTrumanI18nFunction, postType: PostType) 
 export function FindTruman(props: FindTrumanProps) {
     const { classes } = useStyles()
     const { address, t } = useContext(FindTrumanContext)
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const {
         postType,
         clueId,

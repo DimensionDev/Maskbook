@@ -3,7 +3,7 @@ import classNames from 'classnames'
 import { toChecksumAddress } from 'web3-utils'
 import { Box, Button, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { useAccount, useChainId, useWeb3Connection, useNetworkContext } from '@masknet/web3-hooks-base'
+import { useChainContext, useWeb3Connection, useNetworkContext } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useSnackbarCallback } from '@masknet/shared'
 import { useI18N } from '../../../utils/index.js'
@@ -55,8 +55,7 @@ export function VotingCard() {
     const identifier = useContext(SnapshotContext)
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
     const { payload: proposal } = useProposal(identifier.id)
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { value: power } = usePower(identifier)
     const choices = proposal.choices
     const [choices_, setChoices_] = useState<number[]>([])

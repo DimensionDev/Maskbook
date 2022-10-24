@@ -1,7 +1,7 @@
 import { useAsyncRetry } from 'react-use'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { useChainId } from './useChainId.js'
+import { useChainContext } from './useContext.js'
 import { useWeb3Hub } from './useWeb3Hub.js'
 
 export function useFungibleTokenPrice<T extends NetworkPluginID>(
@@ -9,7 +9,7 @@ export function useFungibleTokenPrice<T extends NetworkPluginID>(
     address?: string,
     options?: Web3Helper.Web3HubOptions<T>,
 ) {
-    const chainId = useChainId(pluginID, options?.chainId)
+    const { chainId } = useChainContext({ chainId: options?.chainId })
     const hub = useWeb3Hub(pluginID, options)
 
     return useAsyncRetry(async () => {

@@ -10,7 +10,7 @@ import { useGameToken } from '../hooks/usePoolData.js'
 import { isGameActionError } from '../utils.js'
 import { formatBalance } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { useChainId, useFungibleToken } from '@masknet/web3-hooks-base'
+import { useChainContext, useFungibleToken } from '@masknet/web3-hooks-base'
 
 const useStyles = makeStyles()((theme) => ({
     button: {
@@ -24,7 +24,7 @@ interface GameActionProps {
 }
 
 export function GameAction(props: GameActionProps) {
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const gameToken = useGameToken()
 
     const { classes } = useStyles()

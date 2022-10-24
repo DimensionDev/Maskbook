@@ -16,7 +16,7 @@ import { isTwitter } from '../../../social-network-adaptor/twitter.com/base.js'
 import { isFacebook } from '../../../social-network-adaptor/facebook.com/base.js'
 import { NFTCardStyledAssetPlayer, ChainBoundary } from '@masknet/shared'
 import { openWindow } from '@masknet/shared-base-ui'
-import { useAccount, useNetworkType, useWeb3 } from '@masknet/web3-hooks-base'
+import { useChainContext, useWeb3 } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { Icons } from '@masknet/icons'
 
@@ -194,7 +194,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
     const t = useI18N()
     const { classes } = useStyles()
     const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM)
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const { account, networkType } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
     const {
         value: availability,
@@ -228,7 +228,6 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
     const rpNftImg = new URL('./assets/redpacket.nft.png', import.meta.url).toString()
     // #region on share
     const postLink = usePostLink()
-    const networkType = useNetworkType(NetworkPluginID.PLUGIN_EVM)
     const shareText = useMemo(() => {
         const isOnTwitter = isTwitter(activatedSocialNetworkUI)
         const isOnFacebook = isFacebook(activatedSocialNetworkUI)

@@ -5,7 +5,7 @@ import { makeStyles, useCustomSnackbar, ActionButton } from '@masknet/theme'
 import { Box } from '@mui/system'
 import { formatBalance } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { useAccount, useChainId, useWeb3, useFungibleTokenBalance, useWeb3Connection } from '@masknet/web3-hooks-base'
+import { useChainContext, useWeb3, useFungibleTokenBalance, useWeb3Connection } from '@masknet/web3-hooks-base'
 
 import { AdjustFarmRewardsInterface, TransactionStatus, PagesType, FungibleTokenDetailed } from '../types.js'
 import { useI18N } from '../locales/index.js'
@@ -63,9 +63,8 @@ export function AdjustFarmRewards(props: AdjustFarmRewardsInterface) {
 
     const t = useI18N()
     const { classes } = useStyles()
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM)
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const { showSnackbar } = useCustomSnackbar()
     const requiredChainId = getRequiredChainId(chainId)
     const { value: rewardBalance = '0' } = useFungibleTokenBalance(

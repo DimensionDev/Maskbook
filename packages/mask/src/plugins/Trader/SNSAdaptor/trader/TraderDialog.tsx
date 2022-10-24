@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { PluginID, NetworkPluginID, isDashboardPage, CrossIsolationMessages } from '@masknet/shared-base'
 import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
-import { ChainContextProvider, NetworkContextProvider, useChainId, useChainIdValid } from '@masknet/web3-hooks-base'
+import { Web3ContextProvider, useChainContext, useChainIdValid } from '@masknet/web3-hooks-base'
 import { ChainId, isNativeTokenAddress, SchemaType } from '@masknet/web3-shared-evm'
 import { DialogContent, dialogTitleClasses, IconButton } from '@mui/material'
 import { InjectedDialog, useSelectAdvancedSettings, NetworkTab } from '@masknet/shared'
@@ -74,8 +74,8 @@ export function TraderDialog() {
     const { t } = useI18N()
     const { classes } = useStyles()
 
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
-    const chainIdValid = useChainIdValid(NetworkPluginID.PLUGIN_EVM)
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+    const chainIdValid = useChainIdValid(NetworkPluginID.PLUGIN_EVM, chainId)
 
     const [traderProps, setTraderProps] = useState<TraderProps>()
     const chainIdRef = useRef<ChainId>(chainId)
@@ -180,18 +180,16 @@ export function TraderDialog() {
                         chains={chainIdList}
                     />
                 </div>
-                <NetworkContextProvider value={NetworkPluginID.PLUGIN_EVM}>
-                    <ChainContextProvider value={{ chainId }}>
-                        <AllProviderTradeContext.Provider>
-                            <Trader
-                                {...traderProps}
-                                chainId={chainId}
-                                classes={{ root: classes.tradeRoot }}
-                                ref={tradeRef}
-                            />
-                        </AllProviderTradeContext.Provider>
-                    </ChainContextProvider>
-                </NetworkContextProvider>
+                <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM, chainId }}>
+                    <AllProviderTradeContext.Provider>
+                        <Trader
+                            {...traderProps}
+                            chainId={chainId}
+                            classes={{ root: classes.tradeRoot }}
+                            ref={tradeRef}
+                        />
+                    </AllProviderTradeContext.Provider>
+                </Web3ContextProvider>
             </DialogContent>
         </InjectedDialog>
     )

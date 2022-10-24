@@ -1,10 +1,10 @@
 import React, { createContext, ReactNode, useContext, useState } from 'react'
-import { EMPTY_OBJECT, NetworkPluginID } from '@masknet/shared-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { useActualAccount } from './useAccount.js'
-import { useActualChainId } from './useChainId.js'
-import { useActualNetworkType } from './useNetworkType.js'
-import { useActualProviderType } from './useProviderType.js'
+import { useAccount } from './useAccount.js'
+import { useChainId } from './useChainId.js'
+import { useNetworkType } from './useNetworkType.js'
+import { useProviderType } from './useProviderType.js'
 
 interface NetworkContext {
     pluginID: NetworkPluginID
@@ -31,12 +31,12 @@ const NetworkContext = createContext<NetworkContext>(null!)
 
 const ChainContext = createContext<ChainContext>(null!)
 
-export function NetworkContextProvider({ value, children }: React.ProviderProps<NetworkPluginID>) {
-    const [pluginID, setPluginID] = useState(value)
+function NetworkContextProvider({ value, children }: React.ProviderProps<NetworkPluginID>) {
+    const [pluginID, setPluginID] = useState<NetworkPluginID>()
     return (
         <NetworkContext.Provider
             value={{
-                pluginID,
+                pluginID: pluginID ?? value,
                 setPluginID,
             }}>
             {children}
@@ -44,24 +44,29 @@ export function NetworkContextProvider({ value, children }: React.ProviderProps<
     )
 }
 
-export function ChainContextProvider({ value, children }: React.ProviderProps<ChainContextDefaults>) {
-    const [chainId, setChainId] = useState(value.chainId)
-    const [account, setAccount] = useState(value.account)
-    const [networkType, setNetworkType] = useState(value.networkType)
-    const [providerType, setProviderType] = useState(value.providerType)
+function ChainContextProvider({ value, children }: React.ProviderProps<ChainContextDefaults>) {
+    const { pluginID } = useNetworkContext()
+    const globalAccount = useAccount(pluginID)
+    const globalChainId = useChainId(pluginID)
+    const globalNetworkType = useNetworkType(pluginID)
+    const globalProviderType = useProviderType(pluginID)
+    const [account, setAccount] = useState<string>()
+    const [chainId, setChainId] = useState<Web3Helper.ChainIdAll>()
+    const [networkType, setNetworkType] = useState<Web3Helper.NetworkTypeAll>()
+    const [providerType, setProviderType] = useState<Web3Helper.ProviderTypeAll>()
 
     return (
         <ChainContext.Provider
             value={{
                 ...value,
-                chainId,
-                account,
-                providerType,
-                networkType,
+                account: account ?? value.account ?? globalAccount,
+                chainId: chainId ?? value.chainId ?? globalChainId,
+                networkType: networkType ?? value.networkType ?? globalNetworkType,
+                providerType: providerType ?? value.providerType ?? globalProviderType,
                 setAccount,
                 setChainId,
-                setProviderType,
                 setNetworkType,
+                setProviderType,
             }}
             children={children}
         />
@@ -70,18 +75,26 @@ export function ChainContextProvider({ value, children }: React.ProviderProps<Ch
 
 export function ActualChainContextProvider({ children }: { children: ReactNode | undefined }) {
     const value = {
-        account: useActualAccount(),
-        chainId: useActualChainId(),
-        networkType: useActualNetworkType(),
-        providerType: useActualProviderType(),
+        account: useAccount(),
+        chainId: useChainId(),
+        networkType: useNetworkType(),
+        providerType: useProviderType(),
     }
     return <ChainContext.Provider value={value} children={children} />
 }
 
-export function Web3ContextProvider({ value, children }: React.ProviderProps<NetworkPluginID>) {
+export function Web3ContextProvider({
+    value,
+    children,
+}: React.ProviderProps<
+    {
+        pluginID: NetworkPluginID
+    } & ChainContextDefaults
+>) {
+    const { pluginID, ...rest } = value
     return (
-        <NetworkContextProvider value={value}>
-            <ChainContextProvider value={EMPTY_OBJECT} children={children} />
+        <NetworkContextProvider value={pluginID}>
+            <ChainContextProvider value={rest} children={children} />
         </NetworkContextProvider>
     )
 }
@@ -99,5 +112,5 @@ export function useChainContext<T extends NetworkPluginID = NetworkPluginID>(def
     return {
         ...context,
         ...defaults,
-    } as ChainContext<T>
+    } as Required<ChainContext<T>>
 }

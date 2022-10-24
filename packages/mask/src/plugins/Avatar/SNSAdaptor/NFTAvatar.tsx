@@ -6,7 +6,7 @@ import { LoadingBase, makeStyles, useStylesExtends } from '@masknet/theme'
 import { Box, Button, List, ListItem, Skeleton, Typography } from '@mui/material'
 import { useI18N } from '../../../utils/index.js'
 import { AddNFT } from './AddNFT.js'
-import { useAccount, useChainId, useNetworkContext, useNonFungibleAssets } from '@masknet/web3-hooks-base'
+import { useChainContext, useNetworkContext, useNonFungibleAssets } from '@masknet/web3-hooks-base'
 import { ElementAnchor, ReversedAddress, ChainBoundary } from '@masknet/shared'
 import { NetworkPluginID, EMPTY_LIST } from '@masknet/shared-base'
 import type { AllChainsNonFungibleToken, SelectTokenInfo } from '../types.js'
@@ -97,8 +97,7 @@ export function NFTAvatar(props: NFTAvatarProps) {
     const { onChange, hideWallet } = props
     const classes = useStylesExtends(useStyles(), props)
     const { pluginID } = useNetworkContext()
-    const account = useAccount(pluginID)
-    const chainId = useChainId(pluginID)
+    const { account, chainId } = useChainContext()
     const [selectedToken, setSelectedToken] = useState<AllChainsNonFungibleToken | undefined>()
     const [open_, setOpen_] = useState(false)
     const [collectibles_, setCollectibles_] = useState<AllChainsNonFungibleToken[]>([])

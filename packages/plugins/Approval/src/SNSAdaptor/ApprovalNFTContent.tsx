@@ -6,7 +6,7 @@ import { ChainId, NetworkType, SchemaType } from '@masknet/web3-shared-evm'
 import { Icons } from '@masknet/icons'
 import { ActionButton, makeStyles, parseColor } from '@masknet/theme'
 import {
-    useAccount,
+    useChainContext,
     useWeb3State,
     useNetworkDescriptor,
     useNonFungibleTokenContract,
@@ -143,7 +143,7 @@ export const useStyles = makeStyles<{ listItemBackground?: string; listItemBackg
 )
 
 export function ApprovalNFTContent({ chainId }: { chainId: ChainId }) {
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const hub = useWeb3Hub(NetworkPluginID.PLUGIN_EVM)
     const { value: spenderList, loading } = useAsync(
         async () => hub?.getNonFungibleTokenSpenders?.(chainId, account),

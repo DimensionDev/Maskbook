@@ -16,7 +16,7 @@ import { useDepositCallback } from '../hooks/useDepositCallback.js'
 import { PluginPoolTogetherMessages } from '../messages.js'
 import type { Pool } from '../types.js'
 import { calculateOdds, getPrizePeriod } from '../utils.js'
-import { useAccount, useFungibleTokenBalance } from '@masknet/web3-hooks-base'
+import { useChainContext, useFungibleTokenBalance } from '@masknet/web3-hooks-base'
 
 const rainbow_animation = keyframes`
     0% {
@@ -69,7 +69,7 @@ export function DepositDialog() {
     const [odds, setOdds] = useState<string>()
 
     // context
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
     // #region remote controlled dialog
     const { open, closeDialog: onClose } = useRemoteControlledDialog(

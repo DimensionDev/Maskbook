@@ -1,13 +1,12 @@
 import { useAsyncFn } from 'react-use'
-import { useAccount, useChainId, useWeb3Connection } from '@masknet/web3-hooks-base'
+import { useChainContext, useWeb3Connection } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { toFixed } from '@masknet/web3-shared-base'
 import { encodeContractTransaction, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
 import { useCryptoArtAI_Contract } from './useCryptoArtAI_Contract.js'
 
 export function usePlaceBidCallback(is24Auction: boolean, editionNumber: string) {
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { artistAcceptingBidsV2_contract, cANFTMarket_contract } = useCryptoArtAI_Contract(chainId)
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
 

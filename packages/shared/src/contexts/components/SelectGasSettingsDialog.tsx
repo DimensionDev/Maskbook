@@ -1,5 +1,5 @@
 import { FC, useMemo, useState } from 'react'
-import { useChainId, useNetworkContext } from '@masknet/web3-hooks-base'
+import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useSharedI18N } from '@masknet/shared'
 import { isDashboardPage, NetworkPluginID } from '@masknet/shared-base'
@@ -61,7 +61,7 @@ export const SelectGasSettingsDialog: FC<SelectGasSettingsDialogProps> = ({
     const t = useSharedI18N()
     const { classes } = useStyles({ compact: disableSlippageTolerance ?? true })
     const { pluginID: pluginID_ } = useNetworkContext(pluginID)
-    const chainId_ = useChainId(pluginID_, chainId)
+    const { chainId: chainId_ } = useChainContext({ chainId })
     const [settings, setSettings] = useState<{
         slippageTolerance?: number
         transaction?: Web3Helper.TransactionAll

@@ -1,10 +1,9 @@
 import { Dispatch, FC, memo, SetStateAction, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import {
-    useAccount,
-    useChainId,
     useFungibleToken,
     useNonFungibleTokenContract,
     useNetworkContext,
+    useChainContext,
 } from '@masknet/web3-hooks-base'
 import { isSameAddress, SocialAccount } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
@@ -36,8 +35,7 @@ function useRecipients(pluginID: NetworkPluginID, tipsAccounts: SocialAccount[])
 
 function useDirtyDetection(deps: any[]): [boolean, Dispatch<SetStateAction<boolean>>] {
     const [isDirty, setIsDirty] = useState(false)
-    const { pluginID } = useNetworkContext()
-    const account = useAccount(pluginID)
+    const { account } = useChainContext()
 
     useEffect(() => {
         setIsDirty(true)
@@ -47,17 +45,16 @@ function useDirtyDetection(deps: any[]): [boolean, Dispatch<SetStateAction<boole
 }
 
 export const TipTaskProvider: FC<React.PropsWithChildren<Props>> = memo(({ children, task }) => {
-    const targetChainId = useChainId()
     const { pluginID, setPluginID } = useNetworkContext()
+    const { chainId } = useChainContext()
 
     const [_recipientAddress, setRecipient] = useState<string>(task.recipient ?? '')
     const recipients = useRecipients(pluginID, task.accounts)
     const [tipType, setTipType] = useState<TipsType>(TipsType.Tokens)
     const [amount, setAmount] = useState('')
-    const chainId = useChainId()
     const [nonFungibleTokenAddress, setNonFungibleTokenAddress] = useState<string>('')
     const { value: nativeTokenDetailed = null } = useFungibleToken(pluginID, undefined, {
-        chainId: targetChainId,
+        chainId,
     })
     const [userSelectedToken, setToken] = useState<TipContextOptions['token']>(nativeTokenDetailed)
     const token = userSelectedToken ?? nativeTokenDetailed
@@ -97,7 +94,7 @@ export const TipTaskProvider: FC<React.PropsWithChildren<Props>> = memo(({ child
         setNonFungibleTokenAddress('')
     }, [])
 
-    useEffect(reset, [targetChainId])
+    useEffect(reset, [chainId])
 
     const wrappedSendTip = useCallback(() => {
         setIsDirty(false)

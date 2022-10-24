@@ -2,7 +2,7 @@ import { useCallback } from 'react'
 import type { DataProvider } from '@masknet/public-api'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { ChainContextProvider, NetworkContextProvider } from '@masknet/web3-hooks-base'
+import { Web3ContextProvider } from '@masknet/web3-hooks-base'
 import { TrendingPopper } from './TrendingPopper.js'
 import { TagType } from '../../types/index.js'
 import { TrendingView } from './TrendingView.js'
@@ -21,10 +21,8 @@ export function TagInspector(props: TagInspectorProps) {
         [],
     )
     return (
-        <NetworkContextProvider value={NetworkPluginID.PLUGIN_EVM}>
-            <ChainContextProvider value={{ chainId: ChainId.Mainnet }}>
-                <TrendingPopper>{createTrendingView}</TrendingPopper>
-            </ChainContextProvider>
-        </NetworkContextProvider>
+        <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM, chainId: ChainId.Mainnet }}>
+            <TrendingPopper>{createTrendingView}</TrendingPopper>
+        </Web3ContextProvider>
     )
 }

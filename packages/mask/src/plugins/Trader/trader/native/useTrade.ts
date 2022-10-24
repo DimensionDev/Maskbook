@@ -1,14 +1,14 @@
 import { useAsyncRetry } from 'react-use'
 import { FungibleToken, isSameAddress } from '@masknet/web3-shared-base'
-import { NetworkPluginID } from '@masknet/shared-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
 import { ChainId, SchemaType, useTokenConstants } from '@masknet/web3-shared-evm'
-import { useChainId } from '@masknet/web3-hooks-base'
+import { useChainContext } from '@masknet/web3-hooks-base'
 
 export function useTrade(
     inputToken?: FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>,
     outputToken?: FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>,
 ) {
-    const targetChainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { chainId: targetChainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { WNATIVE_ADDRESS } = useTokenConstants(targetChainId)
 
     // to mimic the same interface with other trade providers
