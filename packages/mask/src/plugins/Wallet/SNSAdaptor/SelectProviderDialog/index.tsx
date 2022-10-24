@@ -12,6 +12,7 @@ import { hasNativeAPI, nativeAPI } from '../../../../../shared/native-rpc/index.
 import { PluginProviderRender } from './PluginProviderRender.js'
 import { pluginIDSettings } from '../../../../../shared/legacy-settings/settings.js'
 import { getSiteType, isDashboardPage, NetworkPluginID } from '@masknet/shared-base'
+import { delay } from '@dimensiondev/kit'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -82,6 +83,8 @@ export function SelectProviderDialog(props: SelectProviderDialogProps) {
 
             closeDialog()
 
+            // prevent incorrect dialog overflow state
+            await delay(500)
             // TODO:
             // refactor to use react-router-dom
             setConnectWalletDialog({
