@@ -18,7 +18,7 @@ export function useSaveToNextID() {
 
             saveAddress(
                 info.userId,
-                info.pluginID ?? NetworkPluginID.PLUGIN_EVM,
+                info.pluginId ?? NetworkPluginID.PLUGIN_EVM,
                 account,
                 activatedSocialNetworkUI.networkIdentifier as EnhanceableSite,
             )

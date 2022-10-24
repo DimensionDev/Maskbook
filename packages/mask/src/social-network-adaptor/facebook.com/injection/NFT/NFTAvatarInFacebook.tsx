@@ -70,7 +70,7 @@ function NFTAvatarInFacebook() {
         storage?.address ?? account,
         nftAvatar?.address,
         nftAvatar?.tokenId,
-        nftAvatar?.pluginID ?? NetworkPluginID.PLUGIN_EVM,
+        nftAvatar?.pluginId ?? NetworkPluginID.PLUGIN_EVM,
         nftAvatar?.chainId,
     )
 

@@ -47,7 +47,7 @@ export function NFTAvatarSettingDialog() {
                         avatarId,
                         chainId: (info.token.chainId ?? ChainId.Mainnet) as ChainId,
                         schema: (info.token.schema ?? SchemaType.ERC721) as SchemaType,
-                        pluginID: info.pluginID,
+                        pluginId: info.pluginID,
                     },
                     identity.identifier.network as EnhanceableSite,
                     RSS3_KEY_SNS.INSTAGRAM,

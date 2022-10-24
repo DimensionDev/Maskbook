@@ -10,7 +10,7 @@ export interface AvatarMetaDB {
     avatarId: string
     chainId?: ChainId
     schema?: SchemaType
-    pluginID?: NetworkPluginID
+    pluginId?: NetworkPluginID
     ownerAddress?: string
 }
 
