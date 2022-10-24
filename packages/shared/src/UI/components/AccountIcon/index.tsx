@@ -111,18 +111,6 @@ export function AccountIcon({ socialAccount, classes: externalClasses }: Account
                 </AccountTooltips>
             ) : null}
 
-            {supportedAddressTypes.includes(SocialAddressType.RSS3) ? (
-                <Linking
-                    href={resolveSocialAddressLink(SocialAddressType.RSS3)}
-                    LinkProps={{ className: classes.link }}>
-                    <AccountTooltips
-                        platform={fromTwitter ? AddressPlatform.Twitter : undefined}
-                        type={SocialAddressType.RSS3}>
-                        <Icons.RSS3 className={cx(classes.actionIcon, classes.icon)} size={18} style={iconStyle} />
-                    </AccountTooltips>
-                </Linking>
-            ) : null}
-
             {supportedAddressTypes.includes(SocialAddressType.CyberConnect) ? (
                 <Linking
                     href={resolveSocialAddressLink(SocialAddressType.CyberConnect)}
