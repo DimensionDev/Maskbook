@@ -2,6 +2,7 @@
 i18n_generated*
 icon-generated*
 .swc
+.env/dev-preference
 
 # VSCode personal settings
 .vscode/launch.json
@@ -28,28 +29,8 @@ packages/netlify/sites/
 /MaskNetwork.*.zip
 compilation-stats.json
 
-# Environment files
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-
 # Block-chain contract files
 /contracts
-
-# E2E tests
-/.env/e2e-test
-/.env/e2e-development
-/.env/e2e-production
-/.pptr-alice
-/.pptr-bob
-/screenshots
-/.env
-/.pptr-*
-
-# Temp profiles
-.firefox
-.chrome
 
 # Following content is copied from https://github.com/github/gitignore/blob/master/Node.gitignore
 # Logs
@@ -95,9 +76,6 @@ build/Release
 node_modules/
 jspm_packages/
 
-# Snowpack dependency directory (https://snowpack.dev/)
-web_modules/
-
 # TypeScript cache
 *.tsbuildinfo
 
@@ -119,17 +97,6 @@ web_modules/
 # Output of 'npm pack'
 *.tgz
 
-# Yarn Integrity file
-.yarn-integrity
-
-# dotenv environment variables file
-.env
-.env.test
-
-# parcel-bundler cache (https://parceljs.org/)
-.cache
-.parcel-cache
-
 # Next.js build output
 .next
 out
@@ -143,31 +110,6 @@ dist
 # Comment in the public line in if your project uses Gatsby and not Next.js
 # https://nextjs.org/blog/next-9-1#public-directory-support
 # public
-
-# vuepress build output
-.vuepress/dist
-
-# Serverless directories
-.serverless/
-
-# FuseBox cache
-.fusebox/
-
-# DynamoDB Local files
-.dynamodb/
-
-# TernJS port file
-.tern-port
-
-# Stores VSCode versions used for testing VSCode extensions
-.vscode-test
-
-# yarn v2
-.yarn/cache
-.yarn/unplugged
-.yarn/build-state.yml
-.yarn/install-state.gz
-.pnp.*
 
 # Rush temporary files
 common/deploy/

@@ -2011,6 +2011,9 @@ importers:
       chalk:
         specifier: ^5.0.1
         version: 5.0.1
+      dotenv:
+        specifier: ^16.0.3
+        version: 16.0.3
       enquirer:
         specifier: ^2.3.6
         version: 2.3.6
@@ -17496,6 +17499,11 @@ packages:
 
   /dotenv/14.3.2:
     resolution: {integrity: sha512-vwEppIphpFdvaMCaHfCEv9IgwcxMljMw2TnAQBB4VWPvzXQLTb82jwmdOKzlEVUL3gNFT4l4TPKO+Bn+sqcrVQ==}
+    engines: {node: '>=12'}
+    dev: false
+
+  /dotenv/16.0.3:
+    resolution: {integrity: sha512-7GO6HghkA5fYG9TYnNxi14/7K9f5occMlp3zXAuSxn7CKCxt9xbNWG7yF8hTCSUchlfWSe3uLmlPfigevRItzQ==}
     engines: {node: '>=12'}
     dev: false
 
