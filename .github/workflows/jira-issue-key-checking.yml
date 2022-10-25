@@ -1,4 +1,4 @@
-name: "Jira Issue Key Checker"
+name: "Check Jira Issue Key"
 
 on:
   pull_request:
