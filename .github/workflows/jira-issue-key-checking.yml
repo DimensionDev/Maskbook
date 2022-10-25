@@ -1,0 +1,17 @@
+name: "Jira Issue Key Checker"
+
+on:
+  pull_request:
+    types:
+      - opened
+      - edited
+      - synchronize
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: fgiuliani/jira-issue-key-checker@v1.0.0
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          jira-prefix: 'MF'
