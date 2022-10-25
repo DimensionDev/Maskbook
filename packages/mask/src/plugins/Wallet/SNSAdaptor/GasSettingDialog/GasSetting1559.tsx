@@ -22,7 +22,7 @@ import {
     multipliedBy,
     toFixed,
 } from '@masknet/web3-shared-base'
-import { useChainId, useFungibleTokenPrice, useGasOptions } from '@masknet/web3-hooks-base'
+import { useChainContext, useFungibleTokenPrice, useGasOptions } from '@masknet/web3-hooks-base'
 
 const HIGH_FEE_WARNING_MULTIPLIER = 1.5
 
@@ -92,7 +92,7 @@ export const GasSetting1559: FC<GasSettingProps> = memo(
     ({ gasLimit, minGasLimit = 0, gasOptionType = GasOptionType.NORMAL, onConfirm = noop }) => {
         const { t } = useI18N()
         const { classes } = useStyles()
-        const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+        const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
         const { NATIVE_TOKEN_ADDRESS } = useTokenConstants(chainId)
 
         const [selectedGasOption, setGasOptionType] = useState<GasOptionType | null>(gasOptionType)

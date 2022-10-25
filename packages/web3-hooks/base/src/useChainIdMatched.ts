@@ -1,11 +1,8 @@
 import type { NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { useChainId } from './useChainId.js'
+import { useChainContext } from './useContext.js'
 
-export function useChainIdMatched<T extends NetworkPluginID>(
-    pluginID?: T,
-    expectedChainId?: Web3Helper.Definition[T]['ChainId'],
-) {
-    const actualChainId = useChainId(pluginID)
+export function useChainIdMatched<T extends NetworkPluginID>(expectedChainId?: Web3Helper.Definition[T]['ChainId']) {
+    const { chainId: actualChainId } = useChainContext<T>()
     return actualChainId === expectedChainId
 }

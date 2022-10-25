@@ -42,7 +42,7 @@ import { ExpandMore } from '@mui/icons-material'
 import { LoadingButton } from '@mui/lab'
 import { toHex } from 'web3-utils'
 import {
-    useChainId,
+    useChainContext,
     useFungibleToken,
     useFungibleTokenBalance,
     useLookupAddress,
@@ -190,7 +190,7 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
 
     const { pluginID } = useNetworkContext()
     const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
     const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const { value: nativeToken } = useFungibleToken(NetworkPluginID.PLUGIN_EVM)

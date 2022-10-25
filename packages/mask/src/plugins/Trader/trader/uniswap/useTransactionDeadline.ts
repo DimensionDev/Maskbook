@@ -2,11 +2,11 @@ import { useMemo } from 'react'
 import BigNumber from 'bignumber.js'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { DEFAULT_TRANSACTION_DEADLINE, L2_TRANSACTION_DEADLINE } from '../../constants/index.js'
-import { useBlockTimestamp, useChainId } from '@masknet/web3-hooks-base'
+import { useBlockTimestamp, useChainContext } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 
 export function useTransactionDeadline() {
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { value: timestamp } = useBlockTimestamp(NetworkPluginID.PLUGIN_EVM, { chainId })
 
     return useMemo(() => {

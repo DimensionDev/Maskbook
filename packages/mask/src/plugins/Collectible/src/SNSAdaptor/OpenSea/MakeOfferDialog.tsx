@@ -19,13 +19,7 @@ import {
 import { makeStyles, ActionButton } from '@masknet/theme'
 import { InjectedDialog, PluginWalletStatusBar, ActionButtonPromise, ChainBoundary } from '@masknet/shared'
 import { CrossIsolationMessages, NetworkPluginID } from '@masknet/shared-base'
-import {
-    useAccount,
-    useChainId,
-    useNetworkContext,
-    useFungibleTokenWatched,
-    useWeb3State,
-} from '@masknet/web3-hooks-base'
+import { useChainContext, useNetworkContext, useFungibleTokenWatched, useWeb3State } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { UnreviewedWarnings } from './UnreviewedWarnings.js'
 import { useI18N } from '../../../../../utils/index.js'
@@ -83,8 +77,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
     const { classes } = useStyles()
 
     const { pluginID } = useNetworkContext()
-    const account = useAccount()
-    const chainId = useChainId()
+    const { account, chainId } = useChainContext()
     const opensea = useOpenSea(pluginID, chainId)
     const { Others } = useWeb3State()
 

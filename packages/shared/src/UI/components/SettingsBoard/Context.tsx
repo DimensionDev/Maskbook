@@ -7,7 +7,7 @@ import { useSharedI18N } from '@masknet/shared'
 import {
     useGasOptions,
     useNetworkContext,
-    useChainId,
+    useChainContext,
     useSingleBlockBeatRetry,
     useWeb3State,
 } from '@masknet/web3-hooks-base'
@@ -40,7 +40,9 @@ export function useSettingsContext(initial?: {
 }) {
     const t = useSharedI18N()
     const { pluginID } = useNetworkContext(initial?.pluginID)
-    const chainId = useChainId(pluginID, initial?.chainId)
+    const { chainId } = useChainContext({
+        chainId: initial?.chainId,
+    })
     const { Others } = useWeb3State<'all'>(pluginID)
     const [transactionOptions, setTransactionOptions] = useState<Partial<Web3Helper.TransactionAll> | null>(
         initial?.transaction ?? null,

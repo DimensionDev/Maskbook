@@ -8,7 +8,7 @@ import type { ChainId, Web3 } from '@masknet/web3-shared-evm'
 import { ProviderIconURLs } from './IconURL.js'
 import { useI18N } from '../../../utils/index.js'
 import { ProtocolType, SavingsProtocol, TabType } from '../types.js'
-import { useAccount, useFungibleAssets, useWeb3, useFungibleTokenBalance } from '@masknet/web3-hooks-base'
+import { useChainContext, useFungibleAssets, useWeb3, useFungibleTokenBalance } from '@masknet/web3-hooks-base'
 import { CrossIsolationMessages, NetworkPluginID } from '@masknet/shared-base'
 import { useCallback, useMemo } from 'react'
 import { LDO_PAIRS } from '../constants.js'
@@ -97,7 +97,7 @@ export function SavingsTable({ chainId, tab, protocols, setTab, setSelectedProto
     const { classes } = useStyles()
 
     const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM, { chainId })
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
     const { value: assets, loading: getAssetsLoading } = useFungibleAssets(NetworkPluginID.PLUGIN_EVM, undefined, {
         chainId,

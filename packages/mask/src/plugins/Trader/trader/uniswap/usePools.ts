@@ -8,8 +8,8 @@ import { useGetTradeContext } from '../useGetTradeContext.js'
 import { MulticallStateType, useMultipleContractSingleData } from '@masknet/web3-hooks-evm'
 import { useTargetBlockNumber } from '../useTargetBlockNumber.js'
 import { isZero } from '@masknet/web3-shared-base'
-import { NetworkPluginID } from '@masknet/shared-base'
-import { useChainId } from '@masknet/web3-hooks-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
+import { useChainContext } from '@masknet/web3-hooks-base'
 
 export enum PoolState {
     LOADING = 0,
@@ -22,7 +22,7 @@ export function usePools(
     tradeProvider: TradeProvider,
     poolKeys: Array<[Currency | undefined, Currency | undefined, FeeAmount | undefined]>,
 ): Array<[PoolState, Pool | null]> {
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const context = useGetTradeContext(tradeProvider)
 
     const transformed: Array<[Token, Token, FeeAmount] | null> = useMemo(() => {

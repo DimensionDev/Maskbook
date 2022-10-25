@@ -20,7 +20,7 @@ import type { JSON_PayloadInMask } from '../types.js'
 import { useQualificationVerify } from './hooks/useQualificationVerify.js'
 import { useSwapCallback } from './hooks/useSwapCallback.js'
 import { SwapStatus } from './SwapGuide.js'
-import { useChainId, useFungibleToken, useFungibleTokenBalance, useWeb3State } from '@masknet/web3-hooks-base'
+import { useChainContext, useFungibleToken, useFungibleTokenBalance, useWeb3State } from '@masknet/web3-hooks-base'
 
 const useStyles = makeStyles()((theme) => ({
     button: {},
@@ -87,7 +87,7 @@ export function SwapDialog(props: SwapDialogProps) {
         exchangeTokens,
     } = props
 
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { Token } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const classes = useStylesExtends(useStyles(), props)
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()

@@ -4,14 +4,12 @@ import { Box, Typography } from '@mui/material'
 import { makeStyles, MaskColorVar, ShadowRootTooltip, useStylesExtends, ActionButton } from '@masknet/theme'
 import {
     useNetworkContext,
-    useAccount,
+    useChainContext,
     useNetworkDescriptor,
     useAllowTestnet,
     useWeb3State,
     useWeb3Connection,
     useProviderDescriptor,
-    useChainId,
-    useProviderType,
 } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { ProviderType } from '@masknet/web3-shared-evm'
@@ -75,11 +73,15 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
     const expectedPlugin = useActivatedPlugin(expectedPluginID, 'any')
 
     const { Others: actualOthers } = useWeb3State(actualPluginID)
-    const actualChainId = useChainId(actualPluginID)
-    const actualProviderType = useProviderType(actualPluginID)
+    const {
+        account,
+        chainId: actualChainId,
+        providerType: actualProviderType,
+    } = useChainContext({
+        account: expectedAccount,
+    })
     const actualProviderDescriptor = useProviderDescriptor(actualPluginID)
     const actualChainName = actualOthers?.chainResolver.chainName(actualChainId)
-    const account = useAccount(actualPluginID, expectedAccount)
 
     const { Others: expectedOthers } = useWeb3State(expectedPluginID)
     const expectedConnection = useWeb3Connection(expectedPluginID)

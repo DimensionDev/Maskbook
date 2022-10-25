@@ -2,13 +2,7 @@ import { useState, useLayoutEffect, useRef, useCallback } from 'react'
 import classNames from 'classnames'
 import { flatten, uniq } from 'lodash-unified'
 import formatDateTime from 'date-fns/format'
-import {
-    useAccount,
-    useChainId,
-    useFungibleToken,
-    useNetworkContext,
-    useFungibleTokens,
-} from '@masknet/web3-hooks-base'
+import { useChainContext, useFungibleToken, useNetworkContext, useFungibleTokens } from '@masknet/web3-hooks-base'
 import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
 import { SnackbarProvider, makeStyles, ActionButton, LoadingBase } from '@masknet/theme'
 import {
@@ -17,12 +11,12 @@ import {
     useOpenShareTxDialog,
     PluginWalletStatusBar,
     ChainBoundary,
+    NetworkTab,
 } from '@masknet/shared'
 import { DialogContent, Typography, List, ListItem, useTheme, DialogActions } from '@mui/material'
 import { PluginID, NetworkPluginID } from '@masknet/shared-base'
 import { formatBalance, isSameAddress, FungibleToken } from '@masknet/web3-shared-base'
 import { useITOConstants, ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import { NetworkTab } from '../../../components/shared/NetworkTab.js'
 import { useI18N } from '../../../utils/index.js'
 import { useClaimAll } from './hooks/useClaimAll.js'
 import { useClaimCallback } from './hooks/useClaimCallback.js'
@@ -195,8 +189,7 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
     const { pluginID } = useNetworkContext()
     const chainIdList = ITO_Definition?.enableRequirement.web3?.[pluginID]?.supportedChainIds ?? []
     const DialogRef = useRef<HTMLDivElement>(null)
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
     const { value: _swappedTokens, loading: _loading, retry } = useClaimAll(account, chainId)
     const { value: swappedTokensWithDetailed = [], loading: loadingTokenDetailed } = useFungibleTokens(

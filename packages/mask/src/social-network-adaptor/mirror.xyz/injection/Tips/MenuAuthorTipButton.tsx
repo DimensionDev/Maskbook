@@ -9,7 +9,7 @@ import {
 import { EMPTY_LIST, PluginID, NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import type { SocialAccount } from '@masknet/web3-shared-base'
-import { NetworkContextProvider, useWeb3State, useNetworkContext } from '@masknet/web3-hooks-base'
+import { Web3ContextProvider, useWeb3State, useNetworkContext } from '@masknet/web3-hooks-base'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI.js'
 import { createReactRootShadowed, startWatch } from '../../../../utils/index.js'
 import { menuAuthorSelector as selector } from '../../utils/selectors.js'
@@ -18,9 +18,9 @@ export function injectTipsButtonOnMenu(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(selector())
     startWatch(watcher, signal)
     createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(
-        <NetworkContextProvider value={NetworkPluginID.PLUGIN_EVM}>
+        <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM }}>
             <AuthorTipsButtonWrapper />
-        </NetworkContextProvider>,
+        </Web3ContextProvider>,
     )
 }
 

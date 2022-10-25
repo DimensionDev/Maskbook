@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useAccount, useChainId, useWeb3Hub } from '@masknet/web3-hooks-base'
+import { useChainContext, useWeb3Hub } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { makeStyles, ShadowRootMenu } from '@masknet/theme'
 import { Hub, OrderSide, resolveSourceTypeName, SourceType } from '@masknet/web3-shared-base'
@@ -20,8 +20,7 @@ const useStyles = makeStyles()({
 export function HubContent(props: HubContentProps) {
     const { classes } = useStyles()
     const hub = useWeb3Hub()
-    const chainId = useChainId()
-    const account = useAccount()
+    const { account, chainId } = useChainContext()
     const [keyword, setKeyword] = useState<string>('PUNK')
     const [address, setAddress] = useState<string>('0x932261f9fc8da46c4a22e31b45c4de60623848bf')
     const [tokenId, setTokenId] = useState<string>('32342')

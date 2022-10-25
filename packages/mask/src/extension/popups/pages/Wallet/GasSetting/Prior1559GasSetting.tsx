@@ -23,7 +23,7 @@ import { StyledInput } from '../../../components/StyledInput/index.js'
 import { LoadingButton } from '@mui/lab'
 import { isEmpty } from 'lodash-unified'
 import { toHex } from 'web3-utils'
-import { useChainId, useGasOptions, useNativeToken, useNativeTokenPrice, useWeb3 } from '@masknet/web3-hooks-base'
+import { useChainContext, useGasOptions, useNativeToken, useNativeTokenPrice, useWeb3 } from '@masknet/web3-hooks-base'
 
 const useStyles = makeStyles()((theme) => ({
     options: {
@@ -93,7 +93,7 @@ export const Prior1559GasSetting = memo(() => {
     const { classes } = useStyles()
     const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM)
     const { value: gasOptions_ } = useGasOptions(NetworkPluginID.PLUGIN_EVM)
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { value, loading: getValueLoading } = useUnconfirmedRequest()
     const navigate = useNavigate()
     const [selected, setOption] = useState<number | null>(null)

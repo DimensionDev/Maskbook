@@ -1,15 +1,7 @@
 import BigNumber from 'bignumber.js'
 import classNames from 'classnames'
 import { useCallback, useEffect, useMemo, useRef } from 'react'
-import {
-    useAccount,
-    useChainId,
-    useBalance,
-    useNetworkType,
-    useWeb3,
-    useNativeToken,
-    useNativeTokenAddress,
-} from '@masknet/web3-hooks-base'
+import { useChainContext, useBalance, useWeb3, useNativeToken, useNativeTokenAddress } from '@masknet/web3-hooks-base'
 import { chainResolver, explorerResolver, isNativeTokenAddress, useRedPacketConstants } from '@masknet/web3-shared-evm'
 import { Grid, Link, Paper, Typography } from '@mui/material'
 import { makeStyles, ActionButton } from '@masknet/theme'
@@ -56,8 +48,8 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface ConfirmRedPacketFormProps {
-    onBack: () => void
     onCreated: (payload: RedPacketJSONPayload) => void
+    onBack: () => void
     onClose: () => void
     settings?: RedPacketSettings
 }
@@ -67,7 +59,7 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
     const { onBack, settings, onCreated, onClose } = props
     const { classes } = useStyles()
     const { value: balance = '0', loading: loadingBalance } = useBalance(NetworkPluginID.PLUGIN_EVM)
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { account, chainId, networkType } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     useEffect(() => {
         if (settings?.token?.chainId !== chainId) onClose()
     }, [chainId, onClose])
@@ -77,8 +69,6 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
     //  otherwise password in database would be different from creating red-packet.
     const contract_version = 4
     const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM)
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const networkType = useNetworkType(NetworkPluginID.PLUGIN_EVM)
     const nativeTokenAddress = useNativeTokenAddress(NetworkPluginID.PLUGIN_EVM)
     const { address: publicKey, privateKey } = useMemo(
         () => web3?.eth.accounts.create() ?? { address: '', privateKey: '' },

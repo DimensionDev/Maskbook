@@ -15,9 +15,8 @@ import { makeStyles, MaskFixedSizeListProps, MaskTextFieldProps, SearchableList 
 import { Box, Stack, Typography } from '@mui/material'
 import { useSharedI18N } from '../../../locales/index.js'
 import {
-    useAccount,
     useBlockedFungibleTokens,
-    useChainId,
+    useChainContext,
     useNetworkContext,
     useFungibleAssets,
     useFungibleToken,
@@ -138,8 +137,9 @@ export const FungibleTokenList = forwardRef(
         // #endregion
 
         const { pluginID } = useNetworkContext<T>(props.pluginID)
-        const account = useAccount(pluginID)
-        const chainId = useChainId(pluginID, props.chainId)
+        const { account, chainId } = useChainContext({
+            chainId: props.chainId,
+        })
         const { Token, Others } = useWeb3State<'all'>(pluginID)
         const { value: fungibleTokens = EMPTY_LIST } = useFungibleTokensFromTokenList(pluginID, { chainId })
         const trustedFungibleTokens = useTrustedFungibleTokens(pluginID, undefined, chainId)

@@ -27,7 +27,7 @@ import { useAvailableTraderProviders } from '../trending/useAvailableTraderProvi
 import { useNativeTradeGasLimit } from './useNativeTradeGasLimit.js'
 import type { TradeComputed } from '../types/index.js'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import { useChainId } from '@masknet/web3-hooks-base'
+import { useChainContext } from '@masknet/web3-hooks-base'
 
 export function useAllTradeComputed(
     inputAmount: string,
@@ -35,12 +35,12 @@ export function useAllTradeComputed(
     outputToken?: FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>,
     temporarySlippage?: number,
 ): TradeInfo[] {
-    const targetChainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const inputTokenProduct = pow10(inputToken?.decimals ?? 0)
     const inputAmount_ = multipliedBy(inputAmount || '0', inputTokenProduct)
         .integerValue()
         .toFixed()
-    const { value: tradeProviders = EMPTY_LIST } = useAvailableTraderProviders(TagType.CASH, 'MASK', targetChainId)
+    const { value: tradeProviders = EMPTY_LIST } = useAvailableTraderProviders(TagType.CASH, 'MASK', chainId)
 
     // NATIVE-WNATIVE pair
     const nativeToken_ = useNativeTokenTrade(inputToken, outputToken)
@@ -53,7 +53,7 @@ export function useAllTradeComputed(
         outputToken,
     )
 
-    const nativeTradeGasLimit = useNativeTradeGasLimit(nativeToken, targetChainId)
+    const nativeTradeGasLimit = useNativeTradeGasLimit(nativeToken, chainId)
 
     // uniswap-v2
     const {

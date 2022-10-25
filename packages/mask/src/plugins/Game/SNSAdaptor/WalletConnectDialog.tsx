@@ -4,7 +4,7 @@ import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import DialogContent from '@mui/material/DialogContent'
 import { alpha, DialogActions } from '@mui/material'
 import { useCustomSnackbar, makeStyles } from '@masknet/theme'
-import { useAccount, useChainId, useNetworkContext } from '@masknet/web3-hooks-base'
+import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { InjectedDialog, PluginWalletStatusBar, ChainBoundary } from '@masknet/shared'
 import { PluginGameMessages } from '../messages.js'
@@ -48,8 +48,7 @@ const WalletConnectDialog = () => {
     const { classes } = useStyles()
     const { showSnackbar } = useCustomSnackbar()
     const { pluginID } = useNetworkContext()
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { isGameShow, setGameShow, tokenProps, setTokenProps, gameInfo, setGameInfo } = ConnectContext.useContainer()
 
     const { open, closeDialog } = useRemoteControlledDialog(PluginGameMessages.events.gameDialogUpdated, (ev) => {

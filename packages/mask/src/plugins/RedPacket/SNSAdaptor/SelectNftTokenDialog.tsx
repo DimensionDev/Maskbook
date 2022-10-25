@@ -14,7 +14,7 @@ import CheckIcon from '@mui/icons-material/Check'
 import { useUpdate } from 'react-use'
 import { findLastIndex, uniq } from 'lodash-unified'
 import { NFT_RED_PACKET_MAX_SHARES } from '../constants.js'
-import { useAccount, useChainId, useWeb3Connection } from '@masknet/web3-hooks-base'
+import { useChainContext, useWeb3Connection } from '@masknet/web3-hooks-base'
 
 interface StyleProps {
     isSelectSharesExceed: boolean
@@ -269,14 +269,13 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
     const theme = useTheme()
     const { t: tr } = useBaseI18N()
     const t = useI18N()
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const [searchedTokenDetailedList, setSearchedTokenDetailedList] = useState<OrderedERC721Token[]>()
     const [searched, setSearched] = useState(false)
     const [tokenDetailedSelectedList, setTokenDetailedSelectedList] =
         useState<OrderedERC721Token[]>(existTokenDetailedList)
     const [loadingToken, setLoadingToken] = useState(false)
     const [searchTokenListInput, setSearchTokenListInput] = useState('')
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
     const [tokenIdListInput, setTokenIdListInput] = useState<string>('')
     const [tokenIdFilterList, setTokenIdFilterList] = useState<string[]>([])

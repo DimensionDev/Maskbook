@@ -11,7 +11,7 @@ import {
     useWeb3State,
     useReverseAddress,
     useRecentTransactions,
-    useAccount,
+    useChainContext,
 } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { PluginMessages } from '../../../../API.js'
@@ -65,7 +65,7 @@ const useStyles = makeStyles()((theme) => ({
 export const WalletStateBar = memo(() => {
     const t = useDashboardI18N()
 
-    const account = useAccount()
+    const { account } = useChainContext()
     const wallet = useWallet()
     const networkDescriptor = useNetworkDescriptor()
     const providerDescriptor = useProviderDescriptor()

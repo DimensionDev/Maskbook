@@ -13,7 +13,7 @@ import { useITO_Contract } from './useITO_Contract.js'
 import { useQualificationContract } from './useQualificationContract.js'
 import type { JSON_PayloadInMask } from '../../types.js'
 import { checkAvailability } from '../utils/checkAvailability.js'
-import { useAccount, useChainId, useWeb3Connection } from '@masknet/web3-hooks-base'
+import { useChainContext, useWeb3Connection } from '@masknet/web3-hooks-base'
 
 export function useSwapCallback(
     payload: JSON_PayloadInMask,
@@ -21,8 +21,7 @@ export function useSwapCallback(
     token: Partial<FungibleToken<ChainId, SchemaType>>,
     isQualificationHasLucky = false,
 ) {
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, { chainId })
     const { ITO_CONTRACT_ADDRESS } = useITOConstants(chainId)
     const { contract: ITO_Contract, version } = useITO_Contract(chainId, payload.contract_address)

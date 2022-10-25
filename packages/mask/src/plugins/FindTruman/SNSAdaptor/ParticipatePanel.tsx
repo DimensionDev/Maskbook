@@ -1,4 +1,4 @@
-import { useAccount } from '@masknet/web3-hooks-base'
+import { useChainContext } from '@masknet/web3-hooks-base'
 import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import { useAsyncRetry } from 'react-use'
 import {
@@ -73,7 +73,7 @@ export default function ParticipatePanel(props: ParticipatePanelProps) {
     const { storyId } = props
     const { classes } = useStyles()
     const { t } = useContext(FindTrumanContext)
-    const account = useAccount()
+    const { account } = useChainContext()
 
     const { open: isDialogOpen, onOpen: onDialogOpen, onClose: onDialogClose } = useControlledDialog()
 

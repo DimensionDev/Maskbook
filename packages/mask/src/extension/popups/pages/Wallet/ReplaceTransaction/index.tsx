@@ -19,7 +19,7 @@ import { WalletContext } from '../hooks/useWalletContext.js'
 import { isLessThanOrEqualTo, isPositive, multipliedBy } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import {
-    useChainId,
+    useChainContext,
     useWeb3State,
     useNativeToken,
     useNativeTokenPrice,
@@ -64,7 +64,7 @@ const ReplaceTransaction = memo(() => {
     const type = search.get('type') as ReplaceType
     const [errorMessage, setErrorMessage] = useState('')
     const { transaction } = useContainer(WalletContext)
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { TransactionFormatter } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
     const { value: formatterTransaction } = useAsync(async () => {

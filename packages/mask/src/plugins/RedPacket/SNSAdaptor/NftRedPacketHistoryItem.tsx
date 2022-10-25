@@ -7,7 +7,7 @@ import { makeStyles, ActionButton } from '@masknet/theme'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { NetworkPluginID } from '@masknet/shared-base'
 import type { NonFungibleTokenContract } from '@masknet/web3-shared-base'
-import { useAccount, useNonFungibleTokenContract } from '@masknet/web3-hooks-base'
+import { useChainContext, useNonFungibleTokenContract } from '@masknet/web3-hooks-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { Box, ListItem, Typography } from '@mui/material'
 import { dateTimeFormat } from '../../ITO/assets/formatDate.js'
@@ -129,7 +129,7 @@ export interface NftRedPacketHistoryItemProps {
 }
 export const NftRedPacketHistoryItem: FC<NftRedPacketHistoryItemProps> = memo(
     ({ history, onSend, onShowPopover, onHidePopover }) => {
-        const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+        const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
         const t = useI18N()
         const { classes } = useStyles()
         const {

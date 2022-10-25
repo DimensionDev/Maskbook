@@ -5,11 +5,11 @@ import { JSON_PayloadInMask, JSON_PayloadFromChain, ITO_Status } from '../../typ
 import { useAvailability } from './useAvailability.js'
 import { useQualification } from './useQualification.js'
 import { ITO_CONTRACT_BASE_TIMESTAMP } from '../../constants.js'
-import { useChainId } from '@masknet/web3-hooks-base'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { useChainContext } from '@masknet/web3-hooks-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
 
 export function useAvailabilityComputed(payload: JSON_PayloadInMask | JSON_PayloadFromChain) {
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { DEFAULT_QUALIFICATION2_ADDRESS } = useITOConstants(payload.chain_id ?? chainId)
     const asyncResult = useAvailability(payload.pid, payload.contract_address, {
         account: payload.seller.address,

@@ -1,5 +1,5 @@
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
-import { ChainContextProvider, NetworkContextProvider } from '@masknet/web3-hooks-base'
+import { Web3ContextProvider } from '@masknet/web3-hooks-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { useAvailableDataProviders } from '../../trending/useAvailableDataProviders.js'
 import { TagType } from '../../types/index.js'
@@ -16,10 +16,8 @@ export function SearchResultInspector({ keyword }: SearchResultInspectorProps) {
 
     if (!name || !dataProviders?.length) return null
     return (
-        <NetworkContextProvider value={NetworkPluginID.PLUGIN_EVM}>
-            <ChainContextProvider value={{ chainId: ChainId.Mainnet }}>
-                <TrendingView isPopper={false} name={name} tagType={type_} dataProviders={dataProviders} />
-            </ChainContextProvider>
-        </NetworkContextProvider>
+        <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM, chainId: ChainId.Mainnet }}>
+            <TrendingView isPopper={false} name={name} tagType={type_} dataProviders={dataProviders} />
+        </Web3ContextProvider>
     )
 }

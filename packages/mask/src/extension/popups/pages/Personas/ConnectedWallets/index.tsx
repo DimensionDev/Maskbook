@@ -2,7 +2,7 @@ import { memo } from 'react'
 import { useAsync, useAsyncFn } from 'react-use'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { compact } from 'lodash-unified'
-import { useChainId, useWallets, useWeb3State } from '@masknet/web3-hooks-base'
+import { useChainContext, useWallets, useWeb3State } from '@masknet/web3-hooks-base'
 import { isSameAddress, isGreaterThan } from '@masknet/web3-shared-base'
 import { NetworkPluginID, NextIDAction, NextIDPlatform, PopupRoutes } from '@masknet/shared-base'
 import { usePopupCustomSnackbar } from '@masknet/theme'
@@ -17,7 +17,7 @@ import { MaskMessages } from '../../../../../../shared/messages.js'
 
 const ConnectedWallets = memo(() => {
     const { t } = useI18N()
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { NameService } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const wallets = useWallets(NetworkPluginID.PLUGIN_EVM)
     const navigate = useNavigate()

@@ -2,7 +2,7 @@ import { Trans } from 'react-i18next'
 import { Icons } from '@masknet/icons'
 import { Box } from '@mui/material'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
-import { NetworkContextProvider } from '@masknet/web3-hooks-base'
+import { Web3ContextProvider } from '@masknet/web3-hooks-base'
 import { SocialAddressType } from '@masknet/web3-shared-base'
 import { NetworkPluginID, parseURLs } from '@masknet/shared-base'
 import { type Plugin, usePostInfoDetails, usePluginWrapper } from '@masknet/plugin-infra/content-script'
@@ -22,9 +22,9 @@ const TabConfig: Plugin.SNSAdaptor.ProfileTab = {
         TabContent({ socialAccount, identity }) {
             if (!socialAccount) return null
             return (
-                <NetworkContextProvider value={socialAccount.pluginID}>
+                <Web3ContextProvider value={{ pluginID: socialAccount.pluginID }}>
                     <CollectionList socialAccount={socialAccount} persona={identity?.publicKey} profile={identity} />
-                </NetworkContextProvider>
+                </Web3ContextProvider>
             )
         },
     },
@@ -78,13 +78,13 @@ const sns: Plugin.SNSAdaptor.Definition = {
                     if (!socialAccount) return null
                     return (
                         <Box pr={1.5}>
-                            <NetworkContextProvider value={socialAccount.pluginID}>
+                            <Web3ContextProvider value={{ pluginID: socialAccount.pluginID }}>
                                 <CollectionList
                                     socialAccount={socialAccount}
                                     persona={identity?.publicKey}
                                     profile={identity}
                                 />
-                            </NetworkContextProvider>
+                            </Web3ContextProvider>
                         </Box>
                     )
                 },

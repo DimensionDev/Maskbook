@@ -15,7 +15,7 @@ import { PluginSkeleton } from './PluginSkeleton.js'
 import { TabState, TransactionType } from '../types/index.js'
 import { resolveAssetLinkOnCryptoartAI, resolveWebLinkOnCryptoartAI } from '../pipes/index.js'
 import { ActionBar } from './ActionBar.js'
-import { useChainId } from '@masknet/web3-hooks-base'
+import { useChainContext } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { PLUGIN_NAME } from '../constants.js'
 
@@ -80,7 +80,7 @@ export interface CollectibleProps {}
 export function Collectible(props: CollectibleProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { asset, events, tabIndex, setTabIndex, chainId: expectChainId } = CollectibleState.useContainer()
 
     const assetSource = useMemo(() => {

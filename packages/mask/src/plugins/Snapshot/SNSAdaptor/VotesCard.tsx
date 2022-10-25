@@ -4,8 +4,8 @@ import millify from 'millify'
 import { formatEthereumAddress, explorerResolver, formatPercentage } from '@masknet/web3-shared-evm'
 import { Avatar, Badge, Box, Link, List, ListItem, Typography } from '@mui/material'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
-import { useChainId } from '@masknet/web3-hooks-base'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { useChainContext } from '@masknet/web3-hooks-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
 import { resolveIPFS_URL } from '@masknet/web3-shared-base'
 import { useI18N } from '../../../utils/index.js'
 import { EthereumBlockie } from '../../../web3/UI/EthereumBlockie.js'
@@ -89,7 +89,7 @@ const useStyles = makeStyles()((theme) => {
 })
 
 function Content() {
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const identifier = useContext(SnapshotContext)
     const { payload: votes } = useVotes(identifier)
     const { classes, theme } = useStyles()

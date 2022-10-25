@@ -16,7 +16,7 @@ import { StyledLinearProgress } from '../../ITO/SNSAdaptor/StyledLinearProgress.
 import { RedPacketJSONPayload, RedPacketJSONPayloadFromChain, RedPacketStatus } from '../types.js'
 import { useAvailabilityComputed } from './hooks/useAvailabilityComputed.js'
 import { useRefundCallback } from './hooks/useRefundCallback.js'
-import { useAccount, useChainId, useFungibleToken, useWeb3Connection } from '@masknet/web3-hooks-base'
+import { useChainContext, useFungibleToken, useWeb3Connection } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { formatBalance, FungibleToken, isSameAddress } from '@masknet/web3-shared-base'
 
@@ -168,8 +168,7 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
     const { history, onSelect } = props
     const t = useI18N()
     const { classes } = useStyles()
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
     const { HAPPY_RED_PACKET_ADDRESS_V4 } = useRedPacketConstants(chainId)
     const isSmall = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'))

@@ -1,14 +1,13 @@
 import { useAsyncFn } from 'react-use'
 import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
 import { isSameAddress } from '@masknet/web3-shared-base'
-import { NetworkPluginID } from '@masknet/shared-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
 import { isValidAddress, GasConfig, TransactionEventType } from '@masknet/web3-shared-evm'
-import { useAccount, useChainId } from '@masknet/web3-hooks-base'
+import { useChainContext } from '@masknet/web3-hooks-base'
 import { useERC721TokenContract } from './useERC721TokenContract.js'
 
 export function useERC721TokenTransferCallback(address?: string) {
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const erc721Contract = useERC721TokenContract(chainId, address)
 
     return useAsyncFn(

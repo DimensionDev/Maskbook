@@ -31,8 +31,7 @@ import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { useGasConfig } from '../../hooks/index.js'
 import { TransferTab } from './types.js'
 import {
-    useAccount,
-    useChainId,
+    useChainContext,
     useGasPrice,
     useLookupAddress,
     useNetworkDescriptor,
@@ -60,7 +59,7 @@ const GAS_LIMIT = 30000
 
 export const TransferERC721 = memo(() => {
     const t = useDashboardI18N()
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const anchorEl = useRef<HTMLDivElement | null>(null)
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
 
@@ -86,7 +85,6 @@ export const TransferERC721 = memo(() => {
     const network = useNetworkDescriptor()
     const { Others } = useWeb3State()
 
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const nativeToken = useNativeToken(NetworkPluginID.PLUGIN_EVM)
     const nativeTokenPrice = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM)
     // form

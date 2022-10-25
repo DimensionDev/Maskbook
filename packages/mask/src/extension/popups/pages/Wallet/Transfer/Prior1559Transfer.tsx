@@ -31,7 +31,7 @@ import { ExpandMore } from '@mui/icons-material'
 import { LoadingButton } from '@mui/lab'
 import { TransferAddressError } from '../type.js'
 import {
-    useChainId,
+    useChainContext,
     useFungibleTokenBalance,
     useWallet,
     useWeb3Connection,
@@ -159,10 +159,10 @@ export interface Prior1559TransferProps {
 export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, openAssetMenu, otherWallets }) => {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const { pluginID: currentPluginId } = useNetworkContext()
+    const { pluginID: currentPluginID } = useNetworkContext()
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
     const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const hub = useWeb3Hub(NetworkPluginID.PLUGIN_EVM)
     const [minGasLimitContext, setMinGasLimitContext] = useState(0)
     const navigate = useNavigate()
@@ -223,7 +223,7 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
 
         methods.clearErrors('address')
 
-        if (address.includes('.eth') && currentPluginId !== NetworkPluginID.PLUGIN_EVM) {
+        if (address.includes('.eth') && currentPluginID !== NetworkPluginID.PLUGIN_EVM) {
             setAddressTip({
                 type: TransferAddressError.NETWORK_NOT_SUPPORT,
                 message: t('wallet_transfer_error_no_support_ens'),
@@ -247,7 +247,7 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
                 message: t('wallet_transfer_error_is_contract_address'),
             })
         }
-    }, [address, EthereumAddress.isValid, methods.clearErrors, connection, currentPluginId])
+    }, [address, EthereumAddress.isValid, methods.clearErrors, connection, currentPluginID])
 
     // #region Set default gas price
     useAsync(async () => {

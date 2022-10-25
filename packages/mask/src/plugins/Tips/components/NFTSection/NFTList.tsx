@@ -3,7 +3,7 @@ import classnames from 'classnames'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { ElementAnchor, NFTCardStyledAssetPlayer, RetryHint } from '@masknet/shared'
-import { useChainId, useWeb3State, useNetworkContext } from '@masknet/web3-hooks-base'
+import { useChainContext, useWeb3State, useNetworkContext } from '@masknet/web3-hooks-base'
 import { isSameAddress, NonFungibleToken } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { Checkbox, List, ListItem, Radio, Stack, Tooltip } from '@mui/material'
@@ -98,7 +98,7 @@ interface NFTItemProps {
 
 export const NFTItem: FC<NFTItemProps> = ({ token }) => {
     const { classes } = useStyles()
-    const chainId = useChainId()
+    const { chainId } = useChainContext()
     return (
         <NFTCardStyledAssetPlayer
             chainId={chainId}

@@ -1,7 +1,7 @@
 import { useAsyncRetry } from 'react-use'
 import { head } from 'lodash-unified'
 import type { Order } from 'opensea-js/lib/types'
-import { useChainId } from '@masknet/web3-hooks-base'
+import { useChainContext } from '@masknet/web3-hooks-base'
 import { getOrderUnitPrice } from '@masknet/web3-providers'
 import { ZERO } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
@@ -10,7 +10,7 @@ import { isOpenSeaSupportedChainId } from '../../../pipes/index.js'
 import type { AssetOrder } from '../../../../../../../../web3-providers/src/opensea/types.js'
 
 export function useAssetOrder(address?: string, tokenId?: string) {
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const opensea = useOpenSea(NetworkPluginID.PLUGIN_EVM, isOpenSeaSupportedChainId(chainId) ? chainId : undefined)
 
     return useAsyncRetry(async () => {
