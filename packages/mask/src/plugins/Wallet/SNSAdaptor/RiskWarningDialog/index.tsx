@@ -1,16 +1,16 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import classnames from 'classnames'
 import { Trans } from 'react-i18next'
-import { InjectedDialog, ActionButtonPromise } from '@masknet/shared'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { ActionButtonPromise } from '@masknet/shared'
 import { DialogActions, DialogContent, Typography } from '@mui/material'
 import { getMaskColor, makeStyles, useCustomSnackbar, ActionButton } from '@masknet/theme'
 import { isDashboardPage, NetworkPluginID } from '@masknet/shared-base'
 import { Icons } from '@masknet/icons'
 import { useWeb3State } from '@masknet/web3-hooks-base'
-import { useI18N, useMatchXS } from '../../../../utils/index.js'
-import { WalletMessages } from '../../messages.js'
+import { useI18N } from '../../../../utils/index.js'
 import { WalletStatusBox } from '../../../../components/shared/WalletStatusBox/index.js'
+import { useLocation } from 'react-router-dom'
+import type { WalletRiskWarningDialogEvent } from '@masknet/plugin-wallet'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {
@@ -49,29 +49,28 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export function WalletRiskWarningDialog() {
+export interface WalletRiskWarningDialogprops {
+    closeDialog: () => void
+}
+
+export function WalletRiskWarningDialog({ closeDialog }: WalletRiskWarningDialogprops) {
     const { t } = useI18N()
     const { classes } = useStyles()
     const { showSnackbar } = useCustomSnackbar()
-    const isMobile = useMatchXS()
 
     const [account, setAccount] = useState('')
     const [pluginID, setPluginID] = useState<NetworkPluginID>()
 
     const { RiskWarning } = useWeb3State(pluginID)
 
-    const { open, setDialog: setRiskWarningDialog } = useRemoteControlledDialog(
-        WalletMessages.events.walletRiskWarningDialogUpdated,
-        (ev) => {
-            if (!ev.open) return
-            setAccount(ev.account)
-            setPluginID(ev.pluginID)
-        },
-    )
+    const location = useLocation()
+    const state = location.state as WalletRiskWarningDialogEvent | undefined
 
-    const onClose = useCallback(async () => {
-        setRiskWarningDialog({ open: false })
-    }, [setRiskWarningDialog])
+    useEffect(() => {
+        if (!state) return
+        setAccount(state.account)
+        setPluginID(state.pluginID)
+    }, [state])
 
     const onConfirm = useCallback(async () => {
         if (!account) {
@@ -82,14 +81,11 @@ export function WalletRiskWarningDialog() {
             return
         }
         await RiskWarning?.approve?.(account)
-        setRiskWarningDialog({ open: false })
-    }, [showSnackbar, account, setRiskWarningDialog])
+        closeDialog()
+    }, [showSnackbar, account])
 
     return (
-        <InjectedDialog
-            title={isMobile ? undefined : t('wallet_risk_warning_dialog_title')}
-            open={open}
-            onClose={onClose}>
+        <>
             <DialogContent className={classes.paper}>
                 <div className={classes.icon}>
                     <Icons.Warning size={90} sx={{ filter: 'drop-shadow(0px 6px 12px rgba(255, 53, 69, 0.2))' }} />
@@ -113,7 +109,7 @@ export function WalletRiskWarningDialog() {
                     fullWidth
                     variant="outlined"
                     color="secondary"
-                    onClick={onClose}>
+                    onClick={closeDialog}>
                     {t('cancel')}
                 </ActionButton>
                 <ActionButtonPromise
@@ -130,6 +126,6 @@ export function WalletRiskWarningDialog() {
                     complete={t('done')}
                 />
             </DialogActions>
-        </InjectedDialog>
+        </>
     )
 }

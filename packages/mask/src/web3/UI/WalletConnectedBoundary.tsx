@@ -1,7 +1,5 @@
 import { makeStyles, useStylesExtends, ActionButton, ActionButtonProps } from '@masknet/theme'
 import classNames from 'classnames'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { WalletMessages } from '../../plugins/Wallet/messages.js'
 import { useI18N } from '../../utils/index.js'
 import { isZero } from '@masknet/web3-shared-base'
 import {
@@ -13,6 +11,7 @@ import {
 import { useGlobalDialogController } from '@masknet/shared'
 import { useCallback } from 'react'
 import { GlobalDialogRoutes } from '@masknet/shared-base'
+import type { WalletRiskWarningDialogEvent } from '@masknet/plugin-wallet'
 
 const useStyles = makeStyles()((theme) => ({
     button: {
@@ -39,10 +38,6 @@ export function WalletConnectedBoundary(props: WalletConnectedBoundaryProps) {
     const { account, chainId: chainIdValid } = useChainContext()
     const nativeTokenBalance = useNativeTokenBalance()
     const approved = useRiskWarningApproved()
-
-    const { setDialog: setRiskWarningDialog } = useRemoteControlledDialog(
-        WalletMessages.events.walletRiskWarningDialogUpdated,
-    )
 
     const { openGlobalDialog } = useGlobalDialogController()
 
@@ -71,10 +66,8 @@ export function WalletConnectedBoundary(props: WalletConnectedBoundaryProps) {
                 fullWidth
                 variant="contained"
                 onClick={() => {
-                    setRiskWarningDialog({
-                        open: true,
-                        account,
-                        pluginID,
+                    openGlobalDialog<WalletRiskWarningDialogEvent>(GlobalDialogRoutes.RiskWarning, {
+                        state: { account, pluginID },
                     })
                 }}
                 {...props.ActionButtonProps}>

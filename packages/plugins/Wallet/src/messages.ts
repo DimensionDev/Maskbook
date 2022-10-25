@@ -49,15 +49,10 @@ export type GasSettingDialogEvent = {
     gasOption?: GasOptionType | null
 }
 
-export type WalletRiskWarningDialogEvent =
-    | {
-          open: true
-          account: string
-          pluginID: NetworkPluginID
-      }
-    | {
-          open: false
-      }
+export type WalletRiskWarningDialogEvent = {
+    account: string
+    pluginID: NetworkPluginID
+}
 
 export type SelectNftContractDialogEvent = {
     open: boolean
@@ -98,11 +93,6 @@ export interface WalletMessage {
      * WalletConnect QR Code dialog
      */
     walletConnectQRCodeDialogUpdated: WalletConnectQRCodeDialogEvent
-
-    /**
-     * Wallet Risk Warning dialog
-     */
-    walletRiskWarningDialogUpdated: WalletRiskWarningDialogEvent
 
     walletsUpdated: void
     phrasesUpdated: void

@@ -807,7 +807,7 @@ export namespace Plugin.SNSAdaptor {
         /**
          * The name of global dialog title
          */
-        label: I18NStringField
+        label?: I18NStringField
         path: string
         UI: {
             DialogContent: ComponentType<{ closeDialog: () => void }>
