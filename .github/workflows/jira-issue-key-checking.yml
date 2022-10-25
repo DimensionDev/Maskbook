@@ -11,7 +11,7 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     steps:
-      - uses: fgiuliani/jira-issue-key-checker@v1.0.0
+      - uses: fgiuliani/jira-issue-key-checker@master
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           jira-prefix: 'MF'
