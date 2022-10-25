@@ -1,5 +1,5 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { GlobalDialog } from '../../../components/InjectedComponents/GlobalDialog.js'
+import { GlobalDialog } from '@masknet/shared'
 import { createReactRootShadowed, startWatch } from '../../../utils/index.js'
 import { rootSelector } from '../utils/selector.js'
 

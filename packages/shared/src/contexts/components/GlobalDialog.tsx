@@ -4,19 +4,27 @@ import {
     useActivatedPluginsSNSAdaptor,
     useAvailablePlugins,
 } from '@masknet/plugin-infra/content-script'
+import { useActivatedPluginsDashboard } from '@masknet/plugin-infra/dashboard'
 import { InjectedDialog } from '@masknet/shared'
 import { CrossIsolationMessages, EMPTY_LIST, PluginID } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import type { ComponentType } from 'react'
 import { MemoryRouter, Routes, Route, useLocation, useNavigate } from 'react-router-dom'
 
-export function GlobalDialog() {
+export interface GlobalDialogProps {
+    kind?: 'page' | 'sns'
+}
+
+export function GlobalDialog({ kind = 'sns' }: GlobalDialogProps) {
     const activatedPlugins = useActivatedPluginsSNSAdaptor('any')
-    const displayPlugins = useAvailablePlugins(activatedPlugins, (plugins) => {
+    const dashboardPlugins = useActivatedPluginsDashboard()
+    const displayPlugins = useAvailablePlugins(kind === 'sns' ? activatedPlugins : dashboardPlugins, (plugins) => {
         return plugins.flatMap((x) => x.GlobalDialogContents?.map((y) => ({ ...y, pluginID: x.ID })) ?? EMPTY_LIST)
     })
 
     const initialEntries = displayPlugins.map((plugin) => plugin.path)
+
+    if (!initialEntries.length) return null
     return (
         <MemoryRouter initialEntries={initialEntries}>
             <GlobalDialogUI routes={displayPlugins} />

@@ -49,11 +49,11 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface WalletRiskWarningDialogprops {
+export interface WalletRiskWarningDialogProps {
     closeDialog: () => void
 }
 
-export function WalletRiskWarningDialog({ closeDialog }: WalletRiskWarningDialogprops) {
+export function WalletRiskWarningDialog({ closeDialog }: WalletRiskWarningDialogProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
     const { showSnackbar } = useCustomSnackbar()

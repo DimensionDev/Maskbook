@@ -8,7 +8,7 @@ import {
     DashboardLightTheme,
     useSystemPreferencePalette,
 } from '@masknet/theme'
-import { I18NextProviderHMR, SharedContextProvider } from '@masknet/shared'
+import { I18NextProviderHMR, SharedContextProvider, GlobalDialog } from '@masknet/shared'
 import { ErrorBoundary } from '@masknet/shared-base-ui'
 import { createInjectHooksRenderer, useActivatedPluginsDashboard } from '@masknet/plugin-infra/dashboard'
 import { Web3ContextProvider } from '@masknet/web3-hooks-base'
@@ -51,6 +51,7 @@ export default function DashboardRoot() {
                                     <SharedContextProvider>
                                         <HashRouter>
                                             <Pages />
+                                            <GlobalDialog kind="page" />
                                         </HashRouter>
                                         <PluginRender />
                                     </SharedContextProvider>

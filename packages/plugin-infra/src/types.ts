@@ -802,18 +802,6 @@ export namespace Plugin.SNSAdaptor {
         }
     }
 
-    export interface GlobalDialogContent {
-        ID: PluginID
-        /**
-         * The name of global dialog title
-         */
-        label?: I18NStringField
-        path: string
-        UI: {
-            DialogContent: ComponentType<{ closeDialog: () => void }>
-        }
-    }
-
     /** Contribute a widget to other plugins. */
     export interface Widget {
         ID: string
@@ -877,8 +865,21 @@ export namespace Plugin.Dashboard {
             Web3,
             Web3Provider
         >
+        GlobalDialogContents?: GlobalDialogContent[]
         /** Plugin DO NOT need to define this. This will be auto set by the plugin host. */
         __general_ui__?: GeneralUI.DefinitionDeferred
+    }
+}
+
+export interface GlobalDialogContent {
+    ID: PluginID
+    /**
+     * The name of global dialog title
+     */
+    label?: I18NStringField
+    path: string
+    UI: {
+        DialogContent: ComponentType<{ closeDialog: () => void }>
     }
 }
 
