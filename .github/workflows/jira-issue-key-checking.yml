@@ -1,0 +1,20 @@
+name: "Check Jira Issue Key"
+
+on:
+  pull_request:
+    types:
+      - opened
+      - edited
+      - synchronize
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: DimensionDev/jira-issue-key-checker@master
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          jira-prefix: 'MF'
