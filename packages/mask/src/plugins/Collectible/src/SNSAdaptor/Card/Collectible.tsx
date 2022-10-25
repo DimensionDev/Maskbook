@@ -40,7 +40,7 @@ const useStyles = makeStyles()((theme) => {
             flex: 1,
             backgroundColor: theme.palette.maskColor.bg,
             overflow: 'auto',
-            maxHeight: 800,
+            maxHeight: 382,
             borderRadius: '0 0 12px 12px',
             scrollbarWidth: 'none',
             background: '#fff !important',
