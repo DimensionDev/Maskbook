@@ -54,7 +54,6 @@ export function useThemeMindsVariant(baseTheme: Theme) {
         setAutoFreeze(false)
 
         const MindsTheme = produce(baseTheme, (theme) => {
-            // theme.palette.background.paper = backgroundColor
             theme.palette.primary = {
                 light: toRGB(shade(primaryColorRGB, 10)),
                 main: toRGB(primaryColorRGB),
