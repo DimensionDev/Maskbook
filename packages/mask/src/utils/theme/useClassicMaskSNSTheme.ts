@@ -20,7 +20,6 @@ export function useClassicMaskSNSTheme() {
     const usePostTheme = useRef(activatedSocialNetworkUI.customization.useTheme || defaultUseTheme).current
     const palette = useSubscription(provider)
 
-    // const baseTheme = palette === 'dark' ? MaskDarkTheme : MaskLightTheme
     const maskTheme = palette === 'dark' ? MaskDarkTheme : MaskLightTheme
 
     // TODO: support RTL?

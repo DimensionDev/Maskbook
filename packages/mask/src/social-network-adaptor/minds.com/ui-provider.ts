@@ -31,6 +31,7 @@ import { injectAvatar } from './injection/Avatar/index.js'
 
 const useInjectedDialogClassesOverwriteMinds = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
+    console.log(theme)
     return {
         root: {
             display: 'flex',
