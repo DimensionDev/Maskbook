@@ -226,6 +226,7 @@ export function WalletStatusBox(props: WalletStatusBox) {
                             size="small"
                             onClick={async () => {
                                 props.closeDialog?.()
+                                // TODO: remove this after global dialog be implement
                                 await delay(500)
                                 closeWalletStatusDialog()
                                 await connection?.disconnect()
