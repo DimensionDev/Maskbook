@@ -10,8 +10,10 @@ import {
 import { useProfilePublicKey } from '../../hooks/useProfilePublicKey.js'
 import { PluginTipsMessages } from '../../messages.js'
 import { useTipsAccounts } from './useTipsAccounts.js'
+import type { SocialAccount } from '@masknet/web3-shared-base'
 
 interface Props extends HTMLProps<HTMLDivElement> {
+    accounts?: SocialAccount[]
     recipient?: string
     receiver?: ProfileIdentifier
     onStatusUpdate?(disabled: boolean): void
@@ -27,8 +29,15 @@ const useStyles = makeStyles()({
     },
 })
 
-// TODO: reduce re-render
-export const TipButton: FC<Props> = ({ className, receiver, recipient, children, onStatusUpdate, ...rest }) => {
+export const TipButton: FC<Props> = ({
+    className,
+    accounts: receivingAccounts = [],
+    receiver,
+    recipient,
+    children,
+    onStatusUpdate,
+    ...rest
+}) => {
     const { classes, cx } = useStyles()
 
     const { value: personaPubkey, loading: loadingPersona } = useProfilePublicKey(receiver)
@@ -49,7 +58,9 @@ export const TipButton: FC<Props> = ({ className, receiver, recipient, children,
         return false
     }, [pluginID, isVisitingUser])
 
-    const accounts = useTipsAccounts(identity, personaPubkey)
+    const accountsByIdentity = useTipsAccounts(identity, personaPubkey)
+    const accounts = [...receivingAccounts, ...accountsByIdentity]
+
     const disabled = loadingPersona || accounts.length === 0 || !isRuntimeAvailable
 
     useEffect(() => {
