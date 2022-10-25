@@ -192,7 +192,7 @@ export function Collectible(props: CollectibleProps) {
                         />
                     }
                     title={
-                        <Typography style={{ display: 'flex', alignItems: 'center' }}>
+                        <Typography component="div" style={{ display: 'flex', alignItems: 'center' }}>
                             <Typography className={classes.cardTitle}>{_asset.metadata?.name || '-'}</Typography>
                             {_asset.collection?.verified ? (
                                 <Icons.VerifiedCollection size={20} sx={{ marginLeft: 0.5 }} />
