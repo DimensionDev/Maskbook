@@ -66,9 +66,12 @@ const useStyles = makeStyles()((theme) => {
         subtitle: {
             marginRight: theme.spacing(0.5),
             maxHeight: '3rem',
-            overflow: 'hidden',
+            overflow: 'auto',
             wordBreak: 'break-word',
             color: theme.palette.maskColor.publicSecond,
+            '&::-webkit-scrollbar': {
+                display: 'none',
+            },
         },
         countdown: {
             fontSize: 12,
@@ -197,18 +200,11 @@ export function Collectible(props: CollectibleProps) {
                         </Typography>
                     }
                     subheader={
-                        <>
-                            {_asset.metadata?.description ? (
-                                <Box display="flex" alignItems="center">
-                                    <Typography className={classes.subtitle} component="div" variant="body2">
-                                        <Markdown
-                                            classes={{ root: classes.markdown }}
-                                            content={_asset.metadata.description}
-                                        />
-                                    </Typography>
-                                </Box>
-                            ) : null}
-                        </>
+                        _asset.metadata?.description ? (
+                            <Typography className={classes.subtitle} component="div" variant="body2">
+                                <Markdown classes={{ root: classes.markdown }} content={_asset.metadata.description} />
+                            </Typography>
+                        ) : null
                     }
                 />
                 <CardContent className={classes.content}>
