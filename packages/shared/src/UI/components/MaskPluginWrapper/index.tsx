@@ -91,7 +91,12 @@ export function MaskPostExtraInfoWrapper(props: PluginWrapperProps) {
     const publisherInfo = useMemo(() => {
         if (!publisher) return
         const main = (
-            <Typography variant="body1" fontSize={14} fontWeight="500" color={MaskColorVar.textPluginColor}>
+            <Typography
+                variant="body1"
+                fontSize={14}
+                fontWeight="500"
+                component="div"
+                color={MaskColorVar.textPluginColor}>
                 {publisher}
             </Typography>
         )
@@ -126,6 +131,7 @@ export function MaskPostExtraInfoWrapper(props: PluginWrapperProps) {
                     variant="body1"
                     fontSize={16}
                     fontWeight={700}
+                    component="div"
                     color={MaskColorVar.textPluginColor}>
                     {wrapperProps?.title ?? title ?? t.plugin_default_title()}
                 </Typography>
