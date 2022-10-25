@@ -2,7 +2,7 @@ import { FC, HTMLProps, MouseEventHandler, useCallback, useEffect, useMemo } fro
 import { makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
 import { useCurrentWeb3NetworkPluginID } from '@masknet/web3-hooks-base'
-import { ProfileIdentifier, NetworkPluginID } from '@masknet/shared-base'
+import { ProfileIdentifier, NetworkPluginID, EMPTY_LIST } from '@masknet/shared-base'
 import {
     useCurrentVisitingIdentity,
     useSocialIdentityByUseId,
@@ -10,7 +10,7 @@ import {
 import { useProfilePublicKey } from '../../hooks/useProfilePublicKey.js'
 import { PluginTipsMessages } from '../../messages.js'
 import { useTipsAccounts } from './useTipsAccounts.js'
-import type { SocialAccount } from '@masknet/web3-shared-base'
+import { SocialAccount, SocialAddressType } from '@masknet/web3-shared-base'
 
 interface Props extends HTMLProps<HTMLDivElement> {
     // This is workaround solution, link issue mf-2536 and pr #7576.
@@ -33,7 +33,7 @@ const useStyles = makeStyles()({
 
 export const TipButton: FC<Props> = ({
     className,
-    accounts: receivingAccounts = [],
+    accounts: receivingAccounts = EMPTY_LIST,
     receiver,
     recipient,
     children,
@@ -61,7 +61,17 @@ export const TipButton: FC<Props> = ({
     }, [pluginID, isVisitingUser])
 
     const accountsByIdentity = useTipsAccounts(identity, personaPubkey)
-    const accounts = [...receivingAccounts, ...accountsByIdentity]
+    const accounts = useMemo(
+        () =>
+            [...receivingAccounts, ...accountsByIdentity].sort((a, z) => {
+                const aHasNextId = a.supportedAddressTypes?.includes(SocialAddressType.NEXT_ID)
+                const zHasNextId = z.supportedAddressTypes?.includes(SocialAddressType.NEXT_ID)
+                if (aHasNextId === zHasNextId) return 0
+                return aHasNextId ? -1 : zHasNextId ? 1 : 0
+            }),
+
+        [receivingAccounts, accountsByIdentity],
+    )
 
     const disabled = loadingPersona || accounts.length === 0 || !isRuntimeAvailable
 
