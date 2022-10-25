@@ -11,7 +11,7 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     steps:
-      - uses: fgiuliani/jira-issue-key-checker@master
+      - uses: DimensionDev/jira-issue-key-checker@master
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           jira-prefix: 'MF'
