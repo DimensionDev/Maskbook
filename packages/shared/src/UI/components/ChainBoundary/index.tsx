@@ -14,12 +14,13 @@ import {
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { delay } from '@dimensiondev/kit'
-import { useGlobalDialogController, WalletIcon } from '../WalletIcon/index.js'
+import { WalletIcon } from '../WalletIcon/index.js'
 import { ActionButtonPromise, ActionButtonPromiseProps } from '../ActionButton/index.js'
 import { Icons } from '@masknet/icons'
 import { GlobalDialogRoutes, NetworkPluginID } from '@masknet/shared-base'
 import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
 import { useSharedI18N } from '../../../locales/index.js'
+import { useGlobalDialogController } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     tooltip: {
@@ -95,7 +96,7 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
     const { openGlobalDialog } = useGlobalDialogController()
 
     const openSelectProviderDialog = useCallback(() => {
-        openGlobalDialog<SelectProviderDialogEvent>(GlobalDialogRoutes.SelectProvider, {
+        openGlobalDialog<{ network?: Web3Helper.NetworkDescriptorAll }>(GlobalDialogRoutes.SelectProvider, {
             state: { network: expectedNetworkDescriptor },
         })
     }, [expectedNetworkDescriptor])
@@ -105,7 +106,7 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
         await delay(1000)
 
         if (!isPluginIDMatched || actualProviderType === ProviderType.WalletConnect) {
-            openGlobalDialog<SelectProviderDialogEvent>(GlobalDialogRoutes.SelectProvider, {
+            openGlobalDialog<{ network?: Web3Helper.NetworkDescriptorAll }>(GlobalDialogRoutes.SelectProvider, {
                 state: { network: expectedNetworkDescriptor },
             })
             return 'init'

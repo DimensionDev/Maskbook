@@ -1,5 +1,5 @@
 import classNames from 'classnames'
-import { useCopyToClipboard, useCopyToClipboard } from 'react-use'
+import { useCopyToClipboard } from 'react-use'
 import {
     useChainContext,
     useNetworkDescriptor,
