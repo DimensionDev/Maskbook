@@ -45,8 +45,8 @@ function getNextIDPlatform() {
     return NextIDPlatform.Twitter
 }
 
-async function getWalletAddressesFromNextID(userId?: string, publicKey?: string) {
-    if (!userId || !publicKey) return EMPTY_LIST
+async function getWalletAddressesFromNextID(userId?: string) {
+    if (!userId) return EMPTY_LIST
     const bindings = await NextIDProof.queryAllExistedBindingsByPlatform(getNextIDPlatform(), userId)
     return bindings.flatMap((x) =>
         x.proofs.filter((y) => y.platform === NextIDPlatform.Ethereum && isValidAddress(y.identity)),
@@ -144,8 +144,8 @@ export class IdentityService extends IdentityServiceState {
     }
 
     /** Read a social address from NextID. */
-    private async getSocialAddressesFromNextID({ identifier, publicKey }: SocialIdentity) {
-        const listOfAddress = await getWalletAddressesFromNextID(identifier?.userId, publicKey)
+    private async getSocialAddressesFromNextID({ identifier }: SocialIdentity) {
+        const listOfAddress = await getWalletAddressesFromNextID(identifier?.userId)
         return compact(
             listOfAddress.map((x) =>
                 this.createSocialAddress(SocialAddressType.NEXT_ID, x.identity, x.latest_checked_at, x.created_at),

@@ -8,7 +8,10 @@ import { useTipsSetting } from '../../hooks/useTipsSetting.js'
 export function useTipsAccounts(identity: IdentityResolved | undefined, personaPubkey: string | undefined) {
     const { value: TipsSetting } = useTipsSetting(personaPubkey)
     const { value: socialAccounts = EMPTY_LIST } = useSocialAccountsAll(identity)
+
+    const hiddenAddresses = TipsSetting?.hiddenAddresses
     return useMemo(() => {
-        return socialAccounts.filter((x) => !TipsSetting?.hiddenAddresses?.some((y) => isSameAddress(y, x.address)))
-    }, [socialAccounts, TipsSetting?.hiddenAddresses])
+        if (!hiddenAddresses?.length) return socialAccounts
+        return socialAccounts.filter((x) => !hiddenAddresses.some((y) => isSameAddress(y, x.address)))
+    }, [socialAccounts, hiddenAddresses])
 }
