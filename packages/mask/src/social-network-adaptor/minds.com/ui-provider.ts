@@ -48,6 +48,8 @@ const useInjectedDialogClassesOverwriteMinds = makeStyles()((theme) => {
             maxWidth: 'none',
             boxShadow: 'none',
             backgroundImage: 'none',
+            minHeight: 400,
+            maxHeight: 620,
             [smallQuery]: {
                 '&': {
                     display: 'block !important',
@@ -56,11 +58,16 @@ const useInjectedDialogClassesOverwriteMinds = makeStyles()((theme) => {
             },
         },
         dialogTitle: {
-            display: 'flex',
+            display: 'grid',
+            gridTemplateColumns: '1fr auto 1fr',
             alignItems: 'center',
-            padding: '3px 16px',
-            borderBottom: `1px solid ${theme.palette.mode === 'dark' ? '#2f3336' : '#eff3f4'}`,
-            '& > h2': {
+            padding: 16,
+            position: 'relative',
+            background: theme.palette.maskColor.modalTitleBg,
+            borderBottom: 'none',
+            '& > p': {
+                fontSize: 18,
+                lineHeight: '22px',
                 display: 'inline-block',
                 whiteSpace: 'nowrap',
                 overflow: 'hidden',
@@ -68,7 +75,7 @@ const useInjectedDialogClassesOverwriteMinds = makeStyles()((theme) => {
             },
             [smallQuery]: {
                 display: 'flex',
-                justifyContent: 'space-between',
+                justifyContent: 'start',
                 maxWidth: 600,
                 margin: '0 auto',
                 padding: '7px 14px 6px 11px !important',

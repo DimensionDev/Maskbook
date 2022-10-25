@@ -6,6 +6,8 @@ import { PostDialogHint } from '../../../components/InjectedComponents/PostDialo
 import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot.js'
 import { startWatch } from '../../../utils/watcher.js'
 import { postEditorInDialogSelector, postEditorInTimelineSelector } from '../utils/selector.js'
+import { isMinds } from '../base.js'
+import { activatedSocialNetworkUI } from '../../../social-network/ui.js'
 
 export function injectPostDialogHintAtMinds(signal: AbortSignal) {
     renderPostDialogHintTo(postEditorInDialogSelector(), signal, 'popup')
@@ -29,7 +31,12 @@ interface StyleProps {
 
 const useStyles = makeStyles<StyleProps>()((theme, { reason }) => ({
     buttonTransform: {
-        ...(reason === 'timeline' ? { width: '40px', transform: 'translateX(200px) translateY(-78px)' } : {}),
+        ...(reason === 'timeline'
+            ? {
+                  width: '40px',
+                  transform: !isMinds(activatedSocialNetworkUI) ? 'translateX(200px) translateY(-78px)' : '',
+              }
+            : {}),
     },
     iconButton: {
         '&:hover': {
@@ -45,8 +52,10 @@ function PostDialogHintAtMinds({ reason }: { reason: 'timeline' | 'popup' }) {
         () => CrossIsolationMessages.events.compositionDialogEvent.sendToLocal({ reason, open: true }),
         [reason],
     )
+
     return (
         <PostDialogHint
+            disableGuideTip
             size={17}
             iconType="minds"
             onHintButtonClicked={onHintButtonClicked}
