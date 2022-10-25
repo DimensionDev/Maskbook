@@ -1,7 +1,7 @@
 import { useAsyncFn } from 'react-use'
 import { NetworkPluginID } from '@masknet/shared-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
-import { useAccount, useChainId, useWeb3Connection } from '@masknet/web3-hooks-base'
+import { useChainContext, useWeb3Connection } from '@masknet/web3-hooks-base'
 import { useERC721TokenContract } from './useERC721TokenContract.js'
 
 /**
@@ -16,8 +16,9 @@ export function useERC721ContractSetApproveForAllCallback(
     callback?: () => void,
     _chainId?: ChainId,
 ) {
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM, _chainId)
+    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>({
+        chainId: _chainId,
+    })
     const erc721TokenContract = useERC721TokenContract(chainId, contractAddress)
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, { chainId: _chainId })
 

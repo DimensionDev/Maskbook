@@ -12,7 +12,7 @@ import { useI18N } from '../locales/index.js'
 import { useGrant } from '../hooks/useGrant.js'
 import { PluginGitcoinMessages } from '../messages.js'
 import { usePostLink } from '../../../components/DataSource/usePostInfo.js'
-import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
+import { ChainBoundary } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     root: {

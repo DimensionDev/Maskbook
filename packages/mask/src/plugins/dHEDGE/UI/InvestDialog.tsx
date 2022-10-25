@@ -7,7 +7,7 @@ import {
 } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles, ActionButton } from '@masknet/theme'
-import { useAccount, useFungibleTokenBalance } from '@masknet/web3-hooks-base'
+import { useChainContext, useFungibleTokenBalance } from '@masknet/web3-hooks-base'
 import { CrossIsolationMessages, NetworkPluginID } from '@masknet/shared-base'
 import { formatBalance, FungibleToken, isZero, rightShift } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
@@ -47,7 +47,7 @@ export function InvestDialog() {
     const [allowedTokens, setAllowedTokens] = useState<string[]>()
 
     // context
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
     // #region remote controlled dialog
     const { open, closeDialog } = useRemoteControlledDialog(PluginDHedgeMessages.InvestDialogUpdated, (ev) => {

@@ -1,12 +1,12 @@
 import { useState, useMemo } from 'react'
+import { useLocation } from 'react-use'
 import urlcat from 'urlcat'
 import classNames from 'classnames'
 import { styled } from '@mui/material/styles'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { IconClose, IconFull, IconShare } from '../constants.js'
 import { getCurrentIdentifier } from '../../../social-network-adaptor/utils.js'
-import { useLocation } from 'react-use'
-import { useChainId, useAccount } from '@masknet/web3-hooks-base'
+import { useChainContext } from '@masknet/web3-hooks-base'
 import type { GameInfo, GameNFT } from '../types.js'
 import { NetworkPluginID, EnhanceableSite } from '@masknet/shared-base'
 
@@ -91,7 +91,7 @@ interface Props {
 const GameWindow = (props: Props) => {
     const { gameInfo, tokenProps, isShow, onClose } = props
     const classes = useStylesExtends(useStyles(), {})
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
     const [isFullScreen, setFullScreen] = useState(false)
 
@@ -113,7 +113,6 @@ const GameWindow = (props: Props) => {
 
     const location = useLocation()
     const profile = useMemo(() => getCurrentIdentifier(), [location])
-    const chainId = useChainId()
     const gameUrl = useMemo(() => {
         return urlcat(gameInfo?.url ?? '', {
             dom: 'nff',

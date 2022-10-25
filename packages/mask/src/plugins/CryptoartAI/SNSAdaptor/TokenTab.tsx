@@ -8,8 +8,8 @@ import { FormattedAddress, Markdown } from '@masknet/shared'
 import { ChainId, chainResolver, explorerResolver, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { Account } from './Account.js'
 import { resolveWebLinkOnCryptoartAI } from '../pipes/index.js'
-import { NetworkPluginID } from '@masknet/shared-base'
-import { useChainId } from '@masknet/web3-hooks-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
+import { useChainContext } from '@masknet/web3-hooks-base'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -49,7 +49,7 @@ export interface TokenTabProps {}
 export function TokenTab(props: TokenTabProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { token, asset } = CollectibleState.useContainer()
 
     const assetSource = useMemo(() => {

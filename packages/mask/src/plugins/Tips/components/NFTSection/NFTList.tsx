@@ -1,12 +1,12 @@
-import { useChainId, useCurrentWeb3NetworkPluginID, useWeb3State } from '@masknet/web3-hooks-base'
+import { FC, useCallback } from 'react'
+import classnames from 'classnames'
+import { LoadingBase, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { ElementAnchor, NFTCardStyledAssetPlayer, RetryHint } from '@masknet/shared'
-import { LoadingBase, makeStyles } from '@masknet/theme'
+import { useChainContext, useWeb3State, useNetworkContext } from '@masknet/web3-hooks-base'
 import { isSameAddress, NonFungibleToken } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { Checkbox, List, ListItem, Radio, Stack, Tooltip } from '@mui/material'
-import classnames from 'classnames'
-import { FC, useCallback } from 'react'
 import type { TipNFTKeyPair } from '../../types/index.js'
 
 interface Props {
@@ -98,7 +98,7 @@ interface NFTItemProps {
 
 export const NFTItem: FC<NFTItemProps> = ({ token }) => {
     const { classes } = useStyles()
-    const chainId = useChainId()
+    const { chainId } = useChainContext()
     return (
         <NFTCardStyledAssetPlayer
             chainId={chainId}
@@ -126,7 +126,7 @@ export const NFTList: FC<Props> = ({
     loadError,
 }) => {
     const { classes } = useStyles()
-    const pluginID = useCurrentWeb3NetworkPluginID()
+    const { pluginID } = useNetworkContext()
 
     const isRadio = limit === 1
     const reachedLimit = selectedPairs.length >= limit

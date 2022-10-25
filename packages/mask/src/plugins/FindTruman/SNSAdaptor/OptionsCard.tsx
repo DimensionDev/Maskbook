@@ -6,7 +6,7 @@ import { RadioButtonChecked, RadioButtonUnchecked, DoneOutlined, Send, RefreshOu
 import NoNftCard from './NoNftCard.js'
 import { FindTrumanContext } from '../context.js'
 import { BorderLinearProgress } from './ResultCard.js'
-import { ActionButtonPromise } from '../../../extension/options-page/DashboardComponents/ActionButton.js'
+import { ActionButtonPromise } from '@masknet/shared'
 import { sumBy } from 'lodash-unified'
 
 const useOptionsStyles = makeStyles()((theme) => {

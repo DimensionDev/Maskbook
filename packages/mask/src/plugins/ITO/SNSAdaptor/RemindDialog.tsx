@@ -6,9 +6,9 @@ import { FormattedAddress, TokenIcon } from '@masknet/shared'
 import { useI18N } from '../../../utils/index.js'
 import { ChainId, formatEthereumAddress, explorerResolver, networkResolver, SchemaType } from '@masknet/web3-shared-evm'
 import { SwapStatus } from './SwapGuide.js'
-import { useNetworkType } from '@masknet/web3-hooks-base'
+import { useChainContext } from '@masknet/web3-hooks-base'
 import type { FungibleToken } from '@masknet/web3-shared-base'
-import { NetworkPluginID } from '@masknet/shared-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     reminderText: {
@@ -78,7 +78,7 @@ export function RemindDialog(props: RemindDialogProps) {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), {})
     const [agreeReminder, setAgreeReminder] = useState(false)
-    const networkType = useNetworkType(NetworkPluginID.PLUGIN_EVM)
+    const { networkType } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
     return (
         <>

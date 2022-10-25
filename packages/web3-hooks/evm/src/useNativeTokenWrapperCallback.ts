@@ -1,12 +1,12 @@
 import { useCallback } from 'react'
 import { isLessThan, isZero } from '@masknet/web3-shared-base'
-import { NetworkPluginID } from '@masknet/shared-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
 import { ChainId, encodeContractTransaction, GasOptionConfig } from '@masknet/web3-shared-evm'
-import { useAccount, useWeb3Connection } from '@masknet/web3-hooks-base'
+import { useChainContext, useWeb3Connection } from '@masknet/web3-hooks-base'
 import { useNativeTokenWrapperContract } from './useWrappedEtherContract.js'
 
 export function useNativeTokenWrapperCallback(chainId?: ChainId) {
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const wrapperContract = useNativeTokenWrapperContract(chainId)
     const connection = useWeb3Connection()
 

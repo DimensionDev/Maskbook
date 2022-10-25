@@ -1,14 +1,14 @@
 import { useMemo, useState } from 'react'
 import { useAsync, useUpdateEffect } from 'react-use'
 import { chunk, compact, flatten } from 'lodash-unified'
+import type { AbiItem } from 'web3-utils'
 import { DialogActions, DialogContent, Tab } from '@mui/material'
 import { EMPTY_LIST, isDashboardPage, NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles, MaskColorVar, MaskTabList, useTabs } from '@masknet/theme'
 import { ChainId, createContract, getAaveConstants, SchemaType, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
-import { InjectedDialog, PluginWalletStatusBar } from '@masknet/shared'
+import { InjectedDialog, PluginWalletStatusBar, ChainBoundary, NetworkTab } from '@masknet/shared'
 import { useI18N } from '../../../utils/index.js'
 import { AllProviderTradeContext } from '../../Trader/trader/useAllProviderTradeContext.js'
-import { NetworkTab } from '../../../components/shared/NetworkTab.js'
 import { SavingsProtocol, TabType } from '../types.js'
 import { SavingsTable } from './SavingsTable.js'
 import { SavingsFormDialog } from './SavingsForm.js'
@@ -17,11 +17,9 @@ import AaveProtocolDataProviderABI from '@masknet/web3-contracts/abis/AaveProtoc
 import { LidoProtocol } from '../protocols/LDOProtocol.js'
 import { AAVEProtocol } from '../protocols/AAVEProtocol.js'
 import { LDO_PAIRS } from '../constants.js'
-import type { AbiItem } from 'web3-utils'
 import { TabContext, TabPanel } from '@mui/lab'
-import { PluginWeb3ContextProvider, useChainId, useFungibleTokens, useWeb3 } from '@masknet/web3-hooks-base'
+import { Web3ContextProvider, useChainContext, useFungibleTokens, useWeb3 } from '@masknet/web3-hooks-base'
 import type { FungibleToken } from '@masknet/web3-shared-base'
-import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
 
 const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }) => ({
     abstractTabWrapper: {
@@ -73,7 +71,7 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
     const isDashboard = isDashboardPage()
     const { classes } = useStyles({ isDashboard })
 
-    const currentChainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { chainId: currentChainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const [chainId, setChainId] = useState<ChainId>(ChainId.Mainnet)
     const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM, { chainId })
 
@@ -132,7 +130,7 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
     const [currentTab, onChange, tabs] = useTabs('Deposit', 'Withdraw')
 
     return (
-        <PluginWeb3ContextProvider value={{ chainId: ChainId.Mainnet, pluginID: NetworkPluginID.PLUGIN_EVM }}>
+        <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM, chainId: ChainId.Mainnet }}>
             <AllProviderTradeContext.Provider>
                 <TabContext value={currentTab}>
                     <InjectedDialog
@@ -204,6 +202,6 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
                     />
                 ) : null}
             </AllProviderTradeContext.Provider>
-        </PluginWeb3ContextProvider>
+        </Web3ContextProvider>
     )
 }

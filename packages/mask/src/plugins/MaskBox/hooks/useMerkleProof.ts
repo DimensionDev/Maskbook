@@ -1,10 +1,10 @@
 import { useAsyncRetry } from 'react-use'
-import { useAccount } from '@masknet/web3-hooks-base'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { useChainContext } from '@masknet/web3-hooks-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
 import { getMerkleProof } from '../apis/index.js'
 
 export function useMerkelProof(root?: string) {
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     return useAsyncRetry(async () => {
         if (!root) return
 

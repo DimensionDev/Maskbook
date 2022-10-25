@@ -1,21 +1,14 @@
 import { useState } from 'react'
 import { useAsync } from 'react-use'
-import { ListItem, List, Typography, Link } from '@mui/material'
-import { TokenIcon } from '@masknet/shared'
-import { ChainId, NetworkType, SchemaType } from '@masknet/web3-shared-evm'
+import { ListItem, List, Typography, Link, Avatar } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { ActionButton, makeStyles, parseColor } from '@masknet/theme'
-import {
-    useAccount,
-    useWeb3State,
-    useNetworkDescriptor,
-    useNonFungibleTokenContract,
-    useWeb3Hub,
-} from '@masknet/web3-hooks-base'
-import { useERC721ContractSetApproveForAllCallback } from '@masknet/web3-hooks-evm'
+import type { ChainId, NetworkType, SchemaType } from '@masknet/web3-shared-evm'
+import { useERC20TokenApproveCallback } from '@masknet/web3-hooks-evm'
+import { useChainContext, useWeb3State, useNetworkDescriptor, useWeb3Hub } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { NetworkDescriptor, TokenType, NonFungibleContractSpender } from '@masknet/web3-shared-base'
-import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
+import { NetworkDescriptor, isGreaterThan, FungibleTokenSpender } from '@masknet/web3-shared-base'
+import { ChainBoundary } from '@masknet/shared'
 import { useI18N } from '../locales/index.js'
 import { ApprovalLoadingContent } from './ApprovalLoadingContent.js'
 import { ApprovalEmptyContent } from './ApprovalEmptyContent.js'
@@ -143,40 +136,40 @@ export const useStyles = makeStyles<{ listItemBackground?: string; listItemBackg
     }),
 )
 
-export function ApprovalNFTContent({ chainId }: { chainId: ChainId }) {
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const hub = useWeb3Hub(NetworkPluginID.PLUGIN_EVM)
-    const { value: spenderList, loading } = useAsync(
-        async () => hub?.getNonFungibleTokenSpenders?.(chainId, account),
+export function ApprovalTokenContent({ chainId }: { chainId: ChainId }) {
+    const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+    const hub = useWeb3Hub(NetworkPluginID.PLUGIN_EVM, { chainId })
+
+    const { value: spenders, loading } = useAsync(
+        async () => hub?.getFungibleTokenSpenders?.(chainId, account),
         [chainId, account, hub],
     )
-
     const networkDescriptor = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, chainId)
     const { classes } = useStyles({
         listItemBackground: networkDescriptor?.backgroundGradient,
-        listItemBackgroundIcon: networkDescriptor ? `url("${networkDescriptor?.icon}")` : undefined,
+        listItemBackgroundIcon: networkDescriptor ? `url("${networkDescriptor.icon}")` : undefined,
     })
 
-    return loading ? (
-        <ApprovalLoadingContent />
-    ) : !spenderList || spenderList.length === 0 ? (
-        <ApprovalEmptyContent />
-    ) : (
+    if (loading) return <ApprovalLoadingContent />
+
+    if (!spenders || spenders.length === 0) return <ApprovalEmptyContent />
+
+    return (
         <List className={classes.approvalContentWrapper}>
-            {spenderList.map((spender, i) => (
-                <ApprovalNFTItem key={i} spender={spender} networkDescriptor={networkDescriptor} chainId={chainId} />
+            {spenders.map((spender, i) => (
+                <ApprovalTokenItem key={i} spender={spender} networkDescriptor={networkDescriptor} chainId={chainId} />
             ))}
         </List>
     )
 }
 
-interface ApprovalNFTItemProps {
-    spender: NonFungibleContractSpender<ChainId, SchemaType>
+interface ApprovalTokenItemProps {
     chainId: ChainId
+    spender: FungibleTokenSpender<ChainId, SchemaType>
     networkDescriptor?: NetworkDescriptor<ChainId, NetworkType>
 }
 
-function ApprovalNFTItem(props: ApprovalNFTItemProps) {
+function ApprovalTokenItem(props: ApprovalTokenItemProps) {
     const { networkDescriptor, spender, chainId } = props
     const [cancelled, setCancelled] = useState(false)
     const t = useI18N()
@@ -186,48 +179,28 @@ function ApprovalNFTItem(props: ApprovalNFTItemProps) {
     })
     const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
 
-    const [approveState, approveCallback] = useERC721ContractSetApproveForAllCallback(
-        spender.contract.address,
+    const [_, transactionState, approveCallback] = useERC20TokenApproveCallback(
+        spender.tokenInfo.address,
+        '0',
         spender.address,
-        false,
         () => setCancelled(true),
         chainId,
     )
-
-    const { value: contractDetailed } = useNonFungibleTokenContract(
-        NetworkPluginID.PLUGIN_EVM,
-        spender.contract.address ?? '',
-        SchemaType.ERC721,
-        {
-            chainId,
-        },
-    )
-
     return cancelled ? null : (
         <div className={classes.listItemWrapper}>
             <ListItem className={classes.listItem}>
                 <div className={classes.listItemInfo}>
                     <div>
-                        <TokenIcon
-                            address={spender.contract.address}
-                            name={spender.contract.name}
-                            label=""
-                            logoURL={contractDetailed?.iconURL}
-                            className={classes.logoIcon}
-                            tokenType={TokenType.NonFungible}
-                        />
-
-                        {contractDetailed ? (
-                            <Typography className={classes.primaryText}>{contractDetailed?.symbol}</Typography>
-                        ) : null}
-                        <Typography className={classes.secondaryText}>{spender.contract.name}</Typography>
+                        <Avatar src={spender.tokenInfo.logoURL} className={classes.logoIcon} />
+                        <Typography className={classes.primaryText}>{spender.tokenInfo.symbol}</Typography>
+                        <Typography className={classes.secondaryText}>{spender.tokenInfo.name}</Typography>
                     </div>
                     <div className={classes.contractInfo}>
                         <Typography className={classes.secondaryText}>{t.contract()}</Typography>
-                        {!spender.logo ? null : typeof spender.logo === 'string' ? (
+                        {typeof spender.logo === 'string' ? (
                             <img src={spender.logo} className={classes.spenderLogoIcon} />
                         ) : (
-                            <div className={classes.spenderMaskLogoIcon}>{spender.logo}</div>
+                            <div className={classes.spenderMaskLogoIcon}>{spender.logo ?? ''}</div>
                         )}
                         <Typography className={classes.primaryText}>
                             {spender.name ?? Others?.formatAddress(spender.address, 4)}
@@ -241,11 +214,12 @@ function ApprovalNFTItem(props: ApprovalNFTItemProps) {
                         </Link>
                     </div>
                     <div>
-                        <Typography className={classes.secondaryText}>{t.collection_approval()}</Typography>
-                        <Typography className={classes.primaryText}>{spender.amount}</Typography>
+                        <Typography className={classes.secondaryText}>{t.approved_amount()}</Typography>
+                        <Typography className={classes.primaryText}>
+                            {isGreaterThan(spender.amount, '1e+10') ? t.infinite() : spender.amount}
+                        </Typography>
                     </div>
                 </div>
-
                 <ChainBoundary
                     expectedChainId={chainId}
                     expectedPluginID={NetworkPluginID.PLUGIN_EVM}
@@ -265,11 +239,11 @@ function ApprovalNFTItem(props: ApprovalNFTItemProps) {
                         failed: t.revoke(),
                     }}>
                     <ActionButton
-                        onClick={approveCallback}
-                        disabled={approveState.loading}
-                        loading={approveState.loading}
+                        onClick={() => approveCallback(true, true)}
+                        disabled={transactionState.loadingApprove}
+                        loading={transactionState.loadingApprove}
                         className={classes.button}>
-                        {approveState.loading ? t.revoking() : t.revoke()}
+                        {transactionState.loadingApprove ? t.revoking() : t.revoke()}
                     </ActionButton>
                 </ChainBoundary>
             </ListItem>

@@ -32,7 +32,7 @@ import {
 } from '@masknet/web3-shared-base'
 import { NetworkPluginID, EMPTY_LIST } from '@masknet/shared-base'
 import {
-    useAccount,
+    useChainContext,
     useBalance,
     useFungibleToken,
     useFungibleTokenBalance,
@@ -42,7 +42,7 @@ import {
 
 function useContext(initialState?: { boxId: string; hashRoot: string }) {
     const now = new Date()
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
     const { MASK_BOX_CONTRACT_ADDRESS } = useMaskBoxConstants()
     const coder = ABICoder as unknown as ABICoder.AbiCoder

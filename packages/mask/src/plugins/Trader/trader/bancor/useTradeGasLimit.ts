@@ -4,13 +4,12 @@ import type { AsyncState } from 'react-use/lib/useAsyncFn'
 import { pick } from 'lodash-unified'
 import type { SwapBancorRequest, TradeComputed } from '../../types/index.js'
 import { PluginTraderRPC } from '../../messages.js'
-import { useAccount, useChainId, useWeb3Connection } from '@masknet/web3-hooks-base'
+import { useChainContext, useWeb3Connection } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import BigNumber from 'bignumber.js'
 
 export function useTradeGasLimit(tradeComputed: TradeComputed<SwapBancorRequest> | null): AsyncState<number> {
-    const targetChainId = useChainId(NetworkPluginID.PLUGIN_EVM)
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const { account, chainId: targetChainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, { chainId: targetChainId })
 
     const trade: SwapBancorRequest | null = useMemo(() => {

@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Tab, Tabs, Paper, Card, CardHeader, CardContent, Link, Typography, Avatar, Box } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { useChainId } from '@masknet/web3-hooks-base'
+import { useChainContext } from '@masknet/web3-hooks-base'
 import { useI18N } from '../../../utils/index.js'
 import { CollectionView } from './CollectionView.js'
 import { DetailsView } from './DetailsView.js'
@@ -11,7 +11,7 @@ import { useFetchProject } from '../hooks/useProject.js'
 import { ActionBar } from './ActionBar.js'
 import { resolveProjectLinkOnArtBlocks, resolveUserLinkOnArtBlocks } from '../pipes/index.js'
 import { ArtBlocksLogoUrl } from '../constants.js'
-import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
+import { ChainBoundary } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -40,7 +40,7 @@ interface CollectibleProps {
 export function Collectible(props: CollectibleProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM, props?.chainId)
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>({ chainId: props?.chainId })
     const [tabIndex, setTabIndex] = useState(0)
 
     const { value, loading, error } = useFetchProject(props.projectId, chainId)

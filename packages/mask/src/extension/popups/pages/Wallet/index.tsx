@@ -11,7 +11,7 @@ import { WalletMessages, WalletRPC } from '../../../../plugins/Wallet/messages.j
 import SelectWallet from './SelectWallet/index.js'
 import { useWalletLockStatus } from './hooks/useWalletLockStatus.js'
 import { WalletHeader } from './components/WalletHeader/index.js'
-import { useChainId, useWallet, useWeb3State } from '@masknet/web3-hooks-base'
+import { useChainContext, useWallet, useWeb3State } from '@masknet/web3-hooks-base'
 import { TransactionDescriptorType } from '@masknet/web3-shared-base'
 import { EthereumMethodType, getPayloadConfig } from '@masknet/web3-shared-evm'
 
@@ -43,7 +43,7 @@ export default function Wallet() {
     const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
     const location = useLocation()
     const navigate = useNavigate()
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { TransactionFormatter } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const { isLocked, loading: getLockStatusLoading } = useWalletLockStatus()
 

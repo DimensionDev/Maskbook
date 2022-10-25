@@ -3,7 +3,7 @@ import { useBoolean } from 'react-use'
 import classnames from 'classnames'
 import { uniqWith } from 'lodash-unified'
 import { Icons } from '@masknet/icons'
-import { useAccount, useChainId, useCurrentWeb3NetworkPluginID, useNonFungibleAssets } from '@masknet/web3-hooks-base'
+import { useChainContext, useNonFungibleAssets, useNetworkContext } from '@masknet/web3-hooks-base'
 import { ElementAnchor, RetryHint } from '@masknet/shared'
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import { LoadingBase, makeStyles } from '@masknet/theme'
@@ -91,10 +91,8 @@ export const NFTSection: FC<Props> = ({ className, onEmpty, ...rest }) => {
     const t = useI18N()
     const [addTokenDialogIsOpen, openAddTokenDialog] = useBoolean(false)
     const selectedKey = tokenAddress || tokenId ? `${tokenAddress}_${tokenId}` : undefined
-    const account = useAccount()
-
-    const chainId = useChainId()
-    const pluginID = useCurrentWeb3NetworkPluginID()
+    const { pluginID } = useNetworkContext()
+    const { account, chainId } = useChainContext()
 
     const {
         value: fetchedTokens = EMPTY_LIST,

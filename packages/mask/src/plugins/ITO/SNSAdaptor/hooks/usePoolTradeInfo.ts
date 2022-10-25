@@ -1,6 +1,6 @@
 import { useAsyncRetry } from 'react-use'
-import { useChainId } from '@masknet/web3-hooks-base'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { useChainContext } from '@masknet/web3-hooks-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
 import { PluginITO_RPC } from '../../messages.js'
 
 /**
@@ -9,7 +9,7 @@ import { PluginITO_RPC } from '../../messages.js'
  * @param trader
  */
 export function usePoolTradeInfo(pid: string, trader: string) {
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     return useAsyncRetry(async () => {
         if (!pid || !trader) return
         return PluginITO_RPC.getTradeInfo(pid, trader, chainId)

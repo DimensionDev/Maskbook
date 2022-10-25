@@ -1,17 +1,16 @@
 import { memo, PropsWithChildren, useCallback, useMemo } from 'react'
 import { alpha, Box, Button } from '@mui/material'
 import { Icons } from '@masknet/icons'
+import { makeStyles, MaskColorVar } from '@masknet/theme'
 import {
-    useCurrentWeb3NetworkPluginID,
+    useNetworkContext,
     useProviderDescriptor,
     useRecentTransactions,
     useNetworkDescriptor,
     useWallet,
     useReverseAddress,
     useWeb3State,
-    useProviderType,
-    useChainId,
-    useAccount,
+    useChainContext,
 } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { GlobalDialogRoutes, isDashboardPage, NetworkPluginID } from '@masknet/shared-base'
@@ -20,7 +19,6 @@ import { useSharedI18N } from '../../../locales/index.js'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { WalletDescription } from './WalletDescription.js'
 import { Action } from './Action.js'
-import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { useGlobalDialogController } from '../../../hooks/useGlobalDialogController.js'
 
 const isDashboard = isDashboardPage()
@@ -61,12 +59,10 @@ export const PluginWalletStatusBar = memo<WalletStatusBarProps<NetworkPluginID>>
         const t = useSharedI18N()
         const { classes, cx } = useStyles()
 
-        const pluginID = useCurrentWeb3NetworkPluginID()
-        const account = useAccount(pluginID)
+        const { pluginID } = useNetworkContext()
+        const { account, chainId, providerType } = useChainContext()
         const wallet = useWallet(pluginID)
-        const chainId = useChainId(pluginID)
         const providerDescriptor = useProviderDescriptor()
-        const providerType = useProviderType()
         const networkDescriptor = useNetworkDescriptor(pluginID, chainId)
         const expectedNetworkDescriptor = useNetworkDescriptor(expectedPluginID, expectedChainId)
         const { value: domain } = useReverseAddress(pluginID, account)

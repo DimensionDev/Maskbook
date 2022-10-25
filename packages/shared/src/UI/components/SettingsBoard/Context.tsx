@@ -6,8 +6,8 @@ import { createContainer } from 'unstated-next'
 import { useSharedI18N } from '@masknet/shared'
 import {
     useGasOptions,
-    useCurrentWeb3NetworkPluginID,
-    useChainId,
+    useNetworkContext,
+    useChainContext,
     useSingleBlockBeatRetry,
     useWeb3State,
 } from '@masknet/web3-hooks-base'
@@ -39,8 +39,10 @@ export function useSettingsContext(initial?: {
     disableSlippageTolerance?: boolean
 }) {
     const t = useSharedI18N()
-    const pluginID = useCurrentWeb3NetworkPluginID(initial?.pluginID)
-    const chainId = useChainId(pluginID, initial?.chainId)
+    const { pluginID } = useNetworkContext(initial?.pluginID)
+    const { chainId } = useChainContext({
+        chainId: initial?.chainId,
+    })
     const { Others } = useWeb3State<'all'>(pluginID)
     const [transactionOptions, setTransactionOptions] = useState<Partial<Web3Helper.TransactionAll> | null>(
         initial?.transaction ?? null,

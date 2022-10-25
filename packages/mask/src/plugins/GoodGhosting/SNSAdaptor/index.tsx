@@ -7,7 +7,7 @@ import { Icons } from '@masknet/icons'
 import { PreviewCard } from '../UI/PreviewCard.js'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { base } from '../base.js'
-import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
+import { ChainBoundary } from '@masknet/shared'
 
 const isGoodGhosting = (x: string): boolean => /^https:\/\/goodghosting.com/.test(x)
 

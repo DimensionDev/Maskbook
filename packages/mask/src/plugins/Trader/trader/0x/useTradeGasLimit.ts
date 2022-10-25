@@ -3,14 +3,13 @@ import { useMemo } from 'react'
 import { SUPPORTED_CHAIN_ID_LIST } from './constants.js'
 import { pick } from 'lodash-unified'
 import { useAsync } from 'react-use'
-import { useAccount, useChainId, useWeb3Connection } from '@masknet/web3-hooks-base'
+import { useChainContext, useWeb3Connection } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import BigNumber from 'bignumber.js'
 
 export function useTradeGasLimit(tradeComputed: TradeComputed<SwapQuoteResponse> | null) {
-    const targetChainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { account, chainId: targetChainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, { chainId: targetChainId })
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const config = useMemo(() => {
         if (!account || !tradeComputed?.trade_) return null
         return {

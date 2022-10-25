@@ -11,7 +11,7 @@ export function emitManifestFile(flags: NormalizedFlags) {
         name: 'manifest.json',
         content() {
             const manifest = cloneDeep(
-                flags.runtime.manifest === 2 ? require('../src/manifest.json') : require('../src/manifest-v3.json'),
+                flags.manifest === 2 ? require('../src/manifest.json') : require('../src/manifest-v3.json'),
             )
             modify(manifest, flags)
             return JSON.stringify(manifest, null, 4)
@@ -40,19 +40,19 @@ function modify(manifest: ManifestV2 | ManifestV3, flags: NormalizedFlags) {
 }
 
 function modify_2(manifest: ManifestV2, flags: NormalizedFlags) {
-    if (flags.runtime.engine === 'firefox') {
+    if (flags.engine === 'firefox') {
         // TODO: To make `browser.tabs.executeScript` run on Firefox, we need an extra permission "tabs".
         // Switch to browser.userScripts (Firefox only) API can resolve the problem.
         manifest.permissions.push('tabs')
 
-        if (flags.runtime.architecture === 'app') {
+        if (flags.architecture === 'app') {
             manifest.permissions.push('nativeMessaging', 'nativeMessagingFromContent', 'geckoViewAddons')
             manifest.applications = { gecko: { id: 'info@dimension.im' } }
         }
     }
 
     // Grant all URL permissions on App
-    if (flags.runtime.architecture === 'app') manifest.permissions.push('<all_urls>')
+    if (flags.architecture === 'app') manifest.permissions.push('<all_urls>')
 
     // for eval-source-map
     if (flags.mode === 'development') {

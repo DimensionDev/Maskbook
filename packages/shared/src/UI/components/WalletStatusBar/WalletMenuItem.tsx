@@ -6,8 +6,8 @@ import { resolveNextID_NetworkPluginID } from '@masknet/web3-shared-base'
 import type { NetworkPluginID, NextIDPlatform } from '@masknet/shared-base'
 import { useWalletName } from './hooks/useWalletName.js'
 import {
-    useCurrentWeb3NetworkPluginID,
-    useChainId,
+    useNetworkContext,
+    useChainContext,
     useDefaultChainId,
     useNetworkDescriptor,
     useProviderDescriptor,
@@ -29,10 +29,11 @@ export const WalletMenuItem = memo<WalletMenuItemProps>(
     ({ address, selected, onChangeWallet, platform, onSelect, verified }) => {
         const t = useSharedI18N()
 
-        const pluginID = useCurrentWeb3NetworkPluginID(platform ? resolveNextID_NetworkPluginID(platform) : undefined)
-        const currentChainId = useChainId()
+        const { pluginID } = useNetworkContext(platform ? resolveNextID_NetworkPluginID(platform) : undefined)
         const defaultChainId = useDefaultChainId(pluginID)
-        const chainId = platform ? defaultChainId : currentChainId
+        const { chainId } = useChainContext({
+            chainId: platform ? defaultChainId : undefined,
+        })
 
         const name = useWalletName(address, pluginID, !!platform)
 

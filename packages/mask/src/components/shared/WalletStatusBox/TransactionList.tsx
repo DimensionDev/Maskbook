@@ -1,7 +1,7 @@
 import { FC, forwardRef, useCallback, useMemo, useState, useEffect } from 'react'
 import { useAsync } from 'react-use'
 import { Icons } from '@masknet/icons'
-import { useChainId, useWeb3State } from '@masknet/web3-hooks-base'
+import { useChainContext, useWeb3State } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { isSameAddress, RecentTransactionComputed, TransactionStatusType, Transaction } from '@masknet/web3-shared-base'
@@ -168,7 +168,7 @@ interface Props extends ListProps {
 
 export const TransactionList: FC<Props> = forwardRef(({ className, transactions, onClear = noop, ...rest }, ref) => {
     const { classes } = useStyles()
-    const chainId = useChainId()
+    const { chainId } = useChainContext()
     if (!transactions.length) return null
     return (
         <List className={classnames(classes.list, className)} {...rest} ref={ref}>

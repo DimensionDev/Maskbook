@@ -7,10 +7,10 @@ import { useFetchPool, usePoolDepositAssets } from '../hooks/usePool.js'
 import { PerformanceChart } from './PerformanceChart.js'
 import { PoolStats } from './PoolStats.js'
 import { PoolViewDeck } from './PoolViewDeck.js'
-import { useChainId } from '@masknet/web3-hooks-base'
+import { useChainContext } from '@masknet/web3-hooks-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
+import { ChainBoundary } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -62,7 +62,7 @@ interface PoolViewProps {
 export function PoolView(props: PoolViewProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const currentChainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
     // #region allowed tokens
     const { value: pool, error, loading, retry } = useFetchPool(props.address ?? '')
@@ -96,7 +96,7 @@ export function PoolView(props: PoolViewProps) {
                 {t('plugin_dhedge_pool_not_found')}
             </Typography>
         )
-    if (error || (errorAllowedTokens && currentChainId === pool.chainId))
+    if (error || (errorAllowedTokens && chainId === pool.chainId))
         return (
             <Typography className={classes.message} color="textPrimary">
                 {t('plugin_dhedge_smt_wrong')}

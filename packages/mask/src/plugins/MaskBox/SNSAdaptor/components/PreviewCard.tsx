@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useState } from 'react'
-import { useChainId, useNetworkDescriptor, useWeb3State } from '@masknet/web3-hooks-base'
+import { useChainContext, useNetworkDescriptor, useWeb3State } from '@masknet/web3-hooks-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { useContainer } from 'unstated-next'
 import { makeStyles, ActionButton, LoadingBase, useTabs, MaskTabList } from '@masknet/theme'
@@ -12,12 +12,11 @@ import { DetailsTab } from './DetailsTab.js'
 import { DrawDialog } from './DrawDialog.js'
 import { DrawResultDialog } from './DrawResultDialog.js'
 import { useTransactionCallback } from '@masknet/web3-hooks-evm'
-import { ChainBoundary } from '../../../../web3/UI/ChainBoundary.js'
+import { ChainBoundary, ImageIcon, TokenIcon } from '@masknet/shared'
 import { formatBalance } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useI18N } from '../../locales/index.js'
 import { TabContext, TabPanel } from '@mui/lab'
-import { ImageIcon, TokenIcon } from '@masknet/shared'
 
 const useTabsStyles = makeStyles()((theme) => ({
     button: {
@@ -115,7 +114,7 @@ export function PreviewCard(props: PreviewCardProps) {
     const state = useState(CardTab.Articles)
     const [openDrawDialog, setOpenDrawDialog] = useState(false)
     const [openDrawResultDialog, setOpenDrawResultDialog] = useState(false)
-    const chainId = useChainId()
+    const { chainId } = useChainContext()
     const networkDescriptor = useNetworkDescriptor()
     const theme = useTheme()
     const t = useI18N()

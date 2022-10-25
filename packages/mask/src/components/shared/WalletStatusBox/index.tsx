@@ -1,6 +1,7 @@
+import classNames from 'classnames'
+import { useCopyToClipboard, useCopyToClipboard } from 'react-use'
 import {
-    useAccount,
-    useChainId,
+    useChainContext,
     useNetworkDescriptor,
     useProviderDescriptor,
     useReverseAddress,
@@ -10,6 +11,7 @@ import {
     useWeb3Connection,
     useBalance,
     useChainIdValid,
+    useNetworkContext,
 } from '@masknet/web3-hooks-base'
 import { FormattedAddress, useGlobalDialogController, useSnackbarCallback, WalletIcon } from '@masknet/shared'
 import { ProviderType } from '@masknet/web3-shared-evm'
@@ -17,9 +19,7 @@ import { isDashboardPage, GlobalDialogRoutes } from '@masknet/shared-base'
 import { formatBalance } from '@masknet/web3-shared-base'
 import { getMaskColor, makeStyles } from '@masknet/theme'
 import { Button, DialogContent, Link, Typography, useTheme } from '@mui/material'
-import classNames from 'classnames'
 import { Icons } from '@masknet/icons'
-import { useCopyToClipboard } from 'react-use'
 import { useI18N } from '../../../utils/index.js'
 import { usePendingTransactions } from './usePendingTransactions.js'
 import { useCallback } from 'react'
@@ -100,7 +100,7 @@ const useStyles = makeStyles<{
         position: 'relative',
     },
 }))
-interface WalletStatusBox {
+export interface WalletStatusBox {
     disableChange?: boolean
     withinRiskWarningDialog?: boolean
     showPendingTransaction?: boolean
@@ -122,10 +122,19 @@ export function WalletStatusBox(props: WalletStatusBox) {
     })
 
     const connection = useWeb3Connection()
-    const chainId = useChainId()
-    const account = useAccount()
-    const wallet = useWallet()
+    const { pluginID } = useNetworkContext()
+    const { account, chainId, ...rest } = useChainContext()
+
+    console.log('DEBUG: useChainContext')
+    console.log({
+        pluginID,
+        account,
+        chainId,
+        ...rest,
+    })
+
     const chainIdValid = useChainIdValid()
+    const wallet = useWallet()
     const { value: balance = '0', loading: loadingBalance } = useBalance()
     const { value: nativeToken, loading: loadingNativeToken } = useNativeToken()
     const networkDescriptor = useNetworkDescriptor()
@@ -156,6 +165,21 @@ export function WalletStatusBox(props: WalletStatusBox) {
     // #endregion
 
     const { summary: pendingSummary, transactionList } = usePendingTransactions()
+
+    if (!Others?.isValidAddress(account)) {
+        return (
+            <section className={classes.connectButtonWrapper}>
+                <Button
+                    className={classNames(classes.actionButton)}
+                    color="primary"
+                    variant="contained"
+                    size="small"
+                    onClick={openSelectProviderDialog}>
+                    {t('plugin_wallet_on_connect')}
+                </Button>
+            </section>
+        )
+    }
 
     return (
         <DialogContent>

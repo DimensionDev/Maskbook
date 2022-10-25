@@ -14,7 +14,7 @@ import {
     isNativeTokenAddress,
 } from '@masknet/web3-shared-evm'
 import {
-    useAccount,
+    useChainContext,
     useFungibleTokenBalance,
     useFungibleTokenPrice,
     useNativeToken,
@@ -27,18 +27,18 @@ import {
     TokenIcon,
     useOpenShareTxDialog,
     PluginWalletStatusBar,
+    ActionButtonPromise,
+    ChainBoundary,
 } from '@masknet/shared'
 import type { AaveLendingPoolAddressProvider } from '@masknet/web3-contracts/types/AaveLendingPoolAddressProvider'
 import AaveLendingPoolAddressProviderABI from '@masknet/web3-contracts/abis/AaveLendingPoolAddressProvider.json'
 import { useI18N } from '../../../utils/index.js'
 import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary.js'
-import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
 import { ProtocolType, SavingsProtocol, TabType } from '../types.js'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary.js'
 import { DialogActions, DialogContent, Typography } from '@mui/material'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base.js'
 import { activatedSocialNetworkUI } from '../../../social-network/index.js'
-import { ActionButtonPromise } from '../../../extension/options-page/DashboardComponents/ActionButton.js'
 import { createLookupTableResolver, NetworkPluginID } from '@masknet/shared-base'
 
 export const useStyles = makeStyles()((theme, props) => ({
@@ -104,7 +104,7 @@ export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFo
     const { classes } = useStyles()
 
     const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM, { chainId })
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const [inputAmount, setInputAmount] = useState('')
     const [estimatedGas, setEstimatedGas] = useState<BigNumber.Value>(ZERO)
 

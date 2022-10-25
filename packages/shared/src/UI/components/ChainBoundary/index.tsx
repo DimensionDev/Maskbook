@@ -3,29 +3,23 @@ import { useAsyncFn } from 'react-use'
 import { Box, Typography } from '@mui/material'
 import { makeStyles, MaskColorVar, ShadowRootTooltip, useStylesExtends, ActionButton } from '@masknet/theme'
 import {
-    useCurrentWeb3NetworkPluginID,
-    useAccount,
+    useNetworkContext,
+    useChainContext,
     useNetworkDescriptor,
     useAllowTestnet,
     useWeb3State,
     useWeb3Connection,
     useProviderDescriptor,
-    useChainId,
-    useProviderType,
 } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { delay } from '@dimensiondev/kit'
-import { useGlobalDialogController, WalletIcon } from '@masknet/shared'
+import { useGlobalDialogController, WalletIcon } from '../WalletIcon/index.js'
+import { ActionButtonPromise, ActionButtonPromiseProps } from '../ActionButton/index.js'
 import { Icons } from '@masknet/icons'
 import { GlobalDialogRoutes, NetworkPluginID } from '@masknet/shared-base'
 import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
-import {
-    ActionButtonPromise,
-    ActionButtonPromiseProps,
-} from '../../extension/options-page/DashboardComponents/ActionButton.js'
-import { useI18N } from '../../utils/index.js'
-import type { SelectProviderDialogEvent } from '@masknet/plugin-wallet'
+import { useSharedI18N } from '../../../locales/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     tooltip: {
@@ -69,19 +63,23 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
             actualPluginID === expectedPluginID && actualChainId === expectedChainId,
     } = props
 
-    const { t } = useI18N()
+    const t = useSharedI18N()
     const classes = useStylesExtends(useStyles(), props)
 
-    const actualPluginID = useCurrentWeb3NetworkPluginID()
+    const { pluginID: actualPluginID } = useNetworkContext()
     const plugin = useActivatedPlugin(actualPluginID, 'any')
     const expectedPlugin = useActivatedPlugin(expectedPluginID, 'any')
 
     const { Others: actualOthers } = useWeb3State(actualPluginID)
-    const actualChainId = useChainId(actualPluginID)
-    const actualProviderType = useProviderType(actualPluginID)
+    const {
+        account,
+        chainId: actualChainId,
+        providerType: actualProviderType,
+    } = useChainContext({
+        account: expectedAccount,
+    })
     const actualProviderDescriptor = useProviderDescriptor(actualPluginID)
     const actualChainName = actualOthers?.chainResolver.chainName(actualChainId)
-    const account = useAccount(actualPluginID, expectedAccount)
 
     const { Others: expectedOthers } = useWeb3State(expectedPluginID)
     const expectedConnection = useWeb3Connection(expectedPluginID)
@@ -156,7 +154,7 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
                         startIcon={<Icons.ConnectWallet size={18} />}
                         onClick={openSelectProviderDialog}
                         {...props.ActionButtonPromiseProps}>
-                        {t('plugin_wallet_connect_wallet')}
+                        {t.plugin_wallet_connect_a_wallet()}
                     </ActionButton>
                 ) : null}
             </>,
@@ -170,7 +168,7 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
                 {!noSwitchNetworkTip ? (
                     <Typography color={MaskColorVar.errorPlugin}>
                         <span>
-                            {t('plugin_wallet_not_available_on', {
+                            {t.plugin_wallet_not_available_on({
                                 network: plugin?.name?.fallback ?? 'Unknown Plugin',
                             })}
                         </span>
@@ -190,25 +188,26 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
                     sx={props.ActionButtonPromiseProps?.sx}
                     init={
                         <span>
-                            {t('plugin_wallet_connect_network', {
-                                network: expectedChainAllowed ? expectedChainName : expectedPlugin?.name.fallback,
+                            {t.plugin_wallet_connect_network({
+                                network:
+                                    (expectedChainAllowed ? expectedChainName : expectedPlugin?.name.fallback) ?? '',
                             })}
                         </span>
                     }
-                    waiting={t('plugin_wallet_connect_network_under_going', {
-                        network: expectedChainAllowed ? expectedChainName : expectedPlugin?.name.fallback,
+                    waiting={t.plugin_wallet_connect_network_under_going({
+                        network: (expectedChainAllowed ? expectedChainName : expectedPlugin?.name.fallback) ?? '',
                     })}
-                    complete={t('plugin_wallet_connect_network', {
-                        network: expectedChainAllowed ? expectedChainName : expectedPlugin?.name.fallback,
+                    complete={t.plugin_wallet_connect_network({
+                        network: (expectedChainAllowed ? expectedChainName : expectedPlugin?.name.fallback) ?? '',
                     })}
-                    failed={t('retry')}
+                    failed={t.retry()}
                     executor={onSwitchChain}
                     completeOnClick={onSwitchChain}
                     failedOnClick="use executor"
                     {...props.ActionButtonPromiseProps}
                 />
             </>,
-            actualProviderType === ProviderType.WalletConnect ? t('plugin_wallet_connect_tips') : '',
+            actualProviderType === ProviderType.WalletConnect ? t.plugin_wallet_connect_tips() : '',
         )
     }
 
@@ -217,8 +216,8 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
             {!noSwitchNetworkTip ? (
                 <Typography color={MaskColorVar.errorPlugin}>
                     <span>
-                        {t('plugin_wallet_not_available_on', {
-                            network: actualChainName,
+                        {t.plugin_wallet_not_available_on({
+                            network: actualChainName ?? '',
                         })}
                     </span>
                 </Typography>
@@ -234,12 +233,12 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
                     }
                     disabled={actualProviderType === ProviderType.WalletConnect || switchButtonDisabled}
                     sx={props.ActionButtonPromiseProps?.sx}
-                    init={<span>{t('plugin_wallet_switch_network', { network: expectedChainName })}</span>}
-                    waiting={t('plugin_wallet_switch_network_under_going', {
-                        network: expectedChainName,
+                    init={<span>{t.plugin_wallet_switch_network({ network: expectedChainName ?? '' })}</span>}
+                    waiting={t.plugin_wallet_switch_network_under_going({
+                        network: expectedChainName ?? '',
                     })}
-                    complete={t('plugin_wallet_switch_network', { network: expectedChainName })}
-                    failed={t('retry')}
+                    complete={t.plugin_wallet_switch_network({ network: expectedChainName ?? '' })}
+                    failed={t.retry()}
                     executor={onSwitchChain}
                     completeOnClick={onSwitchChain}
                     failedOnClick="use executor"
@@ -257,9 +256,9 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
             )}
         </>,
         actualProviderType === ProviderType.WalletConnect
-            ? t('plugin_wallet_connect_tips')
+            ? t.plugin_wallet_connect_tips()
             : switchButtonDisabled
-            ? t('plugin_wallet_not_support_network')
+            ? t.plugin_wallet_not_support_network()
             : '',
     )
 }

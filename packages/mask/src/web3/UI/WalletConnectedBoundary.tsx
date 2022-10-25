@@ -5,9 +5,8 @@ import { WalletMessages } from '../../plugins/Wallet/messages.js'
 import { useI18N } from '../../utils/index.js'
 import { isZero } from '@masknet/web3-shared-base'
 import {
-    useAccount,
-    useChainId,
-    useCurrentWeb3NetworkPluginID,
+    useChainContext,
+    useNetworkContext,
     useNativeTokenBalance,
     useRiskWarningApproved,
 } from '@masknet/web3-hooks-base'
@@ -36,9 +35,8 @@ export function WalletConnectedBoundary(props: WalletConnectedBoundaryProps) {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
 
-    const pluginID = useCurrentWeb3NetworkPluginID()
-    const account = useAccount()
-    const chainIdValid = useChainId()
+    const { pluginID } = useNetworkContext()
+    const { account, chainId: chainIdValid } = useChainContext()
     const nativeTokenBalance = useNativeTokenBalance()
     const approved = useRiskWarningApproved()
 

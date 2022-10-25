@@ -1,17 +1,16 @@
 import { Box, DialogActions, DialogContent, Tab, Typography } from '@mui/material'
 import { TabContext, TabPanel } from '@mui/lab'
-import { InjectedDialog, PluginWalletStatusBar } from '@masknet/shared'
+import { InjectedDialog, PluginWalletStatusBar, ChainBoundary } from '@masknet/shared'
 import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import AssetsPanel from './AssetsPanel.js'
 import ParticipatePanel from './ParticipatePanel.js'
 import { useContext } from 'react'
 import type { FindTrumanI18nFunction } from '../types.js'
 import { FindTrumanContext } from '../context.js'
-import { useAccount, useChainId } from '@masknet/web3-hooks-base'
+import { useChainContext } from '@masknet/web3-hooks-base'
 import { useConst } from './hooks/useConst.js'
 import IntroductionPanel from './IntroductionPanel.js'
 import { useI18N } from '../../../utils/index.js'
-import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
 import { NetworkPluginID } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme, props) => ({
@@ -66,10 +65,9 @@ interface FindTrumanDialogProps {
 export function FindTrumanDialog(props: FindTrumanDialogProps) {
     const { t: i18N } = useI18N()
     const { open, onClose } = props
-    const { classes } = useStyles()
-    const account = useAccount()
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const { consts, t } = useConst()
+    const { classes } = useStyles()
+    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
     const [currentTab, onChange, tabs] = useTabs(
         FindTrumanDialogTab.Introduction,
@@ -133,20 +131,11 @@ export function FindTrumanDialog(props: FindTrumanDialogProps) {
     )
 }
 
-interface TabProps {
-    columns: string
-}
-
 enum FindTrumanDialogTab {
     Introduction = 'introduction',
     Assets = 'assets',
     Participate = 'participate',
 }
-const FindTrumanDialogTabValues = [
-    FindTrumanDialogTab.Introduction,
-    FindTrumanDialogTab.Assets,
-    FindTrumanDialogTab.Participate,
-]
 
 interface FindTrumanDialogTabsProps
     extends withClasses<'tab' | 'tabs' | 'tabPanel' | 'indicator' | 'focusTab' | 'tabPaper'> {

@@ -1,5 +1,5 @@
 import type { Trade, TradeComputed, SwapCall } from '../../types/index.js'
-import { useAccount, useChainId, useWeb3Connection } from '@masknet/web3-hooks-base'
+import { useChainContext, useWeb3Connection } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useSwapParameters as useTradeParameters } from './useTradeParameters.js'
 import type { TradeProvider } from '@masknet/public-api'
@@ -30,8 +30,7 @@ interface FailedCall extends SwapCallEstimate {
 }
 
 export function useTradeGasLimit(trade: TradeComputed<Trade> | null, tradeProvider: TradeProvider): AsyncState<number> {
-    const targetChainId = useChainId(NetworkPluginID.PLUGIN_EVM)
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const { account, chainId: targetChainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const tradeParameters = useTradeParameters(trade, tradeProvider)
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, { chainId: targetChainId })
     return useAsync(async () => {

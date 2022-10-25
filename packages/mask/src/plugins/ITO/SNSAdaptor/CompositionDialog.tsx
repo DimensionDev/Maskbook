@@ -1,5 +1,5 @@
 import { useActivatedPlugin, useCompositionContext } from '@masknet/plugin-infra/content-script'
-import { InjectedDialog, InjectedDialogProps, useOpenShareTxDialog } from '@masknet/shared'
+import { InjectedDialog, InjectedDialogProps, useOpenShareTxDialog, NetworkTab } from '@masknet/shared'
 import { PluginID, EMPTY_LIST, EnhanceableSite, NetworkPluginID } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
@@ -19,16 +19,9 @@ import { ConfirmDialog } from './ConfirmDialog.js'
 import { CreateForm } from './CreateForm.js'
 import { payloadOutMask } from './helpers.js'
 import { PoolList } from './PoolList.js'
-import {
-    useAccount,
-    useChainId,
-    useCurrentWeb3NetworkPluginID,
-    useWeb3Connection,
-    useChainIdValid,
-} from '@masknet/web3-hooks-base'
+import { useChainContext, useNetworkContext, useWeb3Connection, useChainIdValid } from '@masknet/web3-hooks-base'
 import { PoolSettings, useFillCallback } from './hooks/useFill.js'
 import { Icons } from '@masknet/icons'
-import { NetworkTab } from '../../../components/shared/NetworkTab.js'
 
 interface StyleProps {
     snsId: string
@@ -78,13 +71,14 @@ export interface CompositionDialogProps extends withClasses<'root'>, Omit<Inject
 export function CompositionDialog(props: CompositionDialogProps) {
     const { t } = useI18N()
 
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const chainIdValid = useChainIdValid(NetworkPluginID.PLUGIN_EVM)
-    const currentChainId = useChainId(NetworkPluginID.PLUGIN_EVM, chainIdValid ? undefined : ChainId.Mainnet)
+    const { account, chainId: currentChainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>({
+        chainId: chainIdValid ? undefined : ChainId.Mainnet,
+    })
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, { chainId: currentChainId })
     const { classes } = useStyles({ snsId: activatedSocialNetworkUI.networkIdentifier })
     const { attachMetadata, dropMetadata } = useCompositionContext()
-    const pluginID = useCurrentWeb3NetworkPluginID()
+    const { pluginID } = useNetworkContext()
     const ITO_Definition = useActivatedPlugin(PluginID.ITO, 'any')
     const chainIdList = ITO_Definition?.enableRequirement.web3?.[pluginID]?.supportedChainIds ?? EMPTY_LIST
     const [chainId, setChainId] = useState<ChainId>(currentChainId)

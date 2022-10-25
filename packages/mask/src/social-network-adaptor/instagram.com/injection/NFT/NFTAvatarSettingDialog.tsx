@@ -9,7 +9,7 @@ import { DialogContent } from '@mui/material'
 import { NFTAvatar } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatar.js'
 import { DialogStackingProvider, makeStyles } from '@masknet/theme'
 import { Instagram } from '@masknet/web3-providers'
-import { useAccount, useCurrentWeb3NetworkPluginID } from '@masknet/web3-hooks-base'
+import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
 import type { SelectTokenInfo } from '../../../../plugins/Avatar/types.js'
 import { RSS3_KEY_SNS } from '../../../../plugins/Avatar/constants.js'
 import { useSaveNFTAvatar } from '../../../../plugins/Avatar/hooks/index.js'
@@ -24,9 +24,9 @@ export function NFTAvatarSettingDialog() {
     const { t } = useI18N()
     const [open, setOpen] = useState(false)
     const { classes } = useStyles()
-    const account = useAccount()
+    const { account } = useChainContext()
     const identity = useCurrentVisitingIdentity()
-    const pluginID = useCurrentWeb3NetworkPluginID()
+    const { pluginID } = useNetworkContext()
     const saveNFTAvatar = useSaveNFTAvatar()
 
     const onChange = useCallback(

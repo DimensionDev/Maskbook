@@ -15,7 +15,7 @@ import { ProviderType } from '@masknet/web3-shared-evm'
 import { TransactionStatusType } from '@masknet/web3-shared-base'
 import {
     useProviderDescriptor,
-    useAccount,
+    useChainContext,
     useChainColor,
     useChainIdValid,
     useWeb3State,
@@ -77,7 +77,7 @@ function ToolboxHintForApplication(props: ToolboxHintProps) {
     const { t } = useI18N()
     const { openDialog } = useRemoteControlledDialog(WalletMessages.events.ApplicationDialogUpdated)
     return (
-        <GuideStep step={1} total={3} tip={t('user_guide_tip_1')}>
+        <GuideStep step={1} total={4} tip={t('user_guide_tip_1')}>
             <Container>
                 <ListItemButton onClick={openDialog}>
                     <ListItemIcon>
@@ -122,7 +122,7 @@ function ToolboxHintForWallet(props: ToolboxHintProps) {
     const providerDescriptor = useProviderDescriptor()
 
     return (
-        <GuideStep step={2} total={3} tip={t('user_guide_tip_2')}>
+        <GuideStep step={2} total={4} tip={t('user_guide_tip_2')}>
             <Container>
                 <ListItemButton onClick={openWallet}>
                     <ListItemIcon>
@@ -167,7 +167,7 @@ function ToolboxHintForWallet(props: ToolboxHintProps) {
 
 function useToolbox() {
     const { t } = useI18N()
-    const account = useAccount()
+    const { account } = useChainContext()
     const chainColor = useChainColor()
     const chainIdValid = useChainIdValid()
     const chainIdMainnet = useChainIdMainnet()

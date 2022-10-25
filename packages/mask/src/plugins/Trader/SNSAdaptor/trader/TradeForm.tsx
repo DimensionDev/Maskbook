@@ -1,4 +1,5 @@
 import { memo, useCallback, useMemo, useRef, useState } from 'react'
+import { useUpdateEffect } from 'react-use'
 import { useI18N } from '../../../../utils/index.js'
 import {
     PluginWalletStatusBar,
@@ -24,8 +25,8 @@ import { MINIMUM_AMOUNT, MIN_GAS_LIMIT } from '../../constants/index.js'
 import { resolveTradeProviderName } from '../../pipes.js'
 import { EthereumERC20TokenApprovedBoundary } from '../../../../web3/UI/EthereumERC20TokenApprovedBoundary.js'
 import { useTradeApproveComputed } from '../../trader/useTradeApproveComputed.js'
-import { useUpdateEffect } from 'react-use'
 import { isDashboardPage, isPopupPage, PopupRoutes, PluginID, NetworkPluginID } from '@masknet/shared-base'
+import { ActualChainContextProvider, useChainContext } from '@masknet/web3-hooks-base'
 import { AllProviderTradeContext } from '../../trader/useAllProviderTradeContext.js'
 import { WalletConnectedBoundary } from '../../../../web3/UI/WalletConnectedBoundary.js'
 import { TokenSecurityBoundary } from '../../../../web3/UI/TokenSecurityBoundary.js'
@@ -34,7 +35,6 @@ import { PluginTraderMessages } from '../../messages.js'
 import Services from '../../../../extension/service.js'
 import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
 import { useIsMinimalModeDashBoard } from '@masknet/plugin-infra/dashboard'
-import { PluginWeb3ActualContextProvider, useChainId } from '@masknet/web3-hooks-base'
 
 const useStyles = makeStyles<{
     isDashboard: boolean
@@ -238,7 +238,7 @@ export const TradeForm = memo<AllTradeFormProps>(
         const { t } = useI18N()
         const styles = useStyles({ isDashboard, isPopup })
         const classes = useStylesExtends(styles, props)
-        const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+        const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
         const { isSwapping, allTradeComputed } = AllProviderTradeContext.useContainer()
         const [isExpand, setExpand] = useState(false)
 
@@ -548,7 +548,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                     </Box>
                 ) : null}
                 <Box className={classes.stateBar}>
-                    <PluginWeb3ActualContextProvider>
+                    <ActualChainContextProvider>
                         <PluginWalletStatusBar onClick={isPopup ? openSelectWalletPopup : undefined}>
                             <WalletConnectedBoundary offChain>
                                 <EthereumERC20TokenApprovedBoundary
@@ -608,7 +608,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                                 </EthereumERC20TokenApprovedBoundary>
                             </WalletConnectedBoundary>
                         </PluginWalletStatusBar>
-                    </PluginWeb3ActualContextProvider>
+                    </ActualChainContextProvider>
                 </Box>
             </>
         )

@@ -17,7 +17,7 @@ import formatDateTime from 'date-fns/format'
 import { startCase } from 'lodash-unified'
 import { EnhanceableSite, NetworkPluginID } from '@masknet/shared-base'
 import { usePostLink } from '../../../components/DataSource/usePostInfo.js'
-import { TokenIcon, useOpenShareTxDialog } from '@masknet/shared'
+import { TokenIcon, useOpenShareTxDialog, ChainBoundary } from '@masknet/shared'
 import { activatedSocialNetworkUI } from '../../../social-network/index.js'
 import { getAssetAsBlobURL, getTextUILength, useI18N } from '../../../utils/index.js'
 import { ITO_EXCHANGE_RATION_MAX, MSG_DELIMITER, TIME_WAIT_BLOCKCHAIN } from '../constants.js'
@@ -33,10 +33,9 @@ import { StyledLinearProgress } from './StyledLinearProgress.js'
 import { SwapGuide, SwapStatus } from './SwapGuide.js'
 import { isFacebook } from '../../../social-network-adaptor/facebook.com/base.js'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base.js'
-import { useAccount, useChainId } from '@masknet/web3-hooks-base'
+import { useChainContext } from '@masknet/web3-hooks-base'
 import { Icons } from '@masknet/icons'
 import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary.js'
-import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
 
 export interface IconProps {
     size?: number
@@ -211,8 +210,7 @@ export interface ITO_Props {
 
 export function ITO(props: ITO_Props) {
     // context
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const postLink = usePostLink()
     const [, destructCallback] = useDestructCallback(props.payload.contract_address)
     const [openClaimDialog, setOpenClaimDialog] = useState(false)

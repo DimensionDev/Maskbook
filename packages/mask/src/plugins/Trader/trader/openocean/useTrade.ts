@@ -10,7 +10,7 @@ import { PluginTraderRPC } from '../../messages.js'
 import type { SwapOOData, TradeStrategy } from '../../types/index.js'
 import { useSlippageTolerance } from './useSlippageTolerance.js'
 import { OPENOCEAN_SUPPORTED_CHAINS } from './constants.js'
-import { useAccount, useChainId, useDoubleBlockBeatRetry } from '@masknet/web3-hooks-base'
+import { useChainContext, useDoubleBlockBeatRetry } from '@masknet/web3-hooks-base'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 import { FungibleToken, isZero } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
@@ -25,16 +25,15 @@ export function useTrade(
 ): AsyncStateRetry<SwapOOData | null> {
     const slippageSetting = useSlippageTolerance()
     const slippage = temporarySlippage || slippageSetting
-    const targetChainId = useChainId(NetworkPluginID.PLUGIN_EVM)
-    const { RPC_URLS } = useRPCConstants(targetChainId)
+    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+    const { RPC_URLS } = useRPCConstants(chainId)
     const providerURL = first(RPC_URLS)
-    const { OPENOCEAN_ETH_ADDRESS } = useTraderConstants(targetChainId)
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const { OPENOCEAN_ETH_ADDRESS } = useTraderConstants(chainId)
 
     return useDoubleBlockBeatRetry(
         NetworkPluginID.PLUGIN_EVM,
         async () => {
-            if (!OPENOCEAN_SUPPORTED_CHAINS.includes(targetChainId)) return null
+            if (!OPENOCEAN_SUPPORTED_CHAINS.includes(chainId)) return null
             if (!inputToken || !outputToken) return null
             if (isZero(inputAmount)) return null
             const sellToken = isNativeTokenAddress(inputToken.address)
@@ -51,7 +50,7 @@ export function useTrade(
                 slippage,
                 userAddr: account,
                 rpc: providerURL,
-                chainId: targetChainId,
+                chainId,
             })
         },
         [
@@ -63,7 +62,7 @@ export function useTrade(
             slippage,
             account,
             providerURL,
-            targetChainId,
+            chainId,
         ],
     )
 }

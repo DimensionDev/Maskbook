@@ -1,13 +1,7 @@
 import { FC, useCallback, useEffect, useMemo, useState } from 'react'
 import { useAsyncFn } from 'react-use'
 import { EthereumAddress } from 'wallet.ts'
-import {
-    useAccount,
-    useChainId,
-    useNetworkDescriptors,
-    useWeb3Connection,
-    useWeb3State,
-} from '@masknet/web3-hooks-base'
+import { useChainContext, useNetworkDescriptors, useWeb3Connection, useWeb3State } from '@masknet/web3-hooks-base'
 import { useERC721TokenContract } from '@masknet/web3-hooks-evm'
 import { ImageIcon, InjectedDialog, InjectedDialogProps } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
@@ -51,8 +45,7 @@ interface Props extends InjectedDialogProps {
 
 export const AddDialog: FC<Props> = ({ onAdd, onClose, ...rest }) => {
     const { classes } = useStyles()
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const [contractAddress, setContractAddress] = useState('')
     const [tokenId, setTokenId] = useState('')
     const { Token } = useWeb3State(NetworkPluginID.PLUGIN_EVM)

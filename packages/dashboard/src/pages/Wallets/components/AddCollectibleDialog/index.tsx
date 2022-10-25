@@ -1,21 +1,21 @@
 import { FormEvent, memo, useCallback, useEffect, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
+import { z } from 'zod'
 import { EthereumAddress } from 'wallet.ts'
 import { MaskDialog, MaskTextField } from '@masknet/theme'
 import { Box, Button, DialogActions, DialogContent } from '@mui/material'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useDashboardI18N } from '../../../../locales/index.js'
 import {
     useWeb3Connection,
     useNonFungibleTokenContract,
-    useAccount,
+    useChainContext,
     useWeb3State,
     useTrustedNonFungibleTokens,
-    useCurrentWeb3NetworkPluginID,
     useWeb3Hub,
+    useNetworkContext,
 } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import type { ChainId } from '@masknet/web3-shared-evm'
@@ -37,10 +37,10 @@ enum FormErrorType {
 }
 
 export const AddCollectibleDialog = memo<AddCollectibleDialogProps>(({ open, onClose, selectedNetwork }) => {
-    const currentNetworkPluginID = useCurrentWeb3NetworkPluginID()
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const { pluginID } = useNetworkContext()
+    const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { Token } = useWeb3State<'all'>()
-    const trustedNonFungibleTokens = useTrustedNonFungibleTokens(currentNetworkPluginID)
+    const trustedNonFungibleTokens = useTrustedNonFungibleTokens(pluginID)
     const hub = useWeb3Hub()
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
 

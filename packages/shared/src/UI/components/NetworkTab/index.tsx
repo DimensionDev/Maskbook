@@ -1,9 +1,8 @@
-import React, { useContext } from 'react'
 import { useUpdateEffect } from 'react-use'
-import { PluginWeb3Context, useNetworkDescriptors } from '@masknet/web3-hooks-base'
+import { useNetworkDescriptors, useNetworkContext, useChainContext } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { MaskTabList, useTabs } from '@masknet/theme'
-import { WalletIcon } from '@masknet/shared'
+import { WalletIcon } from '../WalletIcon'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import TabContext from '@mui/lab/TabContext'
 import { Stack, Tab, Typography } from '@mui/material'
@@ -15,12 +14,13 @@ interface NetworkTabProps<T extends NetworkPluginID>
 
 export function NetworkTab<T extends NetworkPluginID = NetworkPluginID.PLUGIN_EVM>(props: NetworkTabProps<T>) {
     const { chains } = props
-    const { chainId, setChainId, pluginID } = useContext(PluginWeb3Context)
+    const { pluginID } = useNetworkContext()
+    const { chainId, setChainId } = useChainContext()
 
     const networks = useNetworkDescriptors(pluginID)
     const usedNetworks = networks.filter((x) => chains.find((c) => c === x.chainId))
     const networkIds = usedNetworks.map((x) => x.chainId.toString())
-    const [currentTab, , , setTab] = useTabs(chainId?.toString() ?? networkIds[0], ...networkIds)
+    const [tab, , , setTab] = useTabs(chainId?.toString() ?? networkIds[0], ...networkIds)
 
     useUpdateEffect(() => {
         setTab((prev) => {
@@ -30,7 +30,7 @@ export function NetworkTab<T extends NetworkPluginID = NetworkPluginID.PLUGIN_EV
     }, [chainId])
 
     return (
-        <TabContext value={currentTab}>
+        <TabContext value={tab}>
             <MaskTabList
                 variant="flexible"
                 onChange={(_, v) => {
@@ -50,7 +50,7 @@ export function NetworkTab<T extends NetworkPluginID = NetworkPluginID.PLUGIN_EV
                                     <Typography
                                         variant="body2"
                                         fontSize={14}
-                                        fontWeight={currentTab === x.chainId.toString() ? 700 : 400}>
+                                        fontWeight={tab === x.chainId.toString() ? 700 : 400}>
                                         {x.shortName ?? x.name}
                                     </Typography>
                                 </Stack>

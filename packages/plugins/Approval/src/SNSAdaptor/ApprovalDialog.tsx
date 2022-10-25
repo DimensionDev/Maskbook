@@ -2,14 +2,18 @@ import { compact } from 'lodash-unified'
 import { DialogContent, Button, Tab } from '@mui/material'
 import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import { TabContext } from '@mui/lab'
-import { PluginWalletStatusBar, InjectedDialog, useGlobalDialogController } from '@masknet/shared'
-import { useChainId, useCurrentWeb3NetworkPluginID } from '@masknet/web3-hooks-base'
-import { NetworkTab } from '../../../components/shared/NetworkTab.js'
+import {
+    PluginWalletStatusBar,
+    InjectedDialog,
+    useSharedI18N,
+    NetworkTab,
+    useGlobalDialogController,
+} from '@masknet/shared'
+import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
 import { ChainId, chainResolver, NetworkType } from '@masknet/web3-shared-evm'
 import { GlobalDialogRoutes, NetworkPluginID, PluginID } from '@masknet/shared-base'
 import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
 import { useI18N } from '../locales/index.js'
-import { useI18N as useBaseI18n } from '../../../utils/index.js'
 import { ApprovalEmptyContent } from './ApprovalEmptyContent.js'
 import { ApprovalTokenContent } from './ApprovalTokenContent.js'
 import { ApprovalNFTContent } from './ApprovalNFTContent.js'
@@ -125,10 +129,10 @@ interface ApprovalWrapperProps {
 
 function ApprovalWrapper(props: ApprovalWrapperProps) {
     const { tab } = props
-    const { t: tr } = useBaseI18n()
+    const t = useSharedI18N()
 
-    const pluginID = useCurrentWeb3NetworkPluginID()
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { pluginID } = useNetworkContext()
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const approvalDefinition = useActivatedPlugin(PluginID.Approval, 'any')
     const chainIdList = compact<ChainId>(
         approvalDefinition?.enableRequirement.web3?.[NetworkPluginID.PLUGIN_EVM]?.supportedChainIds ?? [],
@@ -182,8 +186,8 @@ function ApprovalWrapper(props: ApprovalWrapperProps) {
                     }}
                     fullWidth>
                     {pluginID === NetworkPluginID.PLUGIN_EVM
-                        ? tr('wallet_status_button_change')
-                        : tr('wallet_status_button_change_to_evm')}
+                        ? t.wallet_status_button_change()
+                        : t.wallet_status_button_change_to_evm()}
                 </Button>
             </PluginWalletStatusBar>
         </div>

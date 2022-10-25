@@ -2,14 +2,8 @@ import { useCallback, useState } from 'react'
 import { compact } from 'lodash-unified'
 import { NetworkPluginID, PluginID } from '@masknet/shared-base'
 import { useCompositionContext } from '@masknet/plugin-infra/content-script'
-import {
-    useAccount,
-    useChainId,
-    useWeb3Connection,
-    useChainIdValid,
-    PluginWeb3ContextProvider,
-} from '@masknet/web3-hooks-base'
-import { InjectedDialog } from '@masknet/shared'
+import { useChainContext, useWeb3Connection, useChainIdValid, Web3ContextProvider } from '@masknet/web3-hooks-base'
+import { InjectedDialog, NetworkTab } from '@masknet/shared'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
@@ -24,7 +18,6 @@ import {
 import { useI18N } from '../locales/index.js'
 import { useI18N as useBaseI18N } from '../../../utils/index.js'
 import { reduceUselessPayloadInfo } from './utils/reduceUselessPayloadInfo.js'
-import { NetworkTab } from '../../../components/shared/NetworkTab.js'
 import { WalletMessages } from '../../Wallet/messages.js'
 import { RedPacketMetaKey } from '../constants.js'
 import { DialogTabs, RedPacketJSONPayload } from '../types.js'
@@ -85,7 +78,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     const state = useState(DialogTabs.create)
     const [isNFTRedPacketLoaded, setIsNFTRedPacketLoaded] = useState(false)
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const chainIdValid = useChainIdValid(NetworkPluginID.PLUGIN_EVM, chainId)
     const approvalDefinition = useActivatedPlugin(PluginID.Approval, 'any')
     const chainIdList = compact<ChainId>(
@@ -95,7 +88,6 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
         chainIdValid && chainIdList.includes(chainId) ? chainId : ChainId.Mainnet,
     )
 
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     // #region token lucky drop
     const [settings, setSettings] = useState<RedPacketSettings>()
     // #endregion
@@ -188,7 +180,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     const [currentTab, onChange, tabs] = useTabs('tokens', 'collectibles')
 
     return (
-        <PluginWeb3ContextProvider value={{ chainId: networkTabChainId }}>
+        <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM, chainId: networkTabChainId }}>
             <TabContext value={currentTab}>
                 <InjectedDialog
                     isOpenFromApplicationBoard={props.isOpenFromApplicationBoard}
@@ -270,6 +262,6 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                     </DialogContent>
                 </InjectedDialog>
             </TabContext>
-        </PluginWeb3ContextProvider>
+        </Web3ContextProvider>
     )
 }
