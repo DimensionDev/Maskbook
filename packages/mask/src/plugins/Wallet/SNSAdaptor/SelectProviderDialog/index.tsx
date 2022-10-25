@@ -83,7 +83,7 @@ export function SelectProviderDialog(props: SelectProviderDialogProps) {
 
             closeDialog()
 
-            // prevent incorrect dialog overflow state
+            // TODO: remove this after global dialog be implement
             await delay(500)
             // TODO:
             // refactor to use react-router-dom
