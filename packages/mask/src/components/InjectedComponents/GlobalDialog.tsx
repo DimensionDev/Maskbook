@@ -13,7 +13,7 @@ import { MemoryRouter, Routes, Route, useLocation, useNavigate } from 'react-rou
 export function GlobalDialog() {
     const activatedPlugins = useActivatedPluginsSNSAdaptor('any')
     const displayPlugins = useAvailablePlugins(activatedPlugins, (plugins) => {
-        return plugins.flatMap((x) => x.GlobalDialogCotnents?.map((y) => ({ ...y, pluginID: x.ID })) ?? EMPTY_LIST)
+        return plugins.flatMap((x) => x.GlobalDialogContents?.map((y) => ({ ...y, pluginID: x.ID })) ?? EMPTY_LIST)
     })
 
     const initialEntries = displayPlugins.map((plugin) => plugin.path)

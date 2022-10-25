@@ -470,7 +470,7 @@ export namespace Plugin.SNSAdaptor {
         /** This UI will be rendered as tab on the setting dialog */
         SettingTabs?: SettingTab[]
         /** This UI will be rendered as a route on the global dialog */
-        GlobalDialogCotnents?: GlobalDialogContent[]
+        GlobalDialogContents?: GlobalDialogContent[]
         /** This UI will be rendered components on the avatar realm */
         AvatarRealm?: AvatarRealm
         /** This UI will be shared across plugins */

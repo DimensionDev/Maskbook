@@ -3,7 +3,7 @@ import { GlobalDialog } from '../../../components/InjectedComponents/GlobalDialo
 import { createReactRootShadowed, startWatch } from '../../../utils/index.js'
 import { rootSelector } from '../utils/selector.js'
 
-export function injectGlobalDilaogAtTwitter(signal: AbortSignal) {
+export function injectGlobalDialogAtTwitter(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(rootSelector())
     startWatch(watcher, signal)
     createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(<GlobalDialog />)

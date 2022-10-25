@@ -34,7 +34,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             </>
         )
     },
-    GlobalDialogCotnents: [
+    GlobalDialogContents: [
         {
             ID: PluginID.Wallet,
             path: GlobalDialogRoutes.WalletStatus,

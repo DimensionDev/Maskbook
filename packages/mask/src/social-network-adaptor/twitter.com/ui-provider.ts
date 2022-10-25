@@ -41,7 +41,7 @@ import { injectProfileCover } from './injection/ProfileCover.js'
 import { injectProfileCardHolder } from './injection/ProfileCard/index.js'
 import { injectAvatar } from './injection/Avatar/index.js'
 import { injectPluginSettingsDialogAtTwitter } from './injection/PluginSettingsDialog.js'
-import { injectGlobalDilaogAtTwitter } from './injection/GlobalDialog.js'
+import { injectGlobalDialogAtTwitter } from './injection/GlobalDialog.js'
 
 const useInjectedDialogClassesOverwriteTwitter = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -201,7 +201,7 @@ const twitterUI: SocialNetworkUI.Definition = {
         tips: injectTips,
         profileCard: injectProfileCardHolder,
         PluginSettingsDialog: injectPluginSettingsDialogAtTwitter,
-        GlobalDialog: injectGlobalDilaogAtTwitter,
+        GlobalDialog: injectGlobalDialogAtTwitter,
     },
     configuration: {
         nextIDConfig: {
