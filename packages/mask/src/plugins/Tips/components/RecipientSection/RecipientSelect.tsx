@@ -1,7 +1,7 @@
 import { FC, memo, useRef } from 'react'
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
-import { AccountIcon } from '@masknet/shared'
+import { AccountIcon, ReversedAddress } from '@masknet/shared'
 import { Link, MenuItem, Select, Typography } from '@mui/material'
 import { useDefaultChainId, useWeb3State } from '@masknet/web3-hooks-base'
 import { isSameAddress, SocialAccount } from '@masknet/web3-shared-base'
@@ -167,9 +167,18 @@ export const RecipientSelect: FC<Props> = memo(({ className }) => {
             {recipients.map((account) => (
                 <MenuItem className={classes.menuItem} key={account.address} value={account.address}>
                     <PluginIcon pluginID={account.pluginID} />
-                    <Typography component="span" className={classes.text}>
-                        {account.label || account.address}
-                    </Typography>
+                    {account.label ? (
+                        <Typography component="span" className={classes.text}>
+                            {account.label}
+                        </Typography>
+                    ) : (
+                        <ReversedAddress
+                            address={account.address}
+                            size={account.address.length}
+                            // @ts-ignore
+                            TypographyProps={{ component: 'span', className: classes.text }}
+                        />
+                    )}
                     <ExternalLink account={account} />
                     <AccountIcon socialAccount={account} classes={{ icon: classes.icon }} />
                     {isSameAddress(account.address, recipientAddress) ? (

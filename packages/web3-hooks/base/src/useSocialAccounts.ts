@@ -14,15 +14,13 @@ export function useSocialAccounts(socialAddressList: Array<SocialAddress<Network
                 pluginID: group[0].pluginID,
                 address: group[0].address,
                 label:
-                    group.find((x) => x.type === SocialAddressType.NEXT_ID)?.address ??
                     first(
                         compact(
                             [SocialAddressType.ENS, SocialAddressType.RSS3, SocialAddressType.SOL].map(
                                 (x) => group.find((y) => y.type === x)?.label,
                             ),
                         ),
-                    ) ??
-                    group[0].label,
+                    ) ?? group[0].label,
                 supportedAddressTypes: group.map((x) => x.type),
             }
         })

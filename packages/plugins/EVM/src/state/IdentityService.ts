@@ -73,11 +73,11 @@ export class IdentityService extends IdentityServiceState {
     private createSocialAddress(
         type: SocialAddressType,
         address: string,
-        label = address,
+        label = '',
         updatedAt?: string,
         createdAt?: string,
     ): SocialAddress<NetworkPluginID.PLUGIN_EVM> | undefined {
-        if (isValidAddress(address) && !isZeroAddress(address))
+        if (isValidAddress(address) && !isZeroAddress(address)) {
             return {
                 pluginID: NetworkPluginID.PLUGIN_EVM,
                 type,
@@ -86,6 +86,7 @@ export class IdentityService extends IdentityServiceState {
                 updatedAt,
                 createdAt,
             }
+        }
         return
     }
 
@@ -148,7 +149,7 @@ export class IdentityService extends IdentityServiceState {
         const listOfAddress = await getWalletAddressesFromNextID(identifier?.userId)
         return compact(
             listOfAddress.map((x) =>
-                this.createSocialAddress(SocialAddressType.NEXT_ID, x.identity, x.latest_checked_at, x.created_at),
+                this.createSocialAddress(SocialAddressType.NEXT_ID, x.identity, '', x.latest_checked_at, x.created_at),
             ),
         )
     }
