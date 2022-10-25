@@ -17,7 +17,7 @@ import { OffersTab } from './tabs/OffersTab.js'
 import { Context } from '../Context/index.js'
 import { useI18N, useSwitcher } from '../../../../../utils/index.js'
 
-const useStyles = makeStyles()((theme) => {
+const useStyles = makeStyles<{ currentTab: string }>()((theme, { currentTab }) => {
     return {
         root: {
             width: '100%',
@@ -40,7 +40,7 @@ const useStyles = makeStyles()((theme) => {
             flex: 1,
             backgroundColor: theme.palette.maskColor.bg,
             overflow: 'auto',
-            maxHeight: 382,
+            maxHeight: currentTab === 'about' ? 800 : 382,
             borderRadius: '0 0 12px 12px',
             scrollbarWidth: 'none',
             background: '#fff !important',
@@ -112,7 +112,8 @@ export interface CollectibleProps {}
 
 export function Collectible(props: CollectibleProps) {
     const { t } = useI18N()
-    const { classes } = useStyles()
+    const [currentTab, onChange, tabs] = useTabs('about', 'details', 'offers', 'activities')
+    const { classes } = useStyles({ currentTab })
     const { asset, events, orders, sourceType, setSourceType } = Context.useContainer()
 
     // #region provider switcher
@@ -124,7 +125,6 @@ export function Collectible(props: CollectibleProps) {
         true,
     )
     // #endregion
-    const [currentTab, onChange, tabs] = useTabs('about', 'details', 'offers', 'activities')
     if (asset.loading)
         return (
             <Box
