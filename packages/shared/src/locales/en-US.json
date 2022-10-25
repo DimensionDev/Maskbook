@@ -129,8 +129,8 @@
     "wallet_set_up_successfully": "Web3 Profile Wallet set up successfully.",
     "wallet_set_up_failed": "Web3 Profile Wallet setup failed, please try again.",
     "setting_alert_title": "Toggle the button to manage wallet display settings.",
-    "source_tooltip": "Data source is retrieved from {{source}}.",
-    "source_tooltip$twitter": "Data source is retrieved from Twitter profile and {{source}}.",
-    "source_tooltip$facebook": "Data source is retrieved from Facebook profile and {{source}}.",
-    "source_tooltip$next_id": "Data source is retrieved from NEXT.ID."
+    "account_icon_tooltips": "Data source is retrieved from {{source}}.",
+    "account_icon_tooltips$twitter": "Data source is retrieved from Twitter profile and {{source}}.",
+    "account_icon_tooltips$facebook": "Data source is retrieved from Facebook profile and {{source}}.",
+    "account_icon_tooltips$next_id": "Data source is retrieved from NEXT.ID."
 }

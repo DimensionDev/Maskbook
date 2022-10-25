@@ -49,7 +49,7 @@ function AccountTooltips({ platform, type, children }: AccountTooltipsProps) {
             disableInteractive
             title={
                 <Typography fontSize={14} lineHeight="18px">
-                    {t.source_tooltip({
+                    {t.account_icon_tooltips({
                         source: type ?? '',
                         context: platform,
                     })}
