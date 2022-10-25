@@ -45,16 +45,17 @@ const useInjectedDialogClassesOverwriteMinds = makeStyles()((theme) => {
         },
         paper: {
             width: '600px !important',
+            minHeight: 400,
+            maxHeight: 620,
             maxWidth: 'none',
             boxShadow: 'none',
             backgroundImage: 'none',
-            minHeight: 400,
-            maxHeight: 620,
             [smallQuery]: {
-                '&': {
-                    display: 'block !important',
-                    borderRadius: '0 !important',
-                },
+                display: 'block !important',
+                margin: 12,
+            },
+            '&::-webkit-scrollbar': {
+                display: 'none',
             },
         },
         dialogTitle: {
@@ -82,16 +83,17 @@ const useInjectedDialogClassesOverwriteMinds = makeStyles()((theme) => {
             },
         },
         dialogContent: {
-            padding: 16,
+            backgroundColor: theme.palette.maskColor.bottom,
             [smallQuery]: {
                 display: 'flex',
                 flexDirection: 'column',
                 maxWidth: 600,
                 margin: '0 auto',
-                padding: '7px 14px 6px !important',
+                padding: '7px 14px 6px',
             },
         },
         dialogActions: {
+            backgroundColor: theme.palette.maskColor.bottom,
             padding: '6px 16px',
             [smallQuery]: {
                 display: 'flex',

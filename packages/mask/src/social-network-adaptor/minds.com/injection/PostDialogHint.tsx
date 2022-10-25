@@ -15,14 +15,12 @@ export function injectPostDialogHintAtMinds(signal: AbortSignal) {
 }
 
 function renderPostDialogHintTo<T>(ls: LiveSelector<T, true>, signal: AbortSignal, reason: 'popup' | 'timeline') {
-    const watcher = new MutationObserverWatcher(ls, document.querySelector('m-app')!)
+    const watcher = new MutationObserverWatcher(ls)
     startWatch(watcher, signal)
 
-    watcher.useForeach((node, key, meta) => {
-        createReactRootShadowed(watcher.firstDOMProxy.afterShadow, {
-            signal,
-        }).render(<PostDialogHintAtMinds reason={reason} />)
-    })
+    createReactRootShadowed(watcher.firstDOMProxy.afterShadow, {
+        signal,
+    }).render(<PostDialogHintAtMinds reason={reason} />)
 }
 
 interface StyleProps {
