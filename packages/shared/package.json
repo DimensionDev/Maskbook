@@ -9,6 +9,7 @@
   },
   "types": "./dist/index.d.ts",
   "dependencies": {
+    "@types/react-router-dom": "^5.3.3",
     "@hookform/resolvers": "^2.8.10",
     "@masknet/icons": "workspace:*",
     "@masknet/plugin-infra": "workspace:*",
@@ -37,6 +38,7 @@
     "qrcode": "^1.5.0",
     "react-feather": "^2.0.9",
     "react-hook-form": "^7.31.1",
+    "react-router-dom": "6.4.2",
     "react-use": "^17.4.0",
     "remarkable": "^2.0.1",
     "unstated-next": "^1.1.0",
