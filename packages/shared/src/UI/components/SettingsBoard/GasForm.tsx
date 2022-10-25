@@ -180,7 +180,7 @@ export function GasForm(props: GasFormProps) {
                     }}
                     icon={<Icons.Info />}>
                     {t.gas_settings_info_gas_fee({
-                        fee: formatBalance(scale10(baseFeePerGas, 2), 2, 2),
+                        fee: formatBalance(scale10(formatWeiToGwei(baseFeePerGas), 2), 2, 2),
                     })}
                 </MaskAlert>
             ) : null}
