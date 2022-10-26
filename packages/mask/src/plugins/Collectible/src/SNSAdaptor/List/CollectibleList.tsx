@@ -3,7 +3,6 @@ import type { NonFungibleAsset } from '@masknet/web3-shared-base'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import { Box, Button, Typography } from '@mui/material'
 import { CollectibleItem } from './CollectibleItem.js'
-import { CollectibleListContext } from './CollectibleListContext.js'
 import { LoadingSkeleton } from './LoadingSkeleton.js'
 import { useI18N } from '../../../../../utils/index.js'
 import { makeStyles } from '@masknet/theme'
@@ -57,31 +56,29 @@ export function CollectibleList(props: CollectibleListProps) {
     const { classes } = useStyles({ columns, gap }, { props: { classes: props.classes } })
 
     return (
-        <CollectibleListContext.Provider value={{ collectiblesRetry: retry }}>
-            <Box className={classes.list}>
-                {loading && <LoadingSkeleton className={classes.root} />}
-                {error || (collectibles.length === 0 && !loading) ? (
-                    <Box className={classes.text}>
-                        <Typography color="textSecondary">{t('dashboard_no_collectible_found')}</Typography>
-                        {hasRetry ? (
-                            <Button className={classes.button} variant="text" onClick={retry}>
-                                {t('plugin_collectible_retry')}
-                            </Button>
-                        ) : null}
-                    </Box>
-                ) : (
-                    <Box className={classes.root}>
-                        {collectibles.map((token, index) => (
-                            <CollectibleItem
-                                key={index}
-                                className={classes.collectibleItem}
-                                pluginID={pluginID}
-                                asset={token}
-                            />
-                        ))}
-                    </Box>
-                )}
-            </Box>
-        </CollectibleListContext.Provider>
+        <Box className={classes.list}>
+            {loading && <LoadingSkeleton className={classes.root} />}
+            {error || (collectibles.length === 0 && !loading) ? (
+                <Box className={classes.text}>
+                    <Typography color="textSecondary">{t('dashboard_no_collectible_found')}</Typography>
+                    {hasRetry ? (
+                        <Button className={classes.button} variant="text" onClick={retry}>
+                            {t('plugin_collectible_retry')}
+                        </Button>
+                    ) : null}
+                </Box>
+            ) : (
+                <Box className={classes.root}>
+                    {collectibles.map((token, index) => (
+                        <CollectibleItem
+                            key={index}
+                            className={classes.collectibleItem}
+                            pluginID={pluginID}
+                            asset={token}
+                        />
+                    ))}
+                </Box>
+            )}
+        </Box>
     )
 }

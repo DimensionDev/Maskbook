@@ -11,3 +11,4 @@ export interface ErrorBoundaryError {
  * Please provide the build info text
  */
 export const ErrorBoundaryBuildInfoContext = createContext('')
+ErrorBoundaryBuildInfoContext.displayName = 'ErrorBoundaryBuildInfoContext'

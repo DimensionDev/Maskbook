@@ -15,6 +15,7 @@ const BaseUIContext = createContext<ContextOptions>({
     networkIdentifier: sharedUINetworkIdentifier.value,
     componentOverwrite: sharedUIComponentOverwrite.value,
 })
+BaseUIContext.displayName = 'BaseUIContext'
 
 export const BaseSharedUIProvider: FC<PropsWithChildren<{}>> = ({ children }) => {
     const snsId = useValueRef(sharedUINetworkIdentifier)

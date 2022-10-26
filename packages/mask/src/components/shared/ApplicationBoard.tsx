@@ -258,6 +258,7 @@ const ApplicationEntryStatusContext = createContext<ApplicationEntryStatusContex
     personaAction: undefined,
     isLoading: false,
 })
+ApplicationEntryStatusContext.displayName = 'ApplicationEntryStatusContext'
 
 function ApplicationEntryStatusProvider(props: PropsWithChildren<{}>) {
     const { value: personaConnectStatus, loading: personaStatusLoading } = useCurrentPersonaConnectStatus()
