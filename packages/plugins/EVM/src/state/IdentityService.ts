@@ -115,7 +115,7 @@ export class IdentityService extends IdentityServiceState {
     private async getSocialAddressFromAvatarKV({ identifier }: SocialIdentity) {
         if (!identifier?.userId) return
         const address = await KeyValue.createJSON_Storage<Record<NetworkPluginID, string>>(
-            `com.maskbook.avatar.metadata.storage_${getSiteType()}`,
+            `com.maskbook.user_${getSiteType()}`,
         )
             .get(identifier.userId)
             .then((x) => x?.[NetworkPluginID.PLUGIN_EVM])
