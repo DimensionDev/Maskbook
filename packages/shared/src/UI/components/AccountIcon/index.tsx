@@ -49,10 +49,14 @@ function AccountTooltips({ platform, type, children }: AccountTooltipsProps) {
             disableInteractive
             title={
                 <Typography fontSize={14} lineHeight="18px">
-                    {t.account_icon_tooltips({
-                        source: type ?? '',
-                        context: platform,
-                    })}
+                    {SocialAddressType.KV === type || SocialAddressType.Address === type
+                        ? t.account_icon_tooltips_only({
+                              context: platform!,
+                          })
+                        : t.account_icon_tooltips({
+                              source: type ?? '',
+                              context: platform,
+                          })}
                 </Typography>
             }
             arrow>
@@ -85,6 +89,7 @@ export function AccountIcon({ socialAccount, classes: externalClasses }: Account
         SocialAddressType.RSS3,
         SocialAddressType.SOL,
         SocialAddressType.TwitterBlue,
+        SocialAddressType.KV,
     ].find((x) => supportedAddressTypes.includes(x))
 
     return (
