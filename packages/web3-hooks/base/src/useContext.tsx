@@ -3,6 +3,7 @@ import type { NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useAccount } from './useAccount.js'
 import { useChainId } from './useChainId.js'
+import { omitBy, isUndefined } from 'lodash-unified'
 import { useNetworkType } from './useNetworkType.js'
 import { useProviderType } from './useProviderType.js'
 
@@ -111,6 +112,6 @@ export function useChainContext<T extends NetworkPluginID = NetworkPluginID>(def
     const context = useContext(ChainContext)
     return {
         ...context,
-        ...Object.fromEntries(Object.entries(defaults ?? {}).filter(([, value]) => value !== undefined)),
+        ...omitBy(defaults, isUndefined),
     } as Required<ChainContext<T>>
 }
