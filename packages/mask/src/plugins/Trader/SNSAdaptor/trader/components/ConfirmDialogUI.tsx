@@ -4,7 +4,6 @@ import type BigNumber from 'bignumber.js'
 import { FormattedBalance, FormattedCurrency, InjectedDialog, TokenIcon, PluginWalletStatusBar } from '@masknet/shared'
 import { isDashboardPage } from '@masknet/shared-base'
 import { makeStyles, MaskColorVar, parseColor } from '@masknet/theme'
-import { ActualChainContextProvider } from '@masknet/web3-hooks-base'
 import { useI18N } from '../../../../../utils/index.js'
 import type { TradeComputed } from '../../../types/index.js'
 import {
@@ -495,13 +494,11 @@ export const ConfirmDialogUI = memo<ConfirmDialogUIProps>(
                 </DialogContent>
 
                 <DialogActions className={classes.actions}>
-                    <ActualChainContextProvider>
-                        <PluginWalletStatusBar>
-                            <Button disabled={staled || priceUpdated} fullWidth onClick={onConfirm}>
-                                {t('plugin_trader_confirm_swap')}
-                            </Button>
-                        </PluginWalletStatusBar>
-                    </ActualChainContextProvider>
+                    <PluginWalletStatusBar>
+                        <Button disabled={staled || priceUpdated} fullWidth onClick={onConfirm}>
+                            {t('plugin_trader_confirm_swap')}
+                        </Button>
+                    </PluginWalletStatusBar>
                 </DialogActions>
             </InjectedDialog>
         )
