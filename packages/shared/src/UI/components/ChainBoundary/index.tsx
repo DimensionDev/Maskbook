@@ -77,14 +77,9 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
         account,
         chainId: actualChainId,
         providerType: actualProviderType,
-    } = useChainContext(
-        expectedAccount
-            ? {
-                  account: expectedAccount,
-              }
-            : undefined,
-    )
-
+    } = useChainContext({
+        account: expectedAccount,
+    })
     const actualProviderDescriptor = useProviderDescriptor(actualPluginID)
     const actualChainName = actualOthers?.chainResolver.chainName(actualChainId)
 
