@@ -111,6 +111,6 @@ export function useChainContext<T extends NetworkPluginID = NetworkPluginID>(def
     const context = useContext(ChainContext)
     return {
         ...context,
-        ...defaults,
+        ...Object.fromEntries(Object.entries(defaults ?? {}).filter(([, value]) => value !== undefined)),
     } as Required<ChainContext<T>>
 }
