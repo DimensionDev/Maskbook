@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 import { useWeb3State } from '@masknet/web3-hooks-base'
-import { NetworkPluginID, EnhanceableSite } from '@masknet/shared-base'
+import type { NetworkPluginID, EnhanceableSite } from '@masknet/shared-base'
 import { NFT_AVATAR_DB_NAME } from '../../constants.js'
 import type { AddressStorageV2 } from '../../types.js'
 
@@ -19,8 +19,8 @@ export function useSaveAddress(pluginID?: NetworkPluginID) {
 
             await addressStorage.set<AddressStorageV2>(userId, {
                 ...(prevData ?? {}),
-                [pluginID ?? NetworkPluginID.PLUGIN_EVM]: account,
-                [userId]: { address: account, networkPluginID: pluginID ?? NetworkPluginID.PLUGIN_EVM },
+                [pluginID]: account,
+                [userId]: { address: account, networkPluginID: pluginID },
             } as AddressStorageV2)
         },
         [Storage],

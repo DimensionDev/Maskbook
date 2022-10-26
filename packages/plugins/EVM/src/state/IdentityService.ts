@@ -113,17 +113,14 @@ export class IdentityService extends IdentityServiceState {
 
     /** Read a social address from avatar KV storage. */
     private async getSocialAddressFromAvatarKV({ identifier }: SocialIdentity) {
-        const address = await KeyValue.createJSON_Storage<
-            Record<
-                NetworkPluginID,
-                {
-                    address: string
-                    networkPluginID: NetworkPluginID
-                }
-            >
-        >(`com.maskbook.user_${getSiteType()}`)
-            .get(identifier?.userId ?? '$unknown')
-            .then((x) => x?.[NetworkPluginID.PLUGIN_EVM].address ?? '')
+        if (!identifier?.userId) return
+        const address = await KeyValue.createJSON_Storage<Record<NetworkPluginID, string>>(
+            `com.maskbook.avatar.metadata.storage_${getSiteType()}`,
+        )
+            .get(identifier.userId)
+            .then((x) => x?.[NetworkPluginID.PLUGIN_EVM])
+
+        if (!address) return
 
         return this.createSocialAddress(SocialAddressType.KV, address)
     }
