@@ -11,7 +11,6 @@ const supportSources: SocialAddressType[] = [
     SocialAddressType.ENS,
     SocialAddressType.NEXT_ID,
     SocialAddressType.TwitterBlue,
-    SocialAddressType.KV,
 ]
 export function useTipsAccounts(identity: IdentityResolved | undefined, personaPubkey: string | undefined) {
     const { value: TipsSetting } = useTipsSetting(personaPubkey)
