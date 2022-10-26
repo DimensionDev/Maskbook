@@ -37,6 +37,10 @@ export function getDefaultChainId() {
     return ChainId.Mainnet
 }
 
+export function getInvalidChainId() {
+    return ChainId.Invalid
+}
+
 export function getDefaultNetworkType() {
     return NetworkType.Flow
 }

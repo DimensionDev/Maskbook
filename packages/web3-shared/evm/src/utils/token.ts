@@ -43,7 +43,11 @@ export function createERC20Token(
     )
 }
 
-export const createERC20Tokens = createFungibleTokensFromConstants(getEnumAsArray(ChainId), SchemaType.ERC20, Token)
+export const createERC20Tokens = createFungibleTokensFromConstants<typeof Token, ChainId, SchemaType.ERC20>(
+    getEnumAsArray(ChainId),
+    SchemaType.ERC20,
+    Token,
+)
 
 export function isNativeTokenSchemaType(schemaType?: SchemaType) {
     return schemaType === SchemaType.Native

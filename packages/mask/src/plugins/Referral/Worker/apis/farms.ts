@@ -110,6 +110,7 @@ function parseFarmDepositAndFarmMetastateEvents(
 }
 
 export async function getFarmExistEvents(chainId: ChainId): Promise<FarmExistsEvent[]> {
+    if (!chainId) return []
     const farmsAddr = await getReferralFarmsV1Address()
 
     const farmExistsEvents = await queryIndexersWithNearestQuorum({
@@ -131,6 +132,7 @@ export async function getAccountFarms(
     chainId: ChainId,
     filter?: TokenFilter,
 ): Promise<FarmDetailed[]> {
+    if (!chainId) return []
     // Allow filtering your own tokens
     let topic3, topic4
     if (filter?.rewardTokens) {
@@ -204,6 +206,10 @@ export async function getDailyAndTotalRewardsFarm(
     farmHash: FarmHash,
     tokenDecimals: number,
 ): Promise<Farm> {
+    let farm = { farmHash, dailyFarmReward: 0, totalFarmRewards: 0 }
+
+    if (!chainId) return farm
+
     const farmsAddr = await getReferralFarmsV1Address()
 
     const res = await queryIndexersWithNearestQuorum({
@@ -214,8 +220,6 @@ export async function getDailyAndTotalRewardsFarm(
     })
 
     const parsed = parseEvents(res.items)
-
-    let farm = { farmHash, dailyFarmReward: 0, totalFarmRewards: 0 }
 
     parsed.forEach((e) => {
         if (e.topic === eventIds.FarmDepositIncreased) {
@@ -246,6 +250,8 @@ export async function getMyRewardsHarvested(
         rewardTokens?: ChainAddress[]
     },
 ): Promise<RewardsHarvested[]> {
+    if (!chainId) return []
+
     const farmsAddr = await getReferralFarmsV1Address()
 
     // Allow filtering by reward tokens
@@ -270,6 +276,7 @@ async function getFarmsForReferredToken(
     chainId: ChainId,
     referredToken: EvmAddress,
 ): Promise<Map<string, FarmDetailed>> {
+    if (!chainId) return {} as Map<string, FarmDetailed>
     const farmsAddr = await getReferralFarmsV1Address()
 
     // query farms basic data
@@ -310,6 +317,7 @@ async function getFarmsForReferredToken(
     return farmsData
 }
 export async function getRewardsForReferredToken(chainId: ChainId, referredToken: EvmAddress): Promise<RewardData[]> {
+    if (!chainId) return []
     const farmsData = await getFarmsForReferredToken(chainId, referredToken)
 
     const rewards = new Map<
@@ -334,6 +342,7 @@ export async function getRewardsForReferredToken(chainId: ChainId, referredToken
 }
 
 export async function getReferredTokensDefn(chainId: ChainId): Promise<ChainAddress[]> {
+    if (!chainId) return []
     const farmExistEvents = await getFarmExistEvents(chainId)
     const referredTokensDefn = farmExistEvents.map((farm) => farm.referredTokenDefn)
 

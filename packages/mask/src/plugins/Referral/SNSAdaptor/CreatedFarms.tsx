@@ -131,7 +131,7 @@ export function CreatedFarms(props: PageInterface) {
         loading,
         error,
     } = useAsync(
-        async () => (account ? ReferralRPC.getAccountFarms(account, currentChainId) : []),
+        async () => (account && currentChainId ? ReferralRPC.getAccountFarms(account, currentChainId) : []),
         [currentChainId, account],
     )
 

@@ -3,6 +3,7 @@ import { isSameAddress } from '@masknet/web3-shared-base'
 import { ProviderState } from '@masknet/web3-state'
 import {
     isValidChainId,
+    getInvalidChainId,
     isValidAddress,
     chainResolver,
     ChainId,
@@ -21,6 +22,7 @@ export class Provider extends ProviderState<ChainId, ProviderType, NetworkType, 
         super(context, Providers, {
             isSameAddress,
             isValidChainId,
+            getInvalidChainId,
             isValidAddress,
             getDefaultChainId,
             getDefaultNetworkType,
