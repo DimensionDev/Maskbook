@@ -14,16 +14,11 @@ const supportSources: SocialAddressType[] = [
 ]
 export function useTipsAccounts(identity: IdentityResolved | undefined, personaPubkey: string | undefined) {
     const { value: TipsSetting } = useTipsSetting(personaPubkey)
-    const { value: socialAccounts = EMPTY_LIST } = useSocialAccountsAll(identity)
+    const { value: socialAccounts = EMPTY_LIST } = useSocialAccountsAll(identity, supportSources)
 
     const hiddenAddresses = TipsSetting?.hiddenAddresses
     return useMemo(() => {
         if (!hiddenAddresses?.length) return socialAccounts
-        return socialAccounts.filter((x) => {
-            const hidden = hiddenAddresses.some((y) => isSameAddress(y, x.address))
-            return (
-                !hidden && (!x.supportedAddressTypes || x.supportedAddressTypes.some((y) => supportSources.includes(y)))
-            )
-        })
+        return socialAccounts.filter((x) => !hiddenAddresses.some((y) => isSameAddress(y, x.address)))
     }, [socialAccounts, hiddenAddresses])
 }
