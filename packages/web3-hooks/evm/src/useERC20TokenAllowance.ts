@@ -1,7 +1,7 @@
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
-import { NetworkPluginID } from '@masknet/shared-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { useAccount, useChainId, useBeatRetry } from '@masknet/web3-hooks-base'
+import { useChainContext, useBeatRetry } from '@masknet/web3-hooks-base'
 import { useERC20TokenContract } from './useERC20TokenContract.js'
 
 export function useERC20TokenAllowance(
@@ -9,8 +9,10 @@ export function useERC20TokenAllowance(
     spender?: string,
     options?: Web3Helper.Web3ConnectionOptionsScope<void, NetworkPluginID.PLUGIN_EVM>,
 ): AsyncStateRetry<string> {
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM, options?.account)
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM, options?.chainId)
+    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>({
+        account: options?.account,
+        chainId: options?.chainId,
+    })
     const erc20Contract = useERC20TokenContract(chainId, address)
     return useBeatRetry(
         async () => {

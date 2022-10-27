@@ -11,45 +11,36 @@ import { EnvironmentPluginCache, EnvironmentPluginNoCache } from './EnvironmentP
 import { emitManifestFile } from './manifest'
 import { emitGitInfo, getGitInfo } from './git-info'
 
-import { isAbsolute, join } from 'path'
-import { readFileSync } from 'fs'
+import { join } from 'path'
+import { readFileSync, readdirSync } from 'fs'
 import { nonNullable, EntryDescription, normalizeEntryDescription, joinEntryItem } from './utils'
-import { BuildFlags, normalizeBuildFlags, computedBuildFlags } from './flags'
+import { BuildFlags, normalizeBuildFlags, computedBuildFlags, computeCacheKey } from './flags'
 
 import './clean-hmr'
 
-export function createConfiguration(rawFlags: BuildFlags): Configuration {
-    const normalizedFlags = normalizeBuildFlags(rawFlags)
-    const { sourceMapKind, lockdown } = computedBuildFlags(normalizedFlags)
-    const { hmr, mode, profiling, reactRefresh, readonlyCache, reproducibleBuild, runtime, outputPath } =
-        normalizedFlags
+export function createConfiguration(_inputFlags: BuildFlags): Configuration {
+    const flags = normalizeBuildFlags(_inputFlags)
+    const computedFlags = computedBuildFlags(flags)
+    const cacheKey = computeCacheKey(flags, computedFlags)
 
-    const distFolder = (() => {
-        if (outputPath) {
-            if (isAbsolute(outputPath)) return outputPath
-            else return join(__dirname, '../../../', outputPath)
-        }
-        return join(__dirname, '../../../', mode === 'development' ? 'dist' : 'build')
-    })()
-    const polyfillFolder = join(distFolder, './polyfill')
+    const polyfillFolder = join(flags.outputPath, './polyfill')
 
+    const patchesDir = join(__dirname, '../../../patches')
+    const pnpmPatches = readdirSync(patchesDir).map((x) => join(patchesDir, x))
     const baseConfig: Configuration = {
         name: 'mask',
-        mode,
-        devtool: sourceMapKind,
+        mode: flags.mode,
+        devtool: computedFlags.sourceMapKind,
         target: ['web', 'es2022'],
         entry: {},
         experiments: { backCompat: false, asyncWebAssembly: true },
         cache: {
             type: 'filesystem',
-            buildDependencies: { config: [__filename] },
-            version: (() => {
-                // In development mode we treat all envs as static. Each runtimeEnv will have it own cache.
-                // Therefore, those modules will be marked as cacheable (to not re-build very often).
-                // In production mode we mark them as runtime value so different targets can share a cache.
-                const envCacheKey = mode === 'development' ? JSON.stringify(runtime) : 'build'
-                return `1-node${process.version}-${envCacheKey}`
-            })(),
+            buildDependencies: {
+                config: [__filename],
+                patches: pnpmPatches,
+            },
+            version: cacheKey,
         },
         resolve: {
             extensionAlias: {
@@ -61,18 +52,18 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
                 const alias = {
                     // We want to always use the full version.
                     'async-call-rpc$': require.resolve('async-call-rpc/full'),
-                    '@dimensiondev/holoflows-kit': require.resolve('@dimensiondev/holoflows-kit/es'),
                     // It's a Node impl for xhr which is unnecessary
                     'xhr2-cookies': require.resolve('./package-overrides/xhr2-cookies.js'),
+                    'error-polyfill': require.resolve('./package-overrides/null.js'),
                     // fake esm
-                    '@uniswap/v3-sdk': require.resolve('@uniswap/v3-sdk/dist/index.js'),
+                    // '@uniswap/v3-sdk': require.resolve('@uniswap/v3-sdk/dist/index.js'),
                 }
-                if (lockdown) {
-                    // https://github.com/near/near-api-js/issues/833
-                    alias['error-polyfill'] = require.resolve('./package-overrides/null.js')
-                }
-                if (profiling) {
-                    alias['scheduler/tracing'] = 'scheduler/tracing-profiling'
+                if (computedFlags.reactProductionProfiling) alias['react-dom$'] = 'react-dom/profiling'
+                if (flags.devtools) {
+                    // Note: when devtools is enabled, we will install react-refresh/runtime manually to keep the correct react global hook installation order.
+                    // https://github.com/pmmmwh/react-refresh-webpack-plugin/issues/680
+                    alias[require.resolve('@pmmmwh/react-refresh-webpack-plugin/client/ReactRefreshEntry.js')] =
+                        require.resolve('./package-overrides/null.js')
                 }
                 return alias
             })(),
@@ -94,22 +85,22 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
                 },
             },
             rules: [
-                // Opt in source map
-                { test: /(async-call|webextension).+\.js$/, enforce: 'pre', use: ['source-map-loader'] },
-                // Patch regenerator-runtime
-                lockdown
-                    ? {
-                          test: /\..?js$/,
-                          loader: require.resolve('./fix-regenerator-runtime.ts'),
-                      }
-                    : undefined!,
+                // Source map for libraries
+                computedFlags.sourceMapKind
+                    ? { test: /(async-call|webextension).+\.js$/, enforce: 'pre', use: ['source-map-loader'] }
+                    : null!,
+                // Patch old regenerator-runtime
+                {
+                    test: /\..?js$/,
+                    loader: require.resolve('./fix-regenerator-runtime.ts'),
+                },
                 // TypeScript
                 {
                     test: /\.tsx?$/,
                     parser: { worker: ['OnDemandWorker', '...'] },
                     // Compile all ts files in the workspace
                     include: join(__dirname, '../../'),
-                    loader: require.resolve('swc-loader'),
+                    loader: 'swc-loader',
                     options: {
                         // https://swc.rs/docs/configuring-swc/
                         jsc: {
@@ -123,7 +114,7 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
                             transform: {
                                 react: {
                                     runtime: 'automatic',
-                                    refresh: reactRefresh && {
+                                    refresh: flags.reactRefresh && {
                                         refreshReg: '$RefreshReg$',
                                         refreshSig: '$RefreshSig$',
                                         emitFullSignatures: true,
@@ -137,7 +128,7 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
                     },
                 },
                 // compress svg files
-                mode === 'production'
+                flags.mode === 'production'
                     ? {
                           test: /\.svg$/,
                           loader: 'svgo-loader',
@@ -158,7 +149,7 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
                           },
                           type: 'asset/resource',
                       }
-                    : undefined!,
+                    : null!,
             ],
         },
         plugins: [
@@ -168,38 +159,40 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
                 'process.nextTick': 'next-tick',
             }),
             (() => {
-                // In development mode, it will be shared across different target (and get inaccurate result).
+                // In development mode, it will be shared across different target to speedup.
                 // This is a valuable trade-off.
                 const runtimeValues = {
-                    ...runtime,
-                    ...getGitInfo(reproducibleBuild),
-                    channel: normalizedFlags.channel,
-                    manifest: String(runtime.manifest),
+                    ...getGitInfo(flags.reproducibleBuild),
+                    architecture: flags.architecture,
+                    engine: flags.engine,
+                    channel: flags.channel,
+                    manifest: String(flags.manifest),
                 }
-                if (mode === 'development') return EnvironmentPluginCache(runtimeValues)
+                if (flags.mode === 'development') return EnvironmentPluginCache(runtimeValues)
                 return EnvironmentPluginNoCache(runtimeValues)
             })(),
             new EnvironmentPlugin({
-                NODE_ENV: mode,
+                NODE_ENV: flags.mode,
+                shadowRootMode: flags.devtools ? 'open' : 'closed',
                 NODE_DEBUG: false,
                 WEB3_CONSTANTS_RPC: process.env.WEB3_CONSTANTS_RPC ?? '',
             }),
             new DefinePlugin({
                 'process.browser': 'true',
-                'process.version': JSON.stringify(process.version),
+                'process.version': JSON.stringify('v18.11.0'),
                 // MetaMaskInpageProvider => extension-port-stream => readable-stream depends on stdin and stdout
                 'process.stdout': '/* stdout */ null',
                 'process.stderr': '/* stdin */ null',
             }),
-            reactRefresh && new ReactRefreshWebpackPlugin({ overlay: false, esModule: true }),
+            flags.reactRefresh && new ReactRefreshWebpackPlugin({ overlay: false, esModule: true }),
             // https://github.com/webpack/webpack/issues/13581
-            readonlyCache && new ReadonlyCachePlugin(),
+            flags.readonlyCache && new ReadonlyCachePlugin(),
             new CopyPlugin({
                 patterns: [
-                    { from: join(__dirname, '../public/'), to: distFolder },
-                    { from: join(__dirname, '../../injected-script/dist/injected-script.js'), to: distFolder },
-                    { from: join(__dirname, '../../gun-utils/gun.js'), to: distFolder },
-                    { from: join(__dirname, '../../mask-sdk/dist/mask-sdk.js'), to: distFolder },
+                    { from: join(__dirname, '../public/'), to: flags.outputPath },
+                    { from: join(__dirname, '../../injected-script/dist/injected-script.js'), to: flags.outputPath },
+                    { from: join(__dirname, '../../gun-utils/gun.js'), to: flags.outputPath },
+                    { from: join(__dirname, '../../mask-sdk/dist/mask-sdk.js'), to: flags.outputPath },
                     {
                         context: join(__dirname, '../../polyfills/dist/'),
                         from: '*.js',
@@ -208,15 +201,15 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
                     { from: require.resolve('webextension-polyfill/dist/browser-polyfill.js'), to: polyfillFolder },
                     {
                         from:
-                            mode === 'development'
+                            flags.mode === 'development'
                                 ? require.resolve('../../../node_modules/ses/dist/lockdown.umd.js')
                                 : require.resolve('../../../node_modules/ses/dist/lockdown.umd.min.js'),
                         to: join(polyfillFolder, 'lockdown.js'),
                     },
                 ],
             }),
-            emitManifestFile(normalizedFlags),
-            emitGitInfo(reproducibleBuild),
+            emitManifestFile(flags),
+            emitGitInfo(flags.reproducibleBuild),
         ].filter(nonNullable),
         optimization: {
             minimize: false,
@@ -246,9 +239,9 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
             environment: {
                 module: false,
                 // Our iOS App doesn't support dynamic import (it requires a heavy post-build time transform).
-                dynamicImport: !(runtime.architecture === 'app' && runtime.engine === 'safari'),
+                dynamicImport: computedFlags.supportDynamicImport,
             },
-            path: distFolder,
+            path: flags.outputPath,
             filename: 'js/[name].js',
             // In some cases webpack will emit files starts with "_" which is reserved in web extension.
             chunkFilename: 'js/chunk.[name].js',
@@ -257,7 +250,7 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
             hotUpdateMainFilename: 'hot/[runtime].[fullhash].json',
             globalObject: 'globalThis',
             publicPath: '/',
-            clean: mode === 'production',
+            clean: flags.mode === 'production',
             trustedTypes: {
                 policyName: 'webpack',
             },
@@ -265,11 +258,11 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
         ignoreWarnings: [/Failed to parse source map/],
         // @ts-ignore
         devServer: {
-            hot: hmr ? 'only' : false,
+            hot: flags.hmr ? 'only' : false,
             liveReload: false,
-            client: hmr ? undefined : false,
+            client: flags.hmr ? undefined : false,
         } as DevServerConfiguration,
-        stats: mode === 'production' ? 'errors-only' : undefined,
+        stats: flags.mode === 'production' ? 'errors-only' : undefined,
     }
     baseConfig.module!.rules = baseConfig.module!.rules!.filter(Boolean)
 
@@ -281,17 +274,23 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
         debug: normalizeEntryDescription(join(__dirname, '../src/extension/debug-page/index.tsx')),
     })
     baseConfig.plugins!.push(
-        addHTMLEntry({ chunks: ['dashboard'], filename: 'dashboard.html', lockdown }),
-        addHTMLEntry({ chunks: ['popups'], filename: 'popups.html', lockdown }),
+        addHTMLEntry({ chunks: ['dashboard'], filename: 'dashboard.html', lockdown: computedFlags.lockdown }),
+        addHTMLEntry({ chunks: ['popups'], filename: 'popups.html', lockdown: computedFlags.lockdown }),
         addHTMLEntry({
             chunks: ['contentScript'],
             filename: 'generated__content__script.html',
-            lockdown,
+            lockdown: computedFlags.lockdown,
         }),
-        addHTMLEntry({ chunks: ['debug'], filename: 'debug.html', lockdown }),
+        addHTMLEntry({ chunks: ['debug'], filename: 'debug.html', lockdown: computedFlags.lockdown }),
     )
+    if (flags.devtools) {
+        entries.devtools = normalizeEntryDescription(join(__dirname, '../devtools/panels/index.tsx'))
+        baseConfig.plugins!.push(
+            addHTMLEntry({ chunks: ['devtools'], filename: 'devtools-background.html', lockdown: false }),
+        )
+    }
     // background
-    if (runtime.manifest === 3) {
+    if (flags.manifest === 3) {
         entries.background = {
             import: join(__dirname, '../background/mv3-entry.ts'),
             filename: 'js/background.js',
@@ -305,12 +304,12 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
                 chunks: ['background'],
                 filename: 'background.html',
                 gun: true,
-                lockdown,
+                lockdown: computedFlags.lockdown,
             }),
         )
     }
     for (const entry in entries) {
-        if (entry !== 'background') {
+        if (entry !== 'background' && entry !== 'devtools') {
             withReactDevTools(entries[entry])
         }
         with_iOSPatch(entries[entry])
@@ -319,14 +318,11 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
     return baseConfig
 
     function withReactDevTools(entry: EntryDescription) {
-        // https://github.com/facebook/react/issues/20377 React-devtools conflicts with react-refresh
-        if (reactRefresh) return
-        if (!profiling) return
-
-        entry.import = joinEntryItem(join(__dirname, './package-overrides/react-devtools.js'), entry.import)
+        if (!flags.devtools) return
+        entry.import = joinEntryItem(join(__dirname, '../devtools/content-script/index.ts'), entry.import)
     }
     function with_iOSPatch(entry: EntryDescription) {
-        if (runtime.engine === 'safari' && runtime.architecture === 'app') {
+        if (flags.engine === 'safari' && flags.architecture === 'app') {
             entry.import = joinEntryItem(entry.import, join(__dirname, '../src/polyfill/permissions.js'))
         }
     }

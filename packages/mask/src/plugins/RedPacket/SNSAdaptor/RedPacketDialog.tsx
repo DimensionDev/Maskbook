@@ -1,8 +1,14 @@
 import { useCallback, useState } from 'react'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useCompositionContext } from '@masknet/plugin-infra/content-script'
+<<<<<<< HEAD
 import { useAccount, useChainId, useWeb3Connection } from '@masknet/web3-hooks-base'
 import { InjectedDialog } from '@masknet/shared'
+=======
+import { useChainContext, useWeb3Connection, useChainIdValid, Web3ContextProvider } from '@masknet/web3-hooks-base'
+import { InjectedDialog, NetworkTab } from '@masknet/shared'
+import { ChainId } from '@masknet/web3-shared-evm'
+>>>>>>> develop
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import { DialogContent, Tab } from '@mui/material'
@@ -58,8 +64,21 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     const state = useState(DialogTabs.create)
     const [isNFTRedPacketLoaded, setIsNFTRedPacketLoaded] = useState(false)
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
+<<<<<<< HEAD
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+=======
+    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+    const chainIdValid = useChainIdValid(NetworkPluginID.PLUGIN_EVM, chainId)
+    const approvalDefinition = useActivatedPlugin(PluginID.Approval, 'any')
+    const chainIdList = compact<ChainId>(
+        approvalDefinition?.enableRequirement.web3?.[NetworkPluginID.PLUGIN_EVM]?.supportedChainIds ?? [],
+    )
+    const [networkTabChainId, setNetworkTabChainId] = useState<ChainId>(
+        chainIdValid && chainIdList.includes(chainId) ? chainId : ChainId.Mainnet,
+    )
+
+>>>>>>> develop
     // #region token lucky drop
     const [settings, setSettings] = useState<RedPacketSettings>()
     // #endregion
@@ -152,6 +171,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     const [currentTab, onChange, tabs] = useTabs('tokens', 'collectibles')
 
     return (
+<<<<<<< HEAD
         <TabContext value={currentTab}>
             <InjectedDialog
                 isOpenFromApplicationBoard={props.isOpenFromApplicationBoard}
@@ -202,6 +222,42 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                                         openNFTConfirmDialog={openNFTConfirmDialog}
                                         onClose={onClose}
                                         setIsNFTRedPacketLoaded={setIsNFTRedPacketLoaded}
+=======
+        <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM, chainId: networkTabChainId }}>
+            <TabContext value={currentTab}>
+                <InjectedDialog
+                    isOpenFromApplicationBoard={props.isOpenFromApplicationBoard}
+                    open={props.open}
+                    title={title}
+                    titleTail={
+                        step === CreateRedPacketPageStep.NewRedPacketPage && !showHistory ? (
+                            <Icons.History onClick={() => setShowHistory((history) => !history)} />
+                        ) : null
+                    }
+                    titleTabs={
+                        step === CreateRedPacketPageStep.NewRedPacketPage && !openNFTConfirmDialog ? (
+                            <MaskTabList variant="base" onChange={onChange} aria-label="Redpacket">
+                                <Tab label={t.erc20_tab_title()} value={tabs.tokens} />
+                                <Tab label={t.erc721_tab_title()} value={tabs.collectibles} />
+                            </MaskTabList>
+                        ) : null
+                    }
+                    onClose={onDialogClose}
+                    isOnBack={showHistory || step !== CreateRedPacketPageStep.NewRedPacketPage}
+                    disableTitleBorder>
+                    <DialogContent className={classes.dialogContent}>
+                        {step === CreateRedPacketPageStep.NewRedPacketPage ? (
+                            <>
+                                <div className={classes.abstractTabWrapper}>
+                                    <NetworkTab
+                                        classes={{
+                                            tab: classes.tab,
+                                            tabPanel: classes.tabPanel,
+                                            indicator: classes.indicator,
+                                            tabPaper: classes.tabPaper,
+                                        }}
+                                        chains={chainIdList}
+>>>>>>> develop
                                     />
                                 </TabPanel>
                             </div>
@@ -211,6 +267,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                         </>
                     ) : null}
 
+<<<<<<< HEAD
                     {step === CreateRedPacketPageStep.ConfirmPage ? (
                         <RedPacketConfirmDialog
                             onClose={onClose}
@@ -222,5 +279,19 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                 </DialogContent>
             </InjectedDialog>
         </TabContext>
+=======
+                        {step === CreateRedPacketPageStep.ConfirmPage ? (
+                            <RedPacketConfirmDialog
+                                onClose={onClose}
+                                onBack={onBack}
+                                onCreated={handleCreated}
+                                settings={settings}
+                            />
+                        ) : null}
+                    </DialogContent>
+                </InjectedDialog>
+            </TabContext>
+        </Web3ContextProvider>
+>>>>>>> develop
     )
 }

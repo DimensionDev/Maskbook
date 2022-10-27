@@ -5,7 +5,7 @@ import Web3Utils from 'web3-utils'
 import formatDateTime from 'date-fns/format'
 import { SchemaType, formatAmount, useITOConstants, ChainId } from '@masknet/web3-shared-evm'
 import { isGreaterThan, isZero, FungibleToken, leftShift } from '@masknet/web3-shared-base'
-import { TokenIcon } from '@masknet/shared'
+import { TokenIcon, PluginWalletStatusBar, ChainBoundary } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { Box, Stack, Typography, InputBase, inputBaseClasses } from '@mui/material'
 import { makeStyles, useStylesExtends, ActionButton, LoadingBase } from '@masknet/theme'
@@ -16,7 +16,7 @@ import {
     useCurrentLinkedPersona,
     useLastRecognizedIdentity,
 } from '../../../components/DataSource/useActivatedUI.js'
-import { PluginWalletStatusBar, sliceTextByUILength, useI18N } from '../../../utils/index.js'
+import { sliceTextByUILength, useI18N } from '../../../utils/index.js'
 import { DateTimePanel } from '../../../web3/UI/DateTimePanel.js'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary.js'
 import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary.js'
@@ -27,8 +27,7 @@ import { decodeRegionCode, encodeRegionCode, regionCodes, useRegionSelect } from
 import { AdvanceSettingData, AdvanceSetting } from './AdvanceSetting.js'
 import { ExchangeTokenPanelGroup } from './ExchangeTokenPanelGroup.js'
 import { RegionSelect } from './RegionSelect.js'
-import { useAccount, useFungibleTokenBalance } from '@masknet/web3-hooks-base'
-import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
+import { useChainContext, useFungibleTokenBalance } from '@masknet/web3-hooks-base'
 
 const useStyles = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -127,7 +126,7 @@ export function CreateForm(props: CreateFormProps) {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
 
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { ITO2_CONTRACT_ADDRESS, DEFAULT_QUALIFICATION2_ADDRESS } = useITOConstants(chainId)
 
     const currentIdentity = useCurrentIdentity()

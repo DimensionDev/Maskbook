@@ -1,8 +1,4 @@
-import {
-    PluginIDContextProvider,
-    PluginWeb3ContextProvider,
-    useCurrentWeb3NetworkPluginID,
-} from '@masknet/web3-hooks-base'
+import { Web3ContextProvider, useNetworkContext } from '@masknet/web3-hooks-base'
 import { MaskLightTheme } from '@masknet/theme'
 import { ThemeProvider } from '@mui/material'
 import type { CollectiblePayload } from '../types.js'
@@ -15,27 +11,21 @@ export interface PostInspectorProps {
 
 export function PostInspector(props: PostInspectorProps) {
     const token = props.payload
-    const parentPluginID = useCurrentWeb3NetworkPluginID()
+    const { pluginID } = useNetworkContext()
 
     return (
         <ThemeProvider theme={MaskLightTheme}>
             <Context.Provider
                 initialState={{
-                    parentPluginID,
+                    parentPluginID: pluginID,
                     pluginID: token.pluginID,
                     chainId: token.chainId,
                     tokenId: token.tokenId,
                     tokenAddress: token.address,
                 }}>
-                <PluginIDContextProvider value={token.pluginID}>
-                    <PluginWeb3ContextProvider
-                        pluginID={token.pluginID}
-                        value={{
-                            chainId: token.chainId,
-                        }}>
-                        <Collectible />
-                    </PluginWeb3ContextProvider>
-                </PluginIDContextProvider>
+                <Web3ContextProvider value={{ pluginID: token.pluginID, chainId: token.chainId }}>
+                    <Collectible />
+                </Web3ContextProvider>
             </Context.Provider>
         </ThemeProvider>
     )

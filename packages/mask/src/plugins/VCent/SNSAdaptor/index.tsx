@@ -1,12 +1,12 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { Trans } from 'react-i18next'
 import { usePostInfoDetails } from '@masknet/plugin-infra/content-script'
+import { Icons } from '@masknet/icons'
+import { Web3ContextProvider } from '@masknet/web3-hooks-base'
+import { ChainId } from '@masknet/web3-shared-evm'
+import { NetworkPluginID } from '@masknet/shared-base'
 import VCentDialog from './TweetDialog.js'
 import { base } from '../base.js'
-import { Icons } from '@masknet/icons'
-import { PluginWeb3ContextProvider } from '@masknet/web3-hooks-base'
-import { NetworkPluginID } from '@masknet/shared-base'
-import { ChainId } from '@masknet/web3-shared-evm'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -43,8 +43,8 @@ function Component() {
     if (!tweetAddress) return null
 
     return (
-        <PluginWeb3ContextProvider pluginID={NetworkPluginID.PLUGIN_EVM} value={{ chainId: ChainId.Mainnet }}>
+        <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM, chainId: ChainId.Mainnet }}>
             <VCentDialog tweetAddress={tweetAddress} />
-        </PluginWeb3ContextProvider>
+        </Web3ContextProvider>
     )
 }

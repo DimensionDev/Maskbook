@@ -9,14 +9,14 @@ import {
     usePluginI18NField,
 } from '@masknet/plugin-infra/content-script'
 import { useAvailablePlugins } from '@masknet/plugin-infra'
-import { useSocialAddressListBySettings } from '@masknet/shared'
+import { useSocialAccountsBySettings } from '@masknet/shared'
 import { EMPTY_LIST, PluginID, NetworkPluginID } from '@masknet/shared-base'
 import { LoadingBase, makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import { isSameAddress, SocialIdentity } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { TabContext } from '@mui/lab'
 import { Tab, Typography } from '@mui/material'
-import { PluginWeb3ContextProvider } from '@masknet/web3-hooks-base'
+import { Web3ContextProvider } from '@masknet/web3-hooks-base'
 import { MaskMessages, sorter, useLocationChange } from '../../../utils/index.js'
 import { ProfileCardTitle } from './ProfileCardTitle.js'
 
@@ -101,21 +101,18 @@ export const ProfileCard: FC<Props> = ({ identity, ...rest }) => {
 
     const translate = usePluginI18NField()
     const {
-        value: allSocialAddressList = EMPTY_LIST,
-        loading: loadingSocialAddressList,
+        value: socialAccounts = EMPTY_LIST,
+        loading: loadingSocialAccounts,
         retry: retrySocialAddress,
-    } = useSocialAddressListBySettings(identity, undefined, sorter)
-    const socialAddressList = useMemo(
-        () => allSocialAddressList.filter((x) => x.pluginID === NetworkPluginID.PLUGIN_EVM),
-        [allSocialAddressList],
-    )
+    } = useSocialAccountsBySettings(identity, undefined, sorter)
 
     const [selectedAddress, setSelectedAddress] = useState<string>()
-    const firstAddress = first(socialAddressList)?.address
+    const firstAddress = first(socialAccounts)?.address
     const activeAddress = selectedAddress ?? firstAddress
-    const selectedSocialAddress = useMemo(() => {
-        return socialAddressList.find((x) => isSameAddress(x.address, activeAddress))
-    }, [activeAddress, socialAddressList])
+    const selectedSocialAccount = useMemo(
+        () => socialAccounts.find((x) => isSameAddress(x.address, activeAddress)),
+        [activeAddress, socialAccounts],
+    )
 
     const userId = identity.identifier?.userId
 
@@ -131,7 +128,7 @@ export const ProfileCard: FC<Props> = ({ identity, ...rest }) => {
             .flatMap((x) => x.ProfileCardTabs?.map((y) => ({ ...y, pluginID: x.ID })) ?? EMPTY_LIST)
             .filter((x) => {
                 const isAllowed = x.pluginID === PluginID.RSS3 || x.pluginID === PluginID.Collectible
-                const shouldDisplay = x.Utils?.shouldDisplay?.(identity, selectedSocialAddress) ?? true
+                const shouldDisplay = x.Utils?.shouldDisplay?.(identity, selectedSocialAccount) ?? true
                 return isAllowed && shouldDisplay
             })
             .sort((a, z) => a.priority - z.priority)
@@ -146,8 +143,8 @@ export const ProfileCard: FC<Props> = ({ identity, ...rest }) => {
     const component = useMemo(() => {
         const Component = getTabContent(currentTab)
 
-        return <Component identity={identity} socialAddress={selectedSocialAddress} />
-    }, [currentTab, identity?.publicKey, selectedSocialAddress])
+        return <Component identity={identity} socialAccount={selectedSocialAccount} />
+    }, [currentTab, identity?.publicKey, selectedSocialAccount])
 
     useLocationChange(() => {
         onChange(undefined, first(tabs)?.id)
@@ -157,7 +154,7 @@ export const ProfileCard: FC<Props> = ({ identity, ...rest }) => {
         onChange(undefined, first(tabs)?.id)
     }, [userId])
 
-    if (!userId || loadingSocialAddressList)
+    if (!userId || loadingSocialAccounts)
         return (
             <div className={cx(classes.root, classes.loading)}>
                 <LoadingBase />
@@ -165,11 +162,11 @@ export const ProfileCard: FC<Props> = ({ identity, ...rest }) => {
         )
 
     return (
-        <PluginWeb3ContextProvider pluginID={NetworkPluginID.PLUGIN_EVM} value={{ chainId: ChainId.Mainnet }}>
+        <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM, chainId: ChainId.Mainnet }}>
             <div className={classes.root}>
                 <div className={classes.header}>
                     <ProfileCardTitle
-                        socialAddressList={socialAddressList}
+                        socialAccounts={socialAccounts}
                         address={activeAddress}
                         onAddressChange={setSelectedAddress}
                         identity={identity}
@@ -208,6 +205,6 @@ export const ProfileCard: FC<Props> = ({ identity, ...rest }) => {
                     <Icons.RSS3 size={24} sx={{ ml: '12px' }} />
                 </div>
             </div>
-        </PluginWeb3ContextProvider>
+        </Web3ContextProvider>
     )
 }

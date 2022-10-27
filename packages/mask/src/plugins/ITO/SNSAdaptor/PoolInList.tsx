@@ -28,7 +28,7 @@ import { usePoolTradeInfo } from './hooks/usePoolTradeInfo.js'
 import { ITO_Status, JSON_PayloadFromChain, JSON_PayloadInMask, PoolFromNetwork } from '../types.js'
 import { useDestructCallback } from './hooks/useDestructCallback.js'
 import { PersistentStorages } from '../../../../shared/index.js'
-import { useAccount, useFungibleToken, useFungibleTokens } from '@masknet/web3-hooks-base'
+import { useChainContext, useFungibleToken, useFungibleTokens } from '@masknet/web3-hooks-base'
 
 const useStyles = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -181,7 +181,7 @@ export function PoolInList(props: PoolInListProps) {
     )
     // #endregion
 
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { computed: availabilityComputed, loading: loadingAvailability } = useAvailabilityComputed(pool)
     const { value: tradeInfo, loading: loadingTradeInfo } = usePoolTradeInfo(pool.pid, account)
     const title = pool.message.split(MSG_DELIMITER)[1] ?? pool.message

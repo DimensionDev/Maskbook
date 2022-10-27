@@ -4,7 +4,7 @@ import BigNumber from 'bignumber.js'
 import { Icons } from '@masknet/icons'
 import { useGasLimit, useTokenTransferCallback } from '@masknet/web3-hooks-evm'
 import {
-    useChainId,
+    useChainContext,
     useFungibleTokenBalance,
     useGasPrice,
     useLookupAddress,
@@ -54,7 +54,7 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
 
     const [selectedToken, setSelectedToken] = useState(token)
     const selectFungibleToken = useSelectFungibleToken(NetworkPluginID.PLUGIN_EVM)
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const is1559Supported = useMemo(() => chainResolver.isSupport(chainId, 'EIP1559'), [chainId])
 
     const { Others } = useWeb3State()

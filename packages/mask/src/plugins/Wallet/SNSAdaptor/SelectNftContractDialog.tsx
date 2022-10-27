@@ -13,8 +13,7 @@ import { WalletMessages } from '../messages.js'
 import { useI18N } from '../../../utils/index.js'
 import { SearchInput } from '../../../extension/options-page/DashboardComponents/SearchInput.js'
 import {
-    useChainId,
-    useAccount,
+    useChainContext,
     useNonFungibleCollections,
     useNonFungibleTokenContract,
     useNonFungibleTokenBalance,
@@ -103,7 +102,7 @@ export function SelectNftContractDialog(props: SelectNftContractDialogProps) {
 
     const [id, setId] = useState('')
     const [keyword, setKeyword] = useState('')
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
     // #region remote controlled dialog
     const { open, setDialog } = useRemoteControlledDialog(
@@ -217,7 +216,7 @@ function SearchResultBox(props: SearchResultBoxProps) {
     const { keyword, searchedTokenList, onSubmit, contractList } = props
     const { t } = useI18N()
     const { classes } = useStyles()
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const isValid = EthereumAddress.isValid(keyword)
     const { value: contractDetailed = null, loading } = useNonFungibleTokenContract(
         NetworkPluginID.PLUGIN_EVM,

@@ -1,7 +1,7 @@
 import { useCallback, useMemo } from 'react'
 import BigNumber from 'bignumber.js'
 import { first } from 'lodash-unified'
-import { InjectedDialog, NFTCardStyledAssetPlayer, useOpenShareTxDialog } from '@masknet/shared'
+import { InjectedDialog, NFTCardStyledAssetPlayer, useOpenShareTxDialog, PluginWalletStatusBar } from '@masknet/shared'
 import { makeStyles, ActionButton } from '@masknet/theme'
 import { Box, Card, CardActions, CardContent, DialogContent, Link, Typography } from '@mui/material'
 import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary.js'
@@ -10,10 +10,10 @@ import { usePurchaseCallback } from '../hooks/usePurchaseCallback.js'
 import { activatedSocialNetworkUI } from '../../../social-network/index.js'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base.js'
 import { isFacebook } from '../../../social-network-adaptor/facebook.com/base.js'
-import { useChainId, useFungibleTokenWatched } from '@masknet/web3-hooks-base'
+import { useChainContext, useFungibleTokenWatched } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { formatBalance, leftShift } from '@masknet/web3-shared-base'
-import { PluginWalletStatusBar, useI18N } from '../../../utils/index.js'
+import { useI18N } from '../../../utils/index.js'
 import { resolveAssetLinkOnCryptoartAI, resolvePaymentTokensOnCryptoartAI } from '../pipes/index.js'
 
 const useStyles = makeStyles()((theme) => {
@@ -72,7 +72,7 @@ export function CheckoutDialog(props: CheckoutDialogProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
 
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
     const paymentTokens = resolvePaymentTokensOnCryptoartAI(chainId) ?? []
     const selectedPaymentToken = first(paymentTokens)

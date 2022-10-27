@@ -4,9 +4,8 @@ import { MaskFixedSizeListProps, MaskTextFieldProps, SearchableList } from '@mas
 import { Stack, Typography } from '@mui/material'
 import { useSharedI18N } from '@masknet/shared'
 import {
-    useAccount,
-    useChainId,
-    useCurrentWeb3NetworkPluginID,
+    useChainContext,
+    useNetworkContext,
     useFungibleAssets,
     useFungibleToken,
     useFungibleTokensFromTokenList,
@@ -61,9 +60,10 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
 
     const t = useSharedI18N()
     const tReferral = useI18N()
-    const pluginID = useCurrentWeb3NetworkPluginID(props.pluginID)
-    const account = useAccount()
-    const chainId = useChainId(pluginID, props.chainId)
+    const { pluginID } = useNetworkContext(props.pluginID)
+    const { account, chainId } = useChainContext({
+        chainId: props.chainId,
+    })
     const { Token, Others } = useWeb3State() as Web3Helper.Web3StateAll
     const { value: fungibleTokens = EMPTY_LIST } = useFungibleTokensFromTokenList()
     const trustedFungibleTokens = useTrustedFungibleTokens()

@@ -1,9 +1,9 @@
 import { makeStyles, ActionButton, LoadingBase } from '@masknet/theme'
 import { explorerResolver } from '@masknet/web3-shared-evm'
-import { useChainId } from '@masknet/web3-hooks-base'
+import { useChainContext } from '@masknet/web3-hooks-base'
 import { Grid, Typography, Link } from '@mui/material'
 import DoneIcon from '@mui/icons-material/Done'
-import { NetworkPluginID } from '@masknet/shared-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
 
 import { useI18N } from '../../locales/index.js'
 import { TransactionStatus, ChainId } from '../../types.js'
@@ -38,7 +38,7 @@ type TransactionProps =
 
 export function Transaction(props: TransactionProps) {
     const t = useI18N()
-    const currentChainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { chainId: currentChainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { classes } = useStyles()
 
     if (props.status === TransactionStatus.CONFIRMATION) {

@@ -1,9 +1,9 @@
 import { useCallback, useMemo, useState } from 'react'
-import { useChainId } from '@masknet/web3-hooks-base'
+import { useChainContext, useNetworkDescriptor, useWeb3State } from '@masknet/web3-hooks-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { useContainer } from 'unstated-next'
-import { makeStyles, ActionButton, LoadingBase } from '@masknet/theme'
-import { Box, Button, Typography, useTheme } from '@mui/material'
+import { makeStyles, ActionButton, LoadingBase, useTabs, MaskTabList } from '@masknet/theme'
+import { Box, Button, Paper, Tab, Typography, useTheme } from '@mui/material'
 import { WalletConnectedBoundary } from '../../../../web3/UI/WalletConnectedBoundary.js'
 import { Context } from '../../hooks/useContext.js'
 import { BoxState, CardTab } from '../../type.js'
@@ -12,38 +12,16 @@ import { DetailsTab } from './DetailsTab.js'
 import { DrawDialog } from './DrawDialog.js'
 import { DrawResultDialog } from './DrawResultDialog.js'
 import { useTransactionCallback } from '@masknet/web3-hooks-evm'
-import { ChainBoundary } from '../../../../web3/UI/ChainBoundary.js'
+import { ChainBoundary, ImageIcon, TokenIcon } from '@masknet/shared'
 import { formatBalance } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
-import type { AbstractTabProps } from '../../../../components/shared/AbstractTab.js'
-import AbstractTab from '../../../../components/shared/AbstractTab.js'
+import { useI18N } from '../../locales/index.js'
+import { TabContext, TabPanel } from '@mui/lab'
 
 const useTabsStyles = makeStyles()((theme) => ({
-    tab: {
-        height: 36,
-        minHeight: 36,
-        fontWeight: 300,
-    },
-    tabs: {
-        width: '100%',
-        height: 36,
-        minHeight: 36,
-        margin: `0 ${location.host.includes('minds') ? '12px' : 'auto'}`,
-        '& .Mui-selected': {
-            backgroundColor: theme.palette.primary.main,
-            color: theme.palette.primary.contrastText,
-        },
-        borderRadius: 4,
-    },
-    indicator: {
-        display: 'none',
-    },
-    tabPanel: {
-        marginTop: `${theme.spacing(2)} !important`,
-    },
     button: {
         backgroundColor: theme.palette.maskColor.dark,
-        color: 'white',
+        color: theme.palette.maskColor.white,
         fontSize: 14,
         fontWeight: 700,
         width: '100%',
@@ -52,6 +30,81 @@ const useTabsStyles = makeStyles()((theme) => ({
         },
         margin: '0 !important',
     },
+    tab: {
+        whiteSpace: 'nowrap',
+        background: 'transparent',
+        color: theme.palette.maskColor.publicSecond,
+        '&:hover': {
+            background: 'transparent',
+        },
+    },
+    tabActive: {
+        background: theme.palette.maskColor.white,
+        color: theme.palette.maskColor.publicMain,
+        '&:hover': {
+            background: theme.palette.maskColor.white,
+        },
+    },
+    body: {
+        padding: 12,
+        paddingBottom: 0,
+    },
+    content: {
+        margin: '0 12px',
+        flex: 1,
+        backgroundColor: theme.palette.maskColor.white,
+        overflow: 'auto',
+        borderRadius: '0 0 12px 12px',
+        scrollbarWidth: 'none',
+        '&::-webkit-scrollbar': {
+            display: 'none',
+        },
+    },
+    header: {
+        gap: 24,
+        display: 'flex',
+        padding: 12,
+        alignItems: 'center',
+    },
+    imgBox: {
+        width: 50,
+        height: 50,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        position: 'relative',
+    },
+    name: {
+        color: theme.palette.maskColor.publicMain,
+        fontSize: 18,
+        fontWeight: 700,
+    },
+    active: {
+        backgroundColor: theme.palette.maskColor.success,
+        color: theme.palette.maskColor.bottom,
+        fontSize: 12,
+        fontWeight: 700,
+        borderRadius: 9999,
+        padding: '8px 12px',
+        width: 65,
+        textAlign: 'center',
+    },
+    iconBox: {
+        position: 'absolute',
+        bottom: 0,
+        right: -8,
+        padding: 2,
+        backgroundColor: theme.palette.maskColor.bg,
+        borderRadius: 9999,
+        lineHeight: 0,
+        alignItems: 'center',
+        justifyContent: 'center',
+        display: 'flex',
+    },
+    icon: {
+        width: 20,
+        height: 20,
+    },
 }))
 
 export interface PreviewCardProps {}
@@ -59,11 +112,12 @@ export interface PreviewCardProps {}
 export function PreviewCard(props: PreviewCardProps) {
     const { classes } = useTabsStyles()
     const state = useState(CardTab.Articles)
-    const chainId = useChainId()
     const [openDrawDialog, setOpenDrawDialog] = useState(false)
     const [openDrawResultDialog, setOpenDrawResultDialog] = useState(false)
+    const { chainId } = useChainContext()
+    const networkDescriptor = useNetworkDescriptor()
     const theme = useTheme()
-
+    const t = useI18N()
     const {
         boxState,
         boxStateMessage,
@@ -92,6 +146,8 @@ export function PreviewCard(props: PreviewCardProps) {
         retryMaskBoxTokensForSale,
         retryMaskBoxPurchasedTokens,
     } = useContainer(Context)
+
+    const [currentTab, onChange, tabs] = useTabs('Articles', 'Details')
 
     const txConfig = useMemo(() => {
         return {
@@ -124,7 +180,7 @@ export function PreviewCard(props: PreviewCardProps) {
         } catch {}
         setDrawing(false)
     }, [openBoxCallback, refreshLastPurchasedTokenIds, onRefresh, retryMaskBoxStatus])
-
+    const { Others } = useWeb3State()
     // #endregion
 
     if (boxState === BoxState.UNKNOWN)
@@ -174,78 +230,151 @@ export function PreviewCard(props: PreviewCardProps) {
             </Box>
         )
 
-    const tabProps: AbstractTabProps = {
-        tabs: [
-            {
-                label: 'Articles',
-                children: boxInfo ? <ArticlesTab boxInfo={boxInfo} boxMetadata={boxMetadata} /> : null,
-                sx: { p: 0 },
-            },
-            {
-                label: 'Details',
-                children: boxInfo ? <DetailsTab boxInfo={boxInfo} boxMetadata={boxMetadata} /> : null,
-                sx: { p: 0 },
-            },
-        ],
-        state,
-        classes: { tab: classes.tab, tabs: classes.tabs, indicator: classes.indicator, tabPanel: classes.tabPanel },
-    }
+    const Tabs = [
+        {
+            value: tabs.Articles,
+            label: t.articles(),
+        },
+        {
+            value: tabs.Details,
+            label: t.details(),
+        },
+    ]
 
     return (
         <>
-            <Box>
-                <AbstractTab height="" {...tabProps} state={state} />
+            <TabContext value={currentTab}>
+                <Box className={classes.header}>
+                    <Box className={classes.imgBox}>
+                        <TokenIcon
+                            address={boxInfo.tokenAddress ?? ''}
+                            name={boxInfo.name}
+                            chainId={chainId}
+                            AvatarProps={{ sx: { width: 48, height: 48 } }}
+                        />
+                        <Box className={classes.iconBox}>
+                            <ImageIcon size={24} icon={networkDescriptor?.icon} classes={{ icon: classes.icon }} />
+                        </Box>
+                    </Box>
+                    <Box sx={{ flex: 1 }}>
+                        <Typography className={classes.name}>{boxInfo.name}</Typography>
+                        <Box sx={{ flex: 1, display: 'flex', flexDirection: 'row' }}>
+                            <Box sx={{ flex: 1, display: 'flex', flexDirection: 'row' }}>
+                                <Typography
+                                    sx={{ paddingRight: 1 }}
+                                    color={theme.palette.maskColor.publicSecond}
+                                    fontSize={14}
+                                    fontWeight={400}>
+                                    {t.sold()}
+                                </Typography>
+                                <Typography color={theme.palette.maskColor.publicMain} fontSize={14} fontWeight="bold">
+                                    {boxInfo.sold}/{boxInfo.total}
+                                </Typography>
+                                <Typography
+                                    sx={{ paddingRight: 1, paddingLeft: 1 }}
+                                    color={theme.palette.maskColor.publicSecond}
+                                    fontSize={14}
+                                    fontWeight={400}>
+                                    {t.limit()}
+                                </Typography>
+                                <Typography color={theme.palette.maskColor.publicMain} fontSize={14} fontWeight="bold">
+                                    1
+                                </Typography>
+                            </Box>
+                            <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+                                <Typography
+                                    sx={{ paddingRight: 1 }}
+                                    color={theme.palette.maskColor.publicSecond}
+                                    fontSize={14}
+                                    fontWeight={400}>
+                                    {t.by()}
+                                </Typography>
+                                <Typography
+                                    color={theme.palette.maskColor.publicMain}
+                                    fontSize={14}
+                                    fontWeight="bold"
+                                    title={boxInfo.creator}>
+                                    {Others?.formatAddress(boxInfo.creator, 4)}
+                                </Typography>
+                            </Box>
+                        </Box>
+                    </Box>
+                    {boxState === BoxState.READY ? (
+                        <Typography className={classes.active}>{t.active()}</Typography>
+                    ) : null}
+                </Box>
+                <Box className={classes.body}>
+                    <MaskTabList variant="base" aria-label="maskbox" onChange={onChange}>
+                        {Tabs.map((x) => (
+                            <Tab
+                                key={x.value}
+                                value={x.value}
+                                label={x.label}
+                                className={x.value === currentTab ? classes.tabActive : classes.tab}
+                            />
+                        ))}
+                    </MaskTabList>
+                </Box>
+                <Paper className={classes.content}>
+                    <TabPanel value={tabs.Articles} key={tabs.Articles} sx={{ padding: 0 }}>
+                        {boxInfo ? <ArticlesTab boxInfo={boxInfo} boxMetadata={boxMetadata} /> : null}
+                    </TabPanel>
+                    <TabPanel value={tabs.Details} key={tabs.Details} sx={{ padding: 0 }}>
+                        {boxInfo ? <DetailsTab boxInfo={boxInfo} boxMetadata={boxMetadata} /> : null}
+                    </TabPanel>
+                </Paper>
 
-                <DrawDialog
-                    boxInfo={boxInfo}
-                    open={openDrawDialog}
-                    drawing={drawing}
-                    onClose={() => {
-                        setOpenBoxTransactionOverrides(null)
-                        setOpenDrawDialog(false)
-                    }}
-                    onSubmit={onDraw}
-                />
-                <DrawResultDialog
-                    boxInfo={boxInfo}
-                    contractDetailed={contractDetailed}
-                    open={openDrawResultDialog}
-                    onClose={() => {
-                        refreshLastPurchasedTokenIds()
-                        setOpenDrawResultDialog(false)
-                    }}
-                />
-            </Box>
-            <Box style={{ padding: 12 }}>
-                <ChainBoundary
-                    expectedPluginID={NetworkPluginID.PLUGIN_EVM}
-                    expectedChainId={chainId as ChainId}
-                    ActionButtonPromiseProps={{ variant: 'roundedDark' }}>
-                    <WalletConnectedBoundary
-                        ActionButtonProps={{ size: 'medium', variant: 'roundedDark' }}
-                        classes={{ button: classes.button }}>
-                        <ActionButton
-                            loading={isOpening}
-                            size="medium"
-                            variant="roundedDark"
-                            fullWidth
-                            disabled={boxState !== BoxState.READY || isOpening}
-                            onClick={() => setOpenDrawDialog(true)}>
-                            {(() => {
-                                return boxState === BoxState.READY && paymentTokenAddress ? (
-                                    <>
-                                        {boxStateMessage} (
-                                        {formatBalance(paymentTokenPrice, paymentTokenDetailed?.decimals ?? 0)}{' '}
-                                        {paymentTokenDetailed?.symbol}/Time)
-                                    </>
-                                ) : (
-                                    boxStateMessage
-                                )
-                            })()}
-                        </ActionButton>
-                    </WalletConnectedBoundary>
-                </ChainBoundary>
-            </Box>
+                <Box style={{ padding: 12 }}>
+                    <ChainBoundary
+                        expectedPluginID={NetworkPluginID.PLUGIN_EVM}
+                        expectedChainId={chainId as ChainId}
+                        ActionButtonPromiseProps={{ variant: 'roundedDark' }}>
+                        <WalletConnectedBoundary
+                            ActionButtonProps={{ size: 'medium', variant: 'roundedDark' }}
+                            classes={{ button: classes.button }}>
+                            <ActionButton
+                                loading={isOpening}
+                                size="medium"
+                                variant="roundedDark"
+                                fullWidth
+                                disabled={boxState !== BoxState.READY || isOpening}
+                                onClick={() => setOpenDrawDialog(true)}>
+                                {(() => {
+                                    return boxState === BoxState.READY && paymentTokenAddress
+                                        ? t.action_title({
+                                              title: boxStateMessage,
+                                              price: formatBalance(
+                                                  paymentTokenPrice,
+                                                  paymentTokenDetailed?.decimals ?? 0,
+                                              ),
+                                              symbol: paymentTokenDetailed?.symbol ?? '',
+                                          })
+                                        : boxStateMessage
+                                })()}
+                            </ActionButton>
+                        </WalletConnectedBoundary>
+                    </ChainBoundary>
+                </Box>
+            </TabContext>
+            <DrawDialog
+                boxInfo={boxInfo}
+                open={openDrawDialog}
+                drawing={drawing}
+                onClose={() => {
+                    setOpenBoxTransactionOverrides(null)
+                    setOpenDrawDialog(false)
+                }}
+                onSubmit={onDraw}
+            />
+            <DrawResultDialog
+                boxInfo={boxInfo}
+                contractDetailed={contractDetailed}
+                open={openDrawResultDialog}
+                onClose={() => {
+                    refreshLastPurchasedTokenIds()
+                    setOpenDrawResultDialog(false)
+                }}
+            />
         </>
     )
 }

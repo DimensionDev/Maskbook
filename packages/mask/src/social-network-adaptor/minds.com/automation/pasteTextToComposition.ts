@@ -43,6 +43,9 @@ export const pasteTextToCompositionMinds: SocialNetworkUI.AutomationCapabilities
             // paste
             inputText(text)
 
+            // Simulate textarea input
+            SimulateTextareaInput(textarea.id)
+
             await delay(interval)
             if (!getEditorContent().replace(/\n/g, '').includes(text.replace(/\n/g, ''))) {
                 fail(new Error('Unable to paste text automatically'))
@@ -56,3 +59,7 @@ export const pasteTextToCompositionMinds: SocialNetworkUI.AutomationCapabilities
 
         worker(abortSignalTimeout(timeout)).then(undefined, (error) => fail(error))
     }
+
+function SimulateTextareaInput(id: string) {
+    document.getElementById(id)?.dispatchEvent(new Event('input', { bubbles: true }))
+}

@@ -13,7 +13,7 @@
   "types": "./dist/index.d.ts",
   "dependencies": {
     "@dimensiondev/secp256k1-webcrypto": "1.0.0-20220412114204-be816df",
-    "@dimensiondev/stego-js": "0.11.1-20201027083223-8ab41be",
+    "@dimensiondev/stego-js": "0.14.1",
     "@masknet/shared-base": "workspace:*",
     "@masknet/typed-message": "workspace:*",
     "@msgpack/msgpack": "^2.8.0"

@@ -5,14 +5,12 @@ import { pick } from 'lodash-unified'
 import BigNumber from 'bignumber.js'
 import type { TransactionConfig } from 'web3-core'
 import type { SwapOOData, TradeComputed } from '../../types/index.js'
-import { useAccount, useChainId, useWeb3Connection } from '@masknet/web3-hooks-base'
+import { useChainContext, useWeb3Connection } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 
 export function useTradeGasLimit(tradeComputed: TradeComputed<SwapOOData> | null): AsyncState<number> {
-    const targetChainId = useChainId(NetworkPluginID.PLUGIN_EVM)
-
-    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, { chainId: targetChainId })
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, { chainId })
     const config = useMemo(() => {
         if (!account || !tradeComputed?.trade_) return null
         return {

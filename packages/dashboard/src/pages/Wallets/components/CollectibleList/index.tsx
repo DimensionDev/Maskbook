@@ -11,8 +11,8 @@ import { CollectibleCard } from '../CollectibleCard/index.js'
 import { useDashboardI18N } from '../../../../locales/index.js'
 import { TransferTab } from '../Transfer/index.js'
 import {
-    useAccount,
-    useCurrentWeb3NetworkPluginID,
+    useChainContext,
+    useNetworkContext,
     useNonFungibleAssets,
     useTrustedNonFungibleTokens,
 } from '@masknet/web3-hooks-base'
@@ -38,7 +38,7 @@ interface CollectibleListProps {
 
 export const CollectibleList = memo<CollectibleListProps>(({ selectedChain }) => {
     const navigate = useNavigate()
-    const account = useAccount()
+    const { account } = useChainContext()
     const trustedNonFungibleTokens = useTrustedNonFungibleTokens(
         NetworkPluginID.PLUGIN_EVM,
         undefined,
@@ -67,7 +67,7 @@ export const CollectibleList = memo<CollectibleListProps>(({ selectedChain }) =>
         if (next) next()
     }, [next])
 
-    const currentPluginId = useCurrentWeb3NetworkPluginID()
+    const { pluginID: currentPluginId } = useNetworkContext()
     const onSend = useCallback(
         (
             detail: NonFungibleToken<

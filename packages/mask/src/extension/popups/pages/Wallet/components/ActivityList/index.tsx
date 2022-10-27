@@ -17,7 +17,7 @@ import { WalletContext } from '../../hooks/useWalletContext.js'
 import { useI18N } from '../../../../../../utils/index.js'
 import { ReplaceType } from '../../type.js'
 import { ActivityListItem } from './ActivityListItem.js'
-import { useChainId, useWeb3State } from '@masknet/web3-hooks-base'
+import { useChainContext, useWeb3State } from '@masknet/web3-hooks-base'
 import { isNativeTokenAddress } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()({
@@ -58,7 +58,7 @@ export interface ActivityListProps {
 export const ActivityList = memo<ActivityListProps>(({ tokenAddress }) => {
     const { transactions } = useContainer(WalletContext)
     const { Others, TransactionFormatter } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
     const { value: dataSource = EMPTY_LIST } = useAsync(async () => {
         if (!TransactionFormatter) return

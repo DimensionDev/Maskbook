@@ -3,10 +3,11 @@ import { openWindow } from '@masknet/shared-base-ui'
 import { Button, Typography } from '@mui/material'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
+import { PluginWalletStatusBar } from '@masknet/shared'
 import { PluginID, NetworkPluginID, CrossIsolationMessages } from '@masknet/shared-base'
 import { resolveSourceTypeName } from '@masknet/web3-shared-base'
-import { PluginIDContextProvider, PluginWeb3ContextProvider } from '@masknet/web3-hooks-base'
-import { PluginWalletStatusBar, useI18N as useBaseI18n } from '../../../../../utils/index.js'
+import { Web3ContextProvider } from '@masknet/web3-hooks-base'
+import { useI18N as useBaseI18n } from '../../../../../utils/index.js'
 import { AboutTab } from './tabs/AboutTab.js'
 import { OffersTab } from './tabs/OffersTab.js'
 import { ActivitiesTab } from './tabs/ActivitiesTab.js'
@@ -146,48 +147,43 @@ export function CardDialogContent(props: CardDialogContentProps) {
                 </div>
             </div>
 
-            <PluginIDContextProvider value={parentPluginID}>
-                <PluginWeb3ContextProvider pluginID={parentPluginID} value={{}}>
-                    <PluginWalletStatusBar
-                        className={classes.footer}
-                        expectedPluginID={pluginID}
-                        expectedChainId={chainId}>
-                        {origin === 'pfp' && isOwnerIdentity ? (
-                            <ConnectPersonaBoundary
-                                handlerPosition="top-right"
-                                customHint
-                                directTo={PluginID.Avatar}
-                                beforeAction={onBeforeAction}>
-                                <Button
-                                    sx={{ display: 'flex', alignItems: 'center' }}
-                                    variant="contained"
-                                    size="medium"
-                                    onClick={onPFPButtonClick}
-                                    fullWidth>
-                                    <Icons.Avatar size={20} />
-                                    <span className={classes.buttonText}>{t('plugin_collectibles_pfp_button')}</span>
-                                </Button>
-                            </ConnectPersonaBoundary>
-                        ) : asset.value.link && asset.value.source ? (
+            <Web3ContextProvider value={{ pluginID: parentPluginID }}>
+                <PluginWalletStatusBar className={classes.footer} expectedPluginID={pluginID} expectedChainId={chainId}>
+                    {origin === 'pfp' && isOwnerIdentity ? (
+                        <ConnectPersonaBoundary
+                            handlerPosition="top-right"
+                            customHint
+                            directTo={PluginID.Avatar}
+                            beforeAction={onBeforeAction}>
                             <Button
                                 sx={{ display: 'flex', alignItems: 'center' }}
                                 variant="contained"
                                 size="medium"
-                                onClick={onMoreButtonClick}
+                                onClick={onPFPButtonClick}
                                 fullWidth>
-                                <span className={classes.buttonText}>
-                                    {t('plugin_collectibles_more_on_button', {
-                                        provider: resolveSourceTypeName(asset.value.source),
-                                    })}
-                                </span>
-                                <Icons.LinkOut size={16} />
+                                <Icons.Avatar size={20} />
+                                <span className={classes.buttonText}>{t('plugin_collectibles_pfp_button')}</span>
                             </Button>
-                        ) : (
-                            <div />
-                        )}
-                    </PluginWalletStatusBar>
-                </PluginWeb3ContextProvider>
-            </PluginIDContextProvider>
+                        </ConnectPersonaBoundary>
+                    ) : asset.value.link && asset.value.source ? (
+                        <Button
+                            sx={{ display: 'flex', alignItems: 'center' }}
+                            variant="contained"
+                            size="medium"
+                            onClick={onMoreButtonClick}
+                            fullWidth>
+                            <span className={classes.buttonText}>
+                                {t('plugin_collectibles_more_on_button', {
+                                    provider: resolveSourceTypeName(asset.value.source),
+                                })}
+                            </span>
+                            <Icons.LinkOut size={16} />
+                        </Button>
+                    ) : (
+                        <div />
+                    )}
+                </PluginWalletStatusBar>
+            </Web3ContextProvider>
         </div>
     )
 }

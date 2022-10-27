@@ -1,8 +1,8 @@
 import { ToolboxHintUnstyled } from '../../../components/InjectedComponents/ToolboxUnstyled.js'
 import { useSideBarNativeItemStyleVariants } from './ToolboxHint.js'
 import { styled, ListItemButton, Typography, ListItemIcon, useMediaQuery, Box } from '@mui/material'
-import GuideStep from '../../../components/GuideStep/index.js'
-import { useI18N } from '../../../utils/index.js'
+import GuideStep from '../../../components/GuideStep'
+import { useI18N } from '../../../utils'
 
 const twitterBreakPoint = 1265
 const Container = styled('div')`
@@ -57,9 +57,12 @@ export function ToolboxHintAtTwitter(props: { category: 'wallet' | 'application'
 
 export function ProfileLinkAtTwitter() {
     const { t } = useI18N()
+
     return (
-        <GuideStep step={3} total={4} tip={t('user_guide_tip_3')}>
-            <Box sx={{ position: 'absolute', left: 0, right: 0, width: '100%', height: '100%' }} />
-        </GuideStep>
+        <>
+            <GuideStep step={3} total={4} tip={t('user_guide_tip_3')}>
+                <Box sx={{ position: 'absolute', left: 0, right: 0, width: '100%', height: '100%' }} />
+            </GuideStep>
+        </>
     )
 }

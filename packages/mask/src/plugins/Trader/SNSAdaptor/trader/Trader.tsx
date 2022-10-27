@@ -6,7 +6,8 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import { FungibleToken, formatBalance } from '@masknet/web3-shared-base'
 import { ChainId, createNativeToken, GasOptionConfig, SchemaType } from '@masknet/web3-shared-evm'
 import { useGasConfig } from '@masknet/web3-hooks-evm'
-import { useAccount, useChainId, useChainIdValid, useFungibleTokenBalance } from '@masknet/web3-hooks-base'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { useChainContext, useChainIdValid, useFungibleTokenBalance } from '@masknet/web3-hooks-base'
 import { activatedSocialNetworkUI } from '../../../../social-network/index.js'
 import { isFacebook } from '../../../../social-network-adaptor/facebook.com/base.js'
 import { isTwitter } from '../../../../social-network-adaptor/twitter.com/base.js'
@@ -21,7 +22,6 @@ import { useSortedTrades } from './hooks/useSortedTrades.js'
 import { useUpdateBalance } from './hooks/useUpdateBalance.js'
 import { TradeForm } from './TradeForm.js'
 import { WalletMessages } from '../../../Wallet/messages.js'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 
 export interface TraderProps extends withClasses<'root'> {
     defaultInputCoin?: FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>
@@ -38,12 +38,12 @@ export interface TraderRef {
 
 export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, ref) => {
     const { defaultOutputCoin, chainId: targetChainId, defaultInputCoin, settings = false } = props
-    const [focusedTrade, setFocusTrade] = useState<TradeInfo>()
-    const currentChainId = useChainId(NetworkPluginID.PLUGIN_EVM)
-    const chainId = targetChainId ?? currentChainId
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const chainIdValid = useChainIdValid(NetworkPluginID.PLUGIN_EVM)
     const t = useI18N()
+    const [focusedTrade, setFocusTrade] = useState<TradeInfo>()
+    const { chainId, account } = useChainContext<NetworkPluginID.PLUGIN_EVM>({
+        chainId: targetChainId,
+    })
+    const chainIdValid = useChainIdValid(NetworkPluginID.PLUGIN_EVM, chainId)
 
     const { openDialog: openConnectWalletDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectProviderDialogUpdated,

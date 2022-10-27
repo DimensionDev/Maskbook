@@ -6,7 +6,7 @@ import { injectPostInspectorDefault } from '../../../social-network/defaults/inj
 const map = new WeakMap<HTMLElement, ShadowRoot>()
 function getShadowRoot(node: HTMLElement) {
     if (map.has(node)) return map.get(node)!
-    const dom = node.attachShadow({ mode: 'closed' })
+    const dom = node.attachShadow({ mode: process.env.shadowRootMode })
     map.set(node, dom)
     return dom
 }

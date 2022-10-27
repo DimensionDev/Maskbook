@@ -1,14 +1,14 @@
 import type { Plugin } from '@masknet/plugin-infra'
-import { PluginIDContextProvider } from '@masknet/web3-hooks-base'
-import type { SocialAddress, SocialIdentity } from '@masknet/web3-shared-base'
+import { Web3ContextProvider } from '@masknet/web3-hooks-base'
+import type { SocialAccount, SocialIdentity } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { base } from '../base.js'
 import { PLUGIN_ID } from '../constants.js'
 import { setupContext } from './context.js'
 import { DonationPage, FeedsPage, FeedPageProps, FootprintPageProps, FootprintsPage } from './pages/index.js'
 
-function shouldDisplay(identity?: SocialIdentity, addressName?: SocialAddress<NetworkPluginID>) {
-    return addressName?.pluginID === NetworkPluginID.PLUGIN_EVM
+function shouldDisplay(identity?: SocialIdentity, socialAccount?: SocialAccount) {
+    return socialAccount?.pluginID === NetworkPluginID.PLUGIN_EVM
 }
 
 const DonationsTabConfig: Plugin.SNSAdaptor.ProfileTab = {
@@ -16,15 +16,15 @@ const DonationsTabConfig: Plugin.SNSAdaptor.ProfileTab = {
     label: 'Donations',
     priority: 1,
     UI: {
-        TabContent: ({ socialAddress, identity }) => {
+        TabContent: ({ socialAccount, identity }) => {
             return (
-                <PluginIDContextProvider value={NetworkPluginID.PLUGIN_EVM}>
+                <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM }}>
                     <DonationPage
-                        socialAddress={socialAddress}
+                        socialAccount={socialAccount}
                         userId={identity?.identifier?.userId}
                         publicKey={identity?.publicKey}
                     />
-                </PluginIDContextProvider>
+                </Web3ContextProvider>
             )
         },
     },
@@ -41,16 +41,16 @@ const createFootprintsTabConfig = (
         label: 'Footprints',
         priority: 2,
         UI: {
-            TabContent: ({ socialAddress, identity }) => {
+            TabContent: ({ socialAccount, identity }) => {
                 return (
-                    <PluginIDContextProvider value={NetworkPluginID.PLUGIN_EVM}>
+                    <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM }}>
                         <FootprintsPage
-                            address={socialAddress?.address ?? ''}
+                            address={socialAccount?.address ?? ''}
                             publicKey={identity?.publicKey}
                             userId={identity?.identifier?.userId ?? ''}
                             {...props}
                         />
-                    </PluginIDContextProvider>
+                    </Web3ContextProvider>
                 )
             },
         },
@@ -72,11 +72,11 @@ const createActivitiesTabConfig = (props: FeedPageProps): Plugin.SNSAdaptor.Prof
         label: 'Activities',
         priority: 3,
         UI: {
-            TabContent: ({ socialAddress }) => {
+            TabContent: ({ socialAccount }) => {
                 return (
-                    <PluginIDContextProvider value={NetworkPluginID.PLUGIN_EVM}>
-                        <FeedsPage address={socialAddress?.address} {...props} />
-                    </PluginIDContextProvider>
+                    <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM }}>
+                        <FeedsPage address={socialAccount?.address} {...props} />
+                    </Web3ContextProvider>
                 )
             },
         },

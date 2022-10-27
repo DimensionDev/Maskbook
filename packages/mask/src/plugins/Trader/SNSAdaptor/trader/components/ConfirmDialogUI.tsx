@@ -1,10 +1,11 @@
-import { FormattedBalance, FormattedCurrency, InjectedDialog, TokenIcon } from '@masknet/shared'
+import { memo, useCallback, useEffect, useMemo, useState } from 'react'
+import { useUpdateEffect } from 'react-use'
+import type BigNumber from 'bignumber.js'
+import { FormattedBalance, FormattedCurrency, InjectedDialog, TokenIcon, PluginWalletStatusBar } from '@masknet/shared'
 import { isDashboardPage } from '@masknet/shared-base'
 import { makeStyles, MaskColorVar, parseColor } from '@masknet/theme'
-import { memo, useCallback, useEffect, useMemo, useState } from 'react'
-import { PluginWalletStatusBar, useI18N } from '../../../../../utils/index.js'
+import { useI18N } from '../../../../../utils/index.js'
 import type { TradeComputed } from '../../../types/index.js'
-import type BigNumber from 'bignumber.js'
 import {
     formatBalance,
     formatCurrency,
@@ -19,8 +20,6 @@ import { Alert, alpha, Box, Button, DialogActions, DialogContent, dialogTitleCla
 import { ArrowDownward } from '@mui/icons-material'
 import { Icons } from '@masknet/icons'
 import { ONE_BIPS, MIN_SLIPPAGE, MAX_SLIPPAGE } from '../../../constants/index.js'
-import { useUpdateEffect } from 'react-use'
-import { PluginWeb3ActualContextProvider } from '@masknet/web3-hooks-base'
 
 const useStyles = makeStyles<{
     isDashboard: boolean
@@ -495,13 +494,11 @@ export const ConfirmDialogUI = memo<ConfirmDialogUIProps>(
                 </DialogContent>
 
                 <DialogActions className={classes.actions}>
-                    <PluginWeb3ActualContextProvider>
-                        <PluginWalletStatusBar>
-                            <Button disabled={staled || priceUpdated} fullWidth onClick={onConfirm}>
-                                {t('plugin_trader_confirm_swap')}
-                            </Button>
-                        </PluginWalletStatusBar>
-                    </PluginWeb3ActualContextProvider>
+                    <PluginWalletStatusBar>
+                        <Button disabled={staled || priceUpdated} fullWidth onClick={onConfirm}>
+                            {t('plugin_trader_confirm_swap')}
+                        </Button>
+                    </PluginWalletStatusBar>
                 </DialogActions>
             </InjectedDialog>
         )

@@ -2,7 +2,7 @@ import { Icons } from '@masknet/icons'
 import { InjectedDialog, PersonaAction, WalletTypes } from '@masknet/shared'
 import { CrossIsolationMessages, EMPTY_LIST, NetworkPluginID, NextIDPlatform, PopupRoutes } from '@masknet/shared-base'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
-import { useChainId } from '@masknet/web3-hooks-base'
+import { useChainContext } from '@masknet/web3-hooks-base'
 import { NextIDProof } from '@masknet/web3-providers'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { DialogActions, DialogContent } from '@mui/material'
@@ -107,7 +107,7 @@ export function Web3ProfileDialog() {
         return sortBy(accountArr, (x) => (x.identity.toLowerCase() === userId?.toLowerCase() ? -1 : 0))
     }, [userId, accountArr])
 
-    const chainId = useChainId()
+    const { chainId } = useChainContext()
 
     const openPopupsWindow = () => {
         context.openPopupWindow(PopupRoutes.ConnectedWallets, {

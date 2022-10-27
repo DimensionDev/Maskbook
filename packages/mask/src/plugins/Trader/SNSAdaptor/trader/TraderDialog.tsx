@@ -1,17 +1,15 @@
 import { useEffect, useRef, useState } from 'react'
-import { useUpdateEffect } from 'react-use'
 import { PluginID, NetworkPluginID, isDashboardPage, CrossIsolationMessages } from '@masknet/shared-base'
 import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
-import { PluginWeb3ContextProvider, useChainId, useChainIdValid } from '@masknet/web3-hooks-base'
+import { Web3ContextProvider, useChainContext, useChainIdValid } from '@masknet/web3-hooks-base'
 import { ChainId, isNativeTokenAddress, SchemaType } from '@masknet/web3-shared-evm'
 import { DialogContent, dialogTitleClasses, IconButton } from '@mui/material'
-import { InjectedDialog, useSelectAdvancedSettings } from '@masknet/shared'
+import { InjectedDialog, useSelectAdvancedSettings, NetworkTab } from '@masknet/shared'
 import { AllProviderTradeContext } from '../../trader/useAllProviderTradeContext.js'
 import { PluginTraderMessages } from '../../messages.js'
 import { Trader, TraderRef, TraderProps } from './Trader.js'
 import { useI18N } from '../../../../utils/index.js'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { NetworkTab } from '../../../../components/shared/NetworkTab.js'
 import { createFungibleToken } from '@masknet/web3-shared-base'
 import { Icons } from '@masknet/icons'
 import { currentSlippageSettings } from '../../settings.js'
@@ -75,10 +73,11 @@ export function TraderDialog() {
     const chainIdList = traderDefinition?.enableRequirement.web3?.[NetworkPluginID.PLUGIN_EVM]?.supportedChainIds ?? []
     const { t } = useI18N()
     const { classes } = useStyles()
-    const currentChainId = useChainId(NetworkPluginID.PLUGIN_EVM)
-    const chainIdValid = useChainIdValid(NetworkPluginID.PLUGIN_EVM)
+
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+    const chainIdValid = useChainIdValid(NetworkPluginID.PLUGIN_EVM, chainId)
+
     const [traderProps, setTraderProps] = useState<TraderProps>()
-    const [chainId, setChainId] = useState<ChainId>(currentChainId)
     const chainIdRef = useRef<ChainId>(chainId)
     const [open, setOpen] = useState(false)
 
@@ -129,19 +128,10 @@ export function TraderDialog() {
         if (!chainIdValid) setOpen(false)
     }, [chainIdValid])
 
-    useUpdateEffect(() => {
-        if (currentChainId) {
-            setChainId(currentChainId)
-        }
-    }, [currentChainId])
-
     return (
         <InjectedDialog
             open={open}
             onClose={() => {
-                if (currentChainId) {
-                    setChainId(currentChainId)
-                }
                 setTraderProps(undefined)
                 setOpen(false)
             }}
@@ -184,17 +174,13 @@ export function TraderDialog() {
             <DialogContent className={classes.content}>
                 <div className={classes.abstractTabWrapper}>
                     <NetworkTab
-                        chainId={chainId}
-                        /* @ts-ignore */
-                        setChainId={setChainId}
                         classes={{
                             indicator: classes.indicator,
                         }}
                         chains={chainIdList}
-                        networkId={NetworkPluginID.PLUGIN_EVM}
                     />
                 </div>
-                <PluginWeb3ContextProvider pluginID={NetworkPluginID.PLUGIN_EVM} value={{ chainId }}>
+                <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM, chainId }}>
                     <AllProviderTradeContext.Provider>
                         <Trader
                             {...traderProps}
@@ -203,7 +189,7 @@ export function TraderDialog() {
                             ref={tradeRef}
                         />
                     </AllProviderTradeContext.Provider>
-                </PluginWeb3ContextProvider>
+                </Web3ContextProvider>
             </DialogContent>
         </InjectedDialog>
     )

@@ -1,9 +1,9 @@
 import type { FC, HTMLProps } from 'react'
 import { PluginID, EMPTY_LIST } from '@masknet/shared-base'
+import { useNetworkContext } from '@masknet/web3-hooks-base'
 import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
 import { makeStyles } from '@masknet/theme'
-import { NetworkTab } from '../../../../components/shared/NetworkTab'
-import { TargetRuntimeContext } from '../../contexts'
+import { NetworkTab } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     abstractTabWrapper: {
@@ -32,9 +32,9 @@ interface Props extends HTMLProps<HTMLDivElement> {}
 export const NetworkSection: FC<Props> = () => {
     const { classes } = useStyles()
 
-    const { pluginID, targetChainId, setTargetChainId } = TargetRuntimeContext.useContainer()
-    const tipDefinition = useActivatedPlugin(PluginID.Tips, 'any')
-    const chainIdList = tipDefinition?.enableRequirement.web3?.[pluginID]?.supportedChainIds ?? EMPTY_LIST
+    const { pluginID } = useNetworkContext()
+    const definition = useActivatedPlugin(PluginID.Tips, 'any')
+    const chainIdList = definition?.enableRequirement.web3?.[pluginID]?.supportedChainIds ?? EMPTY_LIST
 
     if (!chainIdList.length) return null
 
@@ -46,9 +46,6 @@ export const NetworkSection: FC<Props> = () => {
                     tabs: classes.tabs,
                     tabPaper: classes.tabPaper,
                 }}
-                networkId={pluginID}
-                chainId={targetChainId}
-                setChainId={setTargetChainId}
                 chains={chainIdList}
             />
         </div>

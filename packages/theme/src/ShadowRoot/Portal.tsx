@@ -1,16 +1,13 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { useRef, forwardRef, useContext } from 'react'
 import type { PopperProps } from '@mui/material'
-import { DisableShadowRootContext, PreventEventPropagationListContext, StyleSheetsContext } from './Contexts.js'
-
-let mountingPoint: HTMLDivElement
-let mountingShadowRoot: ShadowRoot
-export function setupPortalShadowRoot(init: ShadowRootInit) {
-    if (mountingShadowRoot) return mountingShadowRoot
-    mountingShadowRoot = document.body.appendChild(document.createElement('div')).attachShadow(init)
-    mountingPoint = mountingShadowRoot.appendChild(document.createElement('div'))
-    return mountingShadowRoot
-}
+import {
+    DisableShadowRootContext,
+    PreventShadowRootEventPropagationListContext,
+    stopPropagation,
+    StyleSheetsContext,
+} from './Contexts.js'
+import { ref } from './ShadowRootSetup.js'
 
 /**
  * Render to a React Portal in to the page needs this hook. It will provide a wrapped container that provides ShadowRoot isolation and CSS support for it.
@@ -30,30 +27,29 @@ export function setupPortalShadowRoot(init: ShadowRootInit) {
  */
 export function usePortalShadowRoot<T>(renderer: (container: HTMLElement | undefined) => T): T {
     const disabled = useRef(useContext(DisableShadowRootContext)).current
-    // we ignore the changes on this property during multiple render
+    // we ignore the changes on DisableShadowRootContext during multiple render
     // so we can violates the React hooks rule and still be safe.
     if (disabled) return renderer(undefined)
 
     const sheets = useContext(StyleSheetsContext)
     const signal = useRef<AbortController | null>(null)
-    const preventEventPropagationList = useContext(PreventEventPropagationListContext)
-    const { container } = useRefInit(() => {
+    const preventEventPropagationList = useContext(PreventShadowRootEventPropagationListContext)
+    const container = useRefInit(() => {
         signal.current = new AbortController()
-        const portal = PortalShadowRoot()
+        const portal = ref.portalContainer
 
         const root = document.createElement('div')
         root.dataset.portalShadowRoot = ''
-        const shadow = root.attachShadow({ mode: 'open' })
+        const shadow = root.attachShadow({ mode: process.env.shadowRootMode })
 
-        const stop = (e: Event): void => e.stopPropagation()
         for (const each of preventEventPropagationList) {
-            shadow.addEventListener(each, stop, { signal: signal.current.signal })
+            shadow.addEventListener(each, stopPropagation, { signal: signal.current.signal })
         }
 
         const container = shadow.appendChild(document.createElement('main'))
         sheets.map((x) => x.addContainer(shadow))
 
-        // This is proved to be important to the correct portal orders...
+        // This is important to make the portal orders correct.
         Object.defineProperty(container, 'appendChild', {
             configurable: true,
             writable: true,
@@ -73,7 +69,7 @@ export function usePortalShadowRoot<T>(renderer: (container: HTMLElement | undef
             },
         })
 
-        return { container }
+        return container
     })
 
     return renderer(container)
@@ -100,16 +96,6 @@ export function createShadowRootForwardedPopperComponent<
             return <Component {...props} PopperProps={{ container, ...props.PopperProps }} ref={ref} />
         })
     }) as any as typeof Component
-}
-
-/**
- * ! Do not export !
- */
-function PortalShadowRoot(): Element {
-    if (location.protocol.includes('extension')) return document.body
-    if (globalThis.location.hostname === 'localhost') return document.body
-    if (!mountingPoint) throw new TypeError('Please call setupPortalShadowRoot first')
-    return mountingPoint
 }
 
 function useRefInit<T>(f: () => T): T {

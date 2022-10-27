@@ -11,6 +11,7 @@ import {
     createLookupTableResolver,
     PluginID,
 } from '@masknet/shared-base'
+import { KVStorage } from '@masknet/shared'
 import { ChainId, isValidAddress, isZeroAddress } from '@masknet/web3-shared-evm'
 import { KeyValue, MaskX, MaskX_BaseAPI, NextIDProof, NextIDStorage, RSS3, Twitter } from '@masknet/web3-providers'
 import { ENS_Resolver } from './NameService/ENS.js'
@@ -66,6 +67,8 @@ const resolveMaskXAddressType = createLookupTableResolver<MaskX_BaseAPI.SourceTy
 )
 
 export class IdentityService extends IdentityServiceState {
+    private KV = new KVStorage(`com.maskbook.user_${getSiteType()}`)
+
     constructor(protected context: Plugin.Shared.SharedUIContext) {
         super()
     }

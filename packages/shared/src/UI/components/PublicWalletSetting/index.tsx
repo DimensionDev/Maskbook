@@ -70,17 +70,17 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 interface PublicWalletSettingProps {
-    onClose: () => void
-    onOpenPopup: (route?: PopupRoutes, params?: Record<string, any>) => void
+    pluginID: PluginID
     bindingWallets?: BindingProof[]
     currentPersona?: ECKeyIdentifier
-    pluginID: PluginID
+    onClose: () => void
+    onOpenPopup: (route?: PopupRoutes, params?: Record<string, any>) => void
 }
 
 export const PublicWalletSetting = memo<PublicWalletSettingProps>(
     ({ onClose, bindingWallets, currentPersona, pluginID, onOpenPopup }) => {
-        const { classes } = useStyles()
         const t = useSharedI18N()
+        const { classes } = useStyles()
         const { Storage } = useWeb3State()
 
         const [addresses, setAddresses] = useState<string[]>([])
@@ -156,7 +156,7 @@ export const PublicWalletSetting = memo<PublicWalletSettingProps>(
             }
 
             return mapping[pluginID] ?? t.add_wallet_web3_profile()
-        }, [pluginID, t])
+        }, [t, pluginID])
 
         if (loading) {
             return (

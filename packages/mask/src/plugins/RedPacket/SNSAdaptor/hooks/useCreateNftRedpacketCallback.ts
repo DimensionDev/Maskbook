@@ -3,7 +3,7 @@ import Web3Utils from 'web3-utils'
 import { EthereumAddress } from 'wallet.ts'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { encodeContractTransaction, decodeEvents } from '@masknet/web3-shared-evm'
-import { useAccount, useChainId, useWeb3Connection, useWeb3 } from '@masknet/web3-hooks-base'
+import { useChainContext, useWeb3Connection, useWeb3 } from '@masknet/web3-hooks-base'
 import type { NftRedPacket } from '@masknet/web3-contracts/types/NftRedPacket'
 import { useNftRedPacketContract } from './useNftRedPacketContract.js'
 
@@ -14,8 +14,7 @@ export function useCreateNftRedpacketCallback(
     contractAddress: string,
     tokenIdList: string[],
 ) {
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
     const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM)
     const nftRedPacketContract = useNftRedPacketContract(chainId)

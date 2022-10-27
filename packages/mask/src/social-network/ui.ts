@@ -17,7 +17,7 @@ import type { SetupGuideContext } from '../../shared/legacy-settings/types.js'
 import { createPartialSharedUIContext, createPluginHost } from '../../shared/plugin-infra/host.js'
 import Services from '../extension/service.js'
 import { getCurrentIdentifier, getCurrentSNSNetwork } from '../social-network-adaptor/utils.js'
-import { MaskMessages, setupShadowRootPortal } from '../utils/index.js'
+import { MaskMessages, setupReactShadowRootEnvironment } from '../utils/index.js'
 import '../utils/debug/general.js'
 import { RestPartOfPluginUIContextShared } from '../utils/plugin-context-shared-ui.js'
 import { definedSocialNetworkUIs } from './define.js'
@@ -46,6 +46,7 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
     assertNotEnvironment(Environment.ManifestBackground)
 
     console.log('Activating provider', ui_deferred.networkIdentifier)
+    setupReactShadowRootEnvironment()
     const ui = (activatedSocialNetworkUI = await loadSocialNetworkUI(ui_deferred.networkIdentifier))
 
     sharedUINetworkIdentifier.value = ui_deferred.networkIdentifier
@@ -161,8 +162,6 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
 
     // TODO: receive the signal
     if (Flags.sandboxedPluginRuntime) import('./sandboxed-plugin.js')
-
-    setupShadowRootPortal()
 
     function i18nOverwrite() {
         const i18n = ui.customization.i18nOverwrite || {}

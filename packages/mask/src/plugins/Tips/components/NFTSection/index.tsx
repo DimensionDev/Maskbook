@@ -3,7 +3,7 @@ import { useBoolean } from 'react-use'
 import classnames from 'classnames'
 import { uniqWith } from 'lodash-unified'
 import { Icons } from '@masknet/icons'
-import { useAccount, useNonFungibleAssets } from '@masknet/web3-hooks-base'
+import { useChainContext, useNonFungibleAssets, useNetworkContext } from '@masknet/web3-hooks-base'
 import { ElementAnchor, RetryHint } from '@masknet/shared'
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import { LoadingBase, makeStyles } from '@masknet/theme'
@@ -11,9 +11,9 @@ import { isSameAddress, NonFungibleAsset } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { FormControl, Typography } from '@mui/material'
 import { CollectibleList } from '../../../../extension/options-page/DashboardComponents/CollectibleList/index.js'
-import { TargetRuntimeContext, useTip } from '../../contexts/index.js'
 import { useI18N } from '../../locales/index.js'
 import { AddDialog } from '../AddDialog.js'
+import { useTip } from '../../contexts/index.js'
 
 export * from './NFTList.js'
 
@@ -91,9 +91,9 @@ export const NFTSection: FC<Props> = ({ className, onEmpty, ...rest }) => {
     const t = useI18N()
     const [addTokenDialogIsOpen, openAddTokenDialog] = useBoolean(false)
     const selectedKey = tokenAddress || tokenId ? `${tokenAddress}_${tokenId}` : undefined
-    const account = useAccount()
+    const { pluginID } = useNetworkContext()
+    const { account, chainId } = useChainContext()
 
-    const { targetChainId: chainId, pluginID } = TargetRuntimeContext.useContainer()
     const {
         value: fetchedTokens = EMPTY_LIST,
         done,

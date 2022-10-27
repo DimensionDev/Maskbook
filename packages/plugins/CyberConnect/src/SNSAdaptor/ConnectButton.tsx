@@ -1,12 +1,12 @@
 import { useEffect, useState, useCallback } from 'react'
+import { useAsync } from 'react-use'
 import { LoadingBase, makeStyles, MaskColorVar } from '@masknet/theme'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { useAccount, useWeb3, useCurrentWeb3NetworkPluginID } from '@masknet/web3-hooks-base'
+import { useChainContext, useWeb3, useNetworkContext } from '@masknet/web3-hooks-base'
 import CyberConnect, { Env } from '@cyberlab/cyberconnect'
-import { PluginCyberConnectRPC } from '../messages.js'
 import { useTheme, Typography } from '@mui/material'
-import { useAsync } from 'react-use'
+import { PluginCyberConnectRPC } from '../messages.js'
 
 const useStyles = makeStyles()(() => ({
     button: {
@@ -93,16 +93,17 @@ export default function ConnectButton({
 }) {
     const { classes, cx } = useStyles()
     const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM)
-    const myAddress = useAccount()
+    const { pluginID } = useNetworkContext()
+    const { account } = useChainContext()
     const [cc, setCC] = useState<CyberConnect | null>(null)
     const [isFollowing, setFollowing] = useState(false)
     const [isLoading, setLoading] = useState(false)
-    const blockChainNetwork = useCurrentWeb3NetworkPluginID()
+
     useAsync(async () => {
-        if (isSameAddress(myAddress, address)) return
-        const res = await PluginCyberConnectRPC.fetchFollowStatus(myAddress, address)
+        if (isSameAddress(account, address)) return
+        const res = await PluginCyberConnectRPC.fetchFollowStatus(account, address)
         setFollowing(res.data.followStatus.isFollowing)
-    }, [address, myAddress])
+    }, [address, account])
 
     useEffect(() => {
         if (!web3?.eth.currentProvider) return
@@ -113,7 +114,7 @@ export default function ConnectButton({
         })
 
         setCC(ccInstance)
-    }, [web3, myAddress])
+    }, [web3, account])
 
     const handleClick = useCallback(() => {
         if (!cc) return
@@ -133,21 +134,21 @@ export default function ConnectButton({
                 })
                 .finally(() => setLoading(false))
         }
-    }, [cc, myAddress, isFollowing])
+    }, [cc, account, isFollowing])
 
-    if (!myAddress)
+    if (!account)
         return (
             <Typography variant="body2" sx={{ marginTop: 2 }}>
                 Please connect your wallet first
             </Typography>
         )
-    if (blockChainNetwork !== NetworkPluginID.PLUGIN_EVM) {
+    if (pluginID !== NetworkPluginID.PLUGIN_EVM) {
         return (
             <Typography variant="body2" sx={{ marginTop: 2 }}>
                 Please switch to EVM-based wallet to follow
             </Typography>
         )
-    } else if (!isSameAddress(myAddress, address)) {
+    } else if (!isSameAddress(account, address)) {
         return (
             <div className={cx(classes.button, { [classes.isFollowing]: isFollowing })} onClick={handleClick}>
                 {!isLoading ? (

@@ -8,7 +8,7 @@ import { multipliedBy, formatBalance, ZERO } from '@masknet/web3-shared-base'
 import { PluginTraderRPC } from '../../messages.js'
 import { TradeProvider } from '@masknet/public-api'
 import { useGreatThanSlippageSetting } from './hooks/useGreatThanSlippageSetting.js'
-import { useChainId, useNativeTokenPrice } from '@masknet/web3-hooks-base'
+import { useChainContext, useNativeTokenPrice } from '@masknet/web3-hooks-base'
 import { DefaultTraderPlaceholderUI, TraderInfoUI } from './components/TraderInfoUI.js'
 
 export interface TraderInfoProps {
@@ -20,7 +20,7 @@ export interface TraderInfoProps {
 }
 
 export const TraderInfo = memo<TraderInfoProps>(({ trade, gasPrice, isBest, onClick, isFocus }) => {
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     // #region refresh pools
     useAsyncRetry(async () => {
         // force update balancer's pools each time user enters into the swap tab
@@ -62,7 +62,7 @@ export const TraderInfo = memo<TraderInfoProps>(({ trade, gasPrice, isBest, onCl
 })
 
 export const DefaultTraderPlaceholder = memo(() => {
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const nativeToken = createNativeToken(chainId)
     return <DefaultTraderPlaceholderUI nativeToken={nativeToken} />
 })

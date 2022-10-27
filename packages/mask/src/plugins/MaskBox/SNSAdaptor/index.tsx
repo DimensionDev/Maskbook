@@ -9,8 +9,6 @@ import { Context } from '../hooks/useContext.js'
 import { ApplicationEntry } from '@masknet/shared'
 import { openWindow } from '@masknet/shared-base-ui'
 import { Icons } from '@masknet/icons'
-import { RootContext } from '../contexts/index.js'
-import type { ChainId } from '@masknet/web3-shared-evm'
 
 const isMaskBox = (x: string) => x.startsWith('https://box-beta.mask.io') || x.startsWith('https://box.mask.io')
 
@@ -79,10 +77,8 @@ function Renderer(
     if (shouldNotRender) return null
 
     return (
-        <RootContext chainId={Number.parseInt(matchedChainId, 10) as ChainId.Mainnet}>
-            <Context.Provider initialState={{ boxId, hashRoot }}>
-                <PreviewCard />
-            </Context.Provider>
-        </RootContext>
+        <Context.Provider initialState={{ boxId, hashRoot }}>
+            <PreviewCard />
+        </Context.Provider>
     )
 }

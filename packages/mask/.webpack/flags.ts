@@ -1,54 +1,91 @@
 import type { Configuration } from 'webpack'
-import type { BuildFlags } from '../../scripts/src/extension/normal'
-export type { BuildFlags, Runtime } from '../../scripts/src/extension/normal'
+import { BuildFlags } from '../../scripts/src/extension/flags'
+import { join, isAbsolute } from 'path'
 
-export type NormalizedFlags = ReturnType<typeof normalizeBuildFlags>
-export function normalizeBuildFlags(flags: BuildFlags) {
-    const { mode = 'development', runtime, profiling = false, readonlyCache = false, outputPath, channel } = flags
-    let { hmr = !process.env.NO_HMR && mode === 'development', reactRefresh = hmr, reproducibleBuild = false } = flags
+export type { BuildFlags } from '../../scripts/src/extension/flags'
+
+export type NormalizedFlags = Required<BuildFlags>
+export function normalizeBuildFlags(flags: BuildFlags): NormalizedFlags {
+    const {
+        mode,
+        profiling = false,
+        engine,
+        architecture,
+        manifest = 2,
+        readonlyCache = false,
+        channel = 'stable',
+    } = flags
+    let {
+        hmr = mode === 'development',
+        reactRefresh = hmr,
+        reproducibleBuild = false,
+        devtools = mode === 'development' || channel !== 'stable',
+        sourceMapPreference = true,
+        outputPath = join(__dirname, '../../../', mode === 'development' ? 'dist' : 'build'),
+    } = flags
+    if (!isAbsolute(outputPath)) outputPath = join(__dirname, '../../../', outputPath)
 
     // Firefox requires reproducible build when reviewing the uploaded source code.
-    if (runtime.engine === 'firefox' && mode === 'production') reproducibleBuild = true
+    if (engine === 'firefox' && mode === 'production') reproducibleBuild = true
 
     // CSP of Twitter bans connection to the HMR server and blocks the app to start.
-    if (runtime.engine === 'firefox') hmr = false
+    if (engine === 'firefox') hmr = false
 
-    // React-devtools conflicts with react-refresh
-    // https://github.com/facebook/react/issues/20377
-    if (profiling) reactRefresh = false
+    // React Devtools integration is not supported in Firefox or App yet.
+    if (engine !== 'chromium' || architecture === 'app') devtools = false
 
-    //#region Invariant
     if (mode === 'production') hmr = false
     if (!hmr) reactRefresh = false
-    //#endregion
 
     return {
         mode,
-        runtime,
+        channel,
+        outputPath,
+        // Runtime
+        manifest,
+        architecture,
+        engine,
+        // DX
         hmr,
-        profiling,
         reactRefresh,
+        sourceMapPreference,
+        devtools,
+        // CI / profiling
+        profiling,
         readonlyCache,
         reproducibleBuild,
-        outputPath,
-        channel,
-    } as const
+    }
 }
 
-export function computedBuildFlags(flags: ReturnType<typeof normalizeBuildFlags>) {
-    const { runtime, mode } = flags
+export interface ComputedFlags {
+    lockdown: boolean
+    sourceMapKind: Configuration['devtool']
+    supportDynamicImport: boolean
+    reactProductionProfiling: boolean
+}
+
+export function computedBuildFlags(flags: Required<BuildFlags>): ComputedFlags {
+    const lockdown = flags.engine === 'chromium'
+
     let sourceMapKind: Configuration['devtool'] = false
-    let lockdown = runtime.engine === 'chromium'
-    if (runtime.engine === 'safari' && runtime.architecture === 'app') {
-        // Due to webextension-polyfill, eval on iOS is async.
-        sourceMapKind = false
-    } else if (runtime.manifest === 3 && mode === 'development') {
-        // MV3 does not allow eval even in production
-        sourceMapKind = 'inline-cheap-source-map'
-    } else if (mode === 'development') {
-        sourceMapKind = 'eval-cheap-source-map'
-    } else {
-        sourceMapKind = false
+    if (flags.sourceMapPreference === true) {
+        if (flags.manifest === 3) sourceMapKind = 'inline-cheap-source-map'
+        else sourceMapKind = 'eval-cheap-source-map'
     }
-    return { sourceMapKind, lockdown } as const
+
+    const supportDynamicImport = !(flags.engine === 'safari' && flags.architecture === 'app')
+    const reactProductionProfiling = flags.mode === 'production' && flags.profiling
+    return { sourceMapKind, lockdown, supportDynamicImport, reactProductionProfiling }
+}
+
+export function computeCacheKey(flags: Required<BuildFlags>, computedFlags: ComputedFlags) {
+    return [
+        '1',
+        'node' + process.version,
+        flags.mode,
+        computedFlags.supportDynamicImport, // it will generate different code
+        computedFlags.reactProductionProfiling, // it will affect module resolution of react-dom
+        flags.devtools, // it will affect module resolution of react-refresh-webpack-plugin/client/ReactRefreshEntry.js
+        flags.reactRefresh, // it will affect all TSX files
+    ].join('-')
 }

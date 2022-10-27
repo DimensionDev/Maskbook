@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from 'react'
 import { Avatar, Box, Button, CardContent, CardHeader, Link, Paper, Tab, Tabs, Typography } from '@mui/material'
-import { Markdown } from '@masknet/shared'
+import { Markdown, ChainBoundary } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { Trans } from 'react-i18next'
 import VerifiedUserIcon from '@mui/icons-material/VerifiedUser'
@@ -15,9 +15,8 @@ import { PluginSkeleton } from './PluginSkeleton.js'
 import { TabState, TransactionType } from '../types/index.js'
 import { resolveAssetLinkOnCryptoartAI, resolveWebLinkOnCryptoartAI } from '../pipes/index.js'
 import { ActionBar } from './ActionBar.js'
-import { useChainId } from '@masknet/web3-hooks-base'
+import { useChainContext } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
 import { PLUGIN_NAME } from '../constants.js'
 
 const useStyles = makeStyles()((theme) => {
@@ -81,7 +80,7 @@ export interface CollectibleProps {}
 export function Collectible(props: CollectibleProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { asset, events, tabIndex, setTabIndex, chainId: expectChainId } = CollectibleState.useContainer()
 
     const assetSource = useMemo(() => {

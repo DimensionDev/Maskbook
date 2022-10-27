@@ -7,9 +7,9 @@ import type { GameMetaData, GoodGhostingInfo, Player, TimelineEvent } from '../t
 import { useI18N } from '../../../utils/index.js'
 import addSeconds from 'date-fns/addSeconds'
 import Services from '../../../extension/service.js'
-import { useAccount, useChainId } from '@masknet/web3-hooks-base'
+import { useChainContext } from '@masknet/web3-hooks-base'
 import { useSingleContractMultipleData } from '@masknet/web3-hooks-evm'
-import { NetworkPluginID } from '@masknet/shared-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
 
 export function useGameContractAddress(id: string) {
     const { GOOD_GHOSTING_CONTRACT_ADDRESS_FILE } = useGoodGhostingConstants()
@@ -28,9 +28,8 @@ export function useGameContractAddress(id: string) {
 }
 
 export function useGameInfo(gameData: GameMetaData) {
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const contract = useGoodGhostingContract(chainId, gameData.contractAddress)
-    const account = useAccount()
     const { names, callDatas } = useMemo(() => {
         const names = [
             'segmentPayment',

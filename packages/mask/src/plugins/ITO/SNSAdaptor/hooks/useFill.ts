@@ -6,7 +6,7 @@ import type { TransactionReceipt } from 'web3-core'
 import type { ITO2 } from '@masknet/web3-contracts/types/ITO2'
 import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
 import { TransactionEventType, ChainId, SchemaType, FAKE_SIGN_PASSWORD } from '@masknet/web3-shared-evm'
-import { useAccount, useChainId, useWeb3, useWeb3Connection } from '@masknet/web3-hooks-base'
+import { useChainContext, useWeb3, useWeb3Connection } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { FungibleToken, isGreaterThan, ONE } from '@masknet/web3-shared-base'
 import { ITO_CONTRACT_BASE_TIMESTAMP, MSG_DELIMITER } from '../../constants.js'
@@ -55,8 +55,7 @@ type paramsObjType = {
 export function useFillCallback(poolSettings?: PoolSettings) {
     const { t } = useI18N()
     const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM)
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
     const { contract: ITO_Contract } = useITO_Contract(chainId)
     const paramResult = useFillParams(poolSettings)
@@ -127,7 +126,7 @@ export function useFillCallback(poolSettings?: PoolSettings) {
 }
 
 export function useFillParams(poolSettings: PoolSettings | undefined) {
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { contract: ITO_Contract } = useITO_Contract(chainId)
 
     return useAsync(async () => {

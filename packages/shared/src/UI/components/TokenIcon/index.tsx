@@ -1,9 +1,9 @@
+import { useAsyncRetry } from 'react-use'
+import { compact, first } from 'lodash-unified'
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { useChainId, useWeb3Hub } from '@masknet/web3-hooks-base'
+import { useChainContext, useWeb3Hub } from '@masknet/web3-hooks-base'
 import { TokenType } from '@masknet/web3-shared-base'
-import { compact, first } from 'lodash-unified'
-import { useAsyncRetry } from 'react-use'
 import { useImageURL } from '../../../hooks/useImageURL.js'
 import { Icon, IconProps } from '../Icon/index.js'
 
@@ -19,7 +19,7 @@ export interface TokenIconProps extends IconProps {
 export function TokenIcon(props: TokenIconProps) {
     const { address, logoURL, name, symbol, tokenType = TokenType.Fungible, disableDefaultIcon, ...rest } = props
 
-    const chainId = useChainId(props.pluginID, props.chainId)
+    const { chainId } = useChainContext({ chainId: props.chainId })
     const hub = useWeb3Hub(props.pluginID)
     const isNFT = tokenType === TokenType.NonFungible
     const { value } = useAsyncRetry(async () => {

@@ -2,7 +2,7 @@ import { memo, useMemo } from 'react'
 import { Box, Button, TableCell, TableRow, Tooltip, Typography } from '@mui/material'
 import { getMaskColor, makeStyles } from '@masknet/theme'
 import { FormattedCurrency, TokenIcon, WalletIcon } from '@masknet/shared'
-import { useChainId, useNetworkDescriptors, useCurrentWeb3NetworkPluginID } from '@masknet/web3-hooks-base'
+import { useChainContext, useNetworkDescriptors, useNetworkContext } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { CurrencyType, formatBalance, formatCurrency, FungibleAsset } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
@@ -70,10 +70,10 @@ export interface TokenTableRowProps {
 export const FungibleTokenTableRow = memo<TokenTableRowProps>(({ asset, onSend, onSwap }) => {
     const t = useDashboardI18N()
     const { classes } = useStyles()
-    const currentChainId = useChainId()
+    const { chainId } = useChainContext()
     const networkDescriptors = useNetworkDescriptors()
-    const currentPluginId = useCurrentWeb3NetworkPluginID()
-    const isOnCurrentChain = useMemo(() => currentChainId === asset.chainId, [asset, currentChainId])
+    const { pluginID: currentPluginId } = useNetworkContext()
+    const isOnCurrentChain = useMemo(() => chainId === asset.chainId, [asset, chainId])
 
     return (
         <TableRow className={classes.row}>

@@ -1,4 +1,4 @@
-import { FormattedAddress, FormattedBalance } from '@masknet/shared'
+import { FormattedAddress, FormattedBalance, PluginWalletStatusBar } from '@masknet/shared'
 import {
     formatEthereumAddress,
     isNativeTokenAddress,
@@ -7,7 +7,7 @@ import {
     SchemaType,
     ChainId,
 } from '@masknet/web3-shared-evm'
-import { NetworkPluginID } from '@masknet/shared-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
 import { formatBalance, FungibleToken, leftShift, ONE } from '@masknet/web3-shared-base'
 import { Grid, IconButton, Link, Paper, Typography, Box } from '@mui/material'
 import { makeStyles, ActionButton } from '@masknet/theme'
@@ -15,10 +15,10 @@ import LaunchIcon from '@mui/icons-material/Launch'
 import RepeatIcon from '@mui/icons-material/Repeat'
 import formatDateTime from 'date-fns/format'
 import { Fragment, useCallback, useState, useEffect } from 'react'
-import { PluginWalletStatusBar, useI18N } from '../../../utils/index.js'
+import { useI18N } from '../../../utils/index.js'
 import type { PoolSettings } from './hooks/useFill.js'
 import { decodeRegionCode, regionCodes } from './hooks/useRegion.js'
-import { useChainId } from '@masknet/web3-hooks-base'
+import { useChainContext } from '@masknet/web3-hooks-base'
 
 const useSwapItemStyles = makeStyles()({
     root: {
@@ -104,7 +104,7 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
     const { poolSettings, loading, onDone, onBack, onClose } = props
     const { t } = useI18N()
     const { classes } = useStyles()
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { DEFAULT_QUALIFICATION2_ADDRESS } = useITOConstants(chainId)
     const showQualification =
         poolSettings?.advanceSettingData.contract &&

@@ -18,6 +18,7 @@
     { "path": "../web3-shared/flow" },
     { "path": "../web3-shared/solana" },
     { "path": "../web3-helpers" },
-    { "path": "../web3-providers" }
+    { "path": "../web3-providers" },
+    { "path": "../plugins/Wallet" }
   ]
 }

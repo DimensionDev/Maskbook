@@ -1,6 +1,6 @@
+import { useState, useCallback, useEffect, useMemo } from 'react'
 import { Box, Typography, List, ListItem } from '@mui/material'
 import { makeStyles, ActionButton, LoadingBase } from '@masknet/theme'
-import { useState, useCallback, useEffect, useMemo } from 'react'
 import { useI18N } from '../locales/index.js'
 import classNames from 'classnames'
 import { ERC721ContractSelectPanel } from '../../../web3/UI/ERC721ContractSelectPanel.js'
@@ -13,15 +13,13 @@ import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline'
 import { RedpacketMessagePanel } from './RedpacketMessagePanel.js'
 import { SelectNftTokenDialog, OrderedERC721Token } from './SelectNftTokenDialog.js'
 import { RedpacketNftConfirmDialog } from './RedpacketNftConfirmDialog.js'
-import { NFTCardStyledAssetPlayer } from '@masknet/shared'
+import { NFTCardStyledAssetPlayer, PluginWalletStatusBar, ChainBoundary } from '@masknet/shared'
 import { NFTSelectOption } from '../types.js'
 import { NFT_RED_PACKET_MAX_SHARES } from '../constants.js'
-import { useAccount, useChainId } from '@masknet/web3-hooks-base'
+import { useChainContext } from '@masknet/web3-hooks-base'
 import { useNonFungibleOwnerTokens } from '@masknet/web3-hooks-evm'
 import { NetworkPluginID, EMPTY_LIST } from '@masknet/shared-base'
 import type { NonFungibleTokenContract, NonFungibleToken } from '@masknet/web3-shared-base'
-import { PluginWalletStatusBar } from '../../../utils/index.js'
-import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -218,8 +216,7 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
     const { classes } = useStyles()
     const [balance, setBalance] = useState(0)
     const [selectOption, setSelectOption] = useState<NFTSelectOption | undefined>(undefined)
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const [contract, setContract] = useState<NonFungibleTokenContract<ChainId, SchemaType.ERC721>>()
     const [manualSelectedTokenDetailedList, setExistTokenDetailedList] = useState<OrderedERC721Token[]>(EMPTY_LIST)
     const [onceAllSelectedTokenDetailedList, setAllTokenDetailedList] = useState<OrderedERC721Token[]>(EMPTY_LIST)
@@ -391,10 +388,14 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
             </Box>
             <Box style={{ position: 'absolute', bottom: 0, width: '100%' }}>
                 <PluginWalletStatusBar>
+<<<<<<< HEAD
                     <ChainBoundary
                         expectedPluginID={NetworkPluginID.PLUGIN_EVM}
                         expectedChainId={chainId}
                         forceShowingWrongNetworkButton>
+=======
+                    <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={chainId}>
+>>>>>>> develop
                         <WalletConnectedBoundary>
                             <EthereumERC721TokenApprovedBoundary
                                 validationMessage={validationMessage}

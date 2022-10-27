@@ -6,7 +6,7 @@ const useStyles = makeStyles()((theme) => ({
     main: {
         height: 360,
         overflow: 'auto',
-        marginBottom: theme.spacing(2.75),
+        padding: theme.spacing(2),
     },
     section: {
         margin: theme.spacing(4, 0),
@@ -42,7 +42,7 @@ export interface DetailsTabProps {
 
 export function DetailsTab(props: DetailsTabProps) {
     const { boxInfo, boxMetadata } = props
-    const { classes } = useStyles()
+    const { classes, theme } = useStyles()
 
     const definitions = boxMetadata?.activities.map((x) => ({
         title: x.title,
@@ -52,7 +52,7 @@ export function DetailsTab(props: DetailsTabProps) {
     if (!definitions)
         return (
             <Box className={classes.main}>
-                <Typography className={classes.placeholder} color="textPrimary">
+                <Typography className={classes.placeholder} color={theme.palette.maskColor.publicMain}>
                     No detailed information.
                 </Typography>
             </Box>
@@ -62,10 +62,10 @@ export function DetailsTab(props: DetailsTabProps) {
         <Box className={classes.main}>
             {definitions?.map((x, i) => (
                 <section className={classes.section} key={i}>
-                    <Typography className={classes.title} color="textPrimary" variant="h3">
+                    <Typography className={classes.title} color={theme.palette.maskColor.publicMain} variant="h3">
                         {x.title}
                     </Typography>
-                    <Typography className={classes.content} color="textPrimary" variant="body2">
+                    <Typography className={classes.content} color={theme.palette.maskColor.publicMain} variant="body2">
                         {x.content}
                     </Typography>
                 </section>
