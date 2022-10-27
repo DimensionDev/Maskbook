@@ -1,5 +1,6 @@
 import { forwardRef, useCallback, useEffect, useImperativeHandle, useState, useMemo } from 'react'
 import { useUnmount, useUpdateEffect } from 'react-use'
+import { isUndefined } from 'lodash-unified'
 import { delay } from '@dimensiondev/kit'
 import { useOpenShareTxDialog, useSelectFungibleToken } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
@@ -265,7 +266,7 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
 
     // #region if chain id be changed, reset the chain id on context, and reset gas config
     useEffect(() => {
-        if (!chainId) return
+        if (isUndefined(chainId)) return
         setGasConfig(undefined)
     }, [chainId])
     // #endregion
