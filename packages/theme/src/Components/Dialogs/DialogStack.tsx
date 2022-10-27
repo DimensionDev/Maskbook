@@ -2,7 +2,9 @@ import { useRef, useContext, createContext, useState, useEffect } from 'react'
 import type { DialogProps } from '@mui/material'
 
 const StackingScopeEnabled = createContext<boolean>(false)
+StackingScopeEnabled.displayName = 'DialogStackingScopeEnabledContext'
 const Stack = createContext({ level: -1, onHideChange(shouldHide: boolean) {} })
+Stack.displayName = 'DialogStackContext'
 /**
  * If you're using <Dialog> on its own and you want to support DialogStack, please use this hook.
  *

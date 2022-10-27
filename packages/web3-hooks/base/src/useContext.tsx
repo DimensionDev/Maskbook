@@ -29,8 +29,10 @@ type ChainContextDefaults<T extends NetworkPluginID = NetworkPluginID> = Omit<
 >
 
 const NetworkContext = createContext<NetworkContext>(null!)
+NetworkContext.displayName = 'NetworkContext'
 
 const ChainContext = createContext<ChainContext>(null!)
+ChainContext.displayName = 'ChainContext'
 
 function NetworkContextProvider({ value, children }: React.ProviderProps<NetworkPluginID>) {
     const [pluginID, setPluginID] = useState<NetworkPluginID>()

@@ -35,6 +35,7 @@ export const UserContext = createContext<UserContext>({
         throw new Error('Context not provided.')
     },
 })
+UserContext.displayName = 'UserContext'
 
 export type VerifyPasswordSet = () => void
 export type ConfirmPasswordCallback = () => void

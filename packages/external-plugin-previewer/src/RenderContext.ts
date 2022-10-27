@@ -5,3 +5,4 @@ export interface RenderContext {
     baseURL: string
 }
 export const RenderContext = createContext<RenderContext>(null!)
+RenderContext.displayName = 'RenderContext'

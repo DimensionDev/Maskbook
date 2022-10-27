@@ -12,9 +12,7 @@ import PhoneNumberSettingItem from './components/PhoneNumberSettingItem.js'
 import LanguageSetting from './components/LanguageSetting.js'
 import AppearanceSetting from './components/AppearanceSetting.js'
 import RestoreSetting from './components/RestoreSetting.js'
-// import MobileSyncSetting from './components/MobileSyncSetting'
 
-import { PasswordVerifiedProvider } from './hooks/VerifyPasswordContext.js'
 import { UserProvider } from './hooks/UserContext.js'
 import { Icons } from '@masknet/icons'
 
@@ -24,42 +22,34 @@ export default function Settings() {
     return (
         <PageFrame title={t.settings()} noBackgroundFill>
             <UserProvider>
-                <PasswordVerifiedProvider>
-                    <SettingCard title={t.settings_general()}>
-                        <SettingItem
-                            icon={<Icons.SettingsLanguage />}
-                            title={t.settings_language_title()}
-                            desc={t.settings_language_desc()}>
-                            <LanguageSetting />
-                        </SettingItem>
-                        <SettingItem
-                            icon={<Icons.SettingsAppearance />}
-                            title={t.settings_appearance_title()}
-                            desc={t.settings_appearance_desc()}>
-                            <AppearanceSetting />
-                        </SettingItem>
-                        {/* <SettingItem
-            icon={<SettingsSyncIcon />}
-            title={t.settings_sync_with_mobile_title()}
-            desc={t.settings_sync_with_mobile_desc()}>
-            <MobileSyncSetting />
-        </SettingItem> */}
-                    </SettingCard>
+                <SettingCard title={t.settings_general()}>
+                    <SettingItem
+                        icon={<Icons.SettingsLanguage />}
+                        title={t.settings_language_title()}
+                        desc={t.settings_language_desc()}>
+                        <LanguageSetting />
+                    </SettingItem>
+                    <SettingItem
+                        icon={<Icons.SettingsAppearance />}
+                        title={t.settings_appearance_title()}
+                        desc={t.settings_appearance_desc()}>
+                        <AppearanceSetting />
+                    </SettingItem>
+                </SettingCard>
 
-                    <SettingCard title={t.settings_backup_recovery()}>
-                        <BackupSettingItem />
-                        <SettingItem
-                            icon={<Icons.SettingsRestore />}
-                            title={t.settings_restore_database_title()}
-                            desc={t.settings_restore_database_desc()}>
-                            <RestoreSetting />
-                        </SettingItem>
+                <SettingCard title={t.settings_backup_recovery()}>
+                    <BackupSettingItem />
+                    <SettingItem
+                        icon={<Icons.SettingsRestore />}
+                        title={t.settings_restore_database_title()}
+                        desc={t.settings_restore_database_desc()}>
+                        <RestoreSetting />
+                    </SettingItem>
 
-                        <PasswordSettingItem />
-                        <EmailSettingItem />
-                        <PhoneNumberSettingItem />
-                    </SettingCard>
-                </PasswordVerifiedProvider>
+                    <PasswordSettingItem />
+                    <EmailSettingItem />
+                    <PhoneNumberSettingItem />
+                </SettingCard>
             </UserProvider>
         </PageFrame>
     )

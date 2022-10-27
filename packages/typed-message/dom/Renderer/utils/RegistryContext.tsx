@@ -7,3 +7,4 @@ export const RegistryContext = createContext<(type: string) => undefined | Rende
     )
     return undefined
 })
+RegistryContext.displayName = 'RegistryContext'
