@@ -122,6 +122,7 @@
     "plugin_card_frame_default_provided_by_value": "Mask Network",
     "plugin_card_frame_loading": "Loading....",
     "plugin_wallet_connect_a_wallet": "Connect Wallet",
+    "plugin_wallet_wrong_networgitk": "Wrong Network",
     "plugin_wallet_switch_network": "Switch to {{network}}",
     "plugin_wallet_not_support_network": "This network is not supported yet.",
     "plugin_wallet_switch_network_under_going": "Switching to {{network}}",

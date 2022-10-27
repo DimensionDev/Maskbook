@@ -164,7 +164,7 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
                         startIcon={<Icons.ConnectWallet size={18} />}
                         onClick={openSelectProviderDialog}
                         {...props.ActionButtonPromiseProps}>
-                        {t('plugin_wallet_wrong_network')}
+                        {t.plugin_wallet_wrong_network()}
                     </ActionButton>
                 ) : null}
             </>,
