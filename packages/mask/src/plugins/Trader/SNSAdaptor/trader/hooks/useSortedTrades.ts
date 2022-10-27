@@ -1,27 +1,29 @@
 import { useMemo } from 'react'
-import { NetworkPluginID } from '@masknet/shared-base'
 import { isGreaterThan, isLessThan, multipliedBy, leftShift } from '@masknet/web3-shared-base'
-import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import { useFungibleToken, useFungibleTokenPrice, useNativeTokenPrice } from '@masknet/web3-hooks-base'
+import { SchemaType } from '@masknet/web3-shared-evm'
+import {
+    useFungibleToken,
+    useFungibleTokenPrice,
+    useNativeTokenPrice,
+    useNetworkContext,
+} from '@masknet/web3-hooks-base'
 import { MINIMUM_AMOUNT } from '../../../constants/index.js'
 import type { TradeInfo } from '../../../types/index.js'
 import { AllProviderTradeContext } from '../../../trader/useAllProviderTradeContext.js'
+import type { Web3Helper } from '@masknet/web3-helpers'
 
-export function useSortedTrades(traders: TradeInfo[], chainId: ChainId, gasPrice?: string) {
-    const { value: nativeToken } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, '', { chainId })
-    const { value: nativeTokenPrice = 0 } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM, { chainId })
+export function useSortedTrades(traders: TradeInfo[], chainId: Web3Helper.ChainIdAll, gasPrice?: string) {
+    const { pluginID } = useNetworkContext()
+    const { value: nativeToken } = useFungibleToken(pluginID, '', { chainId })
+    const { value: nativeTokenPrice = 0 } = useNativeTokenPrice(pluginID, { chainId })
 
     const {
         tradeState: [{ outputToken }],
     } = AllProviderTradeContext.useContainer()
 
-    const { value: outputTokenPrice = 0 } = useFungibleTokenPrice(
-        NetworkPluginID.PLUGIN_EVM,
-        outputToken?.address.toLowerCase(),
-        {
-            chainId,
-        },
-    )
+    const { value: outputTokenPrice = 0 } = useFungibleTokenPrice(pluginID, outputToken?.address.toLowerCase(), {
+        chainId,
+    })
 
     return useMemo(() => {
         if (outputToken && nativeToken && (outputTokenPrice || nativeTokenPrice)) {

@@ -11,12 +11,12 @@ import {
 import { Trade, TradeComputed, TradeStrategy } from '../../types/index.js'
 import { useSlippageTolerance } from './useSlippageTolerance.js'
 import { useTradeBreakdown } from './useTradeBreakdown.js'
-import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import type { Web3Helper } from '@masknet/web3-helpers'
 
 export function useTradeComputed(
     trade: Trade | null,
-    inputToken?: FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>,
-    outputToken?: FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>,
+    inputToken?: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>,
+    outputToken?: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>,
     temporarySlippage?: number,
 ): TradeComputed<Trade> | null {
     const slippageSetting = useSlippageTolerance()

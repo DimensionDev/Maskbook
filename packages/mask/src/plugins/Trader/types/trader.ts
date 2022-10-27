@@ -1,7 +1,8 @@
 import type BigNumber from 'bignumber.js'
-import type { ChainId, ChainIdOptionalRecord, SchemaType } from '@masknet/web3-shared-evm'
+import type { ChainIdOptionalRecord } from '@masknet/web3-shared-evm'
 import type { TradeProvider } from '@masknet/public-api'
 import type { FungibleToken } from '@masknet/web3-shared-base'
+import type { Web3Helper } from '@masknet/web3-helpers'
 
 export enum WarningLevel {
     LOW = 1,
@@ -83,8 +84,8 @@ export enum ZrxTradePool {
 
 export interface TradeComputed<T = unknown> {
     strategy: TradeStrategy
-    inputToken?: FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>
-    outputToken?: FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>
+    inputToken?: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
+    outputToken?: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
     inputAmount: BigNumber
     outputAmount: BigNumber
     executionPrice: BigNumber
@@ -94,8 +95,8 @@ export interface TradeComputed<T = unknown> {
     fee: BigNumber
     path?: Array<
         Array<
-            | PartialRequired<FungibleToken<ChainId, SchemaType.Native>, 'address'>
-            | PartialRequired<FungibleToken<ChainId, SchemaType.ERC20>, 'address'>
+            | PartialRequired<FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>, 'address'>
+            | PartialRequired<FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>, 'address'>
         >
     >
     trade_?: T
@@ -121,11 +122,11 @@ export interface TradeContext {
     FACTORY_CONTRACT_ADDRESS?: string
     SPENDER_CONTRACT_ADDRESS?: string
     ADDITIONAL_TOKENS?: ChainIdOptionalRecord<
-        Record<string, Array<FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>>>
+        Record<string, Array<FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>>
     >
-    AGAINST_TOKENS?: ChainIdOptionalRecord<Array<FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>>>
+    AGAINST_TOKENS?: ChainIdOptionalRecord<Array<FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>>
     CUSTOM_TOKENS?: ChainIdOptionalRecord<
-        Record<string, Array<FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>>>
+        Record<string, Array<FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>>
     >
 }
 

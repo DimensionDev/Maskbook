@@ -182,11 +182,11 @@ export interface ConfirmDialogUIProps {
     gasFeeUSD: string
     isGreatThanSlippageSetting: boolean
     trade: TradeComputed
-    nativeToken: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
+    nativeToken?: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
     inputToken: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
     outputToken: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
     onClose: () => void
-    openSettingDialog: () => void
+    openSettingDialog?: () => void
     onConfirm: () => void
 }
 
@@ -421,9 +421,11 @@ export const ConfirmDialogUI = memo<ConfirmDialogUIProps>(
                             {t('plugin_trader_confirm_slippage_tolerance')}
                         </Typography>
                         <Typography className={classes.description}>
-                            <Typography component="span" className={classes.edit} onClick={openSettingDialog}>
-                                {t('edit')}
-                            </Typography>
+                            {openSettingDialog ? (
+                                <Typography component="span" className={classes.edit} onClick={openSettingDialog}>
+                                    {t('edit')}
+                                </Typography>
+                            ) : null}
                             {currentSlippage / 100}%
                         </Typography>
                     </Box>
@@ -452,14 +454,16 @@ export const ConfirmDialogUI = memo<ConfirmDialogUIProps>(
                         <Box className={classes.section}>
                             <Typography className={classes.title}>{t('plugin_trader_gas')}</Typography>
                             <Typography className={classes.description}>
-                                <Typography component="span" className={classes.edit} onClick={openSettingDialog}>
-                                    {t('edit')}
-                                </Typography>
+                                {openSettingDialog ? (
+                                    <Typography component="span" className={classes.edit} onClick={openSettingDialog}>
+                                        {t('edit')}
+                                    </Typography>
+                                ) : null}
                                 <FormattedBalance
                                     value={gasFee}
-                                    decimals={nativeToken.decimals ?? 0}
+                                    decimals={nativeToken?.decimals ?? 0}
                                     significant={4}
-                                    symbol={nativeToken.symbol}
+                                    symbol={nativeToken?.symbol}
                                     formatter={formatBalance}
                                 />
                                 <span>

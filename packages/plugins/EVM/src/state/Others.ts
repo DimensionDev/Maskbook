@@ -27,6 +27,8 @@ import {
     getMaskTokenAddress,
     getNativeTokenAddress,
     formatSchemaType,
+    createNativeToken,
+    createERC20Token,
 } from '@masknet/web3-shared-evm'
 
 export class Others extends OthersState<ChainId, SchemaType, ProviderType, NetworkType, Transaction> {
@@ -58,4 +60,6 @@ export class Others extends OthersState<ChainId, SchemaType, ProviderType, Netwo
     override formatTokenId = formatTokenId
     override formatDomainName = formatDomainName
     override formatSchemaType = formatSchemaType
+    override createNativeToken = createNativeToken
+    override createERC20Token = createERC20Token
 }

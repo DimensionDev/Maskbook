@@ -2,13 +2,13 @@ import BigNumber from 'bignumber.js'
 import { useMemo } from 'react'
 import { ZERO, pow10, FungibleToken } from '@masknet/web3-shared-base'
 import { SwapOOData, TradeComputed, TradeStrategy } from '../../types/index.js'
-import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import type { Web3Helper } from '@masknet/web3-helpers'
 
 export function useTradeComputed(
     trade: SwapOOData | null,
     strategy: TradeStrategy,
-    inputToken?: FungibleToken<ChainId, SchemaType>,
-    outputToken?: FungibleToken<ChainId, SchemaType>,
+    inputToken?: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>,
+    outputToken?: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>,
 ) {
     return useMemo(() => {
         if (!trade) return null

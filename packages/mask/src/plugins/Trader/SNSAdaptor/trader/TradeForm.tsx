@@ -35,6 +35,7 @@ import { PluginTraderMessages } from '../../messages.js'
 import Services from '../../../../extension/service.js'
 import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
 import { useIsMinimalModeDashBoard } from '@masknet/plugin-infra/dashboard'
+import type { Web3Helper } from '@masknet/web3-helpers'
 
 const useStyles = makeStyles<{
     isDashboard: boolean
@@ -197,8 +198,8 @@ const useStyles = makeStyles<{
 
 export interface AllTradeFormProps extends withClasses<'root'> {
     inputAmount: string
-    inputToken?: FungibleToken<ChainId, SchemaType>
-    outputToken?: FungibleToken<ChainId, SchemaType>
+    inputToken?: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
+    outputToken?: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
     inputTokenBalance?: string
     onInputAmountChange: (amount: string) => void
     onTokenChipClick?: (token: TokenPanelType) => void

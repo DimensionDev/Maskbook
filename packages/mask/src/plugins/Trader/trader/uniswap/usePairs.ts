@@ -10,7 +10,8 @@ import type { TradeProvider } from '@masknet/public-api'
 import { useGetTradeContext } from '../useGetTradeContext.js'
 import { useMultipleContractSingleData } from '@masknet/web3-hooks-evm'
 import { useTargetBlockNumber } from '../useTargetBlockNumber.js'
-import { useChainContext } from '@masknet/web3-hooks-base'
+import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
+import type { ChainId } from '@masknet/web3-shared-evm'
 
 export enum PairState {
     NOT_EXISTS = 0,
@@ -22,10 +23,11 @@ export type TokenPair = [Token, Token]
 
 export function usePairs(tradeProvider: TradeProvider, tokenPairs: readonly TokenPair[]) {
     const context = useGetTradeContext(tradeProvider)
-    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+    const { chainId } = useChainContext()
+    const { pluginID } = useNetworkContext()
 
     const listOfPairAddress = useMemo(() => {
-        if (!context) return EMPTY_LIST
+        if (!context || pluginID !== NetworkPluginID.PLUGIN_EVM) return EMPTY_LIST
         const { FACTORY_CONTRACT_ADDRESS, INIT_CODE_HASH } = context
         if (!FACTORY_CONTRACT_ADDRESS || !INIT_CODE_HASH) return EMPTY_LIST
         return tokenPairs.map(([tokenA, tokenB]) =>
@@ -33,18 +35,20 @@ export function usePairs(tradeProvider: TradeProvider, tokenPairs: readonly Toke
                 ? getPairAddress(FACTORY_CONTRACT_ADDRESS, INIT_CODE_HASH, tokenA, tokenB)
                 : undefined,
         )
-    }, [context, tokenPairs])
+    }, [context, tokenPairs, pluginID])
 
     const { value: targetBlockNumber } = useTargetBlockNumber(chainId)
 
     // get reserves for each pair
-    const contracts = usePairContracts(chainId, [...new Set(listOfPairAddress.filter(Boolean) as string[])])
+    const contracts = usePairContracts(pluginID !== NetworkPluginID.PLUGIN_EVM ? (chainId as ChainId) : undefined, [
+        ...new Set(listOfPairAddress.filter(Boolean) as string[]),
+    ])
 
     const [results, calls, _, callback] = useMultipleContractSingleData(
         contracts,
         Array.from<'getReserves'>({ length: contracts.length }).fill('getReserves'),
         [],
-        chainId,
+        pluginID !== NetworkPluginID.PLUGIN_EVM ? (chainId as ChainId) : undefined,
         targetBlockNumber,
     )
 

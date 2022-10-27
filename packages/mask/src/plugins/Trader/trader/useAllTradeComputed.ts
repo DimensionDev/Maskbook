@@ -1,8 +1,8 @@
-import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
+import { EMPTY_LIST } from '@masknet/shared-base'
 import { FungibleToken, multipliedBy, pow10 } from '@masknet/web3-shared-base'
 import { useTrade as useNativeTokenTrade } from './native/useTrade.js'
 import { useTradeComputed as useNativeTokenTradeComputed } from './native/useTradeComputed.js'
-import { SwapOOData, TagType, TradeInfo, TradeStrategy } from '../types/index.js'
+import { SwapOOData, TradeInfo, TradeStrategy } from '../types/index.js'
 import { useV3Trade as useUniswapV3Trade } from './uniswap/useTrade.js'
 import { useTradeComputed as useUniswapTradeComputed } from './uniswap/useTradeComputed.js'
 import { useTradeGasLimit as useUniswapTradeGasLimit } from './uniswap/useTradeGasLimit.js'
@@ -26,21 +26,21 @@ import { TradeProvider } from '@masknet/public-api'
 import { useAvailableTraderProviders } from '../trending/useAvailableTraderProviders.js'
 import { useNativeTradeGasLimit } from './useNativeTradeGasLimit.js'
 import type { TradeComputed } from '../types/index.js'
-import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { useChainContext } from '@masknet/web3-hooks-base'
+import type { Web3Helper } from '@masknet/web3-helpers'
 
 export function useAllTradeComputed(
     inputAmount: string,
-    inputToken?: FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>,
-    outputToken?: FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>,
+    inputToken?: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>,
+    outputToken?: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>,
     temporarySlippage?: number,
 ): TradeInfo[] {
-    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+    const { chainId } = useChainContext()
     const inputTokenProduct = pow10(inputToken?.decimals ?? 0)
     const inputAmount_ = multipliedBy(inputAmount || '0', inputTokenProduct)
         .integerValue()
         .toFixed()
-    const { value: tradeProviders = EMPTY_LIST } = useAvailableTraderProviders(TagType.CASH, 'MASK', chainId)
+    const { value: tradeProviders = EMPTY_LIST } = useAvailableTraderProviders(chainId)
 
     // NATIVE-WNATIVE pair
     const nativeToken_ = useNativeTokenTrade(inputToken, outputToken)

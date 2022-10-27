@@ -2,7 +2,7 @@ import { useReducer, useState } from 'react'
 import { useAllTradeComputed } from './useAllTradeComputed.js'
 import { createContainer } from 'unstated-next'
 import type { FungibleToken } from '@masknet/web3-shared-base'
-import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import type { Web3Helper } from '@masknet/web3-helpers'
 
 export const INITIAL_STATE = {
     inputAmount: '',
@@ -12,8 +12,8 @@ export const INITIAL_STATE = {
 
 export interface AllProviderTradeState {
     inputAmount: string
-    inputToken?: FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>
-    outputToken?: FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>
+    inputToken?: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
+    outputToken?: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
     inputTokenBalance: string
     outputTokenBalance: string
 }
@@ -30,12 +30,12 @@ export enum AllProviderTradeActionType {
 export type AllProviderSwapAction =
     | {
           type: AllProviderTradeActionType.UPDATE_INPUT_TOKEN
-          token?: FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>
+          token?: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
           balance?: string
       }
     | {
           type: AllProviderTradeActionType.UPDATE_OUTPUT_TOKEN
-          token?: FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>
+          token?: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
       }
     | {
           type: AllProviderTradeActionType.UPDATE_INPUT_AMOUNT
@@ -51,8 +51,8 @@ export type AllProviderSwapAction =
       }
     | {
           type: AllProviderTradeActionType.SWITCH_TOKEN
-          inputToken?: FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>
-          outputToken?: FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>
+          inputToken?: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
+          outputToken?: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
           inputBalance: string
           outputBalance: string
       }

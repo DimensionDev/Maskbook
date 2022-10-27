@@ -3,8 +3,8 @@ import { SchemaType, GasOptionConfig, useTraderConstants, encodeContractTransact
 import { useAsyncFn } from 'react-use'
 import { SLIPPAGE_DEFAULT } from '../../constants/index.js'
 import { SwapResponse, TradeComputed, TradeStrategy } from '../../types/index.js'
-import { useChainContext, useWeb3Connection } from '@masknet/web3-hooks-base'
-import type { NetworkPluginID } from '@masknet/shared-base'
+import { useChainContext, useNetworkContext, useWeb3Connection } from '@masknet/web3-hooks-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { useTradeAmount } from './useTradeAmount.js'
 
 export function useTradeCallback(
@@ -13,7 +13,8 @@ export function useTradeCallback(
     allowedSlippage = SLIPPAGE_DEFAULT,
     gasConfig?: GasOptionConfig,
 ) {
-    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+    const { account, chainId } = useChainContext()
+    const { pluginID } = useNetworkContext()
     const { BALANCER_ETH_ADDRESS } = useTraderConstants(chainId)
     const connection = useWeb3Connection()
     const tradeAmount = useTradeAmount(trade, allowedSlippage)
@@ -25,7 +26,8 @@ export function useTradeCallback(
             !trade.inputToken ||
             !trade.outputToken ||
             !exchangeProxyContract ||
-            !BALANCER_ETH_ADDRESS
+            !BALANCER_ETH_ADDRESS ||
+            pluginID !== NetworkPluginID.PLUGIN_EVM
         ) {
             return
         }
@@ -93,5 +95,5 @@ export function useTradeCallback(
         const receipt = await connection.getTransactionReceipt(hash)
 
         return receipt?.transactionHash
-    }, [chainId, trade, tradeAmount, exchangeProxyContract, BALANCER_ETH_ADDRESS, connection])
+    }, [chainId, trade, tradeAmount, exchangeProxyContract, BALANCER_ETH_ADDRESS, connection, pluginID])
 }

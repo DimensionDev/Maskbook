@@ -27,6 +27,7 @@ import {
     getNativeTokenAddress,
     formatSchemaType,
     formatTokenId,
+    createNativeToken,
 } from '@masknet/web3-shared-flow'
 
 export class Others extends OthersState<ChainId, SchemaType, ProviderType, NetworkType, Transaction> {
@@ -68,4 +69,5 @@ export class Others extends OthersState<ChainId, SchemaType, ProviderType, Netwo
     override formatDomainName = formatDomainName
     override formatTokenId = formatTokenId
     override formatSchemaType = formatSchemaType
+    override createNativeToken = createNativeToken
 }

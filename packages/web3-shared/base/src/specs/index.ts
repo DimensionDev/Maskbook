@@ -1420,6 +1420,10 @@ export interface OthersState<ChainId, SchemaType, ProviderType, NetworkType, Tra
     getMaskTokenAddress(chainId?: ChainId): string | undefined
     getAverageBlockDelay(chainId?: ChainId, scale?: number): number
     getTransactionSignature(chainId?: ChainId, transaction?: Partial<Transaction>): string | undefined
+
+    // #region contrustor
+    createNativeToken(chainId: ChainId): FungibleToken<ChainId, SchemaType>
+    createERC20Token( chainId: ChainId, address: string, name?: string, symbol?: string, decimals?: number, logoURI?: string): FungibleToken<ChainId, SchemaType>
 }
 
 export interface BalanceNotifierState<ChainId> {

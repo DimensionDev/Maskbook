@@ -23,10 +23,10 @@ import { useExchangeProxyContract } from '../contracts/balancer/useExchangeProxy
 import type { NativeTokenWrapper } from './native/useTradeComputed.js'
 import { isNativeTokenWrapper } from '../helpers/index.js'
 import { useGetTradeContext } from './useGetTradeContext.js'
-import type { GasOptionConfig } from '@masknet/web3-shared-evm'
+import type { ChainId, GasOptionConfig } from '@masknet/web3-shared-evm'
 import type { AsyncFnReturn } from 'react-use/lib/useAsyncFn'
-import { useChainContext } from '@masknet/web3-hooks-base'
-import type { NetworkPluginID } from '@masknet/shared-base'
+import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 
 export function useTradeCallback(
     provider?: TradeProvider,
@@ -36,7 +36,8 @@ export function useTradeCallback(
 ): AsyncFnReturn<() => Promise<string | undefined>> {
     // trade context
     const context = useGetTradeContext(provider)
-    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+    const { chainId } = useChainContext()
+    const { pluginID } = useNetworkContext()
     // create trade computed
     const isNativeTokenWrapper_ = isNativeTokenWrapper(tradeComputed ?? null)
     const tradeComputedForUniswapV2Like =
@@ -61,7 +62,9 @@ export function useTradeCallback(
     const uniswapV3Like = useUniswapCallback(tradeComputedForUniswapV3Like, provider, gasConfig, allowedSlippage)
 
     // balancer
-    const exchangeProxyContract = useExchangeProxyContract(chainId)
+    const exchangeProxyContract = useExchangeProxyContract(
+        pluginID === NetworkPluginID.PLUGIN_EVM ? (chainId as ChainId) : undefined,
+    )
     const balancer = useBalancerCallback(
         provider === TradeProvider.BALANCER ? tradeComputedForBalancer : null,
         exchangeProxyContract,
@@ -82,7 +85,7 @@ export function useTradeCallback(
     const nativeTokenWrapper = useNativeTokenWrapperCallback(
         tradeComputed as TradeComputed<NativeTokenWrapper>,
         gasConfig,
-        chainId,
+        pluginID === NetworkPluginID.PLUGIN_EVM ? (chainId as ChainId) : undefined,
     )
     if (isNativeTokenWrapper_) return nativeTokenWrapper
 

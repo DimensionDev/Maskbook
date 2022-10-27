@@ -27,6 +27,7 @@ import {
     getNativeTokenAddress,
     explorerResolver,
     formatSchemaType,
+    createNativeToken,
 } from '@masknet/web3-shared-solana'
 
 export class Others extends OthersState<ChainId, SchemaType, ProviderType, NetworkType, Transaction> {
@@ -60,4 +61,5 @@ export class Others extends OthersState<ChainId, SchemaType, ProviderType, Netwo
     override formatDomainName = formatDomainName
     override formatTokenId = formatTokenId
     override formatSchemaType = formatSchemaType
+    override createNativeToken = createNativeToken
 }

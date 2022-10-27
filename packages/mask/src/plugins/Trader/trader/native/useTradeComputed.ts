@@ -1,8 +1,9 @@
 import { useMemo } from 'react'
 import BigNumber from 'bignumber.js'
-import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import { SchemaType } from '@masknet/web3-shared-evm'
 import { FungibleToken, ZERO } from '@masknet/web3-shared-base'
 import { TradeComputed, TradeStrategy } from '../../types/index.js'
+import type { Web3Helper } from '@masknet/web3-helpers'
 
 export interface NativeTokenWrapper {
     /**
@@ -21,8 +22,8 @@ export function useTradeComputed(
     strategy: TradeStrategy,
     inputAmount: string,
     outputAmount: string,
-    inputToken?: FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>,
-    outputToken?: FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>,
+    inputToken?: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>,
+    outputToken?: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>,
 ) {
     return useMemo((): TradeComputed<NativeTokenWrapper> | null => {
         if (!isNativeTokenWrapper) return null

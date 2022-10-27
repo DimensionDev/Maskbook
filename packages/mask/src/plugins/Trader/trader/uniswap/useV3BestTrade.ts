@@ -9,8 +9,9 @@ import { useAllV3Routes } from './useAllV3Routes.js'
 import { DEFAULT_MULTICALL_GAS_LIMIT } from '../../constants/index.js'
 import { useSingleContractMultipleData } from '@masknet/web3-hooks-evm'
 import { useTargetBlockNumber } from '../useTargetBlockNumber.js'
-import { useChainContext } from '@masknet/web3-hooks-base'
-import type { NetworkPluginID } from '@masknet/shared-base'
+import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
+import { NetworkPluginID } from '@masknet/shared-base'
+import type { ChainId } from '@masknet/web3-shared-evm'
 
 export enum V3TradeState {
     LOADING = 0,
@@ -29,8 +30,9 @@ export function useV3BestTradeExactIn(
     amountIn?: CurrencyAmount<Currency>,
     currencyOut?: Currency,
 ): AsyncStateRetry<Trade<Currency, Currency, TradeType.EXACT_INPUT> | null> {
-    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const quoterContract = useQuoterContract(chainId)
+    const { chainId } = useChainContext()
+    const { pluginID } = useNetworkContext()
+    const quoterContract = useQuoterContract(pluginID !== NetworkPluginID.PLUGIN_EVM ? (chainId as ChainId) : undefined)
     const { routes, loading: routesLoading } = useAllV3Routes(amountIn?.currency, currencyOut)
     const quoteExactInInputs = useMemo(() => {
         try {
@@ -53,7 +55,7 @@ export function useV3BestTradeExactIn(
         Array.from<'quoteExactInput'>({ length: quoteExactInInputs.length }).fill('quoteExactInput'),
         quoteExactInInputs,
         DEFAULT_MULTICALL_GAS_LIMIT,
-        chainId,
+        pluginID !== NetworkPluginID.PLUGIN_EVM ? (chainId as ChainId) : undefined,
         blockNumber,
     )
     const {
@@ -63,7 +65,7 @@ export function useV3BestTradeExactIn(
     } = useAsyncRetry(() => quotesCallback(quotesCalls), [quoterContract, quotesCalls.map((x) => x.join()).join()])
 
     const asyncBestTrade = (() => {
-        if (!amountIn || !currencyOut) {
+        if (!amountIn || !currencyOut || pluginID !== NetworkPluginID.PLUGIN_EVM) {
             return {
                 value: undefined,
                 loading: false,
@@ -155,8 +157,9 @@ export function useV3BestTradeExactOut(
     amountOut?: CurrencyAmount<Currency>,
 ): AsyncStateRetry<Trade<Currency, Currency, TradeType.EXACT_OUTPUT> | null> {
     const { routes, loading: routesLoading } = useAllV3Routes(currencyIn, amountOut?.currency)
-    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const quoterContract = useQuoterContract(chainId)
+    const { chainId } = useChainContext()
+    const { pluginID } = useNetworkContext()
+    const quoterContract = useQuoterContract(pluginID !== NetworkPluginID.PLUGIN_EVM ? (chainId as ChainId) : undefined)
     const quoteExactOutInputs = useMemo(() => {
         try {
             return routes.map(
@@ -178,7 +181,7 @@ export function useV3BestTradeExactOut(
         Array.from<'quoteExactOutput'>({ length: quoteExactOutInputs.length }).fill('quoteExactOutput'),
         quoteExactOutInputs,
         DEFAULT_MULTICALL_GAS_LIMIT,
-        chainId,
+        pluginID !== NetworkPluginID.PLUGIN_EVM ? (chainId as ChainId) : undefined,
         blockNumber,
     )
     const {
@@ -187,7 +190,12 @@ export function useV3BestTradeExactOut(
         retry: quotesRetry,
     } = useAsyncRetry(() => quotesCallback(quotesCalls), [quotesCallback, quotesCalls.map((x) => x.join()).join()])
     const asyncBestTrade = (() => {
-        if (!amountOut || !currencyIn || quotesResults.some(({ error }) => !!error)) {
+        if (
+            !amountOut ||
+            !currencyIn ||
+            quotesResults.some(({ error }) => !!error) ||
+            pluginID !== NetworkPluginID.PLUGIN_EVM
+        ) {
             return {
                 value: undefined,
                 loading: false,

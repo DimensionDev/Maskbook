@@ -1,11 +1,16 @@
 import { useValueRef } from '@masknet/shared-base-ui'
 import type { TradeComputed } from '../../types/index.js'
-import { createNativeToken, formatUSD, formatWeiToEther, GasOptionConfig } from '@masknet/web3-shared-evm'
+import { formatUSD, formatWeiToEther, GasOptionConfig, Transaction } from '@masknet/web3-shared-evm'
 import { useCallback, useMemo, useState } from 'react'
 import { formatBalance, formatCurrency, FungibleToken, leftShift, multipliedBy } from '@masknet/web3-shared-base'
-import { NetworkPluginID } from '@masknet/shared-base'
 import { currentSlippageSettings } from '../../settings.js'
-import { useNativeTokenPrice, useFungibleTokenPrice, useChainContext } from '@masknet/web3-hooks-base'
+import {
+    useNativeTokenPrice,
+    useFungibleTokenPrice,
+    useChainContext,
+    useWeb3State,
+    useNetworkContext,
+} from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useGreatThanSlippageSetting } from './hooks/useGreatThanSlippageSetting.js'
 import { PluginTraderMessages } from '../../messages.js'
@@ -15,6 +20,8 @@ import { PriceImpactDialogUI } from './components/PriceImpactDialogUI.js'
 import { AllProviderTradeContext } from '../../trader/useAllProviderTradeContext.js'
 import BigNumber from 'bignumber.js'
 import { MIN_GAS_LIMIT } from '../../constants/index.js'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { useAsyncFn } from 'react-use'
 
 export interface ConfirmDialogProps {
     open: boolean
@@ -31,17 +38,19 @@ const PERCENT_DENOMINATOR = 10000
 
 export function ConfirmDialog(props: ConfirmDialogProps) {
     const { inputToken, outputToken, gas, gasPrice, trade, onConfirm, gasConfig } = props
-    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+    const { chainId } = useChainContext()
+    const { pluginID } = useNetworkContext()
+    const { Others } = useWeb3State()
     const { setTemporarySlippage } = AllProviderTradeContext.useContainer()
 
     const [priceImpactDialogOpen, setPriceImpactDialogOpen] = useState(false)
 
     const currentSlippage = useValueRef(currentSlippageSettings)
-    const nativeToken = createNativeToken(chainId)
-    const { value: nativeTokenPrice = 0 } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM, { chainId })
+    const nativeToken = Others?.createNativeToken(chainId)
+    const { value: nativeTokenPrice = 0 } = useNativeTokenPrice(pluginID)
 
-    const { value: inputTokenPrice = 0 } = useFungibleTokenPrice(NetworkPluginID.PLUGIN_EVM, inputToken.address)
-    const { value: outputTokenPrice = 0 } = useFungibleTokenPrice(NetworkPluginID.PLUGIN_EVM, outputToken.address)
+    const { value: inputTokenPrice = 0 } = useFungibleTokenPrice(pluginID, inputToken.address)
+    const { value: outputTokenPrice = 0 } = useFungibleTokenPrice(pluginID, outputToken.address)
 
     const gasFee = useMemo(() => {
         return gas && gasPrice ? multipliedBy(gasPrice, gas).integerValue().toFixed() : '0'
@@ -55,7 +64,7 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
     const isGreatThanSlippageSetting = useGreatThanSlippageSetting(trade?.priceImpact)
 
     // #region remote controlled swap settings dialog
-    const selectAdvancedSettings = useSelectAdvancedSettings(NetworkPluginID.PLUGIN_EVM)
+    const selectAdvancedSettings = useSelectAdvancedSettings()
     // #endregion
 
     const lostTokenValue = multipliedBy(trade.inputAmount, trade.priceImpact).toFixed(0)
@@ -93,6 +102,30 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
     }, [])
     // #endregion
 
+    const [, openSettingDialog] = useAsyncFn(async () => {
+        const { slippageTolerance, transaction } = await selectAdvancedSettings({
+            chainId,
+            disableGasLimit: true,
+            disableSlippageTolerance: false,
+            slippageTolerance: currentSlippageSettings.value / 100,
+            transaction: {
+                gas: gas ?? MIN_GAS_LIMIT,
+                ...(gasConfig ?? {}),
+            },
+        })
+
+        if (slippageTolerance) currentSlippageSettings.value = slippageTolerance
+
+        PluginTraderMessages.swapSettingsUpdated.sendToAll({
+            open: false,
+            gasConfig: {
+                gasPrice: (transaction as Transaction)?.gasPrice as string | undefined,
+                maxFeePerGas: (transaction as Transaction)?.maxFeePerGas as string | undefined,
+                maxPriorityFeePerGas: (transaction as Transaction)?.maxPriorityFeePerGas as string | undefined,
+            },
+        })
+    }, [chainId, currentSlippageSettings.value, gas, gasConfig])
+
     return (
         <>
             <ConfirmDialogUI
@@ -103,29 +136,7 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                 nativeToken={nativeToken}
                 inputTokenPrice={inputTokenPrice}
                 outputTokenPrice={outputTokenPrice}
-                openSettingDialog={async () => {
-                    const { slippageTolerance, transaction } = await selectAdvancedSettings({
-                        chainId,
-                        disableGasLimit: true,
-                        disableSlippageTolerance: false,
-                        slippageTolerance: currentSlippageSettings.value / 100,
-                        transaction: {
-                            gas: gas ?? MIN_GAS_LIMIT,
-                            ...(gasConfig ?? {}),
-                        },
-                    })
-
-                    if (slippageTolerance) currentSlippageSettings.value = slippageTolerance
-
-                    PluginTraderMessages.swapSettingsUpdated.sendToAll({
-                        open: false,
-                        gasConfig: {
-                            gasPrice: transaction?.gasPrice as string | undefined,
-                            maxFeePerGas: transaction?.maxFeePerGas as string | undefined,
-                            maxPriorityFeePerGas: transaction?.maxPriorityFeePerGas as string | undefined,
-                        },
-                    })
-                }}
+                openSettingDialog={pluginID === NetworkPluginID.PLUGIN_EVM ? openSettingDialog : undefined}
                 isGreatThanSlippageSetting={isGreatThanSlippageSetting}
                 onConfirm={isGreatThanSlippageSetting ? handleOpenPriceImpactDialog : onConfirm}
             />
