@@ -80,7 +80,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const chainIdValid = useChainIdValid(NetworkPluginID.PLUGIN_EVM, chainId)
-    const approvalDefinition = useActivatedPlugin(PluginID.Approval, 'any')
+    const approvalDefinition = useActivatedPlugin(PluginID.RedPacket, 'any')
     const chainIdList = compact<ChainId>(
         approvalDefinition?.enableRequirement.web3?.[NetworkPluginID.PLUGIN_EVM]?.supportedChainIds ?? [],
     )

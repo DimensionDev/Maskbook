@@ -127,9 +127,11 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
     }, [token])
 
     // balance
-    const { value: tokenBalance = '0' } = useFungibleTokenBalance(NetworkPluginID.PLUGIN_EVM, token?.address ?? '', {
-        chainId,
-    })
+    const { value: tokenBalance = '0', loading: loadingTokenBalance } = useFungibleTokenBalance(
+        NetworkPluginID.PLUGIN_EVM,
+        token?.address ?? '',
+        { chainId },
+    )
     // #endregion
 
     const validationMessage = useMemo(() => {
@@ -238,7 +240,10 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
             </Box>
             <Box style={{ width: '100%' }}>
                 <PluginWalletStatusBar>
-                    <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={chainId}>
+                    <ChainBoundary
+                        expectedPluginID={NetworkPluginID.PLUGIN_EVM}
+                        expectedChainId={chainId}
+                        forceShowingWrongNetworkButton>
                         <WalletConnectedBoundary>
                             <EthereumERC20TokenApprovedBoundary
                                 onlyInfiniteUnlock

@@ -27,7 +27,7 @@ export function useSave(pluginID: NetworkPluginID) {
         ) => {
             if (!token.contract?.address) return
             const info: NextIDAvatarMeta = {
-                pluginID,
+                pluginId: pluginID,
                 nickname: data.nickname,
                 userId: data.userId,
                 imageUrl: data.imageUrl,

@@ -24,6 +24,7 @@ import { Icons } from '@masknet/icons'
 import { WalletMessages } from '../../../plugins/Wallet/messages.js'
 import { useI18N } from '../../../utils/index.js'
 import { usePendingTransactions } from './usePendingTransactions.js'
+import { delay } from '@dimensiondev/kit'
 
 const useStyles = makeStyles<{
     contentBackground?: string
@@ -118,8 +119,8 @@ export function WalletStatusBox(props: WalletStatusBox) {
         withinRiskWarningDialog: props.withinRiskWarningDialog,
         textColor:
             providerDescriptor?.type === ProviderType.MaskWallet
-                ? theme.palette.text.primary
-                : theme.palette.maskColor.dark,
+                ? theme.palette.maskColor.dark
+                : theme.palette.text.primary,
     })
 
     const connection = useWeb3Connection()
@@ -249,6 +250,8 @@ export function WalletStatusBox(props: WalletStatusBox) {
                             size="small"
                             onClick={async () => {
                                 props.closeDialog?.()
+                                // TODO: remove this after global dialog be implement
+                                await delay(500)
                                 closeWalletStatusDialog()
                                 await connection?.disconnect()
                                 openSelectProviderDialog()

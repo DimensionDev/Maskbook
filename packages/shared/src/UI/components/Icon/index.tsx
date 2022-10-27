@@ -7,7 +7,7 @@ const useStyles = makeStyles<Pick<IconProps, 'size'>>()((theme, { size }) => ({
     icon: {
         margin: 0,
         borderRadius: '50%',
-        color: theme.palette.maskColor.dark,
+        color: `${theme.palette.maskColor.dark} !important`,
         backgroundSize: 'cover',
         height: size,
         width: size,
@@ -25,13 +25,13 @@ export interface IconProps {
 
 export const Icon = memo<IconProps>((props) => {
     const { logoURL, AvatarProps, size, name, label, className } = props
-    const [error, setError] = useState(false)
+    const [failed, setFailed] = useState(false)
 
     const defaultBackgroundImage = name2Image(name)
     const { classes, cx } = useStyles({ size })
     const theme = useTheme()
 
-    const showImage = logoURL && !error
+    const showImage = logoURL && !failed
 
     return (
         <Avatar
@@ -40,12 +40,12 @@ export const Icon = memo<IconProps>((props) => {
             {...AvatarProps}
             imgProps={{
                 onError: () => {
-                    setError(true)
+                    setFailed(true)
                 },
             }}
             sx={{
                 ...AvatarProps?.sx,
-                backgroundImage: `url("${defaultBackgroundImage}")`,
+                backgroundImage: showImage ? undefined : `url("${defaultBackgroundImage}")`,
                 backgroundColor: showImage ? theme.palette.common.white : undefined,
             }}>
             {label ?? name?.slice(0, 1).toUpperCase()}

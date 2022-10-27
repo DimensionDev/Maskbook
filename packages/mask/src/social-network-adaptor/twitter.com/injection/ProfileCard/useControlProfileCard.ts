@@ -91,9 +91,9 @@ export function useControlProfileCard(holderRef: RefObject<HTMLDivElement>) {
         const onClick = (event: MouseEvent) => {
             // @ts-ignore
             // `NODE.contains(other)` doesn't work for cross multiple layer of Shadow DOM
-            if (!event.path?.includes(holderRef.current)) {
-                hideProfileCard()
-            }
+            if (event.path?.includes(holderRef.current)) return
+            activeRef.current = false
+            hideProfileCard()
         }
         document.body.addEventListener('click', onClick)
         return () => {

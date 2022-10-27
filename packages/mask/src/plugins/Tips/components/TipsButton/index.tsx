@@ -2,7 +2,8 @@ import { FC, HTMLProps, MouseEventHandler, useCallback, useEffect, useMemo } fro
 import { makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
 import { useNetworkContext } from '@masknet/web3-hooks-base'
-import { ProfileIdentifier, NetworkPluginID } from '@masknet/shared-base'
+import { ProfileIdentifier, NetworkPluginID, EMPTY_LIST } from '@masknet/shared-base'
+import { SocialAccount, SocialAddressType } from '@masknet/web3-shared-base'
 import {
     useCurrentVisitingIdentity,
     useSocialIdentityByUseId,
@@ -12,6 +13,9 @@ import { PluginTipsMessages } from '../../messages.js'
 import { useTipsAccounts } from './useTipsAccounts.js'
 
 interface Props extends HTMLProps<HTMLDivElement> {
+    // This is workaround solution, link issue mf-2536 and pr #7576.
+    // Should refactor social account to support multi-account for one post.
+    accounts?: SocialAccount[]
     recipient?: string
     receiver?: ProfileIdentifier
     onStatusUpdate?(disabled: boolean): void
@@ -27,8 +31,15 @@ const useStyles = makeStyles()({
     },
 })
 
-// TODO: reduce re-render
-export const TipButton: FC<Props> = ({ className, receiver, recipient, children, onStatusUpdate, ...rest }) => {
+export const TipButton: FC<Props> = ({
+    className,
+    accounts: receivingAccounts = EMPTY_LIST,
+    receiver,
+    recipient,
+    children,
+    onStatusUpdate,
+    ...rest
+}) => {
     const { classes, cx } = useStyles()
 
     const { value: personaPubkey, loading: loadingPersona } = useProfilePublicKey(receiver)
@@ -49,7 +60,19 @@ export const TipButton: FC<Props> = ({ className, receiver, recipient, children,
         return false
     }, [pluginID, isVisitingUser])
 
-    const accounts = useTipsAccounts(identity, personaPubkey)
+    const accountsByIdentity = useTipsAccounts(identity, personaPubkey)
+    const accounts = useMemo(
+        () =>
+            [...receivingAccounts, ...accountsByIdentity].sort((a, z) => {
+                const aHasNextId = a.supportedAddressTypes?.includes(SocialAddressType.NEXT_ID)
+                const zHasNextId = z.supportedAddressTypes?.includes(SocialAddressType.NEXT_ID)
+                if (aHasNextId === zHasNextId) return 0
+                return aHasNextId ? -1 : zHasNextId ? 1 : 0
+            }),
+
+        [receivingAccounts, accountsByIdentity],
+    )
+
     const disabled = loadingPersona || accounts.length === 0 || !isRuntimeAvailable
 
     useEffect(() => {
