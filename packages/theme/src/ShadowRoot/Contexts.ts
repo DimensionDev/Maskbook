@@ -3,6 +3,8 @@ import type { StyleSheet } from './ShadowRootStyleSheet.js'
 
 /** @internal */
 export const StyleSheetsContext = createContext<readonly StyleSheet[]>([])
+StyleSheetsContext.displayName = 'StyleSheetsContext'
+
 /** @internal */
 export const PreventShadowRootEventPropagationListContext = createContext<Array<keyof HTMLElementEventMap>>([])
 PreventShadowRootEventPropagationListContext.displayName = 'PreventShadowRootEventPropagationListContext'
