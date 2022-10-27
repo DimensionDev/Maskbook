@@ -102,13 +102,14 @@ export function SelectNftContractDialog(props: SelectNftContractDialogProps) {
 
     const [id, setId] = useState('')
     const [keyword, setKeyword] = useState('')
-    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-
+    const { chainId: _chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+    const [chainId, setChainId] = useState(_chainId)
     // #region remote controlled dialog
     const { open, setDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectNftContractDialogUpdated,
         (ev) => {
             if (!ev.open) return
+            if (ev.chainId) setChainId(ev.chainId)
             setId(ev.uuid)
         },
     )

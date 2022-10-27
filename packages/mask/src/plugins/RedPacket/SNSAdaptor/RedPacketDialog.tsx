@@ -84,7 +84,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     const chainIdList = compact<ChainId>(
         approvalDefinition?.enableRequirement.web3?.[NetworkPluginID.PLUGIN_EVM]?.supportedChainIds ?? [],
     )
-    const [networkTabChainId, setNetworkTabChainId] = useState<ChainId>(
+    const [networkTabChainId] = useState<ChainId>(
         chainIdValid && chainIdList.includes(chainId) ? chainId : ChainId.Mainnet,
     )
 

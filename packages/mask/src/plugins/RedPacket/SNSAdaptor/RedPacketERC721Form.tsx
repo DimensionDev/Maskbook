@@ -314,6 +314,7 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                         onContractChange={setContract}
                         balance={balance}
                         onBalanceChange={setBalance}
+                        chainId={chainId}
                     />
                 </Box>
                 {contract && balance ? (
