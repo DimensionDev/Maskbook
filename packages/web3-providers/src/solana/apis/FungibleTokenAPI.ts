@@ -52,6 +52,7 @@ export class SolanaFungibleAPI
     private coingecko = new CoinGeckoPriceSolanaAPI()
 
     private async getSplTokenList(chainId: ChainId, account: string) {
+        if (!chainId) return []
         const data = await requestRPC<GetProgramAccountsResponse>(chainId, {
             method: 'getProgramAccounts',
             params: [
@@ -110,6 +111,7 @@ export class SolanaFungibleAPI
         address: string,
         { chainId = ChainId.Mainnet, indicator }: HubOptions<ChainId, HubIndicator> = {},
     ): Promise<Pageable<FungibleAsset<ChainId, SchemaType>, HubIndicator>> {
+        if (!chainId) return createPageable([], createIndicator(indicator))
         const allSettled = await Promise.allSettled([
             this.getAsset(address, { chainId }).then((x) => [x]),
             this.getSplTokenList(chainId, address),

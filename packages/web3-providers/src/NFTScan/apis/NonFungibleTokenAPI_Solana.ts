@@ -39,6 +39,7 @@ export class NFTScanNonFungibleTokenAPI_Solana implements NonFungibleTokenAPI.Pr
         }))
     }
     async getAsset(address: string, _: string, { chainId = ChainId.Mainnet }: HubOptions<ChainId> = {}) {
+        if (!chainId) return
         const path = urlcat('/api/sol/assets/:address', {
             address,
         })
@@ -52,6 +53,7 @@ export class NFTScanNonFungibleTokenAPI_Solana implements NonFungibleTokenAPI.Pr
     }
 
     async getAssets(account: string, { chainId = ChainId.Mainnet, indicator, size = 20 }: HubOptions<ChainId> = {}) {
+        if (!chainId) return createPageable(EMPTY_LIST, createIndicator(indicator))
         const path = urlcat('/api/sol/account/own/:from', {
             from: account,
             account_address: account,
@@ -71,6 +73,7 @@ export class NFTScanNonFungibleTokenAPI_Solana implements NonFungibleTokenAPI.Pr
         name: string,
         { chainId = ChainId.Mainnet, indicator, size = 20 }: HubOptions<ChainId> = {},
     ) {
+        if (!chainId) return createPageable(EMPTY_LIST, createIndicator(indicator))
         const path = urlcat('/api/sol/assets/collection/:name', {
             name,
             collection: name,
@@ -90,6 +93,7 @@ export class NFTScanNonFungibleTokenAPI_Solana implements NonFungibleTokenAPI.Pr
         keyword: string,
         { chainId = ChainId.Mainnet, indicator, size = 20 }: HubOptions<ChainId, HubIndicator> = {},
     ): Promise<Pageable<NonFungibleCollection<ChainId, SchemaType>, HubIndicator>> {
+        if (!chainId) return createPageable(EMPTY_LIST, createIndicator(indicator))
         const path = '/api/sol/collections/filters'
         const response = await fetchFromNFTScanV2<Response<Solana.Collection[]>>(chainId, path, {
             method: 'POST',
@@ -132,6 +136,7 @@ export class NFTScanNonFungibleTokenAPI_Solana implements NonFungibleTokenAPI.Pr
         _: string,
         { chainId = ChainId.Mainnet, indicator, size = 20 }: HubOptions<ChainId, HubIndicator> = {},
     ): Promise<Pageable<NonFungibleTokenEvent<ChainId, SchemaType>>> {
+        if (!chainId) return createPageable(EMPTY_LIST, createIndicator(indicator))
         const path = urlcat('/api/sol/transactions/:address', {
             address,
             token_address: address,

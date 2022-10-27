@@ -157,6 +157,7 @@ export async function fetchEtherPricesByBlockNumbers(chainId: ChainId, blockNumb
  * @param keyword
  */
 export async function fetchTokensByKeyword(chainId: ChainId, keyword: string) {
+    if (!chainId) return []
     // thegraph does not support case-insensitive searching
     // so cased keywords will be added too
     const listOfKeywords = [keyword, keyword.toLowerCase(), keyword.toUpperCase()]

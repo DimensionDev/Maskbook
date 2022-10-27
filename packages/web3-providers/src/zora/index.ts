@@ -245,6 +245,7 @@ export class ZoraAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType
     }
 
     async getAsset(address: string, tokenId: string, { chainId = ChainId.Mainnet }: HubOptions<ChainId> = {}) {
+        if (!chainId) return
         const token = await this.request<{
             token: {
                 token: Token
@@ -270,6 +271,7 @@ export class ZoraAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType
         tokenId: string,
         eventTypes: EventType[],
     ) {
+        if (!chainId) return []
         const response = await this.request<{
             events: {
                 nodes: Array<Event<T>>
@@ -287,6 +289,8 @@ export class ZoraAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType
         tokenId: string,
         { chainId = ChainId.Mainnet, indicator }: HubOptions<ChainId, HubIndicator> = {},
     ) {
+        if (!chainId) return createPageable(EMPTY_LIST, createIndicator(indicator))
+
         const events = await this.getEventsFiltered<MintEventProperty | SaleEventProperty | TransferEventProperty>(
             chainId,
             address,
@@ -311,6 +315,8 @@ export class ZoraAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType
         side: OrderSide,
         { chainId = ChainId.Mainnet, indicator }: HubOptions<ChainId, HubIndicator> = {},
     ) {
+        if (!chainId) return createPageable(EMPTY_LIST, createIndicator(indicator))
+
         const events = await this.getEventsFiltered<SaleEventProperty | V3AskEventProperty>(
             chainId,
             address,

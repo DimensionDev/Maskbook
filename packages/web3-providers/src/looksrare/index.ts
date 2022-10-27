@@ -156,6 +156,7 @@ function createNonFungibleTokenOrderFromOrder(
 
 export class LooksRareAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
     async getAsset(address: string, tokenId: string, { chainId = ChainId.Mainnet }: HubOptions<ChainId> = {}) {
+        if (!chainId) return
         const response = await fetchFromLooksRare<{
             data: Token
         }>(
@@ -179,6 +180,8 @@ export class LooksRareAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
         address: string,
         { chainId = ChainId.Mainnet }: HubOptions<ChainId, HubIndicator> = {},
     ): Promise<NonFungibleTokenContract<ChainId, SchemaType> | undefined> {
+        if (!chainId) return
+
         const response = await fetchFromLooksRare<{
             data: Collection
         }>(chainId, address)
@@ -190,6 +193,7 @@ export class LooksRareAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
         tokenId: string,
         { chainId = ChainId.Mainnet, indicator }: HubOptions<ChainId, HubIndicator> = {},
     ) {
+        if (!chainId) return createPageable(EMPTY_LIST, createIndicator(indicator))
         const response = await fetchFromLooksRare<{
             data: Event[]
         }>(
@@ -219,6 +223,7 @@ export class LooksRareAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
         address: string,
         { chainId = ChainId.Mainnet }: HubOptions<ChainId> = {},
     ): Promise<NonFungibleTokenStats | undefined> {
+        if (!chainId) return
         const response = await fetchFromLooksRare<{
             data: Stats
         }>(
@@ -243,6 +248,7 @@ export class LooksRareAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
         side: OrderSide,
         { chainId = ChainId.Mainnet, indicator }: HubOptions<ChainId, HubIndicator> = {},
     ) {
+        if (!chainId) return createPageable(EMPTY_LIST, createIndicator(indicator))
         const response = await fetchFromLooksRare<{
             data: Order[]
         }>(

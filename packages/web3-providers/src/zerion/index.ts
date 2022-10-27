@@ -136,7 +136,7 @@ export class ZerionNonFungibleTokenAPI implements NonFungibleTokenAPI.Provider<C
     }
 
     async getAsset(address: string, tokenId: string, { chainId = ChainId.Mainnet, account }: HubOptions<ChainId> = {}) {
-        if (!account) return
+        if (!account || !chainId) return
         const response = await getNonFungibleAsset(account, address, tokenId)
         if (!response.payload.nft.length) return
         const payload = first(response.payload.nft)
@@ -147,6 +147,7 @@ export class ZerionNonFungibleTokenAPI implements NonFungibleTokenAPI.Provider<C
         account: string,
         { chainId = ChainId.Mainnet, indicator, size }: HubOptions<ChainId, HubIndicator> = {},
     ) {
+        if (!chainId) return createPageable(EMPTY_LIST, createIndicator(indicator))
         const response = await getNonFungibleAssets(account, indicator?.index, size)
         if (!response.payload.nft.length) return createPageable(EMPTY_LIST, createIndicator(indicator))
         const assets = response.payload.nft.map((x) => this.createNonFungibleTokenAssetFromNFT(chainId, x))
@@ -162,7 +163,7 @@ export class ZerionNonFungibleTokenAPI implements NonFungibleTokenAPI.Provider<C
         address: string,
         { chainId = ChainId.Mainnet, indicator, size, account }: HubOptions<ChainId, HubIndicator> = {},
     ) {
-        if (!account) return createPageable(EMPTY_LIST, createIndicator(indicator))
+        if (!account || !chainId) return createPageable(EMPTY_LIST, createIndicator(indicator))
         const response = await getNonFungibleAssets(account, indicator?.index, size, address)
         const assets = response.payload.nft.map((x) => this.createNonFungibleTokenAssetFromNFT(chainId, x))
 
@@ -174,6 +175,7 @@ export class ZerionNonFungibleTokenAPI implements NonFungibleTokenAPI.Provider<C
     }
 
     async getFloorPrice(address: string, tokenId: string, { chainId = ChainId.Mainnet }: HubOptions<ChainId> = {}) {
+        if (!chainId) return
         const response = await getNonFungibleInfo(address, tokenId)
 
         if (!response.payload['nft-info'].asset.floor_price) return
@@ -222,7 +224,8 @@ export class ZerionTrendingAPI implements TrendingAPI.Provider<ChainId> {
 }
 
 export class ZerionGasAPI implements GasOptionAPI.Provider<ChainId, GasOption> {
-    async getGasOptions(chainId: ChainId): Promise<Record<GasOptionType, GasOption>> {
+    async getGasOptions(chainId: ChainId): Promise<Record<GasOptionType, GasOption> | undefined> {
+        if (!chainId) return
         const result = await getGasOptions(chainId)
         return {
             [GasOptionType.FAST]: {

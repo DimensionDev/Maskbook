@@ -12,7 +12,7 @@ export class RabbyAPI implements AuthorizationAPI.Provider<ChainId> {
         const maskDappContractInfoList = getAllMaskDappContractInfo(chainId, 'nft')
         const networkType = chainResolver.networkType(chainId)
 
-        if (!networkType || !account) return []
+        if (!networkType || !account || !chainId) return []
         const response = await fetch(
             urlcat(NON_FUNGIBLE_TOKEN_API_URL, { id: account, chain_id: resolveNetworkOnRabby(networkType) }),
         )
@@ -63,7 +63,7 @@ export class RabbyAPI implements AuthorizationAPI.Provider<ChainId> {
         const maskDappContractInfoList = getAllMaskDappContractInfo(chainId, 'token')
         const networkType = chainResolver.networkType(chainId)
 
-        if (!networkType || !account) return []
+        if (!networkType || !account || !chainId) return []
 
         const response = await fetch(
             urlcat(FUNGIBLE_TOKEN_API_URL, { id: account, chain_id: resolveNetworkOnRabby(networkType) }),

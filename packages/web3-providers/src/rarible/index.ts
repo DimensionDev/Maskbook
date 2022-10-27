@@ -170,6 +170,7 @@ export class RaribleAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
             chainId?: ChainId
         } = {},
     ) {
+        if (!chainId) return
         const requestPath = `/v0.1/items/${resolveRaribleBlockchain(chainId)}:${address}:${tokenId}`
         const asset = await fetchFromRarible<RaribleNFTItemMapResponse>(RaribleURL, requestPath)
         if (!asset) return
@@ -207,6 +208,8 @@ export class RaribleAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
         tokenId: string,
         { chainId = ChainId.Mainnet, indicator, size = 20 }: HubOptions<ChainId> = {},
     ) {
+        if (!chainId) return createPageable(EMPTY_LIST, createIndicator(indicator))
+
         const requestPath = urlcat('/v0.1/orders/bids/byItem', {
             itemId: `${resolveRaribleBlockchain(chainId)}:${tokenAddress}:${tokenId}`,
             size,
@@ -235,6 +238,8 @@ export class RaribleAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
         tokenId: string,
         { chainId = ChainId.Mainnet, indicator, size = 20 }: HubOptions<ChainId> = {},
     ) {
+        if (!chainId) return createPageable(EMPTY_LIST, createIndicator(indicator))
+
         const requestPath = urlcat('/v0.1/orders/sell/byItem', {
             itemId: `${resolveRaribleBlockchain(chainId)}:${tokenAddress}:${tokenId}`,
             size,
@@ -274,6 +279,8 @@ export class RaribleAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
         tokenId: string,
         { chainId = ChainId.Mainnet, indicator, size = 20 }: HubOptions<ChainId> = {},
     ) {
+        if (!chainId) return createPageable(EMPTY_LIST, createIndicator(indicator))
+
         const requestPath = urlcat('/v0.1/activities/byItem', {
             type: [RaribleEventType.TRANSFER, RaribleEventType.MINT, RaribleEventType.BID, RaribleEventType.LIST],
             itemId: `${resolveRaribleBlockchain(chainId)}:${tokenAddress}:${tokenId}`,

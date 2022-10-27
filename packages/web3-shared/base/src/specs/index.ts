@@ -1136,7 +1136,7 @@ export interface Hub<ChainId, SchemaType, GasOption, Web3HubOptions = HubOptions
     extends HubFungible<ChainId, SchemaType, GasOption, Web3HubOptions>,
         HubNonFungible<ChainId, SchemaType, GasOption, Web3HubOptions> {
     /** Get recommended gas options. */
-    getGasOptions?: (chainId: ChainId, initial?: Web3HubOptions) => Promise<Record<GasOptionType, GasOption>>
+    getGasOptions?: (chainId: ChainId, initial?: Web3HubOptions) => Promise<Record<GasOptionType, GasOption> | undefined>
     /** Get the most recent transactions of the given account. */
     getTransactions: (
         chainId: ChainId,

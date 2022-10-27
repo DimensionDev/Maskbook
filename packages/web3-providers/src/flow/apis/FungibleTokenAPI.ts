@@ -151,6 +151,7 @@ export class FlowFungibleAPI
         account: string,
         { chainId = ChainId.Mainnet, indicator }: HubOptions<ChainId, HubIndicator> = {},
     ): Promise<Pageable<FungibleAsset<ChainId, SchemaType>, HubIndicator>> {
+        if (!chainId) return createPageable([], createIndicator(indicator))
         const allSettled = await Promise.allSettled([
             getAssetFLOW(chainId, account),
             getAssetFUSD(chainId, account),
