@@ -3,6 +3,8 @@ import {
     attachReactTreeToMountedRoot_noHost,
     setupReactShadowRootEnvironment as setupReactShadowRootEnvironmentUpper,
     CSSVariableInjector,
+    DialogStackingProvider,
+    GlobalBackdrop,
 } from '@masknet/theme'
 import { Suspense } from 'react'
 import { MaskUIRoot } from '../../UIRoot.js'
@@ -22,10 +24,17 @@ const captureEvents: Array<keyof HTMLElementEventMap> = [
     'change',
 ]
 export function setupReactShadowRootEnvironment() {
-    const shadow = setupReactShadowRootEnvironmentUpper({ mode: process.env.shadowRootMode }, (jsx) =>
-        MaskUIRoot({ children: jsx, useTheme: useClassicMaskSNSTheme, kind: 'sns' }),
+    const shadow = setupReactShadowRootEnvironmentUpper({ mode: process.env.shadowRootMode }, (jsx) => (
+        <MaskUIRoot useTheme={useClassicMaskSNSTheme} kind="sns">
+            <DialogStackingProvider hasGlobalBackdrop>{jsx}</DialogStackingProvider>
+        </MaskUIRoot>
+    ))
+    attachReactTreeToGlobalContainer_inner(shadow, { key: 'css-vars' }).render(
+        <>
+            <GlobalBackdrop />
+            <CSSVariableInjector />
+        </>,
     )
-    attachReactTreeToGlobalContainer_inner(shadow, { key: 'css-vars' }).render(<CSSVariableInjector />)
 }
 
 // https://github.com/DimensionDev/Maskbook/issues/3265 with fast refresh or import order?
