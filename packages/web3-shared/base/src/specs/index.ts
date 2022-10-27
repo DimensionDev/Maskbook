@@ -1413,6 +1413,7 @@ export interface OthersState<ChainId, SchemaType, ProviderType, NetworkType, Tra
 
     // #region customization
     getDefaultChainId(): ChainId
+    getInvalidChainId(): ChainId
     getDefaultNetworkType(): NetworkType
     getDefaultProviderType(): ProviderType
     getZeroAddress(): string | undefined

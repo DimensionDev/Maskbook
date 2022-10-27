@@ -29,6 +29,9 @@ export class OthersState<ChainId, SchemaType, ProviderType, NetworkType, Transac
     getDefaultChainId(): ChainId {
         throw new Error('Method not implemented.')
     }
+    getInvalidChainId(): ChainId {
+        throw new Error('Method not implemented.')
+    }
     getDefaultNetworkType(): NetworkType {
         throw new Error('Method not implemented.')
     }
