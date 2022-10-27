@@ -3,6 +3,7 @@ import {
     attachReactTreeToMountedRoot_noHost,
     setupReactShadowRootEnvironment as setupReactShadowRootEnvironmentUpper,
     CSSVariableInjector,
+    DialogStackingProvider,
 } from '@masknet/theme'
 import { Suspense } from 'react'
 import { MaskUIRoot } from '../../UIRoot.js'
@@ -23,7 +24,11 @@ const captureEvents: Array<keyof HTMLElementEventMap> = [
 ]
 export function setupReactShadowRootEnvironment() {
     const shadow = setupReactShadowRootEnvironmentUpper({ mode: process.env.shadowRootMode }, (jsx) =>
-        MaskUIRoot({ children: jsx, useTheme: useClassicMaskSNSTheme, kind: 'sns' }),
+        MaskUIRoot({
+            children: DialogStackingProvider({ children: jsx }),
+            useTheme: useClassicMaskSNSTheme,
+            kind: 'sns',
+        }),
     )
     attachReactTreeToGlobalContainer_inner(shadow, { key: 'css-vars' }).render(<CSSVariableInjector />)
 }
