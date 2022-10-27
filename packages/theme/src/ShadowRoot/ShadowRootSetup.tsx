@@ -12,10 +12,11 @@ let globalContainer: HTMLElement
  * This container is prepared for all the Modals.
  */
 let portalContainer: ShadowRoot
+type WrapJSX = (jsx: React.ReactNode) => JSX.Element
 /** @internal */
 export const shadowEnvironmentMountingRoots = new ObservableMap<any, JSX.Element>()
 
-export function setupReactShadowRootEnvironment(init: ShadowRootInit) {
+export function setupReactShadowRootEnvironment(init: ShadowRootInit, wrapJSX: WrapJSX = (x) => <>{x}</>) {
     if (portalContainer) return portalContainer
     // TODO: make sure globalContainer is the last DOM in the body?
     globalContainer = document.body.appendChild(document.createElement('div'))
@@ -24,20 +25,19 @@ export function setupReactShadowRootEnvironment(init: ShadowRootInit) {
     // Note: This React Root does not expect to have any direct DOM children.
     createRoot(globalContainer).render(
         <StrictMode>
-            <App />
+            <MountingPoint wrapJSX={wrapJSX} />
         </StrictMode>,
     )
     return portalContainer
 }
-function App() {
+function MountingPoint({ wrapJSX }: { wrapJSX: WrapJSX }) {
     const [children, setChildren] = useState<JSX.Element[]>([])
     useEffect(() => {
         shadowEnvironmentMountingRoots.event.on(ALL_EVENTS, () => {
             setChildren(Array.from(shadowEnvironmentMountingRoots.values()))
         })
     }, [])
-    // Note: This is safe because Map is ordered when iterating
-    return <>{children}</>
+    return wrapJSX(children)
 }
 
 /** @internal */
