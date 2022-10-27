@@ -1,14 +1,14 @@
 export {
-    createReactRootShadowedPartial,
-    type CreateRenderInShadowRootHostConfig as CreateRenderInShadowRootConfig,
-    type RenderInShadowRootOptions as RenderInShadowRootConfig,
+    attachReactTreeToMountedRoot_noHost,
+    type AttachInShadowRootHostConfig,
+    type AttachInShadowRootOptions,
     type ReactRootShadowed,
-} from './createReactRootShadowed.js'
+} from './attachReactTreeToMountedRoot.js'
 export {
     usePortalShadowRoot,
-    setupPortalShadowRoot,
     createShadowRootForwardedComponent,
     createShadowRootForwardedPopperComponent,
 } from './Portal.js'
+export { setupReactShadowRootEnvironment } from './ShadowRootSetup.js'
 export { ShadowRootIsolation } from './ShadowRootIsolation.js'
 export { DisableShadowRootContext } from './Contexts.js'

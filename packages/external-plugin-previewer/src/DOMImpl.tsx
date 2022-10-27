@@ -1,9 +1,9 @@
 import { setDOMImpl } from 'ef.js'
-import { createReactRootShadowedPartial, ReactRootShadowed } from '@masknet/theme'
+import { attachReactTreeToMountedRoot_noHost, ReactRootShadowed } from '@masknet/theme'
 import * as Components from './Components/index.js'
 import { RenderContext } from './RenderContext.js'
 
-const createReactRootShadowed = createReactRootShadowedPartial({
+const createReactRootShadowed = attachReactTreeToMountedRoot_noHost({
     preventEventPropagationList: [],
 })
 setDOMImpl({

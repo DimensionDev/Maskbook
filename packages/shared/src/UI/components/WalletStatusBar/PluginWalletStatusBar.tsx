@@ -11,6 +11,7 @@ import {
     useReverseAddress,
     useWeb3State,
     useChainContext,
+    ActualChainContextProvider,
 } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { WalletMessages } from '@masknet/plugin-wallet'
@@ -55,7 +56,7 @@ export interface WalletStatusBarProps<T extends NetworkPluginID> extends PropsWi
     onClick?: (ev: React.MouseEvent<HTMLDivElement>) => void
 }
 
-export const PluginWalletStatusBar = memo<WalletStatusBarProps<NetworkPluginID>>(
+const PluginWalletStatusBarWithoutContext = memo<WalletStatusBarProps<NetworkPluginID>>(
     ({ className, onClick, expectedPluginID, expectedChainId, children }) => {
         const t = useSharedI18N()
         const { classes, cx } = useStyles()
@@ -120,3 +121,11 @@ export const PluginWalletStatusBar = memo<WalletStatusBarProps<NetworkPluginID>>
         )
     },
 )
+
+export const PluginWalletStatusBar = memo<WalletStatusBarProps<NetworkPluginID>>((props) => {
+    return (
+        <ActualChainContextProvider>
+            <PluginWalletStatusBarWithoutContext {...props} />
+        </ActualChainContextProvider>
+    )
+})

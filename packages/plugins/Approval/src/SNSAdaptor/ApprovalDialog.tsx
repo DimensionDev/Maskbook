@@ -2,7 +2,7 @@ import { compact } from 'lodash-unified'
 import { DialogContent, Button, Tab } from '@mui/material'
 import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import { TabContext } from '@mui/lab'
-import { PluginWalletStatusBar, InjectedDialog, useSharedI18N, NetworkTab } from '@masknet/shared'
+import { PluginWalletStatusBar, InjectedDialog, useSharedI18N, NetworkTab, ChainBoundary } from '@masknet/shared'
 import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { ChainId, chainResolver, NetworkType } from '@masknet/web3-shared-evm'
@@ -165,25 +165,27 @@ function ApprovalWrapper(props: ApprovalWrapperProps) {
                 <ApprovalEmptyContent />
             )}
             <PluginWalletStatusBar className={classes.footer}>
-                <Button
-                    variant="contained"
-                    size="medium"
-                    onClick={() => {
-                        setSelectProviderDialog({
-                            open: true,
-                            supportedNetworkList: chainIdList
-                                ?.map((chainId) => {
-                                    const x = chainResolver.networkType(chainId)
-                                    return x
-                                })
-                                .filter((x) => Boolean(x)) as NetworkType[],
-                        })
-                    }}
-                    fullWidth>
-                    {pluginID === NetworkPluginID.PLUGIN_EVM
-                        ? t.wallet_status_button_change()
-                        : t.wallet_status_button_change_to_evm()}
-                </Button>
+                <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={chainId}>
+                    <Button
+                        variant="contained"
+                        size="medium"
+                        onClick={() => {
+                            setSelectProviderDialog({
+                                open: true,
+                                supportedNetworkList: chainIdList
+                                    ?.map((chainId) => {
+                                        const x = chainResolver.networkType(chainId)
+                                        return x
+                                    })
+                                    .filter((x) => Boolean(x)) as NetworkType[],
+                            })
+                        }}
+                        fullWidth>
+                        {pluginID === NetworkPluginID.PLUGIN_EVM
+                            ? t.wallet_status_button_change()
+                            : t.wallet_status_button_change_to_evm()}
+                    </Button>
+                </ChainBoundary>
             </PluginWalletStatusBar>
         </div>
     )
