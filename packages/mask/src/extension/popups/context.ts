@@ -13,3 +13,4 @@ export const PageTitleContextDefault = {
 }
 
 export const PageTitleContext = createContext<PageTitleState>(PageTitleContextDefault)
+PageTitleContext.displayName = 'PageTitleContext'

@@ -51,3 +51,4 @@ export namespace RenderFragmentsContextType {
     }
 }
 export const RenderFragmentsContext = createContext<RenderFragmentsContextType>(DefaultRenderFragments)
+RenderFragmentsContext.displayName = 'RenderFragmentsContext'

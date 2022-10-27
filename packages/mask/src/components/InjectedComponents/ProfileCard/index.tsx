@@ -42,6 +42,7 @@ const useStyles = makeStyles()((theme) => {
             overscrollBehavior: 'contain',
             borderRadius: theme.spacing(1.5),
             boxShadow: theme.palette.shadow.popup,
+            backgroundColor: theme.palette.background.paper,
         },
         loading: {
             display: 'flex',

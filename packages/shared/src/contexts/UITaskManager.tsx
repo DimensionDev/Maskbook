@@ -19,6 +19,7 @@ export const createUITaskManager = <TaskOptions extends BaseDialogProps<Result>,
     Component: ComponentType<TaskOptions>,
 ) => {
     const TaskManagerContext = createContext<ContextOptions<TaskOptions, Result | null>>(null!)
+    TaskManagerContext.displayName = `TaskManagerContext (${Component.displayName || Component.name})`
     let id = 0
 
     type TaskDeferTuple = DeferTuple<Result | null>

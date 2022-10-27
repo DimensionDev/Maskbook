@@ -3,7 +3,7 @@ import type { Plugin } from '@masknet/plugin-infra'
 import { SocialIdentity, SocialAddress, SocialAddressType } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { IdentityServiceState } from '@masknet/web3-state'
-import { formatAddress, isValidAddress } from '@masknet/web3-shared-solana'
+import { isValidAddress } from '@masknet/web3-shared-solana'
 import { SolanaRPC } from '../messages.js'
 
 const SOL_RE = /\S{1,256}\.sol\b/
@@ -41,7 +41,7 @@ export class IdentityService extends IdentityServiceState {
                 ? {
                       pluginID: NetworkPluginID.PLUGIN_SOLANA,
                       type: SocialAddressType.Address,
-                      label: formatAddress(address, 4),
+                      label: '',
                       address,
                   }
                 : undefined,

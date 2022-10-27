@@ -68,6 +68,7 @@ const useStyles = makeStyles<void, 'avatarDecoration'>()((theme, _, refs) => ({
         color: theme.palette.text.primary,
         fontSize: 14,
         height: 18,
+        fontWeight: 400,
         lineHeight: '18px',
     },
     linkIcon: {

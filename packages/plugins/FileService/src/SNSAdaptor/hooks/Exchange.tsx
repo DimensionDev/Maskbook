@@ -8,14 +8,15 @@ export interface Props extends React.PropsWithChildren<{}> {
     onDialogClose(cb: DialogCloseCallback): void
 }
 
-const Context = createContext<Props>({
+const ExchangeContext = createContext<Props>({
     onInsert: noop,
     onUploading: noop,
     onDialogClose: noop,
 })
+ExchangeContext.displayName = 'ExchangeContext'
 
 export const Exchange: React.FC<Props> = (props) => (
-    <Context.Provider value={omit(props, ['children'])} children={props.children} />
+    <ExchangeContext.Provider value={omit(props, ['children'])} children={props.children} />
 )
 
-export const useExchange = () => useContext(Context)
+export const useExchange = () => useContext(ExchangeContext)

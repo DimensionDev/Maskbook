@@ -13,7 +13,7 @@ import {
 } from '@masknet/shared-base'
 import { KVStorage } from '@masknet/shared'
 import { ChainId, isValidAddress, isZeroAddress } from '@masknet/web3-shared-evm'
-import { MaskX, MaskX_BaseAPI, NextIDProof, NextIDStorage, RSS3, Twitter } from '@masknet/web3-providers'
+import { KeyValue, MaskX, MaskX_BaseAPI, NextIDProof, NextIDStorage, RSS3, Twitter } from '@masknet/web3-providers'
 import { ENS_Resolver } from './NameService/ENS.js'
 import { ChainbaseResolver } from './NameService/Chainbase.js'
 import { Web3StateSettings } from '../settings/index.js'
@@ -46,8 +46,8 @@ function getNextIDPlatform() {
     return NextIDPlatform.Twitter
 }
 
-async function getWalletAddressesFromNextID(userId?: string, publicKey?: string) {
-    if (!userId || !publicKey) return EMPTY_LIST
+async function getWalletAddressesFromNextID(userId?: string) {
+    if (!userId) return EMPTY_LIST
     const bindings = await NextIDProof.queryAllExistedBindingsByPlatform(getNextIDPlatform(), userId)
     return bindings.flatMap((x) =>
         x.proofs.filter((y) => y.platform === NextIDPlatform.Ethereum && isValidAddress(y.identity)),
@@ -76,11 +76,11 @@ export class IdentityService extends IdentityServiceState {
     private createSocialAddress(
         type: SocialAddressType,
         address: string,
-        label = address,
+        label = '',
         updatedAt?: string,
         createdAt?: string,
     ): SocialAddress<NetworkPluginID.PLUGIN_EVM> | undefined {
-        if (isValidAddress(address) && !isZeroAddress(address))
+        if (isValidAddress(address) && !isZeroAddress(address)) {
             return {
                 pluginID: NetworkPluginID.PLUGIN_EVM,
                 type,
@@ -89,6 +89,7 @@ export class IdentityService extends IdentityServiceState {
                 updatedAt,
                 createdAt,
             }
+        }
         return
     }
 
@@ -115,15 +116,14 @@ export class IdentityService extends IdentityServiceState {
 
     /** Read a social address from avatar KV storage. */
     private async getSocialAddressFromAvatarKV({ identifier }: SocialIdentity) {
-        const address = await this.KV.get<
-            Record<
-                NetworkPluginID,
-                {
-                    address: string
-                    networkPluginID: NetworkPluginID
-                }
-            >
-        >(identifier?.userId ?? '$unknown').then((x) => x?.[NetworkPluginID.PLUGIN_EVM].address ?? '')
+        if (!identifier?.userId) return
+        const address = await KeyValue.createJSON_Storage<Record<NetworkPluginID, string>>(
+            `com.maskbook.user_${getSiteType()}`,
+        )
+            .get(identifier.userId)
+            .then((x) => x?.[NetworkPluginID.PLUGIN_EVM])
+
+        if (!address) return
 
         return this.createSocialAddress(SocialAddressType.KV, address)
     }
@@ -145,11 +145,11 @@ export class IdentityService extends IdentityServiceState {
     }
 
     /** Read a social address from NextID. */
-    private async getSocialAddressesFromNextID({ identifier, publicKey }: SocialIdentity) {
-        const listOfAddress = await getWalletAddressesFromNextID(identifier?.userId, publicKey)
+    private async getSocialAddressesFromNextID({ identifier }: SocialIdentity) {
+        const listOfAddress = await getWalletAddressesFromNextID(identifier?.userId)
         return compact(
             listOfAddress.map((x) =>
-                this.createSocialAddress(SocialAddressType.NEXT_ID, x.identity, x.latest_checked_at, x.created_at),
+                this.createSocialAddress(SocialAddressType.NEXT_ID, x.identity, '', x.latest_checked_at, x.created_at),
             ),
         )
     }
@@ -194,18 +194,48 @@ export class IdentityService extends IdentityServiceState {
         if (!userId) return
 
         const response = await MaskX.getIdentitiesExact(userId, MaskX_BaseAPI.PlatformType.Twitter)
-        return response.records
-            .filter((x) => {
-                if (!isValidAddress(x.web3_addr)) return false
+        const results = response.records.filter((x) => {
+            if (
+                !isValidAddress(x.web3_addr) ||
+                ![
+                    MaskX_BaseAPI.SourceType.CyberConnect,
+                    MaskX_BaseAPI.SourceType.Leaderboard,
+                    MaskX_BaseAPI.SourceType.Sybil,
+                ].includes(x.source)
+            )
+                return false
+
+            try {
+                // detect if a valid data source
+                resolveMaskXAddressType(x.source)
+                return true
+            } catch {
+                return false
+            }
+        })
+
+        const allSettled = await Promise.allSettled(
+            results.map(async (y) => {
                 try {
-                    // detect if a valid data source
-                    resolveMaskXAddressType(x.source)
-                    return true
+                    const name = await attemptUntil(
+                        [new ENS_Resolver(), new ChainbaseResolver()].map((resolver) => {
+                            return async () => resolver.reverse(y.web3_addr)
+                        }),
+                        undefined,
+                        true,
+                    )
+
+                    return this.createSocialAddress(
+                        resolveMaskXAddressType(y.source),
+                        y.web3_addr,
+                        name ?? y.sns_handle,
+                    )
                 } catch {
-                    return false
+                    return this.createSocialAddress(resolveMaskXAddressType(y.source), y.web3_addr, y.sns_handle)
                 }
-            })
-            .map((y) => this.createSocialAddress(resolveMaskXAddressType(y.source), y.web3_addr, y.sns_handle))
+            }),
+        )
+        return compact(allSettled.map((x) => (x.status === 'fulfilled' ? x.value : undefined)))
     }
 
     override async getFromRemote(identity: SocialIdentity, includes?: SocialAddressType[]) {

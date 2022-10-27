@@ -98,9 +98,7 @@ export default class FortmaticProvider extends BaseProvider implements EVM_Provi
 
     private async logout() {
         const fm = this.createFortmatic(this.chainId)
-        const loggedIn = await fm.user.isLoggedIn()
-        if (loggedIn) fm.user.logout()
-        return
+        return fm.user.logout()
     }
 
     override async switchChain(chainId?: ChainId): Promise<void> {

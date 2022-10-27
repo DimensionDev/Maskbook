@@ -57,6 +57,7 @@ export const MaskPostExtraPluginWrapperWithPermission: PluginWrapperComponent<Pl
                                     fontSize={14}
                                     marginBottom={3.25}
                                     textAlign="left"
+                                    component="div"
                                     px="18px">
                                     {t.authorization_descriptions()}
                                     <Typography component="div">

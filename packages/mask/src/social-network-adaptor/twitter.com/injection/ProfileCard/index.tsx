@@ -26,7 +26,6 @@ const useStyles = makeStyles()((theme) => ({
         position: 'absolute',
         width: CARD_WIDTH,
         height: CARD_HEIGHT,
-        backgroundColor: theme.palette.background.paper,
     },
     loading: {
         height: '100%',
