@@ -1,7 +1,10 @@
 import type { Subscription } from 'use-subscription'
 import type { Plugin } from '@masknet/plugin-infra'
 import { ConnectionState } from '@masknet/web3-state'
-import type {
+import {
+    isValidChainId,
+    getDefaultChainId,
+    getDefaultProviderType,
     AddressType,
     Block,
     ChainId,
@@ -40,7 +43,14 @@ export class Connection extends ConnectionState<
             chainId?: Subscription<ChainId>
             providerType?: Subscription<ProviderType>
         },
+        options: {
+            isValidChainId(chainId: ChainId): boolean
+        },
     ) {
-        super(context, createConnection, subscription)
+        super(context, createConnection, subscription, {
+            isValidChainId,
+            getDefaultChainId,
+            getDefaultProviderType,
+        })
     }
 }

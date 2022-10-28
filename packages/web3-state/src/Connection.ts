@@ -72,6 +72,11 @@ export class ConnectionState<
             chainId?: Subscription<ChainId>
             providerType?: Subscription<ProviderType>
         },
+        protected options: {
+            isValidChainId(chainId: ChainId): boolean
+            getDefaultChainId(): ChainId
+            getDefaultProviderType(): ProviderType
+        },
     ) {
         this.createConnectionCached = memoize(
             (
@@ -108,10 +113,19 @@ export class ConnectionState<
     }
 
     async getConnection(options?: Web3ConnectionOptions) {
+        const chainId =
+            options?.chainId ?? this.subscription.chainId?.getCurrentValue() ?? this.options.getDefaultChainId()
+        const account = options?.account ?? this.subscription.account?.getCurrentValue() ?? ''
+        const providerType =
+            options?.providerType ??
+            this.subscription.providerType?.getCurrentValue() ??
+            this.options.getDefaultProviderType()
+
+        if (this.options.isValidChainId(chainId)) return
         return this.createConnectionCached?.(this.context, {
-            chainId: options?.chainId ?? this.subscription.chainId?.getCurrentValue(),
-            account: options?.account ?? this.subscription.account?.getCurrentValue(),
-            providerType: options?.providerType ?? this.subscription.providerType?.getCurrentValue(),
+            chainId,
+            account,
+            providerType,
         })
     }
 }
