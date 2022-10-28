@@ -1,4 +1,10 @@
-import { InjectedDialog, useOpenShareTxDialog, useSelectFungibleToken, FungibleTokenInput } from '@masknet/shared'
+import {
+    InjectedDialog,
+    useOpenShareTxDialog,
+    useSelectFungibleToken,
+    FungibleTokenInput,
+    WalletConnectedBoundary,
+} from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { keyframes, makeStyles, ActionButton } from '@masknet/theme'
 import { CrossIsolationMessages, NetworkPluginID } from '@masknet/shared-base'
@@ -11,7 +17,6 @@ import { isFacebook } from '../../../social-network-adaptor/facebook.com/base.js
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base.js'
 import { useI18N } from '../../../utils/i18n-next-ui.js'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary.js'
-import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary.js'
 import { useDepositCallback } from '../hooks/useDepositCallback.js'
 import { PluginPoolTogetherMessages } from '../messages.js'
 import type { Pool } from '../types.js'

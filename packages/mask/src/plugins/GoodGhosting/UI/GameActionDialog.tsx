@@ -1,7 +1,6 @@
 import { Box, Button, DialogContent, DialogActions, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { InjectedDialog } from '@masknet/shared'
-import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary.js'
+import { InjectedDialog, WalletConnectedBoundary } from '@masknet/shared'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import type { GoodGhostingInfo } from '../types.js'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary.js'

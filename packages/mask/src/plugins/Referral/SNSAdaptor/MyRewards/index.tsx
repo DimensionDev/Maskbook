@@ -8,8 +8,7 @@ import { getRequiredChainId } from '../../helpers/index.js'
 import type { PageInterface } from '../../types.js'
 import { ReferralRPC } from '../../messages.js'
 
-import { WalletConnectedBoundary } from '../../../../web3/UI/WalletConnectedBoundary.js'
-import { ChainBoundary } from '@masknet/shared'
+import { WalletConnectedBoundary, ChainBoundary } from '@masknet/shared'
 import { Rewards } from './Rewards.js'
 
 import { LoadingBase, makeStyles } from '@masknet/theme'

@@ -7,6 +7,7 @@ import {
     TokenSecurityBar,
     useSelectAdvancedSettings,
     useTokenSecurity,
+    WalletConnectedBoundary,
 } from '@masknet/shared'
 import { makeStyles, MaskColorVar, useStylesExtends, ActionButton } from '@masknet/theme'
 import { InputTokenPanel } from './InputTokenPanel.js'
@@ -28,7 +29,6 @@ import { useTradeApproveComputed } from '../../trader/useTradeApproveComputed.js
 import { isDashboardPage, isPopupPage, PopupRoutes, PluginID, NetworkPluginID } from '@masknet/shared-base'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { AllProviderTradeContext } from '../../trader/useAllProviderTradeContext.js'
-import { WalletConnectedBoundary } from '../../../../web3/UI/WalletConnectedBoundary.js'
 import { TokenSecurityBoundary } from '../../../../web3/UI/TokenSecurityBoundary.js'
 import { currentSlippageSettings } from '../../settings.js'
 import { PluginTraderMessages } from '../../messages.js'

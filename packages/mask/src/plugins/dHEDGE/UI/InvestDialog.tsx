@@ -4,6 +4,7 @@ import {
     useSelectFungibleToken,
     FungibleTokenInput,
     PluginWalletStatusBar,
+    WalletConnectedBoundary,
 } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles, ActionButton } from '@masknet/theme'
@@ -18,7 +19,6 @@ import { isFacebook } from '../../../social-network-adaptor/facebook.com/base.js
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base.js'
 import { useI18N } from '../../../utils/i18n-next-ui.js'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary.js'
-import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary.js'
 import { useInvestCallback } from '../hooks/useInvestCallback.js'
 import { PluginDHedgeMessages } from '../messages.js'
 import type { Pool } from '../types.js'

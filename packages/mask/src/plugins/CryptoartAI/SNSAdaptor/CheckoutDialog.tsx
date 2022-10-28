@@ -1,10 +1,15 @@
 import { useCallback, useMemo } from 'react'
 import BigNumber from 'bignumber.js'
 import { first } from 'lodash-unified'
-import { InjectedDialog, NFTCardStyledAssetPlayer, useOpenShareTxDialog, PluginWalletStatusBar } from '@masknet/shared'
+import {
+    InjectedDialog,
+    NFTCardStyledAssetPlayer,
+    useOpenShareTxDialog,
+    PluginWalletStatusBar,
+    WalletConnectedBoundary,
+} from '@masknet/shared'
 import { makeStyles, ActionButton } from '@masknet/theme'
 import { Box, Card, CardActions, CardContent, DialogContent, Link, Typography } from '@mui/material'
-import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary.js'
 import type { useAsset } from '../hooks/useAsset.js'
 import { usePurchaseCallback } from '../hooks/usePurchaseCallback.js'
 import { activatedSocialNetworkUI } from '../../../social-network/index.js'

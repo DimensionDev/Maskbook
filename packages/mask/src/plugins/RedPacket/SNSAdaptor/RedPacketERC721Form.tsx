@@ -7,13 +7,17 @@ import CloseIcon from '@mui/icons-material/Close'
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline'
 import { useI18N } from '../locales/index.js'
 import { ERC721ContractSelectPanel } from '../../../web3/UI/ERC721ContractSelectPanel.js'
-import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary.js'
+import {
+    WalletConnectedBoundary,
+    NFTCardStyledAssetPlayer,
+    PluginWalletStatusBar,
+    ChainBoundary,
+} from '@masknet/shared'
 import { EthereumERC721TokenApprovedBoundary } from '../../../web3/UI/EthereumERC721TokenApprovedBoundary.js'
 import { ChainId, SchemaType, useNftRedPacketConstants, formatTokenId } from '@masknet/web3-shared-evm'
 import { RedpacketMessagePanel } from './RedpacketMessagePanel.js'
 import { SelectNftTokenDialog, OrderedERC721Token } from './SelectNftTokenDialog.js'
 import { RedpacketNftConfirmDialog } from './RedpacketNftConfirmDialog.js'
-import { NFTCardStyledAssetPlayer, PluginWalletStatusBar, ChainBoundary } from '@masknet/shared'
 import { NFTSelectOption } from '../types.js'
 import { NFT_RED_PACKET_MAX_SHARES } from '../constants.js'
 import { useChainContext } from '@masknet/web3-hooks-base'

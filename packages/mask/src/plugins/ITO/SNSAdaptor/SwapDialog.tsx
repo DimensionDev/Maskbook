@@ -2,7 +2,12 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import BigNumber from 'bignumber.js'
 import { openWindow } from '@masknet/shared-base-ui'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { useSelectFungibleToken, useOpenShareTxDialog, FungibleTokenInput } from '@masknet/shared'
+import {
+    useSelectFungibleToken,
+    useOpenShareTxDialog,
+    FungibleTokenInput,
+    WalletConnectedBoundary,
+} from '@masknet/shared'
 import { makeStyles, useStylesExtends, ActionButton } from '@masknet/theme'
 import { leftShift, rightShift, ZERO, FungibleToken, currySameAddress, formatBalance } from '@masknet/web3-shared-base'
 import {
@@ -15,7 +20,6 @@ import {
 import { Slider, Typography } from '@mui/material'
 import { useI18N } from '../../../utils/index.js'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary.js'
-import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary.js'
 import type { JSON_PayloadInMask } from '../types.js'
 import { useQualificationVerify } from './hooks/useQualificationVerify.js'
 import { useSwapCallback } from './hooks/useSwapCallback.js'
