@@ -22,8 +22,8 @@ export function useMaskIconPalette(theme: Theme) {
 export function MaskUIRoot(
     kind: 'page' | 'sns',
     useTheme: () => Theme,
+    children: React.ReactNode,
     fallback?: React.ReactNode,
-    children?: React.ReactNode,
 ) {
     return compose(
         // Avoid the crash due to unhandled suspense

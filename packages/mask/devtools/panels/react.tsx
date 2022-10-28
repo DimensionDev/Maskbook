@@ -33,6 +33,10 @@ let componentsWindow: Window
 let profilerWindow: Window
 
 export async function startReactDevTools(signal: AbortSignal) {
+    // default preset for VSCode users
+    if (!localStorage.getItem('React::DevTools::openInEditorUrl')) {
+        localStorage.setItem('React::DevTools::openInEditorUrl', '"vscode://file/{path}:{line}"')
+    }
     const runInContentScript = (await devtoolsEval<string>('location.href', false)).startsWith('http')
     const id = Math.random().toString(36)
     await devtoolsEval(`globalThis.${GLOBAL_ID_KEY} = ${JSON.stringify(id)}`, runInContentScript)

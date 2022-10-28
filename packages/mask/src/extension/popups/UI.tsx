@@ -38,7 +38,6 @@ export default function Popups() {
     return MaskUIRoot(
         'page',
         usePopupTheme,
-        frame(<LoadingPlaceholder />),
         <PopupSnackbarProvider>
             <PopupContext.Provider>
                 <PageTitleContext.Provider value={{ title, setTitle }}>
@@ -61,6 +60,7 @@ export default function Popups() {
                 </PageTitleContext.Provider>
             </PopupContext.Provider>
         </PopupSnackbarProvider>,
+        frame(<LoadingPlaceholder />),
     )
 }
 
