@@ -12,8 +12,8 @@ import {
     PluginWalletStatusBar,
     ERC721ContractSelectPanel,
     ChainBoundary,
+    EthereumERC721TokenApprovedBoundary,
 } from '@masknet/shared'
-import { EthereumERC721TokenApprovedBoundary } from '../../../web3/UI/EthereumERC721TokenApprovedBoundary.js'
 import { ChainId, SchemaType, useNftRedPacketConstants, formatTokenId } from '@masknet/web3-shared-evm'
 import { RedpacketMessagePanel } from './RedpacketMessagePanel.js'
 import { SelectNftTokenDialog, OrderedERC721Token } from './SelectNftTokenDialog.js'
