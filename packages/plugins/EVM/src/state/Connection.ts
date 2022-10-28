@@ -43,9 +43,6 @@ export class Connection extends ConnectionState<
             chainId?: Subscription<ChainId>
             providerType?: Subscription<ProviderType>
         },
-        options: {
-            isValidChainId(chainId: ChainId): boolean
-        },
     ) {
         super(context, createConnection, subscription, {
             isValidChainId,
