@@ -29,7 +29,7 @@ import { useTradeApproveComputed } from '../../trader/useTradeApproveComputed.js
 import { isDashboardPage, isPopupPage, PopupRoutes, PluginID, NetworkPluginID } from '@masknet/shared-base'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { AllProviderTradeContext } from '../../trader/useAllProviderTradeContext.js'
-import { TokenSecurityBoundary } from '../../../../web3/UI/TokenSecurityBoundary.js'
+import { TokenSecurityBoundary } from '@masknet/plugin-go-plus-security'
 import { currentSlippageSettings } from '../../settings.js'
 import { PluginTraderMessages } from '../../messages.js'
 import Services from '../../../../extension/service.js'
