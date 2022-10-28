@@ -1,11 +1,8 @@
-import { ErrorBoundary } from '@masknet/shared-base-ui'
 import {
     attachReactTreeToMountedRoot_noHost,
     setupReactShadowRootEnvironment as setupReactShadowRootEnvironmentUpper,
     CSSVariableInjector,
-    DialogStackingProvider,
 } from '@masknet/theme'
-import { Suspense } from 'react'
 import { MaskUIRoot } from '../../UIRoot.js'
 import { useClassicMaskSNSTheme } from '../theme/index.js'
 
@@ -23,13 +20,7 @@ const captureEvents: Array<keyof HTMLElementEventMap> = [
     'change',
 ]
 export function setupReactShadowRootEnvironment() {
-    const shadow = setupReactShadowRootEnvironmentUpper({ mode: process.env.shadowRootMode }, (jsx) =>
-        MaskUIRoot({
-            children: DialogStackingProvider({ children: jsx }),
-            useTheme: useClassicMaskSNSTheme,
-            kind: 'sns',
-        }),
-    )
+    const shadow = setupReactShadowRootEnvironmentUpper({ mode: process.env.shadowRootMode })
     attachReactTreeToGlobalContainer_inner(shadow, { key: 'css-vars' }).render(<CSSVariableInjector />)
 }
 
@@ -38,9 +29,10 @@ const attachReactTreeToGlobalContainer_inner = attachReactTreeToMountedRoot_noHo
     preventEventPropagationList: captureEvents,
     wrapJSX(jsx) {
         return (
-            <Suspense fallback={null}>
-                <ErrorBoundary>{jsx}</ErrorBoundary>
-            </Suspense>
+            <MaskUIRoot useTheme={useClassicMaskSNSTheme} kind="sns">
+                <CSSVariableInjector />
+                {jsx}
+            </MaskUIRoot>
         )
     },
 })
