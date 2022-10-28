@@ -1,15 +1,14 @@
-import { useState, useCallback } from 'react'
-import { v4 as uuid } from 'uuid'
+import { useCallback } from 'react'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import classNames from 'classnames'
-import { EthereumAddress } from 'wallet.ts'
 import { Box, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
-import { SelectNftContractDialogEvent, WalletMessages } from '../../plugins/Wallet/messages.js'
-import { useI18N } from '../../utils/index.js'
+import { SelectNftContractDialogEvent, WalletMessages } from '@masknet/plugin-wallet'
+import { useSharedI18N } from '../../../locales/index.js'
 import type { NonFungibleTokenContract } from '@masknet/web3-shared-base'
+import { useWeb3State } from '@masknet/web3-hooks-base'
 
 interface StyleProps {
     hasIcon: boolean
@@ -71,21 +70,19 @@ export interface ERC721TokenSelectPanelProps {
 }
 export function ERC721ContractSelectPanel(props: ERC721TokenSelectPanelProps) {
     const { onContractChange, onBalanceChange, contract, label, chainId = ChainId.Mainnet, balance } = props
-    const { t } = useI18N()
+    const t = useSharedI18N()
     const { classes } = useStyles({ hasIcon: Boolean(contract?.logoURL) })
-
-    // #region select contract
-    const [id] = useState(uuid)
+    const { Others } = useWeb3State()
 
     const { setDialog: setNftContractDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectNftContractDialogUpdated,
         useCallback(
             (ev: SelectNftContractDialogEvent) => {
-                if (ev.open || !ev.contract || ev.uuid !== id) return
+                if (ev.open || !ev.contract) return
                 onContractChange(ev.contract as NonFungibleTokenContract<ChainId, SchemaType.ERC721>)
                 onBalanceChange(Number.parseInt(ev.balance ?? '0', 10))
             },
-            [id, onContractChange, onBalanceChange],
+            [onContractChange, onBalanceChange],
         ),
     )
 
@@ -93,20 +90,19 @@ export function ERC721ContractSelectPanel(props: ERC721TokenSelectPanelProps) {
         setNftContractDialog({
             open: true,
             chainId,
-            uuid: id,
         })
-    }, [setNftContractDialog, uuid, chainId])
+    }, [setNftContractDialog, chainId])
     // #endregion
 
     return (
         <Box className={classes.root}>
             <div className={classes.wrapper}>
                 <Typography className={classes.title} color="textSecondary" variant="body2" component="span">
-                    {label ?? t('select_an_nft')}
+                    {label ?? t.select_an_nft()}
                 </Typography>
-                {!contract?.address || !EthereumAddress.isValid(contract.address) ? null : (
+                {!contract?.address || !Others?.isValidAddress(contract.address) ? null : (
                     <Typography className={classes.title} color="textSecondary" variant="body2" component="span">
-                        {t('wallet_balance')}: {balance ? balance : '0'}
+                        {t.wallet_balance()}: {balance ? balance : '0'}
                     </Typography>
                 )}
             </div>

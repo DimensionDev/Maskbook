@@ -6,11 +6,11 @@ import CheckIcon from '@mui/icons-material/Check'
 import CloseIcon from '@mui/icons-material/Close'
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline'
 import { useI18N } from '../locales/index.js'
-import { ERC721ContractSelectPanel } from '../../../web3/UI/ERC721ContractSelectPanel.js'
 import {
     WalletConnectedBoundary,
     NFTCardStyledAssetPlayer,
     PluginWalletStatusBar,
+    ERC721ContractSelectPanel,
     ChainBoundary,
 } from '@masknet/shared'
 import { EthereumERC721TokenApprovedBoundary } from '../../../web3/UI/EthereumERC721TokenApprovedBoundary.js'
