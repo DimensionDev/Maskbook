@@ -3,7 +3,7 @@ import { useMemo, useState, useContext } from 'react'
 import { Box, Button, IconButton, Typography, Alert, AlertTitle, styled } from '@mui/material'
 import ExpandLess from '@mui/icons-material/ExpandLess'
 import ExpandMore from '@mui/icons-material/ExpandMore'
-import { ErrorBoundaryBuildInfoContext, ErrorBoundaryError } from './context.js'
+import { BuildInfo, ErrorBoundaryError } from './context.js'
 import { useSharedBaseI18N } from '../../locales/index.js'
 
 export interface CrashUIProps extends React.PropsWithChildren<ErrorBoundaryError> {
@@ -18,7 +18,7 @@ export interface CrashUIProps extends React.PropsWithChildren<ErrorBoundaryError
     onRetry: () => void
 }
 export function CrashUI({ onRetry, subject, ...error }: CrashUIProps) {
-    const context = useContext(ErrorBoundaryBuildInfoContext)
+    const context = useContext(BuildInfo)
     const t = useSharedBaseI18N()
 
     const [showStack, setShowStack] = useState(false)
