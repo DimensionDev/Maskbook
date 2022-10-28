@@ -28,7 +28,7 @@ export class HubState<ChainId, SchemaType, GasOption> implements Web3HubState<Ch
             currencyType?: Subscription<CurrencyType>
         },
         protected options: {
-            isValidChainId(chainId: ChainId): boolean
+            isValidChainId(chainId?: ChainId): boolean
             getDefaultChainId(): ChainId
         },
     ) {

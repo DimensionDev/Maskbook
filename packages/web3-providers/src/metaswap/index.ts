@@ -1,6 +1,6 @@
 import urlcat from 'urlcat'
 import { GasOptionType } from '@masknet/web3-shared-base'
-import { ChainId, formatGweiToWei, GasOption } from '@masknet/web3-shared-evm'
+import { ChainId, formatGweiToWei, GasOption, isValidChainId } from '@masknet/web3-shared-evm'
 import type { GasOptionAPI } from '../types/index.js'
 import type { EstimateSuggestResponse } from './types.js'
 
@@ -12,7 +12,7 @@ function formatAmountAsWei(amount = '0') {
 
 export class MetaSwapAPI implements GasOptionAPI.Provider<ChainId, GasOption> {
     async getGasOptions(chainId: ChainId): Promise<Record<GasOptionType, GasOption> | undefined> {
-        if (!chainId) return
+        if (!isValidChainId(chainId)) return
         const response = await global.r2d2Fetch(
             urlcat(METASWAP_API, '/networks/:chainId/suggestedGasFees', { chainId }),
         )

@@ -3,7 +3,7 @@ import { compact } from 'lodash-unified'
 import { DataProvider } from '@masknet/public-api'
 import { createLookupTableResolver, EMPTY_LIST } from '@masknet/shared-base'
 import { TokenType } from '@masknet/web3-shared-base'
-import type { ChainId } from '@masknet/web3-shared-evm'
+import { ChainId, isValidChainId } from '@masknet/web3-shared-evm'
 import { LooksRareLogo, OpenSeaLogo } from '../../resources/index.js'
 import { TrendingAPI } from '../../types/index.js'
 import { NFTSCAN_API } from '../constants.js'
@@ -35,7 +35,7 @@ export class NFTScanTrendingAPI implements TrendingAPI.Provider<ChainId> {
     private opensea = new OpenSeaAPI()
 
     private async getCollection(chainId: ChainId, address: string): Promise<EVM.Collection | undefined> {
-        if (!chainId) return
+        if (!isValidChainId(chainId)) return
         const path = urlcat('/api/v2/collections/:address', {
             address,
             contract_address: address,
@@ -45,7 +45,7 @@ export class NFTScanTrendingAPI implements TrendingAPI.Provider<ChainId> {
     }
 
     private async searchNFTCollection(chainId: ChainId, keyword: string): Promise<EVM.Collection[]> {
-        if (!chainId) return EMPTY_LIST
+        if (!isValidChainId(chainId)) return EMPTY_LIST
         const path = '/api/v2/collections/filters'
         const response = await fetchFromNFTScanV2<Response<EVM.Collection[]>>(chainId, path, {
             method: 'POST',
@@ -78,7 +78,7 @@ export class NFTScanTrendingAPI implements TrendingAPI.Provider<ChainId> {
     }
 
     async getCoinsByKeyword(chainId: ChainId, keyword: string): Promise<TrendingAPI.Coin[]> {
-        if (!keyword || !chainId) return EMPTY_LIST
+        if (!keyword || !isValidChainId(chainId)) return EMPTY_LIST
         const nfts = await this.searchNFTCollection(chainId, keyword)
 
         const coins: TrendingAPI.Coin[] = nfts.map((nft) => ({

@@ -1,11 +1,10 @@
 import { forwardRef, useCallback, useEffect, useImperativeHandle, useState, useMemo } from 'react'
 import { useUnmount, useUpdateEffect } from 'react-use'
-import { isUndefined } from 'lodash-unified'
 import { delay } from '@dimensiondev/kit'
 import { useOpenShareTxDialog, useSelectFungibleToken } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { FungibleToken, formatBalance } from '@masknet/web3-shared-base'
-import { ChainId, createNativeToken, GasOptionConfig, SchemaType } from '@masknet/web3-shared-evm'
+import { ChainId, createNativeToken, GasOptionConfig, SchemaType, isValidChainId } from '@masknet/web3-shared-evm'
 import { useGasConfig } from '@masknet/web3-hooks-evm'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { useChainContext, useChainIdValid, useFungibleTokenBalance } from '@masknet/web3-hooks-base'
@@ -266,7 +265,7 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
 
     // #region if chain id be changed, reset the chain id on context, and reset gas config
     useEffect(() => {
-        if (isUndefined(chainId)) return
+        if (!isValidChainId(chainId)) return
         setGasConfig(undefined)
     }, [chainId])
     // #endregion

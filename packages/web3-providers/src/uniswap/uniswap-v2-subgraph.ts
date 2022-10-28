@@ -1,4 +1,4 @@
-import { ChainId, getTrendingConstants } from '@masknet/web3-shared-evm'
+import { ChainId, getTrendingConstants, isValidChainId } from '@masknet/web3-shared-evm'
 import stringify from 'json-stable-stringify'
 import { chunk, first, flatten } from 'lodash-unified'
 
@@ -157,7 +157,7 @@ export async function fetchEtherPricesByBlockNumbers(chainId: ChainId, blockNumb
  * @param keyword
  */
 export async function fetchTokensByKeyword(chainId: ChainId, keyword: string) {
-    if (!chainId) return []
+    if (!isValidChainId(chainId)) return []
     // thegraph does not support case-insensitive searching
     // so cased keywords will be added too
     const listOfKeywords = [keyword, keyword.toLowerCase(), keyword.toUpperCase()]

@@ -1,5 +1,5 @@
 import { useAsync } from 'react-use'
-import { useChainContext } from '@masknet/web3-hooks-base'
+import { useChainContext, useWeb3State } from '@masknet/web3-hooks-base'
 import { getMaskColor, LoadingBase, makeStyles } from '@masknet/theme'
 import { Grid, Typography, Box, Button } from '@mui/material'
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
@@ -125,13 +125,17 @@ export function CreatedFarms(props: PageInterface) {
     const { classes } = useStyles()
     const { account, chainId: currentChainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const requiredChainId = getRequiredChainId(currentChainId)
+    const { Others } = useWeb3State()
 
     const {
         value: farms = EMPTY_LIST,
         loading,
         error,
     } = useAsync(
-        async () => (account && currentChainId ? ReferralRPC.getAccountFarms(account, currentChainId) : []),
+        async () =>
+            account && Others?.chainResolver.isValid(currentChainId)
+                ? ReferralRPC.getAccountFarms(account, currentChainId)
+                : [],
         [currentChainId, account],
     )
 

@@ -11,7 +11,7 @@ import {
     NonFungibleTokenEvent,
     Pageable,
 } from '@masknet/web3-shared-base'
-import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import { ChainId, SchemaType, isValidChainId } from '@masknet/web3-shared-evm'
 import type { NonFungibleTokenAPI } from '../../types/index.js'
 import { EVM, PageableResponse, Response } from '../types/index.js'
 import {
@@ -25,7 +25,7 @@ import {
 
 export class NFTScanNonFungibleTokenAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
     async getAsset(address: string, tokenId: string, { chainId = ChainId.Mainnet }: HubOptions<ChainId> = {}) {
-        if (!chainId) return
+        if (!isValidChainId(chainId)) return
         const path = urlcat('/api/v2/assets/:address/:token_id', {
             address,
             contract_address: address,
@@ -38,7 +38,7 @@ export class NFTScanNonFungibleTokenAPI_EVM implements NonFungibleTokenAPI.Provi
     }
 
     async getAssets(account: string, { chainId = ChainId.Mainnet, indicator, size = 20 }: HubOptions<ChainId> = {}) {
-        if (!chainId) return createPageable(EMPTY_LIST, createIndicator(indicator))
+        if (!isValidChainId(chainId)) return createPageable(EMPTY_LIST, createIndicator(indicator))
         const path = urlcat('/api/v2/account/own/all/:from', {
             from: account,
             erc_type: EVM.ErcType.ERC721,
@@ -53,7 +53,7 @@ export class NFTScanNonFungibleTokenAPI_EVM implements NonFungibleTokenAPI.Provi
         address: string,
         { chainId = ChainId.Mainnet, indicator, size = 20 }: HubOptions<ChainId> = {},
     ) {
-        if (!chainId) return createPageable(EMPTY_LIST, createIndicator(indicator))
+        if (!isValidChainId(chainId)) return createPageable(EMPTY_LIST, createIndicator(indicator))
         const path = urlcat('/api/v2/assets/:address', {
             address,
             contract_address: address,
@@ -74,7 +74,7 @@ export class NFTScanNonFungibleTokenAPI_EVM implements NonFungibleTokenAPI.Provi
         account: string,
         { chainId = ChainId.Mainnet, indicator }: HubOptions<ChainId, HubIndicator> = {},
     ): Promise<Pageable<NonFungibleCollection<ChainId, SchemaType>, HubIndicator>> {
-        if (!chainId) return createPageable(EMPTY_LIST, createIndicator(indicator))
+        if (!isValidChainId(chainId)) return createPageable(EMPTY_LIST, createIndicator(indicator))
         const path = urlcat('/api/v2/account/own/all/:from', {
             from: account,
             erc_type: EVM.ErcType.ERC721,
@@ -89,7 +89,7 @@ export class NFTScanNonFungibleTokenAPI_EVM implements NonFungibleTokenAPI.Provi
         keyword: string,
         { chainId = ChainId.Mainnet, indicator, size = 20 }: HubOptions<ChainId, HubIndicator> = {},
     ): Promise<Pageable<NonFungibleCollection<ChainId, SchemaType>, HubIndicator>> {
-        if (!chainId) return createPageable(EMPTY_LIST, createIndicator(indicator))
+        if (!isValidChainId(chainId)) return createPageable(EMPTY_LIST, createIndicator(indicator))
         const path = '/api/v2/collections/filters'
         const response = await fetchFromNFTScanV2<Response<EVM.Collection[]>>(chainId, path, {
             method: 'POST',
@@ -110,7 +110,7 @@ export class NFTScanNonFungibleTokenAPI_EVM implements NonFungibleTokenAPI.Provi
         address: string,
         { chainId = ChainId.Mainnet }: HubOptions<ChainId, HubIndicator> = {},
     ): Promise<NonFungibleCollection<ChainId, SchemaType> | undefined> {
-        if (!chainId) return
+        if (!isValidChainId(chainId)) return
         const path = urlcat('/v2/collections/:address', {
             address,
             contract_address: address,
@@ -137,7 +137,7 @@ export class NFTScanNonFungibleTokenAPI_EVM implements NonFungibleTokenAPI.Provi
         tokenId: string,
         { chainId = ChainId.Mainnet, indicator, size = 20 }: HubOptions<ChainId, HubIndicator> = {},
     ): Promise<Pageable<NonFungibleTokenEvent<ChainId, SchemaType>>> {
-        if (!chainId) return createPageable(EMPTY_LIST, createIndicator(indicator))
+        if (!isValidChainId(chainId)) return createPageable(EMPTY_LIST, createIndicator(indicator))
         const path = urlcat('/api/v2/transactions/:address/:tokenId', {
             address,
             tokenId,

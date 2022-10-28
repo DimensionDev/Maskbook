@@ -73,7 +73,7 @@ export class ConnectionState<
             providerType?: Subscription<ProviderType>
         },
         protected options: {
-            isValidChainId(chainId: ChainId): boolean
+            isValidChainId(chainId?: ChainId): boolean
             getDefaultChainId(): ChainId
             getDefaultProviderType(): ProviderType
         },

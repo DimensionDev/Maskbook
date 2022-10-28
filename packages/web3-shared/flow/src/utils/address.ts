@@ -29,7 +29,7 @@ export function isValidAddress(address: string) {
     return isValidAccountAddress(address) || isValidContractAddress(address)
 }
 
-export function isValidChainId(chainId: ChainId) {
+export function isValidChainId(chainId?: ChainId) {
     return getEnumAsArray(ChainId).some((x) => x.value === chainId)
 }
 
