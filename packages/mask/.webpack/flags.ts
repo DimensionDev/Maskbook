@@ -34,7 +34,10 @@ export function normalizeBuildFlags(flags: BuildFlags): NormalizedFlags {
     // React Devtools integration is not supported in Firefox or App yet.
     if (engine !== 'chromium' || architecture === 'app') devtools = false
 
-    if (mode === 'production') hmr = false
+    if (mode === 'production') {
+        hmr = false
+        sourceMapPreference = false
+    }
     if (!hmr) reactRefresh = false
 
     return {
