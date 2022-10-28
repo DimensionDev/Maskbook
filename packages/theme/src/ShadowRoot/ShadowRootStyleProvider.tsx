@@ -2,11 +2,13 @@ import createEmotionCache, { type EmotionCache } from '@emotion/cache'
 import { CacheProvider as EmotionCacheProvider } from '@emotion/react'
 import { TssCacheProvider } from 'tss-react'
 import { StyleSheet } from './ShadowRootStyleSheet.js'
-import { StyleSheetsContext } from './Contexts.js'
+import { PreventShadowRootEventPropagationListContext, stopPropagation, StyleSheetsContext } from './Contexts.js'
+import { useContext, useEffect } from 'react'
 
 /** @internal */
 export interface ShadowRootStyleProviderProps extends React.PropsWithChildren<{}> {
     shadow: ShadowRoot
+    preventPropagation: boolean
 }
 /**
  * @internal
@@ -19,6 +21,14 @@ export interface ShadowRootStyleProviderProps extends React.PropsWithChildren<{}
 export function ShadowRootStyleProvider(props: ShadowRootStyleProviderProps) {
     const { shadow, children } = props
     const [mui, tss, sheets] = getShadowRootEmotionCache(shadow)
+
+    const preventEventPropagationList = useContext(PreventShadowRootEventPropagationListContext)
+    useEffect(() => {
+        if (!props.preventPropagation) return
+        preventEventPropagationList.forEach((event) => shadow.addEventListener(event, stopPropagation))
+        return () => preventEventPropagationList.forEach((event) => shadow.removeEventListener(event, stopPropagation))
+    }, [props.preventPropagation, preventEventPropagationList, shadow])
+
     return (
         <StyleSheetsContext.Provider value={sheets}>
             <EmotionCacheProvider value={mui}>

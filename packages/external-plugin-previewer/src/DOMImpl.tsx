@@ -3,9 +3,7 @@ import { attachReactTreeToMountedRoot_noHost, ReactRootShadowed } from '@masknet
 import * as Components from './Components/index.js'
 import { RenderContext } from './RenderContext.js'
 
-const createReactRootShadowed = attachReactTreeToMountedRoot_noHost({
-    preventEventPropagationList: [],
-})
+const createReactRootShadowed = attachReactTreeToMountedRoot_noHost()
 setDOMImpl({
     Node,
     document: new Proxy(document, {

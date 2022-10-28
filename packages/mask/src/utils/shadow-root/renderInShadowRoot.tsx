@@ -1,11 +1,16 @@
+import { ErrorBoundary } from '@masknet/shared-base-ui'
 import {
     attachReactTreeToMountedRoot_noHost,
     setupReactShadowRootEnvironment as setupReactShadowRootEnvironmentUpper,
     CSSVariableInjector,
+    MaskThemeProvider,
     usePortalShadowRoot,
 } from '@masknet/theme'
+import { Suspense } from 'react'
+import { isFacebook } from '../../social-network-adaptor/facebook.com/base.js'
+import { activatedSocialNetworkUI } from '../../social-network/ui.js'
 import { createPortal } from 'react-dom'
-import { MaskUIRoot } from '../../UIRoot.js'
+import { MaskUIRoot, useMaskIconPalette } from '../../UIRoot.js'
 import { useClassicMaskSNSTheme } from '../theme/index.js'
 
 const captureEvents: Array<keyof HTMLElementEventMap> = [
@@ -22,35 +27,32 @@ const captureEvents: Array<keyof HTMLElementEventMap> = [
     'change',
 ]
 export function setupReactShadowRootEnvironment() {
-    const shadow = setupReactShadowRootEnvironmentUpper({ mode: process.env.shadowRootMode })
-    attachReactTreeToGlobalContainer_inner(shadow, { key: 'css-vars' }).render(<CSSVariableInjector />)
+    const shadow = setupReactShadowRootEnvironmentUpper(
+        { mode: process.env.shadowRootMode },
+        captureEvents,
+        (children) => MaskUIRoot('sns', useClassicMaskSNSTheme, children),
+    )
+    attachReactTreeToGlobalContainer(shadow, { key: 'css-vars' }).render(<CSSVariableInjector />)
 }
 
-// https://github.com/DimensionDev/Maskbook/issues/3265 with fast refresh or import order?
-const attachReactTreeToGlobalContainer_inner = attachReactTreeToMountedRoot_noHost({
-    preventEventPropagationList: captureEvents,
-    wrapJSX(jsx) {
-        return (
-            <MaskUIRoot useTheme={useClassicMaskSNSTheme} kind="sns">
-                <CSSVariableInjector />
-                {jsx}
-            </MaskUIRoot>
-        )
-    },
+export const attachReactTreeToGlobalContainer = attachReactTreeToMountedRoot_noHost((children) => {
+    return (
+        <Suspense>
+            <ErrorBoundary>
+                <MaskThemeProvider
+                    useMaskIconPalette={useMaskIconPalette}
+                    CustomSnackbarOffsetY={isFacebook(activatedSocialNetworkUI) ? 80 : undefined}
+                    useTheme={useClassicMaskSNSTheme}>
+                    <CSSVariableInjector />
+                    {children}
+                </MaskThemeProvider>
+            </ErrorBoundary>
+        </Suspense>
+    )
 })
 
 /** @deprecated Renamed to attachReactTreeToGlobalContainer */
-export function createReactRootShadowed(...args: Parameters<typeof attachReactTreeToGlobalContainer_inner>) {
-    // @ts-expect-error
-    createReactRootShadowed = attachReactTreeToGlobalContainer_inner
-    return attachReactTreeToGlobalContainer_inner(...args)
-}
-
-export function attachReactTreeToGlobalContainer(...args: Parameters<typeof attachReactTreeToGlobalContainer_inner>) {
-    // @ts-expect-error
-    attachReactTreeToGlobalContainer = attachReactTreeToGlobalContainer_inner
-    return attachReactTreeToGlobalContainer_inner(...args)
-}
+export const createReactRootShadowed = attachReactTreeToGlobalContainer
 
 function AttachReactTreeWithoutContainerRedirect(props: React.PropsWithChildren<{ debugKey: string }>) {
     // Note: since it is the direct children of attachReactTreeWithoutContainer, it MUST inside a ShadowRoot environment.
@@ -66,7 +68,7 @@ export function attachReactTreeWithoutContainer(debugKey: string, jsx: React.Rea
     const dom = document.createElement('main')
     const shadow = dom.attachShadow({ mode: 'closed' })
 
-    attachReactTreeToGlobalContainer_inner(shadow, { signal, key: debugKey }).render(
+    attachReactTreeToGlobalContainer(shadow, { signal, key: debugKey }).render(
         <AttachReactTreeWithoutContainerRedirect children={jsx} debugKey={debugKey} />,
     )
 }
