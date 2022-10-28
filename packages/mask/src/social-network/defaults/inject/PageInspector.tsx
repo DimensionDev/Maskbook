@@ -1,7 +1,7 @@
 import { memo } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { PageInspector, PageInspectorProps } from '../../../components/InjectedComponents/PageInspector.js'
-import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot.js'
+import { attachReactTreeWithoutContainer } from '../../../utils/shadow-root/renderInShadowRoot.js'
 
 export interface InjectPageInspectorDefaultConfig {}
 
@@ -19,10 +19,6 @@ export function injectPageInspectorDefault<T extends string>(
     })
 
     return function injectPageInspector(signal: AbortSignal) {
-        const dom = document.body
-            .appendChild(document.createElement('div'))
-            .attachShadow({ mode: process.env.shadowRootMode })
-
-        createReactRootShadowed(dom, { signal, key: 'page-inspector' }).render(<PageInspectorDefault />)
+        attachReactTreeWithoutContainer('page-inspector', <PageInspectorDefault />, signal)
     }
 }

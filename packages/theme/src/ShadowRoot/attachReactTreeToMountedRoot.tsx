@@ -38,20 +38,13 @@ export function attachReactTreeToMountedRoot_noHost(hostConfig: AttachInShadowRo
         options: AttachInShadowRootOptions = {},
     ): ReactRootShadowed {
         let jsx: React.ReactNode = ''
-        let root: ReactRootShadowed | null = null
-        function tryRender(): void {
-            if (options.signal?.aborted) return
-            if (shadowRoot.host?.parentNode === null) return void setTimeout(tryRender, 20)
-
-            root = attach(jsx, shadowRoot, options, hostConfig)
-        }
-        tryRender()
+        const root: ReactRootShadowed = attach(jsx, shadowRoot, options, hostConfig)
         return {
             render: (_jsx) => {
                 if (!root) jsx = _jsx
                 else root.render(_jsx)
             },
-            destroy: () => root?.destroy(),
+            destroy: () => root.destroy(),
         }
     }
 }
