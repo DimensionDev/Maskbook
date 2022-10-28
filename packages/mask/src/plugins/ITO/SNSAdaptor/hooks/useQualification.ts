@@ -11,5 +11,5 @@ export function useQualification(qualification_address: string, ito_address: str
         if (!qualificationContract) return null
         const startTime = await qualificationContract.methods.get_start_time().call({ from: account })
         return Number(startTime) * 1000
-    }, [account, qualificationContract, chainId])
+    }, [account, qualificationContract])
 }
