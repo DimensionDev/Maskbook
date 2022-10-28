@@ -3,16 +3,16 @@ import { MaskPostExtraPluginWrapper, useSharedI18N } from '@masknet/shared'
 import { Typography, useTheme } from '@mui/material'
 import { forwardRef, memo, PropsWithChildren, ReactElement, useImperativeHandle, useMemo, useState } from 'react'
 import type { AsyncState } from 'react-use/lib/useAsyncFn.js'
-import { useCheckPermissions, useGrantPermissions } from '../../components/DataSource/usePluginHostPermission.js'
-import { PossiblePluginSuggestionUISingle } from '../../components/InjectedComponents/DisabledPluginSuggestion.js'
-export interface PermissionBoundaryProps extends PropsWithChildren<{}> {
+import { useCheckPermissions, useGrantPermissions } from '../DataSource/usePluginHostPermission.js'
+import { PossiblePluginSuggestionUISingle } from './DisabledPluginSuggestion.js'
+interface PermissionBoundaryProps extends PropsWithChildren<{}> {
     permissions: string[]
     fallback?:
         | ReactElement
         | ((grantState: AsyncState<boolean>, onGrantPermissions: () => Promise<boolean | undefined>) => ReactElement)
 }
 
-export const PermissionBoundary = memo<PermissionBoundaryProps>(({ permissions, fallback, children }) => {
+const PermissionBoundary = memo<PermissionBoundaryProps>(({ permissions, fallback, children }) => {
     const { value: hasPermissions = true } = useCheckPermissions(permissions)
 
     const [grantState, onGrant] = useGrantPermissions(permissions)
