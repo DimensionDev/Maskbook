@@ -11,6 +11,7 @@ import {
     ChainBoundary,
     WalletConnectedBoundary,
     DateTimePanel,
+    EthereumERC20TokenApprovedBoundary,
 } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { Box, Stack, Typography, InputBase, inputBaseClasses } from '@mui/material'
@@ -23,7 +24,6 @@ import {
     useLastRecognizedIdentity,
 } from '../../../components/DataSource/useActivatedUI.js'
 import { sliceTextByUILength, useI18N } from '../../../utils/index.js'
-import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary.js'
 import type { ExchangeTokenAndAmountState } from './hooks/useExchangeTokenAmountstate.js'
 import type { PoolSettings } from './hooks/useFill.js'
 import { useQualificationVerify } from './hooks/useQualificationVerify.js'

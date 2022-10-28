@@ -19,12 +19,12 @@ import {
     PluginWalletStatusBar,
     ChainBoundary,
     WalletConnectedBoundary,
+    EthereumERC20TokenApprovedBoundary,
 } from '@masknet/shared'
 import { useFungibleToken, useFungibleTokenBalance, useChainContext } from '@masknet/web3-hooks-base'
 import { useCurrentIdentity, useCurrentLinkedPersona } from '../../../components/DataSource/useActivatedUI.js'
 import { useI18N } from '../locales/index.js'
 import { useI18N as useBaseI18n } from '../../../utils/index.js'
-import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary.js'
 import { RED_PACKET_DEFAULT_SHARES, RED_PACKET_MAX_SHARES, RED_PACKET_MIN_SHARES } from '../constants.js'
 import type { RedPacketSettings } from './hooks/useCreateCallback.js'
 

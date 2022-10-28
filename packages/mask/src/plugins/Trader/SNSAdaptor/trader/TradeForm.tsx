@@ -8,6 +8,7 @@ import {
     useSelectAdvancedSettings,
     useTokenSecurity,
     WalletConnectedBoundary,
+    EthereumERC20TokenApprovedBoundary,
 } from '@masknet/shared'
 import { makeStyles, MaskColorVar, useStylesExtends, ActionButton } from '@masknet/theme'
 import { InputTokenPanel } from './InputTokenPanel.js'
@@ -24,7 +25,6 @@ import { isNativeTokenWrapper } from '../../helpers/index.js'
 import { DefaultTraderPlaceholder, TraderInfo } from './TraderInfo.js'
 import { MINIMUM_AMOUNT, MIN_GAS_LIMIT } from '../../constants/index.js'
 import { resolveTradeProviderName } from '../../pipes.js'
-import { EthereumERC20TokenApprovedBoundary } from '../../../../web3/UI/EthereumERC20TokenApprovedBoundary.js'
 import { useTradeApproveComputed } from '../../trader/useTradeApproveComputed.js'
 import { isDashboardPage, isPopupPage, PopupRoutes, PluginID, NetworkPluginID } from '@masknet/shared-base'
 import { useChainContext } from '@masknet/web3-hooks-base'

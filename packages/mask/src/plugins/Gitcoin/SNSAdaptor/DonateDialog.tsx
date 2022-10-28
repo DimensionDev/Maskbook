@@ -6,6 +6,7 @@ import {
     FungibleTokenInput,
     PluginWalletStatusBar,
     WalletConnectedBoundary,
+    EthereumERC20TokenApprovedBoundary,
 } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles, useStylesExtends, ActionButton } from '@masknet/theme'
@@ -18,7 +19,6 @@ import { activatedSocialNetworkUI } from '../../../social-network/index.js'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base.js'
 import { Translate, useI18N } from '../locales/index.js'
 import { useI18N as useBaseI18N } from '../../../utils/index.js'
-import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary.js'
 import { useDonateCallback } from '../hooks/useDonateCallback.js'
 import { PluginGitcoinMessages } from '../messages.js'
 

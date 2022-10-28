@@ -5,9 +5,13 @@ import { useCallback, useState } from 'react'
 import { SchemaType, formatEthereumAddress, explorerResolver, useITOConstants, ChainId } from '@masknet/web3-shared-evm'
 import { Link, Typography } from '@mui/material'
 import { Trans } from 'react-i18next'
-import { useSelectFungibleToken, FungibleTokenInput, WalletConnectedBoundary } from '@masknet/shared'
+import {
+    useSelectFungibleToken,
+    FungibleTokenInput,
+    WalletConnectedBoundary,
+    EthereumERC20TokenApprovedBoundary,
+} from '@masknet/shared'
 import { useI18N } from '../../../utils/index.js'
-import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary.js'
 import { useChainContext, useFungibleTokenBalance } from '@masknet/web3-hooks-base'
 
 function isMoreThanMillion(allowance: string, decimals: number) {

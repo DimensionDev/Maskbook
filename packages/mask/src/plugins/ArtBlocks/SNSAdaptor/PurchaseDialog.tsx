@@ -6,6 +6,7 @@ import {
     useOpenShareTxDialog,
     useShowConfirm,
     WalletConnectedBoundary,
+    EthereumERC20TokenApprovedBoundary,
 } from '@masknet/shared'
 import { makeStyles, ActionButton } from '@masknet/theme'
 import { FungibleToken, leftShift } from '@masknet/web3-shared-base'
@@ -27,7 +28,6 @@ import { activatedSocialNetworkUI } from '../../../social-network/index.js'
 import { isFacebook } from '../../../social-network-adaptor/facebook.com/base.js'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base.js'
 import { useI18N } from '../../../utils/index.js'
-import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary.js'
 import { usePurchaseCallback } from '../hooks/usePurchaseCallback.js'
 import type { Project } from '../types.js'
 
