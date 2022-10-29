@@ -26,6 +26,7 @@ import {
     ChainbaseFungibleToken,
     ChainbaseNonFungibleToken,
     ZerionNonFungibleToken,
+    X2Y2,
 } from '@masknet/web3-providers'
 import { SourceType, HubOptions, Pageable, CurrencyType, Transaction } from '@masknet/web3-shared-base'
 import { ChainId, chainResolver, SchemaType } from '@masknet/web3-shared-evm'
@@ -97,6 +98,7 @@ class HubNonFungibleClient extends HubStateNonFungibleClient<ChainId, SchemaType
             | TokenListAPI.Provider<ChainId, SchemaType>
         >(
             {
+                [SourceType.X2Y2]: X2Y2,
                 [SourceType.Chainbase]: ChainbaseNonFungibleToken,
                 [SourceType.Zerion]: ZerionNonFungibleToken,
                 [SourceType.NFTScan]: NFTScanNonFungibleTokenEVM,
@@ -111,6 +113,7 @@ class HubNonFungibleClient extends HubStateNonFungibleClient<ChainId, SchemaType
             },
             options.chainId === ChainId.Mainnet
                 ? [
+                      X2Y2,
                       NFTScanNonFungibleTokenEVM,
                       ZerionNonFungibleToken,
                       Rarible,
