@@ -117,7 +117,12 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
         let page = 1
         do {
             const personaBindings = await this.queryExistedBindingByPlatform(platform, identity, page)
-            if (personaBindings.length === 0) return nextIDPersonaBindings
+            if (personaBindings.length === 0)
+                return nextIDPersonaBindings.filter((x) =>
+                    x.proofs.some(
+                        (y) => y.platform === platform && y.identity.toLowerCase() === identity.toLowerCase(),
+                    ),
+                )
             nextIDPersonaBindings.push(...personaBindings)
             page += 1
         } while (page > 1)
@@ -129,7 +134,6 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
 
         const url = getExistedBindingQueryURL(platform, identity, personaPublicKey)
         const result = await fetchJSON<BindingProof>(url, {}, enableCache)
-
         return result.map(() => true).unwrapOr(false)
     }
 
