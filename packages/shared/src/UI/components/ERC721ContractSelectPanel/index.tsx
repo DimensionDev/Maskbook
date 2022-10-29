@@ -1,14 +1,14 @@
 import { useCallback } from 'react'
-import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import classNames from 'classnames'
+import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { Box, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import { SelectNftContractDialogEvent, WalletMessages } from '@masknet/plugin-wallet'
-import { useSharedI18N } from '../../../locales/index.js'
 import type { NonFungibleTokenContract } from '@masknet/web3-shared-base'
 import { useWeb3State } from '@masknet/web3-hooks-base'
+import { useSharedI18N } from '../../../locales/index.js'
 
 interface StyleProps {
     hasIcon: boolean
