@@ -7,8 +7,7 @@ import { useI18N } from '../locales/index.js'
 import type { DepositDialogInterface } from '../types.js'
 import { roundValue } from '../helpers/index.js'
 
-import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary.js'
-import { ChainBoundary } from '@masknet/shared'
+import { WalletConnectedBoundary, ChainBoundary } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
