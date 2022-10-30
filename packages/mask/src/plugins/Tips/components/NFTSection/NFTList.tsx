@@ -2,7 +2,7 @@ import { FC, useCallback } from 'react'
 import classnames from 'classnames'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { ElementAnchor, NFTCardStyledAssetPlayer, RetryHint } from '@masknet/shared'
+import { ElementAnchor, AssetPreviewer, RetryHint } from '@masknet/shared'
 import { useChainContext, useWeb3State, useNetworkContext } from '@masknet/web3-hooks-base'
 import { isSameAddress, NonFungibleToken } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
@@ -100,16 +100,10 @@ export const NFTItem: FC<NFTItemProps> = ({ token }) => {
     const { classes } = useStyles()
     const { chainId } = useChainContext()
     return (
-        <NFTCardStyledAssetPlayer
-            chainId={chainId}
-            contractAddress={token.contract?.address}
+        <AssetPreviewer
             url={token.metadata?.imageURL ?? token.metadata?.mediaURL}
-            tokenId={token.tokenId}
             classes={{
                 fallbackImage: classes.fallbackImage,
-                iframe: classes.assetPlayerIframe,
-                wrapper: classes.wrapper,
-                imgWrapper: classes.imgWrapper,
             }}
         />
     )

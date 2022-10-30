@@ -2,7 +2,7 @@ import { HTMLProps, memo } from 'react'
 import classnames from 'classnames'
 import formatDateTime from 'date-fns/format'
 import { useReverseAddress, useWeb3State } from '@masknet/web3-hooks-base'
-import { NFTCardStyledAssetPlayer } from '@masknet/shared'
+import { AssetPreviewer } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import type { RSS3BaseAPI } from '@masknet/web3-providers'
 import type { SocialAccount } from '@masknet/web3-shared-base'
@@ -84,12 +84,10 @@ export const DonationCard = memo(({ donation, socialAccount, onSelect, className
     return (
         <div onClick={() => onSelect(donation)} className={classnames(classes.card, className)} {...rest}>
             <Card className={classes.img}>
-                <NFTCardStyledAssetPlayer
+                <AssetPreviewer
                     url={action.metadata?.logo || RSS3_DEFAULT_IMAGE}
                     classes={{
                         fallbackImage: classes.fallbackImage,
-                        wrapper: classes.img,
-                        iframe: classes.img,
                     }}
                 />
             </Card>

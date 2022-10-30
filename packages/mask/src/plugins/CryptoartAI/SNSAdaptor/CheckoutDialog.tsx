@@ -3,7 +3,7 @@ import BigNumber from 'bignumber.js'
 import { first } from 'lodash-unified'
 import {
     InjectedDialog,
-    NFTCardStyledAssetPlayer,
+    AssetPreviewer,
     useOpenShareTxDialog,
     PluginWalletStatusBar,
     WalletConnectedBoundary,
@@ -133,7 +133,7 @@ export function CheckoutDialog(props: CheckoutDialogProps) {
                         <Box className={classes.mediaContent}>
                             {asset?.value?.ossUrl.match(/\.(mp4|avi|webm)$/i) ? (
                                 <Link href={asset.value.ossUrl} target="_blank" rel="noopener noreferrer">
-                                    <NFTCardStyledAssetPlayer url={asset.value.ossUrl || asset.value.shareUrl} />
+                                    <AssetPreviewer url={asset.value.ossUrl || asset.value.shareUrl} />
                                 </Link>
                             ) : (
                                 <img

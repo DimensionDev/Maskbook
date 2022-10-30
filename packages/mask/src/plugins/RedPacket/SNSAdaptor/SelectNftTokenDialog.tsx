@@ -1,5 +1,8 @@
+import { useCallback, useState, useEffect } from 'react'
+import { useUpdate } from 'react-use'
+import { findLastIndex, uniq } from 'lodash-unified'
 import classNames from 'classnames'
-import { NFTCardStyledAssetPlayer } from '@masknet/shared'
+import { AssetPreviewer } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { isSameAddress, NonFungibleToken, NonFungibleTokenContract } from '@masknet/web3-shared-base'
 import { SchemaType, formatTokenId, ChainId } from '@masknet/web3-shared-evm'
@@ -8,11 +11,8 @@ import { Translate, useI18N } from '../locales/index.js'
 import { DialogContent, Box, InputBase, Button, Typography, ListItem, useTheme } from '@mui/material'
 import QuestionMarkIcon from '@mui/icons-material/QuestionMark'
 import { LoadingBase, makeStyles, ShadowRootTooltip } from '@masknet/theme'
-import { useCallback, useState, useEffect } from 'react'
 import { Icons } from '@masknet/icons'
 import CheckIcon from '@mui/icons-material/Check'
-import { useUpdate } from 'react-use'
-import { findLastIndex, uniq } from 'lodash-unified'
 import { NFT_RED_PACKET_MAX_SHARES } from '../constants.js'
 import { useChainContext, useWeb3Connection } from '@masknet/web3-hooks-base'
 
@@ -654,16 +654,10 @@ function NFTCard(props: NFTCardProps) {
     const { classes } = useStyles({ isSelectSharesExceed })
     return (
         <ListItem className={classes.selectWrapper}>
-            <NFTCardStyledAssetPlayer
+            <AssetPreviewer
                 url={token.metadata?.mediaURL || token.metadata?.imageURL}
-                contractAddress={token.contract?.address}
-                tokenId={token.tokenId}
-                renderOrder={renderOrder}
-                chainId={token.contract?.chainId}
                 classes={{
                     fallbackImage: classes.fallbackImage,
-                    iframe: classes.iframe,
-                    imgWrapper: classes.assetImgWrapper,
                 }}
             />
             <div className={classes.selectWrapperNftNameWrapper}>
