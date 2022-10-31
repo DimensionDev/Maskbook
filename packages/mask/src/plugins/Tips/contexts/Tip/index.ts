@@ -1,4 +1,4 @@
 export * from './TipContext.js'
 export * from './TipTaskProvider.js'
 export * from './useTipValidate.js'
-export * from './useRecipientValidate'
+export * from './useRecipientValidate.js'

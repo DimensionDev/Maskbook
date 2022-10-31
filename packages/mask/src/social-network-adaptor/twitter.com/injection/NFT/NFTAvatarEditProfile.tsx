@@ -6,7 +6,7 @@ import { startWatch, createReactRootShadowed, useLocationChange } from '../../..
 import { searchEditProfileSelector } from '../../utils/selector.js'
 import { ConnectPersonaBoundary } from '../../../../components/shared/ConnectPersonaBoundary.js'
 import { PluginID, CrossIsolationMessages } from '@masknet/shared-base'
-import { injectOpenNFTAvatarEditProfileButtonAtEditProfileDialog } from './NFTAvatarEditProfileDialog'
+import { injectOpenNFTAvatarEditProfileButtonAtEditProfileDialog } from './NFTAvatarEditProfileDialog.js'
 
 export function injectOpenNFTAvatarEditProfileButton(signal: AbortSignal) {
     injectOpenNFTAvatarEditProfileButtonAtProfilePage(signal)

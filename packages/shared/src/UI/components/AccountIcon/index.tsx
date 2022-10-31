@@ -3,7 +3,7 @@ import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { resolveSocialAddressLink, SocialAccount, SocialAddressType } from '@masknet/web3-shared-base'
 import { TooltipProps, Typography } from '@mui/material'
 import { Linking } from '../../../index.js'
-import { useSharedI18N } from '../../../locales'
+import { useSharedI18N } from '../../../locales/index.js'
 
 const useStyles = makeStyles<void, 'icon' | 'tooltip'>()((theme) => {
     return {

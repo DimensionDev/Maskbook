@@ -6,17 +6,17 @@ import {
     ProfileIdentifier,
     resolveNextIDIdentityToProfile,
 } from '@masknet/shared-base'
-import { currentSetupGuideStatus, userPinExtension } from '../../../../shared/legacy-settings/settings'
+import { currentSetupGuideStatus, userPinExtension } from '../../../../shared/legacy-settings/settings.js'
 import { useValueRef } from '@masknet/shared-base-ui'
-import { activatedSocialNetworkUI } from '../../../social-network'
-import { SetupGuideContext, SetupGuideStep } from '../../../../shared/legacy-settings/types'
+import { activatedSocialNetworkUI } from '../../../social-network/index.js'
+import { SetupGuideContext, SetupGuideStep } from '../../../../shared/legacy-settings/types.js'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useAsyncRetry } from 'react-use'
 import { NextIDProof } from '@masknet/web3-providers'
-import Services from '../../../extension/service'
-import { useLastRecognizedIdentity } from '../../DataSource/useActivatedUI'
+import Services from '../../../extension/service.js'
+import { useLastRecognizedIdentity } from '../../DataSource/useActivatedUI.js'
 import type { IdentityResolved } from '@masknet/plugin-infra'
-import { MaskMessages } from '../../../../shared'
+import { MaskMessages } from '../../../../shared/index.js'
 
 export const useSetupGuideStepInfo = (destinedPersona: PersonaIdentifier) => {
     const ui = activatedSocialNetworkUI

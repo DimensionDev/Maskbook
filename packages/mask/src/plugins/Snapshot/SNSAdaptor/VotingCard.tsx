@@ -13,9 +13,9 @@ import { usePower } from './hooks/usePower.js'
 import { VoteConfirmDialog } from './VoteConfirmDialog.js'
 import { useRetry } from './hooks/useRetry.js'
 import { SnapshotContext } from '../context.js'
-import { SNAPSHOT_VOTE_DOMAIN } from '../constants'
+import { SNAPSHOT_VOTE_DOMAIN } from '../constants.js'
 import { getSnapshotVoteType } from '../utils.js'
-import { PluginSnapshotRPC } from '../messages'
+import { PluginSnapshotRPC } from '../messages.js'
 
 const useStyles = makeStyles()((theme) => {
     return {

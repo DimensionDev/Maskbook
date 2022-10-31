@@ -6,7 +6,7 @@ import { SourceType } from '@masknet/web3-shared-base'
 import { Box, Button, DialogActions, DialogContent, Typography } from '@mui/material'
 import type { FC, PropsWithChildren } from 'react'
 import { CollectibleCard } from '../../../../extension/options-page/DashboardComponents/CollectibleList/CollectibleCard.js'
-import type { TipContextOptions } from '../../contexts'
+import type { TipContextOptions } from '../../contexts/index.js'
 import { useI18N } from '../../locales/index.js'
 import { TipsType } from '../../types/tip.js'
 

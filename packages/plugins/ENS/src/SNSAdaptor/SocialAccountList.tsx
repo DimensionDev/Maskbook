@@ -5,9 +5,9 @@ import { Icons } from '@masknet/icons'
 import { Box, Typography, MenuItem } from '@mui/material'
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
 import { openWindow } from '@masknet/shared-base-ui'
-import { NextIdBadge } from './NextIdBadge'
+import { NextIdBadge } from './NextIdBadge.js'
 import type { BindingProof } from '@masknet/shared-base'
-import { useI18N } from '../locales'
+import { useI18N } from '../locales/index.js'
 import { makeStyles } from '@masknet/theme'
 
 interface StyleProps {

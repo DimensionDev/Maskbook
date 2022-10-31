@@ -6,7 +6,7 @@ import { makeStyles } from '@masknet/theme'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { formatCurrency } from '@masknet/web3-shared-base'
 import { Typography } from '@mui/material'
-import { useTip } from '../../contexts'
+import { useTip } from '../../contexts/index.js'
 
 const useStyles = makeStyles<void, 'tokenIcon'>()((theme, _, ref) => ({
     container: {
