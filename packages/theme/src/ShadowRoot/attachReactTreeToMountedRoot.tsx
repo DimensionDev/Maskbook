@@ -1,8 +1,7 @@
 import { createPortal } from 'react-dom'
 import { noop } from 'lodash-unified'
 import { ShadowRootStyleProvider } from './ShadowRootStyleProvider.js'
-import { PreventShadowRootEventPropagationListContext, stopPropagation } from './Contexts.js'
-import { shadowEnvironmentMountingRoots } from './ShadowRootSetup.js'
+import { shadowEnvironmentMountingRoots, WrapJSX } from './ShadowRootSetup.js'
 
 export interface AttachInShadowRootOptions {
     /** Root tag. @default "main" */
@@ -11,15 +10,6 @@ export interface AttachInShadowRootOptions {
     key?: string
     /** The AbortSignal to stop the render */
     signal?: AbortSignal
-}
-export interface AttachInShadowRootHostConfig {
-    /**
-     * A list of event that want to prevent to pop out to the ShadowRoot
-     *
-     * ! This is not a security boundary !
-     */
-    preventEventPropagationList: Array<keyof HTMLElementEventMap>
-    wrapJSX?(jsx: React.ReactNode): React.ReactNode
 }
 export interface ReactRootShadowed {
     render(jsx: React.ReactNode): void
@@ -32,26 +22,19 @@ export interface ReactRootShadowed {
  *
  * This function should be only call once for each config.key.
  */
-export function attachReactTreeToMountedRoot_noHost(hostConfig: AttachInShadowRootHostConfig) {
+export function attachReactTreeToMountedRoot_noHost(wrapJSX?: WrapJSX) {
     return function attachReactTreeToMountedRoot(
         shadowRoot: ShadowRoot,
         options: AttachInShadowRootOptions = {},
     ): ReactRootShadowed {
         let jsx: React.ReactNode = ''
-        let root: ReactRootShadowed | null = null
-        function tryRender(): void {
-            if (options.signal?.aborted) return
-            if (shadowRoot.host?.parentNode === null) return void setTimeout(tryRender, 20)
-
-            root = attach(jsx, shadowRoot, options, hostConfig)
-        }
-        tryRender()
+        const root: ReactRootShadowed = attach(jsx, shadowRoot, options, wrapJSX)
         return {
             render: (_jsx) => {
                 if (!root) jsx = _jsx
                 else root.render(_jsx)
             },
-            destroy: () => root?.destroy(),
+            destroy: () => root.destroy(),
         }
     }
 }
@@ -60,7 +43,7 @@ function attach(
     jsx: React.ReactNode,
     shadow: ShadowRoot,
     options: AttachInShadowRootOptions,
-    { preventEventPropagationList, wrapJSX }: AttachInShadowRootHostConfig,
+    wrapJSX: WrapJSX,
 ): ReactRootShadowed {
     const tag = options.tag || 'main'
     const key = options.key || 'main'
@@ -72,8 +55,6 @@ function attach(
         }
     }
 
-    jsx = getJSX(jsx)
-
     const container = shadow.appendChild(document.createElement(tag))
     const instanceKey = `${key}(${Math.random().toString(36).slice(2)})`
     container.className = key
@@ -81,12 +62,7 @@ function attach(
     const controller = new AbortController()
     const signal = controller.signal
 
-    // prevent event popup
-    for (const each of preventEventPropagationList) {
-        container.addEventListener(each, stopPropagation, { signal })
-    }
-
-    shadowEnvironmentMountingRoots.set(instanceKey, createPortal(jsx, container, instanceKey))
+    shadowEnvironmentMountingRoots.set(instanceKey, createPortal(<AttachPointComponent />, container, instanceKey))
 
     signal.addEventListener(
         'abort',
@@ -97,18 +73,19 @@ function attach(
         { signal },
     )
     options.signal?.addEventListener('abort', () => controller.abort(), { signal })
+    AttachPointComponent.displayName = `ShadowRootAttachPoint (${key})`
 
     return {
         destroy: () => controller.abort(),
-        render: (jsx) => {
-            shadowEnvironmentMountingRoots.set(instanceKey, createPortal(getJSX(jsx), container, instanceKey))
+        render: (newJSX) => {
+            jsx = newJSX
+            shadowEnvironmentMountingRoots.set(
+                instanceKey,
+                createPortal(<AttachPointComponent />, container, instanceKey),
+            )
         },
     }
-    function getJSX(jsx: React.ReactNode) {
-        return (
-            <PreventShadowRootEventPropagationListContext.Provider value={preventEventPropagationList}>
-                <ShadowRootStyleProvider shadow={shadow}>{wrapJSX ? wrapJSX(jsx) : jsx}</ShadowRootStyleProvider>
-            </PreventShadowRootEventPropagationListContext.Provider>
-        )
+    function AttachPointComponent() {
+        return ShadowRootStyleProvider({ preventPropagation: true, shadow, children: wrapJSX ? wrapJSX(jsx) : jsx })
     }
 }

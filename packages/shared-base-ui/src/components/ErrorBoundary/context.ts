@@ -8,7 +8,7 @@ export interface ErrorBoundaryError {
     stack: string
 }
 /**
- * Please provide the build info text
+ * Provide the build info for CrashUI
  */
-export const ErrorBoundaryBuildInfoContext = createContext('')
-ErrorBoundaryBuildInfoContext.displayName = 'ErrorBoundaryBuildInfoContext'
+export const BuildInfo = createContext('')
+BuildInfo.displayName = 'BuildInfo'

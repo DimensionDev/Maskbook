@@ -25,7 +25,7 @@ import { ref } from './ShadowRootSetup.js'
  *      />
  * ))
  */
-export function usePortalShadowRoot<T>(renderer: (container: HTMLElement | undefined) => T): T {
+export function usePortalShadowRoot<T>(renderer: (container: HTMLElement | undefined) => T, debugKey?: string): T {
     const disabled = useRef(useContext(DisableShadowRootContext)).current
     // we ignore the changes on DisableShadowRootContext during multiple render
     // so we can violates the React hooks rule and still be safe.
@@ -39,7 +39,7 @@ export function usePortalShadowRoot<T>(renderer: (container: HTMLElement | undef
         const portal = ref.portalContainer
 
         const root = document.createElement('div')
-        root.dataset.portalShadowRoot = ''
+        root.dataset.portalShadowRoot = debugKey || ''
         const shadow = root.attachShadow({ mode: process.env.shadowRootMode })
 
         for (const each of preventEventPropagationList) {

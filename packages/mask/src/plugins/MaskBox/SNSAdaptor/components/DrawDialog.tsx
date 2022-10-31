@@ -3,13 +3,19 @@ import { useContainer } from 'unstated-next'
 import { makeStyles, ActionButton } from '@masknet/theme'
 import { Add, Remove } from '@mui/icons-material'
 import { useChainContext, useProviderDescriptor } from '@masknet/web3-hooks-base'
-import { FormattedAddress, FormattedBalance, ImageIcon, InjectedDialog, PluginWalletStatusBar } from '@masknet/shared'
+import {
+    FormattedAddress,
+    FormattedBalance,
+    ImageIcon,
+    InjectedDialog,
+    PluginWalletStatusBar,
+    WalletConnectedBoundary,
+    EthereumERC20TokenApprovedBoundary,
+} from '@masknet/shared'
 import { Box, Button, DialogActions, DialogContent, TextField, Typography } from '@mui/material'
 import { formatEthereumAddress, SchemaType, useMaskBoxConstants } from '@masknet/web3-shared-evm'
 import { formatBalance, multipliedBy } from '@masknet/web3-shared-base'
 import type { NetworkPluginID } from '@masknet/shared-base'
-import { EthereumERC20TokenApprovedBoundary } from '../../../../web3/UI/EthereumERC20TokenApprovedBoundary.js'
-import { WalletConnectedBoundary } from '../../../../web3/UI/WalletConnectedBoundary.js'
 import type { BoxInfo } from '../../type.js'
 import { GasSettingBar } from '../../../Wallet/SNSAdaptor/GasSettingDialog/GasSettingBar.js'
 import { TokenPrice } from '../../../../components/shared/TokenPrice.js'

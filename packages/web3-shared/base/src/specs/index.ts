@@ -9,7 +9,7 @@ import type {
     NextIDPersonaBindings,
     NextIDPlatform,
     NameServiceID,
-    NetworkPluginID
+    NetworkPluginID,
 } from '@masknet/shared-base'
 import type { api } from '@dimensiondev/mask-wallet-core/proto'
 import type {
@@ -116,6 +116,7 @@ export enum TransactionDescriptorType {
 export enum SocialAddressType {
     Address = 'Address',
     ENS = 'ENS',
+    SPACE_ID = 'SPACE_ID',
     RSS3 = 'RSS3',
     SOL = 'SOL',
     KV = 'KV',
@@ -183,7 +184,7 @@ export interface SocialAddress<PluginID> {
 
 /**
  * The social account that merged from multiple social addresses.
- * This type only for UI usage. 
+ * This type only for UI usage.
  */
 export interface SocialAccount extends Omit<SocialAddress<NetworkPluginID>, 'type'> {
     supportedAddressTypes?: SocialAddressType[]
@@ -419,7 +420,7 @@ export enum ActivityType {
     Sale = 'Sale',
     Offer = 'Offer',
     List = 'List',
-    CancelOffer= 'CancelOffer',
+    CancelOffer = 'CancelOffer',
 }
 export interface NonFungibleTokenEvent<ChainId, SchemaType> {
     id: string
@@ -556,24 +557,23 @@ export interface TransactionDescriptor<ChainId, Transaction> {
     /** a transaction title. */
     title: string
     /** The original transaction object */
-    _tx: Transaction    
+    _tx: Transaction
     /** The address of the token leveraged to swap other tokens */
     tokenInAddress?: string
     /** The amount of the token leveraged to swap other tokens */
-    tokenInAmount?: string 
+    tokenInAmount?: string
     /** a human-readable description. */
-    description?: string    
-    snackbar?: {   
+    description?: string
+    snackbar?: {
         /** a human-readable description for successful transaction. */
         successfulDescription?: string
         /** a human-readable description for failed transaction. */
         failedDescription?: string
     }
     popup?: {
-        /** The custom token description */    
+        /** The custom token description */
         tokenDescription?: string
     }
-
 }
 
 export interface TransactionContext<ChainId, Parameter = string | undefined> {
@@ -1432,54 +1432,54 @@ export interface BlockNumberNotifierState<ChainId> {
 }
 
 export interface Web3State<
+    ChainId,
+    AddressType,
+    SchemaType,
+    ProviderType,
+    NetworkType,
+    Signature,
+    GasOption,
+    Block,
+    Operation,
+    Transaction,
+    TransactionReceipt,
+    TransactionDetailed,
+    TransactionSignature,
+    TransactionParameter,
+    Web3,
+    Web3Provider,
+> {
+    AddressBook?: AddressBookState<ChainId>
+    BalanceNotifier?: BalanceNotifierState<ChainId>
+    BlockNumberNotifier?: BlockNumberNotifierState<ChainId>
+    Hub?: HubState<ChainId, SchemaType, GasOption>
+    IdentityService?: IdentityServiceState
+    NameService?: NameServiceState<ChainId>
+    RiskWarning?: RiskWarningState
+    Settings?: SettingsState
+    Token?: TokenState<ChainId, SchemaType>
+    Transaction?: TransactionState<ChainId, Transaction>
+    TransactionFormatter?: TransactionFormatterState<ChainId, TransactionParameter, Transaction>
+    TransactionWatcher?: TransactionWatcherState<ChainId, Transaction>
+    Connection?: ConnectionState<
         ChainId,
         AddressType,
         SchemaType,
         ProviderType,
-        NetworkType,
         Signature,
-        GasOption,
         Block,
         Operation,
         Transaction,
         TransactionReceipt,
         TransactionDetailed,
         TransactionSignature,
-        TransactionParameter,
         Web3,
         Web3Provider
-    > {
-        AddressBook?: AddressBookState<ChainId>
-        BalanceNotifier?: BalanceNotifierState<ChainId>
-        BlockNumberNotifier?: BlockNumberNotifierState<ChainId>
-        Hub?: HubState<ChainId, SchemaType, GasOption>
-        IdentityService?: IdentityServiceState
-        NameService?: NameServiceState<ChainId>
-        RiskWarning?: RiskWarningState
-        Settings?: SettingsState
-        Token?: TokenState<ChainId, SchemaType>
-        Transaction?: TransactionState<ChainId, Transaction>
-        TransactionFormatter?: TransactionFormatterState<ChainId, TransactionParameter, Transaction>
-        TransactionWatcher?: TransactionWatcherState<ChainId, Transaction>
-        Connection?: ConnectionState<
-            ChainId,
-            AddressType,
-            SchemaType,
-            ProviderType,
-            Signature,
-            Block,
-            Operation,
-            Transaction,
-            TransactionReceipt,
-            TransactionDetailed,
-            TransactionSignature,
-            Web3,
-            Web3Provider
-        >
-        Provider?: ProviderState<ChainId, ProviderType, NetworkType>
-        Wallet?: WalletState
-        Others?: OthersState<ChainId, SchemaType, ProviderType, NetworkType, Transaction>
-        Storage?: Web3StorageServiceState
+    >
+    Provider?: ProviderState<ChainId, ProviderType, NetworkType>
+    Wallet?: WalletState
+    Others?: OthersState<ChainId, SchemaType, ProviderType, NetworkType, Transaction>
+    Storage?: Web3StorageServiceState
 }
 
 export interface NetworkIconClickBaitProps<ChainId, ProviderType, NetworkType> {
@@ -1510,18 +1510,12 @@ export interface AddressFormatterProps {
 export interface Web3UI<ChainId, ProviderType, NetworkType> {
     SelectNetworkMenu?: {
         /** This UI will receive network icon as children component, and the plugin may hook click handle on it. */
-        NetworkIconClickBait?: React.ComponentType<
-            NetworkIconClickBaitProps<ChainId, ProviderType, NetworkType>
-        >
+        NetworkIconClickBait?: React.ComponentType<NetworkIconClickBaitProps<ChainId, ProviderType, NetworkType>>
     }
     SelectProviderDialog?: {
         /** This UI will receive network icon as children component, and the plugin may hook click handle on it. */
-        NetworkIconClickBait?: React.ComponentType<
-            NetworkIconClickBaitProps<ChainId, ProviderType, NetworkType>
-        >
+        NetworkIconClickBait?: React.ComponentType<NetworkIconClickBaitProps<ChainId, ProviderType, NetworkType>>
         /** This UI will receive provider icon as children component, and the plugin may hook click handle on it. */
-        ProviderIconClickBait?: React.ComponentType<
-            ProviderIconClickBaitProps<ChainId, ProviderType, NetworkType>
-        >
+        ProviderIconClickBait?: React.ComponentType<ProviderIconClickBaitProps<ChainId, ProviderType, NetworkType>>
     }
 }

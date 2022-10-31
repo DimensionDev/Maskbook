@@ -1,5 +1,10 @@
 import { useEffect, useMemo, useState, useCallback } from 'react'
-import { InjectedDialog, NFTCardStyledAssetPlayer, useOpenShareTxDialog } from '@masknet/shared'
+import {
+    InjectedDialog,
+    NFTCardStyledAssetPlayer,
+    useOpenShareTxDialog,
+    WalletConnectedBoundary,
+} from '@masknet/shared'
 import { makeStyles, ActionButton } from '@masknet/theme'
 import { first } from 'lodash-unified'
 import BigNumber from 'bignumber.js'
@@ -7,7 +12,6 @@ import { isNativeTokenAddress } from '@masknet/web3-shared-evm'
 import { Box, Card, CardActions, CardContent, DialogContent, Link } from '@mui/material'
 import { useI18N } from '../../../utils/index.js'
 import { SelectTokenAmountPanel } from '../../ITO/SNSAdaptor/SelectTokenAmountPanel.js'
-import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary.js'
 import type { useAsset } from '../hooks/useAsset.js'
 import { usePlaceBidCallback } from '../hooks/usePlaceBidCallback.js'
 import { activatedSocialNetworkUI } from '../../../social-network/index.js'

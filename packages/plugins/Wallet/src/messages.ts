@@ -76,7 +76,6 @@ export type WalletRiskWarningDialogEvent =
 
 export type SelectNftContractDialogEvent = {
     open: boolean
-    uuid: string
 
     chainId?: ChainId
     balance?: string
