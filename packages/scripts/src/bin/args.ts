@@ -32,7 +32,15 @@ export function extensionArgsParser(mode: 'development' | 'production') {
         .options('hmr', { type: 'boolean', description: 'Enable Hot Module Reload' })
         .options('reactRefresh', { type: 'boolean', description: 'Enable react-refresh', implies: 'hmr' })
         .options('devtools', { type: 'boolean', description: 'Enable devtools' })
-        .options('sourceMap', { boolean: true, string: true, description: 'Enable source map' })
+        .options('sourceMap', {
+            type: 'string',
+            description: 'Enable source map',
+            coerce(arg) {
+                if (arg === '') return true
+                if (arg === 'false') return false
+                return arg
+            },
+        })
 
         .hide('version')
         .strict().argv
