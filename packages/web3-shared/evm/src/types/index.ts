@@ -292,6 +292,7 @@ export enum ProviderType {
     Torus = 'Torus',
     Coin98 = 'Coin98',
     MathWallet = 'MathWallet',
+    Opera = 'Opera',
     WalletLink = 'WalletLink',
     CustomNetwork = 'CustomNetwork',
 }
