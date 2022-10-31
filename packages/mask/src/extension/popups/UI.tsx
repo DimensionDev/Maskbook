@@ -6,7 +6,7 @@ import { usePopupFullPageTheme } from '../../utils/theme/useClassicMaskFullPageT
 import '../../social-network-adaptor/browser-action/index.js'
 import { PopupContext } from './hook/usePopupContext.js'
 import { PopupFrame } from './components/PopupFrame/index.js'
-import { MaskUIRoot } from '../../UIRoot.js'
+import { MaskUIRootPage } from '../../UIRoot-page.js'
 import { PageTitleContext } from './context.js'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { languageSettings } from '../../../shared/legacy-settings/settings.js'
@@ -35,8 +35,7 @@ function PluginRenderDelayed() {
 export default function Popups() {
     const [title, setTitle] = useState('')
     useEffect(queryRemoteI18NBundle(Services.Helper.queryRemoteI18NBundle), [])
-    return MaskUIRoot(
-        'page',
+    return MaskUIRootPage(
         usePopupTheme,
         <PopupSnackbarProvider>
             <PopupContext.Provider>

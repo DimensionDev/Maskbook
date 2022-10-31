@@ -1,17 +1,11 @@
-import { ErrorBoundary } from '@masknet/shared-base-ui'
 import {
     attachReactTreeToMountedRoot_noHost,
     setupReactShadowRootEnvironment as setupReactShadowRootEnvironmentUpper,
     CSSVariableInjector,
-    MaskThemeProvider,
     usePortalShadowRoot,
 } from '@masknet/theme'
-import { Suspense } from 'react'
-import { isFacebook } from '../../social-network-adaptor/facebook.com/base.js'
-import { activatedSocialNetworkUI } from '../../social-network/ui.js'
 import { createPortal } from 'react-dom'
-import { MaskUIRoot, useMaskIconPalette } from '../../UIRoot.js'
-import { useClassicMaskSNSTheme } from '../theme/index.js'
+import { MaskUIRootSNS, ShadowRootAttachPointRoot } from '../../UIRoot-sns.js'
 
 const captureEvents: Array<keyof HTMLElementEventMap> = [
     'paste',
@@ -30,26 +24,13 @@ export function setupReactShadowRootEnvironment() {
     const shadow = setupReactShadowRootEnvironmentUpper(
         { mode: process.env.shadowRootMode },
         captureEvents,
-        (children) => MaskUIRoot('sns', useClassicMaskSNSTheme, children),
+        MaskUIRootSNS,
     )
+    // Inject variable for Portals
     attachReactTreeToGlobalContainer(shadow, { key: 'css-vars' }).render(<CSSVariableInjector />)
 }
 
-export const attachReactTreeToGlobalContainer = attachReactTreeToMountedRoot_noHost((children) => {
-    return (
-        <Suspense>
-            <ErrorBoundary>
-                <MaskThemeProvider
-                    useMaskIconPalette={useMaskIconPalette}
-                    CustomSnackbarOffsetY={isFacebook(activatedSocialNetworkUI) ? 80 : undefined}
-                    useTheme={useClassicMaskSNSTheme}>
-                    <CSSVariableInjector />
-                    {children}
-                </MaskThemeProvider>
-            </ErrorBoundary>
-        </Suspense>
-    )
-})
+export const attachReactTreeToGlobalContainer = attachReactTreeToMountedRoot_noHost(ShadowRootAttachPointRoot)
 
 /** @deprecated Renamed to attachReactTreeToGlobalContainer */
 export const createReactRootShadowed = attachReactTreeToGlobalContainer
