@@ -11,17 +11,13 @@ export class OperaProvider extends BaseInjectedProvider implements EVM_Provider 
 
     override get ready() {
         const isOpera = navigator.userAgent.includes('OPR/')
-        if (!isOpera) {
-            return true
-        }
+        if (!isOpera) return true
         return super.ready
     }
 
     override get readyPromise() {
         const isOpera = navigator.userAgent.includes('OPR/')
-        if (!isOpera) {
-            return Promise.resolve(undefined)
-        }
+        if (!isOpera) return Promise.resolve(undefined)
         return super.readyPromise
     }
 
