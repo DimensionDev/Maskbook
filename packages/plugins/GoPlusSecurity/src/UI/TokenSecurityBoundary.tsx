@@ -1,7 +1,7 @@
 import { ActionButton, makeStyles } from '@masknet/theme'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { PluginGoPlusSecurityMessages } from '../messages'
-import { useI18N } from '../locales'
+import { PluginGoPlusSecurityMessages } from '../messages.js'
+import { useI18N } from '../locales/index.js'
 import type { ChainId } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({

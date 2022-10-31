@@ -1,6 +1,6 @@
 import { EnhanceableSite } from '@masknet/shared-base'
-import { defineSiteAdaptor } from '../definitions'
-import type { SiteAdaptor } from '../types'
+import { defineSiteAdaptor } from '../definitions.js'
+import type { SiteAdaptor } from '../types.js'
 
 const origins = ['https://*.mirror.xyz/*']
 export const MirrorAdaptor: SiteAdaptor.Definition = {

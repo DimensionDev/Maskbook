@@ -9,8 +9,8 @@ import {
     PriorEIP1559GasConfig,
 } from '@masknet/web3-shared-evm'
 import { useCallback, useMemo } from 'react'
-import { useGasLimit } from './useGasLimit'
-import { useTip } from '../../contexts'
+import { useGasLimit } from './useGasLimit.js'
+import { useTip } from '../../contexts/index.js'
 
 const ETH_GAS_LIMIT = 21000
 const ERC20_GAS_LIMIT = 50000

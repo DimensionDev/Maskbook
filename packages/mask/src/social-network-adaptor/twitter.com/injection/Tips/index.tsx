@@ -1,5 +1,5 @@
-import { injectOpenTipsButtonOnProfile } from './ProfileTipButton'
-import { injectTipsButtonOnFollowButton } from './FollowTipsButton'
+import { injectOpenTipsButtonOnProfile } from './ProfileTipButton.js'
+import { injectTipsButtonOnFollowButton } from './FollowTipsButton.js'
 
 export function injectTips(signal: AbortSignal) {
     injectOpenTipsButtonOnProfile(signal)

@@ -16,7 +16,7 @@ import {
 import { useHiddenAddressSetting, useWeb3State } from '@masknet/web3-hooks-base'
 import { WalletSettingCard } from '@masknet/shared'
 import { isSameAddress } from '@masknet/web3-shared-base'
-import { useSharedI18N } from '../../../locales'
+import { useSharedI18N } from '../../../locales/index.js'
 import { SettingActions } from './SettingActions.js'
 
 export type PublicWalletSettingType = {
