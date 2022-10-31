@@ -17,9 +17,6 @@ declare module '@ensdomains/eth-ens-namehash' {
 declare module '@siddomains/sidjs' {
     import { Provider } from 'react'
 
-    export class SIDfunctions {
-        static getSidAddress(chiainId: number)
-    }
     export function getSidAddress(chain: number): number
     export default class SID {
         constructor(options: { provider: Provider; sidAddress: number }): void

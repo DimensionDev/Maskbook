@@ -218,6 +218,8 @@
         "scroller",
         "secp",
         "serializers",
+        "siddomains",
+        "sidjs",
         "solana",
         "solanart",
         "solflare",
