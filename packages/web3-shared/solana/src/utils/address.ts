@@ -50,7 +50,7 @@ export function isValidAddress(address?: string, strict?: boolean) {
     }
 }
 
-export function isValidChainId(chainId: ChainId) {
+export function isValidChainId(chainId?: ChainId) {
     return getEnumAsArray(ChainId).some((x) => x.value === chainId)
 }
 
@@ -65,6 +65,10 @@ export function isNativeTokenAddress(address?: string) {
 
 export function getDefaultChainId() {
     return ChainId.Mainnet
+}
+
+export function getInvalidChainId() {
+    return ChainId.Invalid
 }
 
 export function getDefaultNetworkType() {

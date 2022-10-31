@@ -213,5 +213,5 @@ export async function getGasOptions(chainId: ChainId) {
 
     const gasOptionsCollection = mapKeys(response.payload['chain-prices'], (_, key) => zerionChainIdResolver(key))
 
-    return gasOptionsCollection[chainId].info.classic
+    return gasOptionsCollection[chainId]?.info.classic
 }

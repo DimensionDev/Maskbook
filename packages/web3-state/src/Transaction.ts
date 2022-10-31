@@ -34,7 +34,7 @@ export class TransactionState<ChainId, Transaction> implements Web3TransactionSt
         },
         protected options: {
             formatAddress(a: string): string
-            isValidChainId(chainId: ChainId): boolean
+            isValidChainId(chainId?: ChainId): boolean
         },
     ) {
         const defaultValue = Object.fromEntries(chainIds.map((x) => [x, {}])) as TransactionStorage<
