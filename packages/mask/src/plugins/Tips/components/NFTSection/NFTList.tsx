@@ -71,22 +71,6 @@ const useStyles = makeStyles()((theme) => ({
         width: 64,
         height: 64,
     },
-    assetPlayerIframe: {
-        height: 96,
-        width: 96,
-    },
-    wrapper: {
-        height: '96px !important',
-        width: '96px !important',
-    },
-    imgWrapper: {
-        height: '96px !important',
-        width: '96px !important',
-        img: {
-            height: '100%',
-            width: '100%',
-        },
-    },
     tooltip: {
         marginBottom: `${theme.spacing(0.5)} !important`,
     },

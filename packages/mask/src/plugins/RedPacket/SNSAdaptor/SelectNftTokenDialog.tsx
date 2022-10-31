@@ -74,9 +74,6 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
     textField: {
         flex: 1,
     },
-    iframe: {
-        minHeight: 147,
-    },
     confirmButton: {
         width: '100%',
         backgroundColor: theme.palette.mode === 'dark' ? '#fff' : '#000',
@@ -238,9 +235,6 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-    },
-    assetImgWrapper: {
-        maxHeight: 145,
     },
 }))
 

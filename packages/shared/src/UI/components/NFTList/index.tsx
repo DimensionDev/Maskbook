@@ -95,22 +95,6 @@ const useStyles = makeStyles<{ columns?: number; gap?: number }>()((theme, { col
             width: 64,
             height: 64,
         },
-        assetPlayerIframe: {
-            aspectRatio: '1 / 1',
-        },
-        wrapper: {
-            aspectRatio: '1 / 1',
-            height: 'auto !important',
-            width: '100% !important',
-            borderRadius: 8,
-        },
-        imgWrapper: {
-            aspectRatio: '1 / 1',
-            img: {
-                height: '100%',
-                width: '100%',
-            },
-        },
         caption: {
             padding: theme.spacing(0.5),
             color: theme.palette.text.primary,
