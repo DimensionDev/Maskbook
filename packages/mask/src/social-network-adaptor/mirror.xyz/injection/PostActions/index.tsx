@@ -10,7 +10,7 @@ import {
 import { useWeb3State, Web3ContextProvider } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { Flags } from '../../../../../shared/index.js'
-import { createReactRootShadowed } from '../../../../utils'
+import { createReactRootShadowed } from '../../../../utils/index.js'
 
 const ActionsRenderer = createInjectHooksRenderer(
     useActivatedPluginsSNSAdaptor.visibility.useNotMinimalMode,

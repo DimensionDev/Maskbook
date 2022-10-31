@@ -1,6 +1,6 @@
 import { makeStyles } from '@masknet/theme'
 import { Stack, Typography, Button } from '@mui/material'
-import { useI18N } from '../../../utils'
+import { useI18N } from '../../../utils/index.js'
 
 const useStyles = makeStyles()((theme) => {
     return {

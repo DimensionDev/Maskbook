@@ -2001,8 +2001,8 @@ importers:
   packages/scripts:
     dependencies:
       '@masknet/static-module-record-swc':
-        specifier: ^0.3.4
-        version: 0.3.4
+        specifier: ^0.4.1
+        version: 0.4.1
       '@types/rimraf':
         specifier: ^3.0.2
         version: 3.0.2
@@ -7514,8 +7514,13 @@ packages:
       '@locker/near-membrane-dom': 0.11.10
     dev: false
 
-  /@masknet/static-module-record-swc/0.3.4:
-    resolution: {integrity: sha512-g3UoSW+KbzD2mSzKQHpL1mIvZCU90KeV1Lkn1fWn9vjlpPGqCX+CJeCIJD07HrX8IfsDVMAZhNhgweO93O19Bg==}
+  /@masknet/static-module-record-swc/0.4.1:
+    resolution: {integrity: sha512-ZP0UkesksO3opeK2DhdmeuMVuaHx3ZMMpcqtkkyxVos98c8QNwOusBK6IhysSst8S2+4Oj9rRAMZMvFkK2ktmA==}
+    peerDependencies:
+      '@swc/core': ^1.3.10
+    peerDependenciesMeta:
+      '@swc/core':
+        optional: true
     dev: false
 
   /@masknet/web-endowments/0.1.1:

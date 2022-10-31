@@ -5,8 +5,8 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import type { ERC20 } from '@masknet/web3-contracts/types/ERC20'
 import { createContract, isNativeTokenAddress } from '@masknet/web3-shared-evm'
 import { AbiItem, toHex } from 'web3-utils'
-import { useTip } from '../../contexts'
-import { TipsType } from '../../types'
+import { useTip } from '../../contexts/index.js'
+import { TipsType } from '../../types/index.js'
 
 const MIN_GAS_LIMIT = 21000
 // We only care about fungible tokens

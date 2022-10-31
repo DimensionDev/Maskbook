@@ -24,7 +24,7 @@ import { PersonaItemUI } from './PersonaItemUI.js'
 import { useCurrentPersona } from '../../DataSource/usePersonaConnectStatus.js'
 import { delay } from '@dimensiondev/kit'
 import { Icons } from '@masknet/icons'
-import { ErrorPanel } from './ErrorPanel'
+import { ErrorPanel } from './ErrorPanel.js'
 
 const useStyles = makeStyles()((theme) => {
     return {

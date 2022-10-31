@@ -9,7 +9,7 @@ import { makeStyles, ShadowRootMenu } from '@masknet/theme'
 import { isSameAddress, SocialAccount, SocialIdentity } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../utils/index.js'
-import { AvatarDecoration } from './AvatarDecoration'
+import { AvatarDecoration } from './AvatarDecoration.js'
 
 const MENU_ITEM_HEIGHT = 40
 const MENU_LIST_PADDING = 8

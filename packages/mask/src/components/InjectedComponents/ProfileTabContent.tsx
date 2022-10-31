@@ -27,7 +27,7 @@ import { MaskMessages, sorter, useI18N, useLocationChange } from '../../utils/in
 import { useCurrentVisitingSocialIdentity } from '../DataSource/useActivatedUI.js'
 import { useCurrentPersonaConnectStatus } from '../DataSource/usePersonaConnectStatus.js'
 import { ConnectPersonaBoundary } from '../shared/ConnectPersonaBoundary.js'
-import { WalletSettingEntry } from './ProfileTab/WalletSettingEntry'
+import { WalletSettingEntry } from './ProfileTab/WalletSettingEntry.js'
 import { isFacebook } from '../../social-network-adaptor/facebook.com/base.js'
 import { useGrantPermissions, usePluginHostPermissionCheck } from '../DataSource/usePluginHostPermission.js'
 

@@ -1,6 +1,6 @@
 import formatDateTime from 'date-fns/format'
 import fromUnixTime from 'date-fns/fromUnixTime'
-import type { MirrorBaseAPI, Writer, Publisher } from '../types'
+import type { MirrorBaseAPI, Writer, Publisher } from '../types/index.js'
 import { EMPTY_LIST } from '@masknet/shared-base'
 
 const MIRROR_API_URL = 'https://mirror-api.com/graphql'
@@ -107,7 +107,9 @@ export class MirrorAPI implements MirrorBaseAPI.Provider {
     async getWriter(id: string) {
         if (!id) return null
 
-        const writer = await fetchFromMirror<{ projectFeed: Writer }>({
+        const writer = await fetchFromMirror<{
+            projectFeed: Writer
+        }>({
             query: `query Writer ($projectAddress: String!) {
                 projectFeed(projectAddress: $projectAddress) {
                     address
@@ -128,7 +130,9 @@ export class MirrorAPI implements MirrorBaseAPI.Provider {
     async getPost(digest: string) {
         if (!digest) return null
 
-        const response = await fetchFromMirror<{ entry: EntryResponse }>({
+        const response = await fetchFromMirror<{
+            entry: EntryResponse
+        }>({
             query: `
             query Entry ($digest: String!) {
                 entry(digest: $digest) {

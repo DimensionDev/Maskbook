@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { createContainer } from 'unstated-next'
-import type { CollectibleToken } from '../../types'
+import type { CollectibleToken } from '../../types.js'
 import { useNonFungibleOrders } from '@masknet/web3-hooks-base'
 import { SourceType } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
