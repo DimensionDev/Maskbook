@@ -1,10 +1,15 @@
 import { useCallback, useMemo } from 'react'
 import BigNumber from 'bignumber.js'
 import { first } from 'lodash-unified'
-import { InjectedDialog, NFTCardStyledAssetPlayer, useOpenShareTxDialog, PluginWalletStatusBar } from '@masknet/shared'
+import {
+    InjectedDialog,
+    AssetPreviewer,
+    useOpenShareTxDialog,
+    PluginWalletStatusBar,
+    WalletConnectedBoundary,
+} from '@masknet/shared'
 import { makeStyles, ActionButton } from '@masknet/theme'
 import { Box, Card, CardActions, CardContent, DialogContent, Link, Typography } from '@mui/material'
-import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary.js'
 import type { useAsset } from '../hooks/useAsset.js'
 import { usePurchaseCallback } from '../hooks/usePurchaseCallback.js'
 import { activatedSocialNetworkUI } from '../../../social-network/index.js'
@@ -128,7 +133,7 @@ export function CheckoutDialog(props: CheckoutDialogProps) {
                         <Box className={classes.mediaContent}>
                             {asset?.value?.ossUrl.match(/\.(mp4|avi|webm)$/i) ? (
                                 <Link href={asset.value.ossUrl} target="_blank" rel="noopener noreferrer">
-                                    <NFTCardStyledAssetPlayer url={asset.value.ossUrl || asset.value.shareUrl} />
+                                    <AssetPreviewer url={asset.value.ossUrl || asset.value.shareUrl} />
                                 </Link>
                             ) : (
                                 <img

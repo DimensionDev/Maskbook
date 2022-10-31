@@ -1,25 +1,25 @@
 /* spell-checker: disable */
 import emitFile from '@nice-labs/emit-file-webpack-plugin'
 import { cloneDeep } from 'lodash-unified'
-import { NormalizedFlags } from './flags'
+import { ComputedFlags, NormalizedFlags } from './flags'
 
 type ManifestV2 = typeof import('../src/manifest.json') & { key?: string; devtools_page?: string; applications?: any }
 type ManifestV3 = typeof import('../src/manifest-v3.json') & { key?: string; devtools_page?: string }
 
-export function emitManifestFile(flags: NormalizedFlags) {
+export function emitManifestFile(flags: NormalizedFlags, computedFlags: ComputedFlags) {
     return emitFile({
         name: 'manifest.json',
         content() {
             const manifest = cloneDeep(
                 flags.manifest === 2 ? require('../src/manifest.json') : require('../src/manifest-v3.json'),
             )
-            modify(manifest, flags)
+            modify(manifest, flags, computedFlags)
             return JSON.stringify(manifest, null, 4)
         },
     })
 }
 
-function modify(manifest: ManifestV2 | ManifestV3, flags: NormalizedFlags) {
+function modify(manifest: ManifestV2 | ManifestV3, flags: NormalizedFlags, computedFlags: ComputedFlags) {
     if (flags.channel === 'beta') {
         manifest.name += ' (Beta)'
     } else if (flags.channel === 'insider') {
@@ -35,11 +35,11 @@ function modify(manifest: ManifestV2 | ManifestV3, flags: NormalizedFlags) {
         manifest.devtools_page = 'devtools-background.html'
     }
 
-    if (manifest.manifest_version === 2) modify_2(manifest as ManifestV2, flags)
+    if (manifest.manifest_version === 2) modify_2(manifest as ManifestV2, flags, computedFlags)
     else modify_3(manifest as ManifestV3, flags)
 }
 
-function modify_2(manifest: ManifestV2, flags: NormalizedFlags) {
+function modify_2(manifest: ManifestV2, flags: NormalizedFlags, computedFlags: ComputedFlags) {
     if (flags.engine === 'firefox') {
         // TODO: To make `browser.tabs.executeScript` run on Firefox, we need an extra permission "tabs".
         // Switch to browser.userScripts (Firefox only) API can resolve the problem.
@@ -54,8 +54,8 @@ function modify_2(manifest: ManifestV2, flags: NormalizedFlags) {
     // Grant all URL permissions on App
     if (flags.architecture === 'app') manifest.permissions.push('<all_urls>')
 
-    // for eval-source-map
-    if (flags.mode === 'development') {
+    if (String(computedFlags.sourceMapKind).includes('eval')) {
+        // TODO: enable TrustedTypes for production build.
         manifest.content_security_policy = `script-src 'self' 'unsafe-eval'; object-src 'self'; require-trusted-types-for 'script'; trusted-types default dompurify webpack mask ssr`
     }
 

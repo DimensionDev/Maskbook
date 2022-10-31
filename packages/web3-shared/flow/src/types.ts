@@ -5,6 +5,8 @@ import type { MutateOptions, BlockObject, TransactionObject } from '@blocto/fcl'
 export enum ChainId {
     Mainnet = 1,
     Testnet = 2,
+    // For any chains not supported yet.
+    Invalid = 0,
 }
 
 export enum AddressType {

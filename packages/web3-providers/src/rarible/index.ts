@@ -15,7 +15,7 @@ import {
     scale10,
     SourceType,
 } from '@masknet/web3-shared-base'
-import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import { ChainId, SchemaType, isValidChainId } from '@masknet/web3-shared-evm'
 import { RaribleEventType, RaribleOrder, RaribleHistory, RaribleNFTItemMapResponse } from './types.js'
 import { RaribleURL } from './constants.js'
 import type { NonFungibleTokenAPI } from '../types/index.js'
@@ -170,6 +170,7 @@ export class RaribleAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
             chainId?: ChainId
         } = {},
     ) {
+        if (!isValidChainId(chainId)) return
         const requestPath = `/v0.1/items/${resolveRaribleBlockchain(chainId)}:${address}:${tokenId}`
         const asset = await fetchFromRarible<RaribleNFTItemMapResponse>(RaribleURL, requestPath)
         if (!asset) return
@@ -207,6 +208,8 @@ export class RaribleAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
         tokenId: string,
         { chainId = ChainId.Mainnet, indicator, size = 20 }: HubOptions<ChainId> = {},
     ) {
+        if (!isValidChainId(chainId)) return createPageable(EMPTY_LIST, createIndicator(indicator))
+
         const requestPath = urlcat('/v0.1/orders/bids/byItem', {
             itemId: `${resolveRaribleBlockchain(chainId)}:${tokenAddress}:${tokenId}`,
             size,
@@ -235,6 +238,8 @@ export class RaribleAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
         tokenId: string,
         { chainId = ChainId.Mainnet, indicator, size = 20 }: HubOptions<ChainId> = {},
     ) {
+        if (!isValidChainId(chainId)) return createPageable(EMPTY_LIST, createIndicator(indicator))
+
         const requestPath = urlcat('/v0.1/orders/sell/byItem', {
             itemId: `${resolveRaribleBlockchain(chainId)}:${tokenAddress}:${tokenId}`,
             size,
@@ -274,6 +279,8 @@ export class RaribleAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
         tokenId: string,
         { chainId = ChainId.Mainnet, indicator, size = 20 }: HubOptions<ChainId> = {},
     ) {
+        if (!isValidChainId(chainId)) return createPageable(EMPTY_LIST, createIndicator(indicator))
+
         const requestPath = urlcat('/v0.1/activities/byItem', {
             type: [RaribleEventType.TRANSFER, RaribleEventType.MINT, RaribleEventType.BID, RaribleEventType.LIST],
             itemId: `${resolveRaribleBlockchain(chainId)}:${tokenAddress}:${tokenId}`,

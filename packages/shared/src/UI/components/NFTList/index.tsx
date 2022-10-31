@@ -2,7 +2,7 @@ import { FC, useCallback } from 'react'
 import { noop } from 'lodash-unified'
 import classnames from 'classnames'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { ElementAnchor, Linking, NFTCardStyledAssetPlayer, RetryHint } from '@masknet/shared'
+import { ElementAnchor, Linking, AssetPreviewer, RetryHint } from '@masknet/shared'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { isSameAddress, NonFungibleToken } from '@masknet/web3-shared-base'
@@ -95,22 +95,6 @@ const useStyles = makeStyles<{ columns?: number; gap?: number }>()((theme, { col
             width: 64,
             height: 64,
         },
-        assetPlayerIframe: {
-            aspectRatio: '1 / 1',
-        },
-        wrapper: {
-            aspectRatio: '1 / 1',
-            height: 'auto !important',
-            width: '100% !important',
-            borderRadius: 8,
-        },
-        imgWrapper: {
-            aspectRatio: '1 / 1',
-            img: {
-                height: '100%',
-                width: '100%',
-            },
-        },
         caption: {
             padding: theme.spacing(0.5),
             color: theme.palette.text.primary,
@@ -128,16 +112,10 @@ export const NFTItem: FC<NFTItemProps> = ({ token }) => {
     const caption = token.metadata?.name?.match(/#\d+$/) ? token.metadata.name : Others?.formatTokenId(token.tokenId)
     return (
         <div className={classes.nftContainer}>
-            <NFTCardStyledAssetPlayer
-                chainId={chainId}
-                contractAddress={token.contract?.address}
+            <AssetPreviewer
                 url={token.metadata?.imageURL ?? token.metadata?.imageURL}
-                tokenId={token.tokenId}
                 classes={{
                     fallbackImage: classes.fallbackImage,
-                    iframe: classes.assetPlayerIframe,
-                    imgWrapper: classes.imgWrapper,
-                    wrapper: classes.wrapper,
                 }}
             />
             <Typography className={classes.caption} title={fullCaption !== caption ? fullCaption : undefined}>

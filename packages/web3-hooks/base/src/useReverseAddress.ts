@@ -15,7 +15,8 @@ export function useReverseAddress<T extends NetworkPluginID>(
     const { NameService, Others } = useWeb3State(pluginID)
 
     return useAsyncRetry(async () => {
-        if (!chainId || !address || !Others?.isValidAddress?.(address) || !NameService) return
+        if (!Others?.chainResolver.isValid(chainId) || !address || !Others?.isValidAddress?.(address) || !NameService)
+            return
         return NameService.reverse?.(chainId, address)
     }, [address, chainId, NameService])
 }

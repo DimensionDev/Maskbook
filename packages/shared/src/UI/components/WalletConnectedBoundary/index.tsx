@@ -1,8 +1,8 @@
 import { makeStyles, useStylesExtends, ActionButton, ActionButtonProps } from '@masknet/theme'
 import classNames from 'classnames'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { WalletMessages } from '../../plugins/Wallet/messages.js'
-import { useI18N } from '../../utils/index.js'
+import { WalletMessages } from '@masknet/plugin-wallet'
+import { useSharedI18N } from '../../../locales/index.js'
 import { isZero } from '@masknet/web3-shared-base'
 import {
     useChainContext,
@@ -29,7 +29,7 @@ export interface WalletConnectedBoundaryProps
 export function WalletConnectedBoundary(props: WalletConnectedBoundaryProps) {
     const { children = null, offChain = false, hideRiskWarningConfirmed = false } = props
 
-    const { t } = useI18N()
+    const t = useSharedI18N()
     const classes = useStylesExtends(useStyles(), props)
 
     const { pluginID } = useNetworkContext()
@@ -54,7 +54,7 @@ export function WalletConnectedBoundary(props: WalletConnectedBoundaryProps) {
                 fullWidth
                 onClick={openSelectProviderDialog}
                 {...props.ActionButtonProps}>
-                {t('plugin_wallet_connect_a_wallet')}
+                {t.plugin_wallet_connect_a_wallet()}
             </ActionButton>
         )
 
@@ -72,7 +72,7 @@ export function WalletConnectedBoundary(props: WalletConnectedBoundaryProps) {
                     })
                 }}
                 {...props.ActionButtonProps}>
-                {t('plugin_wallet_confirm_risk_warning')}
+                {t.plugin_wallet_confirm_risk_warning()}
             </ActionButton>
         )
 
@@ -85,14 +85,14 @@ export function WalletConnectedBoundary(props: WalletConnectedBoundaryProps) {
                 variant="contained"
                 onClick={nativeTokenBalance.retry}
                 {...props.ActionButtonProps}>
-                {t(nativeTokenBalance.loading ? 'plugin_wallet_update_gas_fee' : 'plugin_wallet_no_gas_fee')}
+                {nativeTokenBalance.loading ? t.plugin_wallet_update_gas_fee() : t.plugin_wallet_no_gas_fee()}
             </ActionButton>
         )
 
     if (!chainIdValid && !offChain)
         return (
             <ActionButton className={buttonClass} disabled fullWidth variant="contained" {...props.ActionButtonProps}>
-                {t('plugin_wallet_invalid_network')}
+                {t.plugin_wallet_invalid_network()}
             </ActionButton>
         )
 

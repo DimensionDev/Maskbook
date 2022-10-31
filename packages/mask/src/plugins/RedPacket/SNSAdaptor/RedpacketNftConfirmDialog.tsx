@@ -10,11 +10,15 @@ import {
     isNativeTokenAddress,
     formatTokenId,
 } from '@masknet/web3-shared-evm'
-import { NFTCardStyledAssetPlayer, PluginWalletStatusBar, ChainBoundary } from '@masknet/shared'
+import {
+    NFTCardStyledAssetPlayer,
+    PluginWalletStatusBar,
+    ChainBoundary,
+    WalletConnectedBoundary,
+} from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { Grid, Link, Typography, List, DialogContent, ListItem, Box } from '@mui/material'
-import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary.js'
 import LaunchIcon from '@mui/icons-material/Launch'
 import { useI18N } from '../locales/index.js'
 import { useCreateNftRedpacketCallback } from './hooks/useCreateNftRedpacketCallback.js'

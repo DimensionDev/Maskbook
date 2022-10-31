@@ -1,7 +1,7 @@
 import React from 'react'
 import { t } from 'ef.js'
 import { setupReactShadowRootEnvironment } from '@masknet/theme'
-setupReactShadowRootEnvironment({ mode: 'open' })
+setupReactShadowRootEnvironment({ mode: 'open' }, [])
 
 Object.assign(globalThis, { React })
 

@@ -3,7 +3,7 @@
  */
 export enum NameServiceID {
     ENS = 'ENS',
-    BNS = 'BNS',
+    SpaceID = 'SpaceID',
     Chainbase = 'Chainbase',
     Flowns = 'Flowns',
     Bonfida = 'Bonfida',

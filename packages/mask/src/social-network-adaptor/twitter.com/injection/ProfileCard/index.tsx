@@ -6,19 +6,13 @@ import { useEffect, useRef, useState } from 'react'
 import { useAsync } from 'react-use'
 import { useSocialIdentity } from '../../../../components/DataSource/useActivatedUI.js'
 import { ProfileCard } from '../../../../components/InjectedComponents/ProfileCard/index.js'
-import { createReactRootShadowed } from '../../../../utils/index.js'
+import { attachReactTreeWithoutContainer } from '../../../../utils/index.js'
 import { twitterBase } from '../../base.js'
 import { CARD_HEIGHT, CARD_WIDTH } from './constants.js'
 import { useControlProfileCard } from './useControlProfileCard.js'
 
 export function injectProfileCardHolder(signal: AbortSignal) {
-    const root = document.createElement('div')
-    root.attachShadow({ mode: process.env.shadowRootMode })
-    document.body.appendChild(root)
-    if (!root.shadowRoot) {
-        throw new Error('Can not inject a holder for ProfileCard')
-    }
-    createReactRootShadowed(root.shadowRoot, { signal }).render(<ProfileCardHolder />)
+    attachReactTreeWithoutContainer('profile-card', <ProfileCardHolder />, signal)
 }
 
 const useStyles = makeStyles()((theme) => ({

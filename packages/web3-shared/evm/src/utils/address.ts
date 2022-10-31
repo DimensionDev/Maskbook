@@ -14,7 +14,7 @@ export function isValidAddress(address?: string) {
     return EthereumAddress.isValid(address)
 }
 
-export function isValidChainId(chainId: ChainId) {
+export function isValidChainId(chainId?: ChainId) {
     return getEnumAsArray(ChainId).some((x) => x.value === chainId)
 }
 
@@ -56,6 +56,10 @@ export function isRedPacketAddress(address: string, version?: 1 | 2 | 3 | 4) {
 
 export function getDefaultChainId() {
     return ChainId.Mainnet
+}
+
+export function getInvalidChainId() {
+    return ChainId.Invalid
 }
 
 export function getDefaultNetworkType() {

@@ -1,6 +1,7 @@
 import { ALL_EVENTS, ObservableMap } from '@masknet/shared-base'
 import { StrictMode, useEffect, useState } from 'react'
 import { createRoot } from 'react-dom/client'
+import { PreventShadowRootEventPropagationListContext } from './Contexts.js'
 
 /**
  * This container is used to attach the single React root.
@@ -12,11 +13,15 @@ let globalContainer: HTMLElement
  * This container is prepared for all the Modals.
  */
 let portalContainer: ShadowRoot
-type WrapJSX = (jsx: React.ReactNode) => JSX.Element
+export type WrapJSX = ((jsx: React.ReactNode) => JSX.Element) | undefined
 /** @internal */
 export const shadowEnvironmentMountingRoots = new ObservableMap<any, JSX.Element>()
 
-export function setupReactShadowRootEnvironment(init: ShadowRootInit, wrapJSX: WrapJSX = (x) => <>{x}</>) {
+export function setupReactShadowRootEnvironment(
+    init: ShadowRootInit,
+    preventEventPropagationList: Array<keyof HTMLElementEventMap>,
+    wrapJSX?: WrapJSX,
+) {
     if (portalContainer) return portalContainer
     // TODO: make sure globalContainer is the last DOM in the body?
     globalContainer = document.body.appendChild(document.createElement('div'))
@@ -25,19 +30,23 @@ export function setupReactShadowRootEnvironment(init: ShadowRootInit, wrapJSX: W
     // Note: This React Root does not expect to have any direct DOM children.
     createRoot(globalContainer).render(
         <StrictMode>
-            <MountingPoint wrapJSX={wrapJSX} />
+            <MountingPoint wrapJSX={wrapJSX} preventPropagationList={preventEventPropagationList} />
         </StrictMode>,
     )
     return portalContainer
 }
-function MountingPoint({ wrapJSX }: { wrapJSX: WrapJSX }) {
+function MountingPoint(props: { wrapJSX: WrapJSX; preventPropagationList: Array<keyof HTMLElementEventMap> }) {
     const [children, setChildren] = useState<JSX.Element[]>([])
     useEffect(() => {
         shadowEnvironmentMountingRoots.event.on(ALL_EVENTS, () => {
             setChildren(Array.from(shadowEnvironmentMountingRoots.values()))
         })
     }, [])
-    return wrapJSX(children)
+    return (
+        <PreventShadowRootEventPropagationListContext.Provider value={props.preventPropagationList}>
+            {props.wrapJSX ? props.wrapJSX(children) : children}
+        </PreventShadowRootEventPropagationListContext.Provider>
+    )
 }
 
 /** @internal */

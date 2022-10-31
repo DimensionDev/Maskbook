@@ -78,6 +78,9 @@ export enum ChainId {
     ZKSync_Alpha_Testnet = 280,
 
     Crossbell = 3737,
+
+    // For any chains not supported yet.
+    Invalid = 0,
 }
 
 /**

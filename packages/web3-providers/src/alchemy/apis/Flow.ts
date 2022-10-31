@@ -8,7 +8,7 @@ import {
     TokenType,
     SourceType,
 } from '@masknet/web3-shared-base'
-import { ChainId, getContractAddress, SchemaType } from '@masknet/web3-shared-flow'
+import { ChainId, getContractAddress, SchemaType, isValidChainId } from '@masknet/web3-shared-flow'
 import type { NonFungibleTokenAPI } from '../../types/index.js'
 import { fetchJSON, getAssetFullName } from '../../helpers.js'
 import { Alchemy_FLOW_NetworkMap, FILTER_WORDS } from '../constants.js'
@@ -106,7 +106,7 @@ function createNonFungibleAsset(
 export class AlchemyFlowAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
     async getAsset(address: string, tokenId: string, { account, chainId = ChainId.Mainnet }: HubOptions<ChainId> = {}) {
         const { address: contractAddress, identifier: contractName } = getContractAddress(address) ?? {}
-        if (!account || !contractAddress || !contractName) return
+        if (!account || !contractAddress || !contractName || !isValidChainId(chainId)) return
         const chainInfo = Alchemy_FLOW_NetworkMap?.chains?.find((chain) => chain.chainId === chainId)
         const metadata = await fetchJSON<AlchemyResponse_FLOW_Metadata>(
             urlcat(`${chainInfo?.baseURL}/getNFTMetadata/`, {
@@ -122,6 +122,7 @@ export class AlchemyFlowAPI implements NonFungibleTokenAPI.Provider<ChainId, Sch
     }
 
     async getAssets(from: string, { chainId, indicator }: HubOptions<ChainId> = {}) {
+        if (!from || !isValidChainId(chainId)) return createPageable([], createIndicator(indicator))
         const chainInfo = Alchemy_FLOW_NetworkMap?.chains?.find((chain) => chain.chainId === chainId)
         const res = await fetchJSON<AlchemyResponse_FLOW>(
             urlcat(`${chainInfo?.baseURL}/getNFTs/`, {
