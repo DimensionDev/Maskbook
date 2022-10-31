@@ -20,7 +20,7 @@ export function normalizeBuildFlags(flags: BuildFlags): NormalizedFlags {
         reactRefresh = hmr,
         reproducibleBuild = false,
         devtools = mode === 'development' || channel !== 'stable',
-        sourceMapPreference = true,
+        sourceMapPreference = mode === 'development',
         outputPath = join(__dirname, '../../../', mode === 'development' ? 'dist' : 'build'),
     } = flags
     if (!isAbsolute(outputPath)) outputPath = join(__dirname, '../../../', outputPath)
@@ -34,10 +34,7 @@ export function normalizeBuildFlags(flags: BuildFlags): NormalizedFlags {
     // React Devtools integration is not supported in Firefox or App yet.
     if (engine !== 'chromium' || architecture === 'app') devtools = false
 
-    if (mode === 'production') {
-        hmr = false
-        sourceMapPreference = false
-    }
+    if (mode === 'production') hmr = false
     if (!hmr) reactRefresh = false
 
     return {
@@ -71,9 +68,13 @@ export function computedBuildFlags(flags: Required<BuildFlags>): ComputedFlags {
     const lockdown = flags.engine === 'chromium'
 
     let sourceMapKind: Configuration['devtool'] = false
-    if (flags.sourceMapPreference === true) {
+    if (flags.sourceMapPreference) {
         if (flags.manifest === 3) sourceMapKind = 'inline-cheap-source-map'
         else sourceMapKind = 'eval-cheap-source-map'
+
+        if (flags.mode === 'production') sourceMapKind = 'source-map'
+        if (typeof flags.sourceMapPreference === 'string') sourceMapKind = flags.sourceMapPreference
+        if (process.env.CI) sourceMapKind = false
     }
 
     const supportDynamicImport = !(flags.engine === 'safari' && flags.architecture === 'app')
