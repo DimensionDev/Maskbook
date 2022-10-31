@@ -17,14 +17,22 @@ import { KeyValue, MaskX, MaskX_BaseAPI, NextIDProof, NextIDStorage, RSS3, Twitt
 import { ENS_Resolver } from './NameService/ENS.js'
 import { ChainbaseResolver } from './NameService/Chainbase.js'
 import { Web3StateSettings } from '../settings/index.js'
+import { SpaceID_Resolver } from './NameService/SpaceID.js'
 
 const ENS_RE = /[^\t\n\v()[\]]{1,256}\.(eth|kred|xyz|luxe)\b/i
+const SID_RE = /[^\t\n\v()[\]]{1,256}\.bnb\b/i
 const ADDRESS_FULL = /0x\w{40,}/i
 const RSS3_URL_RE = /https?:\/\/(?<name>[\w.]+)\.(rss3|cheers)\.bio/
 const RSS3_RNS_RE = /(?<name>[\w.]+)\.rss3/
 
 function getENSNames(userId: string, nickname: string, bio: string) {
     return [userId.match(ENS_RE), nickname.match(ENS_RE), bio.match(ENS_RE)]
+        .map((result) => result?.[0] ?? '')
+        .filter(Boolean)
+}
+
+function getSIDNames(userId: string, nickname: string, bio: string) {
+    return [userId.match(SID_RE), nickname.match(SID_RE), bio.match(SID_RE)]
         .map((result) => result?.[0] ?? '')
         .filter(Boolean)
 }
@@ -176,6 +184,22 @@ export class IdentityService extends IdentityServiceState {
         return compact(allSettled.map((x) => (x.status === 'fulfilled' ? x.value : undefined)).filter(Boolean))
     }
 
+    private async getSocialAddressFromSpaceID({ identifier, nickname = '', bio = '' }: SocialIdentity) {
+        const names = getSIDNames(identifier?.userId ?? '', nickname, bio)
+        if (!names.length) return
+
+        const resolver = new SpaceID_Resolver()
+
+        const allSettled = await Promise.allSettled(
+            names.map(async (name) => {
+                const address = await resolver.lookup(name)
+                if (!address) return
+                return this.createSocialAddress(SocialAddressType.SPACE_ID, address, name)
+            }),
+        )
+        return compact(allSettled.map((x) => (x.status === 'fulfilled' ? x.value : undefined)).filter(Boolean))
+    }
+
     /** Read a social address from Twitter Blue. */
     private async getSocialAddressFromTwitterBlue({ identifier }: SocialIdentity) {
         const userId = identifier?.userId
@@ -244,6 +268,7 @@ export class IdentityService extends IdentityServiceState {
         const allSettled = await Promise.allSettled([
             this.getSocialAddressFromBio(identity),
             this.getSocialAddressFromENS(identity),
+            this.getSocialAddressFromSpaceID(identity),
             this.getSocialAddressFromAvatarKV(identity),
             this.getSocialAddressFromAvatarNextID(identity),
             this.getSocialAddressFromRSS3(identity),
