@@ -1,8 +1,8 @@
 import { useCallback } from 'react'
 import type { SourceType } from '@masknet/web3-shared-base'
 import { FootnoteMenuOption, SourceSwitcher as SourceSwitcherShared } from '@masknet/shared'
-import { CollectibleState } from './hooks/useCollectibleState'
-import { SUPPORTED_SOURCE_TYPES } from '../constants'
+import { CollectibleState } from './hooks/useCollectibleState.js'
+import { SUPPORTED_SOURCE_TYPES } from '../constants.js'
 import { makeStyles } from '@masknet/theme'
 
 interface StyleProps {

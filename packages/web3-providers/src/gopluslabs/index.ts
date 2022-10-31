@@ -1,6 +1,6 @@
 import urlcat from 'urlcat'
 import { first, isEmpty, parseInt, uniqBy } from 'lodash-unified'
-import { ChainId } from '@masknet/web3-shared-evm'
+import { ChainId, isValidChainId } from '@masknet/web3-shared-evm'
 import type { SecurityAPI } from '../index.js'
 import { fetchJSON } from '../helpers.js'
 import { GO_PLUS_LABS_ROOT_URL, SecurityMessageLevel } from './constants.js'
@@ -32,6 +32,7 @@ export class GoPlusLabsAPI implements SecurityAPI.Provider<ChainId> {
     }
 
     async getAddressSecurity(chainId: ChainId, address: string): Promise<SecurityAPI.AddressSecurity | undefined> {
+        if (!isValidChainId(chainId)) return
         const response = await fetchJSON<{
             code: 0 | 1
             message: 'OK' | string
@@ -66,7 +67,7 @@ export const createTokenSecurity = (
         SecurityAPI.ContractSecurity & SecurityAPI.TokenSecurity & SecurityAPI.TradingSecurity
     > = {},
 ) => {
-    if (isEmpty(response)) return
+    if (isEmpty(response) || !isValidChainId(chainId)) return
     const entity = first(Object.entries(response))
     if (!entity) return
     const tokenSecurity = { ...entity[1], contract: entity[0], chainId }

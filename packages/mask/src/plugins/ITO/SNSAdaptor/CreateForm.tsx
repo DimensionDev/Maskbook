@@ -5,7 +5,14 @@ import Web3Utils from 'web3-utils'
 import formatDateTime from 'date-fns/format'
 import { SchemaType, formatAmount, useITOConstants, ChainId } from '@masknet/web3-shared-evm'
 import { isGreaterThan, isZero, FungibleToken, leftShift } from '@masknet/web3-shared-base'
-import { TokenIcon, PluginWalletStatusBar, ChainBoundary } from '@masknet/shared'
+import {
+    TokenIcon,
+    PluginWalletStatusBar,
+    ChainBoundary,
+    WalletConnectedBoundary,
+    DateTimePanel,
+    EthereumERC20TokenApprovedBoundary,
+} from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { Box, Stack, Typography, InputBase, inputBaseClasses } from '@mui/material'
 import { makeStyles, useStylesExtends, ActionButton, LoadingBase } from '@masknet/theme'
@@ -17,9 +24,6 @@ import {
     useLastRecognizedIdentity,
 } from '../../../components/DataSource/useActivatedUI.js'
 import { sliceTextByUILength, useI18N } from '../../../utils/index.js'
-import { DateTimePanel } from '../../../web3/UI/DateTimePanel.js'
-import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary.js'
-import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary.js'
 import type { ExchangeTokenAndAmountState } from './hooks/useExchangeTokenAmountstate.js'
 import type { PoolSettings } from './hooks/useFill.js'
 import { useQualificationVerify } from './hooks/useQualificationVerify.js'

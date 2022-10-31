@@ -5,8 +5,7 @@ import {
     usePortalShadowRoot,
 } from '@masknet/theme'
 import { createPortal } from 'react-dom'
-import { MaskUIRoot } from '../../UIRoot.js'
-import { useClassicMaskSNSTheme } from '../theme/index.js'
+import { MaskUIRootSNS, ShadowRootAttachPointRoot } from '../../UIRoot-sns.js'
 
 const captureEvents: Array<keyof HTMLElementEventMap> = [
     'paste',
@@ -22,35 +21,19 @@ const captureEvents: Array<keyof HTMLElementEventMap> = [
     'change',
 ]
 export function setupReactShadowRootEnvironment() {
-    const shadow = setupReactShadowRootEnvironmentUpper({ mode: process.env.shadowRootMode })
-    attachReactTreeToGlobalContainer_inner(shadow, { key: 'css-vars' }).render(<CSSVariableInjector />)
+    const shadow = setupReactShadowRootEnvironmentUpper(
+        { mode: process.env.shadowRootMode },
+        captureEvents,
+        MaskUIRootSNS,
+    )
+    // Inject variable for Portals
+    attachReactTreeToGlobalContainer(shadow, { key: 'css-vars' }).render(<CSSVariableInjector />)
 }
 
-// https://github.com/DimensionDev/Maskbook/issues/3265 with fast refresh or import order?
-const attachReactTreeToGlobalContainer_inner = attachReactTreeToMountedRoot_noHost({
-    preventEventPropagationList: captureEvents,
-    wrapJSX(jsx) {
-        return (
-            <MaskUIRoot useTheme={useClassicMaskSNSTheme} kind="sns">
-                <CSSVariableInjector />
-                {jsx}
-            </MaskUIRoot>
-        )
-    },
-})
+export const attachReactTreeToGlobalContainer = attachReactTreeToMountedRoot_noHost(ShadowRootAttachPointRoot)
 
 /** @deprecated Renamed to attachReactTreeToGlobalContainer */
-export function createReactRootShadowed(...args: Parameters<typeof attachReactTreeToGlobalContainer_inner>) {
-    // @ts-expect-error
-    createReactRootShadowed = attachReactTreeToGlobalContainer_inner
-    return attachReactTreeToGlobalContainer_inner(...args)
-}
-
-export function attachReactTreeToGlobalContainer(...args: Parameters<typeof attachReactTreeToGlobalContainer_inner>) {
-    // @ts-expect-error
-    attachReactTreeToGlobalContainer = attachReactTreeToGlobalContainer_inner
-    return attachReactTreeToGlobalContainer_inner(...args)
-}
+export const createReactRootShadowed = attachReactTreeToGlobalContainer
 
 function AttachReactTreeWithoutContainerRedirect(props: React.PropsWithChildren<{ debugKey: string }>) {
     // Note: since it is the direct children of attachReactTreeWithoutContainer, it MUST inside a ShadowRoot environment.
@@ -66,7 +49,7 @@ export function attachReactTreeWithoutContainer(debugKey: string, jsx: React.Rea
     const dom = document.createElement('main')
     const shadow = dom.attachShadow({ mode: 'closed' })
 
-    attachReactTreeToGlobalContainer_inner(shadow, { signal, key: debugKey }).render(
+    attachReactTreeToGlobalContainer(shadow, { signal, key: debugKey }).render(
         <AttachReactTreeWithoutContainerRedirect children={jsx} debugKey={debugKey} />,
     )
 }

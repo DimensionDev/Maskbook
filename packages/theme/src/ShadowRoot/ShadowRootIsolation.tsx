@@ -34,7 +34,7 @@ export function ShadowRootIsolation({
 
     return (
         <span {...props}>
-            <ShadowRootStyleProvider shadow={dom.shadowRoot}>
+            <ShadowRootStyleProvider preventPropagation={false} shadow={dom.shadowRoot}>
                 {createPortal(children, container.current)}
             </ShadowRootStyleProvider>
         </span>

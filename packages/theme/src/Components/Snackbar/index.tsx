@@ -253,7 +253,7 @@ export const CustomSnackbarProvider = memo<
     SnackbarProviderProps & {
         offsetY?: number
     }
->(({ offsetY, ...rest }) => {
+>(function CustomSnackbarProvider({ offsetY, ...rest }) {
     const ref = useRef<SnackbarProvider>(null)
     const { classes } = useStyles({ offsetY })
     const onDismiss = (key: string | number) => () => {

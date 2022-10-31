@@ -2,7 +2,7 @@ import type { FC, PropsWithChildren } from 'react'
 import { PluginID } from '@masknet/shared-base'
 import { PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
 import { MaskPostExtraInfoWrapper } from '@masknet/shared'
-import { base } from '../base'
+import { base } from '../base.js'
 import { Icons } from '@masknet/icons'
 
 export const ENSPostExtraInfoWrapper: FC<PropsWithChildren<{}>> = ({ children }) => {

@@ -7,6 +7,8 @@ import {
     TokenSecurityBar,
     useSelectAdvancedSettings,
     useTokenSecurity,
+    WalletConnectedBoundary,
+    EthereumERC20TokenApprovedBoundary,
 } from '@masknet/shared'
 import { makeStyles, MaskColorVar, useStylesExtends, ActionButton } from '@masknet/theme'
 import { InputTokenPanel } from './InputTokenPanel.js'
@@ -23,13 +25,11 @@ import { isNativeTokenWrapper } from '../../helpers/index.js'
 import { DefaultTraderPlaceholder, TraderInfo } from './TraderInfo.js'
 import { MINIMUM_AMOUNT, MIN_GAS_LIMIT } from '../../constants/index.js'
 import { resolveTradeProviderName } from '../../pipes.js'
-import { EthereumERC20TokenApprovedBoundary } from '../../../../web3/UI/EthereumERC20TokenApprovedBoundary.js'
 import { useTradeApproveComputed } from '../../trader/useTradeApproveComputed.js'
 import { isDashboardPage, isPopupPage, PopupRoutes, PluginID, NetworkPluginID } from '@masknet/shared-base'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { AllProviderTradeContext } from '../../trader/useAllProviderTradeContext.js'
-import { WalletConnectedBoundary } from '../../../../web3/UI/WalletConnectedBoundary.js'
-import { TokenSecurityBoundary } from '../../../../web3/UI/TokenSecurityBoundary.js'
+import { TokenSecurityBoundary } from '@masknet/plugin-go-plus-security'
 import { currentSlippageSettings } from '../../settings.js'
 import { PluginTraderMessages } from '../../messages.js'
 import Services from '../../../../extension/service.js'

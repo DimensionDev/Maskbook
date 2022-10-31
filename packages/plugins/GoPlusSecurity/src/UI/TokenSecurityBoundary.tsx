@@ -1,7 +1,7 @@
 import { ActionButton, makeStyles } from '@masknet/theme'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { PluginGoPlusSecurityMessages } from '@masknet/plugin-go-plus-security/messages'
-import { useI18N } from '../../utils/index.js'
+import { PluginGoPlusSecurityMessages } from '../messages.js'
+import { useI18N } from '../locales/index.js'
 import type { ChainId } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({
@@ -30,7 +30,7 @@ export interface TokenSecurityBoundaryProps {
 export function TokenSecurityBoundary(props: TokenSecurityBoundaryProps) {
     const { children = null, showTokenSecurity = false, tokenInfo, onSwap, disabled = true } = props
 
-    const { t } = useI18N()
+    const t = useI18N()
     const { classes } = useStyles()
 
     const { setDialog: setRiskWarningDialog } = useRemoteControlledDialog(
@@ -54,7 +54,7 @@ export function TokenSecurityBoundary(props: TokenSecurityBoundaryProps) {
                         swap: false,
                     })
                 }}>
-                {t('confirm_swap_risk')}
+                {t.confirm_swap_risk()}
             </ActionButton>
         )
 

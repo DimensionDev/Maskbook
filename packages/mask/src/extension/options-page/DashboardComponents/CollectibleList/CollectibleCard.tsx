@@ -1,3 +1,4 @@
+import { memo } from 'react'
 import { Card, Link } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useWeb3State } from '@masknet/web3-hooks-base'
@@ -6,7 +7,6 @@ import type { NetworkPluginID } from '@masknet/shared-base'
 import { NFTCardStyledAssetPlayer } from '@masknet/shared'
 import type { NonFungibleAsset, SourceType, Wallet } from '@masknet/web3-shared-base'
 import { ActionsBarNFT } from '../ActionsBarNFT.js'
-import { memo } from 'react'
 
 const useStyles = makeStyles()((theme) => ({
     root: {

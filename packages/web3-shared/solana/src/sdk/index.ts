@@ -5,6 +5,7 @@ const Endpoints: Record<ChainId, string> = {
     [ChainId.Mainnet]: 'https://solana-mainnet.phantom.app/YBPpkkN4g91xDiAnTE9r0RcMkjg0sKUIWvAfoFVJ',
     [ChainId.Testnet]: 'https://api.testnet.solana.com',
     [ChainId.Devnet]: 'https://api.devnet.solana.com',
+    [ChainId.Invalid]: '',
 }
 
 export function createClientEndpoint(chainId = ChainId.Mainnet) {

@@ -3,7 +3,7 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import { useChainContext, useNetworkContext, useFungibleTokenBalance } from '@masknet/web3-hooks-base'
 import { isGreaterThan, isLessThanOrEqualTo, rightShift } from '@masknet/web3-shared-base'
 import { useI18N } from '../../locales/index.js'
-import { TipsType, ValidationTuple } from '../../types'
+import { TipsType, ValidationTuple } from '../../types/index.js'
 import type { TipContextOptions } from './TipContext.js'
 
 type TipValidateOptions = Pick<

@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
-import { activatedSocialNetworkUI } from '../../../../social-network'
-import { useI18N } from '../../locales'
+import { activatedSocialNetworkUI } from '../../../../social-network/index.js'
+import { useI18N } from '../../locales/index.js'
 import { ConfirmModal, ConfirmModalProps } from '../common/ConfirmModal.js'
 
 export interface TipsTransactionProps extends ConfirmModalProps {

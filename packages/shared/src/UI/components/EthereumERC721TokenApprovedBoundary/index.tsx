@@ -1,8 +1,8 @@
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import { useI18N } from '../../utils/index.js'
+import { useSharedI18N } from '../../../locales/index.js'
 import { makeStyles, useStylesExtends, ActionButtonProps, ActionButton } from '@masknet/theme'
 import { useMemo } from 'react'
-import { EthereumAddress } from 'wallet.ts'
+import { useWeb3State } from '@masknet/web3-hooks-base'
 import type { NonFungibleTokenContract } from '@masknet/web3-shared-base'
 import { useERC721ContractIsApproveForAll, useERC721ContractSetApproveForAllCallback } from '@masknet/web3-hooks-evm'
 
@@ -19,7 +19,8 @@ export interface EthereumERC712TokenApprovedBoundaryProps extends withClasses<'a
 
 export function EthereumERC721TokenApprovedBoundary(props: EthereumERC712TokenApprovedBoundaryProps) {
     const { owner, contractDetailed, operator, children, validationMessage: _validationMessage } = props
-    const { t } = useI18N()
+    const t = useSharedI18N()
+    const { Others } = useWeb3State()
     const classes = useStylesExtends(useStyles(), props)
     const { value, loading, retry } = useERC721ContractIsApproveForAll(contractDetailed?.address, owner, operator)
     const [approveState, approveCallback] = useERC721ContractSetApproveForAllCallback(
@@ -30,10 +31,10 @@ export function EthereumERC721TokenApprovedBoundary(props: EthereumERC712TokenAp
     )
 
     const validationMessage = useMemo(() => {
-        if (!contractDetailed?.address || !EthereumAddress.isValid(contractDetailed?.address))
-            return t('plugin_wallet_select_a_nft_contract')
-        if (!owner || !EthereumAddress.isValid(owner)) return t('plugin_wallet_select_a_nft_owner')
-        if (!operator || !EthereumAddress.isValid(operator)) return t('plugin_wallet_select_a_nft_operator')
+        if (!contractDetailed?.address || !Others?.isValidAddress(contractDetailed?.address))
+            return t.plugin_wallet_select_a_nft_contract()
+        if (!owner || !Others?.isValidAddress(owner)) return t.plugin_wallet_select_a_nft_owner()
+        if (!operator || !Others?.isValidAddress(operator)) return t.plugin_wallet_select_a_nft_operator()
         if (_validationMessage) return _validationMessage
         return ''
     }, [contractDetailed, owner, operator, _validationMessage])
@@ -47,7 +48,7 @@ export function EthereumERC721TokenApprovedBoundary(props: EthereumERC712TokenAp
                 loading
                 disabled
                 {...props.ActionButtonProps}>
-                {t('plugin_wallet_nft_approving_all', {
+                {t.plugin_wallet_nft_approving_all({
                     symbol: contractDetailed?.symbol
                         ? contractDetailed.symbol.toLowerCase() === 'unknown'
                             ? 'All'
@@ -86,7 +87,7 @@ export function EthereumERC721TokenApprovedBoundary(props: EthereumERC712TokenAp
                 fullWidth
                 onClick={approveCallback}
                 {...props.ActionButtonProps}>
-                {t('plugin_wallet_approve_all_nft', {
+                {t.plugin_wallet_approve_all_nft({
                     symbol: contractDetailed?.symbol
                         ? contractDetailed?.symbol.toLowerCase() === 'unknown'
                             ? 'All'
@@ -103,7 +104,7 @@ export function EthereumERC721TokenApprovedBoundary(props: EthereumERC712TokenAp
                 fullWidth
                 onClick={retry}
                 {...props.ActionButtonProps}>
-                {t('plugin_wallet_fail_to_load_nft_contract')}
+                {t.plugin_wallet_fail_to_load_nft_contract()}
             </ActionButton>
         )
     }

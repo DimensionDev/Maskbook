@@ -13,7 +13,7 @@ import {
     resolveIPFS_URL,
     SourceType,
 } from '@masknet/web3-shared-base'
-import { ChainId, SchemaType } from '@masknet/web3-shared-solana'
+import { ChainId, SchemaType, isValidChainId } from '@masknet/web3-shared-solana'
 import type { NonFungibleTokenAPI } from '../types/index.js'
 import { MAGIC_EDEN_API_URL } from './constants.js'
 import type {
@@ -95,6 +95,7 @@ function createNFTCollection(collection: Collection): NonFungibleTokenContract<C
 
 export class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
     async getToken(address: string, tokenMint: string, { chainId = ChainId.Mainnet }: HubOptions<ChainId> = {}) {
+        if (!isValidChainId(chainId)) return
         const token = await fetchFromMagicEden<MagicEdenToken>(
             chainId,
             urlcat('/v2/tokens/:mint_address', { mint_address: tokenMint }),
@@ -109,6 +110,7 @@ export class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
     }
 
     async getAsset(address: string, tokenMint: string, { chainId = ChainId.Mainnet }: HubOptions<ChainId> = {}) {
+        if (!isValidChainId(chainId)) return
         const [token, auction, nft] = await Promise.all([
             this.getToken(address, tokenMint, {
                 chainId,
@@ -146,6 +148,7 @@ export class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
     }
 
     async getAssets(owner: string, { chainId = ChainId.Mainnet, indicator }: HubOptions<ChainId> = {}) {
+        if (!isValidChainId(chainId)) return createPageable(EMPTY_LIST, createIndicator(indicator))
         if ((indicator?.index ?? 0) > 0) return createPageable(EMPTY_LIST, createIndicator(indicator))
 
         const response = await fetchFromMagicEden<{
@@ -197,6 +200,7 @@ export class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
     }
 
     async getContract(tokenMint: string, { chainId = ChainId.Mainnet }: HubOptions<ChainId> = {}) {
+        if (!isValidChainId(chainId)) return
         const token = await fetchFromMagicEden<MagicEdenToken>(
             chainId,
             urlcat('/v2/tokens/:mint_address', { mint_address: tokenMint }),
@@ -215,6 +219,7 @@ export class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
         tokenId: string,
         { chainId = ChainId.Mainnet, indicator, size = 50 }: HubOptions<ChainId> = {},
     ) {
+        if (!isValidChainId(chainId)) return createPageable(EMPTY_LIST, createIndicator(indicator))
         const activities = await fetchFromMagicEden<TokenActivity[]>(
             chainId,
             urlcat('/v2/tokens/:mint_address/activities', {
@@ -253,6 +258,7 @@ export class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
         side: OrderSide,
         { chainId = ChainId.Mainnet, indicator, size }: HubOptions<ChainId> = {},
     ) {
+        if (!isValidChainId(chainId)) return createPageable(EMPTY_LIST, createIndicator(indicator))
         const limit = size || 20
         const offers = await fetchFromMagicEden<WalletOffer[]>(
             chainId,
@@ -285,6 +291,7 @@ export class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
         symbol: string,
         { chainId = ChainId.Mainnet, indicator, size = 20 }: HubOptions<ChainId> = {},
     ) {
+        if (!isValidChainId(chainId)) return createPageable(EMPTY_LIST, createIndicator(indicator))
         const collections = await fetchFromMagicEden<Collection[]>(
             chainId,
             urlcat('/collections/:symbol/listings', {

@@ -5,7 +5,7 @@ import { makeTypedMessageText } from '@masknet/typed-message'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { useWeb3, useChainContext } from '@masknet/web3-hooks-base'
 import type { Web3 } from '@masknet/web3-shared-evm'
-import { TokenIcon, ChainBoundary } from '@masknet/shared'
+import { TokenIcon, ChainBoundary, WalletConnectedBoundary } from '@masknet/shared'
 import { Button, Card, Grid, Typography, Box } from '@mui/material'
 import { usePluginWrapper } from '@masknet/plugin-infra/content-script'
 
@@ -19,7 +19,6 @@ import {
     singAndPostProofOfRecommendationWithReferrer,
 } from './utils/proofOfRecommendation.js'
 
-import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary.js'
 import { RewardFarmPostWidget } from './shared-ui/RewardFarmPostWidget.js'
 import { SponsoredFarmIcon } from './shared-ui/icons/SponsoredFarm.js'
 import { IconURLs } from '../assets/index.js'
