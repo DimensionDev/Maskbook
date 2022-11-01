@@ -50,7 +50,8 @@ export async function getAvailableDataProviders(chainId: ChainId, type?: TagType
             .filter((x) => (isMainnet ? true : x.value !== DataProvider.UniswapInfo))
             .map((y) => y.value)
 
-    if (!Number.isNaN(keyword)) return EMPTY_LIST
+    // Check if the keyword is a numeric string
+    if (!Number.isNaN(Number(keyword))) return EMPTY_LIST
 
     const checked = await Promise.all(
         getEnumAsArray(DataProvider)
