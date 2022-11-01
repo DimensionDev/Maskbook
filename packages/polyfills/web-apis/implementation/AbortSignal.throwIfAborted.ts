@@ -1,4 +1,5 @@
 try {
+    // iOS 15.4-
     if (!AbortSignal.prototype.throwIfAborted) {
         AbortSignal.prototype.throwIfAborted = function throwIfAborted(this: AbortSignal) {
             if (!this.aborted) return
