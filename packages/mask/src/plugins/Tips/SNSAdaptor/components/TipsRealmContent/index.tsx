@@ -2,7 +2,7 @@ import { makeStyles } from '@masknet/theme'
 import { Stack } from '@mui/material'
 import { Plugin } from '@masknet/plugin-infra'
 import { TipButton } from '../../../components/index.js'
-import { PluginGuide } from '@masknet/shared'
+import { PluginGuide, PluginGuideProvider } from '@masknet/shared'
 import { getStorage } from '../../../storage/index.js'
 import { EnhanceableSite } from '@masknet/shared-base'
 import { useI18N } from '../../../locales/index.js'
@@ -93,21 +93,24 @@ export const TipsRealmContent: Plugin.InjectUI<Plugin.SNSAdaptor.TipsRealmOption
 
     if (slot === Plugin.SNSAdaptor.TipsSlot.MirrorMenu) {
         return (
-            <PluginGuide
-                storageKey={EnhanceableSite.Mirror}
-                step={1}
-                storage={getStorage()}
-                totalStep={1}
-                guideText={[
-                    {
-                        title: t.tips_guide_description(),
-                        description: t.tips_guide_action(),
-                    },
-                ]}>
-                <Stack display="inline-block" width="38px" height="38px" position="relative" top={2}>
-                    {button}
-                </Stack>
-            </PluginGuide>
+            <PluginGuideProvider
+                value={{
+                    storageKey: EnhanceableSite.Mirror,
+                    totalStep: 1,
+                    storage: getStorage(),
+                    guides: [
+                        {
+                            title: t.tips_guide_description(),
+                            actionText: t.tips_guide_action(),
+                        },
+                    ],
+                }}>
+                <PluginGuide step={1}>
+                    <Stack display="inline-block" width="38px" height="38px" position="relative" top={2}>
+                        {button}
+                    </Stack>
+                </PluginGuide>
+            </PluginGuideProvider>
         )
     }
 

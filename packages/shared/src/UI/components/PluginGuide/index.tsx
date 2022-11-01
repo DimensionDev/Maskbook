@@ -1,8 +1,16 @@
 import type { StorageObject } from '@masknet/shared-base'
 import { makeStyles, usePortalShadowRoot } from '@masknet/theme'
 import { Box, Button, Portal, Typography } from '@mui/material'
-import React, { cloneElement, PropsWithChildren, ReactElement, useEffect, useRef, useState } from 'react'
-import { useSharedI18N } from '../../../locales'
+import React, {
+    cloneElement,
+    createContext,
+    PropsWithChildren,
+    ReactElement,
+    useContext,
+    useEffect,
+    useRef,
+    useState,
+} from 'react'
 import { usePluginGuide } from './usePluginGuide'
 
 const useStyles = makeStyles()((theme) => ({
@@ -71,49 +79,29 @@ const useStyles = makeStyles()((theme) => ({
 
 export interface GuideStepProps extends PropsWithChildren<{}> {
     step: number
-    totalStep: number
-
-    storageKey?: string
     arrow?: boolean
     disabled?: boolean
-    onComplete?: () => void
-    storage: StorageObject<PluginGuideSetting>
-    guideText: Array<{
-        title: string
-        description: string
-    }>
 }
 
 export interface PluginGuideSetting {
     userGuide: { default: number } & Record<string, number>
 }
 
-export function PluginGuide({
-    storageKey = 'default',
-    children,
-    arrow = true,
-    disabled = false,
-    onComplete,
-    totalStep,
-    step,
-    storage,
-    guideText,
-}: GuideStepProps) {
-    const t = useSharedI18N()
+export function PluginGuide({ children, arrow = true, disabled = false, step }: GuideStepProps) {
     const { classes, cx } = useStyles()
     const childrenRef = useRef<HTMLElement>()
+
     const [clientRect, setClientRect] = useState<any>({})
     const [open, setOpen] = useState(false)
     const [bottomAvailable, setBottomAvailable] = useState(true)
-    const { currentStep, finished, nextStep } = usePluginGuide(storage, totalStep, storageKey, onComplete)
+    const { nextStep, currentStep, finished, title, actionText } = useContext(PluginGuideContext)
 
     useEffect(() => {
-        if (disabled || finished) return
+        if (disabled || finished || step !== currentStep) return
         setOpen(true)
-    }, [])
+    }, [currentStep])
 
     useEffect(() => {
-        if (disabled || finished) return
         document.body.style.overflow = open ? 'hidden' : ''
     }, [open])
 
@@ -185,7 +173,7 @@ export function PluginGuide({
                                         }}>
                                         <div>
                                             <Typography fontSize={14} fontWeight={600}>
-                                                {guideText[currentStep - 1]?.title}
+                                                {title}
                                             </Typography>
                                         </div>
                                         <div className={classes.buttonContainer}>
@@ -194,7 +182,7 @@ export function PluginGuide({
                                                 color="primary"
                                                 className={classes.button}
                                                 onClick={onNext}>
-                                                {guideText[currentStep - 1]?.description}
+                                                {actionText}
                                             </Button>
                                         </div>
                                     </div>
@@ -205,5 +193,45 @@ export function PluginGuide({
                 )
             })}
         </>
+    )
+}
+
+interface PluginGuideContext {
+    title?: string
+    actionText?: string
+    finished: boolean
+    currentStep: number
+    totalStep: number
+    nextStep: () => void
+}
+const PluginGuideContext = createContext<PluginGuideContext>(null!)
+
+export function PluginGuideProvider({
+    value,
+    children,
+}: React.ProviderProps<{
+    storage: StorageObject<PluginGuideSetting>
+    totalStep: number
+    storageKey?: string
+    onFinish?: () => void
+    guides: Array<{
+        title: string
+        actionText: string
+    }>
+}>) {
+    const { guides, storage, totalStep, onFinish, storageKey = 'default' } = value
+    const { currentStep, finished, nextStep } = usePluginGuide(storage, totalStep, storageKey, onFinish)
+    return (
+        <PluginGuideContext.Provider
+            value={{
+                title: guides[currentStep - 1]?.title,
+                actionText: guides[currentStep - 1]?.actionText,
+                finished,
+                currentStep,
+                totalStep,
+                nextStep,
+            }}>
+            {children}
+        </PluginGuideContext.Provider>
     )
 }
