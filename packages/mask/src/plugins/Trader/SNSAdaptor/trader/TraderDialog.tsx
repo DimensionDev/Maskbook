@@ -107,8 +107,6 @@ export function TraderDialog() {
         ),
     )
 
-    console.log({ traderProps, inputToken, outputToken })
-
     const [open, setOpen] = useState(false)
 
     const selectAdvancedSettings = useSelectAdvancedSettings(NetworkPluginID.PLUGIN_EVM)
