@@ -2,7 +2,7 @@ import { LiveSelector } from '@dimensiondev/holoflows-kit'
 import { CrossIsolationMessages, CompositionDialogEvent } from '@masknet/shared-base'
 import { i18n } from '../../../../shared-ui/locales_legacy/index.js'
 import { makeTypedMessageText, SerializableTypedMessages } from '@masknet/typed-message'
-import { delay, waitDocumentReadyState } from '@dimensiondev/kit'
+import { delay, waitDocumentReadyState } from '@masknet/kit'
 
 const nativeComposeButtonSelector = () =>
     new LiveSelector()

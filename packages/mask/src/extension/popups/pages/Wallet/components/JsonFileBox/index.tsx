@@ -3,7 +3,6 @@ import { Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useDropArea } from 'react-use'
 import { Icons } from '@masknet/icons'
-import { blobToText } from '@dimensiondev/kit'
 import { useI18N } from '../../../../../../utils/index.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -55,7 +54,7 @@ export const JsonFileBox = memo<JsonFileBox>(({ onChange }) => {
 
     useEffect(() => {
         if (file) {
-            blobToText(file).then((result) => onChange(result))
+            file.text().then((result) => onChange(result))
         }
     }, [file, onChange])
 

@@ -48,9 +48,15 @@ export async function openPopupWindow(route?: PopupRoutes, params?: Record<strin
             // opened from the background chrome process for the extension that
             // has no physical dimensions
 
-            const { screenX, screenY, outerWidth } = window
-            top = Math.max(screenY, 0)
-            left = Math.max(screenX + (outerWidth - 350), 0)
+            if (process.env.manifest === '2') {
+                // @ts-expect-error
+                const { screenX, screenY, outerWidth } = window
+                top = Math.max(screenY, 0)
+                left = Math.max(screenX + (outerWidth - 350), 0)
+            } else {
+                top = 100
+                left = 100
+            }
         }
 
         const { id } = await browser.windows.create({

@@ -1,6 +1,6 @@
 import { forwardRef, useCallback, useEffect, useImperativeHandle, useState, useMemo } from 'react'
 import { useUnmount, useUpdateEffect } from 'react-use'
-import { delay } from '@dimensiondev/kit'
+import { delay } from '@masknet/kit'
 import { useOpenShareTxDialog, useSelectFungibleToken } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { FungibleToken, formatBalance } from '@masknet/web3-shared-base'

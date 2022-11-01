@@ -1,4 +1,4 @@
-import { decodeArrayBuffer, encodeArrayBuffer } from '@dimensiondev/kit'
+import { decodeArrayBuffer, encodeArrayBuffer } from '@masknet/kit'
 import { parseURLs } from '@masknet/shared-base'
 import { Some, None, Option } from 'ts-results'
 

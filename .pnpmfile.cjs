@@ -60,6 +60,7 @@ function assertInstallationSourceValid(parentPackage, dependedPackage, installat
         if (Array.isArray(source) && source.indexOf(installationSource) !== -1) return
     }
 
+    if (dependedPackage === '@typescript/lib-dom' && installationSource.startsWith('npm:@types/web@^')) return
     if (dependedPackage === 'lodash-es' && installationSource.startsWith('npm:lodash@^4')) return
 
     // !!! There is some relative path installation source in the dependency tree,

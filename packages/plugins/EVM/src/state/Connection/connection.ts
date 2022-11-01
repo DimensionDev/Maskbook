@@ -1,7 +1,7 @@
 import { first } from 'lodash-unified'
 import { AbiItem, numberToHex, toHex, toNumber } from 'web3-utils'
 import type { RequestArguments, SignedTransaction, TransactionReceipt } from 'web3-core'
-import { delay } from '@dimensiondev/kit'
+import { delay } from '@masknet/kit'
 import { getSubscriptionCurrentValue, PartialRequired } from '@masknet/shared-base'
 import type { ERC20 } from '@masknet/web3-contracts/types/ERC20'
 import type { ERC20Bytes32 } from '@masknet/web3-contracts/types/ERC20Bytes32'

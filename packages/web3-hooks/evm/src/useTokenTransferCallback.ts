@@ -1,4 +1,4 @@
-import { unreachable } from '@dimensiondev/kit'
+import { unreachable } from '@masknet/kit'
 import { SchemaType } from '@masknet/web3-shared-evm'
 import { useERC20TokenTransferCallback } from './useERC20TokenTransferCallback.js'
 import { useERC721TokenTransferCallback } from './useERC721TokenTransferCallback.js'

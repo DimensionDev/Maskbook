@@ -1,5 +1,5 @@
 import type Web3 from 'web3'
-import { isNonNull } from '@dimensiondev/kit'
+import { isNonNull } from '@masknet/kit'
 import type { TransactionReceipt } from 'web3-core'
 import { createContract, TransactionEventType } from '@masknet/web3-shared-evm'
 import type { AbiItem } from 'web3-utils'

@@ -13,7 +13,7 @@ import {
 } from '../utils/index.js'
 import type { PayloadParserResult } from './index.js'
 import { get_v38PublicSharedCryptoKey } from './shared.js'
-import { encodeText } from '@dimensiondev/kit'
+import { encodeText } from '@masknet/kit'
 import {
     andThenAsync,
     CheckedError,

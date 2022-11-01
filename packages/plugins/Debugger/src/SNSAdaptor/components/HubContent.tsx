@@ -4,7 +4,7 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import { makeStyles, ShadowRootMenu } from '@masknet/theme'
 import { Hub, OrderSide, resolveSourceTypeName, SourceType } from '@masknet/web3-shared-base'
 import { Button, MenuItem, Table, TableBody, TableCell, TableRow, TextField, Typography } from '@mui/material'
-import { getEnumAsArray } from '@dimensiondev/kit'
+import { getEnumAsArray } from '@masknet/kit'
 import { Icons } from '@masknet/icons'
 
 export interface HubContentProps {

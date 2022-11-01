@@ -1,4 +1,4 @@
-import { encodeArrayBuffer } from '@dimensiondev/kit'
+import { encodeArrayBuffer } from '@masknet/kit'
 import {
     decrypt,
     parsePayload,

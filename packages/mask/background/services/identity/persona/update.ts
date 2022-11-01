@@ -1,4 +1,4 @@
-import { decodeArrayBuffer } from '@dimensiondev/kit'
+import { decodeArrayBuffer } from '@masknet/kit'
 import type { MobilePersona } from '@masknet/public-api'
 import {
     ECKeyIdentifierFromJsonWebKey,

@@ -1,4 +1,4 @@
-import { unreachable } from '@dimensiondev/kit'
+import { unreachable } from '@masknet/kit'
 import { AlgorithmVersion, GrayscaleAlgorithm, TransformAlgorithm, type EncodeOptions } from '@masknet/stego-js'
 import { SteganographyPreset } from './index.js'
 

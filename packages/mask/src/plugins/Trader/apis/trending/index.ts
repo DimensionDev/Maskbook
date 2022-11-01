@@ -1,5 +1,5 @@
 import { first } from 'lodash-unified'
-import { getEnumAsArray, unreachable } from '@dimensiondev/kit'
+import { getEnumAsArray, unreachable } from '@masknet/kit'
 import { DataProvider } from '@masknet/public-api'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { CoinGeckoTrendingEVM, CoinMarketCap, NFTScanTrending, TrendingAPI, UniSwap } from '@masknet/web3-providers'

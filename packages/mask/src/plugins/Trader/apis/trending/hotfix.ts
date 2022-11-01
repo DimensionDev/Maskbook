@@ -1,4 +1,4 @@
-import { getEnumAsArray } from '@dimensiondev/kit'
+import { getEnumAsArray } from '@masknet/kit'
 import { ChainId, getCoinGeckoConstants, getCoinMarketCapConstants } from '@masknet/web3-shared-evm'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { TagType } from '../../types/index.js'

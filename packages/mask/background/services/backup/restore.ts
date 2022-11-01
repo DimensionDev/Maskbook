@@ -1,4 +1,4 @@
-import { unreachable } from '@dimensiondev/kit'
+import { unreachable } from '@masknet/kit'
 import { BackupPreview, getBackupPreviewInfo, normalizeBackup, NormalizedBackup } from '@masknet/backup-format'
 import { PopupRoutes } from '@masknet/shared-base'
 import { Result } from 'ts-results'

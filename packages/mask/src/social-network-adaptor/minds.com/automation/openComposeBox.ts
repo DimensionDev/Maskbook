@@ -1,6 +1,6 @@
 import { makeTypedMessageText, SerializableTypedMessages } from '@masknet/typed-message'
 import { CrossIsolationMessages, CompositionDialogEvent } from '@masknet/shared-base'
-import { delay, waitDocumentReadyState } from '@dimensiondev/kit'
+import { delay, waitDocumentReadyState } from '@masknet/kit'
 import { i18n } from '../../../../shared-ui/locales_legacy/index.js'
 import { composeButtonSelector, composeDialogIndicatorSelector, composeTextareaSelector } from '../utils/selector.js'
 

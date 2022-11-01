@@ -1,5 +1,5 @@
 import { first, unionWith } from 'lodash-unified'
-import { getEnumAsArray } from '@dimensiondev/kit'
+import { getEnumAsArray } from '@masknet/kit'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import {
     Transaction,

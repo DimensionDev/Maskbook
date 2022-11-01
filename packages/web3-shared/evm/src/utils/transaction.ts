@@ -1,5 +1,5 @@
 import { sha3, toHex } from 'web3-utils'
-import { unreachable } from '@dimensiondev/kit'
+import { unreachable } from '@masknet/kit'
 import { Transaction, TransactionStateType, EthereumMethodType, ChainId } from '../types/index.js'
 import { isEmptyHex } from './address.js'
 import { ZERO_ADDRESS } from '../constants/index.js'

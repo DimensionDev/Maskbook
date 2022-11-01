@@ -2,7 +2,7 @@ import type { SocialNetworkUI } from '../../../social-network/index.js'
 import { untilElementAvailable } from '../../../utils/dom.js'
 import { MaskMessages } from '../../../utils/messages.js'
 import { selectElementContents } from '../../../utils/utils.js'
-import { abortSignalTimeout, delay } from '@dimensiondev/kit'
+import { delay } from '@masknet/kit'
 import { inputText } from '@masknet/injected-script'
 import { getEditorContent, hasEditor, hasFocus, isCompose } from '../utils/postBox.js'
 import { composeButtonSelector, postEditorDraftContentSelector } from '../utils/selector.js'
@@ -57,7 +57,7 @@ export const pasteTextToCompositionMinds: SocialNetworkUI.AutomationCapabilities
             throw e
         }
 
-        worker(abortSignalTimeout(timeout)).then(undefined, (error) => fail(error))
+        worker(AbortSignal.timeout(timeout)).then(undefined, (error) => fail(error))
     }
 
 function SimulateTextareaInput(id: string) {

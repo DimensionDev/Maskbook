@@ -1,5 +1,5 @@
 import { downloadUrl, MaskMessages, pasteImageToActiveElements } from '../../../utils/index.js'
-import { delay, waitDocumentReadyState } from '@dimensiondev/kit'
+import { delay, waitDocumentReadyState } from '@masknet/kit'
 import type { SocialNetworkUI } from '../../types.js'
 import { activatedSocialNetworkUI } from '../../ui.js'
 

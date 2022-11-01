@@ -1,4 +1,4 @@
-import { decodeArrayBuffer, encodeArrayBuffer } from '@dimensiondev/kit'
+import { decodeArrayBuffer, encodeArrayBuffer } from '@masknet/kit'
 import { None, Option, Some } from 'ts-results'
 /** @internal */
 export function sharedEncoder(input: Uint8Array): string {

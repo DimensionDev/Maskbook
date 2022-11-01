@@ -1,4 +1,4 @@
-import { unreachable } from '@dimensiondev/kit'
+import { unreachable } from '@masknet/kit'
 import { createGlobalSettings, createInternalSettings } from '../../../shared/legacy-settings/createSettings.js'
 import { PLUGIN_ID, SLIPPAGE_DEFAULT } from './constants/index.js'
 import type { ZrxTradePool } from './types/index.js'
