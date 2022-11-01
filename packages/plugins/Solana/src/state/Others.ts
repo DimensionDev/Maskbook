@@ -29,6 +29,7 @@ import {
     explorerResolver,
     formatSchemaType,
     createNativeToken,
+    isValidChainId,
 } from '@masknet/web3-shared-solana'
 
 export class Others extends OthersState<ChainId, SchemaType, ProviderType, NetworkType, Transaction> {
@@ -43,6 +44,7 @@ export class Others extends OthersState<ChainId, SchemaType, ProviderType, Netwo
     override explorerResolver = explorerResolver
 
     override isValidDomain = isValidDomain
+    override isValidChainId = isValidChainId
     override isValidAddress = isValidAddress
     override isZeroAddress = isZeroAddress
     override isNativeTokenAddress = isNativeTokenAddress

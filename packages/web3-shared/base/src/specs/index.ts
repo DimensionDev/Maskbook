@@ -1395,6 +1395,7 @@ export interface OthersState<ChainId, SchemaType, ProviderType, NetworkType, Tra
 
     // #region validators
     isValidChain(chainId?: ChainId, testnet?: boolean): boolean
+    isValidChainId(chainId: ChainId): boolean
     isValidDomain(domain?: string): boolean
     isValidAddress(address?: string): boolean
     isZeroAddress(address?: string): boolean
@@ -1422,7 +1423,7 @@ export interface OthersState<ChainId, SchemaType, ProviderType, NetworkType, Tra
     getAverageBlockDelay(chainId?: ChainId, scale?: number): number
     getTransactionSignature(chainId?: ChainId, transaction?: Partial<Transaction>): string | undefined
 
-    // #region contrustor
+    // #region Constructor
     createNativeToken(chainId: ChainId): FungibleToken<ChainId, SchemaType>
     createERC20Token( chainId: ChainId, address: string, name?: string, symbol?: string, decimals?: number, logoURI?: string): FungibleToken<ChainId, SchemaType>
 }

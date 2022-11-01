@@ -74,6 +74,9 @@ export class OthersState<ChainId, SchemaType, ProviderType, NetworkType, Transac
         const descriptor = this.options.chainDescriptors.find((x) => x.chainId === chainId)
         return descriptor?.network === 'mainnet' || testnet
     }
+    isValidChainId(chainId: ChainId): boolean {
+        throw new Error('Method not implemented.')
+    }
     isValidDomain(domain: string): boolean {
         throw new Error('Method not implemented.')
     }
