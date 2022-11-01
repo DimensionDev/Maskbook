@@ -24,7 +24,7 @@ import { Icons } from '@masknet/icons'
 import { WalletMessages } from '../../../plugins/Wallet/messages.js'
 import { useI18N } from '../../../utils/index.js'
 import { usePendingTransactions } from './usePendingTransactions.js'
-import { delay } from '@dimensiondev/kit'
+import { delay } from '@masknet/kit'
 
 const useStyles = makeStyles<{
     contentBackground?: string

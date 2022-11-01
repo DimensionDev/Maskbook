@@ -1,4 +1,4 @@
-import { isNonNull } from '@dimensiondev/kit'
+import { isNonNull } from '@masknet/kit'
 import type { PersonaIdentifier, PostInformation, PostIVIdentifier } from '@masknet/shared-base'
 import { PostRecord, queryPostPagedDB } from '../../database/post/index.js'
 

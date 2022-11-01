@@ -8,7 +8,7 @@ import { Services } from '../../../API.js'
 import { PersonaNameUI } from './PersonaNameUI.js'
 import { useCreatePersonaByPrivateKey, useCreatePersonaV2 } from '../../../hooks/useCreatePersonaV2.js'
 import { PersonaContext } from '../../Personas/hooks/usePersonaContext.js'
-import { delay } from '@dimensiondev/kit'
+import { delay } from '@masknet/kit'
 import { useAsync } from 'react-use'
 
 export const PersonaRecovery = () => {

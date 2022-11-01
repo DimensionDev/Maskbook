@@ -12,7 +12,7 @@ import { WalletContext } from '../hooks/useWalletContext.js'
 import { useTitle } from '../../../hook/useTitle.js'
 import formatDateTime from 'date-fns/format'
 import { saveFileFromBuffer } from '../../../../../../shared/index.js'
-import { encodeText } from '@dimensiondev/kit'
+import { encodeText } from '@masknet/kit'
 import { MimeTypes } from '@masknet/shared-base'
 
 const useStyles = makeStyles()({

@@ -12,15 +12,17 @@ import {
     NonFungibleToken,
 } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType, createNativeToken, isValidChainId } from '@masknet/web3-shared-solana'
-import { memoizePromise } from '@dimensiondev/kit'
+import { memoizePromise } from '@masknet/kit'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { CoinGeckoPriceSolanaAPI } from '../../coingecko/index.js'
 import type { FungibleTokenAPI, TokenListAPI } from '../../types/index.js'
 import { RAYDIUM_TOKEN_LIST, SPL_TOKEN_PROGRAM_ID } from '../constants.js'
 import { createFungibleAsset, createFungibleToken, requestRPC } from '../helpers.js'
 import type { GetAccountInfoResponse, GetProgramAccountsResponse, RaydiumTokenList } from '../types.js'
+import { memoize } from 'lodash-unified'
 
 const fetchTokenList = memoizePromise(
+    memoize,
     async (url: string): Promise<Array<FungibleToken<ChainId, SchemaType>>> => {
         const response = await fetch(url, { cache: 'force-cache' })
         const tokenList = (await response.json()) as RaydiumTokenList

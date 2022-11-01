@@ -13,7 +13,7 @@ import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import { SignUpRoutePath } from '../../pages/SignUp/routePath.js'
 import { LoadingButton } from '../LoadingButton/index.js'
-import { delay } from '@dimensiondev/kit'
+import { delay } from '@masknet/kit'
 
 const useStyles = makeStyles()((theme) => ({
     error: {

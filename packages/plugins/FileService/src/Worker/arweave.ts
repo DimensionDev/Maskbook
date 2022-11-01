@@ -1,5 +1,5 @@
 import { Attachment } from '@dimensiondev/common-protocols'
-import { encodeText } from '@dimensiondev/kit'
+import { encodeText } from '@masknet/kit'
 import Arweave from 'arweave/web'
 import type Transaction from 'arweave/web/lib/transaction.js'
 import type { JWKInterface } from 'arweave/web/lib/wallet.js'

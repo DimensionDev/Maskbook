@@ -1,5 +1,5 @@
 import { selectElementContents } from '../../../utils/utils.js'
-import { delay } from '@dimensiondev/kit'
+import { delay } from '@masknet/kit'
 import { isMobileFacebook } from '../utils/isMobile.js'
 import { MaskMessages } from '../../../utils/messages.js'
 import type { PostInfo } from '@masknet/plugin-infra/content-script'

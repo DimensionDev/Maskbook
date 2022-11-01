@@ -4,8 +4,7 @@
     "rootDir": "./",
     "outDir": "../dist/shared-ui/",
     "tsBuildInfoFile": "../dist/shared-ui.tsbuildinfo",
-    "emitDeclarationOnly": true,
-    "lib": ["ES2022"]
+    "emitDeclarationOnly": true
   },
   "include": ["./", "./**/*.json"],
   "references": [

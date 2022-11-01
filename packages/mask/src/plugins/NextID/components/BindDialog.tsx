@@ -6,7 +6,7 @@ import { NetworkPluginID, Binding, PersonaInformation, NextIDAction, NextIDPlatf
 import { BindPanelUI } from './BindPanelUI.js'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { useCustomSnackbar } from '@masknet/theme'
-import { delay } from '@dimensiondev/kit'
+import { delay } from '@masknet/kit'
 import { useBindPayload } from '../hooks/useBindPayload.js'
 import { usePersonaSign } from '../hooks/usePersonaSign.js'
 import { useWalletSign } from '../hooks/useWalletSign.js'

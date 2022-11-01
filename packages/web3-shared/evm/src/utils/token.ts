@@ -1,4 +1,4 @@
-import { getEnumAsArray } from '@dimensiondev/kit'
+import { getEnumAsArray } from '@masknet/kit'
 import { createFungibleToken, createFungibleTokensFromConstants } from '@masknet/web3-shared-base'
 import Token from '@masknet/web3-constants/evm/token.json'
 import { chainResolver } from './resolver.js'

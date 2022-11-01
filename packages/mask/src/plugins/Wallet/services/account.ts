@@ -8,7 +8,7 @@ import {
 } from '../../../../shared/legacy-settings/wallet-settings.js'
 import { Flags } from '../../../../shared/index.js'
 import { WalletRPC } from '../messages.js'
-import { defer, DeferTuple } from '@dimensiondev/kit'
+import { defer, DeferTuple } from '@masknet/kit'
 import type { EnhanceableSite, ExtensionSite } from '@masknet/shared-base'
 
 export async function setDefaultMaskAccount() {

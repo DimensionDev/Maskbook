@@ -1,4 +1,4 @@
-import { encodeArrayBuffer, decodeArrayBuffer, concatArrayBuffer } from '@dimensiondev/kit'
+import { encodeArrayBuffer, decodeArrayBuffer, concatArrayBuffer } from '@masknet/kit'
 import type { EC_JsonWebKey, EC_Public_JsonWebKey } from './JWKType.js'
 import { fromBase64URL, toBase64URL } from '../convert/index.js'
 import { ECKeyIdentifier } from '../Identifier/index.js'

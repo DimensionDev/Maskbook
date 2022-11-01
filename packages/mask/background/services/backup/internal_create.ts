@@ -3,7 +3,7 @@ import type { PersonaIdentifier } from '@masknet/shared-base'
 import { None, Some } from 'ts-results'
 import { queryPersonasDB, queryProfilesDB, queryRelations } from '../../database/persona/db.js'
 import { queryPostsDB } from '../../database/post/index.js'
-import { timeout } from '@dimensiondev/kit'
+import { timeout } from '@masknet/kit'
 import { activatedPluginsWorker } from '@masknet/plugin-infra/background-worker'
 import { internal_wallet_backup } from './internal_wallet_backup.js'
 

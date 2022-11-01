@@ -75,9 +75,6 @@ importers:
       '@dimensiondev/holoflows-kit':
         specifier: 0.9.0-20220916150447-7ac7ff2
         version: 0.9.0-20220916150447-7ac7ff2
-      '@dimensiondev/kit':
-        specifier: 0.0.0-20220617045824-8bc7a27
-        version: 0.0.0-20220617045824-8bc7a27
       '@emotion/cache':
         specifier: 11.10.3
         version: 11.10.3_anquw7u43yedhv6g6kmhzkdhze
@@ -96,6 +93,9 @@ importers:
       '@emotion/utils':
         specifier: 1.2.0
         version: 1.2.0
+      '@masknet/kit':
+        specifier: 0.1.0
+        version: 0.1.0
       '@mui/icons-material':
         specifier: 5.10.6
         version: 5.10.6_uv4temvmglq3ybbyla2x45igzm
@@ -117,9 +117,9 @@ importers:
       '@types/react-dom':
         specifier: ^18.0.6
         version: 18.0.6
-      '@types/web':
-        specifier: ^0.0.72
-        version: 0.0.72
+      '@typescript/lib-dom':
+        specifier: npm:@types/web@^0.0.78
+        version: /@types/web/0.0.78
       i18next:
         specifier: ^21.9.1
         version: 21.9.1
@@ -5996,12 +5996,6 @@ packages:
       tslib: 2.4.0
     dev: false
 
-  /@dimensiondev/kit/0.0.0-20220617045824-8bc7a27:
-    resolution: {integrity: sha512-rEA1LIifhVZR4xXa4auXhzolURi7kGO5DLq6dDzP0/JFmhM+gg0yFflmKB1QBQlA2Abuz8sOYyhDvdSxgzokiQ==, tarball: download/@dimensiondev/kit/0.0.0-20220617045824-8bc7a27/a4d1dd89ca1add306290082328acc8150c8794ccb89ce5e0551d1763ad6b6367}
-    dependencies:
-      lodash-es: 4.17.21
-    dev: false
-
   /@dimensiondev/mask-wallet-core/0.1.0-20211013082857-eb62e5f:
     resolution: {integrity: sha512-2d7v1/z9Khw4O7J7oBNKLBo7BONd7ZE2gpw34uHVtdG9i0aEz+LSRappgNTZyUZ/+TRJ7ZgAf+Dbeql1oPMvNA==, tarball: download/@DimensionDev/mask-wallet-core/0.1.0-20211013082857-eb62e5f/04f14f2d88766a9ab098a686785f824270c5ed90}
     peerDependencies:
@@ -7488,6 +7482,10 @@ packages:
 
   /@masknet/compartment/0.4.2:
     resolution: {integrity: sha512-zY9NPar8BhdWcOlZbZaWn5RwXQuPzEHkb5c5Ibijm+Mix4LaDMy6DQLt06NIwoCPFra4Jz4dqiLVsQJ0YtZTWQ==}
+    dev: false
+
+  /@masknet/kit/0.1.0:
+    resolution: {integrity: sha512-OVQJSjEKDcL6RLFrdaQ9MF+3RyD3P3rClrPpfYTfeF3xT6pQitgfO4l3+A11CCSoD+5+EqezGnMGpQ2zB2O3kg==}
     dev: false
 
   /@masknet/membrane/0.1.5:
@@ -11834,8 +11832,8 @@ packages:
       '@types/node': 18.7.4
     dev: true
 
-  /@types/web/0.0.72:
-    resolution: {integrity: sha512-8ELWTmT6gpjH+mFCN6jja/pmXBZTOjSvfnBcxwP7xKC9tkqLNVxtQX/o2W0c1VcUR2ZFPoPSNH7YtdZQfHOvmg==}
+  /@types/web/0.0.78:
+    resolution: {integrity: sha512-1Apkpr0zolMDECgtokp9ztApWkdlg4Ey4UJ3sKHAGjCHoiUq1/kBd0lR+JxeHlQVqAC6tike7tUJ9uLbVNwsxQ==}
     dev: false
 
   /@types/webpack-env/1.18.0:

@@ -3,7 +3,7 @@ import './setup.js'
 import { test } from 'vitest'
 import type { AESCryptoKey, EC_Private_CryptoKey, EC_Public_CryptoKey, ProfileIdentifier } from '@masknet/shared-base'
 import { type EC_Key, EC_KeyCurveEnum, importEC_Key } from '../src/index.js'
-import { unreachable } from '@dimensiondev/kit'
+import { unreachable } from '@masknet/kit'
 test('test keys', () => {})
 
 const alice_K256_publicKey = {
