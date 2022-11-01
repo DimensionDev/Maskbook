@@ -9,7 +9,7 @@ import { buildInfoMarkdown } from './utils/BuildInfoMarkdown.js'
 import { activatedSocialNetworkUI } from './social-network/index.js'
 import { pluginIDSettings } from './../shared/legacy-settings/settings.js'
 import { isTwitter } from './social-network-adaptor/twitter.com/base.js'
-import { useClassicMaskSNSTheme } from './utils/theme/useClassicMaskSNSTheme.js'
+import { useMaskSiteAdaptorMixedTheme } from './utils/theme/useMaskSiteAdaptorMixedTheme.js'
 import { getBackgroundColor } from './utils/theme/color-tools.js'
 import { isFacebook } from './social-network-adaptor/facebook.com/base.js'
 
@@ -51,7 +51,7 @@ export function ShadowRootAttachPointRoot(children: React.ReactNode) {
         (children) =>
             MaskThemeProvider({
                 useMaskIconPalette,
-                useTheme: useClassicMaskSNSTheme,
+                useTheme: useMaskSiteAdaptorMixedTheme,
                 CustomSnackbarOffsetY: isFacebook(activatedSocialNetworkUI) ? 80 : undefined,
                 children,
             }),
