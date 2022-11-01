@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { ChainId, createERC20Token, SchemaType } from '@masknet/web3-shared-evm'
+import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { FungibleToken, ZERO } from '@masknet/web3-shared-base'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import { useChainContext } from '@masknet/web3-hooks-base'
@@ -17,10 +17,7 @@ export function useTradeApproveComputed(
 
     return useMemo(() => {
         return {
-            approveToken:
-                token?.schema === SchemaType.ERC20
-                    ? createERC20Token(chainId, token.address, token.name, token.symbol, token.decimals)
-                    : null,
+            approveToken: token?.schema === SchemaType.ERC20 ? token : null,
             approveAmount: trade ? trade.inputAmount : ZERO,
             approveAddress: (() => {
                 if (context?.TYPE === TradeProvider.ZRX)

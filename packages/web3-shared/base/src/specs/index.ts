@@ -1248,6 +1248,8 @@ export interface TokenState<ChainId, SchemaType> {
     blockedFungibleTokens?: Subscription<Array<FungibleToken<ChainId, SchemaType>>>
     /** The user blocked non-fungible tokens. */
     blockedNonFungibleTokens?: Subscription<Array<NonFungibleToken<ChainId, SchemaType>>>
+    /** Credible fungible tokens */
+    credibleFungibleTokens?: Subscription<Array<FungibleToken<ChainId, SchemaType>>>
 
     /** Add a token */
     addToken?: (address: string, token: Token<ChainId, SchemaType>) => Promise<void>
@@ -1257,6 +1259,8 @@ export interface TokenState<ChainId, SchemaType> {
     trustToken?: (address: string, token: Token<ChainId, SchemaType>) => Promise<void>
     /** Block a token */
     blockToken?: (address: string, token: Token<ChainId, SchemaType>) => Promise<void>
+    /** Create a credible token */
+    createFungibleToken?: (chainId: ChainId, address: string, token?: FungibleToken<ChainId, SchemaType>) => Promise<FungibleToken<ChainId, SchemaType> | undefined>
 }
 export interface TransactionState<ChainId, Transaction> {
     /** The tracked transactions of currently chosen sub-network */

@@ -53,7 +53,7 @@ export const TipTaskProvider: FC<React.PropsWithChildren<Props>> = memo(({ child
     const [tipType, setTipType] = useState<TipsType>(TipsType.Tokens)
     const [amount, setAmount] = useState('')
     const [nonFungibleTokenAddress, setNonFungibleTokenAddress] = useState<string>('')
-    const { value: nativeTokenDetailed = null } = useFungibleToken(pluginID, undefined, {
+    const { value: nativeTokenDetailed = null } = useFungibleToken(pluginID, undefined, undefined, {
         chainId,
     })
     const [userSelectedToken, setToken] = useState<TipContextOptions['token']>(nativeTokenDetailed)

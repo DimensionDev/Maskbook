@@ -8,7 +8,7 @@ import type { TradeInfo } from '../../../types/index.js'
 import { AllProviderTradeContext } from '../../../trader/useAllProviderTradeContext.js'
 
 export function useSortedTrades(traders: TradeInfo[], chainId: ChainId, gasPrice?: string) {
-    const { value: nativeToken } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, '', { chainId })
+    const { value: nativeToken } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, '', undefined, { chainId })
     const { value: nativeTokenPrice = 0 } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM, { chainId })
 
     const {
