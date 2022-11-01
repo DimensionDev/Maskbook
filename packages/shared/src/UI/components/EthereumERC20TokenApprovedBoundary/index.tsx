@@ -1,7 +1,7 @@
 import { makeStyles, useStylesExtends, ActionButton, ActionButtonProps, ShadowRootTooltip } from '@masknet/theme'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { unreachable } from '@dimensiondev/kit'
-import { useI18N } from '../../utils/index.js'
+import { useSharedI18N } from '../../../locales/index.js'
 import type { FungibleToken } from '@masknet/web3-shared-base'
 import { ApproveStateType, useERC20TokenApproveCallback } from '@masknet/web3-hooks-evm'
 import { TokenIcon } from '@masknet/shared'
@@ -52,7 +52,7 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
         expectedChainId,
     } = props
 
-    const { t } = useI18N()
+    const t = useSharedI18N()
     const classes = useStylesExtends(useStyles(), props)
 
     const [{ type: approveStateType, allowance }, transactionState, approveCallback, resetApproveCallback] =
@@ -74,7 +74,7 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
                 variant="contained"
                 disabled
                 {...props.ActionButtonProps}>
-                {fallback ?? t('wallet_transfer_error_amount_absence')}
+                {fallback ?? t.wallet_transfer_error_amount_absence()}
             </ActionButton>
         )
     if (approveStateType === ApproveStateType.FAILED)
@@ -85,7 +85,7 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
                 variant="contained"
                 onClick={resetApproveCallback}
                 {...props.ActionButtonProps}>
-                {t('wallet_load_retry', { symbol: token.symbol ?? token.name ?? 'Token' })}
+                {t.wallet_load_retry({ symbol: token.symbol ?? token.name ?? 'Token' })}
             </ActionButton>
         )
     if (
@@ -110,8 +110,8 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
                 }
                 endIcon={
                     <ShadowRootTooltip
-                        title={t('plugin_wallet_token_infinite_unlock_tips', {
-                            provider: contractName,
+                        title={t.plugin_wallet_token_infinite_unlock_tips({
+                            provider: contractName ?? '',
                             symbol: token.symbol,
                         })}
                         placement="top"
@@ -125,7 +125,7 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
                 }
                 onClick={onApprove}
                 {...props.ActionButtonProps}>
-                {infiniteUnlockContent ?? t('plugin_wallet_token_infinite_unlock', { symbol: token.symbol })}
+                {infiniteUnlockContent ?? t.plugin_wallet_token_infinite_unlock({ symbol: token.symbol })}
             </ActionButton>
         )
     if (approveStateType === ApproveStateType.APPROVED)

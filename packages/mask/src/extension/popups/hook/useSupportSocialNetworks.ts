@@ -1,5 +1,5 @@
 import { useAsync } from 'react-use'
-import Service from '../../service'
+import Service from '../../service.js'
 import type { EnhanceableSite } from '@masknet/shared-base'
 
 export const useSupportSocialNetworks = () => {

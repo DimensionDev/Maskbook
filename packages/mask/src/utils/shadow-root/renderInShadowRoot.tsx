@@ -1,6 +1,12 @@
-import { createReactRootShadowedPartial, setupPortalShadowRoot, CSSVariableInjector } from '@masknet/theme'
-import { MaskUIRoot } from '../../UIRoot.js'
-import { useClassicMaskSNSTheme } from '../theme/index.js'
+import {
+    attachReactTreeToMountedRoot_noHost,
+    setupReactShadowRootEnvironment as setupReactShadowRootEnvironmentUpper,
+    CSSVariableInjector,
+    GlobalBackdrop,
+    usePortalShadowRoot,
+} from '@masknet/theme'
+import { createPortal } from 'react-dom'
+import { MaskUIRootSNS, ShadowRootAttachPointRoot } from '../../UIRoot-sns.js'
 
 const captureEvents: Array<keyof HTMLElementEventMap> = [
     'paste',
@@ -15,23 +21,41 @@ const captureEvents: Array<keyof HTMLElementEventMap> = [
     'dragstart',
     'change',
 ]
-export const setupShadowRootPortal = () => {
-    const shadow = setupPortalShadowRoot({ mode: process.env.shadowRootMode })
-    createReactRootShadowed(shadow, { key: 'css-vars' }).render(<CSSVariableInjector />)
+export function setupReactShadowRootEnvironment() {
+    const shadow = setupReactShadowRootEnvironmentUpper(
+        { mode: process.env.shadowRootMode },
+        captureEvents,
+        MaskUIRootSNS,
+    )
+    // Inject variable for Portals
+    attachReactTreeToGlobalContainer(shadow, { key: 'css-vars' }).render(
+        <>
+            <GlobalBackdrop />
+            <CSSVariableInjector />
+        </>,
+    )
 }
 
-// https://github.com/DimensionDev/Maskbook/issues/3265 with fast refresh or import order?
-const createReactRootShadowed_raw = createReactRootShadowedPartial({
-    preventEventPropagationList: captureEvents,
-    wrapJSX(jsx) {
-        return (
-            <MaskUIRoot useTheme={useClassicMaskSNSTheme} kind="sns">
-                <CSSVariableInjector />
-                {jsx}
-            </MaskUIRoot>
-        )
-    },
-})
-export function createReactRootShadowed(...args: Parameters<typeof createReactRootShadowed_raw>) {
-    return createReactRootShadowed_raw(...args)
+export const attachReactTreeToGlobalContainer = attachReactTreeToMountedRoot_noHost(ShadowRootAttachPointRoot)
+
+/** @deprecated Renamed to attachReactTreeToGlobalContainer */
+export const createReactRootShadowed = attachReactTreeToGlobalContainer
+
+function AttachReactTreeWithoutContainerRedirect(props: React.PropsWithChildren<{ debugKey: string }>) {
+    // Note: since it is the direct children of attachReactTreeWithoutContainer, it MUST inside a ShadowRoot environment.
+    return usePortalShadowRoot((container) => createPortal(props.children, container!), props.debugKey)
+}
+/**
+ * @param debugKey Only used for debug
+ * @param jsx JSX to render
+ * @param signal AbortSignal
+ */
+export function attachReactTreeWithoutContainer(debugKey: string, jsx: React.ReactNode, signal?: AbortSignal) {
+    // Note: do not attach this DOM to window. We don't need it
+    const dom = document.createElement('main')
+    const shadow = dom.attachShadow({ mode: 'closed' })
+
+    attachReactTreeToGlobalContainer(shadow, { signal, key: debugKey }).render(
+        <AttachReactTreeWithoutContainerRedirect children={jsx} debugKey={debugKey} />,
+    )
 }

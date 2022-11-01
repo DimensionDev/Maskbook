@@ -1,19 +1,23 @@
 import { useState, useCallback, useEffect, useMemo } from 'react'
+import classNames from 'classnames'
 import { Box, Typography, List, ListItem } from '@mui/material'
 import { makeStyles, ActionButton, LoadingBase } from '@masknet/theme'
-import { useI18N } from '../locales/index.js'
-import classNames from 'classnames'
-import { ERC721ContractSelectPanel } from '../../../web3/UI/ERC721ContractSelectPanel.js'
-import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary.js'
-import { EthereumERC721TokenApprovedBoundary } from '../../../web3/UI/EthereumERC721TokenApprovedBoundary.js'
-import { ChainId, SchemaType, useNftRedPacketConstants, formatTokenId } from '@masknet/web3-shared-evm'
 import CheckIcon from '@mui/icons-material/Check'
 import CloseIcon from '@mui/icons-material/Close'
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline'
+import { useI18N } from '../locales/index.js'
+import {
+    WalletConnectedBoundary,
+    NFTCardStyledAssetPlayer,
+    PluginWalletStatusBar,
+    ERC721ContractSelectPanel,
+    ChainBoundary,
+    EthereumERC721TokenApprovedBoundary,
+} from '@masknet/shared'
+import { ChainId, SchemaType, useNftRedPacketConstants, formatTokenId } from '@masknet/web3-shared-evm'
 import { RedpacketMessagePanel } from './RedpacketMessagePanel.js'
 import { SelectNftTokenDialog, OrderedERC721Token } from './SelectNftTokenDialog.js'
 import { RedpacketNftConfirmDialog } from './RedpacketNftConfirmDialog.js'
-import { NFTCardStyledAssetPlayer, PluginWalletStatusBar, ChainBoundary } from '@masknet/shared'
 import { NFTSelectOption } from '../types.js'
 import { NFT_RED_PACKET_MAX_SHARES } from '../constants.js'
 import { useChainContext } from '@masknet/web3-hooks-base'
@@ -314,6 +318,7 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                         onContractChange={setContract}
                         balance={balance}
                         onBalanceChange={setBalance}
+                        chainId={chainId}
                     />
                 </Box>
                 {contract && balance ? (
@@ -388,7 +393,10 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
             </Box>
             <Box style={{ position: 'absolute', bottom: 0, width: '100%' }}>
                 <PluginWalletStatusBar>
-                    <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={chainId}>
+                    <ChainBoundary
+                        expectedPluginID={NetworkPluginID.PLUGIN_EVM}
+                        expectedChainId={chainId}
+                        forceShowingWrongNetworkButton>
                         <WalletConnectedBoundary>
                             <EthereumERC721TokenApprovedBoundary
                                 validationMessage={validationMessage}

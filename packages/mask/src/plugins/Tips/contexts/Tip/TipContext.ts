@@ -67,3 +67,4 @@ export const TipContext = createContext<TipContextOptions>({
     validatingRecipient: false,
     recipientValidation: [true],
 })
+TipContext.displayName = 'TipContext'

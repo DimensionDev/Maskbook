@@ -12,7 +12,7 @@ export function useSaveAvatar(pluginID?: NetworkPluginID) {
     return useCallback(
         async (account: string, network: EnhanceableSite, avatar: NextIDAvatarMeta, sign: string) => {
             if (!Storage || avatar.userId === '$unknown') return
-            await saveAddress(avatar.userId, avatar.pluginID ?? NetworkPluginID.PLUGIN_EVM, account, network)
+            await saveAddress(avatar.userId, avatar.pluginId ?? NetworkPluginID.PLUGIN_EVM, account, network)
             const avatarStorage = Storage.createKVStorage(`${NFT_AVATAR_METADATA_STORAGE}_${network}`)
             avatarStorage?.set<AvatarMeta>(avatar.userId, {
                 ...avatar,

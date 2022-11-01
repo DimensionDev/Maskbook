@@ -9,7 +9,7 @@ import { CurrentVisitingIdentityProviderMirror, IdentityProviderMirror } from '.
 import { PaletteModeProviderMirror } from './customization/custom.js'
 import { injectTips } from './injection/Tips/index.js'
 import { useInjectedDialogClassesOverwriteMirror } from './customization/ui-overwrite.js'
-import { injectPostActionsAtMirror } from './injection/PostActions'
+import { injectPostActionsAtMirror } from './injection/PostActions/index.js'
 import { PostProviderMirror } from './collecting/posts.js'
 
 // TODO: access chrome permission

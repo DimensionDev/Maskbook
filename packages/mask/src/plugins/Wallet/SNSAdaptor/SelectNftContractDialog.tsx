@@ -100,16 +100,14 @@ export function SelectNftContractDialog(props: SelectNftContractDialogProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
 
-    const [id, setId] = useState('')
     const [keyword, setKeyword] = useState('')
-    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-
+    const { chainId, setChainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     // #region remote controlled dialog
     const { open, setDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectNftContractDialogUpdated,
         (ev) => {
             if (!ev.open) return
-            setId(ev.uuid)
+            if (ev.chainId) setChainId(ev.chainId)
         },
     )
     const onSubmit = useCallback(
@@ -117,20 +115,19 @@ export function SelectNftContractDialog(props: SelectNftContractDialogProps) {
             setKeyword('')
             setDialog({
                 open: false,
-                uuid: id,
+
                 balance,
                 contract,
             })
         },
-        [id, setDialog, setKeyword],
+        [setDialog, setKeyword],
     )
     const onClose = useCallback(() => {
         setKeyword('')
         setDialog({
             open: false,
-            uuid: id,
         })
-    }, [id, setDialog])
+    }, [setDialog])
     // #endregion
 
     const { value: assets = [], loading } = useNonFungibleCollections(NetworkPluginID.PLUGIN_EVM, {

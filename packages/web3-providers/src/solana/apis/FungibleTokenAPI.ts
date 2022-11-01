@@ -11,7 +11,7 @@ import {
     CurrencyType,
     NonFungibleToken,
 } from '@masknet/web3-shared-base'
-import { ChainId, SchemaType, createNativeToken } from '@masknet/web3-shared-solana'
+import { ChainId, SchemaType, createNativeToken, isValidChainId } from '@masknet/web3-shared-solana'
 import { memoizePromise } from '@dimensiondev/kit'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { CoinGeckoPriceSolanaAPI } from '../../coingecko/index.js'
@@ -52,6 +52,7 @@ export class SolanaFungibleAPI
     private coingecko = new CoinGeckoPriceSolanaAPI()
 
     private async getSplTokenList(chainId: ChainId, account: string) {
+        if (!isValidChainId(chainId)) return []
         const data = await requestRPC<GetProgramAccountsResponse>(chainId, {
             method: 'getProgramAccounts',
             params: [
@@ -110,6 +111,7 @@ export class SolanaFungibleAPI
         address: string,
         { chainId = ChainId.Mainnet, indicator }: HubOptions<ChainId, HubIndicator> = {},
     ): Promise<Pageable<FungibleAsset<ChainId, SchemaType>, HubIndicator>> {
+        if (!isValidChainId(chainId)) return createPageable([], createIndicator(indicator))
         const allSettled = await Promise.allSettled([
             this.getAsset(address, { chainId }).then((x) => [x]),
             this.getSplTokenList(chainId, address),

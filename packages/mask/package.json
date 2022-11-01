@@ -6,7 +6,7 @@
   "dependencies": {
     "@balancer-labs/sor": "^1.0.0",
     "@dimensiondev/mask-wallet-core": "0.1.0-20211013082857-eb62e5f",
-    "@dimensiondev/secp256k1-webcrypto": "1.0.0-20220412114204-be816df",
+    "@masknet/secp256k1-webcrypto": "1.0.0",
     "@ethersproject/abi": "^5.4.0",
     "@ethersproject/address": "^5.0.4",
     "@ethersproject/providers": "^5.4.2",

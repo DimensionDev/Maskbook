@@ -12,19 +12,15 @@ import { MaskDarkTheme, MaskLightTheme } from '@masknet/theme'
 
 const staticRef = createSubscriptionFromValueRef(new ValueRef('light'))
 const defaultUseTheme = (t: Theme) => t
-/**
- * @deprecated Should migrate to \@masknet/theme
- */
-export function useClassicMaskSNSTheme() {
+
+export function useMaskSiteAdaptorMixedTheme() {
     const provider = useRef(activatedSocialNetworkUI.customization.paletteMode?.current || staticRef).current
-    const usePostTheme = useRef(activatedSocialNetworkUI.customization.useTheme || defaultUseTheme).current
+    const useMixedTheme = useRef(activatedSocialNetworkUI.customization.useTheme || defaultUseTheme).current
     const palette = useSubscription(provider)
 
     const maskTheme = palette === 'dark' ? MaskDarkTheme : MaskLightTheme
 
-    // TODO: support RTL?
-
     const [localization, isRTL] = useThemeLanguage(useValueRef(languageSettings))
     const theme = unstable_createMuiStrictModeTheme(maskTheme, localization)
-    return usePostTheme(theme)
+    return useMixedTheme(theme)
 }

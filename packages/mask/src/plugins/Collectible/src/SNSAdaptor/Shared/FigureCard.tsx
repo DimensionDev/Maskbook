@@ -32,6 +32,9 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 16,
         fontWeight: 700,
         color: theme.palette.maskColor.publicMain,
+        whiteSpace: 'nowrap',
+        textOverflow: 'ellipsis',
+        overflow: 'hidden',
     },
     nameLg: {
         fontSize: 20,

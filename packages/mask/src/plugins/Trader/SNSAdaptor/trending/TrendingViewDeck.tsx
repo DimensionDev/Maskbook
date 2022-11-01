@@ -98,6 +98,7 @@ const useStyles = makeStyles()((theme) => {
         avatar: {
             width: 24,
             height: 24,
+            fontSize: 10,
             backgroundColor: theme.palette.common.white,
         },
         buyButton: {
@@ -224,6 +225,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                                 <CoinIcon
                                                     type={coin.type}
                                                     name={coin.name}
+                                                    label=""
                                                     symbol={coin.symbol}
                                                     address={coin.address}
                                                     logoURL={coin.image_url}

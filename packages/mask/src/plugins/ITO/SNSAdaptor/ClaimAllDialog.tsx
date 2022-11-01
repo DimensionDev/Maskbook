@@ -12,6 +12,7 @@ import {
     PluginWalletStatusBar,
     ChainBoundary,
     NetworkTab,
+    WalletConnectedBoundary,
 } from '@masknet/shared'
 import { DialogContent, Typography, List, ListItem, useTheme, DialogActions } from '@mui/material'
 import { PluginID, NetworkPluginID } from '@masknet/shared-base'
@@ -20,7 +21,6 @@ import { useITOConstants, ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../utils/index.js'
 import { useClaimAll } from './hooks/useClaimAll.js'
 import { useClaimCallback } from './hooks/useClaimCallback.js'
-import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary.js'
 import type { SwappedTokenType } from '../types.js'
 
 interface StyleProps {

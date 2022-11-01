@@ -1,24 +1,14 @@
 import { makeStyles } from '@masknet/theme'
+import { AssetPreviewer } from '@masknet/shared'
 import { CollectibleTab } from './CollectibleTab.js'
 import { CollectibleState } from '../hooks/useCollectibleState.js'
 import { Video } from '../../../components/shared/Video.js'
-import { NFTCardStyledAssetPlayer } from '@masknet/shared'
 
 const useStyles = makeStyles()({
     body: {
         display: 'flex',
         justifyContent: 'center',
         height: '300px',
-    },
-    player: {
-        maxWidth: '100%',
-        maxHeight: '100%',
-        border: 'none',
-    },
-    iframe: {
-        minWidth: 300,
-        minHeight: 300,
-        margin: 'auto',
     },
 })
 
@@ -36,13 +26,7 @@ export function ArticleTab(props: ArticleTabProps) {
                 {asset.value.metadataContentType === 'video/mp4' ? (
                     <Video VideoProps={{ controls: true }} src={resourceUrl} />
                 ) : (
-                    <NFTCardStyledAssetPlayer
-                        url={resourceUrl}
-                        classes={{
-                            wrapper: classes.player,
-                            iframe: classes.iframe,
-                        }}
-                    />
+                    <AssetPreviewer url={resourceUrl} />
                 )}
             </div>
         </CollectibleTab>

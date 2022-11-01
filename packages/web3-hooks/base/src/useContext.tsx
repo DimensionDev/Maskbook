@@ -1,5 +1,5 @@
 import React, { createContext, ReactNode, useContext, useState } from 'react'
-import type { NetworkPluginID } from '@masknet/shared-base'
+import { compose, NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useAccount } from './useAccount.js'
 import { useChainId } from './useChainId.js'
@@ -29,8 +29,10 @@ type ChainContextDefaults<T extends NetworkPluginID = NetworkPluginID> = Omit<
 >
 
 const NetworkContext = createContext<NetworkContext>(null!)
+NetworkContext.displayName = 'NetworkContext'
 
 const ChainContext = createContext<ChainContext>(null!)
+ChainContext.displayName = 'ChainContext'
 
 function NetworkContextProvider({ value, children }: React.ProviderProps<NetworkPluginID>) {
     const [pluginID, setPluginID] = useState<NetworkPluginID>()
@@ -93,10 +95,10 @@ export function Web3ContextProvider({
     } & ChainContextDefaults
 >) {
     const { pluginID, ...rest } = value
-    return (
-        <NetworkContextProvider value={pluginID}>
-            <ChainContextProvider value={rest} children={children} />
-        </NetworkContextProvider>
+    return compose(
+        (children) => NetworkContextProvider({ value: pluginID, children }),
+        (children) => <ChainContextProvider value={rest} children={children} />,
+        <>{children}</>,
     )
 }
 

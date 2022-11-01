@@ -1,4 +1,4 @@
-import { forwardRef, HTMLProps, useRef } from 'react'
+import { forwardRef, HTMLProps, useRef, useLayoutEffect, useState } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { Skeleton, Tooltip, Typography } from '@mui/material'
 import { CollectibleCard, CollectibleCardProps } from './CollectibleCard.js'
@@ -29,6 +29,9 @@ const useStyles = makeStyles()((theme) => ({
         minHeight: '1em',
         textIndent: '8px',
     },
+    hidden: {
+        visibility: 'hidden',
+    },
 }))
 
 interface CollectibleItemProps extends HTMLProps<HTMLDivElement>, CollectibleCardProps {}
@@ -37,47 +40,35 @@ export const CollectibleItem = forwardRef<HTMLDivElement, CollectibleItemProps>(
     const { className, asset, pluginID, ...rest } = props
     const { classes, cx } = useStyles()
     const textRef = useRef<HTMLDivElement>(null)
+    const [showTooltip, setShowTooltip] = useState(false)
     const name = asset.metadata?.name ?? ''
-    const showTooltip = !!textRef.current && textRef.current.offsetWidth !== textRef.current.scrollWidth
+    useLayoutEffect(() => {
+        if (textRef.current) {
+            setShowTooltip(textRef.current.offsetWidth !== textRef.current.scrollWidth)
+        }
+    }, [textRef.current])
 
     return (
-        <>
-            {showTooltip ? (
-                <Tooltip
-                    title={name}
-                    placement="top"
-                    disableInteractive
-                    PopperProps={{
-                        disablePortal: true,
-                        popperOptions: {
-                            strategy: 'absolute',
-                        },
-                    }}
-                    arrow>
-                    <div className={cx(classes.card, className)} {...rest} ref={ref}>
-                        <CollectibleCard className={classes.collectibleCard} pluginID={pluginID} asset={asset} />
-                        {name ? (
-                            <div className={classes.description}>
-                                <Typography ref={textRef} className={classes.name} color="textPrimary" variant="body2">
-                                    {name}
-                                </Typography>
-                            </div>
-                        ) : null}
-                    </div>
-                </Tooltip>
-            ) : (
-                <div className={cx(classes.card, className)} {...rest} ref={ref}>
-                    <CollectibleCard className={classes.collectibleCard} pluginID={pluginID} asset={asset} />
-                    {name ? (
-                        <div className={classes.description}>
-                            <Typography ref={textRef} className={classes.name} color="textPrimary" variant="body2">
-                                {name}
-                            </Typography>
-                        </div>
-                    ) : null}
+        <Tooltip
+            title={showTooltip ? name : undefined}
+            placement="top"
+            disableInteractive
+            PopperProps={{
+                disablePortal: true,
+                popperOptions: {
+                    strategy: 'absolute',
+                },
+            }}
+            arrow>
+            <div className={cx(classes.card, className)} {...rest} ref={ref}>
+                <CollectibleCard className={classes.collectibleCard} pluginID={pluginID} asset={asset} />
+                <div className={cx(classes.description, name ? '' : classes.hidden)}>
+                    <Typography ref={textRef} className={classes.name} color="textPrimary" variant="body2">
+                        {name}
+                    </Typography>
                 </div>
-            )}
-        </>
+            </div>
+        </Tooltip>
     )
 })
 

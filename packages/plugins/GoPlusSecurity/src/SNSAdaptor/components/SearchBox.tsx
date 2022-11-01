@@ -67,27 +67,29 @@ export const SearchBox = memo<SearchBoxProps>(({ onSearch }) => {
         if (!supportedChains.length) return
         setSelectedChain(supportedChains[0])
         return (
-            supportedChains.map((chain) => {
-                return (
-                    <MenuItem
-                        key={chain.chainId}
-                        onClick={() => {
-                            setSelectedChain(chain)
-                            onClose()
-                        }}>
-                        <Stack
-                            display="inline-flex"
-                            direction="row"
-                            alignItems="center"
-                            justifyContent="flex-start"
-                            gap={1}
-                            width="100%">
-                            <WalletIcon mainIcon={chain?.icon} size={18} />
-                            <Typography>{getChainName(chain)}</Typography>
-                        </Stack>
-                    </MenuItem>
-                )
-            }) ?? []
+            supportedChains
+                .filter((x) => x.icon)
+                .map((chain) => {
+                    return (
+                        <MenuItem
+                            key={chain.chainId}
+                            onClick={() => {
+                                setSelectedChain(chain)
+                                onClose()
+                            }}>
+                            <Stack
+                                display="inline-flex"
+                                direction="row"
+                                alignItems="center"
+                                justifyContent="flex-start"
+                                gap={1}
+                                width="100%">
+                                <WalletIcon mainIcon={chain?.icon} size={18} />
+                                <Typography>{getChainName(chain)}</Typography>
+                            </Stack>
+                        </MenuItem>
+                    )
+                }) ?? []
         )
     }, [supportedChains.length])
 

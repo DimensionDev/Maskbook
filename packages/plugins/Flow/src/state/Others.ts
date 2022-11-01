@@ -20,6 +20,7 @@ import {
     NETWORK_DESCRIPTORS,
     PROVIDER_DESCRIPTORS,
     getDefaultChainId,
+    getInvalidChainId,
     getDefaultNetworkType,
     getDefaultProviderType,
     getZeroAddress,
@@ -59,6 +60,7 @@ export class Others extends OthersState<ChainId, SchemaType, ProviderType, Netwo
     override isNonFungibleTokenSchemaType = isNonFungibleTokenSchemaType
 
     override getDefaultChainId = getDefaultChainId
+    override getInvalidChainId = getInvalidChainId
     override getDefaultNetworkType = getDefaultNetworkType
     override getDefaultProviderType = getDefaultProviderType
     override getZeroAddress = getZeroAddress

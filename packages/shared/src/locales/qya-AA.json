@@ -140,14 +140,5 @@
     "save_failed": "crwdns18816:0crwdne18816:0",
     "wallet_set_up_successfully": "crwdns18818:0crwdne18818:0",
     "wallet_set_up_failed": "crwdns18820:0crwdne18820:0",
-    "setting_alert_title": "crwdns18822:0crwdne18822:0",
-    "source_tooltip": "crwdns18824:0{{source}}crwdne18824:0",
-    "source_tooltip$twitter": "crwdns18826:0{{source}}crwdne18826:0",
-    "source_tooltip_only": "crwdns18828:0crwdne18828:0",
-    "source_tooltip_only$twitter": "crwdns18830:0crwdne18830:0",
-    "source_tooltip$facebook": "crwdns18832:0{{source}}crwdne18832:0",
-    "source_tooltip_only$facebook": "crwdns18834:0crwdne18834:0",
-    "source_tooltip$next_id": "crwdns18836:0crwdne18836:0",
-    "source_tooltip_only$next_id": "crwdns18838:0crwdne18838:0",
-    "recent_transaction_pending": "crwdns18848:0crwdne18848:0"
+    "setting_alert_title": "crwdns18822:0crwdne18822:0"
 }

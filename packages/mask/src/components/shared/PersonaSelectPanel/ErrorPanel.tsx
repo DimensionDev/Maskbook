@@ -1,6 +1,6 @@
 import { makeStyles } from '@masknet/theme'
 import { Stack, Typography, Button } from '@mui/material'
-import { useI18N } from '../../../utils'
+import { useI18N } from '../../../utils/index.js'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -26,8 +26,10 @@ export const ErrorPanel = ({ onRetry }: ErrorPanelProps) => {
     return (
         <Stack className={classes.root} justifyContent="center" height="100%">
             <Stack justifyContent="center" height="100%" gap={1.5} alignItems="center">
-                <Typography>{t('persona_load_failed')}</Typography>
-                <Button color="primary" sx={{ borderRadius: 20 }} onClick={onRetry}>
+                <Typography fontSize={12} fontWeight={700}>
+                    {t('persona_load_failed')}
+                </Typography>
+                <Button variant="roundedContained" color="primary" sx={{ minWidth: 88 }} size="small" onClick={onRetry}>
                     {t('reload')}
                 </Button>
             </Stack>

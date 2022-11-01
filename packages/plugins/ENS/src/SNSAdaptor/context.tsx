@@ -30,6 +30,7 @@ export const ENSContext = createContext<ENSContextProps>({
     isError: false,
     retry: undefined,
 })
+ENSContext.displayName = 'ENSContext'
 
 export function ENSProvider({ children, domain }: PropsWithChildren<SearchResultInspectorProps>) {
     const {

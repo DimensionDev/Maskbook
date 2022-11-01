@@ -29,6 +29,8 @@ export function createConfiguration(_inputFlags: BuildFlags): Configuration {
     const pnpmPatches = readdirSync(patchesDir).map((x) => join(patchesDir, x))
     const baseConfig: Configuration = {
         name: 'mask',
+        // to set a correct base path for source map
+        context: join(__dirname, '../../../'),
         mode: flags.mode,
         devtool: computedFlags.sourceMapKind,
         target: ['web', 'es2022'],
@@ -55,10 +57,8 @@ export function createConfiguration(_inputFlags: BuildFlags): Configuration {
                     // It's a Node impl for xhr which is unnecessary
                     'xhr2-cookies': require.resolve('./package-overrides/xhr2-cookies.js'),
                     'error-polyfill': require.resolve('./package-overrides/null.js'),
-                    // fake esm
-                    // '@uniswap/v3-sdk': require.resolve('@uniswap/v3-sdk/dist/index.js'),
                 }
-                if (computedFlags.reactProductionProfiling) alias['react-dom$'] = 'react-dom/profiling'
+                if (computedFlags.reactProductionProfiling) alias['react-dom$'] = require.resolve('react-dom/profiling')
                 if (flags.devtools) {
                     // Note: when devtools is enabled, we will install react-refresh/runtime manually to keep the correct react global hook installation order.
                     // https://github.com/pmmmwh/react-refresh-webpack-plugin/issues/680
@@ -69,12 +69,12 @@ export function createConfiguration(_inputFlags: BuildFlags): Configuration {
             })(),
             // Polyfill those Node built-ins
             fallback: {
-                http: 'stream-http',
-                https: 'https-browserify',
-                stream: 'stream-browserify',
-                crypto: 'crypto-browserify',
-                buffer: 'buffer',
-                'text-encoding': '@sinonjs/text-encoding',
+                http: require.resolve('stream-http'),
+                https: require.resolve('https-browserify'),
+                stream: require.resolve('stream-browserify'),
+                crypto: require.resolve('crypto-browserify'),
+                buffer: require.resolve('buffer'),
+                'text-encoding': require.resolve('@sinonjs/text-encoding'),
             },
         },
         module: {
@@ -87,7 +87,7 @@ export function createConfiguration(_inputFlags: BuildFlags): Configuration {
             rules: [
                 // Source map for libraries
                 computedFlags.sourceMapKind
-                    ? { test: /(async-call|webextension).+\.js$/, enforce: 'pre', use: ['source-map-loader'] }
+                    ? { test: /\.js$/, enforce: 'pre', use: [require.resolve('source-map-loader')] }
                     : null!,
                 // Patch old regenerator-runtime
                 {
@@ -100,8 +100,9 @@ export function createConfiguration(_inputFlags: BuildFlags): Configuration {
                     parser: { worker: ['OnDemandWorker', '...'] },
                     // Compile all ts files in the workspace
                     include: join(__dirname, '../../'),
-                    loader: 'swc-loader',
+                    loader: require.resolve('swc-loader'),
                     options: {
+                        sourceMaps: !!computedFlags.sourceMapKind,
                         // https://swc.rs/docs/configuring-swc/
                         jsc: {
                             parser: {
@@ -131,7 +132,7 @@ export function createConfiguration(_inputFlags: BuildFlags): Configuration {
                 flags.mode === 'production'
                     ? {
                           test: /\.svg$/,
-                          loader: 'svgo-loader',
+                          loader: require.resolve('svgo-loader'),
                           // overrides
                           options: {
                               js2svg: {
@@ -155,8 +156,8 @@ export function createConfiguration(_inputFlags: BuildFlags): Configuration {
         plugins: [
             new ProvidePlugin({
                 // Polyfill for Node global "Buffer" variable
-                Buffer: ['buffer', 'Buffer'],
-                'process.nextTick': 'next-tick',
+                Buffer: [require.resolve('buffer'), 'Buffer'],
+                'process.nextTick': require.resolve('next-tick'),
             }),
             (() => {
                 // In development mode, it will be shared across different target to speedup.
@@ -208,7 +209,7 @@ export function createConfiguration(_inputFlags: BuildFlags): Configuration {
                     },
                 ],
             }),
-            emitManifestFile(flags),
+            emitManifestFile(flags, computedFlags),
             emitGitInfo(flags.reproducibleBuild),
         ].filter(nonNullable),
         optimization: {
@@ -246,6 +247,7 @@ export function createConfiguration(_inputFlags: BuildFlags): Configuration {
             // In some cases webpack will emit files starts with "_" which is reserved in web extension.
             chunkFilename: 'js/chunk.[name].js',
             assetModuleFilename: 'assets/[hash][ext][query]',
+            devtoolModuleFilenameTemplate: 'webpack://[namespace]/[resource-path]',
             hotUpdateChunkFilename: 'hot/[id].[fullhash].js',
             hotUpdateMainFilename: 'hot/[runtime].[fullhash].json',
             globalObject: 'globalThis',

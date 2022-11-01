@@ -32,18 +32,26 @@ async function checkAvailabilityOnDataProvider(
     type: TagType,
     dataProvider: DataProvider,
 ) {
-    if (isBlockedKeyword(type, keyword)) return false
-    const coins = await getCoinsByKeyword(chainId, resolveKeyword(chainId, keyword, dataProvider), dataProvider)
-    return !!coins.length
+    try {
+        if (isBlockedKeyword(type, keyword)) return false
+        const coins = await getCoinsByKeyword(chainId, resolveKeyword(chainId, keyword, dataProvider), dataProvider)
+        return !!coins.length
+    } catch {
+        return false
+    }
 }
 
 export async function getAvailableDataProviders(chainId: ChainId, type?: TagType, keyword?: string) {
     const networkType = chainResolver.networkType(chainId)
     const isMainnet = chainResolver.isMainnet(chainId)
+
     if (!type || !keyword)
         return getEnumAsArray(DataProvider)
             .filter((x) => (isMainnet ? true : x.value !== DataProvider.UniswapInfo))
             .map((y) => y.value)
+
+    // Check if the keyword is a numeric string
+    if (!Number.isNaN(Number(keyword))) return EMPTY_LIST
 
     const checked = await Promise.all(
         getEnumAsArray(DataProvider)

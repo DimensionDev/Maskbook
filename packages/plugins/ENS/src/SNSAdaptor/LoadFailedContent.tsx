@@ -1,7 +1,7 @@
 import { Typography, Box } from '@mui/material'
 import { ActionButton, makeStyles } from '@masknet/theme'
-import { useI18N } from '../locales'
-import { ENSPostExtraInfoWrapper } from './ENSPostExtraInfoWrapper'
+import { useI18N } from '../locales/index.js'
+import { ENSPostExtraInfoWrapper } from './ENSPostExtraInfoWrapper.js'
 
 interface StyleProps {
     isMenuScroll?: boolean

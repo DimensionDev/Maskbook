@@ -1,4 +1,4 @@
-import { createContext, createElement, FC, ComponentType, PropsWithChildren, useMemo, useState } from 'react'
+import { createContext, createElement, ComponentType, PropsWithChildren, useMemo, useState } from 'react'
 import { defer, DeferTuple } from '@dimensiondev/kit'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import type { InjectedDialogProps } from './components/index.js'
@@ -19,6 +19,7 @@ export const createUITaskManager = <TaskOptions extends BaseDialogProps<Result>,
     Component: ComponentType<TaskOptions>,
 ) => {
     const TaskManagerContext = createContext<ContextOptions<TaskOptions, Result | null>>(null!)
+    TaskManagerContext.displayName = `TaskManagerContext (${Component.displayName || Component.name})`
     let id = 0
 
     type TaskDeferTuple = DeferTuple<Result | null>
@@ -30,7 +31,7 @@ export const createUITaskManager = <TaskOptions extends BaseDialogProps<Result>,
         options?: Omit<TaskOptions, 'open'>
     }
 
-    const TaskManagerProvider: FC<PropsWithChildren<{}>> = ({ children }) => {
+    function TaskManagerProvider({ children }: PropsWithChildren<{}>) {
         const [tasks, setTasks] = useState<Task[]>(EMPTY_LIST)
 
         const contextValue = useMemo(() => {

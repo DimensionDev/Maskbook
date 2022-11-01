@@ -184,7 +184,7 @@ export const TransferERC721 = memo(() => {
     const { setDialog: setSelectContractDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectNftContractDialogUpdated,
         (ev) => {
-            if (ev.open || !ev.contract || ev.uuid !== id) return
+            if (ev.open || !ev.contract) return
             if (!contract || (contract && !isSameAddress(contract.address, ev.contract.address))) {
                 if (contract && defaultToken && !isSameAddress(contract.address, defaultToken.address)) {
                     setDefaultToken(null)
@@ -335,7 +335,7 @@ export const TransferERC721 = memo(() => {
                         <Controller
                             control={control}
                             render={(field) => (
-                                <Box onClick={() => setSelectContractDialog({ open: true, uuid: id })}>
+                                <Box onClick={() => setSelectContractDialog({ open: true })}>
                                     <MaskTextField
                                         {...field}
                                         error={!!errors.contract || !!errors.tokenId}
