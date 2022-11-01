@@ -464,12 +464,12 @@ importers:
 
   packages/encryption:
     dependencies:
-      '@dimensiondev/secp256k1-webcrypto':
-        specifier: 1.0.0-20220412114204-be816df
-        version: 1.0.0-20220412114204-be816df
       '@dimensiondev/stego-js':
         specifier: 0.14.1
         version: 0.14.1
+      '@masknet/secp256k1-webcrypto':
+        specifier: 1.0.0
+        version: 1.0.0
       '@masknet/shared-base':
         specifier: workspace:*
         version: link:../shared-base
@@ -548,9 +548,6 @@ importers:
       '@dimensiondev/mask-wallet-core':
         specifier: 0.1.0-20211013082857-eb62e5f
         version: 0.1.0-20211013082857-eb62e5f_protobufjs@6.11.2
-      '@dimensiondev/secp256k1-webcrypto':
-        specifier: 1.0.0-20220412114204-be816df
-        version: 1.0.0-20220412114204-be816df
       '@ethersproject/abi':
         specifier: ^5.4.0
         version: 5.4.0
@@ -650,6 +647,9 @@ importers:
       '@masknet/sdk':
         specifier: workspace:*
         version: link:../mask-sdk
+      '@masknet/secp256k1-webcrypto':
+        specifier: 1.0.0
+        version: 1.0.0
       '@masknet/shared':
         specifier: workspace:*
         version: link:../shared
@@ -6024,13 +6024,6 @@ packages:
       extension-port-stream: 1.0.0
     dev: false
 
-  /@dimensiondev/secp256k1-webcrypto/1.0.0-20220412114204-be816df:
-    resolution: {integrity: sha512-gDNH39SnATJogShz7egcc4aJqBUurB7xzyNVuVy78XmkAz57xG7nWlo5KyC8sh9cZDHNwi12vYI1zJz5UPgN2A==, tarball: download/@dimensiondev/secp256k1-webcrypto/1.0.0-20220412114204-be816df/7e05b026476e62dc08df835fa6a559e9dbcfe976128f54172b8d0d0221aad6af}
-    dependencies:
-      elliptic: 6.5.4
-      pvtsutils: 1.2.2
-    dev: false
-
   /@dimensiondev/stego-js/0.14.1:
     resolution: {integrity: sha512-FslPs5SWC2ROr1R0ggmc4UG4huDUClbwtzRKWhUx9pIO0uXwxhPm+jxFW0sNn7CDYklCeQFbWtCcxPK5zaOxrA==, tarball: download/@DimensionDev/stego-js/0.14.1/c49b1e2bb33b7510d3dda9d4435700a9efc00818}
     hasBin: true
@@ -7512,6 +7505,13 @@ packages:
     dependencies:
       '@locker/near-membrane-base': 0.11.10
       '@locker/near-membrane-dom': 0.11.10
+    dev: false
+
+  /@masknet/secp256k1-webcrypto/1.0.0:
+    resolution: {integrity: sha512-oIrlLzsjEsE1XmBLJVpH8pIQ9ugefQUqGyjtDXTGhzYi3sB8HviwY03JgYo8FRywNsSEj5HuE3iYJI16jYublQ==}
+    dependencies:
+      elliptic: 6.5.4
+      pvtsutils: 1.3.2
     dev: false
 
   /@masknet/static-module-record-swc/0.4.1:
@@ -26014,12 +26014,6 @@ packages:
       deepmerge: 2.2.1
       equals: 1.0.5
       prop-types: 15.8.1
-    dev: false
-
-  /pvtsutils/1.2.2:
-    resolution: {integrity: sha512-OALo5ZEdqiI127i64+CXwkCOyFHUA+tCQgaUO/MvRDFXWPr53f2sx28ECNztUEzuyu5xvuuD1EB/szg9mwJoGA==}
-    dependencies:
-      tslib: 2.4.0
     dev: false
 
   /pvtsutils/1.3.2:
