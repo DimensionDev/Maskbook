@@ -94,7 +94,7 @@ export function PluginGuide({ children, arrow = true, disabled = false, step }: 
     const [clientRect, setClientRect] = useState<any>({})
     const [open, setOpen] = useState(false)
     const [bottomAvailable, setBottomAvailable] = useState(true)
-    const { nextStep, currentStep, finished, title, actionText } = useContext(PluginGuideContext)
+    const { nextStep, currentStep, finished, title, actionText, totalStep } = useContext(PluginGuideContext)
 
     useEffect(() => {
         if (disabled || finished || step !== currentStep) return
@@ -171,6 +171,13 @@ export function PluginGuide({ children, arrow = true, disabled = false, step }: 
                                             left: clientRect.width < 50 ? -clientRect.width / 2 + 5 : 0,
                                             [bottomAvailable ? 'top' : 'bottom']: clientRect.height + 16,
                                         }}>
+                                        {totalStep !== 1 && (
+                                            <div style={{ paddingBottom: '16px' }}>
+                                                <Typography sx={{ fontSize: 20 }}>
+                                                    {currentStep}/{totalStep}
+                                                </Typography>
+                                            </div>
+                                        )}
                                         <div>
                                             <Typography fontSize={14} fontWeight={600}>
                                                 {title}
