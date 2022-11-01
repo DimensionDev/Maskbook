@@ -1,5 +1,5 @@
 import { unreachable } from '@dimensiondev/kit'
-import { AlgorithmVersion, GrayscaleAlgorithm, TransformAlgorithm, type EncodeOptions } from '@dimensiondev/stego-js'
+import { AlgorithmVersion, GrayscaleAlgorithm, TransformAlgorithm, type EncodeOptions } from '@masknet/stego-js'
 import { SteganographyPreset } from './index.js'
 
 /** @internal */
