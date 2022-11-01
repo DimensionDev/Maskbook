@@ -2270,6 +2270,9 @@ importers:
       '@types/remarkable':
         specifier: ^2.0.3
         version: 2.0.3
+      '@types/use-subscription':
+        specifier: ^1.0.0
+        version: 1.0.0
 
   packages/shared-base:
     dependencies:

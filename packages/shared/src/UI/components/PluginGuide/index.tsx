@@ -1,10 +1,9 @@
+import type { StorageObject } from '@masknet/shared-base'
 import { makeStyles, usePortalShadowRoot } from '@masknet/theme'
-import { Box, Typography, Portal, Button } from '@mui/material'
-import { PropsWithChildren, useRef, cloneElement, useEffect, ReactElement, useState } from 'react'
-import { activatedSocialNetworkUI } from '../../../social-network/index.js'
-import { useI18N } from '../locales/index.js'
-import { finishUserGuide, useTipsUserGuide } from '../storage/index.js'
-import type { EnhanceableSite } from '@masknet/shared-base'
+import { Box, Button, Portal, Typography } from '@mui/material'
+import React, { cloneElement, PropsWithChildren, ReactElement, useEffect, useRef, useState } from 'react'
+import { useSharedI18N } from '../../../locales'
+import { usePluginGuide } from './usePluginGuide'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -71,39 +70,61 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface GuideStepProps extends PropsWithChildren<{}> {
+    step: number
+    totalStep: number
+
+    storageKey?: string
     arrow?: boolean
     disabled?: boolean
     onComplete?: () => void
+    storage: StorageObject<PluginGuideSetting>
+    guideText: Array<{
+        title: string
+        description: string
+    }>
 }
 
-export default function Guide({ children, arrow = true, disabled = false, onComplete }: GuideStepProps) {
-    const t = useI18N()
+export interface PluginGuideSetting {
+    userGuide: { default: number } & Record<string, number>
+}
+
+export function PluginGuide({
+    storageKey = 'default',
+    children,
+    arrow = true,
+    disabled = false,
+    onComplete,
+    totalStep,
+    step,
+    storage,
+    guideText,
+}: GuideStepProps) {
+    const t = useSharedI18N()
     const { classes, cx } = useStyles()
     const childrenRef = useRef<HTMLElement>()
     const [clientRect, setClientRect] = useState<any>({})
     const [open, setOpen] = useState(false)
     const [bottomAvailable, setBottomAvailable] = useState(true)
-    const ui = activatedSocialNetworkUI
-    const enableUserGuide = ui.configuration.tipsConfig?.enableUserGuide
-    const lastStep = useTipsUserGuide(ui.networkIdentifier as EnhanceableSite)
+    const { currentStep, finished, nextStep } = usePluginGuide(storage, totalStep, storageKey, onComplete)
 
     useEffect(() => {
-        if (disabled || !enableUserGuide || lastStep.finished) return
+        if (disabled || finished) return
         setOpen(true)
     }, [])
 
     useEffect(() => {
-        if (disabled || !enableUserGuide || lastStep.finished) return
+        if (disabled || finished) return
         document.body.style.overflow = open ? 'hidden' : ''
     }, [open])
 
     const onNext = () => {
         setOpen(false)
-        finishUserGuide(ui.networkIdentifier as EnhanceableSite)
+        nextStep()
     }
 
     useEffect(() => {
-        if (disabled || !enableUserGuide || lastStep.finished) return
+        if (disabled || finished) return
+
         const onResize = () => {
             const cr = childrenRef.current?.getBoundingClientRect()
 
@@ -125,7 +146,7 @@ export default function Guide({ children, arrow = true, disabled = false, onComp
         return () => {
             window.removeEventListener('resize', onResize)
         }
-    }, [childrenRef, lastStep.finished])
+    }, [childrenRef, finished])
 
     return (
         <>
@@ -164,7 +185,7 @@ export default function Guide({ children, arrow = true, disabled = false, onComp
                                         }}>
                                         <div>
                                             <Typography fontSize={14} fontWeight={600}>
-                                                {t.tips_guide_description()}
+                                                {guideText[currentStep - 1]?.title}
                                             </Typography>
                                         </div>
                                         <div className={classes.buttonContainer}>
@@ -173,7 +194,7 @@ export default function Guide({ children, arrow = true, disabled = false, onComp
                                                 color="primary"
                                                 className={classes.button}
                                                 onClick={onNext}>
-                                                {t.tips_guide_action()}
+                                                {guideText[currentStep - 1]?.description}
                                             </Button>
                                         </div>
                                     </div>
