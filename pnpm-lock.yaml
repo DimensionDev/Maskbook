@@ -464,15 +464,15 @@ importers:
 
   packages/encryption:
     dependencies:
-      '@dimensiondev/stego-js':
-        specifier: 0.14.1
-        version: 0.14.1
       '@masknet/secp256k1-webcrypto':
         specifier: 1.0.0
         version: 1.0.0
       '@masknet/shared-base':
         specifier: workspace:*
         version: link:../shared-base
+      '@masknet/stego-js':
+        specifier: 0.14.2
+        version: 0.14.2
       '@masknet/typed-message':
         specifier: workspace:*
         version: link:../typed-message
@@ -6024,16 +6024,6 @@ packages:
       extension-port-stream: 1.0.0
     dev: false
 
-  /@dimensiondev/stego-js/0.14.1:
-    resolution: {integrity: sha512-FslPs5SWC2ROr1R0ggmc4UG4huDUClbwtzRKWhUx9pIO0uXwxhPm+jxFW0sNn7CDYklCeQFbWtCcxPK5zaOxrA==, tarball: download/@DimensionDev/stego-js/0.14.1/c49b1e2bb33b7510d3dda9d4435700a9efc00818}
-    hasBin: true
-    dependencies:
-      '@rgba-image/lanczos': 0.1.1
-      meow: 10.1.5
-    optionalDependencies:
-      '@napi-rs/image': 1.4.1
-    dev: false
-
   /@dimensiondev/webextension-shim/0.0.3-20210823035705-4257e12:
     resolution: {integrity: sha512-zkpb1xzfyhWu9c5FZc4HHa5aBrUVdQCNGfmnUzNk2kU6AaCtfVeB4i39LLaPVLCP5nKKAVnbWNe88fGYSmcryw==, tarball: download/@dimensiondev/webextension-shim/0.0.3-20210823035705-4257e12/f0cf9f4c48531ee9828e0a0d2842d70212dc0f371b409054026fc17fcd3eef93}
     hasBin: true
@@ -7521,6 +7511,16 @@ packages:
     peerDependenciesMeta:
       '@swc/core':
         optional: true
+    dev: false
+
+  /@masknet/stego-js/0.14.2:
+    resolution: {integrity: sha512-vZvV1XRSlq/Lxk8/c86nqgY7Be7kyrVie3pWAXF58vTxnsO+7pjZ9rvyoldOwe5dZmEnRLXszNdRZnBVUXdRIA==}
+    hasBin: true
+    dependencies:
+      '@rgba-image/lanczos': 0.1.1
+      meow: 10.1.5
+    optionalDependencies:
+      '@napi-rs/image': 1.4.1
     dev: false
 
   /@masknet/web-endowments/0.1.1:
@@ -21912,11 +21912,6 @@ packages:
       has: 1.0.3
     dev: true
 
-  /is-core-module/2.9.0:
-    resolution: {integrity: sha512-+5FPy5PnwmO3lvfMb0AsoPaBG+5KHUI0wYFXOtYPnVVVspTFUuMZNfNaNVRt3FZadstu2c8x23vykRW/NBoU6A==}
-    dependencies:
-      has: 1.0.3
-
   /is-data-descriptor/0.1.4:
     resolution: {integrity: sha512-+w9D5ulSoBNlmw9OHn3U2v51SyoCd0he+bB3xMl62oijhrspxowjU+AIcDY0N3iEJbUEkB15IlMASQsxYigvXg==}
     engines: {node: '>=0.10.0'}
@@ -27223,7 +27218,7 @@ packages:
     resolution: {integrity: sha512-Hhtrw0nLeSrFQ7phPp4OOcVjLPIeMnRlr5mcnVuMe7M/7eBn98A3hmFRLoFo3DLZkivSYwhRUJTyPyWAk56WLw==}
     hasBin: true
     dependencies:
-      is-core-module: 2.9.0
+      is-core-module: 2.10.0
       path-parse: 1.0.7
       supports-preserve-symlinks-flag: 1.0.0
 

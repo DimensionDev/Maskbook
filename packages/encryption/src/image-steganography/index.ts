@@ -1,10 +1,10 @@
-import { encode, decode, GrayscaleAlgorithm, DEFAULT_MASK } from '@dimensiondev/stego-js'
-import type { EncodeOptions } from '@dimensiondev/stego-js'
+import { encode, decode, GrayscaleAlgorithm, DEFAULT_MASK } from '@masknet/stego-js'
+import type { EncodeOptions } from '@masknet/stego-js'
 import { getDimension } from './utils.js'
 import { getPreset, findPreset } from './presets.js'
-import { decodeArrayBuffer, encodeArrayBuffer } from '@dimensiondev/kit'
+import { decodeArrayBuffer, encodeArrayBuffer } from '@masknet/kit'
 
-export { GrayscaleAlgorithm, AlgorithmVersion } from '@dimensiondev/stego-js'
+export { GrayscaleAlgorithm, AlgorithmVersion } from '@masknet/stego-js'
 
 export interface SteganographyIO {
     downloadImage: (url: string) => Promise<ArrayBuffer>
