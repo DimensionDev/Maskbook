@@ -2,7 +2,7 @@ import { Suspense } from 'react'
 import type { Theme } from '@mui/material'
 import { Web3ContextProvider } from '@masknet/web3-hooks-base'
 import { I18NextProviderHMR, SharedContextProvider } from '@masknet/shared'
-import { CSSVariableInjector, MaskThemeProvider } from '@masknet/theme'
+import { CSSVariableInjector, DialogStackingProvider, MaskThemeProvider } from '@masknet/theme'
 import { ErrorBoundary, BuildInfo, useValueRef } from '@masknet/shared-base-ui'
 import { compose, getSiteType, i18NextInstance, NetworkPluginID } from '@masknet/shared-base'
 import { buildInfoMarkdown } from './utils/BuildInfoMarkdown.js'
@@ -37,6 +37,7 @@ function MaskUIRoot({ children }: React.PropsWithChildren<{}>) {
 
     const context = { pluginID: site ? pluginIDs[site] : NetworkPluginID.PLUGIN_EVM }
     return compose(
+        (children) => DialogStackingProvider({ children, hasGlobalBackdrop: true }),
         (children) => Web3ContextProvider({ value: context, children }),
         (children) => I18NextProviderHMR({ i18n: i18NextInstance, children }),
         <>{children}</>,

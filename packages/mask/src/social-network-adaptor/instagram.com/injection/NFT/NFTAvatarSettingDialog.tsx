@@ -7,7 +7,7 @@ import { getAvatarId } from '../../utils/user.js'
 import { InjectedDialog } from '@masknet/shared'
 import { DialogContent } from '@mui/material'
 import { NFTAvatar } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatar.js'
-import { DialogStackingProvider, makeStyles } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 import { Instagram } from '@masknet/web3-providers'
 import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
 import type { SelectTokenInfo } from '../../../../plugins/Avatar/types.js'
@@ -81,17 +81,15 @@ export function NFTAvatarSettingDialog() {
     })
 
     return (
-        <DialogStackingProvider>
-            <InjectedDialog keepMounted open={open} onClose={onClose} title={t('set_nft_profile_photo')}>
-                <DialogContent style={{ padding: 16 }}>
-                    <NFTAvatar
-                        onChange={onChange}
-                        classes={{
-                            root: classes.root,
-                        }}
-                    />
-                </DialogContent>
-            </InjectedDialog>
-        </DialogStackingProvider>
+        <InjectedDialog keepMounted open={open} onClose={onClose} title={t('set_nft_profile_photo')}>
+            <DialogContent style={{ padding: 16 }}>
+                <NFTAvatar
+                    onChange={onChange}
+                    classes={{
+                        root: classes.root,
+                    }}
+                />
+            </DialogContent>
+        </InjectedDialog>
     )
 }

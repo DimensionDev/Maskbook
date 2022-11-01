@@ -138,7 +138,7 @@ export function InjectedDialog(props: InjectedDialogProps) {
     } = props
     const actions = CopyElementWithNewProps(children, DialogActions, { root: dialogActions })
     const content = CopyElementWithNewProps(children, DialogContent, { root: dialogContent })
-    const { extraProps, shouldReplaceExitWithBack, IncreaseStack } = useDialogStackActor(open)
+    const { extraProps, shouldReplaceExitWithBack, TrackDialogHierarchy } = useDialogStackActor(open)
 
     const closeBothCompositionDialog = useCallback(() => {
         if (isOpenFromApplicationBoard) {
@@ -157,7 +157,7 @@ export function InjectedDialog(props: InjectedDialogProps) {
     }, [isOpenFromApplicationBoard, onClose])
 
     return usePortalShadowRoot((container) => (
-        <IncreaseStack>
+        <TrackDialogHierarchy>
             <Dialog
                 container={container}
                 fullScreen={fullScreen}
@@ -216,7 +216,7 @@ export function InjectedDialog(props: InjectedDialogProps) {
                     {actions}
                 </ErrorBoundary>
             </Dialog>
-        </IncreaseStack>
+        </TrackDialogHierarchy>
     ))
 }
 function CopyElementWithNewProps<T>(
