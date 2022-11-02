@@ -421,7 +421,7 @@ export namespace RSS3BaseAPI {
         /**
          * The fees paid for the transaction.
          */
-        fee: number
+        fee?: number
         network: Network
         /**
          * There are many platforms supported by PreGod, see the full list. When platform is unknown, the transaction's network is used.

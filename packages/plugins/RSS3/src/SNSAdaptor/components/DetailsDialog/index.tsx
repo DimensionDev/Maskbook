@@ -63,7 +63,7 @@ export function FeedDetailsDialog({ type, feed, onClose, action, onSubmit, ...re
                 onSubmit?.()
             }}>
             <DialogContent className={classes.content}>
-                <FeedCard feed={feed} action={action} verbose disableFee={false} />
+                <FeedCard feed={feed} action={action} verbose />
                 {links?.length ? (
                     <div className={classes.links}>
                         {links.map((link, index) => {

@@ -98,7 +98,8 @@ const CardBody: FC<CardBodyProps> = memo(({ metadata, className, ...rest }) => {
  *
  * - DonationDonate
  */
-export const DonationCard: FC<DonationCardProps> = ({ feed, action: feedAction, verbose, ...rest }) => {
+export const DonationCard: FC<DonationCardProps> = ({ feed, action: feedAction, ...rest }) => {
+    const { verbose } = rest
     const { classes } = useStyles()
 
     const [index, setIndex] = useState(0)

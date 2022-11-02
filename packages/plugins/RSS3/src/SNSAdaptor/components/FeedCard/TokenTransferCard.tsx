@@ -59,7 +59,8 @@ interface TokenFeedCardProps extends Omit<FeedCardProps, 'feed'> {
  * TokenIn
  * TokenOut
  */
-export const TokenTransferCard: FC<TokenFeedCardProps> = ({ feed, verbose, ...rest }) => {
+export const TokenTransferCard: FC<TokenFeedCardProps> = ({ feed, ...rest }) => {
+    const { verbose } = rest
     const t = useI18N()
     const { classes, cx } = useStyles()
 

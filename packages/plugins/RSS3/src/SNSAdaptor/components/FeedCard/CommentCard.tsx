@@ -79,7 +79,8 @@ interface CommentCardProps extends Omit<FeedCardProps, 'feed'> {
  *
  * - NoteLink
  */
-export const CommentCard: FC<CommentCardProps> = ({ feed, verbose, ...rest }) => {
+export const CommentCard: FC<CommentCardProps> = ({ feed, ...rest }) => {
+    const { verbose } = rest
     const { classes, cx } = useStyles()
 
     const t = useI18N()

@@ -15,9 +15,12 @@ export interface FeedCardBaseProps {
      * for donation feed. there might be multiple actions to render
      */
     action?: RSS3BaseAPI.Web3Feed['actions'][number]
+    /**
+     * verbose variant is
+     * - not inspectable (no clickable)
+     * - show more details, including fee, more other content, different layout
+     */
     verbose?: boolean
-    disableFee?: boolean
-    inspectable?: boolean
 }
 
 export interface FeedCardProps extends Omit<HTMLProps<HTMLDivElement>, 'type' | 'action'>, FeedCardBaseProps {}
@@ -56,9 +59,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface CardFrameProps
-    extends Omit<HTMLProps<HTMLDivElement>, 'type' | 'action'>,
-        Omit<FeedCardBaseProps, 'verbose'> {
+export interface CardFrameProps extends Omit<HTMLProps<HTMLDivElement>, 'type' | 'action'>, FeedCardBaseProps {
     type: CardType
 }
 
@@ -66,11 +67,10 @@ export const CardFrame: FC<CardFrameProps> = ({
     type,
     feed,
     action,
-    disableFee = true,
-    inspectable,
     className,
     children,
     onClick,
+    verbose,
     ...rest
 }) => {
     const { classes, cx } = useStyles()
@@ -82,10 +82,10 @@ export const CardFrame: FC<CardFrameProps> = ({
 
     return (
         <article
-            className={cx(className, inspectable ? classes.inspectable : null)}
+            className={cx(className, verbose ? null : classes.inspectable)}
             onClick={(event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
                 onClick?.(event)
-                if (inspectable) {
+                if (!verbose) {
                     viewDetails({
                         type,
                         feed,
@@ -96,7 +96,7 @@ export const CardFrame: FC<CardFrameProps> = ({
             {...rest}>
             <div className={classes.header}>
                 <CardIcon width={36} height={18} />
-                {!disableFee ? (
+                {verbose && feed.fee ? (
                     <div className={classes.fee}>
                         <Icons.Gas size={16} />
                         <Typography ml="4px">{new BigNumber(feed.fee).toFixed(6)}</Typography>

@@ -48,7 +48,8 @@ interface VoteCardProps extends Omit<FeedCardProps, 'feed'> {
  * - NoteCreate
  * - NoteEdit
  */
-export const VoteCard: FC<VoteCardProps> = ({ feed, verbose, ...rest }) => {
+export const VoteCard: FC<VoteCardProps> = ({ feed, ...rest }) => {
+    const { verbose } = rest
     const { classes } = useStyles()
 
     const action = feed.actions[0]

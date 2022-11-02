@@ -53,7 +53,7 @@ export const FeedsPage = memo(function FeedsPage({ address, tag, ...rest }: Feed
                 <Box p={2} boxSizing="border-box" {...rest}>
                     {feeds.map((feed, index) => (
                         <Box key={index} mt={2}>
-                            <FeedCard feed={feed} inspectable />
+                            <FeedCard feed={feed} />
                         </Box>
                     ))}
                 </Box>

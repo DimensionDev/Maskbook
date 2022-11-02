@@ -110,7 +110,8 @@ interface CollectibleCardProps extends Omit<FeedCardProps, 'feed'> {
  * - CollectibleMint
  * - CollectibleOut
  */
-export const CollectibleCard: FC<CollectibleCardProps> = ({ feed, verbose, ...rest }) => {
+export const CollectibleCard: FC<CollectibleCardProps> = ({ feed, ...rest }) => {
+    const { verbose } = rest
     const { classes, cx } = useStyles()
 
     const user = useAddressLabel(feed.owner)

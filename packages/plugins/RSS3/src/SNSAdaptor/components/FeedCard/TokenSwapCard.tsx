@@ -62,7 +62,8 @@ interface TokenSwapCardProps extends Omit<FeedCardProps, 'feed'> {
  *
  * - TokenSwap
  */
-export const TokenSwapCard: FC<TokenSwapCardProps> = ({ feed, verbose, ...rest }) => {
+export const TokenSwapCard: FC<TokenSwapCardProps> = ({ feed, ...rest }) => {
+    const { verbose } = rest
     const t = useI18N()
     const { classes, cx } = useStyles()
 
