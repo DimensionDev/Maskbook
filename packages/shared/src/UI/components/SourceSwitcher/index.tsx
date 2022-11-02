@@ -35,7 +35,7 @@ export interface SourceSwitcherProps extends withClasses<'source' | 'sourceNote'
 export function SourceSwitcher(props: SourceSwitcherProps) {
     const { sourceType, sourceTypes = [], onSourceTypeChange } = props
     const t = useSharedI18N()
-    const classes = useStylesExtends(useStyles(), props)
+    const { classes } = useStylesExtends(useStyles(), props)
 
     return (
         <Box className={classes.source}>

@@ -57,7 +57,7 @@ export interface PlatformCardProps extends withClasses<never | 'root'> {
 export function PlatformCard(props: PlatformCardProps) {
     const { account, openImageSetting, isCurrent, currentPersona } = props
     const t = useI18N()
-    const classes = useStylesExtends(useStyles(), props)
+    const { classes } = useStylesExtends(useStyles(), props)
 
     const walletsCount = account.walletList.NFTs.length
 

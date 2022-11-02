@@ -47,7 +47,7 @@ interface CountdownProps extends withClasses<'digit' | 'separator'> {
 }
 
 export const CountdownView = (props: CountdownProps) => {
-    const classes = useStylesExtends(useStyles(), props)
+    const { classes } = useStylesExtends(useStyles(), props)
 
     const { secondsRemaining, msgOnEnd } = props
     const [secs, setSecs] = useState(secondsRemaining)

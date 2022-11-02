@@ -1,6 +1,5 @@
 import { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react'
 import { v4 as uuid } from 'uuid'
-import classNames from 'classnames'
 import Web3Utils from 'web3-utils'
 import formatDateTime from 'date-fns/format'
 import { SchemaType, formatAmount, useITOConstants, ChainId } from '@masknet/web3-shared-evm'
@@ -127,7 +126,7 @@ export interface CreateFormProps extends withClasses<never> {
 export function CreateForm(props: CreateFormProps) {
     const { onChangePoolSettings, onNext, origin, chainId } = props
     const { t } = useI18N()
-    const classes = useStylesExtends(useStyles(), props)
+    const { classes, cx } = useStylesExtends(useStyles(), props)
 
     const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { ITO2_CONTRACT_ADDRESS, DEFAULT_QUALIFICATION2_ADDRESS } = useITOConstants(chainId)
@@ -424,7 +423,7 @@ export function CreateForm(props: CreateFormProps) {
             ) : null}
             {advanceSettingData.delayUnlocking ? <Box className={classes.date}>{UnlockTime}</Box> : null}
             {account && advanceSettingData.contract ? (
-                <Box className={classNames(classes.line, classes.column)}>
+                <Box className={cx(classes.line, classes.column)}>
                     <InputBase
                         className={classes.input}
                         onChange={(e) => setQualificationAddress(e.currentTarget.value)}
@@ -436,13 +435,13 @@ export function CreateForm(props: CreateFormProps) {
                         }
                         endAdornment={
                             qualification?.isQualification ? (
-                                <Box className={classNames(classes.iconWrapper, classes.success)}>
+                                <Box className={cx(classes.iconWrapper, classes.success)}>
                                     <CheckIcon fontSize="small" style={{ color: '#77E0B5' }} />
                                 </Box>
                             ) : qualification?.loadingERC165 || loadingQualification ? (
                                 <LoadingBase size={16} />
                             ) : qualificationAddress.length > 0 ? (
-                                <Box className={classNames(classes.iconWrapper, classes.fail)}>
+                                <Box className={cx(classes.iconWrapper, classes.fail)}>
                                     <UnCheckIcon fontSize="small" style={{ color: '#ff4e59' }} />
                                 </Box>
                             ) : null

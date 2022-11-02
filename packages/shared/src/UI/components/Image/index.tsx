@@ -1,5 +1,4 @@
 import { ImgHTMLAttributes, useState } from 'react'
-import classNames from 'classnames'
 import { LoadingBase, makeStyles, useStylesExtends } from '@masknet/theme'
 import { Box, useTheme } from '@mui/material'
 import { useImageURL } from '../../../hooks/useImageURL.js'
@@ -59,7 +58,7 @@ export function Image({
     onClick,
     ...rest
 }: ImageProps) {
-    const classes = useStylesExtends(useStyles({ size, rounded }), { classes: externalClasses })
+    const { classes, cx } = useStylesExtends(useStyles({ size, rounded }), { classes: externalClasses })
     const theme = useTheme()
     const [failed, setFailed] = useState(false)
 
@@ -93,7 +92,7 @@ export function Image({
     }
     if (fallback && !(fallback instanceof URL) && typeof fallback !== 'string') {
         return (
-            <Box className={classNames(classes.container, classes.failed)}>
+            <Box className={cx(classes.container, classes.failed)}>
                 <Box className={classes.floatingContainer}>{fallback}</Box>
             </Box>
         )
@@ -106,7 +105,7 @@ export function Image({
             : new URL('./mask-light.png', import.meta.url).toString())
 
     return (
-        <Box className={classNames(classes.container, classes.failed)} onClick={onClick}>
+        <Box className={cx(classes.container, classes.failed)} onClick={onClick}>
             <Box className={classes.floatingContainer}>
                 <img
                     loading="lazy"
@@ -115,7 +114,7 @@ export function Image({
                     height={size}
                     {...rest}
                     src={fallbackImageURL}
-                    className={classNames(classes.image, classes.failImage, classes.fallbackImage)}
+                    className={cx(classes.image, classes.failImage, classes.fallbackImage)}
                 />
             </Box>
         </Box>

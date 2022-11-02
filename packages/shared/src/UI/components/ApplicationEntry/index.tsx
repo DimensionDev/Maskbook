@@ -1,4 +1,3 @@
-import classNames from 'classnames'
 import type { Plugin } from '@masknet/plugin-infra'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { Typography } from '@mui/material'
@@ -104,13 +103,13 @@ export function ApplicationEntry(props: ApplicationEntryProps) {
         iconFilterColor,
         popperBoundary,
     } = props
-    const { classes } = useStyles({ disabled, iconFilterColor })
+    const { classes, cx } = useStyles({ disabled, iconFilterColor })
     const jsx = recommendFeature ? (
         <div
             style={{
                 background: recommendFeature.backgroundGradient,
             }}
-            className={classNames(
+            className={cx(
                 classes.recommendFeatureApplicationBox,
                 disabled ? classes.disabled : classes.applicationBoxHover,
             )}
@@ -125,7 +124,7 @@ export function ApplicationEntry(props: ApplicationEntryProps) {
         </div>
     ) : (
         <div
-            className={classNames(classes.applicationBox, disabled ? classes.disabled : classes.applicationBoxHover)}
+            className={cx(classes.applicationBox, disabled ? classes.disabled : classes.applicationBoxHover)}
             onClick={disabled ? () => {} : onClick}>
             <div className={classes.iconWrapper}>{icon}</div>
             <Typography className={classes.title} color="textPrimary">
@@ -149,7 +148,7 @@ export function ApplicationEntry(props: ApplicationEntryProps) {
                 ],
             }}
             classes={{
-                arrow: classNames(classes.arrow, recommendFeature?.isFirst ? classes.firstAreaArrow : ''),
+                arrow: cx(classes.arrow, recommendFeature?.isFirst ? classes.firstAreaArrow : ''),
             }}
             placement={recommendFeature ? 'bottom' : 'top'}
             arrow

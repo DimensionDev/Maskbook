@@ -20,7 +20,6 @@ import { TokenPanelType, TradeInfo } from '../../types/index.js'
 import { BigNumber } from 'bignumber.js'
 import { first, noop } from 'lodash-unified'
 import { Icons } from '@masknet/icons'
-import classnames from 'classnames'
 import { isNativeTokenWrapper } from '../../helpers/index.js'
 import { DefaultTraderPlaceholder, TraderInfo } from './TraderInfo.js'
 import { MINIMUM_AMOUNT, MIN_GAS_LIMIT } from '../../constants/index.js'
@@ -237,7 +236,7 @@ export const TradeForm = memo<AllTradeFormProps>(
         const isPopup = isPopupPage()
         const { t } = useI18N()
         const styles = useStyles({ isDashboard, isPopup })
-        const classes = useStylesExtends(styles, props)
+        const { classes, cx } = useStylesExtends(styles, props)
         const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
         const { isSwapping, allTradeComputed } = AllProviderTradeContext.useContainer()
         const [isExpand, setExpand] = useState(false)
@@ -513,10 +512,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                                 {trades.filter((x) => !!x.value).length > 1 ? (
                                     <Box width="100%" display="flex" justifyContent="center" marginTop={1.5}>
                                         <Icons.ChevronUp
-                                            className={classnames(
-                                                classes.chevron,
-                                                isExpand ? classes.reverseChevron : null,
-                                            )}
+                                            className={cx(classes.chevron, isExpand ? classes.reverseChevron : null)}
                                             onClick={() => setExpand(!isExpand)}
                                         />
                                     </Box>

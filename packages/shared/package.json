@@ -29,7 +29,6 @@
     "@types/qrcode": "^1.5.0",
     "anchorme": "^2.1.2",
     "bignumber.js": "9.1.0",
-    "classnames": "^2.3.1",
     "date-fns": "2.28.0",
     "iframe-resizer-react": "^1.1.0",
     "lodash-es": "^4.17.21",

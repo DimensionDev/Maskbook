@@ -95,7 +95,7 @@ export interface NFTAvatarProps extends withClasses<'root'> {
 
 export function NFTAvatar(props: NFTAvatarProps) {
     const { onChange, hideWallet } = props
-    const classes = useStylesExtends(useStyles(), props)
+    const { classes } = useStylesExtends(useStyles(), props)
     const { pluginID } = useNetworkContext()
     const { account, chainId } = useChainContext()
     const [selectedToken, setSelectedToken] = useState<AllChainsNonFungibleToken | undefined>()

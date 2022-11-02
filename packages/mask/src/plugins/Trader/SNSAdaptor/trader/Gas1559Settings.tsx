@@ -3,7 +3,6 @@ import { isEmpty } from 'lodash-unified'
 import { Accordion, AccordionDetails, AccordionSummary, Box, TextField, Typography } from '@mui/material'
 import { makeStyles, MaskColorVar, ActionButton } from '@masknet/theme'
 import { formatGweiToWei, GasOptionConfig } from '@masknet/web3-shared-evm'
-import classnames from 'classnames'
 import { z as zod } from 'zod'
 import { BigNumber } from 'bignumber.js'
 import { useForm, Controller } from 'react-hook-form'
@@ -136,7 +135,7 @@ export const Gas1559Settings = memo<Gas1559SettingsProps>(
     ({ onCancel, onSave: onSave_, gasConfig, onSaveSlippage }) => {
         const { t } = useI18N()
         const isDashboard = isDashboardPage()
-        const { classes } = useStyles({ isDashboard })
+        const { classes, cx } = useStyles({ isDashboard })
         const [selected, setOption] = useState<number | null>(1)
 
         const { value: gasOptions, loading: getGasOptionsLoading } = useGasOptions(NetworkPluginID.PLUGIN_EVM)
@@ -267,14 +266,14 @@ export const Gas1559Settings = memo<Gas1559SettingsProps>(
                             <Box display="flex" justifyContent="space-around" alignItems="center">
                                 {options.map((option, index) => (
                                     <Box
-                                        className={classnames(
+                                        className={cx(
                                             classes.option,
                                             selected === index ? classes.selected : undefined,
                                         )}
                                         key={index}
                                         onClick={() => setOption(index)}>
                                         <Box
-                                            className={classnames(
+                                            className={cx(
                                                 classes.pointer,
                                                 selected === index ? classes.selectedPointer : undefined,
                                             )}

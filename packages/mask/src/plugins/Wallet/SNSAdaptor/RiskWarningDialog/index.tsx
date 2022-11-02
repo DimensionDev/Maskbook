@@ -1,5 +1,4 @@
 import { useCallback, useState } from 'react'
-import classnames from 'classnames'
 import { Trans } from 'react-i18next'
 import { InjectedDialog, ActionButtonPromise } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
@@ -51,7 +50,7 @@ const useStyles = makeStyles()((theme) => ({
 
 export function WalletRiskWarningDialog() {
     const { t } = useI18N()
-    const { classes } = useStyles()
+    const { classes, cx } = useStyles()
     const { showSnackbar } = useCustomSnackbar()
     const isMobile = useMatchXS()
 
@@ -109,7 +108,7 @@ export function WalletRiskWarningDialog() {
             </DialogContent>
             <DialogActions className={classes.buttons}>
                 <ActionButton
-                    className={classnames(classes.button, classes.cancel)}
+                    className={cx(classes.button, classes.cancel)}
                     fullWidth
                     variant="outlined"
                     color="secondary"

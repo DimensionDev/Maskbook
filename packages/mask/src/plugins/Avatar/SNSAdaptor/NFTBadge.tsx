@@ -25,7 +25,7 @@ interface NFTBadgeProps extends withClasses<'root' | 'text' | 'icon'> {
 
 export function NFTBadge(props: NFTBadgeProps) {
     const { avatar, nftInfo, size = 140, hasRainbow, borderSize } = props
-    const classes = useStylesExtends(useStyles(), props)
+    const { classes } = useStylesExtends(useStyles(), props)
     const { t } = useI18N()
 
     if (!nftInfo)

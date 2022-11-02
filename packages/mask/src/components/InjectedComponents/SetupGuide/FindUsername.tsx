@@ -4,7 +4,6 @@ import { useState } from 'react'
 import { SetupGuideStep } from '../../../../shared/legacy-settings/types.js'
 import { Box, Typography } from '@mui/material'
 import { MaskIcon, ActionButtonPromise } from '@masknet/shared'
-import classNames from 'classnames'
 import { Icons } from '@masknet/icons'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { Trans } from 'react-i18next'
@@ -97,7 +96,7 @@ export function FindUsername({
     const { t } = useI18N()
     const [connected, setConnected] = useState(false)
 
-    const { classes } = useFindUsernameStyles()
+    const { classes, cx } = useFindUsernameStyles()
 
     return (
         <WizardDialog
@@ -116,10 +115,7 @@ export function FindUsername({
                             <Box className={classes.line} />
                             <Box className={classes.connectItem}>
                                 <Box position="relative" width={48}>
-                                    <img
-                                        src={avatar}
-                                        className={classNames(classes.avatar, connected ? 'connected' : '')}
-                                    />
+                                    <img src={avatar} className={cx(classes.avatar, connected ? 'connected' : '')} />
                                     {connected ? <Icons.Verified className={classes.verified} /> : null}
                                 </Box>
                                 <Typography variant="body2" className={classes.name}>

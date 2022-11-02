@@ -12,7 +12,6 @@ import { Box, Card, Link, Typography } from '@mui/material'
 import { makeStyles, ActionButton } from '@masknet/theme'
 import { OpenInNew as OpenInNewIcon } from '@mui/icons-material'
 import { BigNumber } from 'bignumber.js'
-import classNames from 'classnames'
 import formatDateTime from 'date-fns/format'
 import { startCase } from 'lodash-unified'
 import { EnhanceableSite, NetworkPluginID } from '@masknet/shared-base'
@@ -232,7 +231,7 @@ export function ITO(props: ITO_Props) {
 
     const title = message.split(MSG_DELIMITER)[1] ?? message
     const regions = message.split(MSG_DELIMITER)[2] ?? defaultRegions
-    const { classes } = useStyles({
+    const { classes, cx } = useStyles({
         titleLength: getTextUILength(title),
         tokenNumber: exchange_tokens.length,
         snsId: activatedSocialNetworkUI.networkIdentifier,
@@ -518,7 +517,7 @@ export function ITO(props: ITO_Props) {
                             variant="roundedDark"
                             onClick={() => undefined}
                             disabled
-                            className={classNames(classes.actionButton, classes.textInOneLine)}>
+                            className={cx(classes.actionButton, classes.textInOneLine)}>
                             {t('plugin_ito_claim')}
                         </ActionButton>
                     )
@@ -798,11 +797,11 @@ export function ITO(props: ITO_Props) {
 export function ITO_Loading() {
     const { t } = useI18N()
     const PoolBackground = getAssetAsBlobURL(new URL('../assets/pool-loading-background.jpg', import.meta.url))
-    const { classes } = useStyles({})
+    const { classes, cx } = useStyles({})
     return (
         <div style={{ width: '100%' }}>
             <Card
-                className={classNames(classes.root, classes.loadingWrap)}
+                className={cx(classes.root, classes.loadingWrap)}
                 elevation={0}
                 style={{ backgroundImage: `url(${PoolBackground})` }}>
                 <Typography variant="body1" className={classes.loadingITO}>
@@ -815,11 +814,11 @@ export function ITO_Loading() {
 
 export function ITO_Error({ retryPoolPayload }: { retryPoolPayload: () => void }) {
     const { t } = useI18N()
-    const { classes } = useStyles({})
+    const { classes, cx } = useStyles({})
     const PoolBackground = getAssetAsBlobURL(new URL('../assets/pool-loading-background.jpg', import.meta.url))
     return (
         <Card
-            className={classNames(classes.root, classes.loadingWrap)}
+            className={cx(classes.root, classes.loadingWrap)}
             elevation={0}
             style={{ backgroundImage: `url(${PoolBackground})` }}>
             <Typography variant="body1" className={classes.loadingITO}>

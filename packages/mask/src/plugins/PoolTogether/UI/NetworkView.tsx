@@ -22,7 +22,7 @@ interface NetworkViewProps extends withClasses<never> {
 }
 
 export const NetworkView = (props: NetworkViewProps) => {
-    const classes = useStylesExtends(useStyles(), props)
+    const { classes } = useStylesExtends(useStyles(), props)
     const { chainId = ChainId.Mainnet } = props
     const networkProvider = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM)
     return (

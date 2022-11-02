@@ -63,7 +63,7 @@ const useStyles = makeStyles()((theme) => {
 
 export const PersonaItemUI = (props: PersonaItemProps) => {
     const { data, onCopy, onClick, currentPersona, currentPersonaIdentifier, currentProfileIdentify } = props
-    const classes = useStylesExtends(useStyles(), props)
+    const { classes } = useStylesExtends(useStyles(), props)
 
     const isVerified = useMemo(() => {
         return data.proof.some(

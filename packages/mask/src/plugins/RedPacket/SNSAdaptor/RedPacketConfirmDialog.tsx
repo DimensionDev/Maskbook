@@ -1,5 +1,4 @@
 import { BigNumber } from 'bignumber.js'
-import classNames from 'classnames'
 import { useCallback, useEffect, useMemo, useRef } from 'react'
 import { useChainContext, useBalance, useWeb3, useNativeToken, useNativeTokenAddress } from '@masknet/web3-hooks-base'
 import { chainResolver, explorerResolver, isNativeTokenAddress, useRedPacketConstants } from '@masknet/web3-shared-evm'
@@ -57,7 +56,7 @@ export interface ConfirmRedPacketFormProps {
 export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
     const t = useI18N()
     const { onBack, settings, onCreated, onClose } = props
-    const { classes } = useStyles()
+    const { classes, cx } = useStyles()
     const { value: balance = '0', loading: loadingBalance } = useBalance(NetworkPluginID.PLUGIN_EVM)
     const { account, chainId, networkType } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     useEffect(() => {
@@ -162,7 +161,7 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
 
     return (
         <>
-            <Grid container spacing={2} className={classNames(classes.grid, classes.gridWrapper)}>
+            <Grid container spacing={2} className={cx(classes.grid, classes.gridWrapper)}>
                 <Grid item xs={12}>
                     <Typography variant="h4" color="textPrimary" align="center" className={classes.ellipsis}>
                         {settings?.message}

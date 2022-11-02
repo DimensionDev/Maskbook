@@ -1,7 +1,6 @@
 import { useCallback, useState, useEffect } from 'react'
 import { useUpdate } from 'react-use'
 import { findLastIndex, uniq } from 'lodash-unified'
-import classNames from 'classnames'
 import { AssetPreviewer } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { isSameAddress, NonFungibleToken, NonFungibleTokenContract } from '@masknet/web3-shared-base'
@@ -276,7 +275,7 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
     const isSelectSharesExceed =
         (tokenDetailedOwnerList.length === 0 ? NFT_RED_PACKET_MAX_SHARES - 1 : NFT_RED_PACKET_MAX_SHARES) <
         tokenDetailedSelectedList.length
-    const { classes } = useStyles({ isSelectSharesExceed })
+    const { classes, cx } = useStyles({ isSelectSharesExceed })
     const [selectAll, setSelectAll] = useState(false)
     const selectAllHandler = useCallback(() => {
         setTokenDetailedSelectedList(selectAll ? [] : tokenDetailedOwnerList)
@@ -491,7 +490,7 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
             </Button>
         </DialogContent>
     ) : (
-        <DialogContent className={classNames(classes.dialogContent, classes.dialogContentFixedHeight)}>
+        <DialogContent className={cx(classes.dialogContent, classes.dialogContentFixedHeight)}>
             <div className={classes.searchWrapper}>
                 <InputBase
                     startAdornment={<Icons.Search className={classes.iconButton} />}
@@ -523,14 +522,11 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                             <div className={classes.selectBar}>
                                 <div className={classes.selectAll}>
                                     <div
-                                        className={classNames(
-                                            classes.selectAllCheckBox,
-                                            selectAll ? classes.checked : '',
-                                        )}
+                                        className={cx(classes.selectAllCheckBox, selectAll ? classes.checked : '')}
                                         onClick={selectAllHandler}>
                                         {selectAll ? <CheckIcon className={classes.checkIcon} /> : null}
                                     </div>
-                                    <Typography className={classNames(classes.selectAllCheckBoxText)}>
+                                    <Typography className={cx(classes.selectAllCheckBoxText)}>
                                         {tr('select_all')}
                                     </Typography>
                                 </div>
@@ -572,7 +568,7 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                                     )
                                 })}
                                 {loadingOwnerList ? (
-                                    <ListItem className={classNames(classes.selectWrapper, classes.loadingWrapper)}>
+                                    <ListItem className={cx(classes.selectWrapper, classes.loadingWrapper)}>
                                         <LoadingBase size={25} />
                                     </ListItem>
                                 ) : null}
@@ -644,7 +640,7 @@ interface NFTCardProps {
 
 function NFTCard(props: NFTCardProps) {
     const { findToken, token, isSelectSharesExceed, renderOrder, selectToken } = props
-    const { classes } = useStyles({ isSelectSharesExceed })
+    const { classes, cx } = useStyles({ isSelectSharesExceed })
     return (
         <ListItem className={classes.selectWrapper}>
             <AssetPreviewer
@@ -660,7 +656,7 @@ function NFTCard(props: NFTCardProps) {
             </div>
 
             <div
-                className={classNames(classes.checkbox, findToken ? classes.checked : '')}
+                className={cx(classes.checkbox, findToken ? classes.checked : '')}
                 onClick={(event) => selectToken(token, findToken, event.shiftKey, token.index)}>
                 {findToken ? <CheckIcon className={classes.checkIcon} /> : null}
             </div>

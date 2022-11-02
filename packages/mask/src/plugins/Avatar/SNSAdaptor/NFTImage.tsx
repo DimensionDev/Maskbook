@@ -1,4 +1,3 @@
-import classNames from 'classnames'
 import { makeStyles } from '@masknet/theme'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
@@ -101,10 +100,7 @@ export function NFTImage(props: NFTImageProps) {
                     }}
                     onClick={() => onClick(token)}
                     src={token.metadata?.imageURL ?? ''}
-                    className={classNames(
-                        classes.image,
-                        isSameNFT(pluginID, token, selectedToken) ? classes.selected : '',
-                    )}
+                    className={cx(classes.image, isSameNFT(pluginID, token, selectedToken) ? classes.selected : '')}
                 />
                 {showBadge && isSameNFT(pluginID, token, selectedToken) ? (
                     <SelectedIcon className={classes.icon} />

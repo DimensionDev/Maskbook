@@ -2,7 +2,6 @@ import { MouseEvent, useCallback, useState, useMemo } from 'react'
 import { useAsync } from 'react-use'
 import { Interface } from '@ethersproject/abi'
 import { BigNumber } from 'bignumber.js'
-import classNames from 'classnames'
 import { Box, ListItem, Typography, Popper, useMediaQuery, Theme } from '@mui/material'
 import { makeStyles, ActionButton } from '@masknet/theme'
 import { TokenIcon } from '@masknet/shared'
@@ -167,7 +166,7 @@ export interface RedPacketInHistoryListProps {
 export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
     const { history, onSelect } = props
     const t = useI18N()
-    const { classes } = useStyles()
+    const { classes, cx } = useStyles()
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
     const { HAPPY_RED_PACKET_ADDRESS_V4 } = useRedPacketConstants(chainId)
@@ -260,25 +259,25 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
                     <section className={classes.section}>
                         <div className={classes.div}>
                             <div className={classes.fullWidthBox}>
-                                <Typography variant="body1" className={classNames(classes.title, classes.message)}>
+                                <Typography variant="body1" className={cx(classes.title, classes.message)}>
                                     {patchedHistory.sender.message === ''
                                         ? t.best_wishes()
                                         : patchedHistory.sender.message}
                                 </Typography>
                             </div>
-                            <Typography variant="body1" className={classNames(classes.info, classes.message)}>
+                            <Typography variant="body1" className={cx(classes.info, classes.message)}>
                                 {t.history_duration({
                                     startTime: dateTimeFormat(new Date(creation_time)),
                                     endTime: dateTimeFormat(new Date(creation_time + patchedHistory.duration), false),
                                 })}
                             </Typography>
-                            <Typography variant="body1" className={classNames(classes.info, classes.message)}>
+                            <Typography variant="body1" className={cx(classes.info, classes.message)}>
                                 {t.history_total_amount({
                                     amount: formatBalance(patchedHistory.total, historyToken?.decimals, 6),
                                     symbol: historyToken?.symbol,
                                 })}
                             </Typography>
-                            <Typography variant="body1" className={classNames(classes.info, classes.message)}>
+                            <Typography variant="body1" className={cx(classes.info, classes.message)}>
                                 {t.history_split_mode({
                                     mode: patchedHistory.is_random ? t.random() : t.average(),
                                 })}
@@ -297,7 +296,7 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
                                         canSend && !isPasswordValid ? setAnchorEl(null) : undefined
                                     }}
                                     disabled={listOfStatus.includes(RedPacketStatus.empty) || refunded || isRefunding}
-                                    className={classNames(
+                                    className={cx(
                                         classes.actionButton,
                                         canSend && !isPasswordValid ? classes.disabledButton : '',
                                     )}

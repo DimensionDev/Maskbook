@@ -1,10 +1,9 @@
 import React, { useState } from 'react'
-import { makeStyles, useStylesExtends } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 import { Box } from '@mui/material'
-import classNames from 'classnames'
 import Drag from './Drag.js'
 import ModelView from './ModelView.js'
-import { useStyles as boxUseStyles } from './PreviewBox.js'
+import { useStyles as useBoxStyles } from './PreviewBox.js'
 import { DragIcon } from '../constants.js'
 import type { ShowMeta } from '../types.js'
 import RightMenu from './RightMenu.js'
@@ -54,8 +53,8 @@ interface ModelNFTProps {
 
 export function ModelNFT(props: ModelNFTProps) {
     const { start, showMeta } = props
-    const classes = useStylesExtends(useStyles(), {})
-    const boxClasses = useStylesExtends(boxUseStyles(), {})
+    const { classes, cx } = useStyles()
+    const { classes: boxClasses } = useBoxStyles()
     const [position, setPosition] = useState({ x: 50, y: 150 })
     const moveHandle = (x: number, y: number) => {
         setPosition({ x, y })
@@ -95,9 +94,7 @@ export function ModelNFT(props: ModelNFTProps) {
                 </div>
                 {start && showMeta?.word ? (
                     <Box className={classes.wordContent}>
-                        <Box className={classNames(classes.word, boxClasses.msgBox, boxClasses.wordShow)}>
-                            {showMeta?.word}
-                        </Box>
+                        <Box className={cx(classes.word, boxClasses.msgBox, boxClasses.wordShow)}>{showMeta?.word}</Box>
                     </Box>
                 ) : null}
             </Drag>

@@ -29,7 +29,7 @@ interface CollectionItemProps extends withClasses<never | 'root' | 'list' | 'col
 }
 export function CollectionItem(props: CollectionItemProps) {
     const { title, walletsNum, collectionNum, onClick } = props
-    const classes = useStylesExtends(useStyles(), props)
+    const { classes } = useStylesExtends(useStyles(), props)
     const t = useI18N()
 
     return (

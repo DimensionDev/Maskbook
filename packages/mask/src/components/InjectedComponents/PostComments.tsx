@@ -23,7 +23,7 @@ const useStyle = makeStyles()({
 })
 export type PostCommentDecryptedProps = React.PropsWithChildren<{ ChipProps?: ChipProps }>
 export function PostCommentDecrypted(props: PostCommentDecryptedProps) {
-    const classes = useStylesExtends(useStyle(), props.ChipProps || {})
+    const { classes } = useStylesExtends(useStyle(), props.ChipProps || {})
     return (
         <>
             <Chip

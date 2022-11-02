@@ -23,7 +23,6 @@
       "react-use": "^17.3.2",
       "use-subscription": "1.7.0",
       "react-feather": "^2.0.9",
-      "classnames": "^2.3.1",
       "urlcat": "^2.0.4",
       "@types/use-subscription": "^1.0.0",
       "date-fns":"2.28.0"

@@ -4,7 +4,6 @@ import { Icons } from '@masknet/icons'
 import { useContext, useMemo } from 'react'
 import { UserContext } from '../../hooks/UserContext.js'
 import { useDashboardI18N } from '../../../../locales/index.js'
-import classNames from 'classnames'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -57,7 +56,7 @@ export interface BackupModeSelectDialogProps {
 
 export default function BackupModeSelectDialog({ open, onClose, onSelect }: BackupModeSelectDialogProps) {
     const t = useDashboardI18N()
-    const { classes } = useStyles()
+    const { classes, cx } = useStyles()
     const { user } = useContext(UserContext)
 
     const cloudDisabled = useMemo(() => {
@@ -72,7 +71,7 @@ export default function BackupModeSelectDialog({ open, onClose, onSelect }: Back
                         <Icons.LocalBackup className={classes.icon} />
                         <Typography className={classes.label}>Local Backup</Typography>
                     </Box>
-                    <Box className={classNames(classes.mode, cloudDisabled && 'disabled')}>
+                    <Box className={cx(classes.mode, cloudDisabled && 'disabled')}>
                         {cloudDisabled ? (
                             <Tooltip title={t.settings_dialogs_bind_email_or_phone()} placement="top" arrow>
                                 <div className={classes.mask} />

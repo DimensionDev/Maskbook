@@ -1,6 +1,5 @@
-import { HTMLProps, memo, useEffect, useRef, useState } from 'react'
+import { HTMLProps, memo, useEffect, useId, useRef, useState } from 'react'
 import { useCopyToClipboard } from 'react-use'
-import { v4 as uuid } from 'uuid'
 import { Icons } from '@masknet/icons'
 import { Box, Link, MenuItem, Typography } from '@mui/material'
 import { useWeb3State, useChainContext } from '@masknet/web3-hooks-base'
@@ -120,7 +119,7 @@ export const ProfileBar = memo<ProfileBarProps>(
         const { classes, theme, cx } = useStyles()
         const { t } = useI18N()
         const containerRef = useRef<HTMLDivElement>(null)
-        const { current: avatarClipPathId } = useRef<string>(uuid())
+        const avatarClipPathId = useId()
 
         const [, copyToClipboard] = useCopyToClipboard()
 

@@ -1,6 +1,5 @@
 import { memo, useCallback, useMemo, useState } from 'react'
 import { useUpdateEffect } from 'react-use'
-import classnames from 'classnames'
 import { toHex } from 'web3-utils'
 import { BigNumber } from 'bignumber.js'
 import { formatGweiToEther, formatGweiToWei, formatWeiToGwei, GasOptionConfig } from '@masknet/web3-shared-evm'
@@ -98,7 +97,7 @@ export const GasPrior1559Settings = memo<GasPrior1559SettingsProps>(
         const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
         const { value: gasOptions_ } = useGasOptions(NetworkPluginID.PLUGIN_EVM)
         const isDashboard = isDashboardPage()
-        const { classes } = useStyles({ isDashboard })
+        const { classes, cx } = useStyles({ isDashboard })
         const { t } = useI18N()
         const [selected, setOption] = useState<number>(1)
         const [customGasPrice, setCustomGasPrice] = useState('0')
@@ -178,10 +177,7 @@ export const GasPrior1559Settings = memo<GasPrior1559SettingsProps>(
                                 <Box
                                     key={index}
                                     onClick={() => setOption(index)}
-                                    className={classnames(
-                                        classes.option,
-                                        selected === index ? classes.selected : undefined,
-                                    )}>
+                                    className={cx(classes.option, selected === index ? classes.selected : undefined)}>
                                     <Box
                                         width="100%"
                                         display="flex"
@@ -190,7 +186,7 @@ export const GasPrior1559Settings = memo<GasPrior1559SettingsProps>(
                                         mb={1.5}>
                                         <Typography className={classes.optionTitle}>{option.title}</Typography>
                                         <Box
-                                            className={classnames(
+                                            className={cx(
                                                 classes.pointer,
                                                 selected === index ? classes.selectedPointer : undefined,
                                             )}
