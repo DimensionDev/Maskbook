@@ -630,6 +630,8 @@ export interface Wallet {
     derivationPath?: string
     /** the derivation path when wallet last was derived */
     latestDerivationPath?: string
+    /** eip-4337 compatible salt number using by create2Factory */
+    salt?: number
     /** the internal presentation of mask wallet sdk */
     storedKeyInfo?: api.IStoredKeyInfo
     /** the Mask SDK stored key info */
