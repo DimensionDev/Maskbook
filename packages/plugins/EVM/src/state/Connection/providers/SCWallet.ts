@@ -4,6 +4,9 @@ import type { ChainId, ProviderType, Web3Provider } from '@masknet/web3-shared-e
 import type { EVM_Provider } from '../types.js'
 import { BaseProvider } from './Base.js'
 
+/**
+ * EIP-4338 compatible smart contract based wallet.
+ */
 export class SCWalletProvider extends BaseProvider implements EVM_Provider {
     constructor(protected providerType: ProviderType) {
         super()
@@ -12,7 +15,7 @@ export class SCWalletProvider extends BaseProvider implements EVM_Provider {
     override async createWeb3Provider(options?: ProviderOptions<ChainId>): Promise<Web3Provider> {
         throw new Error('To be implemented.')
     }
-    
+
     override async request<T extends unknown>(
         requestArguments: RequestArguments,
         options?: ProviderOptions<ChainId>,
@@ -21,7 +24,7 @@ export class SCWalletProvider extends BaseProvider implements EVM_Provider {
         return provider.request(requestArguments) as Promise<T>
     }
 
-    override async connect(): Promise<{chainId: ChainId, account: string}> {
+    override async connect(): Promise<{ chainId: ChainId; account: string }> {
         throw new Error('To be implemented.')
     }
 
@@ -29,4 +32,5 @@ export class SCWalletProvider extends BaseProvider implements EVM_Provider {
         throw new Error('To be implemented.')
     }
 
+    protected async deploy(): Promise<void> {}
 }
