@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useState } from 'react'
-import BigNumber from 'bignumber.js'
+import { BigNumber } from 'bignumber.js'
 import { useValueRef } from '@masknet/shared-base-ui'
 import type { TradeComputed } from '../../types/index.js'
 import { createNativeToken, formatUSD, formatWeiToEther, GasOptionConfig } from '@masknet/web3-shared-evm'

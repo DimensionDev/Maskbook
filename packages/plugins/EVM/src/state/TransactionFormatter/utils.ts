@@ -2,7 +2,7 @@ import { FungibleToken, scale10, formatBalance } from '@masknet/web3-shared-base
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { decodeEvents, createContract } from '@masknet/web3-shared-evm'
 import { Web3StateSettings } from '../../settings/index.js'
-import BigNumber from 'bignumber.js'
+import { BigNumber } from 'bignumber.js'
 import type { AbiItem } from 'web3-utils'
 
 export function getTokenAmountDescription(amount = '0', token?: FungibleToken<ChainId, SchemaType>) {

@@ -1,4 +1,4 @@
-import BigNumber from 'bignumber.js'
+import { BigNumber } from 'bignumber.js'
 import { first } from 'lodash-unified'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 import { makeStyles } from '@masknet/theme'

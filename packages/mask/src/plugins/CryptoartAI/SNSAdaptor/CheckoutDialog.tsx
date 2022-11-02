@@ -1,5 +1,5 @@
 import { useCallback, useMemo } from 'react'
-import BigNumber from 'bignumber.js'
+import { BigNumber } from 'bignumber.js'
 import { first } from 'lodash-unified'
 import {
     InjectedDialog,

@@ -1,4 +1,4 @@
-import BigNumber from 'bignumber.js'
+import { BigNumber } from 'bignumber.js'
 import { useMemo } from 'react'
 import { ZERO, pow10, FungibleToken } from '@masknet/web3-shared-base'
 import { SwapOOData, TradeComputed, TradeStrategy } from '../../types/index.js'

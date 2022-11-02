@@ -5,7 +5,7 @@ import { useSwapParameters as useTradeParameters } from './useTradeParameters.js
 import type { TradeProvider } from '@masknet/public-api'
 import { toHex } from 'web3-utils'
 import { useAsync } from 'react-use'
-import BigNumber from 'bignumber.js'
+import { BigNumber } from 'bignumber.js'
 import { swapErrorToUserReadableMessage } from '../../helpers/index.js'
 import type { AsyncState } from 'react-use/lib/useAsyncFn'
 import type { SwapParameters } from '@uniswap/v2-sdk'

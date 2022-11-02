@@ -1,6 +1,6 @@
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useUpdateEffect } from 'react-use'
-import BigNumber from 'bignumber.js'
+import { BigNumber } from 'bignumber.js'
 import { Icons } from '@masknet/icons'
 import { useGasLimit, useTokenTransferCallback } from '@masknet/web3-hooks-evm'
 import {

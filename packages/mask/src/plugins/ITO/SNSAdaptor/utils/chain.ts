@@ -1,6 +1,6 @@
 import urlcat from 'urlcat'
 import { first } from 'lodash-unified'
-import BigNumber from 'bignumber.js'
+import { BigNumber } from 'bignumber.js'
 import isAfter from 'date-fns/isAfter'
 import isEqual from 'date-fns/isEqual'
 import { isSameAddress, FungibleToken, TokenType } from '@masknet/web3-shared-base'

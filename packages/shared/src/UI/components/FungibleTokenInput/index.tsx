@@ -3,7 +3,7 @@ import { useWeb3State } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { formatBalance } from '@masknet/web3-shared-base'
 import { FungibleTokenInputUI } from './UI.js'
-import BigNumber from 'bignumber.js'
+import { BigNumber } from 'bignumber.js'
 
 const MIN_AMOUNT_LENGTH = 1
 const MAX_AMOUNT_LENGTH = 79

@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import BigNumber from 'bignumber.js'
+import { BigNumber } from 'bignumber.js'
 import { FungibleToken, ZERO } from '@masknet/web3-shared-base'
 import type { SwapQuoteResponse, TradeComputed, TradeStrategy } from '../../types/index.js'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'

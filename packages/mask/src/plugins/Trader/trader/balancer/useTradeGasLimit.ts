@@ -1,6 +1,6 @@
 import { useAsync } from 'react-use'
 import type { AsyncState } from 'react-use/lib/useAsyncFn'
-import BigNumber from 'bignumber.js'
+import { BigNumber } from 'bignumber.js'
 import type { SwapResponse, TradeComputed } from '../../types/index.js'
 import { TradeStrategy } from '../../types/index.js'
 import { encodeContractTransaction, SchemaType, useTraderConstants } from '@masknet/web3-shared-evm'

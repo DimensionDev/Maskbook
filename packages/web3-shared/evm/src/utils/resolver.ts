@@ -4,7 +4,7 @@ import {
     createNetworkResolver,
     createProviderResolver,
 } from '@masknet/web3-shared-base'
-import BigNumber from 'bignumber.js'
+import { BigNumber } from 'bignumber.js'
 import { keccak256 } from '@ethersproject/keccak256'
 import { toUtf8Bytes } from '@ethersproject/strings'
 import { CHAIN_DESCRIPTORS, NETWORK_DESCRIPTORS, PROVIDER_DESCRIPTORS } from '../constants/index.js'

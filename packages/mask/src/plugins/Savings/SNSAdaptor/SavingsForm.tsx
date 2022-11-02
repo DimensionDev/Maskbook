@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react'
 import { useAsync, useAsyncFn } from 'react-use'
 import type { AbiItem } from 'web3-utils'
-import BigNumber from 'bignumber.js'
+import { BigNumber } from 'bignumber.js'
 import { isLessThan, rightShift, ZERO, formatBalance, formatCurrency } from '@masknet/web3-shared-base'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import {

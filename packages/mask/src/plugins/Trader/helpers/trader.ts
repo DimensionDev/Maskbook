@@ -1,4 +1,4 @@
-import BigNumber from 'bignumber.js'
+import { BigNumber } from 'bignumber.js'
 import { BIPS_BASE } from '../constants/index.js'
 import type { NativeTokenWrapper } from '../trader/native/useTradeComputed.js'
 import type { TradeComputed } from '../types/index.js'

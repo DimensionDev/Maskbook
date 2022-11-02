@@ -9,7 +9,7 @@ import { ChainId, DebankTransactionDirection, SchemaType, ZerionTransactionDirec
 import { Box, Link, Stack, TableCell, TableRow, Tooltip, Typography } from '@mui/material'
 import { TransactionIcon } from '../TransactionIcon/index.js'
 import { TokenType, Transaction } from '@masknet/web3-shared-base'
-import BigNumber from 'bignumber.js'
+import { BigNumber } from 'bignumber.js'
 import fromUnixTime from 'date-fns/fromUnixTime'
 
 const useStyles = makeStyles()((theme) => ({

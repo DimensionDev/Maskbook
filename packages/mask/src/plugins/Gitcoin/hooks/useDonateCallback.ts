@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { useAsyncFn } from 'react-use'
-import BigNumber from 'bignumber.js'
+import { BigNumber } from 'bignumber.js'
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import { FungibleToken, toFixed } from '@masknet/web3-shared-base'
 import { ChainId, encodeContractTransaction, SchemaType, useGitcoinConstants } from '@masknet/web3-shared-evm'

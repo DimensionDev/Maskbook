@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import { useAsyncRetry } from 'react-use'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
-import BigNumber from 'bignumber.js'
+import { BigNumber } from 'bignumber.js'
 import { Currency, CurrencyAmount, TradeType } from '@uniswap/sdk-core'
 import { encodeRouteToPath, Route, Trade } from '@uniswap/v3-sdk'
 import { useQuoterContract } from '../../contracts/uniswap/useQuoterContract.js'

@@ -5,7 +5,7 @@ import { pick } from 'lodash-unified'
 import { useAsync } from 'react-use'
 import { useChainContext, useWeb3Connection } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
-import BigNumber from 'bignumber.js'
+import { BigNumber } from 'bignumber.js'
 
 export function useTradeGasLimit(tradeComputed: TradeComputed<SwapQuoteResponse> | null) {
     const { account, chainId: targetChainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()

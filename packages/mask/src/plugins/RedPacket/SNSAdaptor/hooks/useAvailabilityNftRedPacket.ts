@@ -1,5 +1,5 @@
 import type { ChainId } from '@masknet/web3-shared-evm'
-import BigNumber from 'bignumber.js'
+import { BigNumber } from 'bignumber.js'
 import { useAsyncRetry } from 'react-use'
 import { useNftRedPacketContract } from './useNftRedPacketContract.js'
 

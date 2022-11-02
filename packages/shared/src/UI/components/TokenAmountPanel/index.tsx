@@ -1,6 +1,6 @@
 import { ChangeEvent, useCallback, useMemo } from 'react'
 import classNames from 'classnames'
-import BigNumber from 'bignumber.js'
+import { BigNumber } from 'bignumber.js'
 import { Box, Chip, ChipProps, InputProps, StandardTextFieldProps, Typography } from '@mui/material'
 import { makeStyles, MaskTextField, useStylesExtends } from '@masknet/theme'
 import { FungibleToken, formatBalance } from '@masknet/web3-shared-base'

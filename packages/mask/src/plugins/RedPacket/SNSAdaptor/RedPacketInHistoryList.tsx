@@ -1,7 +1,7 @@
 import { MouseEvent, useCallback, useState, useMemo } from 'react'
 import { useAsync } from 'react-use'
 import { Interface } from '@ethersproject/abi'
-import BigNumber from 'bignumber.js'
+import { BigNumber } from 'bignumber.js'
 import classNames from 'classnames'
 import { Box, ListItem, Typography, Popper, useMediaQuery, Theme } from '@mui/material'
 import { makeStyles, ActionButton } from '@masknet/theme'

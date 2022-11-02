@@ -17,7 +17,7 @@ import { ChainId, formatWeiToEther, GasOptionConfig, SchemaType, ZERO_ADDRESS } 
 import { FungibleToken, isLessThan, rightShift, multipliedBy, leftShift } from '@masknet/web3-shared-base'
 import { Tune as TuneIcon } from '@mui/icons-material'
 import { TokenPanelType, TradeInfo } from '../../types/index.js'
-import BigNumber from 'bignumber.js'
+import { BigNumber } from 'bignumber.js'
 import { first, noop } from 'lodash-unified'
 import { Icons } from '@masknet/icons'
 import classnames from 'classnames'

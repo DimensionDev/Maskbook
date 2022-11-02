@@ -1,5 +1,5 @@
 import { useCallback } from 'react'
-import BigNumber from 'bignumber.js'
+import { BigNumber } from 'bignumber.js'
 import { omit } from 'lodash-unified'
 import { useSubscription } from 'use-subscription'
 import formatDateTime from 'date-fns/format'

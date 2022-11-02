@@ -1,4 +1,4 @@
-import BigNumber from 'bignumber.js'
+import { BigNumber } from 'bignumber.js'
 import classNames from 'classnames'
 import { useCallback, useEffect, useMemo, useRef } from 'react'
 import { useChainContext, useBalance, useWeb3, useNativeToken, useNativeTokenAddress } from '@masknet/web3-hooks-base'
