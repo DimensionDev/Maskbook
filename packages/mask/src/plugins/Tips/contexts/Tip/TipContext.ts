@@ -25,7 +25,7 @@ export interface TipContextOptions {
     sendTip: () => Promise<string | undefined>
     isSending: boolean
     isDirty: boolean
-    storedTokens: Array<Web3Helper.NonFungibleTokenAll>
+    storedTokens: Web3Helper.NonFungibleTokenAll[]
     reset: () => void
     setGasOption: Dispatch<SetStateAction<GasOptionConfig | undefined>>
     gasOption: GasOptionConfig | undefined

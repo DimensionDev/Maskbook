@@ -42,7 +42,7 @@ export interface SelectTokenPanelProps {
     amount: string
     balance: string
     token?: Web3Helper.FungibleTokenAll
-    tokens?: Array<Web3Helper.FungibleTokenAll>
+    tokens?: Web3Helper.FungibleTokenAll[]
     onAmountChange: (amount: string) => void
     onTokenChange: (token: Web3Helper.FungibleTokenAll) => void
 }
