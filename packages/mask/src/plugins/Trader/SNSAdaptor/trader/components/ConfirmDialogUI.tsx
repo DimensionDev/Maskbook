@@ -9,7 +9,6 @@ import type { TradeComputed } from '../../../types/index.js'
 import {
     formatBalance,
     formatCurrency,
-    FungibleToken,
     multipliedBy,
     formatPercentage,
     isZero,

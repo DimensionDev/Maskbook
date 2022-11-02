@@ -4,7 +4,7 @@ import { FormattedBalance, TokenIcon, useMenuConfig } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import Check from '@mui/icons-material/Check'
 import { FormControl, ListItemIcon, MenuItem, Typography, InputBase, InputAdornment } from '@mui/material'
-import { FungibleToken, isSameAddress, formatBalance } from '@masknet/web3-shared-base'
+import { isSameAddress, formatBalance } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useI18N } from '../../../../../utils/index.js'
 

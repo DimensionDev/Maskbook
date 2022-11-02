@@ -1,13 +1,8 @@
-import type { Web3Helper } from '@masknet/web3-helpers'
-import type {
-    FungibleToken,
-    NonFungibleToken,
-    NonFungibleTokenContract,
-    SocialAccount,
-} from '@masknet/web3-shared-base'
-import type { GasOptionConfig } from '@masknet/web3-shared-evm'
 import { noop } from 'lodash-unified'
 import { createContext, Dispatch, SetStateAction } from 'react'
+import type { Web3Helper } from '@masknet/web3-helpers'
+import type { NonFungibleTokenContract, SocialAccount } from '@masknet/web3-shared-base'
+import type { GasOptionConfig } from '@masknet/web3-shared-evm'
 import { TipsType, ValidationTuple } from '../../types/index.js'
 
 export interface TipContextOptions {
@@ -30,7 +25,7 @@ export interface TipContextOptions {
     sendTip: () => Promise<string | undefined>
     isSending: boolean
     isDirty: boolean
-    storedTokens: Array<NonWeb3Helper.FungibleTokenAll>
+    storedTokens: Array<Web3Helper.NonFungibleTokenAll>
     reset: () => void
     setGasOption: Dispatch<SetStateAction<GasOptionConfig | undefined>>
     gasOption: GasOptionConfig | undefined

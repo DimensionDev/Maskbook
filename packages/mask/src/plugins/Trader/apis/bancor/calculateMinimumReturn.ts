@@ -1,7 +1,7 @@
-import { FungibleToken, leftShift, ONE, rightShift } from '@masknet/web3-shared-base'
 import BigNumber from 'bignumber.js'
-import { BIPS_BASE } from '../../constants/index.js'
+import { leftShift, ONE, rightShift } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
+import { BIPS_BASE } from '../../constants/index.js'
 
 export const calculateMinimumReturn = ({
     toToken,

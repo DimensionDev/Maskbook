@@ -3,8 +3,8 @@ import classnames from 'classnames'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { ElementAnchor, AssetPreviewer, RetryHint } from '@masknet/shared'
-import { useChainContext, useWeb3State, useNetworkContext } from '@masknet/web3-hooks-base'
-import { isSameAddress, NonFungibleToken } from '@masknet/web3-shared-base'
+import { useWeb3State, useNetworkContext } from '@masknet/web3-hooks-base'
+import { isSameAddress } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { Checkbox, List, ListItem, Radio, Stack, Tooltip } from '@mui/material'
 import type { TipNFTKeyPair } from '../../types/index.js'
@@ -77,12 +77,11 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 interface NFTItemProps {
-    token: NonWeb3Helper.FungibleTokenAll
+    token: Web3Helper.NonFungibleTokenAll
 }
 
 export const NFTItem: FC<NFTItemProps> = ({ token }) => {
     const { classes } = useStyles()
-    const { chainId } = useChainContext()
     return (
         <AssetPreviewer
             url={token.metadata?.imageURL ?? token.metadata?.mediaURL}

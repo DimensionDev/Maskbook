@@ -12,7 +12,7 @@ import {
 } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { formatBalance, FungibleToken } from '@masknet/web3-shared-base'
+import { formatBalance } from '@masknet/web3-shared-base'
 import { Icons } from '@masknet/icons'
 import { noop } from 'lodash-unified'
 import { FormattedBalance, TokenIcon, useSharedI18N } from '../../../index.js'
