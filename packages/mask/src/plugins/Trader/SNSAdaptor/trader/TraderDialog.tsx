@@ -104,7 +104,7 @@ export function TraderDialog() {
     const defaultInputCoin = defaultCoins?.defaultInputCoin
     const defaultOutputCoin = defaultCoins?.defaultOutputCoin
 
-    // TODO: Other network shema suport
+    // TODO: Other network schema support
     const { value: inputToken } = useFungibleToken(
         pluginID,
         defaultInputCoin?.address,
