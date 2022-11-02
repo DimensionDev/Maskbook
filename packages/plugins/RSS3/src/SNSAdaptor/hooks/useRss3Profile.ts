@@ -1,5 +1,5 @@
 import { useAsync } from 'react-use'
-import type { AsyncState } from 'react-use/lib/useAsync'
+import type { AsyncState } from 'react-use/lib/useAsync.js'
 import { PluginProfileRPC } from '../../messages.js'
 import type { RSS3Profile } from '../../types.js'
 

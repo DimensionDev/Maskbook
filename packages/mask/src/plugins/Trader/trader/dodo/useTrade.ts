@@ -10,7 +10,7 @@ import type { SwapRouteData, TradeStrategy } from '../../types/index.js'
 import { useSlippageTolerance } from './useSlippageTolerance.js'
 import { first } from 'lodash-unified'
 import { useChainContext, useDoubleBlockBeatRetry } from '@masknet/web3-hooks-base'
-import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
+import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
 import { FungibleToken, isZero } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 

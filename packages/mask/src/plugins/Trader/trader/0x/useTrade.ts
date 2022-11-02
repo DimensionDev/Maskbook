@@ -5,7 +5,7 @@ import { PluginTraderRPC } from '../../messages.js'
 import { SwapQuoteResponse, TradeStrategy } from '../../types/index.js'
 import { useSlippageTolerance } from '../0x/useSlippageTolerance.js'
 import { useChainContext, useDoubleBlockBeatRetry } from '@masknet/web3-hooks-base'
-import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
+import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
 import { FungibleToken, isZero } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 

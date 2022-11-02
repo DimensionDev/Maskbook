@@ -1,7 +1,7 @@
 import { useAsync } from 'react-use'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import type { TradeProvider } from '@masknet/public-api'
-import type { AsyncState } from 'react-use/lib/useAsyncFn'
+import type { AsyncState } from 'react-use/lib/useAsyncFn.js'
 import { PluginTraderRPC } from '../messages.js'
 import type { TagType } from '../types/index.js'
 import type { NetworkPluginID } from '@masknet/shared-base'

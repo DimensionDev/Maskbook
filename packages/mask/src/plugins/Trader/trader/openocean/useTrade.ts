@@ -11,7 +11,7 @@ import type { SwapOOData, TradeStrategy } from '../../types/index.js'
 import { useSlippageTolerance } from './useSlippageTolerance.js'
 import { OPENOCEAN_SUPPORTED_CHAINS } from './constants.js'
 import { useChainContext, useDoubleBlockBeatRetry } from '@masknet/web3-hooks-base'
-import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
+import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
 import { FungibleToken, isZero } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 

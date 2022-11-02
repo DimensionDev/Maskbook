@@ -4,7 +4,7 @@ import type { ProfileInformation, Relation, RelationFavor } from '@masknet/share
 import { useRef } from 'react'
 import { last } from 'lodash-unified'
 import { PersonaContext } from './usePersonaContext.js'
-import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
+import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
 
 export interface Contacts extends ProfileInformation {
     favor: RelationFavor | undefined

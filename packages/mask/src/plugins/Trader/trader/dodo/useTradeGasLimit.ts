@@ -4,7 +4,7 @@ import { pick } from 'lodash-unified'
 import { BigNumber } from 'bignumber.js'
 import type { TransactionConfig } from 'web3-core'
 import type { SwapRouteData, TradeComputed } from '../../types/index.js'
-import type { AsyncState } from 'react-use/lib/useAsyncFn'
+import type { AsyncState } from 'react-use/lib/useAsyncFn.js'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useChainContext, useWeb3Connection } from '@masknet/web3-hooks-base'
 
