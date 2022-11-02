@@ -14,7 +14,7 @@ import { makeStyles, MaskColorVar, useStylesExtends, ActionButton } from '@maskn
 import { InputTokenPanel } from './InputTokenPanel.js'
 import { alpha, Box, chipClasses, Collapse, IconButton, lighten, Typography } from '@mui/material'
 import { ChainId, formatWeiToEther, GasOptionConfig, SchemaType, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
-import { FungibleToken, isLessThan, rightShift, multipliedBy, leftShift } from '@masknet/web3-shared-base'
+import { isLessThan, rightShift, multipliedBy, leftShift } from '@masknet/web3-shared-base'
 import TuneIcon from '@mui/icons-material/Tune'
 import { TokenPanelType, TradeInfo } from '../../types/index.js'
 import BigNumber from 'bignumber.js'
@@ -198,8 +198,8 @@ const useStyles = makeStyles<{
 
 export interface AllTradeFormProps extends withClasses<'root'> {
     inputAmount: string
-    inputToken?: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
-    outputToken?: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
+    inputToken?: Web3Helper.FungibleTokenAll
+    outputToken?: Web3Helper.FungibleTokenAll
     inputTokenBalance?: string
     onInputAmountChange: (amount: string) => void
     onTokenChipClick?: (token: TokenPanelType) => void

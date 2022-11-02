@@ -4,7 +4,7 @@ import { BALANCER_SWAP_TYPE } from '../../constants/index.js'
 import { PluginTraderRPC } from '../../messages.js'
 import { SwapResponse, TradeStrategy } from '../../types/index.js'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
-import { FungibleToken, isZero } from '@masknet/web3-shared-base'
+import { isZero } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 
@@ -12,8 +12,8 @@ export function useTrade(
     strategy: TradeStrategy,
     inputAmount: string,
     outputAmount: string,
-    inputToken?: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>,
-    outputToken?: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>,
+    inputToken?: Web3Helper.FungibleTokenAll,
+    outputToken?: Web3Helper.FungibleTokenAll,
 ): AsyncStateRetry<SwapResponse | null> {
     const { chainId: targetChainId } = useChainContext()
     const { pluginID } = useNetworkContext()

@@ -1,4 +1,4 @@
-import { FungibleToken, isZero } from '@masknet/web3-shared-base'
+import { isZero } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { TradeStrategy } from '../../types/index.js'
 import { toUniswapCurrencyAmount, toUniswapCurrency } from '../../helpers/index.js'
@@ -13,8 +13,8 @@ function useTrade(
     strategy: TradeStrategy = TradeStrategy.ExactIn,
     inputAmount: string,
     outputAmount: string,
-    inputToken?: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>,
-    outputToken?: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>,
+    inputToken?: Web3Helper.FungibleTokenAll,
+    outputToken?: Web3Helper.FungibleTokenAll,
 ) {
     const isExactIn = strategy === TradeStrategy.ExactIn
     const isTradable = !isZero(inputAmount) || !isZero(outputAmount)
@@ -53,8 +53,8 @@ export function useV2Trade(
     strategy: TradeStrategy = TradeStrategy.ExactIn,
     inputAmount: string,
     outputAmount: string,
-    inputToken?: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>,
-    outputToken?: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>,
+    inputToken?: Web3Helper.FungibleTokenAll,
+    outputToken?: Web3Helper.FungibleTokenAll,
 ) {
     const { isNotAvailable, isExactIn, tradeAmount, inputCurrency, outputCurrency } = useTrade(
         strategy,
@@ -93,8 +93,8 @@ export function useV3Trade(
     strategy: TradeStrategy = TradeStrategy.ExactIn,
     inputAmount: string,
     outputAmount: string,
-    inputToken?: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>,
-    outputToken?: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>,
+    inputToken?: Web3Helper.FungibleTokenAll,
+    outputToken?: Web3Helper.FungibleTokenAll,
 ) {
     const { isNotAvailable, isExactIn, tradeAmount, inputCurrency, outputCurrency } = useTrade(
         strategy,

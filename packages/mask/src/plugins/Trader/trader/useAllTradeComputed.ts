@@ -1,5 +1,5 @@
 import { EMPTY_LIST } from '@masknet/shared-base'
-import { FungibleToken, multipliedBy, pow10 } from '@masknet/web3-shared-base'
+import { multipliedBy, pow10 } from '@masknet/web3-shared-base'
 import { useTrade as useNativeTokenTrade } from './native/useTrade.js'
 import { useTradeComputed as useNativeTokenTradeComputed } from './native/useTradeComputed.js'
 import { SwapOOData, TradeInfo, TradeStrategy } from '../types/index.js'
@@ -31,8 +31,8 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 
 export function useAllTradeComputed(
     inputAmount: string,
-    inputToken?: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>,
-    outputToken?: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>,
+    inputToken?: Web3Helper.FungibleTokenAll,
+    outputToken?: Web3Helper.FungibleTokenAll,
     temporarySlippage?: number,
 ): TradeInfo[] {
     const { chainId } = useChainContext()

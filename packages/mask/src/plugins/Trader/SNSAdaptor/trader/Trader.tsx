@@ -30,8 +30,8 @@ import { WalletMessages } from '../../../Wallet/messages.js'
 import type { Web3Helper } from '@masknet/web3-helpers'
 
 export interface TraderProps extends withClasses<'root'> {
-    defaultInputCoin?: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
-    defaultOutputCoin?: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
+    defaultInputCoin?: Web3Helper.FungibleTokenAll
+    defaultOutputCoin?: Web3Helper.FungibleTokenAll
     chainId?: Web3Helper.ChainIdAll
     settings?: boolean
 }
@@ -96,7 +96,7 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
     const updateTradingCoin = useCallback(
         (
             type: AllProviderTradeActionType.UPDATE_INPUT_TOKEN | AllProviderTradeActionType.UPDATE_OUTPUT_TOKEN,
-            coin?: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>,
+            coin?: Web3Helper.FungibleTokenAll,
         ) => {
             if (!coin?.address) return
             dispatchTradeStore({

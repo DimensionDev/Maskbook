@@ -1,10 +1,9 @@
 import type { Web3Helper } from '@masknet/web3-helpers'
-import type { FungibleToken } from '@masknet/web3-shared-base'
 
 export interface SwapOORequest {
     isNativeSellToken: boolean
-    fromToken: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
-    toToken: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
+    fromToken: Web3Helper.FungibleTokenAll
+    toToken: Web3Helper.FungibleTokenAll
     fromAmount: string
     slippage: number
     userAddr?: string

@@ -1,13 +1,12 @@
 import type { ChainId } from '@masknet/web3-shared-evm'
 import type { TradeStrategy } from '../types/index.js'
-import type { FungibleToken } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 
 export type SwapBancorRequest = {
     strategy: TradeStrategy
     slippage: number
-    fromToken: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
-    toToken: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
+    fromToken: Web3Helper.FungibleTokenAll
+    toToken: Web3Helper.FungibleTokenAll
     fromAmount: string | undefined
     toAmount: string | undefined
     user: string

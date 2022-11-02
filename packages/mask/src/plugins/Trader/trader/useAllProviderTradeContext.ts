@@ -1,7 +1,6 @@
 import { useReducer, useState } from 'react'
 import { useAllTradeComputed } from './useAllTradeComputed.js'
 import { createContainer } from 'unstated-next'
-import type { FungibleToken } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 
 export const INITIAL_STATE = {
@@ -12,8 +11,8 @@ export const INITIAL_STATE = {
 
 export interface AllProviderTradeState {
     inputAmount: string
-    inputToken?: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
-    outputToken?: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
+    inputToken?: Web3Helper.FungibleTokenAll
+    outputToken?: Web3Helper.FungibleTokenAll
     inputTokenBalance: string
     outputTokenBalance: string
 }
@@ -30,12 +29,12 @@ export enum AllProviderTradeActionType {
 export type AllProviderSwapAction =
     | {
           type: AllProviderTradeActionType.UPDATE_INPUT_TOKEN
-          token?: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
+          token?: Web3Helper.FungibleTokenAll
           balance?: string
       }
     | {
           type: AllProviderTradeActionType.UPDATE_OUTPUT_TOKEN
-          token?: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
+          token?: Web3Helper.FungibleTokenAll
       }
     | {
           type: AllProviderTradeActionType.UPDATE_INPUT_AMOUNT
@@ -51,8 +50,8 @@ export type AllProviderSwapAction =
       }
     | {
           type: AllProviderTradeActionType.SWITCH_TOKEN
-          inputToken?: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
-          outputToken?: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
+          inputToken?: Web3Helper.FungibleTokenAll
+          outputToken?: Web3Helper.FungibleTokenAll
           inputBalance: string
           outputBalance: string
       }

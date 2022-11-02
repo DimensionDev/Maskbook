@@ -4,7 +4,7 @@ import BigNumber from 'bignumber.js'
 import { Currency, CurrencyAmount, Ether, Percent, Price, Token, TradeType } from '@uniswap/sdk-core'
 import type { Trade } from '@uniswap/v2-sdk'
 import { ChainId, formatEthereumAddress, SchemaType, WNATIVE } from '@masknet/web3-shared-evm'
-import { FungibleToken, isGreaterThan, isSameAddress, pow10, TokenType } from '@masknet/web3-shared-base'
+import { isGreaterThan, isSameAddress, pow10, TokenType } from '@masknet/web3-shared-base'
 import { ONE_HUNDRED_PERCENT, ZERO_PERCENT } from '../constants/index.js'
 import type { Web3Helper } from '@masknet/web3-helpers'
 
@@ -52,10 +52,7 @@ export function toUniswapPercent(numerator: number, denominator: number) {
     return new Percent(JSBI.BigInt(numerator), JSBI.BigInt(denominator))
 }
 
-export function toUniswapCurrency(
-    chainId?: ChainId,
-    token?: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>,
-): Currency | undefined {
+export function toUniswapCurrency(chainId?: ChainId, token?: Web3Helper.FungibleTokenAll): Currency | undefined {
     try {
         if (!token || !chainId) return
         const extendedEther = ExtendedEther.onChain(chainId)
@@ -67,10 +64,7 @@ export function toUniswapCurrency(
     }
 }
 
-export function toUniswapToken(
-    chainId: ChainId,
-    token: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>,
-) {
+export function toUniswapToken(chainId: ChainId, token: Web3Helper.FungibleTokenAll) {
     return new Token(
         toUniswapChainId(chainId),
         formatEthereumAddress(token.address),
@@ -80,11 +74,7 @@ export function toUniswapToken(
     )
 }
 
-export function toUniswapCurrencyAmount(
-    chainId?: ChainId,
-    token?: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>,
-    amount?: string,
-) {
+export function toUniswapCurrencyAmount(chainId?: ChainId, token?: Web3Helper.FungibleTokenAll, amount?: string) {
     if (!token || !amount || !chainId) return
     const currency = toUniswapCurrency(chainId, token)
     if (!currency) return
@@ -120,7 +110,7 @@ export function uniswapTokenTo(token: Token) {
             ? SchemaType.Native
             : SchemaType.ERC20,
         id: token.symbol,
-    } as FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
+    } as Web3Helper.FungibleTokenAll
 }
 
 export function uniswapCurrencyAmountTo(currencyAmount: CurrencyAmount<Currency>) {

@@ -1,7 +1,6 @@
 import type BigNumber from 'bignumber.js'
 import type { ChainIdOptionalRecord } from '@masknet/web3-shared-evm'
 import type { TradeProvider } from '@masknet/public-api'
-import type { FungibleToken } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 
 export enum WarningLevel {
@@ -84,8 +83,8 @@ export enum ZrxTradePool {
 
 export interface TradeComputed<T = unknown> {
     strategy: TradeStrategy
-    inputToken?: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
-    outputToken?: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
+    inputToken?: Web3Helper.FungibleTokenAll
+    outputToken?: Web3Helper.FungibleTokenAll
     inputAmount: BigNumber
     outputAmount: BigNumber
     executionPrice: BigNumber
@@ -95,8 +94,8 @@ export interface TradeComputed<T = unknown> {
     fee: BigNumber
     path?: Array<
         Array<
-            | PartialRequired<FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>, 'address'>
-            | PartialRequired<FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>, 'address'>
+            | PartialRequired<Web3Helper.FungibleTokenAll, 'address'>
+            | PartialRequired<Web3Helper.FungibleTokenAll, 'address'>
         >
     >
     trade_?: T
@@ -121,13 +120,9 @@ export interface TradeContext {
     ROUTER_CONTRACT_ADDRESS?: string
     FACTORY_CONTRACT_ADDRESS?: string
     SPENDER_CONTRACT_ADDRESS?: string
-    ADDITIONAL_TOKENS?: ChainIdOptionalRecord<
-        Record<string, Array<FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>>
-    >
-    AGAINST_TOKENS?: ChainIdOptionalRecord<Array<FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>>
-    CUSTOM_TOKENS?: ChainIdOptionalRecord<
-        Record<string, Array<FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>>
-    >
+    ADDITIONAL_TOKENS?: ChainIdOptionalRecord<Record<string, Web3Helper.FungibleTokenAll[]>>
+    AGAINST_TOKENS?: ChainIdOptionalRecord<Web3Helper.FungibleTokenAll[]>
+    CUSTOM_TOKENS?: ChainIdOptionalRecord<Record<string, Web3Helper.FungibleTokenAll[]>>
 }
 
 export interface TradeInfo {
