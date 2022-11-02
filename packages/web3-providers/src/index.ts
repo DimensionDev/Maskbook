@@ -44,11 +44,14 @@ import { CF_API } from './cf/index.js'
 import { MirrorAPI } from './mirror/index.js'
 import { MindsAPI } from './minds/index.js'
 import { FuseTrendingAPI } from './fuse/index.js'
+import { SmartPayAPI } from './smart-pay/index.js'
 
+// #region TODO: to be removed
 export * from './helpers.js'
 export * from './types/index.js'
 export * from './opensea/utils.js'
 export { CollectionType } from './rss3/constants.js'
+// #endregion
 
 export const OpenSea = new OpenSeaAPI()
 export const LooksRare = new LooksRareAPI()
@@ -115,3 +118,6 @@ export const ZerionGas = new ZerionGasAPI()
 
 // Fuse
 export const FuseTrending = new FuseTrendingAPI()
+
+// Smart Pay Signer
+export const SmartPay = new SmartPayAPI()

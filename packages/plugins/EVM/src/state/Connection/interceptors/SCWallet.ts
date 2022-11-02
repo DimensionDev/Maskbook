@@ -1,4 +1,5 @@
 import type { AbiItem } from 'web3-utils'
+import { SmartPay } from '@masknet/web3-providers'
 import { createContract, EthereumMethodType, ProviderType, UserOperation } from '@masknet/web3-shared-evm'
 import WalletABI from '@masknet/web3-contracts/abis/Wallet.json'
 import type { Wallet as WalletContract } from '@masknet/web3-contracts/types/Wallet.js'
@@ -21,7 +22,7 @@ export class SCWallet implements Middleware<Context> {
     }
 
     private sendUserOperation(context: Context, userOperation: UserOperation): Promise<string> {
-        throw new Error('To be implemented')
+        return SmartPay.send(context.chainId, userOperation)
     }
 
     async fn(context: Context, next: () => Promise<void>) {
