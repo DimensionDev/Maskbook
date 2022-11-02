@@ -55,7 +55,7 @@ export function ProfileTab(props: ProfileTabProps) {
     return (
         <div key="nfts" className={classes.root}>
             <Typography
-                className={cx(classes.button, active ? classes.selected : '')}
+                className={classes.button + ' ' + (active ? classes.selected : '')}
                 onClick={onClick}
                 component="div">
                 {props.icon}

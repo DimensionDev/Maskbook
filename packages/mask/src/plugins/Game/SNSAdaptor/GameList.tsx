@@ -110,7 +110,7 @@ const GameList = (props: Props) => {
 
     return (
         <>
-            <List className={classes.walletBar}>
+            <List>
                 <Typography className={classes.title}>{t.game_list_title()}</Typography>
                 <ul className={classes.gameList}>
                     {gameList

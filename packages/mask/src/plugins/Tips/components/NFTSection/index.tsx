@@ -86,7 +86,7 @@ export const NFTSection: FC<Props> = ({ className, onEmpty, ...rest }) => {
         setNonFungibleTokenId,
         setNonFungibleTokenAddress,
     } = useTip()
-    const { classes, theme } = useStyles()
+    const { classes, theme, cx } = useStyles()
     const t = useI18N()
     const [addTokenDialogIsOpen, openAddTokenDialog] = useBoolean(false)
     const selectedKey = tokenAddress || tokenId ? `${tokenAddress}_${tokenId}` : undefined
