@@ -11,7 +11,8 @@ import React, {
     useRef,
     useState,
 } from 'react'
-import { usePluginGuide } from './usePluginGuide'
+import type { PluginGuideSetting } from './type.js'
+import { usePluginGuideRecord } from './usePluginGuideRecord.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -33,8 +34,8 @@ const useStyles = makeStyles()((theme) => ({
         position: 'absolute',
         left: 0,
         width: 256,
-        padding: '16px',
-        borderRadius: '16px',
+        padding: theme.spacing(2),
+        borderRadius: theme.spacing(2),
         background: theme.palette.maskColor.tips,
         boxShadow: '0 4px 8px rgba(0,0,0,.1)',
         boxSizing: 'border-box',
@@ -69,7 +70,7 @@ const useStyles = makeStyles()((theme) => ({
     buttonContainer: {
         display: 'flex',
         justifyContent: 'space-between',
-        paddingTop: '16px',
+        paddingTop: theme.spacing(2),
     },
     button: {
         width: '100%',
@@ -81,10 +82,6 @@ export interface GuideStepProps extends PropsWithChildren<{}> {
     step: number
     arrow?: boolean
     disabled?: boolean
-}
-
-export interface PluginGuideSetting {
-    userGuide: { default: number } & Record<string, number>
 }
 
 export function PluginGuide({ children, arrow = true, disabled = false, step }: GuideStepProps) {
@@ -227,7 +224,7 @@ export function PluginGuideProvider({
     }>
 }>) {
     const { guides, storage, totalStep, onFinish, storageKey = 'default' } = value
-    const { currentStep, finished, nextStep } = usePluginGuide(storage, totalStep, storageKey, onFinish)
+    const { currentStep, finished, nextStep } = usePluginGuideRecord(storage, totalStep, storageKey, onFinish)
     return (
         <PluginGuideContext.Provider
             value={{
@@ -242,3 +239,5 @@ export function PluginGuideProvider({
         </PluginGuideContext.Provider>
     )
 }
+
+export * from './type'
