@@ -1,6 +1,6 @@
 import { Box, IconButton, Paper, Typography } from '@mui/material'
 import classNames from 'classnames'
-import CloseIcon from '@mui/icons-material/Close'
+import { Close as CloseIcon } from '@mui/icons-material'
 import { makeStyles } from '@masknet/theme'
 import { SetupGuideStep } from '../../../../shared/legacy-settings/types.js'
 

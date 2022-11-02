@@ -5,7 +5,7 @@ import { useChainContext, useBalance, useWeb3, useNativeToken, useNativeTokenAdd
 import { chainResolver, explorerResolver, isNativeTokenAddress, useRedPacketConstants } from '@masknet/web3-shared-evm'
 import { Grid, Link, Paper, Typography } from '@mui/material'
 import { makeStyles, ActionButton } from '@masknet/theme'
-import LaunchIcon from '@mui/icons-material/Launch'
+import { Launch as LaunchIcon } from '@mui/icons-material'
 import { FormattedBalance, useOpenShareTxDialog, PluginWalletStatusBar, ChainBoundary } from '@masknet/shared'
 import { useI18N } from '../locales/index.js'
 import { RedPacketSettings, useCreateCallback, useCreateParams } from './hooks/useCreateCallback.js'

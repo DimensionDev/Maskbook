@@ -19,7 +19,7 @@ import {
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { Grid, Link, Typography, List, DialogContent, ListItem, Box } from '@mui/material'
-import LaunchIcon from '@mui/icons-material/Launch'
+import { Launch as LaunchIcon } from '@mui/icons-material'
 import { useI18N } from '../locales/index.js'
 import { useCreateNftRedpacketCallback } from './hooks/useCreateNftRedpacketCallback.js'
 import { useCurrentIdentity, useLastRecognizedIdentity } from '../../../components/DataSource/useActivatedUI.js'

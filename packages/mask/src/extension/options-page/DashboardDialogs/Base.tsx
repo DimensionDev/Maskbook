@@ -11,7 +11,7 @@ import {
 } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { Theme, ThemeOptions, ThemeProvider } from '@mui/material/styles'
-import CloseIcon from '@mui/icons-material/Close'
+import { Close as CloseIcon } from '@mui/icons-material'
 import { useMatchXS } from '../../../utils/index.js'
 import { useClassicMaskFullPageTheme } from '../../../utils/theme/useClassicMaskFullPageTheme.js'
 import { appearanceSettings, languageSettings } from '../../../../shared/legacy-settings/settings.js'

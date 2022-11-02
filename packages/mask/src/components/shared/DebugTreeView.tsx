@@ -1,6 +1,5 @@
 import { TreeItem, TreeView } from '@mui/lab'
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
-import ChevronRightIcon from '@mui/icons-material/ChevronRight'
+import { ExpandMore as ExpandMoreIcon , ChevronRight as ChevronRightIcon } from '@mui/icons-material'
 
 export type DebugTreeViewProps = {
     id: string

@@ -1,6 +1,5 @@
 import { useTheme, useMediaQuery } from '@mui/material'
-import CloseIcon from '@mui/icons-material/Close'
-import ArrowBackRoundedIcon from '@mui/icons-material/ArrowBackRounded'
+import { Close as CloseIcon , ArrowBackRounded as ArrowBackRoundedIcon } from '@mui/icons-material'
 
 export interface DialogDismissIconUIProps {
     style?: 'auto' | 'back' | 'close'

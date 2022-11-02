@@ -10,7 +10,7 @@ import {
 import { isZero, ZERO, isGreaterThan, isSameAddress, formatBalance, FungibleToken } from '@masknet/web3-shared-base'
 import { Box, Card, Link, Typography } from '@mui/material'
 import { makeStyles, ActionButton } from '@masknet/theme'
-import OpenInNewIcon from '@mui/icons-material/OpenInNew'
+import { OpenInNew as OpenInNewIcon } from '@mui/icons-material'
 import { BigNumber } from 'bignumber.js'
 import classNames from 'classnames'
 import formatDateTime from 'date-fns/format'

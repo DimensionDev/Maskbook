@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 import { IconButton, MenuItem } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
+import { MoreHoriz as MoreHorizIcon } from '@mui/icons-material'
 import { useI18N } from '../../../utils/index.js'
 import { useMenu } from '@masknet/shared'
 import { useModal } from '../DashboardDialogs/Base.js'

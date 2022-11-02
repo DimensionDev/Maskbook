@@ -1,7 +1,6 @@
 import { makeStyles } from '@masknet/theme'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import AddIcon from '@mui/icons-material/AddOutlined'
-import RemoveIcon from '@mui/icons-material/RemoveOutlined'
+import { AddOutlined as AddIcon , RemoveOutlined as RemoveIcon } from '@mui/icons-material'
 import { IconButton, Paper } from '@mui/material'
 import { useCallback, useEffect, useState } from 'react'
 import { useSelectFungibleToken, FungibleTokenInput } from '@masknet/shared'

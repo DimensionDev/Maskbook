@@ -3,7 +3,7 @@ import { Avatar, Box, Button, CardContent, CardHeader, Link, Paper, Tab, Tabs, T
 import { Markdown, ChainBoundary } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { Trans } from 'react-i18next'
-import VerifiedUserIcon from '@mui/icons-material/VerifiedUser'
+import { VerifiedUser as VerifiedUserIcon } from '@mui/icons-material'
 import { useI18N } from '../../../utils/index.js'
 import { ArticleTab } from './ArticleTab.js'
 import { TokenTab } from './TokenTab.js'

@@ -1,6 +1,6 @@
 import classNames from 'classnames'
 import { makeStyles } from '@masknet/theme'
-import DoneIcon from '@mui/icons-material/Done'
+import { Done as DoneIcon } from '@mui/icons-material'
 import Chip, { ChipProps } from '@mui/material/Chip'
 import { noop } from 'lodash-unified'
 
