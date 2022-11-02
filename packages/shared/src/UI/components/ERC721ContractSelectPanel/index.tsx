@@ -1,5 +1,4 @@
 import { useCallback } from 'react'
-import classNames from 'classnames'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { Box, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
@@ -71,7 +70,7 @@ export interface ERC721TokenSelectPanelProps {
 export function ERC721ContractSelectPanel(props: ERC721TokenSelectPanelProps) {
     const { onContractChange, onBalanceChange, contract, label, chainId = ChainId.Mainnet, balance } = props
     const t = useSharedI18N()
-    const { classes } = useStyles({ hasIcon: Boolean(contract?.logoURL) })
+    const { classes, cx } = useStyles({ hasIcon: Boolean(contract?.logoURL) })
     const { Others } = useWeb3State()
 
     const { setDialog: setNftContractDialog } = useRemoteControlledDialog(
@@ -106,7 +105,7 @@ export function ERC721ContractSelectPanel(props: ERC721TokenSelectPanelProps) {
                     </Typography>
                 )}
             </div>
-            <div className={classNames(classes.wrapper, classes.pointer)} onClick={openDialog}>
+            <div className={cx(classes.wrapper, classes.pointer)} onClick={openDialog}>
                 <div className={classes.tokenWrapper}>
                     {contract?.logoURL ? <img className={classes.icon} src={contract?.logoURL} /> : null}
                     {contract?.name ? (

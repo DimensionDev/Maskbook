@@ -1,4 +1,3 @@
-import classNames from 'classnames'
 import { Icons } from '@masknet/icons'
 import { ImageIcon, useIsImageURL } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
@@ -161,7 +160,7 @@ export function NFTImage(props: NFTImageProps) {
         size = 126,
         showNetwork = false,
     } = props
-    const { classes } = useStyles({ networkPluginID: pluginID })
+    const { classes, cx } = useStyles({ networkPluginID: pluginID })
     const iconURL = NETWORK_DESCRIPTORS.find((network) => network?.chainId === token.chainId)?.icon
 
     return (
@@ -171,7 +170,7 @@ export function NFTImage(props: NFTImageProps) {
                     onClick={() => onChange?.(token)}
                     src={token.metadata?.imageURL}
                     style={{ width: size, height: size }}
-                    className={classNames(
+                    className={cx(
                         classes.itemImage,
                         isSameNFT(pluginID, token, selectedToken) ? classes.itemSelected : '',
                     )}

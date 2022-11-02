@@ -60,7 +60,7 @@ const useStyles = makeStyles()((theme) => {
 })
 
 export function InfoField(props: InfoFieldProps) {
-    const classes = useStylesExtends(useStyles(), props)
+    const { classes } = useStylesExtends(useStyles(), props)
     return (
         <div className={classes.field}>
             <Typography className={classes.title}>{props.title}</Typography>

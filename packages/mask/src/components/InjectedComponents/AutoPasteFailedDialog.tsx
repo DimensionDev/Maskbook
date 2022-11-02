@@ -37,7 +37,7 @@ const useStyles = makeStyles()((theme) => ({
 export function AutoPasteFailedDialog(props: AutoPasteFailedDialogProps) {
     const { onClose, data } = props
     const { t } = useI18N()
-    const classes = useStylesExtends(useStyles(), props)
+    const { classes } = useStylesExtends(useStyles(), props)
     const url = data.image ? URL.createObjectURL(data.image) : undefined
     const { showSnackbar } = useCustomSnackbar()
     const [, copy] = useCopyToClipboard()

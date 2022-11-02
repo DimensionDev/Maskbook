@@ -16,7 +16,7 @@ export interface CollectibleTabProps extends withClasses<'root' | 'content'> {
 }
 
 export function CollectibleTab(props: CollectibleTabProps) {
-    const classes = useStylesExtends(useStyles(), props)
+    const { classes } = useStylesExtends(useStyles(), props)
 
     return (
         <Card className={classes.root} elevation={0} {...props.CardProps}>

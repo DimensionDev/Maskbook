@@ -51,7 +51,7 @@ export interface DonateDialogProps extends withClasses<never> {}
 export function DonateDialog(props: DonateDialogProps) {
     const { t: tr } = useBaseI18N()
     const t = useI18N()
-    const classes = useStylesExtends(useStyles(), props)
+    const { classes } = useStylesExtends(useStyles(), props)
     const [title, setTitle] = useState('')
     const [address, setAddress] = useState('')
     const [postLink, setPostLink] = useState<string | URL>('')

@@ -45,7 +45,6 @@
     "@types/react-avatar-editor": "^13.0.0",
     "async-call-rpc": "^6.1.5",
     "bignumber.js": "9.1.0",
-    "classnames": "^2.3.1",
     "color": "^4.2.3",
     "date-fns": "2.28.0",
     "html-to-image": "^1.9.0",

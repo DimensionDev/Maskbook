@@ -1,5 +1,4 @@
 import { Box, IconButton, Paper, Typography } from '@mui/material'
-import classNames from 'classnames'
 import { Close as CloseIcon } from '@mui/icons-material'
 import { makeStyles } from '@masknet/theme'
 import { SetupGuideStep } from '../../../../shared/legacy-settings/types.js'
@@ -99,10 +98,10 @@ export interface WizardDialogProps {
 
 export function WizardDialog(props: WizardDialogProps) {
     const { small, title, dialogType, content, tip, footer, dismiss, onClose } = props
-    const { classes } = useWizardDialogStyles()
+    const { classes, cx } = useWizardDialogStyles()
 
     return (
-        <Paper className={classNames(classes.root, small ? 'small' : '')}>
+        <Paper className={cx(classes.root, small ? 'small' : '')}>
             <header className={classes.header}>
                 <Typography color="textPrimary" variant="h3" fontSize={24}>
                     {title}

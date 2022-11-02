@@ -19,7 +19,7 @@ export interface InputBoxProps extends withClasses<'root'> {
 }
 export function InputBox(props: InputBoxProps) {
     const { label, children, onChange, value } = props
-    const classes = useStylesExtends(useStyles(), props)
+    const { classes } = useStylesExtends(useStyles(), props)
 
     return (
         <InputBase

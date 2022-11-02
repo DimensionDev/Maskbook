@@ -362,9 +362,6 @@ importers:
       bignumber.js:
         specifier: 9.1.0
         version: 9.1.0
-      classnames:
-        specifier: ^2.3.1
-        version: 2.3.1
       color:
         specifier: ^4.2.3
         version: 4.2.3
@@ -782,9 +779,6 @@ importers:
       buffer:
         specifier: ^6.0.3
         version: 6.0.3
-      classnames:
-        specifier: ^2.3.1
-        version: 2.3.1
       clipboard-polyfill:
         specifier: ^3.0.3
         version: 3.0.3
@@ -1650,9 +1644,6 @@ importers:
       bignumber.js:
         specifier: 9.1.0
         version: 9.1.0
-      classnames:
-        specifier: ^2.3.1
-        version: 2.3.1
       date-fns:
         specifier: ^2.28.0
         version: 2.28.0
@@ -1873,9 +1864,6 @@ importers:
       '@types/use-subscription':
         specifier: ^1.0.0
         version: 1.0.0
-      classnames:
-        specifier: ^2.3.1
-        version: 2.3.1
       date-fns:
         specifier: 2.28.0
         version: 2.28.0
@@ -2127,9 +2115,6 @@ importers:
       bignumber.js:
         specifier: 9.1.0
         version: 9.1.0
-      classnames:
-        specifier: ^2.3.1
-        version: 2.3.1
       date-fns:
         specifier: 2.28.0
         version: 2.28.0
@@ -2305,9 +2290,6 @@ importers:
       '@types/tinycolor2':
         specifier: ^1.4.3
         version: 1.4.3
-      classnames:
-        specifier: ^2.3.1
-        version: 2.3.1
       fuse.js:
         specifier: ^6.6.2
         version: 6.6.2
@@ -15489,10 +15471,6 @@ packages:
       define-property: 0.2.5
       isobject: 3.0.1
       static-extend: 0.1.2
-
-  /classnames/2.3.1:
-    resolution: {integrity: sha512-OlQdbZ7gLfGarSqxesMesDa5uz7KFbID8Kpq/SxIoNGDqY8lSYs0D+hhtBXhcdB3rcbXArFr7vlHheLk1voeNA==}
-    dev: false
 
   /clean-css/4.2.4:
     resolution: {integrity: sha512-EJUDT7nDVFDvaQgAo2G/PJvxmp1o/c6iXLbswsBbUFXi1Nr+AjA2cKmfbKDMjMvzEe75g3P6JkaDDAKk96A85A==}

@@ -109,7 +109,7 @@ export interface WalletAssetsCardProps extends withClasses<never | 'root'> {
 export function WalletAssetsCard(props: WalletAssetsCardProps) {
     const { wallet, onSetting, collections: collectionList = EMPTY_LIST, collectionName, hasUnlisted } = props
     const t = useI18N()
-    const classes = useStylesExtends(useStyles(), props)
+    const { classes } = useStylesExtends(useStyles(), props)
     const chainId = ChainId.Mainnet
 
     const [loadAll, setLoadAll] = useState(false)

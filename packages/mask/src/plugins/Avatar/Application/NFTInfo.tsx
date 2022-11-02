@@ -16,7 +16,7 @@ interface NFTInfoProps extends withClasses<'root'> {
 
 export function NFTInfo(props: NFTInfoProps) {
     const { isNFT = false, loading = false, tooltip = '' } = props
-    const classes = useStylesExtends(useStyles(), props)
+    const { classes } = useStylesExtends(useStyles(), props)
     const t = useI18N()
 
     if (loading) return <LoadingBase size={24} />

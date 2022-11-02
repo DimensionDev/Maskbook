@@ -29,7 +29,7 @@ export function ActionsBarNFT(props: ActionsBarNFT_Props) {
     const { wallet, asset } = props
 
     const { t } = useI18N()
-    const classes = useStylesExtends(useStyles(), props)
+    const { classes } = useStylesExtends(useStyles(), props)
 
     const chainIdValid = useChainIdValid()
 

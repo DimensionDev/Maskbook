@@ -1,7 +1,6 @@
 import { useValueRef } from '@masknet/shared-base-ui'
 import { makeStyles, usePortalShadowRoot } from '@masknet/theme'
 import { Box, Typography, styled, Portal } from '@mui/material'
-import classNames from 'classnames'
 import { PropsWithChildren, useRef, cloneElement, useEffect, ReactElement, useState } from 'react'
 import { sayHelloShowed, userGuideStatus, userGuideVersion } from '../../../shared/legacy-settings/settings.js'
 import { activatedSocialNetworkUI } from '../../social-network/index.js'
@@ -204,7 +203,7 @@ export default function GuideStep({
                                         height: clientRect.height,
                                     }}>
                                     <div
-                                        className={classNames(
+                                        className={cx(
                                             classes.card,
                                             arrow ? (bottomAvailable ? 'arrow-top' : 'arrow-bottom') : '',
                                         )}

@@ -32,7 +32,7 @@ export function TradeView(props: TradeViewProps) {
         TraderProps.defaultInputCoin,
         { chainId },
     )
-    const classes = useStylesExtends(useStyles(), props)
+    const { classes } = useStylesExtends(useStyles(), props)
     return (
         <div className={classes.root}>
             <AllProviderTradeContext.Provider>

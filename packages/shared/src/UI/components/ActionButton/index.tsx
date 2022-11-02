@@ -5,7 +5,6 @@ import { makeStyles, ActionButton } from '@masknet/theme'
 import type { ButtonProps } from '@mui/material/Button'
 import { Check as CheckIcon, Error as ErrorIcon } from '@mui/icons-material'
 import { red, green } from '@mui/material/colors'
-import classNames from 'classnames'
 import { useDebounce, useAsyncFn, useUpdateEffect } from 'react-use'
 
 const useErrorStyles = makeStyles()((theme) => {
@@ -97,7 +96,7 @@ export interface ActionButtonPromiseProps extends ButtonProps {
 }
 type ActionButtonPromiseState = 'init' | 'complete' | 'wait' | 'fail'
 export function ActionButtonPromise(props: ActionButtonPromiseProps) {
-    const { classes } = useStyles()
+    const { classes, cx } = useStyles()
     const {
         executor,
         complete,
@@ -117,8 +116,8 @@ export function ActionButtonPromise(props: ActionButtonPromiseProps) {
     } = props
 
     const [state, setState] = useState<ActionButtonPromiseState>('init')
-    const completeClass = classNames(classes.success, b.className)
-    const failClass = classNames(classes.failed, b.className)
+    const completeClass = cx(classes.success, b.className)
+    const failClass = cx(classes.failed, b.className)
 
     const run = () => {
         setState('wait')

@@ -1,6 +1,5 @@
 import { FC, useCallback } from 'react'
 import { noop } from 'lodash-unified'
-import classnames from 'classnames'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { ElementAnchor, Linking, AssetPreviewer, RetryHint } from '@masknet/shared'
 import { LoadingBase, makeStyles } from '@masknet/theme'
@@ -105,7 +104,7 @@ const useStyles = makeStyles<{ columns?: number; gap?: number }>()((theme, { col
 })
 
 export const NFTItem: FC<NFTItemProps> = ({ token }) => {
-    const { classes } = useStyles({})
+    const { classes, cx } = useStyles({})
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const fullCaption = token.metadata?.name || token.tokenId
@@ -138,7 +137,7 @@ export const NFTList: FC<Props> = ({
     finished,
     hasError,
 }) => {
-    const { classes } = useStyles({ columns, gap })
+    const { classes, cx } = useStyles({ columns, gap })
 
     const isRadio = limit === 1
     const reachedLimit = selectedPairs && selectedPairs.length >= limit
@@ -165,7 +164,7 @@ export const NFTList: FC<Props> = ({
 
     return (
         <>
-            <List className={classnames(classes.list, className)}>
+            <List className={cx(classes.list, className)}>
                 {tokens.map((token) => {
                     const selected = selectedPairs
                         ? includes(selectedPairs, [token.contract?.address!, token.tokenId])
@@ -182,7 +181,7 @@ export const NFTList: FC<Props> = ({
                     return (
                         <ListItem
                             key={token.tokenId + token.id}
-                            className={classnames(classes.nftItem, {
+                            className={cx(classes.nftItem, {
                                 [classes.disabled]: disabled,
                                 [classes.selected]: selected,
                                 [classes.inactive]: inactive,

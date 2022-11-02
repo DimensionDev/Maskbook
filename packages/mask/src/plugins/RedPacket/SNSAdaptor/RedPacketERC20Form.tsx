@@ -66,7 +66,7 @@ export interface RedPacketFormProps extends withClasses<never> {
 export function RedPacketERC20Form(props: RedPacketFormProps) {
     const t = useI18N()
     const { t: tr } = useBaseI18n()
-    const classes = useStylesExtends(useStyles(), props)
+    const { classes } = useStylesExtends(useStyles(), props)
     const { onChange, onNext, origin } = props
     // context
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()

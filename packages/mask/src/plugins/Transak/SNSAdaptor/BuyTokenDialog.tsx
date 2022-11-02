@@ -38,7 +38,7 @@ const useStyles = makeStyles()((theme) => ({
 export interface BuyTokenDialogProps extends withClasses<never | 'root'> {}
 
 export function BuyTokenDialog(props: BuyTokenDialogProps) {
-    const classes = useStylesExtends(useStyles(), props)
+    const { classes } = useStylesExtends(useStyles(), props)
 
     const [code, setCode] = useState('ETH')
     const [address, setAddress] = useState('')
