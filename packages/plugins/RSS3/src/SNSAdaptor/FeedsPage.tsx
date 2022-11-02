@@ -1,27 +1,28 @@
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { useReverseAddress, useWeb3State } from '@masknet/web3-hooks-base'
-import { RSS3 } from '@masknet/web3-providers'
+import { RSS3, RSS3BaseAPI } from '@masknet/web3-providers'
 import { Box, BoxProps } from '@mui/material'
 import { memo, useMemo } from 'react'
 import { useAsyncRetry } from 'react-use'
-import { useI18N } from '../../locales/index.js'
-import { FeedCard, StatusBox } from '../components/index.js'
-import { FeedDetailsProvider } from '../contexts/FeedDetails.js'
-import { FeedOwnerContext, FeedOwnerOptions } from '../contexts/index.js'
+import { useI18N } from '../locales/index.js'
+import { FeedCard, StatusBox } from './components/index.js'
+import { FeedDetailsProvider } from './contexts/FeedDetails.js'
+import { FeedOwnerContext, FeedOwnerOptions } from './contexts/index.js'
 
 export interface FeedPageProps extends BoxProps {
     address?: string
+    tag?: RSS3BaseAPI.Tag
 }
 
-export const FeedsPage = memo(function FeedsPage({ address, ...rest }: FeedPageProps) {
+export const FeedsPage = memo(function FeedsPage({ address, tag, ...rest }: FeedPageProps) {
     const t = useI18N()
     const { Others } = useWeb3State()
 
     const { value: feeds = EMPTY_LIST, loading } = useAsyncRetry(async () => {
         if (!address) return EMPTY_LIST
-        const { data } = await RSS3.getAllNotes(address)
+        const { data } = await RSS3.getAllNotes(address, { tag })
         return data
-    }, [address])
+    }, [address, tag])
 
     const { value: name } = useReverseAddress(undefined, address)
 

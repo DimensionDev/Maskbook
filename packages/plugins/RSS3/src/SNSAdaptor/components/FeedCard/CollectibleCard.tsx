@@ -6,7 +6,8 @@ import { Typography } from '@mui/material'
 import { FC, useMemo } from 'react'
 import { Translate } from '../../../locales/i18n_generated'
 import { useAddressLabel } from '../../hooks'
-import { CardFrame, CardType, FeedCardProps } from './base'
+import { CardType } from '../share'
+import { CardFrame, FeedCardProps } from '../base'
 import { formatValue, Label } from './common'
 
 const useStyles = makeStyles<void, 'image' | 'verbose' | 'info'>()((theme, _, refs) => ({
@@ -168,6 +169,7 @@ export const CollectibleCard: FC<CollectibleCardProps> = ({ feed, verbose, ...re
                             <Translate.collectible_register_ens
                                 values={{
                                     user,
+                                    ens: verbose ? feed.actions[1].metadata!.name : 'an ENS',
                                     cost_value: formatValue(
                                         (feed.actions[0] as RSS3BaseAPI.CollectibleTransferAction).metadata,
                                     ),
@@ -176,6 +178,7 @@ export const CollectibleCard: FC<CollectibleCardProps> = ({ feed, verbose, ...re
                                 components={{
                                     user: <Label />,
                                     cost: <Label />,
+                                    ens: verbose ? <Label /> : <span />,
                                 }}
                             />
                         ),

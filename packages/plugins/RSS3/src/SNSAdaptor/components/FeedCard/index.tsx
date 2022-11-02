@@ -1,4 +1,4 @@
-import type { FeedCardProps } from './base.js'
+import type { FeedCardProps } from '../base.js'
 import { CollectibleCard, isCollectibleFeed } from './CollectibleCard.js'
 import { CommentCard, isCommentFeed } from './CommentCard.js'
 import { DonationCard, isDonationFeed } from './DonationCard.js'

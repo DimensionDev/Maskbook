@@ -30,7 +30,7 @@
     "token_swap$normal": "<user>{{user}}</user> swapped on <platform>{{platform}}</platform>",
     "token_swap$verbose": "<user>{{user}}</user> swapped <bold>{{from_value}} {{from_symbol}}</bold> for <bold>{{to_value}} {{to_symbol}}</bold> on <platform>{{platform}}</platform>",
     "token_swap_pair": "{{from_value}} {{from_symbol}} for {{to_value}} {{to_symbol}}",
-    "collectible_register_ens": "<user>{{user}}</user> registered an ENS for <cost>{{cost_value}} {{cost_symbol}}</cost>",
+    "collectible_register_ens": "<user>{{user}}</user> registered <ens>{{ens}}</ens> for <cost>{{cost_value}} {{cost_symbol}}</cost>",
     "collectible_mint$cost": "<user>{{user}}</uesr> minted <collectible>{{collectible}}</collectible> for <cost>{{cost_value}} {{cost_symbol}}</cost>",
     "collectible_mint$no_cost": "<user>{{user}}</uesr> minted <collectible>{{collectible}}</collectible>",
     "collectible_send": "<user>{{user}}</user> sent <collectible>{{collectible}}</collectible> to <recipient>{{recipient}}</recipient>",

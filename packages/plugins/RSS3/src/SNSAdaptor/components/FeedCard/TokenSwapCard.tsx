@@ -6,7 +6,8 @@ import type { FC } from 'react'
 import { useI18N } from '../../../locales'
 import { Translate } from '../../../locales/i18n_generated'
 import { useAddressLabel } from '../../hooks'
-import { CardFrame, CardType, FeedCardProps } from './base'
+import { CardType } from '../share'
+import { CardFrame, FeedCardProps } from '../base'
 import { formatValue, Label } from './common'
 
 const useStyles = makeStyles<void, 'tokenIcon' | 'verboseToken'>()((theme, _, refs) => ({

@@ -1,42 +1,21 @@
 import type { Plugin } from '@masknet/plugin-infra'
-import { Web3ContextProvider } from '@masknet/web3-hooks-base'
-import type { SocialAccount, SocialIdentity } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
+import { Web3ContextProvider } from '@masknet/web3-hooks-base'
+import { RSS3BaseAPI } from '@masknet/web3-providers'
+import type { SocialAccount, SocialIdentity } from '@masknet/web3-shared-base'
 import { base } from '../base.js'
 import { PLUGIN_ID } from '../constants.js'
 import { setupContext } from './context.js'
-import { DonationPage, FeedsPage, FeedPageProps } from './pages/index.js'
+import { FeedPageProps, FeedsPage } from './FeedsPage.js'
 
-function shouldDisplay(identity?: SocialIdentity, socialAccount?: SocialAccount) {
+function shouldDisplay(_?: SocialIdentity, socialAccount?: SocialAccount) {
     return socialAccount?.pluginID === NetworkPluginID.PLUGIN_EVM
 }
 
-const DonationsTabConfig: Plugin.SNSAdaptor.ProfileTab = {
-    ID: `${PLUGIN_ID}_donations`,
-    label: 'Donations',
-    priority: 2,
-    UI: {
-        TabContent: ({ socialAccount, identity }) => {
-            return (
-                <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM }}>
-                    <DonationPage
-                        socialAccount={socialAccount}
-                        userId={identity?.identifier?.userId}
-                        publicKey={identity?.publicKey}
-                    />
-                </Web3ContextProvider>
-            )
-        },
-    },
-    Utils: {
-        shouldDisplay,
-    },
-}
-
-const createActivitiesTabConfig = (props: FeedPageProps): Plugin.SNSAdaptor.ProfileTab => {
+const createActivitiesTabConfig = (label: string, props: FeedPageProps): Plugin.SNSAdaptor.ProfileTab => {
     return {
-        ID: `${PLUGIN_ID}_feeds`,
-        label: 'Activities',
+        ID: `${PLUGIN_ID}_${label}`,
+        label,
         priority: 1,
         UI: {
             TabContent: ({ socialAccount }) => {
@@ -53,32 +32,34 @@ const createActivitiesTabConfig = (props: FeedPageProps): Plugin.SNSAdaptor.Prof
     }
 }
 
-const ActivitiesTabConfig: Plugin.SNSAdaptor.ProfileTab = createActivitiesTabConfig({})
-const ActivitiesTabConfigInProfileCard: Plugin.SNSAdaptor.ProfileTab = createActivitiesTabConfig({
+const ActivitiesTabConfig: Plugin.SNSAdaptor.ProfileTab = createActivitiesTabConfig('Activities', {})
+const ActivitiesTabConfigInProfileCard: Plugin.SNSAdaptor.ProfileTab = createActivitiesTabConfig('Activities', {
     p: 1.5,
 })
 
-const SocialTabConfig: Plugin.SNSAdaptor.ProfileTab = {
-    ID: `${PLUGIN_ID}_social`,
-    label: 'Social',
-    priority: 3,
-    UI: {
-        TabContent: ({ socialAccount }) => {
-            return <div>social: {socialAccount?.address}</div>
-        },
-    },
-    Utils: {
-        shouldDisplay,
-    },
-}
+const DonationsTabConfig: Plugin.SNSAdaptor.ProfileTab = createActivitiesTabConfig('Donations', {
+    tag: RSS3BaseAPI.Tag.Donation,
+})
+const DonationsTabConfigInProfileCard: Plugin.SNSAdaptor.ProfileTab = createActivitiesTabConfig('Donations', {
+    tag: RSS3BaseAPI.Tag.Donation,
+    p: 1.5,
+})
+
+const SocialTabConfig: Plugin.SNSAdaptor.ProfileTab = createActivitiesTabConfig('Social', {
+    tag: RSS3BaseAPI.Tag.Social,
+})
+const SocialTabConfigInProfileCard: Plugin.SNSAdaptor.ProfileTab = createActivitiesTabConfig('Social', {
+    tag: RSS3BaseAPI.Tag.Social,
+    p: 1.5,
+})
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
-    init(signal, context) {
+    init(_, context) {
         setupContext(context)
     },
-    ProfileTabs: [DonationsTabConfig, ActivitiesTabConfig, SocialTabConfig],
-    ProfileCardTabs: [{ ...ActivitiesTabConfigInProfileCard, priority: 1 }, SocialTabConfig],
+    ProfileTabs: [ActivitiesTabConfig, DonationsTabConfig, SocialTabConfig],
+    ProfileCardTabs: [ActivitiesTabConfigInProfileCard, DonationsTabConfigInProfileCard, SocialTabConfigInProfileCard],
 }
 
 export default sns

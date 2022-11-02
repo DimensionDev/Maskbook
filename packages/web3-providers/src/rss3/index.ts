@@ -154,13 +154,17 @@ export class RSS3API implements RSS3BaseAPI.Provider, NonFungibleTokenAPI.Provid
         result.forEach(normalizedFeed)
         return createPageable(result, createIndicator(indicator), createNextIndicator(indicator, cursor))
     }
-    async getAllNotes(address: string, { indicator, size = 500 }: HubOptions<ChainId> = {}) {
+    async getAllNotes(
+        address: string,
+        options: Partial<Record<string, string>> = {},
+        { indicator, size = 100 }: HubOptions<ChainId> = {},
+    ) {
         if (!address) return createPageable([], createIndicator(indicator))
         const url = urlcat(NEW_RSS3_ENDPOINT, '/:address', {
+            ...options,
             address,
             limit: size,
             cursor: indicator?.id ?? '',
-            include_poap: true,
         })
         const { result, cursor } = await fetchJSON<{
             result: RSS3BaseAPI.Web3Feed[]

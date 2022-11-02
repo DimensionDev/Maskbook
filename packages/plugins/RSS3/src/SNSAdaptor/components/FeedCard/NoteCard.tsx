@@ -4,7 +4,8 @@ import { Typography } from '@mui/material'
 import type { FC } from 'react'
 import { Translate } from '../../../locales/i18n_generated'
 import { useAddressLabel } from '../../hooks'
-import { CardFrame, CardType, FeedCardProps } from './base'
+import { CardType } from '../share'
+import { CardFrame, FeedCardProps } from '../base'
 import { Label } from './common'
 
 const useStyles = makeStyles()((theme) => ({

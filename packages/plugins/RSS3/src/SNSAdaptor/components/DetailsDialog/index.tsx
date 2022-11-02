@@ -4,7 +4,8 @@ import { makeStyles } from '@masknet/theme'
 import { DialogContent, Typography } from '@mui/material'
 import type { PropsWithChildren } from 'react'
 import { FeedCard } from '../FeedCard'
-import type { CardType, FeedCardProps } from '../FeedCard/base'
+import type { FeedCardProps } from '../base'
+import { CardType, hostIconMap, hostNameMap } from '../share'
 
 const useStyles = makeStyles()((theme) => ({
     confirmDialog: {
@@ -65,12 +66,20 @@ export function FeedDetailsDialog({ type, feed, onClose, action, onSubmit, ...re
                 <FeedCard feed={feed} action={action} verbose disableFee={false} />
                 {links?.length ? (
                     <div className={classes.links}>
-                        {links.map((link, index) => (
-                            <Linking key={index} LinkProps={{ className: classes.link }} href={link}>
-                                <Icons.PolygonScan size={24} />
-                                <Typography className={classes.linkLabel}>Polygonscan</Typography>
-                            </Linking>
-                        ))}
+                        {links.map((link, index) => {
+                            let host = ''
+                            try {
+                                host = new URL(link).host
+                            } catch {}
+                            const Icon = hostIconMap[host] ?? Icons.SettingsLanguage
+                            const name = hostNameMap[host] ?? host
+                            return (
+                                <Linking key={index} LinkProps={{ className: classes.link }} href={link}>
+                                    <Icon size={24} />
+                                    <Typography className={classes.linkLabel}>{name}</Typography>
+                                </Linking>
+                            )
+                        })}
                     </div>
                 ) : null}
             </DialogContent>
