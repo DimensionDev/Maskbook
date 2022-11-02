@@ -4,7 +4,7 @@ import type { AbiItem } from 'web3-utils'
 import { first } from 'lodash-unified'
 import { createLookupTableResolver, EMPTY_LIST } from '@masknet/shared-base'
 import ERC721ABI from '@masknet/web3-contracts/abis/ERC721.json'
-import type { ERC721 } from '@masknet/web3-contracts/types/ERC721'
+import type { ERC721 } from '@masknet/web3-contracts/types/ERC721.js'
 import {
     NonFungibleAsset,
     NonFungibleCollection,

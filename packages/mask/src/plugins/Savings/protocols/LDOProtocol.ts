@@ -10,7 +10,7 @@ import {
     ZERO_ADDRESS,
 } from '@masknet/web3-shared-evm'
 import { FungibleToken, ZERO } from '@masknet/web3-shared-base'
-import type { Lido } from '@masknet/web3-contracts/types/Lido'
+import type { Lido } from '@masknet/web3-contracts/types/Lido.js'
 import LidoABI from '@masknet/web3-contracts/abis/Lido.json'
 import { ProtocolType, SavingsProtocol } from '../types.js'
 

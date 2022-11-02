@@ -1,4 +1,4 @@
-import type { AsyncState } from 'react-use/lib/useAsyncFn'
+import type { AsyncState } from 'react-use/lib/useAsyncFn.js'
 import { BigNumber } from 'bignumber.js'
 import { first } from 'lodash-unified'
 import { LoadingBase, makeStyles } from '@masknet/theme'

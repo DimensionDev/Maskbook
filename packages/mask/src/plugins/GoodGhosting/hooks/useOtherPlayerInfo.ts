@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { useAsyncRetry } from 'react-use'
-import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
+import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
 import { useSingleContractMultipleData } from '@masknet/web3-hooks-evm'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import type { NetworkPluginID } from '@masknet/shared-base'

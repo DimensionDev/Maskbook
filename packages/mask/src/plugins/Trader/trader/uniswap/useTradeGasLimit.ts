@@ -6,7 +6,7 @@ import { toHex } from 'web3-utils'
 import { useAsync } from 'react-use'
 import { BigNumber } from 'bignumber.js'
 import { swapErrorToUserReadableMessage } from '../../helpers/index.js'
-import type { AsyncState } from 'react-use/lib/useAsyncFn'
+import type { AsyncState } from 'react-use/lib/useAsyncFn.js'
 import type { SwapParameters } from '@uniswap/v2-sdk'
 import { NetworkPluginID } from '@masknet/shared-base'
 

@@ -1,6 +1,6 @@
 import type { AbiItem } from 'web3-utils'
 import ReverseRecordsABI from '@masknet/web3-contracts/abis/ReverseRecords.json'
-import type { ReverseRecords } from '@masknet/web3-contracts/types/ReverseRecords'
+import type { ReverseRecords } from '@masknet/web3-contracts/types/ReverseRecords.js'
 import { ChainId, useEthereumConstants } from '@masknet/web3-shared-evm'
 import { useContract } from './useContract.js'
 

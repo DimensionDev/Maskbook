@@ -1,5 +1,5 @@
 import type { AbiItem } from 'web3-utils'
-import type { Pair } from '@masknet/web3-contracts/types/Pair'
+import type { Pair } from '@masknet/web3-contracts/types/Pair.js'
 import PairABI from '@masknet/web3-contracts/abis/Pair.json'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { useContract, useContracts } from '@masknet/web3-hooks-evm'

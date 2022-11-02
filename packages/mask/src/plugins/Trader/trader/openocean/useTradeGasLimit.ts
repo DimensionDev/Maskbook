@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { useAsync } from 'react-use'
-import type { AsyncState } from 'react-use/lib/useAsyncFn'
+import type { AsyncState } from 'react-use/lib/useAsyncFn.js'
 import { pick } from 'lodash-unified'
 import { BigNumber } from 'bignumber.js'
 import type { TransactionConfig } from 'web3-core'

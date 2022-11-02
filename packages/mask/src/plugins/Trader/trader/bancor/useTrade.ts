@@ -5,7 +5,7 @@ import { useSlippageTolerance } from './useSlippageTolerance.js'
 import { leftShift } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useChainContext, useDoubleBlockBeatRetry, useNetworkContext } from '@masknet/web3-hooks-base'
-import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
+import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
 import type { Web3Helper } from '@masknet/web3-helpers'
 
 export function useTrade(

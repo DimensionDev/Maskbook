@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { useAsyncRetry } from 'react-use'
-import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
+import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
 import { BigNumber } from 'bignumber.js'
 import { Currency, CurrencyAmount, TradeType } from '@uniswap/sdk-core'
 import { encodeRouteToPath, Route, Trade } from '@uniswap/v3-sdk'

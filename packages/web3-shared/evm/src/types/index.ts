@@ -7,7 +7,7 @@ import type {
     TransactionReceipt as Web3TransactionReceipt,
     TransactionConfig as TransactionConfig_,
 } from 'web3-core'
-import type { NonPayableTransactionObject, PayableTransactionObject } from '@masknet/web3-contracts/types/types'
+import type { NonPayableTransactionObject, PayableTransactionObject } from '@masknet/web3-contracts/types/types.js'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
 
 export type ChainIdOptionalRecord<T> = { [k in ChainId]?: T }

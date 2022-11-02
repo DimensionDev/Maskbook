@@ -1,5 +1,5 @@
 import { useAsync } from 'react-use'
-import type { AsyncState } from 'react-use/lib/useAsyncFn'
+import type { AsyncState } from 'react-use/lib/useAsyncFn.js'
 import { useChainContext, useNetworkContext, useWeb3Connection } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 

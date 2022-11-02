@@ -1,4 +1,4 @@
-import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
+import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useChainContext, useBeatRetry } from '@masknet/web3-hooks-base'

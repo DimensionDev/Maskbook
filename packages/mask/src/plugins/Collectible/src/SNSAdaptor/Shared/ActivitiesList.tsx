@@ -1,6 +1,6 @@
 import { makeStyles, LoadingBase } from '@masknet/theme'
 import type { NonFungibleTokenEvent, Pageable } from '@masknet/web3-shared-base'
-import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
+import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
 import { Typography, Button } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { EMPTY_LIST } from '@masknet/shared-base'
