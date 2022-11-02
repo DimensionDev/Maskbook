@@ -1,8 +1,8 @@
-import type { Transaction, UserOperation } from "../types/index.js";
+import type { Transaction, UserOperation } from '../types/index.js'
 
 /**
  * Compose UserOperation from a normal transaction
- * @param transaction 
+ * @param transaction
  */
 export function encodeUserOperation(transaction: Transaction): UserOperation {
     throw new Error('To be implemented')
@@ -17,7 +17,7 @@ export function decodeUserOperation(userOperation: UserOperation): Transaction {
 
 /**
  * Decode user operations from a entrypoint handleOps transaction
- * @param transaction 
+ * @param transaction
  */
 export function decodeUserOperations(transaction: Transaction): UserOperation[] {
     throw new Error('To be implemented')

@@ -5,7 +5,7 @@ import type { EVM_Provider } from '../types.js'
 import { BaseProvider } from './Base.js'
 
 /**
- * EIP-4338 compatible smart contract based wallet.
+ * EIP-4337 compatible smart contract based wallet.
  */
 export class SCWalletProvider extends BaseProvider implements EVM_Provider {
     constructor(protected providerType: ProviderType) {

@@ -600,7 +600,7 @@ export interface TransactionContext<ChainId, Parameter = string | undefined> {
             [key: string]: Parameter
         }
     }>
-    /** nested children context */
+    /** nested children contexts */
     children?: TransactionContext<ChainId, Parameter>[]
 }
 

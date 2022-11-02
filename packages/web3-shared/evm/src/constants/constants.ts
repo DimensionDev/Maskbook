@@ -27,7 +27,7 @@ import Lido from '@masknet/web3-constants/evm/lido.json'
 import Game from '@masknet/web3-constants/evm/game.json'
 import Pet from '@masknet/web3-constants/evm/pet.json'
 import SmartPay from '@masknet/web3-constants/evm/smart-pay.json'
-import ens from '@masknet/web3-constants/evm/ens.json'
+import ENS from '@masknet/web3-constants/evm/ens.json'
 
 import {
     transformAllHook,
@@ -195,6 +195,4 @@ export const getSmartPayConstants = transformAll(ChainId, SmartPay)
 export const useSmartPayConstant = transformHook(getSmartPayConstants)
 export const useSmartPayConstants = transformAllHook(getSmartPayConstants)
 
-export const getENSConstants = transformAll(ChainId, ens)
-
-
+export const getENSConstants = transformAll(ChainId, ENS)
