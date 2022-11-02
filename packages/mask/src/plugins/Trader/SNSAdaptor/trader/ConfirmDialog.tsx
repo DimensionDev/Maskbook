@@ -2,7 +2,7 @@ import { useCallback, useMemo, useState } from 'react'
 import BigNumber from 'bignumber.js'
 import { useValueRef } from '@masknet/shared-base-ui'
 import type { TradeComputed } from '../../types/index.js'
-import { formatUSD, formatWeiToEther, GasOptionConfig, Transaction } from '@masknet/web3-shared-evm'
+import { formatWeiToEther, GasOptionConfig, Transaction } from '@masknet/web3-shared-evm'
 import { formatBalance, formatCurrency, leftShift, multipliedBy } from '@masknet/web3-shared-base'
 import { currentSlippageSettings } from '../../settings.js'
 import {
@@ -58,7 +58,7 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
 
     const gasFeeUSD = useMemo(() => {
         if (!gasFee) return '0'
-        return formatUSD(formatWeiToEther(gasFee).times(nativeTokenPrice))
+        return formatCurrency(formatWeiToEther(gasFee).times(nativeTokenPrice))
     }, [gasFee, nativeTokenPrice])
 
     const isGreatThanSlippageSetting = useGreatThanSlippageSetting(trade?.priceImpact)

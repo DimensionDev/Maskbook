@@ -9,6 +9,7 @@ import {
     ProviderDescriptor,
     OthersState as Web3OthersState,
     FungibleToken,
+    NonFungibleToken,
 } from '@masknet/web3-shared-base'
 import type { Plugin } from '@masknet/plugin-infra'
 
@@ -109,14 +110,27 @@ export class OthersState<ChainId, SchemaType, ProviderType, NetworkType, Transac
     createNativeToken(chainId: ChainId): FungibleToken<ChainId, SchemaType> {
         throw new Error('Method not implemented.')
     }
-    createERC20Token(
+    createFungibleToken(
         chainId: ChainId,
+        schemaType: SchemaType,
         address: string,
         name?: string,
         symbol?: string,
         decimals?: number,
         logoURI?: string,
     ): FungibleToken<ChainId, SchemaType> {
+        throw new Error('Method not implemented.')
+    }
+    createNonFungibleToken(
+        chainId: ChainId,
+        address: string,
+        schemaType: SchemaType,
+        tokenId: string,
+        ownerId?: string,
+        metadata?: NonFungibleToken<ChainId, SchemaType>['metadata'],
+        contract?: NonFungibleToken<ChainId, SchemaType>['contract'],
+        collection?: NonFungibleToken<ChainId, SchemaType>['collection'],
+    ): NonFungibleToken<ChainId, SchemaType> {
         throw new Error('Method not implemented.')
     }
 }

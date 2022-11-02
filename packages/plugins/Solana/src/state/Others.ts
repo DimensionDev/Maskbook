@@ -31,6 +31,7 @@ import {
     createNativeToken,
     isValidChainId,
 } from '@masknet/web3-shared-solana'
+import { createFungibleToken, createNonFungibleToken } from '@masknet/web3-shared-base'
 
 export class Others extends OthersState<ChainId, SchemaType, ProviderType, NetworkType, Transaction> {
     constructor(context: Plugin.Shared.SharedContext) {
@@ -66,4 +67,6 @@ export class Others extends OthersState<ChainId, SchemaType, ProviderType, Netwo
     override formatTokenId = formatTokenId
     override formatSchemaType = formatSchemaType
     override createNativeToken = createNativeToken
+    override createFungibleToken = createFungibleToken
+    override createNonFungibleToken = createNonFungibleToken
 }

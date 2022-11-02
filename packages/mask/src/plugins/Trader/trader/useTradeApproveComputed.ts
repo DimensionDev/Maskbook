@@ -8,6 +8,7 @@ import type { SwapQuoteResponse, TradeComputed } from '../types/index.js'
 import { useGetTradeContext } from './useGetTradeContext.js'
 import type { Web3Helper } from '@masknet/web3-helpers'
 
+// Only Support EVM ERC20
 export function useTradeApproveComputed(
     trade: TradeComputed<unknown> | null,
     provider?: TradeProvider,

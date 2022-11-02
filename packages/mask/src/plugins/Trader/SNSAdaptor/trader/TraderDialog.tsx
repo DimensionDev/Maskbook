@@ -19,7 +19,7 @@ import { Icons } from '@masknet/icons'
 import { currentSlippageSettings } from '../../settings.js'
 import { MIN_GAS_LIMIT } from '../../constants/index.js'
 import { useAsyncFn } from 'react-use'
-import type { Transaction } from '@masknet/web3-shared-evm'
+import { SchemaType, Transaction } from '@masknet/web3-shared-evm'
 
 const isDashboard = isDashboardPage()
 
@@ -104,8 +104,9 @@ export function TraderDialog() {
                 const inputToken = defaultInputCoin
                     ? Others.isNativeTokenAddress(defaultInputCoin.address)
                         ? Others.createNativeToken(chainIdRef.current)
-                        : Others.createERC20Token(
+                        : Others.createFungibleToken(
                               chainIdRef.current,
+                              SchemaType.ERC20,
                               defaultInputCoin.address,
                               defaultInputCoin.name,
                               defaultInputCoin.symbol,
@@ -115,8 +116,9 @@ export function TraderDialog() {
                 const outputToken = defaultOutputCoin
                     ? Others.isNativeTokenAddress(defaultOutputCoin.address)
                         ? Others.createNativeToken(chainIdRef.current)
-                        : Others.createERC20Token(
+                        : Others.createFungibleToken(
                               chainIdRef.current,
+                              SchemaType.ERC20,
                               defaultOutputCoin.address,
                               defaultOutputCoin.name,
                               defaultOutputCoin.symbol,

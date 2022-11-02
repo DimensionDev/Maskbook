@@ -1,11 +1,11 @@
 import { useMemo } from 'react'
 import { isGreaterThan, isLessThan, multipliedBy, leftShift } from '@masknet/web3-shared-base'
-import { SchemaType } from '@masknet/web3-shared-evm'
 import {
     useFungibleToken,
     useFungibleTokenPrice,
     useNativeTokenPrice,
     useNetworkContext,
+    useWeb3State,
 } from '@masknet/web3-hooks-base'
 import { MINIMUM_AMOUNT } from '../../../constants/index.js'
 import type { TradeInfo } from '../../../types/index.js'
@@ -14,6 +14,7 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 
 export function useSortedTrades(traders: TradeInfo[], chainId: Web3Helper.ChainIdAll, gasPrice?: string) {
     const { pluginID } = useNetworkContext()
+    const { Others } = useWeb3State()
     const { value: nativeToken } = useFungibleToken(pluginID, '', { chainId })
     const { value: nativeTokenPrice = 0 } = useNativeTokenPrice(pluginID, { chainId })
 
@@ -40,7 +41,11 @@ export function useSortedTrades(traders: TradeInfo[], chainId: Web3Helper.ChainI
                         const gasFeeUSD = leftShift(gasFee ?? 0, nativeToken?.decimals).times(nativeTokenPrice)
 
                         const finalPrice = leftShift(trade.value.outputAmount, outputToken.decimals)
-                            .times(outputToken.schema !== SchemaType.Native ? outputTokenPrice : nativeTokenPrice)
+                            .times(
+                                !Others?.isNativeTokenSchemaType(outputToken.schema)
+                                    ? outputTokenPrice
+                                    : nativeTokenPrice,
+                            )
                             .minus(gasFeeUSD)
 
                         return {
@@ -80,5 +85,13 @@ export function useSortedTrades(traders: TradeInfo[], chainId: Web3Helper.ChainI
                 if (a?.outputAmount.isLessThan(b?.outputAmount ?? 0)) return 1
                 return 0
             })
-    }, [traders, outputToken, gasPrice, outputTokenPrice, nativeTokenPrice, nativeToken])
+    }, [
+        traders,
+        outputToken,
+        gasPrice,
+        outputTokenPrice,
+        nativeTokenPrice,
+        nativeToken,
+        Others?.isNativeTokenSchemaType,
+    ])
 }

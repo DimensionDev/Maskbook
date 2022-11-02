@@ -91,7 +91,7 @@ export interface TraderInfoUIProps {
     isGreatThanSlippageSetting: boolean
     gasFee: string
     gasFeeValueUSD: string
-    nativeToken: Web3Helper.FungibleTokenAll
+    nativeToken?: Web3Helper.FungibleTokenAll
 }
 
 export const TraderInfoUI = memo<TraderInfoUIProps>(
@@ -185,7 +185,7 @@ export const TraderInfoUI = memo<TraderInfoUIProps>(
 )
 
 export interface DefaultTraderPlaceholderUIProps {
-    nativeToken: Web3Helper.FungibleTokenAll
+    nativeToken?: Web3Helper.FungibleTokenAll
 }
 
 export const DefaultTraderPlaceholderUI = memo<DefaultTraderPlaceholderUIProps>(({ nativeToken }) => {

@@ -1,9 +1,9 @@
 import type { ExchangeProxy } from '@masknet/web3-contracts/types/ExchangeProxy'
-import { SchemaType, GasOptionConfig, useTraderConstants, encodeContractTransaction } from '@masknet/web3-shared-evm'
+import { GasOptionConfig, useTraderConstants, encodeContractTransaction } from '@masknet/web3-shared-evm'
 import { useAsyncFn } from 'react-use'
 import { SLIPPAGE_DEFAULT } from '../../constants/index.js'
 import { SwapResponse, TradeComputed, TradeStrategy } from '../../types/index.js'
-import { useChainContext, useNetworkContext, useWeb3Connection } from '@masknet/web3-hooks-base'
+import { useChainContext, useNetworkContext, useWeb3Connection, useWeb3State } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useTradeAmount } from './useTradeAmount.js'
 
@@ -15,6 +15,7 @@ export function useTradeCallback(
 ) {
     const { account, chainId } = useChainContext()
     const { pluginID } = useNetworkContext()
+    const { Others } = useWeb3State()
     const { BALANCER_ETH_ADDRESS } = useTraderConstants(chainId)
     const connection = useWeb3Connection()
     const tradeAmount = useTradeAmount(trade, allowedSlippage)
@@ -52,16 +53,18 @@ export function useTradeCallback(
         )
 
         // balancer use a different address for the native token
-        const inputTokenAddress =
-            trade.inputToken.schema === SchemaType.Native ? BALANCER_ETH_ADDRESS : trade.inputToken.address
-        const outputTokenAddress =
-            trade.outputToken.schema === SchemaType.Native ? BALANCER_ETH_ADDRESS : trade.outputToken.address
+        const inputTokenAddress = Others?.isNativeTokenSchemaType(trade.inputToken.schema)
+            ? BALANCER_ETH_ADDRESS
+            : trade.inputToken.address
+        const outputTokenAddress = Others?.isNativeTokenSchemaType(trade.outputToken.schema)
+            ? BALANCER_ETH_ADDRESS
+            : trade.outputToken.address
 
         // trade with the native token
         let transactionValue = '0'
-        if (trade.strategy === TradeStrategy.ExactIn && trade.inputToken.schema === SchemaType.Native)
+        if (trade.strategy === TradeStrategy.ExactIn && Others?.isNativeTokenSchemaType(trade.inputToken.schema))
             transactionValue = trade.inputAmount.toFixed()
-        else if (trade.strategy === TradeStrategy.ExactOut && trade.outputToken.schema === SchemaType.Native)
+        else if (trade.strategy === TradeStrategy.ExactOut && Others?.isNativeTokenSchemaType(trade.outputToken.schema))
             transactionValue = trade.outputAmount.toFixed()
 
         // send transaction and wait for hash
@@ -95,5 +98,14 @@ export function useTradeCallback(
         const receipt = await connection.getTransactionReceipt(hash)
 
         return receipt?.transactionHash
-    }, [chainId, trade, tradeAmount, exchangeProxyContract, BALANCER_ETH_ADDRESS, connection, pluginID])
+    }, [
+        chainId,
+        trade,
+        tradeAmount,
+        exchangeProxyContract,
+        BALANCER_ETH_ADDRESS,
+        connection,
+        pluginID,
+        Others?.isNativeTokenSchemaType,
+    ])
 }

@@ -1,6 +1,5 @@
 import { memo, useMemo } from 'react'
 import BigNumber from 'bignumber.js'
-import type { ChainId } from '@masknet/web3-shared-evm'
 import { useFungibleTokenPrice, useNetworkContext } from '@masknet/web3-hooks-base'
 import { InputTokenPanelUI } from './components/InputTokenPanelUI.js'
 import type { SelectTokenChipProps } from '@masknet/shared'
@@ -9,7 +8,7 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 export interface InputTokenPanelProps extends withClasses<'root'> {
     balance: string
     amount: string
-    chainId: ChainId
+    chainId: Web3Helper.ChainIdAll
     maxAmount: string
     token?: Web3Helper.FungibleTokenAll | null
     onAmountChange: (amount: string) => void

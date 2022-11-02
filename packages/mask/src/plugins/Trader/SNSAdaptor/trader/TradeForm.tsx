@@ -27,7 +27,7 @@ import { MINIMUM_AMOUNT, MIN_GAS_LIMIT } from '../../constants/index.js'
 import { resolveTradeProviderName } from '../../pipes.js'
 import { useTradeApproveComputed } from '../../trader/useTradeApproveComputed.js'
 import { isDashboardPage, isPopupPage, PopupRoutes, PluginID, NetworkPluginID } from '@masknet/shared-base'
-import { useChainContext } from '@masknet/web3-hooks-base'
+import { useChainContext, useNetworkContext, useWeb3State } from '@masknet/web3-hooks-base'
 import { AllProviderTradeContext } from '../../trader/useAllProviderTradeContext.js'
 import { TokenSecurityBoundary } from '@masknet/plugin-go-plus-security'
 import { currentSlippageSettings } from '../../settings.js'
@@ -239,7 +239,9 @@ export const TradeForm = memo<AllTradeFormProps>(
         const { t } = useI18N()
         const styles = useStyles({ isDashboard, isPopup })
         const classes = useStylesExtends(styles, props)
-        const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+        const { chainId } = useChainContext()
+        const { pluginID } = useNetworkContext()
+        const { Others } = useWeb3State()
         const { isSwapping, allTradeComputed } = AllProviderTradeContext.useContainer()
         const [isExpand, setExpand] = useState(false)
 
@@ -249,7 +251,7 @@ export const TradeForm = memo<AllTradeFormProps>(
         const isTokenSecurityEnable = !isSNSClosed && !isDashboardClosed
 
         const { value: tokenSecurityInfo, error } = useTokenSecurity(
-            chainId,
+            pluginID === NetworkPluginID.PLUGIN_EVM ? (chainId as ChainId) : undefined,
             outputToken?.address.trim(),
             isTokenSecurityEnable,
         )
@@ -279,9 +281,9 @@ export const TradeForm = memo<AllTradeFormProps>(
             const marginGasPrice = multipliedBy(gasPrice ?? 0, 1.1)
             const gasFee = multipliedBy(marginGasPrice, focusedTrade?.gas.value ?? MIN_GAS_LIMIT)
             let amount_ = new BigNumber(inputTokenBalanceAmount.toFixed() ?? 0)
-            amount_ = inputToken?.schema === SchemaType.Native ? amount_.minus(gasFee) : amount_
+            amount_ = Others?.isNativeTokenSchemaType(inputToken?.schema) ? amount_.minus(gasFee) : amount_
             return leftShift(BigNumber.max(0, amount_), inputToken?.decimals)
-        }, [focusedTrade, gasPrice, inputTokenTradeAmount, inputToken])
+        }, [focusedTrade, gasPrice, inputTokenTradeAmount, inputToken, Others?.isNativeTokenSchemaType])
 
         // #region UI logic
         // validate form return a message if an error exists
@@ -293,7 +295,7 @@ export const TradeForm = memo<AllTradeFormProps>(
 
             if (
                 inputTokenBalanceAmount.isLessThan(inputTokenTradeAmount) ||
-                (inputToken.schema === SchemaType.Native &&
+                (Others?.isNativeTokenSchemaType(inputToken.schema) &&
                     formatWeiToEther(inputTokenTradeAmount).isGreaterThan(maxAmount))
             )
                 return t('plugin_trader_error_insufficient_balance', {
@@ -311,6 +313,7 @@ export const TradeForm = memo<AllTradeFormProps>(
             inputTokenBalanceAmount.toFixed(),
             inputTokenTradeAmount.toFixed(),
             maxAmount,
+            Others?.isNativeTokenSchemaType,
         ])
         // #endregion
 
@@ -562,7 +565,9 @@ export const TradeForm = memo<AllTradeFormProps>(
                                 infiniteUnlockContent={t('plugin_trader_unlock_symbol', {
                                     symbol: approveToken?.symbol,
                                 })}
-                                expectedChainId={chainId}
+                                expectedChainId={
+                                    pluginID === NetworkPluginID.PLUGIN_EVM ? (chainId as ChainId) : undefined
+                                }
                                 token={
                                     !isNativeTokenWrapper(focusedTrade?.value ?? null) &&
                                     approveToken?.schema === SchemaType.ERC20 &&

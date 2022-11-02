@@ -181,7 +181,7 @@ export interface ConfirmDialogUIProps {
     gasFeeUSD: string
     isGreatThanSlippageSetting: boolean
     trade: TradeComputed
-    nativeToken: Web3Helper.FungibleTokenAll
+    nativeToken?: Web3Helper.FungibleTokenAll
     inputToken: Web3Helper.FungibleTokenAll
     outputToken: Web3Helper.FungibleTokenAll
     onClose: () => void

@@ -1,6 +1,6 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { OthersState } from '@masknet/web3-state'
-import { createExplorerResolver } from '@masknet/web3-shared-base'
+import { createExplorerResolver, createFungibleToken, createNonFungibleToken } from '@masknet/web3-shared-base'
 import {
     isValidDomain,
     isValidAddress,
@@ -74,4 +74,6 @@ export class Others extends OthersState<ChainId, SchemaType, ProviderType, Netwo
     override formatTokenId = formatTokenId
     override formatSchemaType = formatSchemaType
     override createNativeToken = createNativeToken
+    override createFungibleToken = createFungibleToken
+    override createNonFungibleToken = createNonFungibleToken
 }

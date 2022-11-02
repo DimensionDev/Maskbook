@@ -2,8 +2,8 @@ import { forwardRef, useCallback, useEffect, useImperativeHandle, useState, useM
 import { useUnmount, useUpdateEffect } from 'react-use'
 import { delay } from '@masknet/kit'
 import { useOpenShareTxDialog, useSelectFungibleToken } from '@masknet/shared'
-import { FungibleToken, formatBalance } from '@masknet/web3-shared-base'
-import type { ChainId, GasOptionConfig, SchemaType } from '@masknet/web3-shared-evm'
+import { formatBalance } from '@masknet/web3-shared-base'
+import type { GasOptionConfig } from '@masknet/web3-shared-evm'
 import { useGasConfig } from '@masknet/web3-hooks-evm'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import {
@@ -174,7 +174,7 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
                         panelType === TokenPanelType.Input
                             ? AllProviderTradeActionType.UPDATE_INPUT_TOKEN
                             : AllProviderTradeActionType.UPDATE_OUTPUT_TOKEN,
-                    token: picked as FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>,
+                    token: picked,
                     balance: '0',
                 })
             }
