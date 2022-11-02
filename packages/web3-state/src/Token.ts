@@ -194,12 +194,4 @@ export class TokenState<ChainId extends number, SchemaType> implements Web3Token
         this.blockOrUnblockToken(address, token, 'block')
         this.addOrRemoveToken(address, token, 'add')
     }
-
-    async createFungibleToken(chainId: ChainId, address: string, token?: FungibleToken<ChainId, SchemaType>) {
-        return token
-    }
-
-    async createNonFungibleToken(chainId: ChainId, address: string, token?: NonFungibleToken<ChainId, SchemaType>) {
-        return token
-    }
 }

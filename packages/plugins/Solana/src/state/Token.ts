@@ -27,7 +27,7 @@ export class Token extends TokenState<ChainId, SchemaType> {
         })
     }
 
-    override async createFungibleToken(
+    async createFungibleToken(
         chainId: ChainId,
         address: string,
         token?: FungibleToken<ChainId, SchemaType>,
@@ -55,7 +55,7 @@ export class Token extends TokenState<ChainId, SchemaType> {
         return credibleToken ?? token
     }
 
-    override async createNonFungibleToken(
+    async createNonFungibleToken(
         chainId: ChainId,
         address: string,
         token?: NonFungibleToken<ChainId, SchemaType>,
