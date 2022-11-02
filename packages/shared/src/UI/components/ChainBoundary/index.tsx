@@ -69,7 +69,7 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
     } = props
 
     const t = useSharedI18N()
-    const classes = useStylesExtends(useStyles(), props)
+    const { classes } = useStylesExtends(useStyles(), props)
 
     const { pluginID: actualPluginID } = useNetworkContext()
     const plugin = useActivatedPlugin(actualPluginID, 'any')

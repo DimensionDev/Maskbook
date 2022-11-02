@@ -53,7 +53,7 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
     } = props
 
     const t = useSharedI18N()
-    const classes = useStylesExtends(useStyles(), props)
+    const { classes } = useStylesExtends(useStyles(), props)
 
     const [{ type: approveStateType, allowance }, transactionState, approveCallback, resetApproveCallback] =
         useERC20TokenApproveCallback(token?.address ?? '', amount, spender ?? '', noop, expectedChainId)

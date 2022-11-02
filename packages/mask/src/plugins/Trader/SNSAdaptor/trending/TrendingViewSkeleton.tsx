@@ -22,7 +22,7 @@ export interface TrendingViewSkeletonProps extends withClasses<'content' | 'foot
 
 export function TrendingViewSkeleton(props: TrendingViewSkeletonProps) {
     const { TrendingCardProps } = props
-    const classes = useStylesExtends(useStyles(), props)
+    const { classes } = useStylesExtends(useStyles(), props)
     const { t } = useI18N()
 
     return (

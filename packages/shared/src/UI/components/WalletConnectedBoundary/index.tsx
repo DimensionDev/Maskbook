@@ -1,5 +1,4 @@
 import { makeStyles, useStylesExtends, ActionButton, ActionButtonProps } from '@masknet/theme'
-import classNames from 'classnames'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useSharedI18N } from '../../../locales/index.js'
@@ -30,7 +29,7 @@ export function WalletConnectedBoundary(props: WalletConnectedBoundaryProps) {
     const { children = null, offChain = false, hideRiskWarningConfirmed = false } = props
 
     const t = useSharedI18N()
-    const classes = useStylesExtends(useStyles(), props)
+    const { classes, cx } = useStylesExtends(useStyles(), props)
 
     const { pluginID } = useNetworkContext()
     const { account, chainId: chainIdValid } = useChainContext()
@@ -44,7 +43,7 @@ export function WalletConnectedBoundary(props: WalletConnectedBoundaryProps) {
         WalletMessages.events.selectProviderDialogUpdated,
     )
 
-    const buttonClass = classNames(classNames(classes.button, classes.connectWallet))
+    const buttonClass = cx(classes.button, classes.connectWallet)
 
     if (!account)
         return (

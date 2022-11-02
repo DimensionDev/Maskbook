@@ -1,5 +1,4 @@
 import { memo } from 'react'
-import classNames from 'classnames'
 import formatDateTime from 'date-fns/format'
 import { Icons } from '@masknet/icons'
 import { useReverseAddress, useWeb3State } from '@masknet/web3-hooks-base'
@@ -84,7 +83,7 @@ export interface HistoryTableRowUIProps extends HistoryTableRowProps {
 
 export const HistoryTableRowUI = memo<HistoryTableRowUIProps>(
     ({ transaction, selectedChainId, formattedType, domain }) => {
-        const { classes } = useStyles()
+        const { classes, cx } = useStyles()
         const { Others } = useWeb3State()
         return (
             <TableRow className={classes.hover}>
@@ -114,7 +113,7 @@ export const HistoryTableRowUI = memo<HistoryTableRowUIProps>(
                         return (
                             <Stack
                                 key={index}
-                                className={classNames(classes.pair, { [classes.send]: direction })}
+                                className={cx(classes.pair, { [classes.send]: direction })}
                                 justifyContent="center"
                                 gap={2}
                                 direction="row">

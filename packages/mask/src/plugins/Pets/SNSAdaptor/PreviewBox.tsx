@@ -1,6 +1,5 @@
-import { makeStyles, useStylesExtends } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
-import classNames from 'classnames'
 import { useI18N } from '../locales/index.js'
 import type { OwnerERC721TokenInfo } from '../types.js'
 import { ImageLoader } from './ImageLoader.js'
@@ -121,7 +120,7 @@ interface Props {
 }
 
 export function PreviewBox(props: Props) {
-    const classes = useStylesExtends(useStyles(), {})
+    const { classes, cx } = useStyles()
     const t = useI18N()
 
     const renderPreview = (mediaUrl: string, imageUrl: string) => {
@@ -143,7 +142,7 @@ export function PreviewBox(props: Props) {
         <div className={classes.box}>
             {props.message && (
                 <div
-                    className={classNames({
+                    className={cx({
                         [classes.msgBox]: true,
                         [classes.wordShow]: true,
                     })}>

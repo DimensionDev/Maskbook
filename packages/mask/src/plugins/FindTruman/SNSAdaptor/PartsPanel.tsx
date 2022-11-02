@@ -102,7 +102,6 @@ const useStyles = makeStyles()((theme, props) => ({
 interface PartsPanelProps {}
 
 export default function PartsPanel(props: PartsPanelProps) {
-    const { classes } = useStyles()
     const { t } = useContext(FindTrumanContext)
     const { account } = useChainContext()
 

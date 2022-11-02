@@ -4,7 +4,6 @@ import { useStylesExtends, makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { useI18N } from '../../utils/index.js'
 import { isMobileFacebook } from '../../social-network-adaptor/facebook.com/utils/isMobile.js'
 import { MaskSharpIcon, MaskIconInMinds } from '@masknet/shared'
-import classNames from 'classnames'
 import GuideStep from '../GuideStep/index.js'
 
 interface TooltipConfigProps {
@@ -46,7 +45,7 @@ const ICON_MAP: Record<string, JSX.Element> = {
 const EntryIconButton = memo((props: PostDialogHintUIProps) => {
     const { t } = useI18N()
     const { tooltip, disableGuideTip } = props
-    const classes = useStylesExtends(useStyles(), props)
+    const { classes, cx } = useStylesExtends(useStyles(), props)
 
     const getEntry = () => (
         <ShadowRootTooltip
@@ -59,7 +58,7 @@ const EntryIconButton = memo((props: PostDialogHintUIProps) => {
             arrow>
             <IconButton
                 size="large"
-                className={classNames(classes.button, classes.iconButton)}
+                className={cx(classes.button, classes.iconButton)}
                 onClick={props.onHintButtonClicked}>
                 {ICON_MAP?.[props?.iconType ?? 'default']}
             </IconButton>
@@ -77,7 +76,7 @@ const EntryIconButton = memo((props: PostDialogHintUIProps) => {
 
 export const PostDialogHint = memo(function PostDialogHintUI(props: PostDialogHintUIProps) {
     const { onHintButtonClicked, size, ...others } = props
-    const classes = useStylesExtends(useStyles(), props)
+    const { classes } = useStylesExtends(useStyles(), props)
     const { t } = useI18N()
 
     return isMobileFacebook ? (

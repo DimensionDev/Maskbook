@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
 import { makeStyles } from '@masknet/theme'
-import classNames from 'classnames'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { Typography } from '@mui/material'
 import { PluginPetMessages } from '../messages.js'
@@ -67,7 +66,7 @@ const useStyles = makeStyles()(() => ({
 
 function RightMenu(props: Props) {
     const t = useI18N()
-    const { classes } = useStyles()
+    const { classes, cx } = useStyles()
     const refMenuDom = useRef<HTMLDivElement>(null)
     const visitor = useCurrentVisitingUser(0)
     const whoAmI = useLastRecognizedIdentity()
@@ -124,7 +123,7 @@ function RightMenu(props: Props) {
             ref={refMenuDom}
             onMouseDown={stopPop}
             onMouseUp={stopPop}
-            className={classNames(classes.menu, {
+            className={cx(classes.menu, {
                 [classes.show]: props.isShow,
             })}
             style={{

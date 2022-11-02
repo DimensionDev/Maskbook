@@ -1,5 +1,4 @@
 import { memo } from 'react'
-import classNames from 'classnames'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { isDashboardPage } from '@masknet/shared-base'
 import { makeStyles, MaskColorVar, LoadingBase } from '@masknet/theme'
@@ -111,7 +110,7 @@ export const TraderInfoUI = memo<TraderInfoUIProps>(
         const isDashboard = isDashboardPage()
 
         const { t } = useI18N()
-        const { classes } = useStyles({ isDashboard })
+        const { classes, cx } = useStyles({ isDashboard })
 
         if (loading)
             return (
@@ -129,7 +128,7 @@ export const TraderInfoUI = memo<TraderInfoUIProps>(
                 onClick={onClick}
                 value={balance}
                 InputProps={{
-                    className: classNames(classes.trade, isFocus ? classes.focus : null),
+                    className: cx(classes.trade, isFocus ? classes.focus : null),
                     disableUnderline: true,
                     startAdornment: (
                         <Box
@@ -192,7 +191,7 @@ export const DefaultTraderPlaceholderUI = memo<DefaultTraderPlaceholderUIProps>(
     const isDashboard = isDashboardPage()
 
     const { t } = useI18N()
-    const { classes } = useStyles({ isDashboard })
+    const { classes, cx } = useStyles({ isDashboard })
 
     return (
         <TextField
@@ -201,7 +200,7 @@ export const DefaultTraderPlaceholderUI = memo<DefaultTraderPlaceholderUIProps>(
             variant="filled"
             value={0}
             InputProps={{
-                className: classNames(classes.trade, classes.focus),
+                className: cx(classes.trade, classes.focus),
                 disableUnderline: true,
                 startAdornment: (
                     <Box

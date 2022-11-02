@@ -1,6 +1,5 @@
 import { FC, HTMLProps, useCallback, useMemo } from 'react'
 import { useBoolean } from 'react-use'
-import classnames from 'classnames'
 import { uniqWith } from 'lodash-unified'
 import { Icons } from '@masknet/icons'
 import { useChainContext, useNonFungibleAssets, useNetworkContext } from '@masknet/web3-hooks-base'
@@ -121,7 +120,7 @@ export const NFTSection: FC<Props> = ({ className, onEmpty, ...rest }) => {
     }, [])
 
     return (
-        <div className={classnames(classes.root, className)} {...rest}>
+        <div className={cx(classes.root, className)} {...rest}>
             <FormControl className={classes.header}>
                 {isEvm ? (
                     <Typography className={classes.addButton} onClick={() => openAddTokenDialog(true)}>

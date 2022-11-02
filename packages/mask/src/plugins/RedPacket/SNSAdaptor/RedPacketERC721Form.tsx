@@ -1,5 +1,4 @@
 import { useState, useCallback, useEffect, useMemo } from 'react'
-import classNames from 'classnames'
 import { Box, Typography, List, ListItem } from '@mui/material'
 import { makeStyles, ActionButton, LoadingBase } from '@masknet/theme'
 import { Check as CheckIcon, Close as CloseIcon, AddCircleOutline as AddCircleOutlineIcon } from '@mui/icons-material'
@@ -215,7 +214,7 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
         openSelectNFTDialog,
         setOpenSelectNFTDialog,
     } = props
-    const { classes } = useStyles()
+    const { classes, cx } = useStyles()
     const [balance, setBalance] = useState(0)
     const [selectOption, setSelectOption] = useState<NFTSelectOption | undefined>(undefined)
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
@@ -326,7 +325,7 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                         // TODO: replace to radio
                         <Box className={classes.selectWrapper}>
                             <div
-                                className={classNames(
+                                className={cx(
                                     classes.optionLeft,
                                     classes.option,
                                     tokenDetailedOwnerList.length === 0 ? classes.disabledSelector : null,
@@ -336,7 +335,7 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                                     setAllTokenDetailedList(tokenDetailedOwnerList.slice(0, maxSelectShares))
                                 }}>
                                 <div
-                                    className={classNames(
+                                    className={cx(
                                         classes.checkIconWrapper,
                                         selectOption === NFTSelectOption.All ? classes.checked : '',
                                     )}>
@@ -355,7 +354,7 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                             </div>
                             <div className={classes.option} onClick={() => setSelectOption(NFTSelectOption.Partial)}>
                                 <div
-                                    className={classNames(
+                                    className={cx(
                                         classes.checkIconWrapper,
                                         selectOption === NFTSelectOption.Partial ? classes.checked : '',
                                     )}>
@@ -376,7 +375,7 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                             ))}
                             <ListItem
                                 onClick={() => setOpenSelectNFTDialog(true)}
-                                className={classNames(classes.tokenSelectorWrapper, classes.addWrapper)}>
+                                className={cx(classes.tokenSelectorWrapper, classes.addWrapper)}>
                                 <AddCircleOutlineIcon className={classes.addIcon} onClick={() => void 0} />
                             </ListItem>
                         </List>
@@ -427,10 +426,10 @@ interface NFTCardProps {
 
 function NFTCard(props: NFTCardProps) {
     const { token, removeToken, renderOrder } = props
-    const { classes } = useStyles()
+    const { classes, cx } = useStyles()
     const [name, setName] = useState(formatTokenId(token.tokenId, 2))
     return (
-        <ListItem className={classNames(classes.tokenSelectorWrapper)}>
+        <ListItem className={cx(classes.tokenSelectorWrapper)}>
             <NFTCardStyledAssetPlayer
                 contractAddress={token.contract?.address}
                 chainId={token.chainId}

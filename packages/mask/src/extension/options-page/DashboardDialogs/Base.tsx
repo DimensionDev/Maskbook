@@ -1,5 +1,4 @@
 import { cloneElement, useCallback, useReducer } from 'react'
-import classNames from 'classnames'
 import {
     DialogProps,
     Dialog,
@@ -258,7 +257,7 @@ interface DashboardDialogWrapperProps extends withClasses<'wrapper'> {
 /** @deprecated Do not use in new code */
 export function DashboardDialogWrapper(props: DashboardDialogWrapperProps) {
     const { size, icon, iconColor, primary, secondary, constraintSecondary = true, content, footer } = props
-    const { classes } = useDashboardDialogWrapperStyles(props)
+    const { classes, cx } = useDashboardDialogWrapperStyles(props)
     return (
         <ThemeProvider theme={dialogTheme}>
             <DialogContent className={classes.wrapper}>
@@ -268,7 +267,7 @@ export function DashboardDialogWrapper(props: DashboardDialogWrapperProps) {
                         {primary}
                     </Typography>
                     <Typography
-                        className={classNames(
+                        className={cx(
                             classes.secondary,
                             size !== 'small' && constraintSecondary ? classes.confineSecondary : '',
                         )}

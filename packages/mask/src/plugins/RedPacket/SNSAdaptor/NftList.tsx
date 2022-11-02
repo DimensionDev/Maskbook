@@ -1,7 +1,6 @@
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { ChainId, formatTokenId, SchemaType } from '@masknet/web3-shared-evm'
 import { List, ListItem, ListProps, Typography } from '@mui/material'
-import classnames from 'classnames'
 import { FC, HTMLProps, useState } from 'react'
 import { NFTCardStyledAssetPlayer } from '@masknet/shared'
 import type { NonFungibleTokenContract } from '@masknet/web3-shared-base'
@@ -89,11 +88,11 @@ interface NftItemProps extends HTMLProps<HTMLDivElement> {
 
 export const NftItem: FC<NftItemProps> = ({ contract, tokenId, className, claimed, renderOrder, ...rest }) => {
     const t = useI18N()
-    const { classes } = useStyles()
+    const { classes, cx } = useStyles()
     const [name, setName] = useState(formatTokenId(tokenId, 2))
 
     return (
-        <div className={classnames(className, classes.nft)} {...rest}>
+        <div className={cx(className, classes.nft)} {...rest}>
             <NFTCardStyledAssetPlayer
                 classes={{
                     fallbackImage: classes.fallbackImage,
@@ -117,9 +116,9 @@ interface NftListProps extends ListProps {
 }
 
 export const NftList: FC<NftListProps> = ({ contract, statusList, tokenIds, className, ...rest }) => {
-    const { classes } = useStyles()
+    const { classes, cx } = useStyles()
     return (
-        <List className={classnames(className, classes.list)} {...rest}>
+        <List className={cx(className, classes.list)} {...rest}>
             {tokenIds.map((tokenId, index) => (
                 <ListItem className={classes.listItem} key={tokenId}>
                     <NftItem contract={contract} claimed={statusList[index]} tokenId={tokenId} renderOrder={index} />

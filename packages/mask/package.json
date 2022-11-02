@@ -84,7 +84,6 @@
     "bignumber.js": "9.1.0",
     "bip39": "^3.0.2",
     "buffer": "^6.0.3",
-    "classnames": "^2.3.1",
     "clipboard-polyfill": "^3.0.3",
     "color": "^4.2.3",
     "crypto-browserify": "^3.12.0",

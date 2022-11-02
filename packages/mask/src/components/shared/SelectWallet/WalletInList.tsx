@@ -42,7 +42,7 @@ export interface WalletInListProps extends withClasses<never> {
 
 export function WalletInList(props: WalletInListProps) {
     const { t } = useI18N()
-    const classes = useStylesExtends(useStyle(), props)
+    const { classes } = useStylesExtends(useStyle(), props)
     const { wallet, selected = false, disabled = false, onClick, ListItemProps } = props
     const blockie = useBlockie(wallet.address)
 

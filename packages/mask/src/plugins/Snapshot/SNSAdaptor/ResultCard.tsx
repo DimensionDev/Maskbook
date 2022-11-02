@@ -1,5 +1,4 @@
 import { useContext, useRef, useEffect, useState, useMemo } from 'react'
-import classNames from 'classnames'
 import { Box, List, ListItem, Typography, LinearProgress, styled, Button, linearProgressClasses } from '@mui/material'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { useI18N } from '../../../utils/index.js'
@@ -91,7 +90,7 @@ function Content() {
     const {
         payload: { results },
     } = useResults(identifier)
-    const { classes } = useStyles()
+    const { classes, cx } = useStyles()
     const { t } = useI18N()
     const listRef = useRef<HTMLSpanElement[]>([])
     const [tooltipsVisible, setTooltipsVisible] = useState<readonly boolean[]>(
@@ -135,7 +134,7 @@ function Content() {
                                     ref={(ref) => {
                                         listRef.current[i] = ref!
                                     }}
-                                    className={classNames(classes.choice, classes.ellipsisText)}>
+                                    className={cx(classes.choice, classes.ellipsisText)}>
                                     {result.choice}
                                 </Typography>
                             </ShadowRootTooltip>

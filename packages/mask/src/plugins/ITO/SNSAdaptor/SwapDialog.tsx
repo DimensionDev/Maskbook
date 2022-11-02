@@ -93,7 +93,7 @@ export function SwapDialog(props: SwapDialogProps) {
 
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { Token } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
-    const classes = useStylesExtends(useStyles(), props)
+    const { classes } = useStylesExtends(useStyles(), props)
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
     const [ratio, setRatio] = useState<BigNumber>(
         new BigNumber(payload.exchange_amounts[0 * 2]).dividedBy(payload.exchange_amounts[0 * 2 + 1]),

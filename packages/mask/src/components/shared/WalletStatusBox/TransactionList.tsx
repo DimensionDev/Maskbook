@@ -7,7 +7,6 @@ import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { isSameAddress, RecentTransactionComputed, TransactionStatusType, Transaction } from '@masknet/web3-shared-base'
 import { getContractOwnerDomain } from '@masknet/web3-shared-evm'
 import { Grid, GridProps, Link, List, ListItem, ListProps, Stack, Typography } from '@mui/material'
-import classnames from 'classnames'
 import format from 'date-fns/format'
 import { noop } from 'lodash-unified'
 import { useI18N } from '../../../utils/index.js'
@@ -167,11 +166,11 @@ interface Props extends ListProps {
 }
 
 export const TransactionList: FC<Props> = forwardRef(({ className, transactions, onClear = noop, ...rest }, ref) => {
-    const { classes } = useStyles()
+    const { classes, cx } = useStyles()
     const { chainId } = useChainContext()
     if (!transactions.length) return null
     return (
-        <List className={classnames(classes.list, className)} {...rest} ref={ref}>
+        <List className={cx(classes.list, className)} {...rest} ref={ref}>
             {transactions.map((tx) => (
                 <ListItem key={tx.id} className={classes.listItem}>
                     <Transaction className={classes.transaction} transaction={tx} chainId={chainId} onClear={onClear} />

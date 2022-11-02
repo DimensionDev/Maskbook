@@ -1,5 +1,4 @@
 import { ChangeEvent, useCallback, useMemo } from 'react'
-import classNames from 'classnames'
 import { BigNumber } from 'bignumber.js'
 import { Box, Chip, ChipProps, InputProps, StandardTextFieldProps, Typography } from '@mui/material'
 import { makeStyles, MaskTextField, useStylesExtends } from '@masknet/theme'
@@ -81,7 +80,7 @@ export function TokenAmountPanel(props: TokenAmountPanelProps) {
         MaxChipProps,
     } = props
     const t = useSharedI18N()
-    const classes = useStylesExtends(useStyles(), props)
+    const { classes, cx } = useStylesExtends(useStyles(), props)
 
     // #region update amount by self
     const { RE_MATCH_WHOLE_AMOUNT, RE_MATCH_FRACTION_AMOUNT } = useMemo(
@@ -157,7 +156,7 @@ export function TokenAmountPanel(props: TokenAmountPanelProps) {
                             {balance !== '0' && !disableBalance ? (
                                 <Chip
                                     classes={{
-                                        root: classNames(classes.max, MaxChipProps?.classes?.root),
+                                        root: cx(classes.max, MaxChipProps?.classes?.root),
                                         ...MaxChipProps?.classes,
                                     }}
                                     size="small"

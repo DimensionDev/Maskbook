@@ -9,7 +9,6 @@ import { WalletConnectedBoundary, NFTCardStyledAssetPlayer, ChainBoundary } from
 import type { RedPacketNftJSONPayload } from '../types.js'
 import { useClaimNftRedpacketCallback } from './hooks/useClaimNftRedpacketCallback.js'
 import { useAvailabilityNftRedPacket } from './hooks/useAvailabilityNftRedPacket.js'
-import classNames from 'classnames'
 import { usePostLink } from '../../../components/DataSource/usePostInfo.js'
 import { activatedSocialNetworkUI } from '../../../social-network/index.js'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base.js'
@@ -191,7 +190,7 @@ export interface RedPacketNftProps {
 export function RedPacketNft({ payload }: RedPacketNftProps) {
     const { t: i18n } = useBaseI18N()
     const t = useI18N()
-    const { classes } = useStyles()
+    const { classes, cx } = useStyles()
     const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM)
     const { account, networkType } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
@@ -252,14 +251,14 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
     if (availabilityError)
         return (
             <div className={classes.root}>
-                <Card className={classNames(classes.card, classes.errorCard)} component="article" elevation={0}>
+                <Card className={cx(classes.card, classes.errorCard)} component="article" elevation={0}>
                     <img className={classes.errImage} src={rpNftImg} />
                     <Typography className={classes.whiteText} variant="h5">
                         {i18n('loading_failed')}
                     </Typography>
                     <Button
                         onClick={retryAvailability}
-                        className={classNames(classes.errorButton, classes.whiteText)}
+                        className={cx(classes.errorButton, classes.whiteText)}
                         variant="outlined">
                         {i18n('try_again')}
                     </Button>
@@ -279,12 +278,10 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
         <div className={classes.root}>
             <Card className={classes.card} component="article" elevation={0}>
                 <CardHeader
-                    className={classNames(classes.title, availability.isEnd ? classes.hide : '', classes.whiteText)}
+                    className={cx(classes.title, availability.isEnd ? classes.hide : '', classes.whiteText)}
                     title={<Typography className={classes.ellipsis}>{payload.message}</Typography>}
                     subheader={
-                        <span
-                            className={classNames(classes.link, classes.whiteText)}
-                            onClick={openAddressLinkOnExplorer}>
+                        <span className={cx(classes.link, classes.whiteText)} onClick={openAddressLinkOnExplorer}>
                             <Typography variant="body2">{payload.contractName}</Typography>
                             <LaunchIcon fontSize="small" className={classes.dimWhiteText} />
                         </span>
@@ -299,7 +296,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
                             tokenId={availability.claimed_id}
                             setSourceType={setSourceType}
                             classes={{
-                                iframe: classNames(
+                                iframe: cx(
                                     classes.assetPlayerIframe,
                                     sourceType === 'video' ? classes.assetPlayerVideoIframe : '',
                                 ),
@@ -338,18 +335,18 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
             {availability.isEnd ? (
                 <Card className={classes.coverCard}>
                     <CardHeader
-                        className={classNames(classes.title, classes.dim, classes.dimWhiteText)}
+                        className={cx(classes.title, classes.dim, classes.dimWhiteText)}
                         title={<Typography className={classes.ellipsis}>{payload.message}</Typography>}
                         subheader={
                             <span
-                                className={classNames(classes.link, classes.dimWhiteText)}
+                                className={cx(classes.link, classes.dimWhiteText)}
                                 onClick={openAddressLinkOnExplorer}>
                                 <Typography variant="body2">{payload.contractName}</Typography>
                                 <LaunchIcon fontSize="small" className={classes.dimWhiteText} />
                             </span>
                         }
                     />
-                    <div className={classNames(classes.badge, classes.whiteText)}>
+                    <div className={cx(classes.badge, classes.whiteText)}>
                         <Typography variant="body2" className={classes.badgeText}>
                             {availability.expired ? t.expired() : t.completed()}
                         </Typography>

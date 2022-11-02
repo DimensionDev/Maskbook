@@ -1,5 +1,4 @@
 import { HTMLProps, memo } from 'react'
-import classnames from 'classnames'
 import formatDateTime from 'date-fns/format'
 import { useReverseAddress, useWeb3State } from '@masknet/web3-hooks-base'
 import { AssetPreviewer } from '@masknet/shared'
@@ -69,7 +68,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export const DonationCard = memo(({ donation, socialAccount, onSelect, className, ...rest }: DonationCardProps) => {
-    const { classes } = useStyles()
+    const { classes, cx } = useStyles()
     const t = useI18N()
     const { value: domain } = useReverseAddress(socialAccount.pluginID, socialAccount.address)
     const { Others } = useWeb3State(socialAccount.pluginID)
@@ -82,7 +81,7 @@ export const DonationCard = memo(({ donation, socialAccount, onSelect, className
     const action = donation.actions[0]
 
     return (
-        <div onClick={() => onSelect(donation)} className={classnames(classes.card, className)} {...rest}>
+        <div onClick={() => onSelect(donation)} className={cx(classes.card, className)} {...rest}>
             <Card className={classes.img}>
                 <AssetPreviewer
                     url={action.metadata?.logo || RSS3_DEFAULT_IMAGE}
