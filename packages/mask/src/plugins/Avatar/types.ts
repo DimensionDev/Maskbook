@@ -1,5 +1,4 @@
 import type { Web3Helper } from '@masknet/web3-helpers'
-import type { NonFungibleToken } from '@masknet/web3-shared-base'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 
@@ -23,7 +22,7 @@ export interface NFT {
     slug: string
 }
 
-export type AllChainsNonFungibleToken = NonFungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
+export type AllChainsNonFungibleToken = Web3Helper.NonFungibleTokenAll
 
 export interface SelectTokenInfo {
     account: string
