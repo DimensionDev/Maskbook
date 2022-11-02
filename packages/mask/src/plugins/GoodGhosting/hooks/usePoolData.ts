@@ -61,7 +61,7 @@ export function usePoolAssets(): AsyncStateRetry<GameAssets> {
         loading: gameTokenLoading,
         error: gameTokenError,
         retry: gameTokenRetry,
-    } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, gameToken.address, {
+    } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, gameToken.address, undefined, {
         chainId,
     })
     const {
@@ -69,7 +69,7 @@ export function usePoolAssets(): AsyncStateRetry<GameAssets> {
         loading: rewardTokenLoading,
         error: rewardTokenError,
         retry: rewardTokenRetry,
-    } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, rewardToken.address, {
+    } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, rewardToken.address, undefined, {
         chainId,
     })
 

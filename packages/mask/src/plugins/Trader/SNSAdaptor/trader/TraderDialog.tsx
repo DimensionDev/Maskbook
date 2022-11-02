@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { PluginID, NetworkPluginID, isDashboardPage, CrossIsolationMessages } from '@masknet/shared-base'
 import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
-import { Web3ContextProvider, useChainContext, useChainIdValid } from '@masknet/web3-hooks-base'
+import { Web3ContextProvider, useChainContext, useChainIdValid, useFungibleToken } from '@masknet/web3-hooks-base'
 import { ChainId, isNativeTokenAddress, SchemaType } from '@masknet/web3-shared-evm'
 import { DialogContent, dialogTitleClasses, IconButton } from '@mui/material'
 import { InjectedDialog, useSelectAdvancedSettings, NetworkTab } from '@masknet/shared'
@@ -10,7 +10,7 @@ import { PluginTraderMessages } from '../../messages.js'
 import { Trader, TraderRef, TraderProps } from './Trader.js'
 import { useI18N } from '../../../../utils/index.js'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { createFungibleToken } from '@masknet/web3-shared-base'
+import { createFungibleToken, FungibleToken } from '@masknet/web3-shared-base'
 import { Icons } from '@masknet/icons'
 import { currentSlippageSettings } from '../../settings.js'
 import { MIN_GAS_LIMIT } from '../../constants/index.js'
@@ -79,6 +79,34 @@ export function TraderDialog() {
 
     const [traderProps, setTraderProps] = useState<TraderProps>()
     const chainIdRef = useRef<ChainId>(chainId)
+    const defaultInputCoin = traderProps?.defaultInputCoin
+    const defaultOutputCoin = traderProps?.defaultOutputCoin
+
+    const { value: inputToken } = useFungibleToken(
+        undefined,
+        defaultInputCoin?.address,
+        createFungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>(
+            chainIdRef.current,
+            isNativeTokenAddress(defaultInputCoin?.address) ? SchemaType.Native : SchemaType.ERC20,
+            defaultInputCoin?.address ?? '',
+            defaultInputCoin?.name ?? '',
+            defaultInputCoin?.symbol ?? '',
+            defaultInputCoin?.decimals ?? 0,
+        ),
+    )
+    const { value: outputToken } = useFungibleToken(
+        undefined,
+        defaultOutputCoin?.address,
+        createFungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>(
+            chainIdRef.current,
+            isNativeTokenAddress(defaultOutputCoin?.address) ? SchemaType.Native : SchemaType.ERC20,
+            defaultOutputCoin?.address ?? '',
+            defaultOutputCoin?.name ?? '',
+            defaultOutputCoin?.symbol ?? '',
+            defaultOutputCoin?.decimals ?? 0,
+        ),
+    )
+
     const [open, setOpen] = useState(false)
 
     const selectAdvancedSettings = useSelectAdvancedSettings(NetworkPluginID.PLUGIN_EVM)
@@ -93,30 +121,13 @@ export function TraderDialog() {
             setOpen(open)
             if (traderProps) {
                 const { defaultInputCoin, defaultOutputCoin } = traderProps
-                const inputToken = defaultInputCoin
-                    ? createFungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>(
-                          chainIdRef.current,
-                          isNativeTokenAddress(defaultInputCoin.address) ? SchemaType.Native : SchemaType.ERC20,
-                          defaultInputCoin.address,
-                          defaultInputCoin.name,
-                          defaultInputCoin.symbol,
-                          defaultInputCoin.decimals ?? 0,
-                      )
-                    : undefined
-                const outputToken = defaultOutputCoin
-                    ? createFungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>(
-                          chainIdRef.current,
-                          isNativeTokenAddress(defaultOutputCoin.address) ? SchemaType.Native : SchemaType.ERC20,
-                          defaultOutputCoin.address,
-                          defaultOutputCoin.name,
-                          defaultOutputCoin.symbol,
-                          defaultOutputCoin.decimals ?? 0,
-                      )
-                    : undefined
 
                 setTraderProps({
-                    defaultInputCoin: inputToken,
-                    defaultOutputCoin: outputToken,
+                    defaultInputCoin: defaultInputCoin as FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>,
+                    defaultOutputCoin: defaultOutputCoin as FungibleToken<
+                        ChainId,
+                        SchemaType.Native | SchemaType.ERC20
+                    >,
                     chainId: traderProps.chainId,
                 })
             }
@@ -183,7 +194,16 @@ export function TraderDialog() {
                 <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM, chainId }}>
                     <AllProviderTradeContext.Provider>
                         <Trader
-                            {...traderProps}
+                            defaultInputCoin={
+                                defaultInputCoin
+                                    ? (inputToken as FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>)
+                                    : undefined
+                            }
+                            defaultOutputCoin={
+                                defaultOutputCoin
+                                    ? (outputToken as FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>)
+                                    : undefined
+                            }
                             chainId={chainId}
                             classes={{ root: classes.tradeRoot }}
                             ref={tradeRef}

@@ -309,9 +309,14 @@ export const FungibleTokenList = forwardRef(
                 : ''
         }, [keyword, sortedFungibleTokensForList, Others, mode])
 
-        const { value: searchedToken, loading: searchingToken } = useFungibleToken(pluginID, searchedTokenAddress, {
-            chainId,
-        })
+        const { value: searchedToken, loading: searchingToken } = useFungibleToken(
+            pluginID,
+            searchedTokenAddress,
+            undefined,
+            {
+                chainId,
+            },
+        )
         const { value: tokenBalance = '' } = useFungibleTokenBalance(pluginID, searchedToken?.address, {
             chainId,
             account,
