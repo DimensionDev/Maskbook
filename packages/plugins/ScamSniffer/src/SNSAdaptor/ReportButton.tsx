@@ -1,5 +1,5 @@
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
-import { Report as ReportIcon , HourglassBottom as HourglassBottomIcon } from '@mui/icons-material'
+import { Report as ReportIcon, HourglassBottom as HourglassBottomIcon } from '@mui/icons-material'
 import IconButton from '@mui/material/IconButton'
 import { PluginScamRPC } from '../messages.js'
 import { usePostInfoDetails } from '@masknet/plugin-infra/content-script'

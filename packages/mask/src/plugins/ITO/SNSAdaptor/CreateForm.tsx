@@ -16,7 +16,7 @@ import {
 import { NetworkPluginID } from '@masknet/shared-base'
 import { Box, Stack, Typography, InputBase, inputBaseClasses } from '@mui/material'
 import { makeStyles, useStylesExtends, ActionButton, LoadingBase } from '@masknet/theme'
-import { Check as CheckIcon , Close as UnCheckIcon } from '@mui/icons-material'
+import { Check as CheckIcon, Close as UnCheckIcon } from '@mui/icons-material'
 import {
     useCurrentIdentity,
     useCurrentLinkedPersona,

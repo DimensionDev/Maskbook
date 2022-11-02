@@ -1,7 +1,10 @@
 import { Typography, MenuItem, Link, Stack } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useMenuConfig } from '@masknet/shared'
-import { RadioButtonUnchecked as RadioButtonUncheckedIcon , ArrowDropDown as ArrowDropDownIcon } from '@mui/icons-material'
+import {
+    RadioButtonUnchecked as RadioButtonUncheckedIcon,
+    ArrowDropDown as ArrowDropDownIcon,
+} from '@mui/icons-material'
 import { Icons } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => ({

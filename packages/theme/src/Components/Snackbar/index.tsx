@@ -13,7 +13,7 @@ import {
 } from 'notistack'
 import classnames from 'classnames'
 import { Typography, IconButton, alpha } from '@mui/material'
-import { Close as CloseIcon , Warning as WarningIcon , Info as InfoIcon } from '@mui/icons-material'
+import { Close as CloseIcon, Warning as WarningIcon, Info as InfoIcon } from '@mui/icons-material'
 import { Icons } from '@masknet/icons'
 import { makeStyles, useStylesExtends } from '../../UIHelper/index.js'
 import { MaskColorVar } from '../../CSSVariables/index.js'

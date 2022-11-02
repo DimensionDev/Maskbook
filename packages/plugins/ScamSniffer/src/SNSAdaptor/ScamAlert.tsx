@@ -1,6 +1,6 @@
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { Typography, FormControlLabel, List, ListItemButton, ListItemIcon, ListItemText } from '@mui/material'
-import { Twitter as TwitterIcon , Link as LinkIcon , Description as DescriptionIcon } from '@mui/icons-material'
+import { Twitter as TwitterIcon, Link as LinkIcon, Description as DescriptionIcon } from '@mui/icons-material'
 import Checkbox from '@mui/material/Checkbox'
 import type { ScamResult } from '@scamsniffer/detector'
 import { PluginScamRPC } from '../messages.js'

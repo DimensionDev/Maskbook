@@ -1,7 +1,12 @@
 import { Icons } from '@masknet/icons'
 import { Box, IconButton, Link, Typography } from '@mui/material'
 import { makeStyles, getMaskColor } from '@masknet/theme'
-import { Facebook as FacebookIcon , GitHub as GitHubIcon , Telegram as TelegramIcon , Twitter as TwitterIcon } from '@mui/icons-material'
+import {
+    Facebook as FacebookIcon,
+    GitHub as GitHubIcon,
+    Telegram as TelegramIcon,
+    Twitter as TwitterIcon,
+} from '@mui/icons-material'
 import { useDashboardI18N } from '../../locales/index.js'
 import { Version } from './Version.js'
 import links from './links.json'
