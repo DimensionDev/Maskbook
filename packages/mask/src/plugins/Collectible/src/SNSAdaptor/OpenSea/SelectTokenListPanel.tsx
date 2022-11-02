@@ -41,10 +41,10 @@ const useStyles = makeStyles()((theme) => ({
 export interface SelectTokenPanelProps {
     amount: string
     balance: string
-    token?: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
-    tokens?: Array<FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>
+    token?: Web3Helper.FungibleTokenAll
+    tokens?: Array<Web3Helper.FungibleTokenAll>
     onAmountChange: (amount: string) => void
-    onTokenChange: (token: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>) => void
+    onTokenChange: (token: Web3Helper.FungibleTokenAll) => void
 }
 
 export function SelectTokenListPanel(props: SelectTokenPanelProps) {

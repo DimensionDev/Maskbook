@@ -34,7 +34,7 @@ const useStyles = makeStyles()((theme) => {
 })
 
 export interface SelectTokenChipProps extends withClasses<'chip' | 'tokenIcon' | 'noToken'> {
-    token?: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll> | null
+    token?: Web3Helper.FungibleTokenAll | null
     error?: Error
     loading?: boolean
     readonly?: boolean

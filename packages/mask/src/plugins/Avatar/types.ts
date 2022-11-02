@@ -23,7 +23,7 @@ export interface NFT {
     slug: string
 }
 
-export type AllChainsNonFungibleToken = NonFungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
+export type AllChainsNonFungibleToken = NonWeb3Helper.FungibleTokenAll
 
 export interface SelectTokenInfo {
     account: string

@@ -18,8 +18,8 @@ export interface TipContextOptions {
     tipType: TipsType
     setTipType: Dispatch<SetStateAction<TipsType>>
     recipients: SocialAccount[]
-    token: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll> | null
-    setToken: Dispatch<SetStateAction<FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll> | null>>
+    token: Web3Helper.FungibleTokenAll | null
+    setToken: Dispatch<SetStateAction<Web3Helper.FungibleTokenAll | null>>
     amount: string
     setAmount: Dispatch<SetStateAction<string>>
     nonFungibleTokenId: string | null
@@ -30,7 +30,7 @@ export interface TipContextOptions {
     sendTip: () => Promise<string | undefined>
     isSending: boolean
     isDirty: boolean
-    storedTokens: Array<NonFungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>
+    storedTokens: Array<NonWeb3Helper.FungibleTokenAll>
     reset: () => void
     setGasOption: Dispatch<SetStateAction<GasOptionConfig | undefined>>
     gasOption: GasOptionConfig | undefined

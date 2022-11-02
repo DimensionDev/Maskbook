@@ -1,8 +1,9 @@
+import { useCallback, useMemo, useState } from 'react'
+import BigNumber from 'bignumber.js'
 import { useValueRef } from '@masknet/shared-base-ui'
 import type { TradeComputed } from '../../types/index.js'
 import { createNativeToken, formatUSD, formatWeiToEther, GasOptionConfig } from '@masknet/web3-shared-evm'
-import { useCallback, useMemo, useState } from 'react'
-import { formatBalance, formatCurrency, FungibleToken, leftShift, multipliedBy } from '@masknet/web3-shared-base'
+import { formatBalance, formatCurrency, leftShift, multipliedBy } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { currentSlippageSettings } from '../../settings.js'
 import { useNativeTokenPrice, useFungibleTokenPrice, useChainContext } from '@masknet/web3-hooks-base'
@@ -13,15 +14,14 @@ import { ConfirmDialogUI } from './components/ConfirmDialogUI.js'
 import { useSelectAdvancedSettings } from '@masknet/shared'
 import { PriceImpactDialogUI } from './components/PriceImpactDialogUI.js'
 import { AllProviderTradeContext } from '../../trader/useAllProviderTradeContext.js'
-import BigNumber from 'bignumber.js'
 import { MIN_GAS_LIMIT } from '../../constants/index.js'
 
 export interface ConfirmDialogProps {
     open: boolean
     onClose: () => void
     trade: TradeComputed
-    inputToken: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
-    outputToken: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
+    inputToken: Web3Helper.FungibleTokenAll
+    outputToken: Web3Helper.FungibleTokenAll
     gas?: number
     gasPrice?: string
     gasConfig?: GasOptionConfig

@@ -77,7 +77,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 interface NFTItemProps {
-    token: NonFungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
+    token: NonWeb3Helper.FungibleTokenAll
 }
 
 export const NFTItem: FC<NFTItemProps> = ({ token }) => {

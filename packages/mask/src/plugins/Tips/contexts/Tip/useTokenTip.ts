@@ -8,7 +8,7 @@ import type { TipTuple } from './type.js'
 export function useTokenTip<T extends NetworkPluginID>(
     pluginID: T,
     recipient: string,
-    token: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll> | null,
+    token: Web3Helper.FungibleTokenAll | null,
     amount: string,
     options?: Web3Helper.Web3ConnectionOptions<T>,
 ): TipTuple {

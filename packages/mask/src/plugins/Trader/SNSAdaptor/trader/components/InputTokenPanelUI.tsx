@@ -129,7 +129,7 @@ export interface InputTokenPanelUIProps extends withClasses<'root'> {
     amount: string
     chainId: Web3Helper.ChainIdAll
     maxAmount: string
-    token?: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll> | null
+    token?: Web3Helper.FungibleTokenAll | null
     tokenValueUSD: string
     onAmountChange: (amount: string) => void
     SelectTokenChip?: Partial<SelectTokenChipProps>

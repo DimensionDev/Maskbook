@@ -8,7 +8,7 @@ export const calculateMinimumReturn = ({
     toAmount,
     slippage,
 }: {
-    toToken: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
+    toToken: Web3Helper.FungibleTokenAll
     toAmount: string | undefined
     slippage: number
 }): string => {

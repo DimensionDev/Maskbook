@@ -21,7 +21,7 @@ import { SettingsContext } from '../SettingsBoard/Context.js'
 interface SelectGasSettingsToolbarProps<T extends NetworkPluginID = NetworkPluginID> {
     pluginID?: T
     chainId?: Web3Helper.ChainIdAll
-    nativeToken: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
+    nativeToken: Web3Helper.FungibleTokenAll
     nativeTokenPrice: number
     gasLimit: number
     gasOption?: GasOptionConfig

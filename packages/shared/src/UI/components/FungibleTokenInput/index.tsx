@@ -21,7 +21,7 @@ export interface FungibleTokenInputProps {
     disableBalance?: boolean
     placeholder?: string
     loadingBalance?: boolean
-    token?: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll> | null
+    token?: Web3Helper.FungibleTokenAll | null
     onSelectToken?: () => void
     onAmountChange: (amount: string) => void
 }

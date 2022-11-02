@@ -109,7 +109,7 @@ interface FungibleTokenInputUIProps extends InputBaseProps {
     label: string
     disableMax?: boolean
     isNative?: boolean
-    token?: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll> | null
+    token?: Web3Helper.FungibleTokenAll | null
     onSelectToken?: () => void
     onMaxClick: () => void
     balance: string
