@@ -13,7 +13,7 @@ export class SCWalletProvider extends BaseProvider implements EVM_Provider {
     }
 
     override async createWeb3Provider(options?: ProviderOptions<ChainId>): Promise<Web3Provider> {
-        throw new Error('To be implemented.')
+        throw new Error('To be implemented')
     }
 
     override async request<T extends unknown>(
@@ -25,11 +25,11 @@ export class SCWalletProvider extends BaseProvider implements EVM_Provider {
     }
 
     override async connect(): Promise<{ chainId: ChainId; account: string }> {
-        throw new Error('To be implemented.')
+        throw new Error('To be implemented')
     }
 
     override async disconnect(): Promise<void> {
-        throw new Error('To be implemented.')
+        throw new Error('To be implemented')
     }
 
     protected async deploy(): Promise<void> {}

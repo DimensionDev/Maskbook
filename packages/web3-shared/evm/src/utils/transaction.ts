@@ -1,16 +1,15 @@
-import { sha3, toHex } from 'web3-utils'
-import { unreachable } from '@masknet/kit'
-import { Transaction, TransactionStateType, EthereumMethodType, ChainId } from '../types/index.js'
-import { isEmptyHex } from './address.js'
+import type Web3 from 'web3'
+import { identity, pickBy } from 'lodash-unified'
+import { AbiItem, hexToNumber, sha3, toHex } from 'web3-utils'
+import type {
+    BaseContract,
+    NonPayableTransactionObject,
+    PayableTransactionObject,
+    PayableTx,
+} from '@masknet/web3-contracts/types/types'
+import { isValidAddress, isEmptyHex } from './address.js'
+import { Transaction, EthereumMethodType, ChainId } from '../types/index.js'
 import { ZERO_ADDRESS } from '../constants/index.js'
-
-export function isEIP1559Transaction(receipt: Transaction) {
-    return typeof receipt.maxFeePerGas !== 'undefined' && typeof receipt.maxPriorityFeePerGas !== 'undefined'
-}
-
-export function isFinalState(type: TransactionStateType) {
-    return [TransactionStateType.CONFIRMED, TransactionStateType.FAILED].includes(type)
-}
 
 const RISK_METHOD_LIST = [
     EthereumMethodType.ETH_SIGN,
@@ -23,45 +22,6 @@ const RISK_METHOD_LIST = [
 
 export function isRiskMethod(method: EthereumMethodType) {
     return RISK_METHOD_LIST.includes(method)
-}
-
-/**
- * UNKNOWN -> WAIT_FOR_CONFIRMING
- * UNKNOWN, WAIT_FOR_CONFIRMING -> HASH
- * UNKNOWN, WAIT_FOR_CONFIRMING, HASH -> RECEIPT
- * WAIT_FOR_CONFIRMING, HASH, RECEIPT -> CONFIRMED
- * UNKNOWN, WAIT_FOR_CONFIRMING, HASH, RECEIPT -> FAILED
- */
-export function isNextStateAvailable(type: TransactionStateType, nextType: TransactionStateType) {
-    switch (nextType) {
-        case TransactionStateType.UNKNOWN:
-            return false
-        case TransactionStateType.WAIT_FOR_CONFIRMING:
-            return [TransactionStateType.UNKNOWN].includes(type)
-        case TransactionStateType.HASH:
-            return [TransactionStateType.UNKNOWN, TransactionStateType.WAIT_FOR_CONFIRMING].includes(type)
-        case TransactionStateType.RECEIPT:
-            return [
-                TransactionStateType.UNKNOWN,
-                TransactionStateType.WAIT_FOR_CONFIRMING,
-                TransactionStateType.HASH,
-            ].includes(type)
-        case TransactionStateType.CONFIRMED:
-            return [
-                TransactionStateType.WAIT_FOR_CONFIRMING,
-                TransactionStateType.HASH,
-                TransactionStateType.RECEIPT,
-            ].includes(type)
-        case TransactionStateType.FAILED:
-            return [
-                TransactionStateType.UNKNOWN,
-                TransactionStateType.WAIT_FOR_CONFIRMING,
-                TransactionStateType.HASH,
-                TransactionStateType.RECEIPT,
-            ].includes(type)
-        default:
-            unreachable(nextType)
-    }
 }
 
 export function getData(config: Transaction) {
@@ -93,4 +53,79 @@ export function getTransactionSignature(chainId?: ChainId, transaction?: Partial
     if (!chainId || !transaction) return
     const { from, to, data, value } = transaction
     return sha3([chainId, from, to, data || '0x0', toHex((value as string) || '0x0') || '0x0'].join('_')) ?? undefined
+}
+
+export function encodeTransaction(transaction: Transaction): PayableTx & {
+    maxPriorityFeePerGas?: string
+    maxFeePerGas?: string
+} {
+    return pickBy(
+        {
+            from: transaction?.from as string | undefined,
+            to: transaction.to,
+            value: transaction?.value ? toHex(transaction.value) : undefined,
+            gas: transaction?.gas ? toHex(transaction.gas) : undefined,
+            gasPrice: transaction?.gasPrice ? toHex(transaction.gasPrice) : undefined,
+            maxPriorityFeePerGas: transaction?.maxPriorityFeePerGas
+                ? toHex(transaction.maxPriorityFeePerGas)
+                : undefined,
+            maxFeePerGas: transaction?.maxFeePerGas ? toHex(transaction.maxFeePerGas) : undefined,
+            data: transaction.data,
+            nonce: transaction?.nonce ? toHex(transaction.nonce) : undefined,
+            chainId: transaction?.chainId ? toHex(transaction.chainId) : undefined,
+        },
+        identity,
+    )
+}
+
+export async function encodeContractTransaction(
+    contract: BaseContract,
+    transaction: PayableTransactionObject<unknown> | NonPayableTransactionObject<unknown>,
+    overrides?: Partial<Transaction>,
+) {
+    const tx: PayableTx & {
+        maxPriorityFeePerGas?: string
+        maxFeePerGas?: string
+    } = {
+        from: (overrides?.from as string | undefined) ?? contract.defaultAccount ?? '',
+        to: contract.options.address,
+        data: transaction.encodeABI(),
+        value: overrides?.value ? toHex(overrides.value) : undefined,
+        gas: overrides?.gas ? toHex(overrides.gas) : undefined,
+        gasPrice: overrides?.gasPrice ? toHex(overrides.gasPrice) : undefined,
+        maxPriorityFeePerGas: overrides?.maxPriorityFeePerGas ? toHex(overrides.maxPriorityFeePerGas) : undefined,
+        maxFeePerGas: overrides?.maxFeePerGas ? toHex(overrides.maxFeePerGas) : undefined,
+        nonce: overrides?.nonce ? toHex(overrides.nonce) : undefined,
+        chainId: overrides?.chainId ? toHex(overrides.chainId) : undefined,
+    }
+
+    if (!tx.gas) {
+        tx.gas = await transaction.estimateGas({
+            from: tx.from as string | undefined,
+            to: tx.to as string | undefined,
+            data: tx.data as string | undefined,
+            value: tx.value,
+            // rpc hack, alchemy rpc must pass gas parameter
+            gas: hexToNumber(overrides?.chainId ?? '0x0') === ChainId.Astar ? '0x135168' : undefined,
+        })
+    }
+
+    return encodeTransaction(tx)
+}
+
+export async function sendTransaction(
+    contract: BaseContract | null,
+    transaction?: PayableTransactionObject<unknown> | NonPayableTransactionObject<unknown>,
+    overrides?: Partial<Transaction>,
+) {
+    if (!contract || !transaction) throw new Error('Invalid contract or transaction.')
+    const tx = await encodeContractTransaction(contract, transaction, overrides)
+    const receipt = await transaction.send(tx as PayableTx)
+    return receipt?.transactionHash ?? ''
+}
+
+export function createContract<T extends BaseContract>(web3: Web3 | null, address: string, ABI: AbiItem[]) {
+    if (!address || !isValidAddress(address) || !web3) return null
+    const contract = new web3.eth.Contract(ABI, address) as unknown as T
+    return contract
 }
