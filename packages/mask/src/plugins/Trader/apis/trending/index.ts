@@ -42,6 +42,7 @@ async function checkAvailabilityOnDataProvider(
 }
 
 export async function getAvailableDataProviders(chainId: ChainId, type?: TagType, keyword?: string) {
+    // TODO: multi network support
     const networkType = chainResolver.networkType(chainId)
     const isMainnet = chainResolver.isMainnet(chainId)
 

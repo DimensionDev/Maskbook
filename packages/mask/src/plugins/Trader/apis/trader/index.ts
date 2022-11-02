@@ -1,9 +1,8 @@
 import { safeUnreachable } from '@masknet/kit'
 import { TradeProvider } from '@masknet/public-api'
-import { ChainId, chainResolver, NetworkType } from '@masknet/web3-shared-evm'
+import { NetworkType } from '@masknet/web3-shared-evm'
 
-export async function getAvailableTraderProviders(chainId: ChainId) {
-    const networkType = chainResolver.networkType(chainId)
+export async function getEVMAvailableTraderProviders(networkType?: NetworkType) {
     if (!networkType) return []
     switch (networkType) {
         case NetworkType.Ethereum:

@@ -1,12 +1,12 @@
 import { useAsync } from 'react-use'
 import type { AsyncState } from 'react-use/lib/useAsyncFn.js'
-import type { ChainId } from '@masknet/web3-shared-evm'
-import { useChainContext, useWeb3Connection } from '@masknet/web3-hooks-base'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { useChainContext, useNetworkContext, useWeb3Connection } from '@masknet/web3-hooks-base'
+import type { Web3Helper } from '@masknet/web3-helpers'
 
-export function useTargetBlockNumber(targetChainId?: ChainId): AsyncState<number> {
-    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, { chainId: targetChainId })
+export function useTargetBlockNumber(targetChainId?: Web3Helper.ChainIdAll): AsyncState<number> {
+    const { chainId } = useChainContext()
+    const { pluginID } = useNetworkContext()
+    const connection = useWeb3Connection(pluginID, { chainId: targetChainId })
     return useAsync(async () => {
         if (targetChainId === chainId || !connection) return
         return connection.getBlockNumber()

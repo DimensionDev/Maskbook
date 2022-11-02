@@ -90,7 +90,7 @@ export interface TraderInfoUIProps {
     isGreatThanSlippageSetting: boolean
     gasFee: string
     gasFeeValueUSD: string
-    nativeToken: Web3Helper.FungibleTokenAll
+    nativeToken?: Web3Helper.FungibleTokenAll
 }
 
 export const TraderInfoUI = memo<TraderInfoUIProps>(
@@ -148,9 +148,9 @@ export const TraderInfoUI = memo<TraderInfoUIProps>(
                                     <Typography fontSize={14} lineHeight="20px" component="span" marginLeft={0.5}>
                                         <FormattedBalance
                                             value={gasFee}
-                                            decimals={nativeToken.decimals ?? 0}
+                                            decimals={nativeToken?.decimals ?? 0}
                                             significant={4}
-                                            symbol={nativeToken.symbol}
+                                            symbol={nativeToken?.symbol}
                                             formatter={formatBalance}
                                         />
                                     </Typography>
@@ -184,7 +184,7 @@ export const TraderInfoUI = memo<TraderInfoUIProps>(
 )
 
 export interface DefaultTraderPlaceholderUIProps {
-    nativeToken: Web3Helper.FungibleTokenAll
+    nativeToken?: Web3Helper.FungibleTokenAll
 }
 
 export const DefaultTraderPlaceholderUI = memo<DefaultTraderPlaceholderUIProps>(({ nativeToken }) => {
@@ -220,9 +220,9 @@ export const DefaultTraderPlaceholderUI = memo<DefaultTraderPlaceholderUIProps>(
                             <Typography fontSize={14} lineHeight="20px" component="span" marginLeft={0.5}>
                                 <FormattedBalance
                                     value={0}
-                                    decimals={nativeToken.decimals ?? 0}
+                                    decimals={nativeToken?.decimals ?? 0}
                                     significant={4}
-                                    symbol={nativeToken.symbol}
+                                    symbol={nativeToken?.symbol}
                                     formatter={formatBalance}
                                 />
                             </Typography>
