@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 import { formatUnits } from '@ethersproject/units'
-import BigNumber from 'bignumber.js'
+import { BigNumber } from 'bignumber.js'
 import type { ChainId, Web3 } from '@masknet/web3-shared-evm'
 import { useWeb3 } from '@masknet/web3-hooks-base'
 import { useCustomSnackbar } from '@masknet/theme'

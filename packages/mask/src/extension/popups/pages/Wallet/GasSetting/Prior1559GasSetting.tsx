@@ -1,6 +1,6 @@
 import { memo, useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import BigNumber from 'bignumber.js'
+import { BigNumber } from 'bignumber.js'
 import { makeStyles } from '@masknet/theme'
 import { PopupRoutes, NetworkPluginID } from '@masknet/shared-base'
 import { formatCurrency, GasOptionType, isLessThan, pow10, TransactionDescriptorType } from '@masknet/web3-shared-base'

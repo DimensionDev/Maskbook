@@ -1,6 +1,6 @@
 import urlcat from 'urlcat'
 import { uniqBy } from 'lodash-unified'
-import BigNumber from 'bignumber.js'
+import { BigNumber } from 'bignumber.js'
 import getUnixTime from 'date-fns/getUnixTime'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import {

@@ -1,5 +1,5 @@
 import { useAsyncFn } from 'react-use'
-import BigNumber from 'bignumber.js'
+import { BigNumber } from 'bignumber.js'
 import type { TradeProvider } from '@masknet/public-api'
 import type { SwapParameters } from '@uniswap/v2-sdk'
 import type { GasOptionConfig } from '@masknet/web3-shared-evm'

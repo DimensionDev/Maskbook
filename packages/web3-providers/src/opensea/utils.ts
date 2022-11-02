@@ -1,4 +1,4 @@
-import BigNumber from 'bignumber.js'
+import { BigNumber } from 'bignumber.js'
 import { isOne, pow10, ZERO } from '@masknet/web3-shared-base'
 
 export function getOrderUnitPrice(currentPrice?: string, decimals?: number, quantity?: string) {

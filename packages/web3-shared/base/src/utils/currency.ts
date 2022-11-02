@@ -1,4 +1,4 @@
-import BigNumber from 'bignumber.js'
+import { BigNumber } from 'bignumber.js'
 import { defaults } from 'lodash-unified'
 
 export interface FormatterCurrencyOptions {

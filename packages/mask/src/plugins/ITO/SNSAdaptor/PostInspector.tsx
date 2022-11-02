@@ -35,6 +35,7 @@ export function PostInspector(props: PostInspectorProps) {
     } = useFungibleToken(
         NetworkPluginID.PLUGIN_EVM,
         typeof token === 'string' ? (token as string) : (token as FungibleToken<ChainId, SchemaType>).address,
+        undefined,
         { chainId: _payload.chain_id },
     )
 

@@ -2,9 +2,7 @@ import { useState, useCallback, useEffect, useMemo } from 'react'
 import classNames from 'classnames'
 import { Box, Typography, List, ListItem } from '@mui/material'
 import { makeStyles, ActionButton, LoadingBase } from '@masknet/theme'
-import CheckIcon from '@mui/icons-material/Check'
-import CloseIcon from '@mui/icons-material/Close'
-import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline'
+import { Check as CheckIcon, Close as CloseIcon, AddCircleOutline as AddCircleOutlineIcon } from '@mui/icons-material'
 import { useI18N } from '../locales/index.js'
 import {
     WalletConnectedBoundary,

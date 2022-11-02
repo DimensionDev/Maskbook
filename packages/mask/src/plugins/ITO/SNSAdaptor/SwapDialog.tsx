@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import BigNumber from 'bignumber.js'
+import { BigNumber } from 'bignumber.js'
 import { openWindow } from '@masknet/shared-base-ui'
 import { NetworkPluginID } from '@masknet/shared-base'
 import {

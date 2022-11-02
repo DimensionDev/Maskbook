@@ -5,7 +5,7 @@ import { ChevronDown } from 'react-feather'
 import { mapValues } from 'lodash-unified'
 import { z as zod } from 'zod'
 import { EthereumAddress } from 'wallet.ts'
-import BigNumber from 'bignumber.js'
+import { BigNumber } from 'bignumber.js'
 import {
     addGasMargin,
     ChainId,

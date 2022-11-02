@@ -1,5 +1,5 @@
 import { makeStyles, useStylesExtends } from '@masknet/theme'
-import { useChainContext } from '@masknet/web3-hooks-base'
+import { useChainContext, useFungibleToken, useNetworkContext } from '@masknet/web3-hooks-base'
 import { Trader, TraderProps } from './Trader.js'
 import { AllProviderTradeContext } from '../../trader/useAllProviderTradeContext.js'
 
@@ -25,11 +25,24 @@ export interface TradeViewProps extends withClasses<'root'> {
 export function TradeView(props: TradeViewProps) {
     const { TraderProps } = props
     const { chainId } = useChainContext()
+    const { pluginID } = useNetworkContext()
+    const { value: inputToken } = useFungibleToken(
+        pluginID,
+        TraderProps.defaultInputCoin?.address ?? '',
+        TraderProps.defaultInputCoin,
+        { chainId },
+    )
     const classes = useStylesExtends(useStyles(), props)
     return (
         <div className={classes.root}>
             <AllProviderTradeContext.Provider>
-                <Trader {...TraderProps} chainId={chainId} classes={{ root: classes.trade }} settings />
+                <Trader
+                    {...TraderProps}
+                    defaultInputCoin={inputToken}
+                    chainId={chainId}
+                    classes={{ root: classes.trade }}
+                    settings
+                />
             </AllProviderTradeContext.Provider>
         </div>
     )

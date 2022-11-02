@@ -1,12 +1,11 @@
 import { useState, useMemo } from 'react'
 import { useAsync, useAsyncFn } from 'react-use'
 import type { AbiItem } from 'web3-utils'
-import BigNumber from 'bignumber.js'
+import { BigNumber } from 'bignumber.js'
 import { isLessThan, rightShift, ZERO, formatBalance, formatCurrency } from '@masknet/web3-shared-base'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import {
     createContract,
-    createERC20Token,
     SchemaType,
     getAaveConstants,
     ZERO_ADDRESS,
@@ -187,10 +186,7 @@ export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFo
         const poolAddress = await lPoolAddressProviderContract?.methods.getLendingPool().call()
 
         return {
-            approveToken:
-                token.schema === SchemaType.ERC20
-                    ? createERC20Token(chainId, token.address, token.name, token.symbol, token.decimals)
-                    : undefined,
+            approveToken: token.schema === SchemaType.ERC20 ? token : undefined,
             approveAmount: new BigNumber(inputAmount).shiftedBy(token.decimals),
             approveAddress: poolAddress,
         }

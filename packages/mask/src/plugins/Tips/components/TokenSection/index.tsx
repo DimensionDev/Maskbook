@@ -1,5 +1,5 @@
 import { FC, HTMLProps, useCallback, useMemo } from 'react'
-import BigNumber from 'bignumber.js'
+import { BigNumber } from 'bignumber.js'
 import { useChainContext, useNetworkContext, useFungibleTokenBalance, useGasPrice } from '@masknet/web3-hooks-base'
 import { useGasConfig } from '@masknet/web3-hooks-evm'
 import { useSelectFungibleToken, FungibleTokenInput } from '@masknet/shared'

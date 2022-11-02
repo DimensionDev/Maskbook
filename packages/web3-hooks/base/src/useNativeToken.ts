@@ -8,5 +8,5 @@ export function useNativeToken<S extends 'all' | void = void, T extends NetworkP
     options?: Web3Helper.Web3ConnectionOptionsScope<S, T>,
 ) {
     const nativeTokenAddress = useNativeTokenAddress(pluginID, options)
-    return useFungibleToken<S, T>(pluginID, nativeTokenAddress, options)
+    return useFungibleToken<S, T>(pluginID, nativeTokenAddress, undefined, options)
 }

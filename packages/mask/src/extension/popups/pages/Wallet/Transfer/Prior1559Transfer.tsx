@@ -2,7 +2,7 @@ import { memo, ReactElement, SyntheticEvent, useCallback, useMemo, useRef, useSt
 import { ChevronDown } from 'react-feather'
 import { useNavigate } from 'react-router-dom'
 import { z as zod } from 'zod'
-import BigNumber from 'bignumber.js'
+import { BigNumber } from 'bignumber.js'
 import { noop } from 'lodash-unified'
 import { EthereumAddress } from 'wallet.ts'
 import { NetworkPluginID } from '@masknet/shared-base'

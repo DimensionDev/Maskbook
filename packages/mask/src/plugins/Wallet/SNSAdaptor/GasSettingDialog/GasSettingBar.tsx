@@ -1,5 +1,5 @@
 import { useMemo, useState, useEffect, useCallback } from 'react'
-import BigNumber from 'bignumber.js'
+import { BigNumber } from 'bignumber.js'
 import { chainResolver, formatWeiToEther } from '@masknet/web3-shared-evm'
 import { Tune } from '@mui/icons-material'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'

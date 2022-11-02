@@ -7,7 +7,7 @@ import type { AsyncState } from 'react-use/lib/useAsyncFn'
 import { useChainContext, useNetworkContext, useWeb3Connection, useWeb3State } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useNativeTokenWrapperContract } from '@masknet/web3-hooks-evm'
-import BigNumber from 'bignumber.js'
+import { BigNumber } from 'bignumber.js'
 import type { Web3Helper } from '@masknet/web3-helpers'
 
 export function useNativeTradeGasLimit(

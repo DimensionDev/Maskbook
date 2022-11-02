@@ -1,6 +1,6 @@
 import { omit } from 'lodash-unified'
 import { useAsync, useAsyncFn } from 'react-use'
-import BigNumber from 'bignumber.js'
+import { BigNumber } from 'bignumber.js'
 import { sha3 } from 'web3-utils'
 import type { TransactionReceipt } from 'web3-core'
 import type { ITO2 } from '@masknet/web3-contracts/types/ITO2'

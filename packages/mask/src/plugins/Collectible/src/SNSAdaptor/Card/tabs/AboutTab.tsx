@@ -1,5 +1,5 @@
 import type { AsyncState } from 'react-use/lib/useAsyncFn'
-import BigNumber from 'bignumber.js'
+import { BigNumber } from 'bignumber.js'
 import { first } from 'lodash-unified'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'

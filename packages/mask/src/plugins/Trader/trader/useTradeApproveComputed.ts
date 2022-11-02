@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
-import { createERC20Token, SchemaType } from '@masknet/web3-shared-evm'
-import { ZERO } from '@masknet/web3-shared-base'
+import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import { FungibleToken, ZERO } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
 import { TradeProvider } from '@masknet/public-api'
@@ -22,7 +22,7 @@ export function useTradeApproveComputed(
         return {
             approveToken:
                 pluginID === NetworkPluginID.PLUGIN_EVM && token?.schema === SchemaType.ERC20
-                    ? createERC20Token(chainId, token.address, token.name, token.symbol, token.decimals)
+                    ? (token as FungibleToken<ChainId, SchemaType.ERC20>)
                     : null,
             approveAmount: trade ? trade.inputAmount : ZERO,
             approveAddress: (() => {

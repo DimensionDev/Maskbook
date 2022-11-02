@@ -1,6 +1,6 @@
 import JSBI from 'jsbi'
 import { memoize } from 'lodash-unified'
-import BigNumber from 'bignumber.js'
+import { BigNumber } from 'bignumber.js'
 import { Currency, CurrencyAmount, Ether, Percent, Price, Token, TradeType } from '@uniswap/sdk-core'
 import type { Trade } from '@uniswap/v2-sdk'
 import { ChainId, formatEthereumAddress, SchemaType, WNATIVE } from '@masknet/web3-shared-evm'

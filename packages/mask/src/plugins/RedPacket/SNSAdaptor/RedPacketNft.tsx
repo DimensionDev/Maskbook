@@ -1,6 +1,6 @@
 import { makeStyles, ActionButton } from '@masknet/theme'
 import { explorerResolver, networkResolver } from '@masknet/web3-shared-evm'
-import LaunchIcon from '@mui/icons-material/Launch'
+import { Launch as LaunchIcon } from '@mui/icons-material'
 import { Card, CardHeader, Typography, Link, CardMedia, CardContent, Button, Box, Skeleton } from '@mui/material'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useI18N as useBaseI18N } from '../../../utils/index.js'

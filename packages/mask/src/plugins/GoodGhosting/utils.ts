@@ -13,7 +13,7 @@ import differenceInDays from 'date-fns/differenceInDays'
 import formatDuration from 'date-fns/formatDuration'
 import isBefore from 'date-fns/isBefore'
 import { TransactionStateType } from '@masknet/web3-shared-evm'
-import BigNumber from 'bignumber.js'
+import { BigNumber } from 'bignumber.js'
 import { CurrencyType, isZero, multipliedBy, ZERO } from '@masknet/web3-shared-base'
 
 export enum PlayerStatus {

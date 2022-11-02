@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Button, List, Typography } from '@mui/material'
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
+import { ArrowDropDown as ArrowDropDownIcon } from '@mui/icons-material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { useI18N } from '../locales/index.js'
 import { useGameList } from '../hook/index.js'

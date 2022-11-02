@@ -1,5 +1,5 @@
 import { memo, useMemo } from 'react'
-import BigNumber from 'bignumber.js'
+import { BigNumber } from 'bignumber.js'
 import { useFungibleTokenPrice, useNetworkContext } from '@masknet/web3-hooks-base'
 import { InputTokenPanelUI } from './components/InputTokenPanelUI.js'
 import type { SelectTokenChipProps } from '@masknet/shared'
@@ -18,7 +18,7 @@ export interface InputTokenPanelProps extends withClasses<'root'> {
 export const InputTokenPanel = memo<InputTokenPanelProps>(
     ({ chainId, token, balance, onAmountChange, amount, SelectTokenChip: SelectTokenChipProps, maxAmount }) => {
         const { pluginID } = useNetworkContext()
-        const { value: tokenPrice = 0 } = useFungibleTokenPrice(pluginID, token?.address.toLowerCase(), { chainId })
+        const { value: tokenPrice = 0 } = useFungibleTokenPrice(pluginID, token?.address.toLowerCase())
 
         const tokenValueUSD = useMemo(
             () => (amount ? new BigNumber(amount).times(tokenPrice).toFixed(2) : '0'),

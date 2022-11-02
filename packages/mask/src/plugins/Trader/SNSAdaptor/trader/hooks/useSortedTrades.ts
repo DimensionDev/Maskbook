@@ -15,7 +15,7 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 export function useSortedTrades(traders: TradeInfo[], chainId: Web3Helper.ChainIdAll, gasPrice?: string) {
     const { pluginID } = useNetworkContext()
     const { Others } = useWeb3State()
-    const { value: nativeToken } = useFungibleToken(pluginID, '', { chainId })
+    const { value: nativeToken } = useFungibleToken(pluginID, '', undefined, { chainId })
     const { value: nativeTokenPrice = 0 } = useNativeTokenPrice(pluginID, { chainId })
 
     const {

@@ -5,8 +5,8 @@ import { pick } from 'lodash-unified'
 import type { SwapBancorRequest, TradeComputed } from '../../types/index.js'
 import { PluginTraderRPC } from '../../messages.js'
 import { useChainContext, useNetworkContext, useWeb3Connection } from '@masknet/web3-hooks-base'
-import BigNumber from 'bignumber.js'
 import { NetworkPluginID } from '@masknet/shared-base'
+import { BigNumber } from 'bignumber.js'
 
 export function useTradeGasLimit(tradeComputed: TradeComputed<SwapBancorRequest> | null): AsyncState<number> {
     const { account, chainId: targetChainId } = useChainContext()
