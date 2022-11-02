@@ -395,7 +395,7 @@ export type Transaction = TransactionConfig_ & {
     gatewayFeeRecipient?: string // coinbase address of the full serving the light client's transactions
     gatewayFee?: string // value paid to the gateway fee recipient, denominated in the fee currency
 }
-export type Operation = {
+export type UserOperation = {
     sender: string
     nonce: number
     initCode?: string

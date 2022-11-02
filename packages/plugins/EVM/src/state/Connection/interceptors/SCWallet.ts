@@ -1,19 +1,53 @@
-import { EthereumMethodType } from '@masknet/web3-shared-evm'
+import type { AbiItem } from 'web3-utils'
+import { createContract, EthereumMethodType, ProviderType, UserOperation } from '@masknet/web3-shared-evm'
+import WalletABI from '@masknet/web3-contracts/abis/Wallet.json'
+import type { Wallet as WalletContract } from '@masknet/web3-contracts/types/Wallet.js'
+import { Web3StateSettings } from '../../../settings/index.js'
 import type { Middleware, Context } from '../types.js'
 
 export class SCWallet implements Middleware<Context> {
+    private async createWeb3(context: Context) {
+        const web3 = await Web3StateSettings.value.Connection?.getWeb3?.({
+            chainId: context.chainId,
+            providerType: ProviderType.MaskWallet,
+        })
+
+        if (!web3) throw new Error('Failed to create web3.')
+        return web3
+    }
+
+    private createUserOperation(context: Context): UserOperation {
+        throw new Error('To be implemented')
+    }
+
+    private sendUserOperation(context: Context, userOperation: UserOperation): Promise<string> {
+        throw new Error('To be implemented')
+    }
+
     async fn(context: Context, next: () => Promise<void>) {
         switch (context.request.method) {
-            case EthereumMethodType.ETH_GET_BALANCE:
-                context.write(0)
-                break
             case EthereumMethodType.ETH_GET_TRANSACTION_COUNT:
-                context.write(0)
+                try {
+                    const web3 = await this.createWeb3(context)
+                    const wallet = createContract<WalletContract>(web3, context.account, WalletABI as AbiItem[])
+
+                    context.write(await wallet?.methods.nonce())
+                } catch (error) {
+                    context.abort(error)
+                }
                 break
             case EthereumMethodType.ETH_SEND_TRANSACTION:
+                context.write(await this.sendUserOperation(context, this.createUserOperation(context)))
+                break
+            case EthereumMethodType.ETH_SEND_USER_OPERATION:
+                if (!context.userOperation) {
+                    context.abort(new Error('Invalid user operation.'))
+                    break
+                }
+                context.write(await this.sendUserOperation(context, context.userOperation))
                 break
             case EthereumMethodType.ETH_SEND_RAW_TRANSACTION:
-                context.abort(new Error('The raw transaction is not supported by smart contract wallet.'))
+                context.abort(new Error('Not supported by SC wallet.'))
                 break
             default:
                 break

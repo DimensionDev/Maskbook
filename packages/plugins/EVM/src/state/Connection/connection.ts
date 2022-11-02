@@ -36,7 +36,7 @@ import {
     isValidAddress,
     isNativeTokenAddress,
     encodeTransaction,
-    Operation,
+    UserOperation,
     AddressType,
 } from '@masknet/web3-shared-evm'
 import {
@@ -940,7 +940,7 @@ class Connection implements EVM_Connection {
     }
 
     async callOperation(
-        operation: Operation,
+        operation: UserOperation,
         initial?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined,
     ) {
         const options = this.getOptions(initial)
@@ -963,7 +963,7 @@ class Connection implements EVM_Connection {
     }
 
     async sendOperation(
-        operation: Operation,
+        operation: UserOperation,
         initial?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined,
     ) {
         const options = this.getOptions(initial)

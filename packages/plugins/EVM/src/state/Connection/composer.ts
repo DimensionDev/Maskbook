@@ -7,6 +7,7 @@ import {
     EthereumMethodType,
     Transaction,
     ChainId,
+    getPayloadUserOperation,
 } from '@masknet/web3-shared-evm'
 import { getError, hasError } from './error.js'
 import type { Context, EVM_Connection, EVM_Web3ConnectionOptions, Middleware } from './types.js'
@@ -102,6 +103,10 @@ class RequestContext implements Context {
 
     get config() {
         return getPayloadConfig(this.request)
+    }
+
+    get userOperation() {
+        return getPayloadUserOperation(this.request)
     }
 
     set config(config: Transaction | undefined) {

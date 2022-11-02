@@ -34,7 +34,7 @@ export declare namespace Web3Helper {
             Signature: EVM.Signature
             GasOption: EVM.GasOption
             Block: EVM.Block
-            Operation: EVM.Operation
+            Operation: EVM.UserOperation
             Transaction: EVM.Transaction
             TransactionReceipt: EVM.TransactionReceipt
             TransactionDetailed: EVM.TransactionDetailed

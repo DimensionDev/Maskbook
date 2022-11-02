@@ -21,10 +21,41 @@ interface EventOptions {
     topics?: string[]
 }
 
+export type EntryPointChanged = ContractEventLog<{
+    oldEntryPoint: string
+    newEntryPoint: string
+    0: string
+    1: string
+}>
+
 export interface Wallet extends BaseContract {
     constructor(jsonInterface: any[], address?: string, options?: ContractOptions): Wallet
     clone(): Wallet
     methods: {
+        addDeposit(): PayableTransactionObject<void>
+
+        entryPoint(): NonPayableTransactionObject<string>
+
+        exec(dest: string, value: number | string | BN, func: string | number[]): NonPayableTransactionObject<void>
+
+        execBatch(dest: string[], func: (string | number[])[]): NonPayableTransactionObject<void>
+
+        execFromEntryPoint(
+            dest: string,
+            value: number | string | BN,
+            func: string | number[],
+        ): NonPayableTransactionObject<void>
+
+        getDeposit(): NonPayableTransactionObject<string>
+
+        nonce(): NonPayableTransactionObject<string>
+
+        owner(): NonPayableTransactionObject<string>
+
+        transfer(dest: string, amount: number | string | BN): NonPayableTransactionObject<void>
+
+        updateEntryPoint(newEntryPoint: string): NonPayableTransactionObject<void>
+
         validateUserOp(
             userOp: [
                 string,
@@ -43,8 +74,16 @@ export interface Wallet extends BaseContract {
             requestId: string | number[],
             missingWalletFunds: number | string | BN,
         ): NonPayableTransactionObject<void>
+
+        withdrawDepositTo(withdrawAddress: string, amount: number | string | BN): NonPayableTransactionObject<void>
     }
     events: {
+        EntryPointChanged(cb?: Callback<EntryPointChanged>): EventEmitter
+        EntryPointChanged(options?: EventOptions, cb?: Callback<EntryPointChanged>): EventEmitter
+
         allEvents(options?: EventOptions, cb?: Callback<EventLog>): EventEmitter
     }
+
+    once(event: 'EntryPointChanged', cb: Callback<EntryPointChanged>): void
+    once(event: 'EntryPointChanged', options: EventOptions, cb: Callback<EntryPointChanged>): void
 }
