@@ -12,11 +12,11 @@ import type { Plugin } from '@masknet/plugin-infra'
 
 export interface TokenStorage<ChainId extends number, SchemaType> {
     fungibleTokenList: Record<string, Array<FungibleToken<ChainId, SchemaType>>>
-    credibleFungibleTokenList: Partial<Record<ChainId, Array<FungibleToken<ChainId, SchemaType>>>>
     nonFungibleTokenList: Record<string, Array<NonFungibleToken<ChainId, SchemaType>>>
-    credibleNonFungibleTokenList: Partial<Record<ChainId, Array<NonFungibleToken<ChainId, SchemaType>>>>
     fungibleTokenBlockedBy: Record<string, string[]>
     nonFungibleTokenBlockedBy: Record<string, string[]>
+    credibleFungibleTokenList: Partial<Record<ChainId, Array<FungibleToken<ChainId, SchemaType>>>>
+    credibleNonFungibleTokenList: Partial<Record<ChainId, Array<NonFungibleToken<ChainId, SchemaType>>>>
 }
 
 export class TokenState<ChainId extends number, SchemaType> implements Web3TokenState<ChainId, SchemaType> {

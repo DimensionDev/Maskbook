@@ -1,9 +1,9 @@
 import type { Subscription } from 'use-subscription'
-import { SolanaFungible } from '@masknet/web3-providers'
 import type { Plugin } from '@masknet/plugin-infra'
 import { TokenState, TokenStorage } from '@masknet/web3-state'
 import { isSameAddress, FungibleToken, NonFungibleToken } from '@masknet/web3-shared-base'
 import { ChainId, formatAddress, isValidAddress, SchemaType, isValidChainId } from '@masknet/web3-shared-solana'
+import { Web3StateSettings } from '../settings/index.js'
 
 export class Token extends TokenState<ChainId, SchemaType> {
     constructor(
@@ -38,13 +38,16 @@ export class Token extends TokenState<ChainId, SchemaType> {
         const fungibleTokenListByChainFromStorage = fungibleTokenListFromStorage?.[chainId]
 
         if (!fungibleTokenListByChainFromStorage) {
-            const fungibleTokenList = await SolanaFungible.getFungibleTokenList(chainId)
+            const hub = await Web3StateSettings.value.Hub?.getHub?.({
+                chainId,
+            })
+            const fungibleTokenList = await hub?.getFungibleTokensFromTokenList?.(chainId)
             this.storage.credibleFungibleTokenList.setValue({
                 ...fungibleTokenListFromStorage,
                 [chainId]: fungibleTokenList,
             })
 
-            const credibleToken = fungibleTokenList.find((x) => isSameAddress(x.address, address))
+            const credibleToken = fungibleTokenList?.find((x) => isSameAddress(x.address, address))
             return credibleToken ?? token
         }
 
@@ -63,13 +66,16 @@ export class Token extends TokenState<ChainId, SchemaType> {
         const nonFungibleTokenListByChainFromStorage = nonFungibleTokenListFromStorage?.[chainId]
 
         if (!nonFungibleTokenListByChainFromStorage) {
-            const nonFungibleTokenList = await SolanaFungible.getNonFungibleTokenList(chainId)
+            const hub = await Web3StateSettings.value.Hub?.getHub?.({
+                chainId,
+            })
+            const nonFungibleTokenList = await hub?.getNonFungibleTokensFromTokenList?.(chainId)
             this.storage.credibleNonFungibleTokenList.setValue({
                 ...nonFungibleTokenListFromStorage,
                 [chainId]: nonFungibleTokenList,
             })
 
-            const credibleToken = nonFungibleTokenList.find((x) => isSameAddress(x.address, address))
+            const credibleToken = nonFungibleTokenList?.find((x) => isSameAddress(x.address, address))
             return credibleToken ?? token
         }
 
