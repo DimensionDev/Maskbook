@@ -223,7 +223,14 @@ export class HubStateNonFungibleClient<ChainId, SchemaType> extends HubStateBase
         chainId: ChainId,
         initial?: HubOptions<ChainId>,
     ): Promise<Array<NonFungibleToken<ChainId, SchemaType>>> {
-        throw new Error('Method not implemented.')
+        const options = this.getOptions(initial, {
+            chainId,
+        })
+        const providers = this.getProviders(initial)
+        return attemptUntil(
+            providers.map((x) => () => x.getNonFungibleTokenList?.(options.chainId)),
+            EMPTY_LIST,
+        )
     }
 
     async getNonFungibleTokenSpenders(
