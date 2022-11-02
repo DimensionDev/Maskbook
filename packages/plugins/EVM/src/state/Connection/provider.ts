@@ -10,6 +10,7 @@ import { MathWalletProvider } from './providers/MathWallet.js'
 import FortmaticProvider from './providers/Fortmatic.js'
 import TorusProvider from './providers/Torus.js'
 import { NoneProvider } from './providers/None.js'
+import { SmartPayProvider } from './providers/SmartPay.js'
 
 /**
  * Register all supported providers
@@ -24,5 +25,6 @@ export const Providers: Record<ProviderType, BaseProvider> = {
     [ProviderType.MathWallet]: new MathWalletProvider(),
     [ProviderType.Fortmatic]: new FortmaticProvider(),
     [ProviderType.Torus]: new TorusProvider(),
+    [ProviderType.SmartPay]: new SmartPayProvider(),
     [ProviderType.CustomNetwork]: new CustomNetworkProvider(),
 }

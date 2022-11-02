@@ -296,6 +296,7 @@ export enum ProviderType {
     Coin98 = 'Coin98',
     MathWallet = 'MathWallet',
     WalletLink = 'WalletLink',
+    SmartPay = 'SmartPay',
     CustomNetwork = 'CustomNetwork',
 }
 
