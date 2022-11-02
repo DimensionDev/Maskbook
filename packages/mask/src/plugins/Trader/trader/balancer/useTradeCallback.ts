@@ -1,4 +1,4 @@
-import type { ExchangeProxy } from '@masknet/web3-contracts/types/ExchangeProxy'
+import type { ExchangeProxy } from '@masknet/web3-contracts/types/ExchangeProxy.js'
 import { SchemaType, GasOptionConfig, useTraderConstants, encodeContractTransaction } from '@masknet/web3-shared-evm'
 import { useAsyncFn } from 'react-use'
 import { SLIPPAGE_DEFAULT } from '../../constants/index.js'

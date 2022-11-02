@@ -12,7 +12,7 @@ import { AllProviderTradeContext } from '../../Trader/trader/useAllProviderTrade
 import { SavingsProtocol, TabType } from '../types.js'
 import { SavingsTable } from './SavingsTable.js'
 import { SavingsFormDialog } from './SavingsForm.js'
-import type { AaveProtocolDataProvider } from '@masknet/web3-contracts/types/AaveProtocolDataProvider'
+import type { AaveProtocolDataProvider } from '@masknet/web3-contracts/types/AaveProtocolDataProvider.js'
 import AaveProtocolDataProviderABI from '@masknet/web3-contracts/abis/AaveProtocolDataProvider.json'
 import { LidoProtocol } from '../protocols/LDOProtocol.js'
 import { AAVEProtocol } from '../protocols/AAVEProtocol.js'

@@ -1,6 +1,6 @@
 import type { FungibleToken } from '@masknet/web3-shared-base'
 import type { ChainId as ChainIdEnum, SchemaType } from '@masknet/web3-shared-evm'
-import type { FarmExists, FarmDepositIncreased, FarmMetastate } from '@masknet/web3-contracts/types/ReferralFarmsV1'
+import type { FarmExists, FarmDepositIncreased, FarmMetastate } from '@masknet/web3-contracts/types/ReferralFarmsV1.js'
 export enum TokenType {
     REFER = 0,
     REWARD = 1,

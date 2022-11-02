@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import { ZERO_ADDRESS } from '@masknet/web3-shared-evm'
 import { usePoolTogetherTicketContracts } from '../contracts/usePoolTogetherTicket.js'
-import type { PoolTogetherTicket } from '@masknet/web3-contracts/types/PoolTogetherTicket'
+import type { PoolTogetherTicket } from '@masknet/web3-contracts/types/PoolTogetherTicket.js'
 import { useAsyncRetry } from 'react-use'
 import type { AccountPool, Pool } from '../types.js'
 import { useChainContext } from '@masknet/web3-hooks-base'

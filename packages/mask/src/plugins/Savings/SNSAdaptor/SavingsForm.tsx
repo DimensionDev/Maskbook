@@ -31,7 +31,7 @@ import {
     WalletConnectedBoundary,
     EthereumERC20TokenApprovedBoundary,
 } from '@masknet/shared'
-import type { AaveLendingPoolAddressProvider } from '@masknet/web3-contracts/types/AaveLendingPoolAddressProvider'
+import type { AaveLendingPoolAddressProvider } from '@masknet/web3-contracts/types/AaveLendingPoolAddressProvider.js'
 import AaveLendingPoolAddressProviderABI from '@masknet/web3-contracts/abis/AaveLendingPoolAddressProvider.json'
 import { useI18N } from '../../../utils/index.js'
 import { ProtocolType, SavingsProtocol, TabType } from '../types.js'
