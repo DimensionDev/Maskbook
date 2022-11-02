@@ -1,4 +1,4 @@
-import { decodeArrayBuffer, encodeArrayBuffer, safeUnreachable } from '@dimensiondev/kit'
+import { decodeArrayBuffer, encodeArrayBuffer, safeUnreachable } from '@masknet/kit'
 import {
     ECKeyIdentifier,
     ECKeyIdentifierFromJsonWebKey,

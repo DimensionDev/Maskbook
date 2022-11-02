@@ -1,4 +1,4 @@
-import { unreachable } from '@dimensiondev/kit'
+import { unreachable } from '@masknet/kit'
 import type { ProfileIdentifier, AESCryptoKey } from '@masknet/shared-base'
 import { encodePostKey } from './Encryption.js'
 import type { EncryptIO, EncryptionResultE2EMap, EncryptTargetE2E } from './EncryptionTypes.js'

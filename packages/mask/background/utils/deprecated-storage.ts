@@ -1,4 +1,4 @@
-import { timeout } from '@dimensiondev/kit'
+import { timeout } from '@masknet/kit'
 
 /**
  * Make sure that the storage is used serially.

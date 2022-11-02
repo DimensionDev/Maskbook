@@ -1,4 +1,5 @@
-import { memoizePromise } from '@dimensiondev/kit'
+import { memoizePromise } from '@masknet/kit'
+import { memoize } from 'lodash-unified'
 
 const cache = new Map<string, string>()
 async function resolver(u: string): Promise<string | null> {
@@ -15,4 +16,4 @@ async function resolver(u: string): Promise<string | null> {
     return url ?? null
 }
 /** Resolve a https://t.co/ link to it's real address. */
-export const resolveTCOLink = memoizePromise(resolver, (x) => x)
+export const resolveTCOLink = memoizePromise(memoize, resolver, (x) => x)

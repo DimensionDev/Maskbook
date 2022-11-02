@@ -1,4 +1,4 @@
-import { safeUnreachable } from '@dimensiondev/kit'
+import { safeUnreachable } from '@masknet/kit'
 import { TradeProvider } from '@masknet/public-api'
 import { NetworkType } from '@masknet/web3-shared-evm'
 

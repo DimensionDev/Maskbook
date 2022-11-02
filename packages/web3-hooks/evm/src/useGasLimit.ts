@@ -1,5 +1,5 @@
 import { useAsync } from 'react-use'
-import { unreachable } from '@dimensiondev/kit'
+import { unreachable } from '@masknet/kit'
 import type { AsyncState } from 'react-use/lib/useAsyncFn'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { SchemaType } from '@masknet/web3-shared-evm'

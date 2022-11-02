@@ -5,7 +5,7 @@ import { andThenAsync, CheckedError, decompressSecp256k1KeyRaw, OptionalResult }
 import { Ok, Result } from 'ts-results'
 import { EC_Key, EC_KeyCurveEnum } from '../payload/types.js'
 import { decodeMessagePackF, assertIVLengthEq16, importAES, importEC_Key } from '../utils/index.js'
-import { safeUnreachable } from '@dimensiondev/kit'
+import { safeUnreachable } from '@masknet/kit'
 import { parseSignatureContainer } from './SignatureContainer.js'
 import { parseAuthor } from './shared.js'
 // ? Payload format: (binary format)

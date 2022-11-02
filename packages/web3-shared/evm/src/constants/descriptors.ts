@@ -1,4 +1,4 @@
-import { getEnumAsArray } from '@dimensiondev/kit'
+import { getEnumAsArray } from '@masknet/kit'
 import { ChainDescriptor, NetworkDescriptor, ProviderDescriptor, TokenType } from '@masknet/web3-shared-base'
 import { EnhanceableSite, ExtensionSite, isFirefox, NetworkPluginID } from '@masknet/shared-base'
 import CHAINS from './chains.json'

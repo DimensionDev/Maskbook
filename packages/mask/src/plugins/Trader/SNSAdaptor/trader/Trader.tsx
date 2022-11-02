@@ -1,6 +1,6 @@
 import { forwardRef, useCallback, useEffect, useImperativeHandle, useState, useMemo } from 'react'
 import { useUnmount, useUpdateEffect } from 'react-use'
-import { delay } from '@dimensiondev/kit'
+import { delay } from '@masknet/kit'
 import { useOpenShareTxDialog, useSelectFungibleToken } from '@masknet/shared'
 import { FungibleToken, formatBalance } from '@masknet/web3-shared-base'
 import type { ChainId, GasOptionConfig, SchemaType } from '@masknet/web3-shared-evm'

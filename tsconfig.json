@@ -136,7 +136,7 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     // Exclude everything by default. Include them in each project on-demand
-    "types": ["web", "masknet__global-types"],
+    "types": ["masknet__global-types"],
 
     // Emit
     "declaration": true,
@@ -158,7 +158,7 @@
 
     // Language and Environment
     "jsx": "react-jsx",
-    "lib": ["ES2022"], // don't add "DOM", we use @types/web
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
     "target": "ES2022",
     "useDefineForClassFields": true,
 

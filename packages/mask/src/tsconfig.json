@@ -4,8 +4,7 @@
     "rootDir": "./",
     "outDir": "../dist/src/",
     "tsBuildInfoFile": "../dist/legacy.tsbuildinfo",
-    "emitDeclarationOnly": true,
-    "lib": ["ES2022"]
+    "emitDeclarationOnly": true
   },
   "include": ["./", "./**/*.json"],
 

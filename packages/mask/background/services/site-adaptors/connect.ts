@@ -1,4 +1,4 @@
-import { delay } from '@dimensiondev/kit'
+import { delay } from '@masknet/kit'
 import type { PersonaIdentifier, ProfileIdentifier } from '@masknet/shared-base'
 import { openOrActiveTab } from '@masknet/shared-base-ui'
 import { currentSetupGuideStatus, userGuideStatus } from '../../../shared/legacy-settings/settings.js'

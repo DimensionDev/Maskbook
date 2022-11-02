@@ -2,7 +2,7 @@ import { Ok, Result } from 'ts-results'
 import type { Signature } from '../index.js'
 import { PayloadException } from '../types/index.js'
 import { CheckedError, OptionalResult } from '@masknet/shared-base'
-import { concatArrayBuffer } from '@dimensiondev/kit'
+import { concatArrayBuffer } from '@masknet/kit'
 
 const enum SignaturePayloadFirstByte {
     NoSignature = 0,

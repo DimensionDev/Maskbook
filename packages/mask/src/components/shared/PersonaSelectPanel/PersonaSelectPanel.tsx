@@ -22,7 +22,7 @@ import { LoadingBase, makeStyles, useCustomSnackbar, useStylesExtends } from '@m
 import type { PersonaNextIDMixture } from './PersonaItemUI.js'
 import { PersonaItemUI } from './PersonaItemUI.js'
 import { useCurrentPersona } from '../../DataSource/usePersonaConnectStatus.js'
-import { delay } from '@dimensiondev/kit'
+import { delay } from '@masknet/kit'
 import { Icons } from '@masknet/icons'
 import { ErrorPanel } from './ErrorPanel.js'
 

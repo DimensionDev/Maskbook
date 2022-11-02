@@ -75,9 +75,6 @@ importers:
       '@dimensiondev/holoflows-kit':
         specifier: 0.9.0-20220916150447-7ac7ff2
         version: 0.9.0-20220916150447-7ac7ff2
-      '@dimensiondev/kit':
-        specifier: 0.0.0-20220617045824-8bc7a27
-        version: 0.0.0-20220617045824-8bc7a27
       '@emotion/cache':
         specifier: 11.10.3
         version: 11.10.3_anquw7u43yedhv6g6kmhzkdhze
@@ -96,6 +93,9 @@ importers:
       '@emotion/utils':
         specifier: 1.2.0
         version: 1.2.0
+      '@masknet/kit':
+        specifier: 0.1.0
+        version: 0.1.0
       '@mui/icons-material':
         specifier: 5.10.6
         version: 5.10.6_uv4temvmglq3ybbyla2x45igzm
@@ -117,9 +117,9 @@ importers:
       '@types/react-dom':
         specifier: ^18.0.6
         version: 18.0.6
-      '@types/web':
-        specifier: ^0.0.72
-        version: 0.0.72
+      '@typescript/lib-dom':
+        specifier: npm:@types/web@^0.0.78
+        version: /@types/web/0.0.78
       i18next:
         specifier: ^21.9.1
         version: 21.9.1
@@ -464,15 +464,15 @@ importers:
 
   packages/encryption:
     dependencies:
-      '@dimensiondev/stego-js':
-        specifier: 0.14.1
-        version: 0.14.1
       '@masknet/secp256k1-webcrypto':
         specifier: 1.0.0
         version: 1.0.0
       '@masknet/shared-base':
         specifier: workspace:*
         version: link:../shared-base
+      '@masknet/stego-js':
+        specifier: 0.14.2
+        version: 0.14.2
       '@masknet/typed-message':
         specifier: workspace:*
         version: link:../typed-message
@@ -5996,12 +5996,6 @@ packages:
       tslib: 2.4.0
     dev: false
 
-  /@dimensiondev/kit/0.0.0-20220617045824-8bc7a27:
-    resolution: {integrity: sha512-rEA1LIifhVZR4xXa4auXhzolURi7kGO5DLq6dDzP0/JFmhM+gg0yFflmKB1QBQlA2Abuz8sOYyhDvdSxgzokiQ==, tarball: download/@dimensiondev/kit/0.0.0-20220617045824-8bc7a27/a4d1dd89ca1add306290082328acc8150c8794ccb89ce5e0551d1763ad6b6367}
-    dependencies:
-      lodash-es: 4.17.21
-    dev: false
-
   /@dimensiondev/mask-wallet-core/0.1.0-20211013082857-eb62e5f:
     resolution: {integrity: sha512-2d7v1/z9Khw4O7J7oBNKLBo7BONd7ZE2gpw34uHVtdG9i0aEz+LSRappgNTZyUZ/+TRJ7ZgAf+Dbeql1oPMvNA==, tarball: download/@DimensionDev/mask-wallet-core/0.1.0-20211013082857-eb62e5f/04f14f2d88766a9ab098a686785f824270c5ed90}
     peerDependencies:
@@ -6022,16 +6016,6 @@ packages:
       '@metamask/inpage-provider': 8.1.0
       detect-browser: 3.0.1
       extension-port-stream: 1.0.0
-    dev: false
-
-  /@dimensiondev/stego-js/0.14.1:
-    resolution: {integrity: sha512-FslPs5SWC2ROr1R0ggmc4UG4huDUClbwtzRKWhUx9pIO0uXwxhPm+jxFW0sNn7CDYklCeQFbWtCcxPK5zaOxrA==, tarball: download/@DimensionDev/stego-js/0.14.1/c49b1e2bb33b7510d3dda9d4435700a9efc00818}
-    hasBin: true
-    dependencies:
-      '@rgba-image/lanczos': 0.1.1
-      meow: 10.1.5
-    optionalDependencies:
-      '@napi-rs/image': 1.4.1
     dev: false
 
   /@dimensiondev/webextension-shim/0.0.3-20210823035705-4257e12:
@@ -7500,6 +7484,10 @@ packages:
     resolution: {integrity: sha512-zY9NPar8BhdWcOlZbZaWn5RwXQuPzEHkb5c5Ibijm+Mix4LaDMy6DQLt06NIwoCPFra4Jz4dqiLVsQJ0YtZTWQ==}
     dev: false
 
+  /@masknet/kit/0.1.0:
+    resolution: {integrity: sha512-OVQJSjEKDcL6RLFrdaQ9MF+3RyD3P3rClrPpfYTfeF3xT6pQitgfO4l3+A11CCSoD+5+EqezGnMGpQ2zB2O3kg==}
+    dev: false
+
   /@masknet/membrane/0.1.5:
     resolution: {integrity: sha512-DunCKuIQ37Y1qP7ik9qsxhoIHXCPYDTziwEL92xDjYjy8mfgBvCKYr/GOy+hQmM3tMwbylfwsZASNXDIEAcM0w==}
     dependencies:
@@ -7521,6 +7509,16 @@ packages:
     peerDependenciesMeta:
       '@swc/core':
         optional: true
+    dev: false
+
+  /@masknet/stego-js/0.14.2:
+    resolution: {integrity: sha512-vZvV1XRSlq/Lxk8/c86nqgY7Be7kyrVie3pWAXF58vTxnsO+7pjZ9rvyoldOwe5dZmEnRLXszNdRZnBVUXdRIA==}
+    hasBin: true
+    dependencies:
+      '@rgba-image/lanczos': 0.1.1
+      meow: 10.1.5
+    optionalDependencies:
+      '@napi-rs/image': 1.4.1
     dev: false
 
   /@masknet/web-endowments/0.1.1:
@@ -11834,8 +11832,8 @@ packages:
       '@types/node': 18.7.4
     dev: true
 
-  /@types/web/0.0.72:
-    resolution: {integrity: sha512-8ELWTmT6gpjH+mFCN6jja/pmXBZTOjSvfnBcxwP7xKC9tkqLNVxtQX/o2W0c1VcUR2ZFPoPSNH7YtdZQfHOvmg==}
+  /@types/web/0.0.78:
+    resolution: {integrity: sha512-1Apkpr0zolMDECgtokp9ztApWkdlg4Ey4UJ3sKHAGjCHoiUq1/kBd0lR+JxeHlQVqAC6tike7tUJ9uLbVNwsxQ==}
     dev: false
 
   /@types/webpack-env/1.18.0:
@@ -21912,11 +21910,6 @@ packages:
       has: 1.0.3
     dev: true
 
-  /is-core-module/2.9.0:
-    resolution: {integrity: sha512-+5FPy5PnwmO3lvfMb0AsoPaBG+5KHUI0wYFXOtYPnVVVspTFUuMZNfNaNVRt3FZadstu2c8x23vykRW/NBoU6A==}
-    dependencies:
-      has: 1.0.3
-
   /is-data-descriptor/0.1.4:
     resolution: {integrity: sha512-+w9D5ulSoBNlmw9OHn3U2v51SyoCd0he+bB3xMl62oijhrspxowjU+AIcDY0N3iEJbUEkB15IlMASQsxYigvXg==}
     engines: {node: '>=0.10.0'}
@@ -27223,7 +27216,7 @@ packages:
     resolution: {integrity: sha512-Hhtrw0nLeSrFQ7phPp4OOcVjLPIeMnRlr5mcnVuMe7M/7eBn98A3hmFRLoFo3DLZkivSYwhRUJTyPyWAk56WLw==}
     hasBin: true
     dependencies:
-      is-core-module: 2.9.0
+      is-core-module: 2.10.0
       path-parse: 1.0.7
       supports-preserve-symlinks-flag: 1.0.0
 

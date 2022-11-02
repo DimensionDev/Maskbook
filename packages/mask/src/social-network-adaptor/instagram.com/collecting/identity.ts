@@ -1,5 +1,5 @@
 import { LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { delay } from '@dimensiondev/kit'
+import { delay } from '@masknet/kit'
 import { ProfileIdentifier } from '@masknet/shared-base'
 import { creator, SocialNetworkUI as Next } from '../../../social-network/index.js'
 import { instagramBase } from '../base.js'

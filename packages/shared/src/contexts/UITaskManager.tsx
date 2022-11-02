@@ -1,5 +1,5 @@
 import { createContext, createElement, ComponentType, PropsWithChildren, useMemo, useState } from 'react'
-import { defer, DeferTuple } from '@dimensiondev/kit'
+import { defer, DeferTuple } from '@masknet/kit'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import type { InjectedDialogProps } from './components/index.js'
 

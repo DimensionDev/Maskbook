@@ -7,15 +7,15 @@ const key = 'openSNSAndActivatePlugin'
 export async function openSNSAndActivatePlugin(url: string, pluginID: string): Promise<void> {
     await browser.tabs.create({ active: true, url })
     if (process.env.manifest === '2') {
-        sessionStorage.setItem(key, pluginID)
+        ;(globalThis as any).sessionStorage.setItem(key, pluginID)
     } else {
         await browser.storage.session.set({ [key]: pluginID })
     }
 }
 export async function getDesignatedAutoStartPluginID(): Promise<string | null> {
     if (process.env.manifest === '2') {
-        const val = sessionStorage.getItem(key)
-        sessionStorage.removeItem(key)
+        const val = (globalThis as any).sessionStorage.getItem(key)
+        ;(globalThis as any).sessionStorage.removeItem(key)
         return val
     } else {
         const val = await browser.storage.session.get(key)

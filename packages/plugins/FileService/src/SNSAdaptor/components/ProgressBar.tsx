@@ -1,4 +1,4 @@
-import { formatFileSize } from '@dimensiondev/kit'
+import { formatFileSize } from '@masknet/kit'
 import { Typography, LinearProgress, Box } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../locales/i18n_generated.js'

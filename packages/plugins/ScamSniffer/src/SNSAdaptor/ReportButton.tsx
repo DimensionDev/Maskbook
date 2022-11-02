@@ -6,7 +6,7 @@ import { usePostInfoDetails } from '@masknet/plugin-infra/content-script'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom'
 import { useState } from 'react'
-import { delay } from '@dimensiondev/kit'
+import { delay } from '@masknet/kit'
 
 const useStyles = makeStyles()((theme) => ({
     button: {

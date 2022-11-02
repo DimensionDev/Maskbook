@@ -1,5 +1,5 @@
 import { ValueRef } from '@dimensiondev/holoflows-kit'
-import { defer } from '@dimensiondev/kit'
+import { defer } from '@masknet/kit'
 import { MaskMessages } from '../messages.js'
 
 /** @deprecated */

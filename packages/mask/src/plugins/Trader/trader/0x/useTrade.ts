@@ -1,5 +1,5 @@
 import { ChainId, chainResolver, isNativeTokenAddress, NetworkType } from '@masknet/web3-shared-evm'
-import { safeUnreachable } from '@dimensiondev/kit'
+import { safeUnreachable } from '@masknet/kit'
 import { ZRX_AFFILIATE_ADDRESS } from '../../constants/index.js'
 import { PluginTraderRPC } from '../../messages.js'
 import { SwapQuoteResponse, TradeStrategy } from '../../types/index.js'

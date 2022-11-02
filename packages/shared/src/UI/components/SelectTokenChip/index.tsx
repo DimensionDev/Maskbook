@@ -1,13 +1,12 @@
 import classNames from 'classnames'
+import { noop } from 'lodash-unified'
 import { Chip, ChipProps } from '@mui/material'
 import { LoadingBase, makeStyles, useStylesExtends } from '@masknet/theme'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import ErrorIcon from '@mui/icons-material/Error'
-import { noop } from 'lodash-unified'
 import { useSharedI18N } from '../../../locales/index.js'
 import { TokenIcon } from '../TokenIcon/index.js'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import type { FungibleToken } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -34,7 +33,7 @@ const useStyles = makeStyles()((theme) => {
 })
 
 export interface SelectTokenChipProps extends withClasses<'chip' | 'tokenIcon' | 'noToken'> {
-    token?: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll> | null
+    token?: Web3Helper.FungibleTokenAll | null
     error?: Error
     loading?: boolean
     readonly?: boolean

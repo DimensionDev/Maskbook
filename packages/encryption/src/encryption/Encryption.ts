@@ -1,4 +1,4 @@
-import { encodeArrayBuffer, unreachable } from '@dimensiondev/kit'
+import { encodeArrayBuffer, unreachable } from '@masknet/kit'
 import { AESCryptoKey, EC_Public_CryptoKey, PostIVIdentifier, ProfileIdentifier } from '@masknet/shared-base'
 import {
     isTypedMessageText,

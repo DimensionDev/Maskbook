@@ -2,14 +2,7 @@ import { useEffect, useState, useMemo, useCallback } from 'react'
 import BigNumber from 'bignumber.js'
 import { useMenuConfig, FormattedBalance, useSharedI18N, useSelectAdvancedSettings } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
-import {
-    GasOptionType,
-    multipliedBy,
-    isZero,
-    formatBalance,
-    FungibleToken,
-    formatCurrency,
-} from '@masknet/web3-shared-base'
+import { GasOptionType, multipliedBy, isZero, formatBalance, formatCurrency } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { formatEtherToGwei, formatWeiToEther, formatWeiToGwei, GasOptionConfig } from '@masknet/web3-shared-evm'
 import { Typography, MenuItem, Box } from '@mui/material'
@@ -21,7 +14,7 @@ import { SettingsContext } from '../SettingsBoard/Context.js'
 interface SelectGasSettingsToolbarProps<T extends NetworkPluginID = NetworkPluginID> {
     pluginID?: T
     chainId?: Web3Helper.ChainIdAll
-    nativeToken: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
+    nativeToken: Web3Helper.FungibleTokenAll
     nativeTokenPrice: number
     gasLimit: number
     gasOption?: GasOptionConfig
