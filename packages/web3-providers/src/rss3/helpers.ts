@@ -4,6 +4,11 @@ import type { RSS3BaseAPI } from '../types'
 /**
  * Normalize RSS3 feed.
  *
+ * @affects
+ *   feed.actions[number].metadata.image
+ *   feed.actions[number].metadata.token.image
+ *   feed.actions[number].metadata.logo
+ *
  * - resolve image resource
  */
 export function normalizedFeed(feed: RSS3BaseAPI.Web3Feed) {
