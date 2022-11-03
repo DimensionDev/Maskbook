@@ -80,5 +80,3 @@ export const postContentSelector = () =>
     )
 
 export const searchMindsProfileCover = () => querySelector('div[data-cy="data-minds-channel-banner"]')
-
-export const searchSidbarNavigation = () => querySelector('m-sidebar--navigation')
