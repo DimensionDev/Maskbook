@@ -28,6 +28,7 @@ export class SpaceID_Resolver implements NameServiceResolver {
 
     async reverse(address: string) {
         await this.init()
-        return this.sid?.getName(address)
+        const result = await this.sid?.getName(address)
+        return result?.name
     }
 }
