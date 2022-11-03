@@ -105,6 +105,7 @@ export const hostIconMap: Record<string, IconComponent> = {
     'looksrare.org': Icons.LooksRare,
     'gitcoin.co': Icons.Gitcoin,
     'bscscan.com': Icons.BSC,
+    'zkscan.io': Icons.ZkScan,
 }
 
 export const hostNameMap: Record<string, string> = {
@@ -117,5 +118,5 @@ export const hostNameMap: Record<string, string> = {
     'looksrare.org': 'LooksRare',
     'gitcoin.co': 'Gitcoin',
     'bscscan.com': 'BscScan',
-    'zkscan.io': 'zkSync',
+    'zkscan.io': 'ZkScan',
 }

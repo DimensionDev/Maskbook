@@ -11,10 +11,10 @@ import { CardType, cardTypeIconMap, platformIconMap } from './share'
 export interface FeedCardBaseProps {
     feed: RSS3BaseAPI.Web3Feed
     /**
-     * specified action from the feed
+     * to specify action from the feed
      * for donation feed. there might be multiple actions to render
      */
-    action?: RSS3BaseAPI.Web3Feed['actions'][number]
+    actionIndex?: number
     /**
      * verbose variant is
      * - not inspectable (no clickable)
@@ -66,7 +66,7 @@ export interface CardFrameProps extends Omit<HTMLProps<HTMLDivElement>, 'type' |
 export const CardFrame: FC<CardFrameProps> = ({
     type,
     feed,
-    action,
+    actionIndex,
     className,
     children,
     onClick,
@@ -89,7 +89,7 @@ export const CardFrame: FC<CardFrameProps> = ({
                     viewDetails({
                         type,
                         feed,
-                        action,
+                        actionIndex,
                     })
                 }
             }}

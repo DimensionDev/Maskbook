@@ -44,12 +44,12 @@ const useStyles = makeStyles()((theme) => ({
 
 export interface FeedDetailsDialogProps
     extends PropsWithChildren<InjectedDialogProps>,
-        Pick<FeedCardProps, 'feed' | 'action'> {
+        Pick<FeedCardProps, 'feed' | 'actionIndex'> {
     type: CardType
     onSubmit?(): void
 }
 
-export function FeedDetailsDialog({ type, feed, onClose, action, onSubmit, ...rest }: FeedDetailsDialogProps) {
+export function FeedDetailsDialog({ type, feed, onClose, actionIndex, onSubmit, ...rest }: FeedDetailsDialogProps) {
     const t = useI18N()
     const { classes } = useStyles()
     const links = feed.actions[0].related_urls
@@ -65,7 +65,7 @@ export function FeedDetailsDialog({ type, feed, onClose, action, onSubmit, ...re
                 onSubmit?.()
             }}>
             <DialogContent className={classes.content}>
-                <FeedCard feed={feed} action={action} verbose />
+                <FeedCard feed={feed} actionIndex={actionIndex} verbose />
                 {links?.length ? (
                     <div className={classes.links}>
                         {links.map((link, index) => {

@@ -13,7 +13,6 @@ import { formatValue, Label } from './common'
 
 const useStyles = makeStyles<void, 'image'>()((theme, _, refs) => ({
     summary: {
-        fontSize: '14px',
         color: theme.palette.maskColor.third,
     },
     content: {
@@ -40,6 +39,11 @@ const useStyles = makeStyles<void, 'image'>()((theme, _, refs) => ({
         },
     },
     image: {},
+    verbose: {
+        image: {
+            marginTop: theme.spacing(1),
+        },
+    },
     info: {
         overflow: 'auto',
         display: 'flex',
@@ -71,9 +75,8 @@ export function isDonationFeed(feed: RSS3BaseAPI.Web3Feed): feed is RSS3BaseAPI.
     return feed.tag === Tag.Donation
 }
 
-interface DonationCardProps extends Omit<FeedCardProps, 'feed' | 'action'> {
+interface DonationCardProps extends Omit<FeedCardProps, 'feed'> {
     feed: RSS3BaseAPI.DonationFeed
-    action?: RSS3BaseAPI.DonationFeed['actions'][number]
 }
 
 interface CardBodyProps extends HTMLProps<HTMLDivElement> {
@@ -98,19 +101,24 @@ const CardBody: FC<CardBodyProps> = memo(({ metadata, className, ...rest }) => {
  *
  * - DonationDonate
  */
-export const DonationCard: FC<DonationCardProps> = ({ feed, action: feedAction, ...rest }) => {
+export const DonationCard: FC<DonationCardProps> = ({ feed, actionIndex, className, ...rest }) => {
     const { verbose } = rest
-    const { classes } = useStyles()
+    const { classes, cx } = useStyles()
 
     const [index, setIndex] = useState(0)
-    const action = feedAction ?? feed.actions[index]
+    const activeActionIndex = actionIndex ?? index
+    const action = feed.actions[activeActionIndex]
     const metadata = action.metadata
 
     const user = useAddressLabel(feed.owner)
 
     if (verbose) {
         return (
-            <CardFrame type={CardType.DonationDonate} feed={feed} {...rest}>
+            <CardFrame
+                type={CardType.DonationDonate}
+                feed={feed}
+                className={cx(rest.verbose ? classes.verbose : null, className)}
+                {...rest}>
                 <Typography className={classes.summary}>
                     <Translate.donation_donate_verbose
                         values={{
@@ -124,14 +132,14 @@ export const DonationCard: FC<DonationCardProps> = ({ feed, action: feedAction, 
                         }}
                     />
                 </Typography>
-                <Image src={metadata!.logo} width="100%" />
+                <Image classes={{ container: classes.image }} src={metadata!.logo} width="100%" />
                 <Markdown>{metadata!.description}</Markdown>
             </CardFrame>
         )
     }
 
     return (
-        <CardFrame type={CardType.DonationDonate} feed={feed} action={action} {...rest}>
+        <CardFrame type={CardType.DonationDonate} feed={feed} actionIndex={activeActionIndex} {...rest}>
             <Typography className={classes.summary}>
                 <Translate.donation_donate
                     values={{

@@ -14,7 +14,6 @@ import { formatValue, Label } from './common'
 
 const useStyles = makeStyles<void, 'tokenIcon' | 'verboseToken'>()((theme, _, refs) => ({
     summary: {
-        fontSize: '14px',
         color: theme.palette.maskColor.third,
     },
     tokenIcon: {},

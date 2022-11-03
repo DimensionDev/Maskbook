@@ -10,7 +10,6 @@ import { Label } from './common'
 
 const useStyles = makeStyles()((theme) => ({
     summary: {
-        fontSize: '14px',
         color: theme.palette.maskColor.third,
     },
     title: {

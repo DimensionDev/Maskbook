@@ -12,7 +12,6 @@ import { formatValue, Label } from './common'
 
 const useStyles = makeStyles<void, 'image' | 'verbose' | 'info'>()((theme, _, refs) => ({
     summary: {
-        fontSize: '14px',
         color: theme.palette.maskColor.third,
     },
     verbose: {},
