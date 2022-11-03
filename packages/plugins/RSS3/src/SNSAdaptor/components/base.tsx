@@ -5,8 +5,8 @@ import { Typography } from '@mui/material'
 import BigNumber from 'bignumber.js'
 import formatDateTime from 'date-fns/format'
 import type { FC, HTMLProps } from 'react'
-import { useViewFeedDetails } from '../contexts'
-import { CardType, cardTypeIconMap, platformIconMap } from './share'
+import { useViewFeedDetails } from '../contexts/index.js'
+import { CardType, cardTypeIconMap, platformIconMap } from './share.js'
 
 export interface FeedCardBaseProps {
     feed: RSS3BaseAPI.Web3Feed

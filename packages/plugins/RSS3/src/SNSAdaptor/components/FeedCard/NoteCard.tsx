@@ -3,10 +3,10 @@ import { RSS3BaseAPI } from '@masknet/web3-providers'
 import { Typography } from '@mui/material'
 import type { FC } from 'react'
 import { Translate } from '../../../locales/i18n_generated'
-import { useAddressLabel } from '../../hooks'
-import { CardType } from '../share'
-import { CardFrame, FeedCardProps } from '../base'
-import { Label } from './common'
+import { useAddressLabel } from '../../hooks/index.js'
+import { CardType } from '../share.js'
+import { CardFrame, FeedCardProps } from '../base.js'
+import { Label } from './common.js'
 
 const useStyles = makeStyles()((theme) => ({
     summary: {

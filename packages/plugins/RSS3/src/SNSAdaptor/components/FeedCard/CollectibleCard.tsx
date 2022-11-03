@@ -5,10 +5,10 @@ import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { Typography } from '@mui/material'
 import { FC, useMemo } from 'react'
 import { Translate } from '../../../locales/i18n_generated'
-import { useAddressLabel } from '../../hooks'
-import { CardType } from '../share'
-import { CardFrame, FeedCardProps } from '../base'
-import { formatValue, Label } from './common'
+import { useAddressLabel } from '../../hooks/index.js'
+import { CardType } from '../share.js'
+import { CardFrame, FeedCardProps } from '../base.js'
+import { formatValue, Label } from './common.js'
 
 const useStyles = makeStyles<void, 'image' | 'verbose' | 'info'>()((theme, _, refs) => ({
     summary: {
