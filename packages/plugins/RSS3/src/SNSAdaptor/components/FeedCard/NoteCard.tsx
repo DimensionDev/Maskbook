@@ -8,7 +8,7 @@ import { CardType } from '../share.js'
 import { CardFrame, FeedCardProps } from '../base.js'
 import { Label } from './common.js'
 
-const useStyles = makeStyles()((theme) => ({
+const useStyles = makeStyles<void, 'content'>()((theme, _, refs) => ({
     summary: {
         color: theme.palette.maskColor.third,
     },
@@ -21,12 +21,19 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 14,
         color: theme.palette.maskColor.main,
         lineHeight: '18px',
-        marginLeft: theme.spacing(1.5),
         maxHeight: 80,
         overflow: 'hidden',
         display: '-webkit-box',
         WebkitBoxOrient: 'vertical',
         WebkitLineClamp: 3,
+        wordBreak: 'break-all',
+    },
+    verbose: {
+        [`.${refs.content}`]: {
+            display: 'block',
+            maxHeight: 'auto',
+            overflow: 'unset',
+        },
     },
 }))
 
@@ -40,14 +47,14 @@ interface NoteCardProps extends Omit<FeedCardProps, 'feed'> {
 }
 
 /**
- * DonationCard
+ * NoteCard
  * Including:
  *
  * - NoteCreate
  * - NoteEdit
  */
-export const NoteCard: FC<NoteCardProps> = ({ feed, ...rest }) => {
-    const { classes } = useStyles()
+export const NoteCard: FC<NoteCardProps> = ({ feed, className, ...rest }) => {
+    const { classes, cx } = useStyles()
 
     const action = feed.actions[0]
     const metadata = action.metadata
@@ -56,7 +63,11 @@ export const NoteCard: FC<NoteCardProps> = ({ feed, ...rest }) => {
     const isCreatingNote = feed.type === Type.Post
 
     return (
-        <CardFrame type={isCreatingNote ? CardType.NoteCreate : CardType.NoteEdit} feed={feed} {...rest}>
+        <CardFrame
+            type={isCreatingNote ? CardType.NoteCreate : CardType.NoteEdit}
+            feed={feed}
+            className={cx(rest.verbose ? classes.verbose : null, className)}
+            {...rest}>
             <Typography className={classes.summary}>
                 <Translate.note
                     values={{

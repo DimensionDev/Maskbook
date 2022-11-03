@@ -73,7 +73,7 @@ interface CommentCardProps extends Omit<FeedCardProps, 'feed'> {
 }
 
 /**
- * DonationCard
+ * CommentCard
  * Including:
  *
  * - NoteLink
@@ -88,13 +88,12 @@ export const CommentCard: FC<CommentCardProps> = ({ feed, ...rest }) => {
     const metadata = action.metadata
 
     const user = useAddressLabel(feed.owner)
-    const isCreatingNote = feed.type === Type.Post
     const commentTarget = metadata?.target
 
     const imageSize = verbose ? '100%' : 64
 
     return (
-        <CardFrame type={isCreatingNote ? CardType.NoteCreate : CardType.NoteEdit} feed={feed} {...rest}>
+        <CardFrame type={CardType.NoteLink} feed={feed} {...rest}>
             <Typography className={classes.summary}>
                 <Translate.note
                     values={{
