@@ -1,6 +1,6 @@
 import { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { useUpdateEffect } from 'react-use'
-import type BigNumber from 'bignumber.js'
+import type { BigNumber } from 'bignumber.js'
 import { FormattedBalance, FormattedCurrency, InjectedDialog, TokenIcon, PluginWalletStatusBar } from '@masknet/shared'
 import { isDashboardPage } from '@masknet/shared-base'
 import { makeStyles, MaskColorVar, parseColor } from '@masknet/theme'

@@ -1,4 +1,4 @@
-import type BigNumber from 'bignumber.js'
+import type { BigNumber } from 'bignumber.js'
 import type { FungibleAsset } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType, TransactionStateType } from '@masknet/web3-shared-evm'
 
