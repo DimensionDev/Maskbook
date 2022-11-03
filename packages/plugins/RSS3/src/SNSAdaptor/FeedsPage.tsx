@@ -1,13 +1,29 @@
-import { EMPTY_LIST } from '@masknet/shared-base'
+import { Icons } from '@masknet/icons'
+import { ElementAnchor } from '@masknet/shared'
+import { LoadingBase, makeStyles } from '@masknet/theme'
 import { useReverseAddress, useWeb3State } from '@masknet/web3-hooks-base'
-import { RSS3, RSS3BaseAPI } from '@masknet/web3-providers'
-import { Box, BoxProps } from '@mui/material'
+import type { RSS3BaseAPI } from '@masknet/web3-providers'
+import { Box, BoxProps, Skeleton, Typography } from '@mui/material'
+import { range } from 'lodash-unified'
 import { memo, useMemo } from 'react'
-import { useAsyncRetry } from 'react-use'
 import { useI18N } from '../locales/index.js'
-import { FeedCard, StatusBox } from './components/index.js'
+import { FeedCard } from './components/index.js'
 import { FeedDetailsProvider } from './contexts/FeedDetails.js'
 import { FeedOwnerContext, FeedOwnerOptions } from './contexts/index.js'
+import { useFeeds } from './hooks/useFeeds.js'
+
+const useStyles = makeStyles()((theme) => ({
+    feedCard: {
+        marginTop: theme.spacing(2),
+    },
+    statusBox: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: 300,
+        flexDirection: 'column',
+    },
+}))
 
 export interface FeedPageProps extends BoxProps {
     address?: string
@@ -16,13 +32,10 @@ export interface FeedPageProps extends BoxProps {
 
 export const FeedsPage = memo(function FeedsPage({ address, tag, ...rest }: FeedPageProps) {
     const t = useI18N()
+    const { classes } = useStyles()
     const { Others } = useWeb3State()
 
-    const { value: feeds = EMPTY_LIST, loading } = useAsyncRetry(async () => {
-        if (!address) return EMPTY_LIST
-        const { data } = await RSS3.getAllNotes(address, { tag })
-        return data
-    }, [address, tag])
+    const { feeds, loading, finished, next } = useFeeds(address, tag)
 
     const { value: name } = useReverseAddress(undefined, address)
 
@@ -39,11 +52,25 @@ export const FeedsPage = memo(function FeedsPage({ address, tag, ...rest }: Feed
         }
     }, [address, name, Others?.formatDomainName])
 
-    if (loading || !feeds.length || !feedOwner) {
+    if ((loading && !feeds.length) || !feedOwner) {
+        return (
+            <Box p={2} boxSizing="border-box">
+                {range(3).map((i) => (
+                    <Box mb={2} key={i}>
+                        <Skeleton animation="wave" variant="rectangular" height={125} />
+                    </Box>
+                ))}
+            </Box>
+        )
+    }
+    if (!feeds.length && !loading) {
         const context = tag ? tag : 'activities'
         return (
-            <Box p={2} boxSizing="border-box" {...rest}>
-                <StatusBox loading={loading} description={t.no_data({ context })} empty={!feeds.length} />
+            <Box className={classes.statusBox} p={2}>
+                <Icons.EmptySimple size={32} />
+                <Typography color={(theme) => theme.palette.maskColor.second} fontSize="14px" fontWeight={400}>
+                    {t.no_data({ context })}
+                </Typography>
             </Box>
         )
     }
@@ -53,11 +80,10 @@ export const FeedsPage = memo(function FeedsPage({ address, tag, ...rest }: Feed
             <FeedDetailsProvider>
                 <Box p={2} boxSizing="border-box" {...rest}>
                     {feeds.map((feed, index) => (
-                        <Box key={index} mt={2}>
-                            <FeedCard feed={feed} />
-                        </Box>
+                        <FeedCard key={index} className={classes.feedCard} feed={feed} />
                     ))}
                 </Box>
+                <ElementAnchor callback={next}>{finished ? null : <LoadingBase />}</ElementAnchor>
             </FeedDetailsProvider>
         </FeedOwnerContext.Provider>
     )
