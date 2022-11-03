@@ -119,3 +119,9 @@ export const hostNameMap: Record<string, string> = {
     'bscscan.com': 'BscScan',
     'zkscan.io': 'ZkScan',
 }
+
+export function getLastAction<T extends RSS3BaseAPI.Tag, P extends RSS3BaseAPI.TypeMap[T]>(
+    feed: RSS3BaseAPI.Web3FeedGeneric<T, P>,
+) {
+    return feed.actions[feed.actions.length - 1]
+}
