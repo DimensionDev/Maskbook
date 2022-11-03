@@ -1,25 +1,22 @@
-import { Icons } from '@masknet/icons'
-import { useCurrentWeb3NetworkPluginID } from '@masknet/web3-hooks-base'
-import { EMPTY_LIST, NextIDPlatform, ProfileIdentifier } from '@masknet/shared-base'
-import { makeStyles } from '@masknet/theme'
-import { NextIDProof } from '@masknet/web3-providers'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { FC, HTMLProps, MouseEventHandler, useCallback, useEffect, useMemo } from 'react'
-import { useAsyncRetry } from 'react-use'
-import { MaskMessages } from '../../../../../shared/index.js'
+import { makeStyles } from '@masknet/theme'
+import { Icons } from '@masknet/icons'
+import { useNetworkContext } from '@masknet/web3-hooks-base'
+import { ProfileIdentifier, NetworkPluginID, EMPTY_LIST } from '@masknet/shared-base'
+import { SocialAccount, SocialAddressType } from '@masknet/web3-shared-base'
 import {
     useCurrentVisitingIdentity,
     useSocialIdentityByUseId,
 } from '../../../../components/DataSource/useActivatedUI.js'
-import { activatedSocialNetworkUI } from '../../../../social-network/index.js'
 import { useProfilePublicKey } from '../../hooks/useProfilePublicKey.js'
 import { PluginTipsMessages } from '../../messages.js'
-import type { TipsAccount } from '../../types/index.js'
 import { useTipsAccounts } from './useTipsAccounts.js'
 
 interface Props extends HTMLProps<HTMLDivElement> {
-    addresses?: TipsAccount[]
-    recipient?: TipsAccount['address']
+    // This is workaround solution, link issue mf-2536 and pr #7576.
+    // Should refactor social account to support multi-account for one post.
+    accounts?: SocialAccount[]
+    recipient?: string
     receiver?: ProfileIdentifier
     onStatusUpdate?(disabled: boolean): void
 }
@@ -34,11 +31,10 @@ const useStyles = makeStyles()({
     },
 })
 
-// TODO: reduce re-render
 export const TipButton: FC<Props> = ({
     className,
+    accounts: receivingAccounts = EMPTY_LIST,
     receiver,
-    addresses = EMPTY_LIST,
     recipient,
     children,
     onStatusUpdate,
@@ -46,43 +42,39 @@ export const TipButton: FC<Props> = ({
 }) => {
     const { classes, cx } = useStyles()
 
-    const platform = activatedSocialNetworkUI.configuration.nextIDConfig?.platform as NextIDPlatform
-    const { value: persona, loading: loadingPersona } = useProfilePublicKey(receiver)
+    const { value: personaPubkey, loading: loadingPersona } = useProfilePublicKey(receiver)
     const receiverUserId = receiver?.userId
-    const personaPubkey = persona?.publicKeyAsHex
 
-    const pluginId = useCurrentWeb3NetworkPluginID()
-    const {
-        value: isAccountVerified,
-        loading: loadingVerifyInfo,
-        retry: retryLoadVerifyInfo,
-    } = useAsyncRetry(async () => {
-        if (pluginId !== NetworkPluginID.PLUGIN_EVM || !platform) return true
-        if (!personaPubkey || !receiverUserId) return false
-        return NextIDProof.queryIsBound(personaPubkey, platform, receiverUserId, true)
-    }, [pluginId, personaPubkey, platform, receiverUserId])
+    const { pluginID } = useNetworkContext()
     const visitingIdentity = useCurrentVisitingIdentity()
     const { value: identity } = useSocialIdentityByUseId(receiverUserId)
 
     const isVisitingUser = visitingIdentity.identifier?.userId === receiverUserId
     const isRuntimeAvailable = useMemo(() => {
-        switch (pluginId) {
+        switch (pluginID) {
             case NetworkPluginID.PLUGIN_EVM:
                 return true
             case NetworkPluginID.PLUGIN_SOLANA:
                 return isVisitingUser
         }
         return false
-    }, [pluginId, isVisitingUser])
+    }, [pluginID, isVisitingUser])
 
-    useEffect(() => {
-        return MaskMessages.events.ownProofChanged.on(retryLoadVerifyInfo)
-    }, [])
+    const accountsByIdentity = useTipsAccounts(identity, personaPubkey)
+    const accounts = useMemo(
+        () =>
+            [...receivingAccounts, ...accountsByIdentity].sort((a, z) => {
+                const aHasNextId = a.supportedAddressTypes?.includes(SocialAddressType.NEXT_ID)
+                const zHasNextId = z.supportedAddressTypes?.includes(SocialAddressType.NEXT_ID)
+                if (aHasNextId === zHasNextId) return 0
+                return aHasNextId ? -1 : zHasNextId ? 1 : 0
+            }),
 
-    const tipsAccounts = useTipsAccounts(identity, personaPubkey, addresses)
+        [receivingAccounts, accountsByIdentity],
+    )
 
-    const isChecking = loadingPersona || loadingVerifyInfo
-    const disabled = isChecking || !isAccountVerified || tipsAccounts.length === 0 || !isRuntimeAvailable
+    const disabled = loadingPersona || accounts.length === 0 || !isRuntimeAvailable
+
     useEffect(() => {
         onStatusUpdate?.(disabled)
     }, [disabled])
@@ -92,24 +84,24 @@ export const TipButton: FC<Props> = ({
             evt.stopPropagation()
             evt.preventDefault()
             if (disabled) return
-            if (!tipsAccounts.length || !receiverUserId) return
+            if (!accounts.length || !receiverUserId) return
             PluginTipsMessages.tipTask.sendToLocal({
                 recipient,
                 recipientSnsId: receiverUserId,
-                addresses: tipsAccounts,
+                accounts,
             })
         },
-        [disabled, recipient, tipsAccounts, receiverUserId],
+        [disabled, recipient, accounts, receiverUserId],
     )
 
     useEffect(() => {
-        if (!receiverUserId || !tipsAccounts.length) return
+        if (!receiverUserId || !accounts.length) return
         PluginTipsMessages.tipTaskUpdate.sendToLocal({
             recipient,
             recipientSnsId: receiverUserId,
-            addresses: tipsAccounts,
+            accounts,
         })
-    }, [recipient, receiverUserId, tipsAccounts])
+    }, [recipient, receiverUserId, accounts])
 
     if (disabled) return null
 

@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useUpdateEffect } from 'react-use'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { flattenAsyncIterator, EMPTY_LIST } from '@masknet/shared-base'
-import { pageableToIterator, NetworkPluginID } from '@masknet/web3-shared-base'
-import { useAccount } from './useAccount.js'
+import { flattenAsyncIterator, EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
+import { pageableToIterator } from '@masknet/web3-shared-base'
+import { useChainContext } from './useContext.js'
 import { useWeb3Hub } from './useWeb3Hub.js'
 import { useNetworkDescriptors } from './useNetworkDescriptors.js'
 
@@ -17,7 +17,7 @@ export function useNonFungibleAssets<S extends 'all' | void = void, T extends Ne
     const [loading, toggleLoading] = useState(false)
     const [error, setError] = useState<string>()
 
-    const account = useAccount(pluginID, options?.account)
+    const { account } = useChainContext({ account: options?.account })
     const hub = useWeb3Hub(pluginID)
     const networks = useNetworkDescriptors(pluginID)
 

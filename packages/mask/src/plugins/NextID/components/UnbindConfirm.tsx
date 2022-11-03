@@ -3,7 +3,7 @@ import { Box, DialogContent, Button } from '@mui/material'
 import { useWeb3State } from '@masknet/web3-hooks-base'
 import { useI18N } from '../locales/index.js'
 import { makeStyles, MaskDialog } from '@masknet/theme'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     wrapper: {

@@ -1,19 +1,19 @@
+import { useCallback, useEffect, useState } from 'react'
 import { first } from 'lodash-unified'
-import type { Pool } from '../types.js'
 import { Typography, Grid, Button } from '@mui/material'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
+import { TokenIcon } from '@masknet/shared'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { useFungibleToken, useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
 import { usePoolURL } from '../hooks/usePoolURL.js'
+import type { Pool } from '../types.js'
 import { CountdownView } from './CountdownView.js'
 import { PluginPoolTogetherMessages } from '../messages.js'
-import { useCallback, useEffect, useState } from 'react'
 import { calculateNextPrize, calculateSecondsRemaining, getPrizePeriod } from '../utils.js'
 import { NetworkView } from './NetworkView.js'
 import { useI18N } from '../../../utils/index.js'
-import { TokenIcon } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { useChainId, useFungibleToken, useCurrentWeb3NetworkPluginID, useAccount } from '@masknet/web3-hooks-base'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -36,11 +36,6 @@ const useStyles = makeStyles()((theme) => ({
         marginRight: theme.spacing(1),
         backgroundColor: 'transparent',
     },
-    button: {
-        marginTop: theme.spacing(2),
-        marginBottom: theme.spacing(1),
-        fontWeight: 500,
-    },
     progress: {
         bottom: theme.spacing(1),
         right: theme.spacing(1),
@@ -50,21 +45,6 @@ const useStyles = makeStyles()((theme) => ({
         right: theme.spacing(1),
         fontSize: 15,
     },
-    poolLink: {
-        cursor: 'pointer',
-        color: 'inherit',
-        textDecoration: 'inherit',
-        marginRight: theme.spacing(0.5),
-        '&:last-child': {
-            marginRight: 0,
-        },
-    },
-    networkIcon: {
-        width: '1em',
-        height: '1em',
-        backgroundColor: 'transparent',
-        marginRight: theme.spacing(0.5),
-    },
     metaTitle: {
         marginBottom: theme.spacing(1),
         justifyContent: 'inherit',
@@ -73,10 +53,6 @@ const useStyles = makeStyles()((theme) => ({
     metaFooter: {
         justifyContent: 'inherit',
         alignItems: 'center',
-    },
-    metaText: {
-        marginTop: theme.spacing(1),
-        justifyContent: 'inherit',
     },
     metaTextPrize: {
         color: '#55f1d7',
@@ -109,14 +85,6 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: '1.2rem',
         '@media (min-width:600px)': {
             fontSize: '2rem',
-        },
-    },
-    '@keyframes rainbow_animation': {
-        '0%': {
-            backgroundPosition: '100% 0%',
-        },
-        '100%': {
-            backgroundPosition: '0 100%',
         },
     },
     countdown: {
@@ -170,11 +138,10 @@ export function PoolView(props: PoolProps) {
     const { t } = useI18N()
 
     const poolURL = usePoolURL(pool)
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const [prize, setPrize] = useState('TBD')
     const [period, setPeriod] = useState('Custom Period')
-    const currentPluginID = useCurrentWeb3NetworkPluginID()
+    const { pluginID } = useNetworkContext()
 
     // #region pool token
     const {
@@ -242,7 +209,7 @@ export function PoolView(props: PoolProps) {
             <Grid item container direction="column" className={classes.metaPrize}>
                 <Grid container item className={classes.metaTitle}>
                     <Grid item>
-                        <TokenIcon address={token.address} name={token.symbol} classes={{ icon: classes.icon }} />
+                        <TokenIcon address={token.address} name={token.symbol} className={classes.icon} />
                     </Grid>
                     <Grid item>
                         <Typography className={classes.prize} variant="h4" fontWeight="fontWeightBold">
@@ -269,7 +236,7 @@ export function PoolView(props: PoolProps) {
                     />
                 </Grid>
                 <Grid item>
-                    {currentPluginID === NetworkPluginID.PLUGIN_EVM && account ? (
+                    {pluginID === NetworkPluginID.PLUGIN_EVM && account ? (
                         <Button className={classes.deposit} fullWidth size="small" onClick={onDeposit}>
                             {t('plugin_pooltogether_deposit', { token: token.symbol ?? '' })}
                         </Button>
@@ -282,7 +249,7 @@ export function PoolView(props: PoolProps) {
                                 <TokenIcon
                                     address={tokenFaucetDripToken.address}
                                     name={tokenFaucetDripToken.symbol}
-                                    classes={{ icon: classes.poolIcon }}
+                                    className={classes.poolIcon}
                                 />
                                 {t('plugin_pooltogether_apr', {
                                     apr: tokenFaucet.apr?.toFixed(2) ?? 0,

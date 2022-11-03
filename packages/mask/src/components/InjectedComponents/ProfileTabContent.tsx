@@ -1,20 +1,24 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useUpdateEffect } from 'react-use'
-import { first, uniqBy } from 'lodash-unified'
+import { first } from 'lodash-unified'
 import { Icons } from '@masknet/icons'
 import {
     createInjectHooksRenderer,
-    PluginID,
     useActivatedPluginsSNSAdaptor,
     useIsMinimalMode,
     usePluginI18NField,
 } from '@masknet/plugin-infra/content-script'
 import { useAvailablePlugins } from '@masknet/plugin-infra'
-import { useHiddenAddressSetting } from '@masknet/web3-hooks-base'
-import { AddressItem, PluginCardFrameMini, useSocialAddressListBySettings } from '@masknet/shared'
-import { CrossIsolationMessages, EMPTY_LIST, NextIDPlatform } from '@masknet/shared-base'
+import {
+    AccountIcon,
+    AddressItem,
+    GrantPermissions,
+    PluginCardFrameMini,
+    useSocialAccountsBySettings,
+} from '@masknet/shared'
+import { CrossIsolationMessages, EMPTY_LIST, NextIDPlatform, PluginID } from '@masknet/shared-base'
 import { makeStyles, MaskLightTheme, MaskTabList, ShadowRootMenu, useStylesExtends, useTabs } from '@masknet/theme'
-import { isSameAddress, NetworkPluginID, SocialAddress, SocialAddressType } from '@masknet/web3-shared-base'
+import { isSameAddress } from '@masknet/web3-shared-base'
 import { TabContext } from '@mui/lab'
 import { Button, Link, MenuItem, Stack, Tab, ThemeProvider, Typography } from '@mui/material'
 import { isTwitter } from '../../social-network-adaptor/twitter.com/base.js'
@@ -23,7 +27,9 @@ import { MaskMessages, sorter, useI18N, useLocationChange } from '../../utils/in
 import { useCurrentVisitingSocialIdentity } from '../DataSource/useActivatedUI.js'
 import { useCurrentPersonaConnectStatus } from '../DataSource/usePersonaConnectStatus.js'
 import { ConnectPersonaBoundary } from '../shared/ConnectPersonaBoundary.js'
-import { WalletSettingEntry } from './ProfileTab/WalletSettingEntry'
+import { WalletSettingEntry } from './ProfileTab/WalletSettingEntry.js'
+import { isFacebook } from '../../social-network-adaptor/facebook.com/base.js'
+import { useGrantPermissions, usePluginHostPermissionCheck } from '../DataSource/usePluginHostPermission.js'
 
 function getTabContent(tabId?: string) {
     return createInjectHooksRenderer(useActivatedPluginsSNSAdaptor.visibility.useAnyMode, (x) => {
@@ -36,7 +42,7 @@ const MENU_ITEM_HEIGHT = 40
 const MENU_LIST_PADDING = 8
 const useStyles = makeStyles()((theme) => ({
     root: {
-        width: isTwitter(activatedSocialNetworkUI) ? 'auto' : 876,
+        width: isFacebook(activatedSocialNetworkUI) ? 876 : 'auto',
     },
     container: {
         background:
@@ -57,7 +63,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     addressMenu: {
         maxHeight: MENU_ITEM_HEIGHT * 9 + MENU_LIST_PADDING * 2,
-        width: 248,
+        minWidth: 320,
         backgroundColor: theme.palette.maskColor.bottom,
     },
     menuItem: {
@@ -71,14 +77,7 @@ const useStyles = makeStyles()((theme) => ({
     addressItem: {
         display: 'flex',
         alignItems: 'center',
-    },
-    link: {
-        cursor: 'pointer',
-        marginTop: 2,
-        zIndex: 0,
-        '&:hover': {
-            textDecoration: 'none',
-        },
+        marginRight: theme.spacing(2),
     },
     settingLink: {
         cursor: 'pointer',
@@ -87,11 +86,6 @@ const useStyles = makeStyles()((theme) => ({
         '&:hover': {
             textDecoration: 'none',
         },
-    },
-    linkIcon: {
-        color: theme.palette.maskColor.second,
-        fontSize: '20px',
-        margin: '4px 2px 0 2px',
     },
     content: {
         position: 'relative',
@@ -113,11 +107,6 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         position: 'relative',
     },
-    addressLabel: {
-        color: theme.palette.maskColor.dark,
-        fontSize: 18,
-        fontWeight: 700,
-    },
     arrowDropIcon: {
         color: theme.palette.maskColor.dark,
     },
@@ -135,7 +124,6 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.maskColor.secondaryDark,
     },
     secondLinkIcon: {
-        margin: '4px 2px 0 2px',
         color: theme.palette.maskColor.second,
     },
     reload: {
@@ -147,13 +135,13 @@ const useStyles = makeStyles()((theme) => ({
 export interface ProfileTabContentProps extends withClasses<'text' | 'button' | 'root'> {}
 
 export function ProfileTabContent(props: ProfileTabContentProps) {
-    const classes = useStylesExtends(useStyles(), props)
+    const { classes } = useStylesExtends(useStyles(), props)
 
     const { t } = useI18N()
     const translate = usePluginI18NField()
 
     const [hidden, setHidden] = useState(true)
-    const [selectedAddress, setSelectedAddress] = useState<SocialAddress<NetworkPluginID> | undefined>()
+    const [selectedAddress, setSelectedAddress] = useState<string | undefined>()
     const [menuOpen, setMenuOpen] = useState(false)
     const {
         value: personaStatus,
@@ -173,23 +161,22 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     const isOwnerIdentity = currentVisitingSocialIdentity?.isOwner
 
     const {
-        value: socialAddressList = EMPTY_LIST,
-        loading: loadingSocialAddressList,
-        error: loadSocialAddressListError,
-        retry: retrySocialAddress,
-    } = useSocialAddressListBySettings(currentVisitingSocialIdentity, undefined, sorter)
+        value: socialAccounts = EMPTY_LIST,
+        loading: loadingSocialAccounts,
+        error: loadSocialAccounts,
+        retry: retrySocialAccounts,
+    } = useSocialAccountsBySettings(currentVisitingSocialIdentity, undefined, sorter)
 
-    const { value: hiddenAddress } = useHiddenAddressSetting(
-        PluginID.Web3Profile,
-        personaStatus?.currentPersona?.identifier?.publicKeyAsHex,
-    )
+    const selectedSocialAccount = useMemo(() => {
+        return socialAccounts.find((x) => isSameAddress(x.address, selectedAddress))
+    }, [socialAccounts, selectedAddress])
 
     useEffect(() => {
         return MaskMessages.events.ownProofChanged.on(() => {
             retryIdentity()
-            retrySocialAddress()
+            retrySocialAccounts()
         })
-    }, [retrySocialAddress, retryIdentity])
+    }, [retrySocialAccounts, retryIdentity])
 
     useEffect(() => {
         return MaskMessages.events.ownPersonaChanged.on(() => {
@@ -198,15 +185,16 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     }, [retryIdentity])
 
     useEffect(() => {
-        setSelectedAddress(first(socialAddressList))
-    }, [socialAddressList])
+        setSelectedAddress(first(socialAccounts)?.address)
+    }, [socialAccounts])
 
     const activatedPlugins = useActivatedPluginsSNSAdaptor('any')
     const displayPlugins = useAvailablePlugins(activatedPlugins, (plugins) => {
         return plugins
             .flatMap((x) => x.ProfileTabs?.map((y) => ({ ...y, pluginID: x.ID })) ?? EMPTY_LIST)
             .filter((x) => {
-                const shouldDisplay = x.Utils?.shouldDisplay?.(currentVisitingSocialIdentity, selectedAddress) ?? true
+                const shouldDisplay =
+                    x.Utils?.shouldDisplay?.(currentVisitingSocialIdentity, selectedSocialAccount) ?? true
                 return x.pluginID !== PluginID.NextID && shouldDisplay
             })
             .sort((a, z) => {
@@ -247,7 +235,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
             // the owner persona and sns verified on next ID but not verify the wallet
             doesOwnerHaveNoAddress ||
             // the visiting persona not have social address list
-            (!isOwnerIdentity && !socialAddressList.length))
+            (!isOwnerIdentity && !socialAccounts.length))
 
     const componentTabId = showNextID ? `${PluginID.NextID}_tabContent` : currentTab
 
@@ -255,9 +243,15 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         const Component = getTabContent(componentTabId)
         if (!Component) return null
 
-        return <Component identity={currentVisitingSocialIdentity} socialAddress={selectedAddress} />
-    }, [componentTabId, currentVisitingSocialIdentity?.publicKey, selectedAddress])
+        return <Component identity={currentVisitingSocialIdentity} socialAccount={selectedSocialAccount} />
+    }, [componentTabId, currentVisitingSocialIdentity?.publicKey, selectedSocialAccount])
 
+    const lackHostPermission = usePluginHostPermissionCheck(activatedPlugins.filter((x) => x.ProfileCardTabs?.length))
+
+    const lackPluginId = first(lackHostPermission ? [...lackHostPermission] : [])
+    const lackPluginDefine = activatedPlugins.find((x) => x.ID === lackPluginId)
+
+    const [, onGrant] = useGrantPermissions(lackPluginDefine?.enableRequirement.host_permissions)
     useLocationChange(() => {
         onChange(undefined, first(tabs)?.id)
     })
@@ -289,8 +283,8 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     }, [])
 
     const buttonRef = useRef<HTMLButtonElement>(null)
-    const onSelect = (option: SocialAddress<NetworkPluginID>) => {
-        setSelectedAddress(option)
+    const onSelect = (address: string) => {
+        setSelectedAddress(address)
         setMenuOpen(false)
     }
     const handleOpenDialog = () => {
@@ -301,12 +295,22 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
 
     if (hidden) return null
 
-    if (
-        !currentVisitingUserId ||
-        loadingSocialAddressList ||
-        loadingCurrentVisitingSocialIdentity ||
-        loadingPersonaStatus
-    )
+    if (lackHostPermission?.size) {
+        return (
+            <ThemeProvider theme={MaskLightTheme}>
+                <div className={classes.root}>
+                    <PluginCardFrameMini>
+                        <GrantPermissions
+                            permissions={lackPluginDefine?.enableRequirement.host_permissions ?? []}
+                            onGrant={onGrant}
+                        />
+                    </PluginCardFrameMini>
+                </div>
+            </ThemeProvider>
+        )
+    }
+
+    if (!currentVisitingUserId || loadingSocialAccounts || loadingCurrentVisitingSocialIdentity || loadingPersonaStatus)
         return (
             <ThemeProvider theme={MaskLightTheme}>
                 <div className={classes.root}>
@@ -316,15 +320,13 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         )
 
     if (
-        (loadCurrentVisitingSocialIdentityError ||
-            (isOwnerIdentity && loadPersonaStatusError) ||
-            loadSocialAddressListError) &&
-        socialAddressList.length === 0
+        (loadCurrentVisitingSocialIdentityError || (isOwnerIdentity && loadPersonaStatusError) || loadSocialAccounts) &&
+        socialAccounts.length === 0
     ) {
         const handleClick = () => {
             if (loadPersonaStatusError) retryLoadPersonaStatus()
             if (loadCurrentVisitingSocialIdentityError) retryIdentity()
-            if (loadSocialAddressListError) retrySocialAddress()
+            if (loadSocialAccounts) retrySocialAccounts()
         }
         return (
             <ThemeProvider theme={MaskLightTheme}>
@@ -349,7 +351,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     }
 
     // Maybe should merge in NextIdPage
-    if (socialAddressList.length === 0 && !showNextID && !isTwitterPlatform) {
+    if (socialAccounts.length === 0 && !showNextID && !isTwitterPlatform) {
         return (
             <ThemeProvider theme={MaskLightTheme}>
                 <div className={classes.root}>
@@ -369,7 +371,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         )
     }
 
-    if (!socialAddressList.length && !showNextID) {
+    if (!socialAccounts.length && !showNextID) {
         return (
             <ThemeProvider theme={MaskLightTheme}>
                 <div className={classes.root}>
@@ -408,7 +410,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
                                             fontWeight: 700,
                                             color: (theme) => theme.palette.maskColor.dark,
                                         }}
-                                        socialAddress={selectedAddress}
+                                        socialAccount={selectedSocialAccount}
                                     />
                                     <Icons.ArrowDrop className={classes.arrowDropIcon} />
                                 </Button>
@@ -421,21 +423,21 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
                                     }}
                                     aria-labelledby="wallets"
                                     onClose={() => setMenuOpen(false)}>
-                                    {uniqBy(socialAddressList ?? [], (x) => x.address.toLowerCase()).map((x) => {
+                                    {socialAccounts.map((x) => {
                                         return (
                                             <MenuItem
                                                 className={classes.menuItem}
                                                 key={x.address}
                                                 value={x.address}
-                                                onClick={() => onSelect(x)}>
+                                                onClick={() => onSelect(x.address)}>
                                                 <div className={classes.addressItem}>
                                                     <AddressItem
-                                                        socialAddress={x}
+                                                        socialAccount={x}
                                                         linkIconClassName={classes.secondLinkIcon}
                                                     />
-                                                    {x?.type === SocialAddressType.NEXT_ID && <Icons.Verified />}
+                                                    <AccountIcon socialAccount={x} />
                                                 </div>
-                                                {isSameAddress(selectedAddress?.address, x.address) && (
+                                                {isSameAddress(selectedAddress, x.address) && (
                                                     <Icons.CheckCircle className={classes.selectedIcon} />
                                                 )}
                                             </MenuItem>

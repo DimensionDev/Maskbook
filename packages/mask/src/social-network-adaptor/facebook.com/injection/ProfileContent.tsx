@@ -61,5 +61,13 @@ const useStyles = makeStyles()((theme) => {
 
 export function ProfileTabContentAtFacebook() {
     const { classes } = useStyles()
-    return <ProfileTabContent classes={classes} />
+    return (
+        <ProfileTabContent
+            classes={{
+                root: classes.root,
+                text: classes.text,
+                button: classes.button,
+            }}
+        />
+    )
 }

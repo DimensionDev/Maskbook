@@ -65,40 +65,6 @@ export function useThemeFacebookVariant(baseTheme: Theme) {
             theme.shape.borderRadius = 15
             theme.breakpoints.values = { xs: 0, sm: 687, md: 1024, lg: 1280, xl: 1920 }
             theme.components = theme.components || {}
-            theme.components.MuiButton = {
-                defaultProps: {
-                    size: 'medium',
-                    disableElevation: true,
-                },
-                styleOverrides: {
-                    root: {
-                        borderRadius: 500,
-                        textTransform: 'initial',
-                        fontWeight: 'bold',
-                        minHeight: 39,
-                        paddingLeft: 15,
-                        paddingRight: 15,
-                        boxShadow: 'none',
-                        [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
-                            '&': {
-                                height: '28px !important',
-                                minHeight: 'auto !important',
-                                padding: '0 14px !important',
-                            },
-                        },
-                    },
-                    sizeLarge: {
-                        minHeight: 49,
-                        paddingLeft: 30,
-                        paddingRight: 30,
-                    },
-                    sizeSmall: {
-                        minHeight: 30,
-                        paddingLeft: 15,
-                        paddingRight: 15,
-                    },
-                },
-            }
             theme.components.MuiPaper = {
                 defaultProps: {
                     elevation: 0,

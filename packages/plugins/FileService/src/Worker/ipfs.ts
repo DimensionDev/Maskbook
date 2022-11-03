@@ -1,5 +1,5 @@
 import { Attachment } from '@dimensiondev/common-protocols'
-import { encodeText } from '@dimensiondev/kit'
+import { encodeText } from '@masknet/kit'
 import { create, IPFSHTTPClient } from 'ipfs-http-client'
 import { isEmpty } from 'lodash-unified'
 import { landing } from '../constants.js'

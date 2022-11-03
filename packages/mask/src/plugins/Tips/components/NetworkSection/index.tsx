@@ -1,10 +1,9 @@
-import { PluginID } from '@masknet/plugin-infra'
-import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
-import { EMPTY_LIST } from '@masknet/shared-base'
-import { makeStyles } from '@masknet/theme'
 import type { FC, HTMLProps } from 'react'
-import { NetworkTab } from '../../../../components/shared/NetworkTab'
-import { TargetRuntimeContext } from '../../contexts'
+import { PluginID, EMPTY_LIST } from '@masknet/shared-base'
+import { useNetworkContext } from '@masknet/web3-hooks-base'
+import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
+import { makeStyles } from '@masknet/theme'
+import { NetworkTab } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     abstractTabWrapper: {
@@ -33,19 +32,20 @@ interface Props extends HTMLProps<HTMLDivElement> {}
 export const NetworkSection: FC<Props> = () => {
     const { classes } = useStyles()
 
-    const { pluginId, targetChainId, setTargetChainId } = TargetRuntimeContext.useContainer()
-    const tipDefinition = useActivatedPlugin(PluginID.Tips, 'any')
-    const chainIdList = tipDefinition?.enableRequirement.web3?.[pluginId]?.supportedChainIds ?? EMPTY_LIST
+    const { pluginID } = useNetworkContext()
+    const definition = useActivatedPlugin(PluginID.Tips, 'any')
+    const chainIdList = definition?.enableRequirement.web3?.[pluginID]?.supportedChainIds ?? EMPTY_LIST
 
     if (!chainIdList.length) return null
 
     return (
         <div className={classes.abstractTabWrapper}>
             <NetworkTab
-                classes={classes}
-                networkId={pluginId}
-                chainId={targetChainId}
-                setChainId={setTargetChainId}
+                classes={{
+                    tab: classes.tab,
+                    tabs: classes.tabs,
+                    tabPaper: classes.tabPaper,
+                }}
                 chains={chainIdList}
             />
         </div>

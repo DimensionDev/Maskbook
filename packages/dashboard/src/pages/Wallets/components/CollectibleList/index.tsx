@@ -3,16 +3,16 @@ import { useNavigate } from 'react-router-dom'
 import { uniqBy } from 'lodash-unified'
 import { Box, Button, Stack } from '@mui/material'
 import { LoadingBase, makeStyles } from '@masknet/theme'
-import { isSameAddress, NetworkPluginID, NonFungibleAsset, NonFungibleToken } from '@masknet/web3-shared-base'
+import { DashboardRoutes, EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
+import { isSameAddress, NonFungibleAsset, NonFungibleToken } from '@masknet/web3-shared-base'
 import { LoadingPlaceholder } from '../../../../components/LoadingPlaceholder/index.js'
-import { DashboardRoutes, EMPTY_LIST } from '@masknet/shared-base'
 import { EmptyPlaceholder } from '../EmptyPlaceholder/index.js'
 import { CollectibleCard } from '../CollectibleCard/index.js'
 import { useDashboardI18N } from '../../../../locales/index.js'
 import { TransferTab } from '../Transfer/index.js'
 import {
-    useAccount,
-    useCurrentWeb3NetworkPluginID,
+    useChainContext,
+    useNetworkContext,
     useNonFungibleAssets,
     useTrustedNonFungibleTokens,
 } from '@masknet/web3-hooks-base'
@@ -30,11 +30,6 @@ const useStyles = makeStyles()({
         justifyContent: 'space-between',
     },
     card: {},
-    footer: {
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
 })
 
 interface CollectibleListProps {
@@ -43,7 +38,7 @@ interface CollectibleListProps {
 
 export const CollectibleList = memo<CollectibleListProps>(({ selectedChain }) => {
     const navigate = useNavigate()
-    const account = useAccount()
+    const { account } = useChainContext()
     const trustedNonFungibleTokens = useTrustedNonFungibleTokens(
         NetworkPluginID.PLUGIN_EVM,
         undefined,
@@ -72,7 +67,7 @@ export const CollectibleList = memo<CollectibleListProps>(({ selectedChain }) =>
         if (next) next()
     }, [next])
 
-    const currentPluginId = useCurrentWeb3NetworkPluginID()
+    const { pluginID: currentPluginId } = useNetworkContext()
     const onSend = useCallback(
         (
             detail: NonFungibleToken<

@@ -1,4 +1,4 @@
-import { delay } from '@dimensiondev/kit'
+import { delay } from '@masknet/kit'
 import type { IdentityResolved } from '@masknet/plugin-infra/content-script'
 import type { SocialNetworkUI } from '@masknet/social-network-infra'
 import { ProfileIdentifier, EnhanceableSite } from '@masknet/shared-base'

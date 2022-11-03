@@ -43,14 +43,12 @@ const useStyles = makeStyles()((theme) => ({
     },
     addressTitle: {
         color: MaskColorVar.normalText,
-        fontSize: 14,
         lineHeight: '20px',
     },
     address: {
         display: 'flex',
         alignItems: 'center',
         marginTop: 12,
-        fontSize: 14,
         lineHeight: '20px',
     },
     copy: {

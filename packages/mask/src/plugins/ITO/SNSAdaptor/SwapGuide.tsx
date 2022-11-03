@@ -1,8 +1,9 @@
-import { ZERO, NetworkPluginID, FungibleToken } from '@masknet/web3-shared-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
+import { ZERO, FungibleToken } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType, isNativeTokenAddress } from '@masknet/web3-shared-evm'
 import { DialogContent } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import BigNumber from 'bignumber.js'
+import { BigNumber } from 'bignumber.js'
 import { useCallback, useEffect, useMemo, useState, useTransition } from 'react'
 import { InjectedDialog, InjectedDialogProps } from '@masknet/shared'
 import { useI18N } from '../../../utils/index.js'
@@ -10,7 +11,7 @@ import { RemindDialog } from './RemindDialog.js'
 import { ShareDialog } from './ShareDialog.js'
 import { SwapDialog, SwapDialogProps } from './SwapDialog.js'
 import { UnlockDialog } from './UnlockDialog.js'
-import { useAccount, useChainId } from '@masknet/web3-hooks-base'
+import { useChainContext } from '@masknet/web3-hooks-base'
 
 export enum SwapStatus {
     Remind = 0,
@@ -67,8 +68,7 @@ export function SwapGuide(props: SwapGuideProps) {
     const initAmount = ZERO
     const [tokenAmount, setTokenAmount] = useState<BigNumber>(initAmount)
     const [actualSwapAmount, setActualSwapAmount] = useState<BigNumber.Value>(0)
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
     const SwapTitle: Record<SwapStatus, string> = {
         [SwapStatus.Remind]: t('plugin_ito_dialog_swap_reminder_title'),

@@ -1,8 +1,9 @@
 import { List, ListItem } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { NFTImageCollectibleAvatar, CollectionTypes } from '@masknet/shared'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import { NetworkPluginID, TokenType } from '@masknet/web3-shared-base'
+import { TokenType } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({}))
 
@@ -15,19 +16,18 @@ export interface CollectionListProps extends withClasses<never | 'root' | 'list'
 
 export function CollectionList(props: CollectionListProps) {
     const { collections, onList, size = 64, showNetwork = false } = props
-    const classes = useStylesExtends(useStyles(), props)
+    const { classes } = useStylesExtends(useStyles(), props)
 
     return (
         <List className={classes.list}>
             {collections.map((collection) => (
                 <ListItem
-                    data-url={collection.imageURL ?? ''}
-                    key={collection?.key}
+                    key={collection.key}
                     className={classes.collectionWrap}
                     onClick={() => onList?.(collection.key)}>
                     <NFTImageCollectibleAvatar
                         showNetwork={showNetwork}
-                        pluginId={collection?.platform ?? NetworkPluginID.PLUGIN_EVM}
+                        pluginID={collection?.networkPluginID ?? NetworkPluginID.PLUGIN_EVM}
                         size={size}
                         token={{
                             ...collection,

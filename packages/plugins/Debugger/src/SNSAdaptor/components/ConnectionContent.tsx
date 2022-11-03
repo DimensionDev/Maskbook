@@ -1,8 +1,8 @@
 import { useCallback } from 'react'
-import { useAccount, useChainId, useCurrentWeb3NetworkPluginID, useWeb3Connection } from '@masknet/web3-hooks-base'
+import { useWeb3Connection, useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { makeStyles } from '@masknet/theme'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import {
     ChainId,
     ChainId as EVM_ChainId,
@@ -26,19 +26,26 @@ const useStyles = makeStyles()({
 export function ConnectionContent(props: ConnectionContentProps) {
     const { classes } = useStyles()
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
-    const pluginID = useCurrentWeb3NetworkPluginID()
-    const chainId = useChainId()
-    const account = useAccount()
+    const { pluginID } = useNetworkContext()
+    const { account, chainId } = useChainContext()
     const connection = useWeb3Connection()
 
-    const onTransferCallback = useCallback(() => {
-        if (!NATIVE_TOKEN_ADDRESS) return
-        return connection?.transferFungibleToken(
-            NATIVE_TOKEN_ADDRESS,
-            '0x790116d0685eB197B886DAcAD9C247f785987A4a',
-            '100',
-        )
-    }, [connection])
+    const onTransferCallback = useCallback(
+        (providerType: EVM_ProviderType) => {
+            if (!NATIVE_TOKEN_ADDRESS) return
+            return connection?.transferFungibleToken(
+                NATIVE_TOKEN_ADDRESS,
+                '0x790116d0685eB197B886DAcAD9C247f785987A4a',
+                '100',
+                undefined,
+                {
+                    chainId: ChainId.BSC,
+                    providerType,
+                },
+            )
+        },
+        [connection],
+    )
 
     const onApproveFungibleTokenCallback = useCallback(() => {
         if (pluginID !== NetworkPluginID.PLUGIN_EVM) return
@@ -148,8 +155,17 @@ export function ConnectionContent(props: ConnectionContentProps) {
                             </Typography>
                         </TableCell>
                         <TableCell>
-                            <Button size="small" onClick={onTransferCallback}>
-                                Transfer
+                            <Button size="small" onClick={() => onTransferCallback(EVM_ProviderType.MaskWallet)}>
+                                Transfer with Mask Wallet
+                            </Button>
+                            <Button size="small" onClick={() => onTransferCallback(EVM_ProviderType.MetaMask)}>
+                                Transfer with MetaMask
+                            </Button>
+                            <Button size="small" onClick={() => onTransferCallback(EVM_ProviderType.WalletConnect)}>
+                                Transfer with WalletConnect
+                            </Button>
+                            <Button size="small" onClick={() => onTransferCallback(EVM_ProviderType.Fortmatic)}>
+                                Transfer with Fortmatic
                             </Button>
                         </TableCell>
                     </TableRow>

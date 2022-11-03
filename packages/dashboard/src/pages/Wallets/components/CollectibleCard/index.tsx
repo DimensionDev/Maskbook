@@ -1,12 +1,12 @@
 import { memo, useEffect, useMemo, useRef, useState } from 'react'
 import { useHoverDirty } from 'react-use'
-import { WalletIcon, NFTCardStyledAssetPlayer } from '@masknet/shared'
+import { AssetPreviewer, NetworkIcon } from '@masknet/shared'
 import { Box, Button, Link, Tooltip, Typography } from '@mui/material'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { useDashboardI18N } from '../../../../locales/index.js'
 import { ChangeNetworkTip } from '../FungibleTokenTableRow/ChangeNetworkTip.js'
-import { useChainId, useCurrentWeb3NetworkPluginID, useNetworkDescriptor, useWeb3State } from '@masknet/web3-hooks-base'
+import { useChainContext, useNetworkContext, useWeb3State } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 
 const useStyles = makeStyles()((theme) => ({
@@ -47,14 +47,6 @@ const useStyles = makeStyles()((theme) => ({
         overflow: 'hidden',
         fontSize: 12,
     },
-    chainIcon: {
-        position: 'absolute',
-        right: 8,
-        top: 8,
-        height: 20,
-        width: 20,
-        zIndex: 20,
-    },
     tip: {
         padding: theme.spacing(1),
         background: '#111432',
@@ -68,12 +60,6 @@ const useStyles = makeStyles()((theme) => ({
         transform: 'translateY(10px)',
         width: 64,
         height: 64,
-    },
-    wrapper: {
-        width: '100%',
-        minWidth: 140,
-        height: '100%',
-        minHeight: 186,
     },
     linkWrapper: {
         position: 'relative',
@@ -96,15 +82,14 @@ export interface CollectibleCardProps {
 
 export const CollectibleCard = memo<CollectibleCardProps>(({ asset, onSend, renderOrder }) => {
     const t = useDashboardI18N()
-    const chainId = useChainId()
+    const { chainId } = useChainContext()
     const { classes } = useStyles()
     const ref = useRef(null)
     const { Others } = useWeb3State()
     const [isHoveringTooltip, setHoveringTooltip] = useState(false)
     const isHovering = useHoverDirty(ref)
-    const networkDescriptor = useNetworkDescriptor(undefined, asset.contract?.chainId)
     const isOnCurrentChain = useMemo(() => chainId === asset.contract?.chainId, [chainId, asset])
-    const currentPluginId = useCurrentWeb3NetworkPluginID()
+    const { pluginID: currentPluginId } = useNetworkContext()
 
     useEffect(() => {
         setHoveringTooltip(false)
@@ -121,9 +106,6 @@ export const CollectibleCard = memo<CollectibleCardProps>(({ asset, onSend, rend
     return (
         <Box className={`${classes.container} ${isHovering || isHoveringTooltip ? classes.hover : ''}`} ref={ref}>
             <div className={classes.card}>
-                <Box className={classes.chainIcon}>
-                    <WalletIcon mainIcon={networkDescriptor?.icon} size={20} />
-                </Box>
                 <Link
                     target={asset.link ?? nftLink ? '_blank' : '_self'}
                     rel="noopener noreferrer"
@@ -131,16 +113,12 @@ export const CollectibleCard = memo<CollectibleCardProps>(({ asset, onSend, rend
                     href={asset.link ?? nftLink}>
                     <div className={classes.blocker} />
                     <div className={classes.mediaContainer}>
-                        <NFTCardStyledAssetPlayer
-                            contractAddress={asset.contract?.address}
-                            chainId={asset.contract?.chainId}
-                            renderOrder={renderOrder}
-                            url={asset.metadata?.imageURL || asset.metadata?.mediaURL}
-                            tokenId={asset.tokenId}
+                        <AssetPreviewer
                             classes={{
                                 fallbackImage: classes.fallbackImage,
-                                wrapper: classes.wrapper,
                             }}
+                            url={asset.metadata?.imageURL || asset.metadata?.mediaURL}
+                            icon={<NetworkIcon pluginID={currentPluginId} chainId={asset.chainId} />}
                         />
                     </div>
                 </Link>

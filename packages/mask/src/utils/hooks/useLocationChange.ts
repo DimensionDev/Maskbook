@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 
-export function useLocationChange(handler: () => void) {
+export function useLocationChange(handler: (event?: Event) => void) {
     useEffect(() => {
         window.addEventListener('locationchange', handler)
         return () => window.removeEventListener('locationchange', handler)

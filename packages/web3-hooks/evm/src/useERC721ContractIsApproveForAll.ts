@@ -1,6 +1,6 @@
 import { useAsyncRetry } from 'react-use'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { useChainId } from '@masknet/web3-hooks-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
+import { useChainContext } from '@masknet/web3-hooks-base'
 import { safeNonPayableTransactionCall } from '@masknet/web3-shared-evm'
 import { useERC721TokenContract } from './useERC721TokenContract.js'
 
@@ -15,7 +15,7 @@ export function useERC721ContractIsApproveForAll(
     owner: string | undefined,
     operator: string | undefined,
 ) {
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const erc721TokenContract = useERC721TokenContract(chainId, contractAddress)
     return useAsyncRetry(async () => {
         if (!erc721TokenContract || !owner || !operator) return

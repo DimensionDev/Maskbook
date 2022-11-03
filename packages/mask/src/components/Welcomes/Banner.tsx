@@ -39,13 +39,10 @@ const useStyles = makeStyles()({
         height: 38,
         margin: '10px 0',
     },
-    span: {
-        paddingLeft: 8,
-    },
 })
 
 export function BannerUI(props: BannerUIProps) {
-    const classes = useStylesExtends(useStyles(), props)
+    const { classes } = useStylesExtends(useStyles(), props)
 
     return props.nextStep === 'hidden' ? null : (
         <IconButton size="large" className={classes.buttonText} onClick={props.nextStep.onClick}>

@@ -2,7 +2,6 @@ import { memo } from 'react'
 import { PersonaList } from '../components/PersonaList/index.js'
 import { makeStyles } from '@masknet/theme'
 import { Button } from '@mui/material'
-import classNames from 'classnames'
 import { PersonaContext } from '../hooks/usePersonaContext.js'
 import { MAX_PERSONA_LIMIT } from '@masknet/shared-base'
 import urlcat from 'urlcat'
@@ -44,7 +43,7 @@ const useStyles = makeStyles()({
 })
 
 const SelectPersona = memo(() => {
-    const { classes } = useStyles()
+    const { classes, cx } = useStyles()
     const { t } = useI18N()
     const { personas } = PersonaContext.useContainer()
 
@@ -56,7 +55,7 @@ const SelectPersona = memo(() => {
             <div className={classes.controller}>
                 <Button
                     variant="contained"
-                    className={classNames(classes.button, classes.secondaryButton)}
+                    className={cx(classes.button, classes.secondaryButton)}
                     disabled={personas && personas.length >= MAX_PERSONA_LIMIT}
                     onClick={() => {
                         browser.tabs.create({

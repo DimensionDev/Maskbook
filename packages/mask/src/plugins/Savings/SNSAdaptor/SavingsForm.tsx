@@ -1,12 +1,11 @@
 import { useState, useMemo } from 'react'
 import { useAsync, useAsyncFn } from 'react-use'
 import type { AbiItem } from 'web3-utils'
-import BigNumber from 'bignumber.js'
-import { isLessThan, rightShift, NetworkPluginID, ZERO, formatBalance, formatCurrency } from '@masknet/web3-shared-base'
-import { LoadingBase } from '@masknet/theme'
+import { BigNumber } from 'bignumber.js'
+import { isLessThan, rightShift, ZERO, formatBalance, formatCurrency } from '@masknet/web3-shared-base'
+import { LoadingBase, makeStyles } from '@masknet/theme'
 import {
     createContract,
-    createERC20Token,
     SchemaType,
     getAaveConstants,
     ZERO_ADDRESS,
@@ -14,26 +13,75 @@ import {
     isNativeTokenAddress,
 } from '@masknet/web3-shared-evm'
 import {
-    useAccount,
+    useChainContext,
     useFungibleTokenBalance,
     useFungibleTokenPrice,
     useNativeToken,
     useWeb3,
 } from '@masknet/web3-hooks-base'
-import { FungibleTokenInput, FormattedCurrency, InjectedDialog, TokenIcon, useOpenShareTxDialog } from '@masknet/shared'
-import type { AaveLendingPoolAddressProvider } from '@masknet/web3-contracts/types/AaveLendingPoolAddressProvider'
+import {
+    FungibleTokenInput,
+    FormattedCurrency,
+    InjectedDialog,
+    TokenIcon,
+    useOpenShareTxDialog,
+    PluginWalletStatusBar,
+    ActionButtonPromise,
+    ChainBoundary,
+    WalletConnectedBoundary,
+    EthereumERC20TokenApprovedBoundary,
+} from '@masknet/shared'
+import type { AaveLendingPoolAddressProvider } from '@masknet/web3-contracts/types/AaveLendingPoolAddressProvider.js'
 import AaveLendingPoolAddressProviderABI from '@masknet/web3-contracts/abis/AaveLendingPoolAddressProvider.json'
-import { PluginWalletStatusBar, useI18N } from '../../../utils/index.js'
-import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary.js'
-import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
+import { useI18N } from '../../../utils/index.js'
 import { ProtocolType, SavingsProtocol, TabType } from '../types.js'
-import { useStyles } from './SavingsFormStyles.js'
-import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary.js'
 import { DialogActions, DialogContent, Typography } from '@mui/material'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base.js'
 import { activatedSocialNetworkUI } from '../../../social-network/index.js'
-import { ActionButtonPromise } from '../../../extension/options-page/DashboardComponents/ActionButton.js'
-import { createLookupTableResolver } from '@masknet/shared-base'
+import { createLookupTableResolver, NetworkPluginID } from '@masknet/shared-base'
+
+export const useStyles = makeStyles()((theme, props) => ({
+    containerWrap: {
+        padding: 0,
+        fontFamily: theme.typography.fontFamily,
+    },
+    inputWrap: {
+        position: 'relative',
+        width: '100%',
+        margin: theme.spacing(1.25, 0),
+    },
+    tokenValueUSD: {
+        padding: '0 0 10px 0',
+    },
+    infoRow: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        padding: '0 0 15px 0',
+    },
+    infoRowLeft: {
+        display: 'flex',
+        alignItems: 'center',
+    },
+    infoRowRight: {
+        fontWeight: 'bold',
+    },
+    rowImage: {
+        width: '24px',
+        height: '24px',
+        margin: '0 5px 0 0',
+    },
+    button: {},
+    disabledButton: {},
+    connectWallet: {
+        marginTop: 0,
+    },
+    gasFee: {
+        padding: '0 0 0 5px',
+        fontSize: 11,
+        opacity: 0.5,
+    },
+}))
 
 export interface SavingsFormDialogProps {
     chainId: number
@@ -55,7 +103,7 @@ export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFo
     const { classes } = useStyles()
 
     const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM, { chainId })
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const [inputAmount, setInputAmount] = useState('')
     const [estimatedGas, setEstimatedGas] = useState<BigNumber.Value>(ZERO)
 
@@ -138,10 +186,7 @@ export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFo
         const poolAddress = await lPoolAddressProviderContract?.methods.getLendingPool().call()
 
         return {
-            approveToken:
-                token.schema === SchemaType.ERC20
-                    ? createERC20Token(chainId, token.address, token.name, token.symbol, token.decimals)
-                    : undefined,
+            approveToken: token.schema === SchemaType.ERC20 ? token : undefined,
             approveAmount: new BigNumber(inputAmount).shiftedBy(token.decimals),
             approveAddress: poolAddress,
         }
@@ -277,9 +322,9 @@ export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFo
                     <div className={classes.infoRow}>
                         <Typography variant="body2" className={classes.infoRowLeft}>
                             <TokenIcon
+                                className={classes.rowImage}
                                 address={protocol.bareToken.address}
                                 logoURL={protocol.bareToken.logoURL}
-                                classes={{ icon: classes.rowImage }}
                                 chainId={protocol.bareToken.chainId}
                                 name={protocol.bareToken.name}
                             />

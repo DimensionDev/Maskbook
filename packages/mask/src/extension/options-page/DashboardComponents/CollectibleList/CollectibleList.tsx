@@ -1,13 +1,48 @@
 import { useWeb3State } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { NetworkPluginID, NonFungibleAsset, SourceType } from '@masknet/web3-shared-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
+import { NonFungibleAsset, SourceType } from '@masknet/web3-shared-base'
 import { Box, Button, Tooltip, Typography } from '@mui/material'
 import { useCallback, useMemo, useRef } from 'react'
 import { useI18N } from '../../../../utils/index.js'
 import { ChangeEventOptions, CollectibleItem, SelectableProps } from './CollectibleItem.js'
 import { CollectibleListContext } from './CollectibleListContext.js'
-import { CollectibleGridProps, useStyles } from './hooks/useStyles.js'
 import { LoadingSkeleton } from './LoadingSkeleton.js'
+import { makeStyles } from '@masknet/theme'
+import type { CollectibleGridProps } from '../../types.js'
+
+const useStyles = makeStyles<CollectibleGridProps>()((theme, { columns = 3, gap = 2 }) => {
+    const gapIsNumber = typeof gap === 'number'
+    return {
+        root: {
+            width: '100%',
+            display: 'grid',
+            gridTemplateColumns: `repeat(${columns}, 1fr)`,
+            gridGap: gapIsNumber ? theme.spacing(gap) : gap,
+            padding: gapIsNumber ? theme.spacing(0, gap, 0) : `0 ${gap} 0`,
+            boxSizing: 'border-box',
+        },
+        collectibleItem: {
+            overflowX: 'hidden',
+        },
+        text: {
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            height: '100%',
+        },
+        button: {
+            '&:hover': {
+                border: 'solid 1px transparent',
+            },
+        },
+        list: {
+            overflow: 'auto',
+            position: 'relative',
+        },
+    }
+})
 
 export interface CollectibleListProps
     extends withClasses<'empty' | 'button' | 'root'>,

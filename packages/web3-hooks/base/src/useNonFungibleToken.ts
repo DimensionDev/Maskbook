@@ -1,9 +1,8 @@
-import useAsyncRetry from 'react-use/lib/useAsyncRetry'
-import type { NetworkPluginID } from '@masknet/web3-shared-base'
+import useAsyncRetry from 'react-use/lib/useAsyncRetry.js'
+import type { NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useWeb3Connection } from './useWeb3Connection.js'
-import { useChainId } from './useChainId.js'
-import { useAccount } from './useAccount.js'
+import { useChainContext } from './useContext.js'
 
 export function useNonFungibleToken<S extends 'all' | void = void, T extends NetworkPluginID = NetworkPluginID>(
     pluginID?: T,
@@ -12,8 +11,7 @@ export function useNonFungibleToken<S extends 'all' | void = void, T extends Net
     schemaType?: Web3Helper.SchemaTypeScope<S, T>,
     options?: Web3Helper.Web3ConnectionOptionsScope<S, T>,
 ) {
-    const chainId = useChainId(pluginID, options?.chainId)
-    const account = useAccount(pluginID, options?.account)
+    const { account, chainId } = useChainContext({ account: options?.account, chainId: options?.chainId })
     const connection = useWeb3Connection(pluginID, options)
 
     return useAsyncRetry<Web3Helper.NonFungibleTokenScope<S, T> | undefined>(async () => {

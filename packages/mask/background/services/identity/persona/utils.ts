@@ -1,6 +1,6 @@
 import * as bip39 from 'bip39'
 import * as wallet from 'wallet.ts'
-import { encodeArrayBuffer, encodeText } from '@dimensiondev/kit'
+import { encodeArrayBuffer, encodeText } from '@masknet/kit'
 import {
     EC_Private_JsonWebKey,
     EC_Public_JsonWebKey,

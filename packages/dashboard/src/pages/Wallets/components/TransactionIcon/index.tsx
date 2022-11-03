@@ -1,10 +1,11 @@
+import { memo, useMemo } from 'react'
 import { Icons } from '@masknet/icons'
-import { useChainId } from '@masknet/web3-hooks-base'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
+import { isSameAddress } from '@masknet/web3-shared-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
 import { TransactionType, useRedPacketConstants } from '@masknet/web3-shared-evm'
 import { Box } from '@mui/material'
-import { memo, useMemo } from 'react'
+import { useChainContext } from '@masknet/web3-hooks-base'
 
 const useStyles = makeStyles()(() => ({
     container: {
@@ -40,7 +41,7 @@ export interface TransactionIconProps {
 }
 
 export const TransactionIcon = memo<TransactionIconProps>(({ address, failed, type, transactionType }) => {
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const {
         HAPPY_RED_PACKET_ADDRESS_V1,
         HAPPY_RED_PACKET_ADDRESS_V2,

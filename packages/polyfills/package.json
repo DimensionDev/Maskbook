@@ -14,7 +14,6 @@
     "@rollup/plugin-commonjs": "^22.0.2",
     "@rollup/plugin-json": "^4.1.0",
     "@rollup/plugin-node-resolve": "^14.0.1",
-    "@swc/core": "1.2.245",
     "@types/node": "18.7.16",
     "core-js-builder": "3.25.1",
     "regenerator-runtime": "^0.13.9",

@@ -1,14 +1,14 @@
-import { useChainId, useWeb3Connection } from '@masknet/web3-hooks-base'
-import type { HappyRedPacketV1 } from '@masknet/web3-contracts/types/HappyRedPacketV1'
-import type { HappyRedPacketV4 } from '@masknet/web3-contracts/types/HappyRedPacketV4'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { useChainContext, useWeb3Connection } from '@masknet/web3-hooks-base'
+import type { HappyRedPacketV1 } from '@masknet/web3-contracts/types/HappyRedPacketV1.js'
+import type { HappyRedPacketV4 } from '@masknet/web3-contracts/types/HappyRedPacketV4.js'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { encodeContractTransaction } from '@masknet/web3-shared-evm'
 import { useAsyncFn } from 'react-use'
 import Web3Utils from 'web3-utils'
 import { useRedPacketContract } from './useRedPacketContract.js'
 
 export function useClaimCallback(version: number, from: string, id: string, password?: string) {
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const redPacketContract = useRedPacketContract(chainId, version)
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
     return useAsyncFn(async () => {

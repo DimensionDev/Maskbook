@@ -34,6 +34,7 @@ import { RedPacketDescriptor } from './TransactionFormatter/descriptors/RedPacke
 import { ERC20Descriptor } from './TransactionFormatter/descriptors/ERC20.js'
 import { ERC721Descriptor } from './TransactionFormatter/descriptors/ERC721.js'
 import { SwapDescriptor } from './TransactionFormatter/descriptors/Swap.js'
+import { SavingsDescriptor } from './TransactionFormatter/descriptors/Savings.js'
 
 export class TransactionFormatter extends TransactionFormatterState<ChainId, TransactionParameter, Transaction> {
     private coder = ABICoder as unknown as ABICoder.AbiCoder
@@ -41,6 +42,7 @@ export class TransactionFormatter extends TransactionFormatterState<ChainId, Tra
     private descriptors: Record<TransactionDescriptorType, TransactionDescriptor[]> = {
         [TransactionDescriptorType.TRANSFER]: [new TransferTokenDescriptor()],
         [TransactionDescriptorType.INTERACTION]: [
+            new SavingsDescriptor(),
             new ITODescriptor(),
             new MaskBoxDescriptor(),
             new RedPacketDescriptor(),

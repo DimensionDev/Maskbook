@@ -41,8 +41,8 @@ function collectPostsFacebookInner(store: Next.CollectingCapabilities.PostsProvi
                 .closest('[role=article] div[dir="auto"] > [id] > div > div')
 
             const rootProxy = DOMProxy({
-                afterShadowRootInit: { mode: 'closed' },
-                beforeShadowRootInit: { mode: 'closed' },
+                afterShadowRootInit: { mode: process.env.shadowRootMode },
+                beforeShadowRootInit: { mode: process.env.shadowRootMode },
             })
             rootProxy.realCurrent = root.evaluate()[0] as HTMLElement
 

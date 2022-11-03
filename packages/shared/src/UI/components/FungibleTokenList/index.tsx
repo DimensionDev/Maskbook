@@ -10,17 +10,17 @@ import {
     useState,
 } from 'react'
 import { uniqBy } from 'lodash-unified'
-import { EMPTY_LIST, EMPTY_OBJECT } from '@masknet/shared-base'
+import { EMPTY_LIST, EMPTY_OBJECT, NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles, MaskFixedSizeListProps, MaskTextFieldProps, SearchableList } from '@masknet/theme'
 import { Box, Stack, Typography } from '@mui/material'
 import { useSharedI18N } from '../../../locales/index.js'
 import {
-    useAccount,
     useBlockedFungibleTokens,
-    useChainId,
-    useCurrentWeb3NetworkPluginID,
+    useChainContext,
+    useNetworkContext,
     useFungibleAssets,
     useFungibleToken,
+    useFungibleTokenBalance,
     useFungibleTokensBalance,
     useFungibleTokensFromTokenList,
     useTrustedFungibleTokens,
@@ -34,7 +34,6 @@ import {
     isSameAddress,
     leftShift,
     minus,
-    NetworkPluginID,
     toZero,
 } from '@masknet/web3-shared-base'
 import { getFungibleTokenItem } from './FungibleTokenItem.js'
@@ -72,7 +71,6 @@ const useStyles = makeStyles()((theme) => ({
         right: 0,
     },
     listBox: {},
-    wrapper: {},
 }))
 
 const Content = memo(({ message, height }: { message: ReactNode; height?: number | string }) => {
@@ -138,14 +136,12 @@ export const FungibleTokenList = forwardRef(
         )
         // #endregion
 
-        const pluginID = useCurrentWeb3NetworkPluginID(props.pluginID) as T
-        const account = useAccount(pluginID)
-        const chainId = useChainId(pluginID, props.chainId)
+        const { pluginID } = useNetworkContext<T>(props.pluginID)
+        const { account, chainId } = useChainContext({
+            chainId: props.chainId,
+        })
         const { Token, Others } = useWeb3State<'all'>(pluginID)
-        const { value: fungibleTokens = EMPTY_LIST, loading: loadingFungibleTokens } = useFungibleTokensFromTokenList(
-            pluginID,
-            { chainId },
-        )
+        const { value: fungibleTokens = EMPTY_LIST } = useFungibleTokensFromTokenList(pluginID, { chainId })
         const trustedFungibleTokens = useTrustedFungibleTokens(pluginID, undefined, chainId)
         const blockedFungibleTokens = useBlockedFungibleTokens(pluginID)
         const nativeToken = useMemo(() => Others?.chainResolver.nativeCurrency(chainId), [chainId])
@@ -313,8 +309,17 @@ export const FungibleTokenList = forwardRef(
                 : ''
         }, [keyword, sortedFungibleTokensForList, Others, mode])
 
-        const { value: searchedToken, loading: searchingToken } = useFungibleToken(pluginID, searchedTokenAddress, {
+        const { value: searchedToken, loading: searchingToken } = useFungibleToken(
+            pluginID,
+            searchedTokenAddress,
+            undefined,
+            {
+                chainId,
+            },
+        )
+        const { value: tokenBalance = '' } = useFungibleTokenBalance(pluginID, searchedToken?.address, {
             chainId,
+            account,
         })
         // #endregion
 
@@ -396,13 +401,16 @@ export const FungibleTokenList = forwardRef(
         return (
             <Stack className={classes.channel}>
                 <SearchableList<
-                    FungibleToken<Web3Helper.Definition[T]['ChainId'], Web3Helper.Definition[T]['SchemaType']>
+                    FungibleToken<Web3Helper.Definition[T]['ChainId'], Web3Helper.Definition[T]['SchemaType']> & {
+                        balance?: string
+                    }
                 >
                     onSelect={handleSelect}
                     onSearch={setKeyword}
                     data={
                         searchedToken && isSameAddress(searchedToken.address, searchedTokenAddress)
-                            ? [searchedToken]
+                            ? // balance field work for case: user search someone token by contract and whitelist is empty.
+                              [{ ...searchedToken, balance: tokenBalance }]
                             : mode === TokenListMode.List
                             ? sortedFungibleTokensForList
                             : sortedFungibleTokensForManage

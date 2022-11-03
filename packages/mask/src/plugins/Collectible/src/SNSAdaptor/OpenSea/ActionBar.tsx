@@ -1,14 +1,15 @@
 import { Box } from '@mui/material'
 import { makeStyles, ActionButton } from '@masknet/theme'
-import { useAccount } from '@masknet/web3-hooks-base'
+import { useChainContext } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
+import { isSameAddress } from '@masknet/web3-shared-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
 import { useI18N } from '../../../../../utils/index.js'
 import { useControlledDialog } from '../../../../../utils/hooks/useControlledDialog.js'
 import { MakeOfferDialog } from './MakeOfferDialog.js'
 import { PostListingDialog } from './PostListingDialog.js'
 import { CheckoutDialog } from './CheckoutDialog.js'
-import { ChainBoundary } from '../../../../../web3/UI/ChainBoundary.js'
+import { ChainBoundary } from '@masknet/shared'
 import { useAssetOrder } from './hooks/useAssetOrder.js'
 import { Context } from '../Context/index.js'
 
@@ -30,7 +31,7 @@ export function ActionBar({ chainId, pluginID }: ActionBarProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
     const { asset } = Context.useContainer()
-    const account = useAccount()
+    const { account } = useChainContext()
     const { value: assetOrder } = useAssetOrder(asset.value?.address, asset.value?.tokenId)
 
     const {

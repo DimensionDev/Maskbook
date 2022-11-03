@@ -1,13 +1,13 @@
 import { useAsyncFn } from 'react-use'
 import { EthereumAddress } from 'wallet.ts'
 import { toHex } from 'web3-utils'
-import { isGreaterThan, isZero, NetworkPluginID } from '@masknet/web3-shared-base'
+import { isGreaterThan, isZero } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { GasConfig, TransactionEventType } from '@masknet/web3-shared-evm'
-import { useAccount, useChainId, useWeb3 } from '@masknet/web3-hooks-base'
+import { useChainContext, useWeb3 } from '@masknet/web3-hooks-base'
 
 export function useNativeTransferCallback() {
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM)
 
     return useAsyncFn(

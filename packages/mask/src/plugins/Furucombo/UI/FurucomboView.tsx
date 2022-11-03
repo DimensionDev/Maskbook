@@ -1,5 +1,6 @@
-import { useChainId } from '@masknet/web3-hooks-base'
-import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
+import { useChainContext } from '@masknet/web3-hooks-base'
+import { isSameAddress } from '@masknet/web3-shared-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
 import { LoadingBase, makeStyles, MaskColorVar } from '@masknet/theme'
 import { Card, CardContent, Tabs, Tab, Typography, Paper, Button, Stack } from '@mui/material'
 import { useState } from 'react'
@@ -53,7 +54,7 @@ export function FurucomboView(props: PoolViewProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
     const [tabIndex, setTabIndex] = useState(0)
-    const currentChainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { chainId: currentChainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
     const { value, loading, error, retry } = useFetchPools()
 

@@ -23,13 +23,6 @@ const useStyles = makeStyles()((theme) => ({
         gridTemplateColumns: 'repeat(2, 1fr)',
         gridColumnGap: theme.spacing(3.5),
     },
-    backup: {
-        backgroundColor: MaskColorVar.warning,
-        '&:hover': {
-            backgroundColor: MaskColorVar.warning,
-            boxShadow: `0 0 5px ${MaskColorVar.warning}`,
-        },
-    },
 }))
 
 export interface PersonaDrawer {

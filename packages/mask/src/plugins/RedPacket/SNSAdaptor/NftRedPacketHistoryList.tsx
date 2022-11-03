@@ -1,11 +1,11 @@
+import { useRef, useState } from 'react'
 import { useScrollBottomEvent } from '@masknet/shared-base-ui'
 import { makeStyles, LoadingBase } from '@masknet/theme'
-import classNames from 'classnames'
-import { useAccount, useChainId } from '@masknet/web3-hooks-base'
-import { NetworkPluginID, NonFungibleTokenContract } from '@masknet/web3-shared-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
+import { useChainContext } from '@masknet/web3-hooks-base'
+import type { NonFungibleTokenContract } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { List, Popper, Typography, Box } from '@mui/material'
-import { useRef, useState } from 'react'
 import type { NftRedPacketHistory } from '../types.js'
 import { useNftRedPacketHistory } from './hooks/useNftRedPacketHistory.js'
 import { NftRedPacketHistoryItem } from './NftRedPacketHistoryItem.js'
@@ -88,10 +88,9 @@ interface Props {
 }
 
 export function NftRedPacketHistoryList({ onSend }: Props) {
-    const { classes } = useStyles()
+    const { classes, cx } = useStyles()
     const t = useI18N()
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { histories, fetchMore, loading } = useNftRedPacketHistory(account, chainId)
     const containerRef = useRef(null)
     const [popperText, setPopperText] = useState('')
@@ -158,9 +157,7 @@ export function NftRedPacketHistoryList({ onSend }: Props) {
                     return (
                         <div className={classes.popperContent}>
                             <Typography className={classes.popperText}>{popperText}</Typography>
-                            <div
-                                className={classNames(classes.arrow, placement === 'bottom' ? classes.atBottom : '')}
-                            />
+                            <div className={cx(classes.arrow, placement === 'bottom' ? classes.atBottom : '')} />
                         </div>
                     )
                 }}

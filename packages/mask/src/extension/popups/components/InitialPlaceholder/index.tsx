@@ -44,7 +44,6 @@ const useStyles = makeStyles()({
         color: '#07101B',
     },
     description: {
-        fontSize: 14,
         color: '#ACB4C1',
         textAlign: 'center',
         lineHeight: '18px',

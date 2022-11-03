@@ -1,4 +1,4 @@
-import { PluginID } from '@masknet/plugin-infra'
+import { PluginID } from '@masknet/shared-base'
 
 // #region plugin settings
 export const PLUGIN_ID = PluginID.Trader

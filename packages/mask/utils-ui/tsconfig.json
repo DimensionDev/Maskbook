@@ -4,8 +4,7 @@
     "rootDir": "./",
     "outDir": "../dist/utils-ui/",
     "tsBuildInfoFile": "../dist/utils-ui.tsbuildinfo",
-    "emitDeclarationOnly": true,
-    "lib": ["ES2022"]
+    "emitDeclarationOnly": true
   },
   "include": ["./"],
   "references": []

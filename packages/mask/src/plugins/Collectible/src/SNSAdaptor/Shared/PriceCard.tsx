@@ -22,11 +22,9 @@ const useStyles = makeStyles()((theme) => ({
     },
     textPrimary: {
         color: theme.palette.maskColor.publicMain,
-        fontSize: 14,
         fontWeight: 700,
     },
     textBase: {
-        fontSize: 14,
         color: theme.palette.maskColor.publicSecond,
         '& > strong': {
             color: theme.palette.maskColor.publicMain,
@@ -56,9 +54,6 @@ const useStyles = makeStyles()((theme) => ({
         lineHeight: '20px',
         display: 'flex',
         alignItems: 'flex-end',
-    },
-    textSm: {
-        fontSize: 24,
     },
 }))
 

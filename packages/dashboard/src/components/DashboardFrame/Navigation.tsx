@@ -1,3 +1,5 @@
+import { useContext } from 'react'
+import { useMatch, useNavigate } from 'react-router-dom'
 import {
     List,
     ListItem as MuiListItem,
@@ -14,15 +16,12 @@ import {
     useTheme,
 } from '@mui/material'
 import { ExpandLess, ExpandMore } from '@mui/icons-material'
-import { useContext } from 'react'
-import { useMatch, useNavigate } from 'react-router-dom'
 import { DashboardContext } from './context.js'
 import { Icons } from '@masknet/icons'
 import { useDashboardI18N } from '../../locales/index.js'
 import { MaskColorVar } from '@masknet/theme'
-import { DashboardRoutes } from '@masknet/shared-base'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { useCurrentWeb3NetworkPluginID } from '@masknet/web3-hooks-base'
+import { DashboardRoutes, NetworkPluginID } from '@masknet/shared-base'
+import { useNetworkContext } from '@masknet/web3-hooks-base'
 
 const ListItemLinkUnStyled = ({
     to,
@@ -112,7 +111,7 @@ export function Navigation({ onClose }: NavigationProps) {
     const isLargeScreen = useMediaQuery<Theme>((theme) => theme.breakpoints.up('lg'))
     const t = useDashboardI18N()
     const mode = useTheme().palette.mode
-    const currentPluginId = useCurrentWeb3NetworkPluginID()
+    const { pluginID } = useNetworkContext()
 
     const onExpand = (e: React.MouseEvent<HTMLElement>) => {
         e.stopPropagation()
@@ -156,12 +155,12 @@ export function Navigation({ onClose }: NavigationProps) {
                     <ListItemLink to={DashboardRoutes.Wallets}>
                         <ListSubTextItem inset primary={t.wallets_assets()} />
                     </ListItemLink>
-                    {currentPluginId === NetworkPluginID.PLUGIN_EVM && (
+                    {pluginID === NetworkPluginID.PLUGIN_EVM && (
                         <ListItemLink to={DashboardRoutes.WalletsTransfer}>
                             <ListSubTextItem inset primary={t.wallets_transfer()} />
                         </ListItemLink>
                     )}
-                    {currentPluginId === NetworkPluginID.PLUGIN_EVM && (
+                    {pluginID === NetworkPluginID.PLUGIN_EVM && (
                         <ListItemLink to={DashboardRoutes.WalletsHistory}>
                             <ListSubTextItem inset primary={t.wallets_history()} />
                         </ListItemLink>

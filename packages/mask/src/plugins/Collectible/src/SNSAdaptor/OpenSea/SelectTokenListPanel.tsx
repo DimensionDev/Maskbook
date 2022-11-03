@@ -4,7 +4,7 @@ import { FormattedBalance, TokenIcon, useMenuConfig } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import Check from '@mui/icons-material/Check'
 import { FormControl, ListItemIcon, MenuItem, Typography, InputBase, InputAdornment } from '@mui/material'
-import { FungibleToken, isSameAddress, formatBalance } from '@masknet/web3-shared-base'
+import { isSameAddress, formatBalance } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useI18N } from '../../../../../utils/index.js'
 
@@ -41,10 +41,10 @@ const useStyles = makeStyles()((theme) => ({
 export interface SelectTokenPanelProps {
     amount: string
     balance: string
-    token?: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
-    tokens?: Array<FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>
+    token?: Web3Helper.FungibleTokenAll
+    tokens?: Web3Helper.FungibleTokenAll[]
     onAmountChange: (amount: string) => void
-    onTokenChange: (token: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>) => void
+    onTokenChange: (token: Web3Helper.FungibleTokenAll) => void
 }
 
 export function SelectTokenListPanel(props: SelectTokenPanelProps) {
@@ -73,12 +73,7 @@ export function SelectTokenListPanel(props: SelectTokenPanelProps) {
                         onTokenChange(x)
                     }}>
                     <ListItemIcon>
-                        <TokenIcon
-                            classes={{ icon: classes.icon }}
-                            address={x.address}
-                            name={x.name}
-                            logoURL={x.logoURL}
-                        />
+                        <TokenIcon className={classes.icon} address={x.address} name={x.name} logoURL={x.logoURL} />
                     </ListItemIcon>
                     <Typography variant="inherit">{x.symbol}</Typography>
                     <ListItemIcon className={classes.check}>
@@ -166,7 +161,7 @@ export function SelectTokenListPanel(props: SelectTokenPanelProps) {
                             {token?.address ? (
                                 <>
                                     <TokenIcon
-                                        classes={{ icon: classes.icon }}
+                                        className={classes.icon}
                                         address={token?.address}
                                         name={token?.name}
                                         logoURL={token?.logoURL}

@@ -11,8 +11,8 @@ import { WalletMessages } from '../../messages.js'
 import { hasNativeAPI, nativeAPI } from '../../../../../shared/native-rpc/index.js'
 import { PluginProviderRender } from './PluginProviderRender.js'
 import { pluginIDSettings } from '../../../../../shared/legacy-settings/settings.js'
-import { getSiteType, isDashboardPage } from '@masknet/shared-base'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { getSiteType, isDashboardPage, NetworkPluginID } from '@masknet/shared-base'
+import { delay } from '@masknet/kit'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -83,6 +83,8 @@ export function SelectProviderDialog(props: SelectProviderDialogProps) {
 
             closeDialog()
 
+            // TODO: remove this after global dialog be implement
+            await delay(500)
             // TODO:
             // refactor to use react-router-dom
             setConnectWalletDialog({

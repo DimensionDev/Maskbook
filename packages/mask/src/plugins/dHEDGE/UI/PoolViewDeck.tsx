@@ -1,8 +1,8 @@
 import { explorerResolver } from '@masknet/web3-shared-evm'
-import { useAccount, useChainId } from '@masknet/web3-hooks-base'
+import { useChainContext } from '@masknet/web3-hooks-base'
 import { Avatar, Button, Grid, Link, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import BigNumber from 'bignumber.js'
+import { BigNumber } from 'bignumber.js'
 import { useCallback } from 'react'
 import { Trans } from 'react-i18next'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
@@ -10,12 +10,9 @@ import { useI18N } from '../../../utils/i18n-next-ui.js'
 import { useAvatar } from '../hooks/useManager.js'
 import { PluginDHedgeMessages } from '../messages.js'
 import type { Pool } from '../types.js'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
-    root: {
-        padding: theme.spacing(2),
-    },
     title: {
         padding: theme.spacing(1, 0),
         display: 'flex',
@@ -48,10 +45,6 @@ const useStyles = makeStyles()((theme) => ({
         marginBottom: theme.spacing(1),
         fontWeight: 500,
     },
-    chip: {
-        width: '100%',
-        fontSize: 'x-small',
-    },
 }))
 
 interface PoolDeckProps {
@@ -66,8 +59,7 @@ export function PoolViewDeck(props: PoolDeckProps) {
     const { t } = useI18N()
 
     const blockie = useAvatar(pool.managerAddress)
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
     // #region manager share
     const managerShare = new BigNumber(pool.balanceOfManager)

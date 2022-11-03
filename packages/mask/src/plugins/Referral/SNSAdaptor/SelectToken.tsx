@@ -1,13 +1,12 @@
 import { useCallback, useState, useMemo } from 'react'
 import { useAsync } from 'react-use'
-import { delay } from '@dimensiondev/kit'
-import { useChainId } from '@masknet/web3-hooks-base'
+import { delay } from '@masknet/kit'
+import { useChainContext } from '@masknet/web3-hooks-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { DialogContent, Typography } from '@mui/material'
 import { InjectedDialog } from '@masknet/shared'
-import { EMPTY_LIST } from '@masknet/shared-base'
+import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 import { useI18N } from '../locales/index.js'
 import { PluginReferralMessages, ReferralRPC } from '../messages.js'
@@ -17,7 +16,6 @@ import type { FungibleTokenDetailed } from '../types.js'
 
 import { FungibleTokenList } from './shared-ui/FungibleTokenList/index.js'
 
-import { useSharedStyles } from './styles.js'
 import { useRowSize } from '../../../../../shared/src/contexts/components/useRowSize.js'
 
 const DISABLED_NATIVE_TOKEN = true
@@ -37,12 +35,23 @@ const useStyles = makeStyles()((theme) => ({
         paddingTop: theme.spacing(2),
         paddingBottom: theme.spacing(6),
     },
+    msg: {
+        width: '100%',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: '12px',
+        background: theme.palette.background.default,
+        padding: '12px 0',
+        color: theme.palette.text.strong,
+        fontWeight: 500,
+        textAlign: 'center',
+    },
 }))
 
 export function SelectToken() {
-    const currentChainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { chainId: currentChainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const t = useI18N()
-    const { classes: sharedClasses } = useSharedStyles()
     const { classes } = useStyles()
     const rowSize = useRowSize()
 
@@ -104,7 +113,7 @@ export function SelectToken() {
             }}>
             <DialogContent>
                 {onlyFarmTokens && error ? (
-                    <Typography className={sharedClasses.msg}>{t.blockchain_error_your_referral_farms()}</Typography>
+                    <Typography className={classes.msg}>{t.blockchain_error_your_referral_farms()}</Typography>
                 ) : (
                     <FungibleTokenList
                         whitelist={onlyFarmTokens ? referredTokens : undefined}

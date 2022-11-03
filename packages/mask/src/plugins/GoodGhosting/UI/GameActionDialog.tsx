@@ -1,22 +1,15 @@
 import { Box, Button, DialogContent, DialogActions, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { InjectedDialog } from '@masknet/shared'
-import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary.js'
+import { InjectedDialog, WalletConnectedBoundary, EthereumERC20TokenApprovedBoundary } from '@masknet/shared'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import type { GoodGhostingInfo } from '../types.js'
-import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary.js'
 import { useI18N } from '../../../utils/index.js'
 import { useGameToken } from '../hooks/usePoolData.js'
-import { formatBalance, FungibleToken, isGreaterThanOrEqualTo, NetworkPluginID } from '@masknet/web3-shared-base'
+import { formatBalance, FungibleToken, isGreaterThanOrEqualTo } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { useFungibleTokenBalance } from '@masknet/web3-hooks-base'
 
 const useStyles = makeStyles()((theme) => ({
-    content: {
-        width: '100%',
-        display: 'flex',
-        flexDirection: 'column',
-        boxSizing: 'border-box',
-    },
     button: {
         width: '60%',
         minHeight: 39,

@@ -61,7 +61,7 @@ async function getTokens(operationName?: string) {
         fetchContent(getScriptURL(swContent, 'bundle.UserNft')),
     ])
 
-    const bearerToken = getScriptContentMatched(mainContent ?? '', /s="(\w+%3D\w+)"/)
+    const bearerToken = getScriptContentMatched(mainContent ?? '', /,\w="(\w{20,}%3D\w{20,})",/)
     const queryToken = getScriptContentMatched(nftContent ?? '', /{\s?id:\s?"([\w-]+)"/)
     const csrfToken = getCSRFToken()
     const queryId = operationName
@@ -256,6 +256,7 @@ export class TwitterAPI implements TwitterBaseAPI.Provider {
                 withSuperFollowsUserFields: true,
             }),
             features: JSON.stringify({
+                verified_phone_label_enabled: false,
                 responsive_web_graphql_timeline_navigation_enabled: false,
             }),
         })

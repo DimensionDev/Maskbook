@@ -1,13 +1,13 @@
 import urlcat from 'urlcat'
-import { createLookupTableResolver, NextIDPlatform } from '@masknet/shared-base'
 import {
     ChainDescriptor,
     CurrencyType,
     NetworkDescriptor,
-    NetworkPluginID,
     ProviderDescriptor,
+    SocialAddressType,
     SourceType,
 } from '../specs/index.js'
+import { NetworkPluginID, createLookupTableResolver, NextIDPlatform } from '@masknet/shared-base'
 
 export interface ExplorerRoutes {
     addressPathname?: string
@@ -80,7 +80,8 @@ export function createChainResolver<ChainId, SchemaType, NetworkType>(
         networkType: (chainId?: ChainId) => getChainDescriptor(chainId)?.type,
         explorerURL: (chainId?: ChainId) => getChainDescriptor(chainId)?.explorerURL,
         nativeCurrency: (chainId?: ChainId) => getChainDescriptor(chainId)?.nativeCurrency,
-        isValid: (chainId?: ChainId, testnet = false) => getChainDescriptor(chainId)?.network === 'mainnet' || testnet,
+        isValid: (chainId?: ChainId, testnet = false) =>
+            getChainDescriptor(chainId) && (getChainDescriptor(chainId)?.network === 'mainnet' || testnet),
         isMainnet: (chainId?: ChainId) => getChainDescriptor(chainId)?.network === 'mainnet',
         isSupport: (chainId?: ChainId, feature?: string) =>
             !!(feature && getChainDescriptor(chainId)?.features?.includes(feature)),
@@ -165,6 +166,23 @@ export function createProviderResolver<ChainId, ProviderType>(
         providerDownloadLink: (providerType: ProviderType) => getProviderDescriptor(providerType)?.downloadLink,
     }
 }
+
+export const resolveSocialAddressLink = createLookupTableResolver<SocialAddressType, string>(
+    {
+        [SocialAddressType.Address]: '',
+        [SocialAddressType.ENS]: 'https://ens.domains/',
+        [SocialAddressType.SPACE_ID]: 'https://space.id/',
+        [SocialAddressType.RSS3]: 'https://rss3.bio/',
+        [SocialAddressType.SOL]: 'https://naming.bonfida.org/',
+        [SocialAddressType.KV]: 'https://next.id/',
+        [SocialAddressType.NEXT_ID]: 'https://next.id/',
+        [SocialAddressType.CyberConnect]: 'https://cyberconnect.me/',
+        [SocialAddressType.Leaderboard]: 'https://ethleaderboard.xyz/',
+        [SocialAddressType.Sybil]: 'https://sybil.org/',
+        [SocialAddressType.TwitterBlue]: '',
+    },
+    () => '',
+)
 
 export const resolveSourceTypeName = createLookupTableResolver<SourceType, string>(
     {
@@ -272,9 +290,9 @@ export const resolveLocalURL = (url: string): string => {
 /**
  * Remove query from IPFS url, as it is not needed
  * and will increase requests sometimes.
- * For example https://ipfs.io/ipfs/<same-cid>?id=67891 and  https://ipfs.io/ipfs/<same-cid>?id=67892
+ * For example https://ipfs.io/ipfs/<same-cid>?id=67891 and https://ipfs.io/ipfs/<same-cid>?id=67892
  * are set to two different NFTs, but according to the same CID,
- * they are exactly the some.
+ * they are exactly the same.
  */
 const trimQuery = (url: string) => {
     return url.replace(/\?.+$/, '')

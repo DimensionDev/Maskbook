@@ -1,20 +1,20 @@
-import type { Web3Helper } from '@masknet/web3-helpers'
-import type { FungibleToken, NonFungibleToken, NonFungibleTokenContract } from '@masknet/web3-shared-base'
-import type { GasOptionConfig } from '@masknet/web3-shared-evm'
 import { noop } from 'lodash-unified'
 import { createContext, Dispatch, SetStateAction } from 'react'
-import { TipsAccount, TipsType, ValidationTuple } from '../../types/index.js'
+import type { Web3Helper } from '@masknet/web3-helpers'
+import type { NonFungibleTokenContract, SocialAccount } from '@masknet/web3-shared-base'
+import type { GasOptionConfig } from '@masknet/web3-shared-evm'
+import { TipsType, ValidationTuple } from '../../types/index.js'
 
 export interface TipContextOptions {
-    recipient: TipsAccount | undefined
+    recipient: SocialAccount | undefined
     recipientSnsId: string
     recipientAddress: string
     setRecipient: Dispatch<SetStateAction<string>>
     tipType: TipsType
     setTipType: Dispatch<SetStateAction<TipsType>>
-    recipients: TipsAccount[]
-    token: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll> | null
-    setToken: Dispatch<SetStateAction<FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll> | null>>
+    recipients: SocialAccount[]
+    token: Web3Helper.FungibleTokenAll | null
+    setToken: Dispatch<SetStateAction<Web3Helper.FungibleTokenAll | null>>
     amount: string
     setAmount: Dispatch<SetStateAction<string>>
     nonFungibleTokenId: string | null
@@ -24,7 +24,8 @@ export interface TipContextOptions {
     setNonFungibleTokenAddress: Dispatch<SetStateAction<string>>
     sendTip: () => Promise<string | undefined>
     isSending: boolean
-    storedTokens: Array<NonFungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>
+    isDirty: boolean
+    storedTokens: Web3Helper.NonFungibleTokenAll[]
     reset: () => void
     setGasOption: Dispatch<SetStateAction<GasOptionConfig | undefined>>
     gasOption: GasOptionConfig | undefined
@@ -52,6 +53,7 @@ export const TipContext = createContext<TipContextOptions>({
     setNonFungibleTokenAddress: noop,
     sendTip: noop as () => Promise<string | undefined>,
     isSending: false,
+    isDirty: false,
     storedTokens: [],
     reset: noop,
     setGasOption: noop,
@@ -60,3 +62,4 @@ export const TipContext = createContext<TipContextOptions>({
     validatingRecipient: false,
     recipientValidation: [true],
 })
+TipContext.displayName = 'TipContext'

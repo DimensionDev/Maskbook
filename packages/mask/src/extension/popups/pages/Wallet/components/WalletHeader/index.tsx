@@ -1,18 +1,18 @@
 import { memo, useCallback, useMemo } from 'react'
+import { useMatch, useNavigate } from 'react-router-dom'
 import { makeStyles } from '@masknet/theme'
-import { useLocation, useMatch, useNavigate } from 'react-router-dom'
-import { PopupRoutes } from '@masknet/shared-base'
+import { PopupRoutes, NetworkPluginID } from '@masknet/shared-base'
 import type { ChainId, NetworkType } from '@masknet/web3-shared-evm'
 import { WalletHeaderUI } from './UI.js'
 import { getRegisteredWeb3Networks } from '@masknet/plugin-infra'
-import { useAccount, useChainId, useProviderType, useWallet } from '@masknet/web3-hooks-base'
+import { useChainContext, useWallet } from '@masknet/web3-hooks-base'
 import { Flags } from '../../../../../../../shared/index.js'
 import { MenuItem, Typography } from '@mui/material'
 import { useMenuConfig, WalletIcon, ChainIcon } from '@masknet/shared'
 import { currentMaskWalletAccountSettings } from '../../../../../../../shared/legacy-settings/wallet-settings.js'
 import { WalletRPC } from '../../../../../../plugins/Wallet/messages.js'
 import { NormalHeader } from '../../../../components/NormalHeader/index.js'
-import { NetworkDescriptor, NetworkPluginID } from '@masknet/web3-shared-base'
+import type { NetworkDescriptor } from '@masknet/web3-shared-base'
 import Services from '../../../../../service.js'
 import { useConnected } from '../../hooks/useConnected.js'
 
@@ -27,12 +27,9 @@ const useStyles = makeStyles()({
 
 export const WalletHeader = memo(() => {
     const { classes } = useStyles()
-    const location = useLocation()
     const navigate = useNavigate()
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { account, chainId, providerType } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
-    const providerType = useProviderType(NetworkPluginID.PLUGIN_EVM)
 
     const networks = getRegisteredWeb3Networks().filter(
         (x) => x.networkSupporterPluginID === NetworkPluginID.PLUGIN_EVM,

@@ -1,5 +1,5 @@
 import { LiveSelector } from '@dimensiondev/holoflows-kit'
-import { delay, waitDocumentReadyState } from '@dimensiondev/kit'
+import { delay, waitDocumentReadyState } from '@masknet/kit'
 import type { SocialNetworkUI } from '@masknet/social-network-infra'
 import { inputText, pasteText } from '@masknet/injected-script'
 import { MaskMessages } from '../../../utils/messages.js'

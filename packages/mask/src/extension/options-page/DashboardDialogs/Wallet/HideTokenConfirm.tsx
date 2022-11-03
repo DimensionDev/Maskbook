@@ -1,12 +1,10 @@
 import { Trash2 as TrashIcon } from 'react-feather'
 import { Button, Box, BoxProps } from '@mui/material'
 import { SchemaType, isNativeTokenAddress, ChainId } from '@masknet/web3-shared-evm'
-import { useSnackbarCallback } from '@masknet/shared'
+import { useSnackbarCallback, DebounceButton } from '@masknet/shared'
 import { useI18N } from '../../../../utils/index.js'
-import { DebounceButton } from '../../DashboardComponents/ActionButton.js'
 import { DashboardDialogCore, DashboardDialogWrapper, WrappedDialogProps } from '../Base.js'
 import { makeStyles } from '@masknet/theme'
-import classNames from 'classnames'
 import type { FungibleToken, NonFungibleToken, Wallet } from '@masknet/web3-shared-base'
 import { Trans } from 'react-i18next'
 
@@ -94,7 +92,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 function SpacedButtonGroup(_props: BoxProps) {
-    const { classes } = useStyles()
+    const { classes, cx } = useStyles()
     const { className, ...props } = _props
-    return <Box className={classNames(className, classes.buttonGroup)} {...props} />
+    return <Box className={cx(className, classes.buttonGroup)} {...props} />
 }

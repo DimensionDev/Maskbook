@@ -1,13 +1,12 @@
 import { useCallback, useState } from 'react'
 import { useAsync } from 'react-use'
-import { useAccount, useChainId, useWeb3 } from '@masknet/web3-hooks-base'
+import { useChainContext, useWeb3 } from '@masknet/web3-hooks-base'
 import { makeStyles, useCustomSnackbar, ActionButton } from '@masknet/theme'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { Typography, Box, Tab, Tabs, Grid, Divider } from '@mui/material'
 import { TabContext, TabPanel } from '@mui/lab'
 import { v4 as uuid } from 'uuid'
-import { EMPTY_LIST, CrossIsolationMessages } from '@masknet/shared-base'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { EMPTY_LIST, CrossIsolationMessages, NetworkPluginID } from '@masknet/shared-base'
 
 import { useI18N } from '../locales/index.js'
 import { PluginReferralMessages, SelectTokenUpdated, ReferralRPC } from '../messages.js'
@@ -17,15 +16,16 @@ import { singAndPostProofOfRecommendationWithReferrer } from './utils/proofOfRec
 import { MASK_REFERRER, SWAP_CHAIN_ID } from '../constants.js'
 import { TabsReferAndBuy, TransactionStatus, PageInterface, PagesType, FungibleTokenDetailed } from '../types.js'
 
-import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary.js'
-import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
+import { WalletConnectedBoundary, ChainBoundary } from '@masknet/shared'
 import { MyRewards } from './MyRewards/index.js'
 import { TokenSelectField } from './shared-ui/TokenSelectField.js'
 import { RewardDataWidget } from './shared-ui/RewardDataWidget.js'
 import { SponsoredFarmIcon } from './shared-ui/icons/SponsoredFarm.js'
-import { useTabStyles } from './styles.js'
 
 const useStyles = makeStyles()((theme) => ({
+    root: {
+        fontSize: 14,
+    },
     container: {
         flex: 1,
         height: '100%',
@@ -35,12 +35,6 @@ const useStyles = makeStyles()((theme) => ({
         height: '100%',
         overflow: 'auto',
         padding: theme.spacing(3, 0),
-    },
-    tabs: {
-        width: '288px',
-    },
-    subtitle: {
-        margin: '12px 0 24px',
     },
     typeNote: {
         marginBottom: '24px',
@@ -54,11 +48,9 @@ const useStyles = makeStyles()((theme) => ({
 export function BuyToFarm(props: PageInterface) {
     const t = useI18N()
     const { classes } = useStyles()
-    const { classes: tabClasses } = useTabStyles()
-    const currentChainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { account, chainId: currentChainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const requiredChainId = getRequiredChainId(currentChainId)
     const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM)
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const { showSnackbar } = useCustomSnackbar()
 
     const [tab, setTab] = useState(TabsReferAndBuy.NEW)
@@ -150,8 +142,12 @@ export function BuyToFarm(props: PageInterface) {
                     variant="fullWidth"
                     onChange={(e, v) => setTab(v)}
                     aria-label="persona-post-contacts-button-group">
-                    <Tab value={TabsReferAndBuy.NEW} label={t.tab_new()} classes={tabClasses} />
-                    <Tab value={TabsReferAndBuy.MY_REWARDS} label={t.tab_my_rewards()} classes={tabClasses} />
+                    <Tab value={TabsReferAndBuy.NEW} label={t.tab_new()} classes={{ root: classes.root }} />
+                    <Tab
+                        value={TabsReferAndBuy.MY_REWARDS}
+                        label={t.tab_my_rewards()}
+                        classes={{ root: classes.root }}
+                    />
                 </Tabs>
                 <TabPanel value={TabsReferAndBuy.NEW} className={classes.tab}>
                     <Typography fontWeight={600} variant="h6" marginBottom="12px">

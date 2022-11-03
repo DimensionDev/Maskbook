@@ -1,4 +1,4 @@
-import { type Plugin, usePluginWrapper, PluginID } from '@masknet/plugin-infra/content-script'
+import { type Plugin, usePluginWrapper } from '@masknet/plugin-infra/content-script'
 import {
     ChainId,
     SchemaType,
@@ -22,10 +22,10 @@ import { RedPacketInPost } from './RedPacketInPost.js'
 import { RedPacketNftInPost } from './RedPacketNftInPost.js'
 import { Trans } from 'react-i18next'
 import { Icons } from '@masknet/icons'
-import { CrossIsolationMessages } from '@masknet/shared-base'
+import { CrossIsolationMessages, PluginID, NetworkPluginID } from '@masknet/shared-base'
 import { ApplicationEntry } from '@masknet/shared'
 import { useFungibleToken } from '@masknet/web3-hooks-base'
-import { NetworkPluginID, formatBalance } from '@masknet/web3-shared-base'
+import { formatBalance } from '@masknet/web3-shared-base'
 
 function Render(
     props: React.PropsWithChildren<{

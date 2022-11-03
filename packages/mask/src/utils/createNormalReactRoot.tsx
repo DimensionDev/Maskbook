@@ -1,6 +1,5 @@
 import { StrictMode } from 'react'
 import { createRoot, hydrateRoot } from 'react-dom/client'
-import { ErrorBoundary } from '@masknet/shared-base-ui'
 import { DisableShadowRootContext } from '@masknet/theme'
 
 function cleanup() {
@@ -20,9 +19,7 @@ function getContainer(container?: HTMLElement) {
 function Root(jsx: JSX.Element) {
     return (
         <StrictMode>
-            <DisableShadowRootContext.Provider value>
-                <ErrorBoundary>{jsx}</ErrorBoundary>
-            </DisableShadowRootContext.Provider>
+            <DisableShadowRootContext.Provider value>{jsx}</DisableShadowRootContext.Provider>
         </StrictMode>
     )
 }

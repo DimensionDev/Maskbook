@@ -2,7 +2,8 @@ import { Icons } from '@masknet/icons'
 import { useReverseAddress, useWallets, useWeb3State } from '@masknet/web3-hooks-base'
 import { FormattedAddress, useSnackbarCallback } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
-import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
+import { isSameAddress } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { ChainId, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { Link, Typography } from '@mui/material'
 import { useMemo } from 'react'
@@ -29,7 +30,6 @@ const useStyles = makeStyles()((theme) => ({
     },
     accountName: {
         fontWeight: 700,
-        fontSize: 14,
         marginRight: 6,
     },
     address: {
@@ -58,15 +58,6 @@ const useStyles = makeStyles()((theme) => ({
         color: '#1C68F3',
         fontWeight: 700,
         marginLeft: 4,
-    },
-    domain: {
-        fontSize: 16,
-        lineHeight: '18px',
-        marginLeft: 6,
-        padding: 4,
-        borderRadius: 8,
-        backgroundColor: '#ffffff',
-        color: theme.palette.common.black,
     },
     disabled: {
         cursor: 'default',

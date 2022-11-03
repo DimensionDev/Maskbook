@@ -1,28 +1,32 @@
+import { ChangeEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { BigNumber } from 'bignumber.js'
+import { omit } from 'lodash-unified'
 import { makeStyles, useStylesExtends, ActionButton } from '@masknet/theme'
 import {
     FungibleToken,
     isGreaterThan,
     isZero,
     multipliedBy,
-    NetworkPluginID,
     rightShift,
     formatBalance,
 } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType, useRedPacketConstants } from '@masknet/web3-shared-evm'
 import { MenuItem, Select, Box, InputBase, Typography } from '@mui/material'
-import BigNumber from 'bignumber.js'
-import { omit } from 'lodash-unified'
-import { ChangeEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { useSelectFungibleToken, FungibleTokenInput } from '@masknet/shared'
+import { NetworkPluginID } from '@masknet/shared-base'
+import {
+    useSelectFungibleToken,
+    FungibleTokenInput,
+    PluginWalletStatusBar,
+    ChainBoundary,
+    WalletConnectedBoundary,
+    EthereumERC20TokenApprovedBoundary,
+} from '@masknet/shared'
+import { useFungibleToken, useFungibleTokenBalance, useChainContext } from '@masknet/web3-hooks-base'
 import { useCurrentIdentity, useCurrentLinkedPersona } from '../../../components/DataSource/useActivatedUI.js'
 import { useI18N } from '../locales/index.js'
-import { PluginWalletStatusBar, useI18N as useBaseI18n } from '../../../utils/index.js'
-import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary.js'
-import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary.js'
+import { useI18N as useBaseI18n } from '../../../utils/index.js'
 import { RED_PACKET_DEFAULT_SHARES, RED_PACKET_MAX_SHARES, RED_PACKET_MIN_SHARES } from '../constants.js'
 import type { RedPacketSettings } from './hooks/useCreateCallback.js'
-import { useAccount, useChainId, useFungibleToken, useFungibleTokenBalance } from '@masknet/web3-hooks-base'
-import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
 
 // seconds of 1 day
 const duration = 60 * 60 * 24
@@ -36,39 +40,10 @@ const useStyles = makeStyles()((theme) => ({
     input: {
         flex: 1,
     },
-
-    tip: {
-        fontSize: 12,
-        color: theme.palette.text.secondary,
-    },
     button: {
         margin: 0,
         padding: 0,
         height: 40,
-    },
-    selectShrinkLabel: {
-        top: 6,
-        backgroundColor: theme.palette.background.paper,
-        paddingLeft: 2,
-        paddingRight: 7,
-        transform: 'translate(17px, -10px) scale(0.75) !important',
-    },
-    inputShrinkLabel: {
-        transform: 'translate(17px, -3px) scale(0.75) !important',
-    },
-    label: {
-        textAlign: 'left',
-        color: theme.palette.text.secondary,
-    },
-    gasEstimation: {
-        display: 'flex',
-        justifyContent: 'flex-end',
-        alignItems: 'center',
-        cursor: 'pointer',
-        '& > p': {
-            marginRight: 5,
-            color: theme.palette.mode === 'light' ? '#7B8192' : '#6F767C',
-        },
     },
     unlockContainer: {
         margin: 0,
@@ -91,15 +66,16 @@ export interface RedPacketFormProps extends withClasses<never> {
 export function RedPacketERC20Form(props: RedPacketFormProps) {
     const t = useI18N()
     const { t: tr } = useBaseI18n()
-    const classes = useStylesExtends(useStyles(), props)
+    const { classes } = useStylesExtends(useStyles(), props)
     const { onChange, onNext, origin } = props
     // context
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { HAPPY_RED_PACKET_ADDRESS_V4 } = useRedPacketConstants(chainId)
 
     // #region select token
-    const { value: nativeTokenDetailed } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, undefined, { chainId })
+    const { value: nativeTokenDetailed } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, undefined, undefined, {
+        chainId,
+    })
     const [token = nativeTokenDetailed, setToken] = useState<FungibleToken<ChainId, SchemaType> | undefined>(
         origin?.token,
     )
@@ -271,7 +247,10 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
             </Box>
             <Box style={{ width: '100%' }}>
                 <PluginWalletStatusBar>
-                    <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={chainId}>
+                    <ChainBoundary
+                        expectedPluginID={NetworkPluginID.PLUGIN_EVM}
+                        expectedChainId={chainId}
+                        forceShowingWrongNetworkButton>
                         <WalletConnectedBoundary>
                             <EthereumERC20TokenApprovedBoundary
                                 onlyInfiniteUnlock

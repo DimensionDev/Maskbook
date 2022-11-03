@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import { File } from 'react-feather'
 import { useNavigate, useLocation } from 'react-router-dom'
 import urlcat from 'urlcat'
-import { formatFileSize } from '@dimensiondev/kit'
+import { formatFileSize } from '@masknet/kit'
 import { Button, Grid, Typography } from '@mui/material'
 import { openWindow } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
@@ -25,18 +25,7 @@ const useStyles = makeStyles()({
         paddingTop: 18,
         paddingBottom: 18,
     },
-    name: {
-        fontSize: 16,
-        lineHeight: 1.75,
-        color: '#3B3B3B',
-        textAlign: 'center',
-        overflow: 'hidden',
-        textOverflow: 'ellipsis',
-        width: 400,
-        whiteSpace: 'nowrap',
-    },
     meta: {
-        fontSize: 14,
         lineHeight: 1.71,
         color: '#5D6F88',
         textAlign: 'center',

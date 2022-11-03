@@ -4,7 +4,6 @@ import type { DialogProps } from '@mui/material'
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography } from '@mui/material'
 import { LoadingButton } from '@mui/lab'
 import { makeStyles } from '@masknet/theme'
-import classNames from 'classnames'
 import { Trans } from 'react-i18next'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 
@@ -17,7 +16,6 @@ const useStyles = makeStyles()(() => ({
     },
     content: {
         marginTop: 8,
-        fontSize: 14,
         lineHeight: '20px',
         color: '#536471',
         textAlign: 'center',
@@ -67,7 +65,7 @@ export interface DisconnectWalletDialogProps extends DialogProps {
 
 export const DisconnectWalletDialog = memo<DisconnectWalletDialogProps>(
     ({ open, confirmLoading, onConfirmDisconnect, onClose, address, personaName }) => {
-        const { classes } = useStyles()
+        const { classes, cx } = useStyles()
         const { t } = useI18N()
 
         const handleConfirm = useCallback(async () => {
@@ -94,10 +92,10 @@ export const DisconnectWalletDialog = memo<DisconnectWalletDialogProps>(
                     <LoadingButton
                         onClick={handleConfirm}
                         loading={confirmLoading}
-                        className={classNames(classes.button, classes.confirmButton)}>
+                        className={cx(classes.button, classes.confirmButton)}>
                         {t('confirm')}
                     </LoadingButton>
-                    <Button className={classNames(classes.button, classes.cancelButton)} onClick={onClose}>
+                    <Button className={cx(classes.button, classes.cancelButton)} onClick={onClose}>
                         {t('cancel')}
                     </Button>
                 </DialogActions>

@@ -40,15 +40,21 @@ export function createPluginHost<Context>(
     signal: AbortSignal | undefined,
     createContext: (plugin: string, signal: AbortSignal) => Context,
     getPluginMinimalModeEnabled: (id: string) => Promise<BooleanPreference>,
+    hasPermission: (host_permission: string[]) => Promise<boolean>,
 ): Plugin.__Host.Host<Context> {
     const minimalMode: Plugin.__Host.EnabledStatusReporter = {
         isEnabled: getPluginMinimalModeEnabled,
+        events: new Emitter(),
+    }
+    const permission: Plugin.__Host.PermissionReporter = {
+        hasPermission,
         events: new Emitter(),
     }
     MaskMessages.events.pluginMinimalModeChanged.on(
         ([id, val]) => minimalMode.events.emit(val ? 'enabled' : 'disabled', id),
         { signal },
     )
+    MaskMessages.events.hostPermissionChanged.on(() => permission.events.emit('changed'), { signal })
 
     return {
         signal,
@@ -57,5 +63,6 @@ export function createPluginHost<Context>(
             createI18NBundle(plugin, resource)(i18NextInstance)
         },
         createContext,
+        permission,
     }
 }

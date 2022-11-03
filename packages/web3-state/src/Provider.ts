@@ -1,7 +1,13 @@
 import { clone, first } from 'lodash-unified'
 import type { Subscription } from 'use-subscription'
-import { delay } from '@dimensiondev/kit'
-import { getSiteType, mapSubscription, mergeSubscription, StorageObject } from '@masknet/shared-base'
+import { delay } from '@masknet/kit'
+import {
+    getSiteType,
+    isConnectionSiteType,
+    mapSubscription,
+    mergeSubscription,
+    StorageObject,
+} from '@masknet/shared-base'
 import type { Account, WalletProvider, ProviderState as Web3ProviderState } from '@masknet/web3-shared-base'
 import type { Plugin } from '@masknet/plugin-infra'
 
@@ -18,7 +24,7 @@ export class ProviderState<
     Web3,
 > implements Web3ProviderState<ChainId, ProviderType, NetworkType>
 {
-    protected site = getSiteType()
+    protected site = isConnectionSiteType() ? 'popup-connection' : getSiteType()
     protected storage: StorageObject<ProviderStorage<Account<ChainId>, ProviderType>> = null!
 
     public account?: Subscription<string>
@@ -34,12 +40,13 @@ export class ProviderState<
             isValidChainId(a?: number): boolean
             isSameAddress(a?: string, b?: string): boolean
             getDefaultChainId(): ChainId
+            getInvalidChainId(): ChainId
             getDefaultNetworkType(): NetworkType
             getDefaultProviderType(): ProviderType
             getNetworkTypeFromChainId(chainId: ChainId): NetworkType
         },
     ) {
-        const site = getSiteType()
+        const site = isConnectionSiteType() ? 'popup-connection' : getSiteType()
         const defaultValue = {
             account: {
                 account: '',
@@ -125,7 +132,9 @@ export class ProviderState<
 
         if (accountCopied.account !== '' && !this.options.isValidAddress(accountCopied.account))
             delete accountCopied.account
-        if (!this.options.isValidChainId(accountCopied.chainId ?? 0)) delete accountCopied.chainId
+        if (!accountCopied.chainId || !this.options.isValidChainId(accountCopied.chainId)) {
+            accountCopied.chainId = this.options.getInvalidChainId()
+        }
 
         const needToUpdateAccount =
             accountCopied.account === '' || !this.options.isSameAddress(account_.account, account.account)

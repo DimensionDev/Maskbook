@@ -14,10 +14,10 @@ import type {
     EnhanceableSite,
     ExtensionSite,
     BindingProof,
+    PluginID,
+    NetworkPluginID,
 } from '@masknet/shared-base'
 import type {
-    NetworkPluginID,
-    SocialAddress,
     ChainDescriptor,
     NetworkDescriptor,
     ProviderDescriptor,
@@ -26,7 +26,7 @@ import type {
     Web3EnableRequirement,
     Web3UI,
     Web3State,
-    SocialAddressType,
+    SocialAccount,
 } from '@masknet/web3-shared-base'
 import type { ChainId as ChainIdEVM, Transaction as TransactionEVM } from '@masknet/web3-shared-evm'
 import type { Emitter } from '@servie/events'
@@ -320,6 +320,12 @@ export namespace Plugin.Shared {
         networks: SupportedNetworksDeclare
         /** The Web3 Network this plugin supports */
         web3?: Web3EnableRequirement
+        /**
+         * Requested origins.
+         * Only put necessary permissions here.
+         * https://developer.chrome.com/docs/extensions/mv3/match_patterns/
+         */
+        host_permissions?: string[]
     }
     export interface SupportedNetworksDeclare {
         /**
@@ -632,7 +638,7 @@ export namespace Plugin.SNSAdaptor {
             Decorator: InjectUI<{
                 identity?: SocialIdentity
                 persona?: string
-                socialAddressList?: Array<SocialAddress<NetworkPluginID>>
+                socialAccounts?: SocialAccount[]
             }>
             /**
              * The injected avatar settings button component
@@ -640,7 +646,7 @@ export namespace Plugin.SNSAdaptor {
             Settings?: InjectUI<{
                 identity?: SocialIdentity
                 persona?: string
-                socialAddressList?: Array<SocialAddress<NetworkPluginID>>
+                socialAccounts?: SocialAccount[]
             }>
         }
         Utils?: {
@@ -649,7 +655,7 @@ export namespace Plugin.SNSAdaptor {
              */
             shouldDisplay?(
                 identity?: SocialIdentity,
-                addressNames?: Array<SocialAddress<NetworkPluginID>>,
+                socialAccounts?: SocialAccount[],
                 sourceType?: AvatarRealmSourceType,
             ): boolean
         }
@@ -662,21 +668,10 @@ export namespace Plugin.SNSAdaptor {
         MirrorMenu = 'mirror-menu',
         MirrorEntry = 'mirror-entry',
     }
-    export interface TipsAccount {
-        pluginId: NetworkPluginID
-        address: string
-        name?: string
-        type?: SocialAddressType
-        /** Verified by NextId. */
-        verified?: boolean
-        /** From SNS profile */
-        isSocialAddress?: boolean
-        last_checked_at?: string
-    }
     export interface TipsRealmOptions {
         identity?: ProfileIdentifier
         slot: TipsSlot
-        tipsAccounts?: TipsAccount[]
+        accounts?: SocialAccount[]
         onStatusUpdate?(disabled: boolean): void
     }
     export interface TipsRealm {
@@ -725,22 +720,22 @@ export namespace Plugin.SNSAdaptor {
              */
             TabContent: InjectUI<{
                 identity?: SocialIdentity
-                socialAddress?: SocialAddress<NetworkPluginID>
+                socialAccount?: SocialAccount
             }>
         }
         Utils?: {
             /**
              * If it returns false, this tab will not be displayed.
              */
-            shouldDisplay?(identity?: SocialIdentity, addressName?: SocialAddress<NetworkPluginID>): boolean
+            shouldDisplay?(identity?: SocialIdentity, socialAccount?: SocialAccount): boolean
             /**
              * Filter social address.
              */
-            filter?: (x: SocialAddress<NetworkPluginID>) => boolean
+            filter?: (x: SocialAccount) => boolean
             /**
              * Sort social address in expected order.
              */
-            sorter?: (a: SocialAddress<NetworkPluginID>, z: SocialAddress<NetworkPluginID>) => number
+            sorter?: (a: SocialAccount, z: SocialAccount) => number
         }
     }
     export interface ProfileCover {
@@ -762,22 +757,22 @@ export namespace Plugin.SNSAdaptor {
              */
             Cover: InjectUI<{
                 identity?: SocialIdentity
-                socialAddressList?: Array<SocialAddress<NetworkPluginID>>
+                socialAccounts?: SocialAccount[]
             }>
         }
         Utils: {
             /**
              * If it returns false, this cover will not be displayed
              */
-            shouldDisplay?(identity?: SocialIdentity, addressNames?: Array<SocialAddress<NetworkPluginID>>): boolean
+            shouldDisplay?(identity?: SocialIdentity, socialAccount?: SocialAccount[]): boolean
             /**
-             * Filter social address
+             * Filter social account
              */
-            filterSocialAddress?(x: SocialAddress<NetworkPluginID>): boolean
+            filterSocialAccount?(x: SocialAccount): boolean
             /**
-             * Sort social address in expected order
+             * Sort social account in expected order
              */
-            sortSocialAddress?(a: SocialAddress<NetworkPluginID>, z: SocialAddress<NetworkPluginID>): number
+            sortSocialAccount?(a: SocialAccount, z: SocialAccount): number
         }
     }
 
@@ -799,7 +794,7 @@ export namespace Plugin.SNSAdaptor {
                 onOpenPopup: (route?: PopupRoutes, params?: Record<string, any>) => void
                 bindingWallets?: BindingProof[]
                 currentPersona?: ECKeyIdentifier
-                pluginId: PluginID
+                pluginID: PluginID
             }>
         }
     }
@@ -1146,57 +1141,6 @@ export interface IdentityResolved {
 }
 
 /**
- * All integrated Plugin IDs
- */
-export enum PluginID {
-    EVM = 'com.mask.evm',
-    Flow = 'com.mask.flow',
-    Solana = 'com.mask.solana',
-    Approval = 'com.maskbook.approval',
-    Avatar = 'com.maskbook.avatar',
-    ArtBlocks = 'io.artblocks',
-    Collectible = 'com.maskbook.collectibles',
-    CryptoArtAI = 'com.maskbook.cryptoartai',
-    dHEDGE = 'org.dhedge',
-    ENS = 'com.maskbook.ens',
-    NextID = 'com.mask.next_id',
-    External = 'io.mask.external',
-    Furucombo = 'app.furucombo',
-    FindTruman = 'org.findtruman',
-    Gitcoin = 'co.gitcoin',
-    GoodGhosting = 'co.good_ghosting',
-    MaskBox = 'com.maskbook.box',
-    Poll = 'com.maskbook.poll',
-    Profile = 'com.mask.profile',
-    Trader = 'com.maskbook.trader',
-    Tips = 'com.maskbook.tip',
-    Transak = 'com.maskbook.transak',
-    Valuables = 'com.maskbook.tweet',
-    Debugger = 'io.mask.debugger',
-    Example = 'io.mask.example',
-    RSS3 = 'bio.rss3',
-    RedPacket = 'com.maskbook.red_packet',
-    RedPacketNFT = 'com.maskbook.red_packet_nft',
-    Pets = 'com.maskbook.pets',
-    Game = 'com.maskbook.game',
-    Snapshot = 'org.snapshot',
-    Savings = 'com.savings',
-    ITO = 'com.maskbook.ito',
-    Wallet = 'com.maskbook.wallet',
-    PoolTogether = 'com.pooltogether',
-    UnlockProtocol = 'com.maskbook.unlockprotocol',
-    FileService = 'com.maskbook.fileservice',
-    CyberConnect = 'me.cyberconnect.app',
-    GoPlusSecurity = 'io.gopluslabs.security',
-    CrossChainBridge = 'io.mask.cross-chain-bridge',
-    Referral = 'com.maskbook.referral',
-    Web3Profile = 'io.mask.web3-profile',
-    Web3ProfileCard = 'io.mask.web3-profile-card',
-    ScamSniffer = 'io.scamsniffer.mask-plugin',
-    NFTCard = 'com.maskbook.nft-card',
-}
-
-/**
  * This namespace is not related to the plugin authors
  */
 // ---------------------------------------------------
@@ -1211,6 +1155,11 @@ export namespace Plugin.__Host {
         addI18NResource(pluginID: string, resources: Plugin.Shared.I18NResource): void
         createContext(id: string, signal: AbortSignal): Context
         signal?: AbortSignal
+        permission: PermissionReporter
+    }
+    export interface PermissionReporter {
+        hasPermission(host_permission: string[]): Promise<boolean>
+        events: Emitter<{ changed: [] }>
     }
     export interface EnabledStatusReporter {
         isEnabled(id: string): BooleanPreference | Promise<BooleanPreference>

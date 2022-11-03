@@ -41,6 +41,7 @@ startPluginDashboard(
             ...RestPartOfPluginUIContextShared,
         }),
         Services.Settings.getPluginMinimalModeEnabled,
+        Services.Helper.hasHostPermission,
     ),
 )
 status.then(() => createNormalReactRoot(<IntegratedDashboard />))

@@ -1,14 +1,13 @@
 import { useEffect, useLayoutEffect, useMemo, useState } from 'react'
 import { useAsync, useLocation, useWindowSize } from 'react-use'
 import { max, pickBy } from 'lodash-unified'
-import type { EnhanceableSite, NFTAvatarEvent } from '@masknet/shared-base'
+import { EnhanceableSite, NFTAvatarEvent, NetworkPluginID } from '@masknet/shared-base'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { makeStyles } from '@masknet/theme'
-import { useAccount } from '@masknet/web3-hooks-base'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { useChainContext } from '@masknet/web3-hooks-base'
 import { searchFacebookAvatarOnMobileSelector, searchFacebookAvatarSelector } from '../../utils/selector.js'
 import { createReactRootShadowed, MaskMessages, startWatch } from '../../../../utils/index.js'
-import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI.js'
+import { useCurrentVisitingIdentity } from '../DataSource/useActivatedUI.js'
 import type { AvatarMetaDB } from '../../../../plugins/Avatar/types.js'
 import { getAvatarId } from '../../utils/user.js'
 import { useNFT, useNFTAvatar, useSaveNFTAvatar } from '../../../../plugins/Avatar/hooks/index.js'
@@ -65,7 +64,7 @@ function NFTAvatarInFacebook() {
     const identity = useCurrentVisitingIdentity()
     const location = useLocation()
     const { value: nftAvatar } = useNFTAvatar(identity.identifier?.userId, RSS3_KEY_SNS.FACEBOOK)
-    const account = useAccount()
+    const { account } = useChainContext()
     const { loading: loadingWallet, value: storage } = useWallet(nftAvatar?.userId)
     const { value: nftInfo, loading: loadingNFTInfo } = useNFT(
         storage?.address ?? account,
@@ -150,7 +149,7 @@ function NFTAvatarInFacebook() {
                         address: storages.address.value,
                         avatarId: getAvatarId(identity.avatar ?? ''),
                         chainId: storages.chainId.value,
-                        pluginId: storages.pluginId.value,
+                        pluginID: storages.pluginID.value,
                         schema: storages.schema.value,
                     } as AvatarMetaDB,
                     identity.identifier.network as EnhanceableSite,

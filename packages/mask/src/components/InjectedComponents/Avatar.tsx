@@ -1,5 +1,5 @@
 import { createInjectHooksRenderer, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
-import { useSocialAddressListAll } from '@masknet/web3-hooks-base'
+import { useSocialAccountsAll } from '@masknet/web3-hooks-base'
 import type { Plugin } from '@masknet/plugin-infra'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
@@ -19,22 +19,21 @@ export function Avatar(props: AvatarProps) {
     const { identity, sourceType } = props
     const { classes } = useStyles()
 
-    const { value: socialAddressList = EMPTY_LIST, loading: loadingSocialAddressList } =
-        useSocialAddressListAll(identity)
+    const { value: socialAccounts = EMPTY_LIST, loading: loadingSocialAccounts } = useSocialAccountsAll(identity)
 
     const component = useMemo(() => {
         const Component = createInjectHooksRenderer(
             useActivatedPluginsSNSAdaptor.visibility.useNotMinimalMode,
             (plugin) => {
                 const shouldDisplay =
-                    plugin.AvatarRealm?.Utils?.shouldDisplay?.(identity, socialAddressList, sourceType) ?? true
+                    plugin.AvatarRealm?.Utils?.shouldDisplay?.(identity, socialAccounts, sourceType) ?? true
                 return shouldDisplay ? plugin.AvatarRealm?.UI?.Decorator : undefined
             },
         )
 
-        return <Component identity={identity} socialAddressList={socialAddressList} />
-    }, [identity, socialAddressList, sourceType])
+        return <Component identity={identity} socialAccounts={socialAccounts} />
+    }, [identity, socialAccounts, sourceType])
 
-    if (loadingSocialAddressList || !component) return null
+    if (loadingSocialAccounts || !component) return null
     return <div className={classes.root}>{component}</div>
 }

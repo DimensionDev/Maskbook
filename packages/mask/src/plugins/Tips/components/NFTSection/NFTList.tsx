@@ -1,11 +1,11 @@
-import { useChainId, useCurrentWeb3NetworkPluginID, useWeb3State } from '@masknet/web3-hooks-base'
-import type { Web3Helper } from '@masknet/web3-helpers'
-import { ElementAnchor, NFTCardStyledAssetPlayer, RetryHint } from '@masknet/shared'
-import { LoadingBase, makeStyles } from '@masknet/theme'
-import { isSameAddress, NetworkPluginID, NonFungibleToken } from '@masknet/web3-shared-base'
-import { Checkbox, List, ListItem, Radio, Stack, Tooltip } from '@mui/material'
-import classnames from 'classnames'
 import { FC, useCallback } from 'react'
+import { LoadingBase, makeStyles } from '@masknet/theme'
+import type { Web3Helper } from '@masknet/web3-helpers'
+import { ElementAnchor, AssetPreviewer, RetryHint } from '@masknet/shared'
+import { useWeb3State, useNetworkContext } from '@masknet/web3-hooks-base'
+import { isSameAddress } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { Checkbox, List, ListItem, Radio, Stack, Tooltip } from '@mui/material'
 import type { TipNFTKeyPair } from '../../types/index.js'
 
 interface Props {
@@ -70,45 +70,22 @@ const useStyles = makeStyles()((theme) => ({
         width: 64,
         height: 64,
     },
-    assetPlayerIframe: {
-        height: 96,
-        width: 96,
-    },
-    wrapper: {
-        height: '96px !important',
-        width: '96px !important',
-    },
-    imgWrapper: {
-        height: '96px !important',
-        width: '96px !important',
-        img: {
-            height: '100%',
-            width: '100%',
-        },
-    },
     tooltip: {
         marginBottom: `${theme.spacing(0.5)} !important`,
     },
 }))
 
 interface NFTItemProps {
-    token: NonFungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
+    token: Web3Helper.NonFungibleTokenAll
 }
 
 export const NFTItem: FC<NFTItemProps> = ({ token }) => {
     const { classes } = useStyles()
-    const chainId = useChainId()
     return (
-        <NFTCardStyledAssetPlayer
-            chainId={chainId}
-            contractAddress={token.contract?.address}
+        <AssetPreviewer
             url={token.metadata?.imageURL ?? token.metadata?.mediaURL}
-            tokenId={token.tokenId}
             classes={{
                 fallbackImage: classes.fallbackImage,
-                iframe: classes.assetPlayerIframe,
-                wrapper: classes.wrapper,
-                imgWrapper: classes.imgWrapper,
             }}
         />
     )
@@ -124,7 +101,8 @@ export const NFTList: FC<Props> = ({
     loadFinish,
     loadError,
 }) => {
-    const { classes } = useStyles()
+    const { classes, cx } = useStyles()
+    const { pluginID } = useNetworkContext()
 
     const isRadio = limit === 1
     const reachedLimit = selectedPairs.length >= limit
@@ -135,9 +113,8 @@ export const NFTList: FC<Props> = ({
         },
         [onChange, isRadio, reachedLimit],
     )
-    const pluginId = useCurrentWeb3NetworkPluginID()
     const includes =
-        pluginId === NetworkPluginID.PLUGIN_EVM
+        pluginID === NetworkPluginID.PLUGIN_EVM
             ? (pairs: TipNFTKeyPair[], pair: TipNFTKeyPair): boolean => {
                   return !!pairs.find(([address, tokenId]) => isSameAddress(address, pair[0]) && tokenId === pair[1])
               }
@@ -149,7 +126,7 @@ export const NFTList: FC<Props> = ({
     const { Others } = useWeb3State()
 
     return (
-        <List className={classnames(classes.list, className)}>
+        <List className={cx(classes.list, className)}>
             {tokens.map((token) => {
                 const selected = includes(selectedPairs, [token.contract?.address!, token.tokenId])
                 const disabled = !isRadio && reachedLimit && !selected
@@ -170,7 +147,7 @@ export const NFTList: FC<Props> = ({
                         }}
                         arrow>
                         <ListItem
-                            className={classnames(classes.nftItem, {
+                            className={cx(classes.nftItem, {
                                 [classes.disabled]: disabled,
                                 [classes.selected]: selected,
                                 [classes.unselected]: selectedPairs.length > 0 && !selected,

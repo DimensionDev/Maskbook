@@ -1,7 +1,8 @@
-import { ChainId } from '@masknet/web3-shared-evm'
 import { useAsyncRetry } from 'react-use'
+import { ChainId } from '@masknet/web3-shared-evm'
 import { useWeb3Hub, useWeb3State } from '@masknet/web3-hooks-base'
-import { formatBalance, CurrencyType, NetworkPluginID } from '@masknet/web3-shared-base'
+import { formatBalance, CurrencyType } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import type { NFTInfo } from '../types.js'
 
@@ -9,12 +10,12 @@ export function useNFT(
     account: string,
     address?: string,
     tokenId?: string,
-    pluginId: NetworkPluginID = NetworkPluginID.PLUGIN_EVM,
+    pluginID: NetworkPluginID = NetworkPluginID.PLUGIN_EVM,
     chainId: ChainId = ChainId.Mainnet,
     ownerAddress?: string,
 ) {
-    const { Others, Connection } = useWeb3State<'all'>(pluginId ?? NetworkPluginID.PLUGIN_EVM)
-    const hub = useWeb3Hub<'all'>(pluginId, {
+    const { Others, Connection } = useWeb3State<'all'>(pluginID)
+    const hub = useWeb3Hub<'all'>(pluginID, {
         chainId,
         account,
     })
@@ -37,13 +38,11 @@ export function useNFT(
             Web3Helper.NonFungibleAssetScope<'all'> | undefined,
         ]
 
-        const contract = token?.contract || asset?.contract
-        const metadata = token?.metadata || asset?.metadata
-
+        const metadata = asset?.metadata || token?.metadata
         const amount = asset?.priceInToken
             ? formatBalance(asset.priceInToken.amount, asset.priceInToken.token.decimals)
             : asset?.price?.[CurrencyType.USD] ?? '0'
-        const name = contract?.name || metadata?.name || ''
+        const name = metadata?.name ?? ''
         const imageURL = metadata?.imageURL
         const permalink = asset?.link ?? Others?.explorerResolver.nonFungibleTokenLink(chainId, address, tokenId)
 

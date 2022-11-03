@@ -1,18 +1,15 @@
 import { useCallback, useState } from 'react'
-import classnames from 'classnames'
 import { Trans } from 'react-i18next'
-import { InjectedDialog } from '@masknet/shared'
+import { InjectedDialog, ActionButtonPromise } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { DialogActions, DialogContent, Typography } from '@mui/material'
 import { getMaskColor, makeStyles, useCustomSnackbar, ActionButton } from '@masknet/theme'
+import { isDashboardPage, NetworkPluginID } from '@masknet/shared-base'
+import { Icons } from '@masknet/icons'
 import { useWeb3State } from '@masknet/web3-hooks-base'
-import type { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useI18N, useMatchXS } from '../../../../utils/index.js'
 import { WalletMessages } from '../../messages.js'
 import { WalletStatusBox } from '../../../../components/shared/WalletStatusBox/index.js'
-import { ActionButtonPromise } from '../../../../extension/options-page/DashboardComponents/ActionButton.js'
-import { isDashboardPage } from '@masknet/shared-base'
-import { Icons } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {
@@ -44,22 +41,7 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         justifyContent: 'center',
     },
-    avatar: {
-        width: 64,
-        height: 64,
-        backgroundColor: 'rgba(255, 95, 95, 0.2)',
-    },
-    wallet: {
-        backgroundColor: theme.palette.background.default,
-        marginTop: theme.spacing(2),
-        padding: theme.spacing(2),
-        borderRadius: theme.spacing(1),
-    },
-    texts: {
-        paddingBottom: theme.spacing(1),
-    },
     article: {
-        fontSize: 14,
         lineHeight: '18px',
         fontWeight: 400,
         marginBottom: theme.spacing(2),
@@ -68,7 +50,7 @@ const useStyles = makeStyles()((theme) => ({
 
 export function WalletRiskWarningDialog() {
     const { t } = useI18N()
-    const { classes } = useStyles()
+    const { classes, cx } = useStyles()
     const { showSnackbar } = useCustomSnackbar()
     const isMobile = useMatchXS()
 
@@ -126,7 +108,7 @@ export function WalletRiskWarningDialog() {
             </DialogContent>
             <DialogActions className={classes.buttons}>
                 <ActionButton
-                    className={classnames(classes.button, classes.cancel)}
+                    className={cx(classes.button, classes.cancel)}
                     fullWidth
                     variant="outlined"
                     color="secondary"

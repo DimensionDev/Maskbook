@@ -63,14 +63,6 @@
     "view_on_explorer": "View on Explorer",
     "tips_guide_description": "Send authors tips by using Mask Network’s Tips function.",
     "tips_guide_action": "Close",
-    "source_tooltip": "Data source is retrieved from <Link>{{source}}</Link>.",
-    "source_tooltip$twitter": "Data source is retrieved from Twitter profile and <Link>{{source}}</Link>.",
-    "source_tooltip_only": "",
-    "source_tooltip_only$twitter": "Data source is retrieved from Twitter profile.",
-    "source_tooltip$facebook": "Data source is retrieved from Facebook profile and <Link>{{source}}</Link>.",
-    "source_tooltip_only$facebook": "Data source is retrieved from Facebook.",
-    "source_tooltip$next_id": "Data source is retrieved from <Link>NEXT.ID</Link>.",
-    "source_tooltip_only$next_id": "Data source is retrieved from <Link>NEXT.ID</Link>.",
     "nft_amount": "NFT Amount: <strong>{{count}}</strong>",
     "congratulations": "Congratulations!"
 }

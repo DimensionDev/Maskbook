@@ -1,13 +1,12 @@
 import { useCallback, useMemo } from 'react'
-import classNames from 'classnames'
 import { ListItem, ListItemIcon, ListItemText, Typography } from '@mui/material'
-import type { FungibleToken, NetworkPluginID } from '@masknet/web3-shared-base'
+import type { FungibleToken } from '@masknet/web3-shared-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
 import { Icons } from '@masknet/icons'
 import { makeStyles, MaskLoadingButton, LoadingBase } from '@masknet/theme'
 import { TokenIcon, useSharedI18N } from '@masknet/shared'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { Box } from '@mui/system'
-
 import { toChainAddressEthers } from '../../../helpers/index.js'
 import { SponsoredFarmIcon } from '../icons/SponsoredFarm.js'
 import type { ChainAddress } from '../../../types.js'
@@ -47,7 +46,6 @@ const useStyles = makeStyles()((theme) => ({
         gap: theme.spacing(0.5),
         alignItems: 'center',
         lineHeight: '20px',
-        fontSize: 14,
         color: theme.palette.maskColor.second,
     },
     symbol: {
@@ -101,7 +99,7 @@ export const getFungibleTokenItem =
     ) =>
     ({ data, index, style }: any) => {
         const t = useSharedI18N()
-        const { classes } = useStyles()
+        const { classes, cx } = useStyles()
 
         const token = data.dataSet[index]
         const onSelect = data.onSelect
@@ -157,11 +155,11 @@ export const getFungibleTokenItem =
                     onClick={handleTokenSelect}
                     disabled={selected}>
                     <ListItemIcon>
-                        <TokenIcon classes={{ icon: classes.icon }} address={address} name={name} logoURL={logoURL} />
+                        <TokenIcon className={classes.icon} address={address} name={name} logoURL={logoURL} />
                     </ListItemIcon>
                     <ListItemText classes={{ primary: classes.text }}>
                         <Typography
-                            className={classNames(classes.primary, source === 'external' ? classes.import : '')}
+                            className={cx(classes.primary, source === 'external' ? classes.import : '')}
                             color="textPrimary"
                             component="span">
                             <div className={classes.metaInfo}>

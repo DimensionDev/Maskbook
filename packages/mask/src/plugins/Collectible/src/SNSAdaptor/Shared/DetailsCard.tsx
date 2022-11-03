@@ -1,9 +1,10 @@
 import { Icons } from '@masknet/icons'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
-import { Link, Typography } from '@mui/material'
-import { useWeb3State } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
+import { useNetworkContext, useWeb3State } from '@masknet/web3-hooks-base'
 import { SourceType } from '@masknet/web3-shared-base'
+import { Link, Typography } from '@mui/material'
 import { useI18N } from '../../../../../utils/index.js'
 
 const PLATFORM_COSTS: {
@@ -33,11 +34,10 @@ const useStyles = makeStyles()((theme) => ({
         textTransform: 'capitalize',
     },
     title: {
-        fontSize: 14,
         color: theme.palette.maskColor.second,
     },
     content: {
-        maxWidth: '40%',
+        maxWidth: '60%',
         overflow: 'hidden',
         textOverflow: 'ellipsis',
         whiteSpace: 'nowrap',
@@ -64,25 +64,39 @@ export function DetailsCard(props: DetailsCardProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
     const { Others } = useWeb3State()
+    const { pluginID } = useNetworkContext()
 
-    const infoConfigMapping = [
-        { title: t('plugin_collectible_token_id'), value: Others?.formatTokenId(asset.tokenId, 4) },
-        { title: t('contract'), value: Others?.formatAddress(asset.address, 4) ?? '-', link: true },
+    const infos: Array<{ title: string; value?: string; link?: boolean }> = []
+    if (pluginID === NetworkPluginID.PLUGIN_SOLANA) {
+        infos.push({
+            title: t('plugin_collectible_mint_address'),
+            value: Others?.formatAddress(asset.address, 4),
+            link: true,
+        })
+    } else if (pluginID === NetworkPluginID.PLUGIN_EVM) {
+        infos.push(
+            { title: t('plugin_collectible_token_id'), value: Others?.formatTokenId(asset.tokenId, 4) },
+            { title: t('contract'), value: Others?.formatAddress(asset.address, 4) ?? '-', link: true },
+        )
+    }
+    infos.push(
         { title: t('plugin_collectible_block_chain'), value: Others?.chainResolver.chainFullName(asset.chainId) },
         { title: t('token_standard'), value: Others?.formatSchemaType(asset.schema || asset.contract?.schema) },
         {
             title: t('plugin_collectible_creator_earning'),
             value: `${Number.parseInt(asset.contract?.creatorEarning || '0', 10) / 100}%` ?? '0',
         },
-        {
+    )
+    if (sourceType && PLATFORM_COSTS[sourceType]) {
+        infos.push({
             title: t('plugin_collectible_platform_costs', { platform: sourceType ?? SourceType.NFTScan }),
-            value: sourceType && PLATFORM_COSTS[sourceType] ? `${PLATFORM_COSTS[sourceType]}%` : '-',
-        },
-    ]
+            value: `${PLATFORM_COSTS[sourceType]}%`,
+        })
+    }
 
     return (
         <div className={classes.root}>
-            {infoConfigMapping.map((x) => {
+            {infos.map((x) => {
                 return (
                     <div key={x.title} className={classes.listItem}>
                         <Typography className={classes.title}>{x.title}</Typography>
@@ -91,13 +105,7 @@ export function DetailsCard(props: DetailsCardProps) {
                             {x.link && (
                                 <Link
                                     className={classes.link}
-                                    href={
-                                        Others?.explorerResolver.nonFungibleTokenLink?.(
-                                            asset.chainId,
-                                            asset.address,
-                                            asset.tokenId,
-                                        ) ?? ''
-                                    }
+                                    href={Others?.explorerResolver.addressLink?.(asset.chainId, asset.address) ?? ''}
                                     target="_blank"
                                     rel="noopener noreferrer">
                                     <Icons.LinkOut size={16} />

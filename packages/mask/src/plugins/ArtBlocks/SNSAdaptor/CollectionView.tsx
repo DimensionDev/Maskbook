@@ -3,8 +3,8 @@ import { useTheme } from '@mui/material/styles'
 import { MobileStepper, Button, Box, Paper, Typography, Skeleton, Link } from '@mui/material'
 import { KeyboardArrowLeft, KeyboardArrowRight, OpenInNew } from '@mui/icons-material'
 import { makeStyles } from '@masknet/theme'
-import { useChainId } from '@masknet/web3-hooks-base'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { useChainContext } from '@masknet/web3-hooks-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
 import { resolveImageLinkOnArtBlocks, resolveTokenLinkOnArtBlocks } from '../pipes/index.js'
 import { buildTokenId } from '../utils.js'
 import type { Project } from '../types.js'
@@ -35,25 +35,11 @@ const useStyles = makeStyles()((theme) => {
         hidden: {
             display: 'none',
         },
-        active: {
-            display: 'block',
-        },
         buttonPrev: {
             marginRight: theme.spacing(0.5),
         },
         buttonNext: {
             marginLeft: theme.spacing(0.5),
-        },
-        tokenTitle: {
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-        },
-        tokenLinks: {
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            width: 65,
         },
         tokenIdRedirectionIcon: {
             verticalAlign: 'text-bottom',
@@ -82,7 +68,7 @@ export function CollectionView(props: CollectionProps) {
     const { project } = props
     const [isImageLoaded, setImageLoaded] = useState(false)
     const [activeStep, setActiveStep] = useState(1)
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
     const currentSelectedToken = {
         tokenId: buildTokenId(Number(project.projectId), activeStep - 1),

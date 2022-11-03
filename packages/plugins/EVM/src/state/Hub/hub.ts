@@ -23,6 +23,10 @@ import {
     PriceAPI,
     CF,
     CoinGeckoPriceEVM,
+    ChainbaseFungibleToken,
+    ChainbaseNonFungibleToken,
+    ZerionNonFungibleToken,
+    X2Y2,
 } from '@masknet/web3-providers'
 import { SourceType, HubOptions, Pageable, CurrencyType, Transaction } from '@masknet/web3-shared-base'
 import { ChainId, chainResolver, SchemaType } from '@masknet/web3-shared-evm'
@@ -71,6 +75,7 @@ class HubFungibleClient extends HubStateFungibleClient<ChainId, SchemaType> {
                 PriceAPI.Provider<ChainId>
         >(
             {
+                [SourceType.Chainbase]: ChainbaseFungibleToken,
                 [SourceType.DeBank]: DeBank,
                 [SourceType.Zerion]: Zerion,
                 [SourceType.Rabby]: Rabby,
@@ -78,7 +83,7 @@ class HubFungibleClient extends HubStateFungibleClient<ChainId, SchemaType> {
                 [SourceType.CF]: CF,
                 [SourceType.CoinGecko]: CoinGeckoPriceEVM,
             },
-            [DeBank, Zerion, Rabby, R2D2, CF, CoinGeckoPriceEVM],
+            [DeBank, Zerion, ChainbaseFungibleToken, Rabby, R2D2, CF, CoinGeckoPriceEVM],
             initial,
         )
     }
@@ -93,6 +98,9 @@ class HubNonFungibleClient extends HubStateNonFungibleClient<ChainId, SchemaType
             | TokenListAPI.Provider<ChainId, SchemaType>
         >(
             {
+                [SourceType.X2Y2]: X2Y2,
+                [SourceType.Chainbase]: ChainbaseNonFungibleToken,
+                [SourceType.Zerion]: ZerionNonFungibleToken,
                 [SourceType.NFTScan]: NFTScanNonFungibleTokenEVM,
                 [SourceType.Rarible]: Rarible,
                 [SourceType.OpenSea]: OpenSea,
@@ -104,8 +112,31 @@ class HubNonFungibleClient extends HubStateNonFungibleClient<ChainId, SchemaType
                 [SourceType.R2D2]: R2D2,
             },
             options.chainId === ChainId.Mainnet
-                ? [NFTScanNonFungibleTokenEVM, Rarible, OpenSea, AlchemyEVM, LooksRare, Zora, Gem, Rabby, R2D2]
-                : [NFTScanNonFungibleTokenEVM, Rarible, AlchemyEVM, OpenSea, LooksRare, Zora, Gem, Rabby, R2D2],
+                ? [
+                      X2Y2,
+                      NFTScanNonFungibleTokenEVM,
+                      ZerionNonFungibleToken,
+                      Rarible,
+                      OpenSea,
+                      AlchemyEVM,
+                      LooksRare,
+                      Zora,
+                      Gem,
+                      Rabby,
+                      R2D2,
+                  ]
+                : [
+                      NFTScanNonFungibleTokenEVM,
+                      ZerionNonFungibleToken,
+                      Rarible,
+                      AlchemyEVM,
+                      OpenSea,
+                      LooksRare,
+                      Zora,
+                      Gem,
+                      Rabby,
+                      R2D2,
+                  ],
             initial,
         )
     }

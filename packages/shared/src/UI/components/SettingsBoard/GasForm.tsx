@@ -6,8 +6,9 @@ import { makeStyles, MaskAlert, MaskTextField } from '@masknet/theme'
 import { Grid, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { useSharedI18N } from '@masknet/shared'
-import { ChainId, formatWeiToGwei, GasOption, Transaction } from '@masknet/web3-shared-evm'
-import { formatBalance, GasOptionType, isPositive, isZero, NetworkPluginID, scale10 } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { ChainId, formatGweiToWei, formatWeiToGwei, GasOption, Transaction } from '@masknet/web3-shared-evm'
+import { formatBalance, GasOptionType, isPositive, isZero, scale10 } from '@masknet/web3-shared-base'
 import { useWeb3State } from '@masknet/web3-hooks-base'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useGasSchema } from './hooks/index.js'
@@ -31,7 +32,6 @@ const useStyles = makeStyles()((theme) => {
     return {
         unit: {
             color: theme.palette.maskColor.third,
-            fontSize: 14,
         },
         textfield: {
             '& input[type=number]': {
@@ -46,7 +46,6 @@ const useStyles = makeStyles()((theme) => {
         },
         caption: {
             color: theme.palette.maskColor.second,
-            fontSize: 14,
             fontWeight: 700,
             margin: theme.spacing(1, 0, 1.5),
         },
@@ -161,11 +160,11 @@ export function GasForm(props: GasFormProps) {
         const payload = isEIP1559
             ? {
                   gas: gasLimit,
-                  maxFeePerGas,
-                  maxPriorityFeePerGas,
+                  maxFeePerGas: formatGweiToWei(maxFeePerGas).toString(),
+                  maxPriorityFeePerGas: formatGweiToWei(maxPriorityFeePerGas).toString(),
               }
             : {
-                  gasPrice,
+                  gasPrice: formatGweiToWei(gasPrice).toString(),
               }
         onChange?.(!errorCenter && !errorBottom ? payload : undefined)
     }, [errorCenter, errorBottom, isEIP1559, gasLimit, gasPrice, maxFeePerGas, maxPriorityFeePerGas, gasOptions])
@@ -181,7 +180,7 @@ export function GasForm(props: GasFormProps) {
                     }}
                     icon={<Icons.Info />}>
                     {t.gas_settings_info_gas_fee({
-                        fee: formatBalance(scale10(baseFeePerGas, 2), 2, 2),
+                        fee: formatBalance(scale10(formatWeiToGwei(baseFeePerGas), 2), 2, 2),
                     })}
                 </MaskAlert>
             ) : null}

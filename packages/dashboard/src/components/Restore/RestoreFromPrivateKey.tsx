@@ -12,7 +12,7 @@ import { z } from 'zod'
 import { useNavigate } from 'react-router-dom'
 import { DashboardRoutes } from '@masknet/shared-base'
 import { SignUpRoutePath } from '../../pages/SignUp/routePath.js'
-import { delay } from '@dimensiondev/kit'
+import { delay } from '@masknet/kit'
 type FormInputs = {
     privateKey: string
 }

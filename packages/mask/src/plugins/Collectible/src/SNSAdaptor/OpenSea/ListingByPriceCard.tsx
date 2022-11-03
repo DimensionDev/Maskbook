@@ -5,36 +5,21 @@ import { Box, Card, CardActions, CardContent, Checkbox, FormControlLabel, Typogr
 import { makeStyles } from '@masknet/theme'
 import { isZero, isGreaterThan } from '@masknet/web3-shared-base'
 import formatDateTime from 'date-fns/format'
+import { PluginWalletStatusBar, ActionButtonPromise, WalletConnectedBoundary, DateTimePanel } from '@masknet/shared'
 import getUnixTime from 'date-fns/getUnixTime'
-import { PluginWalletStatusBar, useI18N } from '../../../../../utils/index.js'
+import { useI18N } from '../../../../../utils/index.js'
 import { SelectTokenAmountPanel } from '../../../../ITO/SNSAdaptor/SelectTokenAmountPanel.js'
-import { WalletConnectedBoundary } from '../../../../../web3/UI/WalletConnectedBoundary.js'
-import { DateTimePanel } from '../../../../../web3/UI/DateTimePanel.js'
 import { toAsset, isWyvernSchemaName } from '../../helpers/index.js'
-import {
-    useAccount,
-    useChainId,
-    useCurrentWeb3NetworkPluginID,
-    useFungibleTokenWatched,
-    useWeb3State,
-} from '@masknet/web3-hooks-base'
+import { useChainContext, useNetworkContext, useFungibleTokenWatched, useWeb3State } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { ActionButtonPromise } from '../../../../../extension/options-page/DashboardComponents/ActionButton.js'
 import { useOpenSea } from './hooks/useOpenSea.js'
 
 const useStyles = makeStyles()((theme) => {
     return {
-        content: {},
         footer: {
             display: 'flex',
             justifyContent: 'flex-end',
             padding: 0,
-        },
-        panel: {
-            marginTop: theme.spacing(2),
-            '&:first-child': {
-                marginTop: 0,
-            },
         },
         label: {
             marginTop: theme.spacing(1.5),
@@ -64,7 +49,7 @@ export interface ListingByPriceCardProps {
 
 export function ListingByPriceCard(props: ListingByPriceCardProps) {
     const { asset, paymentTokens, open, onClose } = props
-    const pluginID = useCurrentWeb3NetworkPluginID()
+    const { pluginID } = useNetworkContext()
     const { amount, token, balance, setAmount, setAddress } = useFungibleTokenWatched(
         pluginID,
         first(paymentTokens)?.address,
@@ -72,8 +57,7 @@ export function ListingByPriceCard(props: ListingByPriceCardProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
 
-    const account = useAccount()
-    const chainId = useChainId()
+    const { account, chainId } = useChainContext()
     const opensea = useOpenSea(pluginID, chainId)
     const { Others } = useWeb3State()
 

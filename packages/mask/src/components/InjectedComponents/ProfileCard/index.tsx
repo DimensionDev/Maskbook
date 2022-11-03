@@ -1,24 +1,23 @@
 import { FC, useEffect, useMemo, useState } from 'react'
 import { Trans } from 'react-i18next'
 import { useUpdateEffect } from 'react-use'
-import { first, uniqBy } from 'lodash-unified'
+import { first } from 'lodash-unified'
 import { Icons } from '@masknet/icons'
 import {
     createInjectHooksRenderer,
-    PluginID,
     useActivatedPluginsSNSAdaptor,
     usePluginI18NField,
 } from '@masknet/plugin-infra/content-script'
 import { useAvailablePlugins } from '@masknet/plugin-infra'
-import { EMPTY_LIST } from '@masknet/shared-base'
+import { useSocialAccountsBySettings } from '@masknet/shared'
+import { EMPTY_LIST, PluginID, NetworkPluginID } from '@masknet/shared-base'
 import { LoadingBase, makeStyles, MaskTabList, useTabs } from '@masknet/theme'
-import { isSameAddress, NetworkPluginID, SocialIdentity } from '@masknet/web3-shared-base'
+import { isSameAddress, SocialIdentity } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
-import { useSocialAddressListBySettings } from '@masknet/shared'
 import { TabContext } from '@mui/lab'
 import { Tab, Typography } from '@mui/material'
-import { PluginWeb3ContextProvider } from '@masknet/web3-hooks-base'
-import { MaskMessages, sorter, useLocationChange } from '../../../utils/index.js'
+import { Web3ContextProvider } from '@masknet/web3-hooks-base'
+import { MaskMessages, sorter, useI18N, useLocationChange } from '../../../utils/index.js'
 import { ProfileCardTitle } from './ProfileCardTitle.js'
 
 interface Props extends withClasses<'text' | 'button' | 'root'> {
@@ -43,6 +42,7 @@ const useStyles = makeStyles()((theme) => {
             overscrollBehavior: 'contain',
             borderRadius: theme.spacing(1.5),
             boxShadow: theme.palette.shadow.popup,
+            backgroundColor: theme.palette.background.paper,
         },
         loading: {
             display: 'flex',
@@ -57,82 +57,21 @@ const useStyles = makeStyles()((theme) => {
             boxSizing: 'border-box',
             flexShrink: 0,
         },
-        walletItem: {
-            display: 'flex',
-            alignItems: 'center',
-            fontSize: 18,
-            fontWeight: 700,
-        },
-        menuItem: {
-            display: 'flex',
-            alignItems: 'center',
-            flexGrow: 1,
-            justifyContent: 'space-between',
-        },
-        addressMenu: {
-            maxHeight: 192,
-            width: 248,
-            backgroundColor: theme.palette.maskColor.bottom,
-        },
-        addressItem: {
-            display: 'flex',
-            alignItems: 'center',
-        },
-        link: {
-            cursor: 'pointer',
-            marginTop: 2,
-            zIndex: 1,
-            '&:hover': {
-                textDecoration: 'none',
-            },
-        },
-        settingLink: {
-            cursor: 'pointer',
-            marginTop: 4,
-            zIndex: 1,
-            '&:hover': {
-                textDecoration: 'none',
-            },
-        },
-        linkIcon: {
-            color: theme.palette.maskColor.second,
-            fontSize: '20px',
-            margin: '4px 2px 0 2px',
-        },
         content: {
             position: 'relative',
             flexGrow: 1,
             backgroundColor: theme.palette.maskColor.bottom,
             overflow: 'auto',
             paddingBottom: 48,
+            '::-webkit-scrollbar': {
+                display: 'none',
+            },
         },
         tabs: {
             display: 'flex',
             position: 'relative',
             paddingTop: 0,
             marginTop: theme.spacing(2),
-        },
-        addressLabel: {
-            color: theme.palette.maskColor.dark,
-            fontSize: 18,
-            fontWeight: 700,
-        },
-        arrowDropIcon: {
-            color: theme.palette.maskColor.dark,
-        },
-        selectedIcon: {
-            color: theme.palette.maskColor.primary,
-        },
-        linkOutIcon: {
-            color: theme.palette.maskColor.secondaryDark,
-        },
-        mainLinkIcon: {
-            margin: '0px 2px',
-            color: theme.palette.maskColor.secondaryDark,
-        },
-        secondLinkIcon: {
-            margin: '4px 2px 0 2px',
-            color: theme.palette.maskColor.secondaryDark,
         },
         footer: {
             position: 'absolute',
@@ -150,9 +89,17 @@ const useStyles = makeStyles()((theme) => {
             fontWeight: 700,
             zIndex: 2,
         },
-        powerBy: {
+        cardIcon: {
+            filter: 'drop-shadow(0px 6px 12px rgba(0, 65, 185, 0.2))',
+            marginLeft: theme.spacing(0.25),
+        },
+        cardName: {
+            color: theme.palette.maskColor.main,
+            fontWeight: 700,
+            marginRight: 'auto',
+        },
+        powered: {
             color: theme.palette.text.secondary,
-            fontSize: 14,
             fontWeight: 700,
         },
     }
@@ -161,26 +108,21 @@ const useStyles = makeStyles()((theme) => {
 export const ProfileCard: FC<Props> = ({ identity, ...rest }) => {
     const { classes, cx } = useStyles(undefined, { props: { classes: rest.classes } })
 
+    const { t } = useI18N()
     const translate = usePluginI18NField()
     const {
-        value: socialAddressList = EMPTY_LIST,
-        loading: loadingSocialAddressList,
+        value: socialAccounts = EMPTY_LIST,
+        loading: loadingSocialAccounts,
         retry: retrySocialAddress,
-    } = useSocialAddressListBySettings(identity, undefined, sorter)
-
-    const availableSocialAddressList = useMemo(() => {
-        return uniqBy(
-            socialAddressList.filter((x) => x.networkSupporterPluginID === NetworkPluginID.PLUGIN_EVM),
-            (x) => x.address.toLowerCase(),
-        )
-    }, [socialAddressList])
+    } = useSocialAccountsBySettings(identity, undefined, sorter)
 
     const [selectedAddress, setSelectedAddress] = useState<string>()
-    const firstAddress = first(availableSocialAddressList)?.address
+    const firstAddress = first(socialAccounts)?.address
     const activeAddress = selectedAddress ?? firstAddress
-    const selectedSocialAddress = useMemo(() => {
-        return availableSocialAddressList.find((x) => isSameAddress(x.address, activeAddress))
-    }, [activeAddress, availableSocialAddressList])
+    const selectedSocialAccount = useMemo(
+        () => socialAccounts.find((x) => isSameAddress(x.address, activeAddress)),
+        [activeAddress, socialAccounts],
+    )
 
     const userId = identity.identifier?.userId
 
@@ -196,7 +138,7 @@ export const ProfileCard: FC<Props> = ({ identity, ...rest }) => {
             .flatMap((x) => x.ProfileCardTabs?.map((y) => ({ ...y, pluginID: x.ID })) ?? EMPTY_LIST)
             .filter((x) => {
                 const isAllowed = x.pluginID === PluginID.RSS3 || x.pluginID === PluginID.Collectible
-                const shouldDisplay = x.Utils?.shouldDisplay?.(identity, selectedSocialAddress) ?? true
+                const shouldDisplay = x.Utils?.shouldDisplay?.(identity, selectedSocialAccount) ?? true
                 return isAllowed && shouldDisplay
             })
             .sort((a, z) => a.priority - z.priority)
@@ -211,8 +153,8 @@ export const ProfileCard: FC<Props> = ({ identity, ...rest }) => {
     const component = useMemo(() => {
         const Component = getTabContent(currentTab)
 
-        return <Component identity={identity} socialAddress={selectedSocialAddress} />
-    }, [currentTab, identity?.publicKey, selectedSocialAddress])
+        return <Component identity={identity} socialAccount={selectedSocialAccount} />
+    }, [currentTab, identity?.publicKey, selectedSocialAccount])
 
     useLocationChange(() => {
         onChange(undefined, first(tabs)?.id)
@@ -222,7 +164,7 @@ export const ProfileCard: FC<Props> = ({ identity, ...rest }) => {
         onChange(undefined, first(tabs)?.id)
     }, [userId])
 
-    if (!userId || loadingSocialAddressList)
+    if (!userId || loadingSocialAccounts)
         return (
             <div className={cx(classes.root, classes.loading)}>
                 <LoadingBase />
@@ -230,11 +172,11 @@ export const ProfileCard: FC<Props> = ({ identity, ...rest }) => {
         )
 
     return (
-        <PluginWeb3ContextProvider pluginID={NetworkPluginID.PLUGIN_EVM} value={{ chainId: ChainId.Mainnet }}>
+        <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM, chainId: ChainId.Mainnet }}>
             <div className={classes.root}>
                 <div className={classes.header}>
                     <ProfileCardTitle
-                        socialAddressList={availableSocialAddressList}
+                        socialAccounts={socialAccounts}
                         address={activeAddress}
                         onAddressChange={setSelectedAddress}
                         identity={identity}
@@ -253,7 +195,9 @@ export const ProfileCard: FC<Props> = ({ identity, ...rest }) => {
                 </div>
                 <div className={classes.content}>{component}</div>
                 <div className={classes.footer}>
-                    <Typography variant="body1" className={classes.powerBy}>
+                    <Icons.Web3ProfileCard className={classes.cardIcon} size={24} />
+                    <Typography className={classes.cardName}>{t('profile_card_name')}</Typography>
+                    <Typography variant="body1" className={classes.powered}>
                         <Trans
                             i18nKey="powered_by_whom"
                             values={{ whom: 'RSS3' }}
@@ -270,9 +214,9 @@ export const ProfileCard: FC<Props> = ({ identity, ...rest }) => {
                             }}
                         />
                     </Typography>
-                    <Icons.RSS3 size={24} sx={{ ml: '12px' }} />
+                    <Icons.RSS3 size={24} sx={{ ml: '4px' }} />
                 </div>
             </div>
-        </PluginWeb3ContextProvider>
+        </Web3ContextProvider>
     )
 }

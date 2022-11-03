@@ -1,26 +1,19 @@
-import { useEffect, useMemo, useState } from 'react'
-import { useAsyncRetry } from 'react-use'
-import { sortBy } from 'lodash-unified'
 import { Icons } from '@masknet/icons'
-import { useChainId } from '@masknet/web3-hooks-base'
-import { InjectedDialog, PersonaAction } from '@masknet/shared'
-import { CrossIsolationMessages, EMPTY_LIST, NextIDPlatform, PopupRoutes } from '@masknet/shared-base'
-import { makeStyles, useStylesExtends } from '@masknet/theme'
+import { InjectedDialog, PersonaAction, WalletTypes } from '@masknet/shared'
+import { CrossIsolationMessages, EMPTY_LIST, NetworkPluginID, NextIDPlatform, PopupRoutes } from '@masknet/shared-base'
+import { makeStyles } from '@masknet/theme'
+import { useChainContext } from '@masknet/web3-hooks-base'
 import { NextIDProof } from '@masknet/web3-providers'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { DialogActions, DialogContent } from '@mui/material'
-import { CurrentStatusMap, CURRENT_STATUS } from '../../constants.js'
+import { sortBy } from 'lodash-unified'
+import { useEffect, useMemo, useState } from 'react'
+import { useAsyncRetry } from 'react-use'
+import { SceneMap, Scene } from '../../constants.js'
+import { useI18N } from '../../locales/i18n_generated.js'
 import { context } from '../context.js'
-import { useAllPersonas, useCurrentPersona, useLastRecognizedProfile } from '../hooks/usePersona.js'
-import {
-    getDonationList,
-    getFootprintList,
-    getNFTList,
-    getWalletHiddenList,
-    getWalletList,
-    mergeList,
-} from '../utils.js'
+import { useAllPersonas, useCurrentPersona, useLastRecognizedProfile } from '../hooks/index.js'
+import { getDonationList, getFootprintList, getNFTList, getUnlistedConfig, getWalletList } from '../utils.js'
 import { ImageManagement } from './ImageManagement.js'
 import { Main } from './Main.js'
 
@@ -34,20 +27,6 @@ const useStyles = makeStyles()((theme) => ({
             display: 'none',
         },
     },
-    link: {
-        color: theme.palette.text.primary,
-        fontSize: 14,
-        display: 'flex',
-        alignItems: 'center',
-        marginLeft: '4px',
-    },
-    linkIcon: {
-        marginRight: theme.spacing(1),
-        color: '#6E767D',
-    },
-    card: {
-        overflow: 'scroll',
-    },
     actions: {
         padding: '0px !important',
         backgroundColor: theme.palette.background.paper,
@@ -60,12 +39,12 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export function Web3ProfileDialog() {
-    const classes = useStylesExtends(useStyles(), {})
-    const [status, setStatus] = useState(CURRENT_STATUS.Main)
-    const [imageManageOpen, setImageManageOpen] = useState(false)
+    const t = useI18N()
+    const { classes } = useStyles()
+    const [scene, setScene] = useState<Scene>()
     const [accountId, setAccountId] = useState<string>()
-    const [open, setOpen] = useState(false)
 
+    const [open, setOpen] = useState(false)
     useEffect(() => {
         return CrossIsolationMessages.events.web3ProfileDialogEvent.on(({ open }) => {
             setOpen(open)
@@ -86,61 +65,49 @@ export function Web3ProfileDialog() {
 
     const { value: avatar } = useAsyncRetry(async () => context.getPersonaAvatar(currentPersona?.identifier), [])
 
-    const wallets = useMemo(() => {
-        if (!bindings?.proofs.length) return EMPTY_LIST
+    const wallets: WalletTypes[] = useMemo(() => {
+        if (!bindings?.proofs?.length) return EMPTY_LIST
         return bindings.proofs
             .filter((proof) => proof.platform === NextIDPlatform.Ethereum)
-            .map((address) => ({
-                address: address?.identity,
-                platform: NetworkPluginID.PLUGIN_EVM,
-                updateTime: address.last_checked_at ?? address.created_at,
-            }))
+            .map(
+                (proof): WalletTypes => ({
+                    address: proof.identity,
+                    networkPluginID: NetworkPluginID.PLUGIN_EVM,
+                    updateTime: proof.last_checked_at ?? proof.created_at,
+                    collections: [],
+                }),
+            )
     }, [bindings?.proofs])
 
     const accounts = useMemo(
         () => bindings?.proofs?.filter((proof) => proof.platform === NextIDPlatform.Twitter) || EMPTY_LIST,
         [bindings?.proofs],
     )
-
-    const { value: mainnetNFTList } = useAsyncRetry(async () => {
+    const { value: NFTList } = useAsyncRetry(async () => {
         if (!currentPersona) return
-        return getNFTList(wallets)
-    }, [wallets, currentPersona])
-
-    const { value: polygonNFTList } = useAsyncRetry(async () => {
-        if (!currentPersona) return
-        return getNFTList(wallets, ChainId.Matic)
-    }, [wallets, currentPersona])
-
-    const NFTList = useMemo(
-        () => mergeList(mainnetNFTList ?? [], polygonNFTList ?? []),
-        [mainnetNFTList, polygonNFTList],
-    )
-
-    const { value: donationList } = useAsyncRetry(async () => {
-        return getDonationList(wallets)
+        return getNFTList(wallets, [ChainId.Mainnet, ChainId.Matic])
     }, [wallets])
 
-    const { value: footprintList } = useAsyncRetry(async () => {
-        return getFootprintList(wallets)
-    }, [wallets])
+    const { value: donationList } = useAsyncRetry(async () => getDonationList(wallets), [wallets])
 
-    const { value: hiddenObj, retry: retryGetWalletHiddenList } = useAsyncRetry(async () => {
+    const { value: footprintList } = useAsyncRetry(async () => getFootprintList(wallets), [wallets])
+
+    const { value: hiddenConfig, retry: retryGetWalletHiddenList } = useAsyncRetry(async () => {
         if (!personaPublicKey) return
-        return getWalletHiddenList(personaPublicKey)
+        return getUnlistedConfig(personaPublicKey)
     }, [personaPublicKey])
 
     const accountArr = useMemo(
-        () =>
-            getWalletList(accounts, wallets, allPersona, hiddenObj, footprintList, donationList, NFTList) ?? EMPTY_LIST,
-        [accounts, wallets, allPersona, hiddenObj, footprintList, donationList, NFTList],
+        () => getWalletList(accounts, wallets, allPersona, hiddenConfig, footprintList, donationList, NFTList),
+        [accounts, wallets, allPersona, hiddenConfig, footprintList, donationList, NFTList],
     )
 
     const userId = currentVisitingProfile?.identifier?.userId
     const accountList = useMemo(() => {
         return sortBy(accountArr, (x) => (x.identity.toLowerCase() === userId?.toLowerCase() ? -1 : 0))
     }, [userId, accountArr])
-    const chainId = useChainId()
+
+    const { chainId } = useChainContext()
 
     const openPopupsWindow = () => {
         context.openPopupWindow(PopupRoutes.ConnectedWallets, {
@@ -152,7 +119,7 @@ export function Web3ProfileDialog() {
     return (
         <InjectedDialog
             classes={{ dialogContent: classes.content }}
-            title={CurrentStatusMap[status].title}
+            title={scene ? SceneMap[scene].title : t.web3_profile()}
             fullWidth={false}
             open={open}
             isOnBack
@@ -162,29 +129,30 @@ export function Web3ProfileDialog() {
             onClose={() => setOpen(false)}>
             <DialogContent className={classes.content}>
                 <Main
-                    openImageSetting={(status: CURRENT_STATUS, accountId: string) => {
-                        setStatus(status)
-                        setImageManageOpen(true)
+                    openImageSetting={(scene, accountId) => {
+                        setScene(scene)
                         setAccountId(accountId)
                     }}
                     persona={currentPersona}
                     currentVisitingProfile={currentVisitingProfile}
                     accountList={accountList}
                 />
-                <ImageManagement
-                    currentPersona={currentPersona}
-                    accountList={accountList?.find((x) => x?.identity === accountId)}
-                    status={status}
-                    onClose={() => {
-                        setImageManageOpen(false)
-                        setStatus(CURRENT_STATUS.Main)
-                    }}
-                    open={imageManageOpen}
-                    accountId={accountId}
-                    currentVisitingProfile={currentVisitingProfile}
-                    allWallets={wallets}
-                    getWalletHiddenRetry={retryGetWalletHiddenList}
-                />
+                {accountId && scene ? (
+                    <ImageManagement
+                        open
+                        currentPersona={currentPersona}
+                        account={accountList.find((x) => x.identity === accountId)}
+                        scene={scene}
+                        onClose={() => {
+                            setScene(undefined)
+                        }}
+                        accountId={accountId}
+                        currentVisitingProfile={currentVisitingProfile}
+                        allWallets={wallets}
+                        getWalletHiddenRetry={retryGetWalletHiddenList}
+                        unlistedCollectionConfig={hiddenConfig?.collections?.[accountId]}
+                    />
+                ) : null}
             </DialogContent>
             {currentPersona ? (
                 <DialogActions className={classes.actions}>

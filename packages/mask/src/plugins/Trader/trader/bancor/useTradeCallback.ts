@@ -2,16 +2,17 @@ import { pick } from 'lodash-unified'
 import { useMemo } from 'react'
 import { useAsyncFn } from 'react-use'
 import stringify from 'json-stable-stringify'
-import { NetworkPluginID, ZERO } from '@masknet/web3-shared-base'
-import { useAccount, useChainId, useWeb3Connection } from '@masknet/web3-hooks-base'
+import { ZERO } from '@masknet/web3-shared-base'
+import { useChainContext, useNetworkContext, useWeb3Connection } from '@masknet/web3-hooks-base'
 import type { GasOptionConfig } from '@masknet/web3-shared-evm'
 import { PluginTraderRPC } from '../../messages.js'
 import type { SwapBancorRequest, TradeComputed } from '../../types/index.js'
+import { NetworkPluginID } from '@masknet/shared-base'
 
 export function useTradeCallback(tradeComputed: TradeComputed<SwapBancorRequest> | null, gasConfig?: GasOptionConfig) {
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
-    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, { chainId })
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const { account, chainId } = useChainContext()
+    const { pluginID } = useNetworkContext()
+    const connection = useWeb3Connection(pluginID, { chainId })
 
     const trade: SwapBancorRequest | null = useMemo(() => {
         if (!account || !tradeComputed?.trade_) return null
@@ -19,7 +20,7 @@ export function useTradeCallback(tradeComputed: TradeComputed<SwapBancorRequest>
     }, [account, tradeComputed])
 
     return useAsyncFn(async () => {
-        if (!account || !trade || !connection) {
+        if (!account || !trade || !connection || pluginID !== NetworkPluginID.PLUGIN_EVM) {
             return
         }
 
@@ -44,5 +45,5 @@ export function useTradeCallback(tradeComputed: TradeComputed<SwapBancorRequest>
         const receipt = await connection.getTransactionReceipt(hash)
 
         return receipt?.transactionHash
-    }, [connection, account, chainId, stringify(trade), gasConfig])
+    }, [connection, account, chainId, stringify(trade), gasConfig, pluginID])
 }

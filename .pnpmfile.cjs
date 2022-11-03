@@ -36,11 +36,18 @@ approvedList.set('bignumber.js', [
 
 // @magic-works/i18n-codegen -> i18next-translation-parser
 // https://github.com/i18next/i18next-translation-parser/issues/11
-approvedList.set('html-parse-stringify2', 'github:locize/html-parse-stringify2')
+approvedList.set('html-parse-stringify2', [
+    'github:locize/html-parse-stringify2',
+    'github:locize/html-parse-stringify2#d463109433b2c49c74a081044f54b2a6a1ccad7c',
+])
 
 // ipfs https://github.com/ipfs/js-ipfs-utils/issues/158
 approvedList.set('node-fetch', 'https://registry.npmjs.org/@achingbrain/node-fetch/-/node-fetch-2.6.7.tgz')
 
+approvedList.set(
+    'html-parse-stringify2',
+    'github:locize/html-parse-stringify2#d463109433b2c49c74a081044f54b2a6a1ccad7c',
+)
 /**
  * @param {string} parentPackage The current resolving parentPackage
  * @param {string} dependedPackage The package it depends on
@@ -53,6 +60,7 @@ function assertInstallationSourceValid(parentPackage, dependedPackage, installat
         if (Array.isArray(source) && source.indexOf(installationSource) !== -1) return
     }
 
+    if (dependedPackage === '@typescript/lib-dom' && installationSource.startsWith('npm:@types/web@^')) return
     if (dependedPackage === 'lodash-es' && installationSource.startsWith('npm:lodash@^4')) return
 
     // !!! There is some relative path installation source in the dependency tree,

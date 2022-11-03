@@ -2,7 +2,7 @@ import { noop } from 'lodash-unified'
 import type { Trade as V2Trade } from '@uniswap/v2-sdk'
 import type { Trade as V3Trade } from '@uniswap/v3-sdk'
 import type { Currency, TradeType } from '@uniswap/sdk-core'
-import { unreachable } from '@dimensiondev/kit'
+import { unreachable } from '@masknet/kit'
 import { TradeProvider } from '@masknet/public-api'
 import type {
     SwapQuoteResponse,
@@ -23,10 +23,10 @@ import { useExchangeProxyContract } from '../contracts/balancer/useExchangeProxy
 import type { NativeTokenWrapper } from './native/useTradeComputed.js'
 import { isNativeTokenWrapper } from '../helpers/index.js'
 import { useGetTradeContext } from './useGetTradeContext.js'
-import type { GasOptionConfig } from '@masknet/web3-shared-evm'
-import type { AsyncFnReturn } from 'react-use/lib/useAsyncFn'
-import { useChainId } from '@masknet/web3-hooks-base'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import type { ChainId, GasOptionConfig } from '@masknet/web3-shared-evm'
+import type { AsyncFnReturn } from 'react-use/lib/useAsyncFn.js'
+import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 
 export function useTradeCallback(
     provider?: TradeProvider,
@@ -36,7 +36,8 @@ export function useTradeCallback(
 ): AsyncFnReturn<() => Promise<string | undefined>> {
     // trade context
     const context = useGetTradeContext(provider)
-    const targetChainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { chainId } = useChainContext()
+    const { pluginID } = useNetworkContext()
     // create trade computed
     const isNativeTokenWrapper_ = isNativeTokenWrapper(tradeComputed ?? null)
     const tradeComputedForUniswapV2Like =
@@ -61,7 +62,9 @@ export function useTradeCallback(
     const uniswapV3Like = useUniswapCallback(tradeComputedForUniswapV3Like, provider, gasConfig, allowedSlippage)
 
     // balancer
-    const exchangeProxyContract = useExchangeProxyContract(targetChainId)
+    const exchangeProxyContract = useExchangeProxyContract(
+        pluginID === NetworkPluginID.PLUGIN_EVM ? (chainId as ChainId) : undefined,
+    )
     const balancer = useBalancerCallback(
         provider === TradeProvider.BALANCER ? tradeComputedForBalancer : null,
         exchangeProxyContract,
@@ -82,7 +85,7 @@ export function useTradeCallback(
     const nativeTokenWrapper = useNativeTokenWrapperCallback(
         tradeComputed as TradeComputed<NativeTokenWrapper>,
         gasConfig,
-        targetChainId,
+        pluginID === NetworkPluginID.PLUGIN_EVM ? (chainId as ChainId) : undefined,
     )
     if (isNativeTokenWrapper_) return nativeTokenWrapper
 

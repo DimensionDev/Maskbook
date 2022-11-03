@@ -31,12 +31,6 @@ const useStyles = makeStyles<PriceChartProps>()((theme, { stats, coin }) => {
             right: 0,
             bottom: -64,
         },
-        refresh: {
-            bottom: theme.spacing(1),
-            right: theme.spacing(1),
-            position: 'absolute',
-            fontSize: 15,
-        },
         placeholder: {
             paddingTop: theme.spacing(10),
             paddingBottom: theme.spacing(10),
@@ -59,7 +53,7 @@ export interface PriceChartProps extends withClasses<'root'> {
 
 export function PriceChart(props: PriceChartProps) {
     const { t } = useI18N()
-    const classes = useStylesExtends(useStyles(props), props)
+    const { classes } = useStylesExtends(useStyles(props), props)
     const colors = useTheme().palette.maskColor
     const rootRef = useRef<HTMLDivElement>(null)
     const svgRef = useRef<SVGSVGElement>(null)

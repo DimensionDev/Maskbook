@@ -1,11 +1,11 @@
 import { memo, useEffect, useState } from 'react'
-import { useCurrentWeb3NetworkPluginID } from '@masknet/web3-hooks-base'
+import { useNetworkContext } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { makeStyles, useTabs } from '@masknet/theme'
 import { TabContext, TabList, TabPanel } from '@mui/lab'
 import { Box, Button, Tab } from '@mui/material'
 import { useSelectFungibleToken } from '@masknet/shared'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { ContentContainer } from '../../../../components/ContentContainer/index.js'
 import { useDashboardI18N } from '../../../../locales/index.js'
 import { AddCollectibleDialog } from '../AddCollectibleDialog/index.js'
@@ -23,12 +23,6 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: Number(theme.shape.borderRadius) * 3.5,
         fontSize: theme.typography.caption.fontSize,
     },
-    tab: {
-        flex: 1,
-        padding: 0,
-        display: 'flex',
-        flexDirection: 'column',
-    },
 }))
 
 export enum AssetTab {
@@ -45,7 +39,7 @@ export interface AssetsProps {
 
 export const Assets = memo<AssetsProps>(({ network }) => {
     const t = useDashboardI18N()
-    const pluginID = useCurrentWeb3NetworkPluginID()
+    const { pluginID } = useNetworkContext()
     const { classes } = useStyles()
     const assetTabsLabel: Record<AssetTab, string> = {
         [AssetTab.Token]: t.wallets_assets_token(),

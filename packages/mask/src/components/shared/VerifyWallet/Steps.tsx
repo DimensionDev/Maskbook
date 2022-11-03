@@ -48,10 +48,8 @@ const useStyles = makeStyles()((theme) => ({
         minHeight: 100,
     },
     stepTitle: {
-        fontSize: 14,
         fontWeight: 700,
     },
-
     stepIntro: {
         marginTop: 12,
         fontSize: 12,
@@ -78,12 +76,7 @@ const useStyles = makeStyles()((theme) => ({
         color: '#1C68F3',
         fontSize: 14,
     },
-    disableBtn: {
-        pointerEvents: 'none',
-        opacity: 0.5,
-    },
     hasBound: {
-        fontSize: 14,
         width: '100%',
         textAlign: 'left',
         color: theme.palette.error.main,

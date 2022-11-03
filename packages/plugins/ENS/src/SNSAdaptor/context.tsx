@@ -1,11 +1,10 @@
-import { createContext, PropsWithChildren, FC } from 'react'
+import { createContext, PropsWithChildren } from 'react'
 import { useAsync } from 'react-use'
-import { useLookupAddress, PluginWeb3ContextProvider, PluginIDContextProvider } from '@masknet/web3-hooks-base'
-import { NextIDPlatform, BindingProof } from '@masknet/shared-base'
-import { NextIDProof } from '@masknet/web3-providers'
-import { ChainId, resolveNonFungibleTokenIdFromEnsDomain } from '@masknet/web3-shared-evm'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { uniqBy } from 'lodash-unified'
+import { NextIDProof } from '@masknet/web3-providers'
+import { useLookupAddress } from '@masknet/web3-hooks-base'
+import { BindingProof, NetworkPluginID, NextIDPlatform } from '@masknet/shared-base'
+import { resolveNonFungibleTokenIdFromEnsDomain } from '@masknet/web3-shared-evm'
 
 interface ENSContextProps {
     isLoading: boolean
@@ -22,7 +21,6 @@ interface ENSContextProps {
 
 export const ENSContext = createContext<ENSContextProps>({
     isLoading: true,
-
     firstValidNextIdTwitterBinding: undefined,
     restOfValidNextIdTwitterBindings: [],
     validNextIdTwitterBindings: [],
@@ -32,6 +30,7 @@ export const ENSContext = createContext<ENSContextProps>({
     isError: false,
     retry: undefined,
 })
+ENSContext.displayName = 'ENSContext'
 
 export function ENSProvider({ children, domain }: PropsWithChildren<SearchResultInspectorProps>) {
     const {
@@ -39,7 +38,7 @@ export function ENSProvider({ children, domain }: PropsWithChildren<SearchResult
         loading: isLoading,
         error,
         retry,
-    } = useLookupAddress(NetworkPluginID.PLUGIN_EVM, domain, ChainId.Mainnet)
+    } = useLookupAddress(NetworkPluginID.PLUGIN_EVM, domain)
     const isError = !!error
     const tokenId = resolveNonFungibleTokenIdFromEnsDomain(domain)
     const { value: ids } = useAsync(
@@ -75,16 +74,6 @@ export function ENSProvider({ children, domain }: PropsWithChildren<SearchResult
             }}>
             {children}
         </ENSContext.Provider>
-    )
-}
-
-export const RootContext: FC<PropsWithChildren<{}>> = ({ children }) => {
-    return (
-        <PluginIDContextProvider value={NetworkPluginID.PLUGIN_EVM}>
-            <PluginWeb3ContextProvider pluginID={NetworkPluginID.PLUGIN_EVM} value={{ chainId: ChainId.Mainnet }}>
-                {children}
-            </PluginWeb3ContextProvider>
-        </PluginIDContextProvider>
     )
 }
 

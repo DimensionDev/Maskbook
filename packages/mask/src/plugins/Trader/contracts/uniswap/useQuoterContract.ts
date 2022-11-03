@@ -1,5 +1,5 @@
 import QuoterABI from '@masknet/web3-contracts/abis/Quoter.json'
-import type { Quoter } from '@masknet/web3-contracts/types/Quoter'
+import type { Quoter } from '@masknet/web3-contracts/types/Quoter.js'
 import { ChainId, useTraderConstants } from '@masknet/web3-shared-evm'
 import { useContract } from '@masknet/web3-hooks-evm'
 import type { AbiItem } from 'web3-utils'

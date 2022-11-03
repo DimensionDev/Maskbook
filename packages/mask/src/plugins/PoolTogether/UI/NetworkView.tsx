@@ -3,7 +3,7 @@ import { ChainId, chainResolver } from '@masknet/web3-shared-evm'
 import { Typography } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { ImageIcon } from '@masknet/shared'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -22,7 +22,7 @@ interface NetworkViewProps extends withClasses<never> {
 }
 
 export const NetworkView = (props: NetworkViewProps) => {
-    const classes = useStylesExtends(useStyles(), props)
+    const { classes } = useStylesExtends(useStyles(), props)
     const { chainId = ChainId.Mainnet } = props
     const networkProvider = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM)
     return (

@@ -4,8 +4,7 @@ import { Typography, Link } from '@mui/material'
 import { useWeb3State } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { Icons } from '@masknet/icons'
-import { NonFungibleTokenEvent, formatBalance, isZero, isValidTimestamp } from '@masknet/web3-shared-base'
-import { ActivityType } from '../../types.js'
+import { NonFungibleTokenEvent, formatBalance, isZero, isValidTimestamp, ActivityType } from '@masknet/web3-shared-base'
 import { useI18N } from '../../../../../utils/index.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -52,7 +51,6 @@ const useStyles = makeStyles()((theme) => ({
     textBase: {
         display: 'flex',
         alignItems: 'center',
-        fontSize: 14,
         lineHeight: '18px',
         color: theme.palette.maskColor.publicSecond,
         '& > strong': {
@@ -82,12 +80,12 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface ActivityCardProps {
-    type: ActivityType
     activity: NonFungibleTokenEvent<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
 }
 
 export function ActivityCard(props: ActivityCardProps) {
-    const { activity, type } = props
+    const { activity } = props
+    const { type } = activity
     const { t } = useI18N()
     const { classes, cx } = useStyles()
     const { Others } = useWeb3State()
@@ -126,22 +124,20 @@ export function ActivityCard(props: ActivityCardProps) {
                     )}
             </div>
             <div className={classes.flex}>
-                <Typography className={classes.textBase}>
-                    {activity.from && (
-                        <>
-                            {t('plugin_collectible_from')}
-                            <strong>
-                                {activity.from.nickname ||
-                                    (activity.from.address ? Others?.formatAddress(activity.from.address, 4) : '-')}
-                            </strong>
-                        </>
-                    )}
-                </Typography>
+                {activity.from && (
+                    <Typography className={classes.textBase}>
+                        {t('plugin_collectible_from')}
+                        <strong title={activity.from.address}>
+                            {activity.from.nickname ||
+                                (activity.from.address ? Others?.formatAddress(activity.from.address, 4) : '-')}
+                        </strong>
+                    </Typography>
+                )}
                 <Typography className={classes.textBase}>
                     {activity.to && (
                         <>
                             {t('plugin_collectible_to')}
-                            <strong>
+                            <strong title={activity.to.address}>
                                 {activity.to.nickname ||
                                     (activity.to.address ? Others?.formatAddress(activity.to.address, 4) : '-')}
                             </strong>

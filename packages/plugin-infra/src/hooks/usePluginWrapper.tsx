@@ -6,6 +6,7 @@ export type PluginWrapperComponent<T extends Plugin.Shared.Definition = Plugin.S
         React.PropsWithChildren<
             RefAttributes<PluginWrapperMethods> & {
                 definition: T
+                lackHostPermission?: boolean
             }
         >
     >
@@ -18,6 +19,7 @@ export const emptyPluginWrapperMethods = {
 }
 /** @internal */
 export const PluginWrapperMethodsContext = createContext<PluginWrapperMethods>(emptyPluginWrapperMethods)
+PluginWrapperMethodsContext.displayName = 'PluginWrapperMethodsContext'
 export interface PluginWrapperMethods {
     setWrap(open: boolean): void
     setWrapperName(name: string | undefined): void

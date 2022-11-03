@@ -1,22 +1,19 @@
 import { useState } from 'react'
 import { Button, Checkbox, FormControlLabel, Table, TableBody, TableCell, TableRow, Typography } from '@mui/material'
-import { getEnumAsArray } from '@dimensiondev/kit'
-import { PluginID } from '@masknet/plugin-infra'
+import { getEnumAsArray } from '@masknet/kit'
+import { PluginID } from '@masknet/shared-base'
 import {
-    useAccount,
     useBalance,
     useBlockNumber,
     useBlockTimestamp,
-    useChainId,
-    useCurrentWeb3NetworkPluginID,
-    useNetworkType,
-    useProviderType,
+    useNetworkContext,
     useReverseAddress,
     useLookupAddress,
     useWeb3State,
+    useChainContext,
 } from '@masknet/web3-hooks-base'
 import { WalletMessages } from '@masknet/plugin-wallet'
-import { useSelectAdvancedSettings, useSelectFungibleToken } from '@masknet/shared'
+import { useSelectAdvancedSettings } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { ChainId } from '@masknet/web3-shared-evm'
@@ -33,26 +30,22 @@ const useStyles = makeStyles()({
 
 export function ConsoleContent(props: ConsoleContentProps) {
     const { classes } = useStyles()
-    const pluginID = useCurrentWeb3NetworkPluginID()
+    const { pluginID: currentPluginID } = useNetworkContext()
     const { Others } = useWeb3State()
-    const account = useAccount()
-    const chainId = useChainId()
-    const networkType = useNetworkType()
-    const providerType = useProviderType()
+    const { account, chainId, networkType, providerType } = useChainContext()
     const { value: balance = '0' } = useBalance()
     const { value: blockNumber = 0 } = useBlockNumber()
     const { value: blockTimestamp = 0 } = useBlockTimestamp()
 
-    const onSelectFungibleToken = useSelectFungibleToken()
-    const onSelectGasSettings = useSelectAdvancedSettings(pluginID)
+    const onSelectGasSettings = useSelectAdvancedSettings(currentPluginID)
 
-    const [pluginId, setPluginId] = useState<PluginID>(PluginID.RSS3)
+    const [pluginID, setPluginID] = useState<PluginID>(PluginID.RSS3)
     const plugins = getEnumAsArray(PluginID) as Array<{ key: PluginID; value: string }>
 
     const [quickMode, setQuickMode] = useState(true)
     const { setDialog } = useRemoteControlledDialog(WalletMessages.events.ApplicationDialogUpdated)
-    const { value: reversedName, retry: retryReversedName } = useReverseAddress(pluginID, account)
-    const { value: lookedAddress, retry: retryLookedAddress } = useLookupAddress(pluginID, reversedName)
+    const { value: reversedName, retry: retryReversedName } = useReverseAddress(currentPluginID, account)
+    const { value: lookedAddress, retry: retryLookedAddress } = useLookupAddress(currentPluginID, reversedName)
 
     const { showSnackbar } = useCustomSnackbar()
     const table: Array<{ name: string; content: JSX.Element }> = [
@@ -62,7 +55,7 @@ export function ConsoleContent(props: ConsoleContentProps) {
         },
         {
             name: 'PluginID',
-            content: <Typography variant="body2">{pluginID}</Typography>,
+            content: <Typography variant="body2">{currentPluginID}</Typography>,
         },
         {
             name: 'Network Type',
@@ -165,7 +158,7 @@ export function ConsoleContent(props: ConsoleContentProps) {
             name: 'Plugin Settings',
             content: (
                 <>
-                    <select onChange={(event) => setPluginId(event.target.value as PluginID)}>
+                    <select onChange={(event) => setPluginID(event.target.value as PluginID)}>
                         {plugins.map((x) => (
                             <option key={x.value} value={x.value}>
                                 {x.key}
@@ -191,7 +184,7 @@ export function ConsoleContent(props: ConsoleContentProps) {
                                 settings: {
                                     quickMode,
                                     switchTab: {
-                                        focusPluginId: pluginId,
+                                        focusPluginID: pluginID,
                                     },
                                 },
                             })

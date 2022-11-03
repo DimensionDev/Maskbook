@@ -34,8 +34,6 @@ export default {
     '/[DimensionDev.Maskbook] develop/packages/mask/src/plugins/Gitcoin/locales/%locale%.json': 'co.gitcoin',
     '/[DimensionDev.Maskbook] develop/packages/mask/src/plugins/Referral/locales/%locale%.json':
         'com.maskbook.referral',
-    '/[DimensionDev.Maskbook] develop/packages/mask/src/plugins/Approval/locales/%locale%.json':
-        'com.maskbook.approval',
     '/[DimensionDev.Maskbook] develop/packages/mask/src/plugins/FindTruman/locales/%locale%.json': 'org.findtruman',
     '/[DimensionDev.Maskbook] develop/packages/mask/src/plugins/MaskBox/locales/%locale%.json': 'com.maskbook.box',
     '/[DimensionDev.Maskbook] develop/packages/mask/src/plugins/Game/locales/%locale%.json': 'com.maskbook.game',
@@ -44,4 +42,5 @@ export default {
     '/[DimensionDev.Maskbook] develop/packages/mask/src/plugins/ProfileCard/locales/%locale%.json':
         'io.mask.web3-profile-card',
     '/[DimensionDev.Maskbook] develop/packages/plugins/ENS/src/locales/%locale%.json': 'com.maskbook.ens',
+    '/[DimensionDev.Maskbook] develop/packages/plugins/Approval/src/locales/%locale%.json': 'com.maskbook.approval',
 }

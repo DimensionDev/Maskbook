@@ -1,24 +1,23 @@
-import { useState } from 'react'
-import { useAsync } from 'react-use'
-import { GasOptionConfig, formatGweiToWei, ChainId } from '@masknet/web3-shared-evm'
-import { GasOptionType, NetworkPluginID } from '@masknet/web3-shared-base'
+import { useMemo, useState } from 'react'
+import type { GasOptionConfig } from '@masknet/web3-shared-evm'
+import { GasOptionType, toFixed } from '@masknet/web3-shared-base'
 import { useGasOptions, useWeb3State } from '@masknet/web3-hooks-base'
+import type { Web3Helper } from '@masknet/web3-helpers'
 
-// TODO: support multiple chain
-export function useGasConfig(chainId: ChainId) {
+export function useGasConfig(chainId: Web3Helper.ChainIdAll) {
     const [gasConfig, setGasConfig] = useState<GasOptionConfig | undefined>()
-    const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
+    const { Others } = useWeb3State()
     const isEIP1559 = Others?.chainResolver.isSupport(chainId, 'EIP1559')
 
-    const { value: gasOptions_ } = useGasOptions(NetworkPluginID.PLUGIN_EVM)
-    const { value: gasPrice } = useAsync(async () => {
+    const { value: gasOptions_ } = useGasOptions()
+
+    const gasPrice = useMemo(() => {
         try {
-            const maxFeePerGas = formatGweiToWei(
-                gasOptions_?.[GasOptionType.NORMAL]?.suggestedMaxFeePerGas ?? 0,
-            ).toFixed(0)
-            const maxPriorityFeePerGas = formatGweiToWei(
+            const maxFeePerGas = toFixed(gasOptions_?.[GasOptionType.NORMAL]?.suggestedMaxFeePerGas ?? 0, 0)
+            const maxPriorityFeePerGas = toFixed(
                 gasOptions_?.[GasOptionType.NORMAL]?.suggestedMaxPriorityFeePerGas ?? 0,
-            ).toFixed(0)
+                0,
+            )
 
             setGasConfig(
                 isEIP1559

@@ -2,11 +2,11 @@ import { first, last } from 'lodash-unified'
 import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
-import { useI18N } from '../locales'
+import { useI18N } from '../locales/index.js'
 import { NonFungibleTokenOrder, formatBalance, formatCurrency } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import BigNumber from 'bignumber.js'
-import { CollectibleState } from './hooks/useCollectibleState'
+import { BigNumber } from 'bignumber.js'
+import { CollectibleState } from './hooks/useCollectibleState.js'
 
 const useStyles = makeStyles()((theme) => ({
     textBase: {
@@ -16,17 +16,6 @@ const useStyles = makeStyles()((theme) => ({
             color: theme.palette.maskColor.publicMain,
             margin: '0 2px',
         },
-    },
-    priceZone: {
-        display: 'flex',
-        alignItems: 'center',
-        gap: 24,
-        margin: '20px 0',
-    },
-    priceText: {
-        fontSize: 36,
-        fontWeight: 700,
-        color: theme.palette.maskColor.publicMain,
     },
     offerBox: {
         display: 'flex',
@@ -41,9 +30,6 @@ const useStyles = makeStyles()((theme) => ({
         lineHeight: '20px',
         display: 'flex',
         alignItems: 'flex-end',
-    },
-    textSm: {
-        fontSize: 24,
     },
     offerBoxWrapper: {
         display: 'flex',

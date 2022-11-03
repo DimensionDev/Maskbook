@@ -1,4 +1,4 @@
-import { encodeArrayBuffer } from '@dimensiondev/kit'
+import { encodeArrayBuffer } from '@masknet/kit'
 import {
     decrypt,
     parsePayload,
@@ -78,10 +78,16 @@ export async function* decryptionWithSocialNetworkDecoding(
             return yield new DecryptError(DecryptErrorReasons.UnrecognizedAuthor, undefined)
         }
         const result = await steganographyDecodeImage(encoded.image, {
-            pass: context.authorHint.toText(),
+            password: context.authorHint.toText(),
             downloadImage,
         })
-        decoded = socialNetworkDecoder(context.currentSocialNetwork, result)[0]
+        if (typeof result === 'string') {
+            decoded = socialNetworkDecoder(context.currentSocialNetwork, result)[0]
+        } else if (result === null) {
+            return yield new DecryptError(DecryptErrorReasons.NoPayloadFound, undefined)
+        } else {
+            decoded = result
+        }
     }
 
     if (!decoded) return yield new DecryptError(DecryptErrorReasons.NoPayloadFound, undefined)

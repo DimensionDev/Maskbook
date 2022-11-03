@@ -1,6 +1,7 @@
 import React, { createElement, Fragment, useMemo } from 'react'
+import type { PluginID } from '@masknet/shared-base'
 import { useActivatedPluginsSNSAdaptor } from '../manager/sns-adaptor.js'
-import type { Plugin, PluginID } from '../types.js'
+import type { Plugin } from '../types.js'
 
 export interface WidgetProps<Name extends keyof Plugin.SNSAdaptor.WidgetRegistry> {
     name: Name

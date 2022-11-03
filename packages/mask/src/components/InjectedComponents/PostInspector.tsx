@@ -6,14 +6,14 @@ import {
     useActivatedPluginsSNSAdaptor,
 } from '@masknet/plugin-infra/content-script'
 import { PossiblePluginSuggestionPostInspector } from './DisabledPluginSuggestion.js'
-import { MaskPostExtraPluginWrapper } from '@masknet/shared'
 import { useSubscription } from 'use-subscription'
 import { PersistentStorages } from '../../../shared/index.js'
+import { MaskPostExtraPluginWrapperWithPermission } from './PermissionBoundary.js'
 
 const PluginHooksRenderer = createInjectHooksRenderer(
     useActivatedPluginsSNSAdaptor.visibility.useNotMinimalMode,
     (plugin) => plugin.PostInspector,
-    MaskPostExtraPluginWrapper,
+    MaskPostExtraPluginWrapperWithPermission,
 )
 
 export interface PostInspectorProps {

@@ -1,15 +1,15 @@
-import { useAccount, useChainId } from '@masknet/web3-hooks-base'
-import { DialogActions, DialogContent, DialogProps, Chip, Button, InputBase } from '@mui/material'
 import { useEffect, useState } from 'react'
+import { useChainContext } from '@masknet/web3-hooks-base'
+import { DialogActions, DialogContent, DialogProps, Chip, Button, InputBase } from '@mui/material'
 import { InjectedDialog } from '@masknet/shared'
 import { useI18N } from '../../../utils/index.js'
-import { pluginMetaKey } from '../constants.js'
+import { PLUGIN_META_KEY } from '../constants.js'
 import type { UnlockLocks } from '../types.js'
 import { PluginUnlockProtocolRPC } from '../messages.js'
 import { SelectRecipientsUnlockDialogUI } from './SelectRecipientsUnlockDialog.js'
 import { useCompositionContext } from '@masknet/plugin-infra/content-script'
 import { makeStyles } from '@masknet/theme'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
 
 interface UnlockProtocolDialogProps extends withClasses<'wrapper'> {
     open: boolean
@@ -28,15 +28,14 @@ export default function UnlockProtocolDialog(props: UnlockProtocolDialogProps) {
     const { t } = useI18N()
     const [open, setOpen] = useState(false)
     const { classes } = useStyles()
-    const address = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const [currentUnlockChain, setCurrentUnlockChain] = useState(chainId)
     const [currentUnlockPost, setCurrentUnlockPost] = useState('')
     const [currentUnlockTarget, setCurrentUnlockTarget] = useState<UnlockLocks[]>(() => [])
     const [availableUnlockTarget, setAvailableUnlockTarget] = useState<UnlockLocks[]>(() => [])
     const { attachMetadata, dropMetadata } = useCompositionContext()
     useEffect(() => {
-        PluginUnlockProtocolRPC.getLocks(address)
+        PluginUnlockProtocolRPC.getLocks(account)
             .then((value) => {
                 if (value.length) {
                     setAvailableUnlockTarget(value)
@@ -54,7 +53,7 @@ export default function UnlockProtocolDialog(props: UnlockProtocolDialogProps) {
                     },
                 ])
             })
-    }, [address])
+    }, [account])
 
     const onInsert = () => {
         if (!!currentUnlockTarget.length && !!currentUnlockPost) {
@@ -74,9 +73,9 @@ export default function UnlockProtocolDialog(props: UnlockProtocolDialogProps) {
                             post: encryption.encrypted,
                         }
                         if (data) {
-                            attachMetadata(pluginMetaKey, JSON.parse(JSON.stringify(data)))
+                            attachMetadata(PLUGIN_META_KEY, JSON.parse(JSON.stringify(data)))
                         } else {
-                            dropMetadata(pluginMetaKey)
+                            dropMetadata(PLUGIN_META_KEY)
                         }
                         props.onClose()
                     } else {

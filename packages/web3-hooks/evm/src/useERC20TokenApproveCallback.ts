@@ -1,8 +1,9 @@
 import { useCallback, useMemo } from 'react'
 import { useAsyncFn } from 'react-use'
-import { isLessThan, NetworkPluginID, toFixed, isZero } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { isLessThan, toFixed, isZero } from '@masknet/web3-shared-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
-import { useChainId, useAccount, useWeb3Connection, useFungibleTokenBalance } from '@masknet/web3-hooks-base'
+import { useChainContext, useWeb3Connection, useFungibleTokenBalance } from '@masknet/web3-hooks-base'
 import { useERC20TokenContract } from './useERC20TokenContract.js'
 import { useERC20TokenAllowance } from './useERC20TokenAllowance.js'
 
@@ -24,8 +25,9 @@ export function useERC20TokenApproveCallback(
     callback?: () => void,
     _chainId?: ChainId,
 ) {
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM, _chainId)
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>({
+        chainId: _chainId,
+    })
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, { chainId: _chainId })
     const erc20Contract = useERC20TokenContract(chainId, address)
 
@@ -63,7 +65,9 @@ export function useERC20TokenApproveCallback(
                 return
             }
 
-            const hash = await connection?.approveFungibleToken(address, spender, useExact ? amount : MaxUint256)
+            const hash = await connection?.approveFungibleToken(address, spender, useExact ? amount : MaxUint256, {
+                chainId,
+            })
             const receipt = await connection.getTransactionReceipt(hash)
 
             if (receipt) {
@@ -72,7 +76,7 @@ export function useERC20TokenApproveCallback(
                 revalidateAllowance()
             }
         },
-        [account, amount, spender, address, erc20Contract, approveStateType, connection],
+        [account, amount, spender, address, erc20Contract, approveStateType, connection, chainId],
     )
 
     const resetCallback = useCallback(() => {

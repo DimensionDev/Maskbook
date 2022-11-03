@@ -8,6 +8,13 @@ export interface FT {
     balance: string
 }
 
+export interface FT_Price {
+    price: number
+    symbol: string
+    source: string
+    updated_at: string
+}
+
 export interface FT_Metadata {
     contract_address: string
     name: string
@@ -81,4 +88,16 @@ export interface Tx {
     cumulative_gas_used: number
     max_fee_per_gas: number
     max_priority_fee_per_gas: number
+}
+
+export interface ENSRecord {
+    name: string
+    address: string
+    registrant: string
+    owner: string
+    resolver: string
+    registrant_time: string
+    expiration_time: string
+    token_id: string
+    text_records: Record<string, string>
 }

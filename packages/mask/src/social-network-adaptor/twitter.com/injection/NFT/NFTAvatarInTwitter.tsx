@@ -15,14 +15,13 @@ import { useAsync, useLocation, useUpdateEffect, useWindowSize } from 'react-use
 import { rainbowBorderKeyFrames } from '../../../../plugins/Avatar/SNSAdaptor/RainbowBox.js'
 import { RSS3_KEY_SNS } from '../../../../plugins/Avatar/constants.js'
 import { usePersonaNFTAvatar } from '../../../../plugins/Avatar/hooks/usePersonaNFTAvatar.js'
-import { useAccount } from '@masknet/web3-hooks-base'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { useChainContext } from '@masknet/web3-hooks-base'
 import { Box, Typography } from '@mui/material'
 import { useWallet } from '../../../../plugins/Avatar/hooks/useWallet.js'
 import { useNFT, useSaveNFTAvatar } from '../../../../plugins/Avatar/hooks/index.js'
 import { NFTCardStyledAssetPlayer, useShowConfirm } from '@masknet/shared'
 import type { AvatarMetaDB } from '../../../../plugins/Avatar/types.js'
-import { EnhanceableSite, NFTAvatarEvent, CrossIsolationMessages } from '@masknet/shared-base'
+import { NetworkPluginID, EnhanceableSite, NFTAvatarEvent, CrossIsolationMessages } from '@masknet/shared-base'
 import { activatedSocialNetworkUI } from '../../../../social-network/ui.js'
 import { Twitter } from '@masknet/web3-providers'
 
@@ -73,7 +72,7 @@ function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
         '',
         RSS3_KEY_SNS.TWITTER,
     )
-    const account = useAccount()
+    const { account } = useChainContext()
     const { loading: loadingWallet, value: storage } = useWallet(nftAvatar?.userId)
     const { value: nftInfo, loading: loadingNFTInfo } = useNFT(
         storage?.address ?? account,
@@ -169,7 +168,7 @@ function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
                 address: '',
                 tokenId: '',
                 schema: SchemaType.ERC721,
-                pluginID: NetworkPluginID.PLUGIN_EVM,
+                pluginId: NetworkPluginID.PLUGIN_EVM,
                 chainId: ChainId.Mainnet,
             }) as NFTAvatarEvent,
         )
@@ -227,16 +226,18 @@ function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
     }, [location.pathname, showAvatar, updatedAvatar])
 
     useUpdateEffect(() => {
+        if (!showAvatar) return
+
         const linkParentDom = searchTwitterAvatarLinkSelector().evaluate()?.closest('div')
-        if (!nftAvatar || !linkParentDom || !showAvatar) return
+        if (!linkParentDom) return
 
         const handler = (event: MouseEvent) => {
-            if (!nftAvatar.tokenId || !nftAvatar.address) return
+            if (!nftAvatar?.tokenId || !nftAvatar?.address) return
 
             event.stopPropagation()
             event.preventDefault()
 
-            if (!nftAvatar.pluginId || !nftAvatar.chainId) return
+            if (!nftAvatar?.pluginId || !nftAvatar.chainId) return
 
             CrossIsolationMessages.events.nonFungibleTokenDialogEvent.sendToLocal({
                 open: true,
@@ -244,15 +245,23 @@ function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
                 chainId: nftAvatar.chainId,
                 tokenId: nftAvatar.tokenId,
                 tokenAddress: nftAvatar.address,
+                ownerAddress: nftAvatar.ownerAddress,
                 origin: 'pfp',
             })
         }
 
+        const clean = () => {
+            linkParentDom.removeEventListener('click', handler, true)
+        }
+
+        if (!nftAvatar) {
+            clean()
+            return
+        }
+
         linkParentDom.addEventListener('click', handler, true)
 
-        return () => {
-            linkParentDom.removeEventListener('click', handler)
-        }
+        return clean
     }, [nftAvatar, showAvatar, nftInfo])
 
     const handler = () => {

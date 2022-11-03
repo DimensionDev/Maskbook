@@ -5,9 +5,8 @@ import { NFTAvatarButton } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatar
 import { startWatch, createReactRootShadowed, useLocationChange } from '../../../../utils/index.js'
 import { searchEditProfileSelector } from '../../utils/selector.js'
 import { ConnectPersonaBoundary } from '../../../../components/shared/ConnectPersonaBoundary.js'
-import { PluginID } from '@masknet/plugin-infra'
-import { CrossIsolationMessages } from '@masknet/shared-base'
-import { injectOpenNFTAvatarEditProfileButtonAtEditProfileDialog } from './NFTAvatarEditProfileDialog'
+import { PluginID, CrossIsolationMessages } from '@masknet/shared-base'
+import { injectOpenNFTAvatarEditProfileButtonAtEditProfileDialog } from './NFTAvatarEditProfileDialog.js'
 
 export function injectOpenNFTAvatarEditProfileButton(signal: AbortSignal) {
     injectOpenNFTAvatarEditProfileButtonAtProfilePage(signal)

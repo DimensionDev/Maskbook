@@ -16,9 +16,10 @@ import {
     TokenType,
 } from '@masknet/web3-shared-base'
 import { EMPTY_LIST } from '@masknet/shared-base'
-import { ChainId, createERC20Token, formatWeiToEther, SchemaType } from '@masknet/web3-shared-evm'
+import { ChainId, createERC20Token, formatWeiToEther, SchemaType, isValidChainId } from '@masknet/web3-shared-evm'
 import type { NonFungibleTokenAPI } from '../types/index.js'
 import type { Collection, Event, Order, Stats, Token } from './types.js'
+import { resolveNonFungibleTokenEventActivityType } from '../helpers.js'
 import { LOOKSRARE_API_URL, LOOKSRARE_PAGE_SIZE } from './constants.js'
 
 async function fetchFromLooksRare<T>(chainId: ChainId, url: string) {
@@ -107,7 +108,7 @@ function createNonFungibleEventFromEvent(chainId: ChainId, event: Event): NonFun
     return {
         id: event.id.toString(),
         chainId,
-        type: event.type,
+        type: resolveNonFungibleTokenEventActivityType(event.type),
         assetPermalink: urlcat('https://looksrare.org/collections/:address/:tokenId', {
             address: event.token?.collectionAddress ?? event.collection?.address,
             tokenId: event.token?.tokenId,
@@ -155,6 +156,7 @@ function createNonFungibleTokenOrderFromOrder(
 
 export class LooksRareAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
     async getAsset(address: string, tokenId: string, { chainId = ChainId.Mainnet }: HubOptions<ChainId> = {}) {
+        if (!isValidChainId(chainId)) return
         const response = await fetchFromLooksRare<{
             data: Token
         }>(
@@ -178,6 +180,8 @@ export class LooksRareAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
         address: string,
         { chainId = ChainId.Mainnet }: HubOptions<ChainId, HubIndicator> = {},
     ): Promise<NonFungibleTokenContract<ChainId, SchemaType> | undefined> {
+        if (!isValidChainId(chainId)) return
+
         const response = await fetchFromLooksRare<{
             data: Collection
         }>(chainId, address)
@@ -189,6 +193,7 @@ export class LooksRareAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
         tokenId: string,
         { chainId = ChainId.Mainnet, indicator }: HubOptions<ChainId, HubIndicator> = {},
     ) {
+        if (!isValidChainId(chainId)) return createPageable(EMPTY_LIST, createIndicator(indicator))
         const response = await fetchFromLooksRare<{
             data: Event[]
         }>(
@@ -218,6 +223,7 @@ export class LooksRareAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
         address: string,
         { chainId = ChainId.Mainnet }: HubOptions<ChainId> = {},
     ): Promise<NonFungibleTokenStats | undefined> {
+        if (!isValidChainId(chainId)) return
         const response = await fetchFromLooksRare<{
             data: Stats
         }>(
@@ -242,6 +248,7 @@ export class LooksRareAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
         side: OrderSide,
         { chainId = ChainId.Mainnet, indicator }: HubOptions<ChainId, HubIndicator> = {},
     ) {
+        if (!isValidChainId(chainId)) return createPageable(EMPTY_LIST, createIndicator(indicator))
         const response = await fetchFromLooksRare<{
             data: Order[]
         }>(

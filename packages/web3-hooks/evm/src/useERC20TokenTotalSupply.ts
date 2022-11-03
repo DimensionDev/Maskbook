@@ -1,10 +1,10 @@
 import { useAsyncRetry } from 'react-use'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { useChainId } from '@masknet/web3-hooks-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
+import { useChainContext } from '@masknet/web3-hooks-base'
 import { useERC20TokenContract } from './useERC20TokenContract.js'
 
 export function useERC20TokenTotalSupply(address?: string) {
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const erc20TokenContract = useERC20TokenContract(chainId, address)
     return useAsyncRetry(async () => {
         if (!erc20TokenContract) return

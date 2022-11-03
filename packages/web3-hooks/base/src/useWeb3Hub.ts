@@ -1,17 +1,15 @@
 import { useAsyncRetry } from 'react-use'
-import type { NetworkPluginID } from '@masknet/web3-shared-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useWeb3State } from './useWeb3State.js'
-import { useAccount } from './useAccount.js'
-import { useChainId } from './useChainId.js'
+import { useChainContext } from './useContext.js'
 
 export function useWeb3Hub<S extends 'all' | void = void, T extends NetworkPluginID = NetworkPluginID>(
     pluginID?: T,
     options?: Web3Helper.Web3HubOptionsScope<S, T>,
 ) {
-    const account = useAccount(pluginID)
-    const chainId = useChainId(pluginID)
     const { Hub } = useWeb3State(pluginID)
+    const { account, chainId } = useChainContext()
 
     const { value: hub = null } = useAsyncRetry(async () => {
         return Hub?.getHub?.({

@@ -1,7 +1,8 @@
+/* eslint-disable tss-unused-classes/unused-classes */
 import { EnhanceableSite, isDashboardPage, CrossIsolationMessages } from '@masknet/shared-base'
 import { ErrorBoundary, useValueRef } from '@masknet/shared-base-ui'
 import { omit } from 'lodash-unified'
-import { makeStyles, mergeClasses, useDialogStackActor, usePortalShadowRoot, useStylesExtends } from '@masknet/theme'
+import { Cx, makeStyles, useDialogStackActor, usePortalShadowRoot, useStylesExtends } from '@masknet/theme'
 import {
     Dialog,
     DialogActions,
@@ -20,7 +21,6 @@ import { Children, cloneElement, useCallback } from 'react'
 import { useSharedI18N } from '../../locales/index.js'
 import { sharedUIComponentOverwrite, sharedUINetworkIdentifier } from '../base/index.js'
 import { DialogDismissIcon } from './DialogDismissIcon.js'
-import classnames from 'classnames'
 
 interface StyleProps {
     clean: boolean
@@ -90,9 +90,9 @@ export type InjectedDialogClassKey =
 export interface InjectedDialogProps extends Omit<DialogProps, 'onClose' | 'title' | 'classes'> {
     classes?: Partial<Record<InjectedDialogClassKey, string>>
     onClose?(): void
-    title?: React.ReactChild
-    titleTail?: React.ReactChild | null
-    titleTabs?: React.ReactChild | null
+    title?: React.ReactNode
+    titleTail?: React.ReactNode | null
+    titleTabs?: React.ReactNode | null
     disableBackdropClick?: boolean
     disableTitleBorder?: boolean
     isOpenFromApplicationBoard?: boolean
@@ -106,17 +106,20 @@ export function InjectedDialog(props: InjectedDialogProps) {
     props = overwrite.InjectedDialog?.props?.(props) ?? props
     const clean = snsId === EnhanceableSite.Minds || snsId === EnhanceableSite.Facebook
     const {
-        dialogActions,
-        dialogCloseButton,
-        dialogContent,
-        dialogTitle,
-        dialogTitleEndingContent,
-        dialogTitleTabs,
-        dialogTitleWithTabs,
-        dialogTitleTypography,
-        dialogBackdropRoot,
-        container,
-        ...dialogClasses
+        classes: {
+            dialogActions,
+            dialogCloseButton,
+            dialogContent,
+            dialogTitle,
+            dialogTitleEndingContent,
+            dialogTitleTabs,
+            dialogTitleWithTabs,
+            dialogTitleTypography,
+            dialogBackdropRoot,
+            container,
+            ...dialogClasses
+        },
+        cx,
     } = useStylesExtends(useStyles({ clean }), props, overwrite.InjectedDialog?.classes)
 
     const t = useSharedI18N()
@@ -135,19 +138,28 @@ export function InjectedDialog(props: InjectedDialogProps) {
         isOpenFromApplicationBoard,
         ...rest
     } = props
-    const actions = CopyElementWithNewProps(children, DialogActions, { root: dialogActions })
-    const content = CopyElementWithNewProps(children, DialogContent, { root: dialogContent })
-    const { extraProps, shouldReplaceExitWithBack, IncreaseStack } = useDialogStackActor(open)
+    const actions = CopyElementWithNewProps(children, DialogActions, { root: dialogActions }, cx)
+    const content = CopyElementWithNewProps(children, DialogContent, { root: dialogContent }, cx)
+    const { extraProps, shouldReplaceExitWithBack, TrackDialogHierarchy } = useDialogStackActor(open)
 
     const closeBothCompositionDialog = useCallback(() => {
         if (isOpenFromApplicationBoard) {
-            CrossIsolationMessages.events.compositionDialogEvent.sendToLocal({ open: false, reason: 'timeline' })
+            CrossIsolationMessages.events.compositionDialogEvent.sendToLocal({
+                open: false,
+                reason: 'popup',
+                options: { isOpenFromApplicationBoard },
+            })
+            CrossIsolationMessages.events.compositionDialogEvent.sendToLocal({
+                open: false,
+                reason: 'timeline',
+                options: { isOpenFromApplicationBoard },
+            })
         }
         onClose?.()
     }, [isOpenFromApplicationBoard, onClose])
 
     return usePortalShadowRoot((container) => (
-        <IncreaseStack>
+        <TrackDialogHierarchy>
             <Dialog
                 container={container}
                 fullScreen={fullScreen}
@@ -161,7 +173,6 @@ export function InjectedDialog(props: InjectedDialogProps) {
                     if (reason === 'backdropClick' && disableBackdropClick) return
                     !props.isOnBack ? closeBothCompositionDialog() : onClose?.()
                 }}
-                onBackdropClick={disableBackdropClick ? void 0 : onClose}
                 BackdropProps={{
                     classes: {
                         root: dialogBackdropRoot,
@@ -172,7 +183,7 @@ export function InjectedDialog(props: InjectedDialogProps) {
                 <ErrorBoundary>
                     {title ? (
                         <DialogTitle
-                            className={classnames('dashboard-dialog-title-hook', titleTabs ? dialogTitleWithTabs : '')}
+                            className={cx('dashboard-dialog-title-hook', titleTabs ? dialogTitleWithTabs : '')}
                             classes={{ root: dialogTitle }}
                             style={{
                                 border: isDashboard || disableTitleBorder ? 'none' : undefined,
@@ -207,20 +218,20 @@ export function InjectedDialog(props: InjectedDialogProps) {
                     {actions}
                 </ErrorBoundary>
             </Dialog>
-        </IncreaseStack>
+        </TrackDialogHierarchy>
     ))
 }
 function CopyElementWithNewProps<T>(
     children: React.ReactNode,
     Target: React.ComponentType<T>,
-    // @ts-ignore
-    extraClasses: T['classes'],
+    extraClasses: T extends { classes?: infer Q } ? Q : never,
+    cx: Cx,
 ) {
     return (
         Children.map(children, (child: any) =>
             child?.type === Target
                 ? cloneElement(child, {
-                      classes: mergeClasses(extraClasses as any, child.props.classes),
+                      classes: cx(extraClasses as any, child.props.classes),
                   } as DialogContentProps)
                 : null,
         ) || []

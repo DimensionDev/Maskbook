@@ -12,18 +12,9 @@ import { useSetWalletNameForm } from '../hooks/useSetWalletNameForm.js'
 import { WalletContext } from '../hooks/useWalletContext.js'
 import { useTitle } from '../../../hook/useTitle.js'
 import { useWallet } from '@masknet/web3-hooks-base'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 
 const useStyles = makeStyles()({
-    header: {
-        padding: '10px 16px',
-        backgroundColor: '#EFF5FF',
-        color: '#1C68F3',
-    },
-    title: {
-        fontSize: 14,
-        lineHeight: '20px',
-    },
     content: {
         flex: 1,
         display: 'flex',

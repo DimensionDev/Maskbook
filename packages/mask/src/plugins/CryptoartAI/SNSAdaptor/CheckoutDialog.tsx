@@ -1,18 +1,24 @@
 import { useCallback, useMemo } from 'react'
-import BigNumber from 'bignumber.js'
+import { BigNumber } from 'bignumber.js'
 import { first } from 'lodash-unified'
-import { InjectedDialog, NFTCardStyledAssetPlayer, useOpenShareTxDialog } from '@masknet/shared'
+import {
+    InjectedDialog,
+    AssetPreviewer,
+    useOpenShareTxDialog,
+    PluginWalletStatusBar,
+    WalletConnectedBoundary,
+} from '@masknet/shared'
 import { makeStyles, ActionButton } from '@masknet/theme'
 import { Box, Card, CardActions, CardContent, DialogContent, Link, Typography } from '@mui/material'
-import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary.js'
 import type { useAsset } from '../hooks/useAsset.js'
 import { usePurchaseCallback } from '../hooks/usePurchaseCallback.js'
 import { activatedSocialNetworkUI } from '../../../social-network/index.js'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base.js'
 import { isFacebook } from '../../../social-network-adaptor/facebook.com/base.js'
-import { useChainId, useFungibleTokenWatched } from '@masknet/web3-hooks-base'
-import { NetworkPluginID, formatBalance, leftShift } from '@masknet/web3-shared-base'
-import { PluginWalletStatusBar, useI18N } from '../../../utils/index.js'
+import { useChainContext, useFungibleTokenWatched } from '@masknet/web3-hooks-base'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { formatBalance, leftShift } from '@masknet/web3-shared-base'
+import { useI18N } from '../../../utils/index.js'
 import { resolveAssetLinkOnCryptoartAI, resolvePaymentTokensOnCryptoartAI } from '../pipes/index.js'
 
 const useStyles = makeStyles()((theme) => {
@@ -24,17 +30,6 @@ const useStyles = makeStyles()((theme) => {
             display: 'flex',
             justifyContent: 'flex-end',
             padding: 0,
-        },
-        panel: {
-            marginTop: theme.spacing(2),
-            '&:first-child': {
-                marginTop: 0,
-            },
-        },
-        label: {},
-        buttons: {
-            width: '100%',
-            margin: `0 ${theme.spacing(-0.5)}`,
         },
         button: {
             flex: 1,
@@ -82,7 +77,7 @@ export function CheckoutDialog(props: CheckoutDialogProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
 
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
     const paymentTokens = resolvePaymentTokensOnCryptoartAI(chainId) ?? []
     const selectedPaymentToken = first(paymentTokens)
@@ -138,7 +133,7 @@ export function CheckoutDialog(props: CheckoutDialogProps) {
                         <Box className={classes.mediaContent}>
                             {asset?.value?.ossUrl.match(/\.(mp4|avi|webm)$/i) ? (
                                 <Link href={asset.value.ossUrl} target="_blank" rel="noopener noreferrer">
-                                    <NFTCardStyledAssetPlayer url={asset.value.ossUrl || asset.value.shareUrl} />
+                                    <AssetPreviewer url={asset.value.ossUrl || asset.value.shareUrl} />
                                 </Link>
                             ) : (
                                 <img

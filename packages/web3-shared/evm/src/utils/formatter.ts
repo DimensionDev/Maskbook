@@ -28,6 +28,7 @@ export const formatSchemaType = createLookupTableResolver<SchemaType, string>(
         [SchemaType.ERC20]: 'ERC20',
         [SchemaType.ERC721]: 'ERC721',
         [SchemaType.ERC1155]: 'ERC1155',
+        [SchemaType.SBT]: 'SBT',
     },
     '',
 )
@@ -42,12 +43,12 @@ export function formatTokenId(tokenId = '', size_ = 4) {
     return `${prefix}${head}...${tail}`
 }
 
-export function formatDomainName(domain: string, size = 4) {
+export function formatDomainName(domain: string) {
     if (!domain || !isValidDomain(domain)) return domain
-    const [domainName, company] = domain.split('.')
-    if (domainName.length < 13) return domain
+    if (domain.length <= 18) return domain
+    const [name, suffix] = domain.split('.')
 
-    return `${domainName.slice(0, Math.max(0, size))}...${domainName.slice(-size)}.${company}`
+    return `${name.slice(0, 12)}...${name.slice(-2)}.${suffix}`
 }
 
 export function formatKeccakHash(hash: string, size = 0) {

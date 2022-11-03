@@ -4,7 +4,7 @@ import type { MetadataRenderProps } from '../MetadataRender.js'
 export const DefaultRenderFragments = {
     Text: memo((props: RenderFragmentsContextType.TextProps) => <>{props.children}</>),
     Link: memo((props: RenderFragmentsContextType.LinkProps) => (
-        <a href={props.href} target="_blank" rel="noopener noreferrer">
+        <a href={props.href} target="_blank" rel="noopener noreferrer" style={{ fontSize: 'inherit' }}>
             {props.children}
         </a>
     )),
@@ -51,3 +51,4 @@ export namespace RenderFragmentsContextType {
     }
 }
 export const RenderFragmentsContext = createContext<RenderFragmentsContextType>(DefaultRenderFragments)
+RenderFragmentsContext.displayName = 'RenderFragmentsContext'

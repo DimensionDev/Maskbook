@@ -3,19 +3,20 @@ import { useAsyncRetry } from 'react-use'
 import { usePoolTogetherPoolContract } from '../contracts/usePoolTogetherPool.js'
 import { PluginPooltogetherRPC } from '../messages.js'
 import PoolTogetherPrizeStrategyABI from '@masknet/web3-contracts/abis/PoolTogetherPrizeStrategy.json'
-import type { PoolTogetherPrizeStrategy } from '@masknet/web3-contracts/types/PoolTogetherPrizeStrategy'
+import type { PoolTogetherPrizeStrategy } from '@masknet/web3-contracts/types/PoolTogetherPrizeStrategy.js'
 import type { AbiItem } from 'web3-utils'
-import { useChainId, useWeb3 } from '@masknet/web3-hooks-base'
-import { NetworkPluginID, formatBalance } from '@masknet/web3-shared-base'
+import { useChainContext, useWeb3 } from '@masknet/web3-hooks-base'
+import { formatBalance } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 
 export function usePools() {
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     return useAsyncRetry(() => PluginPooltogetherRPC.fetchPools(chainId), [chainId])
 }
 
 export function usePool(address: string | undefined, subgraphUrl: string | undefined, isCommunityPool: boolean) {
     const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM)
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const poolContract = usePoolTogetherPoolContract(chainId, address)
 
     return useAsyncRetry(async () => {

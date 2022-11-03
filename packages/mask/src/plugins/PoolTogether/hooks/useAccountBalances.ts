@@ -1,11 +1,11 @@
 import { useMemo } from 'react'
 import { ZERO_ADDRESS } from '@masknet/web3-shared-evm'
 import { usePoolTogetherTicketContracts } from '../contracts/usePoolTogetherTicket.js'
-import type { PoolTogetherTicket } from '@masknet/web3-contracts/types/PoolTogetherTicket'
+import type { PoolTogetherTicket } from '@masknet/web3-contracts/types/PoolTogetherTicket.js'
 import { useAsyncRetry } from 'react-use'
 import type { AccountPool, Pool } from '../types.js'
-import { useAccount, useChainId } from '@masknet/web3-hooks-base'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { useChainContext } from '@masknet/web3-hooks-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
 import { useMultipleContractSingleData } from '@masknet/web3-hooks-evm'
 
 /**
@@ -13,8 +13,7 @@ import { useMultipleContractSingleData } from '@masknet/web3-hooks-evm'
  * @param pools
  */
 export function useAccountBalance(pools: Pool[]) {
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const ticketContracts = usePoolTogetherTicketContracts(
         chainId,
         pools.map((pool) => pool.tokens.ticket.address),

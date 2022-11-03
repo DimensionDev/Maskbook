@@ -69,6 +69,7 @@ function startPluginHost() {
                 ...RestPartOfPluginUIContextShared,
             }),
             Services.Settings.getPluginMinimalModeEnabled,
+            Services.Helper.hasHostPermission,
         ),
     )
 }

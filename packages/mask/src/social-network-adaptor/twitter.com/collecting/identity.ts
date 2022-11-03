@@ -1,5 +1,5 @@
 import { LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { delay } from '@dimensiondev/kit'
+import { delay } from '@masknet/kit'
 import { TWITTER_RESERVED_SLUGS } from '@masknet/injected-script/shared'
 import { ProfileIdentifier } from '@masknet/shared-base'
 import { Twitter } from '@masknet/web3-providers'

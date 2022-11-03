@@ -1,9 +1,7 @@
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { Typography, FormControlLabel, List, ListItemButton, ListItemIcon, ListItemText } from '@mui/material'
-import TwitterIcon from '@mui/icons-material/Twitter'
-import LinkIcon from '@mui/icons-material/Link'
+import { Twitter as TwitterIcon, Link as LinkIcon, Description as DescriptionIcon } from '@mui/icons-material'
 import Checkbox from '@mui/material/Checkbox'
-import DescriptionIcon from '@mui/icons-material/Description'
 import type { ScamResult } from '@scamsniffer/detector'
 import { PluginScamRPC } from '../messages.js'
 import { useAsync } from 'react-use'
@@ -19,13 +17,6 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         overflow: 'hidden',
         padding: theme.spacing(2),
-    },
-    icon: {
-        color: MaskColorVar.redMain,
-        width: '24px',
-        height: '24px',
-        verticalAlign: '-6px',
-        marginRight: '12px',
     },
     list: {
         padding: 0,

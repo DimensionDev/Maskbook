@@ -1,20 +1,20 @@
 import { useEffect, useMemo, useState, useCallback } from 'react'
-import { InjectedDialog, NFTCardStyledAssetPlayer, useOpenShareTxDialog } from '@masknet/shared'
+import { InjectedDialog, AssetPreviewer, useOpenShareTxDialog, WalletConnectedBoundary } from '@masknet/shared'
 import { makeStyles, ActionButton } from '@masknet/theme'
 import { first } from 'lodash-unified'
-import BigNumber from 'bignumber.js'
+import { BigNumber } from 'bignumber.js'
 import { isNativeTokenAddress } from '@masknet/web3-shared-evm'
 import { Box, Card, CardActions, CardContent, DialogContent, Link } from '@mui/material'
 import { useI18N } from '../../../utils/index.js'
 import { SelectTokenAmountPanel } from '../../ITO/SNSAdaptor/SelectTokenAmountPanel.js'
-import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary.js'
 import type { useAsset } from '../hooks/useAsset.js'
 import { usePlaceBidCallback } from '../hooks/usePlaceBidCallback.js'
 import { activatedSocialNetworkUI } from '../../../social-network/index.js'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base.js'
 import { isFacebook } from '../../../social-network-adaptor/facebook.com/base.js'
-import { formatBalance, leftShift, NetworkPluginID } from '@masknet/web3-shared-base'
-import { useChainId, useFungibleTokenWatched } from '@masknet/web3-hooks-base'
+import { formatBalance, leftShift } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { useChainContext, useFungibleTokenWatched } from '@masknet/web3-hooks-base'
 import { resolveAssetLinkOnCryptoartAI, resolvePaymentTokensOnCryptoartAI } from '../pipes/index.js'
 
 const useStyles = makeStyles()((theme) => {
@@ -32,13 +32,6 @@ const useStyles = makeStyles()((theme) => {
             justifyContent: 'flex-end',
             padding: theme.spacing(0, 2, 2),
         },
-        panel: {
-            marginTop: theme.spacing(2),
-            '&:first-child': {
-                marginTop: 0,
-            },
-        },
-        label: {},
         buttons: {
             width: '100%',
             margin: `0 ${theme.spacing(-0.5)}`,
@@ -46,9 +39,6 @@ const useStyles = makeStyles()((theme) => {
         button: {
             flex: 1,
             margin: `${theme.spacing(1.5)} ${theme.spacing(0.5)} 0`,
-        },
-        markdown: {
-            margin: theme.spacing(1, 0),
         },
         mediaContent: {
             display: 'flex',
@@ -82,7 +72,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
     const is24Auction = assetSource?.is24Auction ?? false
     const isVerified = (!assetSource?.isSoldOut && !assetSource?.is_owner) ?? false
 
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
     const paymentTokens = resolvePaymentTokensOnCryptoartAI(chainId) ?? []
     const selectedPaymentToken = first(paymentTokens)
@@ -168,7 +158,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
                         <Box className={classes.mediaContent}>
                             {assetSource?.ossUrl.match(/\.(mp4|avi|webm)$/i) ? (
                                 <Link href={assetSource?.ossUrl} target="_blank" rel="noopener noreferrer">
-                                    <NFTCardStyledAssetPlayer url={assetSource.ossUrl || assetSource.shareUrl} />
+                                    <AssetPreviewer url={assetSource.ossUrl || assetSource.shareUrl} />
                                 </Link>
                             ) : (
                                 <img

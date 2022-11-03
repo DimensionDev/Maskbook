@@ -1,26 +1,30 @@
-import type { TradeInfo } from '../../../types/index.js'
 import { useMemo } from 'react'
-import { isGreaterThan, isLessThan, multipliedBy, NetworkPluginID, leftShift } from '@masknet/web3-shared-base'
+import { isGreaterThan, isLessThan, multipliedBy, leftShift } from '@masknet/web3-shared-base'
+import {
+    useFungibleToken,
+    useFungibleTokenPrice,
+    useNativeTokenPrice,
+    useNetworkContext,
+    useWeb3State,
+} from '@masknet/web3-hooks-base'
 import { MINIMUM_AMOUNT } from '../../../constants/index.js'
-import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import type { TradeInfo } from '../../../types/index.js'
 import { AllProviderTradeContext } from '../../../trader/useAllProviderTradeContext.js'
-import { useFungibleToken, useFungibleTokenPrice, useNativeTokenPrice } from '@masknet/web3-hooks-base'
+import type { Web3Helper } from '@masknet/web3-helpers'
 
-export function useSortedTrades(traders: TradeInfo[], chainId: ChainId, gasPrice?: string) {
-    const { value: nativeToken } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, '', { chainId })
-    const { value: nativeTokenPrice = 0 } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM, { chainId })
+export function useSortedTrades(traders: TradeInfo[], chainId: Web3Helper.ChainIdAll, gasPrice?: string) {
+    const { pluginID } = useNetworkContext()
+    const { Others } = useWeb3State()
+    const { value: nativeToken } = useFungibleToken(pluginID, '', undefined, { chainId })
+    const { value: nativeTokenPrice = 0 } = useNativeTokenPrice(pluginID, { chainId })
 
     const {
         tradeState: [{ outputToken }],
     } = AllProviderTradeContext.useContainer()
 
-    const { value: outputTokenPrice = 0 } = useFungibleTokenPrice(
-        NetworkPluginID.PLUGIN_EVM,
-        outputToken?.address.toLowerCase(),
-        {
-            chainId,
-        },
-    )
+    const { value: outputTokenPrice = 0 } = useFungibleTokenPrice(pluginID, outputToken?.address.toLowerCase(), {
+        chainId,
+    })
 
     return useMemo(() => {
         if (outputToken && nativeToken && (outputTokenPrice || nativeTokenPrice)) {
@@ -37,7 +41,11 @@ export function useSortedTrades(traders: TradeInfo[], chainId: ChainId, gasPrice
                         const gasFeeUSD = leftShift(gasFee ?? 0, nativeToken?.decimals).times(nativeTokenPrice)
 
                         const finalPrice = leftShift(trade.value.outputAmount, outputToken.decimals)
-                            .times(outputToken.schema !== SchemaType.Native ? outputTokenPrice : nativeTokenPrice)
+                            .times(
+                                !Others?.isNativeTokenSchemaType(outputToken.schema)
+                                    ? outputTokenPrice
+                                    : nativeTokenPrice,
+                            )
                             .minus(gasFeeUSD)
 
                         return {
@@ -77,5 +85,13 @@ export function useSortedTrades(traders: TradeInfo[], chainId: ChainId, gasPrice
                 if (a?.outputAmount.isLessThan(b?.outputAmount ?? 0)) return 1
                 return 0
             })
-    }, [traders, outputToken, gasPrice, outputTokenPrice, nativeTokenPrice, nativeToken])
+    }, [
+        traders,
+        outputToken,
+        gasPrice,
+        outputTokenPrice,
+        nativeTokenPrice,
+        nativeToken,
+        Others?.isNativeTokenSchemaType,
+    ])
 }

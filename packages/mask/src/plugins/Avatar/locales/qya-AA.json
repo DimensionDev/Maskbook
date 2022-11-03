@@ -2,6 +2,7 @@
     "application_dialog_title": "crwdns16640:0crwdne16640:0",
     "application_edit_profile_dialog_title": "crwdns16642:0crwdne16642:0",
     "persona_set_nft": "crwdns16644:0crwdne16644:0",
+    "persona_nft_set": "crwdns18542:0crwdne18542:0",
     "persona_verification_failed": "crwdns16646:0crwdne16646:0",
     "cancel": "crwdns16648:0crwdne16648:0",
     "save": "crwdns16650:0crwdne16650:0",
@@ -30,10 +31,11 @@
     "saving": "crwdns17234:0crwdne17234:0",
     "download_image_error": "crwdns17236:0crwdne17236:0",
     "connect_wallet": "crwdns17238:0crwdne17238:0",
-    "pfp_title": "crwdns18340:0crwdne18340:0",
     "background_title": "crwdns18342:0crwdne18342:0",
     "powered_by": "crwdns18344:0crwdne18344:0",
     "loading": "crwdns18346:0crwdne18346:0",
     "no_wallet_message": "crwdns18348:0crwdne18348:0",
-    "wallet_non_evm_warning": "crwdns16688:0crwdne16688:0"
+    "inactive_persona_tooltip": "crwdns18678:0crwdne18678:0",
+    "wallet_non_evm_warning": "crwdns16688:0crwdne16688:0",
+    "unsupported_network": "crwdns18680:0crwdne18680:0"
 }

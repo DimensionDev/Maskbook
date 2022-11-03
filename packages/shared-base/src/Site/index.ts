@@ -1,3 +1,4 @@
+import { isPopupPage, PopupRoutes } from '../index.js'
 import { EnhanceableSite, ExtensionSite } from './type.js'
 
 export * from './type.js'
@@ -47,6 +48,14 @@ export function isEnhanceableSiteType() {
 
 export function isExtensionSiteType() {
     return !!getExtensionSiteType()
+}
+
+// TODO: remove this line after the `popup-connect.html` be created
+const connectionSite = [PopupRoutes.ConnectWallet, PopupRoutes.VerifyWallet]
+
+export function isConnectionSiteType() {
+    if (!isPopupPage()) return
+    return connectionSite.some((x) => location.hash.includes(x))
 }
 
 export function isFirefox() {

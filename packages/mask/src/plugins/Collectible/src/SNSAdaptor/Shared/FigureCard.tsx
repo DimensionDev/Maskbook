@@ -1,10 +1,10 @@
 import { AssetPreviewer } from '@masknet/shared'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { Typography } from '@mui/material'
-import VerifiedUserIcon from '@mui/icons-material/VerifiedUser'
+import { VerifiedUser as VerifiedUserIcon } from '@mui/icons-material'
 import { useWeb3State } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
 import { Context } from '../Context/index.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -23,10 +23,18 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: 20,
         overflow: 'hidden',
     },
+    previewer: {
+        inset: 0,
+        margin: 'auto',
+        position: 'absolute',
+    },
     nameSm: {
         fontSize: 16,
         fontWeight: 700,
         color: theme.palette.maskColor.publicMain,
+        whiteSpace: 'nowrap',
+        textOverflow: 'ellipsis',
+        overflow: 'hidden',
     },
     nameLg: {
         fontSize: 20,
@@ -38,9 +46,7 @@ const useStyles = makeStyles()((theme) => ({
         gap: 6,
         marginTop: 12,
     },
-    image: {
-        height: 'auto !important',
-    },
+    image: {},
     fallbackImage: {
         width: '100% !important',
         height: '100% !important',
@@ -67,18 +73,19 @@ export function FigureCard(props: FigureCardProps) {
     return (
         <div className={classes.root}>
             <div className={classes.body}>
-                <AssetPreviewer
-                    classes={{
-                        root: classes.image,
-                        fallbackImage: classes.fallbackImage,
-                    }}
-                    url={asset.metadata?.imageURL}
-                    fallbackImage={new URL('../../assets/FallbackImage.svg', import.meta.url)}
-                />
+                <div className={classes.previewer}>
+                    <AssetPreviewer
+                        classes={{
+                            root: classes.image,
+                            fallbackImage: classes.fallbackImage,
+                        }}
+                        url={asset.metadata?.imageURL}
+                        fallbackImage={new URL('../../assets/FallbackImage.svg', import.meta.url)}
+                    />
+                </div>
             </div>
             <Typography className={timeline ? cx(classes.nameSm, classes.unset) : classes.nameSm}>
                 {asset.metadata?.name ?? '-'}
-                {pluginID !== NetworkPluginID.PLUGIN_SOLANA ? Others?.formatTokenId(asset.tokenId) : null}
             </Typography>
             {!hideSubTitle && (
                 <div className={classes.nameLgBox}>

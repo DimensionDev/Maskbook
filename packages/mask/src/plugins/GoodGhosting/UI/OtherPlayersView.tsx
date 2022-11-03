@@ -1,6 +1,6 @@
 import { Grid, Box, Typography, Button } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
+import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
 import { useI18N } from '../../../utils/index.js'
 import type { GoodGhostingInfo, Player } from '../types.js'
 import { getPlayerStandings } from '../utils.js'

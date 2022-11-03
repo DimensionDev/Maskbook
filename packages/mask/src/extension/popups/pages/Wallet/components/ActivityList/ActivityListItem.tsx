@@ -1,8 +1,8 @@
 import { memo, useMemo } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { Box, Button, ListItem, ListItemText, Typography } from '@mui/material'
+import { NetworkPluginID } from '@masknet/shared-base'
 import {
-    NetworkPluginID,
     RecentTransactionComputed,
     TransactionDescriptor,
     TransactionDescriptorType,

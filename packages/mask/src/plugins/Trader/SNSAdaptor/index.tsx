@@ -1,15 +1,16 @@
-import { Plugin, PluginID } from '@masknet/plugin-infra'
+import { Trans } from 'react-i18next'
+import type { Plugin } from '@masknet/plugin-infra'
 import { base } from '../base.js'
 import { TraderDialog } from './trader/TraderDialog.js'
 import { SearchResultInspector } from './trending/SearchResultInspector.js'
-import { Trans } from 'react-i18next'
 import { TagInspector } from './trending/TagInspector.js'
 import { enhanceTag } from './cashTag.js'
 import { ApplicationEntry } from '@masknet/shared'
-import { CrossIsolationMessages } from '@masknet/shared-base'
 import { Icons } from '@masknet/icons'
+import { Web3ContextProvider } from '@masknet/web3-hooks-base'
+import { CrossIsolationMessages, NetworkPluginID, PluginID } from '@masknet/shared-base'
+import { ChainId } from '@masknet/web3-shared-evm'
 import { setupStorage, storageDefaultValue } from '../storage/index.js'
-import type { ChainId } from '@masknet/web3-shared-evm'
 
 const sns: Plugin.SNSAdaptor.Definition<
     ChainId,
@@ -44,7 +45,9 @@ const sns: Plugin.SNSAdaptor.Definition<
         return (
             <>
                 <TagInspector />
-                <TraderDialog />
+                <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM, chainId: ChainId.Mainnet }}>
+                    <TraderDialog />
+                </Web3ContextProvider>
             </>
         )
     },

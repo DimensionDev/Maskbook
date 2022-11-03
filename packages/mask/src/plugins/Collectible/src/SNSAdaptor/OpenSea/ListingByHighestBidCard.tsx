@@ -4,20 +4,12 @@ import { Card, CardActions, CardContent, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { isZero, isLessThan } from '@masknet/web3-shared-base'
 import formatDateTime from 'date-fns/format'
+import { PluginWalletStatusBar, ActionButtonPromise, WalletConnectedBoundary, DateTimePanel } from '@masknet/shared'
 import getUnixTime from 'date-fns/getUnixTime'
-import {
-    useAccount,
-    useChainId,
-    useCurrentWeb3NetworkPluginID,
-    useFungibleTokenWatched,
-    useWeb3State,
-} from '@masknet/web3-hooks-base'
+import { useChainContext, useNetworkContext, useFungibleTokenWatched, useWeb3State } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { PluginWalletStatusBar, useI18N } from '../../../../../utils/index.js'
+import { useI18N } from '../../../../../utils/index.js'
 import { SelectTokenAmountPanel } from '../../../../ITO/SNSAdaptor/SelectTokenAmountPanel.js'
-import { WalletConnectedBoundary } from '../../../../../web3/UI/WalletConnectedBoundary.js'
-import { DateTimePanel } from '../../../../../web3/UI/DateTimePanel.js'
-import { ActionButtonPromise } from '../../../../../extension/options-page/DashboardComponents/ActionButton.js'
 import { useOpenSea } from './hooks/useOpenSea.js'
 import { isWyvernSchemaName, toAsset } from '../../helpers/index.js'
 
@@ -33,7 +25,6 @@ const useStyles = makeStyles()((theme) => ({
             marginTop: 0,
         },
     },
-    label: {},
     button: {
         margin: 0,
         padding: 0,
@@ -62,14 +53,13 @@ export function ListingByHighestBidCard(props: ListingByHighestBidCardProps) {
     const { classes } = useStyles()
 
     const { Others } = useWeb3State()
-    const pluginID = useCurrentWeb3NetworkPluginID()
+    const { pluginID } = useNetworkContext()
     const { amount, token, balance, setAmount, setAddress } = useFungibleTokenWatched(
         pluginID,
         first(paymentTokens)?.address,
     )
 
-    const account = useAccount()
-    const chainId = useChainId()
+    const { account, chainId } = useChainContext()
     const opensea = useOpenSea(pluginID, chainId)
 
     const [reservePrice, setReservePrice] = useState('')

@@ -1,9 +1,9 @@
 import { DependencyList, useState } from 'react'
 import { useAsyncRetry, useTimeoutFn } from 'react-use'
-import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
-import type { NetworkPluginID } from '@masknet/web3-shared-base'
+import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
+import type { NetworkPluginID } from '@masknet/shared-base'
 import { useWeb3State } from './useWeb3State.js'
-import { useChainId } from './useChainId.js'
+import { useChainContext } from './useContext.js'
 
 const DEFAULT_SINGLE_BLOCK_DELAY = 15 * 1000
 const DEFAULT_DOUBLE_BLOCK_DELAY = DEFAULT_SINGLE_BLOCK_DELAY * 2
@@ -27,7 +27,7 @@ export function useSingleBlockBeatRetry<T extends NetworkPluginID, R>(
     fn: () => Promise<R>,
     deps: DependencyList = [],
 ): AsyncStateRetry<R> {
-    const chainId = useChainId(pluginID)
+    const { chainId } = useChainContext()
     const { Others } = useWeb3State(pluginID)
     // @ts-ignore
     return useBeatRetry(fn, Others?.getAverageBlockDelay?.(chainId) ?? DEFAULT_SINGLE_BLOCK_DELAY, deps)
@@ -38,7 +38,7 @@ export function useDoubleBlockBeatRetry<T extends NetworkPluginID, R>(
     fn: () => Promise<R>,
     deps: DependencyList = [],
 ): AsyncStateRetry<R> {
-    const chainId = useChainId(pluginID)
+    const { chainId } = useChainContext()
     const { Others } = useWeb3State(pluginID)
     // @ts-ignore
     return useBeatRetry(fn, Others?.getAverageBlockDelay?.(chainId, 2) ?? DEFAULT_DOUBLE_BLOCK_DELAY, deps)

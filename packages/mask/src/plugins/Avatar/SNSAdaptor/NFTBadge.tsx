@@ -12,10 +12,6 @@ const useStyles = makeStyles()((theme) => ({
         justifyContent: 'center',
         alignItems: 'center',
     },
-    image: {
-        position: 'absolute',
-        bottom: 0,
-    },
 }))
 
 interface NFTBadgeProps extends withClasses<'root' | 'text' | 'icon'> {
@@ -29,7 +25,7 @@ interface NFTBadgeProps extends withClasses<'root' | 'text' | 'icon'> {
 
 export function NFTBadge(props: NFTBadgeProps) {
     const { avatar, nftInfo, size = 140, hasRainbow, borderSize } = props
-    const classes = useStylesExtends(useStyles(), props)
+    const { classes } = useStylesExtends(useStyles(), props)
     const { t } = useI18N()
 
     if (!nftInfo)
@@ -65,9 +61,7 @@ export function NFTBadge(props: NFTBadgeProps) {
                     hasRainbow={hasRainbow}
                     borderSize={borderSize}
                     fontSize={9}
-                    text={`${formatText(nftInfo.name ?? '', avatar.tokenId)} ${
-                        nftInfo.slug?.toLowerCase() === 'ens' ? 'ENS' : ''
-                    }`}
+                    text={formatText(nftInfo.name ?? '', avatar.tokenId)}
                     price={formatPrice(nftInfo.amount ?? '0', nftInfo.symbol ?? 'ETH')}
                 />
             </Link>

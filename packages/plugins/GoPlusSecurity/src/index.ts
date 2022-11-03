@@ -1,5 +1,6 @@
 import { registerPlugin } from '@masknet/plugin-infra'
 import { base } from './base.js'
+export * from './UI/index.js'
 
 registerPlugin({
     ...base,

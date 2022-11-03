@@ -4,8 +4,7 @@ import { useMount } from 'react-use'
 import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
-import { ExtensionSite, PopupRoutes } from '@masknet/shared-base'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { ExtensionSite, PopupRoutes, NetworkPluginID } from '@masknet/shared-base'
 import { ChainId, ProviderType } from '@masknet/web3-shared-evm'
 import { useWeb3State, useWeb3UI, useWallets } from '@masknet/web3-hooks-base'
 import { getRegisteredWeb3Networks, getRegisteredWeb3Providers } from '@masknet/plugin-infra'
@@ -98,11 +97,13 @@ const ConnectWalletPage = memo(() => {
             }
 
             const connection = await Connection?.getConnection?.({
-                chainId: network.chainId,
                 providerType: provider.type,
             })
 
-            const account = await connection?.connect()
+            const currentChainId = await connection?.getChainId()
+            const account = await connection?.connect({
+                chainId: currentChainId,
+            })
 
             navigate(PopupRoutes.VerifyWallet, {
                 state: {

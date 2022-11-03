@@ -1,6 +1,8 @@
+import { compact } from 'lodash-unified'
 import type { Plugin } from '@masknet/plugin-infra'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { IdentityServiceState } from '@masknet/web3-state'
-import { SocialIdentity, SocialAddress, NetworkPluginID, SocialAddressType } from '@masknet/web3-shared-base'
+import { SocialIdentity, SocialAddress, SocialAddressType } from '@masknet/web3-shared-base'
 import { isValidAddress } from '@masknet/web3-shared-flow'
 
 function getFlowAddress(bio: string) {
@@ -18,15 +20,15 @@ export class IdentityService extends IdentityServiceState {
     protected override async getFromRemote({ bio = '' }: SocialIdentity) {
         const address = getFlowAddress(bio)
 
-        return [
+        return compact<SocialAddress<NetworkPluginID.PLUGIN_FLOW>>([
             address
                 ? {
-                      networkSupporterPluginID: NetworkPluginID.PLUGIN_FLOW,
-                      type: SocialAddressType.ADDRESS,
+                      pluginID: NetworkPluginID.PLUGIN_FLOW,
+                      type: SocialAddressType.Address,
                       label: address,
                       address,
                   }
                 : null,
-        ].filter(Boolean) as Array<SocialAddress<NetworkPluginID.PLUGIN_FLOW>>
+        ])
     }
 }

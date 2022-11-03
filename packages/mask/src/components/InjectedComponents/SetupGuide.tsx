@@ -22,7 +22,7 @@ import { FindUsername } from './SetupGuide/FindUsername.js'
 import { VerifyNextID } from './SetupGuide/VerifyNextID.js'
 import { PinExtension } from './SetupGuide/PinExtension.js'
 import { NextIDProof } from '@masknet/web3-providers'
-import { useSetupGuideStepInfo } from './SetupGuide/useSetupGuideStepInfo'
+import { useSetupGuideStepInfo } from './SetupGuide/useSetupGuideStepInfo.js'
 import stringify from 'json-stable-stringify'
 import { useNextIDVerify } from '../DataSource/useNextIDVerify.js'
 

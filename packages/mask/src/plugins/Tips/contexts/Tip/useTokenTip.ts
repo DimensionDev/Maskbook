@@ -1,18 +1,19 @@
-import { useAccount, useWeb3State } from '@masknet/web3-hooks-base'
-import type { Web3Helper } from '@masknet/web3-helpers'
-import { FungibleToken, NetworkPluginID, rightShift } from '@masknet/web3-shared-base'
 import { useAsyncFn } from 'react-use'
+import type { Web3Helper } from '@masknet/web3-helpers'
+import type { NetworkPluginID } from '@masknet/shared-base'
+import { rightShift } from '@masknet/web3-shared-base'
+import { useChainContext, useWeb3State } from '@masknet/web3-hooks-base'
 import type { TipTuple } from './type.js'
 
 export function useTokenTip<T extends NetworkPluginID>(
-    pluginId: T,
+    pluginID: T,
     recipient: string,
-    token: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll> | null,
+    token: Web3Helper.FungibleTokenAll | null,
     amount: string,
     options?: Web3Helper.Web3ConnectionOptions<T>,
 ): TipTuple {
-    const { Connection } = useWeb3State<'all'>(pluginId)
-    const account = useAccount(pluginId)
+    const { Connection } = useWeb3State<'all'>(pluginID)
+    const { account } = useChainContext()
     const [{ loading: isTransferring }, sendTip] = useAsyncFn(async () => {
         const connection = await Connection?.getConnection?.()
         if (!token?.address || !connection) return

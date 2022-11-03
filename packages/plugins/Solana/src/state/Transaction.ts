@@ -1,8 +1,8 @@
 import type { Subscription } from 'use-subscription'
-import { getEnumAsArray } from '@dimensiondev/kit'
+import { getEnumAsArray } from '@masknet/kit'
 import type { Plugin } from '@masknet/plugin-infra'
 import { TransactionState } from '@masknet/web3-state'
-import { ChainId, Transaction as SolanaTransaction, formatAddress } from '@masknet/web3-shared-solana'
+import { ChainId, Transaction as SolanaTransaction, formatAddress, isValidChainId } from '@masknet/web3-shared-solana'
 
 export class Transaction extends TransactionState<ChainId, SolanaTransaction> {
     constructor(
@@ -18,6 +18,7 @@ export class Transaction extends TransactionState<ChainId, SolanaTransaction> {
             subscriptions,
             {
                 formatAddress,
+                isValidChainId,
             },
         )
     }

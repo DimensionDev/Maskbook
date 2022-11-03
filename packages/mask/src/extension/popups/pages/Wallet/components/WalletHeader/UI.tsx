@@ -18,12 +18,6 @@ const useStyles = makeStyles()((theme) => ({
         justifyContent: 'space-between',
         alignItems: 'center',
     },
-    menu: {
-        maxHeight: 466,
-        '&::-webkit-scrollbar': {
-            display: 'none',
-        },
-    },
     action: {
         background: 'rgba(255, 255, 255, 0.8)',
         borderRadius: 99,
@@ -39,7 +33,6 @@ const useStyles = makeStyles()((theme) => ({
     },
     nickname: {
         color: '#07101B',
-        fontSize: 14,
         lineHeight: '18px',
         fontWeight: 700,
     },
@@ -72,7 +65,6 @@ const useStyles = makeStyles()((theme) => ({
         cursor: 'pointer',
     },
     chainName: {
-        fontSize: 14,
         lineHeight: '18px',
         color: '#15181B',
         fontWeight: 700,
@@ -82,7 +74,6 @@ const useStyles = makeStyles()((theme) => ({
     connected: {
         display: 'flex',
         alignItems: 'center',
-        fontSize: 14,
         lineHeight: '18px',
         color: theme.palette.maskColor.second,
         columnGap: 4,

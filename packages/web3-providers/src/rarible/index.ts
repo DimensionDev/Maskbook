@@ -15,11 +15,11 @@ import {
     scale10,
     SourceType,
 } from '@masknet/web3-shared-base'
-import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import { ChainId, SchemaType, isValidChainId } from '@masknet/web3-shared-evm'
 import { RaribleEventType, RaribleOrder, RaribleHistory, RaribleNFTItemMapResponse } from './types.js'
 import { RaribleURL } from './constants.js'
 import type { NonFungibleTokenAPI } from '../types/index.js'
-import { getPaymentToken } from '../helpers.js'
+import { resolveNonFungibleTokenEventActivityType, getPaymentToken, getAssetFullName } from '../helpers.js'
 
 const resolveRaribleBlockchain = createLookupTableResolver<number, string>(
     {
@@ -70,7 +70,7 @@ function createAsset(chainId: ChainId, asset: RaribleNFTItemMapResponse): NonFun
         traits: asset?.meta?.attributes.map(({ key, value }) => ({ type: key, value })) ?? [],
         metadata: {
             chainId,
-            name: asset.meta?.name ?? '',
+            name: getAssetFullName(asset.contract.split(':')[1], '', asset.meta?.name, asset.tokenId),
             description: asset.meta?.description,
             imageURL: asset.meta?.content?.find((x) => x['@type'] === 'IMAGE' && x.representation === 'PREVIEW')?.url,
             mediaURL: asset.meta?.content?.find((x) => x['@type'] === 'IMAGE' && x.representation === 'ORIGINAL')?.url,
@@ -79,7 +79,7 @@ function createAsset(chainId: ChainId, asset: RaribleNFTItemMapResponse): NonFun
             chainId,
             schema: SchemaType.ERC721,
             address: asset.contract.split(':')[1],
-            name: asset.meta?.name ?? '',
+            name: '',
         },
         collection: {
             chainId,
@@ -136,7 +136,7 @@ function createEvent(chainId: ChainId, history: RaribleHistory): NonFungibleToke
         chainId,
         from: createAccount(history.from ?? history.seller ?? history.owner ?? history.maker),
         to: createAccount(history.buyer),
-        type: history['@type'],
+        type: resolveNonFungibleTokenEventActivityType(history['@type']),
         assetPermalink:
             history.nft?.type.contract && history.nft?.type.tokenId
                 ? createRaribleLink(history.nft.type.contract, history.nft.type.tokenId)
@@ -170,6 +170,7 @@ export class RaribleAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
             chainId?: ChainId
         } = {},
     ) {
+        if (!isValidChainId(chainId)) return
         const requestPath = `/v0.1/items/${resolveRaribleBlockchain(chainId)}:${address}:${tokenId}`
         const asset = await fetchFromRarible<RaribleNFTItemMapResponse>(RaribleURL, requestPath)
         if (!asset) return
@@ -207,6 +208,8 @@ export class RaribleAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
         tokenId: string,
         { chainId = ChainId.Mainnet, indicator, size = 20 }: HubOptions<ChainId> = {},
     ) {
+        if (!isValidChainId(chainId)) return createPageable(EMPTY_LIST, createIndicator(indicator))
+
         const requestPath = urlcat('/v0.1/orders/bids/byItem', {
             itemId: `${resolveRaribleBlockchain(chainId)}:${tokenAddress}:${tokenId}`,
             size,
@@ -235,6 +238,8 @@ export class RaribleAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
         tokenId: string,
         { chainId = ChainId.Mainnet, indicator, size = 20 }: HubOptions<ChainId> = {},
     ) {
+        if (!isValidChainId(chainId)) return createPageable(EMPTY_LIST, createIndicator(indicator))
+
         const requestPath = urlcat('/v0.1/orders/sell/byItem', {
             itemId: `${resolveRaribleBlockchain(chainId)}:${tokenAddress}:${tokenId}`,
             size,
@@ -274,6 +279,8 @@ export class RaribleAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
         tokenId: string,
         { chainId = ChainId.Mainnet, indicator, size = 20 }: HubOptions<ChainId> = {},
     ) {
+        if (!isValidChainId(chainId)) return createPageable(EMPTY_LIST, createIndicator(indicator))
+
         const requestPath = urlcat('/v0.1/activities/byItem', {
             type: [RaribleEventType.TRANSFER, RaribleEventType.MINT, RaribleEventType.BID, RaribleEventType.LIST],
             itemId: `${resolveRaribleBlockchain(chainId)}:${tokenAddress}:${tokenId}`,

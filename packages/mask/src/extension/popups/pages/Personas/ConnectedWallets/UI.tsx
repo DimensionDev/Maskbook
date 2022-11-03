@@ -9,7 +9,7 @@ import { Icons } from '@masknet/icons'
 import type { ConnectedWalletInfo } from '../type.js'
 import { DisconnectWalletDialog } from '../components/DisconnectWalletDialog/index.js'
 import { useI18N } from '../../../../../utils/index.js'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 
 const useStyles = makeStyles()(() => ({
     container: {
@@ -54,7 +54,6 @@ const useStyles = makeStyles()(() => ({
         flex: 1,
     },
     name: {
-        fontSize: 14,
         lineHeight: '18px',
         color: '#0F1419',
         fontWeight: 700,
@@ -72,9 +71,6 @@ const useStyles = makeStyles()(() => ({
         marginLeft: 4,
         cursor: 'pointer',
         color: '#767F8D',
-    },
-    delete: {
-        cursor: 'pointer',
     },
     placeholder: {
         display: 'flex',

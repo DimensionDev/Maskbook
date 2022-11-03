@@ -8,6 +8,8 @@ import type {
     ECKeyIdentifier,
     NextIDPersonaBindings,
     NextIDPlatform,
+    NameServiceID,
+    NetworkPluginID,
 } from '@masknet/shared-base'
 import type { api } from '@dimensiondev/mask-wallet-core/proto'
 import type {
@@ -32,12 +34,6 @@ export type Color =
     | `#${string}${string}${string}${string}${string}${string}`
     | `#${string}${string}${string}`
     | `hsl(${number}, ${number}%, ${number}%)`
-
-export enum NetworkPluginID {
-    PLUGIN_EVM = 'com.mask.evm',
-    PLUGIN_FLOW = 'com.mask.flow',
-    PLUGIN_SOLANA = 'com.mask.solana',
-}
 
 export enum CurrencyType {
     NATIVE = 'native',
@@ -118,17 +114,17 @@ export enum TransactionDescriptorType {
 }
 
 export enum SocialAddressType {
-    ADDRESS = 'ADDRESS',
+    Address = 'Address',
     ENS = 'ENS',
-    UNS = 'UNS',
-    DNS = 'DNS',
+    SPACE_ID = 'SPACE_ID',
     RSS3 = 'RSS3',
-    KV = 'KV',
-    GUN = 'GUN',
-    THE_GRAPH = 'THE_GRAPH',
-    TWITTER_BLUE = 'TWITTER_BLUE',
-    NEXT_ID = 'NEXT_ID',
     SOL = 'SOL',
+    KV = 'KV',
+    NEXT_ID = 'NEXT_ID',
+    CyberConnect = 'CyberConnect',
+    Leaderboard = '.eth Leaderboard',
+    Sybil = 'Sybil',
+    TwitterBlue = 'TwitterBlue',
 }
 
 export enum StorageProviderType {
@@ -167,15 +163,31 @@ export interface SocialIdentity {
     binding?: NextIDPersonaBindings
 }
 
+/**
+ * The smallest unit of a social account. This type only for internal usage.
+ * The SocialAccount serves for UI usage.
+ */
 export interface SocialAddress<PluginID> {
     /** The ID of a plugin that the address belongs to */
-    networkSupporterPluginID: PluginID
+    pluginID: PluginID
     /** The data source type */
     type: SocialAddressType
     /** The address in hex string */
     address: string
     /** A human readable address title */
     label: string
+    /** Last updated timestamp (unix timestamp) */
+    updatedAt?: string
+    /** Create timestamp (unix timestamp) */
+    createdAt?: string
+}
+
+/**
+ * The social account that merged from multiple social addresses.
+ * This type only for UI usage.
+ */
+export interface SocialAccount extends Omit<SocialAddress<NetworkPluginID>, 'type'> {
+    supportedAddressTypes?: SocialAddressType[]
 }
 
 export type Price = {
@@ -402,12 +414,20 @@ export interface NonFungibleTokenOrder<ChainId, SchemaType> {
     source?: SourceType
 }
 
+export enum ActivityType {
+    Transfer = 'Transfer',
+    Mint = 'Mint',
+    Sale = 'Sale',
+    Offer = 'Offer',
+    List = 'List',
+    CancelOffer = 'CancelOffer',
+}
 export interface NonFungibleTokenEvent<ChainId, SchemaType> {
     id: string
     /** chain Id */
     chainId: ChainId
     /** event type */
-    type: string
+    type: ActivityType
     /** permalink of asset */
     assetPermalink?: string
     /** name of asset */
@@ -536,18 +556,24 @@ export interface TransactionDescriptor<ChainId, Transaction> {
     type: TransactionDescriptorType
     /** a transaction title. */
     title: string
-    /** a human-readable description. */
-    description?: string
-    /** a human-readable description for successful transaction. */
-    successfulDescription?: string
-    /** a human-readable description for failed transaction. */
-    failedDescription?: string
+    /** The original transaction object */
+    _tx: Transaction
     /** The address of the token leveraged to swap other tokens */
     tokenInAddress?: string
     /** The amount of the token leveraged to swap other tokens */
     tokenInAmount?: string
-    /** The original transaction object */
-    _tx: Transaction
+    /** a human-readable description. */
+    description?: string
+    snackbar?: {
+        /** a human-readable description for successful transaction. */
+        successfulDescription?: string
+        /** a human-readable description for failed transaction. */
+        failedDescription?: string
+    }
+    popup?: {
+        /** The custom token description */
+        tokenDescription?: string
+    }
 }
 
 export interface TransactionContext<ChainId, Parameter = string | undefined> {
@@ -690,9 +716,13 @@ export interface ProviderEvents<ChainId, ProviderType> {
     disconnect: [ProviderType]
 }
 
+export interface RecognizableError extends Error {
+    isRecognized?: boolean
+}
+
 export interface WatchEvents<Transaction> {
     /** Emit when error occur */
-    error: [Error, JsonRpcPayload]
+    error: [RecognizableError, JsonRpcPayload]
     /** Emit when the watched transaction status updated. */
     progress: [string, TransactionStatusType, Transaction | undefined]
 }
@@ -726,10 +756,10 @@ export interface TransactionChecker<ChainId, Transaction> {
 }
 
 export interface ConnectionOptions<ChainId, ProviderType, Transaction> {
-    /** Designate the sub-network id of the transaction. */
-    chainId?: ChainId
     /** Designate the signer of the transaction. */
     account?: string
+    /** Designate the sub-network id of the transaction. */
+    chainId?: ChainId
     /** Designate the provider to handle the transaction. */
     providerType?: ProviderType
     /** Fragments to merge into the transaction. */
@@ -965,7 +995,7 @@ export interface HubFungible<ChainId, SchemaType, GasOption, Web3HubOptions = Hu
         initial?: Web3HubOptions,
     ) => Promise<Array<FungibleToken<ChainId, SchemaType>>>
     /** Get price of a fungible token. */
-    getFungibleTokenPrice?: (chainId: ChainId, address: string, initial?: Web3HubOptions) => Promise<number>
+    getFungibleTokenPrice?: (chainId: ChainId, address: string, initial?: Web3HubOptions) => Promise<number | undefined>
     /** Get token icon URLs that point to a fungible token. */
     getFungibleTokenIconURLs?: (chainId: ChainId, address: string, initial?: Web3HubOptions) => Promise<string[]>
     /** Get spenders of a fungible token approved by the given account. */
@@ -999,7 +1029,7 @@ export interface HubNonFungible<ChainId, SchemaType, GasOption, Web3HubOptions =
         address: string,
         tokenId: string,
         initial?: Web3HubOptions,
-    ) => Promise<PriceInToken<ChainId, SchemaType>>
+    ) => Promise<PriceInToken<ChainId, SchemaType> | undefined>
     /** Get a non-fungible contract. */
     getNonFungibleTokenContract?: (
         address: string,
@@ -1106,7 +1136,7 @@ export interface Hub<ChainId, SchemaType, GasOption, Web3HubOptions = HubOptions
     extends HubFungible<ChainId, SchemaType, GasOption, Web3HubOptions>,
         HubNonFungible<ChainId, SchemaType, GasOption, Web3HubOptions> {
     /** Get recommended gas options. */
-    getGasOptions?: (chainId: ChainId, initial?: Web3HubOptions) => Promise<Record<GasOptionType, GasOption>>
+    getGasOptions?: (chainId: ChainId, initial?: Web3HubOptions) => Promise<Record<GasOptionType, GasOption> | undefined>
     /** Get the most recent transactions of the given account. */
     getTransactions: (
         chainId: ChainId,
@@ -1187,10 +1217,23 @@ export interface Web3StorageServiceState {
 }
 
 export interface IdentityServiceState {
+    /** Merge many social addresses into a social account. Don't overwrite it in sub-classes. */
+    __mergeSocialAddressesAll__(socialAddresses: Array<SocialAddress<NetworkPluginID>>): SocialAccount[]
     /** Find all social addresses related to the given identity. */
     lookup(identity: SocialIdentity): Promise<Array<SocialAddress<NetworkPluginID>>>
 }
+
+export interface NameServiceResolver {
+    get id(): NameServiceID
+    /** get address of domain name */
+    lookup?: (domain: string) => Promise<string | undefined>
+    /** get domain name of address */
+    reverse?: (address: string) => Promise<string | undefined>
+}
+
 export interface NameServiceState<ChainId> {
+    /** create name resolver */
+    createResolvers: (chainId: ChainId) => NameServiceResolver[]
     /** get address of domain name */
     lookup?: (chainId: ChainId, domain: string) => Promise<string | undefined>
     /** get domain name of address */
@@ -1205,6 +1248,10 @@ export interface TokenState<ChainId, SchemaType> {
     blockedFungibleTokens?: Subscription<Array<FungibleToken<ChainId, SchemaType>>>
     /** The user blocked non-fungible tokens. */
     blockedNonFungibleTokens?: Subscription<Array<NonFungibleToken<ChainId, SchemaType>>>
+    /** Credible fungible tokens */
+    credibleFungibleTokens?: Subscription<Array<FungibleToken<ChainId, SchemaType>>>
+    /** Credible non-fungible tokens */
+    credibleNonFungibleTokens?: Subscription<Array<NonFungibleToken<ChainId, SchemaType>>>
 
     /** Add a token */
     addToken?: (address: string, token: Token<ChainId, SchemaType>) => Promise<void>
@@ -1214,6 +1261,10 @@ export interface TokenState<ChainId, SchemaType> {
     trustToken?: (address: string, token: Token<ChainId, SchemaType>) => Promise<void>
     /** Block a token */
     blockToken?: (address: string, token: Token<ChainId, SchemaType>) => Promise<void>
+    /** Create a credible fungible token */
+    createFungibleToken?: (chainId: ChainId, address: string, token?: FungibleToken<ChainId, SchemaType>) => Promise<FungibleToken<ChainId, SchemaType> | undefined>
+    /** Create a credible non-fungible token */
+    createNonFungibleToken?: (chainId: ChainId, address: string, token?: NonFungibleToken<ChainId, SchemaType>) => Promise<NonFungibleToken<ChainId, SchemaType> | undefined>
 }
 export interface TransactionState<ChainId, Transaction> {
     /** The tracked transactions of currently chosen sub-network */
@@ -1352,6 +1403,7 @@ export interface OthersState<ChainId, SchemaType, ProviderType, NetworkType, Tra
 
     // #region validators
     isValidChain(chainId?: ChainId, testnet?: boolean): boolean
+    isValidChainId(chainId: ChainId): boolean
     isValidDomain(domain?: string): boolean
     isValidAddress(address?: string): boolean
     isZeroAddress(address?: string): boolean
@@ -1370,6 +1422,7 @@ export interface OthersState<ChainId, SchemaType, ProviderType, NetworkType, Tra
 
     // #region customization
     getDefaultChainId(): ChainId
+    getInvalidChainId(): ChainId
     getDefaultNetworkType(): NetworkType
     getDefaultProviderType(): ProviderType
     getZeroAddress(): string | undefined
@@ -1377,6 +1430,11 @@ export interface OthersState<ChainId, SchemaType, ProviderType, NetworkType, Tra
     getMaskTokenAddress(chainId?: ChainId): string | undefined
     getAverageBlockDelay(chainId?: ChainId, scale?: number): number
     getTransactionSignature(chainId?: ChainId, transaction?: Partial<Transaction>): string | undefined
+
+    // #region Constructor
+    createNativeToken(chainId: ChainId): FungibleToken<ChainId, SchemaType>
+    createFungibleToken(chainId: ChainId, schemaType: SchemaType, address: string, name?: string, symbol?: string, decimals?: number, logoURI?: string): FungibleToken<ChainId, SchemaType>
+    createNonFungibleToken(chainId: ChainId, address: string, schemaType: SchemaType, tokenId: string, ownerId?: string, metadata?: NonFungibleToken<ChainId, SchemaType>['metadata'], contract?: NonFungibleToken<ChainId, SchemaType>['contract'], collection?: NonFungibleToken<ChainId, SchemaType>['collection']): NonFungibleToken<ChainId, SchemaType>
 }
 
 export interface BalanceNotifierState<ChainId> {
@@ -1388,54 +1446,54 @@ export interface BlockNumberNotifierState<ChainId> {
 }
 
 export interface Web3State<
+    ChainId,
+    AddressType,
+    SchemaType,
+    ProviderType,
+    NetworkType,
+    Signature,
+    GasOption,
+    Block,
+    Operation,
+    Transaction,
+    TransactionReceipt,
+    TransactionDetailed,
+    TransactionSignature,
+    TransactionParameter,
+    Web3,
+    Web3Provider,
+> {
+    AddressBook?: AddressBookState<ChainId>
+    BalanceNotifier?: BalanceNotifierState<ChainId>
+    BlockNumberNotifier?: BlockNumberNotifierState<ChainId>
+    Hub?: HubState<ChainId, SchemaType, GasOption>
+    IdentityService?: IdentityServiceState
+    NameService?: NameServiceState<ChainId>
+    RiskWarning?: RiskWarningState
+    Settings?: SettingsState
+    Token?: TokenState<ChainId, SchemaType>
+    Transaction?: TransactionState<ChainId, Transaction>
+    TransactionFormatter?: TransactionFormatterState<ChainId, TransactionParameter, Transaction>
+    TransactionWatcher?: TransactionWatcherState<ChainId, Transaction>
+    Connection?: ConnectionState<
         ChainId,
         AddressType,
         SchemaType,
         ProviderType,
-        NetworkType,
         Signature,
-        GasOption,
         Block,
         Operation,
         Transaction,
         TransactionReceipt,
         TransactionDetailed,
         TransactionSignature,
-        TransactionParameter,
         Web3,
         Web3Provider
-    > {
-        AddressBook?: AddressBookState<ChainId>
-        BalanceNotifier?: BalanceNotifierState<ChainId>
-        BlockNumberNotifier?: BlockNumberNotifierState<ChainId>
-        Hub?: HubState<ChainId, SchemaType, GasOption>
-        IdentityService?: IdentityServiceState
-        NameService?: NameServiceState<ChainId>
-        RiskWarning?: RiskWarningState
-        Settings?: SettingsState
-        Token?: TokenState<ChainId, SchemaType>
-        Transaction?: TransactionState<ChainId, Transaction>
-        TransactionFormatter?: TransactionFormatterState<ChainId, TransactionParameter, Transaction>
-        TransactionWatcher?: TransactionWatcherState<ChainId, Transaction>
-        Connection?: ConnectionState<
-            ChainId,
-            AddressType,
-            SchemaType,
-            ProviderType,
-            Signature,
-            Block,
-            Operation,
-            Transaction,
-            TransactionReceipt,
-            TransactionDetailed,
-            TransactionSignature,
-            Web3,
-            Web3Provider
-        >
-        Provider?: ProviderState<ChainId, ProviderType, NetworkType>
-        Wallet?: WalletState
-        Others?: OthersState<ChainId, SchemaType, ProviderType, NetworkType, Transaction>
-        Storage?: Web3StorageServiceState
+    >
+    Provider?: ProviderState<ChainId, ProviderType, NetworkType>
+    Wallet?: WalletState
+    Others?: OthersState<ChainId, SchemaType, ProviderType, NetworkType, Transaction>
+    Storage?: Web3StorageServiceState
 }
 
 export interface NetworkIconClickBaitProps<ChainId, ProviderType, NetworkType> {
@@ -1466,18 +1524,12 @@ export interface AddressFormatterProps {
 export interface Web3UI<ChainId, ProviderType, NetworkType> {
     SelectNetworkMenu?: {
         /** This UI will receive network icon as children component, and the plugin may hook click handle on it. */
-        NetworkIconClickBait?: React.ComponentType<
-            NetworkIconClickBaitProps<ChainId, ProviderType, NetworkType>
-        >
+        NetworkIconClickBait?: React.ComponentType<NetworkIconClickBaitProps<ChainId, ProviderType, NetworkType>>
     }
     SelectProviderDialog?: {
         /** This UI will receive network icon as children component, and the plugin may hook click handle on it. */
-        NetworkIconClickBait?: React.ComponentType<
-            NetworkIconClickBaitProps<ChainId, ProviderType, NetworkType>
-        >
+        NetworkIconClickBait?: React.ComponentType<NetworkIconClickBaitProps<ChainId, ProviderType, NetworkType>>
         /** This UI will receive provider icon as children component, and the plugin may hook click handle on it. */
-        ProviderIconClickBait?: React.ComponentType<
-            ProviderIconClickBaitProps<ChainId, ProviderType, NetworkType>
-        >
+        ProviderIconClickBait?: React.ComponentType<ProviderIconClickBaitProps<ChainId, ProviderType, NetworkType>>
     }
 }

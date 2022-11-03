@@ -1,11 +1,11 @@
+import { ChangeEvent, memo, useCallback, useMemo } from 'react'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { alpha, Box, Chip, chipClasses, lighten, Typography, InputBase } from '@mui/material'
-import { ChangeEvent, memo, useCallback, useMemo } from 'react'
+import { isDashboardPage } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { formatBalance, formatCurrency, FungibleToken } from '@masknet/web3-shared-base'
+import { formatBalance, formatCurrency } from '@masknet/web3-shared-base'
 import { FormattedBalance, FormattedCurrency, SelectTokenChip, SelectTokenChipProps } from '@masknet/shared'
 import { useI18N } from '../../../../../utils/index.js'
-import { isDashboardPage } from '@masknet/shared-base'
 
 // TODO: remove isDashboard after remove Dashboard page
 const useStyles = makeStyles<{
@@ -25,7 +25,6 @@ const useStyles = makeStyles<{
         },
     },
     balance: {
-        fontSize: 14,
         fontWeight: 700,
         lineHeight: '18px',
         color: isDashboard ? theme.palette.text.primary : theme.palette.maskColor?.second,
@@ -34,7 +33,6 @@ const useStyles = makeStyles<{
     amount: {
         marginLeft: 10,
         color: !isDashboard ? theme.palette.maskColor?.primary : undefined,
-        fontSize: 14,
         fontWeight: 700,
     },
     input: {
@@ -61,7 +59,6 @@ const useStyles = makeStyles<{
         padding: '0 6px',
     },
     label: {
-        fontSize: 14,
         fontWeight: 700,
         lineHeight: '18px',
         color: theme.palette.maskColor?.second,
@@ -70,7 +67,6 @@ const useStyles = makeStyles<{
         left: 12,
     },
     price: {
-        fontSize: 14,
         lineHeight: '20px',
         position: 'absolute',
         bottom: 12,
@@ -133,7 +129,7 @@ export interface InputTokenPanelUIProps extends withClasses<'root'> {
     amount: string
     chainId: Web3Helper.ChainIdAll
     maxAmount: string
-    token?: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll> | null
+    token?: Web3Helper.FungibleTokenAll | null
     tokenValueUSD: string
     onAmountChange: (amount: string) => void
     SelectTokenChip?: Partial<SelectTokenChipProps>

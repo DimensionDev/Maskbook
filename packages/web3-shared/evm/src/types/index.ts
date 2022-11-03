@@ -7,7 +7,7 @@ import type {
     TransactionReceipt as Web3TransactionReceipt,
     TransactionConfig as TransactionConfig_,
 } from 'web3-core'
-import type { NonPayableTransactionObject, PayableTransactionObject } from '@masknet/web3-contracts/types/types'
+import type { NonPayableTransactionObject, PayableTransactionObject } from '@masknet/web3-contracts/types/types.js'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
 
 export type ChainIdOptionalRecord<T> = { [k in ChainId]?: T }
@@ -78,6 +78,9 @@ export enum ChainId {
     ZKSync_Alpha_Testnet = 280,
 
     Crossbell = 3737,
+
+    // For any chains not supported yet.
+    Invalid = 0,
 }
 
 /**
@@ -106,6 +109,7 @@ export enum SchemaType {
     ERC20 = 2,
     ERC721 = 3,
     ERC1155 = 4,
+    SBT = 5,
 }
 
 export interface EIP1559GasConfig {

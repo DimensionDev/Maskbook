@@ -1,14 +1,12 @@
 import { Link, Stack, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { resolveDaysName } from '../../pipes.js'
-import classNames from 'classnames'
 import { TrendingAPI } from '@masknet/web3-providers'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
         background: theme.palette.background.input,
         borderRadius: 28,
-        fontSize: 14,
         padding: theme.spacing(0.5),
     },
     active: {
@@ -43,12 +41,12 @@ export function PriceChartDaysControl({
     days,
     onDaysChange,
 }: PriceChartDaysControlProps) {
-    const { classes } = useStyles()
+    const { classes, cx } = useStyles()
     return (
         <Stack className={classes.root} direction="row" gap={2}>
             {rangeOptions.map((daysOption) => (
                 <Link
-                    className={classNames(classes.link, days === daysOption ? classes.active : '')}
+                    className={cx(classes.link, days === daysOption ? classes.active : '')}
                     key={daysOption}
                     onClick={() => onDaysChange?.(daysOption)}>
                     <Typography sx={{ ':hover': { fontWeight: 700 } }} component="span">

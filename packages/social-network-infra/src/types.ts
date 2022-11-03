@@ -5,6 +5,7 @@ import type { GrayscaleAlgorithm, SocialNetworkEnum } from '@masknet/encryption'
 import type { IdentityResolved, PostContext, PostContextCreation, PostInfo } from '@masknet/plugin-infra/content-script'
 import type {
     EncryptionTargetType,
+    EnhanceableSite,
     NextIDPlatform,
     ObservableWeakMap,
     PersonaIdentifier,
@@ -36,7 +37,7 @@ export declare namespace SocialNetwork {
          *
          * !!! THIS SHOULD NOT BE USED TO CONSTRUCT A NEW ProfileIdentifier !!!
          */
-        networkIdentifier: string
+        networkIdentifier: EnhanceableSite
         encryptionNetwork: SocialNetworkEnum
         /**
          * This field _will_ be overwritten by SocialNetworkUI.permissions

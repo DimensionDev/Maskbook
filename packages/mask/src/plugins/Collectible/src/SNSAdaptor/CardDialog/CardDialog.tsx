@@ -1,13 +1,29 @@
 import { InjectedDialog } from '@masknet/shared'
-import { MaskTabList, useTabs } from '@masknet/theme'
+import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import { TabContext } from '@mui/lab'
 import { DialogContent, Tab } from '@mui/material'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { CardDialogContent } from './CardDialogContent.js'
 import { useI18N } from '../../../../../utils/index.js'
-import { useStyles } from './hooks/useStyles.js'
 import { TabType } from '../../types.js'
 import { Context } from '../Context/index.js'
+
+const useStyles = makeStyles<{ listItemBackground?: string; listItemBackgroundIcon?: string } | void>()(
+    (theme, props) => ({
+        dialogRoot: {
+            width: 800,
+            height: 800,
+            maxWidth: 800,
+        },
+        dialogContent: {
+            width: '100%',
+            background: theme.palette.maskColor.bottom,
+            padding: 0,
+            height: '100%',
+            overflow: 'hidden',
+        },
+    }),
+)
 
 export interface CardDialogProps {
     open: boolean

@@ -3,12 +3,11 @@ import { useGoodGhostingContract } from '../contracts/useGoodGhostingContract.js
 import type { GoodGhostingInfo } from '../types.js'
 import { getPlayerStatus, PlayerStatus } from '../utils.js'
 import type { TransactionReceipt } from 'web3-core'
-import { useAccount, useChainId } from '@masknet/web3-hooks-base'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { useChainContext } from '@masknet/web3-hooks-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
 
 export function useJoinGame(info: GoodGhostingInfo) {
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const contract = useGoodGhostingContract(chainId, info.contractAddress)
     const canJoinGame =
         (!info.currentPlayer || info.currentPlayer.canRejoin) &&
@@ -54,8 +53,7 @@ export function useJoinGame(info: GoodGhostingInfo) {
 }
 
 export function useMakeDeposit(info: GoodGhostingInfo) {
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const contract = useGoodGhostingContract(chainId, info.contractAddress)
 
     const status = getPlayerStatus(info, info.currentPlayer)
@@ -98,8 +96,7 @@ export function useMakeDeposit(info: GoodGhostingInfo) {
 }
 
 export function useWithdraw(info: GoodGhostingInfo) {
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const contract = useGoodGhostingContract(chainId, info.contractAddress)
 
     const canWithdraw = info.currentPlayer && !info.currentPlayer.withdrawn && info.gameHasEnded
@@ -136,8 +133,7 @@ export function useWithdraw(info: GoodGhostingInfo) {
 }
 
 export function useEarlyWithdraw(info: GoodGhostingInfo) {
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const contract = useGoodGhostingContract(chainId, info.contractAddress)
 
     const canEarlyWithdraw =

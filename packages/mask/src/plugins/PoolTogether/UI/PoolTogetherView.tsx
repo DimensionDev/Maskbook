@@ -1,7 +1,7 @@
 import { Icons } from '@masknet/icons'
 import { DarkColor } from '@masknet/theme/base'
 import { ChainId, usePoolTogetherConstants } from '@masknet/web3-shared-evm'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { Box, Card, CardContent, Paper, Tab, Tabs, Typography } from '@mui/material'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import React, { useState, useEffect } from 'react'
@@ -10,7 +10,7 @@ import { usePool, usePools } from '../hooks/usePools.js'
 import type { Pool } from '../types.js'
 import { Account } from './Account.js'
 import { PoolsView } from './PoolsView.js'
-import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
+import { ChainBoundary } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -158,7 +158,7 @@ export function PoolTogetherView(props: PoolTogetherViewProps) {
                 <ChainBoundary
                     expectedPluginID={NetworkPluginID.PLUGIN_EVM}
                     expectedChainId={ChainId.Mainnet}
-                    predicate={(pluginId, chainId) => [ChainId.Mainnet, ChainId.Matic].includes(chainId)}
+                    predicate={(pluginID, chainId) => [ChainId.Mainnet, ChainId.Matic].includes(chainId)}
                 />
             </Box>
         </>

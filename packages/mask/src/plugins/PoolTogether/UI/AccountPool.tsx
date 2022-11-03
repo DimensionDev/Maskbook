@@ -1,7 +1,8 @@
 import { TokenIcon } from '@masknet/shared'
 import { DarkColor } from '@masknet/theme/base'
-import { leftShift, NetworkPluginID } from '@masknet/web3-shared-base'
-import { useChainId } from '@masknet/web3-hooks-base'
+import { leftShift } from '@masknet/web3-shared-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
+import { useChainContext } from '@masknet/web3-hooks-base'
 import { Grid, Link, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
@@ -20,15 +21,6 @@ const useStyles = makeStyles()((theme) => ({
         textAlign: 'center',
         borderRadius: theme.spacing(1),
         marginBottom: theme.spacing(1),
-    },
-    progress: {
-        bottom: theme.spacing(1),
-        right: theme.spacing(1),
-    },
-    refresh: {
-        bottom: theme.spacing(1),
-        right: theme.spacing(1),
-        fontSize: 15,
     },
     token: {
         padding: theme.spacing(1, 2),
@@ -79,12 +71,6 @@ const useStyles = makeStyles()((theme) => ({
             color: '#ffffff',
         },
     },
-    countdown: {
-        alignSelf: 'center',
-        width: '100%',
-        display: 'flex',
-        justifyContent: 'center',
-    },
     countdownDigit: {
         backgroundColor: 'transparent',
         color: DarkColor.textSecondary,
@@ -116,7 +102,7 @@ export function AccountPool(props: AccountPoolProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
     const poolURL = useManagePoolURL(accountPool.pool)
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
     const balance = leftShift(
         accountPool.account.ticketBalance,

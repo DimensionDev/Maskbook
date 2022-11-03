@@ -1,8 +1,54 @@
 import { Icons } from '@masknet/icons'
+import { makeStyles } from '@masknet/theme'
 import { Typography, Box } from '@mui/material'
-import useStyles from './useStyles'
-import { useI18N } from '../locales'
-import { ENSPostExtraInfoWrapper } from './ENSPostExtraInfoWrapper'
+import { useI18N } from '../locales/index.js'
+import { ENSPostExtraInfoWrapper } from './ENSPostExtraInfoWrapper.js'
+
+interface StyleProps {
+    isMenuScroll?: boolean
+}
+
+const useStyles = makeStyles<StyleProps>()((theme) => {
+    return {
+        root: {
+            padding: theme.spacing(0, 2),
+        },
+        preWrapper: {
+            flexGrow: 1,
+            width: '100%',
+            height: 148,
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+        },
+        preContent: {
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+            fontSize: 14,
+        },
+        loadingText: {
+            color: theme.palette.maskColor.dark,
+            fontSize: 14,
+        },
+        loadingIcon: {
+            width: 24,
+            height: 24,
+            marginBottom: 5,
+            color: theme.palette.maskColor.dark,
+            '@keyframes loadingAnimation': {
+                '0%': {
+                    transform: 'rotate(0deg)',
+                },
+                '100%': {
+                    transform: 'rotate(360deg)',
+                },
+            },
+            animation: 'loadingAnimation 1s linear infinite',
+        },
+    }
+})
 
 export function LoadingContent() {
     const { classes, cx } = useStyles({})

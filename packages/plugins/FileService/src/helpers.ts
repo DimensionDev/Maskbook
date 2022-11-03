@@ -6,7 +6,7 @@ import schemaV1 from './schema-v1.json'
 import schemaV2 from './schema-v2.json'
 import type { Result } from 'ts-results'
 import { isNil } from 'lodash-unified'
-import { encodeArrayBuffer, encodeText } from '@dimensiondev/kit'
+import { encodeArrayBuffer, encodeText } from '@masknet/kit'
 import { createLookupTableResolver } from '@masknet/shared-base'
 
 // Note: if the latest version has been changed, please update packages/mask/src/components/CompositionDialog/useSubmit.ts
@@ -38,7 +38,6 @@ export const resolveGatewayAPI = createLookupTableResolver<Provider, string>(
     {
         [Provider.arweave]: 'https://arweave.net',
         [Provider.ipfs]: 'https://mask.infura-ipfs.io/ipfs',
-        [Provider.swarm]: 'https://gateway-proxy-bee-6-0.gateway.ethswarm.org/bzz',
     },
     () => 'Unknown provider',
 )

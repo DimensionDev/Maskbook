@@ -1,9 +1,10 @@
 import { useEffect } from 'react'
-import useAsyncRetry from 'react-use/lib/useAsyncRetry'
+import useAsyncRetry from 'react-use/lib/useAsyncRetry.js'
 import { noop } from 'lodash-unified'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
-import { useAccount } from './useAccount.js'
+import { isSameAddress } from '@masknet/web3-shared-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
+import { useChainContext } from './useContext.js'
 import { useWeb3State } from './useWeb3State.js'
 import { useWeb3Connection } from './useWeb3Connection.js'
 
@@ -12,7 +13,7 @@ export function useFungibleTokenBalance<S extends 'all' | void = void, T extends
     address?: string,
     options?: Web3Helper.Web3ConnectionOptionsScope<S, T>,
 ) {
-    const account = useAccount(pluginID, options?.account)
+    const { account } = useChainContext({ account: options?.account })
     const connection = useWeb3Connection(pluginID, options)
     const { BalanceNotifier } = useWeb3State(pluginID)
 

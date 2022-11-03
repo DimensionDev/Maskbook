@@ -1,10 +1,9 @@
 import { makeStyles, usePortalShadowRoot } from '@masknet/theme'
 import { Box, Typography, Portal, Button } from '@mui/material'
-import classNames from 'classnames'
 import { PropsWithChildren, useRef, cloneElement, useEffect, ReactElement, useState } from 'react'
 import { activatedSocialNetworkUI } from '../../../social-network/index.js'
 import { useI18N } from '../locales/index.js'
-import { finishUserGuide, TIPS_GUIDE_TOTAL, useTipsUserGuide } from '../storage/index.js'
+import { finishUserGuide, useTipsUserGuide } from '../storage/index.js'
 import type { EnhanceableSite } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
@@ -155,7 +154,7 @@ export default function Guide({ children, arrow = true, disabled = false, onComp
                                     }}>
                                     <div
                                         onClick={(e) => e.stopPropagation()}
-                                        className={classNames(
+                                        className={cx(
                                             classes.card,
                                             arrow ? (bottomAvailable ? 'arrow-top' : 'arrow-bottom') : '',
                                         )}
@@ -163,11 +162,6 @@ export default function Guide({ children, arrow = true, disabled = false, onComp
                                             left: clientRect.width < 50 ? -clientRect.width / 2 + 5 : 0,
                                             [bottomAvailable ? 'top' : 'bottom']: clientRect.height + 16,
                                         }}>
-                                        <div style={{ paddingBottom: '16px' }}>
-                                            <Typography sx={{ fontSize: 20 }}>
-                                                {lastStep.step + 1}/{TIPS_GUIDE_TOTAL}
-                                            </Typography>
-                                        </div>
                                         <div>
                                             <Typography fontSize={14} fontWeight={600}>
                                                 {t.tips_guide_description()}

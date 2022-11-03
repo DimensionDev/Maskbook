@@ -1,15 +1,15 @@
-import { MaskMessages, useI18N } from '../../../../utils/index.js'
 import { useCallback, useState } from 'react'
+import { useMount } from 'react-use'
+import { MaskMessages, useI18N } from '../../../../utils/index.js'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI.js'
 import { toPNG } from '../../../../plugins/Avatar/utils/index.js'
-import { useMount } from 'react-use'
 import { getAvatarId } from '../../utils/user.js'
 import { InjectedDialog } from '@masknet/shared'
 import { DialogContent } from '@mui/material'
 import { NFTAvatar } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatar.js'
-import { DialogStackingProvider, makeStyles } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 import { Instagram } from '@masknet/web3-providers'
-import { useAccount, useCurrentWeb3NetworkPluginID } from '@masknet/web3-hooks-base'
+import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
 import type { SelectTokenInfo } from '../../../../plugins/Avatar/types.js'
 import { RSS3_KEY_SNS } from '../../../../plugins/Avatar/constants.js'
 import { useSaveNFTAvatar } from '../../../../plugins/Avatar/hooks/index.js'
@@ -24,9 +24,9 @@ export function NFTAvatarSettingDialog() {
     const { t } = useI18N()
     const [open, setOpen] = useState(false)
     const { classes } = useStyles()
-    const account = useAccount()
+    const { account } = useChainContext()
     const identity = useCurrentVisitingIdentity()
-    const pluginId = useCurrentWeb3NetworkPluginID()
+    const { pluginID } = useNetworkContext()
     const saveNFTAvatar = useSaveNFTAvatar()
 
     const onChange = useCallback(
@@ -47,11 +47,11 @@ export function NFTAvatarSettingDialog() {
                         avatarId,
                         chainId: (info.token.chainId ?? ChainId.Mainnet) as ChainId,
                         schema: (info.token.schema ?? SchemaType.ERC721) as SchemaType,
-                        pluginId: info.pluginId,
+                        pluginId: info.pluginID,
                     },
                     identity.identifier.network as EnhanceableSite,
                     RSS3_KEY_SNS.INSTAGRAM,
-                    pluginId,
+                    pluginID,
                 )
 
                 if (!avatarInfo) {
@@ -81,12 +81,15 @@ export function NFTAvatarSettingDialog() {
     })
 
     return (
-        <DialogStackingProvider>
-            <InjectedDialog keepMounted open={open} onClose={onClose} title={t('set_nft_profile_photo')}>
-                <DialogContent style={{ padding: 16 }}>
-                    <NFTAvatar onChange={onChange} classes={classes} />
-                </DialogContent>
-            </InjectedDialog>
-        </DialogStackingProvider>
+        <InjectedDialog keepMounted open={open} onClose={onClose} title={t('set_nft_profile_photo')}>
+            <DialogContent style={{ padding: 16 }}>
+                <NFTAvatar
+                    onChange={onChange}
+                    classes={{
+                        root: classes.root,
+                    }}
+                />
+            </DialogContent>
+        </InjectedDialog>
     )
 }

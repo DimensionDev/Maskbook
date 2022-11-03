@@ -1,10 +1,11 @@
 import { makeStyles } from '@masknet/theme'
-import type { NetworkPluginID, SocialAddress, SocialIdentity } from '@masknet/web3-shared-base'
+import type { SocialAccount, SocialIdentity } from '@masknet/web3-shared-base'
+import { useSocialAccountsAll } from '@masknet/web3-hooks-base'
 import { List, ListItem, ListItemText, Table, TableBody, TableCell, TableRow, Typography } from '@mui/material'
 
 export interface TabContentProps {
     identity?: SocialIdentity
-    socialAddress?: SocialAddress<NetworkPluginID>
+    socialAccount?: SocialAccount
 }
 
 const useStyles = makeStyles()({
@@ -13,8 +14,9 @@ const useStyles = makeStyles()({
     },
 })
 
-export function TabContent({ identity, socialAddress }: TabContentProps) {
+export function TabContent({ identity, socialAccount }: TabContentProps) {
     const { classes } = useStyles()
+    const { value: socialAccounts, loading: loadingSocialAccounts } = useSocialAccountsAll(identity)
 
     const renderIdentity = () => {
         return (
@@ -47,18 +49,49 @@ export function TabContent({ identity, socialAddress }: TabContentProps) {
         )
     }
 
-    const renderAddressNames = () => {
+    const renderAddressName = () => {
         return (
             <List dense>
-                {socialAddress &&
-                    [socialAddress].map((x) => (
-                        <ListItem key={`${x.type}_${x.address}`}>
+                {socialAccount &&
+                    [socialAccount].map((x) => (
+                        <ListItem key={`${x.pluginID}_${x.address}`}>
                             <ListItemText
-                                primary={<Typography color="textPrimary">{x.type}</Typography>}
+                                primary={
+                                    <Typography color="textPrimary">
+                                        {x.pluginID} - {x.label}
+                                    </Typography>
+                                }
                                 secondary={x.address}
                             />
                         </ListItem>
                     ))}
+            </List>
+        )
+    }
+
+    const renderAllAddressNames = () => {
+        if (loadingSocialAccounts)
+            return (
+                <List dense>
+                    <ListItem>
+                        <ListItemText primary={<Typography color="textPrimary">Loading...</Typography>} />
+                    </ListItem>
+                </List>
+            )
+        return (
+            <List dense>
+                {socialAccounts?.map((x) => (
+                    <ListItem key={`${x.pluginID}_${x.address}`}>
+                        <ListItemText
+                            primary={
+                                <Typography color="textPrimary">
+                                    {x.pluginID} - {x.label}
+                                </Typography>
+                            }
+                            secondary={x.address}
+                        />
+                    </ListItem>
+                ))}
             </List>
         )
     }
@@ -78,10 +111,18 @@ export function TabContent({ identity, socialAddress }: TabContentProps) {
                     <TableRow>
                         <TableCell>
                             <Typography variant="body2" whiteSpace="nowrap">
-                                Found Address Names
+                                Address Name
                             </Typography>
                         </TableCell>
-                        <TableCell>{renderAddressNames()}</TableCell>
+                        <TableCell>{renderAddressName()}</TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell>
+                            <Typography variant="body2" whiteSpace="nowrap">
+                                All Address Names
+                            </Typography>
+                        </TableCell>
+                        <TableCell>{renderAllAddressNames()}</TableCell>
                     </TableRow>
                 </TableBody>
             </Table>

@@ -12,7 +12,7 @@ import {
 } from '@masknet/web3-shared-base'
 import { ChainId, ChainId as ChainId_EVM, SchemaType as SchemaType_EVM } from '@masknet/web3-shared-evm'
 import type { NonFungibleTokenAPI } from '../../types/index.js'
-import { fetchJSON } from '../../helpers.js'
+import { fetchJSON, getAssetFullName } from '../../helpers.js'
 import { Alchemy_EVM_NetworkMap } from '../constants.js'
 import type {
     AlchemyNFT_EVM,
@@ -56,7 +56,12 @@ function createNonFungibleToken(
         link: createNonFungibleTokenLink(chainId, contractAddress, tokenId),
         metadata: {
             chainId,
-            name: asset.metadata.name ?? asset.title,
+            name: getAssetFullName(
+                asset.contract.address,
+                asset.metadata.name || asset.title,
+                asset.metadata.name || asset.title,
+                tokenId,
+            ),
             description: asset.metadata.description || asset.description,
             imageURL: resolveResourceURL(imageURL),
             mediaURL: resolveResourceURL(mediaURL),
@@ -86,6 +91,8 @@ function createNonFungibleAsset(
     ownersResponse?: AlchemyResponse_EVM_Owners,
 ): NonFungibleAsset<ChainId_EVM, SchemaType_EVM> {
     const tokenId = formatAlchemyTokenId(metaDataResponse.id.tokenId)
+    const contractName = contractMetadataResponse?.contractMetadata.name || metaDataResponse.metadata?.name || ''
+
     return {
         id: `${metaDataResponse.contract.address}_${tokenId}`,
         chainId,
@@ -96,10 +103,7 @@ function createNonFungibleAsset(
         address: metaDataResponse.contract?.address,
         metadata: {
             chainId,
-            name:
-                contractMetadataResponse?.contractMetadata.name ??
-                metaDataResponse.metadata?.name ??
-                metaDataResponse.title,
+            name: getAssetFullName(metaDataResponse.contract?.address, contractName, metaDataResponse.title, tokenId),
             symbol: contractMetadataResponse?.contractMetadata?.symbol ?? '',
             description: metaDataResponse.description,
             imageURL:
@@ -115,18 +119,12 @@ function createNonFungibleAsset(
                     ? SchemaType_EVM.ERC721
                     : SchemaType_EVM.ERC1155,
             address: metaDataResponse.contract?.address,
-            name:
-                contractMetadataResponse?.contractMetadata.name ||
-                metaDataResponse.metadata?.name ||
-                metaDataResponse.title,
+            name: contractName,
             symbol: contractMetadataResponse?.contractMetadata?.symbol ?? '',
         },
         collection: {
             chainId,
-            name:
-                contractMetadataResponse?.contractMetadata.name ||
-                metaDataResponse.metadata?.name ||
-                metaDataResponse.title,
+            name: contractName,
             slug: contractMetadataResponse?.contractMetadata?.symbol || '',
             description: metaDataResponse.description,
         },

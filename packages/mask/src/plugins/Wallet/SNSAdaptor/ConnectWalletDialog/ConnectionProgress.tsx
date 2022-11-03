@@ -1,15 +1,14 @@
 import { Trans } from 'react-i18next'
+import { Icons } from '@masknet/icons'
 import { WalletIcon } from '@masknet/shared'
-import type { NetworkPluginID } from '@masknet/web3-shared-base'
+import { isDashboardPage, NetworkPluginID } from '@masknet/shared-base'
 import { ProviderType } from '@masknet/web3-shared-evm'
-import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
+import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
 import { Box, Card, Typography, Paper, Link } from '@mui/material'
 import { useStylesExtends, makeStyles, MaskColorVar, ActionButton, LoadingBase } from '@masknet/theme'
 import { useProviderDescriptor, useNetworkDescriptor, useWeb3State } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useI18N } from '../../../../utils/index.js'
-import { Icons } from '@masknet/icons'
-import { isDashboardPage } from '@masknet/shared-base'
 
 const useStyles = makeStyles<{
     contentBackground?: string
@@ -43,7 +42,6 @@ const useStyles = makeStyles<{
         fontWeight: 700,
     },
     error: {
-        fontSize: 14,
         paddingRight: theme.spacing(1),
     },
     progressIcon: {
@@ -51,7 +49,6 @@ const useStyles = makeStyles<{
         color: theme.palette.common.white,
     },
     progress: {
-        fontSize: 14,
         color: theme.palette.common.black,
     },
     warningTriangleIcon: {
@@ -78,7 +75,10 @@ export function ConnectionProgress(props: ConnectionProgressProps) {
     const { Others } = useWeb3State(pluginID)
     const providerDescriptor = useProviderDescriptor(pluginID, providerType)
     const networkDescriptor = useNetworkDescriptor(pluginID, networkType)
-    const classes = useStylesExtends(useStyles({ contentBackground: providerDescriptor?.backgroundGradient }), props)
+    const { classes } = useStylesExtends(
+        useStyles({ contentBackground: providerDescriptor?.backgroundGradient }),
+        props,
+    )
     if (!Others) return null
 
     return (

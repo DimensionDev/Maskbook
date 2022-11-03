@@ -3,13 +3,13 @@ import { makeStyles } from '@masknet/theme'
 import { Box, Button, Grid, Typography } from '@mui/material'
 import { FormattedBalance, TokenIcon } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
-import { formatBalance, isZero, NetworkPluginID, rightShift } from '@masknet/web3-shared-base'
+import { formatBalance, isZero, rightShift } from '@masknet/web3-shared-base'
 import type { ChainId, Web3 } from '@masknet/web3-shared-evm'
 import { ProviderIconURLs } from './IconURL.js'
 import { useI18N } from '../../../utils/index.js'
 import { ProtocolType, SavingsProtocol, TabType } from '../types.js'
-import { useAccount, useFungibleAssets, useWeb3, useFungibleTokenBalance } from '@masknet/web3-hooks-base'
-import { CrossIsolationMessages } from '@masknet/shared-base'
+import { useChainContext, useFungibleAssets, useWeb3, useFungibleTokenBalance } from '@masknet/web3-hooks-base'
+import { CrossIsolationMessages, NetworkPluginID } from '@masknet/shared-base'
 import { useCallback, useMemo } from 'react'
 import { LDO_PAIRS } from '../constants.js'
 
@@ -33,11 +33,6 @@ const useStyles = makeStyles()((theme, props) => ({
         '&:last-child': {
             marginBottom: 0,
         },
-    },
-    tableItem: {
-        display: 'flex',
-        background: theme.palette.mode === 'light' ? '#F6F8F8' : '#17191D',
-        borderRadius: theme.spacing(1),
     },
     tableCell: {
         display: 'flex',
@@ -69,7 +64,6 @@ const useStyles = makeStyles()((theme, props) => ({
         width: '100%',
     },
     loading: {
-        fontSize: 14,
         color: theme.palette.text.primary,
         lineHeight: '18px',
         marginTop: 12,
@@ -103,7 +97,7 @@ export function SavingsTable({ chainId, tab, protocols, setTab, setSelectedProto
     const { classes } = useStyles()
 
     const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM, { chainId })
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
     const { value: assets, loading: getAssetsLoading } = useFungibleAssets(NetworkPluginID.PLUGIN_EVM, undefined, {
         chainId,
@@ -169,7 +163,7 @@ export function SavingsTable({ chainId, tab, protocols, setTab, setSelectedProto
                                     <TokenIcon
                                         name={protocol.bareToken.name}
                                         address={protocol.bareToken.address}
-                                        classes={{ icon: classes.logo }}
+                                        className={classes.logo}
                                         chainId={chainId}
                                     />
                                     <img src={ProviderIconURLs[protocol.type]} className={classes.logoMini} />

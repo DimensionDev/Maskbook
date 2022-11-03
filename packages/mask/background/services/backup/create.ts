@@ -23,7 +23,7 @@ export async function mobile_generateBackupJSON(options: MobileBackupOptions): P
 
 export async function generateBackupPreviewInfo(): Promise<BackupPreview> {
     // can we avoid create a full backup?
-    const backup = await createNewBackup({})
+    const backup = await createNewBackup({ allProfile: true })
     return getBackupPreviewInfo(backup)
 }
 

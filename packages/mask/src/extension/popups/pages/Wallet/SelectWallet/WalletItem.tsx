@@ -1,5 +1,6 @@
 import { memo } from 'react'
-import { NetworkPluginID, Wallet } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
+import type { Wallet } from '@masknet/web3-shared-base'
 import { makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
 import { ListItem, ListItemText, Typography } from '@mui/material'
@@ -31,7 +32,6 @@ const useStyles = makeStyles()({
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
-        fontSize: 14,
         color: '#1C68F3',
         fontWeight: 500,
     },

@@ -39,17 +39,12 @@ const useStyles = makeStyles()((theme) => ({
             color: theme.palette.maskColor.publicMain,
         },
     },
-    currencyIcon: {
-        width: 24,
-        height: 24,
-    },
     symbol: {
         marginLeft: theme.spacing(0.2),
     },
     fallbackSymbol: {
         color: theme.palette.maskColor.publicMain,
         fontWeight: 700,
-        fontSize: 14,
         lineHeight: '18px',
         display: 'flex',
         alignItems: 'flex-end',
@@ -99,7 +94,7 @@ export function OfferCard(props: OfferCardProps) {
                         ))}
                     <div className={classes.flex}>
                         <Typography className={classes.textBase}>
-                            <strong style={{ fontSize: 14 }}>
+                            <strong>
                                 {formatBalance(offer.priceInToken?.amount, offer.priceInToken?.token.decimals || 18, 6)}
                             </strong>
                             {offer.priceInToken ? (
@@ -118,7 +113,7 @@ export function OfferCard(props: OfferCardProps) {
 
                     <Typography className={classes.textBase} style={{ marginRight: 6 }}>
                         {(offer.maker?.address && (
-                            <strong style={{ fontSize: 14, margin: '0px 4px' }}>
+                            <strong style={{ margin: '0px 4px' }}>
                                 {Others?.formatAddress(offer.maker.address, 4)}
                             </strong>
                         )) ||

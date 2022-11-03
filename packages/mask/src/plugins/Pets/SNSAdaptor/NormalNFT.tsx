@@ -1,8 +1,7 @@
 import { useState } from 'react'
-import { makeStyles, useStylesExtends } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 import { Box } from '@mui/material'
 import { useStyles as useBoxStyles } from './PreviewBox.js'
-import classNames from 'classnames'
 import Drag from './Drag.js'
 import type { ShowMeta } from '../types.js'
 import { CloseIcon } from '../constants.js'
@@ -44,10 +43,6 @@ const useStyles = makeStyles()(() => ({
         maxWidth: 150,
         bottom: 150,
     },
-    dragImg: {
-        width: 15,
-        height: 15,
-    },
 }))
 
 interface NormalNFTProps {
@@ -59,8 +54,8 @@ interface NormalNFTProps {
 
 export function NormalNFT(props: NormalNFTProps) {
     const { start, infoShow, showMeta, handleClose } = props
-    const classes = useStylesExtends(useStyles(), {})
-    const boxClasses = useStylesExtends(useBoxStyles(), {})
+    const { classes, cx } = useStyles()
+    const { classes: boxClasses } = useBoxStyles()
 
     const [isMenuShow, setMenuShow] = useState(false)
     const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
@@ -85,7 +80,7 @@ export function NormalNFT(props: NormalNFTProps) {
             {start && showMeta?.word ? (
                 <Box className={classes.wordContent}>
                     <Box
-                        className={classNames(
+                        className={cx(
                             {
                                 [boxClasses.msgBox]: true,
                                 [boxClasses.wordShow]: true,

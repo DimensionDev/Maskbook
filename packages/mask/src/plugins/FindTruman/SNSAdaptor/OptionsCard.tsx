@@ -6,7 +6,7 @@ import { RadioButtonChecked, RadioButtonUnchecked, DoneOutlined, Send, RefreshOu
 import NoNftCard from './NoNftCard.js'
 import { FindTrumanContext } from '../context.js'
 import { BorderLinearProgress } from './ResultCard.js'
-import { ActionButtonPromise } from '../../../extension/options-page/DashboardComponents/ActionButton.js'
+import { ActionButtonPromise } from '@masknet/shared'
 import { sumBy } from 'lodash-unified'
 
 const useOptionsStyles = makeStyles()((theme) => {
@@ -38,29 +38,6 @@ const useOptionsStyles = makeStyles()((theme) => {
         blockChipSelected: {
             '&:hover': {
                 backgroundColor: theme.palette.primary.main,
-            },
-        },
-        checkIcon: {},
-        horizontalScrollBar: {
-            '::-webkit-scrollbar': {
-                backgroundColor: 'transparent',
-                height: '8px',
-            },
-            '::-webkit-scrollbar-thumb:horizontal': {
-                backgroundColor: theme.palette.divider,
-                borderRadius: '16px',
-                border: `6px solid ${theme.palette.divider}`,
-            },
-        },
-        verticalScrollBar: {
-            '::-webkit-scrollbar': {
-                backgroundColor: 'transparent',
-                width: '6px',
-            },
-            '::-webkit-scrollbar-thumb:vertical': {
-                backgroundColor: theme.palette.divider,
-                borderRadius: '16px',
-                border: `6px solid ${theme.palette.divider}`,
             },
         },
     }

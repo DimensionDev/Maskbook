@@ -1,6 +1,6 @@
-import BigNumber from 'bignumber.js'
+import { BigNumber } from 'bignumber.js'
 import { first } from 'lodash-unified'
-import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
+import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
 import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import type { NonFungibleTokenOrder, Pageable } from '@masknet/web3-shared-base'
@@ -16,6 +16,9 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         flexDirection: 'column',
         gap: 24,
+        '&::-webkit-scrollbar': {
+            display: 'none',
+        },
     },
 }))
 

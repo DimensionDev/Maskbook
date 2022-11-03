@@ -1,11 +1,9 @@
 import { Typography, Card, Box, CircularProgress, CircularProgressProps } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import classNames from 'classnames'
 import { TypedMessage, makeTypedMessageText } from '@masknet/typed-message'
 import { TextResizeContext, TypedMessageRender } from '@masknet/typed-message/dom'
 import { TypedMessageRenderContext } from '../../../shared-ui/TypedMessageRender/context.js'
-import CheckIcon from '@mui/icons-material/Check'
-import CloseIcon from '@mui/icons-material/Close'
+import { Check as CheckIcon, Close as CloseIcon } from '@mui/icons-material'
 import green from '@mui/material/colors/green'
 import { MaskIcon } from '@masknet/shared'
 import { memo, useCallback, useMemo } from 'react'
@@ -53,7 +51,7 @@ export const AdditionalContent = memo(function AdditionalContent(props: Addition
             variant="caption"
             color={message ? 'textSecondary' : 'textPrimary'}
             gutterBottom
-            className={classNames(classes.title)}>
+            className={classes.title}>
             <span className={classes.icon}>{ProgressJSX || <MaskIcon />}</span>
             <Box
                 sx={{

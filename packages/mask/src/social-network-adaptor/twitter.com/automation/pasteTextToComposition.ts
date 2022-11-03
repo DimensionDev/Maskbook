@@ -1,4 +1,4 @@
-import { abortSignalTimeout, delay } from '@dimensiondev/kit'
+import { delay } from '@masknet/kit'
 import { inputText, pasteText } from '@masknet/injected-script'
 import { newPostButtonSelector, postEditorDraftContentSelector } from '../utils/selector.js'
 import type { SocialNetworkUI } from '@masknet/social-network-infra'
@@ -49,5 +49,5 @@ export const pasteTextToCompositionTwitter: SocialNetworkUI.AutomationCapabiliti
             throw e
         }
 
-        worker(abortSignalTimeout(timeout)).then(undefined, (error) => fail(error))
+        worker(AbortSignal.timeout(timeout)).then(undefined, (error) => fail(error))
     }

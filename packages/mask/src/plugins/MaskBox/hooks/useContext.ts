@@ -5,12 +5,12 @@ import fromUnixTime from 'date-fns/fromUnixTime'
 import addDays from 'date-fns/addDays'
 import subDays from 'date-fns/subDays'
 import { omit, clamp, first, uniq } from 'lodash-unified'
-import BigNumber from 'bignumber.js'
+import { BigNumber } from 'bignumber.js'
 import { createContainer } from 'unstated-next'
-import { unreachable } from '@dimensiondev/kit'
+import { unreachable } from '@masknet/kit'
 import { useERC20TokenAllowance } from '@masknet/web3-hooks-evm'
 import { useMaskBoxConstants, isZeroAddress, SchemaType, isNativeTokenAddress } from '@masknet/web3-shared-evm'
-import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
+import type { NonPayableTx } from '@masknet/web3-contracts/types/types.js'
 import { BoxInfo, BoxState } from '../type.js'
 import { useMaskBoxInfo } from './useMaskBoxInfo.js'
 import { useMerkelProof } from './useMerkleProof.js'
@@ -29,21 +29,20 @@ import {
     isLessThanOrEqualTo,
     isSameAddress,
     multipliedBy,
-    NetworkPluginID,
 } from '@masknet/web3-shared-base'
+import { NetworkPluginID, EMPTY_LIST } from '@masknet/shared-base'
 import {
-    useAccount,
+    useChainContext,
     useBalance,
     useFungibleToken,
     useFungibleTokenBalance,
     useFungibleTokens,
     useNonFungibleTokenContract,
 } from '@masknet/web3-hooks-base'
-import { EMPTY_LIST } from '@masknet/shared-base'
 
 function useContext(initialState?: { boxId: string; hashRoot: string }) {
     const now = new Date()
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
     const { MASK_BOX_CONTRACT_ADDRESS } = useMaskBoxConstants()
     const coder = ABICoder as unknown as ABICoder.AbiCoder

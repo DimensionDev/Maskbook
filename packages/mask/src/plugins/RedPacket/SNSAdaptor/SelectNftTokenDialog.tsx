@@ -1,19 +1,18 @@
-import classNames from 'classnames'
-import { NFTCardStyledAssetPlayer } from '@masknet/shared'
-import { NetworkPluginID, isSameAddress, NonFungibleToken, NonFungibleTokenContract } from '@masknet/web3-shared-base'
+import { useCallback, useState, useEffect } from 'react'
+import { useUpdate } from 'react-use'
+import { findLastIndex, uniq } from 'lodash-unified'
+import { AssetPreviewer } from '@masknet/shared'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { isSameAddress, NonFungibleToken, NonFungibleTokenContract } from '@masknet/web3-shared-base'
 import { SchemaType, formatTokenId, ChainId } from '@masknet/web3-shared-evm'
 import { useI18N as useBaseI18N } from '../../../utils/index.js'
 import { Translate, useI18N } from '../locales/index.js'
 import { DialogContent, Box, InputBase, Button, Typography, ListItem, useTheme } from '@mui/material'
-import QuestionMarkIcon from '@mui/icons-material/QuestionMark'
+import { QuestionMark as QuestionMarkIcon, Check as CheckIcon } from '@mui/icons-material'
 import { LoadingBase, makeStyles, ShadowRootTooltip } from '@masknet/theme'
-import { useCallback, useState, useEffect } from 'react'
 import { Icons } from '@masknet/icons'
-import CheckIcon from '@mui/icons-material/Check'
-import { useUpdate } from 'react-use'
-import { findLastIndex, uniq } from 'lodash-unified'
 import { NFT_RED_PACKET_MAX_SHARES } from '../constants.js'
-import { useAccount, useChainId, useWeb3Connection } from '@masknet/web3-hooks-base'
+import { useChainContext, useWeb3Connection } from '@masknet/web3-hooks-base'
 
 interface StyleProps {
     isSelectSharesExceed: boolean
@@ -42,18 +41,6 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         margin: '14px auto',
         padding: 10,
     },
-    ownerList: {
-        display: 'grid',
-        gridTemplateColumns: 'repeat(4, 1fr)',
-        gap: '16px 0',
-        width: 528,
-        height: 188,
-        overflowY: 'auto',
-        borderRadius: 12,
-        marginTop: theme.spacing(1.5),
-        marginBottom: theme.spacing(1.5),
-        padding: theme.spacing(1, 1.5, 1, 1),
-    },
     noResultBox: {
         width: 540,
         height: 180,
@@ -61,14 +48,6 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         justifyContent: 'center',
         alignItems: 'center',
         marginTop: 16,
-    },
-    search: {
-        width: 405,
-        padding: 5,
-        border: '1px solid #EBEEF0',
-        borderRadius: 6,
-        display: 'flex',
-        alignItems: 'center',
     },
     iconButton: {
         color: '#7B8192',
@@ -93,42 +72,6 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
     textField: {
         flex: 1,
     },
-    wrapper: {
-        position: 'relative',
-        display: 'flex',
-        flexDirection: 'column',
-        borderRadius: 8,
-        padding: 0,
-        marginTop: theme.spacing(2),
-        marginBottom: theme.spacing(2.5),
-        background: theme.palette.background.paper,
-        width: 120,
-        height: 180,
-        minHeight: 153,
-        overflow: 'hidden',
-    },
-    iframe: {
-        minHeight: 147,
-    },
-    nftNameWrapper: {
-        width: '100%',
-        background: theme.palette.mode === 'light' ? 'none' : '#2F3336',
-        borderBottomRightRadius: 8,
-        borderBottomLeftRadius: 8,
-    },
-    nftImg: {
-        margin: '0 auto',
-        height: 160,
-        width: 'auto',
-        minWidth: 120,
-    },
-    nftName: {
-        marginLeft: 8,
-        minHeight: 30,
-    },
-    nftWrapper: {
-        justifyContent: 'center',
-    },
     confirmButton: {
         width: '100%',
         backgroundColor: theme.palette.mode === 'dark' ? '#fff' : '#000',
@@ -137,7 +80,7 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
     tokenSelector: {
         display: 'grid',
         gridTemplateColumns: 'repeat(4, 1fr)',
-        gap: 16,
+        gap: 12,
         width: '100%',
         height: 305,
         overflowY: 'auto',
@@ -161,9 +104,6 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         height: 180,
         overflow: 'hidden',
     },
-    hide: {
-        display: 'none !important',
-    },
     loadingWrapper: {
         display: 'flex',
         justifyContent: 'center',
@@ -181,7 +121,7 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         position: 'absolute',
         bottom: 0,
         marginLeft: 8,
-        minHeight: 35,
+        minHeight: 30,
         whiteSpace: 'nowrap',
         textOverflow: 'ellipsis',
         overflow: 'hidden',
@@ -294,9 +234,6 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         justifyContent: 'center',
         alignItems: 'center',
     },
-    assetImgWrapper: {
-        maxHeight: 155,
-    },
 }))
 
 export type OrderedERC721Token = NonFungibleToken<ChainId, SchemaType.ERC721> & {
@@ -324,14 +261,13 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
     const theme = useTheme()
     const { t: tr } = useBaseI18N()
     const t = useI18N()
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const [searchedTokenDetailedList, setSearchedTokenDetailedList] = useState<OrderedERC721Token[]>()
     const [searched, setSearched] = useState(false)
     const [tokenDetailedSelectedList, setTokenDetailedSelectedList] =
         useState<OrderedERC721Token[]>(existTokenDetailedList)
     const [loadingToken, setLoadingToken] = useState(false)
     const [searchTokenListInput, setSearchTokenListInput] = useState('')
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
     const [tokenIdListInput, setTokenIdListInput] = useState<string>('')
     const [tokenIdFilterList, setTokenIdFilterList] = useState<string[]>([])
@@ -339,7 +275,7 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
     const isSelectSharesExceed =
         (tokenDetailedOwnerList.length === 0 ? NFT_RED_PACKET_MAX_SHARES - 1 : NFT_RED_PACKET_MAX_SHARES) <
         tokenDetailedSelectedList.length
-    const { classes } = useStyles({ isSelectSharesExceed })
+    const { classes, cx } = useStyles({ isSelectSharesExceed })
     const [selectAll, setSelectAll] = useState(false)
     const selectAllHandler = useCallback(() => {
         setTokenDetailedSelectedList(selectAll ? [] : tokenDetailedOwnerList)
@@ -554,7 +490,7 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
             </Button>
         </DialogContent>
     ) : (
-        <DialogContent className={classNames(classes.dialogContent, classes.dialogContentFixedHeight)}>
+        <DialogContent className={cx(classes.dialogContent, classes.dialogContentFixedHeight)}>
             <div className={classes.searchWrapper}>
                 <InputBase
                     startAdornment={<Icons.Search className={classes.iconButton} />}
@@ -586,14 +522,11 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                             <div className={classes.selectBar}>
                                 <div className={classes.selectAll}>
                                     <div
-                                        className={classNames(
-                                            classes.selectAllCheckBox,
-                                            selectAll ? classes.checked : '',
-                                        )}
+                                        className={cx(classes.selectAllCheckBox, selectAll ? classes.checked : '')}
                                         onClick={selectAllHandler}>
                                         {selectAll ? <CheckIcon className={classes.checkIcon} /> : null}
                                     </div>
-                                    <Typography className={classNames(classes.selectAllCheckBoxText)}>
+                                    <Typography className={cx(classes.selectAllCheckBoxText)}>
                                         {tr('select_all')}
                                     </Typography>
                                 </div>
@@ -635,7 +568,7 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                                     )
                                 })}
                                 {loadingOwnerList ? (
-                                    <ListItem className={classNames(classes.selectWrapper, classes.loadingWrapper)}>
+                                    <ListItem className={cx(classes.selectWrapper, classes.loadingWrapper)}>
                                         <LoadingBase size={25} />
                                     </ListItem>
                                 ) : null}
@@ -707,19 +640,13 @@ interface NFTCardProps {
 
 function NFTCard(props: NFTCardProps) {
     const { findToken, token, isSelectSharesExceed, renderOrder, selectToken } = props
-    const { classes } = useStyles({ isSelectSharesExceed })
+    const { classes, cx } = useStyles({ isSelectSharesExceed })
     return (
         <ListItem className={classes.selectWrapper}>
-            <NFTCardStyledAssetPlayer
+            <AssetPreviewer
                 url={token.metadata?.mediaURL || token.metadata?.imageURL}
-                contractAddress={token.contract?.address}
-                tokenId={token.tokenId}
-                renderOrder={renderOrder}
-                chainId={token.contract?.chainId}
                 classes={{
                     fallbackImage: classes.fallbackImage,
-                    iframe: classes.iframe,
-                    imgWrapper: classes.assetImgWrapper,
                 }}
             />
             <div className={classes.selectWrapperNftNameWrapper}>
@@ -729,7 +656,7 @@ function NFTCard(props: NFTCardProps) {
             </div>
 
             <div
-                className={classNames(classes.checkbox, findToken ? classes.checked : '')}
+                className={cx(classes.checkbox, findToken ? classes.checked : '')}
                 onClick={(event) => selectToken(token, findToken, event.shiftKey, token.index)}>
                 {findToken ? <CheckIcon className={classes.checkIcon} /> : null}
             </div>

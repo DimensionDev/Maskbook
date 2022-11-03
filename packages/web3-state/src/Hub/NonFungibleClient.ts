@@ -15,6 +15,7 @@ import {
     NonFungibleTokenSecurity,
     NonFungibleToken,
     NonFungibleContractSpender,
+    PriceInToken,
 } from '@masknet/web3-shared-base'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import type { AuthorizationAPI, NonFungibleTokenAPI, TokenListAPI } from '@masknet/web3-providers'
@@ -75,6 +76,19 @@ export class HubStateNonFungibleClient<ChainId, SchemaType> extends HubStateBase
         return attemptUntil(
             providers.map((x) => () => x.getAssets?.(options.account, options)),
             createPageable(EMPTY_LIST, createIndicator(options.indicator)),
+        )
+    }
+
+    async getNonFungibleTokenFloorPrice(
+        address: string,
+        tokenId: string,
+        initial?: HubOptions<ChainId>,
+    ): Promise<PriceInToken<ChainId, SchemaType> | undefined> {
+        const options = this.getOptions(initial)
+        const providers = this.getProviders(initial)
+        return attemptUntil(
+            providers.map((x) => () => x.getFloorPrice?.(address, tokenId, options)),
+            undefined,
         )
     }
 
@@ -209,7 +223,14 @@ export class HubStateNonFungibleClient<ChainId, SchemaType> extends HubStateBase
         chainId: ChainId,
         initial?: HubOptions<ChainId>,
     ): Promise<Array<NonFungibleToken<ChainId, SchemaType>>> {
-        throw new Error('Method not implemented.')
+        const options = this.getOptions(initial, {
+            chainId,
+        })
+        const providers = this.getProviders(initial)
+        return attemptUntil(
+            providers.map((x) => () => x.getNonFungibleTokenList?.(options.chainId)),
+            EMPTY_LIST,
+        )
     }
 
     async getNonFungibleTokenSpenders(

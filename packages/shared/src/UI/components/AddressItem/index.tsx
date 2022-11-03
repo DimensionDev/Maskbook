@@ -1,67 +1,50 @@
-import { makeStyles } from '@masknet/theme'
-import { Link, Typography, TypographyProps } from '@mui/material'
-import { NetworkPluginID, SocialAddress, SocialAddressType } from '@masknet/web3-shared-base'
-import { ReversedAddress } from '../../../index.js'
 import { Icons } from '@masknet/icons'
+import { makeStyles } from '@masknet/theme'
+import { Link, TypographyProps } from '@mui/material'
 import { useWeb3State } from '@masknet/web3-hooks-base'
+import type { SocialAccount } from '@masknet/web3-shared-base'
+import { ReversedAddress } from '../../../index.js'
 
 const useStyles = makeStyles()((theme) => ({
     link: {
         cursor: 'pointer',
-        marginTop: 2,
         zIndex: 1,
         '&:hover': {
             textDecoration: 'none',
         },
         lineHeight: 0,
     },
-    linkIcon: {
-        color: theme.palette.maskColor.second,
-        margin: '0px 2px 0 2px',
-    },
 }))
 
 export interface AddressItemProps {
-    socialAddress?: SocialAddress<NetworkPluginID>
+    socialAccount?: SocialAccount
     TypographyProps?: TypographyProps
     linkIconClassName?: string
     disableLinkIcon?: boolean
 }
 
-const isReversible = (type?: SocialAddressType) => {
-    if (!type) return false
-    const reversible = [SocialAddressType.KV, SocialAddressType.ADDRESS, SocialAddressType.NEXT_ID].includes(type)
-    return reversible
-}
-
 export function AddressItem({
-    socialAddress,
+    socialAccount,
     TypographyProps = { fontSize: '14px', fontWeight: 700 },
     linkIconClassName,
     disableLinkIcon,
 }: AddressItemProps) {
     const { classes } = useStyles()
-    const { Others } = useWeb3State(socialAddress?.networkSupporterPluginID)
+    const { Others } = useWeb3State(socialAccount?.pluginID)
 
-    if (!socialAddress) return null
-
-    const reversible = isReversible(socialAddress.type)
+    if (!socialAccount) return null
 
     return (
         <>
-            {reversible ? (
-                <ReversedAddress
-                    TypographyProps={TypographyProps}
-                    address={socialAddress.address}
-                    pluginId={socialAddress.networkSupporterPluginID}
-                />
-            ) : (
-                <Typography {...TypographyProps}>{socialAddress.label}</Typography>
-            )}
+            <ReversedAddress
+                TypographyProps={TypographyProps}
+                address={socialAccount.address}
+                pluginID={socialAccount.pluginID}
+            />
             {disableLinkIcon ? null : (
                 <Link
                     className={classes.link}
-                    href={Others?.explorerResolver.addressLink(Others?.getDefaultChainId(), socialAddress.address)}
+                    href={Others?.explorerResolver.addressLink(Others?.getDefaultChainId(), socialAccount.address)}
                     target="_blank"
                     rel="noopener noreferrer">
                     <Icons.LinkOut size={20} className={linkIconClassName} />

@@ -1,11 +1,10 @@
-import { PluginID } from '@masknet/plugin-infra'
-import { CrossIsolationMessages } from '@masknet/shared-base'
+import { PluginID, CrossIsolationMessages } from '@masknet/shared-base'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { makeStyles } from '@masknet/theme'
-import { NFTAvatarButton } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatarButton'
-import { startWatch, createReactRootShadowed } from '../../../../utils'
-import { searchProfileAvatarSelector } from '../../utils/selector'
-import { ConnectPersonaBoundary } from '../../../../components/shared/ConnectPersonaBoundary'
+import { NFTAvatarButton } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatarButton.js'
+import { startWatch, createReactRootShadowed } from '../../../../utils/index.js'
+import { searchProfileAvatarSelector } from '../../utils/selector.js'
+import { ConnectPersonaBoundary } from '../../../../components/shared/ConnectPersonaBoundary.js'
 
 export function injectOpenNFTAvatarEditProfileButtonAtEditProfileDialog(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchProfileAvatarSelector())

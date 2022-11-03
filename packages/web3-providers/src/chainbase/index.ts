@@ -1,4 +1,6 @@
 import urlcat from 'urlcat'
+import LRUCache from 'lru-cache'
+import { first } from 'lodash-unified'
 import {
     createIndicator,
     createNextIndicator,
@@ -10,6 +12,7 @@ import {
     NonFungibleCollection,
     NonFungibleTokenContract,
     NonFungibleTokenEvent,
+    ActivityType,
     Pageable,
     scale10,
     SourceType,
@@ -17,10 +20,22 @@ import {
     Transaction,
 } from '@masknet/web3-shared-base'
 import { EMPTY_LIST } from '@masknet/shared-base'
-import { ChainId, createNativeToken, explorerResolver, SchemaType, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
-import type { FT, NFT, NFT_FloorPrice, NFT_Metadata, NFT_TransferEvent, Tx } from './types.js'
+import {
+    ChainId,
+    createNativeToken,
+    explorerResolver,
+    formatEthereumAddress,
+    isNativeTokenAddress,
+    isValidAddress,
+    isValidChainId,
+    SchemaType,
+    ZERO_ADDRESS,
+} from '@masknet/web3-shared-evm'
+import { formatAddress } from '@masknet/web3-shared-solana'
+import type { ENSRecord, FT, FT_Price, NFT, NFT_FloorPrice, NFT_Metadata, NFT_TransferEvent, Tx } from './types.js'
 import type { FungibleTokenAPI, HistoryAPI, NonFungibleTokenAPI } from '../types/index.js'
 import { CHAINBASE_API_URL } from './constants.js'
+import type { DomainAPI } from '../types/Domain.js'
 
 async function fetchFromChainbase<T>(pathname: string) {
     const response = await globalThis.fetch(urlcat(CHAINBASE_API_URL, pathname))
@@ -52,6 +67,7 @@ export class ChainbaseHistoryAPI implements HistoryAPI.Provider<ChainId, SchemaT
         address: string,
         { chainId = ChainId.Mainnet, indicator }: HubOptions<ChainId> = {},
     ): Promise<Pageable<Transaction<ChainId, SchemaType>>> {
+        if (!isValidChainId(chainId)) return createPageable(EMPTY_LIST, createIndicator(indicator))
         const txs = await fetchFromChainbase<Tx[]>(
             urlcat('/v1/account/txs', {
                 chainId,
@@ -67,6 +83,72 @@ export class ChainbaseHistoryAPI implements HistoryAPI.Provider<ChainId, SchemaT
             createIndicator(indicator),
             assets.length ? createNextIndicator(indicator) : undefined,
         )
+    }
+}
+
+const domainCache = new LRUCache<ChainId, Record<string, string>>({
+    max: 100,
+    ttl: 300_000,
+})
+
+export class ChainbaseDomainAPI implements DomainAPI.Provider<ChainId> {
+    private async getAddress(name: string, chainId: ChainId) {
+        if (!isValidChainId(chainId)) return
+        const response = await fetchFromChainbase<ENSRecord>(
+            urlcat('/v1/ens/records', { chain_id: chainId, domain: name }),
+        )
+        if (!response) return
+
+        return response.address
+    }
+
+    private async getName(address: string, chainId: ChainId) {
+        if (!isValidChainId(chainId)) return
+        const response = await fetchFromChainbase<ENSRecord[]>(
+            urlcat('/v1/ens/reverse', { chain_id: chainId, address }),
+        )
+
+        if (!response) return
+
+        const record = first(response)
+
+        return record?.name
+    }
+
+    private addName(name: string, address: string, chainId: ChainId) {
+        const formattedAddress = formatEthereumAddress(address)
+        const cache = domainCache.get(chainId)
+
+        domainCache.set(chainId, {
+            ...cache,
+            [name]: formattedAddress,
+            [formattedAddress]: name,
+        })
+    }
+
+    async lookup(name: string, chainId: ChainId): Promise<string | undefined> {
+        if (!name) return
+        const address = domainCache.get(chainId)?.[name] || (await this.getAddress(name, chainId))
+
+        if (address && isValidAddress(address)) {
+            this.addName(name, address, chainId)
+            const formattedAddress = formatEthereumAddress(address)
+            return formattedAddress
+        }
+
+        return
+    }
+
+    async reverse(address: string, chainId: ChainId): Promise<string | undefined> {
+        if (!address || !isValidAddress(address)) return
+
+        const name = domainCache.get(chainId)?.[formatAddress(address)] || (await this.getName(address, chainId))
+
+        if (name) {
+            this.addName(name, address, chainId)
+            return name
+        }
+        return
     }
 }
 
@@ -86,6 +168,7 @@ export class ChainbaseFungibleTokenAPI implements FungibleTokenAPI.Provider<Chai
     }
 
     async getAsset(address: string, { chainId = ChainId.Mainnet }: HubOptions<ChainId> = {}) {
+        if (!isValidChainId(chainId)) return
         const token = await fetchFromChainbase<FT>(
             urlcat('/v1/token/metadata', {
                 chain_id: chainId,
@@ -100,6 +183,7 @@ export class ChainbaseFungibleTokenAPI implements FungibleTokenAPI.Provider<Chai
         address: string,
         { chainId = ChainId.Mainnet, indicator }: HubOptions<ChainId> = {},
     ): Promise<Pageable<FungibleAsset<ChainId, SchemaType>, HubIndicator>> {
+        if (!isValidChainId(chainId)) return createPageable(EMPTY_LIST, createIndicator(indicator))
         const tokens = await fetchFromChainbase<FT[]>(
             urlcat('/v1/account/tokens', {
                 chain_id: chainId,
@@ -115,6 +199,15 @@ export class ChainbaseFungibleTokenAPI implements FungibleTokenAPI.Provider<Chai
             createIndicator(indicator),
             assets.length ? createNextIndicator(indicator) : undefined,
         )
+    }
+
+    async getFungibleTokenPrice(chainId: ChainId, address: string) {
+        if (isNativeTokenAddress(address) || !isValidAddress(address) || !isValidChainId(chainId)) return undefined
+        const data = await fetchFromChainbase<FT_Price>(
+            urlcat('/v1/token/price', { chain_id: chainId, contract_address: address }),
+        )
+
+        return data?.price ?? 0
     }
 }
 
@@ -213,7 +306,7 @@ export class ChainbaseNonFungibleTokenAPI implements NonFungibleTokenAPI.Provide
             chainId,
             id: event.transaction_hash,
             quantity: '1',
-            type: 'transfer',
+            type: ActivityType.Transfer,
             assetPermalink: this.createNonFungibleTokenPermalink(chainId, address, event.token_id),
             hash: event.transaction_hash,
             timestamp: new Date(event.block_timestamp).getTime(),
@@ -228,6 +321,7 @@ export class ChainbaseNonFungibleTokenAPI implements NonFungibleTokenAPI.Provide
     }
 
     async getFloorPrice(address: string, tokenId: string, { chainId = ChainId.Mainnet }: HubOptions<ChainId> = {}) {
+        if (!isValidChainId(chainId)) return
         const floorPrice = await fetchFromChainbase<NFT_FloorPrice>(
             urlcat('/v1/nft/floor_price', {
                 chain_id: chainId,
@@ -243,6 +337,7 @@ export class ChainbaseNonFungibleTokenAPI implements NonFungibleTokenAPI.Provide
     }
 
     async getOwner(address: string, tokenId: string, { chainId = ChainId.Mainnet }: HubOptions<ChainId> = {}) {
+        if (!isValidChainId(chainId)) return ZERO_ADDRESS
         const owner = await fetchFromChainbase<string>(
             urlcat('/v1/nft/owner', {
                 chain_id: chainId,
@@ -254,11 +349,12 @@ export class ChainbaseNonFungibleTokenAPI implements NonFungibleTokenAPI.Provide
     }
 
     async getAsset(address: string, tokenId: string, { chainId = ChainId.Mainnet }: HubOptions<ChainId> = {}) {
+        if (!isValidChainId(chainId)) return
         const metadata = await fetchFromChainbase<NFT_Metadata>(
             urlcat('/v1/nft/metadata', {
                 chain_id: chainId,
                 contract_address: address.toLowerCase(),
-                tokenId,
+                token_id: tokenId,
             }),
         )
         if (!metadata) return
@@ -266,6 +362,7 @@ export class ChainbaseNonFungibleTokenAPI implements NonFungibleTokenAPI.Provide
     }
 
     async getAssets(account: string, { chainId = ChainId.Mainnet, indicator }: HubOptions<ChainId, HubIndicator> = {}) {
+        if (!isValidChainId(chainId)) return createPageable(EMPTY_LIST, createIndicator(indicator))
         const tokens = await fetchFromChainbase<NFT[]>(
             urlcat('/v1/account/nfts', {
                 chain_id: chainId,
@@ -286,6 +383,7 @@ export class ChainbaseNonFungibleTokenAPI implements NonFungibleTokenAPI.Provide
         keyword: string,
         { chainId = ChainId.Mainnet, indicator }: HubOptions<ChainId, HubIndicator> = {},
     ) {
+        if (!isValidChainId(chainId)) return createPageable(EMPTY_LIST, createIndicator(indicator))
         const tokens = await fetchFromChainbase<NFT[]>(
             urlcat('/v1/nft/search', {
                 chain_id: chainId,
@@ -306,11 +404,12 @@ export class ChainbaseNonFungibleTokenAPI implements NonFungibleTokenAPI.Provide
         address: string,
         { chainId = ChainId.Mainnet }: HubOptions<ChainId, HubIndicator> = {},
     ): Promise<NonFungibleTokenContract<ChainId, SchemaType> | undefined> {
+        if (!isValidChainId(chainId)) return
         const metadata = await fetchFromChainbase<NFT_Metadata>(
             urlcat('/v1/nft/metadata', {
                 chain_id: chainId,
                 contract_address: address.toLowerCase(),
-                tokenId: 1,
+                token_id: 1,
             }),
         )
         if (!metadata) return
@@ -322,6 +421,7 @@ export class ChainbaseNonFungibleTokenAPI implements NonFungibleTokenAPI.Provide
         tokenId: string,
         { chainId = ChainId.Mainnet, indicator }: HubOptions<ChainId, HubIndicator> = {},
     ) {
+        if (!isValidChainId(chainId)) return createPageable(EMPTY_LIST, createIndicator(indicator))
         const transferEvents = await fetchFromChainbase<NFT_TransferEvent[]>(
             urlcat('/v1/nft/transfers', {
                 chainId,
