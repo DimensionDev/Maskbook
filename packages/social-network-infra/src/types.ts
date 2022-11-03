@@ -21,7 +21,7 @@ export declare namespace SocialNetwork {
     export interface Utils {
         /** @returns post URL from PostIdentifier */
         getPostURL?(post: PostIdentifier): URL | null
-        getIdentity?(useId: string): Promise<IdentityResolved | undefined>
+        getUserIdentity?(useId: string): Promise<IdentityResolved | undefined>
         /** Is this username valid in this network */
         isValidUsername?(username: string): boolean
         /** Handle share */

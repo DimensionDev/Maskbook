@@ -1,5 +1,6 @@
 import { LiveSelector, MutationObserverWatcher, ValueRef } from '@dimensiondev/holoflows-kit'
-import { creator, SocialNetworkUI } from '../../../social-network/index.js'
+import type { SocialNetworkUI } from '@masknet/social-network-infra'
+import { creator } from '../../../social-network/index.js'
 import { getProfileIdentifierAtFacebook, getUserID } from '../utils/getProfileIdentifier.js'
 import { isMobileFacebook } from '../utils/isMobile.js'
 import { ProfileIdentifier, EnhanceableSite } from '@masknet/shared-base'

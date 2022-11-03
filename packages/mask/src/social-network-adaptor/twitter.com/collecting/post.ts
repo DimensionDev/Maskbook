@@ -1,13 +1,14 @@
-import { postsContentSelector, postsImageSelector, timelinePostContentSelector } from '../utils/selector.js'
+import { memoize, noop } from 'lodash-unified'
+import { PostIdentifier, ProfileIdentifier } from '@masknet/shared-base'
 import { IntervalWatcher, DOMProxy, DOMProxyEvents } from '@dimensiondev/holoflows-kit'
 import type { EventListener } from '@servie/events'
-import { creator, globalUIState, SocialNetworkUI as Next } from '../../../social-network/index.js'
+import type { SocialNetworkUI as Next } from '@masknet/social-network-infra'
 import type { PostInfo } from '@masknet/plugin-infra/content-script'
+import { creator, globalUIState } from '../../../social-network/index.js'
 import { postIdParser, postParser, postImagesParser, postContentMessageParser } from '../utils/fetch.js'
-import { memoize, noop } from 'lodash-unified'
+import { postsContentSelector, postsImageSelector, timelinePostContentSelector } from '../utils/selector.js'
 import Services from '../../../extension/service.js'
 import { injectMaskIconToPostTwitter } from '../injection/MaskIcon.js'
-import { PostIdentifier, ProfileIdentifier } from '@masknet/shared-base'
 import {
     makeTypedMessageImage,
     makeTypedMessageTupleFromList,

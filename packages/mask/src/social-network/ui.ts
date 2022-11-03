@@ -21,7 +21,7 @@ import { MaskMessages, setupReactShadowRootEnvironment } from '../utils/index.js
 import '../utils/debug/general.js'
 import { RestPartOfPluginUIContextShared } from '../utils/plugin-context-shared-ui.js'
 import { definedSocialNetworkUIs } from './define.js'
-import type { SocialNetworkUI } from './types.js'
+import type { SocialNetworkUI } from '@masknet/social-network-infra'
 
 const definedSocialNetworkUIsResolved = new Map<string, SocialNetworkUI.Definition>()
 export let activatedSocialNetworkUI: SocialNetworkUI.Definition = {

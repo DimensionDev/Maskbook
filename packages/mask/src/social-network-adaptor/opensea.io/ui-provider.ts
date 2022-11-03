@@ -1,4 +1,4 @@
-import type { SocialNetworkUI } from '../../social-network/index.js'
+import type { SocialNetworkUI } from '@masknet/social-network-infra'
 import { stateCreator } from '../../social-network/utils.js'
 import { createTaskStartSetupGuideDefault } from '../../social-network/defaults/index.js'
 import { InitAutonomousStateProfiles } from '../../social-network/defaults/state/InitProfiles.js'

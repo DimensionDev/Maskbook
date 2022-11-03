@@ -1,6 +1,6 @@
 import { LiveSelector } from '@dimensiondev/holoflows-kit'
 import { isMobileFacebook } from '../utils/isMobile.js'
-import type { SocialNetworkUI } from '../../../social-network/types.js'
+import type { SocialNetworkUI } from '@masknet/social-network-infra'
 import { MaskMessages } from '../../../utils/messages.js'
 import { inputText, pasteText } from '@masknet/injected-script'
 import { delay, waitDocumentReadyState } from '@masknet/kit'

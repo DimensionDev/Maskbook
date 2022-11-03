@@ -1,7 +1,7 @@
 import { CurrentSNSNetwork } from '@masknet/plugin-infra'
+import type { SocialNetwork } from '@masknet/social-network-infra'
 import { EnhanceableSite, PersonaIdentifier, ProfileIdentifier } from '@masknet/shared-base'
 import { activatedSocialNetworkUI, globalUIState } from '../social-network/index.js'
-import type { SocialNetwork } from '../social-network/types.js'
 
 export function getCurrentSNSNetwork(current: SocialNetwork.Base['networkIdentifier']): CurrentSNSNetwork {
     const table: Partial<Record<EnhanceableSite, CurrentSNSNetwork>> = {
