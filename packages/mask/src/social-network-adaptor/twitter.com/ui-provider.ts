@@ -1,5 +1,5 @@
 /* eslint-disable tss-unused-classes/unused-classes */
-import { SocialNetworkUI, STATE_CREATOR } from '@masknet/social-network-infra'
+import { SocialNetworkUI, STATE_CREATOR } from '@masknet/types'
 import { globalUIState } from '../../social-network/index.js'
 import { twitterBase } from './base.js'
 import getSearchedKeywordAtTwitter from './collecting/getSearchedKeyword.js'

@@ -1,5 +1,5 @@
 /* eslint-disable tss-unused-classes/unused-classes */
-import { SocialNetworkUI, STATE_CREATOR } from '@masknet/social-network-infra'
+import { SocialNetworkUI, STATE_CREATOR } from '@masknet/types'
 import { EnhanceableSite, ProfileIdentifier } from '@masknet/shared-base'
 import { globalUIState } from '../../social-network/index.js'
 import { injectPostCommentsDefault } from '../../social-network/defaults/index.js'

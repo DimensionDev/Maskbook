@@ -1,5 +1,5 @@
 import { ProfileIdentifier } from '@masknet/shared-base'
-import { SocialNetworkUI as Next, CREATOR } from '@masknet/social-network-infra'
+import { SocialNetworkUI as Next, CREATOR } from '@masknet/types'
 import { mindsBase } from '../base.js'
 import { handleSelector, selfInfoSelectors } from '../utils/selector.js'
 import { Minds } from '@masknet/web3-providers'

@@ -1,4 +1,4 @@
-import { SocialNetworkUI, CREATOR } from '@masknet/social-network-infra'
+import { SocialNetworkUI, CREATOR } from '@masknet/types'
 import { ProfileIdentifier } from '@masknet/shared-base'
 import { instagramBase } from '../base.js'
 import { openDB } from 'idb/with-async-ittr'

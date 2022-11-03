@@ -2,7 +2,7 @@ import { ProfileIdentifier } from '@masknet/shared-base'
 import { Twitter } from '@masknet/web3-providers'
 import type { SocialIdentity } from '@masknet/web3-shared-base'
 import { isNull } from 'lodash-unified'
-import type { SocialNetwork } from '@masknet/social-network-infra'
+import type { SocialNetwork } from '@masknet/types'
 import { collectNodeText } from '../../../utils/index.js'
 import { twitterBase } from '../base.js'
 import {

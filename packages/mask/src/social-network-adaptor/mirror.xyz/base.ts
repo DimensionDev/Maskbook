@@ -1,5 +1,5 @@
 import { SocialNetworkEnum } from '@masknet/encryption'
-import type { SocialNetwork } from '@masknet/social-network-infra'
+import type { SocialNetwork } from '@masknet/types'
 import { EnhanceableSite } from '@masknet/shared-base'
 
 const origins = ['https://mirror.xyz/*']

@@ -1,4 +1,4 @@
-import type { SocialNetworkUI } from '@masknet/social-network-infra'
+import type { SocialNetworkUI } from '@masknet/types'
 
 const definedSocialNetworkUIsLocal = new Map<string, SocialNetworkUI.DeferredDefinition>()
 export const definedSocialNetworkUIs: ReadonlyMap<string, SocialNetworkUI.DeferredDefinition> =

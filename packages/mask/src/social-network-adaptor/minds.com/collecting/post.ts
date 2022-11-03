@@ -1,5 +1,5 @@
 import { LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { SocialNetworkUI as Next, CREATOR } from '@masknet/social-network-infra'
+import { SocialNetworkUI as Next, CREATOR } from '@masknet/types'
 import {
     makeTypedMessageEmpty,
     makeTypedMessagePromise,

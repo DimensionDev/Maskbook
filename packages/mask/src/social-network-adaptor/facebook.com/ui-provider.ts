@@ -1,5 +1,5 @@
 /* eslint-disable tss-unused-classes/unused-classes */
-import { SocialNetworkUI, STATE_CREATOR } from '@masknet/social-network-infra'
+import { SocialNetworkUI, STATE_CREATOR } from '@masknet/types'
 import { facebookBase } from './base.js'
 import { facebookShared } from './shared.js'
 import { getProfilePageUrlAtFacebook } from './utils/parse-username.js'

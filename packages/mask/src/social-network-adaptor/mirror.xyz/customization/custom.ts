@@ -1,7 +1,7 @@
 import { MutationObserverWatcher, ValueRef } from '@dimensiondev/holoflows-kit'
 import { createSubscriptionFromValueRef } from '@masknet/shared-base'
 import type { PaletteMode } from '@mui/material'
-import type { SocialNetworkUI } from '@masknet/social-network-infra'
+import type { SocialNetworkUI } from '@masknet/types'
 import { themeSelector } from '../utils/selectors.js'
 
 const currentTheme = new ValueRef<PaletteMode>('light')

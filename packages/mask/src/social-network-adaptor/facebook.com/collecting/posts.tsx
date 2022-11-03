@@ -1,4 +1,4 @@
-import { SocialNetworkUI as Next, CREATOR } from '@masknet/social-network-infra'
+import { SocialNetworkUI as Next, CREATOR } from '@masknet/types'
 import { DOMProxy, LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { isMobileFacebook } from '../utils/isMobile.js'
 import { getProfileIdentifierAtFacebook } from '../utils/getProfileIdentifier.js'

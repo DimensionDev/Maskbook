@@ -1,4 +1,4 @@
-import type { SocialNetworkUI } from '@masknet/social-network-infra'
+import type { SocialNetworkUI } from '@masknet/types'
 import { MaskMessages } from '../../../utils/messages.js'
 import { downloadUrl } from '../../../utils/utils.js'
 import { composerModalTextAreaSelector, composerPreviewSelector } from '../utils/selector.js'

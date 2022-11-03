@@ -28,6 +28,6 @@
     { "path": "../backup-format/" },
     { "path": "../shared-base" },
     { "path": "../shared-base-ui" },
-    { "path": "../social-network-infra" }
+    { "path": "../types" }
   ]
 }

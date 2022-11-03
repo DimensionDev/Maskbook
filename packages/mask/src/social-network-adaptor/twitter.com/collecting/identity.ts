@@ -4,7 +4,7 @@ import { delay } from '@masknet/kit'
 import { TWITTER_RESERVED_SLUGS } from '@masknet/injected-script/shared'
 import { ProfileIdentifier } from '@masknet/shared-base'
 import { Twitter } from '@masknet/web3-providers'
-import { SocialNetworkUI as Next, CREATOR } from '@masknet/social-network-infra'
+import { SocialNetworkUI as Next, CREATOR } from '@masknet/types'
 import { twitterBase } from '../base.js'
 import { isMobileTwitter } from '../utils/isMobile.js'
 import {

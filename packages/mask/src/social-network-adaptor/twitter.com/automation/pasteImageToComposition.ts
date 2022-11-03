@@ -1,5 +1,5 @@
 import { delay } from '@masknet/kit'
-import type { SocialNetworkUI } from '@masknet/social-network-infra'
+import type { SocialNetworkUI } from '@masknet/types'
 import { hasEditor, hasFocus, isCompose } from '../utils/postBox.js'
 import { newPostButtonSelector, postEditorDraftContentSelector } from '../utils/selector.js'
 import { untilElementAvailable } from '../../../utils/dom.js'

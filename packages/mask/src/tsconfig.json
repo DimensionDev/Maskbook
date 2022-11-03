@@ -17,7 +17,6 @@
     { "path": "../../backup-format" },
     { "path": "../../shared-base" },
     { "path": "../../shared-base-ui" },
-    { "path": "../../social-network-infra" },
     { "path": "../../typed-message/base" },
     { "path": "../../typed-message/dom" },
     { "path": "../../web3-hooks/base" },
@@ -43,6 +42,7 @@
     { "path": "../utils-ui" },
     { "path": "../background" },
     { "path": "../shared" },
-    { "path": "../shared-ui" }
+    { "path": "../shared-ui" },
+    { "path": "../../types" }
   ]
 }

@@ -1,5 +1,5 @@
 import { CurrentSNSNetwork } from '@masknet/plugin-infra'
-import type { SocialNetwork } from '@masknet/social-network-infra'
+import type { SocialNetwork } from '@masknet/types'
 import { EnhanceableSite, PersonaIdentifier, ProfileIdentifier } from '@masknet/shared-base'
 import { activatedSocialNetworkUI, globalUIState } from '../social-network/index.js'
 

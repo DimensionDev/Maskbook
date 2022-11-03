@@ -1,7 +1,7 @@
 import { delay } from '@masknet/kit'
 import type { IdentityResolved } from '@masknet/plugin-infra'
 import { LiveSelector, MutationObserverWatcher, ValueRef } from '@dimensiondev/holoflows-kit'
-import { SocialNetworkUI, CREATOR } from '@masknet/social-network-infra'
+import { SocialNetworkUI, CREATOR } from '@masknet/types'
 import { getProfileIdentifierAtFacebook, getUserID } from '../utils/getProfileIdentifier.js'
 import { ProfileIdentifier, EnhanceableSite } from '@masknet/shared-base'
 import { isMobileFacebook } from '../utils/isMobile.js'

@@ -1,7 +1,7 @@
 import { delay } from '@masknet/kit'
 import { EnhanceableSite } from '@masknet/shared-base'
 import { Mirror, Writer } from '@masknet/web3-providers'
-import { SocialNetworkUI, CREATOR } from '@masknet/social-network-infra'
+import { SocialNetworkUI, CREATOR } from '@masknet/types'
 import { formatWriter, getMirrorUserId } from './utils.js'
 
 export const getCurrentUserInfo = async () => {

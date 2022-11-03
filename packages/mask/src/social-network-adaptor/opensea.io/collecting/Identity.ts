@@ -1,4 +1,4 @@
-import { SocialNetworkUI, CREATOR } from '@masknet/social-network-infra'
+import { SocialNetworkUI, CREATOR } from '@masknet/types'
 import { ProfileIdentifier } from '@masknet/shared-base'
 import type { IdentityResolved } from '@masknet/plugin-infra'
 import { openseaBase } from '../base.js'
