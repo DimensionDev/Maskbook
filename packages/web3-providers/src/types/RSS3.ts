@@ -125,7 +125,7 @@ export namespace RSS3BaseAPI {
         external_link: string
     }
     interface TradeMetadata extends CollectibleMetadata {
-        cost: TransactionMetadata
+        cost?: TransactionMetadata
     }
     interface MintMetadata extends TradeMetadata {}
     interface PoapMetadata {
