@@ -91,8 +91,8 @@ const sns: Plugin.SNSAdaptor.Definition = {
                         />
                     )
                 },
-                appBoardSortingDefaultPriority: 3,
-                marketListSortingPriority: 3,
+                appBoardSortingDefaultPriority: 4,
+                marketListSortingPriority: 4,
                 icon,
                 iconFilterColor,
                 description: <Trans i18nKey="plugin_ito_description" />,
@@ -127,7 +127,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                         </>
                     )
                 },
-                appBoardSortingDefaultPriority: 4,
+                appBoardSortingDefaultPriority: 5,
                 icon,
                 name,
                 iconFilterColor,

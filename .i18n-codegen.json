@@ -409,6 +409,17 @@
                 "trans": "Translate",
                 "emitTS": true
             }
+        },
+        {
+            "input": "./packages/plugins/SmartPay/src/locales/en-US.json",
+            "output": "./packages/plugins/SmartPay/src/locales/i18n_generated",
+            "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
+            "generator": {
+                "type": "i18next/react-hooks",
+                "hooks": "useI18N",
+                "namespace": "\"com.mask.smart-pay\"",
+                "trans": "Translate"
+            }
         }
     ]
 }

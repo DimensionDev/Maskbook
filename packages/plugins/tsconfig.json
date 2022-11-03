@@ -14,5 +14,6 @@
     { "path": "./CrossChainBridge/" },
     { "path": "./Web3Profile/" },
     { "path": "./ScamWarning/" }
+    { "path": "./SmartPay/" }
   ]
 }
