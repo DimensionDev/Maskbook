@@ -1,4 +1,4 @@
-import type { SocialNetworkUI } from '../../../social-network/index.js'
+import type { SocialNetworkUI } from '@masknet/types'
 import { untilElementAvailable } from '../../../utils/dom.js'
 import { MaskMessages } from '../../../utils/messages.js'
 import { selectElementContents } from '../../../utils/utils.js'

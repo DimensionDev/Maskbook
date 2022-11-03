@@ -1,6 +1,8 @@
+import type { Subscription } from 'use-subscription'
 import type { ValueRef } from '@dimensiondev/holoflows-kit'
+import type { PaletteMode, Theme } from '@mui/material'
 import type { GrayscaleAlgorithm, SocialNetworkEnum } from '@masknet/encryption'
-import type { IdentityResolved, PostInfo } from '@masknet/plugin-infra/content-script'
+import type { IdentityResolved, PostContext, PostContextCreation, PostInfo } from '@masknet/plugin-infra/content-script'
 import type {
     EncryptionTargetType,
     EnhanceableSite,
@@ -14,21 +16,17 @@ import type {
 import type { SerializableTypedMessages } from '@masknet/typed-message'
 import type { RenderFragmentsContextType } from '@masknet/typed-message/dom'
 import type { SharedComponentOverwrite } from '@masknet/shared'
-import type { PaletteMode, Theme } from '@mui/material'
-import type { Subscription } from 'use-subscription'
-import type { createSNSAdaptorSpecializedPostContext } from './utils/create-post-context.js'
-import type { SocialIdentity } from '@masknet/web3-shared-base'
 
 export declare namespace SocialNetwork {
     export interface Utils {
         /** @returns post URL from PostIdentifier */
         getPostURL?(post: PostIdentifier): URL | null
+        getUserIdentity?(useId: string): Promise<IdentityResolved | undefined>
         /** Is this username valid in this network */
         isValidUsername?(username: string): boolean
         /** Handle share */
         share?(text: string): void
-        createPostContext: ReturnType<typeof createSNSAdaptorSpecializedPostContext>
-        getUserIdentity?(useId: string): Promise<SocialIdentity | undefined>
+        createPostContext: (creation: PostContextCreation) => PostContext
     }
     export interface Shared {
         utils: Utils

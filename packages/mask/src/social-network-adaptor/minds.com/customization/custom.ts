@@ -4,7 +4,7 @@ import produce, { setAutoFreeze } from 'immer'
 import { useMemo } from 'react'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { createSubscriptionFromValueRef } from '@masknet/shared-base'
-import type { SocialNetworkUI } from '../../../social-network/index.js'
+import type { SocialNetworkUI } from '@masknet/types'
 import { fromRGB, getBackgroundColor, getForegroundColor, isDark, shade, toRGB } from '../../../utils/theme/index.js'
 import { themeListItemSelector } from '../utils/selector.js'
 

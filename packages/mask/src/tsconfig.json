@@ -42,6 +42,7 @@
     { "path": "../utils-ui" },
     { "path": "../background" },
     { "path": "../shared" },
-    { "path": "../shared-ui" }
+    { "path": "../shared-ui" },
+    { "path": "../../types" }
   ]
 }
