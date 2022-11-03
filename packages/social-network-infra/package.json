@@ -1,0 +1,28 @@
+{
+  "name": "@masknet/social-network-infra",
+  "private": true,
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "webpack": "./src/index.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "types": "./dist/index.d.ts",
+  "dependencies": {
+    "@types/use-subscription": "^1.0.0",
+    "@masknet/plugin-infra": "workspace:*",
+    "@masknet/shared": "workspace:*",
+    "@masknet/shared-base": "workspace:*",
+    "@masknet/shared-base-ui": "workspace:*",
+    "@masknet/encryption": "workspace:*",
+    "@masknet/typed-message": "workspace:*",
+    "@masknet/web3-hooks-base": "workspace:*",
+    "@masknet/web3-shared-base": "workspace:*",
+    "bignumber.js": "9.0.2",
+    "date-fns": "^2.28.0",
+    "react-use": "^17.4.0",
+    "urlcat": "^2.0.4",
+    "use-subscription": "1.6.0"
+  }
+}
