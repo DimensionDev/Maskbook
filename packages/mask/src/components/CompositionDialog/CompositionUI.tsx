@@ -247,7 +247,7 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
             <div className={classes.actions}>
                 {props.maxLength ? <CharLimitIndicator value={currentPostSize} max={props.maxLength} /> : null}
                 {props.requireClipboardPermission && !props.hasClipboardPermission && (
-                    <Button variant="outlined" onClick={props.onRequestClipboardPermission}>
+                    <Button variant="roundedContained" onClick={props.onRequestClipboardPermission}>
                         {t('post_dialog_enable_paste_auto')}
                     </Button>
                 )}
