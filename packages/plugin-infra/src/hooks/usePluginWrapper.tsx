@@ -1,6 +1,7 @@
-import { noop } from 'lodash-unified'
 import { createContext, useEffect, useContext, ForwardRefExoticComponent, RefAttributes } from 'react'
+import { noop } from 'lodash-unified'
 import type { Plugin } from '../types.js'
+
 export type PluginWrapperComponent<T extends Plugin.Shared.Definition = Plugin.Shared.Definition> =
     ForwardRefExoticComponent<
         React.PropsWithChildren<

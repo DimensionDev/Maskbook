@@ -18,8 +18,9 @@ export {
     PostInfoProvider,
     usePostInfo,
     usePostInfoDetails,
-} from './PostContext.js'
-export { CompositionContext, useCompositionContext } from './CompositionContext.js'
+} from './contexts/PostContext.js'
+export { CompositionContext, useCompositionContext } from './contexts/CompositionContext.js'
+export { SharedContext, useSharedContext } from './contexts/SharedContext.js'
 
 // shared components
 export { Widget, type WidgetProps } from './components/Widget.js'
