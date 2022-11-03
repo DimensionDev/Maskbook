@@ -1,5 +1,6 @@
-import { useId } from 'react'
+import { useMemo } from 'react'
 import type { Keyframes } from '@emotion/serialize'
+import { v4 as uuid } from 'uuid'
 import { keyframes, makeStyles, useStylesExtends } from '@masknet/theme'
 import { useLastRecognizedIdentity } from '../../../components/DataSource/useActivatedUI.js'
 import { useNFT } from '../hooks/index.js'
@@ -145,7 +146,7 @@ function Text(props: TextProps) {
 
 export function NFTAvatarClip(props: NFTAvatarClipProps) {
     const { width, height, viewBoxHeight = ViewBoxHeight, viewBoxWidth = ViewBoxWidth, screenName } = props
-    const id = useId()
+    const id = useMemo(() => props.id ?? uuid(), [props.id])
     const { classes, cx } = useStylesExtends(useStyles(), props)
     const { loading, value: avatarMetadata } = useNFTContainerAtTwitter(screenName)
     const { account } = useChainContext()
@@ -231,7 +232,7 @@ export function NFTAvatarClip(props: NFTAvatarClipProps) {
 
 export function NFTAvatarMiniClip(props: NFTAvatarClipProps) {
     const { width, height, viewBoxHeight = ViewBoxHeight, viewBoxWidth = ViewBoxWidth, screenName, className } = props
-    const id = useId()
+    const id = useMemo(() => props.id ?? uuid(), [props.id])
     const { classes, cx } = useStylesExtends(useStyles(), props)
     const identity = useLastRecognizedIdentity()
     const { loading, value: avatarMetadata } = useNFTContainerAtTwitter(screenName ?? identity.identifier?.userId)
