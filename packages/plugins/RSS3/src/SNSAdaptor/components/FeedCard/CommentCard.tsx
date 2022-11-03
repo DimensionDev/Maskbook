@@ -12,7 +12,6 @@ import { CardType } from '../share'
 
 const useStyles = makeStyles<void, 'image' | 'verbose' | 'content'>()((theme, _, refs) => ({
     summary: {
-        fontSize: '14px',
         color: theme.palette.maskColor.third,
     },
     comment: {
