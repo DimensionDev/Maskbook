@@ -8,6 +8,7 @@ import { isTokenSwapFeed, TokenSwapCard } from './TokenSwapCard.js'
 import { isTokenTransferFeed as isTokenOperationFeed, TokenOperationCard } from './TokenOperationCard.js'
 import { isVoteFeed, VoteCard } from './VoteCard.js'
 import { isProposeFeed, ProposeCard } from './ProposeCard.js'
+import { isProfileFeed, ProfileCard } from './ProfileCard.js'
 
 export const FeedCard = ({ feed, ...rest }: FeedCardProps) => {
     if (isTokenOperationFeed(feed)) return <TokenOperationCard feed={feed} {...rest} />
@@ -23,6 +24,8 @@ export const FeedCard = ({ feed, ...rest }: FeedCardProps) => {
     if (isNoteFeed(feed)) return <NoteCard feed={feed} {...rest} />
 
     if (isCommentFeed(feed)) return <CommentCard feed={feed} {...rest} />
+
+    if (isProfileFeed(feed)) return <ProfileCard feed={feed} {...rest} />
 
     if (isProposeFeed(feed)) return <ProposeCard feed={feed} {...rest} />
 

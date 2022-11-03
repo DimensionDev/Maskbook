@@ -2,6 +2,7 @@ import { makeStyles } from '@masknet/theme'
 import { RSS3BaseAPI } from '@masknet/web3-providers'
 import { Typography } from '@mui/material'
 import type { FC } from 'react'
+import Markdown from 'react-markdown'
 import { Translate } from '../../../locales/i18n_generated.js'
 import { useAddressLabel } from '../../hooks/index.js'
 import { CardType } from '../share.js'
@@ -28,10 +29,16 @@ const useStyles = makeStyles<void, 'content'>()((theme, _, refs) => ({
         WebkitLineClamp: 3,
         wordBreak: 'break-all',
     },
+    markdown: {
+        wordBreak: 'break-all',
+        img: {
+            maxWidth: '100%',
+        },
+    },
     verbose: {
         [`.${refs.content}`]: {
             display: 'block',
-            maxHeight: 'auto',
+            maxHeight: 'none',
             overflow: 'unset',
         },
     },
@@ -81,7 +88,11 @@ export const NoteCard: FC<NoteCardProps> = ({ feed, className, ...rest }) => {
                 />
             </Typography>
             {metadata?.title ? <Typography className={classes.title}>{metadata.title}</Typography> : null}
-            <Typography className={classes.content}>{metadata?.body}</Typography>
+            {rest.verbose && metadata?.body ? (
+                <Markdown className={classes.markdown}>{metadata.body}</Markdown>
+            ) : (
+                <Typography className={classes.content}>{metadata?.body}</Typography>
+            )}
         </CardFrame>
     )
 }

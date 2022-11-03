@@ -71,9 +71,8 @@ export const TokenOperationCard: FC<TokenFeedCardProps> = ({ feed, ...rest }) =>
     const isFromOwner = isSameAddress(owner.address, action.address_from)
     const isBurning = feed.type === Type.Burn
 
-    let cardType = isFromOwner ? CardType.TokenOut : CardType.TokenIn
-    cardType = isBurning ? CardType.UnknownBurn : cardType
-    /* eslint-disable-next-line no-nested-ternary */
+    /* eslint-disable no-nested-ternary */
+    const cardType = isBurning ? CardType.UnknownBurn : isFromOwner ? CardType.TokenOut : CardType.TokenIn
     const context = isBurning ? 'burn' : isFromOwner ? 'send' : 'claim'
 
     const from = useAddressLabel(action.address_from!)

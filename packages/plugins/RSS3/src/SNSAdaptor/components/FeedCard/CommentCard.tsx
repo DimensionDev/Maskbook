@@ -52,6 +52,12 @@ const useStyles = makeStyles<void, 'image' | 'verbose' | 'content'>()((theme, _,
         fontSize: 14,
         color: theme.palette.maskColor.second,
     },
+    markdown: {
+        wordBreak: 'break-all',
+        img: {
+            maxWidth: '100%',
+        },
+    },
     content: {
         color: theme.palette.maskColor.main,
         whiteSpace: 'pre-wrap',
@@ -118,7 +124,7 @@ export const CommentCard: FC<CommentCardProps> = ({ feed, ...rest }) => {
                     />
                 ) : null}
                 {verbose && commentTarget?.body ? (
-                    <Markdown>{commentTarget.body}</Markdown>
+                    <Markdown className={classes.markdown}>{commentTarget.body}</Markdown>
                 ) : (
                     <Typography className={classes.content}>{commentTarget?.body}</Typography>
                 )}

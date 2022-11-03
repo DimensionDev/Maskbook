@@ -171,6 +171,12 @@ export class RSS3API implements RSS3BaseAPI.Provider, NonFungibleTokenAPI.Provid
             cursor?: string
         }>(url)
         result.forEach(normalizedFeed)
-        return createPageable(result, createIndicator(indicator), createNextIndicator(indicator, cursor))
+        // createNextIndicator() return a fallback indicator as `{ id: 1, index: 1 }`
+        // which will fail the API, so we pass undefined if cursor is undefined
+        return createPageable(
+            result,
+            createIndicator(indicator),
+            cursor ? createNextIndicator(indicator, cursor) : undefined,
+        )
     }
 }

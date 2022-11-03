@@ -1,4 +1,3 @@
-import { EMPTY_LIST } from '@masknet/shared-base'
 import { RSS3, RSS3BaseAPI } from '@masknet/web3-providers'
 import type { HubIndicator } from '@masknet/web3-shared-base'
 import { uniqBy } from 'lodash-es'
@@ -38,8 +37,6 @@ export function useFeeds(address?: string, tag?: RSS3BaseAPI.Tag) {
     }, [address, tag])
 
     useEffect(() => {
-        setFinished(false)
-        setFeeds(EMPTY_LIST)
         load()
     }, [load])
 

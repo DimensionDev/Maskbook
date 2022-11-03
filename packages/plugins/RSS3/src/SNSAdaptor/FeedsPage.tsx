@@ -35,7 +35,7 @@ export const FeedsPage = memo(function FeedsPage({ address, tag, ...rest }: Feed
     const { classes } = useStyles()
     const { Others } = useWeb3State()
 
-    const { feeds, loading, finished, next } = useFeeds(address, tag)
+    const { feeds, loading, next } = useFeeds(address, tag)
 
     const { value: name } = useReverseAddress(undefined, address)
 
@@ -83,7 +83,7 @@ export const FeedsPage = memo(function FeedsPage({ address, tag, ...rest }: Feed
                         <FeedCard key={index} className={classes.feedCard} feed={feed} />
                     ))}
                 </Box>
-                <ElementAnchor callback={next}>{finished ? null : <LoadingBase />}</ElementAnchor>
+                <ElementAnchor callback={next}>{loading ? <LoadingBase /> : null}</ElementAnchor>
             </FeedDetailsProvider>
         </FeedOwnerContext.Provider>
     )

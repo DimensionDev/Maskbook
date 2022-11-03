@@ -166,14 +166,17 @@ export namespace RSS3BaseAPI {
     interface ProfileMetadata {
         address: string
         network: Network
-        platform: 'ENS' | string
-        source: 'ENS' | string
-        /**  @example 'vitalik.eth' */
+        platform: 'ENS' | 'Lens' | string
+        source: 'ENS' | 'Lens' | string
+        /** @example 'vitalik.eth' */
         name: string
         /** @example 'vitalik.eth' */
         handle: string
         bio: string
         expire_at: RFC3339Datetime
+        /** unknown type, it could possibly be profile avatar url */
+        profile_uri: string[]
+        type: 'create' | 'update'
     }
     interface FollowMetadata {
         type_on_platform: Type[]
@@ -240,6 +243,7 @@ export namespace RSS3BaseAPI {
         comment: CommentMetadata
         share: ShareMetadata
         profile: ProfileMetadata
+        create: ProfileMetadata
         follow: FollowMetadata
         unfollow: FollowMetadata
         // TODO Not official documented
@@ -327,6 +331,7 @@ export namespace RSS3BaseAPI {
         | 'Uniswap'
         | 'crossbell.io'
         | 'xLog'
+        | 'Farcaster'
 
     export enum Tag {
         Collectible = 'collectible',
@@ -464,6 +469,7 @@ export namespace RSS3BaseAPI {
     export type DonationFeed = Web3FeedGeneric<Tag.Donation, Type.Donate>
     export type NoteFeed = Web3FeedGeneric<Tag.Social, Type.Post | Type.Revise>
     export type CommentFeed = Web3FeedGeneric<Tag.Social, Type.Comment>
+    export type ProfileFeed = Web3FeedGeneric<Tag.Social, Type.Profile>
     export type GovernanceFeed = Web3FeedGeneric<Tag.Governance, Type.Propose | Type.Vote>
     export type VoteFeed = Web3FeedGeneric<Tag.Governance, Type.Vote>
     export type ProposeFeed = Web3FeedGeneric<Tag.Governance, Type.Propose>
