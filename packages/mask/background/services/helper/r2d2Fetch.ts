@@ -36,18 +36,24 @@ const HOTFIX_RPC_URLS = [
     'evm.confluxrpc.com',
 ]
 
+enum CACHE_DURATION {
+    INSTANT = 1000 * 3, // 3 seconds
+    SHORT = 1000 * 60, // 1 min
+    LONG = 1000 * 60 * 30, // 30 mins
+}
+
 const CACHE_RULES = {
-    'https://proof-service.nextnext.id/v1/proof': 1000 * 5,
+    'https://proof-service.nextnext.id/v1/proof': CACHE_DURATION.INSTANT,
     // twitter shorten links
-    'https://t.co': 1000 * 60 * 30,
-    'https://gitcoin.co/grants/v1/api/grant': 1000 * 60,
-    'https://vcent-agent.r2d2.to': 1000 * 60,
-    'https://rss3.domains/name': 1000 * 60,
+    'https://t.co': CACHE_DURATION.LONG,
+    'https://gitcoin.co/grants/v1/api/grant': CACHE_DURATION.SHORT,
+    'https://vcent-agent.r2d2.to': CACHE_DURATION.SHORT,
+    'https://rss3.domains/name': CACHE_DURATION.SHORT,
     // avatar on RSS3 kv queries
-    'https://kv.r2d2.to/api/com.maskbook.user_twitter.com': 1000 * 60,
-    'https://discovery.attrace.com': 1000 * 60,
+    'https://kv.r2d2.to/api/com.maskbook.user_twitter.com': CACHE_DURATION.SHORT,
+    'https://discovery.attrace.com': CACHE_DURATION.SHORT,
     // mask-x
-    '7x16bogxfb.execute-api.us-east-1.amazonaws.com': 1000 * 60,
+    '7x16bogxfb.execute-api.us-east-1.amazonaws.com': CACHE_DURATION.SHORT,
 }
 const CACHE_URLS = Object.keys(CACHE_RULES) as unknown as Array<keyof typeof CACHE_RULES>
 
@@ -123,7 +129,7 @@ export async function r2d2Fetch(input: RequestInfo, init?: RequestInit): Promise
     // hotfix image requests
     if (request.method === 'GET' && request.headers.get('accept')?.includes('image/')) {
         const blob = await attemptUntil<Blob | null>(
-            [async () => (await squashedFetch(url, request)).blob(), async () => fetchImageViaDOM(url)],
+            [async () => (await originalFetch(url, request)).blob(), async () => fetchImageViaDOM(url)],
             null,
         )
 
@@ -138,11 +144,11 @@ export async function r2d2Fetch(input: RequestInfo, init?: RequestInit): Promise
     if (url.includes(R2D2_ROOT_URL)) return squashedFetch(request, init)
 
     // infura ipfs
-    if (url.includes(INFURA_IPFS_ROOT_URL)) return squashedFetch(request, init)
+    if (url.includes(INFURA_IPFS_ROOT_URL)) return originalFetch(request, init)
 
     // hotfix rpc requests lost content-type header
     if (request.method === 'POST' && HOTFIX_RPC_URLS.some((x) => url.includes(x)))
-        return squashedFetch(request, { ...init, headers: { ...request?.headers, 'Content-Type': 'application/json' } })
+        return originalFetch(request, { ...init, headers: { ...request?.headers, 'Content-Type': 'application/json' } })
 
     // fallback
     return squashedFetch(request, init)
