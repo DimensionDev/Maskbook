@@ -29,7 +29,6 @@ export function setupReactShadowRootEnvironment() {
     // Inject variable for Portals
     attachReactTreeToGlobalContainer(shadow, { key: 'css-vars' }).render(
         <>
-            {/* <GlobalBackdrop /> */}
             <CSSVariableInjector />
         </>,
     )
