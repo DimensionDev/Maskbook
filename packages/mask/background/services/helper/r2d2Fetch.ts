@@ -37,9 +37,9 @@ const HOTFIX_RPC_URLS = [
 ]
 
 enum CACHE_DURATION {
-    INSTANT = 1000 * 3, // 3 seconds
-    SHORT = 1000 * 60, // 1 min
-    LONG = 1000 * 60 * 30, // 30 mins
+    INSTANT = 3000, // 3 seconds
+    SHORT = 60000, // 1 min
+    LONG = 1800000, // 30 mins
 }
 
 const CACHE_RULES = {
