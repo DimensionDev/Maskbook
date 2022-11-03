@@ -2,7 +2,6 @@ import {
     attachReactTreeToMountedRoot_noHost,
     setupReactShadowRootEnvironment as setupReactShadowRootEnvironmentUpper,
     CSSVariableInjector,
-    GlobalBackdrop,
     usePortalShadowRoot,
 } from '@masknet/theme'
 import { createPortal } from 'react-dom'
@@ -30,7 +29,7 @@ export function setupReactShadowRootEnvironment() {
     // Inject variable for Portals
     attachReactTreeToGlobalContainer(shadow, { key: 'css-vars' }).render(
         <>
-            <GlobalBackdrop />
+            {/* <GlobalBackdrop /> */}
             <CSSVariableInjector />
         </>,
     )
