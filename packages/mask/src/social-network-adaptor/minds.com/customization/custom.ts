@@ -1,11 +1,11 @@
-import { MutationObserverWatcher, ValueRef } from '@dimensiondev/holoflows-kit'
+import { ValueRef } from '@dimensiondev/holoflows-kit'
 import { PaletteMode, Theme, unstable_createMuiStrictModeTheme } from '@mui/material'
 import produce, { setAutoFreeze } from 'immer'
 import { useMemo } from 'react'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { createSubscriptionFromValueRef } from '@masknet/shared-base'
 import type { SocialNetworkUI } from '../../../social-network/index.js'
-import { fromRGB, getBackgroundColor, getForegroundColor, shade, toRGB } from '../../../utils/theme/index.js'
+import { fromRGB, getBackgroundColor, getForegroundColor, isDark, shade, toRGB } from '../../../utils/theme/index.js'
 import { themeListItemSelector } from '../utils/selector.js'
 
 // TODO: get this from DOM. But currently Minds has a single primary color
@@ -23,29 +23,29 @@ export function startWatchThemeColor(signal: AbortSignal) {
     function updateThemeColor() {
         const contrastColor = getForegroundColor(themeListItemSelector().evaluate()!)
         const backgroundColor = getBackgroundColor(document.body)
-        currentTheme.value = contrastColor === 'rgb(255,255,255)' ? 'dark' : 'light'
+        currentTheme.value = isDark(fromRGB(backgroundColor)!) ? 'dark' : 'light'
         if (contrastColor) primaryColorContrastColorRef.value = contrastColor
-        if (backgroundColor)
-            backgroundColorRef.value = currentTheme.value === 'light' ? 'rgb(244, 244 ,245)' : 'rgb(26, 32, 37)'
+        if (backgroundColor) backgroundColorRef.value = backgroundColor
     }
-    // init
-    currentTheme.value = getBackgroundColor(document.body) === 'rgb(255,255,255)' ? 'light' : 'dark'
 
-    // update
-    new MutationObserverWatcher(themeListItemSelector())
-        .addListener('onAdd', updateThemeColor)
-        .addListener('onChange', updateThemeColor)
-        .startWatch(
-            {
-                childList: true,
-                subtree: true,
-            },
-            signal,
-        )
+    updateThemeColor()
+    const observer = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+            updateThemeColor()
+        })
+    })
+
+    observer.observe(document.querySelector('body') as Node, {
+        attributes: true,
+        attributeOldValue: true,
+        attributeFilter: ['class'],
+    })
+
+    signal.addEventListener('abort', () => observer.disconnect())
 }
 
 export function useThemeMindsVariant(baseTheme: Theme) {
-    const primaryColor = useValueRef(primaryColorRef)
+    const primaryColor = useValueRef(primaryColorContrastColorRef)
     const primaryContrastColor = useValueRef(primaryColorContrastColorRef)
     const backgroundColor = useValueRef(backgroundColorRef)
     return useMemo(() => {
