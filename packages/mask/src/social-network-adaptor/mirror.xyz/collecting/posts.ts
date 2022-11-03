@@ -1,6 +1,5 @@
 import { DOMProxy, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import type { SocialNetworkUI as Next } from '@masknet/social-network-infra'
-import { creator } from '../../../social-network/index.js'
+import { SocialNetworkUI as Next, CREATOR } from '@masknet/social-network-infra'
 import { postsContentSelector } from '../utils/selectors.js'
 
 import { mirrorShared } from '../shared.js'
@@ -130,7 +129,7 @@ async function registerPostCollectorInner(
 }
 
 export const PostProviderMirror: Next.CollectingCapabilities.PostsProvider = {
-    posts: creator.EmptyPostProviderState(),
+    posts: CREATOR.EmptyPostProviderState(),
     start(cancel) {
         registerPostCollectorInner(this.posts, cancel)
     },

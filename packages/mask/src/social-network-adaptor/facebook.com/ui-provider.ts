@@ -1,6 +1,5 @@
 /* eslint-disable tss-unused-classes/unused-classes */
-import type { SocialNetworkUI } from '@masknet/social-network-infra'
-import { stateCreator } from '../../social-network/utils.js'
+import { SocialNetworkUI, STATE_CREATOR } from '@masknet/social-network-infra'
 import { facebookBase } from './base.js'
 import { facebookShared } from './shared.js'
 import { getProfilePageUrlAtFacebook } from './utils/parse-username.js'
@@ -161,7 +160,7 @@ const facebookUI: SocialNetworkUI.Definition = {
         useTheme: useThemeFacebookVariant,
     },
     init(signal) {
-        const profiles = stateCreator.profiles()
+        const profiles = STATE_CREATOR.profiles()
         InitAutonomousStateProfiles(signal, profiles, facebookShared.networkIdentifier)
         enableFbStyleTextPayloadReplace()
         return { profiles }

@@ -1,6 +1,5 @@
 import { ProfileIdentifier } from '@masknet/shared-base'
-import type { SocialNetworkUI as Next } from '@masknet/social-network-infra'
-import { creator } from '../../../social-network/index.js'
+import { SocialNetworkUI as Next, CREATOR } from '@masknet/social-network-infra'
 import { mindsBase } from '../base.js'
 import { handleSelector, selfInfoSelectors } from '../utils/selector.js'
 import { Minds } from '@masknet/web3-providers'
@@ -47,7 +46,7 @@ async function resolveLastRecognizedIdentityInner(
 
 export const IdentityProviderMinds: Next.CollectingCapabilities.IdentityResolveProvider = {
     hasDeprecatedPlaceholderName: false,
-    recognized: creator.EmptyIdentityResolveProviderState(),
+    recognized: CREATOR.EmptyIdentityResolveProviderState(),
     start(cancel) {
         resolveLastRecognizedIdentityInner(this.recognized, cancel)
     },

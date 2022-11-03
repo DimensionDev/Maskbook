@@ -1,17 +1,16 @@
-import { LiveSelector, MutationObserverWatcher, ValueRef } from '@dimensiondev/holoflows-kit'
-import type { SocialNetworkUI } from '@masknet/social-network-infra'
-import { creator } from '../../../social-network/index.js'
-import { getProfileIdentifierAtFacebook, getUserID } from '../utils/getProfileIdentifier.js'
-import { isMobileFacebook } from '../utils/isMobile.js'
-import { ProfileIdentifier, EnhanceableSite } from '@masknet/shared-base'
-import { searchFacebookAvatarSelector, searchUserIdOnMobileSelector } from '../utils/selector.js'
-import { getAvatar, getBioDescription, getFacebookId, getNickName, getPersonalHomepage } from '../utils/user.js'
 import { delay } from '@masknet/kit'
 import type { IdentityResolved } from '@masknet/plugin-infra'
+import { LiveSelector, MutationObserverWatcher, ValueRef } from '@dimensiondev/holoflows-kit'
+import { SocialNetworkUI, CREATOR } from '@masknet/social-network-infra'
+import { getProfileIdentifierAtFacebook, getUserID } from '../utils/getProfileIdentifier.js'
+import { ProfileIdentifier, EnhanceableSite } from '@masknet/shared-base'
+import { isMobileFacebook } from '../utils/isMobile.js'
+import { searchFacebookAvatarSelector, searchUserIdOnMobileSelector } from '../utils/selector.js'
+import { getAvatar, getBioDescription, getFacebookId, getNickName, getPersonalHomepage } from '../utils/user.js'
 
 export const IdentityProviderFacebook: SocialNetworkUI.CollectingCapabilities.IdentityResolveProvider = {
     hasDeprecatedPlaceholderName: true,
-    recognized: creator.EmptyIdentityResolveProviderState(),
+    recognized: CREATOR.EmptyIdentityResolveProviderState(),
     start(signal) {
         resolveLastRecognizedIdentityFacebookInner(this.recognized, signal)
     },
@@ -85,7 +84,7 @@ function resolveCurrentVisitingIdentityInner(
 
 export const CurrentVisitingIdentityProviderFacebook: SocialNetworkUI.CollectingCapabilities.IdentityResolveProvider = {
     hasDeprecatedPlaceholderName: false,
-    recognized: creator.EmptyIdentityResolveProviderState(),
+    recognized: CREATOR.EmptyIdentityResolveProviderState(),
     start(cancel) {
         resolveCurrentVisitingIdentityInner(this.recognized, cancel)
     },

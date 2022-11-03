@@ -1,5 +1,4 @@
-import type { SocialNetworkUI } from '@masknet/social-network-infra'
-import { creator } from '../../../social-network/index.js'
+import { SocialNetworkUI, CREATOR } from '@masknet/social-network-infra'
 import { ProfileIdentifier } from '@masknet/shared-base'
 import { instagramBase } from '../base.js'
 import { openDB } from 'idb/with-async-ittr'
@@ -16,7 +15,7 @@ export const IdentityProviderInstagram: SocialNetworkUI.CollectingCapabilities.I
             setTimeout(update, 10 * 1000)
         }
     },
-    recognized: creator.EmptyIdentityResolveProviderState(),
+    recognized: CREATOR.EmptyIdentityResolveProviderState(),
 }
 
 async function query(): Promise<null | IdentityResolved> {

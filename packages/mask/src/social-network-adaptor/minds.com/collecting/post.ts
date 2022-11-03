@@ -1,5 +1,5 @@
 import { LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import type { SocialNetworkUI as Next } from '@masknet/social-network-infra'
+import { SocialNetworkUI as Next, CREATOR } from '@masknet/social-network-infra'
 import {
     makeTypedMessageEmpty,
     makeTypedMessagePromise,
@@ -8,7 +8,6 @@ import {
     makeTypedMessageImage,
 } from '@masknet/typed-message'
 import { ProfileIdentifier } from '@masknet/shared-base'
-import { creator } from '../../../social-network/utils.js'
 import { createRefsForCreatePostContext } from '../../../social-network/utils/create-post-context.js'
 import { untilElementAvailable } from '../../../utils/dom.js'
 import { startWatch } from '../../../utils/watcher.js'
@@ -20,7 +19,7 @@ import { getCurrentIdentifier } from '../../utils.js'
 import Services from '../../../extension/service.js'
 
 export const PostProviderMinds: Next.CollectingCapabilities.PostsProvider = {
-    posts: creator.EmptyPostProviderState(),
+    posts: CREATOR.EmptyPostProviderState(),
     start(signal) {
         collectPostsMindsInner(this.posts, signal)
     },

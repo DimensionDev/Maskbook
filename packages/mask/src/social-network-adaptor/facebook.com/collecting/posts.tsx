@@ -1,6 +1,5 @@
-import type { SocialNetworkUI as Next } from '@masknet/social-network-infra'
+import { SocialNetworkUI as Next, CREATOR } from '@masknet/social-network-infra'
 import { DOMProxy, LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { creator } from '../../../social-network/utils.js'
 import { isMobileFacebook } from '../utils/isMobile.js'
 import { getProfileIdentifierAtFacebook } from '../utils/getProfileIdentifier.js'
 import {
@@ -21,7 +20,7 @@ const posts = new LiveSelector().querySelectorAll<HTMLDivElement>(
 )
 
 export const PostProviderFacebook: Next.CollectingCapabilities.PostsProvider = {
-    posts: creator.EmptyPostProviderState(),
+    posts: CREATOR.EmptyPostProviderState(),
     start(signal) {
         collectPostsFacebookInner(this.posts, signal)
     },

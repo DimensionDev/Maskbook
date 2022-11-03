@@ -1,6 +1,6 @@
 /* eslint-disable tss-unused-classes/unused-classes */
-import type { SocialNetworkUI } from '@masknet/social-network-infra'
-import { globalUIState, stateCreator } from '../../social-network/index.js'
+import { SocialNetworkUI, STATE_CREATOR } from '@masknet/social-network-infra'
+import { globalUIState } from '../../social-network/index.js'
 import { twitterBase } from './base.js'
 import getSearchedKeywordAtTwitter from './collecting/getSearchedKeyword.js'
 import { twitterShared } from './shared.js'
@@ -162,7 +162,7 @@ const twitterUI: SocialNetworkUI.Definition = {
         i18nOverwrite: i18NOverwriteTwitter,
     },
     init(signal) {
-        const profiles = stateCreator.profiles()
+        const profiles = STATE_CREATOR.profiles()
         InitAutonomousStateProfiles(signal, profiles, twitterShared.networkIdentifier)
         return { profiles }
     },

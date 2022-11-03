@@ -4,8 +4,7 @@ import { delay } from '@masknet/kit'
 import { TWITTER_RESERVED_SLUGS } from '@masknet/injected-script/shared'
 import { ProfileIdentifier } from '@masknet/shared-base'
 import { Twitter } from '@masknet/web3-providers'
-import type { SocialNetworkUI as Next } from '@masknet/social-network-infra'
-import { creator } from '../../../social-network/index.js'
+import { SocialNetworkUI as Next, CREATOR } from '@masknet/social-network-infra'
 import { twitterBase } from '../base.js'
 import { isMobileTwitter } from '../utils/isMobile.js'
 import {
@@ -160,7 +159,7 @@ function resolveCurrentVisitingIdentityInner(
 
 export const IdentityProviderTwitter: Next.CollectingCapabilities.IdentityResolveProvider = {
     hasDeprecatedPlaceholderName: false,
-    recognized: creator.EmptyIdentityResolveProviderState(),
+    recognized: CREATOR.EmptyIdentityResolveProviderState(),
     start(cancel) {
         resolveLastRecognizedIdentityInner(this.recognized, cancel)
         if (isMobileTwitter) resolveLastRecognizedIdentityMobileInner(this.recognized, cancel)
@@ -169,7 +168,7 @@ export const IdentityProviderTwitter: Next.CollectingCapabilities.IdentityResolv
 
 export const CurrentVisitingIdentityProviderTwitter: Next.CollectingCapabilities.IdentityResolveProvider = {
     hasDeprecatedPlaceholderName: false,
-    recognized: creator.EmptyIdentityResolveProviderState(),
+    recognized: CREATOR.EmptyIdentityResolveProviderState(),
     start(cancel) {
         resolveCurrentVisitingIdentityInner(this.recognized, cancel)
     },

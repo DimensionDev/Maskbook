@@ -1,5 +1,4 @@
-import type { SocialNetworkUI } from '@masknet/social-network-infra'
-import { stateCreator } from '../../social-network/utils.js'
+import { SocialNetworkUI, STATE_CREATOR } from '@masknet/social-network-infra'
 import { injectPageInspectorDefault } from '../../social-network/defaults/index.js'
 import { InitAutonomousStateProfiles } from '../../social-network/defaults/state/InitProfiles.js'
 
@@ -36,7 +35,7 @@ const define: SocialNetworkUI.Definition = {
         },
     },
     init(signal) {
-        const profiles = stateCreator.profiles()
+        const profiles = STATE_CREATOR.profiles()
         InitAutonomousStateProfiles(signal, profiles, mirrorShared.networkIdentifier)
         return { profiles }
     },
