@@ -228,12 +228,18 @@ function CopyElementWithNewProps<T>(
     cx: Cx,
 ) {
     return (
-        Children.map(children, (child: any) =>
-            child?.type === Target
+        Children.map(children, (child: any) => {
+            const allKeys = new Set([...Object.keys(extraClasses as any), ...Object.keys(child?.props?.classes ?? {})])
+            const result: Record<string, string> = {}
+
+            for (const key of allKeys) {
+                result[key] = cx((extraClasses as any)[key], child?.props?.classes?.[key])
+            }
+            return child?.type === Target
                 ? cloneElement(child, {
-                      classes: cx(extraClasses as any, child.props.classes),
+                      classes: result,
                   } as DialogContentProps)
-                : null,
-        ) || []
+                : null
+        }) || []
     ).filter(Boolean)
 }
