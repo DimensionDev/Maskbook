@@ -1,7 +1,8 @@
 import { delay } from '@masknet/kit'
 import { EnhanceableSite } from '@masknet/shared-base'
 import { Mirror, Writer } from '@masknet/web3-providers'
-import { SocialNetworkUI, CREATOR } from '@masknet/types'
+import type { SocialNetworkUI } from '@masknet/types'
+import { creator } from '../../../social-network/utils.js'
 import { formatWriter, getMirrorUserId } from './utils.js'
 
 export const getCurrentUserInfo = async () => {
@@ -73,7 +74,7 @@ function resolveCurrentVisitingIdentityInner(
 
 export const IdentityProviderMirror: SocialNetworkUI.CollectingCapabilities.IdentityResolveProvider = {
     hasDeprecatedPlaceholderName: false,
-    recognized: CREATOR.EmptyIdentityResolveProviderState(),
+    recognized: creator.EmptyIdentityResolveProviderState(),
     start(cancel) {
         resolveLastRecognizedIdentityInner(this.recognized, cancel)
     },
@@ -81,7 +82,7 @@ export const IdentityProviderMirror: SocialNetworkUI.CollectingCapabilities.Iden
 
 export const CurrentVisitingIdentityProviderMirror: SocialNetworkUI.CollectingCapabilities.IdentityResolveProvider = {
     hasDeprecatedPlaceholderName: false,
-    recognized: CREATOR.EmptyIdentityResolveProviderState(),
+    recognized: creator.EmptyIdentityResolveProviderState(),
     start(cancel) {
         resolveCurrentVisitingIdentityInner(this.recognized, cancel)
     },

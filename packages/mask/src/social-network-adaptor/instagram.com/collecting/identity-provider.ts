@@ -1,8 +1,10 @@
-import { SocialNetworkUI, CREATOR } from '@masknet/types'
+import { openDB } from 'idb/with-async-ittr'
+import type { SocialNetworkUI } from '@masknet/types'
+import { creator } from '../../../social-network/index.js'
 import { ProfileIdentifier } from '@masknet/shared-base'
 import { instagramBase } from '../base.js'
-import { openDB } from 'idb/with-async-ittr'
 import type { IdentityResolved } from '@masknet/plugin-infra'
+
 export const IdentityProviderInstagram: SocialNetworkUI.CollectingCapabilities.IdentityResolveProvider = {
     async start(signal) {
         const ref = this.recognized
@@ -15,7 +17,7 @@ export const IdentityProviderInstagram: SocialNetworkUI.CollectingCapabilities.I
             setTimeout(update, 10 * 1000)
         }
     },
-    recognized: CREATOR.EmptyIdentityResolveProviderState(),
+    recognized: creator.EmptyIdentityResolveProviderState(),
 }
 
 async function query(): Promise<null | IdentityResolved> {

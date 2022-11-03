@@ -1,4 +1,5 @@
-import { SocialNetworkUI, STATE_CREATOR } from '@masknet/types'
+import type { SocialNetworkUI } from '@masknet/types'
+import { stateCreator } from '../../social-network/index.js'
 import { instagramShared } from './shared.js'
 import { instagramBase } from './base.js'
 import { IdentityProviderInstagram } from './collecting/identity-provider.js'
@@ -41,7 +42,7 @@ const define: SocialNetworkUI.Definition = {
     configuration: {},
     customization: {},
     init(signal) {
-        const profiles = STATE_CREATOR.profiles()
+        const profiles = stateCreator.profiles()
         InitAutonomousStateProfiles(signal, profiles, instagramBase.networkIdentifier)
         // No need to init cause this network is not going to support those features now.
         return { profiles }

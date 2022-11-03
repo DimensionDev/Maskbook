@@ -1,7 +1,7 @@
 /* eslint-disable tss-unused-classes/unused-classes */
-import { SocialNetworkUI, STATE_CREATOR } from '@masknet/types'
+import type { SocialNetworkUI } from '@masknet/types'
 import { EnhanceableSite, ProfileIdentifier } from '@masknet/shared-base'
-import { globalUIState } from '../../social-network/index.js'
+import { globalUIState, stateCreator } from '../../social-network/index.js'
 import { injectPostCommentsDefault } from '../../social-network/defaults/index.js'
 import { injectPageInspectorDefault } from '../../social-network/defaults/inject/PageInspector.js'
 import { createTaskStartSetupGuideDefault } from '../../social-network/defaults/inject/StartSetupGuide.js'
@@ -147,7 +147,7 @@ const mindsUI: SocialNetworkUI.Definition = {
         useTheme: useThemeMindsVariant,
     },
     init(signal) {
-        const profiles = STATE_CREATOR.profiles()
+        const profiles = stateCreator.profiles()
         InitAutonomousStateProfiles(signal, profiles, mindsShared.networkIdentifier)
         enableFbStyleTextPayloadReplace()
         return { profiles }

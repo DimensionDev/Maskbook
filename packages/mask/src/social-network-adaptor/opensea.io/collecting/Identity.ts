@@ -1,8 +1,8 @@
-import { SocialNetworkUI, CREATOR } from '@masknet/types'
+import type { SocialNetworkUI } from '@masknet/types'
+import { creator } from '../../../social-network/index.js'
 import { ProfileIdentifier } from '@masknet/shared-base'
-import type { IdentityResolved } from '@masknet/plugin-infra'
 import { openseaBase } from '../base.js'
-
+import type { IdentityResolved } from '@masknet/plugin-infra'
 export const IdentityProviderOpensea: SocialNetworkUI.CollectingCapabilities.IdentityResolveProvider = {
     async start(signal) {
         const ref = this.recognized
@@ -15,7 +15,7 @@ export const IdentityProviderOpensea: SocialNetworkUI.CollectingCapabilities.Ide
             setTimeout(update, 10 * 1000)
         }
     },
-    recognized: CREATOR.EmptyIdentityResolveProviderState(),
+    recognized: creator.EmptyIdentityResolveProviderState(),
 }
 
 async function query(): Promise<null | IdentityResolved> {

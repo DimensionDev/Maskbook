@@ -1,7 +1,8 @@
 import { LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { delay } from '@masknet/kit'
 import { ProfileIdentifier } from '@masknet/shared-base'
-import { SocialNetworkUI as Next, CREATOR } from '@masknet/types'
+import type { SocialNetworkUI as Next } from '@masknet/types'
+import { creator } from '../../../social-network/index.js'
 import { instagramBase } from '../base.js'
 import { searchInstagramAvatarSelector } from '../utils/selector.js'
 import { getAvatar, getBioDescription, getNickname, getPersonalHomepage, getUserId } from '../utils/user.js'
@@ -51,7 +52,7 @@ function resolveCurrentVisitingIdentityInner(
 
 export const CurrentVisitingIdentityProviderInstagram: Next.CollectingCapabilities.IdentityResolveProvider = {
     hasDeprecatedPlaceholderName: false,
-    recognized: CREATOR.EmptyIdentityResolveProviderState(),
+    recognized: creator.EmptyIdentityResolveProviderState(),
     start(cancel) {
         resolveCurrentVisitingIdentityInner(this.recognized, cancel)
     },

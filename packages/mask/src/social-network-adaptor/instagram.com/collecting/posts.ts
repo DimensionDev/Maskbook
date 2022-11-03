@@ -1,5 +1,6 @@
 import { DOMProxy, LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { SocialNetworkUI, CREATOR } from '@masknet/types'
+import type { SocialNetworkUI } from '@masknet/types'
+import { creator } from '../../../social-network/utils.js'
 import { TypedMessage, makeTypedMessageImage, makeTypedMessageTuple } from '@masknet/typed-message'
 import { ProfileIdentifier } from '@masknet/shared-base'
 import { startWatch } from '../../../utils/watcher.js'
@@ -12,7 +13,7 @@ const posts = new LiveSelector().querySelectorAll<HTMLDivElement>(
 )
 
 export const PostProviderInstagram: SocialNetworkUI.CollectingCapabilities.PostsProvider = {
-    posts: CREATOR.EmptyPostProviderState(),
+    posts: creator.EmptyPostProviderState(),
     start(signal) {
         collectPostsInstagramInner(this.posts, signal)
     },

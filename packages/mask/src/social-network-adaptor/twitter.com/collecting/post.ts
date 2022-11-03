@@ -2,9 +2,9 @@ import { memoize, noop } from 'lodash-unified'
 import { PostIdentifier, ProfileIdentifier } from '@masknet/shared-base'
 import { IntervalWatcher, DOMProxy, DOMProxyEvents } from '@dimensiondev/holoflows-kit'
 import type { EventListener } from '@servie/events'
-import { SocialNetworkUI as Next, CREATOR } from '@masknet/types'
+import type { SocialNetworkUI as Next } from '@masknet/types'
 import type { PostInfo } from '@masknet/plugin-infra/content-script'
-import { globalUIState } from '../../../social-network/index.js'
+import { creator, globalUIState } from '../../../social-network/index.js'
 import { postIdParser, postParser, postImagesParser, postContentMessageParser } from '../utils/fetch.js'
 import { postsContentSelector, postsImageSelector, timelinePostContentSelector } from '../utils/selector.js'
 import Services from '../../../extension/service.js'
@@ -149,7 +149,7 @@ function registerPostCollectorInner(
 }
 
 export const PostProviderTwitter: Next.CollectingCapabilities.PostsProvider = {
-    posts: CREATOR.EmptyPostProviderState(),
+    posts: creator.EmptyPostProviderState(),
     start(cancel) {
         registerPostCollectorInner(this.posts, cancel)
     },
