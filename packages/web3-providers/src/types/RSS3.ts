@@ -105,7 +105,7 @@ export namespace RSS3BaseAPI {
          * @example "Uniswap V2"
          */
         protocol: string
-        action: 'add' | 'remove'
+        action: 'supply' | 'withdraw'
         tokens: [TransactionMetadata, TransactionMetadata]
     }
 
@@ -455,6 +455,7 @@ export namespace RSS3BaseAPI {
     /** For feed cards */
     export type TokenTransferFeed = Web3FeedGeneric<Tag.Transaction, Type.Transfer>
     export type TokenSwapFeed = Web3FeedGeneric<Tag.Exchange, Type.Swap>
+    export type LiquidityFeed = Web3FeedGeneric<Tag.Exchange, Type.Liquidity>
     export type CollectibleFeed = Web3FeedGeneric<Tag.Collectible>
     export type CollectibleMintFeed = Web3FeedGeneric<Tag.Collectible, Type.Mint>
     export type CollectibleTradeFeed = Web3FeedGeneric<Tag.Collectible, Type.Trade>
@@ -465,6 +466,7 @@ export namespace RSS3BaseAPI {
     export type CommentFeed = Web3FeedGeneric<Tag.Social, Type.Comment>
     export type GovernanceFeed = Web3FeedGeneric<Tag.Governance, Type.Propose | Type.Vote>
     export type VoteFeed = Web3FeedGeneric<Tag.Governance, Type.Vote>
+    export type ProposeFeed = Web3FeedGeneric<Tag.Governance, Type.Propose>
 
     export interface Web3FeedResponse {
         total: number
