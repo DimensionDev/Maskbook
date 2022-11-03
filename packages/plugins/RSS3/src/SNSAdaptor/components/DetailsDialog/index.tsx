@@ -3,12 +3,13 @@ import { InjectedDialog, InjectedDialogProps, Linking } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { DialogContent, Typography } from '@mui/material'
 import type { PropsWithChildren } from 'react'
-import { FeedCard } from '../FeedCard'
+import { useI18N } from '../../../locales'
 import type { FeedCardProps } from '../base'
+import { FeedCard } from '../FeedCard'
 import { CardType, hostIconMap, hostNameMap } from '../share'
 
 const useStyles = makeStyles()((theme) => ({
-    confirmDialog: {
+    detailsDialog: {
         width: 600,
         minHeight: 400,
         maxHeight: 620,
@@ -49,15 +50,16 @@ export interface FeedDetailsDialogProps
 }
 
 export function FeedDetailsDialog({ type, feed, onClose, action, onSubmit, ...rest }: FeedDetailsDialogProps) {
+    const t = useI18N()
     const { classes } = useStyles()
     const links = feed.actions[0].related_urls
     return (
         <InjectedDialog
             classes={{
-                paper: classes.confirmDialog,
+                paper: classes.detailsDialog,
             }}
             {...rest}
-            title="Details"
+            title={t.details()}
             onClose={() => {
                 onClose?.()
                 onSubmit?.()

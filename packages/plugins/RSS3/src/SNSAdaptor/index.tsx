@@ -12,11 +12,11 @@ function shouldDisplay(_?: SocialIdentity, socialAccount?: SocialAccount) {
     return socialAccount?.pluginID === NetworkPluginID.PLUGIN_EVM
 }
 
-const createActivitiesTabConfig = (label: string, props: FeedPageProps): Plugin.SNSAdaptor.ProfileTab => {
+const createActivitiesTabConfig = (label: string, props: FeedPageProps, priority = 1): Plugin.SNSAdaptor.ProfileTab => {
     return {
         ID: `${PLUGIN_ID}_${label}`,
         label,
-        priority: 1,
+        priority,
         UI: {
             TabContent: ({ socialAccount }) => {
                 return (
@@ -33,32 +33,44 @@ const createActivitiesTabConfig = (label: string, props: FeedPageProps): Plugin.
 }
 
 const ActivitiesTabConfig: Plugin.SNSAdaptor.ProfileTab = createActivitiesTabConfig('Activities', {})
-const ActivitiesTabConfigInProfileCard: Plugin.SNSAdaptor.ProfileTab = createActivitiesTabConfig('Activities', {
-    p: 1.5,
-})
+const ActivitiesTabConfigInProfileCard: Plugin.SNSAdaptor.ProfileTab = createActivitiesTabConfig(
+    'Activities',
+    {
+        p: 1.5,
+    },
+    2,
+)
 
-const DonationsTabConfig: Plugin.SNSAdaptor.ProfileTab = createActivitiesTabConfig('Donations', {
+const DonationTabConfig: Plugin.SNSAdaptor.ProfileTab = createActivitiesTabConfig('Donation', {
     tag: RSS3BaseAPI.Tag.Donation,
 })
-const DonationsTabConfigInProfileCard: Plugin.SNSAdaptor.ProfileTab = createActivitiesTabConfig('Donations', {
-    tag: RSS3BaseAPI.Tag.Donation,
-    p: 1.5,
-})
+const DonationsTabConfigInProfileCard: Plugin.SNSAdaptor.ProfileTab = createActivitiesTabConfig(
+    'Donation',
+    {
+        tag: RSS3BaseAPI.Tag.Donation,
+        p: 1.5,
+    },
+    2,
+)
 
 const SocialTabConfig: Plugin.SNSAdaptor.ProfileTab = createActivitiesTabConfig('Social', {
     tag: RSS3BaseAPI.Tag.Social,
 })
-const SocialTabConfigInProfileCard: Plugin.SNSAdaptor.ProfileTab = createActivitiesTabConfig('Social', {
-    tag: RSS3BaseAPI.Tag.Social,
-    p: 1.5,
-})
+const SocialTabConfigInProfileCard: Plugin.SNSAdaptor.ProfileTab = createActivitiesTabConfig(
+    'Social',
+    {
+        tag: RSS3BaseAPI.Tag.Social,
+        p: 1.5,
+    },
+    2,
+)
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
     init(_, context) {
         setupContext(context)
     },
-    ProfileTabs: [ActivitiesTabConfig, DonationsTabConfig, SocialTabConfig],
+    ProfileTabs: [ActivitiesTabConfig, DonationTabConfig, SocialTabConfig],
     ProfileCardTabs: [ActivitiesTabConfigInProfileCard, DonationsTabConfigInProfileCard, SocialTabConfigInProfileCard],
 }
 

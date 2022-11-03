@@ -11,7 +11,7 @@ import { FeedOwnerContext, FeedOwnerOptions } from './contexts/index.js'
 
 export interface FeedPageProps extends BoxProps {
     address?: string
-    tag?: RSS3BaseAPI.Tag
+    tag?: RSS3BaseAPI.Tag.Donation | RSS3BaseAPI.Tag.Social
 }
 
 export const FeedsPage = memo(function FeedsPage({ address, tag, ...rest }: FeedPageProps) {
@@ -40,9 +40,10 @@ export const FeedsPage = memo(function FeedsPage({ address, tag, ...rest }: Feed
     }, [address, name, Others?.formatDomainName])
 
     if (loading || !feeds.length || !feedOwner) {
+        const context = tag ? tag : 'activities'
         return (
             <Box p={2} boxSizing="border-box" {...rest}>
-                <StatusBox loading={loading} description={t.no_Activities_found()} empty={!feeds.length} />
+                <StatusBox loading={loading} description={t.no_data({ context })} empty={!feeds.length} />
             </Box>
         )
     }
