@@ -40,7 +40,6 @@ function MaskUIRoot({ children, useTheme, fallback }: MaskUIRootProps) {
         (children) => SharedContextProvider({ children }),
         <Suspense fallback={fallback}>
             <CSSVariableInjector />
-            {/* <GlobalBackdrop /> */}
             {children}
         </Suspense>,
     )
