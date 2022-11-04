@@ -1,6 +1,6 @@
 import type { StorageObject } from '@masknet/shared-base'
 import { useSubscription } from 'use-subscription'
-import { useCallback, useEffect, useMemo } from 'react'
+import { useCallback, useMemo } from 'react'
 import type { PluginGuideSetting } from './type'
 
 export const PLUGIN_GUIDE_INIT = 1
@@ -19,14 +19,11 @@ export const usePluginGuideRecord = (
 
     const nextStep = useCallback(() => {
         if (!storage) return
+        const nextStepValue = currentStep + 1
 
-        storage.userGuide.setValue({ ...record, [key ?? 'default']: currentStep + 1 })
-    }, [storage, record, currentStep])
-
-    useEffect(() => {
-        if (currentStep !== totalStep) return
-        onFinish?.()
-    }, [onFinish])
+        storage.userGuide.setValue({ ...record, [key ?? 'default']: nextStepValue })
+        if (nextStepValue > totalStep) onFinish?.()
+    }, [storage, record, currentStep, onFinish])
 
     return {
         currentStep,
