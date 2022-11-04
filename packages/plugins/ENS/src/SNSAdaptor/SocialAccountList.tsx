@@ -2,12 +2,12 @@ import { useMenuConfig } from '@masknet/shared'
 import { useWindowScroll } from 'react-use'
 import { useEffect } from 'react'
 import { Icons } from '@masknet/icons'
-import { Box, Typography, MenuItem } from '@mui/material'
+import { Box, Typography, MenuItem, alpha } from '@mui/material'
 import { MoreHoriz as MoreHorizIcon } from '@mui/icons-material'
 import { openWindow } from '@masknet/shared-base-ui'
-import { NextIdBadge } from './NextIdBadge.js'
 import type { BindingProof } from '@masknet/shared-base'
 import { useI18N } from '../locales/index.js'
+import { SocialTooltip } from './SocialTooltip'
 import { makeStyles } from '@masknet/theme'
 
 interface StyleProps {
@@ -23,6 +23,10 @@ const useStyles = makeStyles<StyleProps>()((theme, { isMenuScroll = false }) => 
             fontSize: 16,
         },
         more: {
+            height: 36,
+            width: 36,
+            borderRadius: 8,
+            background: alpha(theme.palette.common.white, 0.5),
             cursor: 'pointer',
             marginLeft: 'auto',
             display: 'flex',
@@ -67,6 +71,18 @@ const useStyles = makeStyles<StyleProps>()((theme, { isMenuScroll = false }) => 
                 backgroundClip: 'padding-box',
             },
         },
+        twitterIcon: {
+            height: 20,
+            width: 20,
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            backgroundColor: theme.palette.maskColor.dark,
+            borderRadius: 999,
+        },
+        linkOutIcon: {
+            cursor: 'pointer',
+        },
     }
 })
 
@@ -76,23 +92,26 @@ interface SocialAccountListProps {
 
 export function SocialAccountList({ validNextIdTwitterBindings }: SocialAccountListProps) {
     const t = useI18N()
-    const { classes, cx, theme } = useStyles({ isMenuScroll: validNextIdTwitterBindings.length > 5 })
+    const { classes, cx } = useStyles({ isMenuScroll: validNextIdTwitterBindings.length > 5 })
     const position = useWindowScroll()
     const [menu, openMenu, closeMenu] = useMenuConfig(
         validNextIdTwitterBindings.map((x, i) => (
-            <MenuItem
-                className={classes.socialAccountListItem}
-                disabled={false}
-                key={i}
-                onClick={() => openWindow(`https://twitter.com/${x.identity}`)}>
-                <Icons.TwitterRoundWithNoBorder width={20} height={20} />
-                <Typography className={cx(classes.nextIdVerifiedTwitterName, classes.accountNameInList)}>
-                    {x.identity}
-                </Typography>
-                <div className={classes.menuItemNextIdIcon}>
-                    <NextIdBadge />
-                </div>
-            </MenuItem>
+            <SocialTooltip key={i}>
+                <MenuItem
+                    className={classes.socialAccountListItem}
+                    disabled={false}
+                    onClick={() => openWindow(`https://twitter.com/${x.identity}`)}>
+                    <div className={classes.twitterIcon}>
+                        <Icons.Twitter width={12} height={12} />
+                    </div>
+                    <Typography className={cx(classes.nextIdVerifiedTwitterName, classes.accountNameInList)}>
+                        {x.identity}
+                    </Typography>
+                    <div className={classes.menuItemNextIdIcon}>
+                        <Icons.LinkOut size={20} className={classes.linkOutIcon} />
+                    </div>
+                </MenuItem>
+            </SocialTooltip>
         )),
         {
             anchorSibling: false,

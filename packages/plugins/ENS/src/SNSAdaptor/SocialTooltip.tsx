@@ -1,4 +1,4 @@
-import { Icons } from '@masknet/icons'
+import type { PropsWithChildren } from 'react'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { Typography, Link } from '@mui/material'
 import { Trans } from 'react-i18next'
@@ -19,7 +19,7 @@ const useStyles = makeStyles<StyleProps>()((theme, { isMenuScroll = false }) => 
         },
     }
 })
-export function NextIdBadge({ variant, rightBoundary }: { variant?: 'dark' | 'light'; rightBoundary?: number }) {
+export function SocialTooltip({ children }: PropsWithChildren<{}>) {
     const { classes } = useStyles({})
 
     return (
@@ -44,17 +44,7 @@ export function NextIdBadge({ variant, rightBoundary }: { variant?: 'dark' | 'li
                     />
                 </Typography>
             }>
-            <Icons.NextIDMini
-                width={32}
-                variant={variant}
-                ref={(e) => {
-                    if (!rightBoundary) return
-                    const offsetRight = e?.getBoundingClientRect().right
-                    if (offsetRight && offsetRight > rightBoundary) {
-                        e.style.display = 'none'
-                    }
-                }}
-            />
+            <div>{children}</div>
         </ShadowRootTooltip>
     )
 }

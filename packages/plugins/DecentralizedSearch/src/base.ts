@@ -6,7 +6,7 @@ import { languages } from './locales/languages.js'
 
 export const base: Plugin.Shared.Definition = {
     ID: ENS_PluginID,
-    name: { fallback: 'ENS' },
+    name: { fallback: 'DSearch' },
     description: {
         fallback: '',
     },

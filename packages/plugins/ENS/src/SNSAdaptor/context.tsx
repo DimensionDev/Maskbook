@@ -8,7 +8,6 @@ import { resolveNonFungibleTokenIdFromEnsDomain } from '@masknet/web3-shared-evm
 
 interface ENSContextProps {
     isLoading: boolean
-
     firstValidNextIdTwitterBinding: BindingProof | undefined
     restOfValidNextIdTwitterBindings: BindingProof[]
     validNextIdTwitterBindings: BindingProof[]
@@ -39,7 +38,6 @@ export function ENSProvider({ children, keyword }: PropsWithChildren<SearchResul
         error,
         retry,
     } = useLookupAddress(NetworkPluginID.PLUGIN_EVM, keyword)
-    console.log({ keyword })
     const isError = !!error
     const tokenId = resolveNonFungibleTokenIdFromEnsDomain(keyword)
     const { value: ids } = useAsync(
