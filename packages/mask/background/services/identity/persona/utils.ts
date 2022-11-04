@@ -87,8 +87,8 @@ export async function recover_ECDH_256k1_KeyPair_ByMnemonicWord(
     }
 }
 
-export async function validateMnemonic(mnemonic: string, wordlist?: string[] | undefined): Promise<boolean> {
-    return bip39.validateMnemonic(mnemonic, wordlist)
+export async function validateMnemonic(mnemonic: string, wordList?: string[] | undefined): Promise<boolean> {
+    return bip39.validateMnemonic(mnemonic, wordList)
 }
 
 async function HDKeyToJwk(hdk: wallet.HDKey): Promise<JsonWebKey> {
