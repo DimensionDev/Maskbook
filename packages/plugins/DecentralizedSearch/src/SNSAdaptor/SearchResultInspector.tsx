@@ -16,7 +16,7 @@ export function SearchResultInspector(props: { keyword: string }) {
         tokenId: string
         retry: () => void
     }>()
-    const ENSComponent = ENS_Plugin!.SearchResultContent?.UI?.Content!
+    const ENS_SearchResult = ENS_Plugin!.SearchResultContent?.UI?.Content!
     const [isLoading, setLoading] = useState(true)
     const [isHiddenAll, setHiddenAll] = useState(false)
     const [isEmpty, setEmpty] = useState(false)
@@ -39,7 +39,7 @@ export function SearchResultInspector(props: { keyword: string }) {
         <Hidden hidden={isHiddenAll}>
             <DecentralizedSearchPostExtraInfoWrapper>
                 <Hidden hidden={isLoading || isEmpty || isError}>
-                    <ENSComponent keyword={props.keyword} ref={ensRef} />
+                    <ENS_SearchResult keyword={props.keyword} ref={ensRef} />
                 </Hidden>
                 <Hidden hidden={!isLoading}>
                     <LoadingContent />
