@@ -56,5 +56,4 @@ declare module '@mui/material/styles/createPalette.d' {
         modalTitle: string
     }
 }
-
 export {}

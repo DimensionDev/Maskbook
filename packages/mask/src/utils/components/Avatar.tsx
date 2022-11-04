@@ -1,6 +1,5 @@
-import MuiAvatar, { AvatarProps } from '@mui/material/Avatar/Avatar'
 import { ProfileInformation as Profile, generateContactAvatarColor } from '@masknet/shared-base'
-import { useTheme } from '@mui/material'
+import { useTheme, Avatar as MuiAvatar, type AvatarProps } from '@mui/material'
 
 interface Props extends AvatarProps {
     person: Profile

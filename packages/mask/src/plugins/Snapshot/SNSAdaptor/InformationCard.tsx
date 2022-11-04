@@ -1,7 +1,7 @@
 import { formatEthereumAddress, explorerResolver } from '@masknet/web3-shared-evm'
 import { Avatar, Box, Link, Typography } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
-import OpenInNew from '@mui/icons-material/OpenInNew'
+import { OpenInNew } from '@mui/icons-material'
 import formatDateTime from 'date-fns/format'
 import { useContext } from 'react'
 import { useI18N } from '../../../utils/index.js'

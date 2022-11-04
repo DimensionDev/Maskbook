@@ -1,6 +1,7 @@
 {
   "name": "@masknet/plugin-rss3",
   "private": true,
+  "type": "module",
   "exports": {
     ".": {
       "webpack": "./src/index.ts",

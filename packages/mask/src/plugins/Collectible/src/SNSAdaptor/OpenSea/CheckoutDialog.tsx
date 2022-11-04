@@ -12,7 +12,7 @@ import {
     Link,
 } from '@mui/material'
 import { makeStyles, ActionButton } from '@masknet/theme'
-import type { Order } from 'opensea-js/lib/types'
+import type { Order } from 'opensea-js/lib/types.js'
 import { InjectedDialog, ActionButtonPromise, WalletConnectedBoundary } from '@masknet/shared'
 import { CrossIsolationMessages } from '@masknet/shared-base'
 import { isGreaterThan } from '@masknet/web3-shared-base'

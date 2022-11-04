@@ -1,7 +1,7 @@
 import { ListItem, ListItemText, Checkbox } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { MouseEvent, useCallback } from 'react'
-import type { DefaultComponentProps } from '@mui/material/OverridableComponent'
+import type { DefaultComponentProps } from '@mui/material/OverridableComponent.js'
 import type { CheckboxProps } from '@mui/material/Checkbox'
 import type { ListItemTypeMap } from '@mui/material/ListItem'
 import type { UnlockLocks } from '../types.js'

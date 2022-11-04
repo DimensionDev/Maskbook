@@ -279,8 +279,8 @@ importers:
   packages/dashboard:
     dependencies:
       '@hookform/resolvers':
-        specifier: ^2.8.10
-        version: 2.8.10_react-hook-form@7.31.1
+        specifier: ^2.9.10
+        version: 2.9.10_react-hook-form@7.39.1
       '@masknet/backup-format':
         specifier: workspace:*
         version: link:../backup-format
@@ -390,8 +390,8 @@ importers:
         specifier: ^16.0.1
         version: 16.0.1
       react-hook-form:
-        specifier: ^7.31.1
-        version: 7.31.1
+        specifier: ^7.39.1
+        version: 7.39.1
       react-qrcode-logo:
         specifier: ^2.7.0
         version: 2.7.0
@@ -570,8 +570,8 @@ importers:
         specifier: ^5.6.0
         version: 5.6.0
       '@hookform/resolvers':
-        specifier: 2.8.10
-        version: 2.8.10_react-hook-form@7.31.1
+        specifier: 2.9.10
+        version: 2.9.10_react-hook-form@7.39.1
       '@masknet/backup-format':
         specifier: workspace:*
         version: link:../backup-format
@@ -882,8 +882,8 @@ importers:
         specifier: ^0.18.0
         version: 0.18.0
       react-hook-form:
-        specifier: 7.31.1
-        version: 7.31.1
+        specifier: 7.39.1
+        version: 7.39.1
       react-router-dom:
         specifier: ^6.3.0
         version: 6.3.0
@@ -1261,6 +1261,9 @@ importers:
       '@masknet/theme':
         specifier: workspace:*
         version: link:../../theme
+      '@masknet/web3-helpers':
+        specifier: workspace:*
+        version: link:../../web3-helpers
       '@masknet/web3-hooks-base':
         specifier: workspace:*
         version: link:../../web3-hooks/base
@@ -1375,6 +1378,9 @@ importers:
       '@masknet/web3-contracts':
         specifier: workspace:*
         version: link:../../web3-contracts
+      '@masknet/web3-helpers':
+        specifier: workspace:*
+        version: link:../../web3-helpers
       '@masknet/web3-providers':
         specifier: workspace:*
         version: link:../../web3-providers
@@ -1535,6 +1541,9 @@ importers:
       '@masknet/theme':
         specifier: workspace:*
         version: link:../../theme
+      '@masknet/web3-helpers':
+        specifier: workspace:*
+        version: link:../../web3-helpers
       '@masknet/web3-providers':
         specifier: workspace:*
         version: link:../../web3-providers
@@ -1737,6 +1746,9 @@ importers:
       '@masknet/theme':
         specifier: workspace:*
         version: link:../../theme
+      '@masknet/web3-helpers':
+        specifier: workspace:*
+        version: link:../../web3-helpers
       '@masknet/web3-providers':
         specifier: workspace:*
         version: link:../../web3-providers
@@ -1819,6 +1831,9 @@ importers:
       '@masknet/theme':
         specifier: workspace:*
         version: link:../../theme
+      '@masknet/web3-helpers':
+        specifier: workspace:*
+        version: link:../../web3-helpers
       '@masknet/web3-shared-base':
         specifier: workspace:*
         version: link:../../web3-shared/base
@@ -2068,8 +2083,8 @@ importers:
   packages/shared:
     dependencies:
       '@hookform/resolvers':
-        specifier: ^2.8.10
-        version: 2.8.10_react-hook-form@7.31.1
+        specifier: ^2.9.10
+        version: 2.9.10_react-hook-form@7.39.1
       '@masknet/icons':
         specifier: workspace:*
         version: link:../icons
@@ -2079,6 +2094,9 @@ importers:
       '@masknet/plugin-wallet':
         specifier: workspace:*
         version: link:../plugins/Wallet
+      '@masknet/public-api':
+        specifier: workspace:*
+        version: link:../public-api
       '@masknet/shared-base':
         specifier: workspace:*
         version: link:../shared-base
@@ -2146,8 +2164,8 @@ importers:
         specifier: ^2.0.9
         version: 2.0.9
       react-hook-form:
-        specifier: ^7.31.1
-        version: 7.31.1
+        specifier: ^7.39.1
+        version: 7.39.1
       react-use:
         specifier: ^17.4.0
         version: 17.4.0
@@ -2448,6 +2466,9 @@ importers:
 
   packages/web3-helpers:
     dependencies:
+      '@masknet/shared-base':
+        specifier: workspace:*
+        version: link:../shared-base
       '@masknet/web3-shared-base':
         specifier: workspace:*
         version: link:../web3-shared/base
@@ -2877,6 +2898,9 @@ importers:
       '@masknet/shared-base':
         specifier: workspace:*
         version: link:../shared-base
+      '@masknet/web3-providers':
+        specifier: workspace:*
+        version: link:../web3-providers
       '@masknet/web3-shared-base':
         specifier: workspace:*
         version: link:../web3-shared/base
@@ -7200,12 +7224,12 @@ packages:
     resolution: {integrity: sha512-k2Ty1JcVojjJFwrg/ThKi2ujJ7XNLYaFGNB/bWT9wGR+oSMJHMa5w+CUq6p/pVrKeNNgA7pCqEcjSnHVoqJQFw==}
     dev: true
 
-  /@hookform/resolvers/2.8.10_react-hook-form@7.31.1:
-    resolution: {integrity: sha512-DDFtNlugsbwAhCJHYp3NcN5LvJrwSsCLPi41Wo5O8UAIbUFnBfY/jW+zKnlX57BZ4jE0j/g6R9rB3JlO89ad0g==}
+  /@hookform/resolvers/2.9.10_react-hook-form@7.39.1:
+    resolution: {integrity: sha512-JIL1DgJIlH9yuxcNGtyhsWX/PgNltz+5Gr6+8SX9fhXc/hPbEIk6wPI82nhgvp3uUb6ZfAM5mqg/x7KR7NAb+A==}
     peerDependencies:
       react-hook-form: ^7.0.0
     dependencies:
-      react-hook-form: 7.31.1
+      react-hook-form: 7.39.1
     dev: false
 
   /@humanwhocodes/config-array/0.10.4:
@@ -26718,8 +26742,8 @@ packages:
       prop-types: 15.8.1
     dev: false
 
-  /react-hook-form/7.31.1:
-    resolution: {integrity: sha512-QjtjZ8r8KtEBWWpcXLyQordCraTFxILtyQpaz5KLLxN2YzcC+FZ9LLtOnNGuOnzZo9gCoB+viK3ZHV9Mb2htmQ==}
+  /react-hook-form/7.39.1:
+    resolution: {integrity: sha512-MiF9PCILN5KulhSGbnjohMiTOrB47GerDTichMNP0y2cPUu1GTRFqbunOxCE9N1499YTLMV/ne4gFzqCp1rxrQ==}
     engines: {node: '>=12.22.0'}
     peerDependencies:
       react: ^16.8.0 || ^17 || ^18 || 0.0.0-experimental-9cdf8a99e-20221018
