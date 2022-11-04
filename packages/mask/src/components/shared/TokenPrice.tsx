@@ -1,5 +1,5 @@
 import type { FC, HTMLProps } from 'react'
-import type BigNumber from 'bignumber.js'
+import type { BigNumber } from 'bignumber.js'
 import { ChainId, isZeroAddress } from '@masknet/web3-shared-evm'
 import { CurrencyType, multipliedBy } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'

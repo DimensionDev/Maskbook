@@ -5,7 +5,7 @@ import { Icons } from '@masknet/icons'
 import { useI18N } from '../locales/index.js'
 import { NonFungibleTokenOrder, formatBalance, formatCurrency } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import BigNumber from 'bignumber.js'
+import { BigNumber } from 'bignumber.js'
 import { CollectibleState } from './hooks/useCollectibleState.js'
 
 const useStyles = makeStyles()((theme) => ({

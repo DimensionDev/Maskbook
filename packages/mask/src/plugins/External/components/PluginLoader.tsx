@@ -19,9 +19,9 @@ import {
 import { useState } from 'react'
 import { Result } from 'ts-results'
 // import { PermissionAwareRedirectOf } from '../../../extension/popups'
-import { useExternalPluginManifest } from '../loader'
+import { useExternalPluginManifest } from '../loader/index.js'
 import { Link as LinkIcon, Person as PublisherIcon, Description as DescriptionIcon } from '@mui/icons-material'
-import { useI18N } from '../../../utils'
+import { useI18N } from '../../../utils/i18n-next-ui.js'
 import { Trans } from 'react-i18next'
 import { LoadingBase } from '@masknet/theme'
 

@@ -1,5 +1,5 @@
 import type { KVStorageBackend } from './types.js'
-import { defer } from '@dimensiondev/kit'
+import { defer } from '@masknet/kit'
 
 export interface ProxiedKVStorageBackend extends KVStorageBackend {
     replaceBackend(backend: KVStorageBackend): void

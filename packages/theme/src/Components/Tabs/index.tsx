@@ -13,7 +13,7 @@ import {
 } from 'react'
 import { BaseTab } from './BaseTab.js'
 import { FlexibleTab } from './FlexibleTab.js'
-import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
+import { ArrowBackIosNew as ArrowBackIosNewIcon } from '@mui/icons-material'
 import { useClickAway, useWindowSize } from 'react-use'
 import { RoundTab } from './RoundTab.js'
 

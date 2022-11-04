@@ -25,7 +25,7 @@ interface PluginEnableBoundaryProps extends withClasses<'root'> {
 export const PluginEnableBoundary = memo<PluginEnableBoundaryProps>((props) => {
     const { t } = useI18N()
     const { children, pluginID } = props
-    const classes = useStylesExtends(useStyles(), props)
+    const { classes } = useStylesExtends(useStyles(), props)
 
     const disabled = useIsMinimalMode(pluginID)
     const plugins = useActivatedPluginsSNSAdaptor(true)

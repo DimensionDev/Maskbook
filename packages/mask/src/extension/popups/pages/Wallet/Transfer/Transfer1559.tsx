@@ -2,10 +2,10 @@ import { memo, ReactElement, SyntheticEvent, useCallback, useMemo, useRef, useSt
 import { useAsync, useAsyncFn, useUpdateEffect } from 'react-use'
 import { useNavigate } from 'react-router-dom'
 import { ChevronDown } from 'react-feather'
-import { mapValues, noop } from 'lodash-unified'
+import { mapValues } from 'lodash-unified'
 import { z as zod } from 'zod'
 import { EthereumAddress } from 'wallet.ts'
-import BigNumber from 'bignumber.js'
+import { BigNumber } from 'bignumber.js'
 import {
     addGasMargin,
     ChainId,
@@ -703,7 +703,7 @@ export const Transfer1559TransferUI = memo<Transfer1559UIProps>(
                                                         variant="outlined"
                                                         clickable
                                                         label={selectedAsset.symbol}
-                                                        onDelete={noop}
+                                                        onDelete={openAssetMenu}
                                                     />
                                                 ) : null}
                                             </Box>

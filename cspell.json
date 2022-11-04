@@ -16,6 +16,7 @@
     "words": [
         "aave",
         "activityv",
+        "farcaster",
         "adai",
         "addrs",
         "aeth",
@@ -111,6 +112,7 @@
         "imagebitmap",
         "immer",
         "imtokenv",
+        "inspectable",
         "investables",
         "ipfs",
         "ipfshttp",
@@ -126,6 +128,7 @@
         "languagedetector",
         "leaderboard",
         "lendingpool",
+        "lenster",
         "linkswap",
         "locationchange",
         "lockdown",
@@ -284,6 +287,7 @@
         "apng",
         "armv",
         "blocto",
+        "bscscan",
         "bsct",
         "btcb",
         "canft",
@@ -387,7 +391,8 @@
         "xsushi",
         "xyumi",
         "yumi",
-        "yumiswap"
+        "yumiswap",
+        "zkscan"
     ],
     "ignoreRegExpList": ["/@servie/", "/[A-Za-z0-9]{46}/"],
     "overrides": [

@@ -1,4 +1,4 @@
-import { formatFileSize } from '@dimensiondev/kit'
+import { formatFileSize } from '@masknet/kit'
 import { useCustomSnackbar, makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import { isNil } from 'lodash-unified'

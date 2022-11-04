@@ -1,6 +1,6 @@
 import { clone, first } from 'lodash-unified'
 import type { Subscription } from 'use-subscription'
-import { delay } from '@dimensiondev/kit'
+import { delay } from '@masknet/kit'
 import {
     getSiteType,
     isConnectionSiteType,

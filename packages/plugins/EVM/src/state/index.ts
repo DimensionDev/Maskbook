@@ -46,6 +46,7 @@ export function createWeb3State(context: Plugin.Shared.SharedUIContext): EVM_Web
         }),
         Token: new Token(context, {
             account: Provider_.account,
+            chainId: Provider_.chainId,
         }),
         Transaction: Transaction_,
         TransactionFormatter: new TransactionFormatter(context),

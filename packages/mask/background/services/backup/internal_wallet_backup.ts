@@ -1,7 +1,7 @@
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { provider } from './internal_wallet.js'
 import { Some, None } from 'ts-results'
-import { isNonNull } from '@dimensiondev/kit'
+import { isNonNull } from '@masknet/kit'
 import type { NormalizedBackup } from '@masknet/backup-format'
 import type { LegacyWalletRecord, WalletRecord } from '../../../shared/definitions/wallet.js'
 import { ec as EC } from 'elliptic'

@@ -1,7 +1,6 @@
-import classNames from 'classnames'
 import { makeStyles } from '@masknet/theme'
-import DoneIcon from '@mui/icons-material/Done'
-import Chip, { ChipProps } from '@mui/material/Chip'
+import { Done as DoneIcon } from '@mui/icons-material'
+import { Chip, ChipProps } from '@mui/material'
 import { noop } from 'lodash-unified'
 
 export interface ClickableChipProps extends ChipProps {
@@ -34,7 +33,7 @@ const useStyles = makeStyles<StyleProps>()((theme, { checked }) => ({
 }))
 
 export function ClickableChip(props: ClickableChipProps) {
-    const { classes } = useStyles({ checked: Boolean(props.checked) })
+    const { classes, cx } = useStyles({ checked: Boolean(props.checked) })
     return (
         <Chip
             deleteIcon={props.checked ? <DoneIcon className={classes.icon} /> : undefined}
@@ -43,8 +42,8 @@ export function ClickableChip(props: ClickableChipProps) {
             {...props}
             classes={{
                 ...props.classes,
-                root: classNames(classes.root, props.classes?.root),
-                label: classNames(classes.label, props.classes?.label),
+                root: cx(classes.root, props.classes?.root),
+                label: cx(classes.label, props.classes?.label),
             }}
         />
     )

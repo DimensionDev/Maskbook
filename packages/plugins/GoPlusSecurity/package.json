@@ -1,6 +1,7 @@
 {
   "name": "@masknet/plugin-go-plus-security",
   "private": true,
+  "type": "module",
   "exports": {
     ".": {
       "webpack": "./src/index.ts",

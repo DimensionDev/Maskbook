@@ -2,4 +2,4 @@
 export * from './color-tools.js'
 export * from './MaskTheme.js'
 export * from './useThemeLanguage.js'
-export * from './useClassicMaskSNSTheme.js'
+export * from './useMaskSiteAdaptorMixedTheme.js'

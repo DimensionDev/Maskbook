@@ -1,13 +1,18 @@
 import { forwardRef, useCallback, useEffect, useImperativeHandle, useState, useMemo } from 'react'
 import { useUnmount, useUpdateEffect } from 'react-use'
-import { delay } from '@dimensiondev/kit'
+import { delay } from '@masknet/kit'
 import { useOpenShareTxDialog, useSelectFungibleToken } from '@masknet/shared'
-import { NetworkPluginID } from '@masknet/shared-base'
-import { FungibleToken, formatBalance } from '@masknet/web3-shared-base'
-import { ChainId, createNativeToken, GasOptionConfig, SchemaType, isValidChainId } from '@masknet/web3-shared-evm'
+import { formatBalance } from '@masknet/web3-shared-base'
+import type { GasOptionConfig } from '@masknet/web3-shared-evm'
 import { useGasConfig } from '@masknet/web3-hooks-evm'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { useChainContext, useChainIdValid, useFungibleTokenBalance } from '@masknet/web3-hooks-base'
+import {
+    useChainContext,
+    useChainIdValid,
+    useFungibleTokenBalance,
+    useNetworkContext,
+    useWeb3State,
+} from '@masknet/web3-hooks-base'
 import { activatedSocialNetworkUI } from '../../../../social-network/index.js'
 import { isFacebook } from '../../../../social-network-adaptor/facebook.com/base.js'
 import { isTwitter } from '../../../../social-network-adaptor/twitter.com/base.js'
@@ -22,11 +27,12 @@ import { useSortedTrades } from './hooks/useSortedTrades.js'
 import { useUpdateBalance } from './hooks/useUpdateBalance.js'
 import { TradeForm } from './TradeForm.js'
 import { WalletMessages } from '../../../Wallet/messages.js'
+import type { Web3Helper } from '@masknet/web3-helpers'
 
 export interface TraderProps extends withClasses<'root'> {
-    defaultInputCoin?: FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>
-    defaultOutputCoin?: FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>
-    chainId?: ChainId
+    defaultInputCoin?: Web3Helper.FungibleTokenAll
+    defaultOutputCoin?: Web3Helper.FungibleTokenAll
+    chainId?: Web3Helper.ChainIdAll
     settings?: boolean
 }
 
@@ -40,10 +46,12 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
     const { defaultOutputCoin, chainId: targetChainId, defaultInputCoin, settings = false } = props
     const t = useI18N()
     const [focusedTrade, setFocusTrade] = useState<TradeInfo>()
-    const { chainId, account } = useChainContext<NetworkPluginID.PLUGIN_EVM>({
+    const { chainId, account } = useChainContext({
         chainId: targetChainId,
     })
-    const chainIdValid = useChainIdValid(NetworkPluginID.PLUGIN_EVM, chainId)
+    const { pluginID } = useNetworkContext()
+    const chainIdValid = useChainIdValid(pluginID, chainId)
+    const { Others } = useWeb3State()
 
     const { openDialog: openConnectWalletDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectProviderDialogUpdated,
@@ -80,15 +88,15 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
 
         dispatchTradeStore({
             type: AllProviderTradeActionType.UPDATE_INPUT_TOKEN,
-            token: createNativeToken(chainId),
+            token: Others?.createNativeToken(chainId),
         })
-    }, [chainId, chainIdValid])
+    }, [chainId, chainIdValid, Others?.createNativeToken])
     // #endregion
 
     const updateTradingCoin = useCallback(
         (
             type: AllProviderTradeActionType.UPDATE_INPUT_TOKEN | AllProviderTradeActionType.UPDATE_OUTPUT_TOKEN,
-            coin?: FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>,
+            coin?: Web3Helper.FungibleTokenAll,
         ) => {
             if (!coin?.address) return
             dispatchTradeStore({
@@ -114,13 +122,13 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
 
     // #region update balance
     const { value: inputTokenBalance_, loading: loadingInputTokenBalance } = useFungibleTokenBalance(
-        NetworkPluginID.PLUGIN_EVM,
+        pluginID,
         inputToken?.address ?? '',
         { chainId },
     )
 
     const { value: outputTokenBalance_, loading: loadingOutputTokenBalance } = useFungibleTokenBalance(
-        NetworkPluginID.PLUGIN_EVM,
+        pluginID,
         outputToken?.address ?? '',
         { chainId },
     )
@@ -166,7 +174,7 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
                         panelType === TokenPanelType.Input
                             ? AllProviderTradeActionType.UPDATE_INPUT_TOKEN
                             : AllProviderTradeActionType.UPDATE_OUTPUT_TOKEN,
-                    token: picked as FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>,
+                    token: picked,
                     balance: '0',
                 })
             }
@@ -265,7 +273,7 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
 
     // #region if chain id be changed, reset the chain id on context, and reset gas config
     useEffect(() => {
-        if (!isValidChainId(chainId)) return
+        if (!Others?.isValidChainId(chainId)) return
         setGasConfig(undefined)
     }, [chainId])
     // #endregion

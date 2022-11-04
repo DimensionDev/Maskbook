@@ -22,7 +22,7 @@ declare module '@siddomains/sidjs' {
         constructor(options: { provider: Provider; sidAddress: number }): void
 
         name(name: string): Name
-        getName(address: string): Promise<string>
+        getName(address: string): Promise<{ name?: string }>
     }
 
     export class Name {

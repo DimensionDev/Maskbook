@@ -53,7 +53,7 @@ export interface PriceChartProps extends withClasses<'root'> {
 
 export function PriceChart(props: PriceChartProps) {
     const { t } = useI18N()
-    const classes = useStylesExtends(useStyles(props), props)
+    const { classes } = useStylesExtends(useStyles(props), props)
     const colors = useTheme().palette.maskColor
     const rootRef = useRef<HTMLDivElement>(null)
     const svgRef = useRef<SVGSVGElement>(null)

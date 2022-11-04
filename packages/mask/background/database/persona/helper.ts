@@ -1,4 +1,4 @@
-import { safeUnreachable } from '@dimensiondev/kit'
+import { safeUnreachable } from '@masknet/kit'
 import {
     AESCryptoKey,
     AESJsonWebKey,
@@ -99,7 +99,8 @@ async function getLocalKeyOf(id: ProfileIdentifier, tx: FullPersonaDBTransaction
 
 // #region ECDH
 export async function deriveAESByECDH(pub: EC_Public_CryptoKey, of?: ProfileIdentifier | PersonaIdentifier) {
-    const curve = (pub.algorithm as EcKeyAlgorithm).namedCurve || ''
+    // @ts-expect-error
+    const curve = pub.algorithm.namedCurve || ''
     const sameCurvePrivateKeys = new Map<ECKeyIdentifier, EC_Private_JsonWebKey>()
 
     await createPersonaDBReadonlyAccess(async (tx) => {
@@ -124,7 +125,7 @@ export async function deriveAESByECDH(pub: EC_Public_CryptoKey, of?: ProfileIden
             const privateKey = await crypto.subtle.importKey(
                 'jwk',
                 key,
-                { name: 'ECDH', namedCurve: key.crv! } as EcKeyAlgorithm,
+                { name: 'ECDH', namedCurve: key.crv! },
                 false,
                 ['deriveKey'],
             )
@@ -211,7 +212,7 @@ export async function queryPublicKey(author: ProfileIdentifier | null) {
     return (await crypto.subtle.importKey(
         'jwk',
         persona.publicKey,
-        { name: 'ECDH', namedCurve: persona.publicKey.crv! } as EcKeyAlgorithm,
+        { name: 'ECDH', namedCurve: persona.publicKey.crv! },
         true,
         ['deriveKey'],
     )) as EC_Public_CryptoKey

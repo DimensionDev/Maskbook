@@ -26,7 +26,7 @@ const useStyles = makeStyles()({
 })
 export function SelectProfileUI(props: SelectProfileUIProps) {
     const { t } = useI18N()
-    const classes = useStylesExtends(useStyles(), props)
+    const { classes } = useStylesExtends(useStyles(), props)
 
     const { frozenSelected, onSetSelected, disabled, items, selected } = props
 

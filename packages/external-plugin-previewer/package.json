@@ -2,6 +2,7 @@
   "name": "@masknet/external-plugin-previewer",
   "version": "0.0.0",
   "private": true,
+  "type": "module",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",

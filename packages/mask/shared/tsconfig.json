@@ -4,8 +4,7 @@
     "rootDir": "./",
     "outDir": "../dist/shared/",
     "tsBuildInfoFile": "../dist/shared.tsbuildinfo",
-    "emitDeclarationOnly": true,
-    "lib": ["ES2022"]
+    "emitDeclarationOnly": true
   },
   "include": ["./"],
   "exclude": ["./plugin-infra/register.js"],

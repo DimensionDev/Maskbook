@@ -27,7 +27,11 @@ export function setupReactShadowRootEnvironment() {
         MaskUIRootSNS,
     )
     // Inject variable for Portals
-    attachReactTreeToGlobalContainer(shadow, { key: 'css-vars' }).render(<CSSVariableInjector />)
+    attachReactTreeToGlobalContainer(shadow, { key: 'css-vars' }).render(
+        <>
+            <CSSVariableInjector />
+        </>,
+    )
 }
 
 export const attachReactTreeToGlobalContainer = attachReactTreeToMountedRoot_noHost(ShadowRootAttachPointRoot)

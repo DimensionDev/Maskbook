@@ -1,4 +1,4 @@
-import useAsyncRetry from 'react-use/lib/useAsyncRetry'
+import { useAsyncRetry } from 'react-use'
 import { EMPTY_OBJECT, NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useWeb3Connection } from './useWeb3Connection.js'

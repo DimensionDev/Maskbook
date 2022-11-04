@@ -2,9 +2,8 @@ import { memo, ReactNode } from 'react'
 import { Box, Stack, Typography } from '@mui/material'
 import { useI18N } from '../../locales/index.js'
 import { makeStyles } from '@masknet/theme'
-import type { SecurityMessage } from '@masknet/web3-providers/src/gopluslabs/rules'
+import type { GoPlusLabsSecurityMessage as SecurityMessage, SecurityAPI } from '@masknet/web3-providers'
 import { DefineMapping } from '../constants.js'
-import type { SecurityAPI } from '@masknet/web3-providers'
 
 const useStyles = makeStyles()((theme) => ({
     detectionCard: {

@@ -1,4 +1,4 @@
-import { makeStyles, useStylesExtends, ActionButton } from '@masknet/theme'
+import { makeStyles, ActionButton } from '@masknet/theme'
 import { FungibleToken, formatBalance, isZero } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { Box, Typography } from '@mui/material'
@@ -63,7 +63,7 @@ export interface ShareDialogProps extends withClasses<'root'> {
 export function ShareDialog(props: ShareDialogProps) {
     const ShareBackground = getAssetAsBlobURL(new URL('../assets/share-background.jpg', import.meta.url))
     const { t } = useI18N()
-    const classes = useStylesExtends(useStyles(), {})
+    const { classes } = useStyles()
     const { token, actualSwapAmount, shareSuccessText, onClose } = props
     const amount = formatBalance(actualSwapAmount, token.decimals)
 

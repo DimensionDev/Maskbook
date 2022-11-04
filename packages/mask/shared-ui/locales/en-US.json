@@ -29,6 +29,7 @@
     "redirect_to": "Redirect to",
     "sign": "Sign",
     "load_failed": "Load failed",
+    "profile_card_name": "Avatar Web3 Profile Card",
     "powered_by": "Powered by",
     "powered_by_whom": "Powered by <span>{{whom}}</span>",
     "reload": "Reload",

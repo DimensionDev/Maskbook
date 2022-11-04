@@ -73,7 +73,7 @@ export async function grantPermission(baseURL: string, permissions: ThirdPartyPl
     for (const permission of permissions) {
         const key = `plugin:${ThirdPartyPluginPermission[permission]}:${baseURL}`
         if (process.env.manifest === '2') {
-            sessionStorage.setItem(key, '1')
+            ;(globalThis as any).sessionStorage.setItem(key, '1')
         } else {
             await browser.storage.session.set({ [key]: true })
         }
@@ -84,7 +84,7 @@ export async function grantPermission(baseURL: string, permissions: ThirdPartyPl
 async function hasPermissionInternal(baseURL: string, permission: ThirdPartyPluginPermission) {
     const key = `plugin:${ThirdPartyPluginPermission[permission]}:${baseURL}`
     if (process.env.manifest === '2') {
-        return !!sessionStorage.getItem(key)
+        return !!(globalThis as any).sessionStorage.getItem(key)
     } else {
         return !!(await browser.storage.session.get(key))[key]
     }

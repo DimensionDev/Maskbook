@@ -1,5 +1,5 @@
 import * as bip39 from 'bip39'
-import { decodeArrayBuffer } from '@dimensiondev/kit'
+import { decodeArrayBuffer } from '@masknet/kit'
 import {
     EC_Public_JsonWebKey,
     PersonaIdentifier,

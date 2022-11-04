@@ -12,7 +12,7 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import { useContainer } from 'unstated-next'
 import { Context } from '../../hooks/useContext.js'
 import { getTokenUSDValue } from '../../utils/getTokenUSDValue.js'
-import BigNumber from 'bignumber.js'
+import { BigNumber } from 'bignumber.js'
 
 const BalanceContainer = styled('div')(
     ({ theme }) => `

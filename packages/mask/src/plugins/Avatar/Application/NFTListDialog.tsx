@@ -366,7 +366,7 @@ export function NFTListDialog(props: NFTListDialogProps) {
                         expectedPluginID={
                             !supportPluginIds.includes(selectedPluginId) ? NetworkPluginID.PLUGIN_EVM : selectedPluginId
                         }>
-                        <Button onClick={onSave} disabled={disabled} fullWidth>
+                        <Button onClick={onSave} disabled={disabled || !selectedToken} fullWidth>
                             {pfpType === PFP_TYPE.PFP ? t.set_PFP_title() : t.set_pfp_background_title()}
                         </Button>
                     </ChainBoundary>

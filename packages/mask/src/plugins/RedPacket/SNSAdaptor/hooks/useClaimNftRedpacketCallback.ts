@@ -1,5 +1,5 @@
 import { useChainContext, useWeb3Connection } from '@masknet/web3-hooks-base'
-import type { NftRedPacket } from '@masknet/web3-contracts/types/NftRedPacket'
+import type { NftRedPacket } from '@masknet/web3-contracts/types/NftRedPacket.js'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { encodeContractTransaction } from '@masknet/web3-shared-evm'
 import { useAsyncFn } from 'react-use'

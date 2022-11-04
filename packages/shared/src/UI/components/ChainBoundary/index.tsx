@@ -15,7 +15,7 @@ import {
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { delay } from '@dimensiondev/kit'
+import { delay } from '@masknet/kit'
 import { WalletIcon } from '../WalletIcon/index.js'
 import { ActionButtonPromise, ActionButtonPromiseProps } from '../ActionButton/index.js'
 import { Icons } from '@masknet/icons'
@@ -69,7 +69,7 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
     } = props
 
     const t = useSharedI18N()
-    const classes = useStylesExtends(useStyles(), props)
+    const { classes } = useStylesExtends(useStyles(), props)
 
     const { pluginID: actualPluginID } = useNetworkContext()
     const plugin = useActivatedPlugin(actualPluginID, 'any')

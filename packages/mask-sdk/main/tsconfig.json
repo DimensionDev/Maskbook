@@ -4,8 +4,7 @@
     "rootDir": "./",
     "outDir": "../dist/main/",
     "tsBuildInfoFile": "../dist/main.tsbuildinfo",
-    "emitDeclarationOnly": true,
-    "types": ["@types/web"]
+    "emitDeclarationOnly": true
   },
   "include": ["./"],
   "references": [{ "path": "../public-api" }, { "path": "../shared" }]

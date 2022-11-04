@@ -1,6 +1,5 @@
 import { makeStyles } from '@masknet/theme'
 import { Typography, Card, ButtonBase, ButtonBaseProps, CardProps } from '@mui/material'
-import classnames from 'classnames'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -42,9 +41,9 @@ export interface ProviderIconProps extends CardProps {
 }
 
 export function ProviderIcon({ icon, name, onClick, iconFilterColor, className, ButtonBaseProps }: ProviderIconProps) {
-    const { classes } = useStyles()
+    const { classes, cx } = useStyles()
     return (
-        <Card className={classnames(classes.root, className)} elevation={0} onClick={onClick}>
+        <Card className={cx(classes.root, className)} elevation={0} onClick={onClick}>
             <ButtonBase className={`${classes.content} dashboard-style`} {...ButtonBaseProps}>
                 <img
                     src={icon.toString()}

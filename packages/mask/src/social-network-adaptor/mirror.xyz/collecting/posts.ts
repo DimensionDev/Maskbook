@@ -1,5 +1,6 @@
 import { DOMProxy, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { creator, SocialNetworkUI as Next } from '../../../social-network/index.js'
+import type { SocialNetworkUI as Next } from '@masknet/types'
+import { creator } from '../../../social-network/index.js'
 import { postsContentSelector } from '../utils/selectors.js'
 
 import { mirrorShared } from '../shared.js'

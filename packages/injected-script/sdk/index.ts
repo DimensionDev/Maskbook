@@ -9,6 +9,7 @@ import { WalletLinkProvider } from './WalletLink.js'
 import { OperaProvider } from './Opera.js'
 
 export type { EthereumProvider, InternalEvents } from '../shared/index.js'
+export { InjectedProvider } from './Base.js'
 
 export const injectedCoin98EVMProvider = new Coin98Provider(Coin98ProviderType.EVM)
 export const injectedCoin98SolanaProvider = new Coin98Provider(Coin98ProviderType.Solana)

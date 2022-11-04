@@ -1,7 +1,7 @@
 import { ValueRef } from '@dimensiondev/holoflows-kit'
 import { ObservableWeakMap } from '@masknet/shared-base'
 import { isEqual } from 'lodash-unified'
-import type { SocialNetworkUI } from './types.js'
+import type { SocialNetworkUI } from '@masknet/types'
 
 export const stateCreator: {
     readonly [key in keyof SocialNetworkUI.AutonomousState]-?: () => SocialNetworkUI.AutonomousState[key]

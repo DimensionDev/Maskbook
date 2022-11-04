@@ -19,7 +19,7 @@ export interface EthereumBlockieProps extends withClasses<never> {
 
 export function EthereumBlockie(props: EthereumBlockieProps) {
     const { address, name } = props
-    const classes = useStylesExtends(useStyles(), props)
+    const { classes } = useStylesExtends(useStyles(), props)
     const blockie = useBlockie(address)
 
     return (

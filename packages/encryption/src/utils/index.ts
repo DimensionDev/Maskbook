@@ -1,6 +1,6 @@
 import { CheckedError } from '@masknet/shared-base'
 import { Result } from 'ts-results'
-import { decodeArrayBuffer, decodeText } from '@dimensiondev/kit'
+import { decodeArrayBuffer, decodeText } from '@masknet/kit'
 import { decode as decodeMessagePack, encode } from '@msgpack/msgpack'
 export * from './crypto.js'
 

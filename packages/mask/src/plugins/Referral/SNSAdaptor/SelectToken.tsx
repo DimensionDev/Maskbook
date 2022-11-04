@@ -1,6 +1,6 @@
 import { useCallback, useState, useMemo } from 'react'
 import { useAsync } from 'react-use'
-import { delay } from '@dimensiondev/kit'
+import { delay } from '@masknet/kit'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { DialogContent, Typography } from '@mui/material'

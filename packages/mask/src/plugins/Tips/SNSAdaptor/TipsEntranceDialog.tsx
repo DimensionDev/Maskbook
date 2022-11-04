@@ -16,7 +16,7 @@ import {
 import { LoadingBase, makeStyles, useCustomSnackbar, ActionButton } from '@masknet/theme'
 import { isSameAddress, isGreaterThan } from '@masknet/web3-shared-base'
 import { DialogContent, DialogActions, Avatar, Typography } from '@mui/material'
-import { delay } from '@dimensiondev/kit'
+import { delay } from '@masknet/kit'
 import Services from '../../../extension/service.js'
 import { useProvedWallets } from '../hooks/useProvedWallets.js'
 import { useI18N } from '../locales/index.js'

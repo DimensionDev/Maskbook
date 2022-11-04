@@ -7,7 +7,7 @@ import type { DecryptionProgress, FailureDecryption, SuccessDecryption } from '.
 import { DecryptPostSuccess } from './DecryptedPostSuccess.js'
 import { DecryptPostAwaiting } from './DecryptPostAwaiting.js'
 import { DecryptPostFailed } from './DecryptPostFailed.js'
-import { encodeArrayBuffer, safeUnreachable } from '@dimensiondev/kit'
+import { encodeArrayBuffer, safeUnreachable } from '@masknet/kit'
 import { activatedSocialNetworkUI } from '../../../social-network/index.js'
 import type {
     DecryptionContext,

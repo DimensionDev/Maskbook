@@ -1,4 +1,4 @@
-import { encodeArrayBuffer, decodeText, decodeArrayBuffer, encodeText } from '@dimensiondev/kit'
+import { encodeArrayBuffer, decodeText, decodeArrayBuffer, encodeText } from '@masknet/kit'
 import type { AESCryptoKey } from '@masknet/shared-base'
 
 // eslint-disable-next-line @dimensiondev/unicode/specific-set

@@ -16,6 +16,6 @@ export interface PersonaImageIconProps extends withClasses<'icon'> {
 
 export function PersonaImageIcon(props: PersonaImageIconProps) {
     const { size = 48, icon, borderRadius = '50%' } = props
-    const classes = useStylesExtends(useStyles(), props)
+    const { classes } = useStylesExtends(useStyles(), props)
     return <img height={size} width={size} src={icon?.toString()} className={classes.icon} style={{ borderRadius }} />
 }

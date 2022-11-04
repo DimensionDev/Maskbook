@@ -1,10 +1,9 @@
 import { FC, useCallback } from 'react'
-import classnames from 'classnames'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { ElementAnchor, AssetPreviewer, RetryHint } from '@masknet/shared'
-import { useChainContext, useWeb3State, useNetworkContext } from '@masknet/web3-hooks-base'
-import { isSameAddress, NonFungibleToken } from '@masknet/web3-shared-base'
+import { useWeb3State, useNetworkContext } from '@masknet/web3-hooks-base'
+import { isSameAddress } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { Checkbox, List, ListItem, Radio, Stack, Tooltip } from '@mui/material'
 import type { TipNFTKeyPair } from '../../types/index.js'
@@ -77,12 +76,11 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 interface NFTItemProps {
-    token: NonFungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
+    token: Web3Helper.NonFungibleTokenAll
 }
 
 export const NFTItem: FC<NFTItemProps> = ({ token }) => {
     const { classes } = useStyles()
-    const { chainId } = useChainContext()
     return (
         <AssetPreviewer
             url={token.metadata?.imageURL ?? token.metadata?.mediaURL}
@@ -103,7 +101,7 @@ export const NFTList: FC<Props> = ({
     loadFinish,
     loadError,
 }) => {
-    const { classes } = useStyles()
+    const { classes, cx } = useStyles()
     const { pluginID } = useNetworkContext()
 
     const isRadio = limit === 1
@@ -128,7 +126,7 @@ export const NFTList: FC<Props> = ({
     const { Others } = useWeb3State()
 
     return (
-        <List className={classnames(classes.list, className)}>
+        <List className={cx(classes.list, className)}>
             {tokens.map((token) => {
                 const selected = includes(selectedPairs, [token.contract?.address!, token.tokenId])
                 const disabled = !isRadio && reachedLimit && !selected
@@ -149,7 +147,7 @@ export const NFTList: FC<Props> = ({
                         }}
                         arrow>
                         <ListItem
-                            className={classnames(classes.nftItem, {
+                            className={cx(classes.nftItem, {
                                 [classes.disabled]: disabled,
                                 [classes.selected]: selected,
                                 [classes.unselected]: selectedPairs.length > 0 && !selected,

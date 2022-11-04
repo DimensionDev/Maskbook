@@ -1,4 +1,3 @@
-import classNames from 'classnames'
 import { useCopyToClipboard } from 'react-use'
 import {
     useChainContext,
@@ -24,7 +23,7 @@ import { Icons } from '@masknet/icons'
 import { WalletMessages } from '../../../plugins/Wallet/messages.js'
 import { useI18N } from '../../../utils/index.js'
 import { usePendingTransactions } from './usePendingTransactions.js'
-import { delay } from '@dimensiondev/kit'
+import { delay } from '@masknet/kit'
 
 const useStyles = makeStyles<{
     contentBackground?: string
@@ -113,7 +112,7 @@ export function WalletStatusBox(props: WalletStatusBox) {
 
     const providerDescriptor = useProviderDescriptor<'all'>()
     const theme = useTheme()
-    const { classes } = useStyles({
+    const { classes, cx } = useStyles({
         contentBackground: providerDescriptor?.backgroundGradient,
         disableChange: props.disableChange,
         withinRiskWarningDialog: props.withinRiskWarningDialog,
@@ -174,7 +173,7 @@ export function WalletStatusBox(props: WalletStatusBox) {
         return (
             <section className={classes.connectButtonWrapper}>
                 <Button
-                    className={classNames(classes.actionButton)}
+                    className={cx(classes.actionButton)}
                     color="primary"
                     variant="contained"
                     size="small"
@@ -188,7 +187,7 @@ export function WalletStatusBox(props: WalletStatusBox) {
     return (
         <>
             <section
-                className={classNames(
+                className={cx(
                     classes.statusBox,
                     classes.currentAccount,
                     isDashboardPage() ? classes.dashboardBackground : '',
@@ -217,7 +216,7 @@ export function WalletStatusBox(props: WalletStatusBox) {
                             component="button"
                             title={t('wallet_status_button_copy_address')}
                             onClick={onCopy}>
-                            <Icons.Copy className={classNames(classes.icon, classes.copyIcon)} />
+                            <Icons.Copy className={cx(classes.icon, classes.copyIcon)} />
                         </Link>
                         {chainIdValid ? (
                             <Link
@@ -226,7 +225,7 @@ export function WalletStatusBox(props: WalletStatusBox) {
                                 target="_blank"
                                 title={t('plugin_wallet_view_on_explorer')}
                                 rel="noopener noreferrer">
-                                <Icons.LinkOut className={classNames(classes.icon, classes.linkIcon)} />
+                                <Icons.LinkOut className={cx(classes.icon, classes.linkIcon)} />
                             </Link>
                         ) : null}
                     </div>
@@ -245,7 +244,7 @@ export function WalletStatusBox(props: WalletStatusBox) {
                 {!props.disableChange && (
                     <section>
                         <Button
-                            className={classNames(classes.actionButton)}
+                            className={cx(classes.actionButton)}
                             variant="contained"
                             size="small"
                             onClick={async () => {
@@ -259,7 +258,7 @@ export function WalletStatusBox(props: WalletStatusBox) {
                             {t('plugin_wallet_disconnect')}
                         </Button>
                         <Button
-                            className={classNames(classes.actionButton)}
+                            className={cx(classes.actionButton)}
                             variant="contained"
                             size="small"
                             onClick={openSelectProviderDialog}>

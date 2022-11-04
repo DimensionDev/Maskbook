@@ -7,7 +7,7 @@
     "yarn": ">=999.0.0",
     "npm": ">=999.0.0"
   },
-  "version": "2.15.1",
+  "version": "2.15.3",
   "private": true,
   "license": "AGPL-3.0-or-later",
   "scripts": {
@@ -30,13 +30,13 @@
   },
   "dependencies": {
     "@dimensiondev/holoflows-kit": "0.9.0-20220916150447-7ac7ff2",
-    "@dimensiondev/kit": "0.0.0-20220617045824-8bc7a27",
     "@emotion/cache": "11.10.3",
     "@emotion/react": "11.10.4",
     "@emotion/serialize": "1.1.0",
     "@emotion/server": "11.10.0",
     "@emotion/styled": "11.10.4",
     "@emotion/utils": "1.2.0",
+    "@masknet/kit": "0.1.0",
     "@mui/icons-material": "5.10.6",
     "@mui/lab": "5.0.0-alpha.102",
     "@mui/material": "5.10.8",
@@ -44,7 +44,7 @@
     "@types/masknet__global-types": "workspace:*",
     "@types/react": "18.0.19",
     "@types/react-dom": "^18.0.6",
-    "@types/web": "^0.0.72",
+    "@typescript/lib-dom": "npm:@types/web@^0.0.78",
     "i18next": "^21.9.1",
     "lodash": "^4.17.21",
     "lodash-es": "^4.17.21",
@@ -59,7 +59,7 @@
     "@commitlint/cli": "^17.1.2",
     "@commitlint/config-conventional": "^17.1.0",
     "@dimensiondev/eslint-plugin": "0.0.2-20220516081411-2649814",
-    "@magic-works/i18n-codegen": "^0.3.0",
+    "@magic-works/i18n-codegen": "^0.4.0",
     "@masknet/cli": "workspace:*",
     "@masknet/serializer": "workspace:*",
     "@nice-labs/git-rev": "^3.5.0",
@@ -85,7 +85,7 @@
     "prettier": "^2.7.1",
     "svgo": "^2.8.0",
     "ts-node": "^10.9.1",
-    "typescript": "^4.8.3",
+    "typescript": "^4.9.2-rc",
     "vite": "^3.1.0",
     "vitest": "^0.23.2"
   },
@@ -139,7 +139,9 @@
       "@mui/base@5.0.0-alpha.100": "patches/@mui__base@5.0.0-alpha.100.patch",
       "react-devtools-inline@4.26.1": "patches/react-devtools-inline@4.26.1.patch",
       "ses@0.16.0": "patches/ses@0.16.0.patch",
-      "@protobufjs/inquire@1.1.0": "patches/@protobufjs__inquire@1.1.0.patch"
+      "@protobufjs/inquire@1.1.0": "patches/@protobufjs__inquire@1.1.0.patch",
+      "micromark@3.1.0": "patches/micromark@3.1.0.patch",
+      "micromark-util-symbol@1.0.1": "patches/micromark-util-symbol@1.0.1.patch"
     }
   }
 }

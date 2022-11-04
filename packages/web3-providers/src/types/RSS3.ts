@@ -90,7 +90,7 @@ export namespace RSS3BaseAPI {
         collection?: string
         description?: string
         contract_address: string
-        standard: 'ERC-20' | 'Native' | string
+        standard: 'ERC-20' | 'ERC-721' | 'ERC-1155' | 'Native' | string
     }
     interface SwapMetadata {
         /**
@@ -105,7 +105,7 @@ export namespace RSS3BaseAPI {
          * @example "Uniswap V2"
          */
         protocol: string
-        action: 'add' | 'remove'
+        action: 'supply' | 'withdraw'
         tokens: [TransactionMetadata, TransactionMetadata]
     }
 
@@ -125,8 +125,9 @@ export namespace RSS3BaseAPI {
         external_link: string
     }
     interface TradeMetadata extends CollectibleMetadata {
-        cost: TransactionMetadata
+        cost?: TransactionMetadata
     }
+    interface MintMetadata extends TradeMetadata {}
     interface PoapMetadata {
         id: string
         name: string
@@ -141,6 +142,9 @@ export namespace RSS3BaseAPI {
     interface PostMetadata {
         title: string
         body: string
+        author: string[]
+        created_at?: string
+        target_url?: string
         media: [
             {
                 /** URL */
@@ -150,18 +154,33 @@ export namespace RSS3BaseAPI {
         ]
         type_on_platform: Type[]
     }
+    interface CommentMetadata extends PostMetadata {
+        target: PostMetadata
+    }
+    interface ShareMetadata {
+        type_on_platform: Type[]
+        target: Pick<PostMetadata, 'body' | 'author' | 'created_at' | 'target_url'>
+        comment?: CommentMetadata
+    }
     interface ReviseMetadata extends PostMetadata {}
     interface ProfileMetadata {
         address: string
         network: Network
-        platform: 'ENS' | string
-        source: 'ENS' | string
-        /**  @example 'vitalik.eth' */
+        platform: 'ENS' | 'Lens' | string
+        source: 'ENS' | 'Lens' | string
+        /** @example 'vitalik.eth' */
         name: string
         /** @example 'vitalik.eth' */
         handle: string
         bio: string
         expire_at: RFC3339Datetime
+        /** unknown type, it could possibly be profile avatar url */
+        profile_uri: string[]
+        type: 'create' | 'update'
+    }
+    interface FollowMetadata {
+        type_on_platform: Type[]
+        target: Omit<ProfileMetadata, 'expire_at'>
     }
     interface LaunchMetadata {
         logo: URLString
@@ -173,7 +192,7 @@ export namespace RSS3BaseAPI {
         // here we have the donation value in detail
         token: TransactionMetadata
     }
-    interface ProposeMetadata {
+    export interface ProposeMetadata {
         type_on_platform: string[]
         id: string
         title: string
@@ -188,9 +207,10 @@ export namespace RSS3BaseAPI {
             about: string
         }
     }
-    interface VoteMetadata {
-        type_on_platform: string[]
-        choice: number
+    export interface VoteMetadata {
+        type_on_platform: Type[]
+        /** option index, start from 1 */
+        choice: string
         proposal: ProposeMetadata
     }
     export type UnifiedMetadata =
@@ -210,7 +230,7 @@ export namespace RSS3BaseAPI {
 
     type MetadataMap = {
         transfer: TransactionMetadata
-        mint: TransactionMetadata
+        mint: MintMetadata
         burn: TransactionMetadata
         deposit: TransactionMetadata
         withdraw: TransactionMetadata
@@ -220,15 +240,12 @@ export namespace RSS3BaseAPI {
         poap: PoapMetadata
         post: PostMetadata
         revise: PostMetadata
-        // TODO Not official documented
-        comment: PostMetadata
-        // TODO Not official documented
-        share: PostMetadata
+        comment: CommentMetadata
+        share: ShareMetadata
         profile: ProfileMetadata
-        // TODO Not official documented
-        follow: null
-        // TODO Not official documented
-        unfollow: null
+        create: ProfileMetadata
+        follow: FollowMetadata
+        unfollow: FollowMetadata
         // TODO Not official documented
         like: null
         propose: ProposeMetadata
@@ -250,12 +267,19 @@ export namespace RSS3BaseAPI {
         tag: T
         type: P
         index: number
+        /** It's different from transaction.address_from, the token payer */
         address_from?: string
+        /** It's different from transaction.address_from, the token receiver */
         address_to?: string
         metadata?: MetadataMap[P]
         platform?: Platform
         related_urls?: string[]
     }
+
+    export type TokenTransferAction = ActionGeneric<Tag.Transaction, Type.Transfer>
+    export type CollectibleTransferAction = ActionGeneric<Tag.Collectible, Type.Transfer>
+    export type CollectibleTradeAction = ActionGeneric<Tag.Collectible, Type.Trade>
+    export type DonationDonateAction = ActionGeneric<Tag.Donation, Type.Donate>
 
     export interface AddressStatus {
         update_at: RFC3339Datetime
@@ -291,7 +315,23 @@ export namespace RSS3BaseAPI {
         crossbell: ChainId.Crossbell,
     }
 
-    export type Platform = 'mirror' | 'lens' | 'gitcoin' | 'snapshot' | 'uniswap' | 'binance' | 'crossbell'
+    export type Platform =
+        | 'binance'
+        | 'ENS Registrar'
+        | '0x'
+        | 'CrossSync'
+        | 'Crossbell'
+        | 'Gitcoin'
+        | 'Lens'
+        | 'MetaMask'
+        | 'Mirror'
+        | 'OpenSea'
+        | 'Snapshot'
+        | 'SushiSwap'
+        | 'Uniswap'
+        | 'crossbell.io'
+        | 'xLog'
+        | 'Farcaster'
 
     export enum Tag {
         Collectible = 'collectible',
@@ -386,10 +426,11 @@ export namespace RSS3BaseAPI {
         /**
          * The fees paid for the transaction.
          */
-        fee: number
+        fee?: number
         network: Network
         /**
          * There are many platforms supported by PreGod, see the full list. When platform is unknown, the transaction's network is used.
+         * TODO declare a platform map
          */
         platform?: Platform
         /**
@@ -415,6 +456,23 @@ export namespace RSS3BaseAPI {
         | Web3FeedGeneric<Tag.Donation>
         | Web3FeedGeneric<Tag.Collectible>
         | Web3FeedGeneric<Tag.Transaction>
+
+    /** For feed cards */
+    export type TokenTransferFeed = Web3FeedGeneric<Tag.Transaction, Type.Transfer>
+    export type TokenSwapFeed = Web3FeedGeneric<Tag.Exchange, Type.Swap>
+    export type LiquidityFeed = Web3FeedGeneric<Tag.Exchange, Type.Liquidity>
+    export type CollectibleFeed = Web3FeedGeneric<Tag.Collectible>
+    export type CollectibleMintFeed = Web3FeedGeneric<Tag.Collectible, Type.Mint>
+    export type CollectibleTradeFeed = Web3FeedGeneric<Tag.Collectible, Type.Trade>
+    export type CollectibleTransferFeed = Web3FeedGeneric<Tag.Collectible, Type.Transfer>
+    export type CollectibleBurnFeed = Web3FeedGeneric<Tag.Collectible, Type.Burn>
+    export type DonationFeed = Web3FeedGeneric<Tag.Donation, Type.Donate>
+    export type NoteFeed = Web3FeedGeneric<Tag.Social, Type.Post | Type.Revise>
+    export type CommentFeed = Web3FeedGeneric<Tag.Social, Type.Comment>
+    export type ProfileFeed = Web3FeedGeneric<Tag.Social, Type.Profile>
+    export type GovernanceFeed = Web3FeedGeneric<Tag.Governance, Type.Propose | Type.Vote>
+    export type VoteFeed = Web3FeedGeneric<Tag.Governance, Type.Vote>
+    export type ProposeFeed = Web3FeedGeneric<Tag.Governance, Type.Propose>
 
     export interface Web3FeedResponse {
         total: number

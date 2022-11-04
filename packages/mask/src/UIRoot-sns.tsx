@@ -2,14 +2,14 @@ import { Suspense } from 'react'
 import type { Theme } from '@mui/material'
 import { Web3ContextProvider } from '@masknet/web3-hooks-base'
 import { I18NextProviderHMR, SharedContextProvider } from '@masknet/shared'
-import { CSSVariableInjector, MaskThemeProvider } from '@masknet/theme'
+import { CSSVariableInjector, DialogStackingProvider, MaskThemeProvider } from '@masknet/theme'
 import { ErrorBoundary, BuildInfo, useValueRef } from '@masknet/shared-base-ui'
 import { compose, getSiteType, i18NextInstance, NetworkPluginID } from '@masknet/shared-base'
 import { buildInfoMarkdown } from './utils/BuildInfoMarkdown.js'
 import { activatedSocialNetworkUI } from './social-network/index.js'
 import { pluginIDSettings } from './../shared/legacy-settings/settings.js'
 import { isTwitter } from './social-network-adaptor/twitter.com/base.js'
-import { useClassicMaskSNSTheme } from './utils/theme/useClassicMaskSNSTheme.js'
+import { useMaskSiteAdaptorMixedTheme } from './utils/theme/useMaskSiteAdaptorMixedTheme.js'
 import { getBackgroundColor } from './utils/theme/color-tools.js'
 import { isFacebook } from './social-network-adaptor/facebook.com/base.js'
 
@@ -37,6 +37,7 @@ function MaskUIRoot({ children }: React.PropsWithChildren<{}>) {
 
     const context = { pluginID: site ? pluginIDs[site] : NetworkPluginID.PLUGIN_EVM }
     return compose(
+        (children) => DialogStackingProvider({ children, hasGlobalBackdrop: false }),
         (children) => Web3ContextProvider({ value: context, children }),
         (children) => I18NextProviderHMR({ i18n: i18NextInstance, children }),
         <>{children}</>,
@@ -50,7 +51,7 @@ export function ShadowRootAttachPointRoot(children: React.ReactNode) {
         (children) =>
             MaskThemeProvider({
                 useMaskIconPalette,
-                useTheme: useClassicMaskSNSTheme,
+                useTheme: useMaskSiteAdaptorMixedTheme,
                 CustomSnackbarOffsetY: isFacebook(activatedSocialNetworkUI) ? 80 : undefined,
                 children,
             }),

@@ -1,5 +1,5 @@
 import { createContext, createElement, ComponentType, PropsWithChildren, useMemo, useState } from 'react'
-import { defer, DeferTuple } from '@dimensiondev/kit'
+import { defer, DeferTuple } from '@masknet/kit'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import type { InjectedDialogProps } from './components/index.js'
 
@@ -50,7 +50,7 @@ export const createUITaskManager = <TaskOptions extends BaseDialogProps<Result>,
                     const newTask: Task = { id, promise, resolve, reject, options }
                     setTasks((list) => [...list, newTask])
                     promise.then(() => {
-                        removeTask(id)
+                        removeTask(newTask.id)
                     })
                     return promise
                 },

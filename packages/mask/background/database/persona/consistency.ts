@@ -1,4 +1,4 @@
-import { unreachable } from '@dimensiondev/kit'
+import { unreachable } from '@masknet/kit'
 import { ProfileIdentifier, type PersonaIdentifier, ECKeyIdentifier } from '@masknet/shared-base'
 import type { FullPersonaDBTransaction } from './type.js'
 

@@ -1,4 +1,4 @@
-import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
+import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
 import { Typography, Button } from '@mui/material'
 import { makeStyles, LoadingBase } from '@masknet/theme'
 import type { NonFungibleTokenOrder, Pageable } from '@masknet/web3-shared-base'
