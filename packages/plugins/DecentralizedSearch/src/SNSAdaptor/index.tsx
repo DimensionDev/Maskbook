@@ -8,10 +8,15 @@ import { SearchResultInspector } from './SearchResultInspector.js'
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
     init(signal) {},
-    SearchResultContent: {
-        ID: PluginID.ENS,
+    SearchResultBox: {
+        ID: PluginID.DecentralizedSearch,
         UI: {
-            Content: SearchResultInspector,
+            Content: ({ keyword }) => <SearchResultInspector keyword={keyword} />,
+        },
+        Utils: {
+            shouldDisplay(keyword: string) {
+                return keyword.endsWith('.eth')
+            },
         },
     },
     ApplicationEntries: [

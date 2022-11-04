@@ -1,18 +1,14 @@
-import { useContext, useState } from 'react'
+import { useContext, useState, forwardRef } from 'react'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { SourceType } from '@masknet/web3-shared-base'
 import { Box, Typography, Link } from '@mui/material'
 import { useI18N } from '../locales/index.js'
 import { Icons } from '@masknet/icons'
-import { EmptyContent } from './EmptyContent.js'
-import { LoadingContent } from './LoadingContent.js'
-import { LoadFailedContent } from './LoadFailedContent.js'
 import { TopAndLastOffers } from './TopAndLastOffers.js'
 import { ENSProvider, ENSContext, SearchResultInspectorProps } from './context.js'
 import { CollectibleState } from './hooks/useCollectibleState.js'
 import { NextIdBadge } from './NextIdBadge.js'
 import { SocialAccountList } from './SocialAccountList.js'
-import { ENSPostExtraInfoWrapper } from './ENSPostExtraInfoWrapper.js'
 import { makeStyles } from '@masknet/theme'
 
 interface StyleProps {
@@ -79,7 +75,7 @@ const useStyles = makeStyles<StyleProps>()((theme) => {
     }
 })
 
-export function SearchResultInspectorContent() {
+export function SearchResultInspectorContent(props: SearchResultInspectorProps) {
     const t = useI18N()
     const { classes, cx } = useStyles({})
     const [rightBoundary, setRightBoundary] = useState<number | undefined>()
@@ -87,79 +83,68 @@ export function SearchResultInspectorContent() {
         isLoading,
         isError,
         reversedAddress,
-        retry,
         validNextIdTwitterBindings,
         firstValidNextIdTwitterBinding,
-        restOfValidNextIdTwitterBindings,
-        domain,
+        keyword,
         tokenId,
     } = useContext(ENSContext)
 
-    if (isLoading) return <LoadingContent />
-
-    if (reversedAddress === undefined) return null
-
-    if (!reversedAddress || !tokenId) return <EmptyContent />
-
-    if (isError) return <LoadFailedContent isLoading={isLoading} retry={retry} />
-
     return (
-        <ENSPostExtraInfoWrapper>
-            <CollectibleState.Provider
-                initialState={{
-                    chainId: ChainId.Mainnet,
-                    tokenId,
-                    contractAddress: reversedAddress,
-                    sourceType: SourceType.OpenSea,
-                }}>
-                <Box className={classes.root}>
-                    <div className={classes.coverCard}>
-                        <Typography className={classes.coverText}>{domain}</Typography>
-                    </div>
-                    {/* Hide it temporarily <SourceSwitcher /> */}
-                    <TopAndLastOffers />
-                    {firstValidNextIdTwitterBinding?.identity ? (
-                        <div className={classes.nextIdVerified}>
-                            <Typography className={classes.nextIdVerifiedTitle}>
-                                {t.associated_social_accounts()}
-                            </Typography>
-                            <section
-                                className={classes.bindingsWrapper}
-                                ref={(e) => {
-                                    setRightBoundary(e?.getBoundingClientRect().right)
-                                }}>
-                                {validNextIdTwitterBindings.map((x, i) => (
-                                    <div key={i} className={classes.badge}>
-                                        <Link
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className={cx(classes.link, classes.rightSpace)}
-                                            href={`https://twitter.com/${x.identity}`}>
-                                            <Icons.TwitterRoundWithNoBorder width={20} height={20} />
-                                            <Typography className={classes.nextIdVerifiedTwitterName}>
-                                                {x.identity}
-                                            </Typography>
-                                        </Link>
-                                        <NextIdBadge variant="light" rightBoundary={rightBoundary} />
-                                    </div>
-                                ))}
-                            </section>
+        <CollectibleState.Provider
+            initialState={{
+                chainId: ChainId.Mainnet,
+                tokenId: tokenId ?? '',
+                contractAddress: reversedAddress ?? '',
+                sourceType: SourceType.OpenSea,
+            }}>
+            <Box className={classes.root}>
+                <div className={classes.coverCard}>
+                    <Typography className={classes.coverText}>{keyword}</Typography>
+                </div>
+                {/* Hide it temporarily <SourceSwitcher /> */}
+                <TopAndLastOffers />
+                {firstValidNextIdTwitterBinding?.identity ? (
+                    <div className={classes.nextIdVerified}>
+                        <Typography className={classes.nextIdVerifiedTitle}>
+                            {t.associated_social_accounts()}
+                        </Typography>
+                        <section
+                            className={classes.bindingsWrapper}
+                            ref={(e) => {
+                                setRightBoundary(e?.getBoundingClientRect().right)
+                            }}>
+                            {validNextIdTwitterBindings.map((x, i) => (
+                                <div key={i} className={classes.badge}>
+                                    <Link
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className={cx(classes.link, classes.rightSpace)}
+                                        href={`https://twitter.com/${x.identity}`}>
+                                        <Icons.TwitterRoundWithNoBorder width={20} height={20} />
+                                        <Typography className={classes.nextIdVerifiedTwitterName}>
+                                            {x.identity}
+                                        </Typography>
+                                    </Link>
+                                    <NextIdBadge variant="light" rightBoundary={rightBoundary} />
+                                </div>
+                            ))}
+                        </section>
 
-                            {validNextIdTwitterBindings.length > 1 ? (
-                                <SocialAccountList validNextIdTwitterBindings={validNextIdTwitterBindings} />
-                            ) : null}
-                        </div>
-                    ) : null}
-                </Box>
-            </CollectibleState.Provider>
-        </ENSPostExtraInfoWrapper>
+                        {validNextIdTwitterBindings.length > 1 ? (
+                            <SocialAccountList validNextIdTwitterBindings={validNextIdTwitterBindings} />
+                        ) : null}
+                    </div>
+                ) : null}
+            </Box>
+        </CollectibleState.Provider>
     )
 }
 
-export function SearchResultInspector(props: SearchResultInspectorProps) {
+export const SearchResultInspector = forwardRef(function (props: SearchResultInspectorProps) {
+    console.log({ props }, 123)
     return (
         <ENSProvider {...props}>
-            <SearchResultInspectorContent />
+            <SearchResultInspectorContent {...props} />
         </ENSProvider>
     )
-}
+})

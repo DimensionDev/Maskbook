@@ -433,6 +433,8 @@ export namespace Plugin.SNSAdaptor {
         GlobalInjection?: InjectUI<{}>
         /** This UI will be rendered under the Search of the SNS. */
         SearchResultBox?: SearchResultBox
+        /** This is the detailed UI content that will be rendered under the Search of the SNS. */
+        SearchResultContent?: SearchResultContent
         /** This is a chunk of web3 UIs to be rendered into various places of Mask UI. */
         Web3UI?: Web3UI<ChainId, ProviderType, NetworkType>
         /** This is the context of the currently chosen network. */
@@ -616,6 +618,13 @@ export namespace Plugin.SNSAdaptor {
         }
         Utils?: {
             shouldDisplay?(keyword: string): boolean
+        }
+    }
+
+    export interface SearchResultContent {
+        ID: string
+        UI?: {
+            Content?: React.ForwardRefExoticComponent<{ keyword: string } & React.RefAttributes<unknown>>
         }
     }
 

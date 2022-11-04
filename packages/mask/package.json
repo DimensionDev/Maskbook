@@ -25,6 +25,7 @@
     "@masknet/plugin-cyberconnect": "workspace:*",
     "@masknet/plugin-debugger": "workspace:*",
     "@masknet/plugin-ens": "workspace:*",
+    "@masknet/plugin-decentralized-search": "workspace:*",
     "@masknet/plugin-approval": "workspace:*",
     "@masknet/plugin-evm": "workspace:*",
     "@masknet/plugin-example": "workspace:*",

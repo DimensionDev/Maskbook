@@ -13,7 +13,7 @@ interface ENSContextProps {
     restOfValidNextIdTwitterBindings: BindingProof[]
     validNextIdTwitterBindings: BindingProof[]
     reversedAddress: string | undefined
-    domain: string
+    keyword: string
     isError: boolean
     tokenId: string | undefined
     retry: (() => void) | undefined
@@ -26,27 +26,28 @@ export const ENSContext = createContext<ENSContextProps>({
     validNextIdTwitterBindings: [],
     reversedAddress: undefined,
     tokenId: undefined,
-    domain: '',
+    keyword: '',
     isError: false,
     retry: undefined,
 })
 ENSContext.displayName = 'ENSContext'
 
-export function ENSProvider({ children, domain }: PropsWithChildren<SearchResultInspectorProps>) {
+export function ENSProvider({ children, keyword }: PropsWithChildren<SearchResultInspectorProps>) {
     const {
         value: reversedAddress,
         loading: isLoading,
         error,
         retry,
-    } = useLookupAddress(NetworkPluginID.PLUGIN_EVM, domain)
+    } = useLookupAddress(NetworkPluginID.PLUGIN_EVM, keyword)
+    console.log({ keyword })
     const isError = !!error
-    const tokenId = resolveNonFungibleTokenIdFromEnsDomain(domain)
+    const tokenId = resolveNonFungibleTokenIdFromEnsDomain(keyword)
     const { value: ids } = useAsync(
         async () =>
             reversedAddress
                 ? NextIDProof.queryExistedBindingByPlatform(NextIDPlatform.Ethereum, reversedAddress ?? '')
                 : [],
-        [reversedAddress, domain],
+        [reversedAddress, keyword],
     )
 
     const validNextIdTwitterBindings = uniqBy(
@@ -67,7 +68,7 @@ export function ENSProvider({ children, domain }: PropsWithChildren<SearchResult
                 isError,
                 retry,
                 tokenId,
-                domain,
+                keyword,
                 validNextIdTwitterBindings,
                 firstValidNextIdTwitterBinding,
                 restOfValidNextIdTwitterBindings,
@@ -78,5 +79,5 @@ export function ENSProvider({ children, domain }: PropsWithChildren<SearchResult
 }
 
 export interface SearchResultInspectorProps {
-    domain: string
+    keyword: string
 }
