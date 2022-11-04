@@ -84,7 +84,7 @@ const useStyles = makeStyles<{ disabled: boolean; iconFilterColor?: string }>()(
 interface ApplicationEntryProps {
     icon: React.ReactNode
     title: React.ReactNode
-    secondTitle?: React.ReactNode | string
+    secondTitle?: React.ReactNode
     disabled?: boolean
     recommendFeature?: Plugin.SNSAdaptor.ApplicationEntry['recommendFeature']
     popperBoundary?: HTMLElement | null
