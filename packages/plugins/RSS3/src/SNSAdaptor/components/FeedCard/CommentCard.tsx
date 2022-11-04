@@ -3,12 +3,12 @@ import { makeStyles } from '@masknet/theme'
 import { RSS3BaseAPI } from '@masknet/web3-providers'
 import { Typography } from '@mui/material'
 import type { FC } from 'react'
-import { Translate, useI18N } from '../../../locales/i18n_generated.js'
 import Markdown from 'react-markdown'
+import { Translate, useI18N } from '../../../locales/i18n_generated.js'
 import { useAddressLabel } from '../../hooks/index.js'
 import { CardFrame, FeedCardProps } from '../base.js'
-import { Label } from './common.js'
 import { CardType } from '../share.js'
+import { Label } from './common.js'
 
 const useStyles = makeStyles<void, 'image' | 'verbose' | 'content'>()((theme, _, refs) => ({
     summary: {
@@ -52,6 +52,12 @@ const useStyles = makeStyles<void, 'image' | 'verbose' | 'content'>()((theme, _,
         fontSize: 14,
         color: theme.palette.maskColor.second,
     },
+    markdown: {
+        wordBreak: 'break-all',
+        img: {
+            maxWidth: '100%',
+        },
+    },
     content: {
         color: theme.palette.maskColor.main,
         whiteSpace: 'pre-wrap',
@@ -73,7 +79,7 @@ interface CommentCardProps extends Omit<FeedCardProps, 'feed'> {
 }
 
 /**
- * DonationCard
+ * CommentCard
  * Including:
  *
  * - NoteLink
@@ -88,13 +94,12 @@ export const CommentCard: FC<CommentCardProps> = ({ feed, ...rest }) => {
     const metadata = action.metadata
 
     const user = useAddressLabel(feed.owner)
-    const isCreatingNote = feed.type === Type.Post
     const commentTarget = metadata?.target
 
     const imageSize = verbose ? '100%' : 64
 
     return (
-        <CardFrame type={isCreatingNote ? CardType.NoteCreate : CardType.NoteEdit} feed={feed} {...rest}>
+        <CardFrame type={CardType.NoteLink} feed={feed} {...rest}>
             <Typography className={classes.summary}>
                 <Translate.note
                     values={{
@@ -119,7 +124,7 @@ export const CommentCard: FC<CommentCardProps> = ({ feed, ...rest }) => {
                     />
                 ) : null}
                 {verbose && commentTarget?.body ? (
-                    <Markdown>{commentTarget.body}</Markdown>
+                    <Markdown className={classes.markdown}>{commentTarget.body}</Markdown>
                 ) : (
                     <Typography className={classes.content}>{commentTarget?.body}</Typography>
                 )}

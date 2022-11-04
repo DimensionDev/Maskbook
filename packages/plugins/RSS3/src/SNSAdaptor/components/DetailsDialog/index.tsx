@@ -32,13 +32,13 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         height: 24,
         textDecoration: 'none',
+        color: theme.palette.maskColor.highlight,
     },
     linkLabel: {
         fontSize: 18,
         fontWeight: 700,
         lineHeight: '22px',
         marginLeft: theme.spacing(1),
-        color: theme.palette.maskColor.highlight,
     },
 }))
 

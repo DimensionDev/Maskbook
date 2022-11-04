@@ -24,8 +24,7 @@ const useStyles = makeStyles<void, 'image' | 'verbose' | 'info'>()((theme, _, re
         [`&.${refs.verbose}`]: {
             display: 'block',
             [`.${refs.image}`]: {
-                width: '100%',
-                height: '100%',
+                width: 552,
             },
             [`.${refs.info}`]: {
                 marginLeft: 0,
@@ -34,7 +33,7 @@ const useStyles = makeStyles<void, 'image' | 'verbose' | 'info'>()((theme, _, re
         },
         [`.${refs.image}`]: {
             width: 64,
-            height: 64,
+            aspectRatio: '1 / 1',
             borderRadius: 8,
             overflow: 'hidden',
             flexShrink: 0,
@@ -119,7 +118,9 @@ export const CollectibleCard: FC<CollectibleCardProps> = ({ feed, ...rest }) => 
         let metadata
         switch (feed.type) {
             case Type.Mint:
-                metadata = (feed as RSS3BaseAPI.CollectibleMintFeed).actions[0].metadata
+                const actions = (feed as RSS3BaseAPI.CollectibleMintFeed).actions
+                // If only one action, it should be free minting
+                metadata = actions.length > 1 ? actions[1].metadata : actions[0].metadata
                 return {
                     metadata,
                     summary: (

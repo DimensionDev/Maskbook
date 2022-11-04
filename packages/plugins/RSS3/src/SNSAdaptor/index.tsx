@@ -1,5 +1,5 @@
 import type { Plugin } from '@masknet/plugin-infra'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { joinKeys, NetworkPluginID } from '@masknet/shared-base'
 import { Web3ContextProvider } from '@masknet/web3-hooks-base'
 import { RSS3BaseAPI } from '@masknet/web3-providers'
 import type { SocialAccount, SocialIdentity } from '@masknet/web3-shared-base'
@@ -19,9 +19,10 @@ const createActivitiesTabConfig = (label: string, props: FeedPageProps, priority
         priority,
         UI: {
             TabContent: ({ socialAccount }) => {
+                const key = joinKeys(socialAccount?.address ?? '-', props.tag ?? '-')
                 return (
                     <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM }}>
-                        <FeedsPage address={socialAccount?.address} {...props} />
+                        <FeedsPage key={key} address={socialAccount?.address} {...props} />
                     </Web3ContextProvider>
                 )
             },

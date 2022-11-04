@@ -73,7 +73,6 @@ export const platformIconMap: Record<RSS3BaseAPI.Network | RSS3BaseAPI.Platform,
     optimism: Icons.Optimism,
     fantom: Icons.Fantom,
     avalanche: Icons.Avalanche,
-    // TODO icon for zksync is missing
     zksync: Icons.ETH,
     // Platforms
     Gitcoin: Icons.Gitcoin,
@@ -82,7 +81,7 @@ export const platformIconMap: Record<RSS3BaseAPI.Network | RSS3BaseAPI.Platform,
     Uniswap: Icons.Uniswap,
     binance: Icons.BSC,
     Lens: Icons.Mirror,
-    // TODO icon for zksync is missing
+    Farcaster: Icons.Farcaster,
     crossbell: Icons.Mirror,
     '0x': Icons.ZeroX,
     'ENS Registrar': null,

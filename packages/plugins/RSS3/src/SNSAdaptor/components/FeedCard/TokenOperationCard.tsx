@@ -44,7 +44,7 @@ const useStyles = makeStyles<void, 'tokenIcon' | 'verboseToken'>()((theme, _, re
 
 const { Tag, Type } = RSS3BaseAPI
 export function isTokenTransferFeed(feed: RSS3BaseAPI.Web3Feed): feed is RSS3BaseAPI.TokenTransferFeed {
-    return feed.tag === Tag.Transaction && feed.type === Type.Transfer
+    return feed.tag === Tag.Transaction && [Type.Transfer, Type.Burn].includes(feed.type)
 }
 
 interface TokenFeedCardProps extends Omit<FeedCardProps, 'feed'> {
@@ -52,13 +52,14 @@ interface TokenFeedCardProps extends Omit<FeedCardProps, 'feed'> {
 }
 
 /**
- * TokenTransferCard.
+ * TokenOperationCard.
  * Including:
  *
- * TokenIn
- * TokenOut
+ * - TokenIn
+ * - TokenOut
+ * - UnknownBurn
  */
-export const TokenTransferCard: FC<TokenFeedCardProps> = ({ feed, ...rest }) => {
+export const TokenOperationCard: FC<TokenFeedCardProps> = ({ feed, ...rest }) => {
     const { verbose } = rest
     const t = useI18N()
     const { classes, cx } = useStyles()
@@ -68,8 +69,11 @@ export const TokenTransferCard: FC<TokenFeedCardProps> = ({ feed, ...rest }) => 
 
     const owner = useFeedOwner()
     const isFromOwner = isSameAddress(owner.address, action.address_from)
+    const isBurning = feed.type === Type.Burn
 
-    const cardType = isFromOwner ? CardType.TokenOut : CardType.TokenIn
+    /* eslint-disable no-nested-ternary */
+    const cardType = isBurning ? CardType.UnknownBurn : isFromOwner ? CardType.TokenOut : CardType.TokenIn
+    const context = isBurning ? 'burn' : isFromOwner ? 'send' : 'claim'
 
     const from = useAddressLabel(action.address_from!)
     const to = useAddressLabel(action.address_to!)
@@ -78,13 +82,13 @@ export const TokenTransferCard: FC<TokenFeedCardProps> = ({ feed, ...rest }) => 
         <CardFrame type={cardType} feed={feed} {...rest}>
             <Typography className={classes.summary}>
                 {verbose ? (
-                    <Translate.token_transfer_verbose
+                    <Translate.token_operation_verbose
                         values={{
                             from,
                             to,
                             value: formatValue(metadata!),
                             symbol: metadata!.symbol,
-                            context: isFromOwner ? 'send' : 'claim',
+                            context,
                         }}
                         components={{
                             from: <Label title={action.address_from!} />,
@@ -93,15 +97,18 @@ export const TokenTransferCard: FC<TokenFeedCardProps> = ({ feed, ...rest }) => 
                         }}
                     />
                 ) : (
-                    <Translate.token_transfer
+                    <Translate.token_operation
                         values={{
                             from,
                             to,
-                            context: isFromOwner ? 'send' : 'claim',
+                            value: formatValue(metadata!),
+                            symbol: metadata!.symbol,
+                            context,
                         }}
                         components={{
                             from: <Label title={action.address_from!} />,
                             to: <Label title={action.address_to!} />,
+                            bold: <Label />,
                         }}
                     />
                 )}
