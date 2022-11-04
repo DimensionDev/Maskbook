@@ -4,16 +4,22 @@ import { RSS3BaseAPI } from '@masknet/web3-providers'
 import { Typography } from '@mui/material'
 import { FC, HTMLProps, memo, useState } from 'react'
 import Markdown from 'react-markdown'
-import { Translate } from '../../../locales/i18n_generated'
-import { useAddressLabel } from '../../hooks'
-import { CardType } from '../share'
-import { Slider } from '../Slider'
-import { CardFrame, FeedCardProps } from '../base'
-import { formatValue, Label } from './common'
+import { Translate } from '../../../locales/i18n_generated.js'
+import { useAddressLabel } from '../../hooks/index.js'
+import { CardType } from '../share.js'
+import { Slider } from '../Slider.js'
+import { CardFrame, FeedCardProps } from '../base.js'
+import { formatValue, Label } from './common.js'
 
 const useStyles = makeStyles<void, 'image'>()((theme, _, refs) => ({
     summary: {
         color: theme.palette.maskColor.third,
+    },
+    markdown: {
+        wordBreak: 'break-all',
+        img: {
+            maxWidth: '100%',
+        },
     },
     content: {
         marginTop: theme.spacing(1.5),
@@ -133,7 +139,7 @@ export const DonationCard: FC<DonationCardProps> = ({ feed, actionIndex, classNa
                     />
                 </Typography>
                 <Image classes={{ container: classes.image }} src={metadata!.logo} width="100%" />
-                <Markdown>{metadata!.description}</Markdown>
+                <Markdown className={classes.markdown}>{metadata!.description}</Markdown>
             </CardFrame>
         )
     }

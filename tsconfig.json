@@ -61,8 +61,7 @@
 
       "@masknet/backup-format": ["./packages/backup-format/src"],
       "@masknet/configuration": ["./packages/configuration/src"],
-      // ! dashboard is explicitly opt-out of this feature, it and the /packages/mask has circulare reference that TypeScript does not allows.
-      // "@masknet/dashboard": ["./packages/dashboard/src"],
+      "@masknet/dashboard": ["./packages/dashboard/src"],
       "@masknet/encryption": ["./packages/encryption/src"],
       "@masknet/external-plugin-previewer": ["./packages/external-plugin-previewer/src"],
       "@masknet/gun-utils": ["./packages/gun-utils/src"],
@@ -91,6 +90,7 @@
       "@masknet/web3-shared-solana": ["./packages/web3-shared/solana/src"],
       "@masknet/typed-message": ["./packages/typed-message/base"],
       "@masknet/typed-message/dom": ["./packages/typed-message/dom"],
+      "@masknet/types": ["./packages/types/src"],
       "@masknet/sandboxed-plugin-runtime": ["./packages/sandboxed-plugin-runtime/src/runtime/export.ts"],
       "@masknet/sandboxed-plugin-runtime/background": ["./packages/sandboxed-plugin-runtime/src/background"],
       "@masknet/sandboxed-plugin-runtime/site-adaptor": ["./packages/sandboxed-plugin-runtime/src/site-adaptor"],

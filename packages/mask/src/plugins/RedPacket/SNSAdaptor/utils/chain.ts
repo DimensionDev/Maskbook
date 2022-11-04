@@ -1,5 +1,5 @@
 import urlcat from 'urlcat'
-import type BigNumber from 'bignumber.js'
+import type { BigNumber } from 'bignumber.js'
 import { first } from 'lodash-unified'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import type { NetworkPluginID } from '@masknet/shared-base'

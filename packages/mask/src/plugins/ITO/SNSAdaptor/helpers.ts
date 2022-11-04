@@ -1,5 +1,5 @@
 import { omit } from 'lodash-unified'
-import type BigNumber from 'bignumber.js'
+import type { BigNumber } from 'bignumber.js'
 import type { Result } from 'ts-results'
 import { ChainId, isNativeTokenAddress } from '@masknet/web3-shared-evm'
 import type { TypedMessage } from '@masknet/typed-message'

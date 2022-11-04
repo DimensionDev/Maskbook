@@ -7,7 +7,7 @@
     "yarn": ">=999.0.0",
     "npm": ">=999.0.0"
   },
-  "version": "2.15.2",
+  "version": "2.15.3",
   "private": true,
   "license": "AGPL-3.0-or-later",
   "scripts": {
@@ -59,7 +59,7 @@
     "@commitlint/cli": "^17.1.2",
     "@commitlint/config-conventional": "^17.1.0",
     "@dimensiondev/eslint-plugin": "0.0.2-20220516081411-2649814",
-    "@magic-works/i18n-codegen": "^0.3.0",
+    "@magic-works/i18n-codegen": "^0.4.0",
     "@masknet/cli": "workspace:*",
     "@masknet/serializer": "workspace:*",
     "@nice-labs/git-rev": "^3.5.0",

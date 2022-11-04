@@ -4,11 +4,11 @@ import { RSS3BaseAPI } from '@masknet/web3-providers'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { Typography } from '@mui/material'
 import { FC, useMemo } from 'react'
-import { Translate } from '../../../locales/i18n_generated'
-import { useAddressLabel } from '../../hooks'
-import { CardType } from '../share'
-import { CardFrame, FeedCardProps } from '../base'
-import { formatValue, Label } from './common'
+import { Translate } from '../../../locales/i18n_generated.js'
+import { useAddressLabel } from '../../hooks/index.js'
+import { CardType } from '../share.js'
+import { CardFrame, FeedCardProps } from '../base.js'
+import { formatValue, Label } from './common.js'
 
 const useStyles = makeStyles<void, 'image' | 'verbose' | 'info'>()((theme, _, refs) => ({
     summary: {
@@ -24,8 +24,7 @@ const useStyles = makeStyles<void, 'image' | 'verbose' | 'info'>()((theme, _, re
         [`&.${refs.verbose}`]: {
             display: 'block',
             [`.${refs.image}`]: {
-                width: '100%',
-                height: '100%',
+                width: 552,
             },
             [`.${refs.info}`]: {
                 marginLeft: 0,
@@ -34,7 +33,7 @@ const useStyles = makeStyles<void, 'image' | 'verbose' | 'info'>()((theme, _, re
         },
         [`.${refs.image}`]: {
             width: 64,
-            height: 64,
+            aspectRatio: '1 / 1',
             borderRadius: 8,
             overflow: 'hidden',
             flexShrink: 0,
@@ -119,7 +118,9 @@ export const CollectibleCard: FC<CollectibleCardProps> = ({ feed, ...rest }) => 
         let metadata
         switch (feed.type) {
             case Type.Mint:
-                metadata = (feed as RSS3BaseAPI.CollectibleMintFeed).actions[0].metadata
+                const actions = (feed as RSS3BaseAPI.CollectibleMintFeed).actions
+                // If only one action, it should be free minting
+                metadata = actions.length > 1 ? actions[1].metadata : actions[0].metadata
                 return {
                     metadata,
                     summary: (

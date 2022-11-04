@@ -3,10 +3,10 @@ import { InjectedDialog, InjectedDialogProps, Linking } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { DialogContent, Typography } from '@mui/material'
 import type { PropsWithChildren } from 'react'
-import { useI18N } from '../../../locales'
-import type { FeedCardProps } from '../base'
-import { FeedCard } from '../FeedCard'
-import { CardType, hostIconMap, hostNameMap } from '../share'
+import { useI18N } from '../../../locales/index.js'
+import type { FeedCardProps } from '../base.js'
+import { FeedCard } from '../FeedCard/index.js'
+import { CardType, hostIconMap, hostNameMap } from '../share.js'
 
 const useStyles = makeStyles()((theme) => ({
     detailsDialog: {
@@ -32,13 +32,13 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         height: 24,
         textDecoration: 'none',
+        color: theme.palette.maskColor.highlight,
     },
     linkLabel: {
         fontSize: 18,
         fontWeight: 700,
         lineHeight: '22px',
         marginLeft: theme.spacing(1),
-        color: theme.palette.maskColor.highlight,
     },
 }))
 

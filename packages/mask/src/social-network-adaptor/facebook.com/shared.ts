@@ -1,4 +1,4 @@
-import type { SocialNetwork } from '../../social-network/types.js'
+import type { SocialNetwork } from '@masknet/types'
 import { facebookBase } from './base.js'
 import { getPostUrlAtFacebook, isValidFacebookUsername } from './utils/parse-username.js'
 import type { PostIdentifier } from '@masknet/shared-base'

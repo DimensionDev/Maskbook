@@ -1,7 +1,6 @@
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
-import Popover from '@mui/material/Popover'
-import { RadioGroup, Typography } from '@mui/material'
+import { RadioGroup, Typography, Popover } from '@mui/material'
 import type { PropsWithChildren } from 'react'
 
 const useStyles = makeStyles()({

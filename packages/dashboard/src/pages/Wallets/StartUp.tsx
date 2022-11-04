@@ -17,7 +17,7 @@ const Container = styled('div')`
 export function StartUp() {
     const t = useDashboardI18N()
     const { openDialog: openConnectWalletDialog } = useRemoteControlledDialog(
-        PluginMessages.Wallet.events.selectProviderDialogUpdated,
+        PluginMessages.Wallet.selectProviderDialogUpdated,
     )
 
     return (

@@ -1,6 +1,6 @@
 import { Box, Typography } from '@mui/material'
 import { LoadingBase, makeStyles, ShadowRootTooltip, useStylesExtends } from '@masknet/theme'
-import { useI18N } from '../locales/i18n_generated'
+import { useI18N } from '../locales/i18n_generated.js'
 
 const useStyles = makeStyles()(() => ({
     root: {},

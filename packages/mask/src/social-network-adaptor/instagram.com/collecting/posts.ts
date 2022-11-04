@@ -1,5 +1,5 @@
 import { DOMProxy, LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import type { SocialNetworkUI } from '../../../social-network/types.js'
+import type { SocialNetworkUI } from '@masknet/types'
 import { creator } from '../../../social-network/utils.js'
 import { TypedMessage, makeTypedMessageImage, makeTypedMessageTuple } from '@masknet/typed-message'
 import { ProfileIdentifier } from '@masknet/shared-base'

@@ -3,11 +3,11 @@ import { RSS3BaseAPI } from '@masknet/web3-providers'
 import { Typography } from '@mui/material'
 import type { FC } from 'react'
 import Markdown from 'react-markdown'
-import { Translate } from '../../../locales/i18n_generated'
-import { useAddressLabel } from '../../hooks'
-import { CardType } from '../share'
-import { CardFrame, FeedCardProps } from '../base'
-import { Label } from './common'
+import { Translate } from '../../../locales/i18n_generated.js'
+import { useAddressLabel } from '../../hooks/index.js'
+import { CardType } from '../share.js'
+import { CardFrame, FeedCardProps } from '../base.js'
+import { Label } from './common.js'
 
 const useStyles = makeStyles()((theme) => ({
     summary: {
@@ -20,6 +20,12 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 14,
         fontWeight: 700,
         lineHeight: '18px',
+    },
+    markdown: {
+        wordBreak: 'break-all',
+        img: {
+            maxWidth: '100%',
+        },
     },
     content: {
         color: theme.palette.maskColor.main,
@@ -75,7 +81,7 @@ export const VoteCard: FC<VoteCardProps> = ({ feed, ...rest }) => {
                 <>
                     <Typography className={classes.title}>{metadata.proposal.title}</Typography>
                     {verbose ? (
-                        <Markdown>{metadata.proposal.body}</Markdown>
+                        <Markdown className={classes.markdown}>{metadata.proposal.body}</Markdown>
                     ) : (
                         <Typography className={classes.content}>{metadata.proposal.body}</Typography>
                     )}

@@ -13,9 +13,11 @@ export const ElementAnchor = memo<ElementAnchorProps>(({ callback, children }) =
         rootMargin: '200px',
     })
 
+    const callbackRef = useRef(callback)
+    callbackRef.current = callback
     useEffect(() => {
         if (!intersection?.isIntersecting) return
-        callback(intersection)
+        callbackRef.current(intersection)
     }, [intersection])
 
     return (

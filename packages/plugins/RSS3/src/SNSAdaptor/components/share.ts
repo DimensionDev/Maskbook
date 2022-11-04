@@ -1,5 +1,5 @@
 import { Icons } from '@masknet/icons'
-import type { GeneratedIconNonSquareProps } from '@masknet/icons/utils/internal'
+import type { GeneratedIconNonSquareProps } from '@masknet/icons'
 import type { RSS3BaseAPI } from '@masknet/web3-providers'
 import type { ComponentType } from 'react'
 
@@ -73,7 +73,6 @@ export const platformIconMap: Record<RSS3BaseAPI.Network | RSS3BaseAPI.Platform,
     optimism: Icons.Optimism,
     fantom: Icons.Fantom,
     avalanche: Icons.Avalanche,
-    // TODO icon for zksync is missing
     zksync: Icons.ETH,
     // Platforms
     Gitcoin: Icons.Gitcoin,
@@ -82,7 +81,7 @@ export const platformIconMap: Record<RSS3BaseAPI.Network | RSS3BaseAPI.Platform,
     Uniswap: Icons.Uniswap,
     binance: Icons.BSC,
     Lens: Icons.Mirror,
-    // TODO icon for zksync is missing
+    Farcaster: Icons.Farcaster,
     crossbell: Icons.Mirror,
     '0x': Icons.ZeroX,
     'ENS Registrar': null,

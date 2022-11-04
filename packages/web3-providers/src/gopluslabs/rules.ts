@@ -1,4 +1,4 @@
-import parseInt from 'lodash-es/parseInt'
+import { parseInt } from 'lodash-es'
 import { SecurityKey, SecurityMessageLevel } from './constants.js'
 import type { SecurityAPI } from '../types/Security.js'
 
