@@ -15,6 +15,7 @@ const useStyles = makeStyles<void, 'image'>()((theme, _, refs) => ({
     badge: {
         display: 'inline-block',
         height: 18,
+        lineHeight: '18px',
         borderRadius: 4,
         marginLeft: theme.spacing(1.5),
         backgroundColor: theme.palette.maskColor.main,
@@ -157,7 +158,13 @@ export const DonationCard: FC<DonationCardProps> = ({ feed, actionIndex, classNa
     }
 
     return (
-        <CardFrame type={CardType.DonationDonate} feed={feed} actionIndex={activeActionIndex} badge={badge} {...rest}>
+        <CardFrame
+            type={CardType.DonationDonate}
+            feed={feed}
+            actionIndex={activeActionIndex}
+            badge={badge}
+            className={className}
+            {...rest}>
             <Typography className={classes.summary}>
                 <Translate.donation_donate
                     values={{

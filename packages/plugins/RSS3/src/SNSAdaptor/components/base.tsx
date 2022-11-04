@@ -1,12 +1,12 @@
 import { Icons } from '@masknet/icons'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import type { RSS3BaseAPI } from '@masknet/web3-providers'
 import { Typography } from '@mui/material'
 import { BigNumber } from 'bignumber.js'
-import formatDateTime from 'date-fns/format'
 import type { FC, HTMLProps, ReactNode } from 'react'
+import formatDateTime from 'date-fns/format'
 import { useViewFeedDetails } from '../contexts/index.js'
-import { CardType, cardTypeIconMap, platformIconMap } from './share.js'
+import { CardType, cardTypeIconMap, formatTimestamp, platformIconMap } from './share.js'
 
 export interface FeedCardBaseProps {
     feed: RSS3BaseAPI.Web3Feed
@@ -106,9 +106,9 @@ export const CardFrame: FC<CardFrameProps> = ({
                 ) : null}
                 {ProviderPlatformIcon ? <ProviderPlatformIcon className={classes.icon} size={18} /> : null}
                 {PrimaryPlatformIcon ? <PrimaryPlatformIcon className={classes.icon} size={18} /> : null}
-                <Typography className={classes.timestamp}>
-                    {formatDateTime(new Date(feed.timestamp), 'MM/dd/yyyy')}
-                </Typography>
+                <ShadowRootTooltip title={formatDateTime(new Date(feed.timestamp), 'yyyy-MM-dd HH:mm:ss')}>
+                    <Typography className={classes.timestamp}>{formatTimestamp(feed.timestamp)}</Typography>
+                </ShadowRootTooltip>
                 {badge}
             </div>
             <div className={classes.body}>{children}</div>
