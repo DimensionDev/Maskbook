@@ -69,7 +69,7 @@ export class NameServiceState<
                 return
             }
         })
-        return attemptUntil(callbacks, undefined)
+        return attemptUntil(callbacks, undefined, true)
     }
 
     async reverse(chainId: ChainId, address: string) {
