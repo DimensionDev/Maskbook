@@ -4,6 +4,7 @@ import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { Typography } from '@mui/material'
 import { PluginPetMessages } from '../messages.js'
 import { useI18N } from '../locales/index.js'
+import { PluginGameMessages } from '../../Game/messages.js'
 import { NFF_TWITTER } from '../constants.js'
 import { ShowMeta, MenuType } from '../types.js'
 import { useCurrentVisitingUser } from '../hooks/index.js'
@@ -74,6 +75,7 @@ function RightMenu(props: Props) {
     const [isTop, setIsTop] = useState(false)
 
     const { openDialog } = useRemoteControlledDialog(PluginPetMessages.events.essayDialogUpdated)
+    const { setDialog: openGameDialog } = useRemoteControlledDialog(PluginGameMessages.events.gameDialogUpdated)
 
     useEffect(() => {
         if (props.isShow) {
@@ -93,6 +95,16 @@ function RightMenu(props: Props) {
         switch (type) {
             case MenuType.Setting:
                 openDialog()
+                break
+            case MenuType.Game:
+                openGameDialog({
+                    open: true,
+                    tokenProps: {
+                        tokenId: props.showMeta?.tokenId,
+                        contract: props.showMeta?.contract,
+                        chainId: props.showMeta?.chainId,
+                    },
+                })
                 break
             case MenuType.About:
                 window.open(NFF_TWITTER)

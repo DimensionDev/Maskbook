@@ -63,5 +63,6 @@ export interface NonFungibleContract {
 
 export enum MenuType {
     Setting = 0,
-    About = 1,
+    Game = 1,
+    About = 2,
 }
