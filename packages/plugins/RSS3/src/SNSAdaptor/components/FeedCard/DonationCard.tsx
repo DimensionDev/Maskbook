@@ -15,6 +15,12 @@ const useStyles = makeStyles<void, 'image'>()((theme, _, refs) => ({
     summary: {
         color: theme.palette.maskColor.third,
     },
+    markdown: {
+        wordBreak: 'break-all',
+        img: {
+            maxWidth: '100%',
+        },
+    },
     content: {
         marginTop: theme.spacing(1.5),
         fontSize: 14,
@@ -133,7 +139,7 @@ export const DonationCard: FC<DonationCardProps> = ({ feed, actionIndex, classNa
                     />
                 </Typography>
                 <Image classes={{ container: classes.image }} src={metadata!.logo} width="100%" />
-                <Markdown>{metadata!.description}</Markdown>
+                <Markdown className={classes.markdown}>{metadata!.description}</Markdown>
             </CardFrame>
         )
     }

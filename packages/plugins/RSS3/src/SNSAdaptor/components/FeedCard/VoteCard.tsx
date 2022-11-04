@@ -21,6 +21,12 @@ const useStyles = makeStyles()((theme) => ({
         fontWeight: 700,
         lineHeight: '18px',
     },
+    markdown: {
+        wordBreak: 'break-all',
+        img: {
+            maxWidth: '100%',
+        },
+    },
     content: {
         color: theme.palette.maskColor.main,
         whiteSpace: 'pre-wrap',
@@ -75,7 +81,7 @@ export const VoteCard: FC<VoteCardProps> = ({ feed, ...rest }) => {
                 <>
                     <Typography className={classes.title}>{metadata.proposal.title}</Typography>
                     {verbose ? (
-                        <Markdown>{metadata.proposal.body}</Markdown>
+                        <Markdown className={classes.markdown}>{metadata.proposal.body}</Markdown>
                     ) : (
                         <Typography className={classes.content}>{metadata.proposal.body}</Typography>
                     )}
