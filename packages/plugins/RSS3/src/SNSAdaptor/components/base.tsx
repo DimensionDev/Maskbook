@@ -4,7 +4,7 @@ import type { RSS3BaseAPI } from '@masknet/web3-providers'
 import { Typography } from '@mui/material'
 import { BigNumber } from 'bignumber.js'
 import formatDateTime from 'date-fns/format'
-import type { FC, HTMLProps } from 'react'
+import type { FC, HTMLProps, ReactNode } from 'react'
 import { useViewFeedDetails } from '../contexts/index.js'
 import { CardType, cardTypeIconMap, platformIconMap } from './share.js'
 
@@ -61,6 +61,7 @@ const useStyles = makeStyles()((theme) => ({
 
 export interface CardFrameProps extends Omit<HTMLProps<HTMLDivElement>, 'type' | 'action'>, FeedCardBaseProps {
     type: CardType
+    badge?: ReactNode
 }
 
 export const CardFrame: FC<CardFrameProps> = ({
@@ -71,6 +72,7 @@ export const CardFrame: FC<CardFrameProps> = ({
     children,
     onClick,
     verbose,
+    badge,
     ...rest
 }) => {
     const { classes, cx } = useStyles()
@@ -107,6 +109,7 @@ export const CardFrame: FC<CardFrameProps> = ({
                 <Typography className={classes.timestamp}>
                     {formatDateTime(new Date(feed.timestamp), 'MM/dd/yyyy')}
                 </Typography>
+                {badge}
             </div>
             <div className={classes.body}>{children}</div>
         </article>

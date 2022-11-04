@@ -12,6 +12,15 @@ import { CardFrame, FeedCardProps } from '../base.js'
 import { formatValue, Label } from './common.js'
 
 const useStyles = makeStyles<void, 'image'>()((theme, _, refs) => ({
+    badge: {
+        display: 'inline-block',
+        height: 18,
+        borderRadius: 4,
+        marginLeft: theme.spacing(1.5),
+        backgroundColor: theme.palette.maskColor.main,
+        color: theme.palette.maskColor.second,
+        padding: '0 6px',
+    },
     summary: {
         color: theme.palette.maskColor.third,
     },
@@ -46,7 +55,7 @@ const useStyles = makeStyles<void, 'image'>()((theme, _, refs) => ({
     },
     image: {},
     verbose: {
-        image: {
+        [`.${refs.image}`]: {
             marginTop: theme.spacing(1),
         },
     },
@@ -117,6 +126,8 @@ export const DonationCard: FC<DonationCardProps> = ({ feed, actionIndex, classNa
     const metadata = action.metadata
 
     const user = useAddressLabel(feed.owner)
+    const actionSize = feed.actions.length
+    const badge = actionSize > 1 ? <Typography className={classes.badge}>+{actionSize}</Typography> : null
 
     if (verbose) {
         return (
@@ -124,6 +135,7 @@ export const DonationCard: FC<DonationCardProps> = ({ feed, actionIndex, classNa
                 type={CardType.DonationDonate}
                 feed={feed}
                 className={cx(rest.verbose ? classes.verbose : null, className)}
+                badge={badge}
                 {...rest}>
                 <Typography className={classes.summary}>
                     <Translate.donation_donate_verbose
@@ -145,7 +157,7 @@ export const DonationCard: FC<DonationCardProps> = ({ feed, actionIndex, classNa
     }
 
     return (
-        <CardFrame type={CardType.DonationDonate} feed={feed} actionIndex={activeActionIndex} {...rest}>
+        <CardFrame type={CardType.DonationDonate} feed={feed} actionIndex={activeActionIndex} badge={badge} {...rest}>
             <Typography className={classes.summary}>
                 <Translate.donation_donate
                     values={{
