@@ -4,7 +4,7 @@ import { first } from 'lodash-unified'
 import { BigNumber } from 'bignumber.js'
 import getUnixTime from 'date-fns/getUnixTime'
 import formatDateTime from 'date-fns/format'
-import type { Order } from 'opensea-js/lib/types'
+import type { Order } from 'opensea-js/lib/types.js'
 import {
     DialogContent,
     Box,

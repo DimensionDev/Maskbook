@@ -1,6 +1,7 @@
 {
   "name": "@masknet/plugin-web3-profile",
   "private": true,
+  "type": "module",
   "exports": {
     ".": {
       "webpack": "./src/index.ts",

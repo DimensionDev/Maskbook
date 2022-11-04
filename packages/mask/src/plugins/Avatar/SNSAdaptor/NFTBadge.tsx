@@ -1,6 +1,6 @@
 import { openWindow } from '@masknet/shared-base-ui'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
-import Link from '@mui/material/Link'
+import { Link } from '@mui/material'
 import { useI18N } from '../../../utils/index.js'
 import type { AvatarMetaDB, NFTInfo } from '../types.js'
 import { formatPrice, formatText } from '../utils/index.js'

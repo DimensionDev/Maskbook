@@ -48,6 +48,7 @@ import { FuseTrendingAPI } from './fuse/index.js'
 export * from './helpers.js'
 export * from './types/index.js'
 export * from './opensea/utils.js'
+export type { SecurityMessage as GoPlusLabsSecurityMessage } from './gopluslabs/rules.js'
 export { CollectionType } from './rss3/constants.js'
 
 export const OpenSea = new OpenSeaAPI()

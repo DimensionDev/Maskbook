@@ -2,6 +2,7 @@
   "name": "@masknet/plugin-infra",
   "private": true,
   "license": "AGPL-3.0-or-later",
+  "type": "module",
   "exports": {
     ".": {
       "types": "./dist/entry.d.ts",

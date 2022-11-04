@@ -1,6 +1,3 @@
-/// <reference types="@masknet/web3-shared-flow/src/env" />
-/// <reference types="@masknet/web3-shared-solana/src/env" />
-
 import { useCallback, useEffect, useState } from 'react'
 import { createContainer } from 'unstated-next'
 import { useSharedI18N } from '@masknet/shared'

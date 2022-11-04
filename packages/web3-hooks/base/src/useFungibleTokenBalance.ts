@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import useAsyncRetry from 'react-use/lib/useAsyncRetry.js'
+import { useAsyncRetry } from 'react-use'
 import { noop } from 'lodash-unified'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { isSameAddress } from '@masknet/web3-shared-base'

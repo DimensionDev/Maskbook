@@ -1,6 +1,7 @@
 {
   "name": "@masknet/plugin-example",
   "private": true,
+  "type": "module",
   "exports": {
     ".": {
       "webpack": "./src/index.ts",

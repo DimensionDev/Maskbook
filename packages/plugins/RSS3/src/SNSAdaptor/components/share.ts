@@ -1,5 +1,5 @@
 import { Icons } from '@masknet/icons'
-import type { GeneratedIconNonSquareProps } from '@masknet/icons/utils/internal'
+import type { GeneratedIconNonSquareProps } from '@masknet/icons'
 import type { RSS3BaseAPI } from '@masknet/web3-providers'
 import type { ComponentType } from 'react'
 

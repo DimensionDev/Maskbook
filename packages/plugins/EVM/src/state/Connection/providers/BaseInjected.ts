@@ -1,7 +1,7 @@
 import { first } from 'lodash-unified'
 import type { RequestArguments } from 'web3-core'
 import { isEthereumInjected } from '@masknet/shared-base'
-import type { InjectedProvider } from '@masknet/injected-script/sdk/Base'
+import type { InjectedProvider } from '@masknet/injected-script'
 import { ChainId, EthereumMethodType, ProviderType, Web3Provider } from '@masknet/web3-shared-evm'
 import type { ProviderOptions } from '@masknet/web3-shared-base'
 import type { EVM_Provider } from '../types.js'

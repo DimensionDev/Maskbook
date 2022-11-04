@@ -118,6 +118,7 @@ async function createNewPackage({ path, npmName, type, pluginID }: PackageOption
                     hooks: 'useI18N',
                     namespace: pluginID,
                     trans: 'Translate',
+                    emitTS: true,
                 },
             })
         })

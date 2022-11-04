@@ -18,9 +18,7 @@ import {
 } from '@mui/material'
 import type { AutoPasteFailedEvent } from '@masknet/shared-base'
 import { DraggableDiv } from '../shared/DraggableDiv.js'
-import Download from '@mui/icons-material/CloudDownload'
-import { Close as CloseIcon } from '@mui/icons-material'
-import OpenInBrowser from '@mui/icons-material/OpenInBrowser'
+import { Close as CloseIcon, Download, OpenInBrowser } from '@mui/icons-material'
 import { saveFileFromUrl } from '../../../shared/index.js'
 import { Image } from '@masknet/shared'
 

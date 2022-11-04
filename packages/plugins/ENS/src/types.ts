@@ -1,4 +1,4 @@
-import type { WyvernSchemaName } from 'opensea-js/lib/types'
+import type { WyvernSchemaName } from 'opensea-js/lib/types.js'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import type { SourceType } from '@masknet/web3-shared-base'
 
