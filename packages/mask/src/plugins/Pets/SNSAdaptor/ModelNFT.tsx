@@ -7,7 +7,6 @@ import ModelView from './ModelView.js'
 import { useStyles as boxUseStyles } from './PreviewBox.js'
 import { DragIcon } from '../constants.js'
 import type { ShowMeta } from '../types.js'
-import RightMenu from './RightMenu.js'
 
 const useStyles = makeStyles()(() => ({
     dragContent: {
@@ -66,12 +65,6 @@ export function ModelNFT(props: ModelNFTProps) {
     const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
     const handleMenuShow = (e: React.MouseEvent) => {
         e.preventDefault()
-
-        setMousePosition({ x: e.clientX, y: e.clientY })
-        setMenuShow(true)
-    }
-    const handleMenuClose = () => {
-        setMenuShow(false)
     }
     return (
         <div>
@@ -101,13 +94,6 @@ export function ModelNFT(props: ModelNFTProps) {
                     </Box>
                 ) : null}
             </Drag>
-            <RightMenu
-                isShow={isMenuShow}
-                showMeta={showMeta}
-                onClose={handleMenuClose}
-                mousePosition={mousePosition}
-                dragPosition={position}
-            />
         </div>
     )
 }

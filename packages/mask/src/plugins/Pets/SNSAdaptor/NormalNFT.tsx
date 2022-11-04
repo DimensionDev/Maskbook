@@ -6,7 +6,6 @@ import classNames from 'classnames'
 import Drag from './Drag.js'
 import type { ShowMeta } from '../types.js'
 import { CloseIcon } from '../constants.js'
-import RightMenu from './RightMenu.js'
 import { Image } from '@masknet/shared'
 
 const useStyles = makeStyles()(() => ({
@@ -58,22 +57,13 @@ export function NormalNFT(props: NormalNFTProps) {
     const classes = useStylesExtends(useStyles(), {})
     const boxClasses = useStylesExtends(useBoxStyles(), {})
 
-    const [isMenuShow, setMenuShow] = useState(false)
-    const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
     const handleMenuShow = (e: React.MouseEvent) => {
         e.preventDefault()
-
-        setMousePosition({ x: e.clientX, y: e.clientY })
-        setMenuShow(true)
-    }
-    const handleMenuClose = () => {
-        setMenuShow(false)
     }
 
     const [position, setPosition] = useState({ x: 50, y: 150 })
     const moveHandle = (x: number, y: number) => {
         setPosition({ x, y })
-        setMenuShow(false)
     }
 
     return (
@@ -109,13 +99,6 @@ export function NormalNFT(props: NormalNFTProps) {
             {infoShow ? (
                 <div className={classes.close} onClick={handleClose} style={{ backgroundImage: `url(${CloseIcon})` }} />
             ) : null}
-            <RightMenu
-                showMeta={showMeta}
-                isShow={isMenuShow}
-                onClose={handleMenuClose}
-                mousePosition={mousePosition}
-                dragPosition={position}
-            />
         </Drag>
     )
 }
