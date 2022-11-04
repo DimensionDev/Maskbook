@@ -84,6 +84,7 @@ const useStyles = makeStyles<{ disabled: boolean; iconFilterColor?: string }>()(
 interface ApplicationEntryProps {
     icon: React.ReactNode
     title: React.ReactNode
+    secondTitle?: React.ReactNode
     disabled?: boolean
     recommendFeature?: Plugin.SNSAdaptor.ApplicationEntry['recommendFeature']
     popperBoundary?: HTMLElement | null
@@ -95,6 +96,7 @@ interface ApplicationEntryProps {
 export function ApplicationEntry(props: ApplicationEntryProps) {
     const {
         title,
+        secondTitle,
         onClick,
         disabled = false,
         icon,
@@ -117,6 +119,9 @@ export function ApplicationEntry(props: ApplicationEntryProps) {
             <div className={classes.recommendFeatureAppIconWrapper}>{icon}</div>
             <div>
                 <Typography className={classes.recommendFeatureAppListItemName}>{title}</Typography>
+                {secondTitle ? (
+                    <Typography className={classes.recommendFeatureAppListItemDescription}>{secondTitle}</Typography>
+                ) : null}
                 <Typography className={classes.recommendFeatureAppListItemDescription}>
                     {recommendFeature.description}
                 </Typography>
@@ -130,6 +135,11 @@ export function ApplicationEntry(props: ApplicationEntryProps) {
             <Typography className={classes.title} color="textPrimary">
                 {title}
             </Typography>
+            {secondTitle ? (
+                <Typography variant="body2" color="textSecondary">
+                    {secondTitle}
+                </Typography>
+            ) : null}
         </div>
     )
     return tooltipHint ? (

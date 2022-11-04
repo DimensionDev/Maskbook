@@ -134,12 +134,6 @@ function RightMenu(props: Props) {
             <div onClick={() => onClickMenu(MenuType.Setting)}>
                 <Typography>{t.pets_dialog_menu_change()}</Typography>
             </div>
-            {visitor.userId === whoAmI?.identifier?.userId ? (
-                <div onClick={() => onClickMenu(MenuType.Game)}>
-                    <Typography>{t.pets_dialog_menu_ski()}</Typography>
-                </div>
-            ) : null}
-
             <div onClick={() => onClickMenu(MenuType.About)}>
                 <Typography>{t.pets_dialog_menu_about()}</Typography>
             </div>
