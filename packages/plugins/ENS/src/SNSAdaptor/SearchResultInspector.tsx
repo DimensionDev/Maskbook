@@ -2,7 +2,6 @@ import { useContext, forwardRef, useImperativeHandle } from 'react'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { SourceType } from '@masknet/web3-shared-base'
 import { Box, Typography, Link, alpha } from '@mui/material'
-import { useI18N } from '../locales/index.js'
 import { ENSProvider, ENSContext, SearchResultInspectorProps } from './context.js'
 import { CollectibleState } from './hooks/useCollectibleState.js'
 import { SocialAccountList } from './SocialAccountList.js'
@@ -68,6 +67,7 @@ const useStyles = makeStyles<StyleProps>()((theme) => {
             textDecoration: 'none !important',
         },
         linkOutIcon: {
+            color: theme.palette.maskColor.dark,
             cursor: 'pointer',
         },
         bindingsWrapper: {
@@ -93,7 +93,6 @@ export const SearchResultInspectorContent = forwardRef(function (
     props: SearchResultInspectorProps,
     ref: React.ForwardedRef<unknown>,
 ) {
-    const t = useI18N()
     const { classes, cx } = useStyles({})
     const {
         isLoading,
@@ -139,16 +138,17 @@ export const SearchResultInspectorContent = forwardRef(function (
                                         <Link
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            className={cx(classes.link, classes.rightSpace)}
+                                            className={classes.link}
                                             href={`https://twitter.com/${x.identity}`}>
                                             <div className={classes.twitterIcon}>
                                                 <Icons.Twitter width={12} height={12} />
                                             </div>
-                                            <Typography className={classes.nextIdVerifiedTwitterName}>
+                                            <Typography
+                                                className={cx(classes.nextIdVerifiedTwitterName, classes.rightSpace)}>
                                                 {x.identity}
                                             </Typography>
+                                            <Icons.LinkOut size={20} className={classes.linkOutIcon} />
                                         </Link>
-                                        <Icons.LinkOut size={20} className={classes.linkOutIcon} />
                                     </div>
                                 </SocialTooltip>
                             ))}
