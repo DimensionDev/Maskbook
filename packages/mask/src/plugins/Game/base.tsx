@@ -6,7 +6,7 @@ import { languages } from './locales/languages.js'
 
 export const base: Plugin.Shared.Definition = {
     ID: GamePluginID,
-    name: { fallback: 'Game' },
+    name: { fallback: 'More coming' },
     description: {
         fallback: 'Play game with your NFT.',
     },

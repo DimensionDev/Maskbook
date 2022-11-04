@@ -135,8 +135,8 @@ function RightMenu(props: Props) {
                 <Typography>{t.pets_dialog_menu_change()}</Typography>
             </div>
             {visitor.userId === whoAmI?.identifier?.userId ? (
-                <div onClick={() => onClickMenu(MenuType.Game)}>
-                    <Typography>{t.pets_dialog_menu_ski()}</Typography>
+                <div>
+                    <Typography color="gray">{t.pets_dialog_menu_ski()}</Typography>
                 </div>
             ) : null}
 
