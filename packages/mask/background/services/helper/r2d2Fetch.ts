@@ -59,27 +59,7 @@ const CACHE_URLS = Object.keys(CACHE_RULES) as unknown as Array<keyof typeof CAC
 
 const { fetch: originalFetch } = globalThis
 
-// #region debugging
-const set = new Set()
-const hitSet = new Set()
-
-// @ts-ignore
-window.dumpSet = () => {
-    return set
-}
-
-// @ts-ignore
-window.dumpHitSet = () => {
-    return hitSet
-}
-// #endregion
-
 async function squashedFetch(request: RequestInfo, init?: RequestInit): Promise<Response> {
-    set.add({
-        request,
-        timestamp: Date.now(),
-    })
-
     // skip all side effect requests
     if (typeof request !== 'string' && request.method !== 'GET') return originalFetch(request, init)
 
@@ -94,13 +74,7 @@ async function squashedFetch(request: RequestInfo, init?: RequestInit): Promise<
     // hit a cached request
     const cache = await caches.open(rule)
     const hit = await cache.match(request)
-    if (hit) {
-        hitSet.add({
-            request,
-            timestamp: Date.now(),
-        })
-        return hit
-    }
+    if (hit) return hit
 
     // send the request & cache the response
     const response = await originalFetch(request, init)
