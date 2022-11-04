@@ -1,27 +1,40 @@
-// This file includes the API bridge to the Mask Network extension
-// In isolated mode, set up at ./initialization/isolated_bridge
-// In integrated mode, set up at /packages/mask/src/extension/dashboard/index
-
-import type { DashboardPluginMessages, DashboardPluginServices } from '@masknet/shared'
-import type { Services as ServiceType } from '../../mask/dist/src/extension/service.js'
+import type { Services as ServiceType } from '../../mask/background/services/types.js'
 import type { MaskEvents } from '@masknet/shared-base'
-import type { WebExtensionMessage } from '@dimensiondev/holoflows-kit'
+import type { UnboundedRegistry, WebExtensionMessage } from '@dimensiondev/holoflows-kit'
 import type { WalletMessages } from '@masknet/plugin-wallet'
 
-export let Services: typeof ServiceType = null!
+export let Services: ServiceType = null!
 export let Messages: WebExtensionMessage<MaskEvents> = null!
 export let PluginServices: PluginServices = null!
 export let PluginMessages: PluginMessages = null!
-export interface PluginServices extends DashboardPluginServices {
-    Wallet: typeof import('../../mask/dist/src/plugins/Wallet/messages.js').WalletRPC
-    Swap: typeof import('../../mask/dist/src/plugins/Trader/messages.js').PluginTraderRPC
+export interface PluginServices {
+    Wallet: {
+        createMnemonicWords(): Promise<string[]>
+        hasPassword(): Promise<boolean>
+        setPassword(newPassword: string): Promise<void>
+        recoverWalletFromMnemonic(
+            name: string,
+            mnemonic: string,
+            derivationPath?: string,
+            initialPassword?: string | undefined,
+        ): Promise<string>
+        updateMaskAccount(options: { account?: string | undefined }): Promise<void>
+        resolveMaskAccount(accounts: string[]): Promise<void>
+        verifyPassword(unverifiedPassword: string): Promise<boolean>
+    }
 }
-export interface PluginMessages extends DashboardPluginMessages {
-    Wallet: typeof WalletMessages
-    Transak: typeof import('../../mask/dist/src/plugins/Transak/messages.js').PluginTransakMessages
-    Swap: typeof import('../../mask/dist/src/plugins/Trader/messages.js').PluginTraderMessages
-    Pets: typeof import('../../mask/dist/src/plugins/Pets/messages.js').PluginPetMessages
-    Game: typeof import('../../mask/dist/src/plugins/Game/messages.js').PluginGameMessages
+export interface PluginMessages {
+    Wallet: Pick<typeof WalletMessages['events'], 'selectProviderDialogUpdated' | 'walletStatusDialogUpdated'>
+    Transak: {
+        buyTokenDialogUpdated: UnboundedRegistry<
+            | {
+                  open: true
+                  code?: string
+                  address: string
+              }
+            | { open: false }
+        >
+    }
 }
 export function setService(rpc: any) {
     Services = rpc
@@ -31,12 +44,11 @@ export function setMessages(MaskMessage: any) {
     Messages = MaskMessage
     Object.assign(globalThis, { Messages: MaskMessage })
 }
-export function setPluginServices(rpc: DashboardPluginServices) {
-    PluginServices = rpc as any
+export function setPluginServices(rpc: PluginServices) {
+    PluginServices = rpc
     Object.assign(globalThis, { PluginServices: rpc })
 }
-
-export function setPluginMessages(message: DashboardPluginMessages) {
+export function setPluginMessages(message: PluginMessages) {
     PluginMessages = message as any
     Object.assign(globalThis, { PluginMessages: message })
 }
