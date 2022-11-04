@@ -32,6 +32,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                             disabled
                             title={name}
                             icon={icon}
+                            secondTitle="More coming"
                             onClick={props.onClick ? () => props.onClick?.(openDialog) : openDialog}
                         />
                     )
