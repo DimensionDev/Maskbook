@@ -4,6 +4,7 @@
 
 - cross-fetch: try to modify `fetch`. <https://github.com/lquixada/cross-fetch/pull/137>
 - immer: try to overwrite `Map` and `Set` methods. <https://github.com/immerjs/immer/pull/914/>
+- web3: it's browser entry bundles outdated @babel/runtime
 
 ### Bundled outdated `regenerator-runtime`
 

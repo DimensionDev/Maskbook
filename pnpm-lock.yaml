@@ -88,7 +88,7 @@ patchedDependencies:
     hash: 6wzwgbn4gsisp2tjbg76iifhqq
     path: patches/@types__react-avatar-editor@13.0.0.patch
   web3@1.8.0:
-    hash: boiy35ne6el3uwrcxae5axlyf4
+    hash: dcxxuqxbti2wcxbar42oow5yze
     path: patches/web3@1.8.0.patch
   fuse.js@6.6.2:
     hash: b2o4qvyfvxmpo7347sqko6h22a
