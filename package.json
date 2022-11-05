@@ -98,11 +98,13 @@
       "i18next-translation-parser>html-parse-stringify2": "github:locize/html-parse-stringify2#d463109433b2c49c74a081044f54b2a6a1ccad7c",
       "web3@0.20.7>bignumber.js": "git+https://github.com/frozeman/bignumber.js-nolookahead.git#57692b3ecfc98bbdd6b3a516cb2353652ea49934",
       "@mui/base": "5.0.0-alpha.100",
-      "@protobufjs/inquire": "1.1.0"
+      "@protobufjs/inquire": "1.1.0",
+      "@ethersproject/providers": "5.7.2"
     },
     "override comments": {
       "ipfs-utils": "see https://github.com/ipfs/js-ipfs-utils/issues/158",
-      "i18next-translation-parser": "see https://github.com/i18next/i18next-translation-parser/issues/11 we manually pin the commit"
+      "i18next-translation-parser": "see https://github.com/i18next/i18next-translation-parser/issues/11 we manually pin the commit",
+      "@ethersproject/providers": "@balancer-labs/sor is pinning a lower version which breaks the type check"
     },
     "onlyBuiltDependencies": [],
     "peerDependencyRules": {
