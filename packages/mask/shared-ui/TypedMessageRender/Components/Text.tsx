@@ -18,7 +18,12 @@ export const Link = memo(function Anchor(props: RenderFragmentsContextType.LinkP
     if (text.startsWith('https://mask.io')) {
         text = 'Mask.io'
     }
-    return <MaterialLink href={props.href} children={text} fontSize="inherit" />
+    return (
+        <MaterialLink href={props.href} fontSize="inherit">
+            {text}
+            {props.suggestedPostImage}
+        </MaterialLink>
+    )
 })
 
 export function useTagEnhancer(kind: 'hash' | 'cash', content: string) {
