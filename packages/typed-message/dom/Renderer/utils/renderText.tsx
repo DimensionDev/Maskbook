@@ -18,7 +18,7 @@ export const RenderTextFragment = memo(function RenderText(props: RenderTextProp
 export const RenderLinkFragment = memo(function RenderLink(
     props: Pick<TypedMessageAnchor, 'category'> & RenderFragmentsContextType.LinkProps,
 ) {
-    const { children, href, category } = props
+    const { children, href, category, suggestedPostImage } = props
     const context = useContext(RenderFragmentsContext)
     const {
         Text = DefaultRenderFragments.Text,
@@ -27,10 +27,10 @@ export const RenderLinkFragment = memo(function RenderLink(
         CashLink = Text,
         HashLink = Text,
     } = context
-    if (category === 'cash') return <CashLink children={children} />
-    if (category === 'hash') return <HashLink children={children} />
-    if (category === 'user') return <AtLink children={children} />
-    return <Link children={children} href={href} />
+    if (category === 'cash') return <CashLink children={children} suggestedPostImage={suggestedPostImage} />
+    if (category === 'hash') return <HashLink children={children} suggestedPostImage={suggestedPostImage} />
+    if (category === 'user') return <AtLink children={children} suggestedPostImage={suggestedPostImage} />
+    return <Link children={children} href={href} suggestedPostImage={suggestedPostImage} />
 })
 
 function parseText(string: string, Text: NonNullable<RenderFragmentsContextType['Text']>) {
@@ -39,7 +39,14 @@ function parseText(string: string, Text: NonNullable<RenderFragmentsContextType[
             return sliceString(x.content).map((x) => (x === '\n' ? <br /> : <Text children={x} />))
         }
         if (x.category === 'normal' && !x.content.match(/^https?:\/\//gi)) x.content = 'http://' + x.content
-        return <RenderLinkFragment category={x.category} href={x.content} children={x.content} />
+        return (
+            <RenderLinkFragment
+                category={x.category}
+                href={x.content}
+                children={x.content}
+                suggestedPostImage={undefined}
+            />
+        )
     })
     return links
 }
