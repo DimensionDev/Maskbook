@@ -164,7 +164,7 @@ export function ApplicationEntry(props: ApplicationEntryProps) {
             placement={recommendFeature ? 'bottom' : 'top'}
             arrow
             disableHoverListener={!tooltipHint}
-            title={<Typography>{tooltipHint}</Typography>}>
+            title={disabled ? null : <Typography>{tooltipHint}</Typography>}>
             {jsx}
         </ShadowRootTooltip>
     ) : (
