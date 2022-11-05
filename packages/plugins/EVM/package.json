@@ -9,7 +9,7 @@
     }
   },
   "dependencies": {
-    "@dimensiondev/metamask-extension-provider": "^3.0.6-20221105040848-b46982c",
+    "@dimensiondev/metamask-extension-provider": "^3.0.6-20221105074301-8806fca",
     "@ensdomains/eth-ens-namehash": "^2.0.15",
     "@masknet/icons": "workspace:*",
     "@masknet/injected-script": "workspace:*",
@@ -29,8 +29,7 @@
     "@servie/events": "^3.0.0",
     "@siddomains/sidjs": "^0.1.16",
     "@toruslabs/torus-embed": "^1.22.6",
-    "@walletconnect/client": "^1.7.5",
-    "@walletconnect/qrcode-modal": "^1.7.5",
+    "@walletconnect/client": "1.7.8",
     "@walletconnect/types": "^1.7.7",
     "bignumber.js": "9.1.0",
     "ethereumjs-util": "^7.1.0",
