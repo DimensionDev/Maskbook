@@ -1,4 +1,3 @@
-import JSBI from 'jsbi'
 import { memoize } from 'lodash-unified'
 import { BigNumber } from 'bignumber.js'
 import { Currency, CurrencyAmount, Ether, Percent, Price, Token, TradeType } from '@uniswap/sdk-core'
@@ -49,7 +48,7 @@ export function toUniswapChainId(chainId: ChainId) {
 }
 
 export function toUniswapPercent(numerator: number, denominator: number) {
-    return new Percent(JSBI.BigInt(numerator), JSBI.BigInt(denominator))
+    return new Percent(numerator, denominator)
 }
 
 export function toUniswapCurrency(chainId?: ChainId, token?: Web3Helper.FungibleTokenAll): Currency | undefined {
@@ -79,7 +78,7 @@ export function toUniswapCurrencyAmount(chainId?: ChainId, token?: Web3Helper.Fu
     const currency = toUniswapCurrency(chainId, token)
     if (!currency) return
     try {
-        if (isGreaterThan(amount, 0)) return CurrencyAmount.fromRawAmount(currency, JSBI.BigInt(amount))
+        if (isGreaterThan(amount, 0)) return CurrencyAmount.fromRawAmount(currency, amount)
     } catch {
         return
     }

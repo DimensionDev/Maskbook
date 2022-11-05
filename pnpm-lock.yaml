@@ -82,9 +82,6 @@ patchedDependencies:
   fuse.js@6.6.2:
     hash: b2o4qvyfvxmpo7347sqko6h22a
     path: patches/fuse.js@6.6.2.patch
-  jsbi@4.3.0:
-    hash: thrvyy5r5pnr2njhypezofcoxq
-    path: patches/jsbi@4.3.0.patch
   rss3-next@0.6.17:
     hash: db27yqpr4wdtpwfyvaxcqd4jpi
     path: patches/rss3-next@0.6.17.patch
@@ -866,9 +863,6 @@ importers:
       immer:
         specifier: 9.0.16
         version: 9.0.16_5xmqd5oohffxunmhptcxd5g33e
-      jsbi:
-        specifier: 4.3.0
-        version: 4.3.0_thrvyy5r5pnr2njhypezofcoxq
       json-stable-stringify:
         specifier: ^1.0.1
         version: 1.0.1
@@ -22769,11 +22763,6 @@ packages:
   /jsbi/3.1.4:
     resolution: {integrity: sha512-52QRRFSsi9impURE8ZUbzAMCLjPm4THO7H2fcuIvaaeFTbSysvkodbQQXIVsNgq/ypDbq6dJiuGKL0vZ/i9hUg==}
     dev: false
-
-  /jsbi/4.3.0_thrvyy5r5pnr2njhypezofcoxq:
-    resolution: {integrity: sha512-SnZNcinB4RIcnEyZqFPdGPVgrg2AcnykiBy0sHVJQKHYeaLUvi3Exj+iaPpLnFVkDPZIV4U0yvgC9/R4uEAZ9g==}
-    dev: false
-    patched: true
 
   /jsbn/0.1.1:
     resolution: {integrity: sha512-UVU9dibq2JcFWxQPA6KCqj5O42VOmAY3zQUfEKxU0KpTGXwNoCjkX1e13eHNvw/xPynt6pU0rZ1htjWTNTSXsg==}

@@ -145,7 +145,6 @@
       "@types/react-avatar-editor@13.0.0": "patches/@types__react-avatar-editor@13.0.0.patch",
       "web3@1.8.0": "patches/web3@1.8.0.patch",
       "fuse.js@6.6.2": "patches/fuse.js@6.6.2.patch",
-      "jsbi@4.3.0": "patches/jsbi@4.3.0.patch",
       "rss3-next@0.6.17": "patches/rss3-next@0.6.17.patch",
       "@project-serum/sol-wallet-adapter@0.2.6": "patches/@project-serum__sol-wallet-adapter@0.2.6.patch",
       "@types/react-highlight-words@0.16.4": "patches/@types__react-highlight-words@0.16.4.patch",

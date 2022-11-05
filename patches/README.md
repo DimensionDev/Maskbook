@@ -29,7 +29,6 @@
 - idb: <https://github.com/jakearchibald/idb/pull/284>
 - web3: <https://github.com/web3/web3.js/issues/5543>
 - fuse.js: <https://github.com/krisk/Fuse/pull/692/>
-- JSBI: <https://github.com/GoogleChromeLabs/jsbi/issues/96>
 - rss3-next: No issue. This project has been abandoned. See <https://github.com/NaturalSelectionLabs/RSS3-SDK-for-JavaScript#readme>
 - @project-serum/sol-wallet-adapter: <https://github.com/project-serum/sol-wallet-adapter/issues/53>
 - @types/react-highlight-words: <https://github.com/DefinitelyTyped/DefinitelyTyped/discussions/63096>
