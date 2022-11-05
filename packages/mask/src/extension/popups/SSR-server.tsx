@@ -31,6 +31,7 @@ export async function render(props: PopupSSR_Props) {
 
     await init()
     updateLanguage(props.language)
+    // https://github.com/emotion-js/emotion/issues/2933
     const muiCache = (createCache.default || createCache)({ key: 'css' })
     const tssCache = (createCache.default || createCache)({ key: 'tss' })
     const tssServer = (createEmotionServer.default || createEmotionServer)(tssCache)

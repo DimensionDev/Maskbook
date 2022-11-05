@@ -94,7 +94,7 @@ patchedDependencies:
     hash: b2o4qvyfvxmpo7347sqko6h22a
     path: patches/fuse.js@6.6.2.patch
   jsbi@4.3.0:
-    hash: oylzlcl4rp3tqi54ecrufhw6hu
+    hash: thrvyy5r5pnr2njhypezofcoxq
     path: patches/jsbi@4.3.0.patch
   rss3-next@0.6.17:
     hash: db27yqpr4wdtpwfyvaxcqd4jpi

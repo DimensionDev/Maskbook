@@ -1,18 +1,10 @@
-diff --git a/package.json b/package.json
-index 1e4d481763f207049db6030f73026dc45ab49749..2bc694c1b1da7295c2f3647db946a47dba988536 100644
---- a/package.json
-+++ b/package.json
-@@ -13,10 +13,11 @@
-     "rollup-plugin-babel-minify": "^9.0.0",
-     "typescript": "^4.4.2"
-   },
--  "main": "dist/jsbi-cjs.js",
-+  "type": "module",
-+  "main": "dist/jsbi.mjs",
-   "module": "dist/jsbi.mjs",
-   "browser": "dist/jsbi-umd.js",
--  "types": "jsbi.d.ts",
-+  "types": "./jsbi.d.ts",
-   "files": [
-     "dist",
-     "jsbi.d.ts"
+diff --git a/jsbi.d.ts b/jsbi.d.ts
+index 93a48ec918b27c747ac9f332032003a1d4f081f5..9116ecca2f3fd03d2a0fb33222f3098b7394004b 100644
+--- a/jsbi.d.ts
++++ b/jsbi.d.ts
+@@ -40,4 +40,4 @@ declare class JSBI extends Array {
+     static DataViewSetBigInt64(dataview: DataView, byteOffset: number, value: JSBI, littleEndian?: boolean): void;
+     static DataViewSetBigUint64(dataview: DataView, byteOffset: number, value: JSBI, littleEndian?: boolean): void;
+ }
+-export default JSBI;
++export = JSBI;

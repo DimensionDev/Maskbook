@@ -1,0 +1,44 @@
+<body></body>
+<script>
+    function exec(f) {
+        return new Promise((resolve, reject) => {
+            async function wrappedF() {
+                resolve(await f())
+            }
+            var i = document.createElement('iframe')
+            window.addEventListener('unhandledrejection', (e) => console.log(`From main realm ${e.reason?.message}`))
+            i.onload = () => {
+                const document = i.contentDocument
+                const window = i.contentWindow
+                const button = document.createElement('button')
+                document.body.appendChild(button)
+                i.contentWindow.f = mainWorldTask
+                button.onclick = () => {
+                    new window.Promise((r) => {
+                        wrappedF().then(r)
+                    })
+                }
+                window.addEventListener('unhandledrejection', (e) => reject(e.reason))
+                setTimeout(() => {
+                    button.click()
+                }, 500)
+            }
+            document.body.appendChild(i)
+        })
+    }
+
+    console.log(exec(mainWorldTask).catch((err) => console.log(err)))
+    console.log(exec(ok))
+
+    function sleep(ms) {
+        return new Promise((resolve) => setTimeout(resolve, ms))
+    }
+    async function mainWorldTask() {
+        console.log('hi')
+        await sleep(200)
+        throw new Error('err msg')
+    }
+    async function ok() {
+        return 123
+    }
+</script>
