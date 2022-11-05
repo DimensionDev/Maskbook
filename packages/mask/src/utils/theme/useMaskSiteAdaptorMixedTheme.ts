@@ -1,5 +1,5 @@
 import { unstable_createMuiStrictModeTheme } from '@mui/material'
-import type { Theme } from '@mui/material/styles/createTheme'
+import type { Theme } from '@mui/material'
 import { useRef } from 'react'
 import { activatedSocialNetworkUI } from '../../social-network/index.js'
 import { useSubscription } from 'use-subscription'

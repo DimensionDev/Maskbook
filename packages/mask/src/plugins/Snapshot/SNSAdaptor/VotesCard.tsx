@@ -155,7 +155,7 @@ function Content() {
                                 classes={{ tooltip: classes.tooltip, arrow: classes.arrow }}
                                 title={
                                     <Typography className={classes.shadowRootTooltip}>
-                                        {millify(v.balance, { precision: 2, lowercase: true }) +
+                                        {millify.default(v.balance, { precision: 2, lowercase: true }) +
                                             ' ' +
                                             (v.strategySymbol ? v.strategySymbol.toUpperCase() : '')}
                                     </Typography>
@@ -163,7 +163,7 @@ function Content() {
                                 placement="top"
                                 arrow>
                                 <Typography className={classes.power}>
-                                    {millify(v.balance, { precision: 2, lowercase: true }) +
+                                    {millify.default(v.balance, { precision: 2, lowercase: true }) +
                                         ' ' +
                                         (v.strategySymbol ? v.strategySymbol.toUpperCase() : '')}
                                 </Typography>

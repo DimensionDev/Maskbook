@@ -132,8 +132,8 @@
     "useUnknownInCatchVariables": true,
 
     // Modules
-    "module": "ESNext",
-    "moduleResolution": "node",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
     "resolveJsonModule": true,
     // Exclude everything by default. Include them in each project on-demand
     "types": ["masknet__global-types"],
@@ -172,7 +172,6 @@
   "files": [],
   "ts-node": {
     "compilerOptions": {
-      "module": "NodeNext",
       "noEmit": false
     },
     "esm": true,

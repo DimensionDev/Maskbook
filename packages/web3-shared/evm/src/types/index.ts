@@ -1,5 +1,3 @@
-/// <reference types="web3" />
-
 import type EVM_Web3 from 'web3'
 import type {
     RequestArguments,
