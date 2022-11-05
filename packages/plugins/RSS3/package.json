@@ -26,6 +26,6 @@
     "react-use": "^17.4.0",
     "urlcat": "^2.0.4",
     "use-subscription": "1.6.0",
-    "web3-utils": "1.7.5"
+    "web3-utils": "1.8.0"
   }
 }

@@ -1,5 +1,5 @@
 import type { KVStorageBackend } from './types.js'
-import { IDBPDatabase, openDB } from 'idb'
+import { IDBPDatabase, openDB } from 'idb/with-async-ittr'
 import { None, Some } from 'ts-results'
 
 export function createIndexedDB_KVStorageBackend(

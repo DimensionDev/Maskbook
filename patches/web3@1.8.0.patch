@@ -1,0 +1,17 @@
+diff --git a/package.json b/package.json
+index 114dcb5aedd67d4841b1bb68ab80e273f1d05871..e1713914fd51de471b09770a6ea644a07e4aff9c 100644
+--- a/package.json
++++ b/package.json
+@@ -18,7 +18,7 @@
+         "API"
+     ],
+     "author": "ethereum.org",
+-    "types": "types/index.d.ts",
++    "types": "types/index.d.mts",
+     "scripts": {
+         "compile": "tsc -b tsconfig.json",
+         "dtslint": "dtslint --localTs ../../node_modules/typescript/lib types",
+diff --git a/types/index.d.ts b/types/index.d.mts
+similarity index 100%
+rename from types/index.d.ts
+rename to types/index.d.mts

@@ -23,6 +23,19 @@
 - urlcat: <https://github.com/balazsbotond/urlcat/issues/171>
 - ipfs-http-client: already fixed in the upstream. wait for their new version release.
 - @ethersphere/bee-js: <https://github.com/ethersphere/bee-js/issues/751>
+- @hookform/resolvers: <https://github.com/react-hook-form/resolvers/issues/460>
+- @types/react-avatar-editor: <https://github.com/DefinitelyTyped/DefinitelyTyped/discussions/63075>
+- idb: <https://github.com/jakearchibald/idb/pull/284>
+- web3: <https://github.com/web3/web3.js/issues/5543>
+- fuse.js: <https://github.com/krisk/Fuse/pull/692/>
+- JSBI: <https://github.com/GoogleChromeLabs/jsbi/issues/96>
+- rss3-next: No issue. This project has been abandoned. See <https://github.com/NaturalSelectionLabs/RSS3-SDK-for-JavaScript#readme>
+- @project-serum/sol-wallet-adapter: <https://github.com/project-serum/sol-wallet-adapter/issues/53>
+- @types/react-highlight-words: <https://github.com/DefinitelyTyped/DefinitelyTyped/discussions/63096>
+- @snapshot-labs/snapshot.js: <https://github.com/snapshot-labs/snapshot.js/issues/752>
+- @cyberlab/cyberconnect: <https://github.com/cyberconnecthq/js-cyberconnect/issues/32>
+- fortmatic: No issue. Cannot find a GitHub repo. <https://github.com/fortmatic/fortmatic-js> is 404.
+- @walletconnect/client: <https://github.com/WalletConnect/walletconnect-monorepo/issues/1601>
 
 ## Other problems
 

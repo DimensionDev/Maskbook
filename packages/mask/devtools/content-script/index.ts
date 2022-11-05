@@ -1,4 +1,4 @@
-import { initialize, activate, createBridge, Bridge } from 'react-devtools-inline/backend'
+import { initialize, activate, createBridge, Bridge } from 'react-devtools-inline/backend.js'
 import { DevtoolsMessage, GLOBAL_ID_KEY, createReactDevToolsWall } from '../shared.js'
 
 initialize(window)
