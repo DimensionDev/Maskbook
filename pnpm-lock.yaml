@@ -37,7 +37,7 @@ patchedDependencies:
     hash: lwxdtt2msovfmigiutpkaty3lq
     path: patches/arweave@1.11.4.patch
   '@snapshot-labs/snapshot.js@0.4.12':
-    hash: cpsjyzmxgxc3rajzpmx3i5ecja
+    hash: r2lfwabkengwxg57derh27qufe
     path: patches/@snapshot-labs__snapshot.js@0.4.12.patch
   '@ceramicnetwork/rpc-transport@0.3.1':
     hash: subw5upjv36ceix3wmw66isn6u
