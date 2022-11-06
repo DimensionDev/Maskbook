@@ -21,8 +21,9 @@ if (location.hash === '#/personas') {
         ])
         console.timeEnd('[SSR] Fill data')
 
-        const muiCache = createCache({ key: 'css' })
-        const tssCache = createCache({ key: 'tss' })
+        // https://github.com/emotion-js/emotion/issues/2933
+        const muiCache = (createCache.default || createCache)({ key: 'css' })
+        const tssCache = (createCache.default || createCache)({ key: 'tss' })
         hydrateNormalReactRoot(
             <CacheProvider value={muiCache}>
                 <TssCacheProvider value={tssCache}>

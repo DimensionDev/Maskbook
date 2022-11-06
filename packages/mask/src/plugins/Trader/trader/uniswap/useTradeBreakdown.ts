@@ -1,11 +1,10 @@
 import { useMemo } from 'react'
-import JSBI from 'jsbi'
 import { Trade as V2Trade } from '@uniswap/v2-sdk'
 import { Percent, Fraction, CurrencyAmount, Currency } from '@uniswap/sdk-core'
 import type { Trade } from '../../types/index.js'
 
-const BASE_FEE = new Percent(JSBI.BigInt(30), JSBI.BigInt(10000))
-const ONE_HUNDRED_PERCENT = new Percent(JSBI.BigInt(10000), JSBI.BigInt(10000))
+const BASE_FEE = new Percent(30, 10000)
+const ONE_HUNDRED_PERCENT = new Percent(10000, 10000)
 const INPUT_FRACTION_AFTER_FEE = ONE_HUNDRED_PERCENT.subtract(BASE_FEE)
 
 // computes realized lp fee as a percent

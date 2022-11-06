@@ -1,8 +1,6 @@
 {
   "extends": "../../../tsconfig.json",
   "compilerOptions": {
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
     "rootDir": "./",
     "outDir": "../dist/tests",
     "tsBuildInfoFile": "../dist/tests.tsbuildinfo"

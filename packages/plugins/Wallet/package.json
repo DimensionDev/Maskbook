@@ -31,6 +31,6 @@
     "@masknet/web3-helpers": "workspace:*",
     "bignumber.js": "9.1.0",
     "react-use": "^17.4.0",
-    "web3-core-helpers": "1.7.5"
+    "web3-core-helpers": "1.8.0"
   }
 }
