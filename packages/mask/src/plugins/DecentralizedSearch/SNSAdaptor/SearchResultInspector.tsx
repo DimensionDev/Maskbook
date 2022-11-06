@@ -1,17 +1,37 @@
 import { useRef, useEffect, useState } from 'react'
 import { Hidden } from '@masknet/shared'
-import { useActivatedPluginSNSAdaptor } from '@masknet/plugin-infra/content-script'
+import { first } from 'lodash-unified'
+import { TabContext } from '@mui/lab'
+import { useAvailablePlugins } from '@masknet/plugin-infra'
+import {
+    useActivatedPluginSNSAdaptor,
+    useActivatedPluginsSNSAdaptor,
+    usePluginI18NField,
+} from '@masknet/plugin-infra/content-script'
+import { Tab } from '@mui/material'
+import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
+import { SocialAddressType } from '@masknet/web3-shared-base'
 import { DecentralizedSearchPostExtraInfoWrapper } from './DecentralizedSearchPostExtraInfoWrapper.js'
-import { PluginID } from '@masknet/shared-base'
+import { PluginID, EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import { LoadingContent } from './LoadingContent.js'
 import { EmptyContent } from './EmptyContent.js'
 import { LoadFailedContent } from './LoadFailedContent.js'
 
+const useStyles = makeStyles()((theme) => ({
+    tabs: {
+        display: 'flex',
+        position: 'relative',
+        padding: theme.spacing(0, 2),
+    },
+}))
+
 export function SearchResultInspector(props: { keyword: string }) {
     const ENS_Plugin = useActivatedPluginSNSAdaptor(PluginID.ENS, 'any')
+    const { classes } = useStyles()
     const ensRef = useRef<{
         isLoading: boolean
         isError: boolean
+        domain: string
         reversedAddress: string
         tokenId: string
         retry: () => void
@@ -21,6 +41,41 @@ export function SearchResultInspector(props: { keyword: string }) {
     const [isHiddenAll, setHiddenAll] = useState(false)
     const [isEmpty, setEmpty] = useState(false)
     const [isError, setError] = useState(false)
+    const socialAccount = {
+        pluginID: NetworkPluginID.PLUGIN_EVM,
+        address: ensRef.current?.reversedAddress ?? '',
+        label: ensRef.current?.domain ?? '',
+        supportedAddressTypes: [SocialAddressType.ENS],
+    }
+    const translate = usePluginI18NField()
+    const activatedPlugins = useActivatedPluginsSNSAdaptor('any')
+    const displayPlugins = useAvailablePlugins(activatedPlugins, (plugins) => {
+        return plugins
+            .flatMap((x) => x.ProfileCardTabs?.map((y) => ({ ...y, pluginID: x.ID })) ?? EMPTY_LIST)
+            .filter((x) => {
+                return x.Utils?.shouldDisplay?.(undefined, socialAccount) ?? true
+            })
+            .sort((a, z) => {
+                // order those tabs from next id first
+                if (a.pluginID === PluginID.NextID) return -1
+                if (z.pluginID === PluginID.NextID) return 1
+
+                // order those tabs from collectible first
+                if (a.pluginID === PluginID.Collectible) return -1
+                if (z.pluginID === PluginID.Collectible) return 1
+
+                // place those tabs from debugger last
+                if (a.pluginID === PluginID.Debugger) return 1
+                if (z.pluginID === PluginID.Debugger) return -1
+
+                return a.priority - z.priority
+            })
+    })
+    const tabs = displayPlugins.map((x) => ({
+        id: x.ID,
+        label: typeof x.label === 'string' ? x.label : translate(x.pluginID, x.label),
+    }))
+    const [currentTab, onChange] = useTabs(first(tabs)?.id ?? PluginID.Collectible, ...tabs.map((tab) => tab.id))
 
     useEffect(() => {
         setLoading(!ensRef.current || ensRef.current?.isLoading)
@@ -40,6 +95,15 @@ export function SearchResultInspector(props: { keyword: string }) {
             <DecentralizedSearchPostExtraInfoWrapper>
                 <Hidden hidden={isLoading || isEmpty || isError}>
                     <ENS_SearchResult keyword={props.keyword} ref={ensRef} />
+                    <div className={classes.tabs}>
+                        <TabContext value={currentTab}>
+                            <MaskTabList variant="base" onChange={onChange} aria-label="Web3Tabs">
+                                {tabs.map((tab) => (
+                                    <Tab key={tab.id} label={tab.label} value={tab.id} />
+                                ))}
+                            </MaskTabList>
+                        </TabContext>
+                    </div>
                 </Hidden>
                 <Hidden hidden={!isLoading}>
                     <LoadingContent />

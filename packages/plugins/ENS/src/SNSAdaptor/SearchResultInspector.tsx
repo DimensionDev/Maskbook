@@ -105,9 +105,10 @@ export const SearchResultInspectorContent = forwardRef(function (
         tokenId,
     } = useContext(ENSContext)
 
-    useImperativeHandle(ref, () => ({ isLoading, reversedAddress, isError, tokenId }), [
+    useImperativeHandle(ref, () => ({ isLoading, reversedAddress, domain, isError, tokenId }), [
         isLoading,
         reversedAddress,
+        domain,
         isError,
         tokenId,
         retry,
