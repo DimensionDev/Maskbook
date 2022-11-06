@@ -1,8 +1,8 @@
-import { useRef, useEffect, useState } from 'react'
+import { useRef, useEffect, useState, useMemo } from 'react'
 import { Hidden } from '@masknet/shared'
 import { first } from 'lodash-unified'
 import { TabContext } from '@mui/lab'
-import { useAvailablePlugins } from '@masknet/plugin-infra'
+import { useAvailablePlugins, getProfileTabContent } from '@masknet/plugin-infra'
 import {
     useActivatedPluginSNSAdaptor,
     useActivatedPluginsSNSAdaptor,
@@ -22,6 +22,12 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         position: 'relative',
         padding: theme.spacing(0, 2),
+    },
+    content: {
+        position: 'relative',
+        background: theme.palette.common.white,
+        maxHeight: 478,
+        overflow: 'scroll',
     },
 }))
 
@@ -56,17 +62,9 @@ export function SearchResultInspector(props: { keyword: string }) {
                 return x.Utils?.shouldDisplay?.(undefined, socialAccount) ?? true
             })
             .sort((a, z) => {
-                // order those tabs from next id first
-                if (a.pluginID === PluginID.NextID) return -1
-                if (z.pluginID === PluginID.NextID) return 1
-
                 // order those tabs from collectible first
                 if (a.pluginID === PluginID.Collectible) return -1
                 if (z.pluginID === PluginID.Collectible) return 1
-
-                // place those tabs from debugger last
-                if (a.pluginID === PluginID.Debugger) return 1
-                if (z.pluginID === PluginID.Debugger) return -1
 
                 return a.priority - z.priority
             })
@@ -76,6 +74,13 @@ export function SearchResultInspector(props: { keyword: string }) {
         label: typeof x.label === 'string' ? x.label : translate(x.pluginID, x.label),
     }))
     const [currentTab, onChange] = useTabs(first(tabs)?.id ?? PluginID.Collectible, ...tabs.map((tab) => tab.id))
+
+    const component = useMemo(() => {
+        const Component = getProfileTabContent(currentTab)
+        if (!Component) return null
+
+        return <Component identity={undefined} socialAccount={socialAccount} />
+    }, [currentTab, socialAccount])
 
     useEffect(() => {
         setLoading(!ensRef.current || ensRef.current?.isLoading)
@@ -104,6 +109,7 @@ export function SearchResultInspector(props: { keyword: string }) {
                             </MaskTabList>
                         </TabContext>
                     </div>
+                    <div className={classes.content}>{component}</div>
                 </Hidden>
                 <Hidden hidden={!isLoading}>
                     <LoadingContent />
