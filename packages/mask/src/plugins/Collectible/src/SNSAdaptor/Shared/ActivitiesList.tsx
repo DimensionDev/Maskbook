@@ -47,7 +47,7 @@ export function ActivitiesList(props: ActivitiesListProps) {
     if (events.error || !events.value)
         return (
             <div className={classes.wrapper}>
-                <Typography className={classes.emptyText}>{t('plugin_furucombo_load_failed')}</Typography>
+                <Typography className={classes.emptyText}>{t('load_failed')}</Typography>
                 <Button variant="text" onClick={() => events.retry()}>
                     {t('retry')}
                 </Button>
