@@ -7,6 +7,7 @@ import {
     DashboardDarkTheme,
     DashboardLightTheme,
     useSystemPreferencePalette,
+    DialogStackingProvider,
 } from '@masknet/theme'
 import { I18NextProviderHMR, SharedContextProvider } from '@masknet/shared'
 import { ErrorBoundary } from '@masknet/shared-base-ui'
@@ -44,19 +45,21 @@ export default function DashboardRoot() {
             <I18NextProviderHMR i18n={i18NextInstance}>
                 <StyledEngineProvider injectFirst>
                     <ThemeProvider theme={theme}>
-                        <PersonaContext.Provider>
-                            <ErrorBoundary>
-                                <CssBaseline />
-                                <CustomSnackbarProvider>
-                                    <SharedContextProvider>
-                                        <HashRouter>
-                                            <Pages />
-                                        </HashRouter>
-                                        <PluginRender />
-                                    </SharedContextProvider>
-                                </CustomSnackbarProvider>
-                            </ErrorBoundary>
-                        </PersonaContext.Provider>
+                        <DialogStackingProvider>
+                            <PersonaContext.Provider>
+                                <ErrorBoundary>
+                                    <CssBaseline />
+                                    <CustomSnackbarProvider>
+                                        <SharedContextProvider>
+                                            <HashRouter>
+                                                <Pages />
+                                            </HashRouter>
+                                            <PluginRender />
+                                        </SharedContextProvider>
+                                    </CustomSnackbarProvider>
+                                </ErrorBoundary>
+                            </PersonaContext.Provider>
+                        </DialogStackingProvider>
                     </ThemeProvider>
                 </StyledEngineProvider>
             </I18NextProviderHMR>
