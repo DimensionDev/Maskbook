@@ -636,9 +636,6 @@ importers:
       '@masknet/plugin-debugger':
         specifier: workspace:*
         version: link:../plugins/Debugger
-      '@masknet/plugin-decentralized-search':
-        specifier: workspace:*
-        version: link:../plugins/DecentralizedSearch
       '@masknet/plugin-ens':
         specifier: workspace:*
         version: link:../plugins/ENS
