@@ -12,6 +12,7 @@
     { "path": "./RSS3/" },
     { "path": "./CyberConnect/" },
     { "path": "./CrossChainBridge/" },
-    { "path": "./Web3Profile/" }
+    { "path": "./Web3Profile/" },
+    { "path": "./ScamWarning/" }
   ]
 }

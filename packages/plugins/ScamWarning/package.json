@@ -1,0 +1,20 @@
+{
+  "name": "@masknet/plugin-scam-warning",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": {
+      "webpack": "./src/index.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "dependencies": {
+    "@masknet/plugin-infra": "workspace:*",
+    "@masknet/shared": "workspace:*",
+    "@masknet/shared-base": "workspace:*",
+    "@masknet/icons": "workspace:*",
+    "@masknet/theme": "workspace:*",
+    "react-use": "^17.4.0",
+    "use-subscription": "1.6.0"
+  }
+}
