@@ -5,6 +5,7 @@ import { CryptoscanDb } from '@masknet/web3-providers'
 import { uniq } from 'lodash-es'
 import { useI18N } from '../../locales/index.js'
 import { makeStyles } from '@masknet/theme'
+import { usePluginWrapper } from '@masknet/plugin-infra/content-script'
 
 interface PreviewCardProps {
     links: string[]
@@ -30,7 +31,11 @@ export const PreviewCard = ({ links }: PreviewCardProps) => {
         return CryptoscanDb.getScamWarnings(uniq(hosts))
     }, [links])
 
+    usePluginWrapper(!(loading || !value?.length))
+
     const urls = value?.map((x) => x.url).join()
+
+    if (!value?.length || loading) return null
 
     return (
         <Stack p={1.5} pt={0} className={classes.root}>

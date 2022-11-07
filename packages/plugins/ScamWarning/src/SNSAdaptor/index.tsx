@@ -1,5 +1,5 @@
 import type { Plugin } from '@masknet/plugin-infra'
-import { usePluginWrapper, usePostInfoDetails } from '@masknet/plugin-infra/content-script'
+import { usePostInfoDetails } from '@masknet/plugin-infra/content-script'
 import { base } from '../base.js'
 import { setupContext } from './context.js'
 import { PreviewCard } from './components/PreviewCard.js'
@@ -13,21 +13,12 @@ const sns: Plugin.SNSAdaptor.Definition = {
     PostInspector() {
         const links = usePostInfoDetails.mentionedLinks()
         if (!links) return null
-        return <Renderer links={links} />
+        return <PreviewCard links={links} />
     },
     wrapperProps: {
-        icon: <Icons.ApplicationNFT size={24} />,
+        icon: <Icons.Danger size={24} />,
         backgroundGradient: 'rgba(255, 235, 237)',
     },
-}
-
-function Renderer(
-    props: React.PropsWithChildren<{
-        links: string[]
-    }>,
-) {
-    usePluginWrapper(true)
-    return <PreviewCard links={props.links} />
 }
 
 export default sns
