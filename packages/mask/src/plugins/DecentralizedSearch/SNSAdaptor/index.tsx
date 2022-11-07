@@ -1,6 +1,6 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { PluginID } from '@masknet/shared-base'
-import { resolveSearchKeywordType } from '@masknet/web3-shared-base'
+import { resolveSearchKeywordType, isSameAddress } from '@masknet/web3-shared-base'
 import {
     isValidAddress as isValidAddressEVM,
     isZeroAddress as isZeroAddressEVM,
@@ -20,6 +20,7 @@ import { Trans } from 'react-i18next'
 import { Icons } from '@masknet/icons'
 import { base } from '../base.js'
 import { SearchResultInspector } from './SearchResultInspector.js'
+import { HiddenAddressList } from '../constants.js'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -40,7 +41,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                             (isValidAddressEVM(keyword) && !isZeroAddressEVM(keyword)) ||
                             (isValidAddressFlow(keyword) && !isZeroAddressFlow(keyword)) ||
                             (isValidAddressSolana(keyword) && !isZeroAddressSolana(keyword)),
-                    ),
+                    ) && !HiddenAddressList.some((address) => isSameAddress(address, keyword)),
                 )
             },
         },
