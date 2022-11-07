@@ -1,4 +1,4 @@
-import { None } from 'ts-results'
+import { None } from 'ts-results-es'
 import { BackupErrors } from '../BackupErrors.js'
 import { isBackupVersion0, normalizeBackupVersion0 } from '../version-0/index.js'
 import { isBackupVersion1, normalizeBackupVersion1 } from '../version-1/index.js'

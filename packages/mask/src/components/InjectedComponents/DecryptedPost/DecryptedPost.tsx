@@ -15,7 +15,7 @@ import type {
 } from '../../../../background/services/crypto/decryption.js'
 import { DecryptIntermediateProgressKind, DecryptProgressKind } from '@masknet/encryption'
 import { type PostContext, usePostInfoDetails, usePostInfo } from '@masknet/plugin-infra/content-script'
-import { Some } from 'ts-results'
+import { Some } from 'ts-results-es'
 
 function progressReducer(
     state: Array<{

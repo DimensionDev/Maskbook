@@ -14,9 +14,6 @@ overrides:
   '@ethersproject/providers': 5.7.2
 
 patchedDependencies:
-  ts-results@3.3.0:
-    hash: g2bdan7o336xxsymnx5nlozu2m
-    path: patches/ts-results@3.3.0.patch
   cross-fetch@3.1.5:
     hash: fffro4yjhjxi2jqwpqmojnjbce
     path: patches/cross-fetch@3.1.5.patch
@@ -181,9 +178,9 @@ importers:
       ses:
         specifier: 0.16.0
         version: 0.16.0_k64fstgnrckhcwwbxafxqywjdy
-      ts-results:
-        specifier: 3.3.0
-        version: 3.3.0_g2bdan7o336xxsymnx5nlozu2m
+      ts-results-es:
+        specifier: 3.5.0
+        version: 3.5.0
     devDependencies:
       '@commitlint/cli':
         specifier: ^17.1.2
@@ -1740,7 +1737,7 @@ importers:
         version: 17.4.0
       ts-results:
         specifier: ^3.3.0
-        version: 3.3.0_g2bdan7o336xxsymnx5nlozu2m
+        version: 3.3.0
       urlcat:
         specifier: 2.0.4
         version: 2.0.4_fggwetex7eobhq3hztj4obsulu
@@ -1942,7 +1939,7 @@ importers:
         version: link:../../shared-base
       ts-results:
         specifier: ^3.3.0
-        version: 3.3.0_g2bdan7o336xxsymnx5nlozu2m
+        version: 3.3.0
 
   packages/plugins/template:
     dependencies:
@@ -29862,10 +29859,13 @@ packages:
         optional: true
     dev: true
 
-  /ts-results/3.3.0_g2bdan7o336xxsymnx5nlozu2m:
+  /ts-results-es/3.5.0:
+    resolution: {integrity: sha512-W7Vtg9u7QsutEfDbLEJNDlDrYGK7spxab6Je+K9+tjI/ixCM1ouniQmHJX0mZUok5WsWiCGxQy6lIrI//nBzTg==}
+    dev: false
+
+  /ts-results/3.3.0:
     resolution: {integrity: sha512-FWqxGX2NHp5oCyaMd96o2y2uMQmSu8Dey6kvyuFdRJ2AzfmWo3kWa4UsPlCGlfQ/qu03m09ZZtppMoY8EMHuiA==}
     dev: false
-    patched: true
 
   /tsconfig-paths/3.14.1:
     resolution: {integrity: sha512-fxDhWnFSLt3VuTwtvJt5fpwxBHg5AdKWMsgcPOOIilyjymcYVZoCQF8fvFRezCNfblEXmi+PcM1eYHeOAgXCOQ==}

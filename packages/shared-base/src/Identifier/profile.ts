@@ -1,4 +1,4 @@
-import { type Option, None, Some } from 'ts-results'
+import { type Option, None, Some } from 'ts-results-es'
 import { EnhanceableSite } from '../Site/type.js'
 import { Identifier } from './base.js'
 import { banSlash } from './utils.js'

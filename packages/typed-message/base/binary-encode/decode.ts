@@ -1,5 +1,5 @@
 import { decode } from '@msgpack/msgpack'
-import { Result } from 'ts-results'
+import { Result } from 'ts-results-es'
 import type { TypedMessage } from '../base.js'
 import { makeTypedMessageText, makeTypedMessageTuple, makeTypedMessageUnknown } from '../core/index.js'
 import { TypedMessageBinaryEncodingTypeEnum } from './type.js'

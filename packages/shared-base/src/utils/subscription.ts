@@ -1,6 +1,6 @@
 import { noop } from 'lodash-unified'
 import type { Subscription } from 'use-subscription'
-import { None, Option, Some } from 'ts-results'
+import { None, Option, Some } from 'ts-results-es'
 import type { ValueRef } from '@dimensiondev/holoflows-kit'
 
 export async function getSubscriptionCurrentValue<T>(

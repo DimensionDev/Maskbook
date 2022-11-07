@@ -1,4 +1,4 @@
-import { Result, Ok, Err, Some, Option, None } from 'ts-results'
+import { Result, Ok, Err, Some, Option, None } from 'ts-results-es'
 import type { ReactElement, ReactNode } from 'react'
 import type { TypedMessage } from '../../base/index.js'
 import z_schema from 'z-schema'

@@ -1,5 +1,5 @@
 import { compressSecp256k1KeyRaw } from '@masknet/shared-base'
-import { Ok } from 'ts-results'
+import { Ok } from 'ts-results-es'
 import type { PayloadWellFormed } from '../index.js'
 import { EC_KeyCurveEnum } from '../payload/types.js'
 import { encodeMessagePack, exportCryptoKeyToRaw } from '../utils/index.js'

@@ -14,7 +14,7 @@ import { startWatch } from '../../../utils/watcher.js'
 import { facebookShared } from '../shared.js'
 import { createRefsForCreatePostContext } from '../../../social-network/utils/create-post-context.js'
 import { collectNodeText } from '../../../utils/index.js'
-import { None, Some, Option } from 'ts-results'
+import { None, Some, Option } from 'ts-results-es'
 
 const posts = new LiveSelector().querySelectorAll<HTMLDivElement>(
     isMobileFacebook ? '.story_body_container > div' : '[role=article] div[dir="auto"] > [id] > div > div',
