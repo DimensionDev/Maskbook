@@ -7,7 +7,7 @@
     "yarn": ">=999.0.0",
     "npm": ">=999.0.0"
   },
-  "version": "2.15.2",
+  "version": "2.15.4",
   "private": true,
   "license": "AGPL-3.0-or-later",
   "scripts": {
@@ -46,20 +46,18 @@
     "@types/react-dom": "^18.0.6",
     "@typescript/lib-dom": "npm:@types/web@^0.0.78",
     "i18next": "^21.9.1",
-    "lodash": "^4.17.21",
     "lodash-es": "^4.17.21",
-    "lodash-unified": "1.0.2",
     "react": "0.0.0-experimental-9cdf8a99e-20221018",
     "react-dom": "0.0.0-experimental-9cdf8a99e-20221018",
     "react-i18next": "^11.18.6",
     "ses": "0.16.0",
-    "ts-results": "3.3.0"
+    "ts-results-es": "3.5.0"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.1.2",
     "@commitlint/config-conventional": "^17.1.0",
     "@dimensiondev/eslint-plugin": "0.0.2-20220516081411-2649814",
-    "@magic-works/i18n-codegen": "^0.3.0",
+    "@magic-works/i18n-codegen": "^0.4.0",
     "@masknet/cli": "workspace:*",
     "@masknet/serializer": "workspace:*",
     "@nice-labs/git-rev": "^3.5.0",
@@ -91,18 +89,20 @@
   },
   "pnpm": {
     "overrides": {
-      "@types/node": "18.7.4",
-      "@types/react": "18.0.17",
+      "@types/node": "18.11.9",
+      "@types/react": "18.0.25",
       "cross-fetch": "3.1.5",
       "cross-blob": "3.0.1",
       "i18next-translation-parser>html-parse-stringify2": "github:locize/html-parse-stringify2#d463109433b2c49c74a081044f54b2a6a1ccad7c",
       "web3@0.20.7>bignumber.js": "git+https://github.com/frozeman/bignumber.js-nolookahead.git#57692b3ecfc98bbdd6b3a516cb2353652ea49934",
       "@mui/base": "5.0.0-alpha.100",
-      "@protobufjs/inquire": "1.1.0"
+      "@protobufjs/inquire": "1.1.0",
+      "@ethersproject/providers": "5.7.2"
     },
     "override comments": {
       "ipfs-utils": "see https://github.com/ipfs/js-ipfs-utils/issues/158",
-      "i18next-translation-parser": "see https://github.com/i18next/i18next-translation-parser/issues/11 we manually pin the commit"
+      "i18next-translation-parser": "see https://github.com/i18next/i18next-translation-parser/issues/11 we manually pin the commit",
+      "@ethersproject/providers": "@balancer-labs/sor is pinning a lower version which breaks the type check"
     },
     "onlyBuiltDependencies": [],
     "peerDependencyRules": {
@@ -122,8 +122,6 @@
       }
     },
     "patchedDependencies": {
-      "ts-results@3.3.0": "patches/ts-results@3.3.0.patch",
-      "immer@9.0.15": "patches/immer@9.0.15.patch",
       "cross-fetch@3.1.5": "patches/cross-fetch@3.1.5.patch",
       "@uniswap/v3-sdk@3.9.0": "patches/@uniswap__v3-sdk@3.9.0.patch",
       "arweave@1.11.4": "patches/arweave@1.11.4.patch",
@@ -139,7 +137,20 @@
       "@mui/base@5.0.0-alpha.100": "patches/@mui__base@5.0.0-alpha.100.patch",
       "react-devtools-inline@4.26.1": "patches/react-devtools-inline@4.26.1.patch",
       "ses@0.16.0": "patches/ses@0.16.0.patch",
-      "@protobufjs/inquire@1.1.0": "patches/@protobufjs__inquire@1.1.0.patch"
+      "@protobufjs/inquire@1.1.0": "patches/@protobufjs__inquire@1.1.0.patch",
+      "micromark@3.1.0": "patches/micromark@3.1.0.patch",
+      "micromark-util-symbol@1.0.1": "patches/micromark-util-symbol@1.0.1.patch",
+      "@hookform/resolvers@2.9.10": "patches/@hookform__resolvers@2.9.10.patch",
+      "@types/react-avatar-editor@13.0.0": "patches/@types__react-avatar-editor@13.0.0.patch",
+      "web3@1.8.0": "patches/web3@1.8.0.patch",
+      "fuse.js@6.6.2": "patches/fuse.js@6.6.2.patch",
+      "rss3-next@0.6.17": "patches/rss3-next@0.6.17.patch",
+      "@project-serum/sol-wallet-adapter@0.2.6": "patches/@project-serum__sol-wallet-adapter@0.2.6.patch",
+      "@types/react-highlight-words@0.16.4": "patches/@types__react-highlight-words@0.16.4.patch",
+      "immer@9.0.16": "patches/immer@9.0.16.patch",
+      "@cyberlab/cyberconnect@4.2.2": "patches/@cyberlab__cyberconnect@4.2.2.patch",
+      "fortmatic@2.2.1": "patches/fortmatic@2.2.1.patch",
+      "@walletconnect/client@1.7.8": "patches/@walletconnect__client@1.7.8.patch"
     }
   }
 }

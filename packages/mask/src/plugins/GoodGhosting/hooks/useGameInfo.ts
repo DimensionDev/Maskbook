@@ -1,7 +1,7 @@
 import { isZeroAddress, useGoodGhostingConstants, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
 import { useMemo } from 'react'
 import { useAsyncRetry } from 'react-use'
-import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
+import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
 import { useGoodGhostingContract } from '../contracts/useGoodGhostingContract.js'
 import type { GameMetaData, GoodGhostingInfo, Player, TimelineEvent } from '../types.js'
 import { useI18N } from '../../../utils/index.js'

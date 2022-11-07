@@ -1,6 +1,6 @@
 import { useAsyncFn } from 'react-use'
 import { useChainContext } from '@masknet/web3-hooks-base'
-import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
+import type { NonPayableTx } from '@masknet/web3-contracts/types/types.js'
 import { isGreaterThan, isZero } from '@masknet/web3-shared-base'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import { GasConfig, TransactionEventType, isValidAddress } from '@masknet/web3-shared-evm'

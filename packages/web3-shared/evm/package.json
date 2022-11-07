@@ -1,10 +1,11 @@
 {
   "name": "@masknet/web3-shared-evm",
   "private": true,
+  "type": "module",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "webpack": "./src/index.ts",
+      "mask-src": "./src/index.ts",
       "default": "./dist/index.js"
     }
   },
@@ -16,12 +17,11 @@
     "@masknet/web3-contracts": "workspace:*",
     "@masknet/web3-shared-base": "workspace:*",
     "@toruslabs/torus-embed": "^1.22.6",
-    "@walletconnect/client": "^1.7.5",
-    "@walletconnect/qrcode-modal": "^1.7.5",
+    "@walletconnect/client": "1.7.8",
     "bignumber.js": "9.1.0",
     "ethereum-blockies": "^0.1.1",
     "fortmatic": "^2.2.1",
-    "fuse.js": "^6.6.2",
+    "fuse.js": "6.6.2",
     "punycode": "^2.1.1",
     "react-use": "^17.4.0",
     "unstated-next": "^1.1.0",
@@ -29,13 +29,13 @@
     "use-subscription": "1.6.0",
     "uuid": "^8.3.2",
     "wallet.ts": "^1.0.1",
-    "web3": "1.7.5",
-    "web3-core": "1.7.5",
-    "web3-core-helpers": "1.7.5",
-    "web3-eth-contract": "1.7.5",
+    "web3": "1.8.0",
+    "web3-core": "1.8.0",
+    "web3-core-helpers": "1.8.0",
+    "web3-eth-contract": "1.8.0",
     "@ethersproject/keccak256": "5.7.0",
     "@ethersproject/strings": "5.7.0",
-    "web3-utils": "1.7.5"
+    "web3-utils": "1.8.0"
   },
   "devDependencies": {
     "@masknet/injected-script": "*",

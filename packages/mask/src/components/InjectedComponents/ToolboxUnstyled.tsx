@@ -32,7 +32,7 @@ import { hasNativeAPI, nativeAPI } from '../../../shared/native-rpc/index.js'
 import GuideStep from '../GuideStep/index.js'
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
-import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord'
+import { FiberManualRecord as FiberManualRecordIcon } from '@mui/icons-material'
 
 const useStyles = makeStyles()((theme) => ({
     title: {

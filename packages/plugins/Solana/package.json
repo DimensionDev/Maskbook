@@ -1,9 +1,10 @@
 {
   "name": "@masknet/plugin-solana",
   "private": true,
+  "type": "module",
   "exports": {
     ".": {
-      "webpack": "./src/index.ts",
+      "mask-src": "./src/index.ts",
       "default": "./dist/index.js"
     }
   },
@@ -16,6 +17,7 @@
     "@masknet/shared": "workspace:*",
     "@masknet/shared-base": "workspace:*",
     "@masknet/theme": "workspace:*",
+    "@masknet/web3-helpers": "workspace:*",
     "@masknet/web3-providers": "workspace:*",
     "@masknet/web3-state": "workspace:*",
     "@masknet/web3-shared-base": "workspace:*",

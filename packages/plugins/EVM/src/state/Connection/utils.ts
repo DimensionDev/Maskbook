@@ -1,7 +1,7 @@
 import type { TransactionReceipt } from 'web3-core'
 import { NonFungibleTokenMetadata, TransactionStatusType } from '@masknet/web3-shared-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
-import { noop } from 'lodash-unified'
+import { noop } from 'lodash-es'
 
 export function getReceiptStatus(receipt: TransactionReceipt | null) {
     if (!receipt) return TransactionStatusType.NOT_DEPEND

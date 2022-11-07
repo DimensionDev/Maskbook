@@ -1,6 +1,6 @@
 import { useAsyncRetry } from 'react-use'
 import urlcat from 'urlcat'
-import { omit } from 'lodash-unified'
+import { omit } from 'lodash-es'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { ChainId, chainResolver } from '@masknet/web3-shared-evm'
 import { isSameAddress } from '@masknet/web3-shared-base'

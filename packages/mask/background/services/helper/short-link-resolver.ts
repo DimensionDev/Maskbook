@@ -1,5 +1,5 @@
 import { memoizePromise } from '@masknet/kit'
-import { memoize } from 'lodash-unified'
+import { memoize } from 'lodash-es'
 
 const cache = new Map<string, string>()
 async function resolver(u: string): Promise<string | null> {

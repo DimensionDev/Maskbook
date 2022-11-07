@@ -4,12 +4,13 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import { MaskTabList, useTabs } from '@masknet/theme'
 import { WalletIcon } from '../WalletIcon/index.js'
 import type { NetworkPluginID } from '@masknet/shared-base'
-import TabContext from '@mui/lab/TabContext'
+import { TabContext } from '@mui/lab'
 import { Stack, Tab, Typography } from '@mui/material'
 
 interface NetworkTabProps<T extends NetworkPluginID>
     extends withClasses<'tab' | 'tabs' | 'tabPanel' | 'indicator' | 'focusTab' | 'tabPaper'> {
     chains: Array<Web3Helper.Definition[T]['ChainId']>
+    hideArrowButton?: boolean
 }
 
 export function NetworkTab<T extends NetworkPluginID = NetworkPluginID.PLUGIN_EVM>(props: NetworkTabProps<T>) {
@@ -37,6 +38,7 @@ export function NetworkTab<T extends NetworkPluginID = NetworkPluginID.PLUGIN_EV
                     setChainId?.(Number.parseInt(v, 10))
                     setTab(v)
                 }}
+                hideArrowButton={props.hideArrowButton}
                 aria-label="Network Tabs">
                 {usedNetworks.map((x) => {
                     return (

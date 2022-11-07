@@ -50,7 +50,7 @@ export const createUITaskManager = <TaskOptions extends BaseDialogProps<Result>,
                     const newTask: Task = { id, promise, resolve, reject, options }
                     setTasks((list) => [...list, newTask])
                     promise.then(() => {
-                        removeTask(id)
+                        removeTask(newTask.id)
                     })
                     return promise
                 },

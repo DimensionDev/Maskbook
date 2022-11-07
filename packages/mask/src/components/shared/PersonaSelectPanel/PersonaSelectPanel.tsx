@@ -62,7 +62,7 @@ export const PersonaSelectPanel = memo<PersonaSelectPanelProps>((props) => {
     const currentPersona = useCurrentPersona()
     const currentPersonaIdentifier = currentPersona?.identifier
 
-    const classes = useStylesExtends(useStyles(), props)
+    const { classes } = useStylesExtends(useStyles(), props)
 
     const [selectedPersona, setSelectedPersona] = useState<PersonaNextIDMixture>()
 
@@ -250,7 +250,7 @@ interface ActionContentProps extends withClasses<never | 'button'> {
 
 function ActionContent(props: ActionContentProps) {
     const { buttonText, hint, onClick } = props
-    const classes = useStylesExtends(useStyles(), props)
+    const { classes } = useStylesExtends(useStyles(), props)
     if (!buttonText) return null
     return (
         <Stack gap={1.5} mt={1.5}>

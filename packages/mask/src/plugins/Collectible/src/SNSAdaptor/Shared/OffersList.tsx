@@ -1,4 +1,4 @@
-import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
+import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
 import { Typography, Button } from '@mui/material'
 import { makeStyles, LoadingBase } from '@masknet/theme'
 import type { NonFungibleTokenOrder, Pageable } from '@masknet/web3-shared-base'
@@ -47,7 +47,7 @@ export function OffersList(props: OffersListProps) {
     if (offers.error || !offers.value)
         return (
             <div className={classes.wrapper}>
-                <Typography className={classes.emptyText}>{t('plugin_furucombo_load_failed')}</Typography>
+                <Typography className={classes.emptyText}>{t('load_failed')}</Typography>
                 <Button variant="text" onClick={() => offers.retry()}>
                     {t('retry')}
                 </Button>

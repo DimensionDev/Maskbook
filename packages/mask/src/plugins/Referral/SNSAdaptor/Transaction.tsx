@@ -2,7 +2,7 @@ import { makeStyles, ActionButton, LoadingBase } from '@masknet/theme'
 import { explorerResolver } from '@masknet/web3-shared-evm'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { Grid, Typography, Link } from '@mui/material'
-import DoneIcon from '@mui/icons-material/Done'
+import { Done as DoneIcon } from '@mui/icons-material'
 import type { NetworkPluginID } from '@masknet/shared-base'
 
 import { TransactionStatus, TransactionDialogInterface, ChainId } from '../types.js'

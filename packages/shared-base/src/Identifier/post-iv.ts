@@ -1,5 +1,5 @@
 import { decodeArrayBuffer } from '@masknet/kit'
-import { type Option, None } from 'ts-results'
+import { type Option, None } from 'ts-results-es'
 import { Identifier } from './base.js'
 import { banSlash } from './utils.js'
 

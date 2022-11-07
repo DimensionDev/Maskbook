@@ -1,5 +1,5 @@
 import stringify from 'json-stable-stringify'
-import { first } from 'lodash-unified'
+import { first } from 'lodash-es'
 import type { FungibleToken } from '@masknet/web3-shared-base'
 import {
     ChainId,

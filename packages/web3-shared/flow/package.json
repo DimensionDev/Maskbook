@@ -1,10 +1,11 @@
 {
   "name": "@masknet/web3-shared-flow",
   "private": true,
+  "type": "module",
   "exports": {
     ".": {
       "types": "./dist/index.d.js",
-      "webpack": "./src/index.ts",
+      "mask-src": "./src/index.ts",
       "default": "./dist/index.js"
     }
   },

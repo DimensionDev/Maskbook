@@ -57,7 +57,7 @@ export interface ITO_CardProps extends withClasses<never> {
 export function ITO_Card(props: ITO_CardProps) {
     const { token, onUpdateAmount, onUpdateBalance } = props
     const { t } = useI18N()
-    const classes = useStylesExtends(useStyles(), props)
+    const { classes } = useStylesExtends(useStyles(), props)
     const { value: packet, loading: packetLoading, error: packetError, retry: packetRetry } = useMaskITO_Packet()
 
     // #region claim

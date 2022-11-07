@@ -1,5 +1,5 @@
 import urlcat from 'urlcat'
-import { first, isEmpty, parseInt, uniqBy } from 'lodash-unified'
+import { first, isEmpty, parseInt, uniqBy } from 'lodash-es'
 import { ChainId, isValidChainId } from '@masknet/web3-shared-evm'
 import type { SecurityAPI } from '../index.js'
 import { fetchJSON } from '../helpers.js'

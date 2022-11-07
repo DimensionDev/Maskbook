@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { first } from 'lodash-unified'
+import { first } from 'lodash-es'
 import { Card, CardActions, CardContent, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { isZero, isLessThan } from '@masknet/web3-shared-base'

@@ -1,4 +1,3 @@
-import classNames from 'classnames'
 import { useCallback, useMemo } from 'react'
 import { Card, keyframes, Typography } from '@mui/material'
 import { ChainId, chainResolver, networkResolver } from '@masknet/web3-shared-evm'
@@ -248,7 +247,7 @@ export function RedPacket(props: RedPacketProps) {
 
     return (
         <>
-            <Card className={classNames(classes.root)} component="article" elevation={0}>
+            <Card className={classes.root} component="article" elevation={0}>
                 <div className={classes.header}>
                     {/* it might be fontSize: 12 on twitter based on theme? */}
                     {canFetch && listOfStatus.length ? (
@@ -257,7 +256,7 @@ export function RedPacket(props: RedPacketProps) {
                         </Typography>
                     ) : null}
                 </div>
-                <div className={classNames(classes.content)}>
+                <div className={classes.content}>
                     <div className={classes.fullWidthBox}>
                         <Typography className={classes.words} variant="h6">
                             {payload.sender.message}

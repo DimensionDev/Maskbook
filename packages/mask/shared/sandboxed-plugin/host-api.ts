@@ -5,7 +5,9 @@ import type { BasicHostHooks } from '@masknet/sandboxed-plugin-runtime'
 export function createHostAPIs(isBackground: boolean): BasicHostHooks {
     return {
         async getPluginList() {
-            const plugins = await fetch(browser.runtime.getURL('/sandboxed-modules/plugins.json')).then((x) => x.json())
+            const plugins = await fetch(browser.runtime.getURL('/sandboxed-modules/plugins.json'))
+                .then((x) => x.json())
+                .catch(() => ({}))
             // TODO: validate type of plugins here
             return Object.entries(plugins) as Array<[string, any]>
         },

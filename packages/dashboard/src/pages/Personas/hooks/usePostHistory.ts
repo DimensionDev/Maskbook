@@ -1,6 +1,6 @@
 import { useRef } from 'react'
 import { useAsyncRetry, useUpdateEffect } from 'react-use'
-import { last } from 'lodash-unified'
+import { last } from 'lodash-es'
 import type { PostInformation } from '@masknet/shared-base'
 import { Services } from '../../../API.js'
 import { PersonaContext } from './usePersonaContext.js'

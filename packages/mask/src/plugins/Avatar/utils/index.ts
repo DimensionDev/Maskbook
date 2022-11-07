@@ -1,5 +1,5 @@
-import BigNumber from 'bignumber.js'
-import { isNull } from 'lodash-unified'
+import { BigNumber } from 'bignumber.js'
+import { isNull } from 'lodash-es'
 import {
     attemptUntil,
     fetchImageViaHTTP,

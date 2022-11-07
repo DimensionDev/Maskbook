@@ -1,4 +1,4 @@
-import { omit } from 'lodash-unified'
+import { omit } from 'lodash-es'
 import { api } from '@dimensiondev/mask-wallet-core/proto'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { asyncIteratorToArray } from '@masknet/shared-base'

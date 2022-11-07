@@ -19,7 +19,7 @@ import type { Ticker } from '../../types/index.js'
 import { DataProvider } from '@masknet/public-api'
 import { formatElapsed } from '../../../Wallet/formatter.js'
 import { ReactNode, useMemo } from 'react'
-import { compact, pick } from 'lodash-unified'
+import { compact, pick } from 'lodash-es'
 
 const useStyles = makeStyles()((theme) => ({
     container: {

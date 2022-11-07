@@ -1,10 +1,10 @@
 import { useCallback } from 'react'
 import { useAsync, useAsyncFn } from 'react-use'
 import Web3Utils from 'web3-utils'
-import { omit } from 'lodash-unified'
+import { omit } from 'lodash-es'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useChainContext, useWeb3Connection, useWeb3 } from '@masknet/web3-hooks-base'
-import type { HappyRedPacketV4 } from '@masknet/web3-contracts/types/HappyRedPacketV4'
+import type { HappyRedPacketV4 } from '@masknet/web3-contracts/types/HappyRedPacketV4.js'
 import { FungibleToken, isLessThan, toFixed } from '@masknet/web3-shared-base'
 import {
     ChainId,

@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useState, useEffect } from 'react'
 import { useCopyToClipboard, useAsyncFn, useAsyncRetry, useUpdateEffect } from 'react-use'
-import { sortBy, last } from 'lodash-unified'
+import { sortBy, last } from 'lodash-es'
 import { useWeb3State } from '@masknet/web3-hooks-base'
 import { Icons } from '@masknet/icons'
 import { InjectedDialog, useSnackbarCallback } from '@masknet/shared'

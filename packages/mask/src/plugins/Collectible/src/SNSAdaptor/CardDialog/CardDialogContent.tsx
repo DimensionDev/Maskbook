@@ -122,7 +122,7 @@ export function CardDialogContent(props: CardDialogContentProps) {
         return (
             <div className={classes.contentWrapper}>
                 <div className={classes.loadingPlaceholder}>
-                    <Typography className={classes.emptyText}>{t('plugin_furucombo_load_failed')}</Typography>
+                    <Typography className={classes.emptyText}>{t('load_failed')}</Typography>
                     <Button variant="text" onClick={() => asset.retry()}>
                         {t('retry')}
                     </Button>

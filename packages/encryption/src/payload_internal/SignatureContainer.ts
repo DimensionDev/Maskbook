@@ -1,4 +1,4 @@
-import { Ok, Result } from 'ts-results'
+import { Ok, Result } from 'ts-results-es'
 import type { Signature } from '../index.js'
 import { PayloadException } from '../types/index.js'
 import { CheckedError, OptionalResult } from '@masknet/shared-base'

@@ -1,5 +1,5 @@
 import urlcat from 'urlcat'
-import { omit } from 'lodash-unified'
+import { omit } from 'lodash-es'
 import { ChainId, chainResolver, SchemaType, isValidChainId } from '@masknet/web3-shared-evm'
 import { isSameAddress, NonFungibleContractSpender, FungibleTokenSpender } from '@masknet/web3-shared-base'
 import type { AuthorizationAPI } from '../types/index.js'

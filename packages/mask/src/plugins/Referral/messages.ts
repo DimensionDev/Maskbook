@@ -28,7 +28,7 @@ interface ReferralMessages {
 
 if (import.meta.webpackHot) import.meta.webpackHot.accept()
 export const PluginReferralMessages: PluginMessageEmitter<ReferralMessages> = createPluginMessage(META_KEY)
-export const ReferralRPC: AsyncVersionOf<typeof import('./Worker/services')> = createPluginRPC(
+export const ReferralRPC: AsyncVersionOf<typeof import('./Worker/services.js')> = createPluginRPC(
     PLUGIN_ID,
     () => import('./Worker/services.js') as any,
     PluginReferralMessages.rpc,

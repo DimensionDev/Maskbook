@@ -1,5 +1,5 @@
 import { useAsyncRetry } from 'react-use'
-import type { HappyRedPacketV4 } from '@masknet/web3-contracts/types/HappyRedPacketV4'
+import type { HappyRedPacketV4 } from '@masknet/web3-contracts/types/HappyRedPacketV4.js'
 import { useRedPacketContract } from './useRedPacketContract.js'
 import { useChainContext, useWeb3Connection } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'

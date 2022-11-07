@@ -1,4 +1,4 @@
-import { uniqBy } from 'lodash-unified'
+import { uniqBy } from 'lodash-es'
 import type { Subscription } from 'use-subscription'
 import { mapSubscription, mergeSubscription, safeEmptyList, StorageObject } from '@masknet/shared-base'
 import {
@@ -10,26 +10,31 @@ import {
 } from '@masknet/web3-shared-base'
 import type { Plugin } from '@masknet/plugin-infra'
 
-export interface TokenStorage<ChainId, SchemaType> {
+export interface TokenStorage<ChainId extends number, SchemaType> {
     fungibleTokenList: Record<string, Array<FungibleToken<ChainId, SchemaType>>>
     nonFungibleTokenList: Record<string, Array<NonFungibleToken<ChainId, SchemaType>>>
     fungibleTokenBlockedBy: Record<string, string[]>
     nonFungibleTokenBlockedBy: Record<string, string[]>
+    credibleFungibleTokenList: Partial<Record<ChainId, Array<FungibleToken<ChainId, SchemaType>>>>
+    credibleNonFungibleTokenList: Partial<Record<ChainId, Array<NonFungibleToken<ChainId, SchemaType>>>>
 }
 
-export class TokenState<ChainId, SchemaType> implements Web3TokenState<ChainId, SchemaType> {
+export class TokenState<ChainId extends number, SchemaType> implements Web3TokenState<ChainId, SchemaType> {
     protected storage: StorageObject<TokenStorage<ChainId, SchemaType>> = null!
 
     public trustedFungibleTokens?: Subscription<Array<FungibleToken<ChainId, SchemaType>>>
     public trustedNonFungibleTokens?: Subscription<Array<NonFungibleToken<ChainId, SchemaType>>>
     public blockedFungibleTokens?: Subscription<Array<FungibleToken<ChainId, SchemaType>>>
     public blockedNonFungibleTokens?: Subscription<Array<NonFungibleToken<ChainId, SchemaType>>>
+    public credibleFungibleTokens?: Subscription<Array<FungibleToken<ChainId, SchemaType>>>
+    public credibleNonFungibleTokens?: Subscription<Array<NonFungibleToken<ChainId, SchemaType>>>
 
     constructor(
         protected context: Plugin.Shared.SharedContext,
         protected defaultValue: TokenStorage<ChainId, SchemaType>,
         protected subscriptions: {
             account?: Subscription<string>
+            chainId?: Subscription<ChainId>
         },
         protected options: {
             isValidAddress(a: string): boolean
@@ -93,6 +98,20 @@ export class TokenState<ChainId, SchemaType> implements Web3TokenState<ChainId, 
                         ),
                     ),
             )
+            if (this.subscriptions.chainId) {
+                this.credibleFungibleTokens = mapSubscription(
+                    mergeSubscription(this.subscriptions.chainId, this.storage.credibleFungibleTokenList.subscription),
+                    ([chainId, tokens]) => safeEmptyList(tokens[chainId]),
+                )
+
+                this.credibleNonFungibleTokens = mapSubscription(
+                    mergeSubscription(
+                        this.subscriptions.chainId,
+                        this.storage.credibleNonFungibleTokenList.subscription,
+                    ),
+                    ([chainId, tokens]) => safeEmptyList(tokens[chainId]),
+                )
+            }
         }
     }
 

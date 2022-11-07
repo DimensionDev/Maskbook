@@ -1,5 +1,5 @@
 import urlcat from 'urlcat'
-import { compact } from 'lodash-unified'
+import { compact } from 'lodash-es'
 import { DataProvider } from '@masknet/public-api'
 import { createLookupTableResolver, EMPTY_LIST } from '@masknet/shared-base'
 import { TokenType } from '@masknet/web3-shared-base'

@@ -6,6 +6,7 @@
     "emitDeclarationOnly": true,
     "isolatedModules": false,
     "module": "None",
+    "moduleResolution": "Classic",
     "resolveJsonModule": false,
     "outFile": "../dist/public-api"
   },

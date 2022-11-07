@@ -3,7 +3,7 @@ import type { TabID } from 'react-devtools-inline/commons.js'
 import { flushSync } from 'react-dom'
 import { createRoot } from 'react-dom/client'
 import { DevtoolsMessage, createReactDevToolsWall, GLOBAL_ID_KEY } from '../shared.js'
-import { initialize, createBridge, DevtoolsProps, createStore } from 'react-devtools-inline/frontend'
+import { initialize, createBridge, DevtoolsProps, createStore } from 'react-devtools-inline/frontend.js'
 import type { ComponentType } from 'react'
 import { attachListener, createPanel, devtoolsEval } from './utils.js'
 

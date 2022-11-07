@@ -1,6 +1,6 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { forwardRef, useImperativeHandle } from 'react'
-import { Ok, Err } from 'ts-results'
+import { Ok, Err } from 'ts-results-es'
 
 const metadataReader: Plugin.GeneralUI.MetadataRender.MetadataReader<unknown> = (meta) => {
     const raw = meta?.get('io.mask.example/v1')

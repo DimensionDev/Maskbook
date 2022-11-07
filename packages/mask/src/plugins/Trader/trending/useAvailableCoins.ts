@@ -2,7 +2,7 @@ import { useChainContext } from '@masknet/web3-hooks-base'
 import type { DataProvider } from '@masknet/public-api'
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import { useAsync } from 'react-use'
-import type { AsyncState } from 'react-use/lib/useAsyncFn'
+import type { AsyncState } from 'react-use/lib/useAsyncFn.js'
 import { PluginTraderRPC } from '../messages.js'
 import type { Coin, TagType } from '../types/index.js'
 

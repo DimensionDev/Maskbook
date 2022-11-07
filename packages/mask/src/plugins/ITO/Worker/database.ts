@@ -1,5 +1,5 @@
 import type { PoolRecord, PoolRecordInDatabase } from '../types.js'
-import { omit } from 'lodash-unified'
+import { omit } from 'lodash-es'
 import type { Plugin } from '@masknet/plugin-infra'
 
 export let PoolDatabase: Plugin.Worker.DatabaseStorage<PoolRecordInDatabase>

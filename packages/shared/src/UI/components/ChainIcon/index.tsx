@@ -16,7 +16,7 @@ export interface ChainIconProps extends withClasses<'point'> {
 }
 
 export const ChainIcon = memo<ChainIconProps>(({ color, size = 12.5, ...props }) => {
-    const classes = useStylesExtends(useStyles(), props)
+    const { classes } = useStylesExtends(useStyles(), props)
 
     return (
         <div

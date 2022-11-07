@@ -1,4 +1,4 @@
-import { type Option, None } from 'ts-results'
+import { type Option, None } from 'ts-results-es'
 import { Identifier } from './base.js'
 import { ProfileIdentifier } from './profile.js'
 import { banSlash } from './utils.js'

@@ -1,4 +1,4 @@
-import { first } from 'lodash-unified'
+import { first } from 'lodash-es'
 import { EthereumAddress } from 'wallet.ts'
 import { ChainId, chainResolver, networkResolver, NetworkType } from '@masknet/web3-shared-evm'
 import {

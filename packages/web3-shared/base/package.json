@@ -1,10 +1,11 @@
 {
   "name": "@masknet/web3-shared-base",
   "private": true,
+  "type": "module",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "webpack": "./src/index.ts",
+      "mask-src": "./src/index.ts",
       "default": "./dist/index.js"
     }
   },
@@ -20,7 +21,7 @@
     "react-use": "^17.4.0",
     "reconnecting-websocket": "^4.4.0",
     "urlcat": "^2.0.4",
-    "web3-core-helpers": "1.7.5"
+    "web3-core-helpers": "1.8.0"
   },
   "devDependencies": {
     "mock-socket": "^9.1.2"

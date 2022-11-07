@@ -1,0 +1,15 @@
+diff --git a/package.json b/package.json
+index 712f83a2d00049a70bcdae0223f4e1a98ea5217c..e3d96fe2aa7aa198028cadbe39dec3af78c306da 100644
+--- a/package.json
++++ b/package.json
+@@ -4,8 +4,8 @@
+   "description": "Library to allow Solana dApps to use third-party wallets to sign transactions",
+   "license": "Apache-2.0",
+   "repository": "project-serum/sol-wallet-adapter",
+-  "main": "dist/cjs/index.js",
+-  "module": "dist/esm/index.js",
++  "type": "module",
++  "main": "dist/esm/index.js",
+   "engines": {
+     "node": ">=10"
+   },

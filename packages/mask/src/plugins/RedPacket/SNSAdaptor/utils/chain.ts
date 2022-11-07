@@ -1,6 +1,6 @@
 import urlcat from 'urlcat'
-import type BigNumber from 'bignumber.js'
-import { first } from 'lodash-unified'
+import type { BigNumber } from 'bignumber.js'
+import { first } from 'lodash-es'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import { ChainId, chainResolver, getExplorerConstants, getRedPacketConstants } from '@masknet/web3-shared-evm'

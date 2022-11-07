@@ -1,4 +1,4 @@
-import { first, unionWith } from 'lodash-unified'
+import { first, unionWith } from 'lodash-es'
 import { getEnumAsArray } from '@masknet/kit'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import {

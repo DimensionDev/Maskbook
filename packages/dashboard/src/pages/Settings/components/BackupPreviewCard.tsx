@@ -1,6 +1,5 @@
 import { MaskColorVar, makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
-import classNames from 'classnames'
 import { useDashboardI18N } from '../../../locales/index.js'
 import formatDateTime from 'date-fns/format'
 import type { BackupPreview } from '@masknet/backup-format'
@@ -29,7 +28,7 @@ export interface Props {
 
 export default function BackupPreviewCard({ json }: Props) {
     const t = useDashboardI18N()
-    const { classes } = useStyles()
+    const { classes, cx } = useStyles()
 
     const records = [
         {
@@ -69,7 +68,7 @@ export default function BackupPreviewCard({ json }: Props) {
     return (
         <div className={classes.root}>
             {records.map((record, idx) => (
-                <div className={classNames(classes.item, record.sub ? classes.sub : '')} key={idx}>
+                <div className={cx(classes.item, record.sub ? classes.sub : '')} key={idx}>
                     <Typography variant="body2">{record.name}</Typography>
                     <Typography variant="body2">{record.value}</Typography>
                 </div>

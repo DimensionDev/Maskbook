@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { toHex } from 'web3-utils'
-import BigNumber from 'bignumber.js'
+import { BigNumber } from 'bignumber.js'
 import { chainResolver } from '@masknet/web3-shared-evm'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { WalletMessages } from '@masknet/plugin-wallet'

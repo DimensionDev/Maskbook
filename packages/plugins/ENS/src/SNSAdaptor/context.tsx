@@ -1,6 +1,6 @@
 import { createContext, PropsWithChildren } from 'react'
 import { useAsync } from 'react-use'
-import { uniqBy } from 'lodash-unified'
+import { uniqBy } from 'lodash-es'
 import { NextIDProof } from '@masknet/web3-providers'
 import { useLookupAddress } from '@masknet/web3-hooks-base'
 import { BindingProof, NetworkPluginID, NextIDPlatform } from '@masknet/shared-base'

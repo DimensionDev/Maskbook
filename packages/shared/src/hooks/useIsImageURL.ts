@@ -1,5 +1,5 @@
 import { useAsync } from 'react-use'
-import type { AsyncState } from 'react-use/lib/useAsyncFn'
+import type { AsyncState } from 'react-use/lib/useAsyncFn.js'
 import { resolveResourceURL } from '@masknet/web3-shared-base'
 
 // filter out nft with image resource

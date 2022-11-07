@@ -1,15 +1,13 @@
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { Typography, FormControlLabel, List, ListItemButton, ListItemIcon, ListItemText } from '@mui/material'
-import TwitterIcon from '@mui/icons-material/Twitter'
-import LinkIcon from '@mui/icons-material/Link'
+import { Twitter as TwitterIcon, Link as LinkIcon, Description as DescriptionIcon } from '@mui/icons-material'
 import Checkbox from '@mui/material/Checkbox'
-import DescriptionIcon from '@mui/icons-material/Description'
 import type { ScamResult } from '@scamsniffer/detector'
 import { PluginScamRPC } from '../messages.js'
 import { useAsync } from 'react-use'
 import { useState, useEffect } from 'react'
 import { openWindow } from '@masknet/shared-base-ui'
-import { useI18N } from '../locales/i18n_generated'
+import { useI18N } from '../locales/i18n_generated.js'
 import urlcat from 'urlcat'
 
 const useStyles = makeStyles()((theme) => ({

@@ -1,6 +1,6 @@
 import { Grid, Typography, Box, Button } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
+import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
 import type { GameAssets, GoodGhostingInfo, LendingPoolData, Player } from '../types.js'
 import { CircularDataDisplay } from './CircularDataDisplay.js'
 import { useGameToken, useRewardToken } from '../hooks/usePoolData.js'

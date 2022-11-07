@@ -1,4 +1,4 @@
-import { first } from 'lodash-unified'
+import { first } from 'lodash-es'
 import { getEnumAsArray, unreachable } from '@masknet/kit'
 import { DataProvider } from '@masknet/public-api'
 import { EMPTY_LIST } from '@masknet/shared-base'
@@ -42,6 +42,7 @@ async function checkAvailabilityOnDataProvider(
 }
 
 export async function getAvailableDataProviders(chainId: ChainId, type?: TagType, keyword?: string) {
+    // TODO: multi network support
     const networkType = chainResolver.networkType(chainId)
     const isMainnet = chainResolver.isMainnet(chainId)
 

@@ -5,7 +5,7 @@ import { InjectedDialog } from '@masknet/shared'
 import { useI18N } from '../../utils/index.js'
 import { SelectProfileUI } from '../shared/SelectProfileUI/index.js'
 import type { ProfileInformation as Profile } from '@masknet/shared-base'
-import { uniqBy } from 'lodash-unified'
+import { uniqBy } from 'lodash-es'
 
 export interface SelectProfileDialogProps {
     open: boolean

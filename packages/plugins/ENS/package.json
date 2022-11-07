@@ -1,9 +1,10 @@
 {
   "name": "@masknet/plugin-ens",
   "private": true,
+  "type": "module",
   "exports": {
     ".": {
-      "webpack": "./src/index.ts",
+      "mask-src": "./src/index.ts",
       "default": "./dist/index.js"
     }
   },

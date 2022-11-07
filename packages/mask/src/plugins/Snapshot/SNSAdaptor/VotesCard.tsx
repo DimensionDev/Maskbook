@@ -1,5 +1,4 @@
 import { useContext } from 'react'
-import classNames from 'classnames'
 import millify from 'millify'
 import { formatEthereumAddress, explorerResolver, formatPercentage } from '@masknet/web3-shared-evm'
 import { Avatar, Badge, Box, Link, List, ListItem, Typography } from '@mui/material'
@@ -92,7 +91,7 @@ function Content() {
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const identifier = useContext(SnapshotContext)
     const { payload: votes } = useVotes(identifier)
-    const { classes, theme } = useStyles()
+    const { classes, cx, theme } = useStyles()
     const { t } = useI18N()
 
     return (
@@ -118,7 +117,7 @@ function Content() {
                     return (
                         <ListItem className={classes.listItem} key={v.address}>
                             <Link
-                                className={classNames(classes.link, classes.ellipsisText)}
+                                className={cx(classes.link, classes.ellipsisText)}
                                 target="_blank"
                                 rel="noopener"
                                 href={explorerResolver.addressLink(chainId, v.address)}>
@@ -156,7 +155,7 @@ function Content() {
                                 classes={{ tooltip: classes.tooltip, arrow: classes.arrow }}
                                 title={
                                     <Typography className={classes.shadowRootTooltip}>
-                                        {millify(v.balance, { precision: 2, lowercase: true }) +
+                                        {millify.default(v.balance, { precision: 2, lowercase: true }) +
                                             ' ' +
                                             (v.strategySymbol ? v.strategySymbol.toUpperCase() : '')}
                                     </Typography>
@@ -164,7 +163,7 @@ function Content() {
                                 placement="top"
                                 arrow>
                                 <Typography className={classes.power}>
-                                    {millify(v.balance, { precision: 2, lowercase: true }) +
+                                    {millify.default(v.balance, { precision: 2, lowercase: true }) +
                                         ' ' +
                                         (v.strategySymbol ? v.strategySymbol.toUpperCase() : '')}
                                 </Typography>

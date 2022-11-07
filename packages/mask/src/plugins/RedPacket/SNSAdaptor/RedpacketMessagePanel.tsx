@@ -1,4 +1,3 @@
-import classNames from 'classnames'
 import { Box, InputBase, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../locales/index.js'
@@ -31,7 +30,7 @@ export interface RedpacketMessagePanelProps {
 }
 export function RedpacketMessagePanel(props: RedpacketMessagePanelProps) {
     const { onChange, message } = props
-    const { classes } = useStyles()
+    const { classes, cx } = useStyles()
     const t = useI18N()
 
     return (
@@ -39,7 +38,7 @@ export function RedpacketMessagePanel(props: RedpacketMessagePanelProps) {
             <div className={classes.wrapper}>
                 <Typography>{t.message_label()}</Typography>
             </div>
-            <div className={classNames(classes.wrapper)}>
+            <div className={cx(classes.wrapper)}>
                 <InputBase
                     className={classes.input}
                     onChange={(e) => onChange(e.target.value)}

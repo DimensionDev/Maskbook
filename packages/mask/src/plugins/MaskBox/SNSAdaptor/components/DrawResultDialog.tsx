@@ -1,4 +1,4 @@
-import { difference } from 'lodash-unified'
+import { difference } from 'lodash-es'
 import { useContainer } from 'unstated-next'
 import { makeStyles, ActionButton } from '@masknet/theme'
 import { Box, DialogContent } from '@mui/material'

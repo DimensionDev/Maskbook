@@ -1,4 +1,4 @@
-import { orderBy } from 'lodash-unified'
+import { orderBy } from 'lodash-es'
 import { keccak256, asciiToHex, padRight } from 'web3-utils'
 import { defaultAbiCoder, Interface } from '@ethersproject/abi'
 import { formatUnits } from '@ethersproject/units'

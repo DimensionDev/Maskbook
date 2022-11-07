@@ -1,4 +1,4 @@
-import type { Order } from 'opensea-js/lib/types'
+import type { Order } from 'opensea-js/lib/types.js'
 import { makeStyles } from '@masknet/theme'
 import { Image } from '@masknet/shared'
 import { Table, TableHead, TableBody, TableRow, TableCell, Typography, Link } from '@mui/material'

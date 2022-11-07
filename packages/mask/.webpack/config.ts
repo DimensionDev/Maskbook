@@ -55,15 +55,15 @@ export function createConfiguration(_inputFlags: BuildFlags): Configuration {
                     // We want to always use the full version.
                     'async-call-rpc$': require.resolve('async-call-rpc/full'),
                     // It's a Node impl for xhr which is unnecessary
-                    'xhr2-cookies': require.resolve('./package-overrides/xhr2-cookies.js'),
-                    'error-polyfill': require.resolve('./package-overrides/null.js'),
+                    'xhr2-cookies': require.resolve('./package-overrides/xhr2-cookies.mjs'),
+                    'error-polyfill': require.resolve('./package-overrides/null.mjs'),
                 }
                 if (computedFlags.reactProductionProfiling) alias['react-dom$'] = require.resolve('react-dom/profiling')
                 if (flags.devtools) {
                     // Note: when devtools is enabled, we will install react-refresh/runtime manually to keep the correct react global hook installation order.
                     // https://github.com/pmmmwh/react-refresh-webpack-plugin/issues/680
                     alias[require.resolve('@pmmmwh/react-refresh-webpack-plugin/client/ReactRefreshEntry.js')] =
-                        require.resolve('./package-overrides/null.js')
+                        require.resolve('./package-overrides/null.mjs')
                 }
                 return alias
             })(),
@@ -76,6 +76,7 @@ export function createConfiguration(_inputFlags: BuildFlags): Configuration {
                 buffer: require.resolve('buffer'),
                 'text-encoding': require.resolve('@sinonjs/text-encoding'),
             },
+            conditionNames: ['mask-src', '...'],
         },
         module: {
             parser: {

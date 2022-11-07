@@ -1,4 +1,4 @@
-import { noop } from 'lodash-unified'
+import { noop } from 'lodash-es'
 import { createContext, Dispatch, SetStateAction } from 'react'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import type { NonFungibleTokenContract, SocialAccount } from '@masknet/web3-shared-base'

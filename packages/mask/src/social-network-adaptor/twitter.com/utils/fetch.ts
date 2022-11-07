@@ -1,5 +1,5 @@
 import { regexMatch } from '../../../utils/utils.js'
-import { defaultTo, flattenDeep } from 'lodash-unified'
+import { defaultTo, flattenDeep } from 'lodash-es'
 import { canonifyImgUrl } from './url.js'
 import {
     makeTypedMessageText,
@@ -9,6 +9,7 @@ import {
     isTypedMessageEmpty,
     isTypedMessageText,
     TypedMessageText,
+    makeTypedMessageImage,
 } from '@masknet/typed-message'
 import { collectNodeText, collectTwitterEmoji } from '../../../utils/index.js'
 
@@ -87,7 +88,13 @@ export const postContentMessageParser = (node: HTMLElement) => {
             const href = anchor.getAttribute('title') ?? anchor.getAttribute('href')
             const content = anchor.textContent
             if (!content) return makeTypedMessageEmpty()
-            return makeTypedMessageAnchor(resolve(content), href ?? '', content)
+            const altImage = node.querySelector('img')
+            return makeTypedMessageAnchor(
+                resolve(content),
+                href ?? '',
+                content,
+                altImage ? makeTypedMessageImage(altImage.src, altImage) : undefined,
+            )
         } else if (node instanceof HTMLImageElement) {
             const image = node
             const src = image.getAttribute('src')

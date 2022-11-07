@@ -1,4 +1,4 @@
-import { sum } from 'lodash-unified'
+import { sum } from 'lodash-es'
 
 /** @internal */
 export function hex2buffer(hexString: string, padded?: boolean) {
