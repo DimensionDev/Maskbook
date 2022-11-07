@@ -1,10 +1,10 @@
-import type { NetworkPluginID, SocialAddress, SocialIdentity } from '@masknet/web3-shared-base'
+import type { SocialAccount, SocialIdentity } from '@masknet/web3-shared-base'
 import { makeStyles } from '@masknet/theme'
 
 interface AvatarDecoratorProps {
     identity?: SocialIdentity
     persona?: string
-    socialAddressList?: Array<SocialAddress<NetworkPluginID>>
+    socialAccounts?: SocialAccount[]
 }
 
 const useStyles = makeStyles()({
@@ -19,14 +19,14 @@ const useStyles = makeStyles()({
         },
     },
 })
-export function AvatarDecorator({ identity, persona, socialAddressList }: AvatarDecoratorProps) {
+export function AvatarDecorator({ identity, persona, socialAccounts }: AvatarDecoratorProps) {
     const { classes } = useStyles()
     return (
         <div
             className={classes.container}
             data-nickname={identity?.nickname ?? 'N/A'}
             data-persona={persona ?? 'N/A'}
-            data-address-list={JSON.stringify(socialAddressList)}
+            data-address-list={JSON.stringify(socialAccounts)}
         />
     )
 }

@@ -1,7 +1,7 @@
 import { Icons } from '@masknet/icons'
-import { Plugin, PluginID, PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
+import { Plugin, PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
 import { ApplicationEntry } from '@masknet/shared'
-import { CrossIsolationMessages } from '@masknet/shared-base'
+import { PluginID, CrossIsolationMessages } from '@masknet/shared-base'
 import { Trans } from 'react-i18next'
 import { NFTAvatarDialog } from '../Application/NFTAvatarsDialog.js'
 import { base } from '../base.js'
@@ -28,7 +28,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                     const clickHandler = () => {
                         CrossIsolationMessages.events.applicationDialogEvent.sendToLocal({
                             open: true,
-                            application: PluginID.Avatar,
+                            pluginID: PluginID.Avatar,
                         })
                     }
                     return (

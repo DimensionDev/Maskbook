@@ -1,28 +1,18 @@
-import BigNumber from 'bignumber.js'
-import classNames from 'classnames'
+import { BigNumber } from 'bignumber.js'
 import { useCallback, useEffect, useMemo, useRef } from 'react'
-import {
-    useAccount,
-    useChainId,
-    useBalance,
-    useNetworkType,
-    useWeb3,
-    useNativeToken,
-    useNativeTokenAddress,
-} from '@masknet/plugin-infra/web3'
+import { useChainContext, useBalance, useWeb3, useNativeToken, useNativeTokenAddress } from '@masknet/web3-hooks-base'
 import { chainResolver, explorerResolver, isNativeTokenAddress, useRedPacketConstants } from '@masknet/web3-shared-evm'
 import { Grid, Link, Paper, Typography } from '@mui/material'
 import { makeStyles, ActionButton } from '@masknet/theme'
-import LaunchIcon from '@mui/icons-material/Launch'
-import { FormattedBalance, useOpenShareTxDialog } from '@masknet/shared'
+import { Launch as LaunchIcon } from '@mui/icons-material'
+import { FormattedBalance, useOpenShareTxDialog, PluginWalletStatusBar, ChainBoundary } from '@masknet/shared'
 import { useI18N } from '../locales/index.js'
 import { RedPacketSettings, useCreateCallback, useCreateParams } from './hooks/useCreateCallback.js'
-import { useTransactionValue } from '@masknet/plugin-infra/web3-evm'
-import { NetworkPluginID, formatBalance, isSameAddress } from '@masknet/web3-shared-base'
+import { useTransactionValue } from '@masknet/web3-hooks-evm'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { formatBalance, isSameAddress } from '@masknet/web3-shared-base'
 import type { RedPacketJSONPayload, RedPacketRecord } from '../types.js'
 import { RedPacketRPC } from '../messages.js'
-import { PluginWalletStatusBar } from '../../../utils/index.js'
-import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
 
 const useStyles = makeStyles()((theme) => ({
     link: {
@@ -38,7 +28,6 @@ const useStyles = makeStyles()((theme) => ({
         paddingRight: theme.spacing(3),
     },
     hit: {
-        fontSize: 14,
         fontWeight: 300,
         borderRadius: 8,
         backgroundColor: theme.palette.background.default,
@@ -51,27 +40,6 @@ const useStyles = makeStyles()((theme) => ({
         justifyContent: 'flex-end',
         alignItems: 'center',
     },
-    data: {
-        textAlign: 'right',
-        color: theme.palette.text.primary,
-    },
-    label: {
-        textAlign: 'left',
-        color: theme.palette.text.secondary,
-    },
-    button: {
-        padding: theme.spacing(2),
-    },
-    gasEstimation: {
-        display: 'flex',
-        justifyContent: 'flex-end',
-        alignItems: 'center',
-        cursor: 'pointer',
-        '& > p': {
-            marginRight: 5,
-            color: theme.palette.mode === 'light' ? '#7B8192' : '#6F767C',
-        },
-    },
     ellipsis: {
         textOverflow: 'ellipsis',
         overflow: 'hidden',
@@ -79,8 +47,8 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface ConfirmRedPacketFormProps {
-    onBack: () => void
     onCreated: (payload: RedPacketJSONPayload) => void
+    onBack: () => void
     onClose: () => void
     settings?: RedPacketSettings
 }
@@ -88,9 +56,9 @@ export interface ConfirmRedPacketFormProps {
 export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
     const t = useI18N()
     const { onBack, settings, onCreated, onClose } = props
-    const { classes } = useStyles()
+    const { classes, cx } = useStyles()
     const { value: balance = '0', loading: loadingBalance } = useBalance(NetworkPluginID.PLUGIN_EVM)
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { account, chainId, networkType } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     useEffect(() => {
         if (settings?.token?.chainId !== chainId) onClose()
     }, [chainId, onClose])
@@ -100,8 +68,6 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
     //  otherwise password in database would be different from creating red-packet.
     const contract_version = 4
     const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM)
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const networkType = useNetworkType(NetworkPluginID.PLUGIN_EVM)
     const nativeTokenAddress = useNativeTokenAddress(NetworkPluginID.PLUGIN_EVM)
     const { address: publicKey, privateKey } = useMemo(
         () => web3?.eth.accounts.create() ?? { address: '', privateKey: '' },
@@ -190,12 +156,12 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
         }
         payload.current.contract_address = contractAddress
         payload.current.contract_version = contract_version
-        payload.current.network = chainResolver.chainName(chainId)
+        payload.current.network = chainResolver.networkType(chainId)
     }, [chainId, networkType, contract_version])
 
     return (
         <>
-            <Grid container spacing={2} className={classNames(classes.grid, classes.gridWrapper)}>
+            <Grid container spacing={2} className={cx(classes.grid, classes.gridWrapper)}>
                 <Grid item xs={12}>
                     <Typography variant="h4" color="textPrimary" align="center" className={classes.ellipsis}>
                         {settings?.message}
@@ -296,7 +262,7 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
                 </Grid>
                 <Grid item xs={12}>
                     <Paper className={classes.hit}>
-                        <Typography variant="body1" align="center" style={{ fontSize: 14, lineHeight: '20px' }}>
+                        <Typography variant="body1" align="center" style={{ lineHeight: '20px' }}>
                             {t.hint()}
                         </Typography>
                     </Paper>

@@ -1,6 +1,6 @@
 import type { Plugin } from '@masknet/plugin-infra'
-import { OthersState } from '@masknet/plugin-infra/web3'
-import { createExplorerResolver, isSameAddress } from '@masknet/web3-shared-base'
+import { OthersState } from '@masknet/web3-state'
+import { createExplorerResolver, createFungibleToken, createNonFungibleToken } from '@masknet/web3-shared-base'
 import {
     isValidDomain,
     isValidAddress,
@@ -20,12 +20,16 @@ import {
     NETWORK_DESCRIPTORS,
     PROVIDER_DESCRIPTORS,
     getDefaultChainId,
+    getInvalidChainId,
     getDefaultNetworkType,
     getDefaultProviderType,
     getZeroAddress,
     getMaskTokenAddress,
     getNativeTokenAddress,
     formatSchemaType,
+    formatTokenId,
+    createNativeToken,
+    isValidChainId,
 } from '@masknet/web3-shared-flow'
 
 export class Others extends OthersState<ChainId, SchemaType, ProviderType, NetworkType, Transaction> {
@@ -49,8 +53,8 @@ export class Others extends OthersState<ChainId, SchemaType, ProviderType, Netwo
     }
 
     override isValidDomain = isValidDomain
+    override isValidChainId = isValidChainId
     override isValidAddress = isValidAddress
-    override isSameAddress = isSameAddress
     override isZeroAddress = isZeroAddress
     override isNativeTokenAddress = isNativeTokenAddress
     override isNativeTokenSchemaType = isNativeTokenSchemaType
@@ -58,6 +62,7 @@ export class Others extends OthersState<ChainId, SchemaType, ProviderType, Netwo
     override isNonFungibleTokenSchemaType = isNonFungibleTokenSchemaType
 
     override getDefaultChainId = getDefaultChainId
+    override getInvalidChainId = getInvalidChainId
     override getDefaultNetworkType = getDefaultNetworkType
     override getDefaultProviderType = getDefaultProviderType
     override getZeroAddress = getZeroAddress
@@ -66,6 +71,9 @@ export class Others extends OthersState<ChainId, SchemaType, ProviderType, Netwo
 
     override formatAddress = formatAddress
     override formatDomainName = formatDomainName
-    override formatTokenId = () => ''
+    override formatTokenId = formatTokenId
     override formatSchemaType = formatSchemaType
+    override createNativeToken = createNativeToken
+    override createFungibleToken = createFungibleToken
+    override createNonFungibleToken = createNonFungibleToken
 }

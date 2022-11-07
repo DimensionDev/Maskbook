@@ -1,29 +1,21 @@
 import { memo, useState } from 'react'
-import { uniqBy } from 'lodash-unified'
+import { uniqBy } from 'lodash-es'
 import { MaskFixedSizeListProps, MaskTextFieldProps, SearchableList } from '@masknet/theme'
 import { Stack, Typography } from '@mui/material'
 import { useSharedI18N } from '@masknet/shared'
 import {
-    useAccount,
-    useChainId,
-    useCurrentWeb3NetworkPluginID,
+    useChainContext,
+    useNetworkContext,
     useFungibleAssets,
     useFungibleToken,
     useFungibleTokensFromTokenList,
     useTrustedFungibleTokens,
     useWeb3State,
-} from '@masknet/plugin-infra/web3'
+} from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import {
-    CurrencyType,
-    currySameAddress,
-    FungibleToken,
-    isSameAddress,
-    NetworkPluginID,
-} from '@masknet/web3-shared-base'
+import { CurrencyType, currySameAddress, FungibleToken, isSameAddress } from '@masknet/web3-shared-base'
+import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import { getFungibleTokenItem } from './FungibleTokenItem.js'
-import { EMPTY_LIST } from '@masknet/shared-base'
-
 import type { ChainAddress } from '../../../types.js'
 import { useI18N } from '../../../locales/index.js'
 
@@ -68,9 +60,10 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
 
     const t = useSharedI18N()
     const tReferral = useI18N()
-    const pluginID = useCurrentWeb3NetworkPluginID(props.pluginID)
-    const account = useAccount()
-    const chainId = useChainId(pluginID, props.chainId)
+    const { pluginID } = useNetworkContext(props.pluginID)
+    const { account, chainId } = useChainContext({
+        chainId: props.chainId,
+    })
     const { Token, Others } = useWeb3State() as Web3Helper.Web3StateAll
     const { value: fungibleTokens = EMPTY_LIST } = useFungibleTokensFromTokenList()
     const trustedFungibleTokens = useTrustedFungibleTokens()

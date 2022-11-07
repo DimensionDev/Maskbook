@@ -1,4 +1,4 @@
-import { None, Ok, Result } from 'ts-results'
+import { None, Ok, Result } from 'ts-results-es'
 import { makeTypedMessageText, TypedMessageText } from '../core/index.js'
 
 export function encodeTypedMessageV38Format(message: TypedMessageText) {

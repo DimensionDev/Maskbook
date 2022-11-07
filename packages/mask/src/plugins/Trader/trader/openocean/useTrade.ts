@@ -1,40 +1,36 @@
-import { first } from 'lodash-unified'
-import {
-    ChainId,
-    isNativeTokenAddress,
-    SchemaType,
-    useRPCConstants,
-    useTraderConstants,
-} from '@masknet/web3-shared-evm'
+import { first } from 'lodash-es'
+import { ChainId, isNativeTokenAddress, useRPCConstants, useTraderConstants } from '@masknet/web3-shared-evm'
 import { PluginTraderRPC } from '../../messages.js'
 import type { SwapOOData, TradeStrategy } from '../../types/index.js'
-import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
 import { useSlippageTolerance } from './useSlippageTolerance.js'
 import { OPENOCEAN_SUPPORTED_CHAINS } from './constants.js'
-import { useAccount, useDoubleBlockBeatRetry } from '@masknet/plugin-infra/web3'
-import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
-import { FungibleToken, NetworkPluginID, isZero } from '@masknet/web3-shared-base'
+import { useChainContext, useDoubleBlockBeatRetry, useNetworkContext } from '@masknet/web3-hooks-base'
+import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
+import { isZero } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
+import type { Web3Helper } from '@masknet/web3-helpers'
 
 export function useTrade(
     strategy: TradeStrategy,
     inputAmount: string,
     outputAmount: string,
-    inputToken?: FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>,
-    outputToken?: FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>,
+    inputToken?: Web3Helper.FungibleTokenAll,
+    outputToken?: Web3Helper.FungibleTokenAll,
     temporarySlippage?: number,
 ): AsyncStateRetry<SwapOOData | null> {
     const slippageSetting = useSlippageTolerance()
     const slippage = temporarySlippage || slippageSetting
-    const { targetChainId } = TargetChainIdContext.useContainer()
-    const { RPC_URLS } = useRPCConstants(targetChainId)
+    const { account, chainId } = useChainContext()
+    const { pluginID } = useNetworkContext()
+    const { RPC_URLS } = useRPCConstants(chainId)
     const providerURL = first(RPC_URLS)
-    const { OPENOCEAN_ETH_ADDRESS } = useTraderConstants(targetChainId)
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const { OPENOCEAN_ETH_ADDRESS } = useTraderConstants(chainId)
 
     return useDoubleBlockBeatRetry(
         NetworkPluginID.PLUGIN_EVM,
         async () => {
-            if (!OPENOCEAN_SUPPORTED_CHAINS.includes(targetChainId)) return null
+            if (pluginID !== NetworkPluginID.PLUGIN_EVM || !OPENOCEAN_SUPPORTED_CHAINS.includes(chainId as ChainId))
+                return null
             if (!inputToken || !outputToken) return null
             if (isZero(inputAmount)) return null
             const sellToken = isNativeTokenAddress(inputToken.address)
@@ -51,7 +47,7 @@ export function useTrade(
                 slippage,
                 userAddr: account,
                 rpc: providerURL,
-                chainId: targetChainId,
+                chainId,
             })
         },
         [
@@ -63,7 +59,8 @@ export function useTrade(
             slippage,
             account,
             providerURL,
-            targetChainId,
+            chainId,
+            pluginID,
         ],
     )
 }

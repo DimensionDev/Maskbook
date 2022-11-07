@@ -17,7 +17,7 @@ import {
     SourceType,
     TokenType,
 } from '@masknet/web3-shared-base'
-import { ChainId, createNativeToken, SchemaType } from '@masknet/web3-shared-evm'
+import { ChainId, createNativeToken, SchemaType, isValidChainId } from '@masknet/web3-shared-evm'
 import {
     Collection,
     Event,
@@ -28,10 +28,11 @@ import {
     TransferEventProperty,
     V3AskEventProperty,
 } from './types.js'
+import { getAssetFullName, resolveNonFungibleTokenEventActivityType } from '../helpers.js'
 import type { NonFungibleTokenAPI } from '../types/index.js'
 import { GetCollectionsByKeywordQuery, GetEventsQuery, GetTokenQuery } from './queries.js'
 import { ZORA_MAINNET_GRAPHQL_URL } from './constants.js'
-import type { Variables } from 'graphql-request/dist/types'
+import type { Variables } from 'graphql-request/dist/types.js'
 
 export class ZoraAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
     private client = new GraphQLClient(ZORA_MAINNET_GRAPHQL_URL)
@@ -53,7 +54,7 @@ export class ZoraAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType
         const shared = {
             chainId,
             address: token.tokenContract?.collectionAddress ?? token.collectionAddress,
-            name: token.tokenContract?.name ?? token.name ?? token.collectionName ?? 'Unknown Token',
+            name: token.tokenContract?.name ?? token.collectionName ?? '',
             symbol: token.tokenContract?.symbol ?? 'UNKNOWN',
             schema: SchemaType.ERC721,
         }
@@ -76,6 +77,7 @@ export class ZoraAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType
             },
             metadata: {
                 ...shared,
+                name: getAssetFullName(shared.address, shared.name ?? '', token.name, token.tokenId),
             },
             traits:
                 token.attributes
@@ -101,6 +103,7 @@ export class ZoraAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType
                   }
                 : undefined,
             ownerId: token.owner,
+            source: SourceType.Zora,
         }
     }
 
@@ -116,6 +119,7 @@ export class ZoraAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType
             slug: collection.entity.symbol ?? 'UNKNOWN',
             description: collection.entity.description ?? collection.description,
             schema: SchemaType.ERC721,
+            source: SourceType.Zora,
         }
     }
 
@@ -171,7 +175,7 @@ export class ZoraAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType
 
         return {
             id: event.transactionInfo.transactionHash ?? `${event.transactionInfo.blockNumber}_${event.tokenId}`,
-            type: event.eventType,
+            type: resolveNonFungibleTokenEventActivityType(event.eventType),
             chainId,
             quantity: '1',
             from: {
@@ -241,6 +245,7 @@ export class ZoraAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType
     }
 
     async getAsset(address: string, tokenId: string, { chainId = ChainId.Mainnet }: HubOptions<ChainId> = {}) {
+        if (!isValidChainId(chainId)) return
         const token = await this.request<{
             token: {
                 token: Token
@@ -266,6 +271,7 @@ export class ZoraAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType
         tokenId: string,
         eventTypes: EventType[],
     ) {
+        if (!isValidChainId(chainId)) return []
         const response = await this.request<{
             events: {
                 nodes: Array<Event<T>>
@@ -283,6 +289,8 @@ export class ZoraAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType
         tokenId: string,
         { chainId = ChainId.Mainnet, indicator }: HubOptions<ChainId, HubIndicator> = {},
     ) {
+        if (!isValidChainId(chainId)) return createPageable(EMPTY_LIST, createIndicator(indicator))
+
         const events = await this.getEventsFiltered<MintEventProperty | SaleEventProperty | TransferEventProperty>(
             chainId,
             address,
@@ -307,6 +315,8 @@ export class ZoraAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType
         side: OrderSide,
         { chainId = ChainId.Mainnet, indicator }: HubOptions<ChainId, HubIndicator> = {},
     ) {
+        if (!isValidChainId(chainId)) return createPageable(EMPTY_LIST, createIndicator(indicator))
+
         const events = await this.getEventsFiltered<SaleEventProperty | V3AskEventProperty>(
             chainId,
             address,

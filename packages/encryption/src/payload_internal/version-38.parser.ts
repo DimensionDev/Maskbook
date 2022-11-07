@@ -1,7 +1,7 @@
 /* eslint @dimensiondev/unicode/specific-set: ["error", { "only": "code" }] */
 import { EC_Key, PayloadParseResult, EC_KeyCurveEnum, Signature } from '../payload/index.js'
 import { CryptoException, PayloadException } from '../types/index.js'
-import { Result, Ok, Some } from 'ts-results'
+import { Result, Ok, Some } from 'ts-results-es'
 import {
     decodeUint8ArrayF,
     decodeTextF,
@@ -13,7 +13,7 @@ import {
 } from '../utils/index.js'
 import type { PayloadParserResult } from './index.js'
 import { get_v38PublicSharedCryptoKey } from './shared.js'
-import { encodeText } from '@dimensiondev/kit'
+import { encodeText } from '@masknet/kit'
 import {
     andThenAsync,
     CheckedError,

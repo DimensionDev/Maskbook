@@ -3,15 +3,16 @@ import {
     createNextIndicator,
     createPageable,
     HubOptions,
-    resolveResourceURL,
+    SourceType,
     TokenType,
 } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import RSS3 from 'rss3-next'
-import urlcat from 'urlcat'
+import urlcat, { query } from 'urlcat'
 import { fetchJSON } from '../helpers.js'
 import { NonFungibleTokenAPI, RSS3BaseAPI } from '../types/index.js'
 import { NEW_RSS3_ENDPOINT, RSS3_ENDPOINT, TAG, TYPE } from './constants.js'
+import { normalizedFeed } from './helpers.js'
 
 type RSS3Result<T> = {
     cursor?: string
@@ -124,6 +125,7 @@ export class RSS3API implements RSS3BaseAPI.Provider, NonFungibleTokenAPI.Provid
                         name: asset.info.collection ?? '',
                         slug: '',
                     },
+                    source: SourceType.RSS3,
                 }
             })
             .filter((x) => x.chainId === chainId)
@@ -131,33 +133,50 @@ export class RSS3API implements RSS3BaseAPI.Provider, NonFungibleTokenAPI.Provid
     }
 
     /**
+     * @deprecated
      * Get feeds in tags of donation, collectible and transaction
      */
     async getWeb3Feeds(address: string, { indicator, size = 100 }: HubOptions<ChainId> = {}) {
         if (!address) return createPageable([], createIndicator(indicator))
         const tags = [RSS3BaseAPI.Tag.Donation, RSS3BaseAPI.Tag.Collectible, RSS3BaseAPI.Tag.Transaction]
-        const url = urlcat(NEW_RSS3_ENDPOINT, `/:address?tag=${tags.join('&tag=')}`, {
-            address,
+        const queryString = `tag=${tags.join('&tag=')}&${query({
             limit: size,
-            cursor: indicator?.id,
+            cursor: indicator?.id ?? '',
             include_poap: true,
+        })}`
+        const url = urlcat(NEW_RSS3_ENDPOINT, `/:address?${queryString}`, {
+            address,
         })
         const { result, cursor } = await fetchJSON<{
             result: RSS3BaseAPI.Activity[]
             cursor?: string
         }>(url)
-        result.forEach((activity) => {
-            activity.actions.forEach((action) => {
-                if (!action.metadata) return
-                if ('image' in action.metadata) {
-                    action.metadata.image = resolveResourceURL(action.metadata.image)!
-                } else if ('token' in action.metadata) {
-                    action.metadata.token.image = resolveResourceURL(action.metadata.token.image)!
-                } else if ('logo' in action.metadata) {
-                    action.metadata.logo = resolveResourceURL(action.metadata.logo)!
-                }
-            })
-        })
+        result.forEach(normalizedFeed)
         return createPageable(result, createIndicator(indicator), createNextIndicator(indicator, cursor))
+    }
+    async getAllNotes(
+        address: string,
+        options: Partial<Record<string, string>> = {},
+        { indicator, size = 100 }: HubOptions<ChainId> = {},
+    ) {
+        if (!address) return createPageable([], createIndicator(indicator))
+        const url = urlcat(NEW_RSS3_ENDPOINT, '/:address', {
+            ...options,
+            address,
+            limit: size,
+            cursor: indicator?.id ?? '',
+        })
+        const { result, cursor } = await fetchJSON<{
+            result: RSS3BaseAPI.Web3Feed[]
+            cursor?: string
+        }>(url)
+        result.forEach(normalizedFeed)
+        // createNextIndicator() return a fallback indicator as `{ id: 1, index: 1 }`
+        // which will fail the API, so we pass undefined if cursor is undefined
+        return createPageable(
+            result,
+            createIndicator(indicator),
+            cursor ? createNextIndicator(indicator, cursor) : undefined,
+        )
     }
 }

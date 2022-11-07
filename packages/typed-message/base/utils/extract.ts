@@ -1,7 +1,7 @@
 import type { TypedMessage } from '../base.js'
 import { isTypedMessageText, isTypedMessageImage } from '../core/index.js'
 import { isTypedMessageAnchor } from '../extension/index.js'
-import { Option, Some, None } from 'ts-results'
+import { Option, Some, None } from 'ts-results-es'
 import { forEachTypedMessageChild } from '../visitor/index.js'
 
 /**

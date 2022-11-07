@@ -1,6 +1,6 @@
 import { PostIdentifier, ProfileIdentifier } from '@masknet/shared-base'
 import { openWindow } from '@masknet/shared-base-ui'
-import type { SocialNetwork } from '../../social-network/types.js'
+import type { SocialNetwork } from '@masknet/types'
 import { createSNSAdaptorSpecializedPostContext } from '../../social-network/utils/create-post-context.js'
 import { hasPayloadLike } from '../../utils/index.js'
 import { twitterBase } from './base.js'

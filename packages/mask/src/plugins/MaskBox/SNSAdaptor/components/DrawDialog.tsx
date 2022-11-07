@@ -2,18 +2,24 @@ import { useCallback } from 'react'
 import { useContainer } from 'unstated-next'
 import { makeStyles, ActionButton } from '@masknet/theme'
 import { Add, Remove } from '@mui/icons-material'
-import { useAccount, useChainId, useProviderDescriptor } from '@masknet/plugin-infra/web3'
-import { FormattedAddress, FormattedBalance, ImageIcon, InjectedDialog } from '@masknet/shared'
+import { useChainContext, useProviderDescriptor } from '@masknet/web3-hooks-base'
+import {
+    FormattedAddress,
+    FormattedBalance,
+    ImageIcon,
+    InjectedDialog,
+    PluginWalletStatusBar,
+    WalletConnectedBoundary,
+    EthereumERC20TokenApprovedBoundary,
+} from '@masknet/shared'
 import { Box, Button, DialogActions, DialogContent, TextField, Typography } from '@mui/material'
 import { formatEthereumAddress, SchemaType, useMaskBoxConstants } from '@masknet/web3-shared-evm'
-import { formatBalance, multipliedBy, NetworkPluginID } from '@masknet/web3-shared-base'
-import { EthereumERC20TokenApprovedBoundary } from '../../../../web3/UI/EthereumERC20TokenApprovedBoundary.js'
-import { WalletConnectedBoundary } from '../../../../web3/UI/WalletConnectedBoundary.js'
+import { formatBalance, multipliedBy } from '@masknet/web3-shared-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
 import type { BoxInfo } from '../../type.js'
 import { GasSettingBar } from '../../../Wallet/SNSAdaptor/GasSettingDialog/GasSettingBar.js'
 import { TokenPrice } from '../../../../components/shared/TokenPrice.js'
 import { Context } from '../../hooks/useContext.js'
-import { PluginWalletStatusBar } from '../../../../utils/index.js'
 import { useI18N } from '../../locales/index.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -106,8 +112,7 @@ export function DrawDialog(props: DrawDialogProps) {
     } = useContainer(Context)
 
     const providerDescriptor = useProviderDescriptor()
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
     const onCount = useCallback(
         (step: number) => {

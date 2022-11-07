@@ -8,7 +8,7 @@ import {
     EnhanceableSite,
     AESCryptoKey,
 } from '@masknet/shared-base'
-import type { Result, Option } from 'ts-results'
+import type { Result, Option } from 'ts-results-es'
 import type { CryptoException, PayloadException } from '../types/index.js'
 
 /** A parse result, that try to preserve as many info as possible. */

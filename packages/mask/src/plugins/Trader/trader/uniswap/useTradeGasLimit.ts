@@ -1,15 +1,14 @@
 import type { Trade, TradeComputed, SwapCall } from '../../types/index.js'
-import { useAccount, useWeb3Connection } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { useChainContext, useNetworkContext, useWeb3Connection } from '@masknet/web3-hooks-base'
 import { useSwapParameters as useTradeParameters } from './useTradeParameters.js'
 import type { TradeProvider } from '@masknet/public-api'
-import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
 import { toHex } from 'web3-utils'
 import { useAsync } from 'react-use'
-import BigNumber from 'bignumber.js'
+import { BigNumber } from 'bignumber.js'
 import { swapErrorToUserReadableMessage } from '../../helpers/index.js'
-import type { AsyncState } from 'react-use/lib/useAsyncFn'
+import type { AsyncState } from 'react-use/lib/useAsyncFn.js'
 import type { SwapParameters } from '@uniswap/v2-sdk'
+import { NetworkPluginID } from '@masknet/shared-base'
 
 interface FailedCall {
     parameters: SwapParameters
@@ -31,12 +30,13 @@ interface FailedCall extends SwapCallEstimate {
 }
 
 export function useTradeGasLimit(trade: TradeComputed<Trade> | null, tradeProvider: TradeProvider): AsyncState<number> {
-    const { targetChainId } = TargetChainIdContext.useContainer()
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const { account, chainId: targetChainId } = useChainContext()
+    const { pluginID } = useNetworkContext()
     const tradeParameters = useTradeParameters(trade, tradeProvider)
-    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, { chainId: targetChainId })
+    const connection = useWeb3Connection(pluginID, { chainId: targetChainId })
+
     return useAsync(async () => {
-        if (!connection) return 0
+        if (!connection || pluginID !== NetworkPluginID.PLUGIN_EVM) return 0
 
         // step 1: estimate each trade parameter
         const estimatedCalls: SwapCallEstimate[] = await Promise.all(
@@ -94,5 +94,5 @@ export function useTradeGasLimit(trade: TradeComputed<Trade> | null, tradeProvid
         }
 
         return 'gasEstimate' in bestCallOption ? bestCallOption.gasEstimate.toNumber() : 0
-    }, [tradeParameters.length, connection])
+    }, [tradeParameters.length, connection, pluginID])
 }

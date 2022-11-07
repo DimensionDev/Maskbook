@@ -1,8 +1,8 @@
 import Web3 from 'web3'
 import type { HttpProvider } from 'web3-core'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
-import { isNil, omit } from 'lodash-unified'
-import { defer } from '@dimensiondev/kit'
+import { isNil, omit } from 'lodash-es'
+import { defer } from '@masknet/kit'
 import {
     ChainId,
     createWeb3,

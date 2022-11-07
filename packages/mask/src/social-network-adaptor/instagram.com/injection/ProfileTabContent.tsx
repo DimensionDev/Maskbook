@@ -52,5 +52,13 @@ const useStyles = makeStyles()((theme) => {
 
 export function ProfileTabContentAtInstagram() {
     const { classes } = useStyles()
-    return <ProfileTabContent classes={classes} />
+    return (
+        <ProfileTabContent
+            classes={{
+                root: classes.root,
+                button: classes.button,
+                text: classes.text,
+            }}
+        />
+    )
 }

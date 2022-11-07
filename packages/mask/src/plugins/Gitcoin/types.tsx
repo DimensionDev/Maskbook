@@ -1,4 +1,4 @@
-import type BigNumber from 'bignumber.js'
+import type { BigNumber } from 'bignumber.js'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 
 export enum GitcoinGrantFailedReason {

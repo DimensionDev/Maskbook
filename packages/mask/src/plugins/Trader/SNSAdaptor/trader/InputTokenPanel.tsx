@@ -1,28 +1,24 @@
 import { memo, useMemo } from 'react'
-import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import BigNumber from 'bignumber.js'
-import { useFungibleTokenPrice } from '@masknet/plugin-infra/web3'
-import { FungibleToken, NetworkPluginID } from '@masknet/web3-shared-base'
+import { BigNumber } from 'bignumber.js'
+import { useFungibleTokenPrice, useNetworkContext } from '@masknet/web3-hooks-base'
 import { InputTokenPanelUI } from './components/InputTokenPanelUI.js'
 import type { SelectTokenChipProps } from '@masknet/shared'
+import type { Web3Helper } from '@masknet/web3-helpers'
 
 export interface InputTokenPanelProps extends withClasses<'root'> {
     balance: string
     amount: string
-    chainId: ChainId
+    chainId: Web3Helper.ChainIdAll
     maxAmount: string
-    token?: FungibleToken<ChainId, SchemaType> | null
+    token?: Web3Helper.FungibleTokenAll | null
     onAmountChange: (amount: string) => void
     SelectTokenChip?: Partial<SelectTokenChipProps>
 }
 
 export const InputTokenPanel = memo<InputTokenPanelProps>(
     ({ chainId, token, balance, onAmountChange, amount, SelectTokenChip: SelectTokenChipProps, maxAmount }) => {
-        const { value: tokenPrice = 0 } = useFungibleTokenPrice(
-            NetworkPluginID.PLUGIN_EVM,
-            token?.address.toLowerCase(),
-            { chainId },
-        )
+        const { pluginID } = useNetworkContext()
+        const { value: tokenPrice = 0 } = useFungibleTokenPrice(pluginID, token?.address.toLowerCase())
 
         const tokenValueUSD = useMemo(
             () => (amount ? new BigNumber(amount).times(tokenPrice).toFixed(2) : '0'),

@@ -7,25 +7,16 @@ import {
     ChainId,
     SchemaType,
 } from '@masknet/web3-shared-evm'
-import {
-    isZero,
-    ZERO,
-    isGreaterThan,
-    NetworkPluginID,
-    isSameAddress,
-    formatBalance,
-    FungibleToken,
-} from '@masknet/web3-shared-base'
+import { isZero, ZERO, isGreaterThan, isSameAddress, formatBalance, FungibleToken } from '@masknet/web3-shared-base'
 import { Box, Card, Link, Typography } from '@mui/material'
 import { makeStyles, ActionButton } from '@masknet/theme'
-import OpenInNewIcon from '@mui/icons-material/OpenInNew'
+import { OpenInNew as OpenInNewIcon } from '@mui/icons-material'
 import { BigNumber } from 'bignumber.js'
-import classNames from 'classnames'
 import formatDateTime from 'date-fns/format'
-import { startCase } from 'lodash-unified'
-import { EnhanceableSite } from '@masknet/shared-base'
+import { startCase } from 'lodash-es'
+import { EnhanceableSite, NetworkPluginID } from '@masknet/shared-base'
 import { usePostLink } from '../../../components/DataSource/usePostInfo.js'
-import { TokenIcon, useOpenShareTxDialog } from '@masknet/shared'
+import { TokenIcon, useOpenShareTxDialog, ChainBoundary, WalletConnectedBoundary } from '@masknet/shared'
 import { activatedSocialNetworkUI } from '../../../social-network/index.js'
 import { getAssetAsBlobURL, getTextUILength, useI18N } from '../../../utils/index.js'
 import { ITO_EXCHANGE_RATION_MAX, MSG_DELIMITER, TIME_WAIT_BLOCKCHAIN } from '../constants.js'
@@ -41,10 +32,8 @@ import { StyledLinearProgress } from './StyledLinearProgress.js'
 import { SwapGuide, SwapStatus } from './SwapGuide.js'
 import { isFacebook } from '../../../social-network-adaptor/facebook.com/base.js'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base.js'
-import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
+import { useChainContext } from '@masknet/web3-hooks-base'
 import { Icons } from '@masknet/icons'
-import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary.js'
-import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
 
 export interface IconProps {
     size?: number
@@ -134,7 +123,6 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
     },
     fromText: {
         opacity: 0.6,
-        fontSize: 14,
     },
     rationWrap: {
         marginBottom: theme.spacing(1),
@@ -156,10 +144,6 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
     },
     actionButton: {
         width: '100%',
-    },
-    textProviderErr: {
-        color: '#EB5757',
-        marginTop: theme.spacing(1),
     },
     loadingITO: {
         marginTop: 260,
@@ -184,14 +168,6 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
     textInOneLine: {
         whiteSpace: 'nowrap',
     },
-    claimDate: {
-        marginTop: 16,
-        color: '#F4212E',
-    },
-    grid: {
-        width: '100%',
-        margin: 0,
-    },
 }))
 
 // #region token item
@@ -207,7 +183,7 @@ const TokenItem = ({ price, token, exchangeToken }: TokenItemProps) => {
     return (
         <>
             <TokenIcon
-                classes={{ icon: classes.tokenIcon }}
+                className={classes.tokenIcon}
                 address={exchangeToken.address}
                 logoURL={exchangeToken.logoURL}
                 chainId={token.chainId}
@@ -232,8 +208,7 @@ export interface ITO_Props {
 
 export function ITO(props: ITO_Props) {
     // context
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const postLink = usePostLink()
     const [, destructCallback] = useDestructCallback(props.payload.contract_address)
     const [openClaimDialog, setOpenClaimDialog] = useState(false)
@@ -256,7 +231,7 @@ export function ITO(props: ITO_Props) {
 
     const title = message.split(MSG_DELIMITER)[1] ?? message
     const regions = message.split(MSG_DELIMITER)[2] ?? defaultRegions
-    const { classes } = useStyles({
+    const { classes, cx } = useStyles({
         titleLength: getTextUILength(title),
         tokenNumber: exchange_tokens.length,
         snsId: activatedSocialNetworkUI.networkIdentifier,
@@ -542,7 +517,7 @@ export function ITO(props: ITO_Props) {
                             variant="roundedDark"
                             onClick={() => undefined}
                             disabled
-                            className={classNames(classes.actionButton, classes.textInOneLine)}>
+                            className={cx(classes.actionButton, classes.textInOneLine)}>
                             {t('plugin_ito_claim')}
                         </ActionButton>
                     )
@@ -822,11 +797,11 @@ export function ITO(props: ITO_Props) {
 export function ITO_Loading() {
     const { t } = useI18N()
     const PoolBackground = getAssetAsBlobURL(new URL('../assets/pool-loading-background.jpg', import.meta.url))
-    const { classes } = useStyles({})
+    const { classes, cx } = useStyles({})
     return (
         <div style={{ width: '100%' }}>
             <Card
-                className={classNames(classes.root, classes.loadingWrap)}
+                className={cx(classes.root, classes.loadingWrap)}
                 elevation={0}
                 style={{ backgroundImage: `url(${PoolBackground})` }}>
                 <Typography variant="body1" className={classes.loadingITO}>
@@ -839,11 +814,11 @@ export function ITO_Loading() {
 
 export function ITO_Error({ retryPoolPayload }: { retryPoolPayload: () => void }) {
     const { t } = useI18N()
-    const { classes } = useStyles({})
+    const { classes, cx } = useStyles({})
     const PoolBackground = getAssetAsBlobURL(new URL('../assets/pool-loading-background.jpg', import.meta.url))
     return (
         <Card
-            className={classNames(classes.root, classes.loadingWrap)}
+            className={cx(classes.root, classes.loadingWrap)}
             elevation={0}
             style={{ backgroundImage: `url(${PoolBackground})` }}>
             <Typography variant="body1" className={classes.loadingITO}>

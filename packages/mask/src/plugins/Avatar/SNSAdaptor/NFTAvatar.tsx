@@ -1,18 +1,16 @@
 import { useCallback, useState } from 'react'
-import { range, uniqBy } from 'lodash-unified'
+import { range, uniqBy } from 'lodash-es'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { LoadingBase, makeStyles, useStylesExtends } from '@masknet/theme'
 import { Box, Button, List, ListItem, Skeleton, Typography } from '@mui/material'
 import { useI18N } from '../../../utils/index.js'
 import { AddNFT } from './AddNFT.js'
-import { useAccount, useChainId, useCurrentWeb3NetworkPluginID, useNonFungibleAssets } from '@masknet/plugin-infra/web3'
-import { ElementAnchor, ReversedAddress } from '@masknet/shared'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
+import { useChainContext, useNetworkContext, useNonFungibleAssets } from '@masknet/web3-hooks-base'
+import { ElementAnchor, ReversedAddress, ChainBoundary } from '@masknet/shared'
+import { NetworkPluginID, EMPTY_LIST } from '@masknet/shared-base'
 import type { AllChainsNonFungibleToken, SelectTokenInfo } from '../types.js'
 import type { ChainId } from '@masknet/web3-shared-evm'
-import { EMPTY_LIST } from '@masknet/shared-base'
 import { NFTImage } from './NFTImage.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -21,7 +19,6 @@ const useStyles = makeStyles()((theme) => ({
         padding: 0,
         display: 'flex',
         justifyContent: 'space-between',
-        fontSize: 14,
         alignItems: 'center',
     },
     account: {
@@ -45,16 +42,11 @@ const useStyles = makeStyles()((theme) => ({
         justifyContent: 'space-around',
         flexDirection: 'row',
     },
-    setNFTAvatar: {},
     skeleton: {
         width: 100,
         height: 100,
         objectFit: 'cover',
         boxSizing: 'border-box',
-    },
-    skeletonBox: {
-        marginLeft: 'auto',
-        marginRight: 'auto',
     },
     error: {
         display: 'flex',
@@ -103,10 +95,9 @@ export interface NFTAvatarProps extends withClasses<'root'> {
 
 export function NFTAvatar(props: NFTAvatarProps) {
     const { onChange, hideWallet } = props
-    const classes = useStylesExtends(useStyles(), props)
-    const pluginID = useCurrentWeb3NetworkPluginID()
-    const account = useAccount(pluginID)
-    const chainId = useChainId(pluginID)
+    const { classes } = useStylesExtends(useStyles(), props)
+    const { pluginID } = useNetworkContext()
+    const { account, chainId } = useChainContext()
     const [selectedToken, setSelectedToken] = useState<AllChainsNonFungibleToken | undefined>()
     const [open_, setOpen_] = useState(false)
     const [collectibles_, setCollectibles_] = useState<AllChainsNonFungibleToken[]>([])
@@ -124,10 +115,10 @@ export function NFTAvatar(props: NFTAvatarProps) {
             account,
             token: selectedToken,
             image: selectedToken.metadata?.imageURL ?? '',
-            pluginId: pluginID,
+            pluginID,
         })
         setSelectedToken(undefined)
-    }, [onChange, selectedToken])
+    }, [onChange, selectedToken, pluginID])
 
     const onAddClick = useCallback((token: AllChainsNonFungibleToken) => {
         setSelectedToken(token)
@@ -197,7 +188,7 @@ export function NFTAvatar(props: NFTAvatarProps) {
                                     <ListItem className={classes.nftItem} key={i}>
                                         <NFTImage
                                             key={i}
-                                            pluginId={NetworkPluginID.PLUGIN_EVM}
+                                            pluginID={NetworkPluginID.PLUGIN_EVM}
                                             showBadge
                                             token={token}
                                             selectedToken={selectedToken}

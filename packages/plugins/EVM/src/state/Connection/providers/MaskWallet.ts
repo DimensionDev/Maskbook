@@ -1,11 +1,11 @@
 import { toHex } from 'web3-utils'
 import type { RequestArguments } from 'web3-core'
-import { ChainId, createPayload, chainResolver, ProviderType } from '@masknet/web3-shared-evm'
+import { ChainId, createPayload, chainResolver, ProviderType, isValidAddress } from '@masknet/web3-shared-evm'
 import { BaseProvider } from './Base.js'
 import type { EVM_Provider } from '../types.js'
 import { SharedContextSettings, Web3StateSettings } from '../../../settings/index.js'
 import { ExtensionSite, getSiteType, isEnhanceableSiteType, PopupRoutes } from '@masknet/shared-base'
-import { first } from 'lodash-unified'
+import { first } from 'lodash-es'
 import type { ProviderOptions } from '@masknet/web3-shared-base'
 
 export class MaskWalletProvider extends BaseProvider implements EVM_Provider {
@@ -65,7 +65,17 @@ export class MaskWalletProvider extends BaseProvider implements EVM_Provider {
     }
 
     override async connect(chainId: ChainId) {
-        const { chainId: actualChainId, getWallets, updateAccount } = SharedContextSettings.value
+        const { getWallets, updateAccount } = SharedContextSettings.value
+
+        const actualAccount = SharedContextSettings.value.account.getCurrentValue()
+        const actualChainId = SharedContextSettings.value.chainId.getCurrentValue()
+
+        if (chainId === actualChainId && isValidAddress(actualAccount)) {
+            return {
+                account: actualAccount,
+                chainId: actualChainId,
+            }
+        }
 
         const siteType = getSiteType()
         if (siteType === ExtensionSite.Popup) throw new Error('Cannot connect wallet')
@@ -79,7 +89,7 @@ export class MaskWalletProvider extends BaseProvider implements EVM_Provider {
         if (!account) throw new Error(`Failed to connect to ${chainResolver.chainFullName(chainId)}.`)
 
         // switch chain
-        if (actualChainId.getCurrentValue() !== chainId) {
+        if (chainId !== actualChainId) {
             await updateAccount({
                 chainId,
             })

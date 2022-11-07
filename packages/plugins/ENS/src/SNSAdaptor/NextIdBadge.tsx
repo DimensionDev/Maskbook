@@ -1,16 +1,30 @@
 import { Icons } from '@masknet/icons'
-import { ShadowRootTooltip } from '@masknet/theme'
+import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { Typography, Link } from '@mui/material'
 import { Trans } from 'react-i18next'
-import useStyles from './useStyles'
-import { useI18N } from '../locales'
 
-export function NextIdBadge() {
-    const t = useI18N()
-    const { classes } = useStyles()
+interface StyleProps {
+    isMenuScroll?: boolean
+}
+
+const useStyles = makeStyles<StyleProps>()((theme, { isMenuScroll = false }) => {
+    return {
+        nextIdLink: {
+            color: theme.palette.maskColor.primary,
+            textDecoration: 'none !important',
+        },
+        tooltip: {
+            backgroundColor: theme.palette.maskColor.publicMain,
+            color: theme.palette.maskColor.white,
+        },
+    }
+})
+export function NextIdBadge({ variant, rightBoundary }: { variant?: 'dark' | 'light'; rightBoundary?: number }) {
+    const { classes } = useStyles({})
 
     return (
         <ShadowRootTooltip
+            classes={{ tooltip: classes.tooltip }}
             arrow
             placement="top"
             title={
@@ -30,7 +44,17 @@ export function NextIdBadge() {
                     />
                 </Typography>
             }>
-            <Icons.NextIDMini variant="light" width={32} />
+            <Icons.NextIDMini
+                width={32}
+                variant={variant}
+                ref={(e) => {
+                    if (!rightBoundary) return
+                    const offsetRight = e?.getBoundingClientRect().right
+                    if (offsetRight && offsetRight > rightBoundary) {
+                        e.style.display = 'none'
+                    }
+                }}
+            />
         </ShadowRootTooltip>
     )
 }

@@ -5,8 +5,9 @@ import Services from '../../../extension/service.js'
 import { EnhanceableSite, ProfileIdentifier } from '@masknet/shared-base'
 import { MaskIcon } from '@masknet/shared'
 import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot.js'
-import { memoizePromise } from '@dimensiondev/kit'
+import { memoizePromise } from '@masknet/kit'
 import { startWatch } from '../../../utils/watcher.js'
+import { memoize } from 'lodash-es'
 
 function Icon(props: { size: number }) {
     return (
@@ -69,7 +70,7 @@ export function injectMaskIconToPostTwitter(post: PostInfo, signal: AbortSignal)
         if (signal?.aborted) return
         const node = ls.evaluate()
         if (!node) return
-        const proxy = DOMProxy({ afterShadowRootInit: { mode: 'closed' } })
+        const proxy = DOMProxy({ afterShadowRootInit: { mode: process.env.shadowRootMode } })
         proxy.realCurrent = node
         const root = createReactRootShadowed(proxy.afterShadow, { signal })
         root.render(<Icon size={24} />)
@@ -80,6 +81,7 @@ export function injectMaskIconToPostTwitter(post: PostInfo, signal: AbortSignal)
     }
 }
 export const ifUsingMask = memoizePromise(
+    memoize,
     async (pid: ProfileIdentifier | null) => {
         if (!pid) throw new Error()
         const p = await Services.Identity.queryProfilesInformation([pid])

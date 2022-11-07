@@ -1,4 +1,4 @@
-import { getEnumAsArray } from '@dimensiondev/kit'
+import { getEnumAsArray } from '@masknet/kit'
 import { ChainId, getCoinGeckoConstants, getCoinMarketCapConstants } from '@masknet/web3-shared-evm'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { TagType } from '../../types/index.js'
@@ -115,7 +115,7 @@ getEnumAsArray(ChainId).map(({ value: chainId }) => {
     NETWORK_ID_MAP[DataProvider.CoinMarketCap][chainId] = getCoinMarketCapConstants(chainId).CHAIN_ID ?? ''
 })
 
-export function resolveAlias(chainId: ChainId, keyword: string, dataProvider: DataProvider) {
+export function resolveKeyword(chainId: ChainId, keyword: string, dataProvider: DataProvider) {
     if (dataProvider === DataProvider.UniswapInfo || dataProvider === DataProvider.NFTScan) return keyword
     return KEYWORD_ALIAS_MAP[dataProvider][chainId]?.[keyword.toUpperCase()] ?? keyword
 }

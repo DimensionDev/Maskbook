@@ -8,7 +8,7 @@ import {
 import { useObservableValues, useValueRef } from '@masknet/shared-base-ui'
 import type { TypedMessageTuple } from '@masknet/typed-message'
 import { ValueRef, LiveSelector, DOMProxy } from '@dimensiondev/holoflows-kit'
-import type { Some } from 'ts-results'
+import type { Some } from 'ts-results-es'
 import { createContext, createElement, memo, useContext } from 'react'
 import { Subscription, useSubscription } from 'use-subscription'
 import type { SupportedPayloadVersions } from '@masknet/encryption'
@@ -23,6 +23,14 @@ export interface PostContextAuthor {
     /** ID on the SNS network. */
     readonly snsID: Subscription<string | null>
 }
+
+export interface PostContextCoAuthor {
+    nickname?: string
+    avatarURL?: URL
+    author: ProfileIdentifier
+    snsID: string
+}
+
 export interface PostContextComment {
     readonly commentsSelector: LiveSelector<HTMLElement, false>
     readonly commentBoxSelector: LiveSelector<HTMLElement, false>
@@ -33,6 +41,7 @@ export interface PostContextCreation extends PostContextAuthor {
     readonly isFocusing?: boolean
     readonly suggestedInjectionPoint: HTMLElement
     readonly comments?: PostContextComment
+    readonly coAuthors: Subscription<PostContextCoAuthor[]>
     /**
      * The result of this subscription will be merged with `PostContext.postMentionedLinks`.
      *
@@ -60,6 +69,7 @@ export interface PostContext extends PostContextAuthor {
     /** Auto computed */
     readonly identifier: Subscription<null | PostIdentifier>
     readonly url: Subscription<URL | null>
+    readonly coAuthors: Subscription<PostContextCoAuthor[] | null>
     // Meta
     readonly mentionedLinks: Subscription<string[]>
     /** @deprecated It should appears in rawMessage */
@@ -89,12 +99,13 @@ export interface PostContext extends PostContextAuthor {
 }
 export type PostInfo = PostContext
 
-const Context = createContext<PostContext | null>(null)
+const PostInfoContext = createContext<PostContext | null>(null)
+PostInfoContext.displayName = 'PostInfoContext'
 export const PostInfoProvider = memo((props: React.PropsWithChildren<{ post: PostInfo }>) => {
-    return createElement(Context.Provider, { value: props.post, children: props.children })
+    return createElement(PostInfoContext.Provider, { value: props.post, children: props.children })
 })
 export function usePostInfo(): PostContext | null {
-    return useContext(Context)
+    return useContext(PostInfoContext)
 }
 export const usePostInfoDetails: {
     // Change to use* when https://github.com/microsoft/TypeScript/issues/44643 fixed

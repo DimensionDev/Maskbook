@@ -3,11 +3,11 @@ import {
     ChainDescriptor,
     CurrencyType,
     NetworkDescriptor,
-    NetworkPluginID,
     ProviderDescriptor,
+    SocialAddressType,
     SourceType,
 } from '../specs/index.js'
-import { createLookupTableResolver, NextIDPlatform } from '@masknet/shared-base'
+import { NetworkPluginID, createLookupTableResolver, NextIDPlatform } from '@masknet/shared-base'
 
 export interface ExplorerRoutes {
     addressPathname?: string
@@ -77,10 +77,11 @@ export function createChainResolver<ChainId, SchemaType, NetworkType>(
         chainShortName: (chainId?: ChainId) => getChainDescriptor(chainId)?.shortName,
         chainColor: (chainId?: ChainId) => getChainDescriptor(chainId)?.color,
         chainPrefix: (chainId?: ChainId) => 'ETH:',
-        chainNetworkType: (chainId?: ChainId) => getChainDescriptor(chainId)?.type,
-        infoURL: (chainId?: ChainId) => getChainDescriptor(chainId)?.explorerURL,
+        networkType: (chainId?: ChainId) => getChainDescriptor(chainId)?.type,
+        explorerURL: (chainId?: ChainId) => getChainDescriptor(chainId)?.explorerURL,
         nativeCurrency: (chainId?: ChainId) => getChainDescriptor(chainId)?.nativeCurrency,
-        isValid: (chainId?: ChainId, testnet = false) => getChainDescriptor(chainId)?.network === 'mainnet' || testnet,
+        isValid: (chainId?: ChainId, testnet = false) =>
+            getChainDescriptor(chainId) && (getChainDescriptor(chainId)?.network === 'mainnet' || testnet),
         isMainnet: (chainId?: ChainId) => getChainDescriptor(chainId)?.network === 'mainnet',
         isSupport: (chainId?: ChainId, feature?: string) =>
             !!(feature && getChainDescriptor(chainId)?.features?.includes(feature)),
@@ -105,7 +106,7 @@ export function createExplorerResolver<ChainId, SchemaType, NetworkType>(
 
     return {
         explorerURL: getExplorerURL,
-        addressLink: (chainId: ChainId, address: string) =>
+        addressLink: (chainId: ChainId, address: string, tokenId?: string) =>
             urlcat(getExplorerURL(chainId).url, addressPathname, {
                 address,
                 ...getExplorerURL(chainId)?.parameters,
@@ -125,11 +126,13 @@ export function createExplorerResolver<ChainId, SchemaType, NetworkType>(
                 domain,
                 ...getExplorerURL(chainId)?.parameters,
             }),
-        fungibleTokenLink: (chainId: ChainId, address: string) =>
-            urlcat(getExplorerURL(chainId).url, fungibleTokenPathname, {
+        fungibleTokenLink: (chainId: ChainId, address: string) => {
+            if (!address) return ''
+            return urlcat(getExplorerURL(chainId).url, fungibleTokenPathname, {
                 address,
                 ...getExplorerURL(chainId)?.parameters,
-            }),
+            })
+        },
         nonFungibleTokenLink: (chainId: ChainId, address: string, tokenId: string) => {
             return urlcat(getExplorerURL(chainId).url, nonFungibleTokenPathname, {
                 address,
@@ -145,6 +148,8 @@ export function createNetworkResolver<ChainId, NetworkType>(
 ) {
     const getNetworkDescriptor = (networkType: NetworkType) => descriptors.find((x) => x.type === networkType)
     return {
+        networkIcon: (networkType: NetworkType) => getNetworkDescriptor(networkType)?.icon,
+        networkIconColor: (networkType: NetworkType) => getNetworkDescriptor(networkType)?.iconColor,
         networkName: (networkType: NetworkType) => getNetworkDescriptor(networkType)?.name,
         networkChainId: (networkType: NetworkType) => getNetworkDescriptor(networkType)?.chainId,
     }
@@ -161,6 +166,23 @@ export function createProviderResolver<ChainId, ProviderType>(
         providerDownloadLink: (providerType: ProviderType) => getProviderDescriptor(providerType)?.downloadLink,
     }
 }
+
+export const resolveSocialAddressLink = createLookupTableResolver<SocialAddressType, string>(
+    {
+        [SocialAddressType.Address]: '',
+        [SocialAddressType.ENS]: 'https://ens.domains/',
+        [SocialAddressType.SPACE_ID]: 'https://space.id/',
+        [SocialAddressType.RSS3]: 'https://rss3.bio/',
+        [SocialAddressType.SOL]: 'https://naming.bonfida.org/',
+        [SocialAddressType.KV]: 'https://next.id/',
+        [SocialAddressType.NEXT_ID]: 'https://next.id/',
+        [SocialAddressType.CyberConnect]: 'https://cyberconnect.me/',
+        [SocialAddressType.Leaderboard]: 'https://ethleaderboard.xyz/',
+        [SocialAddressType.Sybil]: 'https://sybil.org/',
+        [SocialAddressType.TwitterBlue]: '',
+    },
+    () => '',
+)
 
 export const resolveSourceTypeName = createLookupTableResolver<SourceType, string>(
     {
@@ -185,6 +207,8 @@ export const resolveSourceTypeName = createLookupTableResolver<SourceType, strin
         [SourceType.Element]: 'Element',
         [SourceType.Flow]: 'Flow',
         [SourceType.Solana]: 'Solana',
+        [SourceType.Solsea]: 'Solsea',
+        [SourceType.Solanart]: 'Solanart',
         [SourceType.R2D2]: 'R2D2',
         [SourceType.Rabby]: 'Rabby',
         [SourceType.CoinGecko]: 'CoinGecko',
@@ -234,18 +258,20 @@ export const resolveNextID_NetworkPluginID = createLookupTableResolver<NextIDPla
 const MATCH_IPFS_CID_RAW =
     'Qm[1-9A-HJ-NP-Za-km-z]{44,}|b[2-7A-Za-z]{58,}|B[2-7A-Z]{58,}|z[1-9A-HJ-NP-Za-km-z]{48,}|F[\\dA-F]{50,}'
 const MATCH_IPFS_DATA_RE = /ipfs\/(data:.*)$/
-const MATH_IPFS_CID_AND_PATHNAME_RE = new RegExp(`(?:${MATCH_IPFS_CID_RAW})\\/?.*`)
+const MATCH_IPFS_CID_RE = new RegExp(`(${MATCH_IPFS_CID_RAW})`)
+const MATCH_IPFS_CID_STRICT_RE = new RegExp(`^(?:${MATCH_IPFS_CID_RAW})$`)
+const MATCH_IPFS_CID_AT_STARTS_RE = new RegExp(`^https://(?:${MATCH_IPFS_CID_RAW})`)
+const MATCH_IPFS_CID_AND_PATHNAME_RE = new RegExp(`(?:${MATCH_IPFS_CID_RAW})\\/?.*`)
+const MATCH_LOCAL_RESOURCE_URL_RE = /^(data|blob:|\w+-extension:\/\/|<svg\s)/
 const CORS_HOST = 'https://cors.r2d2.to'
 const IPFS_GATEWAY_HOST = 'https://gateway.ipfscdn.io'
 
 export const isIPFS_CID = (cid: string) => {
-    const re = new RegExp(`^${MATCH_IPFS_CID_RAW}$`)
-    return re.test(cid)
+    return MATCH_IPFS_CID_STRICT_RE.test(cid)
 }
 
 export const isIPFS_Resource = (str: string) => {
-    const re = new RegExp(MATCH_IPFS_CID_RAW)
-    return re.test(str)
+    return MATCH_IPFS_CID_RE.test(str)
 }
 
 export const isArweaveResource = (str: string) => {
@@ -253,7 +279,7 @@ export const isArweaveResource = (str: string) => {
 }
 
 export const isLocaleResource = (url: string): boolean => {
-    return /^(data|blob:|\w+-extension:\/\/|<svg\s)/.test(url)
+    return MATCH_LOCAL_RESOURCE_URL_RE.test(url)
 }
 
 export const resolveLocalURL = (url: string): string => {
@@ -264,12 +290,16 @@ export const resolveLocalURL = (url: string): string => {
 /**
  * Remove query from IPFS url, as it is not needed
  * and will increase requests sometimes.
- * For example https://ipfs.io/ipfs/<same-cid>?id=67891 and  https://ipfs.io/ipfs/<same-cid>?id=67892
+ * For example https://ipfs.io/ipfs/<same-cid>?id=67891 and https://ipfs.io/ipfs/<same-cid>?id=67892
  * are set to two different NFTs, but according to the same CID,
- * they are exactly the some.
+ * they are exactly the same.
  */
 const trimQuery = (url: string) => {
     return url.replace(/\?.+$/, '')
+}
+
+export const resolveIPFS_CID = (str: string) => {
+    return str.match(MATCH_IPFS_CID_RE)?.[1]
 }
 
 export function resolveIPFS_URL(cidOrURL: string | undefined): string | undefined {
@@ -292,7 +322,37 @@ export function resolveIPFS_URL(cidOrURL: string | undefined): string | undefine
 
     // a ipfs hash fragment
     if (isIPFS_Resource(cidOrURL)) {
-        const pathname = cidOrURL.match(MATH_IPFS_CID_AND_PATHNAME_RE)?.[0]
+        // starts with a cid
+        if (MATCH_IPFS_CID_AT_STARTS_RE.test(cidOrURL)) {
+            try {
+                const u = new URL(cidOrURL)
+                const cid = resolveIPFS_CID(cidOrURL)
+
+                if (cid) {
+                    if (u.pathname === '/') {
+                        return resolveIPFS_URL(
+                            urlcat('https://ipfs.io/ipfs/:cid', {
+                                cid,
+                            }),
+                        )
+                    } else {
+                        return resolveIPFS_URL(
+                            urlcat('https://ipfs.io/ipfs/:cid/:path', {
+                                cid,
+                                path: u.pathname.slice(1),
+                            }),
+                        )
+                    }
+                }
+            } catch (error) {
+                console.log({
+                    error,
+                })
+                // do nothing
+            }
+        }
+
+        const pathname = cidOrURL.match(MATCH_IPFS_CID_AND_PATHNAME_RE)?.[0]
         if (pathname) return trimQuery(`${IPFS_GATEWAY_HOST}/ipfs/${pathname}`)
     }
 

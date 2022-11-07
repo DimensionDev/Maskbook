@@ -1,5 +1,4 @@
-import type { LoadingButtonProps } from '@mui/lab/LoadingButton'
-import LoadingButton from '@mui/lab/LoadingButton'
+import { LoadingButton, type LoadingButtonProps } from '@mui/lab'
 import { memo, useCallback, useState, forwardRef } from 'react'
 import { CircularProgress } from '@mui/material'
 

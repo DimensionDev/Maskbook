@@ -1,10 +1,10 @@
+import { memo, useEffect, useMemo, useRef } from 'react'
 import { Icons } from '@masknet/icons'
-import { PluginI18NFieldRender, PluginID, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
-import { CrossIsolationMessages } from '@masknet/shared-base'
+import { PluginI18NFieldRender, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
+import { CrossIsolationMessages, PluginID } from '@masknet/shared-base'
 import { openWindow } from '@masknet/shared-base-ui'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { Avatar, Box, List, ListItem, ListItemAvatar, Switch, Typography } from '@mui/material'
-import { memo, useEffect, useMemo, useRef } from 'react'
 import { Services } from '../../extension/service.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -63,15 +63,15 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 interface Props {
-    focusPluginId?: PluginID
+    focusPluginID?: PluginID
 }
-export const ApplicationSettingPluginSwitch = memo(({ focusPluginId }: Props) => {
+export const ApplicationSettingPluginSwitch = memo(({ focusPluginID }: Props) => {
     const { classes } = useStyles()
     const snsAdaptorPlugins = useActivatedPluginsSNSAdaptor('any')
     const snsAdaptorMinimalPlugins = useActivatedPluginsSNSAdaptor(true)
     const availablePlugins = useMemo(() => {
         return snsAdaptorPlugins
-            .flatMap(({ ID, ApplicationEntries: entries }) => (entries ?? []).map((entry) => ({ entry, pluginId: ID })))
+            .flatMap(({ ID, ApplicationEntries: entries }) => (entries ?? []).map((entry) => ({ entry, pluginID: ID })))
             .filter((x) => x.entry.category === 'dapp')
             .sort((a, b) => (a.entry.marketListSortingPriority ?? 0) - (b.entry.marketListSortingPriority ?? 0))
     }, [snsAdaptorPlugins])
@@ -80,9 +80,9 @@ export const ApplicationSettingPluginSwitch = memo(({ focusPluginId }: Props) =>
     const noAvailablePlugins = availablePlugins.length === 0
 
     useEffect(() => {
-        if (!focusPluginId || noAvailablePlugins || !targetPluginRef.current) return
+        if (!focusPluginID || noAvailablePlugins || !targetPluginRef.current) return
         targetPluginRef.current.scrollIntoView()
-    }, [focusPluginId, noAvailablePlugins])
+    }, [focusPluginID, noAvailablePlugins])
 
     async function onSwitch(id: string, checked: boolean) {
         if (id === PluginID.GoPlusSecurity && checked === false)
@@ -96,7 +96,7 @@ export const ApplicationSettingPluginSwitch = memo(({ focusPluginId }: Props) =>
                 <ListItem
                     key={x.entry.ApplicationEntryID}
                     ref={(ele) => {
-                        if (x.pluginId === focusPluginId) {
+                        if (x.pluginID === focusPluginID) {
                             targetPluginRef.current = ele
                         }
                     }}
@@ -108,7 +108,7 @@ export const ApplicationSettingPluginSwitch = memo(({ focusPluginId }: Props) =>
                         <div className={classes.info}>
                             <div className={classes.headerWrapper}>
                                 <Typography className={classes.name}>
-                                    <PluginI18NFieldRender field={x.entry.name} pluginID={x.pluginId} />
+                                    <PluginI18NFieldRender field={x.entry.name} pluginID={x.pluginID} />
                                 </Typography>
                                 {x.entry.tutorialLink ? (
                                     <Box className={classes.settings}>
@@ -117,14 +117,14 @@ export const ApplicationSettingPluginSwitch = memo(({ focusPluginId }: Props) =>
                                 ) : null}
                             </div>
                             <Typography className={classes.desc}>
-                                <PluginI18NFieldRender field={x.entry.description} pluginID={x.pluginId} />
+                                <PluginI18NFieldRender field={x.entry.description} pluginID={x.pluginID} />
                             </Typography>
                         </div>
                     </section>
 
                     <Switch
-                        checked={!snsAdaptorMinimalPlugins.map((x) => x.ID).includes(x.pluginId)}
-                        onChange={(event) => onSwitch(x.pluginId, event.target.checked)}
+                        checked={!snsAdaptorMinimalPlugins.map((x) => x.ID).includes(x.pluginID)}
+                        onChange={(event) => onSwitch(x.pluginID, event.target.checked)}
                     />
                 </ListItem>
             ))}

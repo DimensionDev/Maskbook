@@ -1,5 +1,5 @@
 import { mixin } from '@masknet/shared-base'
-import { HubStateBaseClient, HubStateFungibleClient, HubStateNonFungibleClient } from '@masknet/plugin-infra/web3'
+import { HubStateBaseClient, HubStateFungibleClient, HubStateNonFungibleClient } from '@masknet/web3-state'
 import {
     CoinGeckoPriceSolana,
     MagicEden,
@@ -8,6 +8,7 @@ import {
     SolanaFungible,
     SolanaNonFungible,
     PriceAPI,
+    NFTScanNonFungibleTokenSolana,
 } from '@masknet/web3-providers'
 import { CurrencyType, GasOptionType, HubOptions, Pageable, SourceType, Transaction } from '@masknet/web3-shared-base'
 import { ChainId, GasOption, SchemaType } from '@masknet/web3-shared-solana'
@@ -37,8 +38,9 @@ class HubNonFungibleClient extends HubStateNonFungibleClient<ChainId, SchemaType
             {
                 [SourceType.MagicEden]: MagicEden,
                 [SourceType.Solana]: SolanaNonFungible,
+                [SourceType.NFTScan]: NFTScanNonFungibleTokenSolana,
             },
-            [MagicEden, SolanaNonFungible],
+            [NFTScanNonFungibleTokenSolana, MagicEden, SolanaNonFungible],
             initial,
         )
     }

@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
 import { makeStyles } from '@masknet/theme'
-import classNames from 'classnames'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { Typography } from '@mui/material'
 import { PluginPetMessages } from '../messages.js'
@@ -63,57 +62,11 @@ const useStyles = makeStyles()(() => ({
         opacity: '1 !important',
         pointerEvents: 'auto',
     },
-    menuItem: {
-        borderTop: '1px solid #f1f1f1',
-    },
-    icon: {
-        position: 'absolute',
-        top: '50%',
-        right: '20px',
-        transform: 'translateY(-50%)',
-        height: '16px',
-        width: 'auto',
-    },
-    itemBox: {
-        padding: '8px !important',
-        backgroundColor: 'transparent !important',
-        boxShadow: 'none !important',
-        '&>ul': {
-            display: 'block',
-            margin: 0,
-            padding: '20px',
-            fontSize: '12px',
-            color: '#444',
-            boxSizing: 'border-box',
-            boxShadow: '0 0 8px rgba(0,0,0,.1)',
-            fontWeight: 500,
-            backgroundColor: '#fff',
-            borderRadius: '12px',
-            position: 'absolute',
-            bottom: 0,
-            left: '8px',
-            '&>li': {
-                listStyle: 'none',
-                padding: '4px 0',
-            },
-        },
-    },
-    link: {
-        color: '#ccc',
-        transition: 'color 200ms',
-        '&:hover': {
-            color: '#444',
-        },
-    },
-    normal: {
-        fontWeight: 'normal',
-        color: '#777',
-    },
 }))
 
 function RightMenu(props: Props) {
     const t = useI18N()
-    const { classes } = useStyles()
+    const { classes, cx } = useStyles()
     const refMenuDom = useRef<HTMLDivElement>(null)
     const visitor = useCurrentVisitingUser(0)
     const whoAmI = useLastRecognizedIdentity()
@@ -170,7 +123,7 @@ function RightMenu(props: Props) {
             ref={refMenuDom}
             onMouseDown={stopPop}
             onMouseUp={stopPop}
-            className={classNames(classes.menu, {
+            className={cx(classes.menu, {
                 [classes.show]: props.isShow,
             })}
             style={{
@@ -181,12 +134,6 @@ function RightMenu(props: Props) {
             <div onClick={() => onClickMenu(MenuType.Setting)}>
                 <Typography>{t.pets_dialog_menu_change()}</Typography>
             </div>
-            {visitor.userId === whoAmI?.identifier?.userId ? (
-                <div onClick={() => onClickMenu(MenuType.Game)}>
-                    <Typography>{t.pets_dialog_menu_ski()}</Typography>
-                </div>
-            ) : null}
-
             <div onClick={() => onClickMenu(MenuType.About)}>
                 <Typography>{t.pets_dialog_menu_about()}</Typography>
             </div>

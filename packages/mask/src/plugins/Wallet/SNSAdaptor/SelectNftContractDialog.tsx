@@ -1,40 +1,28 @@
 import { useCallback, useMemo, useState } from 'react'
 import { EthereumAddress } from 'wallet.ts'
+import Fuse from 'fuse.js'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import { Avatar, Box, DialogContent, Link, List, ListItem, Typography } from '@mui/material'
 import { SchemaType, explorerResolver, ChainId } from '@masknet/web3-shared-evm'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { InjectedDialog } from '@masknet/shared'
-import OpenInNewIcon from '@mui/icons-material/OpenInNew'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { OpenInNew as OpenInNewIcon } from '@mui/icons-material'
+import type { NonFungibleTokenContract } from '@masknet/web3-shared-base'
 import { WalletMessages } from '../messages.js'
 import { useI18N } from '../../../utils/index.js'
-import Fuse from 'fuse.js'
 import { SearchInput } from '../../../extension/options-page/DashboardComponents/SearchInput.js'
 import {
-    useChainId,
-    useAccount,
+    useChainContext,
     useNonFungibleCollections,
     useNonFungibleTokenContract,
     useNonFungibleTokenBalance,
-} from '@masknet/plugin-infra/web3'
-import { NetworkPluginID, NonFungibleTokenContract } from '@masknet/web3-shared-base'
+} from '@masknet/web3-hooks-base'
 
 const useStyles = makeStyles()((theme) => ({
     search: {
         width: '95%',
         margin: theme.spacing(1, 0, 2, 0.8),
-    },
-    list: {
-        scrollbarWidth: 'none',
-        '&::-webkit-scrollbar': {
-            display: 'none',
-        },
-    },
-    placeholder: {
-        textAlign: 'center',
-        height: 288,
-        paddingTop: theme.spacing(14),
-        boxSizing: 'border-box',
     },
     searchBox: {
         height: 400,
@@ -82,9 +70,6 @@ const useStyles = makeStyles()((theme) => ({
     addressText: {
         fontSize: 12,
     },
-    addressNoImage: {
-        left: '16px !important',
-    },
     dialogContent: {
         height: 560,
     },
@@ -115,16 +100,14 @@ export function SelectNftContractDialog(props: SelectNftContractDialogProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
 
-    const [id, setId] = useState('')
     const [keyword, setKeyword] = useState('')
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
-
+    const { chainId, setChainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     // #region remote controlled dialog
     const { open, setDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectNftContractDialogUpdated,
         (ev) => {
             if (!ev.open) return
-            setId(ev.uuid)
+            if (ev.chainId) setChainId(ev.chainId)
         },
     )
     const onSubmit = useCallback(
@@ -132,20 +115,19 @@ export function SelectNftContractDialog(props: SelectNftContractDialogProps) {
             setKeyword('')
             setDialog({
                 open: false,
-                uuid: id,
+
                 balance,
                 contract,
             })
         },
-        [id, setDialog, setKeyword],
+        [setDialog, setKeyword],
     )
     const onClose = useCallback(() => {
         setKeyword('')
         setDialog({
             open: false,
-            uuid: id,
         })
-    }, [id, setDialog])
+    }, [setDialog])
     // #endregion
 
     const { value: assets = [], loading } = useNonFungibleCollections(NetworkPluginID.PLUGIN_EVM, {
@@ -231,7 +213,7 @@ function SearchResultBox(props: SearchResultBoxProps) {
     const { keyword, searchedTokenList, onSubmit, contractList } = props
     const { t } = useI18N()
     const { classes } = useStyles()
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const isValid = EthereumAddress.isValid(keyword)
     const { value: contractDetailed = null, loading } = useNonFungibleTokenContract(
         NetworkPluginID.PLUGIN_EVM,

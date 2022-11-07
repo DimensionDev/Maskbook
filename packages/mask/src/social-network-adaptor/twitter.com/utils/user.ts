@@ -1,8 +1,8 @@
 import { ProfileIdentifier } from '@masknet/shared-base'
 import { Twitter } from '@masknet/web3-providers'
 import type { SocialIdentity } from '@masknet/web3-shared-base'
-import { isNull } from 'lodash-unified'
-import type { SocialNetwork } from '../../../social-network/index.js'
+import { isNull } from 'lodash-es'
+import type { SocialNetwork } from '@masknet/types'
 import { collectNodeText } from '../../../utils/index.js'
 import { twitterBase } from '../base.js'
 import {
@@ -64,16 +64,6 @@ export const getAvatar = () => {
     }
 
     return ''
-}
-
-const TWITTER_AVATAR_ID_MATCH = /^\/profile_images\/(\d+)/
-export const getAvatarId = (avatarURL?: string) => {
-    if (!avatarURL) return ''
-    const _url = new URL(avatarURL)
-    const match = _url.pathname.match(TWITTER_AVATAR_ID_MATCH)
-    if (!match) return ''
-
-    return match[1]
 }
 
 export async function getUserIdentity(twitterId: string): Promise<SocialIdentity | undefined> {

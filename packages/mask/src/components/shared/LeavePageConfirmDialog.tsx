@@ -19,7 +19,6 @@ const useStyles = makeStyles<{
     return {
         root: {
             width: 384,
-            padding: theme.spacing(1),
             background: theme.palette.maskColor.bottom,
             position: props.positionStyle.position,
             top: props.positionStyle.top,
@@ -27,6 +26,7 @@ const useStyles = makeStyles<{
         },
         content: {
             padding: theme.spacing(1, 2, 2, 2),
+            minHeight: 148,
             scrollbarWidth: 'none',
             '&::-webkit-scrollbar': {
                 display: 'none',

@@ -1,7 +1,6 @@
-import { PluginID } from '@masknet/plugin-infra'
-import { useWeb3State } from '@masknet/plugin-infra/web3'
-import { BindingProof, NextIDPlatform } from '@masknet/shared-base'
 import { useAsyncRetry } from 'react-use'
+import { useWeb3State } from '@masknet/web3-hooks-base'
+import { PluginID, BindingProof, NextIDPlatform } from '@masknet/shared-base'
 import type { TipsSettingType } from '../types/index.js'
 
 export function useTipsSetting(publicKeyAsHex?: string) {

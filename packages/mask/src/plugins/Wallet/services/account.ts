@@ -1,4 +1,4 @@
-import { first } from 'lodash-unified'
+import { first } from 'lodash-es'
 import { EthereumAddress } from 'wallet.ts'
 import { ChainId, chainResolver, networkResolver, NetworkType } from '@masknet/web3-shared-evm'
 import {
@@ -8,7 +8,7 @@ import {
 } from '../../../../shared/legacy-settings/wallet-settings.js'
 import { Flags } from '../../../../shared/index.js'
 import { WalletRPC } from '../messages.js'
-import { defer, DeferTuple } from '@dimensiondev/kit'
+import { defer, DeferTuple } from '@masknet/kit'
 import type { EnhanceableSite, ExtensionSite } from '@masknet/shared-base'
 
 export async function setDefaultMaskAccount() {
@@ -22,7 +22,7 @@ export async function setDefaultMaskAccount() {
 }
 
 export async function updateMaskAccount(options: { account?: string; chainId?: ChainId; networkType?: NetworkType }) {
-    if (options.chainId && !options.networkType) options.networkType = chainResolver.chainNetworkType(options.chainId)
+    if (options.chainId && !options.networkType) options.networkType = chainResolver.networkType(options.chainId)
     if (!options.chainId && options.networkType) options.chainId = networkResolver.networkChainId(options.networkType)
 
     const { account, chainId, networkType } = options

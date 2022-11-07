@@ -8,13 +8,6 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         alignItems: 'center',
     },
-    logo: {
-        display: 'flex',
-        justifyContent: 'center',
-        width: '44px',
-        height: '44px',
-        marginRight: '16px',
-    },
     details: {
         marginLeft: '16px',
         fontWeight: 500,

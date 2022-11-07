@@ -1,19 +1,16 @@
-import { twitterBase } from './twitter.com/base.js'
-import { facebookBase } from './facebook.com/base.js'
-import { instagramBase } from './instagram.com/base.js'
 import { CurrentSNSNetwork } from '@masknet/plugin-infra'
-import type { SocialNetwork } from '../social-network/types.js'
+import type { SocialNetwork } from '@masknet/types'
+import { EnhanceableSite, PersonaIdentifier, ProfileIdentifier } from '@masknet/shared-base'
 import { activatedSocialNetworkUI, globalUIState } from '../social-network/index.js'
-import type { PersonaIdentifier, ProfileIdentifier } from '@masknet/shared-base'
 
-export function getCurrentSNSNetwork(current: SocialNetwork.Base['networkIdentifier']) {
-    const table = {
-        [twitterBase.networkIdentifier]: CurrentSNSNetwork.Twitter,
-        [facebookBase.networkIdentifier]: CurrentSNSNetwork.Facebook,
-        [instagramBase.networkIdentifier]: CurrentSNSNetwork.Instagram,
+export function getCurrentSNSNetwork(current: SocialNetwork.Base['networkIdentifier']): CurrentSNSNetwork {
+    const table: Partial<Record<EnhanceableSite, CurrentSNSNetwork>> = {
+        [EnhanceableSite.Twitter]: CurrentSNSNetwork.Twitter,
+        [EnhanceableSite.Facebook]: CurrentSNSNetwork.Facebook,
+        [EnhanceableSite.Instagram]: CurrentSNSNetwork.Instagram,
+        [EnhanceableSite.Minds]: CurrentSNSNetwork.Minds,
     }
-    if (current in table) return table[current]
-    return CurrentSNSNetwork.Unknown
+    return table[current] ?? CurrentSNSNetwork.Unknown
 }
 
 export function getCurrentIdentifier():

@@ -1,11 +1,11 @@
-import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
+import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
 import { Typography, Button } from '@mui/material'
 import { makeStyles, LoadingBase } from '@masknet/theme'
 import type { NonFungibleTokenOrder, Pageable } from '@masknet/web3-shared-base'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { Icons } from '@masknet/icons'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { OfferCard } from './OfferCard'
+import { OfferCard } from './OfferCard.js'
 import { useI18N } from '../../../../../utils/i18n-next-ui.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -23,7 +23,6 @@ const useStyles = makeStyles()((theme) => ({
         height: 36,
     },
     emptyText: {
-        fontSize: 14,
         color: theme.palette.maskColor.publicSecond,
     },
 }))
@@ -48,7 +47,7 @@ export function OffersList(props: OffersListProps) {
     if (offers.error || !offers.value)
         return (
             <div className={classes.wrapper}>
-                <Typography className={classes.emptyText}>{t('plugin_furucombo_load_failed')}</Typography>
+                <Typography className={classes.emptyText}>{t('load_failed')}</Typography>
                 <Button variant="text" onClick={() => offers.retry()}>
                     {t('retry')}
                 </Button>

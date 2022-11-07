@@ -6,6 +6,7 @@ import {
     NonFungibleCollection,
     NonFungibleTokenContract,
     NonFungibleTokenEvent,
+    resolveCrossOriginURL,
     resolveIPFS_URL,
     scale10,
     SourceType,
@@ -13,13 +14,19 @@ import {
 } from '@masknet/web3-shared-base'
 import { NFTSCAN_BASE_SOLANA, NFTSCAN_URL } from '../constants.js'
 import type { Solana } from '../types/index.js'
-import { getJSON } from '../../helpers.js'
+import { resolveNonFungibleTokenEventActivityType, getJSON, getAssetFullName } from '../../helpers.js'
 
 export function createPermalink(chainId: ChainId, address?: string) {
     if (!address) return
     return urlcat('https://solana.nftscan.com', '/:address', {
         address,
     })
+}
+
+export async function fetchFromNFTScan<T>(url: string) {
+    const response = await fetch(resolveCrossOriginURL(url)!)
+    const json = await response.json()
+    return json as T
 }
 
 export async function fetchFromNFTScanV2<T>(chainId: ChainId, pathname: string, init?: RequestInit) {
@@ -81,7 +88,7 @@ export function createNonFungibleAsset(chainId: ChainId, asset: Solana.Asset): N
             : undefined,
         metadata: {
             chainId,
-            name,
+            name: getAssetFullName(asset.token_address, name, name),
             symbol,
             description,
             imageURL: mediaURL,
@@ -106,6 +113,7 @@ export function createNonFungibleAsset(chainId: ChainId, asset: Solana.Asset): N
             verified: false,
             createdAt: asset.mint_timestamp,
         },
+        source: SourceType.NFTScan,
     }
 }
 
@@ -152,7 +160,7 @@ export function createNonFungibleTokenEvent(
         id: transaction.hash,
         quantity: '1',
         timestamp: transaction.timestamp ?? 0,
-        type: transaction.event_type ?? '',
+        type: resolveNonFungibleTokenEventActivityType(transaction.event_type),
         hash: transaction.hash,
         from: transaction.source
             ? {

@@ -4,7 +4,7 @@ import { useValueRef } from '@masknet/shared-base-ui'
 import { PaletteMode, Theme, unstable_createMuiStrictModeTheme } from '@mui/material'
 import produce, { setAutoFreeze } from 'immer'
 import { useMemo } from 'react'
-import type { SocialNetworkUI } from '../../../social-network/index.js'
+import type { SocialNetworkUI } from '@masknet/types'
 import { fromRGB, getBackgroundColor, getForegroundColor, isDark, shade, toRGB } from '../../../utils/theme/index.js'
 import { isMobileTwitter } from '../utils/isMobile.js'
 import { composeAnchorSelector, composeAnchorTextSelector, headingTextSelector } from '../utils/selector.js'
@@ -77,22 +77,6 @@ export function useThemeTwitterVariant(baseTheme: Theme) {
                     },
                 },
             }
-            theme.components.MuiChip = {
-                styleOverrides: {
-                    root: {
-                        backgroundColor: theme.palette.background.default,
-                        color: theme.palette.text.strong,
-                    },
-                    colorPrimary: {
-                        backgroundColor: theme.palette.primary.main,
-                        color: theme.palette.common.white,
-                        '&:hover': {
-                            backgroundColor: `${theme.palette.primary.main} !important`,
-                            opacity: 0.9,
-                        },
-                    },
-                },
-            }
             theme.components.MuiBackdrop = {
                 styleOverrides: {
                     root: {
@@ -100,28 +84,6 @@ export function useThemeTwitterVariant(baseTheme: Theme) {
                     },
                     invisible: {
                         opacity: '0 !important',
-                    },
-                },
-            }
-            theme.components.MuiTooltip = {
-                styleOverrides: {
-                    tooltip: {
-                        backgroundColor: theme.palette.background.tipMask,
-                        color: theme.palette.text.buttonText,
-                        borderRadius: 8,
-                    },
-                    tooltipArrow: {
-                        backgroundColor: theme.palette.background.tipMask,
-                    },
-                    arrow: {
-                        color: theme.palette.background.tipMask,
-                    },
-                },
-            }
-            theme.components.MuiSnackbar = {
-                styleOverrides: {
-                    root: {
-                        filter: `drop-shadow(0 0 16px ${theme.palette.background.messageShadow});`,
                     },
                 },
             }

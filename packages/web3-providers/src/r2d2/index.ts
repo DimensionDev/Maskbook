@@ -1,5 +1,5 @@
-import { uniqBy } from 'lodash-unified'
-import { memoizePromise } from '@dimensiondev/kit'
+import { memoize, uniqBy } from 'lodash-es'
+import { memoizePromise } from '@masknet/kit'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { FungibleToken, NonFungibleToken, TokenType } from '@masknet/web3-shared-base'
 import {
@@ -12,6 +12,7 @@ import {
 import type { TokenListAPI } from '../types/index.js'
 
 const fetchTokenList = memoizePromise(
+    memoize,
     async (url: string) => {
         const response = await globalThis.r2d2Fetch(url, { cache: 'default' })
         return response.json() as Promise<TokenListAPI.TokenList<ChainId> | TokenListAPI.TokenObject<ChainId>>
@@ -69,6 +70,7 @@ export class R2D2API implements TokenListAPI.Provider<ChainId, SchemaType> {
     async getFungibleTokenList(chainId: ChainId, urls?: string[]) {
         const { FUNGIBLE_TOKEN_LISTS = EMPTY_LIST } = getTokenListConstants(chainId)
         const result = memoizePromise(
+            memoize,
             async (urls: string[], chainId = ChainId.Mainnet): Promise<Array<FungibleToken<ChainId, SchemaType>>> => {
                 const tokens = (await fetchERC20TokensFromTokenList(urls, chainId))
                     .sort((a, b) => b.weight - a.weight)

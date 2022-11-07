@@ -5,8 +5,8 @@ import { useAllPoolsAsSeller } from './hooks/useAllPoolsAsSeller.js'
 import type { JSON_PayloadInMask } from '../types.js'
 import { PoolInList } from './PoolInList.js'
 import { useI18N } from '../../../utils/index.js'
-import { useAccount } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { useChainContext } from '@masknet/web3-hooks-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -39,7 +39,7 @@ export interface PoolListProps {
 export function PoolList(props: PoolListProps) {
     const { classes } = useStyles()
     const { t } = useI18N()
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { value = { loadMore: true, pools: [] }, loading, retry } = useAllPoolsAsSeller(account)
     const { pools } = value
     const containerRef = useRef<HTMLDivElement>(null)

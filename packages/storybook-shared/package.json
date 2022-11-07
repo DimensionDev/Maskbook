@@ -7,7 +7,7 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "webpack": "./src/index.ts",
+      "mask-src": "./src/index.ts",
       "default": "./dist/index.js"
     },
     "./patch-webpack": "./patch-webpack.cjs",
@@ -19,7 +19,6 @@
   "devDependencies": {
     "@storybook/addons": "^6.5.10",
     "@storybook/react": "^6.5.10",
-    "@swc/core": "1.2.245",
     "stream-browserify": "3",
     "swc-loader": "^0.2.3",
     "webpack": "^5.74.0"

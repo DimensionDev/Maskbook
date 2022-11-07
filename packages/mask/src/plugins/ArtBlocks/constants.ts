@@ -1,4 +1,4 @@
-import { PluginID } from '@masknet/plugin-infra'
+import { PluginID } from '@masknet/shared-base'
 
 export const ARTBLOCKS_PLUGIN_ID = PluginID.ArtBlocks
 export const PLUGIN_NAME = 'ArtBlocks'

@@ -1,6 +1,7 @@
 import { useAsyncFn } from 'react-use'
-import { useAccount, useChainId, useWeb3Connection } from '@masknet/plugin-infra/web3'
-import { FungibleToken, NetworkPluginID, toFixed } from '@masknet/web3-shared-base'
+import { useChainContext, useWeb3Connection } from '@masknet/web3-hooks-base'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { FungibleToken, toFixed } from '@masknet/web3-shared-base'
 import { ChainId, encodeContractTransaction, SchemaType } from '@masknet/web3-shared-evm'
 import { useDHedgePoolV1Contract, useDHedgePoolV2Contract } from '../contracts/useDHedgePool.js'
 import { Pool, PoolType } from '../types.js'
@@ -12,8 +13,7 @@ import { Pool, PoolType } from '../types.js'
  * @param token
  */
 export function useInvestCallback(pool: Pool | undefined, amount: string, token?: FungibleToken<ChainId, SchemaType>) {
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const poolV1Contract = useDHedgePoolV1Contract(chainId, pool?.address ?? '')
     const poolV2Contract = useDHedgePoolV2Contract(chainId, pool?.address ?? '')
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, { chainId })

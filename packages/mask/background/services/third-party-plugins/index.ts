@@ -1,3 +1,4 @@
+import type { Storage } from 'webextension-polyfill'
 // TODO: those types are defined in the plugin/External
 type MaskSDK_SNS_ContextIdentifier = string
 type Manifest = any
@@ -73,9 +74,11 @@ export async function grantPermission(baseURL: string, permissions: ThirdPartyPl
     for (const permission of permissions) {
         const key = `plugin:${ThirdPartyPluginPermission[permission]}:${baseURL}`
         if (process.env.manifest === '2') {
-            sessionStorage.setItem(key, '1')
+            ;(globalThis as any).sessionStorage.setItem(key, '1')
         } else {
-            await browser.storage.session.set({ [key]: true })
+            // @ts-expect-error Chrome Only API
+            const session: Storage.StorageArea = browser.storage.session
+            await session.set({ [key]: true })
         }
     }
 }
@@ -84,8 +87,10 @@ export async function grantPermission(baseURL: string, permissions: ThirdPartyPl
 async function hasPermissionInternal(baseURL: string, permission: ThirdPartyPluginPermission) {
     const key = `plugin:${ThirdPartyPluginPermission[permission]}:${baseURL}`
     if (process.env.manifest === '2') {
-        return !!sessionStorage.getItem(key)
+        return !!(globalThis as any).sessionStorage.getItem(key)
     } else {
-        return !!(await browser.storage.session.get(key))[key]
+        // @ts-expect-error Chrome Only API
+        const session: Storage.StorageArea = browser.storage.session
+        return !!(await session.get(key))[key]
     }
 }

@@ -1,13 +1,13 @@
 import type Web3 from 'web3'
-import { AbiItem, toHex } from 'web3-utils'
-import { identity, pickBy } from 'lodash-unified'
+import { AbiItem, hexToNumber, toHex } from 'web3-utils'
+import { identity, pickBy } from 'lodash-es'
 import type {
     BaseContract,
     NonPayableTransactionObject,
     PayableTransactionObject,
     PayableTx,
-} from '@masknet/web3-contracts/types/types'
-import type { Transaction } from '../types/index.js'
+} from '@masknet/web3-contracts/types/types.js'
+import { ChainId, Transaction } from '../types/index.js'
 import { isValidAddress } from './address.js'
 
 export function encodeTransaction(transaction: Transaction): PayableTx & {
@@ -60,6 +60,8 @@ export async function encodeContractTransaction(
             to: tx.to as string | undefined,
             data: tx.data as string | undefined,
             value: tx.value,
+            // rpc hack, alchemy rpc must pass gas parameter
+            gas: hexToNumber(overrides?.chainId ?? '0x0') === ChainId.Astar ? '0x135168' : undefined,
         })
     }
 

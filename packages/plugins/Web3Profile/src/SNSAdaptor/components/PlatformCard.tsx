@@ -5,7 +5,7 @@ import { useI18N } from '../../locales/index.js'
 import type { AccountType } from '../types.js'
 import type { IdentityResolved } from '@masknet/plugin-infra'
 import { CollectionItem } from './CollectionItem.js'
-import { CURRENT_STATUS } from '../../constants.js'
+import { Scene } from '../../constants.js'
 import { PlatformAvatar } from '@masknet/shared'
 const DEFAULT_PLACEHOLDER = '--'
 
@@ -32,12 +32,6 @@ const useStyles = makeStyles()((theme) => {
                 cursor: 'default',
             },
         },
-        arrowIcon: {
-            alignSelf: 'center',
-            color: theme.palette.maskColor.second,
-            width: 24,
-            height: 24,
-        },
         currentTag: {
             width: '46px',
             height: '16px',
@@ -54,8 +48,8 @@ const useStyles = makeStyles()((theme) => {
 })
 
 export interface PlatformCardProps extends withClasses<never | 'root'> {
-    account?: AccountType
-    openImageSetting: (status: CURRENT_STATUS) => void
+    account: AccountType
+    openImageSetting: (scene: Scene) => void
     isCurrent?: boolean
     currentPersona?: IdentityResolved
 }
@@ -63,7 +57,9 @@ export interface PlatformCardProps extends withClasses<never | 'root'> {
 export function PlatformCard(props: PlatformCardProps) {
     const { account, openImageSetting, isCurrent, currentPersona } = props
     const t = useI18N()
-    const classes = useStylesExtends(useStyles(), props)
+    const { classes } = useStylesExtends(useStyles(), props)
+
+    const walletsCount = account.walletList.NFTs.length
 
     return (
         <Card className={classes.wrapper}>
@@ -71,7 +67,7 @@ export function PlatformCard(props: PlatformCardProps) {
                 <div className={classes.flexItem}>
                     <div style={{ display: 'flex' }}>
                         <PlatformAvatar
-                            networkIcon={isCurrent ? currentPersona?.avatar : account?.linkedProfile?.avatar}
+                            networkIcon={isCurrent ? currentPersona?.avatar : account.linkedProfile?.avatar}
                             providerIcon={new URL('../assets/Twitter.png', import.meta.url)}
                             size={36}
                         />
@@ -79,7 +75,7 @@ export function PlatformCard(props: PlatformCardProps) {
                             <Typography style={{ fontSize: '14px', fontWeight: '700', display: 'flex' }}>
                                 {isCurrent
                                     ? currentPersona?.nickname
-                                    : account?.linkedProfile?.nickname || DEFAULT_PLACEHOLDER}
+                                    : account.linkedProfile?.nickname || DEFAULT_PLACEHOLDER}
                                 {isCurrent && (
                                     <Typography component="span" className={classes.currentTag}>
                                         {t.current()}
@@ -87,46 +83,37 @@ export function PlatformCard(props: PlatformCardProps) {
                                 )}
                             </Typography>
                             <Typography>
-                                @{isCurrent ? currentPersona?.identifier?.userId : account?.identity}
+                                @{isCurrent ? currentPersona?.identifier?.userId : account.identity}
                             </Typography>
                         </div>
                     </div>
                 </div>
                 <CollectionItem
                     title={t.NFTs()}
-                    onClick={() => openImageSetting(CURRENT_STATUS.NFT_Setting)}
-                    walletsNum={account?.walletList?.NFTs?.length ?? 0}
-                    collectionNum={
-                        account?.walletList?.NFTs?.reduce(
-                            (pre, cur) =>
-                                pre + (cur?.collections?.filter((collection) => !collection?.hidden)?.length ?? 0),
-                            0,
-                        ) ?? 0
-                    }
+                    onClick={() => openImageSetting(Scene.NFTSetting)}
+                    walletsNum={walletsCount}
+                    collectionNum={account.walletList.NFTs.reduce(
+                        (acc, cur) => acc + (cur.collections?.length ?? 0),
+                        0,
+                    )}
                 />
                 <CollectionItem
                     title={t.footprints()}
-                    onClick={() => openImageSetting(CURRENT_STATUS.Footprints_setting)}
-                    walletsNum={account?.walletList?.footprints?.length ?? 0}
-                    collectionNum={
-                        account?.walletList?.footprints?.reduce(
-                            (pre, cur) =>
-                                pre + (cur?.collections?.filter((collection) => !collection?.hidden)?.length ?? 0),
-                            0,
-                        ) ?? 0
-                    }
+                    onClick={() => openImageSetting(Scene.FootprintsSetting)}
+                    walletsNum={walletsCount}
+                    collectionNum={account.walletList.footprints.reduce(
+                        (pre, cur) => pre + (cur.collections?.length ?? 0),
+                        0,
+                    )}
                 />
                 <CollectionItem
                     title={t.donations()}
-                    onClick={() => openImageSetting(CURRENT_STATUS.Donations_setting)}
-                    walletsNum={account?.walletList?.donations?.length ?? 0}
-                    collectionNum={
-                        account?.walletList?.donations?.reduce(
-                            (pre, cur) =>
-                                pre + (cur?.collections?.filter((collection) => !collection?.hidden)?.length ?? 0),
-                            0,
-                        ) ?? 0
-                    }
+                    onClick={() => openImageSetting(Scene.DonationsSetting)}
+                    walletsNum={walletsCount}
+                    collectionNum={account.walletList.donations.reduce(
+                        (pre, cur) => pre + (cur.collections?.length ?? 0),
+                        0,
+                    )}
                 />
             </Stack>
         </Card>

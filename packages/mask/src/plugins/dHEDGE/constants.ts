@@ -1,5 +1,5 @@
-import { PluginID } from '@masknet/plugin-infra'
-import { escapeRegExp } from 'lodash-unified'
+import { PluginID } from '@masknet/shared-base'
+import { escapeRegExp } from 'lodash-es'
 
 export const DHEDGE_PLUGIN_ID = PluginID.dHEDGE
 export const POOL_DESCRIPTION_LIMIT = 210

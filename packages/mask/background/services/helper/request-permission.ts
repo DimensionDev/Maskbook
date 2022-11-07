@@ -1,11 +1,14 @@
 import { getPermissionRequestURL } from '../../../shared/definitions/routes.js'
 import { Flags } from '../../../shared/flags.js'
+import { MaskMessages } from '../../../shared/messages.js'
 import type { SiteAdaptor } from '../../../shared/site-adaptors/types.js'
-export async function requestExtensionPermission(permission: browser.permissions.Permissions): Promise<boolean> {
+import type { Permissions } from 'webextension-polyfill'
+
+export async function requestExtensionPermission(permission: Permissions.Permissions): Promise<boolean> {
     if (Flags.no_web_extension_dynamic_permission_request) return true
     if (await browser.permissions.contains(permission)) return true
     try {
-        return await browser.permissions.request(permission)
+        return await browser.permissions.request(permission).then(sendNotification)
     } catch {
         // which means we're on Firefox or Manifest V3.
         // Chrome Manifest v2 allows permission request from the background.
@@ -19,10 +22,15 @@ export async function requestExtensionPermission(permission: browser.permissions
     return new Promise((resolve) => {
         browser.windows.onRemoved.addListener(function listener(windowID: number) {
             if (windowID !== popup.id) return
-            resolve(browser.permissions.contains(permission))
+            browser.permissions.contains(permission).then(sendNotification).then(resolve)
             browser.windows.onRemoved.removeListener(listener)
         })
     })
+
+    function sendNotification(result: boolean) {
+        if (result) MaskMessages.events.hostPermissionChanged.sendToAll()
+        return result
+    }
 }
 
 export async function requestHostPermission(origins: readonly string[]) {
@@ -32,7 +40,11 @@ export async function requestHostPermission(origins: readonly string[]) {
     return requestExtensionPermission({ origins: extra })
 }
 
-export function queryExtensionPermission(permission: browser.permissions.Permissions): Promise<boolean> {
+export function hasHostPermission(origins: readonly string[]) {
+    return browser.permissions.contains({ origins: [...origins] })
+}
+
+export function queryExtensionPermission(permission: Permissions.AnyPermissions): Promise<boolean> {
     return browser.permissions.contains(permission)
 }
 

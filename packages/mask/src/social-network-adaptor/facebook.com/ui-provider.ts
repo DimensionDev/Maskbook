@@ -1,4 +1,5 @@
-import type { SocialNetworkUI } from '../../social-network/types.js'
+/* eslint-disable tss-unused-classes/unused-classes */
+import type { SocialNetworkUI } from '@masknet/types'
 import { stateCreator } from '../../social-network/utils.js'
 import { facebookBase } from './base.js'
 import { facebookShared } from './shared.js'

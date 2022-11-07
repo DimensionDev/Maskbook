@@ -1,8 +1,17 @@
 import { ForwardedRef, forwardRef } from 'react'
-import { Box, formHelperTextClasses, TextField, StandardTextFieldProps, InputProps, Typography } from '@mui/material'
+import {
+    Box,
+    formHelperTextClasses,
+    TextField,
+    StandardTextFieldProps,
+    InputProps,
+    Typography,
+    InputBase,
+} from '@mui/material'
 import { makeStyles } from '../../UIHelper/makeStyles.js'
 import { getMaskColor, MaskColorVar } from '../../CSSVariables/vars.js'
 import { isDashboardPage } from '@masknet/shared-base'
+import { omit } from 'lodash-es'
 
 const isDashboard = isDashboardPage()
 
@@ -77,19 +86,27 @@ export const MaskTextField = forwardRef((props: MaskTextFieldProps, ref: Forward
                 </Typography>
             )}
             {label && typeof label !== 'string' && label}
-            <TextField
-                ref={ref}
-                {...rest}
-                classes={{ root: classes.field }}
-                variant="standard"
-                required={required}
-                InputProps={{
-                    disableUnderline: true,
-                    className: classes.input,
-                    classes: { disabled: classes.inputDisabled, focused: classes.inputFocused, ...inputProps.classes },
-                    ...inputProps,
-                }}
-            />
+            {isDashboard ? (
+                <TextField
+                    ref={ref}
+                    {...rest}
+                    classes={{ root: classes.field }}
+                    variant="standard"
+                    required={required}
+                    InputProps={{
+                        disableUnderline: true,
+                        className: classes.input,
+                        classes: {
+                            disabled: classes.inputDisabled,
+                            focused: classes.inputFocused,
+                            ...inputProps.classes,
+                        },
+                        ...inputProps,
+                    }}
+                />
+            ) : (
+                <InputBase {...inputProps} {...omit(rest, 'margin', 'onKeyDown', 'onKeyUp', 'InputProps')} />
+            )}
         </Box>
     )
 })

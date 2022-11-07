@@ -3,13 +3,12 @@ import { Box, DialogContent, Stack, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { WalletStatusBox } from '../../../components/shared/WalletStatusBox/index.js'
 import { LoadingButton } from '@mui/lab'
-import DoneIcon from '@mui/icons-material/Done'
+import { Done as DoneIcon } from '@mui/icons-material'
 import { useI18N } from '../locales/index.js'
 import { getMaskColor, makeStyles, MaskColorVar, LoadingBase } from '@masknet/theme'
 import { InjectedDialog } from '@masknet/shared'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
-import { formatPersonaFingerprint, PersonaInformation } from '@masknet/shared-base'
+import { useNetworkContext } from '@masknet/web3-hooks-base'
+import { formatPersonaFingerprint, NetworkPluginID, PersonaInformation } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     persona: {
@@ -29,7 +28,6 @@ const useStyles = makeStyles()((theme) => ({
     name: {
         display: 'flex',
         alignItems: 'center',
-        fontSize: 14,
         color: theme.palette.text.primary,
         fontWeight: 500,
     },
@@ -93,8 +91,8 @@ export const BindPanelUI = memo<BindPanelUIProps>(
     ({ onPersonaSign, onWalletSign, currentPersona, signature, isBound, title, onClose, open, isCurrentAccount }) => {
         const t = useI18N()
         const { classes } = useStyles()
-        const pluginId = useCurrentWeb3NetworkPluginID()
-        const isSupported = SUPPORTED_PLUGINS.includes(pluginId)
+        const { pluginID } = useNetworkContext()
+        const isSupported = SUPPORTED_PLUGINS.includes(pluginID)
 
         const isWalletSigned = !!signature.wallet.value
         const isPersonaSigned = !!signature.persona.value

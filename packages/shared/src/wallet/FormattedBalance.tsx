@@ -24,7 +24,7 @@ export const FormattedBalance: FC<FormattedBalanceProps> = (props) => {
     if (minimumBalance && value && !isZero(formatted) && isLessThan(value, minimumBalance)) {
         formatted = '<' + formatter(minimumBalance, decimals, significant)
     }
-    const classes = useStylesExtends(useStyles(), props)
+    const { classes } = useStylesExtends(useStyles(), props)
 
     if (symbol)
         return (

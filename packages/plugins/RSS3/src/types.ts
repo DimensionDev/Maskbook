@@ -5,7 +5,6 @@ export enum PageTags {
     NFTTag = 'NFTs',
     DonationTag = 'Donations',
     FootprintTag = 'Footprints',
-    DAOTag = 'DAO',
 }
 
 export interface Asset {
@@ -58,4 +57,18 @@ export interface RSS3Feed {
     metadata?: RSS3BaseAPI.Metadata
     attributes?: RSS3BaseAPI.Attribute[]
     tokenId?: string
+}
+
+/**
+ * Normalized RSS3BaseAPI.Activity
+ */
+export interface NormalizedFeed {
+    from: string
+    to?: string
+    /** feed.value_display */
+    cost?: string
+    /**
+     * send to {to}, mint an NFT for {cost}, burn, post a note,
+     */
+    action: string
 }

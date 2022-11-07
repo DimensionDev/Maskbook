@@ -1,14 +1,14 @@
-import { FormattedBalance, FormattedCurrency, InjectedDialog, TokenIcon } from '@masknet/shared'
+import { memo, useCallback, useEffect, useMemo, useState } from 'react'
+import { useUpdateEffect } from 'react-use'
+import type { BigNumber } from 'bignumber.js'
+import { FormattedBalance, FormattedCurrency, InjectedDialog, TokenIcon, PluginWalletStatusBar } from '@masknet/shared'
 import { isDashboardPage } from '@masknet/shared-base'
 import { makeStyles, MaskColorVar, parseColor } from '@masknet/theme'
-import { memo, useCallback, useEffect, useMemo, useState } from 'react'
-import { PluginWalletStatusBar, useI18N } from '../../../../../utils/index.js'
+import { useI18N } from '../../../../../utils/index.js'
 import type { TradeComputed } from '../../../types/index.js'
-import type BigNumber from 'bignumber.js'
 import {
     formatBalance,
     formatCurrency,
-    FungibleToken,
     multipliedBy,
     formatPercentage,
     isZero,
@@ -19,7 +19,6 @@ import { Alert, alpha, Box, Button, DialogActions, DialogContent, dialogTitleCla
 import { ArrowDownward } from '@mui/icons-material'
 import { Icons } from '@masknet/icons'
 import { ONE_BIPS, MIN_SLIPPAGE, MAX_SLIPPAGE } from '../../../constants/index.js'
-import { useUpdateEffect } from 'react-use'
 
 const useStyles = makeStyles<{
     isDashboard: boolean
@@ -58,7 +57,6 @@ const useStyles = makeStyles<{
         },
     },
     label: {
-        fontSize: 14,
         fontWeight: 700,
         lineHeight: '18px',
         color: theme.palette.maskColor?.second,
@@ -67,7 +65,6 @@ const useStyles = makeStyles<{
         display: 'flex',
         alignItems: 'center',
         columnGap: 8,
-        fontSize: 14,
         fontWeight: 700,
         lineHeight: '18px',
     },
@@ -148,22 +145,10 @@ const useStyles = makeStyles<{
             theme.palette.mode === 'dark' ? 0.12 : 0.05,
         )}`,
     },
-    accept: {
-        backgroundColor: isDashboard
-            ? MaskColorVar.primary.alpha(0.1)
-            : parseColor(theme.palette.maskColor?.primary).setAlpha(0.1).toRgbString(),
-        color: isDashboard ? MaskColorVar.primary : theme.palette.maskColor?.primary,
-        fontWeight: 700,
-        fontSize: 12,
-        lineHeight: '16px',
-        padding: '10px 16px',
-        borderRadius: 20,
-    },
     danger: {
         color: `${isDashboard ? MaskColorVar.redMain : theme.palette.maskColor?.danger}!important`,
     },
     edit: {
-        fontSize: 14,
         lineHeight: '18px',
         color: isDashboard ? theme.palette.primary.main : theme.palette.maskColor?.primary,
         marginRight: 4,
@@ -196,11 +181,11 @@ export interface ConfirmDialogUIProps {
     gasFeeUSD: string
     isGreatThanSlippageSetting: boolean
     trade: TradeComputed
-    nativeToken: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
-    inputToken: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
-    outputToken: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
+    nativeToken?: Web3Helper.FungibleTokenAll
+    inputToken: Web3Helper.FungibleTokenAll
+    outputToken: Web3Helper.FungibleTokenAll
     onClose: () => void
-    openSettingDialog: () => void
+    openSettingDialog?: () => void
     onConfirm: () => void
 }
 
@@ -328,7 +313,7 @@ export const ConfirmDialogUI = memo<ConfirmDialogUIProps>(
                         <Box>
                             <Typography component="div" className={classes.symbol}>
                                 <TokenIcon
-                                    classes={{ icon: classes.tokenIcon }}
+                                    className={classes.tokenIcon}
                                     address={inputToken.address}
                                     name={inputToken.name}
                                     symbol={inputToken.symbol}
@@ -367,7 +352,7 @@ export const ConfirmDialogUI = memo<ConfirmDialogUIProps>(
                         <Box>
                             <Typography component="div" className={classes.symbol}>
                                 <TokenIcon
-                                    classes={{ icon: classes.tokenIcon }}
+                                    className={classes.tokenIcon}
                                     chainId={outputToken.chainId}
                                     address={outputToken.address}
                                     name={outputToken.name}
@@ -435,9 +420,11 @@ export const ConfirmDialogUI = memo<ConfirmDialogUIProps>(
                             {t('plugin_trader_confirm_slippage_tolerance')}
                         </Typography>
                         <Typography className={classes.description}>
-                            <Typography component="span" className={classes.edit} onClick={openSettingDialog}>
-                                {t('edit')}
-                            </Typography>
+                            {openSettingDialog ? (
+                                <Typography component="span" className={classes.edit} onClick={openSettingDialog}>
+                                    {t('edit')}
+                                </Typography>
+                            ) : null}
                             {currentSlippage / 100}%
                         </Typography>
                     </Box>
@@ -466,14 +453,16 @@ export const ConfirmDialogUI = memo<ConfirmDialogUIProps>(
                         <Box className={classes.section}>
                             <Typography className={classes.title}>{t('plugin_trader_gas')}</Typography>
                             <Typography className={classes.description}>
-                                <Typography component="span" className={classes.edit} onClick={openSettingDialog}>
-                                    {t('edit')}
-                                </Typography>
+                                {openSettingDialog ? (
+                                    <Typography component="span" className={classes.edit} onClick={openSettingDialog}>
+                                        {t('edit')}
+                                    </Typography>
+                                ) : null}
                                 <FormattedBalance
                                     value={gasFee}
-                                    decimals={nativeToken.decimals ?? 0}
+                                    decimals={nativeToken?.decimals ?? 0}
                                     significant={4}
-                                    symbol={nativeToken.symbol}
+                                    symbol={nativeToken?.symbol}
                                     formatter={formatBalance}
                                 />
                                 <span>

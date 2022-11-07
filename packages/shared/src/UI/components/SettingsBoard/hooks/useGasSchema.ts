@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
+import { z as zod } from 'zod'
 import { useSharedI18N } from '@masknet/shared'
-import type { ChainId, GasOption, Transaction } from '@masknet/web3-shared-evm'
+import { ChainId, formatGweiToWei, GasOption, Transaction } from '@masknet/web3-shared-evm'
 import {
     GasOptionType,
     isGreaterThanOrEqualTo,
@@ -8,10 +9,9 @@ import {
     isLessThanOrEqualTo,
     isPositive,
     multipliedBy,
-    NetworkPluginID,
 } from '@masknet/web3-shared-base'
-import { useWeb3State } from '@masknet/plugin-infra/web3'
-import { z as zod } from 'zod'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { useWeb3State } from '@masknet/web3-hooks-base'
 
 const HIGH_FEE_WARNING_MULTIPLIER = 1.5
 
@@ -22,7 +22,6 @@ export function useGasSchema(
 ) {
     const t = useSharedI18N()
     const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
-    const isEIP1559 = Others?.chainResolver.isSupport(chainId, 'EIP1559')
     return useMemo(() => {
         return zod
             .object({
@@ -39,13 +38,17 @@ export function useGasSchema(
                     .min(1, t.gas_settings_error_gas_price_absence())
                     .refine(isPositive, t.gas_settings_error_gas_price_positive())
                     .refine(
-                        (value) => isGreaterThanOrEqualTo(value, gasOptions?.slow?.suggestedMaxFeePerGas ?? 0),
+                        (value) =>
+                            isGreaterThanOrEqualTo(
+                                formatGweiToWei(value),
+                                gasOptions?.slow?.suggestedMaxFeePerGas ?? 0,
+                            ),
                         t.gas_settings_error_gas_price_too_low(),
                     )
                     .refine(
                         (value) =>
                             isLessThan(
-                                value,
+                                formatGweiToWei(value),
                                 multipliedBy(gasOptions?.fast?.suggestedMaxFeePerGas ?? 0, HIGH_FEE_WARNING_MULTIPLIER),
                             ),
                         t.gas_settings_error_gas_price_too_high(),
@@ -55,13 +58,17 @@ export function useGasSchema(
                     .min(1, t.gas_settings_error_max_priority_fee_absence())
                     .refine(isPositive, t.gas_settings_error_max_priority_gas_fee_positive())
                     .refine(
-                        (value) => isGreaterThanOrEqualTo(value, gasOptions?.slow?.suggestedMaxPriorityFeePerGas ?? 0),
+                        (value) =>
+                            isGreaterThanOrEqualTo(
+                                formatGweiToWei(value),
+                                gasOptions?.slow?.suggestedMaxPriorityFeePerGas ?? 0,
+                            ),
                         t.gas_settings_error_max_priority_gas_fee_too_low(),
                     )
                     .refine(
                         (value) =>
                             isLessThan(
-                                value,
+                                formatGweiToWei(value),
                                 multipliedBy(
                                     gasOptions?.fast?.suggestedMaxPriorityFeePerGas ?? 0,
                                     HIGH_FEE_WARNING_MULTIPLIER,
@@ -73,13 +80,17 @@ export function useGasSchema(
                     .string()
                     .min(1, t.gas_settings_error_max_fee_absence())
                     .refine(
-                        (value) => isGreaterThanOrEqualTo(value, gasOptions?.slow?.suggestedMaxFeePerGas ?? 0),
+                        (value) =>
+                            isGreaterThanOrEqualTo(
+                                formatGweiToWei(value),
+                                gasOptions?.slow?.suggestedMaxFeePerGas ?? 0,
+                            ),
                         t.gas_settings_error_max_fee_too_low(),
                     )
                     .refine(
                         (value) =>
                             isLessThan(
-                                value,
+                                formatGweiToWei(value),
                                 multipliedBy(gasOptions?.fast?.suggestedMaxFeePerGas ?? 0, HIGH_FEE_WARNING_MULTIPLIER),
                             ),
                         t.gas_settings_error_max_fee_too_high(),
@@ -89,5 +100,5 @@ export function useGasSchema(
                 message: t.gas_settings_error_max_priority_gas_fee_imbalance(),
                 path: ['maxFeePerGas'],
             })
-    }, [t, isEIP1559, transaction?.gas, gasOptions, Others])
+    }, [t, transaction?.gas, gasOptions, Others])
 }

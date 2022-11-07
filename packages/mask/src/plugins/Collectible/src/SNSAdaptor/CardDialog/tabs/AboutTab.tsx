@@ -1,6 +1,6 @@
-import BigNumber from 'bignumber.js'
-import { first } from 'lodash-unified'
-import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
+import { BigNumber } from 'bignumber.js'
+import { first } from 'lodash-es'
+import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
 import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import type { NonFungibleTokenOrder, Pageable } from '@masknet/web3-shared-base'
@@ -10,13 +10,15 @@ import { PriceCard } from '../../Shared/PriceCard.js'
 import { DetailsCard } from '../../Shared/DetailsCard.js'
 
 const useStyles = makeStyles()((theme) => ({
-    wrapper: {
+    root: {
         width: '100%',
-        maxHeight: 'calc(100% - 72px)',
         overflowY: 'auto',
         display: 'flex',
         flexDirection: 'column',
         gap: 24,
+        '&::-webkit-scrollbar': {
+            display: 'none',
+        },
     },
 }))
 
@@ -44,7 +46,7 @@ export function AboutTab(props: AboutTabProps) {
 
     if (!_asset) return null
     return (
-        <div className={classes.wrapper}>
+        <div className={classes.root}>
             <PriceCard topOffer={topOffer} asset={_asset} />
             <DetailsCard asset={_asset} />
             <DescriptionCard asset={_asset} />

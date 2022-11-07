@@ -11,18 +11,18 @@ import {
     Box,
     useTheme,
 } from '@mui/material'
+import { ProviderType } from '@masknet/web3-shared-evm'
 import { TransactionStatusType } from '@masknet/web3-shared-base'
 import {
-    useNetworkDescriptor,
     useProviderDescriptor,
-    useAccount,
+    useChainContext,
     useChainColor,
     useChainIdValid,
     useWeb3State,
     useReverseAddress,
     useChainIdMainnet,
     useRecentTransactions,
-} from '@masknet/plugin-infra/web3'
+} from '@masknet/web3-hooks-base'
 import { useCallback } from 'react'
 import { WalletIcon, MaskIcon } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
@@ -32,7 +32,7 @@ import { hasNativeAPI, nativeAPI } from '../../../shared/native-rpc/index.js'
 import GuideStep from '../GuideStep/index.js'
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
-import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord'
+import { FiberManualRecord as FiberManualRecordIcon } from '@mui/icons-material'
 
 const useStyles = makeStyles()((theme) => ({
     title: {
@@ -40,35 +40,11 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         alignItems: 'center',
     },
-    paper: {
-        borderRadius: 4,
-        boxShadow:
-            theme.palette.mode === 'dark'
-                ? 'rgba(255, 255, 255, 0.2) 0 0 15px, rgba(255, 255, 255, 0.15) 0 0 3px 1px'
-                : 'rgba(101, 119, 134, 0.2) 0 0 15px, rgba(101, 119, 134, 0.15) 0 0 3px 1px',
-        backgroundImage: 'none',
-    },
-    menuItem: {
-        paddingTop: theme.spacing(2),
-        paddingBottom: theme.spacing(2),
-    },
-    menuText: {
-        marginLeft: 12,
-        fontSize: 15,
-        color: theme.palette.mode === 'dark' ? 'rgb(216, 216, 216)' : 'rgb(15, 20, 25)',
-        paddingRight: theme.spacing(2),
-    },
+
     chainIcon: {
         fontSize: 18,
         width: 18,
         height: 18,
-    },
-    iconWrapper: {
-        display: 'flex',
-        alignItems: 'baseline',
-    },
-    maskFilledIcon: {
-        marginRight: 6,
     },
 }))
 export interface ToolboxHintProps {
@@ -139,10 +115,9 @@ function ToolboxHintForWallet(props: ToolboxHintProps) {
         mini,
     } = props
     const { classes } = useStyles()
-    const { openWallet, isWalletValid, walletTitle, chainColor, shouldDisplayChainIndicator } = useToolbox()
+    const { openWallet, walletTitle, chainColor, shouldDisplayChainIndicator, account } = useToolbox()
 
     const theme = useTheme()
-    const networkDescriptor = useNetworkDescriptor()
     const providerDescriptor = useProviderDescriptor()
 
     return (
@@ -150,12 +125,11 @@ function ToolboxHintForWallet(props: ToolboxHintProps) {
             <Container>
                 <ListItemButton onClick={openWallet}>
                     <ListItemIcon>
-                        {isWalletValid ? (
+                        {!!account && providerDescriptor?.type !== ProviderType.MaskWallet ? (
                             <WalletIcon
                                 size={iconSize}
                                 badgeSize={badgeSize}
                                 mainIcon={providerDescriptor?.icon} // switch the icon to meet design
-                                badgeIcon={networkDescriptor?.icon}
                                 badgeIconBorderColor={theme.palette.background.paper}
                             />
                         ) : (
@@ -192,7 +166,7 @@ function ToolboxHintForWallet(props: ToolboxHintProps) {
 
 function useToolbox() {
     const { t } = useI18N()
-    const account = useAccount()
+    const { account } = useChainContext()
     const chainColor = useChainColor()
     const chainIdValid = useChainIdValid()
     const chainIdMainnet = useChainIdMainnet()
@@ -211,13 +185,10 @@ function useToolbox() {
     )
     // #endregion
 
-    const isWalletValid = !!account && chainIdValid
-
     const { value: domain } = useReverseAddress(undefined, account)
 
     function renderButtonText() {
         if (!account) return t('plugin_wallet_connect_wallet')
-        if (!chainIdValid) return t('plugin_wallet_wrong_network')
         if (pendingTransactions.length <= 0)
             return Others?.formatDomainName?.(domain) || Others?.formatAddress?.(account, 4) || account
         return (
@@ -234,17 +205,17 @@ function useToolbox() {
 
     const openWallet = useCallback(() => {
         if (hasNativeAPI) return nativeAPI?.api.misc_openCreateWalletView()
-        return isWalletValid ? openWalletStatusDialog() : openSelectProviderDialog()
-    }, [openWalletStatusDialog, openSelectProviderDialog, isWalletValid, hasNativeAPI])
+        return account ? openWalletStatusDialog() : openSelectProviderDialog()
+    }, [openWalletStatusDialog, openSelectProviderDialog, account, hasNativeAPI])
 
     const walletTitle = renderButtonText()
 
     const shouldDisplayChainIndicator = account && chainIdValid && !chainIdMainnet
     return {
         openWallet,
-        isWalletValid,
         walletTitle,
         shouldDisplayChainIndicator,
         chainColor,
+        account,
     }
 }

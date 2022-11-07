@@ -1,4 +1,4 @@
-import { clamp } from 'lodash-unified'
+import { clamp } from 'lodash-es'
 
 type RGB = [number, number, number]
 type RGBA = [number, number, number, number]

@@ -6,7 +6,7 @@ import { Box, Card, DialogContent, Link, Typography } from '@mui/material'
 import { CollectionType, RSS3BaseAPI } from '@masknet/web3-providers'
 import { Icons } from '@masknet/icons'
 import { ChainId, explorerResolver, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
-import { NFTCardStyledAssetPlayer } from '@masknet/shared'
+import { AssetPreviewer } from '@masknet/shared'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 
@@ -91,10 +91,6 @@ const useStyles = makeStyles()((theme) => ({
     themeColor: {
         color: theme.palette.maskColor.highlight,
     },
-    linkLogo: {
-        width: 24,
-        height: 24,
-    },
     icons: {
         margin: '16px 0 16px 0',
         display: 'flex',
@@ -113,12 +109,10 @@ const useStyles = makeStyles()((theme) => ({
         padding: 12,
     },
     traitValue: {
-        fontSize: 14,
         fontWeight: 700,
         color: theme.palette.maskColor.main,
     },
     secondText: {
-        fontSize: 14,
         fontWeight: 400,
         color: theme.palette.maskColor.second,
     },
@@ -180,15 +174,10 @@ export const CollectionDetailCard = memo<CollectionDetailCardProps>(
                 <DialogContent>
                     <Box className={classes.flexItem}>
                         <Card className={classes.img}>
-                            <NFTCardStyledAssetPlayer
-                                contractAddress={metadata?.collection_address}
-                                chainId={RSS3BaseAPI.MaskNetworkMap[metadata?.network ?? 'ethereum']}
+                            <AssetPreviewer
                                 url={img}
-                                tokenId={metadata?.token_id}
                                 classes={{
                                     fallbackImage: classes.fallbackImage,
-                                    wrapper: classes.img,
-                                    iframe: classes.img,
                                 }}
                             />
                         </Card>

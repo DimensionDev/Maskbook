@@ -1,4 +1,3 @@
-import classNames from 'classnames'
 import type { Plugin } from '@masknet/plugin-infra'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { Typography } from '@mui/material'
@@ -39,13 +38,6 @@ const useStyles = makeStyles<{ disabled: boolean; iconFilterColor?: string }>()(
                 height: 36,
             },
             ...(iconFilterColor ? { filter: `drop-shadow(0px 6px 12px ${iconFilterColor})` } : {}),
-        },
-        tooltip: {
-            backgroundColor: theme.palette.mode === 'light' ? theme.palette.common.black : theme.palette.common.white,
-        },
-        tooltipHint: {
-            fontSize: 14,
-            color: theme.palette.mode === 'light' ? theme.palette.common.white : theme.palette.common.black,
         },
         arrow: {
             marginLeft: '-12px',
@@ -92,6 +84,7 @@ const useStyles = makeStyles<{ disabled: boolean; iconFilterColor?: string }>()(
 interface ApplicationEntryProps {
     icon: React.ReactNode
     title: React.ReactNode
+    secondTitle?: React.ReactNode
     disabled?: boolean
     recommendFeature?: Plugin.SNSAdaptor.ApplicationEntry['recommendFeature']
     popperBoundary?: HTMLElement | null
@@ -103,6 +96,7 @@ interface ApplicationEntryProps {
 export function ApplicationEntry(props: ApplicationEntryProps) {
     const {
         title,
+        secondTitle,
         onClick,
         disabled = false,
         icon,
@@ -111,13 +105,13 @@ export function ApplicationEntry(props: ApplicationEntryProps) {
         iconFilterColor,
         popperBoundary,
     } = props
-    const { classes } = useStyles({ disabled, iconFilterColor })
+    const { classes, cx } = useStyles({ disabled, iconFilterColor })
     const jsx = recommendFeature ? (
         <div
             style={{
                 background: recommendFeature.backgroundGradient,
             }}
-            className={classNames(
+            className={cx(
                 classes.recommendFeatureApplicationBox,
                 disabled ? classes.disabled : classes.applicationBoxHover,
             )}
@@ -125,6 +119,9 @@ export function ApplicationEntry(props: ApplicationEntryProps) {
             <div className={classes.recommendFeatureAppIconWrapper}>{icon}</div>
             <div>
                 <Typography className={classes.recommendFeatureAppListItemName}>{title}</Typography>
+                {secondTitle ? (
+                    <Typography className={classes.recommendFeatureAppListItemDescription}>{secondTitle}</Typography>
+                ) : null}
                 <Typography className={classes.recommendFeatureAppListItemDescription}>
                     {recommendFeature.description}
                 </Typography>
@@ -132,12 +129,17 @@ export function ApplicationEntry(props: ApplicationEntryProps) {
         </div>
     ) : (
         <div
-            className={classNames(classes.applicationBox, disabled ? classes.disabled : classes.applicationBoxHover)}
+            className={cx(classes.applicationBox, disabled ? classes.disabled : classes.applicationBoxHover)}
             onClick={disabled ? () => {} : onClick}>
             <div className={classes.iconWrapper}>{icon}</div>
             <Typography className={classes.title} color="textPrimary">
                 {title}
             </Typography>
+            {secondTitle ? (
+                <Typography variant="body2" color="textSecondary">
+                    {secondTitle}
+                </Typography>
+            ) : null}
         </div>
     )
     return tooltipHint ? (
@@ -156,13 +158,12 @@ export function ApplicationEntry(props: ApplicationEntryProps) {
                 ],
             }}
             classes={{
-                tooltip: classes.tooltip,
-                arrow: classNames(classes.arrow, recommendFeature?.isFirst ? classes.firstAreaArrow : ''),
+                arrow: cx(classes.arrow, recommendFeature?.isFirst ? classes.firstAreaArrow : ''),
             }}
             placement={recommendFeature ? 'bottom' : 'top'}
             arrow
             disableHoverListener={!tooltipHint}
-            title={<Typography className={classes.tooltipHint}>{tooltipHint}</Typography>}>
+            title={disabled ? null : <Typography>{tooltipHint}</Typography>}>
             {jsx}
         </ShadowRootTooltip>
     ) : (

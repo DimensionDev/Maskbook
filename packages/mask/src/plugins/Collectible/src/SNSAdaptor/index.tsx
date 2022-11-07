@@ -2,13 +2,15 @@ import { Trans } from 'react-i18next'
 import { Icons } from '@masknet/icons'
 import { Box } from '@mui/material'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
-import { NetworkPluginID, SocialAddressType } from '@masknet/web3-shared-base'
+import { Web3ContextProvider } from '@masknet/web3-hooks-base'
+import { SocialAddressType } from '@masknet/web3-shared-base'
+import { NetworkPluginID, parseURLs } from '@masknet/shared-base'
 import { type Plugin, usePostInfoDetails, usePluginWrapper } from '@masknet/plugin-infra/content-script'
 import { PostInspector } from './PostInspector.js'
 import { base } from '../base.js'
-import { getPayloadFromURL, getPayloadFromURLs } from '../helpers/index.js'
+import { getPayloadFromURLs } from '../helpers/index.js'
 import { setupContext } from '../context.js'
-import { PLUGIN_ID, PLUGIN_WRAPPER_TITLE } from '../constants.js'
+import { PLUGIN_ID, PLUGIN_NAME } from '../constants.js'
 import { DialogInspector } from './DialogInspector.js'
 import { CollectionList } from './List/CollectionList.js'
 
@@ -17,33 +19,25 @@ const TabConfig: Plugin.SNSAdaptor.ProfileTab = {
     label: 'NFTs',
     priority: 1,
     UI: {
-        TabContent({ socialAddress, identity }) {
-            if (!socialAddress) return null
-            return <CollectionList addressName={socialAddress} persona={identity?.publicKey} profile={identity} />
+        TabContent({ socialAccount, identity }) {
+            if (!socialAccount) return null
+            return (
+                <Web3ContextProvider value={{ pluginID: socialAccount.pluginID }}>
+                    <CollectionList socialAccount={socialAccount} persona={identity?.publicKey} profile={identity} />
+                </Web3ContextProvider>
+            )
         },
     },
     Utils: {
         sorter: (a, z) => {
-            if (a.type === SocialAddressType.ENS) return -1
-            if (z.type === SocialAddressType.ENS) return 1
+            if (a.supportedAddressTypes?.includes(SocialAddressType.ENS)) return -1
+            if (z.supportedAddressTypes?.includes(SocialAddressType.ENS)) return 1
 
-            if (a.type === SocialAddressType.UNS) return -1
-            if (z.type === SocialAddressType.UNS) return 1
+            if (a.supportedAddressTypes?.includes(SocialAddressType.RSS3)) return -1
+            if (z.supportedAddressTypes?.includes(SocialAddressType.RSS3)) return 1
 
-            if (a.type === SocialAddressType.DNS) return -1
-            if (z.type === SocialAddressType.DNS) return 1
-
-            if (a.type === SocialAddressType.RSS3) return -1
-            if (z.type === SocialAddressType.RSS3) return 1
-
-            if (a.type === SocialAddressType.ADDRESS) return -1
-            if (z.type === SocialAddressType.ADDRESS) return 1
-
-            if (a.type === SocialAddressType.GUN) return -1
-            if (z.type === SocialAddressType.GUN) return 1
-
-            if (a.type === SocialAddressType.THE_GRAPH) return -1
-            if (z.type === SocialAddressType.THE_GRAPH) return 1
+            if (a.supportedAddressTypes?.includes(SocialAddressType.Address)) return -1
+            if (z.supportedAddressTypes?.includes(SocialAddressType.Address)) return 1
 
             return 0
         },
@@ -69,7 +63,8 @@ const sns: Plugin.SNSAdaptor.Definition = {
         return payload ? <PostInspector payload={payload} /> : null
     },
     DecryptedInspector(props) {
-        const payload = getPayloadFromURL(extractTextFromTypedMessage(props.message, { linkAsText: true }).unwrapOr(''))
+        const links = parseURLs(extractTextFromTypedMessage(props.message, { linkAsText: true }).unwrapOr(''))
+        const payload = getPayloadFromURLs(links)
         usePluginWrapper(!!payload)
         return payload ? <PostInspector payload={payload} /> : null
     },
@@ -77,25 +72,27 @@ const sns: Plugin.SNSAdaptor.Definition = {
     ProfileCardTabs: [
         {
             ...TabConfig,
-            priority: 2,
+            priority: 1,
             UI: {
-                TabContent({ socialAddress, identity }) {
-                    if (!socialAddress) return null
+                TabContent({ socialAccount, identity }) {
+                    if (!socialAccount) return null
                     return (
                         <Box pr={1.5}>
-                            <CollectionList
-                                addressName={socialAddress}
-                                persona={identity?.publicKey}
-                                profile={identity}
-                            />
+                            <Web3ContextProvider value={{ pluginID: socialAccount.pluginID }}>
+                                <CollectionList
+                                    socialAccount={socialAccount}
+                                    persona={identity?.publicKey}
+                                    profile={identity}
+                                />
+                            </Web3ContextProvider>
                         </Box>
                     )
                 },
             },
             Utils: {
                 ...TabConfig.Utils,
-                shouldDisplay(identity, socialAddress) {
-                    return socialAddress?.networkSupporterPluginID === NetworkPluginID.PLUGIN_EVM
+                shouldDisplay(identity, socialAccount) {
+                    return socialAccount?.pluginID === NetworkPluginID.PLUGIN_EVM
                 },
             },
         },
@@ -112,7 +109,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
         },
     ],
     wrapperProps: {
-        title: PLUGIN_WRAPPER_TITLE,
+        title: PLUGIN_NAME,
         icon: <Icons.ApplicationNFT size={24} />,
     },
 }

@@ -1,6 +1,6 @@
 import * as bip39 from 'bip39'
 import * as wallet from 'wallet.ts'
-import { encodeArrayBuffer, encodeText } from '@dimensiondev/kit'
+import { encodeArrayBuffer, encodeText } from '@masknet/kit'
 import {
     EC_Private_JsonWebKey,
     EC_Public_JsonWebKey,
@@ -87,7 +87,9 @@ export async function recover_ECDH_256k1_KeyPair_ByMnemonicWord(
     }
 }
 
-export const validateMnemonic = bip39.validateMnemonic
+export async function validateMnemonic(mnemonic: string, wordList?: string[] | undefined): Promise<boolean> {
+    return bip39.validateMnemonic(mnemonic, wordList)
+}
 
 async function HDKeyToJwk(hdk: wallet.HDKey): Promise<JsonWebKey> {
     const jwk = await decompressSecp256k1Key(encodeArrayBuffer(hdk.publicKey))

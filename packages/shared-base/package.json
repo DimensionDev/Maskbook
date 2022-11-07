@@ -5,7 +5,7 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "webpack": "./src/index.ts",
+      "mask-src": "./src/index.ts",
       "default": "./dist/index.js"
     }
   },
@@ -23,10 +23,10 @@
     "@types/react": "18.0.19",
     "anchorme": "^2.1.2",
     "async-call-rpc": "^6.1.5",
-    "bignumber.js": "^9.0.2",
+    "bignumber.js": "9.1.0",
     "dompurify": "^2.4.0",
     "i18next-browser-languagedetector": "^6.1.5",
-    "idb": "^7.0.2",
+    "idb": "^7.1.1",
     "pvtsutils": "^1.3.2",
     "react": "link:..\\empty",
     "tiny-secp256k1": "^2.2.1",

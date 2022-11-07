@@ -1,10 +1,10 @@
 import { useAsyncRetry } from 'react-use'
 import type { Currency } from '../types/index.js'
 import type { DataProvider } from '@masknet/public-api'
-import { isUndefined } from 'lodash-unified'
+import { isUndefined } from 'lodash-es'
 import { PluginTraderRPC } from '../messages.js'
-import { useChainId } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { useChainContext } from '@masknet/web3-hooks-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
 import { TrendingAPI } from '@masknet/web3-providers'
 
 interface Options {
@@ -15,7 +15,7 @@ interface Options {
 }
 
 export function usePriceStats({ coinId, currency, days = TrendingAPI.Days.MAX, dataProvider }: Options) {
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     return useAsyncRetry(async () => {
         if (isUndefined(days) || isUndefined(coinId) || isUndefined(dataProvider) || isUndefined(currency)) return []
         return PluginTraderRPC.getPriceStats(chainId, coinId, currency, days, dataProvider)

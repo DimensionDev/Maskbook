@@ -1,10 +1,9 @@
-import { Plugin, PluginID } from '@masknet/plugin-infra'
-import { PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
+import type { Plugin } from '@masknet/plugin-infra'
+import { PluginID } from '@masknet/shared-base'
 import { Trans } from 'react-i18next'
 import { Icons } from '@masknet/icons'
-import { base } from '../base'
-import { MaskPostExtraInfoWrapper } from '@masknet/shared'
-import { SearchResultInspector } from './SearchResultInspector'
+import { base } from '../base.js'
+import { SearchResultInspector } from './SearchResultInspector.js'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -12,25 +11,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     SearchResultBox: {
         ID: PluginID.ENS,
         UI: {
-            Content: ({ keyword }) => (
-                <MaskPostExtraInfoWrapper
-                    open
-                    wrapperProps={{
-                        icon: <Icons.ENS size={24} />,
-                        borderRadius: '0px',
-                        margin: '0px',
-                    }}
-                    key={PluginID.ENS}
-                    title={<PluginI18NFieldRender field={base.name} pluginID={PluginID.ENS} />}
-                    publisher={
-                        base.publisher ? (
-                            <PluginI18NFieldRender pluginID={PluginID.ENS} field={base.publisher.name} />
-                        ) : undefined
-                    }
-                    publisherLink={base.publisher?.link}>
-                    <SearchResultInspector domain={keyword} />
-                </MaskPostExtraInfoWrapper>
-            ),
+            Content: ({ keyword }) => <SearchResultInspector domain={keyword} />,
         },
         Utils: {
             shouldDisplay(keyword: string) {

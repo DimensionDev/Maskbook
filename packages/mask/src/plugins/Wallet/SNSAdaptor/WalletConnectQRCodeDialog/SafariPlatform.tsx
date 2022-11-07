@@ -1,6 +1,6 @@
 import { ImageList, ImageListItem, SvgIconProps } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { map } from 'lodash-unified'
+import { map } from 'lodash-es'
 import { createElement } from 'react'
 import { useI18N } from '../../../../utils/index.js'
 import { Provider } from '../Provider.js'
@@ -9,7 +9,6 @@ import urlcat from 'urlcat'
 import { openWindow } from '@masknet/shared-base-ui'
 
 const useStyles = makeStyles()({
-    container: { display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' },
     grid: { width: '100%' },
     icon: { fontSize: 45 },
 })

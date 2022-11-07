@@ -30,6 +30,10 @@ export interface NextIDPersonaBindings {
 
 export interface BindingProof {
     platform: NextIDPlatform
+    /**
+     * Platform identity.
+     * For Twitter, it's twitter account
+     */
     identity: string
     created_at: string
     invalid_reason: string
@@ -65,7 +69,7 @@ export interface NextIDStorageInfo<T = unknown> {
 }
 export interface NextIDStorageProofs<T> {
     content: {
-        // pluginId
+        // pluginID
         [index: string]: T
     }
     identity: string

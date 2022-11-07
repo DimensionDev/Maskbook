@@ -1,13 +1,14 @@
-import { NFTCardStyledAssetPlayer } from '@masknet/shared'
+import { AssetPreviewer } from '@masknet/shared'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { Typography } from '@mui/material'
-import VerifiedUserIcon from '@mui/icons-material/VerifiedUser'
-import { useWeb3State } from '@masknet/plugin-infra/web3'
+import { VerifiedUser as VerifiedUserIcon } from '@mui/icons-material'
+import { useWeb3State } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import type { NetworkPluginID } from '@masknet/web3-shared-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
+import { Context } from '../Context/index.js'
 
 const useStyles = makeStyles()((theme) => ({
-    layout: {
+    root: {
         width: '100%',
         display: 'flex',
         flexDirection: 'column',
@@ -20,52 +21,20 @@ const useStyles = makeStyles()((theme) => ({
         marginBottom: 36,
         boxShadow: `0px 28px 56px -28px ${MaskColorVar.primary.alpha(0.5)}`,
         borderRadius: 20,
-    },
-    loadingPlaceholder: {
-        position: 'absolute',
-        width: '100%',
-        height: '100%',
-        padding: '74px 0',
-    },
-    wrapper: {
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: '100% !important',
-        width: '100% !important',
         overflow: 'hidden',
+    },
+    previewer: {
+        inset: 0,
+        margin: 'auto',
         position: 'absolute',
-    },
-
-    loadingIcon: {
-        width: 36,
-        height: 52,
-    },
-    errorIcon: {
-        width: 36,
-        height: 36,
-    },
-    iframe: {
-        minWidth: 300,
-        minHeight: 300,
-        width: '100%',
-        height: '100%',
-        borderRadius: 20,
-        background: '#000',
-    },
-    imgWrapper: {
-        position: 'absolute',
-        width: '100%',
-        height: '100%',
-        borderRadius: 20,
-        '& > img': {
-            borderRadius: 20,
-        },
     },
     nameSm: {
         fontSize: 16,
         fontWeight: 700,
         color: theme.palette.maskColor.publicMain,
+        whiteSpace: 'nowrap',
+        textOverflow: 'ellipsis',
+        overflow: 'hidden',
     },
     nameLg: {
         fontSize: 20,
@@ -77,21 +46,11 @@ const useStyles = makeStyles()((theme) => ({
         gap: 6,
         marginTop: 12,
     },
-    absoluteProvider: {
-        top: 16,
-        right: '5%',
-        position: 'absolute',
-        display: 'flex',
-        alignItems: 'center',
-        gap: 8,
-        zIndex: 99,
-    },
-    providerIcon: {
-        cursor: 'pointer',
-    },
+    image: {},
     fallbackImage: {
         width: '100% !important',
         height: '100% !important',
+        top: 0,
         position: 'absolute',
     },
     unset: {
@@ -108,29 +67,25 @@ export interface FigureCardProps {
 export function FigureCard(props: FigureCardProps) {
     const { asset, hideSubTitle, timeline } = props
     const { classes, cx } = useStyles()
+    const { pluginID } = Context.useContainer()
     const { Others } = useWeb3State()
 
-    const fallbackImgURL = new URL('../../assets/FallbackImage.svg', import.meta.url)
-    const resourceUrl = asset.metadata?.imageURL ?? asset.metadata?.mediaURL
     return (
-        <div className={classes.layout}>
+        <div className={classes.root}>
             <div className={classes.body}>
-                <NFTCardStyledAssetPlayer
-                    fallbackImage={fallbackImgURL}
-                    url={resourceUrl}
-                    classes={{
-                        iframe: classes.iframe,
-                        wrapper: classes.wrapper,
-                        imgWrapper: classes.imgWrapper,
-                        loadingPlaceholder: classes.loadingPlaceholder,
-                        fallbackImage: classes.fallbackImage,
-                    }}
-                    isImageOnly={false}
-                />
+                <div className={classes.previewer}>
+                    <AssetPreviewer
+                        classes={{
+                            root: classes.image,
+                            fallbackImage: classes.fallbackImage,
+                        }}
+                        url={asset.metadata?.imageURL}
+                        fallbackImage={new URL('../../assets/FallbackImage.svg', import.meta.url)}
+                    />
+                </div>
             </div>
             <Typography className={timeline ? cx(classes.nameSm, classes.unset) : classes.nameSm}>
                 {asset.metadata?.name ?? '-'}
-                {Others?.formatTokenId(asset.tokenId)}
             </Typography>
             {!hideSubTitle && (
                 <div className={classes.nameLgBox}>

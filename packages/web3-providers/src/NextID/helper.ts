@@ -1,5 +1,5 @@
 import LRU from 'lru-cache'
-import { Result, Ok, Err } from 'ts-results'
+import { Result, Ok, Err } from 'ts-results-es'
 
 const fetchCache = new LRU<string, any>({
     max: 100,
@@ -18,15 +18,15 @@ export async function fetchJSON<T = unknown>(
     type FetchCache = LRU<string, Promise<Response> | T>
 
     const fetch = globalThis.r2d2Fetch ?? globalThis.fetch
-    const cached = enableCache ? (fetchCache as FetchCache).get(url) : undefined
-    const isPending = cached instanceof Promise
+    const hit = enableCache ? (fetchCache as FetchCache).get(url) : undefined
+    const isPending = hit instanceof Promise
 
-    if (cached && !isPending) {
-        return Ok(cached)
+    if (hit && !isPending) {
+        return Ok(hit)
     }
     let pendingResponse: Promise<Response>
     if (isPending) {
-        pendingResponse = cached
+        pendingResponse = hit
     } else {
         pendingResponse = fetch(url, requestInit)
         if (enableCache) {
@@ -38,6 +38,7 @@ export async function fetchJSON<T = unknown>(
     const result = await response.clone().json()
 
     if (result.message || !response.ok) {
+        fetchCache.delete(url)
         return Err(result.message)
     }
     fetchCache.set(url, result)

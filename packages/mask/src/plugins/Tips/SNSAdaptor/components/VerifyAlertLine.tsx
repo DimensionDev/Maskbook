@@ -1,6 +1,6 @@
 import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
-import CloseIcon from '@mui/icons-material/Close'
+import { Close as CloseIcon } from '@mui/icons-material'
 import { useI18N } from '../../locales/index.js'
 
 const useStyles = makeStyles()((theme) => ({

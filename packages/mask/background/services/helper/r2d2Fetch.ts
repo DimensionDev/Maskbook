@@ -1,65 +1,93 @@
-import {
-    attemptUntil,
-    fetchImageViaDOM,
-    isIPFS_CID,
-    resolveCrossOriginURL,
-    resolveIPFS_URL,
-} from '@masknet/web3-shared-base'
-
 /* cspell:disable */
+import { attemptUntil, fetchImageViaDOM } from '@masknet/web3-shared-base'
+
 const R2D2_ROOT_URL = 'r2d2.to'
 
-enum R2d2Workers {
-    alchemy = 'alchemy-proxy',
-    opensea = 'opensea-proxy',
-    gitcoin = 'gitcoin-agent',
-    coinMarketCap = 'coinmarketcap-agent',
-    goPlusLabs = 'gopluslabs',
-    coingecko = 'coingecko-agent',
-}
-
-enum AlchemyProxies {
-    eth = 'eth-mainnet',
-    eth_io = 'eth-mainnet-io',
-    polygon = 'polygon-mainnet',
-    flow = 'flow-mainnet',
-}
+const INFURA_IPFS_ROOT_URL = 'ipfs.infura.io'
 
 const HOTFIX_RPC_URLS = [
-    'infura.io',
+    'mainnet.infura.io',
+    'ropsten.infura.io',
+    'rinkeby.infura.io',
+    'kovan.infura.io',
+    'goerli.infura.io',
+    'polygon-mainnet.infura.io',
+    'polygon-mumbai.infura.io',
     'quiknode.pro',
     'binance.org',
-    'aurora.dev',
-    'onfinality.io',
-    'arbitrum.io',
-    'celo.org',
-    'ftm.tools',
-    'gnosischain.com',
-    'avax.network',
-    'optimism.io',
+    'polygon-rpc.com',
+    'mainnet.aurora.dev',
+    'testnet.aurora.dev',
+    'astar.api.onfinality.io',
+    'rpc.astar.network',
+    'arb1.arbitrum.io',
+    'rinkeby.arbitrum.io',
+    'forno.celo.org',
+    'rpc.ftm.tools',
+    'rpc.gnosischain.com',
+    'api.avax.network',
+    'mainnet.optimism.io',
+    'kovan.optimism.io',
+    'goerli.optimism.io',
     'harmony.one',
     'hmny.io',
-    'hermesdefi.io',
-    'pokt.network',
-    'confluxrpc.com',
+    'rpc.hermesdefi.io',
+    'gateway.pokt.network',
+    'evm.confluxrpc.com',
 ]
 
-const AlchemyMatchers: Array<[string, AlchemyProxies]> = [
-    ['https://eth-mainnet.alchemyapi.io', AlchemyProxies.eth_io],
-    ['https://eth-mainnet.g.alchemy.com', AlchemyProxies.eth],
-    ['https://polygon-mainnet.g.alchemy.com', AlchemyProxies.polygon],
-    ['https://flow-mainnet.g.alchemy.com', AlchemyProxies.flow],
-]
+enum CACHE_DURATION {
+    INSTANT = 3000, // 3 seconds
+    SHORT = 60000, // 1 min
+    LONG = 1800000, // 30 mins
+}
 
-const WorkerMatchers: Array<[string, R2d2Workers]> = [
-    ['https://api.opensea.io', R2d2Workers.opensea],
-    ['https://gitcoin.co', R2d2Workers.gitcoin],
-    ['https://web-api.coinmarketcap.com', R2d2Workers.coinMarketCap],
-    ['https://api.gopluslabs.io', R2d2Workers.goPlusLabs],
-    ['https://api.coingecko.com', R2d2Workers.coingecko],
-]
+const CACHE_RULES = {
+    'https://proof-service.nextnext.id/v1/proof': CACHE_DURATION.INSTANT,
+    // twitter shorten links
+    'https://t.co': CACHE_DURATION.LONG,
+    'https://gitcoin.co/grants/v1/api/grant': CACHE_DURATION.SHORT,
+    'https://vcent-agent.r2d2.to': CACHE_DURATION.SHORT,
+    'https://rss3.domains/name': CACHE_DURATION.SHORT,
+    // avatar on RSS3 kv queries
+    'https://kv.r2d2.to/api/com.maskbook.user_twitter.com': CACHE_DURATION.SHORT,
+    'https://discovery.attrace.com': CACHE_DURATION.SHORT,
+    // mask-x
+    '7x16bogxfb.execute-api.us-east-1.amazonaws.com': CACHE_DURATION.SHORT,
+}
+const CACHE_URLS = Object.keys(CACHE_RULES) as unknown as Array<keyof typeof CACHE_RULES>
 
 const { fetch: originalFetch } = globalThis
+
+async function squashedFetch(request: Request, init?: RequestInit): Promise<Response> {
+    // skip all side effect requests
+    if (request.method !== 'GET') return originalFetch(request, init)
+
+    // skip all non-http requests
+    const url = request.url
+    if (!url.startsWith('http')) return originalFetch(request, init)
+
+    // no need to cache
+    const rule = CACHE_URLS.find((x) => url.includes(x))
+    if (!rule) return originalFetch(request, init)
+
+    // hit a cached request
+    const cache = await caches.open(rule)
+    const hit = await cache.match(request)
+    if (hit) return hit
+
+    // send the request & cache the response
+    const response = await originalFetch(request.clone(), init)
+    if (response.ok && response.status === 200) {
+        await cache.put(request.clone(), response.clone())
+
+        // stale the cache
+        setTimeout(async () => {
+            await cache.delete(request.clone())
+        }, CACHE_RULES[rule])
+    }
+    return response
+}
 
 /**
  * Why use r2d2 fetch: some third api provider will be block in Firefox and protect api key
@@ -68,20 +96,16 @@ const { fetch: originalFetch } = globalThis
  * @param init
  */
 export async function r2d2Fetch(input: RequestInfo, init?: RequestInit): Promise<Response> {
-    const info = new Request(input, init)
-    const url = info.url
-    const u = new URL(url, location.href)
-
-    // ipfs
-    if (url.startsWith('ipfs://') || isIPFS_CID(url))
-        return originalFetch(resolveCrossOriginURL(resolveIPFS_URL(url))!, info)
+    const request = new Request(input, init)
+    const url = request.url
 
     // hotfix image requests
-    if (info.method === 'GET' && info.headers.get('accept')?.includes('image/')) {
+    if (request.method === 'GET' && request.headers.get('accept')?.includes('image/')) {
         const blob = await attemptUntil<Blob | null>(
-            [async () => (await originalFetch(url, info)).blob(), async () => fetchImageViaDOM(url)],
+            [async () => (await originalFetch(url, request)).blob(), async () => fetchImageViaDOM(url)],
             null,
         )
+
         return new Response(blob, {
             headers: {
                 'Content-Type': 'image/png',
@@ -90,34 +114,17 @@ export async function r2d2Fetch(input: RequestInfo, init?: RequestInit): Promise
     }
 
     // r2d2
-    if (url.includes('r2d2.to')) return originalFetch(info, init)
+    if (url.includes(R2D2_ROOT_URL)) return squashedFetch(request, init)
 
-    // r2d2 worker
-    const r2deWorkerType =
-        WorkerMatchers.find((x) => url.startsWith(x[0]))?.[1] ??
-        (AlchemyMatchers.find((x) => url.startsWith(x[0])) ? R2d2Workers.alchemy : undefined)
-
-    if (r2deWorkerType) {
-        if (r2deWorkerType === R2d2Workers.alchemy) {
-            const alchemyType = AlchemyMatchers.find((x) => u.origin === x[0])?.[1]
-
-            return originalFetch(
-                `https://${r2deWorkerType}.${R2D2_ROOT_URL}/${alchemyType}${
-                    alchemyType === AlchemyProxies.eth ? '/nft' : ''
-                }/v2/APIKEY/${u.pathname.replace('/nft', '').replace('/v2/', '')}${u.search}`,
-                info,
-            )
-        }
-        return originalFetch(url.replace(u.origin, `https://${r2deWorkerType}.${R2D2_ROOT_URL}`), info)
-    }
+    // infura ipfs
+    if (url.includes(INFURA_IPFS_ROOT_URL)) return originalFetch(request, init)
 
     // hotfix rpc requests lost content-type header
-    if (info.method === 'POST' && HOTFIX_RPC_URLS.some((x) => url.includes(x))) {
-        return originalFetch(info, { ...init, headers: { ...init?.headers, 'Content-Type': 'application/json' } })
-    }
+    if (request.method === 'POST' && HOTFIX_RPC_URLS.some((x) => url.includes(x)))
+        return originalFetch(request, { ...init, headers: { ...request?.headers, 'Content-Type': 'application/json' } })
 
     // fallback
-    return originalFetch(info, init)
+    return squashedFetch(request, init)
 }
 
 Reflect.set(globalThis, 'r2d2Fetch', r2d2Fetch)

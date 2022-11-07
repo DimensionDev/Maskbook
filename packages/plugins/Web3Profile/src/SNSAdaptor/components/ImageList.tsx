@@ -1,32 +1,19 @@
-import { Box, Button, DialogActions, DialogContent, Typography } from '@mui/material'
+import { useWeb3State } from '@masknet/web3-hooks-base'
+import { CollectionTypes, InjectedDialog, WalletTypes } from '@masknet/shared'
+import { EMPTY_LIST, NextIDPlatform, PersonaInformation } from '@masknet/shared-base'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
+import { isSameAddress, NonFungibleToken } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
-import { useWeb3State } from '@masknet/plugin-infra/web3'
-import { useEffect, useState } from 'react'
-import { useI18N } from '../../locales/index.js'
+import { Box, Button, DialogActions, DialogContent, Typography } from '@mui/material'
+import { isEqual, sortBy } from 'lodash-es'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { PLUGIN_ID } from '../../constants.js'
-import { InjectedDialog, CollectionTypes, WalletTypes } from '@masknet/shared'
-import { PersonaInformation, NextIDPlatform } from '@masknet/shared-base'
-import { NetworkPluginID, NonFungibleToken } from '@masknet/web3-shared-base'
+import { useI18N } from '../../locales/index.js'
 import { AddNFT } from './AddCollectibles.js'
-import classNames from 'classnames'
 import { CollectionList } from './CollectionList.js'
 
-const useStyles = makeStyles()((theme) => {
+const useStyles = makeStyles<void, 'list'>()((theme, _, refs) => {
     return {
-        walletInfo: {
-            display: 'flex',
-            alignItems: 'center',
-        },
-        titleTailButton: {
-            marginLeft: 'auto',
-            justifyContent: 'center',
-        },
-        walletName: {
-            fontSize: '16px',
-            fontWeight: 400,
-            marginLeft: '4px',
-        },
         collectionWrap: {
             position: 'relative',
             cursor: 'pointer',
@@ -80,11 +67,6 @@ const useStyles = makeStyles()((theme) => {
             gridTemplateRows: 64,
             padding: '0 16px',
         },
-        AddCollectiblesButton: {
-            fontWeight: 600,
-            color: '#1D9BF0',
-            display: 'none',
-        },
         unListedEmpty: {
             color: theme.palette.maskColor.third,
             alignSelf: 'center',
@@ -117,12 +99,15 @@ const useStyles = makeStyles()((theme) => {
             flexWrap: 'wrap',
             height: 170,
             justifyContent: 'center',
+            [`.${refs.list}`]: {
+                paddingBottom: 30,
+            },
         },
     }
 })
 
 export interface ImageListDialogProps extends withClasses<never | 'root'> {
-    address?: WalletTypes
+    wallet: WalletTypes
     open: boolean
     onClose: () => void
     title: string
@@ -130,74 +115,73 @@ export interface ImageListDialogProps extends withClasses<never | 'root'> {
     collectionList?: CollectionTypes[]
     accountId?: string
     retryData: () => void
+    unlistedKeys: string[]
 }
 
 export function ImageListDialog(props: ImageListDialogProps) {
     const {
-        address = { address: ZERO_ADDRESS },
+        wallet,
         open,
         onClose,
         retryData,
         title,
         accountId,
         currentPersona,
-        collectionList,
+        collectionList = EMPTY_LIST,
+        unlistedKeys,
     } = props
     const t = useI18N()
     const { Storage } = useWeb3State()
-    const classes = useStylesExtends(useStyles(), props)
-    const [unListedCollections, setUnListedCollections] = useState<CollectionTypes[]>([])
-    const [listedCollections, setListedCollections] = useState<CollectionTypes[]>([])
-    const [confirmButtonDisabled, setConfirmButtonDisabled] = useState(true)
-    const [open_, setOpen_] = useState(false)
+    const { classes, cx } = useStylesExtends(useStyles(), props)
+    const [addNFTOpen, setAddNFTOpen] = useState(false)
+
+    const [pendingUnlistedKeys, setPendingUnlistedKeys] = useState(unlistedKeys)
 
     useEffect(() => {
-        setListedCollections(collectionList?.filter((collection) => !collection?.hidden) || [])
-        setUnListedCollections(collectionList?.filter((collection) => collection?.hidden) || [])
-        setConfirmButtonDisabled(true)
-    }, [collectionList, open])
+        setPendingUnlistedKeys(unlistedKeys)
+    }, [unlistedKeys, open])
+    const confirmButtonDisabled = isEqual(sortBy(unlistedKeys), sortBy(pendingUnlistedKeys))
 
-    const unList = (key: string | undefined) => {
-        if (!key) return
-        if (confirmButtonDisabled) setConfirmButtonDisabled(false)
-        const unListingCollection = listedCollections?.find((collection) => collection?.key === key)
-        if (unListingCollection) {
-            setUnListedCollections((pre) => [...pre, unListingCollection])
-        }
-        const currentListed = [...listedCollections]
-        setListedCollections(currentListed?.filter((collection) => collection?.key !== key))
-    }
-    const list = (key: string | undefined) => {
-        if (!key) return
-        if (confirmButtonDisabled) setConfirmButtonDisabled(false)
-        const listingCollection = unListedCollections?.find((collection) => collection?.key === key)
-        if (listingCollection) {
-            setListedCollections((pre) => [...pre, listingCollection])
-        }
+    const unListedCollections = useMemo(
+        () => collectionList.filter((x) => pendingUnlistedKeys.includes(x.key)),
+        [collectionList, pendingUnlistedKeys],
+    )
+    const listedCollections = useMemo(
+        () => collectionList.filter((x) => !pendingUnlistedKeys.includes(x.key)),
+        [collectionList, pendingUnlistedKeys],
+    )
 
-        const currentUnListed = [...unListedCollections]
-        setUnListedCollections(currentUnListed?.filter((collection) => collection?.key !== key))
-    }
+    const unList = useCallback((key: string) => {
+        setPendingUnlistedKeys((keys) => [...keys, key])
+    }, [])
+
+    const list = useCallback((key: string) => {
+        setPendingUnlistedKeys((keys) => keys.filter((x) => x !== key))
+    }, [])
 
     const onConfirm = async () => {
-        if (!currentPersona?.identifier.publicKeyAsHex) return
-        const patch = {
-            unListedCollections: {
-                [address.address]: {
-                    [title]: unListedCollections?.map((x) => x?.key),
-                },
-            },
-        }
+        if (
+            !currentPersona?.identifier.publicKeyAsHex ||
+            !wallet?.address ||
+            isSameAddress(wallet.address, ZERO_ADDRESS)
+        )
+            return
         try {
             if (!Storage || !accountId) return
+            const patch = {
+                unListedCollections: {
+                    [wallet.address]: {
+                        [title]: pendingUnlistedKeys,
+                    },
+                },
+            }
             const storage = Storage.createNextIDStorage(accountId, NextIDPlatform.Twitter, currentPersona.identifier)
-
             await storage.set(PLUGIN_ID, patch)
 
             onClose()
             retryData()
         } catch (err) {
-            console.log({ err })
+            console.log('Failed to update settings', err)
         }
     }
 
@@ -224,8 +208,8 @@ export function ImageListDialog(props: ImageListDialogProps) {
                         }}>
                         <Typography sx={{ fontSize: '16px', fontWeight: 700 }}>{t.listed()}</Typography>
                     </Box>
-                    <Box className={classNames(classes.listedBox, classes.scrollBar)}>
-                        {listedCollections && listedCollections.length > 0 ? (
+                    <Box className={cx(classes.listedBox, classes.scrollBar)}>
+                        {listedCollections?.length > 0 ? (
                             <CollectionList
                                 classes={{ list: classes.list, collectionWrap: classes.collectionWrap }}
                                 onList={unList}
@@ -242,8 +226,8 @@ export function ImageListDialog(props: ImageListDialogProps) {
                     <Box>
                         <Typography sx={{ fontSize: '16px', fontWeight: 700, padding: 2 }}>{t.unlisted()}</Typography>
                     </Box>
-                    <Box className={classNames(classes.unlistedBox, classes.scrollBar)}>
-                        {unListedCollections && unListedCollections.length > 0 ? (
+                    <Box className={cx(classes.unlistedBox, classes.scrollBar)}>
+                        {unListedCollections.length > 0 ? (
                             <CollectionList
                                 classes={{ list: classes.list, collectionWrap: classes.collectionWrap }}
                                 onList={list}
@@ -251,20 +235,20 @@ export function ImageListDialog(props: ImageListDialogProps) {
                             />
                         ) : (
                             <Typography className={classes.unListedEmpty}>
-                                {listedCollections && listedCollections?.length > 0
+                                {listedCollections?.length > 0
                                     ? t.no_unlisted_collection({ collection: title })
                                     : (!collectionList || collectionList?.length === 0) && t.no_items_found()}
                             </Typography>
                         )}
                     </Box>
                     <AddNFT
-                        account={address.address}
+                        account={wallet.address}
                         chainId={ChainId.Mainnet}
                         title={t.add_collectible()}
-                        open={open_}
-                        onClose={() => setOpen_(false)}
+                        open={addNFTOpen}
+                        onClose={() => setAddNFTOpen(false)}
                         onAddClick={onAddClick}
-                        expectedPluginID={address?.platform ?? NetworkPluginID.PLUGIN_EVM}
+                        expectedPluginID={wallet.networkPluginID}
                     />
                 </div>
             </DialogContent>

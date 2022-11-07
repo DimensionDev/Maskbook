@@ -1,7 +1,9 @@
 import { Transformer, TypedMessage, emptyTransformationContext, TransformationContext } from '../../../base/index.js'
 import { createContext, useContext, useMemo } from 'react'
 export const TransformerProvider = createContext<Transformer>((x) => x)
+TransformerProvider.displayName = 'TransformerProvider'
 export const TransformationContextProvider = createContext<TransformationContext>(emptyTransformationContext)
+TransformationContextProvider.displayName = 'TransformationContextProvider'
 
 export function useTransformedValue(message: TypedMessage): TypedMessage
 export function useTransformedValue(message: undefined | TypedMessage): TypedMessage | undefined

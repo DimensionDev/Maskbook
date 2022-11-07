@@ -5,7 +5,7 @@ import { InjectedDialog } from '@masknet/shared'
 import { useI18N } from '../../utils/index.js'
 import { SelectProfileUI } from '../shared/SelectProfileUI/index.js'
 import type { ProfileInformation as Profile } from '@masknet/shared-base'
-import { uniqBy } from 'lodash-unified'
+import { uniqBy } from 'lodash-es'
 
 export interface SelectProfileDialogProps {
     open: boolean
@@ -15,9 +15,7 @@ export interface SelectProfileDialogProps {
     onSelect: (people: Profile[]) => Promise<void>
 }
 const useStyles = makeStyles()({
-    title: { paddingBottom: 0 },
     content: { padding: '0 12px' },
-    progress: { marginRight: 6 },
 })
 
 export function SelectProfileDialog(props: SelectProfileDialogProps) {

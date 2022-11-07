@@ -12,23 +12,21 @@ import {
     OptionsObject,
 } from 'notistack'
 import { Typography, IconButton, alpha } from '@mui/material'
-import classnames from 'classnames'
-import { Close as CloseIcon } from '@mui/icons-material'
-import WarningIcon from '@mui/icons-material/Warning'
-import InfoIcon from '@mui/icons-material/Info'
+import { Close as CloseIcon, Warning as WarningIcon, Info as InfoIcon } from '@mui/icons-material'
 import { Icons } from '@masknet/icons'
 import { makeStyles, useStylesExtends } from '../../UIHelper/index.js'
 import { MaskColorVar } from '../../CSSVariables/index.js'
+import { usePortalShadowRoot } from '../../entry-base.js'
 
 export { PopupSnackbarProvider, usePopupCustomSnackbar } from './PopupSnackbar.js'
 export { SnackbarProvider, useSnackbar } from 'notistack'
 export type { VariantType, OptionsObject, SnackbarKey, SnackbarMessage } from 'notistack'
 
-interface StyleProps {
+export interface StyleProps {
     offsetY?: number
 }
 
-const useStyles = makeStyles<StyleProps, 'title' | 'message'>()((theme, { offsetY }, refs) => {
+export const useStyles = makeStyles<StyleProps, 'title' | 'message'>()((theme, { offsetY }, refs) => {
     const spinningAnimationKeyFrames = keyframes`
         to {
           transform: rotate(360deg)
@@ -164,6 +162,7 @@ const useStyles = makeStyles<StyleProps, 'title' | 'message'>()((theme, { offset
                 color: '#ffffff',
             },
         },
+        // eslint-disable-next-line tss-unused-classes/unused-classes
         default: defaultVariant,
         success,
         error,
@@ -217,7 +216,7 @@ const IconMap: Record<VariantType, React.ReactNode> = {
 }
 
 export const CustomSnackbarContent = forwardRef<HTMLDivElement, CustomSnackbarContentProps>((props, ref) => {
-    const classes = useStylesExtends(useStyles({ offsetY: props.offsetY }), props)
+    const { classes, cx } = useStylesExtends(useStyles({ offsetY: props.offsetY }), props)
     const snackbar = useSnackbar()
     const loadingIcon = <Icons.CircleLoading className={classes.spinning} />
     const variantIcon = props.processing ? loadingIcon : props.variant ? IconMap[props.variant] : null
@@ -230,7 +229,7 @@ export const CustomSnackbarContent = forwardRef<HTMLDivElement, CustomSnackbarCo
         renderedAction = typeof props.action === 'function' ? props.action(props.id) : props.action
     }
     return (
-        <SnackbarContent ref={ref} className={classnames(classes.content, classes[props.variant!])}>
+        <SnackbarContent ref={ref} className={cx(classes.content, classes[props.variant!])}>
             {variantIcon && <div className={classes.icon}>{variantIcon}</div>}
             <div className={classes.texts}>
                 <Typography className={classes.title} variant="h2">
@@ -251,14 +250,14 @@ export const CustomSnackbarProvider = memo<
     SnackbarProviderProps & {
         offsetY?: number
     }
->(({ offsetY, ...rest }) => {
+>(function CustomSnackbarProvider({ offsetY, ...rest }) {
     const ref = useRef<SnackbarProvider>(null)
     const { classes } = useStyles({ offsetY })
     const onDismiss = (key: string | number) => () => {
         ref.current?.closeSnackbar(key)
     }
 
-    return (
+    return usePortalShadowRoot((container) => (
         <SnackbarProvider
             ref={ref}
             maxSnack={30}
@@ -280,9 +279,10 @@ export const CustomSnackbarProvider = memo<
                 variantInfo: classes.info,
                 variantWarning: classes.warning,
             }}
+            domRoot={container}
             {...rest}
         />
-    )
+    ))
 })
 
 export interface ShowSnackbarOptions

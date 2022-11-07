@@ -2,29 +2,21 @@ import { Paper, Stack, Tab, Tabs } from '@mui/material'
 import { makeStyles, MaskColorVar, useCustomSnackbar } from '@masknet/theme'
 import { PageFrame } from '../../components/PageFrame/index.js'
 import { useEffect, useState } from 'react'
-import { capitalize } from 'lodash-unified'
+import { capitalize } from 'lodash-es'
 import { TabContext, TabPanel } from '@mui/lab'
 import { PersonaSetup } from './components/PersonaSetup/index.js'
 import { PersonaDrawer } from './components/PersonaDrawer/index.js'
 import { PersonaContext } from './hooks/usePersonaContext.js'
 import { useDashboardI18N } from '../../locales/index.js'
-import type { PersonaInformation } from '@masknet/shared-base'
+import { DashboardRoutes, PersonaInformation } from '@masknet/shared-base'
 import { ContentContainer } from '../../components/ContentContainer/index.js'
 import { PersonaContent } from './components/PersonaContent/index.js'
 import { PersonaRowCard } from './components/PersonaCard/Row.js'
 import { PersonaStateBar } from './components/PersonaStateBar/index.js'
 import { UserProvider } from '../Settings/hooks/UserContext.js'
 import { useNavigate } from 'react-router-dom'
-import { DashboardRoutes } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
-    tabPanel: {
-        padding: 0,
-        flex: 1,
-    },
-    label: {
-        width: 'auto',
-    },
     tab: {
         flex: 1,
         display: 'flex',

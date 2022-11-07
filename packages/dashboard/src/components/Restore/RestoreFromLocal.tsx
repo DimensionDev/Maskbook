@@ -10,7 +10,6 @@ import FileUpload from '../FileUpload/index.js'
 import { ButtonContainer } from '../RegisterFrame/ButtonContainer.js'
 import { useNavigate } from 'react-router-dom'
 import { DashboardRoutes } from '@masknet/shared-base'
-import { blobToText } from '@dimensiondev/kit'
 import { LoadingCard } from './steps/LoadingCard.js'
 import { decryptBackup } from '@masknet/backup-format'
 import { decode, encode } from '@msgpack/msgpack'
@@ -49,8 +48,7 @@ export const RestoreFromLocal = memo(() => {
     const handleSetFile = useCallback(async (file: File) => {
         setFile(file)
         if (file.type === supportedFileType.json) {
-            const content = await blobToText(file)
-            setBackupValue(content)
+            setBackupValue(await file.text())
         } else if ([supportedFileType.octetStream, supportedFileType.macBinary].includes(file.type)) {
             setRestoreStatus(RestoreStatus.Decrypting)
         } else {

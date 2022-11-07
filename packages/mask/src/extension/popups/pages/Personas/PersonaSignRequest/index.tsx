@@ -71,13 +71,6 @@ const useStyles = makeStyles()(() => ({
         fontSize: 14,
         lineHeight: '20px',
     },
-    error: {
-        color: '#FF5F5F',
-        fontSize: 12,
-        lineHeight: '16px',
-        padding: '0 16px 20px 16px',
-        wordBreak: 'break-all',
-    },
 }))
 
 const PersonaSignRequest = memo(() => {

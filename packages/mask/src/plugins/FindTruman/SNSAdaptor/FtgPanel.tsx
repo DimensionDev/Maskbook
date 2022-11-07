@@ -8,9 +8,9 @@ import FusionFtg from './FusionFtg.js'
 import { useContext } from 'react'
 import { FindTrumanContext } from '../context.js'
 import { getPartName } from './PartsPanel.js'
-import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { useERC721TokenContract } from '@masknet/plugin-infra/web3-evm'
+import { useChainContext } from '@masknet/web3-hooks-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
+import { useERC721TokenContract } from '@masknet/web3-hooks-evm'
 import { Image } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
@@ -55,8 +55,7 @@ interface FtgPanelProps {}
 export default function FtgPanel(props: FtgPanelProps) {
     const { classes } = useStyles()
     const { t, const: consts } = useContext(FindTrumanContext)
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const ftgContract = useERC721TokenContract(chainId, consts?.ftgAddress)
 
     const { value: ftgs } = useAsync(async () => {

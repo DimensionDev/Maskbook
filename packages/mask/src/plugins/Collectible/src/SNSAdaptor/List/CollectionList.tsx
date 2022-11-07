@@ -1,26 +1,25 @@
 import { useEffect, useMemo, useState } from 'react'
-import { differenceWith, uniqBy } from 'lodash-unified'
+import { differenceWith, uniqBy } from 'lodash-es'
 import { Icons } from '@masknet/icons'
 import { ElementAnchor, RetryHint, useWeb3ProfileHiddenSettings } from '@masknet/shared'
-import { useNonFungibleAssets, useTrustedNonFungibleTokens } from '@masknet/plugin-infra/web3'
+import { useNonFungibleAssets, useTrustedNonFungibleTokens } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { EMPTY_LIST, EMPTY_OBJECT } from '@masknet/shared-base'
-import { LoadingBase } from '@masknet/theme'
+import { EMPTY_LIST, EMPTY_OBJECT, joinKeys } from '@masknet/shared-base'
+import { LoadingBase, makeStyles } from '@masknet/theme'
 import { CollectionType } from '@masknet/web3-providers'
 import {
     isSameAddress,
-    NetworkPluginID,
     NonFungibleAsset,
     NonFungibleCollection,
-    SocialAddress,
+    SocialAccount,
     SocialIdentity,
 } from '@masknet/web3-shared-base'
 import { Box, Button, Stack, Typography, styled } from '@mui/material'
 import { CollectibleList } from './CollectibleList.js'
 import { CollectionIcon } from './CollectionIcon.js'
-import { CollectibleGridProps, useStyles } from './hooks/useStyles.js'
 import { LoadingSkeleton } from './LoadingSkeleton.js'
 import { useI18N } from '../../../../../utils/index.js'
+import type { CollectibleGridProps } from '../../../../../extension/options-page/types.js'
 
 const AllButton = styled(Button)(({ theme }) => ({
     display: 'inline-block',
@@ -33,15 +32,66 @@ const AllButton = styled(Button)(({ theme }) => ({
     opacity: 0.5,
 }))
 
+export const useStyles = makeStyles<CollectibleGridProps>()((theme, { columns = 3, gap = 2 }) => {
+    const gapIsNumber = typeof gap === 'number'
+    return {
+        root: {
+            width: '100%',
+            display: 'grid',
+            gridTemplateColumns: `repeat(${columns}, 1fr)`,
+            gridGap: gapIsNumber ? theme.spacing(gap) : gap,
+            padding: gapIsNumber ? theme.spacing(0, gap, 0) : `0 ${gap} 0`,
+            boxSizing: 'border-box',
+        },
+        container: {
+            boxSizing: 'border-box',
+            paddingTop: gapIsNumber ? theme.spacing(gap) : gap,
+        },
+        sidebar: {
+            width: 30,
+            flexShrink: 0,
+        },
+        name: {
+            whiteSpace: 'nowrap',
+            textOverflow: 'ellipsis',
+            overflow: 'hidden',
+            lineHeight: '36px',
+            paddingLeft: '8px',
+        },
+        networkSelected: {
+            width: 24,
+            height: 24,
+            minHeight: 24,
+            minWidth: 24,
+            lineHeight: '24px',
+            background: theme.palette.maskColor.primary,
+            color: '#ffffff',
+            fontSize: 10,
+            opacity: 1,
+            '&:hover': {
+                background: theme.palette.maskColor.primary,
+            },
+        },
+        collectionButton: {
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            marginBottom: '12px',
+            minWidth: 30,
+            maxHeight: 24,
+        },
+    }
+})
+
 export interface CollectionListProps {
-    addressName: SocialAddress<NetworkPluginID>
+    socialAccount: SocialAccount
     persona?: string
     profile?: SocialIdentity
     gridProps?: CollectibleGridProps
 }
 
-export function CollectionList({ addressName, persona, profile, gridProps = EMPTY_OBJECT }: CollectionListProps) {
-    const { address: account } = addressName
+export function CollectionList({ socialAccount, persona, profile, gridProps = EMPTY_OBJECT }: CollectionListProps) {
+    const { address: account } = socialAccount
     const { t } = useI18N()
     const { classes } = useStyles(gridProps)
     const [selectedCollection, setSelectedCollection] = useState<
@@ -62,7 +112,7 @@ export function CollectionList({ addressName, persona, profile, gridProps = EMPT
         next: nextPage,
         error,
         retry: retryFetchCollectible,
-    } = useNonFungibleAssets(addressName.networkSupporterPluginID, undefined, { account })
+    } = useNonFungibleAssets(socialAccount.pluginID, undefined, { account })
 
     const { isHiddenAddress, hiddenList } = useWeb3ProfileHiddenSettings(
         profile?.identifier?.userId.toLowerCase(),
@@ -80,32 +130,35 @@ export function CollectionList({ addressName, persona, profile, gridProps = EMPT
         return differenceWith(
             collectibles,
             hiddenList,
-            (collection, id) => `${collection.id}_${collection.tokenId}`.toLowerCase() === id.toLowerCase(),
+            (collection, key) => joinKeys(collection.address, collection.tokenId).toLowerCase() === key.toLowerCase(),
         )
     }, [hiddenList, collectibles])
 
-    const allCollectibles = [
-        ...trustedNonFungibleTokens.filter((x) => isSameAddress(x.contract?.owner, account)),
-        ...unHiddenCollectibles,
-    ]
+    const allCollectibles = useMemo(
+        () => [
+            ...trustedNonFungibleTokens.filter((x) => isSameAddress(x.contract?.owner, account)),
+            ...unHiddenCollectibles,
+        ],
+        [trustedNonFungibleTokens, unHiddenCollectibles],
+    )
 
     const renderCollectibles = useMemo(() => {
         if (!selectedCollection) return allCollectibles
-        const uniqCollectibles = uniqBy(allCollectibles, (x) => x?.contract?.address.toLowerCase() + x?.tokenId)
+        const uniqCollectibles = uniqBy(allCollectibles, (x) => x.contract?.address.toLowerCase() + x?.tokenId)
         if (!selectedCollection) return uniqCollectibles.filter((x) => !x.collection)
         return uniqCollectibles.filter(
             (x) =>
                 selectedCollection.name === x.collection?.name ||
                 isSameAddress(selectedCollection.address, x.collection?.address),
         )
-    }, [selectedCollection, allCollectibles.length])
+    }, [selectedCollection, allCollectibles])
 
     const collectionsWithName = useMemo(() => {
-        const collections = uniqBy(allCollectibles, (x) => x?.contract?.address.toLowerCase())
-            .map((x) => x?.collection)
-            .filter((x) => x?.name?.length)
+        const collections = uniqBy(allCollectibles, (x) => x.contract?.address.toLowerCase())
+            .map((x) => x.collection)
+            .filter((x) => x?.name)
         return collections as Array<NonFungibleCollection<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>
-    }, [allCollectibles.length])
+    }, [allCollectibles])
 
     if (!allCollectibles.length && !done && !error && account)
         return (
@@ -150,7 +203,7 @@ export function CollectionList({ addressName, persona, profile, gridProps = EMPT
                             </Box>
                         )}
                         <CollectibleList
-                            address={addressName}
+                            pluginID={socialAccount.pluginID}
                             retry={retryFetchCollectible}
                             collectibles={renderCollectibles}
                             loading={renderCollectibles.length === 0}

@@ -1,19 +1,19 @@
+import { useContext } from 'react'
+import millify from 'millify'
 import { formatEthereumAddress, explorerResolver, formatPercentage } from '@masknet/web3-shared-evm'
 import { Avatar, Badge, Box, Link, List, ListItem, Typography } from '@mui/material'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
-import classNames from 'classnames'
-import millify from 'millify'
-import { useContext } from 'react'
+import { useChainContext } from '@masknet/web3-hooks-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
+import { resolveIPFS_URL } from '@masknet/web3-shared-base'
 import { useI18N } from '../../../utils/index.js'
-import { EthereumBlockie } from '../../../web3/UI/EthereumBlockie.js'
+import { EthereumBlockie } from '@masknet/shared'
 import { SnapshotContext } from '../context.js'
 import { useRetry } from './hooks/useRetry.js'
 import { useVotes } from './hooks/useVotes.js'
 import { LoadingCard } from './LoadingCard.js'
 import { LoadingFailCard } from './LoadingFailCard.js'
 import { SnapshotCard } from './SnapshotCard.js'
-import { useChainId } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID, resolveIPFS_URL } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -34,6 +34,7 @@ const useStyles = makeStyles()((theme) => {
             borderBottom: `1px solid ${theme.palette.maskColor.publicLine}`,
             paddingLeft: 0,
             paddingRight: 0,
+            gap: 16,
         },
         badge: {
             transform: 'translateX(40px) translateY(2.5px)',
@@ -46,7 +47,7 @@ const useStyles = makeStyles()((theme) => {
             overflow: 'hidden',
             whiteSpace: 'nowrap',
             textOverflow: 'ellipsis',
-            maxWidth: 180,
+            maxWidth: 170,
             color: theme.palette.maskColor.publicMain,
         },
         ellipsisText: {
@@ -64,23 +65,33 @@ const useStyles = makeStyles()((theme) => {
             color: 'inherit',
             alignItems: 'center',
             textDecoration: 'none !important',
-            marginRight: 16,
         },
         power: {
             minWidth: 90,
             color: theme.palette.maskColor.publicMain,
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap',
+            overflow: 'hidden',
+            maxWidth: 90,
         },
         shadowRootTooltip: {
             color: theme.palette.maskColor.white,
+        },
+        tooltip: {
+            backgroundColor: theme.palette.maskColor.publicMain,
+            color: 'white',
+        },
+        arrow: {
+            color: theme.palette.maskColor.publicMain,
         },
     }
 })
 
 function Content() {
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const identifier = useContext(SnapshotContext)
     const { payload: votes } = useVotes(identifier)
-    const { classes, theme } = useStyles()
+    const { classes, cx, theme } = useStyles()
     const { t } = useI18N()
 
     return (
@@ -106,7 +117,7 @@ function Content() {
                     return (
                         <ListItem className={classes.listItem} key={v.address}>
                             <Link
-                                className={classNames(classes.link, classes.ellipsisText)}
+                                className={cx(classes.link, classes.ellipsisText)}
                                 target="_blank"
                                 rel="noopener"
                                 href={explorerResolver.addressLink(chainId, v.address)}>
@@ -126,21 +137,37 @@ function Content() {
                             ) : v.choices ? (
                                 <ShadowRootTooltip
                                     PopperProps={{
-                                        disablePortal: true,
+                                        disablePortal: false,
                                     }}
                                     title={
                                         <Typography className={classes.shadowRootTooltip}>{fullChoiceText}</Typography>
                                     }
                                     placement="top"
+                                    classes={{ tooltip: classes.tooltip, arrow: classes.arrow }}
                                     arrow>
                                     <Typography className={classes.choice}>{fullChoiceText}</Typography>
                                 </ShadowRootTooltip>
                             ) : null}
-                            <Typography className={classes.power}>
-                                {millify(v.balance, { precision: 2, lowercase: true }) +
-                                    ' ' +
-                                    (v.strategySymbol ? v.strategySymbol.toUpperCase() : '')}
-                            </Typography>
+                            <ShadowRootTooltip
+                                PopperProps={{
+                                    disablePortal: true,
+                                }}
+                                classes={{ tooltip: classes.tooltip, arrow: classes.arrow }}
+                                title={
+                                    <Typography className={classes.shadowRootTooltip}>
+                                        {millify.default(v.balance, { precision: 2, lowercase: true }) +
+                                            ' ' +
+                                            (v.strategySymbol ? v.strategySymbol.toUpperCase() : '')}
+                                    </Typography>
+                                }
+                                placement="top"
+                                arrow>
+                                <Typography className={classes.power}>
+                                    {millify.default(v.balance, { precision: 2, lowercase: true }) +
+                                        ' ' +
+                                        (v.strategySymbol ? v.strategySymbol.toUpperCase() : '')}
+                                </Typography>
+                            </ShadowRootTooltip>
                         </ListItem>
                     )
                 })}

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState, useRef } from 'react'
 import { DialogActions, DialogContent } from '@mui/material'
-import { DialogStackingProvider, makeStyles } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 import { activatedSocialNetworkUI } from '../../social-network/index.js'
 import { MaskMessages, useI18N } from '../../utils/index.js'
 import { CrossIsolationMessages } from '@masknet/shared-base'
@@ -51,8 +51,10 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
     // #region Open
     const [open, setOpen] = useState(false)
     const [isOpenFromApplicationBoard, setIsOpenFromApplicationBoard] = useState(false)
+
     const onClose = useCallback(() => {
         setOpen(false)
+
         UI.current?.reset()
     }, [])
 
@@ -61,7 +63,6 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
         openOnInitAnswered = true
         Services.SocialNetwork.getDesignatedAutoStartPluginID().then((plugin) => {
             if (!plugin) return
-
             setOpen(true)
             UI.current?.startPlugin(plugin)
         })
@@ -77,6 +78,7 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
     useEffect(() => {
         return CrossIsolationMessages.events.compositionDialogEvent.on(({ reason, open, content, options }) => {
             if ((reason !== 'reply' && reason !== type) || (reason === 'reply' && type === 'popup')) return
+
             setOpen(open)
             setReason(reason)
             setIsOpenFromApplicationBoard(Boolean(options?.isOpenFromApplicationBoard))
@@ -87,6 +89,7 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
     }, [type])
     useEffect(() => {
         if (!open) return
+
         return MaskMessages.events.replaceComposition.on((message) => {
             const ui = UI.current
             if (!ui) return
@@ -110,32 +113,30 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
     })()
 
     return (
-        <DialogStackingProvider>
-            <InjectedDialog
-                classes={{ paper: cx(classes.dialogRoot, !open ? classes.hideDialogRoot : '') }}
-                keepMounted
-                open={open}
-                onClose={onClose}
-                title={t('post_dialog__title')}>
-                <DialogContent classes={{ root: classes.dialogContent }}>
-                    <CompositionDialogUI
-                        version={version}
-                        setVersion={setVersion}
-                        ref={UI}
-                        hasClipboardPermission={hasClipboardPermission}
-                        onRequestClipboardPermission={onRequestClipboardPermission}
-                        requireClipboardPermission={requireClipboardPermission}
-                        recipients={recipients}
-                        maxLength={560}
-                        onSubmit={onSubmit_}
-                        supportImageEncoding={version === -37 ? false : networkSupport?.text ?? false}
-                        supportTextEncoding={networkSupport?.image ?? false}
-                        e2eEncryptionDisabled={isE2E_Disabled}
-                        isOpenFromApplicationBoard={isOpenFromApplicationBoard}
-                    />
-                </DialogContent>
-                <DialogActions sx={{ height: 68, padding: '0px !important' }} />
-            </InjectedDialog>
-        </DialogStackingProvider>
+        <InjectedDialog
+            classes={{ paper: cx(classes.dialogRoot, !open ? classes.hideDialogRoot : '') }}
+            keepMounted
+            open={open}
+            onClose={onClose}
+            title={t('post_dialog__title')}>
+            <DialogContent classes={{ root: classes.dialogContent }}>
+                <CompositionDialogUI
+                    version={version}
+                    setVersion={setVersion}
+                    ref={UI}
+                    hasClipboardPermission={hasClipboardPermission}
+                    onRequestClipboardPermission={onRequestClipboardPermission}
+                    requireClipboardPermission={requireClipboardPermission}
+                    recipients={recipients}
+                    maxLength={560}
+                    onSubmit={onSubmit_}
+                    supportImageEncoding={networkSupport?.text ?? false}
+                    supportTextEncoding={networkSupport?.image ?? false}
+                    e2eEncryptionDisabled={isE2E_Disabled}
+                    isOpenFromApplicationBoard={isOpenFromApplicationBoard}
+                />
+            </DialogContent>
+            <DialogActions sx={{ height: 68, padding: '0px !important' }} />
+        </InjectedDialog>
     )
 }

@@ -2,6 +2,7 @@ import { ValueRef } from '@dimensiondev/holoflows-kit'
 import type {
     PostContext,
     PostContextAuthor,
+    PostContextCoAuthor,
     PostContextCreation,
     PostContextSNSActions,
 } from '@masknet/plugin-infra/content-script'
@@ -15,7 +16,7 @@ import {
     ALL_EVENTS,
     ObservableMap,
     ObservableSet,
-    parseURL,
+    parseURLs,
     PostIdentifier,
     ProfileIdentifier,
     createSubscriptionFromValueRef,
@@ -29,7 +30,7 @@ import type { Subscription } from 'use-subscription'
 import { activatedSocialNetworkUI } from '../ui.js'
 import { resolveFacebookLink } from '../../social-network-adaptor/facebook.com/utils/resolveFacebookLink.js'
 import type { SupportedPayloadVersions } from '@masknet/encryption'
-import { difference } from 'lodash-unified'
+import { difference } from 'lodash-es'
 
 export function createSNSAdaptorSpecializedPostContext(create: PostContextSNSActions) {
     return function createPostContext(opt: PostContextCreation): PostContext {
@@ -42,9 +43,9 @@ export function createSNSAdaptorSpecializedPostContext(create: PostContextSNSAct
             const links = new ValueRef<string[]>(EMPTY_LIST)
 
             function evaluate() {
-                const text = parseURL(extractTextFromTypedMessage(opt.rawMessage.getCurrentValue()).unwrapOr(''))
+                const text = parseURLs(extractTextFromTypedMessage(opt.rawMessage.getCurrentValue()).unwrapOr(''))
                     .concat(opt.postMentionedLinksProvider?.getCurrentValue() || EMPTY_LIST)
-                    .map(isFacebook ? resolveFacebookLink : (x) => x)
+                    .map(isFacebook ? resolveFacebookLink : (x: string) => x)
                 if (difference(text, links.value).length === 0) return
                 if (!text.length) links.value = EMPTY_LIST
                 else links.value = text
@@ -79,6 +80,7 @@ export function createSNSAdaptorSpecializedPostContext(create: PostContextSNSAct
         const version = new ValueRef<SupportedPayloadVersions | undefined>(undefined)
         return {
             author: author.author,
+            coAuthors: opt.coAuthors,
             avatarURL: author.avatarURL,
             nickname: author.nickname,
             snsID: author.snsID,
@@ -144,6 +146,7 @@ export function createRefsForCreatePostContext() {
     const avatarURL = new ValueRef<string | null>(null)
     const nickname = new ValueRef<string | null>(null)
     const postBy = new ValueRef<ProfileIdentifier | null>(null)
+    const postCoAuthors = new ValueRef<PostContextCoAuthor[]>([])
     const postID = new ValueRef<string | null>(null)
     const postMessage = new ValueRef<TypedMessageTuple<readonly TypedMessage[]>>(makeTypedMessageTupleFromList())
     const postMetadataImages = new ObservableSet<string>()
@@ -169,6 +172,7 @@ export function createRefsForCreatePostContext() {
                 postMetadataMentionedLinks.size ? [...postMetadataMentionedLinks.values()] : EMPTY_LIST,
             subscribe: (sub) => postMetadataMentionedLinks.event.on(ALL_EVENTS, sub),
         }),
+        coAuthors: createSubscriptionFromValueRef(postCoAuthors),
     }
     return {
         subscriptions,
@@ -176,6 +180,7 @@ export function createRefsForCreatePostContext() {
         nickname,
         postBy,
         postID,
+        postCoAuthors,
         postMessage,
         postMetadataMentionedLinks,
         postMetadataImages,

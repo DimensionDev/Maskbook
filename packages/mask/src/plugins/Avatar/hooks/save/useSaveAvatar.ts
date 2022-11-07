@@ -1,14 +1,13 @@
 import { useCallback } from 'react'
-import { useWeb3State } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
-import type { EnhanceableSite } from '@masknet/shared-base'
+import { useWeb3State } from '@masknet/web3-hooks-base'
+import { NetworkPluginID, EnhanceableSite } from '@masknet/shared-base'
 import { useSaveAddress } from './useSaveAddress.js'
 import type { NextIDAvatarMeta, AvatarMeta } from '../../types.js'
 import { NFT_AVATAR_METADATA_STORAGE } from '../../constants.js'
 
-export function useSaveAvatar(pluginId?: NetworkPluginID) {
-    const { Storage } = useWeb3State(pluginId)
-    const saveAddress = useSaveAddress(pluginId)
+export function useSaveAvatar(pluginID?: NetworkPluginID) {
+    const { Storage } = useWeb3State(pluginID)
+    const saveAddress = useSaveAddress(pluginID)
 
     return useCallback(
         async (account: string, network: EnhanceableSite, avatar: NextIDAvatarMeta, sign: string) => {

@@ -52,11 +52,11 @@ export { socialNetworkEncoder, socialNetworkDecoder, TwitterDecoder } from './so
 export {
     type DecodeImageOptions,
     type EncodeImageOptions,
-    type ImageTemplateTypes,
     type SteganographyIO,
     steganographyDecodeImage,
     steganographyEncodeImage,
     GrayscaleAlgorithm,
+    SteganographyPreset,
 } from './image-steganography/index.js'
 
 // TODO: remove them in the future

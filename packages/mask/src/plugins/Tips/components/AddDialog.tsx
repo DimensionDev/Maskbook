@@ -1,19 +1,14 @@
-import {
-    useAccount,
-    useChainId,
-    useNetworkDescriptors,
-    useWeb3Connection,
-    useWeb3State,
-} from '@masknet/plugin-infra/web3'
-import { useERC721TokenContract } from '@masknet/plugin-infra/web3-evm'
-import { ImageIcon, InjectedDialog, InjectedDialogProps } from '@masknet/shared'
-import { makeStyles } from '@masknet/theme'
-import { isSameAddress, NetworkPluginID, NonFungibleToken } from '@masknet/web3-shared-base'
-import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import { Button, DialogContent, FormControl, TextField, Typography } from '@mui/material'
 import { FC, useCallback, useEffect, useMemo, useState } from 'react'
 import { useAsyncFn } from 'react-use'
 import { EthereumAddress } from 'wallet.ts'
+import { useChainContext, useNetworkDescriptors, useWeb3Connection, useWeb3State } from '@masknet/web3-hooks-base'
+import { useERC721TokenContract } from '@masknet/web3-hooks-evm'
+import { ImageIcon, InjectedDialog, InjectedDialogProps } from '@masknet/shared'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { makeStyles } from '@masknet/theme'
+import { isSameAddress, NonFungibleToken } from '@masknet/web3-shared-base'
+import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import { Button, DialogContent, FormControl, InputBase, Typography } from '@mui/material'
 import { useI18N } from '../locales/index.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -50,8 +45,7 @@ interface Props extends InjectedDialogProps {
 
 export const AddDialog: FC<Props> = ({ onAdd, onClose, ...rest }) => {
     const { classes } = useStyles()
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const [contractAddress, setContractAddress] = useState('')
     const [tokenId, setTokenId] = useState('')
     const { Token } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
@@ -133,7 +127,7 @@ export const AddDialog: FC<Props> = ({ onAdd, onClose, ...rest }) => {
                     <Typography className={classes.chainName}>{network.name}</Typography>
                 </div>
                 <FormControl fullWidth className={classes.row}>
-                    <TextField
+                    <InputBase
                         fullWidth
                         value={contractAddress}
                         onChange={(e) => setContractAddress(e.currentTarget.value)}
@@ -141,7 +135,7 @@ export const AddDialog: FC<Props> = ({ onAdd, onClose, ...rest }) => {
                     />
                 </FormControl>
                 <FormControl fullWidth className={classes.row}>
-                    <TextField
+                    <InputBase
                         fullWidth
                         value={tokenId}
                         onChange={(e) => setTokenId(e.currentTarget.value)}

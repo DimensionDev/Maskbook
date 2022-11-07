@@ -1,6 +1,6 @@
 import { toHex } from 'web3-utils'
 import type { RequestArguments } from 'web3-core'
-import { delay } from '@dimensiondev/kit'
+import { delay } from '@masknet/kit'
 import { Emitter } from '@servie/events'
 import type { Account, ProviderEvents, ProviderOptions } from '@masknet/web3-shared-base'
 import {
@@ -57,7 +57,7 @@ export class BaseProvider implements EVM_Provider {
                             chainName: chainResolver.chainFullName(chainId) ?? chainResolver.chainName(chainId),
                             nativeCurrency: chainResolver.nativeCurrency(chainId),
                             rpcUrls: getRPCConstants(chainId).RPC_URLS_OFFICIAL ?? [],
-                            blockExplorerUrls: [chainResolver.infoURL(chainId)?.url],
+                            blockExplorerUrls: [chainResolver.explorerURL(chainId)?.url],
                         },
                     ],
                 })

@@ -1,9 +1,10 @@
 {
   "name": "@masknet/plugin-solana",
   "private": true,
+  "type": "module",
   "exports": {
     ".": {
-      "webpack": "./src/index.ts",
+      "mask-src": "./src/index.ts",
       "default": "./dist/index.js"
     }
   },
@@ -16,7 +17,9 @@
     "@masknet/shared": "workspace:*",
     "@masknet/shared-base": "workspace:*",
     "@masknet/theme": "workspace:*",
+    "@masknet/web3-helpers": "workspace:*",
     "@masknet/web3-providers": "workspace:*",
+    "@masknet/web3-state": "workspace:*",
     "@masknet/web3-shared-base": "workspace:*",
     "@masknet/web3-shared-evm": "workspace:*",
     "@masknet/web3-shared-solana": "workspace:*",
@@ -30,7 +33,7 @@
     "@solana/spl-token-registry": "^0.2.1301",
     "@solana/web3.js": "^1.44.2",
     "@toruslabs/solana-embed": "^0.1.6",
-    "bignumber.js": "^9.0.2",
+    "bignumber.js": "9.1.0",
     "bn.js": "^4.12.0",
     "bs58": "^4.0.1",
     "buffer": "^6.0.3",

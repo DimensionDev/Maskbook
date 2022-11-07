@@ -5,6 +5,7 @@
     "go_plus": "Go+",
     "high_risk": "High Risk",
     "low_risk": "Low Risk",
+    "confirm_swap_risk": "Confirm swap risk",
     "medium_risk": "Medium Risk",
     "search": "Search",
     "search_input_placeholder": "Please enter token contract address.",

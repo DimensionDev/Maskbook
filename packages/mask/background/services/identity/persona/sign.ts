@@ -12,7 +12,7 @@ import { MaskMessages } from '../../../../shared/index.js'
 import { PersonaIdentifier, fromBase64URL, PopupRoutes, ECKeyIdentifier } from '@masknet/shared-base'
 import { queryPersonasWithPrivateKey } from '../../../../background/database/persona/db.js'
 import { openPopupWindow } from '../../../../background/services/helper/index.js'
-import { delay, encodeText } from '@dimensiondev/kit'
+import { delay, encodeText } from '@masknet/kit'
 export interface SignRequest {
     /** Use that who to sign this message. */
     identifier?: PersonaIdentifier

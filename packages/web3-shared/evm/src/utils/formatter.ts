@@ -28,12 +28,13 @@ export const formatSchemaType = createLookupTableResolver<SchemaType, string>(
         [SchemaType.ERC20]: 'ERC20',
         [SchemaType.ERC721]: 'ERC721',
         [SchemaType.ERC1155]: 'ERC1155',
+        [SchemaType.SBT]: 'SBT',
     },
     '',
 )
 
-export function formatTokenId(tokenId: string, size = 4) {
-    size = Math.max(2, size)
+export function formatTokenId(tokenId = '', size_ = 4) {
+    const size = Math.max(2, size_)
     const isHex = tokenId.toLowerCase().startsWith('0x')
     const prefix = isHex ? '0x' : '#'
     if (tokenId.length < size * 2 + prefix.length) return `#${tokenId}`
@@ -42,12 +43,12 @@ export function formatTokenId(tokenId: string, size = 4) {
     return `${prefix}${head}...${tail}`
 }
 
-export function formatDomainName(domain: string, size = 4) {
+export function formatDomainName(domain: string) {
     if (!domain || !isValidDomain(domain)) return domain
-    const [domainName, company] = domain.split('.')
-    if (domainName.length < 13) return domain
+    if (domain.length <= 18) return domain
+    const [name, suffix] = domain.split('.')
 
-    return `${domainName.slice(0, Math.max(0, size))}...${domainName.slice(-size)}.${company}`
+    return `${name.slice(0, 12)}...${name.slice(-2)}.${suffix}`
 }
 
 export function formatKeccakHash(hash: string, size = 0) {
@@ -74,10 +75,20 @@ export function formatGweiToWei(value: BigNumber.Value) {
     return new BigNumber(value).shiftedBy(9).integerValue()
 }
 
+export function formatEtherToGwei(value: BigNumber.Value) {
+    return new BigNumber(value).shiftedBy(9).integerValue()
+}
+
 export function formatGweiToEther(value: BigNumber.Value) {
     return new BigNumber(value).shiftedBy(-9)
 }
 
+/**
+ * @deprecated use formatCurrency stead
+ * @param value
+ * @param significant
+ * @returns
+ */
 export function formatUSD(value: BigNumber.Value, significant = 2): string {
     const bn = new BigNumber(value)
     return bn.lt(0.01) ? '<$0.01' : bn.toFixed(significant)

@@ -13,7 +13,7 @@ import { useRecipientsList } from '../../CompositionDialog/useRecipientsList.js'
 import { useAsyncRetry } from 'react-use'
 import Services from '../../../extension/service.js'
 import type { LazyRecipients } from '../../CompositionDialog/CompositionUI.js'
-import { delay } from '@dimensiondev/kit'
+import { delay } from '@masknet/kit'
 import { activatedSocialNetworkUI } from '../../../social-network/index.js'
 
 export interface DecryptPostSuccessProps {

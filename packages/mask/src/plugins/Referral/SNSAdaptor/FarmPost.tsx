@@ -1,14 +1,13 @@
 import { useCallback } from 'react'
 import { useAsync } from 'react-use'
-import { CrossIsolationMessages, EMPTY_LIST } from '@masknet/shared-base'
+import { CrossIsolationMessages, EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import { makeTypedMessageText } from '@masknet/typed-message'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
-import { useWeb3, useAccount } from '@masknet/plugin-infra/web3'
+import { useWeb3, useChainContext } from '@masknet/web3-hooks-base'
 import type { Web3 } from '@masknet/web3-shared-evm'
-import { TokenIcon } from '@masknet/shared'
+import { TokenIcon, ChainBoundary, WalletConnectedBoundary } from '@masknet/shared'
 import { Button, Card, Grid, Typography, Box } from '@mui/material'
 import { usePluginWrapper } from '@masknet/plugin-infra/content-script'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 import type { ReferralMetaData } from '../types.js'
 import { MASK_REFERRER, META_KEY, SWAP_CHAIN_ID } from '../constants.js'
@@ -20,8 +19,6 @@ import {
     singAndPostProofOfRecommendationWithReferrer,
 } from './utils/proofOfRecommendation.js'
 
-import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary.js'
-import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
 import { RewardFarmPostWidget } from './shared-ui/RewardFarmPostWidget.js'
 import { SponsoredFarmIcon } from './shared-ui/icons/SponsoredFarm.js'
 import { IconURLs } from '../assets/index.js'
@@ -50,9 +47,6 @@ const useStyles = makeStyles()(() => ({
             width: 'calc( 100% - 8px)',
         },
     },
-    switchButtonBox: {
-        width: '100%',
-    },
 }))
 
 export function FarmPost(props: FarmPostProps) {
@@ -61,10 +55,10 @@ export function FarmPost(props: FarmPostProps) {
     const { payload } = props
     const farmChainId = payload.referral_token_chain_id
 
+    const t = useI18N()
     const { classes } = useStyles()
     const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM)
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const t = useI18N()
+    const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const currentIdentity = useCurrentIdentity()
     const { value: linkedPersona } = useCurrentLinkedPersona()
     const { showSnackbar } = useCustomSnackbar()

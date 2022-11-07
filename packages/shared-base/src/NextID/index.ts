@@ -1,4 +1,5 @@
-import { NextIDPlatform, ProfileIdentifier } from '../index.js'
+import { ProfileIdentifier } from '../Identifier/index.js'
+import { NextIDPlatform } from '../NextID/type.js'
 import { EnhanceableSite } from '../Site/type.js'
 import { createLookupTableResolver } from '../utils/index.js'
 

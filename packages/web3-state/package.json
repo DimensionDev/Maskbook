@@ -1,0 +1,27 @@
+{
+  "name": "@masknet/web3-state",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "mask-src": "./src/index.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "types": "./dist/index.d.ts",
+  "dependencies": {
+    "@masknet/shared-base": "workspace:*",
+    "@masknet/plugin-infra": "workspace:*",
+    "@masknet/web3-shared-base": "workspace:*",
+    "@masknet/web3-providers": "workspace:*",
+    "@types/use-subscription": "^1.0.0",
+    "lru-cache": "^7.10.1",
+    "use-subscription": "1.6.0",
+    "@servie/events": "^3.0.0",
+    "web3-core-helpers": "1.8.0"
+  },
+  "devDependencies": {
+    "mock-socket": "^9.1.2"
+  }
+}

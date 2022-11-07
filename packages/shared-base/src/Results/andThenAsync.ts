@@ -1,4 +1,4 @@
-import type { Result } from 'ts-results'
+import type { Result } from 'ts-results-es'
 
 export async function andThenAsync<T, E, Q, E2>(
     op: Result<T, E> | Promise<Result<T, E>>,

@@ -1,15 +1,13 @@
 import { useState, useMemo } from 'react'
-import classNames from 'classnames'
+import { useLocation } from 'react-use'
+import urlcat from 'urlcat'
 import { styled } from '@mui/material/styles'
-import { makeStyles, useStylesExtends } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 import { IconClose, IconFull, IconShare } from '../constants.js'
 import { getCurrentIdentifier } from '../../../social-network-adaptor/utils.js'
-import { useLocation } from 'react-use'
-import { useChainId, useAccount } from '@masknet/plugin-infra/web3'
+import { useChainContext } from '@masknet/web3-hooks-base'
 import type { GameInfo, GameNFT } from '../types.js'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
-import urlcat from 'urlcat'
-import { EnhanceableSite } from '@masknet/shared-base'
+import { NetworkPluginID, EnhanceableSite } from '@masknet/shared-base'
 
 const useStyles = makeStyles()(() => ({
     root: {
@@ -91,8 +89,8 @@ interface Props {
 
 const GameWindow = (props: Props) => {
     const { gameInfo, tokenProps, isShow, onClose } = props
-    const classes = useStylesExtends(useStyles(), {})
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const { classes, cx } = useStyles()
+    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
     const [isFullScreen, setFullScreen] = useState(false)
 
@@ -114,7 +112,6 @@ const GameWindow = (props: Props) => {
 
     const location = useLocation()
     const profile = useMemo(() => getCurrentIdentifier(), [location])
-    const chainId = useChainId()
     const gameUrl = useMemo(() => {
         return urlcat(gameInfo?.url ?? '', {
             dom: 'nff',
@@ -136,14 +133,12 @@ const GameWindow = (props: Props) => {
     ])
 
     return isShow ? (
-        <div className={classNames(classes.root, { [classes.shadow]: props.isShadow })}>
+        <div className={cx(classes.root, { [classes.shadow]: props.isShadow })}>
             <div className={classes.body}>
-                <div
-                    className={classNames(classes.iframeBox, { [classes.fullScreen]: isFullScreen })}
-                    style={windowStyle}>
+                <div className={cx(classes.iframeBox, { [classes.fullScreen]: isFullScreen })} style={windowStyle}>
                     {!!gameInfo?.url && <IFrame src={gameUrl} />}
                 </div>
-                <div className={classNames(classes.control, { [classes.fullControl]: isFullScreen })}>
+                <div className={cx(classes.control, { [classes.fullControl]: isFullScreen })}>
                     <img src={IconClose} onClick={handleClose} alt="close" />
                     <img src={IconFull} onClick={toggleFullscreen} alt="fullscreen" />
                     {profile?.identifier.network === EnhanceableSite.Twitter ? (

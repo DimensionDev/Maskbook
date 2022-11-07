@@ -1,9 +1,9 @@
 import { ChangeEvent, memo, useCallback, useMemo } from 'react'
-import { useWeb3State } from '@masknet/plugin-infra/web3'
+import { useWeb3State } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { formatBalance, FungibleToken } from '@masknet/web3-shared-base'
+import { formatBalance } from '@masknet/web3-shared-base'
 import { FungibleTokenInputUI } from './UI.js'
-import BigNumber from 'bignumber.js'
+import { BigNumber } from 'bignumber.js'
 
 const MIN_AMOUNT_LENGTH = 1
 const MAX_AMOUNT_LENGTH = 79
@@ -21,7 +21,7 @@ export interface FungibleTokenInputProps {
     disableBalance?: boolean
     placeholder?: string
     loadingBalance?: boolean
-    token?: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll> | null
+    token?: Web3Helper.FungibleTokenAll | null
     onSelectToken?: () => void
     onAmountChange: (amount: string) => void
 }
@@ -34,13 +34,13 @@ export const FungibleTokenInput = memo<FungibleTokenInputProps>(
         disableMax,
         disableBalance,
         disableToken,
+        loadingBalance,
         onSelectToken,
         onAmountChange,
         amount,
         maxAmount,
         balance,
         maxAmountSignificant,
-        loadingBalance,
         placeholder = '0.0',
         maxAmountShares = 1,
     }) => {
@@ -92,11 +92,11 @@ export const FungibleTokenInput = memo<FungibleTokenInputProps>(
                 onMaxClick={() => {
                     if (!token) return
                     const amount = new BigNumber(maxAmount ?? balance).dividedBy(maxAmountShares).decimalPlaces(0, 1)
-                    onAmountChange(formatBalance(amount, token.decimals, maxAmountSignificant) ?? '0')
+                    onAmountChange(formatBalance(amount, token.decimals, maxAmountSignificant, true) ?? '0')
                 }}
                 balance={balance}
                 required
-                loadingBalance
+                loadingBalance={loadingBalance}
                 disabled={disabled}
                 disableMax={disableMax}
                 disableBalance={disableBalance}

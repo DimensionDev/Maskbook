@@ -1,6 +1,6 @@
 import { Box, Button, InputAdornment, MenuItem, Stack, Typography } from '@mui/material'
 import { memo, useMemo, useState } from 'react'
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
+import { KeyboardArrowDown as KeyboardArrowDownIcon } from '@mui/icons-material'
 import { makeStyles, MaskTextField, ShadowRootMenu } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
 import { useI18N } from '../../locales/index.js'
@@ -10,12 +10,6 @@ import { WalletIcon } from '@masknet/shared'
 import { useSupportedChains } from '../hooks/useSupportedChains.js'
 
 const useStyles = makeStyles()((theme) => ({
-    root: {
-        width: '600px',
-    },
-    content: {
-        width: '552px',
-    },
     option: {
         background: theme.palette.maskColor.input,
     },
@@ -35,7 +29,6 @@ const useStyles = makeStyles()((theme) => ({
     searchButton: {
         borderRadius: 8,
     },
-    menu: {},
     search: {
         background: theme.palette.maskColor.input,
         height: 40,
@@ -74,27 +67,29 @@ export const SearchBox = memo<SearchBoxProps>(({ onSearch }) => {
         if (!supportedChains.length) return
         setSelectedChain(supportedChains[0])
         return (
-            supportedChains.map((chain) => {
-                return (
-                    <MenuItem
-                        key={chain.chainId}
-                        onClick={() => {
-                            setSelectedChain(chain)
-                            onClose()
-                        }}>
-                        <Stack
-                            display="inline-flex"
-                            direction="row"
-                            alignItems="center"
-                            justifyContent="flex-start"
-                            gap={1}
-                            width="100%">
-                            <WalletIcon mainIcon={chain?.icon} size={18} />
-                            <Typography sx={{ fontSize: 14 }}>{getChainName(chain)}</Typography>
-                        </Stack>
-                    </MenuItem>
-                )
-            }) ?? []
+            supportedChains
+                .filter((x) => x.icon)
+                .map((chain) => {
+                    return (
+                        <MenuItem
+                            key={chain.chainId}
+                            onClick={() => {
+                                setSelectedChain(chain)
+                                onClose()
+                            }}>
+                            <Stack
+                                display="inline-flex"
+                                direction="row"
+                                alignItems="center"
+                                justifyContent="flex-start"
+                                gap={1}
+                                width="100%">
+                                <WalletIcon mainIcon={chain?.icon} size={18} />
+                                <Typography>{getChainName(chain)}</Typography>
+                            </Stack>
+                        </MenuItem>
+                    )
+                }) ?? []
         )
     }, [supportedChains.length])
 

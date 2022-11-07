@@ -4,15 +4,15 @@ import { useAsyncRetry } from 'react-use'
 import { Route, Routes, useNavigate, useLocation } from 'react-router-dom'
 import { WalletStartUp } from './components/StartUp/index.js'
 import { WalletAssets } from './components/WalletAssets/index.js'
-import { PopupRoutes, relativeRouteOf } from '@masknet/shared-base'
+import { NetworkPluginID, PopupRoutes, relativeRouteOf } from '@masknet/shared-base'
 import { WalletContext } from './hooks/useWalletContext.js'
 import { LoadingPlaceholder } from '../../components/LoadingPlaceholder/index.js'
 import { WalletMessages, WalletRPC } from '../../../../plugins/Wallet/messages.js'
 import SelectWallet from './SelectWallet/index.js'
 import { useWalletLockStatus } from './hooks/useWalletLockStatus.js'
 import { WalletHeader } from './components/WalletHeader/index.js'
-import { useChainId, useWallet, useWeb3State } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID, TransactionDescriptorType } from '@masknet/web3-shared-base'
+import { useChainContext, useWallet, useWeb3State } from '@masknet/web3-hooks-base'
+import { TransactionDescriptorType } from '@masknet/web3-shared-base'
 import { EthereumMethodType, getPayloadConfig } from '@masknet/web3-shared-evm'
 
 const ImportWallet = lazy(() => import('./ImportWallet/index.js'))
@@ -43,7 +43,7 @@ export default function Wallet() {
     const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
     const location = useLocation()
     const navigate = useNavigate()
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { TransactionFormatter } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const { isLocked, loading: getLockStatusLoading } = useWalletLockStatus()
 

@@ -8,9 +8,6 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: 6.25,
         margin: 3.75,
     },
-    border: {
-        border: `1px solid ${theme.palette.background.paper}`,
-    },
 }))
 export interface ChainIconProps extends withClasses<'point'> {
     color: string
@@ -19,7 +16,7 @@ export interface ChainIconProps extends withClasses<'point'> {
 }
 
 export const ChainIcon = memo<ChainIconProps>(({ color, size = 12.5, ...props }) => {
-    const classes = useStylesExtends(useStyles(), props)
+    const { classes } = useStylesExtends(useStyles(), props)
 
     return (
         <div

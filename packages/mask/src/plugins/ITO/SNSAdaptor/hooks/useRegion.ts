@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useAsyncRetry } from 'react-use'
-import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
+import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
 // TODO better way to do the i18n of region
 import regions from '../../assets/regions.json'
 

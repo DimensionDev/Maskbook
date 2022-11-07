@@ -1,4 +1,4 @@
-import BigNumber from 'bignumber.js'
+import { BigNumber } from 'bignumber.js'
 import type { Pair } from './uniswap-v2-subgraph.js'
 import {
     fetchEtherPriceByBlockNumber,

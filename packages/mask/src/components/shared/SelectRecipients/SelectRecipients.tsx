@@ -1,4 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
+import { batch } from 'async-call-rpc'
+import { cloneDeep, uniqBy } from 'lodash-es'
 import {
     ProfileInformation as Profile,
     NextIDPlatform,
@@ -13,9 +15,7 @@ import { usePersonasFromNextID } from '../../DataSource/usePersonasFromNextID.js
 import { useTwitterIdByWalletSearch } from './useTwitterIdByWalletSearch.js'
 import { isValidAddress } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../utils/index.js'
-import { cloneDeep, uniqBy } from 'lodash-unified'
 import Services from '../../../extension/service.js'
-import { batch } from 'async-call-rpc'
 
 export interface SelectRecipientsUIProps {
     items: LazyRecipients

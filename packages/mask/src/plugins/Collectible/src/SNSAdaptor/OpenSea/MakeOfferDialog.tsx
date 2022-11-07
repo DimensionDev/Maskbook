@@ -1,10 +1,10 @@
 import { ChangeEvent, useState, useCallback, useMemo, useEffect } from 'react'
 import { Trans } from 'react-i18next'
-import { first } from 'lodash-unified'
-import BigNumber from 'bignumber.js'
+import { first } from 'lodash-es'
+import { BigNumber } from 'bignumber.js'
 import getUnixTime from 'date-fns/getUnixTime'
 import formatDateTime from 'date-fns/format'
-import type { Order } from 'opensea-js/lib/types'
+import type { Order } from 'opensea-js/lib/types.js'
 import {
     DialogContent,
     Box,
@@ -17,24 +17,21 @@ import {
     DialogActions,
 } from '@mui/material'
 import { makeStyles, ActionButton } from '@masknet/theme'
-import { InjectedDialog } from '@masknet/shared'
-import { CrossIsolationMessages } from '@masknet/shared-base'
-import { UnreviewedWarnings } from './UnreviewedWarnings.js'
-import { PluginWalletStatusBar, useI18N } from '../../../../../utils/index.js'
-import { ActionButtonPromise } from '../../../../../extension/options-page/DashboardComponents/ActionButton.js'
-import { DateTimePanel } from '../../../../../web3/UI/DateTimePanel.js'
-import { toAsset, isWyvernSchemaName } from '../../helpers/index.js'
-import { CurrencyType, NetworkPluginID, rightShift, ZERO } from '@masknet/web3-shared-base'
-import { SelectTokenListPanel } from './SelectTokenListPanel.js'
-import { ChainBoundary } from '../../../../../web3/UI/ChainBoundary.js'
 import {
-    useAccount,
-    useChainId,
-    useCurrentWeb3NetworkPluginID,
-    useFungibleTokenWatched,
-    useWeb3State,
-} from '@masknet/plugin-infra/web3'
+    InjectedDialog,
+    PluginWalletStatusBar,
+    ActionButtonPromise,
+    ChainBoundary,
+    DateTimePanel,
+} from '@masknet/shared'
+import { CrossIsolationMessages, NetworkPluginID } from '@masknet/shared-base'
+import { useChainContext, useNetworkContext, useFungibleTokenWatched, useWeb3State } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
+import { UnreviewedWarnings } from './UnreviewedWarnings.js'
+import { useI18N } from '../../../../../utils/index.js'
+import { toAsset, isWyvernSchemaName } from '../../helpers/index.js'
+import { CurrencyType, rightShift, ZERO } from '@masknet/web3-shared-base'
+import { SelectTokenListPanel } from './SelectTokenListPanel.js'
 import { useOpenSea } from './hooks/useOpenSea.js'
 
 const useStyles = makeStyles()((theme) => {
@@ -42,11 +39,6 @@ const useStyles = makeStyles()((theme) => {
         content: {
             padding: 0,
             borderRadius: 0,
-        },
-        footer: {
-            display: 'flex',
-            justifyContent: 'flex-end',
-            padding: 0,
         },
         panel: {
             marginTop: theme.spacing(2),
@@ -89,9 +81,8 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
 
-    const pluginID = useCurrentWeb3NetworkPluginID()
-    const account = useAccount()
-    const chainId = useChainId()
+    const { pluginID } = useNetworkContext()
+    const { account, chainId } = useChainContext()
     const opensea = useOpenSea(pluginID, chainId)
     const { Others } = useWeb3State()
 

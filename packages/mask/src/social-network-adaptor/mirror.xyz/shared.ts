@@ -1,7 +1,8 @@
-import type { SocialNetwork } from '../../social-network/types.js'
+import type { SocialNetwork } from '@masknet/types'
 import { createSNSAdaptorSpecializedPostContext } from '../../social-network/utils/create-post-context.js'
 import { hasPayloadLike } from '../../utils/index.js'
 import { mirrorBase } from './base.js'
+import { getUserIdentity } from './utils/user.js'
 
 export const mirrorShared: SocialNetwork.Shared & SocialNetwork.Base = {
     ...mirrorBase,
@@ -9,5 +10,6 @@ export const mirrorShared: SocialNetwork.Shared & SocialNetwork.Base = {
         createPostContext: createSNSAdaptorSpecializedPostContext({
             hasPayloadLike,
         }),
+        getUserIdentity,
     },
 }

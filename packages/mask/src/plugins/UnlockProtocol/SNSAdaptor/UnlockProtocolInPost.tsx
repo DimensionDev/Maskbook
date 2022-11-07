@@ -1,14 +1,14 @@
+import React, { useEffect, useState } from 'react'
 import type { TypedMessage } from '@masknet/typed-message'
 import { Button, Typography } from '@mui/material'
-import React, { useEffect, useState } from 'react'
 import { useI18N } from '../../../utils/index.js'
 import { paywallUrl } from '../constants.js'
 import { renderWithUnlockProtocolMetadata, UnlockProtocolMetadataReader } from '../helpers.js'
-import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
+import { useChainContext } from '@masknet/web3-hooks-base'
 import { PluginUnlockProtocolRPC } from '../messages.js'
-import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
+import { ChainBoundary } from '@masknet/shared'
 import { usePluginWrapper } from '@masknet/plugin-infra/dom'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 
 interface UnlockProtocolInPostProps {
     message: TypedMessage
@@ -18,23 +18,22 @@ export default function UnlockProtocolInPost(props: UnlockProtocolInPostProps) {
     const { t } = useI18N()
     const { message } = props
     const [content, setContent] = useState('')
-    const address = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const chain = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const [redirectUrl, setRedirectUrl] = useState('')
 
     useEffect(() => {
         const metadata = UnlockProtocolMetadataReader(props.message.meta)
         if (metadata.ok) {
-            if (address) {
+            if (account) {
                 const data: {
                     locks: Record<string, object>
                 } = { locks: {} }
                 metadata.val.unlockLocks.forEach((locks) => {
-                    PluginUnlockProtocolRPC.verifyPurchase(address, locks.unlocklock, locks.chainid).then((res) => {
+                    PluginUnlockProtocolRPC.verifyPurchase(account, locks.unlocklock, locks.chainid).then((res) => {
                         if (!res) return
                         const requestData = {
                             lock: locks.unlocklock,
-                            address,
+                            address: account,
                             chain: locks.chainid,
                             identifier: metadata.val.iv,
                         }
@@ -60,7 +59,7 @@ export default function UnlockProtocolInPost(props: UnlockProtocolInPostProps) {
                 setRedirectUrl(paywallUrl + encodeURI(JSON.stringify(data)))
             }
         }
-    }, [chain, address])
+    }, [chainId, account])
     if (content) {
         const jsx = message
             ? renderWithUnlockProtocolMetadata(props.message.meta, (r) => {
@@ -68,7 +67,7 @@ export default function UnlockProtocolInPost(props: UnlockProtocolInPostProps) {
                       <Render>
                           <ChainBoundary
                               expectedPluginID={NetworkPluginID.PLUGIN_EVM}
-                              expectedChainId={chain}
+                              expectedChainId={chainId}
                               noSwitchNetworkTip={false}>
                               <Typography color="textPrimary">{content}</Typography>
                           </ChainBoundary>
@@ -103,7 +102,7 @@ export default function UnlockProtocolInPost(props: UnlockProtocolInPostProps) {
                       <Render>
                           <ChainBoundary
                               expectedPluginID={NetworkPluginID.PLUGIN_EVM}
-                              expectedChainId={chain}
+                              expectedChainId={chainId}
                               noSwitchNetworkTip={false}>
                               <Typography color="textPrimary">"{t('loading')}"</Typography>
                               <br />

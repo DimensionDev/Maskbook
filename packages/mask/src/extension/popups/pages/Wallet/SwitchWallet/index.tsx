@@ -1,24 +1,17 @@
 import { memo, useCallback } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Button, List } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
-import { useNavigate } from 'react-router-dom'
-import { PopupRoutes } from '@masknet/shared-base'
+import { isSameAddress } from '@masknet/web3-shared-base'
+import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { useI18N } from '../../../../../utils/index.js'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages.js'
 import { WalletItem } from './WalletItem.js'
 import { MAX_WALLET_LIMIT } from '@masknet/shared'
-import classNames from 'classnames'
-import { useWallet, useWalletPrimary, useWallets } from '@masknet/plugin-infra/web3'
+import { useWallet, useWalletPrimary, useWallets } from '@masknet/web3-hooks-base'
 import { Services } from '../../../../service.js'
 
 const useStyles = makeStyles()({
-    header: {
-        padding: 10,
-        display: 'flex',
-        marginBottom: 1,
-        backgroundColor: '#ffffff',
-    },
     content: {
         overflow: 'auto',
         backgroundColor: '#F7F9FA',
@@ -30,25 +23,6 @@ const useStyles = makeStyles()({
         padding: 0,
         height: 'calc(100vh - 168px)',
         overflow: 'auto',
-    },
-    item: {
-        padding: 10,
-        borderBottom: '1px solid #F7F9FA',
-        cursor: 'pointer',
-    },
-    address: {
-        fontSize: 12,
-        color: '#1C68F3',
-        display: 'flex',
-        alignItems: 'center',
-    },
-    name: {
-        fontSize: 14,
-        color: '#1C68F3',
-        fontWeight: 500,
-    },
-    text: {
-        marginLeft: 4,
     },
     controller: {
         display: 'grid',
@@ -78,7 +52,7 @@ const useStyles = makeStyles()({
 
 const SwitchWallet = memo(() => {
     const { t } = useI18N()
-    const { classes } = useStyles()
+    const { classes, cx } = useStyles()
 
     const navigate = useNavigate()
     const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
@@ -124,7 +98,7 @@ const SwitchWallet = memo(() => {
             <div className={classes.controller}>
                 <Button
                     variant="contained"
-                    className={classNames(classes.button, classes.secondaryButton)}
+                    className={cx(classes.button, classes.secondaryButton)}
                     disabled={wallets.length >= MAX_WALLET_LIMIT}
                     onClick={handleClickCreate}>
                     {t('create')}

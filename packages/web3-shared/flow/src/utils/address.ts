@@ -1,24 +1,44 @@
-import { getEnumAsArray } from '@dimensiondev/kit'
+import { getEnumAsArray } from '@masknet/kit'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { getTokenConstant, ZERO_ADDRESS } from '../constants/index.js'
 import { ChainId, NetworkType, ProviderType } from '../types.js'
 
 export function formatAddress(address: string, size = 0) {
-    if (!isValidAddress(address)) return address
-    if (size === 0 || size >= 8) return address
-    return `${address.slice(0, Math.max(0, 2 + size))}...${address.slice(-size)}`
+    const format = (partial: string) => {
+        if (size === 0 || size >= 8) return partial
+        return `${partial.slice(0, Math.max(0, 2 + size))}...${partial.slice(-size)}`
+    }
+    if (isValidAccountAddress(address)) return format(address)
+    if (isValidContractAddress(address)) return format(`0x${address.split(/\./g)[1]}`)
+    return address
 }
 
-export function isValidAddress(address: string) {
+export function formatTokenId(id: string) {
+    return `#${id}`
+}
+
+export function isValidAccountAddress(address: string) {
     return /0x\w{16}/.test(address)
 }
 
-export function isValidChainId(chainId: ChainId) {
+export function isValidContractAddress(address: string) {
+    return /A\.\w{16}\.\w+/.test(address)
+}
+
+export function isValidAddress(address: string) {
+    return isValidAccountAddress(address) || isValidContractAddress(address)
+}
+
+export function isValidChainId(chainId?: ChainId) {
     return getEnumAsArray(ChainId).some((x) => x.value === chainId)
 }
 
 export function getDefaultChainId() {
     return ChainId.Mainnet
+}
+
+export function getInvalidChainId() {
+    return ChainId.Invalid
 }
 
 export function getDefaultNetworkType() {
@@ -31,6 +51,17 @@ export function getDefaultProviderType() {
 
 export function getZeroAddress() {
     return ZERO_ADDRESS
+}
+
+export function getContractAddress(address: string) {
+    if (isValidContractAddress(address)) {
+        const [_, contractAddress, ...identifierFragments] = address.split(/\./g)
+        return {
+            address: `0x${contractAddress}`,
+            identifier: identifierFragments.join('.'),
+        }
+    }
+    return
 }
 
 export function getNativeTokenAddress(chainId = ChainId.Mainnet) {

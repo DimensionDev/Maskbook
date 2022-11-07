@@ -84,7 +84,7 @@
         "Rinkeby": ["https://rinkeby.infura.io/v3/d65858b010d249419cf8687eca12b094"],
         "Kovan": ["https://kovan.infura.io/v3/d65858b010d249419cf8687eca12b094"],
         "Gorli": ["https://goerli.infura.io/v3/d65858b010d249419cf8687eca12b094"],
-        "BSC": ["https://bsc-dataseed1.binance.org"],
+        "BSC": ["https://bsc-dataseed.binance.org"],
         "BSCT": ["https://data-seed-prebsc-1-s1.binance.org:8545"],
         "Matic": ["https://polygon-rpc.com/"],
         "Mumbai": ["https://matic-mumbai.chainstacklabs.com"],

@@ -1,6 +1,5 @@
-import classNames from 'classnames'
 import { useCallback, useMemo } from 'react'
-import { Card, Typography } from '@mui/material'
+import { Card, keyframes, Typography } from '@mui/material'
 import { ChainId, chainResolver, networkResolver } from '@masknet/web3-shared-evm'
 import { useOpenShareTxDialog } from '@masknet/shared'
 import { usePostLink } from '../../../../components/DataSource/usePostInfo.js'
@@ -15,9 +14,105 @@ import { useAvailabilityComputed } from '../hooks/useAvailabilityComputed.js'
 import { useClaimCallback } from '../hooks/useClaimCallback.js'
 import { useRefundCallback } from '../hooks/useRefundCallback.js'
 import { OperationFooter } from './OperationFooter.js'
-import { useStyles } from './useStyles.js'
-import { NetworkPluginID, formatBalance } from '@masknet/web3-shared-base'
-import { useAccount, useNetworkType, useWeb3 } from '@masknet/plugin-infra/web3'
+import { formatBalance } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { useChainContext, useWeb3 } from '@masknet/web3-hooks-base'
+import { makeStyles } from '@masknet/theme'
+
+export const useStyles = makeStyles()((theme) => {
+    const spinningAnimationKeyFrames = keyframes`
+to {
+  transform: rotate(360deg)
+}`
+    return {
+        root: {
+            borderRadius: theme.spacing(1),
+            padding: theme.spacing(3),
+            background: '#DB0632',
+            position: 'relative',
+            display: 'flex',
+            color: theme.palette.common.white,
+            flexDirection: 'column',
+            justifyContent: 'space-between',
+            height: 335,
+            boxSizing: 'border-box',
+            backgroundImage: `url(${new URL('./cover.png', import.meta.url)})`,
+            backgroundSize: 'contain',
+            [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
+                padding: theme.spacing(1, 1.5),
+                height: 202,
+            },
+            width: '100%',
+        },
+        header: {
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'flex-start',
+        },
+        content: {
+            display: 'flex',
+            flex: 1,
+            flexDirection: 'column',
+            alignItems: 'flex-start',
+            justifyContent: 'space-between',
+        },
+        bottomContent: {
+            width: '100%',
+            display: 'flex',
+            justifyContent: 'space-between',
+            flexWrap: 'wrap',
+        },
+        myStatus: {
+            fontSize: 14,
+            color: '#FAD85A',
+            fontWeight: 'bold',
+            [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
+                fontSize: 14,
+                left: 12,
+                bottom: 8,
+            },
+        },
+        from: {
+            fontSize: '14px',
+            color: '#FFFFFF',
+            fontWeight: 'bold',
+            [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
+                fontSize: 14,
+                right: 12,
+                bottom: 8,
+            },
+        },
+        label: {
+            borderRadius: theme.spacing(1),
+            padding: theme.spacing(0.2, 1),
+            background: 'rgba(0, 0, 0, 0.2)',
+            textTransform: 'capitalize',
+            position: 'absolute',
+            right: 12,
+            top: 8,
+        },
+        words: {
+            color: '#FAD85A',
+            fontSize: 20,
+            whiteSpace: 'pre',
+            textOverflow: 'ellipsis',
+            overflow: 'hidden',
+            width: '85%',
+            minWidth: 300,
+            [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
+                fontSize: 14,
+            },
+        },
+        fullWidthBox: {
+            width: '100%',
+        },
+        loadingText: {
+            textAlign: 'center',
+            fontSize: 24,
+            marginTop: 210,
+        },
+    }
+})
 
 export interface RedPacketProps {
     payload: RedPacketJSONPayload
@@ -32,8 +127,7 @@ export function RedPacket(props: RedPacketProps) {
 
     // context
     const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM)
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const networkType = useNetworkType(NetworkPluginID.PLUGIN_EVM)
+    const { account, networkType } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
     // #region token detailed
     const {
@@ -153,7 +247,7 @@ export function RedPacket(props: RedPacketProps) {
 
     return (
         <>
-            <Card className={classNames(classes.root)} component="article" elevation={0}>
+            <Card className={classes.root} component="article" elevation={0}>
                 <div className={classes.header}>
                     {/* it might be fontSize: 12 on twitter based on theme? */}
                     {canFetch && listOfStatus.length ? (
@@ -162,7 +256,7 @@ export function RedPacket(props: RedPacketProps) {
                         </Typography>
                     ) : null}
                 </div>
-                <div className={classNames(classes.content)}>
+                <div className={classes.content}>
                     <div className={classes.fullWidthBox}>
                         <Typography className={classes.words} variant="h6">
                             {payload.sender.message}

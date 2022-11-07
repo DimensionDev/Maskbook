@@ -2,7 +2,7 @@ import { Suspense } from 'react'
 import { Skeleton } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { FindTrumanCard } from './FindTrumanCard.js'
-import { range } from 'lodash-unified'
+import { range } from 'lodash-es'
 
 const useStyles = makeStyles()((theme) => {
     return {

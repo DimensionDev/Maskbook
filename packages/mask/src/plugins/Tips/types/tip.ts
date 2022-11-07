@@ -1,18 +1,14 @@
-export enum TipType {
-    Token = 'token',
-    NFT = 'nft',
+import type { SocialAccount } from '@masknet/web3-shared-base'
+
+export enum TipsType {
+    Tokens = 'tokens',
+    Collectibles = 'collectibles',
 }
 
-export interface TipsAccount {
-    address: string
-    name?: string
-    verified?: boolean
-    last_checked_at?: string
-}
 export interface TipTask {
     recipient?: string
     recipientSnsId?: string
-    addresses: TipsAccount[]
+    accounts: SocialAccount[]
 }
 
 export type TipNFTKeyPair = [address: string, tokenId: string]

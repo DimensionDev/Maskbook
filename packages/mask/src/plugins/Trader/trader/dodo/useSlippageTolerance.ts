@@ -1,4 +1,4 @@
-import { clamp } from 'lodash-unified'
+import { clamp } from 'lodash-es'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { SLIPPAGE_MAX, SLIPPAGE_MIN } from '../../constants/index.js'
 import { currentSlippageSettings } from '../../settings.js'

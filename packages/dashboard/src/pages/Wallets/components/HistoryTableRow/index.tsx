@@ -1,15 +1,14 @@
 import { memo } from 'react'
-import classNames from 'classnames'
 import formatDateTime from 'date-fns/format'
 import { Icons } from '@masknet/icons'
-import { useReverseAddress, useWeb3State } from '@masknet/plugin-infra/web3'
+import { useReverseAddress, useWeb3State } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { ChainId, DebankTransactionDirection, SchemaType, ZerionTransactionDirection } from '@masknet/web3-shared-evm'
 import { Box, Link, Stack, TableCell, TableRow, Tooltip, Typography } from '@mui/material'
 import { TransactionIcon } from '../TransactionIcon/index.js'
 import { TokenType, Transaction } from '@masknet/web3-shared-base'
-import BigNumber from 'bignumber.js'
+import { BigNumber } from 'bignumber.js'
 import fromUnixTime from 'date-fns/fromUnixTime'
 
 const useStyles = makeStyles()((theme) => ({
@@ -84,7 +83,7 @@ export interface HistoryTableRowUIProps extends HistoryTableRowProps {
 
 export const HistoryTableRowUI = memo<HistoryTableRowUIProps>(
     ({ transaction, selectedChainId, formattedType, domain }) => {
-        const { classes } = useStyles()
+        const { classes, cx } = useStyles()
         const { Others } = useWeb3State()
         return (
             <TableRow className={classes.hover}>
@@ -114,7 +113,7 @@ export const HistoryTableRowUI = memo<HistoryTableRowUIProps>(
                         return (
                             <Stack
                                 key={index}
-                                className={classNames(classes.pair, { [classes.send]: direction })}
+                                className={cx(classes.pair, { [classes.send]: direction })}
                                 justifyContent="center"
                                 gap={2}
                                 direction="row">

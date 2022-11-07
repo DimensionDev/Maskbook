@@ -1,8 +1,7 @@
 import { memo } from 'react'
-import { ListItemAvatar, ListItemText } from '@mui/material'
-import ListItemButton from '@mui/material/ListItemButton'
+import { ListItemAvatar, ListItemText, ListItemButton } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import type { DefaultComponentProps } from '@mui/material/OverridableComponent'
+import type { DefaultComponentProps } from '@mui/material/OverridableComponent.js'
 import type { ListItemTypeMap } from '@mui/material/ListItem'
 import { Avatar } from '../../../utils/index.js'
 import type { ProfileInformation as Profile } from '@masknet/shared-base'
@@ -31,9 +30,6 @@ const useStyle = makeStyles()((theme) => ({
         textOverflow: 'ellipsis',
         whiteSpace: 'nowrap',
         overflow: 'hidden',
-    },
-    networkHint: {
-        color: theme.palette.grey[500],
     },
 }))
 /**

@@ -1,28 +1,31 @@
 import { useMemo } from 'react'
-import { flatMap } from 'lodash-unified'
+import { flatMap } from 'lodash-es'
 import type { Pair } from '@uniswap/v2-sdk'
 import type { Currency, Token } from '@uniswap/sdk-core'
 import { toUniswapToken } from '../../helpers/index.js'
 import { PairState, usePairs } from './usePairs.js'
 import type { TradeProvider } from '@masknet/public-api'
 import { useGetTradeContext } from '../useGetTradeContext.js'
-import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
-import { chainResolver } from '@masknet/web3-shared-evm'
+import type { ChainId } from '@masknet/web3-shared-evm'
+import { useChainContext, useNetworkContext, useWeb3State } from '@masknet/web3-hooks-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 
 export function useAllCurrencyCombinations(tradeProvider: TradeProvider, currencyA?: Currency, currencyB?: Currency) {
-    const { targetChainId: chainId } = TargetChainIdContext.useContainer()
-    const chainIdValid = chainResolver.isValid(chainId)
+    const { chainId } = useChainContext()
+    const { Others } = useWeb3State()
+    const { pluginID } = useNetworkContext()
+    const chainIdValid = Others?.chainResolver.isValid(chainId)
     const context = useGetTradeContext(tradeProvider)
 
     const [tokenA, tokenB] = chainIdValid ? [currencyA?.wrapped, currencyB?.wrapped] : [undefined, undefined]
 
     const bases: Token[] = useMemo(() => {
-        if (!chainIdValid) return []
-        const common = context?.AGAINST_TOKENS?.[chainId] ?? []
-        const additionalA = tokenA ? context?.ADDITIONAL_TOKENS?.[chainId]?.[tokenA.address] ?? [] : []
-        const additionalB = tokenB ? context?.ADDITIONAL_TOKENS?.[chainId]?.[tokenB.address] ?? [] : []
-        return [...common, ...additionalA, ...additionalB].map((x) => toUniswapToken(chainId, x))
-    }, [chainId, chainIdValid, tokenA?.address, tokenB?.address])
+        if (!chainIdValid || pluginID !== NetworkPluginID.PLUGIN_EVM) return []
+        const common = context?.AGAINST_TOKENS?.[chainId as ChainId] ?? []
+        const additionalA = tokenA ? context?.ADDITIONAL_TOKENS?.[chainId as ChainId]?.[tokenA.address] ?? [] : []
+        const additionalB = tokenB ? context?.ADDITIONAL_TOKENS?.[chainId as ChainId]?.[tokenB.address] ?? [] : []
+        return [...common, ...additionalA, ...additionalB].map((x) => toUniswapToken(chainId as ChainId, x))
+    }, [chainId, chainIdValid, tokenA?.address, tokenB?.address, pluginID])
 
     const basePairs: Array<[Token, Token]> = useMemo(
         () => flatMap(bases, (base): Array<[Token, Token]> => bases.map((otherBase) => [base, otherBase])),
@@ -30,7 +33,7 @@ export function useAllCurrencyCombinations(tradeProvider: TradeProvider, currenc
     )
 
     return useMemo(() => {
-        if (!tokenA || !tokenB) return []
+        if (!tokenA || !tokenB || pluginID !== NetworkPluginID.PLUGIN_EVM) return []
 
         return [
             // the direct pair
@@ -46,13 +49,13 @@ export function useAllCurrencyCombinations(tradeProvider: TradeProvider, currenc
             .filter(([t0, t1]) => t0.address !== t1.address)
             .filter(([tokenA, tokenB]) => {
                 if (!chainIdValid) return true
-                const customBases = context?.CUSTOM_TOKENS?.[chainId]
+                const customBases = context?.CUSTOM_TOKENS?.[chainId as ChainId]
 
                 const customBasesA: Token[] | undefined = customBases?.[tokenA.address]?.map((x) =>
-                    toUniswapToken(chainId, x),
+                    toUniswapToken(chainId as ChainId, x),
                 )
                 const customBasesB: Token[] | undefined = customBases?.[tokenB.address]?.map((x) =>
-                    toUniswapToken(chainId, x),
+                    toUniswapToken(chainId as ChainId, x),
                 )
 
                 if (!customBasesA && !customBasesB) return true
@@ -62,7 +65,7 @@ export function useAllCurrencyCombinations(tradeProvider: TradeProvider, currenc
 
                 return true
             })
-    }, [tokenA?.address, tokenB?.address, bases, basePairs, chainId, chainIdValid])
+    }, [tokenA?.address, tokenB?.address, bases, basePairs, chainId, chainIdValid, pluginID])
 }
 
 export function useAllCommonPairs(tradeProvider: TradeProvider, currencyA?: Currency, currencyB?: Currency) {

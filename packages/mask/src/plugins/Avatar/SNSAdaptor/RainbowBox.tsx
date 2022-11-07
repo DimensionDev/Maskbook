@@ -54,7 +54,7 @@ interface RainbowBoxProps extends withClasses<'root'> {
     children?: React.ReactNode
 }
 export function RainbowBox(props: RainbowBoxProps) {
-    const classes = useStylesExtends(
+    const { classes } = useStylesExtends(
         useStyles({
             width: props.width,
             height: props.height,

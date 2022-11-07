@@ -1,14 +1,15 @@
 import { useMemo, useState, useEffect, useCallback } from 'react'
-import BigNumber from 'bignumber.js'
+import { BigNumber } from 'bignumber.js'
 import { chainResolver, formatWeiToEther } from '@masknet/web3-shared-evm'
 import { Tune } from '@mui/icons-material'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
+import type { NonPayableTx } from '@masknet/web3-contracts/types/types.js'
 import { Box, IconButton, Typography } from '@mui/material'
 import { WalletMessages } from '../../messages.js'
 import { TokenPrice } from '../../../../components/shared/TokenPrice.js'
-import { GasOptionType, multipliedBy, NetworkPluginID } from '@masknet/web3-shared-base'
-import { useChainId, useFungibleToken, useGasPrice } from '@masknet/plugin-infra/web3'
+import { GasOptionType, multipliedBy } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { useChainContext, useFungibleToken, useGasPrice } from '@masknet/web3-hooks-base'
 
 export interface GasSettingBarProps {
     gasLimit: number
@@ -21,7 +22,7 @@ export interface GasSettingBarProps {
 export function GasSettingBar(props: GasSettingBarProps) {
     const { gasLimit, gasPrice, maxFee, priorityFee, onChange } = props
 
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { value: nativeTokenDetailed } = useFungibleToken(NetworkPluginID.PLUGIN_EVM)
     const { value: gasPriceDefault = '0' } = useGasPrice(NetworkPluginID.PLUGIN_EVM)
 

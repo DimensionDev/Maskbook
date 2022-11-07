@@ -1,6 +1,6 @@
 /* eslint @dimensiondev/unicode/specific-set: ["error", { "only": "code" }] */
 import type React from 'react'
-import type { Option, Result } from 'ts-results'
+import type { Option, Result } from 'ts-results-es'
 import type { Subscription } from 'use-subscription'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
 import type { TypedMessage } from '@masknet/typed-message'
@@ -14,10 +14,10 @@ import type {
     EnhanceableSite,
     ExtensionSite,
     BindingProof,
+    PluginID,
+    NetworkPluginID,
 } from '@masknet/shared-base'
 import type {
-    NetworkPluginID,
-    SocialAddress,
     ChainDescriptor,
     NetworkDescriptor,
     ProviderDescriptor,
@@ -26,8 +26,9 @@ import type {
     Web3EnableRequirement,
     Web3UI,
     Web3State,
+    SocialAccount,
 } from '@masknet/web3-shared-base'
-import type { ChainId, SchemaType, Transaction } from '@masknet/web3-shared-evm'
+import type { ChainId as ChainIdEVM, Transaction as TransactionEVM } from '@masknet/web3-shared-evm'
 import type { Emitter } from '@servie/events'
 import type { UnboundedRegistry } from '@dimensiondev/holoflows-kit'
 
@@ -78,6 +79,7 @@ export declare namespace Plugin {
      */
     export interface DeferredDefinition<
         ChainId = unknown,
+        AddressType = unknown,
         SchemaType = unknown,
         ProviderType = unknown,
         NetworkType = unknown,
@@ -91,11 +93,12 @@ export declare namespace Plugin {
         TransactionParameter = unknown,
         Web3 = unknown,
         Web3Provider = unknown,
-    > extends Shared.Definition<ChainId, ProviderType, NetworkType> {
+    > extends Shared.Definition<ChainId, SchemaType, ProviderType, NetworkType> {
         /** Load the SNSAdaptor part of the plugin. */
         SNSAdaptor?: Loader<
             SNSAdaptor.Definition<
                 ChainId,
+                AddressType,
                 SchemaType,
                 ProviderType,
                 NetworkType,
@@ -115,6 +118,7 @@ export declare namespace Plugin {
         Dashboard?: Loader<
             Dashboard.Definition<
                 ChainId,
+                AddressType,
                 SchemaType,
                 ProviderType,
                 NetworkType,
@@ -165,7 +169,7 @@ export namespace Plugin.Shared {
             payload: JsonRpcPayload,
             options?: {
                 account?: string
-                chainId?: ChainId
+                chainId?: ChainIdEVM
                 popupsWindow?: boolean
             },
         ): Promise<JsonRpcResponse>
@@ -203,7 +207,7 @@ export namespace Plugin.Shared {
         generateSignResult(signer: ECKeyIdentifier, message: string): Promise<PersonaSignResult>
 
         /** Sign transaction */
-        signTransaction(address: string, transaction: Transaction): Promise<string>
+        signTransaction(address: string, transaction: TransactionEVM): Promise<string>
         /** Sign personal message, aka. eth.personal.sign() */
         signPersonalMessage(address: string, message: string): Promise<string>
         /** Sign typed data */
@@ -220,7 +224,12 @@ export namespace Plugin.Shared {
         /** Remove a old wallet */
         removeWallet(id: string, password?: string): Promise<void>
     }
-    export interface Definition<ChainId = unknown, ProviderType = unknown, NetworkType = unknown> {
+    export interface Definition<
+        ChainId = unknown,
+        SchemaType = unknown,
+        ProviderType = unknown,
+        NetworkType = unknown,
+    > {
         /**
          * ID of the plugin. It should be unique.
          * @example "com.mask.wallet"
@@ -311,6 +320,12 @@ export namespace Plugin.Shared {
         networks: SupportedNetworksDeclare
         /** The Web3 Network this plugin supports */
         web3?: Web3EnableRequirement
+        /**
+         * Requested origins.
+         * Only put necessary permissions here.
+         * https://developer.chrome.com/docs/extensions/mv3/match_patterns/
+         */
+        host_permissions?: string[]
     }
     export interface SupportedNetworksDeclare {
         /**
@@ -390,6 +405,7 @@ export namespace Plugin.SNSAdaptor {
     }
     export interface Definition<
         ChainId = unknown,
+        AddressType = unknown,
         SchemaType = unknown,
         ProviderType = unknown,
         NetworkType = unknown,
@@ -422,6 +438,7 @@ export namespace Plugin.SNSAdaptor {
         /** This is the context of the currently chosen network. */
         Web3State?: Web3State<
             ChainId,
+            AddressType,
             SchemaType,
             ProviderType,
             NetworkType,
@@ -567,6 +584,10 @@ export namespace Plugin.SNSAdaptor {
         category?: 'dapp' | 'other'
 
         nextIdRequired?: boolean
+        /**
+         * One plugin may has multiple part. E.g. Tips requires connected wallet, but Tips setting not.
+         */
+        entryWalletConnectedNotRequired?: boolean
 
         /**
          * Display using an eye-catching card and unable to be unlisted.
@@ -617,7 +638,7 @@ export namespace Plugin.SNSAdaptor {
             Decorator: InjectUI<{
                 identity?: SocialIdentity
                 persona?: string
-                socialAddressList?: Array<SocialAddress<NetworkPluginID>>
+                socialAccounts?: SocialAccount[]
             }>
             /**
              * The injected avatar settings button component
@@ -625,7 +646,7 @@ export namespace Plugin.SNSAdaptor {
             Settings?: InjectUI<{
                 identity?: SocialIdentity
                 persona?: string
-                socialAddressList?: Array<SocialAddress<NetworkPluginID>>
+                socialAccounts?: SocialAccount[]
             }>
         }
         Utils?: {
@@ -634,7 +655,7 @@ export namespace Plugin.SNSAdaptor {
              */
             shouldDisplay?(
                 identity?: SocialIdentity,
-                addressNames?: Array<SocialAddress<NetworkPluginID>>,
+                socialAccounts?: SocialAccount[],
                 sourceType?: AvatarRealmSourceType,
             ): boolean
         }
@@ -644,10 +665,14 @@ export namespace Plugin.SNSAdaptor {
         FocusingPost = 'focusing-post',
         Post = 'post',
         Profile = 'profile',
+        MirrorMenu = 'mirror-menu',
+        MirrorEntry = 'mirror-entry',
     }
     export interface TipsRealmOptions {
         identity?: ProfileIdentifier
         slot: TipsSlot
+        accounts?: SocialAccount[]
+        onStatusUpdate?(disabled: boolean): void
     }
     export interface TipsRealm {
         ID: string
@@ -695,22 +720,22 @@ export namespace Plugin.SNSAdaptor {
              */
             TabContent: InjectUI<{
                 identity?: SocialIdentity
-                socialAddress?: SocialAddress<NetworkPluginID>
+                socialAccount?: SocialAccount
             }>
         }
         Utils?: {
             /**
              * If it returns false, this tab will not be displayed.
              */
-            shouldDisplay?(identity?: SocialIdentity, addressName?: SocialAddress<NetworkPluginID>): boolean
+            shouldDisplay?(identity?: SocialIdentity, socialAccount?: SocialAccount): boolean
             /**
              * Filter social address.
              */
-            filter?: (x: SocialAddress<NetworkPluginID>) => boolean
+            filter?: (x: SocialAccount) => boolean
             /**
              * Sort social address in expected order.
              */
-            sorter?: (a: SocialAddress<NetworkPluginID>, z: SocialAddress<NetworkPluginID>) => number
+            sorter?: (a: SocialAccount, z: SocialAccount) => number
         }
     }
     export interface ProfileCover {
@@ -732,22 +757,22 @@ export namespace Plugin.SNSAdaptor {
              */
             Cover: InjectUI<{
                 identity?: SocialIdentity
-                socialAddressList?: Array<SocialAddress<NetworkPluginID>>
+                socialAccounts?: SocialAccount[]
             }>
         }
         Utils: {
             /**
              * If it returns false, this cover will not be displayed
              */
-            shouldDisplay?(identity?: SocialIdentity, addressNames?: Array<SocialAddress<NetworkPluginID>>): boolean
+            shouldDisplay?(identity?: SocialIdentity, socialAccount?: SocialAccount[]): boolean
             /**
-             * Filter social address
+             * Filter social account
              */
-            filterSocialAddress?(x: SocialAddress<NetworkPluginID>): boolean
+            filterSocialAccount?(x: SocialAccount): boolean
             /**
-             * Sort social address in expected order
+             * Sort social account in expected order
              */
-            sortSocialAddress?(a: SocialAddress<NetworkPluginID>, z: SocialAddress<NetworkPluginID>): number
+            sortSocialAccount?(a: SocialAccount, z: SocialAccount): number
         }
     }
 
@@ -769,7 +794,7 @@ export namespace Plugin.SNSAdaptor {
                 onOpenPopup: (route?: PopupRoutes, params?: Record<string, any>) => void
                 bindingWallets?: BindingProof[]
                 currentPersona?: ECKeyIdentifier
-                pluginId: PluginID
+                pluginID: PluginID
             }>
         }
     }
@@ -798,6 +823,7 @@ export namespace Plugin.Dashboard {
     // As you can see we currently don't have so much use case for an API here.
     export interface Definition<
         ChainId = unknown,
+        AddressType = unknown,
         SchemaType = unknown,
         ProviderType = unknown,
         NetworkType = unknown,
@@ -820,6 +846,7 @@ export namespace Plugin.Dashboard {
         /** This is the context of the currently chosen network. */
         Web3State?: Web3State<
             ChainId,
+            AddressType,
             SchemaType,
             ProviderType,
             NetworkType,
@@ -1114,58 +1141,6 @@ export interface IdentityResolved {
 }
 
 /**
- * All integrated Plugin IDs
- */
-export enum PluginID {
-    EVM = 'com.mask.evm',
-    Flow = 'com.mask.flow',
-    Solana = 'com.mask.solana',
-    Approval = 'com.maskbook.approval',
-    Avatar = 'com.maskbook.avatar',
-    ArtBlocks = 'io.artblocks',
-    Collectible = 'com.maskbook.collectibles',
-    CryptoArtAI = 'com.maskbook.cryptoartai',
-    dHEDGE = 'org.dhedge',
-    ENS = 'com.maskbook.ens',
-    NextID = 'com.mask.next_id',
-    External = 'io.mask.external',
-    Furucombo = 'app.furucombo',
-    FindTruman = 'org.findtruman',
-    Gitcoin = 'co.gitcoin',
-    GoodGhosting = 'co.good_ghosting',
-    MaskBox = 'com.maskbook.box',
-    Poll = 'com.maskbook.poll',
-    Profile = 'com.mask.profile',
-    Trader = 'com.maskbook.trader',
-    Tips = 'com.maskbook.tip',
-    Transak = 'com.maskbook.transak',
-    Valuables = 'com.maskbook.tweet',
-    DAO = 'money.juicebox',
-    Debugger = 'io.mask.debugger',
-    Example = 'io.mask.example',
-    RSS3 = 'bio.rss3',
-    RedPacket = 'com.maskbook.red_packet',
-    RedPacketNFT = 'com.maskbook.red_packet_nft',
-    Pets = 'com.maskbook.pets',
-    Game = 'com.maskbook.game',
-    Snapshot = 'org.snapshot',
-    Savings = 'com.savings',
-    ITO = 'com.maskbook.ito',
-    Wallet = 'com.maskbook.wallet',
-    PoolTogether = 'com.pooltogether',
-    UnlockProtocol = 'com.maskbook.unlockprotocol',
-    FileService = 'com.maskbook.fileservice',
-    CyberConnect = 'me.cyberconnect.app',
-    GoPlusSecurity = 'io.gopluslabs.security',
-    CrossChainBridge = 'io.mask.cross-chain-bridge',
-    Referral = 'com.maskbook.referral',
-    Web3Profile = 'io.mask.web3-profile',
-    Web3ProfileCard = 'io.mask.web3-profile-card',
-    ScamSniffer = 'io.scamsniffer.mask-plugin',
-    NFTCard = 'com.maskbook.nft-card',
-}
-
-/**
  * This namespace is not related to the plugin authors
  */
 // ---------------------------------------------------
@@ -1180,6 +1155,11 @@ export namespace Plugin.__Host {
         addI18NResource(pluginID: string, resources: Plugin.Shared.I18NResource): void
         createContext(id: string, signal: AbortSignal): Context
         signal?: AbortSignal
+        permission: PermissionReporter
+    }
+    export interface PermissionReporter {
+        hasPermission(host_permission: string[]): Promise<boolean>
+        events: Emitter<{ changed: [] }>
     }
     export interface EnabledStatusReporter {
         isEnabled(id: string): BooleanPreference | Promise<BooleanPreference>

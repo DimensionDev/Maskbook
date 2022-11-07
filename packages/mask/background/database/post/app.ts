@@ -9,7 +9,7 @@ import {
     convertRawMapToIdentifierMap,
 } from '@masknet/shared-base'
 import { nativeAPI } from '../../../shared/native-rpc/index.js'
-import { isNonNull } from '@dimensiondev/kit'
+import { isNonNull } from '@masknet/kit'
 
 export async function createPostDB(record: PostRecord, t?: PostReadWriteTransaction) {
     await nativeAPI?.api.create_post({ post: postInNative(record) as NativePostRecord })

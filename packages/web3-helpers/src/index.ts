@@ -1,10 +1,10 @@
+import { NetworkPluginID } from '@masknet/shared-base'
 import type {
     Connection,
     ConnectionOptions,
     Hub,
     HubOptions,
     NetworkDescriptor,
-    NetworkPluginID,
     ConnectionState,
     ProviderDescriptor,
     ProviderState,
@@ -27,6 +27,7 @@ export declare namespace Web3Helper {
     export type Definition = {
         [NetworkPluginID.PLUGIN_EVM]: {
             ChainId: EVM.ChainId
+            AddressType: EVM.AddressType
             SchemaType: EVM.SchemaType
             ProviderType: EVM.ProviderType
             NetworkType: EVM.NetworkType
@@ -44,6 +45,7 @@ export declare namespace Web3Helper {
         }
         [NetworkPluginID.PLUGIN_FLOW]: {
             ChainId: Flow.ChainId
+            AddressType: Flow.AddressType
             SchemaType: Flow.SchemaType
             ProviderType: Flow.ProviderType
             NetworkType: Flow.NetworkType
@@ -61,6 +63,7 @@ export declare namespace Web3Helper {
         }
         [NetworkPluginID.PLUGIN_SOLANA]: {
             ChainId: Solana.ChainId
+            AddressType: Solana.AddressType
             SchemaType: Solana.SchemaType
             ProviderType: Solana.ProviderType
             NetworkType: Solana.NetworkType
@@ -100,6 +103,7 @@ export declare namespace Web3Helper {
         ? never
         : ConnectionState<
               Definition[T]['ChainId'],
+              Definition[T]['AddressType'],
               Definition[T]['SchemaType'],
               Definition[T]['ProviderType'],
               Definition[T]['Signature'],
@@ -121,6 +125,7 @@ export declare namespace Web3Helper {
         ? never
         : Connection<
               Definition[T]['ChainId'],
+              Definition[T]['AddressType'],
               Definition[T]['SchemaType'],
               Definition[T]['ProviderType'],
               Definition[T]['Signature'],
@@ -145,6 +150,7 @@ export declare namespace Web3Helper {
         ? never
         : Web3StateShared<
               Definition[T]['ChainId'],
+              Definition[T]['AddressType'],
               Definition[T]['SchemaType'],
               Definition[T]['ProviderType'],
               Definition[T]['NetworkType'],
@@ -166,6 +172,7 @@ export declare namespace Web3Helper {
         : Web3UIShared<Definition[T]['ChainId'], Definition[T]['ProviderType'], Definition[T]['NetworkType']>
 
     export type ChainIdAll = Definition[NetworkPluginID]['ChainId']
+    export type AddressTypeAll = Definition[NetworkPluginID]['AddressType']
     export type SchemaTypeAll = Definition[NetworkPluginID]['SchemaType']
     export type ProviderTypeAll = Definition[NetworkPluginID]['ProviderType']
     export type NetworkTypeAll = Definition[NetworkPluginID]['NetworkType']
@@ -179,6 +186,15 @@ export declare namespace Web3Helper {
     export type TransactionParameterAll = Definition[NetworkPluginID]['TransactionParameter']
     export type Web3All = Definition[NetworkPluginID]['Web3']
     export type Web3ProviderAll = Definition[NetworkPluginID]['Web3Provider']
+
+    export type FungibleTokenAll = FungibleToken<
+        Definition[NetworkPluginID]['ChainId'],
+        Definition[NetworkPluginID]['SchemaType']
+    >
+    export type NonFungibleTokenAll = NonFungibleToken<
+        Definition[NetworkPluginID]['ChainId'],
+        Definition[NetworkPluginID]['SchemaType']
+    >
 
     export type NetworkDescriptorAll = NetworkDescriptor<
         Definition[NetworkPluginID]['ChainId'],
@@ -198,6 +214,7 @@ export declare namespace Web3Helper {
 
     export type Web3ConnectionAll = Connection<
         Definition[NetworkPluginID]['ChainId'],
+        Definition[NetworkPluginID]['AddressType'],
         Definition[NetworkPluginID]['SchemaType'],
         Definition[NetworkPluginID]['ProviderType'],
         Definition[NetworkPluginID]['Signature'],
@@ -221,6 +238,7 @@ export declare namespace Web3Helper {
 
     export type Web3StateAll = Web3StateShared<
         Definition[NetworkPluginID]['ChainId'],
+        Definition[NetworkPluginID]['AddressType'],
         Definition[NetworkPluginID]['SchemaType'],
         Definition[NetworkPluginID]['ProviderType'],
         Definition[NetworkPluginID]['NetworkType'],
@@ -249,6 +267,10 @@ export declare namespace Web3Helper {
         S extends 'all' | void = void,
         T extends NetworkPluginID = NetworkPluginID,
     > = S extends 'all' ? Web3Helper.ChainIdAll : Web3Helper.Definition[T]['ChainId']
+    export type AddressTypeScope<
+        S extends 'all' | void = void,
+        T extends NetworkPluginID = NetworkPluginID,
+    > = S extends 'all' ? Web3Helper.AddressTypeAll : Web3Helper.Definition[T]['AddressType']
     export type NetworkTypeScope<
         S extends 'all' | void = void,
         T extends NetworkPluginID = NetworkPluginID,
@@ -319,6 +341,7 @@ export declare namespace Web3Helper {
         ? Web3StateAll
         : Web3StateShared<
               Definition[T]['ChainId'],
+              Definition[T]['AddressType'],
               Definition[T]['SchemaType'],
               Definition[T]['ProviderType'],
               Definition[T]['NetworkType'],
@@ -347,6 +370,7 @@ export declare namespace Web3Helper {
         ? Web3ConnectionAll
         : Connection<
               Definition[T]['ChainId'],
+              Definition[T]['AddressType'],
               Definition[T]['SchemaType'],
               Definition[T]['ProviderType'],
               Definition[T]['Signature'],

@@ -1,18 +1,20 @@
-import { useChainId, useWeb3State } from '@masknet/plugin-infra/web3'
 import { useEffect, useMemo, useState } from 'react'
-import type { TipsAccount } from '../../types/index.js'
+import { useChainContext, useWeb3State } from '@masknet/web3-hooks-base'
+import type { SocialAccount } from '@masknet/web3-shared-base'
 
 /**
  * Add name service
  */
-export function useTipAccountsCompletion(tipAccounts: TipsAccount[]) {
+export function useTipAccountsCompletion(accounts: SocialAccount[]) {
     const [map, setMap] = useState<Record<string, string>>({})
 
     const { NameService } = useWeb3State()
-    const chainId = useChainId()
+    const { chainId } = useChainContext()
     useEffect(() => {
         if (!NameService?.reverse) return
-        tipAccounts.forEach(async ({ address }) => {
+        accounts.forEach(async ({ address, label: originalName }) => {
+            if (originalName) return
+
             const name = await NameService.reverse!(chainId, address)
             if (!name) return
             setMap((oldMap) => ({
@@ -20,13 +22,13 @@ export function useTipAccountsCompletion(tipAccounts: TipsAccount[]) {
                 [address]: name,
             }))
         })
-    }, [chainId, tipAccounts, NameService])
+    }, [chainId, accounts, NameService])
 
     return useMemo(() => {
-        if (!Object.keys(map).length) return tipAccounts
-        return tipAccounts.map((config) => ({
+        if (!Object.keys(map).length) return accounts
+        return accounts.map((config) => ({
             ...config,
-            name: map[config.address] || config.name,
+            name: config.label || map[config.address],
         }))
-    }, [tipAccounts, map])
+    }, [accounts, map])
 }

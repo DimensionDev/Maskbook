@@ -7,7 +7,7 @@ import type { DecryptionProgress, FailureDecryption, SuccessDecryption } from '.
 import { DecryptPostSuccess } from './DecryptedPostSuccess.js'
 import { DecryptPostAwaiting } from './DecryptPostAwaiting.js'
 import { DecryptPostFailed } from './DecryptPostFailed.js'
-import { encodeArrayBuffer, safeUnreachable } from '@dimensiondev/kit'
+import { encodeArrayBuffer, safeUnreachable } from '@masknet/kit'
 import { activatedSocialNetworkUI } from '../../../social-network/index.js'
 import type {
     DecryptionContext,
@@ -15,7 +15,7 @@ import type {
 } from '../../../../background/services/crypto/decryption.js'
 import { DecryptIntermediateProgressKind, DecryptProgressKind } from '@masknet/encryption'
 import { type PostContext, usePostInfoDetails, usePostInfo } from '@masknet/plugin-infra/content-script'
-import { Some } from 'ts-results'
+import { Some } from 'ts-results-es'
 
 function progressReducer(
     state: Array<{

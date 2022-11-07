@@ -1,7 +1,7 @@
 import { DOMProxy, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { createInjectHooksRenderer, Plugin, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
 import { makeStyles } from '@masknet/theme'
-import { memo, useMemo } from 'react'
+import { memo, useMemo, useState } from 'react'
 import { useAsync } from 'react-use'
 import { createReactRootShadowed, startWatch } from '../../../../utils/index.js'
 import { normalFollowButtonSelector as selector } from '../../utils/selector.js'
@@ -24,7 +24,7 @@ export function injectTipsButtonOnFollowButton(signal: AbortSignal) {
                 const twitterId = getTwitterId(ele)
                 if (!twitterId) return
 
-                const proxy = DOMProxy({ afterShadowRootInit: { mode: 'closed' } })
+                const proxy = DOMProxy({ afterShadowRootInit: { mode: process.env.shadowRootMode } })
                 proxy.realCurrent = ele
                 const identity = await getUserIdentity(twitterId)
                 if (!identity) return
@@ -46,6 +46,9 @@ export function injectTipsButtonOnFollowButton(signal: AbortSignal) {
 }
 
 const useStyles = makeStyles()((theme) => ({
+    disabled: {
+        display: 'none',
+    },
     slot: {
         height: 36,
         width: 36,
@@ -53,18 +56,6 @@ const useStyles = makeStyles()((theme) => ({
         left: -10,
         top: -2,
         transform: 'translate(-100%)',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderWidth: 1,
-        borderStyle: 'solid',
-        borderColor: theme.palette.mode === 'dark' ? '#536471' : '#d2dbe0',
-        borderRadius: '50%',
-        verticalAlign: 'top',
-        color: theme.palette.text.primary,
-        '&:hover': {
-            backgroundColor: theme.palette.mode === 'dark' ? 'rgba(239,243,244,0.1)' : 'rgba(15,20,25,0.1)',
-        },
     },
 }))
 
@@ -73,19 +64,26 @@ interface Props {
 }
 
 const FollowButtonTipsSlot = memo(({ userId }: Props) => {
-    const { classes } = useStyles()
+    const { classes, cx } = useStyles()
 
     const { value: identity } = useAsync(async () => getUserIdentity(userId), [userId])
+    const [disabled, setDisabled] = useState(true)
     const component = useMemo(() => {
         const Component = createInjectHooksRenderer(
             useActivatedPluginsSNSAdaptor.visibility.useNotMinimalMode,
             (plugin) => plugin.TipsRealm?.UI?.Content,
         )
 
-        return <Component identity={identity?.identifier} slot={Plugin.SNSAdaptor.TipsSlot.FollowButton} />
+        return (
+            <Component
+                identity={identity?.identifier}
+                slot={Plugin.SNSAdaptor.TipsSlot.FollowButton}
+                onStatusUpdate={setDisabled}
+            />
+        )
     }, [identity?.identifier])
 
     if (!identity?.identifier) return null
 
-    return <span className={classes.slot}>{component}</span>
+    return <span className={cx(classes.slot, disabled ? classes.disabled : null)}>{component}</span>
 })
