@@ -2,7 +2,9 @@ import { getPermissionRequestURL } from '../../../shared/definitions/routes.js'
 import { Flags } from '../../../shared/flags.js'
 import { MaskMessages } from '../../../shared/messages.js'
 import type { SiteAdaptor } from '../../../shared/site-adaptors/types.js'
-export async function requestExtensionPermission(permission: browser.permissions.Permissions): Promise<boolean> {
+import type { Permissions } from 'webextension-polyfill'
+
+export async function requestExtensionPermission(permission: Permissions.Permissions): Promise<boolean> {
     if (Flags.no_web_extension_dynamic_permission_request) return true
     if (await browser.permissions.contains(permission)) return true
     try {
@@ -42,7 +44,7 @@ export function hasHostPermission(origins: readonly string[]) {
     return browser.permissions.contains({ origins: [...origins] })
 }
 
-export function queryExtensionPermission(permission: browser.permissions.Permissions): Promise<boolean> {
+export function queryExtensionPermission(permission: Permissions.AnyPermissions): Promise<boolean> {
     return browser.permissions.contains(permission)
 }
 

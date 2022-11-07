@@ -28,6 +28,9 @@ export interface FeedCardProps extends Omit<HTMLProps<HTMLDivElement>, 'type' | 
 const useStyles = makeStyles()((theme) => ({
     inspectable: {
         cursor: 'pointer',
+        '&:hover': {
+            backgroundColor: theme.palette.maskColor.bg,
+        },
     },
     header: {
         display: 'flex',

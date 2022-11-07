@@ -76,6 +76,7 @@ export function createConfiguration(_inputFlags: BuildFlags): Configuration {
                 buffer: require.resolve('buffer'),
                 'text-encoding': require.resolve('@sinonjs/text-encoding'),
             },
+            conditionNames: ['mask-src', '...'],
         },
         module: {
             parser: {

@@ -2,10 +2,9 @@ import { noop } from 'lodash-es'
 import { MaskMessages } from '../../../shared/messages.js'
 import { Flags } from '../../../shared/flags.js'
 import { hmr } from '../../../utils-pure/index.js'
+import type { ExtensionTypes, WebNavigation } from 'webextension-polyfill'
 
 const { signal } = hmr(import.meta.webpackHot)
-type Args = browser.webNavigation.TransitionNavListener extends browser.webNavigation.NavListener<infer U> ? U : never
-
 export const injectedScriptURL = '/injected-script.js'
 export const maskSDK_URL = '/mask-sdk.js'
 export const contentScriptURL = '/generated__content__script.html'
@@ -17,7 +16,7 @@ function InjectContentScript(signal: AbortSignal) {
     const maskSDK = fetchUserScript(maskSDK_URL)
     const injectContentScript = fetchInjectContentScript(contentScriptURL)
 
-    async function onCommittedListener(arg: Args): Promise<void> {
+    async function onCommittedListener(arg: WebNavigation.OnCommittedDetailsType): Promise<void> {
         if (arg.url === 'about:blank') return
         if (!arg.url.startsWith('http')) return
         const contains = await browser.permissions.contains({ origins: [arg.url] })
@@ -27,7 +26,7 @@ function InjectContentScript(signal: AbortSignal) {
          * A `manifest.webextension-shim.json` field is used to declare user scripts.
          */
         if (!Flags.support_declarative_user_script) {
-            const detail: browser.extensionTypes.InjectDetails = { runAt: 'document_start', frameId: arg.frameId }
+            const detail: ExtensionTypes.InjectDetails = { runAt: 'document_start', frameId: arg.frameId }
 
             // #region Injected script
             if (Flags.has_firefox_xray_vision) {
@@ -88,7 +87,7 @@ function fetchInjectContentScript(entryHTML: string) {
     const contentScripts = fetchInjectContentScriptList(entryHTML)
     return async (tabID: number, frameId: number | undefined) => {
         for (const script of await contentScripts) {
-            const option: browser.extensionTypes.InjectDetails = {
+            const option: ExtensionTypes.InjectDetails = {
                 runAt: 'document_idle',
                 frameId,
                 file: script,

@@ -7,8 +7,7 @@ import {
     injectedScriptURL,
     maskSDK_URL,
 } from './InjectContentScripts.js'
-
-type Args = browser.webNavigation.TransitionNavListener extends browser.webNavigation.NavListener<infer U> ? U : never
+import type { WebNavigation, Scripting } from 'webextension-polyfill'
 
 const { signal } = hmr(import.meta.webpackHot)
 if (process.env.manifest === '3') {
@@ -19,7 +18,7 @@ if (process.env.manifest === '3') {
 function OldImplementation(signal: AbortSignal) {
     const injectContentScript = fetchInjectContentScriptList(contentScriptURL)
 
-    async function onCommittedListener(arg: Args): Promise<void> {
+    async function onCommittedListener(arg: WebNavigation.OnCommittedDetailsType): Promise<void> {
         if (arg.url === 'about:blank') return
         if (!arg.url.startsWith('http')) return
 
@@ -32,6 +31,7 @@ function OldImplementation(signal: AbortSignal) {
         browser.scripting.executeScript({
             files: [injectedScriptURL, maskSDK_URL],
             target: { tabId: arg.tabId, frameIds: [arg.frameId] },
+            // @ts-expect-error Chrome only API
             world: 'MAIN',
         })
 
@@ -62,15 +62,16 @@ async function unregisterExistingScripts() {
         .catch(noop)
 }
 
-function prepareMainWorldScript(matches: string[]): browser.scripting.RegisteredContentScript[] {
+function prepareMainWorldScript(matches: string[]): Scripting.RegisteredContentScript[] {
     if (Flags.support_declarative_user_script) return []
     if (Flags.has_firefox_xray_vision) return []
 
-    const result: browser.scripting.RegisteredContentScript = {
+    const result: Scripting.RegisteredContentScript = {
         id: 'injected',
         allFrames: true,
         js: [injectedScriptURL],
         persistAcrossSessions: false,
+        // @ts-expect-error Chrome API
         world: 'MAIN',
         runAt: 'document_start',
         matches,
@@ -79,23 +80,25 @@ function prepareMainWorldScript(matches: string[]): browser.scripting.Registered
     return [result]
 }
 
-async function prepareContentScript(matches: string[]): Promise<browser.scripting.RegisteredContentScript[]> {
-    const xrayScript: browser.scripting.RegisteredContentScript = {
+async function prepareContentScript(matches: string[]): Promise<Scripting.RegisteredContentScript[]> {
+    const xrayScript: Scripting.RegisteredContentScript = {
         id: 'xray',
         allFrames: true,
         js: [injectedScriptURL],
         persistAcrossSessions: false,
+        // @ts-expect-error Chrome API
         world: 'ISOLATED',
         runAt: 'document_start',
         matches,
     }
     if (Flags.mask_SDK_ready) xrayScript.js!.push(maskSDK_URL)
 
-    const content: browser.scripting.RegisteredContentScript = {
+    const content: Scripting.RegisteredContentScript = {
         id: 'content',
         allFrames: true,
         js: await fetchInjectContentScriptList(contentScriptURL),
         persistAcrossSessions: false,
+        // @ts-expect-error Chrome API
         world: 'ISOLATED',
         runAt: 'document_idle',
         matches,

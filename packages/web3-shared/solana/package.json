@@ -5,7 +5,7 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.js",
-      "webpack": "./src/index.ts",
+      "mask-src": "./src/index.ts",
       "default": "./dist/index.js"
     }
   },

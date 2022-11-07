@@ -783,6 +783,9 @@ importers:
       '@types/uuid':
         specifier: ^8.3.4
         version: 8.3.4
+      '@types/webextension-polyfill':
+        specifier: ^0.9.1
+        version: 0.9.1
       '@uniswap/sdk-core':
         specifier: ^3.0.1
         version: 3.0.1
@@ -1955,6 +1958,9 @@ importers:
 
   packages/polyfills:
     dependencies:
+      '@types/webextension-polyfill':
+        specifier: ^0.9.1
+        version: 0.9.1
       buffer:
         specifier: ^6.0.3
         version: 6.0.3
@@ -1992,9 +1998,6 @@ importers:
       rollup-plugin-terser:
         specifier: ^7.0.2
         version: 7.0.2_rollup@2.79.0
-      web-ext-types:
-        specifier: ^3.1.0
-        version: 3.2.1
 
   packages/polyfills/types: {}
 
@@ -11727,6 +11730,10 @@ packages:
 
   /@types/web/0.0.78:
     resolution: {integrity: sha512-1Apkpr0zolMDECgtokp9ztApWkdlg4Ey4UJ3sKHAGjCHoiUq1/kBd0lR+JxeHlQVqAC6tike7tUJ9uLbVNwsxQ==}
+    dev: false
+
+  /@types/webextension-polyfill/0.9.1:
+    resolution: {integrity: sha512-6aNzPIhqKlAV9t06nwSH3/veAceYE2dS2RVFZI8V1+UXHqsFNB6cRwxNmheiBvEGRc45E/gyZNzH0xAYIC27KA==}
     dev: false
 
   /@types/webpack-env/1.18.0:
