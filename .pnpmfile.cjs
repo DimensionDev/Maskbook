@@ -76,10 +76,19 @@ function assertInstallationSourceValid(parentPackage, dependedPackage, installat
 
 /* cspell:enable */
 
-function validatePackage({ dependencies, devDependencies, optionalDependencies, peerDependencies, name }) {
+function validatePackage({ dependencies, optionalDependencies, peerDependencies, name, exports }) {
+    if (
+        exports &&
+        !name.startsWith('@dimensiondev') &&
+        !name.startsWith('@masknet') &&
+        JSON.stringify(exports).includes('mask-src')
+    ) {
+        throw new Error(
+            'A package ' + name + ' out of @dimensiondev or @masknet scope using mask-src in exports field.',
+        )
+    }
     for (const [k, v] of notNormativeInstall(dependencies)) assertInstallationSourceValid(name, k, v)
     // devDependencies won't be installed for intermediate dependencies
-    // for (const [k, v] of notNormativeInstall(devDependencies)) assertInstallationSourceValid(name, k, v)
     for (const [k, v] of notNormativeInstall(optionalDependencies)) assertInstallationSourceValid(name, k, v)
     for (const [k, v] of notNormativeInstall(peerDependencies)) assertInstallationSourceValid(name, k, v)
 }

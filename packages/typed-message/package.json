@@ -5,12 +5,12 @@
   "exports": {
     ".": {
       "types": "./dist/base/index.d.ts",
-      "webpack": "./base/index.ts",
+      "mask-src": "./base/index.ts",
       "default": "./dist/base/index.js"
     },
     "./dom": {
       "types": "./dist/dom/index.d.ts",
-      "webpack": "./dom/index.ts",
+      "mask-src": "./dom/index.ts",
       "default": "./dist/dom/index.js"
     }
   },
