@@ -3,12 +3,13 @@ export namespace ScamWarningAPI {
         name: string
         url: string
         path?: string
-        category?: number
-        subcategory?: number
+        category?: string
+        subcategory?: string
         description: string
     }
 
     export interface Provider {
         getScamWarning(key: string): Promise<Info | undefined>
+        getScamWarnings(keys: string[]): Promise<Info[] | undefined>
     }
 }

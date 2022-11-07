@@ -12,9 +12,8 @@ const sns: Plugin.SNSAdaptor.Definition = {
     },
     PostInspector() {
         const links = usePostInfoDetails.mentionedLinks()
-        const link = ''
-        if (!link) return null
-        return <PreviewCard url={link} />
+        if (!links) return null
+        return <PreviewCard links={links} />
     },
 }
 
