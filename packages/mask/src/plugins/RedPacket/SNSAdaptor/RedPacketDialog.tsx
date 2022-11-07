@@ -81,8 +81,11 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const chainIdValid = useChainIdValid(NetworkPluginID.PLUGIN_EVM, chainId)
     const approvalDefinition = useActivatedPlugin(PluginID.RedPacket, 'any')
+    const [currentTab, onChange, tabs] = useTabs('tokens', 'collectibles')
     const chainIdList = compact<ChainId>(
-        approvalDefinition?.enableRequirement.web3?.[NetworkPluginID.PLUGIN_EVM]?.supportedChainIds ?? [],
+        currentTab === tabs.tokens
+            ? approvalDefinition?.enableRequirement.web3?.[NetworkPluginID.PLUGIN_EVM]?.supportedChainIds ?? []
+            : [ChainId.Mainnet, ChainId.BSC, ChainId.Matic],
     )
     const networkTabChainId = chainIdValid && chainIdList.includes(chainId) ? chainId : ChainId.Mainnet
 
@@ -175,7 +178,6 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
         : isCreateStep
         ? t.display_name()
         : t.details()
-    const [currentTab, onChange, tabs] = useTabs('tokens', 'collectibles')
 
     return (
         <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM, chainId: networkTabChainId }}>
@@ -212,6 +214,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                                             tabPaper: classes.tabPaper,
                                         }}
                                         chains={chainIdList}
+                                        hideArrowButton={currentTab === tabs.collectibles}
                                     />
                                 </div>
                                 <div

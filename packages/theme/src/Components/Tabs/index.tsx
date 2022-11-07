@@ -25,6 +25,7 @@ export interface MaskTabListProps
     onChange(event: object, value: string): void
     'aria-label': string
     variant?: MaskTabVariant
+    hideArrowButton?: boolean
 }
 
 const ArrowButtonWrap = styled(Button)(({ theme }) => ({
@@ -252,12 +253,12 @@ export const MaskTabList = forwardRef<HTMLDivElement, MaskTabListProps>((props, 
                     <FlexButtonGroupWrap
                         maskVariant={variant}
                         isOpen={open}
-                        isOverflow={isTabsOverflow}
+                        isOverflow={isTabsOverflow && !props.hideArrowButton}
                         {...rest}
                         ref={innerRef}
                         role="tablist">
                         {flexibleTabs}
-                        {isTabsOverflow && (
+                        {isTabsOverflow && !props.hideArrowButton && (
                             <ArrowButtonWrap
                                 variant="text"
                                 size="small"
