@@ -2400,6 +2400,9 @@ importers:
 
   packages/typed-message/base:
     dependencies:
+      '@msgpack/msgpack':
+        specifier: ^2.8.0
+        version: 2.8.0
       anchorme:
         specifier: ^2.1.2
         version: 2.1.2
@@ -2415,12 +2418,6 @@ importers:
       '@masknet/typed-message':
         specifier: workspace:*
         version: link:../base
-      '@msgpack/msgpack':
-        specifier: ^2.8.0
-        version: 2.8.0
-      anchorme:
-        specifier: ^2.1.2
-        version: 2.1.2
       immer:
         specifier: ^9.0.16
         version: 9.0.16_5xmqd5oohffxunmhptcxd5g33e
