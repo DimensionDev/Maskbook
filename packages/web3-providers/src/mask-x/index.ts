@@ -1,5 +1,5 @@
 import urlcat from 'urlcat'
-import { compact } from 'lodash-unified'
+import { compact } from 'lodash-es'
 import { resolveCrossOriginURL } from '@masknet/web3-shared-base'
 import { MaskX_BaseAPI } from '../types/MaskX.js'
 import { MASK_X_DEFAULT_PAGINATION, MASK_X_ROOT_URL } from './constants.js'

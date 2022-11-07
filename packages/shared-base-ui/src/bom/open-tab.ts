@@ -1,4 +1,4 @@
-import { first } from 'lodash-unified'
+import { first } from 'lodash-es'
 
 export async function openOrActiveTab(url?: string) {
     if (!url) return

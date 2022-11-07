@@ -1,5 +1,5 @@
 import { ProfileIdentifier, CheckedError, OptionalResult, EnhanceableSite } from '@masknet/shared-base'
-import { Ok } from 'ts-results'
+import { Ok } from 'ts-results-es'
 import { PayloadParseResult, SocialNetworkEnum } from '../payload/index.js'
 import { CryptoException, PayloadException } from '../types/index.js'
 import { importAES } from '../utils/index.js'

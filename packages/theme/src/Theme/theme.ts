@@ -1,7 +1,7 @@
 import { MaskColors } from './colors.js'
 import type { PaletteMode, ThemeOptions } from '@mui/material'
 import { createTheme } from '@mui/material'
-import { merge } from 'lodash-unified'
+import { merge } from 'lodash-es'
 import * as Components from './component-changes.js'
 import { grey } from '@mui/material/colors'
 

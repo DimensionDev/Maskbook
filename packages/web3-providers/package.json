@@ -1,6 +1,7 @@
 {
   "name": "@masknet/web3-providers",
   "private": true,
+  "type": "module",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -31,9 +32,8 @@
     "bignumber.js": "9.1.0",
     "date-fns": "^2.28.0",
     "graphql-request": "^3.4.0",
-    "fuse.js": "^6.6.2",
+    "fuse.js": "6.6.2",
     "json-stable-stringify": "^1.0.1",
-    "lodash-unified": "1.0.2",
     "lru-cache": "^7.10.1",
     "react-use": "^17.4.0",
     "rss3-next": "^0.6.17",
@@ -41,10 +41,10 @@
     "urlcat": "^2.0.4",
     "uuid": "^8.3.2",
     "wallet.ts": "^1.0.1",
-    "web3": "1.7.5",
-    "web3-core": "1.7.5",
-    "web3-eth": "1.7.5",
-    "web3-utils": "1.7.5"
+    "web3": "1.8.0",
+    "web3-core": "1.8.0",
+    "web3-eth": "1.8.0",
+    "web3-utils": "1.8.0"
   },
   "devDependencies": {
     "@types/json-stable-stringify": "^1.0.34"

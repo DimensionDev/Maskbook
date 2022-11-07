@@ -1,26 +1,31 @@
 import { Image } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { RSS3BaseAPI } from '@masknet/web3-providers'
+import { isSameAddress } from '@masknet/web3-shared-base'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { Typography } from '@mui/material'
 import { FC, useMemo } from 'react'
 import { Translate } from '../../../locales/i18n_generated.js'
 import { useAddressLabel } from '../../hooks/index.js'
-import { CardType } from '../share.js'
 import { CardFrame, FeedCardProps } from '../base.js'
+import { CardType, getLastAction } from '../share.js'
 import { formatValue, Label } from './common.js'
 
-const useStyles = makeStyles<void, 'image' | 'verbose' | 'info'>()((theme, _, refs) => ({
+const useStyles = makeStyles<void, 'image' | 'verbose' | 'info' | 'center'>()((theme, _, refs) => ({
     summary: {
         color: theme.palette.maskColor.third,
     },
     verbose: {},
     image: {},
+    center: {},
     body: {
         display: 'flex',
         flexDirection: 'row',
         alignItems: 'flex-start',
         marginTop: theme.spacing(1.5),
+        [`&.${refs.center}`]: {
+            alignItems: 'center',
+        },
         [`&.${refs.verbose}`]: {
             display: 'block',
             [`.${refs.image}`]: {
@@ -114,14 +119,15 @@ export const CollectibleCard: FC<CollectibleCardProps> = ({ feed, ...rest }) => 
 
     const user = useAddressLabel(feed.owner)
 
-    const { metadata, summary } = useMemo(() => {
+    const { metadata, cardType, summary } = useMemo(() => {
+        let action
         let metadata
         switch (feed.type) {
             case Type.Mint:
-                const actions = (feed as RSS3BaseAPI.CollectibleMintFeed).actions
                 // If only one action, it should be free minting
-                metadata = actions.length > 1 ? actions[1].metadata : actions[0].metadata
+                metadata = getLastAction(feed as RSS3BaseAPI.CollectibleMintFeed).metadata
                 return {
+                    cardType: CardType.CollectibleMint,
                     metadata,
                     summary: (
                         <Translate.collectible_mint
@@ -141,15 +147,17 @@ export const CollectibleCard: FC<CollectibleCardProps> = ({ feed, ...rest }) => 
                     ),
                 }
             case Type.Trade:
-                metadata = (feed as RSS3BaseAPI.CollectibleTradeFeed).actions[0].metadata
+                action = getLastAction(feed as RSS3BaseAPI.CollectibleTradeFeed)
+                metadata = action.metadata
                 return {
+                    cardType: CardType.CollectibleOut,
                     metadata,
                     summary: (
                         <Translate.collectible_trade
                             values={{
                                 user,
                                 collectible: verbose ? metadata!.name : 'an NFT',
-                                recipient: formatEthereumAddress(feed.actions[0].address_to ?? '', 4),
+                                recipient: formatEthereumAddress(action.address_to ?? '', 4),
                                 cost_value: formatValue(metadata?.cost),
                                 cost_symbol: metadata?.cost?.symbol ?? '',
                             }}
@@ -165,6 +173,7 @@ export const CollectibleCard: FC<CollectibleCardProps> = ({ feed, ...rest }) => 
             case Type.Transfer:
                 if (isRegisteringENS(feed)) {
                     return {
+                        cardType: CardType.CollectibleIn,
                         metadata: feed.actions[1].metadata,
                         summary: (
                             <Translate.collectible_register_ens
@@ -185,27 +194,43 @@ export const CollectibleCard: FC<CollectibleCardProps> = ({ feed, ...rest }) => 
                         ),
                     }
                 }
-                metadata = (feed as RSS3BaseAPI.CollectibleTransferFeed).actions[0].metadata
+                action = getLastAction(feed as RSS3BaseAPI.CollectibleTransferFeed)
+                metadata = action.metadata
+                const standard = feed.actions[0].metadata?.standard
+                const costMetadata: RSS3BaseAPI.TransactionMetadata | undefined =
+                    standard && ['Native', 'ERC-20'].includes(standard)
+                        ? (feed.actions[0].metadata as RSS3BaseAPI.TransactionMetadata)
+                        : undefined
+                const isSending = isSameAddress(feed.owner, action.address_from)
                 return {
+                    cardType: isSending ? CardType.CollectibleIn : CardType.CollectibleOut,
                     metadata,
                     summary: (
-                        <Translate.collectible_send
+                        <Translate.collectible_operation
                             values={{
                                 user,
                                 collectible: verbose ? metadata!.name : 'an NFT',
-                                recipient: formatEthereumAddress(feed.actions[0].address_to ?? '', 4),
+                                other: isSending
+                                    ? formatEthereumAddress(action.address_to ?? '', 4)
+                                    : formatEthereumAddress(action.address_from ?? '', 4),
+                                /* eslint-disable no-nested-ternary */
+                                context: isSending ? 'send' : costMetadata ? 'claim_cost' : 'claim',
+                                cost_value: formatValue(costMetadata),
+                                cost_symbol: costMetadata?.symbol!,
                             }}
                             components={{
                                 user: <Label />,
-                                recipient: <Label />,
+                                other: <Label />,
                                 collectible: verbose ? <Label /> : <span />,
+                                cost: <Label />,
                             }}
                         />
                     ),
                 }
             case Type.Burn:
-                metadata = (feed as RSS3BaseAPI.CollectibleBurnFeed).actions[0].metadata
+                metadata = getLastAction(feed as RSS3BaseAPI.CollectibleBurnFeed).metadata
                 return {
+                    cardType: CardType.CollectibleBurn,
                     metadata,
                     summary: (
                         <Translate.collectible_burn
@@ -222,16 +247,21 @@ export const CollectibleCard: FC<CollectibleCardProps> = ({ feed, ...rest }) => 
                 }
         }
 
-        return { summary: '' }
+        return { summary: '', cardType: CardType.CollectibleIn }
     }, [feed, user])
 
     const imageSize = verbose ? '100%' : 64
+    const attributes = metadata && 'attributes' in metadata ? metadata.attributes?.filter((x) => x.trait_type) : []
 
     return (
-        <CardFrame type={CardType.TokenSwap} feed={feed} {...rest}>
+        <CardFrame type={cardType} feed={feed} {...rest}>
             <Typography className={classes.summary}>{summary}</Typography>
             {metadata ? (
-                <div className={cx(classes.body, verbose ? classes.verbose : null)}>
+                <div
+                    className={cx(classes.body, {
+                        [classes.verbose]: verbose,
+                        [classes.center]: !verbose && !metadata.description,
+                    })}>
                     <Image
                         classes={{ container: classes.image }}
                         src={metadata.image}
@@ -240,11 +270,13 @@ export const CollectibleCard: FC<CollectibleCardProps> = ({ feed, ...rest }) => 
                     />
                     <div className={classes.info}>
                         {verbose ? null : <Typography className={classes.title}>{metadata.name}</Typography>}
-                        <Typography className={classes.subtitle}>{metadata.description}</Typography>
+                        {metadata.description ? (
+                            <Typography className={classes.subtitle}>{metadata.description}</Typography>
+                        ) : null}
                     </div>
-                    {verbose && 'attributes' in metadata && metadata.attributes?.length ? (
+                    {verbose && attributes?.length ? (
                         <div className={classes.attributes}>
-                            {metadata.attributes.map((attribute) => (
+                            {attributes.map((attribute) => (
                                 <div className={classes.attribute} key={attribute.trait_type}>
                                     <Typography className={classes.attributeType}>{attribute.trait_type}</Typography>
                                     <Typography className={classes.attributeValue}>{attribute.value}</Typography>

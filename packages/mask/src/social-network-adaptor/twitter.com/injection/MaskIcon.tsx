@@ -7,7 +7,7 @@ import { MaskIcon } from '@masknet/shared'
 import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot.js'
 import { memoizePromise } from '@masknet/kit'
 import { startWatch } from '../../../utils/watcher.js'
-import { memoize } from 'lodash-unified'
+import { memoize } from 'lodash-es'
 
 function Icon(props: { size: number }) {
     return (

@@ -1,4 +1,4 @@
-import type { Swap } from '@balancer-labs/sor/dist/types'
+import type { Swap } from '@balancer-labs/sor/dist/types.js'
 import type { BigNumber } from 'bignumber.js'
 
 export interface Route {

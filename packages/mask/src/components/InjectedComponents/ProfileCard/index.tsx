@@ -1,7 +1,7 @@
 import { FC, useEffect, useMemo, useState } from 'react'
 import { Trans } from 'react-i18next'
 import { useUpdateEffect } from 'react-use'
-import { first } from 'lodash-unified'
+import { first } from 'lodash-es'
 import { Icons } from '@masknet/icons'
 import {
     createInjectHooksRenderer,

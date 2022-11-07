@@ -1,5 +1,5 @@
 import { memo, useState } from 'react'
-import { uniqBy } from 'lodash-unified'
+import { uniqBy } from 'lodash-es'
 import { MaskFixedSizeListProps, MaskTextFieldProps, SearchableList } from '@masknet/theme'
 import { Stack, Typography } from '@mui/material'
 import { useSharedI18N } from '@masknet/shared'

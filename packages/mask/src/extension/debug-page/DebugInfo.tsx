@@ -1,4 +1,4 @@
-import { map } from 'lodash-unified'
+import { map } from 'lodash-es'
 import { makeNewBugIssueURL } from './issue.js'
 import { useI18N } from '../../utils/index.js'
 import { openWindow } from '@masknet/shared-base-ui'

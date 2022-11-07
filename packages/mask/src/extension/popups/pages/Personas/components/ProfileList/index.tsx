@@ -10,7 +10,7 @@ import {
     NextIDPlatform,
     PopupRoutes,
 } from '@masknet/shared-base'
-import { compact } from 'lodash-unified'
+import { compact } from 'lodash-es'
 import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../../../../utils/index.js'
 import { PersonaContext } from '../../hooks/usePersonaContext.js'

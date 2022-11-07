@@ -1,6 +1,6 @@
 import { memo, useRef, useCallback, useState, useEffect, useMemo } from 'react'
 import { useUpdateEffect } from 'react-use'
-import { first } from 'lodash-unified'
+import { first } from 'lodash-es'
 import IframeResizer, { IFrameComponent } from 'iframe-resizer-react'
 import { getRPCConstants } from '@masknet/web3-shared-evm'
 import { makeStyles, useStylesExtends } from '@masknet/theme'

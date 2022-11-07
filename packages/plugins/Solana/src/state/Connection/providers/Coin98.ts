@@ -1,4 +1,4 @@
-import { first } from 'lodash-unified'
+import { first } from 'lodash-es'
 import type { PublicKey, Transaction } from '@solana/web3.js'
 import { injectedCoin98SolanaProvider } from '@masknet/injected-script'
 import type { Account } from '@masknet/web3-shared-base'

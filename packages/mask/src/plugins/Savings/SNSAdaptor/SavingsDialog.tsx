@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import { useAsync, useUpdateEffect } from 'react-use'
-import { chunk, compact, flatten } from 'lodash-unified'
+import { chunk, compact, flatten } from 'lodash-es'
 import type { AbiItem } from 'web3-utils'
 import { DialogActions, DialogContent, Tab } from '@mui/material'
 import { EMPTY_LIST, isDashboardPage, NetworkPluginID } from '@masknet/shared-base'

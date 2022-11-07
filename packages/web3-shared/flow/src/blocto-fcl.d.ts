@@ -1,7 +1,6 @@
 // cspell:disable
-/// <reference types="@masknet/global-types/webpack" />
 
-// After https://github.com/louisguitton/DefinitelyTyped/pull/1
+// https://github.com/louisguitton/DefinitelyTyped/pull/1
 
 declare module '@blocto/fcl' {
     // Type definitions for @onflow/fcl 0.0

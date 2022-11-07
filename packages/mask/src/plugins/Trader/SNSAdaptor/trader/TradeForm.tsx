@@ -18,7 +18,7 @@ import { isLessThan, rightShift, multipliedBy, leftShift } from '@masknet/web3-s
 import { Tune as TuneIcon } from '@mui/icons-material'
 import { TokenPanelType, TradeInfo } from '../../types/index.js'
 import { BigNumber } from 'bignumber.js'
-import { first, noop } from 'lodash-unified'
+import { first, noop } from 'lodash-es'
 import { Icons } from '@masknet/icons'
 import { isNativeTokenWrapper } from '../../helpers/index.js'
 import { DefaultTraderPlaceholder, TraderInfo } from './TraderInfo.js'

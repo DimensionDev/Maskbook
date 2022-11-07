@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useAsyncRetry } from 'react-use'
-import { first } from 'lodash-unified'
+import { first } from 'lodash-es'
 import { InjectedDialog } from '@masknet/shared'
 import {
     useActivatedPluginsSNSAdaptor,

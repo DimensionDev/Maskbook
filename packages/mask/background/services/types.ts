@@ -20,6 +20,8 @@ export interface Services {
     Backup: BackupService
     Helper: HelperService
     Settings: SettingsService
+    /** @deprecated Renamed to SiteAdaptor */
+    SocialNetwork: SiteAdaptorService
     SiteAdaptor: SiteAdaptorService
     ThirdPartyPlugin: ThirdPartyPluginService
 }

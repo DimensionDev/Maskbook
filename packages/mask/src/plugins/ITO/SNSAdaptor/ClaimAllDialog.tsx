@@ -1,5 +1,5 @@
 import { useState, useLayoutEffect, useRef, useCallback } from 'react'
-import { flatten, uniq } from 'lodash-unified'
+import { flatten, uniq } from 'lodash-es'
 import formatDateTime from 'date-fns/format'
 import { useChainContext, useFungibleToken, useNetworkContext, useFungibleTokens } from '@masknet/web3-hooks-base'
 import { useActivatedPlugin } from '@masknet/plugin-infra/dom'

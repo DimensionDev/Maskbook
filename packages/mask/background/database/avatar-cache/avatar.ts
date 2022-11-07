@@ -2,7 +2,7 @@ import { queryAvatarDB, isAvatarOutdatedDB, storeAvatarDB, IdentifierWithAvatar,
 import { hasNativeAPI, nativeAPI } from '../../../shared/native-rpc/index.js'
 import { blobToDataURL, memoizePromise } from '@masknet/kit'
 import { createTransaction } from '../utils/openDB.js'
-import { memoize } from 'lodash-unified'
+import { memoize } from 'lodash-es'
 
 /**
  * Get a (cached) blob url for an identifier. No cache for native api.

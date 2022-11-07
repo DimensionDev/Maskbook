@@ -1,5 +1,5 @@
 import { memo, useMemo } from 'react'
-import { noop } from 'lodash-unified'
+import { noop } from 'lodash-es'
 import { Icons } from '@masknet/icons'
 import { FormattedCurrency, MiniNetworkSelector } from '@masknet/shared'
 import { DashboardRoutes, NetworkPluginID } from '@masknet/shared-base'

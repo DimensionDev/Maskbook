@@ -15,7 +15,6 @@ export class NameService extends NameServiceState<ChainId> {
     }
 
     override createResolvers(chainId?: ChainId) {
-        if (chainId === ChainId.BSC) return [new SpaceID_Resolver()]
-        return [new ENS_Resolver(), new ChainbaseResolver()]
+        return [new ENS_Resolver(), new ChainbaseResolver(), new SpaceID_Resolver()]
     }
 }

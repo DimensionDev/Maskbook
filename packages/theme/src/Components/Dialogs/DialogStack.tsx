@@ -1,6 +1,6 @@
 import { useRef, useContext, createContext, useState, useMemo, useEffect } from 'react'
 import { type DialogProps, Backdrop } from '@mui/material'
-import { noop } from 'lodash-unified'
+import { noop } from 'lodash-es'
 
 interface StackContext {
     stack: readonly string[]

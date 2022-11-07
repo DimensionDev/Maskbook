@@ -7,7 +7,7 @@ import { ApproveStateType, useERC20TokenApproveCallback } from '@masknet/web3-ho
 import { TokenIcon } from '@masknet/shared'
 import { HelpOutline } from '@mui/icons-material'
 import React, { useCallback } from 'react'
-import { noop } from 'lodash-unified'
+import { noop } from 'lodash-es'
 
 const useStyles = makeStyles<void, 'icon'>()((theme, _, refs) => ({
     icon: {},

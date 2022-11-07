@@ -1,6 +1,6 @@
 import { memo, PropsWithChildren, useCallback, useMemo, useState } from 'react'
 import { useUpdateEffect } from 'react-use'
-import { first, omit } from 'lodash-unified'
+import { first, omit } from 'lodash-es'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { alpha, Box, Button, Divider, ListItemIcon, MenuItem, Typography } from '@mui/material'

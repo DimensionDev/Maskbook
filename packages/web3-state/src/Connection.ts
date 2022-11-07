@@ -1,4 +1,4 @@
-import { memoize } from 'lodash-unified'
+import { memoize } from 'lodash-es'
 import type { Subscription } from 'use-subscription'
 import type { Connection, ConnectionOptions, ConnectionState as Web3ConnectionState } from '@masknet/web3-shared-base'
 import type { Plugin } from '@masknet/plugin-infra'

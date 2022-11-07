@@ -59,12 +59,12 @@ const CACHE_URLS = Object.keys(CACHE_RULES) as unknown as Array<keyof typeof CAC
 
 const { fetch: originalFetch } = globalThis
 
-async function squashedFetch(request: RequestInfo, init?: RequestInit): Promise<Response> {
+async function squashedFetch(request: Request, init?: RequestInit): Promise<Response> {
     // skip all side effect requests
-    if (typeof request !== 'string' && request.method !== 'GET') return originalFetch(request, init)
+    if (request.method !== 'GET') return originalFetch(request, init)
 
     // skip all non-http requests
-    const url = typeof request === 'string' ? request : request.url
+    const url = request.url
     if (!url.startsWith('http')) return originalFetch(request, init)
 
     // no need to cache
@@ -77,14 +77,13 @@ async function squashedFetch(request: RequestInfo, init?: RequestInit): Promise<
     if (hit) return hit
 
     // send the request & cache the response
-    const response = await originalFetch(request, init)
-
+    const response = await originalFetch(request.clone(), init)
     if (response.ok && response.status === 200) {
-        await cache.put(request, response)
+        await cache.put(request.clone(), response.clone())
 
         // stale the cache
         setTimeout(async () => {
-            await cache.delete(request)
+            await cache.delete(request.clone())
         }, CACHE_RULES[rule])
     }
     return response

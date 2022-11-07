@@ -1,10 +1,10 @@
 import type { PluginRuntime } from '../runtime/runtime.js'
-import * as tsResults from 'ts-results'
+import * as tsResults from 'ts-results-es'
 import { Identifier, PostIdentifier, ECKeyIdentifier, ProfileIdentifier, PostIVIdentifier } from '@masknet/shared-base'
 import * as typedMessage from '@masknet/typed-message'
 
 export function addPeerDependencies(runtime: PluginRuntime) {
-    runtime.addNamespaceModule('ts-results', tsResults)
+    runtime.addNamespaceModule('ts-results-es', tsResults)
     runtime.addNamespaceModule('@masknet/typed-message', typedMessage)
 
     runtime.addReExportModule('@masknet/base', { exportAllFrom: '@masknet/base/identifier.js' })

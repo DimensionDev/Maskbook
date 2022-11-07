@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { differenceWith, uniqBy } from 'lodash-unified'
+import { differenceWith, uniqBy } from 'lodash-es'
 import { Icons } from '@masknet/icons'
 import { ElementAnchor, RetryHint, useWeb3ProfileHiddenSettings } from '@masknet/shared'
 import { useNonFungibleAssets, useTrustedNonFungibleTokens } from '@masknet/web3-hooks-base'

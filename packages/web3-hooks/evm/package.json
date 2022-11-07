@@ -1,6 +1,7 @@
 {
   "name": "@masknet/web3-hooks-evm",
   "private": true,
+  "type": "module",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -22,8 +23,8 @@
     "react-use": "^17.4.0",
     "unstated-next": "^1.1.0",
     "wallet.ts": "^1.0.1",
-    "web3": "1.7.5",
-    "web3-core": "1.7.5",
-    "web3-utils": "1.7.5"
+    "web3": "1.8.0",
+    "web3-core": "1.8.0",
+    "web3-utils": "1.8.0"
   }
 }

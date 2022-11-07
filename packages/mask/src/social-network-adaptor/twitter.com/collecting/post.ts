@@ -1,4 +1,4 @@
-import { memoize, noop } from 'lodash-unified'
+import { memoize, noop } from 'lodash-es'
 import { PostIdentifier, ProfileIdentifier } from '@masknet/shared-base'
 import { IntervalWatcher, DOMProxy, DOMProxyEvents } from '@dimensiondev/holoflows-kit'
 import type { EventListener } from '@servie/events'

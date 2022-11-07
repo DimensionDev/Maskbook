@@ -2,8 +2,8 @@
  * Document url: https://github.com/nextdotid/kv_server/blob/develop/docs/api.apib
  */
 import urlcat from 'urlcat'
-import { compact } from 'lodash-unified'
-import { Err, Ok, Result } from 'ts-results'
+import { compact } from 'lodash-es'
+import { Err, Ok, Result } from 'ts-results-es'
 import type { NextIDStoragePayload, NextIDPlatform } from '@masknet/shared-base'
 import { deleteCache, fetchJSON } from './helper.js'
 import type { NextIDBaseAPI } from '../types/index.js'

@@ -33,7 +33,7 @@
     "@masknet/storybook-shared": "workspace:*",
     "@types/qrcode": "^1.5.0",
     "@types/tinycolor2": "^1.4.3",
-    "fuse.js": "^6.6.2",
+    "fuse.js": "6.6.2",
     "notistack": "2.0.5",
     "react-use": "^17.4.0",
     "react-window": "^1.8.7",

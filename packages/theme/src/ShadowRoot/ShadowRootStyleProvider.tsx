@@ -48,11 +48,12 @@ function getShadowRootEmotionCache(shadow: ShadowRoot) {
     const keyA = 'mui-' + instanceID
     const keyB = 'tss-' + instanceID
 
-    const muiEmotionCache = createEmotionCache({ key: keyA })
+    // https://github.com/emotion-js/emotion/issues/2933
+    const muiEmotionCache = (createEmotionCache.default || createEmotionCache)({ key: keyA })
     const muiStyleSheet = new StyleSheet({ key: keyA, container: shadow })
     muiEmotionCache.sheet = muiStyleSheet
 
-    const tssEmotionCache = createEmotionCache({ key: keyB })
+    const tssEmotionCache = (createEmotionCache.default || createEmotionCache)({ key: keyB })
     const tssStyleSheet = new StyleSheet({ key: keyB, container: shadow })
     tssEmotionCache.sheet = tssStyleSheet
 

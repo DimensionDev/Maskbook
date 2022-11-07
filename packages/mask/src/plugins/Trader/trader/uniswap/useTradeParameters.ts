@@ -1,5 +1,4 @@
 import { useMemo } from 'react'
-import JSBI from 'jsbi'
 import { Percent, TradeType } from '@uniswap/sdk-core'
 import { Router, Trade as V2Trade } from '@uniswap/v2-sdk'
 import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
@@ -14,7 +13,7 @@ import { useTransactionDeadline } from './useTransactionDeadline.js'
 import { useGetTradeContext } from '../useGetTradeContext.js'
 import type { ChainId } from '@masknet/web3-shared-evm'
 
-const UNISWAP_BIPS_BASE = JSBI.BigInt(10000)
+const UNISWAP_BIPS_BASE = 10000
 
 // Pangolin and TraderJoe have modified uniswap contracts
 type SwapParams = Parameters<typeof Router.swapCallParameters>
@@ -75,7 +74,7 @@ export function useSwapParameters(
         if (!account || !trade?.trade_ || !deadline || pluginID !== NetworkPluginID.PLUGIN_EVM) return []
 
         const { trade_ } = trade
-        const allowedSlippage_ = new Percent(JSBI.BigInt(allowedSlippage), UNISWAP_BIPS_BASE)
+        const allowedSlippage_ = new Percent(allowedSlippage, UNISWAP_BIPS_BASE)
 
         if (trade_ instanceof V2Trade) {
             if (!routerV2Contract) return []

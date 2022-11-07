@@ -1,4 +1,4 @@
-import { throttle } from 'lodash-unified'
+import { throttle } from 'lodash-es'
 import { MaskMessages } from '../../../../shared/messages.js'
 import { InternalStorageKeys } from '../../../services/settings/utils.js'
 import type { PopupSSR_Props } from './type.js'

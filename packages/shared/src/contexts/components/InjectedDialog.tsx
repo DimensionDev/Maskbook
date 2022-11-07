@@ -1,7 +1,7 @@
 /* eslint-disable tss-unused-classes/unused-classes */
 import { EnhanceableSite, isDashboardPage, CrossIsolationMessages } from '@masknet/shared-base'
 import { ErrorBoundary, useValueRef } from '@masknet/shared-base-ui'
-import { omit } from 'lodash-unified'
+import { omit } from 'lodash-es'
 import { Cx, makeStyles, useDialogStackActor, usePortalShadowRoot, useStylesExtends } from '@masknet/theme'
 import {
     Dialog,

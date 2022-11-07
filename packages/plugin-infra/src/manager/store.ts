@@ -1,5 +1,5 @@
 // DO NOT import React in this file. This file is also used by worker.
-import { memoize } from 'lodash-unified'
+import { memoize } from 'lodash-es'
 import type { Subscription } from 'use-subscription'
 import type { PluginID, NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'

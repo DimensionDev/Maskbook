@@ -1,5 +1,5 @@
 import LRU from 'lru-cache'
-import { groupBy, first, compact } from 'lodash-unified'
+import { groupBy, first, compact } from 'lodash-es'
 import {
     SocialAddress,
     SocialIdentity,

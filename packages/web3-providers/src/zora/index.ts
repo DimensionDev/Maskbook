@@ -32,7 +32,7 @@ import { getAssetFullName, resolveNonFungibleTokenEventActivityType } from '../h
 import type { NonFungibleTokenAPI } from '../types/index.js'
 import { GetCollectionsByKeywordQuery, GetEventsQuery, GetTokenQuery } from './queries.js'
 import { ZORA_MAINNET_GRAPHQL_URL } from './constants.js'
-import type { Variables } from 'graphql-request/dist/types'
+import type { Variables } from 'graphql-request/dist/types.js'
 
 export class ZoraAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
     private client = new GraphQLClient(ZORA_MAINNET_GRAPHQL_URL)

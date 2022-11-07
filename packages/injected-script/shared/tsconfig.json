@@ -3,9 +3,7 @@
   "compilerOptions": {
     "rootDir": "./",
     "outDir": "../dist/shared",
-    "tsBuildInfoFile": "../dist/shared.tsbuildinfo",
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext"
+    "tsBuildInfoFile": "../dist/shared.tsbuildinfo"
   },
   "files": ["./index.ts", "./twitter.ts"],
   "references": []

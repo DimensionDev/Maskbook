@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction, useCallback, useEffect, useMemo, useState } from 'react'
-import { first, uniqBy } from 'lodash-unified'
+import { first, uniqBy } from 'lodash-es'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { NetworkPluginID, BindingProof, EMPTY_LIST, PopupRoutes } from '@masknet/shared-base'

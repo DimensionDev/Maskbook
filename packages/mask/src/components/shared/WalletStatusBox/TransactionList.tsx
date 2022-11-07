@@ -8,7 +8,7 @@ import { isSameAddress, RecentTransactionComputed, TransactionStatusType, Transa
 import { getContractOwnerDomain } from '@masknet/web3-shared-evm'
 import { Grid, GridProps, Link, List, ListItem, ListProps, Stack, Typography } from '@mui/material'
 import format from 'date-fns/format'
-import { noop } from 'lodash-unified'
+import { noop } from 'lodash-es'
 import { useI18N } from '../../../utils/index.js'
 
 const useStyles = makeStyles()((theme) => ({

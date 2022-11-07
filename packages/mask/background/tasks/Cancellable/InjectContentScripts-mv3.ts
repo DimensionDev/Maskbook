@@ -1,4 +1,4 @@
-import { noop } from 'lodash-unified'
+import { noop } from 'lodash-es'
 import { Flags } from '../../../shared/flags.js'
 import { hmr } from '../../../utils-pure/index.js'
 import {

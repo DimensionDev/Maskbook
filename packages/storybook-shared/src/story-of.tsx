@@ -1,9 +1,9 @@
 import type { Annotations, BaseStory } from '@storybook/addons'
-import type { StoryFnReactReturnType } from '@storybook/react/dist/ts3.9/client/preview/types'
-import type { Meta, Story } from '@storybook/react/types-6-0'
+import type { StoryFnReactReturnType } from '@storybook/react/dist/ts3.9/client/preview/types.js'
+import type { Meta, Story } from '@storybook/react'
 export type ComponentAnnotations<T> = Annotations<T, StoryFnReactReturnType> &
     Pick<BaseStory<any, any>, 'storyName'> & { children?: React.ReactNode }
-export type { Story, Meta } from '@storybook/react/types-6-0'
+export type { Story, Meta } from '@storybook/react'
 
 /**
  * Create a typed story of a given component

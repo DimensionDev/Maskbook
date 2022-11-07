@@ -9,8 +9,8 @@ import {
     Card,
     CardContent,
     CardActions,
+    ListItemButton,
 } from '@mui/material'
-import ListItemButton from '@mui/material/ListItemButton'
 import { useMap } from 'react-use'
 import { useI18N } from '../../../utils/index.js'
 import type { ExternalPluginLoadDetails } from '../types.js'

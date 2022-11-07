@@ -1,5 +1,5 @@
 import { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react'
-import { first } from 'lodash-unified'
+import { first } from 'lodash-es'
 import { EthereumAddress } from 'wallet.ts'
 import { Box, Card, CardActions, CardContent, Checkbox, FormControlLabel, Typography, InputBase } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
