@@ -1,5 +1,21 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { PluginID } from '@masknet/shared-base'
+import { resolveSearchKeywordType } from '@masknet/web3-shared-base'
+import {
+    isValidAddress as isValidAddressEVM,
+    isZeroAddress as isZeroAddressEVM,
+    isValidDomain as isValidDomainEVM,
+} from '@masknet/web3-shared-evm'
+import {
+    isValidAddress as isValidAddressSolana,
+    isZeroAddress as isZeroAddressSolana,
+    isValidDomain as isValidDomainSolana,
+} from '@masknet/web3-shared-solana'
+import {
+    isValidAddress as isValidAddressFlow,
+    isZeroAddress as isZeroAddressFlow,
+    isValidDomain as isValidDomainFlow,
+} from '@masknet/web3-shared-flow'
 import { Trans } from 'react-i18next'
 import { Icons } from '@masknet/icons'
 import { base } from '../base.js'
@@ -15,7 +31,17 @@ const sns: Plugin.SNSAdaptor.Definition = {
         },
         Utils: {
             shouldDisplay(keyword: string) {
-                return keyword.endsWith('.eth')
+                return Boolean(
+                    resolveSearchKeywordType(
+                        keyword,
+                        (keyword: string) =>
+                            isValidDomainEVM(keyword) || isValidDomainSolana(keyword) || isValidDomainFlow(keyword),
+                        (keyword: string) =>
+                            (isValidAddressEVM(keyword) && !isZeroAddressEVM(keyword)) ||
+                            (isValidAddressFlow(keyword) && !isZeroAddressFlow(keyword)) ||
+                            (isValidAddressSolana(keyword) && !isZeroAddressSolana(keyword)),
+                    ),
+                )
             },
         },
     },

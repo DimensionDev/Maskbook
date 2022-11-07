@@ -7,7 +7,7 @@ import { MoreHoriz as MoreHorizIcon } from '@mui/icons-material'
 import { openWindow } from '@masknet/shared-base-ui'
 import type { BindingProof } from '@masknet/shared-base'
 import { useI18N } from '../locales/index.js'
-import { SocialTooltip } from './SocialTooltip'
+import { SocialTooltip } from './SocialTooltip.js'
 import { makeStyles } from '@masknet/theme'
 
 interface StyleProps {

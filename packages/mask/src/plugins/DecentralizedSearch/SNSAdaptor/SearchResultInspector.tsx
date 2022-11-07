@@ -9,8 +9,9 @@ import {
     usePluginI18NField,
 } from '@masknet/plugin-infra/content-script'
 import { Tab } from '@mui/material'
+import { useWeb3State } from '@masknet/web3-hooks-base'
 import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
-import { SocialAddressType } from '@masknet/web3-shared-base'
+import { SocialAddressType, resolveSearchKeywordType } from '@masknet/web3-shared-base'
 import { DecentralizedSearchPostExtraInfoWrapper } from './DecentralizedSearchPostExtraInfoWrapper.js'
 import { PluginID, EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import { LoadingContent } from './LoadingContent.js'
@@ -42,6 +43,7 @@ export function SearchResultInspector(props: { keyword: string }) {
         tokenId: string
         retry: () => void
     }>()
+    const { Others } = useWeb3State()
     const ENS_SearchResult = ENS_Plugin!.SearchResultContent?.UI?.Content!
     const [isLoading, setLoading] = useState(true)
     const [isHiddenAll, setHiddenAll] = useState(false)
@@ -99,7 +101,16 @@ export function SearchResultInspector(props: { keyword: string }) {
         <Hidden hidden={isHiddenAll}>
             <DecentralizedSearchPostExtraInfoWrapper>
                 <Hidden hidden={isLoading || isEmpty || isError}>
-                    <ENS_SearchResult keyword={props.keyword} ref={ensRef} />
+                    <ENS_SearchResult
+                        keyword={props.keyword}
+                        ref={ensRef}
+                        keywordType={resolveSearchKeywordType(
+                            props.keyword,
+                            (keyword: string) => Boolean(Others?.isValidDomain(keyword)),
+                            (keyword: string) =>
+                                Boolean(Others?.isValidAddress(keyword) && !Others?.isZeroAddress(keyword)),
+                        )}
+                    />
                     <div className={classes.tabs}>
                         <TabContext value={currentTab}>
                             <MaskTabList variant="base" onChange={onChange} aria-label="Web3Tabs">

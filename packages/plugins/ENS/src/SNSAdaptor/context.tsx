@@ -1,8 +1,9 @@
-import { createContext, PropsWithChildren } from 'react'
+import { createContext, PropsWithChildren, useCallback, useMemo } from 'react'
 import { useAsync } from 'react-use'
 import { uniqBy } from 'lodash-unified'
 import { NextIDProof } from '@masknet/web3-providers'
-import { useLookupAddress } from '@masknet/web3-hooks-base'
+import { useLookupAddress, useReverseAddress } from '@masknet/web3-hooks-base'
+import { SearchKeywordType } from '@masknet/web3-shared-base'
 import { BindingProof, NetworkPluginID, NextIDPlatform } from '@masknet/shared-base'
 import { resolveNonFungibleTokenIdFromEnsDomain } from '@masknet/web3-shared-evm'
 
@@ -12,7 +13,7 @@ interface ENSContextProps {
     restOfValidNextIdTwitterBindings: BindingProof[]
     validNextIdTwitterBindings: BindingProof[]
     reversedAddress: string | undefined
-    keyword: string
+    domain: string
     isError: boolean
     tokenId: string | undefined
     retry: (() => void) | undefined
@@ -25,21 +26,50 @@ export const ENSContext = createContext<ENSContextProps>({
     validNextIdTwitterBindings: [],
     reversedAddress: undefined,
     tokenId: undefined,
-    keyword: '',
+    domain: '',
     isError: false,
     retry: undefined,
 })
 ENSContext.displayName = 'ENSContext'
 
-export function ENSProvider({ children, keyword }: PropsWithChildren<SearchResultInspectorProps>) {
+export function ENSProvider({ children, keyword, keywordType }: PropsWithChildren<SearchResultInspectorProps>) {
     const {
-        value: reversedAddress,
-        loading: isLoading,
-        error,
-        retry,
+        value: _reversedAddress,
+        loading: isLoadingLookup,
+        error: lookupError,
+        retry: retryLookup,
     } = useLookupAddress(NetworkPluginID.PLUGIN_EVM, keyword)
-    const isError = !!error
-    const tokenId = resolveNonFungibleTokenIdFromEnsDomain(keyword)
+    const {
+        value: _domain,
+        loading: isLoadingReverse,
+        error: reverseError,
+        retry: retryReverse,
+    } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, keyword)
+
+    const isLoading =
+        (isLoadingLookup && keywordType === SearchKeywordType.NameServiceDomain) ||
+        (isLoadingReverse && keywordType === SearchKeywordType.Address)
+    const isError =
+        (!!lookupError && keywordType === SearchKeywordType.NameServiceDomain) ||
+        (!!reverseError && keywordType === SearchKeywordType.Address)
+    const retry = useCallback(() => {
+        if (keywordType === SearchKeywordType.NameServiceDomain) retryLookup()
+        if (keywordType === SearchKeywordType.Address) retryReverse()
+    }, [keywordType, keyword])
+
+    const reversedAddress = useMemo(() => {
+        if (keywordType === SearchKeywordType.NameServiceDomain) return _reversedAddress
+        if (keywordType === SearchKeywordType.Address) return keyword
+        return undefined
+    }, [keywordType, keyword, _reversedAddress])
+
+    const domain = useMemo(() => {
+        if (keywordType === SearchKeywordType.NameServiceDomain) return keyword
+        if (keywordType === SearchKeywordType.Address) return _domain ?? ''
+        return ''
+    }, [keywordType, keyword, _domain])
+
+    const tokenId = resolveNonFungibleTokenIdFromEnsDomain(domain)
     const { value: ids } = useAsync(
         async () =>
             reversedAddress
@@ -66,7 +96,7 @@ export function ENSProvider({ children, keyword }: PropsWithChildren<SearchResul
                 isError,
                 retry,
                 tokenId,
-                keyword,
+                domain,
                 validNextIdTwitterBindings,
                 firstValidNextIdTwitterBinding,
                 restOfValidNextIdTwitterBindings,
@@ -78,4 +108,5 @@ export function ENSProvider({ children, keyword }: PropsWithChildren<SearchResul
 
 export interface SearchResultInspectorProps {
     keyword: string
+    keywordType?: SearchKeywordType
 }

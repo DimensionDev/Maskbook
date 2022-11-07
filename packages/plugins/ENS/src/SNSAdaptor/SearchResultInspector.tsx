@@ -101,7 +101,7 @@ export const SearchResultInspectorContent = forwardRef(function (
         reversedAddress,
         validNextIdTwitterBindings,
         firstValidNextIdTwitterBinding,
-        keyword: domain,
+        domain,
         tokenId,
     } = useContext(ENSContext)
 
