@@ -72,7 +72,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     ProfileCardTabs: [
         {
             ...TabConfig,
-            priority: 2,
+            priority: 1,
             UI: {
                 TabContent({ socialAccount, identity }) {
                     if (!socialAccount) return null
