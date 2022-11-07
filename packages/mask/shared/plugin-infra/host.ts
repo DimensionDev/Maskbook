@@ -1,5 +1,5 @@
 // All plugin manager need to call createPluginHost so let's register plugins implicitly.
-import './register'
+import './register.js'
 import type { BooleanPreference, Plugin } from '@masknet/plugin-infra'
 import { Emitter } from '@servie/events'
 import { MaskMessages } from '../../shared/messages.js'

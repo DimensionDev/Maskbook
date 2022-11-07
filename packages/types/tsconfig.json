@@ -13,7 +13,7 @@
     { "path": "../shared-base" },
     { "path": "../shared-base-ui" },
     { "path": "../typed-message/base" },
-    { "path": "../typed-message/dom" },
+    { "path": "../typed-message/react" },
     { "path": "../injected-script/sdk" }
   ]
 }

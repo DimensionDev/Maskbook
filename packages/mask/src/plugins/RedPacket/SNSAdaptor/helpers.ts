@@ -1,4 +1,4 @@
-import { createRenderWithMetadata, createTypedMessageMetadataReader } from '@masknet/typed-message/dom'
+import { createRenderWithMetadata, createTypedMessageMetadataReader } from '@masknet/typed-message-react'
 import { RedPacketMetaKey, RedPacketNftMetaKey } from '../constants.js'
 import type { RedPacketJSONPayload, RedPacketNftJSONPayload } from '../types.js'
 import schema from '../schema.json'
