@@ -1,7 +1,7 @@
 import { Typography, Card, Box, CircularProgress, CircularProgressProps, colors } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { TypedMessage, makeTypedMessageText } from '@masknet/typed-message'
-import { TextResizeContext, TypedMessageRender } from '@masknet/typed-message/dom'
+import { TextResizeContext, TypedMessageRender } from '@masknet/typed-message-react'
 import { TypedMessageRenderContext } from '../../../shared-ui/TypedMessageRender/context.js'
 import { Check as CheckIcon, Close as CloseIcon } from '@mui/icons-material'
 import { MaskIcon } from '@masknet/shared'
