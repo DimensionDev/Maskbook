@@ -1,6 +1,6 @@
 import { toHex } from 'web3-utils'
 import type { RequestArguments } from 'web3-core'
-import { delay } from '@dimensiondev/kit'
+import { delay } from '@masknet/kit'
 import { Emitter } from '@servie/events'
 import type { Account, ProviderEvents, ProviderOptions } from '@masknet/web3-shared-base'
 import {

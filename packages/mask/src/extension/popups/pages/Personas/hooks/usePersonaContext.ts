@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useAsyncRetry } from 'react-use'
-import { head, unionWith } from 'lodash-unified'
+import { head, unionWith } from 'lodash-es'
 import { createContainer } from 'unstated-next'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { ECKeyIdentifier, EMPTY_LIST, isSameProfile, PersonaInformation, ProfileIdentifier } from '@masknet/shared-base'

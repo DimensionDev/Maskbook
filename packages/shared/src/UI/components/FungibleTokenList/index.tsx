@@ -9,15 +9,14 @@ import {
     useMemo,
     useState,
 } from 'react'
-import { uniqBy } from 'lodash-unified'
+import { uniqBy } from 'lodash-es'
 import { EMPTY_LIST, EMPTY_OBJECT, NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles, MaskFixedSizeListProps, MaskTextFieldProps, SearchableList } from '@masknet/theme'
 import { Box, Stack, Typography } from '@mui/material'
 import { useSharedI18N } from '../../../locales/index.js'
 import {
-    useAccount,
     useBlockedFungibleTokens,
-    useChainId,
+    useChainContext,
     useNetworkContext,
     useFungibleAssets,
     useFungibleToken,
@@ -138,8 +137,9 @@ export const FungibleTokenList = forwardRef(
         // #endregion
 
         const { pluginID } = useNetworkContext<T>(props.pluginID)
-        const account = useAccount(pluginID)
-        const chainId = useChainId(pluginID, props.chainId)
+        const { account, chainId } = useChainContext({
+            chainId: props.chainId,
+        })
         const { Token, Others } = useWeb3State<'all'>(pluginID)
         const { value: fungibleTokens = EMPTY_LIST } = useFungibleTokensFromTokenList(pluginID, { chainId })
         const trustedFungibleTokens = useTrustedFungibleTokens(pluginID, undefined, chainId)
@@ -309,9 +309,14 @@ export const FungibleTokenList = forwardRef(
                 : ''
         }, [keyword, sortedFungibleTokensForList, Others, mode])
 
-        const { value: searchedToken, loading: searchingToken } = useFungibleToken(pluginID, searchedTokenAddress, {
-            chainId,
-        })
+        const { value: searchedToken, loading: searchingToken } = useFungibleToken(
+            pluginID,
+            searchedTokenAddress,
+            undefined,
+            {
+                chainId,
+            },
+        )
         const { value: tokenBalance = '' } = useFungibleTokenBalance(pluginID, searchedToken?.address, {
             chainId,
             account,

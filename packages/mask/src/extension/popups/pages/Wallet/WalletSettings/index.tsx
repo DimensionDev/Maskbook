@@ -6,7 +6,7 @@ import { Icons } from '@masknet/icons'
 import { PopupRoutes, NetworkPluginID } from '@masknet/shared-base'
 import { useI18N } from '../../../../../utils/index.js'
 import { explorerResolver } from '@masknet/web3-shared-evm'
-import { useChainId, useWallet } from '@masknet/web3-hooks-base'
+import { useChainContext, useWallet } from '@masknet/web3-hooks-base'
 import { WalletContext } from '../hooks/useWalletContext.js'
 import { Navigator } from '../../../components/Navigator/index.js'
 import { useTitle } from '../../../hook/useTitle.js'
@@ -39,7 +39,7 @@ const useStyles = makeStyles()((theme) => ({
 const WalletSettings = memo(() => {
     const { t } = useI18N()
     const navigate = useNavigate()
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const currentWallet = useWallet(NetworkPluginID.PLUGIN_EVM)
     const { selectedWallet } = WalletContext.useContainer()
 

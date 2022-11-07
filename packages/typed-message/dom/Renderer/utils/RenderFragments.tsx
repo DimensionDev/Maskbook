@@ -6,6 +6,7 @@ export const DefaultRenderFragments = {
     Link: memo((props: RenderFragmentsContextType.LinkProps) => (
         <a href={props.href} target="_blank" rel="noopener noreferrer" style={{ fontSize: 'inherit' }}>
             {props.children}
+            {props.suggestedPostImage}
         </a>
     )),
     Image: memo((props: RenderFragmentsContextType.ImageProps) =>
@@ -33,15 +34,19 @@ export namespace RenderFragmentsContextType {
     export interface LinkProps {
         children: string
         href: string
+        suggestedPostImage: React.ReactNode | undefined
     }
     export interface AtLinkProps {
         children: string
+        suggestedPostImage: React.ReactNode | undefined
     }
     export interface CashLinkProps {
         children: string
+        suggestedPostImage: React.ReactNode | undefined
     }
     export interface HashLinkProps {
         children: string
+        suggestedPostImage: React.ReactNode | undefined
     }
     export interface ImageProps {
         src: string
@@ -51,3 +56,4 @@ export namespace RenderFragmentsContextType {
     }
 }
 export const RenderFragmentsContext = createContext<RenderFragmentsContextType>(DefaultRenderFragments)
+RenderFragmentsContext.displayName = 'RenderFragmentsContext'

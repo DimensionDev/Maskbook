@@ -1,15 +1,9 @@
 import { useCallback, useState } from 'react'
-import { compact } from 'lodash-unified'
+import { compact } from 'lodash-es'
 import { NetworkPluginID, PluginID } from '@masknet/shared-base'
 import { useCompositionContext } from '@masknet/plugin-infra/content-script'
-import {
-    useAccount,
-    useChainId,
-    useWeb3Connection,
-    useChainIdValid,
-    ChainContextProvider,
-} from '@masknet/web3-hooks-base'
-import { InjectedDialog } from '@masknet/shared'
+import { useChainContext, useWeb3Connection, useChainIdValid, Web3ContextProvider } from '@masknet/web3-hooks-base'
+import { InjectedDialog, NetworkTab } from '@masknet/shared'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
@@ -24,7 +18,6 @@ import {
 import { useI18N } from '../locales/index.js'
 import { useI18N as useBaseI18N } from '../../../utils/index.js'
 import { reduceUselessPayloadInfo } from './utils/reduceUselessPayloadInfo.js'
-import { NetworkTab } from '../../../components/shared/NetworkTab.js'
 import { WalletMessages } from '../../Wallet/messages.js'
 import { RedPacketMetaKey } from '../constants.js'
 import { DialogTabs, RedPacketJSONPayload } from '../types.js'
@@ -85,17 +78,17 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     const state = useState(DialogTabs.create)
     const [isNFTRedPacketLoaded, setIsNFTRedPacketLoaded] = useState(false)
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const chainIdValid = useChainIdValid(NetworkPluginID.PLUGIN_EVM, chainId)
-    const approvalDefinition = useActivatedPlugin(PluginID.Approval, 'any')
+    const approvalDefinition = useActivatedPlugin(PluginID.RedPacket, 'any')
+    const [currentTab, onChange, tabs] = useTabs('tokens', 'collectibles')
     const chainIdList = compact<ChainId>(
-        approvalDefinition?.enableRequirement.web3?.[NetworkPluginID.PLUGIN_EVM]?.supportedChainIds ?? [],
+        currentTab === tabs.tokens
+            ? approvalDefinition?.enableRequirement.web3?.[NetworkPluginID.PLUGIN_EVM]?.supportedChainIds ?? []
+            : [ChainId.Mainnet, ChainId.BSC, ChainId.Matic],
     )
-    const [networkTabChainId, setNetworkTabChainId] = useState<ChainId>(
-        chainIdValid && chainIdList.includes(chainId) ? chainId : ChainId.Mainnet,
-    )
+    const networkTabChainId = chainIdValid && chainIdList.includes(chainId) ? chainId : ChainId.Mainnet
 
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     // #region token lucky drop
     const [settings, setSettings] = useState<RedPacketSettings>()
     // #endregion
@@ -185,10 +178,9 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
         : isCreateStep
         ? t.display_name()
         : t.details()
-    const [currentTab, onChange, tabs] = useTabs('tokens', 'collectibles')
 
     return (
-        <ChainContextProvider value={{ chainId: networkTabChainId }}>
+        <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM, chainId: networkTabChainId }}>
             <TabContext value={currentTab}>
                 <InjectedDialog
                     isOpenFromApplicationBoard={props.isOpenFromApplicationBoard}
@@ -222,6 +214,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                                             tabPaper: classes.tabPaper,
                                         }}
                                         chains={chainIdList}
+                                        hideArrowButton={currentTab === tabs.collectibles}
                                     />
                                 </div>
                                 <div
@@ -270,6 +263,6 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                     </DialogContent>
                 </InjectedDialog>
             </TabContext>
-        </ChainContextProvider>
+        </Web3ContextProvider>
     )
 }

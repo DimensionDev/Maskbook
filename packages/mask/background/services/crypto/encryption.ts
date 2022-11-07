@@ -12,7 +12,7 @@ import {
 } from '@masknet/encryption'
 import { encryptByLocalKey, deriveAESByECDH, queryPublicKey } from '../../database/persona/helper.js'
 import { savePostKeyToDB } from '../../database/post/helper.js'
-import { noop } from 'lodash-unified'
+import { noop } from 'lodash-es'
 import { queryProfileDB } from '../../database/persona/db.js'
 import { publishPostAESKey_version37 } from '../../network/gun/encryption/queryPostKey.js'
 export async function encryptTo(

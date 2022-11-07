@@ -6,7 +6,6 @@ import {
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { TransactionStatusType } from '@masknet/web3-shared-base'
 import { Typography } from '@mui/material'
-import classnames from 'classnames'
 import { useState } from 'react'
 import { useI18N } from '../../../utils/index.js'
 import { TransactionList } from './TransactionList.js'
@@ -36,7 +35,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export function usePendingTransactions() {
-    const { classes } = useStyles()
+    const { classes, cx } = useStyles()
     const { t } = useI18N()
 
     // #region recent pending transactions
@@ -53,7 +52,7 @@ export function usePendingTransactions() {
     // #endregion
     const summary = pendingTransactions.length ? (
         <section className={classes.summaryWrapper}>
-            <div className={classnames(pendingTransactions.length ? '' : classes.hide)}>
+            <div className={cx(pendingTransactions.length ? '' : classes.hide)}>
                 {pendingTransactions.length ? (
                     <Typography className={classes.pendingSummary} variant="body2" mr={1} fontWeight={700}>
                         {t('wallet_status_pending', { count: pendingTransactions.length })}

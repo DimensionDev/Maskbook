@@ -7,7 +7,7 @@ import type { NetworkPluginID, NextIDPlatform } from '@masknet/shared-base'
 import { useWalletName } from './hooks/useWalletName.js'
 import {
     useNetworkContext,
-    useChainId,
+    useChainContext,
     useDefaultChainId,
     useNetworkDescriptor,
     useProviderDescriptor,
@@ -30,9 +30,10 @@ export const WalletMenuItem = memo<WalletMenuItemProps>(
         const t = useSharedI18N()
 
         const { pluginID } = useNetworkContext(platform ? resolveNextID_NetworkPluginID(platform) : undefined)
-        const currentChainId = useChainId()
         const defaultChainId = useDefaultChainId(pluginID)
-        const chainId = platform ? defaultChainId : currentChainId
+        const { chainId } = useChainContext({
+            chainId: platform ? defaultChainId : undefined,
+        })
 
         const name = useWalletName(address, pluginID, !!platform)
 

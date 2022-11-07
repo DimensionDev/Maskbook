@@ -1,15 +1,15 @@
 import { isZeroAddress, useGoodGhostingConstants, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
 import { useMemo } from 'react'
 import { useAsyncRetry } from 'react-use'
-import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
+import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
 import { useGoodGhostingContract } from '../contracts/useGoodGhostingContract.js'
 import type { GameMetaData, GoodGhostingInfo, Player, TimelineEvent } from '../types.js'
 import { useI18N } from '../../../utils/index.js'
 import addSeconds from 'date-fns/addSeconds'
 import Services from '../../../extension/service.js'
-import { useAccount, useChainId } from '@masknet/web3-hooks-base'
+import { useChainContext } from '@masknet/web3-hooks-base'
 import { useSingleContractMultipleData } from '@masknet/web3-hooks-evm'
-import { NetworkPluginID } from '@masknet/shared-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
 
 export function useGameContractAddress(id: string) {
     const { GOOD_GHOSTING_CONTRACT_ADDRESS_FILE } = useGoodGhostingConstants()
@@ -28,9 +28,8 @@ export function useGameContractAddress(id: string) {
 }
 
 export function useGameInfo(gameData: GameMetaData) {
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const contract = useGoodGhostingContract(chainId, gameData.contractAddress)
-    const account = useAccount()
     const { names, callDatas } = useMemo(() => {
         const names = [
             'segmentPayment',

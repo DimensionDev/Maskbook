@@ -8,9 +8,10 @@
     "dev": "./src/bin/dev.ts"
   },
   "dependencies": {
-    "@masknet/static-module-record-swc": "^0.3.4",
+    "@masknet/static-module-record-swc": "^0.4.1",
     "@types/rimraf": "^3.0.2",
     "chalk": "^5.0.1",
+    "dotenv": "^16.0.3",
     "enquirer": "^2.3.6",
     "fs-extra": "^10.1.0",
     "glob": "^7.2.0",

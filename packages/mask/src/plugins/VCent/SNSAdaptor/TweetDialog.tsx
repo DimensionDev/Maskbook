@@ -1,4 +1,4 @@
-import { first } from 'lodash-unified'
+import { first } from 'lodash-es'
 import { alpha, Box, Button, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useAsync } from 'react-use'
@@ -8,7 +8,7 @@ import { usePluginWrapper } from '@masknet/plugin-infra/content-script'
 import { Icons } from '@masknet/icons'
 import { ImageIcon } from '@masknet/shared'
 import { useNetworkDescriptor } from '@masknet/web3-hooks-base'
-import { VALUABLES_VCENT_URL } from '../constants'
+import { VALUABLES_VCENT_URL } from '../constants.js'
 import urlcat from 'urlcat'
 
 const useStyle = makeStyles()((theme) => ({

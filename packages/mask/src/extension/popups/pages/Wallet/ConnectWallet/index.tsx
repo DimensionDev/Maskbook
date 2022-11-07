@@ -97,11 +97,13 @@ const ConnectWalletPage = memo(() => {
             }
 
             const connection = await Connection?.getConnection?.({
-                chainId: network.chainId,
                 providerType: provider.type,
             })
 
-            const account = await connection?.connect()
+            const currentChainId = await connection?.getChainId()
+            const account = await connection?.connect({
+                chainId: currentChainId,
+            })
 
             navigate(PopupRoutes.VerifyWallet, {
                 state: {

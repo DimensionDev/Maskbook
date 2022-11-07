@@ -6,8 +6,8 @@ import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { LoadingPlaceholder } from '../../../../components/LoadingPlaceholder/index.js'
 import { EmptyPlaceholder } from '../EmptyPlaceholder/index.js'
 import { HistoryTableRow } from '../HistoryTableRow/index.js'
-import { noop } from 'lodash-unified'
-import { useAccount, useTransactions } from '@masknet/web3-hooks-base'
+import { noop } from 'lodash-es'
+import { useChainContext, useTransactions } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { NetworkPluginID, EMPTY_LIST } from '@masknet/shared-base'
 import type { Transaction } from '@masknet/web3-shared-base'
@@ -39,7 +39,7 @@ interface HistoryTableProps {
 
 export const HistoryTable = memo<HistoryTableProps>(({ selectedChainId }) => {
     const [page, setPage] = useState(0)
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { value, loading } = useTransactions(NetworkPluginID.PLUGIN_EVM, { chainId: selectedChainId })
 
     useUpdateEffect(() => {

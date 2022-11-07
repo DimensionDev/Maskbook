@@ -1,4 +1,4 @@
-import BigNumber from 'bignumber.js'
+import { BigNumber } from 'bignumber.js'
 
 // Run this file multiple times should be safe
 if (import.meta.webpackHot) import.meta.webpackHot.accept()

@@ -6,7 +6,7 @@ import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useDashboardI18N } from '../../../../locales/index.js'
 import { ChangeNetworkTip } from '../FungibleTokenTableRow/ChangeNetworkTip.js'
-import { useChainId, useNetworkContext, useWeb3State } from '@masknet/web3-hooks-base'
+import { useChainContext, useNetworkContext, useWeb3State } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 
 const useStyles = makeStyles()((theme) => ({
@@ -82,7 +82,7 @@ export interface CollectibleCardProps {
 
 export const CollectibleCard = memo<CollectibleCardProps>(({ asset, onSend, renderOrder }) => {
     const t = useDashboardI18N()
-    const chainId = useChainId()
+    const { chainId } = useChainContext()
     const { classes } = useStyles()
     const ref = useRef(null)
     const { Others } = useWeb3State()

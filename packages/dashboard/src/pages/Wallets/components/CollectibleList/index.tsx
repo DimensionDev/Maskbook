@@ -1,6 +1,6 @@
 import { memo, useCallback, useEffect, useMemo, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { uniqBy } from 'lodash-unified'
+import { uniqBy } from 'lodash-es'
 import { Box, Button, Stack } from '@mui/material'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import { DashboardRoutes, EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
@@ -11,7 +11,7 @@ import { CollectibleCard } from '../CollectibleCard/index.js'
 import { useDashboardI18N } from '../../../../locales/index.js'
 import { TransferTab } from '../Transfer/index.js'
 import {
-    useAccount,
+    useChainContext,
     useNetworkContext,
     useNonFungibleAssets,
     useTrustedNonFungibleTokens,
@@ -38,7 +38,7 @@ interface CollectibleListProps {
 
 export const CollectibleList = memo<CollectibleListProps>(({ selectedChain }) => {
     const navigate = useNavigate()
-    const account = useAccount()
+    const { account } = useChainContext()
     const trustedNonFungibleTokens = useTrustedNonFungibleTokens(
         NetworkPluginID.PLUGIN_EVM,
         undefined,

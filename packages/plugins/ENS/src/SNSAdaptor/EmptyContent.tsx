@@ -1,7 +1,7 @@
-import { useI18N } from '../locales'
+import { useI18N } from '../locales/index.js'
 import { Icons } from '@masknet/icons'
 import { Typography, Box } from '@mui/material'
-import { ENSPostExtraInfoWrapper } from './ENSPostExtraInfoWrapper'
+import { ENSPostExtraInfoWrapper } from './ENSPostExtraInfoWrapper.js'
 import { makeStyles } from '@masknet/theme'
 
 interface StyleProps {

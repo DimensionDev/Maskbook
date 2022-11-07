@@ -1,7 +1,7 @@
 import { FC, useCallback, useEffect, useState } from 'react'
-import { isEqual } from 'lodash-unified'
+import { isEqual } from 'lodash-es'
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
-import { NetworkContextProvider, ChainContextProvider } from '@masknet/web3-hooks-base'
+import { Web3ContextProvider } from '@masknet/web3-hooks-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { TipDialog } from '../components/index.js'
@@ -48,18 +48,18 @@ export const TipTaskManager: FC<React.PropsWithChildren<{}>> = ({ children }) =>
                 const tipsAccount = task.accounts.find((x) => isSameAddress(x.address, task.recipient))
 
                 return (
-                    <NetworkContextProvider key={task.id} value={tipsAccount?.pluginID ?? NetworkPluginID.PLUGIN_EVM}>
-                        <ChainContextProvider
-                            value={{
-                                chainId: ChainId.Mainnet,
-                            }}>
-                            <TipTaskProvider key={task.id} task={task}>
-                                <TipsTransactionProvider>
-                                    <TipDialog open key={task.id} onClose={() => removeTask(task)} />
-                                </TipsTransactionProvider>
-                            </TipTaskProvider>
-                        </ChainContextProvider>
-                    </NetworkContextProvider>
+                    <Web3ContextProvider
+                        key={task.id}
+                        value={{
+                            pluginID: tipsAccount?.pluginID ?? NetworkPluginID.PLUGIN_EVM,
+                            chainId: ChainId.Mainnet,
+                        }}>
+                        <TipTaskProvider key={task.id} task={task}>
+                            <TipsTransactionProvider>
+                                <TipDialog open key={task.id} onClose={() => removeTask(task)} />
+                            </TipsTransactionProvider>
+                        </TipTaskProvider>
+                    </Web3ContextProvider>
                 )
             })}
             {children}

@@ -1,6 +1,6 @@
 import { useEffect, useLayoutEffect, useMemo, useState } from 'react'
 import { useAsync, useLocation, useWindowSize } from 'react-use'
-import { max, pickBy } from 'lodash-unified'
+import { max, pickBy } from 'lodash-es'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { searchFacebookAvatarOnMobileSelector, searchFacebookAvatarSelector } from '../../utils/selector.js'
 import { createReactRootShadowed, MaskMessages, startWatch } from '../../../../utils/index.js'
@@ -14,7 +14,7 @@ import { makeStyles } from '@masknet/theme'
 import { isMobileFacebook } from '../../utils/isMobile.js'
 import { InMemoryStorages } from '../../../../../shared/index.js'
 import { RSS3_KEY_SNS } from '../../../../plugins/Avatar/constants.js'
-import { useAccount } from '@masknet/web3-hooks-base'
+import { useChainContext } from '@masknet/web3-hooks-base'
 import { useWallet } from '../../../../plugins/Avatar/hooks/useWallet.js'
 
 export function injectNFTAvatarInFacebook(signal: AbortSignal) {
@@ -64,13 +64,13 @@ function NFTAvatarInFacebook() {
     const identity = useCurrentVisitingIdentity()
     const location = useLocation()
     const { value: nftAvatar } = useNFTAvatar(identity.identifier?.userId, RSS3_KEY_SNS.FACEBOOK)
-    const account = useAccount()
+    const { account } = useChainContext()
     const { loading: loadingWallet, value: storage } = useWallet(nftAvatar?.userId)
     const { value: nftInfo, loading: loadingNFTInfo } = useNFT(
         storage?.address ?? account,
         nftAvatar?.address,
         nftAvatar?.tokenId,
-        nftAvatar?.pluginID ?? NetworkPluginID.PLUGIN_EVM,
+        nftAvatar?.pluginId ?? NetworkPluginID.PLUGIN_EVM,
         nftAvatar?.chainId,
     )
 

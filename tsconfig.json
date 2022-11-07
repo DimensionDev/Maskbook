@@ -61,8 +61,7 @@
 
       "@masknet/backup-format": ["./packages/backup-format/src"],
       "@masknet/configuration": ["./packages/configuration/src"],
-      // ! dashboard is explicitly opt-out of this feature, it and the /packages/mask has circulare reference that TypeScript does not allows.
-      // "@masknet/dashboard": ["./packages/dashboard/src"],
+      "@masknet/dashboard": ["./packages/dashboard/src"],
       "@masknet/encryption": ["./packages/encryption/src"],
       "@masknet/external-plugin-previewer": ["./packages/external-plugin-previewer/src"],
       "@masknet/gun-utils": ["./packages/gun-utils/src"],
@@ -91,6 +90,7 @@
       "@masknet/web3-shared-solana": ["./packages/web3-shared/solana/src"],
       "@masknet/typed-message": ["./packages/typed-message/base"],
       "@masknet/typed-message/dom": ["./packages/typed-message/dom"],
+      "@masknet/types": ["./packages/types/src"],
       "@masknet/sandboxed-plugin-runtime": ["./packages/sandboxed-plugin-runtime/src/runtime/export.ts"],
       "@masknet/sandboxed-plugin-runtime/background": ["./packages/sandboxed-plugin-runtime/src/background"],
       "@masknet/sandboxed-plugin-runtime/site-adaptor": ["./packages/sandboxed-plugin-runtime/src/site-adaptor"],
@@ -111,6 +111,7 @@
       "@masknet/plugin-cross-chain-bridge": ["./packages/plugins/CrossChainBridge/src"],
       "@masknet/plugin-web3-profile": ["./packages/plugins/Web3Profile/src"],
       "@masknet/plugin-ens": ["./packages/plugins/ens/src"],
+      "@masknet/plugin-approval": ["./packages/plugins/approval/src"],
       // @masknet/scripts: insert-here 3
       "@masknet/plugin-wallet": ["./packages/plugins/Wallet/src"]
     },
@@ -131,11 +132,11 @@
     "useUnknownInCatchVariables": true,
 
     // Modules
-    "module": "ESNext",
-    "moduleResolution": "node",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
     "resolveJsonModule": true,
     // Exclude everything by default. Include them in each project on-demand
-    "types": ["web", "masknet__global-types"],
+    "types": ["masknet__global-types"],
 
     // Emit
     "declaration": true,
@@ -157,7 +158,7 @@
 
     // Language and Environment
     "jsx": "react-jsx",
-    "lib": ["ES2022"], // don't add "DOM", we use @types/web
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
     "target": "ES2022",
     "useDefineForClassFields": true,
 
@@ -171,7 +172,6 @@
   "files": [],
   "ts-node": {
     "compilerOptions": {
-      "module": "NodeNext",
       "noEmit": false
     },
     "esm": true,

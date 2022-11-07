@@ -1,6 +1,6 @@
 import { createLookupTableResolver } from '@masknet/shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
-import { mapKeys } from 'lodash-unified'
+import { mapKeys } from 'lodash-es'
 import io from 'socket.io-client'
 import {
     SocketRequestNameSpace,
@@ -213,5 +213,5 @@ export async function getGasOptions(chainId: ChainId) {
 
     const gasOptionsCollection = mapKeys(response.payload['chain-prices'], (_, key) => zerionChainIdResolver(key))
 
-    return gasOptionsCollection[chainId].info.classic
+    return gasOptionsCollection[chainId]?.info.classic
 }

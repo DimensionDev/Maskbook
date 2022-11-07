@@ -1,4 +1,4 @@
-import type { NonPayableTransactionObject, NonPayableTx } from '@masknet/web3-contracts/types/types'
+import type { NonPayableTransactionObject, NonPayableTx } from '@masknet/web3-contracts/types/types.js'
 
 export function safeNonPayableTransactionCall<T>(tx?: NonPayableTransactionObject<T>, overrides?: NonPayableTx) {
     try {

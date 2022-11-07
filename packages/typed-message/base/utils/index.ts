@@ -6,7 +6,7 @@ import type {
     SerializableTypedMessage,
     NonSerializableWithAltTypedMessage,
 } from '../base.js'
-import { isEqual } from 'lodash-unified'
+import { isEqual } from 'lodash-es'
 
 export function isNonSerializableTypedMessageWithAlt(x: TypedMessage): x is NonSerializableWithAltTypedMessage {
     const y = x as NonSerializableWithAltTypedMessage

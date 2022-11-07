@@ -152,7 +152,7 @@ export function ImageManagement({
                     {wallets.length ? (
                         wallets.map((wallet) => {
                             const unlistedKeys = unlistedCollectionConfig?.[wallet.address]?.[categoryField] ?? []
-                            const collections = wallet.collections.filter((x) => !unlistedKeys.includes(x.key))
+                            const collections = wallet.collections?.filter((x) => !unlistedKeys.includes(x.key))
                             return (
                                 <WalletAssetsCard
                                     key={wallet.address}

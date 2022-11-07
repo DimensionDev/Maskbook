@@ -1,4 +1,4 @@
-import { noop } from 'lodash-unified'
+import { noop } from 'lodash-es'
 import { Plugin } from '@masknet/plugin-infra'
 import {
     createInjectHooksRenderer,
@@ -7,10 +7,10 @@ import {
     useActivatedPluginsSNSAdaptor,
     usePostInfoDetails,
 } from '@masknet/plugin-infra/content-script'
-import { NetworkContextProvider, useWeb3State } from '@masknet/web3-hooks-base'
+import { useWeb3State, Web3ContextProvider } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { Flags } from '../../../../../shared/index.js'
-import { createReactRootShadowed } from '../../../../utils'
+import { createReactRootShadowed } from '../../../../utils/index.js'
 
 const ActionsRenderer = createInjectHooksRenderer(
     useActivatedPluginsSNSAdaptor.visibility.useNotMinimalMode,
@@ -53,11 +53,11 @@ export function PostActions() {
 function createPostActionsInjector() {
     return function injectPostActions(postInfo: PostInfo, signal: AbortSignal) {
         const jsx = (
-            <NetworkContextProvider value={NetworkPluginID.PLUGIN_EVM}>
+            <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM }}>
                 <PostInfoProvider post={postInfo}>
                     <PostActions />
                 </PostInfoProvider>
-            </NetworkContextProvider>
+            </Web3ContextProvider>
         )
         if (postInfo.actionsElement) {
             const root = createReactRootShadowed(postInfo.actionsElement.afterShadow, {

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState, useRef } from 'react'
 import { DialogActions, DialogContent } from '@mui/material'
-import { DialogStackingProvider, makeStyles } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 import { activatedSocialNetworkUI } from '../../social-network/index.js'
 import { MaskMessages, useI18N } from '../../utils/index.js'
 import { CrossIsolationMessages } from '@masknet/shared-base'
@@ -110,30 +110,28 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
     })()
 
     return (
-        <DialogStackingProvider>
-            <InjectedDialog
-                classes={{ paper: cx(classes.dialogRoot, !open ? classes.hideDialogRoot : '') }}
-                keepMounted
-                open={open}
-                onClose={onClose}
-                title={t('post_dialog__title')}>
-                <DialogContent classes={{ root: classes.dialogContent }}>
-                    <CompositionDialogUI
-                        ref={UI}
-                        hasClipboardPermission={hasClipboardPermission}
-                        onRequestClipboardPermission={onRequestClipboardPermission}
-                        requireClipboardPermission={requireClipboardPermission}
-                        recipients={recipients}
-                        maxLength={560}
-                        onSubmit={onSubmit_}
-                        supportImageEncoding={networkSupport?.text ?? false}
-                        supportTextEncoding={networkSupport?.image ?? false}
-                        e2eEncryptionDisabled={isE2E_Disabled}
-                        isOpenFromApplicationBoard={isOpenFromApplicationBoard}
-                    />
-                </DialogContent>
-                <DialogActions sx={{ height: 68, padding: '0px !important' }} />
-            </InjectedDialog>
-        </DialogStackingProvider>
+        <InjectedDialog
+            classes={{ paper: cx(classes.dialogRoot, !open ? classes.hideDialogRoot : '') }}
+            keepMounted
+            open={open}
+            onClose={onClose}
+            title={t('post_dialog__title')}>
+            <DialogContent classes={{ root: classes.dialogContent }}>
+                <CompositionDialogUI
+                    ref={UI}
+                    hasClipboardPermission={hasClipboardPermission}
+                    onRequestClipboardPermission={onRequestClipboardPermission}
+                    requireClipboardPermission={requireClipboardPermission}
+                    recipients={recipients}
+                    maxLength={560}
+                    onSubmit={onSubmit_}
+                    supportImageEncoding={networkSupport?.text ?? false}
+                    supportTextEncoding={networkSupport?.image ?? false}
+                    e2eEncryptionDisabled={isE2E_Disabled}
+                    isOpenFromApplicationBoard={isOpenFromApplicationBoard}
+                />
+            </DialogContent>
+            <DialogActions sx={{ height: 68, padding: '0px !important' }} />
+        </InjectedDialog>
     )
 }

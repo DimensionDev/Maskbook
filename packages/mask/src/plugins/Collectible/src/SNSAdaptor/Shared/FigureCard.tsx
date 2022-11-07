@@ -1,7 +1,7 @@
 import { AssetPreviewer } from '@masknet/shared'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { Typography } from '@mui/material'
-import VerifiedUserIcon from '@mui/icons-material/VerifiedUser'
+import { VerifiedUser as VerifiedUserIcon } from '@mui/icons-material'
 import { useWeb3State } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import type { NetworkPluginID } from '@masknet/shared-base'
@@ -32,6 +32,9 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 16,
         fontWeight: 700,
         color: theme.palette.maskColor.publicMain,
+        whiteSpace: 'nowrap',
+        textOverflow: 'ellipsis',
+        overflow: 'hidden',
     },
     nameLg: {
         fontSize: 20,

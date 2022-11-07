@@ -1,11 +1,11 @@
-import BigNumber from 'bignumber.js'
-import { useBalance, useChainId } from '@masknet/web3-hooks-base'
+import { BigNumber } from 'bignumber.js'
+import { useBalance, useChainContext } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useGasConfig } from './useGasConfig.js'
 
 export function useTransactionValue(originalValue: BigNumber.Value | undefined, gas: number | undefined) {
     const { value: balance = '0' } = useBalance(NetworkPluginID.PLUGIN_EVM)
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
     // #region amount minus estimate gas fee
     const { gasPrice } = useGasConfig(chainId)

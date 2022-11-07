@@ -23,7 +23,7 @@ export const MaskDialog = memo((props: MaskDialogProps) => {
     const { title, onBack, onClose, open, children, DialogProps, isOpenFromApplicationBoard, ...inferredDialogProps } =
         props
     const dialogProps: DialogProps = { onBackdropClick: onClose, onClose, open, ...inferredDialogProps, ...DialogProps }
-    const { extraProps, shouldReplaceExitWithBack, IncreaseStack } = useDialogStackActor(open)
+    const { extraProps, shouldReplaceExitWithBack, TrackDialogHierarchy } = useDialogStackActor(open)
     const closeBothCompositionDialog = useCallback(() => {
         if (isOpenFromApplicationBoard) {
             CrossIsolationMessages.events.compositionDialogEvent.sendToLocal({
@@ -41,7 +41,7 @@ export const MaskDialog = memo((props: MaskDialogProps) => {
         onClose?.()
     }, [isOpenFromApplicationBoard])
     return usePortalShadowRoot((container) => (
-        <IncreaseStack>
+        <TrackDialogHierarchy>
             <Dialog container={container} {...dialogProps} {...extraProps}>
                 {shouldReplaceExitWithBack ? (
                     // replace onClose with onBack when and only when there is no onBack
@@ -55,7 +55,7 @@ export const MaskDialog = memo((props: MaskDialogProps) => {
                 )}
                 {children}
             </Dialog>
-        </IncreaseStack>
+        </TrackDialogHierarchy>
     ))
 })
 

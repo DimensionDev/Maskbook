@@ -1,6 +1,6 @@
 import { useCallback, useState, useRef, forwardRef, memo, useImperativeHandle, useMemo } from 'react'
 import { Trans } from 'react-i18next'
-import { Result } from 'ts-results'
+import { Result } from 'ts-results-es'
 import {
     useActivatedPluginsSNSAdaptor,
     Plugin,

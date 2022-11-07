@@ -1,27 +1,25 @@
 /// <reference path="./custom-ui.d.ts" />
-export type ClassNameMap<ClassKey extends string = string> = { [P in ClassKey]: string }
-// Priority: classes from props > configHooks > defaultStyles
-export function useStylesExtends<InternalKeys extends string, OverwrittenKeys extends string>(
-    defaultStyles: { classes?: ClassNameMap<InternalKeys> },
-    props: { classes?: Partial<ClassNameMap<OverwrittenKeys>> },
-    useConfigHooks?: () => { classes: Partial<ClassNameMap<OverwrittenKeys>> },
-): ClassNameMap<InternalKeys> & Partial<ClassNameMap<OverwrittenKeys>> {
-    // Note: this is a React hooks
-    const configOverwrite = useConfigHooks?.() || { classes: {} }
-    return mergeClasses(defaultStyles.classes, configOverwrite.classes, props.classes) as any
-}
 
-export function mergeClasses(...args: Array<Partial<ClassNameMap<string>> | undefined>): Partial<ClassNameMap<string>> {
-    args = args.filter(Boolean)
-    if (args.length === 1) return args[0]!
-    const result = {} as Partial<ClassNameMap<string>>
-    for (const current of args) {
-        if (!current) continue
-        for (const key of Object.keys(current)) {
-            if (key === '__proto__') continue
-            if (key in result) result[key] = result[key] + ' ' + current[key]
-            else result[key] = current[key]
-        }
+import { useRef } from 'react'
+import type { Cx } from 'tss-react'
+export type ClassNameMap<ClassKey extends string = string> = { [P in ClassKey]: string }
+export function useStylesExtends<Input extends { classes: ClassNameMap; cx: Cx }, PropsOverwriteKeys extends string>(
+    defaultStyles: Input,
+    props: { classes?: Partial<ClassNameMap<PropsOverwriteKeys>> },
+    useConfigHooks?: () => { classes: Partial<ClassNameMap<PropsOverwriteKeys>> },
+): Omit<Input, 'classes'> & { classes: Input['classes'] & Partial<ClassNameMap<PropsOverwriteKeys>> } {
+    const { current: useConfigOverwriteHook } = useRef(useConfigHooks || (() => ({ classes: {} })))
+    const configOverwrite = useConfigOverwriteHook()
+    const { classes, cx } = defaultStyles
+
+    const allKeys = new Set([
+        ...Object.keys(defaultStyles.classes),
+        ...(props.classes ? Object.keys(props.classes) : []),
+        ...Object.keys(configOverwrite.classes),
+    ])
+    const result: Record<string, string> = {}
+    for (const key of allKeys) {
+        result[key] = cx((classes as any)[key], (props.classes as any)?.[key], (configOverwrite.classes as any)?.[key])
     }
-    return result
+    return { ...defaultStyles, classes: result } as any
 }

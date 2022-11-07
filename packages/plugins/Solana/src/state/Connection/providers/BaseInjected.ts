@@ -1,5 +1,5 @@
 import { isExtensionSiteType } from '@masknet/shared-base'
-import type { InjectedProvider } from '@masknet/injected-script/sdk/Base'
+import type { InjectedProvider } from '@masknet/injected-script'
 import type { Account, ProviderOptions } from '@masknet/web3-shared-base'
 import { ChainId, ProviderType, Web3Provider } from '@masknet/web3-shared-solana'
 import type { SolanaProvider } from '../types.js'

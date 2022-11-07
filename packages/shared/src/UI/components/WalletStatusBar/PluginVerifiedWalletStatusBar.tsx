@@ -1,6 +1,6 @@
 import { memo, PropsWithChildren, useCallback, useMemo, useState } from 'react'
 import { useUpdateEffect } from 'react-use'
-import { first, omit } from 'lodash-unified'
+import { first, omit } from 'lodash-es'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { alpha, Box, Button, Divider, ListItemIcon, MenuItem, Typography } from '@mui/material'
@@ -8,9 +8,8 @@ import { useSharedI18N } from '../../../locales/index.js'
 import { Action } from './Action.js'
 import { BindingProof, NetworkPluginID, isDashboardPage } from '@masknet/shared-base'
 import {
-    useAccount,
+    useChainContext,
     useNetworkContext,
-    useChainId,
     useNetworkDescriptor,
     useProviderDescriptor,
     useWeb3State,
@@ -64,10 +63,9 @@ interface PluginVerifiedWalletStatusBarProps extends PropsWithChildren<{}> {
 export const PluginVerifiedWalletStatusBar = memo<PluginVerifiedWalletStatusBarProps>(
     ({ className, children, verifiedWallets, onChange, expectedAddress, openPopupWindow }) => {
         const t = useSharedI18N()
-
-        const account = useAccount()
-
         const { classes, cx } = useStyles()
+
+        const { account, chainId } = useChainContext()
 
         const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
             WalletMessages.events.selectProviderDialogUpdated,
@@ -80,7 +78,7 @@ export const PluginVerifiedWalletStatusBar = memo<PluginVerifiedWalletStatusBarP
         // exclude current account
         const wallets = verifiedWallets.filter((x) => !isSameAddress(x.identity, account))
 
-        const { pluginID: currentPluginId } = useNetworkContext()
+        const { pluginID: currentPluginID } = useNetworkContext()
 
         const selectedWallet = wallets.find((x) => isSameAddress(x.identity, expectedAddress))
 
@@ -95,7 +93,7 @@ export const PluginVerifiedWalletStatusBar = memo<PluginVerifiedWalletStatusBarP
 
         const isNextIdWallet = !account || !isSameAddress(account, expectedAddress)
 
-        const defaultPluginId = isNextIdWallet ? pluginIdByDefaultVerifiedWallet : currentPluginId
+        const defaultPluginId = isNextIdWallet ? pluginIdByDefaultVerifiedWallet : currentPluginID
 
         const defaultWalletName = useWalletName(
             isNextIdWallet ? defaultVerifiedWallet?.identity : account,
@@ -104,13 +102,12 @@ export const PluginVerifiedWalletStatusBar = memo<PluginVerifiedWalletStatusBarP
         )
 
         const { Others } = useWeb3State(defaultPluginId)
-        const chainId = useChainId(defaultPluginId)
         const defaultChainId = useDefaultChainId(defaultPluginId)
 
         const providerDescriptor = useProviderDescriptor(defaultPluginId)
         const networkDescriptor = useNetworkDescriptor(defaultPluginId)
 
-        const pendingTransactions = useRecentTransactions(currentPluginId, TransactionStatusType.NOT_DEPEND)
+        const pendingTransactions = useRecentTransactions(currentPluginID, TransactionStatusType.NOT_DEPEND)
 
         // actual address
         const walletIdentity = !isNextIdWallet ? account : defaultVerifiedWallet?.identity

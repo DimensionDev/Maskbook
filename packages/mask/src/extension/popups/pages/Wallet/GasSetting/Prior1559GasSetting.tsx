@@ -1,6 +1,6 @@
 import { memo, useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import BigNumber from 'bignumber.js'
+import { BigNumber } from 'bignumber.js'
 import { makeStyles } from '@masknet/theme'
 import { PopupRoutes, NetworkPluginID } from '@masknet/shared-base'
 import { formatCurrency, GasOptionType, isLessThan, pow10, TransactionDescriptorType } from '@masknet/web3-shared-base'
@@ -21,9 +21,9 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Typography } from '@mui/material'
 import { StyledInput } from '../../../components/StyledInput/index.js'
 import { LoadingButton } from '@mui/lab'
-import { isEmpty } from 'lodash-unified'
+import { isEmpty } from 'lodash-es'
 import { toHex } from 'web3-utils'
-import { useChainId, useGasOptions, useNativeToken, useNativeTokenPrice, useWeb3 } from '@masknet/web3-hooks-base'
+import { useChainContext, useGasOptions, useNativeToken, useNativeTokenPrice, useWeb3 } from '@masknet/web3-hooks-base'
 
 const useStyles = makeStyles()((theme) => ({
     options: {
@@ -93,7 +93,7 @@ export const Prior1559GasSetting = memo(() => {
     const { classes } = useStyles()
     const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM)
     const { value: gasOptions_ } = useGasOptions(NetworkPluginID.PLUGIN_EVM)
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { value, loading: getValueLoading } = useUnconfirmedRequest()
     const navigate = useNavigate()
     const [selected, setOption] = useState<number | null>(null)

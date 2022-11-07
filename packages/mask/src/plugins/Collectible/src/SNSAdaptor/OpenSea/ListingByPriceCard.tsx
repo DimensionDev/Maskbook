@@ -1,24 +1,16 @@
 import { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react'
-import { first } from 'lodash-unified'
+import { first } from 'lodash-es'
 import { EthereumAddress } from 'wallet.ts'
 import { Box, Card, CardActions, CardContent, Checkbox, FormControlLabel, Typography, InputBase } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { isZero, isGreaterThan } from '@masknet/web3-shared-base'
 import formatDateTime from 'date-fns/format'
-import { PluginWalletStatusBar, ActionButtonPromise } from '@masknet/shared'
+import { PluginWalletStatusBar, ActionButtonPromise, WalletConnectedBoundary, DateTimePanel } from '@masknet/shared'
 import getUnixTime from 'date-fns/getUnixTime'
 import { useI18N } from '../../../../../utils/index.js'
 import { SelectTokenAmountPanel } from '../../../../ITO/SNSAdaptor/SelectTokenAmountPanel.js'
-import { WalletConnectedBoundary } from '../../../../../web3/UI/WalletConnectedBoundary.js'
-import { DateTimePanel } from '../../../../../web3/UI/DateTimePanel.js'
 import { toAsset, isWyvernSchemaName } from '../../helpers/index.js'
-import {
-    useAccount,
-    useChainId,
-    useNetworkContext,
-    useFungibleTokenWatched,
-    useWeb3State,
-} from '@masknet/web3-hooks-base'
+import { useChainContext, useNetworkContext, useFungibleTokenWatched, useWeb3State } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useOpenSea } from './hooks/useOpenSea.js'
 
@@ -65,8 +57,7 @@ export function ListingByPriceCard(props: ListingByPriceCardProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
 
-    const account = useAccount()
-    const chainId = useChainId()
+    const { account, chainId } = useChainContext()
     const opensea = useOpenSea(pluginID, chainId)
     const { Others } = useWeb3State()
 

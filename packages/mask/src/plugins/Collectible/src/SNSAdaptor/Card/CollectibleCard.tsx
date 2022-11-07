@@ -21,7 +21,7 @@ export interface CollectibleCardProps extends withClasses<'root' | 'content'> {
 }
 
 export function CollectibleCard(props: CollectibleCardProps) {
-    const classes = useStylesExtends(useStyles(), props)
+    const { classes } = useStylesExtends(useStyles(), props)
 
     return (
         <Card className={classes.root} elevation={0} {...props.CardProps}>

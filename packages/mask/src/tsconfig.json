@@ -4,15 +4,11 @@
     "rootDir": "./",
     "outDir": "../dist/src/",
     "tsBuildInfoFile": "../dist/legacy.tsbuildinfo",
-    "emitDeclarationOnly": true,
-    "lib": ["ES2022"]
+    "emitDeclarationOnly": true
   },
   "include": ["./", "./**/*.json"],
-
-  // ! Note: mask/ depends dashboard/ on source-code level
-  // !       but dashboard/ depends mask/ on type level
-  // !       do not add dashboard/ as a reference otherwise there is a circular dependency on the type level.
   "references": [
+    { "path": "../../dashboard" },
     { "path": "../../public-api" },
     { "path": "../../shared" },
     { "path": "../../backup-format" },
@@ -43,6 +39,7 @@
     { "path": "../utils-ui" },
     { "path": "../background" },
     { "path": "../shared" },
-    { "path": "../shared-ui" }
+    { "path": "../shared-ui" },
+    { "path": "../../types" }
   ]
 }

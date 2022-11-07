@@ -1,10 +1,11 @@
-import { first } from 'lodash-unified'
+import { first } from 'lodash-es'
 import { createLookupTableResolver } from '@masknet/shared-base'
 import { ChainId, chainResolver } from '@masknet/web3-shared-evm'
-import * as Torus from '@toruslabs/torus-embed'
+import Torus from '@toruslabs/torus-embed'
 import type { RequestArguments } from 'web3-core'
 import type { EVM_Provider } from '../types.js'
 import { BaseProvider } from './Base.js'
+import type { Account } from '@masknet/web3-shared-base'
 
 export type ChainIdTorus = ChainId.Mainnet | ChainId.BSC | ChainId.Matic | ChainId.xDai
 
@@ -69,7 +70,7 @@ export default class TorusProvider extends BaseProvider implements EVM_Provider 
         return provider.enable()
     }
 
-    override async connect(chainId: ChainId) {
+    override async connect(chainId: ChainId): Promise<Account<ChainId>> {
         try {
             this.chainId = chainId
             const accounts = await this.login()

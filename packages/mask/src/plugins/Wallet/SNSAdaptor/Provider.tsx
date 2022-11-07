@@ -40,7 +40,7 @@ export interface ProviderProps
 }
 
 export function Provider(props: ProviderProps) {
-    const classes = useStylesExtends(useStyles(), props)
+    const { classes } = useStylesExtends(useStyles(), props)
     return (
         <Card className={classes.root} elevation={0} style={{ opacity: props.ButtonBaseProps?.disabled ? 0.5 : 1 }}>
             <ButtonBase

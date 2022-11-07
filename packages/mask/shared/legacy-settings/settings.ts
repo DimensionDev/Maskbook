@@ -1,4 +1,4 @@
-import { isEqual } from 'lodash-unified'
+import { isEqual } from 'lodash-es'
 import { Appearance } from '@masknet/theme'
 import { LanguageOptions } from '@masknet/public-api'
 import { EnhanceableSite, ExtensionSite, updateLanguage, NetworkPluginID } from '@masknet/shared-base'

@@ -1,12 +1,11 @@
 import { Link, DialogContent, DialogActions, Typography } from '@mui/material'
 import { ActionButton, makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import millify from 'millify'
-import OpenInNew from '@mui/icons-material/OpenInNew'
+import { OpenInNew } from '@mui/icons-material'
 import { ChainId, explorerResolver } from '@masknet/web3-shared-evm'
-import { PluginWalletStatusBar, InjectedDialog } from '@masknet/shared'
+import { PluginWalletStatusBar, InjectedDialog, WalletConnectedBoundary } from '@masknet/shared'
 import { useI18N } from '../../../utils/index.js'
 import { InfoField } from './InformationCard.js'
-import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary.js'
 
 const useStyles = makeStyles()((theme) => ({
     link: {
@@ -87,7 +86,7 @@ export function VoteConfirmDialog(props: VoteConfirmDialogProps) {
                 </InfoField>
                 <InfoField classes={{ field: classes.field }} title={t('plugin_snapshot_vote_power')}>
                     <Typography>
-                        {millify(power, { precision: 2, lowercase: true })} {powerSymbol.toUpperCase()}
+                        {millify.default(power, { precision: 2, lowercase: true })} {powerSymbol.toUpperCase()}
                     </Typography>
                 </InfoField>
             </DialogContent>

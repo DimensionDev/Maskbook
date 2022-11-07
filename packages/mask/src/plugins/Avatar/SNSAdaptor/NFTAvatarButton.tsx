@@ -34,7 +34,7 @@ export interface NFTAvatarButtonProps extends withClasses<'root' | 'text'> {
 export function NFTAvatarButton(props: NFTAvatarButtonProps) {
     const { onClick } = props
     const { t } = useI18N()
-    const classes = useStylesExtends(useStyles(), props)
+    const { classes } = useStylesExtends(useStyles(), props)
 
     return (
         <div className={classes.root} onClick={onClick}>

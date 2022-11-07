@@ -6,7 +6,7 @@ import { usePopupFullPageTheme } from '../../utils/theme/useClassicMaskFullPageT
 import '../../social-network-adaptor/browser-action/index.js'
 import { PopupContext } from './hook/usePopupContext.js'
 import { PopupFrame } from './components/PopupFrame/index.js'
-import { MaskUIRoot } from '../../UIRoot.js'
+import { MaskUIRootPage } from '../../UIRoot-page.js'
 import { PageTitleContext } from './context.js'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { languageSettings } from '../../../shared/legacy-settings/settings.js'
@@ -35,34 +35,31 @@ function PluginRenderDelayed() {
 export default function Popups() {
     const [title, setTitle] = useState('')
     useEffect(queryRemoteI18NBundle(Services.Helper.queryRemoteI18NBundle), [])
-    return (
-        <MaskUIRoot fallback={frame(<LoadingPlaceholder />)} useTheme={usePopupTheme} kind="page">
-            <PopupSnackbarProvider>
-                <PopupContext.Provider>
-                    <PageTitleContext.Provider value={{ title, setTitle }}>
-                        <HashRouter>
-                            <Routes>
-                                <Route path={PopupRoutes.Personas + '/*'} element={frame(<Personas />)} />
-                                <Route path={PopupRoutes.Wallet + '/*'} element={frame(<Wallet />)} />
-                                <Route path={PopupRoutes.Swap} element={<SwapPage />} />
-                                <Route path={PopupRoutes.RequestPermission} element={<RequestPermissionPage />} />
-                                <Route
-                                    path={PopupRoutes.PermissionAwareRedirect}
-                                    element={<PermissionAwareRedirect />}
-                                />
-                                <Route
-                                    path={PopupRoutes.ThirdPartyRequestPermission}
-                                    element={<ThirdPartyRequestPermission />}
-                                />
-                                <Route path="*" element={<Navigate replace to={PopupRoutes.Personas} />} />
-                            </Routes>
-                            {/* TODO: Should only load plugins when the page is plugin-aware. */}
-                            <PluginRenderDelayed />
-                        </HashRouter>
-                    </PageTitleContext.Provider>
-                </PopupContext.Provider>
-            </PopupSnackbarProvider>
-        </MaskUIRoot>
+    return MaskUIRootPage(
+        usePopupTheme,
+        <PopupSnackbarProvider>
+            <PopupContext.Provider>
+                <PageTitleContext.Provider value={{ title, setTitle }}>
+                    <HashRouter>
+                        <Routes>
+                            <Route path={PopupRoutes.Personas + '/*'} element={frame(<Personas />)} />
+                            <Route path={PopupRoutes.Wallet + '/*'} element={frame(<Wallet />)} />
+                            <Route path={PopupRoutes.Swap} element={<SwapPage />} />
+                            <Route path={PopupRoutes.RequestPermission} element={<RequestPermissionPage />} />
+                            <Route path={PopupRoutes.PermissionAwareRedirect} element={<PermissionAwareRedirect />} />
+                            <Route
+                                path={PopupRoutes.ThirdPartyRequestPermission}
+                                element={<ThirdPartyRequestPermission />}
+                            />
+                            <Route path="*" element={<Navigate replace to={PopupRoutes.Personas} />} />
+                        </Routes>
+                        {/* TODO: Should only load plugins when the page is plugin-aware. */}
+                        <PluginRenderDelayed />
+                    </HashRouter>
+                </PageTitleContext.Provider>
+            </PopupContext.Provider>
+        </PopupSnackbarProvider>,
+        frame(<LoadingPlaceholder />),
     )
 }
 

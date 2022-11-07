@@ -1,6 +1,6 @@
-import { first, range as rangeNum } from 'lodash-unified'
+import { first, range as rangeNum } from 'lodash-es'
 import { useAsyncRetry } from 'react-use'
-import type { CreationSuccess } from '@masknet/web3-contracts/types/MaskBox'
+import type { CreationSuccess } from '@masknet/web3-contracts/types/MaskBox.js'
 import { useMaskBoxConstants } from '@masknet/web3-shared-evm'
 import { useMaskBoxContract } from './useMaskBoxContract.js'
 import { NetworkPluginID } from '@masknet/shared-base'

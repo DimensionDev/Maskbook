@@ -1,6 +1,6 @@
 import bs58 from 'bs58'
 import * as Web3 from '@solana/web3.js'
-import { getEnumAsArray } from '@dimensiondev/kit'
+import { getEnumAsArray } from '@masknet/kit'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { ChainId, NetworkType, ProviderType, SchemaType } from '../types.js'
 import { getTokenConstant, ZERO_ADDRESS } from '../constants/index.js'
@@ -50,7 +50,7 @@ export function isValidAddress(address?: string, strict?: boolean) {
     }
 }
 
-export function isValidChainId(chainId: ChainId) {
+export function isValidChainId(chainId?: ChainId) {
     return getEnumAsArray(ChainId).some((x) => x.value === chainId)
 }
 
@@ -65,6 +65,10 @@ export function isNativeTokenAddress(address?: string) {
 
 export function getDefaultChainId() {
     return ChainId.Mainnet
+}
+
+export function getInvalidChainId() {
+    return ChainId.Invalid
 }
 
 export function getDefaultNetworkType() {

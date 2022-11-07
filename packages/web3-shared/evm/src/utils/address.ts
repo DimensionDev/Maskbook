@@ -1,5 +1,5 @@
 import { EthereumAddress } from 'wallet.ts'
-import { getEnumAsArray } from '@dimensiondev/kit'
+import { getEnumAsArray } from '@masknet/kit'
 import { isPopupPage } from '@masknet/shared-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { getENSConstants, getRedPacketConstants, getTokenConstant, ZERO_ADDRESS } from '../constants/index.js'
@@ -14,7 +14,7 @@ export function isValidAddress(address?: string) {
     return EthereumAddress.isValid(address)
 }
 
-export function isValidChainId(chainId: ChainId) {
+export function isValidChainId(chainId?: ChainId) {
     return getEnumAsArray(ChainId).some((x) => x.value === chainId)
 }
 
@@ -56,6 +56,10 @@ export function isRedPacketAddress(address: string, version?: 1 | 2 | 3 | 4) {
 
 export function getDefaultChainId() {
     return ChainId.Mainnet
+}
+
+export function getInvalidChainId() {
+    return ChainId.Invalid
 }
 
 export function getDefaultNetworkType() {

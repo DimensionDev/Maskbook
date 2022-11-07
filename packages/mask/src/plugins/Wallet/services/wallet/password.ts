@@ -35,7 +35,7 @@ export async function verifyPassword(unverifiedPassword: string) {
 }
 
 export async function verifyPasswordRequired(unverifiedPassword: string) {
-    if (!(await verifyPassword(unverifiedPassword))) throw new Error(i18n.t('popups_wallet_unlock_error_password'))
+    if (!(await verifyPassword(unverifiedPassword))) throw new Error('Wrong password')
     return true
 }
 

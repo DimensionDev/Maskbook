@@ -1,6 +1,5 @@
 import { useMemo, useCallback, useState } from 'react'
 import { useAsync } from 'react-use'
-import classNames from 'classnames'
 import { makeStyles, ActionButton } from '@masknet/theme'
 import {
     formatEthereumAddress,
@@ -10,12 +9,16 @@ import {
     isNativeTokenAddress,
     formatTokenId,
 } from '@masknet/web3-shared-evm'
-import { NFTCardStyledAssetPlayer, PluginWalletStatusBar, ChainBoundary } from '@masknet/shared'
+import {
+    NFTCardStyledAssetPlayer,
+    PluginWalletStatusBar,
+    ChainBoundary,
+    WalletConnectedBoundary,
+} from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { Grid, Link, Typography, List, DialogContent, ListItem, Box } from '@mui/material'
-import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary.js'
-import LaunchIcon from '@mui/icons-material/Launch'
+import { Launch as LaunchIcon } from '@mui/icons-material'
 import { useI18N } from '../locales/index.js'
 import { useCreateNftRedpacketCallback } from './hooks/useCreateNftRedpacketCallback.js'
 import { useCurrentIdentity, useLastRecognizedIdentity } from '../../../components/DataSource/useActivatedUI.js'
@@ -23,7 +26,7 @@ import { useCompositionContext } from '@masknet/plugin-infra/content-script'
 import { RedPacketNftMetaKey } from '../constants.js'
 import { WalletMessages } from '../../Wallet/messages.js'
 import { RedPacketRPC } from '../messages.js'
-import { useAccount, useChainId, useWallet, useWeb3 } from '@masknet/web3-hooks-base'
+import { useChainContext, useWallet, useWeb3 } from '@masknet/web3-hooks-base'
 import type { NonFungibleTokenContract, NonFungibleToken } from '@masknet/web3-shared-base'
 import Services from '../../../extension/service.js'
 
@@ -129,11 +132,10 @@ export interface RedpacketNftConfirmDialogProps {
     message: string
 }
 export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps) {
-    const { classes } = useStyles()
+    const { classes, cx } = useStyles()
     const { onClose, message, contract, tokenList } = props
     const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM)
     const { attachMetadata } = useCompositionContext()
 
@@ -219,7 +221,7 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
                         color="textPrimary"
                         variant="body1"
                         align="right"
-                        className={classNames(classes.account, classes.bold, classes.text)}>
+                        className={cx(classes.account, classes.bold, classes.text)}>
                         {formatEthereumAddress(account, 4)}
                         {isNativeTokenAddress(wallet?.address) ? null : (
                             <Link
@@ -235,7 +237,7 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
                     </Typography>
                 </Grid>
                 <Grid item xs={6}>
-                    <Typography variant="body1" color="textPrimary" className={classNames(classes.text)}>
+                    <Typography variant="body1" color="textPrimary" className={cx(classes.text)}>
                         {t.nft_attached_message()}
                     </Typography>
                 </Grid>
@@ -244,12 +246,12 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
                         variant="body1"
                         color="textPrimary"
                         align="right"
-                        className={classNames(classes.text, classes.bold, classes.ellipsis)}>
+                        className={cx(classes.text, classes.bold, classes.ellipsis)}>
                         {message}
                     </Typography>
                 </Grid>
                 <Grid item xs={6}>
-                    <Typography variant="body1" color="textPrimary" className={classNames(classes.text)}>
+                    <Typography variant="body1" color="textPrimary" className={cx(classes.text)}>
                         {t.collections()}
                     </Typography>
                 </Grid>
@@ -260,7 +262,7 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
                             variant="body1"
                             color="textPrimary"
                             align="right"
-                            className={classNames(classes.text, classes.bold)}>
+                            className={cx(classes.text, classes.bold)}>
                             {contract.name}
                         </Typography>
                     </div>
@@ -276,12 +278,12 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
                 </Grid>
 
                 <Grid item xs={6}>
-                    <Typography color="textPrimary" variant="body1" className={classNames(classes.text)}>
+                    <Typography color="textPrimary" variant="body1" className={cx(classes.text)}>
                         {t.nft_total_amount()}
                     </Typography>
                 </Grid>
                 <Grid item xs={6}>
-                    <Typography color="textPrimary" align="right" className={classNames(classes.text, classes.bold)}>
+                    <Typography color="textPrimary" align="right" className={cx(classes.text, classes.bold)}>
                         {tokenList.length}
                     </Typography>
                 </Grid>
@@ -291,15 +293,15 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
                     <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={chainId}>
                         <WalletConnectedBoundary
                             classes={{
-                                connectWallet: classNames(classes.button, classes.sendButton),
-                                unlockMetaMask: classNames(classes.button, classes.sendButton),
+                                connectWallet: cx(classes.button, classes.sendButton),
+                                unlockMetaMask: cx(classes.button, classes.sendButton),
                             }}>
                             <ActionButton
                                 size="medium"
                                 loading={isSending}
                                 disabled={isSending}
                                 onClick={onSendTx}
-                                className={classNames(classes.button, classes.sendButton)}
+                                className={cx(classes.button, classes.sendButton)}
                                 fullWidth>
                                 {t.send_symbol({
                                     count: tokenList.length,
@@ -320,10 +322,10 @@ interface NFTCardProps {
 
 function NFTCard(props: NFTCardProps) {
     const { token, renderOrder } = props
-    const { classes } = useStyles()
+    const { classes, cx } = useStyles()
     const [name, setName] = useState(formatTokenId(token.tokenId, 2))
     return (
-        <ListItem className={classNames(classes.tokenSelectorWrapper)}>
+        <ListItem className={cx(classes.tokenSelectorWrapper)}>
             <NFTCardStyledAssetPlayer
                 contractAddress={token.contract?.address}
                 chainId={token.contract?.chainId}

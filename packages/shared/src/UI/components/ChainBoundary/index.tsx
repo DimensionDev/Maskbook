@@ -4,19 +4,18 @@ import { Box, Typography } from '@mui/material'
 import { makeStyles, MaskColorVar, ShadowRootTooltip, useStylesExtends, ActionButton } from '@masknet/theme'
 import {
     useNetworkContext,
-    useAccount,
+    useChainContext,
     useNetworkDescriptor,
     useAllowTestnet,
     useWeb3State,
     useWeb3Connection,
+    useChainIdValid,
     useProviderDescriptor,
-    useChainId,
-    useProviderType,
 } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { delay } from '@dimensiondev/kit'
+import { delay } from '@masknet/kit'
 import { WalletIcon } from '../WalletIcon/index.js'
 import { ActionButtonPromise, ActionButtonPromiseProps } from '../ActionButton/index.js'
 import { Icons } from '@masknet/icons'
@@ -52,6 +51,7 @@ export interface ChainBoundaryProps<T extends NetworkPluginID> extends withClass
     noSwitchNetworkTip?: boolean
     hiddenConnectButton?: boolean
     switchChainWithoutPopup?: boolean
+    forceShowingWrongNetworkButton?: boolean
     children?: React.ReactNode
     ActionButtonPromiseProps?: Partial<ActionButtonPromiseProps>
 }
@@ -63,27 +63,34 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
         expectedChainId,
         expectedAccount,
         switchChainWithoutPopup = false,
+        forceShowingWrongNetworkButton = false,
         predicate = (actualPluginID, actualChainId) =>
             actualPluginID === expectedPluginID && actualChainId === expectedChainId,
     } = props
 
     const t = useSharedI18N()
-    const classes = useStylesExtends(useStyles(), props)
+    const { classes } = useStylesExtends(useStyles(), props)
 
     const { pluginID: actualPluginID } = useNetworkContext()
     const plugin = useActivatedPlugin(actualPluginID, 'any')
     const expectedPlugin = useActivatedPlugin(expectedPluginID, 'any')
 
     const { Others: actualOthers } = useWeb3State(actualPluginID)
-    const actualChainId = useChainId(actualPluginID)
-    const actualProviderType = useProviderType(actualPluginID)
+    const {
+        account,
+        chainId: actualChainId,
+        providerType: actualProviderType,
+    } = useChainContext({
+        account: expectedAccount,
+    })
     const actualProviderDescriptor = useProviderDescriptor(actualPluginID)
     const actualChainName = actualOthers?.chainResolver.chainName(actualChainId)
-    const account = useAccount(actualPluginID, expectedAccount)
 
     const { Others: expectedOthers } = useWeb3State(expectedPluginID)
     const expectedConnection = useWeb3Connection(expectedPluginID)
     const expectedAllowTestnet = useAllowTestnet(expectedPluginID)
+
+    const chainIdValid = useChainIdValid(actualPluginID)
 
     const expectedChainName = expectedOthers?.chainResolver.chainName(expectedChainId)
     const expectedNetworkDescriptor = useNetworkDescriptor(expectedPluginID, expectedChainId)
@@ -147,6 +154,21 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
             </ShadowRootTooltip>
         )
     }
+
+    if (!chainIdValid && !expectedChainAllowed && !switchChainWithoutPopup && forceShowingWrongNetworkButton)
+        return renderBox(
+            <>
+                {!props.hiddenConnectButton ? (
+                    <ActionButton
+                        fullWidth
+                        startIcon={<Icons.ConnectWallet size={18} />}
+                        onClick={openSelectProviderDialog}
+                        {...props.ActionButtonPromiseProps}>
+                        {t.plugin_wallet_wrong_network()}
+                    </ActionButton>
+                ) : null}
+            </>,
+        )
 
     if (!account)
         return renderBox(

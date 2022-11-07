@@ -1,6 +1,6 @@
 import ss from '@snapshot-labs/snapshot.js'
 import type { Proposal, VoteSuccess, RawVote, Strategy } from '../../types.js'
-import { transform } from 'lodash-unified'
+import { transform } from 'lodash-es'
 import { SNAPSHOT_GET_SCORE_API } from '../../constants.js'
 import type { ChainId } from '@masknet/web3-shared-evm'
 

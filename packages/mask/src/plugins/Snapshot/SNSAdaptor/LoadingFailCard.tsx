@@ -21,7 +21,7 @@ export class LoadingFailCard extends Component<
             return this.props.isFullPluginDown ? (
                 <Box style={{ textAlign: 'center', padding: 16 }}>
                     <Typography textAlign="center" color="error">
-                        <Trans i18nKey="plugin_furucombo_load_failed" />
+                        <Trans i18nKey="load_failed" />
                     </Typography>
                     <Button
                         sx={{

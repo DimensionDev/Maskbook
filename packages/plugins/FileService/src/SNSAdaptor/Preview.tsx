@@ -1,4 +1,4 @@
-import { formatFileSize } from '@dimensiondev/kit'
+import { formatFileSize } from '@masknet/kit'
 import { Paper, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { DownloadCloud, File } from 'react-feather'

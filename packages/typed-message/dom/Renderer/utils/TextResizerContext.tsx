@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState } from 'react'
 
 export const TextResizeContext = createContext(false)
+TextResizeContext.displayName = 'TextResizeContext'
 /** @internal */
 export function useTextResize(shouldEnable: boolean) {
     const hasTextEnlarge = useContext(TextResizeContext)

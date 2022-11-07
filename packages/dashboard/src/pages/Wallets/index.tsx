@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState, useCallback } from 'react'
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom'
 import { getRegisteredWeb3Networks } from '@masknet/plugin-infra'
-import { useAccount, useChainId, useNetworkDescriptor, useNetworkContext, useWallets } from '@masknet/web3-hooks-base'
+import { useChainContext, useNetworkDescriptor, useNetworkContext, useWallets } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { DashboardRoutes, relativeRouteOf, CrossIsolationMessages, NetworkPluginID } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
@@ -23,8 +23,7 @@ const r = relativeRouteOf(DashboardRoutes.Wallets)
 function Wallets() {
     const t = useDashboardI18N()
     const navigate = useNavigate()
-    const chainId = useChainId()
-    const account = useAccount()
+    const { account, chainId } = useChainContext()
     const wallets = useWallets()
 
     const { pathname } = useLocation()

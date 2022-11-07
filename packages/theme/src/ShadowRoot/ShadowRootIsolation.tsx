@@ -25,7 +25,8 @@ export function ShadowRootIsolation({
         if (!dom) return
         if (dom.shadowRoot) return
 
-        const shadow = dom.attachShadow({ mode: process.env.shadowRootMode })
+        // Note: do not use process.env.shadowRootMode here because ShadowRootIsolation is expected to use inside other closed ShadowRoot
+        const shadow = dom.attachShadow({ mode: 'open' })
         shadow.appendChild(container.current!)
     }, [dom])
 
@@ -33,7 +34,7 @@ export function ShadowRootIsolation({
 
     return (
         <span {...props}>
-            <ShadowRootStyleProvider shadow={dom.shadowRoot}>
+            <ShadowRootStyleProvider preventPropagation={false} shadow={dom.shadowRoot}>
                 {createPortal(children, container.current)}
             </ShadowRootStyleProvider>
         </span>

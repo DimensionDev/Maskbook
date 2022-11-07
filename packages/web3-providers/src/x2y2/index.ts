@@ -8,7 +8,6 @@ import {
     createIndicator,
     createNextIndicator,
     NonFungibleTokenEvent,
-    ActivityType,
     NonFungibleTokenContract,
     SourceType,
 } from '@masknet/web3-shared-base'
@@ -17,6 +16,8 @@ import { ChainId, createERC20Token, createNativeToken, isZeroAddress, SchemaType
 import type { NonFungibleTokenAPI } from '../types/index.js'
 import { X2Y2_API_URL, X2Y2_PAGE_SIZE } from './constants.js'
 import type { Contract, Event, Order } from './types.js'
+import { first, last } from 'lodash-es'
+import { resolveNonFungibleTokenEventActivityType } from '../helpers.js'
 
 async function fetchFromX2Y2<T>(pathname: string) {
     const response = await globalThis.fetch(urlcat(X2Y2_API_URL, pathname))
@@ -72,7 +73,7 @@ export class X2Y2API implements NonFungibleTokenAPI.Provider<ChainId, SchemaType
         return {
             id: event.id.toString(),
             chainId: ChainId.Mainnet,
-            type: ActivityType.List,
+            type: resolveNonFungibleTokenEventActivityType(event.type),
             assetPermalink: this.createPermalink(address, tokenId),
             quantity: '1',
             hash: event.order.item_hash,
@@ -148,15 +149,39 @@ export class X2Y2API implements NonFungibleTokenAPI.Provider<ChainId, SchemaType
         return this.getOrders(address, tokenId, OrderSide.Sell)
     }
     async getEvents(address: string, tokenId: string, options?: HubOptions<ChainId, HubIndicator>) {
-        const [data = EMPTY_LIST, next] = await fetchFromX2Y2<Event[]>(
-            urlcat('/v1/events', {
-                cursor: options?.indicator?.id,
-                contract: address,
-                token_id: tokenId,
-                // list, sale, cancel_listing
-                type: 'list',
-            }),
-        )
+        const cursors = options?.indicator?.id?.split('_')
+        const listCursor = first(cursors)
+        const saleCursor = last(cursors)
+
+        const result = await Promise.all([
+            listCursor || !options?.indicator?.index
+                ? fetchFromX2Y2<Event[]>(
+                      urlcat('/v1/events', {
+                          cursor: listCursor,
+                          contract: address,
+                          token_id: tokenId,
+                          // list, sale, cancel_listing
+                          type: 'list',
+                      }),
+                  )
+                : EMPTY_LIST,
+            saleCursor || !options?.indicator?.index
+                ? fetchFromX2Y2<Event[]>(
+                      urlcat('/v1/events', {
+                          cursor: saleCursor,
+                          contract: address,
+                          token_id: tokenId,
+                          // list, sale, cancel_listing
+                          type: 'sale',
+                      }),
+                  )
+                : EMPTY_LIST,
+        ])
+
+        const [[listData = EMPTY_LIST, listNext], [saleData = EMPTY_LIST, saleNext]] = result
+        const data = [...listData, ...saleData]
+
+        const next = `${listNext}_${saleNext}`
 
         const events = data.map((x) => this.createEvent(address, tokenId, x))
 

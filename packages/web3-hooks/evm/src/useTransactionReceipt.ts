@@ -1,5 +1,5 @@
 import { useAsyncRetry } from 'react-use'
-import type { BaseContract } from '@masknet/web3-contracts/types/types'
+import type { BaseContract } from '@masknet/web3-contracts/types/types.js'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { decodeEvents } from '@masknet/web3-shared-evm'
 import { useWeb3, useWeb3Connection } from '@masknet/web3-hooks-base'

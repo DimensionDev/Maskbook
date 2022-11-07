@@ -1,27 +1,20 @@
 import { useEffect, useState, useMemo, useCallback } from 'react'
-import BigNumber from 'bignumber.js'
+import { BigNumber } from 'bignumber.js'
 import { useMenuConfig, FormattedBalance, useSharedI18N, useSelectAdvancedSettings } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
-import {
-    GasOptionType,
-    multipliedBy,
-    isZero,
-    formatBalance,
-    FungibleToken,
-    formatCurrency,
-} from '@masknet/web3-shared-base'
+import { GasOptionType, multipliedBy, isZero, formatBalance, formatCurrency } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { formatEtherToGwei, formatWeiToEther, formatWeiToGwei, GasOptionConfig } from '@masknet/web3-shared-evm'
 import { Typography, MenuItem, Box } from '@mui/material'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { useChainId, useWeb3State, useNetworkContext } from '@masknet/web3-hooks-base'
+import { useChainContext, useWeb3State, useNetworkContext } from '@masknet/web3-hooks-base'
 import { Icons } from '@masknet/icons'
 import { SettingsContext } from '../SettingsBoard/Context.js'
 
 interface SelectGasSettingsToolbarProps<T extends NetworkPluginID = NetworkPluginID> {
     pluginID?: T
     chainId?: Web3Helper.ChainIdAll
-    nativeToken: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
+    nativeToken: Web3Helper.FungibleTokenAll
     nativeTokenPrice: number
     gasLimit: number
     gasOption?: GasOptionConfig
@@ -95,7 +88,7 @@ const useStyles = makeStyles()((theme) => {
 
 export function SelectGasSettingsToolbar(props: SelectGasSettingsToolbarProps) {
     const { pluginID } = useNetworkContext(props.pluginID)
-    const chainId = useChainId(pluginID, props.chainId)
+    const { chainId } = useChainContext({ chainId: props.chainId })
 
     return (
         <SettingsContext.Provider initialState={{ pluginID, chainId }}>
@@ -116,7 +109,7 @@ export function SelectGasSettingsToolbarUI({
     const [isCustomGas, setIsCustomGas] = useState(false)
     const [currentGasOptionType, setCurrentGasOptionType] = useState<GasOptionType>(GasOptionType.NORMAL)
     const { classes, cx, theme } = useStyles()
-    const chainId = useChainId()
+    const { chainId } = useChainContext()
     const { Others } = useWeb3State<'all'>()
 
     const selectAdvancedSettings = useSelectAdvancedSettings(NetworkPluginID.PLUGIN_EVM)

@@ -63,6 +63,7 @@ const useStyles = makeStyles<{}, 'postTipsButton'>()((theme, _, refs) => ({
 export const TipsRealmContent: Plugin.InjectUI<Plugin.SNSAdaptor.TipsRealmOptions> = ({
     identity,
     slot,
+    accounts,
     onStatusUpdate,
 }) => {
     const { classes, cx } = useStyles({})
@@ -77,7 +78,14 @@ export const TipsRealmContent: Plugin.InjectUI<Plugin.SNSAdaptor.TipsRealmOption
         [Plugin.SNSAdaptor.TipsSlot.MirrorEntry]: classes.postTipsButton,
     }
 
-    const button = <TipButton className={buttonClassMap[slot]} receiver={identity} onStatusUpdate={onStatusUpdate} />
+    const button = (
+        <TipButton
+            accounts={accounts}
+            className={buttonClassMap[slot]}
+            receiver={identity}
+            onStatusUpdate={onStatusUpdate}
+        />
+    )
 
     if (slot === Plugin.SNSAdaptor.TipsSlot.MirrorMenu) {
         return (

@@ -1,6 +1,6 @@
 import { ChangeEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import BigNumber from 'bignumber.js'
-import { omit } from 'lodash-unified'
+import { BigNumber } from 'bignumber.js'
+import { omit } from 'lodash-es'
 import { makeStyles, useStylesExtends, ActionButton } from '@masknet/theme'
 import {
     FungibleToken,
@@ -13,21 +13,20 @@ import {
 import { ChainId, SchemaType, useRedPacketConstants } from '@masknet/web3-shared-evm'
 import { MenuItem, Select, Box, InputBase, Typography } from '@mui/material'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { useSelectFungibleToken, FungibleTokenInput, PluginWalletStatusBar, ChainBoundary } from '@masknet/shared'
+import {
+    useSelectFungibleToken,
+    FungibleTokenInput,
+    PluginWalletStatusBar,
+    ChainBoundary,
+    WalletConnectedBoundary,
+    EthereumERC20TokenApprovedBoundary,
+} from '@masknet/shared'
+import { useFungibleToken, useFungibleTokenBalance, useChainContext } from '@masknet/web3-hooks-base'
 import { useCurrentIdentity, useCurrentLinkedPersona } from '../../../components/DataSource/useActivatedUI.js'
 import { useI18N } from '../locales/index.js'
 import { useI18N as useBaseI18n } from '../../../utils/index.js'
-import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary.js'
-import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary.js'
 import { RED_PACKET_DEFAULT_SHARES, RED_PACKET_MAX_SHARES, RED_PACKET_MIN_SHARES } from '../constants.js'
 import type { RedPacketSettings } from './hooks/useCreateCallback.js'
-import {
-    useAccount,
-    useFungibleToken,
-    useFungibleTokenBalance,
-    useChainId,
-    ActualChainContextProvider,
-} from '@masknet/web3-hooks-base'
 
 // seconds of 1 day
 const duration = 60 * 60 * 24
@@ -67,15 +66,16 @@ export interface RedPacketFormProps extends withClasses<never> {
 export function RedPacketERC20Form(props: RedPacketFormProps) {
     const t = useI18N()
     const { t: tr } = useBaseI18n()
-    const classes = useStylesExtends(useStyles(), props)
+    const { classes } = useStylesExtends(useStyles(), props)
     const { onChange, onNext, origin } = props
     // context
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { HAPPY_RED_PACKET_ADDRESS_V4 } = useRedPacketConstants(chainId)
 
     // #region select token
-    const { value: nativeTokenDetailed } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, undefined, { chainId })
+    const { value: nativeTokenDetailed } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, undefined, undefined, {
+        chainId,
+    })
     const [token = nativeTokenDetailed, setToken] = useState<FungibleToken<ChainId, SchemaType> | undefined>(
         origin?.token,
     )
@@ -134,9 +134,11 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
     }, [token])
 
     // balance
-    const { value: tokenBalance = '0' } = useFungibleTokenBalance(NetworkPluginID.PLUGIN_EVM, token?.address ?? '', {
-        chainId,
-    })
+    const { value: tokenBalance = '0', loading: loadingTokenBalance } = useFungibleTokenBalance(
+        NetworkPluginID.PLUGIN_EVM,
+        token?.address ?? '',
+        { chainId },
+    )
     // #endregion
 
     const validationMessage = useMemo(() => {
@@ -245,34 +247,35 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
             </Box>
             <Box style={{ width: '100%' }}>
                 <PluginWalletStatusBar>
-                    <ActualChainContextProvider>
-                        <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={chainId}>
-                            <WalletConnectedBoundary>
-                                <EthereumERC20TokenApprovedBoundary
-                                    onlyInfiniteUnlock
-                                    amount={totalAmount.toFixed()}
-                                    classes={{ container: classes.unlockContainer }}
-                                    ActionButtonProps={{
-                                        size: 'medium',
-                                    }}
-                                    token={
-                                        token?.schema === SchemaType.ERC20 && totalAmount.gt(0) && !validationMessage
-                                            ? token
-                                            : undefined
-                                    }
-                                    spender={HAPPY_RED_PACKET_ADDRESS_V4}>
-                                    <ActionButton
-                                        size="large"
-                                        className={classes.button}
-                                        fullWidth
-                                        disabled={!!validationMessage}
-                                        onClick={onClick}>
-                                        {validationMessage || t.next()}
-                                    </ActionButton>
-                                </EthereumERC20TokenApprovedBoundary>
-                            </WalletConnectedBoundary>
-                        </ChainBoundary>
-                    </ActualChainContextProvider>
+                    <ChainBoundary
+                        expectedPluginID={NetworkPluginID.PLUGIN_EVM}
+                        expectedChainId={chainId}
+                        forceShowingWrongNetworkButton>
+                        <WalletConnectedBoundary>
+                            <EthereumERC20TokenApprovedBoundary
+                                onlyInfiniteUnlock
+                                amount={totalAmount.toFixed()}
+                                classes={{ container: classes.unlockContainer }}
+                                ActionButtonProps={{
+                                    size: 'medium',
+                                }}
+                                token={
+                                    token?.schema === SchemaType.ERC20 && totalAmount.gt(0) && !validationMessage
+                                        ? token
+                                        : undefined
+                                }
+                                spender={HAPPY_RED_PACKET_ADDRESS_V4}>
+                                <ActionButton
+                                    size="large"
+                                    className={classes.button}
+                                    fullWidth
+                                    disabled={!!validationMessage}
+                                    onClick={onClick}>
+                                    {validationMessage || t.next()}
+                                </ActionButton>
+                            </EthereumERC20TokenApprovedBoundary>
+                        </WalletConnectedBoundary>
+                    </ChainBoundary>
                 </PluginWalletStatusBar>
             </Box>
         </>

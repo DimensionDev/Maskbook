@@ -1,4 +1,4 @@
-import { decodeArrayBuffer, decodeText, encodeArrayBuffer, encodeText } from '@dimensiondev/kit'
+import { decodeArrayBuffer, decodeText, encodeArrayBuffer, encodeText } from '@masknet/kit'
 
 export async function encryptUnlockData(content: string): Promise<{
     iv: string

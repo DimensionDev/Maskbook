@@ -5,7 +5,7 @@ import { Icons } from '@masknet/icons'
 import { useNavigate } from 'react-router-dom'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { PopupRoutes } from '@masknet/shared-base'
-import { first } from 'lodash-unified'
+import { first } from 'lodash-es'
 import { FormattedAddress } from '@masknet/shared'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages.js'
 import { useI18N } from '../../../../../utils/index.js'
@@ -124,7 +124,9 @@ const DeleteWallet = memo(() => {
                 navigate(PopupRoutes.Wallet, { replace: true })
             } catch (error) {
                 if (error instanceof Error) {
-                    setErrorMessage(error.message)
+                    setErrorMessage(
+                        error.message === 'Wrong password' ? t('popups_wallet_unlock_error_password') : error.message,
+                    )
                 }
             }
         }

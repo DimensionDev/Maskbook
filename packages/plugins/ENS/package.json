@@ -1,9 +1,10 @@
 {
   "name": "@masknet/plugin-ens",
   "private": true,
+  "type": "module",
   "exports": {
     ".": {
-      "webpack": "./src/index.ts",
+      "mask-src": "./src/index.ts",
       "default": "./dist/index.js"
     }
   },
@@ -20,7 +21,7 @@
     "@masknet/web3-providers": "workspace:*",
     "@masknet/theme": "workspace:*",
     "react-use": "^17.4.0",
-    "bignumber.js": "9.0.2",
+    "bignumber.js": "9.1.0",
     "unstated-next": "^1.1.0",
     "opensea-js": "^1.2.7"
   }

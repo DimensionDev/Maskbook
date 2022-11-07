@@ -1,17 +1,17 @@
 import { useMemo } from 'react'
 import { useAsync } from 'react-use'
-import type { AsyncState } from 'react-use/lib/useAsyncFn'
-import { pick } from 'lodash-unified'
+import type { AsyncState } from 'react-use/lib/useAsyncFn.js'
+import { pick } from 'lodash-es'
 import type { SwapBancorRequest, TradeComputed } from '../../types/index.js'
 import { PluginTraderRPC } from '../../messages.js'
-import { useAccount, useChainId, useWeb3Connection } from '@masknet/web3-hooks-base'
+import { useChainContext, useNetworkContext, useWeb3Connection } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
-import BigNumber from 'bignumber.js'
+import { BigNumber } from 'bignumber.js'
 
 export function useTradeGasLimit(tradeComputed: TradeComputed<SwapBancorRequest> | null): AsyncState<number> {
-    const targetChainId = useChainId(NetworkPluginID.PLUGIN_EVM)
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, { chainId: targetChainId })
+    const { account, chainId: targetChainId } = useChainContext()
+    const { pluginID } = useNetworkContext()
+    const connection = useWeb3Connection(pluginID, { chainId: targetChainId })
 
     const trade: SwapBancorRequest | null = useMemo(() => {
         if (!account || !tradeComputed?.trade_) return null
@@ -19,7 +19,7 @@ export function useTradeGasLimit(tradeComputed: TradeComputed<SwapBancorRequest>
     }, [account, tradeComputed])
 
     return useAsync(async () => {
-        if (!account || !trade || !connection?.estimateTransaction) return 0
+        if (!account || !trade || !connection?.estimateTransaction || pluginID !== NetworkPluginID.PLUGIN_EVM) return 0
 
         const [data, err] = await PluginTraderRPC.swapTransactionBancor(trade)
 
@@ -33,5 +33,5 @@ export function useTradeGasLimit(tradeComputed: TradeComputed<SwapBancorRequest>
             pick(tradeTransaction.transaction, ['to', 'data', 'value', 'from']),
         )
         return new BigNumber(gas).toNumber()
-    }, [trade, account, connection])
+    }, [trade, account, connection, pluginID])
 }

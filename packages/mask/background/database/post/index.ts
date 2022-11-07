@@ -6,7 +6,7 @@ function assign(module: any) {
     return module
 }
 export let { createPostDB, updatePostDB, queryPostDB, queryPostsDB, queryPostPagedDB, withPostDBTransaction } =
-    new Proxy({} as any as typeof import('./web'), {
+    new Proxy({} as any as typeof import('./web.js'), {
         get(_, key) {
             return async function (...args: any) {
                 if (hasNativeAPI) {

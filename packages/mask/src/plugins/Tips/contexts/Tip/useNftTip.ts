@@ -1,5 +1,5 @@
 import { useAsyncFn } from 'react-use'
-import { useAccount, useChainId, useWeb3State } from '@masknet/web3-hooks-base'
+import { useChainContext, useWeb3State } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { NetworkPluginID } from '@masknet/shared-base'
 import type { TipTuple } from './type.js'
@@ -12,9 +12,7 @@ export function useNftTip<T extends NetworkPluginID>(
     options?: Web3Helper.Web3ConnectionOptions<T>,
 ): TipTuple {
     const { Token, Connection } = useWeb3State<'all'>(pluginID)
-    const chainId = useChainId()
-
-    const account = useAccount(pluginID)
+    const { account, chainId } = useChainContext()
     const connectionOptions = {
         account,
         ...options,

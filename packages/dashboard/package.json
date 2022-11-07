@@ -1,11 +1,12 @@
 {
   "name": "@masknet/dashboard",
   "private": true,
+  "type": "module",
   "description": "New dashboard of Mask Network",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "webpack": "./src/entry.tsx",
+      "mask-src": "./src/entry.tsx",
       "default": "./dist/src/entry.js"
     }
   },
@@ -15,7 +16,7 @@
     "storybook": "dev -- start-storybook -p 6006"
   },
   "dependencies": {
-    "@hookform/resolvers": "^2.8.10",
+    "@hookform/resolvers": "^2.9.10",
     "@masknet/backup-format": "workspace:*",
     "@masknet/icons": "workspace:*",
     "@masknet/plugin-evm": "workspace:*",
@@ -44,8 +45,7 @@
     "@types/color": "^3.0.3",
     "@types/react-avatar-editor": "^13.0.0",
     "async-call-rpc": "^6.1.5",
-    "bignumber.js": "^9.0.2",
-    "classnames": "^2.3.1",
+    "bignumber.js": "9.1.0",
     "color": "^4.2.3",
     "date-fns": "2.28.0",
     "html-to-image": "^1.9.0",
@@ -53,7 +53,7 @@
     "react-avatar-editor": "^13.0.0",
     "react-dnd": "^16.0.1",
     "react-dnd-html5-backend": "^16.0.1",
-    "react-hook-form": "^7.31.1",
+    "react-hook-form": "^7.39.1",
     "react-qrcode-logo": "^2.7.0",
     "react-router-dom": "^6.3.0",
     "react-to-print": "^2.14.7",
@@ -63,8 +63,8 @@
     "use-subscription": "1.6.0",
     "uuid": "^8.3.2",
     "wallet.ts": "^1.0.1",
-    "web3-core-helpers": "1.7.5",
-    "web3-utils": "1.7.5",
+    "web3-core-helpers": "1.8.0",
+    "web3-utils": "1.8.0",
     "zod": "^3.16.0"
   },
   "devDependencies": {

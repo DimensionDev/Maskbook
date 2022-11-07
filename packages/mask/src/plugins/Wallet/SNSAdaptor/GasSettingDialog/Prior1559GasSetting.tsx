@@ -2,8 +2,8 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { formatWeiToEther, formatWeiToGwei, ChainIdOptionalRecord, ChainId } from '@masknet/web3-shared-evm'
 import { Typography } from '@mui/material'
 import { LoadingButton } from '@mui/lab'
-import BigNumber from 'bignumber.js'
-import { isEmpty, noop } from 'lodash-unified'
+import { BigNumber } from 'bignumber.js'
+import { isEmpty, noop } from 'lodash-es'
 import { FC, memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { useUpdateEffect } from 'react-use'
@@ -14,7 +14,7 @@ import { useI18N } from '../../../../utils/index.js'
 import type { GasSettingProps } from './types.js'
 import { GasOptionType, pow10 } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { useChainId, useGasOptions, useNativeTokenPrice } from '@masknet/web3-hooks-base'
+import { useChainContext, useGasOptions, useNativeTokenPrice } from '@masknet/web3-hooks-base'
 import { makeStyles } from '@masknet/theme'
 
 const minGasPriceOfChain: ChainIdOptionalRecord<BigNumber.Value> = {
@@ -78,7 +78,7 @@ export const Prior1559GasSetting: FC<GasSettingProps> = memo(
     ({ gasLimit, minGasLimit = 0, gasOptionType = GasOptionType.NORMAL, onConfirm = noop }) => {
         const { classes } = useStyles()
         const { t } = useI18N()
-        const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+        const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
         const [selectedGasOption, setGasOptionType] = useState<GasOptionType | null>(gasOptionType)
 
         const { value: nativeTokenPrice = 0 } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM)

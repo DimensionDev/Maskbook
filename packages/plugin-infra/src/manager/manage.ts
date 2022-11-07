@@ -1,4 +1,4 @@
-import { noop } from 'lodash-unified'
+import { noop } from 'lodash-es'
 import { ObservableSet, PluginID } from '@masknet/shared-base'
 import { Emitter } from '@servie/events'
 import { BooleanPreference, Plugin } from '../types.js'

@@ -10,7 +10,7 @@ import {
     NextIDPlatform,
     PopupRoutes,
 } from '@masknet/shared-base'
-import { compact } from 'lodash-unified'
+import { compact } from 'lodash-es'
 import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../../../../utils/index.js'
 import { PersonaContext } from '../../hooks/usePersonaContext.js'
@@ -19,7 +19,6 @@ import Services from '../../../../../service.js'
 import { Icons } from '@masknet/icons'
 import { DisconnectDialog } from '../DisconnectDialog/index.js'
 import { NextIDProof } from '@masknet/web3-providers'
-import classNames from 'classnames'
 import { useNavigate } from 'react-router-dom'
 import urlcat from 'urlcat'
 import { MethodAfterPersonaSign } from '../../../Wallet/type.js'
@@ -239,7 +238,7 @@ export interface ProfileListUIProps {
 export const ProfileListUI = memo<ProfileListUIProps>(
     ({ networks, profiles, onConnect, onDisconnect, openProfilePage }) => {
         const { t } = useI18N()
-        const { classes } = useStyles()
+        const { classes, cx } = useStyles()
 
         return (
             <List dense className={classes.list}>
@@ -260,7 +259,7 @@ export const ProfileListUI = memo<ProfileListUIProps>(
                                 {avatar ? (
                                     <Avatar
                                         src={avatar}
-                                        className={classNames(
+                                        className={cx(
                                             classes.avatar,
                                             is_valid ? classes.verified_avatar : classes.unverified_avatar,
                                         )}
@@ -268,7 +267,7 @@ export const ProfileListUI = memo<ProfileListUIProps>(
                                 ) : (
                                     <div className={classes.avatar}>
                                         <Icons.GrayMasks
-                                            className={classNames(
+                                            className={cx(
                                                 classes.avatar,
                                                 is_valid ? classes.verified_avatar : classes.unverified_avatar,
                                             )}

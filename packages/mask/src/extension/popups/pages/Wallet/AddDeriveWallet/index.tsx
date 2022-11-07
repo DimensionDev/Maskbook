@@ -1,6 +1,6 @@
 import { memo, useCallback, useRef, useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
-import { first } from 'lodash-unified'
+import { first } from 'lodash-es'
 import { TableContainer, TablePagination, tablePaginationClasses, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useAsync, useAsyncFn } from 'react-use'

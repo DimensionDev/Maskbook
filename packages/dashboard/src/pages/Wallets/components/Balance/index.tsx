@@ -1,5 +1,5 @@
 import { memo, useMemo } from 'react'
-import { noop } from 'lodash-unified'
+import { noop } from 'lodash-es'
 import { Icons } from '@masknet/icons'
 import { FormattedCurrency, MiniNetworkSelector } from '@masknet/shared'
 import { DashboardRoutes, NetworkPluginID } from '@masknet/shared-base'
@@ -10,9 +10,9 @@ import { useDashboardI18N } from '../../../../locales/index.js'
 import { useIsMatched } from '../../hooks/index.js'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useContainer } from 'unstated-next'
-import { Context } from '../../hooks/useContext'
-import { getTokenUSDValue } from '../../utils/getTokenUSDValue'
-import BigNumber from 'bignumber.js'
+import { Context } from '../../hooks/useContext.js'
+import { getTokenUSDValue } from '../../utils/getTokenUSDValue.js'
+import { BigNumber } from 'bignumber.js'
 
 const BalanceContainer = styled('div')(
     ({ theme }) => `

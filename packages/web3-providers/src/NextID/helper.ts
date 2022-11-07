@@ -1,5 +1,5 @@
 import LRU from 'lru-cache'
-import { Result, Ok, Err } from 'ts-results'
+import { Result, Ok, Err } from 'ts-results-es'
 
 const fetchCache = new LRU<string, any>({
     max: 100,

@@ -16,7 +16,7 @@ export interface CollectionListProps extends withClasses<never | 'root' | 'list'
 
 export function CollectionList(props: CollectionListProps) {
     const { collections, onList, size = 64, showNetwork = false } = props
-    const classes = useStylesExtends(useStyles(), props)
+    const { classes } = useStylesExtends(useStyles(), props)
 
     return (
         <List className={classes.list}>

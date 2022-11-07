@@ -1,4 +1,4 @@
-import type { SocialNetworkUI } from '../../social-network/index.js'
+import type { SocialNetworkUI } from '@masknet/types'
 import { stateCreator } from '../../social-network/utils.js'
 import { injectPageInspectorDefault } from '../../social-network/defaults/index.js'
 import { InitAutonomousStateProfiles } from '../../social-network/defaults/state/InitProfiles.js'
@@ -9,7 +9,7 @@ import { CurrentVisitingIdentityProviderMirror, IdentityProviderMirror } from '.
 import { PaletteModeProviderMirror } from './customization/custom.js'
 import { injectTips } from './injection/Tips/index.js'
 import { useInjectedDialogClassesOverwriteMirror } from './customization/ui-overwrite.js'
-import { injectPostActionsAtMirror } from './injection/PostActions'
+import { injectPostActionsAtMirror } from './injection/PostActions/index.js'
 import { PostProviderMirror } from './collecting/posts.js'
 
 // TODO: access chrome permission

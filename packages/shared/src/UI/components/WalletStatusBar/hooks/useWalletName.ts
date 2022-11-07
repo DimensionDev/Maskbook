@@ -2,10 +2,9 @@ import { useMemo } from 'react'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import {
     useWallet,
-    useAccount,
+    useChainContext,
     useReverseAddress,
     useWeb3State,
-    useProviderType,
     useProviderDescriptor,
 } from '@masknet/web3-hooks-base'
 import { ProviderType } from '@masknet/web3-shared-evm'
@@ -16,14 +15,11 @@ export const useWalletName = (
     expectedPluginId?: NetworkPluginID,
     isNextIdWallet?: boolean,
 ) => {
-    const account = useAccount(expectedPluginId, expectedAccount)
-    const wallet = useWallet(expectedPluginId)
-
-    const { value: domain } = useReverseAddress(expectedPluginId, account)
-
     const { Others } = useWeb3State(expectedPluginId)
+    const { account, providerType } = useChainContext({ account: expectedAccount })
+    const { value: domain } = useReverseAddress(expectedPluginId, account)
+    const wallet = useWallet(expectedPluginId)
     const providerDescriptor = useProviderDescriptor(expectedPluginId)
-    const providerType = useProviderType(expectedPluginId)
 
     return useMemo(() => {
         // Binding Wallet Just display domain and network name

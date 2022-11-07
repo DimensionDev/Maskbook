@@ -5,8 +5,7 @@ import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { isSameAddress, NonFungibleToken } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
 import { Box, Button, DialogActions, DialogContent, Typography } from '@mui/material'
-import classNames from 'classnames'
-import { isEqual, sortBy } from 'lodash-unified'
+import { isEqual, sortBy } from 'lodash-es'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { PLUGIN_ID } from '../../constants.js'
 import { useI18N } from '../../locales/index.js'
@@ -133,7 +132,7 @@ export function ImageListDialog(props: ImageListDialogProps) {
     } = props
     const t = useI18N()
     const { Storage } = useWeb3State()
-    const classes = useStylesExtends(useStyles(), props)
+    const { classes, cx } = useStylesExtends(useStyles(), props)
     const [addNFTOpen, setAddNFTOpen] = useState(false)
 
     const [pendingUnlistedKeys, setPendingUnlistedKeys] = useState(unlistedKeys)
@@ -209,7 +208,7 @@ export function ImageListDialog(props: ImageListDialogProps) {
                         }}>
                         <Typography sx={{ fontSize: '16px', fontWeight: 700 }}>{t.listed()}</Typography>
                     </Box>
-                    <Box className={classNames(classes.listedBox, classes.scrollBar)}>
+                    <Box className={cx(classes.listedBox, classes.scrollBar)}>
                         {listedCollections?.length > 0 ? (
                             <CollectionList
                                 classes={{ list: classes.list, collectionWrap: classes.collectionWrap }}
@@ -227,7 +226,7 @@ export function ImageListDialog(props: ImageListDialogProps) {
                     <Box>
                         <Typography sx={{ fontSize: '16px', fontWeight: 700, padding: 2 }}>{t.unlisted()}</Typography>
                     </Box>
-                    <Box className={classNames(classes.unlistedBox, classes.scrollBar)}>
+                    <Box className={cx(classes.unlistedBox, classes.scrollBar)}>
                         {unListedCollections.length > 0 ? (
                             <CollectionList
                                 classes={{ list: classes.list, collectionWrap: classes.collectionWrap }}

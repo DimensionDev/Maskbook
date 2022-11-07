@@ -1,4 +1,4 @@
-import { isNil } from 'lodash-unified'
+import { isNil } from 'lodash-es'
 import type { JsonRpcResponse } from 'web3-core-helpers'
 import type { RecognizableError } from '@masknet/web3-shared-base'
 import { JSON_RPC_ERROR_CODE } from '../../types/index.js'

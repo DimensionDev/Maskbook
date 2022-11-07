@@ -43,4 +43,4 @@ export {
     type EC_CryptoKey,
 } from '@masknet/shared-base'
 
-export * from 'ts-results'
+export * from 'ts-results-es'

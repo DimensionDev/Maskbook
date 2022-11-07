@@ -2,8 +2,8 @@ import type { Plugin } from '@masknet/plugin-infra'
 import { PluginID } from '@masknet/shared-base'
 import { Trans } from 'react-i18next'
 import { Icons } from '@masknet/icons'
-import { base } from '../base'
-import { SearchResultInspector } from './SearchResultInspector'
+import { base } from '../base.js'
+import { SearchResultInspector } from './SearchResultInspector.js'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,

@@ -1,12 +1,10 @@
 import { useCallback } from 'react'
 import type { NetworkPluginID } from '@masknet/shared-base'
-import { useAccount } from './useAccount.js'
-import { useChainId } from './useChainId.js'
+import { useChainContext } from './useContext.js'
 import { useWeb3State } from './useWeb3State.js'
 
 export function useRemoveTransactionCallback<T extends NetworkPluginID>(pluginID?: T) {
-    const account = useAccount(pluginID)
-    const chainId = useChainId(pluginID)
+    const { account, chainId } = useChainContext()
     const { Transaction, TransactionWatcher } = useWeb3State(pluginID)
 
     return useCallback(

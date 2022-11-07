@@ -1,26 +1,28 @@
-import { useChainId, useDoubleBlockBeatRetry } from '@masknet/web3-hooks-base'
-import { ChainId, isNativeTokenAddress, SchemaType, useTokenConstants } from '@masknet/web3-shared-evm'
+import { useChainContext, useDoubleBlockBeatRetry, useNetworkContext } from '@masknet/web3-hooks-base'
+import { ChainId, isNativeTokenAddress, useTokenConstants } from '@masknet/web3-shared-evm'
 import { BALANCER_SWAP_TYPE } from '../../constants/index.js'
 import { PluginTraderRPC } from '../../messages.js'
 import { SwapResponse, TradeStrategy } from '../../types/index.js'
-import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
-import { FungibleToken, isZero } from '@masknet/web3-shared-base'
+import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
+import { isZero } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
+import type { Web3Helper } from '@masknet/web3-helpers'
 
 export function useTrade(
     strategy: TradeStrategy,
     inputAmount: string,
     outputAmount: string,
-    inputToken?: FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>,
-    outputToken?: FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>,
+    inputToken?: Web3Helper.FungibleTokenAll,
+    outputToken?: Web3Helper.FungibleTokenAll,
 ): AsyncStateRetry<SwapResponse | null> {
-    const targetChainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { chainId: targetChainId } = useChainContext()
+    const { pluginID } = useNetworkContext()
     const { WNATIVE_ADDRESS } = useTokenConstants(targetChainId)
 
     return useDoubleBlockBeatRetry(
         NetworkPluginID.PLUGIN_EVM,
         async () => {
-            if (!WNATIVE_ADDRESS) return null
+            if (!WNATIVE_ADDRESS || pluginID !== NetworkPluginID.PLUGIN_EVM) return null
             if (!inputToken || !outputToken) return null
             const isExactIn = strategy === TradeStrategy.ExactIn
             if (isZero(inputAmount) && isExactIn) return null
@@ -33,7 +35,7 @@ export function useTrade(
                 buyToken,
                 isExactIn ? BALANCER_SWAP_TYPE.EXACT_IN : BALANCER_SWAP_TYPE.EXACT_OUT,
                 isExactIn ? inputAmount : outputAmount,
-                targetChainId,
+                targetChainId as ChainId,
             )
             // no pool found
             if (!swaps[0].length) return null
@@ -47,6 +49,7 @@ export function useTrade(
             outputAmount,
             inputToken?.address,
             outputToken?.address,
+            pluginID,
         ],
     )
 }

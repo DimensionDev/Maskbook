@@ -1,4 +1,4 @@
-import { type Option, Some, None } from 'ts-results'
+import { type Option, Some, None } from 'ts-results-es'
 import { ProfileIdentifier } from './profile.js'
 import { PostIdentifier } from './post.js'
 import { ECKeyIdentifier } from './ec-key.js'

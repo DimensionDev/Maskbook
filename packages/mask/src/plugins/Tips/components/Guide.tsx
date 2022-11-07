@@ -1,6 +1,5 @@
 import { makeStyles, usePortalShadowRoot } from '@masknet/theme'
 import { Box, Typography, Portal, Button } from '@mui/material'
-import classNames from 'classnames'
 import { PropsWithChildren, useRef, cloneElement, useEffect, ReactElement, useState } from 'react'
 import { activatedSocialNetworkUI } from '../../../social-network/index.js'
 import { useI18N } from '../locales/index.js'
@@ -155,7 +154,7 @@ export default function Guide({ children, arrow = true, disabled = false, onComp
                                     }}>
                                     <div
                                         onClick={(e) => e.stopPropagation()}
-                                        className={classNames(
+                                        className={cx(
                                             classes.card,
                                             arrow ? (bottomAvailable ? 'arrow-top' : 'arrow-bottom') : '',
                                         )}

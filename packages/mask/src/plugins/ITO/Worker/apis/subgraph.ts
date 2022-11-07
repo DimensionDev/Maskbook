@@ -1,6 +1,6 @@
 import { ChainId, getITOConstants } from '@masknet/web3-shared-evm'
 import stringify from 'json-stable-stringify'
-import { first, omit } from 'lodash-unified'
+import { first, omit } from 'lodash-es'
 import { payloadIntoMask } from '../../SNSAdaptor/helpers.js'
 import type { JSON_PayloadOutMask, PoolFromNetwork } from '../../types.js'
 

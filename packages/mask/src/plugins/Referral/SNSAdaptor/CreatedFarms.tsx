@@ -1,5 +1,5 @@
 import { useAsync } from 'react-use'
-import { useAccount, useChainId } from '@masknet/web3-hooks-base'
+import { useChainContext, useWeb3State } from '@masknet/web3-hooks-base'
 import { getMaskColor, LoadingBase, makeStyles } from '@masknet/theme'
 import { Grid, Typography, Box, Button } from '@mui/material'
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
@@ -10,8 +10,7 @@ import { getRequiredChainId } from '../helpers/index.js'
 import { ReferralRPC } from '../messages.js'
 
 import { AccordionFarm } from './shared-ui/AccordionFarm.js'
-import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary.js'
-import { ChainBoundary } from '@masknet/shared'
+import { WalletConnectedBoundary, ChainBoundary } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     buttonWithdraw: {
@@ -123,16 +122,19 @@ function FarmList({ loading, error, farms, onAdjustRewardButtonClick }: FarmList
 export function CreatedFarms(props: PageInterface) {
     const t = useI18N()
     const { classes } = useStyles()
-    const currentChainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { account, chainId: currentChainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const requiredChainId = getRequiredChainId(currentChainId)
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const { Others } = useWeb3State()
 
     const {
         value: farms = EMPTY_LIST,
         loading,
         error,
     } = useAsync(
-        async () => (account ? ReferralRPC.getAccountFarms(account, currentChainId) : []),
+        async () =>
+            account && Others?.chainResolver.isValid(currentChainId)
+                ? ReferralRPC.getAccountFarms(account, currentChainId)
+                : [],
         [currentChainId, account],
     )
 

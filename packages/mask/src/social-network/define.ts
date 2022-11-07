@@ -1,4 +1,4 @@
-import type { SocialNetworkUI } from './types.js'
+import type { SocialNetworkUI } from '@masknet/types'
 
 const definedSocialNetworkUIsLocal = new Map<string, SocialNetworkUI.DeferredDefinition>()
 export const definedSocialNetworkUIs: ReadonlyMap<string, SocialNetworkUI.DeferredDefinition> =
@@ -12,9 +12,7 @@ export function activateSocialNetworkUI() {
         .then(
             () => true,
             (error) => {
-                if (process.env.NODE_ENV === 'development') {
-                    console.info('Failed to initialize social network UI', error)
-                }
+                console.error('Mask: Failed to initialize Social Network Adaptor', error)
                 return false
             },
         )

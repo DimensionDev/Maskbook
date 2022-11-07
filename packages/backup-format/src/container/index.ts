@@ -1,4 +1,4 @@
-import { unreachable, concatArrayBuffer } from '@dimensiondev/kit'
+import { unreachable, concatArrayBuffer } from '@masknet/kit'
 import { BackupErrors } from '../BackupErrors.js'
 
 const MAGIC_HEADER_Version0 = new TextEncoder().encode('MASK-BACKUP-V000')

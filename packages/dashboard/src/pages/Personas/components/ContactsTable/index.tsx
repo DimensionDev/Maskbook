@@ -1,7 +1,7 @@
 import { Dispatch, memo, SetStateAction, useEffect, useMemo, useState } from 'react'
 import { useUpdateEffect } from 'react-use'
 import { useContainer } from 'unstated-next'
-import { sortBy } from 'lodash-unified'
+import { sortBy } from 'lodash-es'
 import { useContacts } from '../../hooks/useContacts.js'
 import { RelationFavor, RelationProfile } from '@masknet/shared-base'
 import { TableContainer, Box, TablePagination, Stack, Table, TableBody } from '@mui/material'

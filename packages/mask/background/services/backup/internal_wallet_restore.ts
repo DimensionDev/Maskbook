@@ -1,6 +1,6 @@
 import type { NormalizedBackup } from '@masknet/backup-format'
 import { currySameAddress, HD_PATH_WITHOUT_INDEX_ETHEREUM } from '@masknet/web3-shared-base'
-import { concatArrayBuffer } from '@dimensiondev/kit'
+import { concatArrayBuffer } from '@masknet/kit'
 import { ec as EC } from 'elliptic'
 import { fromBase64URL, EC_JsonWebKey, isSecp256k1Point, isSecp256k1PrivateKey } from '@masknet/shared-base'
 import { provider } from './internal_wallet.js'

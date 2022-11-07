@@ -1,4 +1,5 @@
 try {
+    // iOS 14-
     const abort = new AbortController()
     const signal = abort.signal
     const event = new EventTarget()

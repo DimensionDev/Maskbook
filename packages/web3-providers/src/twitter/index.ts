@@ -1,4 +1,4 @@
-import { escapeRegExp } from 'lodash-unified'
+import { escapeRegExp } from 'lodash-es'
 import urlcat from 'urlcat'
 import LRUCache from 'lru-cache'
 import type { TwitterBaseAPI } from '../types/index.js'
@@ -89,16 +89,15 @@ async function getUserNftContainer(
     }
 }> {
     const response = await fetch(
-        urlcat(
-            `https://twitter.com/i/api/graphql/:queryToken/userNftContainer_Query?variables=${encodeURIComponent(
-                JSON.stringify({
-                    screenName,
-                }),
-            )}`,
-            {
-                queryToken,
-            },
-        ),
+        urlcat('https://twitter.com/i/api/graphql/:queryToken/userNftContainer_Query', {
+            queryToken,
+            variables: JSON.stringify({
+                screenName,
+            }),
+            features: JSON.stringify({
+                responsive_web_twitter_blue_verified_badge_is_enabled: false,
+            }),
+        }),
         {
             headers: {
                 authorization: `Bearer ${bearerToken}`,
@@ -258,6 +257,7 @@ export class TwitterAPI implements TwitterBaseAPI.Provider {
             features: JSON.stringify({
                 verified_phone_label_enabled: false,
                 responsive_web_graphql_timeline_navigation_enabled: false,
+                responsive_web_twitter_blue_verified_badge_is_enabled: false,
             }),
         })
         const cacheKey = `${bearerToken}/${csrfToken}/${queryId}/${screenName}`

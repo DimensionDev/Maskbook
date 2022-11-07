@@ -1,5 +1,5 @@
-import { padStart } from 'lodash-unified'
-import BigNumber from 'bignumber.js'
+import { padStart } from 'lodash-es'
+import { BigNumber } from 'bignumber.js'
 import { bytesToHex } from 'web3-utils'
 import { createTypedMessageMetadataReader } from '@masknet/typed-message/dom'
 import { formatUnits } from '@ethersproject/units'

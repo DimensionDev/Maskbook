@@ -13,7 +13,7 @@ import {
     SocialIdentity,
 } from '@masknet/web3-shared-base'
 import { Box, Button, Stack, Typography, styled } from '@mui/material'
-import { differenceWith, uniqBy } from 'lodash-unified'
+import { differenceWith, uniqBy } from 'lodash-es'
 import { useEffect, useMemo, useState } from 'react'
 import { useI18N } from '../../../../utils/index.js'
 import { CollectibleList } from './CollectibleList.js'

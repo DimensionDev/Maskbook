@@ -1,6 +1,6 @@
 import type { AbiItem } from 'web3-utils'
 import type { ChainId } from '@masknet/web3-shared-evm'
-import type { MaskBoxQualification } from '@masknet/web3-contracts/types/MaskBoxQualification'
+import type { MaskBoxQualification } from '@masknet/web3-contracts/types/MaskBoxQualification.js'
 import MASK_BOX_QUALIFICATION_CONTRACT from '@masknet/web3-contracts/abis/MaskBoxQualification.json'
 import { useContract } from '@masknet/web3-hooks-evm'
 

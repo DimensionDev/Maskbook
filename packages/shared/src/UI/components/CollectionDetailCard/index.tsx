@@ -6,7 +6,7 @@ import { Box, Card, DialogContent, Link, Typography } from '@mui/material'
 import { CollectionType, RSS3BaseAPI } from '@masknet/web3-providers'
 import { Icons } from '@masknet/icons'
 import { ChainId, explorerResolver, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
-import { NFTCardStyledAssetPlayer } from '@masknet/shared'
+import { AssetPreviewer } from '@masknet/shared'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 
@@ -174,15 +174,10 @@ export const CollectionDetailCard = memo<CollectionDetailCardProps>(
                 <DialogContent>
                     <Box className={classes.flexItem}>
                         <Card className={classes.img}>
-                            <NFTCardStyledAssetPlayer
-                                contractAddress={metadata?.collection_address}
-                                chainId={RSS3BaseAPI.MaskNetworkMap[metadata?.network ?? 'ethereum']}
+                            <AssetPreviewer
                                 url={img}
-                                tokenId={metadata?.token_id}
                                 classes={{
                                     fallbackImage: classes.fallbackImage,
-                                    wrapper: classes.img,
-                                    iframe: classes.img,
                                 }}
                             />
                         </Card>

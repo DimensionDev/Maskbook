@@ -1,6 +1,7 @@
 /* eslint-disable tss-unused-classes/unused-classes */
+import type { SocialNetworkUI } from '@masknet/types'
 import { EnhanceableSite, ProfileIdentifier } from '@masknet/shared-base'
-import { globalUIState, SocialNetworkUI, stateCreator } from '../../social-network/index.js'
+import { globalUIState, stateCreator } from '../../social-network/index.js'
 import { injectPostCommentsDefault } from '../../social-network/defaults/index.js'
 import { injectPageInspectorDefault } from '../../social-network/defaults/inject/PageInspector.js'
 import { createTaskStartSetupGuideDefault } from '../../social-network/defaults/inject/StartSetupGuide.js'
@@ -45,22 +46,30 @@ const useInjectedDialogClassesOverwriteMinds = makeStyles()((theme) => {
         },
         paper: {
             width: '600px !important',
+            minHeight: 400,
+            maxHeight: 620,
             maxWidth: 'none',
             boxShadow: 'none',
             backgroundImage: 'none',
             [smallQuery]: {
-                '&': {
-                    display: 'block !important',
-                    borderRadius: '0 !important',
-                },
+                display: 'block !important',
+                margin: 12,
+            },
+            '&::-webkit-scrollbar': {
+                display: 'none',
             },
         },
         dialogTitle: {
-            display: 'flex',
+            display: 'grid',
+            gridTemplateColumns: '1fr auto 1fr',
             alignItems: 'center',
-            padding: '3px 16px',
-            borderBottom: `1px solid ${theme.palette.mode === 'dark' ? '#2f3336' : '#eff3f4'}`,
-            '& > h2': {
+            padding: 16,
+            position: 'relative',
+            background: theme.palette.maskColor.modalTitleBg,
+            borderBottom: 'none',
+            '& > p': {
+                fontSize: 18,
+                lineHeight: '22px',
                 display: 'inline-block',
                 whiteSpace: 'nowrap',
                 overflow: 'hidden',
@@ -68,23 +77,24 @@ const useInjectedDialogClassesOverwriteMinds = makeStyles()((theme) => {
             },
             [smallQuery]: {
                 display: 'flex',
-                justifyContent: 'space-between',
+                justifyContent: 'start',
                 maxWidth: 600,
                 margin: '0 auto',
                 padding: '7px 14px 6px 11px !important',
             },
         },
         dialogContent: {
-            padding: 16,
+            backgroundColor: theme.palette.maskColor.bottom,
             [smallQuery]: {
                 display: 'flex',
                 flexDirection: 'column',
                 maxWidth: 600,
                 margin: '0 auto',
-                padding: '7px 14px 6px !important',
+                padding: '7px 14px 6px',
             },
         },
         dialogActions: {
+            backgroundColor: theme.palette.maskColor.bottom,
             padding: '6px 16px',
             [smallQuery]: {
                 display: 'flex',

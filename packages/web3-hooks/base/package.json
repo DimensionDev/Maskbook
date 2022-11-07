@@ -1,10 +1,11 @@
 {
   "name": "@masknet/web3-hooks-base",
   "private": true,
+  "type": "module",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "webpack": "./src/index.ts",
+      "mask-src": "./src/index.ts",
       "default": "./dist/index.js"
     }
   },
@@ -19,11 +20,11 @@
     "@masknet/web3-shared-solana": "workspace:*",
     "@types/ethereum-blockies": "^0.1.0",
     "@types/use-subscription": "^1.0.0",
-    "bignumber.js": "^9.0.2",
+    "bignumber.js": "9.1.0",
     "ethereum-blockies": "^0.1.1",
     "lru-cache": "^7.10.1",
     "react-use": "^17.4.0",
     "use-subscription": "1.6.0",
-    "web3": "1.7.5"
+    "web3": "1.8.0"
   }
 }

@@ -7,6 +7,12 @@ lockdown({
     overrideTaming: 'severe',
     consoleTaming: 'unsafe',
     errorTaming: 'unsafe',
+    errorTrapping: 'none',
+    unhandledRejectionTrapping: 'none',
 })
+
+// https://github.com/endojs/endo/issues/1345 and https://github.com/endojs/endo/issues/1346
+console.clear()
+
 // completion value
 null

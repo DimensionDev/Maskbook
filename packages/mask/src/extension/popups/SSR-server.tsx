@@ -2,7 +2,7 @@
 
 import { Suspense } from 'react'
 import { i18NextInstance, updateLanguage, PopupRoutes } from '@masknet/shared-base'
-import { once, noop } from 'lodash-unified'
+import { once, noop } from 'lodash-es'
 import { TssCacheProvider, MaskThemeProvider } from '@masknet/theme'
 import { CacheProvider } from '@emotion/react'
 import { renderToString } from 'react-dom/server'
@@ -11,7 +11,7 @@ import createEmotionServer from '@emotion/server/create-instance'
 import { initReactI18next } from 'react-i18next'
 import { addMaskI18N } from '../../../shared-ui/locales/languages.js'
 import type { PopupSSR_Props } from '../../../background/tasks/Cancellable/PopupSSR/type.js'
-import { StaticRouter } from 'react-router-dom/server'
+import { StaticRouter } from 'react-router-dom/server.js'
 import { PopupFrame } from './components/PopupFrame/index.js'
 import { PersonaHomeUI } from './pages/Personas/Home/UI.js'
 import { usePopupFullPageTheme } from '../../utils/theme/useClassicMaskFullPageTheme.js'
@@ -31,10 +31,11 @@ export async function render(props: PopupSSR_Props) {
 
     await init()
     updateLanguage(props.language)
-    const muiCache = createCache({ key: 'css' })
-    const tssCache = createCache({ key: 'tss' })
-    const tssServer = createEmotionServer(tssCache)
-    const muiServer = createEmotionServer(muiCache)
+    // https://github.com/emotion-js/emotion/issues/2933
+    const muiCache = (createCache.default || createCache)({ key: 'css' })
+    const tssCache = (createCache.default || createCache)({ key: 'tss' })
+    const tssServer = (createEmotionServer.default || createEmotionServer)(tssCache)
+    const muiServer = (createEmotionServer.default || createEmotionServer)(muiCache)
 
     const html = renderToString(
         <CacheProvider value={muiCache}>

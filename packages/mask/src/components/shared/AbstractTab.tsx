@@ -1,5 +1,4 @@
 import { makeStyles, useStylesExtends } from '@masknet/theme'
-import classNames from 'classnames'
 import { Tabs, Tab, Box, BoxProps, Paper } from '@mui/material'
 
 const useStyles = makeStyles()((theme) => ({
@@ -42,7 +41,7 @@ export interface AbstractTabProps
 
 export default function AbstractTab(props: AbstractTabProps) {
     const { tabs, state, index, height = 200, hasOnlyOneChild = false, scrollable = false } = props
-    const classes = useStylesExtends(useStyles(), props)
+    const { classes, cx } = useStylesExtends(useStyles(), props)
     const [value, setValue] = state ?? [undefined, undefined]
     const tabIndicatorStyle = tabs.length && !scrollable ? { width: 100 / tabs.length + '%' } : undefined
 
@@ -66,7 +65,7 @@ export default function AbstractTab(props: AbstractTabProps) {
                     {tabs.map((tab, i) => (
                         <Tab
                             disabled={tab.disabled}
-                            className={classNames(
+                            className={cx(
                                 classes.tab,
                                 [index, value].includes(i) ? classes.focusTab : '',
                                 tab.disabled ? classes.disabledTab : '',

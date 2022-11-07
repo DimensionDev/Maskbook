@@ -14,8 +14,7 @@
             "error",
             {
                 "paths": [
-                    { "name": "lodash", "message": "Please use lodash-unified instead." },
-                    { "name": "lodash-es", "message": "Please use lodash-unified instead." },
+                    { "name": "lodash", "message": "Please use lodash-es instead." },
                     { "name": "date-fns", "message": "Please use date-fns/{submodule} instead." },
                     { "name": "date-fns/esm", "message": "Please use date-fns/{submodule} instead." },
                     { "name": "idb/with-async-ittr-cjs", "message": "Please use idb/with-async-ittr instead." },
@@ -25,7 +24,7 @@
                         "message": "Please use @dimensiondev/holoflows-kit instead."
                     },
                     {
-                        "name": "lodash-unified",
+                        "name": "lodash-es",
                         "message": "Avoid using type unsafe methods.",
                         "importNames": ["get"]
                     }

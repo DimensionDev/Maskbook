@@ -13,7 +13,7 @@ import {
 } from 'react'
 import { BaseTab } from './BaseTab.js'
 import { FlexibleTab } from './FlexibleTab.js'
-import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
+import { ArrowBackIosNew as ArrowBackIosNewIcon } from '@mui/icons-material'
 import { useClickAway, useWindowSize } from 'react-use'
 import { RoundTab } from './RoundTab.js'
 
@@ -25,6 +25,7 @@ export interface MaskTabListProps
     onChange(event: object, value: string): void
     'aria-label': string
     variant?: MaskTabVariant
+    hideArrowButton?: boolean
 }
 
 const ArrowButtonWrap = styled(Button)(({ theme }) => ({
@@ -252,12 +253,12 @@ export const MaskTabList = forwardRef<HTMLDivElement, MaskTabListProps>((props, 
                     <FlexButtonGroupWrap
                         maskVariant={variant}
                         isOpen={open}
-                        isOverflow={isTabsOverflow}
+                        isOverflow={isTabsOverflow && !props.hideArrowButton}
                         {...rest}
                         ref={innerRef}
                         role="tablist">
                         {flexibleTabs}
-                        {isTabsOverflow && (
+                        {isTabsOverflow && !props.hideArrowButton && (
                             <ArrowButtonWrap
                                 variant="text"
                                 size="small"

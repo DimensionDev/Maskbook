@@ -1,3 +1,5 @@
+// eslint-disable-next-line no-restricted-imports
+import type {} from 'date-fns'
 import { zhTW, enUS, ja, zhCN, ko } from 'date-fns/locale'
 import { SupportedLanguages } from '@masknet/public-api'
 

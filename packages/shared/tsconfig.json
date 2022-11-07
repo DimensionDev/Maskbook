@@ -9,6 +9,7 @@
   "references": [
     { "path": "../theme" },
     { "path": "../plugin-infra" },
+    { "path": "../public-api" },
     { "path": "../shared-base" },
     { "path": "../shared-base-ui" },
     { "path": "../web3-hooks/base" },

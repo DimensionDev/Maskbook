@@ -11,7 +11,7 @@ import {
 import { makeStyles } from '../../UIHelper/makeStyles.js'
 import { getMaskColor, MaskColorVar } from '../../CSSVariables/vars.js'
 import { isDashboardPage } from '@masknet/shared-base'
-import { omit } from 'lodash-unified'
+import { omit } from 'lodash-es'
 
 const isDashboard = isDashboardPage()
 

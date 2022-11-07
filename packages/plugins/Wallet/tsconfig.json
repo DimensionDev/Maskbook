@@ -10,6 +10,7 @@
     { "path": "../../plugin-infra" },
     { "path": "../../web3-shared/base" },
     { "path": "../../web3-shared/evm" },
+    { "path": "../../web3-helpers" },
     { "path": "../../shared-base" },
     { "path": "../../theme" }
   ]

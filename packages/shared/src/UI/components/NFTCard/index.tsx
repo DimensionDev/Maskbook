@@ -1,12 +1,10 @@
-import classNames from 'classnames'
 import { Icons } from '@masknet/icons'
-import { useWeb3State } from '@masknet/web3-hooks-base'
 import { ImageIcon, useIsImageURL } from '@masknet/shared'
-import { makeStyles } from '@masknet/theme'
 import { NetworkPluginID } from '@masknet/shared-base'
+import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
+import { Box, Skeleton, TooltipProps } from '@mui/material'
 import { isSameAddress, NonFungibleToken } from '@masknet/web3-shared-base'
 import { ChainId, NETWORK_DESCRIPTORS, SchemaType } from '@masknet/web3-shared-evm'
-import { Box, Skeleton, Tooltip, TooltipProps } from '@mui/material'
 
 const useStyles = makeStyles<{ networkPluginID: NetworkPluginID }>()((theme, props) => ({
     itemRoot: {
@@ -74,10 +72,6 @@ const COMMON_TOOLTIP_PROPS: Partial<TooltipProps> = {
     arrow: true,
     disableInteractive: true,
     PopperProps: {
-        disablePortal: true,
-        style: {
-            whiteSpace: 'nowrap',
-        },
         popperOptions: {
             strategy: 'absolute',
         },
@@ -97,7 +91,6 @@ export function NFTImageCollectibleAvatar({
 }: NFTImageCollectibleAvatarProps) {
     const { classes } = useStyles({ networkPluginID: pluginID })
     const { value: isImageToken, loading } = useIsImageURL(token.metadata?.imageURL)
-    const { Others } = useWeb3State()
 
     if (loading)
         return (
@@ -111,9 +104,7 @@ export function NFTImageCollectibleAvatar({
             </div>
         )
 
-    const name = token.collection?.name || token.contract?.name
-    const uiTokenId = Others?.formatTokenId(token.tokenId, 4) ?? `#${token.tokenId}`
-    const title = name ? `${name} ${uiTokenId}` : token.metadata?.name ?? ''
+    const title = token.collection?.name || token.contract?.name || ''
     return isImageToken ? (
         <NFTImage
             title={title}
@@ -126,11 +117,11 @@ export function NFTImageCollectibleAvatar({
             showNetwork={showNetwork}
         />
     ) : (
-        <Tooltip {...COMMON_TOOLTIP_PROPS} title={title}>
+        <ShadowRootTooltip {...COMMON_TOOLTIP_PROPS} title={title}>
             <Box sx={{ width: size, height: size }} className={classes.defaultImage}>
                 <Icons.MaskAvatar className={classes.maskIcon} />
             </Box>
-        </Tooltip>
+        </ShadowRootTooltip>
     )
 }
 
@@ -169,17 +160,17 @@ export function NFTImage(props: NFTImageProps) {
         size = 126,
         showNetwork = false,
     } = props
-    const { classes } = useStyles({ networkPluginID: pluginID })
+    const { classes, cx } = useStyles({ networkPluginID: pluginID })
     const iconURL = NETWORK_DESCRIPTORS.find((network) => network?.chainId === token.chainId)?.icon
 
     return (
-        <Tooltip {...COMMON_TOOLTIP_PROPS} title={title}>
+        <ShadowRootTooltip {...COMMON_TOOLTIP_PROPS} title={title}>
             <Box className={classes.itemRoot}>
                 <img
                     onClick={() => onChange?.(token)}
                     src={token.metadata?.imageURL}
                     style={{ width: size, height: size }}
-                    className={classNames(
+                    className={cx(
                         classes.itemImage,
                         isSameNFT(pluginID, token, selectedToken) ? classes.itemSelected : '',
                     )}
@@ -190,6 +181,6 @@ export function NFTImage(props: NFTImageProps) {
                     <Icons.Selected className={classes.itemIcon} />
                 ) : null}
             </Box>
-        </Tooltip>
+        </ShadowRootTooltip>
     )
 }

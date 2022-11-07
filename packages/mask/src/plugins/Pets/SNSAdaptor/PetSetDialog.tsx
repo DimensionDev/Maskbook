@@ -2,15 +2,7 @@ import { useState, useMemo, ReactNode } from 'react'
 import { useTimeout } from 'react-use'
 import type { Constant } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { ChainId } from '@masknet/web3-shared-evm'
-import {
-    makeStyles,
-    useStylesExtends,
-    useCustomSnackbar,
-    ShadowRootPopper,
-    ActionButton,
-    LoadingBase,
-} from '@masknet/theme'
+import { makeStyles, useCustomSnackbar, ShadowRootPopper, ActionButton, LoadingBase } from '@masknet/theme'
 import { useValueRef } from '@masknet/shared-base-ui'
 import {
     Typography,
@@ -29,7 +21,7 @@ import { initMeta, initCollection, GLB3DIcon, PetsPluginID } from '../constants.
 import { PreviewBox } from './PreviewBox.js'
 import { PetMetaDB, FilterContract, OwnerERC721TokenInfo, ImageType } from '../types.js'
 import { useUser, useNFTs } from '../hooks/index.js'
-import { PluginWalletStatusBar, ChainBoundary } from '@masknet/shared'
+import { PluginWalletStatusBar } from '@masknet/shared'
 import { useI18N } from '../locales/index.js'
 import { ImageLoader } from './ImageLoader.js'
 import { petShowSettings } from '../settings.js'
@@ -113,7 +105,7 @@ interface PetSetDialogProps {
 
 export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
     const t = useI18N()
-    const classes = useStylesExtends(useStyles(), {})
+    const { classes } = useStyles()
     const theme = useTheme()
     const { showSnackbar } = useCustomSnackbar()
     const [loading, setLoading] = useState(false)
@@ -366,23 +358,14 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
             </Box>
 
             <PluginWalletStatusBar>
-                <ChainBoundary
-                    expectedPluginID={NetworkPluginID.PLUGIN_EVM}
-                    expectedChainId={ChainId.Mainnet}
-                    predicate={(actualPluginID) => actualPluginID === NetworkPluginID.PLUGIN_EVM}
-                    noSwitchNetworkTip
-                    ActionButtonPromiseProps={{
-                        fullWidth: true,
-                    }}>
-                    <ActionButton
-                        loading={loading}
-                        fullWidth
-                        className={classes.btn}
-                        onClick={saveHandle}
-                        disabled={!collection.name || !metaData.image}>
-                        {t.pets_dialog_btn()}
-                    </ActionButton>
-                </ChainBoundary>
+                <ActionButton
+                    loading={loading}
+                    fullWidth
+                    className={classes.btn}
+                    onClick={saveHandle}
+                    disabled={!collection.name || !metaData.image}>
+                    {t.pets_dialog_btn()}
+                </ActionButton>
             </PluginWalletStatusBar>
 
             <Snackbar

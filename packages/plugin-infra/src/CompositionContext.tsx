@@ -8,5 +8,6 @@ export const CompositionContext = createContext<CompositionContext>({
     attachMetadata() {},
     dropMetadata() {},
 })
+CompositionContext.displayName = 'CompositionContext'
 export const useCompositionContext = () => useContext(CompositionContext)
 import.meta.webpackHot && import.meta.webpackHot.accept()

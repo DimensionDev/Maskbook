@@ -1,6 +1,6 @@
 import { memo } from 'react'
 import { useAsync } from 'react-use'
-import { range } from 'lodash-unified'
+import { range } from 'lodash-es'
 import {
     Table,
     TableCell,

@@ -187,6 +187,15 @@ export declare namespace Web3Helper {
     export type Web3All = Definition[NetworkPluginID]['Web3']
     export type Web3ProviderAll = Definition[NetworkPluginID]['Web3Provider']
 
+    export type FungibleTokenAll = FungibleToken<
+        Definition[NetworkPluginID]['ChainId'],
+        Definition[NetworkPluginID]['SchemaType']
+    >
+    export type NonFungibleTokenAll = NonFungibleToken<
+        Definition[NetworkPluginID]['ChainId'],
+        Definition[NetworkPluginID]['SchemaType']
+    >
+
     export type NetworkDescriptorAll = NetworkDescriptor<
         Definition[NetworkPluginID]['ChainId'],
         Definition[NetworkPluginID]['NetworkType']

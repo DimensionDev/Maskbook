@@ -6,7 +6,7 @@ import type { JSON_PayloadInMask } from '../types.js'
 import { ITO, ITO_Error, ITO_Loading } from './ITO.js'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { FungibleToken, TokenType } from '@masknet/web3-shared-base'
-import { useChainId, useFungibleToken, useFungibleTokens } from '@masknet/web3-hooks-base'
+import { useChainContext, useFungibleToken, useFungibleTokens } from '@masknet/web3-hooks-base'
 
 export interface PostInspectorProps {
     payload: JSON_PayloadInMask
@@ -16,7 +16,7 @@ export function PostInspector(props: PostInspectorProps) {
     const { chain_id, pid } = props.payload
     const isCompactPayload_ = isCompactPayload(props.payload)
 
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const {
         value: payload,
         error,
@@ -35,6 +35,7 @@ export function PostInspector(props: PostInspectorProps) {
     } = useFungibleToken(
         NetworkPluginID.PLUGIN_EVM,
         typeof token === 'string' ? (token as string) : (token as FungibleToken<ChainId, SchemaType>).address,
+        undefined,
         { chainId: _payload.chain_id },
     )
 

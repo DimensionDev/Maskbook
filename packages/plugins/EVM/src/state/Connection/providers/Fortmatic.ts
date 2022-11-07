@@ -1,8 +1,8 @@
 import Fortmatic from 'fortmatic'
 import { toHex } from 'web3-utils'
 import type { RequestArguments } from 'web3-core'
-import { first } from 'lodash-unified'
-import type { FmProvider } from 'fortmatic/dist/cjs/src/core/fm-provider'
+import { first } from 'lodash-es'
+import type { FmProvider } from 'fortmatic/dist/cjs/src/core/fm-provider.js'
 import { ChainId, chainResolver, getRPCConstants, ProviderType } from '@masknet/web3-shared-evm'
 import { createLookupTableResolver } from '@masknet/shared-base'
 import type { EVM_Provider } from '../types.js'
@@ -98,9 +98,7 @@ export default class FortmaticProvider extends BaseProvider implements EVM_Provi
 
     private async logout() {
         const fm = this.createFortmatic(this.chainId)
-        const loggedIn = await fm.user.isLoggedIn()
-        if (loggedIn) fm.user.logout()
-        return
+        return fm.user.logout()
     }
 
     override async switchChain(chainId?: ChainId): Promise<void> {

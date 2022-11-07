@@ -1,6 +1,6 @@
 import type { EventBasedChannel } from 'async-call-rpc'
 import type { PluginRuntime } from './runtime.js'
-import { combineAbortSignal } from '@dimensiondev/kit'
+import { combineAbortSignal } from '@masknet/kit'
 
 export interface PluginListItem {
     normal?: boolean

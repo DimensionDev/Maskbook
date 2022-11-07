@@ -1,12 +1,11 @@
 import { FC, useCallback } from 'react'
-import { noop } from 'lodash-unified'
-import classnames from 'classnames'
+import { noop } from 'lodash-es'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { ElementAnchor, Linking, NFTCardStyledAssetPlayer, RetryHint } from '@masknet/shared'
+import { ElementAnchor, Linking, AssetPreviewer, RetryHint } from '@masknet/shared'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { isSameAddress, NonFungibleToken } from '@masknet/web3-shared-base'
-import { useChainId, useWeb3State, useNetworkContext } from '@masknet/web3-hooks-base'
+import { useChainContext, useWeb3State, useNetworkContext } from '@masknet/web3-hooks-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { Checkbox, List, ListItem, Radio, Stack, Typography } from '@mui/material'
 
@@ -95,22 +94,6 @@ const useStyles = makeStyles<{ columns?: number; gap?: number }>()((theme, { col
             width: 64,
             height: 64,
         },
-        assetPlayerIframe: {
-            aspectRatio: '1 / 1',
-        },
-        wrapper: {
-            aspectRatio: '1 / 1',
-            height: 'auto !important',
-            width: '100% !important',
-            borderRadius: 8,
-        },
-        imgWrapper: {
-            aspectRatio: '1 / 1',
-            img: {
-                height: '100%',
-                width: '100%',
-            },
-        },
         caption: {
             padding: theme.spacing(0.5),
             color: theme.palette.text.primary,
@@ -121,23 +104,17 @@ const useStyles = makeStyles<{ columns?: number; gap?: number }>()((theme, { col
 })
 
 export const NFTItem: FC<NFTItemProps> = ({ token }) => {
-    const { classes } = useStyles({})
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { classes, cx } = useStyles({})
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const fullCaption = token.metadata?.name || token.tokenId
     const caption = token.metadata?.name?.match(/#\d+$/) ? token.metadata.name : Others?.formatTokenId(token.tokenId)
     return (
         <div className={classes.nftContainer}>
-            <NFTCardStyledAssetPlayer
-                chainId={chainId}
-                contractAddress={token.contract?.address}
+            <AssetPreviewer
                 url={token.metadata?.imageURL ?? token.metadata?.imageURL}
-                tokenId={token.tokenId}
                 classes={{
                     fallbackImage: classes.fallbackImage,
-                    iframe: classes.assetPlayerIframe,
-                    imgWrapper: classes.imgWrapper,
-                    wrapper: classes.wrapper,
                 }}
             />
             <Typography className={classes.caption} title={fullCaption !== caption ? fullCaption : undefined}>
@@ -160,10 +137,13 @@ export const NFTList: FC<Props> = ({
     finished,
     hasError,
 }) => {
-    const { classes } = useStyles({ columns, gap })
+    const { classes, cx } = useStyles({ columns, gap })
 
     const isRadio = limit === 1
     const reachedLimit = selectedPairs && selectedPairs.length >= limit
+
+    const { pluginID } = useNetworkContext()
+    const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
 
     const toggleItem = useCallback(
         (currentId: string | null, contractAddress?: string) => {
@@ -171,7 +151,6 @@ export const NFTList: FC<Props> = ({
         },
         [onChange],
     )
-    const { pluginID } = useNetworkContext()
     const includes: (pairs: NFTKeyPair[], pair: NFTKeyPair) => boolean =
         pluginID === NetworkPluginID.PLUGIN_EVM
             ? (pairs, pair) => {
@@ -182,11 +161,10 @@ export const NFTList: FC<Props> = ({
               }
 
     const SelectComponent = isRadio ? Radio : Checkbox
-    const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
 
     return (
         <>
-            <List className={classnames(classes.list, className)}>
+            <List className={cx(classes.list, className)}>
                 {tokens.map((token) => {
                     const selected = selectedPairs
                         ? includes(selectedPairs, [token.contract?.address!, token.tokenId])
@@ -203,7 +181,7 @@ export const NFTList: FC<Props> = ({
                     return (
                         <ListItem
                             key={token.tokenId + token.id}
-                            className={classnames(classes.nftItem, {
+                            className={cx(classes.nftItem, {
                                 [classes.disabled]: disabled,
                                 [classes.selected]: selected,
                                 [classes.inactive]: inactive,
