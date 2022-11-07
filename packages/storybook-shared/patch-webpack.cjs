@@ -34,6 +34,7 @@ module.exports = async function (config) {
         http: false,
         https: false,
     }
+    config.resolve.conditionNames = ['mask-src', '...']
 
     config.module.rules.push({
         test: /\.m?js$/,
