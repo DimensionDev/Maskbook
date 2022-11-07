@@ -1,4 +1,3 @@
 {
-    "name": "Example Plugin",
-    "__entry__": "🤔 Example"
+    "warning_description": "This domain is currently on the Mask Network domain warning list."
 }
