@@ -1,5 +1,5 @@
 import { useAsyncRetry } from 'react-use'
-import { head } from 'lodash-unified'
+import { head } from 'lodash-es'
 import type { Order } from 'opensea-js/lib/types.js'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { getOrderUnitPrice } from '@masknet/web3-providers'

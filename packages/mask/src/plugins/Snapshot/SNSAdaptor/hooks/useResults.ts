@@ -2,7 +2,7 @@ import type { ProposalIdentifier, ProposalResult, VoteItem } from '../../types.j
 import { useSuspense } from '../../../../utils/hooks/useSuspense.js'
 import { useProposal } from './useProposal.js'
 import { useVotes } from './useVotes.js'
-import { sumBy } from 'lodash-unified'
+import { sumBy } from 'lodash-es'
 
 const cache = new Map<
     string,

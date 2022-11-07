@@ -1,6 +1,6 @@
 import { ChangeEvent, useState, useCallback, useMemo, useEffect } from 'react'
 import { Trans } from 'react-i18next'
-import { first } from 'lodash-unified'
+import { first } from 'lodash-es'
 import { BigNumber } from 'bignumber.js'
 import getUnixTime from 'date-fns/getUnixTime'
 import formatDateTime from 'date-fns/format'

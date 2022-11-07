@@ -34,7 +34,6 @@
     "graphql-request": "^3.4.0",
     "fuse.js": "6.6.2",
     "json-stable-stringify": "^1.0.1",
-    "lodash-unified": "1.0.2",
     "lru-cache": "^7.10.1",
     "react-use": "^17.4.0",
     "rss3-next": "^0.6.17",

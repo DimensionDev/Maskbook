@@ -1,4 +1,4 @@
-import { first } from 'lodash-unified'
+import { first } from 'lodash-es'
 import { AbiItem, numberToHex, toHex, toNumber } from 'web3-utils'
 import type { RequestArguments, SignedTransaction, TransactionReceipt } from 'web3-core'
 import { delay } from '@masknet/kit'

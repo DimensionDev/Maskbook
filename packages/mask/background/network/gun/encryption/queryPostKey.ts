@@ -12,7 +12,7 @@ import type { EC_Public_CryptoKey, EC_Public_JsonWebKey } from '@masknet/shared-
 import { CryptoKeyToJsonWebKey } from '../../../../utils-pure/index.js'
 import { getGunData, pushToGunDataArray, subscribeGunMapData } from '@masknet/gun-utils'
 import { EventIterator } from 'event-iterator'
-import { isObject, noop, uniq } from 'lodash-unified'
+import { isObject, noop, uniq } from 'lodash-es'
 import { queryPublicKey } from '../../../database/persona/helper.js'
 
 // !!! Change how this file access Gun will break the compatibility of v40 payload decryption.

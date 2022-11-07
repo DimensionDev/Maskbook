@@ -1,4 +1,4 @@
-import { first } from 'lodash-unified'
+import { first } from 'lodash-es'
 import { getEnumAsArray, unreachable } from '@masknet/kit'
 import { DataProvider } from '@masknet/public-api'
 import { EMPTY_LIST } from '@masknet/shared-base'

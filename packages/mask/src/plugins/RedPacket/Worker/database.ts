@@ -1,4 +1,4 @@
-import { omit } from 'lodash-unified'
+import { omit } from 'lodash-es'
 import type { RedPacketRecord, RedPacketRecordInDatabase, RedPacketNftRecordInDatabase } from '../types.js'
 import type { Plugin } from '@masknet/plugin-infra'
 

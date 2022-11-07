@@ -9,7 +9,7 @@ import {
     useMemo,
     useState,
 } from 'react'
-import { uniqBy } from 'lodash-unified'
+import { uniqBy } from 'lodash-es'
 import { EMPTY_LIST, EMPTY_OBJECT, NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles, MaskFixedSizeListProps, MaskTextFieldProps, SearchableList } from '@masknet/theme'
 import { Box, Stack, Typography } from '@mui/material'

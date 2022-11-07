@@ -1,4 +1,4 @@
-import { omit } from 'lodash-unified'
+import { omit } from 'lodash-es'
 import { useAsyncFn } from 'react-use'
 import type { PayableTransactionObject, PayableTx } from '@masknet/web3-contracts/types/types.js'
 import { TransactionEventType } from '@masknet/web3-shared-evm'

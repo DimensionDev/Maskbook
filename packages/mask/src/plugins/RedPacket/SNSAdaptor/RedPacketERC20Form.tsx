@@ -1,6 +1,6 @@
 import { ChangeEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { BigNumber } from 'bignumber.js'
-import { omit } from 'lodash-unified'
+import { omit } from 'lodash-es'
 import { makeStyles, useStylesExtends, ActionButton } from '@masknet/theme'
 import {
     FungibleToken,

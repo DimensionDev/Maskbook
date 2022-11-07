@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { batch } from 'async-call-rpc'
-import { cloneDeep, uniqBy } from 'lodash-unified'
+import { cloneDeep, uniqBy } from 'lodash-es'
 import {
     ProfileInformation as Profile,
     NextIDPlatform,

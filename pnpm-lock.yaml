@@ -157,15 +157,9 @@ importers:
       i18next:
         specifier: ^21.9.1
         version: 21.9.1
-      lodash:
-        specifier: ^4.17.21
-        version: 4.17.21
       lodash-es:
         specifier: ^4.17.21
         version: 4.17.21
-      lodash-unified:
-        specifier: 1.0.2
-        version: 1.0.2_3ib2ivapxullxkx3xftsimdk7u
       react:
         specifier: 0.0.0-experimental-9cdf8a99e-20221018
         version: 0.0.0-experimental-9cdf8a99e-20221018
@@ -2671,9 +2665,6 @@ importers:
       json-stable-stringify:
         specifier: ^1.0.1
         version: 1.0.1
-      lodash-unified:
-        specifier: 1.0.2
-        version: 1.0.2
       lru-cache:
         specifier: ^7.10.1
         version: 7.10.1
@@ -11428,9 +11419,11 @@ packages:
     resolution: {integrity: sha512-R+zTeVUKDdfoRxpAryaQNRKk3105Rrgx2CFRClIgRGaqDTdjsm8h6IYA8ir584W3ePzkZfst5xIgDwYrlh9HLg==}
     dependencies:
       '@types/lodash': 4.14.178
+    dev: true
 
   /@types/lodash/4.14.178:
     resolution: {integrity: sha512-0d5Wd09ItQWH1qFbEyQ7oTQ3GZrMfth5JkbN3EvTKLXcHLRDSXeLnlvlOn0wvxVIwK5o2M8JzP/OWz7T3NRsbw==}
+    dev: true
 
   /@types/lodash/4.14.182:
     resolution: {integrity: sha512-/THyiqyQAP9AfARo4pF+aCGcyiQ94tX/Is2I7HofNRqoYLgN1PBoOWu2/zTA5zMxzP5EFutMtWtGAFRKUe961Q==}
@@ -23240,26 +23233,6 @@ packages:
 
   /lodash-es/4.17.21:
     resolution: {integrity: sha512-mKnC+QJ9pWVzv+C4/U3rRsHapFfHvQFoFB92e52xeyGMcX6/OlIl78je1u8vePzYZSkkogMPJ2yjxxsb89cxyw==}
-    dev: false
-
-  /lodash-unified/1.0.2:
-    resolution: {integrity: sha512-OGbEy+1P+UT26CYi4opY4gebD8cWRDxAT6MAObIVQMiqYdxZr1g3QHWCToVsm31x2NkLS4K3+MC2qInaRMa39g==}
-    peerDependencies:
-      '@types/lodash-es': '*'
-      lodash: '*'
-      lodash-es: '*'
-    dev: false
-
-  /lodash-unified/1.0.2_3ib2ivapxullxkx3xftsimdk7u:
-    resolution: {integrity: sha512-OGbEy+1P+UT26CYi4opY4gebD8cWRDxAT6MAObIVQMiqYdxZr1g3QHWCToVsm31x2NkLS4K3+MC2qInaRMa39g==}
-    peerDependencies:
-      '@types/lodash-es': '*'
-      lodash: '*'
-      lodash-es: '*'
-    dependencies:
-      '@types/lodash-es': 4.17.6
-      lodash: 4.17.21
-      lodash-es: 4.17.21
     dev: false
 
   /lodash.assign/4.2.0:

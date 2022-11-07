@@ -1,7 +1,7 @@
 import { makeStyles } from '@masknet/theme'
 import { Done as DoneIcon } from '@mui/icons-material'
 import { Chip, ChipProps } from '@mui/material'
-import { noop } from 'lodash-unified'
+import { noop } from 'lodash-es'
 
 export interface ClickableChipProps extends ChipProps {
     checked?: boolean

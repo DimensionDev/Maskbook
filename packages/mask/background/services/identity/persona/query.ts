@@ -1,6 +1,6 @@
 import type { MobilePersona } from '@masknet/public-api'
 import type { PersonaIdentifier, PersonaInformation, ProfileIdentifier } from '@masknet/shared-base'
-import { first, orderBy } from 'lodash-unified'
+import { first, orderBy } from 'lodash-es'
 import {
     createPersonaDBReadonlyAccess,
     PersonaRecord,

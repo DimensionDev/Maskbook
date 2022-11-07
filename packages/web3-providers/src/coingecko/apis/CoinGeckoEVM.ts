@@ -1,4 +1,4 @@
-import { uniq, uniqBy } from 'lodash-unified'
+import { uniq, uniqBy } from 'lodash-es'
 import { DataProvider } from '@masknet/public-api'
 import { HubIndicator, HubOptions, TokenType } from '@masknet/web3-shared-base'
 import { ChainId, getCoinGeckoConstants, isNativeTokenAddress, isValidAddress } from '@masknet/web3-shared-evm'

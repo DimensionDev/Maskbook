@@ -1,4 +1,4 @@
-import { first } from 'lodash-unified'
+import { first } from 'lodash-es'
 import { LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { delay } from '@masknet/kit'
 import { TWITTER_RESERVED_SLUGS } from '@masknet/injected-script/shared'

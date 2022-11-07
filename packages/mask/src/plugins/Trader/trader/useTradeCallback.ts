@@ -1,4 +1,4 @@
-import { noop } from 'lodash-unified'
+import { noop } from 'lodash-es'
 import type { Trade as V2Trade } from '@uniswap/v2-sdk'
 import type { Trade as V3Trade } from '@uniswap/v3-sdk'
 import type { Currency, TradeType } from '@uniswap/sdk-core'

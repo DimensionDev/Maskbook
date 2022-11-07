@@ -16,7 +16,7 @@ import { ChainId, createERC20Token, createNativeToken, isZeroAddress, SchemaType
 import type { NonFungibleTokenAPI } from '../types/index.js'
 import { X2Y2_API_URL, X2Y2_PAGE_SIZE } from './constants.js'
 import type { Contract, Event, Order } from './types.js'
-import { first, last } from 'lodash-unified'
+import { first, last } from 'lodash-es'
 import { resolveNonFungibleTokenEventActivityType } from '../helpers.js'
 
 async function fetchFromX2Y2<T>(pathname: string) {

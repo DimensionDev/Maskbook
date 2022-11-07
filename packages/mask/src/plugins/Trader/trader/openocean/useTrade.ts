@@ -1,4 +1,4 @@
-import { first } from 'lodash-unified'
+import { first } from 'lodash-es'
 import { ChainId, isNativeTokenAddress, useRPCConstants, useTraderConstants } from '@masknet/web3-shared-evm'
 import { PluginTraderRPC } from '../../messages.js'
 import type { SwapOOData, TradeStrategy } from '../../types/index.js'

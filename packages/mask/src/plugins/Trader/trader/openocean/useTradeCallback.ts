@@ -1,5 +1,5 @@
 import stringify from 'json-stable-stringify'
-import { pick } from 'lodash-unified'
+import { pick } from 'lodash-es'
 import { useMemo } from 'react'
 import { useAsyncFn } from 'react-use'
 import type { TransactionConfig } from 'web3-core'

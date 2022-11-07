@@ -1,5 +1,5 @@
 import { BigNumber } from 'bignumber.js'
-import { defaults } from 'lodash-unified'
+import { defaults } from 'lodash-es'
 
 export interface FormatterCurrencyOptions {
     symbols?: Record<string, string>

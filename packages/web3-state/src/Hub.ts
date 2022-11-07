@@ -1,4 +1,4 @@
-import { memoize } from 'lodash-unified'
+import { memoize } from 'lodash-es'
 import type { Subscription } from 'use-subscription'
 import type { HubState as Web3HubState, Hub, HubOptions, SourceType, CurrencyType } from '@masknet/web3-shared-base'
 

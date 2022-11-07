@@ -8,7 +8,7 @@ import { makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
 import { TokenIcon, FormattedBalance } from '@masknet/shared'
 import { WalletContext } from '../../hooks/useWalletContext.js'
-import { isNaN } from 'lodash-unified'
+import { isNaN } from 'lodash-es'
 import { formatBalance, FungibleAsset, isGreaterThanOrEqualTo, isLessThan } from '@masknet/web3-shared-base'
 import { useI18N } from '../../../../../../utils/index.js'
 

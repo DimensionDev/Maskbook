@@ -3,7 +3,7 @@ import { formatWeiToEther, formatWeiToGwei, ChainIdOptionalRecord, ChainId } fro
 import { Typography } from '@mui/material'
 import { LoadingButton } from '@mui/lab'
 import { BigNumber } from 'bignumber.js'
-import { isEmpty, noop } from 'lodash-unified'
+import { isEmpty, noop } from 'lodash-es'
 import { FC, memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { useUpdateEffect } from 'react-use'

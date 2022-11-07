@@ -1,6 +1,6 @@
 import { ImageList, ImageListItem, SvgIconProps } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { map } from 'lodash-unified'
+import { map } from 'lodash-es'
 import { createElement } from 'react'
 import { useI18N } from '../../../../utils/index.js'
 import { Provider } from '../Provider.js'

@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import { useAsyncFn } from 'react-use'
 import type { TransactionConfig } from 'web3-core'
-import { pick } from 'lodash-unified'
+import { pick } from 'lodash-es'
 import stringify from 'json-stable-stringify'
 import { useChainContext, useNetworkContext, useWeb3Connection } from '@masknet/web3-hooks-base'
 import type { SwapRouteSuccessResponse, TradeComputed } from '../../types/index.js'

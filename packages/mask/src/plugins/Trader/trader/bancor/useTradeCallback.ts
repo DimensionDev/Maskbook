@@ -1,4 +1,4 @@
-import { pick } from 'lodash-unified'
+import { pick } from 'lodash-es'
 import { useMemo } from 'react'
 import { useAsyncFn } from 'react-use'
 import stringify from 'json-stable-stringify'

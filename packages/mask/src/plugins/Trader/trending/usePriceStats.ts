@@ -1,7 +1,7 @@
 import { useAsyncRetry } from 'react-use'
 import type { Currency } from '../types/index.js'
 import type { DataProvider } from '@masknet/public-api'
-import { isUndefined } from 'lodash-unified'
+import { isUndefined } from 'lodash-es'
 import { PluginTraderRPC } from '../messages.js'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import type { NetworkPluginID } from '@masknet/shared-base'

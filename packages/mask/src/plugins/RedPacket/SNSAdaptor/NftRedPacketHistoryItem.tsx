@@ -1,5 +1,5 @@
 import { FC, memo, MouseEventHandler, useCallback } from 'react'
-import { fill } from 'lodash-unified'
+import { fill } from 'lodash-es'
 import { TokenIcon } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles, ActionButton } from '@masknet/theme'

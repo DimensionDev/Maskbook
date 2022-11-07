@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { groupBy } from 'lodash-unified'
+import { groupBy } from 'lodash-es'
 import { BigNumber } from 'bignumber.js'
 import { formatUnits } from '@ethersproject/units'
 import { Grid, Typography } from '@mui/material'

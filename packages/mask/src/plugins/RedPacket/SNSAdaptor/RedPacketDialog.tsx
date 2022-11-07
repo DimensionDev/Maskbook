@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react'
-import { compact } from 'lodash-unified'
+import { compact } from 'lodash-es'
 import { NetworkPluginID, PluginID } from '@masknet/shared-base'
 import { useCompositionContext } from '@masknet/plugin-infra/content-script'
 import { useChainContext, useWeb3Connection, useChainIdValid, Web3ContextProvider } from '@masknet/web3-hooks-base'

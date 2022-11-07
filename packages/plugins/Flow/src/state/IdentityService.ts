@@ -1,4 +1,4 @@
-import { compact } from 'lodash-unified'
+import { compact } from 'lodash-es'
 import type { Plugin } from '@masknet/plugin-infra'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { IdentityServiceState } from '@masknet/web3-state'

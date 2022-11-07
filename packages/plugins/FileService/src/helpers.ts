@@ -5,7 +5,7 @@ import { FileInfo, FileInfoV1, Provider } from './types.js'
 import schemaV1 from './schema-v1.json'
 import schemaV2 from './schema-v2.json'
 import type { Result } from 'ts-results-es'
-import { isNil } from 'lodash-unified'
+import { isNil } from 'lodash-es'
 import { encodeArrayBuffer, encodeText } from '@masknet/kit'
 import { createLookupTableResolver } from '@masknet/shared-base'
 

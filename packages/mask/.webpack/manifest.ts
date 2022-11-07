@@ -1,6 +1,6 @@
 /* spell-checker: disable */
 import emitFile from '@nice-labs/emit-file-webpack-plugin'
-import { cloneDeep } from 'lodash-unified'
+import { cloneDeep } from 'lodash-es'
 import { ComputedFlags, NormalizedFlags } from './flags'
 
 type ManifestV2 = typeof import('../src/manifest.json') & { key?: string; devtools_page?: string; applications?: any }

@@ -1,4 +1,4 @@
-import { remove } from 'lodash-unified'
+import { remove } from 'lodash-es'
 import type { ScopedStorage, EnhanceableSite } from '@masknet/shared-base'
 import { NonFungibleToken, isSameAddress } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'

@@ -1,7 +1,7 @@
 import { memo } from 'react'
 import { useAsync, useAsyncFn } from 'react-use'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { compact } from 'lodash-unified'
+import { compact } from 'lodash-es'
 import { useChainContext, useWallets, useWeb3State } from '@masknet/web3-hooks-base'
 import { isSameAddress, isGreaterThan } from '@masknet/web3-shared-base'
 import { NetworkPluginID, NextIDAction, NextIDPlatform, PopupRoutes } from '@masknet/shared-base'

@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 import { BigNumber } from 'bignumber.js'
-import { omit } from 'lodash-unified'
+import { omit } from 'lodash-es'
 import { useSubscription } from 'use-subscription'
 import formatDateTime from 'date-fns/format'
 import { FormattedBalance, TokenIcon } from '@masknet/shared'

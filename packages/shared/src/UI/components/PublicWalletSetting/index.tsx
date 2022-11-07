@@ -1,6 +1,6 @@
 import { memo, useCallback, useMemo, useState } from 'react'
 import { useAsyncFn, useUpdateEffect } from 'react-use'
-import { differenceWith, uniq } from 'lodash-unified'
+import { differenceWith, uniq } from 'lodash-es'
 import { Icons } from '@masknet/icons'
 import { LoadingBase, makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { Typography, Box } from '@mui/material'

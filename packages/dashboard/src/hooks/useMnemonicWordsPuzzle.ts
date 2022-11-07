@@ -1,4 +1,4 @@
-import { range, shuffle } from 'lodash-unified'
+import { range, shuffle } from 'lodash-es'
 import { useCallback, useMemo, useState } from 'react'
 import { useAsyncRetry } from 'react-use'
 import { PluginServices } from '../API.js'

@@ -1,4 +1,4 @@
-import { first } from 'lodash-unified'
+import { first } from 'lodash-es'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import type { JsonRpcPayload } from 'web3-core-helpers'
 import { createTransaction } from '../../../../background/database/utils/openDB.js'
