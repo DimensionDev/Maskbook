@@ -1,8 +1,14 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import BigNumber from 'bignumber.js'
+import { BigNumber } from 'bignumber.js'
 import { openWindow } from '@masknet/shared-base-ui'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { useSelectFungibleToken, useOpenShareTxDialog, FungibleTokenInput } from '@masknet/shared'
+import {
+    useSelectFungibleToken,
+    useOpenShareTxDialog,
+    FungibleTokenInput,
+    WalletConnectedBoundary,
+    EthereumERC20TokenApprovedBoundary,
+} from '@masknet/shared'
 import { makeStyles, useStylesExtends, ActionButton } from '@masknet/theme'
 import { leftShift, rightShift, ZERO, FungibleToken, currySameAddress, formatBalance } from '@masknet/web3-shared-base'
 import {
@@ -14,13 +20,11 @@ import {
 } from '@masknet/web3-shared-evm'
 import { Slider, Typography } from '@mui/material'
 import { useI18N } from '../../../utils/index.js'
-import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary.js'
-import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary.js'
 import type { JSON_PayloadInMask } from '../types.js'
 import { useQualificationVerify } from './hooks/useQualificationVerify.js'
 import { useSwapCallback } from './hooks/useSwapCallback.js'
 import { SwapStatus } from './SwapGuide.js'
-import { useChainId, useFungibleToken, useFungibleTokenBalance, useWeb3State } from '@masknet/web3-hooks-base'
+import { useChainContext, useFungibleToken, useFungibleTokenBalance, useWeb3State } from '@masknet/web3-hooks-base'
 
 const useStyles = makeStyles()((theme) => ({
     button: {},
@@ -87,9 +91,9 @@ export function SwapDialog(props: SwapDialogProps) {
         exchangeTokens,
     } = props
 
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { Token } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
-    const classes = useStylesExtends(useStyles(), props)
+    const { classes } = useStylesExtends(useStyles(), props)
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
     const [ratio, setRatio] = useState<BigNumber>(
         new BigNumber(payload.exchange_amounts[0 * 2]).dividedBy(payload.exchange_amounts[0 * 2 + 1]),

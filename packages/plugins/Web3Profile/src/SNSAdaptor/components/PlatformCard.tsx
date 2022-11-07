@@ -57,7 +57,7 @@ export interface PlatformCardProps extends withClasses<never | 'root'> {
 export function PlatformCard(props: PlatformCardProps) {
     const { account, openImageSetting, isCurrent, currentPersona } = props
     const t = useI18N()
-    const classes = useStylesExtends(useStyles(), props)
+    const { classes } = useStylesExtends(useStyles(), props)
 
     const walletsCount = account.walletList.NFTs.length
 
@@ -92,19 +92,28 @@ export function PlatformCard(props: PlatformCardProps) {
                     title={t.NFTs()}
                     onClick={() => openImageSetting(Scene.NFTSetting)}
                     walletsNum={walletsCount}
-                    collectionNum={account.walletList.NFTs.reduce((acc, cur) => acc + cur.collections.length, 0)}
+                    collectionNum={account.walletList.NFTs.reduce(
+                        (acc, cur) => acc + (cur.collections?.length ?? 0),
+                        0,
+                    )}
                 />
                 <CollectionItem
                     title={t.footprints()}
                     onClick={() => openImageSetting(Scene.FootprintsSetting)}
                     walletsNum={walletsCount}
-                    collectionNum={account.walletList.footprints.reduce((pre, cur) => pre + cur.collections.length, 0)}
+                    collectionNum={account.walletList.footprints.reduce(
+                        (pre, cur) => pre + (cur.collections?.length ?? 0),
+                        0,
+                    )}
                 />
                 <CollectionItem
                     title={t.donations()}
                     onClick={() => openImageSetting(Scene.DonationsSetting)}
                     walletsNum={walletsCount}
-                    collectionNum={account.walletList.donations.reduce((pre, cur) => pre + cur.collections.length, 0)}
+                    collectionNum={account.walletList.donations.reduce(
+                        (pre, cur) => pre + (cur.collections?.length ?? 0),
+                        0,
+                    )}
                 />
             </Stack>
         </Card>

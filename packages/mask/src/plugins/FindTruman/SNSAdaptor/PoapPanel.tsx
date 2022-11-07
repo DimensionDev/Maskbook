@@ -4,8 +4,8 @@ import { fetchUserPoap } from '../Worker/apis/index.js'
 import { Box, Button, Grid, Skeleton, Typography } from '@mui/material'
 import { useContext } from 'react'
 import { FindTrumanContext } from '../context.js'
-import { useAccount } from '@masknet/web3-hooks-base'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { useChainContext } from '@masknet/web3-hooks-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
 import { Image } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme, props) => ({
@@ -39,7 +39,7 @@ interface PoapPanelProps {}
 export default function PoapPanel(props: PoapPanelProps) {
     const { classes } = useStyles()
     const { t, const: consts } = useContext(FindTrumanContext)
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
     const { value: poaps, loading } = useAsync(async () => {
         return account ? fetchUserPoap(account) : undefined

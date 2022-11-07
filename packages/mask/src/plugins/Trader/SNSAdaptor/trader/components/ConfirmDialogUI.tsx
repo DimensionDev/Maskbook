@@ -1,14 +1,14 @@
+import { memo, useCallback, useEffect, useMemo, useState } from 'react'
+import { useUpdateEffect } from 'react-use'
+import type { BigNumber } from 'bignumber.js'
 import { FormattedBalance, FormattedCurrency, InjectedDialog, TokenIcon, PluginWalletStatusBar } from '@masknet/shared'
 import { isDashboardPage } from '@masknet/shared-base'
 import { makeStyles, MaskColorVar, parseColor } from '@masknet/theme'
-import { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { useI18N } from '../../../../../utils/index.js'
 import type { TradeComputed } from '../../../types/index.js'
-import type BigNumber from 'bignumber.js'
 import {
     formatBalance,
     formatCurrency,
-    FungibleToken,
     multipliedBy,
     formatPercentage,
     isZero,
@@ -19,8 +19,6 @@ import { Alert, alpha, Box, Button, DialogActions, DialogContent, dialogTitleCla
 import { ArrowDownward } from '@mui/icons-material'
 import { Icons } from '@masknet/icons'
 import { ONE_BIPS, MIN_SLIPPAGE, MAX_SLIPPAGE } from '../../../constants/index.js'
-import { useUpdateEffect } from 'react-use'
-import { ActualChainContextProvider } from '@masknet/web3-hooks-base'
 
 const useStyles = makeStyles<{
     isDashboard: boolean
@@ -183,11 +181,11 @@ export interface ConfirmDialogUIProps {
     gasFeeUSD: string
     isGreatThanSlippageSetting: boolean
     trade: TradeComputed
-    nativeToken: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
-    inputToken: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
-    outputToken: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
+    nativeToken?: Web3Helper.FungibleTokenAll
+    inputToken: Web3Helper.FungibleTokenAll
+    outputToken: Web3Helper.FungibleTokenAll
     onClose: () => void
-    openSettingDialog: () => void
+    openSettingDialog?: () => void
     onConfirm: () => void
 }
 
@@ -422,9 +420,11 @@ export const ConfirmDialogUI = memo<ConfirmDialogUIProps>(
                             {t('plugin_trader_confirm_slippage_tolerance')}
                         </Typography>
                         <Typography className={classes.description}>
-                            <Typography component="span" className={classes.edit} onClick={openSettingDialog}>
-                                {t('edit')}
-                            </Typography>
+                            {openSettingDialog ? (
+                                <Typography component="span" className={classes.edit} onClick={openSettingDialog}>
+                                    {t('edit')}
+                                </Typography>
+                            ) : null}
                             {currentSlippage / 100}%
                         </Typography>
                     </Box>
@@ -453,14 +453,16 @@ export const ConfirmDialogUI = memo<ConfirmDialogUIProps>(
                         <Box className={classes.section}>
                             <Typography className={classes.title}>{t('plugin_trader_gas')}</Typography>
                             <Typography className={classes.description}>
-                                <Typography component="span" className={classes.edit} onClick={openSettingDialog}>
-                                    {t('edit')}
-                                </Typography>
+                                {openSettingDialog ? (
+                                    <Typography component="span" className={classes.edit} onClick={openSettingDialog}>
+                                        {t('edit')}
+                                    </Typography>
+                                ) : null}
                                 <FormattedBalance
                                     value={gasFee}
-                                    decimals={nativeToken.decimals ?? 0}
+                                    decimals={nativeToken?.decimals ?? 0}
                                     significant={4}
-                                    symbol={nativeToken.symbol}
+                                    symbol={nativeToken?.symbol}
                                     formatter={formatBalance}
                                 />
                                 <span>
@@ -495,13 +497,11 @@ export const ConfirmDialogUI = memo<ConfirmDialogUIProps>(
                 </DialogContent>
 
                 <DialogActions className={classes.actions}>
-                    <ActualChainContextProvider>
-                        <PluginWalletStatusBar>
-                            <Button disabled={staled || priceUpdated} fullWidth onClick={onConfirm}>
-                                {t('plugin_trader_confirm_swap')}
-                            </Button>
-                        </PluginWalletStatusBar>
-                    </ActualChainContextProvider>
+                    <PluginWalletStatusBar>
+                        <Button disabled={staled || priceUpdated} fullWidth onClick={onConfirm}>
+                            {t('plugin_trader_confirm_swap')}
+                        </Button>
+                    </PluginWalletStatusBar>
                 </DialogActions>
             </InjectedDialog>
         )

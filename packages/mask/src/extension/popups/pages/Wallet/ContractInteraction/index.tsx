@@ -9,19 +9,18 @@ import { Link, Typography } from '@mui/material'
 import { useI18N } from '../../../../../utils/index.js'
 import { PopupRoutes, NetworkPluginID } from '@masknet/shared-base'
 import { LoadingButton } from '@mui/lab'
-import { unreachable } from '@dimensiondev/kit'
-import BigNumber from 'bignumber.js'
+import { unreachable } from '@masknet/kit'
+import { BigNumber } from 'bignumber.js'
 import { LoadingPlaceholder } from '../../../components/LoadingPlaceholder/index.js'
 import { toHex } from 'web3-utils'
 import {
-    useChainId,
+    useChainContext,
     useChainIdSupport,
     useFungibleToken,
     useFungibleTokenPrice,
     useGasOptions,
     useNativeToken,
     useNativeTokenPrice,
-    useNetworkType,
     useReverseAddress,
     useWeb3State,
 } from '@masknet/web3-hooks-base'
@@ -144,8 +143,7 @@ const ContractInteraction = memo(() => {
     const location = useLocation()
     const navigate = useNavigate()
     const { Others, TransactionFormatter } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
-    const networkType = useNetworkType(NetworkPluginID.PLUGIN_EVM)
+    const { chainId, networkType } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const [transferError, setTransferError] = useState(false)
     const { value: request, loading: requestLoading } = useUnconfirmedRequest()
     const { value: transactionDescription } = useAsync(async () => {

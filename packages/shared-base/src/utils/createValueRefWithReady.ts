@@ -1,4 +1,4 @@
-import { defer } from '@dimensiondev/kit'
+import { defer } from '@masknet/kit'
 import { ValueRef } from '@dimensiondev/holoflows-kit'
 
 export type ValueRefWithReady<T> = ValueRef<T> & {

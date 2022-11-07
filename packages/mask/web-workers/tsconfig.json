@@ -5,8 +5,7 @@
     "outDir": "../dist/web-workers/",
     "tsBuildInfoFile": "../dist/web-worker.tsbuildinfo",
     "emitDeclarationOnly": true,
-    "lib": ["WebWorker", "ES2020"],
-    "types": []
+    "lib": ["WebWorker", "ES2020"]
   },
   "include": ["./"],
   "references": []

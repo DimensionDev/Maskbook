@@ -1,11 +1,11 @@
 import { makeStyles, LoadingBase } from '@masknet/theme'
 import type { NonFungibleTokenEvent, Pageable } from '@masknet/web3-shared-base'
-import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
+import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
 import { Typography, Button } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { ActivityCard } from './ActivityCard'
+import { ActivityCard } from './ActivityCard.js'
 import { useI18N } from '../../../../../utils/index.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -47,7 +47,7 @@ export function ActivitiesList(props: ActivitiesListProps) {
     if (events.error || !events.value)
         return (
             <div className={classes.wrapper}>
-                <Typography className={classes.emptyText}>{t('plugin_furucombo_load_failed')}</Typography>
+                <Typography className={classes.emptyText}>{t('load_failed')}</Typography>
                 <Button variant="text" onClick={() => events.retry()}>
                     {t('retry')}
                 </Button>

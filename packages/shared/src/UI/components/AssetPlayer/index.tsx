@@ -1,6 +1,6 @@
 import { memo, useRef, useCallback, useState, useEffect, useMemo } from 'react'
 import { useUpdateEffect } from 'react-use'
-import { first } from 'lodash-unified'
+import { first } from 'lodash-es'
 import IframeResizer, { IFrameComponent } from 'iframe-resizer-react'
 import { getRPCConstants } from '@masknet/web3-shared-evm'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
@@ -64,7 +64,7 @@ enum AssetPlayerState {
 export const AssetPlayer = memo<AssetPlayerProps>((props) => {
     const ref = useRef<IFrameComponent | null>(null)
     const { url, type, options, iconProps, isFixedIframeSize = true, showNetwork = false, networkIcon } = props
-    const classes = useStylesExtends(useStyles(), props)
+    const { classes } = useStylesExtends(useStyles(), props)
     const [hidden, setHidden] = useState(Boolean(props.renderTimeout))
     const { RPC_URLS } = getRPCConstants(props.erc721Token?.chainId)
     const rpc = first(RPC_URLS)

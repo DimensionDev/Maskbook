@@ -3,13 +3,13 @@ import { useCopyToClipboard } from 'react-use'
 import { v4 as uuid } from 'uuid'
 import { Icons } from '@masknet/icons'
 import { Box, Link, MenuItem, Typography } from '@mui/material'
-import { useChainId, useWeb3State } from '@masknet/web3-hooks-base'
+import { useWeb3State, useChainContext } from '@masknet/web3-hooks-base'
 import { AccountIcon, AddressItem, useSnackbarCallback } from '@masknet/shared'
 import { makeStyles, ShadowRootMenu } from '@masknet/theme'
 import { isSameAddress, SocialAccount, SocialIdentity } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../utils/index.js'
-import { AvatarDecoration } from './AvatarDecoration'
+import { AvatarDecoration } from './AvatarDecoration.js'
 
 const MENU_ITEM_HEIGHT = 40
 const MENU_LIST_PADDING = 8
@@ -68,6 +68,7 @@ const useStyles = makeStyles<void, 'avatarDecoration'>()((theme, _, refs) => ({
         color: theme.palette.text.primary,
         fontSize: 14,
         height: 18,
+        fontWeight: 400,
         lineHeight: '18px',
     },
     linkIcon: {
@@ -130,7 +131,7 @@ export const ProfileBar = memo<ProfileBarProps>(
         })
 
         const { Others } = useWeb3State()
-        const chainId = useChainId()
+        const { chainId } = useChainContext()
 
         const [walletMenuOpen, setWalletMenuOpen] = useState(false)
         useEffect(() => {

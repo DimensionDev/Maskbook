@@ -1,5 +1,5 @@
-import { first } from 'lodash-unified'
-import { getEnumAsArray, unreachable } from '@dimensiondev/kit'
+import { first } from 'lodash-es'
+import { getEnumAsArray, unreachable } from '@masknet/kit'
 import { DataProvider } from '@masknet/public-api'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { CoinGeckoTrendingEVM, CoinMarketCap, NFTScanTrending, TrendingAPI, UniSwap } from '@masknet/web3-providers'
@@ -32,18 +32,27 @@ async function checkAvailabilityOnDataProvider(
     type: TagType,
     dataProvider: DataProvider,
 ) {
-    if (isBlockedKeyword(type, keyword)) return false
-    const coins = await getCoinsByKeyword(chainId, resolveKeyword(chainId, keyword, dataProvider), dataProvider)
-    return !!coins.length
+    try {
+        if (isBlockedKeyword(type, keyword)) return false
+        const coins = await getCoinsByKeyword(chainId, resolveKeyword(chainId, keyword, dataProvider), dataProvider)
+        return !!coins.length
+    } catch {
+        return false
+    }
 }
 
 export async function getAvailableDataProviders(chainId: ChainId, type?: TagType, keyword?: string) {
+    // TODO: multi network support
     const networkType = chainResolver.networkType(chainId)
     const isMainnet = chainResolver.isMainnet(chainId)
+
     if (!type || !keyword)
         return getEnumAsArray(DataProvider)
             .filter((x) => (isMainnet ? true : x.value !== DataProvider.UniswapInfo))
             .map((y) => y.value)
+
+    // Check if the keyword is a numeric string
+    if (!Number.isNaN(Number(keyword))) return EMPTY_LIST
 
     const checked = await Promise.all(
         getEnumAsArray(DataProvider)

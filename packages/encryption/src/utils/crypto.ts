@@ -1,5 +1,5 @@
 import { AESCryptoKey, CheckedError, EC_CryptoKey, EC_Public_CryptoKey } from '@masknet/shared-base'
-import { Result, Ok } from 'ts-results'
+import { Result, Ok } from 'ts-results-es'
 import { EC_KeyCurveEnum } from '../payload/index.js'
 import { CryptoException } from '../types/index.js'
 export function importAES(key: JsonWebKey | Uint8Array): Promise<Result<AESCryptoKey, unknown>> {

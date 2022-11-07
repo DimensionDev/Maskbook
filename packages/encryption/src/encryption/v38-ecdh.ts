@@ -1,4 +1,4 @@
-import { concatArrayBuffer, decodeArrayBuffer } from '@dimensiondev/kit'
+import { concatArrayBuffer, decodeArrayBuffer } from '@masknet/kit'
 import type { AESCryptoKey, EC_Public_CryptoKey } from '@masknet/shared-base'
 import { encryptWithAES } from '../utils/index.js'
 import {

@@ -1,4 +1,4 @@
-import type BigNumber from 'bignumber.js'
+import type { BigNumber } from 'bignumber.js'
 import { createPluginMessage, PluginMessageEmitter } from '@masknet/plugin-infra'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import type { PluginID, NetworkPluginID } from '@masknet/shared-base'
@@ -76,7 +76,6 @@ export type WalletRiskWarningDialogEvent =
 
 export type SelectNftContractDialogEvent = {
     open: boolean
-    uuid: string
 
     chainId?: ChainId
     balance?: string

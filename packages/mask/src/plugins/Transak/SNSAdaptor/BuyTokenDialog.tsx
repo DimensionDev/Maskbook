@@ -2,7 +2,7 @@ import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { InjectedDialog } from '@masknet/shared'
 import { DialogContent, IconButton } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
-import CloseIcon from '@mui/icons-material/Close'
+import { Close as CloseIcon } from '@mui/icons-material'
 import { useState } from 'react'
 import { useTransakURL } from '../hooks/useTransakURL.js'
 import { PluginTransakMessages } from '../messages.js'
@@ -38,7 +38,7 @@ const useStyles = makeStyles()((theme) => ({
 export interface BuyTokenDialogProps extends withClasses<never | 'root'> {}
 
 export function BuyTokenDialog(props: BuyTokenDialogProps) {
-    const classes = useStylesExtends(useStyles(), props)
+    const { classes } = useStylesExtends(useStyles(), props)
 
     const [code, setCode] = useState('ETH')
     const [address, setAddress] = useState('')

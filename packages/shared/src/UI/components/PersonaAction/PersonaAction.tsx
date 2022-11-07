@@ -1,4 +1,4 @@
-import { useStylesExtends, makeStyles, ShadowRootTooltip } from '@masknet/theme'
+import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { Box, Typography } from '@mui/material'
 import { useCopyToClipboard } from 'react-use'
 import { PlatformAvatar } from './PlatformAvatar.js'
@@ -36,7 +36,7 @@ interface PersonaActionProps {
 }
 
 export function PersonaAction(props: PersonaActionProps) {
-    const classes = useStylesExtends(useStyles(), {})
+    const { classes } = useStyles()
     const { currentPersona, avatar } = props
     const t = useSharedI18N()
 

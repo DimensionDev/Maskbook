@@ -1,6 +1,6 @@
 import { CrossIsolationMessages } from '@masknet/shared-base'
 import { CSSProperties, RefObject, useCallback, useEffect, useRef, useState } from 'react'
-import { CARD_HEIGHT, CARD_WIDTH } from './constants'
+import { CARD_HEIGHT, CARD_WIDTH } from './constants.js'
 
 export function useControlProfileCard(holderRef: RefObject<HTMLDivElement>) {
     const activeRef = useRef(false)
@@ -91,9 +91,9 @@ export function useControlProfileCard(holderRef: RefObject<HTMLDivElement>) {
         const onClick = (event: MouseEvent) => {
             // @ts-ignore
             // `NODE.contains(other)` doesn't work for cross multiple layer of Shadow DOM
-            if (!event.path?.includes(holderRef.current)) {
-                hideProfileCard()
-            }
+            if (event.path?.includes(holderRef.current)) return
+            activeRef.current = false
+            hideProfileCard()
         }
         document.body.addEventListener('click', onClick)
         return () => {

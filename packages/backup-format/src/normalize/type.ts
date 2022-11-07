@@ -7,7 +7,7 @@ import type {
     RelationFavor,
     PostIVIdentifier,
 } from '@masknet/shared-base'
-import type { Option } from 'ts-results'
+import type { Option } from 'ts-results-es'
 
 // All optional type in this file is marked by Option<T> because we don't want to miss any field.
 export namespace NormalizedBackup {

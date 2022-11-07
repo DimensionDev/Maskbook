@@ -1,5 +1,5 @@
 import urlcat from 'urlcat'
-import { unionWith } from 'lodash-unified'
+import { unionWith } from 'lodash-es'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import {
     GasOptionType,

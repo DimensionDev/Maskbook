@@ -1,14 +1,15 @@
 {
   "name": "@masknet/plugin-cyberconnect",
   "private": true,
+  "type": "module",
   "exports": {
     ".": {
-      "webpack": "./src/index.ts",
+      "mask-src": "./src/index.ts",
       "default": "./dist/index.js"
     }
   },
   "dependencies": {
-    "@cyberlab/cyberconnect": "^4.2.2",
+    "@cyberlab/cyberconnect": "4.2.2",
     "@masknet/icons": "workspace:*",
     "@masknet/plugin-infra": "workspace:*",
     "@masknet/shared-base": "workspace:*",

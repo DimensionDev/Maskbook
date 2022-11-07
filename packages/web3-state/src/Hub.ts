@@ -1,4 +1,4 @@
-import { memoize } from 'lodash-unified'
+import { memoize } from 'lodash-es'
 import type { Subscription } from 'use-subscription'
 import type { HubState as Web3HubState, Hub, HubOptions, SourceType, CurrencyType } from '@masknet/web3-shared-base'
 
@@ -27,6 +27,10 @@ export class HubState<ChainId, SchemaType, GasOption> implements Web3HubState<Ch
             sourceType?: Subscription<SourceType>
             currencyType?: Subscription<CurrencyType>
         },
+        protected options: {
+            isValidChainId(chainId?: ChainId): boolean
+            getDefaultChainId(): ChainId
+        },
     ) {
         this.createHubCached = memoize(
             (
@@ -53,12 +57,20 @@ export class HubState<ChainId, SchemaType, GasOption> implements Web3HubState<Ch
     }
 
     getHub(options?: HubOptions<ChainId>) {
+        const chainId =
+            options?.chainId ?? this.subscription.chainId?.getCurrentValue() ?? this.options.getDefaultChainId()
+        const account = options?.account ?? this.subscription.account?.getCurrentValue()
+        const sourceType = options?.sourceType ?? this.subscription.sourceType?.getCurrentValue()
+        const currencyType = options?.currencyType ?? this.subscription.currencyType?.getCurrentValue()
+
+        if (!this.options.isValidChainId(chainId)) return Promise.resolve()
+
         return Promise.resolve(
             this.createHubCached?.(
-                options?.chainId ?? this.subscription.chainId?.getCurrentValue(),
-                options?.account ?? this.subscription.account?.getCurrentValue(),
-                options?.sourceType ?? this.subscription.sourceType?.getCurrentValue(),
-                options?.currencyType ?? this.subscription.currencyType?.getCurrentValue(),
+                chainId,
+                account,
+                sourceType,
+                currencyType,
                 HubState.SIZE_PER_PAGE,
                 HubState.MAX_PAGE_SIZE,
             ),

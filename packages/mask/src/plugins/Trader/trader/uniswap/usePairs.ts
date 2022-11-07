@@ -10,7 +10,8 @@ import type { TradeProvider } from '@masknet/public-api'
 import { useGetTradeContext } from '../useGetTradeContext.js'
 import { useMultipleContractSingleData } from '@masknet/web3-hooks-evm'
 import { useTargetBlockNumber } from '../useTargetBlockNumber.js'
-import { useChainId } from '@masknet/web3-hooks-base'
+import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
+import type { ChainId } from '@masknet/web3-shared-evm'
 
 export enum PairState {
     NOT_EXISTS = 0,
@@ -22,11 +23,11 @@ export type TokenPair = [Token, Token]
 
 export function usePairs(tradeProvider: TradeProvider, tokenPairs: readonly TokenPair[]) {
     const context = useGetTradeContext(tradeProvider)
-
-    const targetChainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { chainId } = useChainContext()
+    const { pluginID } = useNetworkContext()
 
     const listOfPairAddress = useMemo(() => {
-        if (!context) return EMPTY_LIST
+        if (!context || pluginID !== NetworkPluginID.PLUGIN_EVM) return EMPTY_LIST
         const { FACTORY_CONTRACT_ADDRESS, INIT_CODE_HASH } = context
         if (!FACTORY_CONTRACT_ADDRESS || !INIT_CODE_HASH) return EMPTY_LIST
         return tokenPairs.map(([tokenA, tokenB]) =>
@@ -34,24 +35,26 @@ export function usePairs(tradeProvider: TradeProvider, tokenPairs: readonly Toke
                 ? getPairAddress(FACTORY_CONTRACT_ADDRESS, INIT_CODE_HASH, tokenA, tokenB)
                 : undefined,
         )
-    }, [context, tokenPairs])
+    }, [context, tokenPairs, pluginID])
 
-    const { value: targetBlockNumber } = useTargetBlockNumber(targetChainId)
+    const { value: targetBlockNumber } = useTargetBlockNumber(chainId)
 
     // get reserves for each pair
-    const contracts = usePairContracts(targetChainId, [...new Set(listOfPairAddress.filter(Boolean) as string[])])
+    const contracts = usePairContracts(pluginID !== NetworkPluginID.PLUGIN_EVM ? (chainId as ChainId) : undefined, [
+        ...new Set(listOfPairAddress.filter(Boolean) as string[]),
+    ])
 
     const [results, calls, _, callback] = useMultipleContractSingleData(
         contracts,
         Array.from<'getReserves'>({ length: contracts.length }).fill('getReserves'),
         [],
-        targetChainId,
+        pluginID !== NetworkPluginID.PLUGIN_EVM ? (chainId as ChainId) : undefined,
         targetBlockNumber,
     )
 
     const asyncResults = useAsyncRetry(
-        () => callback(calls, { chainId: numberToHex(targetChainId) }),
-        [calls, callback, targetChainId],
+        () => callback(calls, { chainId: numberToHex(chainId) }),
+        [calls, callback, chainId],
     )
 
     // compose reserves from multicall results

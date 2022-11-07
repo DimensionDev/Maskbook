@@ -29,6 +29,7 @@ export async function fetchJSON<T = unknown>(
 ): Promise<T> {
     const fetch = options?.fetch ?? globalThis.fetch
     const res = await fetch(requestInfo, requestInit)
+    if (!res.ok) throw new Error('Failed to fetch.')
     return res.json()
 }
 

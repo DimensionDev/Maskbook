@@ -1,6 +1,6 @@
-import { decodeArrayBuffer, encodeArrayBuffer } from '@dimensiondev/kit'
+import { decodeArrayBuffer, encodeArrayBuffer } from '@masknet/kit'
 import { Convert } from 'pvtsutils'
-import { type Option, None, Some } from 'ts-results'
+import { type Option, None, Some } from 'ts-results-es'
 import { Identifier } from './base.js'
 
 const instance = new WeakSet()

@@ -1,4 +1,4 @@
-import { delay } from '@dimensiondev/kit'
+import { delay } from '@masknet/kit'
 import type { NormalizedBackup } from '@masknet/backup-format'
 import { activatedPluginsWorker, registeredPlugins } from '@masknet/plugin-infra/background-worker'
 import { PluginID, ProfileIdentifier, RelationFavor } from '@masknet/shared-base'

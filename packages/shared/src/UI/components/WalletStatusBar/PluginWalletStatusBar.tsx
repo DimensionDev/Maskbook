@@ -1,6 +1,7 @@
 import { memo, PropsWithChildren, useCallback, useMemo } from 'react'
 import { alpha, Box, Button } from '@mui/material'
 import { Icons } from '@masknet/icons'
+import { makeStyles, MaskColorVar } from '@masknet/theme'
 import {
     useNetworkContext,
     useProviderDescriptor,
@@ -9,9 +10,8 @@ import {
     useWallet,
     useReverseAddress,
     useWeb3State,
-    useProviderType,
-    useChainId,
-    useAccount,
+    useChainContext,
+    ActualChainContextProvider,
 } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { WalletMessages } from '@masknet/plugin-wallet'
@@ -22,7 +22,6 @@ import { useSharedI18N } from '../../../locales/index.js'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { WalletDescription } from './WalletDescription.js'
 import { Action } from './Action.js'
-import { makeStyles, MaskColorVar } from '@masknet/theme'
 
 const isDashboard = isDashboardPage()
 
@@ -57,17 +56,15 @@ export interface WalletStatusBarProps<T extends NetworkPluginID> extends PropsWi
     onClick?: (ev: React.MouseEvent<HTMLDivElement>) => void
 }
 
-export const PluginWalletStatusBar = memo<WalletStatusBarProps<NetworkPluginID>>(
+const PluginWalletStatusBarWithoutContext = memo<WalletStatusBarProps<NetworkPluginID>>(
     ({ className, onClick, expectedPluginID, expectedChainId, children }) => {
         const t = useSharedI18N()
         const { classes, cx } = useStyles()
 
         const { pluginID } = useNetworkContext()
-        const account = useAccount(pluginID)
+        const { account, chainId, providerType } = useChainContext()
         const wallet = useWallet(pluginID)
-        const chainId = useChainId(pluginID)
         const providerDescriptor = useProviderDescriptor()
-        const providerType = useProviderType()
         const networkDescriptor = useNetworkDescriptor(pluginID, chainId)
         const expectedNetworkDescriptor = useNetworkDescriptor(expectedPluginID, expectedChainId)
         const { value: domain } = useReverseAddress(pluginID, account)
@@ -124,3 +121,11 @@ export const PluginWalletStatusBar = memo<WalletStatusBarProps<NetworkPluginID>>
         )
     },
 )
+
+export const PluginWalletStatusBar = memo<WalletStatusBarProps<NetworkPluginID>>((props) => {
+    return (
+        <ActualChainContextProvider>
+            <PluginWalletStatusBarWithoutContext {...props} />
+        </ActualChainContextProvider>
+    )
+})

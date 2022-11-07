@@ -1,4 +1,4 @@
-import { omit } from 'lodash-unified'
+import { omit } from 'lodash-es'
 import type { RedPacketNftRecordInDatabase, RedPacketNftRecord } from '../types.js'
 import { RedPacketDatabase } from './database.js'
 

@@ -1,6 +1,6 @@
+import { useCallback } from 'react'
 import { BindingProof, ECKeyIdentifier, EnhanceableSite, NetworkPluginID } from '@masknet/shared-base'
 import { useWeb3State } from '@masknet/web3-hooks-base'
-import { useCallback } from 'react'
 import { activatedSocialNetworkUI } from '../../../../social-network/index.js'
 import { useSaveAddress } from './useSaveAddress.js'
 import type { NextIDAvatarMeta } from '../../types.js'
@@ -18,7 +18,7 @@ export function useSaveToNextID() {
 
             saveAddress(
                 info.userId,
-                info.pluginID ?? NetworkPluginID.PLUGIN_EVM,
+                info.pluginId ?? NetworkPluginID.PLUGIN_EVM,
                 account,
                 activatedSocialNetworkUI.networkIdentifier as EnhanceableSite,
             )

@@ -1,7 +1,8 @@
 import { queryAvatarDB, isAvatarOutdatedDB, storeAvatarDB, IdentifierWithAvatar, createAvatarDBAccess } from './db.js'
 import { hasNativeAPI, nativeAPI } from '../../../shared/native-rpc/index.js'
-import { blobToDataURL, memoizePromise } from '@dimensiondev/kit'
+import { blobToDataURL, memoizePromise } from '@masknet/kit'
 import { createTransaction } from '../utils/openDB.js'
+import { memoize } from 'lodash-es'
 
 /**
  * Get a (cached) blob url for an identifier. No cache for native api.
@@ -18,6 +19,7 @@ async function nativeImpl(identifiers: IdentifierWithAvatar[]): Promise<Map<Iden
     return map
 }
 const indexedDBImpl = memoizePromise(
+    memoize,
     async function (identifiers: IdentifierWithAvatar[]): Promise<Map<IdentifierWithAvatar, string>> {
         const promises: Array<Promise<unknown>> = []
 

@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest'
-import { MirrorPageType, getMirrorPageType, getMirrorUserId } from '../collecting/utils'
+import { MirrorPageType, getMirrorPageType, getMirrorUserId } from '../collecting/utils.js'
 
 describe('test mirror collection utils', () => {
     test.each([

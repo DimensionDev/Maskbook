@@ -2,7 +2,7 @@ import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useAsync, useUpdateEffect } from 'react-use'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { v4 as uuid } from 'uuid'
-import { unionBy } from 'lodash-unified'
+import { unionBy } from 'lodash-es'
 import { z } from 'zod'
 import { EthereumAddress } from 'wallet.ts'
 import { Controller, useForm } from 'react-hook-form'
@@ -25,14 +25,12 @@ import { WalletMessages } from '@masknet/plugin-wallet'
 import { SelectNFTList } from './SelectNFTList.js'
 import { LoadingPlaceholder } from '../../../../components/LoadingPlaceholder/index.js'
 import { zodResolver } from '@hookform/resolvers/zod'
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
-import TuneIcon from '@mui/icons-material/Tune'
+import { KeyboardArrowDown as KeyboardArrowDownIcon, Tune as TuneIcon } from '@mui/icons-material'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { useGasConfig } from '../../hooks/index.js'
 import { TransferTab } from './types.js'
 import {
-    useAccount,
-    useChainId,
+    useChainContext,
     useGasPrice,
     useLookupAddress,
     useNetworkDescriptor,
@@ -60,7 +58,7 @@ const GAS_LIMIT = 30000
 
 export const TransferERC721 = memo(() => {
     const t = useDashboardI18N()
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const anchorEl = useRef<HTMLDivElement | null>(null)
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
 
@@ -86,7 +84,6 @@ export const TransferERC721 = memo(() => {
     const network = useNetworkDescriptor()
     const { Others } = useWeb3State()
 
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const nativeToken = useNativeToken(NetworkPluginID.PLUGIN_EVM)
     const nativeTokenPrice = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM)
     // form
@@ -186,7 +183,7 @@ export const TransferERC721 = memo(() => {
     const { setDialog: setSelectContractDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectNftContractDialogUpdated,
         (ev) => {
-            if (ev.open || !ev.contract || ev.uuid !== id) return
+            if (ev.open || !ev.contract) return
             if (!contract || (contract && !isSameAddress(contract.address, ev.contract.address))) {
                 if (contract && defaultToken && !isSameAddress(contract.address, defaultToken.address)) {
                     setDefaultToken(null)
@@ -337,7 +334,7 @@ export const TransferERC721 = memo(() => {
                         <Controller
                             control={control}
                             render={(field) => (
-                                <Box onClick={() => setSelectContractDialog({ open: true, uuid: id })}>
+                                <Box onClick={() => setSelectContractDialog({ open: true })}>
                                     <MaskTextField
                                         {...field}
                                         error={!!errors.contract || !!errors.tokenId}

@@ -3,7 +3,7 @@ import { useI18N } from '../../../utils/index.js'
 import { SetupGuideStep } from '../../../../shared/legacy-settings/types.js'
 import { Box, Button, Typography } from '@mui/material'
 import { MaskIcon } from '@masknet/shared'
-import ExtensionIcon from '@mui/icons-material/Extension'
+import { Extension as ExtensionIcon } from '@mui/icons-material'
 import { Icons } from '@masknet/icons'
 import { useFindUsernameStyles } from './FindUsername.js'
 

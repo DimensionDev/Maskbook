@@ -1,4 +1,4 @@
-import { flattenDeep } from 'lodash-unified'
+import { flattenDeep } from 'lodash-es'
 import {
     isTypedMessageEmpty,
     isTypedMessageText,
@@ -8,10 +8,11 @@ import {
     TypedMessage,
     TypedMessageText,
 } from '@masknet/typed-message'
-import { assertNonNull } from '@dimensiondev/kit'
+import { assertNonNull } from '@masknet/kit'
 
 const parseNameArea = (nameArea: HTMLAnchorElement) => {
-    const displayNameNode = nameArea.querySelector('strong')
+    const displayNameNode = nameArea.querySelector('span')
+
     return {
         name: displayNameNode && assertNonNull(displayNameNode) ? displayNameNode.innerText : nameArea.innerText,
         handle: nameArea.href.slice(8).split('/')[1],
@@ -19,16 +20,20 @@ const parseNameArea = (nameArea: HTMLAnchorElement) => {
 }
 
 export const postIdParser = (node: HTMLElement) => {
-    const idNode = node.querySelector<HTMLAnchorElement>('.m-activityOwnerBlock__permalink')
+    const idNode = node.querySelector<HTMLAnchorElement>('m-activityv2__permalink .m-activityPermalink__wrapper--link')
     return idNode ? idNode.getAttribute('href')?.split('/')[2] ?? undefined : undefined
 }
 
 export const postNameParser = (node: HTMLElement) => {
-    return parseNameArea(assertNonNull(node.querySelector<HTMLAnchorElement>('.m-activityOwnerBlock__displayName')))
+    return parseNameArea(
+        assertNonNull(
+            node.querySelector<HTMLAnchorElement>('m-activityv2__ownerblock .m-activityOwnerBlock__displayName'),
+        ),
+    )
 }
 
 export const postAvatarParser = (node: HTMLElement) => {
-    const avatarElement = node.querySelector<HTMLImageElement>('.m-activityOwnerBlock__avatar img')
+    const avatarElement = node.querySelector<HTMLImageElement>('m-hovercard img')
     return avatarElement ? avatarElement.src : undefined
 }
 
@@ -66,7 +71,7 @@ export const postContentMessageParser = (node: HTMLElement) => {
         } else return makeTypedMessageEmpty()
     }
 
-    const content = node.querySelector<HTMLDivElement>('m-activity__content')
+    const content = node.querySelector<HTMLDivElement>('m-activityv2__content')
     return content ? Array.from(content.childNodes).flatMap(make) : []
 }
 

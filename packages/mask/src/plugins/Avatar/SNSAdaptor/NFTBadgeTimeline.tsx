@@ -25,7 +25,7 @@ export function NFTBadgeTimeline(props: NFTBadgeTimelineProps) {
     const { loading, value: _avatar } = usePersonaNFTAvatar(userId, avatarId, '', snsKey)
     const [avatar, setAvatar] = useState<AvatarMetaDB>()
     const [avatarId_, setAvatarId_] = useState('')
-    const classes = useStylesExtends(useStyles(), props)
+    const { classes } = useStylesExtends(useStyles(), props)
 
     const onUpdate = (data: AvatarMetaDB) => {
         if (!data.address || !data.tokenId) {

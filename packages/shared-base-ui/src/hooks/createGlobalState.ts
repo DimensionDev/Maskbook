@@ -1,5 +1,5 @@
 import { useSubscription, Subscription } from 'use-subscription'
-import { Some, None, Err, Result, Ok, Option } from 'ts-results'
+import { Some, None, Err, Result, Ok, Option } from 'ts-results-es'
 /**
  * Create a new global state.
  *

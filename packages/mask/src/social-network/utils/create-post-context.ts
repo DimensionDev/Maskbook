@@ -30,7 +30,7 @@ import type { Subscription } from 'use-subscription'
 import { activatedSocialNetworkUI } from '../ui.js'
 import { resolveFacebookLink } from '../../social-network-adaptor/facebook.com/utils/resolveFacebookLink.js'
 import type { SupportedPayloadVersions } from '@masknet/encryption'
-import { difference } from 'lodash-unified'
+import { difference } from 'lodash-es'
 
 export function createSNSAdaptorSpecializedPostContext(create: PostContextSNSActions) {
     return function createPostContext(opt: PostContextCreation): PostContext {

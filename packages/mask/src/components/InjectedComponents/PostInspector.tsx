@@ -8,7 +8,7 @@ import {
 import { PossiblePluginSuggestionPostInspector } from './DisabledPluginSuggestion.js'
 import { useSubscription } from 'use-subscription'
 import { PersistentStorages } from '../../../shared/index.js'
-import { MaskPostExtraPluginWrapperWithPermission } from '../../web3/UI/PermissionBoundary.js'
+import { MaskPostExtraPluginWrapperWithPermission } from './PermissionBoundary.js'
 
 const PluginHooksRenderer = createInjectHooksRenderer(
     useActivatedPluginsSNSAdaptor.visibility.useNotMinimalMode,

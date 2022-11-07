@@ -3,7 +3,7 @@ import { makeStyles } from '@masknet/theme'
 import { useContext, useEffect, useState } from 'react'
 import { useI18N } from '../../../utils/index.js'
 import { InjectedDialog, InjectedDialogProps, Image } from '@masknet/shared'
-import { useAccount } from '@masknet/web3-hooks-base'
+import { useChainContext } from '@masknet/web3-hooks-base'
 import { fetchConst, fetchUserParticipatedStoryStatus } from '../Worker/apis/index.js'
 import type { UserStoryStatus, FindTrumanConst } from '../types.js'
 import { BorderLinearProgress } from './ResultCard.js'
@@ -34,7 +34,7 @@ const FindTrumanDialog: React.FC<Props> = (props) => {
     const { i18n } = useI18N()
     const { t } = useContext(FindTrumanContext)
     const { classes } = useStyles()
-    const account = useAccount().toLowerCase()
+    const { account } = useChainContext()
     const [statuses, setStatuses] = useState<UserStoryStatus[]>([])
     const [consts, setConsts] = useState<FindTrumanConst>()
 
@@ -46,7 +46,7 @@ const FindTrumanDialog: React.FC<Props> = (props) => {
             })
         }
         FindTruman_Const.then(setConsts)
-        fetchUserParticipatedStoryStatus(account).then(setStatuses)
+        fetchUserParticipatedStoryStatus(account.toLowerCase()).then(setStatuses)
     }, [account])
 
     const renderProgress = (total: number, success: number, color: 'primary' | 'secondary' | 'success') => {

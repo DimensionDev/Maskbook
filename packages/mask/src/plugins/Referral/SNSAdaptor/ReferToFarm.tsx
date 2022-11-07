@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react'
 import { useAsync } from 'react-use'
 import type { Web3 } from '@masknet/web3-shared-evm'
-import { useAccount, useChainId, useWeb3 } from '@masknet/web3-hooks-base'
+import { useChainContext, useWeb3 } from '@masknet/web3-hooks-base'
 import { makeStyles, useCustomSnackbar, ActionButton } from '@masknet/theme'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { WalletMessages } from '@masknet/plugin-wallet'
@@ -30,8 +30,7 @@ import { MyRewards } from './MyRewards/index.js'
 import { TokenSelectField } from './shared-ui/TokenSelectField.js'
 import { RewardDataWidget } from './shared-ui/RewardDataWidget.js'
 import { SponsoredFarmIcon } from './shared-ui/icons/SponsoredFarm.js'
-import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary.js'
-import { ChainBoundary } from '@masknet/shared'
+import { WalletConnectedBoundary, ChainBoundary } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -51,18 +50,16 @@ const useStyles = makeStyles()((theme) => ({
 
 export function ReferToFarm(props: PageInterface) {
     const t = useI18N()
-    const currentChainId = useChainId(NetworkPluginID.PLUGIN_EVM)
-    const requiredChainId = getRequiredChainId(currentChainId)
-    const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM)
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const { classes } = useStyles()
     const { showSnackbar } = useCustomSnackbar()
+    const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM)
+    const { account, chainId: currentChainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+    const requiredChainId = getRequiredChainId(currentChainId)
     const { closeDialog: closeApplicationBoardDialog } = useRemoteControlledDialog(
         WalletMessages.events.ApplicationDialogUpdated,
     )
     const currentIdentity = useCurrentIdentity()
     const { value: linkedPersona } = useCurrentLinkedPersona()
-
-    const { classes } = useStyles()
 
     const [tab, setTab] = useState(TabsReferAndBuy.NEW)
     const [token, setToken] = useState<FungibleTokenDetailed>()

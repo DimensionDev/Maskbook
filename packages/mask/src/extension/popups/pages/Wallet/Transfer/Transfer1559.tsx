@@ -2,10 +2,10 @@ import { memo, ReactElement, SyntheticEvent, useCallback, useMemo, useRef, useSt
 import { useAsync, useAsyncFn, useUpdateEffect } from 'react-use'
 import { useNavigate } from 'react-router-dom'
 import { ChevronDown } from 'react-feather'
-import { mapValues, noop } from 'lodash-unified'
+import { mapValues } from 'lodash-es'
 import { z as zod } from 'zod'
 import { EthereumAddress } from 'wallet.ts'
-import BigNumber from 'bignumber.js'
+import { BigNumber } from 'bignumber.js'
 import {
     addGasMargin,
     ChainId,
@@ -42,7 +42,7 @@ import { ExpandMore } from '@mui/icons-material'
 import { LoadingButton } from '@mui/lab'
 import { toHex } from 'web3-utils'
 import {
-    useChainId,
+    useChainContext,
     useFungibleToken,
     useFungibleTokenBalance,
     useLookupAddress,
@@ -190,7 +190,7 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
 
     const { pluginID } = useNetworkContext()
     const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
     const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const { value: nativeToken } = useFungibleToken(NetworkPluginID.PLUGIN_EVM)
@@ -703,7 +703,7 @@ export const Transfer1559TransferUI = memo<Transfer1559UIProps>(
                                                         variant="outlined"
                                                         clickable
                                                         label={selectedAsset.symbol}
-                                                        onDelete={noop}
+                                                        onDelete={openAssetMenu}
                                                     />
                                                 ) : null}
                                             </Box>

@@ -11,7 +11,7 @@ import {
     useWeb3State,
     useReverseAddress,
     useRecentTransactions,
-    useAccount,
+    useChainContext,
 } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { PluginMessages } from '../../../../API.js'
@@ -65,18 +65,18 @@ const useStyles = makeStyles()((theme) => ({
 export const WalletStateBar = memo(() => {
     const t = useDashboardI18N()
 
-    const account = useAccount()
+    const { account } = useChainContext()
     const wallet = useWallet()
     const networkDescriptor = useNetworkDescriptor()
     const providerDescriptor = useProviderDescriptor()
     const pendingTransactions = useRecentTransactions(NetworkPluginID.PLUGIN_EVM, TransactionStatusType.NOT_DEPEND)
 
     const { openDialog: openWalletStatusDialog } = useRemoteControlledDialog(
-        PluginMessages.Wallet.events.walletStatusDialogUpdated,
+        PluginMessages.Wallet.walletStatusDialogUpdated,
     )
 
     const { openDialog: openConnectWalletDialog } = useRemoteControlledDialog(
-        PluginMessages.Wallet.events.selectProviderDialogUpdated,
+        PluginMessages.Wallet.selectProviderDialogUpdated,
     )
 
     const [menu, openMenu] = useNetworkSelector()

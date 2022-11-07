@@ -1,5 +1,5 @@
-import { decodeArrayBuffer } from '@dimensiondev/kit'
-import { type Option, None } from 'ts-results'
+import { decodeArrayBuffer } from '@masknet/kit'
+import { type Option, None } from 'ts-results-es'
 import { Identifier } from './base.js'
 import { banSlash } from './utils.js'
 

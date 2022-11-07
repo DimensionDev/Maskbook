@@ -1,4 +1,4 @@
-import { Result, Ok, Err, Some, Option, None } from 'ts-results'
+import { Result, Ok, Err, Some, Option, None } from 'ts-results-es'
 import type { ReactElement, ReactNode } from 'react'
 import type { TypedMessage } from '../../base/index.js'
 import z_schema from 'z-schema'
@@ -84,7 +84,7 @@ export function editMetadata(
     metadata: TypedMessage['meta'],
     edit: (meta: NonNullable<Draft<TypedMessage['meta']>>) => void,
 ): NonNullable<TypedMessage['meta']> {
-    return (draft as any as typeof draft.default)(metadata || new Map(), (e) => void edit(e))
+    return draft(metadata || new Map(), (e) => void edit(e))
 }
 export function editTypedMessageMeta<T extends TypedMessage>(
     typedMessage: T,

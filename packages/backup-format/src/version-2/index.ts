@@ -1,4 +1,4 @@
-import { decodeArrayBuffer, encodeArrayBuffer, safeUnreachable } from '@dimensiondev/kit'
+import { decodeArrayBuffer, encodeArrayBuffer, safeUnreachable } from '@masknet/kit'
 import {
     ECKeyIdentifier,
     ECKeyIdentifierFromJsonWebKey,
@@ -12,7 +12,7 @@ import {
 import __ from 'elliptic'
 import { Convert } from 'pvtsutils'
 import { decode, encode } from '@msgpack/msgpack'
-import { None, Some } from 'ts-results'
+import { None, Some } from 'ts-results-es'
 import { createEmptyNormalizedBackup } from '../normalize/index.js'
 import type { NormalizedBackup } from '../normalize/type.js'
 import { hex2buffer } from '../utils/hex2buffer.js'

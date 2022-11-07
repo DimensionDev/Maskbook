@@ -3,9 +3,9 @@ import { useAsync } from 'react-use'
 import { CrossIsolationMessages, EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import { makeTypedMessageText } from '@masknet/typed-message'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
-import { useWeb3, useAccount } from '@masknet/web3-hooks-base'
+import { useWeb3, useChainContext } from '@masknet/web3-hooks-base'
 import type { Web3 } from '@masknet/web3-shared-evm'
-import { TokenIcon, ChainBoundary } from '@masknet/shared'
+import { TokenIcon, ChainBoundary, WalletConnectedBoundary } from '@masknet/shared'
 import { Button, Card, Grid, Typography, Box } from '@mui/material'
 import { usePluginWrapper } from '@masknet/plugin-infra/content-script'
 
@@ -19,7 +19,6 @@ import {
     singAndPostProofOfRecommendationWithReferrer,
 } from './utils/proofOfRecommendation.js'
 
-import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary.js'
 import { RewardFarmPostWidget } from './shared-ui/RewardFarmPostWidget.js'
 import { SponsoredFarmIcon } from './shared-ui/icons/SponsoredFarm.js'
 import { IconURLs } from '../assets/index.js'
@@ -56,10 +55,10 @@ export function FarmPost(props: FarmPostProps) {
     const { payload } = props
     const farmChainId = payload.referral_token_chain_id
 
+    const t = useI18N()
     const { classes } = useStyles()
     const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM)
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const t = useI18N()
+    const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const currentIdentity = useCurrentIdentity()
     const { value: linkedPersona } = useCurrentLinkedPersona()
     const { showSnackbar } = useCustomSnackbar()

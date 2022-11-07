@@ -1,10 +1,10 @@
-import type { Order } from 'opensea-js/lib/types'
+import type { Order } from 'opensea-js/lib/types.js'
 import { makeStyles } from '@masknet/theme'
 import { Image } from '@masknet/shared'
 import { Table, TableHead, TableBody, TableRow, TableCell, Typography, Link } from '@mui/material'
 import { CurrencyType, formatBalance } from '@masknet/web3-shared-base'
-import { NetworkPluginID } from '@masknet/shared-base'
-import { useChainId } from '@masknet/web3-hooks-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
+import { useChainContext } from '@masknet/web3-hooks-base'
 import { resolveAssetLinkOnCurrentProvider } from '../../pipes/index.js'
 import { useI18N } from '../../../../../utils/index.js'
 import { Context } from '../Context/index.js'
@@ -27,7 +27,7 @@ export function CheckoutOrder({ order }: CheckoutOrderProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
     const { tokenId, tokenAddress, asset, sourceType } = Context.useContainer()
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
     if (!asset?.value || !tokenId || !tokenAddress || !order) return null
 

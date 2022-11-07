@@ -1,6 +1,6 @@
 import { memo, useCallback, useMemo, useState } from 'react'
 import { useAsyncFn, useUpdateEffect } from 'react-use'
-import { differenceWith, uniq } from 'lodash-unified'
+import { differenceWith, uniq } from 'lodash-es'
 import { Icons } from '@masknet/icons'
 import { LoadingBase, makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { Typography, Box } from '@mui/material'
@@ -16,7 +16,7 @@ import {
 import { useHiddenAddressSetting, useWeb3State } from '@masknet/web3-hooks-base'
 import { WalletSettingCard } from '@masknet/shared'
 import { isSameAddress } from '@masknet/web3-shared-base'
-import { useSharedI18N } from '../../../locales'
+import { useSharedI18N } from '../../../locales/index.js'
 import { SettingActions } from './SettingActions.js'
 
 export type PublicWalletSettingType = {

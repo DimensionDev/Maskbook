@@ -1,4 +1,4 @@
-import { sum } from 'lodash-unified'
+import { sum } from 'lodash-es'
 
 /* eslint @dimensiondev/unicode/specific-set: ["error", { "only": "code" }] */
 

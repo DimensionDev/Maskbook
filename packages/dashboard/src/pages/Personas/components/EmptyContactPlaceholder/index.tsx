@@ -2,7 +2,7 @@ import { memo } from 'react'
 import { Box, Typography, Link, Button, FilledInput } from '@mui/material'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
-import { DashboardTrans } from '../../../../locales/i18n_generated'
+import { DashboardTrans } from '../../../../locales/i18n_generated.js'
 import { useCopyToClipboard } from 'react-use'
 import { useSnackbarCallback } from '@masknet/shared'
 

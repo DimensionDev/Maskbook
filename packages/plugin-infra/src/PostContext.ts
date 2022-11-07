@@ -8,7 +8,7 @@ import {
 import { useObservableValues, useValueRef } from '@masknet/shared-base-ui'
 import type { TypedMessageTuple } from '@masknet/typed-message'
 import { ValueRef, LiveSelector, DOMProxy } from '@dimensiondev/holoflows-kit'
-import type { Some } from 'ts-results'
+import type { Some } from 'ts-results-es'
 import { createContext, createElement, memo, useContext } from 'react'
 import { Subscription, useSubscription } from 'use-subscription'
 import type { SupportedPayloadVersions } from '@masknet/encryption'
@@ -99,12 +99,13 @@ export interface PostContext extends PostContextAuthor {
 }
 export type PostInfo = PostContext
 
-const Context = createContext<PostContext | null>(null)
+const PostInfoContext = createContext<PostContext | null>(null)
+PostInfoContext.displayName = 'PostInfoContext'
 export const PostInfoProvider = memo((props: React.PropsWithChildren<{ post: PostInfo }>) => {
-    return createElement(Context.Provider, { value: props.post, children: props.children })
+    return createElement(PostInfoContext.Provider, { value: props.post, children: props.children })
 })
 export function usePostInfo(): PostContext | null {
-    return useContext(Context)
+    return useContext(PostInfoContext)
 }
 export const usePostInfoDetails: {
     // Change to use* when https://github.com/microsoft/TypeScript/issues/44643 fixed

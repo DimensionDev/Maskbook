@@ -5,21 +5,21 @@ import { makeStyles } from '@masknet/theme'
 import { Box, Typography } from '@mui/material'
 import { formatGweiToEther, formatGweiToWei, formatWeiToGwei } from '@masknet/web3-shared-evm'
 import { z as zod } from 'zod'
-import BigNumber from 'bignumber.js'
+import { BigNumber } from 'bignumber.js'
 import { useI18N } from '../../../../../utils/index.js'
 import { hexToNumber, toHex } from 'web3-utils'
 import { Controller, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { StyledInput } from '../../../components/StyledInput/index.js'
 import { LoadingButton } from '@mui/lab'
-import { isEmpty } from 'lodash-unified'
+import { isEmpty } from 'lodash-es'
 import { useAsync, useAsyncFn } from 'react-use'
 import { useContainer } from 'unstated-next'
 import { WalletContext } from '../hooks/useWalletContext.js'
 import { isLessThanOrEqualTo, isPositive, multipliedBy } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import {
-    useChainId,
+    useChainContext,
     useWeb3State,
     useNativeToken,
     useNativeTokenPrice,
@@ -64,7 +64,7 @@ const ReplaceTransaction = memo(() => {
     const type = search.get('type') as ReplaceType
     const [errorMessage, setErrorMessage] = useState('')
     const { transaction } = useContainer(WalletContext)
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { TransactionFormatter } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
     const { value: formatterTransaction } = useAsync(async () => {

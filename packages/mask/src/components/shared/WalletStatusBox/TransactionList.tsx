@@ -1,15 +1,14 @@
 import { FC, forwardRef, useCallback, useMemo, useState, useEffect } from 'react'
 import { useAsync } from 'react-use'
 import { Icons } from '@masknet/icons'
-import { useChainId, useWeb3State } from '@masknet/web3-hooks-base'
+import { useChainContext, useWeb3State } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { isSameAddress, RecentTransactionComputed, TransactionStatusType, Transaction } from '@masknet/web3-shared-base'
 import { getContractOwnerDomain } from '@masknet/web3-shared-evm'
 import { Grid, GridProps, Link, List, ListItem, ListProps, Stack, Typography } from '@mui/material'
-import classnames from 'classnames'
 import format from 'date-fns/format'
-import { noop } from 'lodash-unified'
+import { noop } from 'lodash-es'
 import { useI18N } from '../../../utils/index.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -167,11 +166,11 @@ interface Props extends ListProps {
 }
 
 export const TransactionList: FC<Props> = forwardRef(({ className, transactions, onClear = noop, ...rest }, ref) => {
-    const { classes } = useStyles()
-    const chainId = useChainId()
+    const { classes, cx } = useStyles()
+    const { chainId } = useChainContext()
     if (!transactions.length) return null
     return (
-        <List className={classnames(classes.list, className)} {...rest} ref={ref}>
+        <List className={cx(classes.list, className)} {...rest} ref={ref}>
             {transactions.map((tx) => (
                 <ListItem key={tx.id} className={classes.listItem}>
                     <Transaction className={classes.transaction} transaction={tx} chainId={chainId} onClear={onClear} />

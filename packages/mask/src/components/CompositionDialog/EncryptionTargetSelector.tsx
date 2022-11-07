@@ -7,7 +7,7 @@ import { PopoverListItem } from './PopoverListItem.js'
 import { E2EUnavailableReason } from './CompositionUI.js'
 import { Icons } from '@masknet/icons'
 import { EncryptionTargetType } from '@masknet/shared-base'
-import { unreachable } from '@dimensiondev/kit'
+import { unreachable } from '@masknet/kit'
 import { ConnectPersonaBoundary } from '../shared/ConnectPersonaBoundary.js'
 
 const useStyles = makeStyles()((theme) => ({

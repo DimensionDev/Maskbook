@@ -1,4 +1,4 @@
-import { compact, castArray, uniq } from 'lodash-unified'
+import { compact, castArray, uniq } from 'lodash-es'
 
 export function isSameAddress(address?: string | undefined, otherAddress?: string | undefined): boolean {
     if (!address || !otherAddress) return false

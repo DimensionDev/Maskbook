@@ -1,4 +1,4 @@
-import { encodeArrayBuffer } from '@dimensiondev/kit'
+import { encodeArrayBuffer } from '@masknet/kit'
 import {
     decrypt,
     parsePayload,
@@ -23,7 +23,7 @@ import {
     ProfileIdentifier,
 } from '@masknet/shared-base'
 import type { TypedMessage } from '@masknet/typed-message'
-import { noop } from 'lodash-unified'
+import { noop } from 'lodash-es'
 import { queryProfileDB, queryPersonaDB } from '../../database/persona/db.js'
 import {
     createProfileWithPersona,

@@ -6,7 +6,7 @@ import {
     useDisabledPluginSuggestionFromMeta,
     useDisabledPluginSuggestionFromPost,
 } from './DisabledPluginSuggestion.js'
-import { MaskPostExtraPluginWrapperWithPermission } from '../../web3/UI/PermissionBoundary.js'
+import { MaskPostExtraPluginWrapperWithPermission } from './PermissionBoundary.js'
 
 const Decrypted = createInjectHooksRenderer(
     useActivatedPluginsSNSAdaptor.visibility.useNotMinimalMode,

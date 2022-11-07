@@ -15,7 +15,7 @@ import { useAsync, useLocation, useUpdateEffect, useWindowSize } from 'react-use
 import { rainbowBorderKeyFrames } from '../../../../plugins/Avatar/SNSAdaptor/RainbowBox.js'
 import { RSS3_KEY_SNS } from '../../../../plugins/Avatar/constants.js'
 import { usePersonaNFTAvatar } from '../../../../plugins/Avatar/hooks/usePersonaNFTAvatar.js'
-import { useAccount } from '@masknet/web3-hooks-base'
+import { useChainContext } from '@masknet/web3-hooks-base'
 import { Box, Typography } from '@mui/material'
 import { useWallet } from '../../../../plugins/Avatar/hooks/useWallet.js'
 import { useNFT, useSaveNFTAvatar } from '../../../../plugins/Avatar/hooks/index.js'
@@ -72,13 +72,13 @@ function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
         '',
         RSS3_KEY_SNS.TWITTER,
     )
-    const account = useAccount()
+    const { account } = useChainContext()
     const { loading: loadingWallet, value: storage } = useWallet(nftAvatar?.userId)
     const { value: nftInfo, loading: loadingNFTInfo } = useNFT(
         storage?.address ?? account,
         nftAvatar?.address,
         nftAvatar?.tokenId,
-        nftAvatar?.pluginID,
+        nftAvatar?.pluginId,
         nftAvatar?.chainId,
         nftAvatar?.ownerAddress,
     )
@@ -168,7 +168,7 @@ function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
                 address: '',
                 tokenId: '',
                 schema: SchemaType.ERC721,
-                pluginID: NetworkPluginID.PLUGIN_EVM,
+                pluginId: NetworkPluginID.PLUGIN_EVM,
                 chainId: ChainId.Mainnet,
             }) as NFTAvatarEvent,
         )
@@ -237,11 +237,11 @@ function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
             event.stopPropagation()
             event.preventDefault()
 
-            if (!nftAvatar?.pluginID || !nftAvatar.chainId) return
+            if (!nftAvatar?.pluginId || !nftAvatar.chainId) return
 
             CrossIsolationMessages.events.nonFungibleTokenDialogEvent.sendToLocal({
                 open: true,
-                pluginID: nftAvatar.pluginID,
+                pluginID: nftAvatar.pluginId,
                 chainId: nftAvatar.chainId,
                 tokenId: nftAvatar.tokenId,
                 tokenAddress: nftAvatar.address,

@@ -3,7 +3,7 @@ import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShad
 import { PostInfoProvider, PostInfo } from '@masknet/plugin-infra/content-script'
 import { PostReplacer, PostReplacerProps } from '../../../components/InjectedComponents/PostReplacer.js'
 import type { DOMProxy } from '@dimensiondev/holoflows-kit'
-import { noop } from 'lodash-unified'
+import { noop } from 'lodash-es'
 
 export function injectPostReplacer(config: injectPostReplacerConfig = {}) {
     const PostReplacerDefault = memo(function PostReplacerDefault(props: {

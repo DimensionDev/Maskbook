@@ -1,6 +1,6 @@
-import { clone, first } from 'lodash-unified'
+import { clone, first } from 'lodash-es'
 import type { Subscription } from 'use-subscription'
-import { delay } from '@dimensiondev/kit'
+import { delay } from '@masknet/kit'
 import {
     getSiteType,
     isConnectionSiteType,
@@ -40,6 +40,7 @@ export class ProviderState<
             isValidChainId(a?: number): boolean
             isSameAddress(a?: string, b?: string): boolean
             getDefaultChainId(): ChainId
+            getInvalidChainId(): ChainId
             getDefaultNetworkType(): NetworkType
             getDefaultProviderType(): ProviderType
             getNetworkTypeFromChainId(chainId: ChainId): NetworkType
@@ -131,7 +132,9 @@ export class ProviderState<
 
         if (accountCopied.account !== '' && !this.options.isValidAddress(accountCopied.account))
             delete accountCopied.account
-        if (!this.options.isValidChainId(accountCopied.chainId ?? 0)) delete accountCopied.chainId
+        if (!accountCopied.chainId || !this.options.isValidChainId(accountCopied.chainId)) {
+            accountCopied.chainId = this.options.getInvalidChainId()
+        }
 
         const needToUpdateAccount =
             accountCopied.account === '' || !this.options.isSameAddress(account_.account, account.account)

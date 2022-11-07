@@ -1,4 +1,4 @@
-import { encodeArrayBuffer, unreachable } from '@dimensiondev/kit'
+import { encodeArrayBuffer, unreachable } from '@masknet/kit'
 import { AESCryptoKey, EC_Public_CryptoKey, PostIVIdentifier, ProfileIdentifier } from '@masknet/shared-base'
 import {
     isTypedMessageText,
@@ -6,7 +6,7 @@ import {
     encodeTypedMessageToDocument,
     SerializableTypedMessages,
 } from '@masknet/typed-message'
-import { None, Option, Some } from 'ts-results'
+import { None, Option, Some } from 'ts-results-es'
 import { EC_Key, encodePayload, PayloadWellFormed } from '../payload/index.js'
 import { encryptWithAES } from '../utils/index.js'
 

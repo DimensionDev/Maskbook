@@ -1,5 +1,4 @@
 import { memo } from 'react'
-import classNames from 'classnames'
 import { Box, Tooltip } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { Image, Icon } from '@masknet/shared'
@@ -38,7 +37,7 @@ export interface CollectionIconProps {
 }
 
 export const CollectionIcon = memo<CollectionIconProps>(({ collection, onClick, selectedCollection }) => {
-    const { classes } = useStyles()
+    const { classes, cx } = useStyles()
 
     const name = collection?.name ?? collection?.symbol ?? 'Unknown'
     // CollectionIcon should not display a character
@@ -53,7 +52,7 @@ export const CollectionIcon = memo<CollectionIconProps>(({ collection, onClick, 
             title={collection?.name ?? ''}
             arrow>
             <Box
-                className={classNames(
+                className={cx(
                     classes.collectionWrap,
                     isSameAddress(collection?.address, selectedCollection) ? classes.selected : '',
                 )}

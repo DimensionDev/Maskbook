@@ -1,13 +1,8 @@
-import type { Web3Helper } from '@masknet/web3-helpers'
-import type {
-    FungibleToken,
-    NonFungibleToken,
-    NonFungibleTokenContract,
-    SocialAccount,
-} from '@masknet/web3-shared-base'
-import type { GasOptionConfig } from '@masknet/web3-shared-evm'
-import { noop } from 'lodash-unified'
+import { noop } from 'lodash-es'
 import { createContext, Dispatch, SetStateAction } from 'react'
+import type { Web3Helper } from '@masknet/web3-helpers'
+import type { NonFungibleTokenContract, SocialAccount } from '@masknet/web3-shared-base'
+import type { GasOptionConfig } from '@masknet/web3-shared-evm'
 import { TipsType, ValidationTuple } from '../../types/index.js'
 
 export interface TipContextOptions {
@@ -18,8 +13,8 @@ export interface TipContextOptions {
     tipType: TipsType
     setTipType: Dispatch<SetStateAction<TipsType>>
     recipients: SocialAccount[]
-    token: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll> | null
-    setToken: Dispatch<SetStateAction<FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll> | null>>
+    token: Web3Helper.FungibleTokenAll | null
+    setToken: Dispatch<SetStateAction<Web3Helper.FungibleTokenAll | null>>
     amount: string
     setAmount: Dispatch<SetStateAction<string>>
     nonFungibleTokenId: string | null
@@ -30,7 +25,7 @@ export interface TipContextOptions {
     sendTip: () => Promise<string | undefined>
     isSending: boolean
     isDirty: boolean
-    storedTokens: Array<NonFungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>
+    storedTokens: Web3Helper.NonFungibleTokenAll[]
     reset: () => void
     setGasOption: Dispatch<SetStateAction<GasOptionConfig | undefined>>
     gasOption: GasOptionConfig | undefined
@@ -67,3 +62,4 @@ export const TipContext = createContext<TipContextOptions>({
     validatingRecipient: false,
     recipientValidation: [true],
 })
+TipContext.displayName = 'TipContext'

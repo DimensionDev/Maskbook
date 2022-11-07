@@ -4,7 +4,6 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { NETWORK_DESCRIPTORS } from '@masknet/web3-shared-evm'
 import { useTheme } from '@mui/material'
-import classNames from 'classnames'
 import { useMemo } from 'react'
 import { useIsImageURL } from '../../../hooks/index.js'
 import { AssetPlayer } from '../AssetPlayer/index.js'
@@ -75,7 +74,7 @@ export function NFTCardStyledAssetPlayer(props: Props) {
         setSourceType,
         showNetwork = false,
     } = props
-    const classes = useStylesExtends(useStyles(), props)
+    const { classes, cx } = useStylesExtends(useStyles(), props)
     const theme = useTheme()
     const { value: tokenDetailed } = useNonFungibleToken<'all'>(
         NetworkPluginID.PLUGIN_EVM,
@@ -141,7 +140,7 @@ export function NFTCardStyledAssetPlayer(props: Props) {
             renderTimeout={renderOrder ? 20000 * Math.floor(renderOrder / 100) : undefined}
             fallbackImage={fallbackImageURL}
             classes={{
-                iframe: classNames(classes.wrapper, classes.iframe),
+                iframe: cx(classes.wrapper, classes.iframe),
                 errorPlaceholder: classes.wrapper,
                 loadingPlaceholder: classes.wrapper,
                 fallbackImage: classes.fallbackImage,

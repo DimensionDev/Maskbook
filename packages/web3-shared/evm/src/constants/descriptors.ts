@@ -1,4 +1,4 @@
-import { getEnumAsArray } from '@dimensiondev/kit'
+import { getEnumAsArray } from '@masknet/kit'
 import { ChainDescriptor, NetworkDescriptor, ProviderDescriptor, TokenType } from '@masknet/web3-shared-base'
 import { EnhanceableSite, ExtensionSite, isFirefox, NetworkPluginID } from '@masknet/shared-base'
 import CHAINS from './chains.json'
@@ -360,6 +360,21 @@ export const PROVIDER_DESCRIPTORS: Array<ProviderDescriptor<ChainId, ProviderTyp
         homeLink: 'https://mathwallet.org',
         shortenLink: 'mathwallet.org',
         downloadLink: 'https://mathwallet.org/en-us/#extension',
+    },
+    {
+        ID: `${PLUGIN_ID}_opera`,
+        providerAdaptorPluginID: PLUGIN_ID,
+        type: ProviderType.Opera,
+        name: 'Opera',
+        icon: new URL('../assets/opera.png', import.meta.url),
+        enableRequirements: {
+            supportedChainIds: [ChainId.Mainnet, ChainId.BSC, ChainId.Matic],
+            supportedEnhanceableSites: getEnumAsArray(EnhanceableSite).map((x) => x.value),
+            supportedExtensionSites: [],
+        },
+        homeLink: 'https://www.opera.com/crypto/next',
+        shortenLink: 'opera.com',
+        downloadLink: 'https://www.opera.com/crypto/next',
     },
     {
         ID: `${PLUGIN_ID}_fortmatic`,

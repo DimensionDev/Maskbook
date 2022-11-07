@@ -3,7 +3,7 @@ import { Icons } from '@masknet/icons'
 import { WalletIcon } from '@masknet/shared'
 import { isDashboardPage, NetworkPluginID } from '@masknet/shared-base'
 import { ProviderType } from '@masknet/web3-shared-evm'
-import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
+import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
 import { Box, Card, Typography, Paper, Link } from '@mui/material'
 import { useStylesExtends, makeStyles, MaskColorVar, ActionButton, LoadingBase } from '@masknet/theme'
 import { useProviderDescriptor, useNetworkDescriptor, useWeb3State } from '@masknet/web3-hooks-base'
@@ -75,7 +75,10 @@ export function ConnectionProgress(props: ConnectionProgressProps) {
     const { Others } = useWeb3State(pluginID)
     const providerDescriptor = useProviderDescriptor(pluginID, providerType)
     const networkDescriptor = useNetworkDescriptor(pluginID, networkType)
-    const classes = useStylesExtends(useStyles({ contentBackground: providerDescriptor?.backgroundGradient }), props)
+    const { classes } = useStylesExtends(
+        useStyles({ contentBackground: providerDescriptor?.backgroundGradient }),
+        props,
+    )
     if (!Others) return null
 
     return (

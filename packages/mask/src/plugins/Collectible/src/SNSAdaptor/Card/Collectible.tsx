@@ -17,7 +17,7 @@ import { OffersTab } from './tabs/OffersTab.js'
 import { Context } from '../Context/index.js'
 import { useI18N, useSwitcher } from '../../../../../utils/index.js'
 
-const useStyles = makeStyles()((theme) => {
+const useStyles = makeStyles<{ currentTab: string }>()((theme, { currentTab }) => {
     return {
         root: {
             width: '100%',
@@ -40,13 +40,13 @@ const useStyles = makeStyles()((theme) => {
             flex: 1,
             backgroundColor: theme.palette.maskColor.bg,
             overflow: 'auto',
-            maxHeight: 800,
+            maxHeight: currentTab === 'about' ? 800 : 382,
             borderRadius: '0 0 12px 12px',
             scrollbarWidth: 'none',
+            background: '#fff !important',
             '&::-webkit-scrollbar': {
                 display: 'none',
             },
-            background: '#fff !important',
         },
         tab: {
             whiteSpace: 'nowrap',
@@ -66,9 +66,12 @@ const useStyles = makeStyles()((theme) => {
         subtitle: {
             marginRight: theme.spacing(0.5),
             maxHeight: '3rem',
-            overflow: 'hidden',
+            overflow: 'auto',
             wordBreak: 'break-word',
             color: theme.palette.maskColor.publicSecond,
+            '&::-webkit-scrollbar': {
+                display: 'none',
+            },
         },
         countdown: {
             fontSize: 12,
@@ -97,6 +100,10 @@ const useStyles = makeStyles()((theme) => {
             lineHeight: '20px',
             fontWeight: 700,
             color: theme.palette.maskColor.publicMain,
+            whiteSpace: 'nowrap',
+            textOverflow: 'ellipsis',
+            overflow: 'hidden',
+            width: 380,
         },
     }
 })
@@ -105,7 +112,8 @@ export interface CollectibleProps {}
 
 export function Collectible(props: CollectibleProps) {
     const { t } = useI18N()
-    const { classes } = useStyles()
+    const [currentTab, onChange, tabs] = useTabs('about', 'details', 'offers', 'activities')
+    const { classes } = useStyles({ currentTab })
     const { asset, events, orders, sourceType, setSourceType } = Context.useContainer()
 
     // #region provider switcher
@@ -117,7 +125,6 @@ export function Collectible(props: CollectibleProps) {
         true,
     )
     // #endregion
-    const [currentTab, onChange, tabs] = useTabs('about', 'details', 'offers', 'activities')
     if (asset.loading)
         return (
             <Box
@@ -185,26 +192,19 @@ export function Collectible(props: CollectibleProps) {
                         />
                     }
                     title={
-                        <Typography style={{ display: 'flex', alignItems: 'center' }}>
-                            <span className={classes.cardTitle}>{_asset.metadata?.name || '-'}</span>
+                        <Typography component="div" style={{ display: 'flex', alignItems: 'center' }}>
+                            <Typography className={classes.cardTitle}>{_asset.metadata?.name || '-'}</Typography>
                             {_asset.collection?.verified ? (
                                 <Icons.VerifiedCollection size={20} sx={{ marginLeft: 0.5 }} />
                             ) : null}
                         </Typography>
                     }
                     subheader={
-                        <>
-                            {_asset.metadata?.description ? (
-                                <Box display="flex" alignItems="center">
-                                    <Typography className={classes.subtitle} component="div" variant="body2">
-                                        <Markdown
-                                            classes={{ root: classes.markdown }}
-                                            content={_asset.metadata.description}
-                                        />
-                                    </Typography>
-                                </Box>
-                            ) : null}
-                        </>
+                        _asset.metadata?.description ? (
+                            <Typography className={classes.subtitle} component="div" variant="body2">
+                                <Markdown classes={{ root: classes.markdown }} content={_asset.metadata.description} />
+                            </Typography>
+                        ) : null
                     }
                 />
                 <CardContent className={classes.content}>

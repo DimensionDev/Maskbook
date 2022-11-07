@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react'
 import { useAsync } from 'react-use'
-import { useAccount, useChainId, useWeb3 } from '@masknet/web3-hooks-base'
+import { useChainContext, useWeb3 } from '@masknet/web3-hooks-base'
 import { makeStyles, useCustomSnackbar, ActionButton } from '@masknet/theme'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { Typography, Box, Tab, Tabs, Grid, Divider } from '@mui/material'
@@ -16,8 +16,7 @@ import { singAndPostProofOfRecommendationWithReferrer } from './utils/proofOfRec
 import { MASK_REFERRER, SWAP_CHAIN_ID } from '../constants.js'
 import { TabsReferAndBuy, TransactionStatus, PageInterface, PagesType, FungibleTokenDetailed } from '../types.js'
 
-import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary.js'
-import { ChainBoundary } from '@masknet/shared'
+import { WalletConnectedBoundary, ChainBoundary } from '@masknet/shared'
 import { MyRewards } from './MyRewards/index.js'
 import { TokenSelectField } from './shared-ui/TokenSelectField.js'
 import { RewardDataWidget } from './shared-ui/RewardDataWidget.js'
@@ -49,10 +48,9 @@ const useStyles = makeStyles()((theme) => ({
 export function BuyToFarm(props: PageInterface) {
     const t = useI18N()
     const { classes } = useStyles()
-    const currentChainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { account, chainId: currentChainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const requiredChainId = getRequiredChainId(currentChainId)
     const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM)
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const { showSnackbar } = useCustomSnackbar()
 
     const [tab, setTab] = useState(TabsReferAndBuy.NEW)

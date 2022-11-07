@@ -1,12 +1,6 @@
 import { FC, HTMLProps, useCallback, useMemo } from 'react'
-import BigNumber from 'bignumber.js'
-import {
-    useAccount,
-    useChainId,
-    useNetworkContext,
-    useFungibleTokenBalance,
-    useGasPrice,
-} from '@masknet/web3-hooks-base'
+import { BigNumber } from 'bignumber.js'
+import { useChainContext, useNetworkContext, useFungibleTokenBalance, useGasPrice } from '@masknet/web3-hooks-base'
 import { useGasConfig } from '@masknet/web3-hooks-evm'
 import { useSelectFungibleToken, FungibleTokenInput } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
@@ -34,8 +28,7 @@ export const TokenSection: FC<Props> = ({ className, ...rest }) => {
     const { classes, cx } = useStyles()
     const { token, setToken, amount, setAmount } = useTip()
     const { pluginID } = useNetworkContext()
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
     // balance
     const { value: tokenBalance = '0' } = useFungibleTokenBalance(NetworkPluginID.PLUGIN_EVM, token?.address, {

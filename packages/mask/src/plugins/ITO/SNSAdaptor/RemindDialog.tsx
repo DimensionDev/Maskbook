@@ -1,14 +1,13 @@
 import { useState } from 'react'
-import classNames from 'classnames'
 import { Checkbox, FormControlLabel, Link, Typography } from '@mui/material'
-import { makeStyles, useStylesExtends, ActionButton } from '@masknet/theme'
+import { makeStyles, ActionButton } from '@masknet/theme'
 import { FormattedAddress, TokenIcon } from '@masknet/shared'
 import { useI18N } from '../../../utils/index.js'
 import { ChainId, formatEthereumAddress, explorerResolver, networkResolver, SchemaType } from '@masknet/web3-shared-evm'
 import { SwapStatus } from './SwapGuide.js'
-import { useNetworkType } from '@masknet/web3-hooks-base'
+import { useChainContext } from '@masknet/web3-hooks-base'
 import type { FungibleToken } from '@masknet/web3-shared-base'
-import { NetworkPluginID } from '@masknet/shared-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     reminderText: {
@@ -76,14 +75,14 @@ export function RemindDialog(props: RemindDialogProps) {
     const { token, chainId, setStatus } = props
 
     const { t } = useI18N()
-    const classes = useStylesExtends(useStyles(), {})
+    const { classes, cx } = useStyles()
     const [agreeReminder, setAgreeReminder] = useState(false)
-    const networkType = useNetworkType(NetworkPluginID.PLUGIN_EVM)
+    const { networkType } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
     return (
         <>
             <section className={classes.wrapper}>
-                <Typography variant="body1" className={classNames(classes.reminderText, classes.reminderTextFirst)}>
+                <Typography variant="body1" className={cx(classes.reminderText, classes.reminderTextFirst)}>
                     {t('plugin_ito_dialog_claim_reminder_text1', {
                         networkType: networkResolver.networkName(networkType),
                     })}
@@ -94,11 +93,11 @@ export function RemindDialog(props: RemindDialogProps) {
                 <Typography variant="body1" className={classes.reminderText}>
                     {t('plugin_ito_dialog_claim_reminder_text3')}
                 </Typography>
-                <Typography variant="body1" className={classNames(classes.reminderText, classes.reminderTextLast)}>
+                <Typography variant="body1" className={cx(classes.reminderText, classes.reminderTextLast)}>
                     {t('plugin_ito_dialog_claim_reminder_text4')}
                 </Typography>
             </section>
-            <section className={classNames(classes.wrapper, classes.tokenWrapper)}>
+            <section className={cx(classes.wrapper, classes.tokenWrapper)}>
                 <TokenIcon
                     className={classes.tokenIcon}
                     chainId={token.chainId}

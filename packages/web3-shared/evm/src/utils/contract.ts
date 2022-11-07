@@ -1,12 +1,12 @@
 import type Web3 from 'web3'
 import { AbiItem, hexToNumber, toHex } from 'web3-utils'
-import { identity, pickBy } from 'lodash-unified'
+import { identity, pickBy } from 'lodash-es'
 import type {
     BaseContract,
     NonPayableTransactionObject,
     PayableTransactionObject,
     PayableTx,
-} from '@masknet/web3-contracts/types/types'
+} from '@masknet/web3-contracts/types/types.js'
 import { ChainId, Transaction } from '../types/index.js'
 import { isValidAddress } from './address.js'
 

@@ -8,6 +8,8 @@ import {
     NetworkDescriptor,
     ProviderDescriptor,
     OthersState as Web3OthersState,
+    FungibleToken,
+    NonFungibleToken,
 } from '@masknet/web3-shared-base'
 import type { Plugin } from '@masknet/plugin-infra'
 
@@ -27,6 +29,9 @@ export class OthersState<ChainId, SchemaType, ProviderType, NetworkType, Transac
     ) {}
 
     getDefaultChainId(): ChainId {
+        throw new Error('Method not implemented.')
+    }
+    getInvalidChainId(): ChainId {
         throw new Error('Method not implemented.')
     }
     getDefaultNetworkType(): NetworkType {
@@ -70,6 +75,9 @@ export class OthersState<ChainId, SchemaType, ProviderType, NetworkType, Transac
         const descriptor = this.options.chainDescriptors.find((x) => x.chainId === chainId)
         return descriptor?.network === 'mainnet' || testnet
     }
+    isValidChainId(chainId: ChainId): boolean {
+        throw new Error('Method not implemented.')
+    }
     isValidDomain(domain: string): boolean {
         throw new Error('Method not implemented.')
     }
@@ -97,6 +105,32 @@ export class OthersState<ChainId, SchemaType, ProviderType, NetworkType, Transac
         throw new Error('Method not implemented.')
     }
     formatSchemaType(schema: SchemaType): string {
+        throw new Error('Method not implemented.')
+    }
+    createNativeToken(chainId: ChainId): FungibleToken<ChainId, SchemaType> {
+        throw new Error('Method not implemented.')
+    }
+    createFungibleToken(
+        chainId: ChainId,
+        schemaType: SchemaType,
+        address: string,
+        name?: string,
+        symbol?: string,
+        decimals?: number,
+        logoURI?: string,
+    ): FungibleToken<ChainId, SchemaType> {
+        throw new Error('Method not implemented.')
+    }
+    createNonFungibleToken(
+        chainId: ChainId,
+        address: string,
+        schemaType: SchemaType,
+        tokenId: string,
+        ownerId?: string,
+        metadata?: NonFungibleToken<ChainId, SchemaType>['metadata'],
+        contract?: NonFungibleToken<ChainId, SchemaType>['contract'],
+        collection?: NonFungibleToken<ChainId, SchemaType>['collection'],
+    ): NonFungibleToken<ChainId, SchemaType> {
         throw new Error('Method not implemented.')
     }
 }

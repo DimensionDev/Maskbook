@@ -7,9 +7,9 @@ import {
     encodeContractTransaction,
     UnboxTransactionObject,
 } from '@masknet/web3-shared-evm'
-import { useChainId, useWeb3, useWeb3Connection } from '@masknet/web3-hooks-base'
-import type { BaseContract, NonPayableTx } from '@masknet/web3-contracts/types/types'
-import type { Multicall } from '@masknet/web3-contracts/types/Multicall'
+import { useChainContext, useWeb3, useWeb3Connection } from '@masknet/web3-hooks-base'
+import type { BaseContract, NonPayableTx } from '@masknet/web3-contracts/types/types.js'
+import type { Multicall } from '@masknet/web3-contracts/types/Multicall.js'
 import { useMulticallContract } from './useMulticallContract.js'
 
 // #region types
@@ -117,7 +117,7 @@ export type MulticallState =
  * @param calls
  */
 export function useMulticallCallback(targetChainId?: ChainId, targetBlockNumber?: number) {
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM, targetChainId)
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>({ chainId: targetChainId })
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
     const multicallContract = useMulticallContract(chainId)
     const [multicallState, setMulticallState] = useState<MulticallState>({

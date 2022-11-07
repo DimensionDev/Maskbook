@@ -1,10 +1,10 @@
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useUpdateEffect } from 'react-use'
-import BigNumber from 'bignumber.js'
+import { BigNumber } from 'bignumber.js'
 import { Icons } from '@masknet/icons'
 import { useGasLimit, useTokenTransferCallback } from '@masknet/web3-hooks-evm'
 import {
-    useChainId,
+    useChainContext,
     useFungibleTokenBalance,
     useGasPrice,
     useLookupAddress,
@@ -28,7 +28,7 @@ import {
     NetworkType,
     isNativeTokenAddress,
 } from '@masknet/web3-shared-evm'
-import TuneIcon from '@mui/icons-material/Tune'
+import { Tune as TuneIcon } from '@mui/icons-material'
 import { Box, Button, IconButton, Link, Popover, Stack, Typography } from '@mui/material'
 import { useDashboardI18N } from '../../../../locales/index.js'
 import { useGasConfig } from '../../hooks/useGasConfig.js'
@@ -54,7 +54,7 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
 
     const [selectedToken, setSelectedToken] = useState(token)
     const selectFungibleToken = useSelectFungibleToken(NetworkPluginID.PLUGIN_EVM)
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const is1559Supported = useMemo(() => chainResolver.isSupport(chainId, 'EIP1559'), [chainId])
 
     const { Others } = useWeb3State()

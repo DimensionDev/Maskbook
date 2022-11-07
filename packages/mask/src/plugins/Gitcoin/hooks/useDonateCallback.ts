@@ -1,10 +1,10 @@
 import { useMemo } from 'react'
 import { useAsyncFn } from 'react-use'
-import BigNumber from 'bignumber.js'
+import { BigNumber } from 'bignumber.js'
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import { FungibleToken, toFixed } from '@masknet/web3-shared-base'
 import { ChainId, encodeContractTransaction, SchemaType, useGitcoinConstants } from '@masknet/web3-shared-evm'
-import { useAccount, useChainId, useWeb3Connection } from '@masknet/web3-hooks-base'
+import { useChainContext, useWeb3Connection } from '@masknet/web3-hooks-base'
 import { useBulkCheckoutContract } from './useBulkCheckoutWallet.js'
 
 /**
@@ -16,8 +16,7 @@ import { useBulkCheckoutContract } from './useBulkCheckoutWallet.js'
 export function useDonateCallback(address: string, amount: string, token?: FungibleToken<ChainId, SchemaType>) {
     const { GITCOIN_ETH_ADDRESS, GITCOIN_TIP_PERCENTAGE } = useGitcoinConstants()
 
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const bulkCheckoutContract = useBulkCheckoutContract(chainId)
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
 

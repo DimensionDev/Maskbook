@@ -1,19 +1,16 @@
 import { useState } from 'react'
 import { Button, Checkbox, FormControlLabel, Table, TableBody, TableCell, TableRow, Typography } from '@mui/material'
-import { getEnumAsArray } from '@dimensiondev/kit'
+import { getEnumAsArray } from '@masknet/kit'
 import { PluginID } from '@masknet/shared-base'
 import {
-    useAccount,
     useBalance,
     useBlockNumber,
     useBlockTimestamp,
-    useChainId,
     useNetworkContext,
-    useNetworkType,
-    useProviderType,
     useReverseAddress,
     useLookupAddress,
     useWeb3State,
+    useChainContext,
 } from '@masknet/web3-hooks-base'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useSelectAdvancedSettings } from '@masknet/shared'
@@ -35,10 +32,7 @@ export function ConsoleContent(props: ConsoleContentProps) {
     const { classes } = useStyles()
     const { pluginID: currentPluginID } = useNetworkContext()
     const { Others } = useWeb3State()
-    const account = useAccount()
-    const chainId = useChainId()
-    const networkType = useNetworkType()
-    const providerType = useProviderType()
+    const { account, chainId, networkType, providerType } = useChainContext()
     const { value: balance = '0' } = useBalance()
     const { value: blockNumber = 0 } = useBlockNumber()
     const { value: blockTimestamp = 0 } = useBlockTimestamp()

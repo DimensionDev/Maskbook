@@ -1,6 +1,6 @@
 import { createGlobalState } from '@masknet/shared-base-ui'
 import { Services, Messages } from '../../API.js'
-import { noop } from 'lodash-unified'
+import { noop } from 'lodash-es'
 
 export type SocialNetwork = {
     networkIdentifier: string

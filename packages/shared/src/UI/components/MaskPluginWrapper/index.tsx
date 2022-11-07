@@ -1,6 +1,6 @@
 import { Typography, SnackbarContent, Link } from '@mui/material'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { MaskIcon } from '../MaskIcon'
+import { MaskIcon } from '../MaskIcon/index.js'
 import { Suspense, ReactNode, useMemo, forwardRef, useImperativeHandle, useState } from 'react'
 import { useSharedI18N } from '@masknet/shared'
 import { Box } from '@mui/system'
@@ -25,59 +25,61 @@ interface PluginWrapperProps extends React.PropsWithChildren<{}> {
     lackHostPermission?: boolean
 }
 
-const useStyles = makeStyles<{ backgroundGradient?: string; borderRadius?: string; margin?: string }>()(
-    (theme, props) => {
-        return {
-            card: {
-                background:
-                    props?.backgroundGradient ??
-                    'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%), linear-gradient(90deg, rgba(28, 104, 243, 0.2) 0%, rgba(45, 41, 253, 0.2) 100%), #FFFFFF;',
-                margin: props?.margin ?? theme.spacing(2, 0),
-                width: '100%',
-                boxSizing: 'border-box',
-                cursor: 'default',
-                borderRadius: props?.borderRadius ?? 15,
-                overflow: 'hidden',
+const useStyles = makeStyles<{
+    backgroundGradient?: string
+    borderRadius?: string
+    margin?: string
+}>()((theme, props) => {
+    return {
+        card: {
+            background:
+                props?.backgroundGradient ??
+                'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%), linear-gradient(90deg, rgba(28, 104, 243, 0.2) 0%, rgba(45, 41, 253, 0.2) 100%), #FFFFFF;',
+            margin: props?.margin ?? theme.spacing(2, 0),
+            width: '100%',
+            boxSizing: 'border-box',
+            cursor: 'default',
+            borderRadius: props?.borderRadius ?? 15,
+            overflow: 'hidden',
+        },
+        header: {
+            backgroundColor: 'transparent',
+            color: theme.palette.text.primary,
+            display: 'flex',
+            alignItems: 'center',
+            padding: 15,
+        },
+        provider: {
+            display: 'flex',
+            alignItems: 'center',
+            '& > a': {
+                lineHeight: 0,
             },
-            header: {
-                backgroundColor: 'transparent',
-                color: theme.palette.text.primary,
-                display: 'flex',
-                alignItems: 'center',
-                padding: 15,
-            },
-            provider: {
-                display: 'flex',
-                alignItems: 'center',
-                '& > a': {
-                    lineHeight: 0,
-                },
-            },
-            publish: {
-                flex: 1,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'flex-end',
-            },
-            action: {
-                textAlign: 'center',
-                margin: theme.spacing(1),
-                width: '100%',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                marginBottom: 16,
-            },
-            body: {
-                padding: theme.spacing(0),
-            },
-            providerBy: {
-                marginRight: theme.spacing(0.5),
-                color: theme.palette.mode === 'dark' ? theme.palette.grey[700] : theme.palette.text.secondary,
-            },
-        }
-    },
-)
+        },
+        publish: {
+            flex: 1,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'flex-end',
+        },
+        action: {
+            textAlign: 'center',
+            margin: theme.spacing(1),
+            width: '100%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            marginBottom: 16,
+        },
+        body: {
+            padding: theme.spacing(0),
+        },
+        providerBy: {
+            marginRight: theme.spacing(0.5),
+            color: theme.palette.mode === 'dark' ? theme.palette.grey[700] : theme.palette.text.secondary,
+        },
+    }
+})
 
 export function MaskPostExtraInfoWrapper(props: PluginWrapperProps) {
     const { open, title, children, action, publisher, publisherLink, content, wrapperProps } = props
@@ -91,7 +93,12 @@ export function MaskPostExtraInfoWrapper(props: PluginWrapperProps) {
     const publisherInfo = useMemo(() => {
         if (!publisher) return
         const main = (
-            <Typography variant="body1" fontSize={14} fontWeight="500" color={MaskColorVar.textPluginColor}>
+            <Typography
+                variant="body1"
+                fontSize={14}
+                fontWeight="500"
+                component="div"
+                color={MaskColorVar.textPluginColor}>
                 {publisher}
             </Typography>
         )
@@ -126,6 +133,7 @@ export function MaskPostExtraInfoWrapper(props: PluginWrapperProps) {
                     variant="body1"
                     fontSize={16}
                     fontWeight={700}
+                    component="div"
                     color={MaskColorVar.textPluginColor}>
                     {wrapperProps?.title ?? title ?? t.plugin_default_title()}
                 </Typography>

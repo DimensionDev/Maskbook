@@ -1,8 +1,8 @@
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import { Typography, Box } from '@mui/material'
-import { useI18N } from '../locales'
-import { ENSPostExtraInfoWrapper } from './ENSPostExtraInfoWrapper'
+import { useI18N } from '../locales/index.js'
+import { ENSPostExtraInfoWrapper } from './ENSPostExtraInfoWrapper.js'
 
 interface StyleProps {
     isMenuScroll?: boolean

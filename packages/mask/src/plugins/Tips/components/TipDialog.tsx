@@ -1,6 +1,6 @@
 import { useCallback, useMemo } from 'react'
 import { useBoolean } from 'react-use'
-import { ActualChainContextProvider, useChainId, useNetworkContext } from '@masknet/web3-hooks-base'
+import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
 import { InjectedDialog, PluginWalletStatusBar, ChainBoundary } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { ActionButton, makeStyles, MaskTabList } from '@masknet/theme'
@@ -77,7 +77,7 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
         validation: [isValid, validateMessage],
     } = useTip()
     const { pluginID } = useNetworkContext()
-    const chainId = useChainId()
+    const { chainId } = useChainContext()
 
     const isTokenTip = tipType === TipsType.Tokens
     const shareText = useMemo(() => {
@@ -129,7 +129,7 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
     const expectedPluginID = [NetworkPluginID.PLUGIN_EVM, NetworkPluginID.PLUGIN_SOLANA].includes(pluginID)
         ? pluginID
         : NetworkPluginID.PLUGIN_EVM
-    const submitDisabled = (!isValid || isSending) && !isDirty
+    const submitDisabled = !isValid || (isSending && !isDirty)
 
     return (
         <TabContext value={currentTab}>
@@ -153,22 +153,20 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
                     <TabPanel value={TipsType.Collectibles} className={classes.tabPanel} style={{ padding: 0 }}>
                         <NFTSection className={classes.section} />
                     </TabPanel>
-                    <ActualChainContextProvider>
-                        <PluginWalletStatusBar expectedPluginID={expectedPluginID} expectedChainId={chainId}>
-                            <ChainBoundary
-                                expectedPluginID={expectedPluginID}
-                                expectedChainId={chainId!}
-                                noSwitchNetworkTip
-                                switchChainWithoutPopup
-                                ActionButtonPromiseProps={{
-                                    fullWidth: true,
-                                }}>
-                                <ActionButton fullWidth disabled={submitDisabled} onClick={send}>
-                                    {buttonLabel}
-                                </ActionButton>
-                            </ChainBoundary>
-                        </PluginWalletStatusBar>
-                    </ActualChainContextProvider>
+                    <PluginWalletStatusBar expectedPluginID={expectedPluginID} expectedChainId={chainId}>
+                        <ChainBoundary
+                            expectedPluginID={expectedPluginID}
+                            expectedChainId={chainId!}
+                            noSwitchNetworkTip
+                            switchChainWithoutPopup
+                            ActionButtonPromiseProps={{
+                                fullWidth: true,
+                            }}>
+                            <ActionButton fullWidth disabled={submitDisabled} onClick={send}>
+                                {buttonLabel}
+                            </ActionButton>
+                        </ChainBoundary>
+                    </PluginWalletStatusBar>
                 </DialogContent>
             </InjectedDialog>
             <AddDialog open={addTokenDialogIsOpen} onClose={() => openAddTokenDialog(false)} onAdd={handleAddToken} />

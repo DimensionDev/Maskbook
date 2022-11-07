@@ -33,7 +33,7 @@ export interface MarkdownProps extends withClasses<'root'> {
 }
 
 export function Markdown(props: MarkdownProps) {
-    const classes = useStylesExtends(useStyles(), props)
+    const { classes } = useStylesExtends(useStyles(), props)
     const html = purify(useRemarkable(props.content))
     return <div dangerouslySetInnerHTML={{ __html: html }} className={classes.root} />
 }

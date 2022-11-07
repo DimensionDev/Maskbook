@@ -1,14 +1,14 @@
 import { memo, useMemo } from 'react'
 import { useAsyncRetry } from 'react-use'
 import type { TradeInfo } from '../../types/index.js'
-import { createNativeToken, formatPercentage, formatUSD, formatWeiToEther } from '@masknet/web3-shared-evm'
+import { ChainId, formatPercentage, formatWeiToEther } from '@masknet/web3-shared-evm'
 import { resolveTradeProviderName } from '../../pipes.js'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { multipliedBy, formatBalance, ZERO } from '@masknet/web3-shared-base'
+import { multipliedBy, formatBalance, ZERO, formatCurrency } from '@masknet/web3-shared-base'
 import { PluginTraderRPC } from '../../messages.js'
 import { TradeProvider } from '@masknet/public-api'
 import { useGreatThanSlippageSetting } from './hooks/useGreatThanSlippageSetting.js'
-import { useChainId, useNativeTokenPrice } from '@masknet/web3-hooks-base'
+import { useChainContext, useNativeTokenPrice, useNetworkContext, useWeb3State } from '@masknet/web3-hooks-base'
 import { DefaultTraderPlaceholderUI, TraderInfoUI } from './components/TraderInfoUI.js'
 
 export interface TraderInfoProps {
@@ -20,16 +20,21 @@ export interface TraderInfoProps {
 }
 
 export const TraderInfo = memo<TraderInfoProps>(({ trade, gasPrice, isBest, onClick, isFocus }) => {
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { chainId } = useChainContext()
+    const { pluginID } = useNetworkContext()
+    const { Others } = useWeb3State()
     // #region refresh pools
     useAsyncRetry(async () => {
-        // force update balancer's pools each time user enters into the swap tab
-        if (trade.provider === TradeProvider.BALANCER) await PluginTraderRPC.updatePools(true, chainId)
-    }, [trade.provider, chainId])
+        if (pluginID !== NetworkPluginID.PLUGIN_EVM)
+            if (trade.provider === TradeProvider.BALANCER)
+                // force update balancer's pools each time user enters into the swap tab
+                await PluginTraderRPC.updatePools(true, chainId as ChainId)
+    }, [trade.provider, chainId, pluginID])
     // #endregion
 
-    const nativeToken = createNativeToken(chainId)
-    const { value: tokenPrice = 0 } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM, { chainId })
+    // const nativeToken = createNativeToken(chainId)
+    const nativeToken = Others?.createNativeToken(chainId)
+    const { value: tokenPrice = 0 } = useNativeTokenPrice(pluginID, { chainId })
 
     const gasFee = useMemo(() => {
         return trade.gas.value && gasPrice ? multipliedBy(gasPrice, trade.gas.value).integerValue().toFixed() : '0'
@@ -37,7 +42,7 @@ export const TraderInfo = memo<TraderInfoProps>(({ trade, gasPrice, isBest, onCl
 
     const gasFeeValueUSD = useMemo(() => {
         if (!gasFee) return ZERO.toString()
-        return formatUSD(formatWeiToEther(gasFee).times(tokenPrice))
+        return formatCurrency(formatWeiToEther(gasFee).times(tokenPrice))
     }, [gasFee, tokenPrice])
 
     const isGreatThanSlippageSetting = useGreatThanSlippageSetting(trade.value?.priceImpact)
@@ -62,7 +67,8 @@ export const TraderInfo = memo<TraderInfoProps>(({ trade, gasPrice, isBest, onCl
 })
 
 export const DefaultTraderPlaceholder = memo(() => {
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
-    const nativeToken = createNativeToken(chainId)
+    const { chainId } = useChainContext()
+    const { Others } = useWeb3State()
+    const nativeToken = Others?.createNativeToken(chainId)
     return <DefaultTraderPlaceholderUI nativeToken={nativeToken} />
 })

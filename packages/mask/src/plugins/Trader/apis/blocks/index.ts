@@ -1,6 +1,6 @@
 import { ChainId, getTrendingConstants } from '@masknet/web3-shared-evm'
 import stringify from 'json-stable-stringify'
-import { chunk, first, flatten } from 'lodash-unified'
+import { chunk, first, flatten } from 'lodash-es'
 
 interface Block {
     number: string

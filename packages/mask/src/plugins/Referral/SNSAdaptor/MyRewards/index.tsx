@@ -1,6 +1,6 @@
 import { useAsync } from 'react-use'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { useAccount, useChainId } from '@masknet/web3-hooks-base'
+import { useChainContext } from '@masknet/web3-hooks-base'
 import { Grid, Typography } from '@mui/material'
 
 import { useI18N } from '../../locales/index.js'
@@ -8,8 +8,7 @@ import { getRequiredChainId } from '../../helpers/index.js'
 import type { PageInterface } from '../../types.js'
 import { ReferralRPC } from '../../messages.js'
 
-import { WalletConnectedBoundary } from '../../../../web3/UI/WalletConnectedBoundary.js'
-import { ChainBoundary } from '@masknet/shared'
+import { WalletConnectedBoundary, ChainBoundary } from '@masknet/shared'
 import { Rewards } from './Rewards.js'
 
 import { LoadingBase, makeStyles } from '@masknet/theme'
@@ -63,9 +62,8 @@ export const useStyles = makeStyles()((theme) => ({
 export function MyRewards(props: PageInterface) {
     const t = useI18N()
     const { classes } = useStyles()
-    const currentChainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { account, chainId: currentChainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const requiredChainId = getRequiredChainId(currentChainId)
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
 
     const {
         value: accountRewards,

@@ -1,7 +1,7 @@
-import { unreachable } from '@dimensiondev/kit'
+import { unreachable } from '@masknet/kit'
 import { decodeTypedMessageFromDocument, decodeTypedMessageV38ToV40Format, TypedMessage } from '@masknet/typed-message'
 import { AESCryptoKey, EC_Public_CryptoKey, andThenAsync } from '@masknet/shared-base'
-import { None, Result } from 'ts-results'
+import { None, Result } from 'ts-results-es'
 import type { PayloadParseResult } from '../payload/index.js'
 import { decryptWithAES, importAES } from '../utils/index.js'
 import {

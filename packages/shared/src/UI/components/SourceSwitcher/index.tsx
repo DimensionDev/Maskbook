@@ -3,8 +3,8 @@ import { Stack, Typography } from '@mui/material'
 import { SourceType, resolveSourceTypeName } from '@masknet/web3-shared-base'
 import { Box } from '@mui/system'
 import { useSharedI18N } from '@masknet/shared'
-import { FootnoteMenu, FootnoteMenuOption } from '../FootnoteMenu'
-import { SourceProviderIcon } from '../SourceProviderIcon'
+import { FootnoteMenu, FootnoteMenuOption } from '../FootnoteMenu/index.js'
+import { SourceProviderIcon } from '../SourceProviderIcon/index.js'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -35,7 +35,7 @@ export interface SourceSwitcherProps extends withClasses<'source' | 'sourceNote'
 export function SourceSwitcher(props: SourceSwitcherProps) {
     const { sourceType, sourceTypes = [], onSourceTypeChange } = props
     const t = useSharedI18N()
-    const classes = useStylesExtends(useStyles(), props)
+    const { classes } = useStylesExtends(useStyles(), props)
 
     return (
         <Box className={classes.source}>

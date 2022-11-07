@@ -1,6 +1,6 @@
 import { Icons } from '@masknet/icons'
 import { useActivatedPluginsSNSAdaptor, useIsMinimalMode } from '@masknet/plugin-infra/content-script'
-import { useAccount } from '@masknet/web3-hooks-base'
+import { useChainContext } from '@masknet/web3-hooks-base'
 import { DataProvider } from '@masknet/public-api'
 import {
     FormattedCurrency,
@@ -29,7 +29,7 @@ import {
 } from '@mui/material'
 import { Box } from '@mui/system'
 import stringify from 'json-stable-stringify'
-import { first, last } from 'lodash-unified'
+import { first, last } from 'lodash-es'
 import { useCallback, useMemo, useRef, useState } from 'react'
 import { useI18N } from '../../../../utils/index.js'
 import { useTransakAllowanceCoin } from '../../../Transak/hooks/useTransakAllowanceCoin.js'
@@ -98,6 +98,7 @@ const useStyles = makeStyles()((theme) => {
         avatar: {
             width: 24,
             height: 24,
+            fontSize: 10,
             backgroundColor: theme.palette.common.white,
         },
         buyButton: {
@@ -139,7 +140,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
 
     const { t } = useI18N()
     const theme = useTheme()
-    const classes = useStylesExtends(useStyles(), props)
+    const { classes } = useStylesExtends(useStyles(), props)
 
     const isNFT = coin.type === TokenType.NonFungible
 
@@ -147,7 +148,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
     const transakPluginEnabled = useActivatedPluginsSNSAdaptor('any').some((x) => x.ID === PluginID.Transak)
     const transakIsMinimalMode = useIsMinimalMode(PluginID.Transak)
 
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const isAllowanceCoin = useTransakAllowanceCoin({ address: coin.contract_address, symbol: coin.symbol })
     const { setDialog: setBuyDialog } = useRemoteControlledDialog(PluginTransakMessages.buyTokenDialogUpdated)
 
@@ -224,6 +225,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                                 <CoinIcon
                                                     type={coin.type}
                                                     name={coin.name}
+                                                    label=""
                                                     symbol={coin.symbol}
                                                     address={coin.address}
                                                     logoURL={coin.image_url}

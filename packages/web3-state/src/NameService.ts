@@ -1,5 +1,5 @@
 import type { Subscription } from 'use-subscription'
-import { getEnumAsArray } from '@dimensiondev/kit'
+import { getEnumAsArray } from '@masknet/kit'
 import type { Plugin } from '@masknet/plugin-infra'
 import { StorageItem, NameServiceID } from '@masknet/shared-base'
 import { attemptUntil, NameServiceResolver, NameServiceState as Web3NameServiceState } from '@masknet/web3-shared-base'
@@ -69,7 +69,7 @@ export class NameServiceState<
                 return
             }
         })
-        return attemptUntil(callbacks, undefined)
+        return attemptUntil(callbacks, undefined, true)
     }
 
     async reverse(chainId: ChainId, address: string) {
