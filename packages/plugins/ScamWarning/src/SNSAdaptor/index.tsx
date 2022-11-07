@@ -1,14 +1,26 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { usePostInfoDetails } from '@masknet/plugin-infra/content-script'
+import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import { base } from '../base.js'
 import { setupContext } from './context.js'
 import { PreviewCard } from './components/PreviewCard.js'
 import { Icons } from '@masknet/icons'
+import { useMemo } from 'react'
+import { parseURLs } from '@masknet/shared-base'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
     init(signal, context) {
         setupContext(context)
+    },
+    DecryptedInspector: function Comp(props) {
+        const links = useMemo(() => {
+            const x = extractTextFromTypedMessage(props.message)
+            if (x.none) return null
+            return parseURLs(x.val)
+        }, [props.message])
+        if (!links) return null
+        return <PreviewCard links={links} />
     },
     PostInspector() {
         const links = usePostInfoDetails.mentionedLinks()
