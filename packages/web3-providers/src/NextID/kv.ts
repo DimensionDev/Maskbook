@@ -3,7 +3,7 @@
  */
 import urlcat from 'urlcat'
 import { compact } from 'lodash-unified'
-import { Err, Ok, Result } from 'ts-results'
+import { Err, Ok, Result } from 'ts-results-es'
 import type { NextIDStoragePayload, NextIDPlatform } from '@masknet/shared-base'
 import { deleteCache, fetchJSON } from './helper.js'
 import type { NextIDBaseAPI } from '../types/index.js'

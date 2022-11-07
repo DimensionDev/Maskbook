@@ -6,7 +6,7 @@ import {
     encodeTypedMessageToDocument,
     SerializableTypedMessages,
 } from '@masknet/typed-message'
-import { None, Option, Some } from 'ts-results'
+import { None, Option, Some } from 'ts-results-es'
 import { EC_Key, encodePayload, PayloadWellFormed } from '../payload/index.js'
 import { encryptWithAES } from '../utils/index.js'
 

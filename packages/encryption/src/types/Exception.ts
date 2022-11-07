@@ -1,5 +1,5 @@
 import { CheckedError } from '@masknet/shared-base'
-import { Ok } from 'ts-results'
+import { Ok } from 'ts-results-es'
 
 export enum CryptoException {
     InvalidCryptoKey = '[@masknet/encryption] Encountered an invalid CryptoKey.',

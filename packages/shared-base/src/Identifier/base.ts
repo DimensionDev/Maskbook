@@ -1,4 +1,4 @@
-import { type Option, None } from 'ts-results'
+import { type Option, None } from 'ts-results-es'
 
 export abstract class Identifier {
     abstract toText(): string

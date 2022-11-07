@@ -1,4 +1,4 @@
-import type { Result } from 'ts-results'
+import type { Result } from 'ts-results-es'
 import type {
     NextIDAction,
     NextIDStoragePayload,
