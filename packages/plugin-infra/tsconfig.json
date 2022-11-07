@@ -18,9 +18,5 @@
     { "path": "../web3-shared/solana" },
     { "path": "../typed-message/base" },
     { "path": "../encryption" }
-  ],
-  "ts-node": {
-    "swc": true,
-    "compilerOptions": { "module": "CommonJS" }
-  }
+  ]
 }
