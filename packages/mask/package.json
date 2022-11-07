@@ -79,6 +79,7 @@
     "@types/remarkable": "^2.0.3",
     "@types/use-subscription": "^1.0.0",
     "@types/uuid": "^8.3.4",
+    "@types/webextension-polyfill": "^0.9.1",
     "@uniswap/sdk-core": "^3.0.1",
     "@uniswap/v2-sdk": "3.0.0-alpha.2",
     "@uniswap/v3-sdk": "3.9.0",
