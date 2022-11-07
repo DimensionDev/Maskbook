@@ -150,7 +150,7 @@ export function formatTimestamp(timestamp: string): string {
     }
     if (distance > ONE_HOUR) {
         const hours = Math.floor(distance / ONE_HOUR)
-        return plural(hours, 'hour')
+        return plural(hours, 'hr')
     }
     const mins = Math.floor(distance / ONE_MIN)
     return plural(mins, 'min')
