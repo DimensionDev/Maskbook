@@ -1,5 +1,5 @@
 import { memo, useMemo } from 'react'
-import type { TypedMessageTuple } from '../../../base/index.js'
+import type { TypedMessageTuple } from '@masknet/typed-message'
 import { hasCircular } from '../utils/circularDetect.js'
 import { TypedMessageRenderInline } from '../Entry.js'
 import { useMetadataRender } from '../MetadataRender.js'

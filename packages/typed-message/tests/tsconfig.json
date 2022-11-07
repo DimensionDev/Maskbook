@@ -3,7 +3,8 @@
   "compilerOptions": {
     "rootDir": "./",
     "outDir": "../dist/tests",
-    "tsBuildInfoFile": "../dist/tests.tsbuildinfo"
+    "tsBuildInfoFile": "../dist/tests.tsbuildinfo",
+    "emitDeclarationOnly": true
   },
   "include": ["./"],
   "references": [{ "path": "../base/" }]

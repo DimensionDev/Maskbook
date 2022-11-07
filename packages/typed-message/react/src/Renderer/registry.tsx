@@ -6,7 +6,7 @@ import type {
     TypedMessageAnchor,
     TypedMessageTuple,
     TypedMessagePromise,
-} from '../../base/index.js'
+} from '@masknet/typed-message'
 import { TypedMessageTextRenderer } from './Core/Text.js'
 import { TypedMessageImageRenderer } from './Core/Image.js'
 import { TypedMessageTupleRenderer } from './Core/Tuple.js'

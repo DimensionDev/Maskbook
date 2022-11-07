@@ -8,14 +8,17 @@ export interface TypedMessageEmpty extends SerializableTypedMessage<1> {
 
 export const isTypedMessageEmpty = createIsType<TypedMessageEmpty>('empty')
 
-const empty: TypedMessageEmpty = {
-    type: 'empty',
-    serializable: true,
-    version: 1,
-    meta: undefined,
-}
-Object.setPrototypeOf(empty, null)
-Object.freeze(empty)
+let empty: TypedMessageEmpty
 export function makeTypedMessageEmpty(): TypedMessageEmpty {
+    if (empty) return empty
+
+    empty = {
+        type: 'empty',
+        serializable: true,
+        version: 1,
+        meta: undefined,
+    }
+    Object.setPrototypeOf(empty, null)
+    Object.freeze(empty)
     return empty
 }

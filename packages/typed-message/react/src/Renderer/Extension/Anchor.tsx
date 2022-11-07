@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import type { TypedMessageAnchor } from '../../../base/index.js'
+import type { TypedMessageAnchor } from '@masknet/typed-message'
 import { RenderLinkFragment } from '../utils/renderText.js'
 
 export const TypedMessageAnchorRenderer = memo(function TypedMessageAnchorRenderer(props: TypedMessageAnchor) {

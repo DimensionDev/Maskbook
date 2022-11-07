@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import type { TypedMessageText } from '../../../base/index.js'
+import type { TypedMessageText } from '@masknet/typed-message'
 import { RenderTextFragment } from '../utils/renderText.js'
 import { useMetadataRender } from '../MetadataRender.js'
 

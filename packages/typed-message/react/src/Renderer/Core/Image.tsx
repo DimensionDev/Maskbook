@@ -1,5 +1,5 @@
 import { memo, useContext, useEffect, useState } from 'react'
-import type { TypedMessageImage } from '../../../base/index.js'
+import type { TypedMessageImage } from '@masknet/typed-message'
 import { useMetadataRender } from '../MetadataRender.js'
 import { RenderFragmentsContext, DefaultRenderFragments } from '../utils/RenderFragments.js'
 

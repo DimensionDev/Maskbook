@@ -13,8 +13,8 @@ export type ParseLinkResult =
       }
 
 export function parseLink(text: string): ParseLinkResult[] {
-    // ESM-CJS cooperation
-    const parsed = (anchorme as any as typeof anchorme.default).list(text)
+    // ESM-CJS interop
+    const parsed = (anchorme.default || anchorme).list(text)
 
     const result: ParseLinkResult[] = []
 

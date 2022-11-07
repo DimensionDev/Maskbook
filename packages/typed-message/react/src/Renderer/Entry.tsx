@@ -1,5 +1,5 @@
 import { useContext } from 'react'
-import type { TypedMessage } from '../../base/index.js'
+import type { TypedMessage } from '@masknet/typed-message'
 import { TypedMessageUnknownRenderer as TypedMessageUnknownRender } from './Core/Unknown.js'
 import { RegistryContext } from './utils/RegistryContext.js'
 import { RenderFragmentsContext } from './utils/RenderFragments.js'

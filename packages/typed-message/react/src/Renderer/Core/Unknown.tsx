@@ -1,5 +1,5 @@
 import { memo, useRef } from 'react'
-import type { TypedMessage } from '../../../base/index.js'
+import type { TypedMessage } from '@masknet/typed-message'
 
 /** @internal */
 export const TypedMessageUnknownRenderer = memo(function TypedMessageUnknownRenderer(props: TypedMessage) {

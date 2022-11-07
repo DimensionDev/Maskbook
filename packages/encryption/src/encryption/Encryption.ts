@@ -2,7 +2,7 @@ import { encodeArrayBuffer, unreachable } from '@masknet/kit'
 import { AESCryptoKey, EC_Public_CryptoKey, PostIVIdentifier, ProfileIdentifier } from '@masknet/shared-base'
 import {
     isTypedMessageText,
-    encodeTypedMessageV38Format,
+    encodeTypedMessageToDeprecatedFormat,
     encodeTypedMessageToDocument,
     SerializableTypedMessages,
 } from '@masknet/typed-message'
@@ -152,7 +152,7 @@ async function encodeMessage(version: -38 | -37, message: SerializableTypedMessa
     if (version === -37) return encodeTypedMessageToDocument(message)
     if (!isTypedMessageText(message))
         throw new EncryptError(EncryptErrorReasons.ComplexTypedMessageNotSupportedInPayload38)
-    return encodeTypedMessageV38Format(message)
+    return encodeTypedMessageToDeprecatedFormat(message)
 }
 async function queryAuthorPublicKey(
     of: ProfileIdentifier | null,

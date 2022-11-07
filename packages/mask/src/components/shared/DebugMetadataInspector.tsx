@@ -14,7 +14,7 @@ import {
 } from '@mui/material'
 import { ExpandMore as ExpandMoreIcon } from '@mui/icons-material'
 import { InjectedDialog } from '@masknet/shared'
-import { isDataMatchJSONSchema, getKnownMetadataKeys, getMetadataSchema } from '@masknet/typed-message/dom'
+import { isDataMatchJSONSchema, getKnownMetadataKeys, getMetadataSchema } from '@masknet/typed-message-react'
 import { ShadowRootPopper } from '@masknet/theme'
 import { useState } from 'react'
 import { useI18N } from '../../utils/index.js'
