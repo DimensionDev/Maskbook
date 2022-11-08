@@ -71,44 +71,6 @@ export function useCurrentLinkedPersona() {
 }
 
 /**
- * Get a persona bound with the last recognized identity from DB
- */
-export function useLastRecognizedPersona() {
-    const identity = useLastRecognizedIdentity()
-    return useAsyncRetry(async () => queryPersonaFromDB(identity), [identity.identifier?.toText()])
-}
-
-/**
- * Get a persona bound with the currently visiting identity from DB
- */
-export function useCurrentVisitingPersona() {
-    const identity = useCurrentVisitingIdentity()
-    return useAsyncRetry(async () => queryPersonaFromDB(identity), [identity.identifier?.toText()])
-}
-
-/**
- * Get all personas bound with the last recognized identity from NextID service
- */
-export function useLastRecognizedPersonas() {
-    const identity = useLastRecognizedIdentity()
-    return useAsyncRetry(async () => {
-        const bindings = await queryPersonasFromNextID(identity)
-        return bindings?.sort((a, b) => sortPersonaBindings(a, b, identity.identifier?.userId.toLowerCase()))
-    }, [identity.identifier?.userId])
-}
-
-/**
- * Get all personas bound with the currently visiting identity from NextID service
- */
-export function useCurrentVisitingPersonas() {
-    const identity = useCurrentVisitingIdentity()
-    return useAsyncRetry(async () => {
-        const bindings = await queryPersonasFromNextID(identity)
-        return bindings?.sort((a, b) => sortPersonaBindings(a, b, identity.identifier?.userId.toLowerCase()))
-    }, [identity.identifier?.userId])
-}
-
-/**
  * Get the social identity of the given identity
  */
 export function useSocialIdentity(identity: IdentityResolved | null | undefined) {

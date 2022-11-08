@@ -6,7 +6,7 @@
     "tsBuildInfoFile": "../dist/legacy.tsbuildinfo",
     "emitDeclarationOnly": true
   },
-  "include": ["./", "./**/*.json"],
+  "include": ["./", "./**/*.json", "../../plugin-infra/src/hooks/useCurrentVisitingSocialIdentity.ts"],
   "references": [
     { "path": "../../dashboard" },
     { "path": "../../public-api" },
