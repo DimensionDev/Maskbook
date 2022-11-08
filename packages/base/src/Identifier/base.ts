@@ -3,7 +3,7 @@ import { type Option, None } from 'ts-results-es'
 export abstract class Identifier {
     abstract toText(): string
     abstract [Symbol.toStringTag]: string
-    /** We mark this as private because it's encouraged to use toText(). toString is for JavaScript runtime accidentally calling. */
+    /** We mark this as private because we encourage to use toText(). toString is for JavaScript runtime accidentally calling. */
     private toString() {
         return this.toText()
     }

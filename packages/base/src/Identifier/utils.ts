@@ -62,7 +62,7 @@ Object.freeze(Identifier)
  * Because "/" is used to split parts in identifier
  * we should reject the "/"
  *
- * If you want to use it, you must first convert to something other
+ * If you want to use it, you must first convert to something else
  * @internal
  */
 export function banSlash(input: string | undefined | null) {

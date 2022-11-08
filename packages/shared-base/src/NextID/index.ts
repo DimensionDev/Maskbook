@@ -1,4 +1,4 @@
-import { ProfileIdentifier } from '../Identifier/index.js'
+import { ProfileIdentifier } from '@masknet/base'
 import { NextIDPlatform } from '../NextID/type.js'
 import { EnhanceableSite } from '../Site/type.js'
 import { createLookupTableResolver } from '../utils/index.js'
