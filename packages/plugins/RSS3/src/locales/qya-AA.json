@@ -22,6 +22,7 @@
     "donation_donate": "crwdns18967:0{{user}}crwdnd18967:0{{cost_value}}crwdnd18967:0{{cost_symbol}}crwdne18967:0",
     "donation_donate_verbose": "crwdns18969:0{{user}}crwdnd18969:0{{cost_value}}crwdnd18969:0{{cost_symbol}}crwdnd18969:0{{project}}crwdne18969:0",
     "note$add": "crwdns18971:0{{user}}crwdnd18971:0{{platform}}crwdne18971:0",
+    "note$mint": "crwdns19017:0{{user}}crwdnd19017:0{{platform}}crwdne19017:0",
     "note$revise": "crwdns18973:0{{user}}crwdnd18973:0{{platform}}crwdne18973:0",
     "note$comment": "crwdns18975:0{{user}}crwdnd18975:0{{platform}}crwdne18975:0",
     "profile$create": "crwdns19005:0{{user}}crwdnd19005:0{{platform}}crwdne19005:0",
