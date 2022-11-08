@@ -89,7 +89,9 @@ export function editTypedMessageMeta<T extends TypedMessage>(
         immer_setup = true
     }
     return draft(typedMessage, (e) => {
-        e.meta && edit(e.meta)
+        if (!e.meta) e.meta = new Map()
+        edit(e.meta)
+        if (e.meta.size === 0) e.meta = undefined
     })
 }
 
