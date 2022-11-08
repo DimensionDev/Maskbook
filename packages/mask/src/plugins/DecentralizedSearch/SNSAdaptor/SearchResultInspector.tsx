@@ -1,6 +1,6 @@
 import { useRef, useEffect, useState, useMemo } from 'react'
 import { Hidden } from '@masknet/shared'
-import { first } from 'lodash-unified'
+import { first } from 'lodash-es'
 import { TabContext } from '@mui/lab'
 import { useAvailablePlugins, getProfileTabContent } from '@masknet/plugin-infra'
 import {

@@ -1,5 +1,5 @@
 import { useAsyncRetry } from 'react-use'
-import { flatten } from 'lodash-unified'
+import { flatten } from 'lodash-es'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useWeb3Connection, useWeb3State, useChainId } from '@masknet/web3-hooks-base'
