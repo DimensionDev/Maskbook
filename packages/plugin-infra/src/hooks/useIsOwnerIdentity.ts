@@ -1,5 +1,5 @@
-import type { IdentityResolved } from "../types.js"
-import { useLastRecognizedIdentity } from "./useLastRecognizedIdentity.js"
+import type { IdentityResolved } from '../types.js'
+import { useLastRecognizedIdentity } from './useLastRecognizedIdentity.js'
 
 export function useIsOwnerIdentity(identity: IdentityResolved | null | undefined) {
     const lastRecognizedIdentity = useLastRecognizedIdentity()
