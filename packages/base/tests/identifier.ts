@@ -19,7 +19,9 @@ describe('ECKeyIdentifier', () => {
         expect(a).not.toBe(b)
 
         expect(a.curve).toMatchInlineSnapshot('"secp256k1"')
-        expect(a.publicKeyAsHex).toMatchInlineSnapshot('"0x02fcb44cfde9c1f8338a90fb87bf9eca784081f6bc3cb9c3f72351d90edc5289ef"')
+        expect(a.publicKeyAsHex).toMatchInlineSnapshot(
+            '"0x02fcb44cfde9c1f8338a90fb87bf9eca784081f6bc3cb9c3f72351d90edc5289ef"',
+        )
         expect(a.rawPublicKey).toMatchInlineSnapshot('"Avy0TP3pwfgzipD7h7+eynhAgfa8PLnD9yNR2Q7cUonv"')
         expect(a.toText()).toMatchInlineSnapshot('"ec_key:secp256k1/Avy0TP3pwfgzipD7h7+eynhAgfa8PLnD9yNR2Q7cUonv"')
     })
