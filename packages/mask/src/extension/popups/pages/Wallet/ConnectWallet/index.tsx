@@ -57,7 +57,6 @@ const ConnectWalletPage = memo(() => {
     const { t } = useI18N()
     const { classes } = useStyles()
     const navigate = useNavigate()
-
     const { setSigned } = PopupContext.useContainer()
     const wallets = useWallets()
     const { isLocked, loading: getLockStatusLoading } = useWalletLockStatus()
