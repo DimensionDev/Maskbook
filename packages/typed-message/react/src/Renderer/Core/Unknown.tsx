@@ -2,7 +2,7 @@ import { memo, useRef } from 'react'
 import type { TypedMessage } from '@masknet/typed-message'
 
 /** @internal */
-export const TypedMessageUnknownRenderer = memo(function TypedMessageUnknownRenderer(props: TypedMessage) {
+export const TypedMessageUnknownRender = memo(function TypedMessageUnknownRender(props: TypedMessage) {
     const warned = useRef(false)
     if (!warned.current) {
         warned.current = true

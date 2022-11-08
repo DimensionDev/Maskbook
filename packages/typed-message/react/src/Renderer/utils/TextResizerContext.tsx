@@ -1,32 +1,33 @@
-import { createContext, useContext, useEffect, useState } from 'react'
+import { createContext, useContext, useLayoutEffect, useState } from 'react'
 
-export const TextResizeContext = createContext(false)
+export type TextResizer = (textCount: number) => number
+export const TextResizeContext = createContext<TextResizer | boolean>(false)
 TextResizeContext.displayName = 'TextResizeContext'
+
+function defaultAlgr(length: number): number {
+    let scale = 1
+    if (length < 45) scale = 1.5
+    else if (length < 80) scale = 1.2
+    return scale
+}
 /** @internal */
 export function useTextResize(shouldEnable: boolean) {
-    const hasTextEnlarge = useContext(TextResizeContext)
+    const provider = useContext(TextResizeContext)
     const [element, setElement] = useState<HTMLElement | null>(null)
-    const enable = hasTextEnlarge && shouldEnable
 
-    useEffect(() => {
-        if (!element || !enable) return
+    useLayoutEffect(() => {
+        if (!shouldEnable || !element || !provider) return
 
         const updateFontSize = () => {
-            const length = Array.from(element.innerText).length
-            let fontSize = 1
-            if (length < 45) fontSize = 1.5
-            else if (length < 80) fontSize = 1.2
-
-            // reset twitter font size to inherit from the root node.
-            if (location.href.includes('twitter.com')) fontSize = 1
-
-            element.style.fontSize = `${fontSize}rem`
+            const algr = typeof provider === 'function' ? provider : defaultAlgr
+            const scale = algr(element.textContent?.length ?? 0)
+            element.style.fontSize = `${scale}rem`
         }
         updateFontSize()
 
-        // const watcher = new MutationObserver(updateFontSize)
-        // watcher.observe(element, { subtree: true, childList: true, characterData: true })
-        // return () => watcher.disconnect()
-    }, [enable, element])
+        const watcher = new MutationObserver(updateFontSize)
+        watcher.observe(element, { subtree: true, childList: true, characterData: true })
+        return () => watcher.disconnect()
+    }, [shouldEnable, provider, element])
     return setElement
 }
