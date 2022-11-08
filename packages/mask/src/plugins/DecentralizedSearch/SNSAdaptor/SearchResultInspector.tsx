@@ -10,6 +10,8 @@ import {
 } from '@masknet/plugin-infra/content-script'
 import { Tab } from '@mui/material'
 import { useWeb3State } from '@masknet/web3-hooks-base'
+import { useAddressTypeBaseOnChainIdList } from '@masknet/web3-hooks-evm'
+import { ChainId, AddressType } from '@masknet/web3-shared-evm'
 import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import { SocialAddressType, resolveSearchKeywordType } from '@masknet/web3-shared-base'
 import { DecentralizedSearchPostExtraInfoWrapper } from './DecentralizedSearchPostExtraInfoWrapper.js'
@@ -43,10 +45,16 @@ export function SearchResultInspector(props: { keyword: string }) {
         tokenId: string
         retry: () => void
     }>()
-    const { Others } = useWeb3State()
+    const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
+    const { value: addressType, loading: isLoadingAddressType } = useAddressTypeBaseOnChainIdList(
+        NetworkPluginID.PLUGIN_EVM,
+        props.keyword,
+        [ChainId.Mainnet, ChainId.BSC, ChainId.Matic],
+    )
+
     const ENS_SearchResult = ENS_Plugin!.SearchResultContent?.UI?.Content!
     const [isLoading, setLoading] = useState(true)
-    const [isHiddenAll, setHiddenAll] = useState(false)
+    const [isHiddenAll, setHiddenAll] = useState(true)
     const [isEmpty, setEmpty] = useState(false)
     const [isError, setError] = useState(false)
     const socialAccount = {
@@ -86,7 +94,7 @@ export function SearchResultInspector(props: { keyword: string }) {
 
     useEffect(() => {
         setLoading(!ensRef.current || ensRef.current?.isLoading)
-        setHiddenAll(Boolean(ensRef.current && ensRef.current?.reversedAddress === undefined))
+        setHiddenAll(Boolean(ensRef.current && ensRef.current?.reversedAddress === undefined) || isLoadingAddressType)
         setEmpty(
             Boolean(
                 ensRef.current &&
@@ -95,7 +103,14 @@ export function SearchResultInspector(props: { keyword: string }) {
             ),
         )
         setError(Boolean(ensRef.current?.isError))
-    }, [ensRef.current])
+    }, [ensRef.current, isLoadingAddressType])
+
+    if (
+        addressType === AddressType.Contract ||
+        isLoadingAddressType ||
+        (!addressType && ensRef.current?.reversedAddress && !Others?.isValidDomain?.(props.keyword))
+    )
+        return null
 
     return (
         <Hidden hidden={isHiddenAll}>
