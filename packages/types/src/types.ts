@@ -14,7 +14,7 @@ import type {
     ProfileInformation,
 } from '@masknet/shared-base'
 import type { SerializableTypedMessages } from '@masknet/typed-message'
-import type { RenderFragmentsContextType } from '@masknet/typed-message/dom'
+import type { RenderFragmentsContextType } from '@masknet/typed-message-react'
 import type { SharedComponentOverwrite } from '@masknet/shared'
 
 export declare namespace SocialNetwork {

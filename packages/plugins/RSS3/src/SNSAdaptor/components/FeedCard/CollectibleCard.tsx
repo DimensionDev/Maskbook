@@ -203,7 +203,7 @@ export const CollectibleCard: FC<CollectibleCardProps> = ({ feed, ...rest }) => 
                         : undefined
                 const isSending = isSameAddress(feed.owner, action.address_from)
                 return {
-                    cardType: isSending ? CardType.CollectibleIn : CardType.CollectibleOut,
+                    cardType: isSending ? CardType.CollectibleOut : CardType.CollectibleIn,
                     metadata,
                     summary: (
                         <Translate.collectible_operation

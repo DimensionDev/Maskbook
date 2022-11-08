@@ -500,7 +500,7 @@ importers:
         version: 0.14.2
       '@masknet/typed-message':
         specifier: workspace:*
-        version: link:../typed-message
+        version: link:../typed-message/base
       '@msgpack/msgpack':
         specifier: ^2.8.0
         version: 2.8.0
@@ -689,7 +689,10 @@ importers:
         version: link:../theme
       '@masknet/typed-message':
         specifier: workspace:*
-        version: link:../typed-message
+        version: link:../typed-message/base
+      '@masknet/typed-message-react':
+        specifier: workspace:*
+        version: link:../typed-message/react
       '@masknet/types':
         specifier: workspace:*
         version: link:../types
@@ -1072,7 +1075,7 @@ importers:
         version: link:../theme
       '@masknet/typed-message':
         specifier: workspace:*
-        version: link:../typed-message
+        version: link:../typed-message/base
       '@masknet/web3-constants':
         specifier: workspace:*
         version: link:../web3-constants
@@ -1243,7 +1246,7 @@ importers:
         version: link:../../theme
       '@masknet/typed-message':
         specifier: workspace:*
-        version: link:../../typed-message
+        version: link:../../typed-message/base
       '@masknet/web3-hooks-base':
         specifier: workspace:*
         version: link:../../web3-hooks/base
@@ -1508,7 +1511,10 @@ importers:
         version: link:../../theme
       '@masknet/typed-message':
         specifier: workspace:*
-        version: link:../../typed-message
+        version: link:../../typed-message/base
+      '@masknet/typed-message-react':
+        specifier: workspace:*
+        version: link:../../typed-message/react
       '@masknet/web3-shared-base':
         specifier: workspace:*
         version: link:../../web3-shared/base
@@ -1719,7 +1725,7 @@ importers:
         version: link:../../theme
       '@masknet/typed-message':
         specifier: workspace:*
-        version: link:../../typed-message
+        version: link:../../typed-message/base
       '@masknet/web3-providers':
         specifier: workspace:*
         version: link:../../web3-providers
@@ -2022,7 +2028,7 @@ importers:
         version: link:../theme
       '@masknet/typed-message':
         specifier: workspace:*
-        version: link:../typed-message
+        version: link:../typed-message/base
       '@masknet/web-endowments':
         specifier: ^0.1.1
         version: 0.1.1
@@ -2215,7 +2221,7 @@ importers:
         version: link:../public-api
       '@masknet/typed-message':
         specifier: workspace:*
-        version: link:../typed-message
+        version: link:../typed-message/base
       '@msgpack/msgpack':
         specifier: ^2.8.0
         version: 2.8.0
@@ -2392,20 +2398,32 @@ importers:
         specifier: ^8.2.5
         version: 8.2.5_@babel+core@7.19.0
 
-  packages/typed-message:
+  packages/typed-message/base:
     dependencies:
       '@msgpack/msgpack':
         specifier: ^2.8.0
         version: 2.8.0
-      '@mui/material':
-        specifier: link:..\empty
-        version: link:../empty
       anchorme:
         specifier: ^2.1.2
         version: 2.1.2
+      lodash-es:
+        specifier: ^4.17.21
+        version: 4.17.21
+      ts-results-es:
+        specifier: ^3.5.0
+        version: 3.5.0
+
+  packages/typed-message/react:
+    dependencies:
+      '@masknet/typed-message':
+        specifier: workspace:*
+        version: link:../base
       immer:
-        specifier: 9.0.16
+        specifier: ^9.0.16
         version: 9.0.16_5xmqd5oohffxunmhptcxd5g33e
+      react:
+        specifier: ^18
+        version: 18.2.0
       z-schema:
         specifier: ^5.0.3
         version: 5.0.3
@@ -2429,7 +2447,10 @@ importers:
         version: link:../shared-base-ui
       '@masknet/typed-message':
         specifier: workspace:*
-        version: link:../typed-message
+        version: link:../typed-message/base
+      '@masknet/typed-message-react':
+        specifier: workspace:*
+        version: link:../typed-message/react
       '@masknet/web3-hooks-base':
         specifier: workspace:*
         version: link:../web3-hooks/base
@@ -23254,7 +23275,7 @@ packages:
     resolution: {integrity: sha1-gteb/zCmfEAF/9XiUVMArZyk168=}
 
   /lodash.get/4.4.2:
-    resolution: {integrity: sha1-LRd/ZS+jHpObRDjVNBSZ36OCXpk=}
+    resolution: {integrity: sha512-z+Uw/vLuy6gQe8cfaFWD7p0wVv8fJl3mbzXh33RS+0oW2wvUqiRXiQ69gLWSLpgB5/6sU+r6BlQR0MBILadqTQ==}
     dev: false
 
   /lodash.includes/4.3.0:
@@ -23266,7 +23287,7 @@ packages:
     dev: true
 
   /lodash.isequal/4.5.0:
-    resolution: {integrity: sha1-QVxEePK8wwEgwizhDtMib30+GOA=}
+    resolution: {integrity: sha512-pDo3lu8Jhfjqls6GkMgpahsF9kCyayhgykjyLMNFTKWrpVdAQtYyB4muAMWozBB4ig/dtWAmsMxLEI8wuz+DYQ==}
     dev: false
 
   /lodash.isinteger/4.0.4:
@@ -26753,6 +26774,13 @@ packages:
 
   /react/0.0.0-experimental-9cdf8a99e-20221018:
     resolution: {integrity: sha512-Py2uVVYQD8P4swOQRpC9vPLGFWVJDzgqfkmSs2gl4WsgmYYSdoEkLgdEKIy/OZVhZYLYAWkZM1Ym7cbTdtvLUw==}
+    engines: {node: '>=0.10.0'}
+    dependencies:
+      loose-envify: 1.4.0
+    dev: false
+
+  /react/18.2.0:
+    resolution: {integrity: sha512-/3IjMdb2L9QbBdWiW5e3P2/npwMBaU9mHCSCUzNln0ZCYbcfTsGbTJrU/kGemdH2IWmB2ioZ+zkxtmq6g09fGQ==}
     engines: {node: '>=0.10.0'}
     dependencies:
       loose-envify: 1.4.0

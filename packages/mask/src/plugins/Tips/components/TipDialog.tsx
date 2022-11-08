@@ -129,7 +129,7 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
     const expectedPluginID = [NetworkPluginID.PLUGIN_EVM, NetworkPluginID.PLUGIN_SOLANA].includes(pluginID)
         ? pluginID
         : NetworkPluginID.PLUGIN_EVM
-    const submitDisabled = (!isValid || isSending) && !isDirty
+    const submitDisabled = !isValid || (isSending && !isDirty)
 
     return (
         <TabContext value={currentTab}>

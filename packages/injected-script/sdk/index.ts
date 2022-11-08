@@ -6,6 +6,7 @@ import { MetaMaskProvider } from './MetaMask.js'
 import { sendEvent, rejectPromise, resolvePromise } from './utils.js'
 import { MathWalletProvider } from './MathWallet.js'
 import { WalletLinkProvider } from './WalletLink.js'
+import { OperaProvider } from './Opera.js'
 
 export type { EthereumProvider, InternalEvents } from '../shared/index.js'
 export { InjectedProvider } from './Base.js'
@@ -17,6 +18,7 @@ export const injectedSolflareProvider = new SolflareProvider()
 export const injectedMetaMaskProvider = new MetaMaskProvider()
 export const injectedMathWalletProvider = new MathWalletProvider()
 export const injectedWalletLinkProvider = new WalletLinkProvider()
+export const injectedOperaProvider = new OperaProvider()
 
 export function pasteText(text: string) {
     sendEvent('paste', text)
@@ -63,6 +65,7 @@ globalThis?.document?.addEventListener?.(CustomEventId, (e) => {
                 injectedMetaMaskProvider,
                 injectedMathWalletProvider,
                 injectedWalletLinkProvider,
+                injectedOperaProvider,
             ].find((x) => x.pathname === pathname)
 
             provider?.emit(eventName, data)

@@ -6,12 +6,12 @@
   "exports": {
     ".": {
       "types": "./dist/src/entry.d.ts",
-      "webpack": "./src/entry.ts",
+      "mask-src": "./src/entry.ts",
       "default": "./dist/src/entry.d.ts"
     },
     "./base": {
       "types": "./dist/src/entry-base.d.ts",
-      "webpack": "./src/entry-base.ts",
+      "mask-src": "./src/entry-base.ts",
       "default": "./dist/src/entry-base.js"
     }
   },
