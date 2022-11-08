@@ -1,4 +1,4 @@
-# Copy and rename this file to .dev-preference
+# Copy and rename this file to dev-preference
 # This dot file will NOT be used in CI or production build.
 
 ### SourceMap

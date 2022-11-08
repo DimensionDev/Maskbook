@@ -15,8 +15,8 @@ export {
     type PostContextCreation,
     type PostContextSNSActions,
     type PostInfo,
+    PostInfoContext,
     PostInfoProvider,
-    usePostInfo,
     usePostInfoDetails,
 } from './contexts/PostContext.js'
 export { CompositionContext, useCompositionContext } from './contexts/CompositionContext.js'

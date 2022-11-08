@@ -27,7 +27,7 @@ export function visitEachTypedMessageChild(
         return makeTypedMessageTuple(after, node.meta)
     } else if (isTypedMessagePromise(node)) {
         // we ignore alt if promise is resolved.
-        if (node.promise.value) return visitor(node.promise.value, context)
+        if ('value' in node.promise) return visitor(node.promise.value, context)
         else if (node.alt) return makeTypedMessagePromise(node.promise, visitor(node.alt, context))
         return node
     } else if (isTypedMessageMaskPayload(node)) {

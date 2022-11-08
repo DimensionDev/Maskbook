@@ -80,18 +80,13 @@ export function createRenderWithMetadata<T>(metadataReader: (meta: TypedMessage[
     }
 }
 
-export function editMetadata(
-    metadata: TypedMessage['meta'],
-    edit: (meta: NonNullable<Draft<TypedMessage['meta']>>) => void,
-): NonNullable<TypedMessage['meta']> {
-    return draft(metadata || new Map(), (e) => void edit(e))
-}
 export function editTypedMessageMeta<T extends TypedMessage>(
     typedMessage: T,
     edit: (meta: NonNullable<Draft<TypedMessage['meta']>>) => void,
 ): T {
-    const meta = editMetadata(typedMessage.meta, edit)
-    return { ...typedMessage, meta: meta.size === 0 ? undefined : meta }
+    return draft(typedMessage, (e) => {
+        e.meta && edit(e.meta)
+    })
 }
 
 /**

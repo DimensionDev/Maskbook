@@ -3,7 +3,7 @@ import type { TypedMessageImage } from '@masknet/typed-message'
 import { useMetadataRender } from '../MetadataRender.js'
 import { RenderFragmentsContext, DefaultRenderFragments } from '../utils/RenderFragments.js'
 
-export const TypedMessageImageRenderer = memo(function TypedMessageImageRenderer(props: TypedMessageImage) {
+export const TypedMessageImageRender = memo(function TypedMessageImageRender(props: TypedMessageImage) {
     const { Image = DefaultRenderFragments.Image } = useContext(RenderFragmentsContext)
     const { image, width, height } = props
     const [blobSrc, setBlobSrc] = useState<string | null>(null)

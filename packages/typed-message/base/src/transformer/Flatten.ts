@@ -14,7 +14,8 @@ import { isSerializableTypedMessage } from '../utils/index.js'
 import { emptyTransformationContext, TransformationContext } from './context.js'
 
 export function FlattenTypedMessage(message: TypedMessage, context: TransformationContext): TypedMessage {
-    if (isTypedMessagePromise(message) && message.promise.value) return message.promise.value
+    if (isTypedMessagePromise(message) && 'value' in message.promise)
+        return FlattenTypedMessage(message.promise.value, context)
     if (isTypedMessageTuple(message)) {
         const next = message.items
             .map((x) => FlattenTypedMessage(x, context))

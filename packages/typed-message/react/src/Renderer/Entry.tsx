@@ -1,9 +1,10 @@
 import { useContext } from 'react'
 import type { TypedMessage } from '@masknet/typed-message'
-import { TypedMessageUnknownRenderer as TypedMessageUnknownRender } from './Core/Unknown.js'
+import { TypedMessageUnknownRender } from './Core/Unknown.js'
 import { RegistryContext } from './utils/RegistryContext.js'
 import { RenderFragmentsContext } from './utils/RenderFragments.js'
 import { useTextResize } from './utils/TextResizerContext.js'
+import { DebugElementProvider } from './utils/DebugElementProvider.js'
 export interface RenderProps {
     message: TypedMessage
 }
@@ -27,16 +28,14 @@ export function TypedMessageRenderInline(props: RenderProps) {
     const { message } = props
 
     const Registry = useContext(RegistryContext)
+    const isDebug = useContext(DebugElementProvider)
+
     if (message.type === 'empty') return null
 
     const Render = Registry(message.type)?.component || TypedMessageUnknownRender
-    if (process.env.NODE_ENV === 'development') {
+    if (isDebug) {
         return (
-            <span
-                data-kind={message.type}
-                ref={(ref) => {
-                    if (ref) (ref as any).message = message
-                }}>
+            <span data-kind={message.type} ref={(ref) => ref && Object.assign(ref, { message })}>
                 <Render {...message} />
             </span>
         )
