@@ -16,8 +16,10 @@
   "dependencies": {
     "@masknet/typed-message": "workspace:*",
     "immer": "^9.0.16",
-    "react": "^18",
     "z-schema": "^5.0.3"
+  },
+  "peerDependencies": {
+    "react": "^18"
   },
   "files": ["src", "dist", "!dist/.tsbuildinfo"]
 }
