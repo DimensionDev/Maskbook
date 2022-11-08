@@ -67,26 +67,27 @@ export const cardTypeIconMap: Record<CardType, IconComponent> = {
 export const platformIconMap: Record<RSS3BaseAPI.Network | RSS3BaseAPI.Platform, IconComponent | null> = {
     // Networks
     ethereum: Icons.ETH,
-    binance_smart_chain: Icons.ETH,
+    binance_smart_chain: Icons.BSC,
     polygon: Icons.PolygonScan,
     xdai: Icons.Gnosis,
     arbitrum: Icons.Arbitrum,
     optimism: Icons.Optimism,
     fantom: Icons.Fantom,
     avalanche: Icons.Avalanche,
-    zksync: Icons.ETH,
+    // TODO icon for zksync is missing
+    zksync: Icons.ZkScan,
     // Platforms
     Gitcoin: Icons.Gitcoin,
     Mirror: Icons.Mirror,
     Snapshot: Icons.Snapshot,
     Uniswap: Icons.Uniswap,
     binance: Icons.BSC,
-    Lens: Icons.Mirror,
+    Lens: Icons.Lens,
     Farcaster: Icons.Farcaster,
-    crossbell: Icons.Mirror,
+    crossbell: Icons.Crossbell,
     '0x': Icons.ZeroX,
     'ENS Registrar': null,
-    CrossSync: Icons.Lens,
+    CrossSync: Icons.Crossbell,
     Crossbell: Icons.Crossbell,
     MetaMask: Icons.MetaMask,
     OpenSea: Icons.OpenSea,
@@ -106,6 +107,7 @@ export const hostIconMap: Record<string, IconComponent> = {
     'gitcoin.co': Icons.Gitcoin,
     'bscscan.com': Icons.BSC,
     'zkscan.io': Icons.ZkScan,
+    'mirror.xyz': Icons.Mirror,
 }
 
 export const hostNameMap: Record<string, string> = {
