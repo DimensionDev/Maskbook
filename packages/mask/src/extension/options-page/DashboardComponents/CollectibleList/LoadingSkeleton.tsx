@@ -1,4 +1,4 @@
-import { range } from 'lodash-unified'
+import { range } from 'lodash-es'
 import type { FC, HTMLProps } from 'react'
 import { CollectibleItemSkeleton } from './CollectibleItem.js'
 

@@ -1,7 +1,7 @@
 import { formatFileSize } from '@masknet/kit'
 import type { Plugin } from '@masknet/plugin-infra'
 import { PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
-import { truncate } from 'lodash-unified'
+import { truncate } from 'lodash-es'
 import { base } from '../base.js'
 import { META_KEY_1, META_KEY_2 } from '../constants.js'
 import { FileInfoMetadataReader } from '../helpers.js'

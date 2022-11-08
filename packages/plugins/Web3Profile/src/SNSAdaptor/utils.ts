@@ -1,4 +1,4 @@
-import { compact, uniqBy } from 'lodash-unified'
+import { compact, uniqBy } from 'lodash-es'
 import type { CollectionTypes, WalletsCollection, WalletTypes } from '@masknet/shared'
 import {
     NetworkPluginID,

@@ -1,4 +1,4 @@
-import { noop } from 'lodash-unified'
+import { noop } from 'lodash-es'
 import { Plugin } from '@masknet/plugin-infra'
 import {
     createInjectHooksRenderer,

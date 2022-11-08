@@ -15,7 +15,7 @@ import { useMatchXS } from '../../../utils/index.js'
 import { useClassicMaskFullPageTheme } from '../../../utils/theme/useClassicMaskFullPageTheme.js'
 import { appearanceSettings, languageSettings } from '../../../../shared/legacy-settings/settings.js'
 import { useValueRef } from '@masknet/shared-base-ui'
-import { cloneDeep, merge } from 'lodash-unified'
+import { cloneDeep, merge } from 'lodash-es'
 
 const useStyles = makeStyles()((theme) => ({
     root: {

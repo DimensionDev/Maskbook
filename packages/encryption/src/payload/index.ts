@@ -1,4 +1,4 @@
-import { Ok, Result } from 'ts-results'
+import { Ok, Result } from 'ts-results-es'
 import type { PayloadWellFormed } from '../index.js'
 import {
     encode37,

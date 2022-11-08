@@ -1,4 +1,4 @@
-import { compact } from 'lodash-unified'
+import { compact } from 'lodash-es'
 import { useITOConstants } from '@masknet/web3-shared-evm'
 import isAfter from 'date-fns/isAfter'
 import { JSON_PayloadInMask, JSON_PayloadFromChain, ITO_Status } from '../../types.js'

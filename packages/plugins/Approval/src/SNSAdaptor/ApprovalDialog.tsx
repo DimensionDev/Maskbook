@@ -1,4 +1,4 @@
-import { compact } from 'lodash-unified'
+import { compact } from 'lodash-es'
 import { DialogContent, Button, Tab } from '@mui/material'
 import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import { TabContext } from '@mui/lab'

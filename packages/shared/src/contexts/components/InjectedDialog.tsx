@@ -1,7 +1,7 @@
 /* eslint-disable tss-unused-classes/unused-classes */
 import { EnhanceableSite, isDashboardPage, CrossIsolationMessages } from '@masknet/shared-base'
 import { ErrorBoundary, useValueRef } from '@masknet/shared-base-ui'
-import { omit } from 'lodash-unified'
+import { omit } from 'lodash-es'
 import { Cx, makeStyles, useDialogStackActor, usePortalShadowRoot, useStylesExtends } from '@masknet/theme'
 import {
     Dialog,
@@ -97,6 +97,7 @@ export interface InjectedDialogProps extends Omit<DialogProps, 'onClose' | 'titl
     disableTitleBorder?: boolean
     isOpenFromApplicationBoard?: boolean
     isOnBack?: boolean
+    independent?: boolean
     titleBarIconStyle?: 'auto' | 'back' | 'close'
 }
 
@@ -136,6 +137,7 @@ export function InjectedDialog(props: InjectedDialogProps) {
         titleTail = null,
         disableTitleBorder,
         isOpenFromApplicationBoard,
+        independent,
         ...rest
     } = props
     const actions = CopyElementWithNewProps(children, DialogActions, { root: dialogActions }, cx)
@@ -179,7 +181,7 @@ export function InjectedDialog(props: InjectedDialogProps) {
                     },
                 }}
                 {...omit(rest, 'isOnBack')}
-                {...extraProps}>
+                {...(independent ? omit(extraProps, 'hidden', 'style', 'aria-hidden') : extraProps)}>
                 <ErrorBoundary>
                     {title ? (
                         <DialogTitle

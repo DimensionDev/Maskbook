@@ -1,6 +1,6 @@
 import { ValueRef } from '@dimensiondev/holoflows-kit'
 import { ObservableWeakMap } from '@masknet/shared-base'
-import { isEqual } from 'lodash-unified'
+import { isEqual } from 'lodash-es'
 import type { SocialNetworkUI } from '@masknet/types'
 
 export const stateCreator: {

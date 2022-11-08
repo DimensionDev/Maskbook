@@ -1,3 +1,5 @@
+import type { Storage } from 'webextension-polyfill'
+
 const key = 'openSNSAndActivatePlugin'
 /**
  * This function will open a new web page, then open the composition dialog and activate the composition entry of the given plugin.
@@ -9,7 +11,9 @@ export async function openSNSAndActivatePlugin(url: string, pluginID: string): P
     if (process.env.manifest === '2') {
         ;(globalThis as any).sessionStorage.setItem(key, pluginID)
     } else {
-        await browser.storage.session.set({ [key]: pluginID })
+        // @ts-expect-error Chrome Only API
+        const session: Storage.StorageArea = browser.storage.session
+        await session.set({ [key]: pluginID })
     }
 }
 export async function getDesignatedAutoStartPluginID(): Promise<string | null> {
@@ -18,8 +22,10 @@ export async function getDesignatedAutoStartPluginID(): Promise<string | null> {
         ;(globalThis as any).sessionStorage.removeItem(key)
         return val
     } else {
-        const val = await browser.storage.session.get(key)
-        await browser.storage.session.remove(key)
+        // @ts-expect-error Chrome Only API
+        const session: Storage.StorageArea = browser.storage.session
+        const val = await session.get(key)
+        await session.remove(key)
         return (val[key] as string) ?? null
     }
 }

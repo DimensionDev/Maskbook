@@ -1,4 +1,4 @@
-import { noop, omit } from 'lodash-unified'
+import { noop, omit } from 'lodash-es'
 import { createContext, useContext } from 'react'
 import type { FileInfo, DialogCloseCallback } from '../../types.js'
 

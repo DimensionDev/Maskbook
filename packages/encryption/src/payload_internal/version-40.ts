@@ -1,6 +1,6 @@
 /* eslint @dimensiondev/unicode/specific-set: ["error", { "only": "code" }] */
 import type { PayloadParseResult, Signature } from '../payload/index.js'
-import { Ok } from 'ts-results'
+import { Ok } from 'ts-results-es'
 import { PayloadException } from '../types/index.js'
 import { decodeUint8ArrayF, assertIVLengthEq16 } from '../utils/index.js'
 import type { PayloadParserResult } from './index.js'

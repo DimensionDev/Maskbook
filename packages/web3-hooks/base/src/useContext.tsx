@@ -3,7 +3,7 @@ import { compose, NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useAccount } from './useAccount.js'
 import { useChainId } from './useChainId.js'
-import { omitBy, isUndefined } from 'lodash-unified'
+import { omitBy, isUndefined } from 'lodash-es'
 import { useNetworkType } from './useNetworkType.js'
 import { useProviderType } from './useProviderType.js'
 

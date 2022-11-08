@@ -2,7 +2,7 @@ import { memo, ReactElement, SyntheticEvent, useCallback, useMemo, useRef, useSt
 import { useAsync, useAsyncFn, useUpdateEffect } from 'react-use'
 import { useNavigate } from 'react-router-dom'
 import { ChevronDown } from 'react-feather'
-import { mapValues } from 'lodash-unified'
+import { mapValues } from 'lodash-es'
 import { z as zod } from 'zod'
 import { EthereumAddress } from 'wallet.ts'
 import { BigNumber } from 'bignumber.js'

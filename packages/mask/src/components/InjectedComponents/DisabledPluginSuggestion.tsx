@@ -1,5 +1,5 @@
 import { ReactNode, useCallback } from 'react'
-import type { Option } from 'ts-results'
+import type { Option } from 'ts-results-es'
 import {
     useActivatedPluginsSNSAdaptor,
     registeredPlugins,

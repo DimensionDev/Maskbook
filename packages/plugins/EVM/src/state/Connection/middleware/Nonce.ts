@@ -1,7 +1,7 @@
 import { EthereumAddress } from 'wallet.ts'
 import Web3 from 'web3'
 import { toHex } from 'web3-utils'
-import { first } from 'lodash-unified'
+import { first } from 'lodash-es'
 import { ChainId, EthereumMethodType, getRPCConstants, ProviderType } from '@masknet/web3-shared-evm'
 import type { Context, Middleware } from '../types.js'
 

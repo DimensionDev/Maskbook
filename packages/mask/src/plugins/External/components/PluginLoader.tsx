@@ -17,7 +17,7 @@ import {
     ListItemText,
 } from '@mui/material'
 import { useState } from 'react'
-import { Result } from 'ts-results'
+import { Result } from 'ts-results-es'
 // import { PermissionAwareRedirectOf } from '../../../extension/popups'
 import { useExternalPluginManifest } from '../loader/index.js'
 import { Link as LinkIcon, Person as PublisherIcon, Description as DescriptionIcon } from '@mui/icons-material'

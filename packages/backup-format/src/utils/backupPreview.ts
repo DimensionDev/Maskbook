@@ -1,5 +1,5 @@
 import type { NormalizedBackup } from '@masknet/backup-format'
-import { flatten, sumBy } from 'lodash-unified'
+import { flatten, sumBy } from 'lodash-es'
 
 export interface BackupPreview {
     personas: number

@@ -9,17 +9,21 @@ import { CardType } from '../share.js'
 import { CardFrame, FeedCardProps } from '../base.js'
 import { Label } from './common.js'
 
-const useStyles = makeStyles<void, 'image' | 'verbose' | 'info'>()((theme, _, refs) => ({
+const useStyles = makeStyles<void, 'image' | 'verbose' | 'info' | 'center'>()((theme, _, refs) => ({
     summary: {
         color: theme.palette.maskColor.third,
     },
     verbose: {},
     image: {},
+    center: {},
     body: {
         display: 'flex',
         flexDirection: 'row',
         alignItems: 'flex-start',
         marginTop: theme.spacing(1.5),
+        [`&.${refs.center}`]: {
+            alignItems: 'center',
+        },
         [`&.${refs.verbose}`]: {
             display: 'block',
             [`.${refs.image}`]: {
@@ -101,7 +105,11 @@ export const ProfileCard: FC<CollectibleCardProps> = ({ feed, ...rest }) => {
                 />
             </Typography>
             {metadata ? (
-                <div className={cx(classes.body, verbose ? classes.verbose : null)}>
+                <div
+                    className={cx(classes.body, {
+                        [classes.verbose]: verbose,
+                        [classes.center]: !metadata.bio && !verbose,
+                    })}>
                     <Image
                         classes={{ container: classes.image }}
                         src={metadata.profile_uri[0]}
@@ -109,8 +117,8 @@ export const ProfileCard: FC<CollectibleCardProps> = ({ feed, ...rest }) => {
                         width={imageSize}
                     />
                     <div className={classes.info}>
-                        <Typography className={classes.title}>{metadata.name}</Typography>
-                        <Typography className={classes.bio}>{metadata.bio}</Typography>
+                        <Typography className={classes.title}>{metadata.name || metadata.handle}</Typography>
+                        {metadata.bio ? <Typography className={classes.bio}>{metadata.bio}</Typography> : null}
                     </div>
                 </div>
             ) : null}

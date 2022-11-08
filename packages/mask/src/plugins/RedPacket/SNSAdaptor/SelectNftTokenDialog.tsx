@@ -1,6 +1,6 @@
 import { useCallback, useState, useEffect } from 'react'
 import { useUpdate } from 'react-use'
-import { findLastIndex, uniq } from 'lodash-unified'
+import { findLastIndex, uniq } from 'lodash-es'
 import { AssetPreviewer } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { isSameAddress, NonFungibleToken, NonFungibleTokenContract } from '@masknet/web3-shared-base'

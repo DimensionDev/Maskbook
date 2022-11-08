@@ -1,7 +1,7 @@
 import type { TradeComputed, SwapQuoteResponse } from '../../types/index.js'
 import { useMemo } from 'react'
 import { SUPPORTED_CHAIN_ID_LIST } from './constants.js'
-import { pick } from 'lodash-unified'
+import { pick } from 'lodash-es'
 import { useAsync } from 'react-use'
 import { useChainContext, useNetworkContext, useWeb3Connection } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'

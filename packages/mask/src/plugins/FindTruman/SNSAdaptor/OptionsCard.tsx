@@ -7,7 +7,7 @@ import NoNftCard from './NoNftCard.js'
 import { FindTrumanContext } from '../context.js'
 import { BorderLinearProgress } from './ResultCard.js'
 import { ActionButtonPromise } from '@masknet/shared'
-import { sumBy } from 'lodash-unified'
+import { sumBy } from 'lodash-es'
 
 const useOptionsStyles = makeStyles()((theme) => {
     return {

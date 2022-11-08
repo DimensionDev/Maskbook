@@ -72,7 +72,7 @@ export namespace RSS3BaseAPI {
         name?: string
     }
 
-    interface TransactionMetadata {
+    export interface TransactionMetadata {
         /** Only exists for collectible tag */
         id?: string
         /** URL */
@@ -254,7 +254,7 @@ export namespace RSS3BaseAPI {
         donate: DonateMetadata
     }
 
-    type TypeMap = {
+    export type TypeMap = {
         [Tag.Transaction]: Type.Transfer | Type.Mint | Type.Burn
         [Tag.Exchange]: Type.Withdraw | Type.Deposit | Type.Swap | Type.Liquidity
         [Tag.Collectible]: Type.Transfer | Type.Trade | Type.Mint | Type.Burn | Type.Poap

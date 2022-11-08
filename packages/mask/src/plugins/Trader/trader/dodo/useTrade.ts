@@ -2,7 +2,7 @@ import { isNativeTokenAddress, useRPCConstants, useTraderConstants } from '@mask
 import { PluginTraderRPC } from '../../messages.js'
 import type { SwapRouteData, TradeStrategy } from '../../types/index.js'
 import { useSlippageTolerance } from './useSlippageTolerance.js'
-import { first } from 'lodash-unified'
+import { first } from 'lodash-es'
 import { useChainContext, useDoubleBlockBeatRetry, useNetworkContext } from '@masknet/web3-hooks-base'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
 import { isZero } from '@masknet/web3-shared-base'

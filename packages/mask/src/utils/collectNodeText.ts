@@ -1,4 +1,4 @@
-import type { Option } from 'ts-results'
+import type { Option } from 'ts-results-es'
 
 export function collectTwitterEmoji(points: readonly number[]) {
     if (points.length === 0) return ''

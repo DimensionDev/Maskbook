@@ -1,7 +1,7 @@
 import { ReactNode, useCallback, useMemo, useState } from 'react'
 import { FixedSizeList, FixedSizeListProps, ListChildComponentProps } from 'react-window'
 import Fuse from 'fuse.js'
-import { uniqBy } from 'lodash-unified'
+import { uniqBy } from 'lodash-es'
 import { Box, InputAdornment, Stack } from '@mui/material'
 import { makeStyles } from '../../UIHelper/index.js'
 import { MaskTextField, MaskTextFieldProps } from '../TextField/index.js'

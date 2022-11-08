@@ -6,7 +6,7 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "webpack": "./src/entry.tsx",
+      "mask-src": "./src/entry.tsx",
       "default": "./dist/src/entry.js"
     }
   },

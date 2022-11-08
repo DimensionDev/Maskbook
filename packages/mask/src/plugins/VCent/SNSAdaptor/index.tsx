@@ -41,7 +41,7 @@ function Component() {
     const tweetAddress = usePostInfoDetails.snsID()
 
     if (!tweetAddress) return null
-
+    if (!location.href.includes(`/status/${tweetAddress}`)) return null
     return (
         <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM, chainId: ChainId.Mainnet }}>
             <VCentDialog tweetAddress={tweetAddress} />

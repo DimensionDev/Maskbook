@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { useAsync, useAsyncRetry } from 'react-use'
-import { first, isEqual } from 'lodash-unified'
+import { first, isEqual } from 'lodash-es'
 import { Subscription, useSubscription } from 'use-subscription'
 import { ValueRef } from '@dimensiondev/holoflows-kit'
 import { useValueRef } from '@masknet/shared-base-ui'

@@ -1,5 +1,5 @@
 import { FC, useCallback } from 'react'
-import { noop } from 'lodash-unified'
+import { noop } from 'lodash-es'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { ElementAnchor, Linking, AssetPreviewer, RetryHint } from '@masknet/shared'
 import { LoadingBase, makeStyles } from '@masknet/theme'

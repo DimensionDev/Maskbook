@@ -1,4 +1,4 @@
-import { omit } from 'lodash-unified'
+import { omit } from 'lodash-es'
 import { useAsync, useAsyncFn } from 'react-use'
 import { BigNumber } from 'bignumber.js'
 import { sha3 } from 'web3-utils'

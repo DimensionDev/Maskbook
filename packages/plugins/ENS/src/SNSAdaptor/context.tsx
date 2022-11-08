@@ -1,6 +1,6 @@
 import { createContext, PropsWithChildren, useCallback, useMemo } from 'react'
 import { useAsync } from 'react-use'
-import { uniqBy } from 'lodash-unified'
+import { uniqBy } from 'lodash-es'
 import { NextIDProof } from '@masknet/web3-providers'
 import { useLookupAddress, useReverseAddress } from '@masknet/web3-hooks-base'
 import { SearchKeywordType } from '@masknet/web3-shared-base'

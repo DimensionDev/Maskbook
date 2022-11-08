@@ -10,7 +10,7 @@ import { isNativeTokenAddress, isNativeTokenSymbol, SchemaType } from '@masknet/
 import { TabContext } from '@mui/lab'
 import { Link, Stack, Tab, ThemeProvider } from '@mui/material'
 import { Box, useTheme } from '@mui/system'
-import { compact } from 'lodash-unified'
+import { compact } from 'lodash-es'
 import { useEffect, useMemo, useState } from 'react'
 import { useI18N } from '../../../../utils/index.js'
 import { resolveDataProviderLink, resolveDataProviderName } from '../../pipes.js'

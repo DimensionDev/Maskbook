@@ -24,11 +24,6 @@
                         "message": "Please use @dimensiondev/holoflows-kit instead."
                     },
                     {
-                        "name": "lodash-unified",
-                        "message": "Avoid using type unsafe methods.",
-                        "importNames": ["get"]
-                    },
-                    {
                         "name": "lodash-es",
                         "message": "Avoid using type unsafe methods.",
                         "importNames": ["get"]

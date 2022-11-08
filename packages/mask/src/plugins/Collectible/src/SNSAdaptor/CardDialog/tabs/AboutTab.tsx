@@ -1,5 +1,5 @@
 import { BigNumber } from 'bignumber.js'
-import { first } from 'lodash-unified'
+import { first } from 'lodash-es'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
 import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'

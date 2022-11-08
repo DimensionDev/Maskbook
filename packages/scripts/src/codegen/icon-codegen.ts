@@ -1,6 +1,6 @@
 import { readFile, writeFile } from 'fs/promises'
 import { watch } from 'gulp'
-import { camelCase, snakeCase, upperFirst } from 'lodash-unified'
+import { camelCase, snakeCase, upperFirst } from 'lodash-es'
 import { parse as parsePath } from 'path'
 import { PKG_PATH, ROOT_PATH, watchTask } from '../utils/index.js'
 import type { Position } from 'source-map'

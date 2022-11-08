@@ -27,7 +27,7 @@ import type {
     RelationRecordDB,
     PersonaRecord,
 } from './type.js'
-import { isEmpty } from 'lodash-unified'
+import { isEmpty } from 'lodash-es'
 /**
  * Database structure:
  *

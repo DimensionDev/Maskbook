@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { first } from 'lodash-unified'
+import { first } from 'lodash-es'
 import { Icons } from '@masknet/icons'
 import { ImageIcon } from '@masknet/shared'
 import { getSiteType, NetworkPluginID } from '@masknet/shared-base'

@@ -1,4 +1,4 @@
-import { memoize } from 'lodash-unified'
+import { memoize } from 'lodash-es'
 import { BigNumber } from 'bignumber.js'
 import { Currency, CurrencyAmount, Ether, Percent, Price, Token, TradeType } from '@uniswap/sdk-core'
 import type { Trade } from '@uniswap/v2-sdk'

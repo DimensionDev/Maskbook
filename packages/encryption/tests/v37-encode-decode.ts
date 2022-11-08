@@ -1,5 +1,5 @@
 import { test, expect } from 'vitest'
-import { None, Some } from 'ts-results'
+import { None, Some } from 'ts-results-es'
 import { encodePayload, parsePayload, PayloadWellFormed, importAESFromJWK } from '../src/index.js'
 import { ProfileIdentifier } from '@masknet/shared-base'
 import { queryTestPublicKey } from './keys.js'

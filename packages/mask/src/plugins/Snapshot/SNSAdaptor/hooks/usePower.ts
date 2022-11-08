@@ -4,7 +4,7 @@ import type { NetworkPluginID } from '@masknet/shared-base'
 import { PluginSnapshotRPC } from '../../messages.js'
 import type { ProposalIdentifier } from '../../types.js'
 import { useProposal } from './useProposal.js'
-import { find, sumBy } from 'lodash-unified'
+import { find, sumBy } from 'lodash-es'
 
 export function usePower(identifier: ProposalIdentifier) {
     const { payload: proposal } = useProposal(identifier.id)

@@ -4,7 +4,7 @@
   "type": "module",
   "exports": {
     ".": {
-      "webpack": "./src/index.ts",
+      "mask-src": "./src/index.ts",
       "default": "./dist/index.js"
     }
   },
@@ -19,6 +19,7 @@
     "@masknet/shared-base-ui": "workspace:*",
     "@masknet/theme": "workspace:*",
     "@masknet/typed-message": "workspace:*",
+    "@masknet/typed-message-react": "workspace:*",
     "@masknet/web3-shared-base": "workspace:*",
     "@msgpack/msgpack": "^2.8.0",
     "arweave": "^1.11.4",

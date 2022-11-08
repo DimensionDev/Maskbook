@@ -10,7 +10,7 @@ import {
     TypedMessage,
     visitEachTypedMessageChild,
 } from '@masknet/typed-message'
-import { TUPLE_RENDER_STYLE } from '@masknet/typed-message/dom'
+import { TUPLE_RENDER_STYLE } from '@masknet/typed-message-react'
 
 export enum Order {
     Flatten = 1000,

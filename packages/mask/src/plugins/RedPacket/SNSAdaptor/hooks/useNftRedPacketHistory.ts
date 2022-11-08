@@ -1,6 +1,6 @@
 import { EMPTY_LIST } from '@masknet/shared-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
-import { eq, uniqBy } from 'lodash-unified'
+import { eq, uniqBy } from 'lodash-es'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { RedPacketRPC } from '../../messages.js'
 import type { NftRedPacketHistory } from '../../types.js'

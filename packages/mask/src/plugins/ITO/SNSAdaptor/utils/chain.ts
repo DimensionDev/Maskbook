@@ -1,5 +1,5 @@
 import urlcat from 'urlcat'
-import { first } from 'lodash-unified'
+import { first } from 'lodash-es'
 import { BigNumber } from 'bignumber.js'
 import isAfter from 'date-fns/isAfter'
 import isEqual from 'date-fns/isEqual'

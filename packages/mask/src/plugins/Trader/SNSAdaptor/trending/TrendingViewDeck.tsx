@@ -29,7 +29,7 @@ import {
 } from '@mui/material'
 import { Box } from '@mui/system'
 import stringify from 'json-stable-stringify'
-import { first, last } from 'lodash-unified'
+import { first, last } from 'lodash-es'
 import { useCallback, useMemo, useRef, useState } from 'react'
 import { useI18N } from '../../../../utils/index.js'
 import { useTransakAllowanceCoin } from '../../../Transak/hooks/useTransakAllowanceCoin.js'
