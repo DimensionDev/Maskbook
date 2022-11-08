@@ -3,17 +3,17 @@ export function createPredicate<T, P extends T>(candidates: T[]) {
 }
 
 export async function attemptUntil<T>(funcs: Array<() => Promise<T> | undefined>, fallback: T, strict = false) {
-    let hasError = false
+    let hasError: Error | null = null
     for (const func of funcs) {
         try {
             const result = await func()
             if (typeof result === 'undefined' && !strict) continue
             return result ?? fallback
         } catch (error) {
-            hasError = true
+            hasError = error as Error
             continue
         }
     }
-    if (hasError) throw new Error('Failed to fetch.')
+    if (hasError) throw new Error('At least one of the attempt fails')
     return fallback
 }

@@ -2,8 +2,10 @@ import { escapeRegExp } from 'lodash-es'
 import urlcat from 'urlcat'
 import LRUCache from 'lru-cache'
 import type { TwitterBaseAPI } from '../types/index.js'
+import { attemptUntil } from '@masknet/web3-shared-base'
 
 const UPLOAD_AVATAR_URL = 'https://upload.twitter.com/i/media/upload.json'
+const TWITTER_IDENTITY_URL = 'https://mr8asf7i4h.execute-api.us-east-1.amazonaws.com/prod/twitter-identity'
 
 function getScriptURL(content: string, name: string) {
     const matchURL = new RegExp(
@@ -254,7 +256,15 @@ export class TwitterAPI implements TwitterBaseAPI.Provider {
         }
     }
 
-    async getUserByScreenName(screenName: string): Promise<TwitterBaseAPI.User | null> {
+    async getUserByScreenName(screenName: string, checkNFTAvatar?: boolean): Promise<TwitterBaseAPI.User | null> {
+        if (checkNFTAvatar) return this.getUserViaWebAPI(screenName)
+        return attemptUntil<TwitterBaseAPI.User | null>(
+            [() => this.getUserViaWebAPI(screenName), () => this.getUserViaTwitterIdentity(screenName)],
+            null,
+        )
+    }
+
+    private async getUserViaWebAPI(screenName: string, times = 0): Promise<TwitterBaseAPI.User | null> {
         const { bearerToken, csrfToken, queryId } = await getTokens('UserByScreenName')
         const url = urlcat('https://twitter.com/i/api/graphql/:queryId/UserByScreenName', {
             queryId,
@@ -284,6 +294,7 @@ export class TwitterAPI implements TwitterBaseAPI.Provider {
         if (!response.ok) {
             cache.delete(cacheKey)
             const failedResponse: TwitterBaseAPI.FailedResponse = await response.json()
+            if (times >= 3) return null
             const features: string[] = []
             for (const error of failedResponse.errors) {
                 const match = error.message.match(/The following features cannot be null: (.*)$/)
@@ -296,12 +307,59 @@ export class TwitterAPI implements TwitterBaseAPI.Provider {
             }
             if (features.length) {
                 this.features = { ...this.features, ...Object.fromEntries(features.map((x) => [x, false])) }
-                return this.getUserByScreenName(screenName)
+                return this.getUserViaWebAPI(screenName, times + 1)
             }
             return null
         }
         const userResponse: TwitterBaseAPI.UserByScreenNameResponse = await response.json()
         return userResponse.data.user.result
+    }
+    /**
+     * Convert response from twitter identity to web API getUserByScreenName
+     */
+    private identityToLegacyUser(response: TwitterBaseAPI.IdentifyResponse): TwitterBaseAPI.User {
+        return {
+            id: response.id_str,
+            rest_id: '',
+            affiliates_highlighted_label: {},
+            legacy: {
+                created_at: response.created_at,
+                default_profile: response.default_profile,
+                default_profile_image: response.default_profile_image,
+                description: response.description,
+                entities: response.entities,
+                favourites_count: response.favourites_count,
+                follow_request_sent: response.follow_request_sent,
+                followers_count: response.followers_count,
+                following: response.following,
+                friends_count: response.friends_count,
+                has_custom_timelines: response.has_custom_timelines,
+                is_translator: response.is_translator,
+                listed_count: response.listed_count,
+                location: response.location,
+                media_count: response.media_count,
+                name: response.name,
+                notifications: response.notifications,
+                profile_banner_url: response.profile_banner_url,
+                profile_image_url_https: response.profile_image_url_https,
+                protected: response.protected,
+                screen_name: response.screen_name,
+                statuses_count: response.statuses_count,
+                translator_type: response.translator_type,
+                url: response.url,
+                verified: response.verified,
+                withheld_in_countries: response.withheld_in_countries,
+            },
+        }
+    }
+    private async getUserViaTwitterIdentity(screenName: string): Promise<TwitterBaseAPI.User | null> {
+        const url = urlcat(TWITTER_IDENTITY_URL, {
+            screenName,
+        })
+        const response = await fetch(url)
+        if (!response.ok) return null
+        const identity: TwitterBaseAPI.IdentifyResponse = await response.json()
+        return this.identityToLegacyUser(identity)
     }
 }
 
