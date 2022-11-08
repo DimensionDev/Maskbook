@@ -8,6 +8,7 @@ import {
     BindingProof,
     PersonaInformation,
     resolveNextIDIdentityToProfile,
+    CrossIsolationMessages,
 } from '@masknet/shared-base'
 import { NextIDProof } from '@masknet/web3-providers'
 import { useRemoteControlledDialog, useValueRef } from '@masknet/shared-base-ui'
@@ -17,7 +18,6 @@ import { activatedSocialNetworkUI } from '../../social-network/index.js'
 import { SetupGuideStep } from '../../../shared/legacy-settings/types.js'
 import { useLastRecognizedIdentity } from './useActivatedUI.js'
 import { usePersonasFromDB } from './usePersonasFromDB.js'
-import { PluginNextIDMessages } from '../../plugins/NextID/messages.js'
 import { MaskMessages, useI18N } from '../../utils/index.js'
 
 const createPersona = () => {
@@ -99,9 +99,11 @@ export function useCurrentPersonaConnectStatus() {
     const currentIdentifier = useValueRef(currentPersonaIdentifier)
 
     const { setDialog: setPersonaSelectPanelDialog } = useRemoteControlledDialog(
-        PluginNextIDMessages.PersonaSelectPanelDialogUpdated,
+        CrossIsolationMessages.events.PersonaSelectPanelDialogUpdated,
     )
-    const { setDialog: setCreatePersonaConfirmDialog } = useRemoteControlledDialog(MaskMessages.events.openPageConfirm)
+    const { setDialog: setCreatePersonaConfirmDialog } = useRemoteControlledDialog(
+        CrossIsolationMessages.events.openPageConfirm,
+    )
 
     const create = useCallback(
         (target?: string, position?: 'center' | 'top-right', enableVerify?: boolean, direct = false) => {

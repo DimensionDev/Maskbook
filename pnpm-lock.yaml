@@ -1930,9 +1930,30 @@ importers:
       '@masknet/shared-base':
         specifier: workspace:*
         version: link:../../shared-base
+      '@masknet/shared-base-ui':
+        specifier: workspace:*
+        version: link:../../shared-base-ui
+      '@masknet/theme':
+        specifier: 'workspace: *'
+        version: link:../../theme
+      '@masknet/web3-hooks-base':
+        specifier: workspace:*
+        version: link:../../web3-hooks/base
+      '@masknet/web3-providers':
+        specifier: workspace:*
+        version: link:../../web3-providers
+      '@masknet/web3-shared-base':
+        specifier: workspace:*
+        version: link:../../web3-shared/base
+      '@masknet/web3-shared-evm':
+        specifier: workspace:*
+        version: link:../../web3-shared/evm
       react-use:
         specifier: ^17.4.0
         version: 17.4.0
+      unstated-next:
+        specifier: ^1.1.0
+        version: 1.1.0
       use-subscription:
         specifier: 1.6.0
         version: 1.6.0

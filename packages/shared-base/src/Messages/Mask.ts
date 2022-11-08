@@ -5,6 +5,13 @@ import type { NetworkPluginID } from '../Plugin/index.js'
 import type { RelationFavor } from '../Persona/type.js'
 import type { EnhanceableSite, ExtensionSite } from '../Site/index.js'
 
+export type PersonaSelectPanelDialogEvent = {
+    open: boolean
+    target?: string
+    position?: 'center' | 'top-right'
+    enableVerify: boolean
+}
+
 export interface MaskSettingsEvents {
     appearanceSettings: Appearance
     pluginIDSettings: Record<EnhanceableSite | ExtensionSite, NetworkPluginID>
@@ -56,9 +63,6 @@ export interface MaskEvents extends MaskSettingsEvents, MaskMobileOnlyEvents, Ma
     __kv_backend_in_memory__: [string, unknown]
     /** @deprecated do not use it in new code. */
     wallet_is_locked: ['request'] | ['response', boolean]
-
-    /** emit when open new page . */
-    openPageConfirm: OpenPageConfirmEvent
 }
 
 export interface UpdateEvent<Data> {

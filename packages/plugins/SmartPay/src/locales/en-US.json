@@ -1,3 +1,10 @@
 {
-    "__plugin_name": "Smart Pay"
+    "__plugin_name": "Smart Pay",
+    "smart_pay_wallet": "Smart Pay wallet",
+    "ineligibility_tips": "Sorry, You are not in the free trial whitelist.",
+    "eligibility_description": "You can follow <Link>Mask Network</Link> Twitter or <Discord>Discord</Discord> to participate in the event and get free qualification to have free-gas blockchain experiences with SmartPay. Soon we will publish the second batch of users participating in the test!",
+    "eligibility_query": "Clisk <Link>here</Link> to see if you are in the first batch free-deployment SmartPay wallet whitelist.",
+    "personas_description": "Your Persona {{personas}} can create one Smart Pay wallet.",
+    "copy_wallet_address_success": "Copy Success",
+    "setup_smart_pay_managed_account": "Set up Smart Pay's Managed Account"
 }

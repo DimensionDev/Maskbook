@@ -1,11 +1,10 @@
 import { Button, DialogActions, DialogContent, Stack, Typography } from '@mui/material'
 import { InjectedDialog } from '@masknet/shared'
-import { MaskMessages } from '../../utils/index.js'
 import { makeStyles } from '@masknet/theme'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { useCallback, useEffect, useState } from 'react'
 import Services from '../../extension/service.js'
-import { DashboardRoutes, OpenPageConfirmEvent } from '@masknet/shared-base'
+import { CrossIsolationMessages, DashboardRoutes, OpenPageConfirmEvent } from '@masknet/shared-base'
 
 type PositionStyle = {
     top?: number
@@ -57,10 +56,10 @@ export const LeavePageConfirmDialog = () => {
     const [info, setInfo] = useState<OpenPageConfirmEvent>()
     const { classes } = useStyles({ positionStyle: positionStyleMap[info?.position ?? 'center'] })
 
-    const { closeDialog } = useRemoteControlledDialog(MaskMessages.events.openPageConfirm)
+    const { closeDialog } = useRemoteControlledDialog(CrossIsolationMessages.events.openPageConfirm)
 
     useEffect(() => {
-        return MaskMessages.events.openPageConfirm.on((evt) => {
+        return CrossIsolationMessages.events.openPageConfirm.on((evt) => {
             setOpen(evt.open)
             if (!evt.open) return
             setInfo(evt)

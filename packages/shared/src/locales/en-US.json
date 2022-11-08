@@ -1,6 +1,9 @@
 {
     "approve": "Approve",
     "authorization_descriptions": "Mask Network requires you to authorize the following websites before using it.",
+    "create_persona_hint": "Please create a Persona and verify your account to use this function.",
+    "create_persona_title": "Persona",
+    "create_persona_action": "Create persona",
     "domain_request": "Domain Request",
     "available_balance": "Available Balance",
     "snackbar_done": "Done",

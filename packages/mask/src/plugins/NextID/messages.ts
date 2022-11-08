@@ -1,18 +1,7 @@
 import { createPluginMessage, PluginMessageEmitter } from '@masknet/plugin-infra'
 import { PLUGIN_ID } from './constants.js'
 
-type PersonaSelectPanelDialogEvent = {
-    open: boolean
-    target?: string
-    position?: 'center' | 'top-right'
-    enableVerify: boolean
-}
-
 interface PluginNextIDMessage {
-    /**
-     * Application Persona List dialog
-     */
-    PersonaSelectPanelDialogUpdated: PersonaSelectPanelDialogEvent
     rpc: unknown
 }
 

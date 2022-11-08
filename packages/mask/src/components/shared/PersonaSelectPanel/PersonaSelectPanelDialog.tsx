@@ -4,8 +4,8 @@ import { useState } from 'react'
 import { useI18N } from '../../../utils/index.js'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
-import { PluginNextIDMessages } from '../../../plugins/NextID/messages.js'
 import { PersonaSelectPanel, PositionOption } from './PersonaSelectPanel.js'
+import { CrossIsolationMessages } from '@masknet/shared-base'
 
 type PositionStyle = {
     top?: number
@@ -57,7 +57,7 @@ export const PersonaSelectPanelDialog = () => {
     const { classes } = useStyles({ positionStyle: positionStyleMap[position] })
 
     const { open, closeDialog } = useRemoteControlledDialog(
-        PluginNextIDMessages.PersonaSelectPanelDialogUpdated,
+        CrossIsolationMessages.events.PersonaSelectPanelDialogUpdated,
         (ev) => {
             if (!ev.open) {
                 setFinishTarget(undefined)

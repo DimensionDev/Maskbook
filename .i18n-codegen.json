@@ -417,8 +417,9 @@
             "generator": {
                 "type": "i18next/react-hooks",
                 "hooks": "useI18N",
-                "namespace": "\"com.mask.smart-pay\"",
-                "trans": "Translate"
+                "namespace": "com.mask.smart-pay",
+                "trans": "Translate",
+                "emitTS": true
             }
         }
     ]
