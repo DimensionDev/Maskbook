@@ -146,7 +146,7 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
                                 <Tab label={tabs.Withdraw} value={tabs.Withdraw} />
                             </MaskTabList>
                         }>
-                        <DialogContent style={{ padding: 0, overflowX: 'hidden' }}>
+                        <DialogContent style={{ padding: 0, overflow: 'hidden' }}>
                             <>
                                 <div className={classes.abstractTabWrapper}>
                                     <NetworkTab
