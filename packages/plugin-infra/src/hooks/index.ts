@@ -1,4 +1,4 @@
-export * from './useAllPersonas.js'
+export * from './useAllPersonasFromDB.js'
 export * from './useActivatedPlugin.js'
 export * from './useActivatedPluginWeb3UI.js'
 export * from './useActivatedPluginWeb3State.js'

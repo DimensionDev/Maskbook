@@ -376,6 +376,7 @@ export namespace Plugin.SNSAdaptor {
         currentVisitingProfile: Subscription<IdentityResolved | undefined>
         allPersonas?: Subscription<PersonaInformation[]>
         getPersonaAvatar: (identifier: ECKeyIdentifier | null | undefined) => Promise<string | null | undefined>
+        getSocialIdentity: (identity: IdentityResolved | undefined) => Promise<SocialIdentity | undefined>
         ownProofChanged: UnboundedRegistry<void>
         setMinimalMode: (id: string, enabled: boolean) => Promise<void>
     }
