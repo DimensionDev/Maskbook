@@ -1,25 +1,23 @@
 import { type Option, None, Some } from 'ts-results-es'
-import { EnhanceableSite } from '../Site/type.js'
 import { Identifier } from './base.js'
 import { banSlash } from './utils.js'
 
 const instance = new WeakSet()
 const id: Record<string, Record<string, ProfileIdentifier>> = Object.create(null)
+const unknownText = 'person:localhost/$unknown'
 /**
  * Refers to a profile on a network.
  */
 export class ProfileIdentifier extends Identifier {
-    /** @deprecated Avoid using it */
-    static unknownToText = 'person:localhost/$unknown'
     static override from(input: string | null | undefined): Option<ProfileIdentifier> {
         input = String(input)
-        if (input === this.unknownToText) return None
+        if (input === unknownText) return None
         if (input.startsWith('person:')) return Identifier.from(input) as Option<ProfileIdentifier>
         return None
     }
     static of(network: string | undefined | null, userID: string | undefined | null): Option<ProfileIdentifier> {
         if (!userID || !network) return None
-        if (network === EnhanceableSite.Localhost && userID === '$unknown') return None
+        if (network === 'localhost' && userID === '$unknown') return None
         return Some(new ProfileIdentifier(network, userID))
     }
 
@@ -27,13 +25,13 @@ export class ProfileIdentifier extends Identifier {
     declare readonly network: string
     declare readonly userId: string
     private constructor(network: string, userID: string) {
-        if (network === EnhanceableSite.Localhost && userID === '$unknown') {
-            throw new TypeError('[@masknet/shared-base] Please use null instead.')
+        if (network === 'localhost' && userID === '$unknown') {
+            throw new TypeError('[@masknet/base] Use null instead.')
         }
 
-        network = String(network)
-        userID = String(userID)
-        if (!userID) throw new TypeError('[@masknet/shared-base] userID cannot be empty.')
+        network = String(network).toLowerCase()
+        userID = String(userID).toLowerCase()
+        if (!userID) throw new TypeError('[@masknet/base] userID cannot be empty.')
 
         const networkCache = (id[network] ??= {})
         if (networkCache[userID]) return networkCache[userID]

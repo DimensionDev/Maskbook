@@ -292,6 +292,15 @@ importers:
         specifier: ^6.4.14
         version: 6.4.14
 
+  packages/base:
+    dependencies:
+      pvtsutils:
+        specifier: ^1.3.2
+        version: 1.3.2
+      ts-results-es:
+        specifier: ^3.5.0
+        version: 3.5.0
+
   packages/configuration:
     dependencies:
       urlcat:
@@ -2192,6 +2201,9 @@ importers:
 
   packages/shared-base:
     dependencies:
+      '@masknet/base':
+        specifier: workspace:*
+        version: link:../base
       '@masknet/public-api':
         specifier: workspace:*
         version: link:../public-api

@@ -1,7 +1,7 @@
 import { encodeArrayBuffer, decodeArrayBuffer, concatArrayBuffer } from '@masknet/kit'
 import type { EC_JsonWebKey, EC_Public_JsonWebKey } from './JWKType.js'
 import { fromBase64URL, toBase64URL } from '../convert/index.js'
-import { ECKeyIdentifier } from '../Identifier/index.js'
+import { ECKeyIdentifier } from '@masknet/base'
 
 // This module is only used in background.
 // Loading tiny-secp256k1 will instantiate a WebAssembly module which is not allowed in the content script for unknown reason and fail the whole module graph.
