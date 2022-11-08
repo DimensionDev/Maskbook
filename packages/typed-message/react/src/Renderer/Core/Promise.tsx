@@ -37,7 +37,7 @@ export const TypedMessagePromiseRender = memo(
 )
 
 function Await_new({ promise }: { promise: Promise<TypedMessage> }): JSX.Element {
-    const resolved = React.use(promise)
+    const resolved = Reflect.get(React, 'use')(promise)
     const transformedValue = useTransformedValue(resolved)
     return <TypedMessageRenderInline message={transformedValue} />
 }
