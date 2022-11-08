@@ -17,7 +17,6 @@ import type { WalletTokenRecord, HistoryResponse, GasPriceDictResponse } from '.
 import type { FungibleTokenAPI, HistoryAPI, GasOptionAPI } from '../types/index.js'
 import { getAllEVMNativeAssets } from '../helpers.js'
 
-const DEBANK_API = 'https://api.debank.com'
 const DEBANK_OPEN_API = 'https://debank-proxy.r2d2.to'
 
 /**
