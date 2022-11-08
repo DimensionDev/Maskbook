@@ -1,8 +1,8 @@
+import { toHex } from 'web3-utils'
 import { injectedOperaProvider } from '@masknet/injected-script'
 import { ChainId, chainResolver, EthereumMethodType, ProviderType } from '@masknet/web3-shared-evm'
 import type { EVM_Provider } from '../types.js'
 import { BaseInjectedProvider } from './BaseInjected.js'
-import { toHex } from 'web3-utils'
 
 export class OperaProvider extends BaseInjectedProvider implements EVM_Provider {
     constructor() {
