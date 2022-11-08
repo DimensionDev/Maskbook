@@ -43,12 +43,12 @@ const useStyles = makeStyles<void, 'tokenIcon' | 'verboseToken'>()((theme, _, re
 }))
 
 const { Tag, Type } = RSS3BaseAPI
-export function isTokenTransferFeed(feed: RSS3BaseAPI.Web3Feed): feed is RSS3BaseAPI.TokenTransferFeed {
+export function isTokenOperationFeed(feed: RSS3BaseAPI.Web3Feed): feed is RSS3BaseAPI.TokenOperationFeed {
     return feed.tag === Tag.Transaction && [Type.Transfer, Type.Burn].includes(feed.type)
 }
 
 interface TokenFeedCardProps extends Omit<FeedCardProps, 'feed'> {
-    feed: RSS3BaseAPI.TokenTransferFeed
+    feed: RSS3BaseAPI.TokenOperationFeed
 }
 
 /**

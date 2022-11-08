@@ -8,6 +8,7 @@ import { useAddressLabel } from '../../hooks/index.js'
 import { CardType } from '../share.js'
 import { CardFrame, FeedCardProps } from '../base.js'
 import { Label } from './common.js'
+import { LensAvatar } from './LensAvatar.js'
 
 const useStyles = makeStyles<void, 'image' | 'verbose' | 'info' | 'center'>()((theme, _, refs) => ({
     summary: {
@@ -96,7 +97,7 @@ export const ProfileCard: FC<CollectibleCardProps> = ({ feed, ...rest }) => {
                     values={{
                         user,
                         platform: metadata?.platform!,
-                        context: metadata?.type!,
+                        context: metadata?.type,
                     }}
                     components={{
                         user: <Label />,
@@ -110,12 +111,17 @@ export const ProfileCard: FC<CollectibleCardProps> = ({ feed, ...rest }) => {
                         [classes.verbose]: verbose,
                         [classes.center]: !metadata.bio && !verbose,
                     })}>
-                    <Image
-                        classes={{ container: classes.image }}
-                        src={metadata.profile_uri[0]}
-                        height={imageSize}
-                        width={imageSize}
-                    />
+                    {/* eslint-disable-next-line no-nested-ternary */}
+                    {metadata.source === 'Lens' ? (
+                        <LensAvatar handle={metadata.handle} size={imageSize} />
+                    ) : metadata.profile_uri ? (
+                        <Image
+                            classes={{ container: classes.image }}
+                            src={metadata.profile_uri[0]}
+                            height={imageSize}
+                            width={imageSize}
+                        />
+                    ) : null}
                     <div className={classes.info}>
                         <Typography className={classes.title}>{metadata.name || metadata.handle}</Typography>
                         {metadata.bio ? <Typography className={classes.bio}>{metadata.bio}</Typography> : null}
