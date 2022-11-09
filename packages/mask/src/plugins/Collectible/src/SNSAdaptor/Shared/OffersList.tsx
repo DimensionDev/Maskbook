@@ -16,6 +16,7 @@ const useStyles = makeStyles()((theme) => ({
         minHeight: 300,
         width: '100%',
         gap: 12,
+        height: 327,
         justifyContent: 'center',
     },
     emptyIcon: {
