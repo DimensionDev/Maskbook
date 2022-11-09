@@ -1,5 +1,5 @@
 import type { TypedMessage } from '@masknet/typed-message'
-import { createTypedMessageMetadataReader } from '@masknet/typed-message/dom'
+import { createTypedMessageMetadataReader } from '@masknet/typed-message-react'
 import { META_KEY_1, META_KEY_2 } from './constants.js'
 import { FileInfo, FileInfoV1, Provider } from './types.js'
 import schemaV1 from './schema-v1.json'

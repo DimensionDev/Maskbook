@@ -57,7 +57,6 @@ const ConnectWalletPage = memo(() => {
     const { t } = useI18N()
     const { classes } = useStyles()
     const navigate = useNavigate()
-
     const { setSigned } = PopupContext.useContainer()
     const wallets = useWallets()
     const { isLocked, loading: getLockStatusLoading } = useWalletLockStatus()
@@ -78,6 +77,8 @@ const ConnectWalletPage = memo(() => {
             provider: Web3Helper.Web3ProviderDescriptor<NetworkPluginID.PLUGIN_EVM>,
         ) => {
             if (provider.type === ProviderType.MaskWallet) {
+                const connection = await Connection?.getConnection?.()
+                if (connection) connection.disconnect()
                 if (isLocked && !getLockStatusLoading) {
                     navigate(urlcat(PopupRoutes.Unlock, { from: PopupRoutes.SelectWallet, goBack: true, popup: true }))
                     return

@@ -1,4 +1,4 @@
-import type { PersonaIdentifier, ProfileIdentifier } from '../Identifier/index.js'
+import type { PersonaIdentifier, ProfileIdentifier } from '@masknet/base'
 import type { NextIDPersonaBindings } from '../NextID/type.js'
 /**
  * This interface contains the minimal information for UI display

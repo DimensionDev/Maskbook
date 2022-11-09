@@ -34,13 +34,7 @@ const createActivitiesTabConfig = (label: string, props: FeedPageProps, priority
 }
 
 const ActivitiesTabConfig: Plugin.SNSAdaptor.ProfileTab = createActivitiesTabConfig('Activities', {})
-const ActivitiesTabConfigInProfileCard: Plugin.SNSAdaptor.ProfileTab = createActivitiesTabConfig(
-    'Activities',
-    {
-        p: 1.5,
-    },
-    2,
-)
+const ActivitiesTabConfigInProfileCard: Plugin.SNSAdaptor.ProfileTab = createActivitiesTabConfig('Activities', {}, 2)
 
 const DonationTabConfig: Plugin.SNSAdaptor.ProfileTab = createActivitiesTabConfig('Donation', {
     tag: RSS3BaseAPI.Tag.Donation,
@@ -49,7 +43,6 @@ const DonationsTabConfigInProfileCard: Plugin.SNSAdaptor.ProfileTab = createActi
     'Donation',
     {
         tag: RSS3BaseAPI.Tag.Donation,
-        p: 1.5,
     },
     2,
 )
@@ -61,7 +54,6 @@ const SocialTabConfigInProfileCard: Plugin.SNSAdaptor.ProfileTab = createActivit
     'Social',
     {
         tag: RSS3BaseAPI.Tag.Social,
-        p: 1.5,
     },
     2,
 )

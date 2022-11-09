@@ -292,6 +292,15 @@ importers:
         specifier: ^6.4.14
         version: 6.4.14
 
+  packages/base:
+    dependencies:
+      pvtsutils:
+        specifier: ^1.3.2
+        version: 1.3.2
+      ts-results-es:
+        specifier: ^3.5.0
+        version: 3.5.0
+
   packages/configuration:
     dependencies:
       urlcat:
@@ -500,34 +509,10 @@ importers:
         version: 0.14.2
       '@masknet/typed-message':
         specifier: workspace:*
-        version: link:../typed-message
+        version: link:../typed-message/base
       '@msgpack/msgpack':
         specifier: ^2.8.0
         version: 2.8.0
-
-  packages/encryption-sdk:
-    dependencies:
-      '@rollup/plugin-alias':
-        specifier: ^3.1.8
-        version: 3.1.9_rollup@2.79.0
-      '@rollup/plugin-commonjs':
-        specifier: ^22.0.2
-        version: 22.0.2_rollup@2.79.0
-      '@rollup/plugin-json':
-        specifier: ^4.1.0
-        version: 4.1.0_rollup@2.79.0
-      '@rollup/plugin-node-resolve':
-        specifier: ^14.0.1
-        version: 14.0.1_rollup@2.79.0
-      '@rollup/plugin-replace':
-        specifier: ^4.0.0
-        version: 4.0.0_rollup@2.79.0
-      rollup:
-        specifier: ^2.79.0
-        version: 2.79.0
-      rollup-plugin-dts:
-        specifier: 4.2.2
-        version: 4.2.2_rollup@2.79.0
 
   packages/external-plugin-previewer:
     dependencies:
@@ -689,7 +674,10 @@ importers:
         version: link:../theme
       '@masknet/typed-message':
         specifier: workspace:*
-        version: link:../typed-message
+        version: link:../typed-message/base
+      '@masknet/typed-message-react':
+        specifier: workspace:*
+        version: link:../typed-message/react
       '@masknet/types':
         specifier: workspace:*
         version: link:../types
@@ -1072,7 +1060,7 @@ importers:
         version: link:../theme
       '@masknet/typed-message':
         specifier: workspace:*
-        version: link:../typed-message
+        version: link:../typed-message/base
       '@masknet/web3-constants':
         specifier: workspace:*
         version: link:../web3-constants
@@ -1243,7 +1231,7 @@ importers:
         version: link:../../theme
       '@masknet/typed-message':
         specifier: workspace:*
-        version: link:../../typed-message
+        version: link:../../typed-message/base
       '@masknet/web3-hooks-base':
         specifier: workspace:*
         version: link:../../web3-hooks/base
@@ -1508,7 +1496,10 @@ importers:
         version: link:../../theme
       '@masknet/typed-message':
         specifier: workspace:*
-        version: link:../../typed-message
+        version: link:../../typed-message/base
+      '@masknet/typed-message-react':
+        specifier: workspace:*
+        version: link:../../typed-message/react
       '@masknet/web3-shared-base':
         specifier: workspace:*
         version: link:../../web3-shared/base
@@ -1678,6 +1669,9 @@ importers:
       '@types/use-subscription':
         specifier: ^1.0.0
         version: 1.0.0
+      '@types/uuid':
+        specifier: ^8.3.4
+        version: 8.3.4
       bignumber.js:
         specifier: 9.1.0
         version: 9.1.0
@@ -1696,6 +1690,9 @@ importers:
       use-subscription:
         specifier: 1.6.0
         version: 1.6.0
+      uuid:
+        specifier: ^8.3.2
+        version: 8.3.2
       web3-utils:
         specifier: 1.8.0
         version: 1.8.0
@@ -1719,7 +1716,7 @@ importers:
         version: link:../../theme
       '@masknet/typed-message':
         specifier: workspace:*
-        version: link:../../typed-message
+        version: link:../../typed-message/base
       '@masknet/web3-providers':
         specifier: workspace:*
         version: link:../../web3-providers
@@ -2022,7 +2019,7 @@ importers:
         version: link:../theme
       '@masknet/typed-message':
         specifier: workspace:*
-        version: link:../typed-message
+        version: link:../typed-message/base
       '@masknet/web-endowments':
         specifier: ^0.1.1
         version: 0.1.1
@@ -2210,12 +2207,15 @@ importers:
 
   packages/shared-base:
     dependencies:
+      '@masknet/base':
+        specifier: workspace:*
+        version: link:../base
       '@masknet/public-api':
         specifier: workspace:*
         version: link:../public-api
       '@masknet/typed-message':
         specifier: workspace:*
-        version: link:../typed-message
+        version: link:../typed-message/base
       '@msgpack/msgpack':
         specifier: ^2.8.0
         version: 2.8.0
@@ -2392,19 +2392,28 @@ importers:
         specifier: ^8.2.5
         version: 8.2.5_@babel+core@7.19.0
 
-  packages/typed-message:
+  packages/typed-message/base:
     dependencies:
       '@msgpack/msgpack':
         specifier: ^2.8.0
         version: 2.8.0
-      '@mui/material':
-        specifier: link:..\empty
-        version: link:../empty
       anchorme:
         specifier: ^2.1.2
         version: 2.1.2
+      lodash-es:
+        specifier: ^4.17.21
+        version: 4.17.21
+      ts-results-es:
+        specifier: ^3.5.0
+        version: 3.5.0
+
+  packages/typed-message/react:
+    dependencies:
+      '@masknet/typed-message':
+        specifier: workspace:*
+        version: link:../base
       immer:
-        specifier: 9.0.16
+        specifier: ^9.0.16
         version: 9.0.16_5xmqd5oohffxunmhptcxd5g33e
       z-schema:
         specifier: ^5.0.3
@@ -2429,7 +2438,10 @@ importers:
         version: link:../shared-base-ui
       '@masknet/typed-message':
         specifier: workspace:*
-        version: link:../typed-message
+        version: link:../typed-message/base
+      '@masknet/typed-message-react':
+        specifier: workspace:*
+        version: link:../typed-message/react
       '@masknet/web3-hooks-base':
         specifier: workspace:*
         version: link:../web3-hooks/base
@@ -8376,16 +8388,6 @@ packages:
       '@rgba-image/create-image': 0.1.1
     dev: false
 
-  /@rollup/plugin-alias/3.1.9_rollup@2.79.0:
-    resolution: {integrity: sha512-QI5fsEvm9bDzt32k39wpOwZhVzRcL5ydcffUHMyLVaVaLeC70I8TJZ17F1z1eMoLu4E/UOcH9BWVkKpIKdrfiw==}
-    engines: {node: '>=8.0.0'}
-    peerDependencies:
-      rollup: ^1.20.0||^2.0.0
-    dependencies:
-      rollup: 2.79.0
-      slash: 3.0.0
-    dev: false
-
   /@rollup/plugin-commonjs/22.0.2_rollup@2.79.0:
     resolution: {integrity: sha512-//NdP6iIwPbMTcazYsiBMbJW7gfmpHom33u1beiIoHDEM0Q9clvtQB1T0efvMqHeKsGohiHo97BCPCkBXdscwg==}
     engines: {node: '>= 12.0.0'}
@@ -8400,6 +8402,7 @@ packages:
       magic-string: 0.25.9
       resolve: 1.22.1
       rollup: 2.79.0
+    dev: true
 
   /@rollup/plugin-json/4.1.0_rollup@2.79.0:
     resolution: {integrity: sha512-yfLbTdNS6amI/2OpmbiBoW12vngr5NW2jCJVZSBEz+H5KfUJZ2M7sDjk0U6GOOdCWFVScShte29o9NezJ53TPw==}
@@ -8408,6 +8411,7 @@ packages:
     dependencies:
       '@rollup/pluginutils': 3.1.0_rollup@2.79.0
       rollup: 2.79.0
+    dev: true
 
   /@rollup/plugin-node-resolve/14.0.1_rollup@2.79.0:
     resolution: {integrity: sha512-YvSs0ev00QWTQS8u+yaCJkIUPBgpmBsnzRJFvg8c2chbky85ZKoZtoNuRH0k9rjZT4xpgEPOiVTyeJTj1/iMdQ==}
@@ -8422,16 +8426,7 @@ packages:
       is-module: 1.0.0
       resolve: 1.22.1
       rollup: 2.79.0
-
-  /@rollup/plugin-replace/4.0.0_rollup@2.79.0:
-    resolution: {integrity: sha512-+rumQFiaNac9y64OHtkHGmdjm7us9bo1PlbgQfdihQtuNxzjpaB064HbRnewUOggLQxVCCyINfStkgmBeQpv1g==}
-    peerDependencies:
-      rollup: ^1.20.0 || ^2.0.0
-    dependencies:
-      '@rollup/pluginutils': 3.1.0_rollup@2.79.0
-      magic-string: 0.25.9
-      rollup: 2.79.0
-    dev: false
+    dev: true
 
   /@rollup/pluginutils/3.1.0_rollup@2.79.0:
     resolution: {integrity: sha512-GksZ6pr6TpIjHm8h9lSQ8pi8BE9VeubNT0OMJ3B5uZJ8pz73NPiqOtCog/x2/QzM1ENChPKxMDhiQuRHsqc+lg==}
@@ -8443,6 +8438,7 @@ packages:
       estree-walker: 1.0.1
       picomatch: 2.3.1
       rollup: 2.79.0
+    dev: true
 
   /@rollup/pluginutils/4.2.1:
     resolution: {integrity: sha512-iKnFXr7NkdZAIHiIWE+BX5ULi/ucVFYWD6TbAV+rZctiRTY2PL6tsIKhoIOaoskiWAkgu+VsbXgUVDNLHf+InQ==}
@@ -11242,12 +11238,14 @@ packages:
 
   /@types/estree/0.0.39:
     resolution: {integrity: sha512-EYNwp3bU+98cpU4lAWYYL7Zz+2gryWH1qbdDTidVd6hkiR6weksdbMadyXKXNPEkQFhXM+hVO9ZygomHXp+AIw==}
+    dev: true
 
   /@types/estree/0.0.51:
     resolution: {integrity: sha512-CuPgU6f3eT/XgKKPqKd/gLZV1Xmvf1a2R5POBOGQa6uv82xpls89HU5zKeVoyR8XzHd1RGNOlQlvUe3CFkjWNQ==}
 
   /@types/estree/1.0.0:
     resolution: {integrity: sha512-WulqXMDUTYAXCjZnk6JtIHPigp55cVtDgDrO2gHRwhyJto21+1zbVCtOYB2L1F9w4qCQ0rOGWBnBe0FNTiEJIQ==}
+    dev: true
 
   /@types/ethereum-blockies/0.1.0:
     resolution: {integrity: sha512-yQgqv9dqnFm9pHmCPUBPGu4NRIGSD/hihO+BwcuzxaxmMX3juD97vRvwUB3uY/MUBQ+7pWvUWDPYSAcZ1dIQDA==}
@@ -11622,6 +11620,7 @@ packages:
     resolution: {integrity: sha512-yy7HuzQhj0dhGpD8RLXSZWEkLsV9ibvxvi6EiJ3bkqLAO1RGo0WbkWQiwpRlSFymTJRz0d3k5LM3kkx8ArDbLw==}
     dependencies:
       '@types/node': 18.11.9
+    dev: true
 
   /@types/responselike/1.0.0:
     resolution: {integrity: sha512-85Y2BjiufFzaMIlvJDvTTB8Fxl2xfLo4HgmHzVBz08w4wDePCTjYw66PdrolO0kzli3yam/YCgRufyo1DdQVTA==}
@@ -14835,6 +14834,7 @@ packages:
   /builtin-modules/3.3.0:
     resolution: {integrity: sha512-zhaCDicdLuWN5UbN5IMnFqNMhNfo919sH85y2/ea+5Yg9TsTkeZxpL+JLbp6cgYFS4sRLp3YV4S6yDuqVWHYOw==}
     engines: {node: '>=6'}
+    dev: true
 
   /builtin-status-codes/3.0.0:
     resolution: {integrity: sha512-HpGFw18DgFWlncDfjTa2rcQ4W88O1mC8e8yZ2AvQY5KDaktSTwo+KRf6nHK6FRI5FyRyb/5T6+TSxfP7QyGsmQ==}
@@ -15730,6 +15730,7 @@ packages:
 
   /commondir/1.0.1:
     resolution: {integrity: sha512-W9pAhw0ja1Edb5GVdIF1mjZw/ASI0AlShXM83UUGe2DVr5TdAPEA1OA8m/g8zWp9x6On7gqufY+FatDbC3MDQg==}
+    dev: true
 
   /compare-func/2.0.0:
     resolution: {integrity: sha512-zHig5N+tPWARooBnb0Zx1MFcdfpyJrfTJ3Y5L+IFvUm8rM74hHz66z0gw0x4tijh5CorKkKUCnW82R2vmpeCRA==}
@@ -18635,9 +18636,11 @@ packages:
 
   /estree-walker/1.0.1:
     resolution: {integrity: sha512-1fMXF3YP4pZZVozF8j/ZLfvnR8NSIljt56UhbZ5PeeDmmGHpgpdwQt7ITlGvYaQukCvuBRMLEiKiYC+oeIg4cg==}
+    dev: true
 
   /estree-walker/2.0.2:
     resolution: {integrity: sha512-Rfkk/Mp/DL7JVje3u18FxFujQlTNR2q6QfMSMB7AvCBx91NGj/ba3kCfza0f6dVDbw7YlRf/nDrn7pQrCCyQ/w==}
+    dev: true
 
   /esutils/1.1.6:
     resolution: {integrity: sha512-RG1ZkUT7iFJG9LSHr7KDuuMSlujfeTtMNIcInURxKAxhMtwQhI3NrQhz26gZQYlsYZQKzsnwtpKrFKj9K9Qu1A==}
@@ -21783,6 +21786,7 @@ packages:
     engines: {node: '>=6'}
     dependencies:
       builtin-modules: 3.3.0
+    dev: true
 
   /is-callable/1.2.4:
     resolution: {integrity: sha512-nsuwtxZfMX67Oryl9LCQ+upnC0Z0BgpwntpS89m1H/TLF0zNfzfLMV/9Wa/6MZsj0acpEjAO0KF1xT6ZdLl95w==}
@@ -21975,6 +21979,7 @@ packages:
 
   /is-module/1.0.0:
     resolution: {integrity: sha512-51ypPSPCoTEIN9dy5Oy+h4pShgJmPCygKfyRCISBI+JoWT/2oJvK8QPxmwv7b/p239jXrm9M1mlQbyKJ5A152g==}
+    dev: true
 
   /is-nan/1.3.2:
     resolution: {integrity: sha512-E+zBKpQ2t6MEo1VsonYmluk9NxGrbzpeeLC2xIViuO2EjU2xsXsBPwTr3Ykv9l08UYEVEdWeRZNouaZqF6RN0w==}
@@ -22087,6 +22092,7 @@ packages:
     resolution: {integrity: sha512-U82MsXXiFIrjCK4otLT+o2NA2Cd2g5MLoOVXUZjIOhLurrRxpEXzI8O0KZHr3IjLvlAH1kTPYSuqer5T9ZVBKQ==}
     dependencies:
       '@types/estree': 1.0.0
+    dev: true
 
   /is-regex/1.1.4:
     resolution: {integrity: sha512-kvRdxDsxZjhzUX07ZnLydzS1TU/TJlTUHHY4YLL87e37oUA49DfkLqgy+VjFocowy29cKvcSiu+kIv728jTTVg==}
@@ -23254,7 +23260,7 @@ packages:
     resolution: {integrity: sha1-gteb/zCmfEAF/9XiUVMArZyk168=}
 
   /lodash.get/4.4.2:
-    resolution: {integrity: sha1-LRd/ZS+jHpObRDjVNBSZ36OCXpk=}
+    resolution: {integrity: sha512-z+Uw/vLuy6gQe8cfaFWD7p0wVv8fJl3mbzXh33RS+0oW2wvUqiRXiQ69gLWSLpgB5/6sU+r6BlQR0MBILadqTQ==}
     dev: false
 
   /lodash.includes/4.3.0:
@@ -23266,7 +23272,7 @@ packages:
     dev: true
 
   /lodash.isequal/4.5.0:
-    resolution: {integrity: sha1-QVxEePK8wwEgwizhDtMib30+GOA=}
+    resolution: {integrity: sha512-pDo3lu8Jhfjqls6GkMgpahsF9kCyayhgykjyLMNFTKWrpVdAQtYyB4muAMWozBB4ig/dtWAmsMxLEI8wuz+DYQ==}
     dev: false
 
   /lodash.isinteger/4.0.4:
@@ -23418,13 +23424,7 @@ packages:
     resolution: {integrity: sha512-RmF0AsMzgt25qzqqLc1+MbHmhdx0ojF2Fvs4XnOqz2ZOBXzzkEwc/dJQZCYHAn7v1jbVOjAZfK8msRn4BxO4VQ==}
     dependencies:
       sourcemap-codec: 1.4.8
-
-  /magic-string/0.26.2:
-    resolution: {integrity: sha512-NzzlXpclt5zAbmo6h6jNc8zl2gNRGHvmsZW4IvZhTC4W7k4OlLP+S5YLussa/r3ixNT66KOQfNORlXHSOy/X4A==}
-    engines: {node: '>=12'}
-    dependencies:
-      sourcemap-codec: 1.4.8
-    dev: false
+    dev: true
 
   /make-dir/2.1.0:
     resolution: {integrity: sha512-LS9X+dc8KLxXCb8dni79fLIIUA5VyZoyjSMCwTluaXA0o27cCK0bhXkpgw+sTXVpPy/lSO57ilRixqk0vDmtRA==}
@@ -27481,22 +27481,6 @@ packages:
     dependencies:
       bn.js: 5.2.1
 
-  /rollup-plugin-dts/4.2.2_rollup@2.79.0:
-    resolution: {integrity: sha512-A3g6Rogyko/PXeKoUlkjxkP++8UDVpgA7C+Tdl77Xj4fgEaIjPSnxRmR53EzvoYy97VMVwLAOcWJudaVAuxneQ==}
-    engines: {node: '>=v12.22.11'}
-    peerDependencies:
-      rollup: ^2.55
-      typescript: ^4.1
-    peerDependenciesMeta:
-      typescript:
-        optional: true
-    dependencies:
-      magic-string: 0.26.2
-      rollup: 2.79.0
-    optionalDependencies:
-      '@babel/code-frame': 7.18.6
-    dev: false
-
   /rollup-plugin-swc3/0.6.0_rollup@2.79.0:
     resolution: {integrity: sha512-nNG2T3x3wq6e7H+8ZHB0CxJ3H9QeYZUh+DwCjwWEyGCaIwIMyIaq/30ZJlYK8/OWWhCfYMwxKRcZGirPg6nPqA==}
     engines: {node: '>=12'}
@@ -27536,6 +27520,7 @@ packages:
     hasBin: true
     optionalDependencies:
       fsevents: 2.3.2
+    dev: true
 
   /rpc-utils/0.3.4:
     resolution: {integrity: sha512-VmaweXLRpOO2U0FX3Prb88KS0xxkpJK+pJKupR+TagvBmmEetSmvEz+SGTuKwhR9tdSFmjrqt1QSK53Vltapww==}
@@ -28154,6 +28139,7 @@ packages:
   /slash/3.0.0:
     resolution: {integrity: sha512-g9Q1haeby36OSStwb4ntCGGGaKsaVSjQ68fBxoQcutl5fS1vuY18H3wSt3jFyFtrkx+Kz0V1G85A4MyAdDMi2Q==}
     engines: {node: '>=8'}
+    dev: true
 
   /slash/4.0.0:
     resolution: {integrity: sha512-3dOsAHXXUkQTpOYcoAxLIorMTp4gIQr5IW3iVb7A7lFIp0VHhnynm9izx6TssdrIcVIESAlVjtnO2K8bg+Coew==}

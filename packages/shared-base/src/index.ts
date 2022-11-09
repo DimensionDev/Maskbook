@@ -1,4 +1,4 @@
-export * from './Identifier/index.js'
+export * from '@masknet/base'
 export * from './Messages/Mask.js'
 export * from './Messages/Shared.js'
 export * from './NameService/index.js'

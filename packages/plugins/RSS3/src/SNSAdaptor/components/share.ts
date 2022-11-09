@@ -18,21 +18,22 @@ export enum CardType {
     GovernancePropose = 9,
     GovernanceVote = 10,
     NoteCreate = 11,
-    NoteEdit = 12,
-    NoteLink = 13,
-    NoteBurn = 14,
-    ProfileBurn = 15,
-    ProfileCreate = 16,
-    ProfileLink = 17,
-    TokenIn = 18,
-    TokenLiquidity = 19,
-    TokenOut = 20,
-    TokenStake = 21,
-    TokenSwap = 22,
-    UnknownBurn = 23,
-    UnknownCancel = 24,
-    UnknownIn = 25,
-    UnknownOut = 26,
+    NoteMint = 12,
+    NoteEdit = 13,
+    NoteLink = 14,
+    NoteBurn = 15,
+    ProfileBurn = 16,
+    ProfileCreate = 17,
+    ProfileLink = 18,
+    TokenIn = 19,
+    TokenLiquidity = 20,
+    TokenOut = 21,
+    TokenStake = 22,
+    TokenSwap = 23,
+    UnknownBurn = 24,
+    UnknownCancel = 25,
+    UnknownIn = 26,
+    UnknownOut = 27,
 }
 
 export const cardTypeIconMap: Record<CardType, IconComponent> = {
@@ -47,6 +48,7 @@ export const cardTypeIconMap: Record<CardType, IconComponent> = {
     [CardType.GovernancePropose]: Icons.GovernancePropose,
     [CardType.GovernanceVote]: Icons.GovernanceVote,
     [CardType.NoteCreate]: Icons.NoteCreate,
+    [CardType.NoteMint]: Icons.NoteMint,
     [CardType.NoteEdit]: Icons.NoteEdit,
     [CardType.NoteLink]: Icons.NoteLink,
     [CardType.NoteBurn]: Icons.NoteBurn,
@@ -67,26 +69,27 @@ export const cardTypeIconMap: Record<CardType, IconComponent> = {
 export const platformIconMap: Record<RSS3BaseAPI.Network | RSS3BaseAPI.Platform, IconComponent | null> = {
     // Networks
     ethereum: Icons.ETH,
-    binance_smart_chain: Icons.ETH,
+    binance_smart_chain: Icons.BSC,
     polygon: Icons.PolygonScan,
     xdai: Icons.Gnosis,
     arbitrum: Icons.Arbitrum,
     optimism: Icons.Optimism,
     fantom: Icons.Fantom,
     avalanche: Icons.Avalanche,
-    zksync: Icons.ETH,
+    // TODO icon for zksync is missing
+    zksync: Icons.ZkScan,
     // Platforms
     Gitcoin: Icons.Gitcoin,
     Mirror: Icons.Mirror,
     Snapshot: Icons.Snapshot,
     Uniswap: Icons.Uniswap,
     binance: Icons.BSC,
-    Lens: Icons.Mirror,
+    Lens: Icons.Lens,
     Farcaster: Icons.Farcaster,
-    crossbell: Icons.Mirror,
+    crossbell: Icons.Crossbell,
     '0x': Icons.ZeroX,
     'ENS Registrar': null,
-    CrossSync: Icons.Lens,
+    CrossSync: Icons.Crossbell,
     Crossbell: Icons.Crossbell,
     MetaMask: Icons.MetaMask,
     OpenSea: Icons.OpenSea,
@@ -106,6 +109,7 @@ export const hostIconMap: Record<string, IconComponent> = {
     'gitcoin.co': Icons.Gitcoin,
     'bscscan.com': Icons.BSC,
     'zkscan.io': Icons.ZkScan,
+    'mirror.xyz': Icons.Mirror,
 }
 
 export const hostNameMap: Record<string, string> = {
@@ -121,9 +125,10 @@ export const hostNameMap: Record<string, string> = {
     'zkscan.io': 'ZkScan',
 }
 
-export function getLastAction<T extends RSS3BaseAPI.Tag, P extends RSS3BaseAPI.TypeMap[T]>(
-    feed: RSS3BaseAPI.Web3FeedGeneric<T, P>,
-) {
+export function getLastAction<
+    T extends RSS3BaseAPI.Tag,
+    P extends keyof RSS3BaseAPI.MetadataMap[T] = keyof RSS3BaseAPI.MetadataMap[T],
+>(feed: RSS3BaseAPI.Web3FeedGeneric<T, P>) {
     return feed.actions[feed.actions.length - 1]
 }
 
@@ -150,7 +155,7 @@ export function formatTimestamp(timestamp: string): string {
     }
     if (distance > ONE_HOUR) {
         const hours = Math.floor(distance / ONE_HOUR)
-        return plural(hours, 'hour')
+        return plural(hours, 'hr')
     }
     const mins = Math.floor(distance / ONE_MIN)
     return plural(mins, 'min')

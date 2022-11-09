@@ -6,7 +6,7 @@ import * as BN from 'bignumber.js'
 
 // @ts-ignore
 import { blob, builtin, cryptokey, file, filelist, imagebitmap, specialNumbers } from 'typeson-registry'
-import { Identifier } from '../Identifier/index.js'
+import { Identifier } from '@masknet/base'
 import { responseRegedit } from './response.js'
 import { requestRegedit } from './request.js'
 

@@ -1,0 +1,33 @@
+{
+  "name": "@masknet/typed-message",
+  "version": "0.0.0",
+  "sideEffects": false,
+  "description": "TypedMessage definition used in Mask Network.",
+  "publishConfig": {
+    "access": "public"
+  },
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "mask-src": "./src/index.ts",
+      "default": "./dist/index.js"
+    },
+    "./internal": {
+      "types": "./dist/internal.d.ts",
+      "mask-src": "./src/internal.ts",
+      "default": "./dist/internal.js"
+    }
+  },
+  "dependencies": {
+    "@msgpack/msgpack": "^2.8.0",
+    "anchorme": "^2.1.2",
+    "lodash-es": "^4.17.21",
+    "ts-results-es": "^3.5.0"
+  },
+  "files": [
+    "src",
+    "dist",
+    "!dist/.tsbuildinfo"
+  ]
+}

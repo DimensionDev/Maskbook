@@ -10,6 +10,7 @@ import { CardType } from '../share.js'
 import { Slider } from '../Slider.js'
 import { CardFrame, FeedCardProps } from '../base.js'
 import { formatValue, Label } from './common.js'
+import { useMarkdownStyles } from './useMarkdownStyles.js'
 
 const useStyles = makeStyles<void, 'image'>()((theme, _, refs) => ({
     badge: {
@@ -24,12 +25,6 @@ const useStyles = makeStyles<void, 'image'>()((theme, _, refs) => ({
     },
     summary: {
         color: theme.palette.maskColor.third,
-    },
-    markdown: {
-        wordBreak: 'break-all',
-        img: {
-            maxWidth: '100%',
-        },
     },
     content: {
         marginTop: theme.spacing(1.5),
@@ -120,6 +115,7 @@ const CardBody: FC<CardBodyProps> = memo(({ metadata, className, ...rest }) => {
 export const DonationCard: FC<DonationCardProps> = ({ feed, actionIndex, className, ...rest }) => {
     const { verbose } = rest
     const { classes, cx } = useStyles()
+    const { classes: mdClasses } = useMarkdownStyles()
 
     const [index, setIndex] = useState(0)
     const activeActionIndex = actionIndex ?? index
@@ -152,7 +148,7 @@ export const DonationCard: FC<DonationCardProps> = ({ feed, actionIndex, classNa
                     />
                 </Typography>
                 <Image classes={{ container: classes.image }} src={metadata!.logo} width="100%" />
-                <Markdown className={classes.markdown}>{metadata!.description}</Markdown>
+                <Markdown className={mdClasses.markdown}>{metadata!.description}</Markdown>
             </CardFrame>
         )
     }

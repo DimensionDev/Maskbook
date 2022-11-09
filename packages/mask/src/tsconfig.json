@@ -15,7 +15,7 @@
     { "path": "../../shared-base" },
     { "path": "../../shared-base-ui" },
     { "path": "../../typed-message/base" },
-    { "path": "../../typed-message/dom" },
+    { "path": "../../typed-message/react" },
     { "path": "../../web3-hooks/base" },
     { "path": "../../web3-hooks/evm" },
     { "path": "../../web3-shared/base" },

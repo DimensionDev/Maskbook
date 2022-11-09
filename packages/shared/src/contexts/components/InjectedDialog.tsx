@@ -97,6 +97,7 @@ export interface InjectedDialogProps extends Omit<DialogProps, 'onClose' | 'titl
     disableTitleBorder?: boolean
     isOpenFromApplicationBoard?: boolean
     isOnBack?: boolean
+    independent?: boolean
     titleBarIconStyle?: 'auto' | 'back' | 'close'
 }
 
@@ -136,6 +137,7 @@ export function InjectedDialog(props: InjectedDialogProps) {
         titleTail = null,
         disableTitleBorder,
         isOpenFromApplicationBoard,
+        independent,
         ...rest
     } = props
     const actions = CopyElementWithNewProps(children, DialogActions, { root: dialogActions }, cx)
@@ -179,7 +181,7 @@ export function InjectedDialog(props: InjectedDialogProps) {
                     },
                 }}
                 {...omit(rest, 'isOnBack')}
-                {...extraProps}>
+                {...(independent ? omit(extraProps, 'hidden', 'style', 'aria-hidden') : extraProps)}>
                 <ErrorBoundary>
                     {title ? (
                         <DialogTitle
