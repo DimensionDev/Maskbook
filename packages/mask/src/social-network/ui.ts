@@ -1,6 +1,7 @@
 import { assertNotEnvironment, Environment, ValueRef } from '@dimensiondev/holoflows-kit'
 import { delay, waitDocumentReadyState } from '@masknet/kit'
 import { SocialNetworkEnum } from '@masknet/encryption'
+import type { SocialNetworkUI } from '@masknet/types'
 import { IdentityResolved, Plugin, startPluginSNSAdaptor } from '@masknet/plugin-infra/content-script'
 import { sharedUIComponentOverwrite, sharedUINetworkIdentifier } from '@masknet/shared'
 import {
@@ -20,8 +21,7 @@ import { getCurrentIdentifier, getCurrentSNSNetwork } from '../social-network-ad
 import { MaskMessages, setupReactShadowRootEnvironment } from '../utils/index.js'
 import '../utils/debug/general.js'
 import { RestPartOfPluginUIContextShared } from '../utils/plugin-context-shared-ui.js'
-import { activateSocialNetworkUI, definedSocialNetworkUIs } from './define.js'
-import type { SocialNetworkUI } from '@masknet/types'
+import { definedSocialNetworkUIs } from './define.js'
 
 const definedSocialNetworkUIsResolved = new Map<string, SocialNetworkUI.Definition>()
 export let activatedSocialNetworkUI: SocialNetworkUI.Definition = {
