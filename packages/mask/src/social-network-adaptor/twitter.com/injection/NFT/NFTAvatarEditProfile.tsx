@@ -30,25 +30,20 @@ interface StyleProps {
     height: number
     fontWeight: string
 }
-const useStyles = makeStyles<StyleProps>()((theme, props) => {
-    const b = {
-        root: {
-            minHeight: props.minHeight,
-            fontSize: props.fontSize,
-            marginBottom: props.marginBottom,
-            marginTop: 1,
-            marginRight: theme.spacing(2),
-            height: props.height,
-        },
-        text: {
-            color: theme.palette.text.buttonText,
-            fontWeight: props.fontWeight,
-        },
-    }
-    console.log('bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb')
-    console.log(b)
-    return b
-})
+const useStyles = makeStyles<StyleProps>()((theme, props) => ({
+    root: {
+        minHeight: props.minHeight,
+        fontSize: props.fontSize,
+        marginBottom: props.marginBottom,
+        marginTop: 1,
+        marginRight: theme.spacing(2),
+        height: props.height,
+    },
+    text: {
+        color: theme.palette.text.buttonText,
+        fontWeight: props.fontWeight,
+    },
+}))
 
 export function openNFTAvatarSettingDialog() {
     const editDom = searchEditProfileSelector().evaluate()
@@ -95,7 +90,7 @@ function OpenNFTAvatarEditProfileButtonInTwitter() {
 
     return (
         <ConnectPersonaBoundary handlerPosition="top-right" customHint directTo={PluginID.Avatar}>
-            <NFTAvatarButton classes={classes} onClick={clickHandler} />
+            <NFTAvatarButton classes={{ root: classes.root, text: classes.text }} onClick={clickHandler} />
         </ConnectPersonaBoundary>
     )
 }
