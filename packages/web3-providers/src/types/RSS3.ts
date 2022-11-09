@@ -142,6 +142,7 @@ export namespace RSS3BaseAPI {
     export interface PostMetadata {
         title: string
         body: string
+        summary: string
         author: string[]
         created_at?: string
         target_url?: string
