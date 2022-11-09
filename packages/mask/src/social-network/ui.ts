@@ -121,9 +121,7 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
     signal.addEventListener('abort', queryRemoteI18NBundle(Services.Helper.queryRemoteI18NBundle))
 
     const allPersonaSub = createSubscriptionFromAsync(
-        () => {
-            return Services.Identity.queryOwnedPersonaInformation(true)
-        },
+        () => Services.Identity.queryOwnedPersonaInformation(true),
         [],
         MaskMessages.events.currentPersonaIdentifier.on,
         signal,
@@ -151,6 +149,7 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
                     currentVisitingProfile: currentVisitingSub,
                     allPersonas: allPersonaSub,
                     getPersonaAvatar: Services.Identity.getPersonaAvatar,
+                    getSocialIdentity: Services.Identity.querySocialIdentity,
                     ownProofChanged: MaskMessages.events.ownProofChanged,
                     setMinimalMode: Services.Settings.setPluginMinimalModeEnabled,
                 }

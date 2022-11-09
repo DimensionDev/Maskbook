@@ -1,9 +1,9 @@
-import { WalletConnectQRCodeDialogEvent, WalletMessages } from '@masknet/plugin-wallet'
+import type { Plugin } from '@masknet/plugin-infra'
 import { createSubscriptionFromAsync, EMPTY_LIST } from '@masknet/shared-base'
+import { WalletConnectQRCodeDialogEvent, WalletMessages } from '@masknet/plugin-wallet'
 import Services from '../extension/service.js'
 import { WalletRPC } from '../plugins/Wallet/messages.js'
 import { MaskMessages } from './messages.js'
-import type { Plugin } from '@masknet/plugin-infra'
 import type { PartialSharedUIContext } from '../../shared/plugin-infra/host.js'
 
 export const RestPartOfPluginUIContextShared: Omit<
@@ -11,6 +11,7 @@ export const RestPartOfPluginUIContextShared: Omit<
     | keyof PartialSharedUIContext
     | 'lastRecognizedProfile'
     | 'currentVisitingProfile'
+    | 'getSocialIdentity'
     | 'getPersonaAvatar'
     | 'ownProofChanged'
     | 'setMinimalMode'
