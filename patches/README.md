@@ -4,6 +4,7 @@
 
 - cross-fetch: try to modify `fetch`. <https://github.com/lquixada/cross-fetch/pull/137>
 - immer: try to overwrite `Map` and `Set` methods. <https://github.com/immerjs/immer/pull/914/>
+- reflect-metadata: try to overwrite `Reflect` methods. We use `ReflectMetadata` global object for them.
 
 ### Bundled outdated `regenerator-runtime`
 

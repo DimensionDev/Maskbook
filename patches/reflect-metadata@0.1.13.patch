@@ -1,0 +1,19 @@
+diff --git a/Reflect.js b/Reflect.js
+deleted file mode 100644
+index 4afbb52544f0c23208b6292a368060eac6bf137c..0000000000000000000000000000000000000000
+diff --git a/null.js b/null.js
+new file mode 100644
+index 0000000000000000000000000000000000000000..e69de29bb2d1d6434b8b29ae775ad8c2e48c5391
+diff --git a/package.json b/package.json
+index 11d979c00b63ccd23d2009681be5473e7c7b3b77..18203b9aefeca5695b56bf43853e17e742b186db 100644
+--- a/package.json
++++ b/package.json
+@@ -2,7 +2,7 @@
+   "name": "reflect-metadata",
+   "version": "0.1.13",
+   "description": "Polyfill for Metadata Reflection API",
+-  "main": "Reflect.js",
++  "main": "null.js",
+   "types": "index.d.ts",
+   "typescript": {
+     "definition": "Reflect.d.ts"

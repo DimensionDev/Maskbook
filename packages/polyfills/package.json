@@ -10,7 +10,8 @@
     "@types/webextension-polyfill": "^0.9.1",
     "buffer": "^6.0.3",
     "clipboard-polyfill": "^3.0.3",
-    "core-js": "3.25.1"
+    "core-js": "3.25.1",
+    "tslib": "^2.4.1"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^22.0.2",

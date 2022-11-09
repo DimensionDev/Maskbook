@@ -6,14 +6,14 @@ import json from '@rollup/plugin-json'
 import { join } from 'path'
 
 export default [
-    {
-        input: join(__dirname, './ecmascript-intl/index.ts'),
-        output: {
-            file: 'intl.js',
-            format: 'iife',
-        },
-        plugins: plugins(),
-    },
+    // {
+    //     input: join(__dirname, './ecmascript-intl/index.ts'),
+    //     output: {
+    //         file: 'intl.js',
+    //         format: 'iife',
+    //     },
+    //     plugins: plugins(),
+    // },
     {
         input: join(__dirname, './web-apis/index.ts'),
         output: {
@@ -31,9 +31,9 @@ export default [
         plugins: plugins(),
     },
     {
-        input: join(__dirname, './regenerator.js'),
+        input: join(__dirname, './lib-runtime.mjs'),
         output: {
-            file: 'regenerator.js',
+            file: 'lib-runtime.js',
             format: 'iife',
         },
         plugins: plugins(),

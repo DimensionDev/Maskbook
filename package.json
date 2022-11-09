@@ -97,7 +97,8 @@
       "web3@0.20.7>bignumber.js": "git+https://github.com/frozeman/bignumber.js-nolookahead.git#57692b3ecfc98bbdd6b3a516cb2353652ea49934",
       "@mui/base": "5.0.0-alpha.100",
       "@protobufjs/inquire": "1.1.0",
-      "@ethersproject/providers": "5.7.2"
+      "@ethersproject/providers": "5.7.2",
+      "reflect-metadata": "0.1.13"
     },
     "override comments": {
       "ipfs-utils": "see https://github.com/ipfs/js-ipfs-utils/issues/158",
@@ -150,7 +151,8 @@
       "immer@9.0.16": "patches/immer@9.0.16.patch",
       "@cyberlab/cyberconnect@4.2.2": "patches/@cyberlab__cyberconnect@4.2.2.patch",
       "fortmatic@2.2.1": "patches/fortmatic@2.2.1.patch",
-      "@walletconnect/client@1.7.8": "patches/@walletconnect__client@1.7.8.patch"
+      "@walletconnect/client@1.7.8": "patches/@walletconnect__client@1.7.8.patch",
+      "reflect-metadata@0.1.13": "patches/reflect-metadata@0.1.13.patch"
     }
   }
 }
