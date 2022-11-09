@@ -2,8 +2,9 @@ import type { ScamWarningAPI } from '../types/ScamWarning.js'
 import LRUCache from 'lru-cache'
 import urlcat from 'urlcat'
 import { fetchJSON } from '../helpers.js'
+import { ScalableBloomFilter } from 'bloom-filters'
 
-const cache = new LRUCache<string, OnlineCategory[] | ScamWarningAPI.Info[] | ScamWarningAPI.Info>({
+const cache = new LRUCache<string, JSON | ScamWarningAPI.Info>({
     max: 100,
     ttl: 300_000,
 })
@@ -22,51 +23,26 @@ export interface OnlineInfo {
     description: string
 }
 
-const baseURL =
-    'https://raw.githubusercontent.com/DimensionDev/Mask-Scam-List/feat/fetch-cryptoscan-db-data/providers/cryptoscan-db'
+const baseURL = 'https://raw.githubusercontent.com/DimensionDev/Mask-Scam-List/main/providers/cryptoscan-db/'
 
-export class CryptoscanDbAPI implements ScamWarningAPI.Provider {
-    async getCategories() {
-        const categoriesCacheKey = 'site-categories'
-        const inCache = cache.get<OnlineCategory[]>(categoriesCacheKey)
-        if (inCache) return inCache
+export class CryptoScanDbAPI implements ScamWarningAPI.Provider {
+    bloomFilter?: ScalableBloomFilter
 
-        const categories = await fetchJSON<OnlineCategory[]>(urlcat(baseURL, 'categories.json'))
+    async getBloomFilter() {
+        if (this.bloomFilter) return this.bloomFilter
+        const categoriesCacheKey = 'filter-config'
+        const filterConfigCache = cache.get<JSON>(categoriesCacheKey)
 
-        cache.set(categoriesCacheKey, categories)
-        return categories
-    }
+        if (filterConfigCache) {
+            this.bloomFilter = ScalableBloomFilter.fromJSON(filterConfigCache) as ScalableBloomFilter
+            return this.bloomFilter
+        }
 
-    async getSubCategories() {
-        const categoriesCacheKey = 'site-sub-categories'
-        const inCache = cache.get<OnlineCategory[]>(categoriesCacheKey)
-        if (inCache) return inCache
+        const filter = await fetchJSON<JSON>(urlcat(baseURL, 'filter/config.json'))
+        cache.set(categoriesCacheKey, filter)
 
-        const categories = await fetchJSON<OnlineCategory[]>(urlcat(baseURL, 'sub-categories.json'))
-
-        cache.set(categoriesCacheKey, categories)
-        return categories
-    }
-
-    async getSiteList() {
-        const listCacheKey = 'site-list'
-        const inCache = cache.get<ScamWarningAPI.Info[]>(listCacheKey)
-        if (inCache) return inCache
-
-        const categories = await this.getCategories()
-        const subCategories = await this.getSubCategories()
-
-        const result = await fetchJSON<OnlineInfo[]>(urlcat(baseURL, 'list.json'))
-        const infos = result.map((x) => {
-            return {
-                ...x,
-                category: categories.find((c) => c.id === x.category)?.value,
-                subcategory: categories.find((c) => c.id === x.subcategory)?.value,
-            }
-        })
-        cache.set('site-list', infos)
-
-        return infos
+        this.bloomFilter = ScalableBloomFilter.fromJSON(filter)
+        return this.bloomFilter as ScalableBloomFilter
     }
 
     async getScamWarning(key: string): Promise<ScamWarningAPI.Info | undefined> {
@@ -74,24 +50,17 @@ export class CryptoscanDbAPI implements ScamWarningAPI.Provider {
         const cacheSite = cache.get<ScamWarningAPI.Info>(cacheKey)
         if (cacheSite) return cacheSite
 
-        const list = await this.getSiteList()
-        if (!list) return
+        const filter = await this.getBloomFilter()
+        if (!filter.has(key)) return
 
-        return list.find((x) => x.name.toLowerCase() === key.toLowerCase())
+        return fetchJSON<ScamWarningAPI.Info>(urlcat(baseURL, `${key}.json`))
     }
 
     async getScamWarnings(keys: string[]): Promise<ScamWarningAPI.Info[] | undefined> {
-        const cacheKey = `site-${keys.join('-')}`
-        const cacheSite = cache.get<ScamWarningAPI.Info[]>(cacheKey)
-        if (cacheSite) return cacheSite
-
-        const categories = await this.getCategories()
-        const subCategories = await this.getSubCategories()
-        const list = await this.getSiteList()
-        if (!list) return
-
-        return keys
-            .map((x) => list.find((c) => c.name.toLowerCase() === x.toLowerCase()))
-            .filter(Boolean) as ScamWarningAPI.Info[]
+        const requests = keys.map((x) => this.getScamWarning(x))
+        const result = await Promise.allSettled(requests)
+        return result
+            .map((x) => (x.status === 'fulfilled' ? x.value : undefined))
+            .filter((x): x is ScamWarningAPI.Info => !!x)
     }
 }
