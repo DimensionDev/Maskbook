@@ -50,7 +50,6 @@ function webpack(flags: BuildFlagsExtended) {
         flags.mode === 'development' ? 'serve' : undefined,
         '--mode',
         flags.mode === 'development' ? 'development' : 'production',
-        flags.channel === 'e2e' && '--devtools',
         flags.progress && '--progress',
         flags.profiling && '--profile',
         // this command runs in the /packages/mask folder.
