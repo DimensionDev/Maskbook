@@ -1,3 +1,5 @@
+import { memo } from 'react'
+import { makeStyles } from '@masknet/theme'
 import { DOMProxy, LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { createReactRootShadowed, startWatch } from '../../../../utils/index.js'
 import { getInjectNodeInfo } from '../../utils/avatar.js'
@@ -5,9 +7,6 @@ import { searchFaceBookPostAvatarOnMobileSelector, searchFaceBookPostAvatarSelec
 import { NFTBadgeTimeline } from '../../../../plugins/Avatar/SNSAdaptor/NFTBadgeTimeline.js'
 import { isMobileFacebook } from '../../utils/isMobile.js'
 import { RSS3_KEY_SNS } from '../../../../plugins/Avatar/constants.js'
-import { memo } from 'react'
-import { makeStyles } from '@masknet/theme'
-import { Flags } from '../../../../../shared'
 
 const useStyles = makeStyles()(() => ({
     root: {

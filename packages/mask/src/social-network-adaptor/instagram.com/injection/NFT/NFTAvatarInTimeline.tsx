@@ -6,7 +6,6 @@ import { getInjectNodeInfo } from '../../utils/avatar.js'
 import { NFTBadgeTimeline } from '../../../../plugins/Avatar/SNSAdaptor/NFTBadgeTimeline.js'
 import { RSS3_KEY_SNS } from '../../../../plugins/Avatar/constants.js'
 import { searchInstagramPostAvatarSelector } from '../../utils/selector.js'
-import { Flags } from '../../../../../shared'
 
 const useStyles = makeStyles()(() => ({
     root: {
