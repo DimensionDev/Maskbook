@@ -23,7 +23,7 @@ function resolveLastRecognizedIdentityInner(
         const writer = await getCurrentUserInfo()
         if (!writer) return
 
-        ref.value = formatWriter(writer)
+        ref.value = formatWriter(writer, true)
     }
 
     assign()
@@ -33,15 +33,18 @@ function resolveLastRecognizedIdentityInner(
 
 function resolveCurrentVisitingIdentityInner(
     ref: SocialNetworkUI.CollectingCapabilities.IdentityResolveProvider['recognized'],
+    ownerRef: SocialNetworkUI.CollectingCapabilities.IdentityResolveProvider['recognized'],
     cancel: AbortSignal,
 ) {
     const assign = async () => {
         // get from mirror api
         const userId = getMirrorUserId(location.href)
+        const ownerId = ownerRef.value.identifier?.userId
+        const isOwner = !!(userId && ownerId && userId.toLowerCase() === ownerId.toLowerCase())
         if (userId) {
             const writer = await Mirror.getWriter(userId)
             if (writer) {
-                ref.value = formatWriter(writer)
+                ref.value = formatWriter(writer, isOwner)
                 return
             }
         }
@@ -61,10 +64,10 @@ function resolveCurrentVisitingIdentityInner(
             // when current page is dashboard
             const currentUser = await getCurrentUserInfo()
             if (!currentUser) return
-            ref.value = formatWriter(currentUser)
+            ref.value = formatWriter(currentUser, isOwner)
             return
         }
-        ref.value = formatWriter(writer)
+        ref.value = formatWriter(writer, isOwner)
     }
 
     assign()
@@ -84,6 +87,6 @@ export const CurrentVisitingIdentityProviderMirror: SocialNetworkUI.CollectingCa
     hasDeprecatedPlaceholderName: false,
     recognized: creator.EmptyIdentityResolveProviderState(),
     start(cancel) {
-        resolveCurrentVisitingIdentityInner(this.recognized, cancel)
+        resolveCurrentVisitingIdentityInner(this.recognized, IdentityProviderMirror.recognized, cancel)
     },
 }

@@ -13,10 +13,13 @@ import { HubDialog } from './components/HubDialog.js'
 import { ProfileCover } from './components/ProfileCover.js'
 import { AvatarDecorator } from './components/AvatarDecorator.js'
 import { WidgetDialog } from './components/WidgetDialog.js'
+import { SharedContextSettings } from '../settings/index.js'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
-    init(signal) {},
+    init(signal, context) {
+        SharedContextSettings.value = context
+    },
     ApplicationEntries: [
         {
             ApplicationEntryID: `${PLUGIN_ID}_Debugger`,

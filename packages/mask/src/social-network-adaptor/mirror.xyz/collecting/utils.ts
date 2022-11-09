@@ -7,7 +7,7 @@ import { mirrorBase } from '../base.js'
 
 export const getMirrorProfileUrl = (id: string) => urlcat('https://mirror.xyz/:id', { id })
 
-export function formatWriter(writer: Writer) {
+export function formatWriter(writer: Writer, isOwner: boolean) {
     return {
         avatar: writer.avatarURL,
         nickname: writer.displayName,
@@ -16,6 +16,7 @@ export function formatWriter(writer: Writer) {
         identifier: ProfileIdentifier.of(mirrorBase.networkIdentifier, formatEthereumAddress(writer.address)).unwrapOr(
             undefined,
         ),
+        isOwner,
     }
 }
 
