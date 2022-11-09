@@ -212,8 +212,6 @@ const facebookUI: SocialNetworkUI.Definition = {
     },
     configuration: {
         steganography: {
-            // ! the color image cannot compression resistance in Facebook
-            grayscaleAlgorithm: GrayscaleAlgorithm.LUMINANCE,
             // ! Change this might be a breaking change !
             password() {
                 const id =
