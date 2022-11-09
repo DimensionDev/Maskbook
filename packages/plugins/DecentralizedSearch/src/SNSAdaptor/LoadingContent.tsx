@@ -2,7 +2,6 @@ import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import { Typography, Box } from '@mui/material'
 import { useI18N } from '../locales/index.js'
-import { ENSPostExtraInfoWrapper } from './ENSPostExtraInfoWrapper.js'
 
 interface StyleProps {
     isMenuScroll?: boolean
@@ -55,15 +54,13 @@ export function LoadingContent() {
 
     const t = useI18N()
     return (
-        <ENSPostExtraInfoWrapper>
-            <Box className={classes.root}>
-                <div className={classes.preWrapper}>
-                    <div className={cx(classes.preContent, classes.loadingText)}>
-                        <Icons.CircleLoading className={classes.loadingIcon} />
-                        <Typography>{t.loading()}</Typography>
-                    </div>
+        <Box className={classes.root}>
+            <div className={classes.preWrapper}>
+                <div className={cx(classes.preContent, classes.loadingText)}>
+                    <Icons.CircleLoading className={classes.loadingIcon} />
+                    <Typography>{t.loading()}</Typography>
                 </div>
-            </Box>
-        </ENSPostExtraInfoWrapper>
+            </div>
+        </Box>
     )
 }

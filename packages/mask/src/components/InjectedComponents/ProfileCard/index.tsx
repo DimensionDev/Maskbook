@@ -3,12 +3,8 @@ import { Trans } from 'react-i18next'
 import { useUpdateEffect } from 'react-use'
 import { first } from 'lodash-es'
 import { Icons } from '@masknet/icons'
-import {
-    createInjectHooksRenderer,
-    useActivatedPluginsSNSAdaptor,
-    usePluginI18NField,
-} from '@masknet/plugin-infra/content-script'
-import { useAvailablePlugins } from '@masknet/plugin-infra'
+import { useActivatedPluginsSNSAdaptor, usePluginI18NField } from '@masknet/plugin-infra/content-script'
+import { useAvailablePlugins, getProfileTabContent } from '@masknet/plugin-infra'
 import { useSocialAccountsBySettings } from '@masknet/shared'
 import { EMPTY_LIST, PluginID, NetworkPluginID } from '@masknet/shared-base'
 import { LoadingBase, makeStyles, MaskTabList, useTabs } from '@masknet/theme'
@@ -24,12 +20,6 @@ interface Props extends withClasses<'text' | 'button' | 'root'> {
     identity: SocialIdentity
 }
 
-function getTabContent(tabId?: string) {
-    return createInjectHooksRenderer(useActivatedPluginsSNSAdaptor.visibility.useAnyMode, (x) => {
-        const tab = x.ProfileCardTabs?.find((x) => x.ID === tabId)
-        return tab?.UI?.TabContent
-    })
-}
 const useStyles = makeStyles()((theme) => {
     const isDark = theme.palette.mode === 'dark'
     return {
@@ -151,7 +141,7 @@ export const ProfileCard: FC<Props> = ({ identity, ...rest }) => {
     const [currentTab, onChange] = useTabs(first(tabs)?.id ?? PluginID.Collectible, ...tabs.map((tab) => tab.id))
 
     const component = useMemo(() => {
-        const Component = getTabContent(currentTab)
+        const Component = getProfileTabContent(currentTab)
 
         return <Component identity={identity} socialAccount={selectedSocialAccount} />
     }, [currentTab, identity?.publicKey, selectedSocialAccount])

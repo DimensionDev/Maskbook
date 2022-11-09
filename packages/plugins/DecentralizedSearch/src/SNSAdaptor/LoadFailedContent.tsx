@@ -1,7 +1,7 @@
 import { Typography, Box } from '@mui/material'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import { useI18N } from '../locales/index.js'
-import { ENSPostExtraInfoWrapper } from './ENSPostExtraInfoWrapper.js'
+import { DecentralizedSearchPostExtraInfoWrapper } from './DecentralizedSearchPostExtraInfoWrapper.js'
 
 interface StyleProps {
     isMenuScroll?: boolean
@@ -49,7 +49,7 @@ export function LoadFailedContent({
 
     const t = useI18N()
     return (
-        <ENSPostExtraInfoWrapper>
+        <DecentralizedSearchPostExtraInfoWrapper>
             <Box className={classes.root}>
                 <div className={classes.preWrapper}>
                     <div className={cx(classes.preContent, classes.loadFailedText)}>
@@ -64,6 +64,6 @@ export function LoadFailedContent({
                     </div>
                 </div>
             </Box>
-        </ENSPostExtraInfoWrapper>
+        </DecentralizedSearchPostExtraInfoWrapper>
     )
 }

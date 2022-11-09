@@ -9,7 +9,7 @@ import { ApplicationEntry } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
 import { Web3ContextProvider } from '@masknet/web3-hooks-base'
 import { CrossIsolationMessages, NetworkPluginID, PluginID } from '@masknet/shared-base'
-import { ChainId } from '@masknet/web3-shared-evm'
+import { ChainId, isValidAddress, isZeroAddress } from '@masknet/web3-shared-evm'
 import { setupStorage, storageDefaultValue } from '../storage/index.js'
 
 const sns: Plugin.SNSAdaptor.Definition<
@@ -37,7 +37,7 @@ const sns: Plugin.SNSAdaptor.Definition<
         },
         Utils: {
             shouldDisplay(keyword: string) {
-                return /[#$]\w+/.test(keyword)
+                return /[#$]\w+/.test(keyword) || (isValidAddress(keyword) && !isZeroAddress(keyword))
             },
         },
     },

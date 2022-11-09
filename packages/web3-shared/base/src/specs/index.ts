@@ -1533,3 +1533,8 @@ export interface Web3UI<ChainId, ProviderType, NetworkType> {
         ProviderIconClickBait?: React.ComponentType<ProviderIconClickBaitProps<ChainId, ProviderType, NetworkType>>
     }
 }
+
+export enum SearchKeywordType {
+    Domain = 'Domain',
+    Address = 'Address',
+}

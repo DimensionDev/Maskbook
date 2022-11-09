@@ -1,7 +1,7 @@
 import { useI18N } from '../locales/index.js'
 import { Icons } from '@masknet/icons'
 import { Typography, Box } from '@mui/material'
-import { ENSPostExtraInfoWrapper } from './ENSPostExtraInfoWrapper.js'
+import { DecentralizedSearchPostExtraInfoWrapper } from './DecentralizedSearchPostExtraInfoWrapper.js'
 import { makeStyles } from '@masknet/theme'
 
 interface StyleProps {
@@ -44,7 +44,7 @@ export function EmptyContent() {
 
     const t = useI18N()
     return (
-        <ENSPostExtraInfoWrapper>
+        <DecentralizedSearchPostExtraInfoWrapper>
             <Box className={classes.root}>
                 <div className={classes.preWrapper}>
                     <div className={classes.preContent}>
@@ -53,6 +53,6 @@ export function EmptyContent() {
                     </div>
                 </div>
             </Box>
-        </ENSPostExtraInfoWrapper>
+        </DecentralizedSearchPostExtraInfoWrapper>
     )
 }
