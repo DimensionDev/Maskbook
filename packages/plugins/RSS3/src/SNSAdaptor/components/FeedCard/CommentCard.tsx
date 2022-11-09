@@ -99,7 +99,7 @@ export const CommentCard: FC<CommentCardProps> = ({ feed, ...rest }) => {
                 <Translate.note
                     values={{
                         user,
-                        platform: action.platform!,
+                        platform: feed.platform!,
                         context: 'comment',
                     }}
                     components={{
@@ -109,7 +109,7 @@ export const CommentCard: FC<CommentCardProps> = ({ feed, ...rest }) => {
             </Typography>
             <Typography className={classes.comment}>{metadata?.body}</Typography>
             <div className={cx(classes.target, verbose ? classes.verbose : null)}>
-                {verbose ? <Typography classes={classes.originalLabel}>{t.original()}</Typography> : null}
+                {verbose ? <Typography className={classes.originalLabel}>{t.original()}</Typography> : null}
                 {commentTarget?.media?.[0].mime_type?.startsWith('image/') ? (
                     <Image
                         classes={{ container: classes.image }}

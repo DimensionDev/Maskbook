@@ -179,10 +179,7 @@ export namespace RSS3BaseAPI {
         profile_uri: string[]
         type: 'create' | 'update'
     }
-    interface FollowMetadata {
-        type_on_platform: Type[]
-        target: Omit<ProfileMetadata, 'expire_at'>
-    }
+    export interface FollowMetadata extends Omit<ProfileMetadata, 'expire_at'> {}
     interface LaunchMetadata {
         logo: URLString
         title: string
@@ -464,6 +461,7 @@ export namespace RSS3BaseAPI {
     export type NoteFeed = Web3FeedGeneric<Tag.Social, Type.Post | Type.Revise | Type.Mint>
     export type CommentFeed = Web3FeedGeneric<Tag.Social, Type.Comment>
     export type ProfileFeed = Web3FeedGeneric<Tag.Social, Type.Profile>
+    export type ProfileLinkFeed = Web3FeedGeneric<Tag.Social, Type.Follow | Type.Unfollow>
     export type GovernanceFeed = Web3FeedGeneric<Tag.Governance, Type.Propose | Type.Vote>
     export type VoteFeed = Web3FeedGeneric<Tag.Governance, Type.Vote>
     export type ProposeFeed = Web3FeedGeneric<Tag.Governance, Type.Propose>

@@ -67,6 +67,7 @@ const useStyles = makeStyles<void, 'title' | 'image' | 'content' | 'info' | 'bod
         },
         [`.${refs.image}`]: {
             width: 552,
+            marginTop: theme.spacing(1.5),
             [`& + .${refs.info}`]: {
                 marginTop: theme.spacing(1.5),
                 marginLeft: 0,
