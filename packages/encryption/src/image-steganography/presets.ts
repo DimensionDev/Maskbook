@@ -43,11 +43,11 @@ const libV2AlgrDefaults: Omit<EncodeOptions, 'text'> = {
 
 const Preset2021: Preset = {
     type: 'string',
-    description: 'the preset we used for payload V38',
+    description: 'the preset we used for payload V38 with v1 algorithm',
     width: 1200,
-    height: 682,
-    mask: null,
-    options: libV2AlgrDefaults,
+    height: 681,
+    mask: new URL('./masks/mask-v2.png', import.meta.url).toString(),
+    options: libV1AlgrDefaults,
 }
 
 const Preset2022: Preset = {
@@ -59,17 +59,20 @@ const Preset2022: Preset = {
     options: libV2AlgrDefaults,
 }
 
+const Preset2023: Preset = {
+    type: 'string',
+    description: 'the preset we used for payload V38',
+    width: 1200,
+    // TODO: use a different height with Preset 2021 and Preset 2022
+    height: 681,
+    mask: null,
+    options: libV2AlgrDefaults,
+}
+
 const dimensionPreset: readonly Preset[] = [
-    Preset2021,
+    Preset2023,
     Preset2022,
-    {
-        type: 'string',
-        description: 'the preset we used for payload V38 with v1 algorithm',
-        width: 1200,
-        height: 681,
-        mask: new URL('./masks/mask-v2.png', import.meta.url).toString(),
-        options: libV1AlgrDefaults,
-    },
+    // Preset2021,
     {
         type: 'string',
         description: 'legacy post',
@@ -112,9 +115,16 @@ export function findPreset(dimension: Dimension) {
     return dimensionPreset.find((d) => isSameDimension(d, dimension))
 }
 export function getPreset(preset: SteganographyPreset): Preset {
-    if (preset === SteganographyPreset.Preset2021) return Preset2021
-    if (preset === SteganographyPreset.Preset2022) return Preset2022
-    unreachable(preset)
+    switch (preset) {
+        case SteganographyPreset.Preset2021:
+            return Preset2021
+        case SteganographyPreset.Preset2022:
+            return Preset2022
+        case SteganographyPreset.Preset2023:
+            return Preset2023
+        default:
+            unreachable(preset)
+    }
 }
 function isSameDimension(dimension: Dimension, otherDimension: Dimension) {
     return dimension.width === otherDimension.width && dimension.height === otherDimension.height
