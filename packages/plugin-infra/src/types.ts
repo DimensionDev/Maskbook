@@ -377,6 +377,7 @@ export namespace Plugin.SNSAdaptor {
         lastRecognizedProfile: Subscription<IdentityResolved | undefined>
         currentVisitingProfile: Subscription<IdentityResolved | undefined>
         allPersonas?: Subscription<PersonaInformation[]>
+        getNextIDPlatform: () => NextIDPlatform | undefined
         getPersonaAvatar: (identifier: ECKeyIdentifier | null | undefined) => Promise<string | null | undefined>
         getSocialIdentity: (
             platform: NextIDPlatform,

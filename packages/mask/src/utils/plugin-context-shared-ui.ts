@@ -11,6 +11,7 @@ export const RestPartOfPluginUIContextShared: Omit<
     | keyof PartialSharedUIContext
     | 'lastRecognizedProfile'
     | 'currentVisitingProfile'
+    | 'getNextIDPlatform'
     | 'getSocialIdentity'
     | 'getPersonaAvatar'
     | 'ownProofChanged'

@@ -10,7 +10,11 @@ import {
     useChainContext,
 } from '@masknet/web3-hooks-base'
 import { makeStyles } from '@masknet/theme'
-import { useCurrentVisitingIdentity, useLastRecognizedIdentity } from '@masknet/plugin-infra'
+import {
+    useLastRecognizedIdentity,
+    useCurrentVisitingIdentity,
+    useCurrentVisitingSocialIdentity,
+} from '@masknet/plugin-infra'
 
 export interface ConsoleContentProps {
     onClose?: () => void
@@ -34,6 +38,7 @@ export function ConsoleContent(props: ConsoleContentProps) {
     const { value: lookedAddress } = useLookupAddress(currentPluginID, reversedName)
     const currentVisitingIdentity = useCurrentVisitingIdentity()
     const lastRecognizedIdentity = useLastRecognizedIdentity()
+    const currentVisitingSocialIdentity = useCurrentVisitingSocialIdentity()
 
     const table: Array<{ name: string; content: JSX.Element }> = [
         {
@@ -85,10 +90,18 @@ export function ConsoleContent(props: ConsoleContentProps) {
             ),
         },
         {
-            name: 'Last Regconized Identity',
+            name: 'Last Recognized Identity',
             content: (
                 <Typography variant="body2">
                     {lastRecognizedIdentity?.identifier?.userId} {lastRecognizedIdentity?.isOwner ? 'OWNER' : ''}
+                </Typography>
+            ),
+        },
+        {
+            name: 'Current Visiting Public Key',
+            content: (
+                <Typography variant="body2" style={{ width: 280, wordBreak: 'break-all' }}>
+                    {currentVisitingSocialIdentity?.value?.publicKey}
                 </Typography>
             ),
         },

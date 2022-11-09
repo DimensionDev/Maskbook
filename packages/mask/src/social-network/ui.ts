@@ -20,7 +20,7 @@ import { getCurrentIdentifier, getCurrentSNSNetwork } from '../social-network-ad
 import { MaskMessages, setupReactShadowRootEnvironment } from '../utils/index.js'
 import '../utils/debug/general.js'
 import { RestPartOfPluginUIContextShared } from '../utils/plugin-context-shared-ui.js'
-import { definedSocialNetworkUIs } from './define.js'
+import { activateSocialNetworkUI, definedSocialNetworkUIs } from './define.js'
 import type { SocialNetworkUI } from '@masknet/types'
 
 const definedSocialNetworkUIsResolved = new Map<string, SocialNetworkUI.Definition>()
@@ -148,6 +148,7 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
                     lastRecognizedProfile: lastRecognizedSub,
                     currentVisitingProfile: currentVisitingSub,
                     allPersonas: allPersonaSub,
+                    getNextIDPlatform: () => activatedSocialNetworkUI.configuration.nextIDConfig?.platform,
                     getPersonaAvatar: Services.Identity.getPersonaAvatar,
                     getSocialIdentity: Services.Identity.querySocialIdentity,
                     ownProofChanged: MaskMessages.events.ownProofChanged,

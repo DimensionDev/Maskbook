@@ -1,11 +1,10 @@
-import type { NextIDPlatform } from '@masknet/shared-base'
 import { useSocialIdentity } from './useSocialIdentity.js'
 import { useLastRecognizedIdentity } from './useLastRecognizedIdentity.js'
 
 /**
  * Get the social identity of the last recognized identity
  */
-export function useLastRecognizedSocialIdentity(platform: NextIDPlatform) {
+export function useLastRecognizedSocialIdentity() {
     const identity = useLastRecognizedIdentity()
-    return useSocialIdentity(platform, identity)
+    return useSocialIdentity(identity)
 }
