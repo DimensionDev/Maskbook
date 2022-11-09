@@ -10,7 +10,7 @@ import type { ProfileInformation } from '@masknet/shared-base'
 import type { SocialIdentity } from '@masknet/web3-shared-base'
 import { activatedSocialNetworkUI, globalUIState } from '../../social-network/index.js'
 import Services from '../../extension/service.js'
-import { MaskMessages, sortPersonaBindings } from '../../utils/index.js'
+import { MaskMessages } from '../../utils/index.js'
 
 async function queryPersonaFromDB(identityResolved: IdentityResolved) {
     if (!identityResolved.identifier) return
