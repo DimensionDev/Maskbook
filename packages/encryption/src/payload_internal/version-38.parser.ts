@@ -19,7 +19,7 @@ import {
     CheckedError,
     OptionalResult,
     ProfileIdentifier,
-    decompressSecp256k1Point,
+    decompressK256Point,
 } from '@masknet/shared-base'
 
 const decodeUint8Array = decodeUint8ArrayF(PayloadException.InvalidPayload, PayloadException.DecodeFailed)
@@ -128,7 +128,7 @@ async function decodePublicSharedAESKey(
 async function decodeECDHPublicKey(compressedPublic: string): Promise<OptionalResult<EC_Key, CryptoException>> {
     const key = await andThenAsync(decodeUint8ArrayCrypto(compressedPublic), async (val) =>
         (
-            await Result.wrapAsync(() => decompressSecp256k1Point(val))
+            await Result.wrapAsync(() => decompressK256Point(val))
         ).mapErr((e) => new CheckedError(CryptoException.InvalidCryptoKey, e)),
     )
 

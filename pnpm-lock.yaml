@@ -294,9 +294,15 @@ importers:
 
   packages/base:
     dependencies:
+      '@masknet/kit':
+        specifier: 0.1.0
+        version: 0.1.0
       pvtsutils:
         specifier: ^1.3.2
         version: 1.3.2
+      tiny-secp256k1:
+        specifier: ^2.2.1
+        version: 2.2.1
       ts-results-es:
         specifier: ^3.5.0
         version: 3.5.0
