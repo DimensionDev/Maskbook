@@ -5,7 +5,7 @@ import type { PayloadWellFormed, Signature } from '../index.js'
 import { CryptoException, PayloadException } from '../types/index.js'
 import { encryptWithAES, exportCryptoKeyToJWK } from '../utils/index.js'
 import { get_v38PublicSharedCryptoKey } from './shared.js'
-import { CheckedError, compressK256Point } from '@masknet/shared-base'
+import { CheckedError, compressK256Point } from '@masknet/base'
 
 const enum Index {
     authorPublicKey = 5,

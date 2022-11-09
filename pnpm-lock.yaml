@@ -507,12 +507,12 @@ importers:
 
   packages/encryption:
     dependencies:
+      '@masknet/base':
+        specifier: workspace:*
+        version: link:../base
       '@masknet/secp256k1-webcrypto':
         specifier: 1.0.0
         version: 1.0.0
-      '@masknet/shared-base':
-        specifier: workspace:*
-        version: link:../shared-base
       '@masknet/stego-js':
         specifier: 0.14.2
         version: 0.14.2

@@ -5,7 +5,7 @@ import {
     EC_Private_CryptoKey,
     PostIVIdentifier,
     registerSerializableClass,
-} from '@masknet/shared-base'
+} from '@masknet/base'
 import type { SerializableTypedMessages } from '@masknet/typed-message'
 import type { EC_Key, EC_KeyCurveEnum } from '../payload/index.js'
 

@@ -1,7 +1,7 @@
 import type { PayloadParserResult } from './index.js'
 import type { PayloadParseResult } from '../payload/index.js'
 import { CryptoException, PayloadException, assertArray, assertUint8Array } from '../types/index.js'
-import { andThenAsync, CheckedError, decompressK256Raw, OptionalResult } from '@masknet/shared-base'
+import { andThenAsync, CheckedError, decompressK256Raw, OptionalResult } from '@masknet/base'
 import { Ok, Result } from 'ts-results-es'
 import { EC_Key, EC_KeyCurveEnum } from '../payload/types.js'
 import { decodeMessagePackF, assertIVLengthEq16, importAES, importEC_Key } from '../utils/index.js'

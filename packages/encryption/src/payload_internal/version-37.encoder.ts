@@ -1,4 +1,4 @@
-import { compressK256KeyRaw } from '@masknet/shared-base'
+import { compressK256KeyRaw } from '@masknet/base'
 import { Ok } from 'ts-results-es'
 import type { PayloadWellFormed } from '../index.js'
 import { EC_KeyCurveEnum } from '../payload/types.js'

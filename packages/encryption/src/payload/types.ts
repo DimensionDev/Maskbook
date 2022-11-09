@@ -1,6 +1,6 @@
 // This file contains normalized Payload.
 // Internal payload should not be exported
-import type { ProfileIdentifier, CheckedError, OptionalResult, EC_CryptoKey, AESCryptoKey } from '@masknet/shared-base'
+import type { ProfileIdentifier, CheckedError, OptionalResult, EC_CryptoKey, AESCryptoKey } from '@masknet/base'
 import type { Result, Option } from 'ts-results-es'
 import type { CryptoException, PayloadException } from '../types/index.js'
 
