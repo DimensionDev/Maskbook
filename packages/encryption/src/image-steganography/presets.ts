@@ -45,9 +45,9 @@ const Preset2021: Preset = {
     type: 'string',
     description: 'the preset we used for payload V38',
     width: 1200,
-    height: 681,
-    mask: new URL('./masks/mask-v2.png', import.meta.url).toString(),
-    options: libV1AlgrDefaults,
+    height: 682,
+    mask: null,
+    options: libV2AlgrDefaults,
 }
 
 const Preset2022: Preset = {
@@ -62,6 +62,14 @@ const Preset2022: Preset = {
 const dimensionPreset: readonly Preset[] = [
     Preset2021,
     Preset2022,
+    {
+        type: 'string',
+        description: 'the preset we used for payload V38 with v1 algorithm',
+        width: 1200,
+        height: 681,
+        mask: new URL('./masks/mask-v2.png', import.meta.url).toString(),
+        options: libV1AlgrDefaults,
+    },
     {
         type: 'string',
         description: 'legacy post',
