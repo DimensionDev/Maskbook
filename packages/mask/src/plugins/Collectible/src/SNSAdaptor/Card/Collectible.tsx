@@ -40,7 +40,7 @@ const useStyles = makeStyles<{ currentTab: string }>()((theme, { currentTab }) =
             flex: 1,
             backgroundColor: theme.palette.maskColor.bg,
             overflow: 'auto',
-            maxHeight: currentTab === 'about' ? 800 : 382,
+            maxHeight: currentTab === 'about' ? 800 : 327,
             borderRadius: '0 0 12px 12px',
             scrollbarWidth: 'none',
             background: '#fff !important',
