@@ -66,6 +66,7 @@ function resolveLastRecognizedIdentityInner(
                 avatar,
                 nickname,
                 identifier: ProfileIdentifier.of(twitterBase.networkIdentifier, handle).unwrapOr(undefined),
+                isOwner: true,
             }
         }
     }

@@ -112,7 +112,7 @@ export namespace SocialNetworkUI {
             /** Inject UI to the setting dialog */
             PluginSettingsDialog?(signal: AbortSignal): void
             setupWizard?(signal: AbortSignal, for_: PersonaIdentifier): void
-            openNFTAvatarSettinxgDialog?(): void
+            openNFTAvatarSettingDialog?(): void
 
             /**
              * @deprecated

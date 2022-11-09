@@ -1,4 +1,5 @@
 export * from './types.js'
+export * from './hooks/index.js'
 export { createPluginMessage, type DefaultPluginMessage, type PluginMessageEmitter } from './utils/message.js'
 export { createPluginRPC, createPluginRPCGenerator } from './utils/rpc.js'
 export {
@@ -8,9 +9,3 @@ export {
     registerPlugin,
     registeredPlugins,
 } from './manager/store.js'
-export {
-    useActivatedPluginWeb3State,
-    useActivatedPluginWeb3UI,
-    useAllPluginsWeb3State,
-    useAvailablePlugins,
-} from './hooks/index.js'

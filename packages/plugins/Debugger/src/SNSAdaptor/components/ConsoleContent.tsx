@@ -1,7 +1,4 @@
-import { useState } from 'react'
-import { Button, Checkbox, FormControlLabel, Table, TableBody, TableCell, TableRow, Typography } from '@mui/material'
-import { getEnumAsArray } from '@masknet/kit'
-import { PluginID } from '@masknet/shared-base'
+import { Table, TableBody, TableCell, TableRow, Typography } from '@mui/material'
 import {
     useBalance,
     useBlockNumber,
@@ -12,11 +9,8 @@ import {
     useWeb3State,
     useChainContext,
 } from '@masknet/web3-hooks-base'
-import { WalletMessages } from '@masknet/plugin-wallet'
-import { useSelectAdvancedSettings } from '@masknet/shared'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { makeStyles, useCustomSnackbar } from '@masknet/theme'
-import { ChainId } from '@masknet/web3-shared-evm'
+import { makeStyles } from '@masknet/theme'
+import { useCurrentVisitingIdentity, useLastRecognizedIdentity } from '@masknet/plugin-infra'
 
 export interface ConsoleContentProps {
     onClose?: () => void
@@ -36,18 +30,11 @@ export function ConsoleContent(props: ConsoleContentProps) {
     const { value: balance = '0' } = useBalance()
     const { value: blockNumber = 0 } = useBlockNumber()
     const { value: blockTimestamp = 0 } = useBlockTimestamp()
+    const { value: reversedName } = useReverseAddress(currentPluginID, account)
+    const { value: lookedAddress } = useLookupAddress(currentPluginID, reversedName)
+    const currentVisitingIdentity = useCurrentVisitingIdentity()
+    const lastRecognizedIdentity = useLastRecognizedIdentity()
 
-    const onSelectGasSettings = useSelectAdvancedSettings(currentPluginID)
-
-    const [pluginID, setPluginID] = useState<PluginID>(PluginID.RSS3)
-    const plugins = getEnumAsArray(PluginID) as Array<{ key: PluginID; value: string }>
-
-    const [quickMode, setQuickMode] = useState(true)
-    const { setDialog } = useRemoteControlledDialog(WalletMessages.events.ApplicationDialogUpdated)
-    const { value: reversedName, retry: retryReversedName } = useReverseAddress(currentPluginID, account)
-    const { value: lookedAddress, retry: retryLookedAddress } = useLookupAddress(currentPluginID, reversedName)
-
-    const { showSnackbar } = useCustomSnackbar()
     const table: Array<{ name: string; content: JSX.Element }> = [
         {
             name: 'ChainId',
@@ -82,116 +69,27 @@ export function ConsoleContent(props: ConsoleContentProps) {
             content: <Typography variant="body2">{blockTimestamp}</Typography>,
         },
         {
-            name: 'Lookup Address',
-            content: (
-                <Typography variant="body2">
-                    <span>{lookedAddress}</span>
-                    <br />
-                    <Button
-                        size="small"
-                        onClick={() => {
-                            retryLookedAddress()
-                        }}>
-                        Lookup Address
-                    </Button>
-                </Typography>
-            ),
-        },
-        {
             name: 'Reversed Name',
+            content: <Typography variant="body2">{reversedName}</Typography>,
+        },
+        {
+            name: 'Looked Address',
+            content: <Typography variant="body2">{lookedAddress}</Typography>,
+        },
+        {
+            name: 'Current Visiting Identity',
             content: (
                 <Typography variant="body2">
-                    <span>{reversedName}</span>
-                    <br />
-                    <Button
-                        size="small"
-                        onClick={() => {
-                            retryReversedName()
-                        }}>
-                        Reversed Name
-                    </Button>
+                    {currentVisitingIdentity?.identifier?.userId} {currentVisitingIdentity?.isOwner ? 'OWNER' : ''}
                 </Typography>
             ),
         },
         {
-            name: 'Gas Settings',
+            name: 'Last Regconized Identity',
             content: (
-                <Button
-                    size="small"
-                    onClick={async () => {
-                        const gasSettings = await onSelectGasSettings({
-                            chainId: ChainId.Matic,
-                            slippageTolerance: 1,
-                            disableSlippageTolerance: true,
-                            transaction: {
-                                from: account,
-                                to: account,
-                                value: '1',
-                                gas: 30000,
-                                // this field could be overridden with the instant gas options
-                                maxFeePerGas: 3800000000,
-                            },
-                        })
-                        console.log(gasSettings)
-                    }}>
-                    Gas Settings
-                </Button>
-            ),
-        },
-        {
-            name: 'Snackbar',
-            content: (
-                <Button
-                    size="small"
-                    onClick={() => {
-                        showSnackbar('test', {
-                            variant: 'success',
-                            message: 'test message',
-                            autoHideDuration: 100000000,
-                        })
-                    }}>
-                    Show
-                </Button>
-            ),
-        },
-        {
-            name: 'Plugin Settings',
-            content: (
-                <>
-                    <select onChange={(event) => setPluginID(event.target.value as PluginID)}>
-                        {plugins.map((x) => (
-                            <option key={x.value} value={x.value}>
-                                {x.key}
-                            </option>
-                        ))}
-                    </select>
-                    <br />
-                    <FormControlLabel
-                        control={
-                            <Checkbox
-                                checked={quickMode}
-                                onChange={(event) => setQuickMode(event.currentTarget.checked)}
-                            />
-                        }
-                        label="Quick Mode"
-                    />
-                    <br />
-                    <Button
-                        size="small"
-                        onClick={() => {
-                            setDialog({
-                                open: true,
-                                settings: {
-                                    quickMode,
-                                    switchTab: {
-                                        focusPluginID: pluginID,
-                                    },
-                                },
-                            })
-                        }}>
-                        Open
-                    </Button>
-                </>
+                <Typography variant="body2">
+                    {lastRecognizedIdentity?.identifier?.userId} {lastRecognizedIdentity?.isOwner ? 'OWNER' : ''}
+                </Typography>
             ),
         },
     ]

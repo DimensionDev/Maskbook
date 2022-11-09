@@ -70,8 +70,8 @@ async function collectPostInfo(node: HTMLElement | null, cancel: AbortSignal) {
     return {
         postId,
         writers: {
-            author: formatWriter(publisher.author),
-            coAuthors: publisher?.coAuthors.map((x) => formatWriter(x)),
+            author: formatWriter(publisher.author, false),
+            coAuthors: publisher?.coAuthors.map((x) => formatWriter(x, false)),
         },
     }
 }
