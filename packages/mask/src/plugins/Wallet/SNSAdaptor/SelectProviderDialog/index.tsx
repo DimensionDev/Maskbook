@@ -13,7 +13,6 @@ import { PluginProviderRender } from './PluginProviderRender.js'
 import { pluginIDSettings } from '../../../../../shared/legacy-settings/settings.js'
 import { getSiteType, isDashboardPage, NetworkPluginID } from '@masknet/shared-base'
 import { delay } from '@masknet/kit'
-import { ProviderType } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -57,10 +56,9 @@ export function SelectProviderDialog(props: SelectProviderDialogProps) {
         if (hasNativeAPI) nativeAPI?.api.misc_openCreateWalletView()
     }, [open])
     // #endregion
-    const isOpera = navigator.userAgent.includes('OPR/')
     const site = getSiteType()
     const networks = getRegisteredWeb3Networks()
-    const providers = getRegisteredWeb3Providers().filter((x) => !(!isOpera && x.type === ProviderType.Opera)) ?? []
+    const providers = getRegisteredWeb3Providers()
     const pluginIDs = useValueRef(pluginIDSettings)
     const [undeterminedPluginID, setUndeterminedPluginID] = useState(site ? pluginIDs[site] : undefined)
 
