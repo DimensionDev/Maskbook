@@ -106,6 +106,7 @@ function resolveLastRecognizedIdentityMobileInner(
             ref.value = {
                 ...ref.value,
                 identifier,
+                isOwner: true,
             }
         }
     }
@@ -121,6 +122,7 @@ function getFirstSlug() {
 
 function resolveCurrentVisitingIdentityInner(
     ref: Next.CollectingCapabilities.IdentityResolveProvider['recognized'],
+    ownerRef: Next.CollectingCapabilities.IdentityResolveProvider['recognized'],
     cancel: AbortSignal,
 ) {
     const update = async (twitterId: string) => {
@@ -129,6 +131,8 @@ function resolveCurrentVisitingIdentityInner(
 
         const nickname = user.legacy.name
         const handle = user.legacy.screen_name
+        const ownerHandle = ownerRef.value.identifier?.userId
+        const isOwner = !!(ownerHandle && handle.toLowerCase() === ownerHandle.toLowerCase())
         const avatar = user.legacy.profile_image_url_https.replace(/_normal(\.\w+)$/, '_400x400$1')
         const bio = user.legacy.description
         const homepage = user.legacy.entities.url?.urls[0]?.expanded_url ?? ''
@@ -139,6 +143,7 @@ function resolveCurrentVisitingIdentityInner(
             avatar,
             bio,
             homepage,
+            isOwner,
         }
     }
 
@@ -171,6 +176,6 @@ export const CurrentVisitingIdentityProviderTwitter: Next.CollectingCapabilities
     hasDeprecatedPlaceholderName: false,
     recognized: creator.EmptyIdentityResolveProviderState(),
     start(cancel) {
-        resolveCurrentVisitingIdentityInner(this.recognized, cancel)
+        resolveCurrentVisitingIdentityInner(this.recognized, IdentityProviderTwitter.recognized, cancel)
     },
 }
