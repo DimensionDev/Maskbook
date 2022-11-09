@@ -4,7 +4,7 @@ import {
     decodeTypedMessageFromDeprecatedFormat,
     TypedMessage,
 } from '@masknet/typed-message'
-import { AESCryptoKey, EC_Public_CryptoKey, andThenAsync } from '@masknet/shared-base'
+import { AESCryptoKey, EC_Public_CryptoKey, andThenAsync } from '@masknet/base'
 import { None, Result } from 'ts-results-es'
 import type { PayloadParseResult } from '../payload/index.js'
 import { decryptWithAES, importAES } from '../utils/index.js'

@@ -107,8 +107,10 @@ export const CardFrame: FC<CardFrameProps> = ({
                         <Typography ml="4px">{new BigNumber(feed.fee).toFixed(6)}</Typography>
                     </div>
                 ) : null}
-                {ProviderPlatformIcon ? <ProviderPlatformIcon className={classes.icon} size={18} /> : null}
-                {PrimaryPlatformIcon ? <PrimaryPlatformIcon className={classes.icon} size={18} /> : null}
+                {ProviderPlatformIcon ? (
+                    <ProviderPlatformIcon className={classes.icon} height={18} width="auto" />
+                ) : null}
+                {PrimaryPlatformIcon ? <PrimaryPlatformIcon className={classes.icon} height={18} width="auto" /> : null}
                 <ShadowRootTooltip title={formatDateTime(new Date(feed.timestamp), 'yyyy-MM-dd HH:mm:ss')}>
                     <Typography className={classes.timestamp}>{formatTimestamp(feed.timestamp)}</Typography>
                 </ShadowRootTooltip>

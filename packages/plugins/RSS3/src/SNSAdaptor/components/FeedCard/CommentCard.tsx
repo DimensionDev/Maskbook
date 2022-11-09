@@ -9,6 +9,7 @@ import { useAddressLabel } from '../../hooks/index.js'
 import { CardFrame, FeedCardProps } from '../base.js'
 import { CardType } from '../share.js'
 import { Label } from './common.js'
+import { useMarkdownStyles } from './useMarkdownStyles.js'
 
 const useStyles = makeStyles<void, 'image' | 'verbose' | 'content'>()((theme, _, refs) => ({
     summary: {
@@ -52,12 +53,6 @@ const useStyles = makeStyles<void, 'image' | 'verbose' | 'content'>()((theme, _,
         fontSize: 14,
         color: theme.palette.maskColor.second,
     },
-    markdown: {
-        wordBreak: 'break-all',
-        img: {
-            maxWidth: '100%',
-        },
-    },
     content: {
         color: theme.palette.maskColor.main,
         whiteSpace: 'pre-wrap',
@@ -87,6 +82,7 @@ interface CommentCardProps extends Omit<FeedCardProps, 'feed'> {
 export const CommentCard: FC<CommentCardProps> = ({ feed, ...rest }) => {
     const { verbose } = rest
     const { classes, cx } = useStyles()
+    const { classes: mdClasses } = useMarkdownStyles()
 
     const t = useI18N()
 
@@ -124,7 +120,7 @@ export const CommentCard: FC<CommentCardProps> = ({ feed, ...rest }) => {
                     />
                 ) : null}
                 {verbose && commentTarget?.body ? (
-                    <Markdown className={classes.markdown}>{commentTarget.body}</Markdown>
+                    <Markdown className={mdClasses.markdown}>{commentTarget.body}</Markdown>
                 ) : (
                     <Typography className={classes.content}>{commentTarget?.body}</Typography>
                 )}

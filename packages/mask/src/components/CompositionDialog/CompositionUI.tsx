@@ -108,7 +108,10 @@ export interface CompositionRef {
     startPlugin(id: string): void
     reset(): void
 }
-export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>((props, ref) => {
+export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(function CompositionDialogUI(
+    props,
+    ref,
+) {
     const { classes, cx, theme } = useStyles()
     const { t } = useI18N()
     const id = useId()

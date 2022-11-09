@@ -3,7 +3,6 @@ import { Result, Ok, Err, Some, Option, None } from 'ts-results-es'
 import type { ReactElement, ReactNode } from 'react'
 import z_schema from 'z-schema'
 import draft, { enableMapSet, Draft } from 'immer'
-enableMapSet()
 
 const metadataSchemaStore = new Map<string, object>()
 export function getKnownMetadataKeys() {
@@ -80,12 +79,19 @@ export function createRenderWithMetadata<T>(metadataReader: (meta: TypedMessage[
     }
 }
 
+let immer_setup = false
 export function editTypedMessageMeta<T extends TypedMessage>(
     typedMessage: T,
     edit: (meta: NonNullable<Draft<TypedMessage['meta']>>) => void,
 ): T {
+    if (!immer_setup) {
+        enableMapSet()
+        immer_setup = true
+    }
     return draft(typedMessage, (e) => {
-        e.meta && edit(e.meta)
+        if (!e.meta) e.meta = new Map()
+        edit(e.meta)
+        if (e.meta.size === 0) e.meta = undefined
     })
 }
 

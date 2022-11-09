@@ -1,19 +1,13 @@
-import { useContext, useState } from 'react'
+import { useContext, forwardRef, useImperativeHandle } from 'react'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { SourceType } from '@masknet/web3-shared-base'
-import { Box, Typography, Link } from '@mui/material'
-import { useI18N } from '../locales/index.js'
-import { Icons } from '@masknet/icons'
-import { EmptyContent } from './EmptyContent.js'
-import { LoadingContent } from './LoadingContent.js'
-import { LoadFailedContent } from './LoadFailedContent.js'
-import { TopAndLastOffers } from './TopAndLastOffers.js'
+import { Box, Typography, Link, alpha } from '@mui/material'
 import { ENSProvider, ENSContext, SearchResultInspectorProps } from './context.js'
 import { CollectibleState } from './hooks/useCollectibleState.js'
-import { NextIdBadge } from './NextIdBadge.js'
 import { SocialAccountList } from './SocialAccountList.js'
-import { ENSPostExtraInfoWrapper } from './ENSPostExtraInfoWrapper.js'
+import { SocialTooltip } from './SocialTooltip.js'
 import { makeStyles } from '@masknet/theme'
+import { Icons } from '@masknet/icons'
 
 interface StyleProps {
     isMenuScroll?: boolean
@@ -24,31 +18,39 @@ const useStyles = makeStyles<StyleProps>()((theme) => {
         root: {
             padding: theme.spacing(0, 2),
         },
-        coverCard: {
+        ensInfo: {
+            height: 42,
+            display: 'flex',
+            alignItems: 'center',
+            marginBottom: 16,
+        },
+        ensIcon: {
+            marginRight: 4,
+        },
+        ensDomain: {
+            fontWeight: 700,
+            color: theme.palette.common.black,
+            fontSize: 14,
+            lineHeight: '18px',
+        },
+        twitterIcon: {
+            height: 20,
+            width: 20,
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
-            height: 256,
-            marginBottom: 12,
-            backgroundImage: `url(${new URL('./assets/ENSCover.svg', import.meta.url)})`,
-            backgroundSize: 'contain',
+            backgroundColor: theme.palette.maskColor.dark,
+            borderRadius: 999,
         },
-        coverText: {
-            fontSize: 24,
-            fontWeight: 700,
-            width: '100%',
-            textAlign: 'center',
-            color: theme.palette.common.white,
+        reversedAddress: {
+            color: theme.palette.maskColor.secondaryDark,
+            fontSize: 14,
+            lineHeight: '18px',
         },
         nextIdVerified: {
             display: 'flex',
             alignItems: 'center',
-            margin: '0px 12px 28px',
-        },
-        nextIdVerifiedTitle: {
-            color: theme.palette.maskColor.secondaryDark,
-            marginRight: 12,
-            fontSize: 16,
+            marginBottom: 12,
         },
         nextIdVerifiedTwitterName: {
             color: theme.palette.maskColor.dark,
@@ -57,17 +59,21 @@ const useStyles = makeStyles<StyleProps>()((theme) => {
             fontSize: 16,
         },
         rightSpace: {
-            marginRight: 12,
+            marginRight: 6,
         },
         link: {
             display: 'flex',
             alignItems: 'center',
             textDecoration: 'none !important',
         },
+        linkOutIcon: {
+            color: theme.palette.maskColor.dark,
+            cursor: 'pointer',
+        },
         bindingsWrapper: {
             display: 'grid',
             gridAutoFlow: 'column',
-            width: 300,
+            width: 520,
             alignItems: 'center',
             overflow: 'hidden',
         },
@@ -75,91 +81,97 @@ const useStyles = makeStyles<StyleProps>()((theme) => {
             display: 'flex',
             marginRight: 12,
             alignItems: 'center',
+            height: 36,
+            padding: theme.spacing(0, 1),
+            background: alpha(theme.palette.common.white, 0.5),
+            borderRadius: 8,
         },
     }
 })
 
-export function SearchResultInspectorContent() {
-    const t = useI18N()
+export const SearchResultInspectorContent = forwardRef(function (
+    props: SearchResultInspectorProps,
+    ref: React.ForwardedRef<unknown>,
+) {
     const { classes, cx } = useStyles({})
-    const [rightBoundary, setRightBoundary] = useState<number | undefined>()
     const {
         isLoading,
         isError,
-        reversedAddress,
         retry,
+        reversedAddress,
         validNextIdTwitterBindings,
         firstValidNextIdTwitterBinding,
-        restOfValidNextIdTwitterBindings,
         domain,
         tokenId,
     } = useContext(ENSContext)
 
-    if (isLoading) return <LoadingContent />
-
-    if (reversedAddress === undefined) return null
-
-    if (!reversedAddress || !tokenId) return <EmptyContent />
-
-    if (isError) return <LoadFailedContent isLoading={isLoading} retry={retry} />
+    useImperativeHandle(ref, () => ({ isLoading, reversedAddress, domain, isError, tokenId }), [
+        isLoading,
+        reversedAddress,
+        domain,
+        isError,
+        tokenId,
+        retry,
+    ])
 
     return (
-        <ENSPostExtraInfoWrapper>
-            <CollectibleState.Provider
-                initialState={{
-                    chainId: ChainId.Mainnet,
-                    tokenId,
-                    contractAddress: reversedAddress,
-                    sourceType: SourceType.OpenSea,
-                }}>
-                <Box className={classes.root}>
-                    <div className={classes.coverCard}>
-                        <Typography className={classes.coverText}>{domain}</Typography>
+        <CollectibleState.Provider
+            initialState={{
+                chainId: ChainId.Mainnet,
+                tokenId: tokenId ?? '',
+                contractAddress: reversedAddress ?? '',
+                sourceType: SourceType.OpenSea,
+            }}>
+            <Box className={classes.root}>
+                <section className={classes.ensInfo}>
+                    <Icons.ETH size={30} className={classes.ensIcon} />
+                    <div>
+                        <Typography className={classes.ensDomain}>{domain}</Typography>
+                        <Typography className={classes.reversedAddress}>{reversedAddress}</Typography>
                     </div>
-                    {/* Hide it temporarily <SourceSwitcher /> */}
-                    <TopAndLastOffers />
-                    {firstValidNextIdTwitterBinding?.identity ? (
-                        <div className={classes.nextIdVerified}>
-                            <Typography className={classes.nextIdVerifiedTitle}>
-                                {t.associated_social_accounts()}
-                            </Typography>
-                            <section
-                                className={classes.bindingsWrapper}
-                                ref={(e) => {
-                                    setRightBoundary(e?.getBoundingClientRect().right)
-                                }}>
-                                {validNextIdTwitterBindings.map((x, i) => (
-                                    <div key={i} className={classes.badge}>
+                </section>
+                {firstValidNextIdTwitterBinding?.identity ? (
+                    <div className={classes.nextIdVerified}>
+                        <section className={classes.bindingsWrapper}>
+                            {validNextIdTwitterBindings.map((x, i) => (
+                                <SocialTooltip key={i}>
+                                    <div className={classes.badge}>
                                         <Link
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            className={cx(classes.link, classes.rightSpace)}
+                                            className={classes.link}
                                             href={`https://twitter.com/${x.identity}`}>
-                                            <Icons.TwitterRoundWithNoBorder width={20} height={20} />
-                                            <Typography className={classes.nextIdVerifiedTwitterName}>
+                                            <div className={classes.twitterIcon}>
+                                                <Icons.Twitter width={12} height={12} />
+                                            </div>
+                                            <Typography
+                                                className={cx(classes.nextIdVerifiedTwitterName, classes.rightSpace)}>
                                                 {x.identity}
                                             </Typography>
+                                            <Icons.LinkOut size={20} className={classes.linkOutIcon} />
                                         </Link>
-                                        <NextIdBadge variant="light" rightBoundary={rightBoundary} />
                                     </div>
-                                ))}
-                            </section>
+                                </SocialTooltip>
+                            ))}
+                        </section>
 
-                            {validNextIdTwitterBindings.length > 1 ? (
-                                <SocialAccountList validNextIdTwitterBindings={validNextIdTwitterBindings} />
-                            ) : null}
-                        </div>
-                    ) : null}
-                </Box>
-            </CollectibleState.Provider>
-        </ENSPostExtraInfoWrapper>
+                        {validNextIdTwitterBindings.length > 1 ? (
+                            <SocialAccountList validNextIdTwitterBindings={validNextIdTwitterBindings} />
+                        ) : null}
+                    </div>
+                ) : null}
+            </Box>
+        </CollectibleState.Provider>
     )
-}
+})
 
-export function SearchResultInspector(props: SearchResultInspectorProps) {
+export const SearchResultInspector = forwardRef(function (
+    props: SearchResultInspectorProps,
+    ref: React.ForwardedRef<unknown>,
+) {
     return (
         <ENSProvider {...props}>
-            <SearchResultInspectorContent />
+            <SearchResultInspectorContent {...props} ref={ref} />
         </ENSProvider>
     )
-}
+})
