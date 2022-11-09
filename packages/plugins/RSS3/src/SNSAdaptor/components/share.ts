@@ -4,7 +4,11 @@ import type { GeneratedIconNonSquareProps } from '@masknet/icons'
 import type { RSS3BaseAPI } from '@masknet/web3-providers'
 import type { ComponentType } from 'react'
 
-export type IconComponent = ComponentType<GeneratedIconNonSquareProps<never>>
+export type IconComponent =
+    | ComponentType<GeneratedIconNonSquareProps<never>>
+    | ComponentType<GeneratedIconNonSquareProps<'light'>>
+    | ComponentType<GeneratedIconNonSquareProps<'dark'>>
+    | ComponentType<GeneratedIconNonSquareProps<'dim'>>
 
 export enum CardType {
     AchievementBurn = 1,
