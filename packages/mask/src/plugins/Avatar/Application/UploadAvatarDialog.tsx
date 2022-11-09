@@ -11,6 +11,7 @@ import { context } from '../context.js'
 import { useNetworkContext } from '@masknet/web3-hooks-base'
 import { AvatarInfo, useSave } from '../hooks/save/useSave.js'
 import type { AllChainsNonFungibleToken } from '../types.js'
+import { delay } from 'opensea-js/lib/utils/utils.js'
 
 const useStyles = makeStyles()((theme) => ({
     actions: {
@@ -102,9 +103,11 @@ export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
                 return
             }
             showSnackbar(t.upload_avatar_success_message(), { variant: 'success' })
-            location.reload()
+
             onClose()
             setDisabled(false)
+            await delay(500)
+            location.reload()
         }, 'image/png')
     }, [account, editor, identifier, onClose, currentPersona, proof, isBindAccount, saveAvatar])
 

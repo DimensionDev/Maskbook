@@ -24,7 +24,11 @@ export function usePersonaNFTAvatar(userId: string, avatarId: string, persona: s
     return useAsyncRetry(async () => {
         if (!userId) return
         const key = `${userId}-${activatedSocialNetworkUI.networkIdentifier}`
-        if (!cache.has(key)) cache.set(key, getNFTAvatarForCache(userId, snsKey, avatarId, persona, getNFTAvatar))
+        if (!cache.has(key)) {
+            const nftAvatar = getNFTAvatarForCache(userId, snsKey, avatarId, persona, getNFTAvatar)
+            if (await nftAvatar) cache.set(key, nftAvatar)
+        }
+
         return cache.get(key)
     }, [userId, getNFTAvatar, avatarId, activatedSocialNetworkUI.networkIdentifier])
 }
