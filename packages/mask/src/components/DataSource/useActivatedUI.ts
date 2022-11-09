@@ -53,15 +53,6 @@ export function useCurrentVisitingIdentity() {
     return useValueRef(activatedSocialNetworkUI.collecting.currentVisitingIdentityProvider?.recognized || defaults)
 }
 
-export function useIsOwnerIdentity(identity: IdentityResolved | null | undefined) {
-    const lastRecognizedIdentity = useLastRecognizedIdentity()
-    const lastRecognizedUserId = lastRecognizedIdentity.identifier?.userId
-    const currentVisitingUserId = identity?.identifier?.userId
-
-    if (!lastRecognizedUserId || !currentVisitingUserId) return false
-    return lastRecognizedUserId.toLowerCase() === currentVisitingUserId.toLowerCase()
-}
-
 export function useCurrentLinkedPersona() {
     const currentIdentity = useSubscription(CurrentIdentitySubscription)
     return useAsync(async () => {
@@ -74,8 +65,6 @@ export function useCurrentLinkedPersona() {
  * Get the social identity of the given identity
  */
 export function useSocialIdentity(identity: IdentityResolved | null | undefined) {
-    const isOwner = useIsOwnerIdentity(identity)
-
     const result = useAsyncRetry<SocialIdentity | undefined>(async () => {
         if (!identity) return
         const bindings = await queryPersonasFromNextID(identity)
@@ -84,12 +73,11 @@ export function useSocialIdentity(identity: IdentityResolved | null | undefined)
             bindings?.filter((x) => x.persona === persona?.identifier.publicKeyAsHex.toLowerCase()) ?? []
         return {
             ...identity,
-            isOwner,
             publicKey: persona?.identifier.publicKeyAsHex,
             hasBinding: personaBindings.length > 0,
             binding: first(personaBindings),
         }
-    }, [isOwner, identity])
+    }, [identity])
 
     useEffect(() => MaskMessages.events.ownProofChanged.on(result.retry), [result.retry])
 
