@@ -12,7 +12,7 @@ import { CardType } from '../share.js'
 import { Label } from './common.js'
 import { useMarkdownStyles } from './useMarkdownStyles.js'
 
-const useStyles = makeStyles<void, 'image' | 'content' | 'info' | 'body'>()((theme, _, refs) => ({
+const useStyles = makeStyles<void, 'title' | 'image' | 'content' | 'info' | 'body' | 'center'>()((theme, _, refs) => ({
     summary: {
         color: theme.palette.maskColor.third,
     },
@@ -21,6 +21,10 @@ const useStyles = makeStyles<void, 'image' | 'content' | 'info' | 'body'>()((the
         color: theme.palette.maskColor.main,
     },
     info: {},
+    center: {
+        display: 'flex',
+        alignItems: 'center',
+    },
     image: {
         [`& + .${refs.info}`]: {
             marginLeft: theme.spacing(1.5),
@@ -50,6 +54,11 @@ const useStyles = makeStyles<void, 'image' | 'content' | 'info' | 'body'>()((the
         wordBreak: 'break-all',
     },
     verbose: {
+        [`.${refs.title}`]: {
+            fontWeight: 700,
+            lineHeight: '18px',
+            marginBottom: theme.spacing(1.5),
+        },
         [`.${refs.body}`]: {
             display: 'block',
         },
@@ -104,7 +113,7 @@ export const NoteCard: FC<NoteCardProps> = ({ feed, className, ...rest }) => {
     const { classes: mdClasses } = useMarkdownStyles()
 
     const action = feed.actions[0]
-    const metadata = action.metadata as RSS3BaseAPI.PostMetadata
+    const metadata = action.metadata
 
     const user = useAddressLabel(feed.owner)
     const type = feed.type
@@ -130,7 +139,7 @@ export const NoteCard: FC<NoteCardProps> = ({ feed, className, ...rest }) => {
                 />
             </Typography>
             <div className={classes.body}>
-                {metadata.media?.[0].mime_type.startsWith('image/') ? (
+                {metadata?.media?.[0].mime_type.startsWith('image/') ? (
                     <Image
                         classes={{ container: classes.image }}
                         src={metadata.media[0].address}
@@ -138,7 +147,7 @@ export const NoteCard: FC<NoteCardProps> = ({ feed, className, ...rest }) => {
                         width={imageSize}
                     />
                 ) : null}
-                <div className={classes.info}>
+                <div className={cx(classes.info, metadata?.title || rest.verbose ? null : classes.center)}>
                     {metadata?.title ? <Typography className={classes.title}>{metadata.title}</Typography> : null}
                     {rest.verbose && metadata?.body ? (
                         <Markdown className={mdClasses.markdown}>{markdownTransformIpfsURL(metadata.body)}</Markdown>
