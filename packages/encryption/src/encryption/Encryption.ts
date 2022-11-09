@@ -1,5 +1,5 @@
 import { encodeArrayBuffer, unreachable } from '@masknet/kit'
-import { AESCryptoKey, EC_Public_CryptoKey, PostIVIdentifier, ProfileIdentifier } from '@masknet/shared-base'
+import { AESCryptoKey, EC_Public_CryptoKey, PostIVIdentifier, ProfileIdentifier } from '@masknet/base'
 import {
     isTypedMessageText,
     encodeTypedMessageToDeprecatedFormat,

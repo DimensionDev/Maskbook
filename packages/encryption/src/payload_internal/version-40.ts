@@ -5,7 +5,7 @@ import { PayloadException } from '../types/index.js'
 import { decodeUint8ArrayF, assertIVLengthEq16 } from '../utils/index.js'
 import type { PayloadParserResult } from './index.js'
 import { encodeText } from '@masknet/kit'
-import { CheckedError, OptionalResult } from '@masknet/shared-base'
+import { CheckedError, OptionalResult } from '@masknet/base'
 
 const decodeUint8Array = decodeUint8ArrayF(PayloadException.InvalidPayload, PayloadException.DecodeFailed)
 // ? Payload format: (text format)

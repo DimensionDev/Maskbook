@@ -1,4 +1,4 @@
-import { CheckedError } from '@masknet/shared-base'
+import { CheckedError } from '@masknet/base'
 import { Ok } from 'ts-results-es'
 
 export enum CryptoException {

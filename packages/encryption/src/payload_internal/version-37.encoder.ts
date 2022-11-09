@@ -1,4 +1,4 @@
-import { compressSecp256k1KeyRaw } from '@masknet/shared-base'
+import { compressK256KeyRaw } from '@masknet/base'
 import { Ok } from 'ts-results-es'
 import type { PayloadWellFormed } from '../index.js'
 import { EC_KeyCurveEnum } from '../payload/types.js'
@@ -30,7 +30,7 @@ export async function encode37(payload: PayloadWellFormed.Payload) {
         const raw = await exportCryptoKeyToRaw(key)
         if (raw.ok) {
             if (algr === EC_KeyCurveEnum.secp256k1)
-                payload_arr[Index.authorPublicKey] = await compressSecp256k1KeyRaw(raw.val)
+                payload_arr[Index.authorPublicKey] = await compressK256KeyRaw(raw.val)
             else payload_arr[Index.authorPublicKey] = raw.val
         } else {
             payload_arr[Index.authorPublicKey] = null
@@ -45,7 +45,7 @@ export async function encode37(payload: PayloadWellFormed.Payload) {
             const k = await exportCryptoKeyToRaw(key)
             if (k.err) warn(key, k.err)
             else {
-                if (alg === EC_KeyCurveEnum.secp256k1) keyMaterials[alg] = await compressSecp256k1KeyRaw(k.val)
+                if (alg === EC_KeyCurveEnum.secp256k1) keyMaterials[alg] = await compressK256KeyRaw(k.val)
                 else keyMaterials[alg] = k.val
             }
         }
