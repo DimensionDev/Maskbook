@@ -1,5 +1,5 @@
 import type { HubOptions, Pageable } from '@masknet/web3-shared-base'
-import { ChainId } from '@masknet/web3-shared-evm'
+import type { ChainId } from '@masknet/web3-shared-evm'
 import type RSS3 from 'rss3-next'
 
 /**
@@ -305,19 +305,7 @@ export namespace RSS3BaseAPI {
         | 'fantom'
         | 'avalanche'
         | 'crossbell'
-
-    export const MaskNetworkMap: Record<Network, ChainId> = {
-        ethereum: ChainId.Mainnet,
-        binance_smart_chain: ChainId.BSC,
-        polygon: ChainId.Matic,
-        zksync: ChainId.ZKSync_Alpha_Testnet,
-        xdai: ChainId.xDai,
-        arbitrum: ChainId.Arbitrum,
-        optimism: ChainId.Optimism,
-        fantom: ChainId.Fantom,
-        avalanche: ChainId.Avalanche,
-        crossbell: ChainId.Crossbell,
-    }
+        | 'EIP-1577'
 
     export type Platform =
         | 'binance'
@@ -336,6 +324,7 @@ export namespace RSS3BaseAPI {
         | 'crossbell.io'
         | 'xLog'
         | 'Farcaster'
+        | 'Planet'
 
     export enum Tag {
         Collectible = 'collectible',
