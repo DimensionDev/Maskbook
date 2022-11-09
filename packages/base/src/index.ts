@@ -30,3 +30,4 @@ export {
     isK256Point,
     isK256PrivateKey,
 } from './WebCrypto/index.js'
+export { CheckedError, OptionalResult, andThenAsync } from './ts-results/index.js'
