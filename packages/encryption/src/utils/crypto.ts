@@ -1,4 +1,4 @@
-import { AESCryptoKey, CheckedError, EC_CryptoKey, EC_Public_CryptoKey } from '@masknet/shared-base'
+import { AESCryptoKey, CheckedError, EC_CryptoKey, EC_Public_CryptoKey } from '@masknet/base'
 import { Result, Ok } from 'ts-results-es'
 import { EC_KeyCurveEnum } from '../payload/index.js'
 import { CryptoException } from '../types/index.js'

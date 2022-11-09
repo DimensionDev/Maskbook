@@ -1,4 +1,4 @@
-import type { EC_Public_CryptoKey, EC_Private_CryptoKey } from '@masknet/shared-base'
+import type { EC_Public_CryptoKey, EC_Private_CryptoKey } from '@masknet/base'
 import { EC_KeyCurveEnum } from '../payload/index.js'
 import type { EncryptIO } from './Encryption.js'
 
