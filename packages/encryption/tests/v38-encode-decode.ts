@@ -1,7 +1,7 @@
 import { expect, test } from 'vitest'
 import { encodePayload, parsePayload, PayloadWellFormed, importAESFromJWK } from '../src/index.js'
 import { None, Some } from 'ts-results-es'
-import { ProfileIdentifier } from '@masknet/shared-base'
+import { ProfileIdentifier } from '@masknet/base'
 import { queryTestPublicKey } from './keys.js'
 
 test('Parse v38 encoded by old infra', async () => {
