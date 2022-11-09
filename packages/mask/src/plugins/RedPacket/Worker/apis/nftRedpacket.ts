@@ -1,13 +1,13 @@
 import { getNftRedPacketConstants, chainResolver, ChainId } from '@masknet/web3-shared-evm'
 import stringify from 'json-stable-stringify'
-import { first, pick } from 'lodash-unified'
-import { tokenIntoMask } from '../../../ITO/SNSAdaptor/helpers'
+import { first, pick } from 'lodash-es'
+import { tokenIntoMask } from '../../../ITO/SNSAdaptor/helpers.js'
 import type {
     NftRedPacketHistory,
     NftRedPacketJSONPayload,
     NftRedPacketSubgraphInMask,
     NftRedPacketSubgraphOutMask,
-} from '../../types'
+} from '../../types.js'
 
 const redPacketBasicKeys = [
     'contract_address',
@@ -76,7 +76,9 @@ async function fetchFromNFTRedPacketSubgraph<T>(chainId: ChainId, query: string)
 }
 
 export async function getNftRedPacketTxid(chainId: ChainId, rpid: string) {
-    const data = await fetchFromNFTRedPacketSubgraph<{ redPackets: NftRedPacketSubgraphOutMask[] }>(
+    const data = await fetchFromNFTRedPacketSubgraph<{
+        redPackets: NftRedPacketSubgraphOutMask[]
+    }>(
         chainId,
         `
     {
@@ -90,8 +92,10 @@ export async function getNftRedPacketTxid(chainId: ChainId, rpid: string) {
 }
 
 const PAGE_SIZE = 5
-export async function getNftRedPacketHistory(chainId: ChainId, address: string, page: number) {
-    const data = await fetchFromNFTRedPacketSubgraph<{ nftredPackets: NftRedPacketSubgraphOutMask[] }>(
+export async function getNftRedPacketHistory(chainId: ChainId, address: string, page: number, pageSize = PAGE_SIZE) {
+    const data = await fetchFromNFTRedPacketSubgraph<{
+        nftredPackets: NftRedPacketSubgraphOutMask[]
+    }>(
         chainId,
         `
     {
@@ -99,8 +103,8 @@ export async function getNftRedPacketHistory(chainId: ChainId, address: string, 
           where: { creator: "${address.toLowerCase()}" },
           orderBy: creation_time,
           orderDirection: desc,
-          first: ${PAGE_SIZE},
-          skip: ${(page - 1) * PAGE_SIZE}
+          first: ${pageSize},
+          skip: ${(page - 1) * pageSize}
         ) {
             ${RED_PACKET_FIELDS}
         }
@@ -117,7 +121,7 @@ export async function getNftRedPacketHistory(chainId: ChainId, address: string, 
             creation_time: x.creation_time * 1000,
         } as NftRedPacketSubgraphInMask
         const redPacketBasic = pick(nftRedPacketSubgraphInMask, redPacketBasicKeys)
-        const network = chainResolver.chainNetworkType(nftRedPacketSubgraphInMask.chain_id)
+        const network = chainResolver.networkType(nftRedPacketSubgraphInMask.chain_id)
         const sender = {
             address: nftRedPacketSubgraphInMask.creator.address,
             name: nftRedPacketSubgraphInMask.creator.name,

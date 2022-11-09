@@ -1,5 +1,5 @@
 import type { Wallet } from '@masknet/web3-shared-base'
-import type { LegacyWalletRecord } from '../../../shared/definitions/wallet'
+import type { LegacyWalletRecord } from '../../../shared/definitions/wallet.js'
 
 // TODO: this should be in the plugin infra.
 export interface WalletBackupProvider {

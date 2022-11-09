@@ -1,7 +1,7 @@
 import { memo } from 'react'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { Typography } from '@mui/material'
-import { ConnectedPersonaLine, UnconnectedPersonaLine } from '../PersonaLine'
+import { ConnectedPersonaLine, UnconnectedPersonaLine } from '../PersonaLine/index.js'
 import {
     type NextIDPersonaBindings,
     type PersonaIdentifier,
@@ -9,10 +9,9 @@ import {
     type ProfileInformation,
     formatPersonaFingerprint,
 } from '@masknet/shared-base'
-import { PersonaContext } from '../../hooks/usePersonaContext'
-import type { SocialNetwork } from '../../api'
-import classNames from 'classnames'
-import { usePersonaProof } from '../../hooks/usePersonaProof'
+import { PersonaContext } from '../../hooks/usePersonaContext.js'
+import type { SocialNetwork } from '../../api.js'
+import { usePersonaProof } from '../../hooks/usePersonaProof.js'
 
 const useStyles = makeStyles()((theme) => ({
     card: {
@@ -44,15 +43,6 @@ const useStyles = makeStyles()((theme) => ({
     content: {
         marginTop: theme.spacing(1.25),
         paddingRight: theme.spacing(1.25),
-    },
-    line: {
-        display: 'flex',
-        justifyContent: 'space-between',
-        fontSize: theme.typography.caption.fontSize,
-    },
-    setting: {
-        fontSize: theme.typography.caption.fontSize,
-        padding: 0,
     },
 }))
 
@@ -92,11 +82,11 @@ export interface PersonaCardUIProps extends PersonaCardProps {
 export const PersonaCardUI = memo<PersonaCardUIProps>((props) => {
     const { nickname, active = false, definedSocialNetworks, identifier, profiles, publicKey } = props
     const { onConnect, onDisconnect, onClick } = props
-    const { classes } = useStyles()
+    const { classes, cx } = useStyles()
     const proof = usePersonaProof(publicKey)
     return (
         <div className={classes.card}>
-            <div className={classNames(classes.status, active ? classes.statusActivated : classes.statusInactivated)} />
+            <div className={cx(classes.status, active ? classes.statusActivated : classes.statusInactivated)} />
             <div style={{ flex: 1 }}>
                 <div className={classes.header}>
                     <Typography variant="subtitle2" sx={{ cursor: 'pointer' }} onClick={onClick}>
@@ -143,4 +133,4 @@ export const PersonaCardUI = memo<PersonaCardUIProps>((props) => {
     )
 })
 
-export * as PersonaRowCard from './Row'
+export * as PersonaRowCard from './Row.js'

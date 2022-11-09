@@ -1,7 +1,7 @@
-import { PluginId } from '@masknet/plugin-infra'
+import { PluginID } from '@masknet/shared-base'
 
 // #region plugin definitions
-export const PLUGIN_ID = PluginId.Wallet
+export const PLUGIN_ID = PluginID.Wallet
 export const PLUGIN_NAME = 'Wallet'
 export const PLUGIN_DESCRIPTION = 'Mask Wallet'
 // #endregion

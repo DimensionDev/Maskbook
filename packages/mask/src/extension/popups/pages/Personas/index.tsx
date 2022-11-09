@@ -1,20 +1,20 @@
 import { lazy, memo, Suspense } from 'react'
-import { LoadingPlaceholder } from '../../components/LoadingPlaceholder'
+import { LoadingPlaceholder } from '../../components/LoadingPlaceholder/index.js'
 
-import { PersonaContext } from './hooks/usePersonaContext'
+import { PersonaContext } from './hooks/usePersonaContext.js'
 import { PopupRoutes, relativeRouteOf } from '@masknet/shared-base'
 import { Route, Routes } from 'react-router-dom'
-import { PersonaHeader } from './components/PersonaHeader'
+import { PersonaHeader } from './components/PersonaHeader/index.js'
 
-const Home = lazy(() => import(/* webpackPreload: true */ './Home'))
-const Logout = lazy(() => import('./Logout'))
-const PersonaRename = lazy(() => import('./Rename'))
-const PersonaSignRequest = lazy(() => import('./PersonaSignRequest'))
-const VerifyWallet = lazy(() => import('./VerifyWallet'))
-const SelectPersona = lazy(() => import('./SelectPersona'))
-const Accounts = lazy(() => import('./Accounts'))
-const AccountDetail = lazy(() => import('./AccountDetail'))
-const ConnectedWallets = lazy(() => import('./ConnectedWallets'))
+const Home = lazy(() => import(/* webpackPreload: true */ './Home/index.js'))
+const Logout = lazy(() => import('./Logout/index.js'))
+const PersonaRename = lazy(() => import('./Rename/index.js'))
+const PersonaSignRequest = lazy(() => import('./PersonaSignRequest/index.js'))
+const VerifyWallet = lazy(() => import('./VerifyWallet/index.js'))
+const SelectPersona = lazy(() => import('./SelectPersona/index.js'))
+const Accounts = lazy(() => import('./Accounts/index.js'))
+const AccountDetail = lazy(() => import('./AccountDetail/index.js'))
+const ConnectedWallets = lazy(() => import('./ConnectedWallets/index.js'))
 
 const r = relativeRouteOf(PopupRoutes.Personas)
 const Persona = memo(() => {

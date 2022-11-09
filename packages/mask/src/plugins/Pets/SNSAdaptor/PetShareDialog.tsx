@@ -1,9 +1,9 @@
 import { useCallback } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { Button, Typography, Box } from '@mui/material'
-import { activatedSocialNetworkUI } from '../../../social-network'
-import { useI18N } from '../locales'
-import { Share_Twitter_TXT } from '../constants'
+import { activatedSocialNetworkUI } from '../../../social-network/index.js'
+import { useI18N } from '../locales/index.js'
+import { Share_Twitter_TXT } from '../constants.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -13,14 +13,20 @@ const useStyles = makeStyles()((theme) => ({
         flexDirection: 'column',
         justifyContent: 'space-between',
     },
-    shareNotice: {
+    content: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        flex: 1,
+    },
+    notice: {
         color: theme.palette.maskColor.main,
         fontSize: '16px',
         fontFamily: 'TwitterChirp',
         lineHeight: '16px',
         marginTop: theme.spacing(2),
     },
-    shareButton: {
+    button: {
         width: '100%',
         margin: theme.spacing(4, 0, 3),
     },
@@ -41,8 +47,10 @@ export function PetShareDialog({ onClose }: PetSetDialogProps) {
 
     return (
         <Box className={classes.root}>
-            <Typography className={classes.shareNotice}>{t.pets_dialog_success()}</Typography>
-            <Button onClick={onShareClick} size="large" className={classes.shareButton}>
+            <Box className={classes.content}>
+                <Typography className={classes.notice}>{t.pets_dialog_success()}</Typography>
+            </Box>
+            <Button onClick={onShareClick} size="large" className={classes.button}>
                 {t.pets_dialog_btn_share()}
             </Button>
         </Box>

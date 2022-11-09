@@ -1,10 +1,9 @@
-import { createTheme, PaletteMode, ThemeOptions } from '@mui/material'
-import * as Changes from './changes'
-import * as Components from './component-changes'
-import { merge } from 'lodash-unified'
-import type { PaletteOptions } from '@mui/material/styles/createPalette'
-import { DarkColor, LightColor, Color } from '../../CSSVariables'
-import { MaskColors } from '../colors'
+import { createTheme, PaletteMode, PaletteOptions, ThemeOptions } from '@mui/material'
+import * as Changes from './changes.js'
+import * as Components from './component-changes.js'
+import { merge } from 'lodash-es'
+import { DarkColor, LightColor, Color } from '../../CSSVariables/index.js'
+import { MaskColors } from '../colors.js'
 
 /**
  * TODO: Remove this and css color var after the dashboard be removed.
@@ -12,7 +11,7 @@ import { MaskColors } from '../colors'
 const color = (mode: PaletteMode, color: Color): PaletteOptions => ({
     mode,
     primary: { main: color.primary, contrastText: color.primaryContrastText },
-    secondary: { main: color.primary, contrastText: color.primaryContrastText }, // Yes, not a typo, it's primary
+    secondary: { main: color.primary, contrastText: color.primaryContrastText },
     background: { paper: color.primaryBackground, default: color.secondaryBackground },
     error: { main: color.redMain, contrastText: color.redContrastText },
     success: { main: color.greenMain },

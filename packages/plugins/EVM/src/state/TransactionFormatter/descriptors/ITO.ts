@@ -2,10 +2,10 @@ import { i18NextInstance } from '@masknet/shared-base'
 import { TransactionContext, isSameAddress } from '@masknet/web3-shared-base'
 import { ChainId, getITOConstants, TransactionParameter } from '@masknet/web3-shared-evm'
 import ITO_ABI from '@masknet/web3-contracts/abis/ITO2.json'
-import { Web3StateSettings } from '../../../settings'
-import type { TransactionDescriptor } from '../types'
+import { Web3StateSettings } from '../../../settings/index.js'
+import type { TransactionDescriptor } from '../types.js'
 import type { AbiItem } from 'web3-utils'
-import { DescriptorWithTransactionDecodedReceipt, getTokenAmountDescription } from '../utils'
+import { DescriptorWithTransactionDecodedReceipt, getTokenAmountDescription } from '../utils.js'
 
 export class ITODescriptor extends DescriptorWithTransactionDecodedReceipt implements TransactionDescriptor {
     async getClaimTokenInfo(chainId: ChainId, contractAddress: string | undefined, hash: string | undefined) {
@@ -43,34 +43,42 @@ export class ITODescriptor extends DescriptorWithTransactionDecodedReceipt imple
 
             return {
                 chainId: context.chainId,
+                tokenInAddress: token?.address,
+                tokenInAmount: method?.parameters?._total_tokens,
                 title: i18NextInstance.t('plugin_infra_descriptor_ito_create_title'),
                 description: i18NextInstance.t('plugin_infra_descriptor_ito_create'),
-                successfulDescription: i18NextInstance.t('plugin_infra_descriptor_ito_create_success', {
-                    tokenAmountDescription: getTokenAmountDescription(method.parameters?._total_tokens, token),
-                }),
-                failedDescription: i18NextInstance.t('plugin_infra_descriptor_ito_create_fail'),
+                snackbar: {
+                    successfulDescription: i18NextInstance.t('plugin_infra_descriptor_ito_create_success', {
+                        tokenAmountDescription: getTokenAmountDescription(method.parameters?._total_tokens, token),
+                    }),
+                    failedDescription: i18NextInstance.t('plugin_infra_descriptor_ito_create_fail'),
+                },
             }
         } else if (method?.name === 'claim' || method?.name === 'swap') {
             return {
                 chainId: context.chainId,
                 title: i18NextInstance.t('plugin_infra_descriptor_ito_claim_title'),
                 description: i18NextInstance.t('plugin_infra_descriptor_ito_claim'),
-                successfulDescription: i18NextInstance.t('plugin_infra_descriptor_ito_claim_success', {
-                    tokenAmountDescription: await this.getClaimTokenInfo(
-                        context.chainId,
-                        ITO2_CONTRACT_ADDRESS,
-                        context.hash,
-                    ),
-                }),
-                failedDescription: i18NextInstance.t('plugin_infra_descriptor_ito_claim_fail'),
+                snackbar: {
+                    successfulDescription: i18NextInstance.t('plugin_infra_descriptor_ito_claim_success', {
+                        tokenAmountDescription: await this.getClaimTokenInfo(
+                            context.chainId,
+                            ITO2_CONTRACT_ADDRESS,
+                            context.hash,
+                        ),
+                    }),
+                    failedDescription: i18NextInstance.t('plugin_infra_descriptor_ito_claim_fail'),
+                },
             }
         } else if (method?.name === 'destruct') {
             return {
                 chainId: context.chainId,
                 title: i18NextInstance.t('plugin_infra_descriptor_ito_refund_title'),
                 description: i18NextInstance.t('plugin_infra_descriptor_ito_refund'),
-                successfulDescription: i18NextInstance.t('plugin_infra_descriptor_ito_refund_success'),
-                failedDescription: i18NextInstance.t('plugin_infra_descriptor_ito_refund_fail'),
+                snackbar: {
+                    successfulDescription: i18NextInstance.t('plugin_infra_descriptor_ito_refund_success'),
+                    failedDescription: i18NextInstance.t('plugin_infra_descriptor_ito_refund_fail'),
+                },
             }
         }
         return

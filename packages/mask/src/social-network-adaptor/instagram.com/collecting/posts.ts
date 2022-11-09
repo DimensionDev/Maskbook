@@ -1,12 +1,12 @@
 import { DOMProxy, LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import type { SocialNetworkUI } from '../../../social-network/types'
-import { creator } from '../../../social-network/utils'
+import type { SocialNetworkUI } from '@masknet/types'
+import { creator } from '../../../social-network/utils.js'
 import { TypedMessage, makeTypedMessageImage, makeTypedMessageTuple } from '@masknet/typed-message'
 import { ProfileIdentifier } from '@masknet/shared-base'
-import { startWatch } from '../../../utils/watcher'
-import { instagramBase } from '../base'
-import { createRefsForCreatePostContext } from '../../../social-network/utils/create-post-context'
-import { instagramShared } from '../shared'
+import { startWatch } from '../../../utils/watcher.js'
+import { instagramBase } from '../base.js'
+import { createRefsForCreatePostContext } from '../../../social-network/utils/create-post-context.js'
+import { instagramShared } from '../shared.js'
 
 const posts = new LiveSelector().querySelectorAll<HTMLDivElement>(
     'main[role="main"] article[role="presentation"][tabindex="-1"]',

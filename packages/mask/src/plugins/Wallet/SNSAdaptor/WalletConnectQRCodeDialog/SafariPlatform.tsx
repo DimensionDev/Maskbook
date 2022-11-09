@@ -1,15 +1,14 @@
 import { ImageList, ImageListItem, SvgIconProps } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { map } from 'lodash-unified'
+import { map } from 'lodash-es'
 import { createElement } from 'react'
-import { useI18N } from '../../../../utils'
-import { Provider } from '../Provider'
-import { IMTokenIcon, MetaMaskIcon, RainbowIcon, TrustIcon } from './Icons'
+import { useI18N } from '../../../../utils/index.js'
+import { Provider } from '../Provider.js'
+import { IMTokenIcon, MetaMaskIcon, RainbowIcon, TrustIcon } from './Icons.js'
 import urlcat from 'urlcat'
 import { openWindow } from '@masknet/shared-base-ui'
 
 const useStyles = makeStyles()({
-    container: { display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' },
     grid: { width: '100%' },
     icon: { fontSize: 45 },
 })
@@ -26,7 +25,9 @@ const providers: WalletProvider[] = [
     { name: 'imToken', logo: IMTokenIcon, protocol: 'imtokenv2://wc' },
 ]
 
-export const SafariPlatform: React.FC<{ uri: string }> = ({ uri }) => {
+export const SafariPlatform: React.FC<{
+    uri: string
+}> = ({ uri }) => {
     const { t } = useI18N()
     const { classes } = useStyles()
     const makeConnect = (link: string) => () => openWindow(urlcat(link, { uri }))

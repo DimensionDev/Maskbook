@@ -1,9 +1,9 @@
 import { memo } from 'react'
 import { Box, Button, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { useEnterDashboard } from '../../hook/useEnterDashboard'
+import { useEnterDashboard } from '../../hook/useEnterDashboard.js'
 import { Icons } from '@masknet/icons'
-import { useI18N } from '../../../../utils'
+import { useI18N } from '../../../../utils/index.js'
 
 const useStyles = makeStyles()({
     container: {
@@ -44,7 +44,6 @@ const useStyles = makeStyles()({
         color: '#07101B',
     },
     description: {
-        fontSize: 14,
         color: '#ACB4C1',
         textAlign: 'center',
         lineHeight: '18px',

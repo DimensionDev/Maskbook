@@ -1,14 +1,16 @@
 import { Icons } from '@masknet/icons'
 import { Box, IconButton, Link, Typography } from '@mui/material'
 import { makeStyles, getMaskColor } from '@masknet/theme'
-import FacebookIcon from '@mui/icons-material/Facebook'
-import GitHubIcon from '@mui/icons-material/GitHub'
-import TelegramIcon from '@mui/icons-material/Telegram'
-import TwitterIcon from '@mui/icons-material/Twitter'
-import { useDashboardI18N } from '../../locales'
-import { Version } from './Version'
+import {
+    Facebook as FacebookIcon,
+    GitHub as GitHubIcon,
+    Telegram as TelegramIcon,
+    Twitter as TwitterIcon,
+} from '@mui/icons-material'
+import { useDashboardI18N } from '../../locales/index.js'
+import { Version } from './Version.js'
 import links from './links.json'
-import { ABOUT_DIALOG_BACKGROUND } from '../../assets'
+import { ABOUT_DIALOG_BACKGROUND } from '../../assets/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     wrapper: {
@@ -45,9 +47,6 @@ const useStyles = makeStyles()((theme) => ({
     },
     icon: {
         color: theme.palette.text.primary,
-    },
-    close: {
-        color: '#FFF',
     },
     brands: {
         marginTop: theme.spacing(1),

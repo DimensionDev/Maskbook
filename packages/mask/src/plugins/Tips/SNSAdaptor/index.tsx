@@ -1,17 +1,17 @@
-import { Icons } from '@masknet/icons'
-import { Plugin, PluginId } from '@masknet/plugin-infra'
-import { PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
-import { ApplicationEntry } from '@masknet/shared'
-import { MaskColorVar } from '@masknet/theme'
-import { Link } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { Trans } from 'react-i18next'
-import { base } from '../base'
-import { PostTipButton, TipTaskManager } from '../components'
-import { RootContext } from '../contexts'
-import { setupStorage, storageDefaultValue } from '../storage'
-import { TipsEntranceDialog } from './TipsEntranceDialog'
-import { CrossIsolationMessages } from '@masknet/shared-base'
+import { Icons } from '@masknet/icons'
+import type { Plugin } from '@masknet/plugin-infra'
+import { PluginID, CrossIsolationMessages } from '@masknet/shared-base'
+import { PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
+import { ApplicationEntry, PublicWalletSetting } from '@masknet/shared'
+import { MaskColorVar } from '@masknet/theme'
+import { Link } from '@mui/material'
+import { base } from '../base.js'
+import { TipTaskManager } from '../contexts/index.js'
+import { setupStorage, storageDefaultValue } from '../storage/index.js'
+import { TipsEntranceDialog } from './TipsEntranceDialog.js'
+import { TipsRealmContent } from './components/TipsRealmContent/index.js'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -27,7 +27,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 category: 'dapp',
                 description: (
                     <Trans
-                        ns={PluginId.Tips}
+                        ns={PluginID.Tips}
                         i18nKey="description"
                         components={{
                             Link: (
@@ -46,8 +46,8 @@ const sns: Plugin.SNSAdaptor.Definition = {
                     const clickHandler = () => setOpen(true)
 
                     useEffect(() => {
-                        return CrossIsolationMessages.events.requestOpenApplication.on(({ open, application }) => {
-                            if (application !== PluginId.Tips) return
+                        return CrossIsolationMessages.events.applicationDialogEvent.on(({ open, pluginID }) => {
+                            if (pluginID !== PluginID.Tips) return
                             setOpen(open)
                         })
                     }, [])
@@ -76,22 +76,29 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 iconFilterColor,
                 appBoardSortingDefaultPriority: 9,
                 nextIdRequired: true,
+                entryWalletConnectedNotRequired: true,
             }
         })(),
     ],
+    SettingTabs: [
+        {
+            ID: PluginID.Tips,
+            label: 'Tips',
+            priority: 1,
+            UI: {
+                TabContent: PublicWalletSetting,
+            },
+        },
+    ],
     GlobalInjection() {
-        return (
-            <RootContext>
-                <TipTaskManager />
-            </RootContext>
-        )
+        return <TipTaskManager />
     },
-    PostActions() {
-        return (
-            <RootContext>
-                <PostTipButton />
-            </RootContext>
-        )
+    TipsRealm: {
+        ID: `${base.ID}_tips`,
+        priority: 1,
+        UI: {
+            Content: TipsRealmContent,
+        },
     },
 }
 

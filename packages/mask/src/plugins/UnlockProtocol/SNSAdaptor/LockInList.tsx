@@ -1,11 +1,10 @@
 import { ListItem, ListItemText, Checkbox } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import classNames from 'classnames'
 import { MouseEvent, useCallback } from 'react'
-import type { DefaultComponentProps } from '@mui/material/OverridableComponent'
+import type { DefaultComponentProps } from '@mui/material/OverridableComponent.js'
 import type { CheckboxProps } from '@mui/material/Checkbox'
 import type { ListItemTypeMap } from '@mui/material/ListItem'
-import type { UnlockLocks } from '../types'
+import type { UnlockLocks } from '../types.js'
 
 const useStyle = makeStyles()({
     root: {
@@ -17,11 +16,6 @@ const useStyle = makeStyles()({
         whiteSpace: 'nowrap',
         overflow: 'hidden',
     },
-    highlighted: {
-        backgroundColor: 'inherit',
-        color: 'inherit',
-        fontWeight: 'bold',
-    },
 })
 export interface LockInListProps {
     item: UnlockLocks
@@ -30,11 +24,20 @@ export interface LockInListProps {
     disabled?: boolean
     onChange: (ev: MouseEvent<HTMLDivElement>, checked: boolean) => void
     CheckboxProps?: Partial<CheckboxProps>
-    ListItemProps?: Partial<DefaultComponentProps<ListItemTypeMap<{ button: true }, 'div'>>>
+    ListItemProps?: Partial<
+        DefaultComponentProps<
+            ListItemTypeMap<
+                {
+                    button: true
+                },
+                'div'
+            >
+        >
+    >
 }
 
 export function LockInList(props: LockInListProps) {
-    const { classes } = useStyle()
+    const { classes, cx } = useStyle()
     const lock = props.item
     const name = lock.lock.name
     const secondary = lock.lock.address
@@ -46,7 +49,7 @@ export function LockInList(props: LockInListProps) {
             onClick={onClick}
             disabled={props.disabled}
             {...props.ListItemProps}
-            className={classNames(classes.root, props.ListItemProps?.className)}>
+            className={cx(classes.root, props.ListItemProps?.className)}>
             <Checkbox checked={props.checked} color="primary" {...props.CheckboxProps} />
             <ListItemText
                 classes={{

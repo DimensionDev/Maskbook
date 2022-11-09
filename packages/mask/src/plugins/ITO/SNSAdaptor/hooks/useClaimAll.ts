@@ -1,10 +1,10 @@
 import { useRef, useEffect } from 'react'
 import { useAsyncRetry } from 'react-use'
-import type { SwappedTokenType } from '../../types'
-import * as chain from '../utils/chain'
+import type { SwappedTokenType } from '../../types.js'
+import * as chain from '../utils/chain.js'
 import type { ChainId } from '@masknet/web3-shared-evm'
-import { useWeb3Connection } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { useWeb3Connection } from '@masknet/web3-hooks-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 
 export function useClaimAll(swapperAddress: string, chainId: ChainId) {
     const allPoolsRef = useRef<SwappedTokenType[]>([])

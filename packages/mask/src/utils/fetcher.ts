@@ -1,4 +1,5 @@
-import Services from '../extension/service'
+import { EnhanceableSite } from '@masknet/shared-base'
+import Services from '../extension/service.js'
 
 const { fetch: original_fetch } = globalThis
 export function contentFetch(input: RequestInfo, init?: RequestInit) {
@@ -35,6 +36,8 @@ function canAccessAsContent(url: string) {
         ['https://abs.twimg.com', 'https://upload.twitter.com'].includes(target.origin)
     )
         return true
+
+    if (location.origin.endsWith(EnhanceableSite.Mirror) && target.origin.endsWith('mirror-api.com')) return true
     if (extensionOrigin === target.origin) return true
     return target.origin === location.origin
 }

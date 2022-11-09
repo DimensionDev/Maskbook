@@ -1,6 +1,5 @@
-import { createProxyKVStorageBackend, createKVStorageHost, KVStorageBackend } from '@masknet/shared-base'
-import { PluginId } from '@masknet/plugin-infra'
-import { MaskMessages } from './messages'
+import { createProxyKVStorageBackend, createKVStorageHost, KVStorageBackend, PluginID } from '@masknet/shared-base'
+import { MaskMessages } from './messages.js'
 
 const indexedDBProxy = createProxyKVStorageBackend()
 const inMemoryBackend = createProxyKVStorageBackend()
@@ -13,14 +12,14 @@ const createInMemoryKVStorage = createKVStorageHost(inMemoryBackend, MaskMessage
 
 export const InMemoryStorages = {
     Plugin: createInMemoryKVStorage('plugin', {}),
-    FacebookNFTEventOnMobile: createInMemoryKVStorage('FacebookNFTEventOnMobile', {
+    FacebookNFTEventOnMobile: createInMemoryKVStorage('FacebookNFTEventMobile', {
         userId: '',
         avatarId: '',
         address: '',
         tokenId: '',
         schema: 1,
         chainId: 1,
-        pluginId: '',
+        pluginID: '',
     }),
 }
 
@@ -30,26 +29,27 @@ export const PersistentStorages = {
     Settings: createPersistentKVStorage('settings', {
         debugging: false,
     }),
-    ApplicationEntryUnListedList: createPersistentKVStorage<{ current: { [key: string]: boolean } }>(
-        ApplicationEntryUnlistedListKey,
-        {
-            current: {
-                [PluginId.RedPacket]: false,
-                [PluginId.FileService]: false,
-                [PluginId.ITO]: false,
-                [`${PluginId.ITO}_claim`]: false,
-                [PluginId.CrossChainBridge]: false,
-                [PluginId.MaskBox]: false,
-                [PluginId.Savings]: false,
-                [PluginId.Avatar]: false,
-                [PluginId.Trader]: false,
-                [PluginId.Tips]: false,
-                [PluginId.Transak]: false,
-                [PluginId.Pets]: false,
-                [PluginId.FindTruman]: false,
-                [PluginId.GoPlusSecurity]: false,
-                [PluginId.Referral]: false,
-            },
+    ApplicationEntryUnListedList: createPersistentKVStorage<{
+        current: {
+            [key: string]: boolean
+        }
+    }>(ApplicationEntryUnlistedListKey, {
+        current: {
+            [PluginID.RedPacket]: false,
+            [PluginID.FileService]: false,
+            [PluginID.ITO]: false,
+            [`${PluginID.ITO}_claim`]: false,
+            [PluginID.CrossChainBridge]: false,
+            [PluginID.MaskBox]: false,
+            [PluginID.Savings]: false,
+            [PluginID.Avatar]: false,
+            [PluginID.Trader]: false,
+            [PluginID.Tips]: false,
+            [PluginID.Transak]: false,
+            [PluginID.Pets]: false,
+            [PluginID.FindTruman]: false,
+            [PluginID.GoPlusSecurity]: false,
+            [PluginID.Referral]: false,
         },
-    ),
+    }),
 }

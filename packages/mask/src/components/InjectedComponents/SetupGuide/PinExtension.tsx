@@ -1,10 +1,11 @@
-import { useWizardDialogStyles, WizardDialog } from './WizardDialog'
-import { useI18N } from '../../../utils'
-import { SetupGuideStep } from '../../../../shared/legacy-settings/types'
+import { WizardDialog } from './WizardDialog.js'
+import { useI18N } from '../../../utils/index.js'
+import { SetupGuideStep } from '../../../../shared/legacy-settings/types.js'
 import { Box, Button, Typography } from '@mui/material'
-import { MaskIcon } from '../../../resources/MaskIcon'
-import ExtensionIcon from '@mui/icons-material/Extension'
+import { MaskIcon } from '@masknet/shared'
+import { Extension as ExtensionIcon } from '@mui/icons-material'
 import { Icons } from '@masknet/icons'
+import { useFindUsernameStyles } from './FindUsername.js'
 
 interface PinExtensionProps {
     onDone?: () => void
@@ -12,7 +13,7 @@ interface PinExtensionProps {
 
 export function PinExtension({ onDone }: PinExtensionProps) {
     const pinImg = new URL('../../../resources/extensionPinned.png', import.meta.url).toString()
-    const { classes } = useWizardDialogStyles()
+    const { classes } = useFindUsernameStyles()
     const { t } = useI18N()
 
     return (

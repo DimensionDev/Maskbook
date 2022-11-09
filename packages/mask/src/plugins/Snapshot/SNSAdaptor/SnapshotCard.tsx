@@ -5,7 +5,7 @@ const useStyles = makeStyles()((theme) => {
         root: {
             minHeight: 120,
             padding: 0,
-            border: `solid 1px ${theme.palette.divider}`,
+            border: `solid 1px ${theme.palette.maskColor.publicLine}`,
             margin: `${theme.spacing(2)} auto`,
             marginBottom: theme.spacing(2),
             '&:first-child': {
@@ -14,9 +14,10 @@ const useStyles = makeStyles()((theme) => {
             '&:last-child': {
                 marginBottom: 0,
             },
+            background: theme.palette.maskColor.white,
         },
         header: {
-            borderBottom: `1px solid ${theme.palette.divider}`,
+            borderBottom: `solid 1px ${theme.palette.maskColor.publicLine}`,
         },
         content: {
             width: '100%',
@@ -25,10 +26,16 @@ const useStyles = makeStyles()((theme) => {
             boxSizing: 'border-box',
             justifyContent: 'center',
             alignContent: 'center',
+            '&:last-child': {
+                paddingBottom: 16,
+            },
         },
         title: {
             display: 'flex',
             alignItems: 'center',
+            color: theme.palette.maskColor.publicMain,
+            fontWeight: 'bold',
+            fontSize: 18,
         },
     }
 })

@@ -1,14 +1,9 @@
 import type { Appearance, LanguageOptions } from '@masknet/public-api'
 import type { SerializableTypedMessages } from '@masknet/typed-message'
-import type { ProfileIdentifier, PersonaIdentifier } from '../Identifier/index.js'
+import type { ProfileIdentifier, PersonaIdentifier } from '@masknet/base'
+import type { NetworkPluginID } from '../Plugin/index.js'
 import type { RelationFavor } from '../Persona/type.js'
 import type { EnhanceableSite, ExtensionSite } from '../Site/index.js'
-
-enum NetworkPluginID {
-    PLUGIN_EVM = 'com.mask.evm',
-    PLUGIN_FLOW = 'com.mask.flow',
-    PLUGIN_SOLANA = 'com.mask.solana',
-}
 
 export interface MaskSettingsEvents {
     appearanceSettings: Appearance
@@ -52,6 +47,7 @@ export interface MaskEvents extends MaskSettingsEvents, MaskMobileOnlyEvents, Ma
     restoreSuccess: void
     relationsChanged: RelationChangedEvent[]
     pluginMinimalModeChanged: [id: string, newStatus: boolean]
+    hostPermissionChanged: void
 
     requestExtensionPermission: RequestExtensionPermissionEvent
     personaSignRequest: PersonaSignRequestEvent
@@ -70,7 +66,7 @@ export interface UpdateEvent<Data> {
     readonly of: Data
 }
 
-export interface CompositionRequest {
+export interface CompositionDialogEvent {
     readonly reason: 'timeline' | 'popup' | 'reply'
     readonly open: boolean
     readonly content?: SerializableTypedMessages
@@ -80,6 +76,60 @@ export interface CompositionRequest {
         isOpenFromApplicationBoard?: boolean
     }
 }
+
+export interface Web3ProfileDialogEvent {
+    open: boolean
+}
+
+export interface CheckSecurityConfirmationDialogEvent {
+    open: boolean
+}
+
+export type CheckSecurityDialogEvent =
+    | {
+          open: true
+          searchHidden: boolean
+          tokenAddress?: string
+          chainId?: number
+      }
+    | {
+          open: false
+      }
+
+export type ApplicationDialogEvent = {
+    open: boolean
+    pluginID: string
+}
+
+export interface SettingsDialogEvent {
+    open: boolean
+    targetTab?: string
+}
+
+export type ProfileCardEvent =
+    | {
+          open: false
+      }
+    | {
+          open: true
+          userId: string
+          badgeBounding: DOMRect
+      }
+
+export type NonFungibleTokenDialogEvent =
+    | {
+          open: true
+          pluginID: NetworkPluginID
+          chainId: number
+          tokenId: string
+          tokenAddress: string
+          ownerAddress?: string
+          origin?: 'pfp' | 'web3-profile-card' | 'web3-profile-tab' | 'unknown'
+      }
+    | {
+          open: false
+      }
+
 export enum EncryptionTargetType {
     Public = 'public',
     Self = 'self',
@@ -108,30 +158,8 @@ export interface OpenPageConfirmEvent {
     title: string
     text: string
     actionHint: string
+    position?: 'center' | 'top-right'
 }
-
-export interface Web3ProfileDialogRequest {
-    open: boolean
-}
-
-export interface CheckSecurityCloseConfirmDialogRequest {
-    open: boolean
-}
-export type OpenApplicationRequestEvent = {
-    open: boolean
-    application: string
-}
-
-export type CheckSecurityDialogRequest =
-    | {
-          open: true
-          searchHidden: boolean
-          tokenAddress?: string
-          chainId?: number
-      }
-    | {
-          open: false
-      }
 
 export interface NFTAvatarEvent {
     userId: string
@@ -140,7 +168,26 @@ export interface NFTAvatarEvent {
     tokenId?: string
     schema?: number
     chainId?: number
-    pluginId?: string
+    pluginID?: NetworkPluginID
+}
+
+export interface TokenType {
+    name: string
+    symbol: string
+    address: string
+    decimals?: number
+}
+export interface SwapDialogEvent {
+    open: boolean
+    traderProps?: {
+        defaultInputCoin?: TokenType
+        defaultOutputCoin?: TokenType
+        chainId?: number
+    }
+}
+
+export interface WalletSettingsDialogEvent {
+    pluginID?: string
 }
 
 /** This is a subset of browser.permissions.Permission */

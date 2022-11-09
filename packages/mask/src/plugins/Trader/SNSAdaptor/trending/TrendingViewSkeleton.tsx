@@ -1,21 +1,18 @@
 import { LoadingBase, makeStyles, useStylesExtends } from '@masknet/theme'
 import { CardContent, Stack, Typography } from '@mui/material'
-import { useI18N } from '../../../../utils'
-import { PluginHeader } from './PluginHeader'
-import { TrendingCard, TrendingCardProps } from './TrendingCard'
+import { useI18N } from '../../../../utils/index.js'
+import { PluginHeader } from './PluginHeader.js'
+import { TrendingCard, TrendingCardProps } from './TrendingCard.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
         padding: theme.spacing(2),
-        background: theme.palette.background.modalTitle,
+        background: theme.palette.maskColor.modalTitleBg,
     },
     content: {
         height: 162,
         paddingTop: 0,
         paddingBottom: 0,
-    },
-    footer: {
-        justifyContent: 'space-between',
     },
 }))
 
@@ -25,7 +22,7 @@ export interface TrendingViewSkeletonProps extends withClasses<'content' | 'foot
 
 export function TrendingViewSkeleton(props: TrendingViewSkeletonProps) {
     const { TrendingCardProps } = props
-    const classes = useStylesExtends(useStyles(), props)
+    const { classes } = useStylesExtends(useStyles(), props)
     const { t } = useI18N()
 
     return (

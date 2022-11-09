@@ -11,13 +11,14 @@ import {
     useWeb3State,
     useReverseAddress,
     useRecentTransactions,
-    Web3Helper,
-    useAccount,
-} from '@masknet/plugin-infra/web3'
-import { PluginMessages } from '../../../../API'
-import { useDashboardI18N } from '../../../../locales'
-import { useNetworkSelector } from './useNetworkSelector'
-import { NetworkPluginID, TransactionStatusType } from '@masknet/web3-shared-base'
+    useChainContext,
+} from '@masknet/web3-hooks-base'
+import type { Web3Helper } from '@masknet/web3-helpers'
+import { PluginMessages } from '../../../../API.js'
+import { useDashboardI18N } from '../../../../locales/index.js'
+import { useNetworkSelector } from './useNetworkSelector.js'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { TransactionStatusType } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     bar: {
@@ -64,18 +65,18 @@ const useStyles = makeStyles()((theme) => ({
 export const WalletStateBar = memo(() => {
     const t = useDashboardI18N()
 
-    const account = useAccount()
+    const { account } = useChainContext()
     const wallet = useWallet()
     const networkDescriptor = useNetworkDescriptor()
     const providerDescriptor = useProviderDescriptor()
     const pendingTransactions = useRecentTransactions(NetworkPluginID.PLUGIN_EVM, TransactionStatusType.NOT_DEPEND)
 
     const { openDialog: openWalletStatusDialog } = useRemoteControlledDialog(
-        PluginMessages.Wallet.events.walletStatusDialogUpdated,
+        PluginMessages.Wallet.walletStatusDialogUpdated,
     )
 
     const { openDialog: openConnectWalletDialog } = useRemoteControlledDialog(
-        PluginMessages.Wallet.events.selectProviderDialogUpdated,
+        PluginMessages.Wallet.selectProviderDialogUpdated,
     )
 
     const [menu, openMenu] = useNetworkSelector()

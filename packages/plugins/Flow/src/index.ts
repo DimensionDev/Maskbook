@@ -1,5 +1,6 @@
 import { registerPlugin } from '@masknet/plugin-infra'
 import type {
+    AddressType,
     ChainId,
     NetworkType,
     ProviderType,
@@ -7,6 +8,7 @@ import type {
     Signature,
     GasOption,
     Block,
+    Operation,
     Transaction,
     TransactionDetailed,
     TransactionParameter,
@@ -14,16 +16,18 @@ import type {
     Web3,
     TransactionReceipt,
 } from '@masknet/web3-shared-flow'
-import { base } from './base'
+import { base } from './base.js'
 
 registerPlugin<
     ChainId,
+    AddressType,
     SchemaType,
     ProviderType,
     NetworkType,
     Signature,
     GasOption,
     Block,
+    Operation,
     Transaction,
     TransactionReceipt,
     TransactionDetailed,
@@ -33,20 +37,20 @@ registerPlugin<
 >({
     ...base,
     SNSAdaptor: {
-        load: () => import('./UI/SNSAdaptor'),
+        load: () => import('./UI/SNSAdaptor/index.js'),
         hotModuleReload: (hot) =>
             import.meta.webpackHot &&
-            import.meta.webpackHot.accept('./UI/SNSAdaptor', () => hot(import('./UI/SNSAdaptor'))),
+            import.meta.webpackHot.accept('./UI/SNSAdaptor', () => hot(import('./UI/SNSAdaptor/index.js'))),
     },
     Dashboard: {
-        load: () => import('./UI/Dashboard'),
+        load: () => import('./UI/Dashboard/index.js'),
         hotModuleReload: (hot) =>
             import.meta.webpackHot &&
-            import.meta.webpackHot.accept('./UI/Dashboard', () => hot(import('./UI/Dashboard'))),
+            import.meta.webpackHot.accept('./UI/Dashboard', () => hot(import('./UI/Dashboard/index.js'))),
     },
     Worker: {
-        load: () => import('./Worker'),
+        load: () => import('./Worker/index.js'),
         hotModuleReload: (hot) =>
-            import.meta.webpackHot && import.meta.webpackHot.accept('./Worker', () => hot(import('./Worker'))),
+            import.meta.webpackHot && import.meta.webpackHot.accept('./Worker', () => hot(import('./Worker/index.js'))),
     },
 })

@@ -1,5 +1,5 @@
-import type { Discovery, DiscoveryFarmOracles } from '../../types'
-import { supportedChainId } from '../../constants'
+import type { Discovery, DiscoveryFarmOracles } from '../../types.js'
+import { supportedChainId } from '../../constants.js'
 
 export async function getFullDiscovery(): Promise<{
     discovery: Discovery

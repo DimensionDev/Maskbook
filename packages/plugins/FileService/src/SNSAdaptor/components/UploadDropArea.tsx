@@ -1,10 +1,10 @@
-import { formatFileSize } from '@dimensiondev/kit'
+import { formatFileSize } from '@masknet/kit'
 import { useCustomSnackbar, makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
-import { isNil } from 'lodash-unified'
+import { isNil } from 'lodash-es'
 import { UploadCloud } from 'react-feather'
 import { useDropArea } from 'react-use'
-import { useI18N } from '../../locales/i18n_generated'
+import { useI18N } from '../../locales/i18n_generated.js'
 
 const useStyles = makeStyles()((theme) => ({
     label: {

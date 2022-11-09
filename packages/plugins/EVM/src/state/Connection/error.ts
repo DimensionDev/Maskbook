@@ -1,6 +1,7 @@
-import { isNil } from 'lodash-unified'
+import { isNil } from 'lodash-es'
 import type { JsonRpcResponse } from 'web3-core-helpers'
-import { JSON_RPC_ERROR_CODE } from '../../types'
+import type { RecognizableError } from '@masknet/web3-shared-base'
+import { JSON_RPC_ERROR_CODE } from '../../types/index.js'
 // TODO: 6002: missing i18n
 
 function getInternalError(error: unknown, response?: JsonRpcResponse | null, fallback?: string): Error {
@@ -28,14 +29,23 @@ export function hasError(error: unknown, response?: JsonRpcResponse | null) {
 
 export function getError(error: unknown, response?: JsonRpcResponse | null, fallback?: string): Error {
     const internalError = getInternalError(error, response, fallback)
-    const internalErrorMessage = (() => {
-        const { code, message } = internalError as unknown as { code?: number; message: string }
+    const RecognizableErrorMessage = (() => {
+        const { code, message } = internalError as unknown as {
+            code?: number
+            message: string
+        }
 
         if (message.includes(`"code":${JSON_RPC_ERROR_CODE.INTERNAL_ERROR}`))
             return 'Transaction was failed due to an internal JSON-RPC server error.'
         if (message.includes('User denied message signature.')) return 'Signature canceled.'
         if (message.includes('User denied transaction signature.')) return 'Transaction was rejected!'
         if (message.includes('transaction underpriced')) return 'Transaction underpriced.'
+        if (
+            message.includes('The NFT is bounded to your soul, you cannot transfer it!') ||
+            message.match(/Please go to .* for mint/)
+        ) {
+            return 'This NFT can not be transferred.'
+        }
         if (
             typeof code === 'number' &&
             (code === JSON_RPC_ERROR_CODE.INTERNAL_ERROR ||
@@ -44,8 +54,13 @@ export function getError(error: unknown, response?: JsonRpcResponse | null, fall
         ) {
             return 'Transaction was failed due to an internal JSON-RPC server error.'
         }
-        return internalError.message
+        return undefined
     })()
 
-    return new Error(internalErrorMessage)
+    if (RecognizableErrorMessage) {
+        const error = new Error(RecognizableErrorMessage) as RecognizableError
+        error.isRecognized = true
+        return error
+    }
+    return new Error(internalError.message)
 }

@@ -2,9 +2,9 @@ import ITO_ABI from '@masknet/web3-contracts/abis/ITO.json'
 import ITO2_ABI from '@masknet/web3-contracts/abis/ITO2.json'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { Interface } from '@ethersproject/abi'
-import type { Availability } from '../../types'
-import type { Web3Helper } from '@masknet/plugin-infra/web3'
-import type { NetworkPluginID } from '@masknet/web3-shared-base'
+import type { Availability } from '../../types.js'
+import type { Web3Helper } from '@masknet/web3-helpers'
+import type { NetworkPluginID } from '@masknet/shared-base'
 
 const interFaceV1 = new Interface(ITO_ABI)
 const interFaceV2 = new Interface(ITO2_ABI)

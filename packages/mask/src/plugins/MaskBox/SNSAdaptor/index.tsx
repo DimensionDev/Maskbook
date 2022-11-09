@@ -1,16 +1,14 @@
 import { useMemo } from 'react'
 import { type Plugin, usePluginWrapper, usePostInfoDetails } from '@masknet/plugin-infra/content-script'
-import { base } from '../base'
+import { base } from '../base.js'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import { Trans } from 'react-i18next'
-import { parseURL } from '@masknet/shared-base'
-import { PreviewCard } from './components/PreviewCard'
-import { Context } from '../hooks/useContext'
+import { parseURLs } from '@masknet/shared-base'
+import { PreviewCard } from './components/PreviewCard.js'
+import { Context } from '../hooks/useContext.js'
 import { ApplicationEntry } from '@masknet/shared'
 import { openWindow } from '@masknet/shared-base-ui'
 import { Icons } from '@masknet/icons'
-import { RootContext } from '../contexts'
-import type { ChainId } from '@masknet/web3-shared-evm'
 
 const isMaskBox = (x: string) => x.startsWith('https://box-beta.mask.io') || x.startsWith('https://box.mask.io')
 
@@ -21,12 +19,12 @@ const sns: Plugin.SNSAdaptor.Definition = {
         const link = useMemo(() => {
             const x = extractTextFromTypedMessage(props.message)
             if (x.none) return null
-            return parseURL(x.val).find(isMaskBox)
+            return parseURLs(x.val).find(isMaskBox)
         }, [props.message])
         if (!link) return null
         return <Renderer url={link} />
     },
-    PostInspector: function Component() {
+    PostInspector() {
         const links = usePostInfoDetails.mentionedLinks()
         const link = links.find(isMaskBox)
         if (!link) return null
@@ -65,7 +63,11 @@ const sns: Plugin.SNSAdaptor.Definition = {
 
 export default sns
 
-function Renderer(props: React.PropsWithChildren<{ url: string }>) {
+function Renderer(
+    props: React.PropsWithChildren<{
+        url: string
+    }>,
+) {
     const [, matchedChainId] = props.url.match(/chain=(\d+)/i) ?? []
     const [, boxId] = props.url.match(/box=(\d+)/i) ?? []
     const [, hashRoot] = props.url.match(/rootHash=([\dA-Za-z]+)/) ?? []
@@ -75,10 +77,8 @@ function Renderer(props: React.PropsWithChildren<{ url: string }>) {
     if (shouldNotRender) return null
 
     return (
-        <RootContext chainId={Number.parseInt(matchedChainId, 10) as ChainId.Mainnet}>
-            <Context.Provider initialState={{ boxId, hashRoot }}>
-                <PreviewCard />
-            </Context.Provider>
-        </RootContext>
+        <Context.Provider initialState={{ boxId, hashRoot }}>
+            <PreviewCard />
+        </Context.Provider>
     )
 }

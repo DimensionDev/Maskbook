@@ -1,8 +1,8 @@
 import { Suspense } from 'react'
-import { Skeleton } from '@mui/material'
+import { alpha, Skeleton } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { SnapshotCard } from './SnapshotCard'
-import { range } from 'lodash-unified'
+import { SnapshotCard } from './SnapshotCard.js'
+import { range } from 'lodash-es'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -15,8 +15,12 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
-export function LoadingCard(props: React.PropsWithChildren<{ title: string }>) {
-    const { classes } = useStyles()
+export function LoadingCard(
+    props: React.PropsWithChildren<{
+        title: string
+    }>,
+) {
+    const { classes, theme } = useStyles()
     return (
         <Suspense
             fallback={
@@ -25,6 +29,7 @@ export function LoadingCard(props: React.PropsWithChildren<{ title: string }>) {
                         <Skeleton
                             key={i}
                             className={classes.skeleton}
+                            sx={{ backgroundColor: alpha(theme.palette.maskColor.publicMain, 0.6) }}
                             animation="wave"
                             variant="rectangular"
                             width={i === 0 ? '80%' : '60%'}

@@ -1,7 +1,7 @@
 import ZSchema from 'z-schema'
 import KeyStoreSchema from './schema.json'
 import { sha3 } from 'web3-utils'
-import type { CryptoKeyStore, KeyStore } from './types'
+import type { CryptoKeyStore, KeyStore } from './types.js'
 
 export function loadKeyStore(input: string): KeyStore {
     let store: object

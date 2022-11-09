@@ -1,10 +1,10 @@
-import type { SocialNetworkUI } from '../../social-network'
-import { stateCreator } from '../../social-network/utils'
-import { createTaskStartSetupGuideDefault } from '../../social-network/defaults'
-import { InitAutonomousStateProfiles } from '../../social-network/defaults/state/InitProfiles'
-import { IdentityProviderOpensea } from './collecting/Identity'
-import { openseaBase } from './base'
-import { openseaShared } from './shared'
+import type { SocialNetworkUI } from '@masknet/types'
+import { stateCreator } from '../../social-network/utils.js'
+import { createTaskStartSetupGuideDefault } from '../../social-network/defaults/index.js'
+import { InitAutonomousStateProfiles } from '../../social-network/defaults/state/InitProfiles.js'
+import { IdentityProviderOpensea } from './collecting/Identity.js'
+import { openseaBase } from './base.js'
+import { openseaShared } from './shared.js'
 const define: SocialNetworkUI.Definition = {
     ...openseaShared,
     ...openseaBase,

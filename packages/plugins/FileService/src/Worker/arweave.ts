@@ -1,22 +1,23 @@
 import { Attachment } from '@dimensiondev/common-protocols'
-import { encodeText } from '@dimensiondev/kit'
+import { encodeText } from '@masknet/kit'
 import Arweave from 'arweave/web'
-import type Transaction from 'arweave/web/lib/transaction'
-import type { JWKInterface } from 'arweave/web/lib/wallet'
-import { isEmpty } from 'lodash-unified'
-import { landing, mesonPrefix } from '../constants'
-import { sign } from './remote-signing'
+import type Transaction from 'arweave/web/lib/transaction.js'
+import type { JWKInterface } from 'arweave/web/lib/wallet.js'
+import { isEmpty } from 'lodash-es'
+import { landing, mesonPrefix } from '../constants.js'
+import { sign } from './remote-signing.js'
 import TOKEN from './arweave-token.json'
-import type { ProviderAgent, LandingPageMetadata, AttachmentOptions } from '../types'
-import { makeFileKeySigned } from '../helpers'
+import type { ProviderAgent, LandingPageMetadata, AttachmentOptions } from '../types.js'
+import { makeFileKeySigned } from '../helpers.js'
 
 class ArweaveAgent implements ProviderAgent {
-    instance!: Arweave
-    static stage: Record<Transaction['id'], Transaction> = {}
+    instance!: Arweave.default
+    static stage: Record<Transaction.default['id'], Transaction.default> = {}
 
     init() {
         if (this.instance) return
-        this.instance = Arweave.init({
+        // Note: ESM interop
+        this.instance = (Arweave.default || Arweave).init({
             host: 'arweave.net',
             port: 443,
             protocol: 'https',
@@ -60,7 +61,7 @@ class ArweaveAgent implements ProviderAgent {
         return transaction.id
     }
 
-    async *upload(id: Transaction['id']) {
+    async *upload(id: Transaction.default['id']) {
         this.init()
         for await (const uploader of this.instance.transactions.upload(ArweaveAgent.stage[id], new Uint8Array())) {
             yield uploader.pctComplete

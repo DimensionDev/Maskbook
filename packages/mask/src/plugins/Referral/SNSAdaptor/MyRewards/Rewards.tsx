@@ -1,19 +1,19 @@
 import { useCallback } from 'react'
 import { formatUnits } from '@ethersproject/units'
-import BigNumber from 'bignumber.js'
+import { BigNumber } from 'bignumber.js'
 import type { ChainId, Web3 } from '@masknet/web3-shared-evm'
-import { useWeb3 } from '@masknet/plugin-infra/web3'
+import { useWeb3 } from '@masknet/web3-hooks-base'
 import { useCustomSnackbar } from '@masknet/theme'
 import { Typography, Button, Box } from '@mui/material'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 
-import { useI18N } from '../../locales'
-import { roundValue } from '../../helpers'
-import { harvestRewards } from '../utils/rewards'
-import { PagesType, TransactionStatus, AccountRewards, RewardDetailed, ChangePage } from '../../types'
+import { useI18N } from '../../locales/index.js'
+import { roundValue } from '../../helpers/index.js'
+import { harvestRewards } from '../utils/rewards.js'
+import { PagesType, TransactionStatus, AccountRewards, RewardDetailed, ChangePage } from '../../types.js'
 
-import { AccordionReward } from './AccordionReward'
-import { ReferredTokenRewards } from './ReferredTokenRewards'
+import { AccordionReward } from './AccordionReward.js'
+import { ReferredTokenRewards } from './ReferredTokenRewards.js'
 
 interface RewardsProps {
     currentChainId: ChainId

@@ -1,18 +1,18 @@
 import { Collapse, Link, Stack, Typography } from '@mui/material'
-import { useI18N } from '../../locales'
+import { useI18N } from '../../locales/index.js'
 import { makeStyles } from '@masknet/theme'
 import { memo, useMemo, useState } from 'react'
-import { RiskCard, RiskCardUI } from './RiskCard'
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
+import { RiskCard, RiskCardUI } from './RiskCard.js'
+import { KeyboardArrowDown as KeyboardArrowDownIcon } from '@mui/icons-material'
 import { useTheme } from '@mui/system'
-import { resolveGoLabLink } from '../../utils/helper'
-import { TokenPanel } from './TokenPanel'
+import { resolveGoLabLink } from '../../utils/helper.js'
+import { TokenPanel } from './TokenPanel.js'
 import { TokenIcon } from '@masknet/shared'
 import type { SecurityAPI, TokenAPI } from '@masknet/web3-providers'
 import { Icons } from '@masknet/icons'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { formatCurrency, FungibleToken } from '@masknet/web3-shared-base'
-import { DefineMapping, SecurityMessageLevel } from '../constants'
+import { DefineMapping, SecurityMessageLevel } from '../constants.js'
 import { EMPTY_LIST } from '@masknet/shared-base'
 
 interface TokenCardProps {
@@ -26,12 +26,6 @@ const useStyles = makeStyles()((theme) => ({
     header: {
         fontWeight: 700,
         fontSize: 18,
-    },
-    root: {
-        width: '600px',
-    },
-    detectionCard: {
-        backgroundColor: theme.palette.background.default,
     },
     detectionCollection: {
         overflowY: 'auto',
@@ -101,11 +95,11 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity, tokenInfo, t
                 <Stack direction="row" spacing={0.8}>
                     {tokenSecurity?.token_name ? (
                         <TokenIcon
-                            classes={{ icon: classes.icon }}
-                            address={tokenSecurity?.contract ?? ''}
-                            name={tokenSecurity?.token_name}
+                            className={classes.icon}
+                            address={tokenSecurity.contract ?? ''}
+                            name={tokenSecurity.token_name}
                             logoURL={tokenInfo?.logoURL}
-                            chainId={tokenSecurity?.chainId}
+                            chainId={tokenSecurity.chainId}
                         />
                     ) : (
                         <Icons.DefaultToken size={48} />

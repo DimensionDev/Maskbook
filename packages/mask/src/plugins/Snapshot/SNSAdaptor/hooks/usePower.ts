@@ -1,15 +1,15 @@
 import { useAsyncRetry } from 'react-use'
-import { useAccount } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { PluginSnapshotRPC } from '../../messages'
-import type { ProposalIdentifier } from '../../types'
-import { useProposal } from './useProposal'
-import { find, sumBy } from 'lodash-unified'
+import { useChainContext } from '@masknet/web3-hooks-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
+import { PluginSnapshotRPC } from '../../messages.js'
+import type { ProposalIdentifier } from '../../types.js'
+import { useProposal } from './useProposal.js'
+import { find, sumBy } from 'lodash-es'
 
 export function usePower(identifier: ProposalIdentifier) {
     const { payload: proposal } = useProposal(identifier.id)
 
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     return useAsyncRetry(async () => {
         if (!account) return 0
         const scores = await PluginSnapshotRPC.getScores(

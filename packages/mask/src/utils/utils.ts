@@ -4,8 +4,8 @@
  */
 import { pasteImage } from '@masknet/injected-script'
 import type { NextIDPersonaBindings } from '@masknet/shared-base'
-import { first, isNull } from 'lodash-unified'
-import Services from '../extension/service'
+import { first, isNull } from 'lodash-es'
+import Services from '../extension/service.js'
 /**
  * Download given url return as Blob
  */
@@ -65,6 +65,6 @@ export const sortPersonaBindings = (a: NextIDPersonaBindings, b: NextIDPersonaBi
     const p_b = first(b.proofs.filter((x) => x.identity === userId.toLowerCase()))
 
     if (!p_a || !p_b) return 0
-    if (p_a.created_at > p_b.created_at) return -1
+    if (p_a.last_checked_at > p_b.last_checked_at) return -1
     return 1
 }

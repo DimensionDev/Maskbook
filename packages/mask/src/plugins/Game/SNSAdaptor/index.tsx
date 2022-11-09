@@ -3,9 +3,9 @@ import type { Plugin } from '@masknet/plugin-infra'
 import { ApplicationEntry } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { Trans } from 'react-i18next'
-import { base } from '../base'
-import { PluginGameMessages } from '../messages'
-import WalletConnectDialog, { ConnectContext } from './WalletConnectDialog'
+import { base } from '../base.js'
+import { PluginGameMessages } from '../messages.js'
+import WalletConnectDialog, { ConnectContext } from './WalletConnectDialog.js'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -29,9 +29,10 @@ const sns: Plugin.SNSAdaptor.Definition = {
                     return (
                         <ApplicationEntry
                             {...props}
-                            disabled={disabled}
+                            disabled
                             title={name}
                             icon={icon}
+                            secondTitle="More coming"
                             onClick={props.onClick ? () => props.onClick?.(openDialog) : openDialog}
                         />
                     )

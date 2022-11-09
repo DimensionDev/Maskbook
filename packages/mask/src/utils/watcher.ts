@@ -4,8 +4,8 @@ import { Flags } from '../../shared'
 export function startWatch<T extends MutationObserverWatcher<any, any, any, any>>(watcher: T, signal: AbortSignal) {
     watcher
         .setDOMProxyOption({
-            afterShadowRootInit: { mode: Flags.shadowRootMode },
-            beforeShadowRootInit: { mode: Flags.shadowRootMode },
+            afterShadowRootInit: { mode: process.env.shadowRootMode },
+            beforeShadowRootInit: { mode: process.env.shadowRootMode },
         })
         .startWatch({ subtree: true, childList: true }, signal)
     return watcher

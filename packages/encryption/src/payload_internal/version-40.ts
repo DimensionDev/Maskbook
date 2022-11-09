@@ -1,11 +1,11 @@
 /* eslint @dimensiondev/unicode/specific-set: ["error", { "only": "code" }] */
 import type { PayloadParseResult, Signature } from '../payload/index.js'
-import { Ok } from 'ts-results'
+import { Ok } from 'ts-results-es'
 import { PayloadException } from '../types/index.js'
 import { decodeUint8ArrayF, assertIVLengthEq16 } from '../utils/index.js'
 import type { PayloadParserResult } from './index.js'
-import { encodeText } from '@dimensiondev/kit'
-import { CheckedError, OptionalResult } from '@masknet/shared-base'
+import { encodeText } from '@masknet/kit'
+import { CheckedError, OptionalResult } from '@masknet/base'
 
 const decodeUint8Array = decodeUint8ArrayF(PayloadException.InvalidPayload, PayloadException.DecodeFailed)
 // ? Payload format: (text format)

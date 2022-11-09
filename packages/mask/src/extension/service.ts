@@ -21,7 +21,8 @@ import type {
     SettingsService,
     SiteAdaptorService,
     ThirdPartyPluginService,
-} from '../../background/services/types'
+    Services as ServicesType,
+} from '../../background/services/types.js'
 assertNotEnvironment(Environment.ManifestBackground)
 
 const message = new WebExtensionMessage<Record<string, any>>({ domain: '$' })
@@ -31,11 +32,12 @@ const log: AsyncCallOptions['log'] = {
     sendLocalStack: process.env.NODE_ENV === 'development',
 }
 
-export const Services = {
+export const Services: ServicesType = {
     Crypto: add<CryptoService>('Crypto'),
     Identity: add<IdentityService>('Identity'),
     Backup: add<BackupService>('Backup'),
     Helper: add<HelperService>('Helper'),
+    SiteAdaptor: add<SiteAdaptorService>('SiteAdaptor'),
     SocialNetwork: add<SiteAdaptorService>('SiteAdaptor'),
     Settings: add<SettingsService>('Settings'),
     ThirdPartyPlugin: add<ThirdPartyPluginService>('ThirdPartyPlugin'),

@@ -1,4 +1,5 @@
 import {
+    Box,
     Link,
     Stack,
     Table,
@@ -9,16 +10,16 @@ import {
     TableRow,
     Typography,
 } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { FormattedCurrency } from '@masknet/shared'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { formatCurrency, TokenType } from '@masknet/web3-shared-base'
-import { useI18N } from '../../../../utils'
-import type { Ticker } from '../../types'
+import { useI18N } from '../../../../utils/index.js'
+import type { Ticker } from '../../types/index.js'
 import { DataProvider } from '@masknet/public-api'
-import { formatElapsed } from '../../../Wallet/formatter'
+import { formatElapsed } from '../../../Wallet/formatter.js'
 import { ReactNode, useMemo } from 'react'
-import { compact, pick } from 'lodash-unified'
+import { compact, pick } from 'lodash-es'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -51,6 +52,13 @@ const useStyles = makeStyles()((theme) => ({
         paddingBottom: theme.spacing(10),
         borderStyle: 'none',
     },
+    pair: {
+        whiteSpace: 'nowrap',
+        textOverflow: 'ellipsis',
+        overflow: 'hidden',
+        maxWidth: 100,
+        width: 100,
+    },
 }))
 
 export interface TickersTableProps {
@@ -67,7 +75,7 @@ export function TickersTable({ dataProvider, tickers, coinType }: TickersTablePr
     const { t } = useI18N()
     const { classes } = useStyles()
     const isNFT = coinType === TokenType.NonFungible
-    const isUniswap = dataProvider === DataProvider.UNISWAP_INFO
+    const isUniswap = dataProvider === DataProvider.UniswapInfo
 
     const headCellMap: Record<Cells, string> = {
         volume: t('plugin_trader_table_volume'),
@@ -104,17 +112,26 @@ export function TickersTable({ dataProvider, tickers, coinType }: TickersTablePr
                 if (!ticker.base_name || !ticker.target_name) return null
                 const formatted = formatEthereumAddress(ticker.base_name, 2)
                 return (
-                    <Link
-                        color={(theme) => theme.palette.maskColor?.primary}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        href={ticker.trade_url}>
-                        <Typography component="span" title={formatted !== ticker.base_name ? ticker.base_name : ''}>
-                            {formatted}
-                        </Typography>
-                        <span>/</span>
-                        <Typography component="span">{formatEthereumAddress(ticker.target_name, 2)}</Typography>
-                    </Link>
+                    <ShadowRootTooltip
+                        placement="top-start"
+                        title={`${formatted} / ${formatEthereumAddress(ticker.target_name, 2)}`}
+                        arrow>
+                        <Box className={classes.pair}>
+                            <Link
+                                color={(theme) => theme.palette.maskColor?.primary}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                href={ticker.trade_url}>
+                                <Typography
+                                    component="span"
+                                    title={formatted !== ticker.base_name ? ticker.base_name : ''}>
+                                    {formatted}
+                                </Typography>
+                                <span>/</span>
+                                <Typography component="span">{formatEthereumAddress(ticker.target_name, 2)}</Typography>
+                            </Link>
+                        </Box>
+                    </ShadowRootTooltip>
                 )
             })(),
             price: price ? <FormattedCurrency value={price} sign={currency} formatter={formatCurrency} /> : null,

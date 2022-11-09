@@ -1,5 +1,5 @@
 import {
-    decompressSecp256k1Key,
+    decompressK256Key,
     ECKeyIdentifier,
     NextIDAction,
     PersonaIdentifier,
@@ -7,8 +7,8 @@ import {
     ProfileInformationFromNextID,
     RelationFavor,
 } from '@masknet/shared-base'
-import { MaskMessages } from '../../../../shared/messages'
-import { storeAvatar } from '../../../database/avatar-cache/avatar'
+import { MaskMessages } from '../../../../shared/messages.js'
+import { storeAvatar } from '../../../database/avatar-cache/avatar.js'
 import {
     attachProfileDB,
     consistentPersonaDBWriteAccess,
@@ -21,9 +21,9 @@ import {
     ProfileRecord,
     queryProfileDB,
     queryProfilesDB,
-} from '../../../database/persona/db'
+} from '../../../database/persona/db.js'
 import { NextIDProof } from '@masknet/web3-providers'
-import { createOrUpdatePersonaDB, createOrUpdateRelationDB } from '../../../database/persona/web'
+import { createOrUpdatePersonaDB, createOrUpdateRelationDB } from '../../../database/persona/web.js'
 
 export interface UpdateProfileInfo {
     nickname?: string | null
@@ -53,7 +53,9 @@ export async function detachProfileWithNextID(
     platform: string,
     identity: string,
     createdAt: string,
-    options?: { signature?: string },
+    options?: {
+        signature?: string
+    },
 ): Promise<void> {
     await NextIDProof.bindProof(uuid, personaPublicKey, NextIDAction.Delete, platform, identity, createdAt, {
         signature: options?.signature,
@@ -113,7 +115,7 @@ export async function attachNextIDPersonaToProfile(item: ProfileInformationFromN
         updatedAt: now,
         identifier: item.linkedPersona,
         linkedProfiles: new Map(),
-        publicKey: await decompressSecp256k1Key(item.linkedPersona.rawPublicKey),
+        publicKey: await decompressK256Key(item.linkedPersona.rawPublicKey),
         publicHexKey: item.linkedPersona?.publicKeyAsHex,
         nickname: item.nickname,
         hasLogout: false,

@@ -1,10 +1,17 @@
-/// <reference path="./env.d.ts" />
+/// <reference path="./blocto-fcl.d.ts" />
+/// <reference types="@masknet/global-types/webpack" />
 
 import type { MutateOptions, BlockObject, TransactionObject } from '@blocto/fcl'
 
 export enum ChainId {
     Mainnet = 1,
     Testnet = 2,
+    // For any chains not supported yet.
+    Invalid = 0,
+}
+
+export enum AddressType {
+    Default = 1,
 }
 
 export enum SchemaType {
@@ -46,6 +53,7 @@ export type Web3Provider = {}
 export type Signature = string
 export type GasOption = never
 export type Block = BlockObject
+export type Operation = never
 export type Transaction = MutateOptions
 export type TransactionReceipt = never
 export type TransactionDetailed = TransactionObject

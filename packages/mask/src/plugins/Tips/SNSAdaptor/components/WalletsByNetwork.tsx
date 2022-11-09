@@ -1,11 +1,10 @@
-import { Icons } from '@masknet/icons'
-import type { BindingProof } from '@masknet/shared-base'
-import { networkMap } from '../../hooks/useSupportedNetworks'
 import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
-import { useI18N } from '../../locales'
-import { WalletItem } from './WalletItem'
-import type { NetworkPluginID } from '@masknet/web3-shared-base'
+import type { BindingProof, NetworkPluginID } from '@masknet/shared-base'
+import { isSameAddress } from '@masknet/web3-shared-base'
+import { networkMap } from '../../hooks/useSupportedNetworks.js'
+import { useI18N } from '../../locales/index.js'
+import { WalletItem } from './WalletItem.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -25,19 +24,13 @@ const useStyles = makeStyles()((theme) => ({
         overflowY: 'auto',
         gap: 12,
     },
-    settingIcon: {
-        fontSize: 16,
-        cursor: 'pointer',
-    },
     commonFlexBox: {
-        fontSize: 14,
         display: 'flex',
         alignItems: 'center',
         gap: theme.spacing(0.5),
     },
     empty: {
         height: '100px',
-        fontSize: 14,
         color: theme.palette.text.secondary,
         lineHeight: '100px',
         textAlign: 'center',
@@ -46,19 +39,40 @@ const useStyles = makeStyles()((theme) => ({
         width: 'auto',
         height: 18,
     },
+    link: {
+        color: theme.palette.maskColor.main,
+        fontWeight: 700,
+        lineHeight: '18px',
+        cursor: 'pointer',
+        marginLeft: theme.spacing(1.25),
+    },
 }))
 
 interface WalletsByNetworkProps {
     networkId: NetworkPluginID
     toSetting: () => void
-    wallets: BindingProof[]
-    setAsDefault: (idx: number) => void
+    wallets: Array<
+        BindingProof & {
+            fallbackName: string
+        }
+    >
+    notEmpty: boolean
+    defaultAddress?: string
+    setAsDefault: (address: string) => void
+    openConnectWallet: () => void
 }
 
-export function WalletsByNetwork({ wallets, networkId, toSetting, setAsDefault }: WalletsByNetworkProps) {
+export function WalletsByNetwork({
+    wallets,
+    networkId,
+    toSetting,
+    defaultAddress,
+    setAsDefault,
+    openConnectWallet,
+    notEmpty,
+}: WalletsByNetworkProps) {
     const t = useI18N()
     const { classes } = useStyles()
-    const isAllHide = wallets.every((x) => !x.isPublic)
     const network = networkMap[networkId]
     return (
         <div className={classes.container}>
@@ -67,24 +81,32 @@ export function WalletsByNetwork({ wallets, networkId, toSetting, setAsDefault }
                     <network.icon className={classes.networkIcon} />
                     {network.name}
                 </Typography>
-                <Icons.Settings onClick={toSetting} className={classes.settingIcon} />
             </div>
             <div className={classes.content}>
-                {isAllHide ? (
-                    <Typography className={classes.empty}>{t.tip_empty_list()}</Typography>
+                {wallets.length ? (
+                    wallets.map((x) => (
+                        <WalletItem
+                            key={x.identity}
+                            setAsDefault={setAsDefault}
+                            fallbackName={x.fallbackName}
+                            address={x.identity}
+                            isDefault={isSameAddress(defaultAddress, x.identity)}
+                        />
+                    ))
+                ) : notEmpty ? (
+                    <Typography className={classes.empty}>
+                        {t.tip_empty_manage_list()}
+                        <Typography component="span" className={classes.link} onClick={toSetting}>
+                            {t.manage_wallet()}
+                        </Typography>
+                    </Typography>
                 ) : (
-                    wallets
-                        .filter((x) => x.isPublic)
-                        .map((x, idx) => (
-                            <WalletItem
-                                key={x.identity}
-                                nowIdx={idx}
-                                setAsDefault={setAsDefault}
-                                fallbackName={`Wallet ${x.rawIdx}`}
-                                address={x.identity}
-                                isDefault={!!x.isDefault}
-                            />
-                        ))
+                    <Typography className={classes.empty}>
+                        {t.tip_empty_list()}
+                        <Typography component="span" className={classes.link} onClick={openConnectWallet}>
+                            {t.add_wallet()}
+                        </Typography>
+                    </Typography>
                 )}
             </div>
         </div>

@@ -1,8 +1,8 @@
 import { createMaskSDKServer } from '@masknet/sdk'
-import './hmr-sdk'
-import { hmr_sdkServer } from './hmr-bridge'
-import Services from '../service'
-import { currentSNSContext } from './bridge/sns_context'
+import './hmr-sdk.js'
+import { hmr_sdkServer } from './hmr-bridge.js'
+import Services from '../service.js'
+import { currentSNSContext } from './bridge/sns_context.js'
 
 const maskSDK = createMaskSDKServer(hmr_sdkServer)
 async function start() {

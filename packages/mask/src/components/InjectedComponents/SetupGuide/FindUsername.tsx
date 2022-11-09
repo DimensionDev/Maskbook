@@ -1,12 +1,10 @@
-import { WizardDialog, WizardDialogProps, useWizardDialogStyles } from './WizardDialog'
-import { useI18N } from '../../../utils'
+import { WizardDialog, WizardDialogProps } from './WizardDialog.js'
+import { useI18N } from '../../../utils/index.js'
 import { useState } from 'react'
-import { SetupGuideStep } from '../../../../shared/legacy-settings/types'
+import { SetupGuideStep } from '../../../../shared/legacy-settings/types.js'
 import { Box, Typography } from '@mui/material'
-import { MaskIcon } from '../../../resources/MaskIcon'
-import classNames from 'classnames'
+import { MaskIcon, ActionButtonPromise } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
-import { ActionButtonPromise } from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { Trans } from 'react-i18next'
 
@@ -29,13 +27,57 @@ export const useFindUsernameStyles = makeStyles()((theme) => ({
         width: 16,
         color: MaskColorVar.success,
     },
+    button: {
+        minWidth: 150,
+        height: 40,
+        minHeight: 40,
+        marginLeft: 0,
+        marginTop: 0,
+        [theme.breakpoints.down('sm')]: {
+            width: '100%',
+        },
+        fontSize: 14,
+        wordBreak: 'keep-all',
+        '&,&:hover': {
+            color: `${MaskColorVar.twitterButtonText} !important`,
+            background: `${MaskColorVar.twitterButton} !important`,
+        },
+    },
+    tip: {
+        fontSize: 16,
+        fontWeight: 500,
+        lineHeight: '22px',
+        paddingTop: 16,
+    },
+    connection: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-around',
+    },
+    connectItem: {
+        flex: 1,
+        height: 75,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+    },
+    line: {
+        width: 100,
+        height: 1,
+        borderTop: `dashed 1px  ${MaskColorVar.borderSecondary}`,
+    },
+    name: {
+        fontSize: 16,
+        fontWeight: 500,
+    },
 }))
 
 export interface FindUsernameProps extends Partial<WizardDialogProps> {
     username: string
+    stepUpdating?: boolean
     personaName?: string
     avatar?: string
-    onUsernameChange?: (username: string) => void
     onConnect: () => Promise<void>
     onDone?: () => void
     enableNextID?: boolean
@@ -49,12 +91,12 @@ export function FindUsername({
     onDone,
     onClose,
     enableNextID,
+    stepUpdating,
 }: FindUsernameProps) {
     const { t } = useI18N()
     const [connected, setConnected] = useState(false)
 
-    const { classes } = useWizardDialogStyles()
-    const { classes: findUsernameClasses } = useFindUsernameStyles()
+    const { classes, cx } = useFindUsernameStyles()
 
     return (
         <WizardDialog
@@ -73,11 +115,8 @@ export function FindUsername({
                             <Box className={classes.line} />
                             <Box className={classes.connectItem}>
                                 <Box position="relative" width={48}>
-                                    <img
-                                        src={avatar}
-                                        className={classNames(findUsernameClasses.avatar, connected ? 'connected' : '')}
-                                    />
-                                    {connected ? <Icons.Verified className={findUsernameClasses.verified} /> : null}
+                                    <img src={avatar} className={cx(classes.avatar, connected ? 'connected' : '')} />
+                                    {connected ? <Icons.Verified className={classes.verified} /> : null}
                                 </Box>
                                 <Typography variant="body2" className={classes.name}>
                                     {username}
@@ -110,7 +149,7 @@ export function FindUsername({
                         executor={onConnect}
                         completeOnClick={enableNextID ? undefined : onDone}
                         onComplete={enableNextID ? onDone : () => setConnected(true)}
-                        disabled={!username || !personaName}
+                        disabled={!username || !personaName || stepUpdating}
                         completeIcon={null}
                         failIcon={null}
                         failedOnClick="use executor"

@@ -7,31 +7,10 @@ import type { NonFungibleToken } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()({
-    card: {
-        position: 'relative',
-    },
     checkbox: {
         position: 'absolute',
         top: 0,
         right: 0,
-    },
-    container: {
-        borderTopLeftRadius: 8,
-        borderTopRightRadius: 8,
-        height: '100%',
-        backgroundColor: MaskColorVar.lineLight,
-        display: 'flex',
-        flexDirection: 'column',
-    },
-    placeholder: {
-        width: '100%',
-        height: 200,
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    description: {
-        flex: 1,
     },
     disabled: {
         filter: 'opacity(0.5)',
@@ -51,7 +30,7 @@ const useStyles = makeStyles()({
         width: '140px !important',
         height: '186px !important',
     },
-    loadingFailImage: {
+    fallbackImage: {
         minHeight: '0 !important',
         maxWidth: 'none',
         transform: 'translateY(10px)',
@@ -110,7 +89,7 @@ export const NFTCard = memo<NFTCardProps>(({ token, selectedTokenId, onSelect, r
                 setERC721TokenName={setName}
                 renderOrder={renderOrder}
                 classes={{
-                    loadingFailImage: classes.loadingFailImage,
+                    fallbackImage: classes.fallbackImage,
                     loadingPlaceholder: classes.loadingPlaceholder,
                     wrapper: classes.wrapper,
                 }}

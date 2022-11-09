@@ -6,17 +6,20 @@ import {
     RegistryContext,
     TransformerProvider,
     TransformationContextProvider,
-} from '@masknet/typed-message/dom'
-import { TypedMessageRenderRegistry } from './registry'
+    TextResizeContext,
+    TextResizer,
+} from '@masknet/typed-message-react'
+import { TypedMessageRenderRegistry } from './registry.js'
 import { useSubscription } from 'use-subscription'
 import { useMemo } from 'react'
-import { Container, Link } from './Components/Text'
-import { TypedMessageTransformers } from './transformer'
+import { Container, Link } from './Components/Text.js'
+import { TypedMessageTransformers } from './transformer.js'
 
 export interface TypedMessageRenderContextProps extends React.PropsWithChildren<{}> {
     context?: TransformationContext
     metadataRender?: React.ComponentType<MetadataRenderProps>
     renderFragments?: RenderFragmentsContextType
+    textResizer?: TextResizer | boolean
 }
 
 export function TypedMessageRenderContext(props: TypedMessageRenderContextProps) {
@@ -27,16 +30,18 @@ export function TypedMessageRenderContext(props: TypedMessageRenderContextProps)
     }, [props.metadataRender, props.renderFragments])
 
     return (
-        // basic render fragments provider: Text, Link, Image and Metadata
-        <RenderFragmentsContext.Provider value={Provider}>
-            {/* transformer pipeline */}
-            <TransformerProvider.Provider value={transformerFunction}>
-                {/* transformation context */}
-                <TransformationContextProvider.Provider value={props.context || emptyTransformationContext}>
-                    {/* components provider */}
-                    <RegistryContext.Provider value={registry}>{props.children}</RegistryContext.Provider>
-                </TransformationContextProvider.Provider>
-            </TransformerProvider.Provider>
-        </RenderFragmentsContext.Provider>
+        <TextResizeContext.Provider value={props.textResizer ?? true}>
+            {/* basic render fragments provider: Text, Link, Image and Metadata */}
+            <RenderFragmentsContext.Provider value={Provider}>
+                {/* transformer pipeline */}
+                <TransformerProvider.Provider value={transformerFunction}>
+                    {/* transformation context */}
+                    <TransformationContextProvider.Provider value={props.context || emptyTransformationContext}>
+                        {/* components provider */}
+                        <RegistryContext.Provider value={registry}>{props.children}</RegistryContext.Provider>
+                    </TransformationContextProvider.Provider>
+                </TransformerProvider.Provider>
+            </RenderFragmentsContext.Provider>
+        </TextResizeContext.Provider>
     )
 }

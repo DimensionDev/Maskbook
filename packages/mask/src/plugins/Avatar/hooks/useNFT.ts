@@ -1,39 +1,60 @@
-import { ChainId } from '@masknet/web3-shared-evm'
 import { useAsyncRetry } from 'react-use'
-import { useWeb3Connection, useWeb3Hub, useWeb3State } from '@masknet/plugin-infra/web3'
-import { CurrencyType, NetworkPluginID } from '@masknet/web3-shared-base'
-import type { NFTInfo } from '../types'
+import { ChainId } from '@masknet/web3-shared-evm'
+import { useWeb3Hub, useWeb3State } from '@masknet/web3-hooks-base'
+import { formatBalance, CurrencyType } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
+import type { Web3Helper } from '@masknet/web3-helpers'
+import type { NFTInfo } from '../types.js'
 
 export function useNFT(
     account: string,
-    address: string,
-    tokenId: string,
-    pluginId: NetworkPluginID,
-    chainId?: ChainId,
+    address?: string,
+    tokenId?: string,
+    pluginID: NetworkPluginID = NetworkPluginID.PLUGIN_EVM,
+    chainId: ChainId = ChainId.Mainnet,
+    ownerAddress?: string,
 ) {
-    const { Others } = useWeb3State<'all'>(pluginId ?? NetworkPluginID.PLUGIN_EVM)
-    const hub = useWeb3Hub<'all'>(pluginId, {
+    const { Others, Connection } = useWeb3State<'all'>(pluginID)
+    const hub = useWeb3Hub<'all'>(pluginID, {
         chainId,
         account,
     })
-    const connection = useWeb3Connection(pluginId ?? NetworkPluginID.PLUGIN_EVM)
     return useAsyncRetry(async () => {
-        const asset = await hub?.getNonFungibleAsset?.(address, tokenId, {
+        if (!address || !tokenId) return
+        const connection = await Connection?.getConnection?.({
             chainId,
+            account,
         })
+        const allSettled = await Promise.allSettled([
+            connection?.getNonFungibleToken(address, tokenId),
+            hub?.getNonFungibleAsset?.(address, tokenId, {
+                chainId,
+                account: ownerAddress,
+            }),
+        ])
 
-        const metaData = await connection?.getNonFungibleTokenMetadata(address, tokenId)
+        const [token, asset] = allSettled.map((x) => (x.status === 'fulfilled' ? x.value : undefined)) as [
+            Web3Helper.NonFungibleTokenScope<'all'> | undefined,
+            Web3Helper.NonFungibleAssetScope<'all'> | undefined,
+        ]
+
+        const metadata = asset?.metadata || token?.metadata
+        const amount = asset?.priceInToken
+            ? formatBalance(asset.priceInToken.amount, asset.priceInToken.token.decimals)
+            : asset?.price?.[CurrencyType.USD] ?? '0'
+        const name = metadata?.name ?? ''
+        const imageURL = metadata?.imageURL
+        const permalink = asset?.link ?? Others?.explorerResolver.nonFungibleTokenLink(chainId, address, tokenId)
+
         return {
-            amount: asset?.priceInToken?.amount ?? asset?.price?.[CurrencyType.USD] ?? '0',
-            name: asset?.contract?.name ?? metaData?.name ?? '',
-            symbol: asset?.priceInToken?.token.symbol ?? asset?.paymentTokens?.[0].symbol ?? 'ETH',
-            image: asset?.metadata?.imageURL ?? metaData?.imageURL ?? '',
-            owner: asset?.owner?.address ?? asset?.ownerId ?? '',
-            slug: asset?.collection?.slug ?? '',
-            permalink:
-                asset?.link ??
-                Others?.explorerResolver.nonFungibleTokenLink(chainId ?? ChainId.Mainnet, address, tokenId) ??
-                '',
+            amount,
+            name,
+            symbol: asset?.priceInToken ? asset.priceInToken.token.symbol : 'USD',
+            image: imageURL,
+            owner: token?.ownerId ?? asset?.owner?.address ?? asset?.ownerId,
+            // Not all NFT markets have slug in the URL
+            slug: token ? undefined : asset?.collection?.slug,
+            permalink,
         } as NFTInfo
-    }, [hub?.getNonFungibleAsset, address, tokenId, Others, chainId, connection])
+    }, [hub?.getNonFungibleAsset, Connection?.getConnection, address, tokenId, Others, chainId, ownerAddress])
 }

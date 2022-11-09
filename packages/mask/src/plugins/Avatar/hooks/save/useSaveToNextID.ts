@@ -1,48 +1,30 @@
-import { BindingProof, ECKeyIdentifier, EnhanceableSite, fromHex, toBase64 } from '@masknet/shared-base'
-import { NextIDStorage } from '@masknet/web3-providers'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { useAsyncFn } from 'react-use'
-import Services from '../../../../extension/service'
-import { activatedSocialNetworkUI } from '../../../../social-network'
-import { PLUGIN_ID } from '../../constants'
-import { PluginNFTAvatarRPC } from '../../messages'
-import type { NextIDAvatarMeta } from '../../types'
+import { useCallback } from 'react'
+import { BindingProof, ECKeyIdentifier, EnhanceableSite, NetworkPluginID } from '@masknet/shared-base'
+import { useWeb3State } from '@masknet/web3-hooks-base'
+import { activatedSocialNetworkUI } from '../../../../social-network/index.js'
+import { useSaveAddress } from './useSaveAddress.js'
+import type { NextIDAvatarMeta } from '../../types.js'
+import { PLUGIN_ID } from '../../constants.js'
 
 export function useSaveToNextID() {
-    return useAsyncFn(
+    const { Storage } = useWeb3State()
+    const saveAddress = useSaveAddress()
+    return useCallback(
         async (info: NextIDAvatarMeta, account: string, persona?: ECKeyIdentifier, proof?: BindingProof) => {
-            if (!proof?.identity || !persona?.publicKeyAsHex) return
-            const payload = await NextIDStorage.getPayload(
-                persona.publicKeyAsHex,
-                proof?.platform,
-                proof?.identity,
-                info,
-                PLUGIN_ID,
-            )
-            if (!payload.ok) {
-                return
-            }
-            const result = await Services.Identity.generateSignResult(persona, payload.val.signPayload)
-            if (!result) return
-            const response = await NextIDStorage.set(
-                payload.val.uuid,
-                persona.publicKeyAsHex,
-                toBase64(fromHex(result.signature.signature)),
-                proof.platform,
-                proof.identity,
-                payload.val.createdAt,
-                info,
-                PLUGIN_ID,
-            )
+            if (!proof?.identity || !persona || !Storage) return
+            const storage = Storage.createNextIDStorage(proof.identity, proof.platform, persona)
 
-            await PluginNFTAvatarRPC.setAddress(
-                activatedSocialNetworkUI.networkIdentifier as EnhanceableSite,
+            await storage.set(PLUGIN_ID, info)
+
+            saveAddress(
                 info.userId,
                 info.pluginId ?? NetworkPluginID.PLUGIN_EVM,
                 account,
+                activatedSocialNetworkUI.networkIdentifier as EnhanceableSite,
             )
 
-            return response.ok
+            return info
         },
+        [saveAddress, Storage],
     )
 }

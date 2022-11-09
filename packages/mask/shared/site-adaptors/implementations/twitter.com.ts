@@ -1,7 +1,7 @@
 import urlcat from 'urlcat'
 import { EnhanceableSite } from '@masknet/shared-base'
-import { defineSiteAdaptor } from '../definitions'
-import type { SiteAdaptor } from '../types'
+import { defineSiteAdaptor } from '../definitions.js'
+import type { SiteAdaptor } from '../types.js'
 
 if (import.meta.webpackHot) import.meta.webpackHot.accept()
 
@@ -10,6 +10,7 @@ export const TwitterAdaptor: SiteAdaptor.Definition = {
     networkIdentifier: EnhanceableSite.Twitter,
     declarativePermissions: { origins },
     homepage: 'https://twitter.com',
+    isSocialNetwork: true,
 
     getProfilePage: (userId) => new URL(`https://twitter.com/${userId.userId}`),
     getShareLinkURL(message) {

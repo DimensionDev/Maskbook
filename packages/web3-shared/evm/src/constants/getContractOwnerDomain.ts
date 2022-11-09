@@ -1,17 +1,15 @@
 import Aave from '@masknet/web3-constants/evm/aave.json'
 import Airdrop from '@masknet/web3-constants/evm/airdrop.json'
 import ArtBlocks from '@masknet/web3-constants/evm/artblocks.json'
-import CryptoArtAI from '@masknet/web3-constants/evm/cryptoartai.json'
 import Gitcoin from '@masknet/web3-constants/evm/gitcoin.json'
 import GoodGhosting from '@masknet/web3-constants/evm/good-ghosting.json'
 import ITO from '@masknet/web3-constants/evm/ito.json'
 import Lido from '@masknet/web3-constants/evm/lido.json'
 import MaskBox from '@masknet/web3-constants/evm/mask-box.json'
 import NftRedPacket from '@masknet/web3-constants/evm/nft-red-packet.json'
-import PoolTogether from '@masknet/web3-constants/evm/pooltogether.json'
 import RedPacket from '@masknet/web3-constants/evm/red-packet.json'
 import Trader from '@masknet/web3-constants/evm/trader.json'
-import { filter, flatten, pick, uniq, values } from 'lodash-unified'
+import { filter, flatten, pick, uniq, values } from 'lodash-es'
 
 const collect = <T extends Record<string, Record<string, string | number>>>(
     data: T,
@@ -55,11 +53,9 @@ const domainAddressMap: Record<string, string[]> = {
     'mdex.com': collect(Trader, ['MDEX_ROUTER_ADDRESS', 'MDEX_FACTORY_ADDRESS']),
     'aave.com': collect(Aave, ['AAVE_LENDING_POOL_ADDRESSES_PROVIDER_CONTRACT_ADDRESS']),
     'www.artblocks.io': collect(ArtBlocks, ['GEN_ART_721_MINTER']),
-    'www.cryptoart.ai': collect(CryptoArtAI, ['ARTIST_ACCEPTING_BIDS_V2', 'ARTIST_ACCEPTING_BIDS_V2', 'CANFT_MARKET']),
     'gitcoin.co': collect(Gitcoin, ['GITCOIN_ETH_ADDRESS', 'BULK_CHECKOUT_ADDRESS']),
     'goodghosting.com': collect(GoodGhosting, ['GOOD_GHOSTING_INCENTIVES_CONTRACT_ADDRESS']),
     'lido.fi': collect(Lido, ['LIDO_stETH_ADDRESS', 'LIDO_REFERRAL_ADDRESS']),
-    'pooltogether.com': collect(PoolTogether, ['MASK_POOL_ADDRESS']),
     'mask.io': [
         ...collect(Airdrop, ['AIRDROP_CONTRACT_ADDRESS']),
         ...collect(ITO, ['ITO_CONTRACT_ADDRESS']),

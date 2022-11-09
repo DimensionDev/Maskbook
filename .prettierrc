@@ -3,5 +3,12 @@
   "printWidth": 120,
   "semi": false,
   "singleQuote": true,
-  "bracketSameLine": true
+  "bracketSameLine": true,
+  "tabWidth": 4,
+  "overrides": [
+    {
+      "files": ["*rc", "package.json", "tsconfig*", "*.md", "*.yaml", "*.yml"],
+      "options": { "tabWidth": 2 }
+    }
+  ]
 }

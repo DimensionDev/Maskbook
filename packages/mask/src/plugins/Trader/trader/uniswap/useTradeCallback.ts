@@ -1,14 +1,14 @@
 import { useAsyncFn } from 'react-use'
-import BigNumber from 'bignumber.js'
+import { BigNumber } from 'bignumber.js'
 import type { TradeProvider } from '@masknet/public-api'
 import type { SwapParameters } from '@uniswap/v2-sdk'
 import type { GasOptionConfig } from '@masknet/web3-shared-evm'
-import { useSwapParameters as useTradeParameters } from './useTradeParameters'
-import { swapErrorToUserReadableMessage } from '../../helpers'
-import type { SwapCall, Trade, TradeComputed } from '../../types'
-import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
-import { useAccount, useWeb3Connection } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID, ZERO } from '@masknet/web3-shared-base'
+import { useSwapParameters as useTradeParameters } from './useTradeParameters.js'
+import { swapErrorToUserReadableMessage } from '../../helpers/index.js'
+import type { SwapCall, Trade, TradeComputed } from '../../types/index.js'
+import { useChainContext, useNetworkContext, useWeb3Connection } from '@masknet/web3-hooks-base'
+import { ZERO } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 
 interface FailedCall {
     parameters: SwapParameters
@@ -35,13 +35,13 @@ export function useTradeCallback(
     gasConfig?: GasOptionConfig,
     allowedSlippage?: number,
 ) {
-    const { targetChainId } = TargetChainIdContext.useContainer()
-    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, { chainId: targetChainId })
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const { account, chainId } = useChainContext()
+    const { pluginID } = useNetworkContext()
+    const connection = useWeb3Connection(pluginID, { chainId })
     const tradeParameters = useTradeParameters(trade, tradeProvider, allowedSlippage)
 
     return useAsyncFn(async () => {
-        if (!tradeParameters.length || !connection) {
+        if (!tradeParameters.length || !connection || pluginID !== NetworkPluginID.PLUGIN_EVM) {
             return
         }
         // step 1: estimate each trade parameter
@@ -116,14 +116,19 @@ export function useTradeCallback(
         } = bestCallOption
 
         try {
-            const hash = await connection.sendTransaction({
-                from: account,
-                to: address,
-                data: calldata,
-                ...('gasEstimate' in bestCallOption ? { gas: bestCallOption.gasEstimate.toFixed() } : {}),
-                ...(!value || /^0x0*$/.test(value) ? {} : { value }),
-                ...gasConfig,
-            })
+            const hash = await connection.sendTransaction(
+                {
+                    from: account,
+                    to: address,
+                    data: calldata,
+                    ...('gasEstimate' in bestCallOption ? { gas: bestCallOption.gasEstimate.toFixed() } : {}),
+                    ...(!value || /^0x0*$/.test(value) ? {} : { value }),
+                    ...gasConfig,
+                },
+                {
+                    chainId,
+                },
+            )
             const receipt = await connection.getTransactionReceipt(hash)
             return receipt?.transactionHash
         } catch (error: any) {
@@ -136,5 +141,5 @@ export function useTradeCallback(
                     : 'Transaction rejected.',
             )
         }
-    }, [connection, account, tradeParameters, gasConfig])
+    }, [connection, account, tradeParameters, gasConfig, chainId, pluginID])
 }

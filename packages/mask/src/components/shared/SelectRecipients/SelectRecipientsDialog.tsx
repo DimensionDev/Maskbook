@@ -1,28 +1,23 @@
-import { LoadingBase, makeStyles } from '@masknet/theme'
-import { InjectedDialog } from '@masknet/shared'
-import { Button, DialogActions, DialogContent, InputAdornment, InputBase, Typography } from '@mui/material'
+import { startTransition, useDeferredValue, useEffect, useMemo, useState } from 'react'
 import Fuse from 'fuse.js'
-import { useEffect, useMemo, useState } from 'react'
+import { InjectedDialog } from '@masknet/shared'
+import { useLookupAddress } from '@masknet/web3-hooks-base'
+import { LoadingBase, makeStyles } from '@masknet/theme'
+import { Icons } from '@masknet/icons'
+import { Button, DialogActions, DialogContent, InputAdornment, InputBase, Typography } from '@mui/material'
 import type {
     ProfileInformation as Profile,
     ProfileInformation,
     ProfileInformationFromNextID,
 } from '@masknet/shared-base'
-import { useI18N } from '../../../utils'
-import { ProfileInList } from './ProfileInList'
-import { Icons } from '@masknet/icons'
+import { useI18N } from '../../../utils/index.js'
+import { ProfileInList } from './ProfileInList.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
         minHeight: 400,
         minWidth: 400,
         overflow: 'hidden',
-    },
-    content: {
-        padding: '0 !important',
-    },
-    title: {
-        marginLeft: 6,
     },
     inputRoot: {
         padding: '4px 10px',
@@ -96,7 +91,13 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
     const { t } = useI18N()
     const { classes, cx } = useStyles()
     const { items, disabledItems, onSearch } = props
-    const [search, setSearch] = useState('')
+    const [_search, setSearch] = useState('')
+    const { value: registeredAddress = '', loading: resolveDomainLoading } = useLookupAddress(
+        undefined,
+        useDeferredValue(_search),
+    )
+
+    const search = registeredAddress || _search
 
     useEffect(() => {
         setSearch('')
@@ -130,10 +131,10 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
                     classes={{
                         focused: classes.inputFocused,
                     }}
-                    value={search}
+                    value={_search}
                     onKeyUp={(e) => {
                         if (e.code !== 'Enter') return
-                        onSearch(search)
+                        startTransition(() => onSearch(search))
                     }}
                     onChange={(e) => setSearch(e.target.value)}
                     onBlur={() => onSearch(search)}
@@ -144,9 +145,9 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
                     }
                     placeholder={t('post_dialog_share_with_input_placeholder')}
                 />
-                {props.loading ? (
+                {props.loading || resolveDomainLoading ? (
                     <div className={cx(classes.empty, classes.mainText)}>
-                        <LoadingBase style={{ fontSize: '2rem' }} />
+                        <LoadingBase />
                         <Typography>{t('loading')}</Typography>
                     </div>
                 ) : (

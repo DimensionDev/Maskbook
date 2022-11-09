@@ -1,5 +1,5 @@
-import { delay } from '@dimensiondev/kit'
-import { Messages, Services } from '../API'
+import { delay } from '@masknet/kit'
+import { Messages, Services } from '../API.js'
 
 export function useCreatePersonaV2() {
     return async (mnemonicWord: string, nickName: string) => {

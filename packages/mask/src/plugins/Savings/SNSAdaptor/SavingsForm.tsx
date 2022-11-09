@@ -1,40 +1,87 @@
 import { useState, useMemo } from 'react'
 import { useAsync, useAsyncFn } from 'react-use'
 import type { AbiItem } from 'web3-utils'
-import BigNumber from 'bignumber.js'
-import {
-    isLessThan,
-    rightShift,
-    createLookupTableResolver,
-    NetworkPluginID,
-    ZERO,
-    formatBalance,
-    formatCurrency,
-} from '@masknet/web3-shared-base'
-import { LoadingBase } from '@masknet/theme'
+import { BigNumber } from 'bignumber.js'
+import { isLessThan, rightShift, ZERO, formatBalance, formatCurrency } from '@masknet/web3-shared-base'
+import { LoadingBase, makeStyles } from '@masknet/theme'
 import {
     createContract,
-    createERC20Token,
     SchemaType,
     getAaveConstants,
     ZERO_ADDRESS,
     chainResolver,
     isNativeTokenAddress,
 } from '@masknet/web3-shared-evm'
-import { useAccount, useFungibleTokenBalance, useFungibleTokenPrice, useWeb3 } from '@masknet/plugin-infra/web3'
-import { FormattedCurrency, InjectedDialog, TokenAmountPanel, TokenIcon, useOpenShareTxDialog } from '@masknet/shared'
-import type { AaveLendingPoolAddressProvider } from '@masknet/web3-contracts/types/AaveLendingPoolAddressProvider'
+import {
+    useChainContext,
+    useFungibleTokenBalance,
+    useFungibleTokenPrice,
+    useNativeToken,
+    useWeb3,
+} from '@masknet/web3-hooks-base'
+import {
+    FungibleTokenInput,
+    FormattedCurrency,
+    InjectedDialog,
+    TokenIcon,
+    useOpenShareTxDialog,
+    PluginWalletStatusBar,
+    ActionButtonPromise,
+    ChainBoundary,
+    WalletConnectedBoundary,
+    EthereumERC20TokenApprovedBoundary,
+} from '@masknet/shared'
+import type { AaveLendingPoolAddressProvider } from '@masknet/web3-contracts/types/AaveLendingPoolAddressProvider.js'
 import AaveLendingPoolAddressProviderABI from '@masknet/web3-contracts/abis/AaveLendingPoolAddressProvider.json'
-import { PluginWalletStatusBar, useI18N } from '../../../utils'
-import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
-import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
-import { ProtocolType, SavingsProtocol, TabType } from '../types'
-import { useStyles } from './SavingsFormStyles'
-import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
+import { useI18N } from '../../../utils/index.js'
+import { ProtocolType, SavingsProtocol, TabType } from '../types.js'
 import { DialogActions, DialogContent, Typography } from '@mui/material'
-import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
-import { activatedSocialNetworkUI } from '../../../social-network'
-import { ActionButtonPromise } from '../../../extension/options-page/DashboardComponents/ActionButton'
+import { isTwitter } from '../../../social-network-adaptor/twitter.com/base.js'
+import { activatedSocialNetworkUI } from '../../../social-network/index.js'
+import { createLookupTableResolver, NetworkPluginID } from '@masknet/shared-base'
+
+export const useStyles = makeStyles()((theme, props) => ({
+    containerWrap: {
+        padding: 0,
+        fontFamily: theme.typography.fontFamily,
+    },
+    inputWrap: {
+        position: 'relative',
+        width: '100%',
+        margin: theme.spacing(1.25, 0),
+    },
+    tokenValueUSD: {
+        padding: '0 0 10px 0',
+    },
+    infoRow: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        padding: '0 0 15px 0',
+    },
+    infoRowLeft: {
+        display: 'flex',
+        alignItems: 'center',
+    },
+    infoRowRight: {
+        fontWeight: 'bold',
+    },
+    rowImage: {
+        width: '24px',
+        height: '24px',
+        margin: '0 5px 0 0',
+    },
+    button: {},
+    disabledButton: {},
+    connectWallet: {
+        marginTop: 0,
+    },
+    gasFee: {
+        padding: '0 0 0 5px',
+        fontSize: 11,
+        opacity: 0.5,
+    },
+}))
 
 export interface SavingsFormDialogProps {
     chainId: number
@@ -56,11 +103,16 @@ export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFo
     const { classes } = useStyles()
 
     const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM, { chainId })
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const [inputAmount, setInputAmount] = useState('')
     const [estimatedGas, setEstimatedGas] = useState<BigNumber.Value>(ZERO)
 
-    const { value: nativeTokenBalance } = useFungibleTokenBalance(NetworkPluginID.PLUGIN_EVM, '', { chainId })
+    const { value: nativeToken } = useNativeToken<'all'>(NetworkPluginID.PLUGIN_EVM, {
+        chainId,
+    })
+    const { value: nativeTokenBalance } = useFungibleTokenBalance(NetworkPluginID.PLUGIN_EVM, nativeToken?.address, {
+        chainId,
+    })
 
     // #region form variables
     const { value: inputTokenBalance } = useFungibleTokenBalance(
@@ -110,7 +162,7 @@ export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFo
 
     const { value: tokenPrice = 0 } = useFungibleTokenPrice(
         NetworkPluginID.PLUGIN_EVM,
-        !isNativeTokenAddress(protocol.bareToken.address) ? protocol.bareToken.address : undefined,
+        !isNativeTokenAddress(protocol.bareToken.address) ? protocol.bareToken.address : nativeToken?.address,
         { chainId },
     )
 
@@ -134,17 +186,14 @@ export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFo
         const poolAddress = await lPoolAddressProviderContract?.methods.getLendingPool().call()
 
         return {
-            approveToken:
-                token.schema === SchemaType.ERC20
-                    ? createERC20Token(chainId, token.address, token.name, token.symbol, token.decimals)
-                    : undefined,
+            approveToken: token.schema === SchemaType.ERC20 ? token : undefined,
             approveAmount: new BigNumber(inputAmount).shiftedBy(token.decimals),
             approveAddress: poolAddress,
         }
     }, [protocol.bareToken, inputAmount, chainId])
 
     const openShareTxDialog = useOpenShareTxDialog()
-    const shareText = t('promote_savings', {
+    const shareText = t(tab === TabType.Deposit ? 'promote_savings' : 'promote_withdraw', {
         amount: inputAmount,
         symbol: protocol.bareToken.symbol,
         chain: chainResolver.chainName(chainId),
@@ -243,16 +292,13 @@ export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFo
                     {needsSwap ? null : (
                         <>
                             <div className={classes.inputWrap}>
-                                <TokenAmountPanel
+                                <FungibleTokenInput
                                     amount={inputAmount}
                                     maxAmount={balanceAsBN.minus(estimatedGas).toString()}
                                     balance={balanceAsBN.toString()}
                                     label={t('plugin_savings_amount')}
                                     token={protocol.bareToken}
                                     onAmountChange={setInputAmount}
-                                    InputProps={{ classes: { root: classes.inputTextField } }}
-                                    MaxChipProps={{ classes: { root: classes.maxChip } }}
-                                    SelectTokenChip={{ ChipProps: { classes: { root: classes.selectTokenChip } } }}
                                 />
                             </div>
 
@@ -275,7 +321,13 @@ export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFo
 
                     <div className={classes.infoRow}>
                         <Typography variant="body2" className={classes.infoRowLeft}>
-                            <TokenIcon address={protocol.bareToken.address} classes={{ icon: classes.rowImage }} />
+                            <TokenIcon
+                                className={classes.rowImage}
+                                address={protocol.bareToken.address}
+                                logoURL={protocol.bareToken.logoURL}
+                                chainId={protocol.bareToken.chainId}
+                                name={protocol.bareToken.name}
+                            />
                             {protocol.bareToken.name} {t('plugin_savings_apr')}%
                         </Typography>
                         <Typography variant="body2" className={classes.infoRowRight}>

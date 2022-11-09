@@ -1,6 +1,7 @@
+/* eslint-disable tss-unused-classes/unused-classes */
 import { makeStyles } from '@masknet/theme'
-import { injectCommentBoxDefaultFactory } from '../../../social-network/defaults'
-import { pasteToCommentBoxMinds } from '../automation/pasteToCommentBoxMinds'
+import { injectCommentBoxDefaultFactory } from '../../../social-network/defaults/index.js'
+import { pasteToCommentBoxMinds } from '../automation/pasteToCommentBoxMinds.js'
 
 export default function injectCommentBoxAtMinds() {
     return injectCommentBoxDefaultFactory(
@@ -21,7 +22,7 @@ export default function injectCommentBoxAtMinds() {
                 padding: '2px 1em',
                 border: `1px solid ${theme.palette.mode === 'dark' ? '#414c57' : '#d3dbe3'}`,
                 margin: '0 10px 10px',
-                color: theme.palette.mode === 'dark' ? '#fff' : '#43434d', // TODO: maybe inherit?
+                color: theme.palette.mode === 'dark' ? '#fff' : '#43434d',
                 fontWeight: 400,
             },
             input: {

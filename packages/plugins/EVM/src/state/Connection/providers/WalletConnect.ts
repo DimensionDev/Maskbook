@@ -1,14 +1,14 @@
-import { first } from 'lodash-unified'
+import { first } from 'lodash-es'
 import { toHex } from 'web3-utils'
 import type { RequestArguments } from 'web3-core'
-import { defer } from '@dimensiondev/kit'
+import { defer } from '@masknet/kit'
 import WalletConnect from '@walletconnect/client'
 import type { ITxData } from '@walletconnect/types'
 import { ChainId, chainResolver, EthereumMethodType, isValidAddress, ProviderType } from '@masknet/web3-shared-evm'
-import { BaseProvider } from './Base'
-import type { EVM_Provider } from '../types'
 import type { Account } from '@masknet/web3-shared-base'
-import { SharedContextSettings } from '../../../settings'
+import { BaseProvider } from './Base.js'
+import type { EVM_Provider } from '../types.js'
+import { SharedContextSettings } from '../../../settings/index.js'
 
 interface SessionPayload {
     event: 'connect' | 'session_update'
@@ -22,7 +22,11 @@ interface SessionPayload {
 
 interface DisconnectPayload {
     event: 'disconnect'
-    params: [{ message: string }]
+    params: [
+        {
+            message: string
+        },
+    ]
 }
 
 interface ModalClosePayload {

@@ -3,26 +3,15 @@ import { Button, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { Controller } from 'react-hook-form'
 import type { z as zod } from 'zod'
-import { StyledInput } from '../../../components/StyledInput'
+import { StyledInput } from '../../../components/StyledInput/index.js'
 import { useNavigate } from 'react-router-dom'
-import { WalletRPC } from '../../../../../plugins/Wallet/messages'
-import { useI18N } from '../../../../../utils'
+import { WalletRPC } from '../../../../../plugins/Wallet/messages.js'
+import { useI18N } from '../../../../../utils/index.js'
 
-import { useSetWalletNameForm } from '../hooks/useSetWalletNameForm'
-import { useTitle } from '../../../hook/useTitle'
+import { useSetWalletNameForm } from '../hooks/useSetWalletNameForm.js'
+import { useTitle } from '../../../hook/useTitle.js'
 
 const useStyles = makeStyles()({
-    header: {
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        padding: '16px 10px',
-    },
-    title: {
-        color: '#15181B',
-        fontSize: 12,
-        fontHeight: '16px',
-    },
     content: {
         padding: '16px',
         flex: 1,

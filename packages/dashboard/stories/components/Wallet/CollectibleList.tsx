@@ -1,5 +1,5 @@
 import { story } from '@masknet/storybook-shared'
-import { CollectibleListUI as C } from '../../../src/pages/Wallets/components/CollectibleList'
+import { CollectibleListUI as C } from '../../../src/pages/Wallets/components/CollectibleList/index.js'
 import { ChainId } from '@masknet/web3-shared-evm'
 
 const { meta, of } = story(C)

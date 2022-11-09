@@ -1,6 +1,6 @@
 import type { ButtonProps, SelectProps, TextFieldProps, TooltipProps, AlertProps } from '@mui/material'
 import type { ArgType, ArgTypes } from '@storybook/addons'
-import { argsOfArr, ControlType } from './args'
+import { argsOfArr, ControlType } from './args.js'
 import { SnackbarProviderProps } from 'notistack'
 function enumIn<T>(enums: {
     [Prop in keyof T]?: (

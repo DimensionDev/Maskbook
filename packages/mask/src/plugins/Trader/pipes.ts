@@ -1,12 +1,12 @@
 import { DataProvider, TradeProvider } from '@masknet/public-api'
-import { createLookupTableResolver } from '@masknet/web3-shared-base'
+import { createLookupTableResolver } from '@masknet/shared-base'
 
 export const resolveDataProviderName = createLookupTableResolver<DataProvider, string>(
     {
-        [DataProvider.COIN_GECKO]: 'CoinGecko',
-        [DataProvider.COIN_MARKET_CAP]: 'CoinMarketCap',
-        [DataProvider.UNISWAP_INFO]: 'Uniswap Info',
-        [DataProvider.NFTSCAN]: 'NFTScan',
+        [DataProvider.CoinGecko]: 'CoinGecko',
+        [DataProvider.CoinMarketCap]: 'CoinMarketCap',
+        [DataProvider.UniswapInfo]: 'Uniswap Info',
+        [DataProvider.NFTScan]: 'NFTScan',
     },
     (dataProvider) => {
         throw new Error(`Unknown data provider: ${dataProvider}`)
@@ -15,10 +15,10 @@ export const resolveDataProviderName = createLookupTableResolver<DataProvider, s
 
 export const resolveDataProviderLink = createLookupTableResolver<DataProvider, string>(
     {
-        [DataProvider.COIN_GECKO]: 'https://www.coingecko.com/',
-        [DataProvider.COIN_MARKET_CAP]: 'https://coinmarketcap.com/',
-        [DataProvider.UNISWAP_INFO]: 'https://info.uniswap.org/',
-        [DataProvider.NFTSCAN]: 'https://www.nftscan.com/',
+        [DataProvider.CoinGecko]: 'https://www.coingecko.com/',
+        [DataProvider.CoinMarketCap]: 'https://coinmarketcap.com/',
+        [DataProvider.UniswapInfo]: 'https://info.uniswap.org/',
+        [DataProvider.NFTScan]: 'https://www.nftscan.com/',
     },
     (dataProvider) => {
         throw new Error(`Unknown data provider: ${dataProvider}`)

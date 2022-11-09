@@ -1,6 +1,6 @@
-import { FindTrumanContext } from '../context'
-import { LoadingFailCard } from './LoadingFailCard'
-import { FindTruman } from './FindTruman'
+import { FindTrumanContext } from '../context.js'
+import { LoadingFailCard } from './LoadingFailCard.js'
+import { FindTruman } from './FindTruman.js'
 import {
     CompletionQuestionAnswer,
     PollResult,
@@ -10,8 +10,8 @@ import {
     UserCompletionStatus,
     UserPollStatus,
     UserStoryStatus,
-} from '../types'
-import { useAccount } from '@masknet/plugin-infra/web3'
+} from '../types.js'
+import { useChainContext } from '@masknet/web3-hooks-base'
 import { useEffect, useState } from 'react'
 import {
     fetchPollResult,
@@ -24,10 +24,10 @@ import {
     submitCompletion,
     submitPoll,
     submitPuzzle,
-} from '../Worker/apis'
+} from '../Worker/apis/index.js'
 import getUnixTime from 'date-fns/getUnixTime'
-import { useConst } from './hooks/useConst'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { useConst } from './hooks/useConst.js'
+import type { NetworkPluginID } from '@masknet/shared-base'
 
 export interface PostInspectorProps {
     url: string
@@ -35,8 +35,9 @@ export interface PostInspectorProps {
 
 export function PostInspector(props: PostInspectorProps) {
     const { url } = props
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM).toLowerCase()
     const { consts, t } = useConst()
+    const { account: account_ } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+    const account = account_.toLowerCase()
 
     const [, , , _storyId, , _targetId] = new URL(url).hash.split('/')
     const storyId = _storyId ? _storyId : ''

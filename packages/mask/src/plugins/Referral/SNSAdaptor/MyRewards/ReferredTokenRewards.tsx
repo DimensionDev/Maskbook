@@ -1,14 +1,14 @@
 import { useMemo } from 'react'
-import { groupBy } from 'lodash-unified'
-import BigNumber from 'bignumber.js'
+import { groupBy } from 'lodash-es'
+import { BigNumber } from 'bignumber.js'
 import { formatUnits } from '@ethersproject/units'
 import { Grid, Typography } from '@mui/material'
 
-import { useI18N } from '../../locales'
-import { roundValue } from '../../helpers'
-import type { RewardDetailed } from '../../types'
+import { useI18N } from '../../locales/index.js'
+import { roundValue } from '../../helpers/index.js'
+import type { RewardDetailed } from '../../types.js'
 
-import { FarmTokenDetailed } from '../shared-ui/FarmTokenDetailed'
+import { FarmTokenDetailed } from '../shared-ui/FarmTokenDetailed.js'
 
 export interface ReferredTokenRewardsProps extends React.PropsWithChildren<{}> {
     rewards: RewardDetailed[]

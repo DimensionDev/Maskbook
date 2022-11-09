@@ -1,19 +1,24 @@
-import urlcat from 'urlcat'
-import RSS3 from 'rss3-next'
-import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import { NETWORK_PLUGIN, NEW_RSS3_ENDPOINT, RSS3_ENDPOINT, RSS3_FEED_ENDPOINT, TAG, TYPE } from './constants'
-import { NonFungibleTokenAPI, RSS3BaseAPI } from '../types'
-import { fetchJSON } from '../helpers'
 import {
     createIndicator,
+    createNextIndicator,
     createPageable,
     HubOptions,
-    leftShift,
-    NetworkPluginID,
+    SourceType,
     TokenType,
-    ZERO,
 } from '@masknet/web3-shared-base'
-import { first } from 'lodash-unified'
+import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import RSS3 from 'rss3-next'
+import urlcat, { query } from 'urlcat'
+import { fetchJSON } from '../helpers.js'
+import { NonFungibleTokenAPI, RSS3BaseAPI } from '../types/index.js'
+import { NEW_RSS3_ENDPOINT, RSS3_ENDPOINT, TAG, TYPE } from './constants.js'
+import { normalizedFeed } from './helpers.js'
+
+type RSS3Result<T> = {
+    cursor?: string
+    total: number
+    result: T[]
+}
 
 export class RSS3API implements RSS3BaseAPI.Provider, NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
     createRSS3(
@@ -46,25 +51,36 @@ export class RSS3API implements RSS3BaseAPI.Provider, NonFungibleTokenAPI.Provid
         await rss3.files.sync()
         return value as T
     }
-    async getDonations(address: string) {
-        if (!address) return
+    async getDonations(address: string, { indicator, size = 100 }: HubOptions<ChainId> = {}) {
+        if (!address) return createPageable([], createIndicator(indicator))
         const collectionURL = urlcat(NEW_RSS3_ENDPOINT, address, {
             tag: TAG.donation,
             type: TYPE.donate,
+            limit: size,
+            cursor: indicator?.id,
             include_poap: true,
         })
-        const res = await fetchJSON<{ result: RSS3BaseAPI.CollectionResponse[] }>(collectionURL)
-        return createCollection(res.result)
+        const { result: donations, cursor } = await fetchJSON<RSS3Result<RSS3BaseAPI.Donation>>(collectionURL)
+        // A donation Feed contains multiple donation Actions. Let's flatten them.
+        const result = donations.flatMap((donation) => {
+            return donation.actions.map((action) => ({
+                ...donation,
+                actions: [action],
+            }))
+        })
+        return createPageable(result, createIndicator(indicator), createNextIndicator(indicator, cursor))
     }
-    async getFootprints(address: string) {
-        if (!address) return
+    async getFootprints(address: string, { indicator, size = 100 }: HubOptions<ChainId> = {}) {
+        if (!address) return createPageable([], createIndicator(indicator))
         const collectionURL = urlcat(NEW_RSS3_ENDPOINT, address, {
             tag: TAG.collectible,
             type: TYPE.poap,
+            limit: size,
+            cursor: indicator?.id,
             include_poap: true,
         })
-        const res = await fetchJSON<{ result: RSS3BaseAPI.CollectionResponse[] }>(collectionURL)
-        return createCollection(res.result)
+        const { result, cursor } = await fetchJSON<RSS3Result<RSS3BaseAPI.Footprint>>(collectionURL)
+        return createPageable(result, createIndicator(indicator), createNextIndicator(indicator, cursor))
     }
     async getNameInfo(id: string) {
         if (!id) return
@@ -109,50 +125,58 @@ export class RSS3API implements RSS3BaseAPI.Provider, NonFungibleTokenAPI.Provid
                         name: asset.info.collection ?? '',
                         slug: '',
                     },
+                    source: SourceType.RSS3,
                 }
             })
             .filter((x) => x.chainId === chainId)
         return createPageable(data, createIndicator(indicator))
     }
 
-    async getWeb3Feed(address: string, type?: RSS3BaseAPI.FeedType, networkPluginId = NetworkPluginID.PLUGIN_EVM) {
-        if (!address) return
-        const url = urlcat(RSS3_FEED_ENDPOINT, 'account::address@:network/notes', {
+    /**
+     * @deprecated
+     * Get feeds in tags of donation, collectible and transaction
+     */
+    async getWeb3Feeds(address: string, { indicator, size = 100 }: HubOptions<ChainId> = {}) {
+        if (!address) return createPageable([], createIndicator(indicator))
+        const tags = [RSS3BaseAPI.Tag.Donation, RSS3BaseAPI.Tag.Collectible, RSS3BaseAPI.Tag.Transaction]
+        const queryString = `tag=${tags.join('&tag=')}&${query({
+            limit: size,
+            cursor: indicator?.id ?? '',
+            include_poap: true,
+        })}`
+        const url = urlcat(NEW_RSS3_ENDPOINT, `/:address?${queryString}`, {
             address,
-            network: NETWORK_PLUGIN[networkPluginId],
-            limit: 100,
-            exclude_tags: TAG.POAP,
-            latest: false,
         })
-        const res = fetchJSON<RSS3BaseAPI.Web3FeedResponse>(url + '&tags=Gitcoin&tags=POAP&tags=NFT&tags=Donation')
-        return res
+        const { result, cursor } = await fetchJSON<{
+            result: RSS3BaseAPI.Activity[]
+            cursor?: string
+        }>(url)
+        result.forEach(normalizedFeed)
+        return createPageable(result, createIndicator(indicator), createNextIndicator(indicator, cursor))
     }
-}
-
-const getIdFromDonationURL = (url?: string) => {
-    if (!url) return
-    return url?.match(/(?<=https:\/\/gitcoin.co\/grants)\d+/g)?.[0]
-}
-
-const createCollection = (collectionResponse: RSS3BaseAPI.CollectionResponse[]): RSS3BaseAPI.Collection[] => {
-    return collectionResponse.map((collection: RSS3BaseAPI.CollectionResponse) => {
-        const firstAction = first(collection.actions)
-        return {
-            ...collection,
-            title: firstAction?.metadata?.title || firstAction?.metadata?.name,
-            id: firstAction?.metadata?.id ?? getIdFromDonationURL(firstAction?.related_urls?.[0]) ?? collection?.hash,
-            imageURL: firstAction?.metadata?.logo ?? firstAction?.metadata?.image,
-            description: firstAction?.metadata?.description,
-            tokenAmount: collection.actions?.reduce((pre, cur) => {
-                return pre.plus(
-                    leftShift(cur?.metadata?.token?.value || '0', cur?.metadata?.token?.decimals).toFixed(8),
-                )
-            }, ZERO),
-            tokenSymbol: firstAction?.metadata?.token?.symbol,
-            location:
-                firstAction?.metadata?.attributes?.find((trait) => trait.trait_type === 'city')?.value ||
-                firstAction?.metadata?.attributes?.find((trait) => trait.trait_type === 'country')?.value ||
-                'Metaverse',
-        }
-    })
+    async getAllNotes(
+        address: string,
+        options: Partial<Record<string, string>> = {},
+        { indicator, size = 100 }: HubOptions<ChainId> = {},
+    ) {
+        if (!address) return createPageable([], createIndicator(indicator))
+        const url = urlcat(NEW_RSS3_ENDPOINT, '/:address', {
+            ...options,
+            address,
+            limit: size,
+            cursor: indicator?.id ?? '',
+        })
+        const { result, cursor } = await fetchJSON<{
+            result: RSS3BaseAPI.Web3Feed[]
+            cursor?: string
+        }>(url)
+        result.forEach(normalizedFeed)
+        // createNextIndicator() return a fallback indicator as `{ id: 1, index: 1 }`
+        // which will fail the API, so we pass undefined if cursor is undefined
+        return createPageable(
+            result,
+            createIndicator(indicator),
+            cursor ? createNextIndicator(indicator, cursor) : undefined,
+        )
+    }
 }

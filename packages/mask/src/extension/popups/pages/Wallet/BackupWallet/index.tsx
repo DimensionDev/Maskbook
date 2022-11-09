@@ -4,29 +4,18 @@ import { Button, styled, Tab, tabClasses, Tabs, tabsClasses, Typography } from '
 import { makeStyles } from '@masknet/theme'
 import { TabContext, TabPanel } from '@mui/lab'
 import { Icons } from '@masknet/icons'
-import { useWallet } from '@masknet/plugin-infra/web3'
-import { WalletRPC } from '../../../../../plugins/Wallet/messages'
-import { useI18N } from '../../../../../utils'
-import { PasswordField } from '../../../components/PasswordField'
-import { WalletContext } from '../hooks/useWalletContext'
-import { useTitle } from '../../../hook/useTitle'
+import { useWallet } from '@masknet/web3-hooks-base'
+import { WalletRPC } from '../../../../../plugins/Wallet/messages.js'
+import { useI18N } from '../../../../../utils/index.js'
+import { PasswordField } from '../../../components/PasswordField/index.js'
+import { WalletContext } from '../hooks/useWalletContext.js'
+import { useTitle } from '../../../hook/useTitle.js'
 import formatDateTime from 'date-fns/format'
-import { saveFileFromBuffer } from '../../../../../../shared'
-import { encodeText } from '@dimensiondev/kit'
+import { saveFileFromBuffer } from '../../../../../../shared/index.js'
+import { encodeText } from '@masknet/kit'
 import { MimeTypes } from '@masknet/shared-base'
 
 const useStyles = makeStyles()({
-    header: {
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        padding: '16px 10px',
-    },
-    title: {
-        color: '#15181B',
-        fontSize: 12,
-        fontHeight: '16px',
-    },
     content: {
         flex: 1,
         backgroundColor: '#F7F9FA',

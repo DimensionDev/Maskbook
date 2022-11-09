@@ -1,7 +1,7 @@
 import { ALL_EVENTS } from '@servie/events'
 import { useSubscription, Subscription } from 'use-subscription'
-import { createManager } from './manage'
-import type { Plugin } from '../types'
+import { createManager } from './manage.js'
+import type { Plugin } from '../types.js'
 
 const { activated, startDaemon, events, minimalMode } = createManager((def) => def.Dashboard)
 

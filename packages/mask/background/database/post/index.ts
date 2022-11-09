@@ -1,19 +1,19 @@
-export * from './type'
-import { hasNativeAPI } from '../../../shared/native-rpc'
+export * from './type.js'
+import { hasNativeAPI } from '../../../shared/native-rpc/index.js'
 
 function assign(module: any) {
     ;({ createPostDB, updatePostDB, queryPostDB, queryPostsDB, queryPostPagedDB, withPostDBTransaction } = module)
     return module
 }
 export let { createPostDB, updatePostDB, queryPostDB, queryPostsDB, queryPostPagedDB, withPostDBTransaction } =
-    new Proxy({} as any as typeof import('./web'), {
+    new Proxy({} as any as typeof import('./web.js'), {
         get(_, key) {
             return async function (...args: any) {
                 if (hasNativeAPI) {
-                    return import('./app').then((module) => assign(module)[key](...args))
+                    return import('./app.js').then((module) => assign(module)[key](...args))
                 }
 
-                return import('./web').then((module) => assign(module)[key](...args))
+                return import('./web.js').then((module) => assign(module)[key](...args))
             }
         },
     })

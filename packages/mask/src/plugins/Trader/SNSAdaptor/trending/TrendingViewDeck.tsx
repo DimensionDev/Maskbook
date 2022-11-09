@@ -1,45 +1,50 @@
 import { Icons } from '@masknet/icons'
-import { PluginId, useActivatedPluginsSNSAdaptor, useIsMinimalMode } from '@masknet/plugin-infra/content-script'
-import { useAccount } from '@masknet/plugin-infra/web3'
+import { useActivatedPluginsSNSAdaptor, useIsMinimalMode } from '@masknet/plugin-infra/content-script'
+import { useChainContext } from '@masknet/web3-hooks-base'
 import { DataProvider } from '@masknet/public-api'
-import { FormattedCurrency, Linking, TokenSecurityBar, useTokenSecurity } from '@masknet/shared'
-import { EMPTY_LIST } from '@masknet/shared-base'
+import {
+    FormattedCurrency,
+    Linking,
+    TokenSecurityBar,
+    useTokenSecurity,
+    SourceSwitcher,
+    FootnoteMenuOption,
+} from '@masknet/shared'
+import { EMPTY_LIST, PluginID, NetworkPluginID } from '@masknet/shared-base'
 import { useRemoteControlledDialog, useValueRef } from '@masknet/shared-base-ui'
-import { makeStyles, useStylesExtends } from '@masknet/theme'
+import { makeStyles, MaskColors, MaskLightTheme, useStylesExtends } from '@masknet/theme'
 import type { TrendingAPI } from '@masknet/web3-providers'
-import { formatCurrency, NetworkPluginID, TokenType } from '@masknet/web3-shared-base'
+import { formatCurrency, TokenType, SourceType } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
-import { Avatar, Button, CardContent, IconButton, Paper, Stack, Typography, useTheme } from '@mui/material'
+import {
+    Avatar,
+    Button,
+    CardContent,
+    IconButton,
+    Paper,
+    Stack,
+    ThemeProvider,
+    Typography,
+    useTheme,
+} from '@mui/material'
 import { Box } from '@mui/system'
 import stringify from 'json-stable-stringify'
-import { first, last } from 'lodash-unified'
+import { first, last } from 'lodash-es'
 import { useCallback, useMemo, useRef, useState } from 'react'
-import { useI18N } from '../../../../utils'
-import { useTransakAllowanceCoin } from '../../../Transak/hooks/useTransakAllowanceCoin'
-import { PluginTransakMessages } from '../../../Transak/messages'
-import { getCurrentPreferredCoinIdSettings } from '../../settings'
-import { setStorage } from '../../storage'
-import type { Coin, Currency, Stat } from '../../types'
-import type { FootnoteMenuOption } from '../trader/components/FootnoteMenuUI'
-import { TradeDataSource } from '../trader/TradeDataSource'
-import { CoinMenu } from './CoinMenu'
-import { CoinSafetyAlert } from './CoinSafetyAlert'
-import { CoinIcon } from './components'
-import { PluginHeader } from './PluginHeader'
-import { PriceChanged } from './PriceChanged'
-import { TrendingCard, TrendingCardProps } from './TrendingCard'
+import { useI18N } from '../../../../utils/index.js'
+import { useTransakAllowanceCoin } from '../../../Transak/hooks/useTransakAllowanceCoin.js'
+import { PluginTransakMessages } from '../../../Transak/messages.js'
+import { getCurrentPreferredCoinIdSettings } from '../../settings.js'
+import { setStorage } from '../../storage/index.js'
+import type { Coin, Currency, Stat } from '../../types/index.js'
+import { CoinMenu } from './CoinMenu.js'
+import { CoinIcon } from './components/index.js'
+import { PluginHeader } from './PluginHeader.js'
+import { PriceChanged } from './PriceChanged.js'
+import { TrendingCard, TrendingCardProps } from './TrendingCard.js'
 
 const useStyles = makeStyles()((theme) => {
     return {
-        root: {
-            width: '100%',
-            boxShadow: 'none',
-            borderRadius: 0,
-            marginBottom: theme.spacing(2),
-            '&::-webkit-scrollbar': {
-                display: 'none',
-            },
-        },
         content: {
             paddingTop: 0,
             paddingBottom: '0 !important',
@@ -52,10 +57,6 @@ const useStyles = makeStyles()((theme) => {
             paddingBottom: theme.spacing(6.5),
             background:
                 'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%), linear-gradient(90deg, rgba(28, 104, 243, 0.2) 0%, rgba(69, 163, 251, 0.2) 100%), #FFFFFF;',
-        },
-        header: {
-            display: 'flex',
-            position: 'relative',
         },
         headline: {
             marginTop: 30,
@@ -85,7 +86,6 @@ const useStyles = makeStyles()((theme) => {
             marginLeft: theme.spacing(0.5),
             marginRight: theme.spacing(0.5),
         },
-        buy: {},
         rank: {
             display: 'inline-flex',
             padding: theme.spacing(0.25, 0.5),
@@ -98,17 +98,15 @@ const useStyles = makeStyles()((theme) => {
         avatar: {
             width: 24,
             height: 24,
+            fontSize: 10,
             backgroundColor: theme.palette.common.white,
         },
-        avatarFallback: {
-            width: 24,
-            height: 24,
-        },
         buyButton: {
-            background: theme.palette.maskColor.dark,
-            color: theme.palette.maskColor.white,
             marginLeft: 'auto',
             marginBottom: theme.spacing(2),
+        },
+        icon: {
+            color: MaskColors.dark.maskColor.dark,
         },
     }
 })
@@ -142,20 +140,20 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
 
     const { t } = useI18N()
     const theme = useTheme()
-    const classes = useStylesExtends(useStyles(), props)
+    const { classes } = useStylesExtends(useStyles(), props)
 
     const isNFT = coin.type === TokenType.NonFungible
 
     // #region buy
-    const transakPluginEnabled = useActivatedPluginsSNSAdaptor('any').some((x) => x.ID === PluginId.Transak)
-    const transakIsMinimalMode = useIsMinimalMode(PluginId.Transak)
+    const transakPluginEnabled = useActivatedPluginsSNSAdaptor('any').some((x) => x.ID === PluginID.Transak)
+    const transakIsMinimalMode = useIsMinimalMode(PluginID.Transak)
 
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const isAllowanceCoin = useTransakAllowanceCoin({ address: coin.contract_address, symbol: coin.symbol })
     const { setDialog: setBuyDialog } = useRemoteControlledDialog(PluginTransakMessages.buyTokenDialogUpdated)
 
     const snsAdaptorMinimalPlugins = useActivatedPluginsSNSAdaptor(true)
-    const isTokenSecurityEnable = !isNFT && !snsAdaptorMinimalPlugins.map((x) => x.ID).includes(PluginId.GoPlusSecurity)
+    const isTokenSecurityEnable = !isNFT && !snsAdaptorMinimalPlugins.map((x) => x.ID).includes(PluginID.GoPlusSecurity)
 
     const { value: tokenSecurityInfo, error } = useTokenSecurity(
         coin.chainId ?? ChainId.Mainnet,
@@ -198,122 +196,130 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
 
     return (
         <TrendingCard {...TrendingCardProps}>
-            <Stack className={classes.cardHeader}>
-                <PluginHeader>
-                    <TradeDataSource
-                        showDataProviderIcon={showDataProviderIcon}
-                        dataProvider={dataProvider}
-                        dataProviders={dataProviders}
-                        onDataProviderChange={onDataProviderChange}
-                    />
-                </PluginHeader>
-                <Stack className={classes.headline}>
-                    <Stack gap={2} flexGrow={1}>
-                        <Stack flexDirection="row">
-                            {typeof coin.market_cap_rank === 'number' ? (
-                                <Typography component="span" className={classes.rank} title="Index Cap Rank">
-                                    {t('plugin_trader_rank', { rank: coin.market_cap_rank })}
-                                </Typography>
-                            ) : null}
-                            <Box flex={1} />
-                        </Stack>
-                        <Stack>
-                            <Stack flexDirection="row" alignItems="center" gap={0.5} ref={titleRef}>
-                                <Linking href={first(coin.home_urls)}>
-                                    <Avatar className={classes.avatar} src={coin.image_url} alt={coin.symbol}>
-                                        <CoinIcon
-                                            type={coin.type}
-                                            address={coin.address}
-                                            name={coin.name}
-                                            logoUrl={coin.image_url}
-                                            size={20}
-                                        />
-                                    </Avatar>
-                                </Linking>
-                                <Typography className={classes.title} variant="h6">
-                                    <Linking
-                                        href={first(coin.home_urls)}
-                                        LinkProps={{ className: classes.name, title: coin.name.toUpperCase() }}>
-                                        {coin.name.toUpperCase()}
-                                    </Linking>
-                                    {coin.symbol ? (
-                                        <Typography component="span" className={classes.symbol}>
-                                            ({coin.symbol.toUpperCase()})
-                                        </Typography>
-                                    ) : null}
-                                </Typography>
-                                {coins.length > 1 ? (
-                                    <>
-                                        <IconButton
-                                            sx={{ padding: 0 }}
-                                            size="small"
-                                            onClick={() => setCoinMenuOpen((v) => !v)}>
-                                            <Icons.ArrowDrop size={24} />
-                                        </IconButton>
-                                        <CoinMenu
-                                            open={coinMenuOpen}
-                                            anchorEl={titleRef.current}
-                                            options={coinOptions}
-                                            value={coins.find((x) => x.id === coin.id)?.id}
-                                            type={coin.type}
-                                            onChange={onCoinMenuChange}
-                                            onClose={() => setCoinMenuOpen(false)}
-                                        />
-                                    </>
+            <ThemeProvider theme={MaskLightTheme}>
+                <Stack className={classes.cardHeader}>
+                    <PluginHeader>
+                        {showDataProviderIcon ? (
+                            <SourceSwitcher
+                                sourceType={dataProvider as unknown as SourceType}
+                                sourceTypes={dataProviders as unknown as SourceType[]}
+                                onSourceTypeChange={onDataProviderChange}
+                            />
+                        ) : null}
+                    </PluginHeader>
+                    <Stack className={classes.headline}>
+                        <Stack gap={2} flexGrow={1}>
+                            <Stack flexDirection="row">
+                                {typeof coin.market_cap_rank === 'number' ? (
+                                    <Typography component="span" className={classes.rank} title="Index Cap Rank">
+                                        {t('plugin_trader_rank', { rank: coin.market_cap_rank })}
+                                    </Typography>
                                 ) : null}
-                                {isBuyable ? (
-                                    <Button
-                                        className={classes.buyButton}
-                                        size="small"
-                                        startIcon={<Icons.Buy size={16} />}
-                                        variant="containedDark"
-                                        onClick={onBuyButtonClicked}>
-                                        {t('buy_now')}
-                                    </Button>
-                                ) : null}
+                                <Box flex={1} />
                             </Stack>
-                            <Stack direction="row" justifyContent="space-between">
-                                <Stack direction="row" gap={1} alignItems="center">
-                                    {market ? (
-                                        <Typography
-                                            fontSize={18}
-                                            fontWeight={500}
-                                            lineHeight="24px"
-                                            color={theme.palette.maskColor.dark}>
-                                            {isNFT ? `${t('plugin_trader_floor_price')}: ` : null}
-                                            <FormattedCurrency
-                                                value={
-                                                    (dataProvider === DataProvider.COIN_MARKET_CAP
-                                                        ? last(stats)?.[1] ?? market.current_price
-                                                        : market.current_price) ?? 0
-                                                }
-                                                sign={isNFT ? 'ETH' : 'USD'}
-                                                formatter={formatCurrency}
+                            <Stack>
+                                <Stack flexDirection="row" alignItems="center" gap={0.5} ref={titleRef}>
+                                    {coin.address ? (
+                                        <Linking href={first(coin.home_urls)}>
+                                            <Avatar className={classes.avatar} src={coin.image_url} alt={coin.symbol}>
+                                                <CoinIcon
+                                                    type={coin.type}
+                                                    name={coin.name}
+                                                    label=""
+                                                    symbol={coin.symbol}
+                                                    address={coin.address}
+                                                    logoURL={coin.image_url}
+                                                    size={20}
+                                                />
+                                            </Avatar>
+                                        </Linking>
+                                    ) : null}
+
+                                    <Typography className={classes.title} variant="h6">
+                                        <Linking
+                                            href={first(coin.home_urls)}
+                                            LinkProps={{ className: classes.name, title: coin.name.toUpperCase() }}>
+                                            {coin.name.toUpperCase()}
+                                        </Linking>
+                                        {coin.symbol ? (
+                                            <Typography component="span" className={classes.symbol}>
+                                                ({coin.symbol.toUpperCase()})
+                                            </Typography>
+                                        ) : null}
+                                    </Typography>
+                                    {coins.length > 1 ? (
+                                        <>
+                                            <IconButton
+                                                sx={{ padding: 0 }}
+                                                size="small"
+                                                onClick={() => setCoinMenuOpen((v) => !v)}>
+                                                <Icons.ArrowDrop size={24} className={classes.icon} />
+                                            </IconButton>
+                                            <CoinMenu
+                                                open={coinMenuOpen}
+                                                anchorEl={titleRef.current}
+                                                options={coinOptions}
+                                                value={coins.find((x) => x.id === coin.id)?.id}
+                                                type={coin.type}
+                                                onChange={onCoinMenuChange}
+                                                onClose={() => setCoinMenuOpen(false)}
                                             />
-                                        </Typography>
-                                    ) : (
-                                        <Typography fontSize={14} fontWeight={500} lineHeight="24px">
-                                            {t('plugin_trader_no_data')}
-                                        </Typography>
-                                    )}
-                                    <PriceChanged
-                                        amount={
-                                            market?.price_change_percentage_1h ??
-                                            market?.price_change_percentage_24h ??
-                                            0
-                                        }
-                                    />
+                                        </>
+                                    ) : null}
+                                    {isBuyable ? (
+                                        <Button
+                                            color="primary"
+                                            className={classes.buyButton}
+                                            size="small"
+                                            startIcon={<Icons.Buy size={16} />}
+                                            variant="contained"
+                                            onClick={onBuyButtonClicked}>
+                                            {t('buy_now')}
+                                        </Button>
+                                    ) : null}
                                 </Stack>
-                                {isTokenSecurityEnable && tokenSecurityInfo && !error && (
-                                    <TokenSecurityBar tokenSecurity={tokenSecurityInfo} />
-                                )}
+                                <Stack direction="row" justifyContent="space-between">
+                                    <Stack direction="row" gap={1} alignItems="center">
+                                        {market ? (
+                                            <Typography
+                                                fontSize={18}
+                                                fontWeight={500}
+                                                lineHeight="24px"
+                                                color={theme.palette.maskColor.dark}>
+                                                {isNFT ? `${t('plugin_trader_floor_price')}: ` : null}
+                                                <FormattedCurrency
+                                                    value={
+                                                        (dataProvider === DataProvider.CoinMarketCap
+                                                            ? last(stats)?.[1] ?? market.current_price
+                                                            : market.current_price) ?? 0
+                                                    }
+                                                    sign={isNFT ? 'ETH' : 'USD'}
+                                                    formatter={formatCurrency}
+                                                />
+                                            </Typography>
+                                        ) : (
+                                            <Typography fontSize={14} fontWeight={500} lineHeight="24px">
+                                                {t('plugin_trader_no_data')}
+                                            </Typography>
+                                        )}
+                                        <PriceChanged
+                                            amount={
+                                                market?.price_change_percentage_1h ??
+                                                market?.price_change_percentage_24h ??
+                                                0
+                                            }
+                                        />
+                                    </Stack>
+                                    {isTokenSecurityEnable && tokenSecurityInfo && !error && (
+                                        <TokenSecurityBar tokenSecurity={tokenSecurityInfo} />
+                                    )}
+                                </Stack>
                             </Stack>
                         </Stack>
                     </Stack>
                 </Stack>
-            </Stack>
+            </ThemeProvider>
             <CardContent className={classes.content}>
-                {dataProvider === DataProvider.UNISWAP_INFO && <CoinSafetyAlert coin={trending.coin} />}
                 <Paper className={classes.body} elevation={0}>
                     {children}
                 </Paper>

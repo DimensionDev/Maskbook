@@ -1,6 +1,6 @@
-import { regexMatch } from '../../../utils/utils'
-import { defaultTo, flattenDeep } from 'lodash-unified'
-import { canonifyImgUrl } from './url'
+import { regexMatch } from '../../../utils/utils.js'
+import { defaultTo, flattenDeep } from 'lodash-es'
+import { canonifyImgUrl } from './url.js'
 import {
     makeTypedMessageText,
     makeTypedMessageAnchor,
@@ -9,8 +9,9 @@ import {
     isTypedMessageEmpty,
     isTypedMessageText,
     TypedMessageText,
+    makeTypedMessageImage,
 } from '@masknet/typed-message'
-import { collectNodeText, collectTwitterEmoji } from '../../../utils'
+import { collectNodeText, collectTwitterEmoji } from '../../../utils/index.js'
 
 const parseId = (t: string) => {
     return regexMatch(t, /status\/(\d+)/, 1)!
@@ -35,7 +36,10 @@ export const postNameParser = (node: HTMLElement) => {
     const name = collectNodeText(
         tweetElement.querySelector<HTMLElement>('a:not([target]) > div > div[dir="auto"] > span'),
     )
-    const handle = collectNodeText(tweetElement.querySelector<HTMLElement>('a[tabindex="-1"] span'))
+    // Note: quoted tweet has no [data-testid="User-Names"]
+    const handle = collectNodeText(
+        tweetElement.querySelector<HTMLElement>('[data-testid="User-Names"] a[tabindex="-1"] span'),
+    )
 
     if (name && handle) {
         return {
@@ -84,14 +88,25 @@ export const postContentMessageParser = (node: HTMLElement) => {
             const href = anchor.getAttribute('title') ?? anchor.getAttribute('href')
             const content = anchor.textContent
             if (!content) return makeTypedMessageEmpty()
-            return makeTypedMessageAnchor(resolve(content), href ?? '', content)
+            const altImage = node.querySelector('img')
+            return makeTypedMessageAnchor(
+                resolve(content),
+                href ?? '',
+                content,
+                altImage ? makeTypedMessageImage(altImage.src, altImage) : undefined,
+            )
         } else if (node instanceof HTMLImageElement) {
             const image = node
             const src = image.getAttribute('src')
+            const alt = image.getAttribute('alt')
             const matched = src?.match(/emoji\/v2\/svg\/([\w\-]+)\.svg/)
-            if (!matched) return makeTypedMessageEmpty()
-            const points = matched[1].split('-').map((point) => Number.parseInt(point, 16))
-            return makeTypedMessageText(collectTwitterEmoji(points))
+            if (matched) {
+                const points = matched[1].split('-').map((point) => Number.parseInt(point, 16))
+                return makeTypedMessageText(collectTwitterEmoji(points))
+            }
+            if (!alt) return makeTypedMessageEmpty()
+
+            return makeTypedMessageText(alt)
         } else if (node.childNodes.length) {
             const flattened = flattenDeep(Array.from(node.childNodes).map(make))
             // conjunct text messages under same node

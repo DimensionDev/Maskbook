@@ -1,8 +1,8 @@
 import { NextIDPlatform } from '@masknet/shared-base'
 import { useAsyncRetry } from 'react-use'
 import { NextIDProof } from '@masknet/web3-providers'
-import { first } from 'lodash-unified'
-import { sortPersonaBindings } from '../utils'
+import { first } from 'lodash-es'
+import { sortPersonaBindings } from '../utils.js'
 
 export function useNextIDWallets(userId?: string, platform?: NextIDPlatform) {
     return useAsyncRetry(async () => {

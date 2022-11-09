@@ -1,3 +1,5 @@
-import './implementation/EventTarget-abortSignal'
-import './implementation/AbortController.abortReason'
-import './implementation/AbortSignal.throwIfAborted'
+import './implementation/EventTarget-abortSignal.js'
+import './implementation/AbortController.abortReason.js'
+import './implementation/AbortSignal.throwIfAborted.js'
+import './implementation/AbortSignal.timeout.js'
+import './implementation/Response.blob.js'

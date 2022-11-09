@@ -1,15 +1,18 @@
 import { makeStyles, ActionButton } from '@masknet/theme'
-import { formatBalance, FungibleToken, isGreaterThan, NetworkPluginID, rightShift } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { formatBalance, FungibleToken, isGreaterThan, rightShift } from '@masknet/web3-shared-base'
 import { useCallback, useState } from 'react'
 import { SchemaType, formatEthereumAddress, explorerResolver, useITOConstants, ChainId } from '@masknet/web3-shared-evm'
 import { Link, Typography } from '@mui/material'
 import { Trans } from 'react-i18next'
-import { useSelectFungibleToken } from '@masknet/shared'
-import { useI18N } from '../../../utils'
-import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
-import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
-import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
-import { useChainId, useFungibleTokenBalance } from '@masknet/plugin-infra/web3'
+import {
+    useSelectFungibleToken,
+    FungibleTokenInput,
+    WalletConnectedBoundary,
+    EthereumERC20TokenApprovedBoundary,
+} from '@masknet/shared'
+import { useI18N } from '../../../utils/index.js'
+import { useChainContext, useFungibleTokenBalance } from '@masknet/web3-hooks-base'
 
 function isMoreThanMillion(allowance: string, decimals: number) {
     return isGreaterThan(allowance, `100000000000e${decimals}`) // 100 billion
@@ -35,7 +38,7 @@ export function UnlockDialog(props: UnlockDialogProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
 
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { ITO2_CONTRACT_ADDRESS } = useITOConstants(chainId)
     // #region select token
     const [token, setToken] = useState<FungibleToken<ChainId, SchemaType.ERC20>>(tokens[0])
@@ -53,26 +56,18 @@ export function UnlockDialog(props: UnlockDialogProps) {
     // #region amount
     const [rawAmount, setRawAmount] = useState('')
     const amount = rightShift(rawAmount || '0', token?.decimals)
-    const { value: tokenBalance = '0', loading: loadingTokenBalance } = useFungibleTokenBalance(
-        NetworkPluginID.PLUGIN_EVM,
-        token?.address ?? '',
-    )
+    const { value: tokenBalance = '0' } = useFungibleTokenBalance(NetworkPluginID.PLUGIN_EVM, token?.address ?? '')
     // #endregion
     if (!tokens.length) return <Typography>{t('plugin_ito_empty_token')}</Typography>
     return (
         <div className={classes.root}>
-            <TokenAmountPanel
-                label="Amount"
+            <FungibleTokenInput
+                label={t('amount')}
                 amount={rawAmount}
                 balance={tokenBalance ?? '0'}
                 token={token}
                 onAmountChange={setRawAmount}
-                SelectTokenChip={{
-                    loading: loadingTokenBalance,
-                    ChipProps: {
-                        onClick: onSelectTokenChipClick,
-                    },
-                }}
+                onSelectToken={onSelectTokenChipClick}
             />
             {ITO2_CONTRACT_ADDRESS ? (
                 <Typography className={classes.tip} variant="body2" color="textSecondary">

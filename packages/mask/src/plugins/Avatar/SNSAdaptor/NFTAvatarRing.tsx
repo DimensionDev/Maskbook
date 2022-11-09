@@ -1,5 +1,6 @@
+import { isFirefox } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
-import { RainbowBox } from './RainbowBox'
+import { RainbowBox } from './RainbowBox.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -75,7 +76,13 @@ export function NFTAvatarRing(props: NFTAvatarRingProps) {
                     stroke={stroke}
                     strokeWidth={strokeWidth}
                 />
-                <pattern id={`${id}-pattern`} x="0" y="0" width="300%" height="100%">
+                <pattern
+                    id={`${id}-pattern`}
+                    x="0"
+                    y="0"
+                    width="300%"
+                    height="100%"
+                    patternUnits={process.env.engine === 'firefox' ? '' : 'userSpaceOnUse'}>
                     <circle cx={R} cy={R} r={R} fill={`url(#${id}-gradient)`}>
                         <animateTransform
                             attributeName="transform"
@@ -97,7 +104,11 @@ export function NFTAvatarRing(props: NFTAvatarRingProps) {
                     </textPath>
                 </text>
 
-                <text x="0%" textAnchor="middle" fontFamily="sans-serif">
+                <text
+                    x="0%"
+                    textAnchor="middle"
+                    fill={isFirefox() ? 'currentColor' : `url(#${id}-pattern)`}
+                    fontFamily="sans-serif">
                     <textPath xlinkHref={`#${id}-path-price`} startOffset="50%" rotate="auto">
                         <tspan fontWeight="bold" fontSize={fontSize} dy="0.5em">
                             {price}

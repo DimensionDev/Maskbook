@@ -1,12 +1,14 @@
 import createEmotionCache, { type EmotionCache } from '@emotion/cache'
 import { CacheProvider as EmotionCacheProvider } from '@emotion/react'
 import { TssCacheProvider } from 'tss-react'
-import { StyleSheet } from './ShadowRootStyleSheet'
-import { StyleSheetsContext } from './Contexts'
+import { StyleSheet } from './ShadowRootStyleSheet.js'
+import { PreventShadowRootEventPropagationListContext, stopPropagation, StyleSheetsContext } from './Contexts.js'
+import { useContext, useEffect } from 'react'
 
 /** @internal */
 export interface ShadowRootStyleProviderProps extends React.PropsWithChildren<{}> {
     shadow: ShadowRoot
+    preventPropagation: boolean
 }
 /**
  * @internal
@@ -19,6 +21,14 @@ export interface ShadowRootStyleProviderProps extends React.PropsWithChildren<{}
 export function ShadowRootStyleProvider(props: ShadowRootStyleProviderProps) {
     const { shadow, children } = props
     const [mui, tss, sheets] = getShadowRootEmotionCache(shadow)
+
+    const preventEventPropagationList = useContext(PreventShadowRootEventPropagationListContext)
+    useEffect(() => {
+        if (!props.preventPropagation) return
+        preventEventPropagationList.forEach((event) => shadow.addEventListener(event, stopPropagation))
+        return () => preventEventPropagationList.forEach((event) => shadow.removeEventListener(event, stopPropagation))
+    }, [props.preventPropagation, preventEventPropagationList, shadow])
+
     return (
         <StyleSheetsContext.Provider value={sheets}>
             <EmotionCacheProvider value={mui}>
@@ -38,11 +48,12 @@ function getShadowRootEmotionCache(shadow: ShadowRoot) {
     const keyA = 'mui-' + instanceID
     const keyB = 'tss-' + instanceID
 
-    const muiEmotionCache = createEmotionCache({ key: keyA })
+    // https://github.com/emotion-js/emotion/issues/2933
+    const muiEmotionCache = (createEmotionCache.default || createEmotionCache)({ key: keyA })
     const muiStyleSheet = new StyleSheet({ key: keyA, container: shadow })
     muiEmotionCache.sheet = muiStyleSheet
 
-    const tssEmotionCache = createEmotionCache({ key: keyB })
+    const tssEmotionCache = (createEmotionCache.default || createEmotionCache)({ key: keyB })
     const tssStyleSheet = new StyleSheet({ key: keyB, container: shadow })
     tssEmotionCache.sheet = tssStyleSheet
 

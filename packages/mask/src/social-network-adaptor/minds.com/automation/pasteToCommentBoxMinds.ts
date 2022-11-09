@@ -1,7 +1,7 @@
 import type { PostInfo } from '@masknet/plugin-infra/content-script'
-import { MaskMessages } from '../../../utils/messages'
-import { delay } from '@dimensiondev/kit'
-import { selectElementContents } from '../../../utils/utils'
+import { MaskMessages } from '../../../utils/messages.js'
+import { delay } from '@masknet/kit'
+import { selectElementContents } from '../../../utils/utils.js'
 import { pasteText } from '@masknet/injected-script'
 
 export async function pasteToCommentBoxMinds(encryptedComment: string, current: PostInfo, dom: HTMLElement | null) {

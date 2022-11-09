@@ -1,20 +1,16 @@
 import { openWindow } from '@masknet/shared-base-ui'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
-import Link from '@mui/material/Link'
-import { useI18N } from '../../../utils'
-import type { AvatarMetaDB, NFTInfo } from '../types'
-import { formatPrice, formatText } from '../utils'
-import { NFTAvatarRing } from './NFTAvatarRing'
+import { Link } from '@mui/material'
+import { useI18N } from '../../../utils/index.js'
+import type { AvatarMetaDB, NFTInfo } from '../types.js'
+import { formatPrice, formatText } from '../utils/index.js'
+import { NFTAvatarRing } from './NFTAvatarRing.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-    },
-    image: {
-        position: 'absolute',
-        bottom: 0,
     },
 }))
 
@@ -29,7 +25,7 @@ interface NFTBadgeProps extends withClasses<'root' | 'text' | 'icon'> {
 
 export function NFTBadge(props: NFTBadgeProps) {
     const { avatar, nftInfo, size = 140, hasRainbow, borderSize } = props
-    const classes = useStylesExtends(useStyles(), props)
+    const { classes } = useStylesExtends(useStyles(), props)
     const { t } = useI18N()
 
     if (!nftInfo)
@@ -65,9 +61,7 @@ export function NFTBadge(props: NFTBadgeProps) {
                     hasRainbow={hasRainbow}
                     borderSize={borderSize}
                     fontSize={9}
-                    text={`${formatText(nftInfo.name ?? '', avatar.tokenId)} ${
-                        nftInfo.slug.toLowerCase() === 'ens' ? 'ENS' : ''
-                    }`}
+                    text={formatText(nftInfo.name ?? '', avatar.tokenId)}
                     price={formatPrice(nftInfo.amount ?? '0', nftInfo.symbol ?? 'ETH')}
                 />
             </Link>

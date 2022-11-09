@@ -1,6 +1,6 @@
 import { Switch, styled, switchClasses } from '@mui/material'
 
-export const SettingSwitch = styled<typeof Switch>(Switch)(({ size }) => {
+export const SettingSwitch = styled<typeof Switch>(Switch)(({ size, disabled }) => {
     const isSmall = size === 'small'
     const base = isSmall ? 16 : 24
     return {
@@ -20,7 +20,7 @@ export const SettingSwitch = styled<typeof Switch>(Switch)(({ size }) => {
             },
             [`&+.${switchClasses.track}`]: {
                 opacity: '1 !important',
-                backgroundColor: '#3DC233 !important',
+                backgroundColor: `${disabled ? 'rgba(61, 194, 51, 0.5)' : '#3DC233'} !important`,
             },
         },
         [`& .${switchClasses.track}`]: {

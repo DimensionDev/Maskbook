@@ -54,9 +54,7 @@ export const Flags = {
     /** we still need to handle image encoding */
     v37PayloadDefaultEnabled: false, // new Date() > new Date('2022-07-01'),
     i18nTranslationHotUpdate: true,
-
-    /** open shadow root for e2e testing */
-    shadowRootMode: process.env.channel === 'e2e' ? 'open' : 'closed',
+    sandboxedPluginRuntime: insiderOnly,
 } as const
 
 if (process.env.NODE_ENV === 'development') {

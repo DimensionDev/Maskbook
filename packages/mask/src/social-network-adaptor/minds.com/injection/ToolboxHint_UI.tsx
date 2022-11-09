@@ -1,4 +1,4 @@
-import { ToolboxHintUnstyled } from '../../../components/InjectedComponents/ToolboxUnstyled'
+import { ToolboxHintUnstyled } from '../../../components/InjectedComponents/ToolboxUnstyled.js'
 import { styled, ListItemButton, Typography, ListItemIcon, useMediaQuery, useTheme } from '@mui/material'
 
 const mindsBreakPoint = 1221 /** px */
@@ -11,7 +11,7 @@ const Item = styled(ListItemButton)`
     border-radius: 8px;
     height: 45px;
     padding: 4px 12px 4px 0;
-    color: ${({ theme }) => (theme.palette.mode === 'dark' ? '#b8c1ca' : '#72727c')};
+    color: ${({ theme }) => theme.palette.primary.main};
     &:hover {
         background: unset;
         color: rgb(48, 153, 242);
@@ -43,6 +43,7 @@ const Icon = styled(ListItemIcon)`
 export function ToolboxHintAtMinds(props: { category: 'wallet' | 'application' }) {
     const mini = useMediaQuery(`(max-width: ${mindsBreakPoint}px)`)
     const mode = useTheme().palette.mode
+
     return (
         <ToolboxHintUnstyled
             mini={mini}

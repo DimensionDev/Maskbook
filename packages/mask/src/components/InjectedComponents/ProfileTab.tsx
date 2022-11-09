@@ -1,9 +1,9 @@
 import { ReactElement, useCallback, useEffect, useState } from 'react'
-import classnames from 'classnames'
+import { useMount } from 'react-use'
 import { Typography } from '@mui/material'
-import { MaskMessages, useMatchXS, useLocationChange } from '../../utils'
-import { isTwitter } from '../../social-network-adaptor/twitter.com/base'
-import { activatedSocialNetworkUI } from '../../social-network'
+import { MaskMessages, useMatchXS, useLocationChange } from '../../utils/index.js'
+import { isTwitter } from '../../social-network-adaptor/twitter.com/base.js'
+import { activatedSocialNetworkUI } from '../../social-network/index.js'
 
 export interface ProfileTabProps extends withClasses<'tab' | 'button' | 'selected'> {
     clear(): void
@@ -20,15 +20,27 @@ export function ProfileTab(props: ProfileTabProps) {
     const [active, setActive] = useState(false)
     const isMobile = useMatchXS()
 
-    const onClick = useCallback(() => {
-        // Change the url hashtag to trigger `locationchange` event from e.g. 'hostname/medias#web3 => hostname/medias'
-        isTwitter(activatedSocialNetworkUI) && location.assign('#web3')
+    const switchToTab = useCallback(() => {
         MaskMessages.events.profileTabUpdated.sendToLocal({ show: true })
         setActive(true)
         clear()
     }, [clear])
 
+    const onClick = useCallback(() => {
+        // Change the url hashtag to trigger `locationchange` event from e.g. 'hostname/medias#web3 => hostname/medias'
+        isTwitter(activatedSocialNetworkUI) && location.assign('#web3')
+        switchToTab()
+    }, [switchToTab])
+
+    useMount(() => {
+        if (location.hash !== '#web3' || active) return
+        switchToTab()
+    })
+
     useLocationChange(() => {
+        const testId = (document.activeElement as HTMLElement | null)?.dataset?.testid
+        if (testId === 'SearchBox_Search_Input') return
+
         MaskMessages.events.profileTabUpdated.sendToLocal({ show: false })
         setActive(false)
         reset()
@@ -43,7 +55,7 @@ export function ProfileTab(props: ProfileTabProps) {
     return (
         <div key="nfts" className={classes.root}>
             <Typography
-                className={classnames(classes.button, active ? classes.selected : '')}
+                className={classes.button + ' ' + (active ? classes.selected : '')}
                 onClick={onClick}
                 component="div">
                 {props.icon}

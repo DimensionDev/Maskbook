@@ -1,6 +1,6 @@
-import { deleteCache, fetchJSON } from './helper'
+import { deleteCache, fetchJSON } from './helper.js'
 import urlcat from 'urlcat'
-import { first } from 'lodash-unified'
+import { first } from 'lodash-es'
 import {
     BindingProof,
     fromHex,
@@ -11,8 +11,8 @@ import {
     NextIDPlatform,
     toBase64,
 } from '@masknet/shared-base'
-import type { NextIDBaseAPI } from '../types'
-import { PROOF_BASE_URL_DEV, PROOF_BASE_URL_PROD } from './constants'
+import type { NextIDBaseAPI } from '../types/index.js'
+import { PROOF_BASE_URL_DEV, PROOF_BASE_URL_PROD } from './constants.js'
 
 const BASE_URL =
     process.env.channel === 'stable' && process.env.NODE_ENV === 'production' ? PROOF_BASE_URL_PROD : PROOF_BASE_URL_DEV
@@ -27,7 +27,9 @@ interface CreatePayloadBody {
 type PostContentLanguages = 'default' | 'zh_CN'
 
 interface CreatePayloadResponse {
-    post_content: { [key in PostContentLanguages]: string }
+    post_content: {
+        [key in PostContentLanguages]: string
+    }
     sign_payload: string
     uuid: string
     created_at: string
@@ -112,13 +114,18 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
     }
     async queryAllExistedBindingsByPlatform(platform: NextIDPlatform, identity: string) {
         const nextIDPersonaBindings: NextIDPersonaBindings[] = []
-        let page = 0
+        let page = 1
         do {
             const personaBindings = await this.queryExistedBindingByPlatform(platform, identity, page)
-            if (personaBindings.length === 0) return nextIDPersonaBindings
+            if (personaBindings.length === 0)
+                return nextIDPersonaBindings.filter((x) =>
+                    x.proofs.some(
+                        (y) => y.platform === platform && y.identity.toLowerCase() === identity.toLowerCase(),
+                    ),
+                )
             nextIDPersonaBindings.push(...personaBindings)
             page += 1
-        } while (page > 0)
+        } while (page > 1)
         return []
     }
 
@@ -127,7 +134,6 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
 
         const url = getExistedBindingQueryURL(platform, identity, personaPublicKey)
         const result = await fetchJSON<BindingProof>(url, {}, enableCache)
-
         return result.map(() => true).unwrapOr(false)
     }
 

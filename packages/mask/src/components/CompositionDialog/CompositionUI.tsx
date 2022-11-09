@@ -1,39 +1,39 @@
 import { forwardRef, useImperativeHandle, useMemo, useRef, useState, startTransition, useCallback, useId } from 'react'
-import { Typography, Chip, Button } from '@mui/material'
+import { Typography, Chip, Button, Checkbox } from '@mui/material'
 import { LoadingButton } from '@mui/lab'
 import type { SerializableTypedMessages, TypedMessage } from '@masknet/typed-message'
 import { makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
-import { PluginEntryRender, PluginEntryRenderRef } from './PluginEntryRender'
-import { TypedMessageEditor, TypedMessageEditorRef } from './TypedMessageEditor'
-import { CharLimitIndicator } from './CharLimitIndicator'
-import { useI18N } from '../../utils'
-import { PersistentStorages } from '../../../shared'
+import { PluginEntryRender, PluginEntryRenderRef } from './PluginEntryRender.js'
+import { TypedMessageEditor, TypedMessageEditorRef } from './TypedMessageEditor.js'
+import { CharLimitIndicator } from './CharLimitIndicator.js'
+import { useI18N } from '../../utils/index.js'
+import { PersistentStorages } from '../../../shared/index.js'
 import { ProfileInformation, EncryptionTargetType } from '@masknet/shared-base'
 import { CompositionContext } from '@masknet/plugin-infra/content-script'
-import { DebugMetadataInspector } from '../shared/DebugMetadataInspector'
+import { DebugMetadataInspector } from '../shared/DebugMetadataInspector.js'
 import type { EncryptTargetE2E, EncryptTargetPublic } from '@masknet/encryption'
 import { useSubscription } from 'use-subscription'
-import { SelectRecipientsUI } from '../shared/SelectRecipients/SelectRecipients'
-import { EncryptionTargetSelector } from './EncryptionTargetSelector'
-import { EncryptionMethodSelector, EncryptionMethodType } from './EncryptionMethodSelector'
+import { SelectRecipientsUI } from '../shared/SelectRecipients/SelectRecipients.js'
+import { EncryptionTargetSelector } from './EncryptionTargetSelector.js'
+import { EncryptionMethodSelector, EncryptionMethodType } from './EncryptionMethodSelector.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
         '& > *': {
-            marginBottom: '18px !important',
+            height: '36px !important',
         },
         minHeight: 450,
-        overflowY: 'auto',
+        maxHeight: 464,
+        height: 464,
+        display: 'flex',
+        flexDirection: 'column',
     },
     flex: {
         width: '100%',
         display: 'flex',
         alignItems: 'center',
         flexWrap: 'wrap',
-    },
-    sup: {
-        paddingLeft: 2,
     },
     actions: {
         position: 'absolute',
@@ -42,7 +42,7 @@ const useStyles = makeStyles()((theme) => ({
         left: '50%',
         transform: 'translateX(-50%)',
         display: 'flex',
-        padding: '14px 16px',
+        padding: 16,
         boxSizing: 'border-box',
         flexDirection: 'row',
         justifyContent: 'flex-end',
@@ -53,31 +53,24 @@ const useStyles = makeStyles()((theme) => ({
     between: {
         justifyContent: 'space-between',
     },
-    popper: {
-        overflow: 'visible',
-        padding: 6,
-    },
-    popperText: {
-        fontSize: 14,
-        fontWeight: 700,
-        lineHeight: '18px',
-        display: 'flex',
-        alignItems: 'center',
-        gap: 4,
-        cursor: 'pointer',
-    },
     optionTitle: {
-        fontSize: 14,
         lineHeight: '18px',
         color: theme.palette.text.secondary,
         marginRight: 12,
     },
     editorWrapper: {
-        minHeight: 338,
+        flex: 1,
+        width: 568,
         background: theme.palette.background.input,
-        padding: 14,
+        padding: 0,
         boxSizing: 'border-box',
         borderRadius: 8,
+        marginBottom: 16,
+    },
+    icon: {
+        width: 18,
+        height: 18,
+        fill: theme.palette.text.buttonText,
     },
 }))
 
@@ -89,8 +82,6 @@ export interface CompositionProps {
     maxLength?: number
     onSubmit(data: SubmitComposition): Promise<void>
     onChange?(message: TypedMessage): void
-    onConnectPersona(): void
-    onCreatePersona(): void
     isOpenFromApplicationBoard: boolean
     e2eEncryptionDisabled: E2EUnavailableReason | undefined
     recipients: LazyRecipients
@@ -117,7 +108,10 @@ export interface CompositionRef {
     startPlugin(id: string): void
     reset(): void
 }
-export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>((props, ref) => {
+export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(function CompositionDialogUI(
+    props,
+    ref,
+) {
     const { classes, cx, theme } = useStyles()
     const { t } = useI18N()
     const id = useId()
@@ -214,8 +208,6 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
                 <div className={cx(classes.flex, classes.between)}>
                     <EncryptionTargetSelector
                         target={encryptionKind}
-                        onConnectPersona={props.onConnectPersona}
-                        onCreatePersona={props.onCreatePersona}
                         e2eDisabled={props.e2eEncryptionDisabled}
                         selectedRecipientLength={recipients.length}
                         onChange={(target) => {
@@ -247,9 +239,8 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
                             Next generation payload
                         </Typography>
                         <div style={{ flex: 1 }} />
-                        <input
+                        <Checkbox
                             id={id}
-                            type="checkbox"
                             checked={props.version === -37}
                             onChange={() => props.setVersion(props.version === -38 ? -37 : -38)}
                         />
@@ -259,17 +250,21 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
             <div className={classes.actions}>
                 {props.maxLength ? <CharLimitIndicator value={currentPostSize} max={props.maxLength} /> : null}
                 {props.requireClipboardPermission && !props.hasClipboardPermission && (
-                    <Button variant="outlined" onClick={props.onRequestClipboardPermission}>
+                    <Button
+                        variant="roundedContained"
+                        onClick={props.onRequestClipboardPermission}
+                        sx={{ marginRight: 1 }}>
                         {t('post_dialog_enable_paste_auto')}
                     </Button>
                 )}
                 <LoadingButton
+                    style={{ opacity: 1 }}
                     disabled={!submitAvailable}
                     loading={sending}
                     loadingPosition="start"
                     variant="roundedContained"
                     onClick={onSubmit}
-                    startIcon={<Icons.Send size={18} color={theme.palette.text.buttonText} />}>
+                    startIcon={<Icons.Send className={classes.icon} />}>
                     {t('post_dialog__button')}
                 </LoadingButton>
             </div>

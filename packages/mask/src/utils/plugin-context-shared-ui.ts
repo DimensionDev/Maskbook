@@ -1,10 +1,20 @@
 import { WalletConnectQRCodeDialogEvent, WalletMessages } from '@masknet/plugin-wallet'
 import { createSubscriptionFromAsync, EMPTY_LIST } from '@masknet/shared-base'
-import Services from '../extension/service'
-import { WalletRPC } from '../plugins/Wallet/messages'
-import { MaskMessages } from './messages'
+import Services from '../extension/service.js'
+import { WalletRPC } from '../plugins/Wallet/messages.js'
+import { MaskMessages } from './messages.js'
+import type { Plugin } from '@masknet/plugin-infra'
+import type { PartialSharedUIContext } from '../../shared/plugin-infra/host.js'
 
-export const RestPartOfPluginUIContextShared = {
+export const RestPartOfPluginUIContextShared: Omit<
+    Plugin.SNSAdaptor.SNSAdaptorContext,
+    | keyof PartialSharedUIContext
+    | 'lastRecognizedProfile'
+    | 'currentVisitingProfile'
+    | 'getPersonaAvatar'
+    | 'ownProofChanged'
+    | 'setMinimalMode'
+> = {
     currentPersona: createSubscriptionFromAsync(
         Services.Settings.getCurrentPersonaIdentifier,
         undefined,
@@ -45,7 +55,7 @@ export const RestPartOfPluginUIContextShared = {
     ),
 
     personaSignMessage: Services.Identity.signWithPersona,
-
+    generateSignResult: Services.Identity.generateSignResult,
     recordConnectedSites: WalletRPC.recordConnectedSites,
     updateAccount: WalletRPC.updateMaskAccount,
     resetAccount: WalletRPC.resetMaskAccount,

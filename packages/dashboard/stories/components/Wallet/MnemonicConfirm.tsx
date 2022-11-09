@@ -1,6 +1,6 @@
 import { story } from '@masknet/storybook-shared'
 import { actions } from '@storybook/addon-actions'
-import { DesktopMnemonicConfirm as C } from '../../../src/components/Mnemonic/DesktopMnemonicConfirm'
+import { DesktopMnemonicConfirm as C } from '../../../src/components/Mnemonic/DesktopMnemonicConfirm.js'
 
 const { meta, of } = story(C)
 export default meta({

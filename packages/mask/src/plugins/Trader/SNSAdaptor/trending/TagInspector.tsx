@@ -1,26 +1,24 @@
 import { useCallback } from 'react'
-import { TrendingPopper } from './TrendingPopper'
-import { TagType } from '../../types'
 import type { DataProvider } from '@masknet/public-api'
-import { TraderView } from './TraderView'
-import { useAvailableDataProviders } from '../../trending/useAvailableDataProviders'
-import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
+import { Web3ContextProvider } from '@masknet/web3-hooks-base'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { ChainId } from '@masknet/web3-shared-evm'
+import type { TagType } from '../../types/index.js'
+import { TrendingPopper } from './TrendingPopper.js'
+import { TrendingView } from './TrendingView.js'
 
 export interface TagInspectorProps {}
 
 export function TagInspector(props: TagInspectorProps) {
-    // build availability cache in the background page
-    useAvailableDataProviders(TagType.CASH, 'BTC')
-
     const createTrendingView = useCallback(
         (name: string, type: TagType, dataProviders: DataProvider[], reposition?: () => void) => {
-            return <TraderView name={name} tagType={type} dataProviders={dataProviders} onUpdate={reposition} />
+            return <TrendingView name={name} tagType={type} dataProviders={dataProviders} onUpdate={reposition} />
         },
         [],
     )
     return (
-        <TargetChainIdContext.Provider>
+        <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM, chainId: ChainId.Mainnet }}>
             <TrendingPopper>{createTrendingView}</TrendingPopper>
-        </TargetChainIdContext.Provider>
+        </Web3ContextProvider>
     )
 }

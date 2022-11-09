@@ -2,8 +2,8 @@ import type { ReactElement } from 'react'
 import { Typography, Grid } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 
-import { useI18N } from '../../locales'
-import type { RewardData } from '../../types'
+import { useI18N } from '../../locales/index.js'
+import type { RewardData } from '../../types.js'
 
 const useStyles = makeStyles()((theme) => ({
     dataContainer: {
@@ -36,25 +36,17 @@ export function RewardFarmPostWidget({ title, icon, rewardData, tokenSymbol }: R
                 <Grid item xs={12} display="flex" alignItems="center">
                     <Typography fontWeight={600}>
                         {t.daily_reward()}:{' '}
-                        {rewardData ? (
-                            <>
-                                {Number.parseFloat(rewardData.dailyReward.toFixed(4))} {tokenSymbol ?? '-'}
-                            </>
-                        ) : (
-                            '-'
-                        )}
+                        {rewardData
+                            ? `${Number.parseFloat(rewardData.dailyReward.toFixed(4))} ${tokenSymbol ?? '-'}`
+                            : '-'}
                     </Typography>
                 </Grid>
                 <Grid item xs={12} display="flex" alignItems="center">
                     <Typography fontWeight={600}>
                         {t.total_rewards()}:{' '}
-                        {rewardData ? (
-                            <>
-                                {Number.parseFloat(rewardData.totalReward.toFixed(4))} {tokenSymbol ?? '-'}
-                            </>
-                        ) : (
-                            '-'
-                        )}
+                        {rewardData
+                            ? `${Number.parseFloat(rewardData.totalReward.toFixed(4))} ${tokenSymbol ?? '-'}`
+                            : '-'}
                     </Typography>
                 </Grid>
             </Grid>

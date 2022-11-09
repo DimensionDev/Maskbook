@@ -1,8 +1,9 @@
 import getUnixTime from 'date-fns/getUnixTime'
-import { first } from 'lodash-unified'
-import { unreachable } from '@dimensiondev/kit'
+import { first } from 'lodash-es'
+import { unreachable } from '@masknet/kit'
 import type { BlockHeaderObject, BlockObject, MutateOptions, QueryOptions } from '@blocto/fcl'
 import {
+    AddressType,
     ChainId,
     createNativeToken,
     isNativeTokenAddress,
@@ -14,16 +15,17 @@ import {
     Account,
     FungibleToken,
     NonFungibleToken,
-    NonFungibleTokenCollection,
+    NonFungibleCollection,
     NonFungibleTokenContract,
     NonFungibleTokenMetadata,
     TransactionStatusType,
 } from '@masknet/web3-shared-base'
-import { PartialRequired, toHex } from '@masknet/shared-base'
-import { Providers } from './provider'
-import type { FlowWeb3Connection as BaseConnection, FlowConnectionOptions } from './types'
-import { Web3StateSettings } from '../../settings'
 import type { Plugin } from '@masknet/plugin-infra'
+import { PartialRequired, toHex } from '@masknet/shared-base'
+import { Providers } from './provider.js'
+import type { FlowWeb3Connection as BaseConnection, FlowConnectionOptions } from './types.js'
+import { Web3StateSettings } from '../../settings/index.js'
+
 class Connection implements BaseConnection {
     constructor(
         private chainId: ChainId,
@@ -31,7 +33,6 @@ class Connection implements BaseConnection {
         private providerType: ProviderType,
         private context?: Plugin.Shared.SharedContext,
     ) {}
-
     private getOptions(
         initial?: FlowConnectionOptions,
         overrides?: Partial<FlowConnectionOptions>,
@@ -73,7 +74,10 @@ class Connection implements BaseConnection {
     getGasPrice(initial?: FlowConnectionOptions): Promise<string> {
         throw new Error('Method not implemented.')
     }
-    getTokenSchema(address: string, initial?: FlowConnectionOptions): Promise<SchemaType> {
+    getAddressType() {
+        return Promise.resolve(AddressType.Default)
+    }
+    getSchemaType(address: string, initial?: FlowConnectionOptions): Promise<SchemaType> {
         throw new Error('Method not implemented.')
     }
     getNonFungibleTokenContract(
@@ -87,7 +91,7 @@ class Connection implements BaseConnection {
         address: string,
         schema?: SchemaType,
         initial?: FlowConnectionOptions,
-    ): Promise<NonFungibleTokenCollection<ChainId, SchemaType>> {
+    ): Promise<NonFungibleCollection<ChainId, SchemaType>> {
         throw new Error('Method not implemented.')
     }
     async getBlock(no: number, initial?: FlowConnectionOptions): Promise<BlockObject | null> {
@@ -138,8 +142,8 @@ class Connection implements BaseConnection {
     }
     transferNonFungibleToken(
         address: string,
-        recipient: string,
         tokenId: string,
+        recipient: string,
         amount: string,
         schema?: SchemaType,
         initial?: FlowConnectionOptions,
@@ -193,12 +197,20 @@ class Connection implements BaseConnection {
         }
         throw new Error('Method not implemented.')
     }
-    getNonFungibleToken(
+    async getNonFungibleToken(
         address: string,
         tokenId: string,
         schema?: SchemaType,
         initial?: FlowConnectionOptions,
     ): Promise<NonFungibleToken<ChainId, SchemaType>> {
+        throw new Error('Method not implemented.')
+    }
+    getNonFungibleTokenOwner(
+        address: string,
+        tokenId: string,
+        schema?: SchemaType,
+        initial?: FlowConnectionOptions,
+    ): Promise<string> {
         throw new Error('Method not implemented.')
     }
     getNonFungibleTokenOwnership(

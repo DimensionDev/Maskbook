@@ -1,13 +1,13 @@
 import { useAsync } from 'react-use'
-import { PluginTraderRPC } from '../messages'
-import type { Coin, TagType } from '../types'
 import type { DataProvider } from '@masknet/public-api'
-import { useCurrentCurrency } from './useCurrentCurrency'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { useChainId, useFungibleToken } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { useChainContext, useFungibleToken } from '@masknet/web3-hooks-base'
+import { PluginTraderRPC } from '../messages.js'
+import type { Coin, TagType } from '../types/index.js'
+import { useCurrentCurrency } from './useCurrentCurrency.js'
 
 export function useTrendingByKeyword(tagType: TagType, keyword: string, dataProvider: DataProvider) {
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const currency = useCurrentCurrency(dataProvider)
     const {
         value: trending,
@@ -41,7 +41,7 @@ export function useTrendingByKeyword(tagType: TagType, keyword: string, dataProv
 }
 
 export function useTrendingById(id: string, dataProvider: DataProvider) {
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const currency = useCurrentCurrency(dataProvider)
     const {
         value: trending,
@@ -50,7 +50,7 @@ export function useTrendingById(id: string, dataProvider: DataProvider) {
     } = useAsync(async () => {
         if (!id) return null
         if (!currency) return null
-        return PluginTraderRPC.getCoinTrendingById(chainId, id, currency, dataProvider).catch(() => null)
+        return PluginTraderRPC.getCoinTrending(chainId, id, currency, dataProvider).catch(() => null)
     }, [chainId, dataProvider, currency?.id, id])
 
     const { value: detailedToken } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, trending?.coin.contract_address)

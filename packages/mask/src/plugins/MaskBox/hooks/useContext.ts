@@ -4,23 +4,24 @@ import { useAsyncRetry } from 'react-use'
 import fromUnixTime from 'date-fns/fromUnixTime'
 import addDays from 'date-fns/addDays'
 import subDays from 'date-fns/subDays'
-import { omit, clamp, first, uniq } from 'lodash-unified'
-import BigNumber from 'bignumber.js'
+import { omit, clamp, first, uniq } from 'lodash-es'
+import { BigNumber } from 'bignumber.js'
 import { createContainer } from 'unstated-next'
-import { unreachable } from '@dimensiondev/kit'
+import { unreachable } from '@masknet/kit'
+import { useERC20TokenAllowance } from '@masknet/web3-hooks-evm'
 import { useMaskBoxConstants, isZeroAddress, SchemaType, isNativeTokenAddress } from '@masknet/web3-shared-evm'
-import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
-import { BoxInfo, BoxState } from '../type'
-import { useMaskBoxInfo } from './useMaskBoxInfo'
-import { useMerkelProof } from './useMerkleProof'
-import { useMaskBoxStatus } from './useMaskBoxStatus'
-import { useMaskBoxCreationSuccessEvent } from './useMaskBoxCreationSuccessEvent'
-import { useMaskBoxTokensForSale } from './useMaskBoxTokensForSale'
-import { useMaskBoxPurchasedTokens } from './useMaskBoxPurchasedTokens'
-import { formatCountdown } from '../helpers/formatCountdown'
-import { useOpenBoxTransaction } from './useOpenBoxTransaction'
-import { useMaskBoxMetadata } from './useMaskBoxMetadata'
-import { useQualification } from './useQualification'
+import type { NonPayableTx } from '@masknet/web3-contracts/types/types.js'
+import { BoxInfo, BoxState } from '../type.js'
+import { useMaskBoxInfo } from './useMaskBoxInfo.js'
+import { useMerkelProof } from './useMerkleProof.js'
+import { useMaskBoxStatus } from './useMaskBoxStatus.js'
+import { useMaskBoxCreationSuccessEvent } from './useMaskBoxCreationSuccessEvent.js'
+import { useMaskBoxTokensForSale } from './useMaskBoxTokensForSale.js'
+import { useMaskBoxPurchasedTokens } from './useMaskBoxPurchasedTokens.js'
+import { formatCountdown } from '../helpers/formatCountdown.js'
+import { useOpenBoxTransaction } from './useOpenBoxTransaction.js'
+import { useMaskBoxMetadata } from './useMaskBoxMetadata.js'
+import { useQualification } from './useQualification.js'
 import {
     formatBalance,
     isGreaterThan,
@@ -28,25 +29,23 @@ import {
     isLessThanOrEqualTo,
     isSameAddress,
     multipliedBy,
-    NetworkPluginID,
 } from '@masknet/web3-shared-base'
+import { NetworkPluginID, EMPTY_LIST } from '@masknet/shared-base'
 import {
-    useAccount,
+    useChainContext,
     useBalance,
     useFungibleToken,
     useFungibleTokenBalance,
     useFungibleTokens,
     useNonFungibleTokenContract,
-} from '@masknet/plugin-infra/web3'
-import { EMPTY_LIST } from '@masknet/shared-base'
-import { useERC20TokenAllowance } from '@masknet/plugin-infra/web3-evm'
+} from '@masknet/web3-hooks-base'
 
 function useContext(initialState?: { boxId: string; hashRoot: string }) {
     const now = new Date()
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+
     const { MASK_BOX_CONTRACT_ADDRESS } = useMaskBoxConstants()
     const coder = ABICoder as unknown as ABICoder.AbiCoder
-
     const [boxId, setBoxId] = useState(initialState?.boxId ?? '')
     const rootHash = initialState?.hashRoot || ''
     const [paymentTokenAddress, setPaymentTokenAddress] = useState('')

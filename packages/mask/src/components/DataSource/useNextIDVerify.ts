@@ -1,11 +1,11 @@
 import { fromHex, NextIDAction, NextIDPlatform, PersonaInformation, toBase64 } from '@masknet/shared-base'
 import { NextIDProof } from '@masknet/web3-providers'
-import Services from '../../extension/service'
-import { MaskMessages } from '../../utils'
+import Services from '../../extension/service.js'
+import { MaskMessages } from '../../utils/index.js'
 import { useRef } from 'react'
 import { useAsyncFn } from 'react-use'
-import { languageSettings } from '../../../shared/legacy-settings/settings'
-import { activatedSocialNetworkUI } from '../../social-network'
+import { languageSettings } from '../../../shared/legacy-settings/settings.js'
+import { activatedSocialNetworkUI } from '../../social-network/index.js'
 
 export function useNextIDVerify() {
     const verifyPostCollectTimer = useRef<NodeJS.Timer | null>(null)
@@ -14,7 +14,7 @@ export function useNextIDVerify() {
     const platform = activatedSocialNetworkUI.configuration.nextIDConfig?.platform as NextIDPlatform | undefined
 
     return useAsyncFn(
-        async (persona?: PersonaInformation, username?: string) => {
+        async (persona?: PersonaInformation, username?: string, verifiedCallback?: () => void | Promise<void>) => {
             if (!platform || !persona || !username) return
 
             const payload = await NextIDProof.createPersonaPayload(
@@ -64,6 +64,7 @@ export function useNextIDVerify() {
             if (!isBound) throw new Error('Failed to verify.')
 
             MaskMessages.events.ownProofChanged.sendToAll(undefined)
+            await verifiedCallback?.()
         },
         [postMessage, platform],
     )

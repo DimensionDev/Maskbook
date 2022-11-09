@@ -1,17 +1,17 @@
 import { useCallback } from 'react'
 import { MutationObserverWatcher, LiveSelector } from '@dimensiondev/holoflows-kit'
 import { CrossIsolationMessages } from '@masknet/shared-base'
-import { isReplyPageSelector, postEditorInPopupSelector, searchReplyToolbarSelector } from '../utils/selector'
-import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot'
-import { PostDialogHint } from '../../../components/InjectedComponents/PostDialogHint'
-import { startWatch } from '../../../utils/watcher'
+import { isReplyPageSelector, postEditorInPopupSelector, searchReplyToolbarSelector } from '../utils/selector.js'
+import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot.js'
+import { PostDialogHint } from '../../../components/InjectedComponents/PostDialogHint.js'
+import { startWatch } from '../../../utils/watcher.js'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { alpha } from '@mui/material'
-import { twitterBase } from '../base'
-import { sayHelloShowed } from '../../../../shared/legacy-settings/settings'
+import { twitterBase } from '../base.js'
+import { sayHelloShowed } from '../../../../shared/legacy-settings/settings.js'
 import { makeTypedMessageText } from '@masknet/typed-message'
-import { useI18N } from '../../../utils'
-import { hasEditor, isCompose } from '../utils/postBox'
+import { useI18N } from '../../../utils/index.js'
+import { hasEditor, isCompose } from '../utils/postBox.js'
 
 const useStyles = makeStyles()((theme) => ({
     iconButton: {
@@ -60,7 +60,7 @@ function PostDialogHintAtTwitter({ reason }: { reason: 'timeline' | 'popup' }) {
                       t('setup_guide_say_hello_follow', { account: '@realMaskNetwork' }),
               )
 
-        CrossIsolationMessages.events.requestComposition.sendToLocal({
+        CrossIsolationMessages.events.compositionDialogEvent.sendToLocal({
             reason: isReplyPageSelector() ? 'reply' : reason,
             open: true,
             content,
@@ -74,7 +74,7 @@ function PostDialogHintAtTwitter({ reason }: { reason: 'timeline' | 'popup' }) {
             classes={{ iconButton: classes.iconButton, tooltip: classes.tooltip }}
             size={20}
             onHintButtonClicked={onHintButtonClicked}
-            tooltip={{ disabled: false }}
+            tooltip={{ disabled: false, placement: 'top' }}
         />
     )
 }

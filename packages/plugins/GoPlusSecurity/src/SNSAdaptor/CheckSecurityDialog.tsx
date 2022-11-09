@@ -1,25 +1,22 @@
+import { memo, ReactNode, useEffect, useState } from 'react'
 import { Box, DialogActions, DialogContent, Stack } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { useI18N } from '../locales'
-import { SearchBox } from './components/SearchBox'
+import { useI18N } from '../locales/index.js'
+import { SearchBox } from './components/SearchBox.js'
 import { useAsync, useAsyncFn } from 'react-use'
 import { GoPlusLabs, SecurityAPI, TokenView } from '@masknet/web3-providers'
-import { Searching } from './components/Searching'
-import { SecurityPanel } from './components/SecurityPanel'
-import { Footer } from './components/Footer'
-import { DefaultPlaceholder } from './components/DefaultPlaceholder'
-import { NotFound } from './components/NotFound'
+import { Searching } from './components/Searching.js'
+import { SecurityPanel } from './components/SecurityPanel.js'
+import { Footer } from './components/Footer.js'
+import { DefaultPlaceholder } from './components/DefaultPlaceholder.js'
+import { NotFound } from './components/NotFound.js'
 import { ChainId, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
 import { InjectedDialog } from '@masknet/shared'
-import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
-import { useFungibleToken, useFungibleTokenPrice } from '@masknet/plugin-infra/web3'
-import { memo, ReactNode, useEffect, useState } from 'react'
-import { CrossIsolationMessages } from '@masknet/shared-base'
+import { isSameAddress } from '@masknet/web3-shared-base'
+import { NetworkPluginID, CrossIsolationMessages } from '@masknet/shared-base'
+import { useFungibleToken, useFungibleTokenPrice } from '@masknet/web3-hooks-base'
 
 const useStyles = makeStyles()((theme) => ({
-    root: {
-        width: 600,
-    },
     content: {
         height: 510,
         maxHeight: 510,
@@ -49,7 +46,7 @@ export function CheckSecurityDialog() {
     const [searchHidden, setSearchHidden] = useState(false)
 
     useEffect(() => {
-        return CrossIsolationMessages.events.requestCheckSecurityDialog.on((env) => {
+        return CrossIsolationMessages.events.checkSecurityDialogEvent.on((env) => {
             if (!env.open) return
             setOpen(env.open)
             setSearchHidden(env.searchHidden)

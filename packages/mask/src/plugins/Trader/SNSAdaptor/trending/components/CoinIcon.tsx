@@ -1,28 +1,12 @@
-import { TokenIcon } from '@masknet/shared'
-import { NetworkPluginID, TokenType } from '@masknet/web3-shared-base'
 import type { FC } from 'react'
+import { TokenIcon, TokenIconProps } from '@masknet/shared'
+import type { TokenType } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 
-interface CoinIconProps {
+export interface CoinIconProps extends TokenIconProps {
     type: TokenType
-    address?: string
-    logoUrl?: string
-    name?: string
-    size?: number
 }
-export const CoinIcon: FC<CoinIconProps> = ({ type, address, logoUrl, name, size }) => {
-    return (
-        <TokenIcon
-            tokenType={type}
-            pluginID={NetworkPluginID.PLUGIN_EVM}
-            name={name}
-            AvatarProps={{
-                sx: {
-                    height: size,
-                    width: size,
-                },
-            }}
-            address={address ?? ''}
-            logoURL={logoUrl}
-        />
-    )
+
+export const CoinIcon: FC<CoinIconProps> = ({ type, ...rest }) => {
+    return <TokenIcon tokenType={type} pluginID={NetworkPluginID.PLUGIN_EVM} {...rest} />
 }

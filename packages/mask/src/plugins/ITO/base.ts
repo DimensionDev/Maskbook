@@ -1,7 +1,7 @@
 import type { Plugin } from '@masknet/plugin-infra'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
-import { ITO_MetaKey_1, ITO_MetaKey_2, ITO_PluginID } from './constants'
+import { ITO_MetaKey_1, ITO_MetaKey_2, ITO_PluginID } from './constants.js'
 
 export const base: Plugin.Shared.Definition = {
     ID: ITO_PluginID,

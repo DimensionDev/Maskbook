@@ -3,14 +3,14 @@ import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import { useLayoutEffect, useMemo, useState } from 'react'
 import { useLocation } from 'react-use'
-import { ProfileTab } from '../../../components/InjectedComponents/ProfileTab'
-import { createReactRootShadowed, startWatch, useMatchXS } from '../../../utils'
+import { ProfileTab } from '../../../components/InjectedComponents/ProfileTab.js'
+import { createReactRootShadowed, MaskMessages, startWatch, useMatchXS } from '../../../utils/index.js'
 import {
     searchProfileActiveTabSelector,
     searchProfileTabListLastChildSelector,
     searchProfileTabPageSelector,
     searchProfileTabSelector,
-} from '../utils/selector'
+} from '../utils/selector.js'
 
 export function injectProfileTabAtInstagram(signal: AbortSignal) {
     let tabInjected = false
@@ -70,7 +70,6 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => {
                 borderTop: 'unset',
             },
         },
-        line: {},
         icon: {
             [`@media (min-width: ${theme.breakpoints.values.sm}px)`]: {
                 height: props.fontSize,
@@ -104,6 +103,20 @@ function getColor() {
     return style.color
 }
 
+const handler = () => {
+    MaskMessages.events.profileTabActive.sendToLocal({ active: false })
+    MaskMessages.events.profileTabHidden.sendToLocal({ hidden: true })
+    const activeTab = searchProfileActiveTabSelector().evaluate()
+    if (activeTab?.style) {
+        activeTab.style.borderTop = ''
+        activeTab.style.color = ''
+    }
+    const ele = searchProfileTabPageSelector().evaluate()
+    if (ele?.style) {
+        ele.style.display = ''
+    }
+}
+
 export function ProfileTabAtInstagram() {
     const isMobile = useMatchXS()
     const location = useLocation()
@@ -135,6 +148,7 @@ export function ProfileTabAtInstagram() {
             activeTab.style.borderTop = ''
             activeTab.style.color = ''
         }
+        activeTab?.removeEventListener('click', handler)
 
         if (isMobile) {
             const activeTab = searchProfileActiveTabSelector().evaluate()?.firstElementChild
@@ -156,9 +170,11 @@ export function ProfileTabAtInstagram() {
         const style = getStyleProps({ activeColor, color })
         const activeTab = searchProfileActiveTabSelector().evaluate()
         if (activeTab?.style) {
-            activeTab.style.borderTop = 'none'
+            activeTab.style.setProperty('border-top', 'none', 'important')
             activeTab.style.color = style.color
         }
+
+        activeTab?.addEventListener('click', handler)
 
         if (isMobile) {
             const activeTab = searchProfileActiveTabSelector().evaluate()?.firstElementChild
@@ -179,7 +195,11 @@ export function ProfileTabAtInstagram() {
         <ProfileTab
             title="Web3"
             icon={<Icons.Collectible className={classes.icon} />}
-            classes={classes}
+            classes={{
+                root: classes.root,
+                button: classes.button,
+                selected: classes.selected,
+            }}
             reset={reset}
             clear={clear}
         />

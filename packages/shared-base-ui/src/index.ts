@@ -1,4 +1,4 @@
-export * from './bom'
-export * from './components'
-export * from './hooks'
-export { addShareBaseI18N, languages } from './locales/languages'
+export * from './bom/index.js'
+export * from './components/index.js'
+export * from './hooks/index.js'
+export { addShareBaseI18N, languages } from './locales/languages.js'

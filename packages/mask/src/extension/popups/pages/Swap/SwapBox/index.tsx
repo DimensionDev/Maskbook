@@ -1,32 +1,41 @@
-import { useChainId } from '@masknet/plugin-infra/web3'
-import { useMemo } from 'react'
-import { useNavigate, useLocation } from 'react-router-dom'
 import { useUpdateEffect } from 'react-use'
-import { Trader } from '../../../../../plugins/Trader/SNSAdaptor/trader/Trader'
-import type { Coin } from '../../../../../plugins/Trader/types'
-import { PopupRoutes } from '@masknet/shared-base'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { useNavigate, useLocation } from 'react-router-dom'
+import { useChainContext, useFungibleToken } from '@masknet/web3-hooks-base'
+import { PopupRoutes, NetworkPluginID } from '@masknet/shared-base'
+import type { FungibleToken } from '@masknet/web3-shared-base'
+import { createERC20Token, ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import { Trader } from '../../../../../plugins/Trader/SNSAdaptor/trader/Trader.js'
 
 export function SwapBox() {
     const location = useLocation()
     const navigate = useNavigate()
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
-
-    const coin = useMemo(() => {
-        if (!location.search) return undefined
-        const params = new URLSearchParams(location.search)
-        return {
-            id: params.get('id'),
-            name: params.get('name'),
-            symbol: params.get('symbol'),
-            contract_address: params.get('contract_address'),
-            decimals: Number.parseInt(params.get('decimals') ?? '0', 10),
-        } as Coin
-    }, [location])
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+    const params = new URLSearchParams(location.search)
+    const address = params.get('contract_address')
+    const name = params.get('name')
+    const symbol = params.get('symbol')
+    const decimals = params.get('decimals')
+    const { value: coin } = useFungibleToken(
+        NetworkPluginID.PLUGIN_EVM,
+        address ?? '',
+        createERC20Token(
+            chainId,
+            address ?? '',
+            name ? name : undefined,
+            symbol ? symbol : undefined,
+            Number.parseInt(decimals ?? '0', 10),
+        ),
+        { chainId },
+    )
 
     useUpdateEffect(() => {
         navigate(PopupRoutes.Swap, { replace: true })
     }, [chainId])
 
-    return <Trader coin={coin} chainId={chainId} />
+    return (
+        <Trader
+            defaultInputCoin={coin as FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>}
+            chainId={chainId}
+        />
+    )
 }

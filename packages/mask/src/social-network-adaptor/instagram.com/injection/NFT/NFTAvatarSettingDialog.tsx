@@ -1,20 +1,18 @@
-import { MaskMessages, useI18N } from '../../../../utils'
 import { useCallback, useState } from 'react'
-import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI'
-import { toPNG } from '../../../../plugins/Avatar/utils'
 import { useMount } from 'react-use'
-import { getAvatarId } from '../../utils/user'
+import { MaskMessages, useI18N } from '../../../../utils/index.js'
+import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI.js'
+import { toPNG } from '../../../../plugins/Avatar/utils/index.js'
+import { getAvatarId } from '../../utils/user.js'
 import { InjectedDialog } from '@masknet/shared'
 import { DialogContent } from '@mui/material'
-import { NFTAvatar } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatar'
-import { DialogStackingProvider, makeStyles } from '@masknet/theme'
+import { NFTAvatar } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatar.js'
+import { makeStyles } from '@masknet/theme'
 import { Instagram } from '@masknet/web3-providers'
-import { useAccount, useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
-import type { SelectTokenInfo } from '../../../../plugins/Avatar/types'
-import { RSS3_KEY_SNS } from '../../../../plugins/Avatar/constants'
-import { activatedSocialNetworkUI } from '../../../../social-network'
-import { useSaveNFTAvatar } from '../../../../plugins/Avatar/hooks'
-import { PluginNFTAvatarRPC } from '../../../../plugins/Avatar/messages'
+import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
+import type { SelectTokenInfo } from '../../../../plugins/Avatar/types.js'
+import { RSS3_KEY_SNS } from '../../../../plugins/Avatar/constants.js'
+import { useSaveNFTAvatar } from '../../../../plugins/Avatar/hooks/index.js'
 import type { EnhanceableSite } from '@masknet/shared-base'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 
@@ -26,10 +24,10 @@ export function NFTAvatarSettingDialog() {
     const { t } = useI18N()
     const [open, setOpen] = useState(false)
     const { classes } = useStyles()
-    const account = useAccount()
+    const { account } = useChainContext()
     const identity = useCurrentVisitingIdentity()
-    const pluginId = useCurrentWeb3NetworkPluginID()
-    const [, saveNFTAvatar] = useSaveNFTAvatar()
+    const { pluginID } = useNetworkContext()
+    const saveNFTAvatar = useSaveNFTAvatar()
 
     const onChange = useCallback(
         async (info: SelectTokenInfo) => {
@@ -49,11 +47,11 @@ export function NFTAvatarSettingDialog() {
                         avatarId,
                         chainId: (info.token.chainId ?? ChainId.Mainnet) as ChainId,
                         schema: (info.token.schema ?? SchemaType.ERC721) as SchemaType,
-                        pluginId: info.pluginId,
+                        pluginId: info.pluginID,
                     },
                     identity.identifier.network as EnhanceableSite,
                     RSS3_KEY_SNS.INSTAGRAM,
-                    pluginId,
+                    pluginID,
                 )
 
                 if (!avatarInfo) {
@@ -61,12 +59,6 @@ export function NFTAvatarSettingDialog() {
                     setOpen(false)
                     return
                 }
-
-                await PluginNFTAvatarRPC.clearCache(
-                    identity.identifier.userId,
-                    activatedSocialNetworkUI.networkIdentifier as EnhanceableSite,
-                    RSS3_KEY_SNS.INSTAGRAM,
-                )
 
                 // If the avatar is set successfully, reload the page
                 window.location.reload()
@@ -89,12 +81,15 @@ export function NFTAvatarSettingDialog() {
     })
 
     return (
-        <DialogStackingProvider>
-            <InjectedDialog keepMounted open={open} onClose={onClose} title={t('set_nft_profile_photo')}>
-                <DialogContent style={{ padding: 16 }}>
-                    <NFTAvatar onChange={onChange} classes={classes} />
-                </DialogContent>
-            </InjectedDialog>
-        </DialogStackingProvider>
+        <InjectedDialog keepMounted open={open} onClose={onClose} title={t('set_nft_profile_photo')}>
+            <DialogContent style={{ padding: 16 }}>
+                <NFTAvatar
+                    onChange={onChange}
+                    classes={{
+                        root: classes.root,
+                    }}
+                />
+            </DialogContent>
+        </InjectedDialog>
     )
 }

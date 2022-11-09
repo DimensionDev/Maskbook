@@ -1,9 +1,10 @@
 import { useMemo } from 'react'
 import type { Currency } from '@uniswap/sdk-core'
 import { Pool, Route } from '@uniswap/v3-sdk'
-import { useV3SwapPools } from './useV3SwapPools'
-import { useSingleHopOnly } from './useSingleHopOnly'
-import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
+import { useV3SwapPools } from './useV3SwapPools.js'
+import { useSingleHopOnly } from './useSingleHopOnly.js'
+import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 
 function computeAllRoutes(
     currencyIn: Currency,
@@ -54,13 +55,25 @@ function computeAllRoutes(
 export function useAllV3Routes(
     currencyIn?: Currency,
     currencyOut?: Currency,
-): { loading: boolean; routes: Array<Route<Currency, Currency>> } {
-    const { targetChainId: chainId } = TargetChainIdContext.useContainer()
+): {
+    loading: boolean
+    routes: Array<Route<Currency, Currency>>
+} {
+    const { chainId } = useChainContext()
+    const { pluginID } = useNetworkContext()
     const { pools, loading: poolsLoading } = useV3SwapPools(currencyIn, currencyOut)
     const singleHopOnly = useSingleHopOnly()
 
     return useMemo(() => {
-        if (poolsLoading || !chainId || !pools || !currencyIn || !currencyOut) return { loading: true, routes: [] }
+        if (
+            poolsLoading ||
+            !chainId ||
+            !pools ||
+            !currencyIn ||
+            !currencyOut ||
+            pluginID !== NetworkPluginID.PLUGIN_EVM
+        )
+            return { loading: true, routes: [] }
 
         const routes = computeAllRoutes(
             currencyIn,
@@ -73,5 +86,13 @@ export function useAllV3Routes(
             singleHopOnly ? 1 : 2,
         )
         return { loading: false, routes }
-    }, [chainId, currencyIn?.wrapped.address, currencyOut?.wrapped.address, pools, poolsLoading, singleHopOnly])
+    }, [
+        chainId,
+        currencyIn?.wrapped.address,
+        currencyOut?.wrapped.address,
+        pools,
+        poolsLoading,
+        singleHopOnly,
+        pluginID,
+    ])
 }

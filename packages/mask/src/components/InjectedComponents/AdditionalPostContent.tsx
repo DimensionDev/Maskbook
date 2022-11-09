@@ -1,15 +1,12 @@
-import { Typography, Card, Box, CircularProgress, CircularProgressProps } from '@mui/material'
+import { Typography, Card, Box, CircularProgress, CircularProgressProps, colors } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import classNames from 'classnames'
 import { TypedMessage, makeTypedMessageText } from '@masknet/typed-message'
-import { TextResizeContext, TypedMessageRender } from '@masknet/typed-message/dom'
-import { TypedMessageRenderContext } from '../../../shared-ui/TypedMessageRender/context'
-import CheckIcon from '@mui/icons-material/Check'
-import CloseIcon from '@mui/icons-material/Close'
-import green from '@mui/material/colors/green'
-import { MaskIcon } from '../../resources/MaskIcon'
+import { TypedMessageRender } from '@masknet/typed-message-react'
+import { TypedMessageRenderContext } from '../../../shared-ui/TypedMessageRender/context.js'
+import { Check as CheckIcon, Close as CloseIcon } from '@mui/icons-material'
+import { MaskIcon } from '@masknet/shared'
 import { memo, useCallback, useMemo } from 'react'
-import { activatedSocialNetworkUI } from '../../social-network/ui'
+import { activatedSocialNetworkUI } from '../../social-network/ui.js'
 
 export enum AdditionalIcon {
     check = 'check',
@@ -44,7 +41,7 @@ export const AdditionalContent = memo(function AdditionalContent(props: Addition
     )
     const RightIconJSX = ((icon) => {
         const props = { fontSize: 'small', className: classes.rightIcon } as const
-        if (icon === AdditionalIcon.check) return <CheckIcon htmlColor={green[500]} {...props} />
+        if (icon === AdditionalIcon.check) return <CheckIcon htmlColor={colors.green[500]} {...props} />
         if (icon === AdditionalIcon.error) return <CloseIcon color="error" {...props} />
         return null
     })(props.titleIcon)
@@ -53,7 +50,7 @@ export const AdditionalContent = memo(function AdditionalContent(props: Addition
             variant="caption"
             color={message ? 'textSecondary' : 'textPrimary'}
             gutterBottom
-            className={classNames(classes.title)}>
+            className={classes.title}>
             <span className={classes.icon}>{ProgressJSX || <MaskIcon />}</span>
             <Box
                 sx={{
@@ -76,14 +73,11 @@ export const AdditionalContent = memo(function AdditionalContent(props: Addition
             <header className={classes.content}>{header}</header>
             {message ? (
                 <main className={classes.content}>
-                    <TextResizeContext.Provider value>
-                        <TypedMessageRenderContext
-                            renderFragments={
-                                activatedSocialNetworkUI?.customization.componentOverwrite?.RenderFragments
-                            }>
-                            <TypedMessageRender message={TypedMessage} />
-                        </TypedMessageRenderContext>
-                    </TextResizeContext.Provider>
+                    <TypedMessageRenderContext
+                        textResizer={activatedSocialNetworkUI.networkIdentifier !== 'twitter.com'}
+                        renderFragments={activatedSocialNetworkUI?.customization.componentOverwrite?.RenderFragments}>
+                        <TypedMessageRender message={TypedMessage} />
+                    </TypedMessageRenderContext>
                 </main>
             ) : null}
         </Card>

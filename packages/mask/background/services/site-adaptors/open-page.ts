@@ -1,7 +1,7 @@
-import { delay } from '@dimensiondev/kit'
+import { delay } from '@masknet/kit'
 import { ProfileIdentifier } from '@masknet/shared-base'
-import { definedSiteAdaptors } from '../../../shared/site-adaptors/definitions'
-import { requestSiteAdaptorsPermission } from '../helper/request-permission'
+import { definedSiteAdaptors } from '../../../shared/site-adaptors/definitions.js'
+import { requestSiteAdaptorsPermission } from '../helper/request-permission.js'
 
 export async function openProfilePage(network: string, userId?: string) {
     const worker = definedSiteAdaptors.get(network)
@@ -27,7 +27,16 @@ export async function openShareLink(network: string, post: string) {
         width,
         height,
         type: 'popup',
-        left: (screen.width - width) / 2,
-        top: (screen.height - height) / 2,
+        left: getLeft(width),
+        top: getTop(height),
     })
+}
+
+function getLeft(width: number) {
+    if (process.env.manifest === '2') return ((globalThis as any).screen.width - width) / 2
+    return 200
+}
+function getTop(height: number) {
+    if (process.env.manifest === '2') return ((globalThis as any).screen.height - height) / 2
+    return 200
 }

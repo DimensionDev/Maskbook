@@ -1,10 +1,9 @@
-import { makeStyles, useStylesExtends } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
-import classNames from 'classnames'
-import { useI18N } from '../locales'
-import type { OwnerERC721TokenInfo } from '../types'
-import { ImageLoader } from './ImageLoader'
-import ModelView from './ModelView'
+import { useI18N } from '../locales/index.js'
+import type { OwnerERC721TokenInfo } from '../types.js'
+import { ImageLoader } from './ImageLoader.js'
+import ModelView from './ModelView.js'
 
 export const useStyles = makeStyles()((theme) => ({
     box: {
@@ -107,13 +106,6 @@ export const useStyles = makeStyles()((theme) => ({
         fontSize: '12px',
         textAlign: 'center',
     },
-    glbTransfer: {
-        position: 'absolute',
-        width: 45,
-        height: 20,
-        bottom: '-10px',
-        cursor: 'pointer',
-    },
     glbView: {
         width: '100%',
         height: 150,
@@ -128,7 +120,7 @@ interface Props {
 }
 
 export function PreviewBox(props: Props) {
-    const classes = useStylesExtends(useStyles(), {})
+    const { classes, cx } = useStyles()
     const t = useI18N()
 
     const renderPreview = (mediaUrl: string, imageUrl: string) => {
@@ -150,7 +142,7 @@ export function PreviewBox(props: Props) {
         <div className={classes.box}>
             {props.message && (
                 <div
-                    className={classNames({
+                    className={cx({
                         [classes.msgBox]: true,
                         [classes.wordShow]: true,
                     })}>

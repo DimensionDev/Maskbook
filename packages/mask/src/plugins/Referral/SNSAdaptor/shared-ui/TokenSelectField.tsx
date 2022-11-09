@@ -4,9 +4,9 @@ import { ChevronDown } from 'react-feather'
 import { makeStyles } from '@masknet/theme'
 import { TokenIcon } from '@masknet/shared'
 
-import type { FungibleTokenDetailed } from '../../types'
+import type { FungibleTokenDetailed } from '../../types.js'
 
-import { useI18N } from '../../locales'
+import { useI18N } from '../../locales/index.js'
 
 const useStyles = makeStyles()(() => ({
     button: {
@@ -58,7 +58,7 @@ export function TokenSelectField({ label, token, disabled, style, onClick }: Tok
 
                     startAdornment: token && (
                         <InputAdornment position="start">
-                            <TokenIcon {...token} classes={classes} />
+                            <TokenIcon {...token} className={classes.icon} />
                         </InputAdornment>
                     ),
                     endAdornment: (

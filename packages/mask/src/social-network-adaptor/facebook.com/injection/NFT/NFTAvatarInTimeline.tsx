@@ -1,10 +1,10 @@
 import { DOMProxy, LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { createReactRootShadowed, startWatch } from '../../../../utils'
-import { getInjectNodeInfo } from '../../utils/avatar'
-import { searchFaceBookPostAvatarOnMobileSelector, searchFaceBookPostAvatarSelector } from '../../utils/selector'
-import { NFTBadgeTimeline } from '../../../../plugins/Avatar/SNSAdaptor/NFTBadgeTimeline'
-import { isMobileFacebook } from '../../utils/isMobile'
-import { RSS3_KEY_SNS } from '../../../../plugins/Avatar/constants'
+import { createReactRootShadowed, startWatch } from '../../../../utils/index.js'
+import { getInjectNodeInfo } from '../../utils/avatar.js'
+import { searchFaceBookPostAvatarOnMobileSelector, searchFaceBookPostAvatarSelector } from '../../utils/selector.js'
+import { NFTBadgeTimeline } from '../../../../plugins/Avatar/SNSAdaptor/NFTBadgeTimeline.js'
+import { isMobileFacebook } from '../../utils/isMobile.js'
+import { RSS3_KEY_SNS } from '../../../../plugins/Avatar/constants.js'
 import { memo } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { Flags } from '../../../../../shared'
@@ -31,7 +31,7 @@ const TimelineRainbow = memo(
                     avatarId={avatarId}
                     width={width}
                     height={height}
-                    classes={classes}
+                    classes={{ root: classes.root }}
                     snsKey={RSS3_KEY_SNS.FACEBOOK}
                 />
             </div>
@@ -71,7 +71,7 @@ function _(selector: () => LiveSelector<HTMLElement | SVGElement, false>, signal
 
                 if (!info) return
 
-                const proxy = DOMProxy({ afterShadowRootInit: { mode: Flags.shadowRootMode } })
+                const proxy = DOMProxy({ afterShadowRootInit: { mode: process.env.shadowRootMode } })
                 proxy.realCurrent = info.element
 
                 const root = createReactRootShadowed(proxy.afterShadow, { signal })

@@ -1,17 +1,17 @@
 import { useState } from 'react'
 import { Tab, Tabs, Paper, Card, CardHeader, CardContent, Link, Typography, Avatar, Box } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { useChainId } from '@masknet/plugin-infra/web3'
-import { useI18N } from '../../../utils'
-import { CollectionView } from './CollectionView'
-import { DetailsView } from './DetailsView'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { useChainContext } from '@masknet/web3-hooks-base'
+import { useI18N } from '../../../utils/index.js'
+import { CollectionView } from './CollectionView.js'
+import { DetailsView } from './DetailsView.js'
 import { ChainId, formatWeiToEther } from '@masknet/web3-shared-evm'
-import { useFetchProject } from '../hooks/useProject'
-import { ActionBar } from './ActionBar'
-import { resolveProjectLinkOnArtBlocks, resolveUserLinkOnArtBlocks } from '../pipes'
-import { ArtBlocksLogoUrl } from '../constants'
-import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
+import { useFetchProject } from '../hooks/useProject.js'
+import { ActionBar } from './ActionBar.js'
+import { resolveProjectLinkOnArtBlocks, resolveUserLinkOnArtBlocks } from '../pipes/index.js'
+import { ArtBlocksLogoUrl } from '../constants.js'
+import { ChainBoundary } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -29,28 +29,6 @@ const useStyles = makeStyles()((theme) => {
         content: {
             padding: '0 !important',
         },
-        footer: {
-            marginTop: -1, // merge duplicate borders
-            zIndex: 1,
-            position: 'relative',
-            borderTop: `solid 1px ${theme.palette.divider}`,
-            justifyContent: 'space-between',
-        },
-        sourceNote: {
-            fontSize: 10,
-            marginRight: theme.spacing(1),
-        },
-        footLink: {
-            cursor: 'pointer',
-            marginRight: theme.spacing(0.5),
-            '&:last-child': {
-                marginRight: 0,
-            },
-        },
-        mask: {
-            width: 40,
-            height: 10,
-        },
     }
 })
 
@@ -62,7 +40,7 @@ interface CollectibleProps {
 export function Collectible(props: CollectibleProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM, props?.chainId)
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>({ chainId: props?.chainId })
     const [tabIndex, setTabIndex] = useState(0)
 
     const { value, loading, error } = useFetchProject(props.projectId, chainId)

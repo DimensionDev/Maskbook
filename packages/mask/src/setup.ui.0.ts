@@ -1,7 +1,7 @@
 import type { KVStorageBackend } from '@masknet/shared-base'
-import { setupMaskKVStorageBackend } from '../shared/kv-storage'
-import Services from './extension/service'
-import { contentFetch } from './utils/fetcher'
+import { setupMaskKVStorageBackend } from '../shared/kv-storage.js'
+import Services from './extension/service.js'
+import { contentFetch } from './utils/fetcher.js'
 
 const memory: KVStorageBackend = {
     beforeAutoSync: Promise.resolve(),

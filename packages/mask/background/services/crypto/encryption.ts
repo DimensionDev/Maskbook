@@ -10,11 +10,14 @@ import {
     SocialNetworkEnum,
     SocialNetworkEnumToProfileDomain,
 } from '@masknet/encryption'
-import { encryptByLocalKey, deriveAESByECDH, queryPublicKey } from '../../database/persona/helper'
-import { savePostKeyToDB } from '../../database/post/helper'
-import { noop } from 'lodash-unified'
-import { queryProfileDB } from '../../database/persona/db'
-import { publishPostAESKey_version39Or38, publishPostAESKey_version37 } from '../../network/gun/encryption/queryPostKey'
+import { encryptByLocalKey, deriveAESByECDH, queryPublicKey } from '../../database/persona/helper.js'
+import { savePostKeyToDB } from '../../database/post/helper.js'
+import { noop } from 'lodash-es'
+import { queryProfileDB } from '../../database/persona/db.js'
+import {
+    publishPostAESKey_version39Or38,
+    publishPostAESKey_version37,
+} from '../../network/gun/encryption/queryPostKey.js'
 export async function encryptTo(
     version: -37 | -38,
     content: SerializableTypedMessages,
@@ -46,7 +49,6 @@ export async function encryptTo(
                 ),
         },
     )
-
     ;(async () => {
         const profile = whoAmI ? await queryProfileDB(whoAmI).catch(noop) : null
         const usingPersona = profile?.linkedPersona

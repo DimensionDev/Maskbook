@@ -1,11 +1,10 @@
 import { memo } from 'react'
-import { IconButton, Tooltip } from '@mui/material'
-import { useStylesExtends, makeStyles } from '@masknet/theme'
-import { useI18N } from '../../utils'
-import { isMobileFacebook } from '../../social-network-adaptor/facebook.com/utils/isMobile'
-import { MaskSharpIcon, MaskIconInMinds } from '../../resources/MaskIcon'
-import classNames from 'classnames'
-import GuideStep from '../GuideStep'
+import { IconButton, Typography } from '@mui/material'
+import { useStylesExtends, makeStyles, ShadowRootTooltip } from '@masknet/theme'
+import { useI18N } from '../../utils/index.js'
+import { isMobileFacebook } from '../../social-network-adaptor/facebook.com/utils/isMobile.js'
+import { MaskSharpIcon, MaskIconInMinds } from '@masknet/shared'
+import GuideStep from '../GuideStep/index.js'
 
 interface TooltipConfigProps {
     placement?: 'bottom' | 'top'
@@ -26,8 +25,7 @@ const useStyles = makeStyles()((theme) => ({
         padding: isMobileFacebook ? 0 : '7px',
     },
     text: {
-        fontSize: 14,
-        color: '#606770',
+        color: theme.palette.grey[300],
         marginLeft: theme.spacing(1),
     },
     wrapper: {
@@ -35,10 +33,7 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         width: '100%',
         padding: '8px 10px',
-        borderBottom: '1px solid #dadde1',
-    },
-    tooltip: {
-        color: 'white',
+        borderBottom: `1px solid ${theme.palette.divider}`,
     },
 }))
 
@@ -50,24 +45,24 @@ const ICON_MAP: Record<string, JSX.Element> = {
 const EntryIconButton = memo((props: PostDialogHintUIProps) => {
     const { t } = useI18N()
     const { tooltip, disableGuideTip } = props
-    const classes = useStylesExtends(useStyles(), props)
+    const { classes, cx } = useStylesExtends(useStyles(), props)
 
     const getEntry = () => (
-        <Tooltip
-            title="Mask Network"
-            classes={{ tooltip: classes.tooltip }}
+        <ShadowRootTooltip
+            title={t('mask_network')}
             placement={tooltip?.placement}
             disableHoverListener={tooltip?.disabled}
             PopperProps={{
-                disablePortal: true,
-            }}>
+                disablePortal: false,
+            }}
+            arrow>
             <IconButton
                 size="large"
-                className={classNames(classes.button, classes.iconButton)}
+                className={cx(classes.button, classes.iconButton)}
                 onClick={props.onHintButtonClicked}>
                 {ICON_MAP?.[props?.iconType ?? 'default']}
             </IconButton>
-        </Tooltip>
+        </ShadowRootTooltip>
     )
 
     return disableGuideTip ? (
@@ -81,13 +76,13 @@ const EntryIconButton = memo((props: PostDialogHintUIProps) => {
 
 export const PostDialogHint = memo(function PostDialogHintUI(props: PostDialogHintUIProps) {
     const { onHintButtonClicked, size, ...others } = props
-    const classes = useStylesExtends(useStyles(), props)
+    const { classes } = useStylesExtends(useStyles(), props)
     const { t } = useI18N()
 
     return isMobileFacebook ? (
         <div className={classes.wrapper} onClick={onHintButtonClicked}>
             <EntryIconButton size={size} onHintButtonClicked={() => undefined} />
-            <span className={classes.text}>{t('post_modal_hint__button')}</span>
+            <Typography className={classes.text}>{t('post_modal_hint__button')}</Typography>
         </div>
     ) : (
         <div className={classes.buttonTransform}>

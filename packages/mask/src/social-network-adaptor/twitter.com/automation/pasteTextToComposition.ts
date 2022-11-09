@@ -1,11 +1,11 @@
-import { abortSignalTimeout, delay } from '@dimensiondev/kit'
+import { delay } from '@masknet/kit'
 import { inputText, pasteText } from '@masknet/injected-script'
-import { newPostButtonSelector, postEditorDraftContentSelector } from '../utils/selector'
-import type { SocialNetworkUI } from '../../../social-network'
-import { getEditorContent, hasEditor, hasFocus, isCompose } from '../utils/postBox'
-import { untilElementAvailable } from '../../../utils/dom'
-import { isMobileTwitter } from '../utils/isMobile'
-import { MaskMessages } from '../../../utils/messages'
+import { newPostButtonSelector, postEditorDraftContentSelector } from '../utils/selector.js'
+import type { SocialNetworkUI } from '@masknet/types'
+import { getEditorContent, hasEditor, hasFocus, isCompose } from '../utils/postBox.js'
+import { untilElementAvailable } from '../../../utils/dom.js'
+import { isMobileTwitter } from '../utils/isMobile.js'
+import { MaskMessages } from '../../../utils/messages.js'
 
 /**
  * Wait for up to 5000 ms
@@ -49,5 +49,5 @@ export const pasteTextToCompositionTwitter: SocialNetworkUI.AutomationCapabiliti
             throw e
         }
 
-        worker(abortSignalTimeout(timeout)).then(undefined, (error) => fail(error))
+        worker(AbortSignal.timeout(timeout)).then(undefined, (error) => fail(error))
     }

@@ -1,7 +1,7 @@
-export { CrashUI } from './CrashUI'
-export type { CrashUIProps } from './CrashUI'
+export { CrashUI } from './CrashUI.js'
+export type { CrashUIProps } from './CrashUI.js'
 
-export { ErrorBoundaryBuildInfoContext } from './context'
-export type { ErrorBoundaryError } from './context'
+export { BuildInfo } from './context.js'
+export type { ErrorBoundaryError } from './context.js'
 
-export { ErrorBoundary, withErrorBoundary } from './ErrorBoundary'
+export { ErrorBoundary, withErrorBoundary } from './ErrorBoundary.js'

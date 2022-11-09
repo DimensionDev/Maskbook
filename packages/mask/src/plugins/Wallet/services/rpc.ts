@@ -1,9 +1,9 @@
-import { first } from 'lodash-unified'
+import { first } from 'lodash-es'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import type { JsonRpcPayload } from 'web3-core-helpers'
-import { createTransaction } from '../../../../background/database/utils/openDB'
-import { createWalletDBAccess } from '../database/Wallet.db'
-import { openPopupWindow } from '../../../../background/services/helper'
+import { createTransaction } from '../../../../background/database/utils/openDB.js'
+import { createWalletDBAccess } from '../database/Wallet.db.js'
+import { openPopupWindow } from '../../../../background/services/helper/index.js'
 
 const MAX_UNCONFIRMED_REQUESTS_SIZE = 1
 const MAIN_RECORD_ID = '0'

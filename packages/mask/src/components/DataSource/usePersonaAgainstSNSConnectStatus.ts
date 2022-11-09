@@ -1,9 +1,9 @@
 import { useAsyncRetry } from 'react-use'
 import type { PersonaInformation } from '@masknet/shared-base'
-import Services from '../../extension/service'
-import { useLastRecognizedIdentity } from './useActivatedUI'
-import { usePersonasFromDB } from './usePersonasFromDB'
-import { useSetupGuideStatus } from '../GuideStep/useSetupGuideStatus'
+import Services from '../../extension/service.js'
+import { useLastRecognizedIdentity } from './useActivatedUI.js'
+import { usePersonasFromDB } from './usePersonasFromDB.js'
+import { useSetupGuideStatus } from '../GuideStep/useSetupGuideStatus.js'
 
 export function usePersonaAgainstSNSConnectStatus() {
     const personas = usePersonasFromDB()

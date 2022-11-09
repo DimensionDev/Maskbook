@@ -1,13 +1,13 @@
-import { keyBy, mapValues } from 'lodash-unified'
+import { keyBy, mapValues } from 'lodash-es'
 import {
     FungibleToken,
     NonFungibleToken,
-    NonFungibleTokenCollection,
+    NonFungibleCollection,
     NonFungibleTokenContract,
     NonFungibleTokenMetadata,
     TokenType,
-} from '../specs'
-import type { Constants } from './types'
+} from '../specs/index.js'
+import type { Constants } from './types.js'
 
 export function createFungibleToken<ChainId, SchemaType>(
     chainId: ChainId,
@@ -72,7 +72,7 @@ export function createNonFungibleTokenCollection<ChainId, SchemaType>(
     iconURL?: string,
     verified?: boolean,
     createdAt?: number,
-): NonFungibleTokenCollection<ChainId, SchemaType> {
+): NonFungibleCollection<ChainId, SchemaType> {
     return {
         chainId,
         name,
@@ -108,7 +108,10 @@ export function createNonFungibleToken<ChainId, SchemaType>(
 }
 
 export function createFungibleTokensFromConstants<T extends Constants<string>, ChainId extends number, SchemaType>(
-    chainIds: Array<{ key: string; value: ChainId }>,
+    chainIds: Array<{
+        key: string
+        value: ChainId
+    }>,
     schema: SchemaType,
     constants: T,
 ) {

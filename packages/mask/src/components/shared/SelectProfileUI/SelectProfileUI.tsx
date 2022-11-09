@@ -1,10 +1,10 @@
 import { useState, useCallback } from 'react'
 import { ListItem, ListItemText, InputBase, Button, List, Box, Chip } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
-import { useI18N } from '../../../utils'
+import { useI18N } from '../../../utils/index.js'
 import type { ProfileInformation as Profile } from '@masknet/shared-base'
-import { ProfileInList } from './ProfileInList'
-import { ProfileInChip } from './ProfileInChip'
+import { ProfileInList } from './ProfileInList.js'
+import { ProfileInChip } from './ProfileInChip.js'
 import { FixedSizeList } from 'react-window'
 
 export interface SelectProfileUIProps extends withClasses<'root'> {
@@ -26,7 +26,7 @@ const useStyles = makeStyles()({
 })
 export function SelectProfileUI(props: SelectProfileUIProps) {
     const { t } = useI18N()
-    const classes = useStylesExtends(useStyles(), props)
+    const { classes } = useStylesExtends(useStyles(), props)
 
     const { frozenSelected, onSetSelected, disabled, items, selected } = props
 

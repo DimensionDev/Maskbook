@@ -1,5 +1,5 @@
 import { makeStyles, usePopupCustomSnackbar, ActionButton } from '@masknet/theme'
-import { CurrentWalletBox } from './CurrentWalletBox'
+import { CurrentWalletBox } from './CurrentWalletBox.js'
 import {
     step1ActiveIcon,
     stepSuccessIcon,
@@ -8,11 +8,11 @@ import {
     dividerActiveIcon,
     step2DisableIcon,
     step2ActiveIcon,
-} from './constants'
+} from './constants.js'
 import { ImageIcon } from '@masknet/shared'
 import { Typography } from '@mui/material'
 import { useEffect } from 'react'
-import { useI18N } from '../../../utils'
+import { useI18N } from '../../../utils/index.js'
 import type { Account } from '@masknet/web3-shared-base'
 import type { ChainId, ProviderType } from '@masknet/web3-shared-evm'
 import { LoadingButton } from '@mui/lab'
@@ -48,10 +48,8 @@ const useStyles = makeStyles()((theme) => ({
         minHeight: 100,
     },
     stepTitle: {
-        fontSize: 14,
         fontWeight: 700,
     },
-
     stepIntro: {
         marginTop: 12,
         fontSize: 12,
@@ -78,12 +76,7 @@ const useStyles = makeStyles()((theme) => ({
         color: '#1C68F3',
         fontSize: 14,
     },
-    disableBtn: {
-        pointerEvents: 'none',
-        opacity: 0.5,
-    },
     hasBound: {
-        fontSize: 14,
         width: '100%',
         textAlign: 'left',
         color: theme.palette.error.main,
@@ -155,9 +148,14 @@ export function Steps(props: StepsProps) {
 
     useEffect(() => {
         if (disableConfirm && !notInPop) {
-            showSnackbar(t('wallet_verify_has_bound'), { variant: 'error' })
+            showSnackbar(
+                t('wallet_verify_has_bound', {
+                    currentPersona: nickname ?? 'Persona Name',
+                }),
+                { variant: 'error' },
+            )
         }
-    }, [disableConfirm])
+    }, [disableConfirm, nickname])
 
     return (
         <div className={classes.container}>
@@ -165,7 +163,13 @@ export function Steps(props: StepsProps) {
             {notEvm && wallet.account && (
                 <Typography className={classes.hasBound}>{t('plugin_tips_not_evm_alert')}</Typography>
             )}
-            {isBound && <Typography className={classes.hasBound}>{t('wallet_verify_has_bound')}</Typography>}
+            {isBound && step !== SignSteps.SecondStepDone && (
+                <Typography className={classes.hasBound}>
+                    {t('wallet_verify_has_bound', {
+                        currentPersona: nickname ?? 'Persona Name',
+                    })}
+                </Typography>
+            )}
             {notConnected && (
                 <Typography className={classes.hasBound} style={{ textAlign: 'center' }}>
                     {t('wallet_verify_empty_alert')}
@@ -216,7 +220,11 @@ export function Steps(props: StepsProps) {
                     variant="contained"
                     fullWidth
                     onClick={onConfirm}>
-                    {disableConfirm ? t('wallet_verify_persona_sign') : step === 2 ? t('done') : t('confirm')}
+                    {disableConfirm
+                        ? t('wallet_verify_persona_sign')
+                        : step === SignSteps.SecondStepDone
+                        ? t('done')
+                        : t('confirm')}
                 </LoadingButton>
             </div>
         </div>

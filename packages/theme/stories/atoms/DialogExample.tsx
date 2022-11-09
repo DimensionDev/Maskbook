@@ -1,5 +1,5 @@
 import { Button, DialogActions, DialogContent, DialogContentText, Box } from '@mui/material'
-import { MaskDialog } from '../../src/Components/Dialogs'
+import { MaskDialog } from '../../src/Components/Dialogs/index.js'
 export interface DialogExampleProps {
     withExit: boolean
     withBack: boolean

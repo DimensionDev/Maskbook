@@ -2,12 +2,12 @@ import { memo } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import { chainResolver } from '@masknet/web3-shared-evm'
-import { useI18N } from '../../../../../utils'
-import { GasSetting1559 } from './GasSetting1559'
-import { Prior1559GasSetting } from './Prior1559GasSetting'
-import { useChainId } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { useTitle } from '../../../hook/useTitle'
+import { useI18N } from '../../../../../utils/index.js'
+import { GasSetting1559 } from './GasSetting1559.js'
+import { Prior1559GasSetting } from './Prior1559GasSetting.js'
+import { useChainContext } from '@masknet/web3-hooks-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
+import { useTitle } from '../../../hook/useTitle.js'
 
 const useStyles = makeStyles()(() => ({
     container: {
@@ -31,7 +31,7 @@ const useStyles = makeStyles()(() => ({
 const GasSetting = memo(() => {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     useTitle(t('popups_gas_fee_settings'))
     return (
         <main className={classes.container}>

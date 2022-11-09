@@ -1,7 +1,7 @@
 import urlcat from 'urlcat'
 import { EnhanceableSite } from '@masknet/shared-base'
-import { defineSiteAdaptor } from '../definitions'
-import type { SiteAdaptor } from '../types'
+import { defineSiteAdaptor } from '../definitions.js'
+import type { SiteAdaptor } from '../types.js'
 
 if (import.meta.webpackHot) import.meta.webpackHot.accept()
 
@@ -10,6 +10,7 @@ export const FacebookAdaptor: SiteAdaptor.Definition = {
     networkIdentifier: EnhanceableSite.Facebook,
     declarativePermissions: { origins },
     homepage: 'https://www.facebook.com',
+    isSocialNetwork: true,
 
     getProfilePage: () => new URL('https://www.facebook.com'),
     getShareLinkURL(message) {

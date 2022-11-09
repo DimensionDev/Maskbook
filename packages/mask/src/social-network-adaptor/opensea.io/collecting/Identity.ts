@@ -1,6 +1,7 @@
-import { SocialNetworkUI, creator } from '../../../social-network'
+import type { SocialNetworkUI } from '@masknet/types'
+import { creator } from '../../../social-network/index.js'
 import { ProfileIdentifier } from '@masknet/shared-base'
-import { openseaBase } from '../base'
+import { openseaBase } from '../base.js'
 import type { IdentityResolved } from '@masknet/plugin-infra'
 export const IdentityProviderOpensea: SocialNetworkUI.CollectingCapabilities.IdentityResolveProvider = {
     async start(signal) {

@@ -2,39 +2,39 @@ import urlcat from 'urlcat'
 import { lazy, Suspense, useEffect } from 'react'
 import { useAsyncRetry } from 'react-use'
 import { Route, Routes, useNavigate, useLocation } from 'react-router-dom'
-import { WalletStartUp } from './components/StartUp'
-import { WalletAssets } from './components/WalletAssets'
-import { PopupRoutes, relativeRouteOf } from '@masknet/shared-base'
-import { WalletContext } from './hooks/useWalletContext'
-import { LoadingPlaceholder } from '../../components/LoadingPlaceholder'
-import { WalletMessages, WalletRPC } from '../../../../plugins/Wallet/messages'
-import SelectWallet from './SelectWallet'
-import { useWalletLockStatus } from './hooks/useWalletLockStatus'
-import { WalletHeader } from './components/WalletHeader'
-import { useChainId, useWallet, useWeb3State } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID, TransactionDescriptorType } from '@masknet/web3-shared-base'
+import { WalletStartUp } from './components/StartUp/index.js'
+import { WalletAssets } from './components/WalletAssets/index.js'
+import { NetworkPluginID, PopupRoutes, relativeRouteOf } from '@masknet/shared-base'
+import { WalletContext } from './hooks/useWalletContext.js'
+import { LoadingPlaceholder } from '../../components/LoadingPlaceholder/index.js'
+import { WalletMessages, WalletRPC } from '../../../../plugins/Wallet/messages.js'
+import SelectWallet from './SelectWallet/index.js'
+import { useWalletLockStatus } from './hooks/useWalletLockStatus.js'
+import { WalletHeader } from './components/WalletHeader/index.js'
+import { useChainContext, useWallet, useWeb3State } from '@masknet/web3-hooks-base'
+import { TransactionDescriptorType } from '@masknet/web3-shared-base'
 import { EthereumMethodType, getPayloadConfig } from '@masknet/web3-shared-evm'
 
-const ImportWallet = lazy(() => import('./ImportWallet'))
-const AddDeriveWallet = lazy(() => import('./AddDeriveWallet'))
-const WalletSettings = lazy(() => import('./WalletSettings'))
-const WalletRename = lazy(() => import('./WalletRename'))
-const DeleteWallet = lazy(() => import('./DeleteWallet'))
-const CreateWallet = lazy(() => import('./CreateWallet'))
-const SwitchWallet = lazy(() => import(/* webpackPrefetch: true */ './SwitchWallet'))
-const BackupWallet = lazy(() => import('./BackupWallet'))
-const AddToken = lazy(() => import('./AddToken'))
-const TokenDetail = lazy(() => import(/* webpackPrefetch: true */ './TokenDetail'))
-const SignRequest = lazy(() => import(/* webpackPrefetch: true */ './SignRequest'))
-const GasSetting = lazy(() => import(/* webpackPrefetch: true */ './GasSetting'))
-const Transfer = lazy(() => import(/* webpackPrefetch: true */ './Transfer'))
-const ContractInteraction = lazy(() => import(/* webpackPrefetch: true */ './ContractInteraction'))
-const Unlock = lazy(() => import(/* webpackPreload: true */ './Unlock'))
-const SetPaymentPassword = lazy(() => import('./SetPaymentPassword'))
-const WalletRecovery = lazy(() => import('./WalletRecovery'))
-const LegacyWalletRecovery = lazy(() => import('./LegacyWalletRecovery'))
-const ReplaceTransaction = lazy(() => import('./ReplaceTransaction'))
-const ConnectWallet = lazy(() => import('./ConnectWallet'))
+const ImportWallet = lazy(() => import('./ImportWallet/index.js'))
+const AddDeriveWallet = lazy(() => import('./AddDeriveWallet/index.js'))
+const WalletSettings = lazy(() => import('./WalletSettings/index.js'))
+const WalletRename = lazy(() => import('./WalletRename/index.js'))
+const DeleteWallet = lazy(() => import('./DeleteWallet/index.js'))
+const CreateWallet = lazy(() => import('./CreateWallet/index.js'))
+const SwitchWallet = lazy(() => import('./SwitchWallet/index.js'))
+const BackupWallet = lazy(() => import('./BackupWallet/index.js'))
+const AddToken = lazy(() => import('./AddToken/index.js'))
+const TokenDetail = lazy(() => import('./TokenDetail/index.js'))
+const SignRequest = lazy(() => import('./SignRequest/index.js'))
+const GasSetting = lazy(() => import('./GasSetting/index.js'))
+const Transfer = lazy(() => import('./Transfer/index.js'))
+const ContractInteraction = lazy(() => import('./ContractInteraction/index.js'))
+const Unlock = lazy(() => import('./Unlock/index.js'))
+const SetPaymentPassword = lazy(() => import('./SetPaymentPassword/index.js'))
+const WalletRecovery = lazy(() => import('./WalletRecovery/index.js'))
+const LegacyWalletRecovery = lazy(() => import('./LegacyWalletRecovery/index.js'))
+const ReplaceTransaction = lazy(() => import('./ReplaceTransaction/index.js'))
+const ConnectWallet = lazy(() => import('./ConnectWallet/index.js'))
 
 const exclusionDetectLocked = [PopupRoutes.Unlock, PopupRoutes.ConnectWallet]
 
@@ -43,7 +43,7 @@ export default function Wallet() {
     const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
     const location = useLocation()
     const navigate = useNavigate()
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { TransactionFormatter } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const { isLocked, loading: getLockStatusLoading } = useWalletLockStatus()
 

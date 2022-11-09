@@ -2,9 +2,9 @@ import { Button, styled, FilledInput, Tab, Typography } from '@mui/material'
 import { makeStyles, ButtonGroupTabList, MaskColorVar, useTabs } from '@masknet/theme'
 import { memo } from 'react'
 import { Icons } from '@masknet/icons'
-import { MnemonicReveal } from '../../../../components/Mnemonic'
-import { MaskAlert } from '../../../../components/MaskAlert'
-import { useDashboardI18N } from '../../../../locales'
+import { MnemonicReveal } from '../../../../components/Mnemonic/index.js'
+import { MaskAlert } from '../../../../components/MaskAlert/index.js'
+import { useDashboardI18N } from '../../../../locales/index.js'
 import { TabContext, TabPanel } from '@mui/lab'
 
 const Container = styled('div')`
@@ -78,7 +78,7 @@ const useTabPanelStyles = makeStyles()({
 
 export const CreateWallet = memo(() => {
     const t = useDashboardI18N()
-    const { classes: panelStyles } = useTabPanelStyles()
+    const { classes } = useTabPanelStyles()
     const [currentTab, onChange, tabs] = useTabs('mnemonic', 'json', 'privateKey')
     return (
         <Container>
@@ -88,7 +88,7 @@ export const CreateWallet = memo(() => {
                     <Tab label={t.wallets_wallet_json_file()} value={tabs.json} />
                     <Tab label={t.wallets_wallet_private_key()} value={tabs.privateKey} />
                 </ButtonGroupTabList>
-                <TabPanel classes={panelStyles} value={tabs.mnemonic}>
+                <TabPanel classes={{ root: classes.root }} value={tabs.mnemonic}>
                     <Refresh>
                         <Icons.Refresh color="#1C68F3" />
                         <Typography>{t.wallets_create_wallet_refresh()}</Typography>
@@ -97,10 +97,10 @@ export const CreateWallet = memo(() => {
                         <MnemonicReveal words={[...Array(12).keys()].map((i) => String(i))} />
                     </MnemonicGeneratorContainer>
                 </TabPanel>
-                <TabPanel classes={panelStyles} value={tabs.json}>
+                <TabPanel classes={{ root: classes.root }} value={tabs.json}>
                     TODO
                 </TabPanel>
-                <TabPanel classes={panelStyles} value={tabs.privateKey}>
+                <TabPanel classes={{ root: classes.root }} value={tabs.privateKey}>
                     <PrivateKeyInput />
                 </TabPanel>
             </TabContext>

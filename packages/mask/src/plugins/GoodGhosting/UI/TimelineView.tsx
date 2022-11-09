@@ -1,10 +1,9 @@
 import { Grid, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import type { GoodGhostingInfo } from '../types'
+import type { GoodGhostingInfo } from '../types.js'
 import formatDateTime from 'date-fns/format'
 import isBefore from 'date-fns/isBefore'
-import classNames from 'classnames'
-import { useTimeline } from '../hooks/useGameInfo'
+import { useTimeline } from '../hooks/useGameInfo.js'
 
 const useStyles = makeStyles()((theme) => ({
     text: {
@@ -81,7 +80,7 @@ interface TimelineViewProps {
 }
 
 export function TimelineView(props: TimelineViewProps) {
-    const { classes } = useStyles()
+    const { classes, cx } = useStyles()
     const timeline = useTimeline(props.info)
 
     return (
@@ -98,13 +97,13 @@ export function TimelineView(props: TimelineViewProps) {
                                 {formatDateTime(timelineEvent.date, 'HH:mm EEE d LLL O')}
                             </Typography>
                             <div
-                                className={classNames(
+                                className={cx(
                                     classes.verticalLine,
                                     index % 2 === 0 ? classes.tallVerticalLine : classes.shortVerticalLine,
                                 )}
                             />
                             <div
-                                className={classNames(
+                                className={cx(
                                     classes.circleIndicator,
                                     isBefore(new Date(), timelineEvent.date)
                                         ? classes.circleIndicatorFilled
@@ -115,7 +114,7 @@ export function TimelineView(props: TimelineViewProps) {
                         <div className={classes.eventText}>
                             {index === timeline.length - 1 && (
                                 <div
-                                    className={classNames(
+                                    className={cx(
                                         classes.circleIndicator,
                                         classes.circleIndicatorFilled,
                                         classes.rightAligned,

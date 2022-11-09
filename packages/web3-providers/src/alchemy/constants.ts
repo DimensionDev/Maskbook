@@ -1,18 +1,19 @@
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { ChainId as ChainId_EVM } from '@masknet/web3-shared-evm'
 import { ChainId as ChainId_FLOW } from '@masknet/web3-shared-flow'
+
 export const Alchemy_EVM_NetworkMap = {
     network: NetworkPluginID.PLUGIN_EVM,
     chains: [
         {
             chainId: ChainId_EVM.Mainnet,
-            baseURL: 'https://eth-mainnet.alchemyapi.io/v2',
-            contractMetadataURL: 'https://eth-mainnet.g.alchemy.com/nft/v2',
-            tokenOwnerURL: 'https://eth-mainnet.g.alchemy.com/nft/v2',
+            baseURL: 'https://alchemy-proxy.r2d2.to/eth-mainnet-io/v2/APIKEY',
+            contractMetadataURL: 'https://alchemy-proxy.r2d2.to/eth-mainnet/nft/v2/APIKEY',
+            tokenOwnerURL: 'https://alchemy-proxy.r2d2.to/eth-mainnet/nft/v2/APIKEY',
         },
         {
             chainId: ChainId_EVM.Matic,
-            baseURL: 'https://polygon-mainnet.g.alchemy.com/v2',
+            baseURL: 'https://alchemy-proxy.r2d2.to/polygon-mainnet/v2/APIKEY',
         },
     ],
 }
@@ -22,7 +23,7 @@ export const Alchemy_FLOW_NetworkMap = {
     chains: [
         {
             chainId: ChainId_FLOW.Mainnet,
-            baseURL: 'https://flow-mainnet.g.alchemy.com/v2',
+            baseURL: 'https://alchemy-proxy.r2d2.to/flow-mainnet/v2/APIKEY',
         },
     ],
 }

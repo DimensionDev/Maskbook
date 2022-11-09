@@ -1,20 +1,17 @@
 import { memo, useCallback } from 'react'
 import { Box, MenuItem, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { Flags } from '../../../../../shared'
+import { getRegisteredWeb3Networks } from '@masknet/plugin-infra'
 import { ChainId, ProviderType, NetworkType } from '@masknet/web3-shared-evm'
-import {
-    getRegisteredWeb3Networks,
-    useAccount,
-    useChainId,
-    Web3Helper,
-    useProviderType,
-} from '@masknet/plugin-infra/web3'
-import { currentMaskWalletAccountSettings } from '../../../../../shared/legacy-settings/wallet-settings'
+import { useChainContext } from '@masknet/web3-hooks-base'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import { ChainIcon, useMenuConfig, WalletIcon } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
-import { WalletRPC } from '../../../../plugins/Wallet/messages'
-import { NetworkDescriptor, NetworkPluginID } from '@masknet/web3-shared-base'
+import type { NetworkDescriptor } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { Flags } from '../../../../../shared/index.js'
+import { currentMaskWalletAccountSettings } from '../../../../../shared/legacy-settings/wallet-settings.js'
+import { WalletRPC } from '../../../../plugins/Wallet/messages.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -40,9 +37,6 @@ const useStyles = makeStyles()((theme) => ({
         lineHeight: '16px',
         marginLeft: 4,
     },
-    networkName: {
-        marginLeft: 10,
-    },
     menu: {
         maxHeight: 466,
         '&::-webkit-scrollbar': {
@@ -56,9 +50,7 @@ export const NetworkSelector = memo(() => {
         (x) => x.networkSupporterPluginID === NetworkPluginID.PLUGIN_EVM,
     ) as Array<NetworkDescriptor<ChainId, NetworkType>>
 
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
-    const providerType = useProviderType(NetworkPluginID.PLUGIN_EVM)
+    const { account, chainId, providerType } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const onChainChange = useCallback(
         async (chainId: Web3Helper.Definition[NetworkPluginID.PLUGIN_EVM]['ChainId']) => {
             if (providerType === ProviderType.MaskWallet) {

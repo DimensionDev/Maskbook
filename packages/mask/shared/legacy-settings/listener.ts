@@ -1,8 +1,10 @@
-import { appearanceSettings, pluginIDSettings, languageSettings, currentPersonaIdentifier } from './settings'
+import { appearanceSettings, pluginIDSettings, languageSettings, currentPersonaIdentifier } from './settings.js'
 import type { MaskSettingsEvents } from '@masknet/shared-base'
-import type { InternalSettings } from './createSettings'
+import type { InternalSettings } from './createSettings.js'
 
-type ToBeListedSettings = { [key in keyof MaskSettingsEvents]: InternalSettings<MaskSettingsEvents[key]> }
+type ToBeListedSettings = {
+    [key in keyof MaskSettingsEvents]: InternalSettings<MaskSettingsEvents[key]>
+}
 export function ToBeListened(): ToBeListedSettings {
     return {
         appearanceSettings,

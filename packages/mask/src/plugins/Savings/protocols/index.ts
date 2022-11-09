@@ -1,6 +1,6 @@
-import { AAVE_PAIRS, LDO_PAIRS } from '../constants'
-import { LidoProtocol } from './LDOProtocol'
-import { AAVEProtocol } from './AAVEProtocol'
+import { AAVE_PAIRS, LDO_PAIRS } from '../constants.js'
+import { LidoProtocol } from './LDOProtocol.js'
+import { AAVEProtocol } from './AAVEProtocol.js'
 
 export const SavingsProtocols = [
     ...LDO_PAIRS.map((pair) => new LidoProtocol(pair)),

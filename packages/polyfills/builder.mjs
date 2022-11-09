@@ -1,6 +1,5 @@
 import { fileURLToPath } from 'node:url'
 import { readFile, writeFile } from 'node:fs/promises'
-import { spawn } from 'node:child_process'
 import { createHash } from 'node:crypto'
 import { createRequire } from 'node:module'
 import builder from 'core-js-builder'

@@ -1,6 +1,6 @@
 import { v4 as uuid } from 'uuid'
-import { decodeText, encodeText } from '@dimensiondev/kit'
-import { PluginDB } from '../../../database/Plugin.db'
+import { decodeText, encodeText } from '@masknet/kit'
+import { PluginDB } from '../../../database/Plugin.db.js'
 
 const SECRET_ID = '0'
 

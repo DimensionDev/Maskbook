@@ -1,6 +1,6 @@
 import { validate } from 'uuid'
-import * as database from './database'
-import { i18n } from '../../../../../shared-ui/locales_legacy'
+import * as database from './database/index.js'
+import { i18n } from '../../../../../shared-ui/locales_legacy/index.js'
 
 let password = ''
 
@@ -35,7 +35,7 @@ export async function verifyPassword(unverifiedPassword: string) {
 }
 
 export async function verifyPasswordRequired(unverifiedPassword: string) {
-    if (!(await verifyPassword(unverifiedPassword))) throw new Error(i18n.t('popups_wallet_unlock_error_password'))
+    if (!(await verifyPassword(unverifiedPassword))) throw new Error('Wrong password')
     return true
 }
 

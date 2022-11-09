@@ -10,7 +10,7 @@ const querySelector = <T extends E, SingleMode extends boolean = true>(selector:
 export const rootSelector: () => LiveSelector<E, true> = () => querySelector<E>('m-app')
 
 export const themeListItemSelector: () => LiveSelector<HTMLAnchorElement, true> = () =>
-    querySelector<HTMLAnchorElement>('.m-sidebarMore__dropdown > li:nth-child(7)')
+    querySelector<HTMLAnchorElement>('.m-sidebarNavigation__list > li:nth-child(7) > a > span')
 
 export const composerModalSelector: () => LiveSelector<E, true> = () => querySelector<E>('m-composer__modal')
 
@@ -21,16 +21,17 @@ export const postEditorInDialogSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('m-composer__modal m-composer__titlebar m-composertitlebar__dropdown', true)
 
 export const postEditorInTimelineSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>('m-newsfeed m-composer', true)
+    querySelector<E>('m-composer m-composer__toolbar > div > :nth-child(6)', true)
 
-export const toolBoxInSideBarSelector: () => LiveSelector<E, true> = () =>
+export const toolboxInSidebarSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('.m-sidebarNavigation__list li:nth-child(7)')
 
 export const postEditorDraftContentSelector = () => {
     return querySelector<HTMLElement>('m-composer__modal m-composer__textarea textarea.m-composerTextarea__message')
 }
 
-export const handleSelector = () => querySelector<HTMLScriptElement, true>('.m-user-menu ul li a:first-child')
+export const handleSelector = () =>
+    querySelector<HTMLScriptElement, true>('.m-sidebarNavigation ul > li:nth-child(8) a span')
 
 export const selfInfoSelectors = () => ({
     handle: handleSelector().map((x) => x.innerText.replace(/@/, '').trim()),
@@ -71,8 +72,8 @@ export const searchResultHeadingSelector = () => querySelector('m-discovery__sea
 export const postContentSelector = () =>
     new LiveSelector().querySelectorAll<HTMLDivElement>(
         [
-            'm-activity__modal m-activity__content .m-activityContent__mediaDescriptionText',
-            'm-activity__modal m-activity__content .m-activityContent__messageWrapper > span:first-child',
+            'm-activityv2 m-activityv2__content .m-activityTop__mainColumn',
+            'm-activityv2 m-activityv2__content .m-activityContentText__body > m-readmore > span:first-child',
             'm-activity:not(.m-activity--minimalMode) m-activity__content .m-activityContent__messageWrapper > span:first-child',
             'm-activity:not(.m-activity--minimalMode) m-activity__content .m-activityContent__mediaDescriptionText',
         ].join(),

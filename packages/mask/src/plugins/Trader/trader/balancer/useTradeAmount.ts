@@ -1,8 +1,8 @@
 import { ZERO } from '@masknet/web3-shared-base'
-import BigNumber from 'bignumber.js'
+import { BigNumber } from 'bignumber.js'
 import { useMemo } from 'react'
-import { ONE_BIPS, SLIPPAGE_DEFAULT } from '../../constants'
-import { SwapResponse, TradeComputed, TradeStrategy } from '../../types'
+import { ONE_BIPS, SLIPPAGE_DEFAULT } from '../../constants/index.js'
+import { SwapResponse, TradeComputed, TradeStrategy } from '../../types/index.js'
 
 export function useTradeAmount(trade: TradeComputed<SwapResponse> | null, allowedSlippage = SLIPPAGE_DEFAULT) {
     return useMemo(() => {

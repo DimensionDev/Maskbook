@@ -6,23 +6,23 @@
   "exports": {
     ".": {
       "types": "./dist/sdk/index.d.ts",
-      "webpack": "./sdk/index.ts",
+      "mask-src": "./sdk/index.ts",
       "default": "./dist/sdk/index.js"
     },
     "./shared": {
       "types": "./dist/shared/index.d.ts",
-      "webpack": "./shared/index.ts",
+      "mask-src": "./shared/index.ts",
       "default": "./dist/shared/index.js"
     }
   },
   "types": "./dist/sdk/index.d.ts",
   "scripts": {
-    "build": "tsc -b ./main/tsconfig.json && rollup -c",
-    "start": "tsc -b ./main/tsconfig.json && rollup -c -w"
+    "build": "rollup -c",
+    "start": "rollup -c -w"
   },
   "devDependencies": {
-    "@rollup/plugin-sucrase": "^4.0.4",
-    "rollup": "^2.75.6",
+    "rollup": "^2.79.0",
+    "rollup-plugin-swc3": "^0.6.0",
     "rollup-plugin-terser": "^7.0.2"
   }
 }

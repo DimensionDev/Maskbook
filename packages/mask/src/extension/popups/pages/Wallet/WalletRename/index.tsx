@@ -1,29 +1,20 @@
 import { memo } from 'react'
 import { makeStyles } from '@masknet/theme'
-import { StyledInput } from '../../../components/StyledInput'
-import { WalletRPC } from '../../../../../plugins/Wallet/messages'
+import { StyledInput } from '../../../components/StyledInput/index.js'
+import { WalletRPC } from '../../../../../plugins/Wallet/messages.js'
 import { useNavigate } from 'react-router-dom'
-import { useI18N } from '../../../../../utils'
+import { useI18N } from '../../../../../utils/index.js'
 import { useAsyncFn } from 'react-use'
 import { LoadingButton } from '@mui/lab'
 import type { z as zod } from 'zod'
 import { Controller } from 'react-hook-form'
-import { useSetWalletNameForm } from '../hooks/useSetWalletNameForm'
-import { WalletContext } from '../hooks/useWalletContext'
-import { useTitle } from '../../../hook/useTitle'
-import { useWallet } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { useSetWalletNameForm } from '../hooks/useSetWalletNameForm.js'
+import { WalletContext } from '../hooks/useWalletContext.js'
+import { useTitle } from '../../../hook/useTitle.js'
+import { useWallet } from '@masknet/web3-hooks-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 
 const useStyles = makeStyles()({
-    header: {
-        padding: '10px 16px',
-        backgroundColor: '#EFF5FF',
-        color: '#1C68F3',
-    },
-    title: {
-        fontSize: 14,
-        lineHeight: '20px',
-    },
     content: {
         flex: 1,
         display: 'flex',

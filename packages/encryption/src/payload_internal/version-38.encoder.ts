@@ -1,11 +1,11 @@
 /* eslint @dimensiondev/unicode/specific-set: ["error", { "only": "code" }] */
-import { encodeText, encodeArrayBuffer } from '@dimensiondev/kit'
-import { Ok, Option, Result } from 'ts-results'
+import { encodeText, encodeArrayBuffer } from '@masknet/kit'
+import { Ok, Option, Result } from 'ts-results-es'
 import type { PayloadWellFormed, Signature } from '../index.js'
 import { CryptoException, PayloadException } from '../types/index.js'
 import { encryptWithAES, exportCryptoKeyToJWK } from '../utils/index.js'
 import { get_v38PublicSharedCryptoKey } from './shared.js'
-import { CheckedError, compressSecp256k1Point } from '@masknet/shared-base'
+import { CheckedError, compressK256Point } from '@masknet/base'
 
 const enum Index {
     authorPublicKey = 5,
@@ -27,7 +27,7 @@ export async function encode38(payload: PayloadWellFormed.Payload) {
     const fields: string[] = ['\u{1F3BC}4/4', AESKeyEncrypted.val, iv, encrypted, signature]
 
     if (payload.authorPublicKey.some) {
-        const compressed = await compressSecp256k1Key(payload.authorPublicKey.val.key)
+        const compressed = await compressK256Key(payload.authorPublicKey.val.key)
         if (compressed.err) {
             console.error('[@masknet/encryption] An error happened when compressing a secp256k1 key.', compressed.err)
         }
@@ -74,10 +74,10 @@ function encodeSignature(sig: Option<Signature>) {
     return encodeArrayBuffer(sig.val.signature.slice())
 }
 
-async function compressSecp256k1Key(key: CryptoKey) {
+async function compressK256Key(key: CryptoKey) {
     const jwk = await exportCryptoKeyToJWK(key)
     if (jwk.err) return jwk.mapErr((e) => new CheckedError(CryptoException.InvalidCryptoKey, e))
-    const arr = (await Result.wrapAsync(() => compressSecp256k1Point(jwk.val.x!, jwk.val.y!))).mapErr(
+    const arr = (await Result.wrapAsync(() => compressK256Point(jwk.val.x!, jwk.val.y!))).mapErr(
         (e) => new CheckedError(CryptoException.InvalidCryptoKey, e),
     )
     if (arr.err) return arr

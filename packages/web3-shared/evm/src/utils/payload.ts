@@ -1,8 +1,8 @@
-import BigNumber from 'bignumber.js'
-import { first, isUndefined, omitBy } from 'lodash-unified'
+import { BigNumber } from 'bignumber.js'
+import { first, isUndefined, omitBy } from 'lodash-es'
 import type { JsonRpcPayload } from 'web3-core-helpers'
 import { hexToNumber, hexToNumberString } from 'web3-utils'
-import { EthereumMethodType, Transaction } from '../types'
+import { EthereumMethodType, Transaction } from '../types/index.js'
 
 export function addGasMargin(value: BigNumber.Value, scale = 3000) {
     return new BigNumber(value).multipliedBy(new BigNumber(10000).plus(scale)).dividedToIntegerBy(10000)

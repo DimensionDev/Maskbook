@@ -1,16 +1,16 @@
-import type { Plugin } from '@masknet/plugin-infra'
-import { base } from '../base'
-import { TraderDialog } from './trader/TraderDialog'
-import { SearchResultInspector } from './trending/SearchResultInspector'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { Trans } from 'react-i18next'
-import { TagInspector } from './trending/TagInspector'
-import { enhanceTag } from './cashTag'
+import type { Plugin } from '@masknet/plugin-infra'
+import { base } from '../base.js'
+import { TraderDialog } from './trader/TraderDialog.js'
+import { SearchResultInspector } from './trending/SearchResultInspector.js'
+import { TagInspector } from './trending/TagInspector.js'
+import { enhanceTag } from './cashTag.js'
 import { ApplicationEntry } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
-import { PluginTraderMessages } from '../messages'
-import { setupStorage, storageDefaultValue } from '../storage'
-import type { ChainId } from '@masknet/web3-shared-evm'
+import { Web3ContextProvider } from '@masknet/web3-hooks-base'
+import { CrossIsolationMessages, NetworkPluginID, PluginID } from '@masknet/shared-base'
+import { ChainId, isValidAddress, isZeroAddress } from '@masknet/web3-shared-evm'
+import { setupStorage, storageDefaultValue } from '../storage/index.js'
 
 const sns: Plugin.SNSAdaptor.Definition<
     ChainId,
@@ -30,12 +30,24 @@ const sns: Plugin.SNSAdaptor.Definition<
     init(signal, context) {
         setupStorage(context.createKVStorage('persistent', storageDefaultValue))
     },
-    SearchResultBox: SearchResultInspector,
-    GlobalInjection: function Component() {
+    SearchResultBox: {
+        ID: PluginID.Trader,
+        UI: {
+            Content: SearchResultInspector,
+        },
+        Utils: {
+            shouldDisplay(keyword: string) {
+                return /[#$]\w+/.test(keyword) || (isValidAddress(keyword) && !isZeroAddress(keyword))
+            },
+        },
+    },
+    GlobalInjection() {
         return (
             <>
                 <TagInspector />
-                <TraderDialog />
+                <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM, chainId: ChainId.Mainnet }}>
+                    <TraderDialog />
+                </Web3ContextProvider>
             </>
         )
     },
@@ -48,8 +60,10 @@ const sns: Plugin.SNSAdaptor.Definition<
             return {
                 ApplicationEntryID: base.ID,
                 RenderEntryComponent(EntryComponentProps) {
-                    const { openDialog } = useRemoteControlledDialog(PluginTraderMessages.swapDialogUpdated)
-
+                    const openDialog = () =>
+                        CrossIsolationMessages.events.swapDialogEvent.sendToLocal({
+                            open: true,
+                        })
                     return (
                         <ApplicationEntry
                             {...EntryComponentProps}

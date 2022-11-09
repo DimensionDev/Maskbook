@@ -1,63 +1,62 @@
+import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import { Link, Typography, TypographyProps } from '@mui/material'
-import type { NetworkPluginID, SocialAddress } from '@masknet/web3-shared-base'
-import { ReversedAddress } from '../../..'
-import { Icons } from '@masknet/icons'
-import { useWeb3State } from '@masknet/plugin-infra/web3'
+import { useWeb3State } from '@masknet/web3-hooks-base'
+import type { SocialAccount } from '@masknet/web3-shared-base'
+import { ReversedAddress } from '../../../index.js'
+import { isSameAddress } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     link: {
         cursor: 'pointer',
-        marginTop: 2,
         zIndex: 1,
         '&:hover': {
             textDecoration: 'none',
         },
-    },
-    linkIcon: {
-        color: theme.palette.maskColor.second,
-        margin: '0px 2px 0 2px',
+        lineHeight: 0,
     },
 }))
 
 export interface AddressItemProps {
-    identityAddress?: SocialAddress<NetworkPluginID>
-    reverse?: boolean
+    socialAccount?: SocialAccount
     TypographyProps?: TypographyProps
-    iconProps?: string
+    linkIconClassName?: string
+    disableLinkIcon?: boolean
 }
 
 export function AddressItem({
-    identityAddress,
-    reverse = true,
+    socialAccount,
     TypographyProps = { fontSize: '14px', fontWeight: 700 },
-    iconProps,
+    linkIconClassName,
+    disableLinkIcon,
 }: AddressItemProps) {
     const { classes } = useStyles()
-    const { Others } = useWeb3State(identityAddress?.networkSupporterPluginID)
+    const { Others } = useWeb3State(socialAccount?.pluginID)
 
-    if (!identityAddress) return null
+    if (!socialAccount) return null
 
     return (
         <>
-            <Typography>
-                {reverse ? (
-                    <ReversedAddress
-                        TypographyProps={TypographyProps}
-                        address={identityAddress.address}
-                        pluginId={identityAddress.networkSupporterPluginID}
-                    />
-                ) : (
-                    <Typography {...TypographyProps}>{identityAddress.label}</Typography>
-                )}
-            </Typography>
-            <Link
-                className={classes.link}
-                href={Others?.explorerResolver.addressLink(Others?.getDefaultChainId(), identityAddress.address)}
-                target="_blank"
-                rel="noopener noreferrer">
-                <Icons.LinkOut size={20} className={iconProps} />
-            </Link>
+            {!socialAccount.label || isSameAddress(socialAccount.label, socialAccount.address) ? (
+                <ReversedAddress
+                    TypographyProps={TypographyProps}
+                    address={socialAccount.address}
+                    pluginID={socialAccount.pluginID}
+                />
+            ) : (
+                <Typography fontSize="14px" fontWeight={700} {...TypographyProps}>
+                    {socialAccount.label}
+                </Typography>
+            )}
+            {disableLinkIcon ? null : (
+                <Link
+                    className={classes.link}
+                    href={Others?.explorerResolver.addressLink(Others?.getDefaultChainId(), socialAccount.address)}
+                    target="_blank"
+                    rel="noopener noreferrer">
+                    <Icons.LinkOut size={20} className={linkIconClassName} />
+                </Link>
+            )}
         </>
     )
 }

@@ -1,17 +1,14 @@
-import { useControlledDialog, useI18N } from '../../../utils'
 import { makeStyles, ActionButton } from '@masknet/theme'
 import { Box } from '@mui/material'
-import { PurchaseDialog } from './PurchaseDialog'
-import type { Project } from '../types'
 import type { ChainId } from '@masknet/web3-shared-evm'
+import { PurchaseDialog } from './PurchaseDialog.js'
+import type { Project } from '../types.js'
+import { useControlledDialog, useI18N } from '../../../utils/index.js'
 
 const useStyles = makeStyles()((theme) => {
     return {
         root: {
             flex: 1,
-        },
-        content: {
-            padding: theme.spacing(0),
         },
     }
 })

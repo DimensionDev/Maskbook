@@ -1,25 +1,16 @@
 import { makeStyles } from '@masknet/theme'
 import { memo, useState } from 'react'
-import { StyledInput } from '../../../components/StyledInput'
+import { StyledInput } from '../../../components/StyledInput/index.js'
 import { LoadingButton } from '@mui/lab'
-import { useI18N } from '../../../../../utils'
+import { useI18N } from '../../../../../utils/index.js'
 import { useNavigate } from 'react-router-dom'
 import { useAsyncFn } from 'react-use'
-import { PersonaContext } from '../hooks/usePersonaContext'
-import Services from '../../../../service'
+import { PersonaContext } from '../hooks/usePersonaContext.js'
+import Services from '../../../../service.js'
 import { PopupRoutes } from '@masknet/shared-base'
-import { useTitle } from '../../../hook/useTitle'
+import { useTitle } from '../../../hook/useTitle.js'
 
 const useStyles = makeStyles()({
-    header: {
-        padding: '10px 16px',
-        backgroundColor: '#EFF5FF',
-        color: '#1C68F3',
-    },
-    title: {
-        fontSize: 14,
-        lineHeight: '20px',
-    },
     content: {
         flex: 1,
         display: 'flex',

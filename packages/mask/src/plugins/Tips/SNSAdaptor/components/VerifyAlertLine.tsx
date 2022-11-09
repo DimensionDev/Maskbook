@@ -1,7 +1,7 @@
 import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
-import CloseIcon from '@mui/icons-material/Close'
-import { useI18N } from '../../locales'
+import { Close as CloseIcon } from '@mui/icons-material'
+import { useI18N } from '../../locales/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -29,7 +29,7 @@ export function VerifyAlertLine({ onClose }: VerifyAlertLineProps) {
     const { classes } = useStyles()
     return (
         <div className={classes.container}>
-            <Typography>{t.tip_verify_line_intro()}</Typography>
+            <Typography fontSize={14}>{t.tips_wallet_alert()}</Typography>
             <CloseIcon className={classes.closeIcon} onClick={() => onClose()} />
         </div>
     )

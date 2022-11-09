@@ -1,5 +1,6 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import type {
+    AddressType,
     ChainId,
     NetworkType,
     ProviderType,
@@ -7,6 +8,7 @@ import type {
     Signature,
     GasOption,
     Block,
+    Operation,
     Transaction,
     TransactionReceipt,
     TransactionDetailed,
@@ -14,18 +16,20 @@ import type {
     TransactionSignature,
     Web3,
 } from '@masknet/web3-shared-solana'
-import { base } from '../../base'
-import { SharedContextSettings, Web3StateSettings } from '../../settings'
-import { createWeb3State } from '../../state'
+import { base } from '../../base.js'
+import { SharedContextSettings, Web3StateSettings } from '../../settings/index.js'
+import { createWeb3State } from '../../state/index.js'
 
 const dashboard: Plugin.Dashboard.Definition<
     ChainId,
+    AddressType,
     SchemaType,
     ProviderType,
     NetworkType,
     Signature,
     GasOption,
     Block,
+    Operation,
     Transaction,
     TransactionReceipt,
     TransactionDetailed,

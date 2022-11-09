@@ -2,10 +2,16 @@ import { useCallback } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { Typography, Button, Grid, Box } from '@mui/material'
 
-import { useI18N, Translate } from '../locales'
-import { PageInterface, PagesType } from '../types'
+import { useI18N, Translate } from '../locales/index.js'
+import { PageInterface, PagesType } from '../types.js'
 
-import { ReferralFarmsIcon, ReferToFarmIcon, CreateFarmIcon, BuyToFarmIcon, RewardsIcon } from './shared-ui/icons'
+import {
+    ReferralFarmsIcon,
+    ReferToFarmIcon,
+    CreateFarmIcon,
+    BuyToFarmIcon,
+    RewardsIcon,
+} from './shared-ui/icons/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     wrapper: {
@@ -18,17 +24,6 @@ const useStyles = makeStyles()((theme) => ({
         padding: theme.spacing(3, 4, 3),
         borderRadius: '8px',
         marginBottom: '24px',
-    },
-    walletStatusBox: {
-        width: 535,
-        margin: '24px auto',
-    },
-    img: {
-        height: 60,
-        width: 60,
-        justifyContent: 'center',
-        display: 'flex',
-        marginBottom: '16px',
     },
     smallText: {
         fontSize: '15px',

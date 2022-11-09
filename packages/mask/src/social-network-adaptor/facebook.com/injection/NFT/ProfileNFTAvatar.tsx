@@ -1,7 +1,7 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { makeStyles } from '@masknet/theme'
-import { createReactRootShadowed, MaskMessages, startWatch } from '../../../../utils'
-import { NFTAvatar } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatar'
+import { createReactRootShadowed, MaskMessages, startWatch } from '../../../../utils/index.js'
+import { NFTAvatar } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatar.js'
 import { hookInputUploadOnce } from '@masknet/injected-script'
 import {
     searchFacebookAvatarListSelector,
@@ -10,15 +10,15 @@ import {
     searchFacebookAvatarOpenFilesSelector,
     searchFacebookConfirmAvatarImageSelector,
     searchFacebookSaveAvatarButtonSelector,
-} from '../../utils/selector'
+} from '../../utils/selector.js'
 import { useCallback, useEffect } from 'react'
-import { toPNG } from '../../../../plugins/Avatar/utils'
-import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI'
-import { getAvatarId } from '../../utils/user'
-import { isMobileFacebook } from '../../utils/isMobile'
-import { InMemoryStorages } from '../../../../../shared'
-import type { SelectTokenInfo } from '../../../../plugins/Avatar/types'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { toPNG } from '../../../../plugins/Avatar/utils/index.js'
+import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI.js'
+import { getAvatarId } from '../../utils/user.js'
+import { isMobileFacebook } from '../../utils/isMobile.js'
+import { InMemoryStorages } from '../../../../../shared/index.js'
+import type { SelectTokenInfo } from '../../../../plugins/Avatar/types.js'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 
 export async function injectProfileNFTAvatarInFaceBook(signal: AbortSignal) {
@@ -76,7 +76,7 @@ function NFTAvatarInFacebookFirstStep() {
                 avatarId: '',
                 address: info.token.contract.address,
                 tokenId: info.token.tokenId,
-                pluginId: info.pluginId ?? NetworkPluginID.PLUGIN_EVM,
+                pluginID: info.pluginID ?? NetworkPluginID.PLUGIN_EVM,
                 chainId: info.token.chainId ?? ChainId.Mainnet,
                 schema: info.token.schema ?? SchemaType.ERC721,
             })
@@ -156,8 +156,8 @@ function NFTAvatarListInFaceBookMobile() {
                 InMemoryStorages.FacebookNFTEventOnMobile.storage.userId.setValue(identity.identifier.userId)
             InMemoryStorages.FacebookNFTEventOnMobile.storage.address.setValue(info.token.contract?.address)
             InMemoryStorages.FacebookNFTEventOnMobile.storage.tokenId.setValue(info.token.tokenId)
-            InMemoryStorages.FacebookNFTEventOnMobile.storage.pluginId.setValue(
-                info.pluginId ?? NetworkPluginID.PLUGIN_EVM,
+            InMemoryStorages.FacebookNFTEventOnMobile.storage.pluginID.setValue(
+                info.pluginID ?? NetworkPluginID.PLUGIN_EVM,
             )
             InMemoryStorages.FacebookNFTEventOnMobile.storage.chainId.setValue(info.token.chainId ?? ChainId.Mainnet)
             InMemoryStorages.FacebookNFTEventOnMobile.storage.schema.setValue(info.token.schema ?? SchemaType.ERC721)
@@ -165,5 +165,5 @@ function NFTAvatarListInFaceBookMobile() {
         [identity],
     )
 
-    return <NFTAvatar onChange={onChange} classes={classes} />
+    return <NFTAvatar onChange={onChange} classes={{ root: classes.root }} />
 }

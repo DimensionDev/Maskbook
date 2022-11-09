@@ -1,20 +1,20 @@
 import { FC, memo, MouseEventHandler, useCallback } from 'react'
-import classNames from 'classnames'
-import { fill } from 'lodash-unified'
+import { fill } from 'lodash-es'
 import { TokenIcon } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles, ActionButton } from '@masknet/theme'
 import { WalletMessages } from '@masknet/plugin-wallet'
-import { NetworkPluginID, NonFungibleTokenContract } from '@masknet/web3-shared-base'
-import { useAccount, useNonFungibleTokenContract } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID } from '@masknet/shared-base'
+import type { NonFungibleTokenContract } from '@masknet/web3-shared-base'
+import { useChainContext, useNonFungibleTokenContract } from '@masknet/web3-hooks-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { Box, ListItem, Typography } from '@mui/material'
-import { dateTimeFormat } from '../../ITO/assets/formatDate'
-import type { NftRedPacketHistory } from '../types'
-import { useAvailabilityNftRedPacket } from './hooks/useAvailabilityNftRedPacket'
-import { useNftAvailabilityComputed } from './hooks/useNftAvailabilityComputed'
-import { NftList } from './NftList'
-import { Translate, useI18N } from '../locales'
+import { dateTimeFormat } from '../../ITO/assets/formatDate.js'
+import type { NftRedPacketHistory } from '../types.js'
+import { useAvailabilityNftRedPacket } from './hooks/useAvailabilityNftRedPacket.js'
+import { useNftAvailabilityComputed } from './hooks/useNftAvailabilityComputed.js'
+import { NftList } from './NftList.js'
+import { Translate, useI18N } from '../locales/index.js'
 
 const useStyles = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -31,14 +31,6 @@ const useStyles = makeStyles()((theme) => {
                 padding: theme.spacing(2, 1.5),
             },
         },
-        primary: {
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-        },
-        secondary: {
-            fontSize: 12,
-        },
         message: {
             whiteSpace: 'nowrap',
             overflow: 'hidden',
@@ -46,18 +38,6 @@ const useStyles = makeStyles()((theme) => {
             [smallQuery]: {
                 whiteSpace: 'normal',
             },
-        },
-        strong: {
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-        },
-        span: {
-            maxWidth: 350,
-            display: 'inline-flex',
-        },
-        time: {
-            fontSize: 12,
-            color: theme.palette.text.secondary,
         },
         box: {
             display: 'flex',
@@ -88,7 +68,6 @@ const useStyles = makeStyles()((theme) => {
             fontSize: 16,
         },
         info: {
-            fontSize: 14,
             color: theme.palette.mode === 'light' ? '#5B7083' : '#c3cbd2',
             [smallQuery]: {
                 fontSize: 13,
@@ -149,9 +128,9 @@ export interface NftRedPacketHistoryItemProps {
 }
 export const NftRedPacketHistoryItem: FC<NftRedPacketHistoryItemProps> = memo(
     ({ history, onSend, onShowPopover, onHidePopover }) => {
-        const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+        const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
         const t = useI18N()
-        const { classes } = useStyles()
+        const { classes, cx } = useStyles()
         const {
             computed: { canSend, isPasswordValid },
         } = useNftAvailabilityComputed(account, history.payload)
@@ -187,7 +166,7 @@ export const NftRedPacketHistoryItem: FC<NftRedPacketHistoryItemProps> = memo(
             <ListItem className={classes.root}>
                 <Box className={classes.box}>
                     <TokenIcon
-                        classes={{ icon: classes.icon }}
+                        className={classes.icon}
                         address={contractDetailed?.address ?? ''}
                         name={contractDetailed?.name ?? '-'}
                         logoURL={
@@ -200,10 +179,10 @@ export const NftRedPacketHistoryItem: FC<NftRedPacketHistoryItemProps> = memo(
                             <div>
                                 <Typography
                                     variant="body1"
-                                    className={classNames(classes.title, classes.message, classes.ellipsis)}>
+                                    className={cx(classes.title, classes.message, classes.ellipsis)}>
                                     {history.message === '' ? t.best_wishes() : history.message}
                                 </Typography>
-                                <Typography variant="body1" className={classNames(classes.info, classes.message)}>
+                                <Typography variant="body1" className={cx(classes.info, classes.message)}>
                                     {t.history_duration({
                                         startTime: dateTimeFormat(new Date(history.creation_time)),
                                         endTime: dateTimeFormat(
@@ -218,10 +197,7 @@ export const NftRedPacketHistoryItem: FC<NftRedPacketHistoryItemProps> = memo(
                                     onMouseEnter={handleMouseEnter}
                                     onMouseLeave={onHidePopover}
                                     onClick={handleSend}
-                                    className={classNames(
-                                        classes.actionButton,
-                                        isPasswordValid ? '' : classes.disabledButton,
-                                    )}
+                                    className={cx(classes.actionButton, isPasswordValid ? '' : classes.disabledButton)}
                                     size="large">
                                     {t.send()}
                                 </ActionButton>

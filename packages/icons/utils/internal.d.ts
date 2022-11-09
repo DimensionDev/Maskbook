@@ -8,8 +8,8 @@ export interface GeneratedIconProps<Variants extends MaskIconPalette = never>
 export interface GeneratedIconNonSquareProps<Variants extends MaskIconPalette = never>
     extends React.HTMLProps<HTMLElement> {
     variant?: Variants[] | Variants
-    height?: number
-    width?: number
+    height?: number | string
+    width?: number | string
     color?: string
     sx?: SxProps<Theme>
 }

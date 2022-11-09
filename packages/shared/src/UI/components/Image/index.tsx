@@ -1,81 +1,122 @@
-import { makeStyles, parseColor, useStylesExtends } from '@masknet/theme'
-import { Box, CircularProgress, useTheme } from '@mui/material'
-import classNames from 'classnames'
-import type { ImgHTMLAttributes } from 'react'
-import { useAsync } from 'react-use'
-import { useImageChecker } from '../../../hooks'
+import { ImgHTMLAttributes, useState } from 'react'
+import { LoadingBase, makeStyles, useStylesExtends } from '@masknet/theme'
+import { Box, useTheme } from '@mui/material'
+import { useImageURL } from '../../../hooks/useImageURL.js'
 
-const useStyles = makeStyles()((theme) => ({
-    circle: {
-        color: parseColor(theme.palette.maskColor.main).setAlpha(0.5).toRgbString(),
-    },
-    failImage: {
-        width: 30,
-        height: 30,
-    },
-}))
+const useStyles = makeStyles<Pick<ImageProps, 'size' | 'rounded'>, 'floatingContainer'>()(
+    (theme, { size, rounded }, refs) => ({
+        container: {
+            width: size ?? '100%',
+            height: size ?? '100%',
+            position: 'relative',
+            borderRadius: rounded ? '50%' : undefined,
+            overflow: rounded ? 'hidden' : undefined,
+        },
+        image: {
+            display: 'block',
+        },
+        failImage: {
+            width: 30,
+            height: 30,
+        },
+        floatingContainer: {
+            width: '100%',
+            height: '100%',
+            inset: 0,
+            margin: 'auto',
+            position: 'absolute',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+        },
+        failed: {
+            [`.${refs.floatingContainer}`]: {
+                background:
+                    theme.palette.mode === 'light'
+                        ? 'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.9) 100%), linear-gradient(90deg, rgba(98, 152, 234, 0.2) 1.03%, rgba(98, 152, 234, 0.2) 1.04%, rgba(98, 126, 234, 0.2) 100%)'
+                        : undefined,
+            },
+        },
+    }),
+)
 
-interface ImageProps
+export interface ImageProps
     extends ImgHTMLAttributes<HTMLImageElement>,
-        withClasses<'loadingFailImage' | 'imageLoading' | 'imageLoadingBox'> {
-    fallbackImage?: URL
+        withClasses<'container' | 'fallbackImage' | 'imageLoading'> {
+    size?: number | string
+    rounded?: boolean
+    fallback?: URL | string | JSX.Element
+    disableSpinner?: boolean
 }
 
-export function Image(props: ImageProps) {
-    const classes = useStylesExtends(useStyles(), props)
+export function Image({
+    fallback,
+    size,
+    rounded,
+    disableSpinner,
+    classes: externalClasses,
+    onClick,
+    ...rest
+}: ImageProps) {
+    const { classes, cx } = useStylesExtends(useStyles({ size, rounded }), { classes: externalClasses })
     const theme = useTheme()
-    const maskImageURL =
-        theme.palette.mode === 'dark'
-            ? new URL('./mask_dark.png', import.meta.url)
-            : new URL('./mask_light.png', import.meta.url)
+    const [failed, setFailed] = useState(false)
 
-    const { loading: loadingImage, value: image } = useAsync(async () => {
-        if (!props.src) return
-        const data = await globalThis.r2d2Fetch(`https://cors.r2d2.to?${props.src}`)
-        return URL.createObjectURL(await data.blob())
-    }, [props.src])
+    const { value: imageURL, loading: loadingImageURL } = useImageURL(rest.src)
 
-    const { value: isImageToken, loading: checkImageTokenLoading } = useImageChecker(props.src)
+    if (loadingImageURL && !disableSpinner) {
+        return (
+            <Box className={classes.container}>
+                <Box className={classes.floatingContainer}>
+                    <LoadingBase />
+                </Box>
+            </Box>
+        )
+    }
+
+    if (imageURL && !failed) {
+        return (
+            <Box className={classes.container} onClick={onClick}>
+                <img
+                    className={classes.image}
+                    loading="lazy"
+                    decoding="async"
+                    width={size}
+                    height={size}
+                    {...rest}
+                    src={imageURL}
+                    onError={() => setFailed(true)}
+                />
+            </Box>
+        )
+    }
+    if (fallback && !(fallback instanceof URL) && typeof fallback !== 'string') {
+        return (
+            <Box className={cx(classes.container, classes.failed)}>
+                <Box className={classes.floatingContainer}>{fallback}</Box>
+            </Box>
+        )
+    }
+
+    const fallbackImageURL =
+        fallback?.toString() ??
+        (theme.palette.mode === 'dark'
+            ? new URL('./mask-dark.png', import.meta.url).toString()
+            : new URL('./mask-light.png', import.meta.url).toString())
 
     return (
-        <>
-            {loadingImage || checkImageTokenLoading ? (
-                <Box className={classes.imageLoadingBox}>
-                    <Box sx={{ position: 'relative' }}>
-                        <CircularProgress
-                            variant="determinate"
-                            value={100}
-                            className={classNames(classes.imageLoading, classes.circle)}
-                        />
-
-                        <CircularProgress
-                            variant="indeterminate"
-                            disableShrink
-                            className={classes.imageLoading}
-                            sx={{ position: 'absolute', left: 0 }}
-                        />
-                    </Box>
-                </Box>
-            ) : isImageToken ? (
+        <Box className={cx(classes.container, classes.failed)} onClick={onClick}>
+            <Box className={classes.floatingContainer}>
                 <img
-                    crossOrigin="anonymous"
-                    {...props}
-                    src={image ?? props.src}
-                    onError={(event) => {
-                        const target = event.currentTarget as HTMLImageElement
-                        target.src = (props.fallbackImage ?? maskImageURL).toString()
-                        target.classList.add(classes.loadingFailImage ?? '')
-                    }}
+                    loading="lazy"
+                    decoding="async"
+                    width={size}
+                    height={size}
+                    {...rest}
+                    src={fallbackImageURL}
+                    className={cx(classes.image, classes.failImage, classes.fallbackImage)}
                 />
-            ) : (
-                <Box className={classes.imageLoadingBox}>
-                    <img
-                        {...props}
-                        src={(props.fallbackImage ?? maskImageURL).toString()}
-                        className={classNames(classes.failImage, classes.loadingFailImage)}
-                    />
-                </Box>
-            )}
-        </>
+            </Box>
+        </Box>
     )
 }

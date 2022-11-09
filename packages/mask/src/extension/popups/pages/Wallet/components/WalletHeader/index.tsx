@@ -1,25 +1,20 @@
 import { memo, useCallback, useMemo } from 'react'
-import { makeStyles } from '@masknet/theme'
 import { useMatch, useNavigate } from 'react-router-dom'
-import { PopupRoutes } from '@masknet/shared-base'
+import { makeStyles } from '@masknet/theme'
+import { PopupRoutes, NetworkPluginID } from '@masknet/shared-base'
 import type { ChainId, NetworkType } from '@masknet/web3-shared-evm'
-import { WalletHeaderUI } from './UI'
-import {
-    getRegisteredWeb3Networks,
-    useAccount,
-    useChainId,
-    useProviderType,
-    useWallet,
-} from '@masknet/plugin-infra/web3'
-import { Flags } from '../../../../../../../shared'
+import { WalletHeaderUI } from './UI.js'
+import { getRegisteredWeb3Networks } from '@masknet/plugin-infra'
+import { useChainContext, useWallet } from '@masknet/web3-hooks-base'
+import { Flags } from '../../../../../../../shared/index.js'
 import { MenuItem, Typography } from '@mui/material'
 import { useMenuConfig, WalletIcon, ChainIcon } from '@masknet/shared'
-import { currentMaskWalletAccountSettings } from '../../../../../../../shared/legacy-settings/wallet-settings'
-import { WalletRPC } from '../../../../../../plugins/Wallet/messages'
-import { NormalHeader } from '../../../../components/NormalHeader'
-import { NetworkDescriptor, NetworkPluginID } from '@masknet/web3-shared-base'
-import Services from '../../../../../service'
-import { useConnected } from '../../hooks/useConnected'
+import { currentMaskWalletAccountSettings } from '../../../../../../../shared/legacy-settings/wallet-settings.js'
+import { WalletRPC } from '../../../../../../plugins/Wallet/messages.js'
+import { NormalHeader } from '../../../../components/NormalHeader/index.js'
+import type { NetworkDescriptor } from '@masknet/web3-shared-base'
+import Services from '../../../../../service.js'
+import { useConnected } from '../../hooks/useConnected.js'
 
 const useStyles = makeStyles()({
     menu: {
@@ -32,12 +27,9 @@ const useStyles = makeStyles()({
 
 export const WalletHeader = memo(() => {
     const { classes } = useStyles()
-
     const navigate = useNavigate()
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { account, chainId, providerType } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
-    const providerType = useProviderType(NetworkPluginID.PLUGIN_EVM)
 
     const networks = getRegisteredWeb3Networks().filter(
         (x) => x.networkSupporterPluginID === NetworkPluginID.PLUGIN_EVM,
@@ -47,7 +39,7 @@ export const WalletHeader = memo(() => {
         () => networks.find((x) => x.chainId === chainId) ?? networks[0],
         [networks, chainId],
     )
-    const connected = useConnected()
+    const { connected, url } = useConnected()
     const matchWallet = useMatch(PopupRoutes.Wallet)
     const matchSwitchWallet = useMatch(PopupRoutes.SwitchWallet)
     const matchContractInteraction = useMatch(PopupRoutes.ContractInteraction)
@@ -103,6 +95,7 @@ export const WalletHeader = memo(() => {
                     isSwitchWallet={!!matchSwitchWallet}
                     disabled
                     connected={connected}
+                    hiddenConnected={!url}
                 />
                 {menu}
             </>
@@ -119,10 +112,11 @@ export const WalletHeader = memo(() => {
                 onActionClick={() => navigate(matchSwitchWallet ? PopupRoutes.Wallet : PopupRoutes.SwitchWallet)}
                 wallet={wallet}
                 isSwitchWallet={!!matchSwitchWallet}
+                hiddenConnected={!url}
             />
             {menu}
         </>
     ) : (
-        <NormalHeader onClose={Services.Helper.removePopupWindow} />
+        <NormalHeader onClose={() => Services.Helper.removePopupWindow()} />
     )
 })

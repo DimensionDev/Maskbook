@@ -1,27 +1,27 @@
-import '../utils/debug/general'
-import Services from '../extension/service'
-import { Flags } from '../../shared'
-import type { SocialNetworkUI } from './types'
-import { currentSetupGuideStatus } from '../../shared/legacy-settings/settings'
-import type { SetupGuideContext } from '../../shared/legacy-settings/types'
+import { assertNotEnvironment, Environment, ValueRef } from '@dimensiondev/holoflows-kit'
+import { delay, waitDocumentReadyState } from '@masknet/kit'
+import { SocialNetworkEnum } from '@masknet/encryption'
+import { IdentityResolved, Plugin, startPluginSNSAdaptor } from '@masknet/plugin-infra/content-script'
+import { sharedUIComponentOverwrite, sharedUINetworkIdentifier } from '@masknet/shared'
 import {
+    createSubscriptionFromAsync,
+    createSubscriptionFromValueRef,
     ECKeyIdentifier,
     EnhanceableSite,
     i18NextInstance,
-    createSubscriptionFromValueRef,
-    createSubscriptionFromAsync,
     queryRemoteI18NBundle,
 } from '@masknet/shared-base'
-import { Environment, assertNotEnvironment, ValueRef } from '@dimensiondev/holoflows-kit'
-import { IdentityResolved, Plugin, PluginId, startPluginSNSAdaptor } from '@masknet/plugin-infra/content-script'
-import { getCurrentIdentifier, getCurrentSNSNetwork } from '../social-network-adaptor/utils'
-import { createPluginHost, createPartialSharedUIContext } from '../../shared/plugin-infra/host'
-import { definedSocialNetworkUIs } from './define'
-import { setupShadowRootPortal, MaskMessages } from '../utils'
-import { delay, waitDocumentReadyState } from '@dimensiondev/kit'
-import { sharedUINetworkIdentifier, sharedUIComponentOverwrite } from '@masknet/shared'
-import { SocialNetworkEnum } from '@masknet/encryption'
-import { RestPartOfPluginUIContextShared } from '../utils/plugin-context-shared-ui'
+import { Flags } from '../../shared/index.js'
+import { currentSetupGuideStatus } from '../../shared/legacy-settings/settings.js'
+import type { SetupGuideContext } from '../../shared/legacy-settings/types.js'
+import { createPartialSharedUIContext, createPluginHost } from '../../shared/plugin-infra/host.js'
+import Services from '../extension/service.js'
+import { getCurrentIdentifier, getCurrentSNSNetwork } from '../social-network-adaptor/utils.js'
+import { MaskMessages, setupReactShadowRootEnvironment } from '../utils/index.js'
+import '../utils/debug/general.js'
+import { RestPartOfPluginUIContextShared } from '../utils/plugin-context-shared-ui.js'
+import { definedSocialNetworkUIs } from './define.js'
+import type { SocialNetworkUI } from '@masknet/types'
 
 const definedSocialNetworkUIsResolved = new Map<string, SocialNetworkUI.Definition>()
 export let activatedSocialNetworkUI: SocialNetworkUI.Definition = {
@@ -46,6 +46,7 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
     assertNotEnvironment(Environment.ManifestBackground)
 
     console.log('Activating provider', ui_deferred.networkIdentifier)
+    setupReactShadowRootEnvironment()
     const ui = (activatedSocialNetworkUI = await loadSocialNetworkUI(ui_deferred.networkIdentifier))
 
     sharedUINetworkIdentifier.value = ui_deferred.networkIdentifier
@@ -96,7 +97,7 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
     ui.injection.profileCover?.(signal)
     ui.injection.userAvatar?.(signal)
     ui.injection.profileAvatar?.(signal)
-    ui.injection.profileTip?.(signal)
+    ui.injection.tips?.(signal)
 
     ui.injection.enhancedProfileNFTAvatar?.(signal)
     ui.injection.openNFTAvatar?.(signal)
@@ -104,6 +105,9 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
     ui.injection.avatarClipNFT?.(signal)
 
     ui.injection.avatar?.(signal)
+    ui.injection.profileCard?.(signal)
+
+    ui.injection.PluginSettingsDialog?.(signal)
 
     // Update user avatar
     ui.collecting.currentVisitingIdentityProvider?.recognized.addListener((ref) => {
@@ -134,8 +138,9 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
         signal,
     )
 
+    const currentSNS = getCurrentSNSNetwork(ui.networkIdentifier)
     startPluginSNSAdaptor(
-        getCurrentSNSNetwork(ui.networkIdentifier),
+        currentSNS,
         createPluginHost(
             signal,
             (pluginID, signal): Plugin.SNSAdaptor.SNSAdaptorContext => {
@@ -145,21 +150,18 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
                     lastRecognizedProfile: lastRecognizedSub,
                     currentVisitingProfile: currentVisitingSub,
                     allPersonas: allPersonaSub,
-                    privileged_silentSign: () => {
-                        if (pluginID !== PluginId.Web3Profile)
-                            throw new TypeError("current plugin doesn't support silent sign function")
-                        return Services.Identity.generateSignResult
-                    },
                     getPersonaAvatar: Services.Identity.getPersonaAvatar,
                     ownProofChanged: MaskMessages.events.ownProofChanged,
                     setMinimalMode: Services.Settings.setPluginMinimalModeEnabled,
                 }
             },
             Services.Settings.getPluginMinimalModeEnabled,
+            Services.Helper.hasHostPermission,
         ),
     )
 
-    setupShadowRootPortal()
+    // TODO: receive the signal
+    if (Flags.sandboxedPluginRuntime) import('./sandboxed-plugin.js')
 
     function i18nOverwrite() {
         const i18n = ui.customization.i18nOverwrite || {}

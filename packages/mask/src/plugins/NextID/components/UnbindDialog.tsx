@@ -1,19 +1,18 @@
 import { memo, useCallback, useState } from 'react'
-import { useI18N } from '../locales'
 import { useAsyncRetry } from 'react-use'
-import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
-import { useAccount } from '@masknet/plugin-infra/web3'
-import type { Binding, PersonaInformation } from '@masknet/shared-base'
-import { NextIDAction, NextIDPlatform } from '@masknet/shared-base'
+import { useI18N } from '../locales/index.js'
+import { isSameAddress } from '@masknet/web3-shared-base'
+import { useChainContext } from '@masknet/web3-hooks-base'
+import { NetworkPluginID, Binding, PersonaInformation, NextIDAction, NextIDPlatform } from '@masknet/shared-base'
 import { useCustomSnackbar } from '@masknet/theme'
-import { usePersonaSign } from '../hooks/usePersonaSign'
-import { useWalletSign } from '../hooks/useWalletSign'
-import { useBindPayload } from '../hooks/useBindPayload'
-import { delay } from '@dimensiondev/kit'
-import { UnbindPanelUI } from './UnbindPanelUI'
-import { UnbindConfirm } from './UnbindConfirm'
+import { usePersonaSign } from '../hooks/usePersonaSign.js'
+import { useWalletSign } from '../hooks/useWalletSign.js'
+import { useBindPayload } from '../hooks/useBindPayload.js'
+import { delay } from '@masknet/kit'
+import { UnbindPanelUI } from './UnbindPanelUI.js'
+import { UnbindConfirm } from './UnbindConfirm.js'
 import { NextIDProof } from '@masknet/web3-providers'
-import { MaskMessages } from '../../../../shared'
+import { MaskMessages } from '../../../../shared/index.js'
 
 interface VerifyWalletDialogProps {
     unbindAddress: string
@@ -24,17 +23,15 @@ interface VerifyWalletDialogProps {
 }
 
 export const UnbindDialog = memo<VerifyWalletDialogProps>(({ unbindAddress, onClose, persona, onUnBound, bounds }) => {
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const t = useI18N()
 
-    const [openSecondDialog, setSecondDialog] = useState(false)
-
     const { showSnackbar } = useCustomSnackbar()
-    const currentIdentifier = persona.identifier
+    const [openSecondDialog, setSecondDialog] = useState(false)
+    const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const isBound = !!bounds.find((x) => isSameAddress(x.identity, unbindAddress))
 
     const { value: message } = useBindPayload(NextIDAction.Delete, unbindAddress, persona.identifier.publicKeyAsHex)
-    const [personaSignState, handlePersonaSign] = usePersonaSign(message?.signPayload, currentIdentifier)
+    const [personaSignState, handlePersonaSign] = usePersonaSign(message?.signPayload, persona.identifier)
     const [walletSignState, handleWalletSign] = useWalletSign(message?.signPayload, unbindAddress)
 
     useAsyncRetry(async () => {

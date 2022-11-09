@@ -1,5 +1,5 @@
 import stringify from 'json-stable-stringify'
-import { first } from 'lodash-unified'
+import { first } from 'lodash-es'
 import type { FungibleToken } from '@masknet/web3-shared-base'
 import {
     ChainId,
@@ -8,8 +8,8 @@ import {
     chainResolver,
     isNativeTokenAddress,
 } from '@masknet/web3-shared-evm'
-import { tokenIntoMask } from '../../../ITO/SNSAdaptor/helpers'
-import type { RedPacketJSONPayload } from '../../types'
+import { tokenIntoMask } from '../../../ITO/SNSAdaptor/helpers.js'
+import type { RedPacketJSONPayload } from '../../types.js'
 
 const TOKEN_FIELDS = `
     type
@@ -54,12 +54,18 @@ const RED_PACKET_FIELDS = `
 
 type RedpacketFromSubgraphType = {
     chain_id: ChainId
-    claimers: Array<{ name: string; address: string }>
+    claimers: Array<{
+        name: string
+        address: string
+    }>
     contract_address: string
     contract_version: number
     block_number: number
     creation_time: number
-    creator: { name: string; address: string }
+    creator: {
+        name: string
+        address: string
+    }
     duration: number
     is_random: boolean
     message: string
@@ -92,7 +98,9 @@ async function fetchFromRedPacketSubgraph<T>(chainId: ChainId, query: string) {
 }
 
 export async function getRedPacketTxid(chainId: ChainId, rpid: string) {
-    const data = await fetchFromRedPacketSubgraph<{ redPackets: RedpacketFromSubgraphType[] }>(
+    const data = await fetchFromRedPacketSubgraph<{
+        redPackets: RedpacketFromSubgraphType[]
+    }>(
         chainId,
         `
     {
@@ -106,7 +114,9 @@ export async function getRedPacketTxid(chainId: ChainId, rpid: string) {
 }
 
 export async function getRedPacketHistory(chainId: ChainId, address: string) {
-    const data = await fetchFromRedPacketSubgraph<{ redPackets: RedpacketFromSubgraphType[] }>(
+    const data = await fetchFromRedPacketSubgraph<{
+        redPackets: RedpacketFromSubgraphType[]
+    }>(
         chainId,
         `
     {
@@ -158,4 +168,4 @@ export async function getRedPacketHistory(chainId: ChainId, address: string) {
         .sort((a, b) => b.creation_time - a.creation_time)
 }
 
-export * from './nftRedpacket'
+export * from './nftRedpacket.js'

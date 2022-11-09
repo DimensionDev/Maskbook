@@ -1,20 +1,19 @@
 import { useMemo } from 'react'
 import { useAsync } from 'react-use'
-import { pick } from 'lodash-unified'
-import type { SwapRouteData, TradeComputed } from '../../types'
-import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
+import { pick } from 'lodash-es'
+import { BigNumber } from 'bignumber.js'
 import type { TransactionConfig } from 'web3-core'
-import type { AsyncState } from 'react-use/lib/useAsyncFn'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { useAccount, useWeb3Connection } from '@masknet/plugin-infra/web3'
-import BigNumber from 'bignumber.js'
+import type { SwapRouteData, TradeComputed } from '../../types/index.js'
+import type { AsyncState } from 'react-use/lib/useAsyncFn.js'
+import { useChainContext, useNetworkContext, useWeb3Connection } from '@masknet/web3-hooks-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 
 export function useTradeGasLimit(tradeComputed: TradeComputed<SwapRouteData> | null): AsyncState<number> {
-    const { targetChainId } = TargetChainIdContext.useContainer()
-    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, { chainId: targetChainId })
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const { pluginID } = useNetworkContext()
+    const { account, chainId } = useChainContext()
+    const connection = useWeb3Connection(pluginID, { chainId })
     const config = useMemo(() => {
-        if (!account || !tradeComputed?.trade_) return null
+        if (!account || !tradeComputed?.trade_ || pluginID !== NetworkPluginID.PLUGIN_EVM) return null
         return {
             from: account,
             ...pick(tradeComputed.trade_, ['to', 'data', 'value']),
@@ -26,5 +25,5 @@ export function useTradeGasLimit(tradeComputed: TradeComputed<SwapRouteData> | n
 
         const gas = await connection.estimateTransaction(config)
         return new BigNumber(gas).toNumber()
-    }, [config, connection])
+    }, [config, connection, pluginID])
 }

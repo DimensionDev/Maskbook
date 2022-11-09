@@ -1,11 +1,11 @@
-import type { SocialNetworkUI } from '../../../social-network'
-import { untilElementAvailable } from '../../../utils/dom'
-import { MaskMessages } from '../../../utils/messages'
-import { selectElementContents } from '../../../utils/utils'
-import { abortSignalTimeout, delay } from '@dimensiondev/kit'
+import type { SocialNetworkUI } from '@masknet/types'
+import { untilElementAvailable } from '../../../utils/dom.js'
+import { MaskMessages } from '../../../utils/messages.js'
+import { selectElementContents } from '../../../utils/utils.js'
+import { delay } from '@masknet/kit'
 import { inputText } from '@masknet/injected-script'
-import { getEditorContent, hasEditor, hasFocus, isCompose } from '../utils/postBox'
-import { composeButtonSelector, postEditorDraftContentSelector } from '../utils/selector'
+import { getEditorContent, hasEditor, hasFocus, isCompose } from '../utils/postBox.js'
+import { composeButtonSelector, postEditorDraftContentSelector } from '../utils/selector.js'
 
 /**
  * Wait for up to 5000 ms
@@ -43,6 +43,9 @@ export const pasteTextToCompositionMinds: SocialNetworkUI.AutomationCapabilities
             // paste
             inputText(text)
 
+            // Simulate textarea input
+            SimulateTextareaInput(textarea.id)
+
             await delay(interval)
             if (!getEditorContent().replace(/\n/g, '').includes(text.replace(/\n/g, ''))) {
                 fail(new Error('Unable to paste text automatically'))
@@ -54,5 +57,9 @@ export const pasteTextToCompositionMinds: SocialNetworkUI.AutomationCapabilities
             throw e
         }
 
-        worker(abortSignalTimeout(timeout)).then(undefined, (error) => fail(error))
+        worker(AbortSignal.timeout(timeout)).then(undefined, (error) => fail(error))
     }
+
+function SimulateTextareaInput(id: string) {
+    document.getElementById(id)?.dispatchEvent(new Event('input', { bubbles: true }))
+}

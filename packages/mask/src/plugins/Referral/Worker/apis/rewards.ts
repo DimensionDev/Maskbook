@@ -1,14 +1,14 @@
-import { groupBy } from 'lodash-unified'
+import { groupBy } from 'lodash-es'
 import { defaultAbiCoder } from '@ethersproject/abi'
 import { keccak256 } from 'web3-utils'
 
-import type { ChainId, AccountRewards, Reward } from '../../types'
-import { getAccountEntitlements } from './entitlements'
-import { getMyRewardsHarvested, getFarmExistEvents } from './farms'
-import { toChainAddressEthers, parseChainAddress } from '../../helpers'
-import { supportedChainId } from '../../constants'
-import { fetchERC20TokensFromTokenListsMap } from './tokenLists'
-import { getFarmOraclesDiscovery } from './discovery'
+import type { ChainId, AccountRewards, Reward } from '../../types.js'
+import { getAccountEntitlements } from './entitlements.js'
+import { getMyRewardsHarvested, getFarmExistEvents } from './farms.js'
+import { toChainAddressEthers, parseChainAddress } from '../../helpers/index.js'
+import { supportedChainId } from '../../constants.js'
+import { fetchERC20TokensFromTokenListsMap } from './tokenLists.js'
+import { getFarmOraclesDiscovery } from './discovery.js'
 
 function makeLeafHash(
     chainId: number,

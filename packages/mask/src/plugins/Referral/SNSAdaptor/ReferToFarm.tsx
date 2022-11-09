@@ -1,24 +1,22 @@
 import { useCallback, useState } from 'react'
 import { useAsync } from 'react-use'
 import type { Web3 } from '@masknet/web3-shared-evm'
-import { useAccount, useChainId, useWeb3 } from '@masknet/plugin-infra/web3'
+import { useChainContext, useWeb3 } from '@masknet/web3-hooks-base'
 import { makeStyles, useCustomSnackbar, ActionButton } from '@masknet/theme'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { v4 as uuid } from 'uuid'
-import { blue } from '@mui/material/colors'
 import { Typography, Box, Tab, Tabs, Grid, Divider } from '@mui/material'
 import { TabContext, TabPanel } from '@mui/lab'
-import { CrossIsolationMessages, EMPTY_LIST } from '@masknet/shared-base'
+import { CrossIsolationMessages, EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import { makeTypedMessageText } from '@masknet/typed-message'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
 
-import { useI18N } from '../locales'
-import { META_KEY } from '../constants'
-import { useCurrentIdentity, useCurrentLinkedPersona } from '../../../components/DataSource/useActivatedUI'
-import { PluginReferralMessages, SelectTokenUpdated, ReferralRPC } from '../messages'
-import { getRequiredChainId } from '../helpers'
-import { singAndPostProofOfRecommendationOrigin } from './utils/proofOfRecommendation'
+import { useI18N } from '../locales/index.js'
+import { META_KEY } from '../constants.js'
+import { useCurrentIdentity, useCurrentLinkedPersona } from '../../../components/DataSource/useActivatedUI.js'
+import { PluginReferralMessages, SelectTokenUpdated, ReferralRPC } from '../messages.js'
+import { getRequiredChainId } from '../helpers/index.js'
+import { singAndPostProofOfRecommendationOrigin } from './utils/proofOfRecommendation.js'
 import {
     ReferralMetaData,
     TabsReferAndBuy,
@@ -26,23 +24,18 @@ import {
     PageInterface,
     PagesType,
     FungibleTokenDetailed,
-} from '../types'
+} from '../types.js'
 
-import { MyRewards } from './MyRewards'
-import { TokenSelectField } from './shared-ui/TokenSelectField'
-import { RewardDataWidget } from './shared-ui/RewardDataWidget'
-import { SponsoredFarmIcon } from './shared-ui/icons/SponsoredFarm'
-import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
-import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
-
-import { useTabStyles } from './styles'
+import { MyRewards } from './MyRewards/index.js'
+import { TokenSelectField } from './shared-ui/TokenSelectField.js'
+import { RewardDataWidget } from './shared-ui/RewardDataWidget.js'
+import { SponsoredFarmIcon } from './shared-ui/icons/SponsoredFarm.js'
+import { WalletConnectedBoundary, ChainBoundary } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
-    walletStatusBox: {
-        width: 535,
-        margin: '24px auto',
+    root: {
+        fontSize: 14,
     },
-
     container: {
         flex: 1,
         height: '100%',
@@ -53,42 +46,20 @@ const useStyles = makeStyles()((theme) => ({
         overflow: 'auto',
         padding: `${theme.spacing(3)} 0`,
     },
-    tabs: {
-        width: '288px',
-    },
-    chip: {
-        width: '150px',
-        height: '40px',
-        flexDirection: 'row',
-    },
-    linkText: {
-        color: blue[50],
-    },
-    heading: {
-        fontSize: '20px',
-        fontWeight: 'bold',
-    },
-    icon: {
-        maxWidth: '20px',
-        maxHeight: '20px',
-    },
 }))
 
 export function ReferToFarm(props: PageInterface) {
     const t = useI18N()
-    const currentChainId = useChainId(NetworkPluginID.PLUGIN_EVM)
-    const requiredChainId = getRequiredChainId(currentChainId)
-    const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM)
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const { classes } = useStyles()
     const { showSnackbar } = useCustomSnackbar()
+    const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM)
+    const { account, chainId: currentChainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+    const requiredChainId = getRequiredChainId(currentChainId)
     const { closeDialog: closeApplicationBoardDialog } = useRemoteControlledDialog(
         WalletMessages.events.ApplicationDialogUpdated,
     )
     const currentIdentity = useCurrentIdentity()
     const { value: linkedPersona } = useCurrentLinkedPersona()
-
-    const { classes } = useStyles()
-    const { classes: tabClasses } = useTabStyles()
 
     const [tab, setTab] = useState(TabsReferAndBuy.NEW)
     const [token, setToken] = useState<FungibleTokenDetailed>()
@@ -106,7 +77,7 @@ export function ReferToFarm(props: PageInterface) {
 
     const openComposeBox = useCallback(
         (selectedReferralData: Map<string, ReferralMetaData>, id?: string) =>
-            CrossIsolationMessages.events.requestComposition.sendToLocal({
+            CrossIsolationMessages.events.compositionDialogEvent.sendToLocal({
                 reason: 'timeline',
                 open: true,
                 content: makeTypedMessageText('', selectedReferralData),
@@ -197,8 +168,12 @@ export function ReferToFarm(props: PageInterface) {
                     variant="fullWidth"
                     onChange={(e, v) => setTab(v)}
                     aria-label="persona-post-contacts-button-group">
-                    <Tab value={TabsReferAndBuy.NEW} label={t.tab_new()} classes={tabClasses} />
-                    <Tab value={TabsReferAndBuy.MY_REWARDS} label={t.tab_my_rewards()} classes={tabClasses} />
+                    <Tab value={TabsReferAndBuy.NEW} label={t.tab_new()} classes={{ root: classes.root }} />
+                    <Tab
+                        value={TabsReferAndBuy.MY_REWARDS}
+                        label={t.tab_my_rewards()}
+                        classes={{ root: classes.root }}
+                    />
                 </Tabs>
                 <TabPanel value={TabsReferAndBuy.NEW} className={classes.tab}>
                     <Typography fontWeight={600} variant="h6" marginBottom="12px">

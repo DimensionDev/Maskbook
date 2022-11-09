@@ -1,13 +1,13 @@
 import { useMemo } from 'react'
 import { type Plugin, usePostInfoDetails, usePluginWrapper } from '@masknet/plugin-infra/content-script'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
-import { parseURL } from '@masknet/shared-base'
+import { parseURLs } from '@masknet/shared-base'
 import { Icons } from '@masknet/icons'
-import { base } from '../base'
-import { PoolView } from '../UI/PoolView'
+import { base } from '../base.js'
+import { PoolView } from '../UI/PoolView.js'
 import { Trans } from 'react-i18next'
-import { InvestDialog } from '../UI/InvestDialog'
-import { createMatchLink } from '../constants'
+import { InvestDialog } from '../UI/InvestDialog.js'
+import { createMatchLink } from '../constants.js'
 
 function getPoolFromLink(link: string) {
     const matchLink = createMatchLink()
@@ -25,24 +25,24 @@ function getPoolFromLinks(links: string[]) {
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
     init(signal) {},
-    DecryptedInspector: function Component(props) {
+    DecryptedInspector(props) {
         const links = useMemo(() => {
             const x = extractTextFromTypedMessage(props.message)
             if (x.none) return null
-            return parseURL(x.val)
+            return parseURLs(x.val)
         }, [props.message])
         if (!links) return null
         const pool = getPoolFromLinks(links)
         if (!pool?.address) return null
         return <Renderer link={pool.link} address={pool.address} />
     },
-    PostInspector: function Component() {
+    PostInspector() {
         const links = usePostInfoDetails.mentionedLinks()
         const pool = getPoolFromLinks(links)
         if (!pool?.address) return null
         return <Renderer link={pool.link} address={pool.address} />
     },
-    GlobalInjection: function Component() {
+    GlobalInjection() {
         return <InvestDialog />
     },
     ApplicationEntries: [
@@ -65,7 +65,12 @@ const sns: Plugin.SNSAdaptor.Definition = {
 
 export default sns
 
-function Renderer(props: React.PropsWithChildren<{ link: string; address: string }>) {
+function Renderer(
+    props: React.PropsWithChildren<{
+        link: string
+        address: string
+    }>,
+) {
     usePluginWrapper(true)
     return <PoolView address={props.address} link={props.link} />
 }

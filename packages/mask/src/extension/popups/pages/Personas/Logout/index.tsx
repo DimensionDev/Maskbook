@@ -2,15 +2,15 @@ import { memo, useCallback, useMemo, useState } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
 import { Button, Typography } from '@mui/material'
-import { useI18N } from '../../../../../utils'
+import { useI18N } from '../../../../../utils/index.js'
 import { useAsyncFn } from 'react-use'
-import { PersonaContext } from '../hooks/usePersonaContext'
-import Services from '../../../../service'
+import { PersonaContext } from '../hooks/usePersonaContext.js'
+import Services from '../../../../service.js'
 import { LoadingButton } from '@mui/lab'
 import { useNavigate } from 'react-router-dom'
 import { PopupRoutes, formatPersonaFingerprint, type PersonaInformation } from '@masknet/shared-base'
-import { PasswordField } from '../../../components/PasswordField'
-import { useTitle } from '../../../hook/useTitle'
+import { PasswordField } from '../../../components/PasswordField/index.js'
+import { useTitle } from '../../../hook/useTitle.js'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -56,7 +56,6 @@ const useStyles = makeStyles()((theme) => ({
     name: {
         display: 'flex',
         alignItems: 'center',
-        fontSize: 14,
         color: '#1C68F3',
         fontWeight: 500,
     },

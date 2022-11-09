@@ -2,14 +2,15 @@ import { TransactionStateType, DAI, explorerResolver } from '@masknet/web3-share
 import { Button, Typography, Link } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useState } from 'react'
-import { useI18N } from '../../../utils'
-import { useJoinGame, useMakeDeposit, useWithdraw } from '../hooks/useGameActions'
-import type { GoodGhostingInfo } from '../types'
-import { GameActionDialog } from './GameActionDialog'
-import { useGameToken } from '../hooks/usePoolData'
-import { isGameActionError } from '../utils'
-import { formatBalance, NetworkPluginID } from '@masknet/web3-shared-base'
-import { useChainId, useFungibleToken } from '@masknet/plugin-infra/web3'
+import { useI18N } from '../../../utils/index.js'
+import { useJoinGame, useMakeDeposit, useWithdraw } from '../hooks/useGameActions.js'
+import type { GoodGhostingInfo } from '../types.js'
+import { GameActionDialog } from './GameActionDialog.js'
+import { useGameToken } from '../hooks/usePoolData.js'
+import { isGameActionError } from '../utils.js'
+import { formatBalance } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { useChainContext, useFungibleToken } from '@masknet/web3-hooks-base'
 
 const useStyles = makeStyles()((theme) => ({
     button: {
@@ -23,7 +24,7 @@ interface GameActionProps {
 }
 
 export function GameAction(props: GameActionProps) {
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const gameToken = useGameToken()
 
     const { classes } = useStyles()
@@ -35,7 +36,10 @@ export function GameAction(props: GameActionProps) {
 
     const [openDialog, setOpenDialog] = useState(false)
     const [buttonEnabled, setButtonEnabled] = useState(true)
-    const [errorState, setErrorState] = useState<{ message?: string; link?: string }>({})
+    const [errorState, setErrorState] = useState<{
+        message?: string
+        link?: string
+    }>({})
     const {
         value: tokenDetailed,
         loading: loadingToken,

@@ -1,23 +1,29 @@
 import { useMemo } from 'react'
 import { useAsyncFn } from 'react-use'
-import { pick } from 'lodash-unified'
+import { pick } from 'lodash-es'
 import stringify from 'json-stable-stringify'
 import type { TransactionConfig } from 'web3-core'
-import type { GasOptionConfig } from '@masknet/web3-shared-evm'
-import type { SwapQuoteResponse, TradeComputed } from '../../types'
-import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
-import { SUPPORTED_CHAIN_ID_LIST } from './constants'
-import { NetworkPluginID, ZERO } from '@masknet/web3-shared-base'
-import { useAccount, useWeb3Connection } from '@masknet/plugin-infra/web3'
+import type { ChainId, GasOptionConfig } from '@masknet/web3-shared-evm'
+import type { SwapQuoteResponse, TradeComputed } from '../../types/index.js'
+import { SUPPORTED_CHAIN_ID_LIST } from './constants.js'
+import { ZERO } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { useChainContext, useNetworkContext, useWeb3Connection } from '@masknet/web3-hooks-base'
 
 export function useTradeCallback(tradeComputed: TradeComputed<SwapQuoteResponse> | null, gasConfig?: GasOptionConfig) {
-    const { targetChainId: chainId } = TargetChainIdContext.useContainer()
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, { chainId })
+    const { account, chainId } = useChainContext()
+    const { pluginID } = useNetworkContext()
+    const connection = useWeb3Connection()
 
     // compose transaction config
     const config = useMemo(() => {
-        if (!account || !tradeComputed?.trade_ || !SUPPORTED_CHAIN_ID_LIST.includes(chainId)) return null
+        if (
+            !account ||
+            !tradeComputed?.trade_ ||
+            pluginID !== NetworkPluginID.PLUGIN_EVM ||
+            !SUPPORTED_CHAIN_ID_LIST.includes(chainId as ChainId)
+        )
+            return null
         return {
             from: account,
             ...pick(tradeComputed.trade_, ['to', 'data', 'value']),
@@ -41,9 +47,9 @@ export function useTradeCallback(tradeComputed: TradeComputed<SwapQuoteResponse>
         }
 
         // send transaction and wait for hash
-        const hash = await connection.sendTransaction(config_)
+        const hash = await connection.sendTransaction(config_, { chainId })
         const receipt = await connection.getTransactionReceipt(hash)
 
         return receipt?.transactionHash
-    }, [connection, account, chainId, stringify(config), gasConfig])
+    }, [connection, account, chainId, stringify(config), gasConfig, pluginID])
 }

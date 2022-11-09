@@ -1,23 +1,23 @@
 import { memo } from 'react'
-import { useTitle } from '../../../hook/useTitle'
-import { useI18N } from '../../../../../utils'
-import { ConnectedWalletsUI } from './UI'
-import { PersonaContext } from '../hooks/usePersonaContext'
-import { useChainId, useWallets, useWeb3State } from '@masknet/plugin-infra/web3'
-import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
-import { NextIDAction, NextIDPlatform, PopupRoutes } from '@masknet/shared-base'
 import { useAsync, useAsyncFn } from 'react-use'
-import { compact, sortBy } from 'lodash-unified'
-import type { ConnectedWalletInfo } from '../type'
-import { NextIDProof } from '@masknet/web3-providers'
-import Service from '../../../../service'
-import { usePopupCustomSnackbar } from '@masknet/theme'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { MaskMessages } from '../../../../../../shared/messages'
+import { compact } from 'lodash-es'
+import { useChainContext, useWallets, useWeb3State } from '@masknet/web3-hooks-base'
+import { isSameAddress, isGreaterThan } from '@masknet/web3-shared-base'
+import { NetworkPluginID, NextIDAction, NextIDPlatform, PopupRoutes } from '@masknet/shared-base'
+import { usePopupCustomSnackbar } from '@masknet/theme'
+import { NextIDProof } from '@masknet/web3-providers'
+import { useTitle } from '../../../hook/useTitle.js'
+import { useI18N } from '../../../../../utils/index.js'
+import { ConnectedWalletsUI } from './UI.js'
+import { PersonaContext } from '../hooks/usePersonaContext.js'
+import type { ConnectedWalletInfo } from '../type.js'
+import Service from '../../../../service.js'
+import { MaskMessages } from '../../../../../../shared/messages.js'
 
 const ConnectedWallets = memo(() => {
     const { t } = useI18N()
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { NameService } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const wallets = useWallets(NetworkPluginID.PLUGIN_EVM)
     const navigate = useNavigate()
@@ -30,7 +30,7 @@ const ConnectedWallets = memo(() => {
         if (!proofs) return []
 
         const results = await Promise.all(
-            proofs.map(async (x, index) => {
+            proofs.map(async (x) => {
                 if (x.platform === NextIDPlatform.Ethereum) {
                     const domain = await NameService?.reverse?.(chainId, x.identity)
 
@@ -57,17 +57,19 @@ const ConnectedWallets = memo(() => {
             }),
         )
 
-        return sortBy(compact(results), (x) => Number(x.created_at))
-            .map((x, index) => {
+        return compact(results)
+            .sort((a, z) => {
+                return isGreaterThan(a.last_checked_at, z.last_checked_at) ? -1 : 1
+            })
+            .map((x, index, list) => {
                 if (!x.name)
                     return {
                         ...x,
-                        name: `${x.platform} wallet ${index + 1}`,
+                        name: `${x.platform} wallet ${list.length - index}`,
                     }
 
                 return x
             })
-            .reverse()
     }, [wallets, NameService, proofs, chainId])
 
     const [confirmState, onConfirmRelease] = useAsyncFn(

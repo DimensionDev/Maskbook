@@ -1,40 +1,38 @@
 import { forwardRef, useCallback, useEffect, useImperativeHandle, useState, useMemo } from 'react'
 import { useUnmount, useUpdateEffect } from 'react-use'
-import { delay } from '@dimensiondev/kit'
+import { delay } from '@masknet/kit'
 import { useOpenShareTxDialog, useSelectFungibleToken } from '@masknet/shared'
-import { NetworkPluginID, FungibleToken, formatBalance } from '@masknet/web3-shared-base'
+import { formatBalance } from '@masknet/web3-shared-base'
+import type { GasOptionConfig } from '@masknet/web3-shared-evm'
+import { useGasConfig } from '@masknet/web3-hooks-evm'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import {
-    ChainId,
-    createERC20Token,
-    createNativeToken,
-    GasOptionConfig,
-    isNativeTokenAddress,
-    SchemaType,
-    UST,
-} from '@masknet/web3-shared-evm'
-import { useGasConfig, TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
-import { useChainId, useChainIdValid, useFungibleTokenBalance } from '@masknet/plugin-infra/web3'
-import { activatedSocialNetworkUI } from '../../../../social-network'
-import { isFacebook } from '../../../../social-network-adaptor/facebook.com/base'
-import { isTwitter } from '../../../../social-network-adaptor/twitter.com/base'
-import { useI18N } from '../../locales'
-import { isNativeTokenWrapper } from '../../helpers'
-import { PluginTraderMessages } from '../../messages'
-import { AllProviderTradeActionType, AllProviderTradeContext } from '../../trader/useAllProviderTradeContext'
-import { useTradeCallback } from '../../trader/useTradeCallback'
-import type { Coin } from '../../types'
-import { TokenPanelType, TradeInfo } from '../../types'
-import { ConfirmDialog } from './ConfirmDialog'
-import { useSortedTrades } from './hooks/useSortedTrades'
-import { useUpdateBalance } from './hooks/useUpdateBalance'
-import { TradeForm } from './TradeForm'
+    useChainContext,
+    useChainIdValid,
+    useFungibleTokenBalance,
+    useNetworkContext,
+    useWeb3State,
+} from '@masknet/web3-hooks-base'
+import { activatedSocialNetworkUI } from '../../../../social-network/index.js'
+import { isFacebook } from '../../../../social-network-adaptor/facebook.com/base.js'
+import { isTwitter } from '../../../../social-network-adaptor/twitter.com/base.js'
+import { useI18N } from '../../locales/index.js'
+import { isNativeTokenWrapper } from '../../helpers/index.js'
+import { PluginTraderMessages } from '../../messages.js'
+import { AllProviderTradeActionType, AllProviderTradeContext } from '../../trader/useAllProviderTradeContext.js'
+import { useTradeCallback } from '../../trader/useTradeCallback.js'
+import { TokenPanelType, TradeInfo } from '../../types/index.js'
+import { ConfirmDialog } from './ConfirmDialog.js'
+import { useSortedTrades } from './hooks/useSortedTrades.js'
+import { useUpdateBalance } from './hooks/useUpdateBalance.js'
+import { TradeForm } from './TradeForm.js'
+import { WalletMessages } from '../../../Wallet/messages.js'
+import type { Web3Helper } from '@masknet/web3-helpers'
 
 export interface TraderProps extends withClasses<'root'> {
-    coin?: Coin
-    defaultInputCoin?: Coin
-    defaultOutputCoin?: Coin
-    tokenDetailed?: FungibleToken<ChainId, SchemaType>
-    chainId?: ChainId
+    defaultInputCoin?: Web3Helper.FungibleTokenAll
+    defaultOutputCoin?: Web3Helper.FungibleTokenAll
+    chainId?: Web3Helper.ChainIdAll
     settings?: boolean
 }
 
@@ -45,13 +43,19 @@ export interface TraderRef {
 }
 
 export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, ref) => {
-    const { defaultOutputCoin, coin, chainId: targetChainId, defaultInputCoin, settings = false } = props
-    const [focusedTrade, setFocusTrade] = useState<TradeInfo>()
-    const currentChainId = useChainId(NetworkPluginID.PLUGIN_EVM)
-    const chainId = targetChainId ?? currentChainId
-    const chainIdValid = useChainIdValid(NetworkPluginID.PLUGIN_EVM)
+    const { defaultOutputCoin, chainId: targetChainId, defaultInputCoin, settings = false } = props
     const t = useI18N()
-    const { setTargetChainId } = TargetChainIdContext.useContainer()
+    const [focusedTrade, setFocusTrade] = useState<TradeInfo>()
+    const { chainId, account } = useChainContext({
+        chainId: targetChainId,
+    })
+    const { pluginID } = useNetworkContext()
+    const chainIdValid = useChainIdValid(pluginID, chainId)
+    const { Others } = useWeb3State()
+
+    const { openDialog: openConnectWalletDialog } = useRemoteControlledDialog(
+        WalletMessages.events.selectProviderDialogUpdated,
+    )
 
     // #region trade state
     const {
@@ -84,23 +88,23 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
 
         dispatchTradeStore({
             type: AllProviderTradeActionType.UPDATE_INPUT_TOKEN,
-            token: chainId === ChainId.Mainnet && coin?.is_mirrored ? UST[ChainId.Mainnet] : createNativeToken(chainId),
+            token: Others?.createNativeToken(chainId),
         })
-    }, [chainId, chainIdValid])
+    }, [chainId, chainIdValid, Others?.createNativeToken])
     // #endregion
 
     const updateTradingCoin = useCallback(
         (
             type: AllProviderTradeActionType.UPDATE_INPUT_TOKEN | AllProviderTradeActionType.UPDATE_OUTPUT_TOKEN,
-            coin?: Coin,
+            coin?: Web3Helper.FungibleTokenAll,
         ) => {
-            if (!coin?.contract_address) return
+            if (!coin?.address) return
             dispatchTradeStore({
                 type,
-                token: createERC20Token(chainId, coin.contract_address, coin.name, coin.symbol, coin.decimals),
+                token: coin,
             })
         },
-        [chainId],
+        [],
     )
     useEffect(() => {
         updateTradingCoin(AllProviderTradeActionType.UPDATE_INPUT_TOKEN, defaultInputCoin)
@@ -108,42 +112,6 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
     useEffect(() => {
         updateTradingCoin(AllProviderTradeActionType.UPDATE_OUTPUT_TOKEN, defaultOutputCoin)
     }, [updateTradingCoin, defaultOutputCoin])
-
-    // #region if coin be changed, update output token
-    useEffect(() => {
-        if (!coin || currentChainId !== targetChainId) return
-
-        // if coin be native token and input token also be native token, reset it
-        if (
-            isNativeTokenAddress(coin.contract_address) &&
-            inputToken?.schema === SchemaType.Native &&
-            coin.symbol === inputToken.symbol
-        ) {
-            dispatchTradeStore({
-                type: AllProviderTradeActionType.UPDATE_INPUT_TOKEN,
-                token: undefined,
-            })
-        }
-        if (!outputToken) {
-            updateTradingCoin(AllProviderTradeActionType.UPDATE_OUTPUT_TOKEN, coin)
-        }
-    }, [coin, inputToken, outputToken, currentChainId, targetChainId, updateTradingCoin])
-
-    useEffect(() => {
-        if (!defaultInputCoin) return
-        dispatchTradeStore({
-            type: AllProviderTradeActionType.UPDATE_INPUT_TOKEN,
-            token: defaultInputCoin.contract_address
-                ? createERC20Token(
-                      chainId,
-                      defaultInputCoin.contract_address,
-                      defaultInputCoin.name,
-                      defaultInputCoin.symbol,
-                      defaultInputCoin.decimals,
-                  )
-                : undefined,
-        })
-    }, [defaultInputCoin, chainId])
 
     const onInputAmountChange = useCallback((amount: string) => {
         dispatchTradeStore({
@@ -154,41 +122,36 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
 
     // #region update balance
     const { value: inputTokenBalance_, loading: loadingInputTokenBalance } = useFungibleTokenBalance(
-        NetworkPluginID.PLUGIN_EVM,
+        pluginID,
         inputToken?.address ?? '',
         { chainId },
     )
 
     const { value: outputTokenBalance_, loading: loadingOutputTokenBalance } = useFungibleTokenBalance(
-        NetworkPluginID.PLUGIN_EVM,
+        pluginID,
         outputToken?.address ?? '',
         { chainId },
     )
 
     useEffect(() => {
-        if (!inputToken || inputToken.schema === SchemaType.Native || !inputTokenBalance_ || loadingInputTokenBalance) {
+        if (!inputTokenBalance_ || loadingInputTokenBalance || !inputToken) {
             return
         }
         dispatchTradeStore({
             type: AllProviderTradeActionType.UPDATE_INPUT_TOKEN_BALANCE,
             balance: inputTokenBalance_,
         })
-    }, [inputToken, inputTokenBalance_, loadingInputTokenBalance])
+    }, [inputTokenBalance_, loadingInputTokenBalance, inputToken])
 
     useEffect(() => {
-        if (
-            !outputToken ||
-            outputToken.schema === SchemaType.Native ||
-            !outputTokenBalance_ ||
-            loadingOutputTokenBalance
-        ) {
+        if (!outputTokenBalance_ || loadingOutputTokenBalance || outputToken) {
             return
         }
         dispatchTradeStore({
             type: AllProviderTradeActionType.UPDATE_OUTPUT_TOKEN_BALANCE,
             balance: outputTokenBalance_,
         })
-    }, [outputToken, outputTokenBalance_, loadingOutputTokenBalance])
+    }, [outputTokenBalance_, loadingOutputTokenBalance, outputToken])
 
     // #region select token
     const excludeTokens = [inputToken, outputToken].filter(Boolean).map((x) => x?.address) as string[]
@@ -196,6 +159,10 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
     const selectFungibleToken = useSelectFungibleToken()
     const onTokenChipClick = useCallback(
         async (panelType: TokenPanelType) => {
+            if (!account) {
+                openConnectWalletDialog()
+                return
+            }
             const picked = await selectFungibleToken({
                 chainId,
                 disableNativeToken: false,
@@ -207,7 +174,8 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
                         panelType === TokenPanelType.Input
                             ? AllProviderTradeActionType.UPDATE_INPUT_TOKEN
                             : AllProviderTradeActionType.UPDATE_OUTPUT_TOKEN,
-                    token: picked as FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>,
+                    token: picked,
+                    balance: '0',
                 })
             }
         },
@@ -273,20 +241,13 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
     // #region the click handler of switch arrow
     const onSwitchToken = useCallback(() => {
         dispatchTradeStore({
-            type: AllProviderTradeActionType.UPDATE_INPUT_TOKEN,
-            token: outputToken,
+            type: AllProviderTradeActionType.SWITCH_TOKEN,
+            inputToken: outputToken,
+            outputToken: inputToken,
+            inputBalance: outputToken ? outputTokenBalance_ ?? '0' : '0',
+            outputBalance: inputTokenBalance_ ?? '0',
         })
-
-        dispatchTradeStore({
-            type: AllProviderTradeActionType.UPDATE_OUTPUT_TOKEN,
-            token: inputToken,
-        })
-
-        dispatchTradeStore({
-            type: AllProviderTradeActionType.UPDATE_INPUT_AMOUNT,
-            amount: '',
-        })
-    }, [dispatchTradeStore, inputToken, outputToken, inputAmount])
+    }, [dispatchTradeStore, inputToken, outputToken, inputAmount, inputTokenBalance_, outputTokenBalance_])
 
     // #region swap callback
     const onSwap = useCallback(() => {
@@ -312,8 +273,7 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
 
     // #region if chain id be changed, reset the chain id on context, and reset gas config
     useEffect(() => {
-        if (!chainId) return
-        setTargetChainId(chainId)
+        if (!Others?.isValidChainId(chainId)) return
         setGasConfig(undefined)
     }, [chainId])
     // #endregion
@@ -330,7 +290,11 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
     useEffect(() => {
         return PluginTraderMessages.swapSettingsUpdated.on((event) => {
             if (event.open) return
-            if (event.gasConfig) setGasConfig(event.gasConfig)
+
+            if (event.gasConfig) {
+                console.log({ gasConfig: event.gasConfig })
+                setGasConfig(event.gasConfig)
+            }
         })
     }, [])
 

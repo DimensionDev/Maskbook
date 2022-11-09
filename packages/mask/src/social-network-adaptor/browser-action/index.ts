@@ -1,4 +1,5 @@
-import { defineSocialNetworkUI, definedSocialNetworkUIs, SocialNetworkUI, SocialNetwork } from '../../social-network'
+import type { SocialNetwork, SocialNetworkUI } from '@masknet/types'
+import { defineSocialNetworkUI, definedSocialNetworkUIs } from '../../social-network/index.js'
 import { isEnvironment, Environment, ValueRef } from '@dimensiondev/holoflows-kit'
 import { SocialNetworkEnum } from '@masknet/encryption'
 import { EnhanceableSite } from '@masknet/shared-base'

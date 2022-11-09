@@ -1,46 +1,46 @@
 import { EMPTY_LIST } from '@masknet/shared-base'
-import { FungibleToken, multipliedBy, pow10 } from '@masknet/web3-shared-base'
-import { useTrade as useNativeTokenTrade } from './native/useTrade'
-import { useTradeComputed as useNativeTokenTradeComputed } from './native/useTradeComputed'
-import { SwapOOData, TagType, TradeInfo, TradeStrategy } from '../types'
-import { useV3Trade as useUniswapV3Trade } from './uniswap/useTrade'
-import { useTradeComputed as useUniswapTradeComputed } from './uniswap/useTradeComputed'
-import { useTradeGasLimit as useUniswapTradeGasLimit } from './uniswap/useTradeGasLimit'
-import { useUniswapV2Like } from './uniswap/useUniswapV2Like'
-import { useTrade as useZrxTrade } from './0x/useTrade'
-import { useTradeComputed as useZrxTradeComputed } from './0x/useTradeComputed'
-import { useTradeGasLimit as useZrxTradeGasLimit } from './0x/useTradeGasLimit'
-import { useTrade as useBalancerTrade } from './balancer/useTrade'
-import { useTradeComputed as useBalancerTradeComputed } from './balancer/useTradeComputed'
-import { useTradeGasLimit as useBalancerTradeGasLimit } from './balancer/useTradeGasLimit'
-import { useTrade as useDODOTrade } from './dodo/useTrade'
-import { useTradeComputed as useDODOTradeComputed } from './dodo/useTradeComputed'
-import { useTradeGasLimit as useDODOTradeGasLimit } from './dodo/useTradeGasLimit'
-import { useTrade as useBancorTrade } from './bancor/useTrade'
-import { useTradeComputed as useBancorTradeComputed } from './bancor/useTradeComputed'
-import { useTradeGasLimit as useBancorTradeGasLimit } from './bancor/useTradeGasLimit'
-import { useTradeComputed as useOpenOceanTradeComputed } from './openocean/useTradeComputed'
-import { useTrade as useOpenOceanTrade } from './openocean/useTrade'
-import { useTradeGasLimit as useOpenOceanTradeGasLimit } from './openocean/useTradeGasLimit'
+import { multipliedBy, pow10 } from '@masknet/web3-shared-base'
+import { useTrade as useNativeTokenTrade } from './native/useTrade.js'
+import { useTradeComputed as useNativeTokenTradeComputed } from './native/useTradeComputed.js'
+import { SwapOOData, TradeInfo, TradeStrategy } from '../types/index.js'
+import { useV3Trade as useUniswapV3Trade } from './uniswap/useTrade.js'
+import { useTradeComputed as useUniswapTradeComputed } from './uniswap/useTradeComputed.js'
+import { useTradeGasLimit as useUniswapTradeGasLimit } from './uniswap/useTradeGasLimit.js'
+import { useUniswapV2Like } from './uniswap/useUniswapV2Like.js'
+import { useTrade as useZrxTrade } from './0x/useTrade.js'
+import { useTradeComputed as useZrxTradeComputed } from './0x/useTradeComputed.js'
+import { useTradeGasLimit as useZrxTradeGasLimit } from './0x/useTradeGasLimit.js'
+import { useTrade as useBalancerTrade } from './balancer/useTrade.js'
+import { useTradeComputed as useBalancerTradeComputed } from './balancer/useTradeComputed.js'
+import { useTradeGasLimit as useBalancerTradeGasLimit } from './balancer/useTradeGasLimit.js'
+import { useTrade as useDODOTrade } from './dodo/useTrade.js'
+import { useTradeComputed as useDODOTradeComputed } from './dodo/useTradeComputed.js'
+import { useTradeGasLimit as useDODOTradeGasLimit } from './dodo/useTradeGasLimit.js'
+import { useTrade as useBancorTrade } from './bancor/useTrade.js'
+import { useTradeComputed as useBancorTradeComputed } from './bancor/useTradeComputed.js'
+import { useTradeGasLimit as useBancorTradeGasLimit } from './bancor/useTradeGasLimit.js'
+import { useTradeComputed as useOpenOceanTradeComputed } from './openocean/useTradeComputed.js'
+import { useTrade as useOpenOceanTrade } from './openocean/useTrade.js'
+import { useTradeGasLimit as useOpenOceanTradeGasLimit } from './openocean/useTradeGasLimit.js'
 import { TradeProvider } from '@masknet/public-api'
-import { useAvailableTraderProviders } from '../trending/useAvailableTraderProviders'
-import { useNativeTradeGasLimit } from './useNativeTradeGasLimit'
-import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
-import type { TradeComputed } from '../types'
-import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import { useAvailableTraderProviders } from '../trending/useAvailableTraderProviders.js'
+import { useNativeTradeGasLimit } from './useNativeTradeGasLimit.js'
+import type { TradeComputed } from '../types/index.js'
+import { useChainContext } from '@masknet/web3-hooks-base'
+import type { Web3Helper } from '@masknet/web3-helpers'
 
 export function useAllTradeComputed(
     inputAmount: string,
-    inputToken?: FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>,
-    outputToken?: FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>,
+    inputToken?: Web3Helper.FungibleTokenAll,
+    outputToken?: Web3Helper.FungibleTokenAll,
     temporarySlippage?: number,
 ): TradeInfo[] {
-    const { targetChainId } = TargetChainIdContext.useContainer()
+    const { chainId } = useChainContext()
     const inputTokenProduct = pow10(inputToken?.decimals ?? 0)
     const inputAmount_ = multipliedBy(inputAmount || '0', inputTokenProduct)
         .integerValue()
         .toFixed()
-    const { value: tradeProviders = EMPTY_LIST } = useAvailableTraderProviders(TagType.CASH, 'MASK', targetChainId)
+    const { value: tradeProviders = EMPTY_LIST } = useAvailableTraderProviders(chainId)
 
     // NATIVE-WNATIVE pair
     const nativeToken_ = useNativeTokenTrade(inputToken, outputToken)
@@ -53,7 +53,7 @@ export function useAllTradeComputed(
         outputToken,
     )
 
-    const nativeTradeGasLimit = useNativeTradeGasLimit(nativeToken, targetChainId)
+    const nativeTradeGasLimit = useNativeTradeGasLimit(nativeToken, chainId)
 
     // uniswap-v2
     const {

@@ -11,6 +11,15 @@ export namespace TrendingAPI {
         HASH = 2,
     }
 
+    export enum Days {
+        MAX = 0,
+        ONE_DAY = 1,
+        ONE_WEEK = 7,
+        ONE_MONTH = 30,
+        THREE_MONTHS = 90,
+        ONE_YEAR = 365,
+    }
+
     export interface Currency {
         id: string
         name: string
@@ -158,15 +167,13 @@ export namespace TrendingAPI {
     }
 
     export interface Provider<ChainId> {
-        getCoinTrending(chainId: ChainId, id: string, currency: Currency): Promise<Trending>
-
-        // #region get all coins
-        getCoins(keyword?: string): Promise<Coin[]>
-        // #endregion
-
-        // #region get all currency
-        getCurrencies(): Promise<Currency[]>
-        // #endregion
-        getPriceStats(chainId: ChainId, coinId: string, currency: Currency, days: number): Promise<Stat[]>
+        /** Get all supported coins. */
+        getAllCoins: () => Promise<Coin[]>
+        /** Get all related coins with a keyword. */
+        getCoinsByKeyword: (chainId: ChainId, keyword: string) => Promise<Coin[]>
+        /** Get coin trending information by id. */
+        getCoinTrending: (chainId: ChainId, id: string, currency: Currency) => Promise<Trending>
+        /** Get coin price stats by id. */
+        getCoinPriceStats: (chainId: ChainId, id: string, currency: Currency, days: number) => Promise<Stat[]>
     }
 }

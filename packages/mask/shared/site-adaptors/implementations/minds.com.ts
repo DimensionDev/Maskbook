@@ -1,7 +1,7 @@
 import { EnhanceableSite } from '@masknet/shared-base'
 import urlcat from 'urlcat'
-import { defineSiteAdaptor } from '../definitions'
-import type { SiteAdaptor } from '../types'
+import { defineSiteAdaptor } from '../definitions.js'
+import type { SiteAdaptor } from '../types.js'
 
 if (import.meta.webpackHot) import.meta.webpackHot.accept()
 
@@ -10,6 +10,7 @@ export const MindsAdaptor: SiteAdaptor.Definition = {
     networkIdentifier: EnhanceableSite.Minds,
     declarativePermissions: { origins },
     homepage: 'https://www.minds.com',
+    isSocialNetwork: true,
 
     getProfilePage: () => new URL('https://www.minds.com'),
     getShareLinkURL(message) {

@@ -2,10 +2,10 @@ import { i18NextInstance } from '@masknet/shared-base'
 import { TransactionContext, isSameAddress } from '@masknet/web3-shared-base'
 import { ChainId, getMaskBoxConstants, TransactionParameter } from '@masknet/web3-shared-evm'
 import MaskBox_ABI from '@masknet/web3-contracts/abis/MaskBox.json'
-import { Web3StateSettings } from '../../../settings'
-import type { TransactionDescriptor } from '../types'
+import { Web3StateSettings } from '../../../settings/index.js'
+import type { TransactionDescriptor } from '../types.js'
 import type { AbiItem } from 'web3-utils'
-import { DescriptorWithTransactionDecodedReceipt, getTokenAmountDescription } from '../utils'
+import { DescriptorWithTransactionDecodedReceipt, getTokenAmountDescription } from '../utils.js'
 
 export class MaskBoxDescriptor extends DescriptorWithTransactionDecodedReceipt implements TransactionDescriptor {
     async getPurchaseTokenInfo(chainId: ChainId, contractAddress: string | undefined, hash: string | undefined) {
@@ -45,14 +45,16 @@ export class MaskBoxDescriptor extends DescriptorWithTransactionDecodedReceipt i
                 chainId: context.chainId,
                 title: i18NextInstance.t('plugin_infra_descriptor_mask_box_purchase_title'),
                 description: i18NextInstance.t('plugin_infra_descriptor_mask_box_purchase'),
-                successfulDescription: i18NextInstance.t('plugin_infra_descriptor_mask_box_purchase_success', {
-                    tokenAmountDescription: await this.getPurchaseTokenInfo(
-                        context.chainId,
-                        MASK_BOX_CONTRACT_ADDRESS,
-                        context.hash,
-                    ),
-                }),
-                failedDescription: i18NextInstance.t('plugin_infra_descriptor_mask_box_purchase_fail'),
+                snackbar: {
+                    successfulDescription: i18NextInstance.t('plugin_infra_descriptor_mask_box_purchase_success', {
+                        tokenAmountDescription: await this.getPurchaseTokenInfo(
+                            context.chainId,
+                            MASK_BOX_CONTRACT_ADDRESS,
+                            context.hash,
+                        ),
+                    }),
+                    failedDescription: i18NextInstance.t('plugin_infra_descriptor_mask_box_purchase_fail'),
+                },
             }
         }
         return

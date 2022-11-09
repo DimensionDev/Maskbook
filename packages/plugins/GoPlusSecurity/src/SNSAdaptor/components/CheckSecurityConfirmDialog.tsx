@@ -1,11 +1,10 @@
-import { PluginId } from '@masknet/plugin-infra'
+import { useEffect, useState } from 'react'
 import { InjectedDialog } from '@masknet/shared'
-import { CrossIsolationMessages } from '@masknet/shared-base'
+import { CrossIsolationMessages, PluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { Button, DialogContent, Stack, Typography } from '@mui/material'
-import { useEffect, useState } from 'react'
-import { useI18N } from '../../locales'
-import { context } from '../context'
+import { useI18N } from '../../locales/index.js'
+import { context } from '../context.js'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {
@@ -37,14 +36,14 @@ function CheckSecurityConfirmDialog() {
     const [open, setOpen] = useState(false)
 
     useEffect(() => {
-        return CrossIsolationMessages.events.requestCheckSecurityCloseConfirmDialog.on(({ open }) => {
+        return CrossIsolationMessages.events.checkSecurityConfirmationDialogEvent.on(({ open }) => {
             setOpen(open)
         })
     }, [])
 
     const onClose = () => setOpen(false)
 
-    const onConfirm = () => context.setMinimalMode(PluginId.GoPlusSecurity, true)
+    const onConfirm = () => context.setMinimalMode(PluginID.GoPlusSecurity, true)
 
     return (
         <InjectedDialog

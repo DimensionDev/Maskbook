@@ -1,10 +1,10 @@
-import { useChainId } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { useChainContext } from '@masknet/web3-hooks-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
 import { useAsyncRetry } from 'react-use'
-import { useMaskBoxQualificationContract } from './useMaskBoxQualificationContract'
+import { useMaskBoxQualificationContract } from './useMaskBoxQualificationContract.js'
 
 export function useQualification(address?: string, account?: string, proof?: string) {
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const qualificationContract = useMaskBoxQualificationContract(chainId, address)
     const { value: qualification = { qualified: false, error_msg: '' } } = useAsyncRetry(async () => {
         if (!qualificationContract || !account) return null

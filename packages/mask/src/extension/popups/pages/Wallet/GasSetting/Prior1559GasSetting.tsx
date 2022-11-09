@@ -1,29 +1,29 @@
-import { makeStyles } from '@masknet/theme'
-import { GasOptionType, isLessThan, NetworkPluginID, pow10, TransactionDescriptorType } from '@masknet/web3-shared-base'
 import { memo, useEffect, useMemo, useState } from 'react'
-import { useI18N } from '../../../../../utils'
+import { useNavigate } from 'react-router-dom'
+import { BigNumber } from 'bignumber.js'
+import { makeStyles } from '@masknet/theme'
+import { PopupRoutes, NetworkPluginID } from '@masknet/shared-base'
+import { formatCurrency, GasOptionType, isLessThan, pow10, TransactionDescriptorType } from '@masknet/web3-shared-base'
+import { useI18N } from '../../../../../utils/index.js'
 import { useAsync, useAsyncFn, useUpdateEffect } from 'react-use'
-import { WalletRPC } from '../../../../../plugins/Wallet/messages'
-import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest'
+import { WalletRPC } from '../../../../../plugins/Wallet/messages.js'
+import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest.js'
 import {
     ChainId,
     formatGweiToWei,
-    formatGweiToEther,
     formatWeiToGwei,
     ChainIdOptionalRecord,
+    formatWeiToEther,
 } from '@masknet/web3-shared-evm'
-import BigNumber from 'bignumber.js'
 import { z as zod } from 'zod'
 import { Controller, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Typography } from '@mui/material'
-import { StyledInput } from '../../../components/StyledInput'
+import { StyledInput } from '../../../components/StyledInput/index.js'
 import { LoadingButton } from '@mui/lab'
-import { isEmpty } from 'lodash-unified'
-import { useNavigate } from 'react-router-dom'
-import { PopupRoutes } from '@masknet/shared-base'
+import { isEmpty } from 'lodash-es'
 import { toHex } from 'web3-utils'
-import { useChainId, useGasOptions, useNativeToken, useNativeTokenPrice, useWeb3 } from '@masknet/plugin-infra/web3'
+import { useChainContext, useGasOptions, useNativeToken, useNativeTokenPrice, useWeb3 } from '@masknet/web3-hooks-base'
 
 const useStyles = makeStyles()((theme) => ({
     options: {
@@ -50,19 +50,11 @@ const useStyles = makeStyles()((theme) => ({
     optionsContent: {
         fontSize: 11,
     },
-    gasPrice: {
-        fontSize: 12,
-        lineHeight: '16px',
-    },
     gasUSD: {
         color: '#7B8192',
         fontSize: 12,
         lineHeight: '14px',
         wordBreak: 'break-all',
-    },
-    or: {
-        display: 'flex',
-        justifyContent: 'center',
     },
     label: {
         color: theme.palette.primary.main,
@@ -90,9 +82,9 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 const minGasPriceOfChain: ChainIdOptionalRecord<BigNumber.Value> = {
-    [ChainId.BSC]: pow10(9).multipliedBy(5), // 5 Gwei
-    [ChainId.Conflux]: pow10(9).multipliedBy(5), // 5 Gwei
-    [ChainId.Matic]: pow10(9).multipliedBy(30), // 30 Gwei
+    [ChainId.BSC]: pow10(9).multipliedBy(5),
+    [ChainId.Conflux]: pow10(9).multipliedBy(5),
+    [ChainId.Matic]: pow10(9).multipliedBy(30),
     [ChainId.Astar]: pow10(9).multipliedBy(5), // 5 Gwei
 }
 
@@ -101,9 +93,8 @@ export const Prior1559GasSetting = memo(() => {
     const { classes } = useStyles()
     const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM)
     const { value: gasOptions_ } = useGasOptions(NetworkPluginID.PLUGIN_EVM)
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { value, loading: getValueLoading } = useUnconfirmedRequest()
-    const [getGasLimitError, setGetGasLimitError] = useState(false)
     const navigate = useNavigate()
     const [selected, setOption] = useState<number | null>(null)
     const { value: nativeToken } = useNativeToken(NetworkPluginID.PLUGIN_EVM)
@@ -225,7 +216,7 @@ export const Prior1559GasSetting = memo(() => {
     }, [minGasLimit, gas, setValue])
 
     useEffect(() => {
-        if (selected !== null && options) setValue('gasPrice', options[selected].gasPrice.toString())
+        if (selected !== null && options) setValue('gasPrice', formatWeiToGwei(options[selected].gasPrice).toString())
     }, [selected, setValue, options])
 
     const [{ loading }, handleConfirm] = useAsyncFn(
@@ -253,11 +244,6 @@ export const Prior1559GasSetting = memo(() => {
         }
     }, [value, getValueLoading])
 
-    // #region If the estimate gas be 0, Set error
-    useUpdateEffect(() => {
-        if (!getGasLimitError) setError('gasLimit', { message: 'Cant not get estimate gas from contract' })
-    }, [getGasLimitError])
-
     return (
         <>
             {options ? (
@@ -269,14 +255,17 @@ export const Prior1559GasSetting = memo(() => {
                             className={selected === index ? classes.selected : undefined}>
                             <Typography className={classes.optionsTitle}>{title}</Typography>
                             <Typography className={classes.optionsContent}>
-                                {Number(gasPrice ?? 0).toString()} Gwei
+                                {formatWeiToGwei(gasPrice ?? 0).toString()} Gwei
                             </Typography>
                             <Typography className={classes.gasUSD}>
                                 {t('popups_wallet_gas_fee_settings_usd', {
-                                    usd: formatGweiToEther(gasPrice)
-                                        .times(nativeTokenPrice)
-                                        .times(minGasLimit || 21000)
-                                        .toPrecision(3),
+                                    usd: formatCurrency(
+                                        formatWeiToEther(gasPrice)
+                                            .times(nativeTokenPrice)
+                                            .times(minGasLimit || 21000),
+                                        'USD',
+                                        { boundaries: { min: 0.01 } },
+                                    ),
                                 })}
                             </Typography>
                         </div>

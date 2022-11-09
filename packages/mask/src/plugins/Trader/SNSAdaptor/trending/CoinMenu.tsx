@@ -1,13 +1,13 @@
+import { FC, PropsWithChildren, useCallback, useMemo } from 'react'
+import { groupBy, toPairs } from 'lodash-es'
 import { Icons } from '@masknet/icons'
 import { makeStyles, ShadowRootMenu } from '@masknet/theme'
 import { TokenType } from '@masknet/web3-shared-base'
-import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked'
+import { RadioButtonUnchecked as RadioButtonUncheckedIcon } from '@mui/icons-material'
 import { Divider, MenuItem, Stack, Typography } from '@mui/material'
 import { useTheme } from '@mui/system'
-import { groupBy, toPairs } from 'lodash-unified'
-import { FC, PropsWithChildren, useCallback, useMemo } from 'react'
-import type { Coin } from '../../types'
-import { CoinIcon } from './components'
+import type { Coin } from '../../types/index.js'
+import { CoinIcon } from './components/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     coinMenu: {
@@ -23,7 +23,6 @@ const useStyles = makeStyles()((theme) => ({
     },
     groupName: {
         height: 18,
-        fontSize: 14,
         fontWeight: 'bold',
         padding: theme.spacing(0, 2),
     },
@@ -49,6 +48,9 @@ const useStyles = makeStyles()((theme) => ({
     },
     symbol: {
         marginLeft: theme.spacing(0.5),
+    },
+    coinIcon: {
+        fontSize: 10,
     },
     checkedIcon: {
         filter: 'drop-shadow(0px 4px 10px rgba(28, 104, 243, 0.2))',
@@ -80,13 +82,18 @@ const TokenMenuList: FC<TokenMenuListProps> = ({ options, type, value, onSelect 
                         selected={selected}
                         key={`${x.coin.type}/${x.value}`}
                         onClick={() => onSelect(x.coin.type, x.value)}>
-                        <CoinIcon
-                            type={x.coin.type}
-                            address={x.coin.address}
-                            name={x.coin.name}
-                            logoUrl={x.coin.image_url}
-                            size={20}
-                        />
+                        {x.coin.address ? (
+                            <CoinIcon
+                                className={classes.coinIcon}
+                                type={x.coin.type}
+                                address={x.coin.address}
+                                name={x.coin.name}
+                                label=""
+                                symbol={x.coin.symbol}
+                                logoURL={x.coin.image_url}
+                                size={20}
+                            />
+                        ) : null}
                         <Typography className={classes.symbol}>{x.coin.market_cap_rank}</Typography>
                         <Stack className={classes.itemText}>
                             <Typography

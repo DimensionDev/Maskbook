@@ -1,20 +1,29 @@
-import { throttle } from 'lodash-unified'
-import { MaskMessages } from '../../../../shared/messages'
-import { InternalStorageKeys } from '../../../services/settings/utils'
-import type { PopupSSR_Props } from './type'
-import { getCurrentPersonaIdentifier, getLanguage } from '../../../services/settings'
-import { queryOwnedPersonaInformation } from '../../../services/identity'
+import { throttle } from 'lodash-es'
+import { MaskMessages } from '../../../../shared/messages.js'
+import { InternalStorageKeys } from '../../../services/settings/utils.js'
+import type { PopupSSR_Props } from './type.js'
+import { getCurrentPersonaIdentifier, getLanguage } from '../../../services/settings/index.js'
+import { queryOwnedPersonaInformation } from '../../../services/identity/index.js'
+import type { Storage } from 'webextension-polyfill'
 
 const CACHE_KEY = 'popup-ssr-cache'
-export let cache: { html: string; css: string } = { html: '', css: '' }
+export let cache: {
+    html: string
+    css: string
+} = { html: '', css: '' }
 export function startListen(
-    render: (props: PopupSSR_Props) => Promise<{ html: string; css: string }>,
+    render: (props: PopupSSR_Props) => Promise<{
+        html: string
+        css: string
+    }>,
     signal: AbortSignal,
 ) {
+    // @ts-expect-error Chrome Only API
+    const session: Storage.StorageArea = browser.storage.session
     async function task() {
         cache = await prepareData().then(render)
         if (process.env.manifest === '3') {
-            browser.storage.session.set({ [CACHE_KEY]: cache })
+            session.set({ [CACHE_KEY]: cache })
         }
         console.log('[Popup SSR] Page ready.')
     }
@@ -23,7 +32,7 @@ export function startListen(
     if (process.env.manifest === '2') {
         throttledTask()
     } else {
-        browser.storage.session.get(CACHE_KEY).then((result) => {
+        session.get(CACHE_KEY).then((result) => {
             if (result[CACHE_KEY]) cache = result[CACHE_KEY] as any
             else throttledTask()
         })

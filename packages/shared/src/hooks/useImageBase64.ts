@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import LRUCache from 'lru-cache'
 import { useAsyncRetry } from 'react-use'
+import LRUCache from 'lru-cache'
 
 function readAsDataURL(blob: Blob) {
     return new Promise<string>((resolve, reject) => {
@@ -21,43 +21,53 @@ const responseToBase64 = async (response: Response) => {
     return dataURL
 }
 
-export function useAccessibleUrl(
-    key = '',
-    url?: string,
-    options?: {
-        fetch: typeof globalThis.fetch
-    },
-) {
-    const fetch = options?.fetch ?? globalThis.fetch
+export function useImageBase64(key = '', url?: string) {
+    const cacheKey = key || (url ?? '')
     const [availableUrl, setAvailableUrl] = useState(() => {
-        const hit = cache.get(key)
+        const hit = cache.get(cacheKey)
         return typeof hit === 'string' ? hit : ''
     })
 
     useAsyncRetry(async () => {
-        if (!key) return
-        const hit = cache.get(key)
+        if (!cacheKey) return
+        const hit = cache.get(cacheKey)
         if (typeof hit === 'string') {
             setAvailableUrl(hit)
             return
         } else if (hit instanceof Promise) {
-            setAvailableUrl(await responseToBase64((await hit).clone()))
-            return
+            try {
+                const response = await hit
+                const result = await responseToBase64(response.clone())
+                cache.set(cacheKey, result)
+                setAvailableUrl(result)
+                return
+            } catch {
+                setAvailableUrl('')
+            }
         }
 
         if (!url) return
-        const fetchingTask = globalThis.r2d2Fetch(`https://cors.r2d2.to/?${url}`)
-        cache.set(key, fetchingTask)
+        const fetchingTask = fetch(url, {
+            headers: {
+                accept: url.includes('imagedelivery.net')
+                    ? 'image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8'
+                    : '',
+            },
+        })
+        cache.set(cacheKey, fetchingTask)
         const response = await fetchingTask
         if (!response.ok) {
-            cache.delete(key)
+            cache.delete(cacheKey)
+            setAvailableUrl('')
             return
         }
 
         const dataURL = await responseToBase64(response)
-        cache.set(key, dataURL)
+        cache.set(cacheKey, dataURL)
         setAvailableUrl(dataURL)
-    }, [key, url])
+    }, [cacheKey, url])
+
+    if (!cacheKey) return ''
 
     return availableUrl
 }

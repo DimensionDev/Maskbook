@@ -11,12 +11,11 @@ import {
     ForwardRefExoticComponent,
     useMemo,
 } from 'react'
-import { BaseTab } from './BaseTab'
-import { FlexibleTab } from './FlexibleTab'
-import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
+import { BaseTab } from './BaseTab.js'
+import { FlexibleTab } from './FlexibleTab.js'
+import { ArrowBackIosNew as ArrowBackIosNewIcon } from '@mui/icons-material'
 import { useClickAway, useWindowSize } from 'react-use'
-import { RoundTab } from './RoundTab'
-import { get } from 'lodash-unified'
+import { RoundTab } from './RoundTab.js'
 
 type MaskTabVariant = 'base' | 'flexible' | 'round'
 const defaultTabSize = 38
@@ -26,6 +25,7 @@ export interface MaskTabListProps
     onChange(event: object, value: string): void
     'aria-label': string
     variant?: MaskTabVariant
+    hideArrowButton?: boolean
 }
 
 const ArrowButtonWrap = styled(Button)(({ theme }) => ({
@@ -50,7 +50,9 @@ const ArrowBackIosNewIconWrap = styled(ArrowBackIosNewIcon)(({ theme }) => ({
 
 const FlexibleButtonGroupPanel = styled(Box, {
     shouldForwardProp: (prop) => prop !== 'isOpen',
-})<{ isOpen?: boolean }>(({ theme, isOpen = false }) => ({
+})<{
+    isOpen?: boolean
+}>(({ theme, isOpen = false }) => ({
     position: 'absolute',
     top: 0,
     left: 0,
@@ -68,7 +70,9 @@ const FlexibleButtonGroupPanel = styled(Box, {
 
 const ButtonGroupWrap = styled(ButtonGroup, {
     shouldForwardProp: (prop) => prop !== 'maskVariant',
-})<{ maskVariant?: MaskTabVariant }>(({ theme, maskVariant = 'base' }) => ({
+})<{
+    maskVariant?: MaskTabVariant
+}>(({ theme, maskVariant = 'base' }) => ({
     position: 'relative',
     display: 'flex',
     alignItems: 'center',
@@ -97,28 +101,32 @@ const ButtonGroupWrap = styled(ButtonGroup, {
 
 const FlexButtonGroupWrap = styled(ButtonGroup, {
     shouldForwardProp: (prop) => prop !== 'maskVariant' && prop !== 'isOpen' && prop !== 'isOverflow',
-})<{ maskVariant?: MaskTabVariant; isOpen?: boolean; isOverflow?: boolean }>(
-    ({ theme, maskVariant = 'base', isOpen = false, isOverflow = false }) => ({
-        position: 'relative',
-        display: 'flex',
-        alignItems: 'center',
-        flexWrap: isOpen ? 'wrap' : 'nowrap',
-        overflow: 'hidden',
-        flex: 1,
-        maxWidth: '100%',
-        paddingRight: isOpen ? defaultTabSize : 0,
-        gap: maskVariant !== 'base' ? theme.spacing(1) : 0,
-        borderRadius: 0,
-        background:
-            !isOpen && isOverflow
-                ? theme.palette.mode === 'light'
-                    ? `linear-gradient(270deg, rgba(255,255,255,1) ${defaultTabSize}px, rgba(223, 229, 244, 0.8) ${defaultTabSize}px, rgba(244, 247, 254, 0) 72px)`
-                    : `linear-gradient(270deg, transparent ${defaultTabSize}px, rgba(49, 49, 49, 0.8) ${defaultTabSize}px, rgba(23, 23, 23, 0) 72px)`
-                : 'transparent',
-    }),
-)
+})<{
+    maskVariant?: MaskTabVariant
+    isOpen?: boolean
+    isOverflow?: boolean
+}>(({ theme, maskVariant = 'base', isOpen = false, isOverflow = false }) => ({
+    position: 'relative',
+    display: 'flex',
+    alignItems: 'center',
+    flexWrap: isOpen ? 'wrap' : 'nowrap',
+    overflow: 'hidden',
+    flex: 1,
+    maxWidth: '100%',
+    paddingRight: isOpen ? defaultTabSize : 0,
+    gap: maskVariant !== 'base' ? theme.spacing(1) : 0,
+    borderRadius: 0,
+    background:
+        !isOpen && isOverflow
+            ? theme.palette.mode === 'light'
+                ? `linear-gradient(270deg, rgba(255,255,255,1) ${defaultTabSize}px, rgba(223, 229, 244, 0.8) ${defaultTabSize}px, rgba(244, 247, 254, 0) 72px)`
+                : `linear-gradient(270deg, transparent ${defaultTabSize}px, rgba(49, 49, 49, 0.8) ${defaultTabSize}px, rgba(23, 23, 23, 0) 72px)`
+            : 'transparent',
+}))
 
-const tabMapping: { [key in MaskTabVariant]: ForwardRefExoticComponent<any> } = {
+const tabMapping: {
+    [key in MaskTabVariant]: ForwardRefExoticComponent<any>
+} = {
     flexible: FlexibleTab,
     round: RoundTab,
     base: BaseTab,
@@ -177,6 +185,7 @@ export const MaskTabList = forwardRef<HTMLDivElement, MaskTabListProps>((props, 
             'aria-controls': getPanelId(context, child.props.value),
             id: getTabId(context, child.props.value),
             selected: child.props.value === context.value,
+            className: child.props.className,
             onChange: (event: object, value: string, visitable?: boolean) => {
                 handleToggle(false)
                 props.onChange(event, value)
@@ -225,8 +234,8 @@ export const MaskTabList = forwardRef<HTMLDivElement, MaskTabListProps>((props, 
             top: 0,
             bottom: 0,
         }
-        const pointerX = get(event, 'x', 0)
-        const pointerY = get(event, 'y', 0)
+        const pointerX = (event as MouseEvent).x ?? 0
+        const pointerY = (event as MouseEvent).y ?? 0
 
         if (pointerX > right || pointerX < left || pointerY < top || pointerY > bottom) handleToggle(false)
     })
@@ -244,12 +253,12 @@ export const MaskTabList = forwardRef<HTMLDivElement, MaskTabListProps>((props, 
                     <FlexButtonGroupWrap
                         maskVariant={variant}
                         isOpen={open}
-                        isOverflow={isTabsOverflow}
+                        isOverflow={isTabsOverflow && !props.hideArrowButton}
                         {...rest}
                         ref={innerRef}
                         role="tablist">
                         {flexibleTabs}
-                        {isTabsOverflow && (
+                        {isTabsOverflow && !props.hideArrowButton && (
                             <ArrowButtonWrap
                                 variant="text"
                                 size="small"

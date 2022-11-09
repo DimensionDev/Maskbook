@@ -1,131 +1,183 @@
-import { useState, useContext } from 'react'
-import { Box, Card, CardHeader, CardContent, Typography, Tab, Tabs, Chip, Paper } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
-import { SnapshotContext } from '../context'
-import { useProposal } from './hooks/useProposal'
-import { ProposalTab } from './ProposalTab'
-import { ProgressTab } from './ProgressTab'
-import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
-import { useChainId } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { useContext } from 'react'
+import Color from 'color'
+import { Box, Tab, Avatar, Typography, Chip } from '@mui/material'
+import { makeStyles, MaskTabList, ShadowRootTooltip, useTabs } from '@masknet/theme'
+import { SnapshotContext } from '../context.js'
+import { useProposal } from './hooks/useProposal.js'
+import { ProposalTab } from './ProposalTab.js'
+import { ProgressTab } from './ProgressTab.js'
+import { ChainBoundary } from '@masknet/shared'
+import { useChainContext } from '@masknet/web3-hooks-base'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { resolveIPFS_URL } from '@masknet/web3-shared-base'
+import { TabContext, TabPanel } from '@mui/lab'
+import { useI18N } from '../../../utils/index.js'
 
 const useStyles = makeStyles()((theme) => {
     return {
-        root: {
-            '--contentHeight': '400px',
-            '--tabHeight': '35px',
-            width: '100%',
-            padding: 0,
-        },
-        content: {
-            width: '100%',
-            minHeight: 'var(--contentHeight)',
+        header: {
+            gap: theme.spacing(2),
             display: 'flex',
-            flexDirection: 'column',
-            padding: '0 !important',
+            padding: 12,
+            alignItems: 'center',
+        },
+        title: {
+            flex: 1,
         },
         body: {
+            padding: 12,
+            paddingBottom: 0,
+        },
+        tab: {
+            whiteSpace: 'nowrap',
+            background: 'transparent',
+            color: theme.palette.maskColor.secondaryDark,
+            '&:hover': {
+                background: 'transparent',
+            },
+        },
+        tabActive: {
+            background: theme.palette.maskColor.white,
+            color: theme.palette.maskColor.publicMain,
+            '&:hover': {
+                background: theme.palette.maskColor.white,
+            },
+        },
+        content: {
             flex: 1,
-            maxHeight: 'calc(var(--contentHeight) - var(--tabHeight))',
             overflow: 'auto',
+            borderRadius: '0 0 12px 12px',
             scrollbarWidth: 'none',
             '&::-webkit-scrollbar': {
                 display: 'none',
             },
+            background: theme.palette.maskColor.white,
         },
-        tabs: {
-            height: 'var(--tabHeight)',
-            width: '100%',
-            minHeight: 'unset',
-            borderTop: `solid 1px ${theme.palette.divider}`,
-            borderBottom: `solid 1px ${theme.palette.divider}`,
+        active: {
+            color: theme.palette.maskColor.white,
+            backgroundColor: theme.palette.maskColor.success,
         },
-        tab: {
-            height: 'var(--tabHeight)',
-            minHeight: 'unset',
-            minWidth: 'unset',
+        default: {
+            color: theme.palette.maskColor.white,
+            backgroundColor: new Color(theme.palette.maskColor.primary).alpha(0.1).toString(),
         },
-        subtitle: {
-            fontSize: 12,
-            marginRight: theme.spacing(0.5),
+        avatar: {
+            boxShadow: '0px 6px 12px rgba(81, 62, 255, 0.2)',
+            backdropFilter: 'blur(8px)',
+            width: 48,
+            height: 48,
         },
-        button: {
-            width: '100%',
-            minHeight: 39,
-            margin: `${theme.spacing(1)} auto`,
+        shadowRootTooltip: {},
+        tooltip: {
+            backgroundColor: theme.palette.maskColor.publicMain,
+            color: theme.palette.maskColor.white,
         },
-        choiceButton: {
-            color: theme.palette.mode === 'dark' ? 'white' : 'black',
-            transitionDuration: '0s !important',
-            '&:hover': {
-                border: '2px solid rgb(29, 161, 242) !important',
-                backgroundColor: 'transparent !important',
-            },
-        },
-        buttonActive: {
-            border: '2px solid rgb(29, 161, 242)',
-            backgroundColor: 'transparent',
-            color: theme.palette.mode === 'dark' ? 'white' : 'black',
+        arrow: {
+            color: theme.palette.maskColor.publicMain,
         },
     }
 })
 
 export function Snapshot() {
-    const { classes } = useStyles()
+    const { classes, theme } = useStyles()
     const identifier = useContext(SnapshotContext)
     const { payload: proposal } = useProposal(identifier.id)
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
-    const [tabIndex, setTabIndex] = useState(0)
-    const tabs = [
-        <Tab className={classes.tab} key="proposal" label="Proposal" />,
-        <Tab className={classes.tab} key="progress" label="Progress" />,
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+    const [currentTab, onChange, tabs] = useTabs('Proposal', 'Progress')
+    const { t } = useI18N()
+
+    const Tabs = [
+        {
+            value: tabs.Proposal,
+            label: t('plugin_snapshot_proposal'),
+        },
+        {
+            value: tabs.Progress,
+            label: t('plugin_snapshot_progress'),
+        },
     ]
+
     return (
-        <>
-            <Card className={classes.root} elevation={0}>
-                <CardHeader
-                    title={
-                        <Box display="flex" alignItems="center" justifyContent="space-between">
-                            <Typography sx={{ marginRight: 1 }}>
-                                <Typography component="span" sx={{ marginRight: 0.5 }}>
-                                    {proposal.title}
+        <TabContext value={currentTab}>
+            <Box className={classes.header}>
+                <Avatar src={resolveIPFS_URL(proposal.space.avatar)} className={classes.avatar} />
+                <Box className={classes.title}>
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                        <ShadowRootTooltip
+                            PopperProps={{
+                                disablePortal: true,
+                            }}
+                            title={
+                                <Typography fontSize={18} fontWeight="bold">
+                                    {proposal.space.name}
                                 </Typography>
-                                <Typography color="textSecondary" component="span">
-                                    #{identifier.id.slice(0, 7)}
-                                </Typography>
+                            }
+                            placement="top"
+                            classes={{ tooltip: classes.tooltip, arrow: classes.arrow }}
+                            arrow>
+                            <Typography
+                                fontSize={18}
+                                fontWeight="bold"
+                                sx={{ width: 150, whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden' }}>
+                                {proposal.space.name}
                             </Typography>
-                            <Chip color="primary" size="small" label={proposal.status} />
-                        </Box>
-                    }
-                    subheader={
-                        <Box display="flex" alignItems="center" sx={{ marginTop: 0.5 }}>
-                            <Typography color="textSecondary" variant="body2">
-                                {identifier.space}
+                        </ShadowRootTooltip>
+                        <Box sx={{ display: 'flex' }}>
+                            <Typography
+                                fontSize={14}
+                                sx={{ paddingRight: 1 }}
+                                color={theme.palette.maskColor.publicSecond}>
+                                by
+                            </Typography>
+                            <Typography fontSize={14} fontWeight="700">
+                                {proposal.space.id}
                             </Typography>
                         </Box>
-                    }
-                />
-                <CardContent className={classes.content}>
-                    <Tabs
-                        className={classes.tabs}
-                        indicatorColor="primary"
-                        textColor="primary"
-                        variant="fullWidth"
-                        value={tabIndex}
-                        onChange={(ev: React.ChangeEvent<{}>, newValue: number) => setTabIndex(newValue)}
-                        TabIndicatorProps={{
-                            style: {
-                                display: 'none',
-                            },
-                        }}>
-                        {tabs}
-                    </Tabs>
-                    <Paper className={classes.body}>
-                        {tabIndex === 0 ? <ProposalTab /> : null}
-                        {tabIndex === 1 ? <ProgressTab /> : null}
-                    </Paper>
-                </CardContent>
-            </Card>
+                    </Box>
+
+                    <ShadowRootTooltip
+                        PopperProps={{
+                            disablePortal: true,
+                        }}
+                        title={<Typography className={classes.shadowRootTooltip}>{proposal.title}</Typography>}
+                        placement="top"
+                        classes={{ tooltip: classes.tooltip, arrow: classes.arrow }}
+                        arrow>
+                        <Typography
+                            fontSize={14}
+                            fontWeight="700"
+                            sx={{ width: 300, whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden' }}>
+                            {proposal.title}
+                        </Typography>
+                    </ShadowRootTooltip>
+                </Box>
+                <Box>
+                    <Chip
+                        className={proposal.status === 'Active' ? classes.active : classes.default}
+                        label={proposal.status}
+                    />
+                </Box>
+            </Box>
+            <Box className={classes.body}>
+                <MaskTabList variant="base" aria-label="snapshot" onChange={onChange}>
+                    {Tabs.map((x, i) => (
+                        <Tab
+                            key={i}
+                            value={x.value}
+                            label={x.label}
+                            className={x.value === currentTab ? classes.tabActive : classes.tab}
+                        />
+                    ))}
+                </MaskTabList>
+                <Box className={classes.content}>
+                    <TabPanel value={tabs.Proposal} key={tabs.Proposal} sx={{ padding: 0 }}>
+                        <ProposalTab />
+                    </TabPanel>
+                    <TabPanel value={tabs.Progress} key={tabs.Progress} sx={{ padding: 0 }}>
+                        <ProgressTab />
+                    </TabPanel>
+                </Box>
+            </Box>
             <Box style={{ padding: 12 }}>
                 <ChainBoundary
                     expectedPluginID={NetworkPluginID.PLUGIN_EVM}
@@ -133,6 +185,6 @@ export function Snapshot() {
                     ActionButtonPromiseProps={{ variant: 'roundedDark' }}
                 />
             </Box>
-        </>
+        </TabContext>
     )
 }

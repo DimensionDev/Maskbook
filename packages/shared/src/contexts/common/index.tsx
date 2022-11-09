@@ -1,18 +1,18 @@
-import type { FC, PropsWithChildren } from 'react'
-import { ConfirmProvider } from './Confirm'
-import { SelectFungibleTokenProvider } from './SelectFungibleTokenDialog'
-import { SelectGasSettingsProvider } from './SelectAdvancedSettingsDialog'
+import type { PropsWithChildren } from 'react'
+import { ConfirmProvider } from './Confirm/index.js'
+import { SelectFungibleTokenProvider } from './SelectFungibleTokenDialog/index.js'
+import { SelectGasSettingsProvider } from './SelectAdvancedSettingsDialog/index.js'
+import { compose } from '@masknet/shared-base'
 
-export * from './Confirm'
-export * from './SelectFungibleTokenDialog'
-export * from './SelectAdvancedSettingsDialog'
+export * from './Confirm/index.js'
+export * from './SelectFungibleTokenDialog/index.js'
+export * from './SelectAdvancedSettingsDialog/index.js'
 
-export const CommonUIProvider: FC<PropsWithChildren<{}>> = ({ children }) => {
-    return (
-        <ConfirmProvider>
-            <SelectFungibleTokenProvider>
-                <SelectGasSettingsProvider>{children}</SelectGasSettingsProvider>
-            </SelectFungibleTokenProvider>
-        </ConfirmProvider>
+export function CommonUIProvider({ children }: PropsWithChildren<{}>) {
+    return compose(
+        (children) => ConfirmProvider({ children }),
+        (children) => SelectFungibleTokenProvider({ children }),
+        (children) => SelectGasSettingsProvider({ children }),
+        <>{children}</>,
     )
 }

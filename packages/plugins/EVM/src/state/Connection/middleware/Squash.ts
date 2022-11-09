@@ -1,8 +1,8 @@
 import { sha3 } from 'web3-utils'
 import type { RequestArguments, TransactionConfig } from 'web3-core'
-import { defer } from '@dimensiondev/kit'
+import { defer } from '@masknet/kit'
 import { EthereumMethodType } from '@masknet/web3-shared-evm'
-import type { Context, Middleware, EVM_Web3ConnectionOptions } from '../types'
+import type { Context, Middleware, EVM_Web3ConnectionOptions } from '../types.js'
 
 /**
  * Squash multiple RPC requests into a single one.

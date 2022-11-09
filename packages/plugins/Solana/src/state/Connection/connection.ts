@@ -1,17 +1,20 @@
-import { MagicEden } from '@masknet/web3-providers'
+import { MagicEden, SolanaFungible } from '@masknet/web3-providers'
 import {
     Account,
     ConnectionOptions,
     createNonFungibleToken,
     FungibleToken,
+    isSameAddress,
     NonFungibleToken,
-    NonFungibleTokenCollection,
+    NonFungibleCollection,
     NonFungibleTokenContract,
     NonFungibleTokenMetadata,
     TransactionStatusType,
 } from '@masknet/web3-shared-base'
 import {
+    AddressType,
     ChainId,
+    createClient,
     createNativeToken,
     decodeAddress,
     getNativeTokenAddress,
@@ -27,14 +30,12 @@ import {
     SystemProgram,
     Transaction,
 } from '@solana/web3.js'
-import { NETWORK_ENDPOINTS } from '../../constants'
-import { SolanaRPC } from '../../messages'
-import { Web3StateSettings } from '../../settings'
 import type { Plugin } from '@masknet/plugin-infra'
-import { Providers } from './provider'
-import { createTransferInstruction, getOrCreateAssociatedTokenAccount } from './spl-token'
-import type { SolanaConnection as BaseConnection, SolanaWeb3ConnectionOptions } from './types'
 import type { PartialRequired } from '@masknet/shared-base'
+import { Web3StateSettings } from '../../settings/index.js'
+import { Providers } from './provider.js'
+import { createTransferInstruction, getOrCreateAssociatedTokenAccount } from './spl-token/index.js'
+import type { SolanaConnection as BaseConnection, SolanaWeb3ConnectionOptions } from './types.js'
 
 class Connection implements BaseConnection {
     private connections: Map<ChainId, SolConnection> = new Map()
@@ -66,8 +67,7 @@ class Connection implements BaseConnection {
 
     private async _attachRecentBlockHash(transaction: Transaction, initial?: SolanaWeb3ConnectionOptions) {
         const options = this.getOptions(initial)
-        const connection =
-            this.connections.get(options.chainId) ?? new SolConnection(NETWORK_ENDPOINTS[options.chainId])
+        const connection = this.connections.get(options.chainId) ?? createClient(options.chainId)
         const blockHash = await connection.getRecentBlockhash()
         transaction.recentBlockhash = blockHash.blockhash
         return transaction
@@ -120,8 +120,7 @@ class Connection implements BaseConnection {
     ): Promise<string> {
         const options = this.getOptions(initial)
         if (!options.account) throw new Error('No payer provides.')
-        const connection =
-            this.connections.get(options.chainId) ?? new SolConnection(NETWORK_ENDPOINTS[options.chainId])
+        const connection = this.connections.get(options.chainId) ?? createClient(options.chainId)
 
         const payerPubkey = new PublicKey(options.account)
         const recipientPubkey = new PublicKey(recipient)
@@ -197,19 +196,25 @@ class Connection implements BaseConnection {
     }
     transferNonFungibleToken(
         address: string,
+        tokenId: string,
         recipient: string,
-        mintAddress: string,
         amount: string,
         schema?: SchemaType,
         initial?: SolanaWeb3ConnectionOptions,
     ): Promise<string> {
         const options = this.getOptions(initial)
-        return this.transferSplToken(mintAddress, recipient, amount, options)
+        return this.transferSplToken(address, recipient, amount, options)
     }
     getGasPrice(initial?: SolanaWeb3ConnectionOptions): Promise<string> {
         throw new Error('Method not implemented.')
     }
-    getTokenSchema(address: string, initial?: SolanaWeb3ConnectionOptions): Promise<SchemaType> {
+    getAddressType(
+        address: string,
+        initial?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined,
+    ): Promise<AddressType | undefined> {
+        return Promise.resolve(AddressType.Default)
+    }
+    getSchemaType(address: string, initial?: SolanaWeb3ConnectionOptions): Promise<SchemaType> {
         throw new Error('Method not implemented.')
     }
     getNonFungibleTokenContract(
@@ -223,7 +228,7 @@ class Connection implements BaseConnection {
         address: string,
         schemaType?: SchemaType,
         initial?: SolanaWeb3ConnectionOptions,
-    ): Promise<NonFungibleTokenCollection<ChainId, SchemaType>> {
+    ): Promise<NonFungibleCollection<ChainId, SchemaType>> {
         throw new Error('Method not implemented.')
     }
     async switchChain(chainId: ChainId, initial?: SolanaWeb3ConnectionOptions) {
@@ -248,7 +253,9 @@ class Connection implements BaseConnection {
         if (isNativeTokenAddress(address)) {
             return this.getNativeTokenBalance(options)
         }
-        return SolanaRPC.getSplTokenBalance(options.chainId, options.account, address)
+        const { data: assets } = await SolanaFungible.getAssets(options.account, options)
+        const asset = assets.find((x) => isSameAddress(x.address, address))
+        return asset?.balance ?? '0'
     }
     getNonFungibleTokenBalance(
         address: string,
@@ -264,8 +271,8 @@ class Connection implements BaseConnection {
     ): Promise<Record<string, string>> {
         const options = this.getOptions(initial)
         if (!options.account) return {}
-        const splTokens = await SolanaRPC.getSplTokenList(options.chainId, options.account)
-        const records = splTokens.reduce(
+        const { data: assets } = await SolanaFungible.getAssets(options.account, options)
+        const records = assets.reduce(
             (map: Record<string, string>, asset) => ({ ...map, [asset.address]: asset.balance }),
             {},
         )
@@ -287,8 +294,7 @@ class Connection implements BaseConnection {
 
     getWeb3Connection(initial?: SolanaWeb3ConnectionOptions) {
         const options = this.getOptions(initial)
-        const connection =
-            this.connections.get(options.chainId) ?? new SolConnection(NETWORK_ENDPOINTS[options.chainId])
+        const connection = this.connections.get(options.chainId) ?? createClient(options.chainId)
         this.connections.set(options.chainId, connection)
         return connection
     }
@@ -406,8 +412,8 @@ class Connection implements BaseConnection {
         if (!address || isNativeTokenAddress(address)) {
             return this.getNativeToken()
         }
-        const splTokens = await SolanaRPC.getAllSplTokens()
-        const token = splTokens.find((x) => x.address === address)
+        const tokens = await SolanaFungible.getFungibleTokenList(options.chainId, [])
+        const token = tokens.find((x) => isSameAddress(x.address, address))
         return (
             token ??
             ({
@@ -434,6 +440,14 @@ class Connection implements BaseConnection {
             asset?.contract,
             asset?.collection,
         )
+    }
+    getNonFungibleTokenOwner(
+        address: string,
+        tokenId: string,
+        schema?: SchemaType,
+        initial?: SolanaWeb3ConnectionOptions,
+    ): Promise<string> {
+        throw new Error('Method not implemented.')
     }
     getNonFungibleTokenOwnership(
         address: string,

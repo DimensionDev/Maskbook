@@ -1,5 +1,5 @@
-import type { Web3Helper } from '@masknet/plugin-infra/web3'
-import type { NetworkPluginID, NonFungibleToken } from '@masknet/web3-shared-base'
+import type { Web3Helper } from '@masknet/web3-helpers'
+import type { NetworkPluginID } from '@masknet/shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 
 export interface AvatarMetaDB {
@@ -10,6 +10,7 @@ export interface AvatarMetaDB {
     chainId?: ChainId
     schema?: SchemaType
     pluginId?: NetworkPluginID
+    ownerAddress?: string
 }
 
 export interface NFT {
@@ -21,13 +22,13 @@ export interface NFT {
     slug: string
 }
 
-export type AllChainsNonFungibleToken = NonFungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
+export type AllChainsNonFungibleToken = Web3Helper.NonFungibleTokenAll
 
 export interface SelectTokenInfo {
     account: string
     token: AllChainsNonFungibleToken
     image: string
-    pluginId: NetworkPluginID
+    pluginID: NetworkPluginID
 }
 
 export interface NextIDAvatarMeta extends AvatarMetaDB {
@@ -40,19 +41,22 @@ export interface NFTRSSNode {
     nft: AvatarMetaDB
 }
 
-export const RSS3Cache = new Map<string, [Promise<NFTRSSNode | undefined>, number]>()
-
 export interface NFTInfo {
     amount: string
     name: string
     symbol: string
-    image: string
-    owner: string
-    slug: string
-    permalink: string
+    image?: string
+    owner?: string
+    slug?: string
+    permalink?: string
 }
 
 export enum PFP_TYPE {
     BACKGROUND = 'background',
     PFP = 'pfp',
 }
+
+export type AvatarMeta = NextIDAvatarMeta & { sign: string }
+
+export type AddressStorageV1 = { address: string; networkPluginID: NetworkPluginID }
+export type AddressStorageV2 = Record<string, AddressStorageV1> & Record<NetworkPluginID, string>

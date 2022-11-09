@@ -1,13 +1,12 @@
 import { Link, Stack, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { resolveDaysName } from '../../pipes'
-import classNames from 'classnames'
+import { resolveDaysName } from '../../pipes.js'
+import { TrendingAPI } from '@masknet/web3-providers'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
         background: theme.palette.background.input,
         borderRadius: 28,
-        fontSize: 14,
         padding: theme.spacing(0.5),
     },
     active: {
@@ -26,21 +25,14 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export enum Days {
-    MAX = 0,
-    ONE_DAY = 1,
-    ONE_WEEK = 7,
-    ONE_MONTH = 30,
-    THREE_MONTHS = 90,
-    ONE_YEAR = 365,
-}
+const Days = TrendingAPI.Days
 
 export const DEFAULT_RANGE_OPTIONS = [Days.ONE_DAY, Days.ONE_WEEK, Days.ONE_MONTH, Days.ONE_YEAR, Days.MAX]
-export const NFT_RANGE_OPTIONS = [Days.ONE_DAY, Days.ONE_WEEK, Days.ONE_MONTH, Days.THREE_MONTHS]
+export const NFT_RANGE_OPTIONS = [Days.ONE_DAY, Days.ONE_WEEK, Days.ONE_MONTH, Days.THREE_MONTHS, Days.MAX]
 
 export interface PriceChartDaysControlProps {
     days: number
-    rangeOptions?: Days[]
+    rangeOptions?: TrendingAPI.Days[]
     onDaysChange?: (days: number) => void
 }
 
@@ -49,12 +41,12 @@ export function PriceChartDaysControl({
     days,
     onDaysChange,
 }: PriceChartDaysControlProps) {
-    const { classes } = useStyles()
+    const { classes, cx } = useStyles()
     return (
         <Stack className={classes.root} direction="row" gap={2}>
             {rangeOptions.map((daysOption) => (
                 <Link
-                    className={classNames(classes.link, days === daysOption ? classes.active : '')}
+                    className={cx(classes.link, days === daysOption ? classes.active : '')}
                     key={daysOption}
                     onClick={() => onDaysChange?.(daysOption)}>
                     <Typography sx={{ ':hover': { fontWeight: 700 } }} component="span">

@@ -1,18 +1,18 @@
-import { formatFileSize } from '@dimensiondev/kit'
-import { Button, Grid, Typography } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
-import formatDateTime from 'date-fns/format'
 import { useEffect } from 'react'
 import { File } from 'react-feather'
 import { useNavigate, useLocation } from 'react-router-dom'
-import { useExchange } from '../hooks/Exchange'
-import { useI18N } from '../../locales/i18n_generated'
-import { FileRouter } from '../../constants'
-import type { FileInfo } from '../../types'
-import { FileName } from './FileName'
-import { resolveGatewayAPI } from '../../helpers'
 import urlcat from 'urlcat'
+import { formatFileSize } from '@masknet/kit'
+import { Button, Grid, Typography } from '@mui/material'
 import { openWindow } from '@masknet/shared-base-ui'
+import { makeStyles } from '@masknet/theme'
+import formatDateTime from 'date-fns/format'
+import { useExchange } from '../hooks/Exchange.js'
+import { useI18N } from '../../locales/i18n_generated.js'
+import { FileRouter } from '../../constants.js'
+import type { FileInfo } from '../../types.js'
+import { FileName } from './FileName.js'
+import { resolveGatewayAPI } from '../../helpers.js'
 
 const useStyles = makeStyles()({
     container: {
@@ -25,18 +25,7 @@ const useStyles = makeStyles()({
         paddingTop: 18,
         paddingBottom: 18,
     },
-    name: {
-        fontSize: 16,
-        lineHeight: 1.75,
-        color: '#3B3B3B',
-        textAlign: 'center',
-        overflow: 'hidden',
-        textOverflow: 'ellipsis',
-        width: 400,
-        whiteSpace: 'nowrap',
-    },
     meta: {
-        fontSize: 14,
         lineHeight: 1.71,
         color: '#5D6F88',
         textAlign: 'center',
@@ -68,7 +57,7 @@ export const Uploaded: React.FC = () => {
     }, [onInsert, state])
     const onBack = () => {
         onInsert(null)
-        navigate(FileRouter.upload)
+        navigate(FileRouter.Prepare)
     }
 
     // return upload route

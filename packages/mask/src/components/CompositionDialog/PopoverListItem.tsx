@@ -1,7 +1,6 @@
 import { makeStyles } from '@masknet/theme'
 import { Box, Radio, Typography } from '@mui/material'
 import type { ReactNode } from 'react'
-import { CheckCircle } from '@mui/icons-material'
 
 const useStyles = makeStyles()((theme) => ({
     item: {
@@ -9,12 +8,10 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
     },
     mainTitle: {
-        fontSize: 14,
         color: theme.palette.text.primary,
         fontWeight: 700,
     },
     subTitle: {
-        fontSize: 14,
         color: theme.palette.text.secondary,
         whiteSpace: 'nowrap',
     },
@@ -39,7 +36,7 @@ export function PopoverListItem(props: PopoverListItemProps) {
                 style={disabled ? { opacity: 0.5, pointerEvents: 'none' } : {}}
                 className={itemTail ? cx(classes.item, classes.pointer) : classes.item}
                 onClick={onItemClick}>
-                <Radio checkedIcon={<CheckCircle />} disabled={disabled} value={value} />
+                <Radio disabled={disabled} value={value} />
                 <Box>
                     <Typography className={classes.mainTitle}>{title}</Typography>
                     <Typography className={classes.subTitle}>{subTitle}</Typography>

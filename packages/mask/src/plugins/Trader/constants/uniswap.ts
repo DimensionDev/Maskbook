@@ -1,7 +1,6 @@
 import { ChainId, AMPL, DAI, USDC, USDT, WBTC, WNATIVE, WNATIVE_ONLY, OP } from '@masknet/web3-shared-evm'
 import { Percent } from '@uniswap/sdk-core'
-import JSBI from 'jsbi'
-import type { ERC20AgainstToken, ERC20TokenCustomizedBase } from './types'
+import type { ERC20AgainstToken, ERC20TokenCustomizedBase } from './types.js'
 
 /**
  * Some tokens can only be swapped via certain pairs,
@@ -25,10 +24,10 @@ export const UNISWAP_BASE_AGAINST_TOKENS: ERC20AgainstToken = {
 
 export const MAX_HOP = 3
 
-export const DEFAULT_MULTICALL_GAS_LIMIT = 2_000_000
+export const DEFAULT_MULTICALL_GAS_LIMIT = 2000000
 
 // used to ensure the user doesn't send so much ETH so they end up with <.01
-export const BETTER_TRADE_LESS_HOPS_THRESHOLD = new Percent(JSBI.BigInt(50), JSBI.BigInt(10000))
+export const BETTER_TRADE_LESS_HOPS_THRESHOLD = new Percent(50, 10000)
 
-export const ZERO_PERCENT = new Percent('0')
-export const ONE_HUNDRED_PERCENT = new Percent('1')
+export const ZERO_PERCENT = new Percent(0)
+export const ONE_HUNDRED_PERCENT = new Percent(1)

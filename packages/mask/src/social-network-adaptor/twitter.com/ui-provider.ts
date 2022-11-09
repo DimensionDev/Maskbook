@@ -1,40 +1,47 @@
-import { globalUIState, SocialNetworkUI, stateCreator } from '../../social-network'
-import { twitterBase } from './base'
-import getSearchedKeywordAtTwitter from './collecting/getSearchedKeyword'
-import { twitterShared } from './shared'
-import { InitAutonomousStateProfiles } from '../../social-network/defaults/state/InitProfiles'
-import { openComposeBoxTwitter } from './automation/openComposeBox'
-import { pasteTextToCompositionTwitter } from './automation/pasteTextToComposition'
-import { gotoNewsFeedPageTwitter } from './automation/gotoNewsFeedPage'
-import { gotoProfilePageTwitter } from './automation/gotoProfilePage'
-import { IdentityProviderTwitter, CurrentVisitingIdentityProviderTwitter } from './collecting/identity'
-import { collectVerificationPost, PostProviderTwitter } from './collecting/post'
-import { PaletteModeProviderTwitter, useThemeTwitterVariant } from './customization/custom'
-import { injectToolboxHintAtTwitter } from './injection/ToolboxHint'
-import { i18NOverwriteTwitter } from './customization/i18n'
-import { injectSearchResultBoxAtTwitter } from './injection/SearchResultBox'
-import { injectProfileTabAtTwitter } from './injection/ProfileTab'
-import { injectProfileTabContentAtTwitter } from './injection/ProfileTabContent'
-import { injectPostReplacerAtTwitter } from './injection/PostReplacer'
-import { injectPageInspectorDefault } from '../../social-network/defaults/inject/PageInspector'
-import { injectSetupPromptAtTwitter } from './injection/SetupPrompt'
-import { injectPostBoxComposed } from './injection/inject'
-import { createTaskStartSetupGuideDefault } from '../../social-network/defaults/inject/StartSetupGuide'
-import { injectMaskUserBadgeAtTwitter } from './injection/MaskIcon'
-import { pasteImageToCompositionDefault } from '../../social-network/defaults/automation/AttachImageToComposition'
-import { injectPostInspectorAtTwitter } from './injection/PostInspector'
-import { injectPostActionsAtTwitter } from './injection/PostActions'
+/* eslint-disable tss-unused-classes/unused-classes */
+import type { SocialNetworkUI } from '@masknet/types'
+import { globalUIState, stateCreator } from '../../social-network/index.js'
+import { twitterBase } from './base.js'
+import getSearchedKeywordAtTwitter from './collecting/getSearchedKeyword.js'
+import { twitterShared } from './shared.js'
+import { InitAutonomousStateProfiles } from '../../social-network/defaults/state/InitProfiles.js'
+import { openComposeBoxTwitter } from './automation/openComposeBox.js'
+import { pasteTextToCompositionTwitter } from './automation/pasteTextToComposition.js'
+import { pasteImageToCompositionTwitter } from './automation/pasteImageToComposition.js'
+import { gotoNewsFeedPageTwitter } from './automation/gotoNewsFeedPage.js'
+import { gotoProfilePageTwitter } from './automation/gotoProfilePage.js'
+import { IdentityProviderTwitter, CurrentVisitingIdentityProviderTwitter } from './collecting/identity.js'
+import { collectVerificationPost, PostProviderTwitter } from './collecting/post.js'
+import { PaletteModeProviderTwitter, useThemeTwitterVariant } from './customization/custom.js'
+import { injectToolboxHintAtTwitter } from './injection/ToolboxHint.js'
+import { i18NOverwriteTwitter } from './customization/i18n.js'
+import { injectSearchResultBoxAtTwitter } from './injection/SearchResultBox.js'
+import { injectProfileTabAtTwitter } from './injection/ProfileTab.js'
+import { injectProfileTabContentAtTwitter } from './injection/ProfileTabContent.js'
+import { injectPostReplacerAtTwitter } from './injection/PostReplacer.js'
+import { injectPageInspectorDefault } from '../../social-network/defaults/inject/PageInspector.js'
+import { injectSetupPromptAtTwitter } from './injection/SetupPrompt.js'
+import { injectPostBoxComposed } from './injection/inject.js'
+import { createTaskStartSetupGuideDefault } from '../../social-network/defaults/inject/StartSetupGuide.js'
+import { injectMaskUserBadgeAtTwitter } from './injection/MaskIcon.js'
+import { injectPostInspectorAtTwitter } from './injection/PostInspector.js'
+import { injectPostActionsAtTwitter } from './injection/PostActions/index.js'
 import { EnhanceableSite, NextIDPlatform, ProfileIdentifier } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
-import { injectNFTAvatarInTwitter } from './injection/NFT/NFTAvatarInTwitter'
-import { injectOpenTipButtonOnProfile } from './injection/Tip/index'
-import { injectUserNFTAvatarAtTwitter } from './injection/NFT/Avatar'
-import { injectOpenNFTAvatarEditProfileButton, openNFTAvatarSettingDialog } from './injection/NFT/NFTAvatarEditProfile'
-import { injectUserNFTAvatarAtTweet } from './injection/NFT/TweetNFTAvatar'
-import { injectNFTAvatarClipInTwitter } from './injection/NFT/NFTAvatarClip'
-import { TwitterRenderFragments } from './customization/render-fragments'
-import { injectProfileCover } from './injection/ProfileCover'
-import { injectAvatar } from './injection/Avatar'
+import { injectNFTAvatarInTwitter } from './injection/NFT/NFTAvatarInTwitter.js'
+import { injectTips } from './injection/Tips/index.js'
+import { injectUserNFTAvatarAtTwitter } from './injection/NFT/Avatar.js'
+import {
+    injectOpenNFTAvatarEditProfileButton,
+    openNFTAvatarSettingDialog,
+} from './injection/NFT/NFTAvatarEditProfile.js'
+import { injectUserNFTAvatarAtTweet } from './injection/NFT/TweetNFTAvatar.js'
+import { injectNFTAvatarClipInTwitter } from './injection/NFT/NFTAvatarClip.js'
+import { TwitterRenderFragments } from './customization/render-fragments.js'
+import { injectProfileCover } from './injection/ProfileCover.js'
+import { injectProfileCardHolder } from './injection/ProfileCard/index.js'
+import { injectAvatar } from './injection/Avatar/index.js'
+import { injectPluginSettingsDialogAtTwitter } from './injection/PluginSettingsDialog.js'
 
 const useInjectedDialogClassesOverwriteTwitter = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -128,7 +135,7 @@ const twitterUI: SocialNetworkUI.Definition = {
         nativeCompositionDialog: {
             appendText: pasteTextToCompositionTwitter,
             // TODO: make a better way to detect
-            attachImage: pasteImageToCompositionDefault(() => false),
+            attachImage: pasteImageToCompositionTwitter(() => false),
         },
         redirect: {
             newsFeed: gotoNewsFeedPageTwitter,
@@ -186,12 +193,14 @@ const twitterUI: SocialNetworkUI.Definition = {
         commentComposition: undefined,
         userAvatar: injectUserNFTAvatarAtTwitter,
         profileAvatar: injectNFTAvatarInTwitter,
-        profileTip: injectOpenTipButtonOnProfile,
         openNFTAvatar: injectOpenNFTAvatarEditProfileButton,
         postAndReplyNFTAvatar: injectUserNFTAvatarAtTweet,
         avatarClipNFT: injectNFTAvatarClipInTwitter,
         openNFTAvatarSettingDialog,
         avatar: injectAvatar,
+        tips: injectTips,
+        profileCard: injectProfileCardHolder,
+        PluginSettingsDialog: injectPluginSettingsDialogAtTwitter,
     },
     configuration: {
         nextIDConfig: {

@@ -1,7 +1,7 @@
+import { createContext, PropsWithChildren, useContext, useMemo } from 'react'
 import { ValueRef } from '@dimensiondev/holoflows-kit'
-import { createContext, FC, PropsWithChildren, useContext, useMemo } from 'react'
 import { useValueRef } from '@masknet/shared-base-ui'
-import type { SharedComponentOverwrite } from './types'
+import type { SharedComponentOverwrite } from './types.js'
 
 export const sharedUINetworkIdentifier = new ValueRef('unknown')
 export const sharedUIComponentOverwrite = new ValueRef<SharedComponentOverwrite>({})
@@ -15,8 +15,9 @@ const BaseUIContext = createContext<ContextOptions>({
     networkIdentifier: sharedUINetworkIdentifier.value,
     componentOverwrite: sharedUIComponentOverwrite.value,
 })
+BaseUIContext.displayName = 'BaseUIContext'
 
-export const BaseSharedUIProvider: FC<PropsWithChildren<{}>> = ({ children }) => {
+export function BaseSharedUIProvider({ children }: PropsWithChildren<{}>) {
     const snsId = useValueRef(sharedUINetworkIdentifier)
     const overwrite = useValueRef(sharedUIComponentOverwrite)
 

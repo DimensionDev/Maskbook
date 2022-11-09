@@ -1,13 +1,14 @@
 import { Icons } from '@masknet/icons'
-import { useReverseAddress, useWallets, useWeb3State } from '@masknet/plugin-infra/web3'
+import { useReverseAddress, useWallets, useWeb3State } from '@masknet/web3-hooks-base'
 import { FormattedAddress, useSnackbarCallback } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { isSameAddress } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { ChainId, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { Link, Typography } from '@mui/material'
 import { useMemo } from 'react'
 import { useCopyToClipboard } from 'react-use'
-import { useI18N } from '../../locales'
+import { useI18N } from '../../locales/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     currentAccount: {
@@ -29,7 +30,6 @@ const useStyles = makeStyles()((theme) => ({
     },
     accountName: {
         fontWeight: 700,
-        fontSize: 14,
         marginRight: 6,
     },
     address: {
@@ -39,7 +39,7 @@ const useStyles = makeStyles()((theme) => ({
         display: 'inline-block',
     },
     link: {
-        color: theme.palette.text.primary,
+        color: theme.palette.maskColor.second,
         fontSize: 14,
         display: 'flex',
         alignItems: 'center',
@@ -59,37 +59,23 @@ const useStyles = makeStyles()((theme) => ({
         fontWeight: 700,
         marginLeft: 4,
     },
-    domain: {
-        fontSize: 16,
-        lineHeight: '18px',
-        marginLeft: 6,
-        padding: 4,
-        borderRadius: 8,
-        backgroundColor: '#ffffff',
-        color: theme.palette.common.black,
+    disabled: {
+        cursor: 'default',
+        color: theme.palette.maskColor.third,
     },
 }))
 
 interface WalletItemProps {
     address: string
     isDefault?: boolean
-    canDelete?: boolean
+    deletable?: boolean
     onDelete?: () => void
     fallbackName?: string
-    nowIdx: number
-    setAsDefault?: (idx: number) => void
+    setAsDefault?: (address: string) => void
 }
 
-export function WalletItem({
-    address,
-    isDefault,
-    canDelete,
-    fallbackName,
-    setAsDefault,
-    nowIdx,
-    onDelete,
-}: WalletItemProps) {
-    const { classes } = useStyles()
+export function WalletItem({ address, isDefault, deletable, fallbackName, setAsDefault, onDelete }: WalletItemProps) {
+    const { classes, cx } = useStyles()
     const t = useI18N()
     const [, copyToClipboard] = useCopyToClipboard()
     const { value: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, address)
@@ -111,24 +97,24 @@ export function WalletItem({
         if (domain && Others?.formatDomainName) {
             return Others.formatDomainName(domain)
         }
-        const currentWallet = wallets.find((x) => Others?.isSameAddress(x.address, address))
+        const currentWallet = wallets.find((x) => isSameAddress(x.address, address))
         const name = currentWallet?.name
         return name !== undefined && currentWallet?.hasStoredKeyInfo ? name : fallbackName
     }, [address, domain, fallbackName])
 
     const getActionRender = () => {
-        if (!canDelete && !isDefault)
+        if (!deletable)
             return (
                 <Typography
-                    className={classes.actionBtn}
+                    className={cx(classes.actionBtn, isDefault ? classes.disabled : undefined)}
                     onClick={() => {
-                        if (!setAsDefault) return
-                        setAsDefault(nowIdx ?? 0)
+                        if (isDefault) return
+                        setAsDefault?.(address)
                     }}>
                     {t.tip_set_as_default()}
                 </Typography>
             )
-        if (canDelete) return <Icons.Trash onClick={onDelete} size={24} className={classes.actionBtn} />
+        if (deletable) return <Icons.Trash onClick={onDelete} size={24} className={classes.actionBtn} />
         return null
     }
     return (

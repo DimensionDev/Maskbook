@@ -1,0 +1,10 @@
+{
+  "extends": "../../../../tsconfig.json",
+  "compilerOptions": {
+    "rootDir": "./",
+    "outDir": "../../dist/runtime/",
+    "tsBuildInfoFile": "../../dist/runtime.tsbuildinfo"
+  },
+  "include": ["./"],
+  "references": []
+}

@@ -1,10 +1,11 @@
 import { useCallback, useState } from 'react'
-import { makeStyles } from '@masknet/theme'
-import { Button, CircularProgress, DialogActions, DialogContent } from '@mui/material'
+import { ActionButton, makeStyles } from '@masknet/theme'
+import { Button, DialogActions, DialogContent } from '@mui/material'
 import { InjectedDialog } from '@masknet/shared'
-import { useI18N } from '../../utils'
-import { SelectProfileUI } from '../shared/SelectProfileUI'
+import { useI18N } from '../../utils/index.js'
+import { SelectProfileUI } from '../shared/SelectProfileUI/index.js'
 import type { ProfileInformation as Profile } from '@masknet/shared-base'
+import { uniqBy } from 'lodash-es'
 
 export interface SelectProfileDialogProps {
     open: boolean
@@ -14,9 +15,7 @@ export interface SelectProfileDialogProps {
     onSelect: (people: Profile[]) => Promise<void>
 }
 const useStyles = makeStyles()({
-    title: { paddingBottom: 0 },
     content: { padding: '0 12px' },
-    progress: { marginRight: 6 },
 })
 
 export function SelectProfileDialog(props: SelectProfileDialogProps) {
@@ -32,8 +31,10 @@ export function SelectProfileDialog(props: SelectProfileDialogProps) {
     const [rejection, onReject] = useState<Error>()
     const share = useCallback(() => {
         setCommitted(true)
-        props.onSelect(people).then(onClose, onReject)
-    }, [onClose, people, props])
+        props
+            .onSelect(uniqBy([...people, ...props.alreadySelectedPreviously], (x) => x.identifier))
+            .then(onClose, onReject)
+    }, [onClose, people, props.onSelect])
 
     const canCommit = committed || people.length === 0
     return (
@@ -58,12 +59,9 @@ export function SelectProfileDialog(props: SelectProfileDialogProps) {
                 <Button size="large" onClick={onClose}>
                     {t('cancel')}
                 </Button>
-                <Button size="large" color="inherit" disabled={canCommit} onClick={share}>
-                    {committed && (
-                        <CircularProgress aria-busy className={classes.progress} size={16} variant="indeterminate" />
-                    )}
+                <ActionButton loading={committed} size="large" color="inherit" disabled={canCommit} onClick={share}>
                     {t(committed ? 'sharing' : 'share')}
-                </Button>
+                </ActionButton>
             </DialogActions>
         </InjectedDialog>
     )

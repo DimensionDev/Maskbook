@@ -1,8 +1,8 @@
 import { ProfileIdentifier, EnhanceableSite } from '@masknet/shared-base'
-import Services from '../../../extension/service'
-import { getCurrentIdentifier } from '../../utils'
-import { searchUserIdOnMobileSelector } from './selector'
 import type { IdentityResolved } from '@masknet/plugin-infra'
+import Services from '../../../extension/service.js'
+import { getCurrentIdentifier } from '../../utils.js'
+import { searchUserIdOnMobileSelector } from './selector.js'
 
 type link = HTMLAnchorElement | null | undefined
 

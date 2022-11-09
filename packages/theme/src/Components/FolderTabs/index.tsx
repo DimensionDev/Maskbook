@@ -1,7 +1,6 @@
 import { Children, FC, useState, HTMLProps, ReactElement } from 'react'
-import classnames from 'classnames'
-import { makeStyles } from '../../UIHelper/makeStyles'
-import { MaskColorVar } from '../../CSSVariables'
+import { makeStyles } from '../../UIHelper/makeStyles.js'
+import { MaskColorVar } from '../../CSSVariables/index.js'
 
 const useStyles = makeStyles<void, 'selected'>()((theme, _, refs) => {
     const { palette } = theme
@@ -9,7 +8,6 @@ const useStyles = makeStyles<void, 'selected'>()((theme, _, refs) => {
     const inactiveColor = isDark ? theme.palette.grey['50'] : MaskColorVar.twitterBg
     const selected = {}
     return {
-        folderTabs: {},
         selected,
         tabList: {
             display: 'flex',
@@ -64,8 +62,8 @@ interface TabPanelProps extends HTMLProps<HTMLDivElement> {
 }
 
 export const FolderTabPanel: FC<TabPanelProps> = ({ className, ...rest }) => {
-    const { classes } = useStyles()
-    return <div className={classnames(classes.tabPanel, className)} role="tabpanel" {...rest} />
+    const { classes, cx } = useStyles()
+    return <div className={cx(classes.tabPanel, className)} role="tabpanel" {...rest} />
 }
 
 type TabPanelReactElement = ReactElement<TabPanelProps, FC<TabPanelProps>>
@@ -73,7 +71,7 @@ type TabPanelReactElement = ReactElement<TabPanelProps, FC<TabPanelProps>>
 interface FolderTabsProps extends HTMLProps<HTMLDivElement> {}
 
 export const FolderTabs: FC<FolderTabsProps> = ({ children: childNodes, defaultValue = 0, ...rest }) => {
-    const { classes } = useStyles()
+    const { classes, cx } = useStyles()
     const [value, setValue] = useState(defaultValue)
     const tabs = Children.map(childNodes as TabPanelReactElement[], (child, index) => {
         const label = child.props.label
@@ -84,7 +82,7 @@ export const FolderTabs: FC<FolderTabsProps> = ({ children: childNodes, defaultV
                 key={label}
                 tabIndex={index === 0 ? 0 : -1}
                 role="tab"
-                className={classnames(classes.tab, selected ? classes.selected : null)}
+                className={cx(classes.tab, selected ? classes.selected : null)}
                 onClick={() => setValue(childValue)}>
                 {label}
             </button>

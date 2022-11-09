@@ -1,6 +1,6 @@
 import { toHex } from 'web3-utils'
 import type { RequestArguments } from 'web3-core'
-import { delay } from '@dimensiondev/kit'
+import { delay } from '@masknet/kit'
 import { Emitter } from '@servie/events'
 import type { Account, ProviderEvents, ProviderOptions } from '@masknet/web3-shared-base'
 import {
@@ -11,9 +11,8 @@ import {
     ProviderType,
     EthereumMethodType,
     getRPCConstants,
-    NetworkType,
 } from '@masknet/web3-shared-evm'
-import type { EVM_Provider } from '../types'
+import type { EVM_Provider } from '../types.js'
 
 export class BaseProvider implements EVM_Provider {
     emitter = new Emitter<ProviderEvents<ChainId, ProviderType>>()
@@ -30,7 +29,9 @@ export class BaseProvider implements EVM_Provider {
 
     // Switch chain with RPC calls by default
     async switchChain(chainId?: ChainId): Promise<void> {
-        if (chainId && chainResolver.chainNetworkType(chainId) === NetworkType.Ethereum) {
+        if (!chainId) throw new Error('Unknown chain id.')
+
+        try {
             await this.request({
                 method: EthereumMethodType.WALLET_SWITCH_ETHEREUM_CHAIN,
                 params: [
@@ -39,21 +40,30 @@ export class BaseProvider implements EVM_Provider {
                     },
                 ],
             })
-        } else if (chainId) {
-            await this.request<void>({
-                method: EthereumMethodType.WALLET_ADD_ETHEREUM_CHAIN,
-                params: [
-                    {
-                        chainId: toHex(chainId),
-                        chainName: chainResolver.chainName(chainId),
-                        nativeCurrency: chainResolver.nativeCurrency(chainId),
-                        rpcUrls: getRPCConstants(chainId).RPC_URLS ?? [],
-                        blockExplorerUrls: [chainResolver.infoURL(chainId)?.url],
-                    },
-                ],
-            })
-        } else {
-            throw new Error('Unknown chain id.')
+        } catch (error) {
+            const errorMessage = (error as { message?: string } | undefined)?.message
+
+            // error message if the chain doesn't exist from metamask
+            // Unrecognized chain ID "xxx". Try adding the chain using wallet_addEthereumChain first.
+            if (
+                typeof errorMessage === 'string' &&
+                errorMessage?.includes(EthereumMethodType.WALLET_ADD_ETHEREUM_CHAIN)
+            ) {
+                await this.request<void>({
+                    method: EthereumMethodType.WALLET_ADD_ETHEREUM_CHAIN,
+                    params: [
+                        {
+                            chainId: toHex(chainId),
+                            chainName: chainResolver.chainFullName(chainId) ?? chainResolver.chainName(chainId),
+                            nativeCurrency: chainResolver.nativeCurrency(chainId),
+                            rpcUrls: getRPCConstants(chainId).RPC_URLS_OFFICIAL ?? [],
+                            blockExplorerUrls: [chainResolver.explorerURL(chainId)?.url],
+                        },
+                    ],
+                })
+            } else {
+                throw error
+            }
         }
 
         // Delay to make sure the provider will return the newest chain id.

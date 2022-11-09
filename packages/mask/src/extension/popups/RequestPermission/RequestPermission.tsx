@@ -8,7 +8,7 @@ import {
     DialogActions,
     DialogContent,
 } from '@mui/material'
-import { useI18N } from '../../../utils'
+import { useI18N } from '../../../utils/index.js'
 
 export interface RequestPermissionProps extends browser.permissions.Permissions {
     onRequestApprove(): void

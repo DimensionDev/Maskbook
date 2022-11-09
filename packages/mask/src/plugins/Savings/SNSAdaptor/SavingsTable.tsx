@@ -3,16 +3,15 @@ import { makeStyles } from '@masknet/theme'
 import { Box, Button, Grid, Typography } from '@mui/material'
 import { FormattedBalance, TokenIcon } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
-import { isZero, rightShift, formatBalance, isSameAddress, NetworkPluginID, TokenType } from '@masknet/web3-shared-base'
+import { formatBalance, isZero, rightShift } from '@masknet/web3-shared-base'
 import type { ChainId, Web3 } from '@masknet/web3-shared-evm'
-import { ProviderIconURLs } from './IconURL'
-import { useI18N } from '../../../utils'
-import { ProtocolType, SavingsProtocol, TabType } from '../types'
-import { useAccount, useWeb3, useFungibleAssets } from '@masknet/plugin-infra/web3'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { useCallback } from 'react'
-import { PluginTraderMessages } from '../../Trader/messages'
-import { LDO_PAIRS } from '../constants'
+import { ProviderIconURLs } from './IconURL.js'
+import { useI18N } from '../../../utils/index.js'
+import { ProtocolType, SavingsProtocol, TabType } from '../types.js'
+import { useChainContext, useFungibleAssets, useWeb3, useFungibleTokenBalance } from '@masknet/web3-hooks-base'
+import { CrossIsolationMessages, NetworkPluginID } from '@masknet/shared-base'
+import { useCallback, useMemo } from 'react'
+import { LDO_PAIRS } from '../constants.js'
 
 const useStyles = makeStyles()((theme, props) => ({
     containerWrap: {
@@ -34,11 +33,6 @@ const useStyles = makeStyles()((theme, props) => ({
         '&:last-child': {
             marginBottom: 0,
         },
-    },
-    tableItem: {
-        display: 'flex',
-        background: theme.palette.mode === 'light' ? '#F6F8F8' : '#17191D',
-        borderRadius: theme.spacing(1),
     },
     tableCell: {
         display: 'flex',
@@ -70,7 +64,6 @@ const useStyles = makeStyles()((theme, props) => ({
         width: '100%',
     },
     loading: {
-        fontSize: 14,
         color: theme.palette.text.primary,
         lineHeight: '18px',
         marginTop: 12,
@@ -104,10 +97,12 @@ export function SavingsTable({ chainId, tab, protocols, setTab, setSelectedProto
     const { classes } = useStyles()
 
     const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM, { chainId })
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
-    const { value: assets, loading: getAssetsLoading } = useFungibleAssets(NetworkPluginID.PLUGIN_EVM)
-    const { setDialog: openSwapDialog } = useRemoteControlledDialog(PluginTraderMessages.swapDialogUpdated)
+    const { value: assets, loading: getAssetsLoading } = useFungibleAssets(NetworkPluginID.PLUGIN_EVM, undefined, {
+        chainId,
+    })
+
     // Only fetch protocol APR and Balance on chainId change
     const { loading } = useAsync(async () => {
         await Promise.all(
@@ -121,28 +116,20 @@ export function SavingsTable({ chainId, tab, protocols, setTab, setSelectedProto
     const onConvertClick = useCallback(() => {
         const ETH = LDO_PAIRS[0][0]
         const sETH = LDO_PAIRS[0][1]
-        openSwapDialog({
+        CrossIsolationMessages.events.swapDialogEvent.sendToLocal({
             open: true,
             traderProps: {
-                defaultInputCoin: {
-                    id: sETH.address,
-                    name: sETH.name ?? '',
-                    symbol: sETH.symbol ?? '',
-                    contract_address: sETH.address,
-                    decimals: sETH.decimals,
-                    type: TokenType.Fungible,
-                },
-                defaultOutputCoin: {
-                    id: ETH.address,
-                    name: ETH.name ?? '',
-                    symbol: ETH.symbol ?? '',
-                    contract_address: ETH.address,
-                    decimals: ETH.decimals,
-                    type: TokenType.Fungible,
-                },
+                defaultInputCoin: sETH,
+                defaultOutputCoin: ETH,
             },
         })
-    }, [openSwapDialog])
+    }, [LDO_PAIRS])
+
+    const renderProtocols = useMemo(() => {
+        if (tab === TabType.Deposit) return protocols
+        return protocols.filter((x) => !x.balance.isZero())
+    }, [tab, protocols])
+
     return (
         <Box className={classes.containerWrap}>
             <Grid container spacing={0} className={classes.tableHeader}>
@@ -167,75 +154,78 @@ export function SavingsTable({ chainId, tab, protocols, setTab, setSelectedProto
                     <Icons.CircleLoading size={36} className={classes.animated} />
                     <Typography className={classes.loading}>{t('popups_loading')}</Typography>
                 </div>
-            ) : protocols.filter((x) => !x.balance.isZero()).length ? (
+            ) : renderProtocols.length ? (
                 <div className={classes.tableContainer}>
-                    {protocols
-                        .filter((x) => !x.balance.isZero())
-                        .map((protocol, index) => (
-                            <Grid container spacing={0} className={classes.tableRow} key={index}>
-                                <Grid item xs={4} className={classes.tableCell}>
-                                    <div className={classes.logoWrap}>
-                                        <TokenIcon
-                                            name={protocol.bareToken.name}
-                                            address={protocol.bareToken.address}
-                                            classes={{ icon: classes.logo }}
-                                            chainId={chainId}
-                                        />
-                                        <img src={ProviderIconURLs[protocol.type]} className={classes.logoMini} />
-                                    </div>
-                                    <div>
-                                        <Typography variant="body1" className={classes.protocolLabel}>
-                                            {protocol.bareToken.symbol}
-                                        </Typography>
-                                    </div>
-                                </Grid>
-                                {tab === TabType.Deposit ? (
-                                    <Grid item xs={2} className={classes.tableCell}>
-                                        <Typography variant="body1">{protocol.apr}%</Typography>
-                                    </Grid>
-                                ) : null}
-                                <Grid xs={tab === TabType.Deposit ? 3 : 5} className={classes.tableCell}>
-                                    <Typography variant="body1">
-                                        <FormattedBalance
-                                            value={
-                                                tab === TabType.Deposit
-                                                    ? assets!.find((x) =>
-                                                          isSameAddress(x.address, protocol.bareToken.address),
-                                                      )?.balance
-                                                    : protocol.balance
-                                            }
-                                            decimals={protocol.bareToken.decimals}
-                                            significant={6}
-                                            minimumBalance={rightShift(10, protocol.bareToken.decimals - 6)}
-                                            formatter={formatBalance}
-                                        />
+                    {renderProtocols.map((protocol, index) => (
+                        <Grid container spacing={0} className={classes.tableRow} key={index}>
+                            <Grid item xs={4} className={classes.tableCell}>
+                                <div className={classes.logoWrap}>
+                                    <TokenIcon
+                                        name={protocol.bareToken.name}
+                                        address={protocol.bareToken.address}
+                                        className={classes.logo}
+                                        chainId={chainId}
+                                    />
+                                    <img src={ProviderIconURLs[protocol.type]} className={classes.logoMini} />
+                                </div>
+                                <div>
+                                    <Typography variant="body1" className={classes.protocolLabel}>
+                                        {protocol.bareToken.symbol}
                                     </Typography>
-                                </Grid>
-                                <Grid item xs={3} className={classes.tableCell}>
-                                    <Button
-                                        color="primary"
-                                        disabled={tab === TabType.Withdraw ? isZero(protocol.balance) : false}
-                                        onClick={() => {
-                                            if (tab === TabType.Withdraw && protocol.type === ProtocolType.Lido) {
-                                                onConvertClick()
-                                                return
-                                            }
-                                            setTab(tab)
-                                            setSelectedProtocol(protocol)
-                                        }}>
-                                        {tab === TabType.Deposit
-                                            ? t('plugin_savings_deposit')
-                                            : t('plugin_savings_withdraw')}
-                                    </Button>
-                                </Grid>
+                                </div>
                             </Grid>
-                        ))}
+                            {tab === TabType.Deposit ? (
+                                <Grid item xs={2} className={classes.tableCell}>
+                                    <Typography variant="body1">{protocol.apr}%</Typography>
+                                </Grid>
+                            ) : null}
+                            <Grid item xs={tab === TabType.Deposit ? 3 : 5} className={classes.tableCell}>
+                                <FungibleTokenBalance tab={tab} protocol={protocol} />
+                            </Grid>
+                            <Grid item xs={3} className={classes.tableCell}>
+                                <Button
+                                    color="primary"
+                                    disabled={tab === TabType.Withdraw ? isZero(protocol.balance) : false}
+                                    onClick={() => {
+                                        if (tab === TabType.Withdraw && protocol.type === ProtocolType.Lido) {
+                                            onConvertClick()
+                                            return
+                                        }
+                                        setTab(tab)
+                                        setSelectedProtocol(protocol)
+                                    }}>
+                                    {tab === TabType.Deposit
+                                        ? t('plugin_savings_deposit')
+                                        : t('plugin_savings_withdraw')}
+                                </Button>
+                            </Grid>
+                        </Grid>
+                    ))}
                 </div>
             ) : (
                 <div className={classes.placeholder}>
-                    <Icons.Direct size={36} className={classes.direct} />
+                    <Icons.EmptySimple size={36} className={classes.direct} />
                 </div>
             )}
         </Box>
+    )
+}
+
+function FungibleTokenBalance({ protocol, tab }: { protocol: SavingsProtocol; tab: TabType }) {
+    const { value: tokenBalance = '0' } = useFungibleTokenBalance(
+        NetworkPluginID.PLUGIN_EVM,
+        protocol.bareToken.address,
+    )
+
+    return (
+        <Typography variant="body1">
+            <FormattedBalance
+                value={tab === TabType.Deposit ? tokenBalance : protocol.balance}
+                decimals={protocol.bareToken.decimals}
+                significant={6}
+                minimumBalance={rightShift(10, protocol.bareToken.decimals - 6)}
+                formatter={formatBalance}
+            />
+        </Typography>
     )
 }

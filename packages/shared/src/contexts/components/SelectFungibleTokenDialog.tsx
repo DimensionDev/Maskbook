@@ -1,14 +1,15 @@
-import { useCallback, FC, useState } from 'react'
-import { useCurrentWeb3NetworkPluginID, useNativeTokenAddress, Web3Helper } from '@masknet/plugin-infra/web3'
+import { useCallback, FC, useState, useMemo } from 'react'
+import { useNetworkContext, useNativeTokenAddress } from '@masknet/web3-hooks-base'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import { FungibleTokenList, useSharedI18N } from '@masknet/shared'
-import { EMPTY_LIST, EnhanceableSite, isDashboardPage } from '@masknet/shared-base'
+import { EMPTY_LIST, EnhanceableSite, isDashboardPage, NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import type { FungibleToken, NetworkPluginID } from '@masknet/web3-shared-base'
+import type { FungibleToken } from '@masknet/web3-shared-base'
 import { DialogContent, Theme, useMediaQuery } from '@mui/material'
-import { useBaseUIRuntime } from '../base'
-import { InjectedDialog } from '../components'
-import { useRowSize } from './useRowSize'
-import { TokenListMode } from '../../UI/components/FungibleTokenList/type'
+import { useBaseUIRuntime } from '../base/index.js'
+import { InjectedDialog } from '../components/index.js'
+import { useRowSize } from './useRowSize.js'
+import { TokenListMode } from '../../UI/components/FungibleTokenList/type.js'
 
 interface StyleProps {
     compact: boolean
@@ -28,18 +29,6 @@ const useStyles = makeStyles<StyleProps>()((theme, { compact, isDashboard }) => 
             display: 'none',
         },
     },
-    list: {
-        scrollbarWidth: 'none',
-        '&::-webkit-scrollbar': {
-            display: 'none',
-        },
-    },
-    placeholder: {
-        textAlign: 'center',
-        height: 288,
-        paddingTop: theme.spacing(14),
-        boxSizing: 'border-box',
-    },
     search: {
         backgroundColor: isDashboard ? 'transparent !important' : theme.palette.maskColor.input,
         border: `solid 1px ${MaskColorVar.twitterBorderLine}`,
@@ -52,6 +41,7 @@ const useStyles = makeStyles<StyleProps>()((theme, { compact, isDashboard }) => 
 
 export interface SelectFungibleTokenDialogProps<T extends NetworkPluginID = NetworkPluginID> {
     open: boolean
+    enableManage?: boolean
     pluginID?: T
     chainId?: Web3Helper.Definition[T]['ChainId']
     keyword?: string
@@ -80,11 +70,12 @@ export const SelectFungibleTokenDialog: FC<SelectFungibleTokenDialogProps> = ({
     onSubmit,
     onClose,
     title,
+    enableManage = true,
 }) => {
     const t = useSharedI18N()
     const { networkIdentifier } = useBaseUIRuntime()
     const compact = networkIdentifier === EnhanceableSite.Minds
-    const pluginId = useCurrentWeb3NetworkPluginID(pluginID)
+    const { pluginID: currentPluginID } = useNetworkContext(pluginID)
     const { classes } = useStyles({ compact, isDashboard })
     const isMdScreen = useMediaQuery<Theme>((theme) => theme.breakpoints.down('md'))
 
@@ -94,7 +85,7 @@ export const SelectFungibleTokenDialog: FC<SelectFungibleTokenDialogProps> = ({
         getCurrentMode(): TokenListMode
     }>()
 
-    const nativeTokenAddress = useNativeTokenAddress(pluginId)
+    const nativeTokenAddress = useNativeTokenAddress(currentPluginID)
 
     const onRefChange = useCallback(
         (node: { updateMode(mode: TokenListMode): void; getCurrentMode(): TokenListMode }) => {
@@ -102,6 +93,11 @@ export const SelectFungibleTokenDialog: FC<SelectFungibleTokenDialogProps> = ({
             setCurrentModeRef(node)
         },
         [],
+    )
+
+    const FixedSizeListProps = useMemo(
+        () => ({ itemSize: rowSize + 22, height: isMdScreen ? 300 : 428, className: classes.wrapper }),
+        [rowSize, isMdScreen],
     )
 
     return (
@@ -121,23 +117,18 @@ export const SelectFungibleTokenDialog: FC<SelectFungibleTokenDialogProps> = ({
             <DialogContent classes={{ root: classes.content }}>
                 <FungibleTokenList
                     ref={onRefChange}
-                    classes={{ list: classes.list, placeholder: classes.placeholder }}
-                    pluginID={pluginId}
+                    pluginID={currentPluginID}
                     chainId={chainId}
                     tokens={tokens ?? []}
                     whitelist={whitelist}
-                    enableManage
+                    enableManage={enableManage}
                     blacklist={
                         disableNativeToken && nativeTokenAddress ? [nativeTokenAddress, ...blacklist] : blacklist
                     }
                     disableSearch={disableSearchBar}
                     selectedTokens={selectedTokens}
                     onSelect={onSubmit}
-                    FixedSizeListProps={{
-                        itemSize: rowSize + 22,
-                        height: isMdScreen ? 300 : 428,
-                        className: classes.wrapper,
-                    }}
+                    FixedSizeListProps={FixedSizeListProps}
                     SearchTextFieldProps={{
                         InputProps: { classes: { root: classes.search } },
                     }}

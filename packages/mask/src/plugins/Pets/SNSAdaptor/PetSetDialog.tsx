@@ -1,11 +1,10 @@
-import { useState, useMemo, ReactNode, Fragment } from 'react'
+import { useState, useMemo, ReactNode } from 'react'
 import { useTimeout } from 'react-use'
-import { Constant, NetworkPluginID } from '@masknet/web3-shared-base'
-import { ChainId } from '@masknet/web3-shared-evm'
-import { makeStyles, useStylesExtends, useCustomSnackbar, ShadowRootPopper, ActionButton } from '@masknet/theme'
+import type { Constant } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { makeStyles, useCustomSnackbar, ShadowRootPopper, ActionButton, LoadingBase } from '@masknet/theme'
 import { useValueRef } from '@masknet/shared-base-ui'
 import {
-    TextField,
     Typography,
     Box,
     Grid,
@@ -14,21 +13,19 @@ import {
     Autocomplete,
     FormControlLabel,
     Checkbox,
-    CircularProgress,
     useTheme,
+    InputBase,
 } from '@mui/material'
-import { PluginPetMessages, PluginPetRPC } from '../messages'
-import { initMeta, initCollection, GLB3DIcon } from '../constants'
-import { PreviewBox } from './PreviewBox'
-import { PetMetaDB, FilterContract, OwnerERC721TokenInfo, ImageType } from '../types'
-import { useUser, useNFTs } from '../hooks'
-import { PluginWalletStatusBar } from '../../../utils'
-import { useI18N } from '../locales'
-import { ImageLoader } from './ImageLoader'
-import { petShowSettings } from '../settings'
-import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
-import { useWeb3Connection } from '@masknet/plugin-infra/web3'
-import { saveCustomEssayToRSS } from '../Services/rss3'
+import { PluginPetMessages } from '../messages.js'
+import { initMeta, initCollection, GLB3DIcon, PetsPluginID } from '../constants.js'
+import { PreviewBox } from './PreviewBox.js'
+import { PetMetaDB, FilterContract, OwnerERC721TokenInfo, ImageType } from '../types.js'
+import { useUser, useNFTs } from '../hooks/index.js'
+import { PluginWalletStatusBar } from '@masknet/shared'
+import { useI18N } from '../locales/index.js'
+import { ImageLoader } from './ImageLoader.js'
+import { petShowSettings } from '../settings.js'
+import { useWeb3Connection, useWeb3State } from '@masknet/web3-hooks-base'
 import { Icons } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => ({
@@ -50,14 +47,6 @@ const useStyles = makeStyles()((theme) => ({
     },
     inputOption: {
         margin: theme.spacing(4, 0, 0),
-    },
-    inputBorder: {
-        borderRadius: theme.spacing(1),
-        padding: theme.spacing(1),
-    },
-    inputArea: {
-        borderRadius: theme.spacing(1),
-        padding: theme.spacing(2),
     },
     menuItem: {
         width: '100%',
@@ -93,14 +82,6 @@ const useStyles = makeStyles()((theme) => ({
         maxWidth: '260px',
         overflow: 'hidden',
     },
-    prevBox: {
-        margin: theme.spacing(2, 0, 0),
-        border: '1px dashed #ccc',
-        borderRadius: 4,
-        height: 'calc(100% - 16px)',
-        boxSizing: 'border-box',
-        padding: 4,
-    },
     boxPaper: {
         backgroundColor: theme.palette.mode === 'dark' ? '#1B1E38' : '#FFFFFF',
         marginBottom: 10,
@@ -109,8 +90,11 @@ const useStyles = makeStyles()((theme) => ({
     icon: {
         margin: theme.spacing(0, 1),
     },
-    RSS3Icon: {
-        color: theme.palette.mode === 'light' ? '#000' : '#fff',
+    arrowIcon: {
+        width: 22.5,
+        height: 22.5,
+        top: 'calc(50% - 11.25px)',
+        color: theme.palette.maskColor.second,
     },
 }))
 
@@ -121,7 +105,7 @@ interface PetSetDialogProps {
 
 export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
     const t = useI18N()
-    const classes = useStylesExtends(useStyles(), {})
+    const { classes } = useStyles()
     const theme = useTheme()
     const { showSnackbar } = useCustomSnackbar()
     const [loading, setLoading] = useState(false)
@@ -129,7 +113,7 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
     const [isReady, cancel] = useTimeout(2000)
 
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
-
+    const { Storage } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const user = useUser()
     const { nfts, state } = useNFTs(user)
     const blacklist = Object.values(configNFTs ?? {}).map((v) => v.Mainnet)
@@ -170,11 +154,12 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
             chainId: chosenToken?.chainId,
         }
         try {
-            await PluginPetRPC.setUserAddress(user)
+            if (!Storage) return
+            const kvStorage = Storage.createKVStorage(PetsPluginID)
+            await kvStorage.set(user.userId, user.address)
             const signature = await connection?.signMessage(user.userId, 'personalSign', { account: user.address })
-            if (signature && connection) {
-                await saveCustomEssayToRSS(user.address, meta, signature, connection)
-            }
+            const storage = Storage.createRSS3Storage(user.address)
+            storage.set('_pet', { address: user.address, signature, essay: meta })
             closeDialogHandle()
         } catch {
             showSnackbar(t.pets_dialog_fail(), { variant: 'error' })
@@ -261,22 +246,18 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
                     </MenuItem>
                 )}
                 renderInput={(params) => (
-                    <TextField
-                        {...params}
-                        label={t.pets_dialog_contract()}
+                    <InputBase
+                        {...params.InputProps}
+                        fullWidth
+                        placeholder={t.pets_dialog_contract()}
                         error={isCollectionsError}
                         className={classes.input}
                         inputProps={{ ...params.inputProps }}
-                        InputProps={{
-                            ...params.InputProps,
-                            classes: { root: classes.inputBorder },
-                            endAdornment: (
-                                <Fragment>
-                                    {state ? <CircularProgress color="inherit" size={20} /> : null}
-                                    {params.InputProps.endAdornment}
-                                </Fragment>
-                            ),
-                        }}
+                        endAdornment={
+                            <Box pr={2} display="flex" alignItems="center">
+                                {state ? <LoadingBase size={20} /> : <Icons.ArrowDrop className={classes.arrowIcon} />}
+                            </Box>
+                        }
                     />
                 )}
             />
@@ -304,13 +285,18 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
                     </Box>
                 )}
                 renderInput={(params) => (
-                    <TextField
-                        {...params}
-                        label={t.pets_dialog_token()}
+                    <InputBase
+                        {...params.InputProps}
+                        fullWidth
+                        placeholder={t.pets_dialog_token()}
                         error={isImageError}
                         className={classes.input}
                         inputProps={{ ...params.inputProps }}
-                        InputProps={{ ...params.InputProps, classes: { root: classes.inputBorder } }}
+                        endAdornment={
+                            <Box pr={2} display="flex" alignItems="center">
+                                <Icons.ArrowDrop className={classes.arrowIcon} />
+                            </Box>
+                        }
                     />
                 )}
             />
@@ -332,10 +318,9 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
                     <Grid item xs={8}>
                         {nftsRender}
                         {tokensRender}
-                        <TextField
+                        <InputBase
                             className={classes.inputOption}
-                            InputProps={{ classes: { root: classes.inputArea } }}
-                            label={holderChange ? t.pets_dialog_msg_optional() : t.pets_dialog_msg()}
+                            placeholder={holderChange ? t.pets_dialog_msg_optional() : t.pets_dialog_msg()}
                             fullWidth
                             multiline
                             rows={3}
@@ -359,7 +344,7 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
                         {t.pets_powered_by()}
                     </Typography>
                     <Typography color="textPrimary" fontSize={14} fontWeight={700}>
-                        MintTeam
+                        NFF
                     </Typography>
                     <Icons.Pets className={classes.icon} />
                     <Typography fontSize={14} color="textSecondary" fontWeight={700} className={classes.des}>
@@ -373,23 +358,14 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
             </Box>
 
             <PluginWalletStatusBar>
-                <ChainBoundary
-                    expectedPluginID={NetworkPluginID.PLUGIN_EVM}
-                    expectedChainId={ChainId.Mainnet}
-                    predicate={(actualPluginID) => actualPluginID === NetworkPluginID.PLUGIN_EVM}
-                    noSwitchNetworkTip
-                    ActionButtonPromiseProps={{
-                        fullWidth: true,
-                    }}>
-                    <ActionButton
-                        loading={loading}
-                        fullWidth
-                        className={classes.btn}
-                        onClick={saveHandle}
-                        disabled={!collection.name || !metaData.image}>
-                        {t.pets_dialog_btn()}
-                    </ActionButton>
-                </ChainBoundary>
+                <ActionButton
+                    loading={loading}
+                    fullWidth
+                    className={classes.btn}
+                    onClick={saveHandle}
+                    disabled={!collection.name || !metaData.image}>
+                    {t.pets_dialog_btn()}
+                </ActionButton>
             </PluginWalletStatusBar>
 
             <Snackbar

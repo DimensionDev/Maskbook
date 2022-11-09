@@ -1,6 +1,6 @@
 import * as fcl from '@blocto/fcl'
-import type { ChainId } from '../types'
-import { getAuthConstants } from '../constants'
+import type { ChainId } from '../types.js'
+import { getAuthConstants } from '../constants/index.js'
 
 export function createClient(chainId: ChainId) {
     const authConstants = getAuthConstants(chainId)

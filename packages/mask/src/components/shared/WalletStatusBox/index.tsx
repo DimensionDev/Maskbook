@@ -1,6 +1,6 @@
+import { useCopyToClipboard } from 'react-use'
 import {
-    useAccount,
-    useChainId,
+    useChainContext,
     useNetworkDescriptor,
     useProviderDescriptor,
     useReverseAddress,
@@ -9,29 +9,28 @@ import {
     useWeb3State,
     useWeb3Connection,
     useBalance,
-} from '@masknet/plugin-infra/web3'
+    useChainIdValid,
+    useNetworkContext,
+} from '@masknet/web3-hooks-base'
 import { FormattedAddress, useSnackbarCallback, WalletIcon } from '@masknet/shared'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { isDashboardPage } from '@masknet/shared-base'
 import { formatBalance } from '@masknet/web3-shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { getMaskColor, makeStyles } from '@masknet/theme'
-import { Button, Link, Typography } from '@mui/material'
-import classNames from 'classnames'
+import { Button, Link, Typography, useTheme } from '@mui/material'
 import { Icons } from '@masknet/icons'
-import { useCopyToClipboard } from 'react-use'
-import { WalletMessages } from '../../../plugins/Wallet/messages'
-import { useI18N } from '../../../utils'
-import { usePendingTransactions } from './usePendingTransactions'
+import { WalletMessages } from '../../../plugins/Wallet/messages.js'
+import { useI18N } from '../../../utils/index.js'
+import { usePendingTransactions } from './usePendingTransactions.js'
+import { delay } from '@masknet/kit'
 
 const useStyles = makeStyles<{
     contentBackground?: string
     disableChange?: boolean
     withinRiskWarningDialog?: boolean
-}>()((theme, { contentBackground, disableChange, withinRiskWarningDialog }) => ({
-    content: {
-        padding: theme.spacing(2, 3, 3),
-    },
+    textColor?: string
+}>()((theme, { contentBackground, disableChange, withinRiskWarningDialog, textColor }) => ({
     currentAccount: {
         padding: theme.spacing(0, 1.5),
         marginBottom: withinRiskWarningDialog ? '7px' : theme.spacing(2),
@@ -52,15 +51,13 @@ const useStyles = makeStyles<{
         marginLeft: theme.spacing(1.5),
     },
     accountName: {
-        color: !isDashboardPage() ? theme.palette.maskColor.dark : undefined,
+        color: !isDashboardPage() ? theme.palette.maskColor.dark : textColor,
         fontWeight: 700,
-        fontSize: 14,
         marginRight: 5,
         lineHeight: '18px',
     },
     balance: {
-        color: !isDashboardPage() ? theme.palette.maskColor.dark : undefined,
-        fontSize: 14,
+        color: !isDashboardPage() ? theme.palette.maskColor.dark : textColor,
         paddingTop: 2,
         lineHeight: '18px',
     },
@@ -78,19 +75,10 @@ const useStyles = makeStyles<{
             backgroundColor: theme.palette.maskColor.dark,
         },
     },
-    address: {
-        fontSize: 16,
-        marginRight: theme.spacing(1),
-        display: 'inline-block',
-    },
     link: {
         fontSize: 14,
         display: 'flex',
         alignItems: 'center',
-    },
-    twitterProviderBorder: {
-        width: 14,
-        height: 14,
     },
     connectButtonWrapper: {
         display: 'flex',
@@ -104,16 +92,16 @@ const useStyles = makeStyles<{
         marginRight: theme.spacing(0.5),
     },
     copyIcon: {
-        color: isDashboardPage() ? theme.palette.text.primary : theme.palette.maskColor.dark,
+        color: isDashboardPage() ? textColor : theme.palette.maskColor.dark,
     },
     linkIcon: {
-        color: isDashboardPage() ? theme.palette.text.primary : theme.palette.maskColor?.dark,
+        color: isDashboardPage() ? textColor : theme.palette.maskColor?.dark,
     },
     statusBox: {
         position: 'relative',
     },
 }))
-interface WalletStatusBox {
+export interface WalletStatusBox {
     disableChange?: boolean
     withinRiskWarningDialog?: boolean
     showPendingTransaction?: boolean
@@ -123,14 +111,30 @@ export function WalletStatusBox(props: WalletStatusBox) {
     const { t } = useI18N()
 
     const providerDescriptor = useProviderDescriptor<'all'>()
-    const { classes } = useStyles({
+    const theme = useTheme()
+    const { classes, cx } = useStyles({
         contentBackground: providerDescriptor?.backgroundGradient,
         disableChange: props.disableChange,
         withinRiskWarningDialog: props.withinRiskWarningDialog,
+        textColor:
+            providerDescriptor?.type === ProviderType.MaskWallet
+                ? theme.palette.maskColor.dark
+                : theme.palette.text.primary,
     })
+
     const connection = useWeb3Connection()
-    const chainId = useChainId()
-    const account = useAccount()
+    const { pluginID } = useNetworkContext()
+    const { account, chainId, ...rest } = useChainContext()
+
+    console.log('DEBUG: useChainContext')
+    console.log({
+        pluginID,
+        account,
+        chainId,
+        ...rest,
+    })
+
+    const chainIdValid = useChainIdValid()
     const wallet = useWallet()
     const { value: balance = '0', loading: loadingBalance } = useBalance()
     const { value: nativeToken, loading: loadingNativeToken } = useNativeToken()
@@ -165,10 +169,25 @@ export function WalletStatusBox(props: WalletStatusBox) {
 
     const { summary: pendingSummary, transactionList } = usePendingTransactions()
 
-    return account ? (
+    if (!Others?.isValidAddress(account)) {
+        return (
+            <section className={classes.connectButtonWrapper}>
+                <Button
+                    className={cx(classes.actionButton)}
+                    color="primary"
+                    variant="contained"
+                    size="small"
+                    onClick={openSelectProviderDialog}>
+                    {t('plugin_wallet_on_connect')}
+                </Button>
+            </section>
+        )
+    }
+
+    return (
         <>
             <section
-                className={classNames(
+                className={cx(
                     classes.statusBox,
                     classes.currentAccount,
                     isDashboardPage() ? classes.dashboardBackground : '',
@@ -177,7 +196,7 @@ export function WalletStatusBox(props: WalletStatusBox) {
                     size={30}
                     badgeSize={12}
                     mainIcon={providerDescriptor?.icon}
-                    badgeIcon={networkDescriptor?.icon}
+                    badgeIcon={chainIdValid ? networkDescriptor?.icon : undefined}
                 />
                 <div className={classes.accountInfo}>
                     {ProviderType.MaskWallet === providerDescriptor?.type ? (
@@ -197,16 +216,18 @@ export function WalletStatusBox(props: WalletStatusBox) {
                             component="button"
                             title={t('wallet_status_button_copy_address')}
                             onClick={onCopy}>
-                            <Icons.Copy className={classNames(classes.icon, classes.copyIcon)} />
+                            <Icons.Copy className={cx(classes.icon, classes.copyIcon)} />
                         </Link>
-                        <Link
-                            className={classes.link}
-                            href={Others?.explorerResolver.addressLink?.(chainId, account) ?? ''}
-                            target="_blank"
-                            title={t('plugin_wallet_view_on_explorer')}
-                            rel="noopener noreferrer">
-                            <Icons.LinkOut className={classNames(classes.icon, classes.linkIcon)} />
-                        </Link>
+                        {chainIdValid ? (
+                            <Link
+                                className={classes.link}
+                                href={Others?.explorerResolver.addressLink?.(chainId, account) ?? ''}
+                                target="_blank"
+                                title={t('plugin_wallet_view_on_explorer')}
+                                rel="noopener noreferrer">
+                                <Icons.LinkOut className={cx(classes.icon, classes.linkIcon)} />
+                            </Link>
+                        ) : null}
                     </div>
 
                     {props.withinRiskWarningDialog ? null : (
@@ -223,11 +244,13 @@ export function WalletStatusBox(props: WalletStatusBox) {
                 {!props.disableChange && (
                     <section>
                         <Button
-                            className={classNames(classes.actionButton)}
+                            className={cx(classes.actionButton)}
                             variant="contained"
                             size="small"
                             onClick={async () => {
                                 props.closeDialog?.()
+                                // TODO: remove this after global dialog be implement
+                                await delay(500)
                                 closeWalletStatusDialog()
                                 await connection?.disconnect()
                                 openSelectProviderDialog()
@@ -235,7 +258,7 @@ export function WalletStatusBox(props: WalletStatusBox) {
                             {t('plugin_wallet_disconnect')}
                         </Button>
                         <Button
-                            className={classNames(classes.actionButton)}
+                            className={cx(classes.actionButton)}
                             variant="contained"
                             size="small"
                             onClick={openSelectProviderDialog}>
@@ -251,16 +274,5 @@ export function WalletStatusBox(props: WalletStatusBox) {
                 </div>
             ) : null}
         </>
-    ) : (
-        <section className={classes.connectButtonWrapper}>
-            <Button
-                className={classNames(classes.actionButton)}
-                color="primary"
-                variant="contained"
-                size="small"
-                onClick={openSelectProviderDialog}>
-                {t('plugin_wallet_on_connect')}
-            </Button>
-        </section>
     )
 }

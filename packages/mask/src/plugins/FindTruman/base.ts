@@ -1,7 +1,7 @@
 import type { Plugin } from '@masknet/plugin-infra'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
-import { FIND_TRUMAN_PLUGIN_ID, FIND_TRUMAN_PLUGIN_NAME } from './constants'
+import { FIND_TRUMAN_PLUGIN_ID, FIND_TRUMAN_PLUGIN_NAME } from './constants.js'
 
 export const base: Plugin.Shared.Definition = {
     ID: FIND_TRUMAN_PLUGIN_ID,

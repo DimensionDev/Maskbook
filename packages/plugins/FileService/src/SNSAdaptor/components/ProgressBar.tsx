@@ -1,18 +1,9 @@
-import { formatFileSize } from '@dimensiondev/kit'
+import { formatFileSize } from '@masknet/kit'
 import { Typography, LinearProgress, Box } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { useI18N } from '../../locales/i18n_generated'
+import { useI18N } from '../../locales/i18n_generated.js'
 
 const useStyles = makeStyles()({
-    container: {
-        height: 250,
-        flexDirection: 'column',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        userSelect: 'none',
-        paddingTop: 18,
-        paddingBottom: 18,
-    },
     progress: {
         display: 'flex',
         alignItems: 'center',

@@ -4,22 +4,20 @@
     "rootDir": "./",
     "outDir": "../dist/src/",
     "tsBuildInfoFile": "../dist/legacy.tsbuildinfo",
-    "emitDeclarationOnly": true,
-    "lib": ["ES2021"]
+    "emitDeclarationOnly": true
   },
   "include": ["./", "./**/*.json"],
-
-  // ! Note: mask/ depends dashboard/ on source-code level
-  // !       but dashboard/ depends mask/ on type level
-  // !       do not add dashboard/ as a reference otherwise there is a circular dependency on the type level.
   "references": [
+    { "path": "../../dashboard" },
     { "path": "../../public-api" },
     { "path": "../../shared" },
     { "path": "../../backup-format" },
     { "path": "../../shared-base" },
     { "path": "../../shared-base-ui" },
     { "path": "../../typed-message/base" },
-    { "path": "../../typed-message/dom" },
+    { "path": "../../typed-message/react" },
+    { "path": "../../web3-hooks/base" },
+    { "path": "../../web3-hooks/evm" },
     { "path": "../../web3-shared/base" },
     { "path": "../../web3-shared/evm" },
     { "path": "../../web3-shared/flow" },
@@ -29,19 +27,19 @@
     { "path": "../../plugin-infra" },
     { "path": "../../plugins/Wallet" },
     { "path": "../../plugins/GoPlusSecurity" },
-    { "path": "../../plugins/DAO" },
-    { "path": "../../plugins/FileService" },
     { "path": "../../plugins/EVM" },
     { "path": "../../plugins/Flow" },
     { "path": "../../plugins/Solana" },
     { "path": "../../external-plugin-previewer" },
     { "path": "../../injected-script/sdk" },
     { "path": "../../mask-sdk/server" },
+    { "path": "../../sandboxed-plugin-runtime/src/site-adaptor" },
     { "path": "../web-workers" },
     { "path": "../utils-pure" },
     { "path": "../utils-ui" },
     { "path": "../background" },
     { "path": "../shared" },
-    { "path": "../shared-ui" }
+    { "path": "../shared-ui" },
+    { "path": "../../types" }
   ]
 }

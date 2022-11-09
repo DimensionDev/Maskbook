@@ -1,6 +1,6 @@
 import type { Plugin } from '@masknet/plugin-infra'
-import { PLUGIN_ID, PLUGIN_NAME, PLUGIN_DESCRIPTION } from './constants'
-import { languages } from './locales/languages'
+import { PLUGIN_ID, PLUGIN_NAME, PLUGIN_DESCRIPTION } from './constants.js'
+import { languages } from './locales/languages.js'
 
 export const base: Plugin.Shared.Definition = {
     ID: PLUGIN_ID,
@@ -11,6 +11,7 @@ export const base: Plugin.Shared.Definition = {
         architecture: { app: true, web: true },
         networks: { type: 'opt-out', networks: {} },
         target: 'stable',
+        host_permissions: ['https://gitcoin.co/'],
     },
     contribution: { postContent: new Set([/https:\/\/gitcoin.co\/grants\/\d+/]) },
     i18n: languages,

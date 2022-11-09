@@ -1,7 +1,11 @@
 {
   "name": "@masknet/web3-constants",
   "private": true,
+  "type": "module",
   "scripts": {
     "start": "ts-node compile-constants.ts"
+  },
+  "dependencies": {
+    "@masknet/web3-contracts": "workspace:*"
   }
 }

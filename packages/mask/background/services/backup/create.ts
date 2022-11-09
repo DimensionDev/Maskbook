@@ -1,5 +1,5 @@
 import { BackupPreview, generateBackupRAW, getBackupPreviewInfo } from '@masknet/backup-format'
-import { createNewBackup } from './internal_create'
+import { createNewBackup } from './internal_create.js'
 
 export interface MobileBackupOptions {
     noPosts?: boolean
@@ -23,7 +23,7 @@ export async function mobile_generateBackupJSON(options: MobileBackupOptions): P
 
 export async function generateBackupPreviewInfo(): Promise<BackupPreview> {
     // can we avoid create a full backup?
-    const backup = await createNewBackup({})
+    const backup = await createNewBackup({ allProfile: true })
     return getBackupPreviewInfo(backup)
 }
 
@@ -32,7 +32,10 @@ export interface BackupOptions {
     /** Includes persona, relations, posts and profiles. */
     excludeBase?: boolean
 }
-export async function createBackupFile(options: BackupOptions): Promise<{ file: unknown; personaNickNames: string[] }> {
+export async function createBackupFile(options: BackupOptions): Promise<{
+    file: unknown
+    personaNickNames: string[]
+}> {
     const { excludeBase, excludeWallet } = options
     const backup = await createNewBackup({
         noPersonas: excludeBase,

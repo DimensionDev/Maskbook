@@ -1,10 +1,10 @@
 import { DataProvider } from '@masknet/public-api'
 import { TokenType } from '@masknet/web3-shared-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
-import { isMirroredKeyword } from '../CoinMarketCap/helper'
-import type { TrendingAPI } from '../types'
-import * as BaseAPI from './base-api'
-import { BTC_FIRST_LEGER_DATE, getAllCoinsByKeyword, getPriceStats as getStats } from './base-api'
+import { isMirroredKeyword } from '../cmc/helper.js'
+import type { TrendingAPI } from '../types/index.js'
+import * as BaseAPI from './base-api.js'
+import { BTC_FIRST_LEGER_DATE, getAllCoinsByKeyword, getPriceStats as getStats } from './base-api.js'
 
 export enum Days {
     MAX = 0,
@@ -15,7 +15,39 @@ export enum Days {
 }
 
 export class UniSwapAPI implements TrendingAPI.Provider<ChainId> {
-    getPriceStats(
+    getAllCoins(): Promise<TrendingAPI.Coin[]> {
+        return Promise.resolve([])
+    }
+
+    getCoinsByKeyword(chainId: ChainId, keyword: string): Promise<TrendingAPI.Coin[]> {
+        return getAllCoinsByKeyword(chainId, keyword)
+    }
+
+    async getCoinTrending(chainId: ChainId, id: string, currency: TrendingAPI.Currency): Promise<TrendingAPI.Trending> {
+        const { token, marketInfo, tickersInfo } = await BaseAPI.getCoinInfo(chainId, id)
+        return {
+            currency,
+            dataProvider: DataProvider.UniswapInfo,
+            market: marketInfo,
+            coin: {
+                id,
+                chainId,
+                name: token?.name || '',
+                symbol: token?.symbol || '',
+                type: TokenType.Fungible,
+                decimals: Number(token?.decimals || '0'),
+                is_mirrored: isMirroredKeyword(token?.symbol || ''),
+                blockchain_urls: [`https://info.uniswap.org/token/${id}`, `https://etherscan.io/address/${id}`],
+                image_url: `https://raw.githubusercontent.com/dimensiondev/assets/master/blockchains/ethereum/assets/${id}/logo.png`,
+                platform_url: `https://info.uniswap.org/token/${id}`,
+                contract_address: id,
+            },
+            tickers: tickersInfo,
+            lastUpdated: '',
+        }
+    }
+
+    getCoinPriceStats(
         chainId: ChainId,
         coinId: string,
         currency: TrendingAPI.Currency,
@@ -38,47 +70,5 @@ export class UniSwapAPI implements TrendingAPI.Provider<ChainId> {
             Math.floor((days === Days.MAX ? BTC_FIRST_LEGER_DATE.getTime() : startTime.getTime()) / 1000),
             Math.floor(endTime.getTime() / 1000),
         )
-    }
-    async getCoinTrending(chainId: ChainId, id: string, currency: TrendingAPI.Currency): Promise<TrendingAPI.Trending> {
-        const { token, marketInfo, tickersInfo } = await BaseAPI.getCoinInfo(chainId, id)
-        return {
-            currency,
-            dataProvider: DataProvider.UNISWAP_INFO,
-            market: marketInfo,
-            coin: {
-                id,
-                chainId,
-                name: token?.name || '',
-                symbol: token?.symbol || '',
-                type: TokenType.Fungible,
-                decimals: Number(token?.decimals || '0'),
-                is_mirrored: isMirroredKeyword(token?.symbol || ''),
-                blockchain_urls: [`https://info.uniswap.org/token/${id}`, `https://etherscan.io/address/${id}`],
-                image_url: `https://raw.githubusercontent.com/dimensiondev/assets/master/blockchains/ethereum/assets/${id}/logo.png`,
-                platform_url: `https://info.uniswap.org/token/${id}`,
-                contract_address: id,
-            },
-            tickers: tickersInfo,
-            lastUpdated: '',
-        }
-    }
-
-    getCoins(): Promise<TrendingAPI.Coin[]> {
-        return Promise.resolve([])
-    }
-
-    getCurrencies(): Promise<TrendingAPI.Currency[]> {
-        return Promise.resolve([
-            {
-                id: 'usd',
-                name: 'USD',
-                symbol: '$',
-                description: 'Unite State Dollar',
-            },
-        ])
-    }
-
-    getCoinsByKeyword(chainId: ChainId, keyword: string): Promise<TrendingAPI.Coin[]> {
-        return getAllCoinsByKeyword(chainId, keyword)
     }
 }

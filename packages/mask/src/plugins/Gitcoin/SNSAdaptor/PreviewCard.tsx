@@ -1,18 +1,17 @@
 import { useCallback } from 'react'
 import urlcat from 'urlcat'
-import { Box, Card, Typography, Button, Avatar, CircularProgress, useTheme } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
-import QueryBuilderIcon from '@mui/icons-material/QueryBuilder'
-import VerifiedUserIcon from '@mui/icons-material/VerifiedUser'
+import { Box, Card, Typography, Button, Avatar, useTheme } from '@mui/material'
+import { LoadingBase, makeStyles } from '@masknet/theme'
+import { QueryBuilder as QueryBuilderIcon, VerifiedUser as VerifiedUserIcon } from '@mui/icons-material'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { useI18N as useBaseI18N } from '../../../utils'
-import { useI18N } from '../locales'
-import { useGrant } from '../hooks/useGrant'
-import { PluginGitcoinMessages } from '../messages'
-import { usePostLink } from '../../../components/DataSource/usePostInfo'
-import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
+import { useI18N as useBaseI18N } from '../../../utils/index.js'
+import { useI18N } from '../locales/index.js'
+import { useGrant } from '../hooks/useGrant.js'
+import { PluginGitcoinMessages } from '../messages.js'
+import { usePostLink } from '../../../components/DataSource/usePostInfo.js'
+import { ChainBoundary } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -23,6 +22,7 @@ const useStyles = makeStyles()((theme) => ({
         '& > *': {
             width: 'auto',
             height: 100,
+            maxWidth: '100%',
         },
     },
     title: {
@@ -58,13 +58,6 @@ const useStyles = makeStyles()((theme) => ({
         width: theme.spacing(2),
         height: theme.spacing(2),
         margin: theme.spacing(0, 1),
-    },
-    buttons: {
-        width: '100%',
-        margin: 0,
-    },
-    verified: {
-        borderRadius: 50,
     },
     text: {
         overflow: 'hidden',
@@ -106,7 +99,7 @@ export function PreviewCard(props: PreviewCardProps) {
     if (loading)
         return (
             <Typography color="textPrimary" textAlign="center" sx={{ padding: 2 }}>
-                <CircularProgress />
+                <LoadingBase />
             </Typography>
         )
     if (error)
@@ -160,7 +153,7 @@ export function PreviewCard(props: PreviewCardProps) {
                 </div>
             </Card>
             <Box sx={{ display: 'flex', width: '100%' }}>
-                <Box sx={{ flex: 1, padding: 1.5 }}>
+                <Box sx={{ flex: 1, padding: '12px 5px' }}>
                     <Button
                         fullWidth
                         variant="roundedDark"
@@ -171,7 +164,7 @@ export function PreviewCard(props: PreviewCardProps) {
                         {t.view_on()}
                     </Button>
                 </Box>
-                <Box sx={{ flex: 1, padding: 1.5 }}>
+                <Box sx={{ flex: 1, padding: '12px 5px' }}>
                     <ChainBoundary
                         expectedPluginID={NetworkPluginID.PLUGIN_EVM}
                         expectedChainId={ChainId.Mainnet}

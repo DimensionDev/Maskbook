@@ -1,11 +1,10 @@
-import { Avatar, ListItemAvatar, ListItemIcon, ListItemText, ListTypeMap } from '@mui/material'
-import ListItemButton from '@mui/material/ListItemButton'
+import { Avatar, ListItemAvatar, ListItemIcon, ListItemText, ListTypeMap, ListItemButton } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
-import CheckIcon from '@mui/icons-material/Check'
-import type { DefaultComponentProps } from '@mui/material/OverridableComponent'
+import { Check as CheckIcon } from '@mui/icons-material'
+import type { DefaultComponentProps } from '@mui/material/OverridableComponent.js'
 import { formatEthereumAddress, Wallet } from '@masknet/web3-shared-evm'
-import { useBlockie } from '@masknet/plugin-infra/web3'
-import { useI18N } from '../../../utils'
+import { useBlockie } from '@masknet/web3-hooks-base'
+import { useI18N } from '../../../utils/index.js'
 
 const useStyle = makeStyles()((theme) => ({
     root: {
@@ -28,12 +27,21 @@ export interface WalletInListProps extends withClasses<never> {
     selected?: boolean
     disabled?: boolean
     onClick?: () => void
-    ListItemProps?: Partial<DefaultComponentProps<ListTypeMap<{ button: true }, 'div'>>>
+    ListItemProps?: Partial<
+        DefaultComponentProps<
+            ListTypeMap<
+                {
+                    button: true
+                },
+                'div'
+            >
+        >
+    >
 }
 
 export function WalletInList(props: WalletInListProps) {
     const { t } = useI18N()
-    const classes = useStylesExtends(useStyle(), props)
+    const { classes } = useStylesExtends(useStyle(), props)
     const { wallet, selected = false, disabled = false, onClick, ListItemProps } = props
     const blockie = useBlockie(wallet.address)
 

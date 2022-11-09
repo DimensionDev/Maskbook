@@ -1,8 +1,7 @@
 import { Icons } from '@masknet/icons'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
-import { Typography } from '@mui/material'
-import { useI18N } from '../../../utils'
-import { ApplicationSmallIcon } from '../assets/application'
+import { Stack, Typography } from '@mui/material'
+import { useI18N } from '../../../utils/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -13,39 +12,39 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: 9999,
         paddingLeft: theme.spacing(2),
         paddingRight: theme.spacing(2),
-        border: `1px solid ${theme.palette.mode === 'dark' ? '#2F3336' : '#EFF3F4'}`,
         color: theme.palette.text.primary,
         cursor: 'pointer',
+        backgroundColor: theme.palette.maskColor.main,
     },
     setIcon: {
         width: 14,
         height: 14,
         marginLeft: 2,
     },
-    text: {
-        display: 'flex',
-        alignItems: 'center',
-        marginLeft: 4,
+    icon: {
+        color: theme.palette.text.buttonText,
     },
 }))
 
-interface NFTAvatarButtonProps extends withClasses<'root' | 'text' | 'icon'> {
+export interface NFTAvatarButtonProps extends withClasses<'root' | 'text'> {
     onClick: () => void
     showSetting?: boolean
 }
 
 export function NFTAvatarButton(props: NFTAvatarButtonProps) {
-    const classes = useStylesExtends(useStyles(), props)
     const { onClick } = props
     const { t } = useI18N()
+    const { classes } = useStylesExtends(useStyles(), props)
 
     return (
         <div className={classes.root} onClick={onClick}>
-            <ApplicationSmallIcon className={classes.icon} />
-            <Typography variant="body1" className={classes.text}>
-                <span style={{ marginLeft: 4, fontWeight: 600 }}>{t('nft_avatar')}</span>
+            <Icons.Avatar className={classes.icon} size={20} />
+            <Stack display="inline-flex" gap={1}>
+                <Typography fontSize={14} style={{ marginLeft: 4 }} className={classes.text}>
+                    {t('nft_avatar')}
+                </Typography>
                 {props.showSetting ? <Icons.GearSettings className={classes.setIcon} /> : null}
-            </Typography>
+            </Stack>
         </div>
     )
 }

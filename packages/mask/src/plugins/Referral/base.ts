@@ -1,12 +1,11 @@
-import { type Plugin, PluginId } from '@masknet/plugin-infra'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import type { Plugin } from '@masknet/plugin-infra'
+import { PluginID, NetworkPluginID } from '@masknet/shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
-
-import { META_KEY } from './constants'
-import { languages } from './locales/languages'
+import { META_KEY } from './constants.js'
+import { languages } from './locales/languages.js'
 
 export const base: Plugin.Shared.Definition = {
-    ID: PluginId.Referral,
+    ID: PluginID.Referral,
     name: { fallback: 'Referral Farms', i18nKey: '__plugin_name' },
     description: {
         fallback: 'Referral Farming distributes yield farming alike returns for successful referrals.',

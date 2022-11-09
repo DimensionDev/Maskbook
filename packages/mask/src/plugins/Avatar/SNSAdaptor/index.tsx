@@ -1,17 +1,19 @@
 import { Icons } from '@masknet/icons'
-import { Plugin, PluginId, PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
+import { Plugin, PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
 import { ApplicationEntry } from '@masknet/shared'
-import { CrossIsolationMessages } from '@masknet/shared-base'
-import { useEffect, useState } from 'react'
+import { PluginID, CrossIsolationMessages } from '@masknet/shared-base'
 import { Trans } from 'react-i18next'
-import { NFTAvatarDialog } from '../Application/NFTAvatarsDialog'
-import { base } from '../base'
-import { setupContext } from '../context'
+import { NFTAvatarDialog } from '../Application/NFTAvatarsDialog.js'
+import { base } from '../base.js'
+import { setupContext } from '../context.js'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
     init(signal, context) {
         setupContext(context)
+    },
+    GlobalInjection() {
+        return <NFTAvatarDialog />
     },
     ApplicationEntries: [
         (() => {
@@ -23,14 +25,12 @@ const sns: Plugin.SNSAdaptor.Definition = {
             }
             return {
                 RenderEntryComponent(EntryComponentProps) {
-                    const [open, setOpen] = useState(false)
-                    const clickHandler = () => setOpen(true)
-                    useEffect(() => {
-                        return CrossIsolationMessages.events.requestOpenApplication.on(({ open, application }) => {
-                            if (application !== PluginId.Avatar) return
-                            setOpen(open)
+                    const clickHandler = () => {
+                        CrossIsolationMessages.events.applicationDialogEvent.sendToLocal({
+                            open: true,
+                            pluginID: PluginID.Avatar,
                         })
-                    }, [])
+                    }
                     return (
                         <>
                             <ApplicationEntry
@@ -48,8 +48,6 @@ const sns: Plugin.SNSAdaptor.Definition = {
                                     (EntryComponentProps.disabled ? undefined : <Trans i18nKey="application_hint" />)
                                 }
                             />
-
-                            <NFTAvatarDialog open={open} onClose={() => setOpen(false)} />
                         </>
                     )
                 },

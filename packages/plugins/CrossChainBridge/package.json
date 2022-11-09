@@ -1,14 +1,13 @@
 {
   "name": "@masknet/plugin-cross-chain-bridge",
   "private": true,
+  "type": "module",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "webpack": "./src/index.ts",
+      "mask-src": "./src/index.ts",
       "default": "./dist/index.js"
     }
   },
-  "types": "./dist/index.d.ts",
   "dependencies": {
     "@masknet/icons": "workspace:*",
     "@masknet/plugin-infra": "workspace:*",

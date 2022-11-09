@@ -1,11 +1,12 @@
 import { LiveSelector, MutationObserverWatcher, ValueRef } from '@dimensiondev/holoflows-kit'
-import { creator, SocialNetworkUI } from '../../../social-network'
-import { getProfileIdentifierAtFacebook, getUserID } from '../utils/getProfileIdentifier'
-import { isMobileFacebook } from '../utils/isMobile'
+import type { SocialNetworkUI } from '@masknet/types'
+import { creator } from '../../../social-network/index.js'
+import { getProfileIdentifierAtFacebook, getUserID } from '../utils/getProfileIdentifier.js'
+import { isMobileFacebook } from '../utils/isMobile.js'
 import { ProfileIdentifier, EnhanceableSite } from '@masknet/shared-base'
-import { searchAvatarSelector, searchUserIdOnMobileSelector } from '../utils/selector'
-import { getAvatar, getBioDescription, getFacebookId, getNickName, getPersonalHomepage } from '../utils/user'
-import { delay } from '@dimensiondev/kit'
+import { searchFacebookAvatarSelector, searchUserIdOnMobileSelector } from '../utils/selector.js'
+import { getAvatar, getBioDescription, getFacebookId, getNickName, getPersonalHomepage } from '../utils/user.js'
+import { delay } from '@masknet/kit'
 import type { IdentityResolved } from '@masknet/plugin-infra'
 
 export const IdentityProviderFacebook: SocialNetworkUI.CollectingCapabilities.IdentityResolveProvider = {
@@ -42,10 +43,10 @@ function resolveCurrentVisitingIdentityInner(
     ref: SocialNetworkUI.CollectingCapabilities.IdentityResolveProvider['recognized'],
     cancel: AbortSignal,
 ) {
-    const selector = isMobileFacebook ? searchUserIdOnMobileSelector() : searchAvatarSelector()
+    const selector = isMobileFacebook ? searchUserIdOnMobileSelector() : searchFacebookAvatarSelector()
 
     const assign = async () => {
-        await delay(500)
+        await delay(3000)
         const nickname = getNickName()
         const bio = getBioDescription()
         const handle = getFacebookId()

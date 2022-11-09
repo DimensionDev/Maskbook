@@ -1,4 +1,4 @@
-import { FormattedAddress, FormattedBalance } from '@masknet/shared'
+import { FormattedAddress, FormattedBalance, PluginWalletStatusBar } from '@masknet/shared'
 import {
     formatEthereumAddress,
     isNativeTokenAddress,
@@ -7,17 +7,17 @@ import {
     SchemaType,
     ChainId,
 } from '@masknet/web3-shared-evm'
-import { formatBalance, FungibleToken, NetworkPluginID, ONE } from '@masknet/web3-shared-base'
-import { Card, Grid, IconButton, Link, Paper, Typography } from '@mui/material'
+import type { NetworkPluginID } from '@masknet/shared-base'
+import { formatBalance, FungibleToken, leftShift, ONE } from '@masknet/web3-shared-base'
+import { Grid, IconButton, Link, Paper, Typography, Box } from '@mui/material'
 import { makeStyles, ActionButton } from '@masknet/theme'
-import LaunchIcon from '@mui/icons-material/Launch'
-import RepeatIcon from '@mui/icons-material/Repeat'
+import { Launch as LaunchIcon, Repeat as RepeatIcon } from '@mui/icons-material'
 import formatDateTime from 'date-fns/format'
 import { Fragment, useCallback, useState, useEffect } from 'react'
-import { PluginWalletStatusBar, useI18N } from '../../../utils'
-import type { PoolSettings } from './hooks/useFill'
-import { decodeRegionCode, regionCodes } from './hooks/useRegion'
-import { useChainId } from '@masknet/plugin-infra/web3'
+import { useI18N } from '../../../utils/index.js'
+import type { PoolSettings } from './hooks/useFill.js'
+import { decodeRegionCode, regionCodes } from './hooks/useRegion.js'
+import { useChainContext } from '@masknet/web3-hooks-base'
 
 const useSwapItemStyles = makeStyles()({
     root: {
@@ -39,7 +39,7 @@ function SwapItem(props: SwapItemProps) {
     const { classes } = useSwapItemStyles()
     const { t } = useI18N()
 
-    const amount_ = formatBalance(swapAmount || '0', swap?.decimals)
+    const amount_ = leftShift(swapAmount || '0', swap?.decimals)
 
     return (
         <div className={classes.root}>
@@ -47,7 +47,7 @@ function SwapItem(props: SwapItemProps) {
                 {t('plugin_ito_swap_title', {
                     swap: exchange ? swap?.symbol : token?.symbol,
                     token: exchange ? token?.symbol : swap?.symbol,
-                    amount: exchange ? ONE.dividedBy(amount_).toFixed() : amount_,
+                    amount: exchange ? ONE.dividedBy(amount_).toFixed() : amount_.toFixed(),
                 })}
             </Typography>
             <div onClick={() => setExchange(!exchange)}>
@@ -68,10 +68,6 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.text.primary,
         fontSize: 18,
     },
-    line: {
-        display: 'flex',
-        padding: theme.spacing(1),
-    },
     data: {
         padding: theme.spacing(1),
         textAlign: 'right',
@@ -83,25 +79,15 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.text.secondary,
         wordBreak: 'keep-all',
     },
-    button: {
-        padding: theme.spacing(2),
-        [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
-            padding: theme.spacing(0, 0, 1, 0),
-        },
-    },
     link: {
         padding: 0,
         marginLeft: theme.spacing(0.5),
         marginTop: 2,
     },
-    gasEstimation: {
-        display: 'flex',
-        justifyContent: 'flex-end',
-        alignItems: 'center',
-        cursor: 'pointer',
-        '& > p': {
-            marginRight: 5,
-            color: theme.palette.mode === 'light' ? '#7B8192' : '#6F767C',
+    grid: {
+        '& div': {
+            borderRadius: 0,
+            backgroundColor: theme.palette.maskColor.bottom,
         },
     },
 }))
@@ -117,7 +103,7 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
     const { poolSettings, loading, onDone, onBack, onClose } = props
     const { t } = useI18N()
     const { classes } = useStyles()
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { DEFAULT_QUALIFICATION2_ADDRESS } = useITOConstants(chainId)
     const showQualification =
         poolSettings?.advanceSettingData.contract &&
@@ -130,8 +116,8 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
 
     return (
         <>
-            <Card elevation={0} style={{ padding: '0 16px' }}>
-                <Grid container spacing={0}>
+            <Box style={{ padding: '0 16px' }}>
+                <Grid container spacing={0} className={classes.grid}>
                     <Grid item xs={12}>
                         <Typography variant="h3" className={classes.title} component="h3" color="textPrimary">
                             {poolSettings?.title}
@@ -307,7 +293,7 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                         </Typography>
                     </Grid>
                 </Grid>
-            </Card>
+            </Box>
             <PluginWalletStatusBar>
                 <ActionButton loading={loading} disabled={loading} fullWidth onClick={onDone}>
                     {t('plugin_ito_send_text', {

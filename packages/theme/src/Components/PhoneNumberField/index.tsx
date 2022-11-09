@@ -1,6 +1,6 @@
 import { Box, InputBaseProps } from '@mui/material'
-import { makeStyles } from '../../UIHelper/makeStyles'
-import { MaskTextField } from '../TextField'
+import { makeStyles } from '../../UIHelper/makeStyles.js'
+import { MaskTextField } from '../TextField/index.js'
 import { ChangeEvent, ReactNode, useState } from 'react'
 
 const useStyles = makeStyles()({

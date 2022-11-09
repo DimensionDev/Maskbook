@@ -1,14 +1,14 @@
 import { LiveSelector } from '@dimensiondev/holoflows-kit'
-import { CrossIsolationMessages, CompositionRequest } from '@masknet/shared-base'
-import { i18n } from '../../../../shared-ui/locales_legacy'
+import { CrossIsolationMessages, CompositionDialogEvent } from '@masknet/shared-base'
+import { i18n } from '../../../../shared-ui/locales_legacy/index.js'
 import { makeTypedMessageText, SerializableTypedMessages } from '@masknet/typed-message'
-import { delay, waitDocumentReadyState } from '@dimensiondev/kit'
+import { delay, waitDocumentReadyState } from '@masknet/kit'
 
 const nativeComposeButtonSelector = () =>
     new LiveSelector()
         .querySelector<HTMLDivElement>(
             [
-                '[role="region"] [role="link"]+[role="button"]', // PC
+                '[role="region"] [role="link"]+[role="button"]',
                 '#MComposer [role="button"]', // mobile
             ].join(','),
         )
@@ -34,9 +34,12 @@ const nativeComposeDialogIndicatorSelector = () =>
         ].join(','),
     )
 
+const nativeComposeDialogCloseButtonSelector = () =>
+    new LiveSelector().querySelector<HTMLDivElement>('[role="dialog"] form[method="post"] [role="button"]')
+
 export async function taskOpenComposeBoxFacebook(
     content: string | SerializableTypedMessages,
-    options?: CompositionRequest['options'],
+    options?: CompositionDialogEvent['options'],
 ) {
     await waitDocumentReadyState('interactive')
     await delay(200)
@@ -56,10 +59,17 @@ export async function taskOpenComposeBoxFacebook(
     }
 
     await delay(2000)
-    CrossIsolationMessages.events.requestComposition.sendToLocal({
+    CrossIsolationMessages.events.compositionDialogEvent.sendToLocal({
         reason: 'popup',
         open: true,
         content: typeof content === 'string' ? makeTypedMessageText(content) : content,
         options,
     })
+}
+
+export async function taskCloseNativeComposeBoxFacebook() {
+    await waitDocumentReadyState('interactive')
+    await delay(200)
+    const closeDialogButton = nativeComposeDialogCloseButtonSelector().evaluate()?.[0]
+    closeDialogButton?.click()
 }

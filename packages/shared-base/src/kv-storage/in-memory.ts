@@ -1,5 +1,5 @@
 import type { KVStorageBackend } from './types.js'
-import { Some, None } from 'ts-results'
+import { Some, None } from 'ts-results-es'
 export function createInMemoryKVStorageBackend(
     onChange: (key: string, value: unknown) => void,
     beforeAutoSync = Promise.resolve(),

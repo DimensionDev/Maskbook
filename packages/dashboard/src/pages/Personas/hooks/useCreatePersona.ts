@@ -1,7 +1,7 @@
 import { useAsyncFn } from 'react-use'
-import { Messages, Services } from '../../../API'
-import { delay } from '@dimensiondev/kit'
-import type { AsyncFnReturn } from 'react-use/lib/useAsyncFn'
+import { Messages, Services } from '../../../API.js'
+import { delay } from '@masknet/kit'
+import type { AsyncFnReturn } from 'react-use/lib/useAsyncFn.js'
 
 export function useCreatePersona(): AsyncFnReturn<(nickName: string) => Promise<void>> {
     return useAsyncFn(async (nickName: string) => {

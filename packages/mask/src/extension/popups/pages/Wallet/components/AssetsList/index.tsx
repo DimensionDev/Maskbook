@@ -7,10 +7,10 @@ import { List, ListItem, ListItemText, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
 import { TokenIcon, FormattedBalance } from '@masknet/shared'
-import { WalletContext } from '../../hooks/useWalletContext'
-import { isNaN } from 'lodash-unified'
+import { WalletContext } from '../../hooks/useWalletContext.js'
+import { isNaN } from 'lodash-es'
 import { formatBalance, FungibleAsset, isGreaterThanOrEqualTo, isLessThan } from '@masknet/web3-shared-base'
-import { useI18N } from '../../../../../../utils'
+import { useI18N } from '../../../../../../utils/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     list: {
@@ -41,7 +41,6 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         justifyContent: 'center',
         gas: 6,
-        fontSize: 14,
         textAlign: 'center',
         padding: 12,
         cursor: 'pointer',
@@ -117,7 +116,7 @@ export const AssetsListUI = memo<AssetsListUIProps>(({ isExpand, dataSource, onI
                     return (
                         <ListItem key={index} className={classes.item} onClick={() => onItemClick(asset)}>
                             <TokenIcon
-                                classes={{ icon: classes.tokenIcon }}
+                                className={classes.tokenIcon}
                                 address={asset.address}
                                 name={asset.name}
                                 chainId={asset.chainId}

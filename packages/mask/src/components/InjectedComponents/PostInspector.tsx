@@ -1,19 +1,19 @@
-import { DecryptPost } from './DecryptedPost/DecryptedPost'
-import { useCurrentIdentity } from '../DataSource/useActivatedUI'
+import { DecryptPost } from './DecryptedPost/DecryptedPost.js'
+import { useCurrentIdentity } from '../DataSource/useActivatedUI.js'
 import {
     usePostInfoDetails,
     createInjectHooksRenderer,
     useActivatedPluginsSNSAdaptor,
 } from '@masknet/plugin-infra/content-script'
-import { PossiblePluginSuggestionPostInspector } from './DisabledPluginSuggestion'
-import { MaskPostExtraPluginWrapper } from '../../plugins/MaskPluginWrapper'
+import { PossiblePluginSuggestionPostInspector } from './DisabledPluginSuggestion.js'
 import { useSubscription } from 'use-subscription'
-import { PersistentStorages } from '../../../shared'
+import { PersistentStorages } from '../../../shared/index.js'
+import { MaskPostExtraPluginWrapperWithPermission } from './PermissionBoundary.js'
 
 const PluginHooksRenderer = createInjectHooksRenderer(
     useActivatedPluginsSNSAdaptor.visibility.useNotMinimalMode,
     (plugin) => plugin.PostInspector,
-    MaskPostExtraPluginWrapper,
+    MaskPostExtraPluginWrapperWithPermission,
 )
 
 export interface PostInspectorProps {

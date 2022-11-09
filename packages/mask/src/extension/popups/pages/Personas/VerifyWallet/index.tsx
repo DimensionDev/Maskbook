@@ -2,20 +2,20 @@ import urlcat from 'urlcat'
 import { memo, useEffect } from 'react'
 import { useAsync, useAsyncFn, useLocation } from 'react-use'
 import { useNavigate } from 'react-router-dom'
-import { NextIDAction, NextIDPlatform, PopupRoutes } from '@masknet/shared-base'
+import { NextIDAction, NextIDPlatform, PopupRoutes, NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
 import { NextIDProof } from '@masknet/web3-providers'
 import { ChainId, EthereumMethodType, providerResolver, ProviderType } from '@masknet/web3-shared-evm'
-import { SignSteps, Steps } from '../../../../../components/shared/VerifyWallet/Steps'
-import Services from '../../../../service'
-import { PersonaContext } from '../hooks/usePersonaContext'
-import { useTitle } from '../../../hook/useTitle'
-import { useI18N } from '../../../../../utils'
-import { useUnconfirmedRequest } from '../../Wallet/hooks/useUnConfirmedRequest'
-import { PopupContext } from '../../../hook/usePopupContext'
-import { Account, isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
-import { useReverseAddress, useWallets, useWeb3Connection, useWeb3State } from '@masknet/plugin-infra/web3'
-import { MaskMessages } from '../../../../../../shared/messages'
+import { SignSteps, Steps } from '../../../../../components/shared/VerifyWallet/Steps.js'
+import Services from '../../../../service.js'
+import { PersonaContext } from '../hooks/usePersonaContext.js'
+import { useTitle } from '../../../hook/useTitle.js'
+import { useI18N } from '../../../../../utils/index.js'
+import { useUnconfirmedRequest } from '../../Wallet/hooks/useUnConfirmedRequest.js'
+import { PopupContext } from '../../../hook/usePopupContext.js'
+import { Account, isSameAddress } from '@masknet/web3-shared-base'
+import { useReverseAddress, useWallets, useWeb3Connection, useWeb3State } from '@masknet/web3-hooks-base'
+import { MaskMessages } from '../../../../../../shared/messages.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -160,6 +160,14 @@ const VerifyWallet = memo(() => {
         }
     }, [signature, walletSignState, walletSign, personaSilentSign, signed])
 
+    // disconnect when router changes
+    useEffect(
+        () => () => {
+            if (!connection) return
+            connection.disconnect()
+        },
+        [connection],
+    )
     useTitle(t('popups_add_wallet'))
 
     if (!currentPersona || !wallet) return null

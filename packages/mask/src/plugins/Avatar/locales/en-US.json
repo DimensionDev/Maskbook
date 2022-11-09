@@ -31,10 +31,11 @@
     "saving": "Saving...",
     "download_image_error": "Download image error",
     "connect_wallet": "Please connect your wallet!",
-    "pfp_title": "NFT PFP",
     "background_title": "NFT background",
     "powered_by": "Powered by",
     "loading": "Loading...",
     "no_wallet_message": "No valid wallet detected. Please connect wallet or verify wallet firstly.",
-    "wallet_non_evm_warning": "The NFT PFP feature currently supports only EVM chains. Support for other<br>chains will be added in the future."
+    "inactive_persona_tooltip": "Not current account. Please switch to this account to set up NFTs Profile.",
+    "wallet_non_evm_warning": "The NFT PFP feature currently supports only EVM chains. Support for other<br>chains will be added in the future.",
+    "unsupported_network": "Do not support the current network."
 }

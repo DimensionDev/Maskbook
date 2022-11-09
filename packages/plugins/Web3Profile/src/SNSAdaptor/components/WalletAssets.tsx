@@ -1,23 +1,22 @@
+import { useMemo, useState } from 'react'
 import { Card, Typography, Link, Box } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
-import { useI18N } from '../../locales'
-import { useReverseAddress, useWeb3State } from '@masknet/plugin-infra/web3'
-import type { CollectionTypes, WalletTypes } from '../types'
+import { useI18N } from '../../locales/index.js'
+import { useReverseAddress, useWeb3State } from '@masknet/web3-hooks-base'
 import { ChainId, explorerResolver, NETWORK_DESCRIPTORS } from '@masknet/web3-shared-evm'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { Empty } from './Empty'
-import { CollectionList } from './CollectionList'
-import { useMemo, useState } from 'react'
-import { EMPTY_LIST } from '@masknet/shared-base'
-import { PersonaImageIcon } from '@masknet/shared'
-import { CurrentStatusMap, CURRENT_STATUS } from '../../constants'
+import { NetworkPluginID, EMPTY_LIST } from '@masknet/shared-base'
+import { Empty } from './Empty.js'
+import { CollectionList } from './CollectionList.js'
+import { PersonaImageIcon, CollectionTypes, WalletTypes } from '@masknet/shared'
+import { SceneMap, Scene } from '../../constants.js'
 
 const useStyles = makeStyles()((theme) => {
     return {
         wrapper: {
             width: '100%',
             marginTop: '16px',
+            backgroundColor: theme.palette.maskColor.bottom,
         },
 
         walletInfo: {
@@ -33,13 +32,11 @@ const useStyles = makeStyles()((theme) => {
             position: 'relative',
             cursor: 'pointer',
             display: 'flex',
-            // overflow: 'hidden',
             padding: 0,
             width: 126,
             height: 126,
             borderRadius: 12,
             userSelect: 'none',
-            lineHeight: 0,
             '&:nth-last-child(-n+4)': {
                 marginBottom: 0,
             },
@@ -62,11 +59,6 @@ const useStyles = makeStyles()((theme) => {
             color: theme.palette.maskColor.second,
             cursor: 'pointer',
         },
-        loadingFailImage: {
-            minHeight: '0 !important',
-            maxWidth: '126px',
-            transform: 'translateY(10px)',
-        },
         list: {
             gridRowGap: 16,
             gridColumnGap: 20,
@@ -77,7 +69,6 @@ const useStyles = makeStyles()((theme) => {
         listBox: {
             display: 'flex',
             flexWrap: 'wrap',
-            minHeight: 298,
             justifyContent: 'center',
         },
         loadIcon: {
@@ -87,6 +78,7 @@ const useStyles = makeStyles()((theme) => {
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
+            fontFamily: 'Helvetica',
             backgroundColor: theme.palette.maskColor.thirdMain,
             fontSize: 12,
             fontWeight: 700,
@@ -107,88 +99,59 @@ const useStyles = makeStyles()((theme) => {
 
 export interface WalletAssetsCardProps extends withClasses<never | 'root'> {
     networkIcon?: URL
-    address: WalletTypes
+    wallet: WalletTypes
     onSetting: () => void
-    collectionList?: CollectionTypes[]
+    collections?: CollectionTypes[]
+    hasUnlisted?: boolean
     collectionName?: string
 }
 
-const enum LOAD_STATUS {
-    Unnecessary = 1,
-    Necessary = 2,
-    Finish = 3,
-}
-
 export function WalletAssetsCard(props: WalletAssetsCardProps) {
-    const { address, onSetting, collectionList, collectionName } = props
+    const { wallet, onSetting, collections: collectionList = EMPTY_LIST, collectionName, hasUnlisted } = props
     const t = useI18N()
-    const classes = useStylesExtends(useStyles(), props)
+    const { classes } = useStylesExtends(useStyles(), props)
     const chainId = ChainId.Mainnet
 
-    const [loadStatus, setLoadStatus] = useState(
-        collectionList && collectionList?.filter((collection) => !collection?.hidden)?.length > 8
-            ? LOAD_STATUS.Necessary
-            : LOAD_STATUS.Unnecessary,
-    )
+    const [loadAll, setLoadAll] = useState(false)
 
-    const { Others } = useWeb3State(address?.platform ?? NetworkPluginID.PLUGIN_EVM)
+    const { Others } = useWeb3State(wallet.networkPluginID ?? NetworkPluginID.PLUGIN_EVM)
 
     const iconURL = NETWORK_DESCRIPTORS.find((network) => network?.chainId === ChainId.Mainnet)?.icon
 
     const collections = useMemo(() => {
-        const filterCollections = collectionList?.filter((collection) => !collection?.hidden)
-        if (!filterCollections || filterCollections?.length === 0) {
-            return EMPTY_LIST
+        if (collectionList.length > 8 && !loadAll) {
+            return collectionList.slice(0, 8)
         }
-        if (filterCollections?.length > 8 && loadStatus !== LOAD_STATUS.Finish) {
-            return filterCollections?.slice(0, 8)
-        }
-        return filterCollections
-    }, [loadStatus, collectionList])
+        return collectionList
+    }, [loadAll, collectionList])
 
-    const hasHiddenCollection = collectionList && collectionList?.filter((collection) => collection.hidden).length > 0
-
-    const loadIcon = useMemo(() => {
-        if (loadStatus === LOAD_STATUS.Necessary)
-            return (
-                <Box onClick={() => setLoadStatus(LOAD_STATUS.Finish)} className={classes.loadIcon}>
-                    {t.load_more()}
-                </Box>
-            )
-        return null
-    }, [loadStatus, setLoadStatus])
-
-    const { value: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, address?.address)
+    const { value: domain } = useReverseAddress(wallet.networkPluginID, wallet.address)
 
     return (
         <Card className={classes.wrapper}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <Box display="flex" justifyContent="space-between" alignItems="center">
                 <div className={classes.walletInfo}>
                     <PersonaImageIcon icon={iconURL} size={20} borderRadius="99px" />
                     <Typography className={classes.walletName}>
-                        {domain || Others?.formatAddress(address?.address, 4)}
+                        {domain || Others?.formatAddress(wallet.address, 4)}
                     </Typography>
                     <Link
                         className={classes.link}
-                        href={address ? explorerResolver.addressLink(chainId, address?.address) ?? '' : ''}
+                        href={explorerResolver.addressLink(chainId, wallet.address) ?? ''}
                         target="_blank"
                         rel="noopener noreferrer">
                         <Icons.LinkOut className={classes.linkIcon} />
                     </Link>
                 </div>
                 <div className={classes.rightIcons}>
-                    {loadStatus === LOAD_STATUS.Finish && (
-                        <Icons.DoubleArrowUp
-                            size={16}
-                            className={classes.arrowUp}
-                            onClick={() => setLoadStatus(LOAD_STATUS.Necessary)}
-                        />
+                    {loadAll && (
+                        <Icons.DoubleArrowUp size={16} className={classes.arrowUp} onClick={() => setLoadAll(false)} />
                     )}
                     <Icons.Edit2 size={20} onClick={onSetting} className={classes.editIcon} />
                 </div>
-            </div>
+            </Box>
 
-            {collectionList && collectionList?.filter((collection) => !collection?.hidden)?.length > 0 ? (
+            {collections.length ? (
                 <Box className={classes.listBox}>
                     <CollectionList
                         classes={{ list: classes.list, collectionWrap: classes.imageIconWrapper }}
@@ -196,19 +159,22 @@ export function WalletAssetsCard(props: WalletAssetsCardProps) {
                         collections={collections}
                         showNetwork
                     />
-                    {loadIcon}
+                    {!loadAll && collectionList?.length > 8 ? (
+                        <Box onClick={() => setLoadAll(true)} className={classes.loadIcon}>
+                            {t.load_more()}
+                        </Box>
+                    ) : null}
                 </Box>
             ) : (
                 <Box>
                     <Empty
-                        showIcon={false}
                         content={
-                            hasHiddenCollection
+                            hasUnlisted
                                 ? t.all_collection_hidden({
-                                      collection: collectionName ?? CurrentStatusMap[CURRENT_STATUS.NFT_Setting].title,
+                                      collection: collectionName ?? SceneMap[Scene.NFTSetting].title,
                                   })
                                 : t.no_collection_item({
-                                      collection: collectionName ?? CurrentStatusMap[CURRENT_STATUS.NFT_Setting].title,
+                                      collection: collectionName ?? SceneMap[Scene.NFTSetting].title,
                                   })
                         }
                     />

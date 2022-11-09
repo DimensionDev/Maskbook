@@ -1,38 +1,38 @@
 import { Box, Button, InputAdornment, MenuItem, Stack, Typography } from '@mui/material'
-import { useAsync } from 'react-use'
 import { memo, useMemo, useState } from 'react'
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
-import { makeStyles, MaskColorVar, MaskTextField, ShadowRootMenu } from '@masknet/theme'
+import { KeyboardArrowDown as KeyboardArrowDownIcon } from '@mui/icons-material'
+import { makeStyles, MaskTextField, ShadowRootMenu } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
-import { useI18N } from '../../locales'
+import { useI18N } from '../../locales/index.js'
 import type { SecurityAPI } from '@masknet/web3-providers'
-import { GoPlusLabs } from '@masknet/web3-providers'
 import { ChainId, chainResolver } from '@masknet/web3-shared-evm'
+import { WalletIcon } from '@masknet/shared'
+import { useSupportedChains } from '../hooks/useSupportedChains.js'
 
 const useStyles = makeStyles()((theme) => ({
-    root: {
-        width: '600px',
-    },
-    content: {
-        width: '552px',
+    option: {
+        background: theme.palette.maskColor.input,
     },
     selectedButton: {
+        padding: theme.spacing(1.5),
         width: '100%',
         height: '100%',
         fontWeight: 400,
         borderColor: theme.palette.divider,
         color: theme.palette.text.primary,
+        background: theme.palette.maskColor.input,
+
+        '&:hover': {
+            background: theme.palette.maskColor.input,
+        },
     },
     searchButton: {
         borderRadius: 8,
     },
-    menu: {},
     search: {
-        backgroundColor: 'transparent !important',
-        border: `solid 1px ${MaskColorVar.twitterBorderLine}`,
-        height: 48,
-        borderColor: theme.palette.divider,
-        borderRadius: 12,
+        background: theme.palette.maskColor.input,
+        height: 40,
+        borderRadius: 8,
     },
 }))
 
@@ -50,40 +50,64 @@ function getChainName(chain?: SecurityAPI.SupportedChain<ChainId>) {
 export const SearchBox = memo<SearchBoxProps>(({ onSearch }) => {
     const t = useI18N()
     const { classes } = useStyles()
-    const [selectedChain, setSelectedChain] = useState<SecurityAPI.SupportedChain<ChainId>>()
+    const [selectedChain, setSelectedChain] = useState<
+        SecurityAPI.SupportedChain<ChainId> & {
+            icon?: URL
+        }
+    >()
     const [searchContent, setSearchSearchContent] = useState<string>()
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
 
     const onClose = () => setAnchorEl(null)
     const onOpen = (event: React.MouseEvent<HTMLButtonElement>) => setAnchorEl(event.currentTarget)
 
-    const { value: supportedChains = [] } = useAsync(GoPlusLabs.getSupportedChain, [])
+    const { value: supportedChains = [] } = useSupportedChains()
 
     const menuElements = useMemo(() => {
         if (!supportedChains.length) return
         setSelectedChain(supportedChains[0])
         return (
-            supportedChains.map((chain) => {
-                return (
-                    <MenuItem
-                        key={chain.chainId}
-                        onClick={() => {
-                            setSelectedChain(chain)
-                            onClose()
-                        }}>
-                        <Typography sx={{ marginLeft: 1 }}>{getChainName(chain)}</Typography>
-                    </MenuItem>
-                )
-            }) ?? []
+            supportedChains
+                .filter((x) => x.icon)
+                .map((chain) => {
+                    return (
+                        <MenuItem
+                            key={chain.chainId}
+                            onClick={() => {
+                                setSelectedChain(chain)
+                                onClose()
+                            }}>
+                            <Stack
+                                display="inline-flex"
+                                direction="row"
+                                alignItems="center"
+                                justifyContent="flex-start"
+                                gap={1}
+                                width="100%">
+                                <WalletIcon mainIcon={chain?.icon} size={18} />
+                                <Typography>{getChainName(chain)}</Typography>
+                            </Stack>
+                        </MenuItem>
+                    )
+                }) ?? []
         )
     }, [supportedChains.length])
 
     return (
         <Stack direction="row" spacing={1}>
-            <Box width={110} height={48}>
+            <Box width={120} height={40}>
                 <Button onClick={onOpen} variant="outlined" className={classes.selectedButton}>
-                    <Stack display="inline-flex" direction="row" justifyContent="space-between" width="100%">
-                        <Typography fontSize={16}>{getChainName(selectedChain)}</Typography>
+                    <Stack
+                        className={classes.option}
+                        display="inline-flex"
+                        direction="row"
+                        justifyContent="space-between"
+                        alignItems="center"
+                        width="100%">
+                        <Stack gap={0.5} display="inline-flex" direction="row" alignItems="center">
+                            <WalletIcon mainIcon={selectedChain?.icon} size={18} />
+                            <Typography fontSize={14}>{getChainName(selectedChain)}</Typography>
+                        </Stack>
                         <KeyboardArrowDownIcon />
                     </Stack>
                 </Button>

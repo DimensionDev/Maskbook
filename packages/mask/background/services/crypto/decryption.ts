@@ -1,4 +1,4 @@
-import { encodeArrayBuffer } from '@dimensiondev/kit'
+import { encodeArrayBuffer } from '@masknet/kit'
 import {
     decrypt,
     parsePayload,
@@ -23,22 +23,22 @@ import {
     ProfileIdentifier,
 } from '@masknet/shared-base'
 import type { TypedMessage } from '@masknet/typed-message'
-import { noop } from 'lodash-unified'
-import { queryProfileDB, queryPersonaDB } from '../../database/persona/db'
+import { noop } from 'lodash-es'
+import { queryProfileDB, queryPersonaDB } from '../../database/persona/db.js'
 import {
     createProfileWithPersona,
     decryptByLocalKey,
     deriveAESByECDH,
     hasLocalKeyOf,
     queryPublicKey,
-} from '../../database/persona/helper'
-import { queryPostDB } from '../../database/post'
-import { savePostKeyToDB } from '../../database/post/helper'
+} from '../../database/persona/helper.js'
+import { queryPostDB } from '../../database/post/index.js'
+import { savePostKeyToDB } from '../../database/post/helper.js'
 import {
     GUN_queryPostKey_version37,
     GUN_queryPostKey_version39Or38,
     GUN_queryPostKey_version40,
-} from '../../network/gun/encryption/queryPostKey'
+} from '../../network/gun/encryption/queryPostKey.js'
 
 export interface DecryptionContext {
     currentSocialNetwork: SocialNetworkEnum
@@ -47,9 +47,18 @@ export interface DecryptionContext {
     postURL: string | undefined
 }
 export type SocialNetworkEncodedPayload =
-    | { type: 'text'; text: string }
-    | { type: 'image'; image: Blob }
-    | { type: 'image-url'; image: string }
+    | {
+          type: 'text'
+          text: string
+      }
+    | {
+          type: 'image'
+          image: Blob
+      }
+    | {
+          type: 'image-url'
+          image: string
+      }
 const downloadImage = (url: string): Promise<ArrayBuffer> => fetch(url).then((x) => x.arrayBuffer())
 
 /**
@@ -69,10 +78,16 @@ export async function* decryptionWithSocialNetworkDecoding(
             return yield new DecryptError(DecryptErrorReasons.UnrecognizedAuthor, undefined)
         }
         const result = await steganographyDecodeImage(encoded.image, {
-            pass: context.authorHint.toText(),
+            password: context.authorHint.toText(),
             downloadImage,
         })
-        decoded = socialNetworkDecoder(context.currentSocialNetwork, result)[0]
+        if (typeof result === 'string') {
+            decoded = socialNetworkDecoder(context.currentSocialNetwork, result)[0]
+        } else if (result === null) {
+            return yield new DecryptError(DecryptErrorReasons.NoPayloadFound, undefined)
+        } else {
+            decoded = result
+        }
     }
 
     if (!decoded) return yield new DecryptError(DecryptErrorReasons.NoPayloadFound, undefined)

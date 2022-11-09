@@ -1,10 +1,10 @@
-import type { NextIDPlatform } from '@masknet/shared-base'
-import { NextIDProof } from '@masknet/web3-providers'
 import { useAsyncRetry } from 'react-use'
 import { useSubscription } from 'use-subscription'
-import Services from '../../../extension/service'
-import { activatedSocialNetworkUI } from '../../../social-network'
-import { context } from '../context'
+import type { NextIDPlatform } from '@masknet/shared-base'
+import { NextIDProof } from '@masknet/web3-providers'
+import Services from '../../../extension/service.js'
+import { activatedSocialNetworkUI } from '../../../social-network/index.js'
+import { context } from '../context.js'
 
 export function usePersonaVerify() {
     const platform = activatedSocialNetworkUI.configuration.nextIDConfig?.platform as NextIDPlatform

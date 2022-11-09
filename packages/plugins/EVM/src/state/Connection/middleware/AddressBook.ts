@@ -1,6 +1,6 @@
 import { ChainId, EthereumMethodType, isZeroAddress, TransactionParameter } from '@masknet/web3-shared-evm'
-import type { Context, Middleware } from '../types'
-import { Web3StateSettings } from '../../../settings'
+import type { Context, Middleware } from '../types.js'
+import { Web3StateSettings } from '../../../settings/index.js'
 import { isSameAddress, TransactionContext, TransactionDescriptorType } from '@masknet/web3-shared-base'
 
 export class AddressBook implements Middleware<Context> {

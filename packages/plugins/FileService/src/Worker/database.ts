@@ -1,6 +1,6 @@
 import type { Plugin } from '@masknet/plugin-infra'
-import { FileInfoV1ToV2 } from '../helpers'
-import type { FileInfo, FileInfoV1 } from '../types'
+import { FileInfoV1ToV2 } from '../helpers.js'
+import type { FileInfo, FileInfoV1 } from '../types.js'
 
 type DatabaseTypes = FileInfo | FileInfoV1
 

@@ -1,11 +1,11 @@
-import { omit } from 'lodash-unified'
+import { omit } from 'lodash-es'
 import { api } from '@dimensiondev/mask-wallet-core/proto'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { asyncIteratorToArray } from '@masknet/shared-base'
 import { formatEthereumAddress, isValidAddress } from '@masknet/web3-shared-evm'
-import { PluginDB } from '../../../database/Plugin.db'
-import { currentMaskWalletAccountSettings } from '../../../../../../shared/legacy-settings/wallet-settings'
-import type { WalletRecord } from '../type'
+import { PluginDB } from '../../../database/Plugin.db.js'
+import { currentMaskWalletAccountSettings } from '../../../../../../shared/legacy-settings/wallet-settings.js'
+import type { WalletRecord } from '../type.js'
 
 function WalletRecordOutDB(record: WalletRecord) {
     return {

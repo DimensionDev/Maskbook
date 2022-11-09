@@ -1,6 +1,6 @@
 import { forwardRef } from 'react'
 import { Alert, AlertProps, alpha } from '@mui/material'
-import { makeStyles } from '../../UIHelper/makeStyles'
+import { makeStyles } from '../../UIHelper/makeStyles.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -44,7 +44,12 @@ export const MaskAlert = forwardRef<HTMLDivElement | null, MaskAlertProps>((prop
             {...rest}
             ref={ref}
             classes={{
-                ...classes,
+                root: classes.root,
+                message: classes.message,
+                icon: classes.icon,
+                action: classes.action,
+                standardWarning: classes.standardWarning,
+                standardError: classes.standardError,
                 ...rest.classes,
             }}>
             {children}

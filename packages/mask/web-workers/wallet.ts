@@ -1,8 +1,14 @@
-import './prepare'
+import './prepare.js'
 import type { api } from '@dimensiondev/mask-wallet-core/proto'
 // How to interact with this worker:
-export type Input = { id: number; data: api.IMWRequest }
-export type Output = { id: number; response: api.MWResponse }
+export type Input = {
+    id: number
+    data: api.IMWRequest
+}
+export type Output = {
+    id: number
+    response: api.MWResponse
+}
 
 async function load() {
     if (process.env.manifest === '3') {

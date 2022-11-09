@@ -1,13 +1,18 @@
 import urlcat from 'urlcat'
 import { GasOptionType } from '@masknet/web3-shared-base'
-import type { ChainId, GasOption } from '@masknet/web3-shared-evm'
-import type { GasOptionAPI } from '../types'
-import type { EstimateSuggestResponse } from './types'
+import { ChainId, formatGweiToWei, GasOption, isValidChainId } from '@masknet/web3-shared-evm'
+import type { GasOptionAPI } from '../types/index.js'
+import type { EstimateSuggestResponse } from './types.js'
 
 const METASWAP_API = 'https://gas-api.metaswap.codefi.network/'
 
+function formatAmountAsWei(amount = '0') {
+    return formatGweiToWei(amount).toFixed()
+}
+
 export class MetaSwapAPI implements GasOptionAPI.Provider<ChainId, GasOption> {
-    async getGasOptions(chainId: ChainId): Promise<Record<GasOptionType, GasOption>> {
+    async getGasOptions(chainId: ChainId): Promise<Record<GasOptionType, GasOption> | undefined> {
+        if (!isValidChainId(chainId)) return
         const response = await global.r2d2Fetch(
             urlcat(METASWAP_API, '/networks/:chainId/suggestedGasFees', { chainId }),
         )
@@ -15,25 +20,25 @@ export class MetaSwapAPI implements GasOptionAPI.Provider<ChainId, GasOption> {
 
         return {
             [GasOptionType.FAST]: {
-                estimatedBaseFee: result.estimatedBaseFee ?? '0',
+                estimatedBaseFee: formatAmountAsWei(result.estimatedBaseFee),
                 estimatedSeconds: 15,
-                baseFeePerGas: result.estimatedBaseFee ?? '0',
-                suggestedMaxFeePerGas: result.high?.suggestedMaxFeePerGas ?? '0',
-                suggestedMaxPriorityFeePerGas: result.high?.suggestedMaxPriorityFeePerGas ?? '0',
+                baseFeePerGas: formatAmountAsWei(result.estimatedBaseFee),
+                suggestedMaxFeePerGas: formatAmountAsWei(result.high?.suggestedMaxFeePerGas),
+                suggestedMaxPriorityFeePerGas: formatAmountAsWei(result.high?.suggestedMaxPriorityFeePerGas),
             },
             [GasOptionType.NORMAL]: {
-                estimatedBaseFee: result.estimatedBaseFee ?? '0',
+                estimatedBaseFee: formatAmountAsWei(result.estimatedBaseFee),
                 estimatedSeconds: 30,
-                baseFeePerGas: result.estimatedBaseFee ?? '0',
-                suggestedMaxFeePerGas: result.medium?.suggestedMaxFeePerGas ?? '0',
-                suggestedMaxPriorityFeePerGas: result.medium?.suggestedMaxPriorityFeePerGas ?? '0',
+                baseFeePerGas: formatAmountAsWei(result.estimatedBaseFee),
+                suggestedMaxFeePerGas: formatAmountAsWei(result.medium?.suggestedMaxFeePerGas),
+                suggestedMaxPriorityFeePerGas: formatAmountAsWei(result.medium?.suggestedMaxPriorityFeePerGas),
             },
             [GasOptionType.SLOW]: {
-                estimatedBaseFee: result.estimatedBaseFee ?? '0',
+                estimatedBaseFee: formatAmountAsWei(result.estimatedBaseFee),
                 estimatedSeconds: 60,
-                baseFeePerGas: result.estimatedBaseFee ?? '0',
-                suggestedMaxFeePerGas: result.low?.suggestedMaxFeePerGas ?? '0',
-                suggestedMaxPriorityFeePerGas: result.low?.suggestedMaxPriorityFeePerGas ?? '0',
+                baseFeePerGas: formatAmountAsWei(result.estimatedBaseFee),
+                suggestedMaxFeePerGas: formatAmountAsWei(result.low?.suggestedMaxFeePerGas),
+                suggestedMaxPriorityFeePerGas: formatAmountAsWei(result.low?.suggestedMaxPriorityFeePerGas),
             },
         }
     }

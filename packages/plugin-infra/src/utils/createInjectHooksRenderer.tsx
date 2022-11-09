@@ -1,14 +1,18 @@
+import { memo, useEffect, useRef, useState } from 'react'
 import { ErrorBoundary } from '@masknet/shared-base-ui'
 import { ShadowRootIsolation } from '@masknet/theme'
-import { createContext, memo, useContext, useEffect, useRef, useState } from 'react'
-import { PluginWrapperComponent, PluginWrapperMethods, useAvailablePlugins, usePluginI18NField } from '../hooks'
-import { PluginWrapperMethodsContext } from '../hooks/usePluginWrapper'
-import type { Plugin } from '../types'
+import {
+    PluginWrapperComponent,
+    PluginWrapperMethods,
+    useAvailablePlugins,
+    usePluginI18NField,
+} from '../hooks/index.js'
+import { PluginWrapperMethodsContext } from '../hooks/usePluginWrapper.js'
+import type { Plugin } from '../types.js'
 
 type Inject<T> = Plugin.InjectUI<T>
 type Raw<T> = Plugin.InjectUIRaw<T>
 
-const PropsContext = createContext<unknown>(null)
 export function createInjectHooksRenderer<PluginDefinition extends Plugin.Shared.Definition, PropsType extends object>(
     usePlugins: () => PluginDefinition[],
     pickInjectorHook: (plugin: PluginDefinition) => undefined | Inject<PropsType>,
@@ -33,9 +37,8 @@ export function createInjectHooksRenderer<PluginDefinition extends Plugin.Shared
         }
         return element
     }
-    function SinglePluginWithinErrorBoundary({ plugin }: { plugin: PluginDefinition }) {
+    function SinglePluginWithinErrorBoundary({ plugin, props }: { plugin: PluginDefinition; props: unknown }) {
         const t = usePluginI18NField()
-        const props = useContext(PropsContext)
         const ui = pickInjectorHook(plugin)
         return usePluginWrapperProvider(
             ui ? (
@@ -50,11 +53,9 @@ export function createInjectHooksRenderer<PluginDefinition extends Plugin.Shared
         const allPlugins = usePlugins()
         const availablePlugins = useAvailablePlugins<PluginDefinition>(allPlugins)
         const all = availablePlugins.filter(pickInjectorHook).map((plugin) => (
-            <PropsContext.Provider key={plugin.ID} value={props}>
-                <ShadowRootIsolation data-plugin={plugin.ID}>
-                    <SinglePluginWithinErrorBoundary plugin={plugin} />
-                </ShadowRootIsolation>
-            </PropsContext.Provider>
+            <ShadowRootIsolation key={plugin.ID} data-plugin={plugin.ID}>
+                <SinglePluginWithinErrorBoundary plugin={plugin} props={props} />
+            </ShadowRootIsolation>
         ))
         return <>{all}</>
     }

@@ -1,11 +1,10 @@
 import { memo } from 'react'
 import { Box, Tooltip } from '@mui/material'
-import { Image } from '../../../../components/shared/Image'
 import { makeStyles } from '@masknet/theme'
-import { TokenIcon } from '@masknet/shared'
-import classNames from 'classnames'
-import { isSameAddress, NonFungibleTokenCollection } from '@masknet/web3-shared-base'
-import type { Web3Helper } from '@masknet/plugin-infra/src/entry-web3'
+import { Image, Icon } from '@masknet/shared'
+import { isSameAddress, NonFungibleCollection } from '@masknet/web3-shared-base'
+import type { Web3Helper } from '@masknet/web3-helpers'
+import { Icons } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => ({
     collectionWrap: {
@@ -17,8 +16,8 @@ const useStyles = makeStyles()((theme) => ({
     },
     collectionImg: {
         objectFit: 'cover',
-        width: '100%',
-        height: '100%',
+        width: 24,
+        height: 24,
         borderRadius: '50%',
         color: theme.palette.primary.main,
     },
@@ -33,15 +32,13 @@ const useStyles = makeStyles()((theme) => ({
 
 export interface CollectionIconProps {
     selectedCollection?: string
-    collection?: NonFungibleTokenCollection<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
+    collection?: NonFungibleCollection<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
     onClick?(): void
 }
 
 export const CollectionIcon = memo<CollectionIconProps>(({ collection, onClick, selectedCollection }) => {
-    const { classes } = useStyles()
-    if (!collection) {
-        return <TokenIcon classes={{ icon: classes.collectionImg }} name="other" address="other" />
-    }
+    const { classes, cx } = useStyles()
+
     return (
         <Tooltip
             placement="right-end"
@@ -52,24 +49,24 @@ export const CollectionIcon = memo<CollectionIconProps>(({ collection, onClick, 
             title={collection?.name ?? ''}
             arrow>
             <Box
-                className={classNames(
+                className={cx(
                     classes.collectionWrap,
-                    isSameAddress(collection.address, selectedCollection) ? classes.selected : '',
+                    isSameAddress(collection?.address, selectedCollection) ? classes.selected : '',
                 )}
                 onClick={onClick}>
                 {collection?.iconURL ? (
                     <Image
                         width={24}
                         height={24}
-                        component="img"
                         className={classes.collectionImg}
-                        src={collection?.iconURL}
+                        src={collection.iconURL}
+                        fallback={<Icons.MaskPlaceholder size={24} />}
+                        disableSpinner
                     />
                 ) : (
-                    <TokenIcon
-                        classes={{ icon: classes.collectionImg }}
-                        name={collection?.name}
-                        address={collection.name}
+                    <Icon
+                        className={classes.collectionImg}
+                        name={collection?.name ?? collection?.symbol ?? 'Unknown'}
                     />
                 )}
             </Box>

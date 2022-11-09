@@ -1,18 +1,17 @@
 import { Icons } from '@masknet/icons'
-import { ImageIcon, useImageChecker } from '@masknet/shared'
+import { ImageIcon, useIsImageURL } from '@masknet/shared'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
-import { isSameAddress, NetworkPluginID, NonFungibleToken } from '@masknet/web3-shared-base'
+import { Box, Skeleton, TooltipProps } from '@mui/material'
+import { isSameAddress, NonFungibleToken } from '@masknet/web3-shared-base'
 import { ChainId, NETWORK_DESCRIPTORS, SchemaType } from '@masknet/web3-shared-evm'
-import { Box, Skeleton } from '@mui/material'
-import classNames from 'classnames'
 
 const useStyles = makeStyles<{ networkPluginID: NetworkPluginID }>()((theme, props) => ({
-    root: {
-        paddingTop: props.networkPluginID === NetworkPluginID.PLUGIN_EVM ? 60 : 16,
-    },
-
     itemRoot: {
         position: 'relative',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
     },
     itemIcon: {
         position: 'absolute',
@@ -33,25 +32,6 @@ const useStyles = makeStyles<{ networkPluginID: NetworkPluginID }>()((theme, pro
         border: `1px solid ${theme.palette.primary.main}`,
         borderRadius: 12,
     },
-    list: {
-        gridGap: 13,
-        display: 'grid',
-        gridTemplateColumns: 'repeat(5, 1fr)',
-        padding: '0 16px 50px 16px',
-    },
-
-    nftItem: {
-        position: 'relative',
-        cursor: 'pointer',
-        display: 'flex',
-        overflow: 'hidden',
-        padding: 0,
-        flexDirection: 'column',
-        borderRadius: 12,
-        userSelect: 'none',
-        justifyContent: 'center',
-        lineHeight: 0,
-    },
     skeleton: {
         width: 126,
         height: 126,
@@ -69,15 +49,6 @@ const useStyles = makeStyles<{ networkPluginID: NetworkPluginID }>()((theme, pro
         alignItems: 'center',
         borderRadius: 12,
     },
-    image: {
-        width: 126,
-        height: 126,
-        objectFit: 'cover',
-        boxSizing: 'border-box',
-        background:
-            'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.9) 100%), linear-gradient(90deg, rgba(98, 152, 234, 0.2) 1.03%, rgba(98, 152, 234, 0.2) 1.04%, rgba(98, 126, 234, 0.2) 100%)',
-        borderRadius: 12,
-    },
     maskIcon: {
         fontSize: 30,
     },
@@ -92,21 +63,34 @@ interface NFTImageCollectibleAvatarProps {
     token: NonFungibleToken<ChainId, SchemaType>
     onChange?: (token: NonFungibleToken<ChainId, SchemaType>) => void
     selectedToken?: NonFungibleToken<ChainId, SchemaType>
-    pluginId: NetworkPluginID
+    pluginID: NetworkPluginID
     size?: number
     showNetwork?: boolean
 }
 
+const COMMON_TOOLTIP_PROPS: Partial<TooltipProps> = {
+    arrow: true,
+    disableInteractive: true,
+    PopperProps: {
+        popperOptions: {
+            strategy: 'absolute',
+        },
+    },
+}
+
+/**
+ * @deprecated Use CollectibleItem instead.
+ */
 export function NFTImageCollectibleAvatar({
     token,
     onChange,
     selectedToken,
-    pluginId,
+    pluginID,
     size = 126,
     showNetwork = false,
 }: NFTImageCollectibleAvatarProps) {
-    const { classes } = useStyles({ networkPluginID: pluginId })
-    const { value: isImageToken, loading } = useImageChecker(token.metadata?.imageURL)
+    const { classes } = useStyles({ networkPluginID: pluginID })
+    const { value: isImageToken, loading } = useIsImageURL(token.metadata?.imageURL)
 
     if (loading)
         return (
@@ -120,9 +104,11 @@ export function NFTImageCollectibleAvatar({
             </div>
         )
 
+    const title = token.collection?.name || token.contract?.name || ''
     return isImageToken ? (
         <NFTImage
-            pluginId={pluginId}
+            title={title}
+            pluginID={pluginID}
             size={size}
             showBadge
             token={token}
@@ -131,7 +117,7 @@ export function NFTImageCollectibleAvatar({
             showNetwork={showNetwork}
         />
     ) : (
-        <ShadowRootTooltip title={token?.contract?.name ?? ''} placement="top" arrow>
+        <ShadowRootTooltip {...COMMON_TOOLTIP_PROPS} title={title}>
             <Box sx={{ width: size, height: size }} className={classes.defaultImage}>
                 <Icons.MaskAvatar className={classes.maskIcon} />
             </Box>
@@ -140,7 +126,8 @@ export function NFTImageCollectibleAvatar({
 }
 
 interface NFTImageProps {
-    pluginId: NetworkPluginID
+    title: string
+    pluginID: NetworkPluginID
     showBadge?: boolean
     token: NonFungibleToken<ChainId, SchemaType>
     selectedToken?: NonFungibleToken<ChainId, SchemaType>
@@ -150,11 +137,11 @@ interface NFTImageProps {
 }
 
 function isSameNFT(
-    pluginId: NetworkPluginID,
+    pluginID: NetworkPluginID,
     a: NonFungibleToken<ChainId, SchemaType>,
     b?: NonFungibleToken<ChainId, SchemaType>,
 ) {
-    return pluginId !== NetworkPluginID.PLUGIN_SOLANA
+    return pluginID !== NetworkPluginID.PLUGIN_SOLANA
         ? isSameAddress(a.contract?.address, b?.contract?.address) &&
               a.contract?.chainId &&
               a.contract?.chainId === b?.contract?.chainId &&
@@ -163,25 +150,34 @@ function isSameNFT(
 }
 
 export function NFTImage(props: NFTImageProps) {
-    const { token, onChange, selectedToken, showBadge = false, pluginId, size = 126, showNetwork = false } = props
-    const { classes } = useStyles({ networkPluginID: pluginId })
+    const {
+        token,
+        onChange,
+        selectedToken,
+        title,
+        showBadge = false,
+        pluginID,
+        size = 126,
+        showNetwork = false,
+    } = props
+    const { classes, cx } = useStyles({ networkPluginID: pluginID })
     const iconURL = NETWORK_DESCRIPTORS.find((network) => network?.chainId === token.chainId)?.icon
 
     return (
-        <ShadowRootTooltip title={token?.contract?.name ?? ''} placement="top" arrow>
+        <ShadowRootTooltip {...COMMON_TOOLTIP_PROPS} title={title}>
             <Box className={classes.itemRoot}>
                 <img
                     onClick={() => onChange?.(token)}
                     src={token.metadata?.imageURL}
                     style={{ width: size, height: size }}
-                    className={classNames(
+                    className={cx(
                         classes.itemImage,
-                        isSameNFT(pluginId, token, selectedToken) ? classes.itemSelected : '',
+                        isSameNFT(pluginID, token, selectedToken) ? classes.itemSelected : '',
                     )}
                 />
                 {showNetwork && <ImageIcon classes={{ icon: classes.networkIcon }} icon={iconURL} size={20} />}
 
-                {showBadge && isSameNFT(pluginId, token, selectedToken) ? (
+                {showBadge && isSameNFT(pluginID, token, selectedToken) ? (
                     <Icons.Selected className={classes.itemIcon} />
                 ) : null}
             </Box>

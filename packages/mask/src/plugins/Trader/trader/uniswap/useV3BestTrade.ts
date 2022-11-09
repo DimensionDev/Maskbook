@@ -1,14 +1,17 @@
 import { useMemo } from 'react'
 import { useAsyncRetry } from 'react-use'
-import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
-import BigNumber from 'bignumber.js'
+import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
+import { BigNumber } from 'bignumber.js'
 import { Currency, CurrencyAmount, TradeType } from '@uniswap/sdk-core'
 import { encodeRouteToPath, Route, Trade } from '@uniswap/v3-sdk'
-import { useQuoterContract } from '../../contracts/uniswap/useQuoterContract'
-import { useAllV3Routes } from './useAllV3Routes'
-import { DEFAULT_MULTICALL_GAS_LIMIT } from '../../constants'
-import { TargetChainIdContext, useSingleContractMultipleData } from '@masknet/plugin-infra/web3-evm'
-import { useTargetBlockNumber } from '../useTargetBlockNumber'
+import { useQuoterContract } from '../../contracts/uniswap/useQuoterContract.js'
+import { useAllV3Routes } from './useAllV3Routes.js'
+import { DEFAULT_MULTICALL_GAS_LIMIT } from '../../constants/index.js'
+import { useSingleContractMultipleData } from '@masknet/web3-hooks-evm'
+import { useTargetBlockNumber } from '../useTargetBlockNumber.js'
+import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
+import { NetworkPluginID } from '@masknet/shared-base'
+import type { ChainId } from '@masknet/web3-shared-evm'
 
 export enum V3TradeState {
     LOADING = 0,
@@ -27,8 +30,9 @@ export function useV3BestTradeExactIn(
     amountIn?: CurrencyAmount<Currency>,
     currencyOut?: Currency,
 ): AsyncStateRetry<Trade<Currency, Currency, TradeType.EXACT_INPUT> | null> {
-    const { targetChainId } = TargetChainIdContext.useContainer()
-    const quoterContract = useQuoterContract(targetChainId)
+    const { chainId } = useChainContext()
+    const { pluginID } = useNetworkContext()
+    const quoterContract = useQuoterContract(pluginID !== NetworkPluginID.PLUGIN_EVM ? (chainId as ChainId) : undefined)
     const { routes, loading: routesLoading } = useAllV3Routes(amountIn?.currency, currencyOut)
     const quoteExactInInputs = useMemo(() => {
         try {
@@ -44,14 +48,14 @@ export function useV3BestTradeExactIn(
         }
     }, [amountIn, routes])
 
-    const { value: blockNumber } = useTargetBlockNumber(targetChainId)
+    const { value: blockNumber } = useTargetBlockNumber(chainId)
 
     const [quotesResults, quotesCalls, , quotesCallback] = useSingleContractMultipleData(
         quoterContract,
         Array.from<'quoteExactInput'>({ length: quoteExactInInputs.length }).fill('quoteExactInput'),
         quoteExactInInputs,
         DEFAULT_MULTICALL_GAS_LIMIT,
-        targetChainId,
+        pluginID !== NetworkPluginID.PLUGIN_EVM ? (chainId as ChainId) : undefined,
         blockNumber,
     )
     const {
@@ -61,7 +65,7 @@ export function useV3BestTradeExactIn(
     } = useAsyncRetry(() => quotesCallback(quotesCalls), [quoterContract, quotesCalls.map((x) => x.join()).join()])
 
     const asyncBestTrade = (() => {
-        if (!amountIn || !currencyOut) {
+        if (!amountIn || !currencyOut || pluginID !== NetworkPluginID.PLUGIN_EVM) {
             return {
                 value: undefined,
                 loading: false,
@@ -80,7 +84,10 @@ export function useV3BestTradeExactIn(
             // eslint-disable-next-line unicorn/no-array-reduce
             .reduce(
                 (
-                    currentBest: { bestRoute: Route<Currency, Currency> | null; amountOut: string | null },
+                    currentBest: {
+                        bestRoute: Route<Currency, Currency> | null
+                        amountOut: string | null
+                    },
                     { value },
                     i,
                 ) => {
@@ -150,8 +157,9 @@ export function useV3BestTradeExactOut(
     amountOut?: CurrencyAmount<Currency>,
 ): AsyncStateRetry<Trade<Currency, Currency, TradeType.EXACT_OUTPUT> | null> {
     const { routes, loading: routesLoading } = useAllV3Routes(currencyIn, amountOut?.currency)
-    const { targetChainId } = TargetChainIdContext.useContainer()
-    const quoterContract = useQuoterContract(targetChainId)
+    const { chainId } = useChainContext()
+    const { pluginID } = useNetworkContext()
+    const quoterContract = useQuoterContract(pluginID !== NetworkPluginID.PLUGIN_EVM ? (chainId as ChainId) : undefined)
     const quoteExactOutInputs = useMemo(() => {
         try {
             return routes.map(
@@ -166,14 +174,14 @@ export function useV3BestTradeExactOut(
         }
     }, [amountOut, routes])
 
-    const { value: blockNumber } = useTargetBlockNumber(targetChainId)
+    const { value: blockNumber } = useTargetBlockNumber(chainId)
 
     const [quotesResults, quotesCalls, , quotesCallback] = useSingleContractMultipleData(
         quoterContract,
         Array.from<'quoteExactOutput'>({ length: quoteExactOutInputs.length }).fill('quoteExactOutput'),
         quoteExactOutInputs,
         DEFAULT_MULTICALL_GAS_LIMIT,
-        targetChainId,
+        pluginID !== NetworkPluginID.PLUGIN_EVM ? (chainId as ChainId) : undefined,
         blockNumber,
     )
     const {
@@ -182,7 +190,12 @@ export function useV3BestTradeExactOut(
         retry: quotesRetry,
     } = useAsyncRetry(() => quotesCallback(quotesCalls), [quotesCallback, quotesCalls.map((x) => x.join()).join()])
     const asyncBestTrade = (() => {
-        if (!amountOut || !currencyIn || quotesResults.some(({ error }) => !!error)) {
+        if (
+            !amountOut ||
+            !currencyIn ||
+            quotesResults.some(({ error }) => !!error) ||
+            pluginID !== NetworkPluginID.PLUGIN_EVM
+        ) {
             return {
                 value: undefined,
                 loading: false,
@@ -201,7 +214,10 @@ export function useV3BestTradeExactOut(
             // eslint-disable-next-line unicorn/no-array-reduce
             .reduce(
                 (
-                    currentBest: { bestRoute: Route<Currency, Currency> | null; amountIn: string | null },
+                    currentBest: {
+                        bestRoute: Route<Currency, Currency> | null
+                        amountIn: string | null
+                    },
                     { value },
                     i,
                 ) => {

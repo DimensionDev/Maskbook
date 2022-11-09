@@ -1,7 +1,7 @@
 import { openDB } from 'idb/with-async-ittr'
-import { CryptoKeyToJsonWebKey } from '../../../utils-pure'
-import { createDBAccessWithAsyncUpgrade, createTransaction } from '../utils/openDB'
-import { assertPersonaDBConsistency } from './consistency'
+import { CryptoKeyToJsonWebKey } from '../../../utils-pure/index.js'
+import { createDBAccessWithAsyncUpgrade, createTransaction } from '../utils/openDB.js'
+import { assertPersonaDBConsistency } from './consistency.js'
 import {
     AESJsonWebKey,
     convertIdentifierMapToRawMap,
@@ -11,7 +11,7 @@ import {
     ProfileIdentifier,
     RelationFavor,
 } from '@masknet/shared-base'
-import { MaskMessages } from '../../../shared'
+import { MaskMessages } from '../../../shared/index.js'
 import type {
     FullPersonaDBTransaction,
     ProfileTransaction,
@@ -26,8 +26,8 @@ import type {
     RelationRecord,
     RelationRecordDB,
     PersonaRecord,
-} from './type'
-import { isEmpty } from 'lodash-unified'
+} from './type.js'
+import { isEmpty } from 'lodash-es'
 /**
  * Database structure:
  *
@@ -136,7 +136,10 @@ const db = createDBAccessWithAsyncUpgrade<PersonaDB, Knowledge>(
     },
     'maskbook-persona',
 )
-type V1To2 = { version: 2; data: Map<string, AESJsonWebKey> }
+type V1To2 = {
+    version: 2
+    data: Map<string, AESJsonWebKey>
+}
 type Knowledge = V1To2
 
 /** @internal */

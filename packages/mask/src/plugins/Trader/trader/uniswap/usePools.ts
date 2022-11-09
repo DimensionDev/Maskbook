@@ -2,12 +2,15 @@ import { useMemo } from 'react'
 import { useAsyncRetry } from 'react-use'
 import { computePoolAddress, Pool, FeeAmount } from '@uniswap/v3-sdk'
 import type { Token, Currency } from '@uniswap/sdk-core'
-import { usePoolContracts } from '../../contracts/uniswap/usePoolContract'
+import { usePoolContracts } from '../../contracts/uniswap/usePoolContract.js'
 import type { TradeProvider } from '@masknet/public-api'
-import { useGetTradeContext } from '../useGetTradeContext'
-import { TargetChainIdContext, MulticallStateType, useMultipleContractSingleData } from '@masknet/plugin-infra/web3-evm'
-import { useTargetBlockNumber } from '../useTargetBlockNumber'
+import { useGetTradeContext } from '../useGetTradeContext.js'
+import { MulticallStateType, useMultipleContractSingleData } from '@masknet/web3-hooks-evm'
+import { useTargetBlockNumber } from '../useTargetBlockNumber.js'
 import { isZero } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
+import type { ChainId } from '@masknet/web3-shared-evm'
 
 export enum PoolState {
     LOADING = 0,
@@ -20,7 +23,8 @@ export function usePools(
     tradeProvider: TradeProvider,
     poolKeys: Array<[Currency | undefined, Currency | undefined, FeeAmount | undefined]>,
 ): Array<[PoolState, Pool | null]> {
-    const { targetChainId: chainId } = TargetChainIdContext.useContainer()
+    const { chainId } = useChainContext()
+    const { pluginID } = useNetworkContext()
     const context = useGetTradeContext(tradeProvider)
 
     const transformed: Array<[Token, Token, FeeAmount] | null> = useMemo(() => {
@@ -52,7 +56,10 @@ export function usePools(
         }
     }, [chainId, transformed, context?.FACTORY_CONTRACT_ADDRESS])
 
-    const poolContracts = usePoolContracts(chainId, poolAddresses)
+    const poolContracts = usePoolContracts(
+        pluginID !== NetworkPluginID.PLUGIN_EVM ? (chainId as ChainId) : undefined,
+        poolAddresses,
+    )
 
     const { value: targetBlockNumber } = useTargetBlockNumber(chainId)
 
@@ -60,14 +67,14 @@ export function usePools(
         poolContracts,
         Array.from<'slot0'>({ length: poolContracts.length }).fill('slot0'),
         [],
-        chainId,
+        pluginID !== NetworkPluginID.PLUGIN_EVM ? (chainId as ChainId) : undefined,
         targetBlockNumber,
     )
     const [liquidities, liquiditiesCalls, liquiditiesState, liquiditiesCallback] = useMultipleContractSingleData(
         poolContracts,
         Array.from<'liquidity'>({ length: poolContracts.length }).fill('liquidity'),
         [],
-        chainId,
+        pluginID !== NetworkPluginID.PLUGIN_EVM ? (chainId as ChainId) : undefined,
         targetBlockNumber,
     )
 

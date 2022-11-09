@@ -1,20 +1,16 @@
-import { makeStyles, ActionButton } from '@masknet/theme'
+import { makeStyles, ActionButton, LoadingBase } from '@masknet/theme'
 import { explorerResolver } from '@masknet/web3-shared-evm'
-import { useChainId } from '@masknet/plugin-infra/web3'
-import { Grid, Typography, CircularProgress, Link } from '@mui/material'
-import DoneIcon from '@mui/icons-material/Done'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { useChainContext } from '@masknet/web3-hooks-base'
+import { Grid, Typography, Link } from '@mui/material'
+import { Done as DoneIcon } from '@mui/icons-material'
+import type { NetworkPluginID } from '@masknet/shared-base'
 
-import { TransactionStatus, TransactionDialogInterface, ChainId } from '../types'
-import { useI18N } from '../locales'
+import { TransactionStatus, TransactionDialogInterface, ChainId } from '../types.js'
+import { useI18N } from '../locales/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     confirmation: {
         padding: '45px 36px 40px',
-    },
-    heading: {
-        fontSize: '20px',
-        fontWeight: 600,
     },
     title: {
         margin: '12px 0 8px',
@@ -33,7 +29,7 @@ const useStyles = makeStyles()((theme) => ({
 
 export function Transaction(props: TransactionDialogInterface | undefined) {
     const t = useI18N()
-    const currentChainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { chainId: currentChainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { classes } = useStyles()
 
     if (!props?.transaction) return <>{null}</>
@@ -49,7 +45,7 @@ export function Transaction(props: TransactionDialogInterface | undefined) {
                 justifyContent="center"
                 alignItems="center"
                 className={classes.confirmation}>
-                <CircularProgress size={72} />
+                <LoadingBase size={72} />
                 <Typography className={classes.title} variant="h6">
                     {transaction.title}
                 </Typography>

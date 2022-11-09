@@ -1,24 +1,19 @@
 import { memo, useCallback, useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { first } from 'lodash-unified'
+import { first } from 'lodash-es'
 import { makeStyles } from '@masknet/theme'
-import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
+import { isSameAddress } from '@masknet/web3-shared-base'
+import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { ChainId, ProviderType } from '@masknet/web3-shared-evm'
 import { Button, List, Typography } from '@mui/material'
-import { WalletRPC } from '../../../../../plugins/Wallet/messages'
-import { useI18N } from '../../../../../utils'
-import Services from '../../../../service'
-import { WalletItem } from './WalletItem'
-import {
-    useAccount,
-    useChainIdValid,
-    useWallets,
-    getRegisteredWeb3Networks,
-    Web3Helper,
-    useChainId,
-} from '@masknet/plugin-infra/web3'
+import { WalletRPC } from '../../../../../plugins/Wallet/messages.js'
+import { useI18N } from '../../../../../utils/index.js'
+import Services from '../../../../service.js'
+import { WalletItem } from './WalletItem.js'
+import { useChainIdValid, useWallets, useChainContext } from '@masknet/web3-hooks-base'
+import { getRegisteredWeb3Networks } from '@masknet/plugin-infra'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import { ChainIcon, WalletIcon } from '@masknet/shared'
-import { PopupRoutes } from '@masknet/shared-base'
 
 const useStyles = makeStyles()({
     content: {
@@ -105,11 +100,9 @@ const SelectWallet = memo(() => {
     const isPopup = search.get('popup')
     // The opener need to switch to specific chain
     const chainIdSearched = search.get('chainId')
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const chainId = useChainId(
-        NetworkPluginID.PLUGIN_EVM,
-        chainIdSearched ? (Number.parseInt(chainIdSearched, 10) as ChainId) : undefined,
-    )
+    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>({
+        chainId: chainIdSearched ? (Number.parseInt(chainIdSearched, 10) as ChainId) : undefined,
+    })
     const chainIdValid = useChainIdValid(NetworkPluginID.PLUGIN_EVM, chainId)
     const wallets = useWallets(NetworkPluginID.PLUGIN_EVM)
 

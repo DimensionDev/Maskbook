@@ -1,4 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
+import { batch } from 'async-call-rpc'
+import { cloneDeep, uniqBy } from 'lodash-es'
 import {
     ProfileInformation as Profile,
     NextIDPlatform,
@@ -6,16 +8,14 @@ import {
     ProfileInformationFromNextID,
     ProfileIdentifier,
 } from '@masknet/shared-base'
-import type { LazyRecipients } from '../../CompositionDialog/CompositionUI'
-import { SelectRecipientsDialogUI } from './SelectRecipientsDialog'
-import { useCurrentIdentity } from '../../DataSource/useActivatedUI'
-import { usePersonasFromNextID } from '../../DataSource/usePersonasFromNextID'
-import { useTwitterIdByWalletSearch } from './useTwitterIdByWalletSearch'
+import type { LazyRecipients } from '../../CompositionDialog/CompositionUI.js'
+import { SelectRecipientsDialogUI } from './SelectRecipientsDialog.js'
+import { useCurrentIdentity } from '../../DataSource/useActivatedUI.js'
+import { usePersonasFromNextID } from '../../DataSource/usePersonasFromNextID.js'
+import { useTwitterIdByWalletSearch } from './useTwitterIdByWalletSearch.js'
 import { isValidAddress } from '@masknet/web3-shared-evm'
-import { useI18N } from '../../../utils'
-import { cloneDeep, uniqBy } from 'lodash-unified'
-import Services from '../../../extension/service'
-import { batch } from 'async-call-rpc'
+import { useI18N } from '../../../utils/index.js'
+import Services from '../../../extension/service.js'
 
 export interface SelectRecipientsUIProps {
     items: LazyRecipients

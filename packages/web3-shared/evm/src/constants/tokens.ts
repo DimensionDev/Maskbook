@@ -1,17 +1,11 @@
-import { getEnumAsArray } from '@dimensiondev/kit'
-import Token from '@masknet/web3-constants/evm/token.json'
-import { createFungibleTokensFromConstants, FungibleToken } from '@masknet/web3-shared-base'
-import { ChainId, ChainIdOptionalRecord, SchemaType } from '../types'
-import { chainResolver } from '../utils/resolver'
+import type { FungibleToken } from '@masknet/web3-shared-base'
+import { ChainId, ChainIdOptionalRecord, SchemaType } from '../types/index.js'
+import { chainResolver } from '../utils/resolver.js'
+import { createERC20Tokens } from '../utils/token.js'
 
 export type ERC20AgainstToken = Readonly<ChainIdOptionalRecord<Array<FungibleToken<ChainId, SchemaType.ERC20>>>>
 
-const createERC20Tokens = createFungibleTokensFromConstants<typeof Token, ChainId, SchemaType.ERC20>(
-    getEnumAsArray(ChainId),
-    SchemaType.ERC20,
-    Token,
-)
-
+export const APE = createERC20Tokens('APE_ADDRESS', 'ApeCoin', 'APE', 18)
 export const USDC = createERC20Tokens('USDC_ADDRESS', 'USC Coin', 'USDC', 6)
 export const USDCe = createERC20Tokens('USDC_ADDRESS', 'USD Coin', 'USDCe', 6)
 export const USDT = createERC20Tokens('USDT_ADDRESS', 'Tether USD', 'USDT', 6)
@@ -34,6 +28,7 @@ export const sUSD = createERC20Tokens('sUSD_ADDRESS', 'Synth sUSD', 'sUSD', 18)
 export const UNITOKEN = createERC20Tokens('UNITOKEN_ADDRESS', 'Uniswap', 'UNI', 18)
 export const TT01 = createERC20Tokens('TT01_ADDRESS', 'Test Token 01', 'TT01', 18)
 export const TT02 = createERC20Tokens('TT02_ADDRESS', 'Test Token 02', 'TT02', 18)
+export const TATR = createERC20Tokens('TART_ADDRESS', 'TATR tech', 'TATR', 18)
 export const ETHER = createERC20Tokens('ETHER_ADDRESS', 'Ether', 'ETH', 18)
 export const QUICK = createERC20Tokens('QUICK_ADDRESS', 'Quickswap', 'QUICK', 18)
 export const WANNA = createERC20Tokens('WANNA_ADDRESS', 'Wannaswap', 'WANNA', 18)
@@ -60,6 +55,7 @@ export const JEWEL = createERC20Tokens('JEWEL_ADDRESS', 'Jewels', 'JEWEL', 18)
 export const YUMI = createERC20Tokens('YUMI_ADDRESS', 'YumiSwap Token', 'YUMI', 18)
 export const xYUMI = createERC20Tokens('xYUMI_ADDRESS', 'Yumi Staking Token', 'xYUMI', 18)
 export const OP = createERC20Tokens('OP_ADDRESS', 'Optimism', 'OP', 18)
+export const RARI = createERC20Tokens('RARI_ADDRESS', 'Rarible', 'RARI', 18)
 
 export const WNATIVE = createERC20Tokens(
     'WNATIVE_ADDRESS',

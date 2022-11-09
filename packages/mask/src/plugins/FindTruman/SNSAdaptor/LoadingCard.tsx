@@ -1,8 +1,8 @@
 import { Suspense } from 'react'
 import { Skeleton } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { FindTrumanCard } from './FindTrumanCard'
-import { range } from 'lodash-unified'
+import { FindTrumanCard } from './FindTrumanCard.js'
+import { range } from 'lodash-es'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -15,7 +15,11 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
-export function LoadingCard(props: React.PropsWithChildren<{ title: string }>) {
+export function LoadingCard(
+    props: React.PropsWithChildren<{
+        title: string
+    }>,
+) {
     const { classes } = useStyles()
     return (
         <Suspense

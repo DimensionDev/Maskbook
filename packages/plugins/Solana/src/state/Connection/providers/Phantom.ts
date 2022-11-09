@@ -2,17 +2,17 @@ import bs58 from 'bs58'
 import { PublicKey, Transaction } from '@solana/web3.js'
 import { injectedPhantomProvider } from '@masknet/injected-script'
 import { PhantomMethodType, ProviderType } from '@masknet/web3-shared-solana'
-import type { SolanaProvider } from '../types'
-import { BaseInjectedProvider } from './BaseInjected'
+import type { SolanaProvider } from '../types.js'
+import { BaseInjectedProvider } from './BaseInjected.js'
 
 export class PhantomProvider extends BaseInjectedProvider implements SolanaProvider {
     constructor() {
-        injectedPhantomProvider.untilAvailable().then(() => {
-            injectedPhantomProvider.connect({
+        super(ProviderType.Phantom, injectedPhantomProvider)
+        injectedPhantomProvider.untilAvailable().then(async () => {
+            await injectedPhantomProvider.connect({
                 onlyIfTrusted: true,
             })
         })
-        super(ProviderType.Phantom, injectedPhantomProvider)
     }
 
     override async signMessage(dataToSign: string) {
@@ -30,7 +30,10 @@ export class PhantomProvider extends BaseInjectedProvider implements SolanaProvi
     }
 
     override async signTransaction(transaction: Transaction) {
-        const { publicKey, signature } = await this.bridge.request<{ publicKey: string; signature: string }>({
+        const { publicKey, signature } = await this.bridge.request<{
+            publicKey: string
+            signature: string
+        }>({
             method: PhantomMethodType.SIGN_TRANSACTION,
             params: {
                 message: bs58.encode(transaction.serializeMessage()),

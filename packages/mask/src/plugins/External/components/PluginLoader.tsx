@@ -9,7 +9,6 @@ import {
     Skeleton,
     Alert,
     AlertTitle,
-    CircularProgress,
     Avatar,
     List,
     ListItem,
@@ -18,12 +17,13 @@ import {
     ListItemText,
 } from '@mui/material'
 import { useState } from 'react'
-import { Result } from 'ts-results'
+import { Result } from 'ts-results-es'
 // import { PermissionAwareRedirectOf } from '../../../extension/popups'
-import { useExternalPluginManifest } from '../loader'
+import { useExternalPluginManifest } from '../loader/index.js'
 import { Link as LinkIcon, Person as PublisherIcon, Description as DescriptionIcon } from '@mui/icons-material'
-import { useI18N } from '../../../utils'
+import { useI18N } from '../../../utils/i18n-next-ui.js'
 import { Trans } from 'react-i18next'
+import { LoadingBase } from '@masknet/theme'
 
 export function PluginLoader() {
     const [input, setInput] = useState(
@@ -92,7 +92,7 @@ function Loader(props: { url: string }) {
     return (
         <Box>
             <Typography variant="h6">
-                {loading ? <CircularProgress sx={{ marginRight: 1 }} size={16} /> : null}
+                {loading ? <LoadingBase sx={{ marginRight: 1 }} size={16} /> : null}
                 {t('plugin_external_name')}: {loading ? skeleton : value?.name ?? 'Unknown name'}
             </Typography>
             <List dense>

@@ -1,16 +1,16 @@
 import type { MobilePersona } from '@masknet/public-api'
 import type { PersonaIdentifier, PersonaInformation, ProfileIdentifier } from '@masknet/shared-base'
-import { first, orderBy } from 'lodash-unified'
+import { first, orderBy } from 'lodash-es'
 import {
     createPersonaDBReadonlyAccess,
     PersonaRecord,
     queryPersonaDB,
     queryPersonasDB,
     queryProfileDB,
-} from '../../../database/persona/db'
-import { queryPersonasDB as queryPersonasFromIndexedDB } from '../../../database/persona/web'
-import { toPersonaInformation } from '../../__utils__/convert'
-import { personaRecordToMobilePersona } from './mobile'
+} from '../../../database/persona/db.js'
+import { queryPersonasDB as queryPersonasFromIndexedDB } from '../../../database/persona/web.js'
+import { toPersonaInformation } from '../../__utils__/convert.js'
+import { personaRecordToMobilePersona } from './mobile.js'
 
 export async function mobile_queryPersonaRecordsFromIndexedDB() {
     if (process.env.architecture !== 'app') throw new Error('This function is only available in app')

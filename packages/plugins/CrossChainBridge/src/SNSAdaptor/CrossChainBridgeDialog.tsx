@@ -1,14 +1,11 @@
 import { DialogContent, Stack, Typography } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
-import { useI18N } from '../locales'
-import { getCrossChainBridge } from '../constants'
+import { useI18N } from '../locales/index.js'
+import { getCrossChainBridge } from '../constants.js'
 import { openWindow } from '@masknet/shared-base-ui'
 import { InjectedDialog } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
-    root: {
-        width: 600,
-    },
     content: {
         maxHeight: 510,
         padding: theme.spacing(2),
@@ -55,7 +52,7 @@ export interface CrossChainBridgeDialogProps extends withClasses<never | 'root'>
 
 export function CrossChainBridgeDialog(props: CrossChainBridgeDialogProps) {
     const t = useI18N()
-    const classes = useStylesExtends(useStyles(), props)
+    const { classes } = useStylesExtends(useStyles(), props)
     const { open, onClose } = props
     // @ts-ignore
     const bridges = getCrossChainBridge(t)

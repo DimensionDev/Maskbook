@@ -1,16 +1,16 @@
 import { useState } from 'react'
 import { Icons } from '@masknet/icons'
-import { Box, Card, CardContent, CardHeader, CircularProgress, Paper, Tab, Tabs, Typography } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
-import { useI18N } from '../../../utils/i18n-next-ui'
-import { useFetchPool, usePoolDepositAssets } from '../hooks/usePool'
-import { PerformanceChart } from './PerformanceChart'
-import { PoolStats } from './PoolStats'
-import { PoolViewDeck } from './PoolViewDeck'
-import { useChainId } from '@masknet/plugin-infra/web3'
+import { Box, Card, CardContent, CardHeader, Paper, Tab, Tabs, Typography } from '@mui/material'
+import { LoadingBase, makeStyles } from '@masknet/theme'
+import { useI18N } from '../../../utils/i18n-next-ui.js'
+import { useFetchPool, usePoolDepositAssets } from '../hooks/usePool.js'
+import { PerformanceChart } from './PerformanceChart.js'
+import { PoolStats } from './PoolStats.js'
+import { PoolViewDeck } from './PoolViewDeck.js'
+import { useChainContext } from '@masknet/web3-hooks-base'
 import { ChainId } from '@masknet/web3-shared-evm'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { ChainBoundary } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -62,7 +62,7 @@ interface PoolViewProps {
 export function PoolView(props: PoolViewProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const currentChainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
     // #region allowed tokens
     const { value: pool, error, loading, retry } = useFetchPool(props.address ?? '')
@@ -87,7 +87,7 @@ export function PoolView(props: PoolViewProps) {
     if (loading || loadingAllowedTokens)
         return (
             <Typography className={classes.message} textAlign="center" sx={{ padding: 2 }}>
-                <CircularProgress />
+                <LoadingBase />
             </Typography>
         )
     if (!pool)
@@ -96,7 +96,7 @@ export function PoolView(props: PoolViewProps) {
                 {t('plugin_dhedge_pool_not_found')}
             </Typography>
         )
-    if (error || (errorAllowedTokens && currentChainId === pool.chainId))
+    if (error || (errorAllowedTokens && chainId === pool.chainId))
         return (
             <Typography className={classes.message} color="textPrimary">
                 {t('plugin_dhedge_smt_wrong')}

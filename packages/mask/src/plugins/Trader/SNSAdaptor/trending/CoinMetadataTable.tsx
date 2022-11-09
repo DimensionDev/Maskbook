@@ -12,17 +12,16 @@ import {
 } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import type { DataProvider } from '@masknet/public-api'
-import { useI18N } from '../../../../utils'
-import { ContractSection } from './ContractSection'
-import type { CommunityType } from '../../types'
+import { useI18N } from '../../../../utils/index.js'
+import { ContractSection } from './ContractSection.js'
+import type { CommunityType } from '../../types/index.js'
 import { Icons } from '@masknet/icons'
-import { upperFirst } from 'lodash-unified'
+import { upperFirst } from 'lodash-es'
 import type { TrendingAPI } from '@masknet/web3-providers'
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
+import { MoreHoriz as MoreHorizIcon } from '@mui/icons-material'
 import { Linking, useMenuConfig } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
-    root: {},
     container: {
         borderRadius: 0,
         backgroundColor: 'transparent',
@@ -91,6 +90,8 @@ export function CoinMetadataTable(props: CoinMetadataTableProps) {
                   {
                       chainId: trending.coin.chainId!,
                       address: trending.coin.contract_address!,
+                      name: trending.coin.name,
+                      symbol: trending.coin.symbol,
                       iconURL: '',
                   },
               ]
@@ -99,7 +100,13 @@ export function CoinMetadataTable(props: CoinMetadataTableProps) {
     const [menu, openMenu] = useMenuConfig(
         contracts.map((x) => (
             <MenuItem key={x.chainId}>
-                <ContractSection address={x.address} chainId={x.chainId} iconURL={x.iconURL} />
+                <ContractSection
+                    chainId={x.chainId}
+                    address={x.address}
+                    name={x.name}
+                    symbol={x.symbol}
+                    iconURL={x.iconURL}
+                />
             </MenuItem>
         )),
         {
@@ -135,6 +142,8 @@ export function CoinMetadataTable(props: CoinMetadataTableProps) {
                                                 iconURL={contracts[0].iconURL}
                                                 chainId={contracts[0].chainId}
                                                 address={contracts[0].address}
+                                                name={contracts[0].name}
+                                                symbol={contracts[0].symbol}
                                             />
                                             {contracts.length > 1 ? (
                                                 <IconButton size="small" onClick={openMenu}>

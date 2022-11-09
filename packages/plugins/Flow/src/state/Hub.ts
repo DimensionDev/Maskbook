@@ -1,9 +1,9 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import type { Subscription } from 'use-subscription'
-import { HubState } from '@masknet/plugin-infra/web3'
+import { HubState } from '@masknet/web3-state'
 import type { CurrencyType, SourceType } from '@masknet/web3-shared-base'
-import type { ChainId, GasOption, SchemaType } from '@masknet/web3-shared-flow'
-import { createHub } from './Hub/hub'
+import { isValidChainId, getDefaultChainId, ChainId, GasOption, SchemaType } from '@masknet/web3-shared-flow'
+import { createHub } from './Hub/hub.js'
 
 export class Hub extends HubState<ChainId, SchemaType, GasOption> {
     constructor(
@@ -15,6 +15,9 @@ export class Hub extends HubState<ChainId, SchemaType, GasOption> {
             currencyType?: Subscription<CurrencyType>
         },
     ) {
-        super(createHub, subscription)
+        super(createHub, subscription, {
+            isValidChainId,
+            getDefaultChainId,
+        })
     }
 }

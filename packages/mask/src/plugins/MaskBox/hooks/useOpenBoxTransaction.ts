@@ -1,9 +1,10 @@
-import { useAccount } from '@masknet/plugin-infra/web3'
-import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
-import { FungibleToken, multipliedBy, NetworkPluginID } from '@masknet/web3-shared-base'
-import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { useMemo } from 'react'
-import { useMaskBoxContract } from './useMaskBoxContract'
+import { useChainContext } from '@masknet/web3-hooks-base'
+import type { NonPayableTx } from '@masknet/web3-contracts/types/types.js'
+import { FungibleToken, multipliedBy } from '@masknet/web3-shared-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
+import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import { useMaskBoxContract } from './useMaskBoxContract.js'
 
 export function useOpenBoxTransaction(
     boxId: string,
@@ -14,7 +15,7 @@ export function useOpenBoxTransaction(
     proof?: string,
     overrides?: NonPayableTx | null,
 ) {
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const maskBoxContract = useMaskBoxContract()
     return useMemo(() => {
         if (!boxId || amount <= 0 || !maskBoxContract) return

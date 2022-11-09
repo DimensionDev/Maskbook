@@ -1,29 +1,29 @@
-import { InjectedDialog, useOpenShareTxDialog, useSelectFungibleToken } from '@masknet/shared'
+import {
+    InjectedDialog,
+    useOpenShareTxDialog,
+    useSelectFungibleToken,
+    FungibleTokenInput,
+    PluginWalletStatusBar,
+    WalletConnectedBoundary,
+    EthereumERC20TokenApprovedBoundary,
+} from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles, ActionButton } from '@masknet/theme'
-import { useAccount, useFungibleTokenBalance } from '@masknet/plugin-infra/web3'
-import { formatBalance, FungibleToken, isZero, NetworkPluginID, rightShift } from '@masknet/web3-shared-base'
+import { useChainContext, useFungibleTokenBalance } from '@masknet/web3-hooks-base'
+import { CrossIsolationMessages, NetworkPluginID } from '@masknet/shared-base'
+import { formatBalance, FungibleToken, isZero, rightShift } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { DialogActions, DialogContent } from '@mui/material'
-import { useCallback, useMemo, useState } from 'react'
-import { activatedSocialNetworkUI } from '../../../social-network'
-import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
-import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
-import { useI18N } from '../../../utils/i18n-next-ui'
-import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
-import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
-import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
-import { PluginTraderMessages } from '../../Trader/messages'
-import type { Coin } from '../../Trader/types'
-import { useInvestCallback } from '../hooks/useInvestCallback'
-import { PluginDHedgeMessages } from '../messages'
-import type { Pool } from '../types'
-import { PluginWalletStatusBar } from '../../../utils'
+import { useCallback, useMemo, useState, useEffect } from 'react'
+import { activatedSocialNetworkUI } from '../../../social-network/index.js'
+import { isFacebook } from '../../../social-network-adaptor/facebook.com/base.js'
+import { isTwitter } from '../../../social-network-adaptor/twitter.com/base.js'
+import { useI18N } from '../../../utils/i18n-next-ui.js'
+import { useInvestCallback } from '../hooks/useInvestCallback.js'
+import { PluginDHedgeMessages } from '../messages.js'
+import type { Pool } from '../types.js'
 
 const useStyles = makeStyles()((theme) => ({
-    paper: {
-        width: '450px !important',
-    },
     form: {
         '& > *': {
             margin: theme.spacing(1, 0),
@@ -31,11 +31,6 @@ const useStyles = makeStyles()((theme) => ({
     },
     root: {
         margin: theme.spacing(2, 0),
-    },
-    tip: {
-        fontSize: 12,
-        color: theme.palette.text.secondary,
-        padding: theme.spacing(2, 2, 0, 2),
     },
     button: {
         margin: 0,
@@ -52,7 +47,7 @@ export function InvestDialog() {
     const [allowedTokens, setAllowedTokens] = useState<string[]>()
 
     // context
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
     // #region remote controlled dialog
     const { open, closeDialog } = useRemoteControlledDialog(PluginDHedgeMessages.InvestDialogUpdated, (ev) => {
@@ -120,32 +115,23 @@ export function InvestDialog() {
     // #endregion
 
     // #region Swap
-    const { setDialog: openSwapDialog } = useRemoteControlledDialog(
-        PluginTraderMessages.swapDialogUpdated,
-        useCallback(
-            (ev: { open: boolean }) => {
-                if (!ev.open) {
-                    retryLoadTokenBalance()
-                }
-            },
-            [retryLoadTokenBalance],
-        ),
+    useEffect(
+        () =>
+            CrossIsolationMessages.events.swapDialogEvent.on(({ open }) => {
+                if (!open) retryLoadTokenBalance()
+            }),
+        [retryLoadTokenBalance],
     )
+
     const openSwap = useCallback(() => {
         if (!token) return
-        openSwapDialog({
+        CrossIsolationMessages.events.swapDialogEvent.sendToLocal({
             open: true,
             traderProps: {
-                coin: {
-                    id: token.address,
-                    name: token.name ?? '',
-                    symbol: token.symbol ?? '',
-                    contract_address: token.address,
-                    decimals: token.decimals,
-                } as Coin,
+                defaultInputCoin: token,
             },
         })
-    }, [token, openSwapDialog])
+    }, [token])
     // #endregion
 
     // #region submit button
@@ -166,18 +152,13 @@ export function InvestDialog() {
             <InjectedDialog open={open} onClose={onClose} title={pool.name} maxWidth="xs">
                 <DialogContent style={{ padding: 16 }}>
                     <form className={classes.form} noValidate autoComplete="off">
-                        <TokenAmountPanel
-                            label="Amount"
+                        <FungibleTokenInput
+                            label={t('amount')}
                             amount={rawAmount}
                             balance={tokenBalance ?? '0'}
                             token={token}
                             onAmountChange={setRawAmount}
-                            SelectTokenChip={{
-                                loading: loadingTokenBalance,
-                                ChipProps: {
-                                    onClick: onSelectTokenChipClick,
-                                },
-                            }}
+                            onSelectToken={onSelectTokenChipClick}
                         />
                     </form>
                 </DialogContent>

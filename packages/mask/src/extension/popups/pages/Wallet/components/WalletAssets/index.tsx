@@ -2,17 +2,16 @@ import { memo, useState } from 'react'
 import { Button, Tab, Tabs, styled, tabClasses, tabsClasses } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { TabContext, TabPanel } from '@mui/lab'
-import { AssetsList } from '../AssetsList'
+import { AssetsList } from '../AssetsList/index.js'
 import { useNavigate } from 'react-router-dom'
-import { PopupRoutes } from '@masknet/shared-base'
-import { ActivityList } from '../ActivityList'
-import { useI18N } from '../../../../../../utils'
+import { PopupRoutes, NetworkPluginID } from '@masknet/shared-base'
+import { ActivityList } from '../ActivityList/index.js'
+import { useI18N } from '../../../../../../utils/index.js'
 import { useContainer } from 'unstated-next'
-import { WalletContext } from '../../hooks/useWalletContext'
-import { LoadingPlaceholder } from '../../../../components/LoadingPlaceholder'
-import { Navigator } from '../../../../components/Navigator'
-import { useWallet } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { WalletContext } from '../../hooks/useWalletContext.js'
+import { LoadingPlaceholder } from '../../../../components/LoadingPlaceholder/index.js'
+import { Navigator } from '../../../../components/Navigator/index.js'
+import { useWallet } from '@masknet/web3-hooks-base'
 
 const useStyles = makeStyles()({
     content: {
@@ -26,9 +25,6 @@ const useStyles = makeStyles()({
         display: 'flex',
         flexDirection: 'column',
         overflow: 'auto',
-    },
-    addToken: {
-        padding: 16,
     },
     button: {
         fontWeight: 600,

@@ -1,20 +1,19 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { base } from '@masknet/plugin-wallet'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { SelectNftContractDialog } from '../SNSAdaptor/SelectNftContractDialog'
-import { SelectProviderDialog } from '../SNSAdaptor/SelectProviderDialog'
-import { WalletStatusDialog } from '../SNSAdaptor/WalletStatusDialog'
-import { ConnectWalletDialog } from '../SNSAdaptor/ConnectWalletDialog'
-import { WalletRiskWarningDialog } from '../SNSAdaptor/RiskWarningDialog'
-import { GasSettingDialog } from '../SNSAdaptor/GasSettingDialog'
-import { TransactionSnackbar } from '../SNSAdaptor/TransactionSnackbar'
-import { WalletConnectQRCodeDialog } from '../SNSAdaptor/WalletConnectQRCodeDialog'
-import { ExtensionSite, getSiteType } from '@masknet/shared-base'
+import { ExtensionSite, getSiteType, NetworkPluginID } from '@masknet/shared-base'
+import { SelectNftContractDialog } from '../SNSAdaptor/SelectNftContractDialog.js'
+import { SelectProviderDialog } from '../SNSAdaptor/SelectProviderDialog/index.js'
+import { WalletStatusDialog } from '../SNSAdaptor/WalletStatusDialog/index.js'
+import { ConnectWalletDialog } from '../SNSAdaptor/ConnectWalletDialog/index.js'
+import { WalletRiskWarningDialog } from '../SNSAdaptor/RiskWarningDialog/index.js'
+import { GasSettingDialog } from '../SNSAdaptor/GasSettingDialog/index.js'
+import { TransactionSnackbar } from '../SNSAdaptor/TransactionSnackbar/index.js'
+import { WalletConnectQRCodeDialog } from '../SNSAdaptor/WalletConnectQRCodeDialog/index.js'
 
 const dashboard: Plugin.Dashboard.Definition = {
     ...base,
     init(signal) {},
-    GlobalInjection: function Component() {
+    GlobalInjection() {
         return (
             <>
                 <SelectProviderDialog />

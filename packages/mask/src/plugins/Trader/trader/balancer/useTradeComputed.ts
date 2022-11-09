@@ -1,8 +1,8 @@
 import { useMemo } from 'react'
-import BigNumber from 'bignumber.js'
-import { FungibleToken, ZERO } from '@masknet/web3-shared-base'
-import { SwapResponse, TradeComputed, TradeStrategy } from '../../types'
-import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import { BigNumber } from 'bignumber.js'
+import { ZERO } from '@masknet/web3-shared-base'
+import { SwapResponse, TradeComputed, TradeStrategy } from '../../types/index.js'
+import type { Web3Helper } from '@masknet/web3-helpers'
 
 const MIN_VALUE = new BigNumber('1e-5')
 
@@ -11,8 +11,8 @@ export function useTradeComputed(
     strategy: TradeStrategy,
     inputAmount: string,
     outputAmount: string,
-    inputToken?: FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>,
-    outputToken?: FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>,
+    inputToken?: Web3Helper.FungibleTokenAll,
+    outputToken?: Web3Helper.FungibleTokenAll,
 ) {
     return useMemo(() => {
         if (!trade) return null

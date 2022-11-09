@@ -1,16 +1,21 @@
-import type BigNumber from 'bignumber.js'
+import type { BigNumber } from 'bignumber.js'
 import { createPluginMessage, PluginMessageEmitter } from '@masknet/plugin-infra'
-import type { Web3Helper } from '@masknet/plugin-infra/web3'
-import type { GasOptionType, NetworkPluginID, NonFungibleTokenContract } from '@masknet/web3-shared-base'
+import type { Web3Helper } from '@masknet/web3-helpers'
+import type { PluginID, NetworkPluginID } from '@masknet/shared-base'
+import type { GasOptionType, NonFungibleTokenContract } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import { PLUGIN_ID } from './constants'
+import { PLUGIN_ID } from './constants.js'
 
 export type ApplicationDialogEvent = {
     open: boolean
-}
-
-export type ApplicationPersonaListDialogEvent = {
-    open: boolean
+    settings?: {
+        // When quickMode is enabled,
+        // closing the Setting dialog will not return to ApplicationBoard normal dialog
+        quickMode?: boolean
+        switchTab?: {
+            focusPluginID?: PluginID
+        }
+    }
 }
 
 export type SelectProviderDialogEvent =
@@ -18,6 +23,7 @@ export type SelectProviderDialogEvent =
           open: true
           walletConnectedCallback?: () => void
           supportedNetworkList?: Array<Web3Helper.NetworkDescriptorAll['type']>
+          network?: Web3Helper.NetworkDescriptorAll
       }
     | {
           open: false
@@ -70,7 +76,6 @@ export type WalletRiskWarningDialogEvent =
 
 export type SelectNftContractDialogEvent = {
     open: boolean
-    uuid: string
 
     chainId?: ChainId
     balance?: string
@@ -132,7 +137,9 @@ export interface WalletMessage {
     phrasesUpdated: void
     addressBookUpdated: void
     transactionsUpdated: void
-    requestsUpdated: { hasRequest: boolean }
+    requestsUpdated: {
+        hasRequest: boolean
+    }
     /** true: Now locked; false: Now unlocked */
     walletLockStatusUpdated: boolean
     socketMessageUpdated: SocketMessageUpdatedEvent
@@ -141,6 +148,8 @@ export interface WalletMessage {
 }
 
 if (import.meta.webpackHot) import.meta.webpackHot.accept()
-export const WalletMessages: { events: PluginMessageEmitter<WalletMessage> } = {
+export const WalletMessages: {
+    events: PluginMessageEmitter<WalletMessage>
+} = {
     events: createPluginMessage<WalletMessage>(PLUGIN_ID),
 }

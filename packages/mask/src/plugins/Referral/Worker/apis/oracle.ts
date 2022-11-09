@@ -1,7 +1,7 @@
 import type { JsonRpcResponse } from 'web3-core-helpers'
 
-import { getFarmOraclesDiscovery } from './discovery'
-import { supportedOracleChainId } from '../../constants'
+import { getFarmOraclesDiscovery } from './discovery.js'
+import { supportedOracleChainId } from '../../constants.js'
 
 export enum RpcRoute {
     rpc = 'rpc',

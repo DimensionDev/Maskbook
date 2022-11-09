@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react'
 import { useAsync } from 'react-use'
-import type { User } from '../types'
-import { useCurrentVisitingIdentity, useLastRecognizedIdentity } from '../../../components/DataSource/useActivatedUI'
-import { PluginPetRPC } from '../messages'
-import { useAccount } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import type { User } from '../types.js'
+import { useCurrentVisitingIdentity, useLastRecognizedIdentity } from '../../../components/DataSource/useActivatedUI.js'
+import { PetsPluginID } from '../constants.js'
+import { useChainContext, useWeb3State } from '@masknet/web3-hooks-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
 
 export function useUser() {
     const [user, setUser] = useState<User>({ userId: '', address: '' })
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const whoAmI = useLastRecognizedIdentity()
     useEffect(() => {
         if (!(account && whoAmI?.identifier?.userId)) return
@@ -20,12 +20,21 @@ export function useUser() {
 export function useCurrentVisitingUser(flag?: number) {
     const [user, setUser] = useState<User>({ userId: '', address: '' })
     const identity = useCurrentVisitingIdentity()
+    const { Storage } = useWeb3State()
     useAsync(async () => {
         const userId = location.href?.endsWith(identity.identifier?.userId ?? '')
             ? identity.identifier?.userId ?? ''
             : ''
         try {
-            const address = (await PluginPetRPC.getUserAddress(identity.identifier?.userId ?? '')) ?? ''
+            if (!Storage || !userId || userId === '$unknown') {
+                setUser({
+                    userId: '',
+                    address: '',
+                })
+                return
+            }
+            const storage = Storage.createKVStorage(PetsPluginID)
+            const address = (await storage.get<string>(userId)) ?? ''
             setUser({
                 userId,
                 address,
@@ -36,6 +45,6 @@ export function useCurrentVisitingUser(flag?: number) {
                 address: '',
             })
         }
-    }, [identity, flag, location.href])
+    }, [identity, flag, location.href, Storage])
     return user
 }

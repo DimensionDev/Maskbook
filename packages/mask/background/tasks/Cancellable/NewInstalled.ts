@@ -1,9 +1,10 @@
-import { Flags } from '../../../shared/flags'
+import { Flags } from '../../../shared/flags.js'
 import { DashboardRoutes } from '@masknet/shared-base'
-import { hmr } from '../../../utils-pure'
+import { hmr } from '../../../utils-pure/index.js'
+import type { Runtime } from 'webextension-polyfill'
 
 const { signal } = hmr(import.meta.webpackHot)
-const onInstalled = (detail: { reason: browser.runtime.OnInstalledReason }) => {
+const onInstalled = (detail: Runtime.OnInstalledDetailsType) => {
     if (Flags.has_native_welcome_ui) return
     if (detail.reason === 'install')
         browser.tabs.create({ url: browser.runtime.getURL(`dashboard.html#${DashboardRoutes.Welcome}`) })

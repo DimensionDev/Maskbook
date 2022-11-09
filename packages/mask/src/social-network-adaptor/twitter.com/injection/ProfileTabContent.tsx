@@ -1,13 +1,13 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { getMaskColor, makeStyles } from '@masknet/theme'
-import { ProfileTabContent } from '../../../components/InjectedComponents/ProfileTabContent'
-import { createReactRootShadowed, startWatch, MaskMessages } from '../../../utils'
+import { ProfileTabContent } from '../../../components/InjectedComponents/ProfileTabContent.js'
+import { createReactRootShadowed, startWatch, MaskMessages } from '../../../utils/index.js'
 import {
     searchNewTweetButtonSelector,
     searchProfileEmptySelector,
     searchProfileTabPageSelector,
     searchProfileTabLoseConnectionPageSelector,
-} from '../utils/selector'
+} from '../utils/selector.js'
 
 function injectProfileTabContentForEmptyState(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchProfileEmptySelector())
@@ -49,7 +49,6 @@ function getStyleProps() {
         fontFamily: newTweetButton?.firstChild
             ? window.getComputedStyle(newTweetButton.firstChild as HTMLElement).fontFamily
             : undefined,
-        isPositionStatic: location.pathname.endsWith('/likes') || location.pathname.endsWith('/media'),
     }
 }
 
@@ -58,7 +57,7 @@ const useStyles = makeStyles()((theme) => {
 
     return {
         root: {
-            position: props.isPositionStatic ? 'static' : 'absolute',
+            position: 'absolute',
             top: 0,
             left: 0,
             right: 0,
@@ -87,5 +86,13 @@ const useStyles = makeStyles()((theme) => {
 
 export function ProfileTabContentAtTwitter() {
     const { classes } = useStyles()
-    return <ProfileTabContent classes={classes} />
+    return (
+        <ProfileTabContent
+            classes={{
+                root: classes.root,
+                button: classes.button,
+                text: classes.text,
+            }}
+        />
+    )
 }

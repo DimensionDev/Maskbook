@@ -1,59 +1,88 @@
 import { useMemo, useState } from 'react'
 import { useAsync, useUpdateEffect } from 'react-use'
-import { DialogActions, DialogContent, Tab } from '@mui/material'
-import { isDashboardPage, EMPTY_LIST } from '@masknet/shared-base'
-import { MaskTabList, useTabs } from '@masknet/theme'
-import {
-    createContract,
-    ChainId,
-    SchemaType,
-    getAaveConstants,
-    ZERO_ADDRESS,
-    networkResolver,
-    NetworkType,
-} from '@masknet/web3-shared-evm'
-import { PluginWalletStatusBar, useI18N } from '../../../utils'
-import { InjectedDialog } from '@masknet/shared'
-import { AllProviderTradeContext } from '../../Trader/trader/useAllProviderTradeContext'
-import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
-import { NetworkTab } from '../../../components/shared/NetworkTab'
-import { WalletRPC } from '../../Wallet/messages'
-import { SavingsProtocol, TabType } from '../types'
-import { useStyles } from './SavingsDialogStyles'
-import { SavingsTable } from './SavingsTable'
-import { SavingsFormDialog } from './SavingsForm'
-import type { AaveProtocolDataProvider } from '@masknet/web3-contracts/types/AaveProtocolDataProvider'
-import AaveProtocolDataProviderABI from '@masknet/web3-contracts/abis/AaveProtocolDataProvider.json'
-import { LidoProtocol } from '../protocols/LDOProtocol'
-import { AAVEProtocol } from '../protocols/AAVEProtocol'
-import { LDO_PAIRS } from '../constants'
+import { chunk, compact, flatten } from 'lodash-es'
 import type { AbiItem } from 'web3-utils'
-import { flatten, compact, chunk } from 'lodash-unified'
-import { useChainId, useFungibleTokens, useWeb3 } from '@masknet/plugin-infra/web3'
-import { FungibleToken, NetworkPluginID } from '@masknet/web3-shared-base'
-import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
+import { DialogActions, DialogContent, Tab } from '@mui/material'
+import { EMPTY_LIST, isDashboardPage, NetworkPluginID } from '@masknet/shared-base'
+import { makeStyles, MaskColorVar, MaskTabList, useTabs } from '@masknet/theme'
+import { ChainId, createContract, getAaveConstants, SchemaType, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
+import { InjectedDialog, PluginWalletStatusBar, ChainBoundary, NetworkTab } from '@masknet/shared'
+import { useI18N } from '../../../utils/index.js'
+import { AllProviderTradeContext } from '../../Trader/trader/useAllProviderTradeContext.js'
+import { SavingsProtocol, TabType } from '../types.js'
+import { SavingsTable } from './SavingsTable.js'
+import { SavingsFormDialog } from './SavingsForm.js'
+import type { AaveProtocolDataProvider } from '@masknet/web3-contracts/types/AaveProtocolDataProvider.js'
+import AaveProtocolDataProviderABI from '@masknet/web3-contracts/abis/AaveProtocolDataProvider.json'
+import { LidoProtocol } from '../protocols/LDOProtocol.js'
+import { AAVEProtocol } from '../protocols/AAVEProtocol.js'
+import { LDO_PAIRS } from '../constants.js'
 import { TabContext, TabPanel } from '@mui/lab'
+import { Web3ContextProvider, useChainContext, useFungibleTokens, useWeb3 } from '@masknet/web3-hooks-base'
+import type { FungibleToken } from '@masknet/web3-shared-base'
+
+const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }) => ({
+    abstractTabWrapper: {
+        width: '100%',
+        paddingBottom: theme.spacing(2),
+        position: 'sticky',
+        top: 0,
+        zIndex: 2,
+    },
+    tableTabWrapper: {
+        padding: theme.spacing(2),
+    },
+    tab: {
+        height: 36,
+        minHeight: 36,
+        backgroundColor: isDashboard ? `${MaskColorVar.primaryBackground2}!important` : undefined,
+    },
+    tabPaper: {
+        backgroundColor: 'inherit',
+    },
+    tabs: {
+        width: 535,
+        height: 36,
+        minHeight: 36,
+        margin: '0 auto',
+        borderRadius: 4,
+        '& .Mui-selected': {
+            color: '#ffffff',
+            backgroundColor: `${theme.palette.primary.main}!important`,
+        },
+    },
+    indicator: {
+        display: 'none',
+    },
+    tabPanel: {
+        marginTop: theme.spacing(3),
+    },
+    content: {
+        padding: 0,
+        '::-webkit-scrollbar': {
+            display: 'none',
+        },
+    },
+}))
+
 export interface SavingsDialogProps {
     open: boolean
     onClose?: () => void
 }
+
+const chains = [ChainId.Mainnet]
 
 export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
     const { t } = useI18N()
     const isDashboard = isDashboardPage()
     const { classes } = useStyles({ isDashboard })
 
-    const currentChainId = useChainId(NetworkPluginID.PLUGIN_EVM)
-    const [chainId, setChainId] = useState<ChainId>(currentChainId)
+    const { chainId: currentChainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+    const [chainId, setChainId] = useState<ChainId>(ChainId.Mainnet)
     const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM, { chainId })
 
     const [tab, setTab] = useState<TabType>(TabType.Deposit)
     const [selectedProtocol, setSelectedProtocol] = useState<SavingsProtocol | null>(null)
-
-    const { value: chains = EMPTY_LIST } = useAsync(async () => {
-        const networks = await WalletRPC.getSupportedNetworks()
-        return networks.map((network: NetworkType) => networkResolver.networkChainId(network))
-    }, [])
 
     const { value: aaveTokens } = useAsync(async () => {
         if (!open || chainId !== ChainId.Mainnet) {
@@ -97,13 +126,17 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
     )
 
     useUpdateEffect(() => {
-        setChainId(currentChainId)
+        if (chains.includes(currentChainId)) {
+            setChainId(currentChainId)
+        } else {
+            setChainId(ChainId.Mainnet)
+        }
     }, [currentChainId])
 
     const [currentTab, onChange, tabs] = useTabs('Deposit', 'Withdraw')
 
     return (
-        <TargetChainIdContext.Provider>
+        <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM, chainId: ChainId.Mainnet }}>
             <AllProviderTradeContext.Provider>
                 <TabContext value={currentTab}>
                     <InjectedDialog
@@ -119,13 +152,17 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
                                 <Tab label={tabs.Withdraw} value={tabs.Withdraw} />
                             </MaskTabList>
                         }>
-                        <DialogContent style={{ padding: 0, overflowX: 'hidden' }}>
+                        <DialogContent className={classes.content}>
                             <>
                                 <div className={classes.abstractTabWrapper}>
                                     <NetworkTab
-                                        chainId={chainId}
-                                        setChainId={setChainId}
-                                        classes={classes}
+                                        classes={{
+                                            tab: classes.tab,
+                                            tabs: classes.tabs,
+                                            tabPaper: classes.tabPaper,
+                                            tabPanel: classes.tabPanel,
+                                            indicator: classes.indicator,
+                                        }}
                                         chains={chains.filter(Boolean) as ChainId[]}
                                     />
                                 </div>
@@ -171,6 +208,6 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
                     />
                 ) : null}
             </AllProviderTradeContext.Provider>
-        </TargetChainIdContext.Provider>
+        </Web3ContextProvider>
     )
 }

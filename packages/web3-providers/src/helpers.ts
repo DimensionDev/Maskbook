@@ -1,17 +1,24 @@
 /// <reference types="@masknet/global-types/firefox" />
 /// <reference types="@masknet/global-types/flag" />
 
-import urlcat from 'urlcat'
-import { ChainId, createNativeToken, NETWORK_DESCRIPTORS, SchemaType } from '@masknet/web3-shared-evm'
-import type { FungibleAsset } from '@masknet/web3-shared-base'
-
-export function isProxyENV() {
-    try {
-        return process.env.PROVIDER_API_ENV === 'proxy'
-    } catch {
-        return false
-    }
-}
+import {
+    APE,
+    BUSD,
+    ChainId,
+    createNativeToken,
+    DAI,
+    HUSD,
+    isENSContractAddress,
+    NETWORK_DESCRIPTORS,
+    RARI,
+    SchemaType,
+    TATR,
+    USDC,
+    USDT,
+    WBTC,
+    WNATIVE,
+} from '@masknet/web3-shared-evm'
+import { FungibleAsset, isSameAddress, ActivityType } from '@masknet/web3-shared-base'
 
 export async function fetchJSON<T = unknown>(
     requestInfo: string,
@@ -20,14 +27,10 @@ export async function fetchJSON<T = unknown>(
         fetch: typeof globalThis.fetch
     },
 ): Promise<T> {
-    const fetch = options?.fetch ?? globalThis.r2d2Fetch ?? globalThis.fetch
+    const fetch = options?.fetch ?? globalThis.fetch
     const res = await fetch(requestInfo, requestInit)
+    if (!res.ok) throw new Error('Failed to fetch.')
     return res.json()
-}
-
-const CORS_PROXY = 'https://cors.r2d2.to'
-export function courier(url: string) {
-    return urlcat(`${CORS_PROXY}?:url`, { url })
 }
 
 export function getAllEVMNativeAssets(): Array<FungibleAsset<ChainId, SchemaType>> {
@@ -37,8 +40,61 @@ export function getAllEVMNativeAssets(): Array<FungibleAsset<ChainId, SchemaType
     }))
 }
 
-export function getTraderAllAPICachedFlag(): RequestCache {
-    // TODO: handle flags
-    // cache: Flags.trader_all_api_cached_enabled ? 'force-cache' : 'default',
-    return 'default'
+export function getJSON<T>(json?: string): T | undefined {
+    if (!json) return
+    try {
+        return JSON.parse(json) as T
+    } catch {
+        return
+    }
+}
+
+export function getPaymentToken(chainId: ChainId, token?: { name?: string; symbol?: string; address?: string }) {
+    if (!token) return
+
+    return [
+        createNativeToken(chainId),
+        /* cspell:disable-next-line */
+        ...[APE, USDC, USDT, DAI, HUSD, BUSD, WBTC, WNATIVE, TATR, RARI].map((x) => x[chainId]),
+    ].find(
+        (x) =>
+            x.name.toLowerCase() === token.name?.toLowerCase() ||
+            x.symbol.toLowerCase() === token.symbol?.toLowerCase() ||
+            isSameAddress(x.address, token.address),
+    )
+}
+
+export function getAssetFullName(contract_address: string, contractName: string, name?: string, tokenId?: string) {
+    if (!name)
+        return tokenId && contractName
+            ? `${contractName} #${tokenId}`
+            : !contractName && tokenId
+            ? `#${tokenId}`
+            : contractName
+    if (isENSContractAddress(contract_address)) return `ENS #${name}`
+
+    const [first, next] = name.split('#').map((x) => x.trim())
+    if (first && next) return `${first} #${next}`
+    if (!first && next) return contractName ? `${contractName} #${next}` : `#${next}`
+
+    if (contractName && tokenId)
+        return contractName.toLowerCase() === first.toLowerCase()
+            ? `${contractName} #${tokenId}`
+            : `${contractName} #${first}`
+    if (!contractName && !tokenId) return first
+    if (!contractName && tokenId) return `${first} #${tokenId}`
+
+    return `${contractName} #${first}`
+}
+
+export const resolveNonFungibleTokenEventActivityType = (type?: string) => {
+    if (!type) return ActivityType.Transfer
+    const type_ = type.toLowerCase()
+    if (['created', 'mint'].includes(type_)) return ActivityType.Mint
+    if (['successful'].includes(type_)) return ActivityType.Sale
+    if (['offer', 'offer_entered', 'bid_withdrawn', 'bid_entered'].includes(type_)) return ActivityType.Offer
+    if (['cancel_offer'].includes(type_)) return ActivityType.CancelOffer
+    if (['list'].includes(type_)) return ActivityType.List
+    if (['sale'].includes(type_)) return ActivityType.Sale
+    return ActivityType.Transfer
 }

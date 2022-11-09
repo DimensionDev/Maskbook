@@ -1,36 +1,48 @@
-// !!! There is some relative path installation source in the dependency tree,
-// !!! but if we do not allow those packages to run install scripts anyway, it might be safe.
-// !!! If we can resolve 'link:../empty' to something like 'workspaceRoot:/projects/empty', it will be safe to install.
-/** @type {Map<string, string | string[]>} */
-// @ts-expect-error
-const approvedList = new Map([
-    // opensea-js https://github.com/ProjectOpenSea/opensea-js/issues/407
-    [
-        'ethereumjs-abi',
-        [
-            'git+https://github.com/ProjectWyvern/ethereumjs-abi.git',
-            'git+https://github.com/ethereumjs/ethereumjs-abi.git',
-            'https://github.com/ProjectWyvern/ethereumjs-abi.git',
-        ],
-    ],
-    [
-        'wyvern-js',
-        ['git+https://github.com/ProjectOpenSea/wyvern-js.git#v3.2.1', 'github:ProjectOpenSea/wyvern-js#semver:^3.2.1'],
-    ],
-    ['wyvern-schemas', 'git+https://github.com/ProjectOpenSea/wyvern-schemas.git#v0.13.1'],
-    /* cspell:disable-next-line */
-    ['async-eventemitter', 'github:ahultgren/async-eventemitter#fa06e39e56786ba541c180061dbf2c0a5bbf951c'],
-    // opensea-js (v1), (and more, run `pnpm -r why web3@0.20.7`) -> web3
-    ['bignumber.js', 'git+https://github.com/frozeman/bignumber.js-nolookahead.git'],
+// !!! 1. Be responsible.
+// !!! 2. Open a new issue to the library author.
+// !!! 3. Add a pnpm/resolution in package.json if the package specifier does not include git hash to pin the version.
 
-    // https://github.com/i18next/i18next-translation-parser/issues/11
-    // @magic-works/i18n-codegen -> i18next-translation-parser
-    /* cspell:disable-next-line */
-    ['html-parse-stringify2', 'github:locize/html-parse-stringify2'],
+/* cspell:disable */
+/** @type {Map<string, RegExp | string | (string | RegExp)[]>} */
+const approvedList = new Map()
 
-    // ipfs https://github.com/ipfs/js-ipfs-utils/issues/158
-    ['node-fetch', 'https://registry.npmjs.org/@achingbrain/node-fetch/-/node-fetch-2.6.7.tgz'],
+approvedList.set('ethereumjs-abi', [
+    // by opensea-js https://github.com/ProjectOpenSea/opensea-js/issues/407
+    'git+https://github.com/ProjectWyvern/ethereumjs-abi.git',
+    // wyvern-js
+    'https://github.com/ProjectWyvern/ethereumjs-abi.git',
+    // eth-sig-util
+    'git+https://github.com/ethereumjs/ethereumjs-abi.git',
 ])
+
+approvedList.set('wyvern-js', [
+    // by opensea-js https://github.com/ProjectOpenSea/opensea-js/issues/407
+    'git+https://github.com/ProjectOpenSea/wyvern-js.git#v3.2.1',
+    // wyvern-schemas
+    'github:ProjectOpenSea/wyvern-js#semver:^3.2.1',
+])
+
+// by opensea-js https://github.com/ProjectOpenSea/opensea-js/issues/407
+approvedList.set('wyvern-schemas', 'git+https://github.com/ProjectOpenSea/wyvern-schemas.git#v0.13.1')
+
+// openseajs -> wyvern-schemas -> web3-provider-engine -> eth-block-tracker
+approvedList.set('async-eventemitter', 'github:ahultgren/async-eventemitter#fa06e39e56786ba541c180061dbf2c0a5bbf951c')
+
+// pnpm -r why web3@0.20.7
+approvedList.set('bignumber.js', [
+    'git+https://github.com/frozeman/bignumber.js-nolookahead.git',
+    'git+https://github.com/frozeman/bignumber.js-nolookahead.git#57692b3ecfc98bbdd6b3a516cb2353652ea49934',
+])
+
+// @magic-works/i18n-codegen -> i18next-translation-parser
+// https://github.com/i18next/i18next-translation-parser/issues/11
+approvedList.set('html-parse-stringify2', [
+    'github:locize/html-parse-stringify2',
+    'github:locize/html-parse-stringify2#d463109433b2c49c74a081044f54b2a6a1ccad7c',
+])
+
+// ipfs https://github.com/ipfs/js-ipfs-utils/issues/158
+approvedList.set('node-fetch', 'https://registry.npmjs.org/@achingbrain/node-fetch/-/node-fetch-2.6.7.tgz')
 
 /**
  * @param {string} parentPackage The current resolving parentPackage
@@ -44,9 +56,11 @@ function assertInstallationSourceValid(parentPackage, dependedPackage, installat
         if (Array.isArray(source) && source.indexOf(installationSource) !== -1) return
     }
 
-    if (dependedPackage === 'lodash-es' && installationSource.startsWith('npm:lodash@^4')) return
+    if (dependedPackage === '@typescript/lib-dom' && installationSource.startsWith('npm:@types/web@^')) return
 
-    // !!! Relative path
+    // !!! There is some relative path installation source in the dependency tree,
+    // !!! but if we do not allow those packages to run install scripts anyway, it might be safe.
+    // !!! If we can resolve 'link:../empty' to something like 'workspaceRoot:/projects/empty', it will be safe to install.
     if (installationSource === 'link:../empty' || installationSource === 'link:..\\empty') return
     if (installationSource === '../empty' || installationSource === '..\\empty') return
 
@@ -54,29 +68,33 @@ function assertInstallationSourceValid(parentPackage, dependedPackage, installat
         `Unapproved dependency source:
     Package: ${dependedPackage}
     Source: ${installationSource}
-    Declared by: ${parentPackage}`,
+    Declared by: ${parentPackage}
+
+    If you want to approve this new unusual dependency, please edit .pnpmfile.cjs.`,
     )
 }
 
-function validatePackage({ dependencies, devDependencies, optionalDependencies, peerDependencies, name }) {
+/* cspell:enable */
+
+function validatePackage({ dependencies, optionalDependencies, peerDependencies, name, exports }) {
+    if (
+        exports &&
+        !name.startsWith('@dimensiondev') &&
+        !name.startsWith('@masknet') &&
+        JSON.stringify(exports).includes('mask-src')
+    ) {
+        throw new Error(
+            'A package ' + name + ' out of @dimensiondev or @masknet scope using mask-src in exports field.',
+        )
+    }
     for (const [k, v] of notNormativeInstall(dependencies)) assertInstallationSourceValid(name, k, v)
     // devDependencies won't be installed for intermediate dependencies
-    // for (const [k, v] of notNormativeInstall(devDependencies)) assertInstallationSourceValid(name, k, v)
     for (const [k, v] of notNormativeInstall(optionalDependencies)) assertInstallationSourceValid(name, k, v)
     for (const [k, v] of notNormativeInstall(peerDependencies)) assertInstallationSourceValid(name, k, v)
 }
 
-function lockPackage(pkg) {
-    if (pkg.name === 'opensea-js') {
-        const prefix = 'git+https://github.com/ProjectOpenSea/wyvern-'
-        pkg.dependencies['wyvern-js'] = `${prefix}js.git#fabb7660f23f2252c141077e32193d281036299e`
-        pkg.dependencies['wyvern-schemas'] = `${prefix}schemas.git#e1a08fcf8ce2b11a0fe9cbdc7c9f77c59fadef26`
-    }
-}
-
 function readPackage(pkg, context) {
     validatePackage(pkg)
-    lockPackage(pkg)
     return pkg
 }
 

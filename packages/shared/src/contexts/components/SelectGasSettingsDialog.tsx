@@ -1,13 +1,13 @@
 import { FC, useMemo, useState } from 'react'
-import { useChainId, useCurrentWeb3NetworkPluginID, Web3Helper } from '@masknet/plugin-infra/web3'
+import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import { useSharedI18N } from '@masknet/shared'
-import { isDashboardPage } from '@masknet/shared-base'
-import { makeStyles, MaskColorVar } from '@masknet/theme'
-import type { NetworkPluginID } from '@masknet/web3-shared-base'
+import { isDashboardPage, NetworkPluginID } from '@masknet/shared-base'
+import { makeStyles } from '@masknet/theme'
 import { DialogContent } from '@mui/material'
-import { InjectedDialog } from '../components'
-import { SettingsBoard } from '../../UI/components/SettingsBoard'
-import { SettingsContext } from '../../UI/components/SettingsBoard/Context'
+import { InjectedDialog } from '../components/index.js'
+import { SettingsBoard } from '../../UI/components/SettingsBoard/index.js'
+import { SettingsContext } from '../../UI/components/SettingsBoard/Context.js'
 
 const isDashboard = isDashboardPage()
 
@@ -24,22 +24,6 @@ const useStyles = makeStyles<StyleProps>()((theme, { compact }) => ({
         padding: theme.spacing(3, 2),
         paddingTop: 0,
     },
-    list: {
-        scrollbarWidth: 'none',
-        '&::-webkit-scrollbar': {
-            display: 'none',
-        },
-    },
-    placeholder: {
-        textAlign: 'center',
-        height: 288,
-        paddingTop: theme.spacing(14),
-        boxSizing: 'border-box',
-    },
-    search: {
-        backgroundColor: 'transparent !important',
-        border: `solid 1px ${MaskColorVar.twitterBorderLine}`,
-    },
 }))
 
 export interface SelectGasSettingsDialogProps<T extends NetworkPluginID = NetworkPluginID> {
@@ -53,7 +37,10 @@ export interface SelectGasSettingsDialogProps<T extends NetworkPluginID = Networ
     disableSlippageTolerance?: boolean
     disableGasLimit?: boolean
     onSubmit?(
-        settings: { slippageTolerance?: number; transaction?: Web3Helper.Definition[T]['Transaction'] } | null,
+        settings: {
+            slippageTolerance?: number
+            transaction?: Web3Helper.Definition[T]['Transaction']
+        } | null,
     ): void
     onClose?(): void
 }
@@ -73,8 +60,8 @@ export const SelectGasSettingsDialog: FC<SelectGasSettingsDialogProps> = ({
 }) => {
     const t = useSharedI18N()
     const { classes } = useStyles({ compact: disableSlippageTolerance ?? true })
-    const pluginID_ = useCurrentWeb3NetworkPluginID(pluginID)
-    const chainId_ = useChainId(pluginID_, chainId)
+    const { pluginID: pluginID_ } = useNetworkContext(pluginID)
+    const { chainId: chainId_ } = useChainContext({ chainId })
     const [settings, setSettings] = useState<{
         slippageTolerance?: number
         transaction?: Web3Helper.TransactionAll

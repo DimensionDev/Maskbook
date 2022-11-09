@@ -1,0 +1,16 @@
+{
+    "game_dialog_menu_change": "crwdns17924:0crwdne17924:0",
+    "game_dialog_menu_ski": "crwdns17926:0crwdne17926:0",
+    "game_dialog_menu_about": "crwdns17928:0crwdne17928:0",
+    "game_dialog_unverified": "crwdns17930:0crwdne17930:0",
+    "game_name": "crwdns17932:0crwdne17932:0",
+    "game_list_title": "crwdns17934:0crwdne17934:0",
+    "game_list_rank": "crwdns17936:0crwdne17936:0",
+    "game_list_play": "crwdns17938:0crwdne17938:0",
+    "game_list_play_error": "crwdns17940:0crwdne17940:0",
+    "game_list_play_evm_error": "crwdns17942:0crwdne17942:0",
+    "game_share_btn": "crwdns17944:0crwdne17944:0",
+    "game_share_title": "crwdns17946:0crwdne17946:0",
+    "game_dialog_info": "crwdns17948:0crwdne17948:0",
+    "game_share_text": "crwdns17950:0{{name}}crwdnd17950:0{{snsId}}crwdnd17950:0$t(mask:hash_tag)crwdnd17950:0{{share_Twitter}}crwdne17950:0"
+}

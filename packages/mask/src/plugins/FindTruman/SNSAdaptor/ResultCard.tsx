@@ -11,12 +11,12 @@ import {
     Card,
 } from '@mui/material'
 import { Adjust, CheckCircle } from '@mui/icons-material'
-import type { PollResult, PuzzleResult, UserPollStatus } from '../types'
-import { PostType } from '../types'
+import type { PollResult, PuzzleResult, UserPollStatus } from '../types.js'
+import { PostType } from '../types.js'
 import { useContext, useState } from 'react'
-import { FindTrumanContext } from '../context'
+import { FindTrumanContext } from '../context.js'
 import { makeStyles } from '@masknet/theme'
-import { sumBy } from 'lodash-unified'
+import { sumBy } from 'lodash-es'
 
 export const BorderLinearProgress: any = styled(LinearProgress)(({ theme }) => ({
     height: 10,

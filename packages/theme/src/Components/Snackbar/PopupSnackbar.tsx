@@ -9,9 +9,8 @@ import {
     SnackbarKey,
     useSnackbar,
 } from 'notistack'
-import { makeStyles } from '../../UIHelper'
-import classnames from 'classnames'
-import type { ShowSnackbarOptions } from './index'
+import { makeStyles } from '../../UIHelper/index.js'
+import type { ShowSnackbarOptions } from './index.js'
 
 const useStyles = makeStyles()(() => ({
     container: {
@@ -28,12 +27,11 @@ const useStyles = makeStyles()(() => ({
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        fontSize: 14,
         lineHeight: '18px',
     },
     title: {
-        fontSize: 14,
         lineHeight: '18px',
+        padding: '0 8px',
     },
     success: {
         background: 'rgba(61, 194, 51, 0.5)',
@@ -43,6 +41,7 @@ const useStyles = makeStyles()(() => ({
         background: 'rgba(255, 53, 69, 0.5)',
         color: '#ffffff',
     },
+    // eslint-disable-next-line tss-unused-classes/unused-classes
     default: {},
     warning: {},
     info: {},
@@ -50,7 +49,7 @@ const useStyles = makeStyles()(() => ({
 
 export const PopupSnackbarProvider = memo<SnackbarProviderProps>(({ ...rest }) => {
     const ref = useRef<SnackbarProvider>(null)
-    const { classes } = useStyles()
+    const { classes, cx } = useStyles()
 
     return (
         <SnackbarProvider
@@ -63,6 +62,8 @@ export const PopupSnackbarProvider = memo<SnackbarProviderProps>(({ ...rest }) =
                 containerRoot: classes.container,
                 variantSuccess: classes.success,
                 variantError: classes.error,
+                variantInfo: classes.info,
+                variantWarning: classes.warning,
             }}
             {...rest}
         />
@@ -77,10 +78,10 @@ export interface PopupSnackbarContentProps {
 }
 
 export const PopupSnackbarContent = forwardRef<HTMLDivElement, PopupSnackbarContentProps>((props, ref) => {
-    const { classes } = useStyles()
+    const { classes, cx } = useStyles()
 
     return (
-        <SnackbarContent key={props.id} className={classnames(classes.content, classes[props.variant!])} ref={ref}>
+        <SnackbarContent key={props.id} className={cx(classes.content, classes[props.variant!])} ref={ref}>
             <Typography className={classes.title}>{props.title}</Typography>
         </SnackbarContent>
     )

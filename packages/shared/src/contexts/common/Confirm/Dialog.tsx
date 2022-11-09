@@ -1,8 +1,8 @@
 import type { FC, ReactNode } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { Button, DialogActions, DialogContent } from '@mui/material'
-import { useSharedI18N } from '../../../locales'
-import { InjectedDialog, InjectedDialogProps } from '../../components'
+import { useSharedI18N } from '../../../locales/index.js'
+import { InjectedDialog, InjectedDialogProps } from '../../components/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -10,7 +10,7 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         justifyContent: 'center',
         minHeight: 80,
-        margin: theme.spacing(0, 1),
+        margin: theme.spacing(0),
         fontSize: 18,
         fontWeight: 'bold',
     },

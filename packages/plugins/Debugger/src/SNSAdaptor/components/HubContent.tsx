@@ -1,9 +1,11 @@
 import { useState } from 'react'
-import { useAccount, useChainId, useWeb3Hub, Web3Helper } from '@masknet/plugin-infra/web3'
+import { useChainContext, useWeb3Hub } from '@masknet/web3-hooks-base'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import { makeStyles, ShadowRootMenu } from '@masknet/theme'
-import { Hub, OrderSide, resolveSourceName, SourceType } from '@masknet/web3-shared-base'
+import { Hub, OrderSide, resolveSourceTypeName, SourceType } from '@masknet/web3-shared-base'
 import { Button, MenuItem, Table, TableBody, TableCell, TableRow, TextField, Typography } from '@mui/material'
-import { getEnumAsArray } from '@dimensiondev/kit'
+import { getEnumAsArray } from '@masknet/kit'
+import { Icons } from '@masknet/icons'
 
 export interface HubContentProps {
     onClose?: () => void
@@ -18,12 +20,11 @@ const useStyles = makeStyles()({
 export function HubContent(props: HubContentProps) {
     const { classes } = useStyles()
     const hub = useWeb3Hub()
-    const chainId = useChainId()
-    const account = useAccount()
+    const { account, chainId } = useChainContext()
     const [keyword, setKeyword] = useState<string>('PUNK')
-    const [address, setAddress] = useState<string>('0x7c3e8096b70a4ddc04c4344b8f33b97c9d12bc4e')
-    const [tokenId, setTokenId] = useState<string>('1')
-    const [sourceType, setSourceType] = useState(SourceType.OpenSea)
+    const [address, setAddress] = useState<string>('0x932261f9fc8da46c4a22e31b45c4de60623848bf')
+    const [tokenId, setTokenId] = useState<string>('32342')
+    const [sourceType, setSourceType] = useState<SourceType | undefined>()
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
 
     type HubAll = Required<Hub<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll, Web3Helper.GasOptionAll>>
@@ -37,8 +38,6 @@ export function HubContent(props: HubContentProps) {
         ['getTransactions', [chainId, account]],
 
         // fungible tokens
-        ['getFungibleToken', [address]],
-        ['getFungibleTokens', [account]],
         ['getFungibleAsset', [address]],
         ['getFungibleAssets', [account]],
         ['getFungibleTokenBalance', [address]],
@@ -50,18 +49,18 @@ export function HubContent(props: HubContentProps) {
 
         ['getFungibleTokenStats', [address]],
         ['getFungibleTokensFromTokenList', [chainId]],
-        ['getApprovedFungibleTokenSpenders', [chainId, account]],
+        ['getFungibleTokenSpenders', [chainId, account]],
 
         // non-fungible tokens
         ['getNonFungibleTokenOwner', [address, tokenId]],
         ['getNonFungibleTokenPrice', [chainId, address, tokenId]],
         ['getNonFungibleTokensFromTokenList', [chainId]],
-        ['getApprovedNonFungibleContracts', [chainId, address]],
+        ['getNonFungibleTokenSpenders', [chainId, address]],
         ['getNonFungibleTokenBalance', [address]],
         ['getNonFungibleTokenStats', [address]],
         ['getNonFungibleTokenSecurity', [chainId, address]],
         ['getNonFungibleTokenContract', [address]],
-        ['getNonFungibleCollections', [account]],
+        ['getNonFungibleCollectionsByOwner', [account]],
         ['getNonFungibleCollectionsByKeyword', [keyword]],
         ['getNonFungibleTokenEvents', [address, tokenId]],
         ['getNonFungibleTokenOffers', [address, tokenId]],
@@ -69,10 +68,8 @@ export function HubContent(props: HubContentProps) {
         ['getNonFungibleTokenOrders', [address, tokenId, OrderSide.Buy]],
         ['getNonFungibleAsset', [address, tokenId]],
         ['getNonFungibleAssets', [account]],
-        ['getNonFungibleToken', [address, tokenId]],
-        ['getNonFungibleTokens', [account]],
+        ['getNonFungibleRarity', [address, tokenId]],
         ['getNonFungibleTokenFloorPrice', [address, tokenId]],
-        ['getNonFungibleTokensByCollection', [address]],
         ['getNonFungibleAssetsByCollection', [address]],
     ]
 
@@ -136,8 +133,11 @@ export function HubContent(props: HubContentProps) {
                             </Typography>
                         </TableCell>
                         <TableCell>
-                            <Button size="small" onClick={(e) => setAnchorEl(e.currentTarget)}>
-                                {resolveSourceName(sourceType)}
+                            <Button
+                                size="small"
+                                onClick={(e) => setAnchorEl(e.currentTarget)}
+                                endIcon={<Icons.ArrowDownRound size={14} />}>
+                                {sourceType ? resolveSourceTypeName(sourceType) : 'NO PROVIDER'}
                             </Button>
                             <ShadowRootMenu
                                 anchorEl={anchorEl}

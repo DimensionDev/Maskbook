@@ -1,14 +1,15 @@
 import type { TypedMessage } from '@masknet/typed-message'
-import { createTypedMessageMetadataReader } from '@masknet/typed-message/dom'
-import { META_KEY_1, META_KEY_2 } from './constants'
-import { FileInfo, FileInfoV1, Provider } from './types'
+import { createTypedMessageMetadataReader } from '@masknet/typed-message-react'
+import { META_KEY_1, META_KEY_2 } from './constants.js'
+import { FileInfo, FileInfoV1, Provider } from './types.js'
 import schemaV1 from './schema-v1.json'
 import schemaV2 from './schema-v2.json'
-import type { Result } from 'ts-results'
-import { isNil } from 'lodash-unified'
-import { encodeArrayBuffer, encodeText } from '@dimensiondev/kit'
-import { createLookupTableResolver } from '@masknet/web3-shared-base'
+import type { Result } from 'ts-results-es'
+import { isNil } from 'lodash-es'
+import { encodeArrayBuffer, encodeText } from '@masknet/kit'
+import { createLookupTableResolver } from '@masknet/shared-base'
 
+// Note: if the latest version has been changed, please update packages/mask/src/components/CompositionDialog/useSubmit.ts
 const reader_v1 = createTypedMessageMetadataReader<FileInfoV1>(META_KEY_1, schemaV1)
 const reader_v2 = createTypedMessageMetadataReader<FileInfo>(META_KEY_2, schemaV2)
 
@@ -36,8 +37,7 @@ export async function makeFileKeySigned(fileKey: string | undefined | null) {
 export const resolveGatewayAPI = createLookupTableResolver<Provider, string>(
     {
         [Provider.arweave]: 'https://arweave.net',
-        [Provider.ipfs]: 'https://infura-ipfs.io/ipfs',
-        [Provider.swarm]: 'https://bee-2.gateway.ethswarm.org/bzz',
+        [Provider.ipfs]: 'https://mask.infura-ipfs.io/ipfs',
     },
     () => 'Unknown provider',
 )

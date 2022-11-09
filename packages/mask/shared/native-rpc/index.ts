@@ -1,14 +1,20 @@
 import { AsyncCall, AsyncCallOptions, AsyncVersionOf } from 'async-call-rpc/full'
-import { AndroidGeckoViewChannel } from './Android.channel'
-import { iOSWebkitChannel } from './iOS.channel'
+import { AndroidGeckoViewChannel } from './Android.channel.js'
+import { iOSWebkitChannel } from './iOS.channel.js'
 import type { AndroidNativeAPIs, iOSNativeAPIs } from '@masknet/public-api'
 
 // This module won't be used in Web. Let it not effecting HMR.
 if (process.env.architecture === 'web' && import.meta.webpackHot) import.meta.webpackHot.accept()
 export const hasNativeAPI = process.env.architecture === 'app'
 export let nativeAPI:
-    | { type: 'iOS'; api: AsyncVersionOf<iOSNativeAPIs> }
-    | { type: 'Android'; api: AsyncVersionOf<AndroidNativeAPIs> }
+    | {
+          type: 'iOS'
+          api: AsyncVersionOf<iOSNativeAPIs>
+      }
+    | {
+          type: 'Android'
+          api: AsyncVersionOf<AndroidNativeAPIs>
+      }
     | undefined = undefined
 
 export let sharedNativeAPI: AsyncVersionOf<iOSNativeAPIs | AndroidNativeAPIs> | undefined = undefined

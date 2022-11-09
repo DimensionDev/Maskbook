@@ -1,4 +1,1 @@
-export * from './DonationCard'
-export * from './FootprintCard'
-export * from './ImageHolder'
-export * from './StatusBox'
+export * from './FeedCard/index.js'

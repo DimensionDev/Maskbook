@@ -1,13 +1,20 @@
-import { delay } from '@dimensiondev/kit'
+import { delay } from '@masknet/kit'
 import type { PersonaIdentifier, ProfileIdentifier } from '@masknet/shared-base'
-import { currentSetupGuideStatus, userGuideStatus } from '../../../shared/legacy-settings/settings'
-import { SetupGuideStep } from '../../../shared/legacy-settings/types'
-import { definedSiteAdaptors } from '../../../shared/site-adaptors/definitions'
-import { requestSiteAdaptorsPermission } from '../helper/request-permission'
+import { openOrActiveTab } from '@masknet/shared-base-ui'
+import { currentSetupGuideStatus, userGuideStatus } from '../../../shared/legacy-settings/settings.js'
+import { SetupGuideStep } from '../../../shared/legacy-settings/types.js'
+import { definedSiteAdaptors } from '../../../shared/site-adaptors/definitions.js'
+import { requestSiteAdaptorsPermission } from '../helper/request-permission.js'
 import stringify from 'json-stable-stringify'
 
-export async function getSupportedSites(): Promise<Array<{ networkIdentifier: string }>> {
-    return [...definedSiteAdaptors.values()].map((x) => ({ networkIdentifier: x.networkIdentifier }))
+export async function getSupportedSites(options: { isSocialNetwork?: boolean } = {}): Promise<
+    Array<{
+        networkIdentifier: string
+    }>
+> {
+    return [...definedSiteAdaptors.values()]
+        .filter((x) => (options.isSocialNetwork === undefined ? true : x.isSocialNetwork === options.isSocialNetwork))
+        .map((x) => ({ networkIdentifier: x.networkIdentifier }))
 }
 
 export async function setupSite(network: string, newTab: boolean) {
@@ -31,12 +38,14 @@ export async function connectSite(
     network: string,
     type?: 'local' | 'nextID',
     profile?: ProfileIdentifier,
+    openInNewTab = true,
 ) {
     const worker = definedSiteAdaptors.get(network)
     if (!worker) return
 
     if (!(await requestSiteAdaptorsPermission([worker]))) return
 
+    // #region reset the global setup status setting
     currentSetupGuideStatus[network].value = stringify({
         status: type === 'nextID' ? SetupGuideStep.VerifyOnNextID : SetupGuideStep.FindUsername,
         persona: identifier.toText(),
@@ -44,8 +53,10 @@ export async function connectSite(
     })
 
     await delay(100)
-
-    if (worker.homepage) {
-        browser.tabs.create({ active: true, url: worker.homepage })
+    // #endregion
+    if (openInNewTab) {
+        await browser.tabs.create({ active: true, url: worker.homepage })
+    } else {
+        await openOrActiveTab(worker.homepage)
     }
 }

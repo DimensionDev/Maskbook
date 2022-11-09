@@ -5,15 +5,15 @@ import { Icons } from '@masknet/icons'
 import { useNavigate } from 'react-router-dom'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { PopupRoutes } from '@masknet/shared-base'
-import { first } from 'lodash-unified'
+import { first } from 'lodash-es'
 import { FormattedAddress } from '@masknet/shared'
-import { WalletRPC } from '../../../../../plugins/Wallet/messages'
-import { useI18N } from '../../../../../utils'
-import { PasswordField } from '../../../components/PasswordField'
-import { currentMaskWalletAccountSettings } from '../../../../../../shared/legacy-settings/wallet-settings'
-import { useWallet } from '@masknet/plugin-infra/web3'
-import { WalletContext } from '../hooks/useWalletContext'
-import { useTitle } from '../../../hook/useTitle'
+import { WalletRPC } from '../../../../../plugins/Wallet/messages.js'
+import { useI18N } from '../../../../../utils/index.js'
+import { PasswordField } from '../../../components/PasswordField/index.js'
+import { currentMaskWalletAccountSettings } from '../../../../../../shared/legacy-settings/wallet-settings.js'
+import { useWallet } from '@masknet/web3-hooks-base'
+import { WalletContext } from '../hooks/useWalletContext.js'
+import { useTitle } from '../../../hook/useTitle.js'
 
 const useStyles = makeStyles()({
     content: {
@@ -83,7 +83,6 @@ const useStyles = makeStyles()({
     name: {
         display: 'flex',
         alignItems: 'center',
-        fontSize: 14,
         color: '#1C68F3',
         fontWeight: 500,
     },
@@ -125,7 +124,9 @@ const DeleteWallet = memo(() => {
                 navigate(PopupRoutes.Wallet, { replace: true })
             } catch (error) {
                 if (error instanceof Error) {
-                    setErrorMessage(error.message)
+                    setErrorMessage(
+                        error.message === 'Wrong password' ? t('popups_wallet_unlock_error_password') : error.message,
+                    )
                 }
             }
         }

@@ -1,5 +1,5 @@
 import { FC, memo } from 'react'
-import { useCountdown } from './useCountdown'
+import { useCountdown } from './useCountdown.js'
 
 interface Props {
     finishTime: number

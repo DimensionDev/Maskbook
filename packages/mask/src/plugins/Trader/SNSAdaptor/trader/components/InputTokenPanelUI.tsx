@@ -1,23 +1,30 @@
-import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { alpha, Box, Chip, chipClasses, lighten, TextField, Typography } from '@mui/material'
 import { ChangeEvent, memo, useCallback, useMemo } from 'react'
-import type { Web3Helper } from '@masknet/plugin-infra/web3'
-import { formatBalance, formatCurrency, FungibleToken } from '@masknet/web3-shared-base'
-import { FormattedBalance, FormattedCurrency, SelectTokenChip, SelectTokenChipProps } from '@masknet/shared'
-import { useI18N } from '../../../../../utils'
+import { makeStyles, MaskColorVar } from '@masknet/theme'
+import { alpha, Box, Chip, chipClasses, lighten, Typography, InputBase } from '@mui/material'
 import { isDashboardPage } from '@masknet/shared-base'
+import type { Web3Helper } from '@masknet/web3-helpers'
+import { formatBalance, formatCurrency } from '@masknet/web3-shared-base'
+import { FormattedBalance, FormattedCurrency, SelectTokenChip, SelectTokenChipProps } from '@masknet/shared'
+import { useI18N } from '../../../../../utils/index.js'
 
 // TODO: remove isDashboard after remove Dashboard page
-const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }) => ({
+const useStyles = makeStyles<{
+    isDashboard: boolean
+}>()((theme, { isDashboard }) => ({
     filledInput: {
         borderRadius: 12,
         padding: 12,
         background: `${isDashboard ? MaskColorVar.primaryBackground2 : theme.palette.maskColor?.input}!important`,
         border: `1px solid ${isDashboard ? MaskColorVar.lineLight : theme.palette.maskColor?.line}`,
         position: 'relative',
+        minHeight: 115,
+        outline: 'none!important',
+        '& input': {
+            padding: 11,
+            height: 18,
+        },
     },
     balance: {
-        fontSize: 14,
         fontWeight: 700,
         lineHeight: '18px',
         color: isDashboard ? theme.palette.text.primary : theme.palette.maskColor?.second,
@@ -26,7 +33,6 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
     amount: {
         marginLeft: 10,
         color: !isDashboard ? theme.palette.maskColor?.primary : undefined,
-        fontSize: 14,
         fontWeight: 700,
     },
     input: {
@@ -53,7 +59,6 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
         padding: '0 6px',
     },
     label: {
-        fontSize: 14,
         fontWeight: 700,
         lineHeight: '18px',
         color: theme.palette.maskColor?.second,
@@ -62,7 +67,6 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
         left: 12,
     },
     price: {
-        fontSize: 14,
         lineHeight: '20px',
         position: 'absolute',
         bottom: 12,
@@ -125,7 +129,7 @@ export interface InputTokenPanelUIProps extends withClasses<'root'> {
     amount: string
     chainId: Web3Helper.ChainIdAll
     maxAmount: string
-    token?: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll> | null
+    token?: Web3Helper.FungibleTokenAll | null
     tokenValueUSD: string
     onAmountChange: (amount: string) => void
     SelectTokenChip?: Partial<SelectTokenChipProps>
@@ -149,7 +153,7 @@ export const InputTokenPanelUI = memo<InputTokenPanelUIProps>(
         // #region update amount by self
         const { RE_MATCH_WHOLE_AMOUNT, RE_MATCH_FRACTION_AMOUNT } = useMemo(
             () => ({
-                RE_MATCH_FRACTION_AMOUNT: new RegExp(`^\\.\\d{0,${token?.decimals}}$`), // .ddd...d
+                RE_MATCH_FRACTION_AMOUNT: new RegExp(`^\\.\\d{0,${token?.decimals}}$`),
                 RE_MATCH_WHOLE_AMOUNT: new RegExp(`^\\d*\\.?\\d{0,${token?.decimals}}$`), // d.ddd...d
             }),
             [token?.decimals],
@@ -165,62 +169,58 @@ export const InputTokenPanelUI = memo<InputTokenPanelUIProps>(
         )
 
         return (
-            <TextField
+            <InputBase
                 fullWidth
                 type="text"
-                variant="filled"
-                value={amount}
-                onChange={onChange}
-                InputProps={{
-                    className: classes.filledInput,
-                    disableUnderline: true,
-                    startAdornment: (
-                        <Box>
-                            <Typography className={classes.label}>{t('plugin_trader_swap_from')}</Typography>
-                            <SelectTokenChip
-                                token={token}
-                                chainId={chainId}
-                                classes={{
-                                    chip: classes.selectedTokenChip,
-                                    tokenIcon: classes.chipTokenIcon,
-                                    noToken: classes.noToken,
+                className={classes.filledInput}
+                startAdornment={
+                    <Box>
+                        <Typography className={classes.label}>{t('plugin_trader_swap_from')}</Typography>
+                        <SelectTokenChip
+                            token={token}
+                            chainId={chainId}
+                            classes={{
+                                chip: classes.selectedTokenChip,
+                                tokenIcon: classes.chipTokenIcon,
+                                noToken: classes.noToken,
+                            }}
+                            {...SelectTokenChipProps}
+                        />
+                    </Box>
+                }
+                endAdornment={
+                    <>
+                        <Box className={classes.action}>
+                            <Typography className={classes.balance}>
+                                {t('plugin_ito_list_table_got')}:
+                                <Typography component="span" className={classes.amount} color="primary">
+                                    <FormattedBalance
+                                        value={balance}
+                                        decimals={token?.decimals}
+                                        significant={6}
+                                        formatter={formatBalance}
+                                    />
+                                </Typography>
+                            </Typography>
+                            <Chip
+                                size="small"
+                                label="MAX"
+                                clickable
+                                color="primary"
+                                variant="filled"
+                                classes={{ root: classes.chip, label: classes.chipLabel }}
+                                onClick={() => {
+                                    onAmountChange(maxAmount)
                                 }}
-                                {...SelectTokenChipProps}
                             />
                         </Box>
-                    ),
-                    endAdornment: (
-                        <>
-                            <Box className={classes.action}>
-                                <Typography className={classes.balance}>
-                                    {t('plugin_ito_list_table_got')}:
-                                    <Typography component="span" className={classes.amount} color="primary">
-                                        <FormattedBalance
-                                            value={balance}
-                                            decimals={token?.decimals}
-                                            significant={6}
-                                            formatter={formatBalance}
-                                        />
-                                    </Typography>
-                                </Typography>
-                                <Chip
-                                    size="small"
-                                    label="MAX"
-                                    clickable
-                                    color="primary"
-                                    variant="filled"
-                                    classes={{ root: classes.chip, label: classes.chipLabel }}
-                                    onClick={() => {
-                                        onAmountChange(maxAmount)
-                                    }}
-                                />
-                            </Box>
-                            <Typography className={classes.price}>
-                                &asymp; <FormattedCurrency value={tokenValueUSD} formatter={formatCurrency} />
-                            </Typography>
-                        </>
-                    ),
-                }}
+                        <Typography className={classes.price}>
+                            &asymp; <FormattedCurrency value={tokenValueUSD} formatter={formatCurrency} />
+                        </Typography>
+                    </>
+                }
+                value={amount}
+                onChange={onChange}
                 inputProps={{ className: classes.input, autoComplete: 'off' }}
             />
         )

@@ -1,5 +1,5 @@
 import * as bip39 from 'bip39'
-import { decodeArrayBuffer } from '@dimensiondev/kit'
+import { decodeArrayBuffer } from '@masknet/kit'
 import {
     EC_Public_JsonWebKey,
     PersonaIdentifier,
@@ -7,16 +7,16 @@ import {
     ProfileIdentifier,
     AESJsonWebKey,
 } from '@masknet/shared-base'
-import { createPersonaByJsonWebKey } from '../../../database/persona/helper'
+import { createPersonaByJsonWebKey } from '../../../database/persona/helper.js'
 import { decode } from '@msgpack/msgpack'
-import { omit } from 'lodash-unified'
-import { personaRecordToMobilePersona } from './mobile'
-import { attachProfileDB, LinkedProfileDetails, queryPersonaDB, queryPersonasDB } from '../../../database/persona/db'
+import { omit } from 'lodash-es'
+import { personaRecordToMobilePersona } from './mobile.js'
+import { attachProfileDB, LinkedProfileDetails, queryPersonaDB, queryPersonasDB } from '../../../database/persona/db.js'
 import {
     deriveLocalKeyFromECDHKey,
     generate_ECDH_256k1_KeyPair_ByMnemonicWord,
     recover_ECDH_256k1_KeyPair_ByMnemonicWord,
-} from './utils'
+} from './utils.js'
 import type { MobilePersona } from '@masknet/public-api'
 
 export async function createPersonaByPrivateKey(

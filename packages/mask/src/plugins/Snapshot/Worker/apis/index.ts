@@ -1,14 +1,22 @@
 import ss from '@snapshot-labs/snapshot.js'
-import type { Proposal, Profile3Box, VoteSuccess, RawVote, Strategy } from '../../types'
-import { transform } from 'lodash-unified'
-import { SNAPSHOT_GET_SCORE_API } from '../../constants'
+import type { Proposal, VoteSuccess, RawVote, Strategy } from '../../types.js'
+import { transform } from 'lodash-es'
+import { SNAPSHOT_GET_SCORE_API } from '../../constants.js'
+import type { ChainId } from '@masknet/web3-shared-evm'
 
 export async function fetchProposal(id: string) {
     const { votes, proposal } = await fetchProposalFromGraphql(id)
     const now = Date.now()
     const isStart = proposal.start * 1000 < now
     const isEnd = proposal.end * 1000 < now
-    return { ...proposal, address: proposal.author, isStart, isEnd, votes } as unknown as Proposal
+    return {
+        ...proposal,
+        address: proposal.author,
+        isStart,
+        isEnd,
+        votes,
+        chainId: Number(proposal.network) as ChainId,
+    } as unknown as Proposal
 }
 
 async function fetchProposalFromGraphql(id: string) {
@@ -92,21 +100,6 @@ async function fetchProposalFromGraphql(id: string) {
     return data
 }
 
-export async function fetch3BoxProfiles(addresses: string[]): Promise<Profile3Box[]> {
-    const { profiles } = await ss.utils.subgraphRequest('https://api.3box.io/graph', {
-        profiles: {
-            __args: {
-                ids: addresses,
-            },
-            name: true,
-            eth_address: true,
-            image: true,
-        },
-    })
-
-    return profiles ?? []
-}
-
 export async function getScores(
     snapshot: string,
     voters: string[],
@@ -114,18 +107,22 @@ export async function getScores(
     space: string,
     strategies: Strategy[],
 ) {
-    const scores: Array<{ [key in string]: number }> = await ss.utils.getScores(
-        space,
-        strategies,
-        network,
-        voters,
-        Number(snapshot),
-        SNAPSHOT_GET_SCORE_API,
-    )
+    const scores: Array<{
+        [key in string]: number
+    }> = await ss.utils.getScores(space, strategies, network, voters, Number(snapshot), SNAPSHOT_GET_SCORE_API)
     return scores.map((score) =>
-        transform(score, function (result: { [key in string]: number }, val, key: string) {
-            result[key.toLowerCase()] = val
-        }),
+        transform(
+            score,
+            function (
+                result: {
+                    [key in string]: number
+                },
+                val,
+                key: string,
+            ) {
+                result[key.toLowerCase()] = val
+            },
+        ),
     )
 }
 

@@ -1,24 +1,27 @@
 import { useEffect, useRef, useState } from 'react'
-import { PluginId } from '@masknet/plugin-infra'
+import { PluginID, NetworkPluginID, isDashboardPage, CrossIsolationMessages, TokenType } from '@masknet/shared-base'
 import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
-import { useChainId, useChainIdValid } from '@masknet/plugin-infra/web3'
-import type { ChainId } from '@masknet/web3-shared-evm'
+import {
+    Web3ContextProvider,
+    useChainContext,
+    useChainIdValid,
+    useNetworkContext,
+    useWeb3State,
+    useFungibleToken,
+} from '@masknet/web3-hooks-base'
+import { SchemaType, Transaction } from '@masknet/web3-shared-evm'
 import { DialogContent, dialogTitleClasses, IconButton } from '@mui/material'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { InjectedDialog, useSelectAdvancedSettings } from '@masknet/shared'
-import { AllProviderTradeContext } from '../../trader/useAllProviderTradeContext'
-import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
-import { PluginTraderMessages } from '../../messages'
-import { Trader, TraderRef, TraderProps } from './Trader'
-import { useI18N } from '../../../../utils'
+import { InjectedDialog, useSelectAdvancedSettings, NetworkTab } from '@masknet/shared'
+import { AllProviderTradeContext } from '../../trader/useAllProviderTradeContext.js'
+import { PluginTraderMessages } from '../../messages.js'
+import { Trader, TraderRef } from './Trader.js'
+import { useI18N } from '../../../../utils/index.js'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { NetworkTab } from '../../../../components/shared/NetworkTab'
-import { useUpdateEffect } from 'react-use'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { Icons } from '@masknet/icons'
-import { currentSlippageSettings } from '../../settings'
-import { MIN_GAS_LIMIT } from '../../constants'
-import { isDashboardPage } from '@masknet/shared-base'
+import { currentSlippageSettings } from '../../settings.js'
+import { MIN_GAS_LIMIT } from '../../constants/index.js'
+import { useAsyncFn } from 'react-use'
+import type { Web3Helper } from '@masknet/web3-helpers'
 
 const isDashboard = isDashboardPage()
 
@@ -72,112 +75,154 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-interface TraderDialogProps {
-    open?: boolean
-    onClose?: () => void
-}
-
-export function TraderDialog({ open, onClose }: TraderDialogProps) {
+export function TraderDialog() {
     const tradeRef = useRef<TraderRef>(null)
-    const traderDefinition = useActivatedPlugin(PluginId.Trader, 'any')
-    const chainIdList = traderDefinition?.enableRequirement.web3?.[NetworkPluginID.PLUGIN_EVM]?.supportedChainIds ?? []
+    const traderDefinition = useActivatedPlugin(PluginID.Trader, 'any')
+    const { pluginID } = useNetworkContext()
+    const { Others } = useWeb3State()
+    const chainIdList = traderDefinition?.enableRequirement.web3?.[pluginID]?.supportedChainIds ?? []
     const { t } = useI18N()
     const { classes } = useStyles()
-    const currentChainId = useChainId(NetworkPluginID.PLUGIN_EVM)
-    const chainIdValid = useChainIdValid(NetworkPluginID.PLUGIN_EVM)
-    const [traderProps, setTraderProps] = useState<TraderProps>()
-    const [chainId, setChainId] = useState<ChainId>(currentChainId)
 
-    const { open: remoteOpen, closeDialog } = useRemoteControlledDialog(
-        PluginTraderMessages.swapDialogUpdated,
-        (ev) => {
-            if (ev?.traderProps) setTraderProps(ev.traderProps)
-        },
+    const { chainId, setChainId } = useChainContext()
+    const chainIdValid = useChainIdValid(pluginID, chainId)
+    const [defaultCoins, setDefaultCoins] = useState<
+        | {
+              defaultInputCoin?: TokenType
+              defaultOutputCoin?: TokenType
+          }
+        | undefined
+    >({
+        defaultInputCoin: undefined,
+        defaultOutputCoin: undefined,
+    })
+    const chainIdRef = useRef<Web3Helper.ChainIdAll>(chainId)
+    const [open, setOpen] = useState(false)
+
+    const selectAdvancedSettings = useSelectAdvancedSettings()
+
+    const defaultInputCoin = defaultCoins?.defaultInputCoin
+    const defaultOutputCoin = defaultCoins?.defaultOutputCoin
+
+    // TODO: Other network schema support
+    const { value: inputToken } = useFungibleToken(
+        pluginID,
+        defaultInputCoin?.address,
+        Others?.createFungibleToken(
+            chainId,
+            Others.isNativeTokenAddress(defaultInputCoin?.address) ? SchemaType.Native : SchemaType.ERC20,
+            defaultInputCoin?.address ?? '',
+            defaultInputCoin?.name ?? '',
+            defaultInputCoin?.symbol ?? '',
+            defaultInputCoin?.decimals ?? 0,
+        ),
     )
 
-    const selectAdvancedSettings = useSelectAdvancedSettings(NetworkPluginID.PLUGIN_EVM)
+    const { value: outputToken } = useFungibleToken(
+        pluginID,
+        defaultOutputCoin?.address,
+        Others?.createFungibleToken(
+            chainId,
+            Others.isNativeTokenAddress(defaultOutputCoin?.address) ? SchemaType.Native : SchemaType.ERC20,
+            defaultOutputCoin?.address ?? '',
+            defaultOutputCoin?.name ?? '',
+            defaultOutputCoin?.symbol ?? '',
+            defaultOutputCoin?.decimals ?? 0,
+        ),
+    )
+
+    // #region update default input or output token
+    useEffect(() => {
+        chainIdRef.current = chainId
+    }, [chainId])
 
     useEffect(() => {
-        if (!chainIdValid) closeDialog()
-    }, [chainIdValid, closeDialog])
+        return CrossIsolationMessages.events.swapDialogEvent.on(({ open, traderProps }) => {
+            setOpen(open)
+            if (traderProps) {
+                const { defaultInputCoin, defaultOutputCoin } = traderProps
 
-    useUpdateEffect(() => {
-        if (currentChainId) {
-            setChainId(currentChainId)
-        }
-    }, [currentChainId])
+                setDefaultCoins({
+                    defaultInputCoin,
+                    defaultOutputCoin,
+                })
+                if (traderProps.chainId) setChainId(traderProps.chainId as Web3Helper.ChainIdAll)
+            }
+        })
+    }, [chainId])
+    // #endregion
+
+    useEffect(() => {
+        if (!chainIdValid) setOpen(false)
+    }, [chainIdValid])
+
+    const [, openGasSettingDialog] = useAsyncFn(async () => {
+        const { slippageTolerance, transaction } = await selectAdvancedSettings({
+            chainId,
+            disableGasLimit: true,
+            disableSlippageTolerance: false,
+            transaction: {
+                gas: tradeRef.current?.focusedTrade?.gas.value ?? MIN_GAS_LIMIT,
+                ...(tradeRef.current?.gasConfig ?? {}),
+            },
+            slippageTolerance: currentSlippageSettings.value / 100,
+        })
+
+        if (slippageTolerance) currentSlippageSettings.value = slippageTolerance
+
+        PluginTraderMessages.swapSettingsUpdated.sendToAll({
+            open: false,
+            gasConfig: {
+                gasPrice: (transaction as Transaction)?.gasPrice as string | undefined,
+                maxFeePerGas: (transaction as Transaction)?.maxFeePerGas as string | undefined,
+                maxPriorityFeePerGas: (transaction as Transaction)?.maxPriorityFeePerGas as string | undefined,
+            },
+        })
+    }, [chainId, currentSlippageSettings.value])
 
     return (
-        <TargetChainIdContext.Provider>
-            <AllProviderTradeContext.Provider>
-                <InjectedDialog
-                    open={open || remoteOpen}
-                    onClose={() => {
-                        onClose?.()
-                        if (currentChainId) {
-                            setChainId(currentChainId)
-                        }
-                        setTraderProps(undefined)
-                        closeDialog()
-                    }}
-                    title={t('plugin_trader_swap')}
-                    titleBarIconStyle={isDashboard ? 'close' : 'back'}
-                    titleTail={
-                        <div className={classes.tail}>
-                            <IconButton onClick={() => tradeRef.current?.refresh()}>
-                                <Icons.Refresh size={24} className={classes.icon} />
-                            </IconButton>
-                            <IconButton
-                                onClick={async () => {
-                                    const { slippageTolerance, transaction } = await selectAdvancedSettings({
-                                        chainId,
-                                        disableGasLimit: true,
-                                        disableSlippageTolerance: false,
-                                        transaction: {
-                                            gas: tradeRef.current?.focusedTrade?.gas.value ?? MIN_GAS_LIMIT,
-                                            ...(tradeRef.current?.gasConfig ?? {}),
-                                        },
-                                        slippageTolerance: currentSlippageSettings.value / 100,
-                                    })
-
-                                    if (slippageTolerance) currentSlippageSettings.value = slippageTolerance
-
-                                    PluginTraderMessages.swapSettingsUpdated.sendToAll({
-                                        open: false,
-                                        gasConfig: {
-                                            gasPrice: transaction?.gasPrice as string | undefined,
-                                            maxFeePerGas: transaction?.maxFeePerGas as string | undefined,
-                                            maxPriorityFeePerGas: transaction?.maxPriorityFeePerGas as
-                                                | string
-                                                | undefined,
-                                        },
-                                    })
-                                }}>
-                                <Icons.Gear size={24} className={classes.icon} />
-                            </IconButton>
-                        </div>
-                    }
-                    className={classes.dialog}>
-                    <DialogContent className={classes.content}>
-                        <div className={classes.abstractTabWrapper}>
-                            <NetworkTab
-                                chainId={chainId}
-                                /* @ts-ignore */
-                                setChainId={setChainId}
-                                classes={classes}
-                                chains={chainIdList}
-                                networkId={NetworkPluginID.PLUGIN_EVM}
-                            />
-                        </div>
+        <InjectedDialog
+            open={open}
+            onClose={() => {
+                setDefaultCoins(undefined)
+                setOpen(false)
+            }}
+            title={t('plugin_trader_swap')}
+            titleBarIconStyle={isDashboard ? 'close' : 'back'}
+            titleTail={
+                <div className={classes.tail}>
+                    <IconButton onClick={() => tradeRef.current?.refresh()}>
+                        <Icons.Refresh size={24} className={classes.icon} />
+                    </IconButton>
+                    {pluginID === NetworkPluginID.PLUGIN_EVM ? (
+                        <IconButton onClick={openGasSettingDialog}>
+                            <Icons.Gear size={24} className={classes.icon} />
+                        </IconButton>
+                    ) : null}
+                </div>
+            }
+            className={classes.dialog}>
+            <DialogContent className={classes.content}>
+                <div className={classes.abstractTabWrapper}>
+                    <NetworkTab
+                        classes={{
+                            indicator: classes.indicator,
+                        }}
+                        chains={chainIdList}
+                    />
+                </div>
+                <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM, chainId }}>
+                    <AllProviderTradeContext.Provider>
                         <Trader
-                            {...traderProps}
+                            defaultInputCoin={defaultInputCoin ? inputToken : undefined}
+                            defaultOutputCoin={defaultOutputCoin ? outputToken : undefined}
                             chainId={chainId}
                             classes={{ root: classes.tradeRoot }}
                             ref={tradeRef}
                         />
-                    </DialogContent>
-                </InjectedDialog>
-            </AllProviderTradeContext.Provider>
-        </TargetChainIdContext.Provider>
+                    </AllProviderTradeContext.Provider>
+                </Web3ContextProvider>
+            </DialogContent>
+        </InjectedDialog>
     )
 }

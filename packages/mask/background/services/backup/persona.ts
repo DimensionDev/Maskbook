@@ -1,7 +1,7 @@
-import { encodeArrayBuffer } from '@dimensiondev/kit'
+import { encodeArrayBuffer } from '@masknet/kit'
 import type { PersonaIdentifier } from '@masknet/shared-base'
 import { encode } from '@msgpack/msgpack'
-import { queryPersonaDB } from '../../database/persona/db'
+import { queryPersonaDB } from '../../database/persona/db.js'
 
 export async function backupPersonaMnemonicWords(identifier: PersonaIdentifier): Promise<string | undefined> {
     const record = await queryPersonaDB(identifier)

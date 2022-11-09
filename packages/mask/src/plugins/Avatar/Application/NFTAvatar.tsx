@@ -1,8 +1,8 @@
 import { EnhanceableSite } from '@masknet/shared-base'
 import { Avatar, Box, Stack } from '@mui/material'
-import { PointIcon } from '../assets/point'
-import { TwitterIcon } from '../assets/twitter'
-import { RainbowBox } from '../SNSAdaptor/RainbowBox'
+import { PointIcon } from '../assets/PointIcon.js'
+import { TwitterIcon } from '../assets/TwitterIcon.js'
+import { RainbowBox } from '../SNSAdaptor/RainbowBox.js'
 
 export const SOCIAL_MEDIA_ICON_MAPPING: Record<string, React.ReactNode> = {
     [EnhanceableSite.Twitter]: <TwitterIcon style={{ width: 15, height: 15 }} />,

@@ -1,6 +1,6 @@
 import { memo } from 'react'
 import { Box, IconButton, Stack, Typography } from '@mui/material'
-import { MaskAvatar } from '../../../../components/MaskAvatar'
+import { MaskAvatar } from '../../../../components/MaskAvatar/index.js'
 import { Icons } from '@masknet/icons'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { formatPersonaFingerprint } from '@masknet/shared-base'
@@ -14,10 +14,6 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: '50%',
         border: `1px solid ${MaskColorVar.blue.alpha(0.1)}`,
         color: MaskColorVar.primary,
-    },
-    nickname: {
-        margin: theme.spacing(0, 1.5),
-        lineHeight: 1.375,
     },
 }))
 

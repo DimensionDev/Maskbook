@@ -1,36 +1,16 @@
 import { Alert, Box, Card, CardContent, Divider, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useContext, useState } from 'react'
-import { fetchClue } from '../Worker/apis'
-import { FindTrumanContext } from '../context'
+import { fetchClue } from '../Worker/apis/index.js'
+import { FindTrumanContext } from '../context.js'
 import { useAsync } from 'react-use'
-import FlipCard from './FlipCard'
-import type { ClueCondition } from '../types'
-import { ClueConditionType } from '../types'
+import FlipCard from './FlipCard.js'
+import type { ClueCondition } from '../types.js'
+import { ClueConditionType } from '../types.js'
 import { Image } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => {
     return {
-        root: {
-            color: 'inherit',
-            fontSize: 'inherit',
-            fontFamily: 'sans-serif',
-            '& p': {
-                margin: 0,
-            },
-            '& p + p': {
-                marginTop: theme.spacing(0.5),
-            },
-            '& h1, & h2, & h3, & h4, & h5, & h6': {
-                fontSize: 14,
-            },
-            '& img': {
-                maxWidth: '100%',
-            },
-            '& a': {
-                color: theme.palette.text.primary,
-            },
-        },
         card: {
             borderRadius: '6px',
             ':not(:last-child)': {
@@ -48,7 +28,6 @@ interface EncryptionCardProps {
 export default function EncryptionCard(props: EncryptionCardProps) {
     const { clueId } = props
 
-    const { classes } = useStyles()
     const { address, t } = useContext(FindTrumanContext)
     const [flipped, setFlipped] = useState(false)
     const [backImgHeight, setBackImgHeight] = useState(0)

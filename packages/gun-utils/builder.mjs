@@ -32,12 +32,15 @@ function init() {
     function String() {
         return globalThis.String.apply(this, arguments)
     }
+    String.fromCharCode = globalThis.String.fromCharCode
+    String.fromCodePoint = globalThis.String.fromCodePoint
     const window = {
         setTimeout,
         location,
         Object,
         console,
         String,
+        JSON,
         TextEncoder: globalThis.TextEncoder,
         TextDecoder: globalThis.TextDecoder,
         crypto: globalThis.crypto,

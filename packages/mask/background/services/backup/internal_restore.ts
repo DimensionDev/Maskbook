@@ -1,18 +1,24 @@
-import { delay } from '@dimensiondev/kit'
+import { delay } from '@masknet/kit'
 import type { NormalizedBackup } from '@masknet/backup-format'
-import { activatedPluginsWorker, registeredPluginIDs } from '@masknet/plugin-infra/background-worker'
-import { ProfileIdentifier, RelationFavor } from '@masknet/shared-base'
-import { MaskMessages } from '../../../shared/messages'
+import { activatedPluginsWorker, registeredPlugins } from '@masknet/plugin-infra/background-worker'
+import { PluginID, ProfileIdentifier, RelationFavor } from '@masknet/shared-base'
+import { MaskMessages } from '../../../shared/messages.js'
 import {
     consistentPersonaDBWriteAccess,
     createOrUpdatePersonaDB,
     createOrUpdateProfileDB,
     createOrUpdateRelationDB,
     LinkedProfileDetails,
-} from '../../database/persona/db'
-import { withPostDBTransaction, createPostDB, PostRecord, queryPostDB, updatePostDB } from '../../database/post'
-import type { LatestRecipientDetailDB, LatestRecipientReasonDB } from '../../database/post/dbType'
-import { internal_wallet_restore } from './internal_wallet_restore'
+} from '../../database/persona/db.js'
+import {
+    withPostDBTransaction,
+    createPostDB,
+    PostRecord,
+    queryPostDB,
+    updatePostDB,
+} from '../../database/post/index.js'
+import type { LatestRecipientDetailDB, LatestRecipientReasonDB } from '../../database/post/dbType.js'
+import { internal_wallet_restore } from './internal_wallet_restore.js'
 
 export async function restoreNormalizedBackup(backup: NormalizedBackup.Data) {
     const { plugins, posts, wallets } = backup
@@ -176,7 +182,7 @@ async function restorePlugins(backup: NormalizedBackup.Data['plugins']) {
         const plugin = plugins.find((x) => x.ID === pluginID)
         // should we warn user here?
         if (!plugin) {
-            if ([...registeredPluginIDs].includes(pluginID))
+            if ([...registeredPlugins.getCurrentValue().map((x) => x[0])].includes(pluginID as PluginID))
                 console.warn(`[@masknet/plugin-infra] Found a backup of a not enabled plugin ${plugin}`, item)
             else console.warn(`[@masknet/plugin-infra] Found an unknown plugin backup of ${plugin}`, item)
             continue

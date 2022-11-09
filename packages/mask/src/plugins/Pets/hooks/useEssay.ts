@@ -1,20 +1,23 @@
 import { useEffect, useState } from 'react'
 import { useAsync } from 'react-use'
-import { useWeb3Connection } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { PluginPetRPC } from '../messages'
-import type { User } from '../types'
-import { ImageType, ShowMeta } from './../types'
-import { Punk3D, DEFAULT_SET_WORD, MASK_TWITTER, DEFAULT_PUNK_MASK_WORD, PunkIcon } from './../constants'
-import { useUser } from './useUser'
+import { useWeb3State } from '@masknet/web3-hooks-base'
+import { NetworkPluginID } from '@masknet/shared-base'
+import type { User } from '../types.js'
+import { ImageType, ShowMeta, EssayRSSNode } from './../types.js'
+import { Punk3D, DEFAULT_SET_WORD, MASK_TWITTER, DEFAULT_PUNK_MASK_WORD, PunkIcon } from './../constants.js'
+import { useUser } from './useUser.js'
 
 export function useEssay(user: User, refresh?: number) {
-    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
-    return useAsync(async () => {
-        if (!connection || !user.address) return null
-        const metaData = await PluginPetRPC.getCustomEssayFromRSS(user.address, connection)
-        return metaData?.userId === user.userId ? metaData : null
-    }, [user, refresh, connection]).value
+    const { Storage } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
+    const { value } = useAsync(async () => {
+        if (!Storage || !user.address) return null
+        const storage = Storage.createRSS3Storage(user.address)
+        const data = await storage.get<EssayRSSNode>('_pet')
+
+        return data?.essay.userId === user.userId ? data.essay : null
+    }, [user, refresh])
+
+    return value
 }
 
 export function useDefaultEssay(user: User) {

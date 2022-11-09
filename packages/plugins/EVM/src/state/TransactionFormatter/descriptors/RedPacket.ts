@@ -3,10 +3,10 @@ import { ChainId, getNftRedPacketConstant, getRedPacketConstants, TransactionPar
 import HappyRedPacketV4ABI from '@masknet/web3-contracts/abis/HappyRedPacketV4.json'
 import NftRedPacketABI from '@masknet/web3-contracts/abis/NftRedPacket.json'
 import { isSameAddress, TransactionContext } from '@masknet/web3-shared-base'
-import type { TransactionDescriptor } from '../types'
-import { Web3StateSettings } from '../../../settings'
+import type { TransactionDescriptor } from '../types.js'
+import { Web3StateSettings } from '../../../settings/index.js'
 import type { AbiItem } from 'web3-utils'
-import { DescriptorWithTransactionDecodedReceipt, getTokenAmountDescription } from '../utils'
+import { DescriptorWithTransactionDecodedReceipt, getTokenAmountDescription } from '../utils.js'
 
 export class RedPacketDescriptor extends DescriptorWithTransactionDecodedReceipt implements TransactionDescriptor {
     async getClaimTokenInfo(chainId: ChainId, contractAddress: string | undefined, hash: string | undefined) {
@@ -106,12 +106,16 @@ export class RedPacketDescriptor extends DescriptorWithTransactionDecodedReceipt
                 const tokenAmountDescription = getTokenAmountDescription(method.parameters?._total_tokens, token)
                 return {
                     chainId: context.chainId,
+                    tokenInAddress: token?.address,
+                    tokenInAmount: method?.parameters?._total_tokens,
                     title: i18NextInstance.t('plugin_red_packet_create_with_token_title'),
                     description: i18NextInstance.t('plugin_red_packet_create_with_token'),
-                    successfulDescription: i18NextInstance.t('plugin_red_packet_create_with_token_success', {
-                        tokenAmountDescription,
-                    }),
-                    failedDescription: i18NextInstance.t('plugin_red_packet_create_with_token_fail'),
+                    snackbar: {
+                        successfulDescription: i18NextInstance.t('plugin_red_packet_create_with_token_success', {
+                            tokenAmountDescription,
+                        }),
+                        failedDescription: i18NextInstance.t('plugin_red_packet_create_with_token_fail'),
+                    },
                 }
             } else if (method?.name === 'claim') {
                 const tokenAmountDescription = await this.getClaimTokenInfo(context.chainId, context.to, context.hash)
@@ -120,27 +124,16 @@ export class RedPacketDescriptor extends DescriptorWithTransactionDecodedReceipt
                     chainId: context.chainId,
                     title: i18NextInstance.t('plugin_red_packet_claim_title'),
                     description: i18NextInstance.t('plugin_red_packet_claim_notification'),
-                    successfulDescription: tokenAmountDescription
-                        ? i18NextInstance.t('plugin_red_packet_claim_success', {
-                              tokenAmountDescription,
-                          })
-                        : i18NextInstance.t('plugin_red_packet_claim_success_without_details'),
-                    failedDescription: i18NextInstance.t('plugin_red_packet_claim_fail'),
+                    snackbar: {
+                        successfulDescription: tokenAmountDescription
+                            ? i18NextInstance.t('plugin_red_packet_claim_success', {
+                                  tokenAmountDescription,
+                              })
+                            : i18NextInstance.t('plugin_red_packet_claim_success_without_details'),
+                        failedDescription: i18NextInstance.t('plugin_red_packet_claim_fail'),
+                    },
                 }
-            } else if (method?.name === 'refund') {
-                const tokenAmountDescription = await this.getRefundTokenInfo(context.chainId, context.to, context.hash)
-
-                return {
-                    chainId: context.chainId,
-                    title: i18NextInstance.t('plugin_red_packet_refund_with_token_title'),
-                    description: i18NextInstance.t('plugin_red_packet_refund_with_token'),
-                    successfulDescription: tokenAmountDescription
-                        ? i18NextInstance.t('plugin_red_packet_refund_with_token_success', {
-                              tokenAmountDescription,
-                          })
-                        : i18NextInstance.t('plugin_red_packet_refund_with_token_success_without_detail'),
-                    failedDescription: i18NextInstance.t('plugin_red_packet_refund_with_token_fail'),
-                }
+            } else {
             }
         } else if (isSameAddress(context.to, RED_PACKET_NFT_ADDRESS)) {
             if (method?.name === 'create_red_packet') {
@@ -152,12 +145,14 @@ export class RedPacketDescriptor extends DescriptorWithTransactionDecodedReceipt
                     chainId: context.chainId,
                     title: i18NextInstance.t('plugin_nft_red_packet_create_title'),
                     description: i18NextInstance.t('plugin_nft_red_packet_create'),
-                    successfulDescription: symbol
-                        ? i18NextInstance.t('plugin_nft_red_packet_create_success', {
-                              symbol,
-                          })
-                        : i18NextInstance.t('plugin_nft_red_packet_create_success_without_detail'),
-                    failedDescription: i18NextInstance.t('plugin_red_packet_create_with_token_fail'),
+                    snackbar: {
+                        successfulDescription: symbol
+                            ? i18NextInstance.t('plugin_nft_red_packet_create_success', {
+                                  symbol,
+                              })
+                            : i18NextInstance.t('plugin_nft_red_packet_create_success_without_detail'),
+                        failedDescription: i18NextInstance.t('plugin_red_packet_create_with_token_fail'),
+                    },
                 }
             } else if (method?.name === 'claim') {
                 const symbol = await this.getClaimedNFTSymbol(context.chainId, RED_PACKET_NFT_ADDRESS, context.hash)
@@ -165,12 +160,14 @@ export class RedPacketDescriptor extends DescriptorWithTransactionDecodedReceipt
                     chainId: context.chainId,
                     title: i18NextInstance.t('plugin_nft_red_packet_claim_title'),
                     description: i18NextInstance.t('plugin_nft_red_packet_claim'),
-                    successfulDescription: symbol
-                        ? i18NextInstance.t('plugin_nft_red_packet_claim_success', {
-                              symbol,
-                          })
-                        : i18NextInstance.t('plugin_nft_red_packet_claim_success_without_detail'),
-                    failedDescription: i18NextInstance.t('plugin_red_packet_claim_fail'),
+                    snackbar: {
+                        successfulDescription: symbol
+                            ? i18NextInstance.t('plugin_nft_red_packet_claim_success', {
+                                  symbol,
+                              })
+                            : i18NextInstance.t('plugin_nft_red_packet_claim_success_without_detail'),
+                        failedDescription: i18NextInstance.t('plugin_red_packet_claim_fail'),
+                    },
                 }
             }
         }

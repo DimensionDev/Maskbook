@@ -1,3 +1,1 @@
-export * from './getFungibleAssets'
-export * from './getNonFungibleAssets'
-export * from './getDomainName'
+export * from './getDomainName.js'

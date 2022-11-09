@@ -3,31 +3,29 @@ import { DialogContent } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useTheme } from '@mui/material/styles'
 
-import { PageHistory, PagesType, DialogInterface } from '../types'
-import { useI18N } from '../locales'
+import { PageHistory, PagesType, DialogInterface } from '../types.js'
+import { useI18N } from '../locales/index.js'
 
 import { InjectedDialog } from '@masknet/shared'
-import { Landing } from './Landing'
-import { ReferralFarms } from './ReferralFarms'
-import { CreateFarm } from './CreateFarm'
-import { ReferToFarm } from './ReferToFarm'
-import { SelectToken } from './SelectToken'
-import { BuyToFarm } from './BuyToFarm'
-import { AdjustFarmRewards } from './AdjustFarmRewards'
-import { Transaction } from './Transaction'
-import { Deposit } from './Deposit'
-import { AttraceLogoDarkTheme, AttraceLogoLightTheme } from './shared-ui/icons'
+import { Landing } from './Landing.js'
+import { ReferralFarms } from './ReferralFarms.js'
+import { CreateFarm } from './CreateFarm.js'
+import { ReferToFarm } from './ReferToFarm.js'
+import { SelectToken } from './SelectToken.js'
+import { BuyToFarm } from './BuyToFarm.js'
+import { AdjustFarmRewards } from './AdjustFarmRewards.js'
+import { Transaction } from './Transaction.js'
+import { Deposit } from './Deposit.js'
+import { AttraceLogoDarkTheme, AttraceLogoLightTheme } from './shared-ui/icons/index.js'
 
 interface ReferralDialogProps {
     open: boolean
     onClose?: () => void
 }
 
-const useStyles = makeStyles<{ hideBackBtn?: boolean }>()((theme, { hideBackBtn = false }) => ({
-    walletStatusBox: {
-        width: 535,
-        margin: '24px auto',
-    },
+const useStyles = makeStyles<{
+    hideBackBtn?: boolean
+}>()((theme, { hideBackBtn = false }) => ({
     content: {
         fontFamily: theme.typography.fontFamily,
         fontWeight: 400,

@@ -1,33 +1,27 @@
 import { useCallback } from 'react'
 import { useAsync } from 'react-use'
-import { CrossIsolationMessages, EMPTY_LIST } from '@masknet/shared-base'
+import { CrossIsolationMessages, EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import { makeTypedMessageText } from '@masknet/typed-message'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
-import { useWeb3, useAccount } from '@masknet/plugin-infra/web3'
+import { useWeb3, useChainContext } from '@masknet/web3-hooks-base'
 import type { Web3 } from '@masknet/web3-shared-evm'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { TokenIcon } from '@masknet/shared'
+import { TokenIcon, ChainBoundary, WalletConnectedBoundary } from '@masknet/shared'
 import { Button, Card, Grid, Typography, Box } from '@mui/material'
 import { usePluginWrapper } from '@masknet/plugin-infra/content-script'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
 
-import type { ReferralMetaData } from '../types'
-import type { Coin } from '../../Trader/types'
-import { MASK_REFERRER, META_KEY, SWAP_CHAIN_ID } from '../constants'
-import { useI18N } from '../locales'
-import { useCurrentIdentity, useCurrentLinkedPersona } from '../../../components/DataSource/useActivatedUI'
-import { PluginTraderMessages } from '../../Trader/messages'
-import { ReferralRPC } from '../messages'
+import type { ReferralMetaData } from '../types.js'
+import { MASK_REFERRER, META_KEY, SWAP_CHAIN_ID } from '../constants.js'
+import { useI18N } from '../locales/index.js'
+import { useCurrentIdentity, useCurrentLinkedPersona } from '../../../components/DataSource/useActivatedUI.js'
+import { ReferralRPC } from '../messages.js'
 import {
     singAndPostProofOfRecommendationOrigin,
     singAndPostProofOfRecommendationWithReferrer,
-} from './utils/proofOfRecommendation'
+} from './utils/proofOfRecommendation.js'
 
-import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
-import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
-import { RewardFarmPostWidget } from './shared-ui/RewardFarmPostWidget'
-import { SponsoredFarmIcon } from './shared-ui/icons/SponsoredFarm'
-import { IconURLs } from '../assets'
+import { RewardFarmPostWidget } from './shared-ui/RewardFarmPostWidget.js'
+import { SponsoredFarmIcon } from './shared-ui/icons/SponsoredFarm.js'
+import { IconURLs } from '../assets/index.js'
 
 interface FarmPostProps {
     payload: ReferralMetaData
@@ -53,9 +47,6 @@ const useStyles = makeStyles()(() => ({
             width: 'calc( 100% - 8px)',
         },
     },
-    switchButtonBox: {
-        width: '100%',
-    },
 }))
 
 export function FarmPost(props: FarmPostProps) {
@@ -64,13 +55,12 @@ export function FarmPost(props: FarmPostProps) {
     const { payload } = props
     const farmChainId = payload.referral_token_chain_id
 
+    const t = useI18N()
     const { classes } = useStyles()
     const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM)
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const t = useI18N()
+    const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const currentIdentity = useCurrentIdentity()
     const { value: linkedPersona } = useCurrentLinkedPersona()
-    const { setDialog: openSwapDialog } = useRemoteControlledDialog(PluginTraderMessages.swapDialogUpdated)
     const { showSnackbar } = useCustomSnackbar()
 
     const { value: rewards = EMPTY_LIST, error } = useAsync(
@@ -81,7 +71,7 @@ export function FarmPost(props: FarmPostProps) {
 
     const openComposeBox = useCallback(
         (selectedReferralData: Map<string, ReferralMetaData>, id?: string) =>
-            CrossIsolationMessages.events.requestComposition.sendToLocal({
+            CrossIsolationMessages.events.compositionDialogEvent.sendToLocal({
                 reason: 'timeline',
                 open: true,
                 content: makeTypedMessageText('', selectedReferralData),
@@ -124,19 +114,18 @@ export function FarmPost(props: FarmPostProps) {
             return
         }
 
-        openSwapDialog({
+        CrossIsolationMessages.events.swapDialogEvent.sendToLocal({
             open: true,
             traderProps: {
-                chainId: SWAP_CHAIN_ID,
-                coin: {
-                    id: payload.referral_token,
+                defaultInputCoin: {
                     name: payload.referral_token_name,
                     symbol: payload.referral_token_symbol,
-                    contract_address: payload.referral_token,
-                } as Coin,
+                    address: payload.referral_token,
+                },
+                chainId: SWAP_CHAIN_ID,
             },
         })
-    }, [payload, openSwapDialog])
+    }, [payload])
 
     const onClickBuyToFarm = useCallback(async () => {
         try {

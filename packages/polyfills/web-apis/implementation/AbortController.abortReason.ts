@@ -1,4 +1,5 @@
 try {
+    // iOS 15.4-
     if (!('reason' in AbortSignal.prototype)) {
         const old_abort = AbortController.prototype.abort
         AbortController.prototype.abort = function abort(this: AbortController, reason?: any) {

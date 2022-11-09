@@ -1,20 +1,21 @@
 import { makeStyles } from '@masknet/theme'
 import { Box, Typography, ListItemButton } from '@mui/material'
-import { NFTAvatar } from './NFTAvatar'
-import { NFTInfo } from './NFTInfo'
-import { MoreIcon } from '../assets/more'
-import { RSS3_KEY_SNS } from '../constants'
-import { useCheckTokenOwner, useTokenOwner } from '../hooks/useTokenOwner'
-import { getAvatarId } from '../../../social-network-adaptor/twitter.com/utils/user'
+import { NFTAvatar } from './NFTAvatar.js'
+import { NFTInfo } from './NFTInfo.js'
+import { MoreIcon } from '../assets/MoreIcon.js'
+import { RSS3_KEY_SNS } from '../constants.js'
 import { useCallback, useMemo } from 'react'
 import type { BindingProof } from '@masknet/shared-base'
-import { usePersonaNFTAvatar } from '../hooks/usePersonaNFTAvatar'
+import { usePersonaNFTAvatar } from '../hooks/usePersonaNFTAvatar.js'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import { NetworkPluginID, TokenType } from '@masknet/web3-shared-base'
-import type { AllChainsNonFungibleToken } from '../types'
-import { useWallet } from '../hooks/useWallet'
+import { TokenType } from '@masknet/web3-shared-base'
+import type { AllChainsNonFungibleToken } from '../types.js'
+import { useI18N } from '../locales/index.js'
+import { Twitter } from '@masknet/web3-providers'
 
-const useStyles = makeStyles<{ disabled: boolean }>()((theme, props) => ({
+const useStyles = makeStyles<{
+    disabled: boolean
+}>()((theme, props) => ({
     root: {
         margin: theme.spacing(2, 0.5),
         border: `1px solid ${theme.palette.divider}`,
@@ -23,10 +24,11 @@ const useStyles = makeStyles<{ disabled: boolean }>()((theme, props) => ({
         display: 'flex',
         alignItems: 'center',
         cursor: 'pointer',
+        '&.Mui-disabled': {
+            pointerEvents: 'auto',
+        },
     },
-
     userInfo: {
-        fontSize: 14,
         marginLeft: 16,
         flex: 1,
     },
@@ -38,26 +40,20 @@ interface PersonaItemProps {
     userId: string
     nickname?: string
     proof?: BindingProof
+    persona?: string
     onSelect?: (proof: BindingProof, tokenInfo?: AllChainsNonFungibleToken) => void
 }
 
 export function PersonaItem(props: PersonaItemProps) {
-    const { userId, onSelect, owner = false, proof, avatar, nickname = '' } = props
+    const { userId, onSelect, owner = false, proof, avatar, nickname = '', persona = '' } = props
+    const t = useI18N()
     const { classes } = useStyles({ disabled: !owner })
-    const { value: _avatar, loading } = usePersonaNFTAvatar(userId, getAvatarId(avatar) ?? '', RSS3_KEY_SNS.TWITTER)
-    const { loading: loadingWallet, value: storage } = useWallet(userId)
-    const { value: token, loading: loadingToken } = useTokenOwner(
-        _avatar?.address ?? '',
-        _avatar?.tokenId ?? '',
-        _avatar?.pluginId ?? storage?.networkPluginID ?? NetworkPluginID.PLUGIN_EVM,
-        _avatar?.chainId,
-        storage?.address,
-    )
 
-    const { loading: loadingCheckOwner, isOwner } = useCheckTokenOwner(
-        _avatar?.pluginId ?? NetworkPluginID.PLUGIN_EVM,
+    const { value: _avatar, loading } = usePersonaNFTAvatar(
         userId,
-        token?.owner ?? '',
+        Twitter.getAvatarId(avatar) ?? '',
+        persona,
+        RSS3_KEY_SNS.TWITTER,
     )
 
     const tokenDetailed: AllChainsNonFungibleToken = useMemo(
@@ -65,16 +61,16 @@ export function PersonaItem(props: PersonaItemProps) {
             tokenId: _avatar?.tokenId ?? '',
             contract: {
                 chainId: _avatar?.chainId ?? ChainId.Mainnet,
-                name: token?.name ?? '',
-                symbol: token?.symbol ?? 'ETH',
+                name: '',
+                symbol: '',
                 address: _avatar?.address ?? '',
                 schema: SchemaType.ERC721,
-                owner: token?.owner,
+                owner: '',
             },
             metadata: {
                 chainId: _avatar?.chainId ?? ChainId.Mainnet,
-                name: token?.name ?? '',
-                symbol: token?.symbol ?? 'ETH',
+                name: '',
+                symbol: '',
             },
             id: _avatar?.address ?? '',
             chainId: _avatar?.chainId ?? ChainId.Mainnet,
@@ -82,16 +78,18 @@ export function PersonaItem(props: PersonaItemProps) {
             schema: SchemaType.ERC721,
             address: _avatar?.address ?? '',
         }),
-        [_avatar, token],
+        [_avatar],
     )
 
     const onClick = useCallback(() => {
         if (!proof) return
-        onSelect?.(proof, _avatar && isOwner ? tokenDetailed : undefined)
+        onSelect?.(proof, _avatar ? tokenDetailed : undefined)
     }, [_avatar, proof])
 
+    const inactive = !owner || !proof
+
     return (
-        <ListItemButton className={classes.root} onClick={onClick} disabled={!owner || !proof}>
+        <ListItemButton className={classes.root} onClick={onClick} disabled={inactive}>
             <NFTAvatar
                 owner={owner}
                 avatar={avatar || _avatar?.imageUrl}
@@ -108,20 +106,9 @@ export function PersonaItem(props: PersonaItemProps) {
             </Box>
 
             <NFTInfo
-                loading={loading || loadingToken || loadingCheckOwner || loadingWallet}
-                owner={owner ? isOwner && _avatar?.avatarId === getAvatarId(avatar) : true}
-                nft={
-                    _avatar
-                        ? {
-                              name: token?.name ?? '',
-                              symbol: token?.symbol ?? '',
-                              tokenId: _avatar?.tokenId ?? '',
-                              address: _avatar?.address ?? '',
-                              chainId: _avatar.chainId ?? ChainId.Mainnet,
-                              networkPluginID: _avatar.pluginId ?? NetworkPluginID.PLUGIN_EVM,
-                          }
-                        : undefined
-                }
+                loading={loading}
+                tooltip={inactive ? t.inactive_persona_tooltip() : ''}
+                isNFT={Boolean(_avatar)}
             />
 
             <MoreIcon style={{ marginLeft: 8 }} />

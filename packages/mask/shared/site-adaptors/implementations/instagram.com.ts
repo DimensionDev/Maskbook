@@ -1,6 +1,6 @@
 import { EnhanceableSite } from '@masknet/shared-base'
-import { defineSiteAdaptor } from '../definitions'
-import type { SiteAdaptor } from '../types'
+import { defineSiteAdaptor } from '../definitions.js'
+import type { SiteAdaptor } from '../types.js'
 
 if (import.meta.webpackHot) import.meta.webpackHot.accept()
 
@@ -9,6 +9,7 @@ export const InstagramAdaptor: SiteAdaptor.Definition = {
     networkIdentifier: EnhanceableSite.Instagram,
     declarativePermissions: { origins },
     homepage: 'https://www.instagram.com/',
+    isSocialNetwork: true,
 
     getProfilePage: () => new URL('https://www.instagram.com/'),
     getShareLinkURL: null,

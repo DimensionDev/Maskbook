@@ -1,11 +1,10 @@
 import { useEffect, useState } from 'react'
 import { Button, List, Typography } from '@mui/material'
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
-import { makeStyles, useStylesExtends } from '@masknet/theme'
-import { useI18N } from '../locales'
-import { useGameList } from '../hook'
-import type { GameInfo } from '../types'
-import classNames from 'classnames'
+import { ArrowDropDown as ArrowDropDownIcon } from '@mui/icons-material'
+import { makeStyles } from '@masknet/theme'
+import { useI18N } from '../locales/index.js'
+import { useGameList } from '../hook/index.js'
+import type { GameInfo } from '../types.js'
 
 const useStyles = makeStyles()(() => ({
     title: {
@@ -93,9 +92,8 @@ interface Props {
 
 const GameList = (props: Props) => {
     const t = useI18N()
-    const classes = useStylesExtends(useStyles(), {})
+    const { classes, cx } = useStyles()
     const gameList = useGameList()
-
     const [descTypes, setDescTypes] = useState<boolean[]>([])
     useEffect(() => {
         if (!gameList?.length) {
@@ -112,7 +110,7 @@ const GameList = (props: Props) => {
 
     return (
         <>
-            <List className={classes.walletBar}>
+            <List>
                 <Typography className={classes.title}>{t.game_list_title()}</Typography>
                 <ul className={classes.gameList}>
                     {gameList
@@ -123,13 +121,13 @@ const GameList = (props: Props) => {
                                       <Typography className={classes.infoTitle}>{game.name}</Typography>
                                       <div className={classes.introductionRow}>
                                           <Typography
-                                              className={classNames(classes.introduction, {
+                                              className={cx(classes.introduction, {
                                                   [classes.isOpen]: descTypes[index],
                                               })}>
                                               {game.description}
                                           </Typography>
                                           <ArrowDropDownIcon
-                                              className={classNames(classes.arrowBtn, {
+                                              className={cx(classes.arrowBtn, {
                                                   [classes.isTurn]: descTypes[index],
                                               })}
                                               onClick={() => toggleDescType(index)}

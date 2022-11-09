@@ -1,33 +1,32 @@
 import { memo, useCallback } from 'react'
-import { useTitle } from '../../../hook/useTitle'
-import { AccountsUI } from './UI'
-import { PersonaContext } from '../hooks/usePersonaContext'
-import { useI18N } from '../../../../../utils'
-import { compact } from 'lodash-unified'
-import { EnhanceableSite, PopupRoutes } from '@masknet/shared-base'
+import { useTitle } from '../../../hook/useTitle.js'
+import { AccountsUI } from './UI.js'
+import { PersonaContext } from '../hooks/usePersonaContext.js'
+import { useI18N } from '../../../../../utils/index.js'
+import { EMPTY_LIST, EnhanceableSite, PopupRoutes } from '@masknet/shared-base'
 import { useAsyncFn } from 'react-use'
-import Services from '../../../../service'
-import type { Account } from '../type'
+import Services from '../../../../service.js'
+import type { Account } from '../type.js'
 import { useNavigate } from 'react-router-dom'
-import { getEnumAsArray } from '@dimensiondev/kit'
+import { useSupportSocialNetworks } from '../../../hook/useSupportSocialNetworks.js'
 
 const Accounts = memo(() => {
     const { t } = useI18N()
 
     const navigate = useNavigate()
     const { currentPersona, setSelectedAccount, accounts } = PersonaContext.useContainer()
-
-    const definedSocialNetworks = compact(
-        getEnumAsArray(EnhanceableSite).map((x) => {
-            if (x.value === EnhanceableSite.Localhost || x.value === EnhanceableSite.OpenSea) return null
-            return x.value
-        }),
-    )
+    const { value: definedSocialNetworks = EMPTY_LIST } = useSupportSocialNetworks()
 
     const [, onConnect] = useAsyncFn(
         async (networkIdentifier: EnhanceableSite) => {
             if (currentPersona) {
-                await Services.SocialNetwork.connectSite(currentPersona.identifier, networkIdentifier, 'local')
+                await Services.SocialNetwork.connectSite(
+                    currentPersona.identifier,
+                    networkIdentifier,
+                    'local',
+                    undefined,
+                    false,
+                )
             }
         },
         [currentPersona],

@@ -1,7 +1,7 @@
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 
 export const RSS3_ENDPOINT = 'https://hub.pass3.me'
-export const NEW_RSS3_ENDPOINT = 'https://pregod.rss3.dev/v1.1.0/notes/'
+export const NEW_RSS3_ENDPOINT = 'https://pregod.rss3.dev/v1/notes/'
 
 export const RSS3_FEED_ENDPOINT = 'https://pregod.rss3.dev/v0.4.0/'
 
@@ -11,10 +11,11 @@ export const NETWORK_PLUGIN = {
     [NetworkPluginID.PLUGIN_SOLANA]: 'solana',
 }
 
-export const CollectionType = {
-    NFT: /Polygon.NFT|Ethereum.NFT|BSC.NFT/,
-    donation: /Gitcoin.Donation/,
-    footprint: /Mirror.XYZ|xDai.POAP/,
+export enum CollectionType {
+    NFTs = 'NFTs',
+    Donations = 'Donations',
+    Footprints = 'Footprints',
+    Feeds = 'Feeds',
 }
 
 export enum TAG {

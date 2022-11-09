@@ -2,30 +2,20 @@ import { explorerResolver, formatEthereumAddress, TransactionStateType } from '@
 import { Grid, Typography, Button, Link } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useState } from 'react'
-import { useI18N } from '../../../utils'
-import { useEarlyWithdraw } from '../hooks/useGameActions'
-import { useGameToken } from '../hooks/usePoolData'
-import type { GoodGhostingInfo, Player } from '../types'
-import { getPlayerStatus, isGameActionError, PlayerStatus } from '../utils'
-import BigNumber from 'bignumber.js'
+import { useI18N } from '../../../utils/index.js'
+import { useEarlyWithdraw } from '../hooks/useGameActions.js'
+import { useGameToken } from '../hooks/usePoolData.js'
+import type { GoodGhostingInfo, Player } from '../types.js'
+import { getPlayerStatus, isGameActionError, PlayerStatus } from '../utils.js'
+import { BigNumber } from 'bignumber.js'
 import { FormattedBalance } from '@masknet/shared'
-import { useChainId } from '@masknet/plugin-infra/web3'
-import { formatBalance, NetworkPluginID } from '@masknet/web3-shared-base'
+import { useChainContext } from '@masknet/web3-hooks-base'
+import { formatBalance } from '@masknet/web3-shared-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     infoRow: {
         paddingBottom: theme.spacing(1),
-    },
-    circularDataSection: {
-        paddingTop: theme.spacing(2),
-    },
-    circularDataWrapper: {
-        minWidth: '80px',
-    },
-    circularData: {
-        padding: theme.spacing(1),
-        maxWidth: '100px',
-        margin: 'auto',
     },
     withdraw: {
         marginTop: theme.spacing(5),
@@ -40,11 +30,14 @@ interface PersonalViewProps {
 export function PersonalView(props: PersonalViewProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const gameToken = useGameToken()
     const { canEarlyWithdraw, earlyWithdraw } = useEarlyWithdraw(props.info)
     const [buttonEnabled, setButtonEnabled] = useState(true)
-    const [errorState, setErrorState] = useState<{ message?: string; link?: string }>({})
+    const [errorState, setErrorState] = useState<{
+        message?: string
+        link?: string
+    }>({})
 
     const status = usePlayerStatusMessage(props.info, props.info.currentPlayer)
 
@@ -143,7 +136,8 @@ export function PersonalView(props: PersonalViewProps) {
                     </Grid>
                     <Grid item>
                         <Typography variant="body1" color="textSecondary">
-                            {Number.parseInt(props.info.currentPlayer.mostRecentSegmentPaid, 10) + 1} /{' '}
+                            {Number.parseInt(props.info.currentPlayer.mostRecentSegmentPaid, 10) + 1}
+                            {' / '}
                             {props.info.lastSegment}
                         </Typography>
                     </Grid>

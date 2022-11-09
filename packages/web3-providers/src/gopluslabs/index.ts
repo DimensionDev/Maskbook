@@ -1,10 +1,10 @@
 import urlcat from 'urlcat'
-import { first, isEmpty, parseInt, uniqBy } from 'lodash-unified'
-import { ChainId } from '@masknet/web3-shared-evm'
-import type { SecurityAPI } from '..'
-import { fetchJSON } from '../helpers'
-import { GO_PLUS_LABS_ROOT_URL, SecurityMessageLevel } from './constants'
-import { SecurityMessages } from './rules'
+import { first, isEmpty, parseInt, uniqBy } from 'lodash-es'
+import { ChainId, isValidChainId } from '@masknet/web3-shared-evm'
+import type { SecurityAPI } from '../index.js'
+import { fetchJSON } from '../helpers.js'
+import { GO_PLUS_LABS_ROOT_URL, SecurityMessageLevel } from './constants.js'
+import { SecurityMessages } from './rules.js'
 
 export interface SupportedChainResponse {
     id: string
@@ -12,7 +12,7 @@ export interface SupportedChainResponse {
 }
 
 export class GoPlusLabsAPI implements SecurityAPI.Provider<ChainId> {
-    async getTokenSecurity(chainId: ChainId, listOfAddress: string[]) {
+    async getTokenSecurity(chainId: ChainId, addresses: string[]) {
         const response = await fetchJSON<{
             code: 0 | 1
             message: 'OK' | string
@@ -23,12 +23,29 @@ export class GoPlusLabsAPI implements SecurityAPI.Provider<ChainId> {
         }>(
             urlcat(GO_PLUS_LABS_ROOT_URL, 'api/v1/token_security/:id', {
                 id: chainId,
-                contract_addresses: uniqBy(listOfAddress, (x) => x.toLowerCase()).join(),
+                contract_addresses: uniqBy(addresses, (x) => x.toLowerCase()).join(),
             }),
         )
 
         if (response.code !== 1) return
         return createTokenSecurity(chainId, response.result)
+    }
+
+    async getAddressSecurity(chainId: ChainId, address: string): Promise<SecurityAPI.AddressSecurity | undefined> {
+        if (!isValidChainId(chainId)) return
+        const response = await fetchJSON<{
+            code: 0 | 1
+            message: 'OK' | string
+            result: SecurityAPI.AddressSecurity
+        }>(
+            urlcat(GO_PLUS_LABS_ROOT_URL, 'api/v1/address_security/:address', {
+                address,
+                chain_id: chainId,
+            }),
+        )
+
+        if (response.code !== 1) return
+        return response.result
     }
 
     async getSupportedChain(): Promise<Array<SecurityAPI.SupportedChain<ChainId>>> {
@@ -50,7 +67,7 @@ export const createTokenSecurity = (
         SecurityAPI.ContractSecurity & SecurityAPI.TokenSecurity & SecurityAPI.TradingSecurity
     > = {},
 ) => {
-    if (isEmpty(response)) return
+    if (isEmpty(response) || !isValidChainId(chainId)) return
     const entity = first(Object.entries(response))
     if (!entity) return
     const tokenSecurity = { ...entity[1], contract: entity[0], chainId }

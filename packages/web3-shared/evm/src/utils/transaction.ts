@@ -1,8 +1,8 @@
 import { sha3, toHex } from 'web3-utils'
-import { unreachable } from '@dimensiondev/kit'
-import { Transaction, TransactionStateType, EthereumMethodType, ChainId } from '../types'
-import { isEmptyHex } from './address'
-import { ZERO_ADDRESS } from '../constants'
+import { unreachable } from '@masknet/kit'
+import { Transaction, TransactionStateType, EthereumMethodType, ChainId } from '../types/index.js'
+import { isEmptyHex } from './address.js'
+import { ZERO_ADDRESS } from '../constants/index.js'
 
 export function isEIP1559Transaction(receipt: Transaction) {
     return typeof receipt.maxFeePerGas !== 'undefined' && typeof receipt.maxPriorityFeePerGas !== 'undefined'

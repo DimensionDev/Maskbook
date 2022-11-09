@@ -1,11 +1,16 @@
-/// <reference path="./env.d.ts" />
-
 import type { PublicKey, BlockResponse, Transaction as SolanaTransaction, TransactionResponse } from '@solana/web3.js'
 
 export enum ChainId {
     Mainnet = 101,
     Testnet = 102,
     Devnet = 103,
+    // For any chains not supported yet.
+    Invalid = 0,
+}
+
+export enum AddressType {
+    Default = 1,
+    Program = 2,
 }
 
 export enum SchemaType {
@@ -63,6 +68,7 @@ export type Web3Provider = {
 export type Signature = string
 export type GasOption = never
 export type Block = BlockResponse
+export type Operation = never
 export type Transaction = SolanaTransaction
 export type TransactionReceipt = never
 export type TransactionDetailed = TransactionResponse

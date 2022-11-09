@@ -6,21 +6,20 @@ import { z as zod } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { LoadingButton, TabContext, TabPanel } from '@mui/lab'
 import { useNavigate } from 'react-router-dom'
-import { PopupRoutes } from '@masknet/shared-base'
-import { JsonFileBox } from '../components/JsonFileBox'
-import { StyledInput } from '../../../components/StyledInput'
-import { WalletRPC } from '../../../../../plugins/Wallet/messages'
+import { PopupRoutes, NetworkPluginID } from '@masknet/shared-base'
+import { JsonFileBox } from '../components/JsonFileBox/index.js'
+import { StyledInput } from '../../../components/StyledInput/index.js'
+import { WalletRPC } from '../../../../../plugins/Wallet/messages.js'
 import { useAsyncFn } from 'react-use'
 import { query } from 'urlcat'
-import { useI18N } from '../../../../../utils'
-import Services from '../../../../service'
-import { getDerivableAccounts } from '../../../../../plugins/Wallet/services'
-import { PageHeader } from '../components/PageHeader'
-import { PasswordField } from '../../../components/PasswordField'
-import { currentMaskWalletAccountSettings } from '../../../../../../shared/legacy-settings/wallet-settings'
-import { useWeb3Connection } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { useTitle } from '../../../hook/useTitle'
+import { useI18N } from '../../../../../utils/index.js'
+import Services from '../../../../service.js'
+import { getDerivableAccounts } from '../../../../../plugins/Wallet/services/index.js'
+import { PageHeader } from '../components/PageHeader/index.js'
+import { PasswordField } from '../../../components/PasswordField/index.js'
+import { currentMaskWalletAccountSettings } from '../../../../../../shared/legacy-settings/wallet-settings.js'
+import { useWeb3Connection } from '@masknet/web3-hooks-base'
+import { useTitle } from '../../../hook/useTitle.js'
 
 const useStyles = makeStyles()({
     container: {
@@ -40,12 +39,6 @@ const useStyles = makeStyles()({
         fontSize: 12,
         lineHeight: '16px',
         color: '#1C68F3',
-    },
-    tips: {
-        color: '#7B8192',
-        fontSize: 12,
-        lineHeight: '16px',
-        marginTop: 10,
     },
     tabs: {
         marginTop: 20,
@@ -69,22 +62,6 @@ const useStyles = makeStyles()({
         padding: '16px 0 0 0',
         flex: 1,
         position: 'relative',
-    },
-    multiline: {
-        width: '100%',
-        height: '100%',
-        position: 'absolute',
-    },
-    multilineInput: {
-        padding: 6,
-        borderRadius: 6,
-        backgroundColor: '#F7F9FA',
-        height: '100%',
-    },
-    textArea: {
-        padding: 0,
-        fontSize: 12,
-        height: '100%!important',
     },
     button: {
         fontWeight: 600,

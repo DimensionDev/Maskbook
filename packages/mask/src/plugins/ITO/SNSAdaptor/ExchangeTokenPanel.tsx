@@ -1,32 +1,19 @@
 import { makeStyles } from '@masknet/theme'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import AddIcon from '@mui/icons-material/AddOutlined'
-import RemoveIcon from '@mui/icons-material/RemoveOutlined'
+import { AddOutlined as AddIcon, RemoveOutlined as RemoveIcon } from '@mui/icons-material'
 import { IconButton, Paper } from '@mui/material'
 import { useCallback, useEffect, useState } from 'react'
-import { useSelectFungibleToken } from '@masknet/shared'
-import { useI18N } from '../../../utils'
-import type { TokenAmountPanelProps } from '../../../web3/UI/TokenAmountPanel'
-import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
-import { FungibleToken, NetworkPluginID } from '@masknet/web3-shared-base'
-import { useFungibleTokenBalance } from '@masknet/plugin-infra/web3'
+import { useSelectFungibleToken, FungibleTokenInput } from '@masknet/shared'
+import { useI18N } from '../../../utils/index.js'
+import type { FungibleToken } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { useFungibleTokenBalance } from '@masknet/web3-hooks-base'
 
 const useStyles = makeStyles()((theme) => ({
-    root: {
-        width: '100%',
-    },
     line: {
         margin: theme.spacing(1),
         display: 'flex',
-    },
-    input: {
-        flex: 1,
-        paddingTop: theme.spacing(1),
-        paddingBottom: theme.spacing(1),
-    },
-    flow: {
-        margin: theme.spacing(1),
-        textAlign: 'center',
+        backgroundColor: theme.palette.maskColor.bottom,
     },
     button: {
         margin: theme.spacing(1),
@@ -59,7 +46,7 @@ export interface ExchangeTokenPanelProps {
     label: string
     excludeTokensAddress?: string[]
     selectedTokensAddress?: string[]
-    TokenAmountPanelProps: Partial<TokenAmountPanelProps>
+    placeholder?: string
 }
 
 export function ExchangeTokenPanel(props: ExchangeTokenPanelProps) {
@@ -79,6 +66,7 @@ export function ExchangeTokenPanel(props: ExchangeTokenPanelProps) {
         chainId,
         onRemove,
         onAdd,
+        placeholder,
     } = props
     const { t } = useI18N()
     const { classes } = useStyles()
@@ -124,25 +112,17 @@ export function ExchangeTokenPanel(props: ExchangeTokenPanelProps) {
 
     return (
         <Paper className={classes.line}>
-            <TokenAmountPanel
-                classes={{ root: classes.input }}
+            <FungibleTokenInput
                 label={label}
                 amount={inputAmountForUI}
-                disableBalance={disableBalance}
                 balance={disableBalance || loadingTokenBalance ? '0' : tokenBalance}
                 token={exchangeToken}
                 onAmountChange={onAmountChangeForUI}
-                SelectTokenChip={{
-                    loading: false,
-                    ChipProps: {
-                        onClick: onSelectTokenChipClick,
-                    },
-                }}
-                TextFieldProps={{
-                    disabled: !exchangeToken,
-                    placeholder: !exchangeToken ? t('plugin_ito_placeholder_when_token_unselected') : '0.0',
-                }}
-                {...props.TokenAmountPanelProps}
+                onSelectToken={onSelectTokenChipClick}
+                disabled={!exchangeToken}
+                placeholder={!exchangeToken ? t('plugin_ito_placeholder_when_token_unselected') : placeholder || '0.0'}
+                disableMax
+                disableBalance={disableBalance}
             />
             {showAdd ? (
                 <IconButton size="large" onClick={onAdd} className={classes.button}>

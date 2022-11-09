@@ -1,9 +1,9 @@
 import type { Plugin } from '@masknet/plugin-infra'
-import { None, Result, Some } from 'ts-results'
-import { base } from '../base'
-import type { FileInfo } from '../types'
-import { getAllFiles, setFileInfo, setupDatabase } from './database'
-import './rpc'
+import { None, Result, Some } from 'ts-results-es'
+import { base } from '../base.js'
+import type { FileInfo } from '../types.js'
+import { getAllFiles, setFileInfo, setupDatabase } from './database.js'
+import './rpc.js'
 
 const worker: Plugin.Worker.Definition = {
     ...base,

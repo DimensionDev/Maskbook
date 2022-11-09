@@ -1,8 +1,8 @@
 import { Button, Card, CardActions, CardContent, CardMedia, Grid, Theme, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import type { PuzzleCondition } from '../types'
+import type { PuzzleCondition } from '../types.js'
 import { useContext } from 'react'
-import { FindTrumanContext } from '../context'
+import { FindTrumanContext } from '../context.js'
 import type { SxProps } from '@mui/system'
 
 const useStyles = makeStyles()((theme) => {
@@ -17,12 +17,6 @@ const useStyles = makeStyles()((theme) => {
         },
         content: {
             flex: 1,
-        },
-        title: {
-            fontSize: '16px',
-            fontWeight: 'bold',
-            color: '#fff',
-            textTransform: 'uppercase',
         },
     }
 })

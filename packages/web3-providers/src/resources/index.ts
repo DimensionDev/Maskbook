@@ -1,3 +1,5 @@
-export const OpenSeaLogo = new URL('./opensea.svg', import.meta.url).href
+import { MaskIconURLs } from '@masknet/icons'
 
-export const LooksRareLogo = new URL('./looksrare.svg', import.meta.url).href
+export const OpenSeaLogo = MaskIconURLs.open_sea_url
+
+export const LooksRareLogo = MaskIconURLs.looks_rare_url

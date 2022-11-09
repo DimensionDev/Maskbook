@@ -1,5 +1,5 @@
 import type { MobilePostRecord as NativePostRecord } from '@masknet/public-api'
-import type { PostRecord, PostReadWriteTransaction, PostReadOnlyTransaction } from './type'
+import type { PostRecord, PostReadWriteTransaction, PostReadOnlyTransaction } from './type.js'
 import {
     PostIVIdentifier,
     AESJsonWebKey,
@@ -8,8 +8,8 @@ import {
     ECKeyIdentifier,
     convertRawMapToIdentifierMap,
 } from '@masknet/shared-base'
-import { nativeAPI } from '../../../shared/native-rpc'
-import { isNonNull } from '@dimensiondev/kit'
+import { nativeAPI } from '../../../shared/native-rpc/index.js'
+import { isNonNull } from '@masknet/kit'
 
 export async function createPostDB(record: PostRecord, t?: PostReadWriteTransaction) {
     await nativeAPI?.api.create_post({ post: postInNative(record) as NativePostRecord })
@@ -122,7 +122,15 @@ export async function withPostDBTransaction(task: (t: PostReadWriteTransaction) 
 
 // #endregion
 
-type RecipientReasonMobile = { type: 'auto-share'; at: number } | { type: 'direct'; at: number }
+type RecipientReasonMobile =
+    | {
+          type: 'auto-share'
+          at: number
+      }
+    | {
+          type: 'direct'
+          at: number
+      }
 
 function RecipientReasonToJSON(y: Date): RecipientReasonMobile {
     return { type: 'direct', at: y.getTime() }

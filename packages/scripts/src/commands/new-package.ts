@@ -1,5 +1,5 @@
 import { resolve } from 'path'
-import { camelCase, identity, kebabCase, upperFirst } from 'lodash-unified'
+import { camelCase, identity, kebabCase, upperFirst } from 'lodash-es'
 import { task } from '../utils/task.js'
 import { ROOT_PATH } from '../utils/paths.js'
 import { awaitChildProcess, changeFile, shell } from '../utils/index.js'
@@ -99,7 +99,7 @@ async function createNewPackage({ path, npmName, type, pluginID }: PackageOption
     if (type === 'plugin') {
         const NormativeName = upperFirst(camelCase(path.split('/').at(-1)))
         await changeFile.typescript(resolve(packagePath, 'src/constants.ts'), (content) =>
-            content.replace('PluginId.Example', `PluginId.${NormativeName}`),
+            content.replace('PluginID.Example', `PluginID.${NormativeName}`),
         )
         /**
          * .i18n-codegen.json
@@ -118,6 +118,7 @@ async function createNewPackage({ path, npmName, type, pluginID }: PackageOption
                     hooks: 'useI18N',
                     namespace: pluginID,
                     trans: 'Translate',
+                    emitTS: true,
                 },
             })
         })

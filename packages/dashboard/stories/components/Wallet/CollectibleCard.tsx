@@ -1,14 +1,14 @@
 import { story } from '@masknet/storybook-shared'
 import { TokenType } from '@masknet/web3-shared-base'
 import { SchemaType } from '@masknet/web3-shared-evm'
-import { CollectibleCard as C } from '../../../src/pages/Wallets/components/CollectibleCard'
+import { CollectibleCard as C } from '../../../src/pages/Wallets/components/CollectibleCard/index.js'
 
 const { meta, of } = story(C)
 
 export default meta({ title: 'Components/Wallet/Collectible Card' })
 export const CollectibleCard = of({
     args: {
-        token: {
+        asset: {
             id: 'token_id',
             chainId: 1,
             tokenId: '608932',

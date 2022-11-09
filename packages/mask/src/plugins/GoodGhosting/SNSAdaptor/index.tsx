@@ -1,30 +1,29 @@
 import { useMemo } from 'react'
+import { Trans } from 'react-i18next'
 import { type Plugin, usePluginWrapper, usePostInfoDetails } from '@masknet/plugin-infra/content-script'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
-import { parseURL } from '@masknet/shared-base'
+import { NetworkPluginID, parseURLs } from '@masknet/shared-base'
 import { Icons } from '@masknet/icons'
-import { Trans } from 'react-i18next'
-import { PreviewCard } from '../UI/PreviewCard'
+import { PreviewCard } from '../UI/PreviewCard.js'
 import { ChainId } from '@masknet/web3-shared-evm'
-import { base } from '../base'
-import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { base } from '../base.js'
+import { ChainBoundary } from '@masknet/shared'
 
 const isGoodGhosting = (x: string): boolean => /^https:\/\/goodghosting.com/.test(x)
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
     init(signal) {},
-    DecryptedInspector: function Component(props) {
+    DecryptedInspector(props) {
         const link = useMemo(() => {
             const x = extractTextFromTypedMessage(props.message)
             if (x.none) return null
-            return parseURL(x.val).find(isGoodGhosting)
+            return parseURLs(x.val).find(isGoodGhosting)
         }, [props.message])
         if (!link) return null
         return <Renderer url={link} />
     },
-    PostInspector: function Component() {
+    PostInspector() {
         const links = usePostInfoDetails.mentionedLinks()
 
         const link = links.find(isGoodGhosting)
@@ -44,7 +43,11 @@ const sns: Plugin.SNSAdaptor.Definition = {
     ],
 }
 
-function Renderer(props: React.PropsWithChildren<{ url: string }>) {
+function Renderer(
+    props: React.PropsWithChildren<{
+        url: string
+    }>,
+) {
     let [id = ''] = props.url.match(/pools\/([\w ]+)/) ?? []
     if (id) {
         id = id.replace('pools/', '')

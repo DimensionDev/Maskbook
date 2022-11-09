@@ -1,12 +1,10 @@
 import { useState } from 'react'
-import { makeStyles, useStylesExtends } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 import { Box } from '@mui/material'
-import { useStyles as useBoxStyles } from './PreviewBox'
-import classNames from 'classnames'
-import Drag from './Drag'
-import type { ShowMeta } from '../types'
-import { CloseIcon } from '../constants'
-import RightMenu from './RightMenu'
+import { useStyles as useBoxStyles } from './PreviewBox.js'
+import Drag from './Drag.js'
+import type { ShowMeta } from '../types.js'
+import { CloseIcon } from '../constants.js'
 import { Image } from '@masknet/shared'
 
 const useStyles = makeStyles()(() => ({
@@ -19,9 +17,11 @@ const useStyles = makeStyles()(() => ({
         justifyContent: 'center',
     },
     imgBox: {
+        textAlign: 'center',
         width: '80%',
         height: '80%',
-        textAlign: 'center',
+        display: 'flex',
+        justifyContent: 'center',
     },
     close: {
         width: 15,
@@ -42,10 +42,6 @@ const useStyles = makeStyles()(() => ({
         maxWidth: 150,
         bottom: 150,
     },
-    dragImg: {
-        width: 15,
-        height: 15,
-    },
 }))
 
 interface NormalNFTProps {
@@ -57,25 +53,16 @@ interface NormalNFTProps {
 
 export function NormalNFT(props: NormalNFTProps) {
     const { start, infoShow, showMeta, handleClose } = props
-    const classes = useStylesExtends(useStyles(), {})
-    const boxClasses = useStylesExtends(useBoxStyles(), {})
+    const { classes, cx } = useStyles()
+    const { classes: boxClasses } = useBoxStyles()
 
-    const [isMenuShow, setMenuShow] = useState(false)
-    const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
     const handleMenuShow = (e: React.MouseEvent) => {
         e.preventDefault()
-
-        setMousePosition({ x: e.clientX, y: e.clientY })
-        setMenuShow(true)
-    }
-    const handleMenuClose = () => {
-        setMenuShow(false)
     }
 
     const [position, setPosition] = useState({ x: 50, y: 150 })
     const moveHandle = (x: number, y: number) => {
         setPosition({ x, y })
-        setMenuShow(false)
     }
 
     return (
@@ -83,7 +70,7 @@ export function NormalNFT(props: NormalNFTProps) {
             {start && showMeta?.word ? (
                 <Box className={classes.wordContent}>
                     <Box
-                        className={classNames(
+                        className={cx(
                             {
                                 [boxClasses.msgBox]: true,
                                 [boxClasses.wordShow]: true,
@@ -111,13 +98,6 @@ export function NormalNFT(props: NormalNFTProps) {
             {infoShow ? (
                 <div className={classes.close} onClick={handleClose} style={{ backgroundImage: `url(${CloseIcon})` }} />
             ) : null}
-            <RightMenu
-                showMeta={showMeta}
-                isShow={isMenuShow}
-                onClose={handleMenuClose}
-                mousePosition={mousePosition}
-                dragPosition={position}
-            />
         </Drag>
     )
 }

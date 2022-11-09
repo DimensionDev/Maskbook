@@ -9,11 +9,17 @@
   "references": [
     { "path": "../theme" },
     { "path": "../plugin-infra" },
+    { "path": "../public-api" },
     { "path": "../shared-base" },
     { "path": "../shared-base-ui" },
+    { "path": "../web3-hooks/base" },
+    { "path": "../web3-hooks/evm" },
+    { "path": "../web3-shared/base" },
     { "path": "../web3-shared/evm" },
     { "path": "../web3-shared/flow" },
     { "path": "../web3-shared/solana" },
-    { "path": "../web3-providers" }
+    { "path": "../web3-helpers" },
+    { "path": "../web3-providers" },
+    { "path": "../plugins/Wallet" }
   ]
 }

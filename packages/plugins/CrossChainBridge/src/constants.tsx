@@ -1,13 +1,13 @@
-import { PluginId } from '@masknet/plugin-infra'
+import { PluginID } from '@masknet/shared-base'
 import {
     CBridgeIcon,
     ArbitrumOneBridgeIcon,
     BobaBridgeIcon,
     PolygonBridgeIcon,
     RainbowBridgeIcon,
-} from './SNSAdaptor/MaskIcon'
+} from './SNSAdaptor/MaskIcon.js'
 
-export const PLUGIN_ID = PluginId.CrossChainBridge
+export const PLUGIN_ID = PluginID.CrossChainBridge
 export const PLUGIN_DESCRIPTION = 'A cross-chain-bridge plugin'
 export const PLUGIN_NAME = 'CrossChainBridge'
 export function getCrossChainBridge(t: Record<string, () => string>) {

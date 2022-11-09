@@ -1,11 +1,11 @@
-import type { SocialNetwork } from '../../social-network/types'
-import { facebookBase } from './base'
-import { getPostUrlAtFacebook, isValidFacebookUsername } from './utils/parse-username'
+import type { SocialNetwork } from '@masknet/types'
+import { facebookBase } from './base.js'
+import { getPostUrlAtFacebook, isValidFacebookUsername } from './utils/parse-username.js'
 import type { PostIdentifier } from '@masknet/shared-base'
-import { hasPayloadLike } from '../../utils'
-import { createSNSAdaptorSpecializedPostContext } from '../../social-network/utils/create-post-context'
+import { hasPayloadLike } from '../../utils/index.js'
+import { createSNSAdaptorSpecializedPostContext } from '../../social-network/utils/create-post-context.js'
 import { openWindow } from '@masknet/shared-base-ui'
-import { FacebookAdaptor } from '../../../shared/site-adaptors/implementations/facebook.com'
+import { FacebookAdaptor } from '../../../shared/site-adaptors/implementations/facebook.com.js'
 
 const getPostURL = (post: PostIdentifier): URL | null => {
     return new URL(getPostUrlAtFacebook(post))

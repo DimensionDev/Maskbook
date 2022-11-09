@@ -1,10 +1,10 @@
 import { useMemo } from 'react'
 import { useSubscription, Subscription } from 'use-subscription'
-import { unreachable } from '@dimensiondev/kit'
-import type { NetworkPluginID } from '@masknet/web3-shared-base'
-import { createManager } from './manage'
-import { getPluginDefine } from './store'
-import type { CurrentSNSNetwork, Plugin } from '../types'
+import { unreachable } from '@masknet/kit'
+import type { NetworkPluginID } from '@masknet/shared-base'
+import { createManager } from './manage.js'
+import { getPluginDefine } from './store.js'
+import type { CurrentSNSNetwork, Plugin } from '../types.js'
 
 const { events, activated, startDaemon, minimalMode } = createManager((def) => def.SNSAdaptor)
 

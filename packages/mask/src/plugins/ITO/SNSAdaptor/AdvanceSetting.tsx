@@ -1,7 +1,7 @@
 import type { ChangeEvent } from 'react'
 import { FormGroup, FormLabel, FormControlLabel, Checkbox } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { useI18N } from '../../../utils'
+import { useI18N } from '../../../utils/index.js'
 
 export enum SettingField {
     IPRegion = 'IPRegion',
@@ -57,7 +57,6 @@ export function AdvanceSetting({ advanceSettingData, setAdvanceSettingData }: Ad
                 <FormControlLabel
                     control={
                         <Checkbox
-                            color="primary"
                             checked={!!advanceSettingData.IPRegion}
                             onChange={handleAdvanceSettingToggle}
                             name={SettingField.IPRegion}
@@ -68,7 +67,6 @@ export function AdvanceSetting({ advanceSettingData, setAdvanceSettingData }: Ad
                 <FormControlLabel
                     control={
                         <Checkbox
-                            color="primary"
                             checked={!!advanceSettingData.delayUnlocking}
                             onChange={handleAdvanceSettingToggle}
                             name={SettingField.delayUnlocking}
@@ -79,7 +77,6 @@ export function AdvanceSetting({ advanceSettingData, setAdvanceSettingData }: Ad
                 <FormControlLabel
                     control={
                         <Checkbox
-                            color="primary"
                             checked={!!advanceSettingData.contract}
                             onChange={handleAdvanceSettingToggle}
                             name={SettingField.contract}

@@ -1,6 +1,7 @@
+/* eslint-disable tss-unused-classes/unused-classes */
 import { Icons } from '@masknet/icons'
 import { memo } from 'react'
-import { makeStyles } from '../../UIHelper'
+import { makeStyles } from '../../UIHelper/index.js'
 import { alpha, Typography } from '@mui/material'
 
 type TagVariant = 'info' | 'success' | 'warning' | 'error'

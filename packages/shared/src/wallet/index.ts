@@ -1,3 +1,3 @@
-export * from './FormattedBalance'
-export * from './FormattedAddress'
-export * from './FormattedCurrency'
+export * from './FormattedBalance.js'
+export * from './FormattedAddress.js'
+export * from './FormattedCurrency.js'

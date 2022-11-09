@@ -1,5 +1,5 @@
-import { decodeArrayBuffer, encodeArrayBuffer } from '@dimensiondev/kit'
-import { None, Option, Some } from 'ts-results'
+import { decodeArrayBuffer, encodeArrayBuffer } from '@masknet/kit'
+import { None, Option, Some } from 'ts-results-es'
 /** @internal */
 export function sharedEncoder(input: Uint8Array): string {
     return `\u{1F3BC}6/8|${encodeArrayBuffer(input)}:||`

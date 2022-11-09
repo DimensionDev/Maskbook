@@ -1,9 +1,9 @@
 import { isExtensionSiteType } from '@masknet/shared-base'
-import type { InjectedProvider } from '@masknet/injected-script/sdk/Base'
+import type { InjectedProvider } from '@masknet/injected-script'
 import type { Account, ProviderOptions } from '@masknet/web3-shared-base'
-import type { ChainId, ProviderType, Web3Provider } from '@masknet/web3-shared-solana'
-import type { SolanaProvider } from '../types'
-import { BaseProvider } from './Base'
+import { ChainId, ProviderType, Web3Provider } from '@masknet/web3-shared-solana'
+import type { SolanaProvider } from '../types.js'
+import { BaseProvider } from './Base.js'
 
 export class BaseInjectedProvider extends BaseProvider implements SolanaProvider {
     constructor(protected providerType: ProviderType, protected bridge: InjectedProvider) {
@@ -11,6 +11,7 @@ export class BaseInjectedProvider extends BaseProvider implements SolanaProvider
 
         bridge.on('accountChanged', this.onAccountChanged.bind(this))
         bridge.on('chainChanged', this.onChainChanged.bind(this))
+        bridge.on('connect', this.onConnect.bind(this))
         bridge.on('disconnect', this.onDisconnect.bind(this))
     }
 
@@ -29,6 +30,13 @@ export class BaseInjectedProvider extends BaseProvider implements SolanaProvider
 
     protected onChainChanged(chainId: string) {
         this.emitter.emit('chainId', chainId)
+    }
+
+    protected onConnect(account: string) {
+        this.emitter.emit('connect', {
+            account,
+            chainId: ChainId.Mainnet,
+        })
     }
 
     protected onDisconnect() {

@@ -1,5 +1,5 @@
-import BigNumber from 'bignumber.js'
-import type { Pair } from './uniswap-v2-subgraph'
+import { BigNumber } from 'bignumber.js'
+import type { Pair } from './uniswap-v2-subgraph.js'
 import {
     fetchEtherPriceByBlockNumber,
     fetchEtherPricesByBlockNumbers,
@@ -9,16 +9,16 @@ import {
     fetchPricesByBlocks,
     fetchTokenData,
     fetchTokensByKeyword,
-} from './uniswap-v2-subgraph'
+} from './uniswap-v2-subgraph.js'
 import {
     fetchBlockNumberByTimestamp,
     fetchBlockNumbersByTimestamps,
     fetchBlockNumbersObjectByTimestamps,
-} from './blocks'
-import { fetchLatestBlocks } from './uniswap-health'
+} from './blocks/index.js'
+import { fetchLatestBlocks } from './uniswap-health.js'
 import { isGreaterThan, isLessThanOrEqualTo, TokenType } from '@masknet/web3-shared-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
-import type { TrendingAPI } from '../types'
+import type { TrendingAPI } from '../types/index.js'
 
 type Value = string | number | BigNumber | undefined
 
@@ -350,10 +350,17 @@ export async function getBulkPairData(chainId: ChainId, pairList: string[]) {
     )
 
     return Object.fromEntries(
-        pairsData.map((pair): [string, Data & { oneDayVolumeUSD: number; oneDayVolumeUntracked: number }] => [
-            pair.id,
-            pair,
-        ]),
+        pairsData.map(
+            (
+                pair,
+            ): [
+                string,
+                Data & {
+                    oneDayVolumeUSD: number
+                    oneDayVolumeUntracked: number
+                },
+            ] => [pair.id, pair],
+        ),
     )
 }
 

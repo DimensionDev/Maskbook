@@ -1,17 +1,17 @@
 import { memo } from 'react'
 import type { z as zod } from 'zod'
-import { useI18N } from '../../../../../utils'
+import { useI18N } from '../../../../../utils/index.js'
 import { Typography } from '@mui/material'
 import { Controller } from 'react-hook-form'
-import { PasswordField } from '../../../components/PasswordField'
+import { PasswordField } from '../../../components/PasswordField/index.js'
 import { makeStyles } from '@masknet/theme'
 import { useAsyncFn } from 'react-use'
-import { WalletRPC } from '../../../../../plugins/Wallet/messages'
+import { WalletRPC } from '../../../../../plugins/Wallet/messages.js'
 import { useNavigate } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'
 import { LoadingButton } from '@mui/lab'
-import { usePasswordForm } from '../hooks/usePasswordForm'
-import { useTitle } from '../../../hook/useTitle'
+import { usePasswordForm } from '../hooks/usePasswordForm.js'
+import { useTitle } from '../../../hook/useTitle.js'
 
 const useStyles = makeStyles()({
     container: {

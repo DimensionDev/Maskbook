@@ -1,6 +1,6 @@
-import { readyPromise } from './bridge'
-import { persona } from './persona'
-import { SocialNetwork } from './socialNetwork'
+import { readyPromise } from './bridge.js'
+import { persona } from './persona.js'
+import { SocialNetwork } from './socialNetwork.js'
 
 document.currentScript?.remove()
 readyPromise.then((init) => {
@@ -13,7 +13,6 @@ readyPromise.then((init) => {
     }
 
     try {
-        // @ts-expect-error
         if (process.env.NODE_ENV === 'development') {
             // @ts-expect-error
             MaskSDK.reload = () => globalThis.dispatchEvent(new Event('mask-sdk-reload'))

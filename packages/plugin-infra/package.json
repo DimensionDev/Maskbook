@@ -2,52 +2,37 @@
   "name": "@masknet/plugin-infra",
   "private": true,
   "license": "AGPL-3.0-or-later",
+  "type": "module",
   "exports": {
     ".": {
       "types": "./dist/entry.d.ts",
-      "webpack": "./src/entry.ts",
+      "mask-src": "./src/entry.ts",
       "default": "./dist/entry.js"
-    },
-    "./web3": {
-      "types": "./dist/entry-web3.d.ts",
-      "webpack": "./src/entry-web3.ts",
-      "default": "./dist/entry-web3.js"
-    },
-    "./web3-evm": {
-      "types": "./dist/entry-web3-evm.d.ts",
-      "webpack": "./src/entry-web3-evm.ts",
-      "default": "./dist/entry-web3-evm.js"
     },
     "./dom": {
       "types": "./dist/entry-dom.d.ts",
-      "webpack": "./src/entry-dom.ts",
+      "mask-src": "./src/entry-dom.ts",
       "default": "./dist/entry-dom.js"
     },
     "./background-worker": {
       "types": "./dist/entry-background-worker.d.ts",
-      "webpack": "./src/entry-background-worker.ts",
+      "mask-src": "./src/entry-background-worker.ts",
       "default": "./dist/entry-background-worker.js"
     },
     "./dashboard": {
       "types": "./dist/entry-dashboard.d.ts",
-      "webpack": "./src/entry-dashboard.ts",
+      "mask-src": "./src/entry-dashboard.ts",
       "default": "./dist/entry-dashboard.js"
     },
     "./content-script": {
       "types": "./dist/entry-content-script.d.ts",
-      "webpack": "./src/entry-content-script.ts",
+      "mask-src": "./src/entry-content-script.ts",
       "default": "./dist/entry-content-script.js"
     }
   },
   "types": "./dist/entry.d.ts",
   "typesVersions": {
     "*": {
-      "web3": [
-        "./dist/entry-web3.d.ts"
-      ],
-      "web3-evm": [
-        "./dist/entry-web3-evm.d.ts"
-      ],
       "dom": [
         "./dist/entry-dom.d.ts"
       ],
@@ -71,6 +56,8 @@
     "@masknet/typed-message": "workspace:*",
     "@masknet/web3-constants": "workspace:*",
     "@masknet/web3-contracts": "workspace:*",
+    "@masknet/web3-helpers": "workspace:*",
+    "@masknet/web3-providers": "workspace:*",
     "@masknet/web3-shared-base": "workspace:*",
     "@masknet/web3-shared-evm": "workspace:*",
     "@masknet/web3-shared-flow": "workspace:*",
@@ -78,8 +65,8 @@
     "@servie/events": "^3.0.0",
     "@types/ethereum-blockies": "^0.1.0",
     "@types/use-subscription": "^1.0.0",
-    "async-call-rpc": "^6.1.2",
-    "bignumber.js": "^9.0.2",
+    "async-call-rpc": "^6.1.5",
+    "bignumber.js": "9.1.0",
     "ethereum-blockies": "^0.1.1",
     "lru-cache": "^7.10.1",
     "react-use": "^17.4.0",
@@ -87,10 +74,10 @@
     "urlcat": "^2.0.4",
     "use-subscription": "1.6.0",
     "wallet.ts": "^1.0.1",
-    "web3": "1.7.4",
-    "web3-core": "1.7.4",
-    "web3-core-helpers": "1.7.4",
-    "web3-utils": "1.7.4"
+    "web3": "1.8.0",
+    "web3-core": "1.8.0",
+    "web3-core-helpers": "1.8.0",
+    "web3-utils": "1.8.0"
   },
   "peerDependencies": {
     "react-i18next": "^11.15.3"

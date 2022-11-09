@@ -1,7 +1,11 @@
-import { unreachable } from '@dimensiondev/kit'
-import { decodeTypedMessageFromDocument, decodeTypedMessageV38ToV40Format, TypedMessage } from '@masknet/typed-message'
-import { AESCryptoKey, EC_Public_CryptoKey, andThenAsync } from '@masknet/shared-base'
-import { None, Result } from 'ts-results'
+import { unreachable } from '@masknet/kit'
+import {
+    decodeTypedMessageFromDocument,
+    decodeTypedMessageFromDeprecatedFormat,
+    TypedMessage,
+} from '@masknet/typed-message'
+import { AESCryptoKey, EC_Public_CryptoKey, andThenAsync } from '@masknet/base'
+import { None, Result } from 'ts-results-es'
 import type { PayloadParseResult } from '../payload/index.js'
 import { decryptWithAES, importAES } from '../utils/index.js'
 import {
@@ -235,7 +239,7 @@ async function* parseTypedMessage(
     report: ((message: TypedMessage) => void) | undefined,
 ): AsyncIterableIterator<DecryptProgress> {
     const { err, val } =
-        version === -37 ? decodeTypedMessageFromDocument(raw) : decodeTypedMessageV38ToV40Format(raw, version)
+        version === -37 ? decodeTypedMessageFromDocument(raw) : decodeTypedMessageFromDeprecatedFormat(raw, version)
     if (err) return yield new DecryptError(ErrorReasons.PayloadDecryptedButTypedMessageBroken, val)
     try {
         report?.(val)

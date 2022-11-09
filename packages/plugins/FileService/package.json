@@ -1,17 +1,16 @@
 {
   "name": "@masknet/plugin-file-service",
   "private": true,
+  "type": "module",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "webpack": "./src/index.ts",
+      "mask-src": "./src/index.ts",
       "default": "./dist/index.js"
     }
   },
-  "types": "./dist/index.d.ts",
   "dependencies": {
     "@dimensiondev/common-protocols": "1.6.0-20210723072221-8f46a92",
-    "@ethersphere/bee-js": "^3.3.1",
+    "@ethersphere/bee-js": "^5.0.0",
     "@masknet/icons": "workspace:*",
     "@masknet/plugin-infra": "workspace:*",
     "@masknet/plugin-wallet": "workspace:*",
@@ -20,11 +19,12 @@
     "@masknet/shared-base-ui": "workspace:*",
     "@masknet/theme": "workspace:*",
     "@masknet/typed-message": "workspace:*",
+    "@masknet/typed-message-react": "workspace:*",
     "@masknet/web3-shared-base": "workspace:*",
-    "@msgpack/msgpack": "^2.7.2",
+    "@msgpack/msgpack": "^2.8.0",
     "arweave": "^1.11.4",
     "date-fns": "^2.28.0",
-    "ipfs-http-client": "^54.0.2",
+    "ipfs-http-client": "^57.0.3",
     "react-feather": "^2.0.9",
     "react-router-dom": "^6.3.0",
     "react-use": "^17.4.0",

@@ -1,10 +1,10 @@
 import type { ChainId } from '@masknet/web3-shared-evm'
-import type { RedPacketRecord, RedPacketJSONPayloadFromChain } from '../types'
-import * as subgraph from './apis/subgraph'
-import * as database from './database'
-import * as nftDb from './databaseForNft'
+import type { RedPacketRecord, RedPacketJSONPayloadFromChain } from '../types.js'
+import * as subgraph from './apis/subgraph.js'
+import * as database from './database.js'
+import * as nftDb from './databaseForNft.js'
 
-export { addRedPacketNft, getRedPacketNft, updateRedPacketNft } from './databaseForNft'
+export { addRedPacketNft, getRedPacketNft, updateRedPacketNft } from './databaseForNft.js'
 
 export async function discoverRedPacket(record: RedPacketRecord, chainId: ChainId) {
     if (record.contract_version === 1) {
@@ -12,7 +12,7 @@ export async function discoverRedPacket(record: RedPacketRecord, chainId: ChainI
         if (!txid) return
         record.id = txid
     }
-    database.addRedPacket(record)
+    await database.addRedPacket(record)
 }
 
 export async function getRedPacketHistoryFromDatabase(redpacketsFromChain: RedPacketJSONPayloadFromChain[]) {
@@ -29,8 +29,8 @@ export async function getRedPacketHistoryFromDatabase(redpacketsFromChain: RedPa
     // #endregion
 }
 
-export async function getNftRedPacketHistory(address: string, chainId: ChainId, page: number) {
-    const histories = await subgraph.getNftRedPacketHistory(chainId, address, page)
+export async function getNftRedPacketHistory(address: string, chainId: ChainId, page: number, pageSize?: number) {
+    const histories = await subgraph.getNftRedPacketHistory(chainId, address, page, pageSize)
     const historiesWithPassword = []
     for (const history of histories) {
         const record = await nftDb.getRedPacketNft(history.txid)

@@ -1,10 +1,11 @@
-import { useNonFungibleToken } from '@masknet/plugin-infra/web3'
-import { makeStyles } from '@masknet/theme'
-import { NetworkPluginID, NonFungibleTokenContract, SourceType } from '@masknet/web3-shared-base'
+import { useNonFungibleAsset } from '@masknet/web3-hooks-base'
+import { LoadingBase, makeStyles } from '@masknet/theme'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { NonFungibleTokenContract, SourceType } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import { CircularProgress, Typography } from '@mui/material'
+import { Typography } from '@mui/material'
 import { memo } from 'react'
-import { CollectibleCard } from '../../../../extension/options-page/DashboardComponents/CollectibleList/CollectibleCard'
+import { CollectibleCard } from '../../../../extension/options-page/DashboardComponents/CollectibleList/CollectibleCard.js'
 
 const useStyles = makeStyles()((theme) => ({
     title: {
@@ -28,11 +29,11 @@ export interface TokenCardProps {
 export const TokenCard = memo<TokenCardProps>((props: TokenCardProps) => {
     const { contractDetailed, tokenId, renderOrder } = props
     const { classes } = useStyles()
-    const { value: tokenDetailed } = useNonFungibleToken(NetworkPluginID.PLUGIN_EVM, contractDetailed.address, tokenId)
+    const { value: tokenDetailed } = useNonFungibleAsset(NetworkPluginID.PLUGIN_EVM, contractDetailed.address, tokenId)
 
     return tokenDetailed ? (
         <>
-            <CollectibleCard readonly provider={SourceType.OpenSea} token={tokenDetailed} renderOrder={renderOrder} />
+            <CollectibleCard readonly provider={SourceType.OpenSea} asset={tokenDetailed} renderOrder={renderOrder} />
             <div className={classes.title}>
                 <Typography className={classes.name} color="textSecondary" variant="body2">
                     {tokenDetailed.contract?.name ?? tokenId}
@@ -40,6 +41,6 @@ export const TokenCard = memo<TokenCardProps>((props: TokenCardProps) => {
             </div>
         </>
     ) : (
-        <CircularProgress />
+        <LoadingBase />
     )
 })

@@ -3,13 +3,13 @@ import { Alert, Box, Skeleton, Typography } from '@mui/material'
 import { useOpenShareTxDialog } from '@masknet/shared'
 import { makeStyles, useStylesExtends, ActionButton } from '@masknet/theme'
 import { useCallback, useEffect, useMemo } from 'react'
-import { usePostLink } from '../../../components/DataSource/usePostInfo'
-import { activatedSocialNetworkUI } from '../../../social-network'
-import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
-import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
-import { useI18N } from '../../../utils/i18n-next-ui'
-import { useMaskClaimCallback } from './hooks/useMaskClaimCallback'
-import { useMaskITO_Packet } from './hooks/useMaskITO_Packet'
+import { usePostLink } from '../../../components/DataSource/usePostInfo.js'
+import { activatedSocialNetworkUI } from '../../../social-network/index.js'
+import { isFacebook } from '../../../social-network-adaptor/facebook.com/base.js'
+import { isTwitter } from '../../../social-network-adaptor/twitter.com/base.js'
+import { useI18N } from '../../../utils/i18n-next-ui.js'
+import { useMaskClaimCallback } from './hooks/useMaskClaimCallback.js'
+import { useMaskITO_Packet } from './hooks/useMaskITO_Packet.js'
 import { FungibleToken, formatBalance } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
@@ -57,7 +57,7 @@ export interface ITO_CardProps extends withClasses<never> {
 export function ITO_Card(props: ITO_CardProps) {
     const { token, onUpdateAmount, onUpdateBalance } = props
     const { t } = useI18N()
-    const classes = useStylesExtends(useStyles(), props)
+    const { classes } = useStylesExtends(useStyles(), props)
     const { value: packet, loading: packetLoading, error: packetError, retry: packetRetry } = useMaskITO_Packet()
 
     // #region claim

@@ -1,6 +1,6 @@
 import type { Plugin } from '@masknet/plugin-infra'
-// import { Ok, Some } from 'ts-results'
-import { base } from '../base'
+// import { Ok, Some } from 'ts-results-es'
+import { base } from '../base.js'
 
 interface File {
     type: 'file'

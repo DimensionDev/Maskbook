@@ -1,14 +1,14 @@
 import type { EnhanceableSite } from '@masknet/shared-base'
-import { useAsyncFn } from 'react-use'
-import { activatedSocialNetworkUI } from '../../../../social-network'
-import { RSS3_KEY_SNS } from '../../constants'
-import type { NextIDAvatarMeta } from '../../types'
-import { useSaveNFTAvatar } from '../rss3'
+import { useCallback } from 'react'
+import { activatedSocialNetworkUI } from '../../../../social-network/index.js'
+import { RSS3_KEY_SNS } from '../../constants.js'
+import type { NextIDAvatarMeta } from '../../types.js'
+import { useSaveNFTAvatar } from '../rss3/index.js'
 
 export function useSaveToRSS3() {
-    const [, saveNFTAvatar] = useSaveNFTAvatar()
+    const saveNFTAvatar = useSaveNFTAvatar()
 
-    return useAsyncFn(
+    return useCallback(
         async (info: NextIDAvatarMeta, account: string) => {
             return saveNFTAvatar(
                 account,

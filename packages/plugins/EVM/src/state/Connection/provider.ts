@@ -1,15 +1,16 @@
 import { ProviderType } from '@masknet/web3-shared-evm'
-import type { BaseProvider } from './providers/Base'
-import { CustomNetworkProvider } from './providers/CustomNetwork'
-import { MaskWalletProvider } from './providers/MaskWallet'
-import { MetaMaskProvider } from './providers/MetaMask'
-import WalletConnectProvider from './providers/WalletConnect'
-import { WalletLinkProvider } from './providers/WalletLink'
-import { Coin98Provider } from './providers/Coin98'
-import { MathWalletProvider } from './providers/MathWallet'
-import FortmaticProvider from './providers/Fortmatic'
-import TorusProvider from './providers/Torus'
-import { NoneProvider } from './providers/None'
+import type { BaseProvider } from './providers/Base.js'
+import { CustomNetworkProvider } from './providers/CustomNetwork.js'
+import { MaskWalletProvider } from './providers/MaskWallet.js'
+import { MetaMaskProvider } from './providers/MetaMask.js'
+import WalletConnectProvider from './providers/WalletConnect.js'
+import { WalletLinkProvider } from './providers/WalletLink.js'
+import { Coin98Provider } from './providers/Coin98.js'
+import { MathWalletProvider } from './providers/MathWallet.js'
+import FortmaticProvider from './providers/Fortmatic.js'
+import TorusProvider from './providers/Torus.js'
+import { OperaProvider } from './providers/Opera.js'
+import { NoneProvider } from './providers/None.js'
 
 /**
  * Register all supported providers
@@ -24,5 +25,6 @@ export const Providers: Record<ProviderType, BaseProvider> = {
     [ProviderType.MathWallet]: new MathWalletProvider(),
     [ProviderType.Fortmatic]: new FortmaticProvider(),
     [ProviderType.Torus]: new TorusProvider(),
+    [ProviderType.Opera]: new OperaProvider(),
     [ProviderType.CustomNetwork]: new CustomNetworkProvider(),
 }

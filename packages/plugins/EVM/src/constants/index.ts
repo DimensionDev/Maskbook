@@ -1,5 +1,5 @@
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { PluginID } from '@masknet/shared-base'
 
-export const PLUGIN_ID = NetworkPluginID.PLUGIN_EVM
+export const PLUGIN_ID = PluginID.EVM
 export const PLUGIN_NAME = 'EVM'
 export const PLUGIN_DESCRIPTION = ''

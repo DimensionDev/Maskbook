@@ -1,15 +1,13 @@
 import urlcat from 'urlcat'
-import { head, uniqBy } from 'lodash-unified'
-import BigNumber from 'bignumber.js'
-import isAfter from 'date-fns/isAfter'
+import { uniqBy } from 'lodash-es'
+import { BigNumber } from 'bignumber.js'
 import getUnixTime from 'date-fns/getUnixTime'
-import LRU, { Options as LRUOptions } from 'lru-cache'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import {
     createPageable,
     CurrencyType,
     NonFungibleToken,
-    NonFungibleTokenCollection,
+    NonFungibleCollection,
     NonFungibleTokenEvent,
     NonFungibleTokenOrder,
     OrderSide,
@@ -20,45 +18,32 @@ import {
     createIndicator,
     createNextIndicator,
     NonFungibleAsset,
-    formatBalance,
     NonFungibleTokenStats,
+    HubIndicator,
+    formatPercentage,
+    dividedBy,
+    resolveIPFS_URL,
+    SourceType,
 } from '@masknet/web3-shared-base'
-import { ChainId, SchemaType, createNativeToken, createERC20Token } from '@masknet/web3-shared-evm'
-import type { NonFungibleTokenAPI, TrendingAPI } from '../types'
-import type {
+import { ChainId, SchemaType, createNativeToken, createERC20Token, isValidChainId } from '@masknet/web3-shared-evm'
+import type { NonFungibleTokenAPI } from '../types/index.js'
+import {
     OpenSeaAssetContract,
     OpenSeaAssetEvent,
-    OpenSeaAssetOrder,
     OpenSeaCollection,
     OpenSeaCollectionStats,
     OpenSeaCustomAccount,
-    OpenSeaResponse,
-} from './types'
-import { getOrderUSDPrice, toImage } from './utils'
-import { OPENSEA_ACCOUNT_URL, OPENSEA_API_URL } from './constants'
+    OpenSeaAssetResponse,
+    EventType,
+} from './types.js'
+import { getOrderUSDPrice } from './utils.js'
+import { OPENSEA_ACCOUNT_URL, OPENSEA_API_URL } from './constants.js'
+import { resolveNonFungibleTokenEventActivityType, getPaymentToken, getAssetFullName } from '../helpers.js'
 
-const cache = new LRU<string, any>({
-    max: 50,
-    ttl: 30_000,
-})
-
-export async function fetchFromOpenSea<T>(url: string, chainId: ChainId, options?: LRUOptions<string, any>) {
+async function fetchFromOpenSea<T>(url: string, chainId: ChainId, init?: RequestInit) {
     if (![ChainId.Mainnet, ChainId.Rinkeby, ChainId.Matic].includes(chainId)) return
-    const cacheKey = `${chainId}/${url}`
-    let fetchingTask = cache.get(cacheKey)
-    if (!fetchingTask) {
-        const fetch = globalThis.r2d2Fetch ?? globalThis.fetch
-
-        fetchingTask = fetch(urlcat(OPENSEA_API_URL, url), { method: 'GET' })
-        cache.set(cacheKey, fetchingTask, options)
-    }
-    const response = (await fetchingTask).clone()
-    if (response.ok) {
-        return (await response.json()) as T
-    } else {
-        cache.delete(cacheKey)
-        throw new Error('Fetch failed')
-    }
+    const response = await fetch(urlcat(OPENSEA_API_URL, url), { method: 'GET', ...init })
+    return response.json() as T
 }
 
 function createTokenDetailed(
@@ -75,14 +60,28 @@ function createTokenDetailed(
     return createERC20Token(chainId, token.address, token.name, token.symbol, token.decimals, token.image_url)
 }
 
-function createAssetLink(account: OpenSeaCustomAccount | undefined) {
+function createAssetLink(chainId: ChainId, address: string, tokenId: string) {
+    if (chainId === ChainId.Mainnet)
+        return urlcat('https://opensea.io/assets/ethereum/:address/:tokenId', {
+            address,
+            tokenId,
+        })
+    if (chainId === ChainId.Matic)
+        return urlcat('https://opensea.io/assets/matic/:address/:tokenId', {
+            address,
+            tokenId,
+        })
+    return
+}
+
+function createAccountLink(account: OpenSeaCustomAccount | undefined) {
     if (!account) return ''
     return urlcat(OPENSEA_ACCOUNT_URL, {
         address: account?.user?.username ?? account?.address,
     })
 }
 
-function createNFTToken(chainId: ChainId, asset: OpenSeaResponse): NonFungibleToken<ChainId, SchemaType> {
+function createNFTToken(chainId: ChainId, asset: OpenSeaAssetResponse): NonFungibleToken<ChainId, SchemaType> {
     return {
         id: asset.token_address ?? asset.asset_contract.address,
         chainId,
@@ -92,18 +91,23 @@ function createNFTToken(chainId: ChainId, asset: OpenSeaResponse): NonFungibleTo
         address: asset.token_address ?? asset.asset_contract.address,
         metadata: {
             chainId,
-            name: asset.name ?? asset.collection.name,
+            name: getAssetFullName(
+                asset.token_address ?? asset.asset_contract.address,
+                asset.name ?? asset.collection.name,
+                asset.name ?? asset.collection.name,
+                asset.token_id,
+            ),
             symbol: asset.asset_contract.symbol,
             description: asset.description,
             imageURL:
                 asset.image_url ?? asset.image_preview_url ?? asset.image_original_url ?? asset.animation_url ?? '',
             mediaURL:
                 asset?.animation_url ??
-                toImage(asset?.image_original_url ?? asset?.image_preview_url ?? asset?.image_url ?? ''),
+                resolveIPFS_URL(asset?.image_original_url ?? asset?.image_preview_url ?? asset?.image_url ?? ''),
         },
         contract: {
             chainId,
-            schema: (asset.asset_contract.schema_name as unknown as SchemaType) ?? SchemaType.ERC721,
+            schema: asset.asset_contract.schema_name === 'ERC1155' ? SchemaType.ERC1155 : SchemaType.ERC721,
             address: asset.token_address ?? asset.asset_contract.address,
             name: asset.name ?? asset.collection.name,
             symbol: asset.asset_contract.symbol,
@@ -124,50 +128,35 @@ function createNFTToken(chainId: ChainId, asset: OpenSeaResponse): NonFungibleTo
     }
 }
 
-function createNFTAsset(chainId: ChainId, asset: OpenSeaResponse): NonFungibleAsset<ChainId, SchemaType> {
-    const desktopOrder = head(
-        asset.orders?.sort((a, b) =>
-            new BigNumber(getOrderUSDPrice(b.current_price, b.payment_token_contract?.usd_price) ?? 0)
-                .minus(getOrderUSDPrice(a.current_price, a.payment_token_contract?.usd_price) ?? 0)
-                .toNumber(),
-        ),
-    )
-    const orderTokens = uniqBy(
-        desktopOrder?.payment_token_contract
-            ? [createTokenDetailed(chainId, desktopOrder.payment_token_contract)]
-            : EMPTY_LIST,
-        (x) => x.address.toLowerCase(),
-    )
-    const offerTokens = uniqBy(
-        asset.collection?.payment_tokens?.map((x) => createTokenDetailed(chainId, x)),
-        (x) => x.address.toLowerCase(),
-    )
+function createNFTAsset(chainId: ChainId, asset: OpenSeaAssetResponse): NonFungibleAsset<ChainId, SchemaType> {
+    const token = createNFTToken(chainId, asset)
+    const paymentToken = getPaymentToken(chainId, {
+        address: asset.last_sale?.payment_token.address,
+        symbol: asset.last_sale?.payment_token.symbol,
+    })
     return {
-        ...createNFTToken(chainId, asset),
-        link: asset.opensea_link ?? asset.permalink,
-        paymentTokens: orderTokens.concat(offerTokens),
-        auction: isAfter(Date.parse(`${asset.endTime ?? ''}Z`), Date.now())
-            ? {
-                  endAt: getUnixTime(new Date(asset.endTime)),
-                  orderTokens,
-                  offerTokens,
-              }
-            : undefined,
+        ...token,
+        link: asset.opensea_link ?? asset.permalink ?? createAssetLink(chainId, token.address, token.tokenId),
+        paymentTokens: uniqBy(
+            asset.collection?.payment_tokens?.map((x) => createTokenDetailed(chainId, x)),
+            (x) => x.address.toLowerCase(),
+        ),
         creator: {
             address: asset.creator.address,
             nickname: asset.creator.user?.username ?? 'Unknown',
             avatarURL: asset.creator.profile_img_url,
-            link: createAssetLink(asset.creator),
+            link: createAccountLink(asset.creator),
         },
         owner: {
             address: asset.owner.address,
             nickname: asset.owner.user?.username ?? 'Unknown',
             avatarURL: asset.owner.profile_img_url,
-            link: createAssetLink(asset.owner),
+            link: createAccountLink(asset.owner),
         },
         traits: asset.traits.map((x) => ({
             type: x.trait_type,
             value: x.value,
+            rarity: formatPercentage(dividedBy(x.trait_count, asset.collection.stats.count)),
         })),
         price: asset.last_sale
             ? {
@@ -180,157 +169,110 @@ function createNFTAsset(chainId: ChainId, asset: OpenSeaResponse): NonFungibleAs
             : undefined,
         priceInToken: asset.last_sale
             ? {
-                  token: createTokenDetailed(chainId, {
-                      address: asset.last_sale.payment_token.address ?? '',
-                      decimals: Number(asset.last_sale.payment_token.decimals ?? '0'),
-                      name: '',
-                      symbol: asset.last_sale.payment_token.symbol ?? '',
-                  }),
-                  amount: formatBalance(
-                      new BigNumber(asset.last_sale.total_price ?? '0'),
-                      asset.last_sale.payment_token.decimals,
-                  ),
+                  token:
+                      paymentToken ??
+                      createTokenDetailed(chainId, {
+                          address: asset.last_sale.payment_token.address ?? '',
+                          decimals: Number(asset.last_sale.payment_token.decimals ?? '0'),
+                          name: '',
+                          symbol: asset.last_sale.payment_token.symbol ?? '',
+                      }),
+                  amount: asset.last_sale.total_price ?? '0',
               }
             : undefined,
-        orders: asset.orders
-            ?.sort((a, z) =>
-                new BigNumber(getOrderUSDPrice(z.current_price, z.payment_token_contract?.usd_price) ?? 0)
-                    .minus(getOrderUSDPrice(a.current_price, a.payment_token_contract?.usd_price) ?? 0)
-                    .toNumber(),
-            )
-            .map((x) => ({
-                id: x.order_hash,
-                chainId,
-                assetPermalink: asset.opensea_link,
-                hash: x.order_hash,
-                quantity: x.quantity,
-                createdAt: x.created_time ? getUnixTime(new Date(x.created_time)) : undefined,
-                expiredAt: x.expiration_time,
-                side: x.side,
-                price: {
-                    [CurrencyType.USD]: x.current_price,
-                },
-                paymentToken: x.payment_token_contract
-                    ? createERC20Token(
-                          chainId,
-                          x.payment_token_contract.address,
-                          x.payment_token_contract.name,
-                          x.payment_token_contract.symbol,
-                          x.payment_token_contract.decimals,
-                          x.payment_token_contract.image_url,
-                      )
-                    : undefined,
-            })),
     }
 }
 
-function createNFTHistory(chainId: ChainId, event: OpenSeaAssetEvent): NonFungibleTokenEvent<ChainId, SchemaType> {
-    const accountPair =
-        event.event_type === 'successful'
-            ? {
-                  from: {
-                      address: event.seller?.address,
-                      nickname: event.seller?.user?.username,
-                      avatarURL: event.seller?.profile_img_url,
-                      link: createAssetLink(event.seller),
-                  },
-                  to: {
-                      address: event.winner_account?.address,
-                      nickname: event.winner_account?.user?.username,
-                      avatarURL: event.winner_account?.profile_img_url,
-                      link: createAssetLink(event.winner_account),
-                  },
-              }
-            : {
-                  from: {
-                      address: event.from_account?.address,
-                      nickname: event.from_account?.user?.username,
-                      avatarURL: event.from_account?.profile_img_url,
-                      link: createAssetLink(event.from_account),
-                  },
-                  to: {
-                      address: event.to_account?.address,
-                      nickname: event.to_account?.user?.username,
-                      avatarURL: event.to_account?.profile_img_url,
-                      link: createAssetLink(event.to_account),
-                  },
-              }
+function createAccount(account?: OpenSeaCustomAccount) {
+    if (!account) return
     return {
-        ...accountPair,
+        address: account.address,
+        nickname: account.user?.username,
+        avatarURL: account.profile_img_url,
+        link: createAccountLink(account),
+    }
+}
+
+function createEvent(chainId: ChainId, event: OpenSeaAssetEvent): NonFungibleTokenEvent<ChainId, SchemaType> {
+    const paymentToken = event.payment_token
+        ? createERC20Token(
+              chainId,
+              event.payment_token.address,
+              event.payment_token.name,
+              event.payment_token.symbol,
+              event.payment_token.decimals,
+              event.payment_token.image_url,
+          )
+        : undefined
+    return {
+        from: createAccount(event.from_account ?? event.seller),
+        to: createAccount(event.to_account ?? event.winner_account),
         id: event.id,
         chainId,
-        type: event.event_type,
+        type: resolveNonFungibleTokenEventActivityType(event.event_type),
         assetPermalink: event.asset.permalink,
         quantity: event.quantity,
         hash: event.transaction?.transaction_hash,
         timestamp: new Date(`${event.created_date}Z`).getTime(),
+        price: event.payment_token
+            ? {
+                  [CurrencyType.USD]: new BigNumber(event.bid_amount ?? event.total_price ?? 0)
+                      .dividedBy(scale10(1, event.payment_token?.decimals))
+                      .dividedBy(event.quantity)
+                      .multipliedBy(event.payment_token?.usd_price ?? 1)
+                      .toFixed(2),
+              }
+            : undefined,
+        priceInToken: paymentToken
+            ? {
+                  amount: event.bid_amount ?? event.total_price ?? '0',
+                  token: paymentToken,
+              }
+            : undefined,
+        paymentToken,
+        source: SourceType.OpenSea,
+    }
+}
+
+function createOrder(chainId: ChainId, event: OpenSeaAssetEvent): NonFungibleTokenOrder<ChainId, SchemaType> {
+    return {
+        id: `${event.asset.permalink}_${event.created_date}`,
+        chainId,
+        hash: event.transaction?.transaction_hash,
+        assetPermalink: event.asset.permalink,
+        quantity: event.quantity,
+        side: event.event_type === 'offer_entered' ? OrderSide.Buy : undefined,
+        maker: createAccount(event.from_account ?? event.seller),
+        taker: createAccount(event.to_account ?? event.winner_account),
+        createdAt: event.created_date ? getUnixTime(new Date(event.created_date)) : undefined,
         price: {
-            [CurrencyType.USD]: new BigNumber(event.bid_amount ?? event.total_price ?? 0)
-                .dividedBy(scale10(event.payment_token.decimals))
+            [CurrencyType.USD]: new BigNumber(event.bid_amount ?? 0)
+                .dividedBy(scale10(1, event.payment_token?.decimals ?? 0))
                 .dividedBy(event.quantity)
                 .multipliedBy(event.payment_token?.usd_price ?? 1)
                 .toFixed(2),
         },
-        paymentToken: event.payment_token
-            ? createERC20Token(
-                  ChainId.Mainnet,
-                  event.payment_token.address,
-                  event.payment_token.name,
-                  event.payment_token.symbol,
-                  event.payment_token.decimals,
-                  event.payment_token.image_url,
-              )
-            : undefined,
-    }
-}
-
-function createAssetOrder(chainId: ChainId, order: OpenSeaAssetOrder): NonFungibleTokenOrder<ChainId, SchemaType> {
-    return {
-        id: order.order_hash,
-        chainId,
-        assetPermalink: order.asset.opensea_link,
-        hash: order.order_hash,
-        quantity: order.quantity,
-        side: order.side,
-        maker: {
-            address: order.maker.address,
-            nickname: order.maker.user?.username,
-            avatarURL: order.maker.profile_img_url,
-            link: urlcat('https://opensea.io/accounts/:address', { address: order.maker.address }),
-        },
-        taker: {
-            address: order.taker.address,
-            nickname: order.taker.user?.username,
-            avatarURL: order.taker.profile_img_url,
-        },
-        createdAt: order.created_time ? getUnixTime(new Date(order.created_time)) : undefined,
-        expiredAt: order.expiration_time,
-        price: {
-            [CurrencyType.USD]: new BigNumber(order.base_price ?? 0)
-                .dividedBy(scale10(order.payment_token_contract?.decimals ?? 0))
-                .dividedBy(order.quantity)
-                .multipliedBy(order.payment_token_contract?.usd_price ?? 1)
-                .toFixed(2),
-        },
-        priceInToken: order.payment_token_contract
+        priceInToken: event.payment_token
             ? {
-                  amount: '0',
+                  amount: event.bid_amount ?? '0',
                   token: createERC20Token(
-                      ChainId.Mainnet,
-                      order.payment_token_contract.address,
-                      order.payment_token_contract.name,
-                      order.payment_token_contract.symbol,
-                      order.payment_token_contract.decimals,
-                      order.payment_token_contract.image_url,
+                      chainId,
+                      event.payment_token.address,
+                      event.payment_token.name,
+                      event.payment_token.symbol,
+                      event.payment_token.decimals,
+                      event.payment_token.image_url,
                   ),
               }
             : undefined,
+        source: SourceType.OpenSea,
     }
 }
 
 export class OpenSeaAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
     async getAsset(address: string, tokenId: string, { chainId = ChainId.Mainnet }: HubOptions<ChainId> = {}) {
-        const response = await fetchFromOpenSea<OpenSeaResponse>(
+        if (!isValidChainId(chainId)) return
+        const response = await fetchFromOpenSea<OpenSeaAssetResponse>(
             urlcat('/api/v1/asset/:address/:tokenId', { address, tokenId }),
             chainId,
         )
@@ -339,54 +281,47 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
     }
 
     async getAssets(account: string, { chainId = ChainId.Mainnet, indicator, size = 50 }: HubOptions<ChainId> = {}) {
-        if (chainId !== ChainId.Mainnet) return createPageable(EMPTY_LIST, createIndicator(indicator))
-
-        const response = await fetchFromOpenSea<{ assets?: OpenSeaResponse[] }>(
+        if (!isValidChainId(chainId)) return createPageable(EMPTY_LIST, createIndicator(indicator))
+        const response = await fetchFromOpenSea<{
+            assets?: OpenSeaAssetResponse[]
+            next: string
+            previous?: string
+        }>(
             urlcat('/api/v1/assets', {
                 owner: account,
                 offset: (indicator?.index ?? 0) * size,
                 limit: size,
+                cursor: indicator?.id,
             }),
             chainId,
         )
-
         const tokens = (response?.assets ?? EMPTY_LIST)
             ?.filter(
-                (x: OpenSeaResponse) =>
+                (x: OpenSeaAssetResponse) =>
                     ['non-fungible', 'semi-fungible'].includes(x.asset_contract.asset_contract_type) ||
                     ['ERC721', 'ERC1155'].includes(x.asset_contract.schema_name),
             )
-            .map((asset: OpenSeaResponse) => createNFTAsset(chainId, asset))
+            .map((asset: OpenSeaAssetResponse) => createNFTAsset(chainId, asset))
 
         return createPageable(
             tokens,
             createIndicator(indicator),
-            tokens.length === size ? createNextIndicator(indicator) : undefined,
+            tokens.length === size ? createNextIndicator(indicator, response?.next) : undefined,
         )
-    }
-
-    async getToken(address: string, tokenId: string, { chainId = ChainId.Mainnet }: HubOptions<ChainId> = {}) {
-        const response = await fetchFromOpenSea<OpenSeaResponse>(
-            urlcat('/api/v1/asset/:address/:tokenId', { address, tokenId }),
-            chainId,
-        )
-        if (!response) return
-        return createNFTToken(chainId, response)
     }
 
     async getContract(address: string, { chainId = ChainId.Mainnet }: HubOptions<ChainId> = {}) {
-        const assetContract = await fetchFromOpenSea<OpenSeaAssetContract>(
+        const contract = await fetchFromOpenSea<OpenSeaAssetContract>(
             urlcat('/api/v1/asset_contract/:address', { address }),
             chainId,
         )
-        const result = createNonFungibleTokenContract(
+        return createNonFungibleTokenContract(
             chainId,
             SchemaType.ERC721,
             address,
-            assetContract?.name ?? 'Unknown Token',
-            assetContract?.symbol ?? 'UNKNOWN',
+            contract?.name ?? 'Unknown Token',
+            contract?.symbol ?? 'UNKNOWN',
         )
-        return result
     }
 
     async getEvents(
@@ -394,23 +329,35 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
         tokenId: string,
         { chainId = ChainId.Mainnet, indicator, size }: HubOptions<ChainId> = {},
     ) {
+        if (!isValidChainId(chainId)) return createPageable(EMPTY_LIST, createIndicator(indicator))
+        const parameters = new URLSearchParams()
+        parameters.append('event_type', EventType.Successful)
+        parameters.append('event_type', EventType.OfferEntered)
+        parameters.append('event_type', EventType.Transfer)
+        parameters.append('asset_contract_address', address)
+        parameters.append('token_id', tokenId)
+        if (indicator?.id) parameters.append('cursor', indicator?.id)
+        if (size) parameters.append('limit', size.toString())
+
         const response = await fetchFromOpenSea<{
             asset_events: OpenSeaAssetEvent[]
-        }>(
-            urlcat('/api/v1/events', {
-                asset_contract_address: address,
-                token_id: tokenId,
-                offset: indicator,
-                limit: size,
-            }),
-            chainId,
-        )
-        const events = response?.asset_events?.map((x) => createNFTHistory(chainId, x)) ?? EMPTY_LIST
+            next: string
+            previous?: string
+        }>(`/api/v1/events?${parameters.toString()}`, chainId)
+        const events = response?.asset_events?.map((x) => createEvent(chainId, x)) ?? EMPTY_LIST
         return createPageable(
             events,
             createIndicator(indicator),
-            events.length === size ? createNextIndicator(indicator) : undefined,
+            events.length === size ? createNextIndicator(indicator, response?.next) : undefined,
         )
+    }
+
+    async getOffers(address: string, tokenId: string, options?: HubOptions<ChainId, HubIndicator> | undefined) {
+        return this.getOrders(address, tokenId, OrderSide.Buy, options)
+    }
+
+    async getListings(address: string, tokenId: string, options?: HubOptions<ChainId, HubIndicator> | undefined) {
+        return this.getOrders(address, tokenId, OrderSide.Sell, options)
     }
 
     async getOrders(
@@ -419,31 +366,41 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
         side: OrderSide,
         { chainId = ChainId.Mainnet, indicator, size }: HubOptions<ChainId> = {},
     ) {
+        if (!isValidChainId(chainId)) return createPageable(EMPTY_LIST, createIndicator(indicator))
+
         const response = await fetchFromOpenSea<{
-            orders: OpenSeaAssetOrder[]
+            asset_events: OpenSeaAssetEvent[]
+            next: string
+            previous?: string
         }>(
-            urlcat('/wyvern/v1/orders', {
+            urlcat('/api/v1/events', {
                 asset_contract_address: address,
                 token_id: tokenId,
-                side,
-                offset: indicator,
+                cursor: indicator?.id,
                 limit: size,
+                event_type: side === OrderSide.Buy ? 'offer_entered' : undefined,
             }),
             chainId,
         )
-        const orders = response?.orders?.map((x) => createAssetOrder(chainId, x)) ?? EMPTY_LIST
+        if (side === OrderSide.Sell) return createPageable(EMPTY_LIST, createIndicator(indicator))
+
+        const offers =
+            response?.asset_events
+                ?.filter((x) => x.event_type === 'offer_entered')
+                .map((x) => createOrder(chainId, x)) ?? EMPTY_LIST
         return createPageable(
-            orders,
+            offers,
             createIndicator(indicator),
-            orders.length === size ? createNextIndicator(indicator) : undefined,
+            offers.length === size ? createNextIndicator(indicator, response?.next) : undefined,
         )
     }
 
-    async getCollections(
+    async getCollectionsByOwner(
         address: string,
         { chainId = ChainId.Mainnet, indicator, size = 50 }: HubOptions<ChainId> = {},
     ) {
-        if (chainId !== ChainId.Mainnet) return createPageable(EMPTY_LIST, createIndicator(indicator))
+        if (!isValidChainId(chainId)) return createPageable(EMPTY_LIST, createIndicator(indicator))
+
         const response = await fetchFromOpenSea<OpenSeaCollection[]>(
             urlcat('/api/v1/collections', {
                 asset_owner: address,
@@ -454,7 +411,7 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
         )
         if (!response) return createPageable(EMPTY_LIST, createIndicator(indicator))
 
-        const collections: Array<NonFungibleTokenCollection<ChainId, SchemaType>> =
+        const collections: Array<NonFungibleCollection<ChainId, SchemaType>> =
             response
                 ?.map((x) => ({
                     chainId,
@@ -485,16 +442,16 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
         address: string,
         { chainId = ChainId.Mainnet }: HubOptions<ChainId> = {},
     ): Promise<NonFungibleTokenStats | undefined> {
+        if (!isValidChainId(chainId)) return
         const assetContract = await fetchFromOpenSea<OpenSeaAssetContract>(
             urlcat('/api/v1/asset_contract/:address', { address }),
             chainId,
-            {
-                ttl: 0,
-            },
         )
         const slug = assetContract?.collection.slug
         if (!slug) return
-        const response = await fetchFromOpenSea<{ stats: OpenSeaCollectionStats }>(
+        const response = await fetchFromOpenSea<{
+            stats: OpenSeaCollectionStats
+        }>(
             urlcat('/api/v1/collection/:slug/stats', {
                 slug,
             }),
@@ -508,9 +465,5 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
             floorPrice: stats.floor_price,
             count24h: stats.one_day_sales,
         }
-    }
-
-    async getCoinTrending(chainId: ChainId, id: string, currency: TrendingAPI.Currency): Promise<TrendingAPI.Trending> {
-        throw new Error('Not implemented yet.')
     }
 }

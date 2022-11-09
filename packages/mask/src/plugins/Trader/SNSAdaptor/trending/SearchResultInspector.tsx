@@ -1,22 +1,25 @@
-import { EMPTY_LIST } from '@masknet/shared-base'
-import { useAvailableDataProviders } from '../../trending/useAvailableDataProviders'
-import { useSearchedKeyword } from '../../trending/useSearchedKeyword'
-import { TagType } from '../../types'
-import { TraderView } from './TraderView'
-import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
+import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
+import { Web3ContextProvider, useAddressType } from '@masknet/web3-hooks-base'
+import { AddressType, ChainId } from '@masknet/web3-shared-evm'
+import { useAvailableDataProviders } from '../../trending/useAvailableDataProviders.js'
+import { TrendingView } from './TrendingView.js'
+import { usePayloadFromTokenSearchKeyword } from '../../trending/usePayloadFromTokenSearchKeyword.js'
 
-export interface SearchResultInspectorProps {}
+export interface SearchResultInspectorProps {
+    keyword: string
+}
 
-export function SearchResultInspector(props: SearchResultInspectorProps) {
-    const keyword = useSearchedKeyword()
-    const [_, type, name = ''] = keyword.match(/([#$])(\w+)/) ?? []
-    const type_ = type === '$' ? TagType.CASH : TagType.HASH
-    const { value: dataProviders = EMPTY_LIST } = useAvailableDataProviders(type_, name)
+export function SearchResultInspector({ keyword }: SearchResultInspectorProps) {
+    const { name, type } = usePayloadFromTokenSearchKeyword(NetworkPluginID.PLUGIN_EVM, keyword)
 
-    if (!name || !dataProviders?.length) return null
+    const { value: addressType } = useAddressType(NetworkPluginID.PLUGIN_EVM, keyword, { chainId: ChainId.Mainnet })
+
+    const { value: dataProviders = EMPTY_LIST } = useAvailableDataProviders(type, name)
+
+    if (!name || name === 'UNKNOWN' || addressType === AddressType.ExternalOwned || !dataProviders?.length) return null
     return (
-        <TargetChainIdContext.Provider>
-            <TraderView isPopper={false} name={name} tagType={type_} dataProviders={dataProviders} />
-        </TargetChainIdContext.Provider>
+        <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM, chainId: ChainId.Mainnet }}>
+            <TrendingView isPopper={false} name={name} tagType={type} dataProviders={dataProviders} />
+        </Web3ContextProvider>
     )
 }

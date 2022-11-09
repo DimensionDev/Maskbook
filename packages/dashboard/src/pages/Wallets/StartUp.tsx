@@ -1,10 +1,10 @@
 import { styled } from '@mui/material/styles'
 import { Icons } from '@masknet/icons'
-import { useDashboardI18N } from '../../locales'
+import { useDashboardI18N } from '../../locales/index.js'
 import { Paper, Stack, Box } from '@mui/material'
-import { ActionCard } from '../../components/ActionCard'
+import { ActionCard } from '../../components/ActionCard/index.js'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { PluginMessages } from '../../API'
+import { PluginMessages } from '../../API.js'
 
 const Container = styled('div')`
     display: flex;
@@ -17,7 +17,7 @@ const Container = styled('div')`
 export function StartUp() {
     const t = useDashboardI18N()
     const { openDialog: openConnectWalletDialog } = useRemoteControlledDialog(
-        PluginMessages.Wallet.events.selectProviderDialogUpdated,
+        PluginMessages.Wallet.selectProviderDialogUpdated,
     )
 
     return (

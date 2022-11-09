@@ -1,19 +1,23 @@
 import { useState, useCallback } from 'react'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { IconButton } from '@mui/material'
-import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI'
-import Services from '../../extension/service'
-import { activatedSocialNetworkUI, globalUIState } from '../../social-network'
+import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI.js'
+import Services from '../../extension/service.js'
+import { activatedSocialNetworkUI, globalUIState } from '../../social-network/index.js'
 import { DashboardRoutes } from '@masknet/shared-base'
-import { MaskIconInMinds, MaskSharpIcon } from '../../resources/MaskIcon'
+import { MaskIconInMinds, MaskSharpIcon } from '@masknet/shared'
 import { useMount } from 'react-use'
-import { usePersonaConnectStatus } from '../DataSource/usePersonaConnectStatus'
-import { hasNativeAPI, nativeAPI } from '../../../shared/native-rpc'
+import { useCurrentPersonaConnectStatus } from '../DataSource/usePersonaConnectStatus.js'
+import { hasNativeAPI, nativeAPI } from '../../../shared/native-rpc/index.js'
 import { useValueRef } from '@masknet/shared-base-ui'
 
 interface BannerUIProps extends withClasses<never | 'header' | 'content' | 'actions' | 'buttonText'> {
     description?: string
-    nextStep: 'hidden' | { onClick(): void }
+    nextStep:
+        | 'hidden'
+        | {
+              onClick(): void
+          }
     username?:
         | 'hidden'
         | {
@@ -35,13 +39,10 @@ const useStyles = makeStyles()({
         height: 38,
         margin: '10px 0',
     },
-    span: {
-        paddingLeft: 8,
-    },
 })
 
 export function BannerUI(props: BannerUIProps) {
-    const classes = useStylesExtends(useStyles(), props)
+    const { classes } = useStylesExtends(useStyles(), props)
 
     return props.nextStep === 'hidden' ? null : (
         <IconButton size="large" className={classes.buttonText} onClick={props.nextStep.onClick}>
@@ -54,7 +55,7 @@ export interface BannerProps extends Partial<BannerUIProps> {}
 
 export function Banner(props: BannerProps) {
     const lastRecognizedIdentity = useLastRecognizedIdentity()
-    const personaConnectStatus = usePersonaConnectStatus()
+    const { value: personaConnectStatus } = useCurrentPersonaConnectStatus()
     const { nextStep } = props
     const networkIdentifier = activatedSocialNetworkUI.networkIdentifier
     const identities = useValueRef(globalUIState.profiles)

@@ -1,5 +1,5 @@
 import { story } from '@masknet/storybook-shared'
-import { HistoryTableUI as C } from '../../../src/pages/Wallets/components/HistoryTable'
+import { HistoryTableUI as C } from '../../../src/pages/Wallets/components/HistoryTable/index.js'
 import { action } from '@storybook/addon-actions'
 
 const { meta, of } = story(C)

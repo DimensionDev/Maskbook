@@ -1,7 +1,7 @@
-import { PluginId } from '@masknet/plugin-infra'
+import { PluginID } from '@masknet/shared-base'
 
 // #region plugin settings
-export const PLUGIN_ID = PluginId.Trader
+export const PLUGIN_ID = PluginID.Trader
 // #endregion
 
 // proxy: https://web-api.coinmarketcap.com/v1

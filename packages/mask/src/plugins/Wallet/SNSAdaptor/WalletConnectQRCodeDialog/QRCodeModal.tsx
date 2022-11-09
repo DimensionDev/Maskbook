@@ -1,6 +1,6 @@
 import { Grid, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { useI18N } from '../../../../utils'
+import { useI18N } from '../../../../utils/index.js'
 import { QRCode } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
@@ -13,7 +13,6 @@ const useStyles = makeStyles()((theme) => ({
         backdropFilter: 'blur(20px)',
     },
     tip: { fontSize: 12, marginTop: '10px' },
-    onCopy: { marginTop: theme.spacing(1) },
 }))
 
 export const QRCodeModal: React.FC<{

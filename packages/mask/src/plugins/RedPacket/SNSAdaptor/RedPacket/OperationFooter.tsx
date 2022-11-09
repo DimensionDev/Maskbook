@@ -1,16 +1,36 @@
-import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
+import { useChainContext } from '@masknet/web3-hooks-base'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
-import { ActionButton } from '@masknet/theme'
-import { Box, useTheme } from '@mui/material'
+import { ActionButton, makeStyles } from '@masknet/theme'
+import { Box, keyframes, useTheme } from '@mui/material'
 import { Icons } from '@masknet/icons'
-import { useI18N as useBaseI18n } from '../../../../utils'
-import { useI18N } from '../../locales'
-import { ChainBoundary } from '../../../../web3/UI/ChainBoundary'
-import { WalletConnectedBoundary } from '../../../../web3/UI/WalletConnectedBoundary'
-import { useStyles } from './useStyles'
+import { useI18N as useBaseI18n } from '../../../../utils/index.js'
+import { useI18N } from '../../locales/index.js'
+import { ChainBoundary, WalletConnectedBoundary } from '@masknet/shared'
+
+export const useStyles = makeStyles()((theme) => {
+    const spinningAnimationKeyFrames = keyframes`
+to {
+  transform: rotate(360deg)
+}`
+    return {
+        footer: {
+            width: '100%',
+            display: 'flex',
+            gap: theme.spacing(2),
+            justifyContent: 'center',
+            '& button': {
+                flexBasis: 'auto',
+            },
+            [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
+                flexDirection: 'column',
+                gap: theme.spacing(1),
+            },
+        },
+    }
+})
 
 interface OperationFooterProps {
     chainId?: ChainId
@@ -33,8 +53,7 @@ export function OperationFooter({
     const { classes } = useStyles()
     const { t: tr } = useBaseI18n()
     const t = useI18N()
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const chainIdValid = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { account, chainId: currentChainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const theme = useTheme()
 
     // #region remote controlled select provider dialog
@@ -53,7 +72,7 @@ export function OperationFooter({
                 </ActionButton>
             )
         }
-        if (!chainIdValid) {
+        if (!currentChainId) {
             return (
                 <ActionButton disabled fullWidth variant="roundedDark">
                     {tr('plugin_wallet_invalid_network')}

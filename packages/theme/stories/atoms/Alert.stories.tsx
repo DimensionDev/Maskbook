@@ -1,6 +1,6 @@
 import { Alert as MuiAlert } from '@mui/material'
-import { noop } from 'lodash-unified'
-import { MuiArgs, story } from '../utils'
+import { noop } from 'lodash-es'
+import { MuiArgs, story } from '../utils/index.js'
 
 const { meta, of } = story(MuiAlert)
 

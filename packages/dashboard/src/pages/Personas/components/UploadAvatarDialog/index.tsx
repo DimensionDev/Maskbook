@@ -4,9 +4,9 @@ import { Box, Button, DialogContent, Slider } from '@mui/material'
 import { memo, useCallback, useState } from 'react'
 import AvatarEditor from 'react-avatar-editor'
 import { useStateList } from 'react-use'
-import { Services } from '../../../../API'
-import FileUpload from '../../../../components/FileUpload'
-import { useDashboardI18N } from '../../../../locales'
+import { Services } from '../../../../API.js'
+import FileUpload from '../../../../components/FileUpload/index.js'
+import { useDashboardI18N } from '../../../../locales/index.js'
 
 interface UploadAvatarDialogProps {
     open: boolean

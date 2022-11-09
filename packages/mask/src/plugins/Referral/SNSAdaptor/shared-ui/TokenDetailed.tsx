@@ -8,13 +8,6 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         alignItems: 'center',
     },
-    logo: {
-        display: 'flex',
-        justifyContent: 'center',
-        width: '44px',
-        height: '44px',
-        marginRight: '16px',
-    },
     details: {
         marginLeft: '16px',
         fontWeight: 500,
@@ -27,10 +20,10 @@ const useStyles = makeStyles()((theme) => ({
 
 export interface TokenProps {
     address: string
+    name: string
     symbol?: string
-    name?: string
-    logoURL?: string
     chainId?: ChainId
+    logoURL?: string
 }
 
 export interface TokenDetailedProps extends React.PropsWithChildren<{}> {

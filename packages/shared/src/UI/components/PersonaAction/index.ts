@@ -1,3 +1,3 @@
-export * from './PersonaImageIcon'
-export * from './PersonaAction'
-export * from './PlatformAvatar'
+export * from './PersonaImageIcon.js'
+export * from './PersonaAction.js'
+export * from './PlatformAvatar.js'

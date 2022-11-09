@@ -1,7 +1,7 @@
 import { ROOT_PATH, task, prettier } from '../utils/index.js'
 import { readdir, writeFile, readFile } from 'fs/promises'
 import { dirname } from 'path'
-import { upperFirst } from 'lodash-unified'
+import { upperFirst } from 'lodash-es'
 
 const mainFallbackMap = new Map([['zh', 'zh-TW']])
 
@@ -19,7 +19,9 @@ export async function syncLanguages() {
 
         const inputDir = new URL(dirname(input) + '/', ROOT_PATH)
 
-        const languages = await getLanguages(inputDir)
+        const languages = getLanguageFamilyName(
+            (await readdir(inputDir, { withFileTypes: true })).filter((x) => x.isFile()).map((x) => x.name),
+        )
 
         {
             let code = header
@@ -86,13 +88,14 @@ task(
     'sync-languages',
     "Run this when adding a new language support or adding a new package with it's own i18n files.",
 )
-async function getLanguages(inputDir: URL): Promise<Map<string, string>> {
-    const languages = (await readdir(inputDir))
+
+export function getLanguageFamilyName(_languages: string[]): Map<string, string> {
+    const languages = _languages
         .filter((x) => x.endsWith('.json'))
         .sort()
         .map((x) => x.slice(0, -5))
     const languageMap = new Map<string, string>()
-    const hasFamily = new Set()
+    const hasFamily = new Set<string>()
 
     for (const language of languages) {
         const family = language.slice(0, 2)

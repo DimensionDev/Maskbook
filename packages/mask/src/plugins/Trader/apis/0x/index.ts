@@ -1,13 +1,13 @@
-import BigNumber from 'bignumber.js'
-import { first } from 'lodash-unified'
-import { BIPS_BASE, ZRX_BASE_URL } from '../../constants'
+import { BigNumber } from 'bignumber.js'
+import { first } from 'lodash-es'
+import { BIPS_BASE, ZRX_BASE_URL } from '../../constants/index.js'
 import type {
     SwapErrorResponse,
     SwapQuoteRequest,
     SwapQuoteResponse,
     SwapServerErrorResponse,
     SwapValidationErrorResponse,
-} from '../../types'
+} from '../../types/index.js'
 import type { NetworkType } from '@masknet/web3-shared-evm'
 import urlcat from 'urlcat'
 

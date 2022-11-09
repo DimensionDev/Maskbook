@@ -12,16 +12,6 @@ interface ImportMeta {
     url: string
 }
 
-// #region Web Components
-interface ShadowRoot {
-    adoptedStyleSheets?: CSSStyleSheet[]
-}
-interface CSSStyleSheet {
-    replace(text: string): Promise<void>
-    replaceSync(text: string): void
-}
-// #endregion
-
 // #region Trusted Types
 interface TrustedHTML {
     toString(): string
@@ -62,4 +52,5 @@ declare namespace React {
         dangerouslySetInnerHTML?: { __html: string | TrustedHTML } | undefined
     }
 }
+
 // #endregion

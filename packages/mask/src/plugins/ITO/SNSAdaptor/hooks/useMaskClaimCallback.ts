@@ -1,12 +1,11 @@
-import { useAccount, useChainId, useWeb3Connection } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { useChainContext, useWeb3Connection } from '@masknet/web3-hooks-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { encodeContractTransaction } from '@masknet/web3-shared-evm'
 import { useAsyncFn } from 'react-use'
-import { useMaskITO_Contract } from './useMaskITO_Contract'
+import { useMaskITO_Contract } from './useMaskITO_Contract.js'
 
 export function useMaskClaimCallback() {
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const MaskITO_Contract = useMaskITO_Contract(chainId)
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, { chainId })
 

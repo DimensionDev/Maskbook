@@ -5,12 +5,12 @@ import {
     TypedMessage,
     SerializableTypedMessages,
 } from '@masknet/typed-message'
-import { editTypedMessageMeta } from '@masknet/typed-message/dom'
+import { editTypedMessageMeta } from '@masknet/typed-message-react'
 import { makeStyles } from '@masknet/theme'
-import { InputBase, Alert, Button } from '@mui/material'
+import { InputBase, Alert, Button, inputBaseClasses } from '@mui/material'
 import { useCallback, useImperativeHandle, useState, useRef, forwardRef, memo, useMemo } from 'react'
-import { useI18N } from '../../utils'
-import { BadgeRenderer } from './BadgeRenderer'
+import { useI18N } from '../../utils/index.js'
+import { BadgeRenderer } from './BadgeRenderer.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -18,10 +18,34 @@ const useStyles = makeStyles()((theme) => ({
     },
     input: {
         fontSize: 15,
-        minHeight: 300,
+        position: 'relative',
+        display: 'flex',
+        height: '100%',
+        [`& > .${inputBaseClasses.input}`]: {
+            height: 'calc(100% - 22px) !important',
+            overflow: 'unset',
+        },
+    },
+    badgeInput: {
+        paddingTop: 48,
+    },
+    textarea: {
+        '::-webkit-scrollbar': {
+            backgroundColor: 'transparent',
+            width: 20,
+        },
+        '::-webkit-scrollbar-thumb': {
+            borderRadius: '20px',
+            width: 5,
+            border: '7px solid rgba(0, 0, 0, 0)',
+            backgroundColor: theme.palette.maskColor.secondaryLine,
+            backgroundClip: 'padding-box',
+        },
     },
     badge: {
-        marginBottom: 12,
+        position: 'absolute',
+        top: 14,
+        left: 14,
     },
 }))
 export interface TypedMessageEditorProps {
@@ -49,9 +73,9 @@ export interface TypedMessageEditorRef {
 const emptyMessage = makeTypedMessageText('')
 // This is an **uncontrolled** component. (performance consideration, because it will be re-rendered very frequently).
 export const TypedMessageEditor = memo(
-    forwardRef<TypedMessageEditorRef, TypedMessageEditorProps>((props, ref) => {
+    forwardRef<TypedMessageEditorRef, TypedMessageEditorProps>(function TypedMessageEditor(props, ref) {
         const { onChange, readonly } = props
-        const { classes } = useStyles()
+        const { classes, cx } = useStyles()
         const { t } = useI18N()
 
         const [value, setValue] = useState(props.defaultValue ?? emptyMessage)
@@ -120,23 +144,27 @@ export const TypedMessageEditor = memo(
         }
         return (
             <>
-                {value.meta && (
-                    <div className={classes.badge}>
-                        <BadgeRenderer readonly={!!readonly} meta={value.meta} onDeleteMeta={deleteMetaID} />
-                    </div>
-                )}
                 <InputBase
+                    startAdornment={
+                        value.meta && (
+                            <div className={classes.badge}>
+                                <BadgeRenderer readonly={!!readonly} meta={value.meta} onDeleteMeta={deleteMetaID} />
+                            </div>
+                        )
+                    }
                     readOnly={readonly}
                     classes={{
                         root: classes.root,
-                        input: classes.input,
+                        input: classes.textarea,
                     }}
+                    className={cx(classes.input, value.meta ? classes.badgeInput : undefined)}
                     autoFocus={props.autoFocus}
                     value={value.content}
                     onChange={setAsText}
                     fullWidth
                     multiline
                     placeholder={t('post_dialog__placeholder')}
+                    rows={value.meta ? 11 : 13}
                 />
             </>
         )

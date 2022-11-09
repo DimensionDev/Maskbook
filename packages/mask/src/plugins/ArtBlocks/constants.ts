@@ -1,4 +1,6 @@
-export const ARTBLOCKS_PLUGIN_ID = 'io.artblocks'
+import { PluginID } from '@masknet/shared-base'
+
+export const ARTBLOCKS_PLUGIN_ID = PluginID.ArtBlocks
 export const PLUGIN_NAME = 'ArtBlocks'
 export const TESTNET_HOSTNAME = 'artist-staging.artblocks.io'
 export const MAINNET_HOSTNAME = 'www.artblocks.io'

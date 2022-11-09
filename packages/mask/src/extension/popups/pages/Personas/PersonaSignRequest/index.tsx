@@ -1,15 +1,15 @@
 import { memo, useEffect, useState } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { Button, Typography } from '@mui/material'
-import { MaskMessages, useI18N } from '../../../../../utils'
+import { MaskMessages, useI18N } from '../../../../../utils/index.js'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { PersonaInformation, PopupRoutes } from '@masknet/shared-base'
-import { usePersonasFromDB } from '../../../../../components/DataSource/usePersonasFromDB'
-import { PersonaContext } from '../hooks/usePersonaContext'
-import { MethodAfterPersonaSign } from '../../Wallet/type'
+import { usePersonasFromDB } from '../../../../../components/DataSource/usePersonasFromDB.js'
+import { PersonaContext } from '../hooks/usePersonaContext.js'
+import { MethodAfterPersonaSign } from '../../Wallet/type.js'
 import { useAsyncFn } from 'react-use'
-import Services from '../../../../service'
-import { useTitle } from '../../../hook/useTitle'
+import Services from '../../../../service.js'
+import { useTitle } from '../../../hook/useTitle.js'
 
 const useStyles = makeStyles()(() => ({
     container: {
@@ -70,13 +70,6 @@ const useStyles = makeStyles()(() => ({
         borderRadius: 20,
         fontSize: 14,
         lineHeight: '20px',
-    },
-    error: {
-        color: '#FF5F5F',
-        fontSize: 12,
-        lineHeight: '16px',
-        padding: '0 16px 20px 16px',
-        wordBreak: 'break-all',
     },
 }))
 

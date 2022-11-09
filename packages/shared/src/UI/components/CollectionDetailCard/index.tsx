@@ -1,12 +1,12 @@
 import { memo, ReactNode } from 'react'
 import { makeStyles } from '@masknet/theme'
-import { InjectedDialog } from '../../../contexts'
-import { useSharedI18N } from '../../../locales'
+import { InjectedDialog } from '../../../contexts/index.js'
+import { useSharedI18N } from '../../../locales/index.js'
 import { Box, Card, DialogContent, Link, Typography } from '@mui/material'
-import type { RSS3BaseAPI } from '@masknet/web3-providers'
+import { CollectionType, RSS3BaseAPI } from '@masknet/web3-providers'
 import { Icons } from '@masknet/icons'
 import { ChainId, explorerResolver, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
-import { NFTCardStyledAssetPlayer } from '@masknet/shared'
+import { AssetPreviewer } from '@masknet/shared'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 
@@ -20,11 +20,9 @@ interface CollectionDetailCardProps {
     date?: string
     location?: string
     relatedURLs?: string[]
+    network?: RSS3BaseAPI.Network
     metadata?: RSS3BaseAPI.Metadata
-    traits?: Array<{
-        type: string
-        value: string
-    }>
+    attributes?: RSS3BaseAPI.Attribute[]
     type: CollectionType
     time?: string
     tokenAmount?: string
@@ -39,7 +37,7 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: 8,
         objectFit: 'cover',
     },
-    loadingFailImage: {
+    fallbackImage: {
         minHeight: '0 !important',
         maxWidth: 'none',
         width: 300,
@@ -81,20 +79,17 @@ const useStyles = makeStyles()((theme) => ({
     threeLine: {
         display: '-webkit-box',
         '-webkit-line-clamp': '3',
-        height: 60,
+        height: 50,
         fontSize: 14,
         fontWeight: 400,
         width: '100%',
         overflow: 'hidden',
         textOverflow: 'ellipsis',
         '-webkit-box-orient': 'vertical',
+        fontFamily: 'Helvetica',
     },
     themeColor: {
         color: theme.palette.maskColor.highlight,
-    },
-    linkLogo: {
-        width: 24,
-        height: 24,
     },
     icons: {
         margin: '16px 0 16px 0',
@@ -114,12 +109,10 @@ const useStyles = makeStyles()((theme) => ({
         padding: 12,
     },
     traitValue: {
-        fontSize: 14,
         fontWeight: 700,
         color: theme.palette.maskColor.main,
     },
     secondText: {
-        fontSize: 14,
         fontWeight: 400,
         color: theme.palette.maskColor.second,
     },
@@ -134,18 +127,6 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-const ChainID = {
-    ethereum: ChainId.Mainnet,
-    polygon: ChainId.Matic,
-    bnb: ChainId.BSC,
-}
-
-export enum CollectionType {
-    donations = 'Donations',
-    footprints = 'Footprints',
-    feeds = 'Feeds',
-}
-
 export const CollectionDetailCard = memo<CollectionDetailCardProps>(
     ({
         img,
@@ -158,7 +139,7 @@ export const CollectionDetailCard = memo<CollectionDetailCardProps>(
         date,
         location,
         relatedURLs = EMPTY_LIST,
-        traits,
+        attributes = EMPTY_LIST,
         type,
         time,
         tokenAmount,
@@ -171,18 +152,18 @@ export const CollectionDetailCard = memo<CollectionDetailCardProps>(
         const icons = relatedURLs.map((url) => {
             let icon: ReactNode = null
             if (url.includes('etherscan.io')) {
-                icon = <Icons.EtherScan size={24} sx={{ marginRight: '12px' }} />
+                icon = <Icons.EtherScan size={24} />
             } else if (url.includes('polygonscan.com/tx')) {
-                icon = <Icons.PolygonScan size={24} sx={{ marginRight: '12px' }} />
+                icon = <Icons.PolygonScan size={24} />
             } else if (url.includes('polygonscan.com/token')) {
-                icon = <Icons.PolygonScan size={24} sx={{ marginRight: '12px' }} />
+                icon = <Icons.PolygonScan size={24} />
             } else if (url.includes('opensea.io')) {
-                icon = <Icons.OpenSeaColored size={24} sx={{ marginRight: '12px' }} />
+                icon = <Icons.OpenSeaColored size={24} />
             } else if (url.includes('gitcoin.co')) {
-                icon = <Icons.Gitcoin size={28} sx={{ marginRight: '12px' }} />
+                icon = <Icons.Gitcoin size={28} />
             }
             return icon ? (
-                <Link href={url} target="_blank" marginBottom="8px">
+                <Link href={url} target="_blank">
                     {icon}
                 </Link>
             ) : null
@@ -193,15 +174,10 @@ export const CollectionDetailCard = memo<CollectionDetailCardProps>(
                 <DialogContent>
                     <Box className={classes.flexItem}>
                         <Card className={classes.img}>
-                            <NFTCardStyledAssetPlayer
-                                contractAddress={metadata?.collection_address}
-                                chainId={metadata ? ChainID[metadata?.network ?? 'ethereum'] : undefined}
+                            <AssetPreviewer
                                 url={img}
-                                tokenId={metadata?.token_id}
                                 classes={{
-                                    loadingFailImage: classes.loadingFailImage,
-                                    wrapper: classes.img,
-                                    iframe: classes.img,
+                                    fallbackImage: classes.fallbackImage,
                                 }}
                             />
                         </Card>
@@ -233,7 +209,7 @@ export const CollectionDetailCard = memo<CollectionDetailCardProps>(
                     </Typography>
                     <div className={classes.threeLine}>{description}</div>
 
-                    {type === CollectionType.donations ? (
+                    {type === CollectionType.Donations ? (
                         <>
                             <Typography fontSize="16px" fontWeight={700} marginTop="16px">
                                 {t.contributions()}
@@ -241,34 +217,32 @@ export const CollectionDetailCard = memo<CollectionDetailCardProps>(
                             <Typography fontSize="16px" fontWeight={700} marginBottom="16px">
                                 {1}
                             </Typography>
+                            <div className={classes.txItem}>
+                                <Typography className={classes.donationAmount}>
+                                    {tokenAmount} {tokenSymbol}
+                                </Typography>
+                                <div className={classes.dayBox}>
+                                    {formatDistanceToNow(new Date(time ?? 0))} {t.ago()}
+                                    <Link
+                                        className={classes.linkBox}
+                                        target="_blank"
+                                        href={explorerResolver.transactionLink(ChainId.Mainnet, hash ?? ZERO_ADDRESS)}>
+                                        <Icons.LinkOut size={18} className={classes.linkOutIcon} />
+                                    </Link>
+                                </div>
+                            </div>
                         </>
                     ) : null}
-                    {type === CollectionType.donations && (
-                        <div className={classes.txItem}>
-                            <Typography className={classes.donationAmount}>
-                                {tokenAmount} {tokenSymbol}
-                            </Typography>
-                            <div className={classes.dayBox}>
-                                {formatDistanceToNow(new Date(time ?? 0))} {t.ago()}
-                                <Link
-                                    className={classes.linkBox}
-                                    target="_blank"
-                                    href={explorerResolver.transactionLink(ChainId.Mainnet, hash ?? ZERO_ADDRESS)}>
-                                    <Icons.LinkOut size={18} className={classes.linkOutIcon} />
-                                </Link>
-                            </div>
-                        </div>
-                    )}
-                    {traits && traits.length > 0 && (
+                    {attributes.length > 0 && (
                         <Typography fontSize="16px" fontWeight={700}>
                             {t.properties()}
                         </Typography>
                     )}
-                    {traits && traits.length > 0 && (
+                    {attributes.length > 0 && (
                         <Box className={classes.traitsBox}>
-                            {traits?.map((trait) => (
-                                <div key={trait.type + trait.value} className={classes.traitItem}>
-                                    <Typography className={classes.secondText}>{trait.type}</Typography>
+                            {attributes.map((trait) => (
+                                <div key={trait.trait_type} className={classes.traitItem}>
+                                    <Typography className={classes.secondText}>{trait.trait_type}</Typography>
                                     <Typography className={classes.traitValue}>{trait.value}</Typography>
                                 </div>
                             ))}

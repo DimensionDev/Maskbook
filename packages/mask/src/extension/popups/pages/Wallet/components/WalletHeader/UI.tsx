@@ -1,12 +1,12 @@
 import { makeStyles } from '@masknet/theme'
 import { memo, MouseEvent } from 'react'
 import { Box, Link, Typography } from '@mui/material'
-import { CopyIconButton } from '../../../../components/CopyIconButton'
+import { CopyIconButton } from '../../../../components/CopyIconButton/index.js'
 import { ChainIcon, FormattedAddress, WalletIcon } from '@masknet/shared'
 import { ChainId, formatEthereumAddress, explorerResolver, NetworkType } from '@masknet/web3-shared-evm'
 import { Icons } from '@masknet/icons'
 import type { NetworkDescriptor, Wallet } from '@masknet/web3-shared-base'
-import { useI18N } from '../../../../../../utils'
+import { useI18N } from '../../../../../../utils/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -17,12 +17,6 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
-    },
-    menu: {
-        maxHeight: 466,
-        '&::-webkit-scrollbar': {
-            display: 'none',
-        },
     },
     action: {
         background: 'rgba(255, 255, 255, 0.8)',
@@ -39,7 +33,6 @@ const useStyles = makeStyles()((theme) => ({
     },
     nickname: {
         color: '#07101B',
-        fontSize: 14,
         lineHeight: '18px',
         fontWeight: 700,
     },
@@ -72,7 +65,6 @@ const useStyles = makeStyles()((theme) => ({
         cursor: 'pointer',
     },
     chainName: {
-        fontSize: 14,
         lineHeight: '18px',
         color: '#15181B',
         fontWeight: 700,
@@ -82,7 +74,6 @@ const useStyles = makeStyles()((theme) => ({
     connected: {
         display: 'flex',
         alignItems: 'center',
-        fontSize: 14,
         lineHeight: '18px',
         color: theme.palette.maskColor.second,
         columnGap: 4,
@@ -108,6 +99,7 @@ interface WalletHeaderUIProps {
     isSwitchWallet: boolean
     disabled?: boolean
     connected?: boolean
+    hiddenConnected?: boolean
 }
 
 export const WalletHeaderUI = memo<WalletHeaderUIProps>(
@@ -120,6 +112,7 @@ export const WalletHeaderUI = memo<WalletHeaderUIProps>(
         isSwitchWallet,
         disabled,
         connected,
+        hiddenConnected,
     }) => {
         const { t } = useI18N()
         const { classes, cx } = useStyles()
@@ -151,16 +144,21 @@ export const WalletHeaderUI = memo<WalletHeaderUIProps>(
                                 />
                             ) : null}
                         </Typography>
-                        <Typography className={classes.connected}>
-                            <div
-                                className={cx(classes.dot, connected ? classes.connectedDot : classes.unconnectedDot)}
-                            />
-                            <span>
-                                {t('popups_wallet_connected_status', {
-                                    context: connected ? 'connected' : 'unconnected',
-                                })}
-                            </span>
-                        </Typography>
+                        {!hiddenConnected ? (
+                            <Typography className={classes.connected}>
+                                <div
+                                    className={cx(
+                                        classes.dot,
+                                        connected ? classes.connectedDot : classes.unconnectedDot,
+                                    )}
+                                />
+                                <span>
+                                    {t('popups_wallet_connected_status', {
+                                        context: connected ? 'connected' : 'unconnected',
+                                    })}
+                                </span>
+                            </Typography>
+                        ) : null}
                     </div>
                 </div>
                 <div

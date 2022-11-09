@@ -1,12 +1,15 @@
 // All plugin manager need to call createPluginHost so let's register plugins implicitly.
-import './register'
+import './register.js'
 import type { BooleanPreference, Plugin } from '@masknet/plugin-infra'
 import { Emitter } from '@servie/events'
-import { MaskMessages } from '../../shared/messages'
+import { MaskMessages } from '../../shared/messages.js'
 import { createI18NBundle, createSubscriptionFromValueRef, i18NextInstance } from '@masknet/shared-base'
-import { InMemoryStorages, PersistentStorages } from '../../shared'
-import { nativeAPI, hasNativeAPI } from '../../shared/native-rpc'
-import { currentMaskWalletAccountSettings, currentMaskWalletChainIdSettings } from '../legacy-settings/wallet-settings'
+import { InMemoryStorages, PersistentStorages } from '../../shared/index.js'
+import { nativeAPI, hasNativeAPI } from '../../shared/native-rpc/index.js'
+import {
+    currentMaskWalletAccountSettings,
+    currentMaskWalletChainIdSettings,
+} from '../legacy-settings/wallet-settings.js'
 
 export type PartialSharedUIContext = Pick<
     Plugin.Shared.SharedUIContext,
@@ -37,15 +40,21 @@ export function createPluginHost<Context>(
     signal: AbortSignal | undefined,
     createContext: (plugin: string, signal: AbortSignal) => Context,
     getPluginMinimalModeEnabled: (id: string) => Promise<BooleanPreference>,
+    hasPermission: (host_permission: string[]) => Promise<boolean>,
 ): Plugin.__Host.Host<Context> {
     const minimalMode: Plugin.__Host.EnabledStatusReporter = {
         isEnabled: getPluginMinimalModeEnabled,
+        events: new Emitter(),
+    }
+    const permission: Plugin.__Host.PermissionReporter = {
+        hasPermission,
         events: new Emitter(),
     }
     MaskMessages.events.pluginMinimalModeChanged.on(
         ([id, val]) => minimalMode.events.emit(val ? 'enabled' : 'disabled', id),
         { signal },
     )
+    MaskMessages.events.hostPermissionChanged.on(() => permission.events.emit('changed'), { signal })
 
     return {
         signal,
@@ -54,5 +63,6 @@ export function createPluginHost<Context>(
             createI18NBundle(plugin, resource)(i18NextInstance)
         },
         createContext,
+        permission,
     }
 }

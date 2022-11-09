@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
-import type { PayableTx } from '@masknet/web3-contracts/types/types'
-import { useMaskBoxContract } from './useMaskBoxContract'
+import type { PayableTx } from '@masknet/web3-contracts/types/types.js'
+import { useMaskBoxContract } from './useMaskBoxContract.js'
 
 export function useOpenBoxGasLimit(parameters: [string, string, string, string], config: PayableTx) {
     const maskBoxContract = useMaskBoxContract()

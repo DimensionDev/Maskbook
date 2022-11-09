@@ -1,13 +1,13 @@
+import { memoize } from 'lodash-es'
+import { MaskIcon } from '@masknet/shared'
+import { memoizePromise } from '@masknet/kit'
 import { MutationObserverWatcher, DOMProxy, LiveSelector } from '@dimensiondev/holoflows-kit'
-import { bioPageUserNickNameSelector, floatingBioCardSelector, bioPageUserIDSelector } from '../utils/selector'
+import { bioPageUserNickNameSelector, floatingBioCardSelector, bioPageUserIDSelector } from '../utils/selector.js'
 import type { PostInfo } from '@masknet/plugin-infra/content-script'
-import Services from '../../../extension/service'
+import Services from '../../../extension/service.js'
 import { EnhanceableSite, ProfileIdentifier } from '@masknet/shared-base'
-import { MaskIcon } from '../../../resources/MaskIcon'
-import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot'
-import { memoizePromise } from '@dimensiondev/kit'
-import { startWatch } from '../../../utils/watcher'
-import { Flags } from '../../../../shared'
+import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot.js'
+import { startWatch } from '../../../utils/watcher.js'
 
 function Icon(props: { size: number }) {
     return (
@@ -70,7 +70,7 @@ export function injectMaskIconToPostTwitter(post: PostInfo, signal: AbortSignal)
         if (signal?.aborted) return
         const node = ls.evaluate()
         if (!node) return
-        const proxy = DOMProxy({ afterShadowRootInit: { mode: Flags.shadowRootMode } })
+        const proxy = DOMProxy({ afterShadowRootInit: { mode: process.env.shadowRootMode } })
         proxy.realCurrent = node
         const root = createReactRootShadowed(proxy.afterShadow, { signal })
         root.render(<Icon size={24} />)
@@ -81,6 +81,7 @@ export function injectMaskIconToPostTwitter(post: PostInfo, signal: AbortSignal)
     }
 }
 export const ifUsingMask = memoizePromise(
+    memoize,
     async (pid: ProfileIdentifier | null) => {
         if (!pid) throw new Error()
         const p = await Services.Identity.queryProfilesInformation([pid])

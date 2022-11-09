@@ -1,3 +1,2 @@
-export * from './useERC20TokensDetailed'
-export * from './useGasConfig'
-export * from './useIsMatched'
+export * from './useGasConfig.js'
+export * from './useIsMatched.js'

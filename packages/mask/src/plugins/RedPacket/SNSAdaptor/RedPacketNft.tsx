@@ -1,35 +1,27 @@
 import { makeStyles, ActionButton } from '@masknet/theme'
 import { explorerResolver, networkResolver } from '@masknet/web3-shared-evm'
-import LaunchIcon from '@mui/icons-material/Launch'
+import { Launch as LaunchIcon } from '@mui/icons-material'
 import { Card, CardHeader, Typography, Link, CardMedia, CardContent, Button, Box, Skeleton } from '@mui/material'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { useI18N as useBaseI18N } from '../../../utils'
-import { useI18N } from '../locales'
-import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
-import type { RedPacketNftJSONPayload } from '../types'
-import { useClaimNftRedpacketCallback } from './hooks/useClaimNftRedpacketCallback'
-import { useAvailabilityNftRedPacket } from './hooks/useAvailabilityNftRedPacket'
-import classNames from 'classnames'
-import { usePostLink } from '../../../components/DataSource/usePostInfo'
-import { activatedSocialNetworkUI } from '../../../social-network'
-import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
-import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
-import { NFTCardStyledAssetPlayer } from '@masknet/shared'
+import { useI18N as useBaseI18N } from '../../../utils/index.js'
+import { useI18N } from '../locales/index.js'
+import { WalletConnectedBoundary, NFTCardStyledAssetPlayer, ChainBoundary } from '@masknet/shared'
+import type { RedPacketNftJSONPayload } from '../types.js'
+import { useClaimNftRedpacketCallback } from './hooks/useClaimNftRedpacketCallback.js'
+import { useAvailabilityNftRedPacket } from './hooks/useAvailabilityNftRedPacket.js'
+import { usePostLink } from '../../../components/DataSource/usePostInfo.js'
+import { activatedSocialNetworkUI } from '../../../social-network/index.js'
+import { isTwitter } from '../../../social-network-adaptor/twitter.com/base.js'
+import { isFacebook } from '../../../social-network-adaptor/facebook.com/base.js'
 import { openWindow } from '@masknet/shared-base-ui'
-import { useAccount, useNetworkType, useWeb3 } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { useChainContext, useWeb3 } from '@masknet/web3-hooks-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { Icons } from '@masknet/icons'
-import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
         position: 'relative',
         width: '100%',
-    },
-    actions: {
-        paddingTop: theme.spacing(2),
-        display: 'flex',
-        justifyContent: 'center',
     },
     card: {
         display: 'flex',
@@ -43,15 +35,6 @@ const useStyles = makeStyles()((theme) => ({
         backgroundImage: `url(${new URL('./assets/background.png', import.meta.url)})`,
         backgroundSize: 'cover',
         backgroundRepeat: 'no-repeat',
-    },
-    loadingCard: {
-        width: '100%',
-        height: 360,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    loadingCardImg: {
-        width: 200,
     },
     title: {
         textAlign: 'left',
@@ -70,10 +53,6 @@ const useStyles = makeStyles()((theme) => ({
         paddingTop: 40,
         color: '#FAD85A',
         width: '100%',
-    },
-    claim: {
-        textAlign: 'center',
-        marginTop: theme.spacing(1),
     },
     button: {
         backgroundColor: theme.palette.maskColor.dark,
@@ -118,10 +97,11 @@ const useStyles = makeStyles()((theme) => ({
         flexDirection: 'column',
         alignItems: 'center',
         maxHeight: 180,
-    },
-    tokenImg: {
-        width: '100%',
-        borderRadius: 6,
+        '& > div': {
+            display: 'flex',
+            justifyContent: 'center',
+            overflow: 'hidden',
+        },
     },
     claimedText: {
         fontSize: 18,
@@ -162,44 +142,6 @@ const useStyles = makeStyles()((theme) => ({
     badgeText: {
         fontSize: 12,
     },
-    snackBarText: {
-        fontSize: 14,
-    },
-    snackBarLink: {
-        color: 'white',
-    },
-    openIcon: {
-        display: 'flex',
-        width: 18,
-        height: 18,
-        marginLeft: 2,
-    },
-    snackBar: {
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        transform: 'translateY(1px)',
-    },
-    loadingTokenImg: {
-        opacity: 0.4,
-    },
-    tokenImgSpinner: {
-        position: 'absolute',
-        opacity: 0.4,
-        top: 65,
-        left: 40,
-        width: 30,
-        height: 30,
-    },
-    loadingText: {
-        textAlign: 'center',
-        fontSize: 24,
-    },
-    loadingWrapper: {
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
     errorCard: {
         height: 360,
         justifyContent: 'center',
@@ -209,12 +151,13 @@ const useStyles = makeStyles()((theme) => ({
         width: 220,
     },
     errorButton: {
-        borderColor: 'white',
+        background: theme.palette.common.black,
         minHeight: 30,
         width: 100,
         marginTop: 16,
+        whiteSpace: 'nowrap',
         '&:hover': {
-            borderColor: 'white',
+            background: theme.palette.common.black,
         },
     },
     ellipsis: {
@@ -235,7 +178,7 @@ const useStyles = makeStyles()((theme) => ({
     assetPlayerVideoIframe: {
         minWidth: 'fit-content',
     },
-    loadingFailImage: {
+    fallbackImage: {
         height: 160,
         width: 120,
     },
@@ -247,9 +190,9 @@ export interface RedPacketNftProps {
 export function RedPacketNft({ payload }: RedPacketNftProps) {
     const { t: i18n } = useBaseI18N()
     const t = useI18N()
-    const { classes } = useStyles()
+    const { classes, cx } = useStyles()
     const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM)
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const { account, networkType } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
     const {
         value: availability,
@@ -283,7 +226,6 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
     const rpNftImg = new URL('./assets/redpacket.nft.png', import.meta.url).toString()
     // #region on share
     const postLink = usePostLink()
-    const networkType = useNetworkType(NetworkPluginID.PLUGIN_EVM)
     const shareText = useMemo(() => {
         const isOnTwitter = isTwitter(activatedSocialNetworkUI)
         const isOnFacebook = isFacebook(activatedSocialNetworkUI)
@@ -309,14 +251,14 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
     if (availabilityError)
         return (
             <div className={classes.root}>
-                <Card className={classNames(classes.card, classes.errorCard)} component="article" elevation={0}>
+                <Card className={cx(classes.card, classes.errorCard)} component="article" elevation={0}>
                     <img className={classes.errImage} src={rpNftImg} />
                     <Typography className={classes.whiteText} variant="h5">
                         {i18n('loading_failed')}
                     </Typography>
                     <Button
                         onClick={retryAvailability}
-                        className={classNames(classes.errorButton, classes.whiteText)}
+                        className={cx(classes.errorButton, classes.whiteText)}
                         variant="outlined">
                         {i18n('try_again')}
                     </Button>
@@ -336,12 +278,10 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
         <div className={classes.root}>
             <Card className={classes.card} component="article" elevation={0}>
                 <CardHeader
-                    className={classNames(classes.title, availability.isEnd ? classes.hide : '', classes.whiteText)}
+                    className={cx(classes.title, availability.isEnd ? classes.hide : '', classes.whiteText)}
                     title={<Typography className={classes.ellipsis}>{payload.message}</Typography>}
                     subheader={
-                        <span
-                            className={classNames(classes.link, classes.whiteText)}
-                            onClick={openAddressLinkOnExplorer}>
+                        <span className={cx(classes.link, classes.whiteText)} onClick={openAddressLinkOnExplorer}>
                             <Typography variant="body2">{payload.contractName}</Typography>
                             <LaunchIcon fontSize="small" className={classes.dimWhiteText} />
                         </span>
@@ -356,12 +296,12 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
                             tokenId={availability.claimed_id}
                             setSourceType={setSourceType}
                             classes={{
-                                iframe: classNames(
+                                iframe: cx(
                                     classes.assetPlayerIframe,
                                     sourceType === 'video' ? classes.assetPlayerVideoIframe : '',
                                 ),
                                 imgWrapper: classes.imgWrapper,
-                                loadingFailImage: classes.loadingFailImage,
+                                fallbackImage: classes.fallbackImage,
                             }}
                             fallbackImage={new URL('./assets/nft-preview.png', import.meta.url)}
                         />
@@ -395,18 +335,18 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
             {availability.isEnd ? (
                 <Card className={classes.coverCard}>
                     <CardHeader
-                        className={classNames(classes.title, classes.dim, classes.dimWhiteText)}
+                        className={cx(classes.title, classes.dim, classes.dimWhiteText)}
                         title={<Typography className={classes.ellipsis}>{payload.message}</Typography>}
                         subheader={
                             <span
-                                className={classNames(classes.link, classes.dimWhiteText)}
+                                className={cx(classes.link, classes.dimWhiteText)}
                                 onClick={openAddressLinkOnExplorer}>
                                 <Typography variant="body2">{payload.contractName}</Typography>
                                 <LaunchIcon fontSize="small" className={classes.dimWhiteText} />
                             </span>
                         }
                     />
-                    <div className={classNames(classes.badge, classes.whiteText)}>
+                    <div className={cx(classes.badge, classes.whiteText)}>
                         <Typography variant="body2" className={classes.badgeText}>
                             {availability.expired ? t.expired() : t.completed()}
                         </Typography>

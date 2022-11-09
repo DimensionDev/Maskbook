@@ -2,16 +2,16 @@ import { useCallback, useState } from 'react'
 import { v4 as uuid } from 'uuid'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { NetworkPluginID, formatBalance } from '@masknet/web3-shared-base'
-import { useAccount, useChainId, useWeb3, useFungibleTokenBalance, useWeb3Connection } from '@masknet/plugin-infra/web3'
-import { CrossIsolationMessages } from '@masknet/shared-base'
+import { formatBalance } from '@masknet/web3-shared-base'
+import { CrossIsolationMessages, NetworkPluginID } from '@masknet/shared-base'
+import { useChainContext, useWeb3, useFungibleTokenBalance, useWeb3Connection } from '@masknet/web3-hooks-base'
 import { makeTypedMessageText } from '@masknet/typed-message'
 import { makeStyles, useCustomSnackbar, ActionButton } from '@masknet/theme'
 import { useCompositionContext } from '@masknet/plugin-infra/content-script'
 import { Typography, Box, Tab, Tabs, Grid, TextField, Chip, InputAdornment, Divider } from '@mui/material'
 import { TabContext, TabPanel } from '@mui/lab'
 
-import { useI18N } from '../locales'
+import { useI18N } from '../locales/index.js'
 import {
     TabsCreateFarm,
     TokenType,
@@ -20,21 +20,21 @@ import {
     PagesType,
     ReferralMetaData,
     FungibleTokenDetailed,
-} from '../types'
-import { ATTRACE_FEE_PERCENT, NATIVE_TOKEN, META_KEY } from '../constants'
-import { useCurrentIdentity, useCurrentLinkedPersona } from '../../../components/DataSource/useActivatedUI'
-import { PluginReferralMessages, SelectTokenUpdated } from '../messages'
-import { roundValue, getRequiredChainId } from '../helpers'
-import { runCreateERC20PairFarm } from './utils/referralFarm'
+} from '../types.js'
+import { ATTRACE_FEE_PERCENT, NATIVE_TOKEN, META_KEY } from '../constants.js'
+import { useCurrentIdentity, useCurrentLinkedPersona } from '../../../components/DataSource/useActivatedUI.js'
+import { PluginReferralMessages, SelectTokenUpdated } from '../messages.js'
+import { roundValue, getRequiredChainId } from '../helpers/index.js'
+import { runCreateERC20PairFarm } from './utils/referralFarm.js'
 
-import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
-import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
-import { CreatedFarms } from './CreatedFarms'
-import { TokenSelectField } from './shared-ui/TokenSelectField'
-
-import { useSharedStyles, useTabStyles } from './styles'
+import { WalletConnectedBoundary, ChainBoundary } from '@masknet/shared'
+import { CreatedFarms } from './CreatedFarms.js'
+import { TokenSelectField } from './shared-ui/TokenSelectField.js'
 
 const useStyles = makeStyles()((theme) => ({
+    root: {
+        fontSize: 14,
+    },
     container: {
         flex: 1,
         height: '100%',
@@ -70,17 +70,25 @@ const useStyles = makeStyles()((theme) => ({
             margin: 0,
         },
     },
+    maxChip: {
+        border: '1px solid #1D9BF0',
+        background: 'transparent',
+        borderRadius: '8px',
+        height: '24px',
+        marginLeft: '8px',
+        color: '#1D9BF0',
+        '&:hover': {
+            color: theme.palette.mode === 'dark' ? '#000000' : '#ffffff',
+        },
+    },
 }))
 
 export function CreateFarm(props: PageInterface) {
     const t = useI18N()
     const { classes } = useStyles()
-    const { classes: tabClasses } = useTabStyles()
-    const { classes: sharedClasses } = useSharedStyles()
-    const currentChainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { account, chainId: currentChainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const requiredChainId = getRequiredChainId(currentChainId)
     const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM)
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const { attachMetadata, dropMetadata } = useCompositionContext()
     const currentIdentity = useCurrentIdentity()
     const { value: linkedPersona } = useCurrentLinkedPersona()
@@ -163,7 +171,7 @@ export function CreateFarm(props: PageInterface) {
 
     const openComposeBox = useCallback(
         (selectedReferralData: Map<string, ReferralMetaData>) =>
-            CrossIsolationMessages.events.requestComposition.sendToLocal({
+            CrossIsolationMessages.events.compositionDialogEvent.sendToLocal({
                 reason: 'timeline',
                 open: true,
                 content: makeTypedMessageText('', selectedReferralData),
@@ -303,8 +311,8 @@ export function CreateFarm(props: PageInterface) {
                     variant="fullWidth"
                     onChange={(e, v) => setTab(v)}
                     aria-label="persona-post-contacts-button-group">
-                    <Tab value={TabsCreateFarm.NEW} label={t.tab_new()} classes={tabClasses} />
-                    <Tab value={TabsCreateFarm.CREATED} label={t.tab_created()} classes={tabClasses} />
+                    <Tab value={TabsCreateFarm.NEW} label={t.tab_new()} classes={{ root: classes.root }} />
+                    <Tab value={TabsCreateFarm.CREATED} label={t.tab_created()} classes={{ root: classes.root }} />
                 </Tabs>
                 <TabPanel value={TabsCreateFarm.NEW} className={classes.tab}>
                     <Typography fontWeight={600} variant="h6" marginBottom="12px">
@@ -383,7 +391,7 @@ export function CreateFarm(props: PageInterface) {
                                                             clickable
                                                             color="primary"
                                                             variant="outlined"
-                                                            className={sharedClasses.maxChip}
+                                                            className={classes.maxChip}
                                                             onClick={() => setTotalFarmReward(balance)}
                                                         />
                                                     </Box>

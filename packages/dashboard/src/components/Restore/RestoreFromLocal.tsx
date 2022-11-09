@@ -2,21 +2,20 @@ import { memo, useCallback, useEffect, useState } from 'react'
 import { useAsync } from 'react-use'
 import { Box, Card } from '@mui/material'
 import type { BackupPreview } from '@masknet/backup-format'
-import { useDashboardI18N } from '../../locales'
-import { Messages, Services } from '../../API'
-import BackupPreviewCard from '../../pages/Settings/components/BackupPreviewCard'
-import { MaskAlert } from '../MaskAlert'
-import FileUpload from '../FileUpload'
-import { ButtonContainer } from '../RegisterFrame/ButtonContainer'
+import { useDashboardI18N } from '../../locales/index.js'
+import { Messages, Services } from '../../API.js'
+import BackupPreviewCard from '../../pages/Settings/components/BackupPreviewCard.js'
+import { MaskAlert } from '../MaskAlert/index.js'
+import FileUpload from '../FileUpload/index.js'
+import { ButtonContainer } from '../RegisterFrame/ButtonContainer.js'
 import { useNavigate } from 'react-router-dom'
 import { DashboardRoutes } from '@masknet/shared-base'
-import { blobToText } from '@dimensiondev/kit'
-import { LoadingCard } from './steps/LoadingCard'
+import { LoadingCard } from './steps/LoadingCard.js'
 import { decryptBackup } from '@masknet/backup-format'
 import { decode, encode } from '@msgpack/msgpack'
-import { PersonaContext } from '../../pages/Personas/hooks/usePersonaContext'
-import { LoadingButton } from '../LoadingButton'
-import PasswordField from '../PasswordField'
+import { PersonaContext } from '../../pages/Personas/hooks/usePersonaContext.js'
+import { LoadingButton } from '../LoadingButton/index.js'
+import PasswordField from '../PasswordField/index.js'
 import { useCustomSnackbar } from '@masknet/theme'
 
 enum RestoreStatus {
@@ -49,8 +48,7 @@ export const RestoreFromLocal = memo(() => {
     const handleSetFile = useCallback(async (file: File) => {
         setFile(file)
         if (file.type === supportedFileType.json) {
-            const content = await blobToText(file)
-            setBackupValue(content)
+            setBackupValue(await file.text())
         } else if ([supportedFileType.octetStream, supportedFileType.macBinary].includes(file.type)) {
             setRestoreStatus(RestoreStatus.Decrypting)
         } else {

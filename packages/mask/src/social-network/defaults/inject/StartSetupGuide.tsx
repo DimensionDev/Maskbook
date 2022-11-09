@@ -1,20 +1,20 @@
+import { combineAbortSignal } from '@masknet/kit'
 import type { PersonaIdentifier } from '@masknet/shared-base'
-import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot'
-import { SetupGuide } from '../../../components/InjectedComponents/SetupGuide'
-import { Flags } from '../../../../shared'
+import { attachReactTreeWithoutContainer } from '../../../utils/shadow-root/renderInShadowRoot.js'
+import { SetupGuide } from '../../../components/InjectedComponents/SetupGuide.js'
 
 function UI({ unmount, persona }: { unmount: () => void; persona: PersonaIdentifier }) {
     return <SetupGuide persona={persona} onClose={unmount} />
 }
 
 export function createTaskStartSetupGuideDefault() {
-    let shadowRoot: ShadowRoot
     return (signal: AbortSignal, for_: PersonaIdentifier) => {
-        shadowRoot ??= document.body
-            .appendChild(document.createElement('div'))
-            .attachShadow({ mode: Flags.shadowRootMode })
-
-        const root = createReactRootShadowed(shadowRoot, { signal, key: 'setup-guide' })
-        root.render(<UI persona={for_} unmount={() => root.destroy()} />)
+        const controller = new AbortController()
+        const combinedSignal = combineAbortSignal(controller.signal, signal)
+        attachReactTreeWithoutContainer(
+            'setup-guide',
+            <UI persona={for_} unmount={() => controller.abort()} />,
+            combinedSignal,
+        )
     }
 }

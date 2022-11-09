@@ -1,8 +1,16 @@
 import { useCallback, useMemo, useState } from 'react'
 import { Trans } from 'react-i18next'
-import { InjectedDialog, TokenAmountPanel, useOpenShareTxDialog, useShowConfirm } from '@masknet/shared'
+import {
+    InjectedDialog,
+    FungibleTokenInput,
+    useOpenShareTxDialog,
+    useShowConfirm,
+    WalletConnectedBoundary,
+    EthereumERC20TokenApprovedBoundary,
+} from '@masknet/shared'
 import { makeStyles, ActionButton } from '@masknet/theme'
-import { FungibleToken, leftShift, NetworkPluginID } from '@masknet/web3-shared-base'
+import { FungibleToken, leftShift } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { SchemaType, useArtBlocksConstants, ChainId } from '@masknet/web3-shared-evm'
 import {
     Card,
@@ -14,23 +22,17 @@ import {
     Link,
     Typography,
 } from '@mui/material'
-import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
-import { useFungibleTokenWatched } from '@masknet/plugin-infra/web3'
-import { usePostLink } from '../../../components/DataSource/usePostInfo'
-import { activatedSocialNetworkUI } from '../../../social-network'
-import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
-import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
-import { useI18N } from '../../../utils'
-import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
-import { usePurchaseCallback } from '../hooks/usePurchaseCallback'
-import type { Project } from '../types'
+import { useFungibleTokenWatched } from '@masknet/web3-hooks-base'
+import { usePostLink } from '../../../components/DataSource/usePostInfo.js'
+import { activatedSocialNetworkUI } from '../../../social-network/index.js'
+import { isFacebook } from '../../../social-network-adaptor/facebook.com/base.js'
+import { isTwitter } from '../../../social-network-adaptor/twitter.com/base.js'
+import { useI18N } from '../../../utils/index.js'
+import { usePurchaseCallback } from '../hooks/usePurchaseCallback.js'
+import type { Project } from '../types.js'
 
 const useStyles = makeStyles()((theme) => {
     return {
-        root: {
-            marginLeft: theme.spacing(-0.5),
-            marginRight: theme.spacing(-0.5),
-        },
         content: {
             padding: theme.spacing(0),
         },
@@ -133,7 +135,7 @@ export function PurchaseDialog(props: ActionBarProps) {
             <DialogContent className={classes.content}>
                 <Card elevation={0}>
                     <CardContent>
-                        <TokenAmountPanel
+                        <FungibleTokenInput
                             label={t('plugin_artblocks_price_per_mint')}
                             amount={price.toString()}
                             balance={balance.value ?? '0'}

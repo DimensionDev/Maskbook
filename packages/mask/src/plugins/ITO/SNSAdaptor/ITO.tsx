@@ -7,44 +7,33 @@ import {
     ChainId,
     SchemaType,
 } from '@masknet/web3-shared-evm'
-import {
-    isZero,
-    ZERO,
-    isGreaterThan,
-    NetworkPluginID,
-    isSameAddress,
-    formatBalance,
-    FungibleToken,
-} from '@masknet/web3-shared-base'
+import { isZero, ZERO, isGreaterThan, isSameAddress, formatBalance, FungibleToken } from '@masknet/web3-shared-base'
 import { Box, Card, Link, Typography } from '@mui/material'
 import { makeStyles, ActionButton } from '@masknet/theme'
-import OpenInNewIcon from '@mui/icons-material/OpenInNew'
+import { OpenInNew as OpenInNewIcon } from '@mui/icons-material'
 import { BigNumber } from 'bignumber.js'
-import classNames from 'classnames'
 import formatDateTime from 'date-fns/format'
-import { startCase } from 'lodash-unified'
-import { EnhanceableSite } from '@masknet/shared-base'
-import { usePostLink } from '../../../components/DataSource/usePostInfo'
-import { TokenIcon, useOpenShareTxDialog } from '@masknet/shared'
-import { activatedSocialNetworkUI } from '../../../social-network'
-import { getAssetAsBlobURL, getTextUILength, useI18N } from '../../../utils'
-import { ITO_EXCHANGE_RATION_MAX, MSG_DELIMITER, TIME_WAIT_BLOCKCHAIN } from '../constants'
-import { sortTokens } from './helpers'
-import { useAvailabilityComputed } from './hooks/useAvailabilityComputed'
-import { useClaimCallback } from './hooks/useClaimCallback'
-import { useDestructCallback } from './hooks/useDestructCallback'
-import { useIfQualified } from './hooks/useIfQualified'
-import { usePoolTradeInfo } from './hooks/usePoolTradeInfo'
-import { checkRegionRestrict, decodeRegionCode, useIPRegion } from './hooks/useRegion'
-import { ITO_Status, JSON_PayloadInMask } from '../types'
-import { StyledLinearProgress } from './StyledLinearProgress'
-import { SwapGuide, SwapStatus } from './SwapGuide'
-import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
-import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
-import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
+import { startCase } from 'lodash-es'
+import { EnhanceableSite, NetworkPluginID } from '@masknet/shared-base'
+import { usePostLink } from '../../../components/DataSource/usePostInfo.js'
+import { TokenIcon, useOpenShareTxDialog, ChainBoundary, WalletConnectedBoundary } from '@masknet/shared'
+import { activatedSocialNetworkUI } from '../../../social-network/index.js'
+import { getAssetAsBlobURL, getTextUILength, useI18N } from '../../../utils/index.js'
+import { ITO_EXCHANGE_RATION_MAX, MSG_DELIMITER, TIME_WAIT_BLOCKCHAIN } from '../constants.js'
+import { sortTokens } from './helpers.js'
+import { useAvailabilityComputed } from './hooks/useAvailabilityComputed.js'
+import { useClaimCallback } from './hooks/useClaimCallback.js'
+import { useDestructCallback } from './hooks/useDestructCallback.js'
+import { useIfQualified } from './hooks/useIfQualified.js'
+import { usePoolTradeInfo } from './hooks/usePoolTradeInfo.js'
+import { checkRegionRestrict, decodeRegionCode, useIPRegion } from './hooks/useRegion.js'
+import { ITO_Status, JSON_PayloadInMask } from '../types.js'
+import { StyledLinearProgress } from './StyledLinearProgress.js'
+import { SwapGuide, SwapStatus } from './SwapGuide.js'
+import { isFacebook } from '../../../social-network-adaptor/facebook.com/base.js'
+import { isTwitter } from '../../../social-network-adaptor/twitter.com/base.js'
+import { useChainContext } from '@masknet/web3-hooks-base'
 import { Icons } from '@masknet/icons'
-import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
-import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
 
 export interface IconProps {
     size?: number
@@ -134,7 +123,6 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
     },
     fromText: {
         opacity: 0.6,
-        fontSize: 14,
     },
     rationWrap: {
         marginBottom: theme.spacing(1),
@@ -156,10 +144,6 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
     },
     actionButton: {
         width: '100%',
-    },
-    textProviderErr: {
-        color: '#EB5757',
-        marginTop: theme.spacing(1),
     },
     loadingITO: {
         marginTop: 260,
@@ -184,14 +168,6 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
     textInOneLine: {
         whiteSpace: 'nowrap',
     },
-    claimDate: {
-        marginTop: 16,
-        color: '#F4212E',
-    },
-    grid: {
-        width: '100%',
-        margin: 0,
-    },
 }))
 
 // #region token item
@@ -207,10 +183,11 @@ const TokenItem = ({ price, token, exchangeToken }: TokenItemProps) => {
     return (
         <>
             <TokenIcon
-                classes={{ icon: classes.tokenIcon }}
+                className={classes.tokenIcon}
                 address={exchangeToken.address}
                 logoURL={exchangeToken.logoURL}
                 chainId={token.chainId}
+                name={exchangeToken.symbol}
             />
             <Typography component="span">
                 <strong>{price}</strong>{' '}
@@ -231,8 +208,7 @@ export interface ITO_Props {
 
 export function ITO(props: ITO_Props) {
     // context
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const postLink = usePostLink()
     const [, destructCallback] = useDestructCallback(props.payload.contract_address)
     const [openClaimDialog, setOpenClaimDialog] = useState(false)
@@ -255,7 +231,7 @@ export function ITO(props: ITO_Props) {
 
     const title = message.split(MSG_DELIMITER)[1] ?? message
     const regions = message.split(MSG_DELIMITER)[2] ?? defaultRegions
-    const { classes } = useStyles({
+    const { classes, cx } = useStyles({
         titleLength: getTextUILength(title),
         tokenNumber: exchange_tokens.length,
         snsId: activatedSocialNetworkUI.networkIdentifier,
@@ -282,7 +258,10 @@ export function ITO(props: ITO_Props) {
         !isRegionRestrict || !currentRegion || (!loadingRegion && allowRegions.includes(currentRegion.code))
 
     // #region if qualified
-    type Qual_V2 = { qualified: boolean; errorMsg: string }
+    type Qual_V2 = {
+        qualified: boolean
+        errorMsg: string
+    }
     const {
         value: ifQualified = false,
         loading: loadingIfQualified,
@@ -538,7 +517,7 @@ export function ITO(props: ITO_Props) {
                             variant="roundedDark"
                             onClick={() => undefined}
                             disabled
-                            className={classNames(classes.actionButton, classes.textInOneLine)}>
+                            className={cx(classes.actionButton, classes.textInOneLine)}>
                             {t('plugin_ito_claim')}
                         </ActionButton>
                     )
@@ -704,7 +683,7 @@ export function ITO(props: ITO_Props) {
                     ) {
                         return (
                             <>
-                                <Box style={{ padding: 12, flex: 1 }}>
+                                <Box style={{ padding: '12px 5px', flex: 1 }}>
                                     <ActionButton
                                         startIcon={<Icons.Shared size={18} />}
                                         onClick={onShareSuccess}
@@ -713,7 +692,7 @@ export function ITO(props: ITO_Props) {
                                         {t('plugin_ito_share')}
                                     </ActionButton>
                                 </Box>
-                                <Box style={{ padding: 12, flex: 1 }}>
+                                <Box style={{ padding: '12px 5px', flex: 1 }}>
                                     <ChainBoundary
                                         expectedPluginID={NetworkPluginID.PLUGIN_EVM}
                                         expectedChainId={payload.chain_id}
@@ -748,7 +727,7 @@ export function ITO(props: ITO_Props) {
                     if (listOfStatus.includes(ITO_Status.waited)) {
                         return (
                             <>
-                                <Box style={{ padding: 12, flex: 1 }}>
+                                <Box style={{ padding: '12px 5px', flex: 1 }}>
                                     <ActionButton
                                         onClick={onUnlock}
                                         className={classes.actionButton}
@@ -757,7 +736,7 @@ export function ITO(props: ITO_Props) {
                                     </ActionButton>
                                 </Box>
                                 {shareText ? (
-                                    <Box style={{ flex: 1, padding: 12 }}>
+                                    <Box style={{ flex: 1, padding: '12px 5px' }}>
                                         <ActionButton
                                             startIcon={<Icons.Shared size={18} />}
                                             onClick={onShare}
@@ -774,7 +753,7 @@ export function ITO(props: ITO_Props) {
                     if (listOfStatus.includes(ITO_Status.started)) {
                         return (
                             <>
-                                <Box style={{ flex: 1, padding: 12 }}>
+                                <Box style={{ flex: 1, padding: '12px 5px' }}>
                                     <ActionButton
                                         onClick={onClaim}
                                         className={classes.actionButton}
@@ -782,7 +761,7 @@ export function ITO(props: ITO_Props) {
                                         {t('plugin_ito_enter')}
                                     </ActionButton>
                                 </Box>
-                                <Box style={{ flex: 1, padding: 12 }}>
+                                <Box style={{ flex: 1, padding: '12px 5px' }}>
                                     <ActionButton
                                         startIcon={<Icons.Shared size={18} />}
                                         onClick={onShareSuccess}
@@ -818,11 +797,11 @@ export function ITO(props: ITO_Props) {
 export function ITO_Loading() {
     const { t } = useI18N()
     const PoolBackground = getAssetAsBlobURL(new URL('../assets/pool-loading-background.jpg', import.meta.url))
-    const { classes } = useStyles({})
+    const { classes, cx } = useStyles({})
     return (
         <div style={{ width: '100%' }}>
             <Card
-                className={classNames(classes.root, classes.loadingWrap)}
+                className={cx(classes.root, classes.loadingWrap)}
                 elevation={0}
                 style={{ backgroundImage: `url(${PoolBackground})` }}>
                 <Typography variant="body1" className={classes.loadingITO}>
@@ -835,11 +814,11 @@ export function ITO_Loading() {
 
 export function ITO_Error({ retryPoolPayload }: { retryPoolPayload: () => void }) {
     const { t } = useI18N()
-    const { classes } = useStyles({})
+    const { classes, cx } = useStyles({})
     const PoolBackground = getAssetAsBlobURL(new URL('../assets/pool-loading-background.jpg', import.meta.url))
     return (
         <Card
-            className={classNames(classes.root, classes.loadingWrap)}
+            className={cx(classes.root, classes.loadingWrap)}
             elevation={0}
             style={{ backgroundImage: `url(${PoolBackground})` }}>
             <Typography variant="body1" className={classes.loadingITO}>

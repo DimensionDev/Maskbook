@@ -1,1 +1,1 @@
-export * from './getAssetAsBlobURL'
+export * from './getAssetAsBlobURL.js'

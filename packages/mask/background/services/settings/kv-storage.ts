@@ -1,4 +1,4 @@
-import { indexedDB_KVStorageBackend, inMemory_KVStorageBackend } from '../../database/kv-storage'
+import { indexedDB_KVStorageBackend, inMemory_KVStorageBackend } from '../../database/kv-storage.js'
 
 export async function __kv_storage_write__(kind: 'indexedDB' | 'memory', key: string, value: unknown) {
     if (kind === 'memory') {

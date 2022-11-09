@@ -1,18 +1,17 @@
 import { Dispatch, memo, SetStateAction, useEffect, useMemo, useState } from 'react'
-import { useContacts } from '../../hooks/useContacts'
-import type { RelationProfile } from '@masknet/shared-base'
-import { TableContainer, Box, TablePagination, Stack, Table, TableBody } from '@mui/material'
-import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { EmptyContactPlaceholder } from '../EmptyContactPlaceholder'
-import { LoadingPlaceholder } from '../../../../components/LoadingPlaceholder'
-import { sortBy } from 'lodash-unified'
-import { useDashboardI18N } from '../../../../locales'
-import { Messages } from '../../../../API'
-import { useContainer } from 'unstated-next'
-import { PersonaContext } from '../../hooks/usePersonaContext'
 import { useUpdateEffect } from 'react-use'
-import { RelationFavor } from '@masknet/shared-base'
-import { ContactTableRow } from '../ContactTableRow'
+import { useContainer } from 'unstated-next'
+import { sortBy } from 'lodash-es'
+import { useContacts } from '../../hooks/useContacts.js'
+import { RelationFavor, RelationProfile } from '@masknet/shared-base'
+import { TableContainer, Box, TablePagination, Stack, Table, TableBody } from '@mui/material'
+import { makeStyles } from '@masknet/theme'
+import { EmptyContactPlaceholder } from '../EmptyContactPlaceholder/index.js'
+import { LoadingPlaceholder } from '../../../../components/LoadingPlaceholder/index.js'
+import { useDashboardI18N } from '../../../../locales/index.js'
+import { Messages } from '../../../../API.js'
+import { PersonaContext } from '../../hooks/usePersonaContext.js'
+import { ContactTableRow } from '../ContactTableRow/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -20,29 +19,10 @@ const useStyles = makeStyles()((theme) => ({
         flexDirection: 'column',
         height: '100%',
     },
-    header: {
-        color: MaskColorVar.normalText,
-        fontWeight: theme.typography.fontWeightRegular as any,
-        padding: '24px 28px',
-        backgroundColor: MaskColorVar.primaryBackground,
-    },
     footer: {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-    },
-    paginationItem: {
-        borderRadius: 4,
-        border: `1px solid ${MaskColorVar.lineLight}`,
-        color: MaskColorVar.textPrimary,
-        '&.Mui-selected': {
-            backgroundColor: MaskColorVar.blue,
-            color: '#ffffff',
-            border: 'none',
-            '&:hover': {
-                backgroundColor: MaskColorVar.blue,
-            },
-        },
     },
 }))
 

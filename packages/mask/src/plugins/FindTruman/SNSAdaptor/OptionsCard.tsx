@@ -1,13 +1,13 @@
-import type { UserPollStatus } from '../types'
+import type { UserPollStatus } from '../types.js'
 import { useCallback, useContext, useEffect, useRef, useState } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { Alert, Box, Card, CardContent, Chip, Snackbar, Typography } from '@mui/material'
 import { RadioButtonChecked, RadioButtonUnchecked, DoneOutlined, Send, RefreshOutlined } from '@mui/icons-material'
-import NoNftCard from './NoNftCard'
-import { FindTrumanContext } from '../context'
-import { BorderLinearProgress } from './ResultCard'
-import { ActionButtonPromise } from '../../../extension/options-page/DashboardComponents/ActionButton'
-import { sumBy } from 'lodash-unified'
+import NoNftCard from './NoNftCard.js'
+import { FindTrumanContext } from '../context.js'
+import { BorderLinearProgress } from './ResultCard.js'
+import { ActionButtonPromise } from '@masknet/shared'
+import { sumBy } from 'lodash-es'
 
 const useOptionsStyles = makeStyles()((theme) => {
     return {
@@ -38,29 +38,6 @@ const useOptionsStyles = makeStyles()((theme) => {
         blockChipSelected: {
             '&:hover': {
                 backgroundColor: theme.palette.primary.main,
-            },
-        },
-        checkIcon: {},
-        horizontalScrollBar: {
-            '::-webkit-scrollbar': {
-                backgroundColor: 'transparent',
-                height: '8px',
-            },
-            '::-webkit-scrollbar-thumb:horizontal': {
-                backgroundColor: theme.palette.divider,
-                borderRadius: '16px',
-                border: `6px solid ${theme.palette.divider}`,
-            },
-        },
-        verticalScrollBar: {
-            '::-webkit-scrollbar': {
-                backgroundColor: 'transparent',
-                width: '6px',
-            },
-            '::-webkit-scrollbar-thumb:vertical': {
-                backgroundColor: theme.palette.divider,
-                borderRadius: '16px',
-                border: `6px solid ${theme.palette.divider}`,
             },
         },
     }

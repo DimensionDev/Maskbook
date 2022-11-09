@@ -1,11 +1,11 @@
-import BigNumber from 'bignumber.js'
-import { first, memoize } from 'lodash-unified'
+import { BigNumber } from 'bignumber.js'
+import { first, memoize } from 'lodash-es'
 import { SOR } from '@balancer-labs/sor'
 import { JsonRpcProvider } from '@ethersproject/providers'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { ChainId, getRPCConstants, getTraderConstants } from '@masknet/web3-shared-evm'
-import { BALANCER_MAX_NO_POOLS, BALANCER_SOR_GAS_PRICE, BALANCER_SWAP_TYPE } from '../../constants'
-import type { Route } from '../../types'
+import { BALANCER_MAX_NO_POOLS, BALANCER_SOR_GAS_PRICE, BALANCER_SWAP_TYPE } from '../../constants/index.js'
+import type { Route } from '../../types/index.js'
 
 // #region create cached SOR
 const createSOR_ = memoize(
@@ -19,7 +19,7 @@ const createSOR_ = memoize(
             BALANCER_SOR_GAS_PRICE,
             BALANCER_MAX_NO_POOLS,
             chainId,
-            '', // set pools url later
+            '',
         )
     },
     (chainId: ChainId) => String(chainId),

@@ -1,12 +1,13 @@
 import urlcat from 'urlcat'
-import type BigNumber from 'bignumber.js'
-import { first } from 'lodash-unified'
-import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
+import type { BigNumber } from 'bignumber.js'
+import { first } from 'lodash-es'
+import { isSameAddress } from '@masknet/web3-shared-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
 import { ChainId, chainResolver, getExplorerConstants, getRedPacketConstants } from '@masknet/web3-shared-evm'
 import { Interface } from '@ethersproject/abi'
-import type { RedPacketJSONPayloadFromChain } from '../../types'
+import type { RedPacketJSONPayloadFromChain } from '../../types.js'
 import REDPACKET_ABI from '@masknet/web3-contracts/abis/HappyRedPacketV4.json'
-import type { Web3Helper } from '@masknet/plugin-infra/web3'
+import type { Web3Helper } from '@masknet/web3-helpers'
 
 const interFace = new Interface(REDPACKET_ABI)
 
@@ -59,7 +60,11 @@ export async function getRedPacketHistory(
         _total_tokens: BigNumber
     }
 
-    const { result }: { result: TxType[] } = await response.json()
+    const {
+        result,
+    }: {
+        result: TxType[]
+    } = await response.json()
     if (!result.length) return []
 
     const payloadList: RedPacketJSONPayloadFromChain[] = result.flatMap((txType: TxType) => {
@@ -79,7 +84,7 @@ export async function getRedPacketHistory(
                 duration: decodedInputParam._duration.toNumber() * 1000,
                 block_number: Number(txType.blockNumber),
                 contract_version: 4,
-                network: chainResolver.chainNetworkType(chainId),
+                network: chainResolver.networkType(chainId),
                 token_address: decodedInputParam._token_addr,
                 sender: {
                     address: senderAddress,

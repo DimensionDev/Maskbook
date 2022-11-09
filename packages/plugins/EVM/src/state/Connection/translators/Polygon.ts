@@ -1,7 +1,7 @@
 import { EthereumMethodType, ProviderType } from '@masknet/web3-shared-evm'
-import type { Context } from '../types'
-import { isReadOnlyMethod } from '../connection'
-import { Base } from './Base'
+import type { Context } from '../types.js'
+import { isReadOnlyMethod } from '../connection.js'
+import { Base } from './Base.js'
 
 export class Polygon extends Base {
     override async encode(context: Context): Promise<void> {

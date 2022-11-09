@@ -1,4 +1,6 @@
 import urlcat from 'urlcat'
+import { unionWith } from 'lodash-es'
+import { EMPTY_LIST } from '@masknet/shared-base'
 import {
     GasOptionType,
     Transaction,
@@ -6,24 +8,16 @@ import {
     HubOptions,
     createIndicator,
     Pageable,
+    isSameAddress,
+    toFixed,
 } from '@masknet/web3-shared-base'
-import {
-    ChainId,
-    formatGweiToWei,
-    getDeBankConstants,
-    SchemaType,
-    GasOption,
-    formatWeiToGwei,
-} from '@masknet/web3-shared-evm'
-import { formatAssets, formatTransactions } from './format'
-import type { WalletTokenRecord, HistoryResponse, GasPriceDictResponse } from './type'
-import type { FungibleTokenAPI, HistoryAPI, GasOptionAPI } from '../types'
-import { getAllEVMNativeAssets } from '../helpers'
-import { unionWith } from 'lodash-unified'
-import { EMPTY_LIST } from '@masknet/shared-base'
+import { ChainId, formatGweiToWei, getDeBankConstants, SchemaType, GasOption } from '@masknet/web3-shared-evm'
+import { formatAssets, formatTransactions } from './format.js'
+import type { WalletTokenRecord, HistoryResponse, GasPriceDictResponse } from './type.js'
+import type { FungibleTokenAPI, HistoryAPI, GasOptionAPI } from '../types/index.js'
+import { getAllEVMNativeAssets } from '../helpers.js'
 
-const DEBANK_API = 'https://api.debank.com'
-const DEBANK_OPEN_API = 'https://openapi.debank.com'
+const DEBANK_OPEN_API = 'https://debank-proxy.r2d2.to'
 
 /**
  * Debank's data might be outdated, like gas price for aurora which requires 1 Gwei at least
@@ -50,7 +44,7 @@ export class DeBankAPI
         const { CHAIN_ID = '' } = getDeBankConstants(chainId)
         if (!CHAIN_ID) throw new Error('Failed to get gas price.')
 
-        const response = await global.r2d2Fetch(urlcat(DEBANK_API, '/chain/gas_price_dict_v2', { chain: CHAIN_ID }))
+        const response = await fetch(urlcat(DEBANK_OPEN_API, '/chain/gas_price_dict_v2', { chain: CHAIN_ID }))
         const result = (await response.json()) as GasPriceDictResponse
         if (result.error_code !== 0) throw new Error('Failed to get gas price.')
 
@@ -58,57 +52,52 @@ export class DeBankAPI
         return {
             [GasOptionType.FAST]: {
                 estimatedSeconds: responseModified.data.fast.estimated_seconds || 15,
-                suggestedMaxFeePerGas: formatWeiToGwei(responseModified.data.fast.price).toString(),
+                suggestedMaxFeePerGas: toFixed(responseModified.data.fast.price),
                 suggestedMaxPriorityFeePerGas: '0',
             },
             [GasOptionType.NORMAL]: {
                 estimatedSeconds: responseModified.data.normal.estimated_seconds || 30,
-                suggestedMaxFeePerGas: formatWeiToGwei(responseModified.data.normal.price).toString(),
+                suggestedMaxFeePerGas: toFixed(responseModified.data.normal.price),
                 suggestedMaxPriorityFeePerGas: '0',
             },
             [GasOptionType.SLOW]: {
                 estimatedSeconds: responseModified.data.slow.estimated_seconds || 60,
-                suggestedMaxFeePerGas: formatWeiToGwei(responseModified.data.slow.price).toString(),
+                suggestedMaxFeePerGas: toFixed(responseModified.data.slow.price),
                 suggestedMaxPriorityFeePerGas: '0',
             },
         }
     }
 
     async getAssets(address: string, options?: HubOptions<ChainId>) {
-        const response = await global.r2d2Fetch(
-            urlcat(DEBANK_OPEN_API, '/v1/user/token_list', {
-                id: address.toLowerCase(),
+        const response = await fetch(
+            urlcat(DEBANK_OPEN_API, '/v1/user/all_token_list', {
+                id: address,
                 is_all: false,
-                has_balance: true,
             }),
         )
         const result = (await response.json()) as WalletTokenRecord[] | undefined
-        try {
-            return createPageable(
-                unionWith(
-                    formatAssets(
-                        (result ?? []).map((x) => ({
-                            ...x,
+        return createPageable(
+            unionWith(
+                formatAssets(
+                    (result ?? []).map((x) => ({
+                        ...x,
 
-                            // rename bsc to bnb
-                            id: x.id === 'bsc' ? 'bnb' : x.id,
-                            chain: x.chain === 'bsc' ? 'bnb' : x.chain,
-                            // prefix ARETH
-                            symbol: x.chain === 'arb' && x.symbol === 'ETH' ? 'ARETH' : x.symbol,
-                            logo_url:
-                                x.chain === 'arb' && x.symbol === 'ETH'
-                                    ? 'https://assets.debank.com/static/media/arbitrum.8e326f58.svg'
-                                    : x.logo_url,
-                        })),
-                    ),
-                    getAllEVMNativeAssets(),
-                    (a, z) => a.symbol === z.symbol && a.chainId === z.chainId,
+                        // rename bsc to bnb
+                        id: x.id === 'bsc' ? 'bnb' : x.id,
+                        chain: x.chain === 'bsc' ? 'bnb' : x.chain,
+                        // prefix ARETH
+                        symbol: x.chain === 'arb' && x.symbol === 'ETH' ? 'ARETH' : x.symbol,
+                        logo_url:
+                            x.chain === 'arb' && x.symbol === 'ETH'
+                                ? 'https://assets.debank.com/static/media/arbitrum.8e326f58.svg'
+                                : x.logo_url,
+                    })),
                 ),
-                createIndicator(options?.indicator),
-            )
-        } catch {
-            return createPageable([], createIndicator(options?.indicator))
-        }
+                getAllEVMNativeAssets(),
+                (a, z) => isSameAddress(a.address, z.address) && a.chainId === z.chainId,
+            ),
+            createIndicator(options?.indicator),
+        )
     }
 
     async getTransactions(
@@ -118,8 +107,8 @@ export class DeBankAPI
         const { CHAIN_ID = '' } = getDeBankConstants(chainId)
         if (!CHAIN_ID) return createPageable(EMPTY_LIST, createIndicator(indicator))
 
-        const response = await global.r2d2Fetch(
-            `${DEBANK_API}/history/list?user_addr=${address.toLowerCase()}&chain=${CHAIN_ID}`,
+        const response = await fetch(
+            `${DEBANK_OPEN_API}/history/list?user_addr=${address.toLowerCase()}&chain=${CHAIN_ID}`,
         )
         const { data, error_code } = (await response.json()) as HistoryResponse
         if (error_code !== 0) throw new Error('Fail to load transactions.')

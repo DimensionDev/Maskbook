@@ -1,7 +1,7 @@
 import { Buffer } from 'buffer'
 import scrypt from 'scrypt-js'
-import type { CryptoKeyStore } from './types'
-import { assertKeyDerivation, loadKeyStore } from './utils'
+import type { CryptoKeyStore } from './types.js'
+import { assertKeyDerivation, loadKeyStore } from './utils.js'
 
 export async function fromKeyStore(input: string, password: Uint8Array) {
     const { crypto, address } = loadKeyStore(input)

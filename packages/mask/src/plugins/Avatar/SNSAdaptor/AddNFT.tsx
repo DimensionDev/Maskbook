@@ -1,21 +1,14 @@
+import { useCallback, useState } from 'react'
 import { makeStyles } from '@masknet/theme'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { Button, DialogContent, InputBase, Typography } from '@mui/material'
-import { useCallback, useState } from 'react'
 import { InjectedDialog } from '@masknet/shared'
-import { useI18N } from '../../../utils'
-import {
-    useAccount,
-    useChainId,
-    useCurrentWeb3NetworkPluginID,
-    useWeb3Connection,
-    useWeb3Hub,
-} from '@masknet/plugin-infra/web3'
-import type { NetworkPluginID } from '@masknet/web3-shared-base'
-import type { AllChainsNonFungibleToken } from '../types'
+import { useChainContext, useNetworkContext, useWeb3Connection, useWeb3Hub } from '@masknet/web3-hooks-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
+import type { AllChainsNonFungibleToken } from '../types.js'
+import { useI18N } from '../../../utils/index.js'
 
 const useStyles = makeStyles()((theme) => ({
-    root: {},
     addNFT: {
         position: 'absolute',
         right: 20,
@@ -24,13 +17,8 @@ const useStyles = makeStyles()((theme) => ({
     input: {
         marginTop: theme.spacing(1),
         marginBottom: theme.spacing(1),
-        display: 'block',
-        width: '100%',
-        border: `1px solid ${theme.palette.mode === 'dark' ? '#2F3336' : '#EFF3F4'}`,
-        alignItems: 'center',
-        padding: theme.spacing(1),
+
         boxSizing: 'border-box',
-        borderRadius: 8,
     },
     message: {
         '&:before': {
@@ -41,13 +29,13 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 export interface AddNFTProps {
+    expectedPluginID: NetworkPluginID
     account?: string
-    onClose: () => void
     chainId?: ChainId
-    onAddClick?: (token: AllChainsNonFungibleToken) => void
     open: boolean
     title?: string
-    expectedPluginID: NetworkPluginID
+    onClose: () => void
+    onAddClick?: (token: AllChainsNonFungibleToken) => void
 }
 export function AddNFT(props: AddNFTProps) {
     const { onClose, open, onAddClick, title, chainId, account, expectedPluginID } = props
@@ -57,11 +45,10 @@ export function AddNFT(props: AddNFTProps) {
     const [tokenId, setTokenId] = useState('')
     const [message, setMessage] = useState('')
     const [checking, toggleChecking] = useState(false)
-    const currentPluginId = useCurrentWeb3NetworkPluginID(expectedPluginID)
-    const _account = useAccount(expectedPluginID, account)
-    const currentChainId = useChainId(expectedPluginID, chainId)
-    const hub = useWeb3Hub(currentPluginId, { chainId: currentChainId, account: _account })
-    const connection = useWeb3Connection(currentPluginId)
+    const { pluginID } = useNetworkContext(expectedPluginID)
+    const { account: _account, chainId: _chainId } = useChainContext({ account, chainId })
+    const hub = useWeb3Hub(pluginID, { chainId: _chainId, account: _account })
+    const connection = useWeb3Connection(pluginID)
 
     const onClick = useCallback(async () => {
         if (!address) {
@@ -81,10 +68,10 @@ export function AddNFT(props: AddNFTProps) {
         let tokenDetailed
 
         try {
-            const asset = await hub.getNonFungibleAsset(address, tokenId, { chainId: currentChainId })
+            const asset = await hub.getNonFungibleAsset(address, tokenId, { chainId: _chainId })
 
             const token = await connection?.getNonFungibleToken(address ?? '', tokenId, undefined, {
-                chainId: currentChainId,
+                chainId: _chainId,
             })
 
             tokenDetailed = { ...(token ?? {}), ...(asset ?? {}) }
@@ -95,14 +82,14 @@ export function AddNFT(props: AddNFTProps) {
                 return
             }
 
-            if (tokenDetailed?.contract?.chainId && tokenDetailed?.contract?.chainId !== currentChainId) {
+            if (tokenDetailed?.contract?.chainId && tokenDetailed?.contract?.chainId !== _chainId) {
                 setMessage(t('plugin_avatar_chain_error'))
                 toggleChecking(false)
                 return
             }
 
             const isOwner = await connection?.getNonFungibleTokenOwnership(address, tokenId, _account, undefined, {
-                chainId: currentChainId,
+                chainId: _chainId,
             })
 
             if (!isOwner) {
@@ -119,7 +106,7 @@ export function AddNFT(props: AddNFTProps) {
             toggleChecking(false)
             return
         }
-    }, [tokenId, address, onAddClick, onClose, currentChainId, hub, _account, connection])
+    }, [tokenId, address, onAddClick, onClose, _chainId, hub, _account, connection])
 
     const onAddressChange = useCallback((address: string) => {
         setMessage('')
@@ -145,24 +132,25 @@ export function AddNFT(props: AddNFTProps) {
                 <Button className={classes.addNFT} size="small" disabled={checking} onClick={onClick}>
                     {checking ? t('nft_add_button_label_checking') : t('nft_add_button_label')}
                 </Button>
-                <div className={classes.input}>
-                    <InputBase
-                        // Workaround for pure-react-carousel bug:
-                        // https://stackoverflow.com/questions/70434847/not-able-to-type-anything-in-input-field-inside-pure-react-carousel
-                        onClick={(e) => e.currentTarget.getElementsByTagName('input')[0].focus()}
-                        sx={{ width: '100%' }}
-                        placeholder={t('plugin_avatar_input_token_address')}
-                        onChange={(e) => onAddressChange(e.target.value)}
-                    />
-                </div>
-                <div className={classes.input}>
-                    <InputBase
-                        onClick={(e) => e.currentTarget.getElementsByTagName('input')[0].focus()}
-                        sx={{ width: '100%' }}
-                        placeholder={t('plugin_avatar_input_token_id')}
-                        onChange={(e) => onTokenIdChange(e.target.value)}
-                    />
-                </div>
+
+                <InputBase
+                    // Workaround for pure-react-carousel bug:
+                    // https://stackoverflow.com/questions/70434847/not-able-to-type-anything-in-input-field-inside-pure-react-carousel
+                    onClick={(e) => e.currentTarget.getElementsByTagName('input')[0].focus()}
+                    fullWidth
+                    className={classes.input}
+                    placeholder={t('plugin_avatar_input_token_address')}
+                    onChange={(e) => onAddressChange(e.target.value)}
+                />
+
+                <InputBase
+                    onClick={(e) => e.currentTarget.getElementsByTagName('input')[0].focus()}
+                    fullWidth
+                    className={classes.input}
+                    placeholder={t('plugin_avatar_input_token_id')}
+                    onChange={(e) => onTokenIdChange(e.target.value)}
+                />
+
                 {message ? (
                     <Typography color="error" className={classes.message} fontSize={12}>
                         {message}

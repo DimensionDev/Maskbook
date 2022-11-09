@@ -59,7 +59,10 @@ export const searchInstagramAvatarSelector = () =>
     querySelector('#ssrb_root_start').closest(1).querySelector<E>('header img, img[data-testid="user-avatar"]')
 
 export const searchInstagramProfileAvatarButtonSelector = () =>
-    querySelector('#ssrb_root_start').closest(1).querySelector('button > img').closest<HTMLDivElement>(3)
+    querySelector('#ssrb_root_start')
+        .closest(1)
+        .querySelector('section main header button > img')
+        .closest<HTMLDivElement>(3)
 
 export const searchInstagramAvatarSettingDialog = () => querySelector('#ssrb_root_start').closest<E>(1)
 

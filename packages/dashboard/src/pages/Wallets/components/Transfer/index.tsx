@@ -1,20 +1,21 @@
 import { memo, useEffect } from 'react'
-import { ContentContainer } from '../../../../components/ContentContainer'
+import { ContentContainer } from '../../../../components/ContentContainer/index.js'
 import { Box, Tab } from '@mui/material'
 import { useTabs } from '@masknet/theme'
 import { TabContext, TabList, TabPanel } from '@mui/lab'
-import { TransferERC20 } from './TransferERC20'
+import { TransferERC20 } from './TransferERC20.js'
 import { useLocation } from 'react-router-dom'
-import { useDashboardI18N } from '../../../../locales'
-import { TransferERC721 } from './TransferERC721'
-import { TransferTab } from './types'
-import { FungibleToken, NetworkPluginID } from '@masknet/web3-shared-base'
+import { useDashboardI18N } from '../../../../locales/index.js'
+import { TransferERC721 } from './TransferERC721.js'
+import { TransferTab } from './types.js'
+import type { FungibleToken } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import { useNativeToken } from '@masknet/plugin-infra/web3'
+import { useNativeToken } from '@masknet/web3-hooks-base'
 
 const assetTabs = [TransferTab.Token, TransferTab.Collectibles] as const
 
-export * from './types'
+export * from './types.js'
 
 export const Transfer = memo(() => {
     const t = useDashboardI18N()

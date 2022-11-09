@@ -2,20 +2,13 @@ import { makeStyles } from '@masknet/theme'
 import { Box, Typography } from '@mui/material'
 import { TokenIcon } from '@masknet/shared'
 import type { ChainId } from '@masknet/web3-shared-evm'
-
-import { useI18N } from '../../locales'
-
-import { SponsoredFarmIcon } from './icons/SponsoredFarm'
+import { useI18N } from '../../locales/index.js'
+import { SponsoredFarmIcon } from './icons/SponsoredFarm.js'
 
 const useStyles = makeStyles()((theme) => ({
     tokenDetails: {
         marginLeft: '16px',
         fontWeight: 500,
-    },
-    icon: {
-        marginLeft: '7px',
-        height: '16px',
-        width: '16px',
     },
     farmName: {
         '& svg': {
@@ -35,11 +28,11 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface TokenProps {
-    address: string
-    symbol?: string
-    name?: string
-    logoURL?: string
     chainId?: ChainId
+    address: string
+    name: string
+    symbol?: string
+    logoURL?: string
 }
 
 export interface FarmTokenDetailedProps extends React.PropsWithChildren<{}> {

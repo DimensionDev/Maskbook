@@ -1,7 +1,7 @@
 import { useAsync } from 'react-use'
 import type { PersonaIdentifier } from '@masknet/shared-base'
-import { Services } from '../../../API'
-import type { AsyncState } from 'react-use/lib/useAsyncFn'
+import { Services } from '../../../API.js'
+import type { AsyncState } from 'react-use/lib/useAsyncFn.js'
 
 export function useExportPrivateKey(identifier: PersonaIdentifier): AsyncState<string> {
     return useAsync(async () => {

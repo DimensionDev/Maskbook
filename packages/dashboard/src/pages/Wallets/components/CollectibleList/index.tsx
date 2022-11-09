@@ -1,23 +1,23 @@
 import { memo, useCallback, useEffect, useMemo, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { uniqBy } from 'lodash-es'
 import { Box, Button, Stack } from '@mui/material'
 import { LoadingBase, makeStyles } from '@masknet/theme'
-import { isSameAddress, NetworkPluginID, NonFungibleToken } from '@masknet/web3-shared-base'
-import { LoadingPlaceholder } from '../../../../components/LoadingPlaceholder'
-import { DashboardRoutes, EMPTY_LIST } from '@masknet/shared-base'
-import { EmptyPlaceholder } from '../EmptyPlaceholder'
-import { CollectibleCard } from '../CollectibleCard'
-import { useDashboardI18N } from '../../../../locales'
-import { TransferTab } from '../Transfer'
+import { DashboardRoutes, EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
+import { isSameAddress, NonFungibleAsset, NonFungibleToken } from '@masknet/web3-shared-base'
+import { LoadingPlaceholder } from '../../../../components/LoadingPlaceholder/index.js'
+import { EmptyPlaceholder } from '../EmptyPlaceholder/index.js'
+import { CollectibleCard } from '../CollectibleCard/index.js'
+import { useDashboardI18N } from '../../../../locales/index.js'
+import { TransferTab } from '../Transfer/index.js'
 import {
-    useAccount,
-    useCurrentWeb3NetworkPluginID,
+    useChainContext,
+    useNetworkContext,
     useNonFungibleAssets,
     useTrustedNonFungibleTokens,
-    Web3Helper,
-} from '@masknet/plugin-infra/web3'
+} from '@masknet/web3-hooks-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
-import { uniqBy } from 'lodash-unified'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import { ElementAnchor } from '@masknet/shared'
 
 const useStyles = makeStyles()({
@@ -30,11 +30,6 @@ const useStyles = makeStyles()({
         justifyContent: 'space-between',
     },
     card: {},
-    footer: {
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
 })
 
 interface CollectibleListProps {
@@ -43,7 +38,7 @@ interface CollectibleListProps {
 
 export const CollectibleList = memo<CollectibleListProps>(({ selectedChain }) => {
     const navigate = useNavigate()
-    const account = useAccount()
+    const { account } = useChainContext()
     const trustedNonFungibleTokens = useTrustedNonFungibleTokens(
         NetworkPluginID.PLUGIN_EVM,
         undefined,
@@ -72,7 +67,7 @@ export const CollectibleList = memo<CollectibleListProps>(({ selectedChain }) =>
         if (next) next()
     }, [next])
 
-    const currentPluginId = useCurrentWeb3NetworkPluginID()
+    const { pluginID: currentPluginId } = useNetworkContext()
     const onSend = useCallback(
         (
             detail: NonFungibleToken<
@@ -112,13 +107,13 @@ export interface CollectibleListUIProps {
     isEmpty: boolean
     chainId?: Web3Helper.ChainIdAll
     dataSource: Array<
-        NonFungibleToken<
+        NonFungibleAsset<
             Web3Helper.Definition[NetworkPluginID]['ChainId'],
             Web3Helper.Definition[NetworkPluginID]['SchemaType']
         >
     >
     onSend(
-        detail: NonFungibleToken<
+        detail: NonFungibleAsset<
             Web3Helper.Definition[NetworkPluginID]['ChainId'],
             Web3Helper.Definition[NetworkPluginID]['SchemaType']
         >,
@@ -148,7 +143,7 @@ export const CollectibleListUI = memo<CollectibleListUIProps>(
                             <div className={classes.root}>
                                 {dataSource.map((x, index) => (
                                     <div className={classes.card} key={index}>
-                                        <CollectibleCard token={x} renderOrder={index} onSend={() => onSend(x)} />
+                                        <CollectibleCard asset={x} renderOrder={index} onSend={() => onSend(x)} />
                                     </div>
                                 ))}
                             </div>

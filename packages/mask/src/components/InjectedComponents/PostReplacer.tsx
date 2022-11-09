@@ -7,13 +7,13 @@ import {
     forEachTypedMessageChild,
     isTypedMessageAnchor,
 } from '@masknet/typed-message'
-import { TextResizeContext, TypedMessageRender, useTransformedValue } from '@masknet/typed-message/dom'
+import { TypedMessageRender, useTransformedValue } from '@masknet/typed-message-react'
 import { makeStyles } from '@masknet/theme'
 import { useEffect, useMemo } from 'react'
 import { usePostInfoDetails } from '@masknet/plugin-infra/content-script'
-import { TypedMessageRenderContext } from '../../../shared-ui/TypedMessageRender/context'
-import { useCurrentIdentity } from '../DataSource/useActivatedUI'
-import { activatedSocialNetworkUI } from '../../social-network/ui'
+import { TypedMessageRenderContext } from '../../../shared-ui/TypedMessageRender/context.js'
+import { useCurrentIdentity } from '../DataSource/useActivatedUI.js'
+import { activatedSocialNetworkUI } from '../../social-network/ui.js'
 
 const useStyles = makeStyles()({
     root: {
@@ -44,18 +44,23 @@ export function PostReplacer(props: PostReplacerProps) {
 
     return (
         <span className={classes.root}>
-            <TextResizeContext.Provider value>
-                <TypedMessageRenderContext
-                    renderFragments={activatedSocialNetworkUI?.customization.componentOverwrite?.RenderFragments}
-                    context={initialTransformationContext}>
-                    <Transformer {...props} message={postMessage} />
-                </TypedMessageRenderContext>
-            </TextResizeContext.Provider>
+            <TypedMessageRenderContext
+                textResizer={activatedSocialNetworkUI.networkIdentifier !== 'twitter.com'}
+                renderFragments={activatedSocialNetworkUI?.customization.componentOverwrite?.RenderFragments}
+                context={initialTransformationContext}>
+                <Transformer {...props} message={postMessage} />
+            </TypedMessageRenderContext>
         </span>
     )
 }
 
-function Transformer({ message, unzip, zip }: { message: TypedMessage } & PostReplacerProps) {
+function Transformer({
+    message,
+    unzip,
+    zip,
+}: {
+    message: TypedMessage
+} & PostReplacerProps) {
     const after = useTransformedValue(message)
 
     const shouldReplace = useMemo(() => {

@@ -1,23 +1,19 @@
 import { FormattedAddress } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { formatEthereumAddress, formatWeiToEther, chainResolver, explorerResolver } from '@masknet/web3-shared-evm'
-import { useChainId, useWeb3State } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { useChainContext, useWeb3State } from '@masknet/web3-hooks-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { OpenInNew } from '@mui/icons-material'
 import { Typography, Box, Link } from '@mui/material'
-import BigNumber from 'bignumber.js'
-import { useI18N } from '../../../utils'
-import { resolveProjectLinkOnArtBlocks, resolveUserLinkOnArtBlocks } from '../pipes'
-import type { Project } from '../types'
+import { BigNumber } from 'bignumber.js'
+import { useI18N } from '../../../utils/index.js'
+import { resolveProjectLinkOnArtBlocks, resolveUserLinkOnArtBlocks } from '../pipes/index.js'
+import type { Project } from '../types.js'
 
 const useStyles = makeStyles()((theme) => {
     return {
         root: {
             padding: theme.spacing(2),
-        },
-        content: {
-            paddingTop: theme.spacing(0),
-            paddingBottom: `${theme.spacing(0)} !important`,
         },
         container: {
             padding: theme.spacing(1),
@@ -28,13 +24,9 @@ const useStyles = makeStyles()((theme) => {
         nameRedirectionLink: {
             marginLeft: theme.spacing(0.5),
         },
-        bold: {
-            fontWeight: 'bold',
-        },
         description: {
             marginTop: theme.spacing(1),
             marginBottom: theme.spacing(1),
-            fontSize: 14,
             whiteSpace: 'pre-line',
         },
         meta_row: {
@@ -56,7 +48,7 @@ export function DetailsView(props: DetailsViewProps) {
     const { classes } = useStyles()
     const { project } = props
     const { t } = useI18N()
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
 
     const artistName = ` ${project.artistName}`

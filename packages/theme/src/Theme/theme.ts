@@ -1,8 +1,8 @@
-import { MaskColors } from './colors'
+import { MaskColors } from './colors.js'
 import type { PaletteMode, ThemeOptions } from '@mui/material'
 import { createTheme } from '@mui/material'
-import { merge } from 'lodash-unified'
-import * as Components from './component-changes'
+import { merge } from 'lodash-es'
+import * as Components from './component-changes.js'
 import { grey } from '@mui/material/colors'
 
 function getFontFamily(monospace?: boolean) {
@@ -58,6 +58,13 @@ function MaskTheme(mode: PaletteMode) {
                     styleOverrides: {
                         paper: {
                             borderRadius: '12px',
+                        },
+                    },
+                },
+                MuiTypography: {
+                    styleOverrides: {
+                        root: {
+                            fontSize: 14,
                         },
                     },
                 },
