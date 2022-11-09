@@ -38,12 +38,12 @@ export const ciBuild: TaskFunction = series(
         ),
         buildTarget(
             'Chromium-E2E',
-            { ...getPreset(Preset.Firefox), e2e: true, 'output-path': 'build-chromium-e2e' },
+            { ...getPreset(Preset.Chromium), channel: 'e2e', outputPath: 'build-chromium-e2e' },
             'MaskNetwork.chromium-e2e.zip',
         ),
         buildTarget(
             'Firefox-E2E',
-            { ...getPreset(Preset.Chromium), e2e: true, 'output-path': 'build-firefox-e2e' },
+            { ...getPreset(Preset.Firefox), channel: 'e2e', outputPath: 'build-firefox-e2e' },
             'MaskNetwork.firefox-e2e.zip',
         ),
     ),

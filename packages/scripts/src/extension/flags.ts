@@ -11,7 +11,7 @@ export interface BuildFlags {
     manifest?: 2 | 3
     mode: 'development' | 'production'
     /** @default 'stable' */
-    channel?: 'stable' | 'beta' | 'insider'
+    channel?: 'e2e' | 'stable' | 'beta' | 'insider'
     /** @default false */
     profiling?: boolean
     /** @default true in development */
