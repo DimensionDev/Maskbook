@@ -7,7 +7,7 @@ import {
     forEachTypedMessageChild,
     isTypedMessageAnchor,
 } from '@masknet/typed-message'
-import { TextResizeContext, TypedMessageRender, useTransformedValue } from '@masknet/typed-message-react'
+import { TypedMessageRender, useTransformedValue } from '@masknet/typed-message-react'
 import { makeStyles } from '@masknet/theme'
 import { useEffect, useMemo } from 'react'
 import { usePostInfoDetails } from '@masknet/plugin-infra/content-script'
@@ -44,13 +44,12 @@ export function PostReplacer(props: PostReplacerProps) {
 
     return (
         <span className={classes.root}>
-            <TextResizeContext.Provider value>
-                <TypedMessageRenderContext
-                    renderFragments={activatedSocialNetworkUI?.customization.componentOverwrite?.RenderFragments}
-                    context={initialTransformationContext}>
-                    <Transformer {...props} message={postMessage} />
-                </TypedMessageRenderContext>
-            </TextResizeContext.Provider>
+            <TypedMessageRenderContext
+                textResizer={activatedSocialNetworkUI.networkIdentifier !== 'twitter.com'}
+                renderFragments={activatedSocialNetworkUI?.customization.componentOverwrite?.RenderFragments}
+                context={initialTransformationContext}>
+                <Transformer {...props} message={postMessage} />
+            </TypedMessageRenderContext>
         </span>
     )
 }

@@ -2,7 +2,7 @@ import { memo } from 'react'
 import type { TypedMessageAnchor } from '@masknet/typed-message'
 import { RenderLinkFragment } from '../utils/renderText.js'
 
-export const TypedMessageAnchorRenderer = memo(function TypedMessageAnchorRenderer(props: TypedMessageAnchor) {
+export const TypedMessageAnchorRender = memo(function TypedMessageAnchorRender(props: TypedMessageAnchor) {
     return (
         <RenderLinkFragment
             category={props.category}

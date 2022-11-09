@@ -12,7 +12,7 @@ export function forEachTypedMessageChild(node: TypedMessage, visitor: (x: TypedM
         }
     } else if (isTypedMessagePromise(node)) {
         // if Promise has a resolved value, we ignore it's alt.
-        if (node.promise.value) visitor(node.promise.value)
+        if ('value' in node.promise) visitor(node.promise.value)
         else if (node.alt) visitor(node.alt)
     } else if (isTypedMessageMaskPayload(node)) {
         visitor(node.message)

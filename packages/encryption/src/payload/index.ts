@@ -11,7 +11,7 @@ import {
 } from '../payload_internal/index.js'
 import { encodeSignatureContainer } from '../payload_internal/SignatureContainer.js'
 import { PayloadException, CryptoException } from '../types/index.js'
-import { CheckedError, OptionalResult } from '@masknet/shared-base'
+import { CheckedError, OptionalResult } from '@masknet/base'
 export * from './types.js'
 
 export async function parsePayload(payload: unknown): PayloadParserResult {

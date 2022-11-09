@@ -1,4 +1,4 @@
-import type { PostIVIdentifier, ProfileIdentifier } from '../Identifier/index.js'
+import type { PostIVIdentifier, ProfileIdentifier } from '@masknet/base'
 
 export interface PostInformation {
     postBy: ProfileIdentifier

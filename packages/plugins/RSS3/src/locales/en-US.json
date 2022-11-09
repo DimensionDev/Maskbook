@@ -22,6 +22,7 @@
     "donation_donate": "<bold>{{user}}</bold> donated <bold>{{cost_value}} {{cost_symbol}}</bold>",
     "donation_donate_verbose": "<bold>{{user}}</bold> donated <bold>{{cost_value}} {{cost_symbol}}</bold> to <bold>{{project}}</bold>",
     "note$add": "<bold>{{user}}</bold> posted a note on <bold>{{platform}}</bold>",
+    "note$mint": "<bold>{{user}}</bold> minted a note on <bold>{{platform}}</bold>",
     "note$revise": "<bold>{{user}}</bold> revised a note on <bold>{{platform}}</bold>",
     "note$comment": "<bold>{{user}}</bold> made a comment on <bold>{{platform}}</bold>",
     "profile$create": "<user>{{user}}</user> created a profile on <platform>{{platform}}</platform>",

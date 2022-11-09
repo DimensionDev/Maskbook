@@ -57,6 +57,12 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
     tabPanel: {
         marginTop: theme.spacing(3),
     },
+    content: {
+        padding: 0,
+        '::-webkit-scrollbar': {
+            display: 'none',
+        },
+    },
 }))
 
 export interface SavingsDialogProps {
@@ -146,7 +152,7 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
                                 <Tab label={tabs.Withdraw} value={tabs.Withdraw} />
                             </MaskTabList>
                         }>
-                        <DialogContent style={{ padding: 0, overflowX: 'hidden' }}>
+                        <DialogContent className={classes.content}>
                             <>
                                 <div className={classes.abstractTabWrapper}>
                                     <NetworkTab

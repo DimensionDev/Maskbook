@@ -7,12 +7,12 @@ import type {
     TypedMessageTuple,
     TypedMessagePromise,
 } from '@masknet/typed-message'
-import { TypedMessageTextRenderer } from './Core/Text.js'
-import { TypedMessageImageRenderer } from './Core/Image.js'
-import { TypedMessageTupleRenderer } from './Core/Tuple.js'
-import { TypedMessagePromiseRenderer } from './Core/Promise.js'
-import { TypedMessageUnknownRenderer } from './Core/Unknown.js'
-import { TypedMessageAnchorRenderer } from './Extension/Anchor.js'
+import { TypedMessageTextRender } from './Core/Text.js'
+import { TypedMessageImageRender } from './Core/Image.js'
+import { TypedMessageTupleRender } from './Core/Tuple.js'
+import { TypedMessagePromiseRender } from './Core/Promise.js'
+import { TypedMessageUnknownRender } from './Core/Unknown.js'
+import { TypedMessageAnchorRender } from './Extension/Anchor.js'
 
 export interface RenderConfig<T extends TypedMessage = TypedMessage> {
     component: React.ComponentType<T>
@@ -49,38 +49,38 @@ export function createTypedMessageRenderRegistry() {
     }
 
     registerTypedMessageRender<TypedMessageText>('text', {
-        component: TypedMessageTextRenderer,
+        component: TypedMessageTextRender,
         id: Symbol('std.text'),
         priority: 0,
     })
 
     registerTypedMessageRender<TypedMessageImage>('image', {
-        component: TypedMessageImageRenderer,
+        component: TypedMessageImageRender,
         id: Symbol('std.image'),
         priority: 0,
     })
 
     registerTypedMessageRender<TypedMessageUnknown>('unknown', {
-        component: TypedMessageUnknownRenderer,
+        component: TypedMessageUnknownRender,
         id: Symbol('std.unknown'),
         priority: 0,
     })
 
     registerTypedMessageRender<TypedMessageTuple>('tuple', {
-        component: TypedMessageTupleRenderer,
+        component: TypedMessageTupleRender,
         id: Symbol('std.tuple'),
         priority: 0,
     })
 
     registerTypedMessageRender<TypedMessagePromise>('promise', {
-        component: TypedMessagePromiseRenderer,
+        component: TypedMessagePromiseRender,
         id: Symbol('std.promise'),
         priority: 0,
     })
 
     // Extension
     registerTypedMessageRender<TypedMessageAnchor>('x-anchor', {
-        component: TypedMessageAnchorRenderer,
+        component: TypedMessageAnchorRender,
         id: Symbol('std.anchor'),
         priority: 0,
     })

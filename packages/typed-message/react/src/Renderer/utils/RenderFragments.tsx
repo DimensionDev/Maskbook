@@ -2,17 +2,23 @@ import { createContext, memo } from 'react'
 import type { MetadataRenderProps } from '../MetadataRender.js'
 
 export const DefaultRenderFragments = {
-    Text: memo((props: RenderFragmentsContextType.TextProps) => <>{props.children}</>),
-    Link: memo((props: RenderFragmentsContextType.LinkProps) => (
-        <a href={props.href} target="_blank" rel="noopener noreferrer" style={{ fontSize: 'inherit' }}>
-            {props.children}
-            {props.suggestedPostImage}
-        </a>
-    )),
-    Image: memo((props: RenderFragmentsContextType.ImageProps) =>
-        props.width === 0 ? null : <img src={props.src} width={props.width} height={props.height} />,
-    ),
-    Metadata: memo(() => null),
+    Text: memo(function TextFragment(props: RenderFragmentsContextType.TextProps) {
+        return <>{props.children}</>
+    }),
+    Link: memo(function LinkFragment(props: RenderFragmentsContextType.LinkProps) {
+        return (
+            <a href={props.href} target="_blank" rel="noopener noreferrer" style={{ fontSize: 'inherit' }}>
+                {props.children}
+                {props.suggestedPostImage}
+            </a>
+        )
+    }),
+    Image: memo(function ImageFragment(props: RenderFragmentsContextType.ImageProps) {
+        return props.width === 0 ? null : <img src={props.src} width={props.width} height={props.height} />
+    }),
+    Metadata: memo(function MetadataFragment() {
+        return null
+    }),
 }
 export interface RenderFragmentsContextType {
     Container?: React.ComponentType<{}>
@@ -27,7 +33,7 @@ export interface RenderFragmentsContextType {
     /** $CASH */
     CashLink?: React.ComponentType<RenderFragmentsContextType.CashLinkProps>
 }
-export namespace RenderFragmentsContextType {
+export declare namespace RenderFragmentsContextType {
     export interface TextProps {
         children: string
     }

@@ -1,4 +1,4 @@
-import type { CheckedError } from '@masknet/shared-base'
+import type { CheckedError } from '@masknet/base'
 import type { Result } from 'ts-results-es'
 import type { PayloadParseResult } from '../index.js'
 import type { CryptoException, PayloadException } from '../types/index.js'

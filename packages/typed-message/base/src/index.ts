@@ -20,6 +20,10 @@ export {
     makeTypedMessageImage,
     // promise
     type TypedMessagePromise,
+    type PendingPromise,
+    type FulfilledPromise,
+    type RejectedPromise,
+    type StatusExposedPromise,
     isTypedMessagePromise,
     makeTypedMessagePromise,
     // text

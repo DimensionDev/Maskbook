@@ -11,7 +11,7 @@ import {
     parsePayload,
     importAESFromJWK,
 } from '../src/index.js'
-import { ProfileIdentifier } from '@masknet/shared-base'
+import { ProfileIdentifier } from '@masknet/base'
 import { makeTypedMessageText, makeTypedMessageTupleSerializable } from '@masknet/typed-message'
 import {
     deriveAESKey,

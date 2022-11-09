@@ -1,3 +1,4 @@
+/** @internal */
 export function hasCircular(message: object) {
     try {
         JSON.stringify(message)
