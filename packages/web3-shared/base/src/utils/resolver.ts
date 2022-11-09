@@ -385,7 +385,7 @@ export function resolveSearchKeywordType(
     isValidDomain: (keyword: string) => boolean,
     isValidAddress: (keyword: string) => boolean,
 ) {
-    if (isValidDomain(keyword)) return SearchKeywordType.NameServiceDomain
+    if (isValidDomain(keyword)) return SearchKeywordType.Domain
     if (isValidAddress(keyword)) return SearchKeywordType.Address
     return
 }

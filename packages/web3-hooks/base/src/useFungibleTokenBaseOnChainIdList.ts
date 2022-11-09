@@ -4,7 +4,6 @@ import type { NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useWeb3Connection, useWeb3State, useChainId } from '@masknet/web3-hooks-base'
 import { attemptUntil } from '@masknet/web3-shared-base'
-import type { ChainId } from '@masknet/web3-shared-evm'
 
 export function useFungibleTokenBaseOnChainIdList<
     S extends 'all' | void = void,
@@ -12,7 +11,7 @@ export function useFungibleTokenBaseOnChainIdList<
 >(
     pluginID?: T,
     address?: string,
-    chainIdList?: ChainId[],
+    chainIdList?: Web3Helper.ChainIdAll[],
     fallbackToken?: Web3Helper.FungibleTokenScope<S, T>,
     options?: Web3Helper.Web3HubOptionsScope<S, T>,
 ) {

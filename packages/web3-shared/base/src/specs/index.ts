@@ -1535,6 +1535,6 @@ export interface Web3UI<ChainId, ProviderType, NetworkType> {
 }
 
 export enum SearchKeywordType {
-    NameServiceDomain = 'NameServiceDomain',
+    Domain = 'Domain',
     Address = 'Address',
 }

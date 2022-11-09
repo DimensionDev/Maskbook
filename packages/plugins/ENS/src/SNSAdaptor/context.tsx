@@ -5,7 +5,7 @@ import { NextIDProof } from '@masknet/web3-providers'
 import { useLookupAddress, useReverseAddress } from '@masknet/web3-hooks-base'
 import { SearchKeywordType } from '@masknet/web3-shared-base'
 import { BindingProof, NetworkPluginID, NextIDPlatform } from '@masknet/shared-base'
-import { resolveNonFungibleTokenIdFromEnsDomain } from '@masknet/web3-shared-evm'
+import { resolveNonFungibleTokenIdFromEnsDomain, ChainId } from '@masknet/web3-shared-evm'
 
 interface ENSContextProps {
     isLoading: boolean
@@ -38,33 +38,33 @@ export function ENSProvider({ children, keyword, keywordType }: PropsWithChildre
         loading: isLoadingLookup,
         error: lookupError,
         retry: retryLookup,
-    } = useLookupAddress(NetworkPluginID.PLUGIN_EVM, keyword)
+    } = useLookupAddress(NetworkPluginID.PLUGIN_EVM, keyword, ChainId.Mainnet)
     const {
         value: _domain,
         loading: isLoadingReverse,
         error: reverseError,
         retry: retryReverse,
-    } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, keyword)
+    } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, keyword, ChainId.Mainnet)
 
     const isLoading =
-        (isLoadingLookup && keywordType === SearchKeywordType.NameServiceDomain) ||
+        (isLoadingLookup && keywordType === SearchKeywordType.Domain) ||
         (isLoadingReverse && keywordType === SearchKeywordType.Address)
     const isError =
-        (!!lookupError && keywordType === SearchKeywordType.NameServiceDomain) ||
+        (!!lookupError && keywordType === SearchKeywordType.Domain) ||
         (!!reverseError && keywordType === SearchKeywordType.Address)
     const retry = useCallback(() => {
-        if (keywordType === SearchKeywordType.NameServiceDomain) retryLookup()
+        if (keywordType === SearchKeywordType.Domain) retryLookup()
         if (keywordType === SearchKeywordType.Address) retryReverse()
     }, [keywordType, keyword])
 
     const reversedAddress = useMemo(() => {
-        if (keywordType === SearchKeywordType.NameServiceDomain) return _reversedAddress
+        if (keywordType === SearchKeywordType.Domain) return _reversedAddress
         if (keywordType === SearchKeywordType.Address) return keyword
         return undefined
     }, [keywordType, keyword, _reversedAddress])
 
     const domain = useMemo(() => {
-        if (keywordType === SearchKeywordType.NameServiceDomain) return keyword
+        if (keywordType === SearchKeywordType.Domain) return keyword
         if (keywordType === SearchKeywordType.Address) return _domain ?? ''
         return ''
     }, [keywordType, keyword, _domain])

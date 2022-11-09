@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState, useMemo } from 'react'
+import { useRef, useMemo } from 'react'
 import { Hidden } from '@masknet/shared'
 import { first } from 'lodash-es'
 import { TabContext } from '@mui/lab'
@@ -9,8 +9,7 @@ import {
     usePluginI18NField,
 } from '@masknet/plugin-infra/content-script'
 import { Tab } from '@mui/material'
-import { useWeb3State } from '@masknet/web3-hooks-base'
-import { useAddressTypeBaseOnChainIdList } from '@masknet/web3-hooks-evm'
+import { useWeb3State, useAddressTypeBaseOnChainIdList } from '@masknet/web3-hooks-base'
 import { ChainId, AddressType } from '@masknet/web3-shared-evm'
 import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import { SocialAddressType, resolveSearchKeywordType } from '@masknet/web3-shared-base'
@@ -30,7 +29,7 @@ const useStyles = makeStyles()((theme) => ({
         position: 'relative',
         background: theme.palette.common.white,
         maxHeight: 478,
-        overflow: 'scroll',
+        overflow: 'auto',
     },
 }))
 
@@ -53,10 +52,6 @@ export function SearchResultInspector(props: { keyword: string }) {
     )
 
     const ENS_SearchResult = ENS_Plugin!.SearchResultContent?.UI?.Content!
-    const [isLoading, setLoading] = useState(true)
-    const [isHiddenAll, setHiddenAll] = useState(true)
-    const [isEmpty, setEmpty] = useState(false)
-    const [isError, setError] = useState(false)
     const socialAccount = {
         pluginID: NetworkPluginID.PLUGIN_EVM,
         address: ensRef.current?.reversedAddress ?? '',
@@ -91,20 +86,13 @@ export function SearchResultInspector(props: { keyword: string }) {
 
         return <Component identity={undefined} socialAccount={socialAccount} />
     }, [currentTab, socialAccount])
-
-    useEffect(() => {
-        setLoading(!ensRef.current || ensRef.current?.isLoading)
-        setHiddenAll(Boolean(ensRef.current && ensRef.current?.reversedAddress === undefined) || isLoadingAddressType)
-        setEmpty(
-            Boolean(
-                ensRef.current &&
-                    (!ensRef.current?.reversedAddress || !ensRef.current?.tokenId) &&
-                    !ensRef.current?.isLoading,
-            ),
-        )
-        setError(Boolean(ensRef.current?.isError))
-    }, [ensRef.current, isLoadingAddressType])
-
+    const isLoading = !ensRef.current || ensRef.current?.isLoading
+    const isHiddenAll = Boolean(ensRef.current && ensRef.current?.reversedAddress === undefined) || isLoadingAddressType
+    const isEmpty = Boolean(
+        ensRef.current && (!ensRef.current?.reversedAddress || !ensRef.current?.tokenId) && !ensRef.current?.isLoading,
+    )
+    const isError = Boolean(ensRef.current?.isError)
+    console.log({ isLoading, isHiddenAll, isEmpty, isLoadingAddressType, c: ensRef.current })
     if (
         addressType === AddressType.Contract ||
         isLoadingAddressType ||
