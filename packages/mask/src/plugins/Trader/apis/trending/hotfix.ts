@@ -3,7 +3,6 @@ import { ChainId, getCoinGeckoConstants, getCoinMarketCapConstants } from '@mask
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { TagType } from '../../types/index.js'
 import { DataProvider } from '@masknet/public-api'
-import MIRRORED_TOKENS from './mirrored_tokens.json'
 import STOCKS_KEYWORDS from './stocks.json'
 import CASHTAG_KEYWORDS from './cashtag.json'
 import HASHTAG_KEYWORDS from './hashtag.json'
@@ -115,6 +114,10 @@ getEnumAsArray(ChainId).map(({ value: chainId }) => {
     NETWORK_ID_MAP[DataProvider.CoinMarketCap][chainId] = getCoinMarketCapConstants(chainId).CHAIN_ID ?? ''
 })
 
+export function resolveCoinAddress(chainId: ChainId, id: string, dataProvider: DataProvider) {
+    return ID_ADDRESS_MAP[dataProvider][chainId]?.[id]
+}
+
 export function resolveKeyword(chainId: ChainId, keyword: string, dataProvider: DataProvider) {
     if (dataProvider === DataProvider.UniswapInfo || dataProvider === DataProvider.NFTScan) return keyword
     return KEYWORD_ALIAS_MAP[dataProvider][chainId]?.[keyword.toUpperCase()] ?? keyword
@@ -122,16 +125,6 @@ export function resolveKeyword(chainId: ChainId, keyword: string, dataProvider: 
 
 export function resolveCoinId(chainId: ChainId, keyword: string, dataProvider: DataProvider) {
     return KEYWORD_ID_MAP[dataProvider][chainId]?.[keyword.toUpperCase()]
-}
-
-export function resolveCoinAddress(chainId: ChainId, id: string, dataProvider: DataProvider) {
-    return ID_ADDRESS_MAP[dataProvider][chainId]?.[id]
-}
-
-export function resolveChainId(id: string, dataProvider: DataProvider) {
-    if (dataProvider === DataProvider.UniswapInfo) return ChainId.Mainnet
-    const chainIds = NETWORK_ID_MAP[dataProvider]
-    return Object.entries(chainIds).find(([_, key]) => key === id)?.[0]
 }
 
 export function isBlockedId(chainId: ChainId, id: string, dataProvider: DataProvider) {
@@ -148,8 +141,4 @@ export function isBlockedKeyword(type: TagType, keyword: string) {
     if (type === TagType.HASH) return HASHTAG_KEYWORDS.includes(search)
     if (type === TagType.CASH) return CASHTAG_KEYWORDS.includes(search)
     return true
-}
-
-export function isMirroredKeyword(symbol: string) {
-    return MIRRORED_TOKENS.map((x) => x.symbol).some((x) => x.toUpperCase() === symbol.toUpperCase())
 }

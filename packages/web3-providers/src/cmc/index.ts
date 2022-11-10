@@ -4,9 +4,10 @@ import type { ChainId } from '@masknet/web3-shared-evm'
 import { DataProvider } from '@masknet/public-api'
 import { TrendingAPI } from '../types/index.js'
 import { BTC_FIRST_LEGER_DATE, CMC_STATIC_BASE_URL, CMC_V1_BASE_URL, THIRD_PARTY_V1_BASE_URL } from './constants.js'
-import { getCommunityLink, isMirroredKeyword, resolveChainIdByName } from './helper.js'
-import type { Coin, ResultData, Status } from './type.js'
+import { resolveCoinMarketCapChainId } from './helpers.js'
 import { fetchJSON } from '../helpers.js'
+import { getCommunityLink, isMirroredKeyword } from '../trending/helpers.js'
+import type { Coin, ResultData, Status } from './types.js'
 import { FuseTrendingAPI } from '../fuse/index.js'
 
 // #regin get quote info
@@ -269,9 +270,9 @@ export class CoinMarketCapAPI implements TrendingAPI.Provider<ChainId> {
         const contracts = coinInfo.contract_address.map(
             (x) =>
                 ({
-                    chainId: resolveChainIdByName(x.platform.name, coinInfo.symbol),
+                    chainId: resolveCoinMarketCapChainId(x.platform.name),
                     address: x.contract_address,
-                    iconURL: `${CMC_STATIC_BASE_URL}/img/coins/64x64/${x.platform.coin.id}.png`,
+                    icon_url: `${CMC_STATIC_BASE_URL}/img/coins/64x64/${x.platform.coin.id}.png`,
                 } as TrendingAPI.Contract),
         )
 

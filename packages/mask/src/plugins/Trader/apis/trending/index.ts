@@ -2,7 +2,7 @@ import { first } from 'lodash-es'
 import { getEnumAsArray, unreachable } from '@masknet/kit'
 import { DataProvider } from '@masknet/public-api'
 import { EMPTY_LIST } from '@masknet/shared-base'
-import { CoinGeckoTrendingEVM, CoinMarketCap, NFTScanTrending, TrendingAPI, UniSwap } from '@masknet/web3-providers'
+import { CoinGeckoTrending, CoinMarketCap, NFTScanTrending, TrendingAPI, UniSwap } from '@masknet/web3-providers'
 import { ChainId, chainResolver, NetworkType } from '@masknet/web3-shared-evm'
 import type { Coin, Currency, Stat, TagType, Trending } from '../../types/index.js'
 import { isBlockedAddress, isBlockedKeyword, resolveKeyword, resolveCoinId } from './hotfix.js'
@@ -14,7 +14,7 @@ export async function getCoinsByKeyword(
 ): Promise<Coin[]> {
     switch (dataProvider) {
         case DataProvider.CoinGecko:
-            return CoinGeckoTrendingEVM.getCoinsByKeyword(chainId, keyword)
+            return CoinGeckoTrending.getCoinsByKeyword(chainId, keyword)
         case DataProvider.CoinMarketCap:
             return CoinMarketCap.getCoinsByKeyword(chainId, keyword)
         case DataProvider.UniswapInfo:
@@ -89,7 +89,7 @@ export async function getCoinTrending(
 ): Promise<Trending> {
     switch (dataProvider) {
         case DataProvider.CoinGecko:
-            return CoinGeckoTrendingEVM.getCoinTrending(chainId, id, currency)
+            return CoinGeckoTrending.getCoinTrending(chainId, id, currency)
         case DataProvider.CoinMarketCap:
             return CoinMarketCap.getCoinTrending(chainId, id, currency)
         case DataProvider.UniswapInfo:
@@ -131,7 +131,7 @@ export async function getPriceStats(
 ): Promise<Stat[]> {
     switch (dataProvider) {
         case DataProvider.CoinGecko:
-            return CoinGeckoTrendingEVM.getCoinPriceStats(
+            return CoinGeckoTrending.getCoinPriceStats(
                 chainId,
                 id,
                 currency,

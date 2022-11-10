@@ -1,4 +1,4 @@
-import { CoinGeckoTrendingEVM_API, CoinGeckoPriceSolanaAPI, CoinGeckoPriceEVM_API } from './coingecko/index.js'
+import { CoinGeckoTrending_API, CoinGeckoPriceSolanaAPI, CoinGeckoPriceEVM_API } from './coingecko/index.js'
 import { OpenSeaAPI } from './opensea/index.js'
 import { LooksRareAPI } from './looksrare/index.js'
 import { RaribleAPI } from './rarible/index.js'
@@ -57,7 +57,7 @@ export const MagicEden = new MagicEdenAPI()
 export const Rarible = new RaribleAPI()
 export const Zora = new ZoraAPI()
 export const Gem = new GemAPI()
-export const CoinGeckoTrendingEVM = new CoinGeckoTrendingEVM_API()
+export const CoinGeckoTrending = new CoinGeckoTrending_API()
 export const CoinGeckoPriceEVM = new CoinGeckoPriceEVM_API()
 export const CoinGeckoPriceSolana = new CoinGeckoPriceSolanaAPI()
 export const Explorer = new NativeExplorerAPI()
