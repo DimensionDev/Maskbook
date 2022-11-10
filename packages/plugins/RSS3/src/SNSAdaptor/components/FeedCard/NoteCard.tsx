@@ -81,7 +81,7 @@ const useStyles = makeStyles<void, 'title' | 'image' | 'content' | 'info' | 'bod
 
 const { Tag, Type } = RSS3BaseAPI
 export function isNoteFeed(feed: RSS3BaseAPI.Web3Feed): feed is RSS3BaseAPI.NoteFeed {
-    return feed.tag === Tag.Social && [Type.Post, Type.Revise, Type.Mint].includes(feed.type)
+    return feed.tag === Tag.Social && [Type.Post, Type.Revise, Type.Mint, Type.Share].includes(feed.type)
 }
 
 interface NoteCardProps extends Omit<FeedCardProps, 'feed'> {
@@ -92,12 +92,7 @@ const cardTypeMap = {
     [Type.Mint]: CardType.NoteEdit,
     [Type.Post]: CardType.NoteCreate,
     [Type.Revise]: CardType.NoteEdit,
-} as const
-
-const i18nContextMap = {
-    [Type.Mint]: 'mint',
-    [Type.Post]: 'add',
-    [Type.Revise]: 'revise',
+    [Type.Share]: CardType.NoteLink,
 } as const
 
 /**
@@ -106,16 +101,17 @@ const i18nContextMap = {
  *
  * - NoteCreate
  * - NoteEdit
+ * - NoteLink
  */
 export const NoteCard: FC<NoteCardProps> = ({ feed, className, ...rest }) => {
     const { classes, cx } = useStyles()
     const { classes: mdClasses } = useMarkdownStyles()
 
     const action = feed.actions[0]
-    const metadata = action.metadata
+    const metadata = 'target' in action.metadata! ? action.metadata.target : action.metadata
 
     const user = useAddressLabel(feed.owner)
-    const type = feed.type
+    const type = action.type
 
     const imageSize = rest.verbose ? '100%' : 64
 
@@ -130,7 +126,7 @@ export const NoteCard: FC<NoteCardProps> = ({ feed, className, ...rest }) => {
                     values={{
                         user,
                         platform: action.platform!,
-                        context: i18nContextMap[type],
+                        context: type,
                     }}
                     components={{
                         bold: <Label />,
