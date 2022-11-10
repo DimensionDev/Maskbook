@@ -1,11 +1,11 @@
-import { uniq, uniqBy } from 'lodash-es'
+import { compact, uniq, uniqBy } from 'lodash-es'
 import { DataProvider } from '@masknet/public-api'
 import { TokenType } from '@masknet/web3-shared-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { getCommunityLink, isMirroredKeyword } from '../../trending/helpers.js'
 import { fetchJSON } from '../../helpers.js'
 import type { TrendingAPI } from '../../types/index.js'
-import { getAllCoins, getCoinInfo, getPriceStats as getStats } from './base.js'
+import { getAllCoins, getCoinInfo, getPriceStats as getStats, getThumbCoins } from './base.js'
 import type { Platform } from '../types.js'
 import { COINGECKO_URL_BASE } from '../constants.js'
 import { resolveCoinGeckoChainId } from '../helpers.js'
@@ -13,10 +13,17 @@ import { FuseTrendingAPI } from '../../fuse/index.js'
 
 export class CoinGeckoTrending_API implements TrendingAPI.Provider<ChainId> {
     private fuse = new FuseTrendingAPI()
+    private coins: Map<string, TrendingAPI.Coin> = new Map()
+
+    private async createCoins() {
+        if (this.coins.size) return
+
+        const coins = await this.getAllCoins()
+        coins.forEach((x) => this.coins.set(x.id, x))
+    }
 
     private async getSupportedPlatform() {
-        const requestPath = `${COINGECKO_URL_BASE}/asset_platforms`
-        const response = await fetchJSON<Platform[]>(requestPath)
+        const response = await fetchJSON<Platform[]>(`${COINGECKO_URL_BASE}/asset_platforms`)
         return response.filter((x) => x.id && x.chain_identifier) ?? []
     }
 
@@ -26,8 +33,14 @@ export class CoinGeckoTrending_API implements TrendingAPI.Provider<ChainId> {
     }
 
     async getCoinsByKeyword(chainId: ChainId, keyword: string): Promise<TrendingAPI.Coin[]> {
-        const coins = await this.fuse.getSearchableItems(this.getAllCoins)
-        return coins.search(keyword).map((x) => x.item)
+        try {
+            await this.createCoins()
+            const coinThumbs = await getThumbCoins(keyword)
+            return compact(coinThumbs.map((x) => this.coins.get(x.id)))
+        } catch {
+            const coins = await this.fuse.getSearchableItems(this.getAllCoins)
+            return coins.search(keyword).map((x) => x.item)
+        }
     }
 
     async getCoinTrending(chainId: ChainId, id: string, currency: TrendingAPI.Currency): Promise<TrendingAPI.Trending> {

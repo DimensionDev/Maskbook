@@ -33,7 +33,7 @@ export async function getThumbCoins(keyword: string) {
         | { error: string }
     >(
         urlcat(`${COINGECKO_URL_BASE}/search`, {
-            qeery: keyword,
+            query: keyword,
         }),
         {
             cache: 'default',
