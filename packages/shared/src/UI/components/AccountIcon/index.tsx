@@ -54,7 +54,7 @@ function AccountTooltips({ platform, type, children }: AccountTooltipsProps) {
                               context: platform!,
                           })
                         : t.account_icon_tooltips({
-                              source: type ?? '',
+                              source: type?.replace('_', ' ') ?? '',
                               context: platform,
                           })}
                 </Typography>
@@ -86,6 +86,7 @@ export function AccountIcon({ socialAccount, classes: externalClasses }: Account
     const fromTwitter = [
         SocialAddressType.Address,
         SocialAddressType.ENS,
+        SocialAddressType.SPACE_ID,
         SocialAddressType.RSS3,
         SocialAddressType.SOL,
         SocialAddressType.TwitterBlue,

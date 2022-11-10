@@ -29,7 +29,7 @@ export function usePayloadFromTokenSearchKeyword(pluginID?: NetworkPluginID, key
     const nonFungibleAssetName = nonFungibleAsset.trending?.coin.symbol || nonFungibleAsset.trending?.coin.name
     const isNFT = schemaType === SchemaType.ERC1155 || schemaType === SchemaType.ERC721 || nonFungibleAssetName
     const presetDataProviders = isNFT ? [DataProvider.NFTScan] : undefined
-    console.log({ nonFungibleAsset, schemaType, fungibleToken })
+
     return {
         name: isPreciseSearch ? (isNFT ? nonFungibleAssetName : fungibleToken?.symbol ?? '') : name,
         presetDataProviders,

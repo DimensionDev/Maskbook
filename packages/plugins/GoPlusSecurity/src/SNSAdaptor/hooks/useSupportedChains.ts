@@ -6,7 +6,7 @@ import { NetworkPluginID } from '@masknet/shared-base'
 const unIntegrationChainLogos: Record<number, URL> = {
     128: new URL('../../assets/chain-heco.png', import.meta.url),
     66: new URL('../../assets/chain-okex.png', import.meta.url),
-    25: new URL('../../assets/chain-harmony.png', import.meta.url),
+    25: new URL('../../assets/chain-cronos.png', import.meta.url),
 }
 
 export const useSupportedChains = () => {

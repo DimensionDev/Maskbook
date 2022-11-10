@@ -1,10 +1,17 @@
+import type { PluginID } from '@masknet/shared-base'
 import { makeStyles, usePortalShadowRoot } from '@masknet/theme'
-import { Box, Typography, Portal, Button } from '@mui/material'
-import { PropsWithChildren, useRef, cloneElement, useEffect, ReactElement, useState } from 'react'
-import { activatedSocialNetworkUI } from '../../../social-network/index.js'
-import { useI18N } from '../locales/index.js'
-import { finishUserGuide, useTipsUserGuide } from '../storage/index.js'
-import type { EnhanceableSite } from '@masknet/shared-base'
+import { Box, Button, Portal, Typography } from '@mui/material'
+import React, {
+    cloneElement,
+    createContext,
+    PropsWithChildren,
+    ReactElement,
+    useContext,
+    useEffect,
+    useRef,
+    useState,
+} from 'react'
+import { usePluginGuideRecord } from './usePluginGuideRecord.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -26,8 +33,8 @@ const useStyles = makeStyles()((theme) => ({
         position: 'absolute',
         left: 0,
         width: 256,
-        padding: '16px',
-        borderRadius: '16px',
+        padding: theme.spacing(2),
+        borderRadius: theme.spacing(2),
         background: theme.palette.maskColor.tips,
         boxShadow: '0 4px 8px rgba(0,0,0,.1)',
         boxSizing: 'border-box',
@@ -62,7 +69,7 @@ const useStyles = makeStyles()((theme) => ({
     buttonContainer: {
         display: 'flex',
         justifyContent: 'space-between',
-        paddingTop: '16px',
+        paddingTop: theme.spacing(2),
     },
     button: {
         width: '100%',
@@ -71,39 +78,37 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface GuideStepProps extends PropsWithChildren<{}> {
+    step: number
     arrow?: boolean
     disabled?: boolean
-    onComplete?: () => void
 }
 
-export default function Guide({ children, arrow = true, disabled = false, onComplete }: GuideStepProps) {
-    const t = useI18N()
+export function PluginGuide({ children, arrow = true, disabled = false, step }: GuideStepProps) {
     const { classes, cx } = useStyles()
     const childrenRef = useRef<HTMLElement>()
+
     const [clientRect, setClientRect] = useState<any>({})
     const [open, setOpen] = useState(false)
     const [bottomAvailable, setBottomAvailable] = useState(true)
-    const ui = activatedSocialNetworkUI
-    const enableUserGuide = ui.configuration.tipsConfig?.enableUserGuide
-    const lastStep = useTipsUserGuide(ui.networkIdentifier as EnhanceableSite)
+    const { nextStep, currentStep, finished, title, actionText, totalStep } = useContext(PluginGuideContext)
 
     useEffect(() => {
-        if (disabled || !enableUserGuide || lastStep.finished) return
+        if (disabled || finished || step !== currentStep) return
         setOpen(true)
-    }, [])
+    }, [currentStep])
 
     useEffect(() => {
-        if (disabled || !enableUserGuide || lastStep.finished) return
         document.body.style.overflow = open ? 'hidden' : ''
     }, [open])
 
     const onNext = () => {
         setOpen(false)
-        finishUserGuide(ui.networkIdentifier as EnhanceableSite)
+        nextStep()
     }
 
     useEffect(() => {
-        if (disabled || !enableUserGuide || lastStep.finished) return
+        if (disabled || finished) return
+
         const onResize = () => {
             const cr = childrenRef.current?.getBoundingClientRect()
 
@@ -125,7 +130,7 @@ export default function Guide({ children, arrow = true, disabled = false, onComp
         return () => {
             window.removeEventListener('resize', onResize)
         }
-    }, [childrenRef, lastStep.finished])
+    }, [childrenRef, finished])
 
     return (
         <>
@@ -162,9 +167,16 @@ export default function Guide({ children, arrow = true, disabled = false, onComp
                                             left: clientRect.width < 50 ? -clientRect.width / 2 + 5 : 0,
                                             [bottomAvailable ? 'top' : 'bottom']: clientRect.height + 16,
                                         }}>
+                                        {totalStep !== 1 && (
+                                            <div style={{ paddingBottom: '16px' }}>
+                                                <Typography sx={{ fontSize: 20 }}>
+                                                    {currentStep}/{totalStep}
+                                                </Typography>
+                                            </div>
+                                        )}
                                         <div>
                                             <Typography fontSize={14} fontWeight={600}>
-                                                {t.tips_guide_description()}
+                                                {title}
                                             </Typography>
                                         </div>
                                         <div className={classes.buttonContainer}>
@@ -173,7 +185,7 @@ export default function Guide({ children, arrow = true, disabled = false, onComp
                                                 color="primary"
                                                 className={classes.button}
                                                 onClick={onNext}>
-                                                {t.tips_guide_action()}
+                                                {actionText}
                                             </Button>
                                         </div>
                                     </div>
@@ -184,5 +196,45 @@ export default function Guide({ children, arrow = true, disabled = false, onComp
                 )
             })}
         </>
+    )
+}
+
+interface PluginGuideContext {
+    title?: string
+    actionText?: string
+    finished: boolean
+    currentStep: number
+    totalStep: number
+    nextStep: () => void
+}
+const PluginGuideContext = createContext<PluginGuideContext>(null!)
+
+export function PluginGuideProvider({
+    value,
+    children,
+}: React.ProviderProps<{
+    pluginID: PluginID
+    totalStep: number
+    storageKey?: string
+    onFinish?: () => void
+    guides: Array<{
+        title: string
+        actionText: string
+    }>
+}>) {
+    const { guides, totalStep, onFinish, storageKey = 'default', pluginID } = value
+    const { currentStep, finished, nextStep } = usePluginGuideRecord(pluginID, totalStep, storageKey, onFinish)
+    return (
+        <PluginGuideContext.Provider
+            value={{
+                title: guides[currentStep - 1]?.title,
+                actionText: guides[currentStep - 1]?.actionText,
+                finished,
+                currentStep,
+                totalStep,
+                nextStep,
+            }}>
+            {children}
+        </PluginGuideContext.Provider>
     )
 }

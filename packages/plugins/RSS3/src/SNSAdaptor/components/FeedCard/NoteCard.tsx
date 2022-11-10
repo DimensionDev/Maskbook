@@ -15,6 +15,7 @@ const useStyles = makeStyles<void, 'title' | 'image' | 'content' | 'info' | 'bod
         color: theme.palette.maskColor.third,
     },
     title: {
+        fontWeight: 700,
         marginTop: theme.spacing(1),
         color: theme.palette.maskColor.main,
     },
@@ -53,7 +54,6 @@ const useStyles = makeStyles<void, 'title' | 'image' | 'content' | 'info' | 'bod
     },
     verbose: {
         [`.${refs.title}`]: {
-            fontWeight: 700,
             lineHeight: '18px',
             marginBottom: theme.spacing(1.5),
         },
@@ -89,7 +89,7 @@ interface NoteCardProps extends Omit<FeedCardProps, 'feed'> {
 }
 
 const cardTypeMap = {
-    [Type.Mint]: CardType.NoteEdit,
+    [Type.Mint]: CardType.NoteMint,
     [Type.Post]: CardType.NoteCreate,
     [Type.Revise]: CardType.NoteEdit,
     [Type.Share]: CardType.NoteLink,
@@ -99,6 +99,7 @@ const cardTypeMap = {
  * NoteCard
  * Including:
  *
+ * - NoteMint
  * - NoteCreate
  * - NoteEdit
  * - NoteLink
@@ -107,7 +108,8 @@ export const NoteCard: FC<NoteCardProps> = ({ feed, className, ...rest }) => {
     const { classes, cx } = useStyles()
     const { classes: mdClasses } = useMarkdownStyles()
 
-    const action = feed.actions[0]
+    // You might see a collectible action on a note minting feed
+    const action = feed.actions.filter((x) => x.tag === Tag.Social)[0]
     const metadata = 'target' in action.metadata! ? action.metadata.target : action.metadata
 
     const user = useAddressLabel(feed.owner)

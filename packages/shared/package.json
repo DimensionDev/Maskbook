@@ -47,6 +47,7 @@
   },
   "devDependencies": {
     "@types/qrcode": "^1.4.2",
-    "@types/remarkable": "^2.0.3"
+    "@types/remarkable": "^2.0.3",
+    "@types/use-subscription": "^1.0.0"
   }
 }

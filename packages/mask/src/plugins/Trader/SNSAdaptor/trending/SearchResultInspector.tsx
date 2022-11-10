@@ -22,7 +22,13 @@ export function SearchResultInspector({ keyword }: SearchResultInspectorProps) {
     if (!name || name === 'UNKNOWN' || addressType === AddressType.ExternalOwned || !dataProviders?.length) return null
     return (
         <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM, chainId: ChainId.Mainnet }}>
-            <TrendingView isPopper={false} name={name} tagType={type} dataProviders={dataProviders} />
+            <TrendingView
+                isPopper={false}
+                name={name}
+                tagType={type}
+                dataProviders={dataProviders}
+                isPreciseSearch={isPreciseSearch}
+            />
         </Web3ContextProvider>
     )
 }

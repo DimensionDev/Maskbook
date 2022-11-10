@@ -81,58 +81,69 @@ export const LiquidityCard: FC<TokenFeedCardProps> = ({ feed, className, ...rest
     const t = useI18N()
     const { classes, cx } = useStyles()
 
-    // You might see two transaction actions in a liquidity feed as well
-    const action = feed.actions.filter((x) => x.tag === Tag.Exchange)[0]
-    const metadata = action.metadata
-
     const owner = useFeedOwner()
     const user = useAddressLabel(owner.address)
 
-    const isSupply = !!metadata?.action && ['supply', 'add', 'repay'].includes(metadata?.action)
+    // You might see two transaction actions in a liquidity feed as well
+    const actions = feed.actions.filter((x) => x.tag === Tag.Exchange)
 
     return (
-        <CardFrame
-            type={CardType.TokenLiquidity}
-            feed={feed}
-            className={cx(className, verbose ? classes.verbose : null)}
-            {...rest}>
-            <Typography className={classes.summary}>
-                <Translate.liquidity
-                    values={{
-                        user,
-                        platform: feed.platform!,
-                        context: metadata?.action!,
-                    }}
-                    components={{
-                        user: <Label title={action.address_from!} />,
-                        platform: <Label />,
-                        bold: <Label />,
-                    }}
-                />
-            </Typography>
-            {metadata?.tokens.length ? (
-                <div className={classes.horizonCenter}>
-                    <div className={classes.tokenList}>
-                        {metadata.tokens.map((token) => (
-                            <div key={token.contract_address} className={classes.token}>
-                                <Image
-                                    classes={{ container: classes.tokenIcon }}
-                                    src={token.image}
-                                    height={40}
-                                    width={40}
-                                />
-                                <Typography className={cx(classes.value, isSupply ? classes.supply : classes.withdraw)}>
-                                    {isSupply ? '+ ' : '- '}
-                                    {t.token_value({
-                                        value: formatValue(token),
-                                        symbol: token.symbol,
-                                    })}
-                                </Typography>
+        <>
+            {actions.map((action, index) => {
+                const metadata = action.metadata
+                const isSupply = !!metadata?.action && ['supply', 'add', 'repay'].includes(metadata?.action)
+
+                return (
+                    <CardFrame
+                        key={index}
+                        type={CardType.TokenLiquidity}
+                        feed={feed}
+                        className={cx(className, verbose ? classes.verbose : null)}
+                        {...rest}>
+                        <Typography className={classes.summary}>
+                            <Translate.liquidity
+                                values={{
+                                    user,
+                                    platform: feed.platform!,
+                                    context: metadata?.action!,
+                                }}
+                                components={{
+                                    user: <Label title={action.address_from!} />,
+                                    platform: <Label />,
+                                    bold: <Label />,
+                                }}
+                            />
+                        </Typography>
+                        {metadata?.tokens.length ? (
+                            <div className={classes.horizonCenter}>
+                                <div className={classes.tokenList}>
+                                    {metadata.tokens.map((token) => (
+                                        <div key={token.contract_address} className={classes.token}>
+                                            <Image
+                                                classes={{ container: classes.tokenIcon }}
+                                                src={token.image}
+                                                height={40}
+                                                width={40}
+                                            />
+                                            <Typography
+                                                className={cx(
+                                                    classes.value,
+                                                    isSupply ? classes.supply : classes.withdraw,
+                                                )}>
+                                                {isSupply ? '+ ' : '- '}
+                                                {t.token_value({
+                                                    value: formatValue(token),
+                                                    symbol: token.symbol,
+                                                })}
+                                            </Typography>
+                                        </div>
+                                    ))}
+                                </div>
                             </div>
-                        ))}
-                    </div>
-                </div>
-            ) : null}
-        </CardFrame>
+                        ) : null}
+                    </CardFrame>
+                )
+            })}
+        </>
     )
 }
