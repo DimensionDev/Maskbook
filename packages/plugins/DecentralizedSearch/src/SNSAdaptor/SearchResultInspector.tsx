@@ -94,7 +94,9 @@ export function SearchResultInspector(props: { keyword: string }) {
         (ensRef.current && ensRef.current?.reversedAddress === undefined) ||
             isContractAddressType ||
             isLoadingAddressType ||
-            (ensRef.current?.reversedAddress && !Others?.isValidDomain?.(props.keyword)),
+            (ensRef.current?.reversedAddress &&
+                !Others?.isValidDomain?.(props.keyword) &&
+                !Others?.isValidDomain?.(ensRef.current.domain)),
     )
     const isEmpty = Boolean(
         ensRef.current && (!ensRef.current?.reversedAddress || !ensRef.current?.tokenId) && !ensRef.current?.isLoading,
