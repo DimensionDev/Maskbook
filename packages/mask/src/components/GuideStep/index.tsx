@@ -1,6 +1,7 @@
 import { useValueRef } from '@masknet/shared-base-ui'
 import { makeStyles, usePortalShadowRoot } from '@masknet/theme'
-import { Box, Typography, styled, Portal, debounce } from '@mui/material'
+import { Box, Typography, styled, Portal } from '@mui/material'
+import { debounce } from 'lodash-es'
 import { PropsWithChildren, useRef, cloneElement, useEffect, ReactElement, useState } from 'react'
 import { useLocation } from 'react-use'
 import { sayHelloShowed, userGuideStatus, userGuideVersion } from '../../../shared/legacy-settings/settings.js'
