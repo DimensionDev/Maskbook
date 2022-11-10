@@ -80,7 +80,6 @@ export const platformIconMap: Record<RSS3BaseAPI.Network | RSS3BaseAPI.Platform,
     optimism: Icons.Optimism,
     fantom: Icons.Fantom,
     avalanche: Icons.Avalanche,
-    // TODO icon for zksync is missing
     zksync: Icons.ZkScan,
     // Platforms
     Gitcoin: Icons.Gitcoin,
@@ -176,8 +175,13 @@ export function formatTimestamp(timestamp: string): string {
 }
 
 export function transformPlanetResource(markdown: string, base: string) {
-    return markdown.replace(/(<img [^>]*)\bsrc=("|')([^"']*)\2([^>]*>)/gi, (match, before, quotation, url, after) => {
-        if (url.match(/^https?:\/\//)) return match
-        return `${before}src=${quotation}https://thumbor.rss3.dev/unsafe/${base}/${url}${quotation}${after}`
-    })
+    return markdown
+        .replace(/(<img [^>]*)\bsrc=("|')([^"']*)\2([^>]*>)/gi, (match, before, quotation, url, after) => {
+            if (url.match(/^https?:\/\//)) return match
+            return `${before}src=${quotation}https://thumbor.rss3.dev/unsafe/${base}/${url}${quotation}${after}`
+        })
+        .replace(/(!\[.*?])\((.*?)\)/g, (match, head, url) => {
+            if (url.match(/^https?:\/\//)) return match
+            return `${head}(https://thumbor.rss3.dev/unsafe/${base}/${url})`
+        })
 }
