@@ -7,7 +7,7 @@ import { getTokenConstant } from './constants.js'
 import { ZERO_ADDRESS } from './primitives.js'
 
 const PLUGIN_ID = NetworkPluginID.PLUGIN_EVM
-const isOpera = navigator.userAgent.includes('OPR/')
+const isOpera = global.navigator?.userAgent.includes('OPR/')
 export const CHAIN_DESCRIPTORS: Array<ChainDescriptor<ChainId, SchemaType, NetworkType>> = CHAINS.map((x) => ({
     ...x,
     coinMarketCapChainId: '',
