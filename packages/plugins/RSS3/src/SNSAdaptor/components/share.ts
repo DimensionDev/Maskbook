@@ -136,6 +136,7 @@ export const hostNameMap: Record<string, string> = {
     'zkscan.io': 'ZkScan',
     'ipfs.io': 'IPFS',
     'snapshot.org': 'Snapshot',
+    'mirror.xyz': 'Mirror',
 }
 
 export function getLastAction<
