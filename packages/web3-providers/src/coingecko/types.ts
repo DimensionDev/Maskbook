@@ -25,7 +25,7 @@ export interface Exchange {
     name: string
     market_type: 'spot' | 'futures'
     thumb: string
-    larget: string
+    large: string
 }
 
 export interface CoinInfo {
