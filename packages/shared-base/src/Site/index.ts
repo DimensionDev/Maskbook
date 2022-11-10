@@ -67,5 +67,5 @@ export function isEthereumInjected() {
 }
 
 export function isOpera() {
-    return navigator.userAgent.includes('OPR/')
+    return globalThis.navigator?.userAgent.includes('OPR/')
 }
