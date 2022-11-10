@@ -27,7 +27,7 @@
     "async-call-rpc": "^6.1.5",
     "bignumber.js": "9.1.0",
     "dompurify": "^2.4.0",
-    "i18next-browser-languagedetector": "^6.1.5",
+    "i18next-browser-languagedetector": "^7.0.1",
     "idb": "^7.1.1",
     "pvtsutils": "^1.3.2",
     "react": "link:..\\empty",
