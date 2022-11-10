@@ -17,19 +17,3 @@ export async function attemptUntil<T>(funcs: Array<() => Promise<T> | undefined>
     if (hasError) throw new Error('Failed to fetch.')
     return fallback
 }
-
-export async function attemptUntilExpectResultMatched<T>(funcs: Array<() => Promise<T> | undefined>, expectResult: T) {
-    let hasError = false
-    for (const func of funcs) {
-        try {
-            const result = await func()
-            if (result !== expectResult) continue
-            return result === expectResult
-        } catch (error) {
-            hasError = true
-            continue
-        }
-    }
-    if (hasError) throw new Error('Failed to fetch.')
-    return false
-}

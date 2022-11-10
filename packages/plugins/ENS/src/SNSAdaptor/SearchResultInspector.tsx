@@ -78,8 +78,7 @@ const useStyles = makeStyles<StyleProps>()((theme) => {
             cursor: 'pointer',
         },
         bindingsWrapper: {
-            display: 'grid',
-            gridAutoFlow: 'column',
+            display: 'flex',
             width: 520,
             alignItems: 'center',
             overflow: 'hidden',
