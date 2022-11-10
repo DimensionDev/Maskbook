@@ -51,6 +51,15 @@ const Preset2021: Preset = {
 }
 
 const Preset2022: Preset = {
+    type: 'string',
+    description: 'the preset we used for payload V38',
+    width: 1200,
+    height: 682,
+    mask: null,
+    options: libV2AlgrDefaults,
+}
+
+const Preset2023: Preset = {
     type: 'raw',
     description: 'the preset we used for payload V37',
     width: 1200,
@@ -59,20 +68,10 @@ const Preset2022: Preset = {
     options: libV2AlgrDefaults,
 }
 
-const Preset2023: Preset = {
-    type: 'string',
-    description: 'the preset we used for payload V38',
-    width: 1200,
-    // TODO: use a different height with Preset 2021 and Preset 2022
-    height: 681,
-    mask: null,
-    options: libV2AlgrDefaults,
-}
-
 const dimensionPreset: readonly Preset[] = [
     Preset2023,
     Preset2022,
-    // Preset2021,
+    Preset2021,
     {
         type: 'string',
         description: 'legacy post',

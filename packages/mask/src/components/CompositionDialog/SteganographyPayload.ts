@@ -6,7 +6,7 @@ import { downloadUrl } from '../../utils/utils.js'
 
 export async function SteganographyPayload(data: string | Uint8Array) {
     const password = activatedSocialNetworkUI.configuration.steganography?.password?.() || 'mask'
-    const preset = typeof data === 'string' ? SteganographyPreset.Preset2023 : SteganographyPreset.Preset2022
+    const preset = typeof data === 'string' ? SteganographyPreset.Preset2022 : SteganographyPreset.Preset2023
     const blankImage = await downloadUrl(SteganographyPresetImage[preset]).then((x) => x.arrayBuffer())
     const secretImage = await Services.Crypto.steganographyEncodeImage(new Uint8Array(blankImage), {
         preset,
