@@ -2,7 +2,11 @@ import { makeStyles } from '@masknet/theme'
 import { Stack } from '@mui/material'
 import { Plugin } from '@masknet/plugin-infra'
 import { TipButton } from '../../../components/index.js'
-import Guide from '../../../components/Guide.js'
+import { PluginGuide, PluginGuideProvider } from '@masknet/shared'
+import { EnhanceableSite, PluginID } from '@masknet/shared-base'
+import { useI18N } from '../../../locales/index.js'
+import { useTipsUserGuide } from '../../../storage/index.js'
+import { activatedSocialNetworkUI } from '../../../../../social-network/ui.js'
 
 const useStyles = makeStyles<{}, 'postTipsButton'>()((theme, _, refs) => ({
     focusingPostButtonWrapper: {
@@ -66,7 +70,10 @@ export const TipsRealmContent: Plugin.InjectUI<Plugin.SNSAdaptor.TipsRealmOption
     accounts,
     onStatusUpdate,
 }) => {
+    const t = useI18N()
     const { classes, cx } = useStyles({})
+    const lastStep = useTipsUserGuide(activatedSocialNetworkUI.networkIdentifier as EnhanceableSite)
+
     if (!identity) return null
 
     const buttonClassMap: Record<Plugin.SNSAdaptor.TipsSlot, string> = {
@@ -89,11 +96,25 @@ export const TipsRealmContent: Plugin.InjectUI<Plugin.SNSAdaptor.TipsRealmOption
 
     if (slot === Plugin.SNSAdaptor.TipsSlot.MirrorMenu) {
         return (
-            <Guide>
-                <Stack display="inline-block" width="38px" height="38px" position="relative" top={2}>
-                    {button}
-                </Stack>
-            </Guide>
+            <PluginGuideProvider
+                value={{
+                    pluginID: PluginID.Tips,
+                    storageKey: EnhanceableSite.Mirror,
+                    // Work for migrate from old tips guide setting
+                    totalStep: lastStep.finished ? 0 : 1,
+                    guides: [
+                        {
+                            title: t.tips_guide_description(),
+                            actionText: t.tips_guide_action(),
+                        },
+                    ],
+                }}>
+                <PluginGuide step={1}>
+                    <Stack display="inline-block" width="38px" height="38px" position="relative" top={2}>
+                        {button}
+                    </Stack>
+                </PluginGuide>
+            </PluginGuideProvider>
         )
     }
 

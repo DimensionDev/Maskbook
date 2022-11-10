@@ -119,6 +119,7 @@ export interface TrendingViewDeckProps extends withClasses<'header' | 'body' | '
     trending: TrendingAPI.Trending
     dataProvider: DataProvider
     children?: React.ReactNode
+    isPreciseSearch?: boolean
     showDataProviderIcon?: boolean
     TrendingCardProps?: Partial<TrendingCardProps>
     dataProviders: DataProvider[]
@@ -135,6 +136,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
         showDataProviderIcon = false,
         TrendingCardProps,
         dataProviders = EMPTY_LIST,
+        isPreciseSearch = false,
     } = props
     const { coin, market } = trending
 
@@ -247,7 +249,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                             </Typography>
                                         ) : null}
                                     </Typography>
-                                    {coins.length > 1 ? (
+                                    {coins.length > 1 && !isPreciseSearch ? (
                                         <>
                                             <IconButton
                                                 sx={{ padding: 0 }}

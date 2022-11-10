@@ -51,9 +51,9 @@ const sns: Plugin.SNSAdaptor.Definition = {
             ApplicationEntryID: base.ID,
             category: 'dapp',
             marketListSortingPriority: 20,
-            description: <Trans i18nKey="plugin_ens_description" />,
-            name: <Trans i18nKey="plugin_ens_name" />,
-            icon: <Icons.ENS size={36} />,
+            description: <Trans i18nKey="plugin_decentralized_search_description" />,
+            name: <Trans i18nKey="plugin_decentralized_search_name" />,
+            icon: <Icons.DecentralizedSearch size={36} />,
         },
     ],
 }
