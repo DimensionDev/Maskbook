@@ -110,30 +110,29 @@ export const LiquidityCard: FC<TokenFeedCardProps> = ({ feed, className, ...rest
                     }}
                 />
             </Typography>
-            <div className={classes.horizonCenter}>
-                <div className={classes.tokenList}>
-                    {metadata?.tokens.length
-                        ? metadata.tokens.map((token) => (
-                              <div key={token.contract_address} className={classes.token}>
-                                  <Image
-                                      classes={{ container: classes.tokenIcon }}
-                                      src={token.image}
-                                      height={40}
-                                      width={40}
-                                  />
-                                  <Typography
-                                      className={cx(classes.value, isSupply ? classes.supply : classes.withdraw)}>
-                                      {isSupply ? '+ ' : '- '}
-                                      {t.token_value({
-                                          value: formatValue(token),
-                                          symbol: token.symbol,
-                                      })}
-                                  </Typography>
-                              </div>
-                          ))
-                        : null}
+            {metadata?.tokens.length ? (
+                <div className={classes.horizonCenter}>
+                    <div className={classes.tokenList}>
+                        {metadata.tokens.map((token) => (
+                            <div key={token.contract_address} className={classes.token}>
+                                <Image
+                                    classes={{ container: classes.tokenIcon }}
+                                    src={token.image}
+                                    height={40}
+                                    width={40}
+                                />
+                                <Typography className={cx(classes.value, isSupply ? classes.supply : classes.withdraw)}>
+                                    {isSupply ? '+ ' : '- '}
+                                    {t.token_value({
+                                        value: formatValue(token),
+                                        symbol: token.symbol,
+                                    })}
+                                </Typography>
+                            </div>
+                        ))}
+                    </div>
                 </div>
-            </div>
+            ) : null}
         </CardFrame>
     )
 }
