@@ -22,7 +22,7 @@
     "@mui/system": "link:..\\empty",
     "@servie/events": "^3.0.0",
     "@types/dompurify": "^2.3.4",
-    "@types/react": "18.0.19",
+    "@types/react": "18.0.21",
     "anchorme": "^2.1.2",
     "async-call-rpc": "^6.1.5",
     "bignumber.js": "9.1.0",
