@@ -231,7 +231,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
 
     const componentTabId = showNextID ? `${PluginID.NextID}_tabContent` : currentTab
 
-    const component = useMemo(() => {
+    const contentComponent = useMemo(() => {
         const Component = getProfileTabContent(componentTabId)
         if (!Component) return null
 
@@ -266,7 +266,6 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
 
     useEffect(() => {
         const listener = () => setMenuOpen(false)
-
         window.addEventListener('scroll', listener, false)
 
         return () => {
@@ -302,7 +301,12 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         )
     }
 
-    if (!currentVisitingUserId || loadingSocialAccounts || loadingCurrentVisitingSocialIdentity || loadingPersonaStatus)
+    if (
+        (!currentVisitingUserId && !loadCurrentVisitingSocialIdentityError) ||
+        loadingSocialAccounts ||
+        loadingCurrentVisitingSocialIdentity ||
+        loadingPersonaStatus
+    )
         return (
             <ThemeProvider theme={MaskLightTheme}>
                 <div className={classes.root}>
@@ -487,7 +491,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
                     </div>
                 )}
             </div>
-            <div className={classes.content}>{component}</div>
+            <div className={classes.content}>{contentComponent}</div>
         </div>
     )
 }

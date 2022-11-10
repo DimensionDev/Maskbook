@@ -56,7 +56,6 @@ export function SelectProviderDialog(props: SelectProviderDialogProps) {
         if (hasNativeAPI) nativeAPI?.api.misc_openCreateWalletView()
     }, [open])
     // #endregion
-
     const site = getSiteType()
     const networks = getRegisteredWeb3Networks()
     const providers = getRegisteredWeb3Providers()

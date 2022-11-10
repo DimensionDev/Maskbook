@@ -18,6 +18,7 @@ export interface EncodeImageOptions extends SteganographyIO {
 export enum SteganographyPreset {
     Preset2021 = '2021',
     Preset2022 = '2022',
+    Preset2023 = '2023',
 }
 
 export async function steganographyEncodeImage(buf: ArrayBuffer, options: EncodeImageOptions) {

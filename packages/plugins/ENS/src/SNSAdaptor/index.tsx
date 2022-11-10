@@ -17,7 +17,6 @@ const sns: Plugin.SNSAdaptor.Definition = {
     ApplicationEntries: [
         {
             ApplicationEntryID: base.ID,
-            category: 'dapp',
             marketListSortingPriority: 20,
             description: <Trans i18nKey="plugin_ens_description" />,
             name: <Trans i18nKey="plugin_ens_name" />,
