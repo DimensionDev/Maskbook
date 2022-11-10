@@ -6,7 +6,7 @@ import { BigNumber } from 'bignumber.js'
 import type { FC, HTMLProps, ReactNode } from 'react'
 import formatDateTime from 'date-fns/format'
 import { useViewFeedDetails } from '../contexts/index.js'
-import { CardType, cardTypeIconMap, formatTimestamp, platformIconMap } from './share.js'
+import { CardType, cardTypeIconMap, formatTimestamp, getPlatformIcon } from './share.js'
 
 export interface FeedCardBaseProps {
     feed: RSS3BaseAPI.Web3Feed
@@ -80,8 +80,8 @@ export const CardFrame: FC<CardFrameProps> = ({
 }) => {
     const { classes, cx } = useStyles()
     const CardIcon = cardTypeIconMap[type]
-    const PrimaryPlatformIcon = feed.network ? platformIconMap[feed.network] : null
-    const ProviderPlatformIcon = feed.platform ? platformIconMap[feed.platform] : null
+    const PrimaryPlatformIcon = getPlatformIcon(feed.network)
+    const ProviderPlatformIcon = getPlatformIcon(feed.platform)
 
     const viewDetails = useViewFeedDetails()
 

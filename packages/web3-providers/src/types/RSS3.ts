@@ -330,6 +330,7 @@ export namespace RSS3BaseAPI {
         | 'Planet'
         | 'PancakeSwap'
         | 'Aave'
+        | 'AAVE'
 
     export enum Tag {
         Collectible = 'collectible',

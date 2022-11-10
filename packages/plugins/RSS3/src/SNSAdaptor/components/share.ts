@@ -70,7 +70,7 @@ export const cardTypeIconMap: Record<CardType, IconComponent> = {
     [CardType.UnknownOut]: Icons.UnknownOut,
 }
 
-export const platformIconMap: Record<RSS3BaseAPI.Network | RSS3BaseAPI.Platform, IconComponent | null> = {
+const platformIconMap: Record<Lowercase<RSS3BaseAPI.Network | RSS3BaseAPI.Platform>, IconComponent | null> = {
     // Networks
     ethereum: Icons.ETH,
     binance_smart_chain: Icons.BSC,
@@ -82,28 +82,32 @@ export const platformIconMap: Record<RSS3BaseAPI.Network | RSS3BaseAPI.Platform,
     avalanche: Icons.Avalanche,
     zksync: Icons.ZkScan,
     // Platforms
-    Gitcoin: Icons.Gitcoin,
-    Mirror: Icons.Mirror,
-    Snapshot: Icons.Snapshot,
-    Uniswap: Icons.Uniswap,
+    gitcoin: Icons.Gitcoin,
+    mirror: Icons.Mirror,
+    snapshot: Icons.Snapshot,
+    uniswap: Icons.Uniswap,
     binance: Icons.BSC,
-    Lens: Icons.Lens,
-    Farcaster: Icons.Farcaster,
+    lens: Icons.Lens,
+    farcaster: Icons.Farcaster,
     crossbell: Icons.Crossbell,
     '0x': Icons.ZeroX,
-    'ENS Registrar': null,
-    CrossSync: Icons.CrossSync,
-    Crossbell: Icons.Crossbell,
-    MetaMask: Icons.MetaMask,
-    OpenSea: Icons.OpenSea,
-    SushiSwap: Icons.SushiSwap,
-    PancakeSwap: Icons.PancakeSwap,
-    Aave: Icons.Aave,
+    'ens registrar': null,
+    crosssync: Icons.CrossSync,
+    metamask: Icons.MetaMask,
+    opensea: Icons.OpenSea,
+    sushiswap: Icons.SushiSwap,
+    pancakeswap: Icons.PancakeSwap,
+    aave: Icons.Aave,
     'crossbell.io': Icons.Crossbell,
-    xLog: Icons.XLog,
-    'EIP-1577': Icons.EIP1577,
-    Planet: Icons.Planet,
+    xlog: Icons.XLog,
+    'eip-1577': Icons.EIP1577,
+    planet: Icons.Planet,
     arweave: Icons.Arweave,
+}
+
+export const getPlatformIcon = (platform?: RSS3BaseAPI.Network | RSS3BaseAPI.Platform) => {
+    if (!platform) return null
+    return platformIconMap[platform.toLowerCase() as Lowercase<RSS3BaseAPI.Network | RSS3BaseAPI.Platform>]
 }
 
 export const hostIconMap: Record<string, IconComponent> = {
