@@ -61,13 +61,13 @@ export function ENSProvider({ children, keyword, keywordType }: PropsWithChildre
         if (keywordType === SearchKeywordType.Domain) return _reversedAddress
         if (keywordType === SearchKeywordType.Address) return keyword
         return undefined
-    }, [keywordType, keyword, _reversedAddress])
+    }, [keywordType, keyword, _reversedAddress, isLoadingLookup])
 
     const domain = useMemo(() => {
         if (keywordType === SearchKeywordType.Domain) return keyword
         if (keywordType === SearchKeywordType.Address) return _domain ?? ''
         return ''
-    }, [keywordType, keyword, _domain])
+    }, [keywordType, keyword, _domain, isLoadingReverse])
 
     const tokenId = resolveNonFungibleTokenIdFromEnsDomain(domain)
     const { value: ids } = useAsync(
