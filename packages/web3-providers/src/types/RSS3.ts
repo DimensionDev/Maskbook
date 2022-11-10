@@ -306,6 +306,7 @@ export namespace RSS3BaseAPI {
         | 'EIP-1577'
 
     export type Platform =
+        | 'arweave'
         | 'binance'
         | 'ENS Registrar'
         | '0x'
@@ -323,6 +324,8 @@ export namespace RSS3BaseAPI {
         | 'xLog'
         | 'Farcaster'
         | 'Planet'
+        | 'PancakeSwap'
+        | 'Aave'
 
     export enum Tag {
         Collectible = 'collectible',

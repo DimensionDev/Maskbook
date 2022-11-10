@@ -97,11 +97,14 @@ export const platformIconMap: Record<RSS3BaseAPI.Network | RSS3BaseAPI.Platform,
     Crossbell: Icons.Crossbell,
     MetaMask: Icons.MetaMask,
     OpenSea: Icons.OpenSea,
-    SushiSwap: null,
+    SushiSwap: Icons.SushiSwap,
+    PancakeSwap: Icons.PancakeSwap,
+    Aave: Icons.Aave,
     'crossbell.io': Icons.Crossbell,
     xLog: Icons.XLog,
     'EIP-1577': Icons.EIP1577,
     Planet: Icons.Planet,
+    arweave: Icons.Arweave,
 }
 
 export const hostIconMap: Record<string, IconComponent> = {
@@ -117,6 +120,7 @@ export const hostIconMap: Record<string, IconComponent> = {
     'zkscan.io': Icons.ZkScan,
     'mirror.xyz': Icons.Mirror,
     'ipfs.io': Icons.IPFS,
+    'snapshot.org': Icons.Snapshot,
 }
 
 export const hostNameMap: Record<string, string> = {
@@ -131,6 +135,7 @@ export const hostNameMap: Record<string, string> = {
     'bscscan.com': 'BscScan',
     'zkscan.io': 'ZkScan',
     'ipfs.io': 'IPFS',
+    'snapshot.org': 'Snapshot',
 }
 
 export function getLastAction<

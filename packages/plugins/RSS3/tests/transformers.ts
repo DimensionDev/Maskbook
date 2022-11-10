@@ -8,7 +8,6 @@ describe('markdown ipfs url transformer', () => {
         <img width="2048" alt="pubsub" src="pubsub.png">
     `
         const result = transformPlanetResource(mockup, 'https://ipfs.io/ipfs/cidcidcid')
-        console.log(result)
         expect(result).contains('https://ipfs.io/ipfs/cidcidcid/pubsub.png')
     })
 })
