@@ -1,6 +1,6 @@
 import { getEnumAsArray } from '@masknet/kit'
 import { ChainDescriptor, NetworkDescriptor, ProviderDescriptor, TokenType } from '@masknet/web3-shared-base'
-import { EnhanceableSite, ExtensionSite, isFirefox, NetworkPluginID } from '@masknet/shared-base'
+import { EnhanceableSite, ExtensionSite, isFirefox, isOpera, NetworkPluginID } from '@masknet/shared-base'
 import CHAINS from './chains.json'
 import { ChainId, NetworkType, ProviderType, SchemaType } from '../types/index.js'
 import { getTokenConstant } from './constants.js'
@@ -369,7 +369,7 @@ export const PROVIDER_DESCRIPTORS: Array<ProviderDescriptor<ChainId, ProviderTyp
         icon: new URL('../assets/opera.png', import.meta.url),
         enableRequirements: {
             supportedChainIds: [ChainId.Mainnet, ChainId.BSC, ChainId.Matic],
-            supportedEnhanceableSites: getEnumAsArray(EnhanceableSite).map((x) => x.value),
+            supportedEnhanceableSites: isOpera() ? getEnumAsArray(EnhanceableSite).map((x) => x.value) : [],
             supportedExtensionSites: [],
         },
         homeLink: 'https://www.opera.com/crypto/next',

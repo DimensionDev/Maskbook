@@ -4,7 +4,11 @@ import type { GeneratedIconNonSquareProps } from '@masknet/icons'
 import type { RSS3BaseAPI } from '@masknet/web3-providers'
 import type { ComponentType } from 'react'
 
-export type IconComponent = ComponentType<GeneratedIconNonSquareProps<never>>
+export type IconComponent =
+    | ComponentType<GeneratedIconNonSquareProps<never>>
+    | ComponentType<GeneratedIconNonSquareProps<'light'>>
+    | ComponentType<GeneratedIconNonSquareProps<'dark'>>
+    | ComponentType<GeneratedIconNonSquareProps<'dim'>>
 
 export enum CardType {
     AchievementBurn = 1,
@@ -93,11 +97,14 @@ export const platformIconMap: Record<RSS3BaseAPI.Network | RSS3BaseAPI.Platform,
     Crossbell: Icons.Crossbell,
     MetaMask: Icons.MetaMask,
     OpenSea: Icons.OpenSea,
-    SushiSwap: null,
+    SushiSwap: Icons.SushiSwap,
+    PancakeSwap: Icons.PancakeSwap,
+    Aave: Icons.Aave,
     'crossbell.io': Icons.Crossbell,
     xLog: Icons.XLog,
     'EIP-1577': Icons.EIP1577,
     Planet: Icons.Planet,
+    arweave: Icons.Arweave,
 }
 
 export const hostIconMap: Record<string, IconComponent> = {
@@ -113,6 +120,7 @@ export const hostIconMap: Record<string, IconComponent> = {
     'zkscan.io': Icons.ZkScan,
     'mirror.xyz': Icons.Mirror,
     'ipfs.io': Icons.IPFS,
+    'snapshot.org': Icons.Snapshot,
 }
 
 export const hostNameMap: Record<string, string> = {
@@ -127,6 +135,8 @@ export const hostNameMap: Record<string, string> = {
     'bscscan.com': 'BscScan',
     'zkscan.io': 'ZkScan',
     'ipfs.io': 'IPFS',
+    'snapshot.org': 'Snapshot',
+    'mirror.xyz': 'Mirror',
 }
 
 export function getLastAction<
@@ -163,4 +173,11 @@ export function formatTimestamp(timestamp: string): string {
     }
     const mins = Math.floor(distance / ONE_MIN)
     return plural(mins, 'min')
+}
+
+export function transformPlanetResource(markdown: string, base: string) {
+    return markdown.replace(/(<img [^>]*)\bsrc=("|')([^"']*)\2([^>]*>)/gi, (match, before, quotation, url, after) => {
+        if (url.match(/^https?:\/\//)) return match
+        return `${before}src=${quotation}https://thumbor.rss3.dev/unsafe/${base}/${url}${quotation}${after}`
+    })
 }
