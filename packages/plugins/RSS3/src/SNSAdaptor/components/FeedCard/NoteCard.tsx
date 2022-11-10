@@ -108,7 +108,8 @@ export const NoteCard: FC<NoteCardProps> = ({ feed, className, ...rest }) => {
     const { classes, cx } = useStyles()
     const { classes: mdClasses } = useMarkdownStyles()
 
-    const action = feed.actions[0]
+    // You might see a collectible action on a note minting feed
+    const action = feed.actions.filter((x) => x.tag === Tag.Social)[0]
     const metadata = 'target' in action.metadata! ? action.metadata.target : action.metadata
 
     const user = useAddressLabel(feed.owner)
