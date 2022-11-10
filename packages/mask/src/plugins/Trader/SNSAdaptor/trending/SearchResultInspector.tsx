@@ -10,7 +10,7 @@ export interface SearchResultInspectorProps {
 }
 
 export function SearchResultInspector({ keyword }: SearchResultInspectorProps) {
-    const { name, type } = usePayloadFromTokenSearchKeyword(NetworkPluginID.PLUGIN_EVM, keyword)
+    const { name, type, isPreciseSearch } = usePayloadFromTokenSearchKeyword(NetworkPluginID.PLUGIN_EVM, keyword)
 
     const { value: addressType } = useAddressType(NetworkPluginID.PLUGIN_EVM, keyword, { chainId: ChainId.Mainnet })
 
@@ -19,7 +19,13 @@ export function SearchResultInspector({ keyword }: SearchResultInspectorProps) {
     if (!name || name === 'UNKNOWN' || addressType === AddressType.ExternalOwned || !dataProviders?.length) return null
     return (
         <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM, chainId: ChainId.Mainnet }}>
-            <TrendingView isPopper={false} name={name} tagType={type} dataProviders={dataProviders} />
+            <TrendingView
+                isPopper={false}
+                name={name}
+                tagType={type}
+                dataProviders={dataProviders}
+                isPreciseSearch={isPreciseSearch}
+            />
         </Web3ContextProvider>
     )
 }
