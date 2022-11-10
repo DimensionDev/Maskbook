@@ -1,10 +1,12 @@
 {
+    "token_operation$mint": "<to>{{to}}</to> minted <bold>{{value}} {{symbol}}</bold>",
     "token_operation$send": "<from>{{from}}</from> sent to <to>{{to}}</to>",
     "token_operation$claim": "<to>{{to}}</to> claim from <from>{{from}}</from>",
     "token_operation$burn": "<from>{{from}}</from> burned <bold>{{value}} {{symbol}}</bold>",
+    "token_operation_verbose$mint": "$t(token_operation$mint)",
     "token_operation_verbose$send": "<from>{{from}}</from> sent to <to>{{to}}</to> for <bold>{{value}} {{symbol}}</bold>",
     "token_operation_verbose$claim": "<to>{{to}}</to> claim from <from>{{from}}</from> for <bold>{{value}} {{symbol}}</bold>",
-    "token_operation_verbose$burn": "$t(token_operation_verbose$burn)",
+    "token_operation_verbose$burn": "$t(token_operation$burn)",
     "liquidity$supply": "<user>{{user}}</user> supplied liquidity on <platform>{{platform}}</platform>",
     "liquidity$add": "<user>{{user}}</user> added liquidity on <platform>{{platform}}</platform>",
     "liquidity$repay": "<user>{{user}}</user> repaid liquidity on <platform>{{platform}}</platform>",
