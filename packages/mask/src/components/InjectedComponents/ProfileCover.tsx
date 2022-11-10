@@ -22,7 +22,6 @@ export function ProfileCover(props: ProfileCoverProps) {
     const component = useMemo(() => {
         const Component = createInjectHooksRenderer(useActivatedPluginsSNSAdaptor.visibility.useAnyMode, (x) => {
             const cover = x.ProfileCover?.find((x) => x.ID === `${PluginID.Debugger}_cover`)
-
             return cover?.UI?.Cover
         })
 

@@ -279,6 +279,7 @@
     ],
     "ignoreWords": [
         "aicanft",
+        "rehype",
         "algr",
         "anft",
         "apng",
