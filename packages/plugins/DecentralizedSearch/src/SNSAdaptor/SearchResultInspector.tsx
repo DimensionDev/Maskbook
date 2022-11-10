@@ -93,7 +93,8 @@ export function SearchResultInspector(props: { keyword: string }) {
     const isHiddenAll = Boolean(
         (ensRef.current && ensRef.current?.reversedAddress === undefined) ||
             isContractAddressType ||
-            isLoadingAddressType,
+            isLoadingAddressType ||
+            (ensRef.current?.reversedAddress && !Others?.isValidDomain?.(props.keyword)),
     )
     const isEmpty = Boolean(
         ensRef.current && (!ensRef.current?.reversedAddress || !ensRef.current?.tokenId) && !ensRef.current?.isLoading,
