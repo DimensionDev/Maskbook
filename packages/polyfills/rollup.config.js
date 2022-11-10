@@ -3,11 +3,11 @@ import { nodeResolve } from '@rollup/plugin-node-resolve'
 import commonjs from '@rollup/plugin-commonjs'
 import { terser } from 'rollup-plugin-terser'
 import json from '@rollup/plugin-json'
-import { join } from 'path'
+import { fileURLToPath } from 'node:url'
 
 export default [
     {
-        input: join(__dirname, './ecmascript-intl/index.ts'),
+        input: fileURLToPath(new URL('./ecmascript-intl/index.ts', import.meta.url)),
         output: {
             file: 'intl.js',
             format: 'iife',
@@ -15,7 +15,7 @@ export default [
         plugins: plugins(),
     },
     {
-        input: join(__dirname, './web-apis/index.ts'),
+        input: fileURLToPath(new URL('./web-apis/index.ts', import.meta.url)),
         output: {
             file: 'dom.js',
             format: 'iife',
@@ -23,7 +23,7 @@ export default [
         plugins: plugins(),
     },
     {
-        input: join(__dirname, './web-apis/worker.ts'),
+        input: fileURLToPath(new URL('./web-apis/worker.ts', import.meta.url)),
         output: {
             file: 'worker.js',
             format: 'iife',
@@ -31,7 +31,7 @@ export default [
         plugins: plugins(),
     },
     {
-        input: join(__dirname, './lib-runtime.mjs'),
+        input: fileURLToPath(new URL('./lib-runtime.js', import.meta.url)),
         output: {
             file: 'lib-runtime.js',
             format: 'iife',

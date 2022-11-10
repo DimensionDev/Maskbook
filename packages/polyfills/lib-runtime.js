@@ -1,7 +1,7 @@
 /* cspell:disable */
 import * as RegeneratorRuntime from 'regenerator-runtime'
 import * as tslib from 'tslib'
-import * as ReflectMetadata from './reflect-metadata.mjs'
+import * as ReflectMetadata from './reflect-metadata.js'
 
 function define(items) {
     const desc = {}
