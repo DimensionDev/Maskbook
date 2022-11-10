@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
 
-import { markdownTransformIpfsURL } from '../src/utils/markdown.js'
+import { markdownTransformIpfsURL } from '../../src/utils/markdown.js'
 
 describe('markdown ipfs url transformer', () => {
     it('should transform ipfs into http url', () => {

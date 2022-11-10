@@ -27,6 +27,8 @@
     "note$comment": "<bold>{{user}}</bold> made a comment on <bold>{{platform}}</bold>",
     "profile$create": "<user>{{user}}</user> created a profile on <platform>{{platform}}</platform>",
     "profile$update": "<user>{{user}}</user> updated a profile on <platform>{{platform}}</platform>",
+    "profile_link$follow": "<user>{{user}}</user> followed <other>{{other}}</other> on <platform>{{platform}}</platform>",
+    "profile_link$unfollow": "<user>{{user}}</user> unfollowed <other>{{other}}</other> on <platform>{{platform}}</platform>",
     "vote": "<bold>{{user}}</bold> voted for <bold>{{option}}</bold>",
     "propose": "<bold>{{user}}</bold> proposed",
     "original": "Original",
