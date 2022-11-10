@@ -18,7 +18,7 @@ import { ProfileTab } from '../../../components/InjectedComponents/ProfileTab.js
 
 function getStyleProps() {
     const EMPTY_STYLE = {} as CSSStyleDeclaration
-    const eleTab = searchProfileTabSelector().evaluate()?.querySelector<Element>('div')
+    const eleTab = searchProfileTabSelector().evaluate()?.querySelector<Element>('div > div')
     const style = eleTab ? window.getComputedStyle(eleTab) : EMPTY_STYLE
     const eleNewTweetButton = searchNewTweetButtonSelector().evaluate()
     const newTweetButtonColorStyle = eleNewTweetButton ? window.getComputedStyle(eleNewTweetButton) : EMPTY_STYLE
@@ -38,7 +38,6 @@ function getStyleProps() {
 
 const useStyles = makeStyles()((theme) => {
     const props = getStyleProps()
-
     return {
         root: {
             '&:hover': {
@@ -105,18 +104,17 @@ function tabClickHandler() {
 }
 
 async function hideTwitterActivatedContent() {
-    const eleTab = searchProfileTabSelector().evaluate()?.querySelector('div') as Element
+    const eleTab = searchProfileTabSelector().evaluate()?.querySelector<Element>('div > div')
     const loseConnectionEle = searchProfileTabLoseConnectionPageSelector().evaluate()
     if (!eleTab) return
     const style = window.getComputedStyle(eleTab)
-
     // hide the activated indicator
     const tabList = searchProfileTabListSelector().evaluate()
     tabList.map((v) => {
-        const _v = v.querySelector<HTMLDivElement>('div')
+        const _v = v.querySelector<HTMLDivElement>('div > div')
         if (_v) _v.style.color = style.color
 
-        const line = v.querySelector<HTMLDivElement>('div > div')
+        const line = v.querySelector<HTMLDivElement>('div > div > div')
         if (line) line.style.display = 'none'
         v.addEventListener('click', v.closest('#open-nft-button') ? nameTagClickHandler : tabClickHandler)
     })
@@ -141,15 +139,15 @@ async function hideTwitterActivatedContent() {
 }
 
 function resetTwitterActivatedContent() {
-    const eleTab = searchProfileTabSelector().evaluate()?.querySelector<Element>('div')
+    const eleTab = searchProfileTabSelector().evaluate()?.querySelector<Element>('div > div')
     const loseConnectionEle = searchProfileTabLoseConnectionPageSelector().evaluate()
     if (!eleTab) return
 
     const tabList = searchProfileTabListSelector().evaluate()
     tabList.map((v) => {
-        const _v = v.querySelector<HTMLDivElement>('div')
+        const _v = v.querySelector<HTMLDivElement>('div > div')
         if (_v) _v.style.color = ''
-        const line = v.querySelector<HTMLDivElement>('div > div')
+        const line = v.querySelector<HTMLDivElement>('div > div > div')
         if (line) line.style.display = ''
         v.removeEventListener('click', v.closest('#open-nft-button') ? nameTagClickHandler : tabClickHandler)
     })
