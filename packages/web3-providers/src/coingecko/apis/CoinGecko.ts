@@ -39,7 +39,10 @@ export class CoinGeckoTrending_API implements TrendingAPI.Provider<ChainId> {
             return compact(coinThumbs.map((x) => this.coins.get(x.id)))
         } catch {
             const coins = await this.fuse.getSearchableItems(this.getAllCoins)
-            return coins.search(keyword).map((x) => x.item)
+            return coins
+                .search(keyword)
+                .map((x) => x.item)
+                .slice(10)
         }
     }
 

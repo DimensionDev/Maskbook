@@ -112,8 +112,8 @@ export async function getCoinTrendingByKeyword(
     const coins = await getAvailableCoins(chainId, keyword, tagType, dataProvider)
     if (!coins.length) return null
 
-    // prefer coins on the ethereum network
-    const coin = coins.find((x) => x.contract_address) ?? first(coins)
+    // check this first coin
+    const coin = first(coins)
     if (!coin) return null
 
     const coinId = resolveCoinId(chainId, resolveKeyword(chainId, keyword, dataProvider), dataProvider) ?? coin.id
