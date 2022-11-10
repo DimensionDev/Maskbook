@@ -1,14 +1,12 @@
 import { Image } from '@masknet/shared'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, Markdown } from '@masknet/theme'
 import { RSS3BaseAPI } from '@masknet/web3-providers'
-import { markdownTransformIpfsURL } from '@masknet/web3-shared-base'
 import { Typography } from '@mui/material'
 import type { FC } from 'react'
-import Markdown from 'react-markdown'
 import { Translate } from '../../../locales/i18n_generated.js'
 import { useAddressLabel } from '../../hooks/index.js'
 import { CardFrame, FeedCardProps } from '../base.js'
-import { CardType } from '../share.js'
+import { CardType, transformPlanetResource } from '../share.js'
 import { Label } from './common.js'
 import { useMarkdownStyles } from './useMarkdownStyles.js'
 
@@ -69,6 +67,7 @@ const useStyles = makeStyles<void, 'title' | 'image' | 'content' | 'info' | 'bod
         },
         [`.${refs.image}`]: {
             width: 552,
+            marginTop: theme.spacing(1.5),
             [`& + .${refs.info}`]: {
                 marginTop: theme.spacing(1.5),
                 marginLeft: 0,
@@ -150,9 +149,13 @@ export const NoteCard: FC<NoteCardProps> = ({ feed, className, ...rest }) => {
                 <div className={cx(classes.info, metadata?.title || rest.verbose ? null : classes.center)}>
                     {metadata?.title ? <Typography className={classes.title}>{metadata.title}</Typography> : null}
                     {rest.verbose && metadata?.body ? (
-                        <Markdown className={mdClasses.markdown}>{markdownTransformIpfsURL(metadata.body)}</Markdown>
+                        <Markdown className={mdClasses.markdown}>
+                            {action.platform === 'Planet' && action.related_urls?.[0]
+                                ? transformPlanetResource(metadata.body, action.related_urls[0])
+                                : metadata.body}
+                        </Markdown>
                     ) : (
-                        <Typography className={classes.content}>{metadata?.body}</Typography>
+                        <Typography className={classes.content}>{metadata?.summary || metadata?.body}</Typography>
                     )}
                 </div>
             </div>
