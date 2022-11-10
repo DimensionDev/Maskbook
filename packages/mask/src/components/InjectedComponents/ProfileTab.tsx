@@ -33,7 +33,7 @@ export function ProfileTab(props: ProfileTabProps) {
     }, [switchToTab])
 
     useMount(() => {
-        if (location.hash !== '#web3' || active) return
+        if (location.hash !== '#web3' || active || location.pathname === '/search') return
         switchToTab()
     })
 

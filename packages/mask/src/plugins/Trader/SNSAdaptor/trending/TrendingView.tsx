@@ -100,6 +100,7 @@ export interface TrendingViewProps {
     name: string
     tagType: TagType
     dataProviders: DataProvider[]
+    isPreciseSearch?: boolean
     onUpdate?: () => void
     isPopper?: boolean
 }
@@ -113,7 +114,7 @@ enum ContentTabs {
 }
 
 export function TrendingView(props: TrendingViewProps) {
-    const { name, tagType, dataProviders, isPopper = true } = props
+    const { name, tagType, dataProviders, isPopper = true, isPreciseSearch = false } = props
 
     const { t } = useI18N()
     const { classes } = useStyles({ isPopper })
@@ -289,6 +290,7 @@ export function TrendingView(props: TrendingViewProps) {
             keyword={name}
             stats={stats}
             coins={coins}
+            isPreciseSearch={isPreciseSearch}
             currency={currency}
             trending={trending}
             dataProvider={dataProvider}
