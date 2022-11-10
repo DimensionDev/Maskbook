@@ -34,10 +34,10 @@
     "@types/qrcode": "^1.5.0",
     "@types/tinycolor2": "^1.4.3",
     "fuse.js": "6.6.2",
-    "notistack": "2.0.5",
+    "notistack": "2.0.8",
     "react-markdown": "^8.0.3",
     "react-use": "^17.4.0",
-    "react-window": "^1.8.7",
+    "react-window": "^1.8.8",
     "rehype-raw": "^6.1.1",
     "remark-gfm": "^3.0.1",
     "tinycolor2": "^1.4.2",
@@ -46,14 +46,14 @@
     "use-subscription": "1.6.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.19.0",
-    "@storybook/addon-actions": "^6.5.10",
-    "@storybook/addon-essentials": "^6.5.10",
-    "@storybook/addon-links": "^6.5.10",
-    "@storybook/builder-webpack5": "^6.5.10",
-    "@storybook/manager-webpack5": "^6.5.10",
-    "@storybook/react": "^6.5.10",
+    "@babel/core": "^7.20.2",
+    "@storybook/addon-actions": "^6.5.13",
+    "@storybook/addon-essentials": "^6.5.13",
+    "@storybook/addon-links": "^6.5.13",
+    "@storybook/builder-webpack5": "^6.5.13",
+    "@storybook/manager-webpack5": "^6.5.13",
+    "@storybook/react": "^6.5.13",
     "@types/react-window": "^1.8.4",
-    "babel-loader": "^8.2.5"
+    "babel-loader": "^9.1.0"
   }
 }

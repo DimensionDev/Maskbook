@@ -17,13 +17,13 @@
     "@servie/events": "^3.0.0",
     "@types/use-subscription": "^1.0.0",
     "bignumber.js": "9.1.0",
-    "date-fns": "^2.28.0",
+    "date-fns": "^2.29.3",
     "react-use": "^17.4.0",
     "reconnecting-websocket": "^4.4.0",
     "urlcat": "^2.0.4",
     "web3-core-helpers": "1.8.0"
   },
   "devDependencies": {
-    "mock-socket": "^9.1.2"
+    "mock-socket": "^9.1.5"
   }
 }

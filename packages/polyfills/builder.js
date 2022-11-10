@@ -1,19 +1,11 @@
 import { fileURLToPath } from 'node:url'
 import { readFile, writeFile } from 'node:fs/promises'
 import { createHash } from 'node:crypto'
-import { createRequire } from 'node:module'
 import builder from 'core-js-builder'
 import { rollup } from 'rollup'
+// @ts-expect-error
+import { loadConfigFile } from 'rollup/loadConfigFile'
 
-// https://github.com/rollup/rollup/issues/4253
-// import loadConfigFile from 'rollup/dist/loadConfigFile.js'
-function loadConfigFile(...args) {
-    // https://github.com/rollup/rollup/issues/4253
-    const privateRequire = createRequire(require.resolve('rollup'))
-    return privateRequire('./loadConfigFile.js')(...args)
-}
-
-const require = createRequire(import.meta.url)
 let polyfillVersion = '__'
 {
     const lockfilePath = fileURLToPath(new URL('../../pnpm-lock.yaml', import.meta.url))
