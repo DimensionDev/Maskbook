@@ -1,4 +1,4 @@
-import { deleteCache, fetchJSON } from './helper.js'
+import { deleteCache, fetchJSON } from './helpers.js'
 import urlcat from 'urlcat'
 import { first } from 'lodash-es'
 import {
