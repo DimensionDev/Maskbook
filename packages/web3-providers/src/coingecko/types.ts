@@ -1,4 +1,4 @@
-export interface ThumbCoin { 
+export interface ThumbCoin {
     id: string
     name: string
     symbol: string
@@ -21,7 +21,7 @@ export interface Category {
 }
 
 export interface Exchange {
-    id :string
+    id: string
     name: string
     market_type: 'spot' | 'futures'
     thumb: string
