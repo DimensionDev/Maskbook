@@ -71,7 +71,9 @@ export function FeedDetailsDialog({ type, feed, onClose, actionIndex, onSubmit, 
                         {links.map((link, index) => {
                             let host = ''
                             try {
-                                host = new URL(link).host
+                                const url = new URL(link)
+                                if (!['http:', 'https:'].includes(url.protocol)) return null
+                                host = url.host
                             } catch {}
                             const Icon = hostIconMap[host] ?? Icons.SettingsLanguage
                             const name = hostNameMap[host] ?? host
