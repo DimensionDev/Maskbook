@@ -44,17 +44,27 @@ const useStyles = makeStyles<void, 'tokenIcon' | 'verboseToken'>()((theme, _, re
 
 const { Tag, Type } = RSS3BaseAPI
 export function isTokenOperationFeed(feed: RSS3BaseAPI.Web3Feed): feed is RSS3BaseAPI.TokenOperationFeed {
-    return feed.tag === Tag.Transaction && [Type.Transfer, Type.Burn].includes(feed.type)
+    return feed.tag === Tag.Transaction && [Type.Transfer, Type.Burn, Type.Mint].includes(feed.type)
 }
 
 interface TokenFeedCardProps extends Omit<FeedCardProps, 'feed'> {
     feed: RSS3BaseAPI.TokenOperationFeed
 }
 
+const cardTypeMap: Partial<Record<RSS3BaseAPI.Type, CardType>> = {
+    [Type.Burn]: CardType.UnknownBurn,
+    [Type.Mint]: CardType.TokenMint,
+}
+const contextMap: Partial<Record<RSS3BaseAPI.Type, RSS3BaseAPI.Type.Burn | RSS3BaseAPI.Type.Mint>> = {
+    [Type.Burn]: Type.Burn,
+    [Type.Mint]: Type.Mint,
+}
+
 /**
  * TokenOperationCard.
  * Including:
  *
+ * - TokenMint
  * - TokenIn
  * - TokenOut
  * - UnknownBurn
@@ -69,11 +79,9 @@ export const TokenOperationCard: FC<TokenFeedCardProps> = ({ feed, ...rest }) =>
 
     const owner = useFeedOwner()
     const isFromOwner = isSameAddress(owner.address, action.address_from)
-    const isBurning = feed.type === Type.Burn
 
-    /* eslint-disable no-nested-ternary */
-    const cardType = isBurning ? CardType.UnknownBurn : isFromOwner ? CardType.TokenOut : CardType.TokenIn
-    const context = isBurning ? 'burn' : isFromOwner ? 'send' : 'claim'
+    const cardType = cardTypeMap[feed.type] || (isFromOwner ? CardType.TokenOut : CardType.TokenIn)
+    const context = contextMap[feed.type] || (isFromOwner ? 'send' : 'claim')
 
     const from = useAddressLabel(action.address_from!)
     const to = useAddressLabel(action.address_to!)

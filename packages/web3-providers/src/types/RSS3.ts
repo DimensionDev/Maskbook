@@ -127,6 +127,7 @@ export namespace RSS3BaseAPI {
         description: string
         animation_url: string
         external_link: string
+        decimals: number
     }
     interface TradeMetadata extends CollectibleMetadata {
         cost?: TransactionMetadata
@@ -330,6 +331,7 @@ export namespace RSS3BaseAPI {
         | 'Planet'
         | 'PancakeSwap'
         | 'Aave'
+        | 'AAVE'
 
     export enum Tag {
         Collectible = 'collectible',
@@ -456,7 +458,7 @@ export namespace RSS3BaseAPI {
         | Web3FeedGeneric<Tag.Transaction>
 
     /** For feed cards */
-    export type TokenOperationFeed = Web3FeedGeneric<Tag.Transaction, Type.Transfer | Type.Burn>
+    export type TokenOperationFeed = Web3FeedGeneric<Tag.Transaction, Type.Transfer | Type.Burn | Type.Mint>
     export type TokenSwapFeed = Web3FeedGeneric<Tag.Exchange, Type.Swap>
     export type LiquidityFeed = Web3FeedGeneric<Tag.Exchange, Type.Liquidity>
     export type CollectibleFeed = Web3FeedGeneric<Tag.Collectible>

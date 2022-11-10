@@ -91,7 +91,10 @@ export const ProfileCard: FC<CollectibleCardProps> = ({ feed, ...rest }) => {
     const imageSize = verbose ? '100%' : 64
 
     return (
-        <CardFrame type={CardType.ProfileCreate} feed={feed} {...rest}>
+        <CardFrame
+            type={metadata?.type === 'update' ? CardType.ProfileUpdate : CardType.ProfileCreate}
+            feed={feed}
+            {...rest}>
             <Typography className={classes.summary}>
                 <Translate.profile
                     values={{
