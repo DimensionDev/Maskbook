@@ -83,7 +83,7 @@
     "prettier": "^2.7.1",
     "svgo": "^2.8.0",
     "ts-node": "^10.9.1",
-    "typescript": "^5.0.0-dev.20221109",
+    "typescript": "npm:@typescript-deploys/pr-build@5.0.0-pr-51474-2",
     "vite": "^3.1.0",
     "vitest": "^0.23.2"
   },
