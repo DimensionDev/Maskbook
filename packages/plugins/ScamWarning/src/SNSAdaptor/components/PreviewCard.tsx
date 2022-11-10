@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { Stack, Typography } from '@mui/material'
 import { useAsync } from 'react-use'
-import { CryptoscanDb } from '@masknet/web3-providers'
+import { CryptoScanDb } from '@masknet/web3-providers'
 import { uniq } from 'lodash-es'
 import { useI18N } from '../../locales/index.js'
 import { makeStyles } from '@masknet/theme'
@@ -28,7 +28,7 @@ export const PreviewCard = ({ links }: PreviewCardProps) => {
     const { classes } = useStyles()
     const { value, loading } = useAsync(() => {
         const hosts = links.map((x) => new URL(x).host).filter((x) => !excludedLinks.includes(x))
-        return CryptoscanDb.getScamWarnings(uniq(hosts))
+        return CryptoScanDb.getScamWarnings(uniq(hosts))
     }, [links])
 
     usePluginWrapper(!(loading || !value?.length))

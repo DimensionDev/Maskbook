@@ -86,7 +86,7 @@ export const Rabby = new RabbyAPI()
 export const X2Y2 = new X2Y2API()
 export const CF = new CF_API()
 export const Mirror = new MirrorAPI()
-export const CryptoscanDb = new CryptoScanDbAPI()
+export const CryptoScanDb = new CryptoScanDbAPI()
 
 // Alchemy
 export const AlchemyEVM = new AlchemyEVM_API()
