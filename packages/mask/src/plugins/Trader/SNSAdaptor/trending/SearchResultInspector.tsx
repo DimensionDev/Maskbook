@@ -10,12 +10,15 @@ export interface SearchResultInspectorProps {
 }
 
 export function SearchResultInspector({ keyword }: SearchResultInspectorProps) {
-    const { name, type } = usePayloadFromTokenSearchKeyword(NetworkPluginID.PLUGIN_EVM, keyword)
+    const { name, type, isPreciseSearch, presetDataProviders } = usePayloadFromTokenSearchKeyword(
+        NetworkPluginID.PLUGIN_EVM,
+        keyword,
+    )
 
     const { value: addressType } = useAddressType(NetworkPluginID.PLUGIN_EVM, keyword, { chainId: ChainId.Mainnet })
 
-    const { value: dataProviders = EMPTY_LIST } = useAvailableDataProviders(type, name)
-
+    const { value: dataProviders_ = EMPTY_LIST } = useAvailableDataProviders(type, name)
+    const dataProviders = presetDataProviders ?? dataProviders_
     if (!name || name === 'UNKNOWN' || addressType === AddressType.ExternalOwned || !dataProviders?.length) return null
     return (
         <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM, chainId: ChainId.Mainnet }}>
