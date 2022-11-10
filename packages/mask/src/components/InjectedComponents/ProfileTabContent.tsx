@@ -301,7 +301,12 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         )
     }
 
-    if (!currentVisitingUserId || loadingSocialAccounts || loadingCurrentVisitingSocialIdentity || loadingPersonaStatus)
+    if (
+        (!currentVisitingUserId && !loadCurrentVisitingSocialIdentityError) ||
+        loadingSocialAccounts ||
+        loadingCurrentVisitingSocialIdentity ||
+        loadingPersonaStatus
+    )
         return (
             <ThemeProvider theme={MaskLightTheme}>
                 <div className={classes.root}>

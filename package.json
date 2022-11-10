@@ -137,7 +137,6 @@
       "@emotion/react@11.10.4": "patches/@emotion__react@11.10.4.patch",
       "@mui/base@5.0.0-alpha.100": "patches/@mui__base@5.0.0-alpha.100.patch",
       "react-devtools-inline@4.26.1": "patches/react-devtools-inline@4.26.1.patch",
-      "ses@0.16.0": "patches/ses@0.16.0.patch",
       "@protobufjs/inquire@1.1.0": "patches/@protobufjs__inquire@1.1.0.patch",
       "micromark@3.1.0": "patches/micromark@3.1.0.patch",
       "micromark-util-symbol@1.0.1": "patches/micromark-util-symbol@1.0.1.patch",
@@ -152,7 +151,8 @@
       "@cyberlab/cyberconnect@4.2.2": "patches/@cyberlab__cyberconnect@4.2.2.patch",
       "fortmatic@2.2.1": "patches/fortmatic@2.2.1.patch",
       "@walletconnect/client@1.7.8": "patches/@walletconnect__client@1.7.8.patch",
-      "reflect-metadata@0.1.13": "patches/reflect-metadata@0.1.13.patch"
+      "reflect-metadata@0.1.13": "patches/reflect-metadata@0.1.13.patch",
+      "ses@0.17.0": "patches/ses@0.17.0.patch"
     }
   }
 }
