@@ -65,3 +65,7 @@ export function isFirefox() {
 export function isEthereumInjected() {
     return !isExtensionSiteType() && !isFirefox()
 }
+
+export function isOpera() {
+    return navigator.userAgent.includes('OPR/')
+}
