@@ -1,6 +1,3 @@
-// Fix regenerator runtime
-globalThis.regeneratorRuntime = undefined
-
 // Fix for globalThis !== window in content script in Firefox
 {
     const fix = () => {
