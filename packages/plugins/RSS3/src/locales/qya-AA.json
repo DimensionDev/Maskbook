@@ -1,10 +1,12 @@
 {
+    "token_operation$mint": "crwdns19051:0{{to}}crwdnd19051:0{{value}}crwdnd19051:0{{symbol}}crwdne19051:0",
     "token_operation$send": "crwdns18989:0{{from}}crwdnd18989:0{{to}}crwdne18989:0",
     "token_operation$claim": "crwdns18991:0{{to}}crwdnd18991:0{{from}}crwdne18991:0",
     "token_operation$burn": "crwdns18993:0{{from}}crwdnd18993:0{{value}}crwdnd18993:0{{symbol}}crwdne18993:0",
+    "token_operation_verbose$mint": "crwdns19053:0$t(token_operation$mint)crwdne19053:0",
     "token_operation_verbose$send": "crwdns18995:0{{from}}crwdnd18995:0{{to}}crwdnd18995:0{{value}}crwdnd18995:0{{symbol}}crwdne18995:0",
     "token_operation_verbose$claim": "crwdns18997:0{{to}}crwdnd18997:0{{from}}crwdnd18997:0{{value}}crwdnd18997:0{{symbol}}crwdne18997:0",
-    "token_operation_verbose$burn": "crwdns18999:0$t(token_operation_verbose$burn)crwdne18999:0",
+    "token_operation_verbose$burn": "crwdns18999:0$t(token_operation$burn)crwdne18999:0",
     "liquidity$supply": "crwdns19001:0{{user}}crwdnd19001:0{{platform}}crwdne19001:0",
     "liquidity$add": "crwdns19035:0{{user}}crwdnd19035:0{{platform}}crwdne19035:0",
     "liquidity$repay": "crwdns19037:0{{user}}crwdnd19037:0{{platform}}crwdne19037:0",
