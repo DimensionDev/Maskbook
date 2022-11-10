@@ -62,6 +62,7 @@
         "contribs",
         "cooldown",
         "corepack",
+        "cronos",
         "crossbell",
         "cyberconnect",
         "cybercrime",
@@ -279,7 +280,6 @@
     ],
     "ignoreWords": [
         "aicanft",
-        "rehype",
         "algr",
         "anft",
         "apng",
@@ -358,6 +358,7 @@
         "rari",
         "rawdata",
         "redpackets",
+        "rehype",
         "renfil",
         "shapeclip",
         "ssrb",
