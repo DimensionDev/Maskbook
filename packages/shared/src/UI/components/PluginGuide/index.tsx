@@ -1,4 +1,4 @@
-import type { StorageObject } from '@masknet/shared-base'
+import type { PluginID } from '@masknet/shared-base'
 import { makeStyles, usePortalShadowRoot } from '@masknet/theme'
 import { Box, Button, Portal, Typography } from '@mui/material'
 import React, {
@@ -11,7 +11,6 @@ import React, {
     useRef,
     useState,
 } from 'react'
-import type { PluginGuideSetting } from './type.js'
 import { usePluginGuideRecord } from './usePluginGuideRecord.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -214,7 +213,7 @@ export function PluginGuideProvider({
     value,
     children,
 }: React.ProviderProps<{
-    storage: StorageObject<PluginGuideSetting>
+    pluginID: PluginID
     totalStep: number
     storageKey?: string
     onFinish?: () => void
@@ -223,8 +222,8 @@ export function PluginGuideProvider({
         actionText: string
     }>
 }>) {
-    const { guides, storage, totalStep, onFinish, storageKey = 'default' } = value
-    const { currentStep, finished, nextStep } = usePluginGuideRecord(storage, totalStep, storageKey, onFinish)
+    const { guides, totalStep, onFinish, storageKey = 'default', pluginID } = value
+    const { currentStep, finished, nextStep } = usePluginGuideRecord(pluginID, totalStep, storageKey, onFinish)
     return (
         <PluginGuideContext.Provider
             value={{
@@ -239,5 +238,3 @@ export function PluginGuideProvider({
         </PluginGuideContext.Provider>
     )
 }
-
-export * from './type'

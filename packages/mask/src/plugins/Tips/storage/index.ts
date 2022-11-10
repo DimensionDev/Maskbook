@@ -3,16 +3,14 @@ import type { ScopedStorage, EnhanceableSite } from '@masknet/shared-base'
 import { NonFungibleToken, isSameAddress } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { useSubscription } from 'use-subscription'
-import type { PluginGuideSetting } from '@masknet/shared'
 
-interface StorageValue extends PluginGuideSetting {
+interface StorageValue {
     addedTokens: Array<NonFungibleToken<ChainId, SchemaType>>
+    userGuide: Partial<Record<EnhanceableSite, number>>
 }
 
 export const storageDefaultValue = {
-    userGuide: {
-        default: 0,
-    },
+    userGuide: {},
     publicKey: null as null | string,
     addedTokens: [],
 }

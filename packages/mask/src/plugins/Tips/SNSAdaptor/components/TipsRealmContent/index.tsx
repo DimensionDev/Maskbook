@@ -3,9 +3,10 @@ import { Stack } from '@mui/material'
 import { Plugin } from '@masknet/plugin-infra'
 import { TipButton } from '../../../components/index.js'
 import { PluginGuide, PluginGuideProvider } from '@masknet/shared'
-import { getStorage } from '../../../storage/index.js'
-import { EnhanceableSite } from '@masknet/shared-base'
+import { EnhanceableSite, PluginID } from '@masknet/shared-base'
 import { useI18N } from '../../../locales/index.js'
+import { useTipsUserGuide } from '../../../storage/index.js'
+import { activatedSocialNetworkUI } from '../../../../../social-network/ui.js'
 
 const useStyles = makeStyles<{}, 'postTipsButton'>()((theme, _, refs) => ({
     focusingPostButtonWrapper: {
@@ -71,6 +72,8 @@ export const TipsRealmContent: Plugin.InjectUI<Plugin.SNSAdaptor.TipsRealmOption
 }) => {
     const t = useI18N()
     const { classes, cx } = useStyles({})
+    const lastStep = useTipsUserGuide(activatedSocialNetworkUI.networkIdentifier as EnhanceableSite)
+
     if (!identity) return null
 
     const buttonClassMap: Record<Plugin.SNSAdaptor.TipsSlot, string> = {
@@ -95,9 +98,10 @@ export const TipsRealmContent: Plugin.InjectUI<Plugin.SNSAdaptor.TipsRealmOption
         return (
             <PluginGuideProvider
                 value={{
+                    pluginID: PluginID.Tips,
                     storageKey: EnhanceableSite.Mirror,
-                    totalStep: 1,
-                    storage: getStorage(),
+                    // Work for migrate from old tips guide setting
+                    totalStep: lastStep.finished ? 0 : 1,
                     guides: [
                         {
                             title: t.tips_guide_description(),

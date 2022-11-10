@@ -1,33 +1,25 @@
-import type { StorageObject } from '@masknet/shared-base'
-import { useSubscription } from 'use-subscription'
-import { useCallback, useMemo } from 'react'
-import type { PluginGuideSetting } from './type'
+import type { PluginID } from '@masknet/shared-base'
+import { useCallback } from 'react'
+import { useLocalStorage } from 'react-use'
 
 export const PLUGIN_GUIDE_INIT = 1
 
-export const usePluginGuideRecord = (
-    storage: StorageObject<PluginGuideSetting>,
-    totalStep: number,
-    key?: string,
-    onFinish?: () => void,
-) => {
-    const record = useSubscription(storage?.userGuide.subscription)
-
-    const currentStep = useMemo(() => {
-        return (key ? record[key] : record.default) ?? PLUGIN_GUIDE_INIT
-    }, [record, key])
+export const usePluginGuideRecord = (pluginID: PluginID, totalStep: number, key?: string, onFinish?: () => void) => {
+    const [setting = PLUGIN_GUIDE_INIT, setSetting] = useLocalStorage<number>(
+        `plugin_userGuide_${pluginID}_${key ?? 'default'}`,
+        PLUGIN_GUIDE_INIT,
+    )
 
     const nextStep = useCallback(() => {
-        if (!storage) return
-        const nextStepValue = currentStep + 1
+        const nextStepValue = setting + 1
+        setSetting(nextStepValue)
 
-        storage.userGuide.setValue({ ...record, [key ?? 'default']: nextStepValue })
         if (nextStepValue > totalStep) onFinish?.()
-    }, [storage, record, currentStep, onFinish])
+    }, [setSetting, setting, totalStep])
 
     return {
-        currentStep,
+        currentStep: setting,
         nextStep,
-        finished: currentStep > totalStep,
+        finished: setting > totalStep,
     }
 }
