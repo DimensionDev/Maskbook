@@ -1,4 +1,4 @@
-/*! *****************************************************************************
+/* ! *****************************************************************************
 Copyright (C) Microsoft. All rights reserved.
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use
 this file except in compliance with the License. You may obtain a copy of the
@@ -7,7 +7,7 @@ License at http://www.apache.org/licenses/LICENSE-2.0
 THIS CODE IS PROVIDED ON AN *AS IS* BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
 KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION ANY IMPLIED
 WARRANTIES OR CONDITIONS OF TITLE, FITNESS FOR A PARTICULAR PURPOSE,
-MERCHANTABLITY OR NON-INFRINGEMENT.
+MERCHANTABILITY OR NON-INFRINGEMENT.
 
 See the Apache Version 2.0 License for specific language governing permissions
 and limitations under the License.
@@ -104,7 +104,7 @@ export function getOwnMetadataKeys(target, propertyKey) {
 export function deleteMetadata(metadataKey, target, propertyKey) {
     if (!IsObject(target)) throw new TypeError()
     if (propertyKey !== undefined) propertyKey = ToPropertyKey(propertyKey)
-    const metadataMap = GetOrCreateMetadataMap(target, propertyKey, /*Create*/ false)
+    const metadataMap = GetOrCreateMetadataMap(target, propertyKey, /* Create*/ false)
     if (metadataMap === undefined) return false
     if (!metadataMap.delete(metadataKey)) return false
     if (metadataMap.size > 0) return true
@@ -166,7 +166,7 @@ function OrdinaryHasMetadata(MetadataKey, O, P) {
 // 3.1.2.1 OrdinaryHasOwnMetadata(MetadataKey, O, P)
 // https://rbuckton.github.io/reflect-metadata/#ordinaryhasownmetadata
 function OrdinaryHasOwnMetadata(MetadataKey, O, P) {
-    const metadataMap = GetOrCreateMetadataMap(O, P, /*Create*/ false)
+    const metadataMap = GetOrCreateMetadataMap(O, P, /* Create*/ false)
     if (metadataMap === undefined) return false
     return metadataMap.has(MetadataKey)
 }
@@ -182,14 +182,14 @@ function OrdinaryGetMetadata(MetadataKey, O, P) {
 // 3.1.4.1 OrdinaryGetOwnMetadata(MetadataKey, O, P)
 // https://rbuckton.github.io/reflect-metadata/#ordinarygetownmetadata
 function OrdinaryGetOwnMetadata(MetadataKey, O, P) {
-    const metadataMap = GetOrCreateMetadataMap(O, P, /*Create*/ false)
+    const metadataMap = GetOrCreateMetadataMap(O, P, /* Create*/ false)
     if (metadataMap === undefined) return undefined
     return metadataMap.get(MetadataKey)
 }
 // 3.1.5.1 OrdinaryDefineOwnMetadata(MetadataKey, MetadataValue, O, P)
 // https://rbuckton.github.io/reflect-metadata/#ordinarydefineownmetadata
 function OrdinaryDefineOwnMetadata(MetadataKey, MetadataValue, O, P) {
-    const metadataMap = GetOrCreateMetadataMap(O, P, /*Create*/ true)
+    const metadataMap = GetOrCreateMetadataMap(O, P, /* Create*/ true)
     if (!metadataMap) throw new TypeError()
     metadataMap.set(MetadataKey, MetadataValue)
 }
@@ -225,7 +225,7 @@ function OrdinaryMetadataKeys(O, P) {
 // 3.1.7.1 OrdinaryOwnMetadataKeys(O, P)
 // https://rbuckton.github.io/reflect-metadata/#ordinaryownmetadatakeys
 function OrdinaryOwnMetadataKeys(O, P) {
-    const metadataMap = GetOrCreateMetadataMap(O, P, /*Create*/ false)
+    const metadataMap = GetOrCreateMetadataMap(O, P, /* Create*/ false)
     if (metadataMap === undefined) return []
     const keysObj = metadataMap.keys()
     return [...keysObj]
@@ -258,7 +258,7 @@ function OrdinaryGetPrototypeOf(O) {
     // must either set __proto__ on a subclass constructor to the superclass constructor,
     // or ensure each class has a valid `constructor` property on its prototype that
     // points back to the constructor.
-    // If this is not the same as Function.[[Prototype]], then this is definately inherited.
+    // If this is not the same as Function.[[Prototype]], then this is definitely inherited.
     // This is the case when in ES6 or when using __proto__ in a compatible browser.
     if (proto !== functionPrototype) return proto
     // If the super prototype is Object.prototype, null, or undefined, then we cannot determine the heritage.
