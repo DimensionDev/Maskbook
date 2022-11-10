@@ -20,7 +20,7 @@ let polyfillVersion = '__'
     const lockfile = await readFile(lockfilePath)
     const hash = createHash('sha256')
     hash.update(lockfile)
-    polyfillVersion = 'v1' + hash.digest('hex')
+    polyfillVersion = 'v0' + hash.digest('hex')
 }
 
 const versionFilePath = fileURLToPath(new URL('./dist/version.txt', import.meta.url))
@@ -55,9 +55,9 @@ for (const optionsObj of options) {
 {
     const polyfill = fileURLToPath(new URL('./dist/ecmascript.js', import.meta.url))
     const ecmascript = await readFile(polyfill, 'utf-8')
-    const regenerator = await readFile(fileURLToPath(new URL('./dist/regenerator.js', import.meta.url)), 'utf-8')
+    const libRuntime = await readFile(fileURLToPath(new URL('./dist/lib-runtime.js', import.meta.url)), 'utf-8')
 
-    await writeFile(polyfill, `${ecmascript};${regenerator};`)
+    await writeFile(polyfill, `${ecmascript};${libRuntime};`)
 }
 
 await normalize(new URL('./dist/dom.js', import.meta.url))

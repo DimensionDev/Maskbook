@@ -107,7 +107,7 @@ export const TipButton: FC<Props> = ({
 
     return (
         <div className={cx(className, classes.tipButton)} {...rest} role="button" onClick={createTipTask}>
-            <Icons.TipCoin />
+            <Icons.TipCoin style={{ width: 20, height: 20 }} />
             {children}
         </div>
     )
