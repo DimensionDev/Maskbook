@@ -4,12 +4,12 @@
   "type": "module",
   "exports": {
     ".": {
-      "webpack": "./src/index.ts",
+      "mask-src": "./src/index.ts",
       "default": "./dist/index.js"
     },
     "./messages": {
       "types": "./dist/messages.d.ts",
-      "webpack": "./src/messages.ts",
+      "mask-src": "./src/messages.ts",
       "default": "./dist/messages.d.ts"
     }
   },

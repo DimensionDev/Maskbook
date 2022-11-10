@@ -1,12 +1,12 @@
 import { Icons } from '@masknet/icons'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import type { RSS3BaseAPI } from '@masknet/web3-providers'
 import { Typography } from '@mui/material'
 import { BigNumber } from 'bignumber.js'
+import type { FC, HTMLProps, ReactNode } from 'react'
 import formatDateTime from 'date-fns/format'
-import type { FC, HTMLProps } from 'react'
 import { useViewFeedDetails } from '../contexts/index.js'
-import { CardType, cardTypeIconMap, platformIconMap } from './share.js'
+import { CardType, cardTypeIconMap, formatTimestamp, platformIconMap } from './share.js'
 
 export interface FeedCardBaseProps {
     feed: RSS3BaseAPI.Web3Feed
@@ -28,6 +28,9 @@ export interface FeedCardProps extends Omit<HTMLProps<HTMLDivElement>, 'type' | 
 const useStyles = makeStyles()((theme) => ({
     inspectable: {
         cursor: 'pointer',
+        '&:hover': {
+            backgroundColor: theme.palette.maskColor.bg,
+        },
     },
     header: {
         display: 'flex',
@@ -61,6 +64,7 @@ const useStyles = makeStyles()((theme) => ({
 
 export interface CardFrameProps extends Omit<HTMLProps<HTMLDivElement>, 'type' | 'action'>, FeedCardBaseProps {
     type: CardType
+    badge?: ReactNode
 }
 
 export const CardFrame: FC<CardFrameProps> = ({
@@ -71,6 +75,7 @@ export const CardFrame: FC<CardFrameProps> = ({
     children,
     onClick,
     verbose,
+    badge,
     ...rest
 }) => {
     const { classes, cx } = useStyles()
@@ -102,11 +107,14 @@ export const CardFrame: FC<CardFrameProps> = ({
                         <Typography ml="4px">{new BigNumber(feed.fee).toFixed(6)}</Typography>
                     </div>
                 ) : null}
-                {ProviderPlatformIcon ? <ProviderPlatformIcon className={classes.icon} size={18} /> : null}
-                {PrimaryPlatformIcon ? <PrimaryPlatformIcon className={classes.icon} size={18} /> : null}
-                <Typography className={classes.timestamp}>
-                    {formatDateTime(new Date(feed.timestamp), 'MM/dd/yyyy')}
-                </Typography>
+                {ProviderPlatformIcon ? (
+                    <ProviderPlatformIcon className={classes.icon} height={18} width="auto" />
+                ) : null}
+                {PrimaryPlatformIcon ? <PrimaryPlatformIcon className={classes.icon} height={18} width="auto" /> : null}
+                <ShadowRootTooltip title={formatDateTime(new Date(feed.timestamp), 'yyyy-MM-dd HH:mm:ss')}>
+                    <Typography className={classes.timestamp}>{formatTimestamp(feed.timestamp)}</Typography>
+                </ShadowRootTooltip>
+                {badge}
             </div>
             <div className={classes.body}>{children}</div>
         </article>

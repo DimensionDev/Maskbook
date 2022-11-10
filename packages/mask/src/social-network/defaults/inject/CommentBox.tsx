@@ -1,5 +1,5 @@
-import { memo, useCallback } from 'react'
-import { type PostInfo, usePostInfoDetails, usePostInfo, PostInfoProvider } from '@masknet/plugin-infra/content-script'
+import { memo, useCallback, useContext } from 'react'
+import { type PostInfo, usePostInfoDetails, PostInfoContext } from '@masknet/plugin-infra/content-script'
 import { DOMProxy, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { CommentBox, CommentBoxProps } from '../../../components/InjectedComponents/CommentBox.js'
 import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot.js'
@@ -26,7 +26,7 @@ export const injectCommentBoxDefaultFactory = function <T extends string>(
     mountPointCallback?: (node: DOMProxy<HTMLElement, HTMLSpanElement, HTMLSpanElement>) => void,
 ) {
     const CommentBoxUI = memo(function CommentBoxUI({ dom }: { dom: HTMLElement | null }) {
-        const info = usePostInfo()
+        const info = useContext(PostInfoContext)
         const encryptComment = usePostInfoDetails.encryptComment()
         const { classes } = useCustomStyles()
         const props = additionPropsToCommentBox(classes)
@@ -53,9 +53,9 @@ export const injectCommentBoxDefaultFactory = function <T extends string>(
             } catch {}
             const root = createReactRootShadowed(meta.afterShadow, { signal })
             root.render(
-                <PostInfoProvider post={current}>
+                <PostInfoContext.Provider value={current}>
                     <CommentBoxUI {...{ ...current, dom: meta.realCurrent }} />
-                </PostInfoProvider>,
+                </PostInfoContext.Provider>,
             )
             return root.destroy
         })

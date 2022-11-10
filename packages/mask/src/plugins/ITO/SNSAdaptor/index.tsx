@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Trans } from 'react-i18next'
-import { set } from 'lodash-unified'
+import { set } from 'lodash-es'
 import { type Plugin, usePluginWrapper } from '@masknet/plugin-infra/content-script'
 import { ItoLabelIcon } from '../assets/ItoLabelIcon.js'
 import { makeStyles } from '@masknet/theme'

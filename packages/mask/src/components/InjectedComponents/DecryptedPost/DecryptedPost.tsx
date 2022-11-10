@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useReducer } from 'react'
+import { Fragment, useContext, useEffect, useReducer } from 'react'
 import { extractTextFromTypedMessage, TypedMessage } from '@masknet/typed-message'
 import type { ProfileIdentifier } from '@masknet/shared-base'
 
@@ -14,8 +14,8 @@ import type {
     SocialNetworkEncodedPayload,
 } from '../../../../background/services/crypto/decryption.js'
 import { DecryptIntermediateProgressKind, DecryptProgressKind } from '@masknet/encryption'
-import { type PostContext, usePostInfoDetails, usePostInfo } from '@masknet/plugin-infra/content-script'
-import { Some } from 'ts-results'
+import { type PostContext, usePostInfoDetails, PostInfoContext } from '@masknet/plugin-infra/content-script'
+import { Some } from 'ts-results-es'
 
 function progressReducer(
     state: Array<{
@@ -60,7 +60,7 @@ export function DecryptPost(props: DecryptPostProps) {
     const postBy = authorInPayload || currentPostBy
     const postMetadataImages = usePostInfoDetails.postMetadataImages()
     const mentionedLinks = usePostInfoDetails.mentionedLinks()
-    const postInfo = usePostInfo()!
+    const postInfo = useContext(PostInfoContext)!
 
     const [progress, dispatch] = useReducer(progressReducer, [])
 

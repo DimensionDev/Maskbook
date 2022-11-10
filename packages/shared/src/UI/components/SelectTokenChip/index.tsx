@@ -1,4 +1,4 @@
-import { noop } from 'lodash-unified'
+import { noop } from 'lodash-es'
 import { Chip, ChipProps } from '@mui/material'
 import { LoadingBase, makeStyles, useStylesExtends } from '@masknet/theme'
 import { ExpandMore as ExpandMoreIcon, Error as ErrorIcon } from '@mui/icons-material'

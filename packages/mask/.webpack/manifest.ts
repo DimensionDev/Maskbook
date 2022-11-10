@@ -1,11 +1,11 @@
 /* spell-checker: disable */
 import emitFile from '@nice-labs/emit-file-webpack-plugin'
-import { cloneDeep } from 'lodash-unified'
 import { ComputedFlags, NormalizedFlags } from './flags'
 
 type ManifestV2 = typeof import('../src/manifest.json') & { key?: string; devtools_page?: string; applications?: any }
 type ManifestV3 = typeof import('../src/manifest-v3.json') & { key?: string; devtools_page?: string }
 
+const cloneDeep = (x: any) => JSON.parse(JSON.stringify(x))
 export function emitManifestFile(flags: NormalizedFlags, computedFlags: ComputedFlags) {
     return emitFile({
         name: 'manifest.json',

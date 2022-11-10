@@ -13,6 +13,7 @@
     "Coin98.ts",
     "MetaMask.ts",
     "MathWallet.ts",
+    "Opera.ts",
     "WalletLink.ts",
     "utils.ts"
   ],

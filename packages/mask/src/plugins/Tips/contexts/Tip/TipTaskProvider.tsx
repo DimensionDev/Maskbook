@@ -7,7 +7,7 @@ import {
 } from '@masknet/web3-hooks-base'
 import { isSameAddress, SocialAccount } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
-import type { GasOptionConfig } from '@masknet/web3-shared-evm'
+import type { ChainId, GasOptionConfig } from '@masknet/web3-shared-evm'
 import { useSubscription } from 'use-subscription'
 import { getStorage } from '../../storage/index.js'
 import { TipTask, TipsType } from '../../types/index.js'
@@ -69,6 +69,7 @@ export const TipTaskProvider: FC<React.PropsWithChildren<Props>> = memo(({ child
         pluginID === NetworkPluginID.PLUGIN_EVM
             ? {
                   overrides: gasOption,
+                  chainId: chainId as ChainId,
               }
             : undefined
     const recipientAddress = _recipientAddress || task.recipient || recipients[0]?.address

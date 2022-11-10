@@ -1,4 +1,4 @@
-import { first, nth } from 'lodash-unified'
+import { first, nth } from 'lodash-es'
 import Web3SDK from 'web3'
 import type { FeeHistoryResult } from 'web3-eth'
 import { GasOptionType, toFixed } from '@masknet/web3-shared-base'

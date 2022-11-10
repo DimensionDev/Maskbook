@@ -1,5 +1,5 @@
 import { FC, PropsWithChildren, useCallback, useMemo } from 'react'
-import { groupBy, toPairs } from 'lodash-unified'
+import { groupBy, toPairs } from 'lodash-es'
 import { Icons } from '@masknet/icons'
 import { makeStyles, ShadowRootMenu } from '@masknet/theme'
 import { TokenType } from '@masknet/web3-shared-base'

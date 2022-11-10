@@ -21,7 +21,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Typography } from '@mui/material'
 import { StyledInput } from '../../../components/StyledInput/index.js'
 import { LoadingButton } from '@mui/lab'
-import { isEmpty } from 'lodash-unified'
+import { isEmpty } from 'lodash-es'
 import { toHex } from 'web3-utils'
 import { useChainContext, useGasOptions, useNativeToken, useNativeTokenPrice, useWeb3 } from '@masknet/web3-hooks-base'
 

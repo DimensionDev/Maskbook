@@ -1,6 +1,6 @@
 /* eslint @dimensiondev/unicode/specific-set: ["error", { "only": "code" }] */
 import type React from 'react'
-import type { Option, Result } from 'ts-results'
+import type { Option, Result } from 'ts-results-es'
 import type { Subscription } from 'use-subscription'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
 import type { TypedMessage } from '@masknet/typed-message'
@@ -16,6 +16,7 @@ import type {
     BindingProof,
     PluginID,
     NetworkPluginID,
+    NextIDPlatform,
 } from '@masknet/shared-base'
 import type {
     ChainDescriptor,
@@ -27,6 +28,7 @@ import type {
     Web3UI,
     Web3State,
     SocialAccount,
+    SearchKeywordType,
 } from '@masknet/web3-shared-base'
 import type { ChainId as ChainIdEVM, Transaction as TransactionEVM } from '@masknet/web3-shared-evm'
 import type { Emitter } from '@servie/events'
@@ -375,7 +377,12 @@ export namespace Plugin.SNSAdaptor {
         lastRecognizedProfile: Subscription<IdentityResolved | undefined>
         currentVisitingProfile: Subscription<IdentityResolved | undefined>
         allPersonas?: Subscription<PersonaInformation[]>
+        getNextIDPlatform: () => NextIDPlatform | undefined
         getPersonaAvatar: (identifier: ECKeyIdentifier | null | undefined) => Promise<string | null | undefined>
+        getSocialIdentity: (
+            platform: NextIDPlatform,
+            identity: IdentityResolved | undefined,
+        ) => Promise<SocialIdentity | undefined>
         ownProofChanged: UnboundedRegistry<void>
         setMinimalMode: (id: string, enabled: boolean) => Promise<void>
     }
@@ -433,6 +440,8 @@ export namespace Plugin.SNSAdaptor {
         GlobalInjection?: InjectUI<{}>
         /** This UI will be rendered under the Search of the SNS. */
         SearchResultBox?: SearchResultBox
+        /** This is the detailed UI content that will be rendered under the Search of the SNS. */
+        SearchResultContent?: SearchResultContent
         /** This is a chunk of web3 UIs to be rendered into various places of Mask UI. */
         Web3UI?: Web3UI<ChainId, ProviderType, NetworkType>
         /** This is the context of the currently chosen network. */
@@ -616,6 +625,15 @@ export namespace Plugin.SNSAdaptor {
         }
         Utils?: {
             shouldDisplay?(keyword: string): boolean
+        }
+    }
+
+    export interface SearchResultContent {
+        ID: string
+        UI?: {
+            Content?: React.ForwardRefExoticComponent<
+                { keyword: string; keywordType?: SearchKeywordType } & React.RefAttributes<unknown>
+            >
         }
     }
 
@@ -1138,6 +1156,7 @@ export interface IdentityResolved {
     bio?: string
     homepage?: string
     identifier?: ProfileIdentifier
+    isOwner?: boolean
 }
 
 /**

@@ -9,7 +9,7 @@ import MaskBox from '@masknet/web3-constants/evm/mask-box.json'
 import NftRedPacket from '@masknet/web3-constants/evm/nft-red-packet.json'
 import RedPacket from '@masknet/web3-constants/evm/red-packet.json'
 import Trader from '@masknet/web3-constants/evm/trader.json'
-import { filter, flatten, pick, uniq, values } from 'lodash-unified'
+import { filter, flatten, pick, uniq, values } from 'lodash-es'
 
 const collect = <T extends Record<string, Record<string, string | number>>>(
     data: T,

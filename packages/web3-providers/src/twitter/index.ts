@@ -1,4 +1,4 @@
-import { escapeRegExp } from 'lodash-unified'
+import { escapeRegExp } from 'lodash-es'
 import urlcat from 'urlcat'
 import LRUCache from 'lru-cache'
 import type { TwitterBaseAPI } from '../types/index.js'

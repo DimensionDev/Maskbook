@@ -2,7 +2,7 @@
 
 import { Suspense } from 'react'
 import { i18NextInstance, updateLanguage, PopupRoutes } from '@masknet/shared-base'
-import { once, noop } from 'lodash-unified'
+import { once, noop } from 'lodash-es'
 import { TssCacheProvider, MaskThemeProvider } from '@masknet/theme'
 import { CacheProvider } from '@emotion/react'
 import { renderToString } from 'react-dom/server'

@@ -5,12 +5,12 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "webpack": "./src/index.ts",
+      "mask-src": "./src/index.ts",
       "default": "./dist/index.js"
     },
     "./components": {
       "types": "./dist/components.d.ts",
-      "webpack": "./src/components.ts",
+      "mask-src": "./src/components.ts",
       "default": "./dist/components.js"
     }
   },

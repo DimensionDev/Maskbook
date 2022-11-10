@@ -5,7 +5,7 @@ import { BaseProvider } from './Base.js'
 import type { EVM_Provider } from '../types.js'
 import { SharedContextSettings, Web3StateSettings } from '../../../settings/index.js'
 import { ExtensionSite, getSiteType, isEnhanceableSiteType, PopupRoutes } from '@masknet/shared-base'
-import { first } from 'lodash-unified'
+import { first } from 'lodash-es'
 import type { ProviderOptions } from '@masknet/web3-shared-base'
 
 export class MaskWalletProvider extends BaseProvider implements EVM_Provider {

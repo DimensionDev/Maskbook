@@ -1,6 +1,6 @@
 import { deleteCache, fetchJSON } from './helper.js'
 import urlcat from 'urlcat'
-import { first } from 'lodash-unified'
+import { first } from 'lodash-es'
 import {
     BindingProof,
     fromHex,

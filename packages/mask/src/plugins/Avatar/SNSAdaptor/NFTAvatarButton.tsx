@@ -40,11 +40,7 @@ export function NFTAvatarButton(props: NFTAvatarButtonProps) {
         <div className={classes.root} onClick={onClick}>
             <Icons.Avatar className={classes.icon} size={20} />
             <Stack display="inline-flex" gap={1}>
-                <Typography
-                    fontSize={14}
-                    style={{ marginLeft: 4 }}
-                    fontWeight={500}
-                    color={(t) => t.palette.text.buttonText}>
+                <Typography fontSize={14} style={{ marginLeft: 4 }} className={classes.text}>
                     {t('nft_avatar')}
                 </Typography>
                 {props.showSetting ? <Icons.GearSettings className={classes.setIcon} /> : null}

@@ -1,5 +1,5 @@
 import { sha3, toHex } from 'web3-utils'
-import { first } from 'lodash-unified'
+import { first } from 'lodash-es'
 import { Explorer, ExplorerAPI } from '@masknet/web3-providers'
 import { TransactionChecker, TransactionStatusType } from '@masknet/web3-shared-base'
 import { ChainId, getExplorerConstants, Transaction } from '@masknet/web3-shared-evm'

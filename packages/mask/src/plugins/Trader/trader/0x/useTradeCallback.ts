@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { useAsyncFn } from 'react-use'
-import { pick } from 'lodash-unified'
+import { pick } from 'lodash-es'
 import stringify from 'json-stable-stringify'
 import type { TransactionConfig } from 'web3-core'
 import type { ChainId, GasOptionConfig } from '@masknet/web3-shared-evm'

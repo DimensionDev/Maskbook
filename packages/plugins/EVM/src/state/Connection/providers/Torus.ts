@@ -1,4 +1,4 @@
-import { first } from 'lodash-unified'
+import { first } from 'lodash-es'
 import { createLookupTableResolver } from '@masknet/shared-base'
 import { ChainId, chainResolver } from '@masknet/web3-shared-evm'
 import Torus from '@toruslabs/torus-embed'

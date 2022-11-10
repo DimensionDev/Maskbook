@@ -34,6 +34,7 @@ function resolveLastRecognizedIdentityFacebookInner(ref: ValueRef<IdentityResolv
         .then((id) =>
             assign({
                 ...ref.value,
+                isOwner: true,
                 identifier: ProfileIdentifier.of(EnhanceableSite.Facebook, id).unwrapOr(undefined),
             }),
         )
@@ -41,6 +42,7 @@ function resolveLastRecognizedIdentityFacebookInner(ref: ValueRef<IdentityResolv
 
 function resolveCurrentVisitingIdentityInner(
     ref: SocialNetworkUI.CollectingCapabilities.IdentityResolveProvider['recognized'],
+    ownerRef: SocialNetworkUI.CollectingCapabilities.IdentityResolveProvider['recognized'],
     cancel: AbortSignal,
 ) {
     const selector = isMobileFacebook ? searchUserIdOnMobileSelector() : searchFacebookAvatarSelector()
@@ -50,8 +52,9 @@ function resolveCurrentVisitingIdentityInner(
         const nickname = getNickName()
         const bio = getBioDescription()
         const handle = getFacebookId()
+        const ownerHandle = ownerRef.value.identifier?.userId
+        const isOwner = !!(handle && ownerHandle && handle.toLowerCase() === ownerHandle.toLowerCase())
         const homepage = getPersonalHomepage()
-
         const avatar = getAvatar()
 
         ref.value = {
@@ -60,6 +63,7 @@ function resolveCurrentVisitingIdentityInner(
             avatar,
             bio,
             homepage,
+            isOwner,
         }
     }
 
@@ -87,7 +91,7 @@ export const CurrentVisitingIdentityProviderFacebook: SocialNetworkUI.Collecting
     hasDeprecatedPlaceholderName: false,
     recognized: creator.EmptyIdentityResolveProviderState(),
     start(cancel) {
-        resolveCurrentVisitingIdentityInner(this.recognized, cancel)
+        resolveCurrentVisitingIdentityInner(this.recognized, IdentityProviderFacebook.recognized, cancel)
     },
 }
 

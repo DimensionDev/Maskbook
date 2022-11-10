@@ -1,5 +1,5 @@
 import type { PaletteMode } from '@mui/material'
-import { kebabCase } from 'lodash-unified'
+import { kebabCase } from 'lodash-es'
 import { LightColor, DarkColor } from './constants.js'
 import tinyColor from 'tinycolor2'
 

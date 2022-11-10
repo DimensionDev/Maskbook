@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import { useAsync } from 'react-use'
 import type { AsyncState } from 'react-use/lib/useAsyncFn.js'
-import { pick } from 'lodash-unified'
+import { pick } from 'lodash-es'
 import { BigNumber } from 'bignumber.js'
 import type { TransactionConfig } from 'web3-core'
 import type { SwapOOData, TradeComputed } from '../../types/index.js'

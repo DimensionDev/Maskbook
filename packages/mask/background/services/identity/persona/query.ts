@@ -1,6 +1,9 @@
+import { first, orderBy } from 'lodash-es'
 import type { MobilePersona } from '@masknet/public-api'
-import type { PersonaIdentifier, PersonaInformation, ProfileIdentifier } from '@masknet/shared-base'
-import { first, orderBy } from 'lodash-unified'
+import type { NextIDPlatform, PersonaIdentifier, PersonaInformation, ProfileIdentifier } from '@masknet/shared-base'
+import type { IdentityResolved } from '@masknet/plugin-infra'
+import { NextIDProof } from '@masknet/web3-providers'
+import type { SocialIdentity } from '@masknet/web3-shared-base'
 import {
     createPersonaDBReadonlyAccess,
     PersonaRecord,
@@ -17,12 +20,11 @@ export async function mobile_queryPersonaRecordsFromIndexedDB() {
     return queryPersonasFromIndexedDB()
 }
 
-export interface MobileQueryPersonasOptions {
+export async function mobile_queryPersonas(options: {
     hasPrivateKey?: boolean
     network?: string
     identifier?: PersonaIdentifier
-}
-export async function mobile_queryPersonas(options: MobileQueryPersonasOptions): Promise<MobilePersona[]> {
+}): Promise<MobilePersona[]> {
     if (process.env.architecture !== 'app') throw new Error('This function is only available in app')
 
     const { hasPrivateKey, identifier, network } = options
@@ -79,4 +81,26 @@ export async function queryPersona(id: PersonaIdentifier): Promise<undefined | P
         result = toPersonaInformation([persona], t).mustNotAwaitThisWithInATransaction.then((x) => first(x)!)
     })
     return result
+}
+
+export async function queryPersonasFromNextID(platform: NextIDPlatform, identityResolved: IdentityResolved) {
+    if (!identityResolved.identifier) return
+    return NextIDProof.queryAllExistedBindingsByPlatform(platform, identityResolved.identifier.userId)
+}
+
+export async function querySocialIdentity(
+    platform: NextIDPlatform,
+    identity: IdentityResolved | undefined,
+): Promise<SocialIdentity | undefined> {
+    if (!identity?.identifier) return
+    const bindings = await queryPersonasFromNextID(platform, identity)
+    const persona = await queryPersonaByProfile(identity.identifier)
+    const personaBindings =
+        bindings?.filter((x) => x.persona === persona?.identifier.publicKeyAsHex.toLowerCase()) ?? []
+    return {
+        ...identity,
+        publicKey: persona?.identifier.publicKeyAsHex,
+        hasBinding: personaBindings.length > 0,
+        binding: first(personaBindings),
+    }
 }

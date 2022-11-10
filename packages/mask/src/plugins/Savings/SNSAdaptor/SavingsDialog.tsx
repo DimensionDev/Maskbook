@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import { useAsync, useUpdateEffect } from 'react-use'
-import { chunk, compact, flatten } from 'lodash-unified'
+import { chunk, compact, flatten } from 'lodash-es'
 import type { AbiItem } from 'web3-utils'
 import { DialogActions, DialogContent, Tab } from '@mui/material'
 import { EMPTY_LIST, isDashboardPage, NetworkPluginID } from '@masknet/shared-base'
@@ -56,6 +56,12 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
     },
     tabPanel: {
         marginTop: theme.spacing(3),
+    },
+    content: {
+        padding: 0,
+        '::-webkit-scrollbar': {
+            display: 'none',
+        },
     },
 }))
 
@@ -146,7 +152,7 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
                                 <Tab label={tabs.Withdraw} value={tabs.Withdraw} />
                             </MaskTabList>
                         }>
-                        <DialogContent style={{ padding: 0, overflowX: 'hidden' }}>
+                        <DialogContent className={classes.content}>
                             <>
                                 <div className={classes.abstractTabWrapper}>
                                     <NetworkTab

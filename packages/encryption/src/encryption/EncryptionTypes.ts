@@ -1,11 +1,10 @@
-import {
+import type {
     ProfileIdentifier,
     EC_Public_CryptoKey,
     AESCryptoKey,
     EC_Private_CryptoKey,
     PostIVIdentifier,
-    registerSerializableClass,
-} from '@masknet/shared-base'
+} from '@masknet/base'
 import type { SerializableTypedMessages } from '@masknet/typed-message'
 import type { EC_Key, EC_KeyCurveEnum } from '../payload/index.js'
 
@@ -96,17 +95,3 @@ export class EncryptError extends Error {
         super(message, { cause })
     }
 }
-registerSerializableClass(
-    'MaskEncryptError',
-    (x) => x instanceof EncryptError,
-    (e: EncryptError) => ({
-        cause: (e as any).cause,
-        message: e.message,
-        stack: e.stack,
-    }),
-    (o) => {
-        const e = new EncryptError(o.message, o.cause)
-        e.stack = o.stack
-        return e
-    },
-)

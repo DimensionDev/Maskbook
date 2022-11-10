@@ -1,7 +1,7 @@
 import { ECKeyIdentifier, EMPTY_LIST, NextIDPlatform } from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { NextIDProof } from '@masknet/web3-providers'
-import { head } from 'lodash-unified'
+import { head } from 'lodash-es'
 import { useEffect } from 'react'
 import { useAsyncRetry } from 'react-use'
 import Services from '../../../extension/service.js'

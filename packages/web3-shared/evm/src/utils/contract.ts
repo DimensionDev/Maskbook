@@ -1,6 +1,6 @@
 import type Web3 from 'web3'
 import { AbiItem, hexToNumber, toHex } from 'web3-utils'
-import { identity, pickBy } from 'lodash-unified'
+import { identity, pickBy } from 'lodash-es'
 import type {
     BaseContract,
     NonPayableTransactionObject,

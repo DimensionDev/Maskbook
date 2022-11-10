@@ -1,7 +1,7 @@
 import { Typography, Card, Box, CircularProgress, CircularProgressProps, colors } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { TypedMessage, makeTypedMessageText } from '@masknet/typed-message'
-import { TextResizeContext, TypedMessageRender } from '@masknet/typed-message/dom'
+import { TypedMessageRender } from '@masknet/typed-message-react'
 import { TypedMessageRenderContext } from '../../../shared-ui/TypedMessageRender/context.js'
 import { Check as CheckIcon, Close as CloseIcon } from '@mui/icons-material'
 import { MaskIcon } from '@masknet/shared'
@@ -73,14 +73,11 @@ export const AdditionalContent = memo(function AdditionalContent(props: Addition
             <header className={classes.content}>{header}</header>
             {message ? (
                 <main className={classes.content}>
-                    <TextResizeContext.Provider value>
-                        <TypedMessageRenderContext
-                            renderFragments={
-                                activatedSocialNetworkUI?.customization.componentOverwrite?.RenderFragments
-                            }>
-                            <TypedMessageRender message={TypedMessage} />
-                        </TypedMessageRenderContext>
-                    </TextResizeContext.Provider>
+                    <TypedMessageRenderContext
+                        textResizer={activatedSocialNetworkUI.networkIdentifier !== 'twitter.com'}
+                        renderFragments={activatedSocialNetworkUI?.customization.componentOverwrite?.RenderFragments}>
+                        <TypedMessageRender message={TypedMessage} />
+                    </TypedMessageRenderContext>
                 </main>
             ) : null}
         </Card>

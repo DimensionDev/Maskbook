@@ -1,7 +1,7 @@
 import { ROOT_PATH, task, prettier } from '../utils/index.js'
 import { readdir, writeFile, readFile } from 'fs/promises'
 import { dirname } from 'path'
-import { upperFirst } from 'lodash-unified'
+import { upperFirst } from 'lodash-es'
 
 const mainFallbackMap = new Map([['zh', 'zh-TW']])
 

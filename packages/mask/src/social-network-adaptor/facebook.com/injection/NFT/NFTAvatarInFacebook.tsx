@@ -1,6 +1,6 @@
 import { useEffect, useLayoutEffect, useMemo, useState } from 'react'
 import { useAsync, useLocation, useWindowSize } from 'react-use'
-import { max, pickBy } from 'lodash-unified'
+import { max, pickBy } from 'lodash-es'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { searchFacebookAvatarOnMobileSelector, searchFacebookAvatarSelector } from '../../utils/selector.js'
 import { createReactRootShadowed, MaskMessages, startWatch } from '../../../../utils/index.js'

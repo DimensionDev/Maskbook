@@ -8,6 +8,7 @@ import { useAddressLabel } from '../../hooks/index.js'
 import { CardType } from '../share.js'
 import { CardFrame, FeedCardProps } from '../base.js'
 import { Label } from './common.js'
+import { useMarkdownStyles } from './useMarkdownStyles.js'
 
 const useStyles = makeStyles()((theme) => ({
     summary: {
@@ -20,12 +21,6 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 14,
         fontWeight: 700,
         lineHeight: '18px',
-    },
-    markdown: {
-        wordBreak: 'break-all',
-        img: {
-            maxWidth: '100%',
-        },
     },
     content: {
         color: theme.palette.maskColor.main,
@@ -57,6 +52,7 @@ interface VoteCardProps extends Omit<FeedCardProps, 'feed'> {
 export const VoteCard: FC<VoteCardProps> = ({ feed, ...rest }) => {
     const { verbose } = rest
     const { classes } = useStyles()
+    const { classes: mdClasses } = useMarkdownStyles()
 
     const action = feed.actions[0]
     const metadata = action.metadata
@@ -81,7 +77,7 @@ export const VoteCard: FC<VoteCardProps> = ({ feed, ...rest }) => {
                 <>
                     <Typography className={classes.title}>{metadata.proposal.title}</Typography>
                     {verbose ? (
-                        <Markdown className={classes.markdown}>{metadata.proposal.body}</Markdown>
+                        <Markdown className={mdClasses.markdown}>{metadata.proposal.body}</Markdown>
                     ) : (
                         <Typography className={classes.content}>{metadata.proposal.body}</Typography>
                     )}

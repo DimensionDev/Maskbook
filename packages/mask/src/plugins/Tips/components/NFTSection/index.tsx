@@ -1,6 +1,6 @@
 import { FC, HTMLProps, useCallback, useMemo } from 'react'
 import { useBoolean } from 'react-use'
-import { uniqWith } from 'lodash-unified'
+import { uniqWith } from 'lodash-es'
 import { Icons } from '@masknet/icons'
 import { useChainContext, useNonFungibleAssets, useNetworkContext } from '@masknet/web3-hooks-base'
 import { ElementAnchor, RetryHint } from '@masknet/shared'

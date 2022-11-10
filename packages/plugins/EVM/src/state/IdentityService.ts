@@ -1,4 +1,4 @@
-import { compact, uniqBy } from 'lodash-unified'
+import { compact, uniqBy } from 'lodash-es'
 import type { Plugin } from '@masknet/plugin-infra'
 import { IdentityServiceState } from '@masknet/web3-state'
 import { SocialIdentity, SocialAddress, SocialAddressType, attemptUntil } from '@masknet/web3-shared-base'

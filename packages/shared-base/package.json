@@ -5,12 +5,14 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "webpack": "./src/index.ts",
+      "mask-src": "./src/index.ts",
       "default": "./dist/index.js"
     }
   },
   "types": "./dist/index.d.ts",
   "dependencies": {
+    "@masknet/base": "workspace:*",
+    "@masknet/encryption": "workspace:*",
     "@masknet/public-api": "workspace:*",
     "@masknet/typed-message": "workspace:*",
     "@msgpack/msgpack": "^2.8.0",

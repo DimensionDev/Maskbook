@@ -2,7 +2,7 @@ import { PluginSnapshotRPC } from '../../messages.js'
 import type { VoteItem, ProposalIdentifier } from '../../types.js'
 import { useSuspense } from '../../../../utils/hooks/useSuspense.js'
 import { useProposal } from './useProposal.js'
-import { sumBy } from 'lodash-unified'
+import { sumBy } from 'lodash-es'
 
 const cache = new Map<string, [0, Promise<void>] | [1, VoteItem[]] | [2, Error]>()
 export function votesRetry() {

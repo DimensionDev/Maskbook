@@ -1,4 +1,4 @@
-import { first } from 'lodash-unified'
+import { first } from 'lodash-es'
 import type { RequestArguments } from 'web3-core'
 import { isEthereumInjected } from '@masknet/shared-base'
 import type { InjectedProvider } from '@masknet/injected-script'

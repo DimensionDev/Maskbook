@@ -14,7 +14,7 @@ import { ActivitiesTab } from './tabs/ActivitiesTab.js'
 import { TabType } from '../../types.js'
 import { FigureCard } from '../Shared/FigureCard.js'
 import { Context } from '../Context/index.js'
-import { useCurrentVisitingIdentity, useIsOwnerIdentity } from '../../../../../components/DataSource/useActivatedUI.js'
+import { useCurrentVisitingIdentity } from '../../../../../components/DataSource/useActivatedUI.js'
 import { ConnectPersonaBoundary } from '../../../../../components/shared/ConnectPersonaBoundary.js'
 
 const useStyles = makeStyles<{ listItemBackground?: string; listItemBackgroundIcon?: string } | void>()(
@@ -88,7 +88,6 @@ export function CardDialogContent(props: CardDialogContentProps) {
         chainId,
     } = Context.useContainer()
     const currentVisitingIdentity = useCurrentVisitingIdentity()
-    const isOwnerIdentity = useIsOwnerIdentity(currentVisitingIdentity)
 
     const onBeforeAction = useCallback(() => {
         props.setOpen(false)
@@ -149,7 +148,7 @@ export function CardDialogContent(props: CardDialogContentProps) {
 
             <Web3ContextProvider value={{ pluginID: parentPluginID }}>
                 <PluginWalletStatusBar className={classes.footer} expectedPluginID={pluginID} expectedChainId={chainId}>
-                    {origin === 'pfp' && isOwnerIdentity ? (
+                    {origin === 'pfp' && currentVisitingIdentity.isOwner ? (
                         <ConnectPersonaBoundary
                             handlerPosition="top-right"
                             customHint

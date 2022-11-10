@@ -1,6 +1,6 @@
 import { memo, useCallback, useEffect, useMemo, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { uniqBy } from 'lodash-unified'
+import { uniqBy } from 'lodash-es'
 import { Box, Button, Stack } from '@mui/material'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import { DashboardRoutes, EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'

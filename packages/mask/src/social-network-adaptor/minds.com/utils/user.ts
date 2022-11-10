@@ -1,4 +1,4 @@
-import { isNull } from 'lodash-unified'
+import { isNull } from 'lodash-es'
 import type { SocialNetwork } from '@masknet/types'
 
 export const usernameValidator: NonNullable<SocialNetwork.Utils['isValidUsername']> = (name: string) => {

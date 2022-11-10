@@ -1,4 +1,4 @@
-import { first } from 'lodash-unified'
+import { first } from 'lodash-es'
 import { alpha, Box, Button, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useAsync } from 'react-use'

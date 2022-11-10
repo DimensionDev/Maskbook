@@ -1,4 +1,4 @@
-import { clone, first } from 'lodash-unified'
+import { clone, first } from 'lodash-es'
 import type { Subscription } from 'use-subscription'
 import { delay } from '@masknet/kit'
 import {

@@ -1,4 +1,4 @@
-import { first, last } from 'lodash-unified'
+import { first, last } from 'lodash-es'
 import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'

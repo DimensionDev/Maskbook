@@ -1,5 +1,5 @@
 import { regexMatch } from '../../../utils/utils.js'
-import { defaultTo, flattenDeep } from 'lodash-unified'
+import { defaultTo, flattenDeep } from 'lodash-es'
 import { canonifyImgUrl } from './url.js'
 import {
     makeTypedMessageText,

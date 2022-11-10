@@ -46,14 +46,12 @@
     "@types/react-dom": "^18.0.6",
     "@typescript/lib-dom": "npm:@types/web@^0.0.78",
     "i18next": "^21.9.1",
-    "lodash": "^4.17.21",
     "lodash-es": "^4.17.21",
-    "lodash-unified": "1.0.2",
     "react": "0.0.0-experimental-9cdf8a99e-20221018",
     "react-dom": "0.0.0-experimental-9cdf8a99e-20221018",
     "react-i18next": "^11.18.6",
     "ses": "0.16.0",
-    "ts-results": "3.3.0"
+    "ts-results-es": "3.5.0"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.1.2",
@@ -124,7 +122,6 @@
       }
     },
     "patchedDependencies": {
-      "ts-results@3.3.0": "patches/ts-results@3.3.0.patch",
       "cross-fetch@3.1.5": "patches/cross-fetch@3.1.5.patch",
       "@uniswap/v3-sdk@3.9.0": "patches/@uniswap__v3-sdk@3.9.0.patch",
       "arweave@1.11.4": "patches/arweave@1.11.4.patch",

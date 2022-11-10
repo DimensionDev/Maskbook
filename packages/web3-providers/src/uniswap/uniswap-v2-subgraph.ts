@@ -1,6 +1,6 @@
 import { ChainId, getTrendingConstants, isValidChainId } from '@masknet/web3-shared-evm'
 import stringify from 'json-stable-stringify'
-import { chunk, first, flatten } from 'lodash-unified'
+import { chunk, first, flatten } from 'lodash-es'
 
 const TokenFields = `
   fragment TokenFields on Token {

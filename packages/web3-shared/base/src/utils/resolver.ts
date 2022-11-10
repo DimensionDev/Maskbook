@@ -6,6 +6,7 @@ import {
     ProviderDescriptor,
     SocialAddressType,
     SourceType,
+    SearchKeywordType,
 } from '../specs/index.js'
 import { NetworkPluginID, createLookupTableResolver, NextIDPlatform } from '@masknet/shared-base'
 
@@ -264,7 +265,7 @@ const MATCH_IPFS_CID_AT_STARTS_RE = new RegExp(`^https://(?:${MATCH_IPFS_CID_RAW
 const MATCH_IPFS_CID_AND_PATHNAME_RE = new RegExp(`(?:${MATCH_IPFS_CID_RAW})\\/?.*`)
 const MATCH_LOCAL_RESOURCE_URL_RE = /^(data|blob:|\w+-extension:\/\/|<svg\s)/
 const CORS_HOST = 'https://cors.r2d2.to'
-const IPFS_GATEWAY_HOST = 'https://gateway.ipfscdn.io'
+export const IPFS_GATEWAY_HOST = 'https://gateway.ipfscdn.io'
 
 export const isIPFS_CID = (cid: string) => {
     return MATCH_IPFS_CID_STRICT_RE.test(cid)
@@ -377,4 +378,14 @@ export function resolveResourceURL(url: string | undefined) {
     if (isLocaleResource(url)) return resolveLocalURL(url)
     if (isArweaveResource(url)) return resolveArweaveURL(url)
     return resolveIPFS_URL(url)
+}
+
+export function resolveSearchKeywordType(
+    keyword: string,
+    isValidDomain: (keyword: string) => boolean,
+    isValidAddress: (keyword: string) => boolean,
+) {
+    if (isValidDomain(keyword)) return SearchKeywordType.Domain
+    if (isValidAddress(keyword)) return SearchKeywordType.Address
+    return
 }

@@ -3,8 +3,8 @@ import { ElementAnchor } from '@masknet/shared'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import { useReverseAddress, useWeb3State } from '@masknet/web3-hooks-base'
 import type { RSS3BaseAPI } from '@masknet/web3-providers'
-import { Box, BoxProps, Skeleton, Typography } from '@mui/material'
-import { range } from 'lodash-unified'
+import { Box, Skeleton, Typography } from '@mui/material'
+import { range } from 'lodash-es'
 import { memo, useMemo } from 'react'
 import { useI18N } from '../locales/index.js'
 import { FeedCard } from './components/index.js'
@@ -14,7 +14,7 @@ import { useFeeds } from './hooks/useFeeds.js'
 
 const useStyles = makeStyles()((theme) => ({
     feedCard: {
-        marginTop: theme.spacing(2),
+        padding: theme.spacing(2, 2, 1),
     },
     statusBox: {
         display: 'flex',
@@ -25,12 +25,12 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface FeedPageProps extends BoxProps {
+export interface FeedPageProps {
     address?: string
     tag?: RSS3BaseAPI.Tag.Donation | RSS3BaseAPI.Tag.Social
 }
 
-export const FeedsPage = memo(function FeedsPage({ address, tag, ...rest }: FeedPageProps) {
+export const FeedsPage = memo(function FeedsPage({ address, tag }: FeedPageProps) {
     const t = useI18N()
     const { classes } = useStyles()
     const { Others } = useWeb3State()
@@ -78,11 +78,9 @@ export const FeedsPage = memo(function FeedsPage({ address, tag, ...rest }: Feed
     return (
         <FeedOwnerContext.Provider value={feedOwner}>
             <FeedDetailsProvider>
-                <Box p={2} boxSizing="border-box" {...rest}>
-                    {feeds.map((feed, index) => (
-                        <FeedCard key={index} className={classes.feedCard} feed={feed} />
-                    ))}
-                </Box>
+                {feeds.map((feed, index) => (
+                    <FeedCard key={index} className={classes.feedCard} feed={feed} />
+                ))}
                 <ElementAnchor callback={next}>{loading ? <LoadingBase /> : null}</ElementAnchor>
             </FeedDetailsProvider>
         </FeedOwnerContext.Provider>

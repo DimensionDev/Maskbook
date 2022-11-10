@@ -1,7 +1,7 @@
 import { LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { makeStyles } from '@masknet/theme'
-import { max } from 'lodash-unified'
+import { max } from 'lodash-es'
 import { useEffect, useMemo, useState } from 'react'
 import { useLocation, useWindowSize } from 'react-use'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI.js'

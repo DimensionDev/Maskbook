@@ -1,5 +1,5 @@
 import urlcat from 'urlcat'
-import { unionWith } from 'lodash-unified'
+import { unionWith } from 'lodash-es'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import {
     GasOptionType,
@@ -17,7 +17,6 @@ import type { WalletTokenRecord, HistoryResponse, GasPriceDictResponse } from '.
 import type { FungibleTokenAPI, HistoryAPI, GasOptionAPI } from '../types/index.js'
 import { getAllEVMNativeAssets } from '../helpers.js'
 
-const DEBANK_API = 'https://api.debank.com'
 const DEBANK_OPEN_API = 'https://debank-proxy.r2d2.to'
 
 /**
@@ -45,7 +44,7 @@ export class DeBankAPI
         const { CHAIN_ID = '' } = getDeBankConstants(chainId)
         if (!CHAIN_ID) throw new Error('Failed to get gas price.')
 
-        const response = await fetch(urlcat(DEBANK_API, '/chain/gas_price_dict_v2', { chain: CHAIN_ID }))
+        const response = await fetch(urlcat(DEBANK_OPEN_API, '/chain/gas_price_dict_v2', { chain: CHAIN_ID }))
         const result = (await response.json()) as GasPriceDictResponse
         if (result.error_code !== 0) throw new Error('Failed to get gas price.')
 
@@ -108,7 +107,9 @@ export class DeBankAPI
         const { CHAIN_ID = '' } = getDeBankConstants(chainId)
         if (!CHAIN_ID) return createPageable(EMPTY_LIST, createIndicator(indicator))
 
-        const response = await fetch(`${DEBANK_API}/history/list?user_addr=${address.toLowerCase()}&chain=${CHAIN_ID}`)
+        const response = await fetch(
+            `${DEBANK_OPEN_API}/history/list?user_addr=${address.toLowerCase()}&chain=${CHAIN_ID}`,
+        )
         const { data, error_code } = (await response.json()) as HistoryResponse
         if (error_code !== 0) throw new Error('Fail to load transactions.')
 
