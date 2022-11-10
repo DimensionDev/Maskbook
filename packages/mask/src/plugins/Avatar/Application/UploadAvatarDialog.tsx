@@ -11,7 +11,7 @@ import { context } from '../context.js'
 import { useNetworkContext } from '@masknet/web3-hooks-base'
 import { AvatarInfo, useSave } from '../hooks/save/useSave.js'
 import type { AllChainsNonFungibleToken } from '../types.js'
-import { delay } from 'opensea-js/lib/utils/utils.js'
+import { delay } from '@masknet/kit'
 
 const useStyles = makeStyles()((theme) => ({
     actions: {
