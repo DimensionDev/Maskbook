@@ -114,16 +114,10 @@ export function findPreset(dimension: Dimension) {
     return dimensionPreset.find((d) => isSameDimension(d, dimension))
 }
 export function getPreset(preset: SteganographyPreset): Preset {
-    switch (preset) {
-        case SteganographyPreset.Preset2021:
-            return Preset2021
-        case SteganographyPreset.Preset2022:
-            return Preset2022
-        case SteganographyPreset.Preset2023:
-            return Preset2023
-        default:
-            unreachable(preset)
-    }
+    if (preset === SteganographyPreset.Preset2021) return Preset2021
+    if (preset === SteganographyPreset.Preset2022) return Preset2022
+    if (preset === SteganographyPreset.Preset2023) return Preset2023
+    unreachable(preset)
 }
 function isSameDimension(dimension: Dimension, otherDimension: Dimension) {
     return dimension.width === otherDimension.width && dimension.height === otherDimension.height
