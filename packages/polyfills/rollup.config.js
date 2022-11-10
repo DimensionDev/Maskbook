@@ -31,9 +31,9 @@ export default [
         plugins: plugins(),
     },
     {
-        input: join(__dirname, './regenerator.js'),
+        input: join(__dirname, './lib-runtime.mjs'),
         output: {
-            file: 'regenerator.js',
+            file: 'lib-runtime.js',
             format: 'iife',
         },
         plugins: plugins(),
