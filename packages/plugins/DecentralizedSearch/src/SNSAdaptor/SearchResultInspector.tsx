@@ -101,7 +101,6 @@ export function SearchResultInspector(props: { keyword: string }) {
         ensRef.current && (!ensRef.current?.reversedAddress || !ensRef.current?.tokenId) && !ensRef.current?.isLoading,
     )
     const isError = Boolean(ensRef.current?.isError)
-    console.log({ isLoading, isHiddenAll, isEmpty, isLoadingAddressType, c: ensRef.current, isContractAddressType })
 
     return (
         <Hidden hidden={isHiddenAll}>
