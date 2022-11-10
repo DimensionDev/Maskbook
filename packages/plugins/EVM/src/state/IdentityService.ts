@@ -51,14 +51,12 @@ function getAddress(text: string) {
 
 function getNextIDPlatform() {
     if (getSiteType() === EnhanceableSite.Twitter) return NextIDPlatform.Twitter
-    return
+    return NextIDPlatform.Twitter
 }
 
 async function getWalletAddressesFromNextID(userId?: string) {
     if (!userId) return EMPTY_LIST
-    const platform = getNextIDPlatform()
-    if (!platform) return EMPTY_LIST
-    const bindings = await NextIDProof.queryAllExistedBindingsByPlatform(platform, userId)
+    const bindings = await NextIDProof.queryAllExistedBindingsByPlatform(getNextIDPlatform(), userId)
     return bindings.flatMap((x) =>
         x.proofs.filter((y) => y.platform === NextIDPlatform.Ethereum && isValidAddress(y.identity)),
     )
