@@ -27,7 +27,7 @@ export async function getCoinsByKeyword(
 }
 
 export async function getCoinNameByAddress(address: string): Promise<{ name: string; chainId: ChainId } | undefined> {
-    return CoinGeckoTrendingEVM.getCoinNameByAddress(address)
+    return CoinGeckoTrending.getCoinNameByAddress(address)
 }
 
 async function checkAvailabilityOnDataProvider(
