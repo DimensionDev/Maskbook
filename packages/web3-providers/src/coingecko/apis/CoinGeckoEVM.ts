@@ -1,6 +1,6 @@
 import { uniq, uniqBy } from 'lodash-es'
 import { DataProvider } from '@masknet/public-api'
-import { HubIndicator, HubOptions, TokenType } from '@masknet/web3-shared-base'
+import { HubIndicator, HubOptions, TokenType, attemptUntil } from '@masknet/web3-shared-base'
 import { ChainId, getCoinGeckoConstants, isNativeTokenAddress, isValidAddress } from '@masknet/web3-shared-evm'
 import { getCommunityLink, isMirroredKeyword, resolveChainId, resolveCoinAddress } from '../../cmc/helper.js'
 import { fetchJSON } from '../../helpers.js'
@@ -127,6 +127,26 @@ export class CoinGeckoTrendingEVM_API implements TrendingAPI.Provider<ChainId> {
         days: number,
     ): Promise<TrendingAPI.Stat[]> {
         return (await getStats(coinId, currency.id, days)).prices
+    }
+
+    async getCoinIdByAddress(
+        address: string,
+        chainIdList: ChainId[],
+    ): Promise<{ coinId: string; chainId: ChainId } | undefined> {
+        return attemptUntil(
+            chainIdList.map((chainId) => async () => {
+                try {
+                    const { PLATFORM_ID = '' } = getCoinGeckoConstants(chainId)
+                    const requestPath = `${COINGECKO_URL_BASE}/coins/${PLATFORM_ID}/contract/${address}`
+                    const response = await fetchJSON<{ id: string; error: string }>(requestPath)
+                    console.log({ response }, response.id)
+                    return response.error ? undefined : { coinId: response.id, chainId }
+                } catch {
+                    return undefined
+                }
+            }),
+            undefined,
+        )
     }
 }
 

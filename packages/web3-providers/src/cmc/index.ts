@@ -100,7 +100,6 @@ export interface CoinInfo {
     'tag-groups': string[]
     'tag-names': string[]
     tags: string[]
-    twitter_username: string
     urls: {
         announcement?: string[]
         chat?: string[]

@@ -26,6 +26,13 @@ export async function getCoinsByKeyword(
     }
 }
 
+export async function getCoinIdByAddress(
+    address: string,
+    chainIdList: ChainId[],
+): Promise<{ coinId: string; chainId: ChainId } | undefined> {
+    return CoinGeckoTrendingEVM.getCoinIdByAddress(address, chainIdList)
+}
+
 async function checkAvailabilityOnDataProvider(
     chainId: ChainId,
     keyword: string,
