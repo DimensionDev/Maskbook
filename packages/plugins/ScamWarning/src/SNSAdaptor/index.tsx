@@ -33,7 +33,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
         const links = useMemo(() => {
             const x = extractTextFromTypedMessage(props.message)
             if (x.none) return null
-            return parseURLs(x.val)
+            return parseURLs(x.val, false)
         }, [props.message])
         if (!links) return null
         return <PreviewCard links={links} />
