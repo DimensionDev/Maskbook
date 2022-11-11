@@ -14,7 +14,6 @@ export function SearchResultInspector({ keyword }: SearchResultInspectorProps) {
         NetworkPluginID.PLUGIN_EVM,
         keyword,
     )
-    console.log({ name, type, presetDataProviders, chainId, searchedContractAddress })
     const { value: addressType } = useAddressType(NetworkPluginID.PLUGIN_EVM, keyword, {
         chainId: chainId ?? ChainId.Mainnet,
     })
