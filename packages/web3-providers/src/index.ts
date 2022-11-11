@@ -44,7 +44,7 @@ import { CF_API } from './cf/index.js'
 import { MirrorAPI } from './mirror/index.js'
 import { MindsAPI } from './minds/index.js'
 import { FuseTrendingAPI } from './fuse/index.js'
-import { CryptoScamDBAPI } from './cryptoscan-db/index.js'
+import { CryptoScamDBAPI } from './cryptoscam-db/index.js'
 
 export * from './helpers.js'
 export * from './types/index.js'
