@@ -6,7 +6,7 @@ import { EMPTY_LIST, PluginID, NetworkPluginID } from '@masknet/shared-base'
 import { ActionButton, makeStyles, MaskLightTheme, MaskTabList, useTabs } from '@masknet/theme'
 import { TrendingAPI } from '@masknet/web3-providers'
 import { createFungibleToken, TokenType } from '@masknet/web3-shared-base'
-import { isNativeTokenAddress, isNativeTokenSymbol, SchemaType } from '@masknet/web3-shared-evm'
+import { isNativeTokenAddress, isNativeTokenSymbol, SchemaType, ChainId } from '@masknet/web3-shared-evm'
 import { TabContext } from '@mui/lab'
 import { Link, Stack, Tab, ThemeProvider } from '@mui/material'
 import { Box, useTheme } from '@mui/system'
@@ -100,7 +100,8 @@ export interface TrendingViewProps {
     name: string
     tagType: TagType
     dataProviders: DataProvider[]
-    isPreciseSearch?: boolean
+    searchedContractAddress?: string
+    expectedChainId?: ChainId
     onUpdate?: () => void
     isPopper?: boolean
 }
@@ -114,7 +115,7 @@ enum ContentTabs {
 }
 
 export function TrendingView(props: TrendingViewProps) {
-    const { name, tagType, dataProviders, isPopper = true, isPreciseSearch = false } = props
+    const { name, tagType, dataProviders, isPopper = true, searchedContractAddress, expectedChainId } = props
 
     const { t } = useI18N()
     const { classes } = useStyles({ isPopper })
@@ -134,8 +135,14 @@ export function TrendingView(props: TrendingViewProps) {
 
     // #region merge trending
     const coinId = usePreferredCoinId(name, dataProvider)
-    const trendingById = useTrendingById(coinId, dataProvider)
-    const trendingByKeyword = useTrendingByKeyword(tagType, coinId ? '' : name, dataProvider)
+    const trendingById = useTrendingById(coinId, dataProvider, expectedChainId, searchedContractAddress)
+    const trendingByKeyword = useTrendingByKeyword(
+        tagType,
+        coinId ? '' : name,
+        dataProvider,
+        expectedChainId,
+        searchedContractAddress,
+    )
     const {
         value: { currency, trending },
         error: trendingError,
@@ -290,7 +297,7 @@ export function TrendingView(props: TrendingViewProps) {
             keyword={name}
             stats={stats}
             coins={coins}
-            isPreciseSearch={isPreciseSearch}
+            isPreciseSearch={!!searchedContractAddress}
             currency={currency}
             trending={trending}
             dataProvider={dataProvider}

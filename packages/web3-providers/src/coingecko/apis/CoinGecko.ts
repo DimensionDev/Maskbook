@@ -1,13 +1,13 @@
 import { compact, uniq, uniqBy } from 'lodash-es'
+import { attemptUntil, TokenType } from '@masknet/web3-shared-base'
 import { DataProvider } from '@masknet/public-api'
-import { TokenType } from '@masknet/web3-shared-base'
-import type { ChainId } from '@masknet/web3-shared-evm'
+import { ChainId, getCoinGeckoConstants } from '@masknet/web3-shared-evm'
+import { COINGECKO_CHAIN_ID_LIST, COINGECKO_URL_BASE } from '../constants.js'
 import { getCommunityLink, isMirroredKeyword } from '../../trending/helpers.js'
 import { fetchJSON } from '../../helpers.js'
 import type { TrendingAPI } from '../../types/index.js'
 import { getAllCoins, getCoinInfo, getPriceStats as getStats, getThumbCoins } from './base.js'
 import type { Platform } from '../types.js'
-import { COINGECKO_URL_BASE } from '../constants.js'
 import { resolveCoinGeckoChainId } from '../helpers.js'
 import { FuseTrendingAPI } from '../../fuse/index.js'
 
@@ -127,6 +127,22 @@ export class CoinGeckoTrending_API implements TrendingAPI.Provider<ChainId> {
                 updated: new Date(x.timestamp),
             })),
         }
+    }
+
+    async getCoinNameByAddress(address: string): Promise<{ name: string; chainId: ChainId } | undefined> {
+        return attemptUntil(
+            COINGECKO_CHAIN_ID_LIST.map((chainId) => async () => {
+                try {
+                    const { PLATFORM_ID = '' } = getCoinGeckoConstants(chainId)
+                    const requestPath = `${COINGECKO_URL_BASE}/coins/${PLATFORM_ID}/contract/${address}`
+                    const response = await fetchJSON<{ name: string; error: string }>(requestPath)
+                    return response.error ? undefined : { name: response.name, chainId }
+                } catch {
+                    return undefined
+                }
+            }),
+            undefined,
+        )
     }
 
     async getCoinPriceStats(
