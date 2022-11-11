@@ -95,7 +95,7 @@ export function AutoPasteFailedDialog(props: AutoPasteFailedDialogProps) {
                     <div style={{ textAlign: permission === 'granted' ? 'left' : 'center' }}>
                         {data.image ? (
                             // It must be img
-                            <Image src={URL.createObjectURL(data.image)} style={{ height: 'auto' }} />
+                            <Image src={URL.createObjectURL(data.image)} style={{ width: '100%' }} />
                         ) : null}
                         <Box
                             sx={{
