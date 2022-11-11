@@ -100,12 +100,16 @@ export namespace RSS3BaseAPI {
         to: TransactionMetadata
         from: TransactionMetadata
     }
+    // Uniswap like actions: add, collect, remove
+    // Aave like actions: supply, withdraw, borrow, repay
+    type LiquidityIn = 'supply' | 'add' | 'repay'
+    type LiquidityOut = 'withdraw' | 'collect' | 'remove' | 'collect'
     interface LiquidityMetadata {
         /**
          * @example "Uniswap V2"
          */
         protocol: string
-        action: 'supply' | 'withdraw'
+        action: LiquidityIn | LiquidityOut
         tokens: [TransactionMetadata, TransactionMetadata]
     }
 
@@ -123,6 +127,7 @@ export namespace RSS3BaseAPI {
         description: string
         animation_url: string
         external_link: string
+        decimals: number
     }
     interface TradeMetadata extends CollectibleMetadata {
         cost?: TransactionMetadata
@@ -140,8 +145,9 @@ export namespace RSS3BaseAPI {
         contract_address: string
     }
     export interface PostMetadata {
-        title: string
+        title?: string
         body: string
+        summary?: string
         author: string[]
         created_at?: string
         target_url?: string
@@ -159,7 +165,7 @@ export namespace RSS3BaseAPI {
     }
     interface ShareMetadata {
         type_on_platform: Type[]
-        target: Pick<PostMetadata, 'body' | 'author' | 'created_at' | 'target_url'>
+        target: PostMetadata
         comment?: CommentMetadata
     }
     interface ReviseMetadata extends PostMetadata {}
@@ -178,10 +184,7 @@ export namespace RSS3BaseAPI {
         profile_uri: string[]
         type: 'create' | 'update'
     }
-    interface FollowMetadata {
-        type_on_platform: Type[]
-        target: Omit<ProfileMetadata, 'expire_at'>
-    }
+    export interface FollowMetadata extends Omit<ProfileMetadata, 'expire_at'> {}
     interface LaunchMetadata {
         logo: URLString
         title: string
@@ -308,6 +311,7 @@ export namespace RSS3BaseAPI {
         | 'EIP-1577'
 
     export type Platform =
+        | 'arweave'
         | 'binance'
         | 'ENS Registrar'
         | '0x'
@@ -325,6 +329,9 @@ export namespace RSS3BaseAPI {
         | 'xLog'
         | 'Farcaster'
         | 'Planet'
+        | 'PancakeSwap'
+        | 'Aave'
+        | 'AAVE'
 
     export enum Tag {
         Collectible = 'collectible',
@@ -451,7 +458,7 @@ export namespace RSS3BaseAPI {
         | Web3FeedGeneric<Tag.Transaction>
 
     /** For feed cards */
-    export type TokenOperationFeed = Web3FeedGeneric<Tag.Transaction, Type.Transfer | Type.Burn>
+    export type TokenOperationFeed = Web3FeedGeneric<Tag.Transaction, Type.Transfer | Type.Burn | Type.Mint>
     export type TokenSwapFeed = Web3FeedGeneric<Tag.Exchange, Type.Swap>
     export type LiquidityFeed = Web3FeedGeneric<Tag.Exchange, Type.Liquidity>
     export type CollectibleFeed = Web3FeedGeneric<Tag.Collectible>
@@ -460,9 +467,10 @@ export namespace RSS3BaseAPI {
     export type CollectibleTransferFeed = Web3FeedGeneric<Tag.Collectible, Type.Transfer>
     export type CollectibleBurnFeed = Web3FeedGeneric<Tag.Collectible, Type.Burn>
     export type DonationFeed = Web3FeedGeneric<Tag.Donation, Type.Donate>
-    export type NoteFeed = Web3FeedGeneric<Tag.Social, Type.Post | Type.Revise | Type.Mint>
+    export type NoteFeed = Web3FeedGeneric<Tag.Social, Type.Post | Type.Revise | Type.Mint | Type.Share>
     export type CommentFeed = Web3FeedGeneric<Tag.Social, Type.Comment>
     export type ProfileFeed = Web3FeedGeneric<Tag.Social, Type.Profile>
+    export type ProfileLinkFeed = Web3FeedGeneric<Tag.Social, Type.Follow | Type.Unfollow>
     export type GovernanceFeed = Web3FeedGeneric<Tag.Governance, Type.Propose | Type.Vote>
     export type VoteFeed = Web3FeedGeneric<Tag.Governance, Type.Vote>
     export type ProposeFeed = Web3FeedGeneric<Tag.Governance, Type.Propose>

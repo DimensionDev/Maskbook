@@ -1,9 +1,8 @@
 import { Image } from '@masknet/shared'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, Markdown } from '@masknet/theme'
 import { RSS3BaseAPI } from '@masknet/web3-providers'
 import { Typography } from '@mui/material'
 import { FC, HTMLProps, memo, useState } from 'react'
-import Markdown from 'react-markdown'
 import { Translate } from '../../../locales/i18n_generated.js'
 import { useAddressLabel } from '../../hooks/index.js'
 import { CardType } from '../share.js'
@@ -19,8 +18,9 @@ const useStyles = makeStyles<void, 'image'>()((theme, _, refs) => ({
         lineHeight: '18px',
         borderRadius: 4,
         marginLeft: theme.spacing(1.5),
+        fontSize: 12,
         backgroundColor: theme.palette.maskColor.main,
-        color: theme.palette.maskColor.second,
+        color: theme.palette.maskColor.bottom,
         padding: '0 6px',
     },
     summary: {
@@ -53,6 +53,7 @@ const useStyles = makeStyles<void, 'image'>()((theme, _, refs) => ({
     verbose: {
         [`.${refs.image}`]: {
             marginTop: theme.spacing(1),
+            aspectRatio: '1/1',
         },
     },
     info: {

@@ -6,13 +6,13 @@ import { BigNumber } from 'bignumber.js'
 import type { FC, HTMLProps, ReactNode } from 'react'
 import formatDateTime from 'date-fns/format'
 import { useViewFeedDetails } from '../contexts/index.js'
-import { CardType, cardTypeIconMap, formatTimestamp, platformIconMap } from './share.js'
+import { CardType, cardTypeIconMap, formatTimestamp, getPlatformIcon } from './share.js'
 
 export interface FeedCardBaseProps {
     feed: RSS3BaseAPI.Web3Feed
     /**
      * to specify action from the feed
-     * for donation feed. there might be multiple actions to render
+     * for example donation feed. there might be multiple actions to render
      */
     actionIndex?: number
     /**
@@ -80,8 +80,8 @@ export const CardFrame: FC<CardFrameProps> = ({
 }) => {
     const { classes, cx } = useStyles()
     const CardIcon = cardTypeIconMap[type]
-    const PrimaryPlatformIcon = feed.network ? platformIconMap[feed.network] : null
-    const ProviderPlatformIcon = feed.platform ? platformIconMap[feed.platform] : null
+    const PrimaryPlatformIcon = getPlatformIcon(feed.network)
+    const ProviderPlatformIcon = getPlatformIcon(feed.platform)
 
     const viewDetails = useViewFeedDetails()
 
@@ -110,7 +110,9 @@ export const CardFrame: FC<CardFrameProps> = ({
                 {ProviderPlatformIcon ? (
                     <ProviderPlatformIcon className={classes.icon} height={18} width="auto" />
                 ) : null}
-                {PrimaryPlatformIcon ? <PrimaryPlatformIcon className={classes.icon} height={18} width="auto" /> : null}
+                {PrimaryPlatformIcon && PrimaryPlatformIcon !== ProviderPlatformIcon ? (
+                    <PrimaryPlatformIcon className={classes.icon} height={18} width="auto" />
+                ) : null}
                 <ShadowRootTooltip title={formatDateTime(new Date(feed.timestamp), 'yyyy-MM-dd HH:mm:ss')}>
                     <Typography className={classes.timestamp}>{formatTimestamp(feed.timestamp)}</Typography>
                 </ShadowRootTooltip>

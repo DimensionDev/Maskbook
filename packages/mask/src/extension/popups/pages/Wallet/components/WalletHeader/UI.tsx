@@ -62,6 +62,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     networkSelector: {
         display: 'flex',
+        alignItems: 'center',
         cursor: 'pointer',
     },
     chainName: {
@@ -75,6 +76,7 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         alignItems: 'center',
         lineHeight: '18px',
+        fontSize: 12,
         color: theme.palette.maskColor.second,
         columnGap: 4,
     },

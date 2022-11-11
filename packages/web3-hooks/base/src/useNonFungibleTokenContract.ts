@@ -5,8 +5,8 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import { useWeb3Connection } from './useWeb3Connection.js'
 
 export function useNonFungibleTokenContract<S extends 'all' | void = void, T extends NetworkPluginID = NetworkPluginID>(
-    pluginID: T,
-    address: string,
+    pluginID?: T,
+    address?: string,
     schemaType?: Web3Helper.SchemaTypeScope<S, T>,
     options?: Web3Helper.Web3ConnectionOptionsScope<S, T>,
 ) {

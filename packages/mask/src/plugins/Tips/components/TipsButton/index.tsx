@@ -1,5 +1,5 @@
 import { FC, HTMLProps, MouseEventHandler, useCallback, useEffect, useMemo } from 'react'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
 import { useNetworkContext } from '@masknet/web3-hooks-base'
 import { ProfileIdentifier, NetworkPluginID, EMPTY_LIST } from '@masknet/shared-base'
@@ -12,7 +12,7 @@ import { useProfilePublicKey } from '../../hooks/useProfilePublicKey.js'
 import { PluginTipsMessages } from '../../messages.js'
 import { useTipsAccounts } from './useTipsAccounts.js'
 
-interface Props extends HTMLProps<HTMLDivElement> {
+interface Props extends HTMLProps<HTMLDivElement>, withClasses<'icon'> {
     // This is workaround solution, link issue mf-2536 and pr #7576.
     // Should refactor social account to support multi-account for one post.
     accounts?: SocialAccount[]
@@ -31,16 +31,17 @@ const useStyles = makeStyles()({
     },
 })
 
-export const TipButton: FC<Props> = ({
-    className,
-    accounts: receivingAccounts = EMPTY_LIST,
-    receiver,
-    recipient,
-    children,
-    onStatusUpdate,
-    ...rest
-}) => {
-    const { classes, cx } = useStyles()
+export const TipButton: FC<Props> = (props) => {
+    const {
+        className,
+        accounts: receivingAccounts = EMPTY_LIST,
+        receiver,
+        recipient,
+        children,
+        onStatusUpdate,
+        ...rest
+    } = props
+    const { classes, cx } = useStylesExtends(useStyles(), props)
 
     const { value: personaPubkey, loading: loadingPersona } = useProfilePublicKey(receiver)
     const receiverUserId = receiver?.userId
@@ -107,7 +108,7 @@ export const TipButton: FC<Props> = ({
 
     return (
         <div className={cx(className, classes.tipButton)} {...rest} role="button" onClick={createTipTask}>
-            <Icons.TipCoin />
+            <Icons.TipCoin className={classes.icon} />
             {children}
         </div>
     )

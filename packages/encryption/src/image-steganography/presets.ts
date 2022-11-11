@@ -43,7 +43,7 @@ const libV2AlgrDefaults: Omit<EncodeOptions, 'text'> = {
 
 const Preset2021: Preset = {
     type: 'string',
-    description: 'the preset we used for payload V38',
+    description: 'the preset we used for payload V38 with v1 algorithm',
     width: 1200,
     height: 681,
     mask: new URL('./masks/mask-v2.png', import.meta.url).toString(),
@@ -51,6 +51,15 @@ const Preset2021: Preset = {
 }
 
 const Preset2022: Preset = {
+    type: 'string',
+    description: 'the preset we used for payload V38',
+    width: 1200,
+    height: 682,
+    mask: null,
+    options: libV2AlgrDefaults,
+}
+
+const Preset2023: Preset = {
     type: 'raw',
     description: 'the preset we used for payload V37',
     width: 1200,
@@ -60,8 +69,9 @@ const Preset2022: Preset = {
 }
 
 const dimensionPreset: readonly Preset[] = [
-    Preset2021,
+    Preset2023,
     Preset2022,
+    Preset2021,
     {
         type: 'string',
         description: 'legacy post',
@@ -106,6 +116,7 @@ export function findPreset(dimension: Dimension) {
 export function getPreset(preset: SteganographyPreset): Preset {
     if (preset === SteganographyPreset.Preset2021) return Preset2021
     if (preset === SteganographyPreset.Preset2022) return Preset2022
+    if (preset === SteganographyPreset.Preset2023) return Preset2023
     unreachable(preset)
 }
 function isSameDimension(dimension: Dimension, otherDimension: Dimension) {

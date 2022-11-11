@@ -23,10 +23,10 @@ export function ActionButton<T extends React.ComponentType<any> = React.Componen
     const { classes, cx } = useStyles()
     return (
         <Button
-            disableElevation
             className={cx('actionButton', className, loading ? classes.loading : undefined)}
             style={{ width, ...style, pointerEvents: loading ? 'none' : undefined }}
             {...rest}
+            disableElevation
             disabled={rest.disabled && !loading}>
             {loading ? (
                 <Box

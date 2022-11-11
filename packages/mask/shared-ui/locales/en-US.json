@@ -1142,6 +1142,8 @@
     "plugin_artblocks_name": "Artblocks",
     "plugin_ens_description": "Optimize the display of search results about ENS in social media.",
     "plugin_ens_name": "ENS",
+    "plugin_decentralized_search_name": "DSearch",
+    "plugin_decentralized_search_description": "Optimize search results with token names, NFT collections, ENS domains, and wallet addresses.",
     "plugin_dhedge_description": "Decentralized hedge funds on Ethereum and Polygon (Matic).",
     "plugin_dhedge_name": "dHEDGE",
     "nft_button_set_avatar": "Set NFT Avatar",

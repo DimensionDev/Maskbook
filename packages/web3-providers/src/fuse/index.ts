@@ -8,10 +8,11 @@ export class FuseTrendingAPI implements FuseAPI.Provider<TrendingAPI.Coin> {
     async getSearchableItems(getCoins: () => Promise<TrendingAPI.Coin[]>) {
         if (!this.searchableItems) {
             const items = await getCoins()
+
             this.searchableItems = new Fuse(items, {
                 keys: [
-                    { name: 'name', weight: 0.5 },
-                    { name: 'symbol', weight: 0.8 },
+                    { name: 'name', weight: 0.8 },
+                    { name: 'symbol', weight: 0.3 },
                 ],
                 isCaseSensitive: false,
                 ignoreLocation: true,

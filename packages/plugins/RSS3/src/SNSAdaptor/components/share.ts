@@ -4,7 +4,11 @@ import type { GeneratedIconNonSquareProps } from '@masknet/icons'
 import type { RSS3BaseAPI } from '@masknet/web3-providers'
 import type { ComponentType } from 'react'
 
-export type IconComponent = ComponentType<GeneratedIconNonSquareProps<never>>
+export type IconComponent =
+    | ComponentType<GeneratedIconNonSquareProps<never>>
+    | ComponentType<GeneratedIconNonSquareProps<'light'>>
+    | ComponentType<GeneratedIconNonSquareProps<'dark'>>
+    | ComponentType<GeneratedIconNonSquareProps<'dim'>>
 
 export enum CardType {
     AchievementBurn = 1,
@@ -24,16 +28,19 @@ export enum CardType {
     NoteBurn = 15,
     ProfileBurn = 16,
     ProfileCreate = 17,
-    ProfileLink = 18,
-    TokenIn = 19,
-    TokenLiquidity = 20,
-    TokenOut = 21,
-    TokenStake = 22,
-    TokenSwap = 23,
-    UnknownBurn = 24,
-    UnknownCancel = 25,
-    UnknownIn = 26,
-    UnknownOut = 27,
+    ProfileUpdate = 18,
+    ProfileLink = 19,
+    TokenMint = 20,
+    TokenIn = 21,
+    TokenLiquidity = 22,
+    TokenOut = 23,
+    TokenStake = 24,
+    TokenSwap = 25,
+    TokenBurn = 26,
+    UnknownBurn = 27,
+    UnknownCancel = 28,
+    UnknownIn = 29,
+    UnknownOut = 30,
 }
 
 export const cardTypeIconMap: Record<CardType, IconComponent> = {
@@ -54,19 +61,22 @@ export const cardTypeIconMap: Record<CardType, IconComponent> = {
     [CardType.NoteBurn]: Icons.NoteBurn,
     [CardType.ProfileBurn]: Icons.ProfileBurn,
     [CardType.ProfileCreate]: Icons.ProfileCreate,
+    [CardType.ProfileUpdate]: Icons.ProfileUpdate,
     [CardType.ProfileLink]: Icons.ProfileLink,
+    [CardType.TokenMint]: Icons.TokenMint,
     [CardType.TokenIn]: Icons.TokenIn,
     [CardType.TokenLiquidity]: Icons.TokenLiquidity,
     [CardType.TokenOut]: Icons.TokenOut,
     [CardType.TokenStake]: Icons.TokenStake,
     [CardType.TokenSwap]: Icons.TokenSwap,
+    [CardType.TokenBurn]: Icons.TokenBurn,
     [CardType.UnknownBurn]: Icons.UnknownBurn,
     [CardType.UnknownCancel]: Icons.UnknownCancel,
     [CardType.UnknownIn]: Icons.UnknownIn,
     [CardType.UnknownOut]: Icons.UnknownOut,
 }
 
-export const platformIconMap: Record<RSS3BaseAPI.Network | RSS3BaseAPI.Platform, IconComponent | null> = {
+const platformIconMap: Record<Lowercase<RSS3BaseAPI.Network | RSS3BaseAPI.Platform>, IconComponent | null> = {
     // Networks
     ethereum: Icons.ETH,
     binance_smart_chain: Icons.BSC,
@@ -76,28 +86,34 @@ export const platformIconMap: Record<RSS3BaseAPI.Network | RSS3BaseAPI.Platform,
     optimism: Icons.Optimism,
     fantom: Icons.Fantom,
     avalanche: Icons.Avalanche,
-    // TODO icon for zksync is missing
     zksync: Icons.ZkScan,
     // Platforms
-    Gitcoin: Icons.Gitcoin,
-    Mirror: Icons.Mirror,
-    Snapshot: Icons.Snapshot,
-    Uniswap: Icons.Uniswap,
+    gitcoin: Icons.Gitcoin,
+    mirror: Icons.Mirror,
+    snapshot: Icons.Snapshot,
+    uniswap: Icons.Uniswap,
     binance: Icons.BSC,
-    Lens: Icons.Lens,
-    Farcaster: Icons.Farcaster,
+    lens: Icons.Lens,
+    farcaster: Icons.Farcaster,
     crossbell: Icons.Crossbell,
     '0x': Icons.ZeroX,
-    'ENS Registrar': null,
-    CrossSync: Icons.CrossSync,
-    Crossbell: Icons.Crossbell,
-    MetaMask: Icons.MetaMask,
-    OpenSea: Icons.OpenSea,
-    SushiSwap: null,
+    'ens registrar': null,
+    crosssync: Icons.CrossSync,
+    metamask: Icons.MetaMask,
+    opensea: Icons.OpenSea,
+    sushiswap: Icons.SushiSwap,
+    pancakeswap: Icons.PancakeSwap,
+    aave: Icons.Aave,
     'crossbell.io': Icons.Crossbell,
-    xLog: Icons.XLog,
-    'EIP-1577': Icons.EIP1577,
-    Planet: Icons.Planet,
+    xlog: Icons.XLog,
+    'eip-1577': Icons.EIP1577,
+    planet: Icons.Planet,
+    arweave: Icons.Arweave,
+}
+
+export const getPlatformIcon = (platform?: RSS3BaseAPI.Network | RSS3BaseAPI.Platform) => {
+    if (!platform) return null
+    return platformIconMap[platform.toLowerCase() as Lowercase<RSS3BaseAPI.Network | RSS3BaseAPI.Platform>]
 }
 
 export const hostIconMap: Record<string, IconComponent> = {
@@ -113,6 +129,7 @@ export const hostIconMap: Record<string, IconComponent> = {
     'zkscan.io': Icons.ZkScan,
     'mirror.xyz': Icons.Mirror,
     'ipfs.io': Icons.IPFS,
+    'snapshot.org': Icons.Snapshot,
 }
 
 export const hostNameMap: Record<string, string> = {
@@ -127,6 +144,8 @@ export const hostNameMap: Record<string, string> = {
     'bscscan.com': 'BscScan',
     'zkscan.io': 'ZkScan',
     'ipfs.io': 'IPFS',
+    'snapshot.org': 'Snapshot',
+    'mirror.xyz': 'Mirror',
 }
 
 export function getLastAction<
@@ -163,4 +182,16 @@ export function formatTimestamp(timestamp: string): string {
     }
     const mins = Math.floor(distance / ONE_MIN)
     return plural(mins, 'min')
+}
+
+export function transformPlanetResource(markdown: string, base: string) {
+    return markdown
+        .replace(/(<img [^>]*)\bsrc=("|')([^"']*)\2([^>]*>)/gi, (match, before, quotation, url, after) => {
+            if (url.match(/^https?:\/\//)) return match
+            return `${before}src=${quotation}https://thumbor.rss3.dev/unsafe/${base}/${url}${quotation}${after}`
+        })
+        .replace(/(!\[.*?])\((.*?)\)/g, (match, head, url) => {
+            if (url.match(/^https?:\/\//)) return match
+            return `${head}(https://thumbor.rss3.dev/unsafe/${base}/${url})`
+        })
 }

@@ -1,9 +1,8 @@
 import { Image } from '@masknet/shared'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, Markdown } from '@masknet/theme'
 import { RSS3BaseAPI } from '@masknet/web3-providers'
 import { Typography } from '@mui/material'
 import type { FC } from 'react'
-import Markdown from 'react-markdown'
 import { Translate, useI18N } from '../../../locales/i18n_generated.js'
 import { useAddressLabel } from '../../hooks/index.js'
 import { CardFrame, FeedCardProps } from '../base.js'
@@ -100,7 +99,7 @@ export const CommentCard: FC<CommentCardProps> = ({ feed, ...rest }) => {
                 <Translate.note
                     values={{
                         user,
-                        platform: action.platform!,
+                        platform: feed.platform!,
                         context: 'comment',
                     }}
                     components={{
@@ -110,7 +109,7 @@ export const CommentCard: FC<CommentCardProps> = ({ feed, ...rest }) => {
             </Typography>
             <Typography className={classes.comment}>{metadata?.body}</Typography>
             <div className={cx(classes.target, verbose ? classes.verbose : null)}>
-                {verbose ? <Typography classes={classes.originalLabel}>{t.original()}</Typography> : null}
+                {verbose ? <Typography className={classes.originalLabel}>{t.original()}</Typography> : null}
                 {commentTarget?.media?.[0].mime_type?.startsWith('image/') ? (
                     <Image
                         classes={{ container: classes.image }}

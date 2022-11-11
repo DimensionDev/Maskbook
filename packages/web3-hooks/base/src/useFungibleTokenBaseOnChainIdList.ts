@@ -24,8 +24,24 @@ export function useFungibleTokenBaseOnChainIdList<
         return attemptUntil(
             flatten(
                 chainIdList?.map((chainId) => [
-                    () => Token?.createFungibleToken?.(chainId, address ?? ''),
-                    () => connection?.getFungibleToken?.(address ?? '', { ...options, chainId }),
+                    async () => {
+                        const token = await connection?.getFungibleToken?.(address ?? '', { ...options, chainId })
+
+                        return !token?.name ||
+                            token?.name.toUpperCase() === 'UNKNOWN' ||
+                            token?.symbol.toUpperCase() === 'UNKNOWN'
+                            ? undefined
+                            : token
+                    },
+                    async () => {
+                        const token = await Token?.createFungibleToken?.(chainId, address ?? '')
+
+                        return !token?.name ||
+                            token?.name.toUpperCase() === 'UNKNOWN' ||
+                            token?.symbol.toUpperCase() === 'UNKNOWN'
+                            ? undefined
+                            : token
+                    },
                 ]),
             ),
             fallbackToken,

@@ -2,7 +2,7 @@ import { first } from 'lodash-es'
 import { getEnumAsArray, unreachable } from '@masknet/kit'
 import { DataProvider } from '@masknet/public-api'
 import { EMPTY_LIST } from '@masknet/shared-base'
-import { CoinGeckoTrendingEVM, CoinMarketCap, NFTScanTrending, TrendingAPI, UniSwap } from '@masknet/web3-providers'
+import { CoinGeckoTrending, CoinMarketCap, NFTScanTrending, TrendingAPI, UniSwap } from '@masknet/web3-providers'
 import { ChainId, chainResolver, NetworkType } from '@masknet/web3-shared-evm'
 import type { Coin, Currency, Stat, TagType, Trending } from '../../types/index.js'
 import { isBlockedAddress, isBlockedKeyword, resolveKeyword, resolveCoinId } from './hotfix.js'
@@ -14,7 +14,7 @@ export async function getCoinsByKeyword(
 ): Promise<Coin[]> {
     switch (dataProvider) {
         case DataProvider.CoinGecko:
-            return CoinGeckoTrendingEVM.getCoinsByKeyword(chainId, keyword)
+            return CoinGeckoTrending.getCoinsByKeyword(chainId, keyword)
         case DataProvider.CoinMarketCap:
             return CoinMarketCap.getCoinsByKeyword(chainId, keyword)
         case DataProvider.UniswapInfo:
@@ -24,6 +24,10 @@ export async function getCoinsByKeyword(
         default:
             return EMPTY_LIST
     }
+}
+
+export async function getCoinNameByAddress(address: string): Promise<{ name: string; chainId: ChainId } | undefined> {
+    return CoinGeckoTrending.getCoinNameByAddress(address)
 }
 
 async function checkAvailabilityOnDataProvider(
@@ -89,7 +93,7 @@ export async function getCoinTrending(
 ): Promise<Trending> {
     switch (dataProvider) {
         case DataProvider.CoinGecko:
-            return CoinGeckoTrendingEVM.getCoinTrending(chainId, id, currency)
+            return CoinGeckoTrending.getCoinTrending(chainId, id, currency)
         case DataProvider.CoinMarketCap:
             return CoinMarketCap.getCoinTrending(chainId, id, currency)
         case DataProvider.UniswapInfo:
@@ -112,8 +116,8 @@ export async function getCoinTrendingByKeyword(
     const coins = await getAvailableCoins(chainId, keyword, tagType, dataProvider)
     if (!coins.length) return null
 
-    // prefer coins on the ethereum network
-    const coin = coins.find((x) => x.contract_address) ?? first(coins)
+    // check this first coin
+    const coin = first(coins)
     if (!coin) return null
 
     const coinId = resolveCoinId(chainId, resolveKeyword(chainId, keyword, dataProvider), dataProvider) ?? coin.id
@@ -131,7 +135,7 @@ export async function getPriceStats(
 ): Promise<Stat[]> {
     switch (dataProvider) {
         case DataProvider.CoinGecko:
-            return CoinGeckoTrendingEVM.getCoinPriceStats(
+            return CoinGeckoTrending.getCoinPriceStats(
                 chainId,
                 id,
                 currency,
