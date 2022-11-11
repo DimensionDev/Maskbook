@@ -7,7 +7,13 @@ import type { ChainId } from '@masknet/web3-shared-evm'
 import type { Coin, TagType } from '../types/index.js'
 import { useCurrentCurrency } from './useCurrentCurrency.js'
 
-export function useTrendingByKeyword(tagType: TagType, keyword: string, dataProvider: DataProvider) {
+export function useTrendingByKeyword(
+    tagType: TagType,
+    keyword: string,
+    dataProvider: DataProvider,
+    expectedChainId?: ChainId,
+    searchedContractAddress?: string,
+) {
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const currency = useCurrentCurrency(dataProvider)
     const {
@@ -23,8 +29,9 @@ export function useTrendingByKeyword(tagType: TagType, keyword: string, dataProv
     const coin = {
         ...trending?.coin,
         decimals: trending?.coin.decimals || detailedToken?.decimals || 0,
-        contract_address: trending?.contracts?.[0]?.address ?? trending?.coin.contract_address,
-        chainId: trending?.contracts?.[0]?.chainId ?? trending?.coin.chainId,
+        contract_address:
+            searchedContractAddress ?? trending?.contracts?.[0]?.address ?? trending?.coin.contract_address,
+        chainId: expectedChainId ?? trending?.contracts?.[0]?.chainId ?? trending?.coin.chainId,
     } as Coin
     return {
         value: {
@@ -41,7 +48,12 @@ export function useTrendingByKeyword(tagType: TagType, keyword: string, dataProv
     }
 }
 
-export function useTrendingById(id: string, dataProvider: DataProvider, expectedChainId?: ChainId) {
+export function useTrendingById(
+    id: string,
+    dataProvider: DataProvider,
+    expectedChainId?: ChainId,
+    searchedContractAddress?: string,
+) {
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>({ chainId: expectedChainId })
     const currency = useCurrentCurrency(dataProvider)
     const {
@@ -59,8 +71,9 @@ export function useTrendingById(id: string, dataProvider: DataProvider, expected
     const coin = {
         ...trending?.coin,
         decimals: trending?.coin.decimals || detailedToken?.decimals || 0,
-        contract_address: trending?.contracts?.[0]?.address ?? trending?.coin.contract_address,
-        chainId: trending?.contracts?.[0]?.chainId ?? trending?.coin.chainId,
+        contract_address:
+            searchedContractAddress ?? trending?.contracts?.[0]?.address ?? trending?.coin.contract_address,
+        chainId: expectedChainId ?? trending?.contracts?.[0]?.chainId ?? trending?.coin.chainId,
     } as Coin
 
     return {
@@ -78,8 +91,8 @@ export function useTrendingById(id: string, dataProvider: DataProvider, expected
     }
 }
 
-export function useCoinIdByAddress(address: string, chainIdList: ChainId[]) {
+export function useCoinIdByAddress(address: string) {
     return useAsyncRetry(() => {
-        return PluginTraderRPC.getCoinIdByAddress(address, chainIdList)
-    }, [address, JSON.stringify(chainIdList)])
+        return PluginTraderRPC.getCoinNameByAddress(address)
+    }, [address])
 }

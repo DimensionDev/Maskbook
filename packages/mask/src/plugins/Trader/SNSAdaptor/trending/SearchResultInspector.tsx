@@ -10,9 +10,11 @@ export interface SearchResultInspectorProps {
 }
 
 export function SearchResultInspector({ keyword }: SearchResultInspectorProps) {
-    const { name, type, isPreciseSearch, presetDataProviders, chainId, tokenAddress } =
-        usePayloadFromTokenSearchKeyword(NetworkPluginID.PLUGIN_EVM, keyword)
-
+    const { name, type, presetDataProviders, chainId, searchedContractAddress } = usePayloadFromTokenSearchKeyword(
+        NetworkPluginID.PLUGIN_EVM,
+        keyword,
+    )
+    console.log({ name, type, presetDataProviders, chainId, searchedContractAddress })
     const { value: addressType } = useAddressType(NetworkPluginID.PLUGIN_EVM, keyword, {
         chainId: chainId ?? ChainId.Mainnet,
     })
@@ -26,9 +28,9 @@ export function SearchResultInspector({ keyword }: SearchResultInspectorProps) {
                 isPopper={false}
                 name={name}
                 tagType={type}
-                tokenAddress={tokenAddress}
+                expectedChainId={chainId}
+                searchedContractAddress={searchedContractAddress}
                 dataProviders={dataProviders}
-                isPreciseSearch={isPreciseSearch}
             />
         </Web3ContextProvider>
     )

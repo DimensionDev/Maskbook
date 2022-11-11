@@ -6,7 +6,7 @@ import { getCommunityLink, isMirroredKeyword, resolveChainId, resolveCoinAddress
 import { fetchJSON } from '../../helpers.js'
 import type { PriceAPI, TrendingAPI } from '../../types/index.js'
 import { getAllCoins, getCoinInfo, getPriceStats as getStats, getTokenPrice, getTokenPriceByCoinId } from './base.js'
-import { COINGECKO_URL_BASE } from '../constants.js'
+import { COINGECKO_URL_BASE, COINGECKO_CHAIN_ID_LIST } from '../constants.js'
 import { resolveChain } from '../helper.js'
 import type { Platform } from '../type.js'
 import { FuseTrendingAPI } from '../../fuse/index.js'
@@ -129,18 +129,14 @@ export class CoinGeckoTrendingEVM_API implements TrendingAPI.Provider<ChainId> {
         return (await getStats(coinId, currency.id, days)).prices
     }
 
-    async getCoinIdByAddress(
-        address: string,
-        chainIdList: ChainId[],
-    ): Promise<{ coinId: string; chainId: ChainId } | undefined> {
+    async getCoinNameByAddress(address: string): Promise<{ name: string; chainId: ChainId } | undefined> {
         return attemptUntil(
-            chainIdList.map((chainId) => async () => {
+            COINGECKO_CHAIN_ID_LIST.map((chainId) => async () => {
                 try {
                     const { PLATFORM_ID = '' } = getCoinGeckoConstants(chainId)
                     const requestPath = `${COINGECKO_URL_BASE}/coins/${PLATFORM_ID}/contract/${address}`
-                    const response = await fetchJSON<{ id: string; error: string }>(requestPath)
-                    console.log({ response }, response.id)
-                    return response.error ? undefined : { coinId: response.id, chainId }
+                    const response = await fetchJSON<{ name: string; error: string }>(requestPath)
+                    return response.error ? undefined : { name: response.name, chainId }
                 } catch {
                     return undefined
                 }
