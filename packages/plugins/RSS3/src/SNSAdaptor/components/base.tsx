@@ -12,7 +12,7 @@ export interface FeedCardBaseProps {
     feed: RSS3BaseAPI.Web3Feed
     /**
      * to specify action from the feed
-     * for donation feed. there might be multiple actions to render
+     * for example donation feed. there might be multiple actions to render
      */
     actionIndex?: number
     /**

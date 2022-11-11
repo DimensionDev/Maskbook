@@ -91,7 +91,7 @@ export const LiquidityCard: FC<TokenFeedCardProps> = ({ feed, className, ...rest
         <>
             {actions.map((action, index) => {
                 const metadata = action.metadata
-                const isSupply = !!metadata?.action && ['supply', 'add', 'repay'].includes(metadata?.action)
+                const isUp = !!metadata?.action && ['supply', 'add', 'repay', 'collect'].includes(metadata?.action)
 
                 return (
                     <CardFrame
@@ -126,11 +126,8 @@ export const LiquidityCard: FC<TokenFeedCardProps> = ({ feed, className, ...rest
                                                 width={40}
                                             />
                                             <Typography
-                                                className={cx(
-                                                    classes.value,
-                                                    isSupply ? classes.supply : classes.withdraw,
-                                                )}>
-                                                {isSupply ? '+ ' : '- '}
+                                                className={cx(classes.value, isUp ? classes.supply : classes.withdraw)}>
+                                                {isUp ? '+ ' : '- '}
                                                 {t.token_value({
                                                     value: formatValue(token),
                                                     symbol: token.symbol,

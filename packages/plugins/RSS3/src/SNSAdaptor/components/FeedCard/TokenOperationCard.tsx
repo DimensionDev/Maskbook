@@ -52,7 +52,7 @@ interface TokenFeedCardProps extends Omit<FeedCardProps, 'feed'> {
 }
 
 const cardTypeMap: Partial<Record<RSS3BaseAPI.Type, CardType>> = {
-    [Type.Burn]: CardType.UnknownBurn,
+    [Type.Burn]: CardType.TokenBurn,
     [Type.Mint]: CardType.TokenMint,
 }
 const contextMap: Partial<Record<RSS3BaseAPI.Type, RSS3BaseAPI.Type.Burn | RSS3BaseAPI.Type.Mint>> = {
@@ -67,7 +67,7 @@ const contextMap: Partial<Record<RSS3BaseAPI.Type, RSS3BaseAPI.Type.Burn | RSS3B
  * - TokenMint
  * - TokenIn
  * - TokenOut
- * - UnknownBurn
+ * - TokenBurn
  */
 export const TokenOperationCard: FC<TokenFeedCardProps> = ({ feed, ...rest }) => {
     const { verbose } = rest
