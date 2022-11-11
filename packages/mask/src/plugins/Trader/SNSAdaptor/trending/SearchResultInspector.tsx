@@ -10,12 +10,14 @@ export interface SearchResultInspectorProps {
 }
 
 export function SearchResultInspector({ keyword }: SearchResultInspectorProps) {
-    const { name, type, isPreciseSearch, presetDataProviders } = usePayloadFromTokenSearchKeyword(
+    const { name, type, isPreciseSearch, presetDataProviders, chainId } = usePayloadFromTokenSearchKeyword(
         NetworkPluginID.PLUGIN_EVM,
         keyword,
     )
 
-    const { value: addressType } = useAddressType(NetworkPluginID.PLUGIN_EVM, keyword, { chainId: ChainId.Mainnet })
+    const { value: addressType } = useAddressType(NetworkPluginID.PLUGIN_EVM, keyword, {
+        chainId: chainId ?? ChainId.Mainnet,
+    })
 
     const { value: dataProviders_ = EMPTY_LIST } = useAvailableDataProviders(type, name)
     const dataProviders = presetDataProviders ?? dataProviders_

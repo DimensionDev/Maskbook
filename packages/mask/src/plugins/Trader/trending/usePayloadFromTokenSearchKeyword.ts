@@ -15,7 +15,7 @@ export function usePayloadFromTokenSearchKeyword(pluginID?: NetworkPluginID, key
     const { value: fungibleToken } = useFungibleTokenBaseOnChainIdList(
         pluginID,
         Others?.isValidAddress(keyword) ? keyword : '',
-        [ChainId.Mainnet],
+        [ChainId.Mainnet, ChainId.BSC, ChainId.Matic],
     )
 
     const { value: schemaType } = useSchemaType(pluginID, Others?.isValidAddress(keyword) ? keyword : '', {
@@ -32,6 +32,7 @@ export function usePayloadFromTokenSearchKeyword(pluginID?: NetworkPluginID, key
 
     return {
         name: isPreciseSearch ? (isNFT ? nonFungibleAssetName : fungibleToken?.symbol ?? '') : name,
+        chainId: isNFT ? nonFungibleAsset.trending?.coin.chainId : (fungibleToken?.chainId as ChainId),
         presetDataProviders,
         isPreciseSearch,
         type: type === '$' ? TagType.CASH : TagType.HASH,
