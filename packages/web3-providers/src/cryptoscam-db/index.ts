@@ -3,15 +3,6 @@ import urlcat from 'urlcat'
 import { fetchJSON } from '../helpers.js'
 import { ScalableBloomFilter } from 'bloom-filters'
 
-export interface OnlineInfo {
-    name: string
-    url: string
-    path?: string
-    category?: number
-    subcategory?: number
-    description: string
-}
-
 const baseURL = 'https://raw.githubusercontent.com/DimensionDev/Mask-Scam-List/main/providers/cryptoscam-db/'
 
 export class CryptoScamDBAPI implements ScamWarningAPI.Provider {

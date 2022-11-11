@@ -26,6 +26,7 @@ const excludedLinks = ['t.co']
 export const PreviewCard = ({ links }: PreviewCardProps) => {
     const t = useI18N()
     const { classes } = useStyles()
+
     const { value, loading } = useAsync(() => {
         const hosts = links.map((x) => new URL(x).host).filter((x) => !excludedLinks.includes(x))
         return CryptoScamDB.getScamWarnings(uniq(hosts))
