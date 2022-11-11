@@ -53,6 +53,7 @@ const useStyles = makeStyles<void, 'image'>()((theme, _, refs) => ({
     verbose: {
         [`.${refs.image}`]: {
             marginTop: theme.spacing(1),
+            aspectRatio: '1/1',
         },
     },
     info: {
