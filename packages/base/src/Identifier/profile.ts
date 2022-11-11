@@ -30,7 +30,7 @@ export class ProfileIdentifier extends Identifier {
         }
 
         network = String(network).toLowerCase()
-        userID = String(userID).toLowerCase()
+        userID = String(userID)
         if (!userID) throw new TypeError('[@masknet/base] userID cannot be empty.')
 
         const networkCache = (id[network] ??= {})

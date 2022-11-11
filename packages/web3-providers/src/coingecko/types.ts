@@ -1,4 +1,33 @@
-// #region get coin info
+export interface ThumbCoin {
+    id: string
+    name: string
+    symbol: string
+    api_symbol: string
+    market_cap_rank: number
+    thumb: string
+    large: string
+}
+
+export interface ThumbCollection {
+    id: string
+    name: string
+    symbol: string
+    thumb: string
+}
+
+export interface Category {
+    id: string
+    name: string
+}
+
+export interface Exchange {
+    id: string
+    name: string
+    market_type: 'spot' | 'futures'
+    thumb: string
+    large: string
+}
+
 export interface CoinInfo {
     asset_platform_id: string
     block_time_in_minutes: number

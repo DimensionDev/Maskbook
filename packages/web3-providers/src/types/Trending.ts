@@ -45,8 +45,8 @@ export namespace TrendingAPI {
         | 'youtube'
         | 'twitter'
         | 'other'
-    export type CommunityUrls = Array<{ type: Partial<CommunityType>; link: string }>
 
+    export type CommunityUrls = Array<{ type: Partial<CommunityType>; link: string }>
     export interface Coin {
         id: string
         chainId?: ChainId
@@ -132,7 +132,7 @@ export namespace TrendingAPI {
     export interface Contract {
         chainId?: ChainId
         address: string
-        iconURL?: string
+        icon_url?: string
     }
 
     export interface Trending {

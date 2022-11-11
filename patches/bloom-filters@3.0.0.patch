@@ -1,0 +1,329 @@
+diff --git a/dist/bloom/bloom-filter.js b/dist/bloom/bloom-filter.js
+index 1323d1304614d3a18c029086f3ab4e92708ce312..5bbe1101af600bd712214e69a288a135df033e0a 100644
+--- a/dist/bloom/bloom-filter.js
++++ b/dist/bloom/bloom-filter.js
+@@ -39,12 +39,12 @@ var __extends = (this && this.__extends) || (function () {
+ })();
+ var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
++    if (typeof globalThis.ReflectMetadata === "object" && typeof globalThis.ReflectMetadata.decorate === "function") r = globalThis.ReflectMetadata.decorate(decorators, target, key, desc);
+     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+     return c > 3 && r && Object.defineProperty(target, key, r), r;
+ };
+ var __metadata = (this && this.__metadata) || function (k, v) {
+-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
++    if (typeof globalThis.ReflectMetadata === "object" && typeof globalThis.ReflectMetadata.metadata === "function") return globalThis.ReflectMetadata.metadata(k, v);
+ };
+ var __param = (this && this.__param) || function (paramIndex, decorator) {
+     return function (target, key) { decorator(target, key, paramIndex); }
+diff --git a/dist/bloom/counting-bloom-filter.js b/dist/bloom/counting-bloom-filter.js
+index ae9375924abea49d9f877d2f4b335f5990f164a8..bc999b79d56ddc94d957484abe643213ec23e020 100644
+--- a/dist/bloom/counting-bloom-filter.js
++++ b/dist/bloom/counting-bloom-filter.js
+@@ -39,12 +39,12 @@ var __extends = (this && this.__extends) || (function () {
+ })();
+ var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
++    if (typeof globalThis.ReflectMetadata === "object" && typeof globalThis.ReflectMetadata.decorate === "function") r = globalThis.ReflectMetadata.decorate(decorators, target, key, desc);
+     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+     return c > 3 && r && Object.defineProperty(target, key, r), r;
+ };
+ var __metadata = (this && this.__metadata) || function (k, v) {
+-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
++    if (typeof globalThis.ReflectMetadata === "object" && typeof globalThis.ReflectMetadata.metadata === "function") return globalThis.ReflectMetadata.metadata(k, v);
+ };
+ var __param = (this && this.__param) || function (paramIndex, decorator) {
+     return function (target, key) { decorator(target, key, paramIndex); }
+diff --git a/dist/bloom/partitioned-bloom-filter.js b/dist/bloom/partitioned-bloom-filter.js
+index 9eecd3c8bc44afb17ba377b459af5383a6a54dfb..6c3e79bf0a68592895289fb64ebb2da399420784 100644
+--- a/dist/bloom/partitioned-bloom-filter.js
++++ b/dist/bloom/partitioned-bloom-filter.js
+@@ -39,12 +39,12 @@ var __extends = (this && this.__extends) || (function () {
+ })();
+ var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
++    if (typeof globalThis.ReflectMetadata === "object" && typeof globalThis.ReflectMetadata.decorate === "function") r = globalThis.ReflectMetadata.decorate(decorators, target, key, desc);
+     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+     return c > 3 && r && Object.defineProperty(target, key, r), r;
+ };
+ var __metadata = (this && this.__metadata) || function (k, v) {
+-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
++    if (typeof globalThis.ReflectMetadata === "object" && typeof globalThis.ReflectMetadata.metadata === "function") return globalThis.ReflectMetadata.metadata(k, v);
+ };
+ var __param = (this && this.__param) || function (paramIndex, decorator) {
+     return function (target, key) { decorator(target, key, paramIndex); }
+diff --git a/dist/bloom/scalable-bloom-filter.js b/dist/bloom/scalable-bloom-filter.js
+index 26be626ec1c423bfab37075d9e3bcaeccab19e6e..24bbfe7367f1aa7989431f8dfc5d87f43c245bbb 100644
+--- a/dist/bloom/scalable-bloom-filter.js
++++ b/dist/bloom/scalable-bloom-filter.js
+@@ -39,12 +39,12 @@ var __extends = (this && this.__extends) || (function () {
+ })();
+ var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
++    if (typeof globalThis.ReflectMetadata === "object" && typeof globalThis.ReflectMetadata.decorate === "function") r = globalThis.ReflectMetadata.decorate(decorators, target, key, desc);
+     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+     return c > 3 && r && Object.defineProperty(target, key, r), r;
+ };
+ var __metadata = (this && this.__metadata) || function (k, v) {
+-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
++    if (typeof globalThis.ReflectMetadata === "object" && typeof globalThis.ReflectMetadata.metadata === "function") return globalThis.ReflectMetadata.metadata(k, v);
+ };
+ var __param = (this && this.__param) || function (paramIndex, decorator) {
+     return function (target, key) { decorator(target, key, paramIndex); }
+diff --git a/dist/bloom/xor-filter.js b/dist/bloom/xor-filter.js
+index ca04035c1d6dc0e79589bd58a0b6d1539db79775..b6b0cb894487654fd5768774508eb569d7f980a2 100644
+--- a/dist/bloom/xor-filter.js
++++ b/dist/bloom/xor-filter.js
+@@ -39,12 +39,12 @@ var __extends = (this && this.__extends) || (function () {
+ })();
+ var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
++    if (typeof globalThis.ReflectMetadata === "object" && typeof globalThis.ReflectMetadata.decorate === "function") r = globalThis.ReflectMetadata.decorate(decorators, target, key, desc);
+     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+     return c > 3 && r && Object.defineProperty(target, key, r), r;
+ };
+ var __metadata = (this && this.__metadata) || function (k, v) {
+-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
++    if (typeof globalThis.ReflectMetadata === "object" && typeof globalThis.ReflectMetadata.metadata === "function") return globalThis.ReflectMetadata.metadata(k, v);
+ };
+ var __param = (this && this.__param) || function (paramIndex, decorator) {
+     return function (target, key) { decorator(target, key, paramIndex); }
+diff --git a/dist/cuckoo/bucket.js b/dist/cuckoo/bucket.js
+index 170a3376c4291a3bb6f44dddadf54a553384675f..cdbc9d6e39fde47e454986548c387f2d58183303 100644
+--- a/dist/cuckoo/bucket.js
++++ b/dist/cuckoo/bucket.js
+@@ -36,7 +36,7 @@ var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (
+ });
+ var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
++    if (typeof globalThis.ReflectMetadata === "object" && typeof globalThis.ReflectMetadata.decorate === "function") r = globalThis.ReflectMetadata.decorate(decorators, target, key, desc);
+     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+     return c > 3 && r && Object.defineProperty(target, key, r), r;
+ };
+@@ -48,7 +48,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
+     return result;
+ };
+ var __metadata = (this && this.__metadata) || function (k, v) {
+-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
++    if (typeof globalThis.ReflectMetadata === "object" && typeof globalThis.ReflectMetadata.metadata === "function") return globalThis.ReflectMetadata.metadata(k, v);
+ };
+ Object.defineProperty(exports, "__esModule", { value: true });
+ var lodash_1 = require("lodash");
+diff --git a/dist/cuckoo/cuckoo-filter.js b/dist/cuckoo/cuckoo-filter.js
+index d2c878d0c7aa69b0a84ca50bd7c1d2bdc1e2c03f..9e1315f4f51fafa9541d4311b18dc9979ac84a96 100644
+--- a/dist/cuckoo/cuckoo-filter.js
++++ b/dist/cuckoo/cuckoo-filter.js
+@@ -39,12 +39,12 @@ var __extends = (this && this.__extends) || (function () {
+ })();
+ var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
++    if (typeof globalThis.ReflectMetadata === "object" && typeof globalThis.ReflectMetadata.decorate === "function") r = globalThis.ReflectMetadata.decorate(decorators, target, key, desc);
+     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+     return c > 3 && r && Object.defineProperty(target, key, r), r;
+ };
+ var __metadata = (this && this.__metadata) || function (k, v) {
+-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
++    if (typeof globalThis.ReflectMetadata === "object" && typeof globalThis.ReflectMetadata.metadata === "function") return globalThis.ReflectMetadata.metadata(k, v);
+ };
+ var __importDefault = (this && this.__importDefault) || function (mod) {
+     return (mod && mod.__esModule) ? mod : { "default": mod };
+diff --git a/dist/exportable.js b/dist/exportable.js
+index 26c7121bcdece1e4e4aaa1497963205ce47a334c..be9836c8a84a6548facde7d2d399b02930cab814 100644
+--- a/dist/exportable.js
++++ b/dist/exportable.js
+@@ -126,26 +126,26 @@ function Field(exporter, importer) {
+     }
+     return function (target, propertyKey) {
+         var fields = [];
+-        if (Reflect.hasMetadata(METADATA_FIELDS, target)) {
+-            fields = Reflect.getMetadata(METADATA_FIELDS, target);
++        if (globalThis.ReflectMetadata.hasMetadata(METADATA_FIELDS, target)) {
++            fields = globalThis.ReflectMetadata.getMetadata(METADATA_FIELDS, target);
+         }
+         fields.push({
+             name: propertyKey,
+             exporter: exporter,
+             importer: importer, // eslint-disable-line @typescript-eslint/no-non-null-assertion
+         });
+-        Reflect.defineMetadata(METADATA_FIELDS, fields, target);
++        globalThis.ReflectMetadata.defineMetadata(METADATA_FIELDS, fields, target);
+     };
+ }
+ exports.Field = Field;
+ function Parameter(fieldName) {
+     return function (target, propertyKey, parameterIndex) {
+         var parameters = new Map();
+-        if (Reflect.hasMetadata(METADATA_PARAMETERS, target)) {
+-            parameters = Reflect.getMetadata(METADATA_PARAMETERS, target);
++        if (globalThis.ReflectMetadata.hasMetadata(METADATA_PARAMETERS, target)) {
++            parameters = globalThis.ReflectMetadata.getMetadata(METADATA_PARAMETERS, target);
+         }
+         parameters.set(fieldName, parameterIndex);
+-        Reflect.defineMetadata(METADATA_PARAMETERS, parameters, target);
++        globalThis.ReflectMetadata.defineMetadata(METADATA_PARAMETERS, parameters, target);
+     };
+ }
+ exports.Parameter = Parameter;
+@@ -156,22 +156,22 @@ exports.Parameter = Parameter;
+ function AutoExportable(className, otherFields) {
+     if (otherFields === void 0) { otherFields = []; }
+     return function (target) {
+-        Reflect.defineMetadata(METADATA_CLASSNAME, className, target.prototype);
+-        if (!Reflect.hasMetadata(METADATA_FIELDS, target.prototype) ||
++        globalThis.ReflectMetadata.defineMetadata(METADATA_CLASSNAME, className, target.prototype);
++        if (!globalThis.ReflectMetadata.hasMetadata(METADATA_FIELDS, target.prototype) ||
+             otherFields.length === 0) {
+             throw new SyntaxError('No exported fields declared when @AutoExportable is called');
+         }
+         // define empty parameters map, for object with a constructor without parameters
+-        if (!Reflect.hasMetadata(METADATA_PARAMETERS, target)) {
+-            Reflect.defineMetadata(METADATA_PARAMETERS, new Map(), target);
++        if (!globalThis.ReflectMetadata.hasMetadata(METADATA_PARAMETERS, target)) {
++            globalThis.ReflectMetadata.defineMetadata(METADATA_PARAMETERS, new Map(), target);
+         }
+         target.prototype.saveAsJSON = function () {
+             var _this = this;
+             var json = {
+-                type: Reflect.getMetadata(METADATA_CLASSNAME, target.prototype),
++                type: globalThis.ReflectMetadata.getMetadata(METADATA_CLASSNAME, target.prototype),
+             };
+             // export fields defined using the @Field decorator
+-            var fields = Reflect.getMetadata(METADATA_FIELDS, target.prototype);
++            var fields = globalThis.ReflectMetadata.getMetadata(METADATA_FIELDS, target.prototype);
+             fields.forEach(function (field) {
+                 json[field.name] = field.exporter(_this[field.name]);
+             });
+@@ -182,9 +182,9 @@ function AutoExportable(className, otherFields) {
+             return json;
+         };
+         target.fromJSON = function (json) {
+-            var className = Reflect.getMetadata(METADATA_CLASSNAME, target.prototype);
+-            var parameters = Reflect.getMetadata(METADATA_PARAMETERS, target);
+-            var fields = Reflect.getMetadata(METADATA_FIELDS, target.prototype);
++            var className = globalThis.ReflectMetadata.getMetadata(METADATA_CLASSNAME, target.prototype);
++            var parameters = globalThis.ReflectMetadata.getMetadata(METADATA_PARAMETERS, target);
++            var fields = globalThis.ReflectMetadata.getMetadata(METADATA_FIELDS, target.prototype);
+             // validate the input JSON
+             if (json.type !== className) {
+                 throw new Error("Cannot create an object ".concat(className, " from a JSON export with type \"").concat(json.type, "\"") // eslint-disable-line @typescript-eslint/restrict-template-expressions
+diff --git a/dist/iblt/cell.js b/dist/iblt/cell.js
+index 3c47d53c9e74ff6b236edb484be016b1493354ea..aa0629a2312c1b0df21a37e56a7285cff859b71a 100644
+--- a/dist/iblt/cell.js
++++ b/dist/iblt/cell.js
+@@ -39,12 +39,12 @@ var __extends = (this && this.__extends) || (function () {
+ })();
+ var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
++    if (typeof globalThis.ReflectMetadata === "object" && typeof globalThis.ReflectMetadata.decorate === "function") r = globalThis.ReflectMetadata.decorate(decorators, target, key, desc);
+     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+     return c > 3 && r && Object.defineProperty(target, key, r), r;
+ };
+ var __metadata = (this && this.__metadata) || function (k, v) {
+-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
++    if (typeof globalThis.ReflectMetadata === "object" && typeof globalThis.ReflectMetadata.metadata === "function") return globalThis.ReflectMetadata.metadata(k, v);
+ };
+ var __param = (this && this.__param) || function (paramIndex, decorator) {
+     return function (target, key) { decorator(target, key, paramIndex); }
+diff --git a/dist/iblt/invertible-bloom-lookup-tables.js b/dist/iblt/invertible-bloom-lookup-tables.js
+index d1ffd1f0eb50af18f302e3489af3467fd7deade2..66276754a88365a549cbfbd736bb1d974936c5e0 100644
+--- a/dist/iblt/invertible-bloom-lookup-tables.js
++++ b/dist/iblt/invertible-bloom-lookup-tables.js
+@@ -39,12 +39,12 @@ var __extends = (this && this.__extends) || (function () {
+ })();
+ var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
++    if (typeof globalThis.ReflectMetadata === "object" && typeof globalThis.ReflectMetadata.decorate === "function") r = globalThis.ReflectMetadata.decorate(decorators, target, key, desc);
+     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+     return c > 3 && r && Object.defineProperty(target, key, r), r;
+ };
+ var __metadata = (this && this.__metadata) || function (k, v) {
+-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
++    if (typeof globalThis.ReflectMetadata === "object" && typeof globalThis.ReflectMetadata.metadata === "function") return globalThis.ReflectMetadata.metadata(k, v);
+ };
+ var __param = (this && this.__param) || function (paramIndex, decorator) {
+     return function (target, key) { decorator(target, key, paramIndex); }
+diff --git a/dist/sketch/count-min-sketch.js b/dist/sketch/count-min-sketch.js
+index 181456a9bca89f1a0cc1c678ae3d67ca6deefc71..e4ce15de57348d0ce61719e6f8b6a264d3718816 100644
+--- a/dist/sketch/count-min-sketch.js
++++ b/dist/sketch/count-min-sketch.js
+@@ -39,12 +39,12 @@ var __extends = (this && this.__extends) || (function () {
+ })();
+ var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
++    if (typeof globalThis.ReflectMetadata === "object" && typeof globalThis.ReflectMetadata.decorate === "function") r = globalThis.ReflectMetadata.decorate(decorators, target, key, desc);
+     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+     return c > 3 && r && Object.defineProperty(target, key, r), r;
+ };
+ var __metadata = (this && this.__metadata) || function (k, v) {
+-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
++    if (typeof globalThis.ReflectMetadata === "object" && typeof globalThis.ReflectMetadata.metadata === "function") return globalThis.ReflectMetadata.metadata(k, v);
+ };
+ var __param = (this && this.__param) || function (paramIndex, decorator) {
+     return function (target, key) { decorator(target, key, paramIndex); }
+diff --git a/dist/sketch/hyperloglog.js b/dist/sketch/hyperloglog.js
+index 38c357d50eeca3c53a818c60d4c1dce5490e4db6..72320c6d0284326edffc0fb723dd4325cd01f4b5 100644
+--- a/dist/sketch/hyperloglog.js
++++ b/dist/sketch/hyperloglog.js
+@@ -39,12 +39,12 @@ var __extends = (this && this.__extends) || (function () {
+ })();
+ var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
++    if (typeof globalThis.ReflectMetadata === "object" && typeof globalThis.ReflectMetadata.decorate === "function") r = globalThis.ReflectMetadata.decorate(decorators, target, key, desc);
+     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+     return c > 3 && r && Object.defineProperty(target, key, r), r;
+ };
+ var __metadata = (this && this.__metadata) || function (k, v) {
+-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
++    if (typeof globalThis.ReflectMetadata === "object" && typeof globalThis.ReflectMetadata.metadata === "function") return globalThis.ReflectMetadata.metadata(k, v);
+ };
+ var __param = (this && this.__param) || function (paramIndex, decorator) {
+     return function (target, key) { decorator(target, key, paramIndex); }
+diff --git a/dist/sketch/min-hash.js b/dist/sketch/min-hash.js
+index 7a7014a7062d7d73a3eba66eb03738250653206b..d4788a3925f2f0ee277b98a91339a40e8ff87fdf 100644
+--- a/dist/sketch/min-hash.js
++++ b/dist/sketch/min-hash.js
+@@ -39,12 +39,12 @@ var __extends = (this && this.__extends) || (function () {
+ })();
+ var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
++    if (typeof globalThis.ReflectMetadata === "object" && typeof globalThis.ReflectMetadata.decorate === "function") r = globalThis.ReflectMetadata.decorate(decorators, target, key, desc);
+     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+     return c > 3 && r && Object.defineProperty(target, key, r), r;
+ };
+ var __metadata = (this && this.__metadata) || function (k, v) {
+-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
++    if (typeof globalThis.ReflectMetadata === "object" && typeof globalThis.ReflectMetadata.metadata === "function") return globalThis.ReflectMetadata.metadata(k, v);
+ };
+ var __param = (this && this.__param) || function (paramIndex, decorator) {
+     return function (target, key) { decorator(target, key, paramIndex); }
+diff --git a/dist/sketch/topk.js b/dist/sketch/topk.js
+index 9dedb212b03932f7e287e51ab3835e04956c46ba..c2b6f081a1a7b8ea76feb5a926e15abe1069600d 100644
+--- a/dist/sketch/topk.js
++++ b/dist/sketch/topk.js
+@@ -39,12 +39,12 @@ var __extends = (this && this.__extends) || (function () {
+ })();
+ var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
++    if (typeof globalThis.ReflectMetadata === "object" && typeof globalThis.ReflectMetadata.decorate === "function") r = globalThis.ReflectMetadata.decorate(decorators, target, key, desc);
+     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+     return c > 3 && r && Object.defineProperty(target, key, r), r;
+ };
+ var __metadata = (this && this.__metadata) || function (k, v) {
+-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
++    if (typeof globalThis.ReflectMetadata === "object" && typeof globalThis.ReflectMetadata.metadata === "function") return globalThis.ReflectMetadata.metadata(k, v);
+ };
+ var __param = (this && this.__param) || function (paramIndex, decorator) {
+     return function (target, key) { decorator(target, key, paramIndex); }

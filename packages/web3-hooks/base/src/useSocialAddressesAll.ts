@@ -13,7 +13,7 @@ const addressCache = new LRUCache<string, CacheValue>({
 })
 
 /**
- * Get all social addresses under of all networks.
+ * Get all social addresses across all networks.
  */
 export function useSocialAddressesAll(
     identity?: SocialIdentity,
