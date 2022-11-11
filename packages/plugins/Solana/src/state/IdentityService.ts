@@ -6,7 +6,7 @@ import { IdentityServiceState } from '@masknet/web3-state'
 import { isValidAddress } from '@masknet/web3-shared-solana'
 import { SolanaRPC } from '../messages.js'
 
-const SOL_RE = /\S{1,256}\.sol\b/
+const SOL_RE = /\S{1,256}\.sol\b/i
 
 function getSolanaAddress(bio: string) {
     const addressMatched = bio.match(/\b\w{32,44}\b/)
