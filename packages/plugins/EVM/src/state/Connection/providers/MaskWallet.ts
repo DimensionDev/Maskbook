@@ -70,15 +70,16 @@ export class MaskWalletProvider extends BaseProvider implements EVM_Provider {
         const actualAccount = SharedContextSettings.value.account.getCurrentValue()
         const actualChainId = SharedContextSettings.value.chainId.getCurrentValue()
 
+        const siteType = getSiteType()
+        if (siteType === ExtensionSite.Popup) throw new Error('Cannot connect wallet')
+
         if (chainId === actualChainId && isValidAddress(actualAccount)) {
+            if (siteType) SharedContextSettings.value.recordConnectedSites(siteType, true)
             return {
                 account: actualAccount,
                 chainId: actualChainId,
             }
         }
-
-        const siteType = getSiteType()
-        if (siteType === ExtensionSite.Popup) throw new Error('Cannot connect wallet')
 
         const wallets = await getWallets()
         SharedContextSettings.value.openPopupWindow(wallets.length ? PopupRoutes.SelectWallet : PopupRoutes.Wallet, {

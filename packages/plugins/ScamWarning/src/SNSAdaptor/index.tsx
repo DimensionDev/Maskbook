@@ -7,12 +7,28 @@ import { Icons } from '@masknet/icons'
 import { useMemo } from 'react'
 import { parseURLs } from '@masknet/shared-base'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
+import { PLUGIN_DESCRIPTION, PLUGIN_NAME } from '../constants.js'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
     init(signal, context) {
         setupContext(context)
     },
+    ApplicationEntries: [
+        (() => {
+            const icon = <Icons.Danger size={36} />
+            return {
+                ApplicationEntryID: base.ID,
+                icon,
+                category: 'dapp',
+                description: {
+                    i18nKey: '__plugin_description',
+                    fallback: PLUGIN_DESCRIPTION,
+                },
+                name: { i18nKey: '__plugin_name', fallback: PLUGIN_NAME },
+            }
+        })(),
+    ],
     DecryptedInspector: function Comp(props) {
         const links = useMemo(() => {
             const x = extractTextFromTypedMessage(props.message)

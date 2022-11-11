@@ -58,6 +58,13 @@ function ProfileTipsSlot() {
     const visitingPersona = useCurrentVisitingIdentity()
     const { classes, cx } = useTipsSlotStyles()
     const [disabled, setDisabled] = useState(true)
+    const iconSize = useMemo(() => {
+        const svg = menuButtonSelector().querySelector('svg').evaluate()
+        if (!svg) return 24
+
+        const svgCss = window.getComputedStyle(svg)
+        return Number.parseFloat(svgCss.width.replace('px', ''))
+    }, [location])
     const component = useMemo(() => {
         const Component = createInjectHooksRenderer(
             useActivatedPluginsSNSAdaptor.visibility.useNotMinimalMode,
@@ -68,6 +75,7 @@ function ProfileTipsSlot() {
             <Component
                 identity={visitingPersona.identifier}
                 slot={Plugin.SNSAdaptor.TipsSlot.Profile}
+                iconSize={iconSize}
                 onStatusUpdate={setDisabled}
             />
         )
