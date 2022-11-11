@@ -8,7 +8,7 @@ import { useI18N } from '../../../locales/index.js'
 import { useTipsUserGuide } from '../../../storage/index.js'
 import { activatedSocialNetworkUI } from '../../../../../social-network/ui.js'
 
-const useStyles = makeStyles<{}, 'postTipsButton'>()((theme, _, refs) => ({
+const useStyles = makeStyles<{ iconSize: number }, 'postTipsButton'>()((theme, { iconSize }, refs) => ({
     focusingPostButtonWrapper: {
         height: 46,
     },
@@ -62,16 +62,21 @@ const useStyles = makeStyles<{}, 'postTipsButton'>()((theme, _, refs) => ({
         top: 0,
         borderRadius: '100%',
     },
+    icon: {
+        width: iconSize,
+        height: iconSize,
+    },
 }))
 
 export const TipsRealmContent: Plugin.InjectUI<Plugin.SNSAdaptor.TipsRealmOptions> = ({
     identity,
     slot,
     accounts,
+    iconSize = 24,
     onStatusUpdate,
 }) => {
     const t = useI18N()
-    const { classes, cx } = useStyles({})
+    const { classes, cx } = useStyles({ iconSize })
     const lastStep = useTipsUserGuide(activatedSocialNetworkUI.networkIdentifier as EnhanceableSite)
 
     if (!identity) return null
@@ -89,6 +94,7 @@ export const TipsRealmContent: Plugin.InjectUI<Plugin.SNSAdaptor.TipsRealmOption
         <TipButton
             accounts={accounts}
             className={buttonClassMap[slot]}
+            classes={{ icon: classes.icon }}
             receiver={identity}
             onStatusUpdate={onStatusUpdate}
         />
