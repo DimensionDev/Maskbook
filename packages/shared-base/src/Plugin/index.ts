@@ -53,5 +53,6 @@ export enum PluginID {
     Web3ProfileCard = 'io.mask.web3-profile-card',
     ScamSniffer = 'io.scamsniffer.mask-plugin',
     NFTCard = 'com.maskbook.nft-card',
+    ScamWarning = 'com.mask.scam-warning',
     DecentralizedSearch = 'com.maskbook.decentralized-search',
 }

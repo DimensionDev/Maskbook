@@ -152,7 +152,8 @@
       "fortmatic@2.2.1": "patches/fortmatic@2.2.1.patch",
       "@walletconnect/client@1.7.8": "patches/@walletconnect__client@1.7.8.patch",
       "reflect-metadata@0.1.13": "patches/reflect-metadata@0.1.13.patch",
-      "ses@0.17.0": "patches/ses@0.17.0.patch"
+      "ses@0.17.0": "patches/ses@0.17.0.patch",
+      "bloom-filters@3.0.0": "patches/bloom-filters@3.0.0.patch"
     }
   }
 }
