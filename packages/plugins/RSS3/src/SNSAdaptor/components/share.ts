@@ -36,10 +36,11 @@ export enum CardType {
     TokenOut = 23,
     TokenStake = 24,
     TokenSwap = 25,
-    UnknownBurn = 26,
-    UnknownCancel = 27,
-    UnknownIn = 28,
-    UnknownOut = 29,
+    TokenBurn = 26,
+    UnknownBurn = 27,
+    UnknownCancel = 28,
+    UnknownIn = 29,
+    UnknownOut = 30,
 }
 
 export const cardTypeIconMap: Record<CardType, IconComponent> = {
@@ -68,6 +69,7 @@ export const cardTypeIconMap: Record<CardType, IconComponent> = {
     [CardType.TokenOut]: Icons.TokenOut,
     [CardType.TokenStake]: Icons.TokenStake,
     [CardType.TokenSwap]: Icons.TokenSwap,
+    [CardType.TokenBurn]: Icons.TokenBurn,
     [CardType.UnknownBurn]: Icons.UnknownBurn,
     [CardType.UnknownCancel]: Icons.UnknownCancel,
     [CardType.UnknownIn]: Icons.UnknownIn,
