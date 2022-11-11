@@ -53,9 +53,11 @@ describe('ProfileIdentifier', () => {
         expect(a.userId).toMatchInlineSnapshot('"test_twitter_1"')
         expect(a.toText()).toMatchInlineSnapshot('"person:twitter.com/test_twitter_1"')
     })
-    test('should be case insensitive', () => {
+    // Note: ProfileIdentifier MUST NOT be case insensitive. It's toText() result will be used as password of stego.
+    //       change it to canse insensitive is a breaking change.
+    test('should NOT be case insensitive', () => {
         const a2 = ProfileIdentifier.from('person:twitter.com/Test_twitter_1').unwrap()
-        expect(a).toBe(a2)
+        expect(a).not.toBe(a2)
     })
     test('should be immutable', () => {
         expect(() => Object.assign(a, { network: 'twitter.com' })).throws()
