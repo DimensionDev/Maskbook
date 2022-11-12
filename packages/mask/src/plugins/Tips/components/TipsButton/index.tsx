@@ -41,7 +41,8 @@ export const TipButton: FC<Props> = (props) => {
         onStatusUpdate,
         ...rest
     } = props
-    const { classes, cx } = useStylesExtends(useStyles(), props)
+    const { cx } = useStyles()
+    const classes = useStylesExtends(useStyles(), props)
 
     const { value: personaPubkey, loading: loadingPersona } = useProfilePublicKey(receiver)
     const receiverUserId = receiver?.userId

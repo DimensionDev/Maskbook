@@ -71,10 +71,7 @@ export const TipsRealmContent: Plugin.InjectUI<Plugin.SNSAdaptor.TipsRealmOption
     iconSize = 24,
     onStatusUpdate,
 }) => {
-    const t = useI18N()
     const { classes, cx } = useStyles({ iconSize })
-    const lastStep = useTipsUserGuide(activatedSocialNetworkUI.networkIdentifier as EnhanceableSite)
-
     if (!identity) return null
 
     const buttonClassMap: Record<Plugin.SNSAdaptor.TipsSlot, string> = {
