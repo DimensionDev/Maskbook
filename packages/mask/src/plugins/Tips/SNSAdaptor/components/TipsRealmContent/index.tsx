@@ -4,7 +4,7 @@ import { Plugin } from '@masknet/plugin-infra'
 import { TipButton } from '../../../components/index.js'
 import Guide from '../../../components/Guide.js'
 
-const useStyles = makeStyles<{}, 'postTipsButton'>()((theme, _, refs) => ({
+const useStyles = makeStyles<{ iconSize: number }, 'postTipsButton'>()((theme, { iconSize }, refs) => ({
     focusingPostButtonWrapper: {
         height: 46,
     },
@@ -58,15 +58,23 @@ const useStyles = makeStyles<{}, 'postTipsButton'>()((theme, _, refs) => ({
         top: 0,
         borderRadius: '100%',
     },
+    icon: {
+        width: iconSize,
+        height: iconSize,
+    },
 }))
 
 export const TipsRealmContent: Plugin.InjectUI<Plugin.SNSAdaptor.TipsRealmOptions> = ({
     identity,
     slot,
     accounts,
+    iconSize = 24,
     onStatusUpdate,
 }) => {
-    const { classes, cx } = useStyles({})
+    const t = useI18N()
+    const { classes, cx } = useStyles({ iconSize })
+    const lastStep = useTipsUserGuide(activatedSocialNetworkUI.networkIdentifier as EnhanceableSite)
+
     if (!identity) return null
 
     const buttonClassMap: Record<Plugin.SNSAdaptor.TipsSlot, string> = {
@@ -82,6 +90,7 @@ export const TipsRealmContent: Plugin.InjectUI<Plugin.SNSAdaptor.TipsRealmOption
         <TipButton
             accounts={accounts}
             className={buttonClassMap[slot]}
+            classes={{ icon: classes.icon }}
             receiver={identity}
             onStatusUpdate={onStatusUpdate}
         />
