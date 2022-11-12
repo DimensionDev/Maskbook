@@ -1,6 +1,6 @@
 {
   "name": "@masknet/encryption",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "private": true,
   "type": "module",
   "exports": {
@@ -19,9 +19,9 @@
     "@msgpack/msgpack": "^2.8.0"
   },
   "files": [
-      "src",
-      "dist/**/*.js",
-      "dist/**/*.d.ts",
-      "dist/**/*.map"
+    "src",
+    "dist/**/*.js",
+    "dist/**/*.d.ts",
+    "dist/**/*.map"
   ]
 }

@@ -1,6 +1,6 @@
 {
   "name": "@masknet/typed-message",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "sideEffects": false,
   "description": "TypedMessage definition used in Mask Network.",
   "publishConfig": {
@@ -26,9 +26,9 @@
     "ts-results-es": "^3.5.0"
   },
   "files": [
-      "src",
-      "dist/**/*.js",
-      "dist/**/*.d.ts",
-      "dist/**/*.map"
+    "src",
+    "dist/**/*.js",
+    "dist/**/*.d.ts",
+    "dist/**/*.map"
   ]
 }
