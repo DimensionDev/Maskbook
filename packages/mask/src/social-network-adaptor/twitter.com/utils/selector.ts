@@ -22,8 +22,10 @@ export const searchProfileTabListLastChildSelector: () => LiveSelector<E, true> 
         '[data-testid="primaryColumn"] div + [role="navigation"][aria-label] [data-testid="ScrollSnap-nextButtonWrapper"]',
     )
 
-export const searchProfileTabPageSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>('[data-testid="primaryColumn"] section > div[aria-label]:not([role="progressbar"])')
+export const searchProfileTabPageSelector = () =>
+    searchProfileTabListLastChildSelector()
+        .closest(3)
+        .querySelector<E>('section > div[aria-label]:not([role="progressbar"])')
 
 export const searchProfileTabLoseConnectionPageSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>(
