@@ -2,6 +2,7 @@
   "name": "@masknet/shared-base",
   "description": "This package MUST be pure (have no side effects when imported).",
   "type": "module",
+  "private": true,
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
