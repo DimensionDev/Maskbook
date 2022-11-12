@@ -1,21 +1,22 @@
 import { useAsyncFn } from 'react-use'
 import type { TransactionReceipt } from 'web3-core'
 import Web3Utils from 'web3-utils'
-import type { ITO } from '@masknet/web3-contracts/types/ITO'
-import type { ITO2 } from '@masknet/web3-contracts/types/ITO2'
-import type { Qualification } from '@masknet/web3-contracts/types/Qualification'
-import type { Qualification2 } from '@masknet/web3-contracts/types/Qualification2'
-import type { PayableTx } from '@masknet/web3-contracts/types/types'
+import type { ITO } from '@masknet/web3-contracts/types/ITO.js'
+import type { ITO2 } from '@masknet/web3-contracts/types/ITO2.js'
+import type { Qualification } from '@masknet/web3-contracts/types/Qualification.js'
+import type { Qualification2 } from '@masknet/web3-contracts/types/Qualification2.js'
+import type { PayableTx } from '@masknet/web3-contracts/types/types.js'
 import { ChainId, SchemaType, TransactionEventType, useITOConstants } from '@masknet/web3-shared-evm'
 import {
     isSameAddress,
     isPositive,
     isZero,
-    NetworkPluginID,
     toFixed,
     FungibleToken,
     currySameAddress,
+    NetworkPluginID,
 } from '@masknet/web3-shared-base'
+
 import { fromHex, toHex } from '@masknet/shared-base'
 import { useITO_Contract } from './useITO_Contract.js'
 import { useQualificationContract } from './useQualificationContract.js'
@@ -29,8 +30,9 @@ export function useSwapCallback(
     token: Partial<FungibleToken<ChainId, SchemaType>>,
     isQualificationHasLucky = false,
 ) {
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, { chainId })
     const { ITO_CONTRACT_ADDRESS } = useITOConstants(chainId)
     const { contract: ITO_Contract, version } = useITO_Contract(chainId, payload.contract_address)

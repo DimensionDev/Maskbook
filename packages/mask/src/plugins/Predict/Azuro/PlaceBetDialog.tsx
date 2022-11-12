@@ -172,9 +172,9 @@ export function PlaceBetDialog() {
                                         {condition && game ? outcomeRegistry[condition.outcomeRegistryId](game) : null}
                                         &nbsp;
                                         {game?.marketRegistryId === Markets.TotalGoals
-                                            ? outcomeSecondParam[condition?.paramId ?? 0]
+                                            ? outcomeSecondParam[condition?.paramId ?? 0].value
                                             : game?.marketRegistryId === Markets.Handicap
-                                            ? outcomeSecondParam[condition?.paramId ?? 0]
+                                            ? outcomeSecondParam[condition?.paramId ?? 0].value
                                             : null}
                                     </Typography>
                                 </Grid>

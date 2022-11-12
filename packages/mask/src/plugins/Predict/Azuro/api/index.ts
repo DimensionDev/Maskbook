@@ -1,7 +1,7 @@
 import { calculateActualOdds } from '@azuro-protocol/sdk'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { configureAzuroSDK } from '../helpers/configureAzuroSDK'
-import type { GamesRaw, OddsByConditions, RawEvents } from '../types.js'
+import type { GamesRaw, OddsByConditions, RawEvents, UserBetsRawData } from '../types.js'
 
 export async function fetchOddsByConditions(conditionIds: number[]): Promise<OddsByConditions> {
     const oddsData = await fetch('https://api.bookmaker.xyz/odds', {
@@ -62,7 +62,7 @@ export async function calculateActualRate({
     })
 }
 
-export async function fetchUserBets(account: string) {
+export async function fetchUserBets(account: string): Promise<UserBetsRawData[]> {
     const response = await fetch('https://api.bookmaker.xyz/bets/' + account)
     const data = await response.json()
     const bets = data.data

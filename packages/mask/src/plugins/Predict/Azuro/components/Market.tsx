@@ -2,6 +2,8 @@ import { Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../locales'
 import { marketRegistry } from '../helpers'
+import { Event, Markets, Sports } from '../types.js'
+import gameTypeRegistry from '../helpers/gameTypeRegistry.js'
 
 const useStyles = makeStyles()((theme) => ({
     label: { fontWeight: 300 },
@@ -12,18 +14,24 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 interface MarketProps {
-    marketRegistryId: number
+    event: Event
 }
 
-export function Market(props: MarketProps) {
+export function Market(props: Event) {
     const t = useI18N()
-    const { marketRegistryId } = props
     const { classes } = useStyles()
+    const { marketRegistryId, sportTypeId, conditions } = props
 
     return (
         <Typography className={classes.label}>
-            {t.plugin_market()}:&nbsp;
-            <span className={classes.title}>{marketRegistry[marketRegistryId]}</span>
+            <span className={classes.title}>
+                {Sports.CSGO === sportTypeId
+                    ? Markets.WinnerOfMatch === marketRegistryId && conditions[0].gamePeriodIds
+                        ? gameTypeRegistry[conditions[0].gamePeriodIds[0]]
+                        : ''
+                    : ''}
+                {marketRegistry[marketRegistryId]}
+            </span>
         </Typography>
     )
 }

@@ -5,7 +5,6 @@ import { useI18N } from '../../../../utils/i18n-next-ui'
 import { BetInfos } from './BetInfos'
 import { League } from './League'
 import { EventDate } from './EventDate'
-import { Market } from './Market'
 import { Teams } from './Teams.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -42,7 +41,7 @@ export function Bet(props: BetProps) {
                         alignItems="center">
                         <League name={bet.gameInfo.league} />
                         <Teams participants={bet.gameInfo.participants} />
-                        <Market marketRegistryId={bet.marketRegistryId} />
+                        {/* <Market {...bet} /> */}
                         <EventDate date={bet.gameInfo.startsAt} />
                     </Grid>
                     <BetInfos bet={bet} retry={retry} />

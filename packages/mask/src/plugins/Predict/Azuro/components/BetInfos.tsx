@@ -86,7 +86,7 @@ export function BetInfos(props: BetInfosProps) {
                 <Typography className={classes.label}>{t.plugin_pick()} </Typography>
                 <Typography>
                     {outcomeRegistry[bet.outcomeRegistryId](bet.gameInfo)}&nbsp;
-                    {outcomesWithParams.includes(bet.outcomeRegistryId) ? outcomeSecondParam[bet.paramId] : null}
+                    {outcomesWithParams.includes(bet.outcomeRegistryId) ? outcomeSecondParam[bet.paramId].value : null}
                 </Typography>
             </Grid>
             <Grid container justifyContent="space-between" className={classes.info}>
@@ -107,9 +107,9 @@ export function BetInfos(props: BetInfosProps) {
                     ) : isLost ? (
                         <span>{result}</span>
                     ) : bet.gameInfo.state === ConditionStatus.CANCELED ? (
-                        <Typography>{result}</Typography>
+                        <span>{result}</span>
                     ) : (
-                        <Typography>&#8212;</Typography>
+                        <span>&#8212;</span>
                     )}
                 </Typography>
             </Grid>

@@ -6,6 +6,7 @@ import { League } from './League'
 import { Teams } from './Teams'
 import { EventDate } from './EventDate'
 import { Odds } from './Odds.js'
+import type { Event as EventType } from '../types.js'
 
 const useStyles = makeStyles()((theme) => ({
     metas: { padding: theme.spacing(0, 2, 0, 0) },
@@ -26,7 +27,7 @@ const useStyles = makeStyles()((theme) => ({
 
 interface EventProps {
     key: string
-    event: any
+    event: EventType
     isUserBet?: boolean
 }
 
@@ -48,7 +49,7 @@ export function Event(props: EventProps) {
                         <League name={event.titleLeague} />
                         <Teams participants={event.participants} />
                         <EventDate date={event.startDate} />
-                        <Market marketRegistryId={event.marketRegistryId} />
+                        <Market {...event} />
                     </Grid>
                     <Grid
                         container

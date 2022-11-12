@@ -93,10 +93,12 @@ export enum Markets {
     TotalGoals = 4,
     IndividualTotal1 = 5,
     IndividualTotal2 = 6,
+    TotalRounds = 7,
     ScoredGoal = 8,
     BothTeamsToScore = 9,
     CorrectScore = 10,
     TotalEven = 14,
+    WinAtLeastOneMap = 16,
     HTFT = 17,
     EuropeanHandicap3w = 18,
     WinnerOfMatch = 19,
@@ -118,6 +120,8 @@ export interface GamesRaw extends Omit<Games, 'participants'> {
 
 export interface Games {
     countryId: number
+    gamePeriodIds?: number[]
+    gameTypeIds?: number[]
     leagueId: number
     leagueSlug: string
     participants: Participant[]
@@ -154,6 +158,8 @@ export interface ConditionsByMarket {
 
 interface ConditionRaw {
     id: number
+    gamePeriodIds?: number[]
+    gameTypeIds?: number[]
     outcomes: number[]
     outcomesRegistryId: number[]
 }
@@ -184,8 +190,9 @@ export interface RawEvents {
 }
 
 export interface UserBetsRawData {
-    [x: string]: any
-    gameInfo: any
+    gameInfo: {
+        state: ConditionStatus
+    }
     prize: string
     isFreebet: boolean
     txHash: string
@@ -210,3 +217,16 @@ export interface UserBetsRawData {
     status: number
     cleanPrize: string
 }
+
+export interface SecondParam {
+    id: number
+    value: string
+}
+
+export enum Sports {
+    Football = 33,
+    Dota2 = 1000,
+    CSGO = 1001,
+}
+
+export const SupportedSports = Sports

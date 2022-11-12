@@ -16,7 +16,6 @@ export function useFetchApi(_searchTerm: string, _market: number, _league: numbe
         const eventsFormatted = eventsAdapter(rawEvents)
 
         const games = await fetchGamesByIds(extractUniqueGamesIds(eventsFormatted))
-        console.log('games: ', games)
 
         const odds = await fetchOddsByConditions(extractConditionsIds(eventsFormatted))
         const events: Event[] = eventsFormatted.map((event) => {

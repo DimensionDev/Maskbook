@@ -10,6 +10,8 @@ export function useMarketList(events: Event[] | undefined) {
         label: marketRegistry[event.marketRegistryId],
     }))
 
+    console.log('markets: ', markets)
+
     const marketsFlatten: Array<{ id: number; label: string }> | undefined = flattenDeep(markets)
 
     return uniqBy(marketsFlatten, 'id')

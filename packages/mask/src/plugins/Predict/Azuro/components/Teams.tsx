@@ -3,6 +3,7 @@ import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../locales'
 import { VersusIcon } from '../icons/VersusIcon'
 import type { Participant } from '../types.js'
+import { AssetPreviewer } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     container: { marginBottom: theme.spacing(2.1) },
@@ -46,11 +47,17 @@ export function Teams(props: TeamsProps) {
                 <VersusIcon className={classes.versusIcon} />
             </Grid>
             <Grid className={classes.teamContainer}>
-                <img
+                <AssetPreviewer
+                    classes={{
+                        root: classes.emblem,
+                    }}
+                    url={new URL(participants[1].image, import.meta.url).toString()}
+                />
+                {/* <img
                     className={classes.emblem}
                     src={new URL(participants[1].image, import.meta.url).toString()}
                     alt={t.plugin_away_team()}
-                />
+                /> */}
                 <Typography className={classes.name}>{participants[1].name}</Typography>
             </Grid>
         </Grid>

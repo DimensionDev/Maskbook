@@ -1,21 +1,21 @@
 import { useAsyncRetry } from 'react-use'
 import { BetStatus, ConditionStatus, UserBet, UserBetsRawData, UserFilter } from '../types'
-import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import type { NetworkPluginID } from '@masknet/web3-shared-base'
 import { betTypeOdd } from '../helpers/index.js'
 import { fetchUserBets } from '../api/index.js'
 
 export function useFetchUserGames(filter: UserFilter): AsyncStateRetry<UserBet[]> {
-    const account = useAccount()
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    // const account = useAccount()
+    // const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
     return useAsyncRetry(async () => {
         if (!account || !chainId) return
 
         const userBets = await fetchUserBets(account)
 
-        const betsFormatted = UserBetsAdapter(userBets)
+        const betsFormatted = userBetsAdapter(userBets)
 
         return betsFormatted.filter((userBet: { gameInfo: { state: ConditionStatus } }) =>
             filter === UserFilter.Active.valueOf()
@@ -28,7 +28,7 @@ export function useFetchUserGames(filter: UserFilter): AsyncStateRetry<UserBet[]
     }, [filter, account, chainId])
 }
 
-export function UserBetsAdapter(bets: UserBetsRawData[]): UserBet[] {
+export function userBetsAdapter(bets: UserBetsRawData[]): UserBet[] {
     return bets.map((bet) => {
         const newBet = {
             ...bet,
@@ -57,4 +57,7 @@ export function UserBetsAdapter(bets: UserBetsRawData[]): UserBet[] {
         }
         return newBet
     })
+}
+function useChainContext<T>(): { account: any; chainId: any } {
+    throw new Error('Function not implemented.')
 }

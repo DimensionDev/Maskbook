@@ -7,7 +7,7 @@ import { NetworkTab } from '../../../components/shared/NetworkTab'
 import { useCallback, useState } from 'react'
 import { useChainId } from '@masknet/plugin-infra/web3'
 import { ChainId, networkResolver, NetworkType } from '@masknet/web3-shared-evm'
-import { useAsync, useUpdateEffect } from 'react-use'
+import { useAsync } from 'react-use'
 import { WalletRPC } from '../../Wallet/messages'
 import { protocols, PLUGIN_AZURO_ID } from './protocols'
 import { AzuroIcon } from '../Azuro/icons/AzuroIcon'
@@ -15,6 +15,7 @@ import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { AzuroDialog } from '../Azuro/AzuroDialog'
 import { PluginWalletStatusBar } from '../../../utils'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
+import compact from 'lodash-es/compact.js'
 
 const useStyles = makeStyles()((theme) => ({
     tabWrapper: {
@@ -77,26 +78,16 @@ export function PredictDialog(props: PredictDialogProps) {
         return networks.map((network: NetworkType) => networkResolver.networkChainId(network))
     }, [])
 
-    useUpdateEffect(() => {
-        setChainId(currentChainId)
-    }, [currentChainId])
-
     return (
         <InjectedDialog open={open} title={t.plugin_predict()} onClose={onClose}>
             <DialogContent style={{ padding: 0, overflowX: 'hidden' }}>
                 <div className={classes.tabWrapper}>
-                    <NetworkTab
-                        chainId={chainId}
-                        setChainId={setChainId}
-                        chains={chains.filter(Boolean) as ChainId[]}
-                    />
+                    <NetworkTab chainId={chainId} setChainId={setChainId} chains={compact(chains)} />
                 </div>
                 <div className={classes.applications}>
-                    {protocols[chainId.valueOf()]?.supportedProtocols.includes(PLUGIN_AZURO_ID) ? (
+                    {protocols[chainId]?.supportedProtocols.includes(PLUGIN_AZURO_ID) ? (
                         <ApplicationEntry
-                            disabled={
-                                !protocols[currentChainId.valueOf()]?.supportedProtocols.includes(PLUGIN_AZURO_ID)
-                            }
+                            disabled={!protocols[currentChainId]?.supportedProtocols.includes(PLUGIN_AZURO_ID)}
                             title={t.plugin_azuro()}
                             icon={<AzuroIcon fill={classes.azuroIcon} />}
                             onClick={() => setOpenAzuro(true)}

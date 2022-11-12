@@ -9,7 +9,6 @@ import { useLeagueList, useMarketList } from '../hooks/index.js'
 import { Icons } from '@masknet/icons'
 import { Grid, FormControl, InputLabel, Button, MenuItem, Select, SelectChangeEvent, TextField } from '@mui/material'
 import { Events } from '../components/Events.js'
-// import Grid from '@material-ui/core/Grid'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
