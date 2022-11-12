@@ -65,6 +65,13 @@ function ProfileTipsSlot() {
         const svgCss = window.getComputedStyle(svg)
         return Number.parseFloat(svgCss.width.replace('px', ''))
     }, [location])
+
+    const buttonSize = useMemo(() => {
+        const button = menuButtonSelector().querySelector('div').evaluate()
+        if (!button) return 34
+        const buttonCss = window.getComputedStyle(button)
+        return Number.parseFloat(buttonCss.height.replace('px', ''))
+    }, [location])
     const component = useMemo(() => {
         const Component = createInjectHooksRenderer(
             useActivatedPluginsSNSAdaptor.visibility.useNotMinimalMode,
@@ -76,6 +83,7 @@ function ProfileTipsSlot() {
                 identity={visitingPersona.identifier}
                 slot={Plugin.SNSAdaptor.TipsSlot.Profile}
                 iconSize={iconSize}
+                buttonSize={buttonSize}
                 onStatusUpdate={setDisabled}
             />
         )
