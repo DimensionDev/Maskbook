@@ -9,8 +9,8 @@
     }
   },
   "dependencies": {
-    "@masknet/plugin-infra": "workspace:*",
-    "@masknet/shared-base": "workspace:*",
+    "@masknet/plugin-infra": "workspace:^",
+    "@masknet/shared-base": "workspace:^",
     "ts-results": "^3.3.0"
   }
 }

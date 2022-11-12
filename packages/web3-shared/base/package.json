@@ -12,8 +12,8 @@
   "types": "./dist/index.d.ts",
   "dependencies": {
     "@dimensiondev/mask-wallet-core": "0.1.0-20211013082857-eb62e5f",
-    "@masknet/public-api": "workspace:*",
-    "@masknet/shared-base": "workspace:*",
+    "@masknet/public-api": "workspace:^",
+    "@masknet/shared-base": "workspace:^",
     "@servie/events": "^3.0.0",
     "@types/use-subscription": "^1.0.0",
     "bignumber.js": "9.1.0",
