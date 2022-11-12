@@ -9,12 +9,12 @@
     }
   },
   "dependencies": {
-    "@masknet/icons": "workspace:*",
-    "@masknet/plugin-infra": "workspace:*",
-    "@masknet/shared": "workspace:*",
-    "@masknet/shared-base": "workspace:*",
-    "@masknet/shared-base-ui": "workspace:*",
-    "@masknet/theme": "workspace:*",
+    "@masknet/icons": "workspace:^",
+    "@masknet/plugin-infra": "workspace:^",
+    "@masknet/shared": "workspace:^",
+    "@masknet/shared-base": "workspace:^",
+    "@masknet/shared-base-ui": "workspace:^",
+    "@masknet/theme": "workspace:^",
     "react-use": "^17.4.0"
   }
 }

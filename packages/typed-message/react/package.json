@@ -14,12 +14,17 @@
     }
   },
   "dependencies": {
-    "@masknet/typed-message": "workspace:*",
+    "@masknet/typed-message": "workspace:^",
     "immer": "^9.0.16",
     "z-schema": "^5.0.3"
   },
   "peerDependencies": {
     "react": "^18"
   },
-  "files": ["src", "dist", "!dist/.tsbuildinfo"]
+  "files": [
+      "src",
+      "dist/**/*.js",
+      "dist/**/*.d.ts",
+      "dist/**/*.map"
+  ]
 }

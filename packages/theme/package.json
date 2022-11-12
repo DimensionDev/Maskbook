@@ -28,9 +28,9 @@
     "start": "dev -- start-storybook -p 6006"
   },
   "dependencies": {
-    "@masknet/icons": "workspace:*",
-    "@masknet/shared-base": "workspace:*",
-    "@masknet/storybook-shared": "workspace:*",
+    "@masknet/icons": "workspace:^",
+    "@masknet/shared-base": "workspace:^",
+    "@masknet/storybook-shared": "workspace:^",
     "@types/qrcode": "^1.5.0",
     "@types/tinycolor2": "^1.4.3",
     "fuse.js": "6.6.2",

@@ -26,8 +26,9 @@
     "ts-results-es": "^3.5.0"
   },
   "files": [
-    "src",
-    "dist",
-    "!dist/.tsbuildinfo"
+      "src",
+      "dist/**/*.js",
+      "dist/**/*.d.ts",
+      "dist/**/*.map"
   ]
 }

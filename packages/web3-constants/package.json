@@ -6,6 +6,6 @@
     "start": "ts-node compile-constants.ts"
   },
   "dependencies": {
-    "@masknet/web3-contracts": "workspace:*"
+    "@masknet/web3-contracts": "workspace:^"
   }
 }
