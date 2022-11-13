@@ -14,7 +14,7 @@ import { SocialAccount, SocialAddressType } from '@masknet/web3-shared-base'
 
 interface Props extends HTMLProps<HTMLDivElement>, withClasses<'icon'> {
     // This is workaround solution, link issue mf-2536 and pr #7576.
-    // Should refactor social account to support mutil-account for one post.
+    // Should refactor social account to support multi-account for one post.
     accounts?: SocialAccount[]
     recipient?: string
     receiver?: ProfileIdentifier
