@@ -673,6 +673,8 @@ export namespace Plugin.SNSAdaptor {
         identity?: ProfileIdentifier
         slot: TipsSlot
         accounts?: SocialAccount[]
+        iconSize?: number
+        buttonSize?: number
         onStatusUpdate?(disabled: boolean): void
     }
     export interface TipsRealm {
