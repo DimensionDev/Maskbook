@@ -53,8 +53,8 @@ const useStyles = makeStyles<{ iconSize: number; buttonSize: number }, 'postTips
         },
         profileTipsButton: {
             position: 'absolute',
-            width: buttonSize,
-            height: buttonSize,
+            width: buttonSize - 2,
+            height: buttonSize - 2,
             left: 0,
             top: 0,
             borderRadius: '100%',
