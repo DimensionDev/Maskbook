@@ -1,8 +1,13 @@
 import { useIsMinimalMode } from '@masknet/plugin-infra/content-script'
-import { useChainContext, useChainIdValid, useNonFungibleAssetsByCollection } from '@masknet/web3-hooks-base'
+import {
+    useChainContext,
+    useChainIdValid,
+    useNonFungibleAssetsByCollection,
+    Web3ContextProvider,
+} from '@masknet/web3-hooks-base'
 import { DataProvider } from '@masknet/public-api'
 import { NFTList } from '@masknet/shared'
-import { EMPTY_LIST, PluginID, NetworkPluginID } from '@masknet/shared-base'
+import { EMPTY_LIST, PluginID, NetworkPluginID, getSiteType } from '@masknet/shared-base'
 import { ActionButton, makeStyles, MaskLightTheme, MaskTabList, useTabs } from '@masknet/theme'
 import { TrendingAPI } from '@masknet/web3-providers'
 import { createFungibleToken, TokenType } from '@masknet/web3-shared-base'
@@ -29,6 +34,8 @@ import { TickersTable } from './TickersTable.js'
 import { TrendingViewDeck } from './TrendingViewDeck.js'
 import { TrendingViewError } from './TrendingViewError.js'
 import { TrendingViewSkeleton } from './TrendingViewSkeleton.js'
+import { useValueRef } from '@masknet/shared-base-ui'
+import { pluginIDSettings } from '../../../../../shared/legacy-settings/settings.js'
 
 const useStyles = makeStyles<{
     isPopper: boolean
@@ -125,6 +132,11 @@ export function TrendingView(props: TrendingViewProps) {
     const [tabIndex, setTabIndex] = useState(dataProvider !== DataProvider.UniswapInfo ? 1 : 0)
     const { chainId, networkType } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const chainIdValid = useChainIdValid(NetworkPluginID.PLUGIN_EVM, chainId)
+
+    const site = getSiteType()
+    const pluginIDs = useValueRef(pluginIDSettings)
+    const context = { pluginID: site ? pluginIDs[site] : NetworkPluginID.PLUGIN_EVM }
+
     // #region track network type
     useEffect(() => setTabIndex(0), [networkType])
     // #endregion
@@ -287,6 +299,7 @@ export function TrendingView(props: TrendingViewProps) {
 
     const { coin, tickers, market } = trending
 
+    console.log(coin)
     return (
         <TrendingViewDeck
             classes={{
@@ -343,21 +356,23 @@ export function TrendingView(props: TrendingViewProps) {
                     </Box>
                 ) : null}
                 {currentTab === ContentTabs.Swap && isSwappable ? (
-                    <TradeView
-                        classes={{ root: classes.tradeViewRoot }}
-                        TraderProps={{
-                            defaultInputCoin: coin.address
-                                ? createFungibleToken(
-                                      chainId,
-                                      isNativeTokenAddress(coin.address) ? SchemaType.Native : SchemaType.ERC20,
-                                      coin.address,
-                                      coin.name,
-                                      coin.symbol,
-                                      coin.decimals ?? 0,
-                                  )
-                                : undefined,
-                        }}
-                    />
+                    <Web3ContextProvider value={context}>
+                        <TradeView
+                            classes={{ root: classes.tradeViewRoot }}
+                            TraderProps={{
+                                defaultInputCoin: coin.address
+                                    ? createFungibleToken(
+                                          chainId,
+                                          isNativeTokenAddress(coin.address) ? SchemaType.Native : SchemaType.ERC20,
+                                          coin.address,
+                                          coin.name,
+                                          coin.symbol,
+                                          coin.decimals ?? 0,
+                                      )
+                                    : undefined,
+                            }}
+                        />
+                    </Web3ContextProvider>
                 ) : null}
                 {currentTab === ContentTabs.NFTItems && isNFT ? (
                     <Box className={classes.nftItems}>
