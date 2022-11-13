@@ -70,7 +70,8 @@ function ProfileTipsSlot() {
         const button = menuButtonSelector().querySelector('div').evaluate()
         if (!button) return 34
         const buttonCss = window.getComputedStyle(button)
-        return Number.parseFloat(buttonCss.height.replace('px', ''))
+        const buttonSize = Number.parseFloat(buttonCss.height.replace('px', ''))
+        return buttonSize === 0 ? 34 : buttonSize - 2
     }, [location])
     const component = useMemo(() => {
         const Component = createInjectHooksRenderer(
