@@ -44,8 +44,8 @@ import { CF_API } from './cf/index.js'
 import { MirrorAPI } from './mirror/index.js'
 import { MindsAPI } from './minds/index.js'
 import { FuseTrendingAPI } from './fuse/index.js'
-import { SmartPayAPI } from './smart-pay/index.js'
 import { CryptoScamDBAPI } from './cryptoscam-db/index.js'
+import { SmartPayAPI } from './smart-pay/index.js'
 
 // #region TODO: to be removed
 export * from './helpers.js'

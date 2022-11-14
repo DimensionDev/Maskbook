@@ -22,7 +22,7 @@ export class SCWallet implements Middleware<Context> {
     }
 
     private sendUserOperation(context: Context, userOperation: UserOperation): Promise<string> {
-        return SmartPay.send(context.chainId, userOperation)
+        return SmartPay.sendUserOperation(context.chainId, userOperation)
     }
 
     async fn(context: Context, next: () => Promise<void>) {

@@ -14,7 +14,7 @@ import type { TokenListAPI } from '../types/index.js'
 const fetchTokenList = memoizePromise(
     memoize,
     async (url: string) => {
-        const response = await globalThis.r2d2Fetch(url, { cache: 'default' })
+        const response = await fetch(url, { cache: 'default' })
         return response.json() as Promise<TokenListAPI.TokenList<ChainId> | TokenListAPI.TokenObject<ChainId>>
     },
     (url) => url,
