@@ -10,6 +10,7 @@ const packages = [
     new URL('../../../encryption/', import.meta.url),
     new URL('../../../typed-message/base/', import.meta.url),
     new URL('../../../typed-message/react/', import.meta.url),
+    new URL('../../../config/', import.meta.url),
 ]
 export async function changesetRelease() {
     const tsc = awaitChildProcess(shell.cwd(ROOT_PATH)`npx tsc -b ./tsconfig.npm.json`)

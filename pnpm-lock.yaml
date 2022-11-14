@@ -201,6 +201,9 @@ importers:
       '@masknet/cli':
         specifier: workspace:^
         version: link:packages/scripts
+      '@masknet/config':
+        specifier: workspace:^0.0.0
+        version: link:packages/config
       '@masknet/serializer':
         specifier: workspace:^
         version: link:packages/test-serializer
