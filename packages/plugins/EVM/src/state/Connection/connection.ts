@@ -939,7 +939,7 @@ class Connection implements EVM_Connection {
         )
     }
 
-    async callOperation(
+    async callUserOperation(
         operation: UserOperation,
         initial?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined,
     ) {
@@ -962,7 +962,7 @@ class Connection implements EVM_Connection {
         )
     }
 
-    async sendOperation(
+    async sendUserOperation(
         operation: UserOperation,
         initial?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined,
     ) {

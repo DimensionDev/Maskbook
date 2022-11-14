@@ -38,6 +38,10 @@ export default class WalletConnectProvider extends BaseProvider implements EVM_P
     private connectorId = 0
     private connector: WalletConnect = this.createConnector()
 
+    constructor() {
+        super(ProviderType.WalletConnect)
+    }
+
     /**
      * The ongoing walletconnect connection which the listeners use to resolve later.
      */

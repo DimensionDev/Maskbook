@@ -928,10 +928,16 @@ export interface Connection<
         schema?: SchemaType,
         initial?: Web3ConnectionOptions,
     ): Promise<string>
+    /** Get all supported entry points */
+    supportedEntryPonits?: () => Promise<string[]>
     /** Call a operation */
-    callOperation?: (operation: Operation, initial?: Web3ConnectionOptions) => Promise<string>
+    callUserOperation?: (operation: Operation, initial?: Web3ConnectionOptions) => Promise<string>
     /** Send a operation */
-    sendOperation?: (operation: Operation, initial?: Web3ConnectionOptions) => Promise<TransactionSignature>
+    sendUserOperation?: (operation: Operation, initial?: Web3ConnectionOptions) => Promise<TransactionSignature>
+    /** Deploy a new SC account */
+    createSmartContractAccount?: () => Promise<string>
+    /** Change owner of SC account */
+    changeSmartContractOwner?: (owner: string, signautre: string) => Promise<void>
     /** Sign a transaction */
     signTransaction(transaction: Transaction, initial?: Web3ConnectionOptions): Promise<TransactionSignature>
     /** Sign multiple transactions */
