@@ -7,5 +7,7 @@
     "access": "public",
     "baseBranch": "develop",
     "updateInternalDependencies": "patch",
-    "ignore": ["!(@masknet/base|@masknet/typed-message|@masknet/typed-message-react|@masknet/encryption)"]
+    "ignore": [
+        "!(@masknet/base|@masknet/typed-message|@masknet/typed-message-react|@masknet/encryption|@masknet/config)"
+    ]
 }

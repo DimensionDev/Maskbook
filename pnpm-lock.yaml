@@ -201,6 +201,9 @@ importers:
       '@masknet/cli':
         specifier: workspace:^
         version: link:packages/scripts
+      '@masknet/config':
+        specifier: workspace:^
+        version: link:packages/config
       '@masknet/serializer':
         specifier: workspace:^
         version: link:packages/test-serializer
@@ -319,6 +322,8 @@ importers:
       ts-results-es:
         specifier: ^3.5.0
         version: 3.5.0
+
+  packages/config: {}
 
   packages/configuration:
     dependencies:

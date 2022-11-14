@@ -60,6 +60,7 @@
     "@dimensiondev/eslint-plugin": "0.0.2-20220516081411-2649814",
     "@magic-works/i18n-codegen": "^0.4.1",
     "@masknet/cli": "workspace:^",
+    "@masknet/config": "workspace:^",
     "@masknet/serializer": "workspace:^",
     "@nice-labs/git-rev": "^3.5.0",
     "@swc/core": "1.3.11",
