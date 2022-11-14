@@ -11,7 +11,8 @@
         "**/node_modules/**",
         "*generated*",
         "patches/**",
-        "pnpm-lock.yaml"
+        "pnpm-lock.yaml",
+        "./packages/web3-contracts/types/**"
     ],
     "words": [
         "aave",
