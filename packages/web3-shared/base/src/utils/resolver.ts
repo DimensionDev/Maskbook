@@ -249,11 +249,61 @@ export const resolveNextID_NetworkPluginID = createLookupTableResolver<NextIDPla
         [NextIDPlatform.GitHub]: undefined,
         [NextIDPlatform.Keybase]: undefined,
         [NextIDPlatform.Twitter]: undefined,
+        [NextIDPlatform.ENS]: undefined,
+        [NextIDPlatform.RSS3]: undefined,
+        [NextIDPlatform.LENS]: undefined,
+        [NextIDPlatform.REDDIT]: undefined,
+        [NextIDPlatform.SYBIL]: undefined,
     },
     (platform) => {
         throw new Error(`Unknown next id platform: ${platform}`)
     },
 )
+
+export const resolveNextIDPlatformName = createLookupTableResolver<NextIDPlatform, string>(
+    {
+        [NextIDPlatform.Ethereum]: 'Ethereum',
+        [NextIDPlatform.NextID]: 'NEXT.ID',
+        [NextIDPlatform.GitHub]: 'Github',
+        [NextIDPlatform.Keybase]: 'Keybase',
+        [NextIDPlatform.Twitter]: 'Twitter',
+        [NextIDPlatform.ENS]: 'ENS',
+        [NextIDPlatform.RSS3]: 'RSS3',
+        [NextIDPlatform.LENS]: 'Lens',
+        [NextIDPlatform.REDDIT]: 'Reddit',
+        [NextIDPlatform.SYBIL]: 'Sybil',
+    },
+    (platform) => {
+        throw new Error(`Unknown next id platform: ${platform}`)
+    },
+)
+
+export const resolveNextIDPlatformLink = (networkPlatform: NextIDPlatform, identifier: string) => {
+    switch (networkPlatform) {
+        case NextIDPlatform.Ethereum:
+            return `https://etherscan.io/address/${identifier}`
+        case NextIDPlatform.NextID:
+            return 'https://next.id/'
+        case NextIDPlatform.GitHub:
+            return `https://github.com/${identifier}`
+        case NextIDPlatform.Keybase:
+            return `https://keybase.io/${identifier}`
+        case NextIDPlatform.Twitter:
+            return `https://twitter.com/${identifier}`
+        case NextIDPlatform.ENS:
+            return `https://app.ens.domains/name/${identifier}`
+        case NextIDPlatform.RSS3:
+            return `https://rss3.io/result?search=${identifier}`
+        case NextIDPlatform.LENS:
+            return `https://www.lensfrens.xyz/${identifier}`
+        case NextIDPlatform.REDDIT:
+            return `https://www.reddit.com/user/${identifier}`
+        case NextIDPlatform.SYBIL:
+            return 'https://sybil.org/'
+        default:
+            return ''
+    }
+}
 
 // https://stackoverflow.com/a/67176726
 const MATCH_IPFS_CID_RAW =

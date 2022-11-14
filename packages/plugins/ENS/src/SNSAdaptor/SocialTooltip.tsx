@@ -1,7 +1,9 @@
 import type { PropsWithChildren } from 'react'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { Typography } from '@mui/material'
-import { Trans } from 'react-i18next'
+import { useSharedI18N } from '@masknet/shared'
+import { NextIDPlatform } from '@masknet/shared-base'
+import { resolveNextIDPlatformName } from '@masknet/web3-shared-base'
 
 interface StyleProps {
     isMenuScroll?: boolean
@@ -15,9 +17,12 @@ const useStyles = makeStyles<StyleProps>()((theme, { isMenuScroll = false }) => 
         },
     }
 })
-export function SocialTooltip({ children }: PropsWithChildren<{}>) {
+export function SocialTooltip({
+    children,
+    platform = NextIDPlatform.NextID,
+}: PropsWithChildren<{ platform?: NextIDPlatform }>) {
     const { classes } = useStyles({})
-
+    const t = useSharedI18N()
     return (
         <ShadowRootTooltip
             classes={{ tooltip: classes.tooltip }}
@@ -25,7 +30,7 @@ export function SocialTooltip({ children }: PropsWithChildren<{}>) {
             placement="top"
             title={
                 <Typography style={{ padding: '6px 2px', whiteSpace: 'nowrap' }} fontSize={14}>
-                    <Trans i18nKey="data_source_from_nextid" />
+                    {t.account_icon_tooltips({ source: resolveNextIDPlatformName(platform) })}
                 </Typography>
             }>
             <div>{children}</div>

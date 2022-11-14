@@ -9,6 +9,11 @@ export enum NextIDPlatform {
     Keybase = 'keybase',
     Ethereum = 'ethereum',
     GitHub = 'github',
+    ENS = 'ens',
+    RSS3 = 'rss3',
+    LENS = 'lens',
+    REDDIT = 'reddit',
+    SYBIL = 'sybil',
 }
 
 export interface NextIDPayload {
@@ -30,6 +35,7 @@ export interface NextIDPersonaBindings {
 
 export interface BindingProof {
     platform: NextIDPlatform
+    source?: NextIDPlatform
     /**
      * Platform identity.
      * For Twitter, it's twitter account
@@ -37,7 +43,7 @@ export interface BindingProof {
     identity: string
     created_at: string
     invalid_reason: string
-    latest_checked_at: string
+    latest_checked_at?: string
     is_valid: boolean
     last_checked_at: string
     rawIdx?: number

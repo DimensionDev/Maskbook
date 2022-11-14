@@ -8,7 +8,6 @@
     "promote_withdraw": "crwdns18584:0{{amount}}crwdnd18584:0{{symbol}}crwdnd18584:0{{chain}}crwdnd18584:0{{account}}crwdne18584:0",
     "promote_collectible": "crwdns16908:0crwdne16908:0",
     "promote_snapshot": "crwdns16910:0crwdne16910:0",
-    "data_source_from_nextid": "crwdns18586:0crwdne18586:0",
     "database_backup": "crwdns10051:0crwdne10051:0",
     "database_overwrite": "crwdns10053:0crwdne10053:0",
     "database_clear": "crwdns10055:0crwdne10055:0",
