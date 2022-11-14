@@ -80,6 +80,10 @@ const useStyles = makeStyles()((theme) => {
             color: theme.palette.maskColor?.dark,
         },
         symbol: {
+            maxWidth: 200,
+            whiteSpace: 'nowrap',
+            textOverflow: 'ellipsis',
+            overflow: 'hidden',
             fontWeight: 700,
             fontSize: 18,
             color: theme.palette.maskColor?.dark,
