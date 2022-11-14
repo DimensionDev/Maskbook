@@ -53,7 +53,7 @@ export const PreviewCard = ({ links }: PreviewCardProps) => {
                         )
                     })}
                     <Typography variant="body1" color="textPrimary">
-                        {t.warning_description()}
+                        {t.warning_description({ count: value.length })}
                     </Typography>
                 </Stack>
             </Stack>
