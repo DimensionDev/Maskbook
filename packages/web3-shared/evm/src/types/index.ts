@@ -170,7 +170,7 @@ export enum EthereumMethodType {
     ETH_SUPPORTED_ENTRY_POINTS = 'eth_supportedEntryPoints',
     SC_WALLET_CHAIN_ID = 'SCWallet_chainId',
     SC_WALLET_ACCOUNTS = 'SCWallet_accounts',
-    SC_WALLET_DEPOLY = 'SCWallet_depoly',
+    SC_WALLET_DEPLOY = 'SCWallet_deploy',
     SC_WALLET_CHANGE_OWNER = 'SCWallet_changeOwner',
 
     // only for mask
