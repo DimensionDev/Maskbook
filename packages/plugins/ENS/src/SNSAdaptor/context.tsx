@@ -74,7 +74,7 @@ export function ENSProvider({ children, keyword, keywordType }: PropsWithChildre
         async () => (reversedAddress ? NextIDProof.queryProfilesByENS(domain) : []),
         [reversedAddress, keyword],
     )
-    console.log({ nextIdBindings })
+
     const firstNextIdrBinding = nextIdBindings[0]
     const restOfNextIdBindings = nextIdBindings.slice(1)
 

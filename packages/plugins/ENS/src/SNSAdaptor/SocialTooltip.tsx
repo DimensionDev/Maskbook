@@ -23,7 +23,6 @@ export function SocialTooltip({
 }: PropsWithChildren<{ platform?: NextIDPlatform }>) {
     const { classes } = useStyles({})
     const t = useSharedI18N()
-    console.log({ platform })
     return (
         <ShadowRootTooltip
             classes={{ tooltip: classes.tooltip }}
