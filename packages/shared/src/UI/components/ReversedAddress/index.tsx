@@ -1,19 +1,19 @@
-import { memo } from 'react'
+import { ComponentProps, memo } from 'react'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import { useReverseAddress, useWeb3State } from '@masknet/web3-hooks-base'
-import { Typography, TypographyProps } from '@mui/material'
+import { Typography } from '@mui/material'
 import { ShadowRootTooltip } from '@masknet/theme'
 import { isSameAddress } from '@masknet/web3-shared-base'
 
-export interface ReverseAddressProps {
+export interface ReverseAddressProps extends ComponentProps<typeof Typography> {
     address: string
     pluginID?: NetworkPluginID
     size?: number
-    TypographyProps?: TypographyProps
-    isInline?: boolean
+    // declare explicitly to avoid ts warning
+    component?: string
 }
 
-export const ReversedAddress = memo<ReverseAddressProps>(({ address, pluginID, size = 4, TypographyProps = {} }) => {
+export const ReversedAddress = memo<ReverseAddressProps>(({ address, pluginID, size = 4, ...rest }) => {
     const { value: domain } = useReverseAddress(pluginID, address)
     const { Others } = useWeb3State(pluginID)
 
@@ -22,7 +22,7 @@ export const ReversedAddress = memo<ReverseAddressProps>(({ address, pluginID, s
     const hasEllipsis = showDomain ? uiLabel !== domain : !isSameAddress(uiLabel, address)
 
     const node = (
-        <Typography fontSize="14px" fontWeight={700} {...TypographyProps}>
+        <Typography fontWeight={700} {...rest}>
             {uiLabel}
         </Typography>
     )

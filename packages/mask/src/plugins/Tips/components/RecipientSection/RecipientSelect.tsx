@@ -175,8 +175,8 @@ export const RecipientSelect: FC<Props> = memo(({ className }) => {
                         <ReversedAddress
                             address={account.address}
                             size={account.address.length}
-                            // @ts-ignore
-                            TypographyProps={{ component: 'span', className: classes.text }}
+                            component="span"
+                            className={classes.text}
                         />
                     )}
                     <ExternalLink account={account} />
