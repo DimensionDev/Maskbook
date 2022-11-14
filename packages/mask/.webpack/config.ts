@@ -3,8 +3,8 @@ import { Configuration, ProvidePlugin, DefinePlugin, EnvironmentPlugin } from 'w
 import type { Configuration as DevServerConfiguration } from 'webpack-dev-server'
 
 import WebExtensionPlugin from 'webpack-target-webextension'
-import CopyPlugin from 'copy-webpack-plugin'
-import HTMLPlugin from 'html-webpack-plugin'
+import CopyPlugin = require('copy-webpack-plugin')
+import HTMLPlugin = require('html-webpack-plugin')
 import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin'
 import { ReadonlyCachePlugin } from './ReadonlyCachePlugin'
 import { EnvironmentPluginCache, EnvironmentPluginNoCache } from './EnvironmentPlugin'
