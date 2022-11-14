@@ -284,7 +284,7 @@ export const resolveNextIDPlatformLink = (networkPlatform: NextIDPlatform, ident
             return `https://etherscan.io/address/${identifier}`
         case NextIDPlatform.NextID:
             return 'https://next.id/'
-        case NextIDPlatform.Ethereum:
+        case NextIDPlatform.GitHub:
             return `https://github.com/${identifier}`
         case NextIDPlatform.Keybase:
             return `https://keybase.io/${identifier}`
