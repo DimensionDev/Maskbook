@@ -220,7 +220,7 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
                             })}
                         </span>
                     }
-                    waiting={t.plugin_wallet_connect_network_under_going({
+                    waiting={t.plugin_wallet_connect_network({
                         network: (expectedChainAllowed ? expectedChainName : expectedPlugin?.name.fallback) ?? '',
                     })}
                     complete={t.plugin_wallet_connect_network({
