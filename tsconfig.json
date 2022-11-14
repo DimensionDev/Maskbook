@@ -26,6 +26,7 @@
   "compilerOptions": {
     // Exclude everything by default. Include them in each project on-demand
     "types": ["masknet__global-types"],
+    "resolveJsonModule": true,
     "preserveValueImports": false,
     "paths": {
       // # Why?
