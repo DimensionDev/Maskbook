@@ -16,17 +16,38 @@ export class CryptoScamDBAPI implements ScamWarningAPI.Provider {
         return this.bloomFilter as ScalableBloomFilter
     }
 
-    async getScamWarning(key: string): Promise<ScamWarningAPI.Info | undefined> {
+    async getScamWarning(link: string): Promise<ScamWarningAPI.Info | undefined> {
         const filter = await this.getBloomFilter()
         if (!filter) return
 
-        if (!filter.has(key)) return
+        try {
+            const url = new URL(link)
 
-        return fetchJSON<ScamWarningAPI.Info>(urlcat(baseURL, `${key}.json`))
+            if (!filter.has(url.host)) return
+
+            const result = await fetchJSON<ScamWarningAPI.Info>(urlcat(baseURL, `${url.host}.json`))
+
+            if (!result) return
+
+            if (!url.pathname || url.pathname === '/') return result
+
+            if (url.pathname.toLowerCase() === new URL(result.url).pathname.toLowerCase()) {
+                return result
+            }
+
+            return
+        } catch {
+            return
+        }
     }
 
-    async getScamWarnings(keys: string[]): Promise<ScamWarningAPI.Info[] | undefined> {
-        const requests = keys.map((x) => this.getScamWarning(x))
+    async getScamWarnings(links: string[]): Promise<ScamWarningAPI.Info[] | undefined> {
+        const requests = links
+            .map((x) => {
+                if (x.startsWith('https://') || x.startsWith('http://')) return x
+                return `http://${x}`
+            })
+            .map((x) => this.getScamWarning(x))
         const result = await Promise.allSettled(requests)
         return result
             .map((x) => (x.status === 'fulfilled' ? x.value : undefined))

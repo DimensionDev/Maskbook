@@ -1,10 +1,10 @@
 import * as React from 'react'
-import { Stack, Typography } from '@mui/material'
+import { Stack, ThemeProvider, Typography } from '@mui/material'
 import { useAsync } from 'react-use'
 import { CryptoScamDB } from '@masknet/web3-providers'
 import { uniq } from 'lodash-es'
 import { useI18N } from '../../locales/index.js'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, MaskDarkTheme } from '@masknet/theme'
 import { usePluginWrapper } from '@masknet/plugin-infra/content-script'
 
 interface PreviewCardProps {
@@ -19,35 +19,44 @@ const useStyles = makeStyles()((theme) => ({
         backgroundColor: theme.palette.maskColor.danger,
         borderRadius: theme.spacing(1),
     },
+    title: {
+        wordBreak: 'break-word',
+    },
 }))
-
-const excludedLinks = ['t.co']
 
 export const PreviewCard = ({ links }: PreviewCardProps) => {
     const t = useI18N()
     const { classes } = useStyles()
 
     const { value, loading } = useAsync(() => {
-        const hosts = links.map((x) => new URL(x).host).filter((x) => !excludedLinks.includes(x))
-        return CryptoScamDB.getScamWarnings(uniq(hosts))
-    }, [links])
+        return CryptoScamDB.getScamWarnings(uniq(links))
+    }, [links.join()])
 
     usePluginWrapper(!(loading || !value?.length))
-
-    const urls = value?.map((x) => x.url).join()
 
     if (!value?.length || loading) return null
 
     return (
-        <Stack p={1.5} pt={0} className={classes.root}>
-            <Stack className={classes.card}>
-                <Typography variant="h6" fontWeight={700} color="textPrimary">
-                    {urls}
-                </Typography>
-                <Typography variant="body1" color="textPrimary">
-                    {t.warning_description()}
-                </Typography>
+        <ThemeProvider theme={MaskDarkTheme}>
+            <Stack p={1.5} pt={0} className={classes.root}>
+                <Stack className={classes.card}>
+                    {value.map((x) => {
+                        return (
+                            <Typography
+                                key={x.url}
+                                className={classes.title}
+                                variant="h6"
+                                fontWeight={700}
+                                color="textPrimary">
+                                {x.url}
+                            </Typography>
+                        )
+                    })}
+                    <Typography variant="body1" color="textPrimary">
+                        {t.warning_description()}
+                    </Typography>
+                </Stack>
             </Stack>
-        </Stack>
+        </ThemeProvider>
     )
 }
