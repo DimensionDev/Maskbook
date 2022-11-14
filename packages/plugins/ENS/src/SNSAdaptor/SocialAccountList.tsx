@@ -42,8 +42,9 @@ const useStyles = makeStyles<StyleProps>()((theme, { isMenuScroll = false }) => 
             display: 'flex',
             alignItems: 'center',
             borderRadius: 12,
+            color: theme.palette.maskColor.dark,
             '&:hover': {
-                background: theme.palette.background.default,
+                background: theme.palette.maskColor.publicBg,
             },
         },
         menuItemNextIdIcon: {
@@ -52,13 +53,13 @@ const useStyles = makeStyles<StyleProps>()((theme, { isMenuScroll = false }) => 
         },
         accountNameInList: {
             maxWidth: 120,
-            color: theme.palette.text.primary,
+            color: theme.palette.maskColor.dark,
             textOverflow: 'ellipsis',
             overflow: 'hidden',
         },
         menu: {
             maxHeight: 296,
-            background: theme.palette.maskColor.bottom,
+            background: theme.palette.maskColor.white,
             scrollbarColor: `${theme.palette.maskColor.secondaryLine} ${theme.palette.maskColor.secondaryLine}`,
             scrollbarWidth: 'thin',
             '::-webkit-scrollbar': {
