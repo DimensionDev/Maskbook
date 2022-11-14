@@ -15,13 +15,18 @@ import { useFeeds } from './hooks/useFeeds.js'
 const useStyles = makeStyles()((theme) => ({
     feedCard: {
         padding: theme.spacing(2, 2, 1),
+        background: theme.palette.maskColor.bottom,
     },
     statusBox: {
         display: 'flex',
+        background: theme.palette.maskColor.bottom,
         alignItems: 'center',
         justifyContent: 'center',
         height: 300,
         flexDirection: 'column',
+    },
+    loadingBox: {
+        background: theme.palette.maskColor.bottom,
     },
 }))
 
@@ -54,7 +59,7 @@ export const FeedsPage = memo(function FeedsPage({ address, tag }: FeedPageProps
 
     if ((loading && !feeds.length) || !feedOwner) {
         return (
-            <Box p={2} boxSizing="border-box">
+            <Box p={2} boxSizing="border-box" className={classes.loadingBox}>
                 {range(3).map((i) => (
                     <Box mb={2} key={i}>
                         <Skeleton animation="wave" variant="rectangular" height={125} />
