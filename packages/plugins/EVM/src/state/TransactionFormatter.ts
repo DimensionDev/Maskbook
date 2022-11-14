@@ -1,4 +1,4 @@
-import { compact } from 'lodash-unified'
+import { compact } from 'lodash-es'
 import * as ABICoder from 'web3-eth-abi'
 import type { Plugin } from '@masknet/plugin-infra'
 import {

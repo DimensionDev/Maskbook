@@ -601,7 +601,7 @@ export interface TransactionContext<ChainId, Parameter = string | undefined> {
         }
     }>
     /** nested children contexts */
-    children?: TransactionContext<ChainId, Parameter>[]
+    children?: Array<TransactionContext<ChainId, Parameter>>
 }
 
 export interface AddressName {
