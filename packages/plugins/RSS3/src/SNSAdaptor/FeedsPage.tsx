@@ -40,9 +40,11 @@ export const FeedsPage = memo(function FeedsPage({ address, tag }: FeedPageProps
     const { classes } = useStyles()
     const { Others } = useWeb3State()
 
-    const { feeds, loading, next } = useFeeds(address, tag)
+    const { feeds, loading: loadingFeeds, next } = useFeeds(address, tag)
 
-    const { value: name } = useReverseAddress(undefined, address)
+    const { value: name, loading: loadingENS } = useReverseAddress(undefined, address)
+
+    const loading = loadingFeeds || loadingENS
 
     const feedOwner = useMemo((): FeedOwnerOptions | undefined => {
         if (!address) return
@@ -57,7 +59,7 @@ export const FeedsPage = memo(function FeedsPage({ address, tag }: FeedPageProps
         }
     }, [address, name, Others?.formatDomainName])
 
-    if ((loading && !feeds.length) || !feedOwner) {
+    if (loading || !feedOwner) {
         return (
             <Box p={2} boxSizing="border-box" className={classes.loadingBox}>
                 {range(3).map((i) => (

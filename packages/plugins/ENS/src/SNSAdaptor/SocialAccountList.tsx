@@ -1,6 +1,7 @@
 import { useMenuConfig } from '@masknet/shared'
 import { useWindowScroll } from 'react-use'
 import { useEffect } from 'react'
+import { resolveNextIDPlatformLink } from '@masknet/web3-shared-base'
 import { Icons } from '@masknet/icons'
 import { Box, Typography, MenuItem, alpha } from '@mui/material'
 import { MoreHoriz as MoreHorizIcon } from '@mui/icons-material'
@@ -9,6 +10,7 @@ import type { BindingProof } from '@masknet/shared-base'
 import { useI18N } from '../locales/index.js'
 import { SocialTooltip } from './SocialTooltip.js'
 import { makeStyles } from '@masknet/theme'
+import { resolveNextIDPlatformIcon } from './utils.js'
 
 interface StyleProps {
     isMenuScroll?: boolean
@@ -71,15 +73,6 @@ const useStyles = makeStyles<StyleProps>()((theme, { isMenuScroll = false }) => 
                 backgroundClip: 'padding-box',
             },
         },
-        twitterIcon: {
-            height: 20,
-            width: 20,
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            backgroundColor: theme.palette.maskColor.dark,
-            borderRadius: 999,
-        },
         linkOutIcon: {
             cursor: 'pointer',
         },
@@ -87,23 +80,21 @@ const useStyles = makeStyles<StyleProps>()((theme, { isMenuScroll = false }) => 
 })
 
 interface SocialAccountListProps {
-    validNextIdTwitterBindings: BindingProof[]
+    nextIdBindings: BindingProof[]
 }
 
-export function SocialAccountList({ validNextIdTwitterBindings }: SocialAccountListProps) {
+export function SocialAccountList({ nextIdBindings }: SocialAccountListProps) {
     const t = useI18N()
-    const { classes, cx } = useStyles({ isMenuScroll: validNextIdTwitterBindings.length > 5 })
+    const { classes, cx } = useStyles({ isMenuScroll: nextIdBindings.length > 5 })
     const position = useWindowScroll()
     const [menu, openMenu, closeMenu] = useMenuConfig(
-        validNextIdTwitterBindings.map((x, i) => (
-            <SocialTooltip key={i}>
+        nextIdBindings.map((x, i) => (
+            <SocialTooltip key={i} platform={x.source}>
                 <MenuItem
                     className={classes.socialAccountListItem}
                     disabled={false}
-                    onClick={() => openWindow(`https://twitter.com/${x.identity}`)}>
-                    <div className={classes.twitterIcon}>
-                        <Icons.Twitter width={12} height={12} />
-                    </div>
+                    onClick={() => openWindow(resolveNextIDPlatformLink(x.platform, x.identity))}>
+                    {resolveNextIDPlatformIcon(x.platform)}
                     <Typography className={cx(classes.nextIdVerifiedTwitterName, classes.accountNameInList)}>
                         {x.identity}
                     </Typography>

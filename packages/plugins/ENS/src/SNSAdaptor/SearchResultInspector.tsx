@@ -1,7 +1,7 @@
 import { useContext, forwardRef, useImperativeHandle } from 'react'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { useCopyToClipboard } from 'react-use'
-import { SourceType } from '@masknet/web3-shared-base'
+import { SourceType, resolveNextIDPlatformLink } from '@masknet/web3-shared-base'
 import { useWeb3State } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useSnackbarCallback } from '@masknet/shared'
@@ -13,6 +13,7 @@ import { SocialTooltip } from './SocialTooltip.js'
 import { makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
 import { useI18N } from '../locales/index.js'
+import { resolveNextIDPlatformIcon } from './utils.js'
 
 interface StyleProps {
     isMenuScroll?: boolean
@@ -38,15 +39,7 @@ const useStyles = makeStyles<StyleProps>()((theme) => {
             fontSize: 14,
             lineHeight: '18px',
         },
-        twitterIcon: {
-            height: 20,
-            width: 20,
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            backgroundColor: theme.palette.maskColor.dark,
-            borderRadius: 999,
-        },
+
         reversedAddress: {
             display: 'flex',
             alignItems: 'center',
@@ -87,6 +80,9 @@ const useStyles = makeStyles<StyleProps>()((theme) => {
             display: 'flex',
             marginRight: 12,
             alignItems: 'center',
+            maxWidth: 134,
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
             height: 36,
             padding: theme.spacing(0, 1),
             background: alpha(theme.palette.common.white, 0.5),
@@ -108,16 +104,8 @@ export const SearchResultInspectorContent = forwardRef(function (
     const t = useI18N()
     const { classes, cx } = useStyles({})
     const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
-    const {
-        isLoading,
-        isError,
-        retry,
-        reversedAddress,
-        validNextIdTwitterBindings,
-        firstValidNextIdTwitterBinding,
-        domain,
-        tokenId,
-    } = useContext(ENSContext)
+    const { isLoading, isError, retry, reversedAddress, nextIdBindings, firstNextIdrBinding, domain, tokenId } =
+        useContext(ENSContext)
 
     useImperativeHandle(ref, () => ({ isLoading, reversedAddress, domain, isError, tokenId }), [
         isLoading,
@@ -168,20 +156,18 @@ export const SearchResultInspectorContent = forwardRef(function (
                         ) : null}
                     </div>
                 </section>
-                {firstValidNextIdTwitterBinding?.identity ? (
+                {firstNextIdrBinding?.identity ? (
                     <div className={classes.nextIdVerified}>
                         <section className={classes.bindingsWrapper}>
-                            {validNextIdTwitterBindings.map((x, i) => (
-                                <SocialTooltip key={i}>
+                            {nextIdBindings.map((x, i) => (
+                                <SocialTooltip key={i} platform={x.source}>
                                     <div className={classes.badge}>
                                         <Link
                                             target="_blank"
                                             rel="noopener noreferrer"
                                             className={classes.link}
-                                            href={`https://twitter.com/${x.identity}`}>
-                                            <div className={classes.twitterIcon}>
-                                                <Icons.Twitter width={12} height={12} />
-                                            </div>
+                                            href={resolveNextIDPlatformLink(x.platform, x.identity)}>
+                                            {resolveNextIDPlatformIcon(x.platform)}
                                             <Typography
                                                 className={cx(classes.nextIdVerifiedTwitterName, classes.rightSpace)}>
                                                 {x.identity}
@@ -193,9 +179,7 @@ export const SearchResultInspectorContent = forwardRef(function (
                             ))}
                         </section>
 
-                        {validNextIdTwitterBindings.length > 1 ? (
-                            <SocialAccountList validNextIdTwitterBindings={validNextIdTwitterBindings} />
-                        ) : null}
+                        {nextIdBindings.length > 1 ? <SocialAccountList nextIdBindings={nextIdBindings} /> : null}
                     </div>
                 ) : null}
             </Box>

@@ -1,17 +1,16 @@
 import { createContext, PropsWithChildren, useCallback, useMemo } from 'react'
 import { useAsync } from 'react-use'
-import { uniqBy } from 'lodash-es'
 import { NextIDProof } from '@masknet/web3-providers'
 import { useLookupAddress, useReverseAddress } from '@masknet/web3-hooks-base'
 import { SearchKeywordType } from '@masknet/web3-shared-base'
-import { BindingProof, NetworkPluginID, NextIDPlatform } from '@masknet/shared-base'
+import { BindingProof, NetworkPluginID } from '@masknet/shared-base'
 import { resolveNonFungibleTokenIdFromEnsDomain, ChainId } from '@masknet/web3-shared-evm'
 
 interface ENSContextProps {
     isLoading: boolean
-    firstValidNextIdTwitterBinding: BindingProof | undefined
-    restOfValidNextIdTwitterBindings: BindingProof[]
-    validNextIdTwitterBindings: BindingProof[]
+    firstNextIdrBinding: BindingProof | undefined
+    restOfNextIdBindings: BindingProof[]
+    nextIdBindings: BindingProof[]
     reversedAddress: string | undefined
     domain: string
     isError: boolean
@@ -21,9 +20,9 @@ interface ENSContextProps {
 
 export const ENSContext = createContext<ENSContextProps>({
     isLoading: true,
-    firstValidNextIdTwitterBinding: undefined,
-    restOfValidNextIdTwitterBindings: [],
-    validNextIdTwitterBindings: [],
+    firstNextIdrBinding: undefined,
+    restOfNextIdBindings: [],
+    nextIdBindings: [],
     reversedAddress: undefined,
     tokenId: undefined,
     domain: '',
@@ -70,23 +69,14 @@ export function ENSProvider({ children, keyword, keywordType }: PropsWithChildre
     }, [keywordType, keyword, _domain])
 
     const tokenId = resolveNonFungibleTokenIdFromEnsDomain(domain)
-    const { value: ids } = useAsync(
-        async () =>
-            reversedAddress
-                ? NextIDProof.queryExistedBindingByPlatform(NextIDPlatform.Ethereum, reversedAddress ?? '')
-                : [],
+
+    const { value: nextIdBindings = [] } = useAsync(
+        async () => (reversedAddress ? NextIDProof.queryProfilesByENS(domain) : []),
         [reversedAddress, keyword],
     )
-
-    const validNextIdTwitterBindings = uniqBy(
-        (ids ?? []).reduce<BindingProof[]>((acc, cur) => {
-            return acc.concat(cur.proofs.filter((proof) => proof.is_valid && proof.platform === NextIDPlatform.Twitter))
-        }, []),
-        (x) => x.identity,
-    ).sort((a, b) => Number(b.last_checked_at) - Number(a.last_checked_at))
-
-    const firstValidNextIdTwitterBinding = validNextIdTwitterBindings[0]
-    const restOfValidNextIdTwitterBindings = validNextIdTwitterBindings.slice(1)
+    console.log({ nextIdBindings })
+    const firstNextIdrBinding = nextIdBindings[0]
+    const restOfNextIdBindings = nextIdBindings.slice(1)
 
     return (
         <ENSContext.Provider
@@ -97,9 +87,9 @@ export function ENSProvider({ children, keyword, keywordType }: PropsWithChildre
                 retry,
                 tokenId,
                 domain,
-                validNextIdTwitterBindings,
-                firstValidNextIdTwitterBinding,
-                restOfValidNextIdTwitterBindings,
+                nextIdBindings,
+                firstNextIdrBinding,
+                restOfNextIdBindings,
             }}>
             {children}
         </ENSContext.Provider>
