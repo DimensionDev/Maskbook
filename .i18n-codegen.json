@@ -417,7 +417,7 @@
             "generator": {
                 "type": "i18next/react-hooks",
                 "hooks": "useI18N",
-                "namespace": "scam-warning",
+                "namespace": "com.maskbook.scam-warning",
                 "trans": "Translate",
                 "emitTS": true
             }
