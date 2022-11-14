@@ -94,7 +94,6 @@ const TokenMenuList: FC<TokenMenuListProps> = ({ options, type, value, onSelect 
                                 size={20}
                             />
                         ) : null}
-                        <Typography className={classes.symbol}>{x.coin.market_cap_rank}</Typography>
                         <Stack className={classes.itemText}>
                             <Typography
                                 fontSize={14}
