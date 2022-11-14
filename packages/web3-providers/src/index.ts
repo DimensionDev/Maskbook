@@ -122,5 +122,5 @@ export const ZerionGas = new ZerionGasAPI()
 // Fuse
 export const FuseTrending = new FuseTrendingAPI()
 
-// Smart Pay Bunlder
+// Smart Pay Bundler
 export const SmartPay = new SmartPayAPI()

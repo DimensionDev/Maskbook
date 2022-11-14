@@ -929,7 +929,7 @@ export interface Connection<
         initial?: Web3ConnectionOptions,
     ): Promise<string>
     /** Get all supported entry points */
-    supportedEntryPonits?: () => Promise<string[]>
+    supportedEntryPoints?: () => Promise<string[]>
     /** Call a operation */
     callUserOperation?: (operation: Operation, initial?: Web3ConnectionOptions) => Promise<string>
     /** Send a operation */
@@ -937,7 +937,7 @@ export interface Connection<
     /** Deploy a new SC account */
     createSmartContractAccount?: () => Promise<string>
     /** Change owner of SC account */
-    changeSmartContractOwner?: (owner: string, signautre: string) => Promise<void>
+    changeSmartContractOwner?: (owner: string, signature: string) => Promise<void>
     /** Sign a transaction */
     signTransaction(transaction: Transaction, initial?: Web3ConnectionOptions): Promise<TransactionSignature>
     /** Sign multiple transactions */
