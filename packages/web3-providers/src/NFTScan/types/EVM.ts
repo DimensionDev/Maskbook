@@ -172,6 +172,13 @@ export namespace EVM {
         platform: string
     }
 
+    export type CollectionTrendingRange = '1h' | '4h' | '12h' | '1d' | '3d' | '7d' | '30d' | '90d' | '1y' | 'all'
+    export interface CollectionTrendingRecord {
+        begin_timestamp: number
+        end_timestamp: number
+        average_price: number
+        volume: number
+    }
     export interface VolumeAndFloorRecord {
         /** timestamp */
         time: number
