@@ -171,7 +171,14 @@ export function CollectionList({ socialAccount, persona, profile, gridProps = EM
             </Box>
         )
 
-    if (!allCollectibles.length && error && account) return <RetryHint retry={nextPage} />
+    if (!allCollectibles.length && error && account)
+        return (
+            <Box className={classes.container}>
+                <Box mt="200px" color={(theme) => theme.palette.maskColor.main}>
+                    <RetryHint retry={nextPage} />
+                </Box>
+            </Box>
+        )
 
     if ((done && !allCollectibles.length) || !account || isHiddenAddress)
         return (
