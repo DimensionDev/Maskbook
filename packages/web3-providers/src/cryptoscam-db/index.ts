@@ -29,6 +29,8 @@ export class CryptoScamDBAPI implements ScamWarningAPI.Provider {
 
             if (!result) return
 
+            if (!url.pathname || url.pathname === '/') return result
+
             if (url.pathname.toLowerCase() === new URL(result.url).pathname.toLowerCase()) {
                 return result
             }
