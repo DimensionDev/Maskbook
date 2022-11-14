@@ -20,6 +20,8 @@ function getStyleProps() {
     const EMPTY_STYLE = {} as CSSStyleDeclaration
     const eleTab = searchProfileTabSelector().evaluate()?.querySelector<Element>('div > div')
     const style = eleTab ? window.getComputedStyle(eleTab) : EMPTY_STYLE
+    const paddingEle = searchProfileTabSelector().evaluate()
+    const paddingCss = paddingEle ? window.getComputedStyle(paddingEle) : EMPTY_STYLE
     const eleNewTweetButton = searchNewTweetButtonSelector().evaluate()
     const newTweetButtonColorStyle = eleNewTweetButton ? window.getComputedStyle(eleNewTweetButton) : EMPTY_STYLE
     const eleBackButton = searchAppBarBackSelector().evaluate()
@@ -30,7 +32,7 @@ function getStyleProps() {
         font: style.font,
         fontSize: style.fontSize,
         padding: style.paddingBottom,
-        paddingX: style.paddingLeft || '16px',
+        paddingX: paddingCss.paddingLeft || '16px',
         height: style.height || '53px',
         hover: backButtonColorStyle.color,
         line: newTweetButtonColorStyle.backgroundColor,
