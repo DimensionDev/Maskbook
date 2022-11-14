@@ -44,6 +44,7 @@ const useStyles = makeStyles<{
         root: props.isPopper
             ? {
                   width: 598,
+                  borderRadius: theme.spacing(2),
                   boxShadow:
                       theme.palette.mode === 'dark'
                           ? 'rgba(255, 255, 255, 0.2) 0 0 15px, rgba(255, 255, 255, 0.15) 0 0 3px 1px'
