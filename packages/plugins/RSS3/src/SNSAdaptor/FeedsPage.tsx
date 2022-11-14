@@ -28,6 +28,9 @@ const useStyles = makeStyles()((theme) => ({
     loadingBox: {
         background: theme.palette.maskColor.bottom,
     },
+    elementAnchor: {
+        background: theme.palette.maskColor.bottom,
+    },
 }))
 
 export interface FeedPageProps {
@@ -59,7 +62,7 @@ export const FeedsPage = memo(function FeedsPage({ address, tag }: FeedPageProps
         }
     }, [address, name, Others?.formatDomainName])
 
-    if (loading || !feedOwner) {
+    if ((loading && !feeds.length) || !feedOwner) {
         return (
             <Box p={2} boxSizing="border-box" className={classes.loadingBox}>
                 {range(3).map((i) => (
@@ -88,7 +91,9 @@ export const FeedsPage = memo(function FeedsPage({ address, tag }: FeedPageProps
                 {feeds.map((feed, index) => (
                     <FeedCard key={index} className={classes.feedCard} feed={feed} />
                 ))}
-                <ElementAnchor callback={next}>{loading ? <LoadingBase /> : null}</ElementAnchor>
+                <div className={classes.elementAnchor}>
+                    <ElementAnchor callback={next}>{loading ? <LoadingBase /> : null}</ElementAnchor>
+                </div>
             </FeedDetailsProvider>
         </FeedOwnerContext.Provider>
     )

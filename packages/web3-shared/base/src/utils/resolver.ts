@@ -255,8 +255,8 @@ export const resolveNextID_NetworkPluginID = createLookupTableResolver<NextIDPla
         [NextIDPlatform.REDDIT]: undefined,
         [NextIDPlatform.SYBIL]: undefined,
     },
-    (platform) => {
-        throw new Error(`Unknown next id platform: ${platform}`)
+    () => {
+        return undefined
     },
 )
 
@@ -273,8 +273,8 @@ export const resolveNextIDPlatformName = createLookupTableResolver<NextIDPlatfor
         [NextIDPlatform.REDDIT]: 'Reddit',
         [NextIDPlatform.SYBIL]: 'Sybil',
     },
-    (platform) => {
-        throw new Error(`Unknown next id platform: ${platform}`)
+    () => {
+        return ''
     },
 )
 

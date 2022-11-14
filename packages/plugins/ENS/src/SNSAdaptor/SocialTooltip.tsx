@@ -15,6 +15,9 @@ const useStyles = makeStyles<StyleProps>()((theme, { isMenuScroll = false }) => 
             backgroundColor: theme.palette.maskColor.publicMain,
             color: theme.palette.maskColor.white,
         },
+        arrow: {
+            color: theme.palette.maskColor.publicMain,
+        },
     }
 })
 export function SocialTooltip({
@@ -25,7 +28,7 @@ export function SocialTooltip({
     const t = useSharedI18N()
     return (
         <ShadowRootTooltip
-            classes={{ tooltip: classes.tooltip }}
+            classes={{ tooltip: classes.tooltip, arrow: classes.arrow }}
             arrow
             placement="top"
             title={
