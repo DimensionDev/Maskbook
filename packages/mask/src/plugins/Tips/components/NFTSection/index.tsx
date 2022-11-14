@@ -1,7 +1,6 @@
 import { FC, HTMLProps, useCallback, useMemo } from 'react'
 import { useBoolean } from 'react-use'
-import classnames from 'classnames'
-import { uniqWith } from 'lodash-unified'
+import { uniqWith } from 'lodash-es'
 import { Icons } from '@masknet/icons'
 import { useChainContext, useNonFungibleAssets, useNetworkContext } from '@masknet/web3-hooks-base'
 import { ElementAnchor, RetryHint } from '@masknet/shared'
@@ -87,7 +86,7 @@ export const NFTSection: FC<Props> = ({ className, onEmpty, ...rest }) => {
         setNonFungibleTokenId,
         setNonFungibleTokenAddress,
     } = useTip()
-    const { classes, theme } = useStyles()
+    const { classes, theme, cx } = useStyles()
     const t = useI18N()
     const [addTokenDialogIsOpen, openAddTokenDialog] = useBoolean(false)
     const selectedKey = tokenAddress || tokenId ? `${tokenAddress}_${tokenId}` : undefined
@@ -121,7 +120,7 @@ export const NFTSection: FC<Props> = ({ className, onEmpty, ...rest }) => {
     }, [])
 
     return (
-        <div className={classnames(classes.root, className)} {...rest}>
+        <div className={cx(classes.root, className)} {...rest}>
             <FormControl className={classes.header}>
                 {isEvm ? (
                     <Typography className={classes.addButton} onClick={() => openAddTokenDialog(true)}>

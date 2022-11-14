@@ -1,6 +1,7 @@
 import { assertNotEnvironment, Environment, ValueRef } from '@dimensiondev/holoflows-kit'
 import { delay, waitDocumentReadyState } from '@masknet/kit'
 import { SocialNetworkEnum } from '@masknet/encryption'
+import type { SocialNetworkUI } from '@masknet/types'
 import { IdentityResolved, Plugin, startPluginSNSAdaptor } from '@masknet/plugin-infra/content-script'
 import { sharedUIComponentOverwrite, sharedUINetworkIdentifier } from '@masknet/shared'
 import {
@@ -21,7 +22,6 @@ import { MaskMessages, setupReactShadowRootEnvironment } from '../utils/index.js
 import '../utils/debug/general.js'
 import { RestPartOfPluginUIContextShared } from '../utils/plugin-context-shared-ui.js'
 import { definedSocialNetworkUIs } from './define.js'
-import type { SocialNetworkUI } from './types.js'
 
 const definedSocialNetworkUIsResolved = new Map<string, SocialNetworkUI.Definition>()
 export let activatedSocialNetworkUI: SocialNetworkUI.Definition = {
@@ -121,9 +121,7 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
     signal.addEventListener('abort', queryRemoteI18NBundle(Services.Helper.queryRemoteI18NBundle))
 
     const allPersonaSub = createSubscriptionFromAsync(
-        () => {
-            return Services.Identity.queryOwnedPersonaInformation(true)
-        },
+        () => Services.Identity.queryOwnedPersonaInformation(true),
         [],
         MaskMessages.events.currentPersonaIdentifier.on,
         signal,
@@ -150,7 +148,9 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
                     lastRecognizedProfile: lastRecognizedSub,
                     currentVisitingProfile: currentVisitingSub,
                     allPersonas: allPersonaSub,
+                    getNextIDPlatform: () => activatedSocialNetworkUI.configuration.nextIDConfig?.platform,
                     getPersonaAvatar: Services.Identity.getPersonaAvatar,
+                    getSocialIdentity: Services.Identity.querySocialIdentity,
                     ownProofChanged: MaskMessages.events.ownProofChanged,
                     setMinimalMode: Services.Settings.setPluginMinimalModeEnabled,
                 }

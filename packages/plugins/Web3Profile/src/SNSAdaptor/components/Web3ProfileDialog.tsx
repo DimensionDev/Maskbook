@@ -1,12 +1,12 @@
 import { Icons } from '@masknet/icons'
 import { InjectedDialog, PersonaAction, WalletTypes } from '@masknet/shared'
 import { CrossIsolationMessages, EMPTY_LIST, NetworkPluginID, NextIDPlatform, PopupRoutes } from '@masknet/shared-base'
-import { makeStyles, useStylesExtends } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { NextIDProof } from '@masknet/web3-providers'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { DialogActions, DialogContent } from '@mui/material'
-import { sortBy } from 'lodash-unified'
+import { sortBy } from 'lodash-es'
 import { useEffect, useMemo, useState } from 'react'
 import { useAsyncRetry } from 'react-use'
 import { SceneMap, Scene } from '../../constants.js'
@@ -40,7 +40,7 @@ const useStyles = makeStyles()((theme) => ({
 
 export function Web3ProfileDialog() {
     const t = useI18N()
-    const classes = useStylesExtends(useStyles(), {})
+    const { classes } = useStyles()
     const [scene, setScene] = useState<Scene>()
     const [accountId, setAccountId] = useState<string>()
 

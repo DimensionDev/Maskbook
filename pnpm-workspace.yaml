@@ -1,10 +1,9 @@
 packages:
   - 'packages/*'
+  - 'packages/typed-message/base'
+  - 'packages/typed-message/react'
   - 'packages/plugins/*'
   - 'packages/polyfills/types'
-  - 'packages/web3-constants'
-  - 'packages/web3-contracts'
-  - 'packages/web3-helpers'
   - 'packages/web3-hooks/base'
   - 'packages/web3-hooks/evm'
   - 'packages/web3-providers'
@@ -12,4 +11,3 @@ packages:
   - 'packages/web3-shared/evm'
   - 'packages/web3-shared/flow'
   - 'packages/web3-shared/solana'
-  - 'packages/web3-state'

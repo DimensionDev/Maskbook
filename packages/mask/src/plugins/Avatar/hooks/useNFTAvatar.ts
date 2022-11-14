@@ -1,4 +1,4 @@
-import type { AsyncState } from 'react-use/lib/useAsyncFn'
+import type { AsyncState } from 'react-use/lib/useAsyncFn.js'
 import { activatedSocialNetworkUI } from '../../../social-network/index.js'
 import type { AvatarMetaDB } from '../types.js'
 import type { RSS3_KEY_SNS } from '../constants.js'

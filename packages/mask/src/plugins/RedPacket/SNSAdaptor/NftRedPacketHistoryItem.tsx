@@ -1,6 +1,5 @@
 import { FC, memo, MouseEventHandler, useCallback } from 'react'
-import classNames from 'classnames'
-import { fill } from 'lodash-unified'
+import { fill } from 'lodash-es'
 import { TokenIcon } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles, ActionButton } from '@masknet/theme'
@@ -131,7 +130,7 @@ export const NftRedPacketHistoryItem: FC<NftRedPacketHistoryItemProps> = memo(
     ({ history, onSend, onShowPopover, onHidePopover }) => {
         const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
         const t = useI18N()
-        const { classes } = useStyles()
+        const { classes, cx } = useStyles()
         const {
             computed: { canSend, isPasswordValid },
         } = useNftAvailabilityComputed(account, history.payload)
@@ -180,10 +179,10 @@ export const NftRedPacketHistoryItem: FC<NftRedPacketHistoryItemProps> = memo(
                             <div>
                                 <Typography
                                     variant="body1"
-                                    className={classNames(classes.title, classes.message, classes.ellipsis)}>
+                                    className={cx(classes.title, classes.message, classes.ellipsis)}>
                                     {history.message === '' ? t.best_wishes() : history.message}
                                 </Typography>
-                                <Typography variant="body1" className={classNames(classes.info, classes.message)}>
+                                <Typography variant="body1" className={cx(classes.info, classes.message)}>
                                     {t.history_duration({
                                         startTime: dateTimeFormat(new Date(history.creation_time)),
                                         endTime: dateTimeFormat(
@@ -198,10 +197,7 @@ export const NftRedPacketHistoryItem: FC<NftRedPacketHistoryItemProps> = memo(
                                     onMouseEnter={handleMouseEnter}
                                     onMouseLeave={onHidePopover}
                                     onClick={handleSend}
-                                    className={classNames(
-                                        classes.actionButton,
-                                        isPasswordValid ? '' : classes.disabledButton,
-                                    )}
+                                    className={cx(classes.actionButton, isPasswordValid ? '' : classes.disabledButton)}
                                     size="large">
                                     {t.send()}
                                 </ActionButton>

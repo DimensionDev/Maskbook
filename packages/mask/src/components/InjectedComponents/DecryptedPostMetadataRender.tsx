@@ -1,5 +1,5 @@
 import { createInjectHooksRenderer, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
-import type { MetadataRenderProps } from '@masknet/typed-message/dom'
+import type { MetadataRenderProps } from '@masknet/typed-message-react'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import {
     PossiblePluginSuggestionUI,

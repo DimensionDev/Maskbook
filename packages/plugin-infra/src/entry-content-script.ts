@@ -15,11 +15,12 @@ export {
     type PostContextCreation,
     type PostContextSNSActions,
     type PostInfo,
+    PostInfoContext,
     PostInfoProvider,
-    usePostInfo,
     usePostInfoDetails,
-} from './PostContext.js'
-export { CompositionContext, useCompositionContext } from './CompositionContext.js'
+} from './contexts/PostContext.js'
+export { CompositionContext, useCompositionContext } from './contexts/CompositionContext.js'
+export { SNSAdaptorContext, useSNSAdaptorContext } from './contexts/SNSAdaptorContext.js'
 
 // shared components
 export { Widget, type WidgetProps } from './components/Widget.js'

@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+    <g clip-path="url(#DecentralizedSearch_svg__a)">
+        <rect width="24" height="24" fill="url(#DecentralizedSearch_svg__b)" rx="6"/>
+        <path fill="#fff" fill-opacity=".8" d="M17.775 18.32a.772.772 0 0 1-1.088 0l-1.606-1.606c-.3-.3-.3-.79 0-1.089a.772.772 0 0 1 1.088 0l1.606 1.606a.766.766 0 0 1 0 1.088Z"/>
+        <path fill="#fff" fill-opacity=".7" d="M5 11.531a6.531 6.531 0 1 0 13.062 0 6.531 6.531 0 0 0-13.062 0Z"/>
+        <path fill="#fff" fill-opacity=".6" d="M6.36 11.531a5.17 5.17 0 1 0 10.342 0 5.17 5.17 0 0 0-10.342 0Z"/>
+    </g>
+    <defs>
+        <linearGradient id="DecentralizedSearch_svg__b" x1="12" x2="12" y1="0" y2="24.5" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#00D3AE"/>
+            <stop offset="1" stop-color="#38F9D7"/>
+        </linearGradient>
+        <clipPath id="DecentralizedSearch_svg__a">
+            <rect width="24" height="24" fill="#fff" rx="6"/>
+        </clipPath>
+    </defs>
+</svg>

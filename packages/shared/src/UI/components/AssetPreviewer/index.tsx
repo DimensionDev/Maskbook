@@ -31,7 +31,7 @@ const ASSET_PLAYER_FALLBACK_LIGHT = new URL('../Image/mask-light.png', import.me
 export function AssetPreviewer(props: AssetPreviewerProps) {
     const { fallbackImage, url, icon } = props
 
-    const classes = useStylesExtends(useStyles(), props)
+    const { classes } = useStylesExtends(useStyles(), props)
     const theme = useTheme()
 
     return (

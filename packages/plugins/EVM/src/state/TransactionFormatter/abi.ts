@@ -1,6 +1,6 @@
 import type { AbiItem } from 'web3-utils'
 import * as ABICoder from 'web3-eth-abi'
-import { uniqBy } from 'lodash-unified'
+import { uniqBy } from 'lodash-es'
 import type { TransactionMethodABI } from './types.js'
 
 // built-in abis

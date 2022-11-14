@@ -1,6 +1,6 @@
 import { useAsyncRetry } from 'react-use'
-import type { Qualification } from '@masknet/web3-contracts/types/Qualification'
-import type { Qualification2 } from '@masknet/web3-contracts/types/Qualification2'
+import type { Qualification } from '@masknet/web3-contracts/types/Qualification.js'
+import type { Qualification2 } from '@masknet/web3-contracts/types/Qualification2.js'
 import { useQualificationContract } from './useQualificationContract.js'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import type { NetworkPluginID } from '@masknet/shared-base'

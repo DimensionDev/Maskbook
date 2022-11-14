@@ -135,7 +135,6 @@
     "plugin_wallet_connect_tips": "Please switch to this network in the mobile\napplication wallet you are connected to.",
     "plugin_wallet_not_available_on": "Not available on {{network}} Network.",
     "plugin_wallet_connect_network": "Change to {{network}} wallet",
-    "plugin_wallet_connect_network_under_going": "Change to {{network}} wallet",
     "plugin_wallet_token_infinite_unlock_tips": "You must give the {{provider}} smart contract permission to use your {{symbol}}. You only have to do this once per token.",
     "plugin_wallet_token_infinite_unlock": "Unlock {{symbol}}",
     "plugin_wallet_select_a_nft_contract": "Select an NFT Contract",

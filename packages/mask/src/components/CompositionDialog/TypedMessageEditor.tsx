@@ -5,7 +5,7 @@ import {
     TypedMessage,
     SerializableTypedMessages,
 } from '@masknet/typed-message'
-import { editTypedMessageMeta } from '@masknet/typed-message/dom'
+import { editTypedMessageMeta } from '@masknet/typed-message-react'
 import { makeStyles } from '@masknet/theme'
 import { InputBase, Alert, Button, inputBaseClasses } from '@mui/material'
 import { useCallback, useImperativeHandle, useState, useRef, forwardRef, memo, useMemo } from 'react'
@@ -73,7 +73,7 @@ export interface TypedMessageEditorRef {
 const emptyMessage = makeTypedMessageText('')
 // This is an **uncontrolled** component. (performance consideration, because it will be re-rendered very frequently).
 export const TypedMessageEditor = memo(
-    forwardRef<TypedMessageEditorRef, TypedMessageEditorProps>((props, ref) => {
+    forwardRef<TypedMessageEditorRef, TypedMessageEditorProps>(function TypedMessageEditor(props, ref) {
         const { onChange, readonly } = props
         const { classes, cx } = useStyles()
         const { t } = useI18N()

@@ -1,6 +1,6 @@
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useUpdateEffect } from 'react-use'
-import BigNumber from 'bignumber.js'
+import { BigNumber } from 'bignumber.js'
 import { Icons } from '@masknet/icons'
 import { useGasLimit, useTokenTransferCallback } from '@masknet/web3-hooks-evm'
 import {
@@ -28,7 +28,7 @@ import {
     NetworkType,
     isNativeTokenAddress,
 } from '@masknet/web3-shared-evm'
-import TuneIcon from '@mui/icons-material/Tune'
+import { Tune as TuneIcon } from '@mui/icons-material'
 import { Box, Button, IconButton, Link, Popover, Stack, Typography } from '@mui/material'
 import { useDashboardI18N } from '../../../../locales/index.js'
 import { useGasConfig } from '../../hooks/useGasConfig.js'

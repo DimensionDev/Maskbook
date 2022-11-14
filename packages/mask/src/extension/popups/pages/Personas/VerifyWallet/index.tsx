@@ -160,6 +160,14 @@ const VerifyWallet = memo(() => {
         }
     }, [signature, walletSignState, walletSign, personaSilentSign, signed])
 
+    // disconnect when router changes
+    useEffect(
+        () => () => {
+            if (!connection) return
+            connection.disconnect()
+        },
+        [connection],
+    )
     useTitle(t('popups_add_wallet'))
 
     if (!currentPersona || !wallet) return null

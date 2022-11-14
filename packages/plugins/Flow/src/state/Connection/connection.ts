@@ -1,5 +1,5 @@
 import getUnixTime from 'date-fns/getUnixTime'
-import { first } from 'lodash-unified'
+import { first } from 'lodash-es'
 import { unreachable } from '@masknet/kit'
 import type { BlockHeaderObject, BlockObject, MutateOptions, QueryOptions } from '@blocto/fcl'
 import {

@@ -1,5 +1,4 @@
 import { useRef, useState } from 'react'
-import classNames from 'classnames'
 import { useScrollBottomEvent } from '@masknet/shared-base-ui'
 import { makeStyles, LoadingBase } from '@masknet/theme'
 import type { NetworkPluginID } from '@masknet/shared-base'
@@ -89,7 +88,7 @@ interface Props {
 }
 
 export function NftRedPacketHistoryList({ onSend }: Props) {
-    const { classes } = useStyles()
+    const { classes, cx } = useStyles()
     const t = useI18N()
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { histories, fetchMore, loading } = useNftRedPacketHistory(account, chainId)
@@ -158,9 +157,7 @@ export function NftRedPacketHistoryList({ onSend }: Props) {
                     return (
                         <div className={classes.popperContent}>
                             <Typography className={classes.popperText}>{popperText}</Typography>
-                            <div
-                                className={classNames(classes.arrow, placement === 'bottom' ? classes.atBottom : '')}
-                            />
+                            <div className={cx(classes.arrow, placement === 'bottom' ? classes.atBottom : '')} />
                         </div>
                     )
                 }}

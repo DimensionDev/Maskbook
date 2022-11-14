@@ -1,6 +1,6 @@
 import { useAsync } from 'react-use'
 import { unreachable } from '@masknet/kit'
-import type { AsyncState } from 'react-use/lib/useAsyncFn'
+import type { AsyncState } from 'react-use/lib/useAsyncFn.js'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { SchemaType } from '@masknet/web3-shared-evm'
 import { useChainContext, useWeb3 } from '@masknet/web3-hooks-base'

@@ -14,7 +14,7 @@ export { ciBuild, extensionWatch } from './extension/index.js'
 export { buildNetlify } from './netlify/index.js'
 
 // Tools
-export { clean, help, createPackageInteractive, fixLockfile, syncDevelop } from './commands/index.js'
+export { clean, help, createPackageInteractive, fixLockfile, syncDevelop, changesetRelease } from './commands/index.js'
 export { syncLanguages } from './locale-kit-next/index.js'
 export { reorderSpellcheck } from './spellcheck/index.js'
 

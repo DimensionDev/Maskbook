@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
-import useAsyncRetry from 'react-use/lib/useAsyncRetry'
-import { noop } from 'lodash-unified'
+import { useAsyncRetry } from 'react-use'
+import { noop } from 'lodash-es'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import type { NetworkPluginID } from '@masknet/shared-base'

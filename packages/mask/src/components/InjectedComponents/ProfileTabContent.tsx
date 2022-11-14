@@ -1,14 +1,13 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useUpdateEffect } from 'react-use'
-import { first } from 'lodash-unified'
+import { first } from 'lodash-es'
 import { Icons } from '@masknet/icons'
 import {
-    createInjectHooksRenderer,
     useActivatedPluginsSNSAdaptor,
     useIsMinimalMode,
     usePluginI18NField,
 } from '@masknet/plugin-infra/content-script'
-import { useAvailablePlugins } from '@masknet/plugin-infra'
+import { useAvailablePlugins, getProfileTabContent } from '@masknet/plugin-infra'
 import {
     AccountIcon,
     AddressItem,
@@ -30,13 +29,6 @@ import { ConnectPersonaBoundary } from '../shared/ConnectPersonaBoundary.js'
 import { WalletSettingEntry } from './ProfileTab/WalletSettingEntry.js'
 import { isFacebook } from '../../social-network-adaptor/facebook.com/base.js'
 import { useGrantPermissions, usePluginHostPermissionCheck } from '../DataSource/usePluginHostPermission.js'
-
-function getTabContent(tabId?: string) {
-    return createInjectHooksRenderer(useActivatedPluginsSNSAdaptor.visibility.useAnyMode, (x) => {
-        const tab = x.ProfileTabs?.find((x) => x.ID === tabId)
-        return tab?.UI?.TabContent
-    })
-}
 
 const MENU_ITEM_HEIGHT = 40
 const MENU_LIST_PADDING = 8
@@ -135,7 +127,7 @@ const useStyles = makeStyles()((theme) => ({
 export interface ProfileTabContentProps extends withClasses<'text' | 'button' | 'root'> {}
 
 export function ProfileTabContent(props: ProfileTabContentProps) {
-    const classes = useStylesExtends(useStyles(), props)
+    const { classes } = useStylesExtends(useStyles(), props)
 
     const { t } = useI18N()
     const translate = usePluginI18NField()
@@ -239,8 +231,8 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
 
     const componentTabId = showNextID ? `${PluginID.NextID}_tabContent` : currentTab
 
-    const component = useMemo(() => {
-        const Component = getTabContent(componentTabId)
+    const contentComponent = useMemo(() => {
+        const Component = getProfileTabContent(componentTabId)
         if (!Component) return null
 
         return <Component identity={currentVisitingSocialIdentity} socialAccount={selectedSocialAccount} />
@@ -274,7 +266,6 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
 
     useEffect(() => {
         const listener = () => setMenuOpen(false)
-
         window.addEventListener('scroll', listener, false)
 
         return () => {
@@ -310,7 +301,12 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         )
     }
 
-    if (!currentVisitingUserId || loadingSocialAccounts || loadingCurrentVisitingSocialIdentity || loadingPersonaStatus)
+    if (
+        (!currentVisitingUserId && !loadCurrentVisitingSocialIdentityError) ||
+        loadingSocialAccounts ||
+        loadingCurrentVisitingSocialIdentity ||
+        loadingPersonaStatus
+    )
         return (
             <ThemeProvider theme={MaskLightTheme}>
                 <div className={classes.root}>
@@ -495,7 +491,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
                     </div>
                 )}
             </div>
-            <div className={classes.content}>{component}</div>
+            <div className={classes.content}>{contentComponent}</div>
         </div>
     )
 }

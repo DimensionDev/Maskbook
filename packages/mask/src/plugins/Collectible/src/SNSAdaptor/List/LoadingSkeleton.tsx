@@ -1,5 +1,5 @@
 import type { FC, HTMLProps } from 'react'
-import { range } from 'lodash-unified'
+import { range } from 'lodash-es'
 import { CollectibleItemSkeleton } from './CollectibleItem.js'
 
 export interface LoadingSkeletonProps extends HTMLProps<HTMLDivElement> {}

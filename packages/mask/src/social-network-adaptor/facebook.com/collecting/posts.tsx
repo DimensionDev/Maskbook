@@ -1,5 +1,5 @@
+import type { SocialNetworkUI as Next } from '@masknet/types'
 import { DOMProxy, LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import type { SocialNetworkUI as Next } from '../../../social-network/types.js'
 import { creator } from '../../../social-network/utils.js'
 import { isMobileFacebook } from '../utils/isMobile.js'
 import { getProfileIdentifierAtFacebook } from '../utils/getProfileIdentifier.js'
@@ -14,7 +14,7 @@ import { startWatch } from '../../../utils/watcher.js'
 import { facebookShared } from '../shared.js'
 import { createRefsForCreatePostContext } from '../../../social-network/utils/create-post-context.js'
 import { collectNodeText } from '../../../utils/index.js'
-import { None, Some, Option } from 'ts-results'
+import { None, Some, Option } from 'ts-results-es'
 
 const posts = new LiveSelector().querySelectorAll<HTMLDivElement>(
     isMobileFacebook ? '.story_body_container > div' : '[role=article] div[dir="auto"] > [id] > div > div',

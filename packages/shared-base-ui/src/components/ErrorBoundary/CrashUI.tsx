@@ -1,8 +1,7 @@
 import { useTimeoutFn } from 'react-use'
 import { useMemo, useState, useContext } from 'react'
 import { Box, Button, IconButton, Typography, Alert, AlertTitle, styled } from '@mui/material'
-import ExpandLess from '@mui/icons-material/ExpandLess'
-import ExpandMore from '@mui/icons-material/ExpandMore'
+import { ExpandLess, ExpandMore } from '@mui/icons-material'
 import { BuildInfo, ErrorBoundaryError } from './context.js'
 import { useSharedBaseI18N } from '../../locales/index.js'
 

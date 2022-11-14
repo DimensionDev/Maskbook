@@ -1,6 +1,5 @@
 import { useState, useLayoutEffect, useRef, useCallback } from 'react'
-import classNames from 'classnames'
-import { flatten, uniq } from 'lodash-unified'
+import { flatten, uniq } from 'lodash-es'
 import formatDateTime from 'date-fns/format'
 import { useChainContext, useFungibleToken, useNetworkContext, useFungibleTokens } from '@masknet/web3-hooks-base'
 import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
@@ -221,7 +220,7 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
             },
         })
     }, [claimCallback, openShareTxDialog, retry])
-    const { classes } = useStyles({
+    const { classes, cx } = useStyles({
         shortITOwrapper: !swappedTokens || swappedTokens.length === 0,
     })
     const [initLoading, setInitLoading] = useState(true)
@@ -275,7 +274,7 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
                                 <WalletConnectedBoundary>
                                     <ActionButton
                                         fullWidth
-                                        className={classNames(classes.actionButton)}
+                                        className={cx(classes.actionButton)}
                                         loading={isClaiming}
                                         disabled={claimablePids!.length === 0}
                                         onClick={claim}>
@@ -319,15 +318,15 @@ interface SwappedTokensProps {
 function SwappedToken({ i, swappedToken, chainId }: SwappedTokensProps) {
     const { t } = useI18N()
     const theme = useTheme()
-    const { classes } = useStyles({ shortITOwrapper: false })
-    const { value: _token } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, swappedToken.token.address, {
+    const { classes, cx } = useStyles({ shortITOwrapper: false })
+    const { value: _token } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, swappedToken.token.address, undefined, {
         chainId,
     })
     const token = _token ?? swappedToken.token
     return (
         <ListItem key={i} className={classes.tokenCard}>
             <div
-                className={classNames(
+                className={cx(
                     classes.cardHeader,
                     swappedToken.isClaimable ? classes.cardHeaderClaimable : classes.cardHeaderLocked,
                 )}>
@@ -359,7 +358,7 @@ function SwappedToken({ i, swappedToken, chainId }: SwappedTokensProps) {
                 )}
             </div>
             <Typography
-                className={classNames(
+                className={cx(
                     classes.cardContent,
                     swappedToken.isClaimable ? classes.cardContentClaimable : classes.cardContentLocked,
                 )}>

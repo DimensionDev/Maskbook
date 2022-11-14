@@ -3,7 +3,7 @@ import type { TabID } from 'react-devtools-inline/commons.js'
 import { flushSync } from 'react-dom'
 import { createRoot } from 'react-dom/client'
 import { DevtoolsMessage, createReactDevToolsWall, GLOBAL_ID_KEY } from '../shared.js'
-import { initialize, createBridge, DevtoolsProps, createStore } from 'react-devtools-inline/frontend'
+import { initialize, createBridge, DevtoolsProps, createStore } from 'react-devtools-inline/frontend.js'
 import type { ComponentType } from 'react'
 import { attachListener, createPanel, devtoolsEval } from './utils.js'
 
@@ -43,7 +43,6 @@ export async function startReactDevTools(signal: AbortSignal) {
     const wall = createReactDevToolsWall(id)
     const bridge = createBridge(null!, wall)
     const store = createStore(bridge, {
-        // @ts-expect-error
         isProfiling: false,
         supportsReloadAndProfile: false,
         supportsProfiling: true,
@@ -53,8 +52,6 @@ export async function startReactDevTools(signal: AbortSignal) {
     })
 
     // Note: since we manually passed bridge and wall, the first argument is unused in the implementation
-    // Note: DT type is wrong
-    // @ts-expect-error
     const ReactDevTools: ComponentType<Partial<DevtoolsProps>> = initialize(null!, { bridge, store })
     DevtoolsMessage.events.helloFromBackend.on(() => DevtoolsMessage.events.activateBackend.sendByBroadcast(id), {
         signal,
@@ -110,7 +107,6 @@ export async function startReactDevTools(signal: AbortSignal) {
                 viewAttributeSourceFunction={viewAttributeSourceFunction}
                 viewElementSourceFunction={viewElementSourceFunction}
                 overrideTab={tab}
-                // @ts-expect-error Following props are not in the DT types
                 viewUrlSourceFunction={
                     'openResource' in browser.devtools.panels
                         ? (url: string, line: number, col: number) =>

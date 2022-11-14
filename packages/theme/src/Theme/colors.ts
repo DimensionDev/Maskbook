@@ -84,7 +84,7 @@ export const MaskColors = {
             primaryMain: '#494949',
             secondaryMain: '#232323',
             thirdMain: '#1e1e1e',
-            bg: '#1C1C1C',
+            bg: 'rgba(255, 255, 255, 0.08)',
             bottom: '#030303',
             secondaryBottom: 'rgba(0, 0, 0, 0.8)',
             input: '#26292C',

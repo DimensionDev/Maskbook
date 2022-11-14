@@ -21,7 +21,7 @@ export function EthereumERC721TokenApprovedBoundary(props: EthereumERC712TokenAp
     const { owner, contractDetailed, operator, children, validationMessage: _validationMessage } = props
     const t = useSharedI18N()
     const { Others } = useWeb3State()
-    const classes = useStylesExtends(useStyles(), props)
+    const { classes } = useStylesExtends(useStyles(), props)
     const { value, loading, retry } = useERC721ContractIsApproveForAll(contractDetailed?.address, owner, operator)
     const [approveState, approveCallback] = useERC721ContractSetApproveForAllCallback(
         contractDetailed?.address,

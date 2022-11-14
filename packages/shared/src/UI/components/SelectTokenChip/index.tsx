@@ -1,9 +1,7 @@
-import classNames from 'classnames'
-import { noop } from 'lodash-unified'
+import { noop } from 'lodash-es'
 import { Chip, ChipProps } from '@mui/material'
 import { LoadingBase, makeStyles, useStylesExtends } from '@masknet/theme'
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
-import ErrorIcon from '@mui/icons-material/Error'
+import { ExpandMore as ExpandMoreIcon, Error as ErrorIcon } from '@mui/icons-material'
 import { useSharedI18N } from '../../../locales/index.js'
 import { TokenIcon } from '../TokenIcon/index.js'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -45,11 +43,11 @@ export interface SelectTokenChipProps extends withClasses<'chip' | 'tokenIcon' |
 export function SelectTokenChip(props: SelectTokenChipProps) {
     const t = useSharedI18N()
     const { token, error, loading = false, readonly = false, ChipProps, chainId } = props
-    const classes = useStylesExtends(useStyles(), props)
+    const { classes, cx } = useStylesExtends(useStyles(), props)
     if (loading)
         return (
             <Chip
-                className={classNames(classes.chip, classes.loadingChip)}
+                className={cx(classes.chip, classes.loadingChip)}
                 icon={<LoadingBase size={16} />}
                 size="small"
                 clickable={false}
@@ -59,7 +57,7 @@ export function SelectTokenChip(props: SelectTokenChipProps) {
     if (!token)
         return (
             <Chip
-                className={classNames(classes.chip, classes.noToken)}
+                className={cx(classes.chip, classes.noToken)}
                 label={t.select_token()}
                 size="small"
                 clickable={!readonly}

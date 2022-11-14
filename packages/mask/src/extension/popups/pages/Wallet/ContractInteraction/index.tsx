@@ -10,7 +10,7 @@ import { useI18N } from '../../../../../utils/index.js'
 import { PopupRoutes, NetworkPluginID } from '@masknet/shared-base'
 import { LoadingButton } from '@mui/lab'
 import { unreachable } from '@masknet/kit'
-import BigNumber from 'bignumber.js'
+import { BigNumber } from 'bignumber.js'
 import { LoadingPlaceholder } from '../../../components/LoadingPlaceholder/index.js'
 import { toHex } from 'web3-utils'
 import {

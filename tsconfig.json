@@ -12,6 +12,7 @@
     { "path": "./packages/theme/stories" },
     // Tests
     // @masknet/scripts: insert-here 1
+    { "path": "./packages/base/tsconfig.tests.json" },
     { "path": "./packages/backup-format/tsconfig.tests.json" },
     { "path": "./packages/encryption/tsconfig.tests.json" },
     { "path": "./packages/typed-message/tests/tsconfig.json" },
@@ -61,8 +62,7 @@
 
       "@masknet/backup-format": ["./packages/backup-format/src"],
       "@masknet/configuration": ["./packages/configuration/src"],
-      // ! dashboard is explicitly opt-out of this feature, it and the /packages/mask has circulare reference that TypeScript does not allows.
-      // "@masknet/dashboard": ["./packages/dashboard/src"],
+      "@masknet/dashboard": ["./packages/dashboard/src"],
       "@masknet/encryption": ["./packages/encryption/src"],
       "@masknet/external-plugin-previewer": ["./packages/external-plugin-previewer/src"],
       "@masknet/gun-utils": ["./packages/gun-utils/src"],
@@ -90,11 +90,13 @@
       "@masknet/web3-shared-flow": ["./packages/web3-shared/flow/src"],
       "@masknet/web3-shared-solana": ["./packages/web3-shared/solana/src"],
       "@masknet/typed-message": ["./packages/typed-message/base"],
-      "@masknet/typed-message/dom": ["./packages/typed-message/dom"],
+      "@masknet/typed-message-react": ["./packages/typed-message/react"],
+      "@masknet/types": ["./packages/types/src"],
       "@masknet/sandboxed-plugin-runtime": ["./packages/sandboxed-plugin-runtime/src/runtime/export.ts"],
       "@masknet/sandboxed-plugin-runtime/background": ["./packages/sandboxed-plugin-runtime/src/background"],
       "@masknet/sandboxed-plugin-runtime/site-adaptor": ["./packages/sandboxed-plugin-runtime/src/site-adaptor"],
       "@masknet/sandboxed-plugin-runtime/extension-page": ["./packages/sandboxed-plugin-runtime/src/extension-page"],
+      "@masknet/base": ["./packages/base/src"],
       // @masknet/scripts: insert-here 2
 
       // Plugins
@@ -111,7 +113,9 @@
       "@masknet/plugin-cross-chain-bridge": ["./packages/plugins/CrossChainBridge/src"],
       "@masknet/plugin-web3-profile": ["./packages/plugins/Web3Profile/src"],
       "@masknet/plugin-ens": ["./packages/plugins/ens/src"],
+      "@masknet/plugin-decentralized-search": ["./packages/plugins/DecentralizedSearch/src"],
       "@masknet/plugin-approval": ["./packages/plugins/approval/src"],
+      "@masknet/plugin-scam-warning": ["./packages/plugins/ScamWarning/src"],
       // @masknet/scripts: insert-here 3
       "@masknet/plugin-wallet": ["./packages/plugins/Wallet/src"]
     },
@@ -132,8 +136,8 @@
     "useUnknownInCatchVariables": true,
 
     // Modules
-    "module": "ESNext",
-    "moduleResolution": "node",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
     "resolveJsonModule": true,
     // Exclude everything by default. Include them in each project on-demand
     "types": ["masknet__global-types"],
@@ -172,7 +176,6 @@
   "files": [],
   "ts-node": {
     "compilerOptions": {
-      "module": "NodeNext",
       "noEmit": false
     },
     "esm": true,

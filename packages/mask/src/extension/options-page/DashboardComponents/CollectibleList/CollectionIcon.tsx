@@ -2,7 +2,6 @@ import { memo } from 'react'
 import { Box, Tooltip } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { Image, Icon } from '@masknet/shared'
-import classNames from 'classnames'
 import { isSameAddress, NonFungibleCollection } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { Icons } from '@masknet/icons'
@@ -38,7 +37,7 @@ export interface CollectionIconProps {
 }
 
 export const CollectionIcon = memo<CollectionIconProps>(({ collection, onClick, selectedCollection }) => {
-    const { classes } = useStyles()
+    const { classes, cx } = useStyles()
 
     return (
         <Tooltip
@@ -50,7 +49,7 @@ export const CollectionIcon = memo<CollectionIconProps>(({ collection, onClick, 
             title={collection?.name ?? ''}
             arrow>
             <Box
-                className={classNames(
+                className={cx(
                     classes.collectionWrap,
                     isSameAddress(collection?.address, selectedCollection) ? classes.selected : '',
                 )}

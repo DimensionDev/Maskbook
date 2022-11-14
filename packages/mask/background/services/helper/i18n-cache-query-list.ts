@@ -43,4 +43,8 @@ export default {
         'io.mask.web3-profile-card',
     '/[DimensionDev.Maskbook] develop/packages/plugins/ENS/src/locales/%locale%.json': 'com.maskbook.ens',
     '/[DimensionDev.Maskbook] develop/packages/plugins/Approval/src/locales/%locale%.json': 'com.maskbook.approval',
+    '/[DimensionDev.Maskbook] develop/packages/plugins/DecentralizedSearch/src/locales/%locale%.json':
+        'com.maskbook.decentralized-search',
+    '/[DimensionDev.Maskbook] develop/packages/plugins/ScamWarning/src/locales/%locale%.json':
+        'com.maskbook.scam-warning',
 }

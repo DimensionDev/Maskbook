@@ -5,13 +5,13 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "webpack": "./src/index.ts",
+      "mask-src": "./src/index.ts",
       "default": "./dist/index.js"
     }
   },
   "types": "./dist/index.d.ts",
   "dependencies": {
-    "@masknet/shared-base": "workspace:*",
+    "@masknet/shared-base": "workspace:^",
     "@msgpack/msgpack": "^2.8.0",
     "elliptic": "^6.5.3",
     "pvtsutils": "^1.3.2"

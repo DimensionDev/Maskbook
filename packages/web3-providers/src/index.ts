@@ -1,4 +1,4 @@
-import { CoinGeckoTrendingEVM_API, CoinGeckoPriceSolanaAPI, CoinGeckoPriceEVM_API } from './coingecko/index.js'
+import { CoinGeckoTrending_API, CoinGeckoPriceSolanaAPI, CoinGeckoPriceEVM_API } from './coingecko/index.js'
 import { OpenSeaAPI } from './opensea/index.js'
 import { LooksRareAPI } from './looksrare/index.js'
 import { RaribleAPI } from './rarible/index.js'
@@ -45,11 +45,13 @@ import { MirrorAPI } from './mirror/index.js'
 import { MindsAPI } from './minds/index.js'
 import { FuseTrendingAPI } from './fuse/index.js'
 import { SmartPayAPI } from './smart-pay/index.js'
+import { CryptoScamDBAPI } from './cryptoscam-db/index.js'
 
 // #region TODO: to be removed
 export * from './helpers.js'
 export * from './types/index.js'
 export * from './opensea/utils.js'
+export type { SecurityMessage as GoPlusLabsSecurityMessage } from './gopluslabs/rules.js'
 export { CollectionType } from './rss3/constants.js'
 // #endregion
 
@@ -59,7 +61,7 @@ export const MagicEden = new MagicEdenAPI()
 export const Rarible = new RaribleAPI()
 export const Zora = new ZoraAPI()
 export const Gem = new GemAPI()
-export const CoinGeckoTrendingEVM = new CoinGeckoTrendingEVM_API()
+export const CoinGeckoTrending = new CoinGeckoTrending_API()
 export const CoinGeckoPriceEVM = new CoinGeckoPriceEVM_API()
 export const CoinGeckoPriceSolana = new CoinGeckoPriceSolanaAPI()
 export const Explorer = new NativeExplorerAPI()
@@ -87,6 +89,7 @@ export const Rabby = new RabbyAPI()
 export const X2Y2 = new X2Y2API()
 export const CF = new CF_API()
 export const Mirror = new MirrorAPI()
+export const CryptoScamDB = new CryptoScamDBAPI()
 
 // Alchemy
 export const AlchemyEVM = new AlchemyEVM_API()

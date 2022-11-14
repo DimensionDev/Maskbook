@@ -8,7 +8,6 @@ import { useI18N } from '../../../../../utils/index.js'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages.js'
 import { WalletItem } from './WalletItem.js'
 import { MAX_WALLET_LIMIT } from '@masknet/shared'
-import classNames from 'classnames'
 import { useWallet, useWalletPrimary, useWallets } from '@masknet/web3-hooks-base'
 import { Services } from '../../../../service.js'
 
@@ -53,7 +52,7 @@ const useStyles = makeStyles()({
 
 const SwitchWallet = memo(() => {
     const { t } = useI18N()
-    const { classes } = useStyles()
+    const { classes, cx } = useStyles()
 
     const navigate = useNavigate()
     const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
@@ -99,7 +98,7 @@ const SwitchWallet = memo(() => {
             <div className={classes.controller}>
                 <Button
                     variant="contained"
-                    className={classNames(classes.button, classes.secondaryButton)}
+                    className={cx(classes.button, classes.secondaryButton)}
                     disabled={wallets.length >= MAX_WALLET_LIMIT}
                     onClick={handleClickCreate}>
                     {t('create')}

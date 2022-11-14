@@ -58,3 +58,17 @@ export interface RSS3Feed {
     attributes?: RSS3BaseAPI.Attribute[]
     tokenId?: string
 }
+
+/**
+ * Normalized RSS3BaseAPI.Activity
+ */
+export interface NormalizedFeed {
+    from: string
+    to?: string
+    /** feed.value_display */
+    cost?: string
+    /**
+     * send to {to}, mint an NFT for {cost}, burn, post a note,
+     */
+    action: string
+}

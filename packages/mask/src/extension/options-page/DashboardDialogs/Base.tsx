@@ -1,5 +1,4 @@
 import { cloneElement, useCallback, useReducer } from 'react'
-import classNames from 'classnames'
 import {
     DialogProps,
     Dialog,
@@ -11,12 +10,12 @@ import {
 } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { Theme, ThemeOptions, ThemeProvider } from '@mui/material/styles'
-import CloseIcon from '@mui/icons-material/Close'
+import { Close as CloseIcon } from '@mui/icons-material'
 import { useMatchXS } from '../../../utils/index.js'
 import { useClassicMaskFullPageTheme } from '../../../utils/theme/useClassicMaskFullPageTheme.js'
 import { appearanceSettings, languageSettings } from '../../../../shared/legacy-settings/settings.js'
 import { useValueRef } from '@masknet/shared-base-ui'
-import { cloneDeep, merge } from 'lodash-unified'
+import { cloneDeep, merge } from 'lodash-es'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -258,7 +257,7 @@ interface DashboardDialogWrapperProps extends withClasses<'wrapper'> {
 /** @deprecated Do not use in new code */
 export function DashboardDialogWrapper(props: DashboardDialogWrapperProps) {
     const { size, icon, iconColor, primary, secondary, constraintSecondary = true, content, footer } = props
-    const { classes } = useDashboardDialogWrapperStyles(props)
+    const { classes, cx } = useDashboardDialogWrapperStyles(props)
     return (
         <ThemeProvider theme={dialogTheme}>
             <DialogContent className={classes.wrapper}>
@@ -268,7 +267,7 @@ export function DashboardDialogWrapper(props: DashboardDialogWrapperProps) {
                         {primary}
                     </Typography>
                     <Typography
-                        className={classNames(
+                        className={cx(
                             classes.secondary,
                             size !== 'small' && constraintSecondary ? classes.confineSecondary : '',
                         )}

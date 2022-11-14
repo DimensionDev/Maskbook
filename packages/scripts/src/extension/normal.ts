@@ -1,4 +1,4 @@
-import { compact } from 'lodash-unified'
+import { compact } from 'lodash-es'
 import { awaitChildProcess, PKG_PATH, shell, task, watchTask } from '../utils/index.js'
 import { buildInjectedScript, watchInjectedScript } from '../projects/injected-scripts.js'
 import { buildMaskSDK, watchMaskSDK } from '../projects/mask-sdk.js'

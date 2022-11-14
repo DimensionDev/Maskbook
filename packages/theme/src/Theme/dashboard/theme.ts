@@ -1,8 +1,7 @@
-import { createTheme, PaletteMode, ThemeOptions } from '@mui/material'
+import { createTheme, PaletteMode, PaletteOptions, ThemeOptions } from '@mui/material'
 import * as Changes from './changes.js'
 import * as Components from './component-changes.js'
-import { merge } from 'lodash-unified'
-import type { PaletteOptions } from '@mui/material/styles/createPalette'
+import { merge } from 'lodash-es'
 import { DarkColor, LightColor, Color } from '../../CSSVariables/index.js'
 import { MaskColors } from '../colors.js'
 

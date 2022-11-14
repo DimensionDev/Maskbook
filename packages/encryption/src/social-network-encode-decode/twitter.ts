@@ -1,6 +1,6 @@
 import { decodeArrayBuffer, encodeArrayBuffer } from '@masknet/kit'
-import { parseURLs } from '@masknet/shared-base'
-import { Some, None, Option } from 'ts-results'
+import { parseURLs } from '@masknet/base'
+import { Some, None, Option } from 'ts-results-es'
 
 export function __TwitterEncoder(data: Uint8Array | string) {
     if (typeof data === 'string') return __TwitterEncoderText(data)

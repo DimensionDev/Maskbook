@@ -1,21 +1,23 @@
 {
   "name": "@masknet/shared-base-ui",
   "description": "This package MUST be pure.",
+  "type": "module",
+  "private": true,
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "webpack": "./src/index.ts",
+      "mask-src": "./src/index.ts",
       "default": "./dist/index.js"
     }
   },
   "types": "./dist/index.d.ts",
   "dependencies": {
-    "@masknet/shared-base": "workspace:*",
+    "@masknet/shared-base": "workspace:^",
     "@types/use-subscription": "^1.0.0",
     "@types/uuid": "^8.3.4",
     "react-use": "^17.4.0",
     "use-subscription": "1.6.0",
-    "uuid": "^8.3.2"
+    "uuid": "^9.0.0"
   },
   "peerDependencies": {
     "react-i18next": "^11.15.3"

@@ -1,6 +1,6 @@
 import { Box, Button, InputAdornment, MenuItem, Stack, Typography } from '@mui/material'
 import { memo, useMemo, useState } from 'react'
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
+import { KeyboardArrowDown as KeyboardArrowDownIcon } from '@mui/icons-material'
 import { makeStyles, MaskTextField, ShadowRootMenu } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
 import { useI18N } from '../../locales/index.js'

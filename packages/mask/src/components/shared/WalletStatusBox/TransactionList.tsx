@@ -166,11 +166,11 @@ interface Props extends ListProps {
 }
 
 export const TransactionList: FC<Props> = forwardRef(({ className, transactions, onClear = noop, ...rest }, ref) => {
-    const { classes } = useStyles()
+    const { classes, cx } = useStyles()
     const { chainId } = useChainContext()
     if (!transactions.length) return null
     return (
-        <List className={classnames(classes.list, className)} {...rest} ref={ref}>
+        <List className={cx(classes.list, className)} {...rest} ref={ref}>
             {transactions.map((tx) => (
                 <ListItem key={tx.id} className={classes.listItem}>
                     <Transaction className={classes.transaction} transaction={tx} chainId={chainId} onClear={onClear} />

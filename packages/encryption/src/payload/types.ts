@@ -1,14 +1,7 @@
 // This file contains normalized Payload.
 // Internal payload should not be exported
-import {
-    ProfileIdentifier,
-    CheckedError,
-    OptionalResult,
-    EC_CryptoKey,
-    EnhanceableSite,
-    AESCryptoKey,
-} from '@masknet/shared-base'
-import type { Result, Option } from 'ts-results'
+import type { ProfileIdentifier, CheckedError, OptionalResult, EC_CryptoKey, AESCryptoKey } from '@masknet/base'
+import type { Result, Option } from 'ts-results-es'
 import type { CryptoException, PayloadException } from '../types/index.js'
 
 /** A parse result, that try to preserve as many info as possible. */
@@ -120,11 +113,11 @@ export enum SocialNetworkEnum {
  */
 export type SupportedPayloadVersions = -37 | -38 | -39 | -40
 const SocialNetworkEnumToDomain: Record<SocialNetworkEnum, string> = {
-    [SocialNetworkEnum.Unknown]: EnhanceableSite.Localhost,
-    [SocialNetworkEnum.Facebook]: EnhanceableSite.Facebook,
-    [SocialNetworkEnum.Minds]: EnhanceableSite.Minds,
-    [SocialNetworkEnum.Twitter]: EnhanceableSite.Twitter,
-    [SocialNetworkEnum.Instagram]: EnhanceableSite.Instagram,
+    [SocialNetworkEnum.Unknown]: 'localhost',
+    [SocialNetworkEnum.Facebook]: 'facebook.com',
+    [SocialNetworkEnum.Minds]: 'minds.com',
+    [SocialNetworkEnum.Twitter]: 'twitter.com',
+    [SocialNetworkEnum.Instagram]: 'instagram.com',
 }
 export function SocialNetworkEnumToProfileDomain(x: SocialNetworkEnum) {
     return SocialNetworkEnumToDomain[x]

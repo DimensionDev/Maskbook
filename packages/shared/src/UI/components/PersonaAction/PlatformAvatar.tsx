@@ -1,4 +1,3 @@
-import classNames from 'classnames'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
 import { PersonaImageIcon } from './PersonaImageIcon.js'
@@ -39,7 +38,7 @@ interface PlatformAvatarProps extends withClasses<'networkIcon' | 'providerIcon'
 
 export const PlatformAvatar = (props: PlatformAvatarProps) => {
     const { size = 24, badgeSize = 14, inverse = false, networkIcon, providerIcon } = props
-    const classes = useStylesExtends(
+    const { classes, cx } = useStylesExtends(
         useStyles({
             size: badgeSize > size ? badgeSize : size,
             isBorderColorNotDefault: props.isBorderColorNotDefault,
@@ -49,8 +48,8 @@ export const PlatformAvatar = (props: PlatformAvatarProps) => {
 
     // #region icon names
     const names = inverse
-        ? [classNames(classes.badgeIcon, classes.providerIcon), classNames(classes.mainIcon, classes.networkIcon)]
-        : [classNames(classes.mainIcon, classes.networkIcon), classNames(classes.badgeIcon, classes.providerIcon)]
+        ? [cx(classes.badgeIcon, classes.providerIcon), cx(classes.mainIcon, classes.networkIcon)]
+        : [cx(classes.mainIcon, classes.networkIcon), cx(classes.badgeIcon, classes.providerIcon)]
     // #endregion
 
     return (

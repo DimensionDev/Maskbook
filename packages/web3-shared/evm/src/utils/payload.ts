@@ -1,5 +1,5 @@
-import BigNumber from 'bignumber.js'
-import { first, isUndefined, omitBy } from 'lodash-unified'
+import { BigNumber } from 'bignumber.js'
+import { first, isUndefined, omitBy } from 'lodash-es'
 import type { JsonRpcPayload } from 'web3-core-helpers'
 import { hexToNumber, hexToNumberString } from 'web3-utils'
 import { EthereumMethodType, Transaction, UserOperation } from '../types/index.js'

@@ -29,7 +29,7 @@ import {
 } from '@mui/material'
 import { Box } from '@mui/system'
 import stringify from 'json-stable-stringify'
-import { first, last } from 'lodash-unified'
+import { first, last } from 'lodash-es'
 import { useCallback, useMemo, useRef, useState } from 'react'
 import { useI18N } from '../../../../utils/index.js'
 import { useTransakAllowanceCoin } from '../../../Transak/hooks/useTransakAllowanceCoin.js'
@@ -80,6 +80,10 @@ const useStyles = makeStyles()((theme) => {
             color: theme.palette.maskColor?.dark,
         },
         symbol: {
+            maxWidth: 200,
+            whiteSpace: 'nowrap',
+            textOverflow: 'ellipsis',
+            overflow: 'hidden',
             fontWeight: 700,
             fontSize: 18,
             color: theme.palette.maskColor?.dark,
@@ -119,6 +123,7 @@ export interface TrendingViewDeckProps extends withClasses<'header' | 'body' | '
     trending: TrendingAPI.Trending
     dataProvider: DataProvider
     children?: React.ReactNode
+    isPreciseSearch?: boolean
     showDataProviderIcon?: boolean
     TrendingCardProps?: Partial<TrendingCardProps>
     dataProviders: DataProvider[]
@@ -135,12 +140,13 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
         showDataProviderIcon = false,
         TrendingCardProps,
         dataProviders = EMPTY_LIST,
+        isPreciseSearch = false,
     } = props
     const { coin, market } = trending
 
     const { t } = useI18N()
     const theme = useTheme()
-    const classes = useStylesExtends(useStyles(), props)
+    const { classes } = useStylesExtends(useStyles(), props)
 
     const isNFT = coin.type === TokenType.NonFungible
 
@@ -247,7 +253,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                             </Typography>
                                         ) : null}
                                     </Typography>
-                                    {coins.length > 1 ? (
+                                    {coins.length > 1 && !isPreciseSearch ? (
                                         <>
                                             <IconButton
                                                 sx={{ padding: 0 }}

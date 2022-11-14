@@ -1,10 +1,9 @@
-import type { FungibleToken } from '@masknet/web3-shared-base'
-import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import type { Web3Helper } from '@masknet/web3-helpers'
 
 export interface SwapRouteRequest {
     isNativeSellToken: boolean
-    fromToken: FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>
-    toToken: FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>
+    fromToken: Web3Helper.FungibleTokenAll
+    toToken: Web3Helper.FungibleTokenAll
     fromAmount: string
     slippage: number
     userAddr: string

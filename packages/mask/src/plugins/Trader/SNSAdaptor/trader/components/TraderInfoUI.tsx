@@ -1,5 +1,4 @@
 import { memo } from 'react'
-import classNames from 'classnames'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { isDashboardPage } from '@masknet/shared-base'
 import { makeStyles, MaskColorVar, LoadingBase } from '@masknet/theme'
@@ -91,7 +90,7 @@ export interface TraderInfoUIProps {
     isGreatThanSlippageSetting: boolean
     gasFee: string
     gasFeeValueUSD: string
-    nativeToken: Web3Helper.FungibleTokenAll
+    nativeToken?: Web3Helper.FungibleTokenAll
 }
 
 export const TraderInfoUI = memo<TraderInfoUIProps>(
@@ -111,7 +110,7 @@ export const TraderInfoUI = memo<TraderInfoUIProps>(
         const isDashboard = isDashboardPage()
 
         const { t } = useI18N()
-        const { classes } = useStyles({ isDashboard })
+        const { classes, cx } = useStyles({ isDashboard })
 
         if (loading)
             return (
@@ -129,7 +128,7 @@ export const TraderInfoUI = memo<TraderInfoUIProps>(
                 onClick={onClick}
                 value={balance}
                 InputProps={{
-                    className: classNames(classes.trade, isFocus ? classes.focus : null),
+                    className: cx(classes.trade, isFocus ? classes.focus : null),
                     disableUnderline: true,
                     startAdornment: (
                         <Box
@@ -149,9 +148,9 @@ export const TraderInfoUI = memo<TraderInfoUIProps>(
                                     <Typography fontSize={14} lineHeight="20px" component="span" marginLeft={0.5}>
                                         <FormattedBalance
                                             value={gasFee}
-                                            decimals={nativeToken.decimals ?? 0}
+                                            decimals={nativeToken?.decimals ?? 0}
                                             significant={4}
-                                            symbol={nativeToken.symbol}
+                                            symbol={nativeToken?.symbol}
                                             formatter={formatBalance}
                                         />
                                     </Typography>
@@ -185,14 +184,14 @@ export const TraderInfoUI = memo<TraderInfoUIProps>(
 )
 
 export interface DefaultTraderPlaceholderUIProps {
-    nativeToken: Web3Helper.FungibleTokenAll
+    nativeToken?: Web3Helper.FungibleTokenAll
 }
 
 export const DefaultTraderPlaceholderUI = memo<DefaultTraderPlaceholderUIProps>(({ nativeToken }) => {
     const isDashboard = isDashboardPage()
 
     const { t } = useI18N()
-    const { classes } = useStyles({ isDashboard })
+    const { classes, cx } = useStyles({ isDashboard })
 
     return (
         <TextField
@@ -201,7 +200,7 @@ export const DefaultTraderPlaceholderUI = memo<DefaultTraderPlaceholderUIProps>(
             variant="filled"
             value={0}
             InputProps={{
-                className: classNames(classes.trade, classes.focus),
+                className: cx(classes.trade, classes.focus),
                 disableUnderline: true,
                 startAdornment: (
                     <Box
@@ -221,9 +220,9 @@ export const DefaultTraderPlaceholderUI = memo<DefaultTraderPlaceholderUIProps>(
                             <Typography fontSize={14} lineHeight="20px" component="span" marginLeft={0.5}>
                                 <FormattedBalance
                                     value={0}
-                                    decimals={nativeToken.decimals ?? 0}
+                                    decimals={nativeToken?.decimals ?? 0}
                                     significant={4}
-                                    symbol={nativeToken.symbol}
+                                    symbol={nativeToken?.symbol}
                                     formatter={formatBalance}
                                 />
                             </Typography>

@@ -1,4 +1,4 @@
-import BigNumber from 'bignumber.js'
+import { BigNumber } from 'bignumber.js'
 import { FungibleAsset, leftShift, multipliedBy, TokenType, Transaction } from '@masknet/web3-shared-base'
 import { ChainId, getTokenConstant, SchemaType, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import {

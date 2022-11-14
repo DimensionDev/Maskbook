@@ -1,5 +1,4 @@
 import { useContext, useState, useEffect, useMemo } from 'react'
-import classNames from 'classnames'
 import { toChecksumAddress } from 'web3-utils'
 import { Box, Button, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
@@ -51,7 +50,7 @@ const useStyles = makeStyles()((theme) => {
 
 export function VotingCard() {
     const { t } = useI18N()
-    const { classes } = useStyles()
+    const { classes, cx } = useStyles()
     const identifier = useContext(SnapshotContext)
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
     const { payload: proposal } = useProposal(identifier.id)
@@ -154,7 +153,7 @@ export function VotingCard() {
                         fullWidth
                         key={i}
                         onClick={() => onClick(i + 1)}
-                        className={classNames([
+                        className={cx([
                             classes.button,
                             classes.choiceButton,
                             ...(choices_.includes(i + 1) ? [classes.buttonActive] : []),
@@ -171,7 +170,7 @@ export function VotingCard() {
                 <Button
                     variant="roundedContained"
                     fullWidth
-                    className={classNames(classes.button, disabled ? '' : classes.buttonActive)}
+                    className={cx(classes.button, disabled ? '' : classes.buttonActive)}
                     disabled={disabled}
                     onClick={() => setOpen(true)}>
                     <Typography fontWeight={700} fontSize={16}>

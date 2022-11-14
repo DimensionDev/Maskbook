@@ -1,4 +1,4 @@
-import BigNumber from 'bignumber.js'
+import { BigNumber } from 'bignumber.js'
 import { toHex } from 'web3-utils'
 import { GasOptionType, isLessThan, toFixed } from '@masknet/web3-shared-base'
 import { addGasMargin, chainResolver, formatWeiToGwei } from '@masknet/web3-shared-evm'

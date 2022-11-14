@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react'
-import { range, uniqBy } from 'lodash-unified'
+import { range, uniqBy } from 'lodash-es'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { LoadingBase, makeStyles, useStylesExtends } from '@masknet/theme'
@@ -95,7 +95,7 @@ export interface NFTAvatarProps extends withClasses<'root'> {
 
 export function NFTAvatar(props: NFTAvatarProps) {
     const { onChange, hideWallet } = props
-    const classes = useStylesExtends(useStyles(), props)
+    const { classes } = useStylesExtends(useStyles(), props)
     const { pluginID } = useNetworkContext()
     const { account, chainId } = useChainContext()
     const [selectedToken, setSelectedToken] = useState<AllChainsNonFungibleToken | undefined>()

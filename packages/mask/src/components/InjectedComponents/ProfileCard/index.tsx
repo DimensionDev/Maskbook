@@ -1,14 +1,10 @@
 import { FC, useEffect, useMemo, useState } from 'react'
 import { Trans } from 'react-i18next'
 import { useUpdateEffect } from 'react-use'
-import { first } from 'lodash-unified'
+import { first } from 'lodash-es'
 import { Icons } from '@masknet/icons'
-import {
-    createInjectHooksRenderer,
-    useActivatedPluginsSNSAdaptor,
-    usePluginI18NField,
-} from '@masknet/plugin-infra/content-script'
-import { useAvailablePlugins } from '@masknet/plugin-infra'
+import { useActivatedPluginsSNSAdaptor, usePluginI18NField } from '@masknet/plugin-infra/content-script'
+import { useAvailablePlugins, getProfileTabContent } from '@masknet/plugin-infra'
 import { useSocialAccountsBySettings } from '@masknet/shared'
 import { EMPTY_LIST, PluginID, NetworkPluginID } from '@masknet/shared-base'
 import { LoadingBase, makeStyles, MaskTabList, useTabs } from '@masknet/theme'
@@ -17,19 +13,13 @@ import { ChainId } from '@masknet/web3-shared-evm'
 import { TabContext } from '@mui/lab'
 import { Tab, Typography } from '@mui/material'
 import { Web3ContextProvider } from '@masknet/web3-hooks-base'
-import { MaskMessages, sorter, useLocationChange } from '../../../utils/index.js'
+import { MaskMessages, sorter, useI18N, useLocationChange } from '../../../utils/index.js'
 import { ProfileCardTitle } from './ProfileCardTitle.js'
 
 interface Props extends withClasses<'text' | 'button' | 'root'> {
     identity: SocialIdentity
 }
 
-function getTabContent(tabId?: string) {
-    return createInjectHooksRenderer(useActivatedPluginsSNSAdaptor.visibility.useAnyMode, (x) => {
-        const tab = x.ProfileCardTabs?.find((x) => x.ID === tabId)
-        return tab?.UI?.TabContent
-    })
-}
 const useStyles = makeStyles()((theme) => {
     const isDark = theme.palette.mode === 'dark'
     return {
@@ -89,6 +79,15 @@ const useStyles = makeStyles()((theme) => {
             fontWeight: 700,
             zIndex: 2,
         },
+        cardIcon: {
+            filter: 'drop-shadow(0px 6px 12px rgba(0, 65, 185, 0.2))',
+            marginLeft: theme.spacing(0.25),
+        },
+        cardName: {
+            color: theme.palette.maskColor.main,
+            fontWeight: 700,
+            marginRight: 'auto',
+        },
         powered: {
             color: theme.palette.text.secondary,
             fontWeight: 700,
@@ -99,12 +98,17 @@ const useStyles = makeStyles()((theme) => {
 export const ProfileCard: FC<Props> = ({ identity, ...rest }) => {
     const { classes, cx } = useStyles(undefined, { props: { classes: rest.classes } })
 
+    const { t } = useI18N()
     const translate = usePluginI18NField()
     const {
-        value: socialAccounts = EMPTY_LIST,
+        value: allSocialAccounts = EMPTY_LIST,
         loading: loadingSocialAccounts,
         retry: retrySocialAddress,
     } = useSocialAccountsBySettings(identity, undefined, sorter)
+    const socialAccounts = useMemo(
+        () => allSocialAccounts.filter((x) => x.pluginID === NetworkPluginID.PLUGIN_EVM),
+        [allSocialAccounts],
+    )
 
     const [selectedAddress, setSelectedAddress] = useState<string>()
     const firstAddress = first(socialAccounts)?.address
@@ -141,7 +145,7 @@ export const ProfileCard: FC<Props> = ({ identity, ...rest }) => {
     const [currentTab, onChange] = useTabs(first(tabs)?.id ?? PluginID.Collectible, ...tabs.map((tab) => tab.id))
 
     const component = useMemo(() => {
-        const Component = getTabContent(currentTab)
+        const Component = getProfileTabContent(currentTab)
 
         return <Component identity={identity} socialAccount={selectedSocialAccount} />
     }, [currentTab, identity?.publicKey, selectedSocialAccount])
@@ -185,6 +189,8 @@ export const ProfileCard: FC<Props> = ({ identity, ...rest }) => {
                 </div>
                 <div className={classes.content}>{component}</div>
                 <div className={classes.footer}>
+                    <Icons.Web3ProfileCard className={classes.cardIcon} size={24} />
+                    <Typography className={classes.cardName}>{t('profile_card_name')}</Typography>
                     <Typography variant="body1" className={classes.powered}>
                         <Trans
                             i18nKey="powered_by_whom"
@@ -202,7 +208,7 @@ export const ProfileCard: FC<Props> = ({ identity, ...rest }) => {
                             }}
                         />
                     </Typography>
-                    <Icons.RSS3 size={24} sx={{ ml: '12px' }} />
+                    <Icons.RSS3 size={24} sx={{ ml: '4px' }} />
                 </div>
             </div>
         </Web3ContextProvider>

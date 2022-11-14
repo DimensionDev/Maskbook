@@ -1,6 +1,5 @@
 import { ReactElement, useCallback, useEffect, useState } from 'react'
 import { useMount } from 'react-use'
-import classnames from 'classnames'
 import { Typography } from '@mui/material'
 import { MaskMessages, useMatchXS, useLocationChange } from '../../utils/index.js'
 import { isTwitter } from '../../social-network-adaptor/twitter.com/base.js'
@@ -34,7 +33,7 @@ export function ProfileTab(props: ProfileTabProps) {
     }, [switchToTab])
 
     useMount(() => {
-        if (location.hash !== '#web3' || active) return
+        if (location.hash !== '#web3' || active || location.pathname === '/search') return
         switchToTab()
     })
 
@@ -56,7 +55,7 @@ export function ProfileTab(props: ProfileTabProps) {
     return (
         <div key="nfts" className={classes.root}>
             <Typography
-                className={classnames(classes.button, active ? classes.selected : '')}
+                className={classes.button + ' ' + (active ? classes.selected : '')}
                 onClick={onClick}
                 component="div">
                 {props.icon}

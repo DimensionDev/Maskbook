@@ -10,7 +10,7 @@
   "references": [
     { "path": "../public-api" },
     { "path": "../theme/" },
-    { "path": "../mask/src" },
+    { "path": "../mask/background" },
     { "path": "../web3-hooks/base/" },
     { "path": "../web3-hooks/evm/" },
     { "path": "../web3-shared/base/" },
@@ -27,6 +27,7 @@
     { "path": "../plugins/Wallet/" },
     { "path": "../backup-format/" },
     { "path": "../shared-base" },
-    { "path": "../shared-base-ui" }
+    { "path": "../shared-base-ui" },
+    { "path": "../types" }
   ]
 }

@@ -3,7 +3,7 @@ import { timeout } from '@masknet/kit'
 /**
  * Make sure that the storage is used serially.
  */
-class MutexStorage<T extends browser.storage.StorageValue> {
+class MutexStorage<T> {
     private tasks: Array<() => void> = []
     private locked = false
 
@@ -60,16 +60,14 @@ class MutexStorage<T extends browser.storage.StorageValue> {
     }
 }
 
-const storage = new MutexStorage<browser.storage.StorageValue>()
+const storage = new MutexStorage()
 
 /**
  * Avoid using this.
  * @deprecated
  * @internal
  */
-export async function __deprecated__getStorage<T extends browser.storage.StorageValue>(
-    key: string,
-): Promise<T | undefined> {
+export async function __deprecated__getStorage<T>(key: string): Promise<T | undefined> {
     if (typeof browser === 'undefined' || !browser.storage) return
     const value = await storage.getStorage(key)
     return value as T
@@ -80,10 +78,7 @@ export async function __deprecated__getStorage<T extends browser.storage.Storage
  * @deprecated
  * @internal
  */
-export async function __deprecated__setStorage<T extends browser.storage.StorageValue>(
-    key: string,
-    value: T,
-): Promise<void> {
+export async function __deprecated__setStorage<T>(key: string, value: T): Promise<void> {
     if (typeof browser === 'undefined' || !browser.storage) return
     return storage.setStorage(key, value)
 }

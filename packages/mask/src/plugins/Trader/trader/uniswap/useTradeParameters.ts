@@ -1,9 +1,8 @@
 import { useMemo } from 'react'
-import JSBI from 'jsbi'
 import { Percent, TradeType } from '@uniswap/sdk-core'
 import { Router, Trade as V2Trade } from '@uniswap/v2-sdk'
-import { useChainContext } from '@masknet/web3-hooks-base'
-import type { NetworkPluginID } from '@masknet/shared-base'
+import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { SwapRouter } from '@uniswap/v3-sdk'
 import { TradeProvider } from '@masknet/public-api'
 import { SLIPPAGE_DEFAULT } from '../../constants/index.js'
@@ -12,8 +11,9 @@ import { useRouterV2Contract } from '../../contracts/uniswap/useRouterV2Contract
 import { useSwapRouterContract } from '../../contracts/uniswap/useSwapRouterContract.js'
 import { useTransactionDeadline } from './useTransactionDeadline.js'
 import { useGetTradeContext } from '../useGetTradeContext.js'
+import type { ChainId } from '@masknet/web3-shared-evm'
 
-const UNISWAP_BIPS_BASE = JSBI.BigInt(10000)
+const UNISWAP_BIPS_BASE = 10000
 
 // Pangolin and TraderJoe have modified uniswap contracts
 type SwapParams = Parameters<typeof Router.swapCallParameters>
@@ -57,17 +57,24 @@ export function useSwapParameters(
     tradeProvider?: TradeProvider,
     allowedSlippage: number = SLIPPAGE_DEFAULT,
 ) {
-    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+    const { account, chainId } = useChainContext()
+    const { pluginID } = useNetworkContext()
     const context = useGetTradeContext(tradeProvider)
     const deadline = useTransactionDeadline()
-    const routerV2Contract = useRouterV2Contract(chainId, context?.ROUTER_CONTRACT_ADDRESS)
-    const swapRouterContract = useSwapRouterContract(chainId, context?.ROUTER_CONTRACT_ADDRESS)
+    const routerV2Contract = useRouterV2Contract(
+        pluginID !== NetworkPluginID.PLUGIN_EVM ? (chainId as ChainId) : undefined,
+        context?.ROUTER_CONTRACT_ADDRESS,
+    )
+    const swapRouterContract = useSwapRouterContract(
+        pluginID !== NetworkPluginID.PLUGIN_EVM ? (chainId as ChainId) : undefined,
+        context?.ROUTER_CONTRACT_ADDRESS,
+    )
 
     return useMemo<SwapCall[]>(() => {
-        if (!account || !trade?.trade_ || !deadline) return []
+        if (!account || !trade?.trade_ || !deadline || pluginID !== NetworkPluginID.PLUGIN_EVM) return []
 
         const { trade_ } = trade
-        const allowedSlippage_ = new Percent(JSBI.BigInt(allowedSlippage), UNISWAP_BIPS_BASE)
+        const allowedSlippage_ = new Percent(allowedSlippage, UNISWAP_BIPS_BASE)
 
         if (trade_ instanceof V2Trade) {
             if (!routerV2Contract) return []
@@ -122,5 +129,5 @@ export function useSwapParameters(
                 },
             ]
         }
-    }, [account, allowedSlippage, deadline, trade, routerV2Contract, swapRouterContract])
+    }, [account, allowedSlippage, deadline, trade, routerV2Contract, swapRouterContract, pluginID])
 }

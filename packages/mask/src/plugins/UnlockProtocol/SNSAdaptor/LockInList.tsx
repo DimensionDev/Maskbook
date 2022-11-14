@@ -1,8 +1,7 @@
 import { ListItem, ListItemText, Checkbox } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import classNames from 'classnames'
 import { MouseEvent, useCallback } from 'react'
-import type { DefaultComponentProps } from '@mui/material/OverridableComponent'
+import type { DefaultComponentProps } from '@mui/material/OverridableComponent.js'
 import type { CheckboxProps } from '@mui/material/Checkbox'
 import type { ListItemTypeMap } from '@mui/material/ListItem'
 import type { UnlockLocks } from '../types.js'
@@ -38,7 +37,7 @@ export interface LockInListProps {
 }
 
 export function LockInList(props: LockInListProps) {
-    const { classes } = useStyle()
+    const { classes, cx } = useStyle()
     const lock = props.item
     const name = lock.lock.name
     const secondary = lock.lock.address
@@ -50,7 +49,7 @@ export function LockInList(props: LockInListProps) {
             onClick={onClick}
             disabled={props.disabled}
             {...props.ListItemProps}
-            className={classNames(classes.root, props.ListItemProps?.className)}>
+            className={cx(classes.root, props.ListItemProps?.className)}>
             <Checkbox checked={props.checked} color="primary" {...props.CheckboxProps} />
             <ListItemText
                 classes={{

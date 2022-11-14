@@ -1,0 +1,10 @@
+// only contains packages to be released on npm here
+{
+  "extends": "./tsconfig.json",
+  "references": [
+    { "path": "./packages/base" },
+    { "path": "./packages/encryption" },
+    { "path": "./packages/typed-message/base" },
+    { "path": "./packages/typed-message/react" }
+  ]
+}

@@ -5,7 +5,7 @@ import {
     NextIDPlatform,
     ProfileIdentifier,
 } from '@masknet/shared-base'
-import { compact, uniqBy } from 'lodash-unified'
+import { compact, uniqBy } from 'lodash-es'
 
 export function useTwitterIdByWalletSearch(
     bindings: NextIDPersonaBindings[] | undefined,

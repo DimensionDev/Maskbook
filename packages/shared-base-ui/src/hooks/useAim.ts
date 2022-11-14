@@ -1,4 +1,4 @@
-import { throttle } from 'lodash-unified'
+import { throttle } from 'lodash-es'
 import { RefObject, useEffect, useRef, useState } from 'react'
 
 type Point = [x: number, y: number]

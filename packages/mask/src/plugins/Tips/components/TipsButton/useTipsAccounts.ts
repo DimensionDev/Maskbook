@@ -9,8 +9,10 @@ import { useTipsSetting } from '../../hooks/useTipsSetting.js'
 const supportSources: SocialAddressType[] = [
     SocialAddressType.Address,
     SocialAddressType.ENS,
+    SocialAddressType.SPACE_ID,
     SocialAddressType.NEXT_ID,
     SocialAddressType.TwitterBlue,
+    SocialAddressType.SOL,
 ]
 export function useTipsAccounts(identity: IdentityResolved | undefined, personaPubkey: string | undefined) {
     const { value: TipsSetting } = useTipsSetting(personaPubkey)

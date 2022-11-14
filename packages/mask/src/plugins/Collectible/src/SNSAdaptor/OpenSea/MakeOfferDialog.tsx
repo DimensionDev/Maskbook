@@ -1,10 +1,10 @@
 import { ChangeEvent, useState, useCallback, useMemo, useEffect } from 'react'
 import { Trans } from 'react-i18next'
-import { first } from 'lodash-unified'
-import BigNumber from 'bignumber.js'
+import { first } from 'lodash-es'
+import { BigNumber } from 'bignumber.js'
 import getUnixTime from 'date-fns/getUnixTime'
 import formatDateTime from 'date-fns/format'
-import type { Order } from 'opensea-js/lib/types'
+import type { Order } from 'opensea-js/lib/types.js'
 import {
     DialogContent,
     Box,

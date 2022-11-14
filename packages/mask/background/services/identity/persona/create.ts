@@ -9,7 +9,7 @@ import {
 } from '@masknet/shared-base'
 import { createPersonaByJsonWebKey } from '../../../database/persona/helper.js'
 import { decode } from '@msgpack/msgpack'
-import { omit } from 'lodash-unified'
+import { omit } from 'lodash-es'
 import { personaRecordToMobilePersona } from './mobile.js'
 import { attachProfileDB, LinkedProfileDetails, queryPersonaDB, queryPersonasDB } from '../../../database/persona/db.js'
 import {

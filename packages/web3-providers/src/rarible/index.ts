@@ -1,5 +1,5 @@
 import urlcat from 'urlcat'
-import { first } from 'lodash-unified'
+import { first } from 'lodash-es'
 import { createLookupTableResolver, EMPTY_LIST } from '@masknet/shared-base'
 import {
     HubOptions,

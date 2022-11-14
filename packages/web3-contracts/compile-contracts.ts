@@ -34,6 +34,7 @@ async function main() {
         ['Callback<Qualification>', 'Callback<QualificationEvent>'],
     ])
 
+    run(GENERATED_PATH, 'npx', '@magic-works/ts-esm-migrate', '.')
     // format code
     run(GENERATED_PATH, 'npx', 'prettier', '.', '--write')
 

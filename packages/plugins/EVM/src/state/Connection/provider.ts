@@ -9,6 +9,7 @@ import { Coin98Provider } from './providers/Coin98.js'
 import { MathWalletProvider } from './providers/MathWallet.js'
 import FortmaticProvider from './providers/Fortmatic.js'
 import TorusProvider from './providers/Torus.js'
+import { OperaProvider } from './providers/Opera.js'
 import { NoneProvider } from './providers/None.js'
 import { SmartPayProvider } from './providers/SmartPay.js'
 
@@ -26,5 +27,6 @@ export const Providers: Record<ProviderType, BaseProvider> = {
     [ProviderType.Fortmatic]: new FortmaticProvider(),
     [ProviderType.Torus]: new TorusProvider(),
     [ProviderType.SmartPay]: new SmartPayProvider(),
+    [ProviderType.Opera]: new OperaProvider(),
     [ProviderType.CustomNetwork]: new CustomNetworkProvider(),
 }

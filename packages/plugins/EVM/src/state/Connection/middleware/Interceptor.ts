@@ -18,6 +18,7 @@ export class Interceptor implements Middleware<Context> {
         [ProviderType.MathWallet]: new MetaMask(),
         [ProviderType.Fortmatic]: new Fortmatic(),
         [ProviderType.SmartPay]: new SCWallet(),
+        [ProviderType.Opera]: new MetaMask(),
     }
 
     async fn(context: Context, next: () => Promise<void>) {

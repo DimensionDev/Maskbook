@@ -1,4 +1,4 @@
-import type { RenderFragmentsContextType } from '@masknet/typed-message/dom'
+import type { RenderFragmentsContextType } from '@masknet/typed-message-react'
 import { memo } from 'react'
 import { Link } from '@mui/material'
 import { useTagEnhancer } from '../../../../shared-ui/TypedMessageRender/Components/Text.js'
@@ -11,7 +11,12 @@ export const TwitterRenderFragments: RenderFragmentsContextType = {
         const text = props.children.slice(1)
         const target = `/hashtag/${encodeURIComponent(text)}?src=hashtag_click`
         const { hasMatch, ...events } = useTagEnhancer('hash', text)
-        return <Link {...events} href={target} children={props.children} fontSize="inherit" />
+        return (
+            <Link {...events} href={target} fontSize="inherit">
+                {props.children}
+                {props.suggestedPostImage}
+            </Link>
+        )
     }),
     CashLink: memo(function (props) {
         const target = `/search?q=${encodeURIComponent(props.children)}&src=cashtag_click`

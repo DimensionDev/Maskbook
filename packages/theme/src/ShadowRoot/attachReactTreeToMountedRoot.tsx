@@ -1,5 +1,5 @@
 import { createPortal } from 'react-dom'
-import { noop } from 'lodash-unified'
+import { noop } from 'lodash-es'
 import { ShadowRootStyleProvider } from './ShadowRootStyleProvider.js'
 import { shadowEnvironmentMountingRoots, WrapJSX } from './ShadowRootSetup.js'
 

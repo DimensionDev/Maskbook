@@ -983,6 +983,16 @@ export interface HubOptions<ChainId, Indicator = HubIndicator> {
 }
 
 export interface HubFungible<ChainId, SchemaType, GasOption, Web3HubOptions = HubOptions<ChainId>> {
+    /** Get a fungible asset. */
+    getFungibleAsset?: (
+        address: string,
+        initial?: Web3HubOptions,
+    ) => Promise<FungibleAsset<ChainId, SchemaType> | undefined>
+    /** Get fungible assets owned by the given account. */
+    getFungibleAssets?: (
+        account: string,
+        initial?: Web3HubOptions,
+    ) => Promise<Pageable<FungibleAsset<ChainId, SchemaType>>>
     /** Get balance of a fungible token owned by the given account. */
     getFungibleTokenBalance?: (address: string, initial?: Web3HubOptions) => Promise<number>
     /** Get stats data of a fungible token */
@@ -1008,16 +1018,6 @@ export interface HubFungible<ChainId, SchemaType, GasOption, Web3HubOptions = Hu
         account: string,
         initial?: Web3HubOptions,
     ) => Promise<Array<FungibleTokenSpender<ChainId, SchemaType>>>
-    /** Get a fungible asset. */
-    getFungibleAsset?: (
-        address: string,
-        initial?: Web3HubOptions,
-    ) => Promise<FungibleAsset<ChainId, SchemaType> | undefined>
-    /** Get fungible assets owned by the given account. */
-    getFungibleAssets?: (
-        account: string,
-        initial?: Web3HubOptions,
-    ) => Promise<Pageable<FungibleAsset<ChainId, SchemaType>>>
 }
 
 export interface HubNonFungible<ChainId, SchemaType, GasOption, Web3HubOptions = HubOptions<ChainId>> {
@@ -1252,6 +1252,10 @@ export interface TokenState<ChainId, SchemaType> {
     blockedFungibleTokens?: Subscription<Array<FungibleToken<ChainId, SchemaType>>>
     /** The user blocked non-fungible tokens. */
     blockedNonFungibleTokens?: Subscription<Array<NonFungibleToken<ChainId, SchemaType>>>
+    /** Credible fungible tokens */
+    credibleFungibleTokens?: Subscription<Array<FungibleToken<ChainId, SchemaType>>>
+    /** Credible non-fungible tokens */
+    credibleNonFungibleTokens?: Subscription<Array<NonFungibleToken<ChainId, SchemaType>>>
 
     /** Add a token */
     addToken?: (address: string, token: Token<ChainId, SchemaType>) => Promise<void>
@@ -1261,6 +1265,10 @@ export interface TokenState<ChainId, SchemaType> {
     trustToken?: (address: string, token: Token<ChainId, SchemaType>) => Promise<void>
     /** Block a token */
     blockToken?: (address: string, token: Token<ChainId, SchemaType>) => Promise<void>
+    /** Create a credible fungible token */
+    createFungibleToken?: (chainId: ChainId, address: string, token?: FungibleToken<ChainId, SchemaType>) => Promise<FungibleToken<ChainId, SchemaType> | undefined>
+    /** Create a credible non-fungible token */
+    createNonFungibleToken?: (chainId: ChainId, address: string, token?: NonFungibleToken<ChainId, SchemaType>) => Promise<NonFungibleToken<ChainId, SchemaType> | undefined>
 }
 export interface TransactionState<ChainId, Transaction> {
     /** The tracked transactions of currently chosen sub-network */
@@ -1399,6 +1407,7 @@ export interface OthersState<ChainId, SchemaType, ProviderType, NetworkType, Tra
 
     // #region validators
     isValidChain(chainId?: ChainId, testnet?: boolean): boolean
+    isValidChainId(chainId: ChainId): boolean
     isValidDomain(domain?: string): boolean
     isValidAddress(address?: string): boolean
     isZeroAddress(address?: string): boolean
@@ -1425,6 +1434,11 @@ export interface OthersState<ChainId, SchemaType, ProviderType, NetworkType, Tra
     getMaskTokenAddress(chainId?: ChainId): string | undefined
     getAverageBlockDelay(chainId?: ChainId, scale?: number): number
     getTransactionSignature(chainId?: ChainId, transaction?: Partial<Transaction>): string | undefined
+
+    // #region Constructor
+    createNativeToken(chainId: ChainId): FungibleToken<ChainId, SchemaType>
+    createFungibleToken(chainId: ChainId, schemaType: SchemaType, address: string, name?: string, symbol?: string, decimals?: number, logoURI?: string): FungibleToken<ChainId, SchemaType>
+    createNonFungibleToken(chainId: ChainId, address: string, schemaType: SchemaType, tokenId: string, ownerId?: string, metadata?: NonFungibleToken<ChainId, SchemaType>['metadata'], contract?: NonFungibleToken<ChainId, SchemaType>['contract'], collection?: NonFungibleToken<ChainId, SchemaType>['collection']): NonFungibleToken<ChainId, SchemaType>
 }
 
 export interface BalanceNotifierState<ChainId> {
@@ -1522,4 +1536,9 @@ export interface Web3UI<ChainId, ProviderType, NetworkType> {
         /** This UI will receive provider icon as children component, and the plugin may hook click handle on it. */
         ProviderIconClickBait?: React.ComponentType<ProviderIconClickBaitProps<ChainId, ProviderType, NetworkType>>
     }
+}
+
+export enum SearchKeywordType {
+    Domain = 'Domain',
+    Address = 'Address',
 }

@@ -7,7 +7,7 @@ import { ApproveStateType, useERC20TokenApproveCallback } from '@masknet/web3-ho
 import { TokenIcon } from '@masknet/shared'
 import { HelpOutline } from '@mui/icons-material'
 import React, { useCallback } from 'react'
-import { noop } from 'lodash-unified'
+import { noop } from 'lodash-es'
 
 const useStyles = makeStyles<void, 'icon'>()((theme, _, refs) => ({
     icon: {},
@@ -53,7 +53,7 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
     } = props
 
     const t = useSharedI18N()
-    const classes = useStylesExtends(useStyles(), props)
+    const { classes } = useStylesExtends(useStyles(), props)
 
     const [{ type: approveStateType, allowance }, transactionState, approveCallback, resetApproveCallback] =
         useERC20TokenApproveCallback(token?.address ?? '', amount, spender ?? '', noop, expectedChainId)

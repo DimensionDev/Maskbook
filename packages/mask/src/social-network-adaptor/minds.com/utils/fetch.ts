@@ -1,4 +1,4 @@
-import { flattenDeep } from 'lodash-unified'
+import { flattenDeep } from 'lodash-es'
 import {
     isTypedMessageEmpty,
     isTypedMessageText,

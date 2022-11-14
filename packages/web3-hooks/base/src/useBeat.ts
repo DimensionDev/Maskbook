@@ -1,6 +1,6 @@
 import { DependencyList, useState } from 'react'
 import { useAsyncRetry, useTimeoutFn } from 'react-use'
-import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
+import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import { useWeb3State } from './useWeb3State.js'
 import { useChainContext } from './useContext.js'

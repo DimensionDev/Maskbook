@@ -1,5 +1,5 @@
 import type Web3 from 'web3'
-import BigNumber from 'bignumber.js'
+import { BigNumber } from 'bignumber.js'
 import { defaultAbiCoder } from '@ethersproject/abi'
 import { parseUnits } from '@ethersproject/units'
 import { ChainId, createContract, encodeContractTransaction } from '@masknet/web3-shared-evm'

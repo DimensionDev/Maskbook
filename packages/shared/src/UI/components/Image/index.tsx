@@ -1,5 +1,4 @@
 import { ImgHTMLAttributes, useState } from 'react'
-import classNames from 'classnames'
 import { LoadingBase, makeStyles, useStylesExtends } from '@masknet/theme'
 import { Box, useTheme } from '@mui/material'
 import { useImageURL } from '../../../hooks/useImageURL.js'
@@ -35,7 +34,7 @@ const useStyles = makeStyles<Pick<ImageProps, 'size' | 'rounded'>, 'floatingCont
                 background:
                     theme.palette.mode === 'light'
                         ? 'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.9) 100%), linear-gradient(90deg, rgba(98, 152, 234, 0.2) 1.03%, rgba(98, 152, 234, 0.2) 1.04%, rgba(98, 126, 234, 0.2) 100%)'
-                        : undefined,
+                        : 'linear-gradient(180deg, #202020 0%, #181818 100%)',
             },
         },
     }),
@@ -59,7 +58,7 @@ export function Image({
     onClick,
     ...rest
 }: ImageProps) {
-    const classes = useStylesExtends(useStyles({ size, rounded }), { classes: externalClasses })
+    const { classes, cx } = useStylesExtends(useStyles({ size, rounded }), { classes: externalClasses })
     const theme = useTheme()
     const [failed, setFailed] = useState(false)
 
@@ -93,7 +92,7 @@ export function Image({
     }
     if (fallback && !(fallback instanceof URL) && typeof fallback !== 'string') {
         return (
-            <Box className={classNames(classes.container, classes.failed)}>
+            <Box className={cx(classes.container, classes.failed)}>
                 <Box className={classes.floatingContainer}>{fallback}</Box>
             </Box>
         )
@@ -106,7 +105,7 @@ export function Image({
             : new URL('./mask-light.png', import.meta.url).toString())
 
     return (
-        <Box className={classNames(classes.container, classes.failed)} onClick={onClick}>
+        <Box className={cx(classes.container, classes.failed)} onClick={onClick}>
             <Box className={classes.floatingContainer}>
                 <img
                     loading="lazy"
@@ -115,7 +114,7 @@ export function Image({
                     height={size}
                     {...rest}
                     src={fallbackImageURL}
-                    className={classNames(classes.image, classes.failImage, classes.fallbackImage)}
+                    className={cx(classes.image, classes.failImage, classes.fallbackImage)}
                 />
             </Box>
         </Box>

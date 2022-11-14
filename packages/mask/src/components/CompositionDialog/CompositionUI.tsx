@@ -108,7 +108,10 @@ export interface CompositionRef {
     startPlugin(id: string): void
     reset(): void
 }
-export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>((props, ref) => {
+export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(function CompositionDialogUI(
+    props,
+    ref,
+) {
     const { classes, cx, theme } = useStyles()
     const { t } = useI18N()
     const id = useId()
@@ -247,7 +250,10 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
             <div className={classes.actions}>
                 {props.maxLength ? <CharLimitIndicator value={currentPostSize} max={props.maxLength} /> : null}
                 {props.requireClipboardPermission && !props.hasClipboardPermission && (
-                    <Button variant="outlined" onClick={props.onRequestClipboardPermission}>
+                    <Button
+                        variant="roundedContained"
+                        onClick={props.onRequestClipboardPermission}
+                        sx={{ marginRight: 1 }}>
                         {t('post_dialog_enable_paste_auto')}
                     </Button>
                 )}

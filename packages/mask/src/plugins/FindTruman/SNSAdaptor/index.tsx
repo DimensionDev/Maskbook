@@ -10,7 +10,7 @@ import { Icons } from '@masknet/icons'
 import { PostInspector } from './PostInspector.js'
 import { ApplicationEntry } from '@masknet/shared'
 import { FindTrumanDialog } from './FindTrumanDialog.js'
-import { range } from 'lodash-unified'
+import { range } from 'lodash-es'
 
 const useStyles = makeStyles()((theme) => {
     return {

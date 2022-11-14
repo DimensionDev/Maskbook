@@ -1,5 +1,5 @@
 import { FC, useCallback, useEffect, useState } from 'react'
-import { isEqual } from 'lodash-unified'
+import { isEqual } from 'lodash-es'
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import { Web3ContextProvider } from '@masknet/web3-hooks-base'
 import { ChainId } from '@masknet/web3-shared-evm'

@@ -44,10 +44,6 @@ approvedList.set('html-parse-stringify2', [
 // ipfs https://github.com/ipfs/js-ipfs-utils/issues/158
 approvedList.set('node-fetch', 'https://registry.npmjs.org/@achingbrain/node-fetch/-/node-fetch-2.6.7.tgz')
 
-approvedList.set(
-    'html-parse-stringify2',
-    'github:locize/html-parse-stringify2#d463109433b2c49c74a081044f54b2a6a1ccad7c',
-)
 /**
  * @param {string} parentPackage The current resolving parentPackage
  * @param {string} dependedPackage The package it depends on
@@ -61,7 +57,6 @@ function assertInstallationSourceValid(parentPackage, dependedPackage, installat
     }
 
     if (dependedPackage === '@typescript/lib-dom' && installationSource.startsWith('npm:@types/web@^')) return
-    if (dependedPackage === 'lodash-es' && installationSource.startsWith('npm:lodash@^4')) return
 
     // !!! There is some relative path installation source in the dependency tree,
     // !!! but if we do not allow those packages to run install scripts anyway, it might be safe.
@@ -75,16 +70,25 @@ function assertInstallationSourceValid(parentPackage, dependedPackage, installat
     Source: ${installationSource}
     Declared by: ${parentPackage}
 
-    If you want to approve this new unusual dependency, please edit ./pnpmfile.cjs.`,
+    If you want to approve this new unusual dependency, please edit .pnpmfile.cjs.`,
     )
 }
 
 /* cspell:enable */
 
-function validatePackage({ dependencies, devDependencies, optionalDependencies, peerDependencies, name }) {
+function validatePackage({ dependencies, optionalDependencies, peerDependencies, name, exports }) {
+    if (
+        exports &&
+        !name.startsWith('@dimensiondev') &&
+        !name.startsWith('@masknet') &&
+        JSON.stringify(exports).includes('mask-src')
+    ) {
+        throw new Error(
+            'A package ' + name + ' out of @dimensiondev or @masknet scope using mask-src in exports field.',
+        )
+    }
     for (const [k, v] of notNormativeInstall(dependencies)) assertInstallationSourceValid(name, k, v)
     // devDependencies won't be installed for intermediate dependencies
-    // for (const [k, v] of notNormativeInstall(devDependencies)) assertInstallationSourceValid(name, k, v)
     for (const [k, v] of notNormativeInstall(optionalDependencies)) assertInstallationSourceValid(name, k, v)
     for (const [k, v] of notNormativeInstall(peerDependencies)) assertInstallationSourceValid(name, k, v)
 }

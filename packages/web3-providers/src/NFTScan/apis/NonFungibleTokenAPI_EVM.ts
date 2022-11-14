@@ -41,7 +41,6 @@ export class NFTScanNonFungibleTokenAPI_EVM implements NonFungibleTokenAPI.Provi
         if (!isValidChainId(chainId)) return createPageable(EMPTY_LIST, createIndicator(indicator))
         const path = urlcat('/api/v2/account/own/all/:from', {
             from: account,
-            erc_type: EVM.ErcType.ERC721,
             show_attribute: true,
         })
         const response = await fetchFromNFTScanV2<Response<EVM.AssetsGroup[]>>(chainId, path)

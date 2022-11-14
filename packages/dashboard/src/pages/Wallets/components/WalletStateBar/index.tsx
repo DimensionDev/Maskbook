@@ -72,11 +72,11 @@ export const WalletStateBar = memo(() => {
     const pendingTransactions = useRecentTransactions(NetworkPluginID.PLUGIN_EVM, TransactionStatusType.NOT_DEPEND)
 
     const { openDialog: openWalletStatusDialog } = useRemoteControlledDialog(
-        PluginMessages.Wallet.events.walletStatusDialogUpdated,
+        PluginMessages.Wallet.walletStatusDialogUpdated,
     )
 
     const { openDialog: openConnectWalletDialog } = useRemoteControlledDialog(
-        PluginMessages.Wallet.events.selectProviderDialogUpdated,
+        PluginMessages.Wallet.selectProviderDialogUpdated,
     )
 
     const [menu, openMenu] = useNetworkSelector()

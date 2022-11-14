@@ -1,28 +1,29 @@
 {
   "name": "@masknet/web3-shared-base",
   "private": true,
+  "type": "module",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "webpack": "./src/index.ts",
+      "mask-src": "./src/index.ts",
       "default": "./dist/index.js"
     }
   },
   "types": "./dist/index.d.ts",
   "dependencies": {
     "@dimensiondev/mask-wallet-core": "0.1.0-20211013082857-eb62e5f",
-    "@masknet/public-api": "workspace:*",
-    "@masknet/shared-base": "workspace:*",
+    "@masknet/public-api": "workspace:^",
+    "@masknet/shared-base": "workspace:^",
     "@servie/events": "^3.0.0",
     "@types/use-subscription": "^1.0.0",
     "bignumber.js": "9.1.0",
-    "date-fns": "^2.28.0",
+    "date-fns": "^2.29.3",
     "react-use": "^17.4.0",
     "reconnecting-websocket": "^4.4.0",
     "urlcat": "^2.0.4",
-    "web3-core-helpers": "1.7.5"
+    "web3-core-helpers": "1.8.0"
   },
   "devDependencies": {
-    "mock-socket": "^9.1.2"
+    "mock-socket": "^9.1.5"
   }
 }

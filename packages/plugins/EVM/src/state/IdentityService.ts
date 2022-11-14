@@ -1,4 +1,4 @@
-import { compact, uniqBy } from 'lodash-unified'
+import { compact, uniqBy } from 'lodash-es'
 import type { Plugin } from '@masknet/plugin-infra'
 import { IdentityServiceState } from '@masknet/web3-state'
 import { SocialIdentity, SocialAddress, SocialAddressType, attemptUntil } from '@masknet/web3-shared-base'
@@ -56,8 +56,10 @@ function getNextIDPlatform() {
 
 async function getWalletAddressesFromNextID(userId?: string) {
     if (!userId) return EMPTY_LIST
+
     const platform = getNextIDPlatform()
     if (!platform) return EMPTY_LIST
+
     const bindings = await NextIDProof.queryAllExistedBindingsByPlatform(platform, userId)
     return bindings.flatMap((x) =>
         x.proofs.filter((y) => y.platform === NextIDPlatform.Ethereum && isValidAddress(y.identity)),

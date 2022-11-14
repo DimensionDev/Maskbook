@@ -1,5 +1,5 @@
 import type { AbiItem } from 'web3-utils'
-import type { GoodGhostingIncentives } from '@masknet/web3-contracts/types/GoodGhostingIncentives'
+import type { GoodGhostingIncentives } from '@masknet/web3-contracts/types/GoodGhostingIncentives.js'
 import GoodGhostingIncentivesABI from '@masknet/web3-contracts/abis/GoodGhostingIncentives.json'
 import { ChainId, useGoodGhostingConstants } from '@masknet/web3-shared-evm'
 import { useContract } from '@masknet/web3-hooks-evm'

@@ -1,5 +1,4 @@
-import { ListItemIcon, ListItemText, styled } from '@mui/material'
-import ListItemButton from '@mui/material/ListItemButton'
+import { ListItemIcon, ListItemText, styled, ListItemButton } from '@mui/material'
 import { MaskColorVar } from '@masknet/theme'
 
 export interface ConnectActionListItemProps {

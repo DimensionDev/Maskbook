@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import BigNumber from 'bignumber.js'
+import { BigNumber } from 'bignumber.js'
 import formatDistanceStrict from 'date-fns/formatDistanceStrict'
 import addSeconds from 'date-fns/addSeconds'
 import { makeStyles } from '@masknet/theme'
