@@ -44,6 +44,7 @@ export const WalletHeader = memo(() => {
     const matchSwitchWallet = useMatch(PopupRoutes.SwitchWallet)
     const matchContractInteraction = useMatch(PopupRoutes.ContractInteraction)
     const matchWalletRecovered = useMatch(PopupRoutes.WalletRecovered)
+    const matchCreatePassword = useMatch(PopupRoutes.CreatePassword)
 
     const onChainChange = useCallback(
         async (chainId: ChainId) => {
@@ -80,6 +81,8 @@ export const WalletHeader = memo(() => {
             classes: { paper: classes.menu },
         },
     )
+
+    if (matchCreatePassword) return null
 
     if (!wallet) return <NormalHeader onlyTitle={!!matchWalletRecovered} onClose={Services.Helper.removePopupWindow} />
 

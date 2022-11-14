@@ -34,6 +34,7 @@ const SetPaymentPassword = lazy(() => import('./SetPaymentPassword/index.js'))
 const WalletRecovery = lazy(() => import('./WalletRecovery/index.js'))
 const LegacyWalletRecovery = lazy(() => import('./LegacyWalletRecovery/index.js'))
 const ReplaceTransaction = lazy(() => import('./ReplaceTransaction/index.js'))
+const CreatePassword = lazy(() => import('./CreatePassword/index.js'))
 
 const exclusionDetectLocked = [PopupRoutes.Unlock]
 
@@ -107,6 +108,8 @@ export default function Wallet() {
                 ) : (
                     <Routes>
                         <Route path="*" element={!wallet ? <WalletStartUp /> : <WalletAssets />} />
+                        <Route path={r(PopupRoutes.CreatePassword)} element={<CreatePassword />} />
+                        <Route path={r(PopupRoutes.WalletStartUp)} element={<WalletStartUp />} />
                         <Route path={r(PopupRoutes.WalletRecovered)} element={<WalletRecovery />} />
                         <Route path={r(PopupRoutes.LegacyWalletRecovered)} element={<LegacyWalletRecovery />} />
                         <Route path={r(PopupRoutes.ImportWallet)} element={<ImportWallet />} />

@@ -6,7 +6,7 @@ import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
 import { useNetworkDescriptor } from '@masknet/web3-hooks-base'
 import { ChainId, formatEthereumAddress } from '@masknet/web3-shared-evm'
-import { DialogActions, DialogContent, Link, Typography, Box } from '@mui/material'
+import { DialogActions, DialogContent, Link, Typography, Box, Button } from '@mui/material'
 import { first } from 'lodash-es'
 import { memo, useState } from 'react'
 import { useAsync, useCopyToClipboard, useUpdateEffect } from 'react-use'
@@ -14,6 +14,7 @@ import { useSignableAccounts } from '../../hooks/useSignableAccounts.js'
 import { Translate, useI18N } from '../../locales/index.js'
 import { PluginSmartPayMessages } from '../../message.js'
 import { context } from '../context.js'
+import { ManagePopover } from './ManagePopover.js'
 import { SmartPayBanner } from './SmartPayBanner.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -21,6 +22,17 @@ const useStyles = makeStyles()((theme) => ({
         padding: theme.spacing(2),
         minHeight: 484,
         boxSizing: 'border-box',
+        '::-webkit-scrollbar': {
+            backgroundColor: 'transparent',
+            width: 20,
+        },
+        '::-webkit-scrollbar-thumb': {
+            borderRadius: '20px',
+            width: 5,
+            border: '7px solid rgba(0, 0, 0, 0)',
+            backgroundColor: theme.palette.mode === 'dark' ? 'rgba(250, 250, 250, 0.2)' : 'rgba(0, 0, 0, 0.2)',
+            backgroundClip: 'padding-box',
+        },
     },
     dialogActions: {
         padding: '0px !important',
@@ -80,12 +92,19 @@ const useStyles = makeStyles()((theme) => ({
     arrow: {
         color: theme.palette.maskColor.second,
     },
+    tips: {
+        marginTop: theme.spacing(1.5),
+        padding: theme.spacing(1.5),
+        backgroundColor: theme.palette.maskColor.bg,
+        borderRadius: 12,
+    },
 }))
 
 export const SmartPayDeployDialog = memo(() => {
     const t = useI18N()
     const { classes } = useStyles()
     const [inWhiteList, setInWhiteList] = useState(true)
+    const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
     const [signAccount, setSignAccount] = useState<
         | {
               type: 'Wallet' | 'Persona'
@@ -98,6 +117,8 @@ export const SmartPayDeployDialog = memo(() => {
         if (!event.open) return
         setInWhiteList(event.inWhiteList)
     })
+
+    const { setDialog } = useRemoteControlledDialog(PluginSmartPayMessages.smartPayDescriptionDialogEvent)
 
     const polygonDescriptor = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, ChainId.Matic)
 
@@ -143,7 +164,11 @@ export const SmartPayDeployDialog = memo(() => {
     }, [signablePersonas, signableWallets])
 
     return (
-        <InjectedDialog open={open} onClose={closeDialog} title={t.smart_pay_wallet()} titleTail={<Icons.Questions />}>
+        <InjectedDialog
+            open={open}
+            onClose={closeDialog}
+            title={t.smart_pay_wallet()}
+            titleTail={<Icons.Questions onClick={() => setDialog({ open: true })} />}>
             <DialogContent className={classes.dialogContent}>
                 {inWhiteList ? (
                     <>
@@ -184,7 +209,13 @@ export const SmartPayDeployDialog = memo(() => {
                                 </Typography>
                             </Box>
                         </Box>
-                        <Box className={classes.select}>
+                        <Box
+                            className={classes.select}
+                            onMouseDown={(event) => {
+                                event.stopPropagation()
+                                event.preventDefault()
+                                setAnchorEl(event.currentTarget)
+                            }}>
                             <Typography className={classes.selectTitle}>
                                 {t.setup_smart_pay_managed_account()}
                             </Typography>
@@ -203,6 +234,24 @@ export const SmartPayDeployDialog = memo(() => {
                                     </Typography>
                                 </Box>
                                 <Icons.ArrowDrop className={classes.arrow} size={24} />
+                            </Box>
+                            <ManagePopover
+                                open={!!anchorEl}
+                                anchorEl={anchorEl}
+                                onClose={() => {
+                                    setAnchorEl(null)
+                                }}
+                                signablePersonas={signablePersonas ?? []}
+                                signableWallets={signableWallets ?? []}
+                            />
+                        </Box>
+                        <Box className={classes.tips}>
+                            <Typography>{t.deploy_tips_title()}</Typography>
+                            <Box component="ol" pl={1.5}>
+                                <Typography component="li">{t.deploy_tips_description_one()}</Typography>
+                                <Typography component="li">{t.deploy_tips_description_two()}</Typography>
+                                <Typography component="li">{t.deploy_tips_description_three()}</Typography>
+                                <Typography component="li">{t.deploy_tips_description_four()}</Typography>
                             </Box>
                         </Box>
                     </>
@@ -249,8 +298,9 @@ export const SmartPayDeployDialog = memo(() => {
                 <PersonaAction
                     avatar={avatar !== null ? avatar : undefined}
                     currentPersona={currentPersona}
-                    currentVisitingProfile={currentVisitingProfile}
-                />
+                    currentVisitingProfile={currentVisitingProfile}>
+                    <Button variant="roundedOutlined">{t.deploy()}</Button>
+                </PersonaAction>
             </DialogActions>
         </InjectedDialog>
     )
