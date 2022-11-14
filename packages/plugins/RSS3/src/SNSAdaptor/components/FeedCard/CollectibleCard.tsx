@@ -9,7 +9,7 @@ import { Translate } from '../../../locales/i18n_generated.js'
 import { useAddressLabel } from '../../hooks/index.js'
 import { CardFrame, FeedCardProps } from '../base.js'
 import { CardType, getLastAction } from '../share.js'
-import { formatValue, Label } from './common.js'
+import { AddressLabel, formatValue, Label } from './common.js'
 
 const useStyles = makeStyles<void, 'image' | 'verbose' | 'info' | 'center'>()((theme, _, refs) => ({
     summary: {
@@ -163,7 +163,7 @@ export const CollectibleCard: FC<CollectibleCardProps> = ({ feed, ...rest }) => 
                             }}
                             components={{
                                 user: <Label />,
-                                recipient: <Label />,
+                                recipient: <AddressLabel address={action.address_to} />,
                                 cost: <Label />,
                                 collectible: verbose ? <Label /> : <span />,
                             }}
@@ -202,6 +202,7 @@ export const CollectibleCard: FC<CollectibleCardProps> = ({ feed, ...rest }) => 
                         ? (feed.actions[0].metadata as RSS3BaseAPI.TransactionMetadata)
                         : undefined
                 const isSending = isSameAddress(feed.owner, action.address_from)
+                const otherAddress = isSending ? action.address_to : action.address_from
                 return {
                     cardType: isSending ? CardType.CollectibleOut : CardType.CollectibleIn,
                     metadata,
@@ -210,9 +211,7 @@ export const CollectibleCard: FC<CollectibleCardProps> = ({ feed, ...rest }) => 
                             values={{
                                 user,
                                 collectible: verbose ? metadata!.name : 'an NFT',
-                                other: isSending
-                                    ? formatEthereumAddress(action.address_to ?? '', 4)
-                                    : formatEthereumAddress(action.address_from ?? '', 4),
+                                other: formatEthereumAddress(otherAddress ?? '', 4),
                                 /* eslint-disable no-nested-ternary */
                                 context: isSending ? 'send' : costMetadata ? 'claim_cost' : 'claim',
                                 cost_value: formatValue(costMetadata),
@@ -220,7 +219,7 @@ export const CollectibleCard: FC<CollectibleCardProps> = ({ feed, ...rest }) => 
                             }}
                             components={{
                                 user: <Label />,
-                                other: <Label />,
+                                other: <AddressLabel address={otherAddress} />,
                                 collectible: verbose ? <Label /> : <span />,
                                 cost: <Label />,
                             }}

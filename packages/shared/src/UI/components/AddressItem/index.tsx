@@ -39,7 +39,7 @@ export function AddressItem({
         <>
             {!socialAccount.label || isSameAddress(socialAccount.label, socialAccount.address) ? (
                 <ReversedAddress
-                    TypographyProps={TypographyProps}
+                    {...TypographyProps}
                     address={socialAccount.address}
                     pluginID={socialAccount.pluginID}
                 />
