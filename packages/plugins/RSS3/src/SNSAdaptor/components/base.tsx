@@ -29,7 +29,7 @@ const useStyles = makeStyles()((theme) => ({
     inspectable: {
         cursor: 'pointer',
         '&:hover': {
-            backgroundColor: theme.palette.maskColor.bg,
+            backgroundColor: theme.palette.background.default,
         },
     },
     header: {
