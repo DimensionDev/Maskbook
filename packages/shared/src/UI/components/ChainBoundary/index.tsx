@@ -188,16 +188,16 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
 
     if (isMatched) return <>{props.children}</>
 
+    const network = (expectedChainAllowed ? expectedChainName : expectedPlugin?.name.fallback) ?? ''
+
     if (!isPluginIDMatched) {
         return renderBox(
             <>
                 {!noSwitchNetworkTip ? (
                     <Typography color={MaskColorVar.errorPlugin}>
-                        <span>
-                            {t.plugin_wallet_not_available_on({
-                                network: plugin?.name?.fallback ?? 'Unknown Plugin',
-                            })}
-                        </span>
+                        {t.plugin_wallet_not_available_on({
+                            network: plugin?.name?.fallback ?? 'Unknown Plugin',
+                        })}
                     </Typography>
                 ) : null}
 
@@ -212,19 +212,14 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
                         />
                     }
                     sx={props.ActionButtonPromiseProps?.sx}
-                    init={
-                        <span>
-                            {t.plugin_wallet_connect_network({
-                                network:
-                                    (expectedChainAllowed ? expectedChainName : expectedPlugin?.name.fallback) ?? '',
-                            })}
-                        </span>
-                    }
-                    waiting={t.plugin_wallet_connect_network_under_going({
-                        network: (expectedChainAllowed ? expectedChainName : expectedPlugin?.name.fallback) ?? '',
+                    init={t.plugin_wallet_connect_network({
+                        network,
+                    })}
+                    waiting={t.plugin_wallet_connect_network({
+                        network,
                     })}
                     complete={t.plugin_wallet_connect_network({
-                        network: (expectedChainAllowed ? expectedChainName : expectedPlugin?.name.fallback) ?? '',
+                        network,
                     })}
                     failed={t.retry()}
                     executor={onSwitchChain}
@@ -241,11 +236,9 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
         <>
             {!noSwitchNetworkTip ? (
                 <Typography color={MaskColorVar.errorPlugin}>
-                    <span>
-                        {t.plugin_wallet_not_available_on({
-                            network: actualChainName ?? '',
-                        })}
-                    </span>
+                    {t.plugin_wallet_not_available_on({
+                        network: actualChainName ?? '',
+                    })}
                 </Typography>
             ) : null}
             {expectedChainAllowed && !switchChainWithoutPopup ? (
@@ -259,7 +252,7 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
                     }
                     disabled={actualProviderType === ProviderType.WalletConnect || switchButtonDisabled}
                     sx={props.ActionButtonPromiseProps?.sx}
-                    init={<span>{t.plugin_wallet_switch_network({ network: expectedChainName ?? '' })}</span>}
+                    init={t.plugin_wallet_switch_network({ network: expectedChainName ?? '' })}
                     waiting={t.plugin_wallet_switch_network_under_going({
                         network: expectedChainName ?? '',
                     })}
