@@ -937,7 +937,7 @@ export interface Connection<
     /** Deploy a new SC account */
     createSmartContractAccount?: () => Promise<string>
     /** Change owner of SC account */
-    changeSmartContractOwner?: (owner: string, signature: string) => Promise<void>
+    transferSmartContractAccount?: (owner: string, signature: string) => Promise<void>
     /** Sign a transaction */
     signTransaction(transaction: Transaction, initial?: Web3ConnectionOptions): Promise<TransactionSignature>
     /** Sign multiple transactions */
