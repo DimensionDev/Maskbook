@@ -27,7 +27,7 @@
     "listed": "Listed",
     "unlisted": "Unlisted",
     "add_wallet": "Add Wallet",
-    "add_wallet_to_connected": "No connected wallet, pleae add wallet.",
+    "add_wallet_to_connected": "No connected wallet. Please add wallet.",
     "open_wallet": "You’ve switched off all wallets. Please go to settings to active.",
     "tip_persona_sign_success": "Persona signed successfully.",
     "tip_wallet_sign_error": "Wallet connection failed.",
