@@ -5,7 +5,7 @@ import type { Configuration as DevServerConfiguration } from 'webpack-dev-server
 import WebExtensionPlugin from 'webpack-target-webextension'
 import CopyPlugin = require('copy-webpack-plugin')
 import HTMLPlugin = require('html-webpack-plugin')
-import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin'
+import ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin')
 import { ReadonlyCachePlugin } from './ReadonlyCachePlugin'
 import { EnvironmentPluginCache, EnvironmentPluginNoCache } from './EnvironmentPlugin'
 import { emitManifestFile } from './manifest'
