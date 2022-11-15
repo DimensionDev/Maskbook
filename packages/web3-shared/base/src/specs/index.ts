@@ -170,6 +170,8 @@ export interface SocialIdentity {
 export interface SocialAddress<PluginID> {
     /** The ID of a plugin that the address belongs to */
     pluginID: PluginID
+    /** The chain id that the address belongs to, default support all chains */
+    chainId?: number
     /** The data source type */
     type: SocialAddressType
     /** The address in hex string */
@@ -188,6 +190,8 @@ export interface SocialAddress<PluginID> {
  */
 export interface SocialAccount extends Omit<SocialAddress<NetworkPluginID>, 'type'> {
     supportedAddressTypes?: SocialAddressType[]
+    /** The chain ids that the address supported, default support all chains */
+    supportedChainIds?: number[]
 }
 
 export type Price = {
