@@ -46,9 +46,10 @@ const useStyles = makeStyles<{ columns?: number; gap?: number }>()((theme, { col
         nftContainer: {
             background: isLight ? '#EDEFEF' : '#2F3336',
             borderRadius: 8,
-            width: '100%',
+            width: 126,
+            height: 154,
             transition: 'all 0.2s ease',
-            overflow: 'auto',
+            overflow: 'hidden',
             '&:hover': {
                 backgroundColor: isLight ? theme.palette.background.paper : undefined,
                 boxShadow: isLight ? '0px 4px 30px rgba(0, 0, 0, 0.1)' : undefined,
@@ -90,15 +91,19 @@ const useStyles = makeStyles<{ columns?: number; gap?: number }>()((theme, { col
         inactive: {
             opacity: 0.5,
         },
-        fallbackImage: {
-            width: 64,
-            height: 64,
+        image: {
+            width: 126,
+            height: 126,
         },
         caption: {
             padding: theme.spacing(0.5),
             color: theme.palette.text.primary,
             fontWeight: 700,
             fontSize: 12,
+        },
+        root: {
+            width: 'auto',
+            height: 'auto',
         },
     }
 })
@@ -114,7 +119,9 @@ export const NFTItem: FC<NFTItemProps> = ({ token }) => {
             <AssetPreviewer
                 url={token.metadata?.imageURL ?? token.metadata?.imageURL}
                 classes={{
-                    fallbackImage: classes.fallbackImage,
+                    fallbackImage: classes.image,
+                    container: classes.image,
+                    root: classes.root,
                 }}
             />
             <Typography className={classes.caption} title={fullCaption !== caption ? fullCaption : undefined}>
