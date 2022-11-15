@@ -1,11 +1,12 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useChainContext, useWeb3State } from '@masknet/web3-hooks-base'
 import type { SocialAccount } from '@masknet/web3-shared-base'
+import type { Web3Helper } from '@masknet/web3-helpers'
 
 /**
  * Add name service
  */
-export function useTipAccountsCompletion(accounts: SocialAccount[]) {
+export function useTipAccountsCompletion(accounts: SocialAccount<Web3Helper.ChainIdAll>[]) {
     const [map, setMap] = useState<Record<string, string>>({})
 
     const { NameService } = useWeb3State()

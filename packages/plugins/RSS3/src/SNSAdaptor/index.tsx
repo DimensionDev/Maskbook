@@ -1,6 +1,6 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { joinKeys, NetworkPluginID } from '@masknet/shared-base'
-import { Web3Helper } from '@masknet/web3-helpers'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import { Web3ContextProvider } from '@masknet/web3-hooks-base'
 import { RSS3BaseAPI } from '@masknet/web3-providers'
 import type { SocialAccount, SocialIdentity } from '@masknet/web3-shared-base'

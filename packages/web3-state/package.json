@@ -13,7 +13,6 @@
   "dependencies": {
     "@masknet/plugin-infra": "workspace:^",
     "@masknet/shared-base": "workspace:^",
-    "@masknet/web3-helpers": "workspace:^",
     "@masknet/web3-providers": "workspace:^",
     "@masknet/web3-shared-base": "workspace:^",
     "@servie/events": "^3.0.0",

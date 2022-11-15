@@ -106,7 +106,7 @@ const useStyles = makeStyles<void, 'avatarDecoration'>()((theme, _, refs) => ({
 
 export interface ProfileBarProps extends HTMLProps<HTMLDivElement> {
     identity: SocialIdentity
-    socialAccounts: SocialAccount<Web3Helper.ChainIdAll>[]
+    socialAccounts: Array<SocialAccount<Web3Helper.ChainIdAll>>
     address?: string
     onAddressChange?: (address: string) => void
 }

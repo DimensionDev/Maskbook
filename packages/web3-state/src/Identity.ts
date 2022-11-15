@@ -7,11 +7,10 @@ import {
     SocialAddressType,
     SocialAccount,
 } from '@masknet/web3-shared-base'
-import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
-import type { Web3Helper } from '@masknet/web3-helpers'
+import { EMPTY_LIST } from '@masknet/shared-base'
 
-export class IdentityServiceState implements Web3SocialIdentityState<Web3Helper.ChainIdAll> {
-    protected cache = new LRU<string, Promise<Array<SocialAddress<NetworkPluginID>>>>({
+export class IdentityServiceState<ChainId> implements Web3SocialIdentityState<ChainId> {
+    protected cache = new LRU<string, Promise<Array<SocialAddress<ChainId>>>>({
         max: 20,
         ttl: Number.MAX_SAFE_INTEGER,
     })
@@ -31,11 +30,11 @@ export class IdentityServiceState implements Web3SocialIdentityState<Web3Helper.
         return this.cache.get(this.getIdentityID(identity))
     }
 
-    protected getFromRemote(identity: SocialIdentity): Promise<Array<SocialAddress<NetworkPluginID>>> {
+    protected getFromRemote(identity: SocialIdentity): Promise<Array<SocialAddress<ChainId>>> {
         throw new Error('Method not implemented.')
     }
 
-    async lookup(identity: SocialIdentity): Promise<Array<SocialAddress<NetworkPluginID>>> {
+    async lookup(identity: SocialIdentity): Promise<Array<SocialAddress<ChainId>>> {
         const ID = this.getIdentityID(identity)
         if (!ID) return EMPTY_LIST
 
@@ -50,9 +49,9 @@ export class IdentityServiceState implements Web3SocialIdentityState<Web3Helper.
         return fromRemote
     }
 
-    __mergeSocialAddressesAll__(socialAddresses: Array<SocialAddress<NetworkPluginID>>) {
+    __mergeSocialAddressesAll__(socialAddresses: Array<SocialAddress<ChainId>>) {
         const accountsGrouped = groupBy(socialAddresses, (x) => `${x.pluginID}_${x.address.toLowerCase()}`)
-        return Object.entries(accountsGrouped).map<SocialAccount<Web3Helper.ChainIdAll>>(([, group]) => {
+        return Object.entries(accountsGrouped).map<SocialAccount<ChainId>>(([, group]) => {
             return {
                 pluginID: group[0].pluginID,
                 address: group[0].address,

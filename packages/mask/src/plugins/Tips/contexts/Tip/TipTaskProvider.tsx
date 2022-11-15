@@ -17,12 +17,13 @@ import { useNftTip } from './useNftTip.js'
 import { useTokenTip } from './useTokenTip.js'
 import { useRecipientValidate } from './useRecipientValidate.js'
 import { useTipValidate } from './useTipValidate.js'
+import type { Web3Helper } from '@masknet/web3-helpers'
 
 interface Props {
     task: TipTask
 }
 
-function useRecipients(pluginID: NetworkPluginID, tipsAccounts: SocialAccount[]) {
+function useRecipients(pluginID: NetworkPluginID, tipsAccounts: SocialAccount<Web3Helper.ChainIdAll>[]) {
     const _recipients = useTipAccountsCompletion(tipsAccounts)
     const recipients = useMemo(() => {
         return [..._recipients].sort((a, z) => {

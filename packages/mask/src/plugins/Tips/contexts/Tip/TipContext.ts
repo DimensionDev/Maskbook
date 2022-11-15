@@ -12,7 +12,7 @@ export interface TipContextOptions {
     setRecipient: Dispatch<SetStateAction<string>>
     tipType: TipsType
     setTipType: Dispatch<SetStateAction<TipsType>>
-    recipients: SocialAccount<Web3Helper.ChainIdAll>[]
+    recipients: Array<SocialAccount<Web3Helper.ChainIdAll>>
     token: Web3Helper.FungibleTokenAll | null
     setToken: Dispatch<SetStateAction<Web3Helper.FungibleTokenAll | null>>
     amount: string

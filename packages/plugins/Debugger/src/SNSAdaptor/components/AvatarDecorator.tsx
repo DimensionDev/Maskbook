@@ -1,11 +1,11 @@
 import { makeStyles } from '@masknet/theme'
-import { Web3Helper } from '@masknet/web3-helpers'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import type { SocialAccount, SocialIdentity } from '@masknet/web3-shared-base'
 
 interface AvatarDecoratorProps {
     identity?: SocialIdentity
     persona?: string
-    socialAccounts?: SocialAccount<Web3Helper.ChainIdAll>[]
+    socialAccounts?: Array<SocialAccount<Web3Helper.ChainIdAll>>
 }
 
 const useStyles = makeStyles()({

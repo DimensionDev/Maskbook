@@ -13,6 +13,7 @@
     { "path": "../../web3-hooks/evm" },
     { "path": "../../shared-base" },
     { "path": "../../theme" },
+    { "path": "../../web3-helpers" },
     { "path": "../../web3-providers" }
   ]
 }

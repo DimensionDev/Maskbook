@@ -33,7 +33,7 @@ import type {
 import type { ChainId as ChainIdEVM, Transaction as TransactionEVM } from '@masknet/web3-shared-evm'
 import type { Emitter } from '@servie/events'
 import type { UnboundedRegistry } from '@dimensiondev/holoflows-kit'
-import { Web3Helper } from '@masknet/web3-helpers'
+import type { Web3Helper } from '@masknet/web3-helpers'
 
 export declare namespace Plugin {
     /**
@@ -657,7 +657,7 @@ export namespace Plugin.SNSAdaptor {
             Decorator: InjectUI<{
                 identity?: SocialIdentity
                 persona?: string
-                socialAccounts?: SocialAccount<Web3Helper.ChainIdAll>[]
+                socialAccounts?: Array<SocialAccount<Web3Helper.ChainIdAll>>
             }>
             /**
              * The injected avatar settings button component
@@ -665,7 +665,7 @@ export namespace Plugin.SNSAdaptor {
             Settings?: InjectUI<{
                 identity?: SocialIdentity
                 persona?: string
-                socialAccounts?: SocialAccount<Web3Helper.ChainIdAll>[]
+                socialAccounts?: Array<SocialAccount<Web3Helper.ChainIdAll>>
             }>
         }
         Utils?: {
@@ -674,7 +674,7 @@ export namespace Plugin.SNSAdaptor {
              */
             shouldDisplay?(
                 identity?: SocialIdentity,
-                socialAccounts?: SocialAccount<Web3Helper.ChainIdAll>[],
+                socialAccounts?: Array<SocialAccount<Web3Helper.ChainIdAll>>,
                 sourceType?: AvatarRealmSourceType,
             ): boolean
         }
@@ -690,7 +690,7 @@ export namespace Plugin.SNSAdaptor {
     export interface TipsRealmOptions {
         identity?: ProfileIdentifier
         slot: TipsSlot
-        accounts?: SocialAccount<Web3Helper.ChainIdAll>
+        accounts?: Array<SocialAccount<Web3Helper.ChainIdAll>>
         iconSize?: number
         buttonSize?: number
         onStatusUpdate?(disabled: boolean): void

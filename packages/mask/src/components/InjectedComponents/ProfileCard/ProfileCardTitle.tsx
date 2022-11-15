@@ -39,7 +39,7 @@ const useStyles = makeStyles()((theme) => {
 
 export interface ProfileCardTitleProps extends HTMLProps<HTMLDivElement> {
     identity: SocialIdentity
-    socialAccounts: SocialAccount<Web3Helper.ChainIdAll>[]
+    socialAccounts: Array<SocialAccount<Web3Helper.ChainIdAll>>
     address?: string
     onAddressChange?(address: string): void
 }
