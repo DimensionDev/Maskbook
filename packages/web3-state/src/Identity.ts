@@ -1,5 +1,5 @@
 import LRU from 'lru-cache'
-import { groupBy, first, compact } from 'lodash-es'
+import { groupBy, first, compact, uniq } from 'lodash-es'
 import {
     SocialAddress,
     SocialIdentity,
@@ -66,8 +66,8 @@ export class IdentityServiceState implements Web3SocialIdentityState {
                 // The supportedChainIds support all chains by default. If not set value, should keep it.
                 supportedChainIds: group.find((x) => !x.chainId)
                     ? undefined
-                    : group.map((x) => x.chainId).filter((x): x is number => !!x),
-                supportedAddressTypes: group.map((x) => x.type),
+                    : uniq(compact(group.map((x) => x.chainId))),
+                supportedAddressTypes: uniq(group.map((x) => x.type)),
             }
         })
     }
