@@ -35,8 +35,8 @@ const useStyles = makeStyles<StyleProps>()((theme) => {
         },
         ensDomain: {
             fontWeight: 700,
-            color: theme.palette.common.black,
-            fontSize: 14,
+            color: theme.palette.maskColor.bottom,
+            fontSize: 18,
             lineHeight: '18px',
         },
 
@@ -54,9 +54,9 @@ const useStyles = makeStyles<StyleProps>()((theme) => {
         },
         socialName: {
             color: theme.palette.maskColor.dark,
-            maxWidth: 115,
+            maxWidth: 85,
             overflow: 'hidden',
-            textOverflow: 'ellipsis',
+            textOverflow: '',
             fontWeight: 700,
             marginLeft: 4,
             fontSize: 16,
