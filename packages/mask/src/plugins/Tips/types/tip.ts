@@ -9,7 +9,7 @@ export enum TipsType {
 export interface TipTask {
     recipient?: string
     recipientSnsId?: string
-    accounts: SocialAccount<Web3Helper.ChainIdAll>[]
+    accounts: Array<SocialAccount<Web3Helper.ChainIdAll>>
 }
 
 export type TipNFTKeyPair = [address: string, tokenId: string]

@@ -16,7 +16,7 @@ const useStyles = makeStyles()(() => ({
 
 export interface TabContentProps {
     identity?: SocialIdentity
-    socialAccounts?: SocialAccount<Web3Helper.ChainIdAll>[]
+    socialAccounts?: Array<SocialAccount<Web3Helper.ChainIdAll>>
 }
 
 export function ProfileCover() {
