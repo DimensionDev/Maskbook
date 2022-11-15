@@ -2,7 +2,7 @@ import { useAsync, useAsyncRetry } from 'react-use'
 import type { DataProvider } from '@masknet/public-api'
 import { NetworkPluginID } from '@masknet/shared-base'
 import type { TrendingAPI } from '@masknet/web3-providers'
-import { TokenType, attemptUntil } from '@masknet/web3-shared-base'
+import { TokenType } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useChainContext, useFungibleToken } from '@masknet/web3-hooks-base'
 import { PluginTraderRPC } from '../messages.js'
@@ -56,7 +56,6 @@ export function useTrendingById(
     dataProvider: DataProvider,
     expectedChainId?: ChainId,
     searchedContractAddress?: string,
-    chainList?: ChainId[],
 ) {
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>({ chainId: expectedChainId })
     const currency = useCurrentCurrency(dataProvider)
@@ -67,17 +66,6 @@ export function useTrendingById(
     } = useAsync(async () => {
         if (!id) return null
         if (!currency) return null
-        if (chainList)
-            return attemptUntil(
-                chainList.map((chainId) => async () => {
-                    const trending = await PluginTraderRPC.getCoinTrending(chainId, id, currency, dataProvider).catch(
-                        () => undefined,
-                    )
-                    if (!trending?.coin.address) return undefined
-                    return trending
-                }),
-                undefined,
-            )
         return PluginTraderRPC.getCoinTrending(chainId, id, currency, dataProvider).catch(() => null)
     }, [chainId, dataProvider, currency?.id, id])
 
