@@ -90,7 +90,7 @@ export class NFTScanTrendingAPI implements TrendingAPI.Provider<ChainId> {
             contract_address: nft.contract_address,
             image_url: nft.logo_url,
         }))
-        return coins
+        return coins.slice(0, 10)
     }
 
     async getCoinPriceStats(
