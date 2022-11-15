@@ -13,7 +13,7 @@ import { ChainId } from '@masknet/web3-shared-evm'
 import { TabContext } from '@mui/lab'
 import { Tab, Typography } from '@mui/material'
 import { Web3ContextProvider } from '@masknet/web3-hooks-base'
-import { MaskMessages, sorter, useI18N, useLocationChange } from '../../../utils/index.js'
+import { MaskMessages, addressSorter, useI18N, useLocationChange } from '../../../utils/index.js'
 import { ProfileCardTitle } from './ProfileCardTitle.js'
 
 interface Props extends withClasses<'text' | 'button' | 'root'> {
@@ -104,7 +104,7 @@ export const ProfileCard: FC<Props> = ({ identity, ...rest }) => {
         value: allSocialAccounts = EMPTY_LIST,
         loading: loadingSocialAccounts,
         retry: retrySocialAddress,
-    } = useSocialAccountsBySettings(identity, undefined, sorter)
+    } = useSocialAccountsBySettings(identity, undefined, addressSorter)
     const socialAccounts = useMemo(
         () => allSocialAccounts.filter((x) => x.pluginID === NetworkPluginID.PLUGIN_EVM),
         [allSocialAccounts],
