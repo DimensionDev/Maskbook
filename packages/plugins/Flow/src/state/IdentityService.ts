@@ -3,7 +3,7 @@ import type { Plugin } from '@masknet/plugin-infra'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { IdentityServiceState } from '@masknet/web3-state'
 import { SocialIdentity, SocialAddress, SocialAddressType } from '@masknet/web3-shared-base'
-import { isValidAddress } from '@masknet/web3-shared-flow'
+import { ChainId, isValidAddress } from '@masknet/web3-shared-flow'
 
 function getFlowAddress(bio: string) {
     const addressMatched = bio.match(/\b0x\w{16}\b/) ?? null
@@ -12,7 +12,7 @@ function getFlowAddress(bio: string) {
     return
 }
 
-export class IdentityService extends IdentityServiceState {
+export class IdentityService extends IdentityServiceState<ChainId> {
     constructor(protected context: Plugin.Shared.SharedContext) {
         super()
     }
@@ -20,7 +20,7 @@ export class IdentityService extends IdentityServiceState {
     protected override async getFromRemote({ bio = '' }: SocialIdentity) {
         const address = getFlowAddress(bio)
 
-        return compact<SocialAddress<NetworkPluginID.PLUGIN_FLOW>>([
+        return compact<SocialAddress<ChainId>>([
             address
                 ? {
                       pluginID: NetworkPluginID.PLUGIN_FLOW,

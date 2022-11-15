@@ -1,4 +1,4 @@
-import { compact, uniqBy } from 'lodash-es'
+import { compact, first, uniqBy } from 'lodash-es'
 import type { Plugin } from '@masknet/plugin-infra'
 import { IdentityServiceState } from '@masknet/web3-state'
 import { SocialIdentity, SocialAddress, SocialAddressType, attemptUntil } from '@masknet/web3-shared-base'
@@ -10,6 +10,8 @@ import {
     NextIDPlatform,
     createLookupTableResolver,
     PluginID,
+    joinKeys,
+    BindingProof,
 } from '@masknet/shared-base'
 import { KVStorage } from '@masknet/shared'
 import { ChainId, isValidAddress, isZeroAddress } from '@masknet/web3-shared-evm'
@@ -54,15 +56,19 @@ function getNextIDPlatform() {
     return
 }
 
-async function getWalletAddressesFromNextID(userId?: string) {
+async function getWalletAddressesFromNextID(userId?: string): Promise<BindingProof[]> {
     if (!userId) return EMPTY_LIST
 
     const platform = getNextIDPlatform()
     if (!platform) return EMPTY_LIST
 
     const bindings = await NextIDProof.queryAllExistedBindingsByPlatform(platform, userId)
-    return bindings.flatMap((x) =>
-        x.proofs.filter((y) => y.platform === NextIDPlatform.Ethereum && isValidAddress(y.identity)),
+    const latestActivatedBinding = first(
+        bindings.sort((a, z) => Number.parseInt(z.activated_at, 10) - Number.parseInt(a.activated_at, 10)),
+    )
+    if (!latestActivatedBinding) return EMPTY_LIST
+    return latestActivatedBinding.proofs.filter(
+        (x) => x.platform === NextIDPlatform.Ethereum && isValidAddress(x.identity),
     )
 }
 
@@ -78,7 +84,7 @@ const resolveMaskXAddressType = createLookupTableResolver<MaskX_BaseAPI.SourceTy
     },
 )
 
-export class IdentityService extends IdentityServiceState {
+export class IdentityService extends IdentityServiceState<ChainId> {
     private KV = new KVStorage(`com.maskbook.user_${getSiteType()}`)
 
     constructor(protected context: Plugin.Shared.SharedUIContext) {
@@ -89,12 +95,14 @@ export class IdentityService extends IdentityServiceState {
         type: SocialAddressType,
         address: string,
         label = '',
+        chainId?: ChainId,
         updatedAt?: string,
         createdAt?: string,
-    ): SocialAddress<NetworkPluginID.PLUGIN_EVM> | undefined {
+    ): SocialAddress<ChainId> | undefined {
         if (isValidAddress(address) && !isZeroAddress(address)) {
             return {
                 pluginID: NetworkPluginID.PLUGIN_EVM,
+                chainId,
                 type,
                 label,
                 address,
@@ -161,7 +169,14 @@ export class IdentityService extends IdentityServiceState {
         const listOfAddress = await getWalletAddressesFromNextID(identifier?.userId)
         return compact(
             listOfAddress.map((x) =>
-                this.createSocialAddress(SocialAddressType.NEXT_ID, x.identity, '', x.latest_checked_at, x.created_at),
+                this.createSocialAddress(
+                    SocialAddressType.NEXT_ID,
+                    x.identity,
+                    '',
+                    undefined,
+                    x.latest_checked_at,
+                    x.created_at,
+                ),
             ),
         )
     }
@@ -196,7 +211,7 @@ export class IdentityService extends IdentityServiceState {
             names.map(async (name) => {
                 const address = await resolver.lookup(name)
                 if (!address) return
-                return this.createSocialAddress(SocialAddressType.SPACE_ID, address, name)
+                return this.createSocialAddress(SocialAddressType.SPACE_ID, address, name, ChainId.BSC)
             }),
         )
         return compact(allSettled.map((x) => (x.status === 'fulfilled' ? x.value : undefined)).filter(Boolean))
@@ -280,7 +295,7 @@ export class IdentityService extends IdentityServiceState {
         ])
         const identities = allSettled
             .flatMap((x) => (x.status === 'fulfilled' ? x.value : []))
-            .filter(Boolean) as Array<SocialAddress<NetworkPluginID.PLUGIN_EVM>>
-        return uniqBy(identities, (x) => `${x.type}_${x.label}_${x.address.toLowerCase()}`)
+            .filter(Boolean) as Array<SocialAddress<ChainId>>
+        return uniqBy(identities, (x) => joinKeys(x.type, x.label, x.address.toLowerCase()))
     }
 }

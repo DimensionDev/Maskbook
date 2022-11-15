@@ -5,6 +5,7 @@ import { PluginID } from '@masknet/shared-base'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import type { SocialAccount, SocialIdentity } from '@masknet/web3-shared-base'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import { TipButton } from '../../../plugins/Tips/components/index.js'
 import { ProfileBar } from './ProfileBar.js'
 
@@ -36,13 +37,13 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
-interface Props extends HTMLProps<HTMLDivElement> {
+export interface ProfileCardTitleProps extends HTMLProps<HTMLDivElement> {
     identity: SocialIdentity
-    socialAccounts: SocialAccount[]
+    socialAccounts: Array<SocialAccount<Web3Helper.ChainIdAll>>
     address?: string
     onAddressChange?(address: string): void
 }
-export const ProfileCardTitle: FC<Props> = ({
+export const ProfileCardTitle: FC<ProfileCardTitleProps> = ({
     className,
     socialAccounts,
     address,

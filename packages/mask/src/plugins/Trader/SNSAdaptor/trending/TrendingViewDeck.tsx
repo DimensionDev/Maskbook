@@ -80,15 +80,22 @@ const useStyles = makeStyles()((theme) => {
             color: theme.palette.maskColor?.dark,
         },
         symbol: {
+            fontWeight: 700,
+            fontSize: 18,
+            color: theme.palette.maskColor.dark,
+            marginLeft: theme.spacing(0.5),
+            marginRight: theme.spacing(0.5),
+            display: 'flex',
+            alignItems: 'center',
+        },
+        symbolText: {
+            display: 'inline-block',
             maxWidth: 200,
             whiteSpace: 'nowrap',
             textOverflow: 'ellipsis',
+            fontStyle: 'normal',
             overflow: 'hidden',
-            fontWeight: 700,
-            fontSize: 18,
-            color: theme.palette.maskColor?.dark,
-            marginLeft: theme.spacing(0.5),
-            marginRight: theme.spacing(0.5),
+            textTransform: 'uppercase',
         },
         rank: {
             display: 'inline-flex',
@@ -249,7 +256,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                         </Linking>
                                         {coin.symbol ? (
                                             <Typography component="span" className={classes.symbol}>
-                                                ({coin.symbol.toUpperCase()})
+                                                (<em className={classes.symbolText}>{coin.symbol}</em>)
                                             </Typography>
                                         ) : null}
                                     </Typography>

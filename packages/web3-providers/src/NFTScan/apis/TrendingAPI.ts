@@ -2,7 +2,7 @@ import urlcat from 'urlcat'
 import { compact } from 'lodash-es'
 import { DataProvider } from '@masknet/public-api'
 import { createLookupTableResolver, EMPTY_LIST } from '@masknet/shared-base'
-import { TokenType } from '@masknet/web3-shared-base'
+import { TokenType, attemptUntil } from '@masknet/web3-shared-base'
 import { ChainId, isValidChainId } from '@masknet/web3-shared-evm'
 import { LooksRareLogo, OpenSeaLogo } from '../../resources/index.js'
 import { TrendingAPI } from '../../types/index.js'
@@ -29,6 +29,8 @@ const resolveNFTScanRange = createLookupTableResolver<TrendingAPI.Days, string>(
     // NFTScan will discard range unrecognized range
     () => '',
 )
+
+const NFTSCAN_CHAIN_ID_LIST = [ChainId.Mainnet, ChainId.BSC, ChainId.Matic]
 
 export class NFTScanTrendingAPI implements TrendingAPI.Provider<ChainId> {
     private looksrare = new LooksRareAPI()
@@ -90,7 +92,7 @@ export class NFTScanTrendingAPI implements TrendingAPI.Provider<ChainId> {
             contract_address: nft.contract_address,
             image_url: nft.logo_url,
         }))
-        return coins
+        return coins.slice(0, 10)
     }
 
     async getCoinPriceStats(
@@ -105,14 +107,26 @@ export class NFTScanTrendingAPI implements TrendingAPI.Provider<ChainId> {
     }
 
     async getCoinTrending(
-        chainId: ChainId,
+        _chainId: ChainId,
         /** address as id */ id: string,
         currency: TrendingAPI.Currency,
     ): Promise<TrendingAPI.Trending> {
-        const collection = await this.getCollection(chainId, id)
-        if (!collection) {
+        const result = await attemptUntil(
+            NFTSCAN_CHAIN_ID_LIST.map((chainId) => async () => {
+                try {
+                    const collection = await this.getCollection(chainId, id)
+                    if (!collection?.contract_address) return undefined
+                    return { collection, chainId }
+                } catch {
+                    return undefined
+                }
+            }),
+            undefined,
+        )
+        if (!result) {
             throw new Error(`NFTSCAN: Can not find token by address ${id}`)
         }
+        const { collection, chainId } = result
         const address = collection.contract_address
         const [symbol, openseaStats, looksrareStats] = await Promise.all([
             getContractSymbol(id, chainId),

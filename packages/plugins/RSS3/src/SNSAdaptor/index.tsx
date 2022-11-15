@@ -1,14 +1,15 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { joinKeys, NetworkPluginID } from '@masknet/shared-base'
-import { Web3ContextProvider } from '@masknet/web3-hooks-base'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import { RSS3BaseAPI } from '@masknet/web3-providers'
+import { Web3ContextProvider } from '@masknet/web3-hooks-base'
 import type { SocialAccount, SocialIdentity } from '@masknet/web3-shared-base'
 import { base } from '../base.js'
 import { PLUGIN_ID } from '../constants.js'
 import { setupContext } from './context.js'
 import { FeedPageProps, FeedsPage } from './FeedsPage.js'
 
-function shouldDisplay(_?: SocialIdentity, socialAccount?: SocialAccount) {
+function shouldDisplay(_?: SocialIdentity, socialAccount?: SocialAccount<Web3Helper.ChainIdAll>) {
     return socialAccount?.pluginID === NetworkPluginID.PLUGIN_EVM
 }
 

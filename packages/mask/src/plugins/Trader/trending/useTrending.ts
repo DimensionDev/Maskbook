@@ -1,6 +1,9 @@
 import { useAsync, useAsyncRetry } from 'react-use'
 import type { DataProvider } from '@masknet/public-api'
 import { NetworkPluginID } from '@masknet/shared-base'
+import type { TrendingAPI } from '@masknet/web3-providers'
+import { TokenType } from '@masknet/web3-shared-base'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import { useChainContext, useFungibleToken } from '@masknet/web3-hooks-base'
 import { PluginTraderRPC } from '../messages.js'
 import type { ChainId } from '@masknet/web3-shared-evm'
@@ -68,21 +71,13 @@ export function useTrendingById(
 
     const { value: detailedToken } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, trending?.coin.contract_address)
 
-    const coin = {
-        ...trending?.coin,
-        decimals: trending?.coin.decimals || detailedToken?.decimals || 0,
-        contract_address:
-            searchedContractAddress ?? trending?.contracts?.[0]?.address ?? trending?.coin.contract_address,
-        chainId: expectedChainId ?? trending?.contracts?.[0]?.chainId ?? trending?.coin.chainId,
-    } as Coin
-
     return {
         value: {
             currency,
             trending: trending
                 ? {
                       ...trending,
-                      coin,
+                      coin: createCoinFromTrending(trending, expectedChainId, searchedContractAddress, detailedToken),
                   }
                 : null,
         },
@@ -91,8 +86,28 @@ export function useTrendingById(
     }
 }
 
+function createCoinFromTrending(
+    trending?: TrendingAPI.Trending,
+    expectedChainId?: ChainId,
+    searchedContractAddress?: string,
+    token?: Web3Helper.FungibleTokenScope<void, NetworkPluginID.PLUGIN_EVM>,
+): Coin {
+    return {
+        ...trending?.coin,
+        id: trending?.coin.id ?? '',
+        name: trending?.coin.name ?? '',
+        symbol: trending?.coin.symbol ?? '',
+        type: trending?.coin.type ?? TokenType.Fungible,
+        decimals: trending?.coin.decimals || token?.decimals || 0,
+        contract_address:
+            searchedContractAddress ?? trending?.contracts?.[0]?.address ?? trending?.coin.contract_address,
+        chainId: expectedChainId ?? trending?.contracts?.[0]?.chainId ?? trending?.coin.chainId,
+    }
+}
+
 export function useCoinIdByAddress(address: string) {
-    return useAsyncRetry(() => {
+    return useAsyncRetry(async () => {
+        if (!address) return
         return PluginTraderRPC.getCoinNameByAddress(address)
     }, [address])
 }

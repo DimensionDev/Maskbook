@@ -33,6 +33,7 @@ import type {
 import type { ChainId as ChainIdEVM, Transaction as TransactionEVM } from '@masknet/web3-shared-evm'
 import type { Emitter } from '@servie/events'
 import type { UnboundedRegistry } from '@dimensiondev/holoflows-kit'
+import type { Web3Helper } from '@masknet/web3-helpers'
 
 export declare namespace Plugin {
     /**
@@ -656,7 +657,7 @@ export namespace Plugin.SNSAdaptor {
             Decorator: InjectUI<{
                 identity?: SocialIdentity
                 persona?: string
-                socialAccounts?: SocialAccount[]
+                socialAccounts?: Array<SocialAccount<Web3Helper.ChainIdAll>>
             }>
             /**
              * The injected avatar settings button component
@@ -664,7 +665,7 @@ export namespace Plugin.SNSAdaptor {
             Settings?: InjectUI<{
                 identity?: SocialIdentity
                 persona?: string
-                socialAccounts?: SocialAccount[]
+                socialAccounts?: Array<SocialAccount<Web3Helper.ChainIdAll>>
             }>
         }
         Utils?: {
@@ -673,7 +674,7 @@ export namespace Plugin.SNSAdaptor {
              */
             shouldDisplay?(
                 identity?: SocialIdentity,
-                socialAccounts?: SocialAccount[],
+                socialAccounts?: Array<SocialAccount<Web3Helper.ChainIdAll>>,
                 sourceType?: AvatarRealmSourceType,
             ): boolean
         }
@@ -689,7 +690,7 @@ export namespace Plugin.SNSAdaptor {
     export interface TipsRealmOptions {
         identity?: ProfileIdentifier
         slot: TipsSlot
-        accounts?: SocialAccount[]
+        accounts?: Array<SocialAccount<Web3Helper.ChainIdAll>>
         iconSize?: number
         buttonSize?: number
         onStatusUpdate?(disabled: boolean): void
@@ -740,22 +741,22 @@ export namespace Plugin.SNSAdaptor {
              */
             TabContent: InjectUI<{
                 identity?: SocialIdentity
-                socialAccount?: SocialAccount
+                socialAccount?: SocialAccount<Web3Helper.ChainIdAll>
             }>
         }
         Utils?: {
             /**
              * If it returns false, this tab will not be displayed.
              */
-            shouldDisplay?(identity?: SocialIdentity, socialAccount?: SocialAccount): boolean
+            shouldDisplay?(identity?: SocialIdentity, socialAccount?: SocialAccount<Web3Helper.ChainIdAll>): boolean
             /**
              * Filter social address.
              */
-            filter?: (x: SocialAccount) => boolean
+            filter?: (x: SocialAccount<Web3Helper.ChainIdAll>) => boolean
             /**
              * Sort social address in expected order.
              */
-            sorter?: (a: SocialAccount, z: SocialAccount) => number
+            sorter?: (a: SocialAccount<Web3Helper.ChainIdAll>, z: SocialAccount<Web3Helper.ChainIdAll>) => number
         }
     }
     export interface ProfileCover {
@@ -777,22 +778,22 @@ export namespace Plugin.SNSAdaptor {
              */
             Cover: InjectUI<{
                 identity?: SocialIdentity
-                socialAccounts?: SocialAccount[]
+                socialAccounts?: SocialAccount<Web3Helper.ChainIdAll>
             }>
         }
         Utils: {
             /**
              * If it returns false, this cover will not be displayed
              */
-            shouldDisplay?(identity?: SocialIdentity, socialAccount?: SocialAccount[]): boolean
+            shouldDisplay?(identity?: SocialIdentity, socialAccount?: SocialAccount<Web3Helper.ChainIdAll>): boolean
             /**
              * Filter social account
              */
-            filterSocialAccount?(x: SocialAccount): boolean
+            filterSocialAccount?(x: SocialAccount<Web3Helper.ChainIdAll>): boolean
             /**
              * Sort social account in expected order
              */
-            sortSocialAccount?(a: SocialAccount, z: SocialAccount): number
+            sortSocialAccount?(a: SocialAccount<Web3Helper.ChainIdAll>, z: SocialAccount<Web3Helper.ChainIdAll>): number
         }
     }
 

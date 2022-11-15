@@ -5,6 +5,7 @@ import { AccountIcon, ReversedAddress } from '@masknet/shared'
 import { Link, MenuItem, Select, Typography } from '@mui/material'
 import { useDefaultChainId, useWeb3State } from '@masknet/web3-hooks-base'
 import { isSameAddress, SocialAccount } from '@masknet/web3-shared-base'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useTip } from '../../contexts/index.js'
 import { useI18N } from '../../locales/index.js'
@@ -112,7 +113,7 @@ const PluginIcon = ({ pluginID }: { pluginID: NetworkPluginID }) => {
     return mapping[pluginID]
 }
 
-const ExternalLink: FC<{ account: SocialAccount }> = ({ account }) => {
+const ExternalLink: FC<{ account: SocialAccount<Web3Helper.ChainIdAll> }> = ({ account }) => {
     const t = useI18N()
     const { classes, cx } = useStyles()
     const { Others } = useWeb3State(account.pluginID)

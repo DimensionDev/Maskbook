@@ -1,10 +1,12 @@
+import { first } from 'lodash-es'
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import { Link, Typography, TypographyProps } from '@mui/material'
 import { useWeb3State } from '@masknet/web3-hooks-base'
 import type { SocialAccount } from '@masknet/web3-shared-base'
-import { ReversedAddress } from '../../../index.js'
 import { isSameAddress } from '@masknet/web3-shared-base'
+import type { Web3Helper } from '@masknet/web3-helpers'
+import { ReversedAddress } from '../../../index.js'
 
 const useStyles = makeStyles()((theme) => ({
     link: {
@@ -18,7 +20,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface AddressItemProps {
-    socialAccount?: SocialAccount
+    socialAccount?: SocialAccount<Web3Helper.ChainIdAll>
     TypographyProps?: TypographyProps
     linkIconClassName?: string
     disableLinkIcon?: boolean
@@ -51,7 +53,10 @@ export function AddressItem({
             {disableLinkIcon ? null : (
                 <Link
                     className={classes.link}
-                    href={Others?.explorerResolver.addressLink(Others?.getDefaultChainId(), socialAccount.address)}
+                    href={Others?.explorerResolver.addressLink(
+                        first(socialAccount.supportedChainIds) ?? Others?.getDefaultChainId(),
+                        socialAccount.address,
+                    )}
                     target="_blank"
                     rel="noopener noreferrer">
                     <Icons.LinkOut size={20} className={linkIconClassName} />
