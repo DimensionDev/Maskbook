@@ -81,6 +81,9 @@ export const useStyles = makeStyles<CollectibleGridProps>()((theme, { columns = 
             minWidth: 30,
             maxHeight: 24,
         },
+        emptyBox: {
+            background: theme.palette.maskColor.bottom,
+        },
     }
 })
 
@@ -175,7 +178,13 @@ export function CollectionList({ socialAccount, persona, profile, gridProps = EM
 
     if ((done && !allCollectibles.length) || !account || isHiddenAddress)
         return (
-            <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" height={400}>
+            <Box
+                display="flex"
+                flexDirection="column"
+                alignItems="center"
+                justifyContent="center"
+                height={400}
+                className={classes.emptyBox}>
                 <Icons.EmptySimple size={32} />
                 <Typography color={(theme) => theme.palette.maskColor.second} fontSize="14px" marginTop="12px">
                     {t('no_NFTs_found')}
@@ -212,12 +221,14 @@ export function CollectionList({ socialAccount, persona, profile, gridProps = EM
                         />
                     </Box>
                     {error && !done && <RetryHint hint={false} retry={nextPage} />}
-                    <ElementAnchor
-                        callback={() => {
-                            if (nextPage) nextPage()
-                        }}>
-                        {!done && <LoadingBase />}
-                    </ElementAnchor>
+                    <div className={classes.emptyBox}>
+                        <ElementAnchor
+                            callback={() => {
+                                if (nextPage) nextPage()
+                            }}>
+                            {!done && <LoadingBase />}
+                        </ElementAnchor>
+                    </div>
                 </Box>
                 {showSidebar ? (
                     <div className={classes.sidebar}>
