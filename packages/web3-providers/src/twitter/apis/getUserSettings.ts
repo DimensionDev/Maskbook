@@ -10,7 +10,7 @@ export async function getUserSettings() {
         /* cspell:disable-next-line */
         const request = indexedDB.open('localforage', 2)
 
-        request.onsuccess = () => {
+        request.addEventListener('success', () => {
             const db = request.result
             /* cspell:disable-next-line */
             const transaction = db.transaction(['keyvaluepairs'], 'readonly')
@@ -19,18 +19,18 @@ export async function getUserSettings() {
             /* cspell:disable-next-line */
             const query = objectStore.get('device:rweb.settings')
 
-            query.onsuccess = (event) => {
+            query.addEventListener('success', (event) => {
                 if (!event.target) reject('Failed to get user settings.')
 
                 const event_ = event as unknown as TwitterBaseAPI.Event<TwitterBaseAPI.UserSettings>
                 resolve(event_.target.result)
-            }
-            query.onerror = (error) => {
+            })
+            query.addEventListener('error', (error) => {
                 reject(error)
-            }
-        }
-        request.onerror = (error) => {
+            })
+        })
+        request.addEventListener('error', (error) => {
             reject(error)
-        }
+        })
     })
 }
