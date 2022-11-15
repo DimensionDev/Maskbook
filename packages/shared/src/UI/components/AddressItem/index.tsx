@@ -51,7 +51,12 @@ export function AddressItem({
             {disableLinkIcon ? null : (
                 <Link
                     className={classes.link}
-                    href={Others?.explorerResolver.addressLink(Others?.getDefaultChainId(), socialAccount.address)}
+                    href={Others?.explorerResolver.addressLink(
+                        socialAccount.supportedChainIds?.length
+                            ? socialAccount.supportedChainIds?.[0]
+                            : Others?.getDefaultChainId(),
+                        socialAccount.address,
+                    )}
                     target="_blank"
                     rel="noopener noreferrer">
                     <Icons.LinkOut size={20} className={linkIconClassName} />
