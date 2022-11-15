@@ -1,9 +1,9 @@
 import type { FC, PropsWithChildren } from 'react'
 import { PluginID } from '@masknet/shared-base'
-import { PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
-import { MaskPostExtraInfoWrapper } from '@masknet/shared'
-import { base } from '../base.js'
 import { Icons } from '@masknet/icons'
+import { MaskPostExtraInfoWrapper } from '@masknet/shared'
+import { PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
+import { base } from '../base.js'
 
 export const DecentralizedSearchPostExtraInfoWrapper: FC<PropsWithChildren<{}>> = ({ children }) => {
     return (

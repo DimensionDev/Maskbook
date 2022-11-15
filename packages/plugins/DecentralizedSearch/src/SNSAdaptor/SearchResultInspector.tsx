@@ -13,7 +13,7 @@ import { useWeb3State, useAddressTypeMatched } from '@masknet/web3-hooks-base'
 import { ChainId, AddressType } from '@masknet/web3-shared-evm'
 import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import { SocialAddressType, resolveSearchKeywordType } from '@masknet/web3-shared-base'
-import { DecentralizedSearchPostExtraInfoWrapper } from './DecentralizedSearchPostExtraInfoWrapper.js'
+import { PluginHeader } from './PluginHeader.js'
 import { PluginID, EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import { LoadingContent } from './LoadingContent.js'
 import { EmptyContent } from './EmptyContent.js'
@@ -30,6 +30,10 @@ const useStyles = makeStyles()((theme) => ({
         background: theme.palette.common.white,
         maxHeight: 478,
         overflow: 'auto',
+    },
+    cardHeader: {
+        background:
+            'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%), linear-gradient(90deg, rgba(28, 104, 243, 0.2) 0%, rgba(69, 163, 251, 0.2) 100%), #FFFFFF;',
     },
 }))
 
@@ -101,8 +105,9 @@ export function SearchResultInspector(props: { keyword: string }) {
 
     return (
         <Hidden hidden={isHiddenAll}>
-            <DecentralizedSearchPostExtraInfoWrapper>
-                <Hidden hidden={isLoading || isEmpty || isError}>
+            <Hidden hidden={isLoading || isEmpty || isError}>
+                <div className={classes.cardHeader}>
+                    <PluginHeader />
                     <ENS_SearchResult
                         keyword={props.keyword}
                         ref={ensRef}
@@ -122,18 +127,18 @@ export function SearchResultInspector(props: { keyword: string }) {
                             </MaskTabList>
                         </TabContext>
                     </div>
-                    <div className={classes.content}>{component}</div>
-                </Hidden>
-                <Hidden hidden={!isLoading}>
-                    <LoadingContent />
-                </Hidden>
-                <Hidden hidden={!isEmpty}>
-                    <EmptyContent />
-                </Hidden>
-                <Hidden hidden={!isError}>
-                    <LoadFailedContent isLoading={isLoading} retry={ensRef.current?.retry} />
-                </Hidden>
-            </DecentralizedSearchPostExtraInfoWrapper>
+                </div>
+                <div className={classes.content}>{component}</div>
+            </Hidden>
+            <Hidden hidden={!isLoading}>
+                <LoadingContent />
+            </Hidden>
+            <Hidden hidden={!isEmpty}>
+                <EmptyContent />
+            </Hidden>
+            <Hidden hidden={!isError}>
+                <LoadFailedContent isLoading={isLoading} retry={ensRef.current?.retry} />
+            </Hidden>
         </Hidden>
     )
 }
