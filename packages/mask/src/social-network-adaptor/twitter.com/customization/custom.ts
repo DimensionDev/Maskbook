@@ -80,10 +80,13 @@ export function startWatchThemeColor(signal: AbortSignal) {
     }
 
     async function updateThemeColor() {
+        console.log('DEBUG: Updating...')
         try {
             await updateThemeByAPI()
+            console.log('DEBUG: Updated')
         } catch {
             updateThemeByDOM()
+            console.log('DEBUG: Fixed')
         }
     }
 
