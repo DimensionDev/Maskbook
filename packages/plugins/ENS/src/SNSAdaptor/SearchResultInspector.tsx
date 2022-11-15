@@ -52,8 +52,11 @@ const useStyles = makeStyles<StyleProps>()((theme) => {
             alignItems: 'center',
             marginBottom: 12,
         },
-        nextIdVerifiedTwitterName: {
+        socialName: {
             color: theme.palette.maskColor.dark,
+            maxWidth: 115,
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
             fontWeight: 700,
             marginLeft: 4,
             fontSize: 16,
@@ -168,8 +171,7 @@ export const SearchResultInspectorContent = forwardRef(function (
                                             className={classes.link}
                                             href={resolveNextIDPlatformLink(x.platform, x.identity)}>
                                             {resolveNextIDPlatformIcon(x.platform)}
-                                            <Typography
-                                                className={cx(classes.nextIdVerifiedTwitterName, classes.rightSpace)}>
+                                            <Typography className={cx(classes.socialName, classes.rightSpace)}>
                                                 {x.identity}
                                             </Typography>
                                             <Icons.LinkOut size={20} className={classes.linkOutIcon} />
