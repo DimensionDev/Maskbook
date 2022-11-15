@@ -120,6 +120,29 @@ export namespace TwitterBaseAPI {
         mediaId: string
     }
 
+    export enum Scale {
+        xSmall = 'xSmall',
+        small = 'small',
+        normal = 'normal',
+        large = 'large',
+        xLarge = 'xLarge',
+    }
+
+    export enum ThemeMode {
+        dark = 'dark',
+        dim = 'dim',
+        light = 'light',
+    }
+
+    export enum ThemeColor {
+        'blue' = 'blue500',
+        'yellow' = 'yellow500',
+        'purple' = 'purple500',
+        'magenta' = 'magenta500',
+        'orange' = 'orange500',
+        'green' = 'green500',
+    }
+
     export interface Settings {
         screen_name: string
     }
@@ -136,12 +159,12 @@ export namespace TwitterBaseAPI {
         pushNotificationsPermission: 'granted'
         reducedMotionEnabled: boolean
         replyVotingSurveyClicked: number
-        scale: 'xSmall' | 'small' | 'normal' | 'large' | 'xLarge'
+        scale: Scale
         shouldAutoPlayGif: boolean
         shouldAutoTagLocation: boolean
         showTweetMediaDetailDrawer: boolean
-        themeBackground: 'dark' | 'dim' | 'light'
-        themeColor: 'blue500' | 'yellow500' | 'purple500' | 'magenta500' | 'orange500' | 'green500'
+        themeBackground: ThemeMode
+        themeColor: ThemeColor
     }
 
     export interface TwitterResult {
