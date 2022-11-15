@@ -5,6 +5,7 @@ import { useWeb3State } from '@masknet/web3-hooks-base'
 import type { SocialAccount } from '@masknet/web3-shared-base'
 import { ReversedAddress } from '../../../index.js'
 import { isSameAddress } from '@masknet/web3-shared-base'
+import { first } from 'lodash-es'
 
 const useStyles = makeStyles()((theme) => ({
     link: {
@@ -52,9 +53,7 @@ export function AddressItem({
                 <Link
                     className={classes.link}
                     href={Others?.explorerResolver.addressLink(
-                        socialAccount.supportedChainIds?.length
-                            ? socialAccount.supportedChainIds?.[0]
-                            : Others?.getDefaultChainId(),
+                        first(socialAccount.supportedChainIds) ?? Others?.getDefaultChainId(),
                         socialAccount.address,
                     )}
                     target="_blank"
