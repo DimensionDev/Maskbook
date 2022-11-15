@@ -59,8 +59,9 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.maskColor.main,
     },
     tokenIcon: {
-        width: 24,
-        height: 24,
+        width: 20,
+        height: 20,
+        marginRight: '0px !important',
     },
     selectToken: {
         backgroundColor: theme.palette.maskColor.primary,
