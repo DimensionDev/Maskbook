@@ -91,7 +91,7 @@ export function SearchResultInspector(props: { keyword: string }) {
         if (!Component) return null
 
         return <Component identity={undefined} socialAccount={socialAccount} />
-    }, [currentTab, socialAccount])
+    }, [currentTab, JSON.stringify(socialAccount)])
     const isLoading = !ensRef.current || ensRef.current?.isLoading
     const isHiddenAll = Boolean(
         (ensRef.current && ensRef.current?.reversedAddress === undefined) ||
