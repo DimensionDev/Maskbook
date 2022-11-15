@@ -49,10 +49,10 @@ const useStyles = makeStyles<{ iconSize: number; buttonSize: number }, 'postTips
         },
         followTipsButton: {
             position: 'absolute',
-            width: '100%',
-            height: '100%',
+            width: buttonSize,
+            height: buttonSize,
             left: 0,
-            top: 0,
+            top: 3,
             borderRadius: '100%',
         },
         profileTipsButton: {
