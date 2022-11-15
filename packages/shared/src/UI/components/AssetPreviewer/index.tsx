@@ -19,7 +19,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface AssetPreviewerProps extends withClasses<'root' | 'fallbackImage'> {
+export interface AssetPreviewerProps extends withClasses<'root' | 'fallbackImage' | 'container'> {
     url?: string
     fallbackImage?: URL
     icon?: React.ReactNode
@@ -39,6 +39,7 @@ export function AssetPreviewer(props: AssetPreviewerProps) {
             <Image
                 classes={{
                     fallbackImage: classes.fallbackImage,
+                    container: classes.container,
                 }}
                 width="100%"
                 height="100%"
