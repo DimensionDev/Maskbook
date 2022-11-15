@@ -114,7 +114,8 @@ function createCoinFromTrending(
 }
 
 export function useCoinIdByAddress(address: string) {
-    return useAsyncRetry(() => {
+    return useAsyncRetry(async () => {
+        if (!address) return undefined
         return PluginTraderRPC.getCoinNameByAddress(address)
     }, [address])
 }
