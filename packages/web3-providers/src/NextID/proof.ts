@@ -133,28 +133,26 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
         return result.map(() => true).unwrapOr(false)
     }
 
-    async queryProfilesByENS(identity: string) {
+    async queryProfilesByRelationService(identity: string) {
         const response = await fetch(RELATION_SERVICE_URL, {
             method: 'POST',
             mode: 'cors',
             body: JSON.stringify({
-                operationName: 'GET_PROFILES_DOMAIN',
-                variables: { identity, platform: 'ENS' },
+                operationName: 'GET_PROFILES_QUERY',
+                variables: { identity: identity.toLowerCase(), platform: 'ethereum' },
                 query: `
-                    query GET_PROFILES_DOMAIN($platform: String, $identity: String) {
-                        domain(domainSystem: $platform, name: $identity) {
-                            owner {
-                                neighborWithTraversal(depth: 7) {
-                                    source
-                                    to {
-                                        platform
-                                        displayName                                                                                                        
-                                    }        
-                                    from {
-                                        platform
-                                        displayName                                                                                                        
-                                    }                                                                                          
-                                }
+                    query GET_PROFILES_QUERY($platform: String, $identity: String) {
+                        identity(platform: $platform, identity: $identity) {                     
+                            neighborWithTraversal(depth: 7) {
+                                source
+                                to {
+                                    platform
+                                    displayName                                                                                                        
+                                }        
+                                from {
+                                    platform
+                                    displayName                                                                                                        
+                                }                                                                                          
                             }
                         }
                     }
@@ -162,7 +160,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
             }),
         })
 
-        const res = (await response.json())?.data.domain.owner.neighborWithTraversal as Array<{
+        const res = (await response.json())?.data.identity.neighborWithTraversal as Array<{
             source: NextIDPlatform
             to: { platform: NextIDPlatform; displayName: string }
             from: { platform: NextIDPlatform; displayName: string }
