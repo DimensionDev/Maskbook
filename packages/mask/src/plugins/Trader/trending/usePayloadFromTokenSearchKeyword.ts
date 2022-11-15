@@ -2,22 +2,26 @@ import type { NetworkPluginID } from '@masknet/shared-base'
 import { useWeb3State } from '@masknet/web3-hooks-base'
 import { DataProvider } from '@masknet/public-api'
 import { useTrendingById, useCoinIdByAddress } from '../trending/useTrending.js'
-import type { ChainId } from '@masknet/web3-shared-evm'
+import { ChainId } from '@masknet/web3-shared-evm'
 import { TagType } from '../types/index.js'
 
 export function usePayloadFromTokenSearchKeyword(pluginID?: NetworkPluginID, keyword = '') {
     const regexResult = keyword.match(/([#$])(\w+)/) ?? []
     const { Others } = useWeb3State(pluginID)
-    const searchedContractAddress = Others?.isValidAddress(keyword) ? keyword : undefined
+    const searchedContractAddress = Others?.isValidAddress(keyword) ? keyword : ''
     const type = searchedContractAddress ? '$' : regexResult[1]
 
     const [_, _type, name = ''] = keyword.match(/([#$])(\w+)/) ?? []
 
     const { value: nonFungibleAsset } = useTrendingById(
-        Others?.isValidAddress(keyword) ? keyword : '',
+        searchedContractAddress,
         DataProvider.NFTScan,
+        undefined,
+        undefined,
+        [ChainId.Mainnet, ChainId.BSC, ChainId.Matic],
     )
-    const { value: fungibleAsset } = useCoinIdByAddress(Others?.isValidAddress(keyword) ? keyword : '')
+
+    const { value: fungibleAsset } = useCoinIdByAddress(searchedContractAddress)
 
     const nonFungibleAssetName = nonFungibleAsset.trending?.coin.symbol || nonFungibleAsset.trending?.coin.name
     const isNFT = !!nonFungibleAssetName
