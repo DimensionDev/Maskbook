@@ -121,26 +121,26 @@ export namespace TwitterBaseAPI {
     }
 
     export enum Scale {
-        xSmall = 'xSmall',
-        small = 'small',
-        normal = 'normal',
-        large = 'large',
-        xLarge = 'xLarge',
+        X_Small = 'xSmall',
+        Small = 'small',
+        Normal = 'normal',
+        Large = 'large',
+        X_Large = 'xLarge',
     }
 
     export enum ThemeMode {
-        dark = 'darker',
-        dim = 'dark',
-        light = 'light',
+        Dark = 'darker',
+        Dim = 'dark',
+        Light = 'light',
     }
 
     export enum ThemeColor {
-        'blue' = 'blue500',
-        'yellow' = 'yellow500',
-        'purple' = 'purple500',
-        'magenta' = 'magenta500',
-        'orange' = 'orange500',
-        'green' = 'green500',
+        Blue = 'blue500',
+        Yellow = 'yellow500',
+        Purple = 'purple500',
+        Magenta = 'magenta500',
+        Orange = 'orange500',
+        Green = 'green500',
     }
 
     export interface Settings {

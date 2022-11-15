@@ -247,7 +247,7 @@ export namespace SocialNetworkUI {
         }
         export interface PaletteModeProvider {
             current: Subscription<PaletteMode>
-            start(signal: AbortSignal): void
+            start(signal: AbortSignal): Promise<void>
         }
         export interface ComponentOverwrite {
             RenderFragments?: RenderFragmentsContextType

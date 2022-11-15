@@ -1,9 +1,15 @@
 import { TwitterBaseAPI } from '../../types/index.js'
 
+const DB_NAME = 'localforage'
+const DB_VERSION = 2
+
 export async function getUserSettings() {
-    return new Promise<TwitterBaseAPI.UserSettings | undefined>((resolve, reject) => {
+    const databases = await indexedDB.databases()
+    if (!databases.some((x) => x.name === DB_NAME && x.version === DB_VERSION)) return
+
+    return new Promise<TwitterBaseAPI.UserSettings | undefined>(async (resolve, reject) => {
         /* cspell:disable-next-line */
-        const request = indexedDB.open('localforage', 2)
+        const request = indexedDB.open(DB_NAME, DB_VERSION)
 
         request.addEventListener('success', () => {
             const db = request.result
@@ -34,8 +40,8 @@ export async function getUserSettings() {
 
 export function getDefaultUserSettings(): TwitterBaseAPI.UserSettings {
     return {
-        scale: TwitterBaseAPI.Scale.normal,
-        themeBackground: TwitterBaseAPI.ThemeMode.light,
-        themeColor: TwitterBaseAPI.ThemeColor.blue,
+        scale: TwitterBaseAPI.Scale.Normal,
+        themeBackground: TwitterBaseAPI.ThemeMode.Light,
+        themeColor: TwitterBaseAPI.ThemeColor.Blue,
     }
 }

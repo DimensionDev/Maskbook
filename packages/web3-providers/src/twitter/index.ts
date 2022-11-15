@@ -1,4 +1,5 @@
 import urlcat from 'urlcat'
+import { timeout } from '@masknet/kit'
 import type { TwitterBaseAPI } from '../types/index.js'
 import {
     getSettings,
@@ -28,13 +29,13 @@ export class TwitterAPI implements TwitterBaseAPI.Provider {
     async getUserSettings() {
         const defaults = getDefaultUserSettings()
         try {
-            const userSettings = await getUserSettings()
+            const userSettings = await timeout(getUserSettings(), 2500)
             return {
                 ...defaults,
                 ...userSettings,
             }
         } catch {
-            return getDefaultUserSettings()
+            return defaults
         }
     }
 
