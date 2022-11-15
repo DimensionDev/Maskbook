@@ -130,6 +130,7 @@ export namespace TwitterBaseAPI {
         autoShowNewTweets: boolean
         highContrastEnabled: boolean
         loginPromptLastShown: number
+        /* cspell:disable-next-line */
         nextPushCheckin: number
         preciseLocationEnabled: boolean
         pushNotificationsPermission: 'granted'

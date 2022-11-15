@@ -7,12 +7,16 @@ export async function getUserSettings() {
     if (!tokens.bearerToken) return
 
     return new Promise<TwitterBaseAPI.UserSettings | undefined>((resolve, reject) => {
+        /* cspell:disable-next-line */
         const request = indexedDB.open('localforage', 2)
 
         request.onsuccess = () => {
             const db = request.result
+            /* cspell:disable-next-line */
             const transaction = db.transaction(['keyvaluepairs'], 'readonly')
+            /* cspell:disable-next-line */
             const objectStore = transaction.objectStore('keyvaluepairs')
+            /* cspell:disable-next-line */
             const query = objectStore.get('device:rweb.settings')
 
             query.onsuccess = (event) => {
