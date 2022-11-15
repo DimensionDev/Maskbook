@@ -170,7 +170,7 @@ export interface SocialIdentity {
 export interface SocialAddress<PluginID> {
     /** The ID of a plugin that the address belongs to */
     pluginID: PluginID
-    /** The chain id that the address belongs to, defalut support all chains */
+    /** The chain id that the address belongs to, default support all chains */
     chainId?: number
     /** The data source type */
     type: SocialAddressType
