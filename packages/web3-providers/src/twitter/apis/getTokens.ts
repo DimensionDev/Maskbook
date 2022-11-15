@@ -1,12 +1,5 @@
 import { escapeRegExp } from 'lodash-es'
-import urlcat from 'urlcat'
-import LRUCache from 'lru-cache'
-import type { TwitterBaseAPI } from '../../types/index.js'
-
-const scriptCache = new LRUCache<string, Promise<Response> | string>({
-    max: 10,
-    ttl: 300_000,
-})
+import { fetchCache } from '../../helpers.js'
 
 function getScriptURL(content: string, name: string) {
     const matchURL = new RegExp(
@@ -34,20 +27,10 @@ function getScriptContentMatched(content: string, pattern: RegExp) {
 async function fetchContent(url?: string) {
     if (!url) return
 
-    const hit: Promise<Response> = scriptCache.get(url) ?? fetch(url)
+    const response = await fetchCache(url)
+    if (!response.ok) return
 
-    if (scriptCache.get(url) !== hit) scriptCache.set(url, hit)
-
-    if (typeof hit === 'string') return hit
-
-    const response = (await hit).clone()
-    if (!response.ok) {
-        scriptCache.delete(url)
-        return
-    }
-    const content = await response.text()
-    scriptCache.set(url, content)
-    return content
+    return response.text()
 }
 
 export async function getTokens(operationName?: string) {

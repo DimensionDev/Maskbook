@@ -1,5 +1,6 @@
-import urlcat from "urlcat"
-import type { TwitterBaseAPI } from "../../types/Twitter.js"
+import urlcat from 'urlcat'
+import { fetchCache } from '../../helpers.js'
+import type { TwitterBaseAPI } from '../../types/Twitter.js'
 
 export async function getUserNFTContainer(
     screenName: string,
@@ -13,7 +14,7 @@ export async function getUserNFTContainer(
         }
     }
 }> {
-    const response = await fetch(
+    const response = await fetchCache(
         urlcat('https://twitter.com/i/api/graphql/:queryToken/userNftContainer_Query', {
             queryToken,
             variables: JSON.stringify({

@@ -1,15 +1,8 @@
 import urlcat from 'urlcat'
-import LRUCache from 'lru-cache'
 import type { TwitterBaseAPI } from '../types/index.js'
-import { getSettings, getTokens, getUserNFTContainer } from './apis/index.js'
+import { getSettings, getTokens, getUserByScreenName, getUserNFTContainer } from './apis/index.js'
 
 const UPLOAD_AVATAR_URL = 'https://upload.twitter.com/i/media/upload.json'
-
-const cache = new LRUCache<string, any>({
-    max: 40,
-    ttl: 300_000,
-})
-
 const TWITTER_AVATAR_ID_MATCH = /^\/profile_images\/(\d+)/
 
 export class TwitterAPI implements TwitterBaseAPI.Provider {
@@ -114,42 +107,7 @@ export class TwitterAPI implements TwitterBaseAPI.Provider {
     }
 
     async getUserByScreenName(screenName: string): Promise<TwitterBaseAPI.User | null> {
-        const { bearerToken, csrfToken, queryId } = await getTokens('UserByScreenName')
-        const url = urlcat('https://twitter.com/i/api/graphql/:queryId/UserByScreenName', {
-            queryId,
-            variables: JSON.stringify({
-                screen_name: screenName,
-                withSafetyModeUserFields: true,
-                withSuperFollowsUserFields: true,
-            }),
-            features: JSON.stringify({
-                verified_phone_label_enabled: false,
-                responsive_web_graphql_timeline_navigation_enabled: false,
-                responsive_web_twitter_blue_verified_badge_is_enabled: false,
-            }),
-        })
-        const cacheKey = `${bearerToken}/${csrfToken}/${queryId}/${screenName}`
-        const fetchingTask: Promise<Response> =
-            cache.get(cacheKey) ??
-            fetch(url, {
-                headers: {
-                    authorization: `Bearer ${bearerToken}`,
-                    'x-csrf-token': csrfToken,
-                    'content-type': 'application/json',
-                    'x-twitter-auth-type': 'OAuth2Session',
-                    'x-twitter-active-user': 'yes',
-                    referer: `https://twitter.com/${screenName}`,
-                },
-            })
-
-        cache.set(cacheKey, fetchingTask)
-        const response = (await fetchingTask).clone()
-        if (!response.ok) {
-            cache.delete(cacheKey)
-            return null
-        }
-        const userResponse: TwitterBaseAPI.UserByScreenNameResponse = await response.json()
-        return userResponse.data.user.result
+        return getUserByScreenName(screenName)
     }
 }
 
