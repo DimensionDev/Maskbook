@@ -7,7 +7,7 @@ import { PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
 
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { PluginSmartPayMessages } from '../../message.js'
-import { useSignableAccounts } from '../../hooks/useSignableAccounts.js'
+import { useQueryQuanlification } from '../../hooks/useQueryQualification.js'
 export interface SmartPayEntryProps {
     disabled: boolean
     tooltipHint?: string
@@ -17,9 +17,7 @@ export interface SmartPayEntryProps {
 
 export const SmartPayEntry = memo<SmartPayEntryProps>((props) => {
     const t = useSharedI18N()
-    const { signablePersonas, signableWallets, personas } = useSignableAccounts()
-    const hasPersona = !!personas.length
-    const eligibility = !!signablePersonas?.length || !!signableWallets?.length
+    const [, queryQuanlification] = useQueryQuanlification()
 
     const { setDialog: setPersonaSelectPanelDialog } = useRemoteControlledDialog(
         CrossIsolationMessages.events.PersonaSelectPanelDialogUpdated,
@@ -29,7 +27,10 @@ export const SmartPayEntry = memo<SmartPayEntryProps>((props) => {
         CrossIsolationMessages.events.openPageConfirm,
     )
 
-    const { setDialog: setSmartPayDialog } = useRemoteControlledDialog(PluginSmartPayMessages.smartPayDialogEvent)
+    const { setDialog: setSmartPayDeployDialog } = useRemoteControlledDialog(
+        PluginSmartPayMessages.smartPayDeployDialogEvent,
+    )
+    const { openDialog: openSmartPayDialog } = useRemoteControlledDialog(PluginSmartPayMessages.smartPayDialogEvent)
 
     useEffect(() => {
         return CrossIsolationMessages.events.applicationDialogEvent.on(({ open, pluginID }) => {
@@ -37,7 +38,9 @@ export const SmartPayEntry = memo<SmartPayEntryProps>((props) => {
         })
     }, [])
 
-    const handleClick = useCallback(() => {
+    const handleClick = useCallback(async () => {
+        const { hasPersona, eligibility } = (await queryQuanlification()) ?? {}
+
         if (!hasPersona) {
             setCreatePersonaConfirmDialog({
                 open: true,
@@ -57,11 +60,12 @@ export const SmartPayEntry = memo<SmartPayEntryProps>((props) => {
             return
         }
 
-        setSmartPayDialog({
-            open: true,
-            inWhiteList: true,
-        })
-    }, [hasPersona, eligibility])
+        // setSmartPayDeployDialog({
+        //     open: true,
+        //     inWhiteList: true,
+        // })
+        openSmartPayDialog()
+    }, [])
 
     return (
         <ApplicationEntry

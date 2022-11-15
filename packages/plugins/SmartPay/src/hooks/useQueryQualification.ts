@@ -5,19 +5,26 @@ import { NextIDProof } from '@masknet/web3-providers'
 import { isSameAddress, Wallet } from '@masknet/web3-shared-base'
 import { isValidAddress } from '@masknet/web3-shared-evm'
 import { first, intersectionWith } from 'lodash-es'
-import { useAsync } from 'react-use'
-import type { AsyncState } from 'react-use/lib/useAsyncFn.js'
+import { useAsyncFn } from 'react-use'
+import type { AsyncFnReturn } from 'react-use/lib/useAsyncFn.js'
 
-export function useSignableAccounts(): AsyncState<{
-    personas: PersonaInformation[]
-    signablePersonas?: PersonaInformation[]
-    signableWallets?: Wallet[]
-}> {
+export function useQueryQuanlification(): AsyncFnReturn<
+    () => Promise<
+        | {
+              hasPersona: boolean
+              eligibility: boolean
+              personas: PersonaInformation[]
+              signablePersonas?: PersonaInformation[]
+              signableWallets?: Wallet[]
+          }
+        | undefined
+    >
+> {
     const currentIdentity = useLastRecognizedIdentity()
     const personas = useAllPersonas()
     const wallets = useWallets()
 
-    return useAsync(async () => {
+    return useAsyncFn(async () => {
         if (!currentIdentity?.identifier?.userId) return
         const response = await NextIDProof.queryAllExistedBindingsByPlatform(
             NextIDPlatform.Twitter,
@@ -60,9 +67,11 @@ export function useSignableAccounts(): AsyncState<{
         )
 
         return {
-            personas,
+            hasPersona: !!personas.length,
+            eligibility: !!signablePersonas?.length || !!signableWallets.length,
             signablePersonas,
             signableWallets,
+            personas,
         }
     }, [currentIdentity, personas, wallets])
 }

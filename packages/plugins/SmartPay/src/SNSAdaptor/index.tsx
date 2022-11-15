@@ -7,6 +7,7 @@ import { setupContext, context } from './context.js'
 import { SNSAdaptorContext } from '@masknet/plugin-infra/content-script'
 import { SmartPayDeployDialog } from './components/SmartPayDeployDialog.js'
 import { SmartPayDescriptionDialog } from './components/SmartPayDescriptionDialog.js'
+import { SmartPayDialog } from './components/SmartPayDialog.js'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -16,6 +17,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     GlobalInjection: function Component() {
         return (
             <SNSAdaptorContext.Provider value={context}>
+                <SmartPayDialog />
                 <SmartPayDeployDialog />
                 <SmartPayDescriptionDialog />
             </SNSAdaptorContext.Provider>

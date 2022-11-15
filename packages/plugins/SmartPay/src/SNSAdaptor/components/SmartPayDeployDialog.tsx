@@ -113,16 +113,21 @@ export const SmartPayDeployDialog = memo(() => {
           }
         | undefined
     >()
-    const { open, closeDialog } = useRemoteControlledDialog(PluginSmartPayMessages.smartPayDialogEvent, (event) => {
-        if (!event.open) return
-        setInWhiteList(event.inWhiteList)
-    })
+    const { open, closeDialog } = useRemoteControlledDialog(
+        PluginSmartPayMessages.smartPayDeployDialogEvent,
+        (event) => {
+            if (!event.open) return
+            setInWhiteList(event.inWhiteList)
+        },
+    )
 
     const { setDialog } = useRemoteControlledDialog(PluginSmartPayMessages.smartPayDescriptionDialogEvent)
 
     const polygonDescriptor = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, ChainId.Matic)
 
-    const { signablePersonas, signableWallets } = useSignableAccounts()
+    const { value } = useSignableAccounts()
+
+    const { signablePersonas, signableWallets } = value ?? {}
 
     // #region get current persona information
     const currentPersona = useCurrentPersonaInformation()
