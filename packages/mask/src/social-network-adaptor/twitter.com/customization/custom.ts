@@ -6,9 +6,9 @@ import type { SocialNetworkUI } from '@masknet/types'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { Twitter, TwitterBaseAPI } from '@masknet/web3-providers'
 import { PaletteMode, Theme, unstable_createMuiStrictModeTheme } from '@mui/material'
-import { fromRGB, getBackgroundColor, getForegroundColor, isDark, shade, toRGB } from '../../../utils/theme/index.js'
+import { fromRGB, shade, toRGB } from '../../../utils/theme/index.js'
 import { isMobileTwitter } from '../utils/isMobile.js'
-import { composeAnchorSelector, composeAnchorTextSelector, headingTextSelector } from '../utils/selector.js'
+import { composeAnchorSelector, headingTextSelector } from '../utils/selector.js'
 
 const resolveThemeColor = createLookupTableResolver<TwitterBaseAPI.ThemeColor, string>(
     {
@@ -60,31 +60,13 @@ export const PaletteModeProviderTwitter: SocialNetworkUI.Customization.PaletteMo
 }
 
 export async function startWatchThemeColor(signal: AbortSignal) {
-    async function updateThemeByAPI() {
+    async function updateThemeColor() {
         const userSettings = await Twitter.getUserSettings()
 
         themeColorRef.value = resolveThemeColor(userSettings.themeColor!)
         textColorRef.value = resolveTextColor(userSettings.themeBackground!)
         backgroundColorRef.value = resolveBackgroundColor(userSettings.themeBackground!)
         paletteModeRef.value = resolveThemeMode(userSettings.themeBackground!)
-    }
-
-    function updateThemeByDOM() {
-        const composeAnchor = composeAnchorSelector().evaluate()
-        const anchorText = composeAnchorTextSelector().evaluate()
-
-        themeColorRef.value = getBackgroundColor(composeAnchor)
-        textColorRef.value = getForegroundColor(anchorText)
-        backgroundColorRef.value = getBackgroundColor(document.body)
-        paletteModeRef.value = isDark(fromRGB(backgroundColorRef.value)!) ? 'dark' : 'light'
-    }
-
-    async function updateThemeColor() {
-        try {
-            await updateThemeByAPI()
-        } catch {
-            updateThemeByDOM()
-        }
     }
 
     new MutationObserverWatcher(composeAnchorSelector())
@@ -99,7 +81,7 @@ export async function startWatchThemeColor(signal: AbortSignal) {
             .startWatch({ childList: true, subtree: true }, signal)
     }
 
-    await updateThemeByAPI()
+    await updateThemeColor()
 }
 export function useThemeTwitterVariant(baseTheme: Theme) {
     const primaryColor = useValueRef(themeColorRef)
