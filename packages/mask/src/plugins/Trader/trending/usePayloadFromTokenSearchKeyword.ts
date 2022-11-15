@@ -8,16 +8,14 @@ import { TagType } from '../types/index.js'
 export function usePayloadFromTokenSearchKeyword(pluginID?: NetworkPluginID, keyword = '') {
     const regexResult = keyword.match(/([#$])(\w+)/) ?? []
     const { Others } = useWeb3State(pluginID)
-    const searchedContractAddress = Others?.isValidAddress(keyword) ? keyword : undefined
+    const searchedContractAddress = Others?.isValidAddress(keyword) ? keyword : ''
     const type = searchedContractAddress ? '$' : regexResult[1]
 
     const [_, _type, name = ''] = keyword.match(/([#$])(\w+)/) ?? []
 
-    const { value: nonFungibleAsset } = useTrendingById(
-        Others?.isValidAddress(keyword) ? keyword : '',
-        DataProvider.NFTScan,
-    )
-    const { value: fungibleAsset } = useCoinIdByAddress(Others?.isValidAddress(keyword) ? keyword : '')
+    const { value: nonFungibleAsset } = useTrendingById(searchedContractAddress, DataProvider.NFTScan)
+
+    const { value: fungibleAsset } = useCoinIdByAddress(searchedContractAddress)
 
     const nonFungibleAssetName = nonFungibleAsset.trending?.coin.symbol || nonFungibleAsset.trending?.coin.name
     const isNFT = !!nonFungibleAssetName
