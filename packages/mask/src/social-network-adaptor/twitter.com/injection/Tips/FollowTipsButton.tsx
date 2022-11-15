@@ -58,7 +58,7 @@ const useStyles = makeStyles()((theme) => ({
         width: 36,
         position: 'absolute',
         left: -10,
-        top: -2,
+        top: 1,
         transform: 'translate(-100%)',
     },
 }))
