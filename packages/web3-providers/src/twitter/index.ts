@@ -1,6 +1,13 @@
 import urlcat from 'urlcat'
 import type { TwitterBaseAPI } from '../types/index.js'
-import { getSettings, getTokens, getUserByScreenName, getUserNFTContainer, getUserSettings } from './apis/index.js'
+import {
+    getSettings,
+    getTokens,
+    getUserByScreenName,
+    getUserNFTContainer,
+    getUserSettings,
+    getDefaultUserSettings,
+} from './apis/index.js'
 
 const UPLOAD_AVATAR_URL = 'https://upload.twitter.com/i/media/upload.json'
 const TWITTER_AVATAR_ID_MATCH = /^\/profile_images\/(\d+)/
@@ -18,8 +25,17 @@ export class TwitterAPI implements TwitterBaseAPI.Provider {
         return getSettings()
     }
 
-    getUserSettings() {
-        return getUserSettings()
+    async getUserSettings() {
+        const defaults = getDefaultUserSettings()
+        try {
+            const userSettings = await getUserSettings()
+            return {
+                ...defaults,
+                ...userSettings,
+            }
+        } catch {
+            return getDefaultUserSettings()
+        }
     }
 
     async getUserNftContainer(screenName: string) {

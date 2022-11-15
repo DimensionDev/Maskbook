@@ -129,8 +129,8 @@ export namespace TwitterBaseAPI {
     }
 
     export enum ThemeMode {
-        dark = 'dark',
-        dim = 'dim',
+        dark = 'darker',
+        dim = 'dark',
         light = 'light',
     }
 
@@ -149,22 +149,22 @@ export namespace TwitterBaseAPI {
 
     export interface UserSettings {
         altTextNudgeType?: string
-        autoPollNewTweets: boolean
-        autoShowNewTweets: boolean
-        highContrastEnabled: boolean
-        loginPromptLastShown: number
+        autoPollNewTweets?: boolean
+        autoShowNewTweets?: boolean
+        highContrastEnabled?: boolean
+        loginPromptLastShown?: number
         /* cspell:disable-next-line */
-        nextPushCheckin: number
-        preciseLocationEnabled: boolean
-        pushNotificationsPermission: 'granted'
-        reducedMotionEnabled: boolean
-        replyVotingSurveyClicked: number
-        scale: Scale
-        shouldAutoPlayGif: boolean
-        shouldAutoTagLocation: boolean
-        showTweetMediaDetailDrawer: boolean
-        themeBackground: ThemeMode
-        themeColor: ThemeColor
+        nextPushCheckin?: number
+        preciseLocationEnabled?: boolean
+        pushNotificationsPermission?: 'granted'
+        reducedMotionEnabled?: boolean
+        replyVotingSurveyClicked?: number
+        scale?: Scale
+        shouldAutoPlayGif?: boolean
+        shouldAutoTagLocation?: boolean
+        showTweetMediaDetailDrawer?: boolean
+        themeBackground?: ThemeMode
+        themeColor?: ThemeColor
     }
 
     export interface TwitterResult {
@@ -192,7 +192,7 @@ export namespace TwitterBaseAPI {
 
     export interface Provider {
         getSettings: () => Promise<Settings | undefined>
-        getUserSettings: () => Promise<UserSettings | undefined>
+        getUserSettings: () => Promise<UserSettings>
         getUserByScreenName: (screenName: string) => Promise<User | null>
         getUserNftContainer: (screenName: string) => Promise<NFT | undefined>
         uploadUserAvatar: (screenName: string, image: Blob | File) => Promise<TwitterResult>

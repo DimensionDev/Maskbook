@@ -1,11 +1,6 @@
-import { getTokens } from './getTokens.js'
-import type { TwitterBaseAPI } from '../../types/index.js'
+import { TwitterBaseAPI } from '../../types/index.js'
 
 export async function getUserSettings() {
-    // only logged users
-    const tokens = await getTokens()
-    if (!tokens.bearerToken) return
-
     return new Promise<TwitterBaseAPI.UserSettings | undefined>((resolve, reject) => {
         /* cspell:disable-next-line */
         const request = indexedDB.open('localforage', 2)
@@ -22,8 +17,10 @@ export async function getUserSettings() {
             query.addEventListener('success', (event) => {
                 if (!event.target) reject('Failed to get user settings.')
 
-                const event_ = event as unknown as TwitterBaseAPI.Event<TwitterBaseAPI.UserSettings>
-                resolve(event_.target.result)
+                const event_ = event as unknown as TwitterBaseAPI.Event<{
+                    local: TwitterBaseAPI.UserSettings
+                }>
+                resolve(event_.target.result.local)
             })
             query.addEventListener('error', (error) => {
                 reject(error)
@@ -33,4 +30,12 @@ export async function getUserSettings() {
             reject(error)
         })
     })
+}
+
+export function getDefaultUserSettings(): TwitterBaseAPI.UserSettings {
+    return {
+        scale: TwitterBaseAPI.Scale.normal,
+        themeBackground: TwitterBaseAPI.ThemeMode.light,
+        themeColor: TwitterBaseAPI.ThemeColor.blue,
+    }
 }

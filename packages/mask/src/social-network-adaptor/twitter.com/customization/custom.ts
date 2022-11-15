@@ -28,7 +28,7 @@ const resolveTextColor = createLookupTableResolver<TwitterBaseAPI.ThemeMode, str
         [TwitterBaseAPI.ThemeMode.dim]: 'rgb(255, 255, 255)',
         [TwitterBaseAPI.ThemeMode.light]: 'rgb(255, 255, 255)',
     },
-    '',
+    'rgb(255, 255, 255)',
 )
 
 const resolveBackgroundColor = createLookupTableResolver<TwitterBaseAPI.ThemeMode, string>(
@@ -62,12 +62,11 @@ export const PaletteModeProviderTwitter: SocialNetworkUI.Customization.PaletteMo
 export function startWatchThemeColor(signal: AbortSignal) {
     async function updateThemeByAPI() {
         const userSettings = await Twitter.getUserSettings()
-        if (!userSettings) throw new Error('Failed to update theme by API.')
 
-        themeColorRef.value = resolveThemeColor(userSettings.themeColor)
-        textColorRef.value = resolveTextColor(userSettings.themeBackground)
-        backgroundColorRef.value = resolveBackgroundColor(userSettings.themeBackground)
-        paletteModeRef.value = resolveThemeMode(userSettings.themeBackground)
+        themeColorRef.value = resolveThemeColor(userSettings.themeColor!)
+        textColorRef.value = resolveTextColor(userSettings.themeBackground!)
+        backgroundColorRef.value = resolveBackgroundColor(userSettings.themeBackground!)
+        paletteModeRef.value = resolveThemeMode(userSettings.themeBackground!)
     }
 
     function updateThemeByDOM() {
