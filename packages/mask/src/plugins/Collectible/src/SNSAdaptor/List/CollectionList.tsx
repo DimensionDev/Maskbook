@@ -88,7 +88,7 @@ export const useStyles = makeStyles<CollectibleGridProps>()((theme, { columns = 
 })
 
 export interface CollectionListProps {
-    socialAccount: SocialAccount
+    socialAccount: SocialAccount<Web3Helper.ChainIdAll>
     persona?: string
     profile?: SocialIdentity
     gridProps?: CollectibleGridProps

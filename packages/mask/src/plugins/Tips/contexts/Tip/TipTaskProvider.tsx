@@ -1,4 +1,5 @@
 import { Dispatch, FC, memo, SetStateAction, useCallback, useContext, useEffect, useMemo, useState } from 'react'
+import { useSubscription } from 'use-subscription'
 import {
     useFungibleToken,
     useNonFungibleTokenContract,
@@ -6,9 +7,9 @@ import {
     useChainContext,
 } from '@masknet/web3-hooks-base'
 import { isSameAddress, SocialAccount } from '@masknet/web3-shared-base'
-import { NetworkPluginID } from '@masknet/shared-base'
 import type { ChainId, GasOptionConfig } from '@masknet/web3-shared-evm'
-import { useSubscription } from 'use-subscription'
+import { NetworkPluginID } from '@masknet/shared-base'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import { getStorage } from '../../storage/index.js'
 import { TipTask, TipsType } from '../../types/index.js'
 import { TipContextOptions, TipContext } from './TipContext.js'
@@ -22,7 +23,7 @@ interface Props {
     task: TipTask
 }
 
-function useRecipients(pluginID: NetworkPluginID, tipsAccounts: SocialAccount[]) {
+function useRecipients(pluginID: NetworkPluginID, tipsAccounts: Array<SocialAccount<Web3Helper.ChainIdAll>>) {
     const _recipients = useTipAccountsCompletion(tipsAccounts)
     const recipients = useMemo(() => {
         return [..._recipients].sort((a, z) => {

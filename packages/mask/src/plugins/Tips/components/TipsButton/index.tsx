@@ -11,11 +11,12 @@ import {
 import { useProfilePublicKey } from '../../hooks/useProfilePublicKey.js'
 import { PluginTipsMessages } from '../../messages.js'
 import { useTipsAccounts } from './useTipsAccounts.js'
+import type { Web3Helper } from '@masknet/web3-helpers'
 
 interface Props extends HTMLProps<HTMLDivElement> {
     // This is workaround solution, link issue mf-2536 and pr #7576.
     // Should refactor social account to support multi-account for one post.
-    accounts?: SocialAccount[]
+    accounts?: Array<SocialAccount<Web3Helper.ChainIdAll>>
     recipient?: string
     receiver?: ProfileIdentifier
     buttonSize?: number

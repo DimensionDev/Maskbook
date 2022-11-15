@@ -2,11 +2,12 @@ import { useEffect, useMemo } from 'react'
 import { PluginID, CrossIsolationMessages, EMPTY_LIST } from '@masknet/shared-base'
 import { useHiddenAddressSetting, useSocialAccountsAll } from '@masknet/web3-hooks-base'
 import { currySameAddress, SocialAccount, SocialAddressType, SocialIdentity } from '@masknet/web3-shared-base'
+import type { Web3Helper } from '@masknet/web3-helpers'
 
 export const useSocialAccountsBySettings = (
     identity?: SocialIdentity,
     typeWhitelist?: SocialAddressType[],
-    sorter?: (a: SocialAccount, z: SocialAccount) => number,
+    sorter?: (a: SocialAccount<Web3Helper.ChainIdAll>, z: SocialAccount<Web3Helper.ChainIdAll>) => number,
 ) => {
     const {
         value: socialAccounts = EMPTY_LIST,
