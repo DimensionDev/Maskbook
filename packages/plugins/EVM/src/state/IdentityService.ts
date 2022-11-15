@@ -1,4 +1,4 @@
-import { compact, uniqBy } from 'lodash-es'
+import { compact, first, uniqBy } from 'lodash-es'
 import type { Plugin } from '@masknet/plugin-infra'
 import { IdentityServiceState } from '@masknet/web3-state'
 import { SocialIdentity, SocialAddress, SocialAddressType, attemptUntil } from '@masknet/web3-shared-base'
@@ -10,6 +10,8 @@ import {
     NextIDPlatform,
     createLookupTableResolver,
     PluginID,
+    joinKeys,
+    BindingProof,
 } from '@masknet/shared-base'
 import { KVStorage } from '@masknet/shared'
 import { ChainId, isValidAddress, isZeroAddress } from '@masknet/web3-shared-evm'
@@ -54,15 +56,19 @@ function getNextIDPlatform() {
     return
 }
 
-async function getWalletAddressesFromNextID(userId?: string) {
+async function getWalletAddressesFromNextID(userId?: string): Promise<BindingProof[]> {
     if (!userId) return EMPTY_LIST
 
     const platform = getNextIDPlatform()
     if (!platform) return EMPTY_LIST
 
     const bindings = await NextIDProof.queryAllExistedBindingsByPlatform(platform, userId)
-    return bindings.flatMap((x) =>
-        x.proofs.filter((y) => y.platform === NextIDPlatform.Ethereum && isValidAddress(y.identity)),
+    const latestActivatedBinding = first(
+        bindings.sort((a, z) => Number.parseInt(z.activated_at, 10) - Number.parseInt(a.activated_at, 10)),
+    )
+    if (!latestActivatedBinding) return EMPTY_LIST
+    return latestActivatedBinding.proofs.filter(
+        (x) => x.platform === NextIDPlatform.Ethereum && isValidAddress(x.identity),
     )
 }
 
@@ -281,6 +287,6 @@ export class IdentityService extends IdentityServiceState {
         const identities = allSettled
             .flatMap((x) => (x.status === 'fulfilled' ? x.value : []))
             .filter(Boolean) as Array<SocialAddress<NetworkPluginID.PLUGIN_EVM>>
-        return uniqBy(identities, (x) => `${x.type}_${x.label}_${x.address.toLowerCase()}`)
+        return uniqBy(identities, (x) => joinKeys(x.type, x.label, x.address.toLowerCase()))
     }
 }
