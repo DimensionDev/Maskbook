@@ -1,4 +1,9 @@
 export namespace TwitterBaseAPI {
+    export interface NFT {
+        address: string
+        token_id: string
+    }
+
     export interface NFTContainer {
         has_nft_avatar: boolean
         nft_avatar_metadata: AvatarMetadata
@@ -32,7 +37,8 @@ export namespace TwitterBaseAPI {
             }>
         }
     }
-    type UserUrl = {
+
+    export interface UserUrl {
         display_url: string
         expanded_url: string
         /** t.co url */
@@ -106,10 +112,7 @@ export namespace TwitterBaseAPI {
         legacy_extended_profile: {}
         is_profile_translatable: boolean
     }
-    export type Response<T> = {
-        data: T
-    }
-    export type UserByScreenNameResponse = Response<{ user: { result: User } }>
+
     export interface AvatarInfo {
         nickname: string
         userId: string
@@ -119,6 +122,25 @@ export namespace TwitterBaseAPI {
 
     export interface Settings {
         screen_name: string
+    }
+
+    export interface UserSettings {
+        altTextNudgeType?: string
+        autoPollNewTweets: boolean
+        autoShowNewTweets: boolean
+        highContrastEnabled: boolean
+        loginPromptLastShown: number
+        nextPushCheckin: number
+        preciseLocationEnabled: boolean
+        pushNotificationsPermission: 'granted'
+        reducedMotionEnabled: boolean
+        replyVotingSurveyClicked: number
+        scale: 'xSmall' | 'small' | 'normal' | 'large' | 'xLarge'
+        shouldAutoPlayGif: boolean
+        shouldAutoTagLocation: boolean
+        showTweetMediaDetailDrawer: boolean
+        themeBackground: 'dark' | 'dim' | 'light'
+        themeColor: 'blue500' | 'yellow500' | 'purple500' | 'magenta500' | 'orange500' | 'green500'
     }
 
     export interface TwitterResult {
@@ -132,17 +154,24 @@ export namespace TwitterBaseAPI {
         }
     }
 
+    export type Event<T> = {
+        target: {
+            result: T
+        }
+    }
+
+    export type Response<T> = {
+        data: T
+    }
+
+    export type UserByScreenNameResponse = Response<{ user: { result: User } }>
+
     export interface Provider {
         getSettings: () => Promise<Settings | undefined>
-        getUserNftContainer: (screenName: string) => Promise<
-            | {
-                  address: string
-                  token_id: string
-              }
-            | undefined
-        >
+        getUserSettings: () => Promise<UserSettings | undefined>
+        getUserByScreenName: (screenName: string) => Promise<User | null>
+        getUserNftContainer: (screenName: string) => Promise<NFT | undefined>
         uploadUserAvatar: (screenName: string, image: Blob | File) => Promise<TwitterResult>
         updateProfileImage: (screenName: string, media_id_str: string) => Promise<AvatarInfo | undefined>
-        getUserByScreenName: (screenName: string) => Promise<User | null>
     }
 }
