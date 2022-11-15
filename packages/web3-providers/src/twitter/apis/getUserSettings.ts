@@ -17,11 +17,8 @@ export async function getUserSettings() {
 
         request.addEventListener('success', () => {
             const db = request.result
-            /* cspell:disable-next-line */
             const transaction = db.transaction([STORE_NAME], 'readonly')
-            /* cspell:disable-next-line */
             const objectStore = transaction.objectStore(STORE_NAME)
-            /* cspell:disable-next-line */
             const query = objectStore.get(KEY_NAME)
 
             query.addEventListener('success', (event) => {

@@ -62,7 +62,6 @@ export const PaletteModeProviderTwitter: SocialNetworkUI.Customization.PaletteMo
 export async function startWatchThemeColor(signal: AbortSignal) {
     async function updateThemeColor() {
         const userSettings = await Twitter.getUserSettings()
-
         themeColorRef.value = resolveThemeColor(userSettings.themeColor!)
         textColorRef.value = resolveTextColor(userSettings.themeBackground!)
         backgroundColorRef.value = resolveBackgroundColor(userSettings.themeBackground!)
