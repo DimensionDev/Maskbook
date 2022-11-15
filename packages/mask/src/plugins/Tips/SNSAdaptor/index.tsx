@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
+import { SNSAdaptorContext, PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
 import { Trans } from 'react-i18next'
 import { Icons } from '@masknet/icons'
 import type { Plugin } from '@masknet/plugin-infra'
 import { PluginID, CrossIsolationMessages } from '@masknet/shared-base'
-import { PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
 import { ApplicationEntry, PublicWalletSetting } from '@masknet/shared'
 import { MaskColorVar } from '@masknet/theme'
 import { Link } from '@mui/material'
@@ -12,11 +12,13 @@ import { TipTaskManager } from '../contexts/index.js'
 import { setupStorage, storageDefaultValue } from '../storage/index.js'
 import { TipsEntranceDialog } from './TipsEntranceDialog.js'
 import { TipsRealmContent } from './components/TipsRealmContent/index.js'
+import { SharedContextSettings } from '../settings/index.js'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
     init(_, context) {
         setupStorage(context.createKVStorage('memory', storageDefaultValue))
+        SharedContextSettings.value = context
     },
     ApplicationEntries: [
         (() => {
@@ -97,7 +99,13 @@ const sns: Plugin.SNSAdaptor.Definition = {
         ID: `${base.ID}_tips`,
         priority: 1,
         UI: {
-            Content: TipsRealmContent,
+            Content(props) {
+                return (
+                    <SNSAdaptorContext.Provider value={SharedContextSettings.value}>
+                        <TipsRealmContent {...props} />
+                    </SNSAdaptorContext.Provider>
+                )
+            },
         },
     },
 }
