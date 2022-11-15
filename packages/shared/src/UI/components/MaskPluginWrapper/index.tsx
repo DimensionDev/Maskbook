@@ -47,7 +47,7 @@ const useStyles = makeStyles<{
             color: theme.palette.text.primary,
             display: 'flex',
             alignItems: 'center',
-            padding: 16,
+            padding: theme.spacing(1.5),
         },
         provider: {
             display: 'flex',
