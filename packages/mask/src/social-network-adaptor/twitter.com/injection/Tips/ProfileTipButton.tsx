@@ -2,6 +2,7 @@ import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { createInjectHooksRenderer, Plugin, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
 import { makeStyles } from '@masknet/theme'
 import { useEffect, useMemo, useState } from 'react'
+import { useLocation } from 'react-use'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI.js'
 import { createReactRootShadowed, startWatch, useLocationChange } from '../../../../utils/index.js'
 import {
@@ -58,10 +59,11 @@ function ProfileTipsSlot() {
     const visitingPersona = useCurrentVisitingIdentity()
     const { classes, cx } = useTipsSlotStyles()
     const [disabled, setDisabled] = useState(true)
+    const location = useLocation()
+
     const iconSize = useMemo(() => {
         const svg = menuButtonSelector().querySelector('svg').evaluate()
         if (!svg) return 24
-
         const svgCss = window.getComputedStyle(svg)
         return Number.parseFloat(svgCss.width.replace('px', ''))
     }, [location])
@@ -70,9 +72,9 @@ function ProfileTipsSlot() {
         const button = menuButtonSelector().querySelector('div').evaluate()
         if (!button) return 34
         const buttonCss = window.getComputedStyle(button)
-        const buttonSize = Number.parseFloat(buttonCss.height.replace('px', ''))
-        return buttonSize === 0 ? 34 : buttonSize - 2
+        return Number.parseFloat(buttonCss.height.replace('px', ''))
     }, [location])
+
     const component = useMemo(() => {
         const Component = createInjectHooksRenderer(
             useActivatedPluginsSNSAdaptor.visibility.useNotMinimalMode,
@@ -88,7 +90,7 @@ function ProfileTipsSlot() {
                 onStatusUpdate={setDisabled}
             />
         )
-    }, [visitingPersona.identifier])
+    }, [visitingPersona.identifier, buttonSize, iconSize])
 
     if (!component || !visitingPersona.identifier) return null
 
