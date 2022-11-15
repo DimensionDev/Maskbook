@@ -95,12 +95,14 @@ export class IdentityService extends IdentityServiceState {
         type: SocialAddressType,
         address: string,
         label = '',
+        chainId?: ChainId,
         updatedAt?: string,
         createdAt?: string,
     ): SocialAddress<NetworkPluginID.PLUGIN_EVM> | undefined {
         if (isValidAddress(address) && !isZeroAddress(address)) {
             return {
                 pluginID: NetworkPluginID.PLUGIN_EVM,
+                chainId,
                 type,
                 label,
                 address,
@@ -167,7 +169,14 @@ export class IdentityService extends IdentityServiceState {
         const listOfAddress = await getWalletAddressesFromNextID(identifier?.userId)
         return compact(
             listOfAddress.map((x) =>
-                this.createSocialAddress(SocialAddressType.NEXT_ID, x.identity, '', x.latest_checked_at, x.created_at),
+                this.createSocialAddress(
+                    SocialAddressType.NEXT_ID,
+                    x.identity,
+                    '',
+                    undefined,
+                    x.latest_checked_at,
+                    x.created_at,
+                ),
             ),
         )
     }
@@ -202,7 +211,7 @@ export class IdentityService extends IdentityServiceState {
             names.map(async (name) => {
                 const address = await resolver.lookup(name)
                 if (!address) return
-                return this.createSocialAddress(SocialAddressType.SPACE_ID, address, name)
+                return this.createSocialAddress(SocialAddressType.SPACE_ID, address, name, ChainId.BSC)
             }),
         )
         return compact(allSettled.map((x) => (x.status === 'fulfilled' ? x.value : undefined)).filter(Boolean))
