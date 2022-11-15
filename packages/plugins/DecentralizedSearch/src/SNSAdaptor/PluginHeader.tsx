@@ -41,30 +41,25 @@ export const PluginHeader = () => {
                     <PluginI18NFieldRender field={base.name} pluginID={PluginID.DecentralizedSearch} />
                 </Typography>
             </Stack>
-            <Box>
-                <Box className={classes.provider}>
-                    <Typography variant="body1" fontSize={14} fontWeight="400" className={classes.providerBy}>
-                        {t.plugin_provider_by()}
-                    </Typography>
-                    <Typography
-                        variant="body1"
-                        fontSize={14}
-                        fontWeight="500"
-                        component="div"
-                        color={MaskColorVar.textPluginColor}>
-                        {base.publisher ? (
-                            <PluginI18NFieldRender
-                                pluginID={PluginID.DecentralizedSearch}
-                                field={base.publisher.name}
-                            />
-                        ) : undefined}
-                    </Typography>
-                    {base.publisher?.link ? (
-                        <Link href={base.publisher?.link} underline="none" target="_blank" rel="noopener">
-                            <Icons.Provider size={18} style={{ marginLeft: 4 }} />
-                        </Link>
-                    ) : null}
-                </Box>
+            <Box className={classes.provider}>
+                <Typography variant="body1" fontSize={14} fontWeight="400" className={classes.providerBy}>
+                    {t.plugin_provider_by()}
+                </Typography>
+                <Typography
+                    variant="body1"
+                    fontSize={14}
+                    fontWeight="500"
+                    component="div"
+                    color={MaskColorVar.textPluginColor}>
+                    {base.publisher ? (
+                        <PluginI18NFieldRender pluginID={PluginID.DecentralizedSearch} field={base.publisher.name} />
+                    ) : undefined}
+                </Typography>
+                {base.publisher?.link ? (
+                    <Link href={base.publisher?.link} underline="none" target="_blank" rel="noopener">
+                        <Icons.Provider size={18} style={{ marginLeft: 4 }} />
+                    </Link>
+                ) : null}
             </Box>
         </Stack>
     )
