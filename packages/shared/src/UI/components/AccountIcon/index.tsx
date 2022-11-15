@@ -1,5 +1,6 @@
 import { Icons } from '@masknet/icons'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import { resolveSocialAddressLink, SocialAccount, SocialAddressType } from '@masknet/web3-shared-base'
 import { TooltipProps, Typography } from '@mui/material'
 import { Linking } from '../../../index.js'
@@ -66,7 +67,7 @@ function AccountTooltips({ platform, type, children }: AccountTooltipsProps) {
 }
 
 export interface AccountIconProps extends withClasses<'icon'> {
-    socialAccount: SocialAccount
+    socialAccount: SocialAccount<Web3Helper.ChainIdAll>
 }
 
 export function AccountIcon({ socialAccount, classes: externalClasses }: AccountIconProps) {

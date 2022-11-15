@@ -6,13 +6,13 @@ import type { GasOptionConfig } from '@masknet/web3-shared-evm'
 import { TipsType, ValidationTuple } from '../../types/index.js'
 
 export interface TipContextOptions {
-    recipient: SocialAccount | undefined
+    recipient: SocialAccount<Web3Helper.ChainIdAll> | undefined
     recipientSnsId: string
     recipientAddress: string
     setRecipient: Dispatch<SetStateAction<string>>
     tipType: TipsType
     setTipType: Dispatch<SetStateAction<TipsType>>
-    recipients: SocialAccount[]
+    recipients: SocialAccount<Web3Helper.ChainIdAll>[]
     token: Web3Helper.FungibleTokenAll | null
     setToken: Dispatch<SetStateAction<Web3Helper.FungibleTokenAll | null>>
     amount: string

@@ -167,11 +167,11 @@ export interface SocialIdentity {
  * The smallest unit of a social account. This type only for internal usage.
  * The SocialAccount serves for UI usage.
  */
-export interface SocialAddress<PluginID> {
+export interface SocialAddress<ChainId> {
     /** The ID of a plugin that the address belongs to */
-    pluginID: PluginID
+    pluginID: NetworkPluginID
     /** The chain id that the address belongs to, default support all chains */
-    chainId?: number
+    chainId?: ChainId
     /** The data source type */
     type: SocialAddressType
     /** The address in hex string */
@@ -188,10 +188,10 @@ export interface SocialAddress<PluginID> {
  * The social account that merged from multiple social addresses.
  * This type only for UI usage.
  */
-export interface SocialAccount extends Omit<SocialAddress<NetworkPluginID>, 'type'> {
+export interface SocialAccount<ChainId> extends Omit<SocialAddress<ChainId>, 'type'> {
     supportedAddressTypes?: SocialAddressType[]
     /** The chain ids that the address supported, default support all chains */
-    supportedChainIds?: number[]
+    supportedChainIds?: ChainId[]
 }
 
 export type Price = {
@@ -1220,9 +1220,9 @@ export interface Web3StorageServiceState {
     ) => Storage
 }
 
-export interface IdentityServiceState {
+export interface IdentityServiceState<ChainId> {
     /** Merge many social addresses into a social account. Don't overwrite it in sub-classes. */
-    __mergeSocialAddressesAll__(socialAddresses: Array<SocialAddress<NetworkPluginID>>): SocialAccount[]
+    __mergeSocialAddressesAll__(socialAddresses: Array<SocialAddress<NetworkPluginID>>): SocialAccount<ChainId>[]
     /** Find all social addresses related to the given identity. */
     lookup(identity: SocialIdentity): Promise<Array<SocialAddress<NetworkPluginID>>>
 }

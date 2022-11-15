@@ -84,7 +84,7 @@ const AllButton = styled(Button)(({ theme }) => ({
 }))
 
 export interface CollectionListProps {
-    socialAccount: SocialAccount
+    socialAccount: SocialAccount<Web3Helper.ChainIdAll>
     persona?: string
     profile?: SocialIdentity
     gridProps?: CollectibleGridProps

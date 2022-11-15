@@ -8,6 +8,7 @@ import { AccountIcon, AddressItem, useSnackbarCallback } from '@masknet/shared'
 import { makeStyles, ShadowRootMenu } from '@masknet/theme'
 import { isSameAddress, SocialAccount, SocialIdentity } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import { useI18N } from '../../../utils/index.js'
 import { AvatarDecoration } from './AvatarDecoration.js'
 
@@ -105,7 +106,7 @@ const useStyles = makeStyles<void, 'avatarDecoration'>()((theme, _, refs) => ({
 
 export interface ProfileBarProps extends HTMLProps<HTMLDivElement> {
     identity: SocialIdentity
-    socialAccounts: SocialAccount[]
+    socialAccounts: SocialAccount<Web3Helper.ChainIdAll>[]
     address?: string
     onAddressChange?: (address: string) => void
 }

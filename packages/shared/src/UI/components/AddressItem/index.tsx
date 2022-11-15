@@ -1,11 +1,12 @@
+import { first } from 'lodash-es'
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import { Link, Typography, TypographyProps } from '@mui/material'
 import { useWeb3State } from '@masknet/web3-hooks-base'
 import type { SocialAccount } from '@masknet/web3-shared-base'
-import { ReversedAddress } from '../../../index.js'
 import { isSameAddress } from '@masknet/web3-shared-base'
-import { first } from 'lodash-es'
+import type { Web3Helper } from '@masknet/web3-helpers'
+import { ReversedAddress } from '../../../index.js'
 
 const useStyles = makeStyles()((theme) => ({
     link: {
@@ -19,7 +20,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface AddressItemProps {
-    socialAccount?: SocialAccount
+    socialAccount?: SocialAccount<Web3Helper.ChainIdAll>
     TypographyProps?: TypographyProps
     linkIconClassName?: string
     disableLinkIcon?: boolean

@@ -8,8 +8,9 @@ import {
     SocialAccount,
 } from '@masknet/web3-shared-base'
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
+import type { Web3Helper } from '@masknet/web3-helpers'
 
-export class IdentityServiceState implements Web3SocialIdentityState {
+export class IdentityServiceState implements Web3SocialIdentityState<Web3Helper.ChainIdAll> {
     protected cache = new LRU<string, Promise<Array<SocialAddress<NetworkPluginID>>>>({
         max: 20,
         ttl: Number.MAX_SAFE_INTEGER,
@@ -51,7 +52,7 @@ export class IdentityServiceState implements Web3SocialIdentityState {
 
     __mergeSocialAddressesAll__(socialAddresses: Array<SocialAddress<NetworkPluginID>>) {
         const accountsGrouped = groupBy(socialAddresses, (x) => `${x.pluginID}_${x.address.toLowerCase()}`)
-        return Object.entries(accountsGrouped).map<SocialAccount>(([, group]) => {
+        return Object.entries(accountsGrouped).map<SocialAccount<Web3Helper.ChainIdAll>>(([, group]) => {
             return {
                 pluginID: group[0].pluginID,
                 address: group[0].address,
