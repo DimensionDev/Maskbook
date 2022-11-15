@@ -54,6 +54,8 @@ const CACHE_RULES = {
     'https://discovery.attrace.com': CACHE_DURATION.SHORT,
     // mask-x
     '7x16bogxfb.execute-api.us-east-1.amazonaws.com': CACHE_DURATION.SHORT,
+    // coingecko
+    'https://coingecko-agent.r2d2.to/api/v3': CACHE_DURATION.SHORT,
 }
 const CACHE_URLS = Object.keys(CACHE_RULES) as unknown as Array<keyof typeof CACHE_RULES>
 

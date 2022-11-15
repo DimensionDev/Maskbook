@@ -42,7 +42,7 @@ export class CoinGeckoTrending_API implements TrendingAPI.Provider<ChainId> {
             return coins
                 .search(keyword)
                 .map((x) => x.item)
-                .slice(10)
+                .slice(0, 10)
         }
     }
 
