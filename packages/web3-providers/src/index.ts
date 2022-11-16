@@ -26,7 +26,6 @@ import { NextIDProofAPI, NextIDStorageAPI } from './NextID/index.js'
 import { AlchemyEVM_API, AlchemyFlowAPI } from './alchemy/index.js'
 import { EthereumWeb3API } from './web3/index.js'
 import { MagicEdenAPI } from './MagicEden/index.js'
-import { TokenViewAPI } from './token-view/index.js'
 import { CoinMarketCapAPI } from './cmc/index.js'
 import { UniSwapAPI } from './uniswap/index.js'
 import { RabbyAPI } from './rabby/index.js'
@@ -45,6 +44,7 @@ import { MirrorAPI } from './mirror/index.js'
 import { MindsAPI } from './minds/index.js'
 import { FuseTrendingAPI } from './fuse/index.js'
 import { CryptoScamDBAPI } from './cryptoscam-db/index.js'
+import { NomicsAPI } from './Nomics/index.js'
 
 export * from './helpers.js'
 export * from './types/index.js'
@@ -79,7 +79,7 @@ export const AstarGas = new AstarAPI()
 export const NextIDProof = new NextIDProofAPI()
 export const NextIDStorage = new NextIDStorageAPI()
 export const EthereumWeb3 = new EthereumWeb3API()
-export const TokenView = new TokenViewAPI()
+export const Nomics = new NomicsAPI()
 export const CoinMarketCap = new CoinMarketCapAPI()
 export const UniSwap = new UniSwapAPI()
 export const Rabby = new RabbyAPI()

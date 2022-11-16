@@ -8,7 +8,7 @@ import { useTheme } from '@mui/system'
 import { resolveGoLabLink } from '../../utils/helper.js'
 import { TokenPanel } from './TokenPanel.js'
 import { TokenIcon } from '@masknet/shared'
-import type { SecurityAPI, TokenAPI } from '@masknet/web3-providers'
+import type { SecurityAPI, TrendingAPI } from '@masknet/web3-providers'
 import { Icons } from '@masknet/icons'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { formatCurrency, FungibleToken } from '@masknet/web3-shared-base'
@@ -19,7 +19,7 @@ interface TokenCardProps {
     tokenSecurity: SecurityAPI.TokenSecurityType
     tokenInfo?: FungibleToken<ChainId, SchemaType>
     tokenPrice?: number
-    tokenMarketCap?: TokenAPI.TokenInfo
+    tokenMarketCap?: TrendingAPI.TokenInfo
 }
 
 const useStyles = makeStyles()((theme) => ({
