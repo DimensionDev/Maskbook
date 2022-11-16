@@ -177,9 +177,11 @@ export class NFTScanTrendingAPI implements TrendingAPI.Provider<ChainId> {
                 community_urls: [
                     {
                         type: 'twitter',
-                        link: collection.twitter?.startsWith('https://twitter.com/')
-                            ? collection.twitter
-                            : `https://twitter.com/${collection.twitter}`,
+                        link:
+                            collection.twitter &&
+                            (collection.twitter.startsWith('https://twitter.com/')
+                                ? collection.twitter
+                                : `https://twitter.com/${collection.twitter}`),
                     },
                     {
                         type: 'facebook',
@@ -192,15 +194,19 @@ export class NFTScanTrendingAPI implements TrendingAPI.Provider<ChainId> {
                     },
                     {
                         type: 'instagram',
-                        link: collection.instagram?.startsWith('https://instagram.com/')
-                            ? collection.instagram
-                            : `https://www.instagram.com/${collection.instagram}`,
+                        link:
+                            collection.instagram &&
+                            (collection.instagram.startsWith('https://instagram.com/')
+                                ? collection.instagram
+                                : `https://www.instagram.com/${collection.instagram}`),
                     },
                     {
                         type: 'medium',
-                        link: collection.medium?.startsWith('https://instagram.com/@')
-                            ? collection.medium
-                            : `https://medium.com/@${collection.medium}`,
+                        link:
+                            collection.medium &&
+                            (collection.medium.startsWith('https://instagram.com/@')
+                                ? collection.medium
+                                : `https://medium.com/@${collection.medium}`),
                     },
                     {
                         type: 'reddit',
