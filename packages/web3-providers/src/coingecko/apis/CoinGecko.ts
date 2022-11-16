@@ -10,7 +10,7 @@ import { getAllCoins, getCoinInfo, getPriceStats as getStats, getThumbCoins } fr
 import type { Platform } from '../types.js'
 import { resolveCoinGeckoChainId } from '../helpers.js'
 import { FuseTrendingAPI } from '../../fuse/index.js'
-import { COIN_RECOMMENDATION_SIZE, LOWEST_RANK } from '../../trending/constants.js'
+import { COIN_RECOMMENDATION_SIZE, VALID_TOP_RANK } from '../../trending/constants.js'
 
 export class CoinGeckoTrending_API implements TrendingAPI.Provider<ChainId> {
     private fuse = new FuseTrendingAPI()
@@ -39,15 +39,14 @@ export class CoinGeckoTrending_API implements TrendingAPI.Provider<ChainId> {
             const coinThumbs = await getThumbCoins(keyword)
             return compact(
                 coinThumbs
-                    .map((x) => this.coins.get(x.id))
-                    .filter((y) => y?.market_cap_rank && y.market_cap_rank < LOWEST_RANK),
+                    .filter((y) => y?.market_cap_rank && y.market_cap_rank < VALID_TOP_RANK)
+                    .map((x) => this.coins.get(x.id)),
             )
         } catch {
             const coins = await this.fuse.getSearchableItems(this.getAllCoins)
             return coins
                 .search(keyword)
                 .map((x) => x.item)
-                .filter((y) => y.market_cap_rank && y.market_cap_rank < LOWEST_RANK)
                 .slice(0, COIN_RECOMMENDATION_SIZE)
         }
     }
