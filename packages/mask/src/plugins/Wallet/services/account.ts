@@ -1,12 +1,11 @@
 import { first } from 'lodash-es'
 import { defer, DeferTuple } from '@masknet/kit'
 import type { EnhanceableSite, ExtensionSite } from '@masknet/shared-base'
-import { ChainId, isValidAddress, NetworkType } from '@masknet/web3-shared-evm'
+import { ChainId, isValidAddress } from '@masknet/web3-shared-evm'
 import {
     currentMaskWalletAccountSettings,
     currentMaskWalletChainIdSettings,
 } from '../../../../shared/legacy-settings/wallet-settings.js'
-import { Flags } from '../../../../shared/index.js'
 import { WalletRPC } from '../messages.js'
 
 export async function setDefaultMaskAccount() {
@@ -58,20 +57,3 @@ export async function rejectMaskAccount() {
     deferred = null
 }
 // #endregion
-
-export async function getSupportedNetworks() {
-    return [
-        NetworkType.Ethereum,
-        Flags.bsc_enabled ? NetworkType.Binance : undefined,
-        Flags.polygon_enabled ? NetworkType.Polygon : undefined,
-        Flags.arbitrum_enabled ? NetworkType.Arbitrum : undefined,
-        Flags.xdai_enabled ? NetworkType.xDai : undefined,
-        Flags.optimism_enabled ? NetworkType.Optimism : undefined,
-        Flags.celo_enabled ? NetworkType.Celo : undefined,
-        Flags.fantom_enabled ? NetworkType.Fantom : undefined,
-        Flags.avalanche_enabled ? NetworkType.Avalanche : undefined,
-        Flags.aurora_enabled ? NetworkType.Aurora : undefined,
-        Flags.astar_enabled ? NetworkType.Astar : undefined,
-        Flags.harmony_enabled ? NetworkType.Harmony : undefined,
-    ].filter(Boolean) as NetworkType[]
-}
