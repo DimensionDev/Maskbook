@@ -39,8 +39,8 @@ export class CoinGeckoTrending_API implements TrendingAPI.Provider<ChainId> {
             const coinThumbs = await getThumbCoins(keyword)
             return compact(
                 coinThumbs
-                    .filter((y) => y?.market_cap_rank && y.market_cap_rank < VALID_TOP_RANK)
-                    .map((x) => this.coins.get(x.id)),
+                    .filter((x) => x?.market_cap_rank && x.market_cap_rank < VALID_TOP_RANK)
+                    .map((y) => this.coins.get(y.id)),
             ).slice(0, COIN_RECOMMENDATION_SIZE)
         } catch {
             const coins = await this.fuse.getSearchableItems(this.getAllCoins)
