@@ -261,7 +261,7 @@ export function TrendingView(props: TrendingViewProps) {
         done,
         next,
         error: loadError,
-    } = useNonFungibleAssetsByCollection(collectionAddress, NetworkPluginID.PLUGIN_EVM)
+    } = useNonFungibleAssetsByCollection(collectionAddress, NetworkPluginID.PLUGIN_EVM, { chainId: expectedChainId })
 
     // #region no available providers
     if (dataProviders.length === 0) return null
