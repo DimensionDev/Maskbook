@@ -1,9 +1,9 @@
+import { useEffect, useRef, useState } from 'react'
+import { useAsync } from 'react-use'
 import { CrossIsolationMessages, ProfileIdentifier } from '@masknet/shared-base'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import { Twitter } from '@masknet/web3-providers'
 import type { SocialIdentity } from '@masknet/web3-shared-base'
-import { useEffect, useRef, useState } from 'react'
-import { useAsync } from 'react-use'
 import { useSocialIdentity } from '../../../../components/DataSource/useActivatedUI.js'
 import { ProfileCard } from '../../../../components/InjectedComponents/ProfileCard/index.js'
 import { attachReactTreeWithoutContainer } from '../../../../utils/index.js'
@@ -46,21 +46,20 @@ function ProfileCardHolder() {
 
     const { value: identity, loading } = useAsync(async (): Promise<SocialIdentity | null> => {
         if (!twitterId) return null
+
         const user = await Twitter.getUserByScreenName(twitterId)
         if (!user?.legacy) return null
 
-        const nickname = user.legacy.name
+        const userId = user.legacy.id_str
         const handle = user.legacy.screen_name
-        const avatar = user.legacy.profile_image_url_https.replace(/_normal(\.\w+)$/, '_400x400$1')
-        const bio = user.legacy.description
-        const homepage = user.legacy.entities.url?.urls[0]?.expanded_url ?? ''
 
         return {
             identifier: ProfileIdentifier.of(twitterBase.networkIdentifier, handle).unwrapOr(undefined),
-            nickname,
-            avatar,
-            bio,
-            homepage,
+            isOwner: !!(userId && document.cookie.includes(escape(`twid=u=${userId}`))),
+            nickname: user.legacy.name,
+            avatar: user.legacy.profile_image_url_https.replace(/_normal(\.\w+)$/, '_400x400$1'),
+            bio: user.legacy.description,
+            homepage: user.legacy.entities.url?.urls[0]?.expanded_url ?? '',
         }
     }, [twitterId])
 
