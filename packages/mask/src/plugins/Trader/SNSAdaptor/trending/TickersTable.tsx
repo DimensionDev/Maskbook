@@ -95,7 +95,7 @@ export function TickersTable({ dataProvider, tickers, coinType }: TickersTablePr
     const tickerRows = tickers.map((ticker, index) => {
         const price = ticker.price ?? ticker.floor_price
         const volume = isNFT ? ticker.volume_24h : ticker.volume
-        const currency = isNFT ? 'ETH' : 'USD'
+        const currency = isNFT ? ticker.price_symbol ?? 'ETH' : 'USD'
         const marketplaceOrExchange = (
             <Stack direction="row" alignItems="center">
                 {ticker.logo_url ? <img className={classes.logo} src={ticker.logo_url} /> : null}

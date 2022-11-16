@@ -142,6 +142,7 @@ export class NFTScanTrendingAPI implements TrendingAPI.Provider<ChainId> {
                       market_name: NonFungibleMarketplace.OpenSea,
                       volume_24h: openseaStats.volume24h,
                       floor_price: openseaStats.floorPrice,
+                      price_symbol: collection.price_symbol,
                       sales_24: openseaStats.count24h,
                   }
                 : null,
@@ -152,6 +153,7 @@ export class NFTScanTrendingAPI implements TrendingAPI.Provider<ChainId> {
                       market_name: NonFungibleMarketplace.LooksRare,
                       volume_24h: looksrareStats.volume24h,
                       floor_price: looksrareStats.floorPrice,
+                      price_symbol: collection.price_symbol,
                       sales_24: looksrareStats.count24h,
                   }
                 : null,
@@ -174,7 +176,9 @@ export class NFTScanTrendingAPI implements TrendingAPI.Provider<ChainId> {
                 community_urls: [
                     {
                         type: 'twitter',
-                        link: collection.twitter && `https://twitter.com/${collection.twitter}`,
+                        link: collection.twitter?.startsWith('https://twitter.com/')
+                            ? collection.twitter
+                            : `https://twitter.com/${collection.twitter}`,
                     },
                     {
                         type: 'facebook',
@@ -187,11 +191,15 @@ export class NFTScanTrendingAPI implements TrendingAPI.Provider<ChainId> {
                     },
                     {
                         type: 'instagram',
-                        link: collection.instagram && `https://www.instagram.com/${collection.instagram}`,
+                        link: collection.instagram?.startsWith('https://instagram.com/')
+                            ? collection.instagram
+                            : `https://www.instagram.com/${collection.instagram}`,
                     },
                     {
                         type: 'medium',
-                        link: collection.medium && `https://medium.com/@${collection.medium}`,
+                        link: collection.medium?.startsWith('https://instagram.com/@')
+                            ? collection.medium
+                            : `https://medium.com/@${collection.medium}`,
                     },
                     {
                         type: 'reddit',
@@ -217,6 +225,7 @@ export class NFTScanTrendingAPI implements TrendingAPI.Provider<ChainId> {
                 floor_price: collection.floor_price,
                 highest_price: undefined,
                 owners_count: collection.owners_total,
+                price_symbol: collection.price_symbol,
                 royalty: collection.royalty?.toString(),
                 total_24h: undefined,
                 volume_24h: undefined,

@@ -16,6 +16,9 @@ const DEFAULT_CURRENCY_SYMBOLS: Record<string, string> = {
     BTC: '\u20BF',
     ETH: '\u039E',
     SOL: '\u25CE',
+    BNB: 'BNB',
+    POLYGON: 'MATIC',
+    MATIC: 'MATIC',
 }
 
 const digitalCurrencyModifier = (parts: Intl.NumberFormatPart[], symbols: Record<string, string>) => {
