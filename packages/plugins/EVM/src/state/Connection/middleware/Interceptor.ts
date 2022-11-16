@@ -1,4 +1,4 @@
-import { SmartPay } from '@masknet/web3-providers'
+import { SmartPayBundler } from '@masknet/web3-providers'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import type { Context, Middleware } from '../types.js'
 import { NoneWallet } from '../interceptors/None.js'
@@ -18,7 +18,7 @@ export class Interceptor implements Middleware<Context> {
         [ProviderType.WalletLink]: new MetaMask(),
         [ProviderType.MathWallet]: new MetaMask(),
         [ProviderType.Fortmatic]: new Fortmatic(),
-        [ProviderType.SmartPay]: new SCWallet(SmartPay),
+        [ProviderType.SmartPay]: new SCWallet(SmartPayBundler),
         [ProviderType.Opera]: new MetaMask(),
     }
 

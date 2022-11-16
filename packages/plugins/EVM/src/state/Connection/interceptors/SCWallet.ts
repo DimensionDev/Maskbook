@@ -1,5 +1,5 @@
 import type { AbiItem } from 'web3-utils'
-import { BundlerAPI, SmartPay } from '@masknet/web3-providers'
+import { BundlerAPI, SmartPayBundler } from '@masknet/web3-providers'
 import { ChainId, createContract, EthereumMethodType, ProviderType, UserOperation } from '@masknet/web3-shared-evm'
 import WalletABI from '@masknet/web3-contracts/abis/Wallet.json'
 import type { Wallet as WalletContract } from '@masknet/web3-contracts/types/Wallet.js'
@@ -24,7 +24,7 @@ export class SCWallet implements Middleware<Context> {
     }
 
     private sendUserOperation(context: Context, userOperation: UserOperation): Promise<string> {
-        return SmartPay.sendUserOperation(context.chainId, userOperation)
+        return SmartPayBundler.sendUserOperation(context.chainId, userOperation)
     }
 
     async fn(context: Context, next: () => Promise<void>) {
