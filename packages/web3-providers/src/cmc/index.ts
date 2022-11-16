@@ -9,6 +9,7 @@ import { fetchJSON } from '../helpers.js'
 import { getCommunityLink, isMirroredKeyword } from '../trending/helpers.js'
 import type { Coin, Pair, ResultData, Status, QuotesInfo, CoinInfo } from './types.js'
 import { FuseTrendingAPI } from '../fuse/index.js'
+import { COIN_RECOMMENDATION_SIZE, VALID_TOP_RANK } from '../trending/constants.js'
 
 // #regin get quote info
 export async function getQuotesInfo(id: string, currency: string) {
@@ -137,7 +138,8 @@ export class CoinMarketCapAPI implements TrendingAPI.Provider<ChainId> {
         return coins
             .search(keyword)
             .map((x) => x.item)
-            .slice(0, 10)
+            .filter((y) => y.market_cap_rank && y.market_cap_rank < VALID_TOP_RANK)
+            .slice(0, COIN_RECOMMENDATION_SIZE)
     }
 
     async getCoinTrending(chainId: ChainId, id: string, currency: TrendingAPI.Currency): Promise<TrendingAPI.Trending> {
