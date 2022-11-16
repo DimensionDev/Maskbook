@@ -122,7 +122,7 @@ export const NFTSection: FC<Props> = ({ className, onEmpty, ...rest }) => {
     return (
         <div className={cx(classes.root, className)} {...rest}>
             <FormControl className={classes.header}>
-                {isEvm ? (
+                {isEvm && account ? (
                     <Typography className={classes.addButton} onClick={() => openAddTokenDialog(true)}>
                         {t.tip_add_collectibles()}
                     </Typography>
