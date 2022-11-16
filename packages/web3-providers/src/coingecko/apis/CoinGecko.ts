@@ -10,6 +10,7 @@ import { getAllCoins, getCoinInfo, getPriceStats as getStats, getThumbCoins } fr
 import type { Platform } from '../types.js'
 import { resolveCoinGeckoChainId } from '../helpers.js'
 import { FuseTrendingAPI } from '../../fuse/index.js'
+import { COIN_RECOMMENDATION_SIZE, VALID_TOP_RANK } from '../../trending/constants.js'
 
 export class CoinGeckoTrending_API implements TrendingAPI.Provider<ChainId> {
     private fuse = new FuseTrendingAPI()
@@ -36,13 +37,17 @@ export class CoinGeckoTrending_API implements TrendingAPI.Provider<ChainId> {
         try {
             await this.createCoins()
             const coinThumbs = await getThumbCoins(keyword)
-            return compact(coinThumbs.map((x) => this.coins.get(x.id)))
+            return compact(
+                coinThumbs
+                    .filter((x) => x?.market_cap_rank && x.market_cap_rank < VALID_TOP_RANK)
+                    .map((y) => this.coins.get(y.id)),
+            ).slice(0, COIN_RECOMMENDATION_SIZE)
         } catch {
             const coins = await this.fuse.getSearchableItems(this.getAllCoins)
             return coins
                 .search(keyword)
                 .map((x) => x.item)
-                .slice(0, 10)
+                .slice(0, COIN_RECOMMENDATION_SIZE)
         }
     }
 
@@ -154,7 +159,7 @@ export class CoinGeckoTrending_API implements TrendingAPI.Provider<ChainId> {
         return (await getStats(coinId, currency.id, days)).prices
     }
 
-    getCoinMarketInfo(tokenSymbol: string): Promise<TrendingAPI.MarketInfo> {
+    getCoinMarketInfo(symbol: string): Promise<TrendingAPI.MarketInfo> {
         throw new Error('To be implemented.')
     }
 }

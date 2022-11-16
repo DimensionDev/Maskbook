@@ -10,6 +10,7 @@ import type { EVM, Response } from '../types/index.js'
 import { fetchFromNFTScanV2, getContractSymbol } from '../helpers/EVM.js'
 import { LooksRareAPI } from '../../looksrare/index.js'
 import { OpenSeaAPI } from '../../opensea/index.js'
+import { COIN_RECOMMENDATION_SIZE } from '../../trending/constants.js'
 
 enum NonFungibleMarketplace {
     OpenSea = 'OpenSea',
@@ -91,7 +92,7 @@ export class NFTScanTrendingAPI implements TrendingAPI.Provider<ChainId> {
             contract_address: nft.contract_address,
             image_url: nft.logo_url,
         }))
-        return coins.slice(0, 10)
+        return coins.slice(0, COIN_RECOMMENDATION_SIZE)
     }
 
     async getCoinPriceStats(
@@ -225,7 +226,7 @@ export class NFTScanTrendingAPI implements TrendingAPI.Provider<ChainId> {
             tickers,
         }
     }
-    getCoinMarketInfo(tokenSymbol: string): Promise<TrendingAPI.MarketInfo> {
+    getCoinMarketInfo(symbol: string): Promise<TrendingAPI.MarketInfo> {
         throw new Error('To be implemented.')
     }
 }
