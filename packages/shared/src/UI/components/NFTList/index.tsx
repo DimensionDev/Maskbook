@@ -184,13 +184,15 @@ export const NFTList: FC<Props> = ({
                         : false
                     const inactive = selectedPairs ? selectedPairs.length > 0 && !selected : false
                     const disabled = selectable ? !isRadio && reachedLimit && !selected : false
-                    const link = token.contract
-                        ? Others?.explorerResolver?.nonFungibleTokenLink(
-                              token.contract.chainId,
-                              token.contract.address,
-                              token.tokenId,
-                          )
-                        : undefined
+                    const link =
+                        token.link ??
+                        (token.contract
+                            ? Others?.explorerResolver?.nonFungibleTokenLink(
+                                  token?.contract?.chainId,
+                                  token?.contract?.address,
+                                  token.tokenId,
+                              )
+                            : undefined)
                     return (
                         <ListItem
                             key={token.tokenId + token.id}

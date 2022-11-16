@@ -12,7 +12,7 @@ const DEFAULT_BOUNDARIES = {
     min: 0.000001,
 }
 
-const DEFAULT_CURRENCY_SYMBOLS: Record<string, string> = {
+const DEFAULT_CRYPTO_CURRENCY_SYMBOLS: Record<string, string> = {
     BTC: '\u20BF',
     ETH: '\u039E',
     SOL: '\u25CE',
@@ -56,18 +56,24 @@ export function formatCurrency(
     const isMoreThanOrEqualToOne = bgValue.isGreaterThanOrEqualTo(1)
 
     const resolvedBoundaries = defaults({}, boundaries, DEFAULT_BOUNDARIES)
-    const resolvedSymbols = defaults({}, symbols, DEFAULT_CURRENCY_SYMBOLS)
+    const resolvedSymbols = defaults({}, symbols, DEFAULT_CRYPTO_CURRENCY_SYMBOLS)
 
-    const formatter = new Intl.NumberFormat('en-US', { style: 'currency', currency, currencyDisplay: 'narrowSymbol' })
+    const symbol = DEFAULT_CRYPTO_CURRENCY_SYMBOLS[currency]
+
+    const formatter = new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: symbol ? 'USD' : currency,
+        currencyDisplay: 'narrowSymbol',
+    })
 
     if (bgValue.isZero()) {
-        const symbol = resolvedSymbols[currency]
         return symbol ? `0.00 ${symbol}` : formatter.format(0)
     }
 
     const isLessMinValue = bgValue.isLessThan(resolvedBoundaries.min)
 
     if (isLessMinValue) {
+        if (symbol) return `< ${DEFAULT_BOUNDARIES.min} ${symbol}`
         const value = digitalCurrencyModifier(formatter.formatToParts(resolvedBoundaries.min), resolvedSymbols)
             .map(({ type, value }) => {
                 switch (type) {
@@ -82,6 +88,8 @@ export function formatCurrency(
             .join('')
         return `< ${value}`
     }
+
+    if (symbol) return `${bgValue.toNumber()} ${symbol}`
 
     return digitalCurrencyModifier(formatter.formatToParts(bgValue.toNumber()), resolvedSymbols)
         .map(({ type, value }) => {
