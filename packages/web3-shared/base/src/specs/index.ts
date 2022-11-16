@@ -604,6 +604,8 @@ export interface TransactionContext<ChainId, Parameter = string | undefined> {
             [key: string]: Parameter
         }
     }>
+    /** nested children contexts */
+    children?: Array<TransactionContext<ChainId, Parameter>>
 }
 
 export interface AddressName {
@@ -632,6 +634,8 @@ export interface Wallet {
     derivationPath?: string
     /** the derivation path when wallet last was derived */
     latestDerivationPath?: string
+    /** eip-4337 compatible salt number using by create2Factory */
+    salt?: number
     /** the internal presentation of mask wallet sdk */
     storedKeyInfo?: api.IStoredKeyInfo
     /** the Mask SDK stored key info */
@@ -928,10 +932,16 @@ export interface Connection<
         schema?: SchemaType,
         initial?: Web3ConnectionOptions,
     ): Promise<string>
+    /** Get all supported entry points */
+    supportedEntryPoints?: () => Promise<string[]>
     /** Call a operation */
-    callOperation?: (operation: Operation, initial?: Web3ConnectionOptions) => Promise<string>
+    callUserOperation?: (operation: Operation, initial?: Web3ConnectionOptions) => Promise<string>
     /** Send a operation */
-    sendOperation?: (operation: Operation, initial?: Web3ConnectionOptions) => Promise<TransactionSignature>
+    sendUserOperation?: (operation: Operation, initial?: Web3ConnectionOptions) => Promise<TransactionSignature>
+    /** Deploy a new SC account */
+    createSmartContractAccount?: () => Promise<string>
+    /** Change owner of SC account */
+    transferSmartContractAccount?: (owner: string, signature: string) => Promise<void>
     /** Sign a transaction */
     signTransaction(transaction: Transaction, initial?: Web3ConnectionOptions): Promise<TransactionSignature>
     /** Sign multiple transactions */

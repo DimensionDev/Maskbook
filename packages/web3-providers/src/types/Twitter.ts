@@ -120,28 +120,51 @@ export namespace TwitterBaseAPI {
         mediaId: string
     }
 
+    export enum Scale {
+        X_Small = 'xSmall',
+        Small = 'small',
+        Normal = 'normal',
+        Large = 'large',
+        X_Large = 'xLarge',
+    }
+
+    export enum ThemeMode {
+        Dark = 'darker',
+        Dim = 'dark',
+        Light = 'light',
+    }
+
+    export enum ThemeColor {
+        Blue = 'blue500',
+        Yellow = 'yellow500',
+        Purple = 'purple500',
+        Magenta = 'magenta500',
+        Orange = 'orange500',
+        Green = 'green500',
+    }
+
     export interface Settings {
         screen_name: string
     }
 
     export interface UserSettings {
         altTextNudgeType?: string
-        autoPollNewTweets: boolean
-        autoShowNewTweets: boolean
-        highContrastEnabled: boolean
-        loginPromptLastShown: number
+        autoPollNewTweets?: boolean
+        autoShowNewTweets?: boolean
+        highContrastEnabled?: boolean
+        loginPromptLastShown?: number
         /* cspell:disable-next-line */
-        nextPushCheckin: number
-        preciseLocationEnabled: boolean
-        pushNotificationsPermission: 'granted'
-        reducedMotionEnabled: boolean
-        replyVotingSurveyClicked: number
-        scale: 'xSmall' | 'small' | 'normal' | 'large' | 'xLarge'
-        shouldAutoPlayGif: boolean
-        shouldAutoTagLocation: boolean
-        showTweetMediaDetailDrawer: boolean
-        themeBackground: 'dark' | 'dim' | 'light'
-        themeColor: 'blue500' | 'yellow500' | 'purple500' | 'magenta500' | 'orange500' | 'green500'
+        nextPushCheckin?: number
+        preciseLocationEnabled?: boolean
+        pushNotificationsPermission?: 'granted'
+        reducedMotionEnabled?: boolean
+        replyVotingSurveyClicked?: number
+        scale?: Scale
+        shouldAutoPlayGif?: boolean
+        shouldAutoTagLocation?: boolean
+        showTweetMediaDetailDrawer?: boolean
+        themeBackground?: ThemeMode
+        themeColor?: ThemeColor
     }
 
     export interface TwitterResult {
@@ -169,7 +192,7 @@ export namespace TwitterBaseAPI {
 
     export interface Provider {
         getSettings: () => Promise<Settings | undefined>
-        getUserSettings: () => Promise<UserSettings | undefined>
+        getUserSettings: () => Promise<UserSettings>
         getUserByScreenName: (screenName: string) => Promise<User | null>
         getUserNftContainer: (screenName: string) => Promise<NFT | undefined>
         uploadUserAvatar: (screenName: string, image: Blob | File) => Promise<TwitterResult>

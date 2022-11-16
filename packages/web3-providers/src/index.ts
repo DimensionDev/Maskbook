@@ -44,13 +44,16 @@ import { MirrorAPI } from './mirror/index.js'
 import { MindsAPI } from './minds/index.js'
 import { FuseTrendingAPI } from './fuse/index.js'
 import { CryptoScamDBAPI } from './cryptoscam-db/index.js'
-import { NomicsTrendingAPI } from './Nomics/index.js'
+import { SmartPayAPI } from './smart-pay/index.js'
+import { NomicsAPI } from './Nomics/index.js'
 
+// #region TODO: to be removed
 export * from './helpers.js'
 export * from './types/index.js'
 export * from './opensea/utils.js'
 export type { SecurityMessage as GoPlusLabsSecurityMessage } from './gopluslabs/rules.js'
 export { CollectionType } from './rss3/constants.js'
+// #endregion
 
 export const OpenSea = new OpenSeaAPI()
 export const LooksRare = new LooksRareAPI()
@@ -79,7 +82,7 @@ export const AstarGas = new AstarAPI()
 export const NextIDProof = new NextIDProofAPI()
 export const NextIDStorage = new NextIDStorageAPI()
 export const EthereumWeb3 = new EthereumWeb3API()
-export const NomicsTrending = new NomicsTrendingAPI()
+export const Nomics = new NomicsAPI()
 export const CoinMarketCap = new CoinMarketCapAPI()
 export const UniSwap = new UniSwapAPI()
 export const Rabby = new RabbyAPI()
@@ -118,3 +121,6 @@ export const ZerionGas = new ZerionGasAPI()
 
 // Fuse
 export const FuseTrending = new FuseTrendingAPI()
+
+// Smart Pay Bundler
+export const SmartPay = new SmartPayAPI()

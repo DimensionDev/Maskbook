@@ -1,12 +1,13 @@
-import { makeStyles } from '@masknet/theme'
-import { Stack } from '@mui/material'
-import { Plugin } from '@masknet/plugin-infra'
+import { Plugin, useLastRecognizedIdentity } from '@masknet/plugin-infra'
 import { PluginGuide, PluginGuideProvider } from '@masknet/shared'
 import { EnhanceableSite, PluginID } from '@masknet/shared-base'
+import { makeStyles } from '@masknet/theme'
+import { Stack } from '@mui/material'
+import type { FC } from 'react'
+import { activatedSocialNetworkUI } from '../../../../../social-network/ui.js'
 import { TipButton } from '../../../components/index.js'
 import { useI18N } from '../../../locales/index.js'
 import { useTipsUserGuide } from '../../../storage/index.js'
-import { activatedSocialNetworkUI } from '../../../../../social-network/ui.js'
 
 const useStyles = makeStyles<{ buttonSize: number }, 'postTipsButton'>()((theme, { buttonSize }, refs) => ({
     focusingPostButtonWrapper: {
@@ -48,8 +49,8 @@ const useStyles = makeStyles<{ buttonSize: number }, 'postTipsButton'>()((theme,
     },
     followTipsButton: {
         position: 'absolute',
-        width: '100%',
-        height: '100%',
+        width: buttonSize,
+        height: buttonSize,
         left: 0,
         top: 0,
         borderRadius: '100%',
@@ -64,7 +65,8 @@ const useStyles = makeStyles<{ buttonSize: number }, 'postTipsButton'>()((theme,
     },
 }))
 
-export const TipsRealmContent: Plugin.InjectUI<Plugin.SNSAdaptor.TipsRealmOptions> = ({
+const { TipsSlot } = Plugin.SNSAdaptor
+export const TipsRealmContent: FC<Plugin.SNSAdaptor.TipsRealmOptions> = ({
     identity,
     slot,
     accounts,
@@ -75,16 +77,17 @@ export const TipsRealmContent: Plugin.InjectUI<Plugin.SNSAdaptor.TipsRealmOption
     const t = useI18N()
     const { classes, cx } = useStyles({ buttonSize })
     const lastStep = useTipsUserGuide(activatedSocialNetworkUI.networkIdentifier as EnhanceableSite)
+    const myIdentity = useLastRecognizedIdentity()
 
-    if (!identity) return null
+    if (!identity || identity.userId === myIdentity?.identifier?.userId) return null
 
     const buttonClassMap: Record<Plugin.SNSAdaptor.TipsSlot, string> = {
-        [Plugin.SNSAdaptor.TipsSlot.FollowButton]: cx(classes.followTipsButton, classes.roundButton),
-        [Plugin.SNSAdaptor.TipsSlot.FocusingPost]: classes.postTipsButton,
-        [Plugin.SNSAdaptor.TipsSlot.Post]: classes.postTipsButton,
-        [Plugin.SNSAdaptor.TipsSlot.Profile]: cx(classes.profileTipsButton, classes.roundButton),
-        [Plugin.SNSAdaptor.TipsSlot.MirrorMenu]: classes.profileTipsButton,
-        [Plugin.SNSAdaptor.TipsSlot.MirrorEntry]: classes.postTipsButton,
+        [TipsSlot.FollowButton]: cx(classes.followTipsButton, classes.roundButton),
+        [TipsSlot.FocusingPost]: classes.postTipsButton,
+        [TipsSlot.Post]: classes.postTipsButton,
+        [TipsSlot.Profile]: cx(classes.profileTipsButton, classes.roundButton),
+        [TipsSlot.MirrorMenu]: classes.profileTipsButton,
+        [TipsSlot.MirrorEntry]: classes.postTipsButton,
     }
 
     const button = (
@@ -97,7 +100,7 @@ export const TipsRealmContent: Plugin.InjectUI<Plugin.SNSAdaptor.TipsRealmOption
         />
     )
 
-    if (slot === Plugin.SNSAdaptor.TipsSlot.MirrorMenu) {
+    if (slot === TipsSlot.MirrorMenu) {
         return (
             <PluginGuideProvider
                 value={{
@@ -121,17 +124,13 @@ export const TipsRealmContent: Plugin.InjectUI<Plugin.SNSAdaptor.TipsRealmOption
         )
     }
 
-    if (
-        slot === Plugin.SNSAdaptor.TipsSlot.Post ||
-        slot === Plugin.SNSAdaptor.TipsSlot.FocusingPost ||
-        slot === Plugin.SNSAdaptor.TipsSlot.MirrorEntry
-    ) {
+    if (slot === TipsSlot.Post || slot === TipsSlot.FocusingPost || slot === TipsSlot.MirrorEntry) {
         return (
             <div
                 className={cx(
                     classes.postButtonWrapper,
-                    slot === Plugin.SNSAdaptor.TipsSlot.FocusingPost ? classes.focusingPostButtonWrapper : undefined,
-                    slot === Plugin.SNSAdaptor.TipsSlot.MirrorEntry ? classes.mirrorEntryTipsButtonWrapper : undefined,
+                    slot === TipsSlot.FocusingPost ? classes.focusingPostButtonWrapper : undefined,
+                    slot === TipsSlot.MirrorEntry ? classes.mirrorEntryTipsButtonWrapper : undefined,
                 )}>
                 {button}
             </div>

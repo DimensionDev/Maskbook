@@ -4,7 +4,7 @@ import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../locales/index.js'
 import { SearchBox } from './components/SearchBox.js'
 import { useAsync, useAsyncFn } from 'react-use'
-import { GoPlusLabs, NomicsTrending, SecurityAPI } from '@masknet/web3-providers'
+import { GoPlusLabs, Nomics, SecurityAPI } from '@masknet/web3-providers'
 import { Searching } from './components/Searching.js'
 import { SecurityPanel } from './components/SecurityPanel.js'
 import { Footer } from './components/Footer.js'
@@ -72,7 +72,7 @@ export function CheckSecurityDialog() {
     const { value: tokenPrice } = useFungibleTokenPrice(NetworkPluginID.PLUGIN_EVM, value?.contract, { chainId })
     const { value: tokenMarketCapInfo } = useAsync(async () => {
         if (!value?.token_symbol) return
-        return NomicsTrending.getTokenInfo(value.token_symbol)
+        return Nomics.getTokenInfo(value.token_symbol)
     }, [value])
 
     const onClose = () => setOpen(false)

@@ -2584,8 +2584,8 @@ importers:
         specifier: ^1.0.0
         version: 1.0.0
       bignumber.js:
-        specifier: 9.0.2
-        version: 9.0.2
+        specifier: 9.1.0
+        version: 9.1.0
       date-fns:
         specifier: ^2.29.3
         version: 2.29.3
@@ -14819,10 +14819,6 @@ packages:
   /bignumber.js/6.0.0:
     resolution: {integrity: sha512-x247jIuy60/+FtMRvscqfxtVHQf8AGx2hm9c6btkgC0x/hp9yt+teISNhvF8WlwRkCc5yF2fDECH8SIMe8j+GA==}
     deprecated: Custom ALPHABET bug fixed in v7.0.2
-    dev: false
-
-  /bignumber.js/9.0.2:
-    resolution: {integrity: sha512-GAcQvbpsM0pUb0zw1EI0KhQEZ+lRwR5fYaAp3vPOYuP7aDvGy6cVN6XHLauvF8SOga2y0dcLcjt3iQDTSEliyw==}
     dev: false
 
   /bignumber.js/9.1.0:

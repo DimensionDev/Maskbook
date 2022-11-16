@@ -1,3 +1,4 @@
+import { compact } from 'lodash-es'
 import * as ABICoder from 'web3-eth-abi'
 import type { Plugin } from '@masknet/plugin-infra'
 import {
@@ -10,9 +11,11 @@ import {
 import { TransactionFormatterState } from '@masknet/web3-state'
 import {
     ChainId,
+    decodeUserOperations,
     getData,
     getFunctionParameters,
     getFunctionSignature,
+    getSmartPayConstant,
     getTo,
     isEmptyHex,
     isZeroAddress,
@@ -126,9 +129,27 @@ export class TransactionFormatter extends TransactionFormatterState<ChainId, Tra
             // send ether
             if (isEmptyHex(code)) {
                 return { ...context, type: TransactionDescriptorType.TRANSFER }
-            } else {
-                return { ...context, type: TransactionDescriptorType.INTERACTION }
             }
+
+            // smart pay tx
+            if (isSameAddress(to, getSmartPayConstant(chainId, 'EP_CONTRACT_ADDRESS'))) {
+                const userOperations = decodeUserOperations(transaction)
+                const allSettled = await Promise.allSettled(
+                    userOperations.map((x) => {
+                        return this.createContext(chainId, x)
+                    }),
+                )
+
+                return {
+                    ...context,
+                    type: TransactionDescriptorType.INTERACTION,
+                    children: compact<TransactionContext<ChainId, string | undefined>>(
+                        allSettled.map((x) => (x.status === 'fulfilled' ? x.value : undefined)),
+                    ),
+                }
+            }
+
+            return { ...context, type: TransactionDescriptorType.INTERACTION }
         }
 
         throw new Error('Failed to format transaction.')

@@ -1,16 +1,16 @@
+import { first } from 'lodash-es'
 import { toHex } from 'web3-utils'
 import type { RequestArguments } from 'web3-core'
 import { ChainId, createPayload, chainResolver, ProviderType, isValidAddress } from '@masknet/web3-shared-evm'
+import { ExtensionSite, getSiteType, isEnhanceableSiteType, PopupRoutes } from '@masknet/shared-base'
+import type { ProviderOptions } from '@masknet/web3-shared-base'
 import { BaseProvider } from './Base.js'
 import type { EVM_Provider } from '../types.js'
 import { SharedContextSettings, Web3StateSettings } from '../../../settings/index.js'
-import { ExtensionSite, getSiteType, isEnhanceableSiteType, PopupRoutes } from '@masknet/shared-base'
-import { first } from 'lodash-es'
-import type { ProviderOptions } from '@masknet/web3-shared-base'
 
 export class MaskWalletProvider extends BaseProvider implements EVM_Provider {
     constructor() {
-        super()
+        super(ProviderType.MaskWallet)
         Web3StateSettings.readyPromise.then(this.addSharedContextListeners.bind(this))
     }
 

@@ -17,7 +17,6 @@ export async function fetchJSON<T = unknown>(
 ): Promise<Result<T, string>> {
     type FetchCache = LRU<string, Promise<Response> | T>
 
-    const fetch = globalThis.r2d2Fetch ?? globalThis.fetch
     const hit = enableCache ? (fetchCache as FetchCache).get(url) : undefined
     const isPending = hit instanceof Promise
 

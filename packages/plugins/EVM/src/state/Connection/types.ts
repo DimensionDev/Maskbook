@@ -10,6 +10,7 @@ import type {
     EthereumMethodType,
     Transaction,
     Web3Provider,
+    UserOperation,
 } from '@masknet/web3-shared-evm'
 
 export interface EVM_Web3State extends Web3Helper.Web3State<NetworkPluginID.PLUGIN_EVM> {}
@@ -54,6 +55,7 @@ export interface Context {
     readonly response: JsonRpcResponse | undefined
 
     config: Transaction | undefined
+    userOperation: UserOperation | undefined
     requestArguments: RequestArguments
     result: unknown
     error: RecognizableError | null

@@ -1,7 +1,7 @@
+import { useMemo } from 'react'
+import produce, { setAutoFreeze } from 'immer'
 import { ValueRef } from '@dimensiondev/holoflows-kit'
 import { PaletteMode, Theme, unstable_createMuiStrictModeTheme } from '@mui/material'
-import produce, { setAutoFreeze } from 'immer'
-import { useMemo } from 'react'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { createSubscriptionFromValueRef } from '@masknet/shared-base'
 import type { SocialNetworkUI } from '@masknet/types'
@@ -19,7 +19,7 @@ export const PaletteModeProviderMinds: SocialNetworkUI.Customization.PaletteMode
     start: startWatchThemeColor,
 }
 
-export function startWatchThemeColor(signal: AbortSignal) {
+export async function startWatchThemeColor(signal: AbortSignal) {
     function updateThemeColor() {
         const contrastColor = getForegroundColor(themeListItemSelector().evaluate()!)
         const backgroundColor = getBackgroundColor(document.body)
