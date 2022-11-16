@@ -377,6 +377,21 @@ export const PROVIDER_DESCRIPTORS: Array<ProviderDescriptor<ChainId, ProviderTyp
         downloadLink: 'https://www.opera.com/crypto/next',
     },
     {
+        ID: `${PLUGIN_ID}_clvwallet`,
+        providerAdaptorPluginID: PLUGIN_ID,
+        type: ProviderType.ClvWallet,
+        name: 'ClvWallet',
+        icon: new URL('../assets/clvwallet.png', import.meta.url),
+        enableRequirements: {
+            supportedChainIds: isFirefox() ? [] : [ChainId.Mainnet, ChainId.BSC, ChainId.Matic],
+            supportedEnhanceableSites: isFirefox() ? [] : getEnumAsArray(EnhanceableSite).map((x) => x.value),
+            supportedExtensionSites: [],
+        },
+        homeLink: 'https://clv.org',
+        shortenLink: 'clv.org',
+        downloadLink: 'https://clv.org/?type=wallet',
+    },
+    {
         ID: `${PLUGIN_ID}_fortmatic`,
         providerAdaptorPluginID: PLUGIN_ID,
         type: ProviderType.Fortmatic,

@@ -7,6 +7,7 @@ import WalletConnectProvider from './providers/WalletConnect.js'
 import { WalletLinkProvider } from './providers/WalletLink.js'
 import { Coin98Provider } from './providers/Coin98.js'
 import { MathWalletProvider } from './providers/MathWallet.js'
+import { ClvWalletProvider } from './providers/ClvWallet.js'
 import FortmaticProvider from './providers/Fortmatic.js'
 import TorusProvider from './providers/Torus.js'
 import { OperaProvider } from './providers/Opera.js'
@@ -24,6 +25,7 @@ export const Providers: Record<ProviderType, BaseProvider> = {
     [ProviderType.Coin98]: new Coin98Provider(),
     [ProviderType.WalletLink]: new WalletLinkProvider(),
     [ProviderType.MathWallet]: new MathWalletProvider(),
+    [ProviderType.ClvWallet]: new ClvWalletProvider(),
     [ProviderType.Fortmatic]: new FortmaticProvider(),
     [ProviderType.Torus]: new TorusProvider(),
     [ProviderType.SmartPay]: new SmartPayProvider(),
