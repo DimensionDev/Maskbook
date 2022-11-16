@@ -261,7 +261,7 @@ export class CoinMarketCapAPI implements TrendingAPI.Provider<ChainId> {
         if (stats.is_active === 0) return []
         return Object.entries(stats).map(([date, x]) => [date, x[currency.name.toUpperCase()][0]])
     }
-    getTokenInfo(tokenSymbol: string): Promise<TrendingAPI.TokenInfo> {
+    getCoinMarketInfo(tokenSymbol: string): Promise<TrendingAPI.MarketInfo> {
         throw new Error('To be implemented.')
     }
 }

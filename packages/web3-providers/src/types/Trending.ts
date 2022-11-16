@@ -166,10 +166,10 @@ export namespace TrendingAPI {
         total_volumes: Stat[]
     }
 
-    export interface TokenInfo {
+    export interface MarketInfo {
         id: string
-        market_cap: string
         price: string
+        market_cap: string
     }
 
     export interface Provider<ChainId> {
@@ -181,8 +181,7 @@ export namespace TrendingAPI {
         getCoinTrending: (chainId: ChainId, id: string, currency: Currency) => Promise<Trending>
         /** Get coin price stats by id. */
         getCoinPriceStats: (chainId: ChainId, id: string, currency: Currency, days: number) => Promise<Stat[]>
-
         /** Get token info by symbol */
-        getTokenInfo: (tokenSymbol: string) => Promise<TokenInfo>
+        getCoinMarketInfo: (tokenSymbol: string) => Promise<MarketInfo>
     }
 }

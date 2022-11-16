@@ -21,11 +21,12 @@ export class NomicsAPI implements TrendingAPI.Provider<ChainId> {
     ): Promise<TrendingAPI.Stat[]> {
         throw new Error('To be implemented.')
     }
-    async getTokenInfo(tokenSymbol: string): Promise<TrendingAPI.TokenInfo> {
-        const response = await fetchJSON<{ items: TrendingAPI.TokenInfo[] } | undefined>(
+    async getCoinMarketInfo(tokenSymbol: string): Promise<TrendingAPI.MarketInfo> {
+        const response = await fetchJSON<{ items: TrendingAPI.MarketInfo[] } | undefined>(
             `${TOKEN_VIEW_ROOT_URL}&symbols=${tokenSymbol}&interval=${INTERVAL}`,
         )
-
-        return response?.items?.[0] as TrendingAPI.TokenInfo
+        const marketInfo = response?.items?.[0]
+        if (!marketInfo) throw new Error('Failed to fetch market info.')
+        return marketInfo
     }
 }
