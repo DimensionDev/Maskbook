@@ -17,7 +17,7 @@ export class FuseTrendingAPI implements FuseAPI.Provider<TrendingAPI.Coin> {
                 isCaseSensitive: false,
                 ignoreLocation: true,
                 shouldSort: true,
-                threshold: 0.45,
+                threshold: 0,
                 minMatchCharLength: 3,
             })
         }
