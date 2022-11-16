@@ -219,14 +219,12 @@ export function CollectionList({ socialAccount, persona, profile, gridProps = EM
                         />
                     </Box>
                     {error && !done && <RetryHint hint={false} retry={nextPage} />}
-                    <div className={classes.emptyBox}>
-                        <ElementAnchor
-                            callback={() => {
-                                if (nextPage) nextPage()
-                            }}>
-                            {!done && <LoadingBase />}
-                        </ElementAnchor>
-                    </div>
+                    <ElementAnchor
+                        callback={() => {
+                            if (nextPage) nextPage()
+                        }}>
+                        {!done && <LoadingBase />}
+                    </ElementAnchor>
                 </Box>
                 {showSidebar ? (
                     <div className={classes.sidebar}>

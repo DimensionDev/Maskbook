@@ -35,7 +35,7 @@ const useStyles = makeStyles<StyleProps>()((theme) => {
         },
         ensDomain: {
             fontWeight: 700,
-            color: theme.palette.maskColor.bottom,
+            color: theme.palette.maskColor.publicMain,
             fontSize: 18,
             lineHeight: '18px',
         },
