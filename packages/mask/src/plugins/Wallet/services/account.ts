@@ -4,7 +4,6 @@ import { ChainId, chainResolver, networkResolver, NetworkType } from '@masknet/w
 import {
     currentMaskWalletAccountSettings,
     currentMaskWalletChainIdSettings,
-    currentMaskWalletNetworkSettings,
 } from '../../../../shared/legacy-settings/wallet-settings.js'
 import { Flags } from '../../../../shared/index.js'
 import { WalletRPC } from '../messages.js'
@@ -27,7 +26,6 @@ export async function updateMaskAccount(options: { account?: string; chainId?: C
 
     const { account, chainId, networkType } = options
     if (chainId) currentMaskWalletChainIdSettings.value = chainId
-    if (networkType) currentMaskWalletNetworkSettings.value = networkType
     if (account && EthereumAddress.isValid(account)) {
         currentMaskWalletAccountSettings.value = account
         await resolveMaskAccount([account])
