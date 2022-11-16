@@ -198,6 +198,7 @@ export const ProfileBar = memo<ProfileBarProps>(
                     anchorEl={containerRef.current}
                     open={walletMenuOpen}
                     disablePortal
+                    disableScrollLock
                     PaperProps={{
                         className: classes.addressMenu,
                     }}
