@@ -1,7 +1,7 @@
+import type { ChainId } from '@masknet/web3-shared-evm'
 import type { TrendingAPI } from '../index.js'
 import { fetchJSON } from '../helpers.js'
 import { TOKEN_VIEW_ROOT_URL, INTERVAL } from './constants.js'
-import type { ChainId } from '@masknet/web3-shared-evm'
 
 export class NomicsAPI implements TrendingAPI.Provider<ChainId> {
     getAllCoins(): Promise<TrendingAPI.Coin[]> {
