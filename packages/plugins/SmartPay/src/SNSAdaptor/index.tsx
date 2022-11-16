@@ -5,12 +5,15 @@ import { PLUGIN_ID } from '../constants.js'
 import { SmartPayEntry } from './components/SmartPayEntry.js'
 import { setupContext, context } from './context.js'
 import { SNSAdaptorContext } from '@masknet/plugin-infra/content-script'
-import { SmartPayDeployDialog } from './components/SmartPayDeployDialog.js'
-import { SmartPayDescriptionDialog } from './components/SmartPayDescriptionDialog.js'
-import { SmartPayDialog } from './components/SmartPayDialog.js'
 import { Web3ContextProvider } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
+import {
+    ApproveMaskDialog,
+    SmartPayDescriptionDialog,
+    SmartPayDeployDialog,
+    SmartPayDialog,
+} from './components/index.js'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -24,6 +27,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                     <SmartPayDialog />
                     <SmartPayDeployDialog />
                     <SmartPayDescriptionDialog />
+                    <ApproveMaskDialog />
                 </Web3ContextProvider>
             </SNSAdaptorContext.Provider>
         )

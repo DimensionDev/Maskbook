@@ -1,5 +1,8 @@
 {
     "__plugin_name": "Smart Pay",
+    "approve_mask": "Approve MASK?",
+    "approve_mask_description": "To interact with Polygon network, MATIC tokens are required to pay as gas fees. SmartPay allow users to pay gas fee on Polygon network with MASK token.",
+    "approve_mask_question": "Do you want to set MASK token as gas fee?",
     "allow_mask_as_gas_token": "Allow Mask as gas token",
     "allow_mask_as_gas_token_description": "Allow MASK tokens to pay gas fee when interacting with Polygon network.",
     "create_a_new_wallet_title": "Create a New Wallet",

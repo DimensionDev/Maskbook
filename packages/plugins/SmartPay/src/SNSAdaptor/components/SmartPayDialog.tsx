@@ -29,7 +29,7 @@ const useStyles = makeStyles()((theme) => ({
         },
     },
     dialogActions: {
-        padding: theme.spacing(1.5, 1.5, 2.5),
+        padding: '12px 12px 20px !important',
         display: 'flex',
         justifyContent: 'space-between',
         columnGap: 12,
@@ -114,10 +114,16 @@ const useStyles = makeStyles()((theme) => ({
 export const SmartPayDialog = memo(() => {
     const t = useI18N()
     const { classes } = useStyles()
+    // #region Remote Dialog Controller
     const { open, closeDialog } = useRemoteControlledDialog(PluginSmartPayMessages.smartPayDialogEvent)
+
     const { setDialog: setDescriptionDialog } = useRemoteControlledDialog(
         PluginSmartPayMessages.smartPayDescriptionDialogEvent,
     )
+
+    const { openDialog: openApproveMaskDialog } = useRemoteControlledDialog(PluginSmartPayMessages.approveDialogEvent)
+
+    // #endregion
 
     const { Others } = useWeb3State()
 
@@ -193,6 +199,7 @@ export const SmartPayDialog = memo(() => {
                                                 placement="top">
                                                 <Typography
                                                     ml={1}
+                                                    onClick={openApproveMaskDialog}
                                                     component="span"
                                                     className={classes.maskGasTip}
                                                     display="inline-flex"
