@@ -4,14 +4,15 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { useFungibleAssets, useNetworkDescriptor, useWeb3State } from '@masknet/web3-hooks-base'
-import { ChainId, formatEthereumAddress } from '@masknet/web3-shared-evm'
+import { ChainId, formatEthereumAddress, useSmartPayConstants } from '@masknet/web3-shared-evm'
 import { Box, Button, DialogActions, DialogContent, List, ListItem, ListItemText, Typography } from '@mui/material'
 import { useCopyToClipboard } from 'react-use'
 import { memo } from 'react'
-import { formatBalance, isSameAddress } from '@masknet/web3-shared-base'
+import { formatBalance, isLessThan, isSameAddress } from '@masknet/web3-shared-base'
 import { isNaN } from 'lodash-es'
 import { useI18N } from '../../locales/i18n_generated.js'
 import { PluginSmartPayMessages } from '../../message.js'
+import { useERC20TokenAllowance } from '@masknet/web3-hooks-evm'
 
 const useStyles = makeStyles()((theme) => ({
     dialogContent: {
@@ -122,13 +123,29 @@ export const SmartPayDialog = memo(() => {
     )
 
     const { openDialog: openApproveMaskDialog } = useRemoteControlledDialog(PluginSmartPayMessages.approveDialogEvent)
-
     // #endregion
 
+    // #region web3 state
     const { Others } = useWeb3State()
-
     const polygonDescriptor = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, ChainId.Matic)
     const maskAddress = Others?.getMaskTokenAddress(ChainId.Matic)
+    const { value: assets, loading } = useFungibleAssets(NetworkPluginID.PLUGIN_EVM, undefined, {
+        chainId: ChainId.Matic,
+        account: '0x790116d0685eB197B886DAcAD9C247f785987A4a',
+    })
+    const tokens = assets?.filter((x) => x.chainId === ChainId.Matic)
+    const maskToken = assets?.find((x) => isSameAddress(maskAddress, x.address))
+
+    const { EP_CONTRACT_ADDRESS } = useSmartPayConstants(ChainId.Matic)
+    const { value: allowance = '0' } = useERC20TokenAllowance(
+        '0x790116d0685eB197B886DAcAD9C247f785987A4a',
+        EP_CONTRACT_ADDRESS,
+        { chainId: ChainId.Matic },
+    )
+
+    const availableBalanceTooLow = isLessThan(formatBalance(allowance, maskToken?.decimals), 0.1)
+
+    // #endregion
 
     // #region copy event handler
     const [, copyToClipboard] = useCopyToClipboard()
@@ -140,12 +157,6 @@ export const SmartPayDialog = memo(() => {
     })
     // #endregion
 
-    const { value: assets, loading } = useFungibleAssets(NetworkPluginID.PLUGIN_EVM, undefined, {
-        chainId: ChainId.Matic,
-        account: '0x790116d0685eB197B886DAcAD9C247f785987A4a',
-    })
-
-    const tokens = assets?.filter((x) => x.chainId === ChainId.Matic)
     return (
         <InjectedDialog
             open={open}
@@ -195,7 +206,14 @@ export const SmartPayDialog = memo(() => {
                                         {token.symbol}
                                         {isSameAddress(token.address, maskAddress) ? (
                                             <ShadowRootTooltip
-                                                title={t.allow_mask_as_gas_token_description()}
+                                                title={
+                                                    availableBalanceTooLow
+                                                        ? t.allow_mask_as_gas_token_description()
+                                                        : t.remain_mask_tips({
+                                                              balance: formatBalance(allowance, maskToken?.decimals),
+                                                              symbol: maskToken?.symbol ?? '',
+                                                          })
+                                                }
                                                 placement="top">
                                                 <Typography
                                                     ml={1}
@@ -204,7 +222,14 @@ export const SmartPayDialog = memo(() => {
                                                     className={classes.maskGasTip}
                                                     display="inline-flex"
                                                     alignItems="center">
-                                                    (<Icons.GasStation size={18} /> {t.allow_mask_as_gas_token()})
+                                                    {availableBalanceTooLow ? (
+                                                        <>
+                                                            (<Icons.GasStation size={18} />{' '}
+                                                            {t.allow_mask_as_gas_token()})
+                                                        </>
+                                                    ) : (
+                                                        <Icons.GasStation size={18} />
+                                                    )}
                                                 </Typography>
                                             </ShadowRootTooltip>
                                         ) : null}

@@ -34,6 +34,7 @@
     "setup_smart_pay_one": "<strong>Your smart contract wallet is only deployed on Polygon Network for now. Please do not receive funds on other chains with the same address. </strong> We will support more chains in the future.",
     "setup_smart_pay_two": "Free gas experience in Mask Network’s dApps like Lukcy Drop, ITO and Tips.",
     "setup_smart_pay_three": "Your private key and Json file can only be used in Smart Pay.",
+    "remain_mask_tips": "Remaining authorization {{balance}} {{symbol}} as gas feee",
     "personas": "Personas",
     "receive": "Receive",
     "wallets": "Wallets",

@@ -4,7 +4,7 @@ import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { ActionButton, makeStyles, usePortalShadowRoot } from '@masknet/theme'
 import { useWeb3State } from '@masknet/web3-hooks-base'
 import { ApproveStateType, useERC20TokenApproveCallback } from '@masknet/web3-hooks-evm'
-import { ChainId } from '@masknet/web3-shared-evm'
+import { ChainId, useSmartPayConstants } from '@masknet/web3-shared-evm'
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, InputBase, Typography } from '@mui/material'
 import { noop } from 'lodash-es'
 import { memo, useCallback, useMemo, useState } from 'react'
@@ -46,11 +46,12 @@ export const ApproveMaskDialog = memo(() => {
     const [amount, setAmount] = useState('')
 
     const maskAddress = Others?.getMaskTokenAddress(ChainId.Matic)
+    const { EP_CONTRACT_ADDRESS } = useSmartPayConstants(ChainId.Matic)
 
-    const [{ type: approveStateType, allowance }, transactionState, approveCallback] = useERC20TokenApproveCallback(
-        maskAddress,
+    const [{ type: approveStateType }, transactionState, approveCallback] = useERC20TokenApproveCallback(
+        maskAddress ?? '',
         amount,
-        '',
+        EP_CONTRACT_ADDRESS ?? '',
         noop,
         ChainId.Matic,
     )
