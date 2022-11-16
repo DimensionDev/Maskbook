@@ -69,12 +69,15 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
             activateSocialNetworkUIInner(ui_deferred)
         })
     }
+
     await waitDocumentReadyState('interactive')
 
     i18nOverwrite()
+
+    await ui.customization.paletteMode?.start(signal)
+
     globalUIState = await ui.init(signal)
 
-    ui.customization.paletteMode?.start(signal)
     startIntermediateSetupGuide()
     $unknownIdentityResolution()
 

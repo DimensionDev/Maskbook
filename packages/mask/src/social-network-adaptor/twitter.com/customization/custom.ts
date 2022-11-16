@@ -1,38 +1,73 @@
 import { useMemo } from 'react'
 import produce, { setAutoFreeze } from 'immer'
 import { MutationObserverWatcher, ValueRef } from '@dimensiondev/holoflows-kit'
-import { createSubscriptionFromValueRef } from '@masknet/shared-base'
+import { createLookupTableResolver, createSubscriptionFromValueRef } from '@masknet/shared-base'
 import type { SocialNetworkUI } from '@masknet/types'
 import { useValueRef } from '@masknet/shared-base-ui'
+import { Twitter, TwitterBaseAPI } from '@masknet/web3-providers'
 import { PaletteMode, Theme, unstable_createMuiStrictModeTheme } from '@mui/material'
-import { fromRGB, getBackgroundColor, getForegroundColor, isDark, shade, toRGB } from '../../../utils/theme/index.js'
+import { fromRGB, shade, toRGB } from '../../../utils/theme/index.js'
 import { isMobileTwitter } from '../utils/isMobile.js'
-import { composeAnchorSelector, composeAnchorTextSelector, headingTextSelector } from '../utils/selector.js'
+import { composeAnchorSelector, headingTextSelector } from '../utils/selector.js'
 
-const themeColorRef = new ValueRef('rgb(29, 161, 242)')
-const textColorRef = new ValueRef('rgb(255, 255, 255)')
-const backgroundColorRef = new ValueRef('rgb(255, 255, 255)')
+const resolveThemeColor = createLookupTableResolver<TwitterBaseAPI.ThemeColor, string>(
+    {
+        [TwitterBaseAPI.ThemeColor.Blue]: 'rgb(29, 155, 240)',
+        [TwitterBaseAPI.ThemeColor.Yellow]: 'rgb(255, 212, 0)',
+        [TwitterBaseAPI.ThemeColor.Purple]: 'rgb(249, 24, 128)',
+        [TwitterBaseAPI.ThemeColor.Magenta]: 'rgb(120, 86, 255)',
+        [TwitterBaseAPI.ThemeColor.Orange]: 'rgb(255, 122, 0)',
+        [TwitterBaseAPI.ThemeColor.Green]: 'rgb(0, 186, 124)',
+    },
+    'rgb(29, 155, 240)',
+)
 
-const currentTheme = new ValueRef<PaletteMode>('light')
+const resolveTextColor = createLookupTableResolver<TwitterBaseAPI.ThemeMode, string>(
+    {
+        [TwitterBaseAPI.ThemeMode.Dark]: 'rgb(255, 255, 255)',
+        [TwitterBaseAPI.ThemeMode.Dim]: 'rgb(255, 255, 255)',
+        [TwitterBaseAPI.ThemeMode.Light]: 'rgb(255, 255, 255)',
+    },
+    'rgb(255, 255, 255)',
+)
+
+const resolveBackgroundColor = createLookupTableResolver<TwitterBaseAPI.ThemeMode, string>(
+    {
+        [TwitterBaseAPI.ThemeMode.Dark]: 'rgb(0, 0, 0)',
+        [TwitterBaseAPI.ThemeMode.Dim]: 'rgb(21, 32, 43)',
+        [TwitterBaseAPI.ThemeMode.Light]: 'rgb(255, 255, 255)',
+    },
+    'rgb(255, 255, 255)',
+)
+
+const resolveThemeMode = createLookupTableResolver<TwitterBaseAPI.ThemeMode, 'dark' | 'light'>(
+    {
+        [TwitterBaseAPI.ThemeMode.Dark]: 'dark',
+        [TwitterBaseAPI.ThemeMode.Dim]: 'dark',
+        [TwitterBaseAPI.ThemeMode.Light]: 'light',
+    },
+    'light',
+)
+
+const themeColorRef = new ValueRef(resolveThemeColor(TwitterBaseAPI.ThemeColor.Blue))
+const textColorRef = new ValueRef(resolveTextColor(TwitterBaseAPI.ThemeMode.Light))
+const backgroundColorRef = new ValueRef(resolveBackgroundColor(TwitterBaseAPI.ThemeMode.Light))
+const paletteModeRef = new ValueRef<PaletteMode>(resolveThemeMode(TwitterBaseAPI.ThemeMode.Light))
+
 export const PaletteModeProviderTwitter: SocialNetworkUI.Customization.PaletteModeProvider = {
-    current: createSubscriptionFromValueRef(currentTheme),
+    current: createSubscriptionFromValueRef(paletteModeRef),
     start: startWatchThemeColor,
 }
 
-export function startWatchThemeColor(signal: AbortSignal) {
-    function updateThemeColor() {
-        const composeAnchor = composeAnchorSelector().evaluate()
-        const anchorText = composeAnchorTextSelector().evaluate()
-        const headingText = headingTextSelector().evaluate()
-        const themeColor = getBackgroundColor(composeAnchor)
-        const textColor = getForegroundColor(anchorText || headingText)
-        const backgroundColor = getBackgroundColor(document.body)
-        currentTheme.value = isDark(fromRGB(backgroundColor)!) ? 'dark' : 'light'
-
-        if (themeColor) themeColorRef.value = themeColor
-        if (textColor) textColorRef.value = textColor
-        if (backgroundColor) backgroundColorRef.value = backgroundColor
+export async function startWatchThemeColor(signal: AbortSignal) {
+    async function updateThemeColor() {
+        const userSettings = await Twitter.getUserSettings()
+        themeColorRef.value = resolveThemeColor(userSettings.themeColor!)
+        textColorRef.value = resolveTextColor(userSettings.themeBackground!)
+        backgroundColorRef.value = resolveBackgroundColor(userSettings.themeBackground!)
+        paletteModeRef.value = resolveThemeMode(userSettings.themeBackground!)
     }
+
     new MutationObserverWatcher(composeAnchorSelector())
         .addListener('onAdd', updateThemeColor)
         .addListener('onChange', updateThemeColor)
@@ -44,6 +79,8 @@ export function startWatchThemeColor(signal: AbortSignal) {
             .addListener('onChange', updateThemeColor)
             .startWatch({ childList: true, subtree: true }, signal)
     }
+
+    await updateThemeColor()
 }
 export function useThemeTwitterVariant(baseTheme: Theme) {
     const primaryColor = useValueRef(themeColorRef)

@@ -11,7 +11,7 @@ export const PaletteModeProviderMirror: SocialNetworkUI.Customization.PaletteMod
     start: startWatchThemeColor,
 }
 
-export function startWatchThemeColor(signal: AbortSignal) {
+export async function startWatchThemeColor(signal: AbortSignal) {
     function updateThemeColor() {
         currentTheme.value = (document.documentElement.dataset.theme as PaletteMode) ?? 'light'
     }
