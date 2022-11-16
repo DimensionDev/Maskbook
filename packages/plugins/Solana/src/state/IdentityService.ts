@@ -3,7 +3,7 @@ import type { Plugin } from '@masknet/plugin-infra'
 import { SocialIdentity, SocialAddress, SocialAddressType } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { IdentityServiceState } from '@masknet/web3-state'
-import { isValidAddress } from '@masknet/web3-shared-solana'
+import { ChainId, isValidAddress } from '@masknet/web3-shared-solana'
 import { SolanaRPC } from '../messages.js'
 
 const SOL_RE = /\S{1,256}\.sol\b/i
@@ -25,7 +25,7 @@ function getSolanaDomainAddress(domain: string) {
     return SolanaRPC.lookup(domain)
 }
 
-export class IdentityService extends IdentityServiceState {
+export class IdentityService extends IdentityServiceState<ChainId> {
     constructor(protected context: Plugin.Shared.SharedContext) {
         super()
     }
@@ -36,7 +36,7 @@ export class IdentityService extends IdentityServiceState {
         const domain = getSolanaDomain(nickname, bio)
         const domainAddress = domain ? await getSolanaDomainAddress(domain) : undefined
 
-        return compact<SocialAddress<NetworkPluginID.PLUGIN_SOLANA>>([
+        return compact<SocialAddress<ChainId>>([
             address
                 ? {
                       pluginID: NetworkPluginID.PLUGIN_SOLANA,

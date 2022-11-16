@@ -9,6 +9,7 @@ import {
 import { EMPTY_LIST, PluginID, NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import type { SocialAccount } from '@masknet/web3-shared-base'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import { Web3ContextProvider, useWeb3State, useNetworkContext } from '@masknet/web3-hooks-base'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI.js'
 import { createReactRootShadowed, startWatch } from '../../../../utils/index.js'
@@ -50,7 +51,7 @@ function AuthorTipsButtonWrapper() {
     const { pluginID } = useNetworkContext()
     const { Others } = useWeb3State()
 
-    const accounts = useMemo((): SocialAccount[] => {
+    const accounts = useMemo((): Array<SocialAccount<Web3Helper.ChainIdAll>> => {
         if (!visitingIdentity?.identifier) return EMPTY_LIST
         return [
             {

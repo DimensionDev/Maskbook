@@ -22,7 +22,7 @@ import { TabContext } from '@mui/lab'
 import { Button, Link, MenuItem, Stack, Tab, ThemeProvider, Typography } from '@mui/material'
 import { isTwitter } from '../../social-network-adaptor/twitter.com/base.js'
 import { activatedSocialNetworkUI } from '../../social-network/index.js'
-import { MaskMessages, sorter, useI18N, useLocationChange } from '../../utils/index.js'
+import { MaskMessages, addressSorter, useI18N, useLocationChange } from '../../utils/index.js'
 import { useCurrentVisitingSocialIdentity } from '../DataSource/useActivatedUI.js'
 import { useCurrentPersonaConnectStatus } from '../DataSource/usePersonaConnectStatus.js'
 import { ConnectPersonaBoundary } from '../shared/ConnectPersonaBoundary.js'
@@ -157,7 +157,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         loading: loadingSocialAccounts,
         error: loadSocialAccounts,
         retry: retrySocialAccounts,
-    } = useSocialAccountsBySettings(currentVisitingSocialIdentity, undefined, sorter)
+    } = useSocialAccountsBySettings(currentVisitingSocialIdentity, undefined, addressSorter)
 
     const selectedSocialAccount = useMemo(() => {
         return socialAccounts.find((x) => isSameAddress(x.address, selectedAddress))

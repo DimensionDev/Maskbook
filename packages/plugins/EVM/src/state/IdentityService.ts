@@ -84,7 +84,7 @@ const resolveMaskXAddressType = createLookupTableResolver<MaskX_BaseAPI.SourceTy
     },
 )
 
-export class IdentityService extends IdentityServiceState {
+export class IdentityService extends IdentityServiceState<ChainId> {
     private KV = new KVStorage(`com.maskbook.user_${getSiteType()}`)
 
     constructor(protected context: Plugin.Shared.SharedUIContext) {
@@ -98,7 +98,7 @@ export class IdentityService extends IdentityServiceState {
         chainId?: ChainId,
         updatedAt?: string,
         createdAt?: string,
-    ): SocialAddress<NetworkPluginID.PLUGIN_EVM> | undefined {
+    ): SocialAddress<ChainId> | undefined {
         if (isValidAddress(address) && !isZeroAddress(address)) {
             return {
                 pluginID: NetworkPluginID.PLUGIN_EVM,
@@ -295,7 +295,7 @@ export class IdentityService extends IdentityServiceState {
         ])
         const identities = allSettled
             .flatMap((x) => (x.status === 'fulfilled' ? x.value : []))
-            .filter(Boolean) as Array<SocialAddress<NetworkPluginID.PLUGIN_EVM>>
+            .filter(Boolean) as Array<SocialAddress<ChainId>>
         return uniqBy(identities, (x) => joinKeys(x.type, x.label, x.address.toLowerCase()))
     }
 }
