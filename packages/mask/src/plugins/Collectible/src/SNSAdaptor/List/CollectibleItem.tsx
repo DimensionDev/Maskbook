@@ -39,9 +39,9 @@ interface CollectibleItemProps extends HTMLProps<HTMLDivElement>, CollectibleCar
 export const CollectibleItem = forwardRef<HTMLDivElement, CollectibleItemProps>((props: CollectibleItemProps, ref) => {
     const { className, asset, pluginID, ...rest } = props
     const { classes, cx } = useStyles()
+    const name = asset.metadata?.name ?? ''
     const textRef = useRef<HTMLDivElement>(null)
     const [showTooltip, setShowTooltip] = useState(false)
-    const name = asset.metadata?.name ?? ''
     useLayoutEffect(() => {
         if (textRef.current) {
             setShowTooltip(textRef.current.offsetWidth !== textRef.current.scrollWidth)

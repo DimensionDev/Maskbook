@@ -1,11 +1,11 @@
-import { FC, useCallback } from 'react'
+import { FC, useCallback, useRef } from 'react'
 import { noop } from 'lodash-es'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { ElementAnchor, Linking, AssetPreviewer, RetryHint } from '@masknet/shared'
-import { LoadingBase, makeStyles } from '@masknet/theme'
+import { LoadingBase, makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { isSameAddress, NonFungibleToken } from '@masknet/web3-shared-base'
-import { useChainContext, useWeb3State, useNetworkContext } from '@masknet/web3-hooks-base'
+import { useWeb3State, useNetworkContext } from '@masknet/web3-hooks-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { Checkbox, List, ListItem, Radio, Stack, Typography } from '@mui/material'
 
@@ -100,6 +100,9 @@ const useStyles = makeStyles<{ columns?: number; gap?: number }>()((theme, { col
             color: theme.palette.text.primary,
             fontWeight: 700,
             fontSize: 12,
+            whiteSpace: 'nowrap',
+            textOverflow: 'ellipsis',
+            overflow: 'hidden',
         },
         root: {
             width: 'auto',
@@ -109,11 +112,12 @@ const useStyles = makeStyles<{ columns?: number; gap?: number }>()((theme, { col
 })
 
 export const NFTItem: FC<NFTItemProps> = ({ token }) => {
-    const { classes, cx } = useStyles({})
-    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
-    const fullCaption = token.metadata?.name || token.tokenId
-    const caption = token.metadata?.name?.match(/#\d+$/) ? token.metadata.name : Others?.formatTokenId(token.tokenId)
+    const { classes } = useStyles({})
+    const caption = token.metadata?.name || token.tokenId
+    const captionRef = useRef<HTMLDivElement>(null)
+
+    const showTooltip = captionRef.current ? captionRef.current.offsetWidth !== captionRef.current.scrollWidth : false
+
     return (
         <div className={classes.nftContainer}>
             <AssetPreviewer
@@ -124,9 +128,11 @@ export const NFTItem: FC<NFTItemProps> = ({ token }) => {
                     root: classes.root,
                 }}
             />
-            <Typography className={classes.caption} title={fullCaption !== caption ? fullCaption : undefined}>
-                {caption}
-            </Typography>
+            <ShadowRootTooltip title={showTooltip ? caption : undefined} placement="bottom" disableInteractive arrow>
+                <Typography ref={captionRef} className={classes.caption}>
+                    {caption}
+                </Typography>
+            </ShadowRootTooltip>
         </div>
     )
 }
