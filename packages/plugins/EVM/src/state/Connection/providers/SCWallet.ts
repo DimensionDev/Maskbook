@@ -15,6 +15,10 @@ export class SCWalletProvider extends BaseProvider implements EVM_Provider {
         super(providerType)
     }
 
+    override switchChain(chainId?: ChainId): Promise<void> {
+        throw new Error('A SC wallet cannot switch chain.')
+    }
+
     override async request<T extends unknown>(
         requestArguments: RequestArguments,
         options?: ProviderOptions<ChainId>,
