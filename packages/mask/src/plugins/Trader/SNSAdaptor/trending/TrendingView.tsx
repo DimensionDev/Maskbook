@@ -112,6 +112,11 @@ export interface TrendingViewProps {
     expectedChainId?: ChainId
     onUpdate?: () => void
     isPopper?: boolean
+    asset?: {
+        value: { currency: TrendingAPI.Currency | undefined; trending: TrendingAPI.Trending | null }
+        loading: boolean
+        error: Error | undefined
+    }
 }
 
 enum ContentTabs {
@@ -123,7 +128,7 @@ enum ContentTabs {
 }
 
 export function TrendingView(props: TrendingViewProps) {
-    const { name, tagType, dataProviders, isPopper = true, searchedContractAddress, expectedChainId } = props
+    const { name, tagType, dataProviders, isPopper = true, searchedContractAddress, expectedChainId, asset } = props
 
     const { t } = useI18N()
     const { classes } = useStyles({ isPopper })
@@ -148,10 +153,10 @@ export function TrendingView(props: TrendingViewProps) {
 
     // #region merge trending
     const coinId = usePreferredCoinId(name, dataProvider)
-    const trendingById = useTrendingById(coinId, dataProvider, expectedChainId, searchedContractAddress)
+    const trendingById = useTrendingById(asset ? '' : coinId, dataProvider, expectedChainId, searchedContractAddress)
     const trendingByKeyword = useTrendingByKeyword(
         tagType,
-        coinId ? '' : name,
+        coinId || asset ? '' : name,
         dataProvider,
         expectedChainId,
         searchedContractAddress,
@@ -160,7 +165,7 @@ export function TrendingView(props: TrendingViewProps) {
         value: { currency, trending },
         error: trendingError,
         loading: loadingTrending,
-    } = coinId ? trendingById : trendingByKeyword
+    } = asset ?? (coinId ? trendingById : trendingByKeyword)
     // #endregion
 
     const coinSymbol = (trending?.coin.symbol || '').toLowerCase()

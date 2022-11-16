@@ -1,15 +1,7 @@
 import { DataProvider } from '@masknet/public-api'
+import type { TrendingAPI } from '@masknet/web3-providers'
 
-const CURRENCIES_MAP: Record<
-    DataProvider,
-    | undefined
-    | Array<{
-          id: string
-          name: string
-          symbol: string
-          description: string
-      }>
-> = {
+const CURRENCIES_MAP: Record<DataProvider, undefined | TrendingAPI.Currency[]> = {
     [DataProvider.CoinGecko]: [
         {
             id: 'usd',

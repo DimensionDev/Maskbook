@@ -142,6 +142,7 @@ export class NFTScanTrendingAPI implements TrendingAPI.Provider<ChainId> {
                       market_name: NonFungibleMarketplace.OpenSea,
                       volume_24h: openseaStats.volume24h,
                       floor_price: openseaStats.floorPrice,
+                      price_symbol: collection.price_symbol,
                       sales_24: openseaStats.count24h,
                   }
                 : null,
@@ -152,6 +153,7 @@ export class NFTScanTrendingAPI implements TrendingAPI.Provider<ChainId> {
                       market_name: NonFungibleMarketplace.LooksRare,
                       volume_24h: looksrareStats.volume24h,
                       floor_price: looksrareStats.floorPrice,
+                      price_symbol: collection.price_symbol,
                       sales_24: looksrareStats.count24h,
                   }
                 : null,
@@ -223,6 +225,7 @@ export class NFTScanTrendingAPI implements TrendingAPI.Provider<ChainId> {
                 floor_price: collection.floor_price,
                 highest_price: undefined,
                 owners_count: collection.owners_total,
+                price_symbol: collection.price_symbol,
                 royalty: collection.royalty?.toString(),
                 total_24h: undefined,
                 volume_24h: undefined,

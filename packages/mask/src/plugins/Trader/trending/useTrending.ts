@@ -69,16 +69,21 @@ export function useTrendingById(
         return PluginTraderRPC.getCoinTrending(chainId, id, currency, dataProvider).catch(() => null)
     }, [chainId, dataProvider, currency?.id, id])
 
-    const { value: detailedToken } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, trending?.coin.contract_address)
+    const { value: detailedToken } = useFungibleToken(
+        NetworkPluginID.PLUGIN_EVM,
+        trending?.coin.contract_address,
+        undefined,
+        { chainId: trending?.coin.chainId },
+    )
 
     return {
         value: {
             currency,
             trending: trending
-                ? {
+                ? ({
                       ...trending,
                       coin: createCoinFromTrending(trending, expectedChainId, searchedContractAddress, detailedToken),
-                  }
+                  } as TrendingAPI.Trending)
                 : null,
         },
         loading,
