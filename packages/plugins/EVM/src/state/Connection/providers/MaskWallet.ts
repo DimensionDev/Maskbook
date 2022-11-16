@@ -14,6 +14,14 @@ export class MaskWalletProvider extends BaseProvider implements EVM_Provider {
         Web3StateSettings.readyPromise.then(this.addSharedContextListeners.bind(this))
     }
 
+    private get account() {
+        return SharedContextSettings.value.account.getCurrentValue()
+    }
+
+    private get chainId() {
+        return SharedContextSettings.value.chainId.getCurrentValue()
+    }
+
     /**
      * Block by the share context
      * @returns
@@ -30,20 +38,6 @@ export class MaskWalletProvider extends BaseProvider implements EVM_Provider {
         return Web3StateSettings.readyPromise.then(() => {})
     }
 
-    override async switchChain(chainId?: ChainId) {
-        await SharedContextSettings.value.updateAccount({
-            chainId,
-        })
-    }
-
-    private get account() {
-        return SharedContextSettings.value.account.getCurrentValue()
-    }
-
-    private get chainId() {
-        return SharedContextSettings.value.chainId.getCurrentValue()
-    }
-
     private addSharedContextListeners() {
         const { account, chainId } = SharedContextSettings.value
 
@@ -53,6 +47,12 @@ export class MaskWalletProvider extends BaseProvider implements EVM_Provider {
         })
         chainId.subscribe(() => {
             this.emitter.emit('chainId', toHex(this.chainId))
+        })
+    }
+
+    override async switchChain(chainId?: ChainId) {
+        await SharedContextSettings.value.updateAccount({
+            chainId,
         })
     }
 
