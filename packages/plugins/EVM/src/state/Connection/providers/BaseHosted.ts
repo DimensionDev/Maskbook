@@ -19,24 +19,30 @@ export class BaseHostedProvider extends BaseProvider implements EVM_Provider {
 
     constructor(
         protected override providerType: ProviderType,
-        protected options: {
-            isSupportedAccount(account: string): boolean
-            isSupportedChainId(chainId: ChainId): boolean
-            getDefaultAccount(): string
-            getDefaultChainId(): ChainId
-        } = {
-            isSupportedAccount: () => true,
-            isSupportedChainId: () => true,
-            getDefaultAccount: () => '',
-            getDefaultChainId,
+        protected init?: {
+            isSupportedAccount?: (account: string) => Promise<boolean>
+            isSupportedChainId?: (chainId: ChainId) => Promise<boolean>
+            getDefaultAccount?: () => string
+            getDefaultChainId?: () => ChainId
         },
     ) {
         super(providerType)
         Web3StateSettings.readyPromise.then(this.addListeners.bind(this))
     }
 
-    private get storage() {
+    protected get options() {
+        return {
+            isSupportedAccount: () => true,
+            isSupportedChainId: () => true,
+            getDefaultAccount: () => '',
+            getDefaultChainId,
+            ...this.init,
+        }
+    }
+
+    protected get storage() {
         if (this.storageObject) return this.storageObject
+
         const { storage } = SharedContextSettings.value
             .createKVStorage('memory', {})
             .createSubScope(this.providerType, {
@@ -47,11 +53,11 @@ export class BaseHostedProvider extends BaseProvider implements EVM_Provider {
         return this.storageObject
     }
 
-    private get account() {
+    protected get account() {
         return this.storage.account.value
     }
 
-    private get chainId() {
+    protected get chainId() {
         return this.storage.chainId.value
     }
 
@@ -83,15 +89,16 @@ export class BaseHostedProvider extends BaseProvider implements EVM_Provider {
         })
     }
 
-    protected selectAccount(account: string) {
-        if (isValidAddress(account) && this.options.isSupportedAccount(account)) this.storage.account.setValue(account)
+    async switchAccount(account: string) {
+        if (isValidAddress(account) && (await this.options.isSupportedAccount(account)))
+            this.storage.account.setValue(account)
     }
 
-    protected switchChainId(chainId: ChainId) {
-        if (this.options.isSupportedChainId(chainId)) this.storage.chainId.setValue(chainId)
+    override async switchChain(chainId: ChainId) {
+        if (await this.options.isSupportedChainId(chainId)) this.storage.chainId.setValue(chainId)
     }
 
-    protected reset() {
+    reset() {
         this.storage.account.setValue(this.options.getDefaultAccount())
         this.storage.chainId.setValue(this.options.getDefaultChainId())
     }
