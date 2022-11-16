@@ -36,4 +36,9 @@ export class BaseHostedProvider extends BaseProvider implements EVM_Provider {
     protected switchChainId(chainId: ChainId) {
         if (this.options.isSupportedChainId(chainId)) this.storage.chainId.setValue(chainId)
     }
+
+    protected reset() {
+        this.storage.account.setValue(this.options.getDefaultAccount())
+        this.storage.chainId.setValue(this.options.getDefaultChainId())
+    }
 }
