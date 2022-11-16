@@ -19,7 +19,7 @@ import { CollectibleList } from './CollectibleList.js'
 import { CollectionIcon } from './CollectionIcon.js'
 import { LoadingSkeleton } from './LoadingSkeleton.js'
 import { useI18N } from '../../../../../utils/index.js'
-import type { CollectibleGridProps } from '../../../../../extension/options-page/types.js'
+import type { CollectibleGridProps } from '../../types.js'
 
 const AllButton = styled(Button)(({ theme }) => ({
     display: 'inline-block',

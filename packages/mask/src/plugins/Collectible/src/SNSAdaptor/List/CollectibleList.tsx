@@ -1,12 +1,12 @@
+import type { NetworkPluginID } from '@masknet/shared-base'
+import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import type { NonFungibleAsset } from '@masknet/web3-shared-base'
-import type { NetworkPluginID } from '@masknet/shared-base'
 import { Box, Button, Typography } from '@mui/material'
+import { useI18N } from '../../../../../utils/index.js'
+import type { CollectibleGridProps } from '../../types.js'
 import { CollectibleItem } from './CollectibleItem.js'
 import { LoadingSkeleton } from './LoadingSkeleton.js'
-import { useI18N } from '../../../../../utils/index.js'
-import { makeStyles } from '@masknet/theme'
-import type { CollectibleGridProps } from '../../../../../extension/options-page/types.js'
 
 export const useStyles = makeStyles<CollectibleGridProps>()((theme, { columns = 3, gap = 2 }) => {
     const gapIsNumber = typeof gap === 'number'
