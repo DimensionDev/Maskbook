@@ -3,7 +3,7 @@ import { fetchJSON } from '../helpers.js'
 import { TOKEN_VIEW_ROOT_URL, INTERVAL } from './constants.js'
 import type { ChainId } from '@masknet/web3-shared-evm'
 
-export class TokenViewAPI implements TrendingAPI.Provider<ChainId> {
+export class NomicsTrendingAPI implements TrendingAPI.Provider<ChainId> {
     getAllCoins(): Promise<TrendingAPI.Coin[]> {
         throw new Error('To be implemented.')
     }
