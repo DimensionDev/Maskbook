@@ -157,7 +157,7 @@ export function TrendingView(props: TrendingViewProps) {
         searchedContractAddress,
     )
     const {
-        value: { currency, trending },
+        value: { currency, trending } = {},
         error: trendingError,
         loading: loadingTrending,
     } = coinId ? trendingById : trendingByKeyword
