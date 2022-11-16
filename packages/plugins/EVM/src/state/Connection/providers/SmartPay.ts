@@ -1,6 +1,6 @@
 import { first } from 'lodash-es'
 import { ChainId, chainResolver, isValidAddress, ProviderType } from '@masknet/web3-shared-evm'
-import { SCWalletProvider } from './SCWallet.js'
+import { BaseSCWalletProvider } from './BaseSCWallet.js'
 import type { EVM_Provider } from '../types.js'
 import { ExtensionSite, getSiteType, PopupRoutes } from '@masknet/shared-base'
 import { SharedContextSettings } from '../../../settings/index.js'
@@ -9,7 +9,7 @@ import { SharedContextSettings } from '../../../settings/index.js'
  * PayGasX
  * Learn more: https://github.com/DimensionDev/PayGasX
  */
-export class SmartPayProvider extends SCWalletProvider implements EVM_Provider {
+export class SmartPayProvider extends BaseSCWalletProvider implements EVM_Provider {
     constructor() {
         super(ProviderType.SmartPay, {
             isSupportedAccount: () => Promise.resolve(true),
@@ -37,13 +37,15 @@ export class SmartPayProvider extends SCWalletProvider implements EVM_Provider {
             chainId,
         })
 
+        // switch account
         const account = first(await SharedContextSettings.value.selectAccount())
-        if (!account) throw new Error(`Failed to connect to ${chainResolver.chainFullName(chainId)}.`)
+        if (account) await this.switchAccount(account)
+        if (!account || account !== this.account)
+            throw new Error(`Failed to connect to ${chainResolver.chainFullName(chainId)}.`)
 
         // switch chain
-        if (chainId !== this.chainId) {
-            await this.switchChain(chainId)
-        }
+        if (chainId !== this.chainId) await this.switchChain(chainId)
+        if (chainId !== this.chainId) throw new Error(`Failed to connect to ${chainResolver.chainFullName(chainId)}.`)
 
         return {
             chainId,
