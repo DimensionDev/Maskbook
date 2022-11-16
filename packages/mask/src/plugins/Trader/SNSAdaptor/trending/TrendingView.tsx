@@ -5,6 +5,7 @@ import {
     useNonFungibleAssetsByCollection,
     Web3ContextProvider,
 } from '@masknet/web3-hooks-base'
+import type { AsyncState } from 'react-use/lib/useAsyncFn.js'
 import { DataProvider } from '@masknet/public-api'
 import { NFTList } from '@masknet/shared'
 import { EMPTY_LIST, PluginID, NetworkPluginID, getSiteType } from '@masknet/shared-base'
@@ -112,11 +113,7 @@ export interface TrendingViewProps {
     expectedChainId?: ChainId
     onUpdate?: () => void
     isPopper?: boolean
-    asset?: {
-        value: { currency: TrendingAPI.Currency | undefined; trending: TrendingAPI.Trending | null }
-        loading: boolean
-        error: Error | undefined
-    }
+    asset?: AsyncState<{ currency: TrendingAPI.Currency | undefined; trending: TrendingAPI.Trending | null }>
 }
 
 enum ContentTabs {
@@ -162,7 +159,7 @@ export function TrendingView(props: TrendingViewProps) {
         searchedContractAddress,
     )
     const {
-        value: { currency, trending },
+        value: { currency, trending } = {},
         error: trendingError,
         loading: loadingTrending,
     } = asset ?? (coinId ? trendingById : trendingByKeyword)

@@ -13,18 +13,18 @@ export function usePayloadFromTokenSearchKeyword(pluginID?: NetworkPluginID, key
 
     const [_, _type, name = ''] = keyword.match(/([#$])(\w+)/) ?? []
 
-    const { value: nonFungibleAsset, error, loading } = useTrendingById(searchedContractAddress, DataProvider.NFTScan)
-
+    const trendingByIdResult = useTrendingById(searchedContractAddress, DataProvider.NFTScan)
+    const { value: nonFungibleAsset } = trendingByIdResult
     const { value: fungibleAsset } = useCoinIdByAddress(searchedContractAddress)
 
-    const nonFungibleAssetName = nonFungibleAsset.trending?.coin.symbol || nonFungibleAsset.trending?.coin.name
+    const nonFungibleAssetName = nonFungibleAsset?.trending?.coin.symbol || nonFungibleAsset?.trending?.coin.name
     const isNFT = !!nonFungibleAssetName
     const presetDataProviders = isNFT ? [DataProvider.NFTScan] : undefined
 
     return {
         name: searchedContractAddress ? (isNFT ? nonFungibleAssetName : fungibleAsset?.name ?? '') : name,
         chainId: isNFT ? nonFungibleAsset.trending?.coin.chainId : (fungibleAsset?.chainId as ChainId),
-        asset: isNFT ? { value: nonFungibleAsset, error, loading } : undefined,
+        asset: isNFT ? trendingByIdResult : undefined,
         presetDataProviders,
         searchedContractAddress: Others?.isValidAddress(keyword) ? keyword : undefined,
         type: type === '$' ? TagType.CASH : TagType.HASH,
