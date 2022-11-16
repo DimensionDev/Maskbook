@@ -39,7 +39,7 @@ export function formatTokenId(tokenId = '', size_ = 4) {
     return `#${head}...${tail}`
 }
 
-export function isValidAddress(address?: string, strict?: boolean) {
+export function isValidAddress(address?: string, strict?: boolean): address is string {
     const length = address?.length
     if (!length || length < 32 || length > 44) return false
     try {
