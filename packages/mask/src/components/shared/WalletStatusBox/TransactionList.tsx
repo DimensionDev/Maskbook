@@ -1,5 +1,7 @@
 import { FC, forwardRef, useCallback, useMemo, useState, useEffect } from 'react'
 import { useAsync } from 'react-use'
+import { noop } from 'lodash-es'
+import format from 'date-fns/format'
 import { Icons } from '@masknet/icons'
 import { useChainContext, useWeb3State } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -7,8 +9,6 @@ import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { isSameAddress, RecentTransactionComputed, TransactionStatusType, Transaction } from '@masknet/web3-shared-base'
 import { getContractOwnerDomain } from '@masknet/web3-shared-evm'
 import { Grid, GridProps, Link, List, ListItem, ListProps, Stack, Typography } from '@mui/material'
-import format from 'date-fns/format'
-import { noop } from 'lodash-es'
 import { useI18N } from '../../../utils/index.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -91,9 +91,8 @@ const Transaction: FC<TransactionProps> = ({ chainId, transaction: tx, onClear =
     const address = ((tx._tx as Transaction<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>).to || '').toLowerCase()
 
     const { value: functionName } = useAsync(async () => {
-        return TransactionFormatter
-            ? (await TransactionFormatter.formatTransaction(chainId, tx._tx)).title
-            : 'Contract Interaction'
+        const formattedTransaction = await TransactionFormatter?.formatTransaction(chainId, tx._tx)
+        return formattedTransaction?.title ?? 'Contract Interaction'
     }, [TransactionFormatter])
 
     const handleClear = useCallback(() => {
