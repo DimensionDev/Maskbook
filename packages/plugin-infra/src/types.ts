@@ -155,7 +155,7 @@ export namespace Plugin.Shared {
         /** The selected account of Mask Wallet */
         account: Subscription<string>
         /** The selected chainId of Mask Wallet */
-        chainId: Subscription<number>
+        chainId: Subscription<ChainIdEVM>
         /** The selected persona */
         currentPersona: Subscription<PersonaIdentifier | undefined>
         /** Get all wallets */
@@ -177,8 +177,6 @@ export namespace Plugin.Shared {
             },
         ): Promise<JsonRpcResponse>
 
-        fetch: (input: RequestInfo, init?: RequestInit | undefined) => Promise<Response>
-
         /** Open popup window */
         openPopupWindow(route?: PopupRoutes, params?: Record<string, any>): Promise<void>
         /** Close popup window */
@@ -198,8 +196,6 @@ export namespace Plugin.Shared {
             networkType?: string
             providerType?: string
         }): Promise<void>
-        /** Reset Mask Wallet account */
-        resetAccount(): Promise<void>
         /** Record which sites are connected to the Mask wallet  */
         recordConnectedSites(site: EnhanceableSite | ExtensionSite, connected: boolean): void
 

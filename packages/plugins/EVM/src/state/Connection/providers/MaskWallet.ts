@@ -36,16 +36,23 @@ export class MaskWalletProvider extends BaseProvider implements EVM_Provider {
         })
     }
 
-    private addSharedContextListeners() {
-        const sharedContext = SharedContextSettings.value
+    private get account() {
+        return SharedContextSettings.value.account.getCurrentValue()
+    }
 
-        sharedContext.chainId.subscribe(() => {
-            this.emitter.emit('chainId', toHex(sharedContext.chainId.getCurrentValue()))
-        })
-        sharedContext.account.subscribe(() => {
-            const account = sharedContext.account.getCurrentValue()
-            if (account) this.emitter.emit('accounts', [account])
+    private get chainId() {
+        return SharedContextSettings.value.chainId.getCurrentValue()
+    }
+
+    private addSharedContextListeners() {
+        const { account, chainId } = SharedContextSettings.value
+
+        account.subscribe(() => {
+            if (this.account) this.emitter.emit('accounts', [this.account])
             else this.emitter.emit('disconnect', ProviderType.MaskWallet)
+        })
+        chainId.subscribe(() => {
+            this.emitter.emit('chainId', toHex(this.chainId))
         })
     }
 
@@ -56,7 +63,7 @@ export class MaskWalletProvider extends BaseProvider implements EVM_Provider {
         const response = await SharedContextSettings.value.send(
             createPayload(0, requestArguments.method, requestArguments.params),
             {
-                chainId: SharedContextSettings.value.chainId.getCurrentValue(),
+                chainId: this.chainId,
                 popupsWindow: getSiteType() === ExtensionSite.Dashboard || isEnhanceableSiteType(),
                 ...options,
             },
@@ -67,17 +74,14 @@ export class MaskWalletProvider extends BaseProvider implements EVM_Provider {
     override async connect(chainId: ChainId) {
         const { getWallets, updateAccount } = SharedContextSettings.value
 
-        const actualAccount = SharedContextSettings.value.account.getCurrentValue()
-        const actualChainId = SharedContextSettings.value.chainId.getCurrentValue()
-
         const siteType = getSiteType()
         if (siteType === ExtensionSite.Popup) throw new Error('Cannot connect wallet')
 
-        if (chainId === actualChainId && isValidAddress(actualAccount)) {
+        if (chainId === this.chainId && isValidAddress(this.account)) {
             if (siteType) SharedContextSettings.value.recordConnectedSites(siteType, true)
             return {
-                account: actualAccount,
-                chainId: actualChainId,
+                account: this.account,
+                chainId: this.chainId,
             }
         }
 
@@ -90,7 +94,7 @@ export class MaskWalletProvider extends BaseProvider implements EVM_Provider {
         if (!account) throw new Error(`Failed to connect to ${chainResolver.chainFullName(chainId)}.`)
 
         // switch chain
-        if (chainId !== actualChainId) {
+        if (chainId !== this.chainId) {
             await updateAccount({
                 chainId,
             })

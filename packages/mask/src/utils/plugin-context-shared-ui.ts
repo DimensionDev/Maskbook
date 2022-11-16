@@ -23,7 +23,6 @@ export const RestPartOfPluginUIContextShared: Omit<
         MaskMessages.events.currentPersonaIdentifier.on,
     ),
     send: WalletRPC.sendPayload,
-    fetch: r2d2Fetch,
     openPopupWindow: Services.Helper.openPopupWindow,
     closePopupWindow: Services.Helper.removePopupWindow,
 
@@ -56,12 +55,12 @@ export const RestPartOfPluginUIContextShared: Omit<
         WalletMessages.events.walletsUpdated.on,
     ),
 
+    updateAccount: WalletRPC.updateMaskAccount,
+    selectAccount: WalletRPC.selectMaskAccount,
+    recordConnectedSites: WalletRPC.recordConnectedSites,
+
     personaSignMessage: Services.Identity.signWithPersona,
     generateSignResult: Services.Identity.generateSignResult,
-    recordConnectedSites: WalletRPC.recordConnectedSites,
-    updateAccount: WalletRPC.updateMaskAccount,
-    resetAccount: WalletRPC.resetMaskAccount,
-    selectAccount: WalletRPC.selectMaskAccount,
 
     signTransaction: WalletRPC.signTransaction,
     signTypedData: WalletRPC.signTypedData,

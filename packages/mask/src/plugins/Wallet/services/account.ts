@@ -44,12 +44,6 @@ export async function getConnectedStatus(site: EnhanceableSite | ExtensionSite) 
     return recordSites.get(site)
 }
 
-export async function resetMaskAccount() {
-    currentMaskWalletChainIdSettings.value = ChainId.Mainnet
-    currentMaskWalletNetworkSettings.value = NetworkType.Ethereum
-    currentMaskWalletAccountSettings.value = ''
-}
-
 // #region select wallet with popups
 let deferred: DeferTuple<string[], Error> | null
 
