@@ -129,7 +129,7 @@ export function NonFungibleCoinMarketTable(props: CoinMarketTableProps) {
                             <TableCell className={classes.cell}>
                                 <FormattedCurrency
                                     value={market?.floor_price ?? 0}
-                                    sign="ETH"
+                                    sign={market?.price_symbol ?? 'ETH'}
                                     formatter={formatCurrency}
                                 />
                             </TableCell>
@@ -143,7 +143,7 @@ export function NonFungibleCoinMarketTable(props: CoinMarketTableProps) {
                             <TableCell className={classes.cell}>
                                 <FormattedCurrency
                                     value={market?.total_24h ?? 0}
-                                    sign="ETH"
+                                    sign={market?.price_symbol ?? 'ETH'}
                                     formatter={formatCurrency}
                                 />
                             </TableCell>

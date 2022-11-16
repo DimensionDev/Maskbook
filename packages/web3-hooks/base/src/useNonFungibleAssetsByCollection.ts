@@ -12,7 +12,6 @@ export function useNonFungibleAssetsByCollection<
     const [done, setDone] = useState(false)
     const [loading, toggleLoading] = useState(false)
     const [error, setError] = useState<string>()
-
     const hub = useWeb3Hub(pluginID, options)
 
     // create iterator

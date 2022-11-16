@@ -10,10 +10,8 @@ export interface SearchResultInspectorProps {
 }
 
 export function SearchResultInspector({ keyword }: SearchResultInspectorProps) {
-    const { name, type, presetDataProviders, chainId, searchedContractAddress } = usePayloadFromTokenSearchKeyword(
-        NetworkPluginID.PLUGIN_EVM,
-        keyword,
-    )
+    const { name, type, presetDataProviders, chainId, searchedContractAddress, asset } =
+        usePayloadFromTokenSearchKeyword(NetworkPluginID.PLUGIN_EVM, keyword)
     const { value: addressType } = useAddressType(NetworkPluginID.PLUGIN_EVM, keyword, {
         chainId: chainId ?? ChainId.Mainnet,
     })
@@ -26,6 +24,7 @@ export function SearchResultInspector({ keyword }: SearchResultInspectorProps) {
             <TrendingView
                 isPopper={false}
                 name={name}
+                asset={asset}
                 tagType={type}
                 expectedChainId={chainId}
                 searchedContractAddress={searchedContractAddress}
