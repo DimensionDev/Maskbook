@@ -225,4 +225,7 @@ export class NFTScanTrendingAPI implements TrendingAPI.Provider<ChainId> {
             tickers,
         }
     }
+    getTokenInfo(tokenSymbol: string): Promise<TrendingAPI.TokenInfo> {
+        throw new Error('To be implemented.')
+    }
 }
