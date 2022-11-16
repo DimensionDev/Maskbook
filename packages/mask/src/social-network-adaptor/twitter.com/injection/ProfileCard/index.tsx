@@ -55,6 +55,7 @@ function ProfileCardHolder() {
 
         return {
             identifier: ProfileIdentifier.of(twitterBase.networkIdentifier, handle).unwrapOr(undefined),
+            /* cspell:disable-next-line */
             isOwner: !!(userId && document.cookie.includes(escape(`twid=u=${userId}`))),
             nickname: user.legacy.name,
             avatar: user.legacy.profile_image_url_https.replace(/_normal(\.\w+)$/, '_400x400$1'),
