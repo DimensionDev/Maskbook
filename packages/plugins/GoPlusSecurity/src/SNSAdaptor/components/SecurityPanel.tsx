@@ -19,7 +19,7 @@ interface TokenCardProps {
     tokenSecurity: SecurityAPI.TokenSecurityType
     tokenInfo?: FungibleToken<ChainId, SchemaType>
     tokenPrice?: number
-    tokenMarketCap?: TrendingAPI.TokenInfo
+    tokenMarketCap?: TrendingAPI.MarketInfo
 }
 
 const useStyles = makeStyles()((theme) => ({
