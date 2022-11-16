@@ -1,5 +1,7 @@
 {
     "__plugin_name": "Smart Pay",
+    "allow_mask_as_gas_token": "Allow Mask as gas token",
+    "allow_mask_as_gas_token_description": "Allow MASK tokens to pay gas fee when interacting with Polygon network.",
     "create_a_new_wallet_title": "Create a New Wallet",
     "create_a_new_wallet_desc": "Create a new Mask wallet in Pop-up",
     "create_a_new_wallet": "Create a new wallet",

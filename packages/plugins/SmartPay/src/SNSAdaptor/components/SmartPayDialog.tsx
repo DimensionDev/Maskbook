@@ -2,13 +2,13 @@ import { Icons } from '@masknet/icons'
 import { InjectedDialog, ImageIcon, useSnackbarCallback, TokenIcon, FormattedBalance } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { makeStyles } from '@masknet/theme'
-import { useFungibleAssets, useNetworkDescriptor } from '@masknet/web3-hooks-base'
+import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
+import { useFungibleAssets, useNetworkDescriptor, useWeb3State } from '@masknet/web3-hooks-base'
 import { ChainId, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { Box, Button, DialogActions, DialogContent, List, ListItem, ListItemText, Typography } from '@mui/material'
 import { useCopyToClipboard } from 'react-use'
 import { memo } from 'react'
-import { formatBalance } from '@masknet/web3-shared-base'
+import { formatBalance, isSameAddress } from '@masknet/web3-shared-base'
 import { isNaN } from 'lodash-es'
 import { useI18N } from '../../locales/i18n_generated.js'
 import { PluginSmartPayMessages } from '../../message.js'
@@ -29,7 +29,7 @@ const useStyles = makeStyles()((theme) => ({
         },
     },
     dialogActions: {
-        padding: theme.spacing(1.5),
+        padding: theme.spacing(1.5, 1.5, 2.5),
         display: 'flex',
         justifyContent: 'space-between',
         columnGap: 12,
@@ -100,6 +100,15 @@ const useStyles = makeStyles()((theme) => ({
             fontWeight: 700,
         },
     },
+    maskGasTip: {
+        color: theme.palette.maskColor.highlight,
+        fontSize: 16,
+        lineHeight: '20px',
+        fontWeight: 700,
+        display: 'inline-flex',
+        alignItems: 'center',
+        cursor: 'pointer',
+    },
 }))
 
 export const SmartPayDialog = memo(() => {
@@ -110,7 +119,10 @@ export const SmartPayDialog = memo(() => {
         PluginSmartPayMessages.smartPayDescriptionDialogEvent,
     )
 
+    const { Others } = useWeb3State()
+
     const polygonDescriptor = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, ChainId.Matic)
+    const maskAddress = Others?.getMaskTokenAddress(ChainId.Matic)
 
     // #region copy event handler
     const [, copyToClipboard] = useCopyToClipboard()
@@ -175,6 +187,20 @@ export const SmartPayDialog = memo(() => {
                                 <Box>
                                     <Typography fontSize={16} lineHeight="20px" fontWeight={700}>
                                         {token.symbol}
+                                        {isSameAddress(token.address, maskAddress) ? (
+                                            <ShadowRootTooltip
+                                                title={t.allow_mask_as_gas_token_description()}
+                                                placement="top">
+                                                <Typography
+                                                    ml={1}
+                                                    component="span"
+                                                    className={classes.maskGasTip}
+                                                    display="inline-flex"
+                                                    alignItems="center">
+                                                    (<Icons.GasStation size={18} /> {t.allow_mask_as_gas_token()})
+                                                </Typography>
+                                            </ShadowRootTooltip>
+                                        ) : null}
                                     </Typography>
                                     <Typography className={classes.name}>
                                         {token.name} <Icons.LinkOut size={14} />

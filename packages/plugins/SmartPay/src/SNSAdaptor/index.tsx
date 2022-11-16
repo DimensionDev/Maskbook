@@ -8,6 +8,9 @@ import { SNSAdaptorContext } from '@masknet/plugin-infra/content-script'
 import { SmartPayDeployDialog } from './components/SmartPayDeployDialog.js'
 import { SmartPayDescriptionDialog } from './components/SmartPayDescriptionDialog.js'
 import { SmartPayDialog } from './components/SmartPayDialog.js'
+import { Web3ContextProvider } from '@masknet/web3-hooks-base'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { ChainId } from '@masknet/web3-shared-evm'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -17,9 +20,11 @@ const sns: Plugin.SNSAdaptor.Definition = {
     GlobalInjection: function Component() {
         return (
             <SNSAdaptorContext.Provider value={context}>
-                <SmartPayDialog />
-                <SmartPayDeployDialog />
-                <SmartPayDescriptionDialog />
+                <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM, chainId: ChainId.Matic }}>
+                    <SmartPayDialog />
+                    <SmartPayDeployDialog />
+                    <SmartPayDescriptionDialog />
+                </Web3ContextProvider>
             </SNSAdaptorContext.Provider>
         )
     },
@@ -28,7 +33,9 @@ const sns: Plugin.SNSAdaptor.Definition = {
             RenderEntryComponent: (props) => {
                 return (
                     <SNSAdaptorContext.Provider value={context}>
-                        <SmartPayEntry {...props} />
+                        <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM, chainId: ChainId.Matic }}>
+                            <SmartPayEntry {...props} />
+                        </Web3ContextProvider>
                     </SNSAdaptorContext.Provider>
                 )
             },
