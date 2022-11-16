@@ -7,7 +7,7 @@ import type { AvatarMetaDB, NextIDAvatarMeta } from '../types.js'
 import { getNFTAvatarByUserId } from '../utils/index.js'
 import { useGetNFTAvatar } from './useGetNFTAvatar.js'
 
-const cache = new LRU<string, NextIDAvatarMeta>({
+const cache = new LRU<string, Promise<NextIDAvatarMeta | undefined>>({
     max: 500,
     ttl: 60 * 1000,
 })
@@ -24,11 +24,7 @@ export function usePersonaNFTAvatar(userId: string, avatarId: string, persona: s
     return useAsyncRetry(async () => {
         if (!userId) return
         const key = `${userId}-${activatedSocialNetworkUI.networkIdentifier}`
-        if (!cache.has(key)) {
-            const nftAvatar = await getNFTAvatarForCache(userId, snsKey, avatarId, persona, getNFTAvatar)
-            if (nftAvatar) cache.set(key, nftAvatar)
-        }
-
+        if (!cache.has(key)) cache.set(key, getNFTAvatarForCache(userId, snsKey, avatarId, persona, getNFTAvatar))
         return cache.get(key)
     }, [userId, getNFTAvatar, avatarId, activatedSocialNetworkUI.networkIdentifier])
 }
