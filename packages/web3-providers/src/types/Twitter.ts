@@ -52,6 +52,7 @@ export namespace TwitterBaseAPI {
         affiliates_highlighted_label: {}
         has_nft_avatar: boolean
         legacy?: {
+            id_str: string
             blocked_by: boolean
             blocking: boolean
             can_dm: boolean

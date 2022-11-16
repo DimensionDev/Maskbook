@@ -19,7 +19,7 @@ export async function getUserByScreenName(screenName: string): Promise<TwitterBa
         }),
     })
 
-    const fetchingTask: Promise<Response> = fetchCache(url, {
+    const response = await fetchCache(url, {
         headers: {
             authorization: `Bearer ${bearerToken}`,
             'x-csrf-token': csrfToken,
@@ -29,8 +29,6 @@ export async function getUserByScreenName(screenName: string): Promise<TwitterBa
             referer: `https://twitter.com/${screenName}`,
         },
     })
-
-    const response = (await fetchingTask).clone()
     if (!response.ok) return null
 
     const json: TwitterBaseAPI.UserByScreenNameResponse = await response.json()
