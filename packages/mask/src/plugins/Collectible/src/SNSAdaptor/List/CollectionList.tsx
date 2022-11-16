@@ -45,7 +45,6 @@ export const useStyles = makeStyles<CollectibleGridProps>()((theme, { columns = 
         },
         container: {
             boxSizing: 'border-box',
-            background: theme.palette.maskColor.bottom,
             paddingTop: gapIsNumber ? theme.spacing(gap) : gap,
         },
         sidebar: {
@@ -80,9 +79,6 @@ export const useStyles = makeStyles<CollectibleGridProps>()((theme, { columns = 
             marginBottom: '12px',
             minWidth: 30,
             maxHeight: 24,
-        },
-        emptyBox: {
-            background: theme.palette.maskColor.bottom,
         },
     }
 })
@@ -185,13 +181,7 @@ export function CollectionList({ socialAccount, persona, profile, gridProps = EM
 
     if ((done && !allCollectibles.length) || !account || isHiddenAddress)
         return (
-            <Box
-                display="flex"
-                flexDirection="column"
-                alignItems="center"
-                justifyContent="center"
-                height={400}
-                className={classes.emptyBox}>
+            <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" height={400}>
                 <Icons.EmptySimple size={32} />
                 <Typography color={(theme) => theme.palette.maskColor.second} fontSize="14px" marginTop="12px">
                     {t('no_NFTs_found')}
