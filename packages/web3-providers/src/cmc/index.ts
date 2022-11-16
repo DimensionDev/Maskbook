@@ -9,6 +9,7 @@ import { fetchJSON } from '../helpers.js'
 import { getCommunityLink, isMirroredKeyword } from '../trending/helpers.js'
 import type { Coin, Pair, ResultData, Status, QuotesInfo, CoinInfo } from './types.js'
 import { FuseTrendingAPI } from '../fuse/index.js'
+import { COIN_RECOMMENDATION_SIZE, LOWEST_RANK } from '../trending/constants.js'
 
 // #regin get quote info
 export async function getQuotesInfo(id: string, currency: string) {
@@ -137,7 +138,8 @@ export class CoinMarketCapAPI implements TrendingAPI.Provider<ChainId> {
         return coins
             .search(keyword)
             .map((x) => x.item)
-            .slice(0, 10)
+            .filter((y) => y.market_cap_rank && y.market_cap_rank < LOWEST_RANK)
+            .slice(0, COIN_RECOMMENDATION_SIZE)
     }
 
     async getCoinTrending(chainId: ChainId, id: string, currency: TrendingAPI.Currency): Promise<TrendingAPI.Trending> {
@@ -261,7 +263,7 @@ export class CoinMarketCapAPI implements TrendingAPI.Provider<ChainId> {
         if (stats.is_active === 0) return []
         return Object.entries(stats).map(([date, x]) => [date, x[currency.name.toUpperCase()][0]])
     }
-    getCoinMarketInfo(tokenSymbol: string): Promise<TrendingAPI.MarketInfo> {
+    getCoinMarketInfo(symbol: string): Promise<TrendingAPI.MarketInfo> {
         throw new Error('To be implemented.')
     }
 }

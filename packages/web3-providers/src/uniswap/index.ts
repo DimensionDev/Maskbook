@@ -71,7 +71,7 @@ export class UniSwapAPI implements TrendingAPI.Provider<ChainId> {
             Math.floor(endTime.getTime() / 1000),
         )
     }
-    getCoinMarketInfo(tokenSymbol: string): Promise<TrendingAPI.MarketInfo> {
+    getCoinMarketInfo(symbol: string): Promise<TrendingAPI.MarketInfo> {
         throw new Error('To be implemented.')
     }
 }
