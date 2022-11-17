@@ -159,6 +159,16 @@ export function AccountIcon({ socialAccount, classes: externalClasses }: Account
                     </AccountTooltips>
                 </Linking>
             ) : null}
+
+            {supportedAddressTypes.includes(SocialAddressType.Mask) ? (
+                <AccountTooltips type={SocialAddressType.Mask}>
+                    <Icons.MaskBlue
+                        className={cx(classes.actionIcon, classes.icon, classes.roundedIcon)}
+                        size={18}
+                        style={iconStyle}
+                    />
+                </AccountTooltips>
+            ) : null}
         </>
     )
 }
