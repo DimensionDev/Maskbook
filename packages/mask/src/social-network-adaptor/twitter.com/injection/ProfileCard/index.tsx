@@ -64,10 +64,15 @@ function ProfileCardHolder() {
         }
     }, [twitterId])
 
+    const handleClick = (e) => {
+        e.preventDefault()
+        e.stopPropagation()
+    }
+
     const { value: resolvedIdentity, loading: resolving } = useSocialIdentity(identity)
 
     return (
-        <div className={classes.root} style={style} ref={holderRef}>
+        <div className={classes.root} style={style} ref={holderRef} onClick={handleClick}>
             {loading || resolving ? (
                 <div className={classes.loading}>
                     <LoadingBase size={36} />
