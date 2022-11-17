@@ -109,7 +109,7 @@ export function formatCurrency(
             .join('')
     }
 
-    return digitalCurrencyModifier(formatter.formatToParts(bgValue.toNumber()), resolvedSymbols)
+    return digitalCurrencyModifierValues
         .map(({ type, value }) => {
             switch (type) {
                 case 'currency':
