@@ -54,7 +54,19 @@ export class Base implements Translator {
         } catch (err) {
             console.error(err)
         }
-        context.config = config
+
+        const overrideMaxFeePerGas = context.requestOptions?.overrides?.maxFeePerGas
+        const overrideMaxPriorityFeePerGas = context.requestOptions?.overrides?.maxPriorityFeePerGas
+        const overrideGasPrice = context.requestOptions?.overrides?.gasPrice
+
+        context.config = {
+            ...config,
+            maxFeePerGas: overrideMaxFeePerGas ? toHex(overrideMaxFeePerGas) : config.maxFeePerGas,
+            maxPriorityFeePerGas: overrideMaxPriorityFeePerGas
+                ? toHex(overrideMaxPriorityFeePerGas)
+                : config.maxPriorityFeePerGas,
+            gasPrice: overrideGasPrice ? toHex(overrideGasPrice) : config.gasPrice,
+        }
         // #endregion
     }
 
