@@ -14,6 +14,7 @@ export const resolveNextIDPlatformIcon = createLookupTableResolver<NextIDPlatfor
         [NextIDPlatform.LENS]: <Icons.LensBlackWhite width={20} height={20} />,
         [NextIDPlatform.REDDIT]: <Icons.RedditRoundBlackWhite width={20} height={20} />,
         [NextIDPlatform.SYBIL]: <></>,
+        [NextIDPlatform.EthLeaderboard]: <></>,
     },
     () => {
         return <></>

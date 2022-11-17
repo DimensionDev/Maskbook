@@ -19,7 +19,9 @@ export function usePayloadFromTokenSearchKeyword(pluginID?: NetworkPluginID, key
 
     const nonFungibleAssetName = nonFungibleAsset?.trending?.coin.symbol || nonFungibleAsset?.trending?.coin.name
     const isNFT = !!nonFungibleAssetName
-    const presetDataProviders = isNFT ? [DataProvider.NFTScan] : undefined
+    const presetDataProviders = isNFT
+        ? [DataProvider.NFTScan]
+        : [DataProvider.CoinGecko, DataProvider.CoinMarketCap, DataProvider.UniswapInfo]
 
     return {
         name: searchedContractAddress ? (isNFT ? nonFungibleAssetName : fungibleAsset?.name ?? '') : name,
