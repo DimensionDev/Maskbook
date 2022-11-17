@@ -1,10 +1,18 @@
 import type { AbiItem } from 'web3-utils'
 import { BundlerAPI, SmartPayBundler } from '@masknet/web3-providers'
-import { ChainId, createContract, EthereumMethodType, ProviderType, UserOperation } from '@masknet/web3-shared-evm'
+import {
+    createContract,
+    EthereumMethodType,
+    isValidAddress,
+    ProviderType,
+    UserOperation,
+} from '@masknet/web3-shared-evm'
 import WalletABI from '@masknet/web3-contracts/abis/Wallet.json'
 import type { Wallet as WalletContract } from '@masknet/web3-contracts/types/Wallet.js'
 import { Web3StateSettings } from '../../../settings/index.js'
 import type { Middleware, Context } from '../types.js'
+import { Providers } from '../provider.js'
+import type { BaseHostedProvider } from '../providers/BaseHosted.js'
 
 export class SCWallet implements Middleware<Context> {
     constructor(protected bundler: BundlerAPI.Provider) {}
@@ -28,18 +36,29 @@ export class SCWallet implements Middleware<Context> {
     }
 
     async fn(context: Context, next: () => Promise<void>) {
+        const provider = Providers[context.providerType] as BaseHostedProvider | undefined
+
+        // not a sc provider
+        if (!provider) {
+            await next()
+            return
+        }
+
         switch (context.request.method) {
             case EthereumMethodType.ETH_CHAIN_ID:
-                context.write(ChainId.Mainnet)
+                context.write(provider.chainId)
                 break
             case EthereumMethodType.ETH_ACCOUNTS:
-                context.write([])
+                if (isValidAddress(provider.account)) {
+                    context.write([provider.account])
+                } else {
+                    context.abort(new Error('Please connect wallet.'))
+                }
                 break
             case EthereumMethodType.ETH_GET_TRANSACTION_COUNT:
                 try {
                     const web3 = await this.createWeb3(context)
                     const wallet = createContract<WalletContract>(web3, context.account, WalletABI as AbiItem[])
-
                     context.write(await wallet?.methods.nonce())
                 } catch (error) {
                     context.abort(error)
