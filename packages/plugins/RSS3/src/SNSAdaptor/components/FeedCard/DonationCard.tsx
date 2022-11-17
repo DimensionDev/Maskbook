@@ -1,5 +1,5 @@
-import { Image } from '@masknet/shared'
-import { makeStyles, Markdown } from '@masknet/theme'
+import { Image, Markdown } from '@masknet/shared'
+import { makeStyles } from '@masknet/theme'
 import { RSS3BaseAPI } from '@masknet/web3-providers'
 import { Typography } from '@mui/material'
 import { FC, HTMLProps, memo, useState } from 'react'
@@ -149,7 +149,9 @@ export const DonationCard: FC<DonationCardProps> = ({ feed, actionIndex, classNa
                     />
                 </Typography>
                 <Image classes={{ container: classes.image }} src={metadata!.logo} width="100%" />
-                <Markdown className={mdClasses.markdown}>{metadata!.description}</Markdown>
+                <Markdown className={mdClasses.markdown} defaultStyle={false}>
+                    {metadata!.description}
+                </Markdown>
             </CardFrame>
         )
     }

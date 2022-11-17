@@ -184,6 +184,9 @@ export function formatTimestamp(timestamp: string): string {
     return plural(mins, 'min')
 }
 
+/**
+ * @deprecated
+ */
 export function transformPlanetResource(markdown: string, base: string) {
     return markdown
         .replace(/(<img [^>]*)\bsrc=("|')([^"']*)\2([^>]*>)/gi, (match, before, quotation, url, after) => {
