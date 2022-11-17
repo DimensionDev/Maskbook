@@ -434,7 +434,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
                                                     <AccountIcon socialAccount={x} />
                                                 </div>
                                                 {isSameAddress(selectedAddress, x.address) && (
-                                                    <Icons.CheckCircle className={classes.selectedIcon} />
+                                                    <Icons.CheckCircle size={20} className={classes.selectedIcon} />
                                                 )}
                                             </MenuItem>
                                         )
