@@ -35,7 +35,7 @@ const useStyles = makeStyles()((theme) => ({
         flexDirection: 'column',
         overflow: 'hidden',
         flexGrow: 1,
-        margin: theme.spacing(4, 0, 0),
+        margin: theme.spacing(2, 0, 0),
     },
     statusBox: {
         display: 'flex',
