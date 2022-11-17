@@ -33,24 +33,6 @@ export async function fetchJSON<T = unknown>(
     return res.json()
 }
 
-export async function fetchCache(info: RequestInfo, init?: RequestInit) {
-    const request = new Request(info, init)
-
-    if (request.method !== 'GET') return fetch(request)
-    if (!request.url.startsWith('http')) return fetch(request)
-
-    const { host } = new URL(request.url)
-    const cache = await caches.open(host)
-    const hit = await cache.match(request)
-    if (hit) return hit
-
-    const response = await fetch(request)
-    if (response.ok && response.status === 200) {
-        await cache.put(request.clone(), response.clone())
-    }
-    return response
-}
-
 export function getAllEVMNativeAssets(): Array<FungibleAsset<ChainId, SchemaType>> {
     return NETWORK_DESCRIPTORS.filter((x) => x.isMainnet).map((x) => ({
         ...createNativeToken(x.chainId),
