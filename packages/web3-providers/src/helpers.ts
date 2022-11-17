@@ -59,7 +59,11 @@ export async function staleCache(info: RequestInfo, init?: RequestInit) {
 
     const { host } = new URL(request.url)
     const cache = await caches.open(host)
+    const hit = await cache.match(request)
+    if (!hit) return
+
     await cache.delete(request)
+    return hit
 }
 
 export function getAllEVMNativeAssets(): Array<FungibleAsset<ChainId, SchemaType>> {
