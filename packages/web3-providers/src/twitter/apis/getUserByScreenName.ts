@@ -1,9 +1,9 @@
 import urlcat from 'urlcat'
 import { getTokens } from './getTokens.js'
 import type { TwitterBaseAPI } from '../../types/index.js'
-import { fetchCache } from '../../helpers.js'
+import { fetchCache, staleCache } from '../../helpers.js'
 
-export async function getUserByScreenName(screenName: string): Promise<TwitterBaseAPI.User | null> {
+async function createRequest(screenName: string) {
     const { bearerToken, csrfToken, queryId } = await getTokens('UserByScreenName')
     const url = urlcat('https://twitter.com/i/api/graphql/:queryId/UserByScreenName', {
         queryId,
@@ -19,7 +19,7 @@ export async function getUserByScreenName(screenName: string): Promise<TwitterBa
         }),
     })
 
-    const response = await fetchCache(url, {
+    return new Request(url, {
         headers: {
             authorization: `Bearer ${bearerToken}`,
             'x-csrf-token': csrfToken,
@@ -29,7 +29,21 @@ export async function getUserByScreenName(screenName: string): Promise<TwitterBa
             referer: `https://twitter.com/${screenName}`,
         },
     })
+}
+
+export async function getUserByScreenName(screenName: string): Promise<TwitterBaseAPI.User | null> {
+    const request = await createRequest(screenName)
+    const response = await fetchCache(request)
     if (!response.ok) return null
+
+    const json: TwitterBaseAPI.UserByScreenNameResponse = await response.json()
+    return json.data.user.result
+}
+
+export async function staleUserByScreenName(screenName: string): Promise<TwitterBaseAPI.User | null> {
+    const request = await createRequest(screenName)
+    const response = await staleCache(request)
+    if (!response?.ok) return null
 
     const json: TwitterBaseAPI.UserByScreenNameResponse = await response.json()
     return json.data.user.result

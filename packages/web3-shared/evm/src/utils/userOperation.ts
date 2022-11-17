@@ -5,14 +5,14 @@ import type { Transaction, UserOperation } from '../types/index.js'
  * @param transaction
  */
 export function encodeUserOperation(transaction: Transaction): UserOperation {
-    throw new Error('To be implemented')
+    throw new Error('Method not implemented.')
 }
 
 /**
  * Decode UserOperation to a normal transaction (only in-memory transaction will not send as transaction)
  */
 export function decodeUserOperation(userOperation: UserOperation): Transaction {
-    throw new Error('To be implemented')
+    throw new Error('Method not implemented.')
 }
 
 /**
@@ -20,5 +20,5 @@ export function decodeUserOperation(userOperation: UserOperation): Transaction {
  * @param transaction
  */
 export function decodeUserOperations(transaction: Transaction): UserOperation[] {
-    throw new Error('To be implemented')
+    throw new Error('Method not implemented.')
 }

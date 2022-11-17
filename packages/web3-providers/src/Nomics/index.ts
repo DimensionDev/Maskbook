@@ -5,13 +5,13 @@ import type { ChainId } from '@masknet/web3-shared-evm'
 
 export class NomicsAPI implements TrendingAPI.Provider<ChainId> {
     getAllCoins(): Promise<TrendingAPI.Coin[]> {
-        throw new Error('To be implemented.')
+        throw new Error('Method not implemented.')
     }
     getCoinsByKeyword(chainId: ChainId, keyword: string): Promise<TrendingAPI.Coin[]> {
-        throw new Error('To be implemented.')
+        throw new Error('Method not implemented.')
     }
     getCoinTrending(chainId: ChainId, id: string, currency: TrendingAPI.Currency): Promise<TrendingAPI.Trending> {
-        throw new Error('To be implemented.')
+        throw new Error('Method not implemented.')
     }
     getCoinPriceStats(
         chainId: ChainId,
@@ -19,7 +19,7 @@ export class NomicsAPI implements TrendingAPI.Provider<ChainId> {
         currency: TrendingAPI.Currency,
         days: number,
     ): Promise<TrendingAPI.Stat[]> {
-        throw new Error('To be implemented.')
+        throw new Error('Method not implemented.')
     }
     async getCoinMarketInfo(symbol: string): Promise<TrendingAPI.MarketInfo> {
         const response = await fetchJSON<{ items: TrendingAPI.MarketInfo[] } | undefined>(
