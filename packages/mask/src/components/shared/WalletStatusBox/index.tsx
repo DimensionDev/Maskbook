@@ -126,14 +126,6 @@ export function WalletStatusBox(props: WalletStatusBox) {
     const { pluginID } = useNetworkContext()
     const { account, chainId, ...rest } = useChainContext()
 
-    console.log('DEBUG: useChainContext')
-    console.log({
-        pluginID,
-        account,
-        chainId,
-        ...rest,
-    })
-
     const chainIdValid = useChainIdValid()
     const wallet = useWallet()
     const { value: balance = '0', loading: loadingBalance } = useBalance()
