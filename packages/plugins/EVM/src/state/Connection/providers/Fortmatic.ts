@@ -1,7 +1,8 @@
-import Fortmatic from 'fortmatic'
+import { first } from 'lodash-es'
 import { toHex } from 'web3-utils'
 import type { RequestArguments } from 'web3-core'
-import { first } from 'lodash-es'
+import { timeout } from '@masknet/kit'
+import Fortmatic from 'fortmatic'
 import type { FmProvider } from 'fortmatic/dist/cjs/src/core/fm-provider.js'
 import { ChainId, chainResolver, getRPCConstants, ProviderType } from '@masknet/web3-shared-evm'
 import { createLookupTableResolver } from '@masknet/shared-base'
@@ -127,9 +128,14 @@ export default class FortmaticProvider extends BaseProvider implements EVM_Provi
     }
 
     override async disconnect() {
-        await this.logout()
-        this.chainId_ = null
-        this.onDisconnect()
+        try {
+            await timeout(this.logout(), 3000)
+        } catch {
+            // do nothing
+        } finally {
+            this.chainId_ = null
+            this.onDisconnect()
+        }
     }
 
     override request<T extends unknown>(requestArguments: RequestArguments) {

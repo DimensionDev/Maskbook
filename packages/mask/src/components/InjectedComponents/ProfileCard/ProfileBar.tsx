@@ -218,7 +218,7 @@ export const ProfileBar = memo<ProfileBarProps>(
                                     <AccountIcon socialAccount={x} />
                                 </div>
                                 {isSameAddress(address, x.address) && (
-                                    <Icons.CheckCircle className={classes.selectedIcon} />
+                                    <Icons.CheckCircle size={20} className={classes.selectedIcon} />
                                 )}
                             </MenuItem>
                         )

@@ -141,7 +141,7 @@ export function NFTListDialog(props: NFTListDialogProps) {
         retry,
     } = useNonFungibleAssets(selectedPluginId, undefined, {
         chainId: actualChainId,
-        account: '0x790116d0685eB197B886DAcAD9C247f785987A4a',
+        account: selectedAccount,
     })
 
     useEffect(() => {

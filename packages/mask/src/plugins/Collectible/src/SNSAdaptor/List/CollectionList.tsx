@@ -58,7 +58,6 @@ export const useStyles = makeStyles<CollectibleGridProps>()((theme, { columns = 
             lineHeight: '36px',
             paddingLeft: '8px',
         },
-        emptyBox: {},
         networkSelected: {
             width: 24,
             height: 24,

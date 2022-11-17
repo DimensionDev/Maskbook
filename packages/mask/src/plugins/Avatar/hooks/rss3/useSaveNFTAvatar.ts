@@ -4,8 +4,10 @@ import type { RSS3_KEY_SNS } from '../../constants.js'
 import type { AvatarMetaDB } from '../../types.js'
 import { useSaveAvatarToRSS3 } from './useSaveNFTAvatarToRSS3.js'
 import { useSaveAddress } from '../save/useSaveAddress.js'
+import { useChainContext } from '@masknet/web3-hooks-base'
 
 export function useSaveNFTAvatar() {
+    const chainId = useChainContext()
     const saveAvatarToRSS3 = useSaveAvatarToRSS3()
     const saveAddress = useSaveAddress()
     return useCallback(
@@ -16,9 +18,14 @@ export function useSaveNFTAvatar() {
             snsKey: RSS3_KEY_SNS,
             pluginID?: NetworkPluginID,
         ) => {
-            const avatar = await saveAvatarToRSS3(address, nft, '', snsKey)
-            await saveAddress(nft.userId, pluginID ?? NetworkPluginID.PLUGIN_EVM, address, network)
-            return avatar
+            try {
+                const avatar = await saveAvatarToRSS3(address, nft, '', snsKey)
+                await saveAddress(nft.userId, pluginID ?? NetworkPluginID.PLUGIN_EVM, address, network)
+                return avatar
+            } catch (error) {
+                console.error(error)
+                throw error
+            }
         },
         [saveAvatarToRSS3, saveAddress],
     )

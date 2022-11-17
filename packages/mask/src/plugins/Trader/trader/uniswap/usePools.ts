@@ -57,7 +57,7 @@ export function usePools(
     }, [chainId, transformed, context?.FACTORY_CONTRACT_ADDRESS])
 
     const poolContracts = usePoolContracts(
-        pluginID !== NetworkPluginID.PLUGIN_EVM ? (chainId as ChainId) : undefined,
+        pluginID === NetworkPluginID.PLUGIN_EVM ? (chainId as ChainId) : undefined,
         poolAddresses,
     )
 
@@ -67,14 +67,14 @@ export function usePools(
         poolContracts,
         Array.from<'slot0'>({ length: poolContracts.length }).fill('slot0'),
         [],
-        pluginID !== NetworkPluginID.PLUGIN_EVM ? (chainId as ChainId) : undefined,
+        pluginID === NetworkPluginID.PLUGIN_EVM ? (chainId as ChainId) : undefined,
         targetBlockNumber,
     )
     const [liquidities, liquiditiesCalls, liquiditiesState, liquiditiesCallback] = useMultipleContractSingleData(
         poolContracts,
         Array.from<'liquidity'>({ length: poolContracts.length }).fill('liquidity'),
         [],
-        pluginID !== NetworkPluginID.PLUGIN_EVM ? (chainId as ChainId) : undefined,
+        pluginID === NetworkPluginID.PLUGIN_EVM ? (chainId as ChainId) : undefined,
         targetBlockNumber,
     )
 

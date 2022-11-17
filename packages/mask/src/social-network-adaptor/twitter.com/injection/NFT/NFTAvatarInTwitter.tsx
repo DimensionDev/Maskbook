@@ -73,11 +73,7 @@ function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
         RSS3_KEY_SNS.TWITTER,
     )
     const { account } = useChainContext()
-    console.log('11111111111111111111111111')
-    console.log(nftAvatar)
-    console.log(nftAvatar?.userId)
     const { loading: loadingWallet, value: storage } = useWallet(nftAvatar?.userId)
-    console.log('wallet', storage?.address)
     const { value: nftInfo, loading: loadingNFTInfo } = useNFT(
         storage?.address ?? account,
         nftAvatar?.address,
@@ -86,15 +82,11 @@ function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
         nftAvatar?.chainId,
         nftAvatar?.ownerAddress,
     )
-    console.log('nft', nftInfo)
     const windowSize = useWindowSize()
     const _location = useLocation()
 
     const [updatedAvatar, setUpdatedAvatar] = useState(false)
 
-    console.log(identity)
-    console.log('avatar1', Twitter.getAvatarId(identity.avatar))
-    console.log('avatar2', nftAvatar?.avatarId)
     const showAvatar = useMemo(
         () => !!nftAvatar?.avatarId && Twitter.getAvatarId(identity.avatar) === nftAvatar.avatarId,
         [nftAvatar?.avatarId, identity.avatar],
@@ -289,13 +281,6 @@ function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
             },
             props.signal,
         )
-
-    console.log(!nftAvatar)
-    console.log(!size)
-    console.log(loadingWallet)
-    console.log(!showAvatar)
-    console.log(loadingNFTInfo)
-    console.log(!updatedAvatar)
 
     if (!nftAvatar || !size || loadingWallet || loadingNFTInfo || !showAvatar || !updatedAvatar) return null
 

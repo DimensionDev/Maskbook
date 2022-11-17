@@ -146,12 +146,6 @@ function resolveCurrentVisitingIdentityInner(
             homepage,
             isOwner,
         }
-
-        console.log('tttttttttttttttttttttttttttttttttttttttttttt')
-        console.log(user.legacy)
-        console.log(user.legacy.profile_image_url_https)
-        console.log('avatar', avatar)
-        console.log('ref', ref.value)
     }
 
     const slug = getFirstSlug()

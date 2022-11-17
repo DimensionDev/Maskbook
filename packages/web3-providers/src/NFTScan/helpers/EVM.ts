@@ -108,12 +108,12 @@ export function createNonFungibleAsset(
         schema,
         creator: {
             address: creator,
-            link: urlcat(NFTSCAN_BASE + '/:id', { id: creator }),
+            link: urlcat(NFTSCAN_BASE, creator),
         },
         owner: owner
             ? {
                   address: owner,
-                  link: urlcat(NFTSCAN_BASE + '/:id', { id: owner }),
+                  link: urlcat(NFTSCAN_BASE, owner),
               }
             : undefined,
         traits:
@@ -152,9 +152,7 @@ export function createNonFungibleAsset(
             address: asset.contract_address,
             // If collectionContext.logo_url is null, we will directly render a fallback logo instead.
             // So do not fallback to the constructed NFTScan logo url
-            iconURL: collection
-                ? collection.logo_url
-                : urlcat(NFTSCAN_LOGO_BASE + '/:id', { id: asset.contract_address + '.png' }),
+            iconURL: collection ? collection.logo_url : `${urlcat(NFTSCAN_LOGO_BASE, asset.contract_address)}.png`,
             // TODO fetch via `collections` API
             verified: false,
             createdAt: asset.mint_timestamp,

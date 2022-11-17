@@ -24,6 +24,8 @@ describe('USD Currency price format util test', () => {
         { give: 0.00000101, expected: '$0.000001' },
         { give: 0.000002, expected: '$0.000002' },
         { give: 1e-15, expected: '< $0.000001' },
+        { give: 0.9993631112, expected: '$0.999363' },
+        { give: 1.999363, expected: '$2.00' },
     ])('.format($give)', ({ give, expected }) => {
         expect(formatCurrency(give)).toBe(expected)
     })
