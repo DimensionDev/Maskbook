@@ -1,5 +1,11 @@
 # @masknet/encryption
 
+## 0.1.2
+
+### Patch Changes
+
+- 6c3a51700: fix: image path error
+
 ## 0.1.1
 
 ### Patch Changes
