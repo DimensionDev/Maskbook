@@ -21,7 +21,6 @@ export function useUniswapV2Like(
         isTrader ? inputToken : undefined,
         isTrader ? outputToken : undefined,
     )
-    console.log(trader_)
     const trader = useUniswapTradeComputed(trader_.value, inputToken, outputToken)
     const traderEstimateGas = useUniswapTradeGasLimit(trader, traderProvider)
     return { trader_, trader, traderEstimateGas }
