@@ -4,8 +4,8 @@ import type { RedPacketJSONPayload } from '../types.js'
 import { RedPacketInHistoryList } from './RedPacketInHistoryList.js'
 import { useRedPacketHistory } from './hooks/useRedPacketHistory.js'
 import { useI18N } from '../locales/index.js'
-import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { useChainContext } from '@masknet/web3-hooks-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
 import { Icons } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => {
@@ -52,8 +52,7 @@ export function RedPacketHistoryList(props: RedPacketHistoryListProps) {
     const { onSelect } = props
     const t = useI18N()
     const { classes } = useStyles()
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { value: histories, loading } = useRedPacketHistory(account, chainId)
 
     if (loading) {

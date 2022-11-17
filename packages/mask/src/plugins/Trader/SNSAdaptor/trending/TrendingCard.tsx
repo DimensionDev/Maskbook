@@ -20,7 +20,7 @@ export interface TrendingCardProps extends withClasses<'root'> {
 
 export function TrendingCard(props: TrendingCardProps) {
     const { children } = props
-    const classes = useStylesExtends(useStyles(), props)
+    const { classes } = useStylesExtends(useStyles(), props)
     return (
         <Card className={classes.root} elevation={0} component="article">
             {children}

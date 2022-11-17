@@ -1,4 +1,4 @@
-import { noop } from 'lodash-unified'
+import { noop } from 'lodash-es'
 import { PostInfoProvider, type PostInfo } from '@masknet/plugin-infra/content-script'
 import { PostActions } from '../../../components/InjectedComponents/PostActions.js'
 import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot.js'
@@ -13,6 +13,7 @@ export function createPostActionsInjector() {
         if (postInfo.actionsElement) {
             const root = createReactRootShadowed(postInfo.actionsElement.afterShadow, {
                 key: 'post-actions',
+                untilVisible: true,
                 signal,
             })
             if (postInfo.actionsElement?.realCurrent?.parentNode) {

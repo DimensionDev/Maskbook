@@ -1,4 +1,11 @@
 import { memo, ReactElement, SyntheticEvent, useCallback, useMemo, useRef, useState } from 'react'
+import { useAsync, useAsyncFn, useUpdateEffect } from 'react-use'
+import { useNavigate } from 'react-router-dom'
+import { ChevronDown } from 'react-feather'
+import { mapValues } from 'lodash-es'
+import { z as zod } from 'zod'
+import { EthereumAddress } from 'wallet.ts'
+import { BigNumber } from 'bignumber.js'
 import {
     addGasMargin,
     ChainId,
@@ -6,11 +13,12 @@ import {
     formatEthereumAddress,
     formatGweiToEther,
     formatGweiToWei,
-    NetworkType,
+    formatWeiToGwei,
     SchemaType,
 } from '@masknet/web3-shared-evm'
 import {
     formatBalance,
+    formatCurrency,
     FungibleAsset,
     isGreaterThan,
     isGreaterThanOrEqualTo,
@@ -20,42 +28,35 @@ import {
     isSameAddress,
     isZero,
     multipliedBy,
-    NetworkPluginID,
     rightShift,
 } from '@masknet/web3-shared-base'
-import { z as zod } from 'zod'
-import { EthereumAddress } from 'wallet.ts'
-import BigNumber from 'bignumber.js'
-import { useAsync, useAsyncFn, useUpdateEffect } from 'react-use'
 import { Controller, FormProvider, useForm, useFormContext } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { makeStyles } from '@masknet/theme'
 import { Box, Button, Chip, Collapse, Link, MenuItem, Popover, Typography } from '@mui/material'
 import { StyledInput } from '../../../components/StyledInput/index.js'
 import { Icons } from '@masknet/icons'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { FormattedAddress, FormattedBalance, TokenIcon, useMenuConfig } from '@masknet/shared'
-import { ChevronDown } from 'react-feather'
-import { noop } from 'lodash-unified'
 import { ExpandMore } from '@mui/icons-material'
-import { useNavigate } from 'react-router-dom'
 import { LoadingButton } from '@mui/lab'
 import { toHex } from 'web3-utils'
 import {
-    useChainId,
+    useChainContext,
     useFungibleToken,
     useFungibleTokenBalance,
     useLookupAddress,
     useNativeTokenPrice,
-    useNetworkType,
     useWallet,
     useWeb3State,
     useWeb3Connection,
     useGasOptions,
-} from '@masknet/plugin-infra/web3'
+    useNetworkContext,
+} from '@masknet/web3-hooks-base'
 import { AccountItem } from './AccountItem.js'
 import { TransferAddressError } from '../type.js'
 import { useI18N } from '../../../../../utils/index.js'
-import { useGasLimit, useTokenTransferCallback } from '@masknet/plugin-infra/web3-evm'
+import { useGasLimit, useTokenTransferCallback } from '@masknet/web3-hooks-evm'
 
 const useStyles = makeStyles()({
     container: {
@@ -117,11 +118,6 @@ const useStyles = makeStyles()({
         width: 20,
         height: 20,
     },
-    gasInput: {
-        display: 'grid',
-        gridTemplateColumns: 'repeat(2, 1fr)',
-        gap: 10,
-    },
     unit: {
         color: '#7B8192',
         fontSize: 12,
@@ -163,14 +159,12 @@ const useStyles = makeStyles()({
         fontWeight: 500,
     },
     domainName: {
-        fontSize: 14,
         fontWeight: 600,
         lineHeight: '20px',
         color: '#000000',
     },
     registeredAddress: {
         color: '#7B8192',
-        fontSize: 14,
         lineHeight: '20px',
     },
     menu: {
@@ -194,9 +188,9 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
     const { t } = useI18N()
     const { classes } = useStyles()
 
+    const { pluginID } = useNetworkContext()
     const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
-    const network = useNetworkType(NetworkPluginID.PLUGIN_EVM)
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
     const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const { value: nativeToken } = useFungibleToken(NetworkPluginID.PLUGIN_EVM)
@@ -213,9 +207,17 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
         chainId: nativeToken?.chainId,
     })
 
-    const { value: estimateGasFees } = useGasOptions(NetworkPluginID.PLUGIN_EVM, {
+    const { value: gasOptions } = useGasOptions(NetworkPluginID.PLUGIN_EVM, {
         chainId,
     })
+
+    const estimateGasFees = useMemo(() => {
+        return mapValues(gasOptions, (option) => ({
+            ...option,
+            suggestedMaxFeePerGas: formatWeiToGwei(option.suggestedMaxFeePerGas),
+            suggestedMaxPriorityFeePerGas: formatWeiToGwei(option.suggestedMaxPriorityFeePerGas),
+        }))
+    }, [gasOptions])
 
     const schema = useMemo(() => {
         return zod
@@ -319,7 +321,7 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
     // #region check address or registered address type
     useAsync(async () => {
         // Only ethereum currently supports ens
-        if (address.includes('.eth') && network !== NetworkType.Ethereum) {
+        if (address.includes('.eth') && pluginID !== NetworkPluginID.PLUGIN_EVM) {
             setAddressTip({
                 type: TransferAddressError.NETWORK_NOT_SUPPORT,
                 message: t('wallet_transfer_error_no_support_ens'),
@@ -361,6 +363,7 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
         }
     }, [
         address,
+        pluginID,
         EthereumAddress.isValid,
         registeredAddress,
         methods.clearErrors,
@@ -687,7 +690,7 @@ export const Transfer1559TransferUI = memo<Transfer1559UIProps>(
                                                         onClick={openAssetMenu}
                                                         icon={
                                                             <TokenIcon
-                                                                classes={{ icon: classes.icon }}
+                                                                className={classes.icon}
                                                                 address={selectedAsset.address ?? ''}
                                                                 name={selectedAsset.name}
                                                                 symbol={selectedAsset.symbol}
@@ -700,7 +703,7 @@ export const Transfer1559TransferUI = memo<Transfer1559UIProps>(
                                                         variant="outlined"
                                                         clickable
                                                         label={selectedAsset.symbol}
-                                                        onDelete={noop}
+                                                        onDelete={openAssetMenu}
                                                     />
                                                 ) : null}
                                             </Box>
@@ -738,10 +741,13 @@ export const Transfer1559TransferUI = memo<Transfer1559UIProps>(
                         </Typography>
                         <Typography component="span" className={classes.price}>
                             {t('popups_wallet_gas_fee_settings_usd', {
-                                usd: formatGweiToEther(Number(maxPriorityFeePerGas) ?? 0)
-                                    .times(etherPrice)
-                                    .times(gasLimit)
-                                    .toPrecision(3),
+                                usd: formatCurrency(
+                                    formatGweiToEther(Number(maxPriorityFeePerGas) ?? 0)
+                                        .times(etherPrice)
+                                        .times(gasLimit),
+                                    'USD',
+                                    { boundaries: { min: 0.01 } },
+                                ),
                             })}
                         </Typography>
                     </Typography>
@@ -765,10 +771,13 @@ export const Transfer1559TransferUI = memo<Transfer1559UIProps>(
                         </Typography>
                         <Typography component="span" className={classes.price}>
                             {t('popups_wallet_gas_fee_settings_usd', {
-                                usd: formatGweiToEther(Number(maxFeePerGas) ?? 0)
-                                    .times(etherPrice)
-                                    .times(gasLimit)
-                                    .toPrecision(3),
+                                usd: formatCurrency(
+                                    formatGweiToEther(Number(maxFeePerGas) ?? 0)
+                                        .times(etherPrice)
+                                        .times(gasLimit),
+                                    'USD',
+                                    { boundaries: { min: 0.01 } },
+                                ),
                             })}
                         </Typography>
                     </Typography>

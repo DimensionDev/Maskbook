@@ -1,25 +1,15 @@
-import type { NetworkPluginID, SocialAddressType } from '@masknet/web3-shared-base'
+import type { Web3Helper } from '@masknet/web3-helpers'
+import type { SocialAccount } from '@masknet/web3-shared-base'
 
 export enum TipsType {
     Tokens = 'tokens',
     Collectibles = 'collectibles',
 }
 
-export interface TipsAccount {
-    pluginId: NetworkPluginID
-    address: string
-    name?: string
-    type?: SocialAddressType
-    /** Verified by NextId. */
-    verified?: boolean
-    /** From SNS profile */
-    isSocialAddress?: boolean
-    last_checked_at?: string
-}
 export interface TipTask {
     recipient?: string
     recipientSnsId?: string
-    addresses: TipsAccount[]
+    accounts: Array<SocialAccount<Web3Helper.ChainIdAll>>
 }
 
 export type TipNFTKeyPair = [address: string, tokenId: string]

@@ -1,6 +1,6 @@
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import type { FungibleToken } from '@masknet/web3-shared-base'
-import type BigNumber from 'bignumber.js'
+import type { BigNumber } from 'bignumber.js'
 
 export interface JSON_PayloadInMask {
     contract_address: string

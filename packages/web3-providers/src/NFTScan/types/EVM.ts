@@ -36,9 +36,11 @@ export namespace EVM {
         twitter: string | null
         discord: string | null
         telegram: string | null
+        reddit: string | null
         github: string | null
         instagram: string | null
         medium: string | null
+        youtube: string | null
         logo_url: string
         banner_url: string
         featured_url: string
@@ -50,6 +52,7 @@ export namespace EVM {
         verified: boolean
         items_total: number
         owners_total: number
+        royalty: number
         opensea_floor_price: number
         floor_price: number
         price_symbol: string
@@ -123,15 +126,18 @@ export namespace EVM {
         trade_value: string
     }
 
+    /**
+     * Unstable API.
+     */
     export interface NFTPlatformInfo {
         description: string
         royalty: string
-        trendingVolumeAverage_24h: number
+        trendingVolumeAverage_24h?: number
         twitter: string
         total: number
-        trendingVolume_all: number
+        trendingVolume_all?: number
         email: string
-        trendingVolume_24h: number
+        trendingVolume_24h?: number
         floorPrice: number
         /** url */
         image: string
@@ -152,10 +158,11 @@ export namespace EVM {
         reddit?: string
         telegram?: string
         youtube?: string
-        trendingTotal_24h: number
+        trendingTotal_24h?: number
         name: string
         contractCreator: string
-        ownersCount: number
+        ownersCount?: number
+        pageView?: number
     }
 
     export interface SearchNFTPlatformNameResult {
@@ -165,6 +172,13 @@ export namespace EVM {
         platform: string
     }
 
+    export type CollectionTrendingRange = '1h' | '4h' | '12h' | '1d' | '3d' | '7d' | '30d' | '90d' | '1y' | 'all'
+    export interface CollectionTrendingRecord {
+        begin_timestamp: number
+        end_timestamp: number
+        average_price: number
+        volume: number
+    }
     export interface VolumeAndFloorRecord {
         /** timestamp */
         time: number

@@ -1,7 +1,6 @@
 import type { TypedMessage } from '@masknet/typed-message'
-import type { ProfileIdentifier, AESCryptoKey, EC_Public_CryptoKey } from '@masknet/shared-base'
+import type { ProfileIdentifier, AESCryptoKey, EC_Public_CryptoKey } from '@masknet/base'
 import type { PayloadParseResult, SupportedPayloadVersions } from '../payload/index.js'
-import { registerSerializableClass } from '@masknet/shared-base'
 
 export interface DecryptOptions {
     message: PayloadParseResult.Payload
@@ -147,18 +146,3 @@ export class DecryptError extends Error {
         super(message, { cause })
     }
 }
-registerSerializableClass(
-    'MaskDecryptError',
-    (x) => x instanceof DecryptError,
-    (e: DecryptError) => ({
-        cause: (e as any).cause,
-        recoverable: e.recoverable,
-        message: e.message,
-        stack: e.stack,
-    }),
-    (o) => {
-        const e = new DecryptError(o.message, o.cause, o.recoverable)
-        e.stack = o.stack
-        return e
-    },
-)

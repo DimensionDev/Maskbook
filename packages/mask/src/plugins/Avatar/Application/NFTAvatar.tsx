@@ -1,7 +1,7 @@
 import { EnhanceableSite } from '@masknet/shared-base'
 import { Avatar, Box, Stack } from '@mui/material'
-import { PointIcon } from '../assets/point.js'
-import { TwitterIcon } from '../assets/twitter.js'
+import { PointIcon } from '../assets/PointIcon.js'
+import { TwitterIcon } from '../assets/TwitterIcon.js'
 import { RainbowBox } from '../SNSAdaptor/RainbowBox.js'
 
 export const SOCIAL_MEDIA_ICON_MAPPING: Record<string, React.ReactNode> = {

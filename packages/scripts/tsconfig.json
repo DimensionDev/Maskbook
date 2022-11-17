@@ -3,13 +3,11 @@
   "compilerOptions": {
     "lib": ["ESNext"],
     "noEmit": true,
-    "moduleResolution": "NodeNext",
     "composite": false,
     "incremental": false
   },
   "ts-node": {
     "compilerOptions": {
-      "module": "NodeNext",
       "noEmit": false
     },
     "esm": true,

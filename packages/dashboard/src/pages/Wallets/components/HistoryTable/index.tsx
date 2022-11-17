@@ -6,11 +6,11 @@ import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { LoadingPlaceholder } from '../../../../components/LoadingPlaceholder/index.js'
 import { EmptyPlaceholder } from '../EmptyPlaceholder/index.js'
 import { HistoryTableRow } from '../HistoryTableRow/index.js'
-import { noop } from 'lodash-unified'
-import { useAccount, useTransactions } from '@masknet/plugin-infra/web3'
+import { noop } from 'lodash-es'
+import { useChainContext, useTransactions } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { NetworkPluginID, Transaction } from '@masknet/web3-shared-base'
-import { EMPTY_LIST } from '@masknet/shared-base'
+import { NetworkPluginID, EMPTY_LIST } from '@masknet/shared-base'
+import type { Transaction } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({
@@ -31,19 +31,6 @@ const useStyles = makeStyles()((theme) => ({
         justifyContent: 'center',
         alignItems: 'center',
     },
-    paginationItem: {
-        borderRadius: 4,
-        border: `1px solid ${MaskColorVar.lineLight}`,
-        color: MaskColorVar.textPrimary,
-        '&.Mui-selected': {
-            backgroundColor: MaskColorVar.blue,
-            color: '#ffffff',
-            border: 'none',
-            '&:hover': {
-                backgroundColor: MaskColorVar.blue,
-            },
-        },
-    },
 }))
 
 interface HistoryTableProps {
@@ -52,7 +39,7 @@ interface HistoryTableProps {
 
 export const HistoryTable = memo<HistoryTableProps>(({ selectedChainId }) => {
     const [page, setPage] = useState(0)
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { value, loading } = useTransactions(NetworkPluginID.PLUGIN_EVM, { chainId: selectedChainId })
 
     useUpdateEffect(() => {

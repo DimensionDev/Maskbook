@@ -1,4 +1,4 @@
-import { useAccount } from '@masknet/plugin-infra/web3'
+import { useChainContext } from '@masknet/web3-hooks-base'
 import { formatTokenId } from '@masknet/web3-shared-evm'
 import { makeStyles } from '@masknet/theme'
 import { useControlledDialog } from '../../../utils/index.js'
@@ -102,9 +102,8 @@ const useStyles = makeStyles()((theme, props) => ({
 interface PartsPanelProps {}
 
 export default function PartsPanel(props: PartsPanelProps) {
-    const { classes } = useStyles()
     const { t } = useContext(FindTrumanContext)
-    const account = useAccount()
+    const { account } = useChainContext()
 
     const {
         value: partsInfo,

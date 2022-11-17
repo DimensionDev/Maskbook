@@ -1,20 +1,14 @@
+import { useCallback, useState } from 'react'
 import { makeStyles } from '@masknet/theme'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { Button, DialogContent, InputBase, Typography } from '@mui/material'
-import { useCallback, useState } from 'react'
 import { InjectedDialog } from '@masknet/shared'
+import type { NetworkPluginID } from '@masknet/shared-base'
 import { useI18N } from '../../locales/index.js'
-import {
-    useAccount,
-    useChainId,
-    useCurrentWeb3NetworkPluginID,
-    useWeb3Connection,
-    useWeb3Hub,
-} from '@masknet/plugin-infra/web3'
-import type { NetworkPluginID, NonFungibleToken } from '@masknet/web3-shared-base'
+import { useChainContext, useNetworkContext, useWeb3Connection, useWeb3Hub } from '@masknet/web3-hooks-base'
+import type { NonFungibleToken } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
-    root: {},
     addNFT: {
         position: 'absolute',
         right: 20,
@@ -49,18 +43,20 @@ export interface AddNFTProps {
     expectedPluginID: NetworkPluginID
 }
 export function AddNFT(props: AddNFTProps) {
-    const { onClose, open, onAddClick, title, chainId, account, expectedPluginID } = props
+    const { onClose, open, onAddClick, title, chainId, expectedPluginID } = props
     const t = useI18N()
     const { classes } = useStyles()
     const [address, setAddress] = useState('')
     const [tokenId, setTokenId] = useState('')
     const [message, setMessage] = useState('')
     const [checking, toggleChecking] = useState(false)
-    const currentPluginId = useCurrentWeb3NetworkPluginID(expectedPluginID)
-    const _account = useAccount(expectedPluginID, account)
-    const currentChainId = useChainId(expectedPluginID, chainId)
-    const hub = useWeb3Hub(currentPluginId, { chainId: currentChainId, account: _account })
-    const connection = useWeb3Connection(currentPluginId)
+    const { pluginID: currentPluginID } = useNetworkContext(expectedPluginID)
+    const { account: currentAccount, chainId: currentChainId } = useChainContext({
+        account: props.account,
+        chainId,
+    })
+    const hub = useWeb3Hub(currentPluginID, { chainId: currentChainId, account: currentAccount })
+    const connection = useWeb3Connection(currentPluginID)
 
     const onClick = useCallback(async () => {
         if (!address) {
@@ -99,9 +95,15 @@ export function AddNFT(props: AddNFTProps) {
                 return
             }
 
-            const isOwner = await connection?.getNonFungibleTokenOwnership(address, tokenId, _account, undefined, {
-                chainId: currentChainId,
-            })
+            const isOwner = await connection?.getNonFungibleTokenOwnership(
+                address,
+                tokenId,
+                currentAccount,
+                undefined,
+                {
+                    chainId: currentChainId,
+                },
+            )
 
             if (!isOwner) {
                 setMessage(t.nft_owner_hint())
@@ -117,7 +119,7 @@ export function AddNFT(props: AddNFTProps) {
             toggleChecking(false)
             return
         }
-    }, [tokenId, address, onAddClick, onClose, currentChainId, hub, _account, connection])
+    }, [tokenId, address, onAddClick, onClose, currentChainId, hub, currentAccount, connection])
 
     const onAddressChange = useCallback((address: string) => {
         setMessage('')
@@ -145,8 +147,7 @@ export function AddNFT(props: AddNFTProps) {
                 </Button>
                 <div className={classes.input}>
                     <InputBase
-                        // Workaround for pure-react-carousel bug:
-                        // https://stackoverflow.com/questions/70434847/not-able-to-type-anything-in-input-field-inside-pure-react-carousel
+                        // Workaround for pure-react-carousel bug: https://stackoverflow.com/q/70434847
                         onClick={(e) => e.currentTarget.getElementsByTagName('input')[0].focus()}
                         sx={{ width: '100%' }}
                         placeholder={t.plugin_avatar_input_token_address()}

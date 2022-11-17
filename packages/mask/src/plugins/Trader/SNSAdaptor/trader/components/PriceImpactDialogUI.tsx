@@ -14,7 +14,7 @@ import {
 import { Icons } from '@masknet/icons'
 import { isDashboardPage } from '@masknet/shared-base'
 import { formatPercentage } from '@masknet/web3-shared-evm'
-import type BigNumber from 'bignumber.js'
+import type { BigNumber } from 'bignumber.js'
 
 const useStyles = makeStyles<{
     isDashboard: boolean

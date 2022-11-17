@@ -107,9 +107,6 @@ const useStyle = makeStyles()((theme) => ({
             paddingLeft: theme.spacing(1),
         },
     },
-    shapeContainerWithBackground: {
-        backgroundColor: theme.palette.background.paper,
-    },
 }))
 
 export interface PageFrameProps extends React.PropsWithChildren<{}> {

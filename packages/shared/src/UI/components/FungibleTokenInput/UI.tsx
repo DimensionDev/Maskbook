@@ -12,9 +12,9 @@ import {
 } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { formatBalance, FungibleToken } from '@masknet/web3-shared-base'
+import { formatBalance } from '@masknet/web3-shared-base'
 import { Icons } from '@masknet/icons'
-import { noop } from 'lodash-unified'
+import { noop } from 'lodash-es'
 import { FormattedBalance, TokenIcon, useSharedI18N } from '../../../index.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -59,8 +59,9 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.maskColor.main,
     },
     tokenIcon: {
-        width: 24,
-        height: 24,
+        width: 20,
+        height: 20,
+        marginRight: '0px !important',
     },
     selectToken: {
         backgroundColor: theme.palette.maskColor.primary,
@@ -95,7 +96,6 @@ const useStyles = makeStyles()((theme) => ({
         whiteSpace: 'nowrap',
         textOverflow: 'ellipsis',
         overflow: 'hidden',
-        fontSize: 14,
         color: theme.palette.maskColor.main,
         lineHeight: '18px',
         fontWeight: 700,
@@ -110,7 +110,7 @@ interface FungibleTokenInputUIProps extends InputBaseProps {
     label: string
     disableMax?: boolean
     isNative?: boolean
-    token?: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll> | null
+    token?: Web3Helper.FungibleTokenAll | null
     onSelectToken?: () => void
     onMaxClick: () => void
     balance: string
@@ -178,7 +178,7 @@ export const FungibleTokenInputUI = memo<FungibleTokenInputUIProps>(
                                             className={classes.chip}
                                             icon={
                                                 <TokenIcon
-                                                    classes={{ icon: classes.tokenIcon }}
+                                                    className={classes.tokenIcon}
                                                     address={token.address}
                                                     name={token.name}
                                                     chainId={token.chainId}

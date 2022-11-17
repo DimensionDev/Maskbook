@@ -16,13 +16,12 @@ import { useI18N } from '../../../../utils/index.js'
 import { ContractSection } from './ContractSection.js'
 import type { CommunityType } from '../../types/index.js'
 import { Icons } from '@masknet/icons'
-import { upperFirst } from 'lodash-unified'
+import { upperFirst } from 'lodash-es'
 import type { TrendingAPI } from '@masknet/web3-providers'
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
+import { MoreHoriz as MoreHorizIcon } from '@mui/icons-material'
 import { Linking, useMenuConfig } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
-    root: {},
     container: {
         borderRadius: 0,
         backgroundColor: 'transparent',

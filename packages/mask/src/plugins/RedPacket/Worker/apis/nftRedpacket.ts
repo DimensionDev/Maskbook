@@ -1,6 +1,6 @@
 import { getNftRedPacketConstants, chainResolver, ChainId } from '@masknet/web3-shared-evm'
 import stringify from 'json-stable-stringify'
-import { first, pick } from 'lodash-unified'
+import { first, pick } from 'lodash-es'
 import { tokenIntoMask } from '../../../ITO/SNSAdaptor/helpers.js'
 import type {
     NftRedPacketHistory,

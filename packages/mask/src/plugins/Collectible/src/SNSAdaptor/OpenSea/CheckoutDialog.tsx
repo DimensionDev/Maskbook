@@ -12,21 +12,14 @@ import {
     Link,
 } from '@mui/material'
 import { makeStyles, ActionButton } from '@masknet/theme'
-import type { Order } from 'opensea-js/lib/types'
-import { InjectedDialog } from '@masknet/shared'
+import type { Order } from 'opensea-js/lib/types.js'
+import { InjectedDialog, ActionButtonPromise, WalletConnectedBoundary } from '@masknet/shared'
 import { CrossIsolationMessages } from '@masknet/shared-base'
 import { isGreaterThan } from '@masknet/web3-shared-base'
-import {
-    useAccount,
-    useChainId,
-    useCurrentWeb3NetworkPluginID,
-    useFungibleTokenWatched,
-} from '@masknet/plugin-infra/web3'
+import { useChainContext, useNetworkContext, useFungibleTokenWatched } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { UnreviewedWarnings } from './UnreviewedWarnings.js'
 import { useI18N } from '../../../../../utils/index.js'
-import { ActionButtonPromise } from '../../../../../extension/options-page/DashboardComponents/ActionButton.js'
-import { WalletConnectedBoundary } from '../../../../../web3/UI/WalletConnectedBoundary.js'
 import { CheckoutOrder } from './CheckoutOrder.js'
 import { useOpenSea } from './hooks/useOpenSea.js'
 
@@ -39,12 +32,6 @@ const useStyles = makeStyles()((theme) => {
             display: 'flex',
             justifyContent: 'flex-end',
             padding: theme.spacing(0, 2, 2),
-        },
-        panel: {
-            marginTop: theme.spacing(2),
-            '&:first-child': {
-                marginTop: 0,
-            },
         },
         label: {},
         buttons: {
@@ -70,9 +57,8 @@ export function CheckoutDialog(props: CheckoutDialogProps) {
     const isVerified = asset?.collection?.verified ?? false
     const { t } = useI18N()
     const { classes } = useStyles()
-    const pluginID = useCurrentWeb3NetworkPluginID()
-    const account = useAccount()
-    const chainId = useChainId()
+    const { pluginID } = useNetworkContext()
+    const { account, chainId } = useChainContext()
     const opensea = useOpenSea(pluginID, chainId)
     const [unreviewedChecked, setUnreviewedChecked] = useState(false)
     const [ToS_Checked, setToS_Checked] = useState(false)

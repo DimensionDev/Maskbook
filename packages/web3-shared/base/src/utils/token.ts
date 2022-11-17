@@ -1,4 +1,4 @@
-import { keyBy, mapValues } from 'lodash-unified'
+import { keyBy, mapValues } from 'lodash-es'
 import {
     FungibleToken,
     NonFungibleToken,

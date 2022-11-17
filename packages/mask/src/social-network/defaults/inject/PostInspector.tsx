@@ -4,7 +4,7 @@ import { type PostInfo, PostInfoProvider } from '@masknet/plugin-infra/content-s
 import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot.js'
 import { PostInspector, PostInspectorProps } from '../../../components/InjectedComponents/PostInspector.js'
 import { makeStyles } from '@masknet/theme'
-import { noop } from 'lodash-unified'
+import { noop } from 'lodash-es'
 
 export function injectPostInspectorDefault<T extends string>(
     config: InjectPostInspectorDefaultConfig = {},
@@ -31,6 +31,7 @@ export function injectPostInspectorDefault<T extends string>(
         )
         const root = createReactRootShadowed(injectionPoint?.(current) ?? current.rootElement.afterShadow, {
             key: 'post-inspector',
+            untilVisible: true,
             signal,
         })
         root.render(jsx)

@@ -1,10 +1,15 @@
-import { Plugin } from '@masknet/plugin-infra'
-import { TipButton } from '../../../components/index.js'
+import { Plugin, useLastRecognizedIdentity } from '@masknet/plugin-infra'
+import { PluginGuide, PluginGuideProvider } from '@masknet/shared'
+import { EnhanceableSite, PluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
-import Guide from '../../../components/Guide.js'
 import { Stack } from '@mui/material'
+import type { FC } from 'react'
+import { activatedSocialNetworkUI } from '../../../../../social-network/ui.js'
+import { TipButton } from '../../../components/index.js'
+import { useI18N } from '../../../locales/index.js'
+import { useTipsUserGuide } from '../../../storage/index.js'
 
-const useStyles = makeStyles<{}, 'postTipsButton'>()((theme, _, refs) => ({
+const useStyles = makeStyles<{ buttonSize: number }, 'postTipsButton'>()((theme, { buttonSize }, refs) => ({
     focusingPostButtonWrapper: {
         height: 46,
     },
@@ -44,70 +49,88 @@ const useStyles = makeStyles<{}, 'postTipsButton'>()((theme, _, refs) => ({
     },
     followTipsButton: {
         position: 'absolute',
-        width: '100%',
-        height: '100%',
+        width: buttonSize,
+        height: buttonSize,
         left: 0,
         top: 0,
         borderRadius: '100%',
     },
     profileTipsButton: {
         position: 'absolute',
-        width: '100%',
-        height: '100%',
         left: 0,
         top: 0,
+        width: buttonSize,
+        height: buttonSize,
         borderRadius: '100%',
     },
 }))
 
-export const TipsRealmContent: Plugin.InjectUI<Plugin.SNSAdaptor.TipsRealmOptions> = ({
+const { TipsSlot } = Plugin.SNSAdaptor
+export const TipsRealmContent: FC<Plugin.SNSAdaptor.TipsRealmOptions> = ({
     identity,
     slot,
-    tipsAccounts,
+    accounts,
+    iconSize = 24,
+    buttonSize = 34,
     onStatusUpdate,
 }) => {
-    const { classes, cx } = useStyles({})
-    if (!identity) return null
+    const t = useI18N()
+    const { classes, cx } = useStyles({ buttonSize })
+    const lastStep = useTipsUserGuide(activatedSocialNetworkUI.networkIdentifier as EnhanceableSite)
+    const myIdentity = useLastRecognizedIdentity()
+
+    if (!identity || identity.userId === myIdentity?.identifier?.userId) return null
 
     const buttonClassMap: Record<Plugin.SNSAdaptor.TipsSlot, string> = {
-        [Plugin.SNSAdaptor.TipsSlot.FollowButton]: cx(classes.followTipsButton, classes.roundButton),
-        [Plugin.SNSAdaptor.TipsSlot.FocusingPost]: classes.postTipsButton,
-        [Plugin.SNSAdaptor.TipsSlot.Post]: classes.postTipsButton,
-        [Plugin.SNSAdaptor.TipsSlot.Profile]: cx(classes.profileTipsButton, classes.roundButton),
-        [Plugin.SNSAdaptor.TipsSlot.MirrorMenu]: classes.profileTipsButton,
-        [Plugin.SNSAdaptor.TipsSlot.MirrorEntry]: classes.postTipsButton,
+        [TipsSlot.FollowButton]: cx(classes.followTipsButton, classes.roundButton),
+        [TipsSlot.FocusingPost]: classes.postTipsButton,
+        [TipsSlot.Post]: classes.postTipsButton,
+        [TipsSlot.Profile]: cx(classes.profileTipsButton, classes.roundButton),
+        [TipsSlot.MirrorMenu]: classes.profileTipsButton,
+        [TipsSlot.MirrorEntry]: classes.postTipsButton,
     }
 
     const button = (
         <TipButton
+            accounts={accounts}
             className={buttonClassMap[slot]}
+            iconSize={iconSize}
             receiver={identity}
-            addresses={tipsAccounts}
             onStatusUpdate={onStatusUpdate}
         />
     )
 
-    if (slot === Plugin.SNSAdaptor.TipsSlot.MirrorMenu) {
+    if (slot === TipsSlot.MirrorMenu) {
         return (
-            <Guide>
-                <Stack display="inline-block" width="38px" height="38px" position="relative" top={2}>
-                    {button}
-                </Stack>
-            </Guide>
+            <PluginGuideProvider
+                value={{
+                    pluginID: PluginID.Tips,
+                    storageKey: EnhanceableSite.Mirror,
+                    // Work for migrate from old tips guide setting
+                    totalStep: lastStep.finished ? 0 : 1,
+                    guides: [
+                        {
+                            title: t.tips_guide_description(),
+                            actionText: t.tips_guide_action(),
+                        },
+                    ],
+                }}>
+                <PluginGuide step={1}>
+                    <Stack display="inline-block" width="38px" height="38px" position="relative" top={2}>
+                        {button}
+                    </Stack>
+                </PluginGuide>
+            </PluginGuideProvider>
         )
     }
 
-    if (
-        slot === Plugin.SNSAdaptor.TipsSlot.Post ||
-        slot === Plugin.SNSAdaptor.TipsSlot.FocusingPost ||
-        slot === Plugin.SNSAdaptor.TipsSlot.MirrorEntry
-    ) {
+    if (slot === TipsSlot.Post || slot === TipsSlot.FocusingPost || slot === TipsSlot.MirrorEntry) {
         return (
             <div
                 className={cx(
                     classes.postButtonWrapper,
-                    slot === Plugin.SNSAdaptor.TipsSlot.FocusingPost ? classes.focusingPostButtonWrapper : undefined,
-                    slot === Plugin.SNSAdaptor.TipsSlot.MirrorEntry ? classes.mirrorEntryTipsButtonWrapper : undefined,
+                    slot === TipsSlot.FocusingPost ? classes.focusingPostButtonWrapper : undefined,
+                    slot === TipsSlot.MirrorEntry ? classes.mirrorEntryTipsButtonWrapper : undefined,
                 )}>
                 {button}
             </div>

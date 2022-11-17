@@ -1,48 +1,54 @@
 import { memo, useState } from 'react'
 import { Avatar, AvatarProps, useTheme } from '@mui/material'
-import { makeStyles, useStylesExtends } from '@masknet/theme'
-import NO_IMAGE_COLOR from './constants.js'
+import { makeStyles } from '@masknet/theme'
+import { name2Image } from './name2Image.js'
 
-const useStyles = makeStyles()((theme) => ({
+const useStyles = makeStyles<Pick<IconProps, 'size'>>()((theme, { size }) => ({
     icon: {
         margin: 0,
         borderRadius: '50%',
+        color: `${theme.palette.maskColor.dark} !important`,
+        backgroundSize: 'cover',
+        height: size,
+        width: size,
     },
 }))
 
-export interface IconProps extends withClasses<'icon'> {
+export interface IconProps {
+    size?: number | string
     name?: string
+    label?: string
     logoURL?: string
+    className?: string
     AvatarProps?: Partial<AvatarProps>
 }
 
 export const Icon = memo<IconProps>((props) => {
-    const { logoURL, AvatarProps, name } = props
-    const [error, setError] = useState(false)
+    const { logoURL, AvatarProps, size, name, label, className } = props
+    const [failed, setFailed] = useState(false)
 
-    // add background color to no-img token icon
-    const defaultBackgroundColorNumber = name?.split('')?.reduce((total, cur) => total + Number(cur?.charCodeAt(0)), 0)
-    const defaultBackgroundColor = defaultBackgroundColorNumber
-        ? NO_IMAGE_COLOR[defaultBackgroundColorNumber % 5]
-        : undefined
-    const classes = useStylesExtends(useStyles(), props)
+    const defaultBackgroundImage = name2Image(name)
+    const { classes, cx } = useStyles({ size })
     const theme = useTheme()
+
+    const showImage = logoURL && !failed
 
     return (
         <Avatar
-            className={classes.icon}
+            className={cx(classes.icon, className)}
             src={logoURL}
             {...AvatarProps}
             imgProps={{
                 onError: () => {
-                    setError(true)
+                    setFailed(true)
                 },
             }}
             sx={{
                 ...AvatarProps?.sx,
-                backgroundColor: logoURL && !error ? theme.palette.common.white : defaultBackgroundColor,
+                backgroundImage: showImage ? undefined : `url("${defaultBackgroundImage}")`,
+                backgroundColor: showImage ? theme.palette.common.white : undefined,
             }}>
-            {name?.slice(0, 1).toUpperCase()}
+            {label ?? name?.slice(0, 1).toUpperCase()}
         </Avatar>
     )
 })

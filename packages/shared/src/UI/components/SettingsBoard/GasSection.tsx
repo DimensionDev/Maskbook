@@ -3,34 +3,28 @@ import { makeStyles, MaskTabList } from '@masknet/theme'
 import { useSharedI18N } from '@masknet/shared'
 import { TabContext } from '@mui/lab'
 import { Tab, Typography } from '@mui/material'
-import { formatBalance, GasOptionType, NetworkPluginID, scale10, isZero } from '@masknet/web3-shared-base'
-import { ChainId, formatWeiToGwei, formatGweiToWei, Transaction } from '@masknet/web3-shared-evm'
-import { useWeb3State } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { formatBalance, GasOptionType, scale10, isZero, plus } from '@masknet/web3-shared-base'
+import { ChainId, formatGweiToWei, formatWeiToGwei, Transaction } from '@masknet/web3-shared-evm'
+import { useWeb3State } from '@masknet/web3-hooks-base'
 import { GasOptionSelector } from './GasOptionSelector.js'
 import { SettingsContext } from './Context.js'
 import { Section } from './Section.js'
 import { GasForm } from './GasForm.js'
 import { GasSettingsType } from './types/index.js'
-import BigNumber from 'bignumber.js'
 
 const useStyles = makeStyles()((theme) => {
     return {
         root: {},
-        paper: {
-            boxShadow: `0px 0px 20px 0px ${theme.palette.mode === 'dark' ? '#FFFFFF1F' : '#0000000D'}`,
-            backdropFilter: 'blur(16px)',
-        },
         tabs: {
             overflow: 'visible',
         },
         additions: {
             fontWeight: 700,
-            fontSize: 14,
         },
         label: {
             color: theme.palette.maskColor.second,
             fontWeight: 700,
-            fontSize: 14,
         },
         price: {
             fontWeight: 700,
@@ -60,7 +54,7 @@ export function GasSection(props: GasSectionProps) {
         GAS_OPTION_NAMES,
     } = SettingsContext.useContainer()
     const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
-    const [maxPriorityFeePerGasByUser, setMaxPriorityFeePerGasByUser] = useState<string>()
+    const [maxPriorityFeePerGasByUser, setMaxPriorityFeePerGasByUser] = useState('0')
 
     // EVM only
     if (pluginID !== NetworkPluginID.PLUGIN_EVM) return null
@@ -69,21 +63,21 @@ export function GasSection(props: GasSectionProps) {
     const suggestedMaxFeePerGas = gasOptions?.[gasOptionType ?? GasOptionType.NORMAL].suggestedMaxFeePerGas as
         | string
         | undefined
+    const suggestedMaxPriorityFeePerGas = gasOptions?.[gasOptionType ?? GasOptionType.NORMAL]
+        .suggestedMaxPriorityFeePerGas as string | undefined
     const baseFeePerGas = gasOptions?.[GasOptionType.FAST].baseFeePerGas ?? '0'
-    const priorityFee = !isZero(maxPriorityFeePerGasByUser || 0)
-        ? maxPriorityFeePerGasByUser
-        : formatWeiToGwei((transaction as Transaction)?.maxPriorityFeePerGas as string)
+    const priorityFee = !isZero(maxPriorityFeePerGasByUser)
+        ? formatGweiToWei(maxPriorityFeePerGasByUser)
+        : ((transaction as Transaction)?.maxPriorityFeePerGas as string)
 
     const gasPrice = (transactionOptions as Transaction | undefined)?.gasPrice as string | undefined
     const customPrice = formatBalance(
         scale10(
             activeTab === GasSettingsType.Basic
-                ? suggestedMaxFeePerGas ?? 0
+                ? formatWeiToGwei(suggestedMaxFeePerGas ?? 0)
                 : formatWeiToGwei(
                       isEIP1559
-                          ? formatGweiToWei(new BigNumber(baseFeePerGas).plus(priorityFee ?? 0)) ??
-                                suggestedMaxFeePerGas ??
-                                0
+                          ? plus(baseFeePerGas, priorityFee ?? suggestedMaxPriorityFeePerGas ?? 0)
                           : gasPrice ?? suggestedMaxFeePerGas ?? 0,
                   ),
             2,

@@ -1,9 +1,9 @@
-import type { NetworkPluginID } from '@masknet/web3-shared-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import type { CollectionType } from '@masknet/web3-providers'
 
 export interface CollectionTypes {
-    platform: NetworkPluginID
+    networkPluginID: NetworkPluginID
     address: string
     /**
      * Identifier of a collection
@@ -20,9 +20,9 @@ export interface CollectionTypes {
 
 export interface WalletTypes {
     address: string
-    platform?: NetworkPluginID
+    networkPluginID: NetworkPluginID
     updateTime?: string
-    collections?: CollectionTypes[]
+    collections: CollectionTypes[]
 }
 
 export interface WalletsCollection {

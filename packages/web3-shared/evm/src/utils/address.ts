@@ -1,20 +1,20 @@
 import { EthereumAddress } from 'wallet.ts'
-import { getEnumAsArray } from '@dimensiondev/kit'
-import { isSameAddress } from '@masknet/web3-shared-base'
-import { getRedPacketConstants, getTokenConstant, ZERO_ADDRESS } from '../constants/index.js'
-import { ChainId, NetworkType, ProviderType } from '../types/index.js'
+import { getEnumAsArray } from '@masknet/kit'
 import { isPopupPage } from '@masknet/shared-base'
+import { isSameAddress } from '@masknet/web3-shared-base'
+import { getENSConstants, getRedPacketConstants, getTokenConstant, ZERO_ADDRESS } from '../constants/index.js'
+import { ChainId, NetworkType, ProviderType } from '../types/index.js'
 
 export function isEmptyHex(hex?: string) {
     return !hex || ['0x', '0x0'].includes(hex)
 }
 
-export function isValidAddress(address?: string) {
+export function isValidAddress(address?: string): address is string {
     if (!address) return false
     return EthereumAddress.isValid(address)
 }
 
-export function isValidChainId(chainId: ChainId) {
+export function isValidChainId(chainId?: ChainId) {
     return getEnumAsArray(ChainId).some((x) => x.value === chainId)
 }
 
@@ -58,6 +58,10 @@ export function getDefaultChainId() {
     return ChainId.Mainnet
 }
 
+export function getInvalidChainId() {
+    return ChainId.Invalid
+}
+
 export function getDefaultNetworkType() {
     return NetworkType.Ethereum
 }
@@ -76,4 +80,9 @@ export function getNativeTokenAddress(chainId = ChainId.Mainnet) {
 
 export function getMaskTokenAddress(chainId = ChainId.Mainnet) {
     return getTokenConstant(chainId, 'MASK_ADDRESS') ?? ''
+}
+
+export function isENSContractAddress(contract_address: string) {
+    const { ENS_CONTRACT_ADDRESS } = getENSConstants()
+    return isSameAddress(contract_address, ENS_CONTRACT_ADDRESS)
 }

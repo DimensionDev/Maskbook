@@ -3,7 +3,7 @@ import { useValueRef } from '@masknet/shared-base-ui'
 import { Chip } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import type { ChipProps } from '@mui/material/Chip'
-import Lock from '@mui/icons-material/Lock'
+import { Lock } from '@mui/icons-material'
 import { useEffect } from 'react'
 import { useAsync } from 'react-use'
 import { usePostInfoDetails } from '@masknet/plugin-infra/content-script'
@@ -23,7 +23,7 @@ const useStyle = makeStyles()({
 })
 export type PostCommentDecryptedProps = React.PropsWithChildren<{ ChipProps?: ChipProps }>
 export function PostCommentDecrypted(props: PostCommentDecryptedProps) {
-    const chipClasses = useStylesExtends(useStyle(), props.ChipProps || {})
+    const { classes } = useStylesExtends(useStyle(), props.ChipProps || {})
     return (
         <>
             <Chip
@@ -32,7 +32,7 @@ export function PostCommentDecrypted(props: PostCommentDecryptedProps) {
                 label={props.children}
                 color="secondary"
                 {...props.ChipProps}
-                classes={chipClasses}
+                classes={{ root: classes.root, label: classes.label }}
             />
         </>
     )

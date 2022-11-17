@@ -1,5 +1,5 @@
 import type { Theme } from '@mui/material'
-import { kebabCase } from 'lodash-unified'
+import { kebabCase } from 'lodash-es'
 import { LightColor, DarkColor } from './constants.js'
 
 export function getMaskColor(theme: Theme) {

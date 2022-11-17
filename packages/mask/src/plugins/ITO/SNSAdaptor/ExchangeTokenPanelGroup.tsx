@@ -1,7 +1,7 @@
 import { Fragment, useCallback, useEffect, useState } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { v4 as uuid } from 'uuid'
-import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward'
+import { ArrowDownward as ArrowDownwardIcon } from '@mui/icons-material'
 import { useI18N } from '../../../utils/index.js'
 import { ITO_EXCHANGE_RATION_MAX } from '../constants.js'
 import {
@@ -17,9 +17,6 @@ const useStyles = makeStyles()((theme) => ({
     arrow: {
         display: 'flex',
         justifyContent: 'center',
-    },
-    adornment: {
-        color: theme.palette.text.secondary,
     },
 }))
 

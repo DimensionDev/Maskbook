@@ -1,13 +1,13 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { makeStyles } from '@masknet/theme'
-import { useState, useEffect } from 'react'
+import { useMemo } from 'react'
 import { NFTAvatarButton } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatarButton.js'
-import { startWatch, createReactRootShadowed, useLocationChange } from '../../../../utils/index.js'
+import { startWatch, createReactRootShadowed } from '../../../../utils/index.js'
 import { searchEditProfileSelector } from '../../utils/selector.js'
 import { ConnectPersonaBoundary } from '../../../../components/shared/ConnectPersonaBoundary.js'
-import { PluginID } from '@masknet/plugin-infra'
-import { CrossIsolationMessages } from '@masknet/shared-base'
-import { injectOpenNFTAvatarEditProfileButtonAtEditProfileDialog } from './NFTAvatarEditProfileDialog'
+import { PluginID, CrossIsolationMessages } from '@masknet/shared-base'
+import { injectOpenNFTAvatarEditProfileButtonAtEditProfileDialog } from './NFTAvatarEditProfileDialog.js'
+import { useLocation } from 'react-use'
 
 export function injectOpenNFTAvatarEditProfileButton(signal: AbortSignal) {
     injectOpenNFTAvatarEditProfileButtonAtProfilePage(signal)
@@ -27,6 +27,8 @@ interface StyleProps {
     fontSize: number
     marginBottom: number
     color: string
+    height: number
+    fontWeight: string
 }
 const useStyles = makeStyles<StyleProps>()((theme, props) => ({
     root: {
@@ -35,9 +37,11 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         marginBottom: props.marginBottom,
         marginTop: 1,
         marginRight: theme.spacing(2),
+        height: props.height,
     },
     text: {
-        color: props.color,
+        color: theme.palette.text.buttonText,
+        fontWeight: props.fontWeight,
     },
 }))
 
@@ -46,31 +50,36 @@ export function openNFTAvatarSettingDialog() {
     editDom?.click()
 }
 
-function OpenNFTAvatarEditProfileButtonInTwitter() {
-    const [style, setStyle] = useState<StyleProps>({
-        minHeight: 32,
-        fontSize: 14,
-        marginBottom: 11,
-        color: '',
-    })
-
+function useNFTAvatarButtonStyles() {
     const setStyleFromEditProfileSelector = () => {
         const editDom = searchEditProfileSelector().evaluate()
-        if (!editDom) return
-
+        if (!editDom)
+            return {
+                minHeight: 32,
+                fontSize: 14,
+                marginBottom: 11,
+                color: '',
+                height: 36,
+                fontWeight: '400',
+            }
         const css = window.getComputedStyle(editDom)
+        const fontWeightCss = window.getComputedStyle(editDom.firstChild! as HTMLDivElement)
         const spanCss = window.getComputedStyle(editDom.querySelector('span')!)
-        setStyle({
-            minHeight: Number(css.minHeight.replace('px', '')),
-            fontSize: Number(css.fontSize.replace('px', '')),
-            marginBottom: Number(css.marginBottom.replace('px', '')),
+        return {
+            height: Number.parseFloat(css.height.replace('px', '')),
+            minHeight: Number.parseFloat(css.minHeight.replace('px', '')),
+            fontSize: Number.parseFloat(css.fontSize.replace('px', '')),
+            marginBottom: Number.parseFloat(css.marginBottom.replace('px', '')),
             color: spanCss.color,
-        })
+            fontWeight: fontWeightCss.fontWeight,
+        }
     }
-
-    useEffect(() => setStyleFromEditProfileSelector(), [])
-
-    useLocationChange(() => setStyleFromEditProfileSelector())
+    const location = useLocation()
+    const style = useMemo(() => setStyleFromEditProfileSelector(), [location])
+    return useStyles(style)
+}
+function OpenNFTAvatarEditProfileButtonInTwitter() {
+    const { classes } = useNFTAvatarButtonStyles()
 
     const clickHandler = () => {
         CrossIsolationMessages.events.applicationDialogEvent.sendToLocal({
@@ -79,7 +88,6 @@ function OpenNFTAvatarEditProfileButtonInTwitter() {
         })
     }
 
-    const { classes } = useStyles(style)
     return (
         <ConnectPersonaBoundary handlerPosition="top-right" customHint directTo={PluginID.Avatar}>
             <NFTAvatarButton classes={{ root: classes.root, text: classes.text }} onClick={clickHandler} />

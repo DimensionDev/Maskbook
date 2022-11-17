@@ -1,15 +1,8 @@
 import { useState, useMemo, ReactNode } from 'react'
 import { useTimeout } from 'react-use'
-import { Constant, NetworkPluginID } from '@masknet/web3-shared-base'
-import { ChainId } from '@masknet/web3-shared-evm'
-import {
-    makeStyles,
-    useStylesExtends,
-    useCustomSnackbar,
-    ShadowRootPopper,
-    ActionButton,
-    LoadingBase,
-} from '@masknet/theme'
+import type { Constant } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { makeStyles, useCustomSnackbar, ShadowRootPopper, ActionButton, LoadingBase } from '@masknet/theme'
 import { useValueRef } from '@masknet/shared-base-ui'
 import {
     Typography,
@@ -28,12 +21,11 @@ import { initMeta, initCollection, GLB3DIcon, PetsPluginID } from '../constants.
 import { PreviewBox } from './PreviewBox.js'
 import { PetMetaDB, FilterContract, OwnerERC721TokenInfo, ImageType } from '../types.js'
 import { useUser, useNFTs } from '../hooks/index.js'
-import { PluginWalletStatusBar } from '../../../utils/index.js'
+import { PluginWalletStatusBar } from '@masknet/shared'
 import { useI18N } from '../locales/index.js'
 import { ImageLoader } from './ImageLoader.js'
 import { petShowSettings } from '../settings.js'
-import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
-import { useWeb3Connection, useWeb3State } from '@masknet/plugin-infra/web3'
+import { useWeb3Connection, useWeb3State } from '@masknet/web3-hooks-base'
 import { Icons } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => ({
@@ -55,14 +47,6 @@ const useStyles = makeStyles()((theme) => ({
     },
     inputOption: {
         margin: theme.spacing(4, 0, 0),
-    },
-    inputBorder: {
-        borderRadius: theme.spacing(1),
-        padding: theme.spacing(1),
-    },
-    inputArea: {
-        borderRadius: theme.spacing(1),
-        padding: theme.spacing(2),
     },
     menuItem: {
         width: '100%',
@@ -98,14 +82,6 @@ const useStyles = makeStyles()((theme) => ({
         maxWidth: '260px',
         overflow: 'hidden',
     },
-    prevBox: {
-        margin: theme.spacing(2, 0, 0),
-        border: '1px dashed #ccc',
-        borderRadius: 4,
-        height: 'calc(100% - 16px)',
-        boxSizing: 'border-box',
-        padding: 4,
-    },
     boxPaper: {
         backgroundColor: theme.palette.mode === 'dark' ? '#1B1E38' : '#FFFFFF',
         marginBottom: 10,
@@ -113,9 +89,6 @@ const useStyles = makeStyles()((theme) => ({
     },
     icon: {
         margin: theme.spacing(0, 1),
-    },
-    RSS3Icon: {
-        color: theme.palette.mode === 'light' ? '#000' : '#fff',
     },
     arrowIcon: {
         width: 22.5,
@@ -132,7 +105,7 @@ interface PetSetDialogProps {
 
 export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
     const t = useI18N()
-    const classes = useStylesExtends(useStyles(), {})
+    const { classes } = useStyles()
     const theme = useTheme()
     const { showSnackbar } = useCustomSnackbar()
     const [loading, setLoading] = useState(false)
@@ -371,7 +344,7 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
                         {t.pets_powered_by()}
                     </Typography>
                     <Typography color="textPrimary" fontSize={14} fontWeight={700}>
-                        MintTeam
+                        NFF
                     </Typography>
                     <Icons.Pets className={classes.icon} />
                     <Typography fontSize={14} color="textSecondary" fontWeight={700} className={classes.des}>
@@ -385,23 +358,14 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
             </Box>
 
             <PluginWalletStatusBar>
-                <ChainBoundary
-                    expectedPluginID={NetworkPluginID.PLUGIN_EVM}
-                    expectedChainId={ChainId.Mainnet}
-                    predicate={(actualPluginID) => actualPluginID === NetworkPluginID.PLUGIN_EVM}
-                    noSwitchNetworkTip
-                    ActionButtonPromiseProps={{
-                        fullWidth: true,
-                    }}>
-                    <ActionButton
-                        loading={loading}
-                        fullWidth
-                        className={classes.btn}
-                        onClick={saveHandle}
-                        disabled={!collection.name || !metaData.image}>
-                        {t.pets_dialog_btn()}
-                    </ActionButton>
-                </ChainBoundary>
+                <ActionButton
+                    loading={loading}
+                    fullWidth
+                    className={classes.btn}
+                    onClick={saveHandle}
+                    disabled={!collection.name || !metaData.image}>
+                    {t.pets_dialog_btn()}
+                </ActionButton>
             </PluginWalletStatusBar>
 
             <Snackbar

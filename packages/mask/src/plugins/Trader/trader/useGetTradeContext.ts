@@ -36,11 +36,11 @@ import {
     YUMISWAP_BASE_AGAINST_TOKENS,
     YUMISWAP_CUSTOM_BASES,
 } from '../constants/index.js'
-import { unreachable } from '@dimensiondev/kit'
-import { useChainId } from '@masknet/plugin-infra/web3'
+import { unreachable } from '@masknet/kit'
+import { useChainContext } from '@masknet/web3-hooks-base'
 
 export function useGetTradeContext(tradeProvider?: TradeProvider) {
-    const chainId = useChainId()
+    const { chainId } = useChainContext()
     return useMemo<TradeContext_ | null>(() => {
         const DEX_TRADE = getTraderConstants(chainId)
         switch (tradeProvider) {

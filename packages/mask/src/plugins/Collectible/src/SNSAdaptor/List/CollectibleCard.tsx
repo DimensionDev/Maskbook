@@ -3,8 +3,8 @@ import { Box, Card } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { AssetPreviewer, NetworkIcon } from '@masknet/shared'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import type { NetworkPluginID, NonFungibleAsset } from '@masknet/web3-shared-base'
-import { CrossIsolationMessages } from '@masknet/shared-base'
+import type { NonFungibleAsset } from '@masknet/web3-shared-base'
+import { CrossIsolationMessages, NetworkPluginID } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -22,19 +22,6 @@ const useStyles = makeStyles()((theme) => ({
         backgroundColor: theme.palette.mode === 'light' ? '#F7F9FA' : '#2F3336',
         width: '100%',
         height: '100%',
-    },
-    icon: {
-        top: theme.spacing(1),
-        right: theme.spacing(1),
-        position: 'absolute',
-        zIndex: 1,
-        backgroundColor: `${theme.palette.background.paper} !important`,
-    },
-    placeholderIcon: {
-        color: theme.palette.mode === 'dark' ? 'rgb(255, 255, 255)' : 'rgb(15, 20, 25)',
-        width: 64,
-        height: 64,
-        opacity: 0.1,
     },
     fallbackImage: {
         minHeight: '0 !important',

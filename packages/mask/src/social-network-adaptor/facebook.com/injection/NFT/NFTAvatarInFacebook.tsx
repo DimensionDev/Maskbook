@@ -1,11 +1,11 @@
+import { useEffect, useLayoutEffect, useMemo, useState } from 'react'
+import { useAsync, useLocation, useWindowSize } from 'react-use'
+import { max, pickBy } from 'lodash-es'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { searchFacebookAvatarOnMobileSelector, searchFacebookAvatarSelector } from '../../utils/selector.js'
 import { createReactRootShadowed, MaskMessages, startWatch } from '../../../../utils/index.js'
-import { useEffect, useLayoutEffect, useMemo, useState } from 'react'
-import type { EnhanceableSite, NFTAvatarEvent } from '@masknet/shared-base'
-import { max, pickBy } from 'lodash-unified'
+import { EnhanceableSite, NFTAvatarEvent, NetworkPluginID } from '@masknet/shared-base'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI.js'
-import { useAsync, useLocation, useWindowSize } from 'react-use'
 import type { AvatarMetaDB } from '../../../../plugins/Avatar/types.js'
 import { getAvatarId } from '../../utils/user.js'
 import { useNFT, useNFTAvatar, useSaveNFTAvatar } from '../../../../plugins/Avatar/hooks/index.js'
@@ -14,9 +14,8 @@ import { makeStyles } from '@masknet/theme'
 import { isMobileFacebook } from '../../utils/isMobile.js'
 import { InMemoryStorages } from '../../../../../shared/index.js'
 import { RSS3_KEY_SNS } from '../../../../plugins/Avatar/constants.js'
-import { useAccount } from '@masknet/plugin-infra/web3'
+import { useChainContext } from '@masknet/web3-hooks-base'
 import { useWallet } from '../../../../plugins/Avatar/hooks/useWallet.js'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 export function injectNFTAvatarInFacebook(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchFacebookAvatarSelector())
@@ -65,7 +64,7 @@ function NFTAvatarInFacebook() {
     const identity = useCurrentVisitingIdentity()
     const location = useLocation()
     const { value: nftAvatar } = useNFTAvatar(identity.identifier?.userId, RSS3_KEY_SNS.FACEBOOK)
-    const account = useAccount()
+    const { account } = useChainContext()
     const { loading: loadingWallet, value: storage } = useWallet(nftAvatar?.userId)
     const { value: nftInfo, loading: loadingNFTInfo } = useNFT(
         storage?.address ?? account,
@@ -150,7 +149,7 @@ function NFTAvatarInFacebook() {
                         address: storages.address.value,
                         avatarId: getAvatarId(identity.avatar ?? ''),
                         chainId: storages.chainId.value,
-                        pluginId: storages.pluginId.value,
+                        pluginID: storages.pluginID.value,
                         schema: storages.schema.value,
                     } as AvatarMetaDB,
                     identity.identifier.network as EnhanceableSite,

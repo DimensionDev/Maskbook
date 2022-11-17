@@ -1,14 +1,14 @@
+import { Icons } from '@masknet/icons'
+import { InjectedDialog, InjectedDialogProps } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
+import { useNetworkContext, useNonFungibleAsset, useWeb3State } from '@masknet/web3-hooks-base'
+import { SourceType } from '@masknet/web3-shared-base'
 import { Box, Button, DialogActions, DialogContent, Typography } from '@mui/material'
 import type { FC, PropsWithChildren } from 'react'
-import { InjectedDialog, InjectedDialogProps } from '@masknet/shared'
-import { TargetRuntimeContext, useTip } from '../../contexts/index.js'
-import { TipsType } from '../../types/tip.js'
-import { Icons } from '@masknet/icons'
-import { useI18N } from '../../locales/index.js'
-import { useNonFungibleAsset, useWeb3State } from '@masknet/plugin-infra/web3'
-import { SourceType } from '@masknet/web3-shared-base'
 import { CollectibleCard } from '../../../../extension/options-page/DashboardComponents/CollectibleList/CollectibleCard.js'
+import type { TipContextOptions } from '../../contexts/index.js'
+import { useI18N } from '../../locales/index.js'
+import { TipsType } from '../../types/tip.js'
 
 const useStyles = makeStyles()((theme) => ({
     confirmDialog: {
@@ -68,17 +68,29 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-interface Props extends PropsWithChildren<InjectedDialogProps> {
+export interface ConfirmModalProps
+    extends PropsWithChildren<InjectedDialogProps>,
+        Pick<TipContextOptions, 'amount' | 'tipType' | 'token' | 'nonFungibleTokenContract' | 'nonFungibleTokenId'> {
     confirmText?: string
     onConfirm?(): void
 }
 
-export const ConfirmModal: FC<Props> = ({ className, confirmText, onConfirm, children, ...rest }) => {
+export const ConfirmModal: FC<ConfirmModalProps> = ({
+    className,
+    confirmText,
+    onConfirm,
+    children,
+    amount,
+    tipType,
+    token,
+    nonFungibleTokenContract,
+    nonFungibleTokenId,
+    ...rest
+}) => {
     const { Others } = useWeb3State()
     const { classes } = useStyles()
     const t = useI18N()
-    const { amount, tipType, token, nonFungibleTokenContract, nonFungibleTokenId } = useTip()
-    const { pluginId } = TargetRuntimeContext.useContainer()
+    const { pluginID } = useNetworkContext()
     confirmText = confirmText || 'Confirm'
     const isTokenTip = tipType === TipsType.Tokens
     const { value: nonFungibleToken } = useNonFungibleAsset(
@@ -124,7 +136,7 @@ export const ConfirmModal: FC<Props> = ({ className, confirmText, onConfirm, chi
                                         readonly
                                         disableLink
                                         renderOrder={0}
-                                        pluginID={pluginId}
+                                        pluginID={pluginID}
                                     />
                                 </div>
                                 <div className={classes.nftName}>

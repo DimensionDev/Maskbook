@@ -14,3 +14,4 @@ export const DashboardContextDefault = {
 }
 
 export const DashboardContext = createContext<DashboardState>(DashboardContextDefault)
+DashboardContext.displayName = 'DashboardContext'

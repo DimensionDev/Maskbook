@@ -1,5 +1,5 @@
 import { ValueRef } from '@dimensiondev/holoflows-kit'
-import { defer } from '@dimensiondev/kit'
+import { defer } from '@masknet/kit'
 import { MaskMessages } from '../messages.js'
 
 /** @deprecated */
@@ -20,7 +20,7 @@ const lastEventId: Map<string, number> = new Map()
 
 export function setupLegacySettingsAtBackground(
     __deprecated__getStorage: (key: string) => Promise<unknown>,
-    __deprecated__setStorage: (key: string, val: browser.storage.StorageValue) => Promise<void>,
+    __deprecated__setStorage: (key: string, val: unknown) => Promise<void>,
 ) {
     MaskMessages.events.createInternalSettingsChanged.on(async (payload) => {
         const { id, key, value, initial } = payload
@@ -48,11 +48,7 @@ MaskMessages.events.createInternalSettingsUpdated.on(async (payload) => {
     settings.resolve(settings.value)
 })
 
-function createComplexInternalSettings<T extends browser.storage.StorageValue>(
-    key: string,
-    value: T,
-    comparer: ValueComparer<T>,
-) {
+function createComplexInternalSettings<T>(key: string, value: T, comparer: ValueComparer<T>) {
     const settings = new ValueRef(value, comparer) as InternalSettings<T>
     const [readyPromise, resolve, reject] = defer<T>()
     Object.assign(settings, {
@@ -104,11 +100,7 @@ export function createInternalSettings(key: string, defaultValue: any): Internal
  * @deprecated
  * @internal
  */
-export function createComplexGlobalSettings<T extends browser.storage.StorageValue>(
-    key: string,
-    value: T,
-    comparer: ValueComparer<T>,
-) {
+export function createComplexGlobalSettings<T>(key: string, value: T, comparer: ValueComparer<T>) {
     const settings = createComplexInternalSettings(`settings+${key}`, value, comparer)
     return settings
 }
@@ -138,11 +130,7 @@ export interface NetworkSettings<T> {
  * @deprecated
  * @internal
  */
-export function createComplexNetworkSettings<T extends browser.storage.StorageValue>(
-    settingsKey: string,
-    defaultValue: T,
-    comparer: ValueComparer<T>,
-) {
+export function createComplexNetworkSettings<T>(settingsKey: string, defaultValue: T, comparer: ValueComparer<T>) {
     const cached: NetworkSettings<T> = {}
     MaskMessages.events.createNetworkSettingsReady.on((networkKey) => {
         if (networkKey.startsWith('plugin:') || settingsKey === 'pluginsEnabled') return

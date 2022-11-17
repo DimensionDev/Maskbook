@@ -1,7 +1,8 @@
 import type { RequestArguments } from 'web3-core'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
+import type { NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import type { NetworkPluginID, WalletProvider } from '@masknet/web3-shared-base'
+import type { RecognizableError, WalletProvider } from '@masknet/web3-shared-base'
 import type {
     Web3,
     ChainId,
@@ -9,6 +10,7 @@ import type {
     EthereumMethodType,
     Transaction,
     Web3Provider,
+    UserOperation,
 } from '@masknet/web3-shared-evm'
 
 export interface EVM_Web3State extends Web3Helper.Web3State<NetworkPluginID.PLUGIN_EVM> {}
@@ -53,9 +55,10 @@ export interface Context {
     readonly response: JsonRpcResponse | undefined
 
     config: Transaction | undefined
+    userOperation: UserOperation | undefined
     requestArguments: RequestArguments
     result: unknown
-    error: Error | null
+    error: RecognizableError | null
 
     /**
      * Resolve a request and write down the result into the context. Alias of end(null, result)

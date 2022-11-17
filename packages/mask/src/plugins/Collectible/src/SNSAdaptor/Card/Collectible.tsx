@@ -17,7 +17,7 @@ import { OffersTab } from './tabs/OffersTab.js'
 import { Context } from '../Context/index.js'
 import { useI18N, useSwitcher } from '../../../../../utils/index.js'
 
-const useStyles = makeStyles()((theme) => {
+const useStyles = makeStyles<{ currentTab: string }>()((theme, { currentTab }) => {
     return {
         root: {
             width: '100%',
@@ -40,27 +40,13 @@ const useStyles = makeStyles()((theme) => {
             flex: 1,
             backgroundColor: theme.palette.maskColor.bg,
             overflow: 'auto',
-            maxHeight: 800,
+            maxHeight: currentTab === 'about' ? 800 : 327,
             borderRadius: '0 0 12px 12px',
             scrollbarWidth: 'none',
+            background: '#fff !important',
             '&::-webkit-scrollbar': {
                 display: 'none',
             },
-            background: '#fff !important',
-        },
-        footer: {
-            marginTop: -1,
-            zIndex: 1,
-            position: 'relative',
-            borderTop: `solid 1px ${theme.palette.divider}`,
-            justifyContent: 'space-between',
-        },
-        tabs: {
-            height: 'var(--tabHeight)',
-            width: '100%',
-            minHeight: 'unset',
-            borderTop: `solid 1px ${theme.palette.divider}`,
-            borderBottom: `solid 1px ${theme.palette.divider}`,
         },
         tab: {
             whiteSpace: 'nowrap',
@@ -78,29 +64,14 @@ const useStyles = makeStyles()((theme) => {
             },
         },
         subtitle: {
-            fontSize: 14,
             marginRight: theme.spacing(0.5),
             maxHeight: '3rem',
-            overflow: 'hidden',
+            overflow: 'auto',
             wordBreak: 'break-word',
             color: theme.palette.maskColor.publicSecond,
-        },
-        description: {
-            fontSize: 12,
-            '& > strong': {
-                color: theme.palette.text.primary,
-                fontWeight: 300,
+            '&::-webkit-scrollbar': {
+                display: 'none',
             },
-        },
-        footMenu: {
-            color: theme.palette.text.secondary,
-            fontSize: 10,
-            display: 'flex',
-            alignItems: 'center',
-        },
-        footName: {
-            color: theme.palette.text.primary,
-            marginLeft: theme.spacing(0.5),
         },
         countdown: {
             fontSize: 12,
@@ -110,13 +81,6 @@ const useStyles = makeStyles()((theme) => {
             color: theme.palette.common.white,
             backgroundColor: '#eb5757',
             padding: theme.spacing(0.5, 2),
-        },
-        loading: {
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            height: '100%',
-            padding: theme.spacing(8, 0),
         },
         markdown: {
             overflow: 'hidden',
@@ -136,6 +100,10 @@ const useStyles = makeStyles()((theme) => {
             lineHeight: '20px',
             fontWeight: 700,
             color: theme.palette.maskColor.publicMain,
+            whiteSpace: 'nowrap',
+            textOverflow: 'ellipsis',
+            overflow: 'hidden',
+            width: 380,
         },
     }
 })
@@ -144,7 +112,8 @@ export interface CollectibleProps {}
 
 export function Collectible(props: CollectibleProps) {
     const { t } = useI18N()
-    const { classes } = useStyles()
+    const [currentTab, onChange, tabs] = useTabs('about', 'details', 'offers', 'activities')
+    const { classes } = useStyles({ currentTab })
     const { asset, events, orders, sourceType, setSourceType } = Context.useContainer()
 
     // #region provider switcher
@@ -156,7 +125,6 @@ export function Collectible(props: CollectibleProps) {
         true,
     )
     // #endregion
-    const [currentTab, onChange, tabs] = useTabs('about', 'details', 'offers', 'activities')
     if (asset.loading)
         return (
             <Box
@@ -224,26 +192,19 @@ export function Collectible(props: CollectibleProps) {
                         />
                     }
                     title={
-                        <Typography style={{ display: 'flex', alignItems: 'center' }}>
-                            <span className={classes.cardTitle}>{_asset.metadata?.name || '-'}</span>
+                        <Typography component="div" style={{ display: 'flex', alignItems: 'center' }}>
+                            <Typography className={classes.cardTitle}>{_asset.metadata?.name || '-'}</Typography>
                             {_asset.collection?.verified ? (
                                 <Icons.VerifiedCollection size={20} sx={{ marginLeft: 0.5 }} />
                             ) : null}
                         </Typography>
                     }
                     subheader={
-                        <>
-                            {_asset.metadata?.description ? (
-                                <Box display="flex" alignItems="center">
-                                    <Typography className={classes.subtitle} component="div" variant="body2">
-                                        <Markdown
-                                            classes={{ root: classes.markdown }}
-                                            content={_asset.metadata.description}
-                                        />
-                                    </Typography>
-                                </Box>
-                            ) : null}
-                        </>
+                        _asset.metadata?.description ? (
+                            <Typography className={classes.subtitle} component="div" variant="body2">
+                                <Markdown className={classes.markdown}>{_asset.metadata.description}</Markdown>
+                            </Typography>
+                        ) : null
                     }
                 />
                 <CardContent className={classes.content}>

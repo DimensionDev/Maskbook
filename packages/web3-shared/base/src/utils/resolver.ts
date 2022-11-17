@@ -3,11 +3,12 @@ import {
     ChainDescriptor,
     CurrencyType,
     NetworkDescriptor,
-    NetworkPluginID,
     ProviderDescriptor,
+    SocialAddressType,
     SourceType,
+    SearchKeywordType,
 } from '../specs/index.js'
-import { createLookupTableResolver, NextIDPlatform } from '@masknet/shared-base'
+import { NetworkPluginID, createLookupTableResolver, NextIDPlatform } from '@masknet/shared-base'
 
 export interface ExplorerRoutes {
     addressPathname?: string
@@ -80,7 +81,8 @@ export function createChainResolver<ChainId, SchemaType, NetworkType>(
         networkType: (chainId?: ChainId) => getChainDescriptor(chainId)?.type,
         explorerURL: (chainId?: ChainId) => getChainDescriptor(chainId)?.explorerURL,
         nativeCurrency: (chainId?: ChainId) => getChainDescriptor(chainId)?.nativeCurrency,
-        isValid: (chainId?: ChainId, testnet = false) => getChainDescriptor(chainId)?.network === 'mainnet' || testnet,
+        isValid: (chainId?: ChainId, testnet = false) =>
+            getChainDescriptor(chainId) && (getChainDescriptor(chainId)?.network === 'mainnet' || testnet),
         isMainnet: (chainId?: ChainId) => getChainDescriptor(chainId)?.network === 'mainnet',
         isSupport: (chainId?: ChainId, feature?: string) =>
             !!(feature && getChainDescriptor(chainId)?.features?.includes(feature)),
@@ -166,6 +168,23 @@ export function createProviderResolver<ChainId, ProviderType>(
     }
 }
 
+export const resolveSocialAddressLink = createLookupTableResolver<SocialAddressType, string>(
+    {
+        [SocialAddressType.Address]: '',
+        [SocialAddressType.ENS]: 'https://ens.domains/',
+        [SocialAddressType.SPACE_ID]: 'https://space.id/',
+        [SocialAddressType.RSS3]: 'https://rss3.bio/',
+        [SocialAddressType.SOL]: 'https://naming.bonfida.org/',
+        [SocialAddressType.KV]: 'https://next.id/',
+        [SocialAddressType.NEXT_ID]: 'https://next.id/',
+        [SocialAddressType.CyberConnect]: 'https://cyberconnect.me/',
+        [SocialAddressType.Leaderboard]: 'https://ethleaderboard.xyz/',
+        [SocialAddressType.Sybil]: 'https://sybil.org/',
+        [SocialAddressType.TwitterBlue]: '',
+    },
+    () => '',
+)
+
 export const resolveSourceTypeName = createLookupTableResolver<SourceType, string>(
     {
         [SourceType.DeBank]: 'DeBank',
@@ -230,11 +249,61 @@ export const resolveNextID_NetworkPluginID = createLookupTableResolver<NextIDPla
         [NextIDPlatform.GitHub]: undefined,
         [NextIDPlatform.Keybase]: undefined,
         [NextIDPlatform.Twitter]: undefined,
+        [NextIDPlatform.ENS]: undefined,
+        [NextIDPlatform.RSS3]: undefined,
+        [NextIDPlatform.LENS]: undefined,
+        [NextIDPlatform.REDDIT]: undefined,
+        [NextIDPlatform.SYBIL]: undefined,
     },
-    (platform) => {
-        throw new Error(`Unknown next id platform: ${platform}`)
+    () => {
+        return undefined
     },
 )
+
+export const resolveNextIDPlatformName = createLookupTableResolver<NextIDPlatform, string>(
+    {
+        [NextIDPlatform.Ethereum]: 'Ethereum',
+        [NextIDPlatform.NextID]: 'NEXT.ID',
+        [NextIDPlatform.GitHub]: 'Github',
+        [NextIDPlatform.Keybase]: 'Keybase',
+        [NextIDPlatform.Twitter]: 'Twitter',
+        [NextIDPlatform.ENS]: 'ENS',
+        [NextIDPlatform.RSS3]: 'RSS3',
+        [NextIDPlatform.LENS]: 'Lens',
+        [NextIDPlatform.REDDIT]: 'Reddit',
+        [NextIDPlatform.SYBIL]: 'Sybil',
+    },
+    () => {
+        return ''
+    },
+)
+
+export const resolveNextIDPlatformLink = (networkPlatform: NextIDPlatform, identifier: string) => {
+    switch (networkPlatform) {
+        case NextIDPlatform.Ethereum:
+            return `https://etherscan.io/address/${identifier}`
+        case NextIDPlatform.NextID:
+            return 'https://next.id/'
+        case NextIDPlatform.GitHub:
+            return `https://github.com/${identifier}`
+        case NextIDPlatform.Keybase:
+            return `https://keybase.io/${identifier}`
+        case NextIDPlatform.Twitter:
+            return `https://twitter.com/${identifier}`
+        case NextIDPlatform.ENS:
+            return `https://app.ens.domains/name/${identifier}`
+        case NextIDPlatform.RSS3:
+            return `https://rss3.io/result?search=${identifier}`
+        case NextIDPlatform.LENS:
+            return `https://www.lensfrens.xyz/${identifier}`
+        case NextIDPlatform.REDDIT:
+            return `https://www.reddit.com/user/${identifier}`
+        case NextIDPlatform.SYBIL:
+            return 'https://sybil.org/'
+        default:
+            return ''
+    }
+}
 
 // https://stackoverflow.com/a/67176726
 const MATCH_IPFS_CID_RAW =
@@ -272,9 +341,9 @@ export const resolveLocalURL = (url: string): string => {
 /**
  * Remove query from IPFS url, as it is not needed
  * and will increase requests sometimes.
- * For example https://ipfs.io/ipfs/<same-cid>?id=67891 and  https://ipfs.io/ipfs/<same-cid>?id=67892
+ * For example https://ipfs.io/ipfs/<same-cid>?id=67891 and https://ipfs.io/ipfs/<same-cid>?id=67892
  * are set to two different NFTs, but according to the same CID,
- * they are exactly the some.
+ * they are exactly the same.
  */
 const trimQuery = (url: string) => {
     return url.replace(/\?.+$/, '')
@@ -359,4 +428,14 @@ export function resolveResourceURL(url: string | undefined) {
     if (isLocaleResource(url)) return resolveLocalURL(url)
     if (isArweaveResource(url)) return resolveArweaveURL(url)
     return resolveIPFS_URL(url)
+}
+
+export function resolveSearchKeywordType(
+    keyword: string,
+    isValidDomain: (keyword: string) => boolean,
+    isValidAddress: (keyword: string) => boolean,
+) {
+    if (isValidDomain(keyword)) return SearchKeywordType.Domain
+    if (isValidAddress(keyword)) return SearchKeywordType.Address
+    return
 }

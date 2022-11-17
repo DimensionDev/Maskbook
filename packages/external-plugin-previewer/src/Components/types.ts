@@ -1,4 +1,4 @@
 export interface Component<P> {
-    (props: P, dispatchEvent: (event: Event) => void): React.ReactChild
+    (props: P, dispatchEvent: (event: Event) => void): React.ReactNode
     displayName: string
 }

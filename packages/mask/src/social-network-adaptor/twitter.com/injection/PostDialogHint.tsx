@@ -74,7 +74,7 @@ function PostDialogHintAtTwitter({ reason }: { reason: 'timeline' | 'popup' }) {
             classes={{ iconButton: classes.iconButton, tooltip: classes.tooltip }}
             size={20}
             onHintButtonClicked={onHintButtonClicked}
-            tooltip={{ disabled: false }}
+            tooltip={{ disabled: false, placement: 'top' }}
         />
     )
 }

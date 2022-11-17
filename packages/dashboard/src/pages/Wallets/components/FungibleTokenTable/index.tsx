@@ -7,7 +7,7 @@ import { useDashboardI18N } from '../../../../locales/index.js'
 import { EmptyPlaceholder } from '../EmptyPlaceholder/index.js'
 import { LoadingPlaceholder } from '../../../../components/LoadingPlaceholder/index.js'
 import { FungibleTokenTableRow } from '../FungibleTokenTableRow/index.js'
-import { DashboardRoutes, EMPTY_LIST, CrossIsolationMessages } from '@masknet/shared-base'
+import { NetworkPluginID, DashboardRoutes, EMPTY_LIST, CrossIsolationMessages } from '@masknet/shared-base'
 import {
     CurrencyType,
     FungibleAsset,
@@ -15,14 +15,13 @@ import {
     isLessThan,
     leftShift,
     minus,
-    NetworkPluginID,
     toZero,
 } from '@masknet/web3-shared-base'
-import { useCurrentWeb3NetworkPluginID, useNativeToken } from '@masknet/plugin-infra/web3'
+import { useNetworkContext, useNativeToken } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { isNativeTokenAddress } from '@masknet/web3-shared-evm'
 import { useContainer } from 'unstated-next'
-import { Context } from '../../hooks/useContext'
+import { Context } from '../../hooks/useContext.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -44,25 +43,6 @@ const useStyles = makeStyles()((theme) => ({
         backgroundColor: MaskColorVar.primaryBackground,
         border: 'none',
     },
-    footer: {
-        flex: 1,
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    paginationItem: {
-        borderRadius: 4,
-        border: `1px solid ${MaskColorVar.lineLight}`,
-        color: MaskColorVar.textPrimary,
-        '&.Mui-selected': {
-            backgroundColor: MaskColorVar.blue,
-            color: '#ffffff',
-            border: 'none',
-            '&:hover': {
-                backgroundColor: MaskColorVar.blue,
-            },
-        },
-    },
     more: {
         textAlign: 'center',
     },
@@ -73,7 +53,6 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         padding: theme.spacing(1, 2),
         gap: 2,
-        fontSize: 14,
         fontWeight: 600,
         margin: theme.spacing(2, 'auto', 1),
         cursor: 'pointer',
@@ -249,7 +228,7 @@ export interface TokenTableUIProps {
 export const TokenTableUI = memo<TokenTableUIProps>(({ onSwap, onSend, isLoading, isExpand, isEmpty, dataSource }) => {
     const t = useDashboardI18N()
     const { classes } = useStyles()
-    const currentPluginId = useCurrentWeb3NetworkPluginID()
+    const { pluginID: currentPluginId } = useNetworkContext()
 
     return (
         <>

@@ -1,13 +1,19 @@
-import { isNull } from 'lodash-unified'
+import { BigNumber } from 'bignumber.js'
+import { isNull } from 'lodash-es'
+import {
+    attemptUntil,
+    fetchImageViaHTTP,
+    isLocaleResource,
+    resolveCrossOriginURL,
+    resolveResourceURL,
+} from '@masknet/web3-shared-base'
+import type { NextIDPlatform } from '@masknet/shared-base'
 import Services from '../../../extension/service.js'
 import { NextIDProof, NextIDStorage } from '@masknet/web3-providers'
-import BigNumber from 'bignumber.js'
 import { activatedSocialNetworkUI } from '../../../social-network/index.js'
-import type { NextIDPlatform } from '@masknet/shared-base'
 import type { NextIDAvatarMeta } from '../types.js'
 import { PLUGIN_ID } from '../constants.js'
 import { sortPersonaBindings } from '../../../utils/index.js'
-import { isLocaleResource, resolveResourceURL } from '@masknet/web3-shared-base'
 
 export async function getImage(image: string): Promise<string> {
     const blob = await Services.Helper.fetch(image)
@@ -23,10 +29,9 @@ function blobToBase64(blob: Blob) {
 }
 
 async function fetchImage(url: string) {
-    if (isLocaleResource(url)) return
-    const fetch = globalThis.r2d2Fetch ?? globalThis.fetch
-    const response = await fetch(url)
-    return response.blob()
+    const resolvedURL = resolveCrossOriginURL(url)
+    if (!resolvedURL) return fetchImageViaHTTP(url)
+    return attemptUntil([async () => fetchImageViaHTTP(url), async () => fetchImageViaHTTP(resolvedURL)], null)
 }
 
 export async function toPNG(image: string) {
@@ -64,10 +69,7 @@ export function formatPrice(amount: string, symbol: string) {
 }
 
 export function formatText(name: string, tokenId: string) {
-    const _name = name.replace(/#\d*/, '').trim()
-    const __name = `${_name} #${tokenId}`
-    if (__name.length > 28) return `${__name.slice(0, 28)}...`
-    return __name
+    return name.length > 28 ? `${name.slice(0, 28)}...` : name
 }
 
 export function formatTokenId(symbol: string, tokenId: string) {

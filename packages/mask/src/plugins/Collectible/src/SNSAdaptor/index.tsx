@@ -2,8 +2,9 @@ import { Trans } from 'react-i18next'
 import { Icons } from '@masknet/icons'
 import { Box } from '@mui/material'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
-import { PluginIDContextProvider } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID, SocialAddressType } from '@masknet/web3-shared-base'
+import { Web3ContextProvider } from '@masknet/web3-hooks-base'
+import { SocialAddressType } from '@masknet/web3-shared-base'
+import { NetworkPluginID, parseURLs } from '@masknet/shared-base'
 import { type Plugin, usePostInfoDetails, usePluginWrapper } from '@masknet/plugin-infra/content-script'
 import { PostInspector } from './PostInspector.js'
 import { base } from '../base.js'
@@ -12,44 +13,31 @@ import { setupContext } from '../context.js'
 import { PLUGIN_ID, PLUGIN_NAME } from '../constants.js'
 import { DialogInspector } from './DialogInspector.js'
 import { CollectionList } from './List/CollectionList.js'
-import { parseURLs } from '@masknet/shared-base'
 
 const TabConfig: Plugin.SNSAdaptor.ProfileTab = {
     ID: `${PLUGIN_ID}_nfts`,
     label: 'NFTs',
     priority: 1,
     UI: {
-        TabContent({ socialAddress, identity }) {
-            if (!socialAddress) return null
+        TabContent({ socialAccount, identity }) {
+            if (!socialAccount) return null
             return (
-                <PluginIDContextProvider value={socialAddress.networkSupporterPluginID}>
-                    <CollectionList socialAddress={socialAddress} persona={identity?.publicKey} profile={identity} />
-                </PluginIDContextProvider>
+                <Web3ContextProvider value={{ pluginID: socialAccount.pluginID }}>
+                    <CollectionList socialAccount={socialAccount} persona={identity?.publicKey} profile={identity} />
+                </Web3ContextProvider>
             )
         },
     },
     Utils: {
         sorter: (a, z) => {
-            if (a.type === SocialAddressType.ENS) return -1
-            if (z.type === SocialAddressType.ENS) return 1
+            if (a.supportedAddressTypes?.includes(SocialAddressType.ENS)) return -1
+            if (z.supportedAddressTypes?.includes(SocialAddressType.ENS)) return 1
 
-            if (a.type === SocialAddressType.UNS) return -1
-            if (z.type === SocialAddressType.UNS) return 1
+            if (a.supportedAddressTypes?.includes(SocialAddressType.RSS3)) return -1
+            if (z.supportedAddressTypes?.includes(SocialAddressType.RSS3)) return 1
 
-            if (a.type === SocialAddressType.DNS) return -1
-            if (z.type === SocialAddressType.DNS) return 1
-
-            if (a.type === SocialAddressType.RSS3) return -1
-            if (z.type === SocialAddressType.RSS3) return 1
-
-            if (a.type === SocialAddressType.ADDRESS) return -1
-            if (z.type === SocialAddressType.ADDRESS) return 1
-
-            if (a.type === SocialAddressType.GUN) return -1
-            if (z.type === SocialAddressType.GUN) return 1
-
-            if (a.type === SocialAddressType.THE_GRAPH) return -1
-            if (z.type === SocialAddressType.THE_GRAPH) return 1
+            if (a.supportedAddressTypes?.includes(SocialAddressType.Address)) return -1
+            if (z.supportedAddressTypes?.includes(SocialAddressType.Address)) return 1
 
             return 0
         },
@@ -84,27 +72,27 @@ const sns: Plugin.SNSAdaptor.Definition = {
     ProfileCardTabs: [
         {
             ...TabConfig,
-            priority: 2,
+            priority: 1,
             UI: {
-                TabContent({ socialAddress, identity }) {
-                    if (!socialAddress) return null
+                TabContent({ socialAccount, identity }) {
+                    if (!socialAccount) return null
                     return (
                         <Box pr={1.5}>
-                            <PluginIDContextProvider value={socialAddress.networkSupporterPluginID}>
+                            <Web3ContextProvider value={{ pluginID: socialAccount.pluginID }}>
                                 <CollectionList
-                                    socialAddress={socialAddress}
+                                    socialAccount={socialAccount}
                                     persona={identity?.publicKey}
                                     profile={identity}
                                 />
-                            </PluginIDContextProvider>
+                            </Web3ContextProvider>
                         </Box>
                     )
                 },
             },
             Utils: {
                 ...TabConfig.Utils,
-                shouldDisplay(identity, socialAddress) {
-                    return socialAddress?.networkSupporterPluginID === NetworkPluginID.PLUGIN_EVM
+                shouldDisplay(identity, socialAccount) {
+                    return socialAccount?.pluginID === NetworkPluginID.PLUGIN_EVM
                 },
             },
         },

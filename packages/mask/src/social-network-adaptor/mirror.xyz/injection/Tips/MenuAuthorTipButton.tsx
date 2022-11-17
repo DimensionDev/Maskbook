@@ -1,28 +1,27 @@
+import { useMemo } from 'react'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import {
     createInjectHooksRenderer,
     Plugin,
-    PluginID,
     useActivatedPluginsSNSAdaptor,
     useIsMinimalMode,
 } from '@masknet/plugin-infra/content-script'
-import { EMPTY_LIST } from '@masknet/shared-base'
+import { EMPTY_LIST, PluginID, NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
-import { useMemo } from 'react'
+import type { SocialAccount } from '@masknet/web3-shared-base'
+import type { Web3Helper } from '@masknet/web3-helpers'
+import { Web3ContextProvider, useWeb3State, useNetworkContext } from '@masknet/web3-hooks-base'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI.js'
-import type { TipsAccount } from '../../../../plugins/Tips/types/tip.js'
 import { createReactRootShadowed, startWatch } from '../../../../utils/index.js'
 import { menuAuthorSelector as selector } from '../../utils/selectors.js'
-import { PluginIDContextProvider, useCurrentWeb3NetworkPluginID, useWeb3State } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 export function injectTipsButtonOnMenu(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(selector())
     startWatch(watcher, signal)
     createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(
-        <PluginIDContextProvider value={NetworkPluginID.PLUGIN_EVM}>
+        <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM }}>
             <AuthorTipsButtonWrapper />
-        </PluginIDContextProvider>,
+        </Web3ContextProvider>,
     )
 }
 
@@ -49,16 +48,16 @@ function AuthorTipsButtonWrapper() {
 
     const visitingIdentity = useCurrentVisitingIdentity()
     const isMinimal = useIsMinimalMode(PluginID.Tips)
-    const pluginId = useCurrentWeb3NetworkPluginID()
+    const { pluginID } = useNetworkContext()
     const { Others } = useWeb3State()
 
-    const tipsAccounts = useMemo((): TipsAccount[] => {
+    const accounts = useMemo((): Array<SocialAccount<Web3Helper.ChainIdAll>> => {
         if (!visitingIdentity?.identifier) return EMPTY_LIST
         return [
             {
-                pluginId,
+                pluginID,
                 address: visitingIdentity.identifier.userId,
-                name: visitingIdentity.nickname
+                label: visitingIdentity.nickname
                     ? `(${visitingIdentity.nickname}) ${Others?.formatAddress(visitingIdentity.identifier.userId, 4)}`
                     : visitingIdentity.identifier.userId,
             },
@@ -75,10 +74,10 @@ function AuthorTipsButtonWrapper() {
             <Component
                 identity={visitingIdentity.identifier}
                 slot={Plugin.SNSAdaptor.TipsSlot.MirrorMenu}
-                tipsAccounts={tipsAccounts}
+                accounts={accounts}
             />
         )
-    }, [visitingIdentity.identifier, tipsAccounts])
+    }, [visitingIdentity.identifier, accounts])
 
     if (!component || !visitingIdentity.identifier || isMinimal) return null
 

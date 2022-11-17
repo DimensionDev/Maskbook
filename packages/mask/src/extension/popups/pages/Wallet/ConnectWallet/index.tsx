@@ -4,16 +4,10 @@ import { useMount } from 'react-use'
 import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
-import { ExtensionSite, PopupRoutes } from '@masknet/shared-base'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { ExtensionSite, PopupRoutes, NetworkPluginID } from '@masknet/shared-base'
 import { ChainId, ProviderType } from '@masknet/web3-shared-evm'
-import {
-    getRegisteredWeb3Networks,
-    getRegisteredWeb3Providers,
-    useWeb3State,
-    useWeb3UI,
-    useWallets,
-} from '@masknet/plugin-infra/web3'
+import { useWeb3State, useWeb3UI, useWallets } from '@masknet/web3-hooks-base'
+import { getRegisteredWeb3Networks, getRegisteredWeb3Providers } from '@masknet/plugin-infra'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useTitle } from '../../../hook/useTitle.js'
 import { useI18N } from '../../../../../utils/index.js'
@@ -63,7 +57,6 @@ const ConnectWalletPage = memo(() => {
     const { t } = useI18N()
     const { classes } = useStyles()
     const navigate = useNavigate()
-
     const { setSigned } = PopupContext.useContainer()
     const wallets = useWallets()
     const { isLocked, loading: getLockStatusLoading } = useWalletLockStatus()
@@ -84,6 +77,8 @@ const ConnectWalletPage = memo(() => {
             provider: Web3Helper.Web3ProviderDescriptor<NetworkPluginID.PLUGIN_EVM>,
         ) => {
             if (provider.type === ProviderType.MaskWallet) {
+                const connection = await Connection?.getConnection?.()
+                if (connection) connection.disconnect()
                 if (isLocked && !getLockStatusLoading) {
                     navigate(urlcat(PopupRoutes.Unlock, { from: PopupRoutes.SelectWallet, goBack: true, popup: true }))
                     return
@@ -103,11 +98,13 @@ const ConnectWalletPage = memo(() => {
             }
 
             const connection = await Connection?.getConnection?.({
-                chainId: network.chainId,
                 providerType: provider.type,
             })
 
-            const account = await connection?.connect()
+            const currentChainId = await connection?.getChainId()
+            const account = await connection?.connect({
+                chainId: currentChainId,
+            })
 
             navigate(PopupRoutes.VerifyWallet, {
                 state: {

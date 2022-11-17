@@ -1,9 +1,9 @@
-import { useAccount, useFungibleTokenBalance } from '@masknet/plugin-infra/web3'
-import { isGreaterThan, isLessThanOrEqualTo, NetworkPluginID, rightShift } from '@masknet/web3-shared-base'
 import { useMemo } from 'react'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { useChainContext, useNetworkContext, useFungibleTokenBalance } from '@masknet/web3-hooks-base'
+import { isGreaterThan, isLessThanOrEqualTo, rightShift } from '@masknet/web3-shared-base'
 import { useI18N } from '../../locales/index.js'
-import { TipsType, ValidationTuple } from '../../types'
-import { TargetRuntimeContext } from '../TargetRuntimeContext.js'
+import { TipsType, ValidationTuple } from '../../types/index.js'
 import type { TipContextOptions } from './TipContext.js'
 
 type TipValidateOptions = Pick<
@@ -18,9 +18,9 @@ export function useTipValidate({
     nonFungibleTokenId: tokenId,
     nonFungibleTokenAddress: tokenAddress,
 }: TipValidateOptions): ValidationTuple {
-    const account = useAccount()
-    const { pluginId, targetChainId: chainId } = TargetRuntimeContext.useContainer()
-    const { value: balance = '0' } = useFungibleTokenBalance(pluginId, token?.address, { chainId, account })
+    const { account, chainId } = useChainContext()
+    const { pluginID } = useNetworkContext()
+    const { value: balance = '0' } = useFungibleTokenBalance(pluginID, token?.address, { chainId, account })
     const t = useI18N()
 
     const result: ValidationTuple = useMemo(() => {
@@ -28,13 +28,13 @@ export function useTipValidate({
             if (!amount || isLessThanOrEqualTo(amount, 0)) return [false]
             if (isGreaterThan(rightShift(amount, token?.decimals), balance))
                 return [false, t.token_insufficient_balance()]
-        } else if (pluginId === NetworkPluginID.PLUGIN_EVM) {
+        } else if (pluginID === NetworkPluginID.PLUGIN_EVM) {
             if (!tokenId || !tokenAddress) return [false]
-        } else if (pluginId === NetworkPluginID.PLUGIN_SOLANA && !tokenAddress) {
+        } else if (pluginID === NetworkPluginID.PLUGIN_SOLANA && !tokenAddress) {
             return [false]
         }
         return [true]
-    }, [tipType, amount, token?.decimals, balance, pluginId, tokenId, tokenAddress, t])
+    }, [tipType, amount, token?.decimals, balance, pluginID, tokenId, tokenAddress, t])
 
     return result
 }

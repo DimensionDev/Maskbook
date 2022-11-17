@@ -36,13 +36,6 @@ const useStyles = makeStyles<{
         header: {
             background: `${theme.palette.maskColor.bottom} !important`,
         },
-        items: {
-            overflow: 'auto',
-            scrollbarWidth: 'none',
-            '&::-webkit-scrollbar': {
-                display: 'none',
-            },
-        },
     }
 })
 

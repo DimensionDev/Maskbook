@@ -1,11 +1,12 @@
 import { LiveSelector, MutationObserverWatcher, ValueRef } from '@dimensiondev/holoflows-kit'
-import { creator, SocialNetworkUI } from '../../../social-network/index.js'
+import type { SocialNetworkUI } from '@masknet/types'
+import { creator } from '../../../social-network/index.js'
 import { getProfileIdentifierAtFacebook, getUserID } from '../utils/getProfileIdentifier.js'
 import { isMobileFacebook } from '../utils/isMobile.js'
 import { ProfileIdentifier, EnhanceableSite } from '@masknet/shared-base'
 import { searchFacebookAvatarSelector, searchUserIdOnMobileSelector } from '../utils/selector.js'
 import { getAvatar, getBioDescription, getFacebookId, getNickName, getPersonalHomepage } from '../utils/user.js'
-import { delay } from '@dimensiondev/kit'
+import { delay } from '@masknet/kit'
 import type { IdentityResolved } from '@masknet/plugin-infra'
 
 export const IdentityProviderFacebook: SocialNetworkUI.CollectingCapabilities.IdentityResolveProvider = {
@@ -33,6 +34,7 @@ function resolveLastRecognizedIdentityFacebookInner(ref: ValueRef<IdentityResolv
         .then((id) =>
             assign({
                 ...ref.value,
+                isOwner: true,
                 identifier: ProfileIdentifier.of(EnhanceableSite.Facebook, id).unwrapOr(undefined),
             }),
         )
@@ -40,6 +42,7 @@ function resolveLastRecognizedIdentityFacebookInner(ref: ValueRef<IdentityResolv
 
 function resolveCurrentVisitingIdentityInner(
     ref: SocialNetworkUI.CollectingCapabilities.IdentityResolveProvider['recognized'],
+    ownerRef: SocialNetworkUI.CollectingCapabilities.IdentityResolveProvider['recognized'],
     cancel: AbortSignal,
 ) {
     const selector = isMobileFacebook ? searchUserIdOnMobileSelector() : searchFacebookAvatarSelector()
@@ -49,8 +52,9 @@ function resolveCurrentVisitingIdentityInner(
         const nickname = getNickName()
         const bio = getBioDescription()
         const handle = getFacebookId()
+        const ownerHandle = ownerRef.value.identifier?.userId
+        const isOwner = !!(handle && ownerHandle && handle.toLowerCase() === ownerHandle.toLowerCase())
         const homepage = getPersonalHomepage()
-
         const avatar = getAvatar()
 
         ref.value = {
@@ -59,6 +63,7 @@ function resolveCurrentVisitingIdentityInner(
             avatar,
             bio,
             homepage,
+            isOwner,
         }
     }
 
@@ -86,7 +91,7 @@ export const CurrentVisitingIdentityProviderFacebook: SocialNetworkUI.Collecting
     hasDeprecatedPlaceholderName: false,
     recognized: creator.EmptyIdentityResolveProviderState(),
     start(cancel) {
-        resolveCurrentVisitingIdentityInner(this.recognized, cancel)
+        resolveCurrentVisitingIdentityInner(this.recognized, IdentityProviderFacebook.recognized, cancel)
     },
 }
 

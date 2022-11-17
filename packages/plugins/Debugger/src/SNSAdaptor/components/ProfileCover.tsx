@@ -1,6 +1,7 @@
-import { makeStyles } from '@masknet/theme'
-import type { NetworkPluginID, SocialAddress, SocialIdentity } from '@masknet/web3-shared-base'
 import { Typography } from '@mui/material'
+import { makeStyles } from '@masknet/theme'
+import type { Web3Helper } from '@masknet/web3-helpers'
+import type { SocialAccount, SocialIdentity } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()(() => ({
     root: {
@@ -15,7 +16,7 @@ const useStyles = makeStyles()(() => ({
 
 export interface TabContentProps {
     identity?: SocialIdentity
-    socialAddressList?: SocialAddress<NetworkPluginID>
+    socialAccounts?: Array<SocialAccount<Web3Helper.ChainIdAll>>
 }
 
 export function ProfileCover() {

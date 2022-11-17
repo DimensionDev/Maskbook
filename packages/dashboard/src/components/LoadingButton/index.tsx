@@ -1,6 +1,5 @@
 import { getMaskColor, makeStyles, MaskLoadingButton, LoadingBase } from '@masknet/theme'
 import { memo } from 'react'
-import classNames from 'classnames'
 import type { LoadingButtonProps } from '@mui/lab'
 
 interface DashboardLoadingButtonProps extends LoadingButtonProps {
@@ -18,10 +17,10 @@ const useStyles = makeStyles()((theme) => ({
 
 export const LoadingButton = memo<DashboardLoadingButtonProps>((props) => {
     const { onClick, children, ...rest } = props
-    const { classes } = useStyles()
+    const { classes, cx } = useStyles()
     return (
         <MaskLoadingButton
-            className={classNames(classes.icon, props.loading ? classes.loadingButtonOverride : '')}
+            className={cx(classes.icon, props.loading ? classes.loadingButtonOverride : '')}
             variant="contained"
             loadingPosition="end"
             soloLoading={false}

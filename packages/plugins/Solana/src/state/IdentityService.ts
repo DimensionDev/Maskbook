@@ -1,10 +1,12 @@
+import { compact } from 'lodash-es'
 import type { Plugin } from '@masknet/plugin-infra'
-import { SocialIdentity, SocialAddress, NetworkPluginID, SocialAddressType } from '@masknet/web3-shared-base'
-import { IdentityServiceState } from '@masknet/plugin-infra/web3'
-import { ChainId, formatAddress, isValidAddress } from '@masknet/web3-shared-solana'
+import { SocialIdentity, SocialAddress, SocialAddressType } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { IdentityServiceState } from '@masknet/web3-state'
+import { ChainId, isValidAddress } from '@masknet/web3-shared-solana'
 import { SolanaRPC } from '../messages.js'
 
-const SOL_RE = /\S{1,256}\.sol\b/
+const SOL_RE = /\S{1,256}\.sol\b/i
 
 function getSolanaAddress(bio: string) {
     const addressMatched = bio.match(/\b\w{32,44}\b/)
@@ -20,10 +22,10 @@ function getSolanaDomain(nickname: string, bio: string) {
 
 function getSolanaDomainAddress(domain: string) {
     if (!domain) return
-    return SolanaRPC.lookup(ChainId.Mainnet, domain)
+    return SolanaRPC.lookup(domain)
 }
 
-export class IdentityService extends IdentityServiceState {
+export class IdentityService extends IdentityServiceState<ChainId> {
     constructor(protected context: Plugin.Shared.SharedContext) {
         super()
     }
@@ -34,23 +36,23 @@ export class IdentityService extends IdentityServiceState {
         const domain = getSolanaDomain(nickname, bio)
         const domainAddress = domain ? await getSolanaDomainAddress(domain) : undefined
 
-        return [
+        return compact<SocialAddress<ChainId>>([
             address
                 ? {
-                      networkSupporterPluginID: NetworkPluginID.PLUGIN_SOLANA,
-                      type: SocialAddressType.ADDRESS,
-                      label: formatAddress(address, 4),
+                      pluginID: NetworkPluginID.PLUGIN_SOLANA,
+                      type: SocialAddressType.Address,
+                      label: '',
                       address,
                   }
-                : null,
+                : undefined,
             domainAddress
                 ? {
-                      networkSupporterPluginID: NetworkPluginID.PLUGIN_SOLANA,
+                      pluginID: NetworkPluginID.PLUGIN_SOLANA,
                       type: SocialAddressType.SOL,
-                      label: domain,
+                      label: domain ?? domainAddress,
                       address: domainAddress,
                   }
-                : null,
-        ].filter(Boolean) as Array<SocialAddress<NetworkPluginID.PLUGIN_SOLANA>>
+                : undefined,
+        ])
     }
 }

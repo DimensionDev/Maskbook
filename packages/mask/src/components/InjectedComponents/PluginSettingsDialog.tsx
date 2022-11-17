@@ -1,21 +1,16 @@
-import { useI18N, MaskMessages } from '../../utils/index.js'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useAsyncRetry } from 'react-use'
+import { first } from 'lodash-es'
 import { InjectedDialog } from '@masknet/shared'
-import {
-    PluginID,
-    useActivatedPluginsSNSAdaptor,
-    usePluginI18NField,
-    createInjectHooksRenderer,
-} from '@masknet/plugin-infra/content-script'
-import { NextIDPlatform, EMPTY_LIST, PopupRoutes, CrossIsolationMessages } from '@masknet/shared-base'
-import { useAvailablePlugins } from '@masknet/plugin-infra/web3'
+import { useActivatedPluginsSNSAdaptor, usePluginI18NField } from '@masknet/plugin-infra/content-script'
+import { PluginID, NextIDPlatform, EMPTY_LIST, PopupRoutes, CrossIsolationMessages } from '@masknet/shared-base'
+import { useAvailablePlugins, getSettingsTabContent } from '@masknet/plugin-infra'
 import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
-import { first } from 'lodash-unified'
 import { TabContext } from '@mui/lab'
 import { DialogContent, Tab } from '@mui/material'
-import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Icons } from '@masknet/icons'
 import { NextIDProof } from '@masknet/web3-providers'
-import { useAsyncRetry } from 'react-use'
+import { useI18N, MaskMessages } from '../../utils/index.js'
 import Services from '../../extension/service.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -30,13 +25,6 @@ const useStyles = makeStyles()((theme) => ({
         boxSizing: 'border-box',
     },
 }))
-
-function getTabContent(tabId?: string) {
-    return createInjectHooksRenderer(useActivatedPluginsSNSAdaptor.visibility.useAnyMode, (x) => {
-        const tab = x.SettingTabs?.find((x) => x.ID === tabId)
-        return tab?.UI?.TabContent
-    })
-}
 
 export function PluginSettingsDialog() {
     const { t } = useI18N()
@@ -86,14 +74,14 @@ export function PluginSettingsDialog() {
     useEffect(() => MaskMessages.events.ownPersonaChanged.on(retry), [retry])
 
     const component = useMemo(() => {
-        const Component = getTabContent(currentTab)
+        const Component = getSettingsTabContent(currentTab)
         if (!Component) return null
         return (
             <Component
                 onClose={() => setOpen(false)}
                 bindingWallets={bindingWallets}
                 currentPersona={currentPersona}
-                pluginId={currentTab}
+                pluginID={currentTab}
                 onOpenPopup={Services.Helper.openPopupWindow}
             />
         )

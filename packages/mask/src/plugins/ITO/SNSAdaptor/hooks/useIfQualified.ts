@@ -1,13 +1,12 @@
 import { useAsyncRetry } from 'react-use'
-import type { Qualification } from '@masknet/web3-contracts/types/Qualification'
-import type { Qualification2 } from '@masknet/web3-contracts/types/Qualification2'
+import type { Qualification } from '@masknet/web3-contracts/types/Qualification.js'
+import type { Qualification2 } from '@masknet/web3-contracts/types/Qualification2.js'
 import { useQualificationContract } from './useQualificationContract.js'
-import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { useChainContext } from '@masknet/web3-hooks-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
 
 export function useIfQualified(address: string, ito_address: string) {
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { contract: qualificationContract, version } = useQualificationContract(chainId, address, ito_address)
 
     return useAsyncRetry(async () => {

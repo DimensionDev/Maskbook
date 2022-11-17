@@ -6,6 +6,7 @@ import {
     createFungibleToken,
     getTokenConstants,
     SchemaType,
+    isValidChainId,
 } from '@masknet/web3-shared-flow'
 import {
     FungibleAsset,
@@ -151,6 +152,7 @@ export class FlowFungibleAPI
         account: string,
         { chainId = ChainId.Mainnet, indicator }: HubOptions<ChainId, HubIndicator> = {},
     ): Promise<Pageable<FungibleAsset<ChainId, SchemaType>, HubIndicator>> {
+        if (!isValidChainId(chainId)) return createPageable([], createIndicator(indicator))
         const allSettled = await Promise.allSettled([
             getAssetFLOW(chainId, account),
             getAssetFUSD(chainId, account),

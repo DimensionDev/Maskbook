@@ -1,0 +1,49 @@
+diff --git a/dist/package.json b/dist/package.json
+new file mode 100644
+index 0000000000000000000000000000000000000000..1cd945a3bfd97ab9befff9b9e468ef791062d59b
+--- /dev/null
++++ b/dist/package.json
+@@ -0,0 +1,3 @@
++{
++    "type": "commonjs"
++}
+diff --git a/package.json b/package.json
+index 80b56c41a4091d13fb3f0d7352d021d1cd2c230a..7fe0b3b533058e49fa9f45abc15f89ec66d85736 100644
+--- a/package.json
++++ b/package.json
+@@ -5,6 +5,7 @@
+     "main": "dist/module/index.js",
+     "module": "dist/module/index.js",
+     "browser": "dist/browser/RSS3.js",
++    "type": "module",
+     "types": "types/index.d.ts",
+     "files": [
+         "src",
+diff --git a/types/index.d.ts b/types/index.d.ts
+index 66d8da249695ca5847b55322685f0fecfa178687..43312be4433a0766abb3bbf8997fc74158fdf71e 100644
+--- a/types/index.d.ts
++++ b/types/index.d.ts
+@@ -7,7 +7,7 @@ import type {
+     RSS3Account,
+     RSS3Content,
+     RSS3Asset,
+-} from './rss3';
++} from './rss3.js';
+ 
+ interface IOptions {
+     endpoint: string;
+@@ -28,8 +28,7 @@ export interface IOptionsSign extends IOptions {
+     sign: (data: string) => Promise<string>;
+ }
+ 
+-declare module 'rss3-next' {
+-    class RSS3 {
++    declare class RSS3 {
+         readonly files: {
+             new (fileID: string): RSS3Content;
+             get(fileID: string, force?: boolean): Promise<RSS3Content>;
+@@ -90,4 +89,3 @@ declare module 'rss3-next' {
+     }
+ 
+     export default RSS3;
+-}

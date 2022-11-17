@@ -1,11 +1,9 @@
 import { memo } from 'react'
-import classNames from 'classnames'
 import { Box, Tooltip } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { Image, Icon } from '@masknet/shared'
 import { isSameAddress, NonFungibleCollection } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { Icons } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => ({
     collectionWrap: {
@@ -14,6 +12,7 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: '50%',
         background: 'rgba(229,232,235,1)',
         cursor: 'pointer',
+        overflow: 'hidden',
     },
     collectionImg: {
         objectFit: 'cover',
@@ -29,10 +28,6 @@ const useStyles = makeStyles()((theme) => ({
         border: '2px solid #1D9BF0',
         borderRadius: '50%',
     },
-    imageLoading: {
-        width: 24,
-        height: 24,
-    },
 }))
 
 export interface CollectionIconProps {
@@ -42,8 +37,11 @@ export interface CollectionIconProps {
 }
 
 export const CollectionIcon = memo<CollectionIconProps>(({ collection, onClick, selectedCollection }) => {
-    const { classes } = useStyles()
+    const { classes, cx } = useStyles()
 
+    const name = collection?.name ?? collection?.symbol ?? 'Unknown'
+    // CollectionIcon should not display a character
+    const fallback = <Icon className={classes.collectionImg} name={name} label="" />
     return (
         <Tooltip
             placement="right-end"
@@ -54,7 +52,7 @@ export const CollectionIcon = memo<CollectionIconProps>(({ collection, onClick, 
             title={collection?.name ?? ''}
             arrow>
             <Box
-                className={classNames(
+                className={cx(
                     classes.collectionWrap,
                     isSameAddress(collection?.address, selectedCollection) ? classes.selected : '',
                 )}
@@ -65,14 +63,11 @@ export const CollectionIcon = memo<CollectionIconProps>(({ collection, onClick, 
                         height={24}
                         className={classes.collectionImg}
                         src={collection?.iconURL}
-                        fallback={<Icons.MaskPlaceholder size={24} />}
+                        fallback={fallback}
                         disableSpinner
                     />
                 ) : (
-                    <Icon
-                        classes={{ icon: classes.collectionImg }}
-                        name={collection?.name ?? collection?.symbol ?? 'Unknown'}
-                    />
+                    fallback
                 )}
             </Box>
         </Tooltip>

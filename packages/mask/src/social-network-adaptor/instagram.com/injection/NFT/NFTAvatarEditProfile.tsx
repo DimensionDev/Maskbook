@@ -38,9 +38,6 @@ const useStyles = makeStyles()(() => ({
         color: '#ffffff',
         lineHeight: '12px',
     },
-    icon: {
-        color: 'white',
-    },
 }))
 
 export function openNFTAvatarSettingDialog() {
@@ -56,5 +53,13 @@ function OpenNFTAvatarEditProfileButtonInInstagram() {
 
     if (location.pathname?.includes('/edit') || !editButton) return null
 
-    return <NFTAvatarButton onClick={openNFTAvatarSettingDialog} classes={classes} />
+    return (
+        <NFTAvatarButton
+            onClick={openNFTAvatarSettingDialog}
+            classes={{
+                root: classes.root,
+                text: classes.text,
+            }}
+        />
+    )
 }

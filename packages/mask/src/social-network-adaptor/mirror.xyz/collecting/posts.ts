@@ -1,11 +1,12 @@
 import { DOMProxy, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { creator, SocialNetworkUI as Next } from '../../../social-network/index.js'
+import type { SocialNetworkUI as Next } from '@masknet/types'
+import { creator } from '../../../social-network/index.js'
 import { postsContentSelector } from '../utils/selectors.js'
 
-import { mirrorShared } from '../shared'
-import { createRefsForCreatePostContext } from '../../../social-network/utils/create-post-context'
-import { startWatch } from '../../../utils'
-import { formatWriter, getMirrorPageType, MirrorPageType, MIRROR_ENTRY_ID } from './utils'
+import { mirrorShared } from '../shared.js'
+import { createRefsForCreatePostContext } from '../../../social-network/utils/create-post-context.js'
+import { startWatch } from '../../../utils/index.js'
+import { formatWriter, getMirrorPageType, MirrorPageType, MIRROR_ENTRY_ID } from './utils.js'
 import { Mirror } from '@masknet/web3-providers'
 import type { PostContextCoAuthor } from '@masknet/plugin-infra/content-script'
 
@@ -69,8 +70,8 @@ async function collectPostInfo(node: HTMLElement | null, cancel: AbortSignal) {
     return {
         postId,
         writers: {
-            author: formatWriter(publisher.author),
-            coAuthors: publisher?.coAuthors.map((x) => formatWriter(x)),
+            author: formatWriter(publisher.author, false),
+            coAuthors: publisher?.coAuthors.map((x) => formatWriter(x, false)),
         },
     }
 }

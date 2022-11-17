@@ -1,27 +1,26 @@
+import { useState, useCallback, useEffect, useMemo } from 'react'
 import { Box, Typography, List, ListItem } from '@mui/material'
 import { makeStyles, ActionButton, LoadingBase } from '@masknet/theme'
-import { useState, useCallback, useEffect, useMemo } from 'react'
+import { Check as CheckIcon, Close as CloseIcon, AddCircleOutline as AddCircleOutlineIcon } from '@mui/icons-material'
 import { useI18N } from '../locales/index.js'
-import classNames from 'classnames'
-import { ERC721ContractSelectPanel } from '../../../web3/UI/ERC721ContractSelectPanel.js'
-import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary.js'
-import { EthereumERC721TokenApprovedBoundary } from '../../../web3/UI/EthereumERC721TokenApprovedBoundary.js'
+import {
+    WalletConnectedBoundary,
+    NFTCardStyledAssetPlayer,
+    PluginWalletStatusBar,
+    ERC721ContractSelectPanel,
+    ChainBoundary,
+    EthereumERC721TokenApprovedBoundary,
+} from '@masknet/shared'
 import { ChainId, SchemaType, useNftRedPacketConstants, formatTokenId } from '@masknet/web3-shared-evm'
-import CheckIcon from '@mui/icons-material/Check'
-import CloseIcon from '@mui/icons-material/Close'
-import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline'
 import { RedpacketMessagePanel } from './RedpacketMessagePanel.js'
 import { SelectNftTokenDialog, OrderedERC721Token } from './SelectNftTokenDialog.js'
 import { RedpacketNftConfirmDialog } from './RedpacketNftConfirmDialog.js'
-import { NFTCardStyledAssetPlayer } from '@masknet/shared'
 import { NFTSelectOption } from '../types.js'
 import { NFT_RED_PACKET_MAX_SHARES } from '../constants.js'
-import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
-import { useNonFungibleOwnerTokens } from '@masknet/plugin-infra/web3-evm'
-import { NetworkPluginID, NonFungibleTokenContract, NonFungibleToken } from '@masknet/web3-shared-base'
-import { EMPTY_LIST } from '@masknet/shared-base'
-import { PluginWalletStatusBar } from '../../../utils/index.js'
-import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
+import { useChainContext } from '@masknet/web3-hooks-base'
+import { useNonFungibleOwnerTokens } from '@masknet/web3-hooks-evm'
+import { NetworkPluginID, EMPTY_LIST } from '@masknet/shared-base'
+import type { NonFungibleTokenContract, NonFungibleToken } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -51,20 +50,6 @@ const useStyles = makeStyles()((theme) => {
             whiteSpace: 'nowrap',
             overflow: 'hidden',
             textOverflow: 'ellipsis',
-        },
-        inputShrinkLabel: {
-            transform: 'translate(17px, -3px) scale(0.75) !important',
-        },
-        input: {
-            flex: 1,
-            padding: theme.spacing(0.5),
-        },
-        tip: {
-            fontSize: 17,
-            marginBottom: theme.spacing(2),
-        },
-        nftImg: {
-            maxWidth: '100%',
         },
         tokenSelector: {
             display: 'grid',
@@ -191,9 +176,6 @@ const useStyles = makeStyles()((theme) => {
             color: '#FF5F5F',
             margin: '16px 4px 24px 4px',
         },
-        unapprovedTip: {
-            color: theme.palette.grey[500],
-        },
         disabledSelector: {
             opacity: 0.5,
             pointerEvents: 'none',
@@ -232,11 +214,10 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
         openSelectNFTDialog,
         setOpenSelectNFTDialog,
     } = props
-    const { classes } = useStyles()
+    const { classes, cx } = useStyles()
     const [balance, setBalance] = useState(0)
     const [selectOption, setSelectOption] = useState<NFTSelectOption | undefined>(undefined)
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const [contract, setContract] = useState<NonFungibleTokenContract<ChainId, SchemaType.ERC721>>()
     const [manualSelectedTokenDetailedList, setExistTokenDetailedList] = useState<OrderedERC721Token[]>(EMPTY_LIST)
     const [onceAllSelectedTokenDetailedList, setAllTokenDetailedList] = useState<OrderedERC721Token[]>(EMPTY_LIST)
@@ -334,6 +315,7 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                         onContractChange={setContract}
                         balance={balance}
                         onBalanceChange={setBalance}
+                        chainId={chainId}
                     />
                 </Box>
                 {contract && balance ? (
@@ -343,7 +325,7 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                         // TODO: replace to radio
                         <Box className={classes.selectWrapper}>
                             <div
-                                className={classNames(
+                                className={cx(
                                     classes.optionLeft,
                                     classes.option,
                                     tokenDetailedOwnerList.length === 0 ? classes.disabledSelector : null,
@@ -353,7 +335,7 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                                     setAllTokenDetailedList(tokenDetailedOwnerList.slice(0, maxSelectShares))
                                 }}>
                                 <div
-                                    className={classNames(
+                                    className={cx(
                                         classes.checkIconWrapper,
                                         selectOption === NFTSelectOption.All ? classes.checked : '',
                                     )}>
@@ -372,7 +354,7 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                             </div>
                             <div className={classes.option} onClick={() => setSelectOption(NFTSelectOption.Partial)}>
                                 <div
-                                    className={classNames(
+                                    className={cx(
                                         classes.checkIconWrapper,
                                         selectOption === NFTSelectOption.Partial ? classes.checked : '',
                                     )}>
@@ -393,7 +375,7 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                             ))}
                             <ListItem
                                 onClick={() => setOpenSelectNFTDialog(true)}
-                                className={classNames(classes.tokenSelectorWrapper, classes.addWrapper)}>
+                                className={cx(classes.tokenSelectorWrapper, classes.addWrapper)}>
                                 <AddCircleOutlineIcon className={classes.addIcon} onClick={() => void 0} />
                             </ListItem>
                         </List>
@@ -408,7 +390,10 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
             </Box>
             <Box style={{ position: 'absolute', bottom: 0, width: '100%' }}>
                 <PluginWalletStatusBar>
-                    <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={chainId}>
+                    <ChainBoundary
+                        expectedPluginID={NetworkPluginID.PLUGIN_EVM}
+                        expectedChainId={chainId}
+                        forceShowingWrongNetworkButton>
                         <WalletConnectedBoundary>
                             <EthereumERC721TokenApprovedBoundary
                                 validationMessage={validationMessage}
@@ -441,10 +426,10 @@ interface NFTCardProps {
 
 function NFTCard(props: NFTCardProps) {
     const { token, removeToken, renderOrder } = props
-    const { classes } = useStyles()
+    const { classes, cx } = useStyles()
     const [name, setName] = useState(formatTokenId(token.tokenId, 2))
     return (
-        <ListItem className={classNames(classes.tokenSelectorWrapper)}>
+        <ListItem className={cx(classes.tokenSelectorWrapper)}>
             <NFTCardStyledAssetPlayer
                 contractAddress={token.contract?.address}
                 chainId={token.chainId}

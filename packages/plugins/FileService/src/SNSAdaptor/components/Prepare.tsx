@@ -3,9 +3,9 @@ import { useAsync } from 'react-use'
 import { useNavigate } from 'react-router-dom'
 import { makeStyles } from '@masknet/theme'
 import { Attachment } from '@dimensiondev/common-protocols'
-import { encodeArrayBuffer } from '@dimensiondev/kit'
+import { encodeArrayBuffer } from '@masknet/kit'
 import { Checkbox, Radio, FormControlLabel, Link, Typography } from '@mui/material'
-import { isNil } from 'lodash-unified'
+import { isNil } from 'lodash-es'
 import { useI18N, Translate } from '../../locales/i18n_generated.js'
 import { makeFileKey } from '../../file-key.js'
 import type { ProviderConfig } from '../../types.js'
@@ -69,10 +69,6 @@ export const Prepare: React.FC = () => {
         {
             provider: Provider.ipfs,
             name: t.provider_ipfs(),
-        },
-        {
-            provider: Provider.swarm,
-            name: t.provider_swarm(),
         },
     ]
 

@@ -1,26 +1,25 @@
 import { useEffect, useMemo, useState } from 'react'
-import { differenceWith, uniqBy } from 'lodash-unified'
+import { differenceWith, uniqBy } from 'lodash-es'
 import { Icons } from '@masknet/icons'
 import { ElementAnchor, RetryHint, useWeb3ProfileHiddenSettings } from '@masknet/shared'
-import { useNonFungibleAssets, useTrustedNonFungibleTokens } from '@masknet/plugin-infra/web3'
+import { useNonFungibleAssets, useTrustedNonFungibleTokens } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { EMPTY_LIST, EMPTY_OBJECT, joinKeys } from '@masknet/shared-base'
-import { LoadingBase } from '@masknet/theme'
+import { LoadingBase, makeStyles } from '@masknet/theme'
 import { CollectionType } from '@masknet/web3-providers'
 import {
     isSameAddress,
-    NetworkPluginID,
     NonFungibleAsset,
     NonFungibleCollection,
-    SocialAddress,
+    SocialAccount,
     SocialIdentity,
 } from '@masknet/web3-shared-base'
 import { Box, Button, Stack, Typography, styled } from '@mui/material'
 import { CollectibleList } from './CollectibleList.js'
 import { CollectionIcon } from './CollectionIcon.js'
-import { CollectibleGridProps, useStyles } from './hooks/useStyles.js'
 import { LoadingSkeleton } from './LoadingSkeleton.js'
 import { useI18N } from '../../../../../utils/index.js'
+import type { CollectibleGridProps } from '../../types.js'
 
 const AllButton = styled(Button)(({ theme }) => ({
     display: 'inline-block',
@@ -33,15 +32,70 @@ const AllButton = styled(Button)(({ theme }) => ({
     opacity: 0.5,
 }))
 
+export const useStyles = makeStyles<CollectibleGridProps>()((theme, { columns = 3, gap = 2 }) => {
+    const gapIsNumber = typeof gap === 'number'
+    return {
+        root: {
+            width: '100%',
+            display: 'grid',
+            gridTemplateColumns: `repeat(${columns}, 1fr)`,
+            gridGap: gapIsNumber ? theme.spacing(gap) : gap,
+            padding: gapIsNumber ? theme.spacing(0, gap, 0) : `0 ${gap} 0`,
+            boxSizing: 'border-box',
+        },
+        container: {
+            boxSizing: 'border-box',
+            background: theme.palette.maskColor.bottom,
+            paddingTop: gapIsNumber ? theme.spacing(gap) : gap,
+        },
+        sidebar: {
+            width: 30,
+            flexShrink: 0,
+        },
+        name: {
+            whiteSpace: 'nowrap',
+            textOverflow: 'ellipsis',
+            overflow: 'hidden',
+            lineHeight: '36px',
+            paddingLeft: '8px',
+        },
+        networkSelected: {
+            width: 24,
+            height: 24,
+            minHeight: 24,
+            minWidth: 24,
+            lineHeight: '24px',
+            background: theme.palette.maskColor.primary,
+            color: '#ffffff',
+            fontSize: 10,
+            opacity: 1,
+            '&:hover': {
+                background: theme.palette.maskColor.primary,
+            },
+        },
+        collectionButton: {
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            marginBottom: '12px',
+            minWidth: 30,
+            maxHeight: 24,
+        },
+        emptyBox: {
+            background: theme.palette.maskColor.bottom,
+        },
+    }
+})
+
 export interface CollectionListProps {
-    socialAddress: SocialAddress<NetworkPluginID>
+    socialAccount: SocialAccount<Web3Helper.ChainIdAll>
     persona?: string
     profile?: SocialIdentity
     gridProps?: CollectibleGridProps
 }
 
-export function CollectionList({ socialAddress, persona, profile, gridProps = EMPTY_OBJECT }: CollectionListProps) {
-    const { address: account } = socialAddress
+export function CollectionList({ socialAccount, persona, profile, gridProps = EMPTY_OBJECT }: CollectionListProps) {
+    const { address: account } = socialAccount
     const { t } = useI18N()
     const { classes } = useStyles(gridProps)
     const [selectedCollection, setSelectedCollection] = useState<
@@ -62,7 +116,7 @@ export function CollectionList({ socialAddress, persona, profile, gridProps = EM
         next: nextPage,
         error,
         retry: retryFetchCollectible,
-    } = useNonFungibleAssets(socialAddress.networkSupporterPluginID, undefined, { account })
+    } = useNonFungibleAssets(socialAccount.pluginID, undefined, { account })
 
     const { isHiddenAddress, hiddenList } = useWeb3ProfileHiddenSettings(
         profile?.identifier?.userId.toLowerCase(),
@@ -120,11 +174,24 @@ export function CollectionList({ socialAddress, persona, profile, gridProps = EM
             </Box>
         )
 
-    if (!allCollectibles.length && error && account) return <RetryHint retry={nextPage} />
+    if (!allCollectibles.length && error && account)
+        return (
+            <Box className={classes.container}>
+                <Box mt="200px" color={(theme) => theme.palette.maskColor.main}>
+                    <RetryHint retry={nextPage} />
+                </Box>
+            </Box>
+        )
 
     if ((done && !allCollectibles.length) || !account || isHiddenAddress)
         return (
-            <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" height={400}>
+            <Box
+                display="flex"
+                flexDirection="column"
+                alignItems="center"
+                justifyContent="center"
+                height={400}
+                className={classes.emptyBox}>
                 <Icons.EmptySimple size={32} />
                 <Typography color={(theme) => theme.palette.maskColor.second} fontSize="14px" marginTop="12px">
                     {t('no_NFTs_found')}
@@ -153,7 +220,7 @@ export function CollectionList({ socialAddress, persona, profile, gridProps = EM
                             </Box>
                         )}
                         <CollectibleList
-                            pluginID={socialAddress.networkSupporterPluginID}
+                            pluginID={socialAccount.pluginID}
                             retry={retryFetchCollectible}
                             collectibles={renderCollectibles}
                             loading={renderCollectibles.length === 0}
@@ -161,12 +228,14 @@ export function CollectionList({ socialAddress, persona, profile, gridProps = EM
                         />
                     </Box>
                     {error && !done && <RetryHint hint={false} retry={nextPage} />}
-                    <ElementAnchor
-                        callback={() => {
-                            if (nextPage) nextPage()
-                        }}>
-                        {!done && <LoadingBase />}
-                    </ElementAnchor>
+                    <div className={classes.emptyBox}>
+                        <ElementAnchor
+                            callback={() => {
+                                if (nextPage) nextPage()
+                            }}>
+                            {!done && <LoadingBase />}
+                        </ElementAnchor>
+                    </div>
                 </Box>
                 {showSidebar ? (
                     <div className={classes.sidebar}>

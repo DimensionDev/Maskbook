@@ -8,8 +8,8 @@ import {
     isAESJsonWebKey,
     ProfileIdentifier,
 } from '@masknet/shared-base'
-import { isObjectLike } from 'lodash-unified'
-import { None, Some } from 'ts-results'
+import { isObjectLike } from 'lodash-es'
+import { None, Some } from 'ts-results-es'
 import { createEmptyNormalizedBackup } from '../normalize/index.js'
 import type { NormalizedBackup } from '../normalize/type.js'
 

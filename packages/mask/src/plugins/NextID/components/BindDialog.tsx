@@ -1,13 +1,12 @@
 import { memo } from 'react'
 import { useI18N } from '../locales/index.js'
 import { useAsyncRetry } from 'react-use'
-import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
-import type { Binding, PersonaInformation } from '@masknet/shared-base'
-import { NextIDAction, NextIDPlatform } from '@masknet/shared-base'
+import { isSameAddress } from '@masknet/web3-shared-base'
+import { NetworkPluginID, Binding, PersonaInformation, NextIDAction, NextIDPlatform } from '@masknet/shared-base'
 import { BindPanelUI } from './BindPanelUI.js'
-import { useAccount } from '@masknet/plugin-infra/web3'
+import { useChainContext } from '@masknet/web3-hooks-base'
 import { useCustomSnackbar } from '@masknet/theme'
-import { delay } from '@dimensiondev/kit'
+import { delay } from '@masknet/kit'
 import { useBindPayload } from '../hooks/useBindPayload.js'
 import { usePersonaSign } from '../hooks/usePersonaSign.js'
 import { useWalletSign } from '../hooks/useWalletSign.js'
@@ -23,7 +22,7 @@ interface BindDialogProps {
 }
 
 export const BindDialog = memo<BindDialogProps>(({ open, onClose, persona, onBound, bounds }) => {
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const t = useI18N()
     const { showSnackbar } = useCustomSnackbar()
     const currentIdentifier = persona.identifier

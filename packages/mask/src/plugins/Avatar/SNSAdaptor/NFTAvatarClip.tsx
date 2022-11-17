@@ -1,15 +1,14 @@
+import { useMemo } from 'react'
 import type { Keyframes } from '@emotion/serialize'
+import { v4 as uuid } from 'uuid'
 import { keyframes, makeStyles, useStylesExtends } from '@masknet/theme'
-import classNames from 'classnames'
 import { useLastRecognizedIdentity } from '../../../components/DataSource/useActivatedUI.js'
 import { useNFT } from '../hooks/index.js'
 import { useNFTContainerAtTwitter } from '../hooks/useNFTContainerAtTwitter.js'
 import { formatPrice, formatText } from '../utils/index.js'
-import { v4 as uuid } from 'uuid'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
-import { useAccount } from '@masknet/plugin-infra/web3'
-import { useMemo } from 'react'
+import { useChainContext } from '@masknet/web3-hooks-base'
 
 // from twitter page
 const ViewBoxWidth = 200
@@ -85,7 +84,7 @@ interface NamePathProps extends withClasses<'root'> {
     id: string
 }
 function NamePath(props: NamePathProps) {
-    const classes = useStylesExtends(useStyles(), props)
+    const { classes } = useStylesExtends(useStyles(), props)
     return (
         <path
             className={classes.root}
@@ -133,7 +132,7 @@ interface TextProps extends withClasses<'root'> {
 
 function Text(props: TextProps) {
     const { xlinkHref, fontSize = 12, text, fill, dominantBaseline = 'mathematical' } = props
-    const classes = useStylesExtends(useStyles(), props)
+    const { classes } = useStylesExtends(useStyles(), props)
     return (
         <text x="0%" textAnchor="middle" fill={fill} fontFamily="sans-serif" className={classes.root}>
             <textPath xlinkHref={xlinkHref} startOffset="50%" rotate="auto" dominantBaseline={dominantBaseline}>
@@ -148,9 +147,9 @@ function Text(props: TextProps) {
 export function NFTAvatarClip(props: NFTAvatarClipProps) {
     const { width, height, viewBoxHeight = ViewBoxHeight, viewBoxWidth = ViewBoxWidth, screenName } = props
     const id = useMemo(() => props.id ?? uuid(), [props.id])
-    const classes = useStylesExtends(useStyles(), props)
+    const { classes, cx } = useStylesExtends(useStyles(), props)
     const { loading, value: avatarMetadata } = useNFTContainerAtTwitter(screenName)
-    const account = useAccount()
+    const { account } = useChainContext()
     const { value = { amount: '0', symbol: 'ETH', name: '', slug: '' }, loading: loadingNFT } = useNFT(
         account,
         avatarMetadata?.address,
@@ -203,10 +202,7 @@ export function NFTAvatarClip(props: NFTAvatarClipProps) {
 
                 <use xlinkHref={`#${id}-border-path`} className={classes.background} />
 
-                <use
-                    xlinkHref={`#${id}-border-path`}
-                    className={classNames(classes.rainbowBorder, classes.borderPath)}
-                />
+                <use xlinkHref={`#${id}-border-path`} className={cx(classes.rainbowBorder, classes.borderPath)} />
                 <g className={classes.text}>
                     <Text
                         xlinkHref={`#${id}-name-path`}
@@ -237,7 +233,7 @@ export function NFTAvatarClip(props: NFTAvatarClipProps) {
 export function NFTAvatarMiniClip(props: NFTAvatarClipProps) {
     const { width, height, viewBoxHeight = ViewBoxHeight, viewBoxWidth = ViewBoxWidth, screenName, className } = props
     const id = useMemo(() => props.id ?? uuid(), [props.id])
-    const classes = useStylesExtends(useStyles(), props)
+    const { classes, cx } = useStylesExtends(useStyles(), props)
     const identity = useLastRecognizedIdentity()
     const { loading, value: avatarMetadata } = useNFTContainerAtTwitter(screenName ?? identity.identifier?.userId)
 
@@ -245,7 +241,7 @@ export function NFTAvatarMiniClip(props: NFTAvatarClipProps) {
 
     return (
         <svg
-            className={classNames(classes.root, className)}
+            className={cx(classes.root, className)}
             width={width}
             height={height}
             id={id}
@@ -257,10 +253,7 @@ export function NFTAvatarMiniClip(props: NFTAvatarClipProps) {
                 <BorderPath id={id} transform={`scale(${width / viewBoxWidth})`} />
             </clipPath>
             <g>
-                <use
-                    xlinkHref={`#${id}-border-path`}
-                    className={classNames(classes.rainbowBorder, classes.miniBorder)}
-                />
+                <use xlinkHref={`#${id}-border-path`} className={cx(classes.rainbowBorder, classes.miniBorder)} />
             </g>
         </svg>
     )

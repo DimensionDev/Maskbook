@@ -13,10 +13,13 @@ import { HubDialog } from './components/HubDialog.js'
 import { ProfileCover } from './components/ProfileCover.js'
 import { AvatarDecorator } from './components/AvatarDecorator.js'
 import { WidgetDialog } from './components/WidgetDialog.js'
+import { SharedContextSettings } from '../settings/index.js'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
-    init(signal) {},
+    init(signal, context) {
+        SharedContextSettings.value = context
+    },
     ApplicationEntries: [
         {
             ApplicationEntryID: `${PLUGIN_ID}_Debugger`,
@@ -134,8 +137,8 @@ const sns: Plugin.SNSAdaptor.Definition = {
             },
             Utils: {
                 sorter(a, z) {
-                    if (a.type === SocialAddressType.ADDRESS) return 1
-                    if (z.type === SocialAddressType.ADDRESS) return -1
+                    if (a.supportedAddressTypes?.includes(SocialAddressType.Address)) return 1
+                    if (z.supportedAddressTypes?.includes(SocialAddressType.Address)) return -1
 
                     return 0
                 },

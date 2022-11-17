@@ -1,25 +1,28 @@
 import { useCallback, useMemo, useState } from 'react'
-import { InjectedDialog, useOpenShareTxDialog, useSelectFungibleToken, FungibleTokenInput } from '@masknet/shared'
+import {
+    InjectedDialog,
+    useOpenShareTxDialog,
+    useSelectFungibleToken,
+    FungibleTokenInput,
+    PluginWalletStatusBar,
+    WalletConnectedBoundary,
+    EthereumERC20TokenApprovedBoundary,
+} from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles, useStylesExtends, ActionButton } from '@masknet/theme'
-import { formatBalance, FungibleToken, NetworkPluginID, rightShift } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { formatBalance, FungibleToken, rightShift } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType, useGitcoinConstants } from '@masknet/web3-shared-evm'
-import { useAccount, useChainId, useFungibleToken, useFungibleTokenBalance } from '@masknet/plugin-infra/web3'
+import { useChainContext, useFungibleToken, useFungibleTokenBalance } from '@masknet/web3-hooks-base'
 import { DialogActions, DialogContent, Link, Typography } from '@mui/material'
 import { activatedSocialNetworkUI } from '../../../social-network/index.js'
-import { isFacebook } from '../../../social-network-adaptor/facebook.com/base.js'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base.js'
 import { Translate, useI18N } from '../locales/index.js'
-import { PluginWalletStatusBar, useI18N as useBaseI18N } from '../../../utils/index.js'
-import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary.js'
-import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary.js'
+import { useI18N as useBaseI18N } from '../../../utils/index.js'
 import { useDonateCallback } from '../hooks/useDonateCallback.js'
 import { PluginGitcoinMessages } from '../messages.js'
 
 const useStyles = makeStyles()((theme) => ({
-    paper: {
-        width: '450px !important',
-    },
     form: {
         '& > *': {
             margin: theme.spacing(1, 0),
@@ -48,14 +51,13 @@ export interface DonateDialogProps extends withClasses<never> {}
 export function DonateDialog(props: DonateDialogProps) {
     const { t: tr } = useBaseI18N()
     const t = useI18N()
-    const classes = useStylesExtends(useStyles(), props)
+    const { classes } = useStylesExtends(useStyles(), props)
     const [title, setTitle] = useState('')
     const [address, setAddress] = useState('')
     const [postLink, setPostLink] = useState<string | URL>('')
 
     // context
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const nativeTokenDetailed = useFungibleToken(NetworkPluginID.PLUGIN_EVM)
 
     const { BULK_CHECKOUT_ADDRESS } = useGitcoinConstants(chainId)
@@ -103,18 +105,14 @@ export function DonateDialog(props: DonateDialogProps) {
     const donate = useCallback(async () => {
         const hash = await donateCallback()
         if (typeof hash !== 'string') return
+
         const cashTag = isTwitter(activatedSocialNetworkUI) ? '$' : ''
-        const isOnTwitter = isTwitter(activatedSocialNetworkUI)
-        const isOnFacebook = isFacebook(activatedSocialNetworkUI)
         const shareText = token
             ? t.share_text({
-                  title,
                   balance: formatBalance(amount, token?.decimals),
                   symbol: `${cashTag}${token?.symbol || ''}`,
-                  account_promote: t.account_promote({
-                      context: isOnTwitter ? 'twitter' : isOnFacebook ? 'facebook' : 'default',
-                  }),
-                  link: postLink.toString(),
+                  promote: t.promote(),
+                  project_name: title,
               })
             : ''
         await openShareTxDialog({

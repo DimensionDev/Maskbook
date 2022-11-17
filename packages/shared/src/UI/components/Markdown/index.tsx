@@ -1,9 +1,15 @@
-import { purify } from '@masknet/shared-base'
-import { makeStyles, useStylesExtends } from '@masknet/theme'
+import { markdownTransformIpfsURL, purify } from '@masknet/shared-base'
+import { memo } from 'react'
+import ReactMarkdown, { Options } from 'react-markdown'
+import { resolveIPFS_URL } from '@masknet/web3-shared-base'
+import rehypeRaw from 'rehype-raw'
+import remarkGfm from 'remark-gfm'
+
+import { makeStyles } from '@masknet/theme'
 import { useRemarkable } from '../../../hooks/useRemarkable.js'
 
 const useStyles = makeStyles()((theme) => ({
-    root: {
+    markdown: {
         color: 'inherit',
         fontSize: 'inherit',
         fontFamily: 'sans-serif',
@@ -28,12 +34,34 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface MarkdownProps extends withClasses<'root'> {
+export interface LegacyMarkdownProps {
     content: string
+    className?: string
 }
 
-export function Markdown(props: MarkdownProps) {
-    const classes = useStylesExtends(useStyles(), props)
-    const html = purify(useRemarkable(props.content))
-    return <div dangerouslySetInnerHTML={{ __html: html }} className={classes.root} />
+export function LegacyMarkdown({ content, className }: LegacyMarkdownProps) {
+    const { classes, cx } = useStyles()
+    const html = purify(useRemarkable(content))
+    return <div dangerouslySetInnerHTML={{ __html: html }} className={cx(classes.markdown, className)} />
 }
+
+interface MarkdownProps extends Options {
+    defaultStyle?: boolean
+}
+
+export const Markdown = memo<MarkdownProps>(({ children, className, defaultStyle = true, ...props }) => {
+    const { classes, cx } = useStyles()
+
+    const markdown = markdownTransformIpfsURL(children)
+    return (
+        <ReactMarkdown
+            className={cx(defaultStyle ? classes.markdown : undefined, className)}
+            remarkPlugins={[[remarkGfm, { singleTilde: false }]]}
+            rehypePlugins={[rehypeRaw]}
+            transformImageUri={(src) => resolveIPFS_URL(src)!}
+            linkTarget="_blank"
+            {...props}>
+            {markdown}
+        </ReactMarkdown>
+    )
+})

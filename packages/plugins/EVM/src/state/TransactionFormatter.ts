@@ -1,3 +1,4 @@
+import { compact } from 'lodash-es'
 import * as ABICoder from 'web3-eth-abi'
 import type { Plugin } from '@masknet/plugin-infra'
 import {
@@ -7,12 +8,14 @@ import {
     TransactionDescriptor as TransactionDescriptorBase,
     TransactionDescriptorType,
 } from '@masknet/web3-shared-base'
-import { TransactionFormatterState } from '@masknet/plugin-infra/web3'
+import { TransactionFormatterState } from '@masknet/web3-state'
 import {
     ChainId,
+    decodeUserOperations,
     getData,
     getFunctionParameters,
     getFunctionSignature,
+    getSmartPayConstant,
     getTo,
     isEmptyHex,
     isZeroAddress,
@@ -34,6 +37,7 @@ import { RedPacketDescriptor } from './TransactionFormatter/descriptors/RedPacke
 import { ERC20Descriptor } from './TransactionFormatter/descriptors/ERC20.js'
 import { ERC721Descriptor } from './TransactionFormatter/descriptors/ERC721.js'
 import { SwapDescriptor } from './TransactionFormatter/descriptors/Swap.js'
+import { SavingsDescriptor } from './TransactionFormatter/descriptors/Savings.js'
 
 export class TransactionFormatter extends TransactionFormatterState<ChainId, TransactionParameter, Transaction> {
     private coder = ABICoder as unknown as ABICoder.AbiCoder
@@ -41,6 +45,7 @@ export class TransactionFormatter extends TransactionFormatterState<ChainId, Tra
     private descriptors: Record<TransactionDescriptorType, TransactionDescriptor[]> = {
         [TransactionDescriptorType.TRANSFER]: [new TransferTokenDescriptor()],
         [TransactionDescriptorType.INTERACTION]: [
+            new SavingsDescriptor(),
             new ITODescriptor(),
             new MaskBoxDescriptor(),
             new RedPacketDescriptor(),
@@ -124,9 +129,27 @@ export class TransactionFormatter extends TransactionFormatterState<ChainId, Tra
             // send ether
             if (isEmptyHex(code)) {
                 return { ...context, type: TransactionDescriptorType.TRANSFER }
-            } else {
-                return { ...context, type: TransactionDescriptorType.INTERACTION }
             }
+
+            // smart pay tx
+            if (isSameAddress(to, getSmartPayConstant(chainId, 'EP_CONTRACT_ADDRESS'))) {
+                const userOperations = decodeUserOperations(transaction)
+                const allSettled = await Promise.allSettled(
+                    userOperations.map((x) => {
+                        return this.createContext(chainId, x)
+                    }),
+                )
+
+                return {
+                    ...context,
+                    type: TransactionDescriptorType.INTERACTION,
+                    children: compact<TransactionContext<ChainId, string | undefined>>(
+                        allSettled.map((x) => (x.status === 'fulfilled' ? x.value : undefined)),
+                    ),
+                }
+            }
+
+            return { ...context, type: TransactionDescriptorType.INTERACTION }
         }
 
         throw new Error('Failed to format transaction.')

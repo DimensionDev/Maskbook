@@ -1,7 +1,7 @@
 import { LanguageOptions } from '@masknet/public-api'
 import i18n from 'i18next'
 import Detector from 'i18next-browser-languagedetector'
-import { debounce, DebouncedFunc } from 'lodash-unified'
+import { debounce, DebouncedFunc } from 'lodash-es'
 
 export const i18NextInstance = i18n.default || i18n
 if (process.env.NODE_ENV === 'development') {

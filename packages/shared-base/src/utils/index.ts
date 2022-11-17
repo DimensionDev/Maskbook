@@ -1,14 +1,14 @@
 export * from './asyncIterator.js'
-export * from './mixin.js'
+export * from './createValueRefWithReady.js'
 export * from './detect.js'
+export * from './getAssetAsBlobURL.js'
 export * from './getLocalImplementation.js'
-export * from './parseURLs.js'
+export * from './markdown.js'
+export * from './misc.js'
+export * from './mixin.js'
+export * from './personas.js'
 export * from './pollingTask.js'
 export * from './subscription.js'
-export * from './getAssetAsBlobURL.js'
-export * from './personas.js'
-export * from './createValueRefWithReady.js'
-export * from './misc.js'
 
 export enum MimeTypes {
     JSON = 'application/json',
@@ -23,4 +23,11 @@ export function createLookupTableResolver<K extends keyof any, T>(map: Record<K,
         return fallback
     }
     return (key: K) => map[key] ?? resolveFallback(key)
+}
+
+export function compose<T>(...args: [...composer: Array<((arg: T) => T) | null | false>, init: T]) {
+    if (args.length === 0) throw new TypeError()
+    const last = args.pop() as T
+    // eslint-disable-next-line unicorn/no-array-reduce
+    return (args as Array<((arg: T) => T) | null>).filter(Boolean).reduceRight((prev, fn) => fn!(prev), last)
 }

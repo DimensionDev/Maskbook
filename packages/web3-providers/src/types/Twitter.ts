@@ -1,4 +1,9 @@
 export namespace TwitterBaseAPI {
+    export interface NFT {
+        address: string
+        token_id: string
+    }
+
     export interface NFTContainer {
         has_nft_avatar: boolean
         nft_avatar_metadata: AvatarMetadata
@@ -32,7 +37,8 @@ export namespace TwitterBaseAPI {
             }>
         }
     }
-    type UserUrl = {
+
+    export interface UserUrl {
         display_url: string
         expanded_url: string
         /** t.co url */
@@ -46,6 +52,7 @@ export namespace TwitterBaseAPI {
         affiliates_highlighted_label: {}
         has_nft_avatar: boolean
         legacy?: {
+            id_str: string
             blocked_by: boolean
             blocking: boolean
             can_dm: boolean
@@ -106,10 +113,7 @@ export namespace TwitterBaseAPI {
         legacy_extended_profile: {}
         is_profile_translatable: boolean
     }
-    export type Response<T> = {
-        data: T
-    }
-    export type UserByScreenNameResponse = Response<{ user: { result: User } }>
+
     export interface AvatarInfo {
         nickname: string
         userId: string
@@ -117,8 +121,51 @@ export namespace TwitterBaseAPI {
         mediaId: string
     }
 
+    export enum Scale {
+        X_Small = 'xSmall',
+        Small = 'small',
+        Normal = 'normal',
+        Large = 'large',
+        X_Large = 'xLarge',
+    }
+
+    export enum ThemeMode {
+        Dark = 'darker',
+        Dim = 'dark',
+        Light = 'light',
+    }
+
+    export enum ThemeColor {
+        Blue = 'blue500',
+        Yellow = 'yellow500',
+        Purple = 'purple500',
+        Magenta = 'magenta500',
+        Orange = 'orange500',
+        Green = 'green500',
+    }
+
     export interface Settings {
         screen_name: string
+    }
+
+    export interface UserSettings {
+        altTextNudgeType?: string
+        autoPollNewTweets?: boolean
+        autoShowNewTweets?: boolean
+        highContrastEnabled?: boolean
+        loginPromptLastShown?: number
+        /* cspell:disable-next-line */
+        nextPushCheckin?: number
+        preciseLocationEnabled?: boolean
+        pushNotificationsPermission?: 'granted'
+        reducedMotionEnabled?: boolean
+        replyVotingSurveyClicked?: number
+        scale?: Scale
+        shouldAutoPlayGif?: boolean
+        shouldAutoTagLocation?: boolean
+        showTweetMediaDetailDrawer?: boolean
+        themeBackground?: ThemeMode
+        themeColor?: ThemeColor
     }
 
     export interface TwitterResult {
@@ -132,17 +179,24 @@ export namespace TwitterBaseAPI {
         }
     }
 
+    export type Event<T> = {
+        target: {
+            result: T
+        }
+    }
+
+    export type Response<T> = {
+        data: T
+    }
+
+    export type UserByScreenNameResponse = Response<{ user: { result: User } }>
+
     export interface Provider {
         getSettings: () => Promise<Settings | undefined>
-        getUserNftContainer: (screenName: string) => Promise<
-            | {
-                  address: string
-                  token_id: string
-              }
-            | undefined
-        >
+        getUserSettings: () => Promise<UserSettings>
+        getUserByScreenName: (screenName: string) => Promise<User | null>
+        getUserNftContainer: (screenName: string) => Promise<NFT | undefined>
         uploadUserAvatar: (screenName: string, image: Blob | File) => Promise<TwitterResult>
         updateProfileImage: (screenName: string, media_id_str: string) => Promise<AvatarInfo | undefined>
-        getUserByScreenName: (screenName: string) => Promise<User | null>
     }
 }

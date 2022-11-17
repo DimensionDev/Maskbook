@@ -1,5 +1,4 @@
-import { createProxyKVStorageBackend, createKVStorageHost, KVStorageBackend } from '@masknet/shared-base'
-import { PluginID } from '@masknet/plugin-infra'
+import { createProxyKVStorageBackend, createKVStorageHost, KVStorageBackend, PluginID } from '@masknet/shared-base'
 import { MaskMessages } from './messages.js'
 
 const indexedDBProxy = createProxyKVStorageBackend()
@@ -13,14 +12,14 @@ const createInMemoryKVStorage = createKVStorageHost(inMemoryBackend, MaskMessage
 
 export const InMemoryStorages = {
     Plugin: createInMemoryKVStorage('plugin', {}),
-    FacebookNFTEventOnMobile: createInMemoryKVStorage('FacebookNFTEventOnMobile', {
+    FacebookNFTEventOnMobile: createInMemoryKVStorage('FacebookNFTEventMobile', {
         userId: '',
         avatarId: '',
         address: '',
         tokenId: '',
         schema: 1,
         chainId: 1,
-        pluginId: '',
+        pluginID: '',
     }),
 }
 

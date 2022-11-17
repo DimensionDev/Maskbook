@@ -29,7 +29,9 @@ const TimeLineRainbow = memo(
                     avatarId={avatarId}
                     width={width}
                     height={height}
-                    classes={classes}
+                    classes={{
+                        root: classes.root,
+                    }}
                     snsKey={RSS3_KEY_SNS.INSTAGRAM}
                 />
             </div>
@@ -55,7 +57,7 @@ function _(selector: () => LiveSelector<HTMLImageElement, false>, signal: AbortS
 
                 if (!info) return
 
-                const proxy = DOMProxy({ afterShadowRootInit: { mode: 'closed' } })
+                const proxy = DOMProxy({ afterShadowRootInit: { mode: process.env.shadowRootMode } })
                 proxy.realCurrent = info.element
 
                 const root = createReactRootShadowed(proxy.afterShadow, { signal })

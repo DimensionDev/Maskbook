@@ -1,7 +1,7 @@
 import { DataProvider } from '@masknet/public-api'
 import { TokenType } from '@masknet/web3-shared-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
-import { isMirroredKeyword } from '../cmc/helper.js'
+import { isMirroredKeyword } from '../trending/helpers.js'
 import type { TrendingAPI } from '../types/index.js'
 import * as BaseAPI from './base-api.js'
 import { BTC_FIRST_LEGER_DATE, getAllCoinsByKeyword, getPriceStats as getStats } from './base-api.js'
@@ -15,30 +15,14 @@ export enum Days {
 }
 
 export class UniSwapAPI implements TrendingAPI.Provider<ChainId> {
-    getPriceStats(
-        chainId: ChainId,
-        coinId: string,
-        currency: TrendingAPI.Currency,
-        days: number,
-    ): Promise<TrendingAPI.Stat[]> {
-        const endTime = new Date()
-        const startTime = new Date()
-        startTime.setDate(endTime.getDate() - days)
-        const uniswap_interval = (() => {
-            if (days === 0 || days > 365) return 86400 // max
-            if (days > 90) return 7200 // 1y
-            if (days > 30) return 3600 // 3m
-            if (days > 7) return 900 // 1w
-            return 300 // 5m
-        })()
-        return getStats(
-            chainId,
-            coinId,
-            uniswap_interval,
-            Math.floor((days === Days.MAX ? BTC_FIRST_LEGER_DATE.getTime() : startTime.getTime()) / 1000),
-            Math.floor(endTime.getTime() / 1000),
-        )
+    getAllCoins(): Promise<TrendingAPI.Coin[]> {
+        return Promise.resolve([])
     }
+
+    getCoinsByKeyword(chainId: ChainId, keyword: string): Promise<TrendingAPI.Coin[]> {
+        return getAllCoinsByKeyword(chainId, keyword)
+    }
+
     async getCoinTrending(chainId: ChainId, id: string, currency: TrendingAPI.Currency): Promise<TrendingAPI.Trending> {
         const { token, marketInfo, tickersInfo } = await BaseAPI.getCoinInfo(chainId, id)
         return {
@@ -63,22 +47,31 @@ export class UniSwapAPI implements TrendingAPI.Provider<ChainId> {
         }
     }
 
-    getCoins(): Promise<TrendingAPI.Coin[]> {
-        return Promise.resolve([])
+    getCoinPriceStats(
+        chainId: ChainId,
+        coinId: string,
+        currency: TrendingAPI.Currency,
+        days: number,
+    ): Promise<TrendingAPI.Stat[]> {
+        const endTime = new Date()
+        const startTime = new Date()
+        startTime.setDate(endTime.getDate() - days)
+        const uniswap_interval = (() => {
+            if (days === 0 || days > 365) return 86400 // max
+            if (days > 90) return 7200 // 1y
+            if (days > 30) return 3600 // 3m
+            if (days > 7) return 900 // 1w
+            return 300 // 5m
+        })()
+        return getStats(
+            chainId,
+            coinId,
+            uniswap_interval,
+            Math.floor((days === Days.MAX ? BTC_FIRST_LEGER_DATE.getTime() : startTime.getTime()) / 1000),
+            Math.floor(endTime.getTime() / 1000),
+        )
     }
-
-    getCurrencies(): Promise<TrendingAPI.Currency[]> {
-        return Promise.resolve([
-            {
-                id: 'usd',
-                name: 'USD',
-                symbol: '$',
-                description: 'Unite State Dollar',
-            },
-        ])
-    }
-
-    getCoinsByKeyword(chainId: ChainId, keyword: string): Promise<TrendingAPI.Coin[]> {
-        return getAllCoinsByKeyword(chainId, keyword)
+    getCoinMarketInfo(symbol: string): Promise<TrendingAPI.MarketInfo> {
+        throw new Error('To be implemented.')
     }
 }

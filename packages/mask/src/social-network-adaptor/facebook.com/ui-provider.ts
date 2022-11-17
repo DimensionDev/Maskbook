@@ -1,4 +1,7 @@
-import type { SocialNetworkUI } from '../../social-network/types.js'
+/* eslint-disable tss-unused-classes/unused-classes */
+import type { SocialNetworkUI } from '@masknet/types'
+import { makeStyles } from '@masknet/theme'
+import { ProfileIdentifier, EnhanceableSite } from '@masknet/shared-base'
 import { stateCreator } from '../../social-network/utils.js'
 import { facebookBase } from './base.js'
 import { facebookShared } from './shared.js'
@@ -19,10 +22,7 @@ import { PostProviderFacebook } from './collecting/posts.js'
 import { pasteImageToCompositionDefault } from '../../social-network/defaults/automation/AttachImageToComposition.js'
 import { injectPageInspectorDefault } from '../../social-network/defaults/inject/PageInspector.js'
 import { createTaskStartSetupGuideDefault } from '../../social-network/defaults/inject/StartSetupGuide.js'
-import { GrayscaleAlgorithm } from '@masknet/encryption'
 import { PaletteModeProviderFacebook, useThemeFacebookVariant } from './customization/custom.js'
-import { makeStyles } from '@masknet/theme'
-import { ProfileIdentifier, EnhanceableSite } from '@masknet/shared-base'
 import { globalUIState } from '../../social-network/index.js'
 import { injectToolboxHintAtFacebook as injectToolboxAtFacebook } from './injection/Toolbar.js'
 import { injectProfileNFTAvatarInFaceBook } from './injection/NFT/ProfileNFTAvatar.js'
@@ -211,8 +211,6 @@ const facebookUI: SocialNetworkUI.Definition = {
     },
     configuration: {
         steganography: {
-            // ! the color image cannot compression resistance in Facebook
-            grayscaleAlgorithm: GrayscaleAlgorithm.LUMINANCE,
             // ! Change this might be a breaking change !
             password() {
                 const id =

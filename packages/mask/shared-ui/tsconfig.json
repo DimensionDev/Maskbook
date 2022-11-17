@@ -4,8 +4,7 @@
     "rootDir": "./",
     "outDir": "../dist/shared-ui/",
     "tsBuildInfoFile": "../dist/shared-ui.tsbuildinfo",
-    "emitDeclarationOnly": true,
-    "lib": ["ES2022"]
+    "emitDeclarationOnly": true
   },
   "include": ["./", "./**/*.json"],
   "references": [
@@ -13,7 +12,7 @@
     { "path": "../../shared/" },
     { "path": "../../shared-base" },
     { "path": "../../typed-message/base" },
-    { "path": "../../typed-message/dom" },
+    { "path": "../../typed-message/react" },
     { "path": "../../theme" },
     { "path": "../../plugin-infra" }
   ]

@@ -1,10 +1,11 @@
+import { first } from 'lodash-es'
 import { LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { delay } from '@dimensiondev/kit'
+import { delay } from '@masknet/kit'
 import { TWITTER_RESERVED_SLUGS } from '@masknet/injected-script/shared'
 import { ProfileIdentifier } from '@masknet/shared-base'
 import { Twitter } from '@masknet/web3-providers'
-import { first } from 'lodash-unified'
-import { creator, SocialNetworkUI as Next } from '../../../social-network/index.js'
+import type { SocialNetworkUI as Next } from '@masknet/types'
+import { creator } from '../../../social-network/index.js'
 import { twitterBase } from '../base.js'
 import { isMobileTwitter } from '../utils/isMobile.js'
 import {
@@ -65,6 +66,7 @@ function resolveLastRecognizedIdentityInner(
                 avatar,
                 nickname,
                 identifier: ProfileIdentifier.of(twitterBase.networkIdentifier, handle).unwrapOr(undefined),
+                isOwner: true,
             }
         }
     }
@@ -105,6 +107,7 @@ function resolveLastRecognizedIdentityMobileInner(
             ref.value = {
                 ...ref.value,
                 identifier,
+                isOwner: true,
             }
         }
     }
@@ -120,6 +123,7 @@ function getFirstSlug() {
 
 function resolveCurrentVisitingIdentityInner(
     ref: Next.CollectingCapabilities.IdentityResolveProvider['recognized'],
+    ownerRef: Next.CollectingCapabilities.IdentityResolveProvider['recognized'],
     cancel: AbortSignal,
 ) {
     const update = async (twitterId: string) => {
@@ -128,6 +132,8 @@ function resolveCurrentVisitingIdentityInner(
 
         const nickname = user.legacy.name
         const handle = user.legacy.screen_name
+        const ownerHandle = ownerRef.value.identifier?.userId
+        const isOwner = !!(ownerHandle && handle.toLowerCase() === ownerHandle.toLowerCase())
         const avatar = user.legacy.profile_image_url_https.replace(/_normal(\.\w+)$/, '_400x400$1')
         const bio = user.legacy.description
         const homepage = user.legacy.entities.url?.urls[0]?.expanded_url ?? ''
@@ -138,6 +144,7 @@ function resolveCurrentVisitingIdentityInner(
             avatar,
             bio,
             homepage,
+            isOwner,
         }
     }
 
@@ -170,6 +177,6 @@ export const CurrentVisitingIdentityProviderTwitter: Next.CollectingCapabilities
     hasDeprecatedPlaceholderName: false,
     recognized: creator.EmptyIdentityResolveProviderState(),
     start(cancel) {
-        resolveCurrentVisitingIdentityInner(this.recognized, cancel)
+        resolveCurrentVisitingIdentityInner(this.recognized, IdentityProviderTwitter.recognized, cancel)
     },
 }

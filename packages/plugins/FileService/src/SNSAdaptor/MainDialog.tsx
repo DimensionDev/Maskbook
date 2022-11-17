@@ -1,7 +1,7 @@
 import { Button, DialogActions, DialogContent } from '@mui/material'
 import { makeStyles, MaskDialog, useCustomSnackbar } from '@masknet/theme'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { isNil } from 'lodash-unified'
+import { isNil } from 'lodash-es'
 import { useState } from 'react'
 import { useI18N } from '../locales/i18n_generated.js'
 import { WalletMessages } from '@masknet/plugin-wallet'

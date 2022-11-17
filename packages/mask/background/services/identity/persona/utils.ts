@@ -1,15 +1,15 @@
 import * as bip39 from 'bip39'
 import * as wallet from 'wallet.ts'
-import { encodeArrayBuffer, encodeText } from '@dimensiondev/kit'
+import { encodeArrayBuffer, encodeText } from '@masknet/kit'
 import {
     EC_Private_JsonWebKey,
     EC_Public_JsonWebKey,
     JsonWebKeyPair,
     toBase64URL,
-    decompressSecp256k1Key,
+    decompressK256Key,
     AESCryptoKey,
     AESJsonWebKey,
-    assertEC_Private_JsonWebKey,
+    isEC_Private_JsonWebKey,
 } from '@masknet/shared-base'
 import { CryptoKeyToJsonWebKey } from '../../../../utils-pure/index.js'
 import type { PersonaRecord } from '../../../database/persona/db.js'
@@ -87,10 +87,12 @@ export async function recover_ECDH_256k1_KeyPair_ByMnemonicWord(
     }
 }
 
-export const validateMnemonic = bip39.validateMnemonic
+export async function validateMnemonic(mnemonic: string, wordList?: string[] | undefined): Promise<boolean> {
+    return bip39.validateMnemonic(mnemonic, wordList)
+}
 
 async function HDKeyToJwk(hdk: wallet.HDKey): Promise<JsonWebKey> {
-    const jwk = await decompressSecp256k1Key(encodeArrayBuffer(hdk.publicKey))
+    const jwk = await decompressK256Key(encodeArrayBuffer(hdk.publicKey))
     jwk.d = hdk.privateKey ? toBase64URL(hdk.privateKey) : undefined
     return jwk
 }
@@ -98,7 +100,7 @@ async function HDKeyToJwk(hdk: wallet.HDKey): Promise<JsonWebKey> {
 async function split_ec_k256_key_pair_into_pub_priv(
     key: Readonly<JsonWebKey>,
 ): Promise<JsonWebKeyPair<EC_Public_JsonWebKey, EC_Private_JsonWebKey>> {
-    assertEC_Private_JsonWebKey(key)
+    if (!isEC_Private_JsonWebKey(key)) throw new TypeError('Not a EC private key')
     const { d, ...pub } = key
     // @ts-expect-error Do a force transform
     return { privateKey: { ...key }, publicKey: pub }

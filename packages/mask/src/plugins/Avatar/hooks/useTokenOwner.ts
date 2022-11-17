@@ -1,30 +1,19 @@
 import { useAsyncRetry } from 'react-use'
 import { isValidAddress, SchemaType } from '@masknet/web3-shared-evm'
-import { useWeb3Connection } from '@masknet/plugin-infra/web3'
-import { activatedSocialNetworkUI } from '../../../social-network/index.js'
-import { EMPTY_LIST, EnhanceableSite, NextIDPlatform } from '@masknet/shared-base'
-import type { NetworkPluginID, SocialIdentity } from '@masknet/web3-shared-base'
-import { NextIDProof } from '@masknet/web3-providers'
-import type { IdentityResolved } from '@masknet/plugin-infra'
-import Services from '../../../extension/service.js'
+import { useWeb3Connection } from '@masknet/web3-hooks-base'
+import { EMPTY_LIST, EnhanceableSite, NextIDPlatform, NetworkPluginID } from '@masknet/shared-base'
+import type { SocialIdentity } from '@masknet/web3-shared-base'
 import { useGetAddress } from './useGetAddress.js'
-
-async function queryCurrentPersona(identityResolved: IdentityResolved) {
-    if (!identityResolved.identifier) return
-    const personaInformation = await Services.Identity.queryPersonaByProfile(identityResolved.identifier)
-    if (!personaInformation?.identifier.publicKeyAsHex) return
-    return NextIDProof.queryExistedBindingByPersona(personaInformation?.identifier.publicKeyAsHex)
-}
+import { activatedSocialNetworkUI } from '../../../social-network/index.js'
 
 export function useCheckTokenOwner(
-    pluginId: NetworkPluginID,
+    pluginID: NetworkPluginID,
     address: string,
     tokenId: string,
     schemaType: SchemaType,
     socialIdentity?: SocialIdentity,
 ) {
-    const connection = useWeb3Connection(pluginId)
-
+    const connection = useWeb3Connection(pluginID)
     const getAddress = useGetAddress()
 
     return useAsyncRetry(async () => {

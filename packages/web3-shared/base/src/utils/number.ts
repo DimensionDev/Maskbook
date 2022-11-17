@@ -1,4 +1,4 @@
-import BigNumber from 'bignumber.js'
+import { BigNumber } from 'bignumber.js'
 
 export const ZERO = new BigNumber('0')
 export const ONE = new BigNumber('1')
@@ -52,6 +52,11 @@ export function isPositive(n: BigNumber.Value) {
 /** a * b */
 export function multipliedBy(a: BigNumber.Value, b: BigNumber.Value) {
     return new BigNumber(a).multipliedBy(b)
+}
+
+/** a + b */
+export function plus(a: BigNumber.Value, b: BigNumber.Value) {
+    return new BigNumber(a).plus(b)
 }
 
 /** a - b */

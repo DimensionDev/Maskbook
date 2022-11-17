@@ -4,7 +4,7 @@
     "rootDir": "./",
     "outDir": "./dist/",
     "tsBuildInfoFile": "./dist/.tsbuildinfo",
-    "lib": ["ESNext"],
+    "lib": ["ESNext", "DOM", "DOM.Iterable"],
     "emitDeclarationOnly": true
   },
   "include": ["./ecmascript", "./ecmascript-intl", "./types", "./web-apis"],

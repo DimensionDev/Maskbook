@@ -13,7 +13,7 @@ import {
     BlockType,
     ContractEventLog,
     BaseContract,
-} from './types'
+} from './types.js'
 
 interface EventOptions {
     filter?: object

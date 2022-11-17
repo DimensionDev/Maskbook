@@ -1,4 +1,4 @@
-import { encodeArrayBuffer } from '@dimensiondev/kit'
+import { encodeArrayBuffer } from '@masknet/kit'
 import {
     decrypt,
     parsePayload,
@@ -23,7 +23,7 @@ import {
     ProfileIdentifier,
 } from '@masknet/shared-base'
 import type { TypedMessage } from '@masknet/typed-message'
-import { noop } from 'lodash-unified'
+import { noop } from 'lodash-es'
 import { queryProfileDB, queryPersonaDB } from '../../database/persona/db.js'
 import {
     createProfileWithPersona,
@@ -78,10 +78,16 @@ export async function* decryptionWithSocialNetworkDecoding(
             return yield new DecryptError(DecryptErrorReasons.UnrecognizedAuthor, undefined)
         }
         const result = await steganographyDecodeImage(encoded.image, {
-            pass: context.authorHint.toText(),
+            password: context.authorHint.toText(),
             downloadImage,
         })
-        decoded = socialNetworkDecoder(context.currentSocialNetwork, result)[0]
+        if (typeof result === 'string') {
+            decoded = socialNetworkDecoder(context.currentSocialNetwork, result)[0]
+        } else if (result === null) {
+            return yield new DecryptError(DecryptErrorReasons.NoPayloadFound, undefined)
+        } else {
+            decoded = result
+        }
     }
 
     if (!decoded) return yield new DecryptError(DecryptErrorReasons.NoPayloadFound, undefined)

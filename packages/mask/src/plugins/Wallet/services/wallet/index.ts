@@ -1,5 +1,5 @@
 import * as bip39 from 'bip39'
-import { first, last, omit } from 'lodash-unified'
+import { first, last, omit } from 'lodash-es'
 import { hexToBytes, toHex } from 'web3-utils'
 import { toBuffer } from 'ethereumjs-util'
 import { personalSign, signTypedData as signTypedData_, SignTypedDataVersion } from '@metamask/eth-sig-util'

@@ -1,6 +1,6 @@
-import { deleteCache, fetchJSON } from './helper.js'
+import { deleteCache, fetchJSON } from './helpers.js'
 import urlcat from 'urlcat'
-import { first } from 'lodash-unified'
+import { first, uniqWith } from 'lodash-es'
 import {
     BindingProof,
     fromHex,
@@ -12,7 +12,7 @@ import {
     toBase64,
 } from '@masknet/shared-base'
 import type { NextIDBaseAPI } from '../types/index.js'
-import { PROOF_BASE_URL_DEV, PROOF_BASE_URL_PROD } from './constants.js'
+import { PROOF_BASE_URL_DEV, PROOF_BASE_URL_PROD, RELATION_SERVICE_URL } from './constants.js'
 
 const BASE_URL =
     process.env.channel === 'stable' && process.env.NODE_ENV === 'production' ? PROOF_BASE_URL_PROD : PROOF_BASE_URL_DEV
@@ -104,7 +104,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
         if (!platform && !identity) return []
 
         const response = await fetchJSON<NextIDBindings>(
-            urlcat(BASE_URL, '/v1/proof', { platform, identity, page }),
+            urlcat(BASE_URL, '/v1/proof', { platform, identity, page, exact: true }),
             undefined,
             true,
         )
@@ -131,6 +131,48 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
         const result = await fetchJSON<BindingProof>(url, {}, enableCache)
 
         return result.map(() => true).unwrapOr(false)
+    }
+
+    async queryProfilesByRelationService(identity: string) {
+        const response = await fetch(RELATION_SERVICE_URL, {
+            method: 'POST',
+            mode: 'cors',
+            body: JSON.stringify({
+                operationName: 'GET_PROFILES_QUERY',
+                variables: { identity: identity.toLowerCase(), platform: 'ethereum' },
+                query: `
+                    query GET_PROFILES_QUERY($platform: String, $identity: String) {
+                        identity(platform: $platform, identity: $identity) {                     
+                            neighborWithTraversal(depth: 7) {
+                                source
+                                to {
+                                    platform
+                                    displayName                                                                                                        
+                                }        
+                                from {
+                                    platform
+                                    displayName                                                                                                        
+                                }                                                                                          
+                            }
+                        }
+                    }
+                `,
+            }),
+        })
+
+        const res = (await response.json())?.data.identity.neighborWithTraversal as Array<{
+            source: NextIDPlatform
+            to: { platform: NextIDPlatform; displayName: string }
+            from: { platform: NextIDPlatform; displayName: string }
+        }>
+
+        const rawData = res
+            .map((x) => createBindingProofFromProfileQuery(x.to.platform, x.source, x.to.displayName))
+            .concat(res.map((x) => createBindingProofFromProfileQuery(x.from.platform, x.source, x.from.displayName)))
+
+        return uniqWith(rawData, (a, b) => a.identity === b.identity && a.platform === b.platform).filter(
+            (x) => ![NextIDPlatform.Ethereum, NextIDPlatform.NextID].includes(x.platform),
+        )
     }
 
     async createPersonaPayload(
@@ -163,4 +205,16 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
             }))
             .unwrapOr(null)
     }
+}
+
+function createBindingProofFromProfileQuery(platform: NextIDPlatform, source: NextIDPlatform, identity: string) {
+    return {
+        platform,
+        source,
+        identity,
+        created_at: '',
+        invalid_reason: '',
+        last_checked_at: '',
+        is_valid: true,
+    } as BindingProof
 }

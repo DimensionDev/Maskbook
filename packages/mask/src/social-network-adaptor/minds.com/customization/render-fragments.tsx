@@ -1,11 +1,12 @@
-import type { RenderFragmentsContextType } from '@masknet/typed-message/dom'
+import type { RenderFragmentsContextType } from '@masknet/typed-message-react'
 import { memo } from 'react'
 import { Link } from '@mui/material'
 import { useTagEnhancer } from '../../../../shared-ui/TypedMessageRender/Components/Text.js'
+
 export const MindsRenderFragments: RenderFragmentsContextType = {
     AtLink: memo(function (props) {
         const target = '/' + props.children.slice(1)
-        return <Link href={target} children={props.children} />
+        return <Link fontSize="inherit" href={target} children={props.children} />
     }),
     HashLink: memo(function (props) {
         const text = props.children.slice(1)
@@ -14,6 +15,7 @@ export const MindsRenderFragments: RenderFragmentsContextType = {
         return (
             <Link
                 {...events}
+                fontSize="inherit"
                 href={target}
                 children={props.children}
                 onClick={(e) => {
@@ -29,6 +31,7 @@ export const MindsRenderFragments: RenderFragmentsContextType = {
         return (
             <Link
                 {...events}
+                fontSize="inherit"
                 href={target}
                 children={props.children}
                 onClick={(e) => {

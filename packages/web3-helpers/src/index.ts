@@ -1,10 +1,10 @@
+import { NetworkPluginID } from '@masknet/shared-base'
 import type {
     Connection,
     ConnectionOptions,
     Hub,
     HubOptions,
     NetworkDescriptor,
-    NetworkPluginID,
     ConnectionState,
     ProviderDescriptor,
     ProviderState,
@@ -34,7 +34,7 @@ export declare namespace Web3Helper {
             Signature: EVM.Signature
             GasOption: EVM.GasOption
             Block: EVM.Block
-            Operation: EVM.Operation
+            Operation: EVM.UserOperation
             Transaction: EVM.Transaction
             TransactionReceipt: EVM.TransactionReceipt
             TransactionDetailed: EVM.TransactionDetailed
@@ -186,6 +186,15 @@ export declare namespace Web3Helper {
     export type TransactionParameterAll = Definition[NetworkPluginID]['TransactionParameter']
     export type Web3All = Definition[NetworkPluginID]['Web3']
     export type Web3ProviderAll = Definition[NetworkPluginID]['Web3Provider']
+
+    export type FungibleTokenAll = FungibleToken<
+        Definition[NetworkPluginID]['ChainId'],
+        Definition[NetworkPluginID]['SchemaType']
+    >
+    export type NonFungibleTokenAll = NonFungibleToken<
+        Definition[NetworkPluginID]['ChainId'],
+        Definition[NetworkPluginID]['SchemaType']
+    >
 
     export type NetworkDescriptorAll = NetworkDescriptor<
         Definition[NetworkPluginID]['ChainId'],

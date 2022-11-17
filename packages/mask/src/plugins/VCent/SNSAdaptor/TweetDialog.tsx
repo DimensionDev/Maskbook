@@ -1,14 +1,15 @@
-import { first } from 'lodash-unified'
+import { first } from 'lodash-es'
 import { alpha, Box, Button, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useAsync } from 'react-use'
 import { PluginVCentRPC } from '../messages.js'
+import { ChainId } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../utils/index.js'
 import { usePluginWrapper } from '@masknet/plugin-infra/content-script'
 import { Icons } from '@masknet/icons'
 import { ImageIcon } from '@masknet/shared'
-import { useNetworkDescriptor } from '@masknet/plugin-infra/web3'
-import { VALUABLES_VCENT_URL } from '../constants'
+import { useNetworkDescriptor } from '@masknet/web3-hooks-base'
+import { VALUABLES_VCENT_URL } from '../constants.js'
 import urlcat from 'urlcat'
 
 const useStyle = makeStyles()((theme) => ({
@@ -53,7 +54,7 @@ export default function VCentDialog({ tweetAddress }: { tweetAddress: string }) 
     const { value: tweets } = useAsync(() => PluginVCentRPC.getTweetData(tweetAddress), [tweetAddress])
     const tweet = first(tweets)
     usePluginWrapper(tweet?.type === 'Offer')
-    const networkDescriptor = useNetworkDescriptor()
+    const networkDescriptor = useNetworkDescriptor(undefined, ChainId.Mainnet)
     // only offer tweets
     if (tweet?.type !== 'Offer') return null
 

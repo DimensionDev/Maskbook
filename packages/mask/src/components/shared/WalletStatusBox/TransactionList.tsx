@@ -1,15 +1,14 @@
 import { FC, forwardRef, useCallback, useMemo, useState, useEffect } from 'react'
 import { useAsync } from 'react-use'
+import { noop } from 'lodash-es'
+import format from 'date-fns/format'
 import { Icons } from '@masknet/icons'
-import { useChainId, useWeb3State } from '@masknet/plugin-infra/web3'
+import { useChainContext, useWeb3State } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { isSameAddress, RecentTransactionComputed, TransactionStatusType, Transaction } from '@masknet/web3-shared-base'
 import { getContractOwnerDomain } from '@masknet/web3-shared-evm'
 import { Grid, GridProps, Link, List, ListItem, ListProps, Stack, Typography } from '@mui/material'
-import classnames from 'classnames'
-import format from 'date-fns/format'
-import { noop } from 'lodash-unified'
 import { useI18N } from '../../../utils/index.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -32,14 +31,12 @@ const useStyles = makeStyles()((theme) => ({
     },
     methodName: {
         fontWeight: 500,
-        fontSize: 14,
         textTransform: 'capitalize',
         textOverflow: 'ellipsis',
         overflow: 'hidden',
         whiteSpace: 'nowrap',
     },
     timestamp: {
-        fontSize: 14,
         lineHeight: '18px',
     },
     cell: {
@@ -50,7 +47,6 @@ const useStyles = makeStyles()((theme) => ({
         boxSizing: 'border-box',
     },
     linkText: {
-        fontSize: 14,
         lineHeight: '18px',
     },
     link: {
@@ -64,7 +60,6 @@ const useStyles = makeStyles()((theme) => ({
         marginLeft: theme.spacing(0.5),
     },
     clear: {
-        fontSize: 14,
         color: MaskColorVar.blue,
         cursor: 'pointer',
     },
@@ -96,9 +91,8 @@ const Transaction: FC<TransactionProps> = ({ chainId, transaction: tx, onClear =
     const address = ((tx._tx as Transaction<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>).to || '').toLowerCase()
 
     const { value: functionName } = useAsync(async () => {
-        return TransactionFormatter
-            ? (await TransactionFormatter.formatTransaction(chainId, tx._tx)).title
-            : 'Contract Interaction'
+        const formattedTransaction = await TransactionFormatter?.formatTransaction(chainId, tx._tx)
+        return formattedTransaction?.title ?? 'Contract Interaction'
     }, [TransactionFormatter])
 
     const handleClear = useCallback(() => {
@@ -171,11 +165,11 @@ interface Props extends ListProps {
 }
 
 export const TransactionList: FC<Props> = forwardRef(({ className, transactions, onClear = noop, ...rest }, ref) => {
-    const { classes } = useStyles()
-    const chainId = useChainId()
+    const { classes, cx } = useStyles()
+    const { chainId } = useChainContext()
     if (!transactions.length) return null
     return (
-        <List className={classnames(classes.list, className)} {...rest} ref={ref}>
+        <List className={cx(classes.list, className)} {...rest} ref={ref}>
             {transactions.map((tx) => (
                 <ListItem key={tx.id} className={classes.listItem}>
                     <Transaction className={classes.transaction} transaction={tx} chainId={chainId} onClear={onClear} />

@@ -1,4 +1,5 @@
 {
+  "extends": "@masknet/config/tsconfig.json",
   "references": [
     // Only list top-level projects here
     { "path": "./packages/polyfills/" },
@@ -12,15 +13,21 @@
     { "path": "./packages/theme/stories" },
     // Tests
     // @masknet/scripts: insert-here 1
+    { "path": "./packages/base/tsconfig.tests.json" },
     { "path": "./packages/backup-format/tsconfig.tests.json" },
     { "path": "./packages/encryption/tsconfig.tests.json" },
     { "path": "./packages/typed-message/tests/tsconfig.json" },
     { "path": "./packages/shared-base/tsconfig.tests.json" },
+    { "path": "./packages/web3-hooks/base/tsconfig.tests.json" },
     { "path": "./packages/web3-shared/base/tsconfig.tests.json" },
     // All plugins should be type checked too
     { "path": "./packages/plugins" }
   ],
   "compilerOptions": {
+    // Exclude everything by default. Include them in each project on-demand
+    "types": ["masknet__global-types"],
+    "resolveJsonModule": true,
+    "preserveValueImports": false,
     "paths": {
       // # Why?
       // TypeScript project reference requires manually declaring all referenced projects.
@@ -60,8 +67,7 @@
 
       "@masknet/backup-format": ["./packages/backup-format/src"],
       "@masknet/configuration": ["./packages/configuration/src"],
-      // ! dashboard is explicitly opt-out of this feature, it and the /packages/mask has circulare reference that TypeScript does not allows.
-      // "@masknet/dashboard": ["./packages/dashboard/src"],
+      "@masknet/dashboard": ["./packages/dashboard/src"],
       "@masknet/encryption": ["./packages/encryption/src"],
       "@masknet/external-plugin-previewer": ["./packages/external-plugin-previewer/src"],
       "@masknet/gun-utils": ["./packages/gun-utils/src"],
@@ -81,16 +87,22 @@
       // @masknet/web3-contracts is not listed. It is not a TS project (only contains generated JSON and .d.ts files).
       "@masknet/web3-helpers": ["./packages/web3-helpers/src"],
       "@masknet/web3-providers": ["./packages/web3-providers/src"],
+      "@masknet/web3-state": ["./packages/web3-state/src"],
+      "@masknet/web3-hooks-base": ["./packages/web3-hooks/base/src"],
+      "@masknet/web3-hooks-evm": ["./packages/web3-hooks/evm/src"],
       "@masknet/web3-shared-base": ["./packages/web3-shared/base/src"],
       "@masknet/web3-shared-evm": ["./packages/web3-shared/evm/src"],
       "@masknet/web3-shared-flow": ["./packages/web3-shared/flow/src"],
       "@masknet/web3-shared-solana": ["./packages/web3-shared/solana/src"],
       "@masknet/typed-message": ["./packages/typed-message/base"],
-      "@masknet/typed-message/dom": ["./packages/typed-message/dom"],
+      "@masknet/typed-message-react": ["./packages/typed-message/react"],
+      "@masknet/types": ["./packages/types/src"],
       "@masknet/sandboxed-plugin-runtime": ["./packages/sandboxed-plugin-runtime/src/runtime/export.ts"],
       "@masknet/sandboxed-plugin-runtime/background": ["./packages/sandboxed-plugin-runtime/src/background"],
       "@masknet/sandboxed-plugin-runtime/site-adaptor": ["./packages/sandboxed-plugin-runtime/src/site-adaptor"],
       "@masknet/sandboxed-plugin-runtime/extension-page": ["./packages/sandboxed-plugin-runtime/src/extension-page"],
+      "@masknet/base": ["./packages/base/src"],
+      "@masknet/config": ["./packages/config/src"],
       // @masknet/scripts: insert-here 2
 
       // Plugins
@@ -107,67 +119,16 @@
       "@masknet/plugin-cross-chain-bridge": ["./packages/plugins/CrossChainBridge/src"],
       "@masknet/plugin-web3-profile": ["./packages/plugins/Web3Profile/src"],
       "@masknet/plugin-ens": ["./packages/plugins/ens/src"],
+      "@masknet/plugin-decentralized-search": ["./packages/plugins/DecentralizedSearch/src"],
+      "@masknet/plugin-approval": ["./packages/plugins/approval/src"],
+      "@masknet/plugin-scam-warning": ["./packages/plugins/ScamWarning/src"],
       // @masknet/scripts: insert-here 3
       "@masknet/plugin-wallet": ["./packages/plugins/Wallet/src"]
-    },
-    // Classification follows https://www.typescriptlang.org/tsconfig
-
-    // Type Checking
-    "strict": true,
-    // exactOptionalPropertyTypes: false,
-    "noFallthroughCasesInSwitch": true,
-    "noImplicitAny": true,
-    "noImplicitOverride": true,
-    "noImplicitReturns": true,
-    "noImplicitThis": true,
-    // noPropertyAccessFromIndexSignature: false,
-    // noUncheckedIndexedAccess: false,
-    // noUnusedLocals: false,
-    // noUnusedParameters: false,
-    "useUnknownInCatchVariables": true,
-
-    // Modules
-    "module": "ESNext",
-    "moduleResolution": "node",
-    "resolveJsonModule": true,
-    // Exclude everything by default. Include them in each project on-demand
-    "types": ["web", "masknet__global-types"],
-
-    // Emit
-    "declaration": true,
-    "declarationMap": true,
-    "importsNotUsedAsValues": "error",
-    "noEmitOnError": true,
-    // "preserveValueImports": true,
-    "sourceMap": true,
-    "stripInternal": true, // skip type emit for @internal types
-
-    // JavaScript Support
-    "allowJs": true,
-    "checkJs": false,
-
-    // Interop Constraints
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-    "isolatedModules": true,
-
-    // Language and Environment
-    "jsx": "react-jsx",
-    "lib": ["ES2022"], // don't add "DOM", we use @types/web
-    "target": "ES2022",
-    "useDefineForClassFields": true,
-
-    // Projects
-    "composite": true,
-    "incremental": true,
-
-    // Completeness
-    "skipLibCheck": true // skip all type checks for .d.ts files
+    }
   },
   "files": [],
   "ts-node": {
     "compilerOptions": {
-      "module": "NodeNext",
       "noEmit": false
     },
     "esm": true,

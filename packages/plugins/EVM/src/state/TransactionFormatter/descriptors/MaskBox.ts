@@ -45,14 +45,16 @@ export class MaskBoxDescriptor extends DescriptorWithTransactionDecodedReceipt i
                 chainId: context.chainId,
                 title: i18NextInstance.t('plugin_infra_descriptor_mask_box_purchase_title'),
                 description: i18NextInstance.t('plugin_infra_descriptor_mask_box_purchase'),
-                successfulDescription: i18NextInstance.t('plugin_infra_descriptor_mask_box_purchase_success', {
-                    tokenAmountDescription: await this.getPurchaseTokenInfo(
-                        context.chainId,
-                        MASK_BOX_CONTRACT_ADDRESS,
-                        context.hash,
-                    ),
-                }),
-                failedDescription: i18NextInstance.t('plugin_infra_descriptor_mask_box_purchase_fail'),
+                snackbar: {
+                    successfulDescription: i18NextInstance.t('plugin_infra_descriptor_mask_box_purchase_success', {
+                        tokenAmountDescription: await this.getPurchaseTokenInfo(
+                            context.chainId,
+                            MASK_BOX_CONTRACT_ADDRESS,
+                            context.hash,
+                        ),
+                    }),
+                    failedDescription: i18NextInstance.t('plugin_infra_descriptor_mask_box_purchase_fail'),
+                },
             }
         }
         return

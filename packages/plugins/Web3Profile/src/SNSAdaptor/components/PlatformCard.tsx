@@ -5,7 +5,7 @@ import { useI18N } from '../../locales/index.js'
 import type { AccountType } from '../types.js'
 import type { IdentityResolved } from '@masknet/plugin-infra'
 import { CollectionItem } from './CollectionItem.js'
-import { CURRENT_STATUS } from '../../constants.js'
+import { Scene } from '../../constants.js'
 import { PlatformAvatar } from '@masknet/shared'
 const DEFAULT_PLACEHOLDER = '--'
 
@@ -32,12 +32,6 @@ const useStyles = makeStyles()((theme) => {
                 cursor: 'default',
             },
         },
-        arrowIcon: {
-            alignSelf: 'center',
-            color: theme.palette.maskColor.second,
-            width: 24,
-            height: 24,
-        },
         currentTag: {
             width: '46px',
             height: '16px',
@@ -55,7 +49,7 @@ const useStyles = makeStyles()((theme) => {
 
 export interface PlatformCardProps extends withClasses<never | 'root'> {
     account: AccountType
-    openImageSetting: (status: CURRENT_STATUS) => void
+    openImageSetting: (scene: Scene) => void
     isCurrent?: boolean
     currentPersona?: IdentityResolved
 }
@@ -63,7 +57,7 @@ export interface PlatformCardProps extends withClasses<never | 'root'> {
 export function PlatformCard(props: PlatformCardProps) {
     const { account, openImageSetting, isCurrent, currentPersona } = props
     const t = useI18N()
-    const classes = useStylesExtends(useStyles(), props)
+    const { classes } = useStylesExtends(useStyles(), props)
 
     const walletsCount = account.walletList.NFTs.length
 
@@ -96,28 +90,28 @@ export function PlatformCard(props: PlatformCardProps) {
                 </div>
                 <CollectionItem
                     title={t.NFTs()}
-                    onClick={() => openImageSetting(CURRENT_STATUS.NFT_Setting)}
+                    onClick={() => openImageSetting(Scene.NFTSetting)}
                     walletsNum={walletsCount}
                     collectionNum={account.walletList.NFTs.reduce(
-                        (acc, cur) => acc + (cur.collections?.filter((x) => !x?.hidden)?.length ?? 0),
+                        (acc, cur) => acc + (cur.collections?.length ?? 0),
                         0,
                     )}
                 />
                 <CollectionItem
                     title={t.footprints()}
-                    onClick={() => openImageSetting(CURRENT_STATUS.Footprints_setting)}
+                    onClick={() => openImageSetting(Scene.FootprintsSetting)}
                     walletsNum={walletsCount}
                     collectionNum={account.walletList.footprints.reduce(
-                        (pre, cur) => pre + (cur.collections?.filter((x) => !x?.hidden)?.length ?? 0),
+                        (pre, cur) => pre + (cur.collections?.length ?? 0),
                         0,
                     )}
                 />
                 <CollectionItem
                     title={t.donations()}
-                    onClick={() => openImageSetting(CURRENT_STATUS.Donations_setting)}
+                    onClick={() => openImageSetting(Scene.DonationsSetting)}
                     walletsNum={walletsCount}
                     collectionNum={account.walletList.donations.reduce(
-                        (pre, cur) => pre + (cur.collections?.filter((x) => !x?.hidden)?.length ?? 0),
+                        (pre, cur) => pre + (cur.collections?.length ?? 0),
                         0,
                     )}
                 />

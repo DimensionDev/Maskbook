@@ -1,4 +1,5 @@
 import { LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
+import type { SocialNetworkUI as Next } from '@masknet/types'
 import {
     makeTypedMessageEmpty,
     makeTypedMessagePromise,
@@ -7,7 +8,6 @@ import {
     makeTypedMessageImage,
 } from '@masknet/typed-message'
 import { ProfileIdentifier } from '@masknet/shared-base'
-import type { SocialNetworkUI as Next } from '../../../social-network/types.js'
 import { creator } from '../../../social-network/utils.js'
 import { createRefsForCreatePostContext } from '../../../social-network/utils/create-post-context.js'
 import { untilElementAvailable } from '../../../utils/dom.js'
@@ -31,13 +31,13 @@ function collectPostsMindsInner(store: Next.CollectingCapabilities.PostsProvider
         new MutationObserverWatcher(postContentSelector()).useForeach((node, key, metadata) => {
             const activitySelector = new LiveSelector()
                 .replace(() => [metadata.realCurrent])
-                .closest('m-activity, m-activity__modal')
+                .closest('m-activityv2, m-activity__modal')
             const activityNode = activitySelector.evaluate()[0]! as HTMLElement
 
             // ? inject after comments
             const commentsSelector = activitySelector
                 .clone()
-                .querySelectorAll<HTMLElement>('m-comment .m-comment__message')
+                .querySelectorAll<HTMLElement>('m-activityv2__content .m-comment__message')
 
             // ? inject comment text field
             const commentBoxSelector = activitySelector

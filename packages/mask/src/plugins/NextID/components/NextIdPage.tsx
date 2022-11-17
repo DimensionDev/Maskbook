@@ -1,8 +1,7 @@
-import { PluginID } from '@masknet/plugin-infra/content-script'
-import { PopupRoutes, EMPTY_LIST } from '@masknet/shared-base'
-import { NextIDProof } from '@masknet/web3-providers'
 import { useMemo, useState } from 'react'
 import { useAsyncRetry } from 'react-use'
+import { PluginID, PopupRoutes, EMPTY_LIST } from '@masknet/shared-base'
+import { NextIDProof } from '@masknet/web3-providers'
 import { useCurrentVisitingIdentity, useLastRecognizedIdentity } from '../../../components/DataSource/useActivatedUI.js'
 import { useCurrentPersonaConnectStatus } from '../../../components/DataSource/usePersonaConnectStatus.js'
 import Services from '../../../extension/service.js'
@@ -19,15 +18,10 @@ import { PluginCardFrameMini } from '@masknet/shared'
 import { ThemeProvider } from '@mui/material'
 import { makeStyles, MaskLightTheme } from '@masknet/theme'
 
-const useStyles = makeStyles()((theme) => ({
-    enablePluginRoot: {
-        marginTop: 80,
-    },
-}))
+const useStyles = makeStyles()((theme) => ({}))
 
 export function NextIdPage() {
     const t = useI18N()
-    const { classes } = useStyles()
 
     const currentProfileIdentifier = useLastRecognizedIdentity()
     const visitingPersonaIdentifier = useCurrentVisitingIdentity()
@@ -62,7 +56,7 @@ export function NextIdPage() {
 
         if (!personaConnectStatus.hasPersona || !personaConnectStatus.connected || !personaConnectStatus.verified) {
             return (
-                <PluginEnableBoundary pluginId={PluginID.Web3Profile} classes={{ root: classes.enablePluginRoot }}>
+                <>
                     {(() => {
                         if (!personaConnectStatus.hasPersona)
                             return (
@@ -78,7 +72,7 @@ export function NextIdPage() {
 
                         return <AddWalletPersonaAction disabled={statusLoading} onAddWallet={handleAddWallets} />
                     })()}
-                </PluginEnableBoundary>
+                </>
             )
         }
 
@@ -92,7 +86,9 @@ export function NextIdPage() {
     return (
         <>
             <PluginCardFrameMini>
-                <ThemeProvider theme={MaskLightTheme}>{getActionComponent}</ThemeProvider>
+                <ThemeProvider theme={MaskLightTheme}>
+                    <PluginEnableBoundary pluginID={PluginID.Web3Profile}>{getActionComponent}</PluginEnableBoundary>
+                </ThemeProvider>
             </PluginCardFrameMini>
             {openBindDialog && currentPersona && isOwn && (
                 <BindDialog

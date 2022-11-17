@@ -1,3 +1,5 @@
+import { useEffect, useState } from 'react'
+import { debounce } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { createReactRootShadowed, startWatch } from '../../../utils/index.js'
@@ -8,8 +10,6 @@ import {
     web3TabSelector,
 } from '../utils/selector.js'
 import { ProfileTab } from '../../../components/InjectedComponents/ProfileTab.js'
-import { useEffect, useState } from 'react'
-import { debounce } from '@mui/material'
 
 function getStyleProps() {
     const EMPTY_STYLE = {} as CSSStyleDeclaration
@@ -128,7 +128,11 @@ export function ProfileTabAtFacebook() {
     return (
         <ProfileTab
             title="Web3"
-            classes={classes}
+            classes={{
+                root: classes.root,
+                button: classes.button,
+                selected: classes.selected,
+            }}
             reset={reset}
             clear={clear}
             children={<div className={classes.line} />}

@@ -2,8 +2,8 @@ import { useState, useContext, createContext, PropsWithChildren, useMemo, useRef
 import { makeStyles, getMaskColor } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
-import { useCurrentWeb3NetworkPluginID, useAccount, useChainId } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { getCurrentSNSNetwork } from '../../social-network-adaptor/utils.js'
 import { activatedSocialNetworkUI } from '../../social-network/index.js'
 import { useI18N } from '../../utils/index.js'
@@ -59,19 +59,6 @@ const useStyles = makeStyles<{
             zIndex: 50,
             top: '-132px',
         },
-        subTitle: {
-            cursor: 'default',
-            fontSize: 18,
-            lineHeight: '24px',
-            fontWeight: 600,
-            color: theme.palette.text.primary,
-        },
-        loadingWrapper: {
-            display: 'flex',
-            height: 324,
-            justifyContent: 'center',
-            alignItems: 'center',
-        },
         placeholderWrapper: {
             display: 'flex',
             justifyContent: 'center',
@@ -81,28 +68,6 @@ const useStyles = makeStyles<{
         },
         placeholder: {
             color: getMaskColor(theme).textLight,
-        },
-        recommendFeatureAppListWrapper: {
-            display: 'flex',
-            overflowX: 'scroll',
-            margin: '0 2px 4px 2px',
-            padding: '8px 2px 0 2px',
-            '&::-webkit-scrollbar': {
-                display: 'none',
-            },
-        },
-        carousel: {
-            height: 130,
-            overflowX: 'scroll',
-            overscrollBehavior: 'contain',
-            '& .carousel__slider': {
-                padding: '8px 2px 0',
-                overscrollBehavior: 'contain',
-                overflowX: 'scroll',
-                '&::-webkit-scrollbar': {
-                    display: 'none',
-                },
-            },
         },
     }
 })
@@ -124,9 +89,8 @@ export function ApplicationBoard(props: Props) {
 function ApplicationBoardContent(props: Props) {
     const { t } = useI18N()
     const snsAdaptorPlugins = useActivatedPluginsSNSAdaptor('any')
-    const currentWeb3Network = useCurrentWeb3NetworkPluginID()
-    const chainId = useChainId()
-    const account = useAccount()
+    const { pluginID: currentWeb3Network } = useNetworkContext()
+    const { account, chainId } = useChainContext()
     const popperBoundaryRef = useRef<HTMLElement | null>(null)
     const currentSNSNetwork = getCurrentSNSNetwork(activatedSocialNetworkUI.networkIdentifier)
     const applicationList = useMemo(
@@ -141,7 +105,7 @@ function ApplicationBoardContent(props: Props) {
                     return ApplicationEntries.map((entry) => ({
                         entry,
                         enabled: isSNSEnabled,
-                        pluginId: ID,
+                        pluginID: ID,
                         isWalletConnectedRequired:
                             !account && isWalletConnectedRequired && !entry.entryWalletConnectedNotRequired,
                         isWalletConnectedEVMRequired: Boolean(
@@ -243,7 +207,7 @@ function RenderEntryComponent({
         if (!application.entry.nextIdRequired) return
         if (ApplicationEntryStatus.isPersonaCreated === false) return ApplicationEntryStatus.personaAction as () => void
         if (ApplicationEntryStatus.shouldVerifyNextId)
-            return () => ApplicationEntryStatus.personaAction?.(application.pluginId)
+            return () => ApplicationEntryStatus.personaAction?.(application.pluginID)
         return
     }, [setSelectProviderDialog, ApplicationEntryStatus, application])
 
@@ -294,6 +258,7 @@ const ApplicationEntryStatusContext = createContext<ApplicationEntryStatusContex
     personaAction: undefined,
     isLoading: false,
 })
+ApplicationEntryStatusContext.displayName = 'ApplicationEntryStatusContext'
 
 function ApplicationEntryStatusProvider(props: PropsWithChildren<{}>) {
     const { value: personaConnectStatus, loading: personaStatusLoading } = useCurrentPersonaConnectStatus()

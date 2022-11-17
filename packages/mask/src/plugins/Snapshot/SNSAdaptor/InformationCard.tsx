@@ -1,11 +1,11 @@
 import { formatEthereumAddress, explorerResolver } from '@masknet/web3-shared-evm'
 import { Avatar, Box, Link, Typography } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
-import OpenInNew from '@mui/icons-material/OpenInNew'
+import { OpenInNew } from '@mui/icons-material'
 import formatDateTime from 'date-fns/format'
 import { useContext } from 'react'
 import { useI18N } from '../../../utils/index.js'
-import { EthereumBlockie } from '../../../web3/UI/EthereumBlockie.js'
+import { EthereumBlockie } from '@masknet/shared'
 import { SnapshotContext } from '../context.js'
 import { useProposal } from './hooks/useProposal.js'
 import { SnapshotCard } from './SnapshotCard.js'
@@ -31,7 +31,6 @@ const useStyles = makeStyles()((theme) => {
             width: '100%',
         },
         title: {
-            fontSize: 14,
             fontWeight: 400,
         },
         link: {
@@ -61,7 +60,7 @@ const useStyles = makeStyles()((theme) => {
 })
 
 export function InfoField(props: InfoFieldProps) {
-    const classes = useStylesExtends(useStyles(), props)
+    const { classes } = useStylesExtends(useStyles(), props)
     return (
         <div className={classes.field}>
             <Typography className={classes.title}>{props.title}</Typography>

@@ -1,5 +1,5 @@
 import type { Plugin } from '@masknet/plugin-infra'
-import { ProviderState } from '@masknet/plugin-infra/web3'
+import { ProviderState } from '@masknet/web3-state'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import {
     ChainId,
@@ -10,6 +10,7 @@ import {
     Web3Provider,
     chainResolver,
     isValidChainId,
+    getInvalidChainId,
     getDefaultChainId,
     getDefaultNetworkType,
     getDefaultProviderType,
@@ -24,6 +25,7 @@ export class Provider extends ProviderState<ChainId, ProviderType, NetworkType, 
             isValidAddress,
             isValidChainId,
             getDefaultChainId,
+            getInvalidChainId,
             getDefaultNetworkType,
             getDefaultProviderType,
             getNetworkTypeFromChainId: (chainId: ChainId) => chainResolver.networkType(chainId) ?? NetworkType.Ethereum,
@@ -44,7 +46,6 @@ export class Provider extends ProviderState<ChainId, ProviderType, NetworkType, 
             mergeSubscription(this.providerType, this.storage.account.subscription, this.context.account),
             ([providerType, account, maskAccount]) => {
                 if (providerType === ProviderType.MaskWallet) return maskAccount
-
                 return account.account
             },
         )
@@ -52,7 +53,6 @@ export class Provider extends ProviderState<ChainId, ProviderType, NetworkType, 
             mergeSubscription(this.providerType, this.storage.account.subscription, this.context.chainId),
             ([providerType, account, chainId]) => {
                 if (providerType === ProviderType.MaskWallet) return this.options.getNetworkTypeFromChainId(chainId)
-
                 return this.options.getNetworkTypeFromChainId(account.chainId)
             },
         )

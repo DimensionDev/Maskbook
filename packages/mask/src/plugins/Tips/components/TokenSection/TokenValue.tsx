@@ -1,11 +1,12 @@
-import { useFungibleTokenPrice } from '@masknet/plugin-infra/web3'
+import { FC, HTMLProps, useMemo } from 'react'
+import { BigNumber } from 'bignumber.js'
+import { useChainContext, useFungibleTokenPrice, useNetworkContext } from '@masknet/web3-hooks-base'
 import { TokenIcon } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { formatCurrency } from '@masknet/web3-shared-base'
 import { Typography } from '@mui/material'
-import BigNumber from 'bignumber.js'
-import { FC, HTMLProps, useMemo } from 'react'
-import { TargetRuntimeContext, useTip } from '../../contexts'
+import { useTip } from '../../contexts/index.js'
 
 const useStyles = makeStyles<void, 'tokenIcon'>()((theme, _, ref) => ({
     container: {
@@ -43,9 +44,9 @@ interface Props extends HTMLProps<HTMLDivElement> {}
 export const TokenValue: FC<Props> = ({ className, ...rest }) => {
     const { classes, cx } = useStyles()
     const { token, amount } = useTip()
-    const { targetChainId: chainId, pluginId } = TargetRuntimeContext.useContainer()
-
-    const { value: tokenPrice = 0 } = useFungibleTokenPrice(pluginId, token?.address, { chainId })
+    const { pluginID } = useNetworkContext()
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+    const { value: tokenPrice = 0 } = useFungibleTokenPrice(NetworkPluginID.PLUGIN_EVM, token?.address, { chainId })
 
     const priceUSD = useMemo(() => {
         if (!tokenPrice || !amount) return
@@ -68,8 +69,8 @@ export const TokenValue: FC<Props> = ({ className, ...rest }) => {
                     {amount}
                 </Typography>
                 <TokenIcon
-                    classes={{ icon: classes.tokenIcon }}
-                    pluginID={pluginId}
+                    className={classes.tokenIcon}
+                    pluginID={pluginID}
                     chainId={chainId}
                     name={token.name}
                     address={token.address}

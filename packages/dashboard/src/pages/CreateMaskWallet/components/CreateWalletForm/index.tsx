@@ -1,4 +1,4 @@
-import { memo, useEffect, useMemo, useState } from 'react'
+import { memo, useEffect, useMemo } from 'react'
 import { Box, Button, formHelperTextClasses, lighten, Typography } from '@mui/material'
 import { makeStyles, MaskColorVar, MaskTextField } from '@masknet/theme'
 import { z as zod } from 'zod'
@@ -80,17 +80,10 @@ const useStyles = makeStyles()((theme) => ({
             background: `${lighten(theme.palette.mode === 'dark' ? '#1A1D20' : '#F7F9FA', 0.1)}!important`,
         },
     },
-    alert: {
-        marginTop: 24,
-        padding: 24,
-        backgroundColor: MaskColorVar.errorBackground,
-        color: MaskColorVar.redMain,
-    },
 }))
 
 const CreateWalletForm = memo(() => {
     const t = useDashboardI18N()
-    const [open, setOpen] = useState(true)
     const { classes } = useStyles()
     const navigate = useNavigate()
     const [searchParams] = useSearchParams()
@@ -110,27 +103,25 @@ const CreateWalletForm = memo(() => {
                 t.create_wallet_password_satisfied_requirement(),
             )
 
-        return zod
-            .object(
-                hasPassword
-                    ? { name: zod.string().min(1).max(12) }
-                    : {
-                          name: zod.string().min(1).max(12),
-                          password: hasPassword ? passwordRule.optional() : passwordRule,
-                          confirm: zod.string().optional(),
-                      },
-            )
-            .refine((data) => (!hasPassword ? data.password === data.confirm : true), {
-                message: t.create_wallet_password_match_tip(),
-                path: ['confirm'],
-            })
+        return hasPassword
+            ? zod.object({ name: zod.string().min(1).max(12) })
+            : zod
+                  .object({
+                      name: zod.string().min(1).max(12),
+                      password: passwordRule,
+                      confirm: zod.string().optional(),
+                  })
+                  .refine((data) => data.password === data.confirm, {
+                      message: t.create_wallet_password_match_tip(),
+                      path: ['confirm'],
+                  })
     }, [hasPassword])
 
     const {
         control,
         handleSubmit,
         formState: { errors, isValid },
-    } = useForm<zod.infer<typeof schema>>({
+    } = useForm<{ name: string; password?: string; confirm?: string }>({
         mode: 'onBlur',
         resolver: zodResolver(schema),
         defaultValues: {

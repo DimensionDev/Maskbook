@@ -3,10 +3,11 @@ import type { Context, Middleware } from '../types.js'
 
 export class MetaMask implements Middleware<Context> {
     async fn(context: Context, next: () => Promise<void>) {
-        // Evoke the unlock popup when metamask is locked before send transaction or sign message.
+        // Evoke the unlock popup when metamask-like is locked before send transaction or sign message.
         if (isRiskMethod(context.request.method as EthereumMethodType)) {
-            await context.connection.connect()
+            await context.connection.connect(context.requestOptions)
         }
+
         switch (context.request.method) {
             case EthereumMethodType.PERSONAL_SIGN:
                 context.requestArguments = {

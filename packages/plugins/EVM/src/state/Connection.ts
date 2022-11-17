@@ -1,11 +1,14 @@
 import type { Subscription } from 'use-subscription'
 import type { Plugin } from '@masknet/plugin-infra'
-import { ConnectionState } from '@masknet/plugin-infra/web3'
-import type {
+import { ConnectionState } from '@masknet/web3-state'
+import {
+    isValidChainId,
+    getDefaultChainId,
+    getDefaultProviderType,
     AddressType,
     Block,
     ChainId,
-    Operation,
+    UserOperation,
     ProviderType,
     SchemaType,
     Signature,
@@ -25,7 +28,7 @@ export class Connection extends ConnectionState<
     ProviderType,
     Signature,
     Block,
-    Operation,
+    UserOperation,
     Transaction,
     TransactionReceipt,
     TransactionDetailed,
@@ -41,6 +44,10 @@ export class Connection extends ConnectionState<
             providerType?: Subscription<ProviderType>
         },
     ) {
-        super(context, createConnection, subscription)
+        super(context, createConnection, subscription, {
+            isValidChainId,
+            getDefaultChainId,
+            getDefaultProviderType,
+        })
     }
 }

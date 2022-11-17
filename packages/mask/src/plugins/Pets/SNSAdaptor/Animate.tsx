@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { makeStyles, useStylesExtends } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { useEssay, useDefaultEssay, useCurrentVisitingUser } from '../hooks/index.js'
 import { ModelNFT } from './ModelNFT.js'
@@ -17,7 +17,7 @@ const useStyles = makeStyles()(() => ({
 }))
 
 const AnimatePic = () => {
-    const classes = useStylesExtends(useStyles(), {})
+    const { classes } = useStyles()
 
     const petShow = useValueRef<boolean>(petShowSettings)
 

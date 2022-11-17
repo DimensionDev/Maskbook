@@ -1,19 +1,12 @@
 import { useState } from 'react'
-import { Typography } from '@mui/material'
+import { Box, Tab, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import Box from '@mui/material/Box'
-import Tab from '@mui/material/Tab'
-import TabContext from '@mui/lab/TabContext'
-import TabList from '@mui/lab/TabList'
-import TabPanel from '@mui/lab/TabPanel'
 import Avatar from 'boring-avatars'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import type { IFollowIdentity } from '../Worker/apis/index.js'
+import { TabContext, TabList, TabPanel } from '@mui/lab'
 
 const useStyles = makeStyles()((theme) => ({
-    tabContext: {
-        marginTop: '20px',
-    },
     tabPanel: {
         height: '400px',
         overflow: 'auto',

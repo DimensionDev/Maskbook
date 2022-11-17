@@ -4,15 +4,14 @@ import { SharedContextProvider } from '@masknet/shared'
 import { SwapBox } from './SwapBox/index.js'
 import { useI18N } from '../../../../utils/index.js'
 import { useSwapPageTheme } from '../../../../utils/theme/useSwapPageTheme.js'
-import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
 import { AllProviderTradeContext } from '../../../../plugins/Trader/trader/useAllProviderTradeContext.js'
 import { NetworkSelector } from '../../components/NetworkSelector/index.js'
+import { Web3ContextProvider } from '@masknet/web3-hooks-base'
+import { ChainId } from '@masknet/web3-shared-evm'
+import { NetworkPluginID } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => {
     return {
-        walletStateBar: {
-            color: theme.palette.grey['900'],
-        },
         page: {
             minHeight: '100vh',
             maxWidth: '100vw',
@@ -77,11 +76,12 @@ export default function SwapPage() {
                             <NetworkSelector />
                         </header>
                         <main className={classes.main}>
-                            <TargetChainIdContext.Provider>
+                            <Web3ContextProvider
+                                value={{ pluginID: NetworkPluginID.PLUGIN_EVM, chainId: ChainId.Mainnet }}>
                                 <AllProviderTradeContext.Provider>
                                     <SwapBox />
                                 </AllProviderTradeContext.Provider>
-                            </TargetChainIdContext.Provider>
+                            </Web3ContextProvider>
                         </main>
                     </div>
                 </div>

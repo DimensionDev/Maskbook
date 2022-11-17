@@ -1,13 +1,13 @@
-import { first } from 'lodash-unified'
+import { first } from 'lodash-es'
 import { toHex } from 'web3-utils'
 import type { RequestArguments } from 'web3-core'
-import { defer } from '@dimensiondev/kit'
+import { defer } from '@masknet/kit'
 import WalletConnect from '@walletconnect/client'
 import type { ITxData } from '@walletconnect/types'
 import { ChainId, chainResolver, EthereumMethodType, isValidAddress, ProviderType } from '@masknet/web3-shared-evm'
+import type { Account } from '@masknet/web3-shared-base'
 import { BaseProvider } from './Base.js'
 import type { EVM_Provider } from '../types.js'
-import type { Account } from '@masknet/web3-shared-base'
 import { SharedContextSettings } from '../../../settings/index.js'
 
 interface SessionPayload {
@@ -37,6 +37,10 @@ interface ModalClosePayload {
 export default class WalletConnectProvider extends BaseProvider implements EVM_Provider {
     private connectorId = 0
     private connector: WalletConnect = this.createConnector()
+
+    constructor() {
+        super(ProviderType.WalletConnect)
+    }
 
     /**
      * The ongoing walletconnect connection which the listeners use to resolve later.

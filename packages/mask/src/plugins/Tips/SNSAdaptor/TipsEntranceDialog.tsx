@@ -1,26 +1,27 @@
-import { useWeb3State } from '@masknet/plugin-infra/web3'
+import { useCallback, useMemo, useState, useEffect } from 'react'
+import { useCopyToClipboard, useAsyncFn, useAsyncRetry, useUpdateEffect } from 'react-use'
+import { sortBy, last } from 'lodash-es'
+import { useWeb3State } from '@masknet/web3-hooks-base'
+import { Icons } from '@masknet/icons'
 import { InjectedDialog, useSnackbarCallback } from '@masknet/shared'
-import { PluginID } from '@masknet/plugin-infra'
 import {
     NextIDPlatform,
     CrossIsolationMessages,
     EMPTY_LIST,
     formatPersonaFingerprint,
     PopupRoutes,
+    PluginID,
+    NetworkPluginID,
 } from '@masknet/shared-base'
 import { LoadingBase, makeStyles, useCustomSnackbar, ActionButton } from '@masknet/theme'
-import { NetworkPluginID, isSameAddress, isGreaterThan } from '@masknet/web3-shared-base'
+import { isSameAddress, isGreaterThan } from '@masknet/web3-shared-base'
 import { DialogContent, DialogActions, Avatar, Typography } from '@mui/material'
-import { delay } from '@dimensiondev/kit'
-import { sortBy, last } from 'lodash-unified'
-import { useCopyToClipboard, useAsyncFn, useAsyncRetry, useUpdateEffect } from 'react-use'
-import { useCallback, useMemo, useState, useEffect } from 'react'
+import { delay } from '@masknet/kit'
 import Services from '../../../extension/service.js'
 import { useProvedWallets } from '../hooks/useProvedWallets.js'
 import { useI18N } from '../locales/index.js'
 import { VerifyAlertLine } from './components/VerifyAlertLine.js'
 import { WalletsByNetwork } from './components/WalletsByNetwork.js'
-import { Icons } from '@masknet/icons'
 import { useTipsSetting } from '../hooks/useTipsSetting.js'
 import type { TipsSettingType } from '../types/index.js'
 import { MaskMessages } from '../../../utils/index.js'
@@ -30,9 +31,6 @@ export interface TipsEntranceDialogProps {
     onClose: () => void
 }
 const useStyles = makeStyles()((theme) => ({
-    walletBtn: {
-        fontSize: 14,
-    },
     alertBox: {
         marginBottom: '20px',
     },
@@ -49,11 +47,6 @@ const useStyles = makeStyles()((theme) => ({
         position: 'relative',
         boxSizing: 'border-box',
         minHeight: 544,
-    },
-    btnContainer: {
-        position: 'absolute',
-        right: 16,
-        maxWidth: '30%',
     },
     loading: {
         position: 'absolute',
@@ -72,14 +65,12 @@ const useStyles = makeStyles()((theme) => ({
         columnGap: 4,
     },
     nickname: {
-        fontSize: 14,
         lineHeight: '18px',
         fontWeight: 700,
     },
     fingerprint: {
         display: 'flex',
         alignItems: 'center',
-        fontSize: 14,
         lineHeight: '18px',
         color: theme.palette.maskColor.third,
     },
@@ -137,7 +128,6 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
                 if (isGreaterThan(a.last_checked_at, z.last_checked_at)) {
                     return isSameAddress(z.identity, defaultAddress) ? 1 : -1
                 }
-
                 return isSameAddress(a.identity, defaultAddress) ? -1 : 1
             })
     }, [defaultAddress, bindingWallets, TipsSetting?.hiddenAddresses])

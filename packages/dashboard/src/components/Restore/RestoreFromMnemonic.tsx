@@ -3,7 +3,7 @@ import { useList } from 'react-use'
 import { Box, Typography } from '@mui/material'
 import { getMaskColor, makeStyles } from '@masknet/theme'
 import { useDashboardI18N } from '../../locales/index.js'
-import { some } from 'lodash-unified'
+import { some } from 'lodash-es'
 import { MaskAlert } from '../MaskAlert/index.js'
 import { ButtonContainer } from '../RegisterFrame/ButtonContainer.js'
 import { Services } from '../../API.js'
@@ -13,7 +13,7 @@ import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import { SignUpRoutePath } from '../../pages/SignUp/routePath.js'
 import { LoadingButton } from '../LoadingButton/index.js'
-import { delay } from '@dimensiondev/kit'
+import { delay } from '@masknet/kit'
 
 const useStyles = makeStyles()((theme) => ({
     error: {

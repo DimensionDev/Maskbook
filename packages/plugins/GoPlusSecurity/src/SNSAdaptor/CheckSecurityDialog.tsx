@@ -4,7 +4,7 @@ import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../locales/index.js'
 import { SearchBox } from './components/SearchBox.js'
 import { useAsync, useAsyncFn } from 'react-use'
-import { GoPlusLabs, SecurityAPI, TokenView } from '@masknet/web3-providers'
+import { GoPlusLabs, Nomics, SecurityAPI } from '@masknet/web3-providers'
 import { Searching } from './components/Searching.js'
 import { SecurityPanel } from './components/SecurityPanel.js'
 import { Footer } from './components/Footer.js'
@@ -12,9 +12,9 @@ import { DefaultPlaceholder } from './components/DefaultPlaceholder.js'
 import { NotFound } from './components/NotFound.js'
 import { ChainId, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
 import { InjectedDialog } from '@masknet/shared'
-import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
-import { CrossIsolationMessages } from '@masknet/shared-base'
-import { useFungibleToken, useFungibleTokenPrice } from '@masknet/plugin-infra/web3'
+import { isSameAddress } from '@masknet/web3-shared-base'
+import { NetworkPluginID, CrossIsolationMessages } from '@masknet/shared-base'
+import { useFungibleToken, useFungibleTokenPrice } from '@masknet/web3-hooks-base'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -72,7 +72,7 @@ export function CheckSecurityDialog() {
     const { value: tokenPrice } = useFungibleTokenPrice(NetworkPluginID.PLUGIN_EVM, value?.contract, { chainId })
     const { value: tokenMarketCapInfo } = useAsync(async () => {
         if (!value?.token_symbol) return
-        return TokenView.getTokenInfo(value.token_symbol)
+        return Nomics.getCoinMarketInfo(value.token_symbol)
     }, [value])
 
     const onClose = () => setOpen(false)

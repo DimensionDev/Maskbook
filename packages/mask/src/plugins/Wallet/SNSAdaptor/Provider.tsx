@@ -26,7 +26,6 @@ const useStyles = makeStyles()((theme) => ({
         marginBottom: theme.spacing(1),
     },
     description: {
-        fontSize: 14,
         fontWeight: 300,
     },
 }))
@@ -41,7 +40,7 @@ export interface ProviderProps
 }
 
 export function Provider(props: ProviderProps) {
-    const classes = useStylesExtends(useStyles(), props)
+    const { classes } = useStylesExtends(useStyles(), props)
     return (
         <Card className={classes.root} elevation={0} style={{ opacity: props.ButtonBaseProps?.disabled ? 0.5 : 1 }}>
             <ButtonBase

@@ -3,7 +3,7 @@ import { useAsync } from 'react-use'
 import { File } from 'react-feather'
 import { Grid, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { timeout } from '@dimensiondev/kit'
+import { timeout } from '@masknet/kit'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useI18N } from '../../locales/i18n_generated.js'
 import { FileRouter } from '../../constants.js'
@@ -22,15 +22,6 @@ const useStyles = makeStyles()({
         userSelect: 'none',
         paddingTop: 18,
         paddingBottom: 18,
-    },
-    name: {
-        fontSize: 16,
-        lineHeight: 1.75,
-        textAlign: 'center',
-        color: '#3B3B3B',
-        overflow: 'hidden',
-        textOverflow: 'ellipsis',
-        whiteSpace: 'nowrap',
     },
 })
 

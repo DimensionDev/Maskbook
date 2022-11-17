@@ -1,13 +1,9 @@
 import { Box, Typography } from '@mui/material'
 import { LoadingBase, makeStyles, ShadowRootTooltip, useStylesExtends } from '@masknet/theme'
-import { useI18N } from '../locales/i18n_generated'
+import { useI18N } from '../locales/i18n_generated.js'
 
 const useStyles = makeStyles()(() => ({
     root: {},
-    nft: {
-        display: 'flex',
-        alignItems: 'center',
-    },
     tip: {
         maxWidth: 'none',
     },
@@ -20,7 +16,7 @@ interface NFTInfoProps extends withClasses<'root'> {
 
 export function NFTInfo(props: NFTInfoProps) {
     const { isNFT = false, loading = false, tooltip = '' } = props
-    const classes = useStylesExtends(useStyles(), props)
+    const { classes } = useStylesExtends(useStyles(), props)
     const t = useI18N()
 
     if (loading) return <LoadingBase size={24} />

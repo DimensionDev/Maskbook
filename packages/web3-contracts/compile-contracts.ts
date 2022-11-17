@@ -1,7 +1,7 @@
 import { promises as fs } from 'fs'
 import path from 'path'
 import { runTypeChain, glob } from 'typechain'
-import { run } from './utils.js'
+import { run } from './utils'
 
 const ABIS_PATH = path.join(__dirname, 'abis')
 const GENERATED_PATH = path.join(__dirname, 'types')
@@ -34,6 +34,7 @@ async function main() {
         ['Callback<Qualification>', 'Callback<QualificationEvent>'],
     ])
 
+    run(GENERATED_PATH, 'npx', '@magic-works/ts-esm-migrate', '.')
     // format code
     run(GENERATED_PATH, 'npx', 'prettier', '.', '--write')
 

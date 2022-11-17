@@ -1,6 +1,7 @@
 import { assertNotEnvironment, Environment, ValueRef } from '@dimensiondev/holoflows-kit'
-import { delay, waitDocumentReadyState } from '@dimensiondev/kit'
+import { delay, waitDocumentReadyState } from '@masknet/kit'
 import { SocialNetworkEnum } from '@masknet/encryption'
+import type { SocialNetworkUI } from '@masknet/types'
 import { IdentityResolved, Plugin, startPluginSNSAdaptor } from '@masknet/plugin-infra/content-script'
 import { sharedUIComponentOverwrite, sharedUINetworkIdentifier } from '@masknet/shared'
 import {
@@ -17,11 +18,10 @@ import type { SetupGuideContext } from '../../shared/legacy-settings/types.js'
 import { createPartialSharedUIContext, createPluginHost } from '../../shared/plugin-infra/host.js'
 import Services from '../extension/service.js'
 import { getCurrentIdentifier, getCurrentSNSNetwork } from '../social-network-adaptor/utils.js'
-import { MaskMessages, setupShadowRootPortal } from '../utils/index.js'
+import { MaskMessages, setupReactShadowRootEnvironment } from '../utils/index.js'
 import '../utils/debug/general.js'
 import { RestPartOfPluginUIContextShared } from '../utils/plugin-context-shared-ui.js'
 import { definedSocialNetworkUIs } from './define.js'
-import type { SocialNetworkUI } from './types.js'
 
 const definedSocialNetworkUIsResolved = new Map<string, SocialNetworkUI.Definition>()
 export let activatedSocialNetworkUI: SocialNetworkUI.Definition = {
@@ -46,6 +46,7 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
     assertNotEnvironment(Environment.ManifestBackground)
 
     console.log('Activating provider', ui_deferred.networkIdentifier)
+    setupReactShadowRootEnvironment()
     const ui = (activatedSocialNetworkUI = await loadSocialNetworkUI(ui_deferred.networkIdentifier))
 
     sharedUINetworkIdentifier.value = ui_deferred.networkIdentifier
@@ -68,12 +69,15 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
             activateSocialNetworkUIInner(ui_deferred)
         })
     }
+
     await waitDocumentReadyState('interactive')
 
     i18nOverwrite()
+
+    await ui.customization.paletteMode?.start(signal)
+
     globalUIState = await ui.init(signal)
 
-    ui.customization.paletteMode?.start(signal)
     startIntermediateSetupGuide()
     $unknownIdentityResolution()
 
@@ -120,9 +124,7 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
     signal.addEventListener('abort', queryRemoteI18NBundle(Services.Helper.queryRemoteI18NBundle))
 
     const allPersonaSub = createSubscriptionFromAsync(
-        () => {
-            return Services.Identity.queryOwnedPersonaInformation(true)
-        },
+        () => Services.Identity.queryOwnedPersonaInformation(true),
         [],
         MaskMessages.events.currentPersonaIdentifier.on,
         signal,
@@ -149,19 +151,20 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
                     lastRecognizedProfile: lastRecognizedSub,
                     currentVisitingProfile: currentVisitingSub,
                     allPersonas: allPersonaSub,
+                    getNextIDPlatform: () => activatedSocialNetworkUI.configuration.nextIDConfig?.platform,
                     getPersonaAvatar: Services.Identity.getPersonaAvatar,
+                    getSocialIdentity: Services.Identity.querySocialIdentity,
                     ownProofChanged: MaskMessages.events.ownProofChanged,
                     setMinimalMode: Services.Settings.setPluginMinimalModeEnabled,
                 }
             },
             Services.Settings.getPluginMinimalModeEnabled,
+            Services.Helper.hasHostPermission,
         ),
     )
 
     // TODO: receive the signal
     if (Flags.sandboxedPluginRuntime) import('./sandboxed-plugin.js')
-
-    setupShadowRootPortal()
 
     function i18nOverwrite() {
         const i18n = ui.customization.i18nOverwrite || {}

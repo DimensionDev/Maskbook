@@ -1,16 +1,9 @@
-import { getEnumAsArray } from '@dimensiondev/kit'
-import Token from '@masknet/web3-constants/evm/token.json'
-import { createFungibleTokensFromConstants, FungibleToken } from '@masknet/web3-shared-base'
+import type { FungibleToken } from '@masknet/web3-shared-base'
 import { ChainId, ChainIdOptionalRecord, SchemaType } from '../types/index.js'
 import { chainResolver } from '../utils/resolver.js'
+import { createERC20Tokens } from '../utils/token.js'
 
 export type ERC20AgainstToken = Readonly<ChainIdOptionalRecord<Array<FungibleToken<ChainId, SchemaType.ERC20>>>>
-
-const createERC20Tokens = createFungibleTokensFromConstants<typeof Token, ChainId, SchemaType.ERC20>(
-    getEnumAsArray(ChainId),
-    SchemaType.ERC20,
-    Token,
-)
 
 export const APE = createERC20Tokens('APE_ADDRESS', 'ApeCoin', 'APE', 18)
 export const USDC = createERC20Tokens('USDC_ADDRESS', 'USC Coin', 'USDC', 6)

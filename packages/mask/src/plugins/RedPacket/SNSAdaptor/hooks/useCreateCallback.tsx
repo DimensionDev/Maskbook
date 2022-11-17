@@ -1,10 +1,11 @@
 import { useCallback } from 'react'
 import { useAsync, useAsyncFn } from 'react-use'
 import Web3Utils from 'web3-utils'
-import { omit } from 'lodash-unified'
-import { useAccount, useChainId, useWeb3Connection, useWeb3 } from '@masknet/plugin-infra/web3'
-import type { HappyRedPacketV4 } from '@masknet/web3-contracts/types/HappyRedPacketV4'
-import { FungibleToken, isLessThan, NetworkPluginID, toFixed } from '@masknet/web3-shared-base'
+import { omit } from 'lodash-es'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { useChainContext, useWeb3Connection, useWeb3 } from '@masknet/web3-hooks-base'
+import type { HappyRedPacketV4 } from '@masknet/web3-contracts/types/HappyRedPacketV4.js'
+import { FungibleToken, isLessThan, toFixed } from '@masknet/web3-shared-base'
 import {
     ChainId,
     encodeContractTransaction,
@@ -63,8 +64,7 @@ export function useCreateParamsCallback(
     version: number,
     publicKey: string,
 ) {
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants(chainId)
     const redPacketContract = useRedPacketContract(chainId, version)
     const getCreateParams = useCallback(async (): Promise<CreateParams | null> => {
@@ -121,8 +121,7 @@ export function useCreateParams(redPacketSettings: RedPacketSettings, version: n
 }
 
 export function useCreateCallback(redPacketSettings: RedPacketSettings, version: number, publicKey: string) {
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const redPacketContract = useRedPacketContract(chainId, version)
     const getCreateParams = useCreateParamsCallback(redPacketSettings, version, publicKey)
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)

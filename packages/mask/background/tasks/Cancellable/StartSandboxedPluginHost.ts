@@ -1,5 +1,6 @@
-import { None, Result, Some } from 'ts-results'
-import { Plugin, PluginID, registerPlugin } from '@masknet/plugin-infra'
+import { None, Result, Some } from 'ts-results-es'
+import type { PluginID } from '@masknet/shared-base'
+import { Plugin, registerPlugin } from '@masknet/plugin-infra'
 import { BackgroundInstance, BackgroundPluginHost } from '@masknet/sandboxed-plugin-runtime/background'
 import { hmr } from '../../../utils-pure/index.js'
 import { Flags } from '../../../shared/flags.js'

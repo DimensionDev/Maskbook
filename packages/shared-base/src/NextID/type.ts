@@ -9,6 +9,11 @@ export enum NextIDPlatform {
     Keybase = 'keybase',
     Ethereum = 'ethereum',
     GitHub = 'github',
+    ENS = 'ens',
+    RSS3 = 'rss3',
+    LENS = 'lens',
+    REDDIT = 'reddit',
+    SYBIL = 'sybil',
 }
 
 export interface NextIDPayload {
@@ -24,20 +29,33 @@ export interface Binding {
 }
 
 export interface NextIDPersonaBindings {
+    activated_at: string
     persona: string
     proofs: BindingProof[]
 }
 
 export interface BindingProof {
     platform: NextIDPlatform
+    source?: NextIDPlatform
+    /**
+     * Platform identity.
+     * For Twitter, it's twitter account
+     */
     identity: string
     created_at: string
     invalid_reason: string
-    latest_checked_at: string
+    latest_checked_at?: string
     is_valid: boolean
     last_checked_at: string
-    rawIdx?: number
+    /**
+     * @deprecated
+     * legacy data
+     */
     isDefault?: 0 | 1
+    /**
+     * @deprecated
+     * legacy data
+     */
     isPublic?: 0 | 1
 }
 
@@ -65,7 +83,7 @@ export interface NextIDStorageInfo<T = unknown> {
 }
 export interface NextIDStorageProofs<T> {
     content: {
-        // pluginId
+        // pluginID
         [index: string]: T
     }
     identity: string

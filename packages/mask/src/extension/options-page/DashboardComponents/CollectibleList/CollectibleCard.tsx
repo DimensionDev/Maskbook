@@ -1,11 +1,12 @@
+import { memo } from 'react'
 import { Card, Link } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { useWeb3State } from '@masknet/plugin-infra/web3'
+import { useWeb3State } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
+import type { NetworkPluginID } from '@masknet/shared-base'
 import { NFTCardStyledAssetPlayer } from '@masknet/shared'
-import type { NetworkPluginID, NonFungibleAsset, SourceType, Wallet } from '@masknet/web3-shared-base'
+import type { NonFungibleAsset, SourceType, Wallet } from '@masknet/web3-shared-base'
 import { ActionsBarNFT } from '../ActionsBarNFT.js'
-import { memo } from 'react'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -25,12 +26,6 @@ const useStyles = makeStyles()((theme) => ({
         position: 'absolute',
         zIndex: 1,
         backgroundColor: `${theme.palette.background.paper} !important`,
-    },
-    placeholderIcon: {
-        color: theme.palette.mode === 'dark' ? 'rgb(255, 255, 255)' : 'rgb(15, 20, 25)',
-        width: 64,
-        height: 64,
-        opacity: 0.1,
     },
     fallbackImage: {
         minHeight: '0 !important',

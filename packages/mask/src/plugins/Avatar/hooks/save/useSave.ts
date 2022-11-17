@@ -1,8 +1,7 @@
-import type { BindingProof, ECKeyIdentifier } from '@masknet/shared-base'
-import type { TwitterBaseAPI } from '@masknet/web3-providers'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { useAsyncFn } from 'react-use'
+import { NetworkPluginID, BindingProof, ECKeyIdentifier } from '@masknet/shared-base'
+import type { TwitterBaseAPI } from '@masknet/web3-providers'
+import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import type { AllChainsNonFungibleToken, NextIDAvatarMeta } from '../../types.js'
 import { useSaveKV } from './useSaveKV.js'
 import { useSaveToNextID } from './useSaveToNextID.js'
@@ -12,10 +11,10 @@ export type AvatarInfo = TwitterBaseAPI.AvatarInfo & {
     avatarId: string
 }
 
-export function useSave(pluginId: NetworkPluginID, chainId: ChainId) {
+export function useSave(pluginID: NetworkPluginID) {
     const saveToNextID = useSaveToNextID()
     const saveToRSS3 = useSaveToRSS3()
-    const saveToKV = useSaveKV(pluginId)
+    const saveToKV = useSaveKV(pluginID)
 
     return useAsyncFn(
         async (
@@ -28,7 +27,7 @@ export function useSave(pluginId: NetworkPluginID, chainId: ChainId) {
         ) => {
             if (!token.contract?.address) return
             const info: NextIDAvatarMeta = {
-                pluginId,
+                pluginId: pluginID,
                 nickname: data.nickname,
                 userId: data.userId,
                 imageUrl: data.imageUrl,
@@ -41,7 +40,7 @@ export function useSave(pluginId: NetworkPluginID, chainId: ChainId) {
             }
 
             try {
-                switch (pluginId) {
+                switch (pluginID) {
                     case NetworkPluginID.PLUGIN_EVM: {
                         if (isBindAccount) {
                             const result = await saveToNextID(info, account, persona, proof)
@@ -58,6 +57,6 @@ export function useSave(pluginId: NetworkPluginID, chainId: ChainId) {
                 return
             }
         },
-        [saveToNextID, saveToRSS3, pluginId],
+        [saveToNextID, saveToRSS3, pluginID],
     )
 }

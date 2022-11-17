@@ -1,11 +1,5 @@
-import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot.js'
+import { attachReactTreeWithoutContainer } from '../../../utils/shadow-root/renderInShadowRoot.js'
 import { Entry } from './Entry.js'
 export function newPostCompositionInstagram(signal: AbortSignal) {
-    const container = document.createElement('div')
-    const shadow = container.attachShadow({ mode: 'closed' })
-
-    createReactRootShadowed(shadow, { signal }).render(<Entry />)
-
-    document.body.appendChild(container)
-    signal.addEventListener('abort', () => container.remove())
+    attachReactTreeWithoutContainer('new-composition', <Entry />, signal)
 }

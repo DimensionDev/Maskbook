@@ -1,36 +1,34 @@
 import { memo, useMemo, useState } from 'react'
-import { useNavigate, useLocation } from 'react-router-dom'
-import { ReplaceType } from '../type.js'
-import { makeStyles } from '@masknet/theme'
-import { Box, Typography } from '@mui/material'
-import { formatGweiToEther, formatGweiToWei, formatWeiToGwei } from '@masknet/web3-shared-evm'
-import { z as zod } from 'zod'
-import BigNumber from 'bignumber.js'
-import { useI18N } from '../../../../../utils/index.js'
-import { hexToNumber, toHex } from 'web3-utils'
-import { Controller, useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { StyledInput } from '../../../components/StyledInput/index.js'
-import { LoadingButton } from '@mui/lab'
-import { isEmpty } from 'lodash-unified'
 import { useAsync, useAsyncFn } from 'react-use'
+import { Controller, useForm } from 'react-hook-form'
+import { useNavigate, useLocation } from 'react-router-dom'
+import { z as zod } from 'zod'
+import { BigNumber } from 'bignumber.js'
+import { isEmpty } from 'lodash-es'
 import { useContainer } from 'unstated-next'
-import { WalletContext } from '../hooks/useWalletContext.js'
-import { isLessThanOrEqualTo, isPositive, multipliedBy, NetworkPluginID } from '@masknet/web3-shared-base'
+import { hexToNumber, toHex } from 'web3-utils'
+import { LoadingButton } from '@mui/lab'
+import { Box, Typography } from '@mui/material'
+import { makeStyles } from '@masknet/theme'
+import { formatGweiToEther, formatGweiToWei, formatWeiToGwei } from '@masknet/web3-shared-evm'
+import { isLessThanOrEqualTo, isPositive, multipliedBy } from '@masknet/web3-shared-base'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { NetworkPluginID } from '@masknet/shared-base'
 import {
-    useChainId,
+    useChainContext,
     useWeb3State,
     useNativeToken,
     useNativeTokenPrice,
     useChainIdSupport,
     useWeb3Connection,
-} from '@masknet/plugin-infra/web3'
+} from '@masknet/web3-hooks-base'
+import { useI18N } from '../../../../../utils/index.js'
+import { ReplaceType } from '../type.js'
+import { StyledInput } from '../../../components/StyledInput/index.js'
+import { WalletContext } from '../hooks/useWalletContext.js'
 import { useTitle } from '../../../hook/useTitle.js'
 
 const useStyles = makeStyles()({
-    container: {
-        padding: 16,
-    },
     label: {
         color: '#1C68F3',
         fontSize: 12,
@@ -66,18 +64,17 @@ const ReplaceTransaction = memo(() => {
     const type = search.get('type') as ReplaceType
     const [errorMessage, setErrorMessage] = useState('')
     const { transaction } = useContainer(WalletContext)
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { TransactionFormatter } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
     const { value: formatterTransaction } = useAsync(async () => {
         if (!TransactionFormatter?.formatTransaction || !transaction) return
-
         return TransactionFormatter.formatTransaction(chainId, transaction)
     }, [transaction, TransactionFormatter, chainId])
 
     const { value: transactionContext } = useAsync(async () => {
-        if (!TransactionFormatter?.createContext || !transaction) return
-        return TransactionFormatter.createContext(chainId, transaction)
+        if (!transaction) return
+        return TransactionFormatter?.createContext?.(chainId, transaction)
     }, [transaction, TransactionFormatter, chainId])
 
     const defaultGas = transaction?._tx.gas ?? 0

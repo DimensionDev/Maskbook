@@ -1,34 +1,23 @@
 import { memo, useCallback, useRef, useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
+import { first } from 'lodash-es'
 import { TableContainer, TablePagination, tablePaginationClasses, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useAsync, useAsyncFn } from 'react-use'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages.js'
 import { DeriveWalletTable } from '../components/DeriveWalletTable/index.js'
-import { currySameAddress, NetworkPluginID, HD_PATH_WITHOUT_INDEX_ETHEREUM } from '@masknet/web3-shared-base'
-import { useWallets } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
+import { currySameAddress, HD_PATH_WITHOUT_INDEX_ETHEREUM } from '@masknet/web3-shared-base'
+import { useNativeToken, useWallets } from '@masknet/web3-hooks-base'
 import { useI18N } from '../../../../../utils/index.js'
 import { LoadingButton } from '@mui/lab'
-import { PopupRoutes } from '@masknet/shared-base'
 import { currentMaskWalletAccountSettings } from '../../../../../../shared/legacy-settings/wallet-settings.js'
-import { first } from 'lodash-unified'
 import { useTitle } from '../../../hook/useTitle.js'
 
 const useStyles = makeStyles()({
     container: {
         padding: '16px 10px',
         backgroundColor: '#ffffff',
-    },
-    header: {
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-    },
-    title: {
-        fontSize: 12,
-        color: '#151818',
-        lineHeight: 1.5,
-        fontWeight: 500,
     },
     path: {
         marginTop: 26,
@@ -52,15 +41,6 @@ const useStyles = makeStyles()({
         alignItems: 'center',
         gap: 4,
     },
-    paginationIcon: {
-        border: '1px solid #E4E8F1',
-        borderRadius: 4,
-        fontSize: 20,
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        padding: 4,
-    },
     toolbar: {
         padding: 0,
     },
@@ -76,6 +56,7 @@ const AddDeriveWallet = memo(() => {
     const { t } = useI18N()
     const navigate = useNavigate()
     const location = useLocation()
+    const { value: nativeToken } = useNativeToken()
     const state = location.state as any as
         | {
               mnemonic?: string
@@ -166,6 +147,7 @@ const AddDeriveWallet = memo(() => {
                     dataSource={dataSource}
                     onCheck={onCheck}
                     confirmLoading={confirmLoading}
+                    symbol={nativeToken?.symbol ?? 'ETH'}
                 />
             </TableContainer>
             {!loading ? (

@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
-import { useChainId } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { useChainContext } from '@masknet/web3-hooks-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
 import { usePostInfoDetails } from '@masknet/plugin-infra/content-script'
 import { RedPacket } from './RedPacket/index.js'
 import { RedPacketRPC } from '../messages.js'
@@ -13,7 +13,7 @@ export interface RedPacketInPostProps {
 
 export function RedPacketInPost(props: RedPacketInPostProps) {
     const { payload } = props
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
     // #region discover red packet
     const postIdentifier = usePostInfoDetails.identifier()

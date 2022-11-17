@@ -1,24 +1,27 @@
-import { SchemaType, formatAmount, useITOConstants, ChainId } from '@masknet/web3-shared-evm'
-import { isGreaterThan, isZero, NetworkPluginID, FungibleToken, leftShift } from '@masknet/web3-shared-base'
-import { TokenIcon } from '@masknet/shared'
-import { Box, Stack, Typography, InputBase, inputBaseClasses } from '@mui/material'
-import { makeStyles, useStylesExtends, ActionButton, LoadingBase } from '@masknet/theme'
-import CheckIcon from '@mui/icons-material/Check'
-import UnCheckIcon from '@mui/icons-material/Close'
-import classNames from 'classnames'
-import formatDateTime from 'date-fns/format'
 import { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react'
 import { v4 as uuid } from 'uuid'
 import Web3Utils from 'web3-utils'
+import formatDateTime from 'date-fns/format'
+import { SchemaType, formatAmount, useITOConstants, ChainId } from '@masknet/web3-shared-evm'
+import { isGreaterThan, isZero, FungibleToken, leftShift } from '@masknet/web3-shared-base'
+import {
+    TokenIcon,
+    PluginWalletStatusBar,
+    ChainBoundary,
+    WalletConnectedBoundary,
+    DateTimePanel,
+    EthereumERC20TokenApprovedBoundary,
+} from '@masknet/shared'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { Box, Stack, Typography, InputBase, inputBaseClasses } from '@mui/material'
+import { makeStyles, useStylesExtends, ActionButton, LoadingBase } from '@masknet/theme'
+import { Check as CheckIcon, Close as UnCheckIcon } from '@mui/icons-material'
 import {
     useCurrentIdentity,
     useCurrentLinkedPersona,
     useLastRecognizedIdentity,
 } from '../../../components/DataSource/useActivatedUI.js'
-import { PluginWalletStatusBar, sliceTextByUILength, useI18N } from '../../../utils/index.js'
-import { DateTimePanel } from '../../../web3/UI/DateTimePanel.js'
-import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary.js'
-import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary.js'
+import { sliceTextByUILength, useI18N } from '../../../utils/index.js'
 import type { ExchangeTokenAndAmountState } from './hooks/useExchangeTokenAmountstate.js'
 import type { PoolSettings } from './hooks/useFill.js'
 import { useQualificationVerify } from './hooks/useQualificationVerify.js'
@@ -26,8 +29,7 @@ import { decodeRegionCode, encodeRegionCode, regionCodes, useRegionSelect } from
 import { AdvanceSettingData, AdvanceSetting } from './AdvanceSetting.js'
 import { ExchangeTokenPanelGroup } from './ExchangeTokenPanelGroup.js'
 import { RegionSelect } from './RegionSelect.js'
-import { useAccount, useFungibleTokenBalance } from '@masknet/plugin-infra/web3'
-import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
+import { useChainContext, useFungibleTokenBalance } from '@masknet/web3-hooks-base'
 
 const useStyles = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -42,10 +44,6 @@ const useStyles = makeStyles()((theme) => {
         },
         column: {
             flexDirection: 'column',
-        },
-        flow: {
-            margin: theme.spacing(1),
-            textAlign: 'center',
         },
         input: {
             position: 'relative',
@@ -64,13 +62,6 @@ const useStyles = makeStyles()((theme) => {
             lineHeight: '18px',
             color: theme.palette.maskColor.second,
             whiteSpace: 'nowrap',
-        },
-        label: {
-            paddingLeft: theme.spacing(2),
-        },
-        tip: {
-            fontSize: 12,
-            color: theme.palette.text.secondary,
         },
         date: {
             margin: theme.spacing(1),
@@ -108,11 +99,6 @@ const useStyles = makeStyles()((theme) => {
             padding: '0 16px',
             opacity: 0.8,
         },
-        field: {
-            flex: 1,
-            padding: theme.spacing(1),
-            marginTop: theme.spacing(1),
-        },
         controller: {
             position: 'sticky',
             bottom: 0,
@@ -133,17 +119,16 @@ const useStyles = makeStyles()((theme) => {
 export interface CreateFormProps extends withClasses<never> {
     onChangePoolSettings: (pollSettings: PoolSettings) => void
     onNext: () => void
-    onClose: () => void
     origin?: PoolSettings
     chainId: ChainId
 }
 
 export function CreateForm(props: CreateFormProps) {
-    const { onChangePoolSettings, onNext, origin, onClose, chainId } = props
+    const { onChangePoolSettings, onNext, origin, chainId } = props
     const { t } = useI18N()
-    const classes = useStylesExtends(useStyles(), props)
+    const { classes, cx } = useStylesExtends(useStyles(), props)
 
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { ITO2_CONTRACT_ADDRESS, DEFAULT_QUALIFICATION2_ADDRESS } = useITOConstants(chainId)
 
     const currentIdentity = useCurrentIdentity()
@@ -245,10 +230,6 @@ export function CreateForm(props: CreateFormProps) {
         if (!advanceSettingData.delayUnlocking) setUnlockTime(new Date())
         if (!advanceSettingData.IPRegion) setRegions(regionCodes)
     }, [advanceSettingData])
-
-    useEffect(() => {
-        if (!ITO2_CONTRACT_ADDRESS || !DEFAULT_QUALIFICATION2_ADDRESS) onClose()
-    }, [ITO2_CONTRACT_ADDRESS, DEFAULT_QUALIFICATION2_ADDRESS, onClose])
 
     useEffect(() => {
         const [first, ...rest] = tokenAndAmounts
@@ -414,7 +395,7 @@ export function CreateForm(props: CreateFormProps) {
                     endAdornment={
                         tokenAndAmount?.token ? (
                             <Box className={classes.tokenAdornment}>
-                                <TokenIcon classes={{ icon: classes.tokenIcon }} {...tokenAndAmount.token} />
+                                <TokenIcon className={classes.tokenIcon} {...tokenAndAmount.token} />
                                 <Typography>{tokenAndAmount.token?.symbol}</Typography>
                             </Box>
                         ) : null
@@ -442,7 +423,7 @@ export function CreateForm(props: CreateFormProps) {
             ) : null}
             {advanceSettingData.delayUnlocking ? <Box className={classes.date}>{UnlockTime}</Box> : null}
             {account && advanceSettingData.contract ? (
-                <Box className={classNames(classes.line, classes.column)}>
+                <Box className={cx(classes.line, classes.column)}>
                     <InputBase
                         className={classes.input}
                         onChange={(e) => setQualificationAddress(e.currentTarget.value)}
@@ -454,13 +435,13 @@ export function CreateForm(props: CreateFormProps) {
                         }
                         endAdornment={
                             qualification?.isQualification ? (
-                                <Box className={classNames(classes.iconWrapper, classes.success)}>
+                                <Box className={cx(classes.iconWrapper, classes.success)}>
                                     <CheckIcon fontSize="small" style={{ color: '#77E0B5' }} />
                                 </Box>
                             ) : qualification?.loadingERC165 || loadingQualification ? (
                                 <LoadingBase size={16} />
                             ) : qualificationAddress.length > 0 ? (
-                                <Box className={classNames(classes.iconWrapper, classes.fail)}>
+                                <Box className={cx(classes.iconWrapper, classes.fail)}>
                                     <UnCheckIcon fontSize="small" style={{ color: '#ff4e59' }} />
                                 </Box>
                             ) : null

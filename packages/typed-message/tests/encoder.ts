@@ -4,7 +4,7 @@ import {
     encodeTypedMessageToDocument,
     makeTypedMessageSerializableTupleFromList,
     decodeTypedMessageFromDocument,
-} from '../base/index.js'
+} from '../base/src/index.js'
 import { testSerializer } from '../../test-serializer/index.js'
 
 expect.addSnapshotSerializer(testSerializer)

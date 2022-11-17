@@ -1,6 +1,5 @@
-import type { EnhanceableSite } from '@masknet/shared-base'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useCallback } from 'react'
+import { EnhanceableSite, NetworkPluginID } from '@masknet/shared-base'
 import type { RSS3_KEY_SNS } from '../../constants.js'
 import type { AvatarMetaDB } from '../../types.js'
 import { useSaveAvatarToRSS3 } from './useSaveNFTAvatarToRSS3.js'
@@ -15,11 +14,11 @@ export function useSaveNFTAvatar() {
             nft: AvatarMetaDB,
             network: EnhanceableSite,
             snsKey: RSS3_KEY_SNS,
-            networkPluginId?: NetworkPluginID,
+            pluginID?: NetworkPluginID,
         ) => {
             const avatar = await saveAvatarToRSS3(address, nft, '', snsKey)
 
-            saveAddress(nft.userId, networkPluginId ?? NetworkPluginID.PLUGIN_EVM, address, network)
+            saveAddress(nft.userId, pluginID ?? NetworkPluginID.PLUGIN_EVM, address, network)
 
             return avatar
         },

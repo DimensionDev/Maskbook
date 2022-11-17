@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 import type { MaskFixedSizeListProps, MaskTextFieldProps } from '@masknet/theme'
 import { useSelectFungibleToken, FungibleTokenInput, FungibleTokenInputProps } from '@masknet/shared'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { useI18N } from '../../../utils/index.js'
 import type { Web3Helper } from '@masknet/web3-helpers'
 

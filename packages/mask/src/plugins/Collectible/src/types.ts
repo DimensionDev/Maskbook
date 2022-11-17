@@ -1,15 +1,7 @@
-import type { WyvernSchemaName } from 'opensea-js/lib/types'
-import type { NetworkPluginID, SourceType } from '@masknet/web3-shared-base'
+import type { WyvernSchemaName } from 'opensea-js/lib/types.js'
+import type { SourceType } from '@masknet/web3-shared-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-
-export enum ActivityType {
-    Transfer = 'Transfer',
-    Mint = 'Mint',
-    Sale = 'Sale',
-    Offer = 'Offer',
-    List = 'List',
-    CancelOffer = 'Cancel Offer',
-}
 
 export enum TabType {
     About = 'About',
@@ -39,3 +31,5 @@ export interface CollectibleToken {
     schemaName?: WyvernSchemaName
     provider?: SourceType
 }
+
+export type { CollectibleGridProps } from '../../../extension/options-page/types.js'

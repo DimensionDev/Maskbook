@@ -4,9 +4,9 @@
     "rootDir": "./",
     "tsBuildInfoFile": "../dist/public-api.tsbuildinfo",
     "emitDeclarationOnly": true,
-    "types": ["@types/web"],
     "isolatedModules": false,
     "module": "None",
+    "moduleResolution": "Classic",
     "resolveJsonModule": false,
     "outFile": "../dist/public-api"
   },

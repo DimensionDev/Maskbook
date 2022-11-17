@@ -2,7 +2,8 @@
 import { describe, expect, test } from 'vitest'
 import { ChainId as ChainIdEVM } from '@masknet/web3-shared-evm'
 import { ChainId as ChainIdSolana } from '@masknet/web3-shared-solana'
-import { NetworkPluginID, SourceType } from '@masknet/web3-shared-base'
+import { SourceType } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { getPayloadFromURL } from '../src/helpers/url.js'
 
 describe('getPayloadFromURL', () => {
@@ -67,7 +68,7 @@ describe('getPayloadFromURL', () => {
                 pluginID: NetworkPluginID.PLUGIN_SOLANA,
                 chainId: ChainIdSolana.Mainnet,
                 address: 'zyru7e6AadBrhFZFQe9r7vM3HxHAVee4Xb8d46qb5Tb',
-                tokenId: 'zyru7e6AadBrhFZFQe9r7vM3HxHAVee4Xb8d46qb5Tb',
+                tokenId: '',
                 provider: SourceType.Rarible,
             },
         },

@@ -7,22 +7,13 @@ import type { Qualification } from '@masknet/web3-contracts/types/Qualification.
 import type { Qualification2 } from '@masknet/web3-contracts/types/Qualification2.js'
 import type { PayableTx } from '@masknet/web3-contracts/types/types.js'
 import { ChainId, SchemaType, TransactionEventType, useITOConstants } from '@masknet/web3-shared-evm'
-import {
-    isSameAddress,
-    isPositive,
-    isZero,
-    toFixed,
-    FungibleToken,
-    currySameAddress,
-    NetworkPluginID,
-} from '@masknet/web3-shared-base'
-
-import { fromHex, toHex } from '@masknet/shared-base'
+import { isSameAddress, isPositive, isZero, toFixed, FungibleToken, currySameAddress } from '@masknet/web3-shared-base'
+import { fromHex, toHex, NetworkPluginID } from '@masknet/shared-base'
 import { useITO_Contract } from './useITO_Contract.js'
 import { useQualificationContract } from './useQualificationContract.js'
 import type { JSON_PayloadInMask } from '../../types.js'
 import { checkAvailability } from '../utils/checkAvailability.js'
-import { useAccount, useChainId, useWeb3Connection } from '@masknet/plugin-infra/web3'
+import { useChainContext, useWeb3Connection } from '@masknet/web3-hooks-base'
 
 export function useSwapCallback(
     payload: JSON_PayloadInMask,
@@ -30,9 +21,7 @@ export function useSwapCallback(
     token: Partial<FungibleToken<ChainId, SchemaType>>,
     isQualificationHasLucky = false,
 ) {
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
-
+    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, { chainId })
     const { ITO_CONTRACT_ADDRESS } = useITOConstants(chainId)
     const { contract: ITO_Contract, version } = useITO_Contract(chainId, payload.contract_address)

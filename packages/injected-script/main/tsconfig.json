@@ -3,9 +3,7 @@
   "compilerOptions": {
     "rootDir": "./",
     "outDir": "../dist/main",
-    "tsBuildInfoFile": "../dist/main.tsbuildinfo",
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext"
+    "tsBuildInfoFile": "../dist/main.tsbuildinfo"
   },
   "include": ["./"],
   "references": [{ "path": "../shared/" }]

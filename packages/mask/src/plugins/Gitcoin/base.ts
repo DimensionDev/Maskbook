@@ -11,6 +11,7 @@ export const base: Plugin.Shared.Definition = {
         architecture: { app: true, web: true },
         networks: { type: 'opt-out', networks: {} },
         target: 'stable',
+        host_permissions: ['https://gitcoin.co/'],
     },
     contribution: { postContent: new Set([/https:\/\/gitcoin.co\/grants\/\d+/]) },
     i18n: languages,

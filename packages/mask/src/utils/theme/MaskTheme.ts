@@ -2,7 +2,7 @@
 
 import { unstable_createMuiStrictModeTheme, type ThemeOptions } from '@mui/material'
 import { grey, orange } from '@mui/material/colors'
-import { cloneDeep, merge } from 'lodash-unified'
+import { cloneDeep, merge } from 'lodash-es'
 
 function getFontFamily(monospace?: boolean) {
     // We want to look native.
@@ -62,6 +62,13 @@ const base: ThemeOptions = {
             styleOverrides: {
                 paper: {
                     borderRadius: '12px',
+                },
+            },
+        },
+        MuiTypography: {
+            styleOverrides: {
+                root: {
+                    fontSize: 14,
                 },
             },
         },

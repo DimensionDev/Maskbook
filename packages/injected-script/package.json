@@ -6,12 +6,12 @@
   "exports": {
     ".": {
       "types": "./dist/sdk/index.d.ts",
-      "webpack": "./sdk/index.ts",
+      "mask-src": "./sdk/index.ts",
       "default": "./dist/sdk/index.js"
     },
     "./shared": {
       "types": "./dist/shared/index.d.ts",
-      "webpack": "./shared/index.ts",
+      "mask-src": "./shared/index.ts",
       "default": "./dist/shared/index.js"
     }
   },
@@ -21,9 +21,8 @@
     "start": "rollup -c -w"
   },
   "devDependencies": {
-    "@swc/core": "1.2.245",
-    "rollup": "^2.79.0",
-    "rollup-plugin-swc3": "^0.6.0",
+    "rollup": "^3.2.5",
+    "rollup-plugin-swc3": "^0.7.0",
     "rollup-plugin-terser": "^7.0.2"
   }
 }

@@ -3,8 +3,6 @@
   "compilerOptions": {
     "rootDir": "./",
     "outDir": "../../dist/runtime/",
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
     "tsBuildInfoFile": "../../dist/runtime.tsbuildinfo"
   },
   "include": ["./"],

@@ -1,5 +1,5 @@
 import type { Plugin } from '@masknet/plugin-infra'
-import { OthersState } from '@masknet/plugin-infra/web3'
+import { OthersState } from '@masknet/web3-state'
 import { formatDomainName } from '@masknet/web3-shared-evm'
 import {
     isValidDomain,
@@ -20,6 +20,7 @@ import {
     PROVIDER_DESCRIPTORS,
     formatTokenId,
     getDefaultChainId,
+    getInvalidChainId,
     getDefaultNetworkType,
     getDefaultProviderType,
     getZeroAddress,
@@ -27,7 +28,10 @@ import {
     getNativeTokenAddress,
     explorerResolver,
     formatSchemaType,
+    createNativeToken,
+    isValidChainId,
 } from '@masknet/web3-shared-solana'
+import { createFungibleToken, createNonFungibleToken } from '@masknet/web3-shared-base'
 
 export class Others extends OthersState<ChainId, SchemaType, ProviderType, NetworkType, Transaction> {
     constructor(context: Plugin.Shared.SharedContext) {
@@ -41,6 +45,7 @@ export class Others extends OthersState<ChainId, SchemaType, ProviderType, Netwo
     override explorerResolver = explorerResolver
 
     override isValidDomain = isValidDomain
+    override isValidChainId = isValidChainId
     override isValidAddress = isValidAddress
     override isZeroAddress = isZeroAddress
     override isNativeTokenAddress = isNativeTokenAddress
@@ -50,6 +55,7 @@ export class Others extends OthersState<ChainId, SchemaType, ProviderType, Netwo
     override isNonFungibleTokenSchemaType = isNonFungibleTokenSchemaType
 
     override getDefaultChainId = getDefaultChainId
+    override getInvalidChainId = getInvalidChainId
     override getDefaultNetworkType = getDefaultNetworkType
     override getDefaultProviderType = getDefaultProviderType
     override getZeroAddress = getZeroAddress
@@ -60,4 +66,7 @@ export class Others extends OthersState<ChainId, SchemaType, ProviderType, Netwo
     override formatDomainName = formatDomainName
     override formatTokenId = formatTokenId
     override formatSchemaType = formatSchemaType
+    override createNativeToken = createNativeToken
+    override createFungibleToken = createFungibleToken
+    override createNonFungibleToken = createNonFungibleToken
 }

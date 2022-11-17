@@ -1,4 +1,4 @@
-import BigNumber from 'bignumber.js'
+import { BigNumber } from 'bignumber.js'
 import type { PrefixedHexString } from 'ethereumjs-util'
 
 // Never used class to force ts compiler to hide the underlying alias type.

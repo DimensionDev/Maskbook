@@ -1,8 +1,9 @@
 import { useValueRef } from '@masknet/shared-base-ui'
 import { makeStyles, usePortalShadowRoot } from '@masknet/theme'
 import { Box, Typography, styled, Portal } from '@mui/material'
-import classNames from 'classnames'
+import { debounce } from 'lodash-es'
 import { PropsWithChildren, useRef, cloneElement, useEffect, ReactElement, useState } from 'react'
+import { useLocation } from 'react-use'
 import { sayHelloShowed, userGuideStatus, userGuideVersion } from '../../../shared/legacy-settings/settings.js'
 import { activatedSocialNetworkUI } from '../../social-network/index.js'
 import { useI18N } from '../../utils/index.js'
@@ -117,16 +118,18 @@ export default function GuideStep({
     const ui = activatedSocialNetworkUI
     const lastStepRef = userGuideStatus[ui.networkIdentifier]
     const lastStep = useValueRef(lastStepRef)
+    const history = useLocation()
 
     useEffect(() => {
         if (disabled) return
+        if (location.pathname !== '/home') return
         const open = +lastStep === step
         setOpen(open)
 
         if (!open) return
         if (location.pathname === '/home') return
         location.assign('/home')
-    }, [lastStep])
+    }, [lastStep, history])
 
     useEffect(() => {
         if (disabled) return
@@ -144,6 +147,9 @@ export default function GuideStep({
         if (step !== total) {
             userGuideStatus[ui.networkIdentifier].value = String(step + 1)
         }
+        if (step === total - 1) {
+            document.body.scrollIntoView()
+        }
     }
 
     const onTry = () => {
@@ -153,7 +159,7 @@ export default function GuideStep({
     }
 
     useEffect(() => {
-        const onResize = () => {
+        const onResize = debounce(() => {
             const cr = childrenRef.current?.getBoundingClientRect()
 
             if (cr) {
@@ -167,7 +173,7 @@ export default function GuideStep({
             } else {
                 setClientRect(cr)
             }
-        }
+        }, 1000)
 
         onResize()
 
@@ -176,13 +182,13 @@ export default function GuideStep({
         return () => {
             window.removeEventListener('resize', onResize)
         }
-    }, [childrenRef, lastStep, open])
+    }, [childrenRef, lastStep, open, history])
 
     return (
         <>
             {cloneElement(children as ReactElement<any>, { ref: childrenRef })}
             {usePortalShadowRoot((container) => {
-                if (!open) return null
+                if (!open || !clientRect.top || !clientRect.left) return null
                 return (
                     <Portal container={container}>
                         <div className={classes.mask} onClick={(e) => e.stopPropagation()}>
@@ -201,7 +207,7 @@ export default function GuideStep({
                                         height: clientRect.height,
                                     }}>
                                     <div
-                                        className={classNames(
+                                        className={cx(
                                             classes.card,
                                             arrow ? (bottomAvailable ? 'arrow-top' : 'arrow-bottom') : '',
                                         )}

@@ -3,14 +3,14 @@ import { MenuItem, Stack, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
 import { useMenu, WalletIcon } from '@masknet/shared'
-import type { NetworkPluginID } from '@masknet/web3-shared-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
 import {
-    useChainId,
+    useChainContext,
     useNetworkDescriptors,
     useProviderDescriptor,
     useWeb3State,
     useWeb3UI,
-} from '@masknet/plugin-infra/web3'
+} from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 
 const useStyles = makeStyles()((theme) => ({
@@ -30,7 +30,7 @@ const useStyles = makeStyles()((theme) => ({
 export const useNetworkSelector = (pluginID?: NetworkPluginID) => {
     const { classes } = useStyles()
 
-    const currentChainId = useChainId()
+    const { chainId } = useChainContext()
     const providerDescriptor = useProviderDescriptor()
     const networkDescriptors = useNetworkDescriptors()
     const Web3UI = useWeb3UI()
@@ -62,7 +62,7 @@ export const useNetworkSelector = (pluginID?: NetworkPluginID) => {
                         onClick={() => onConnect(network.chainId)}>
                         <Stack direction="row" gap={0.5} alignItems="center">
                             <Stack justifyContent="center" width={18}>
-                                {network.chainId === currentChainId && <Icons.Success size={18} />}
+                                {network.chainId === chainId && <Icons.Success size={18} />}
                             </Stack>
                             <Stack justifyContent="center" alignItems="center" width={30}>
                                 <WalletIcon mainIcon={network.icon} size={30} />

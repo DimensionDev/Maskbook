@@ -1,25 +1,20 @@
-import { useState } from 'react'
-import { Button, Checkbox, FormControlLabel, Table, TableBody, TableCell, TableRow, Typography } from '@mui/material'
-import { getEnumAsArray } from '@dimensiondev/kit'
-import { PluginID } from '@masknet/plugin-infra'
+import { Table, TableBody, TableCell, TableRow, Typography } from '@mui/material'
 import {
-    useAccount,
     useBalance,
     useBlockNumber,
     useBlockTimestamp,
-    useChainId,
-    useCurrentWeb3NetworkPluginID,
-    useNetworkType,
-    useProviderType,
+    useNetworkContext,
     useReverseAddress,
     useLookupAddress,
     useWeb3State,
-} from '@masknet/plugin-infra/web3'
-import { WalletMessages } from '@masknet/plugin-wallet'
-import { useSelectAdvancedSettings, useSelectFungibleToken } from '@masknet/shared'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { makeStyles, useCustomSnackbar } from '@masknet/theme'
-import { ChainId } from '@masknet/web3-shared-evm'
+    useChainContext,
+} from '@masknet/web3-hooks-base'
+import { makeStyles } from '@masknet/theme'
+import {
+    useLastRecognizedIdentity,
+    useCurrentVisitingIdentity,
+    useCurrentVisitingSocialIdentity,
+} from '@masknet/plugin-infra'
 
 export interface ConsoleContentProps {
     onClose?: () => void
@@ -33,28 +28,18 @@ const useStyles = makeStyles()({
 
 export function ConsoleContent(props: ConsoleContentProps) {
     const { classes } = useStyles()
-    const pluginID = useCurrentWeb3NetworkPluginID()
+    const { pluginID: currentPluginID } = useNetworkContext()
     const { Others } = useWeb3State()
-    const account = useAccount()
-    const chainId = useChainId()
-    const networkType = useNetworkType()
-    const providerType = useProviderType()
+    const { account, chainId, networkType, providerType } = useChainContext()
     const { value: balance = '0' } = useBalance()
     const { value: blockNumber = 0 } = useBlockNumber()
     const { value: blockTimestamp = 0 } = useBlockTimestamp()
+    const { value: reversedName } = useReverseAddress(currentPluginID, account)
+    const { value: lookedAddress } = useLookupAddress(currentPluginID, reversedName)
+    const currentVisitingIdentity = useCurrentVisitingIdentity()
+    const lastRecognizedIdentity = useLastRecognizedIdentity()
+    const currentVisitingSocialIdentity = useCurrentVisitingSocialIdentity()
 
-    const onSelectFungibleToken = useSelectFungibleToken()
-    const onSelectGasSettings = useSelectAdvancedSettings(pluginID)
-
-    const [pluginId, setPluginId] = useState<PluginID>(PluginID.RSS3)
-    const plugins = getEnumAsArray(PluginID) as Array<{ key: PluginID; value: string }>
-
-    const [quickMode, setQuickMode] = useState(true)
-    const { setDialog } = useRemoteControlledDialog(WalletMessages.events.ApplicationDialogUpdated)
-    const { value: reversedName, retry: retryReversedName } = useReverseAddress(pluginID, account)
-    const { value: lookedAddress, retry: retryLookedAddress } = useLookupAddress(pluginID, reversedName)
-
-    const { showSnackbar } = useCustomSnackbar()
     const table: Array<{ name: string; content: JSX.Element }> = [
         {
             name: 'ChainId',
@@ -62,7 +47,7 @@ export function ConsoleContent(props: ConsoleContentProps) {
         },
         {
             name: 'PluginID',
-            content: <Typography variant="body2">{pluginID}</Typography>,
+            content: <Typography variant="body2">{currentPluginID}</Typography>,
         },
         {
             name: 'Network Type',
@@ -89,116 +74,35 @@ export function ConsoleContent(props: ConsoleContentProps) {
             content: <Typography variant="body2">{blockTimestamp}</Typography>,
         },
         {
-            name: 'Lookup Address',
-            content: (
-                <Typography variant="body2">
-                    <span>{lookedAddress}</span>
-                    <br />
-                    <Button
-                        size="small"
-                        onClick={() => {
-                            retryLookedAddress()
-                        }}>
-                        Lookup Address
-                    </Button>
-                </Typography>
-            ),
-        },
-        {
             name: 'Reversed Name',
+            content: <Typography variant="body2">{reversedName}</Typography>,
+        },
+        {
+            name: 'Looked Address',
+            content: <Typography variant="body2">{lookedAddress}</Typography>,
+        },
+        {
+            name: 'Current Visiting Identity',
             content: (
                 <Typography variant="body2">
-                    <span>{reversedName}</span>
-                    <br />
-                    <Button
-                        size="small"
-                        onClick={() => {
-                            retryReversedName()
-                        }}>
-                        Reversed Name
-                    </Button>
+                    {currentVisitingIdentity?.identifier?.userId} {currentVisitingIdentity?.isOwner ? 'OWNER' : ''}
                 </Typography>
             ),
         },
         {
-            name: 'Gas Settings',
+            name: 'Last Recognized Identity',
             content: (
-                <Button
-                    size="small"
-                    onClick={async () => {
-                        const gasSettings = await onSelectGasSettings({
-                            chainId: ChainId.Matic,
-                            slippageTolerance: 1,
-                            disableSlippageTolerance: true,
-                            transaction: {
-                                from: account,
-                                to: account,
-                                value: '1',
-                                gas: 30000,
-                                // this field could be overridden with the instant gas options
-                                maxFeePerGas: 3800000000,
-                            },
-                        })
-                        console.log(gasSettings)
-                    }}>
-                    Gas Settings
-                </Button>
+                <Typography variant="body2">
+                    {lastRecognizedIdentity?.identifier?.userId} {lastRecognizedIdentity?.isOwner ? 'OWNER' : ''}
+                </Typography>
             ),
         },
         {
-            name: 'Snackbar',
+            name: 'Current Visiting Public Key',
             content: (
-                <Button
-                    size="small"
-                    onClick={() => {
-                        showSnackbar('test', {
-                            variant: 'success',
-                            message: 'test message',
-                            autoHideDuration: 100000000,
-                        })
-                    }}>
-                    Show
-                </Button>
-            ),
-        },
-        {
-            name: 'Plugin Settings',
-            content: (
-                <>
-                    <select onChange={(event) => setPluginId(event.target.value as PluginID)}>
-                        {plugins.map((x) => (
-                            <option key={x.value} value={x.value}>
-                                {x.key}
-                            </option>
-                        ))}
-                    </select>
-                    <br />
-                    <FormControlLabel
-                        control={
-                            <Checkbox
-                                checked={quickMode}
-                                onChange={(event) => setQuickMode(event.currentTarget.checked)}
-                            />
-                        }
-                        label="Quick Mode"
-                    />
-                    <br />
-                    <Button
-                        size="small"
-                        onClick={() => {
-                            setDialog({
-                                open: true,
-                                settings: {
-                                    quickMode,
-                                    switchTab: {
-                                        focusPluginId: pluginId,
-                                    },
-                                },
-                            })
-                        }}>
-                        Open
-                    </Button>
-                </>
+                <Typography variant="body2" style={{ width: 280, wordBreak: 'break-all' }}>
+                    {currentVisitingSocialIdentity?.value?.publicKey}
+                </Typography>
             ),
         },
     ]

@@ -18,7 +18,7 @@ import { getAvatarId } from '../../utils/user.js'
 import { isMobileFacebook } from '../../utils/isMobile.js'
 import { InMemoryStorages } from '../../../../../shared/index.js'
 import type { SelectTokenInfo } from '../../../../plugins/Avatar/types.js'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 
 export async function injectProfileNFTAvatarInFaceBook(signal: AbortSignal) {
@@ -76,7 +76,7 @@ function NFTAvatarInFacebookFirstStep() {
                 avatarId: '',
                 address: info.token.contract.address,
                 tokenId: info.token.tokenId,
-                pluginID: info.pluginId ?? NetworkPluginID.PLUGIN_EVM,
+                pluginID: info.pluginID ?? NetworkPluginID.PLUGIN_EVM,
                 chainId: info.token.chainId ?? ChainId.Mainnet,
                 schema: info.token.schema ?? SchemaType.ERC721,
             })
@@ -156,8 +156,8 @@ function NFTAvatarListInFaceBookMobile() {
                 InMemoryStorages.FacebookNFTEventOnMobile.storage.userId.setValue(identity.identifier.userId)
             InMemoryStorages.FacebookNFTEventOnMobile.storage.address.setValue(info.token.contract?.address)
             InMemoryStorages.FacebookNFTEventOnMobile.storage.tokenId.setValue(info.token.tokenId)
-            InMemoryStorages.FacebookNFTEventOnMobile.storage.pluginId.setValue(
-                info.pluginId ?? NetworkPluginID.PLUGIN_EVM,
+            InMemoryStorages.FacebookNFTEventOnMobile.storage.pluginID.setValue(
+                info.pluginID ?? NetworkPluginID.PLUGIN_EVM,
             )
             InMemoryStorages.FacebookNFTEventOnMobile.storage.chainId.setValue(info.token.chainId ?? ChainId.Mainnet)
             InMemoryStorages.FacebookNFTEventOnMobile.storage.schema.setValue(info.token.schema ?? SchemaType.ERC721)
@@ -165,5 +165,5 @@ function NFTAvatarListInFaceBookMobile() {
         [identity],
     )
 
-    return <NFTAvatar onChange={onChange} classes={classes} />
+    return <NFTAvatar onChange={onChange} classes={{ root: classes.root }} />
 }

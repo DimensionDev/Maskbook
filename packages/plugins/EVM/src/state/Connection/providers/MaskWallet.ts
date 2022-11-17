@@ -1,17 +1,25 @@
+import { first } from 'lodash-es'
 import { toHex } from 'web3-utils'
 import type { RequestArguments } from 'web3-core'
-import { ChainId, createPayload, chainResolver, ProviderType } from '@masknet/web3-shared-evm'
+import { ChainId, createPayload, chainResolver, ProviderType, isValidAddress } from '@masknet/web3-shared-evm'
+import { ExtensionSite, getSiteType, isEnhanceableSiteType, PopupRoutes } from '@masknet/shared-base'
+import type { ProviderOptions } from '@masknet/web3-shared-base'
 import { BaseProvider } from './Base.js'
 import type { EVM_Provider } from '../types.js'
 import { SharedContextSettings, Web3StateSettings } from '../../../settings/index.js'
-import { ExtensionSite, getSiteType, isEnhanceableSiteType, PopupRoutes } from '@masknet/shared-base'
-import { first } from 'lodash-unified'
-import type { ProviderOptions } from '@masknet/web3-shared-base'
 
 export class MaskWalletProvider extends BaseProvider implements EVM_Provider {
     constructor() {
-        super()
+        super(ProviderType.MaskWallet)
         Web3StateSettings.readyPromise.then(this.addSharedContextListeners.bind(this))
+    }
+
+    private get account() {
+        return SharedContextSettings.value.account.getCurrentValue()
+    }
+
+    private get chainId() {
+        return SharedContextSettings.value.chainId.getCurrentValue()
     }
 
     /**
@@ -30,22 +38,21 @@ export class MaskWalletProvider extends BaseProvider implements EVM_Provider {
         return Web3StateSettings.readyPromise.then(() => {})
     }
 
-    override async switchChain(chainId?: ChainId) {
-        await SharedContextSettings.value.updateAccount({
-            chainId,
+    private addSharedContextListeners() {
+        const { account, chainId } = SharedContextSettings.value
+
+        account.subscribe(() => {
+            if (this.account) this.emitter.emit('accounts', [this.account])
+            else this.emitter.emit('disconnect', ProviderType.MaskWallet)
+        })
+        chainId.subscribe(() => {
+            this.emitter.emit('chainId', toHex(this.chainId))
         })
     }
 
-    private addSharedContextListeners() {
-        const sharedContext = SharedContextSettings.value
-
-        sharedContext.chainId.subscribe(() => {
-            this.emitter.emit('chainId', toHex(sharedContext.chainId.getCurrentValue()))
-        })
-        sharedContext.account.subscribe(() => {
-            const account = sharedContext.account.getCurrentValue()
-            if (account) this.emitter.emit('accounts', [account])
-            else this.emitter.emit('disconnect', ProviderType.MaskWallet)
+    override async switchChain(chainId?: ChainId) {
+        await SharedContextSettings.value.updateAccount({
+            chainId,
         })
     }
 
@@ -56,7 +63,7 @@ export class MaskWalletProvider extends BaseProvider implements EVM_Provider {
         const response = await SharedContextSettings.value.send(
             createPayload(0, requestArguments.method, requestArguments.params),
             {
-                chainId: SharedContextSettings.value.chainId.getCurrentValue(),
+                chainId: this.chainId,
                 popupsWindow: getSiteType() === ExtensionSite.Dashboard || isEnhanceableSiteType(),
                 ...options,
             },
@@ -65,11 +72,19 @@ export class MaskWalletProvider extends BaseProvider implements EVM_Provider {
     }
 
     override async connect(chainId: ChainId) {
-        const { chainId: actualChainId, getWallets, updateAccount } = SharedContextSettings.value
-
         const siteType = getSiteType()
         if (siteType === ExtensionSite.Popup) throw new Error('Cannot connect wallet')
 
+        // connected
+        if (chainId === this.chainId && isValidAddress(this.account)) {
+            if (siteType) SharedContextSettings.value.recordConnectedSites(siteType, true)
+            return {
+                account: this.account,
+                chainId: this.chainId,
+            }
+        }
+
+        const { getWallets, updateAccount } = SharedContextSettings.value
         const wallets = await getWallets()
         SharedContextSettings.value.openPopupWindow(wallets.length ? PopupRoutes.SelectWallet : PopupRoutes.Wallet, {
             chainId,
@@ -79,7 +94,7 @@ export class MaskWalletProvider extends BaseProvider implements EVM_Provider {
         if (!account) throw new Error(`Failed to connect to ${chainResolver.chainFullName(chainId)}.`)
 
         // switch chain
-        if (actualChainId.getCurrentValue() !== chainId) {
+        if (chainId !== this.chainId) {
             await updateAccount({
                 chainId,
             })

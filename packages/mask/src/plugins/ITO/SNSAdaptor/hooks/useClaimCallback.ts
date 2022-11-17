@@ -1,5 +1,6 @@
-import { useAccount, useChainId, useWeb3Connection } from '@masknet/plugin-infra/web3'
-import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
+import { useChainContext, useWeb3Connection } from '@masknet/web3-hooks-base'
+import { isSameAddress } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { encodeContractTransaction, useITOConstants } from '@masknet/web3-shared-evm'
 import stringify from 'json-stable-stringify'
 import { useAsyncFn } from 'react-use'
@@ -7,8 +8,7 @@ import { checkAvailability } from '../utils/checkAvailability.js'
 import { useITO_Contract } from './useITO_Contract.js'
 
 export function useClaimCallback(pids: string[], contractAddress: string | undefined) {
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, { chainId })
     const { ITO_CONTRACT_ADDRESS } = useITOConstants(chainId)
     const { contract: ITO_Contract } = useITO_Contract(chainId, contractAddress)

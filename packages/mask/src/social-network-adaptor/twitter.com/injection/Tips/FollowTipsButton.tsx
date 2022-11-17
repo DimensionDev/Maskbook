@@ -24,13 +24,17 @@ export function injectTipsButtonOnFollowButton(signal: AbortSignal) {
                 const twitterId = getTwitterId(ele)
                 if (!twitterId) return
 
-                const proxy = DOMProxy({ afterShadowRootInit: { mode: 'closed' } })
+                const buttonCss = window.getComputedStyle(ele.firstChild as HTMLElement)
+                const buttonSize = Number.parseFloat(buttonCss.height.replace('px', ''))
+                const fontSizeCss = window.getComputedStyle(ele.firstChild?.firstChild as HTMLElement)
+                const fontSize = Number.parseFloat(fontSizeCss.fontSize.replace('px', ''))
+                const proxy = DOMProxy({ afterShadowRootInit: { mode: process.env.shadowRootMode } })
                 proxy.realCurrent = ele
                 const identity = await getUserIdentity(twitterId)
                 if (!identity) return
 
                 const root = createReactRootShadowed(proxy.beforeShadow, { signal })
-                root.render(<FollowButtonTipsSlot userId={twitterId} />)
+                root.render(<FollowButtonTipsSlot userId={twitterId} buttonSize={buttonSize} iconSize={20} />)
                 remover = root.destroy
             }
 
@@ -54,34 +58,38 @@ const useStyles = makeStyles()((theme) => ({
         width: 36,
         position: 'absolute',
         left: -10,
-        top: -2,
+        top: 1,
         transform: 'translate(-100%)',
     },
 }))
 
 interface Props {
     userId: string
+    buttonSize: number
+    iconSize: number
 }
 
-const FollowButtonTipsSlot = memo(({ userId }: Props) => {
+const FollowButtonTipsSlot = memo(({ userId, buttonSize, iconSize }: Props) => {
     const { classes, cx } = useStyles()
 
     const { value: identity } = useAsync(async () => getUserIdentity(userId), [userId])
     const [disabled, setDisabled] = useState(true)
+
     const component = useMemo(() => {
         const Component = createInjectHooksRenderer(
             useActivatedPluginsSNSAdaptor.visibility.useNotMinimalMode,
             (plugin) => plugin.TipsRealm?.UI?.Content,
         )
-
         return (
             <Component
                 identity={identity?.identifier}
+                buttonSize={buttonSize}
+                iconSize={iconSize}
                 slot={Plugin.SNSAdaptor.TipsSlot.FollowButton}
                 onStatusUpdate={setDisabled}
             />
         )
-    }, [identity?.identifier])
+    }, [identity?.identifier, buttonSize, iconSize])
 
     if (!identity?.identifier) return null
 

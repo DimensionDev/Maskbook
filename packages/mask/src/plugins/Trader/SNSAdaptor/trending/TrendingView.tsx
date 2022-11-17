@@ -1,21 +1,21 @@
-import { PluginID, useIsMinimalMode } from '@masknet/plugin-infra/content-script'
+import { useIsMinimalMode } from '@masknet/plugin-infra/content-script'
 import {
-    useChainId,
+    useChainContext,
     useChainIdValid,
-    useNetworkType,
     useNonFungibleAssetsByCollection,
-} from '@masknet/plugin-infra/web3'
+    Web3ContextProvider,
+} from '@masknet/web3-hooks-base'
 import { DataProvider } from '@masknet/public-api'
 import { NFTList } from '@masknet/shared'
-import { EMPTY_LIST } from '@masknet/shared-base'
-import { ActionButton, makeStyles, MaskTabList, useTabs } from '@masknet/theme'
+import { EMPTY_LIST, PluginID, NetworkPluginID, getSiteType } from '@masknet/shared-base'
+import { ActionButton, makeStyles, MaskLightTheme, MaskTabList, useTabs } from '@masknet/theme'
 import { TrendingAPI } from '@masknet/web3-providers'
-import { createFungibleToken, NetworkPluginID, TokenType } from '@masknet/web3-shared-base'
-import { isNativeTokenAddress, isNativeTokenSymbol, SchemaType } from '@masknet/web3-shared-evm'
+import { createFungibleToken, TokenType } from '@masknet/web3-shared-base'
+import { isNativeTokenAddress, isNativeTokenSymbol, SchemaType, ChainId } from '@masknet/web3-shared-evm'
 import { TabContext } from '@mui/lab'
-import { Link, Stack, Tab } from '@mui/material'
+import { Link, Stack, Tab, ThemeProvider } from '@mui/material'
 import { Box, useTheme } from '@mui/system'
-import { compact } from 'lodash-unified'
+import { compact } from 'lodash-es'
 import { useEffect, useMemo, useState } from 'react'
 import { useI18N } from '../../../../utils/index.js'
 import { resolveDataProviderLink, resolveDataProviderName } from '../../pipes.js'
@@ -34,6 +34,8 @@ import { TickersTable } from './TickersTable.js'
 import { TrendingViewDeck } from './TrendingViewDeck.js'
 import { TrendingViewError } from './TrendingViewError.js'
 import { TrendingViewSkeleton } from './TrendingViewSkeleton.js'
+import { useValueRef } from '@masknet/shared-base-ui'
+import { pluginIDSettings } from '../../../../../shared/legacy-settings/settings.js'
 
 const useStyles = makeStyles<{
     isPopper: boolean
@@ -42,6 +44,7 @@ const useStyles = makeStyles<{
         root: props.isPopper
             ? {
                   width: 598,
+                  borderRadius: theme.spacing(2),
                   boxShadow:
                       theme.palette.mode === 'dark'
                           ? 'rgba(255, 255, 255, 0.2) 0 0 15px, rgba(255, 255, 255, 0.15) 0 0 3px 1px'
@@ -105,6 +108,8 @@ export interface TrendingViewProps {
     name: string
     tagType: TagType
     dataProviders: DataProvider[]
+    searchedContractAddress?: string
+    expectedChainId?: ChainId
     onUpdate?: () => void
     isPopper?: boolean
 }
@@ -118,18 +123,22 @@ enum ContentTabs {
 }
 
 export function TrendingView(props: TrendingViewProps) {
-    const { name, tagType, dataProviders, isPopper = true } = props
+    const { name, tagType, dataProviders, isPopper = true, searchedContractAddress, expectedChainId } = props
 
     const { t } = useI18N()
     const { classes } = useStyles({ isPopper })
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const theme = useTheme()
     const isMinimalMode = useIsMinimalMode(PluginID.Trader)
     const dataProvider = useCurrentDataProvider(dataProviders)
     const [tabIndex, setTabIndex] = useState(dataProvider !== DataProvider.UniswapInfo ? 1 : 0)
-    const chainIdValid = useChainIdValid(NetworkPluginID.PLUGIN_EVM)
+    const { chainId, networkType } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+    const chainIdValid = useChainIdValid(NetworkPluginID.PLUGIN_EVM, chainId)
+
+    const site = getSiteType()
+    const pluginIDs = useValueRef(pluginIDSettings)
+    const context = { pluginID: site ? pluginIDs[site] : NetworkPluginID.PLUGIN_EVM }
+
     // #region track network type
-    const networkType = useNetworkType(NetworkPluginID.PLUGIN_EVM)
     useEffect(() => setTabIndex(0), [networkType])
     // #endregion
 
@@ -139,10 +148,16 @@ export function TrendingView(props: TrendingViewProps) {
 
     // #region merge trending
     const coinId = usePreferredCoinId(name, dataProvider)
-    const trendingById = useTrendingById(coinId, dataProvider)
-    const trendingByKeyword = useTrendingByKeyword(tagType, coinId ? '' : name, dataProvider)
+    const trendingById = useTrendingById(coinId, dataProvider, expectedChainId, searchedContractAddress)
+    const trendingByKeyword = useTrendingByKeyword(
+        tagType,
+        coinId ? '' : name,
+        dataProvider,
+        expectedChainId,
+        searchedContractAddress,
+    )
     const {
-        value: { currency, trending },
+        value: { currency, trending } = {},
         error: trendingError,
         loading: loadingTrending,
     } = coinId ? trendingById : trendingByKeyword
@@ -274,10 +289,12 @@ export function TrendingView(props: TrendingViewProps) {
     // #region display loading skeleton
     if (!currency || !trending || loadingTrending)
         return (
-            <TrendingViewSkeleton
-                classes={{ footer: classes.footerSkeleton }}
-                TrendingCardProps={{ classes: { root: classes.root } }}
-            />
+            <ThemeProvider theme={MaskLightTheme}>
+                <TrendingViewSkeleton
+                    classes={{ footer: classes.footerSkeleton }}
+                    TrendingCardProps={{ classes: { root: classes.root } }}
+                />
+            </ThemeProvider>
         )
     // #endregion
 
@@ -293,6 +310,7 @@ export function TrendingView(props: TrendingViewProps) {
             keyword={name}
             stats={stats}
             coins={coins}
+            isPreciseSearch={!!searchedContractAddress}
             currency={currency}
             trending={trending}
             dataProvider={dataProvider}
@@ -338,21 +356,23 @@ export function TrendingView(props: TrendingViewProps) {
                     </Box>
                 ) : null}
                 {currentTab === ContentTabs.Swap && isSwappable ? (
-                    <TradeView
-                        classes={{ root: classes.tradeViewRoot }}
-                        TraderProps={{
-                            defaultInputCoin: coin.address
-                                ? createFungibleToken(
-                                      chainId,
-                                      isNativeTokenAddress(coin.address) ? SchemaType.Native : SchemaType.ERC20,
-                                      coin.address,
-                                      coin.name,
-                                      coin.symbol,
-                                      coin.decimals ?? 0,
-                                  )
-                                : undefined,
-                        }}
-                    />
+                    <Web3ContextProvider value={context}>
+                        <TradeView
+                            classes={{ root: classes.tradeViewRoot }}
+                            TraderProps={{
+                                defaultInputCoin: coin.address
+                                    ? createFungibleToken(
+                                          chainId,
+                                          isNativeTokenAddress(coin.address) ? SchemaType.Native : SchemaType.ERC20,
+                                          coin.address,
+                                          coin.name,
+                                          coin.symbol,
+                                          coin.decimals ?? 0,
+                                      )
+                                    : undefined,
+                            }}
+                        />
+                    </Web3ContextProvider>
                 ) : null}
                 {currentTab === ContentTabs.NFTItems && isNFT ? (
                     <Box className={classes.nftItems}>

@@ -1,9 +1,9 @@
 import { ChangeEvent, memo, useCallback, useMemo } from 'react'
-import { useWeb3State } from '@masknet/plugin-infra/web3'
+import { useWeb3State } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { formatBalance, FungibleToken } from '@masknet/web3-shared-base'
+import { formatBalance } from '@masknet/web3-shared-base'
 import { FungibleTokenInputUI } from './UI.js'
-import BigNumber from 'bignumber.js'
+import { BigNumber } from 'bignumber.js'
 
 const MIN_AMOUNT_LENGTH = 1
 const MAX_AMOUNT_LENGTH = 79
@@ -21,7 +21,7 @@ export interface FungibleTokenInputProps {
     disableBalance?: boolean
     placeholder?: string
     loadingBalance?: boolean
-    token?: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll> | null
+    token?: Web3Helper.FungibleTokenAll | null
     onSelectToken?: () => void
     onAmountChange: (amount: string) => void
 }

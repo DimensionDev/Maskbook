@@ -1,13 +1,13 @@
 import { useState } from 'react'
-import classNames from 'classnames'
 import { Checkbox, FormControlLabel, Link, Typography } from '@mui/material'
-import { makeStyles, useStylesExtends, ActionButton } from '@masknet/theme'
+import { makeStyles, ActionButton } from '@masknet/theme'
 import { FormattedAddress, TokenIcon } from '@masknet/shared'
 import { useI18N } from '../../../utils/index.js'
 import { ChainId, formatEthereumAddress, explorerResolver, networkResolver, SchemaType } from '@masknet/web3-shared-evm'
 import { SwapStatus } from './SwapGuide.js'
-import { useNetworkType } from '@masknet/plugin-infra/web3'
-import { FungibleToken, NetworkPluginID } from '@masknet/web3-shared-base'
+import { useChainContext } from '@masknet/web3-hooks-base'
+import type { FungibleToken } from '@masknet/web3-shared-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     reminderText: {
@@ -20,21 +20,6 @@ const useStyles = makeStyles()((theme) => ({
     },
     reminderTextLast: {
         marginBottom: 0,
-    },
-    docBox: {
-        overflow: 'scroll',
-    },
-    center: {
-        textAlign: 'center',
-        fontWeight: 'bold',
-        fontSize: '1.2rem',
-    },
-    bigCenter: {
-        fontSize: '1.5rem',
-    },
-    bold: {
-        fontWeight: 'bold',
-        fontSize: '1.1rem',
     },
     wrapper: {
         padding: theme.spacing(2),
@@ -59,7 +44,7 @@ const useStyles = makeStyles()((theme) => ({
         flexDirection: 'column',
         justifyContent: 'space-between',
         height: 45,
-        marginLeft: '1rem',
+        marginLeft: 14,
     },
     tokenSymbol: {
         color: theme.palette.mode === 'dark' ? '#fff' : '#15181B',
@@ -78,32 +63,6 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         alignItems: 'center',
     },
-    confirmText: {
-        color: '#6F767C',
-    },
-    table: {
-        border: '1px solid #FF5555',
-        color: '#FF5555',
-    },
-    cell: {
-        width: '50%',
-        border: '1px solid #FF5555',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        textAlign: 'center',
-    },
-    moreCell: {
-        flexDirection: 'column',
-    },
-    column: {
-        width: '100%',
-        display: 'flex',
-    },
-    lowSpacing: {
-        marginTop: 4,
-        marginBottom: 4,
-    },
 }))
 
 export interface RemindDialogProps extends withClasses<'root'> {
@@ -116,14 +75,14 @@ export function RemindDialog(props: RemindDialogProps) {
     const { token, chainId, setStatus } = props
 
     const { t } = useI18N()
-    const classes = useStylesExtends(useStyles(), {})
+    const { classes, cx } = useStyles()
     const [agreeReminder, setAgreeReminder] = useState(false)
-    const networkType = useNetworkType(NetworkPluginID.PLUGIN_EVM)
+    const { networkType } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
     return (
         <>
             <section className={classes.wrapper}>
-                <Typography variant="body1" className={classNames(classes.reminderText, classes.reminderTextFirst)}>
+                <Typography variant="body1" className={cx(classes.reminderText, classes.reminderTextFirst)}>
                     {t('plugin_ito_dialog_claim_reminder_text1', {
                         networkType: networkResolver.networkName(networkType),
                     })}
@@ -134,13 +93,13 @@ export function RemindDialog(props: RemindDialogProps) {
                 <Typography variant="body1" className={classes.reminderText}>
                     {t('plugin_ito_dialog_claim_reminder_text3')}
                 </Typography>
-                <Typography variant="body1" className={classNames(classes.reminderText, classes.reminderTextLast)}>
+                <Typography variant="body1" className={cx(classes.reminderText, classes.reminderTextLast)}>
                     {t('plugin_ito_dialog_claim_reminder_text4')}
                 </Typography>
             </section>
-            <section className={classNames(classes.wrapper, classes.tokenWrapper)}>
+            <section className={cx(classes.wrapper, classes.tokenWrapper)}>
                 <TokenIcon
-                    classes={{ icon: classes.tokenIcon }}
+                    className={classes.tokenIcon}
                     chainId={token.chainId}
                     address={token.address}
                     name={token.name}

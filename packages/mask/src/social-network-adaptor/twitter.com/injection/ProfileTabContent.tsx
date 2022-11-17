@@ -12,7 +12,9 @@ import {
 function injectProfileTabContentForEmptyState(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchProfileEmptySelector())
     startWatch(watcher, signal)
-    createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(<ProfileTabContentAtTwitter />)
+    createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(
+        <ProfileTabContentAtTwitter floating />,
+    )
 }
 
 function injectProfileTabContentState(signal: AbortSignal) {
@@ -49,7 +51,6 @@ function getStyleProps() {
         fontFamily: newTweetButton?.firstChild
             ? window.getComputedStyle(newTweetButton.firstChild as HTMLElement).fontFamily
             : undefined,
-        isPositionStatic: location.pathname.endsWith('/likes') || location.pathname.endsWith('/media'),
     }
 }
 
@@ -57,8 +58,11 @@ const useStyles = makeStyles()((theme) => {
     const props = getStyleProps()
 
     return {
+        holder: {
+            position: 'relative',
+        },
         root: {
-            position: props.isPositionStatic ? 'static' : 'absolute',
+            position: 'absolute',
             top: 0,
             left: 0,
             right: 0,
@@ -85,7 +89,21 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
-export function ProfileTabContentAtTwitter() {
+interface Props {
+    floating?: boolean
+}
+export function ProfileTabContentAtTwitter({ floating }: Props) {
     const { classes } = useStyles()
-    return <ProfileTabContent classes={classes} />
+    const content = (
+        <ProfileTabContent
+            classes={{
+                root: classes.root,
+                button: classes.button,
+                text: classes.text,
+            }}
+        />
+    )
+    // If it's floating, for example being attached to emptyState timeline, we
+    // can fix the position by putting it in a stacking context.
+    return floating ? <div className={classes.holder}>{content}</div> : content
 }

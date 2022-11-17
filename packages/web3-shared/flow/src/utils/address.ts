@@ -1,4 +1,4 @@
-import { getEnumAsArray } from '@dimensiondev/kit'
+import { getEnumAsArray } from '@masknet/kit'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { getTokenConstant, ZERO_ADDRESS } from '../constants/index.js'
 import { ChainId, NetworkType, ProviderType } from '../types.js'
@@ -25,16 +25,21 @@ export function isValidContractAddress(address: string) {
     return /A\.\w{16}\.\w+/.test(address)
 }
 
-export function isValidAddress(address: string) {
+export function isValidAddress(address?: string): address is string {
+    if (!address) return false
     return isValidAccountAddress(address) || isValidContractAddress(address)
 }
 
-export function isValidChainId(chainId: ChainId) {
+export function isValidChainId(chainId?: ChainId) {
     return getEnumAsArray(ChainId).some((x) => x.value === chainId)
 }
 
 export function getDefaultChainId() {
     return ChainId.Mainnet
+}
+
+export function getInvalidChainId() {
+    return ChainId.Invalid
 }
 
 export function getDefaultNetworkType() {

@@ -1,23 +1,24 @@
+import { useEffect, useState } from 'react'
+import { SNSAdaptorContext, PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
+import { Trans } from 'react-i18next'
 import { Icons } from '@masknet/icons'
-import { Plugin, PluginID } from '@masknet/plugin-infra'
-import { PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
+import type { Plugin } from '@masknet/plugin-infra'
+import { PluginID, CrossIsolationMessages } from '@masknet/shared-base'
 import { ApplicationEntry, PublicWalletSetting } from '@masknet/shared'
 import { MaskColorVar } from '@masknet/theme'
 import { Link } from '@mui/material'
-import { useEffect, useState } from 'react'
-import { Trans } from 'react-i18next'
 import { base } from '../base.js'
-import { TipTaskManager } from '../components/index.js'
-import { RootContext } from '../contexts/index.js'
+import { TipTaskManager } from '../contexts/index.js'
 import { setupStorage, storageDefaultValue } from '../storage/index.js'
 import { TipsEntranceDialog } from './TipsEntranceDialog.js'
-import { CrossIsolationMessages } from '@masknet/shared-base'
 import { TipsRealmContent } from './components/TipsRealmContent/index.js'
+import { SharedContextSettings } from '../settings/index.js'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
     init(_, context) {
         setupStorage(context.createKVStorage('memory', storageDefaultValue))
+        SharedContextSettings.value = context
     },
     ApplicationEntries: [
         (() => {
@@ -92,17 +93,19 @@ const sns: Plugin.SNSAdaptor.Definition = {
         },
     ],
     GlobalInjection() {
-        return (
-            <RootContext>
-                <TipTaskManager />
-            </RootContext>
-        )
+        return <TipTaskManager />
     },
     TipsRealm: {
         ID: `${base.ID}_tips`,
         priority: 1,
         UI: {
-            Content: TipsRealmContent,
+            Content(props) {
+                return (
+                    <SNSAdaptorContext.Provider value={SharedContextSettings.value}>
+                        <TipsRealmContent {...props} />
+                    </SNSAdaptorContext.Provider>
+                )
+            },
         },
     },
 }

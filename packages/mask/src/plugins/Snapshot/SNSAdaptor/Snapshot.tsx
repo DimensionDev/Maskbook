@@ -1,25 +1,20 @@
 import { useContext } from 'react'
+import Color from 'color'
 import { Box, Tab, Avatar, Typography, Chip } from '@mui/material'
 import { makeStyles, MaskTabList, ShadowRootTooltip, useTabs } from '@masknet/theme'
 import { SnapshotContext } from '../context.js'
 import { useProposal } from './hooks/useProposal.js'
 import { ProposalTab } from './ProposalTab.js'
 import { ProgressTab } from './ProgressTab.js'
-import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
-import { useChainId } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID, resolveIPFS_URL } from '@masknet/web3-shared-base'
+import { ChainBoundary } from '@masknet/shared'
+import { useChainContext } from '@masknet/web3-hooks-base'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { resolveIPFS_URL } from '@masknet/web3-shared-base'
 import { TabContext, TabPanel } from '@mui/lab'
-import Color from 'color'
 import { useI18N } from '../../../utils/index.js'
 
 const useStyles = makeStyles()((theme) => {
     return {
-        root: {
-            '--contentHeight': '400px',
-            '--tabHeight': '35px',
-            width: '100%',
-            padding: 0,
-        },
         header: {
             gap: theme.spacing(2),
             display: 'flex',
@@ -87,7 +82,7 @@ export function Snapshot() {
     const { classes, theme } = useStyles()
     const identifier = useContext(SnapshotContext)
     const { payload: proposal } = useProposal(identifier.id)
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const [currentTab, onChange, tabs] = useTabs('Proposal', 'Progress')
     const { t } = useI18N()
 

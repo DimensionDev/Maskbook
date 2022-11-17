@@ -2,14 +2,14 @@ import { PlatformCard } from './PlatformCard.js'
 import type { PersonaInformation } from '@masknet/shared-base'
 import type { IdentityResolved } from '@masknet/plugin-infra'
 import type { AccountType } from '../types.js'
-import type { CURRENT_STATUS } from '../../constants.js'
+import type { Scene } from '../../constants.js'
 import { Empty } from './Empty.js'
 import { Box } from '@mui/material'
 import { useI18N } from '../../locales/index.js'
 
 export interface MainProps {
     persona?: PersonaInformation
-    openImageSetting: (status: CURRENT_STATUS, accountId: string) => void
+    openImageSetting: (scene: Scene, account: string) => void
     currentVisitingProfile?: IdentityResolved
     accountList?: AccountType[]
 }
@@ -19,7 +19,7 @@ export function Main(props: MainProps) {
     if (!accountList?.length) {
         return (
             <Box justifyContent="center" alignItems="center" height="100%">
-                <Empty content={t.account_empty()} />
+                <Empty showIcon content={t.account_empty()} />
             </Box>
         )
     }
@@ -28,8 +28,8 @@ export function Main(props: MainProps) {
             {accountList.map((account) => (
                 <PlatformCard
                     key={account.identity}
-                    openImageSetting={(status: CURRENT_STATUS) => {
-                        openImageSetting(status, account.identity)
+                    openImageSetting={(scene: Scene) => {
+                        openImageSetting(scene, account.identity)
                     }}
                     account={account}
                     currentPersona={currentVisitingProfile}

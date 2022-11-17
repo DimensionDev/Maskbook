@@ -8,8 +8,6 @@ import { PageInterface, PagesType, TabsReferralFarms } from '../types.js'
 
 import { ReferToFarmIcon, CreateFarmIcon, BuyToFarmIcon } from './shared-ui/icons/index.js'
 
-import { useTabStyles } from './styles.js'
-
 const useStyles = makeStyles()((theme) => ({
     root: {
         display: 'flex',
@@ -19,9 +17,8 @@ const useStyles = makeStyles()((theme) => ({
         height: '100%',
         borderRadius: 8,
     },
-    walletStatusBox: {
-        width: 535,
-        margin: '24px auto',
+    tabRoot: {
+        fontSize: 14,
     },
     container: {
         flex: 1,
@@ -32,9 +29,6 @@ const useStyles = makeStyles()((theme) => ({
         height: '100%',
         overflow: 'auto',
         padding: `${theme.spacing(3)} 0`,
-    },
-    tabs: {
-        width: '288px',
     },
 }))
 
@@ -47,11 +41,6 @@ const useStylesType = makeStyles()((theme) => ({
         height: '100px',
         borderRadius: '8px',
         background: theme.palette.background.default,
-    },
-    img: {
-        width: 40,
-        marginRight: 4,
-        justifyContent: 'center',
     },
     name: {
         fontSize: '0.938rem',
@@ -88,7 +77,6 @@ export function Type({ name, onClick, icon }: TypeProps) {
 export function ReferralFarms(props: PageInterface) {
     const t = useI18N()
     const { classes } = useStyles()
-    const { classes: tabClasses } = useTabStyles()
 
     const [tab, setTab] = useState(TabsReferralFarms.TOKENS)
 
@@ -126,8 +114,12 @@ export function ReferralFarms(props: PageInterface) {
                         variant="fullWidth"
                         onChange={(e, v) => setTab(v)}
                         aria-label="persona-post-contacts-button-group">
-                        <Tab value={TabsReferralFarms.TOKENS} label="Crypto Tokens" classes={tabClasses} />
-                        <Tab value={TabsReferralFarms.NFTs} label="NFTs" classes={tabClasses} disabled />
+                        <Tab
+                            value={TabsReferralFarms.TOKENS}
+                            label="Crypto Tokens"
+                            classes={{ root: classes.tabRoot }}
+                        />
+                        <Tab value={TabsReferralFarms.NFTs} label="NFTs" classes={{ root: classes.tabRoot }} disabled />
                     </Tabs>
                     <TabPanel value={TabsReferralFarms.TOKENS} className={classes.tab}>
                         <Grid container spacing="20px">
