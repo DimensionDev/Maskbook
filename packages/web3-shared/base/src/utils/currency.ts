@@ -91,19 +91,17 @@ export function formatCurrency(
 
     if (symbol) return `${bgValue.toNumber()} ${symbol}`
 
-    if (bgValue.isLessThan(1)) {
-        return digitalCurrencyModifier(formatter.formatToParts(bgValue.toNumber()), resolvedSymbols)
+    const digitalCurrencyModifierValues = digitalCurrencyModifier(
+        formatter.formatToParts(bgValue.toNumber()),
+        resolvedSymbols,
+    )
+
+    if (isMoreThanOrEqualToOne) {
+        return digitalCurrencyModifierValues
             .map(({ type, value }) => {
                 switch (type) {
                     case 'currency':
                         return resolvedSymbols[value] ?? value
-                    case 'fraction':
-                        const unFormatString = decimalValue.toFormat(isMoreThanOrEqualToOne ? 2 : 6).replace('0.', '')
-                        return isLessMinValue || bgValue.isGreaterThanOrEqualTo(1) || isMoreThanOrEqualToOne
-                            ? unFormatString
-                            : unFormatString.replace(/(0+)$/, '')
-                    case 'integer':
-                        return '0'
                     default:
                         return value
                 }
@@ -116,6 +114,13 @@ export function formatCurrency(
             switch (type) {
                 case 'currency':
                     return resolvedSymbols[value] ?? value
+                case 'fraction':
+                    const unFormatString = decimalValue.toFormat(isMoreThanOrEqualToOne ? 2 : 6).replace('0.', '')
+                    return isLessMinValue || bgValue.isGreaterThanOrEqualTo(1) || isMoreThanOrEqualToOne
+                        ? unFormatString
+                        : unFormatString.replace(/(0+)$/, '')
+                case 'integer':
+                    return '0'
                 default:
                     return value
             }
