@@ -88,6 +88,7 @@ export interface PersonaRowCardUIProps {
         networkIdentifier: string,
         type?: 'local' | 'nextID',
         profile?: ProfileIdentifier,
+        openInNewTab?: boolean,
     ) => void
     onDisconnect: (identifier: ProfileIdentifier) => void
     onRename: (identifier: PersonaIdentifier, target: string, callback?: () => void) => Promise<void>
@@ -201,7 +202,7 @@ export const PersonaRowCardUI = memo<PersonaRowCardUIProps>((props) => {
                                     isHideOperations={false}
                                     key={networkIdentifier}
                                     onConnect={(type, profile) =>
-                                        onConnect(identifier, networkIdentifier, type, profile)
+                                        onConnect(identifier, networkIdentifier, type, profile, false)
                                     }
                                     onDisconnect={onDisconnect}
                                     onDeleteBound={(profile: ProfileIdentifier) => {
