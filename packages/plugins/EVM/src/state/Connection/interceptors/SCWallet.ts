@@ -1,12 +1,21 @@
 import type { AbiItem } from 'web3-utils'
-import { SmartPay } from '@masknet/web3-providers'
+import { BundlerAPI, SmartPayBundler } from '@masknet/web3-providers'
 import { ChainId, createContract, EthereumMethodType, ProviderType, UserOperation } from '@masknet/web3-shared-evm'
 import WalletABI from '@masknet/web3-contracts/abis/Wallet.json'
 import type { Wallet as WalletContract } from '@masknet/web3-contracts/types/Wallet.js'
-import { Web3StateSettings } from '../../../settings/index.js'
+import { SharedContextSettings, Web3StateSettings } from '../../../settings/index.js'
 import type { Middleware, Context } from '../types.js'
 
 export class SCWallet implements Middleware<Context> {
+    constructor(protected bundler: BundlerAPI.Provider) {}
+
+    get storage() {
+        const KVStorage = SharedContextSettings?.value.createKVStorage('memory', {
+            name: 'string',
+        })
+        return KVStorage.storage
+    }
+
     private async createWeb3(context: Context) {
         const web3 = await Web3StateSettings.value.Connection?.getWeb3?.({
             chainId: context.chainId,
@@ -22,7 +31,7 @@ export class SCWallet implements Middleware<Context> {
     }
 
     private sendUserOperation(context: Context, userOperation: UserOperation): Promise<string> {
-        return SmartPay.sendUserOperation(context.chainId, userOperation)
+        return SmartPayBundler.sendUserOperation(context.chainId, userOperation)
     }
 
     async fn(context: Context, next: () => Promise<void>) {
