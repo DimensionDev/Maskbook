@@ -64,6 +64,7 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity, tokenInfo, t
     const theme = useTheme()
 
     const price = tokenPrice ?? tokenMarketCap?.price
+
     const [isCollapse, setCollapse] = useState(false)
     const {
         risk_item_quantity: riskyFactors = 0,

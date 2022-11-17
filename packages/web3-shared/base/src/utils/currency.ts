@@ -97,10 +97,7 @@ export function formatCurrency(
                 case 'currency':
                     return resolvedSymbols[value] ?? value
                 case 'fraction':
-                    const unFormatString = decimalValue.toFormat(isMoreThanOrEqualToOne ? 2 : 6).replace('0.', '')
-                    return isLessMinValue || bgValue.isGreaterThanOrEqualTo(1) || isMoreThanOrEqualToOne
-                        ? unFormatString
-                        : unFormatString.replace(/(0+)$/, '')
+                    return value
                 default:
                     return value
             }
