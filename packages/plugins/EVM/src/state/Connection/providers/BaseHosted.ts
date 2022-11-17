@@ -9,13 +9,11 @@ import { BaseProvider } from './Base.js'
 import { MaskWalletProvider } from './MaskWallet.js'
 
 export class BaseHostedProvider extends BaseProvider implements EVM_Provider {
-    private mask = new MaskWalletProvider()
-    private storageObject:
-        | StorageObject<{
-              account: string
-              chainId: ChainId
-          }>
-        | undefined
+    private provider = new MaskWalletProvider()
+    private storageObject?: StorageObject<{
+        account: string
+        chainId: ChainId
+    }>
 
     constructor(
         protected override providerType: ProviderType,
@@ -45,7 +43,7 @@ export class BaseHostedProvider extends BaseProvider implements EVM_Provider {
 
         const { storage } = SharedContextSettings.value
             .createKVStorage('memory', {})
-            .createSubScope(this.providerType, {
+            .createSubScope(`${this.providerType}_hosted`, {
                 account: this.options.getDefaultAccount(),
                 chainId: this.options.getDefaultChainId(),
             })
@@ -89,7 +87,7 @@ export class BaseHostedProvider extends BaseProvider implements EVM_Provider {
         })
     }
 
-    async switchAccount(account: string) {
+    override async switchAccount(account?: string) {
         if (isValidAddress(account) && (await this.options.isSupportedAccount(account)))
             this.storage.account.setValue(account)
     }
@@ -107,7 +105,7 @@ export class BaseHostedProvider extends BaseProvider implements EVM_Provider {
         requestArguments: RequestArguments,
         options?: ProviderOptions<ChainId>,
     ): Promise<T> {
-        return this.mask.request<T>(requestArguments, {
+        return this.provider.request<T>(requestArguments, {
             account: this.account,
             chainId: this.chainId,
             ...options,

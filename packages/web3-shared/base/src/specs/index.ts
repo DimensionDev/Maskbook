@@ -742,6 +742,8 @@ export interface WalletProvider<ChainId, ProviderType, Web3Provider, Web3> {
     readonly ready: boolean
     /** Keep waiting until the provider is ready. */
     readonly readyPromise: Promise<void>
+    /** Switch to the designate account. */
+    switchAccount(account?: string): Promise<void>
     /** Switch to the designate chain. */
     switchChain(chainId?: ChainId): Promise<void>
     /** Create an instance from the network SDK. */

@@ -30,6 +30,10 @@ export class BaseProvider implements EVM_Provider {
         return Promise.resolve()
     }
 
+    async switchAccount(account?: string | undefined): Promise<void> {
+        throw new Error('To be implemented.')
+    }
+
     // Switch chain with RPC calls by default
     async switchChain(chainId?: ChainId): Promise<void> {
         if (!chainId) throw new Error('Unknown chain id.')
