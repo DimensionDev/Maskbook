@@ -51,6 +51,17 @@ export async function fetchCache(info: RequestInfo, init?: RequestInit) {
     return response
 }
 
+export async function staleCache(info: RequestInfo, init?: RequestInit) {
+    const request = new Request(info, init)
+
+    if (request.method !== 'GET') return
+    if (!request.url.startsWith('http')) return
+
+    const { host } = new URL(request.url)
+    const cache = await caches.open(host)
+    await cache.delete(request)
+}
+
 export function getAllEVMNativeAssets(): Array<FungibleAsset<ChainId, SchemaType>> {
     return NETWORK_DESCRIPTORS.filter((x) => x.isMainnet).map((x) => ({
         ...createNativeToken(x.chainId),
