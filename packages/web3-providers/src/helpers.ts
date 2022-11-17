@@ -58,7 +58,7 @@ export function getAllEVMNativeAssets(): Array<FungibleAsset<ChainId, SchemaType
     }))
 }
 
-export function getJSON<T>(json?: string): T | undefined {
+export function parseJSON<T>(json?: string): T | undefined {
     if (!json) return
     try {
         return JSON.parse(json) as T
@@ -105,7 +105,7 @@ export function getAssetFullName(contract_address: string, contractName: string,
     return `${contractName} #${first}`
 }
 
-export const resolveNonFungibleTokenEventActivityType = (type?: string) => {
+export const resolveActivityType = (type?: string) => {
     if (!type) return ActivityType.Transfer
     const type_ = type.toLowerCase()
     if (['created', 'mint'].includes(type_)) return ActivityType.Mint

@@ -18,7 +18,7 @@ import {
 import { ChainId, createContract, getRPCConstants, SchemaType, WNATIVE } from '@masknet/web3-shared-evm'
 import { NFTSCAN_BASE, NFTSCAN_LOGO_BASE, NFTSCAN_URL } from '../constants.js'
 import type { EVM } from '../types/EVM.js'
-import { getJSON, resolveNonFungibleTokenEventActivityType, getPaymentToken, getAssetFullName } from '../../helpers.js'
+import { parseJSON, resolveActivityType, getPaymentToken, getAssetFullName } from '../../helpers.js'
 
 type NFTScanChainId = ChainId.Mainnet | ChainId.Matic | ChainId.BSC | ChainId.Arbitrum | ChainId.Optimism
 
@@ -76,7 +76,7 @@ export function createNonFungibleAsset(
     asset: EVM.Asset,
     collection?: EVM.AssetsGroup,
 ): NonFungibleAsset<ChainId, SchemaType> {
-    const payload = getJSON<EVM.Payload>(asset.metadata_json)
+    const payload = parseJSON<EVM.Payload>(asset.metadata_json)
     const contractName = asset.contract_name
     const description = payload?.description
     const uri = asset.nftscan_uri ?? asset.image_uri
@@ -157,7 +157,7 @@ export function createNonFungibleCollectionFromGroup(
     group: EVM.AssetsGroup,
 ): NonFungibleCollection<ChainId, SchemaType> {
     const sample = first(group.assets)
-    const payload = getJSON<EVM.Payload>(sample?.metadata_json)
+    const payload = parseJSON<EVM.Payload>(sample?.metadata_json)
     return {
         chainId,
         schema: sample?.erc_type === 'erc1155' ? SchemaType.ERC1155 : SchemaType.ERC721,
@@ -216,7 +216,7 @@ export function createNonFungibleTokenEvent(
         id: transaction.hash,
         quantity: transaction.amount,
         timestamp: transaction.timestamp,
-        type: resolveNonFungibleTokenEventActivityType(transaction.event_type),
+        type: resolveActivityType(transaction.event_type),
         hash: transaction.hash,
         from: {
             address: transaction.from,
