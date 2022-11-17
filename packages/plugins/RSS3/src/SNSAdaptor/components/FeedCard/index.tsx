@@ -1,3 +1,4 @@
+import { memo } from 'react'
 import type { FeedCardProps } from '../base.js'
 import { CollectibleCard, isCollectibleFeed } from './CollectibleCard.js'
 import { CommentCard, isCommentFeed } from './CommentCard.js'
@@ -11,7 +12,7 @@ import { isTokenOperationFeed, TokenOperationCard } from './TokenOperationCard.j
 import { isTokenSwapFeed, TokenSwapCard } from './TokenSwapCard.js'
 import { isVoteFeed, VoteCard } from './VoteCard.js'
 
-export const FeedCard = ({ feed, ...rest }: FeedCardProps) => {
+export const FeedCard = memo(({ feed, ...rest }: FeedCardProps) => {
     if (isTokenOperationFeed(feed)) return <TokenOperationCard feed={feed} {...rest} />
 
     if (isTokenSwapFeed(feed)) return <TokenSwapCard feed={feed} {...rest} />
@@ -35,4 +36,4 @@ export const FeedCard = ({ feed, ...rest }: FeedCardProps) => {
     if (isVoteFeed(feed)) return <VoteCard feed={feed} {...rest} />
 
     return null
-}
+})

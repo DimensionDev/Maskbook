@@ -1,5 +1,5 @@
-import { Image } from '@masknet/shared'
-import { makeStyles, Markdown } from '@masknet/theme'
+import { Image, Markdown } from '@masknet/shared'
+import { makeStyles } from '@masknet/theme'
 import { RSS3BaseAPI } from '@masknet/web3-providers'
 import { Typography } from '@mui/material'
 import type { FC } from 'react'
@@ -119,7 +119,9 @@ export const CommentCard: FC<CommentCardProps> = ({ feed, ...rest }) => {
                     />
                 ) : null}
                 {verbose && commentTarget?.body ? (
-                    <Markdown className={mdClasses.markdown}>{commentTarget.body}</Markdown>
+                    <Markdown defaultStyle={false} className={mdClasses.markdown}>
+                        {commentTarget.body}
+                    </Markdown>
                 ) : (
                     <Typography className={classes.content}>{commentTarget?.body}</Typography>
                 )}
