@@ -27,15 +27,15 @@ function useTrade(
     const { chainId } = useChainContext()
     const { pluginID } = useNetworkContext()
     const inputCurrency = toUniswapCurrency(
-        pluginID !== NetworkPluginID.PLUGIN_EVM ? (chainId as ChainId) : undefined,
+        pluginID === NetworkPluginID.PLUGIN_EVM ? (chainId as ChainId) : undefined,
         inputToken,
     )
     const outputCurrency = toUniswapCurrency(
-        pluginID !== NetworkPluginID.PLUGIN_EVM ? (chainId as ChainId) : undefined,
+        pluginID === NetworkPluginID.PLUGIN_EVM ? (chainId as ChainId) : undefined,
         outputToken,
     )
     const tradeAmount = toUniswapCurrencyAmount(
-        pluginID !== NetworkPluginID.PLUGIN_EVM ? (chainId as ChainId) : undefined,
+        pluginID === NetworkPluginID.PLUGIN_EVM ? (chainId as ChainId) : undefined,
         isExactIn ? inputToken : outputToken,
         isExactIn ? inputAmount : outputAmount,
     )
