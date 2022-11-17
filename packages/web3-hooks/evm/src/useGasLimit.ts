@@ -41,7 +41,7 @@ export function useGasLimit(
                     from: account,
                 })
             case SchemaType.ERC1155:
-                throw new Error('To be implemented.')
+                throw new Error('Method not implemented.')
             default:
                 unreachable(type)
         }

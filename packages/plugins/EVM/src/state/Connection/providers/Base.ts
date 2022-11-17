@@ -31,7 +31,7 @@ export class BaseProvider implements EVM_Provider {
     }
 
     async switchAccount(account?: string | undefined): Promise<void> {
-        throw new Error('To be implemented.')
+        throw new Error('Method not implemented.')
     }
 
     // Switch chain with RPC calls by default

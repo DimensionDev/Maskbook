@@ -72,6 +72,6 @@ export class UniSwapAPI implements TrendingAPI.Provider<ChainId> {
         )
     }
     getCoinMarketInfo(symbol: string): Promise<TrendingAPI.MarketInfo> {
-        throw new Error('To be implemented.')
+        throw new Error('Method not implemented.')
     }
 }

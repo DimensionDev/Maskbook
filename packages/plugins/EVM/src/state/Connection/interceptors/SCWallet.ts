@@ -20,7 +20,7 @@ export class SCWallet implements Middleware<Context> {
     }
 
     private createUserOperation(context: Context): UserOperation {
-        throw new Error('To be implemented.')
+        throw new Error('Method not implemented.')
     }
 
     private sendUserOperation(context: Context, userOperation: UserOperation): Promise<string> {
