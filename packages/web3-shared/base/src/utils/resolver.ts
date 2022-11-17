@@ -254,6 +254,7 @@ export const resolveNextID_NetworkPluginID = createLookupTableResolver<NextIDPla
         [NextIDPlatform.LENS]: undefined,
         [NextIDPlatform.REDDIT]: undefined,
         [NextIDPlatform.SYBIL]: undefined,
+        [NextIDPlatform.EthLeaderboard]: undefined,
     },
     () => {
         return undefined
@@ -272,6 +273,7 @@ export const resolveNextIDPlatformName = createLookupTableResolver<NextIDPlatfor
         [NextIDPlatform.LENS]: 'Lens',
         [NextIDPlatform.REDDIT]: 'Reddit',
         [NextIDPlatform.SYBIL]: 'Sybil',
+        [NextIDPlatform.EthLeaderboard]: 'EthLeaderboard',
     },
     () => {
         return ''
@@ -300,6 +302,8 @@ export const resolveNextIDPlatformLink = (networkPlatform: NextIDPlatform, ident
             return `https://www.reddit.com/user/${identifier}`
         case NextIDPlatform.SYBIL:
             return 'https://sybil.org/'
+        case NextIDPlatform.EthLeaderboard:
+            return 'https://ethleaderboard.xyz/'
         default:
             return ''
     }
