@@ -5,7 +5,7 @@ import { ChainId } from '@masknet/web3-shared-evm'
 import { NetworkPluginID, BindingProof, EMPTY_LIST, PopupRoutes } from '@masknet/shared-base'
 import { isGreaterThan } from '@masknet/web3-shared-base'
 import { Box, Button, DialogActions, DialogContent, Stack, Typography } from '@mui/material'
-import { useChainContext, useNonFungibleAssets, useNetworkContext } from '@masknet/web3-hooks-base'
+import { useChainContext, useNonFungibleAssets, useNetworkContext, Web3ContextProvider } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { Icons } from '@masknet/icons'
 import { PluginVerifiedWalletStatusBar, ChainBoundary, NetworkTab } from '@masknet/shared'
@@ -141,7 +141,7 @@ export function NFTListDialog(props: NFTListDialogProps) {
         retry,
     } = useNonFungibleAssets(selectedPluginId, undefined, {
         chainId: actualChainId,
-        account: selectedAccount,
+        account: '0x790116d0685eB197B886DAcAD9C247f785987A4a',
     })
 
     useEffect(() => {
@@ -252,7 +252,7 @@ export function NFTListDialog(props: NFTListDialogProps) {
     }, [])
 
     return (
-        <>
+        <Web3ContextProvider value={{ pluginID: selectedPluginId, chainId: actualChainId }}>
             <DialogContent className={classes.content}>
                 {account || Boolean(wallets?.length) ? (
                     <>
@@ -381,6 +381,6 @@ export function NFTListDialog(props: NFTListDialogProps) {
                 onAddClick={onAddClick}
                 expectedPluginID={selectedPluginId}
             />
-        </>
+        </Web3ContextProvider>
     )
 }
