@@ -18,7 +18,6 @@ export function useV2BestTradeExactIn(
         currencyOut,
     )
 
-    console.log(tradeProvider, currencyAmountIn, currencyOut)
     const bestTrade = useMemo(() => {
         if (currencyAmountIn && currencyOut && allowedPairs.length > 0) {
             if (maxHops === 1) {
