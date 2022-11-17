@@ -19,6 +19,7 @@
   },
   "files": [
     "src",
+    "assets",
     "dist/**/*.js",
     "dist/**/*.d.ts",
     "dist/**/*.map"
