@@ -64,9 +64,9 @@ function ProfileCardHolder() {
         }
     }, [twitterId])
 
-    const handleClick = (e) => {
-        e.preventDefault()
-        e.stopPropagation()
+    const handleClick = (event: React.MouseEvent) => {
+        event.preventDefault()
+        event.stopPropagation()
     }
 
     const { value: resolvedIdentity, loading: resolving } = useSocialIdentity(identity)
