@@ -10,7 +10,6 @@ import { useRemoteControlledDialog } from '../../../../shared-base-ui/src/hooks/
 import { PluginDebuggerMessages } from '../messages.js'
 import { ConnectionDialog } from './components/ConnectionDialog.js'
 import { HubDialog } from './components/HubDialog.js'
-import { ProfileCover } from './components/ProfileCover.js'
 import { AvatarDecorator } from './components/AvatarDecorator.js'
 import { WidgetDialog } from './components/WidgetDialog.js'
 import { SharedContextSettings } from '../settings/index.js'
@@ -116,17 +115,6 @@ const sns: Plugin.SNSAdaptor.Definition = {
             </>
         )
     },
-    ProfileCover: [
-        {
-            ID: `${PLUGIN_ID}_cover`,
-            label: 'Cover',
-            priority: 99999,
-            UI: {
-                Cover: ProfileCover,
-            },
-            Utils: {},
-        },
-    ],
     ProfileTabs: [
         {
             ID: `${PLUGIN_ID}_tabContent`,

@@ -11,11 +11,15 @@ import { useI18N } from '../../locales/index.js'
 import { PluginGoPlusSecurityMessages } from '../../messages.js'
 
 const useStyles = makeStyles()((theme) => ({
+    paper: {
+        width: 420,
+        maxHeight: 620,
+    },
     content: {
-        marginLeft: 12,
-        marginRight: 12,
-        paddingLeft: 0,
-        paddingRight: 0,
+        paddingLeft: 16,
+        paddingRight: 16,
+        minHeight: 492,
+        boxSizing: 'border-box',
         '&::-webkit-scrollbar': {
             display: 'none',
         },
@@ -100,7 +104,7 @@ export function RiskWarningDialog() {
         <InjectedDialog
             open={open}
             onClose={onClose}
-            classes={{ dialogContent: classes.content }}
+            classes={{ paper: classes.paper }}
             maxWidth="xs"
             fullWidth
             title={t.swap_risk()}>
