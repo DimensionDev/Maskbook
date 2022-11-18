@@ -201,6 +201,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
                                 vertical: 'bottom',
                                 horizontal: 'center',
                             },
+                            disableScrollLock: true,
                             container: selectRef.current,
                             anchorEl: selectRef.current,
                         }}>
