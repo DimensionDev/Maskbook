@@ -47,7 +47,7 @@ export function useTradeCallback(tradeComputed: TradeComputed<SwapQuoteResponse>
         }
 
         // send transaction and wait for hash
-        const hash = await connection.sendTransaction(config_, { chainId })
+        const hash = await connection.sendTransaction(config_, { chainId, overrides: { ...gasConfig } })
         const receipt = await connection.getTransactionReceipt(hash)
 
         return receipt?.transactionHash
