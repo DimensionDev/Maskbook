@@ -31,7 +31,6 @@ export function SearchResultInspector({ keyword }: SearchResultInspectorProps) {
                   ...(id ? [DataProvider.CoinGecko] : []),
               ])
         : dataProviders_
-    console.log({ name, type, isNFT, chainId, searchedContractAddress, asset, id, dataProviders })
     if (!name || name === 'UNKNOWN' || addressType === AddressType.ExternalOwned || !dataProviders?.length) return null
     return (
         <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM, chainId: ChainId.Mainnet }}>
