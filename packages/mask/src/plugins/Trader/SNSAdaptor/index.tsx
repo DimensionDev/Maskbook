@@ -45,7 +45,7 @@ const sns: Plugin.SNSAdaptor.Definition<
         return (
             <>
                 <TagInspector />
-                <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM, chainId: ChainId.Mainnet }}>
+                <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM }}>
                     <TraderDialog />
                 </Web3ContextProvider>
             </>
