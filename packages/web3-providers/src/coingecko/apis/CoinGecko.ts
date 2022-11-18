@@ -139,7 +139,7 @@ export class CoinGeckoTrending_API implements TrendingAPI.Provider<ChainId> {
             COINGECKO_CHAIN_ID_LIST.map((chainId) => async () => {
                 try {
                     const { PLATFORM_ID = '' } = getCoinGeckoConstants(chainId)
-                    const requestPath = `${COINGECKO_URL_BASE}/coins/${PLATFORM_ID}/contract/${address}`
+                    const requestPath = `${COINGECKO_URL_BASE}/coins/${PLATFORM_ID}/contract/${address.toLowerCase()}`
                     const response = await fetchJSON<{ name: string; error: string }>(requestPath)
                     return response.error ? undefined : { name: response.name, chainId }
                 } catch {
