@@ -8,7 +8,7 @@ import { usePersonaConnectStatus } from '../../../components/DataSource/usePerso
 import type { BindingProof, NetworkPluginID } from '@masknet/shared-base'
 import { useI18N } from '../locales/i18n_generated.js'
 import { context } from '../context.js'
-import { useNetworkContext, Web3ContextProvider } from '@masknet/web3-hooks-base'
+import { useNetworkContext } from '@masknet/web3-hooks-base'
 import { AvatarInfo, useSave } from '../hooks/save/useSave.js'
 import type { AllChainsNonFungibleToken } from '../types.js'
 
@@ -111,7 +111,7 @@ export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
     if (!account || !image || !token || !proof) return null
 
     return (
-        <Web3ContextProvider value={{ pluginID: currentPluginID, chainId: token.chainId }}>
+        <>
             <DialogContent className={classes.content}>
                 <AvatarEditor
                     ref={(e) => setEditor(e)}
@@ -152,6 +152,6 @@ export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
                     {t.save()}
                 </Button>
             </DialogActions>
-        </Web3ContextProvider>
+        </>
     )
 }
