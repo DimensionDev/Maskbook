@@ -4,6 +4,7 @@ import { DataProvider } from '@masknet/public-api'
 import { AddressType, ChainId } from '@masknet/web3-shared-evm'
 import { useAvailableDataProviders } from '../../trending/useAvailableDataProviders.js'
 import { TrendingView } from './TrendingView.js'
+import { uniq } from 'lodash-es'
 import { usePayloadFromTokenSearchKeyword } from '../../trending/usePayloadFromTokenSearchKeyword.js'
 
 export interface SearchResultInspectorProps {
@@ -11,7 +12,7 @@ export interface SearchResultInspectorProps {
 }
 
 export function SearchResultInspector({ keyword }: SearchResultInspectorProps) {
-    const { name, type, isNFT, chainId, searchedContractAddress, asset } = usePayloadFromTokenSearchKeyword(
+    const { name, type, isNFT, chainId, searchedContractAddress, asset, id } = usePayloadFromTokenSearchKeyword(
         NetworkPluginID.PLUGIN_EVM,
         keyword,
     )
@@ -19,21 +20,25 @@ export function SearchResultInspector({ keyword }: SearchResultInspectorProps) {
         chainId: chainId ?? ChainId.Mainnet,
     })
 
-    const { value: dataProviders_ = EMPTY_LIST } = useAvailableDataProviders(type, name)
+    const { value: dataProviders_ = EMPTY_LIST } = useAvailableDataProviders(chainId, type, name)
     const dataProviders = searchedContractAddress
         ? isNFT
             ? [DataProvider.NFTScan]
-            : dataProviders_.filter((x) => {
-                  return x !== DataProvider.NFTScan
-              })
+            : uniq([
+                  ...dataProviders_.filter((x) => {
+                      return x !== DataProvider.NFTScan
+                  }),
+                  ...(id ? [DataProvider.CoinGecko] : []),
+              ])
         : dataProviders_
-
+    console.log({ name, type, isNFT, chainId, searchedContractAddress, asset, id, dataProviders })
     if (!name || name === 'UNKNOWN' || addressType === AddressType.ExternalOwned || !dataProviders?.length) return null
     return (
         <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM, chainId: ChainId.Mainnet }}>
             <TrendingView
                 isPopper={false}
                 name={name}
+                id={id}
                 asset={asset}
                 tagType={type}
                 expectedChainId={chainId}

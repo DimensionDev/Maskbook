@@ -107,6 +107,7 @@ const useStyles = makeStyles<{
 
 export interface TrendingViewProps {
     name: string
+    id?: string
     tagType: TagType
     dataProviders: DataProvider[]
     searchedContractAddress?: string
@@ -125,7 +126,7 @@ enum ContentTabs {
 }
 
 export function TrendingView(props: TrendingViewProps) {
-    const { name, tagType, dataProviders, isPopper = true, searchedContractAddress, expectedChainId, asset } = props
+    const { name, tagType, dataProviders, isPopper = true, searchedContractAddress, expectedChainId, asset, id } = props
 
     const { t } = useI18N()
     const { classes } = useStyles({ isPopper })
@@ -149,7 +150,7 @@ export function TrendingView(props: TrendingViewProps) {
     // #endregion
 
     // #region merge trending
-    const coinId = usePreferredCoinId(name, dataProvider)
+    const coinId = usePreferredCoinId(name, dataProvider) || id || ''
     const trendingById = useTrendingById(asset ? '' : coinId, dataProvider, expectedChainId, searchedContractAddress)
     const trendingByKeyword = useTrendingByKeyword(
         tagType,
