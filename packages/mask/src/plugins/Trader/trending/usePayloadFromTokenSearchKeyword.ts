@@ -1,13 +1,29 @@
-import type { NetworkPluginID } from '@masknet/shared-base'
+import type { AsyncState } from 'react-use/lib/useAsyncFn.js'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { useWeb3State } from '@masknet/web3-hooks-base'
 import { DataProvider } from '@masknet/public-api'
-import { useTrendingById, useCoinInfoByAddress } from '../trending/useTrending.js'
 import type { ChainId } from '@masknet/web3-shared-evm'
+import type { TrendingAPI } from '@masknet/web3-providers'
 import { TagType } from '../types/index.js'
+import { useTrendingById, useCoinInfoByAddress } from '../trending/useTrending.js'
 
-export function usePayloadFromTokenSearchKeyword(pluginID?: NetworkPluginID, keyword = '') {
+export interface SearchResult {
+    pluginID: NetworkPluginID
+    type: TagType
+    id?: string
+    name: string
+    chainId?: ChainId
+    asset?: AsyncState<{
+        currency?: TrendingAPI.Currency
+        trending?: TrendingAPI.Trending | null
+    }>
+    isNFT: boolean
+    searchedContractAddress?: string
+}
+
+export function usePayloadFromTokenSearchKeyword(keyword = ''): SearchResult {
     const regexResult = keyword.match(/([#$])(\w+)/) ?? []
-    const { Others } = useWeb3State(pluginID)
+    const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const searchedContractAddress = Others?.isValidAddress(keyword) ? keyword : ''
     const type = searchedContractAddress ? '$' : regexResult[1]
 
@@ -21,6 +37,8 @@ export function usePayloadFromTokenSearchKeyword(pluginID?: NetworkPluginID, key
     const isNFT = !!nonFungibleAssetName
 
     return {
+        pluginID: NetworkPluginID.PLUGIN_EVM,
+        type: type === '$' ? TagType.CASH : TagType.HASH,
         name: searchedContractAddress ? (isNFT ? nonFungibleAssetName : fungibleAsset?.name ?? '') : name,
         id: searchedContractAddress
             ? isNFT
@@ -31,6 +49,5 @@ export function usePayloadFromTokenSearchKeyword(pluginID?: NetworkPluginID, key
         asset: isNFT ? trendingByIdResult : undefined,
         isNFT,
         searchedContractAddress: Others?.isValidAddress(keyword) ? keyword : undefined,
-        type: type === '$' ? TagType.CASH : TagType.HASH,
     }
 }
