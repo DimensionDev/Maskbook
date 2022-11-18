@@ -114,7 +114,7 @@ export interface TrendingViewProps {
     expectedChainId?: ChainId
     onUpdate?: () => void
     isPopper?: boolean
-    asset?: AsyncState<{ currency: TrendingAPI.Currency | undefined; trending: TrendingAPI.Trending | null }>
+    asset?: AsyncState<{ currency?: TrendingAPI.Currency; trending?: TrendingAPI.Trending | null }>
 }
 
 enum ContentTabs {
