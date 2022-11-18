@@ -101,6 +101,7 @@ const useStyles = makeStyles<void, 'avatarDecoration'>()((theme, _, refs) => ({
     },
     selectedIcon: {
         color: theme.palette.maskColor.primary,
+        marginLeft: theme.spacing(2),
     },
 }))
 
