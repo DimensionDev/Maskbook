@@ -1,48 +1,22 @@
 import urlcat from 'urlcat'
-import { omit } from 'lodash-es'
-import type { ChainId, UserOperation } from '@masknet/web3-shared-evm'
+import { ChainId, UserOperation, UserTransaction } from '@masknet/web3-shared-evm'
 import type { BundlerAPI } from '../types/Bundler.js'
 import { BUNDLER_ROOT } from './constants.js'
 
 export class SmartPayBundlerAPI implements BundlerAPI.Provider {
-    private encodeUserOperation(userOperation: UserOperation) {
-        return {
-            ...omit(userOperation, [
-                'initCode',
-                'callGas',
-                'callData',
-                'verificationGas',
-                'preVerificationGas',
-                'maxFeePerGas',
-                'maxPriorityFeePerGas',
-                'paymaster',
-            ]),
-            call_data: userOperation.callData,
-            verification_gas: userOperation.verificationGas,
-            pre_verification_gas: userOperation.preVerificationGas,
-            max_fee_per_gas: userOperation.maxFeePerGas,
-            max_priority_fee_per_gas: userOperation.maxPriorityFeePerGas,
-            paymaster_data: userOperation.paymasterData,
-        }
-    }
-
     private async healthz() {
         const response = await fetch(urlcat(BUNDLER_ROOT, '/healthz'), {
             method: 'GET',
         })
-        const json = (await response.json()) as {
-            bundler_eoa: string
-            chain_id: string
-            entrypoint_contract_address: string
-        }
+        const json: BundlerAPI.Healthz = await response.json()
         return json
     }
 
     private async handle(userOperation: UserOperation) {
-        const body = this.encodeUserOperation(userOperation)
+        const userTransaction = new UserTransaction(userOperation)
         const response = await fetch(urlcat(BUNDLER_ROOT, '/handle'), {
             method: 'POST',
-            body: JSON.stringify(body),
+            body: JSON.stringify(userTransaction.asSnakeCase),
         })
         const json = (await response.json()) as { tx_hash: string }
         return json.tx_hash

@@ -5,7 +5,7 @@ import {
     EthereumMethodType,
     isValidAddress,
     ProviderType,
-    UserOperation,
+    UserTransaction,
 } from '@masknet/web3-shared-evm'
 import WalletABI from '@masknet/web3-contracts/abis/Wallet.json'
 import type { Wallet as WalletContract } from '@masknet/web3-contracts/types/Wallet.js'
@@ -27,18 +27,18 @@ export class SCWallet implements Middleware<Context> {
         return web3
     }
 
-    private createUserOperation(context: Context): UserOperation {
+    private createUserOperation(context: Context): UserTransaction {
         throw new Error('Method not implemented.')
     }
 
-    private sendUserOperation(context: Context, userOperation: UserOperation): Promise<string> {
+    private sendUserOperation(context: Context, userOperation: UserTransaction): Promise<string> {
         return SmartPayBundler.sendUserOperation(context.chainId, userOperation)
     }
 
     async fn(context: Context, next: () => Promise<void>) {
         const provider = Providers[context.providerType] as BaseHostedProvider | undefined
 
-        // not a sc provider
+        // not a SC wallet provider
         if (!provider) {
             await next()
             return
@@ -74,17 +74,17 @@ export class SCWallet implements Middleware<Context> {
                 }
                 context.write(await this.sendUserOperation(context, context.userOperation))
                 break
+            case EthereumMethodType.ETH_SUPPORTED_CHAIN_IDS:
+                context.write(await this.bundler.getSupportedChainIds())
+                break
+            case EthereumMethodType.ETH_SUPPORTED_ENTRY_POINTS:
+                context.write(await this.bundler.getSupportedEntryPoints())
+                break
             case EthereumMethodType.WALLET_SWITCH_ETHEREUM_CHAIN:
                 context.abort(new Error('Not supported by SC wallet.'))
                 break
             case EthereumMethodType.ETH_SEND_RAW_TRANSACTION:
                 context.abort(new Error('Not supported by SC wallet.'))
-                break
-            case EthereumMethodType.ETH_CALL_USER_OPERATION:
-                context.abort(new Error('Not implemented.'))
-                break
-            case EthereumMethodType.ETH_SEND_USER_OPERATION:
-                context.abort(new Error('Not implemented.'))
                 break
             case EthereumMethodType.SC_WALLET_CHANGE_OWNER:
                 context.abort(new Error('Not implemented.'))
