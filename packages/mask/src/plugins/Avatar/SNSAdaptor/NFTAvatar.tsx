@@ -12,6 +12,7 @@ import { NetworkPluginID, EMPTY_LIST } from '@masknet/shared-base'
 import type { AllChainsNonFungibleToken, SelectTokenInfo } from '../types.js'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { NFTImage } from './NFTImage.js'
+import { isSameNFT } from '../utils/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {},
@@ -147,10 +148,6 @@ export function NFTAvatar(props: NFTAvatarProps) {
         </Box>
     )
 
-    const _onChange = (token: AllChainsNonFungibleToken) => {
-        if (!token) return
-        setSelectedToken(token)
-    }
     return (
         <>
             <Box className={classes.root}>
@@ -188,11 +185,9 @@ export function NFTAvatar(props: NFTAvatarProps) {
                                     <ListItem className={classes.nftItem} key={i}>
                                         <NFTImage
                                             key={i}
-                                            pluginID={NetworkPluginID.PLUGIN_EVM}
-                                            showBadge
                                             token={token}
-                                            selectedToken={selectedToken}
-                                            onClick={(token) => _onChange(token)}
+                                            selected={isSameNFT(NetworkPluginID.PLUGIN_EVM, token, selectedToken)}
+                                            onSelect={setSelectedToken}
                                         />
                                     </ListItem>
                                 ))}
