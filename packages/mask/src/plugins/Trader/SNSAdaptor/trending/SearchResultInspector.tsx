@@ -20,11 +20,13 @@ export function SearchResultInspector({ keyword }: SearchResultInspectorProps) {
     })
 
     const { value: dataProviders_ = EMPTY_LIST } = useAvailableDataProviders(type, name)
-    const dataProviders = isNFT
-        ? [DataProvider.NFTScan]
-        : dataProviders_.filter((x) => {
-              return x !== DataProvider.NFTScan
-          })
+    const dataProviders = searchedContractAddress
+        ? isNFT
+            ? [DataProvider.NFTScan]
+            : dataProviders_.filter((x) => {
+                  return x !== DataProvider.NFTScan
+              })
+        : dataProviders_
 
     if (!name || name === 'UNKNOWN' || addressType === AddressType.ExternalOwned || !dataProviders?.length) return null
     return (
