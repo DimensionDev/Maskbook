@@ -2,7 +2,7 @@ import { BigNumber } from 'bignumber.js'
 import { first, isUndefined, omitBy } from 'lodash-es'
 import type { JsonRpcPayload } from 'web3-core-helpers'
 import { hexToNumber, hexToNumberString } from 'web3-utils'
-import { EthereumMethodType, Transaction } from '../types/index.js'
+import { EthereumMethodType, Transaction, UserOperation } from '../types/index.js'
 
 export function addGasMargin(value: BigNumber.Value, scale = 3000) {
     return new BigNumber(value).multipliedBy(new BigNumber(10000).plus(scale)).dividedToIntegerBy(10000)
@@ -53,6 +53,16 @@ export function getPayloadConfig(payload: JsonRpcPayload) {
             const [, config] = payload.params as [string, Transaction]
             return config
         }
+        default:
+            return
+    }
+}
+
+export function getPayloadUserOperation(payload: JsonRpcPayload) {
+    switch (payload.method) {
+        case EthereumMethodType.ETH_SEND_USER_OPERATION:
+            const [userOperation] = payload.params as [UserOperation]
+            return userOperation
         default:
             return
     }

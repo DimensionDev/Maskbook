@@ -1,12 +1,13 @@
-import { Image } from '@masknet/shared'
-import { makeStyles, Markdown } from '@masknet/theme'
+import { Image, Markdown } from '@masknet/shared'
+import { makeStyles } from '@masknet/theme'
 import { RSS3BaseAPI } from '@masknet/web3-providers'
+import { resolveIPFS_URL } from '@masknet/web3-shared-base'
 import { Typography } from '@mui/material'
-import type { FC } from 'react'
+import { FC, useCallback } from 'react'
 import { Translate } from '../../../locales/i18n_generated.js'
 import { useAddressLabel } from '../../hooks/index.js'
 import { CardFrame, FeedCardProps } from '../base.js'
-import { CardType, transformPlanetResource } from '../share.js'
+import { CardType } from '../share.js'
 import { Label } from './common.js'
 import { useMarkdownStyles } from './useMarkdownStyles.js'
 
@@ -116,6 +117,14 @@ export const NoteCard: FC<NoteCardProps> = ({ feed, className, ...rest }) => {
     const type = action.type
 
     const imageSize = rest.verbose ? '100%' : 64
+    const transformUri = useCallback(
+        (uri: string) => {
+            if (action.platform === 'Planet' && action.related_urls?.[0] && !uri.match(/^https?:\/\//))
+                return `https://thumbor.rss3.dev/unsafe/${action.related_urls[0]}/${uri}`
+            return resolveIPFS_URL(uri)!
+        },
+        [action.platform, action.related_urls?.[0]],
+    )
 
     return (
         <CardFrame
@@ -147,10 +156,12 @@ export const NoteCard: FC<NoteCardProps> = ({ feed, className, ...rest }) => {
                 <div className={cx(classes.info, metadata?.title || rest.verbose ? null : classes.center)}>
                     {metadata?.title ? <Typography className={classes.title}>{metadata.title}</Typography> : null}
                     {rest.verbose && metadata?.body ? (
-                        <Markdown className={mdClasses.markdown}>
-                            {action.platform === 'Planet' && action.related_urls?.[0]
-                                ? transformPlanetResource(metadata.body, action.related_urls[0])
-                                : metadata.body}
+                        <Markdown
+                            className={mdClasses.markdown}
+                            defaultStyle={false}
+                            transformLinkUri={transformUri}
+                            transformImageUri={transformUri}>
+                            {metadata.body}
                         </Markdown>
                     ) : (
                         <Typography className={classes.content}>{metadata?.summary || metadata?.body}</Typography>

@@ -28,9 +28,15 @@ export interface SelectRecipientsUIProps {
     onSetSelected(selected: Profile[]): void
 }
 const resolveNextIDPlatform = (value: string) => {
-    if (isValidAddress(value)) return NextIDPlatform.Ethereum
-    if (value.length >= 44) return NextIDPlatform.NextID
-    if (/^\w{1,15}$/.test(value)) return NextIDPlatform.Twitter
+    const address = value
+    if (isValidAddress(address)) return NextIDPlatform.Ethereum
+
+    const pubKey = value
+    if (pubKey.length >= 44) return NextIDPlatform.NextID
+
+    const userId = value
+    if (/^\w{1,15}$/.test(userId)) return NextIDPlatform.Twitter
+
     return
 }
 

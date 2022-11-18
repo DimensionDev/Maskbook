@@ -9,7 +9,7 @@ export function isEmptyHex(hex?: string) {
     return !hex || ['0x', '0x0'].includes(hex)
 }
 
-export function isValidAddress(address?: string) {
+export function isValidAddress(address?: string): address is string {
     if (!address) return false
     return EthereumAddress.isValid(address)
 }

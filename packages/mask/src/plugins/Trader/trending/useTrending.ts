@@ -1,13 +1,13 @@
 import { useAsync, useAsyncRetry } from 'react-use'
+import type { AsyncState } from 'react-use/lib/useAsyncFn.js'
 import type { DataProvider } from '@masknet/public-api'
 import { NetworkPluginID } from '@masknet/shared-base'
 import type { TrendingAPI } from '@masknet/web3-providers'
-import type { AsyncState } from 'react-use/lib/useAsyncFn.js'
 import { TokenType } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useChainContext, useFungibleToken } from '@masknet/web3-hooks-base'
-import { PluginTraderRPC } from '../messages.js'
 import type { ChainId } from '@masknet/web3-shared-evm'
+import { PluginTraderRPC } from '../messages.js'
 import type { Coin, TagType } from '../types/index.js'
 import { useCurrentCurrency } from './useCurrentCurrency.js'
 
@@ -40,6 +40,7 @@ export function useTrendingByKeyword(
             searchedContractAddress ?? trending?.contracts?.[0]?.address ?? trending?.coin.contract_address,
         chainId: expectedChainId ?? trending?.contracts?.[0]?.chainId ?? trending?.coin.chainId,
     } as Coin
+
     if (loading) {
         return {
             loading: true,
@@ -52,6 +53,7 @@ export function useTrendingByKeyword(
             error,
         }
     }
+
     return {
         value: {
             currency,
@@ -72,7 +74,10 @@ export function useTrendingById(
     dataProvider: DataProvider,
     expectedChainId?: ChainId,
     searchedContractAddress?: string,
-): AsyncState<{ currency: TrendingAPI.Currency | undefined; trending: TrendingAPI.Trending | null }> {
+): AsyncState<{
+    currency?: TrendingAPI.Currency
+    trending?: TrendingAPI.Trending | null
+}> {
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>({ chainId: expectedChainId })
     const currency = useCurrentCurrency(dataProvider)
     const {
@@ -91,6 +96,19 @@ export function useTrendingById(
         undefined,
         { chainId: trending?.coin.chainId },
     )
+
+    if (loading) {
+        return {
+            loading: true,
+        }
+    }
+
+    if (error) {
+        return {
+            loading: false,
+            error,
+        }
+    }
 
     if (loading) {
         return {

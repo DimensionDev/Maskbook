@@ -221,8 +221,8 @@ export class ZerionTrendingAPI implements TrendingAPI.Provider<ChainId> {
     ): Promise<TrendingAPI.Stat[]> {
         throw new Error('Method not implemented.')
     }
-    getTokenInfo(tokenSymbol: string): Promise<TrendingAPI.TokenInfo> {
-        throw new Error('To be implemented.')
+    getCoinMarketInfo(symbol: string): Promise<TrendingAPI.MarketInfo> {
+        throw new Error('Method not implemented.')
     }
 }
 

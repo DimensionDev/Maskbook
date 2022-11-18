@@ -10,7 +10,10 @@ export interface AttachInShadowRootOptions {
     key?: string
     /** The AbortSignal to stop the render */
     signal?: AbortSignal
+    /** Defer the tree until the mount point is near visible in the document */
+    untilVisible?: boolean
 }
+
 export interface ReactRootShadowed {
     render(jsx: React.ReactNode): void
     // do not name it as unmount otherwise it might be compatible with ReactDOM's Root interface.
@@ -22,32 +25,21 @@ export interface ReactRootShadowed {
  *
  * This function should be only call once for each config.key.
  */
-export function attachReactTreeToMountedRoot_noHost(wrapJSX?: WrapJSX) {
-    return function attachReactTreeToMountedRoot(
-        shadowRoot: ShadowRoot,
-        options: AttachInShadowRootOptions = {},
-    ): ReactRootShadowed {
-        let jsx: React.ReactNode = ''
-        const root: ReactRootShadowed = attach(jsx, shadowRoot, options, wrapJSX)
-        return {
-            render: (_jsx) => {
-                if (!root) jsx = _jsx
-                else root.render(_jsx)
-            },
-            destroy: () => root.destroy(),
-        }
-    }
+export function attachReactTreeToMountedRoot_noHost(
+    wrapJSX?: WrapJSX,
+): (shadow: ShadowRoot, options?: AttachInShadowRootOptions | undefined) => ReactRootShadowed {
+    return attachReactTreeToMountedRoot.bind(null, wrapJSX)
 }
 
-function attach(
-    jsx: React.ReactNode,
-    shadow: ShadowRoot,
-    options: AttachInShadowRootOptions,
+function attachReactTreeToMountedRoot(
     wrapJSX: WrapJSX,
+    shadow: ShadowRoot,
+    options: AttachInShadowRootOptions = {},
 ): ReactRootShadowed {
     const tag = options.tag || 'main'
     const key = options.key || 'main'
-    if (shadow.querySelector<HTMLElement>(`${tag}.${key}`)) {
+
+    if (shadow.querySelector(`${tag}.${key}`)) {
         console.error('Tried to create root in', shadow, 'with key', key, ' which is already used. Skip rendering.')
         return {
             destroy: noop,
@@ -62,7 +54,13 @@ function attach(
     const controller = new AbortController()
     const signal = controller.signal
 
-    shadowEnvironmentMountingRoots.set(instanceKey, createPortal(<AttachPointComponent />, container, instanceKey))
+    function render(jsx: React.ReactNode) {
+        if (signal.aborted) return
+        shadowEnvironmentMountingRoots.set(
+            instanceKey,
+            createPortal(<AttachPointComponent children={jsx} />, container, instanceKey),
+        )
+    }
 
     signal.addEventListener(
         'abort',
@@ -77,15 +75,49 @@ function attach(
 
     return {
         destroy: () => controller.abort(),
-        render: (newJSX) => {
-            jsx = newJSX
-            shadowEnvironmentMountingRoots.set(
-                instanceKey,
-                createPortal(<AttachPointComponent />, container, instanceKey),
-            )
+        render: (jsx) => {
+            if (options.untilVisible && !isElementPartiallyInViewport(container)) {
+                observe(container, key, () => render(jsx), signal)
+                return
+            }
+            render(jsx)
         },
     }
-    function AttachPointComponent() {
+    function AttachPointComponent({ children: jsx }: React.PropsWithChildren<{}>) {
         return ShadowRootStyleProvider({ preventPropagation: true, shadow, children: wrapJSX ? wrapJSX(jsx) : jsx })
     }
+}
+let observer: IntersectionObserver
+const callbacks = new Map<Element, Record<string, () => void>>()
+function observe(element: Element, key: string, callback: () => void, signal: AbortSignal) {
+    if (signal.aborted) return
+    if (!observer)
+        observer = new IntersectionObserver(
+            (records) => {
+                records
+                    .filter((x) => x.isIntersecting)
+                    .map((x) => {
+                        const result = callbacks.get(x.target)
+                        callbacks.delete(x.target)
+                        return result!
+                    })
+                    .filter(Boolean)
+                    .flatMap(Object.values)
+                    .forEach((f) => f())
+            },
+            // preload the element before it really hits the viewport
+            { root: null, threshold: 0.1, rootMargin: '20px 0px 50px 0px' },
+        )
+
+    observer.observe(element)
+    signal.addEventListener('abort', () => observer.unobserve(element), { signal })
+    callbacks.set(element, { ...callbacks.get(element), [key]: callback })
+}
+function isElementPartiallyInViewport(element: Element) {
+    const { top, left, height, width } = element.getBoundingClientRect()
+
+    const vertInView = top <= document.documentElement.clientHeight && top + height >= 0
+    const horInView = left <= document.documentElement.clientWidth && left + width >= 0
+
+    return vertInView && horInView
 }

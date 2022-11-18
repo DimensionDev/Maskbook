@@ -19,7 +19,7 @@ import { CollectibleList } from './CollectibleList.js'
 import { CollectionIcon } from './CollectionIcon.js'
 import { LoadingSkeleton } from './LoadingSkeleton.js'
 import { useI18N } from '../../../../../utils/index.js'
-import type { CollectibleGridProps } from '../../../../../extension/options-page/types.js'
+import type { CollectibleGridProps } from '../../types.js'
 
 const AllButton = styled(Button)(({ theme }) => ({
     display: 'inline-block',
@@ -170,7 +170,14 @@ export function CollectionList({ socialAccount, persona, profile, gridProps = EM
             </Box>
         )
 
-    if (!allCollectibles.length && error && account) return <RetryHint retry={nextPage} />
+    if (!allCollectibles.length && error && account)
+        return (
+            <Box className={classes.container}>
+                <Box mt="200px" color={(theme) => theme.palette.maskColor.main}>
+                    <RetryHint retry={nextPage} />
+                </Box>
+            </Box>
+        )
 
     if ((done && !allCollectibles.length) || !account || isHiddenAddress)
         return (

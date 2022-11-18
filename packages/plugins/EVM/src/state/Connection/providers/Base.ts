@@ -1,3 +1,4 @@
+import { first } from 'lodash-es'
 import { toHex } from 'web3-utils'
 import type { RequestArguments } from 'web3-core'
 import { delay } from '@masknet/kit'
@@ -15,6 +16,8 @@ import {
 import type { EVM_Provider } from '../types.js'
 
 export class BaseProvider implements EVM_Provider {
+    constructor(protected providerType: ProviderType) {}
+
     emitter = new Emitter<ProviderEvents<ChainId, ProviderType>>()
 
     // No need to wait by default
@@ -25,6 +28,10 @@ export class BaseProvider implements EVM_Provider {
     // No need to wait by default
     get readyPromise() {
         return Promise.resolve()
+    }
+
+    async switchAccount(account?: string | undefined): Promise<void> {
+        throw new Error('Method not implemented.')
     }
 
     // Switch chain with RPC calls by default
@@ -98,11 +105,26 @@ export class BaseProvider implements EVM_Provider {
         return createWeb3Provider((requestArguments: RequestArguments) => this.request(requestArguments, options))
     }
 
-    connect(chainId: ChainId): Promise<Account<ChainId>> {
-        throw new Error('Method not implemented')
+    async connect(expectedChainId: ChainId): Promise<Account<ChainId>> {
+        const accounts = await this.request<string[]>({
+            method: EthereumMethodType.ETH_REQUEST_ACCOUNTS,
+            params: [],
+        })
+        const chainId = await this.request<string>({
+            method: EthereumMethodType.ETH_CHAIN_ID,
+            params: [],
+        })
+
+        const actualChainId = Number.parseInt(chainId, 16)
+        if (expectedChainId !== actualChainId) throw new Error(`Failed to connect to ${this.providerType}`)
+
+        return {
+            chainId: actualChainId,
+            account: first(accounts) ?? '',
+        }
     }
 
-    disconnect(): Promise<void> {
-        throw new Error('Method not implemented')
+    async disconnect(): Promise<void> {
+        // do nothing by default
     }
 }

@@ -5,13 +5,13 @@ import type { ChainId } from '@masknet/web3-shared-evm'
 
 export class NomicsAPI implements TrendingAPI.Provider<ChainId> {
     getAllCoins(): Promise<TrendingAPI.Coin[]> {
-        throw new Error('To be implemented.')
+        throw new Error('Method not implemented.')
     }
     getCoinsByKeyword(chainId: ChainId, keyword: string): Promise<TrendingAPI.Coin[]> {
-        throw new Error('To be implemented.')
+        throw new Error('Method not implemented.')
     }
     getCoinTrending(chainId: ChainId, id: string, currency: TrendingAPI.Currency): Promise<TrendingAPI.Trending> {
-        throw new Error('To be implemented.')
+        throw new Error('Method not implemented.')
     }
     getCoinPriceStats(
         chainId: ChainId,
@@ -19,13 +19,14 @@ export class NomicsAPI implements TrendingAPI.Provider<ChainId> {
         currency: TrendingAPI.Currency,
         days: number,
     ): Promise<TrendingAPI.Stat[]> {
-        throw new Error('To be implemented.')
+        throw new Error('Method not implemented.')
     }
-    async getTokenInfo(tokenSymbol: string): Promise<TrendingAPI.TokenInfo> {
-        const response = await fetchJSON<{ items: TrendingAPI.TokenInfo[] } | undefined>(
-            `${TOKEN_VIEW_ROOT_URL}&symbols=${tokenSymbol}&interval=${INTERVAL}`,
+    async getCoinMarketInfo(symbol: string): Promise<TrendingAPI.MarketInfo> {
+        const response = await fetchJSON<{ items: TrendingAPI.MarketInfo[] } | undefined>(
+            `${TOKEN_VIEW_ROOT_URL}&symbols=${symbol}&interval=${INTERVAL}`,
         )
-
-        return response?.items?.[0] as TrendingAPI.TokenInfo
+        const marketInfo = response?.items?.[0]
+        if (!marketInfo) throw new Error('Failed to fetch market info.')
+        return marketInfo
     }
 }

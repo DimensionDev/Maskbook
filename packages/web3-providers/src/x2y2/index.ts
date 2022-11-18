@@ -17,7 +17,7 @@ import type { NonFungibleTokenAPI } from '../types/index.js'
 import { X2Y2_API_URL, X2Y2_PAGE_SIZE } from './constants.js'
 import type { Contract, Event, Order } from './types.js'
 import { first, last } from 'lodash-es'
-import { resolveNonFungibleTokenEventActivityType } from '../helpers.js'
+import { resolveActivityType } from '../helpers.js'
 
 async function fetchFromX2Y2<T>(pathname: string) {
     const response = await globalThis.fetch(urlcat(X2Y2_API_URL, pathname))
@@ -73,7 +73,7 @@ export class X2Y2API implements NonFungibleTokenAPI.Provider<ChainId, SchemaType
         return {
             id: event.id.toString(),
             chainId: ChainId.Mainnet,
-            type: resolveNonFungibleTokenEventActivityType(event.type),
+            type: resolveActivityType(event.type),
             assetPermalink: this.createPermalink(address, tokenId),
             quantity: '1',
             hash: event.order.item_hash,

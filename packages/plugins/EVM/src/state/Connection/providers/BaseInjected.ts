@@ -8,8 +8,8 @@ import type { EVM_Provider } from '../types.js'
 import { BaseProvider } from './Base.js'
 
 export class BaseInjectedProvider extends BaseProvider implements EVM_Provider {
-    constructor(protected providerType: ProviderType, protected bridge: InjectedProvider) {
-        super()
+    constructor(protected override providerType: ProviderType, protected bridge: InjectedProvider) {
+        super(providerType)
 
         bridge.on('accountsChanged', this.onAccountsChanged.bind(this))
         bridge.on('chainChanged', this.onChainChanged.bind(this))
@@ -63,7 +63,6 @@ export class BaseInjectedProvider extends BaseProvider implements EVM_Provider {
             method: EthereumMethodType.ETH_CHAIN_ID,
             params: [],
         })
-
         return {
             chainId: Number.parseInt(chainId, 16),
             account: first(accounts) ?? '',

@@ -20,6 +20,7 @@ import OpenOceanExchangeV2 from '@masknet/web3-contracts/abis/OpenOceanExchangeV
 import zeroXSwap from '@masknet/web3-contracts/abis/zeroXSwap.json'
 import Lido from '@masknet/web3-contracts/abis/Lido.json'
 import AaveLendingPool from '@masknet/web3-contracts/abis/AaveLendingPool.json'
+import SmartPayEntryPoint from '@masknet/web3-contracts/abis/SmartPayEntryPoint.json'
 
 class ABI {
     private coder = ABICoder as unknown as ABICoder.AbiCoder
@@ -42,6 +43,7 @@ class ABI {
         this.construct(WETH as AbiItem[]) // wrap & unwrap
         this.construct(Lido as AbiItem[]) // lido saving
         this.construct(AaveLendingPool as AbiItem[]) // Aave saving
+        this.construct(SmartPayEntryPoint as AbiItem[]) // smart pay entrypoint
     }
 
     read(signature?: string) {

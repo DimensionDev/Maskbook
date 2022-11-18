@@ -2,6 +2,7 @@ import { first } from 'lodash-es'
 import { AbiItem, numberToHex, toHex, toNumber } from 'web3-utils'
 import type { RequestArguments, SignedTransaction, TransactionReceipt } from 'web3-core'
 import { delay } from '@masknet/kit'
+import type { Plugin } from '@masknet/plugin-infra'
 import { getSubscriptionCurrentValue, PartialRequired } from '@masknet/shared-base'
 import type { ERC20 } from '@masknet/web3-contracts/types/ERC20.js'
 import type { ERC20Bytes32 } from '@masknet/web3-contracts/types/ERC20Bytes32.js'
@@ -15,7 +16,6 @@ import ERC20Bytes32ABI from '@masknet/web3-contracts/abis/ERC20Bytes32.json'
 import ERC721ABI from '@masknet/web3-contracts/abis/ERC721.json'
 import ERC1155ABI from '@masknet/web3-contracts/abis/ERC1155.json'
 import BalanceCheckerABI from '@masknet/web3-contracts/abis/BalanceChecker.json'
-import type { Plugin } from '@masknet/plugin-infra'
 import {
     ChainId,
     EthereumMethodType,
@@ -36,7 +36,7 @@ import {
     isValidAddress,
     isNativeTokenAddress,
     encodeTransaction,
-    Operation,
+    UserOperation,
     AddressType,
 } from '@masknet/web3-shared-evm'
 import {
@@ -480,9 +480,7 @@ class Connection implements EVM_Connection {
             const uri = await contract?.methods.uri(tokenId ?? '').call()
             if (!uri) throw new Error('Failed to read metadata uri.')
 
-            const response = await fetchJSON<ERC1155Metadata>(processURI(uri), undefined, {
-                fetch: this.context?.fetch,
-            })
+            const response = await fetchJSON<ERC1155Metadata>(processURI(uri))
             return createNonFungibleTokenMetadata(
                 options.chainId,
                 response.name,
@@ -498,9 +496,7 @@ class Connection implements EVM_Connection {
         const contract = await this.getERC721Contract(address, options)
         const uri = await contract?.methods.tokenURI(tokenId ?? '').call()
         if (!uri) throw new Error('Failed to read metadata uri.')
-        const response = await fetchJSON<ERC721Metadata>(processURI(uri), undefined, {
-            fetch: this.context?.fetch,
-        })
+        const response = await fetchJSON<ERC721Metadata>(processURI(uri))
         return createNonFungibleTokenMetadata(
             options.chainId,
             response.name,
@@ -939,8 +935,8 @@ class Connection implements EVM_Connection {
         )
     }
 
-    async callOperation(
-        operation: Operation,
+    async callUserOperation(
+        operation: UserOperation,
         initial?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined,
     ) {
         const options = this.getOptions(initial)
@@ -962,8 +958,8 @@ class Connection implements EVM_Connection {
         )
     }
 
-    async sendOperation(
-        operation: Operation,
+    async sendUserOperation(
+        operation: UserOperation,
         initial?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined,
     ) {
         const options = this.getOptions(initial)

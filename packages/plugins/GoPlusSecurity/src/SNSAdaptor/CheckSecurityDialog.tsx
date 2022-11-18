@@ -72,7 +72,7 @@ export function CheckSecurityDialog() {
     const { value: tokenPrice } = useFungibleTokenPrice(NetworkPluginID.PLUGIN_EVM, value?.contract, { chainId })
     const { value: tokenMarketCapInfo } = useAsync(async () => {
         if (!value?.token_symbol) return
-        return Nomics.getTokenInfo(value.token_symbol)
+        return Nomics.getCoinMarketInfo(value.token_symbol)
     }, [value])
 
     const onClose = () => setOpen(false)
@@ -98,7 +98,7 @@ export function CheckSecurityDialog() {
                                 tokenInfo={tokenDetailed}
                                 tokenSecurity={value}
                                 tokenPrice={tokenPrice}
-                                tokenMarketCap={tokenMarketCapInfo}
+                                marketInfo={tokenMarketCapInfo}
                             />
                         )}
                         {!error && !searching && !loadingToken && !value && (

@@ -51,6 +51,21 @@ export async function fetchCache(info: RequestInfo, init?: RequestInit) {
     return response
 }
 
+export async function staleCache(info: RequestInfo, init?: RequestInit) {
+    const request = new Request(info, init)
+
+    if (request.method !== 'GET') return
+    if (!request.url.startsWith('http')) return
+
+    const { host } = new URL(request.url)
+    const cache = await caches.open(host)
+    const hit = await cache.match(request)
+    if (!hit) return
+
+    await cache.delete(request)
+    return hit
+}
+
 export function getAllEVMNativeAssets(): Array<FungibleAsset<ChainId, SchemaType>> {
     return NETWORK_DESCRIPTORS.filter((x) => x.isMainnet).map((x) => ({
         ...createNativeToken(x.chainId),
@@ -58,7 +73,7 @@ export function getAllEVMNativeAssets(): Array<FungibleAsset<ChainId, SchemaType
     }))
 }
 
-export function getJSON<T>(json?: string): T | undefined {
+export function parseJSON<T>(json?: string): T | undefined {
     if (!json) return
     try {
         return JSON.parse(json) as T
@@ -105,7 +120,7 @@ export function getAssetFullName(contract_address: string, contractName: string,
     return `${contractName} #${first}`
 }
 
-export const resolveNonFungibleTokenEventActivityType = (type?: string) => {
+export const resolveActivityType = (type?: string) => {
     if (!type) return ActivityType.Transfer
     const type_ = type.toLowerCase()
     if (['created', 'mint'].includes(type_)) return ActivityType.Mint

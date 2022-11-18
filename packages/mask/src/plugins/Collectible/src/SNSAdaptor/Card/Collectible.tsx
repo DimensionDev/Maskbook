@@ -202,7 +202,7 @@ export function Collectible(props: CollectibleProps) {
                     subheader={
                         _asset.metadata?.description ? (
                             <Typography className={classes.subtitle} component="div" variant="body2">
-                                <Markdown classes={{ root: classes.markdown }} content={_asset.metadata.description} />
+                                <Markdown className={classes.markdown}>{_asset.metadata.description}</Markdown>
                             </Typography>
                         ) : null
                     }

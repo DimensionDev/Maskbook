@@ -166,7 +166,7 @@ export const MaskTabList = forwardRef<HTMLDivElement, MaskTabListProps>((props, 
 
     if (context === null) throw new TypeError('No TabContext provided')
 
-    const { onChange, variant = 'base', ...rest } = props
+    const { onChange, variant = 'base', hideArrowButton, ...rest } = props
 
     useImperativeHandle(ref, () => innerRef?.current!)
 
@@ -253,12 +253,12 @@ export const MaskTabList = forwardRef<HTMLDivElement, MaskTabListProps>((props, 
                     <FlexButtonGroupWrap
                         maskVariant={variant}
                         isOpen={open}
-                        isOverflow={isTabsOverflow && !props.hideArrowButton}
+                        isOverflow={isTabsOverflow && !hideArrowButton}
                         {...rest}
                         ref={innerRef}
                         role="tablist">
                         {flexibleTabs}
-                        {isTabsOverflow && !props.hideArrowButton && (
+                        {isTabsOverflow && !hideArrowButton && (
                             <ArrowButtonWrap
                                 variant="text"
                                 size="small"

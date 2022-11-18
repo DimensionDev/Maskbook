@@ -1,25 +1,25 @@
-import { Collapse, Link, Stack, Typography } from '@mui/material'
-import { useI18N } from '../../locales/index.js'
-import { makeStyles } from '@masknet/theme'
 import { memo, useMemo, useState } from 'react'
-import { RiskCard, RiskCardUI } from './RiskCard.js'
+import { Collapse, Link, Stack, Typography } from '@mui/material'
+import { makeStyles } from '@masknet/theme'
 import { KeyboardArrowDown as KeyboardArrowDownIcon } from '@mui/icons-material'
 import { useTheme } from '@mui/system'
-import { resolveGoLabLink } from '../../utils/helper.js'
-import { TokenPanel } from './TokenPanel.js'
+import { Icons } from '@masknet/icons'
 import { TokenIcon } from '@masknet/shared'
 import type { SecurityAPI, TrendingAPI } from '@masknet/web3-providers'
-import { Icons } from '@masknet/icons'
+import { EMPTY_LIST } from '@masknet/shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { formatCurrency, FungibleToken } from '@masknet/web3-shared-base'
 import { DefineMapping, SecurityMessageLevel } from '../constants.js'
-import { EMPTY_LIST } from '@masknet/shared-base'
+import { RiskCard, RiskCardUI } from './RiskCard.js'
+import { resolveGoLabLink } from '../../utils/helper.js'
+import { TokenPanel } from './TokenPanel.js'
+import { useI18N } from '../../locales/index.js'
 
-interface TokenCardProps {
+interface SecurityPanelProps {
     tokenSecurity: SecurityAPI.TokenSecurityType
     tokenInfo?: FungibleToken<ChainId, SchemaType>
     tokenPrice?: number
-    tokenMarketCap?: TrendingAPI.TokenInfo
+    marketInfo?: TrendingAPI.MarketInfo
 }
 
 const useStyles = makeStyles()((theme) => ({
@@ -58,12 +58,12 @@ const LIST_HEIGHT = {
     max: 308,
 }
 
-export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity, tokenInfo, tokenPrice, tokenMarketCap }) => {
+export const SecurityPanel = memo<SecurityPanelProps>(({ tokenSecurity, tokenInfo, tokenPrice, marketInfo }) => {
     const { classes } = useStyles()
     const t = useI18N()
     const theme = useTheme()
 
-    const price = tokenMarketCap?.price ?? tokenPrice
+    const price = marketInfo?.price ?? tokenPrice
 
     const [isCollapse, setCollapse] = useState(false)
     const {
@@ -169,7 +169,7 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity, tokenInfo, t
                     </Stack>
                 </Stack>
                 <Collapse in={!isCollapse}>
-                    <TokenPanel tokenSecurity={tokenSecurity} tokenMarketCap={tokenMarketCap?.market_cap} />
+                    <TokenPanel tokenSecurity={tokenSecurity} tokenMarketCap={marketInfo?.market_cap} />
                 </Collapse>
             </Stack>
             <Stack spacing={1.5} flex={1}>

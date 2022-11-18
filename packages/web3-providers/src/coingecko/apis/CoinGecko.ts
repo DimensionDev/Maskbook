@@ -159,7 +159,7 @@ export class CoinGeckoTrending_API implements TrendingAPI.Provider<ChainId> {
         return (await getStats(coinId, currency.id, days)).prices
     }
 
-    getTokenInfo(tokenSymbol: string): Promise<TrendingAPI.TokenInfo> {
-        throw new Error('To be implemented.')
+    getCoinMarketInfo(symbol: string): Promise<TrendingAPI.MarketInfo> {
+        throw new Error('Method not implemented.')
     }
 }

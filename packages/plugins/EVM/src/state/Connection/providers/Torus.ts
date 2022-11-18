@@ -1,11 +1,11 @@
 import { first } from 'lodash-es'
-import { createLookupTableResolver } from '@masknet/shared-base'
-import { ChainId, chainResolver } from '@masknet/web3-shared-evm'
-import Torus from '@toruslabs/torus-embed'
 import type { RequestArguments } from 'web3-core'
+import { createLookupTableResolver } from '@masknet/shared-base'
+import { ChainId, chainResolver, ProviderType } from '@masknet/web3-shared-evm'
+import type { Account } from '@masknet/web3-shared-base'
+import Torus from '@toruslabs/torus-embed'
 import type { EVM_Provider } from '../types.js'
 import { BaseProvider } from './Base.js'
-import type { Account } from '@masknet/web3-shared-base'
 
 export type ChainIdTorus = ChainId.Mainnet | ChainId.BSC | ChainId.Matic | ChainId.xDai
 
@@ -68,6 +68,10 @@ export default class TorusProvider extends BaseProvider implements EVM_Provider 
     private async login() {
         const provider = await this.createProvider()
         return provider.enable()
+    }
+
+    constructor() {
+        super(ProviderType.Fortmatic)
     }
 
     override async connect(chainId: ChainId): Promise<Account<ChainId>> {

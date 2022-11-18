@@ -168,6 +168,8 @@ export enum EthereumMethodType {
     ETH_SEND_USER_OPERATION = 'eth_sendUserOperation',
     ETH_CALL_USER_OPERATION = 'eth_callUserOperation',
     ETH_SUPPORTED_ENTRY_POINTS = 'eth_supportedEntryPoints',
+    SC_WALLET_DEPLOY = 'SCWallet_deploy',
+    SC_WALLET_CHANGE_OWNER = 'SCWallet_changeOwner',
 
     // only for mask
     MASK_LOGIN = 'MASK_LOGIN',
@@ -295,6 +297,7 @@ export enum ProviderType {
     MathWallet = 'MathWallet',
     Opera = 'Opera',
     WalletLink = 'WalletLink',
+    SmartPay = 'SmartPay',
     CustomNetwork = 'CustomNetwork',
 }
 
@@ -393,7 +396,7 @@ export type Transaction = TransactionConfig_ & {
     gatewayFeeRecipient?: string // coinbase address of the full serving the light client's transactions
     gatewayFee?: string // value paid to the gateway fee recipient, denominated in the fee currency
 }
-export type Operation = {
+export type UserOperation = {
     sender: string
     nonce: number
     initCode?: string

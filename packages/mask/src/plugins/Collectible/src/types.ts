@@ -31,3 +31,5 @@ export interface CollectibleToken {
     schemaName?: WyvernSchemaName
     provider?: SourceType
 }
+
+export type { CollectibleGridProps } from '../../../extension/options-page/types.js'

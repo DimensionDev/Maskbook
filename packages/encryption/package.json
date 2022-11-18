@@ -1,7 +1,6 @@
 {
   "name": "@masknet/encryption",
-  "version": "0.1.0",
-  "private": true,
+  "version": "0.1.2",
   "type": "module",
   "exports": {
     ".": {
@@ -20,6 +19,7 @@
   },
   "files": [
     "src",
+    "assets",
     "dist/**/*.js",
     "dist/**/*.d.ts",
     "dist/**/*.map"

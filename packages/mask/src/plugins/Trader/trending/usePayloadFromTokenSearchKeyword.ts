@@ -1,8 +1,8 @@
+import { DataProvider } from '@masknet/public-api'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import { useWeb3State } from '@masknet/web3-hooks-base'
-import { DataProvider } from '@masknet/public-api'
-import { useTrendingById, useCoinIdByAddress } from '../trending/useTrending.js'
 import type { ChainId } from '@masknet/web3-shared-evm'
+import { useTrendingById, useCoinIdByAddress } from '../trending/useTrending.js'
 import { TagType } from '../types/index.js'
 
 export function usePayloadFromTokenSearchKeyword(pluginID?: NetworkPluginID, keyword = '') {

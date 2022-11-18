@@ -1,8 +1,8 @@
+import Fortmatic from 'fortmatic'
 import { first } from 'lodash-es'
 import { toHex } from 'web3-utils'
 import type { RequestArguments } from 'web3-core'
 import { timeout } from '@masknet/kit'
-import Fortmatic from 'fortmatic'
 import type { FmProvider } from 'fortmatic/dist/cjs/src/core/fm-provider.js'
 import { ChainId, chainResolver, getRPCConstants, ProviderType } from '@masknet/web3-shared-evm'
 import { createLookupTableResolver } from '@masknet/shared-base'
@@ -62,6 +62,10 @@ export default class FortmaticProvider extends BaseProvider implements EVM_Provi
         this.chainId_ = chainId
     }
 
+    constructor() {
+        super(ProviderType.Fortmatic)
+    }
+
     protected onAccountsChanged(accounts: string[]) {
         this.emitter.emit('accounts', accounts)
     }
@@ -70,8 +74,8 @@ export default class FortmaticProvider extends BaseProvider implements EVM_Provi
         this.emitter.emit('chainId', chainId)
     }
 
-    protected onDisconnect() {
-        this.emitter.emit('disconnect', ProviderType.Fortmatic)
+    protected onConnect(connected: { account: string; chainId: ChainId }) {
+        this.emitter.emit('connect', connected)
     }
 
     private createFortmatic(chainId: ChainIdFortmatic) {
@@ -115,12 +119,16 @@ export default class FortmaticProvider extends BaseProvider implements EVM_Provi
             this.chainId = chainId
             const accounts = await this.login()
             if (!accounts.length) throw new Error(`Failed to connect to ${chainResolver.chainFullName(this.chainId)}.`)
-            this.onAccountsChanged(accounts)
-            this.onChainChanged(toHex(chainId))
-            return {
+
+            const connected = {
                 account: first(accounts)!,
                 chainId,
             }
+
+            this.onAccountsChanged(accounts)
+            this.onChainChanged(toHex(chainId))
+            this.onConnect(connected)
+            return connected
         } catch (error) {
             this.chainId_ = null
             throw error
@@ -134,7 +142,6 @@ export default class FortmaticProvider extends BaseProvider implements EVM_Provi
             // do nothing
         } finally {
             this.chainId_ = null
-            this.onDisconnect()
         }
     }
 

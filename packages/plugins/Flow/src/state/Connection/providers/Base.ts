@@ -16,6 +16,9 @@ export class BaseProvider implements FlowProvider {
         return Promise.resolve()
     }
 
+    switchAccount(account?: string): Promise<void> {
+        throw new Error('Method not implemented.')
+    }
     switchChain(chainId?: ChainId): Promise<void> {
         throw new Error('Method not implemented.')
     }
