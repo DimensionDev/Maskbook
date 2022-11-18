@@ -144,7 +144,7 @@ export class IdentityService extends IdentityServiceState<ChainId> {
 
         if (!address) return
 
-        return this.createSocialAddress(SocialAddressType.KV, address)
+        return this.createSocialAddress(SocialAddressType.Mask, address)
     }
 
     /** Read a social address from avatar NextID storage. */
@@ -160,7 +160,7 @@ export class IdentityService extends IdentityServiceState<ChainId> {
         )
 
         if (!response.ok || !response.val.ownerAddress) return
-        return this.createSocialAddress(SocialAddressType.NEXT_ID, response.val.ownerAddress)
+        return this.createSocialAddress(SocialAddressType.Mask, response.val.ownerAddress)
     }
 
     /** Read a social address from NextID. */
