@@ -19,15 +19,12 @@ export function usePayloadFromTokenSearchKeyword(pluginID?: NetworkPluginID, key
 
     const nonFungibleAssetName = nonFungibleAsset?.trending?.coin.symbol || nonFungibleAsset?.trending?.coin.name
     const isNFT = !!nonFungibleAssetName
-    const presetDataProviders = isNFT
-        ? [DataProvider.NFTScan]
-        : [DataProvider.CoinGecko, DataProvider.CoinMarketCap, DataProvider.UniswapInfo]
 
     return {
         name: searchedContractAddress ? (isNFT ? nonFungibleAssetName : fungibleAsset?.name ?? '') : name,
         chainId: isNFT ? nonFungibleAsset.trending?.coin.chainId : (fungibleAsset?.chainId as ChainId),
         asset: isNFT ? trendingByIdResult : undefined,
-        presetDataProviders,
+        isNFT,
         searchedContractAddress: Others?.isValidAddress(keyword) ? keyword : undefined,
         type: type === '$' ? TagType.CASH : TagType.HASH,
     }
