@@ -16,7 +16,7 @@ export const searchUserIdOnMobileSelector: () => LiveSelector<HTMLAnchorElement,
 
 export const searchAvatarSelector: () => LiveSelector<HTMLImageElement, true> = () =>
     querySelector<HTMLImageElement>(
-        '[role="main"] [role="link"] [role="img"] image, [role="main"] [role="button"] [role="img"] image',
+        '[role="navigation"] svg g image, [role="main"] [role="link"] [role="img"] image, [role="main"] [role="button"] [role="img"] image',
     )
 
 export const searchNickNameSelector: () => LiveSelector<HTMLHeadingElement, true> = () =>

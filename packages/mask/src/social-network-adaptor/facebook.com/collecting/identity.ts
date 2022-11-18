@@ -31,13 +31,17 @@ function resolveLastRecognizedIdentityFacebookInner(ref: ValueRef<IdentityResolv
     fetch('/me', { method: 'HEAD', signal })
         .then((x) => x.url)
         .then(getUserID)
-        .then((id) =>
+        .then((id) => {
+            const nickname = getNickName()
+            const avatar = getAvatar()
             assign({
                 ...ref.value,
+                nickname,
+                avatar,
                 isOwner: true,
                 identifier: ProfileIdentifier.of(EnhanceableSite.Facebook, id).unwrapOr(undefined),
-            }),
-        )
+            })
+        })
 }
 
 function resolveCurrentVisitingIdentityInner(

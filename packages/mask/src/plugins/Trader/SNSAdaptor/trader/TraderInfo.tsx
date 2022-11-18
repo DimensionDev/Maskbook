@@ -42,7 +42,15 @@ export const TraderInfo = memo<TraderInfoProps>(({ trade, gasPrice, isBest, onCl
 
     const gasFeeValueUSD = useMemo(() => {
         if (!gasFee) return ZERO.toString()
-        return formatCurrency(formatWeiToEther(gasFee).times(tokenPrice))
+        return formatCurrency(formatWeiToEther(gasFee).times(tokenPrice), 'USD', {
+            boundaries: {
+                min: 0.01,
+            },
+            symbols: {
+                // hide USD symbol
+                $: '',
+            },
+        })
     }, [gasFee, tokenPrice])
 
     const isGreatThanSlippageSetting = useGreatThanSlippageSetting(trade.value?.priceImpact)
