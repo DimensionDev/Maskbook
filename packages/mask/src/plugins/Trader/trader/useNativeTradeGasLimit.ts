@@ -43,8 +43,8 @@ export function useNativeTradeGasLimit(
                 from: account,
                 value: tradeAmount,
             })
-            const gas = await connection.estimateTransaction(tx)
-            return new BigNumber(gas).toNumber()
+
+            return new BigNumber(tx.gas).toNumber()
         }
 
         return 0
