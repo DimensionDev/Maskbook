@@ -1,38 +1,46 @@
-import { createGlobalState } from '@masknet/shared-base-ui'
 import { Services, Messages } from '../../API.js'
 import { noop } from 'lodash-es'
+import { use, cache } from 'react'
+import type {} from 'react/next'
+import { ValueRef } from '@dimensiondev/holoflows-kit'
+import { useValueRef } from '@masknet/shared-base-ui'
 
 export type SocialNetwork = {
     networkIdentifier: string
 }
 
-export const [useSupportedSocialNetworkSites] = createGlobalState(
+export const useSupportedSocialNetworkSites = createHook(
     () => Services.SocialNetwork.getSupportedSites({ isSocialNetwork: true }),
-    () => noop,
+    noop,
 )
 
-export const [useOwnedPersonas] = createGlobalState(
+export const useOwnedPersonas = createHook(
     () => Services.Identity.queryOwnedPersonaInformation(false),
     (x) => Messages.events.ownPersonaChanged.on(x),
 )
 
-export const [useAppearance] = createGlobalState(Services.Settings.getTheme, (x) =>
-    Messages.events.appearanceSettings.on(x),
+export const useAppearance = createHook(Services.Settings.getTheme, Messages.events.appearanceSettings.on)
+
+export const useCurrentPersonaIdentifier = createHook(
+    Services.Settings.getCurrentPersonaIdentifier,
+    Messages.events.currentPersonaIdentifier.on,
 )
 
-export const [usePluginID] = createGlobalState(Services.Settings.getPluginID, (x) =>
-    Messages.events.pluginIDSettings.on(x),
-)
-
-export const [useCurrentPersonaIdentifier] = createGlobalState(Services.Settings.getCurrentPersonaIdentifier, (x) =>
-    Messages.events.currentPersonaIdentifier.on(x),
-)
-
-export const [usePersonaAvatar] = createGlobalState(
+export const usePersonaAvatar = createHook(
     () => Services.Settings.getCurrentPersonaIdentifier().then(Services.Identity.getPersonaAvatar),
     (x) => {
-        const a = Messages.events.currentPersonaIdentifier.on(x)
-        const b = Messages.events.ownPersonaChanged.on(x)
-        return () => void [a(), b()]
+        Messages.events.currentPersonaIdentifier.on(x)
+        Messages.events.ownPersonaChanged.on(x)
     },
 )
+export const useLanguage = createHook(Services.Settings.getLanguage, Messages.events.languageSettings.on)
+
+function createHook<T>(f: () => Promise<T>, subscribe: (callback: () => void) => void) {
+    const Request = cache((_cacheKey: number) => f())
+    const cacheKey = new ValueRef(0)
+    subscribe(() => (cacheKey.value += 1))
+
+    return function useData() {
+        return use(Request(useValueRef(cacheKey)))
+    }
+}

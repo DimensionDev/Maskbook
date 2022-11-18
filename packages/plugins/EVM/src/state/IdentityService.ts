@@ -10,7 +10,6 @@ import {
     NextIDPlatform,
     createLookupTableResolver,
     PluginID,
-    joinKeys,
     BindingProof,
 } from '@masknet/shared-base'
 import { KVStorage } from '@masknet/shared'
@@ -296,6 +295,6 @@ export class IdentityService extends IdentityServiceState<ChainId> {
         const identities = allSettled
             .flatMap((x) => (x.status === 'fulfilled' ? x.value : []))
             .filter(Boolean) as Array<SocialAddress<ChainId>>
-        return uniqBy(identities, (x) => joinKeys(x.type, x.label, x.address.toLowerCase()))
+        return uniqBy(identities, (x) => [x.type, x.label, x.address.toLowerCase()].join('_'))
     }
 }

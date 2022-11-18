@@ -18,7 +18,7 @@ import { EnhanceableSite, NetworkPluginID } from '@masknet/shared-base'
 import { usePostLink } from '../../../components/DataSource/usePostInfo.js'
 import { TokenIcon, useOpenShareTxDialog, ChainBoundary, WalletConnectedBoundary } from '@masknet/shared'
 import { activatedSocialNetworkUI } from '../../../social-network/index.js'
-import { getAssetAsBlobURL, getTextUILength, useI18N } from '../../../utils/index.js'
+import { useAssetAsBlobURL, getTextUILength, useI18N } from '../../../utils/index.js'
 import { ITO_EXCHANGE_RATION_MAX, MSG_DELIMITER, TIME_WAIT_BLOCKCHAIN } from '../constants.js'
 import { sortTokens } from './helpers.js'
 import { useAvailabilityComputed } from './hooks/useAvailabilityComputed.js'
@@ -215,7 +215,7 @@ export function ITO(props: ITO_Props) {
     const [claimDialogStatus, setClaimDialogStatus] = useState(SwapStatus.Remind)
 
     // assets
-    const PoolBackground = getAssetAsBlobURL(new URL('../assets/pool-background.jpg', import.meta.url))
+    const PoolBackground = useAssetAsBlobURL(new URL('../assets/pool-background.jpg', import.meta.url))
 
     const { pid, payload } = props
     const { regions: defaultRegions = '-' } = props.payload
@@ -796,7 +796,7 @@ export function ITO(props: ITO_Props) {
 
 export function ITO_Loading() {
     const { t } = useI18N()
-    const PoolBackground = getAssetAsBlobURL(new URL('../assets/pool-loading-background.jpg', import.meta.url))
+    const PoolBackground = useAssetAsBlobURL(new URL('../assets/pool-loading-background.jpg', import.meta.url))
     const { classes, cx } = useStyles({})
     return (
         <div style={{ width: '100%' }}>
@@ -815,7 +815,7 @@ export function ITO_Loading() {
 export function ITO_Error({ retryPoolPayload }: { retryPoolPayload: () => void }) {
     const { t } = useI18N()
     const { classes, cx } = useStyles({})
-    const PoolBackground = getAssetAsBlobURL(new URL('../assets/pool-loading-background.jpg', import.meta.url))
+    const PoolBackground = useAssetAsBlobURL(new URL('../assets/pool-loading-background.jpg', import.meta.url))
     return (
         <Card
             className={cx(classes.root, classes.loadingWrap)}

@@ -80,6 +80,7 @@ export function createSubscriptionFromAsyncSuspense<T>(
 
     return {
         getCurrentValue: () => {
+            // TODO: suspense
             if (value.none) throw promise
             return value.val
         },

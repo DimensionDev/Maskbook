@@ -1,15 +1,13 @@
-import { useContext } from 'react'
+import { unstable_useCacheRefresh, useContext } from 'react'
 import millify from 'millify'
 import { formatEthereumAddress, explorerResolver, formatPercentage } from '@masknet/web3-shared-evm'
-import { Avatar, Badge, Box, Link, List, ListItem, Typography } from '@mui/material'
+import { Badge, Box, Link, List, ListItem, Typography } from '@mui/material'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import type { NetworkPluginID } from '@masknet/shared-base'
-import { resolveIPFS_URL } from '@masknet/web3-shared-base'
 import { useI18N } from '../../../utils/index.js'
 import { EthereumBlockie } from '@masknet/shared'
 import { SnapshotContext } from '../context.js'
-import { useRetry } from './hooks/useRetry.js'
 import { useVotes } from './hooks/useVotes.js'
 import { LoadingCard } from './LoadingCard.js'
 import { LoadingFailCard } from './LoadingFailCard.js'
@@ -55,10 +53,6 @@ const useStyles = makeStyles()((theme) => {
             whiteSpace: 'nowrap',
             overflow: 'hidden',
         },
-        avatar: {
-            width: 16,
-            height: 16,
-        },
         link: {
             display: 'flex',
             minWidth: 130,
@@ -90,7 +84,7 @@ const useStyles = makeStyles()((theme) => {
 function Content() {
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const identifier = useContext(SnapshotContext)
-    const { payload: votes } = useVotes(identifier)
+    const votes = useVotes(identifier)
     const { classes, cx, theme } = useStyles()
     const { t } = useI18N()
 
@@ -122,14 +116,10 @@ function Content() {
                                 rel="noopener"
                                 href={explorerResolver.addressLink(chainId, v.address)}>
                                 <Box className={classes.avatarWrapper}>
-                                    {v.authorAvatar ? (
-                                        <Avatar src={resolveIPFS_URL(v.authorAvatar)} className={classes.avatar} />
-                                    ) : (
-                                        <EthereumBlockie address={v.address} />
-                                    )}
+                                    <EthereumBlockie address={v.address} />
                                 </Box>
                                 <Typography color={theme.palette.maskColor.dark}>
-                                    {v.authorName ?? formatEthereumAddress(v.address, 4)}
+                                    {formatEthereumAddress(v.address, 4)}
                                 </Typography>
                             </Link>
                             {v.choice ? (
@@ -183,7 +173,7 @@ function Loading(props: React.PropsWithChildren<{}>) {
 
 function Fail(props: React.PropsWithChildren<{}>) {
     const { t } = useI18N()
-    const retry = useRetry()
+    const retry = unstable_useCacheRefresh()
     return (
         <LoadingFailCard title={t('plugin_snapshot_votes_title')} retry={retry}>
             {props.children}

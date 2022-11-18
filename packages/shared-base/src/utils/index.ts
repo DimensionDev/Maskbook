@@ -1,13 +1,10 @@
 export * from './asyncIterator.js'
 export * from './createValueRefWithReady.js'
 export * from './detect.js'
-export * from './getAssetAsBlobURL.js'
 export * from './getLocalImplementation.js'
 export * from './markdown.js'
-export * from './misc.js'
 export * from './mixin.js'
 export * from './personas.js'
-export * from './pollingTask.js'
 export * from './subscription.js'
 
 export enum MimeTypes {

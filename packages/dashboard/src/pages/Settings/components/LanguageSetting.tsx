@@ -1,6 +1,6 @@
 /* eslint-disable @dimensiondev/unicode/specific-set */
 import { MenuItem } from '@mui/material'
-import { useLanguage } from '../api.js'
+import { useLanguage } from '../../Personas/api.js'
 import { Services } from '../../../API.js'
 import SettingSelect from './SettingSelect.js'
 import { LanguageOptions } from '@masknet/public-api'
@@ -13,8 +13,6 @@ export default function LanguageSetting() {
     }
     const t = useDashboardI18N()
 
-    // cspell:ignore lengua, española, française, русский язык, زبان فارسی
-    // Some languages are not ready to ship to the users. Only display them in beta/insider version.
     return (
         <SettingSelect value={lang} onChange={handleChange}>
             <MenuItem value={LanguageOptions.__auto__}>{t.settings_language_auto()}</MenuItem>

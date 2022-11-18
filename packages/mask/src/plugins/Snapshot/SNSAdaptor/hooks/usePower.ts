@@ -7,7 +7,7 @@ import { useProposal } from './useProposal.js'
 import { find, sumBy } from 'lodash-es'
 
 export function usePower(identifier: ProposalIdentifier) {
-    const { payload: proposal } = useProposal(identifier.id)
+    const proposal = useProposal(identifier.id)
 
     const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     return useAsyncRetry(async () => {

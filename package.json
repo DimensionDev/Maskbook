@@ -47,8 +47,8 @@
     "@typescript/lib-dom": "npm:@types/web@^0.0.78",
     "i18next": "^22.0.4",
     "lodash-es": "^4.17.21",
-    "react": "0.0.0-experimental-9cdf8a99e-20221018",
-    "react-dom": "0.0.0-experimental-9cdf8a99e-20221018",
+    "react": "0.0.0-experimental-d1e35c703-20221110",
+    "react-dom": "0.0.0-experimental-d1e35c703-20221110",
     "react-i18next": "^12.0.0",
     "ses": "0.17.0",
     "ts-results-es": "3.5.0"
@@ -85,7 +85,7 @@
     "prettier": "^2.7.1",
     "svgo": "^3.0.0",
     "ts-node": "^10.9.1",
-    "typescript": "npm:@typescript-deploys/pr-build@5.0.0-pr-51474-2",
+    "typescript": "5.0.0-dev.20221118",
     "vite": "^3.2.3",
     "vitest": "^0.25.1"
   },
@@ -120,8 +120,8 @@
         "typescript"
       ],
       "allowedVersions": {
-        "react": "0.0.0-experimental-9cdf8a99e-20221018",
-        "react-dom": "0.0.0-experimental-9cdf8a99e-20221018"
+        "react": "0.0.0-experimental-d1e35c703-20221110",
+        "react-dom": "0.0.0-experimental-d1e35c703-20221110"
       }
     },
     "patchedDependencies": {

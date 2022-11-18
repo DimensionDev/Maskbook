@@ -129,6 +129,7 @@ function createState(
     }
     const subscription: Subscription<any> = {
         getCurrentValue: () => {
+            // TODO: suspense
             if (!initialized) throw initializedPromise
             return state
         },
