@@ -119,7 +119,6 @@ export enum SocialAddressType {
     SPACE_ID = 'SPACE_ID',
     RSS3 = 'RSS3',
     SOL = 'SOL',
-    KV = 'KV',
     NEXT_ID = 'NEXT_ID',
     CyberConnect = 'CyberConnect',
     Leaderboard = '.eth Leaderboard',
