@@ -57,7 +57,7 @@ const useStyles = makeStyles<StyleProps>()((theme) => {
             maxWidth: 85,
             overflow: 'hidden',
             textOverflow: 'ellipsis',
-            fontWeight: 700,
+            fontWeight: 400,
             marginLeft: 4,
             fontSize: 16,
         },
