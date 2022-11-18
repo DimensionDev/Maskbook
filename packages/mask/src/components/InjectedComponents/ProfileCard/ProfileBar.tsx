@@ -81,7 +81,7 @@ const useStyles = makeStyles<void, 'avatarDecoration'>()((theme, _, refs) => ({
     },
     addressMenu: {
         maxHeight: MENU_ITEM_HEIGHT * 10 + MENU_LIST_PADDING * 2,
-        width: 248,
+        minWidth: 248,
         backgroundColor: theme.palette.maskColor.bottom,
     },
     menuItem: {
