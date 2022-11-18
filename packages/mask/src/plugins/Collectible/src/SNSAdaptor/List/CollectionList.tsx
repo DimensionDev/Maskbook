@@ -4,7 +4,7 @@ import { Icons } from '@masknet/icons'
 import { ElementAnchor, RetryHint, useWeb3ProfileHiddenSettings } from '@masknet/shared'
 import { useNonFungibleAssets, useTrustedNonFungibleTokens } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { EMPTY_LIST, EMPTY_OBJECT, joinKeys } from '@masknet/shared-base'
+import { EMPTY_LIST, EMPTY_OBJECT } from '@masknet/shared-base'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import { CollectionType } from '@masknet/web3-providers'
 import {
@@ -134,7 +134,7 @@ export function CollectionList({ socialAccount, persona, profile, gridProps = EM
         return differenceWith(
             collectibles,
             hiddenList,
-            (collection, key) => joinKeys(collection.address, collection.tokenId).toLowerCase() === key.toLowerCase(),
+            (collection, key) => [collection.address, collection.tokenId].join('_').toLowerCase() === key.toLowerCase(),
         )
     }, [hiddenList, collectibles])
 

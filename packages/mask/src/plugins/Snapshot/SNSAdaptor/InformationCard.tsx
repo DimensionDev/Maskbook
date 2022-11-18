@@ -73,7 +73,7 @@ export function InformationCard(props: InformationCardProps) {
     const { classes } = useStyles()
     const { t } = useI18N()
     const identifier = useContext(SnapshotContext)
-    const { payload: proposal } = useProposal(identifier.id)
+    const proposal = useProposal(identifier.id)
     const { start, end, snapshot, strategies, chainId } = proposal
     return (
         <SnapshotCard title={t('plugin_snapshot_info_title')}>

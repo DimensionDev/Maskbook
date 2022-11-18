@@ -10,10 +10,10 @@ import {
     fetchUploadLink,
     sendCode,
     uploadBackupValue,
-    useLanguage,
     verifyCode,
     VerifyCodeRequest,
 } from '../../api.js'
+import { useLanguage } from '../../../Personas/api.js'
 import { emailRegexp } from '../../regexp.js'
 import { Locale, Scenario, AccountType } from '../../type.js'
 import { decryptBackup, encryptBackup } from '@masknet/backup-format'

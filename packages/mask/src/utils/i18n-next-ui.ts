@@ -3,7 +3,6 @@
 import { useTranslation, UseTranslationOptions } from 'react-i18next'
 import type en from '../../shared-ui/locales/en-US.json'
 import type { i18NextInstance, TranslateOptions } from '@masknet/shared-base'
-import { SupportedLanguages } from '@masknet/public-api'
 
 type PluralsSuffix = 'zero' | 'one' | 'two' | 'few' | 'many' | 'other'
 
@@ -27,11 +26,4 @@ export function useI18N(opt?: UseTranslationOptions): {
     ready: boolean
 } {
     return useTranslation('mask', opt)
-}
-
-export function useLanguage(): SupportedLanguages {
-    const { i18n } = useTranslation()
-    const lang = i18n.language
-    if (lang in SupportedLanguages) return lang as any
-    return SupportedLanguages.enUS
 }

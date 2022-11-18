@@ -1,32 +1,27 @@
 import { PluginSnapshotRPC } from '../../messages.js'
-import type { VoteItem, ProposalIdentifier } from '../../types.js'
-import { useSuspense } from '../../../../utils/hooks/useSuspense.js'
+import type { ProposalIdentifier, VoteItem } from '../../types.js'
+import { cache, use } from 'react'
 import { useProposal } from './useProposal.js'
 import { sumBy } from 'lodash-es'
 
-const cache = new Map<string, [0, Promise<void>] | [1, VoteItem[]] | [2, Error]>()
-export function votesRetry() {
-    for (const key of cache.keys()) {
-        cache.delete(key)
-    }
-}
+const Request = cache(Suspender)
 export function useVotes(identifier: ProposalIdentifier) {
-    return useSuspense<VoteItem[], [ProposalIdentifier]>(identifier.id, [identifier], cache, Suspender)
+    return use(Request(identifier.id, identifier.space))
 }
-async function Suspender(identifier: ProposalIdentifier) {
-    const { payload: proposal } = useProposal(identifier.id)
+async function Suspender(id: ProposalIdentifier['id'], space: ProposalIdentifier['space']) {
+    const proposal = useProposal(id)
 
     const voters = proposal.votes.map((v) => v.voter)
     const scores = await PluginSnapshotRPC.getScores(
         proposal.snapshot,
         voters,
         proposal.network,
-        identifier.space,
+        space,
         proposal.strategies,
     )
     const strategies = proposal.strategies
     return proposal.votes
-        .map((v) => {
+        .map((v): VoteItem => {
             const choices =
                 typeof v.choice === 'number'
                     ? undefined
