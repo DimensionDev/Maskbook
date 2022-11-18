@@ -19,7 +19,6 @@ Request to deploy contracts on <!-- Replace it with the chain name -->.
 | Website      | \- |
 | RPC Endponit | \- |
 
-
 ## Checklist
 
 The following contracts are requested.

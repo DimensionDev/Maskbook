@@ -11,7 +11,9 @@ describe('EVM formatter utilities', () => {
             result: 'short.eth',
         },
         {
+            /* cspell:disable-next-line */
             domain: 'looooooooooooooooooong.eth',
+            /* cspell:disable-next-line */
             result: 'looooooooooo...ng.eth',
         },
     ])('formatDomainName', ({ domain, result }) => {

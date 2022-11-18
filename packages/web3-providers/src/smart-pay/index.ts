@@ -12,8 +12,8 @@ export class SmartPayBundlerAPI implements BundlerAPI.Provider {
         return json
     }
 
-    private async handle(chainId: ChainId, entryPonit: string, userOperation: UserOperation) {
-        const userTransaction = new UserTransaction(chainId, entryPonit, userOperation)
+    private async handle(chainId: ChainId, entryPoint: string, userOperation: UserOperation) {
+        const userTransaction = new UserTransaction(chainId, entryPoint, userOperation)
         const response = await fetch(urlcat(BUNDLER_ROOT, '/handle'), {
             method: 'POST',
             body: JSON.stringify(userTransaction.asSnakeCase),
