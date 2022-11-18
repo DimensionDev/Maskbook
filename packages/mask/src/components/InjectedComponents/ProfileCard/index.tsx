@@ -4,7 +4,7 @@ import { useUpdateEffect } from 'react-use'
 import { first } from 'lodash-es'
 import { Icons } from '@masknet/icons'
 import { useActivatedPluginsSNSAdaptor, usePluginI18NField } from '@masknet/plugin-infra/content-script'
-import { useAvailablePlugins, getProfileTabContent } from '@masknet/plugin-infra'
+import { useAvailablePlugins, getProfileCardTabContent } from '@masknet/plugin-infra'
 import { useSocialAccountsBySettings } from '@masknet/shared'
 import { EMPTY_LIST, PluginID, NetworkPluginID } from '@masknet/shared-base'
 import { LoadingBase, makeStyles, MaskTabList, useTabs } from '@masknet/theme'
@@ -87,6 +87,7 @@ const useStyles = makeStyles()((theme) => {
             color: theme.palette.maskColor.main,
             fontWeight: 700,
             marginRight: 'auto',
+            marginLeft: theme.spacing(0.5),
         },
         powered: {
             color: theme.palette.text.secondary,
@@ -145,7 +146,7 @@ export const ProfileCard: FC<Props> = ({ identity, ...rest }) => {
     const [currentTab, onChange] = useTabs(first(tabs)?.id ?? PluginID.Collectible, ...tabs.map((tab) => tab.id))
 
     const component = useMemo(() => {
-        const Component = getProfileTabContent(currentTab)
+        const Component = getProfileCardTabContent(currentTab)
 
         return <Component identity={identity} socialAccount={selectedSocialAccount} />
     }, [currentTab, identity?.publicKey, selectedSocialAccount])
