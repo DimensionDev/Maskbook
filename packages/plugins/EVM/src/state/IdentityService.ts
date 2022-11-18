@@ -286,7 +286,6 @@ export class IdentityService extends IdentityServiceState<ChainId> {
             this.getSocialAddressFromBio(identity),
             this.getSocialAddressFromENS(identity),
             this.getSocialAddressFromSpaceID(identity),
-            this.getSocialAddressFromAvatarKV(identity),
             this.getSocialAddressFromAvatarNextID(identity),
             this.getSocialAddressFromRSS3(identity),
             this.getSocialAddressFromTwitterBlue(identity),
