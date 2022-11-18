@@ -47,6 +47,10 @@ export class UniSwapAPI implements TrendingAPI.Provider<ChainId> {
         }
     }
 
+    getCoinInfoByAddress(chainId: ChainId, address: string): Promise<TrendingAPI.CoinInfo | undefined> {
+        throw new Error('To be implemented.')
+    }
+
     getCoinPriceStats(
         chainId: ChainId,
         coinId: string,

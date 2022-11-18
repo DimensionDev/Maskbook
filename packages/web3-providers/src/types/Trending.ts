@@ -74,6 +74,12 @@ export namespace TrendingAPI {
         telegram_url?: string
     }
 
+    export interface CoinInfo {
+        name: string
+        id: string
+        chainId: ChainId
+    }
+
     export interface Market {
         current_price: number
         circulating_supply?: number
@@ -150,6 +156,7 @@ export namespace TrendingAPI {
 
     // #region historical
     export type Stat = [number | string, number]
+
     export interface HistoricalCoinInfo {
         id: number
         is_active: 0 | 1
@@ -179,11 +186,12 @@ export namespace TrendingAPI {
         getAllCoins: () => Promise<Coin[]>
         /** Get all related coins with a keyword. */
         getCoinsByKeyword: (chainId: ChainId, keyword: string) => Promise<Coin[]>
+        /** Get coin info by address. */
+        getCoinInfoByAddress: (chainId: ChainId, address: string) => Promise<CoinInfo | undefined>
         /** Get coin trending information by id. */
         getCoinTrending: (chainId: ChainId, id: string, currency: Currency) => Promise<Trending>
         /** Get coin price stats by id. */
         getCoinPriceStats: (chainId: ChainId, id: string, currency: Currency, days: number) => Promise<Stat[]>
-
         /** Get token info by symbol */
         getTokenInfo: (tokenSymbol: string) => Promise<TokenInfo>
     }
