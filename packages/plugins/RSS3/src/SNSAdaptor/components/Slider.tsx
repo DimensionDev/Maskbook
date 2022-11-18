@@ -7,7 +7,6 @@ const useStyles = makeStyles<void, 'active'>()((theme, _, refs) => ({
     container: {},
     slider: {
         width: '100%',
-        overflow: 'auto',
     },
     sliderWrapper: {
         transition: 'transform 0.2s ease-in-out',
