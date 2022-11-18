@@ -108,7 +108,7 @@ export class DeBankAPI
         if (!CHAIN_ID) return createPageable(EMPTY_LIST, createIndicator(indicator))
 
         const response = await fetch(
-            `${DEBANK_OPEN_API}/history/list?user_addr=${address.toLowerCase()}&chain=${CHAIN_ID}`,
+            `${DEBANK_OPEN_API}/v1/user/history_list?id=${address.toLowerCase()}&chain_id=${CHAIN_ID}`,
         )
         const { data, error_code } = (await response.json()) as HistoryResponse
         if (error_code !== 0) throw new Error('Fail to load transactions.')
