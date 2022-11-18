@@ -94,9 +94,7 @@ export function useTradeGasLimit(trade: TradeComputed<SwapResponse> | null): Asy
             },
         )
 
-        const gas = await connection.estimateTransaction(tx)
-
-        return new BigNumber(gas).toNumber()
+        return new BigNumber(tx.gas).toNumber()
     }, [
         trade,
         exchangeProxyContract,
