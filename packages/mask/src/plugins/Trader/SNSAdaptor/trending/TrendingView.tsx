@@ -150,7 +150,7 @@ export function TrendingView(props: TrendingViewProps) {
     // #endregion
 
     // #region merge trending
-    const coinId = usePreferredCoinId(name, dataProvider) || id || ''
+    const coinId = usePreferredCoinId(name, dataProvider, id)
     const trendingById = useTrendingById(asset ? '' : coinId, dataProvider, expectedChainId, searchedContractAddress)
     const trendingByKeyword = useTrendingByKeyword(
         tagType,
