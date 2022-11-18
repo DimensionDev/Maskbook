@@ -1,7 +1,9 @@
 import { Icons } from '@masknet/icons'
 import { Plugin, PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
 import { ApplicationEntry } from '@masknet/shared'
-import { PluginID, CrossIsolationMessages } from '@masknet/shared-base'
+import { PluginID, CrossIsolationMessages, NetworkPluginID } from '@masknet/shared-base'
+import { Web3ContextProvider } from '@masknet/web3-hooks-base'
+import { ChainId } from '@masknet/web3-shared-evm'
 import { Trans } from 'react-i18next'
 import { NFTAvatarDialog } from '../Application/NFTAvatarsDialog.js'
 import { base } from '../base.js'
@@ -13,7 +15,11 @@ const sns: Plugin.SNSAdaptor.Definition = {
         setupContext(context)
     },
     GlobalInjection() {
-        return <NFTAvatarDialog />
+        return (
+            <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM, chainId: ChainId.Mainnet }}>
+                <NFTAvatarDialog />
+            </Web3ContextProvider>
+        )
     },
     ApplicationEntries: [
         (() => {
