@@ -43,5 +43,5 @@
     "details": "Details",
     "no_data$activities": "No activities at the current address.",
     "no_data$donation": "No donation at the current address.",
-    "no_data$social": "No social at the current address."
+    "no_data$social": "There’s no feed associated with this address."
 }
