@@ -142,6 +142,10 @@ export class CoinMarketCapAPI implements TrendingAPI.Provider<ChainId> {
             .slice(0, COIN_RECOMMENDATION_SIZE)
     }
 
+    getCoinInfoByAddress(chainId: ChainId, address: string): Promise<TrendingAPI.CoinInfo | undefined> {
+        throw new Error('To be implemented.')
+    }
+
     async getCoinTrending(chainId: ChainId, id: string, currency: TrendingAPI.Currency): Promise<TrendingAPI.Trending> {
         const currencyName = currency.name.toUpperCase()
         const [{ data: coinInfo, status }, { data: quotesInfo }, { data: market }] = await Promise.all([
@@ -263,6 +267,7 @@ export class CoinMarketCapAPI implements TrendingAPI.Provider<ChainId> {
         if (stats.is_active === 0) return []
         return Object.entries(stats).map(([date, x]) => [date, x[currency.name.toUpperCase()][0]])
     }
+
     getTokenInfo(tokenSymbol: string): Promise<TrendingAPI.TokenInfo> {
         throw new Error('To be implemented.')
     }
