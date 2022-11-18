@@ -51,6 +51,22 @@ export class CoinGeckoTrending_API implements TrendingAPI.Provider<ChainId> {
         }
     }
 
+    async getCoinInfoByAddress(chainId: ChainId, address: string): Promise<TrendingAPI.CoinInfo | undefined> {
+        return attemptUntil(
+            COINGECKO_CHAIN_ID_LIST.map((chainId) => async () => {
+                try {
+                    const { PLATFORM_ID = '' } = getCoinGeckoConstants(chainId)
+                    const requestPath = `${COINGECKO_URL_BASE}/coins/${PLATFORM_ID}/contract/${address.toLowerCase()}`
+                    const response = await fetchJSON<{ name: string; id: string; error: string }>(requestPath)
+                    return response.error ? undefined : { name: response.name, id: response.id, chainId }
+                } catch {
+                    return undefined
+                }
+            }),
+            undefined,
+        )
+    }
+
     async getCoinTrending(chainId: ChainId, id: string, currency: TrendingAPI.Currency): Promise<TrendingAPI.Trending> {
         const info = await getCoinInfo(id)
         if ('error' in info) throw new Error(info.error)
@@ -132,22 +148,6 @@ export class CoinGeckoTrending_API implements TrendingAPI.Provider<ChainId> {
                 updated: new Date(x.timestamp),
             })),
         }
-    }
-
-    async getCoinNameByAddress(address: string): Promise<{ name: string; chainId: ChainId } | undefined> {
-        return attemptUntil(
-            COINGECKO_CHAIN_ID_LIST.map((chainId) => async () => {
-                try {
-                    const { PLATFORM_ID = '' } = getCoinGeckoConstants(chainId)
-                    const requestPath = `${COINGECKO_URL_BASE}/coins/${PLATFORM_ID}/contract/${address.toLowerCase()}`
-                    const response = await fetchJSON<{ name: string; error: string }>(requestPath)
-                    return response.error ? undefined : { name: response.name, chainId }
-                } catch {
-                    return undefined
-                }
-            }),
-            undefined,
-        )
     }
 
     async getCoinPriceStats(
