@@ -4,10 +4,10 @@ import { EnhanceableSite, NetworkPluginID } from '@masknet/shared-base'
 import { activatedSocialNetworkUI } from '../../../social-network/index.js'
 import type { RSS3_KEY_SNS } from '../constants.js'
 import type { AvatarMetaDB, NextIDAvatarMeta } from '../types.js'
-import { getNFTAvatarByUserId } from '../utils/index.js'
 import { useGetNFTAvatar } from './useGetNFTAvatar.js'
+import { getNFTAvatarByUserId } from '../utils/index.js'
 
-const cache = new LRU<string, Promise<NextIDAvatarMeta | undefined>>({
+const cache = new LRU<string, NextIDAvatarMeta>({
     max: 500,
     ttl: 60 * 1000,
 })
@@ -24,7 +24,10 @@ export function usePersonaNFTAvatar(userId: string, avatarId: string, persona: s
     return useAsyncRetry(async () => {
         if (!userId) return
         const key = `${userId}-${activatedSocialNetworkUI.networkIdentifier}`
-        if (!cache.has(key)) cache.set(key, getNFTAvatarForCache(userId, snsKey, avatarId, persona, getNFTAvatar))
+        if (!cache.has(key)) {
+            const nftAvatar = await getNFTAvatarForCache(userId, snsKey, avatarId, persona, getNFTAvatar)
+            if (nftAvatar) cache.set(key, nftAvatar)
+        }
         return cache.get(key)
     }, [userId, getNFTAvatar, avatarId, activatedSocialNetworkUI.networkIdentifier])
 }
