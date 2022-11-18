@@ -24,9 +24,6 @@ const useStyles = makeStyles()((theme) => ({
     button: {
         height: 32,
     },
-    text: {
-        color: theme.palette.text.buttonText,
-    },
 }))
 
 function OpenNFTAvatarEditProfileButtonInTwitter() {
@@ -41,7 +38,7 @@ function OpenNFTAvatarEditProfileButtonInTwitter() {
     return (
         <div className={classes.root}>
             <ConnectPersonaBoundary handlerPosition="top-right" customHint directTo={PluginID.Avatar}>
-                <NFTAvatarButton classes={{ root: classes.button, text: classes.text }} onClick={clickHandler} />
+                <NFTAvatarButton classes={{ root: classes.button }} onClick={clickHandler} />
             </ConnectPersonaBoundary>
         </div>
     )
