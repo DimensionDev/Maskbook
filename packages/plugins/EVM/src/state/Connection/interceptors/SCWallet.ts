@@ -5,7 +5,7 @@ import {
     EthereumMethodType,
     isValidAddress,
     ProviderType,
-    UserTransaction,
+    UserOperation,
 } from '@masknet/web3-shared-evm'
 import WalletABI from '@masknet/web3-contracts/abis/Wallet.json'
 import type { Wallet as WalletContract } from '@masknet/web3-contracts/types/Wallet.js'
@@ -27,11 +27,11 @@ export class SCWallet implements Middleware<Context> {
         return web3
     }
 
-    private createUserOperation(context: Context): UserTransaction {
+    private createUserOperation(context: Context): UserOperation {
         throw new Error('Method not implemented.')
     }
 
-    private sendUserOperation(context: Context, userOperation: UserTransaction): Promise<string> {
+    private sendUserOperation(context: Context, userOperation: UserOperation): Promise<string> {
         return SmartPayBundler.sendUserOperation(context.chainId, userOperation)
     }
 
