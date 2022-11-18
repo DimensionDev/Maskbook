@@ -2,6 +2,7 @@ import { BigNumber } from 'bignumber.js'
 import { isNull } from 'lodash-es'
 import {
     attemptUntil,
+    fetchImageViaDOM,
     fetchImageViaHTTP,
     isLocaleResource,
     resolveCrossOriginURL,
@@ -31,7 +32,14 @@ function blobToBase64(blob: Blob) {
 async function fetchImage(url: string) {
     const resolvedURL = resolveCrossOriginURL(url)
     if (!resolvedURL) return fetchImageViaHTTP(url)
-    return attemptUntil([async () => fetchImageViaHTTP(url), async () => fetchImageViaHTTP(resolvedURL)], null)
+    return attemptUntil(
+        [
+            async () => fetchImageViaHTTP(url),
+            async () => fetchImageViaDOM(resolvedURL),
+            async () => fetchImageViaHTTP(resolvedURL),
+        ],
+        null,
+    )
 }
 
 export async function toPNG(image: string) {
