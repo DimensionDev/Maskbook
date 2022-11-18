@@ -1,14 +1,15 @@
-import { Icons } from '@masknet/icons'
+import type { ComponentType } from 'react'
 import formatDateTime from 'date-fns/format'
+import { Icons } from '@masknet/icons'
 import type { GeneratedIconNonSquareProps } from '@masknet/icons'
 import type { RSS3BaseAPI } from '@masknet/web3-providers'
-import type { ComponentType } from 'react'
 
 export type IconComponent =
     | ComponentType<GeneratedIconNonSquareProps<never>>
     | ComponentType<GeneratedIconNonSquareProps<'light'>>
     | ComponentType<GeneratedIconNonSquareProps<'dark'>>
     | ComponentType<GeneratedIconNonSquareProps<'dim'>>
+    | ComponentType<GeneratedIconNonSquareProps<'light' | 'dark'>>
 
 export enum CardType {
     AchievementBurn = 1,
