@@ -2,8 +2,8 @@ import { useCallback, useEffect, useState } from 'react'
 import { NFTListDialog } from './NFTListDialog.js'
 import { InjectedDialog } from '@masknet/shared'
 import { UploadAvatarDialog } from './UploadAvatarDialog.js'
-import { PluginID, BindingProof, CrossIsolationMessages } from '@masknet/shared-base'
-import { useChainContext, useNetworkContext, Web3ContextProvider } from '@masknet/web3-hooks-base'
+import { PluginID, BindingProof, CrossIsolationMessages, NetworkPluginID } from '@masknet/shared-base'
+import { useAccount, Web3ContextProvider } from '@masknet/web3-hooks-base'
 import { AllChainsNonFungibleToken, PFP_TYPE, SelectTokenInfo } from '../types.js'
 import { PersonaPage } from './PersonaPage.js'
 import { DialogContent } from '@mui/material'
@@ -11,6 +11,7 @@ import { useI18N } from '../locales/i18n_generated.js'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { makeStyles, useTabs } from '@masknet/theme'
 import { TabContext } from '@mui/lab'
+import { ChainId } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -30,8 +31,7 @@ enum CreateNFTAvatarStep {
 
 export function NFTAvatarDialog() {
     const [open, setOpen] = useState(false)
-    const { account, chainId } = useChainContext()
-    const { pluginID } = useNetworkContext()
+    const account = useAccount()
     const [step, setStep] = useState(CreateNFTAvatarStep.Persona)
     const [wallets, setWallets] = useState<BindingProof[]>()
 
@@ -82,7 +82,7 @@ export function NFTAvatarDialog() {
     /** hidden background page **/
     const [currentTab, onChange, tabs] = useTabs(PFP_TYPE.PFP /* , PFP_TYPE.BACKGROUND */)
     return (
-        <Web3ContextProvider value={{ pluginID, chainId }}>
+        <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM, chainId: ChainId.Mainnet }}>
             <TabContext value={currentTab}>
                 <InjectedDialog
                     title={
