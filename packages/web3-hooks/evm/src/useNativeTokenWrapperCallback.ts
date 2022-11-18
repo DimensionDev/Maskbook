@@ -29,7 +29,7 @@ export function useNativeTokenWrapperCallback(chainId?: ChainId) {
             const tx = await encodeContractTransaction(wrapperContract, wrapperContract.methods.deposit(), config)
 
             // send transaction and wait for hash
-            const hash = await connection.sendTransaction(tx)
+            const hash = await connection.sendTransaction(tx, { chainId, overrides: { ...gasConfig } })
 
             const receipt = await connection.getTransactionReceipt(hash)
 
@@ -72,7 +72,7 @@ export function useNativeTokenWrapperCallback(chainId?: ChainId) {
 
             // send transaction and wait for hash
 
-            const hash = await connection.sendTransaction(tx, { chainId })
+            const hash = await connection.sendTransaction(tx, { chainId, overrides: { ...gasConfig } })
             const receipt = await connection.getTransactionReceipt(hash)
 
             return receipt?.transactionHash
