@@ -81,7 +81,7 @@ const useStyles = makeStyles()((theme) => {
 export function Snapshot() {
     const { classes, theme } = useStyles()
     const identifier = useContext(SnapshotContext)
-    const { payload: proposal } = useProposal(identifier.id)
+    const proposal = useProposal(identifier.id)
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const [currentTab, onChange, tabs] = useTabs('Proposal', 'Progress')
     const { t } = useI18N()

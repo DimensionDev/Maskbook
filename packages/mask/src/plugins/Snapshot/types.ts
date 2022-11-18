@@ -107,8 +107,6 @@ export interface VoteItem {
     /** the consist detail of voting power */
     scores: number[]
     strategySymbol: string
-    authorName?: string
-    authorAvatar?: string
     choiceIndex: number | undefined
     choiceIndexes: number[] | undefined
     timestamp: number

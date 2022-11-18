@@ -1,8 +1,4 @@
-import { createGlobalState } from '@masknet/shared-base-ui'
-import { Messages, Services } from '../../API.js'
 import type { AccountType, BackupFileInfo, Scenario, Locale } from './type.js'
-
-export const [useLanguage] = createGlobalState(Services.Settings.getLanguage, Messages.events.languageSettings.on)
 
 const BASE_RUL = 'https://vaalh28dbi.execute-api.ap-east-1.amazonaws.com/api'
 

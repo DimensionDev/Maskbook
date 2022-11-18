@@ -81,7 +81,7 @@ const useStyles = makeStyles<void, 'avatarDecoration'>()((theme, _, refs) => ({
     },
     addressMenu: {
         maxHeight: MENU_ITEM_HEIGHT * 10 + MENU_LIST_PADDING * 2,
-        width: 248,
+        minWidth: 248,
         backgroundColor: theme.palette.maskColor.bottom,
     },
     menuItem: {
@@ -101,6 +101,7 @@ const useStyles = makeStyles<void, 'avatarDecoration'>()((theme, _, refs) => ({
     },
     selectedIcon: {
         color: theme.palette.maskColor.primary,
+        marginLeft: theme.spacing(2),
     },
 }))
 
@@ -198,6 +199,7 @@ export const ProfileBar = memo<ProfileBarProps>(
                     anchorEl={containerRef.current}
                     open={walletMenuOpen}
                     disablePortal
+                    disableScrollLock
                     PaperProps={{
                         className: classes.addressMenu,
                     }}
@@ -217,7 +219,7 @@ export const ProfileBar = memo<ProfileBarProps>(
                                     <AccountIcon socialAccount={x} />
                                 </div>
                                 {isSameAddress(address, x.address) && (
-                                    <Icons.CheckCircle className={classes.selectedIcon} />
+                                    <Icons.CheckCircle size={20} className={classes.selectedIcon} />
                                 )}
                             </MenuItem>
                         )

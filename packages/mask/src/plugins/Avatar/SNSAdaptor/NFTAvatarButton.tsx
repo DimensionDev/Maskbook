@@ -24,6 +24,9 @@ const useStyles = makeStyles()((theme) => ({
     icon: {
         color: theme.palette.text.buttonText,
     },
+    text: {
+        color: theme.palette.text.buttonText,
+    },
 }))
 
 export interface NFTAvatarButtonProps extends withClasses<'root' | 'text'> {

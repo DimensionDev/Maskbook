@@ -1,4 +1,4 @@
-import { useContext, forwardRef, useImperativeHandle } from 'react'
+import { useContext, forwardRef, useImperativeHandle, useRef } from 'react'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { useCopyToClipboard } from 'react-use'
 import { SourceType, resolveNextIDPlatformLink } from '@masknet/web3-shared-base'
@@ -35,7 +35,7 @@ const useStyles = makeStyles<StyleProps>()((theme) => {
         },
         ensDomain: {
             fontWeight: 700,
-            color: theme.palette.maskColor.bottom,
+            color: theme.palette.maskColor.publicMain,
             fontSize: 18,
             lineHeight: '18px',
         },
@@ -56,8 +56,8 @@ const useStyles = makeStyles<StyleProps>()((theme) => {
             color: theme.palette.maskColor.dark,
             maxWidth: 85,
             overflow: 'hidden',
-            textOverflow: '',
-            fontWeight: 700,
+            textOverflow: 'ellipsis',
+            fontWeight: 400,
             marginLeft: 4,
             fontSize: 16,
         },
@@ -125,6 +125,7 @@ export const SearchResultInspectorContent = forwardRef(function (
         successText: t.wallets_address_copied(),
     })
 
+    const badgeCollectionRef = useRef<HTMLDivElement>(null)
     return (
         <CollectibleState.Provider
             initialState={{
@@ -161,7 +162,7 @@ export const SearchResultInspectorContent = forwardRef(function (
                 </section>
                 {firstNextIdrBinding?.identity ? (
                     <div className={classes.nextIdVerified}>
-                        <section className={classes.bindingsWrapper}>
+                        <section className={classes.bindingsWrapper} ref={badgeCollectionRef}>
                             {nextIdBindings.map((x, i) => (
                                 <SocialTooltip key={i} platform={x.source}>
                                     <div className={classes.badge}>
@@ -181,7 +182,11 @@ export const SearchResultInspectorContent = forwardRef(function (
                             ))}
                         </section>
 
-                        {nextIdBindings.length > 1 ? <SocialAccountList nextIdBindings={nextIdBindings} /> : null}
+                        {nextIdBindings.length > 1 &&
+                        badgeCollectionRef.current &&
+                        badgeCollectionRef.current.scrollWidth > 520 ? (
+                            <SocialAccountList nextIdBindings={nextIdBindings} />
+                        ) : null}
                     </div>
                 ) : null}
             </Box>

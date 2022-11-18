@@ -69,6 +69,7 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
         recipient,
         recipientAddress,
         recipientSnsId,
+        nonFungibleTokenAddress,
         nonFungibleTokenContract,
         setNonFungibleTokenAddress,
         nonFungibleTokenId,
@@ -121,10 +122,10 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
             amount,
             tipType,
             token,
-            nonFungibleTokenContract,
+            nonFungibleTokenAddress,
             nonFungibleTokenId,
         })
-    }, [sendTip, createTipsTx, shareText, amount, tipType, token, nonFungibleTokenContract, nonFungibleTokenId])
+    }, [sendTip, createTipsTx, shareText, amount, tipType, token, nonFungibleTokenAddress, nonFungibleTokenId])
 
     const expectedPluginID = [NetworkPluginID.PLUGIN_EVM, NetworkPluginID.PLUGIN_SOLANA].includes(pluginID)
         ? pluginID

@@ -62,11 +62,11 @@ export function useSwapParameters(
     const context = useGetTradeContext(tradeProvider)
     const deadline = useTransactionDeadline()
     const routerV2Contract = useRouterV2Contract(
-        pluginID !== NetworkPluginID.PLUGIN_EVM ? (chainId as ChainId) : undefined,
+        pluginID === NetworkPluginID.PLUGIN_EVM ? (chainId as ChainId) : undefined,
         context?.ROUTER_CONTRACT_ADDRESS,
     )
     const swapRouterContract = useSwapRouterContract(
-        pluginID !== NetworkPluginID.PLUGIN_EVM ? (chainId as ChainId) : undefined,
+        pluginID === NetworkPluginID.PLUGIN_EVM ? (chainId as ChainId) : undefined,
         context?.ROUTER_CONTRACT_ADDRESS,
     )
 

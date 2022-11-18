@@ -7,8 +7,8 @@ export interface CollectionTypes {
     address: string
     /**
      * Identifier of a collection
-     * For NFT and POAP, it's joinKeys(address, tokenId)
-     * For Donation, it's joinKeys(donation.hash, donation.actions[0].index)
+     * For NFT and POAP, it's [address, tokenId].join("_")
+     * For Donation, it's [donation.hash, donation.actions[0].index].join("_")
      */
     key: string
     tokenId?: string

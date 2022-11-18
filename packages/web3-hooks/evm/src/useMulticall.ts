@@ -154,6 +154,7 @@ export function useMulticallCallback(targetChainId?: ChainId, targetBlockNumber?
                                 multicallContract,
                                 multicallContract.methods.multicall(chunk),
                                 overrides,
+                                true,
                             )
                             const hex = await connection.callTransaction(tx)
 

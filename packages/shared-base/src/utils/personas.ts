@@ -16,7 +16,7 @@ export const formatPersonaName = (nickname?: string) => {
     return `${nickname.slice(0, 12)}...`
 }
 
-export function isSameIdentity<T extends Identifier>(
+function isSameIdentity<T extends Identifier>(
     formatString: (i: string) => T,
     ...identities: Array<T | { identifier: T } | string | undefined>
 ) {
@@ -49,16 +49,6 @@ export function isSamePersona(...personas: Array<PersonaIdentifier | PersonaInfo
     }, ...personas)
 }
 
-export function currySamePersona(persona?: PersonaIdentifier | PersonaInformation | string) {
-    return (...personas: Array<PersonaIdentifier | PersonaInformation | string | undefined>) =>
-        isSamePersona(...[persona, ...personas])
-}
-
 export function isSameProfile(...profiles: Array<ProfileIdentifier | ProfileInformation | string | undefined>) {
     return isSameIdentity((i) => ProfileIdentifier.from(i).unwrap(), ...profiles)
-}
-
-export function currySameProfile(profile?: ProfileIdentifier | ProfileInformation | string) {
-    return (...profiles: Array<ProfileIdentifier | ProfileInformation | string | undefined>) =>
-        isSameProfile(...[profile, ...profiles])
 }

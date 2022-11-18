@@ -2,7 +2,8 @@ import { SnapshotContext } from '../context.js'
 import { getProposalIdentifier } from './helpers.js'
 import { Snapshot } from './Snapshot.js'
 import { LoadingFailCard } from './LoadingFailCard.js'
-import { useRetry } from './hooks/useRetry.js'
+// @ts-expect-error
+import { unstable_Cache as Cache, unstable_useCacheRefresh } from 'react'
 
 export interface PostInspectorProps {
     url: string
@@ -10,13 +11,20 @@ export interface PostInspectorProps {
 
 export function PostInspector(props: PostInspectorProps) {
     const identifier = getProposalIdentifier(props.url)
-    const retry = useRetry()
 
     return (
         <SnapshotContext.Provider value={identifier}>
-            <LoadingFailCard title="" isFullPluginDown retry={retry}>
-                <Snapshot />
-            </LoadingFailCard>
+            <Cache>
+                <Component />
+            </Cache>
         </SnapshotContext.Provider>
+    )
+}
+function Component() {
+    const refresh = unstable_useCacheRefresh()
+    return (
+        <LoadingFailCard title="" isFullPluginDown retry={refresh}>
+            <Snapshot />
+        </LoadingFailCard>
     )
 }

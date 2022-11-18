@@ -35,7 +35,7 @@ const useStyles = makeStyles()((theme) => ({
         flexDirection: 'column',
         overflow: 'hidden',
         flexGrow: 1,
-        margin: theme.spacing(4, 0, 0),
+        margin: theme.spacing(2, 0, 0),
     },
     statusBox: {
         display: 'flex',
@@ -122,7 +122,7 @@ export const NFTSection: FC<Props> = ({ className, onEmpty, ...rest }) => {
     return (
         <div className={cx(classes.root, className)} {...rest}>
             <FormControl className={classes.header}>
-                {isEvm ? (
+                {isEvm && account ? (
                     <Typography className={classes.addButton} onClick={() => openAddTokenDialog(true)}>
                         {t.tip_add_collectibles()}
                     </Typography>

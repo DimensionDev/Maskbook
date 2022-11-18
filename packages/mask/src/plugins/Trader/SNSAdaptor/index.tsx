@@ -11,6 +11,7 @@ import { Web3ContextProvider } from '@masknet/web3-hooks-base'
 import { CrossIsolationMessages, NetworkPluginID, PluginID } from '@masknet/shared-base'
 import { ChainId, isValidAddress, isZeroAddress } from '@masknet/web3-shared-evm'
 import { setupStorage, storageDefaultValue } from '../storage/index.js'
+import { usePayloadFromTokenSearchKeyword } from '../trending/usePayloadFromTokenSearchKeyword.js'
 
 const sns: Plugin.SNSAdaptor.Definition<
     ChainId,
@@ -33,7 +34,18 @@ const sns: Plugin.SNSAdaptor.Definition<
     SearchResultBox: {
         ID: PluginID.Trader,
         UI: {
-            Content: SearchResultInspector,
+            Content({ keyword }) {
+                const searchResult = usePayloadFromTokenSearchKeyword(keyword)
+                return (
+                    <Web3ContextProvider
+                        value={{
+                            pluginID: searchResult.pluginID,
+                            chainId: searchResult.chainId ?? ChainId.Mainnet,
+                        }}>
+                        <SearchResultInspector keyword={keyword} searchResult={searchResult} />
+                    </Web3ContextProvider>
+                )
+            },
         },
         Utils: {
             shouldDisplay(keyword: string) {
@@ -45,7 +57,7 @@ const sns: Plugin.SNSAdaptor.Definition<
         return (
             <>
                 <TagInspector />
-                <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM, chainId: ChainId.Mainnet }}>
+                <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM }}>
                     <TraderDialog />
                 </Web3ContextProvider>
             </>

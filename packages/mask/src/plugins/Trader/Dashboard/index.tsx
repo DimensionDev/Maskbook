@@ -1,5 +1,5 @@
 import type { Plugin } from '@masknet/plugin-infra'
-import { ChainId } from '@masknet/web3-shared-evm'
+import type { ChainId } from '@masknet/web3-shared-evm'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { Web3ContextProvider } from '@masknet/web3-hooks-base'
 import { TraderDialog } from '../SNSAdaptor/trader/TraderDialog.js'
@@ -10,7 +10,7 @@ const dashboard: Plugin.Dashboard.Definition<ChainId> = {
     init(signal) {},
     GlobalInjection() {
         return (
-            <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM, chainId: ChainId.Mainnet }}>
+            <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM }}>
                 <TraderDialog />
             </Web3ContextProvider>
         )

@@ -1,17 +1,8 @@
-import { ActionButton, makeStyles } from '@masknet/theme'
+import { ActionButton } from '@masknet/theme'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { PluginGoPlusSecurityMessages } from '../messages.js'
 import { useI18N } from '../locales/index.js'
 import type { ChainId } from '@masknet/web3-shared-evm'
-
-const useStyles = makeStyles()((theme) => ({
-    button: {
-        backgroundColor: theme.palette.maskColor.danger,
-        '&:hover': {
-            backgroundColor: theme.palette.maskColor.danger,
-        },
-    },
-}))
 
 interface Token {
     contract: string
@@ -31,7 +22,6 @@ export function TokenSecurityBoundary(props: TokenSecurityBoundaryProps) {
     const { children = null, showTokenSecurity = false, tokenInfo, onSwap, disabled = true } = props
 
     const t = useI18N()
-    const { classes } = useStyles()
 
     const { setDialog: setRiskWarningDialog } = useRemoteControlledDialog(
         PluginGoPlusSecurityMessages.tokenRiskWarningDialogEvent,
@@ -43,7 +33,7 @@ export function TokenSecurityBoundary(props: TokenSecurityBoundaryProps) {
     if (showTokenSecurity)
         return (
             <ActionButton
-                className={classes.button}
+                color="error"
                 fullWidth
                 variant="contained"
                 disabled={disabled}

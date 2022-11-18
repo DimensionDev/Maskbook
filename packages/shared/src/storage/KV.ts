@@ -42,7 +42,7 @@ export class KVStorage implements Storage {
         await this.getKV<T>().set(key, value)
 
         // clear cache when set
-        this.delete(key)
+        await this.delete(key)
 
         return
     }

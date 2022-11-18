@@ -1,4 +1,4 @@
-import { useContext, useRef, useEffect, useState, useMemo } from 'react'
+import { useContext, useRef, useEffect, useState, useMemo, unstable_useCacheRefresh } from 'react'
 import { Box, List, ListItem, Typography, LinearProgress, styled, Button, linearProgressClasses } from '@mui/material'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { useI18N } from '../../../utils/index.js'
@@ -9,7 +9,6 @@ import { useVotes } from './hooks/useVotes.js'
 import { useResults } from './hooks/useResults.js'
 import { SnapshotCard } from './SnapshotCard.js'
 import { parse } from 'json2csv'
-import { useRetry } from './hooks/useRetry.js'
 import { LoadingFailCard } from './LoadingFailCard.js'
 import { LoadingCard } from './LoadingCard.js'
 
@@ -85,11 +84,9 @@ const StyledLinearProgress = styled(LinearProgress)(({ theme }) => ({
 
 function Content() {
     const identifier = useContext(SnapshotContext)
-    const { payload: proposal } = useProposal(identifier.id)
-    const { payload: votes } = useVotes(identifier)
-    const {
-        payload: { results },
-    } = useResults(identifier)
+    const proposal = useProposal(identifier.id)
+    const votes = useVotes(identifier)
+    const { results } = useResults(identifier)
     const { classes, cx } = useStyles()
     const { t } = useI18N()
     const listRef = useRef<HTMLSpanElement[]>([])
@@ -195,7 +192,7 @@ function Content() {
 function Loading(props: React.PropsWithChildren<{}>) {
     const { t } = useI18N()
     const identifier = useContext(SnapshotContext)
-    const { payload: proposal } = useProposal(identifier.id)
+    const proposal = useProposal(identifier.id)
     return (
         <LoadingCard
             title={proposal.isEnd ? t('plugin_snapshot_result_title') : t('plugin_snapshot_current_result_title')}>
@@ -207,8 +204,8 @@ function Loading(props: React.PropsWithChildren<{}>) {
 function Fail(props: React.PropsWithChildren<{}>) {
     const { t } = useI18N()
     const identifier = useContext(SnapshotContext)
-    const { payload: proposal } = useProposal(identifier.id)
-    const retry = useRetry()
+    const retry = unstable_useCacheRefresh()
+    const proposal = useProposal(identifier.id)
     return (
         <LoadingFailCard
             title={proposal.isEnd ? t('plugin_snapshot_result_title') : t('plugin_snapshot_current_result_title')}

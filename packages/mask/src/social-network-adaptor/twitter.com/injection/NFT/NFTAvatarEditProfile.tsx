@@ -40,7 +40,6 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         height: props.height,
     },
     text: {
-        color: theme.palette.text.buttonText,
         fontWeight: props.fontWeight,
     },
 }))
