@@ -19,7 +19,13 @@ export function SearchResultInspector({ keyword }: SearchResultInspectorProps) {
         chainId: chainId ?? ChainId.Mainnet,
     })
 
-    const { value: dataProviders = EMPTY_LIST } = useAvailableDataProviders(type, name)
+    const { value: dataProviders_ = EMPTY_LIST } = useAvailableDataProviders(type, name)
+    const dataProviders = isNFT
+        ? [DataProvider.NFTScan]
+        : dataProviders_.filter((x) => {
+              return x !== DataProvider.NFTScan
+          })
+
     if (!name || name === 'UNKNOWN' || addressType === AddressType.ExternalOwned || !dataProviders?.length) return null
     return (
         <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM, chainId: ChainId.Mainnet }}>
@@ -30,13 +36,7 @@ export function SearchResultInspector({ keyword }: SearchResultInspectorProps) {
                 tagType={type}
                 expectedChainId={chainId}
                 searchedContractAddress={searchedContractAddress}
-                dataProviders={
-                    isNFT
-                        ? [DataProvider.NFTScan]
-                        : dataProviders.filter((x) => {
-                              return x !== DataProvider.NFTScan
-                          })
-                }
+                dataProviders={dataProviders}
             />
         </Web3ContextProvider>
     )
