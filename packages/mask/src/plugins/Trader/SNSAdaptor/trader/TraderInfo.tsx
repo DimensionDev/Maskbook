@@ -46,10 +46,6 @@ export const TraderInfo = memo<TraderInfoProps>(({ trade, gasPrice, isBest, onCl
             boundaries: {
                 min: 0.01,
             },
-            symbols: {
-                // hide USD symbol
-                $: '',
-            },
         })
     }, [gasFee, tokenPrice])
 

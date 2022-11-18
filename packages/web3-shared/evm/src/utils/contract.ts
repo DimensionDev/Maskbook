@@ -37,6 +37,7 @@ export async function encodeContractTransaction(
     contract: BaseContract,
     transaction: PayableTransactionObject<unknown> | NonPayableTransactionObject<unknown>,
     overrides?: Partial<Transaction>,
+    withoutGas?: boolean,
 ) {
     const tx: PayableTx & {
         maxPriorityFeePerGas?: string
@@ -54,15 +55,17 @@ export async function encodeContractTransaction(
         chainId: overrides?.chainId ? toHex(overrides.chainId) : undefined,
     }
 
-    if (!tx.gas) {
-        tx.gas = await transaction.estimateGas({
-            from: tx.from as string | undefined,
-            to: tx.to as string | undefined,
-            data: tx.data as string | undefined,
-            value: tx.value,
-            // rpc hack, alchemy rpc must pass gas parameter
-            gas: hexToNumber(overrides?.chainId ?? '0x0') === ChainId.Astar ? '0x135168' : undefined,
-        })
+    if (!tx.gas && !withoutGas) {
+        try {
+            tx.gas = await transaction.estimateGas({
+                from: tx.from as string | undefined,
+                to: tx.to as string | undefined,
+                data: tx.data as string | undefined,
+                value: tx.value,
+                // rpc hack, alchemy rpc must pass gas parameter
+                gas: hexToNumber(overrides?.chainId ?? '0x0') === ChainId.Astar ? '0x135168' : undefined,
+            })
+        } catch {}
     }
 
     return encodeTransaction(tx)
