@@ -31,7 +31,7 @@ const sns: Plugin.SNSAdaptor.Definition<
     init(signal, context) {
         setupStorage(context.createKVStorage('persistent', storageDefaultValue))
     },
-    SearchResultBox: {
+    SearchResultInspector: {
         ID: PluginID.Trader,
         UI: {
             Content({ result }) {

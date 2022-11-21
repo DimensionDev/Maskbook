@@ -2,6 +2,7 @@ import type { Plugin } from '@masknet/plugin-infra'
 import { SearchResultType, SocialAddressType } from '@masknet/web3-shared-base'
 import { ApplicationEntry } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
+import { Typography } from '@mui/material'
 import { base } from '../base.js'
 import { PLUGIN_ID, PLUGIN_NAME } from '../constants.js'
 import { TabContent } from './components/TabContent.js'
@@ -13,8 +14,7 @@ import { HubDialog } from './components/HubDialog.js'
 import { AvatarDecorator } from './components/AvatarDecorator.js'
 import { WidgetDialog } from './components/WidgetDialog.js'
 import { SharedContextSettings } from '../settings/index.js'
-import { SearchResultBox } from './components/SearchResultBox.js'
-import { Typography } from '@mui/material'
+import { SearchResultInspector } from './components/SearchResultInspector.js'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -117,10 +117,10 @@ const sns: Plugin.SNSAdaptor.Definition = {
             </>
         )
     },
-    SearchResultBox: {
-        ID: `${PLUGIN_ID}_searchResultBox`,
+    SearchResultInspector: {
+        ID: `${PLUGIN_ID}_searchResultInspector`,
         UI: {
-            Content: SearchResultBox,
+            Content: SearchResultInspector,
         },
         Utils: {
             shouldDisplay: (result) => result.type === SearchResultType.FungibleToken,

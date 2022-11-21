@@ -15,7 +15,7 @@ import { collectVerificationPost, PostProviderTwitter } from './collecting/post.
 import { PaletteModeProviderTwitter, useThemeTwitterVariant } from './customization/custom.js'
 import { injectToolboxHintAtTwitter } from './injection/ToolboxHint.js'
 import { i18NOverwriteTwitter } from './customization/i18n.js'
-import { injectSearchResultBoxAtTwitter } from './injection/SearchResultBox.js'
+import { injectSearchResultInspectorAtTwitter } from './injection/SearchResultInspector.js'
 import { injectProfileTabAtTwitter } from './injection/ProfileTab.js'
 import { injectProfileTabContentAtTwitter } from './injection/ProfileTabContent.js'
 import { injectPostReplacerAtTwitter } from './injection/PostReplacer.js'
@@ -168,7 +168,7 @@ const twitterUI: SocialNetworkUI.Definition = {
     },
     injection: {
         toolbox: injectToolboxHintAtTwitter,
-        searchResult: injectSearchResultBoxAtTwitter,
+        searchResult: injectSearchResultInspectorAtTwitter,
         profileTab: injectProfileTabAtTwitter,
         profileCover: injectProfileCover,
         profileTabContent: injectProfileTabContentAtTwitter,

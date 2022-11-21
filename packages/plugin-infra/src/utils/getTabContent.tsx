@@ -28,8 +28,8 @@ export function getSettingsTabContent(tabId?: string) {
 
 export function getSearchResultContent(result: SearchResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>) {
     return createInjectHooksRenderer(useActivatedPluginsSNSAdaptor.visibility.useNotMinimalMode, (x) => {
-        const shouldDisplay = x.SearchResultBox?.Utils?.shouldDisplay?.(result) ?? true
-        return shouldDisplay ? x.SearchResultBox?.UI?.Content : undefined
+        const shouldDisplay = x.SearchResultInspector?.Utils?.shouldDisplay?.(result) ?? true
+        return shouldDisplay ? x.SearchResultInspector?.UI?.Content : undefined
     })
 }
 

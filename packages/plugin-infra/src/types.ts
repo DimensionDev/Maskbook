@@ -437,11 +437,11 @@ export namespace Plugin.SNSAdaptor {
         /** This UI will be rendered into the global scope of an SNS. */
         GlobalInjection?: InjectUI<{}>
         /** This UI will be rendered under the Search result of SNS */
-        SearchResultBox?: SearchResultBox
+        SearchResultInspector?: SearchResultInspector
         /** This UI will be rendered under the Search result of SNS. */
         SearchResultTabs?: SearchResultTab[]
         /**
-         * @deprecated Use SearchResultBox stead
+         * @deprecated Use SearchResultInspector stead
          * This is the detailed UI content that will be rendered under the Search of the SNS. */
         SearchResultContent?: SearchResultContent
         /** This is a chunk of web3 UIs to be rendered into various places of Mask UI. */
@@ -618,7 +618,7 @@ export namespace Plugin.SNSAdaptor {
         margin?: string
     }
 
-    export interface SearchResultBox {
+    export interface SearchResultInspector {
         ID: string
         /**
          * The injected UI

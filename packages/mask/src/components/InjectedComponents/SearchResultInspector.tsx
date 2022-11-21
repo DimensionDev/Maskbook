@@ -17,9 +17,9 @@ import { useSearchedKeyword } from '../DataSource/useSearchedKeyword.js'
 
 const useStyles = makeStyles()((theme) => ({}))
 
-export interface SearchResultBoxProps {}
+export interface SearchResultInspectorProps {}
 
-export function SearchResultBox(props: SearchResultBoxProps) {
+export function SearchResultInspector(props: SearchResultInspectorProps) {
     const { classes } = useStylesExtends(useStyles(), props)
     const translate = usePluginI18NField()
 
@@ -54,8 +54,8 @@ export function SearchResultBox(props: SearchResultBoxProps) {
     if (!contentComponent) return null
 
     return (
-        <div>
-            {contentComponent ? <div>{contentComponent}</div> : null}
+        <div className={classes.root}>
+            <div className={classes.content}>{contentComponent}</div>
             {tabs.length ? (
                 <div className={classes.tabs}>
                     <TabContext value={currentTab}>
@@ -67,7 +67,7 @@ export function SearchResultBox(props: SearchResultBoxProps) {
                     </TabContext>
                 </div>
             ) : null}
-            <div className={classes.content}>{tabContentComponent}</div>
+            {tabContentComponent ? <div className={classes.tabContent}>{tabContentComponent}</div> : null}
         </div>
     )
 }
