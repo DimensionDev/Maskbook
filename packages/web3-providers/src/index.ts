@@ -45,7 +45,7 @@ import { MindsAPI } from './minds/index.js'
 import { FuseTrendingAPI } from './fuse/index.js'
 import { CryptoScamDBAPI } from './cryptoscam-db/index.js'
 import { SmartPayBundlerAPI } from './smart-pay/index.js'
-import { NomicsAPI } from './Nomics/index.js'
+import { NomicsAPI } from './nomics/index.js'
 
 // #region TODO: to be removed
 export * from './helpers.js'
