@@ -26,12 +26,14 @@ export async function injectProfileNFTAvatarInFaceBook(signal: AbortSignal) {
         // The first step in setting an avatar
         const watcher = new MutationObserverWatcher(searchFacebookAvatarListSelector())
         startWatch(watcher, signal)
-        createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(<NFTAvatarInFacebookFirstStep />)
+        createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { untilVisible: true, signal }).render(
+            <NFTAvatarInFacebookFirstStep />,
+        )
 
         // The second step in setting an avatar
         const saveButtonWatcher = new MutationObserverWatcher(searchFacebookSaveAvatarButtonSelector()).useForeach(
             (node, key, proxy) => {
-                const root = createReactRootShadowed(proxy.afterShadow, { signal })
+                const root = createReactRootShadowed(proxy.afterShadow, { untilVisible: true, signal })
                 root.render(<NFTAvatarInFacebookSecondStep />)
                 return () => root.destroy()
             },
@@ -41,7 +43,9 @@ export async function injectProfileNFTAvatarInFaceBook(signal: AbortSignal) {
     }
     const watcher = new MutationObserverWatcher(searchFacebookAvatarMobileListSelector())
     startWatch(watcher, signal)
-    createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(<NFTAvatarListInFaceBookMobile />)
+    createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { untilVisible: true, signal }).render(
+        <NFTAvatarListInFaceBookMobile />,
+    )
 }
 
 const useStyles = makeStyles()({
