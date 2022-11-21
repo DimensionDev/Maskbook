@@ -7,9 +7,9 @@ import { EMPTY_LIST, PluginID } from '@masknet/shared-base'
 import { DSearch } from '@masknet/web3-providers'
 import { makeStyles, MaskTabList, useStylesExtends, useTabs } from '@masknet/theme'
 import {
+    getSearchResultTabs,
     getSearchResultContent,
     getSearchResultTabContent,
-    getSearchResultTabs,
     usePluginI18NField,
     useActivatedPluginsSNSAdaptor,
 } from '@masknet/plugin-infra/content-script'
