@@ -46,6 +46,7 @@ import { FuseTrendingAPI } from './fuse/index.js'
 import { CryptoScamDBAPI } from './cryptoscam-db/index.js'
 import { SmartPayBundlerAPI } from './smart-pay/index.js'
 import { NomicsAPI } from './nomics/index.js'
+import { DSearchAPI } from './d-search/index.js'
 
 // #region TODO: to be removed
 export * from './helpers.js'
@@ -76,6 +77,7 @@ export const Instagram = new InstagramAPI()
 export const GoPlusLabs = new GoPlusLabsAPI()
 export const R2D2 = new R2D2API()
 export const DeBank = new DeBankAPI()
+export const DSearch = new DSearchAPI()
 
 export const MetaSwap = new MetaSwapAPI()
 export const AstarGas = new AstarAPI()

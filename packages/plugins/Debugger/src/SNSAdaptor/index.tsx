@@ -1,11 +1,11 @@
 import type { Plugin } from '@masknet/plugin-infra'
-import { SocialAddressType } from '@masknet/web3-shared-base'
+import { SearchResultType, SocialAddressType } from '@masknet/web3-shared-base'
+import { ApplicationEntry } from '@masknet/shared'
+import { Icons } from '@masknet/icons'
 import { base } from '../base.js'
 import { PLUGIN_ID, PLUGIN_NAME } from '../constants.js'
 import { TabContent } from './components/TabContent.js'
 import { ConsoleDialog } from './components/ConsoleDialog.js'
-import { ApplicationEntry } from '@masknet/shared'
-import { Icons } from '@masknet/icons'
 import { useRemoteControlledDialog } from '../../../../shared-base-ui/src/hooks/index.js'
 import { PluginDebuggerMessages } from '../messages.js'
 import { ConnectionDialog } from './components/ConnectionDialog.js'
@@ -13,6 +13,8 @@ import { HubDialog } from './components/HubDialog.js'
 import { AvatarDecorator } from './components/AvatarDecorator.js'
 import { WidgetDialog } from './components/WidgetDialog.js'
 import { SharedContextSettings } from '../settings/index.js'
+import { SearchResultBox } from './components/SearchResultBox.js'
+import { Typography } from '@mui/material'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -115,9 +117,40 @@ const sns: Plugin.SNSAdaptor.Definition = {
             </>
         )
     },
+    SearchResultBox: {
+        ID: `${PLUGIN_ID}_searchResultBox`,
+        UI: {
+            Content: SearchResultBox,
+        },
+        Utils: {
+            shouldDisplay: (result) => result.type === SearchResultType.FungibleToken,
+        },
+    },
+    SearchResultTabs: [
+        {
+            ID: `${PLUGIN_ID}_resultTab1`,
+            label: 'Tab 1',
+            priority: 99999,
+            UI: {
+                TabContent({ result }) {
+                    return <Typography>Tab 1</Typography>
+                },
+            },
+        },
+        {
+            ID: `${PLUGIN_ID}_resultTab2`,
+            label: 'Tab 2',
+            priority: 99999,
+            UI: {
+                TabContent({ result }) {
+                    return <Typography>Tab 2</Typography>
+                },
+            },
+        },
+    ],
     ProfileTabs: [
         {
-            ID: `${PLUGIN_ID}_tabContent`,
+            ID: `${PLUGIN_ID}_profileTabContent`,
             label: 'Debugger',
             priority: 99999,
             UI: {

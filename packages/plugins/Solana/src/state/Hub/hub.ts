@@ -10,7 +10,16 @@ import {
     PriceAPI,
     NFTScanNonFungibleTokenSolana,
 } from '@masknet/web3-providers'
-import { CurrencyType, GasOptionType, HubOptions, Pageable, SourceType, Transaction } from '@masknet/web3-shared-base'
+import {
+    CurrencyType,
+    GasOptionType,
+    HubOptions,
+    Pageable,
+    SearchResult,
+    SearchSourceType,
+    SourceType,
+    Transaction,
+} from '@masknet/web3-shared-base'
 import { ChainId, GasOption, SchemaType } from '@masknet/web3-shared-solana'
 import type { SolanaHub } from './types.js'
 
@@ -56,6 +65,10 @@ class Hub extends HubStateBaseClient<ChainId> implements SolanaHub {
         account: string,
         initial?: HubOptions<ChainId>,
     ): Promise<Pageable<Transaction<ChainId, SchemaType>>> {
+        throw new Error('Method not implemented.')
+    }
+
+    getSearchResult(keyword: string, source?: SearchSourceType): Promise<SearchResult<ChainId, SchemaType>> {
         throw new Error('Method not implemented.')
     }
 }

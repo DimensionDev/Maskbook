@@ -28,6 +28,7 @@ import type {
     Web3UI,
     Web3State,
     SocialAccount,
+    SearchResult,
     SearchKeywordType,
 } from '@masknet/web3-shared-base'
 import type { ChainId as ChainIdEVM, Transaction as TransactionEVM } from '@masknet/web3-shared-evm'
@@ -435,9 +436,13 @@ export namespace Plugin.SNSAdaptor {
         }>
         /** This UI will be rendered into the global scope of an SNS. */
         GlobalInjection?: InjectUI<{}>
-        /** This UI will be rendered under the Search of the SNS. */
+        /** This UI will be rendered under the Search result of SNS */
         SearchResultBox?: SearchResultBox
-        /** This is the detailed UI content that will be rendered under the Search of the SNS. */
+        /** This UI will be rendered under the Search result of SNS. */
+        SearchResultTabs?: SearchResultTab[]
+        /**
+         * @deprecated Use SearchResultBox stead
+         * This is the detailed UI content that will be rendered under the Search of the SNS. */
         SearchResultContent?: SearchResultContent
         /** This is a chunk of web3 UIs to be rendered into various places of Mask UI. */
         Web3UI?: Web3UI<ChainId, ProviderType, NetworkType>
@@ -615,13 +620,43 @@ export namespace Plugin.SNSAdaptor {
 
     export interface SearchResultBox {
         ID: string
+        /**
+         * The injected UI
+         */
         UI?: {
+            /** The brief content above detailed tabs. */
             Content?: InjectUI<{
-                keyword: string
+                result: SearchResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
             }>
         }
         Utils?: {
-            shouldDisplay?(keyword: string): boolean
+            shouldDisplay?(result: SearchResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>): boolean
+        }
+    }
+    export interface SearchResultTab {
+        ID: string
+
+        /**
+         * The name of the slider card
+         */
+        label: I18NStringField | string
+        /**
+         * Used to order the sliders
+         */
+        priority: number
+        /**
+         * The injected UI
+         */
+        UI?: {
+            /**
+             * The injected tab content
+             */
+            TabContent: InjectUI<{
+                result: SearchResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
+            }>
+        }
+        Utils?: {
+            shouldDisplay?(result: SearchResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>): boolean
         }
     }
 

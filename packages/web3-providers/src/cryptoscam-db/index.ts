@@ -1,7 +1,7 @@
-import type { ScamWarningAPI } from '../types/ScamWarning.js'
 import urlcat from 'urlcat'
-import { fetchJSON } from '../helpers.js'
 import { ScalableBloomFilter } from 'bloom-filters'
+import type { ScamWarningAPI } from '../types/ScamWarning.js'
+import { fetchJSON } from '../helpers.js'
 
 const baseURL = 'https://raw.githubusercontent.com/DimensionDev/Mask-Scam-List/main/providers/cryptoscam-db/'
 
