@@ -7,12 +7,14 @@ import { useFungibleAssets, useNetworkDescriptor, useWeb3State } from '@masknet/
 import { ChainId, formatEthereumAddress, useSmartPayConstants } from '@masknet/web3-shared-evm'
 import { Box, Button, DialogActions, DialogContent, List, ListItem, ListItemText, Typography } from '@mui/material'
 import { useCopyToClipboard } from 'react-use'
-import { memo } from 'react'
+import { memo, useState } from 'react'
 import { formatBalance, isLessThan, isSameAddress } from '@masknet/web3-shared-base'
 import { isNaN } from 'lodash-es'
 import { useI18N } from '../../locales/i18n_generated.js'
 import { PluginSmartPayMessages } from '../../message.js'
 import { useERC20TokenAllowance } from '@masknet/web3-hooks-evm'
+import { AddSmartPayPopover } from './AddSmartPayPopover.js'
+import { AccountsManagerPopover } from './AccountsManagePopover.js'
 
 const useStyles = makeStyles()((theme) => ({
     dialogContent: {
@@ -115,6 +117,10 @@ const useStyles = makeStyles()((theme) => ({
 export const SmartPayDialog = memo(() => {
     const t = useI18N()
     const { classes } = useStyles()
+
+    const [addAnchorEl, setAddAnchorEl] = useState<HTMLElement | null>(null)
+    const [manageAnchorEl, setManageAnchorEl] = useState<HTMLElement | null>(null)
+
     // #region Remote Dialog Controller
     const { open, closeDialog } = useRemoteControlledDialog(PluginSmartPayMessages.smartPayDialogEvent)
 
@@ -186,8 +192,18 @@ export const SmartPayDialog = memo(() => {
                         $233.00
                     </Typography>
                     <Box display="flex" columnGap={1} position="absolute" top={16} right={16}>
-                        <Icons.KeySquare size={24} />
-                        <Icons.Add size={24} />
+                        <Icons.KeySquare onClick={(event) => setManageAnchorEl(event.currentTarget)} size={24} />
+                        <Icons.Add onClick={(event) => setAddAnchorEl(event.currentTarget)} size={24} />
+                        <AddSmartPayPopover
+                            open={!!addAnchorEl}
+                            anchorEl={addAnchorEl}
+                            onClose={() => setAddAnchorEl(null)}
+                        />
+                        <AccountsManagerPopover
+                            open={!!manageAnchorEl}
+                            anchorEl={manageAnchorEl}
+                            onClose={() => setManageAnchorEl(null)}
+                        />
                     </Box>
                 </Box>
                 <List dense className={classes.list}>
