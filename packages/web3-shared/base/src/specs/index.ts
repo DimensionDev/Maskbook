@@ -152,7 +152,7 @@ export enum ThemeMode {
 export interface ThemeSettings {
     size: ThemeSize
     color: string
-    mode: 'light' | 'dim' | 'dark'
+    mode: ThemeMode
 }
 
 export interface Identity {
