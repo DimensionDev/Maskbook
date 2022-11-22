@@ -43,6 +43,7 @@ import { injectProfileCover } from './injection/ProfileCover.js'
 import { injectProfileCardHolder } from './injection/ProfileCard/index.js'
 import { injectAvatar } from './injection/Avatar/index.js'
 import { injectPluginSettingsDialogAtTwitter } from './injection/PluginSettingsDialog.js'
+import { FontSize, ThemeColor, ThemeMode } from '@masknet/web3-shared-base'
 
 const useInjectedDialogClassesOverwriteTwitter = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -205,6 +206,11 @@ const twitterUI: SocialNetworkUI.Definition = {
         PluginSettingsDialog: injectPluginSettingsDialogAtTwitter,
     },
     configuration: {
+        themeSettings: {
+            color: ThemeColor.Blue,
+            size: FontSize.Normal,
+            mode: ThemeMode.Light,
+        },
         nextIDConfig: {
             enable: true,
             platform: NextIDPlatform.Twitter,

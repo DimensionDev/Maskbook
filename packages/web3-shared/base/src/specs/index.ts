@@ -136,17 +136,21 @@ export enum StorageProviderType {
 }
 
 export enum FontSize {
-    X_SMALL = 'x_small',
-    SMALL = 'small',
-    NORMAL = 'normal',
-    LARGE = 'large',
-    X_LARGE = 'x_large'
+    X_Small = 'xSmall',
+    Small = 'small',
+    Normal = 'normal',
+    Large = 'large',
+    X_Large = 'xLarge'
 }
 
 export enum ThemeMode {
-    LIGHT = 'light',
-    DIM = 'dim',
-    DARK = 'dark',
+    Light = 'light',
+    Dim = 'dim',
+    Dark = 'dark',
+}
+
+export enum ThemeColor {
+    Blue = 'rgb(37, 99, 235)'
 }
 
 export interface ThemeSettings {
