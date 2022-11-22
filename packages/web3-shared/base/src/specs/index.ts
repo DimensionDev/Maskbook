@@ -135,6 +135,26 @@ export enum StorageProviderType {
     KV = 'kv',
 }
 
+export enum ThemeSize {
+    X_SAMLL = 'x_samll',
+    SMALL = 'small',
+    NORMAL = 'normal',
+    LARGE = 'large',
+    X_LARGE = 'x_large'
+}
+
+export enum ThemeMode {
+    LIGHT = 'light',
+    DIM = 'dim',
+    DARK = 'dark',
+}
+
+export interface ThemeSettings {
+    size: ThemeSize
+    color: string
+    mode: 'light' | 'dim' | 'dark'
+}
+
 export interface Identity {
     address?: string
     nickname?: string

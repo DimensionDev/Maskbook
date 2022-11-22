@@ -29,6 +29,7 @@ import type {
     Web3State,
     SocialAccount,
     SearchKeywordType,
+    ThemeSettings,
 } from '@masknet/web3-shared-base'
 import type { ChainId as ChainIdEVM, Transaction as TransactionEVM } from '@masknet/web3-shared-evm'
 import type { Emitter } from '@servie/events'
@@ -374,6 +375,8 @@ export namespace Plugin.SNSAdaptor {
         lastRecognizedProfile: Subscription<IdentityResolved | undefined>
         currentVisitingProfile: Subscription<IdentityResolved | undefined>
         allPersonas?: Subscription<PersonaInformation[]>
+        getThemeSettings: () => Promise<ThemeSettings>
+        getDefaultThemeSettings: () => ThemeSettings
         getNextIDPlatform: () => NextIDPlatform | undefined
         getPersonaAvatar: (identifier: ECKeyIdentifier | null | undefined) => Promise<string | null | undefined>
         getSocialIdentity: (
