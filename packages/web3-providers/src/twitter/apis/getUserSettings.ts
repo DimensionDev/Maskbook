@@ -1,3 +1,6 @@
+import { memoize } from 'lodash-es'
+import { memoizePromise } from '@masknet/kit'
+import { isFirefox } from '@masknet/shared-base'
 import { TwitterBaseAPI } from '../../types/index.js'
 
 /* cspell:disable-next-line */
@@ -9,8 +12,10 @@ const STORE_NAME = 'keyvaluepairs'
 const KEY_NAME = 'device:rweb.settings'
 
 export async function getUserSettings() {
-    const databases = await indexedDB.databases()
-    if (!databases.some((x) => x.name === DB_NAME && x.version === DB_VERSION)) return
+    if (!isFirefox()) {
+        const databases = await indexedDB.databases()
+        if (!databases.some((x) => x.name === DB_NAME && x.version === DB_VERSION)) return
+    }
 
     return new Promise<TwitterBaseAPI.UserSettings | undefined>(async (resolve, reject) => {
         const request = indexedDB.open(DB_NAME, DB_VERSION)
@@ -38,6 +43,8 @@ export async function getUserSettings() {
         })
     })
 }
+
+export const getUserSettingsCached = memoizePromise(memoize, getUserSettings, () => 'DEFAULT')
 
 export function getDefaultUserSettings(): TwitterBaseAPI.UserSettings {
     return {
