@@ -68,9 +68,11 @@ export class ZerionAPI
 
     async getTransactions(
         address: string,
-        { indicator }: HubOptions<ChainId> = {},
+        { indicator, chainId }: HubOptions<ChainId> = {},
     ): Promise<Pageable<Transaction<ChainId, SchemaType>>> {
-        const pairs = getEnumAsArray(ChainId).map((x) => [x.value, 'transactions'] as const)
+        const pairs = getEnumAsArray(ChainId)
+            .filter((x) => x.value === chainId)
+            .map((x) => [x.value, 'transactions'] as const)
         const allSettled = await Promise.allSettled(
             pairs.map(async ([chainId, scope]) => {
                 if (!scope) return EMPTY_LIST
