@@ -28,7 +28,11 @@ const useStyles = makeStyles()((theme) => ({
     content: {
         position: 'relative',
         maxHeight: 478,
+        minHeight: 300,
         overflow: 'auto',
+        '&::-webkit-scrollbar': {
+            display: 'none',
+        },
     },
     cardHeader: {
         background:

@@ -1,6 +1,6 @@
 import { forwardRef, HTMLProps, useRef, useLayoutEffect, useState } from 'react'
-import { makeStyles } from '@masknet/theme'
-import { Skeleton, Tooltip, Typography } from '@mui/material'
+import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
+import { Skeleton, Typography } from '@mui/material'
 import { CollectibleCard, CollectibleCardProps } from './CollectibleCard.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -49,17 +49,7 @@ export const CollectibleItem = forwardRef<HTMLDivElement, CollectibleItemProps>(
     }, [textRef.current])
 
     return (
-        <Tooltip
-            title={showTooltip ? name : undefined}
-            placement="top"
-            disableInteractive
-            PopperProps={{
-                disablePortal: true,
-                popperOptions: {
-                    strategy: 'absolute',
-                },
-            }}
-            arrow>
+        <ShadowRootTooltip title={showTooltip ? name : undefined} placement="top" disableInteractive arrow>
             <div className={cx(classes.card, className)} {...rest} ref={ref}>
                 <CollectibleCard className={classes.collectibleCard} pluginID={pluginID} asset={asset} />
                 <div className={cx(classes.description, name ? '' : classes.hidden)}>
@@ -68,7 +58,7 @@ export const CollectibleItem = forwardRef<HTMLDivElement, CollectibleItemProps>(
                     </Typography>
                 </div>
             </div>
-        </Tooltip>
+        </ShadowRootTooltip>
     )
 })
 

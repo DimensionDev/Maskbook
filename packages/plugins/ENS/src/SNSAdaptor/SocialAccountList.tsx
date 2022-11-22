@@ -1,8 +1,9 @@
 import { useMenuConfig } from '@masknet/shared'
 import { useWindowScroll } from 'react-use'
-import { useEffect } from 'react'
+import { useEffect, useRef, useMemo, useState, useCallback } from 'react'
 import { resolveNextIDPlatformLink } from '@masknet/web3-shared-base'
 import { Icons } from '@masknet/icons'
+import { debounce } from 'lodash-es'
 import { Box, Typography, MenuItem, alpha } from '@mui/material'
 import { MoreHoriz as MoreHorizIcon } from '@mui/icons-material'
 import { openWindow } from '@masknet/shared-base-ui'
@@ -88,9 +89,25 @@ export function SocialAccountList({ nextIdBindings }: SocialAccountListProps) {
     const t = useI18N()
     const { classes, cx } = useStyles({ isMenuScroll: nextIdBindings.length > 5 })
     const position = useWindowScroll()
+    const [hideToolTip, setHideToolTip] = useState(false)
+    const ref = useRef<HTMLDivElement | null>(null)
+
+    const handleEndScroll = useMemo(() => debounce(() => setHideToolTip(false), 300), [])
+
+    const onScroll = useCallback(() => {
+        setHideToolTip(true)
+        handleEndScroll()
+    }, [])
+
+    useEffect(() => {
+        const menu = ref.current?.querySelector('[role="menu"]')?.parentElement
+        menu?.addEventListener('scroll', onScroll)
+        return () => menu?.removeEventListener('scroll', onScroll)
+    }, [ref.current, JSON.stringify(nextIdBindings)])
+
     const [menu, openMenu, closeMenu] = useMenuConfig(
         nextIdBindings.map((x, i) => (
-            <SocialTooltip key={i} platform={x.source}>
+            <SocialTooltip key={i} platform={x.source} hidden={hideToolTip}>
                 <MenuItem
                     className={classes.socialAccountListItem}
                     disabled={false}
@@ -117,6 +134,7 @@ export function SocialAccountList({ nextIdBindings }: SocialAccountListProps) {
                 className: classes.menu,
             },
         },
+        ref,
     )
 
     useEffect(closeMenu, [position])
