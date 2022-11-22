@@ -8,7 +8,6 @@ import {
     getUserNFTContainer,
     getDefaultUserSettings,
     getUserSettingsCached,
-    getUserSettings,
 } from './apis/index.js'
 
 const UPLOAD_AVATAR_URL = 'https://upload.twitter.com/i/media/upload.json'
