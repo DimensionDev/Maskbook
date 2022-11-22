@@ -75,9 +75,10 @@ export function createNonFungibleAsset(chainId: ChainId, asset: Solana.Asset): N
               }
             : undefined,
         traits:
-            payload?.attributes?.map((x) => ({
-                type: x.trait_type,
-                value: x.value,
+            asset.attributes?.map((x) => ({
+                type: x.attribute_name,
+                value: x.attribute_value,
+                rarity: x.percentage,
             })) ?? EMPTY_LIST,
         priceInToken: asset.latest_trade_price
             ? {
