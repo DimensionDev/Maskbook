@@ -82,6 +82,7 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
     startIntermediateSetupGuide()
     $unknownIdentityResolution()
 
+    ui.collecting.themeSettingsProvider?.start(signal)
     ui.collecting.postsProvider?.start(signal)
     startPostListener()
     ui.collecting.currentVisitingIdentityProvider?.start(signal)

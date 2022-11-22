@@ -14,6 +14,7 @@ import {
     useLastRecognizedIdentity,
     useCurrentVisitingIdentity,
     useCurrentVisitingSocialIdentity,
+    useThemeSettings,
 } from '@masknet/plugin-infra'
 
 export interface ConsoleContentProps {
@@ -39,8 +40,29 @@ export function ConsoleContent(props: ConsoleContentProps) {
     const currentVisitingIdentity = useCurrentVisitingIdentity()
     const lastRecognizedIdentity = useLastRecognizedIdentity()
     const currentVisitingSocialIdentity = useCurrentVisitingSocialIdentity()
+    const themeSettings = useThemeSettings()
 
     const table: Array<{ name: string; content: JSX.Element }> = [
+        {
+            name: 'Color',
+            content: (
+                <Typography variant="body2">
+                    {themeSettings.color} <span style={{ color: themeSettings.color }}>&#11044;</span>
+                </Typography>
+            ),
+        },
+        {
+            name: 'Size',
+            content: <Typography variant="body2">{themeSettings.size}</Typography>,
+        },
+        {
+            name: 'Palette Mode',
+            content: <Typography variant="body2">{themeSettings.mode}</Typography>,
+        },
+        {
+            name: 'Account',
+            content: <Typography variant="body2">{Others?.formatAddress(account, 4) || 'Not Connected'}</Typography>,
+        },
         {
             name: 'ChainId',
             content: <Typography variant="body2">{chainId}</Typography>,
@@ -56,10 +78,6 @@ export function ConsoleContent(props: ConsoleContentProps) {
         {
             name: 'Provider Type',
             content: <Typography variant="body2">{providerType}</Typography>,
-        },
-        {
-            name: 'Account',
-            content: <Typography variant="body2">{Others?.formatAddress(account, 4)}</Typography>,
         },
         {
             name: 'Balance',
@@ -82,7 +100,7 @@ export function ConsoleContent(props: ConsoleContentProps) {
             content: <Typography variant="body2">{lookedAddress}</Typography>,
         },
         {
-            name: 'Current Visiting Identity',
+            name: 'Visiting Identity',
             content: (
                 <Typography variant="body2">
                     {currentVisitingIdentity?.identifier?.userId} {currentVisitingIdentity?.isOwner ? 'OWNER' : ''}
@@ -90,7 +108,7 @@ export function ConsoleContent(props: ConsoleContentProps) {
             ),
         },
         {
-            name: 'Last Recognized Identity',
+            name: 'Owner Identity',
             content: (
                 <Typography variant="body2">
                     {lastRecognizedIdentity?.identifier?.userId} {lastRecognizedIdentity?.isOwner ? 'OWNER' : ''}
@@ -98,7 +116,7 @@ export function ConsoleContent(props: ConsoleContentProps) {
             ),
         },
         {
-            name: 'Current Visiting Public Key',
+            name: 'Visiting Public Key',
             content: (
                 <Typography variant="body2" style={{ width: 280, wordBreak: 'break-all' }}>
                     {currentVisitingSocialIdentity?.value?.publicKey}

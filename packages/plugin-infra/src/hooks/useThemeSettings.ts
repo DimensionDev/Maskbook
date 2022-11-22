@@ -1,12 +1,12 @@
 import { useMemo } from 'react'
-import { useSNSAdaptorContext } from '../entry-content-script.js'
+import { useSNSAdaptorContext } from '../contexts/SNSAdaptorContext.js'
 
 export function useThemeSettings() {
     const { themeSettings, getThemeSettings } = useSNSAdaptorContext()
     return useMemo(() => {
         return {
             ...getThemeSettings(),
-            ...themeSettings,
+            ...themeSettings.getCurrentValue(),
         }
     }, [themeSettings, getThemeSettings])
 }
