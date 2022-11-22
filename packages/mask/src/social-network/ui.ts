@@ -22,6 +22,7 @@ import { MaskMessages, setupReactShadowRootEnvironment } from '../utils/index.js
 import '../utils/debug/general.js'
 import { RestPartOfPluginUIContextShared } from '../utils/plugin-context-shared-ui.js'
 import { definedSocialNetworkUIs } from './define.js'
+import type { ThemeSettings } from '@masknet/web3-shared-base'
 
 const definedSocialNetworkUIsResolved = new Map<string, SocialNetworkUI.Definition>()
 export let activatedSocialNetworkUI: SocialNetworkUI.Definition = {
@@ -138,6 +139,9 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
         ui.collecting.currentVisitingIdentityProvider?.recognized || empty,
         signal,
     )
+    const themeSettingsSub = createSubscriptionFromValueRef(
+        ui.collecting.settingsProvider?.recognized || new ValueRef<ThemeSettings | undefined>(undefined),
+    )
 
     const currentSNS = getCurrentSNSNetwork(ui.networkIdentifier)
     startPluginSNSAdaptor(
@@ -151,6 +155,8 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
                     lastRecognizedProfile: lastRecognizedSub,
                     currentVisitingProfile: currentVisitingSub,
                     allPersonas: allPersonaSub,
+                    themeSettings: themeSettingsSub,
+                    getThemeSettings: () => activatedSocialNetworkUI.configuration.theme,
                     getNextIDPlatform: () => activatedSocialNetworkUI.configuration.nextIDConfig?.platform,
                     getPersonaAvatar: Services.Identity.getPersonaAvatar,
                     getSocialIdentity: Services.Identity.querySocialIdentity,

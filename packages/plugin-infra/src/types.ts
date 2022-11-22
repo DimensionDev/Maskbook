@@ -375,8 +375,9 @@ export namespace Plugin.SNSAdaptor {
         lastRecognizedProfile: Subscription<IdentityResolved | undefined>
         currentVisitingProfile: Subscription<IdentityResolved | undefined>
         allPersonas?: Subscription<PersonaInformation[]>
-        getThemeSettings: () => Promise<ThemeSettings>
-        getDefaultThemeSettings: () => ThemeSettings
+        themeSettings: Subscription<ThemeSettings | undefined>
+        /** The default theme settings. */
+        getThemeSettings: () => ThemeSettings | undefined
         getNextIDPlatform: () => NextIDPlatform | undefined
         getPersonaAvatar: (identifier: ECKeyIdentifier | null | undefined) => Promise<string | null | undefined>
         getSocialIdentity: (

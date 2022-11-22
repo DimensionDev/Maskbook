@@ -16,6 +16,7 @@ import type {
 import type { SerializableTypedMessages } from '@masknet/typed-message'
 import type { RenderFragmentsContextType } from '@masknet/typed-message-react'
 import type { SharedComponentOverwrite } from '@masknet/shared'
+import type { ThemeSettings } from '@masknet/web3-shared-base'
 
 export declare namespace SocialNetwork {
     export interface Utils {
@@ -198,6 +199,8 @@ export namespace SocialNetworkUI {
             currentVisitingIdentityProvider?: IdentityResolveProvider
             /** Maintain all the posts up-to-date. */
             postsProvider?: PostsProvider
+            /** Resolve the user settings of site theme. */
+            settingsProvider?: SettingsProvider
             /** Get searched keyword */
             getSearchedKeyword?(): string
         }
@@ -228,6 +231,10 @@ export namespace SocialNetworkUI {
              * Start to maintain the posts.
              * It should add new seen posts and remove gone posts.
              */
+            start(signal: AbortSignal): void
+        }
+        export interface SettingsProvider {
+            readonly recognized: ValueRef<ThemeSettings>
             start(signal: AbortSignal): void
         }
     }
@@ -264,6 +271,7 @@ export namespace SocialNetworkUI {
     }
     export namespace Configuration {
         export interface Define {
+            theme?: ThemeSettings
             nextIDConfig?: NextIDConfig
             steganography?: SteganographyConfig
             tipsConfig?: TipsConfig

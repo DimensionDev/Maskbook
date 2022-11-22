@@ -1,10 +1,14 @@
-import { useAsyncRetry } from 'react-use'
+import { useMemo } from 'react'
 import { useSNSAdaptorContext } from '../entry-content-script.js'
 
 export function useThemeSettings() {
-    const { getThemeSettings, getDefaultThemeSettings } = useSNSAdaptorContext()
-    const { value: settings = getDefaultThemeSettings() } = useAsyncRetry(async () => getThemeSettings(), [])
-    return settings
+    const { themeSettings, getThemeSettings } = useSNSAdaptorContext()
+    return useMemo(() => {
+        return {
+            ...getThemeSettings(),
+            ...themeSettings,
+        }
+    }, [themeSettings, getThemeSettings])
 }
 
 export function useThemeMode() {
