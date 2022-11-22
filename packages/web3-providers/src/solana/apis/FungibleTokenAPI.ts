@@ -1,3 +1,4 @@
+import { memoize } from 'lodash-es'
 import {
     HubOptions,
     HubIndicator,
@@ -19,7 +20,6 @@ import type { FungibleTokenAPI, TokenListAPI } from '../../types/index.js'
 import { RAYDIUM_TOKEN_LIST, SPL_TOKEN_PROGRAM_ID } from '../constants.js'
 import { createFungibleAsset, createFungibleToken, requestRPC } from '../helpers.js'
 import type { GetAccountInfoResponse, GetProgramAccountsResponse, RaydiumTokenList } from '../types.js'
-import { memoize } from 'lodash-es'
 
 const fetchTokenList = memoizePromise(
     memoize,
