@@ -1,4 +1,4 @@
-import { Box, Typography } from '@mui/material'
+import { Box, Divider, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import type { BoxInfo, BoxMetadata } from '../../type.js'
 
@@ -9,13 +9,16 @@ const useStyles = makeStyles()((theme) => ({
         padding: theme.spacing(2),
     },
     section: {
-        margin: theme.spacing(4, 0),
-        '&:first-child': {
-            marginTop: 0,
+        border: `1px solid ${theme.palette.maskColor.publicLine}`,
+        borderRadius: 16,
+        padding: theme.spacing(2),
+        marginBottom: theme.spacing(2),
+        '&:liast-child': {
+            marginBottom: theme.spacing(0),
         },
-        '&:last-child': {
-            marginBottom: 0,
-        },
+    },
+    line: {
+        borderColor: theme.palette.maskColor.publicLine,
     },
     placeholder: {
         textAlign: 'center',
@@ -23,15 +26,18 @@ const useStyles = makeStyles()((theme) => ({
     },
     title: {
         fontSize: 18,
-        fontWeight: 500,
-        lineHeight: '24px',
-        marginBottom: theme.spacing(4),
+        fontWeight: 700,
+        lineHeight: '22px',
+        paddingBottom: theme.spacing(2),
         color: theme.palette.maskColor.dark,
     },
     content: {
-        lineHeight: '24px',
+        lineHeight: '20px',
         whiteSpace: 'pre-line',
+        fontSize: 16,
+        fontWeight: 400,
         color: theme.palette.maskColor.dark,
+        paddingTop: theme.spacing(2),
     },
 }))
 
@@ -65,6 +71,7 @@ export function DetailsTab(props: DetailsTabProps) {
                     <Typography className={classes.title} color={theme.palette.maskColor.publicMain} variant="h3">
                         {x.title}
                     </Typography>
+                    <Divider className={classes.line} />
                     <Typography className={classes.content} color={theme.palette.maskColor.publicMain} variant="body2">
                         {x.content}
                     </Typography>

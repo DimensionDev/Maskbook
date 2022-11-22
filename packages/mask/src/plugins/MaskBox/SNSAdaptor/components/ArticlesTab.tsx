@@ -14,7 +14,7 @@ const useStyles = makeStyles()((theme) => ({
         overflow: 'hidden',
         borderRadius: 8,
         boxSizing: 'border-box',
-        border: `solid 1px ${theme.palette.divider}`,
+        border: `solid 1px ${theme.palette.maskColor.publicLine}`,
     },
     hero: {
         display: 'flex',
@@ -41,6 +41,7 @@ export function ArticlesTab(props: ArticlesTabProps) {
     const { boxInfo, boxMetadata } = props
     const { classes } = useStyles()
 
+    const imageUrl = boxMetadata?.mediaUrl.replace('ipfs.infura.io', 'ipfs.io') ?? ''
     return (
         <Box className={classes.main}>
             <Box className={classes.body}>
@@ -53,14 +54,9 @@ export function ArticlesTab(props: ArticlesTabProps) {
                         )
                     switch (boxMetadata.mediaType) {
                         case MediaType.Video:
-                            return (
-                                <Video
-                                    VideoProps={{ className: classes.hero, controls: true }}
-                                    src={boxMetadata.mediaUrl}
-                                />
-                            )
+                            return <Video VideoProps={{ className: classes.hero, controls: true }} src={imageUrl} />
                         default:
-                            return <img className={classes.hero} src={boxMetadata.mediaUrl} />
+                            return <img className={classes.hero} src={imageUrl} />
                     }
                 })()}
             </Box>
