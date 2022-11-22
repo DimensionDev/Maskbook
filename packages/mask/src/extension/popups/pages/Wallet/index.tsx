@@ -128,7 +128,7 @@ export default function Wallet() {
                         <Route path={r(PopupRoutes.Unlock)} element={<Unlock />} />
                         <Route path={r(PopupRoutes.SetPaymentPassword)} element={<SetPaymentPassword />} />
                         <Route path={r(PopupRoutes.ReplaceTransaction)} element={<ReplaceTransaction />} />
-                        <Route path={r(PopupRoutes.ConnectWallet)} element={<ConnectWallet />} />
+                        {/* <Route path={r(PopupRoutes.ConnectWallet)} element={<ConnectWallet />} /> */}
                     </Routes>
                 )}
             </WalletContext.Provider>

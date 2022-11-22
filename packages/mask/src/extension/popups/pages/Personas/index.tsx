@@ -30,7 +30,7 @@ const Persona = memo(() => {
                     <Route path={r(PopupRoutes.SocialAccounts)} element={<Accounts />} />
                     <Route path={r(PopupRoutes.AccountDetail)} element={<AccountDetail />} />
                     <Route path={r(PopupRoutes.ConnectedWallets)} element={<ConnectedWallets />} />
-                    <Route path={r(PopupRoutes.VerifyWallet)} element={<VerifyWallet />} />
+                    {/* <Route path={r(PopupRoutes.VerifyWallet)} element={<VerifyWallet />} /> */}
                     <Route path="*" element={<Home />} />
                 </Routes>
             </PersonaContext.Provider>
