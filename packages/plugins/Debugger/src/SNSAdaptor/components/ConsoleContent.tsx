@@ -14,6 +14,7 @@ import {
     useLastRecognizedIdentity,
     useCurrentVisitingIdentity,
     useCurrentVisitingSocialIdentity,
+    useThemeSettings,
 } from '@masknet/plugin-infra'
 
 export interface ConsoleContentProps {
@@ -39,8 +40,25 @@ export function ConsoleContent(props: ConsoleContentProps) {
     const currentVisitingIdentity = useCurrentVisitingIdentity()
     const lastRecognizedIdentity = useLastRecognizedIdentity()
     const currentVisitingSocialIdentity = useCurrentVisitingSocialIdentity()
+    const themeSettings = useThemeSettings()
 
     const table: Array<{ name: string; content: JSX.Element }> = [
+        {
+            name: 'Color',
+            content: (
+                <Typography variant="body2">
+                    {themeSettings.color} <span style={{ color: themeSettings.color }}>&#11044;</span>
+                </Typography>
+            ),
+        },
+        {
+            name: 'Size',
+            content: <Typography variant="body2">{themeSettings.size}</Typography>,
+        },
+        {
+            name: 'Palette Mode',
+            content: <Typography variant="body2">{themeSettings.mode}</Typography>,
+        },
         {
             name: 'ChainId',
             content: <Typography variant="body2">{chainId}</Typography>,
