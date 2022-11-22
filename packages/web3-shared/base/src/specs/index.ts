@@ -136,7 +136,7 @@ export enum StorageProviderType {
 }
 
 export enum ThemeSize {
-    X_SAMLL = 'x_samll',
+    X_SMALL = 'x_small',
     SMALL = 'small',
     NORMAL = 'normal',
     LARGE = 'large',
