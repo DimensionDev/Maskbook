@@ -1,5 +1,5 @@
 import { Box, Typography } from '@mui/material'
-import { LoadingBase, makeStyles, ShadowRootTooltip, useStylesExtends } from '@masknet/theme'
+import { LoadingBase, makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { useI18N } from '../locales/i18n_generated.js'
 
 const useStyles = makeStyles()(() => ({
@@ -8,43 +8,44 @@ const useStyles = makeStyles()(() => ({
         maxWidth: 'none',
     },
 }))
-interface NFTInfoProps extends withClasses<'root'> {
+interface NFTInfoProps {
     isNFT: boolean
     loading?: boolean
     tooltip?: string
 }
 
 export function NFTInfo(props: NFTInfoProps) {
-    const { isNFT = false, loading = false, tooltip = '' } = props
-    const { classes } = useStylesExtends(useStyles(), props)
+    const { isNFT = false, loading = false, tooltip } = props
+    const { classes } = useStyles()
     const t = useI18N()
 
     if (loading) return <LoadingBase size={24} />
+    const node = (
+        <Box className={classes.root}>
+            {isNFT ? (
+                <Typography variant="body1" fontWeight={700} fontSize={12}>
+                    {t.nft_set_success()}
+                </Typography>
+            ) : (
+                <Typography fontWeight={700} fontSize={12}>
+                    {t.set_nft()}
+                </Typography>
+            )}
+        </Box>
+    )
+    if (!tooltip) return node
+
     return (
         <ShadowRootTooltip
             arrow
             classes={{ tooltip: classes.tip }}
             placement="top"
             title={
-                tooltip ? (
-                    <Typography style={{ whiteSpace: 'nowrap' }} fontSize={12}>
-                        {tooltip}
-                    </Typography>
-                ) : (
-                    ''
-                )
+                <Typography style={{ whiteSpace: 'nowrap' }} fontSize={12}>
+                    {tooltip}
+                </Typography>
             }>
-            <Box className={classes.root}>
-                {!isNFT ? (
-                    <Typography fontWeight={700} fontSize={12}>
-                        {t.persona_set_nft()}
-                    </Typography>
-                ) : (
-                    <Typography variant="body1" fontWeight={700} fontSize={12}>
-                        {t.persona_nft_set()}
-                    </Typography>
-                )}
-            </Box>
+            {node}
         </ShadowRootTooltip>
     )
 }

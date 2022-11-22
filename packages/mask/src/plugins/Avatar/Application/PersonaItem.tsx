@@ -13,9 +13,7 @@ import { useI18N } from '../locales/index.js'
 import { Twitter } from '@masknet/web3-providers'
 import { Icons } from '@masknet/icons'
 
-const useStyles = makeStyles<{
-    disabled: boolean
-}>()((theme, props) => ({
+const useStyles = makeStyles()((theme) => ({
     root: {
         margin: theme.spacing(2, 0.5),
         border: `1px solid ${theme.palette.divider}`,
@@ -47,7 +45,7 @@ interface PersonaItemProps {
 export function PersonaItem(props: PersonaItemProps) {
     const { userId, onSelect, owner = false, proof, avatar, nickname = '', persona = '' } = props
     const t = useI18N()
-    const { classes } = useStyles({ disabled: !owner })
+    const { classes } = useStyles()
 
     const { value: nftAvatar, loading } = usePersonaNFTAvatar(
         userId,
