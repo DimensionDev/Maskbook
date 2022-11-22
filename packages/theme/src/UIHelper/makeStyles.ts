@@ -3,7 +3,7 @@ import { useTheme, type Theme } from '@mui/material'
 
 // Note: type refinement, see https://github.com/garronej/tss-react/issues/128
 export const { makeStyles } = createMakeStyles({ useTheme }) as any as {
-    makeStyles: <Params = void, RuleNameSubsetReferencableInNestedSelectors extends string = never>(params?: {
+    makeStyles: <Params = void, RuleNameSubsetReferencedInNestedSelectors extends string = never>(params?: {
         name?: string | Record<string, unknown>
         uniqId?: string
     }) => <RuleName extends string>(
@@ -12,8 +12,8 @@ export const { makeStyles } = createMakeStyles({ useTheme }) as any as {
             | ((
                   theme: Theme,
                   params: Params,
-                  classes: Record<RuleNameSubsetReferencableInNestedSelectors, string>,
-              ) => Record<RuleNameSubsetReferencableInNestedSelectors | RuleName, CSSObject>),
+                  classes: Record<RuleNameSubsetReferencedInNestedSelectors, string>,
+              ) => Record<RuleNameSubsetReferencedInNestedSelectors | RuleName, CSSObject>),
     ) => <StyleOverrides extends { classes?: { [key in string]?: string | undefined } }>(
         params: Params,
         styleOverrides?: {
