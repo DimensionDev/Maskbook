@@ -19,6 +19,7 @@ import { injectPostInspectorFacebook } from './injection/PostInspector.js'
 import getSearchedKeywordAtFacebook from './collecting/getSearchedKeyword.js'
 import { injectSearchResultBoxAtFacebook } from './injection/SearchResultBox.js'
 import { PostProviderFacebook } from './collecting/posts.js'
+import { ThemeSettingsProviderFacebook } from './collecting/theme.js'
 import { pasteImageToCompositionDefault } from '../../social-network/defaults/automation/AttachImageToComposition.js'
 import { injectPageInspectorDefault } from '../../social-network/defaults/inject/PageInspector.js'
 import { createTaskStartSetupGuideDefault } from '../../social-network/defaults/inject/StartSetupGuide.js'
@@ -145,6 +146,7 @@ const facebookUI: SocialNetworkUI.Definition = {
         identityProvider: IdentityProviderFacebook,
         currentVisitingIdentityProvider: CurrentVisitingIdentityProviderFacebook,
         postsProvider: PostProviderFacebook,
+        themeSettingsProvider: ThemeSettingsProviderFacebook,
         getSearchedKeyword: getSearchedKeywordAtFacebook,
     },
     customization: {

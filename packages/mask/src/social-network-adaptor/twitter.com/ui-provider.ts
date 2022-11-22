@@ -11,6 +11,7 @@ import { pasteImageToCompositionTwitter } from './automation/pasteImageToComposi
 import { gotoNewsFeedPageTwitter } from './automation/gotoNewsFeedPage.js'
 import { gotoProfilePageTwitter } from './automation/gotoProfilePage.js'
 import { IdentityProviderTwitter, CurrentVisitingIdentityProviderTwitter } from './collecting/identity.js'
+import { ThemeSettingsProviderTwitter } from './collecting/theme.js'
 import { collectVerificationPost, PostProviderTwitter } from './collecting/post.js'
 import { PaletteModeProviderTwitter, useThemeTwitterVariant } from './customization/custom.js'
 import { injectToolboxHintAtTwitter } from './injection/ToolboxHint.js'
@@ -145,6 +146,7 @@ const twitterUI: SocialNetworkUI.Definition = {
     collecting: {
         identityProvider: IdentityProviderTwitter,
         currentVisitingIdentityProvider: CurrentVisitingIdentityProviderTwitter,
+        themeSettingsProvider: ThemeSettingsProviderTwitter,
         postsProvider: PostProviderTwitter,
         getSearchedKeyword: getSearchedKeywordAtTwitter,
     },
