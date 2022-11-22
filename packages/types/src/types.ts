@@ -200,7 +200,7 @@ export namespace SocialNetworkUI {
             /** Maintain all the posts up-to-date. */
             postsProvider?: PostsProvider
             /** Resolve the user settings of site theme. */
-            settingsProvider?: SettingsProvider
+            themeSettingsProvider?: ThemeSettingsProvider
             /** Get searched keyword */
             getSearchedKeyword?(): string
         }
@@ -233,7 +233,7 @@ export namespace SocialNetworkUI {
              */
             start(signal: AbortSignal): void
         }
-        export interface SettingsProvider {
+        export interface ThemeSettingsProvider {
             readonly recognized: ValueRef<ThemeSettings>
             start(signal: AbortSignal): void
         }
@@ -271,7 +271,7 @@ export namespace SocialNetworkUI {
     }
     export namespace Configuration {
         export interface Define {
-            theme?: ThemeSettings
+            themeSettings?: ThemeSettings
             nextIDConfig?: NextIDConfig
             steganography?: SteganographyConfig
             tipsConfig?: TipsConfig

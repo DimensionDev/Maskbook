@@ -12,6 +12,7 @@ import {
     i18NextInstance,
     queryRemoteI18NBundle,
 } from '@masknet/shared-base'
+import type { ThemeSettings } from '@masknet/web3-shared-base'
 import { Flags } from '../../shared/index.js'
 import { currentSetupGuideStatus } from '../../shared/legacy-settings/settings.js'
 import type { SetupGuideContext } from '../../shared/legacy-settings/types.js'
@@ -22,7 +23,6 @@ import { MaskMessages, setupReactShadowRootEnvironment } from '../utils/index.js
 import '../utils/debug/general.js'
 import { RestPartOfPluginUIContextShared } from '../utils/plugin-context-shared-ui.js'
 import { definedSocialNetworkUIs } from './define.js'
-import type { ThemeSettings } from '@masknet/web3-shared-base'
 
 const definedSocialNetworkUIsResolved = new Map<string, SocialNetworkUI.Definition>()
 export let activatedSocialNetworkUI: SocialNetworkUI.Definition = {
@@ -122,6 +122,7 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
             Services.Identity.createNewRelation(ref.identifier, currentProfile.linkedPersona)
         }
     })
+
     signal.addEventListener('abort', queryRemoteI18NBundle(Services.Helper.queryRemoteI18NBundle))
 
     const allPersonaSub = createSubscriptionFromAsync(
@@ -130,6 +131,7 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
         MaskMessages.events.currentPersonaIdentifier.on,
         signal,
     )
+
     const empty = new ValueRef<IdentityResolved | undefined>(undefined)
     const lastRecognizedSub = createSubscriptionFromValueRef(
         ui.collecting.identityProvider?.recognized || empty,
@@ -139,13 +141,15 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
         ui.collecting.currentVisitingIdentityProvider?.recognized || empty,
         signal,
     )
+
+    const defaults = new ValueRef<ThemeSettings | undefined>(activatedSocialNetworkUI.configuration.themeSettings)
     const themeSettingsSub = createSubscriptionFromValueRef(
-        ui.collecting.settingsProvider?.recognized || new ValueRef<ThemeSettings | undefined>(undefined),
+        ui.collecting.themeSettingsProvider?.recognized || defaults,
+        signal,
     )
 
-    const currentSNS = getCurrentSNSNetwork(ui.networkIdentifier)
     startPluginSNSAdaptor(
-        currentSNS,
+        getCurrentSNSNetwork(ui.networkIdentifier),
         createPluginHost(
             signal,
             (pluginID, signal): Plugin.SNSAdaptor.SNSAdaptorContext => {
@@ -156,7 +160,7 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
                     currentVisitingProfile: currentVisitingSub,
                     allPersonas: allPersonaSub,
                     themeSettings: themeSettingsSub,
-                    getThemeSettings: () => activatedSocialNetworkUI.configuration.theme,
+                    getThemeSettings: () => activatedSocialNetworkUI.configuration.themeSettings,
                     getNextIDPlatform: () => activatedSocialNetworkUI.configuration.nextIDConfig?.platform,
                     getPersonaAvatar: Services.Identity.getPersonaAvatar,
                     getSocialIdentity: Services.Identity.querySocialIdentity,
