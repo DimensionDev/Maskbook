@@ -1,4 +1,4 @@
-import { makeStyles, useStylesExtends, ActionButton, ActionButtonProps } from '@masknet/theme'
+import { makeStyles, ActionButton, ActionButtonProps } from '@masknet/theme'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useSharedI18N } from '../../../locales/index.js'
@@ -10,14 +10,13 @@ import {
     useRiskWarningApproved,
 } from '@masknet/web3-hooks-base'
 
-const useStyles = makeStyles()((theme) => ({
+const useStyles = makeStyles()({
     button: {
         margin: 0,
     },
-}))
+})
 
-export interface WalletConnectedBoundaryProps
-    extends withClasses<'connectWallet' | 'unlockMetaMask' | 'gasFeeButton' | 'invalidButton' | 'button'> {
+export interface WalletConnectedBoundaryProps extends withClasses<'connectWallet' | 'button'> {
     offChain?: boolean
     children?: React.ReactNode
     hideRiskWarningConfirmed?: boolean
@@ -29,7 +28,7 @@ export function WalletConnectedBoundary(props: WalletConnectedBoundaryProps) {
     const { children = null, offChain = false, hideRiskWarningConfirmed = false } = props
 
     const t = useSharedI18N()
-    const { classes, cx } = useStylesExtends(useStyles(), props)
+    const { classes, cx } = useStyles(undefined, { props })
 
     const { pluginID } = useNetworkContext()
     const { account, chainId: chainIdValid } = useChainContext()

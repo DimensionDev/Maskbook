@@ -1,10 +1,9 @@
 import { Avatar, ListItemAvatar, ListItemIcon, ListItemText, ListTypeMap, ListItemButton } from '@mui/material'
-import { makeStyles, useStylesExtends } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 import { Check as CheckIcon } from '@mui/icons-material'
 import type { DefaultComponentProps } from '@mui/material/OverridableComponent.js'
 import { formatEthereumAddress, Wallet } from '@masknet/web3-shared-evm'
 import { useBlockie } from '@masknet/web3-hooks-base'
-import { useI18N } from '../../../utils/index.js'
 
 const useStyle = makeStyles()((theme) => ({
     root: {
@@ -22,7 +21,7 @@ const useStyle = makeStyles()((theme) => ({
     },
 }))
 
-export interface WalletInListProps extends withClasses<never> {
+export interface WalletInListProps {
     wallet: Wallet
     selected?: boolean
     disabled?: boolean
@@ -40,8 +39,7 @@ export interface WalletInListProps extends withClasses<never> {
 }
 
 export function WalletInList(props: WalletInListProps) {
-    const { t } = useI18N()
-    const { classes } = useStylesExtends(useStyle(), props)
+    const { classes } = useStyle()
     const { wallet, selected = false, disabled = false, onClick, ListItemProps } = props
     const blockie = useBlockie(wallet.address)
 

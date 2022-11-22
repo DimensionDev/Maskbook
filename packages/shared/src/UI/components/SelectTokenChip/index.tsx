@@ -1,6 +1,6 @@
 import { noop } from 'lodash-es'
 import { Chip, ChipProps } from '@mui/material'
-import { LoadingBase, makeStyles, useStylesExtends } from '@masknet/theme'
+import { LoadingBase, makeStyles } from '@masknet/theme'
 import { ExpandMore as ExpandMoreIcon, Error as ErrorIcon } from '@mui/icons-material'
 import { useSharedI18N } from '../../../locales/index.js'
 import { TokenIcon } from '../TokenIcon/index.js'
@@ -43,7 +43,7 @@ export interface SelectTokenChipProps extends withClasses<'chip' | 'tokenIcon' |
 export function SelectTokenChip(props: SelectTokenChipProps) {
     const t = useSharedI18N()
     const { token, error, loading = false, readonly = false, ChipProps, chainId } = props
-    const { classes, cx } = useStylesExtends(useStyles(), props)
+    const { classes, cx } = useStyles(undefined, { props })
     if (loading)
         return (
             <Chip

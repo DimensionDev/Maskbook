@@ -1,21 +1,15 @@
-import type { InjectedDialogClassKey, InjectedDialogProps } from '../components/index.js'
+import type { InjectedDialogClassKey } from '../components/index.js'
 
 type ClassNameMap<ClassKey extends string = string> = {
     [P in ClassKey]: string
 }
 
-interface ComponentOverwriteConfig<
-    Props extends {
-        classes?: any
-    },
-    Classes extends string,
-> {
+interface ComponentOverwriteConfig<Classes extends string> {
     classes?: () => {
         classes: Partial<ClassNameMap<Classes>>
     }
-    props?: (props: Props) => Props
 }
 
 export interface SharedComponentOverwrite {
-    InjectedDialog?: ComponentOverwriteConfig<InjectedDialogProps, InjectedDialogClassKey>
+    InjectedDialog?: ComponentOverwriteConfig<InjectedDialogClassKey>
 }

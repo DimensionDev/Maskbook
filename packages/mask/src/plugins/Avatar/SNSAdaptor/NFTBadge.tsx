@@ -1,5 +1,5 @@
 import { openWindow } from '@masknet/shared-base-ui'
-import { makeStyles, useStylesExtends } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 import { Link } from '@mui/material'
 import { useI18N } from '../../../utils/index.js'
 import type { AvatarMetaDB, NFTInfo } from '../types.js'
@@ -25,7 +25,7 @@ interface NFTBadgeProps extends withClasses<'root' | 'text' | 'icon'> {
 
 export function NFTBadge(props: NFTBadgeProps) {
     const { avatar, nftInfo, size = 140, hasRainbow, borderSize } = props
-    const { classes } = useStylesExtends(useStyles(), props)
+    const { classes } = useStyles(undefined, { props })
     const { t } = useI18N()
 
     if (!nftInfo)

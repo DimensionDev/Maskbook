@@ -1,5 +1,5 @@
 import { Typography, Card, ButtonBase, ButtonBaseProps } from '@mui/material'
-import { makeStyles, useStylesExtends } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -30,8 +30,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface ProviderProps
-    extends withClasses<never | 'root' | 'dialog' | 'backdrop' | 'container' | 'paper' | 'content'> {
+export interface ProviderProps extends withClasses<'root' | 'dialog' | 'backdrop' | 'container' | 'paper' | 'content'> {
     logo: React.ReactNode
     name: React.ReactNode
     description?: React.ReactNode
@@ -40,7 +39,7 @@ export interface ProviderProps
 }
 
 export function Provider(props: ProviderProps) {
-    const { classes } = useStylesExtends(useStyles(), props)
+    const { classes } = useStyles(undefined, { props })
     return (
         <Card className={classes.root} elevation={0} style={{ opacity: props.ButtonBaseProps?.disabled ? 0.5 : 1 }}>
             <ButtonBase

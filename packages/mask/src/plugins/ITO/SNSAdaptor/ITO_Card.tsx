@@ -1,7 +1,7 @@
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { Alert, Box, Skeleton, Typography } from '@mui/material'
 import { useOpenShareTxDialog } from '@masknet/shared'
-import { makeStyles, useStylesExtends, ActionButton } from '@masknet/theme'
+import { makeStyles, ActionButton } from '@masknet/theme'
 import { useCallback, useEffect, useMemo } from 'react'
 import { usePostLink } from '../../../components/DataSource/usePostInfo.js'
 import { activatedSocialNetworkUI } from '../../../social-network/index.js'
@@ -48,7 +48,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface ITO_CardProps extends withClasses<never> {
+export interface ITO_CardProps {
     token?: FungibleToken<ChainId, SchemaType.ERC20>
     onUpdateAmount: (amount: string) => void
     onUpdateBalance: () => void
@@ -57,7 +57,7 @@ export interface ITO_CardProps extends withClasses<never> {
 export function ITO_Card(props: ITO_CardProps) {
     const { token, onUpdateAmount, onUpdateBalance } = props
     const { t } = useI18N()
-    const { classes } = useStylesExtends(useStyles(), props)
+    const { classes } = useStyles()
     const { value: packet, loading: packetLoading, error: packetError, retry: packetRetry } = useMaskITO_Packet()
 
     // #region claim

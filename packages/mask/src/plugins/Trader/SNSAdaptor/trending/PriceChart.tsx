@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { useWindowSize } from 'react-use'
 import { Stack, Typography, useTheme } from '@mui/material'
-import { LoadingBase, makeStyles, useStylesExtends } from '@masknet/theme'
+import { LoadingBase, makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../../utils/index.js'
 import type { Coin, Currency, Stat } from '../../types/index.js'
 import { useDimension, Dimension } from '../../../hooks/useDimension.js'
@@ -53,7 +53,7 @@ export interface PriceChartProps extends withClasses<'root'> {
 
 export function PriceChart(props: PriceChartProps) {
     const { t } = useI18N()
-    const { classes } = useStylesExtends(useStyles(props), props)
+    const { classes } = useStyles(props, { props })
     const colors = useTheme().palette.maskColor
     const rootRef = useRef<HTMLDivElement>(null)
     const svgRef = useRef<SVGSVGElement>(null)

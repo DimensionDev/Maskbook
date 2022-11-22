@@ -1,4 +1,4 @@
-import { LoadingBase, makeStyles, useStylesExtends } from '@masknet/theme'
+import { LoadingBase, makeStyles } from '@masknet/theme'
 import { CardContent, Stack, Typography } from '@mui/material'
 import { useI18N } from '../../../../utils/index.js'
 import { PluginHeader } from './PluginHeader.js'
@@ -22,7 +22,7 @@ export interface TrendingViewSkeletonProps extends withClasses<'content' | 'foot
 
 export function TrendingViewSkeleton(props: TrendingViewSkeletonProps) {
     const { TrendingCardProps } = props
-    const { classes } = useStylesExtends(useStyles(), props)
+    const { classes } = useStyles(undefined, { props })
     const { t } = useI18N()
 
     return (

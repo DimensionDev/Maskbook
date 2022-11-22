@@ -1,5 +1,5 @@
 import { Card } from '@mui/material'
-import { makeStyles, useStylesExtends } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -20,7 +20,7 @@ export interface TrendingCardProps extends withClasses<'root'> {
 
 export function TrendingCard(props: TrendingCardProps) {
     const { children } = props
-    const { classes } = useStylesExtends(useStyles(), props)
+    const { classes } = useStyles(undefined, { props })
     return (
         <Card className={classes.root} elevation={0} component="article">
             {children}

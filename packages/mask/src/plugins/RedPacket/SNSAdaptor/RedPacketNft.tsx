@@ -374,8 +374,6 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
                                     startIcon={<Icons.ConnectWallet size={18} />}
                                     classes={{
                                         connectWallet: classes.button,
-                                        unlockMetaMask: classes.button,
-                                        gasFeeButton: classes.button,
                                     }}
                                     ActionButtonProps={{ variant: 'roundedDark' }}>
                                     <ActionButton

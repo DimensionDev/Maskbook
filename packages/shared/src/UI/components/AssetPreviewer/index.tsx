@@ -1,5 +1,5 @@
 import { useTheme } from '@mui/material'
-import { makeStyles, useStylesExtends } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 import { Image } from '../Image/index.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -31,7 +31,7 @@ const ASSET_PLAYER_FALLBACK_LIGHT = new URL('../Image/mask-light.png', import.me
 export function AssetPreviewer(props: AssetPreviewerProps) {
     const { fallbackImage, url, icon } = props
 
-    const { classes } = useStylesExtends(useStyles(), props)
+    const { classes } = useStyles(undefined, { props })
     const theme = useTheme()
 
     return (

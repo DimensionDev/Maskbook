@@ -1,7 +1,7 @@
 import type { ValueRef } from '@dimensiondev/holoflows-kit'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { Chip } from '@mui/material'
-import { makeStyles, useStylesExtends } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 import type { ChipProps } from '@mui/material/Chip'
 import { Lock } from '@mui/icons-material'
 import { useEffect } from 'react'
@@ -23,7 +23,7 @@ const useStyle = makeStyles()({
 })
 export type PostCommentDecryptedProps = React.PropsWithChildren<{ ChipProps?: ChipProps }>
 export function PostCommentDecrypted(props: PostCommentDecryptedProps) {
-    const { classes } = useStylesExtends(useStyle(), props.ChipProps || {})
+    const { classes } = useStyle(undefined, { props: props.ChipProps || {} })
     return (
         <>
             <Chip
