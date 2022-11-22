@@ -30,7 +30,7 @@ export class TwitterAPI implements TwitterBaseAPI.Provider {
         const defaults = getDefaultUserSettings()
         try {
             if (fresh) await this.cleanUserSettings()
-            const userSettings = await timeout(getUserSettingsCached(), 2500)
+            const userSettings = await timeout(getUserSettingsCached(), 5000)
             return {
                 ...defaults,
                 ...userSettings,

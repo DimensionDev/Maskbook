@@ -14,8 +14,8 @@ const resolveThemeColor = createLookupTableResolver<TwitterBaseAPI.ThemeColor, s
     {
         [TwitterBaseAPI.ThemeColor.Blue]: 'rgb(29, 155, 240)',
         [TwitterBaseAPI.ThemeColor.Yellow]: 'rgb(255, 212, 0)',
-        [TwitterBaseAPI.ThemeColor.Purple]: 'rgb(249, 24, 128)',
-        [TwitterBaseAPI.ThemeColor.Magenta]: 'rgb(120, 86, 255)',
+        [TwitterBaseAPI.ThemeColor.Purple]: 'rgb(120, 86, 255)',
+        [TwitterBaseAPI.ThemeColor.Magenta]: 'rgb(249, 24, 128)',
         [TwitterBaseAPI.ThemeColor.Orange]: 'rgb(255, 122, 0)',
         [TwitterBaseAPI.ThemeColor.Green]: 'rgb(0, 186, 124)',
     },
