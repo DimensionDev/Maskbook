@@ -9,7 +9,7 @@ import { ConnectPersonaBoundary } from '../../../../components/shared/ConnectPer
 export function injectOpenNFTAvatarEditProfileButtonAtEditProfileDialog(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchProfileAvatarSelector())
     startWatch(watcher, signal)
-    createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(
+    createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { untilVisible: true, signal }).render(
         <OpenNFTAvatarEditProfileButtonInTwitter />,
     )
 }

@@ -29,7 +29,7 @@ export async function injectAvatar(signal: AbortSignal) {
                     ? Plugin.SNSAdaptor.AvatarRealmSourceType.Suggestion
                     : Plugin.SNSAdaptor.AvatarRealmSourceType.Post
 
-                const root = createReactRootShadowed(proxy.afterShadow, { signal })
+                const root = createReactRootShadowed(proxy.afterShadow, { untilVisible: true, signal })
                 root.render(
                     <div
                         style={{
