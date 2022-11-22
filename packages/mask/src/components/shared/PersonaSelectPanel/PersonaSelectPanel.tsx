@@ -18,7 +18,7 @@ import { useNextIDVerify } from '../../DataSource/useNextIDVerify.js'
 import { MaskMessages, useI18N } from '../../../utils/index.js'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { LoadingBase, makeStyles, useCustomSnackbar, useStylesExtends } from '@masknet/theme'
+import { LoadingBase, makeStyles, useCustomSnackbar } from '@masknet/theme'
 import type { PersonaNextIDMixture } from './PersonaItemUI.js'
 import { PersonaItemUI } from './PersonaItemUI.js'
 import { useCurrentPersona } from '../../DataSource/usePersonaConnectStatus.js'
@@ -47,7 +47,7 @@ const useStyles = makeStyles()((theme) => {
 
 export type PositionOption = 'center' | 'top-right'
 
-interface PersonaSelectPanelProps extends withClasses<never | 'checked' | 'unchecked' | 'button'> {
+interface PersonaSelectPanelProps extends withClasses<'checked' | 'unchecked' | 'button'> {
     finishTarget?: string
     enableVerify?: boolean
     onClose?: () => void
@@ -62,7 +62,7 @@ export const PersonaSelectPanel = memo<PersonaSelectPanelProps>((props) => {
     const currentPersona = useCurrentPersona()
     const currentPersonaIdentifier = currentPersona?.identifier
 
-    const { classes } = useStylesExtends(useStyles(), props)
+    const { classes } = useStyles(undefined, { props })
 
     const [selectedPersona, setSelectedPersona] = useState<PersonaNextIDMixture>()
 
@@ -242,7 +242,7 @@ export const PersonaSelectPanel = memo<PersonaSelectPanelProps>((props) => {
     )
 })
 
-interface ActionContentProps extends withClasses<never | 'button'> {
+interface ActionContentProps extends withClasses<'button'> {
     buttonText?: string
     hint?: string
     onClick(): Promise<void>
@@ -250,7 +250,7 @@ interface ActionContentProps extends withClasses<never | 'button'> {
 
 function ActionContent(props: ActionContentProps) {
     const { buttonText, hint, onClick } = props
-    const { classes } = useStylesExtends(useStyles(), props)
+    const { classes } = useStyles(undefined, { props })
     if (!buttonText) return null
     return (
         <Stack gap={1.5} mt={1.5}>

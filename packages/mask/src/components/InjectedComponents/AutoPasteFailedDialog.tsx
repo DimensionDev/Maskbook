@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useCopyToClipboard } from 'react-use'
 import { useI18N, useMatchXS, useQueryNavigatorPermission } from '../../utils/index.js'
 import formatDateTime from 'date-fns/format'
-import { makeStyles, useStylesExtends, useCustomSnackbar } from '@masknet/theme'
+import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import {
     DialogActions,
     DialogContent,
@@ -22,7 +22,7 @@ import { Close as CloseIcon, Download, OpenInBrowser } from '@mui/icons-material
 import { saveFileFromUrl } from '../../../shared/index.js'
 import { Image } from '@masknet/shared'
 
-export interface AutoPasteFailedDialogProps extends withClasses<never> {
+export interface AutoPasteFailedDialogProps {
     onClose: () => void
     data: AutoPasteFailedEvent
 }
@@ -35,7 +35,7 @@ const useStyles = makeStyles()((theme) => ({
 export function AutoPasteFailedDialog(props: AutoPasteFailedDialogProps) {
     const { onClose, data } = props
     const { t } = useI18N()
-    const { classes } = useStylesExtends(useStyles(), props)
+    const { classes } = useStyles()
     const url = data.image ? URL.createObjectURL(data.image) : undefined
     const { showSnackbar } = useCustomSnackbar()
     const [, copy] = useCopyToClipboard()

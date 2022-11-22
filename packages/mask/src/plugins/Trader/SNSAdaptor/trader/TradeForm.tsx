@@ -11,7 +11,7 @@ import {
     EthereumERC20TokenApprovedBoundary,
     ChainBoundary,
 } from '@masknet/shared'
-import { makeStyles, MaskColorVar, useStylesExtends, ActionButton } from '@masknet/theme'
+import { makeStyles, MaskColorVar, ActionButton } from '@masknet/theme'
 import { InputTokenPanel } from './InputTokenPanel.js'
 import { alpha, Box, chipClasses, Collapse, IconButton, lighten, Typography } from '@mui/material'
 import { ChainId, formatWeiToEther, GasOptionConfig, SchemaType, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
@@ -237,8 +237,7 @@ export const TradeForm = memo<AllTradeFormProps>(
         const isDashboard = isDashboardPage()
         const isPopup = isPopupPage()
         const { t } = useI18N()
-        const styles = useStyles({ isDashboard, isPopup })
-        const { classes, cx } = useStylesExtends(styles, props)
+        const { classes, cx } = useStyles({ isDashboard, isPopup }, { props })
         const { chainId } = useChainContext()
         const { pluginID } = useNetworkContext()
         const { Others } = useWeb3State()
@@ -452,7 +451,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                                 onDelete: () => onTokenChipClick(TokenPanelType.Input),
                                 deleteIcon: (
                                     <Icons.Drop
-                                        className={styles.cx(classes.dropIcon, !inputToken ? classes.whiteDrop : null)}
+                                        className={cx(classes.dropIcon, !inputToken ? classes.whiteDrop : null)}
                                     />
                                 ),
                             },
@@ -479,10 +478,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                                     onDelete: () => onTokenChipClick(TokenPanelType.Output),
                                     deleteIcon: (
                                         <Icons.Drop
-                                            className={styles.cx(
-                                                classes.dropIcon,
-                                                !outputToken ? classes.whiteDrop : null,
-                                            )}
+                                            className={cx(classes.dropIcon, !outputToken ? classes.whiteDrop : null)}
                                         />
                                     ),
                                 }}

@@ -240,7 +240,7 @@ export type OrderedERC721Token = NonFungibleToken<ChainId, SchemaType.ERC721> & 
     index: number
 }
 
-export interface SelectNftTokenDialogProps extends withClasses<never> {
+export interface SelectNftTokenDialogProps {
     loadingOwnerList: boolean
     onClose: () => void
     contract: NonFungibleTokenContract<ChainId, SchemaType.ERC721> | null | undefined

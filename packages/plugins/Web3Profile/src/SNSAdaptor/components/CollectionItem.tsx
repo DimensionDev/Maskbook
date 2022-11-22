@@ -1,5 +1,5 @@
 import { Icons } from '@masknet/icons'
-import { makeStyles, useStylesExtends } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import { useI18N } from '../../locales/index.js'
 
@@ -21,7 +21,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-interface CollectionItemProps extends withClasses<never | 'root' | 'list' | 'collectionWrap'> {
+interface CollectionItemProps extends withClasses<'root' | 'list' | 'collectionWrap'> {
     title: string
     walletsNum: number
     collectionNum: number
@@ -29,7 +29,7 @@ interface CollectionItemProps extends withClasses<never | 'root' | 'list' | 'col
 }
 export function CollectionItem(props: CollectionItemProps) {
     const { title, walletsNum, collectionNum, onClick } = props
-    const { classes } = useStylesExtends(useStyles(), props)
+    const { classes } = useStyles(undefined, { props })
     const t = useI18N()
 
     return (

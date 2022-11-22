@@ -9,7 +9,7 @@ import {
     WalletConnectedBoundary,
     EthereumERC20TokenApprovedBoundary,
 } from '@masknet/shared'
-import { makeStyles, useStylesExtends, ActionButton } from '@masknet/theme'
+import { makeStyles, ActionButton } from '@masknet/theme'
 import { leftShift, rightShift, ZERO, FungibleToken, currySameAddress, formatBalance } from '@masknet/web3-shared-base'
 import {
     ChainId,
@@ -93,7 +93,7 @@ export function SwapDialog(props: SwapDialogProps) {
 
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { Token } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
-    const { classes } = useStylesExtends(useStyles(), props)
+    const { classes } = useStyles(undefined, { props })
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
     const [ratio, setRatio] = useState<BigNumber>(
         new BigNumber(payload.exchange_amounts[0 * 2]).dividedBy(payload.exchange_amounts[0 * 2 + 1]),

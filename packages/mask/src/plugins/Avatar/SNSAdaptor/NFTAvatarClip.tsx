@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import type { Keyframes } from '@emotion/serialize'
 import { v4 as uuid } from 'uuid'
-import { keyframes, makeStyles, useStylesExtends } from '@masknet/theme'
+import { keyframes, makeStyles } from '@masknet/theme'
 import { useLastRecognizedIdentity } from '../../../components/DataSource/useActivatedUI.js'
 import { useNFT } from '../hooks/index.js'
 import { useNFTContainerAtTwitter } from '../hooks/useNFTContainerAtTwitter.js'
@@ -84,7 +84,7 @@ interface NamePathProps extends withClasses<'root'> {
     id: string
 }
 function NamePath(props: NamePathProps) {
-    const { classes } = useStylesExtends(useStyles(), props)
+    const { classes } = useStyles(undefined, { props })
     return (
         <path
             className={classes.root}
@@ -132,7 +132,7 @@ interface TextProps extends withClasses<'root'> {
 
 function Text(props: TextProps) {
     const { xlinkHref, fontSize = 12, text, fill, dominantBaseline = 'mathematical' } = props
-    const { classes } = useStylesExtends(useStyles(), props)
+    const { classes } = useStyles(undefined, { props })
     return (
         <text x="0%" textAnchor="middle" fill={fill} fontFamily="sans-serif" className={classes.root}>
             <textPath xlinkHref={xlinkHref} startOffset="50%" rotate="auto" dominantBaseline={dominantBaseline}>
@@ -147,7 +147,7 @@ function Text(props: TextProps) {
 export function NFTAvatarClip(props: NFTAvatarClipProps) {
     const { width, height, viewBoxHeight = ViewBoxHeight, viewBoxWidth = ViewBoxWidth, screenName } = props
     const id = useMemo(() => props.id ?? uuid(), [props.id])
-    const { classes, cx } = useStylesExtends(useStyles(), props)
+    const { classes, cx } = useStyles(undefined, { props })
     const { loading, value: avatarMetadata } = useNFTContainerAtTwitter(screenName)
     const { account } = useChainContext()
     const { value = { amount: '0', symbol: 'ETH', name: '', slug: '' }, loading: loadingNFT } = useNFT(
@@ -233,7 +233,7 @@ export function NFTAvatarClip(props: NFTAvatarClipProps) {
 export function NFTAvatarMiniClip(props: NFTAvatarClipProps) {
     const { width, height, viewBoxHeight = ViewBoxHeight, viewBoxWidth = ViewBoxWidth, screenName, className } = props
     const id = useMemo(() => props.id ?? uuid(), [props.id])
-    const { classes, cx } = useStylesExtends(useStyles(), props)
+    const { classes, cx } = useStyles(undefined, { props })
     const identity = useLastRecognizedIdentity()
     const { loading, value: avatarMetadata } = useNFTContainerAtTwitter(screenName ?? identity.identifier?.userId)
 

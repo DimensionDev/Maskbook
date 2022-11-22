@@ -9,7 +9,7 @@ import {
     EthereumERC20TokenApprovedBoundary,
 } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { makeStyles, useStylesExtends, ActionButton } from '@masknet/theme'
+import { makeStyles, ActionButton } from '@masknet/theme'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { formatBalance, FungibleToken, rightShift } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType, useGitcoinConstants } from '@masknet/web3-shared-evm'
@@ -46,12 +46,12 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface DonateDialogProps extends withClasses<never> {}
+export interface DonateDialogProps {}
 
 export function DonateDialog(props: DonateDialogProps) {
     const { t: tr } = useBaseI18N()
     const t = useI18N()
-    const { classes } = useStylesExtends(useStyles(), props)
+    const { classes } = useStyles()
     const [title, setTitle] = useState('')
     const [address, setAddress] = useState('')
     const [postLink, setPostLink] = useState<string | URL>('')

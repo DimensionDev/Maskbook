@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 import { IconButton, MenuItem } from '@mui/material'
-import { makeStyles, useStylesExtends } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 import { MoreHoriz as MoreHorizIcon } from '@mui/icons-material'
 import { useI18N } from '../../../utils/index.js'
 import { useMenu } from '@masknet/shared'
@@ -29,7 +29,7 @@ export function ActionsBarNFT(props: ActionsBarNFT_Props) {
     const { wallet, asset } = props
 
     const { t } = useI18N()
-    const { classes } = useStylesExtends(useStyles(), props)
+    const { classes } = useStyles(undefined, { props })
 
     const chainIdValid = useChainIdValid()
 
