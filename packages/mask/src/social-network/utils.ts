@@ -2,7 +2,7 @@ import { ValueRef } from '@dimensiondev/holoflows-kit'
 import { ObservableWeakMap } from '@masknet/shared-base'
 import { isEqual } from 'lodash-es'
 import type { SocialNetworkUI } from '@masknet/types'
-import { ThemeMode, ThemeSize } from '@masknet/web3-shared-base'
+import { ThemeMode, FontSize } from '@masknet/web3-shared-base'
 
 export const stateCreator: {
     readonly [key in keyof SocialNetworkUI.AutonomousState]-?: () => SocialNetworkUI.AutonomousState[key]
@@ -17,7 +17,7 @@ export const creator = {
     EmptyThemeSettingsProviderState: (): SocialNetworkUI.CollectingCapabilities.ThemeSettingsProvider['recognized'] =>
         new ValueRef(
             {
-                size: ThemeSize.NORMAL,
+                size: FontSize.NORMAL,
                 mode: ThemeMode.LIGHT,
                 color: 'rgb(37, 99, 235)',
             },

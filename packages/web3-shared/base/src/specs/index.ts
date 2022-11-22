@@ -135,7 +135,7 @@ export enum StorageProviderType {
     KV = 'kv',
 }
 
-export enum ThemeSize {
+export enum FontSize {
     X_SMALL = 'x_small',
     SMALL = 'small',
     NORMAL = 'normal',
@@ -150,7 +150,7 @@ export enum ThemeMode {
 }
 
 export interface ThemeSettings {
-    size: ThemeSize
+    size: FontSize
     color: string
     mode: ThemeMode
 }
