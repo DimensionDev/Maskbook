@@ -316,6 +316,7 @@ export function TrendingView(props: TrendingViewProps) {
             isPreciseSearch={!!searchedContractAddress}
             currency={currency}
             trending={trending}
+            isPopper={isPopper}
             dataProvider={dataProvider}
             showDataProviderIcon={tabIndex < 3}
             dataProviders={dataProviders}

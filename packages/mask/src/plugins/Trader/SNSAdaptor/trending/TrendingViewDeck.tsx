@@ -27,7 +27,6 @@ import {
     Typography,
     useTheme,
 } from '@mui/material'
-import { Box } from '@mui/system'
 import stringify from 'json-stable-stringify'
 import { first, last } from 'lodash-es'
 import { useCallback, useMemo, useRef, useState } from 'react'
@@ -43,7 +42,9 @@ import { PluginHeader } from './PluginHeader.js'
 import { PriceChanged } from './PriceChanged.js'
 import { TrendingCard, TrendingCardProps } from './TrendingCard.js'
 
-const useStyles = makeStyles()((theme) => {
+const useStyles = makeStyles<{
+    isPopper: boolean
+}>()((theme, props) => {
     return {
         content: {
             paddingTop: 0,
@@ -59,7 +60,7 @@ const useStyles = makeStyles()((theme) => {
                 'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%), linear-gradient(90deg, rgba(28, 104, 243, 0.2) 0%, rgba(69, 163, 251, 0.2) 100%), #FFFFFF;',
         },
         headline: {
-            marginTop: 30,
+            marginTop: props.isPopper ? 0 : 30,
             alignItems: 'center',
             flexDirection: 'row',
             justifyContent: 'space-between',
@@ -132,6 +133,7 @@ export interface TrendingViewDeckProps extends withClasses<'header' | 'body' | '
     children?: React.ReactNode
     isPreciseSearch?: boolean
     showDataProviderIcon?: boolean
+    isPopper?: boolean
     TrendingCardProps?: Partial<TrendingCardProps>
     dataProviders: DataProvider[]
 }
@@ -146,6 +148,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
         children,
         showDataProviderIcon = false,
         TrendingCardProps,
+        isPopper = true,
         dataProviders = EMPTY_LIST,
         isPreciseSearch = false,
     } = props
@@ -153,7 +156,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
 
     const { t } = useI18N()
     const theme = useTheme()
-    const { classes } = useStylesExtends(useStyles(), props)
+    const { classes } = useStylesExtends(useStyles({ isPopper }), props)
 
     const isNFT = coin.type === TokenType.NonFungible
 
@@ -206,33 +209,28 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
     const titleRef = useRef<HTMLElement>(null)
     const coinOptions = useMemo(() => coins.map((coin) => ({ coin, value: coin.id })), [coins])
     const [coinMenuOpen, setCoinMenuOpen] = useState(false)
+    const coinAddress = coin.address || coin.contract_address
 
     return (
         <TrendingCard {...TrendingCardProps}>
             <ThemeProvider theme={MaskLightTheme}>
                 <Stack className={classes.cardHeader}>
-                    <PluginHeader>
-                        {showDataProviderIcon ? (
-                            <SourceSwitcher
-                                sourceType={dataProvider as unknown as SourceType}
-                                sourceTypes={dataProviders as unknown as SourceType[]}
-                                onSourceTypeChange={onDataProviderChange}
-                            />
-                        ) : null}
-                    </PluginHeader>
+                    {isPopper ? null : (
+                        <PluginHeader>
+                            {showDataProviderIcon ? (
+                                <SourceSwitcher
+                                    sourceType={dataProvider as unknown as SourceType}
+                                    sourceTypes={dataProviders as unknown as SourceType[]}
+                                    onSourceTypeChange={onDataProviderChange}
+                                />
+                            ) : null}
+                        </PluginHeader>
+                    )}
                     <Stack className={classes.headline}>
                         <Stack gap={2} flexGrow={1}>
-                            <Stack flexDirection="row">
-                                {typeof coin.market_cap_rank === 'number' ? (
-                                    <Typography component="span" className={classes.rank} title="Index Cap Rank">
-                                        {t('plugin_trader_rank', { rank: coin.market_cap_rank })}
-                                    </Typography>
-                                ) : null}
-                                <Box flex={1} />
-                            </Stack>
                             <Stack>
                                 <Stack flexDirection="row" alignItems="center" gap={0.5} ref={titleRef}>
-                                    {coin.address ? (
+                                    {coinAddress ? (
                                         <Linking href={first(coin.home_urls)}>
                                             <Avatar className={classes.avatar} src={coin.image_url} alt={coin.symbol}>
                                                 <CoinIcon
@@ -240,7 +238,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                                     name={coin.name}
                                                     label=""
                                                     symbol={coin.symbol}
-                                                    address={coin.address}
+                                                    address={coinAddress}
                                                     logoURL={coin.image_url}
                                                     size={20}
                                                 />
@@ -260,6 +258,11 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                             </Typography>
                                         ) : null}
                                     </Typography>
+                                    {typeof coin.market_cap_rank === 'number' ? (
+                                        <Typography component="span" className={classes.rank} title="Index Cap Rank">
+                                            {t('plugin_trader_rank', { rank: coin.market_cap_rank })}
+                                        </Typography>
+                                    ) : null}
                                     {coins.length > 1 && !isPreciseSearch ? (
                                         <>
                                             <IconButton
