@@ -13,6 +13,7 @@ export function createPostActionsInjector() {
         if (postInfo.actionsElement) {
             const root = createReactRootShadowed(postInfo.actionsElement.afterShadow, {
                 key: 'post-actions',
+                untilVisible: true,
                 signal,
             })
             if (postInfo.actionsElement?.realCurrent?.parentNode) {

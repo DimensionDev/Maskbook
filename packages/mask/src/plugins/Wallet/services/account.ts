@@ -1,34 +1,27 @@
 import { first } from 'lodash-es'
-import { EthereumAddress } from 'wallet.ts'
-import { ChainId, chainResolver, networkResolver, NetworkType } from '@masknet/web3-shared-evm'
+import { defer, DeferTuple } from '@masknet/kit'
+import type { EnhanceableSite, ExtensionSite } from '@masknet/shared-base'
+import { ChainId, isValidAddress } from '@masknet/web3-shared-evm'
 import {
     currentMaskWalletAccountSettings,
     currentMaskWalletChainIdSettings,
-    currentMaskWalletNetworkSettings,
 } from '../../../../shared/legacy-settings/wallet-settings.js'
-import { Flags } from '../../../../shared/index.js'
 import { WalletRPC } from '../messages.js'
-import { defer, DeferTuple } from '@masknet/kit'
-import type { EnhanceableSite, ExtensionSite } from '@masknet/shared-base'
 
 export async function setDefaultMaskAccount() {
     if (currentMaskWalletAccountSettings.value) return
     const wallets = await WalletRPC.getWallets()
     const address = first(wallets)?.address
-    if (address)
-        await updateMaskAccount({
-            account: address,
-        })
+    if (!address) return
+    await updateMaskAccount({
+        account: address,
+    })
 }
 
-export async function updateMaskAccount(options: { account?: string; chainId?: ChainId; networkType?: NetworkType }) {
-    if (options.chainId && !options.networkType) options.networkType = chainResolver.networkType(options.chainId)
-    if (!options.chainId && options.networkType) options.chainId = networkResolver.networkChainId(options.networkType)
-
-    const { account, chainId, networkType } = options
+export async function updateMaskAccount(options: { account?: string; chainId?: ChainId }) {
+    const { account, chainId } = options
     if (chainId) currentMaskWalletChainIdSettings.value = chainId
-    if (networkType) currentMaskWalletNetworkSettings.value = networkType
-    if (account && EthereumAddress.isValid(account)) {
+    if (isValidAddress(account)) {
         currentMaskWalletAccountSettings.value = account
         await resolveMaskAccount([account])
     }
@@ -42,12 +35,6 @@ export async function recordConnectedSites(site: EnhanceableSite | ExtensionSite
 
 export async function getConnectedStatus(site: EnhanceableSite | ExtensionSite) {
     return recordSites.get(site)
-}
-
-export async function resetMaskAccount() {
-    currentMaskWalletChainIdSettings.value = ChainId.Mainnet
-    currentMaskWalletNetworkSettings.value = NetworkType.Ethereum
-    currentMaskWalletAccountSettings.value = ''
 }
 
 // #region select wallet with popups
@@ -70,20 +57,3 @@ export async function rejectMaskAccount() {
     deferred = null
 }
 // #endregion
-
-export async function getSupportedNetworks() {
-    return [
-        NetworkType.Ethereum,
-        Flags.bsc_enabled ? NetworkType.Binance : undefined,
-        Flags.polygon_enabled ? NetworkType.Polygon : undefined,
-        Flags.arbitrum_enabled ? NetworkType.Arbitrum : undefined,
-        Flags.xdai_enabled ? NetworkType.xDai : undefined,
-        Flags.optimism_enabled ? NetworkType.Optimism : undefined,
-        Flags.celo_enabled ? NetworkType.Celo : undefined,
-        Flags.fantom_enabled ? NetworkType.Fantom : undefined,
-        Flags.avalanche_enabled ? NetworkType.Avalanche : undefined,
-        Flags.aurora_enabled ? NetworkType.Aurora : undefined,
-        Flags.astar_enabled ? NetworkType.Astar : undefined,
-        Flags.harmony_enabled ? NetworkType.Harmony : undefined,
-    ].filter(Boolean) as NetworkType[]
-}

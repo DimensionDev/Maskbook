@@ -44,7 +44,7 @@ import { MirrorAPI } from './mirror/index.js'
 import { MindsAPI } from './minds/index.js'
 import { FuseTrendingAPI } from './fuse/index.js'
 import { CryptoScamDBAPI } from './cryptoscam-db/index.js'
-import { SmartPayAPI } from './smart-pay/index.js'
+import { SmartPayBundlerAPI } from './smart-pay/index.js'
 import { NomicsAPI } from './Nomics/index.js'
 
 // #region TODO: to be removed
@@ -123,4 +123,4 @@ export const ZerionGas = new ZerionGasAPI()
 export const FuseTrending = new FuseTrendingAPI()
 
 // Smart Pay Bundler
-export const SmartPay = new SmartPayAPI()
+export const SmartPayBundler = new SmartPayBundlerAPI()

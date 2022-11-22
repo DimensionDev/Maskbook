@@ -7,7 +7,7 @@ import { SnapshotContext } from '../context.js'
 
 export function ProposalTab() {
     const identifier = useContext(SnapshotContext)
-    const { payload: proposal } = useProposal(identifier.id)
+    const proposal = useProposal(identifier.id)
     return (
         <SnapshotTab>
             <ReadMeCard />

@@ -20,6 +20,7 @@ export function injectPostReplacer(config: injectPostReplacerConfig = {}) {
         signal.addEventListener('abort', unzipPostF)
         createReactRootShadowed(current.rootElement.afterShadow, {
             key: 'post-replacer',
+            untilVisible: true,
             signal,
         }).render(
             <PostInfoProvider post={current}>

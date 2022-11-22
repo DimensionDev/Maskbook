@@ -10,7 +10,6 @@ import {
     NextIDPlatform,
     createLookupTableResolver,
     PluginID,
-    joinKeys,
     BindingProof,
 } from '@masknet/shared-base'
 import { KVStorage } from '@masknet/shared'
@@ -145,7 +144,7 @@ export class IdentityService extends IdentityServiceState<ChainId> {
 
         if (!address) return
 
-        return this.createSocialAddress(SocialAddressType.KV, address)
+        return this.createSocialAddress(SocialAddressType.Mask, address)
     }
 
     /** Read a social address from avatar NextID storage. */
@@ -161,7 +160,7 @@ export class IdentityService extends IdentityServiceState<ChainId> {
         )
 
         if (!response.ok || !response.val.ownerAddress) return
-        return this.createSocialAddress(SocialAddressType.NEXT_ID, response.val.ownerAddress)
+        return this.createSocialAddress(SocialAddressType.Mask, response.val.ownerAddress)
     }
 
     /** Read a social address from NextID. */
@@ -286,7 +285,6 @@ export class IdentityService extends IdentityServiceState<ChainId> {
             this.getSocialAddressFromBio(identity),
             this.getSocialAddressFromENS(identity),
             this.getSocialAddressFromSpaceID(identity),
-            this.getSocialAddressFromAvatarKV(identity),
             this.getSocialAddressFromAvatarNextID(identity),
             this.getSocialAddressFromRSS3(identity),
             this.getSocialAddressFromTwitterBlue(identity),
@@ -296,6 +294,6 @@ export class IdentityService extends IdentityServiceState<ChainId> {
         const identities = allSettled
             .flatMap((x) => (x.status === 'fulfilled' ? x.value : []))
             .filter(Boolean) as Array<SocialAddress<ChainId>>
-        return uniqBy(identities, (x) => joinKeys(x.type, x.label, x.address.toLowerCase()))
+        return uniqBy(identities, (x) => [x.type, x.label, x.address.toLowerCase()].join('_'))
     }
 }

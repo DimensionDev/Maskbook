@@ -31,6 +31,7 @@ export function injectPostInspectorDefault<T extends string>(
         )
         const root = createReactRootShadowed(injectionPoint?.(current) ?? current.rootElement.afterShadow, {
             key: 'post-inspector',
+            untilVisible: true,
             signal,
         })
         root.render(jsx)

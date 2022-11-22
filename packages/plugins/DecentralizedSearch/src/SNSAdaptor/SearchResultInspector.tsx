@@ -27,7 +27,6 @@ const useStyles = makeStyles()((theme) => ({
     },
     content: {
         position: 'relative',
-        background: theme.palette.common.white,
         maxHeight: 478,
         overflow: 'auto',
     },

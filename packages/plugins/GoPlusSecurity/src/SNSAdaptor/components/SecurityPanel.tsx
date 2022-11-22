@@ -19,7 +19,7 @@ interface TokenCardProps {
     tokenSecurity: SecurityAPI.TokenSecurityType
     tokenInfo?: FungibleToken<ChainId, SchemaType>
     tokenPrice?: number
-    tokenMarketCap?: TrendingAPI.TokenInfo
+    tokenMarketCap?: TrendingAPI.MarketInfo
 }
 
 const useStyles = makeStyles()((theme) => ({
@@ -63,7 +63,8 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity, tokenInfo, t
     const t = useI18N()
     const theme = useTheme()
 
-    const price = tokenPrice ?? tokenMarketCap?.price
+    const price = tokenMarketCap?.price ?? tokenPrice
+
     const [isCollapse, setCollapse] = useState(false)
     const {
         risk_item_quantity: riskyFactors = 0,

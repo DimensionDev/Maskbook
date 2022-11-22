@@ -5,6 +5,7 @@ import {
     useNonFungibleAssetsByCollection,
     Web3ContextProvider,
 } from '@masknet/web3-hooks-base'
+import type { AsyncState } from 'react-use/lib/useAsyncFn.js'
 import { DataProvider } from '@masknet/public-api'
 import { NFTList } from '@masknet/shared'
 import { EMPTY_LIST, PluginID, NetworkPluginID, getSiteType } from '@masknet/shared-base'
@@ -106,12 +107,14 @@ const useStyles = makeStyles<{
 
 export interface TrendingViewProps {
     name: string
+    id?: string
     tagType: TagType
     dataProviders: DataProvider[]
     searchedContractAddress?: string
     expectedChainId?: ChainId
     onUpdate?: () => void
     isPopper?: boolean
+    asset?: AsyncState<{ currency?: TrendingAPI.Currency; trending?: TrendingAPI.Trending | null }>
 }
 
 enum ContentTabs {
@@ -123,7 +126,7 @@ enum ContentTabs {
 }
 
 export function TrendingView(props: TrendingViewProps) {
-    const { name, tagType, dataProviders, isPopper = true, searchedContractAddress, expectedChainId } = props
+    const { name, tagType, dataProviders, isPopper = true, searchedContractAddress, expectedChainId, asset, id } = props
 
     const { t } = useI18N()
     const { classes } = useStyles({ isPopper })
@@ -147,20 +150,20 @@ export function TrendingView(props: TrendingViewProps) {
     // #endregion
 
     // #region merge trending
-    const coinId = usePreferredCoinId(name, dataProvider)
-    const trendingById = useTrendingById(coinId, dataProvider, expectedChainId, searchedContractAddress)
+    const coinId = usePreferredCoinId(name, dataProvider, id)
+    const trendingById = useTrendingById(asset ? '' : coinId, dataProvider, expectedChainId, searchedContractAddress)
     const trendingByKeyword = useTrendingByKeyword(
         tagType,
-        coinId ? '' : name,
+        coinId || asset ? '' : name,
         dataProvider,
         expectedChainId,
         searchedContractAddress,
     )
     const {
-        value: { currency, trending },
+        value: { currency, trending } = {},
         error: trendingError,
         loading: loadingTrending,
-    } = coinId ? trendingById : trendingByKeyword
+    } = asset ?? (coinId ? trendingById : trendingByKeyword)
     // #endregion
 
     const coinSymbol = (trending?.coin.symbol || '').toLowerCase()
@@ -256,7 +259,7 @@ export function TrendingView(props: TrendingViewProps) {
         done,
         next,
         error: loadError,
-    } = useNonFungibleAssetsByCollection(collectionAddress, NetworkPluginID.PLUGIN_EVM)
+    } = useNonFungibleAssetsByCollection(collectionAddress, NetworkPluginID.PLUGIN_EVM, { chainId: expectedChainId })
 
     // #region no available providers
     if (dataProviders.length === 0) return null

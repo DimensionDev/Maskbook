@@ -1,12 +1,10 @@
-import { makeStyles } from '@masknet/theme'
-import { isSameAddress } from '@masknet/web3-shared-base'
-import { NetworkPluginID } from '@masknet/shared-base'
-import { SelectedIcon } from '../assets/SelectedIcon.js'
-import { Box, Tooltip, useTheme } from '@mui/material'
+import { Icons } from '@masknet/icons'
 import { Image } from '@masknet/shared'
+import { makeStyles } from '@masknet/theme'
 import { useWeb3State } from '@masknet/web3-hooks-base'
+import { Box, Tooltip } from '@mui/material'
+import { memo } from 'react'
 import type { AllChainsNonFungibleToken } from '../types.js'
-import { mask_avatar_dark, mask_avatar_light } from '../constants.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -18,8 +16,6 @@ const useStyles = makeStyles()((theme) => ({
         position: 'absolute',
         top: 5,
         right: 5,
-        width: 20,
-        height: 20,
         color: theme.palette.maskColor.primary,
     },
     image: {
@@ -58,26 +54,14 @@ const useStyles = makeStyles()((theme) => ({
 
 interface NFTImageProps {
     className?: string
-    pluginID: NetworkPluginID
-    showBadge?: boolean
     token: AllChainsNonFungibleToken
-    selectedToken?: AllChainsNonFungibleToken
-    onClick: (token: AllChainsNonFungibleToken) => void
+    selected?: boolean
+    onSelect: (token: AllChainsNonFungibleToken) => void
 }
 
-function isSameNFT(pluginID: NetworkPluginID, a: AllChainsNonFungibleToken, b?: AllChainsNonFungibleToken) {
-    return pluginID !== NetworkPluginID.PLUGIN_SOLANA
-        ? isSameAddress(a.contract?.address, b?.contract?.address) &&
-              a.contract?.chainId &&
-              a.contract?.chainId === b?.contract?.chainId &&
-              a.tokenId === b?.tokenId
-        : a.tokenId === b?.tokenId && a.id === b.id
-}
-
-export function NFTImage(props: NFTImageProps) {
-    const { className, token, onClick, selectedToken, showBadge = false, pluginID } = props
+export const NFTImage = memo((props: NFTImageProps) => {
+    const { className, token, onSelect, selected } = props
     const { classes, cx } = useStyles()
-    const theme = useTheme()
     const { Others } = useWeb3State()
     const name = token.collection?.name || token.contract?.name
     const uiTokenId = Others?.formatTokenId(token.tokenId, 4) ?? `#${token.tokenId}`
@@ -93,19 +77,17 @@ export function NFTImage(props: NFTImageProps) {
             PopperProps={{ disablePortal: true, popperOptions: { strategy: 'absolute' } }}>
             <Box className={cx(classes.root, className)}>
                 <Image
-                    fallback={theme.palette.mode === 'dark' ? mask_avatar_dark : mask_avatar_light}
+                    fallback={<Icons.MaskAvatar size={100} />}
                     classes={{
                         imageLoading: classes.imageLoading,
                         container: classes.imageLoadingBox,
                     }}
-                    onClick={() => onClick(token)}
+                    onClick={() => onSelect(token)}
                     src={token.metadata?.imageURL ?? ''}
-                    className={cx(classes.image, isSameNFT(pluginID, token, selectedToken) ? classes.selected : '')}
+                    className={cx(classes.image, selected ? classes.selected : '')}
                 />
-                {showBadge && isSameNFT(pluginID, token, selectedToken) ? (
-                    <SelectedIcon className={classes.icon} />
-                ) : null}
+                {selected ? <Icons.CheckCircle className={classes.icon} size={24} /> : null}
             </Box>
         </Tooltip>
     )
-}
+})

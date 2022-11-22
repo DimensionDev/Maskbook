@@ -32,7 +32,7 @@ export function useV3BestTradeExactIn(
 ): AsyncStateRetry<Trade<Currency, Currency, TradeType.EXACT_INPUT> | null> {
     const { chainId } = useChainContext()
     const { pluginID } = useNetworkContext()
-    const quoterContract = useQuoterContract(pluginID !== NetworkPluginID.PLUGIN_EVM ? (chainId as ChainId) : undefined)
+    const quoterContract = useQuoterContract(pluginID === NetworkPluginID.PLUGIN_EVM ? (chainId as ChainId) : undefined)
     const { routes, loading: routesLoading } = useAllV3Routes(amountIn?.currency, currencyOut)
     const quoteExactInInputs = useMemo(() => {
         try {
@@ -55,7 +55,7 @@ export function useV3BestTradeExactIn(
         Array.from<'quoteExactInput'>({ length: quoteExactInInputs.length }).fill('quoteExactInput'),
         quoteExactInInputs,
         DEFAULT_MULTICALL_GAS_LIMIT,
-        pluginID !== NetworkPluginID.PLUGIN_EVM ? (chainId as ChainId) : undefined,
+        pluginID === NetworkPluginID.PLUGIN_EVM ? (chainId as ChainId) : undefined,
         blockNumber,
     )
     const {
@@ -159,7 +159,7 @@ export function useV3BestTradeExactOut(
     const { routes, loading: routesLoading } = useAllV3Routes(currencyIn, amountOut?.currency)
     const { chainId } = useChainContext()
     const { pluginID } = useNetworkContext()
-    const quoterContract = useQuoterContract(pluginID !== NetworkPluginID.PLUGIN_EVM ? (chainId as ChainId) : undefined)
+    const quoterContract = useQuoterContract(pluginID === NetworkPluginID.PLUGIN_EVM ? (chainId as ChainId) : undefined)
     const quoteExactOutInputs = useMemo(() => {
         try {
             return routes.map(
@@ -181,7 +181,7 @@ export function useV3BestTradeExactOut(
         Array.from<'quoteExactOutput'>({ length: quoteExactOutInputs.length }).fill('quoteExactOutput'),
         quoteExactOutInputs,
         DEFAULT_MULTICALL_GAS_LIMIT,
-        pluginID !== NetworkPluginID.PLUGIN_EVM ? (chainId as ChainId) : undefined,
+        pluginID === NetworkPluginID.PLUGIN_EVM ? (chainId as ChainId) : undefined,
         blockNumber,
     )
     const {

@@ -1,13 +1,27 @@
+import { Icons } from '@masknet/icons'
 import { EnhanceableSite } from '@masknet/shared-base'
+import { makeStyles } from '@masknet/theme'
 import { Avatar, Box, Stack } from '@mui/material'
-import { PointIcon } from '../assets/PointIcon.js'
-import { TwitterIcon } from '../assets/TwitterIcon.js'
 import { RainbowBox } from '../SNSAdaptor/RainbowBox.js'
 
 export const SOCIAL_MEDIA_ICON_MAPPING: Record<string, React.ReactNode> = {
-    [EnhanceableSite.Twitter]: <TwitterIcon style={{ width: 15, height: 15 }} />,
+    [EnhanceableSite.Twitter]: <Icons.TwitterRound size={15} />,
     [EnhanceableSite.Localhost]: null,
 }
+
+const useStyles = makeStyles()({
+    indicator: {
+        position: 'absolute',
+        top: 2,
+        right: 6,
+        width: 7,
+        height: 7,
+        backgroundColor: '#3DC233',
+        boxSizing: 'border-box',
+        border: '1px solid #fff',
+        borderRadius: '50%',
+    },
+})
 
 interface NFTAvatarProps {
     hasBorder: boolean
@@ -17,7 +31,8 @@ interface NFTAvatarProps {
 }
 
 export function NFTAvatar(props: NFTAvatarProps) {
-    const { avatar, hasBorder, platform = '', owner = false } = props
+    const { avatar, hasBorder, owner = false } = props
+    const { classes } = useStyles()
 
     return (
         <Stack position="relative">
@@ -42,7 +57,7 @@ export function NFTAvatar(props: NFTAvatarProps) {
                 }}>
                 {SOCIAL_MEDIA_ICON_MAPPING[EnhanceableSite.Twitter]}
             </Stack>
-            {owner ? <PointIcon sx={{ position: 'absolute', top: 1, right: 6, width: 8, height: 8 }} /> : null}
+            {owner ? <div className={classes.indicator} /> : null}
         </Stack>
     )
 }

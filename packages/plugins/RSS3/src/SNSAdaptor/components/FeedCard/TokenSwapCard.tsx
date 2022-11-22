@@ -66,7 +66,8 @@ export const TokenSwapCard: FC<TokenSwapCardProps> = ({ feed, ...rest }) => {
     const t = useI18N()
     const { classes, cx } = useStyles()
 
-    const action = feed.actions[0]
+    // You might see some `transfer` type actions as well
+    const action = feed.actions.filter((x) => x.tag === Tag.Exchange && x.type === Type.Swap)[0]
     const metadata = action.metadata
 
     const user = useAddressLabel(feed.owner)

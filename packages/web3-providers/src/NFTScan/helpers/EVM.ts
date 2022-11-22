@@ -18,7 +18,7 @@ import {
 import { ChainId, createContract, getRPCConstants, SchemaType, WNATIVE } from '@masknet/web3-shared-evm'
 import { NFTSCAN_BASE, NFTSCAN_LOGO_BASE, NFTSCAN_URL } from '../constants.js'
 import type { EVM } from '../types/EVM.js'
-import { getJSON, resolveNonFungibleTokenEventActivityType, getPaymentToken, getAssetFullName } from '../../helpers.js'
+import { parseJSON, resolveActivityType, getPaymentToken, getAssetFullName } from '../../helpers.js'
 
 type NFTScanChainId = ChainId.Mainnet | ChainId.Matic | ChainId.BSC | ChainId.Arbitrum | ChainId.Optimism
 
@@ -76,7 +76,7 @@ export function createNonFungibleAsset(
     asset: EVM.Asset,
     collection?: EVM.AssetsGroup,
 ): NonFungibleAsset<ChainId, SchemaType> {
-    const payload = getJSON<EVM.Payload>(asset.metadata_json)
+    const payload = parseJSON<EVM.Payload>(asset.metadata_json)
     const contractName = asset.contract_name
     const description = payload?.description
     const uri = asset.nftscan_uri ?? asset.image_uri
@@ -97,12 +97,12 @@ export function createNonFungibleAsset(
         schema,
         creator: {
             address: creator,
-            link: urlcat(NFTSCAN_BASE + '/:id', { id: creator }),
+            link: urlcat(NFTSCAN_BASE, creator),
         },
         owner: owner
             ? {
                   address: owner,
-                  link: urlcat(NFTSCAN_BASE + '/:id', { id: owner }),
+                  link: urlcat(NFTSCAN_BASE, owner),
               }
             : undefined,
         traits:
@@ -141,9 +141,7 @@ export function createNonFungibleAsset(
             address: asset.contract_address,
             // If collectionContext.logo_url is null, we will directly render a fallback logo instead.
             // So do not fallback to the constructed NFTScan logo url
-            iconURL: collection
-                ? collection.logo_url
-                : urlcat(NFTSCAN_LOGO_BASE + '/:id', { id: asset.contract_address + '.png' }),
+            iconURL: collection ? collection.logo_url : `${urlcat(NFTSCAN_LOGO_BASE, asset.contract_address)}.png`,
             // TODO fetch via `collections` API
             verified: false,
             createdAt: asset.mint_timestamp,
@@ -157,7 +155,7 @@ export function createNonFungibleCollectionFromGroup(
     group: EVM.AssetsGroup,
 ): NonFungibleCollection<ChainId, SchemaType> {
     const sample = first(group.assets)
-    const payload = getJSON<EVM.Payload>(sample?.metadata_json)
+    const payload = parseJSON<EVM.Payload>(sample?.metadata_json)
     return {
         chainId,
         schema: sample?.erc_type === 'erc1155' ? SchemaType.ERC1155 : SchemaType.ERC721,
@@ -216,7 +214,7 @@ export function createNonFungibleTokenEvent(
         id: transaction.hash,
         quantity: transaction.amount,
         timestamp: transaction.timestamp,
-        type: resolveNonFungibleTokenEventActivityType(transaction.event_type),
+        type: resolveActivityType(transaction.event_type),
         hash: transaction.hash,
         from: {
             address: transaction.from,

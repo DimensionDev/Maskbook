@@ -40,7 +40,7 @@ export function usePairs(tradeProvider: TradeProvider, tokenPairs: readonly Toke
     const { value: targetBlockNumber } = useTargetBlockNumber(chainId)
 
     // get reserves for each pair
-    const contracts = usePairContracts(pluginID !== NetworkPluginID.PLUGIN_EVM ? (chainId as ChainId) : undefined, [
+    const contracts = usePairContracts(pluginID === NetworkPluginID.PLUGIN_EVM ? (chainId as ChainId) : undefined, [
         ...new Set(listOfPairAddress.filter(Boolean) as string[]),
     ])
 
@@ -48,7 +48,7 @@ export function usePairs(tradeProvider: TradeProvider, tokenPairs: readonly Toke
         contracts,
         Array.from<'getReserves'>({ length: contracts.length }).fill('getReserves'),
         [],
-        pluginID !== NetworkPluginID.PLUGIN_EVM ? (chainId as ChainId) : undefined,
+        pluginID === NetworkPluginID.PLUGIN_EVM ? (chainId as ChainId) : undefined,
         targetBlockNumber,
     )
 

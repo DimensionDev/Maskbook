@@ -8,6 +8,13 @@ export function getProfileTabContent(tabId?: string) {
     })
 }
 
+export function getProfileCardTabContent(tabId?: string) {
+    return createInjectHooksRenderer(useActivatedPluginsSNSAdaptor.visibility.useAnyMode, (x) => {
+        const tab = x.ProfileCardTabs?.find((x) => x.ID === tabId)
+        return tab?.UI?.TabContent
+    })
+}
+
 export function getSettingsTabContent(tabId?: string) {
     return createInjectHooksRenderer(useActivatedPluginsSNSAdaptor.visibility.useAnyMode, (x) => {
         const tab = x.SettingTabs?.find((x) => x.ID === tabId)

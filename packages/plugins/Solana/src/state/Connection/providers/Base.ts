@@ -21,10 +21,12 @@ export class BaseProvider implements SolanaProvider {
         return Promise.resolve()
     }
 
+    switchAccount(account?: string): Promise<void> {
+        throw new Error('Method not implemented.')
+    }
     switchChain(chainId?: ChainId): Promise<void> {
         throw new Error('Method not implemented.')
     }
-
     signMessage(dataToSign: string): Promise<string> {
         throw new Error('Method not implemented.')
     }

@@ -3,17 +3,16 @@ import { LoadingBase, makeStyles } from '@masknet/theme'
 import { Box, DialogActions, DialogContent, Stack, Typography } from '@mui/material'
 import { useCallback, useState } from 'react'
 import { useSubscription } from 'use-subscription'
-import { CloseIcon } from '../assets/CloseIcon.js'
 import { context } from '../context.js'
 import { useI18N } from '../locales/index.js'
 import { PersonaItem } from './PersonaItem.js'
-import { InfoIcon } from '../assets/InfoIcon.js'
 import { usePersonasFromDB } from '../../../components/DataSource/usePersonasFromDB.js'
 import type { AllChainsNonFungibleToken } from '../types.js'
 import { PersonaAction } from '@masknet/shared'
 import { useAsyncRetry } from 'react-use'
 import { isValidAddress } from '@masknet/web3-shared-evm'
 import { useLastRecognizedSocialIdentity } from '../../../components/DataSource/useActivatedUI.js'
+import { Icons } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => ({
     messageBox: {
@@ -35,7 +34,7 @@ interface PersonaPageProps {
 }
 
 export function PersonaPage(props: PersonaPageProps) {
-    const { onNext, onChange, onClose } = props
+    const { onNext, onChange } = props
     const [visible, setVisible] = useState(true)
     const { classes } = useStyles()
     const { loading, value: socialIdentity } = useLastRecognizedSocialIdentity()
@@ -64,6 +63,11 @@ export function PersonaPage(props: PersonaPageProps) {
     )
     const { value: avatar } = useAsyncRetry(async () => context.getPersonaAvatar(currentPersona?.identifier), [])
 
+    const personas =
+        socialIdentity?.binding?.proofs.filter(
+            (proof) => proof.platform === socialIdentity.identifier?.network.replace('.com', ''),
+        ) ?? []
+
     return (
         <>
             <DialogContent sx={{ flex: 1, height: 464, padding: 2 }}>
@@ -75,30 +79,26 @@ export function PersonaPage(props: PersonaPageProps) {
                     <>
                         {visible ? (
                             <Box className={classes.messageBox}>
-                                <InfoIcon style={{ width: 20, height: 20 }} />
+                                <Icons.Info size={20} />
                                 <Typography color="currentColor" fontSize={14} fontFamily="Helvetica">
                                     {t.persona_hint()}
                                 </Typography>
-                                <CloseIcon
-                                    sx={{ cursor: 'pointer', width: 20, height: 20 }}
-                                    onClick={() => setVisible(false)}
-                                />
+                                <Icons.Close size={20} onClick={() => setVisible(true)} />
                             </Box>
                         ) : null}
-                        {socialIdentity?.binding?.proofs
+                        {personas
                             .filter(
-                                (proof) => proof.platform === socialIdentity.identifier?.network.replace('.com', ''),
+                                (x) => x.identity.toLowerCase() === socialIdentity!.identifier?.userId.toLowerCase(),
                             )
-                            .filter((x) => x.identity.toLowerCase() === socialIdentity.identifier?.userId.toLowerCase())
                             .map((x, i) => (
                                 <PersonaItem
-                                    persona={socialIdentity.binding?.persona}
+                                    persona={socialIdentity!.binding?.persona}
                                     key={`avatar${i}`}
-                                    avatar={socialIdentity?.avatar ?? ''}
+                                    avatar={socialIdentity!.avatar ?? ''}
                                     owner
-                                    nickname={socialIdentity?.nickname}
+                                    nickname={socialIdentity!.nickname}
                                     proof={x}
-                                    userId={socialIdentity?.identifier?.userId ?? x.identity}
+                                    userId={socialIdentity!.identifier?.userId ?? x.identity}
                                     onSelect={onSelect}
                                 />
                             ))}
@@ -122,16 +122,13 @@ export function PersonaPage(props: PersonaPageProps) {
                                         />
                                     ),
                                 )}
-                        {socialIdentity?.binding?.proofs
-                            .filter(
-                                (proof) => proof.platform === socialIdentity?.identifier?.network.replace('.com', ''),
-                            )
+                        {personas
                             .filter(
                                 (x) => x.identity.toLowerCase() !== socialIdentity?.identifier?.userId.toLowerCase(),
                             )
                             .map((x, i) => (
                                 <PersonaItem
-                                    persona={socialIdentity.binding?.persona}
+                                    persona={socialIdentity!.binding?.persona}
                                     avatar=""
                                     key={i}
                                     owner={false}

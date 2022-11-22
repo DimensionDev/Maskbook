@@ -159,6 +159,7 @@ export const RecipientSelect: FC<Props> = memo(({ className }) => {
                     vertical: 'bottom',
                     horizontal: 'center',
                 },
+                disableScrollLock: true,
                 container: selectRef.current,
                 anchorEl: selectRef.current,
                 BackdropProps: {

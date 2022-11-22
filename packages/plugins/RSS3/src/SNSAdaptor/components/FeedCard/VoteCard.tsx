@@ -1,11 +1,12 @@
-import { makeStyles, Markdown } from '@masknet/theme'
+import { Markdown } from '@masknet/shared'
+import { makeStyles } from '@masknet/theme'
 import { RSS3BaseAPI } from '@masknet/web3-providers'
 import { Typography } from '@mui/material'
 import type { FC } from 'react'
 import { Translate } from '../../../locales/i18n_generated.js'
 import { useAddressLabel } from '../../hooks/index.js'
-import { CardType } from '../share.js'
 import { CardFrame, FeedCardProps } from '../base.js'
+import { CardType } from '../share.js'
 import { Label } from './common.js'
 import { useMarkdownStyles } from './useMarkdownStyles.js'
 
@@ -76,7 +77,9 @@ export const VoteCard: FC<VoteCardProps> = ({ feed, ...rest }) => {
                 <>
                     <Typography className={classes.title}>{metadata.proposal.title}</Typography>
                     {verbose ? (
-                        <Markdown className={mdClasses.markdown}>{metadata.proposal.body}</Markdown>
+                        <Markdown className={mdClasses.markdown} defaultStyle={false}>
+                            {metadata.proposal.body}
+                        </Markdown>
                     ) : (
                         <Typography className={classes.content}>{metadata.proposal.body}</Typography>
                     )}

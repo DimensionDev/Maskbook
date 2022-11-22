@@ -175,12 +175,12 @@ export const resolveSocialAddressLink = createLookupTableResolver<SocialAddressT
         [SocialAddressType.SPACE_ID]: 'https://space.id/',
         [SocialAddressType.RSS3]: 'https://rss3.bio/',
         [SocialAddressType.SOL]: 'https://naming.bonfida.org/',
-        [SocialAddressType.KV]: 'https://next.id/',
         [SocialAddressType.NEXT_ID]: 'https://next.id/',
         [SocialAddressType.CyberConnect]: 'https://cyberconnect.me/',
         [SocialAddressType.Leaderboard]: 'https://ethleaderboard.xyz/',
         [SocialAddressType.Sybil]: 'https://sybil.org/',
         [SocialAddressType.TwitterBlue]: '',
+        [SocialAddressType.Mask]: '',
     },
     () => '',
 )
@@ -254,6 +254,7 @@ export const resolveNextID_NetworkPluginID = createLookupTableResolver<NextIDPla
         [NextIDPlatform.LENS]: undefined,
         [NextIDPlatform.REDDIT]: undefined,
         [NextIDPlatform.SYBIL]: undefined,
+        [NextIDPlatform.EthLeaderboard]: undefined,
     },
     () => {
         return undefined
@@ -272,6 +273,7 @@ export const resolveNextIDPlatformName = createLookupTableResolver<NextIDPlatfor
         [NextIDPlatform.LENS]: 'Lens',
         [NextIDPlatform.REDDIT]: 'Reddit',
         [NextIDPlatform.SYBIL]: 'Sybil',
+        [NextIDPlatform.EthLeaderboard]: 'EthLeaderboard',
     },
     () => {
         return ''
@@ -300,6 +302,8 @@ export const resolveNextIDPlatformLink = (networkPlatform: NextIDPlatform, ident
             return `https://www.reddit.com/user/${identifier}`
         case NextIDPlatform.SYBIL:
             return 'https://sybil.org/'
+        case NextIDPlatform.EthLeaderboard:
+            return 'https://ethleaderboard.xyz/'
         default:
             return ''
     }

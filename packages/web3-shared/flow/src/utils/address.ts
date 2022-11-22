@@ -25,7 +25,8 @@ export function isValidContractAddress(address: string) {
     return /A\.\w{16}\.\w+/.test(address)
 }
 
-export function isValidAddress(address: string) {
+export function isValidAddress(address?: string): address is string {
+    if (!address) return false
     return isValidAccountAddress(address) || isValidContractAddress(address)
 }
 

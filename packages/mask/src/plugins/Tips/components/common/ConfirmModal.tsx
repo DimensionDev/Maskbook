@@ -70,7 +70,7 @@ const useStyles = makeStyles()((theme) => ({
 
 export interface ConfirmModalProps
     extends PropsWithChildren<InjectedDialogProps>,
-        Pick<TipContextOptions, 'amount' | 'tipType' | 'token' | 'nonFungibleTokenContract' | 'nonFungibleTokenId'> {
+        Pick<TipContextOptions, 'amount' | 'tipType' | 'token' | 'nonFungibleTokenAddress' | 'nonFungibleTokenId'> {
     confirmText?: string
     onConfirm?(): void
 }
@@ -83,7 +83,7 @@ export const ConfirmModal: FC<ConfirmModalProps> = ({
     amount,
     tipType,
     token,
-    nonFungibleTokenContract,
+    nonFungibleTokenAddress,
     nonFungibleTokenId,
     ...rest
 }) => {
@@ -95,7 +95,7 @@ export const ConfirmModal: FC<ConfirmModalProps> = ({
     const isTokenTip = tipType === TipsType.Tokens
     const { value: nonFungibleToken } = useNonFungibleAsset(
         undefined,
-        nonFungibleTokenContract?.address,
+        nonFungibleTokenAddress,
         nonFungibleTokenId ?? '',
     )
     const uiTokenId = Others?.formatTokenId(nonFungibleToken?.tokenId)

@@ -4,7 +4,7 @@ import type { ChainId, UserOperation } from '@masknet/web3-shared-evm'
 import type { BundlerAPI } from '../types/Bundler.js'
 import { BUNDLER_ROOT } from './constants.js'
 
-export class SmartPayAPI implements BundlerAPI.Provider {
+export class SmartPayBundlerAPI implements BundlerAPI.Provider {
     private encodeUserOperation(userOperation: UserOperation) {
         return {
             ...omit(userOperation, [

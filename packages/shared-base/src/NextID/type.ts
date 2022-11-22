@@ -14,6 +14,7 @@ export enum NextIDPlatform {
     LENS = 'lens',
     REDDIT = 'reddit',
     SYBIL = 'sybil',
+    EthLeaderboard = 'ethLeaderboard',
 }
 
 export interface NextIDPayload {

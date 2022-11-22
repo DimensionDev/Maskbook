@@ -5,7 +5,7 @@ import { Box, Typography } from '@mui/material'
 import type { BigNumber } from 'bignumber.js'
 import { useCallback } from 'react'
 import { activatedSocialNetworkUI } from '../../../social-network/index.js'
-import { getAssetAsBlobURL, useI18N } from '../../../utils/index.js'
+import { useAssetAsBlobURL, useI18N } from '../../../utils/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     shareWrapper: {
@@ -61,7 +61,7 @@ export interface ShareDialogProps extends withClasses<'root'> {
 }
 
 export function ShareDialog(props: ShareDialogProps) {
-    const ShareBackground = getAssetAsBlobURL(new URL('../assets/share-background.jpg', import.meta.url))
+    const ShareBackground = useAssetAsBlobURL(new URL('../assets/share-background.jpg', import.meta.url))
     const { t } = useI18N()
     const { classes } = useStyles()
     const { token, actualSwapAmount, shareSuccessText, onClose } = props

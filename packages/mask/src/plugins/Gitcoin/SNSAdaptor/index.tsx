@@ -46,7 +46,13 @@ const sns: Plugin.SNSAdaptor.Definition = {
         },
     ],
     wrapperProps: {
-        icon: <Icons.Gitcoin size={24} style={{ filter: 'drop-shadow(0px 6px 12px rgba(255, 159, 10, 0.2))' }} />,
+        icon: (
+            <Icons.Gitcoin
+                variant="light"
+                size={24}
+                style={{ filter: 'drop-shadow(0px 6px 12px rgba(255, 159, 10, 0.2))' }}
+            />
+        ),
     },
 }
 

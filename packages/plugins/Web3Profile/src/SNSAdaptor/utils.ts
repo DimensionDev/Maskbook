@@ -1,13 +1,6 @@
 import { compact, uniqBy } from 'lodash-es'
 import type { CollectionTypes, WalletsCollection, WalletTypes } from '@masknet/shared'
-import {
-    NetworkPluginID,
-    BindingProof,
-    joinKeys,
-    NextIDPlatform,
-    PersonaInformation,
-    EMPTY_LIST,
-} from '@masknet/shared-base'
+import { NetworkPluginID, BindingProof, NextIDPlatform, PersonaInformation, EMPTY_LIST } from '@masknet/shared-base'
 import { AlchemyEVM, NextIDStorage, RSS3 } from '@masknet/web3-providers'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { ChainId, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
@@ -77,7 +70,7 @@ export const getDonationList = async (wallets: WalletTypes[]) => {
                 const action = donation.actions[0]
                 return {
                     // TODO add a `getDonationKey()` function to hide the details behind
-                    key: joinKeys(donation.hash, action.index),
+                    key: [donation.hash, action.index].join('_'),
                     address: donation.address_to ?? action.metadata?.token.contract_address ?? ZERO_ADDRESS,
                     networkPluginID: networkPluginID ?? NetworkPluginID.PLUGIN_EVM,
                     imageURL: action.metadata?.logo,
@@ -101,7 +94,7 @@ export const getFootprintList = async (walletList: WalletTypes[]) => {
                     if (!metadata) return null
                     return {
                         // TODO add a `getFootprintKey()` function to hide the details behind
-                        key: joinKeys(metadata.contract_address, metadata.id),
+                        key: [metadata.contract_address, metadata.id].join('_'),
                         address: metadata.contract_address,
                         networkPluginID,
                         imageURL: metadata.image,

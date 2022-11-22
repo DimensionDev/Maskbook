@@ -1,15 +1,10 @@
 import { PluginSnapshotRPC } from '../../messages.js'
-import type { Proposal } from '../../types.js'
-import { useSuspense } from '../../../../utils/hooks/useSuspense.js'
+import { use, cache } from 'react'
+import type {} from 'react/next'
 
-const cache = new Map<string, [0, Promise<void>] | [1, Proposal] | [2, Error]>()
-export function proposalRetry() {
-    for (const key of cache.keys()) {
-        cache.delete(key)
-    }
-}
+const Request = cache(Suspender)
 export function useProposal(id: string) {
-    return useSuspense<Proposal, [string]>(id, [id], cache, Suspender)
+    return use(Request(id))
 }
 async function Suspender(id: string) {
     const proposal = await PluginSnapshotRPC.fetchProposal(id)

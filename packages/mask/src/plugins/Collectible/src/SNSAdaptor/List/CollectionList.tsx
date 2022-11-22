@@ -4,7 +4,7 @@ import { Icons } from '@masknet/icons'
 import { ElementAnchor, RetryHint, useWeb3ProfileHiddenSettings } from '@masknet/shared'
 import { useNonFungibleAssets, useTrustedNonFungibleTokens } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { EMPTY_LIST, EMPTY_OBJECT, joinKeys } from '@masknet/shared-base'
+import { EMPTY_LIST, EMPTY_OBJECT } from '@masknet/shared-base'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import { CollectionType } from '@masknet/web3-providers'
 import {
@@ -19,7 +19,7 @@ import { CollectibleList } from './CollectibleList.js'
 import { CollectionIcon } from './CollectionIcon.js'
 import { LoadingSkeleton } from './LoadingSkeleton.js'
 import { useI18N } from '../../../../../utils/index.js'
-import type { CollectibleGridProps } from '../../../../../extension/options-page/types.js'
+import type { CollectibleGridProps } from '../../types.js'
 
 const AllButton = styled(Button)(({ theme }) => ({
     display: 'inline-block',
@@ -45,7 +45,6 @@ export const useStyles = makeStyles<CollectibleGridProps>()((theme, { columns = 
         },
         container: {
             boxSizing: 'border-box',
-            background: theme.palette.maskColor.bottom,
             paddingTop: gapIsNumber ? theme.spacing(gap) : gap,
         },
         sidebar: {
@@ -80,9 +79,6 @@ export const useStyles = makeStyles<CollectibleGridProps>()((theme, { columns = 
             marginBottom: '12px',
             minWidth: 30,
             maxHeight: 24,
-        },
-        emptyBox: {
-            background: theme.palette.maskColor.bottom,
         },
     }
 })
@@ -134,7 +130,7 @@ export function CollectionList({ socialAccount, persona, profile, gridProps = EM
         return differenceWith(
             collectibles,
             hiddenList,
-            (collection, key) => joinKeys(collection.address, collection.tokenId).toLowerCase() === key.toLowerCase(),
+            (collection, key) => [collection.address, collection.tokenId].join('_').toLowerCase() === key.toLowerCase(),
         )
     }, [hiddenList, collectibles])
 
@@ -185,13 +181,7 @@ export function CollectionList({ socialAccount, persona, profile, gridProps = EM
 
     if ((done && !allCollectibles.length) || !account || isHiddenAddress)
         return (
-            <Box
-                display="flex"
-                flexDirection="column"
-                alignItems="center"
-                justifyContent="center"
-                height={400}
-                className={classes.emptyBox}>
+            <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" height={400}>
                 <Icons.EmptySimple size={32} />
                 <Typography color={(theme) => theme.palette.maskColor.second} fontSize="14px" marginTop="12px">
                     {t('no_NFTs_found')}
@@ -228,14 +218,12 @@ export function CollectionList({ socialAccount, persona, profile, gridProps = EM
                         />
                     </Box>
                     {error && !done && <RetryHint hint={false} retry={nextPage} />}
-                    <div className={classes.emptyBox}>
-                        <ElementAnchor
-                            callback={() => {
-                                if (nextPage) nextPage()
-                            }}>
-                            {!done && <LoadingBase />}
-                        </ElementAnchor>
-                    </div>
+                    <ElementAnchor
+                        callback={() => {
+                            if (nextPage) nextPage()
+                        }}>
+                        {!done && <LoadingBase />}
+                    </ElementAnchor>
                 </Box>
                 {showSidebar ? (
                     <div className={classes.sidebar}>

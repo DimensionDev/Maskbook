@@ -210,6 +210,9 @@ export class ZerionTrendingAPI implements TrendingAPI.Provider<ChainId> {
     getCoinsByKeyword(chainId: ChainId, keyword: string): Promise<TrendingAPI.Coin[]> {
         throw new Error('Method not implemented.')
     }
+    getCoinInfoByAddress(chainId: ChainId, address: string): Promise<TrendingAPI.CoinInfo | undefined> {
+        throw new Error('To be implemented.')
+    }
     getCoinTrending(chainId: ChainId, id: string, currency: TrendingAPI.Currency): Promise<TrendingAPI.Trending> {
         throw new Error('Method not implemented.')
     }
@@ -221,8 +224,8 @@ export class ZerionTrendingAPI implements TrendingAPI.Provider<ChainId> {
     ): Promise<TrendingAPI.Stat[]> {
         throw new Error('Method not implemented.')
     }
-    getTokenInfo(tokenSymbol: string): Promise<TrendingAPI.TokenInfo> {
-        throw new Error('To be implemented.')
+    getCoinMarketInfo(symbol: string): Promise<TrendingAPI.MarketInfo> {
+        throw new Error('Method not implemented.')
     }
 }
 

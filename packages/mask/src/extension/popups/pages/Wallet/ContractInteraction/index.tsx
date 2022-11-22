@@ -200,7 +200,7 @@ const ContractInteraction = memo(() => {
             case TransactionDescriptorType.DEPLOYMENT:
             case TransactionDescriptorType.RETRY:
             case TransactionDescriptorType.CANCEL:
-                throw new Error('To be implemented')
+                throw new Error('Method not implemented.')
             default:
                 unreachable(type)
         }

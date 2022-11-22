@@ -36,7 +36,7 @@ export interface ReadMeCardProps {}
 export function ReadMeCard(props: ReadMeCardProps) {
     const { classes } = useStyles()
     const identifier = useContext(SnapshotContext)
-    const { payload: proposal } = useProposal(identifier.id)
+    const proposal = useProposal(identifier.id)
 
-    return <Markdown content={proposal.body} classes={{ root: classes.markdown }} />
+    return <Markdown className={classes.markdown}>{proposal.body}</Markdown>
 }

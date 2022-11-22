@@ -2,16 +2,18 @@ import { BigNumber } from 'bignumber.js'
 import { isNull } from 'lodash-es'
 import {
     attemptUntil,
+    fetchImageViaDOM,
     fetchImageViaHTTP,
     isLocaleResource,
+    isSameAddress,
     resolveCrossOriginURL,
     resolveResourceURL,
 } from '@masknet/web3-shared-base'
-import type { NextIDPlatform } from '@masknet/shared-base'
+import { NetworkPluginID, NextIDPlatform } from '@masknet/shared-base'
 import Services from '../../../extension/service.js'
 import { NextIDProof, NextIDStorage } from '@masknet/web3-providers'
 import { activatedSocialNetworkUI } from '../../../social-network/index.js'
-import type { NextIDAvatarMeta } from '../types.js'
+import type { AllChainsNonFungibleToken, NextIDAvatarMeta } from '../types.js'
 import { PLUGIN_ID } from '../constants.js'
 import { sortPersonaBindings } from '../../../utils/index.js'
 
@@ -31,7 +33,14 @@ function blobToBase64(blob: Blob) {
 async function fetchImage(url: string) {
     const resolvedURL = resolveCrossOriginURL(url)
     if (!resolvedURL) return fetchImageViaHTTP(url)
-    return attemptUntil([async () => fetchImageViaHTTP(url), async () => fetchImageViaHTTP(resolvedURL)], null)
+    return attemptUntil(
+        [
+            async () => fetchImageViaHTTP(url),
+            async () => fetchImageViaDOM(resolvedURL),
+            async () => fetchImageViaHTTP(resolvedURL),
+        ],
+        null,
+    )
 }
 
 export async function toPNG(image: string) {
@@ -119,4 +128,16 @@ export async function getNFTAvatarByUserId(
         if (avatar) return avatar
     }
     return
+}
+
+export function isSameNFT(
+    pluginID: NetworkPluginID,
+    a: AllChainsNonFungibleToken,
+    b?: AllChainsNonFungibleToken,
+): boolean {
+    return pluginID !== NetworkPluginID.PLUGIN_SOLANA
+        ? isSameAddress(a.contract?.address, b?.contract?.address) &&
+              a.contract?.chainId === b?.contract?.chainId &&
+              a.tokenId === b?.tokenId
+        : a.tokenId === b?.tokenId && a.id === b.id
 }
