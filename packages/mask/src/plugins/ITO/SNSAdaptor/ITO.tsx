@@ -601,6 +601,8 @@ export function ITO(props: ITO_Props) {
                                             .shiftedBy(exchangeToken.decimals)
                                             .integerValue(),
                                         exchangeToken.decimals,
+                                        exchangeToken.decimals,
+                                        true,
                                     )}
                                     token={token}
                                     exchangeToken={exchangeToken}

@@ -3,12 +3,7 @@ import { DOMProxy, LiveSelector, MutationObserverWatcher } from '@dimensiondev/h
 import { creator } from '../../../social-network/utils.js'
 import { isMobileFacebook } from '../utils/isMobile.js'
 import { getProfileIdentifierAtFacebook } from '../utils/getProfileIdentifier.js'
-import {
-    TypedMessage,
-    makeTypedMessageText,
-    makeTypedMessageImage,
-    makeTypedMessageTuple,
-} from '@masknet/typed-message'
+import { TypedMessage, makeTypedMessageText, makeTypedMessageImage } from '@masknet/typed-message'
 import { clickSeeMore } from '../injection/PostInspector.js'
 import { startWatch } from '../../../utils/watcher.js'
 import { facebookShared } from '../shared.js'
@@ -17,7 +12,7 @@ import { collectNodeText } from '../../../utils/index.js'
 import { None, Some, Option } from 'ts-results-es'
 
 const posts = new LiveSelector().querySelectorAll<HTMLDivElement>(
-    isMobileFacebook ? '.story_body_container > div' : '[role=article] div[dir="auto"] > [id] > div > div',
+    isMobileFacebook ? '.story_body_container > div' : '[role=article]  [id]  span[dir="auto"]',
 )
 
 export const PostProviderFacebook: Next.CollectingCapabilities.PostsProvider = {
@@ -38,7 +33,7 @@ function collectPostsFacebookInner(store: Next.CollectingCapabilities.PostsProvi
         new MutationObserverWatcher(posts).useForeach((node, key, metadata) => {
             const root = new LiveSelector()
                 .replace(() => [metadata.realCurrent])
-                .closest('[role=article] div[dir="auto"] > [id] > div > div')
+                .closest('[role=article] [id] span[dir="auto"]')
 
             const rootProxy = DOMProxy({
                 afterShadowRootInit: { mode: process.env.shadowRootMode },
@@ -49,7 +44,7 @@ function collectPostsFacebookInner(store: Next.CollectingCapabilities.PostsProvi
             // ? inject after comments
             const commentSelectorPC = root
                 .clone()
-                .querySelectorAll('[role=article] [aria-label] span[dir="auto"]')
+                .querySelectorAll('[role=article] [id] span[dir="auto"]')
                 .closest<HTMLElement>(3)
             const commentSelectorMobile = root
                 .clone()
@@ -110,8 +105,6 @@ function collectPostsFacebookInner(store: Next.CollectingCapabilities.PostsProvi
                     info.postMetadataImages.add(url)
                     nextTypedMessage.push(makeTypedMessageImage(url))
                 }
-                // parse post content
-                info.postMessage.value = makeTypedMessageTuple(nextTypedMessage)
             }
             collectPostInfo()
             return {
@@ -150,7 +143,7 @@ function getPostID(node: DOMProxy, root: HTMLElement): null | string {
         } else {
             try {
                 // In timeline
-                const postTimeNode1 = root.querySelector('[href*="permalink"]')
+                const postTimeNode1 = root.closest('[role=article]')?.querySelector('[href*="permalink"]')
                 const postIdMode1 = postTimeNode1
                     ? postTimeNode1
                           .getAttribute('href')
@@ -160,15 +153,14 @@ function getPostID(node: DOMProxy, root: HTMLElement): null | string {
 
                 if (postIdMode1) return postIdMode1
 
-                const postTimeNode2 = root.querySelector('[href*="posts"]')
+                const postTimeNode2 = root.closest('[role=article]')?.querySelector('[href*="posts"]')
                 const postIdMode2 = postTimeNode2
                     ? postTimeNode2
                           .getAttribute('href')
-                          ?.match(/posts\/(\d+)/g)?.[0]
+                          ?.match(/posts\/(\w+)/g)?.[0]
                           .split('/')[1] ?? null
                     : null
-
-                if (postIdMode2 && /^-?\d+$/.test(postIdMode2)) return postIdMode2
+                if (postIdMode2 && /^-?\w+$/.test(postIdMode2)) return postIdMode2
             } catch {
                 return null
             }
@@ -186,8 +178,7 @@ function getPostID(node: DOMProxy, root: HTMLElement): null | string {
 
 function getMetadataImages(node: DOMProxy): string[] {
     if (node.destroyed) return []
-    const parent = node.current.parentElement?.parentElement
-
+    const parent = node.current.parentElement?.parentElement?.parentElement?.parentElement
     if (!parent) return []
     const imgNodes = isMobileFacebook
         ? parent.querySelectorAll<HTMLImageElement>('div>div>div>a>div>div>i.img')
