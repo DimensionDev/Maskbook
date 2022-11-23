@@ -13,13 +13,13 @@ const staticRef = new ValueRef<Partial<ThemeSettings>>({})
 const defaultUseTheme = (t: Theme) => t
 
 export function useMaskSiteAdaptorMixedTheme() {
-    const themeSettings = useValueRef(
-        activatedSocialNetworkUI.collecting.themeSettingsProvider?.recognized || staticRef,
-    )
+    const { mode } = useValueRef(activatedSocialNetworkUI.collecting.themeSettingsProvider?.recognized || staticRef)
     const useMixedTheme = useRef(activatedSocialNetworkUI.customization.useTheme || defaultUseTheme).current
-    const maskTheme = themeSettings.mode === ThemeMode.Dark ? MaskDarkTheme : MaskLightTheme
 
     const [localization, isRTL] = useThemeLanguage(useValueRef(languageSettings))
-    const theme = unstable_createMuiStrictModeTheme(maskTheme, localization)
+    const theme = unstable_createMuiStrictModeTheme(
+        mode === ThemeMode.Dark ? MaskDarkTheme : MaskLightTheme,
+        localization,
+    )
     return useMixedTheme(theme)
 }
