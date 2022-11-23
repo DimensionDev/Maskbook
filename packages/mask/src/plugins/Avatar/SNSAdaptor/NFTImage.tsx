@@ -11,6 +11,9 @@ const useStyles = makeStyles()((theme) => ({
         position: 'relative',
         width: 100,
         height: 100,
+        border: '1px solid transparent',
+        boxSizing: 'border-box',
+        borderRadius: 8,
     },
     icon: {
         position: 'absolute',
@@ -19,30 +22,29 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.maskColor.primary,
     },
     image: {
-        width: 100,
-        height: 100,
+        width: '100%',
+        height: '100%',
         objectFit: 'cover',
         boxSizing: 'border-box',
         borderRadius: 8,
-        border: '1px solid transparent',
     },
     selected: {
-        border: `1px solid ${theme.palette.maskColor.primary}`,
-        borderRadius: 8,
+        borderColor: theme.palette.maskColor.primary,
     },
     imageLoading: {
         color: theme.palette.maskColor.main,
         height: '20px !important',
         width: '20px !important',
     },
-    imageLoadingBox: {
+    imageContainer: {
         background:
             theme.palette.mode === 'dark'
                 ? 'linear-gradient(180deg, #202020 0%, #181818 100%)'
                 : 'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.9) 100%), linear-gradient(90deg, rgba(98, 152, 234, 0.2) 1.03%, rgba(98, 152, 234, 0.2) 1.04%, rgba(98, 126, 234, 0.2) 100%)',
         borderRadius: 8,
-        width: 100,
-        height: 100,
+        overflow: 'hidden',
+        width: '100%',
+        height: '100%',
         justifyContent: 'center',
         alignItems: 'center',
         display: 'flex',
@@ -75,16 +77,17 @@ export const NFTImage = memo((props: NFTImageProps) => {
             disableInteractive
             placement="top"
             PopperProps={{ disablePortal: true, popperOptions: { strategy: 'absolute' } }}>
-            <Box className={cx(classes.root, className)}>
+            <Box
+                className={cx(classes.root, className, selected ? classes.selected : '')}
+                onClick={() => onSelect(token)}>
                 <Image
-                    fallback={<Icons.MaskAvatar size={100} />}
+                    fallback={<Icons.MaskAvatar size={30} />}
                     classes={{
                         imageLoading: classes.imageLoading,
-                        container: classes.imageLoadingBox,
+                        container: classes.imageContainer,
                     }}
-                    onClick={() => onSelect(token)}
                     src={token.metadata?.imageURL ?? ''}
-                    className={cx(classes.image, selected ? classes.selected : '')}
+                    className={classes.image}
                 />
                 {selected ? <Icons.CheckCircle className={classes.icon} size={24} /> : null}
             </Box>
