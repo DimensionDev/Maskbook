@@ -107,7 +107,7 @@ export enum SearchKeywordType {
 
 export enum SearchResultType {
     // e.g., 0xd8da6bf26964af9d7eed9e03e53415d37aa96045
-    Address = 'Address',
+    EOA = 'EOA',
     // e.g., vitalik.eth or vitalik.bnb
     Domain = 'Domain',
     // e.g., $MASK #MASK
@@ -573,8 +573,8 @@ export interface NonFungibleTokenSecurity {}
     keyword: string
 }
 
-export interface AddressResult<ChainId> extends Result<ChainId> {
-    type: SearchResultType.Address
+export interface EOAResult<ChainId> extends Result<ChainId> {
+    type: SearchResultType.EOA
 }
 
 export interface DomainResult<ChainId> extends Result<ChainId> {
@@ -599,7 +599,7 @@ export interface NonFungibleCollectionResult<ChainId, SchemaType> extends Result
 }
 
 export type SearchResult<ChainId, SchemaType> = 
-    | AddressResult<ChainId>
+    | EOAResult<ChainId>
     | DomainResult<ChainId>
     | FungibleTokenResult<ChainId, SchemaType>
     | NonFungibleTokenResult<ChainId, SchemaType>
