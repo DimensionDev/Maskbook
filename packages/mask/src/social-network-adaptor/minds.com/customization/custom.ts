@@ -37,5 +37,5 @@ export function useThemeMindsVariant(baseTheme: Theme) {
         })
         setAutoFreeze(true)
         return unstable_createMuiStrictModeTheme(MindsTheme)
-    }, [baseTheme])
+    }, [baseTheme, themeSettings])
 }
