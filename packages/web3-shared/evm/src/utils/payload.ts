@@ -64,6 +64,8 @@ export function getPayloadUserOperation(payload: JsonRpcPayload) {
             const [userOperation] = payload.params as [UserOperation]
             return userOperation
         default:
+            // const config = getPayloadConfig(payload)
+            // if (config)
             return
     }
 }

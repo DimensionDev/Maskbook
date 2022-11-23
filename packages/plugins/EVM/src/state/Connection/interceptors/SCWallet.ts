@@ -27,11 +27,8 @@ export class SCWallet implements Middleware<Context> {
         return web3
     }
 
-    private createUserOperation(context: Context): UserOperation {
-        throw new Error('Method not implemented.')
-    }
-
-    private sendUserOperation(context: Context, userOperation: UserOperation): Promise<string> {
+    private sendUserOperation(context: Context, userOperation?: UserOperation): Promise<string> {
+        if (!userOperation) throw new Error('Invalid user operation.')
         return SmartPayBundler.sendUserOperation(context.chainId, userOperation)
     }
 
@@ -59,20 +56,25 @@ export class SCWallet implements Middleware<Context> {
                 try {
                     const web3 = await this.createWeb3(context)
                     const wallet = createContract<WalletContract>(web3, context.account, WalletABI as AbiItem[])
-                    context.write(await wallet?.methods.nonce())
+                    const nonce = await wallet?.methods.nonce()
+                    context.write(nonce ?? 0)
                 } catch (error) {
                     context.abort(error)
                 }
                 break
             case EthereumMethodType.ETH_SEND_TRANSACTION:
-                context.write(await this.sendUserOperation(context, this.createUserOperation(context)))
+                try {
+                    context.write(await this.sendUserOperation(context, context.userOperation))
+                } catch (error) {
+                    context.abort(error)
+                }
                 break
             case EthereumMethodType.ETH_SEND_USER_OPERATION:
-                if (!context.userOperation) {
-                    context.abort(new Error('Invalid user operation.'))
-                    break
+                try {
+                    context.write(await this.sendUserOperation(context, context.userOperation))
+                } catch (error) {
+                    context.abort(error)
                 }
-                context.write(await this.sendUserOperation(context, context.userOperation))
                 break
             case EthereumMethodType.ETH_SUPPORTED_CHAIN_IDS:
                 context.write(await this.bundler.getSupportedChainIds())

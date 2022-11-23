@@ -1,8 +1,8 @@
 import { omit } from 'lodash-es'
 import { keccak256 } from 'web3-utils'
 import * as ABICoder from 'web3-eth-abi'
-import type { ChainId, UserOperation } from '../types/index.js'
-import { isZeroAddress } from '../utils/index.js'
+import type { ChainId, Transaction, UserOperation } from '../types/index.js'
+import { isEmptyHex } from '../utils/index.js'
 
 export class UserTransaction {
     private coder = ABICoder as unknown as ABICoder.AbiCoder
@@ -22,7 +22,7 @@ export class UserTransaction {
     }
 
     get hasPaymaster() {
-        return this.operation.paymaster && !isZeroAddress(this.operation.paymaster)
+        return this.operation.paymasterAndData && !isEmptyHex(this.operation.paymasterAndData)
     }
 
     get asCamelCase() {
@@ -36,20 +36,22 @@ export class UserTransaction {
         return {
             ...omit(this.operation, [
                 'initCode',
-                'callGas',
                 'callData',
-                'verificationGas',
-                'preVerificationGas',
+                'callGasLimit',
+                'verificationGasLimit',
+                'preVerificationGasLimit',
                 'maxFeePerGas',
                 'maxPriorityFeePerGas',
-                'paymaster',
+                'paymasterAndData',
             ]),
+            init_code: this.operation.initCode,
             call_data: this.operation.callData,
-            verification_gas: this.operation.verificationGas,
-            pre_verification_gas: this.operation.preVerificationGas,
+            call_gas_limit: this.operation.callGasLimit,
+            verification_gas_limit: this.operation.verificationGasLimit,
+            pre_verification_gas_limit: this.operation.preVerificationGasLimit,
             max_fee_per_gas: this.operation.maxFeePerGas,
             max_priority_fee_per_gas: this.operation.maxPriorityFeePerGas,
-            paymaster_data: this.operation.paymasterData,
+            paymaster_and_data: this.operation.paymasterAndData,
             signature: this.signature,
         }
     }
@@ -93,7 +95,7 @@ export class UserTransaction {
         )
     }
 
-    async estimateVerificationGas() {
+    async estimateVerificationGasLimit() {
         // 100000 default verification gas. will add create2 cost (3200+200*length) if initCode exists
         const verificationGas = 100000
 
@@ -103,7 +105,15 @@ export class UserTransaction {
         return verificationGas
     }
 
-    async estimateExecutionGas() {}
+    async estimateExecutionGasLimit() {}
 
-    async estimateGas() {}
+    async estimateGasLimit() {}
+
+    static fromUserOperation(userOperation?: UserOperation): UserTransaction {
+        throw new Error('Not implemented.')
+    }
+
+    static fromTransaction(transaction?: Transaction): UserTransaction {
+        throw new Error('Not implemented.')
+    }
 }

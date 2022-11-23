@@ -406,7 +406,7 @@ export interface UserOperation {
     callData?: string
     callGasLimit: string
     verificationGasLimit: string
-    preVerificationGas: string
+    preVerificationGasLimit: string
     maxFeePerGas: string
     maxPriorityFeePerGas: string
     paymasterAndData?: string
