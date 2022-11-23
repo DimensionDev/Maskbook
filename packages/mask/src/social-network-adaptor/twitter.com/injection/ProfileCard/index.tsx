@@ -50,13 +50,10 @@ function ProfileCardHolder() {
         const user = await Twitter.getUserByScreenName(twitterId)
         if (!user?.legacy) return null
 
-        const userId = user.legacy.id_str
         const handle = user.legacy.screen_name
 
         return {
             identifier: ProfileIdentifier.of(twitterBase.networkIdentifier, handle).unwrapOr(undefined),
-            /* cspell:disable-next-line */
-            isOwner: !!(userId && document.cookie.includes(escape(`twid=u=${userId}`))),
             nickname: user.legacy.name,
             avatar: user.legacy.profile_image_url_https.replace(/_normal(\.\w+)$/, '_400x400$1'),
             bio: user.legacy.description,
