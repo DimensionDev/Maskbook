@@ -8,7 +8,7 @@ function resolveThemeSettingsInner(
 
 export const ThemeSettingsProviderInstagram: Next.CollectingCapabilities.ThemeSettingsProvider = {
     recognized: creator.EmptyThemeSettingsProviderState(),
-    start(cancel) {
+    async start(cancel) {
         resolveThemeSettingsInner(this.recognized, cancel)
     },
 }

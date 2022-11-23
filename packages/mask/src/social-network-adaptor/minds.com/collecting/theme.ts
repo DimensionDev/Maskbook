@@ -34,7 +34,7 @@ function resolveThemeSettingsInner(
 
 export const ThemeSettingsProviderMinds: Next.CollectingCapabilities.ThemeSettingsProvider = {
     recognized: creator.EmptyThemeSettingsProviderState(),
-    start(cancel) {
+    async start(cancel) {
         resolveThemeSettingsInner(this.recognized, cancel)
     },
 }

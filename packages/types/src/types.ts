@@ -235,7 +235,7 @@ export namespace SocialNetworkUI {
         }
         export interface ThemeSettingsProvider {
             readonly recognized: ValueRef<ThemeSettings>
-            start(signal: AbortSignal): void
+            start(signal: AbortSignal): Promise<void>
         }
     }
     export namespace Customization {

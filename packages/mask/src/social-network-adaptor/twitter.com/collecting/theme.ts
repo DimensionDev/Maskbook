@@ -39,7 +39,7 @@ const resolveFontSize = createLookupTableResolver<TwitterBaseAPI.Scale, FontSize
     FontSize.Normal,
 )
 
-function resolveThemeSettingsInner(
+async function resolveThemeSettingsInner(
     ref: Next.CollectingCapabilities.ThemeSettingsProvider['recognized'],
     cancel: AbortSignal,
 ) {
@@ -55,29 +55,25 @@ function resolveThemeSettingsInner(
         }
     }
 
-    const createWatcher = (selector: LiveSelector<HTMLElement, boolean>) => {
-        new MutationObserverWatcher(selector)
-            .addListener('onAdd', () => assign())
-            .addListener('onChange', () => assign())
-            .startWatch(
-                {
-                    childList: true,
-                    subtree: true,
-                    attributes: true,
-                    attributeFilter: ['src'],
-                },
-                cancel,
-            )
-    }
+    await assign()
 
-    assign()
-
-    createWatcher(composeAnchorSelector())
+    new MutationObserverWatcher(composeAnchorSelector())
+        .addListener('onAdd', () => assign())
+        .addListener('onChange', () => assign())
+        .startWatch(
+            {
+                childList: true,
+                subtree: true,
+                attributes: true,
+                attributeFilter: ['src'],
+            },
+            cancel,
+        )
 }
 
 export const ThemeSettingsProviderTwitter: Next.CollectingCapabilities.ThemeSettingsProvider = {
     recognized: creator.EmptyThemeSettingsProviderState(),
-    start(cancel) {
-        resolveThemeSettingsInner(this.recognized, cancel)
+    async start(cancel) {
+        await resolveThemeSettingsInner(this.recognized, cancel)
     },
 }
