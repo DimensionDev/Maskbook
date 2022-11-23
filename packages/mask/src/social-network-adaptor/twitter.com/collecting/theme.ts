@@ -22,7 +22,7 @@ const resolveThemeColor = createLookupTableResolver<TwitterBaseAPI.ThemeColor, s
 const resolveThemeMode = createLookupTableResolver<TwitterBaseAPI.ThemeMode, ThemeMode>(
     {
         [TwitterBaseAPI.ThemeMode.Dark]: ThemeMode.Dark,
-        [TwitterBaseAPI.ThemeMode.Dim]: ThemeMode.Dim,
+        [TwitterBaseAPI.ThemeMode.Dim]: ThemeMode.Dark,
         [TwitterBaseAPI.ThemeMode.Light]: ThemeMode.Light,
     },
     ThemeMode.Light,

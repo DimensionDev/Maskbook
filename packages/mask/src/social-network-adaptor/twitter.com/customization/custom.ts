@@ -8,6 +8,7 @@ import { PaletteMode, Theme, unstable_createMuiStrictModeTheme } from '@mui/mate
 import { fromRGB, shade, toRGB } from '../../../utils/theme/index.js'
 import { isMobileTwitter } from '../utils/isMobile.js'
 import { composeAnchorSelector, headingTextSelector } from '../utils/selector.js'
+import { ThemeMode } from '@masknet/web3-shared-base'
 
 const resolveThemeColor = createLookupTableResolver<TwitterBaseAPI.ThemeColor, string>(
     {
@@ -39,13 +40,13 @@ const resolveBackgroundColor = createLookupTableResolver<TwitterBaseAPI.ThemeMod
     'rgb(255, 255, 255)',
 )
 
-const resolveThemeMode = createLookupTableResolver<TwitterBaseAPI.ThemeMode, 'dark' | 'light'>(
+const resolveThemeMode = createLookupTableResolver<TwitterBaseAPI.ThemeMode, ThemeMode>(
     {
-        [TwitterBaseAPI.ThemeMode.Dark]: 'dark',
-        [TwitterBaseAPI.ThemeMode.Dim]: 'dark',
-        [TwitterBaseAPI.ThemeMode.Light]: 'light',
+        [TwitterBaseAPI.ThemeMode.Dark]: ThemeMode.Dark,
+        [TwitterBaseAPI.ThemeMode.Dim]: ThemeMode.Dark,
+        [TwitterBaseAPI.ThemeMode.Light]: ThemeMode.Light,
     },
-    'light',
+    ThemeMode.Light,
 )
 
 const themeColorRef = new ValueRef(resolveThemeColor(TwitterBaseAPI.ThemeColor.Blue))

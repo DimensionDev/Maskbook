@@ -145,7 +145,6 @@ export enum FontSize {
 
 export enum ThemeMode {
     Light = 'light',
-    Dim = 'dim',
     Dark = 'dark',
 }
 
