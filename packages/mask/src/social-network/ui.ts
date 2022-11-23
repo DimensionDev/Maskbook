@@ -167,6 +167,8 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
                     getSocialIdentity: Services.Identity.querySocialIdentity,
                     ownProofChanged: MaskMessages.events.ownProofChanged,
                     setMinimalMode: Services.Settings.setPluginMinimalModeEnabled,
+                    getPostURL: ui.utils.getPostURL,
+                    share: ui.utils.share,
                 }
             },
             Services.Settings.getPluginMinimalModeEnabled,
