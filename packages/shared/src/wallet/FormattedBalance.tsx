@@ -1,7 +1,7 @@
 import { FC, Fragment } from 'react'
 import type { BigNumber } from 'bignumber.js'
 import { isZero, isLessThan } from '@masknet/web3-shared-base'
-import { makeStyles, useStylesExtends } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 
 const useStyles = makeStyles()((theme) => ({
     balance: {
@@ -24,7 +24,7 @@ export const FormattedBalance: FC<FormattedBalanceProps> = (props) => {
     if (minimumBalance && value && !isZero(formatted) && isLessThan(value, minimumBalance)) {
         formatted = '<' + formatter(minimumBalance, decimals, significant)
     }
-    const { classes } = useStylesExtends(useStyles(), props)
+    const { classes } = useStyles(undefined, { props })
 
     if (symbol)
         return (

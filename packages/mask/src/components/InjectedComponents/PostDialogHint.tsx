@@ -1,6 +1,6 @@
 import { memo } from 'react'
 import { IconButton, Typography } from '@mui/material'
-import { useStylesExtends, makeStyles, ShadowRootTooltip } from '@masknet/theme'
+import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { useI18N } from '../../utils/index.js'
 import { isMobileFacebook } from '../../social-network-adaptor/facebook.com/utils/isMobile.js'
 import { MaskSharpIcon, MaskIconInMinds } from '@masknet/shared'
@@ -45,7 +45,7 @@ const ICON_MAP: Record<string, JSX.Element> = {
 const EntryIconButton = memo((props: PostDialogHintUIProps) => {
     const { t } = useI18N()
     const { tooltip, disableGuideTip } = props
-    const { classes, cx } = useStylesExtends(useStyles(), props)
+    const { classes, cx } = useStyles(undefined, { props })
 
     const getEntry = () => (
         <ShadowRootTooltip
@@ -76,7 +76,7 @@ const EntryIconButton = memo((props: PostDialogHintUIProps) => {
 
 export const PostDialogHint = memo(function PostDialogHintUI(props: PostDialogHintUIProps) {
     const { onHintButtonClicked, size, ...others } = props
-    const { classes } = useStylesExtends(useStyles(), props)
+    const { classes } = useStyles(undefined, { props })
     const { t } = useI18N()
 
     return isMobileFacebook ? (

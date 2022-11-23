@@ -16,6 +16,7 @@ import type {
 import type { SerializableTypedMessages } from '@masknet/typed-message'
 import type { RenderFragmentsContextType } from '@masknet/typed-message-react'
 import type { SharedComponentOverwrite } from '@masknet/shared'
+import type { ThemeSettings } from '@masknet/web3-shared-base'
 
 export declare namespace SocialNetwork {
     export interface Utils {
@@ -198,6 +199,8 @@ export namespace SocialNetworkUI {
             currentVisitingIdentityProvider?: IdentityResolveProvider
             /** Maintain all the posts up-to-date. */
             postsProvider?: PostsProvider
+            /** Resolve the user settings of site theme. */
+            themeSettingsProvider?: ThemeSettingsProvider
             /** Get searched keyword */
             getSearchedKeyword?(): string
         }
@@ -230,6 +233,10 @@ export namespace SocialNetworkUI {
              */
             start(signal: AbortSignal): void
         }
+        export interface ThemeSettingsProvider {
+            readonly recognized: ValueRef<ThemeSettings>
+            start(signal: AbortSignal): Promise<void>
+        }
     }
     export namespace Customization {
         export interface Define {
@@ -239,8 +246,6 @@ export namespace SocialNetworkUI {
              * Should follow the color scheme of the website.
              */
             useTheme?(baseTheme: Theme): Theme
-            /** Provide the ability to detect the current color scheme (light or dark) in the current SNS */
-            paletteMode?: PaletteModeProvider
             i18nOverwrite?: I18NOverwrite
             sharedComponentOverwrite?: SharedComponentOverwrite
             componentOverwrite?: ComponentOverwrite
@@ -264,6 +269,7 @@ export namespace SocialNetworkUI {
     }
     export namespace Configuration {
         export interface Define {
+            themeSettings?: ThemeSettings
             nextIDConfig?: NextIDConfig
             steganography?: SteganographyConfig
             tipsConfig?: TipsConfig

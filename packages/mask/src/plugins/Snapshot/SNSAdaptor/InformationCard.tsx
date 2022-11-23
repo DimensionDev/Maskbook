@@ -1,6 +1,6 @@
 import { formatEthereumAddress, explorerResolver } from '@masknet/web3-shared-evm'
 import { Avatar, Box, Link, Typography } from '@mui/material'
-import { makeStyles, useStylesExtends } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 import { OpenInNew } from '@mui/icons-material'
 import formatDateTime from 'date-fns/format'
 import { useContext } from 'react'
@@ -60,7 +60,7 @@ const useStyles = makeStyles()((theme) => {
 })
 
 export function InfoField(props: InfoFieldProps) {
-    const { classes } = useStylesExtends(useStyles(), props)
+    const { classes } = useStyles(undefined, { props })
     return (
         <div className={classes.field}>
             <Typography className={classes.title}>{props.title}</Typography>

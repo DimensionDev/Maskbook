@@ -1,19 +1,19 @@
 import { BindingProof, EMPTY_LIST, NextIDPlatform, PersonaInformation } from '@masknet/shared-base'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import { Box, DialogActions, DialogContent, Stack, Typography } from '@mui/material'
-import { useCallback, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { useSubscription } from 'use-subscription'
-import { CloseIcon } from '../assets/CloseIcon.js'
 import { context } from '../context.js'
 import { useI18N } from '../locales/index.js'
 import { PersonaItem } from './PersonaItem.js'
-import { InfoIcon } from '../assets/InfoIcon.js'
 import { usePersonasFromDB } from '../../../components/DataSource/usePersonasFromDB.js'
 import type { AllChainsNonFungibleToken } from '../types.js'
 import { PersonaAction } from '@masknet/shared'
 import { useAsyncRetry } from 'react-use'
 import { isValidAddress } from '@masknet/web3-shared-evm'
 import { useLastRecognizedSocialIdentity } from '../../../components/DataSource/useActivatedUI.js'
+import { Icons } from '@masknet/icons'
+import { usePersonasFromNextID } from '../../../components/DataSource/usePersonasFromNextID.js'
 
 const useStyles = makeStyles()((theme) => ({
     messageBox: {
@@ -34,11 +34,22 @@ interface PersonaPageProps {
     onChange: (proof: BindingProof, wallets?: BindingProof[], tokenInfo?: AllChainsNonFungibleToken) => void
 }
 
-export function PersonaPage(props: PersonaPageProps) {
-    const { onNext, onChange, onClose } = props
+export function PersonaPage({ onNext, onChange }: PersonaPageProps) {
+    const t = useI18N()
     const [visible, setVisible] = useState(true)
     const { classes } = useStyles()
     const { loading, value: socialIdentity } = useLastRecognizedSocialIdentity()
+    const network = socialIdentity?.identifier?.network.replace('.com', '')
+    const userId = socialIdentity?.identifier?.userId
+
+    const { value: bindingPersonas = EMPTY_LIST } = usePersonasFromNextID(
+        socialIdentity?.publicKey,
+        NextIDPlatform.NextID,
+    )
+    const bindingProofs = useMemo(
+        () => bindingPersonas.map((x) => x.proofs.filter((y) => y.is_valid && y.platform === network)).flat(),
+        [bindingPersonas],
+    )
 
     const myPersonas = usePersonasFromDB()
     const _persona = useSubscription(context.currentPersona)
@@ -47,20 +58,16 @@ export function PersonaPage(props: PersonaPageProps) {
         (x: PersonaInformation) => x.identifier.rawPublicKey.toLowerCase() === _persona?.rawPublicKey.toLowerCase(),
     )
 
-    const t = useI18N()
-
     const onSelect = useCallback(
         (proof: BindingProof, tokenInfo?: AllChainsNonFungibleToken) => {
             onChange(
                 proof,
-                socialIdentity?.binding?.proofs.filter(
-                    (x) => x.platform === NextIDPlatform.Ethereum && isValidAddress(x.identity),
-                ) ?? EMPTY_LIST,
+                bindingProofs.filter((x) => x.platform === NextIDPlatform.Ethereum && isValidAddress(x.identity)),
                 tokenInfo,
             )
             onNext()
         },
-        [socialIdentity?.binding],
+        [onNext, bindingProofs],
     )
     const { value: avatar } = useAsyncRetry(async () => context.getPersonaAvatar(currentPersona?.identifier), [])
 
@@ -68,73 +75,53 @@ export function PersonaPage(props: PersonaPageProps) {
         <>
             <DialogContent sx={{ flex: 1, height: 464, padding: 2 }}>
                 {loading ? (
-                    <Stack justifyContent="center" alignItems="center">
+                    <Stack justifyContent="center" alignItems="center" height="100%">
                         <LoadingBase />
                     </Stack>
                 ) : (
                     <>
                         {visible ? (
                             <Box className={classes.messageBox}>
-                                <InfoIcon style={{ width: 20, height: 20 }} />
+                                <Icons.Info size={20} />
                                 <Typography color="currentColor" fontSize={14} fontFamily="Helvetica">
                                     {t.persona_hint()}
                                 </Typography>
-                                <CloseIcon
-                                    sx={{ cursor: 'pointer', width: 20, height: 20 }}
-                                    onClick={() => setVisible(false)}
-                                />
+                                <Icons.Close size={20} onClick={() => setVisible(true)} />
                             </Box>
                         ) : null}
-                        {socialIdentity?.binding?.proofs
+                        {bindingProofs
                             .filter(
-                                (proof) => proof.platform === socialIdentity.identifier?.network.replace('.com', ''),
+                                (x) => x.identity.toLowerCase() === socialIdentity!.identifier?.userId.toLowerCase(),
                             )
-                            .filter((x) => x.identity.toLowerCase() === socialIdentity.identifier?.userId.toLowerCase())
                             .map((x, i) => (
                                 <PersonaItem
-                                    persona={socialIdentity.binding?.persona}
+                                    persona={socialIdentity!.binding?.persona}
                                     key={`avatar${i}`}
-                                    avatar={socialIdentity?.avatar ?? ''}
+                                    avatar={socialIdentity!.avatar ?? ''}
                                     owner
-                                    nickname={socialIdentity?.nickname}
+                                    nickname={socialIdentity!.nickname}
                                     proof={x}
-                                    userId={socialIdentity?.identifier?.userId ?? x.identity}
+                                    userId={userId ?? x.identity}
                                     onSelect={onSelect}
                                 />
                             ))}
 
-                        {myPersonas?.[0] &&
-                            myPersonas[0].linkedProfiles
-                                .filter(
-                                    (x) =>
-                                        x.identifier.network ===
-                                        socialIdentity?.identifier?.network.replace('.com', ''),
-                                )
-                                .map((x, i) =>
-                                    socialIdentity?.binding?.proofs.some(
-                                        (y) => y.identity.toLowerCase() === x.identifier.userId.toLowerCase(),
-                                    ) ? null : (
-                                        <PersonaItem
-                                            avatar=""
-                                            key={`persona${i}`}
-                                            owner={false}
-                                            userId={x.identifier.userId}
-                                        />
-                                    ),
-                                )}
-                        {socialIdentity?.binding?.proofs
-                            .filter(
-                                (proof) => proof.platform === socialIdentity?.identifier?.network.replace('.com', ''),
-                            )
-                            .filter(
-                                (x) => x.identity.toLowerCase() !== socialIdentity?.identifier?.userId.toLowerCase(),
-                            )
+                        {myPersonas?.[0].linkedProfiles
+                            .filter((x) => x.identifier.network === network)
+                            .map((x, i) =>
+                                socialIdentity?.binding?.proofs.some(
+                                    (y) => y.identity.toLowerCase() === x.identifier.userId.toLowerCase(),
+                                ) ? null : (
+                                    <PersonaItem avatar="" key={`persona${i}`} userId={x.identifier.userId} />
+                                ),
+                            )}
+                        {bindingProofs
+                            .filter((x) => x.identity.toLowerCase() !== userId?.toLowerCase())
                             .map((x, i) => (
                                 <PersonaItem
-                                    persona={socialIdentity.binding?.persona}
+                                    persona={socialIdentity!.binding?.persona}
                                     avatar=""
                                     key={i}
-                                    owner={false}
                                     userId={x.identity}
                                     proof={x}
                                 />

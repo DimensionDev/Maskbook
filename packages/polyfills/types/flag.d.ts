@@ -17,6 +17,11 @@ declare module NodeJS {
         COMMIT_DATE: string
         REMOTE_URL: string
         BRANCH_NAME: string
+        /**
+         * Run skip tests like
+         * RUN_SKIP_TESTS=1 pnpm test
+         */
+        RUN_SKIP_TESTS: string
         DIRTY: string
         TAG_DIRTY: string
     }

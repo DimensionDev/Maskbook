@@ -18,7 +18,7 @@ export async function injectAvatar(signal: AbortSignal) {
                 // TODO fetch identity
                 const identity = {}
 
-                const root = createReactRootShadowed(proxy.afterShadow, { signal })
+                const root = createReactRootShadowed(proxy.afterShadow, { untilVisible: true, signal })
                 root.render(
                     <div
                         style={{

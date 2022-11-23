@@ -1,5 +1,5 @@
 import { List, ListItem } from '@mui/material'
-import { makeStyles, useStylesExtends } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 import { NFTImageCollectibleAvatar, CollectionTypes } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
@@ -7,7 +7,7 @@ import { TokenType } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({}))
 
-export interface CollectionListProps extends withClasses<never | 'root' | 'list' | 'collectionWrap'> {
+export interface CollectionListProps extends withClasses<'root' | 'list' | 'collectionWrap'> {
     collections: CollectionTypes[]
     onList?: (key: string) => void
     size?: number
@@ -16,7 +16,7 @@ export interface CollectionListProps extends withClasses<never | 'root' | 'list'
 
 export function CollectionList(props: CollectionListProps) {
     const { collections, onList, size = 64, showNetwork = false } = props
-    const { classes } = useStylesExtends(useStyles(), props)
+    const { classes } = useStyles(undefined, { props })
 
     return (
         <List className={classes.list}>

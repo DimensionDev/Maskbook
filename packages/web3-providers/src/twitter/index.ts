@@ -6,8 +6,8 @@ import {
     getTokens,
     getUserByScreenName,
     getUserNFTContainer,
-    getUserSettings,
     getDefaultUserSettings,
+    getUserSettingsCached,
 } from './apis/index.js'
 
 const UPLOAD_AVATAR_URL = 'https://upload.twitter.com/i/media/upload.json'
@@ -26,10 +26,11 @@ export class TwitterAPI implements TwitterBaseAPI.Provider {
         return getSettings()
     }
 
-    async getUserSettings() {
+    async getUserSettings(fresh = false) {
         const defaults = getDefaultUserSettings()
         try {
-            const userSettings = await timeout(getUserSettings(), 2500)
+            if (fresh) await this.cleanUserSettings()
+            const userSettings = await timeout(getUserSettingsCached(), 5000)
             return {
                 ...defaults,
                 ...userSettings,
@@ -37,6 +38,10 @@ export class TwitterAPI implements TwitterBaseAPI.Provider {
         } catch {
             return defaults
         }
+    }
+
+    async cleanUserSettings() {
+        getUserSettingsCached.cache.clear()
     }
 
     async getUserNftContainer(screenName: string) {

@@ -1,5 +1,5 @@
 import { useNetworkDescriptor, useNonFungibleToken } from '@masknet/web3-hooks-base'
-import { makeStyles, useStylesExtends } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { NETWORK_DESCRIPTORS } from '@masknet/web3-shared-evm'
@@ -74,7 +74,7 @@ export function NFTCardStyledAssetPlayer(props: Props) {
         setSourceType,
         showNetwork = false,
     } = props
-    const { classes, cx } = useStylesExtends(useStyles(), props)
+    const { classes, cx } = useStyles(undefined, { props })
     const theme = useTheme()
     const { value: tokenDetailed } = useNonFungibleToken<'all'>(
         NetworkPluginID.PLUGIN_EVM,

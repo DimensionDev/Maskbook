@@ -62,7 +62,7 @@ enum CreateRedPacketPageStep {
     ConfirmPage = 'confirm',
 }
 
-interface RedPacketDialogProps extends withClasses<never> {
+interface RedPacketDialogProps {
     open: boolean
     onClose: () => void
     isOpenFromApplicationBoard?: boolean

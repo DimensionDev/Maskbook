@@ -2,7 +2,7 @@
 import { EnhanceableSite, isDashboardPage, CrossIsolationMessages } from '@masknet/shared-base'
 import { ErrorBoundary, useValueRef } from '@masknet/shared-base-ui'
 import { omit } from 'lodash-es'
-import { Cx, makeStyles, useDialogStackActor, usePortalShadowRoot, useStylesExtends } from '@masknet/theme'
+import { Cx, makeStyles, useDialogStackActor, usePortalShadowRoot } from '@masknet/theme'
 import {
     Dialog,
     DialogActions,
@@ -17,7 +17,7 @@ import {
     useMediaQuery,
     useTheme,
 } from '@mui/material'
-import { Children, cloneElement, useCallback } from 'react'
+import { Children, cloneElement, useCallback, useRef } from 'react'
 import { useSharedI18N } from '../../locales/index.js'
 import { sharedUIComponentOverwrite, sharedUINetworkIdentifier } from '../base/index.js'
 import { DialogDismissIcon } from './DialogDismissIcon.js'
@@ -104,24 +104,32 @@ export interface InjectedDialogProps extends Omit<DialogProps, 'onClose' | 'titl
 export function InjectedDialog(props: InjectedDialogProps) {
     const snsId = useValueRef(sharedUINetworkIdentifier)
     const overwrite = useValueRef(sharedUIComponentOverwrite)
-    props = overwrite.InjectedDialog?.props?.(props) ?? props
     const clean = snsId === EnhanceableSite.Minds || snsId === EnhanceableSite.Facebook
+
+    const useSiteOverwrite = useRef(overwrite.InjectedDialog?.classes || (() => ({ classes: undefined }))).current
+    const siteOverwrite = useSiteOverwrite().classes
+    const styles = useStyles({ clean }, { props })
+    const cx = styles.cx
+    const classes = { ...styles.classes }
+    if (siteOverwrite) {
+        for (const [key, className] of Object.entries(siteOverwrite)) {
+            if (key in classes) Reflect.set(classes, key, cx(Reflect.get(classes, key), String(className)))
+            else Reflect.set(classes, key, String(className))
+        }
+    }
     const {
-        classes: {
-            dialogActions,
-            dialogCloseButton,
-            dialogContent,
-            dialogTitle,
-            dialogTitleEndingContent,
-            dialogTitleTabs,
-            dialogTitleWithTabs,
-            dialogTitleTypography,
-            dialogBackdropRoot,
-            container,
-            ...dialogClasses
-        },
-        cx,
-    } = useStylesExtends(useStyles({ clean }), props, overwrite.InjectedDialog?.classes)
+        dialogActions,
+        dialogCloseButton,
+        dialogContent,
+        dialogTitle,
+        dialogTitleEndingContent,
+        dialogTitleTabs,
+        dialogTitleWithTabs,
+        dialogTitleTypography,
+        dialogBackdropRoot,
+        container,
+        ...dialogClasses
+    } = classes
 
     const t = useSharedI18N()
     const fullScreen = useMediaQuery(useTheme().breakpoints.down('xs'))

@@ -159,10 +159,6 @@ export function NFTListDialog(props: NFTListDialogProps) {
         setSelectedToken(undefined)
     }
 
-    const onChangeToken = (token: AllChainsNonFungibleToken) => {
-        setSelectedToken(token)
-    }
-
     const onSave = useCallback(async () => {
         if (!selectedToken?.metadata?.imageURL) return
         setDisabled(true)
@@ -254,7 +250,7 @@ export function NFTListDialog(props: NFTListDialogProps) {
     return (
         <>
             <DialogContent className={classes.content}>
-                {account || Boolean(wallets?.length) ? (
+                {account || wallets?.length ? (
                     <>
                         {selectedPluginId === NetworkPluginID.PLUGIN_EVM && actualChainId ? (
                             <div className={classes.abstractTabWrapper}>
@@ -275,7 +271,7 @@ export function NFTListDialog(props: NFTListDialogProps) {
                             pluginID={selectedPluginId}
                             tokens={tokensInList}
                             tokenInfo={selectedToken}
-                            onChange={onChangeToken}
+                            onChange={setSelectedToken}
                             children={NoNFTList()}
                             nextPage={nextPage}
                             loadError={!!loadError}
@@ -367,7 +363,7 @@ export function NFTListDialog(props: NFTListDialogProps) {
                             !supportPluginIds.includes(selectedPluginId) ? NetworkPluginID.PLUGIN_EVM : selectedPluginId
                         }>
                         <Button onClick={onSave} disabled={disabled || !selectedToken} fullWidth>
-                            {pfpType === PFP_TYPE.PFP ? t.set_PFP_title() : t.set_pfp_background_title()}
+                            {t.set_up_title({ context: pfpType === PFP_TYPE.PFP ? 'pfp' : 'background' })}
                         </Button>
                     </ChainBoundary>
                 </PluginVerifiedWalletStatusBar>

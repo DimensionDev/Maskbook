@@ -1,5 +1,5 @@
 import { Stack, Card, Typography, Divider } from '@mui/material'
-import { makeStyles, useStylesExtends } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 
 import { useI18N } from '../../locales/index.js'
 import type { AccountType } from '../types.js'
@@ -47,7 +47,7 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
-export interface PlatformCardProps extends withClasses<never | 'root'> {
+export interface PlatformCardProps extends withClasses<'root'> {
     account: AccountType
     openImageSetting: (scene: Scene) => void
     isCurrent?: boolean
@@ -57,7 +57,7 @@ export interface PlatformCardProps extends withClasses<never | 'root'> {
 export function PlatformCard(props: PlatformCardProps) {
     const { account, openImageSetting, isCurrent, currentPersona } = props
     const t = useI18N()
-    const { classes } = useStylesExtends(useStyles(), props)
+    const { classes } = useStyles(undefined, { props })
 
     const walletsCount = account.walletList.NFTs.length
 

@@ -1,4 +1,4 @@
-import { makeStyles, useStylesExtends } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 import { Tabs, Tab, Box, BoxProps, Paper } from '@mui/material'
 
 const useStyles = makeStyles()((theme) => ({
@@ -41,7 +41,7 @@ export interface AbstractTabProps
 
 export default function AbstractTab(props: AbstractTabProps) {
     const { tabs, state, index, height = 200, hasOnlyOneChild = false, scrollable = false } = props
-    const { classes, cx } = useStylesExtends(useStyles(), props)
+    const { classes, cx } = useStyles(undefined, { props })
     const [value, setValue] = state ?? [undefined, undefined]
     const tabIndicatorStyle = tabs.length && !scrollable ? { width: 100 / tabs.length + '%' } : undefined
 

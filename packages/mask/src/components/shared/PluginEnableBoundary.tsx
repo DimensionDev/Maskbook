@@ -3,7 +3,7 @@ import { useAsyncFn } from 'react-use'
 import { Icons } from '@masknet/icons'
 import type { PluginID } from '@masknet/shared-base'
 import { useActivatedPluginsSNSAdaptor, useIsMinimalMode } from '@masknet/plugin-infra/content-script'
-import { makeStyles, useStylesExtends, ActionButton } from '@masknet/theme'
+import { makeStyles, ActionButton } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import Services from '../../extension/service.js'
 import { useI18N } from '../../utils/index.js'
@@ -25,7 +25,7 @@ interface PluginEnableBoundaryProps extends withClasses<'root'> {
 export const PluginEnableBoundary = memo<PluginEnableBoundaryProps>((props) => {
     const { t } = useI18N()
     const { children, pluginID } = props
-    const { classes } = useStylesExtends(useStyles(), props)
+    const { classes } = useStyles(undefined, { props })
 
     const disabled = useIsMinimalMode(pluginID)
     const plugins = useActivatedPluginsSNSAdaptor(true)

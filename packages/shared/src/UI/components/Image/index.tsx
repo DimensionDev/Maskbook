@@ -1,5 +1,5 @@
 import { ImgHTMLAttributes, useState } from 'react'
-import { LoadingBase, makeStyles, useStylesExtends } from '@masknet/theme'
+import { LoadingBase, makeStyles } from '@masknet/theme'
 import { Box, useTheme } from '@mui/material'
 import { useImageURL } from '../../../hooks/useImageURL.js'
 
@@ -54,11 +54,11 @@ export function Image({
     size,
     rounded,
     disableSpinner,
-    classes: externalClasses,
+    classes: extraClasses,
     onClick,
     ...rest
 }: ImageProps) {
-    const { classes, cx } = useStylesExtends(useStyles({ size, rounded }), { classes: externalClasses })
+    const { classes, cx } = useStyles({ size, rounded }, { props: { classes: extraClasses } })
     const theme = useTheme()
     const [failed, setFailed] = useState(false)
 

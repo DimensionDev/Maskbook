@@ -1,4 +1,4 @@
-import { makeStyles, useStylesExtends, ActionButton, ActionButtonProps, ShadowRootTooltip } from '@masknet/theme'
+import { makeStyles, ActionButton, ActionButtonProps, ShadowRootTooltip } from '@masknet/theme'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { unreachable } from '@masknet/kit'
 import { useSharedI18N } from '../../../locales/index.js'
@@ -53,7 +53,7 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
     } = props
 
     const t = useSharedI18N()
-    const { classes } = useStylesExtends(useStyles(), props)
+    const { classes } = useStyles(undefined, { props })
 
     const [{ type: approveStateType, allowance }, transactionState, approveCallback, resetApproveCallback] =
         useERC20TokenApproveCallback(token?.address ?? '', amount, spender ?? '', noop, expectedChainId)

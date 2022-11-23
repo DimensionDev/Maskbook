@@ -5,7 +5,7 @@ import { isDashboardPage, NetworkPluginID } from '@masknet/shared-base'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
 import { Box, Card, Typography, Paper, Link } from '@mui/material'
-import { useStylesExtends, makeStyles, MaskColorVar, ActionButton, LoadingBase } from '@masknet/theme'
+import { makeStyles, MaskColorVar, ActionButton, LoadingBase } from '@masknet/theme'
 import { useProviderDescriptor, useNetworkDescriptor, useWeb3State } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useI18N } from '../../../../utils/index.js'
@@ -59,7 +59,7 @@ const useStyles = makeStyles<{
     },
 }))
 
-export interface ConnectionProgressProps extends withClasses<never> {
+export interface ConnectionProgressProps {
     pluginID: NetworkPluginID
     providerType: Web3Helper.Definition[NetworkPluginID]['ProviderType']
     networkType: Web3Helper.Definition[NetworkPluginID]['NetworkType']
@@ -75,10 +75,7 @@ export function ConnectionProgress(props: ConnectionProgressProps) {
     const { Others } = useWeb3State(pluginID)
     const providerDescriptor = useProviderDescriptor(pluginID, providerType)
     const networkDescriptor = useNetworkDescriptor(pluginID, networkType)
-    const { classes } = useStylesExtends(
-        useStyles({ contentBackground: providerDescriptor?.backgroundGradient }),
-        props,
-    )
+    const { classes } = useStyles({ contentBackground: providerDescriptor?.backgroundGradient })
     if (!Others) return null
 
     return (

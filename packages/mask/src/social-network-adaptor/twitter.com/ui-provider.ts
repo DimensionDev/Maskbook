@@ -11,8 +11,9 @@ import { pasteImageToCompositionTwitter } from './automation/pasteImageToComposi
 import { gotoNewsFeedPageTwitter } from './automation/gotoNewsFeedPage.js'
 import { gotoProfilePageTwitter } from './automation/gotoProfilePage.js'
 import { IdentityProviderTwitter, CurrentVisitingIdentityProviderTwitter } from './collecting/identity.js'
+import { ThemeSettingsProviderTwitter } from './collecting/theme.js'
 import { collectVerificationPost, PostProviderTwitter } from './collecting/post.js'
-import { PaletteModeProviderTwitter, useThemeTwitterVariant } from './customization/custom.js'
+import { useThemeTwitterVariant } from './customization/custom.js'
 import { injectToolboxHintAtTwitter } from './injection/ToolboxHint.js'
 import { i18NOverwriteTwitter } from './customization/i18n.js'
 import { injectSearchResultBoxAtTwitter } from './injection/SearchResultBox.js'
@@ -42,6 +43,7 @@ import { injectProfileCover } from './injection/ProfileCover.js'
 import { injectProfileCardHolder } from './injection/ProfileCard/index.js'
 import { injectAvatar } from './injection/Avatar/index.js'
 import { injectPluginSettingsDialogAtTwitter } from './injection/PluginSettingsDialog.js'
+import { FontSize, ThemeColor, ThemeMode } from '@masknet/web3-shared-base'
 
 const useInjectedDialogClassesOverwriteTwitter = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -145,11 +147,11 @@ const twitterUI: SocialNetworkUI.Definition = {
     collecting: {
         identityProvider: IdentityProviderTwitter,
         currentVisitingIdentityProvider: CurrentVisitingIdentityProviderTwitter,
+        themeSettingsProvider: ThemeSettingsProviderTwitter,
         postsProvider: PostProviderTwitter,
         getSearchedKeyword: getSearchedKeywordAtTwitter,
     },
     customization: {
-        paletteMode: PaletteModeProviderTwitter,
         sharedComponentOverwrite: {
             InjectedDialog: {
                 classes: useInjectedDialogClassesOverwriteTwitter,
@@ -203,6 +205,11 @@ const twitterUI: SocialNetworkUI.Definition = {
         PluginSettingsDialog: injectPluginSettingsDialogAtTwitter,
     },
     configuration: {
+        themeSettings: {
+            color: ThemeColor.Blue,
+            size: FontSize.Normal,
+            mode: ThemeMode.Light,
+        },
         nextIDConfig: {
             enable: true,
             platform: NextIDPlatform.Twitter,

@@ -3,7 +3,7 @@
 import { Suspense } from 'react'
 import { i18NextInstance, updateLanguage, PopupRoutes } from '@masknet/shared-base'
 import { once, noop } from 'lodash-es'
-import { TssCacheProvider, MaskThemeProvider } from '@masknet/theme'
+import { MaskThemeProvider } from '@masknet/theme'
 import { CacheProvider } from '@emotion/react'
 import { renderToString } from 'react-dom/server'
 import createCache from '@emotion/cache'
@@ -32,23 +32,18 @@ export async function render(props: PopupSSR_Props) {
     await init()
     updateLanguage(props.language)
     // https://github.com/emotion-js/emotion/issues/2933
-    const muiCache = (createCache.default || createCache)({ key: 'css' })
-    const tssCache = (createCache.default || createCache)({ key: 'tss' })
-    const tssServer = (createEmotionServer.default || createEmotionServer)(tssCache)
-    const muiServer = (createEmotionServer.default || createEmotionServer)(muiCache)
+    const cache = (createCache.default || createCache)({ key: 'css' })
+    const server = (createEmotionServer.default || createEmotionServer)(cache)
 
     const html = renderToString(
-        <CacheProvider value={muiCache}>
-            <TssCacheProvider value={tssCache}>
-                <PopupSSR {...props} />
-            </TssCacheProvider>
+        <CacheProvider value={cache}>
+            <PopupSSR {...props} />
         </CacheProvider>,
     )
         .replaceAll('href="/', 'href="#/')
         .replaceAll('href="#/dashboard', 'href="/dashboard')
-    const muiCSS = muiServer.constructStyleTagsFromChunks(muiServer.extractCriticalToChunks(html))
-    const tssCSS = tssServer.constructStyleTagsFromChunks(tssServer.extractCriticalToChunks(html))
-    return { html, css: muiCSS + tssCSS }
+    const css = server.constructStyleTagsFromChunks(server.extractCriticalToChunks(html))
+    return { html, css }
 }
 
 function PopupSSR(props: PopupSSR_Props) {

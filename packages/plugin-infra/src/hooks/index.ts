@@ -10,5 +10,6 @@ export * from './useI18N.js'
 export * from './useLastRecognizedIdentity.js'
 export * from './useLastRecognizedSocialIdentity.js'
 export * from './useSocialIdentity.js'
+export * from './useThemeSettings.js'
 
 export { type PluginWrapperMethods, type PluginWrapperComponent, usePluginWrapper } from './usePluginWrapper.js'

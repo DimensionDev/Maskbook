@@ -73,7 +73,7 @@ function _(selector: () => LiveSelector<HTMLElement | SVGElement, false>, signal
                 const proxy = DOMProxy({ afterShadowRootInit: { mode: process.env.shadowRootMode } })
                 proxy.realCurrent = info.element
 
-                const root = createReactRootShadowed(proxy.afterShadow, { signal })
+                const root = createReactRootShadowed(proxy.afterShadow, { untilVisible: true, signal })
 
                 root.render(
                     <div

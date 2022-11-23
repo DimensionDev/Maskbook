@@ -137,6 +137,8 @@ export class X2Y2API implements NonFungibleTokenAPI.Provider<ChainId, SchemaType
             }),
         )
 
+        if (!data.length) throw new Error('No Data.')
+
         const offers = data.filter((x) => x.type === 'buy').map((x) => this.createOrder(address, tokenId, x))
 
         return createPageable(

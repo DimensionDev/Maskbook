@@ -1,0 +1,76 @@
+// Vitest Snapshot v1
+
+exports[`NFTScan Solana > should get asset correctly 1`] = `
+[
+  {
+    "rarity": "12.61%",
+    "type": "Background",
+    "value": "Grey",
+  },
+  {
+    "rarity": "3.83%",
+    "type": "Clothes",
+    "value": "Black Tee",
+  },
+  {
+    "rarity": "5.07%",
+    "type": "Eyes",
+    "value": "Sad",
+  },
+  {
+    "rarity": "2.82%",
+    "type": "Eyewear",
+    "value": "Circle Sunglasses",
+  },
+  {
+    "rarity": "2.01%",
+    "type": "Fur",
+    "value": "Wood",
+  },
+  {
+    "rarity": "2.12%",
+    "type": "Hat",
+    "value": "Backwards Skate Cap",
+  },
+  {
+    "rarity": "9.22%",
+    "type": "Mouth",
+    "value": "Wry",
+  },
+]
+`;
+
+exports[`NFTScan Solana > show get assets by account correctly 1`] = `
+[
+  {
+    "rarity": "12.6%",
+    "type": "Background",
+    "value": "Green",
+  },
+  {
+    "rarity": "0.88%",
+    "type": "Clothes",
+    "value": "Tweed Suit",
+  },
+  {
+    "rarity": "9.4%",
+    "type": "Eyes",
+    "value": "Disappointed",
+  },
+  {
+    "rarity": "1.96%",
+    "type": "Fur",
+    "value": "Lofi",
+  },
+  {
+    "rarity": "5.51%",
+    "type": "Hat",
+    "value": "Skate Cap",
+  },
+  {
+    "rarity": "2.53%",
+    "type": "Mouth",
+    "value": "Raspberry",
+  },
+]
+`;

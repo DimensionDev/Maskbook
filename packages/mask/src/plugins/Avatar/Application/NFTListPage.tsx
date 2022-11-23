@@ -3,11 +3,12 @@ import { ElementAnchor, RetryHint } from '@masknet/shared'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { Box, List, ListItem, Stack, Typography } from '@mui/material'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { supportPluginIds } from '../constants.js'
 import { useI18N } from '../locales/index.js'
 import { NFTImage } from '../SNSAdaptor/NFTImage.js'
 import type { AllChainsNonFungibleToken } from '../types.js'
+import { isSameNFT } from '../utils/index.js'
 
 const useStyles = makeStyles<{
     networkPluginID: NetworkPluginID
@@ -64,11 +65,14 @@ export function NFTListPage(props: NFTListPageProps) {
     const [selectedToken, setSelectedToken] = useState<AllChainsNonFungibleToken | undefined>(tokenInfo)
     const t = useI18N()
 
-    const _onChange = (token: AllChainsNonFungibleToken) => {
-        if (!token) return
-        setSelectedToken(token)
-        onChange?.(token)
-    }
+    const onSelect = useCallback(
+        (token: AllChainsNonFungibleToken) => {
+            if (!token) return
+            setSelectedToken(token)
+            onChange?.(token)
+        },
+        [onChange],
+    )
 
     useEffect(() => setSelectedToken(tokenInfo), [tokenInfo])
 
@@ -98,11 +102,9 @@ export function NFTListPage(props: NFTListPageProps) {
                     <ListItem key={i} className={classes.nftItem}>
                         <NFTImage
                             key={i}
-                            pluginID={pluginID}
-                            showBadge
                             token={token}
-                            selectedToken={selectedToken}
-                            onClick={(token) => _onChange(token)}
+                            selected={isSameNFT(pluginID, token, selectedToken)}
+                            onSelect={onSelect}
                         />
                     </ListItem>
                 ))}
