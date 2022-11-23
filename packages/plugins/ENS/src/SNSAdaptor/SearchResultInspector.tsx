@@ -1,4 +1,4 @@
-import { useContext, forwardRef, useImperativeHandle, useRef, useEffect, useState } from 'react'
+import { useContext, forwardRef, useImperativeHandle } from 'react'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { useCopyToClipboard } from 'react-use'
 import { SourceType, resolveNextIDPlatformLink } from '@masknet/web3-shared-base'
@@ -83,7 +83,8 @@ const useStyles = makeStyles<StyleProps>()((theme) => {
             display: 'flex',
             marginRight: 12,
             alignItems: 'center',
-            maxWidth: 134,
+            width: 130,
+            justifyContent: 'space-between',
             overflow: 'hidden',
             textOverflow: 'ellipsis',
             height: 36,
@@ -109,7 +110,6 @@ export const SearchResultInspectorContent = forwardRef(function (
     const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const { isLoading, isError, retry, reversedAddress, nextIdBindings, firstNextIdrBinding, domain, tokenId } =
         useContext(ENSContext)
-    const [isShowSocialAccountList, setIsShowSocialAccountList] = useState(false)
     useImperativeHandle(ref, () => ({ isLoading, reversedAddress, domain, isError, tokenId }), [
         isLoading,
         reversedAddress,
@@ -125,15 +125,7 @@ export const SearchResultInspectorContent = forwardRef(function (
         successText: t.wallets_address_copied(),
     })
 
-    const badgeCollectionRef = useRef<HTMLDivElement>(null)
-
-    useEffect(() => {
-        setIsShowSocialAccountList(
-            Boolean(
-                nextIdBindings.length > 1 && badgeCollectionRef.current && badgeCollectionRef.current.scrollWidth > 520,
-            ),
-        )
-    }, [badgeCollectionRef?.current, JSON.stringify(nextIdBindings)])
+    const isShowSocialAccountList = nextIdBindings.length > 3
 
     return (
         <CollectibleState.Provider
@@ -171,7 +163,7 @@ export const SearchResultInspectorContent = forwardRef(function (
                 </section>
                 {firstNextIdrBinding?.identity ? (
                     <div className={classes.nextIdVerified}>
-                        <section className={classes.bindingsWrapper} ref={badgeCollectionRef}>
+                        <section className={classes.bindingsWrapper}>
                             {nextIdBindings.map((x, i) => (
                                 <SocialTooltip key={i} platform={x.source}>
                                     <div className={classes.badge}>
@@ -184,8 +176,8 @@ export const SearchResultInspectorContent = forwardRef(function (
                                             <Typography className={cx(classes.socialName, classes.rightSpace)}>
                                                 {x.identity}
                                             </Typography>
-                                            <Icons.LinkOut size={20} className={classes.linkOutIcon} />
                                         </Link>
+                                        <Icons.LinkOut size={20} className={classes.linkOutIcon} />
                                     </div>
                                 </SocialTooltip>
                             ))}
