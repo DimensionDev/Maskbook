@@ -401,15 +401,16 @@ export type Transaction = TransactionConfig_ & {
 }
 export interface UserOperation {
     sender: string
-    nonce: number
+    nonce: string
     initCode?: string
     callData?: string
-    callGasLimit: string
-    verificationGasLimit: string
-    preVerificationGasLimit: string
+    callGas: string
+    verificationGas: string
+    preVerificationGas: string
     maxFeePerGas: string
     maxPriorityFeePerGas: string
-    paymasterAndData?: string
+    paymaster?: string
+    paymasterData?: string
     signature: string
 }
 export type TransactionReceipt = Web3TransactionReceipt

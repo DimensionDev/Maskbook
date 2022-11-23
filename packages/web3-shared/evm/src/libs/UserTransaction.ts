@@ -2,10 +2,27 @@ import { omit } from 'lodash-es'
 import { keccak256 } from 'web3-utils'
 import * as ABICoder from 'web3-eth-abi'
 import type { ChainId, Transaction, UserOperation } from '../types/index.js'
-import { isEmptyHex } from '../utils/index.js'
+import { isZeroAddress } from '../utils/index.js'
 
 export class UserTransaction {
     private coder = ABICoder as unknown as ABICoder.AbiCoder
+
+    private CALL_OP_TYPE = {
+        callOp: {
+            sender: 'address',
+            nonce: 'uint256',
+            initCode: 'bytes',
+            callData: 'bytes',
+            callGas: 'uint256',
+            verificationGas: 'uint256',
+            preVerificationGas: 'uint256',
+            maxFeePerGas: 'uint256',
+            maxPriorityFeePerGas: 'uint256',
+            paymaster: 'address',
+            paymasterData: 'bytes',
+            signature: 'bytes',
+        },
+    }
 
     constructor(private chainId: ChainId, private entryPoint: string, private operation: UserOperation) {}
 
@@ -18,11 +35,11 @@ export class UserTransaction {
     }
 
     get initCode() {
-        return ''
+        return this.operation.initCode
     }
 
     get hasPaymaster() {
-        return this.operation.paymasterAndData && !isEmptyHex(this.operation.paymasterAndData)
+        return this.operation.paymaster && !isZeroAddress(this.operation.paymaster)
     }
 
     get asCamelCase() {
@@ -37,22 +54,21 @@ export class UserTransaction {
             ...omit(this.operation, [
                 'initCode',
                 'callData',
-                'callGasLimit',
-                'verificationGasLimit',
-                'preVerificationGasLimit',
+                'callGas',
+                'verificationGas',
+                'preVerificationGas',
                 'maxFeePerGas',
                 'maxPriorityFeePerGas',
-                'paymasterAndData',
+                'paymasterData',
             ]),
             init_code: this.operation.initCode,
             call_data: this.operation.callData,
-            call_gas_limit: this.operation.callGasLimit,
-            verification_gas_limit: this.operation.verificationGasLimit,
-            pre_verification_gas_limit: this.operation.preVerificationGasLimit,
+            call_gas: this.operation.callGas,
+            verification_gas: this.operation.verificationGas,
+            pre_verification_gas: this.operation.preVerificationGas,
             max_fee_per_gas: this.operation.maxFeePerGas,
             max_priority_fee_per_gas: this.operation.maxPriorityFeePerGas,
-            paymaster_and_data: this.operation.paymasterAndData,
-            signature: this.signature,
+            paymaster_data: this.operation.paymasterData,
         }
     }
 
@@ -61,32 +77,20 @@ export class UserTransaction {
     }
 
     get pack() {
-        return ''
+        const encoded = this.coder.encodeParameter(this.CALL_OP_TYPE, this.operation)
+        return `0x${encoded.slice(66, encoded.length - 64)}`
     }
 
     get packForSignature() {
-        const userOpType = {
-            components: [
-                { type: 'address', name: 'sender' },
-                { type: 'uint256', name: 'nonce' },
-                { type: 'bytes', name: 'initCode' },
-                { type: 'bytes', name: 'callData' },
-                { type: 'uint256', name: 'callGas' },
-                { type: 'uint256', name: 'verificationGas' },
-                { type: 'uint256', name: 'preVerificationGas' },
-                { type: 'uint256', name: 'maxFeePerGas' },
-                { type: 'uint256', name: 'maxPriorityFeePerGas' },
-                { type: 'address', name: 'paymaster' },
-                { type: 'bytes', name: 'paymasterData' },
-                { type: 'bytes', name: 'signature' },
-            ],
-            name: 'userOp',
-            type: 'tuple',
-        }
+        const encoded = this.coder.encodeParameter(this.CALL_OP_TYPE, {
+            ...this.operation,
+            signature: '0x',
+        })
+        return `0x${encoded.slice(66, encoded.length - 64)}`
     }
 
     get hash() {
-        return keccak256(this.pack)
+        return keccak256(this.packForSignature)
     }
 
     get requestId() {
@@ -95,19 +99,19 @@ export class UserTransaction {
         )
     }
 
-    async estimateVerificationGasLimit() {
+    async estimateVerificationGas() {
         // 100000 default verification gas. will add create2 cost (3200+200*length) if initCode exists
         const verificationGas = 100000
 
-        if (this.initCode.length > 0) {
+        if (this.initCode && this.initCode.length > 0) {
             return verificationGas + 3200 + 200 * this.initCode.length
         }
         return verificationGas
     }
 
-    async estimateExecutionGasLimit() {}
+    async estimateExecutionGas() {}
 
-    async estimateGasLimit() {}
+    async estimateGas() {}
 
     static fromUserOperation(userOperation?: UserOperation): UserTransaction {
         throw new Error('Not implemented.')
