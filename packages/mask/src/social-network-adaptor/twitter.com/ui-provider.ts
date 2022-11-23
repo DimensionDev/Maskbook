@@ -13,7 +13,7 @@ import { gotoProfilePageTwitter } from './automation/gotoProfilePage.js'
 import { IdentityProviderTwitter, CurrentVisitingIdentityProviderTwitter } from './collecting/identity.js'
 import { ThemeSettingsProviderTwitter } from './collecting/theme.js'
 import { collectVerificationPost, PostProviderTwitter } from './collecting/post.js'
-import { PaletteModeProviderTwitter, useThemeTwitterVariant } from './customization/custom.js'
+import { useThemeTwitterVariant } from './customization/custom.js'
 import { injectToolboxHintAtTwitter } from './injection/ToolboxHint.js'
 import { i18NOverwriteTwitter } from './customization/i18n.js'
 import { injectSearchResultBoxAtTwitter } from './injection/SearchResultBox.js'
@@ -152,7 +152,6 @@ const twitterUI: SocialNetworkUI.Definition = {
         getSearchedKeyword: getSearchedKeywordAtTwitter,
     },
     customization: {
-        paletteMode: PaletteModeProviderTwitter,
         sharedComponentOverwrite: {
             InjectedDialog: {
                 classes: useInjectedDialogClassesOverwriteTwitter,

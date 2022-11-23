@@ -7,11 +7,13 @@ import { resolveNextIDPlatformName } from '@masknet/web3-shared-base'
 
 interface StyleProps {
     isMenuScroll?: boolean
+    hidden?: boolean
 }
 
-const useStyles = makeStyles<StyleProps>()((theme, { isMenuScroll = false }) => {
+const useStyles = makeStyles<StyleProps>()((theme, { hidden = false }) => {
     return {
         tooltip: {
+            visibility: hidden ? 'hidden' : 'visible',
             backgroundColor: theme.palette.maskColor.publicMain,
             color: theme.palette.maskColor.white,
         },
@@ -20,11 +22,16 @@ const useStyles = makeStyles<StyleProps>()((theme, { isMenuScroll = false }) => 
         },
     }
 })
+interface SocialTooltipProps {
+    platform?: NextIDPlatform
+    hidden?: boolean
+}
 export function SocialTooltip({
     children,
+    hidden = false,
     platform = NextIDPlatform.NextID,
-}: PropsWithChildren<{ platform?: NextIDPlatform }>) {
-    const { classes } = useStyles({})
+}: PropsWithChildren<SocialTooltipProps>) {
+    const { classes } = useStyles({ hidden })
     const t = useSharedI18N()
     return (
         <ShadowRootTooltip
