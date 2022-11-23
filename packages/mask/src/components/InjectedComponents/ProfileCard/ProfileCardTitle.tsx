@@ -1,12 +1,13 @@
-import type { FC, HTMLProps } from 'react'
 import { Icons } from '@masknet/icons'
-import { makeStyles } from '@masknet/theme'
-import { PluginID } from '@masknet/shared-base'
 import { WalletMessages } from '@masknet/plugin-wallet'
+import { PluginID } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import type { SocialAccount, SocialIdentity } from '@masknet/web3-shared-base'
+import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
+import type { SocialAccount, SocialIdentity } from '@masknet/web3-shared-base'
+import type { FC, HTMLProps } from 'react'
 import { TipButton } from '../../../plugins/Tips/components/index.js'
+import { useLastRecognizedIdentity } from '../../DataSource/useActivatedUI.js'
 import { ProfileBar } from './ProfileBar.js'
 
 const useStyles = makeStyles()((theme) => {
@@ -51,6 +52,7 @@ export const ProfileCardTitle: FC<ProfileCardTitleProps> = ({
     onAddressChange,
     ...rest
 }) => {
+    const me = useLastRecognizedIdentity()
     const { classes, cx } = useStyles()
     const { setDialog } = useRemoteControlledDialog(WalletMessages.events.ApplicationDialogUpdated)
     const handleOpenDialog = () => {
@@ -74,7 +76,7 @@ export const ProfileCardTitle: FC<ProfileCardTitleProps> = ({
                 address={address}
                 onAddressChange={onAddressChange}>
                 <div className={classes.settingItem}>
-                    {identity.isOwner ? (
+                    {identity.identifier?.userId === me?.identifier?.userId ? (
                         <Icons.Gear onClick={handleOpenDialog} className={classes.gearIcon} />
                     ) : (
                         <TipButton className={classes.tipButton} receiver={identity.identifier} />
