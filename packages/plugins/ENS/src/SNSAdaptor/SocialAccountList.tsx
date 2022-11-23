@@ -103,7 +103,7 @@ export function SocialAccountList({ nextIdBindings }: SocialAccountListProps) {
         const menu = ref.current?.querySelector('[role="menu"]')?.parentElement
         menu?.addEventListener('scroll', onScroll)
         return () => menu?.removeEventListener('scroll', onScroll)
-    }, [ref.current, JSON.stringify(nextIdBindings)])
+    }, [ref.current, JSON.stringify(nextIdBindings), onScroll])
 
     const [menu, openMenu, closeMenu] = useMenuConfig(
         nextIdBindings.map((x, i) => (
