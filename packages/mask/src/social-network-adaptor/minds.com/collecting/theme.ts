@@ -23,7 +23,7 @@ function resolveThemeSettingsInner(
         })
     })
 
-    observer.observe(document.querySelector('body') as Node, {
+    observer.observe(document.body, {
         attributes: true,
         attributeOldValue: true,
         attributeFilter: ['class'],

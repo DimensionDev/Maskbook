@@ -13,8 +13,7 @@ function resolveThemeSettingsInner(
         }
     }
 
-    const htmlElement = document.querySelector('html')
-    updateThemeColor(Boolean(htmlElement?.className.includes('dark-mode')))
+    updateThemeColor(document.documentElement.className.includes('dark-mode'))
 
     const observer = new MutationObserver((mutations) => {
         mutations.forEach((mutation) => {
