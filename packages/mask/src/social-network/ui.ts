@@ -75,8 +75,6 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
 
     i18nOverwrite()
 
-    await ui.customization.paletteMode?.start(signal)
-
     globalUIState = await ui.init(signal)
 
     startIntermediateSetupGuide()

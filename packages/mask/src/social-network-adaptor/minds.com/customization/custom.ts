@@ -3,8 +3,6 @@ import produce, { setAutoFreeze } from 'immer'
 import { ValueRef } from '@dimensiondev/holoflows-kit'
 import { PaletteMode, Theme, unstable_createMuiStrictModeTheme } from '@mui/material'
 import { useValueRef } from '@masknet/shared-base-ui'
-import { createSubscriptionFromValueRef } from '@masknet/shared-base'
-import type { SocialNetworkUI } from '@masknet/types'
 import { fromRGB, getBackgroundColor, getForegroundColor, isDark, shade, toRGB } from '../../../utils/theme/index.js'
 import { themeListItemSelector } from '../utils/selector.js'
 
@@ -14,10 +12,6 @@ const primaryColorContrastColorRef = new ValueRef(toRGB([255, 255, 255]))
 const backgroundColorRef = new ValueRef(toRGB([255, 255, 255]))
 
 const currentTheme = new ValueRef<PaletteMode>('light')
-export const PaletteModeProviderMinds: SocialNetworkUI.Customization.PaletteModeProvider = {
-    current: createSubscriptionFromValueRef(currentTheme),
-    start: startWatchThemeColor,
-}
 
 export async function startWatchThemeColor(signal: AbortSignal) {
     function updateThemeColor() {

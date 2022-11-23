@@ -23,7 +23,7 @@ import { ThemeSettingsProviderFacebook } from './collecting/theme.js'
 import { pasteImageToCompositionDefault } from '../../social-network/defaults/automation/AttachImageToComposition.js'
 import { injectPageInspectorDefault } from '../../social-network/defaults/inject/PageInspector.js'
 import { createTaskStartSetupGuideDefault } from '../../social-network/defaults/inject/StartSetupGuide.js'
-import { PaletteModeProviderFacebook, useThemeFacebookVariant } from './customization/custom.js'
+import { useThemeFacebookVariant } from './customization/custom.js'
 import { globalUIState } from '../../social-network/index.js'
 import { injectToolboxHintAtFacebook as injectToolboxAtFacebook } from './injection/Toolbar.js'
 import { injectProfileNFTAvatarInFaceBook } from './injection/NFT/ProfileNFTAvatar.js'
@@ -150,7 +150,6 @@ const facebookUI: SocialNetworkUI.Definition = {
         getSearchedKeyword: getSearchedKeywordAtFacebook,
     },
     customization: {
-        paletteMode: PaletteModeProviderFacebook,
         sharedComponentOverwrite: {
             InjectedDialog: {
                 classes: useInjectedDialogClassesOverwriteFacebook,

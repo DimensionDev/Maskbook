@@ -1,8 +1,7 @@
 import { useMemo } from 'react'
 import produce, { setAutoFreeze } from 'immer'
 import { MutationObserverWatcher, ValueRef } from '@dimensiondev/holoflows-kit'
-import { createLookupTableResolver, createSubscriptionFromValueRef } from '@masknet/shared-base'
-import type { SocialNetworkUI } from '@masknet/types'
+import { createLookupTableResolver } from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { Twitter, TwitterBaseAPI } from '@masknet/web3-providers'
 import { PaletteMode, Theme, unstable_createMuiStrictModeTheme } from '@mui/material'
@@ -53,11 +52,6 @@ const themeColorRef = new ValueRef(resolveThemeColor(TwitterBaseAPI.ThemeColor.B
 const textColorRef = new ValueRef(resolveTextColor(TwitterBaseAPI.ThemeMode.Light))
 const backgroundColorRef = new ValueRef(resolveBackgroundColor(TwitterBaseAPI.ThemeMode.Light))
 const paletteModeRef = new ValueRef<PaletteMode>(resolveThemeMode(TwitterBaseAPI.ThemeMode.Light))
-
-export const PaletteModeProviderTwitter: SocialNetworkUI.Customization.PaletteModeProvider = {
-    current: createSubscriptionFromValueRef(paletteModeRef),
-    start: startWatchThemeColor,
-}
 
 export async function startWatchThemeColor(signal: AbortSignal) {
     async function updateThemeColor() {

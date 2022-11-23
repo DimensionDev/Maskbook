@@ -246,8 +246,6 @@ export namespace SocialNetworkUI {
              * Should follow the color scheme of the website.
              */
             useTheme?(baseTheme: Theme): Theme
-            /** Provide the ability to detect the current color scheme (light or dark) in the current SNS */
-            paletteMode?: PaletteModeProvider
             i18nOverwrite?: I18NOverwrite
             sharedComponentOverwrite?: SharedComponentOverwrite
             componentOverwrite?: ComponentOverwrite
