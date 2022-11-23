@@ -75,14 +75,13 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
 
     i18nOverwrite()
 
-    await ui.customization.paletteMode?.start(signal)
+    await ui.collecting.themeSettingsProvider?.start(signal)
 
     globalUIState = await ui.init(signal)
 
     startIntermediateSetupGuide()
     $unknownIdentityResolution()
 
-    ui.collecting.themeSettingsProvider?.start(signal)
     ui.collecting.postsProvider?.start(signal)
     startPostListener()
     ui.collecting.currentVisitingIdentityProvider?.start(signal)

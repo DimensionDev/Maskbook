@@ -1,5 +1,5 @@
 import { delay } from '@masknet/kit'
-import { LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
+import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { createLookupTableResolver } from '@masknet/shared-base'
 import type { SocialNetworkUI as Next } from '@masknet/types'
 import { Twitter, TwitterBaseAPI } from '@masknet/web3-providers'
@@ -22,7 +22,7 @@ const resolveThemeColor = createLookupTableResolver<TwitterBaseAPI.ThemeColor, s
 const resolveThemeMode = createLookupTableResolver<TwitterBaseAPI.ThemeMode, ThemeMode>(
     {
         [TwitterBaseAPI.ThemeMode.Dark]: ThemeMode.Dark,
-        [TwitterBaseAPI.ThemeMode.Dim]: ThemeMode.Dim,
+        [TwitterBaseAPI.ThemeMode.Dim]: ThemeMode.Dark,
         [TwitterBaseAPI.ThemeMode.Light]: ThemeMode.Light,
     },
     ThemeMode.Light,
@@ -39,7 +39,7 @@ const resolveFontSize = createLookupTableResolver<TwitterBaseAPI.Scale, FontSize
     FontSize.Normal,
 )
 
-function resolveThemeSettingsInner(
+async function resolveThemeSettingsInner(
     ref: Next.CollectingCapabilities.ThemeSettingsProvider['recognized'],
     cancel: AbortSignal,
 ) {
@@ -55,29 +55,25 @@ function resolveThemeSettingsInner(
         }
     }
 
-    const createWatcher = (selector: LiveSelector<HTMLElement, boolean>) => {
-        new MutationObserverWatcher(selector)
-            .addListener('onAdd', () => assign())
-            .addListener('onChange', () => assign())
-            .startWatch(
-                {
-                    childList: true,
-                    subtree: true,
-                    attributes: true,
-                    attributeFilter: ['src'],
-                },
-                cancel,
-            )
-    }
+    await assign()
 
-    assign()
-
-    createWatcher(composeAnchorSelector())
+    new MutationObserverWatcher(composeAnchorSelector())
+        .addListener('onAdd', () => assign())
+        .addListener('onChange', () => assign())
+        .startWatch(
+            {
+                childList: true,
+                subtree: true,
+                attributes: true,
+                attributeFilter: ['src'],
+            },
+            cancel,
+        )
 }
 
 export const ThemeSettingsProviderTwitter: Next.CollectingCapabilities.ThemeSettingsProvider = {
     recognized: creator.EmptyThemeSettingsProviderState(),
-    start(cancel) {
-        resolveThemeSettingsInner(this.recognized, cancel)
+    async start(cancel) {
+        await resolveThemeSettingsInner(this.recognized, cancel)
     },
 }
