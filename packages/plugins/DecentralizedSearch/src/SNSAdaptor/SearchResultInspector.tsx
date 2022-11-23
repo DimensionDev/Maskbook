@@ -12,7 +12,7 @@ import { Tab } from '@mui/material'
 import { useWeb3State, useAddressTypeMatched } from '@masknet/web3-hooks-base'
 import { ChainId, AddressType } from '@masknet/web3-shared-evm'
 import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
-import { SocialAddressType, resolveSearchKeywordType } from '@masknet/web3-shared-base'
+import { SocialAddressType } from '@masknet/web3-shared-base'
 import { PluginHeader } from './PluginHeader.js'
 import { PluginID, EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import { LoadingContent } from './LoadingContent.js'
@@ -107,16 +107,7 @@ export function SearchResultInspector(props: { keyword: string }) {
             <Hidden hidden={isLoading || isEmpty || isError}>
                 <div className={classes.cardHeader}>
                     <PluginHeader />
-                    <ENS_SearchResult
-                        keyword={props.keyword}
-                        ref={ensRef}
-                        keywordType={resolveSearchKeywordType(
-                            props.keyword,
-                            (keyword: string) => Boolean(Others?.isValidDomain(keyword)),
-                            (keyword: string) =>
-                                Boolean(Others?.isValidAddress(keyword) && !Others?.isZeroAddress(keyword)),
-                        )}
-                    />
+                    <ENS_SearchResult keyword={props.keyword} ref={ensRef} />
                     <div className={classes.tabs}>
                         <TabContext value={currentTab}>
                             <MaskTabList variant="base" onChange={onChange} aria-label="Web3Tabs">

@@ -14,6 +14,7 @@ import { makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
 import { useI18N } from '../locales/index.js'
 import { resolveNextIDPlatformIcon } from './utils.js'
+import { PluginHeader } from './PluginHeader.js'
 
 interface StyleProps {
     isMenuScroll?: boolean
@@ -124,7 +125,7 @@ export const SearchResultInspectorContent = forwardRef(function (
         deps: [],
         successText: t.wallets_address_copied(),
     })
-
+    console.log({ reversedAddress })
     const badgeCollectionRef = useRef<HTMLDivElement>(null)
     return (
         <CollectibleState.Provider
@@ -134,6 +135,7 @@ export const SearchResultInspectorContent = forwardRef(function (
                 contractAddress: reversedAddress ?? '',
                 sourceType: SourceType.OpenSea,
             }}>
+            <PluginHeader />
             <Box className={classes.root}>
                 <section className={classes.ensInfo}>
                     <Icons.ETH size={30} className={classes.ensIcon} />

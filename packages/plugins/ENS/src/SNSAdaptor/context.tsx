@@ -1,8 +1,8 @@
 import { createContext, PropsWithChildren, useCallback, useMemo } from 'react'
 import { useAsync } from 'react-use'
 import { NextIDProof } from '@masknet/web3-providers'
-import { useLookupAddress, useReverseAddress } from '@masknet/web3-hooks-base'
-import { SearchKeywordType } from '@masknet/web3-shared-base'
+import { useWeb3State, useLookupAddress, useReverseAddress } from '@masknet/web3-hooks-base'
+import { SearchKeywordType, resolveSearchKeywordType } from '@masknet/web3-shared-base'
 import { BindingProof, NetworkPluginID } from '@masknet/shared-base'
 import { resolveNonFungibleTokenIdFromEnsDomain, ChainId } from '@masknet/web3-shared-evm'
 
@@ -31,7 +31,13 @@ export const ENSContext = createContext<ENSContextProps>({
 })
 ENSContext.displayName = 'ENSContext'
 
-export function ENSProvider({ children, keyword, keywordType }: PropsWithChildren<SearchResultInspectorProps>) {
+export function ENSProvider({ children, keyword }: PropsWithChildren<SearchResultInspectorProps>) {
+    const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
+    const keywordType = resolveSearchKeywordType(
+        keyword,
+        (keyword: string) => Boolean(Others?.isValidDomain(keyword)),
+        (keyword: string) => Boolean(Others?.isValidAddress(keyword) && !Others?.isZeroAddress(keyword)),
+    )
     const {
         value: _reversedAddress,
         loading: isLoadingLookup,

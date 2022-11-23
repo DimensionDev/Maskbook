@@ -97,6 +97,36 @@ const sns: Plugin.SNSAdaptor.Definition = {
             },
         },
     ],
+    SearchResultTabs: [
+        {
+            ...TabConfig,
+            priority: 1,
+            UI: {
+                TabContent({ result }) {
+                    const socialAccount = {
+                        pluginID: NetworkPluginID.PLUGIN_EVM,
+                        address: '0x790116d0685eB197B886DAcAD9C247f785987A4a',
+                        label: 'nottoobad.eth',
+                        supportedAddressTypes: [SocialAddressType.ENS],
+                    }
+                    if (!socialAccount) return null
+                    return (
+                        <Box pr={1.5}>
+                            <Web3ContextProvider value={{ pluginID: result.pluginID }}>
+                                <CollectionList socialAccount={socialAccount} persona={undefined} profile={undefined} />
+                            </Web3ContextProvider>
+                        </Box>
+                    )
+                },
+            },
+            Utils: {
+                ...TabConfig.Utils,
+                shouldDisplay(result) {
+                    return result.pluginID === NetworkPluginID.PLUGIN_EVM
+                },
+            },
+        },
+    ],
     ApplicationEntries: [
         {
             ApplicationEntryID: base.ID,

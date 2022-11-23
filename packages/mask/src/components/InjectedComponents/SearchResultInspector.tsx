@@ -14,8 +14,14 @@ import {
     useActivatedPluginsSNSAdaptor,
 } from '@masknet/plugin-infra/content-script'
 import { useSearchedKeyword } from '../DataSource/useSearchedKeyword.js'
+import { useWeb3State } from '@masknet/web3-hooks-base'
 
-const useStyles = makeStyles()((theme) => ({}))
+const useStyles = makeStyles()((theme) => ({
+    contentWrapper: {
+        background:
+            'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%), linear-gradient(90deg, rgba(28, 104, 243, 0.2) 0%, rgba(69, 163, 251, 0.2) 100%), #FFFFFF;',
+    },
+}))
 
 export interface SearchResultInspectorProps {}
 
@@ -24,6 +30,7 @@ export function SearchResultInspector(props: SearchResultInspectorProps) {
     const translate = usePluginI18NField()
 
     const keyword = useSearchedKeyword()
+    const { Others } = useWeb3State()
     const activatedPlugins = useActivatedPluginsSNSAdaptor.visibility.useNotMinimalMode()
 
     const result = useAsyncRetry(async () => {
@@ -49,24 +56,26 @@ export function SearchResultInspector(props: SearchResultInspectorProps) {
         const Component = getSearchResultTabContent(currentTab)
         return <Component result={result.value} />
     }, [currentTab, result.value])
-
+    console.log({ contentComponent, tabContentComponent, tabs })
     if (!keyword && !result.value) return null
     if (!contentComponent) return null
 
     return (
         <div className={classes.root}>
-            <div className={classes.content}>{contentComponent}</div>
-            {tabs.length ? (
-                <div className={classes.tabs}>
-                    <TabContext value={currentTab}>
-                        <MaskTabList variant="base" onChange={onChange} aria-label="Web3Tabs">
-                            {tabs.map((tab) => (
-                                <Tab key={tab.id} label={tab.label} value={tab.id} />
-                            ))}
-                        </MaskTabList>
-                    </TabContext>
-                </div>
-            ) : null}
+            <div className={classes.contentWrapper}>
+                <div className={classes.content}>{contentComponent}</div>
+                {tabs.length ? (
+                    <div className={classes.tabs}>
+                        <TabContext value={currentTab}>
+                            <MaskTabList variant="base" onChange={onChange} aria-label="Web3Tabs">
+                                {tabs.map((tab) => (
+                                    <Tab key={tab.id} label={tab.label} value={tab.id} />
+                                ))}
+                            </MaskTabList>
+                        </TabContext>
+                    </div>
+                ) : null}
+            </div>
             {tabContentComponent ? <div className={classes.tabContent}>{tabContentComponent}</div> : null}
         </div>
     )

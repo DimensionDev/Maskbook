@@ -1,5 +1,5 @@
 import type { Plugin } from '@masknet/plugin-infra'
-import { SearchResultType, SocialAddressType } from '@masknet/web3-shared-base'
+import { SocialAddressType } from '@masknet/web3-shared-base'
 import { ApplicationEntry } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
 import { Typography } from '@mui/material'
@@ -123,7 +123,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             Content: SearchResultInspector,
         },
         Utils: {
-            shouldDisplay: (result) => result.type === SearchResultType.FungibleToken,
+            shouldDisplay: (result) => false,
         },
     },
     SearchResultTabs: [
@@ -131,6 +131,9 @@ const sns: Plugin.SNSAdaptor.Definition = {
             ID: `${PLUGIN_ID}_resultTab1`,
             label: 'Tab 1',
             priority: 99999,
+            Utils: {
+                shouldDisplay: (result) => false,
+            },
             UI: {
                 TabContent({ result }) {
                     return <Typography>Tab 1</Typography>
@@ -141,6 +144,9 @@ const sns: Plugin.SNSAdaptor.Definition = {
             ID: `${PLUGIN_ID}_resultTab2`,
             label: 'Tab 2',
             priority: 99999,
+            Utils: {
+                shouldDisplay: (result) => false,
+            },
             UI: {
                 TabContent({ result }) {
                     return <Typography>Tab 2</Typography>

@@ -29,7 +29,6 @@ import type {
     Web3State,
     SocialAccount,
     SearchResult,
-    SearchKeywordType,
 } from '@masknet/web3-shared-base'
 import type { ChainId as ChainIdEVM, Transaction as TransactionEVM } from '@masknet/web3-shared-evm'
 import type { Emitter } from '@servie/events'
@@ -663,9 +662,7 @@ export namespace Plugin.SNSAdaptor {
     export interface SearchResultContent {
         ID: string
         UI?: {
-            Content?: React.ForwardRefExoticComponent<
-                { keyword: string; keywordType?: SearchKeywordType } & React.RefAttributes<unknown>
-            >
+            Content?: React.ForwardRefExoticComponent<{ keyword: string } & React.RefAttributes<unknown>>
         }
     }
 
