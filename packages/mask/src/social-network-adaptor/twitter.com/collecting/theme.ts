@@ -1,5 +1,5 @@
 import { delay } from '@masknet/kit'
-import { LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
+import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { createLookupTableResolver } from '@masknet/shared-base'
 import type { SocialNetworkUI as Next } from '@masknet/types'
 import { Twitter, TwitterBaseAPI } from '@masknet/web3-providers'
