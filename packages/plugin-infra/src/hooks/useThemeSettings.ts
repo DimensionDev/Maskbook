@@ -1,14 +1,24 @@
 import { useMemo } from 'react'
+import { useSubscription } from 'use-subscription'
+import { FontSize, ThemeColor, ThemeMode } from '@masknet/web3-shared-base'
 import { useSNSAdaptorContext } from '../contexts/SNSAdaptorContext.js'
+
+const defaults = {
+    mode: ThemeMode.Light,
+    size: FontSize.Normal,
+    color: ThemeColor.Blue,
+}
 
 export function useThemeSettings() {
     const { themeSettings, getThemeSettings } = useSNSAdaptorContext()
+    const settings = useSubscription(themeSettings)
     return useMemo(() => {
         return {
+            ...defaults,
             ...getThemeSettings(),
-            ...themeSettings.getCurrentValue(),
+            ...settings,
         }
-    }, [themeSettings, getThemeSettings])
+    }, [settings, getThemeSettings])
 }
 
 export function useThemeMode() {
