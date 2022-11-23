@@ -25,6 +25,7 @@ export const RestPartOfPluginUIContextShared: Omit<
     send: WalletRPC.sendPayload,
     openPopupWindow: Services.Helper.openPopupWindow,
     closePopupWindow: Services.Helper.removePopupWindow,
+    openPopupConnectWindow: Services.Helper.openPopupConnectWindow,
 
     openWalletConnectDialog: (uri: string, callback: () => void) => {
         const onClose = (ev: WalletConnectQRCodeDialogEvent) => {

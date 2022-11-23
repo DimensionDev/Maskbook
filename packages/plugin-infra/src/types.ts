@@ -181,6 +181,8 @@ export namespace Plugin.Shared {
         openPopupWindow(route?: PopupRoutes, params?: Record<string, any>): Promise<void>
         /** Close popup window */
         closePopupWindow(): Promise<void>
+        /** Open popup connect window */
+        openPopupConnectWindow(): Promise<void>
 
         /** Open walletconnect dialog */
         openWalletConnectDialog(uri: string, callback: () => void): void
