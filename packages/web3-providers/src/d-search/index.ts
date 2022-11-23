@@ -13,24 +13,24 @@ import type { DSearchBaseAPI } from '../types/DSearch.js'
 
 const CHAIN_ID_LIST = [ChainId.Mainnet, ChainId.BSC, ChainId.Matic]
 export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper.SchemaTypeAll>
-    implements DSearchBaseAPI.Provider<ChainId, SchemaType>
+    implements DSearchBaseAPI.Provider<ChainId, SchemaType, NetworkPluginID.PLUGIN_EVM>
 {
     async search(
         keyword: string,
         helpers: {
-            isValidAddress: (address?: string) => boolean
-            isZeroAddress: (address?: string) => boolean
-            isValidDomain: (domain?: string) => boolean
-            getAddressType: (
+            isValidAddress?: (address?: string) => boolean
+            isZeroAddress?: (address?: string) => boolean
+            isValidDomain?: (domain?: string) => boolean
+            getAddressType?: (
                 address: string,
-                options?: Web3Helper.Web3ConnectionOptions<NetworkPluginID>,
+                options?: Web3Helper.Web3ConnectionOptions<NetworkPluginID.PLUGIN_EVM>,
             ) => Promise<AddressType | undefined>
         },
         sourceType?: SearchSourceType,
     ): Promise<SearchResult<ChainId, SchemaType>> {
         const { isValidAddress, isZeroAddress, isValidDomain, getAddressType } = helpers
 
-        if (isValidDomain(keyword)) {
+        if (isValidDomain?.(keyword)) {
             return {
                 type: SearchResultType.Domain,
                 chainId: ChainId.Mainnet,
@@ -40,10 +40,10 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
             } as DomainResult<ChainId>
         }
 
-        if (isValidAddress(keyword) && !isZeroAddress(keyword)) {
+        if (isValidAddress?.(keyword) && !isZeroAddress?.(keyword)) {
             const result = await attemptUntil(
                 CHAIN_ID_LIST.map((chainId) => async () => {
-                    const addressType = await getAddressType(keyword, { chainId })
+                    const addressType = await getAddressType?.(keyword, { chainId })
                     if (addressType !== AddressType.Contract) throw new Error('')
                     return { addressType, chainId } as { addressType: AddressType | undefined; chainId: ChainId }
                 }),

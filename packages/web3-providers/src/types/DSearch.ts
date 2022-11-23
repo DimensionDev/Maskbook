@@ -4,16 +4,16 @@ import type { AddressType } from '@masknet/web3-shared-evm'
 import type { NetworkPluginID } from '@masknet/shared-base'
 
 export namespace DSearchBaseAPI {
-    export interface Provider<ChainId, SchemaType> {
+    export interface Provider<ChainId, SchemaType, T extends NetworkPluginID> {
         search(
             keyword: string,
             helpers: {
-                isValidAddress: (address?: string) => boolean
-                isZeroAddress: (address?: string) => boolean
-                isValidDomain: (domain?: string) => boolean
-                getAddressType: (
+                isValidAddress?: (address?: string) => boolean
+                isZeroAddress?: (address?: string) => boolean
+                isValidDomain?: (domain?: string) => boolean
+                getAddressType?: (
                     address: string,
-                    options?: Web3Helper.Web3ConnectionOptions<NetworkPluginID>,
+                    options?: Web3Helper.Web3ConnectionOptions<T>,
                 ) => Promise<AddressType | undefined>
             },
             source?: SearchSourceType,

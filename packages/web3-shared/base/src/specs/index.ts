@@ -106,7 +106,7 @@ export enum SearchKeywordType {
 }
 
 export enum SearchResultType {
-    // e.g., 0xd8da6bf26964af9d7eed9e03e53415d37aa96045
+    // e.g., 0x6a7122B831c2B79c508A978f73f2ee23171279B3
     EOA = 'EOA',
     // e.g., vitalik.eth or vitalik.bnb
     Domain = 'Domain',

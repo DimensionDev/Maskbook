@@ -3,7 +3,7 @@ import { useAsyncRetry } from 'react-use'
 import { first } from 'lodash-es'
 import { Tab } from '@mui/material'
 import { TabContext } from '@mui/lab'
-import { EMPTY_LIST, PluginID } from '@masknet/shared-base'
+import { EMPTY_LIST, PluginID, NetworkPluginID } from '@masknet/shared-base'
 import { DSearch } from '@masknet/web3-providers'
 import { makeStyles, MaskTabList, useStylesExtends, useTabs } from '@masknet/theme'
 import {
@@ -14,7 +14,7 @@ import {
     useActivatedPluginsSNSAdaptor,
 } from '@masknet/plugin-infra/content-script'
 import { useSearchedKeyword } from '../DataSource/useSearchedKeyword.js'
-import { useWeb3State } from '@masknet/web3-hooks-base'
+import { useWeb3State, useWeb3Connection } from '@masknet/web3-hooks-base'
 
 const useStyles = makeStyles()((theme) => ({
     contentWrapper: {
@@ -31,11 +31,17 @@ export function SearchResultInspector(props: SearchResultInspectorProps) {
 
     const keyword = useSearchedKeyword()
     const { Others } = useWeb3State()
+    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
     const activatedPlugins = useActivatedPluginsSNSAdaptor.visibility.useNotMinimalMode()
 
     const result = useAsyncRetry(async () => {
         if (!keyword) return
-        return DSearch.search(keyword)
+        return DSearch.search(keyword, {
+            isValidAddress: Others?.isValidAddress,
+            isZeroAddress: Others?.isZeroAddress,
+            isValidDomain: Others?.isValidDomain,
+            getAddressType: connection?.getAddressType,
+        })
     }, [keyword])
 
     const contentComponent = useMemo(() => {
