@@ -1,50 +1,17 @@
 import { useMemo } from 'react'
 import produce, { setAutoFreeze } from 'immer'
 import { ValueRef } from '@dimensiondev/holoflows-kit'
-import { PaletteMode, Theme, unstable_createMuiStrictModeTheme } from '@mui/material'
+import { Theme, unstable_createMuiStrictModeTheme } from '@mui/material'
 import { useValueRef } from '@masknet/shared-base-ui'
-import { fromRGB, getBackgroundColor, getForegroundColor, isDark, shade, toRGB } from '../../../utils/theme/index.js'
-import { themeListItemSelector } from '../utils/selector.js'
-
-// TODO: get this from DOM. But currently Minds has a single primary color
-const primaryColorRef = new ValueRef(toRGB([68, 170, 255]))
-const primaryColorContrastColorRef = new ValueRef(toRGB([255, 255, 255]))
-const backgroundColorRef = new ValueRef(toRGB([255, 255, 255]))
-
-const currentTheme = new ValueRef<PaletteMode>('light')
-
-export async function startWatchThemeColor(signal: AbortSignal) {
-    function updateThemeColor() {
-        const contrastColor = getForegroundColor(themeListItemSelector().evaluate()!)
-        const backgroundColor = getBackgroundColor(document.body)
-        currentTheme.value = isDark(fromRGB(backgroundColor)!) ? 'dark' : 'light'
-        if (contrastColor) primaryColorContrastColorRef.value = contrastColor
-        if (backgroundColor) backgroundColorRef.value = backgroundColor
-    }
-
-    updateThemeColor()
-    const observer = new MutationObserver((mutations) => {
-        mutations.forEach((mutation) => {
-            updateThemeColor()
-        })
-    })
-
-    observer.observe(document.querySelector('body') as Node, {
-        attributes: true,
-        attributeOldValue: true,
-        attributeFilter: ['class'],
-    })
-
-    signal.addEventListener('abort', () => observer.disconnect())
-}
+import { fromRGB, shade, toRGB } from '../../../utils/theme/index.js'
+import { useThemeSettings } from '../../../components/DataSource/useActivatedUI.js'
 
 export function useThemeMindsVariant(baseTheme: Theme) {
-    const primaryColor = useValueRef(primaryColorContrastColorRef)
-    const primaryContrastColor = useValueRef(primaryColorContrastColorRef)
-    const backgroundColor = useValueRef(backgroundColorRef)
+    const themeSettings = useThemeSettings()
+
     return useMemo(() => {
-        const primaryColorRGB = fromRGB(primaryColor)!
-        const primaryContrastColorRGB = fromRGB(primaryContrastColor)
+        const primaryColorRGB = fromRGB(themeSettings.color)!
+        const primaryContrastColorRGB = fromRGB('rgb(255, 255, 255)')
         setAutoFreeze(false)
 
         const MindsTheme = produce(baseTheme, (theme) => {
@@ -72,5 +39,5 @@ export function useThemeMindsVariant(baseTheme: Theme) {
         })
         setAutoFreeze(true)
         return unstable_createMuiStrictModeTheme(MindsTheme)
-    }, [baseTheme, backgroundColor, primaryColor, primaryContrastColor])
+    }, [baseTheme])
 }

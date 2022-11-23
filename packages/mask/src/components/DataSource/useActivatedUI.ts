@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useMemo } from 'react'
 import { useAsync, useAsyncRetry } from 'react-use'
 import { first, isEqual } from 'lodash-es'
 import { Subscription, useSubscription } from 'use-subscription'
@@ -7,7 +7,7 @@ import { useValueRef } from '@masknet/shared-base-ui'
 import type { IdentityResolved } from '@masknet/plugin-infra'
 import { NextIDProof } from '@masknet/web3-providers'
 import type { ProfileInformation } from '@masknet/shared-base'
-import type { SocialIdentity } from '@masknet/web3-shared-base'
+import { FontSize, SocialIdentity, ThemeColor, ThemeMode, ThemeSettings } from '@masknet/web3-shared-base'
 import { activatedSocialNetworkUI, globalUIState } from '../../social-network/index.js'
 import Services from '../../extension/service.js'
 import { MaskMessages } from '../../utils/index.js'
@@ -26,12 +26,11 @@ async function queryPersonasFromNextID(identityResolved: IdentityResolved) {
     )
 }
 
-const defaults = new ValueRef<IdentityResolved>({}, isEqual)
-
 const CurrentIdentitySubscription: Subscription<ProfileInformation | undefined> = {
     getCurrentValue() {
         const all = globalUIState.profiles.value
-        const current = (activatedSocialNetworkUI.collecting.identityProvider?.recognized || defaults).value.identifier
+        const current = (activatedSocialNetworkUI.collecting.identityProvider?.recognized || defaultIdentityResolved)
+            .value.identifier
         return all.find((i) => i.identifier === current) || first(all)
     },
     subscribe(sub) {
@@ -41,20 +40,30 @@ const CurrentIdentitySubscription: Subscription<ProfileInformation | undefined> 
     },
 }
 
+const defaults = {
+    mode: ThemeMode.Light,
+    size: FontSize.Normal,
+    color: ThemeColor.Blue,
+}
+const defaultIdentityResolved = new ValueRef<IdentityResolved>({}, isEqual)
+const defaultThemeSettings = new ValueRef<Partial<ThemeSettings>>({}, isEqual)
+
 export function useCurrentIdentity() {
     return useSubscription(CurrentIdentitySubscription)
 }
 
 export function useLastRecognizedIdentity() {
-    return useValueRef(activatedSocialNetworkUI.collecting.identityProvider?.recognized || defaults)
+    return useValueRef(activatedSocialNetworkUI.collecting.identityProvider?.recognized || defaultIdentityResolved)
 }
 
 export function useCurrentVisitingIdentity() {
-    return useValueRef(activatedSocialNetworkUI.collecting.currentVisitingIdentityProvider?.recognized || defaults)
+    return useValueRef(
+        activatedSocialNetworkUI.collecting.currentVisitingIdentityProvider?.recognized || defaultIdentityResolved,
+    )
 }
 
 export function useCurrentLinkedPersona() {
-    const currentIdentity = useSubscription(CurrentIdentitySubscription)
+    const currentIdentity = useCurrentIdentity()
     return useAsync(async () => {
         if (!currentIdentity?.linkedPersona) return
         return Services.Identity.queryPersona(currentIdentity.linkedPersona)
@@ -106,4 +115,18 @@ export function useLastRecognizedSocialIdentity() {
 export function useCurrentVisitingSocialIdentity() {
     const identity = useCurrentVisitingIdentity()
     return useSocialIdentity(identity)
+}
+
+export function useThemeSettings() {
+    const themeSettings = useValueRef(
+        activatedSocialNetworkUI.collecting.themeSettingsProvider?.recognized || defaultThemeSettings,
+    )
+    return useMemo<ThemeSettings>(
+        () => ({
+            ...defaults,
+            ...activatedSocialNetworkUI.configuration.themeSettings,
+            ...themeSettings,
+        }),
+        [activatedSocialNetworkUI.configuration.themeSettings, themeSettings],
+    )
 }
