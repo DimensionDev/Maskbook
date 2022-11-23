@@ -73,6 +73,7 @@ export interface CompositionDialogEvent {
     readonly options?: {
         target?: EncryptionTargetType
         startupPlugin?: string
+        startupPluginProps?: any
         isOpenFromApplicationBoard?: boolean
     }
 }

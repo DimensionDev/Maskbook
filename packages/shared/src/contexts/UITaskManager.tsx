@@ -61,22 +61,18 @@ export const createUITaskManager = <TaskOptions extends BaseDialogProps<Result>,
             <TaskManagerContext.Provider value={contextValue}>
                 {children}
                 {tasks.map((task) => {
-                    return createElement(
-                        Component,
-                        {
-                            ...task.options,
-                            key: task.id,
-                            open: true,
-                            onSubmit: (result: Result | null) => {
-                                task.options?.onSubmit?.(result)
-                                task.resolve(result)
-                            },
-                            onClose: () => {
-                                task.resolve(null)
-                            },
-                        } as unknown as TaskOptions,
-                        children,
-                    )
+                    return createElement(Component, {
+                        ...task.options,
+                        key: task.id,
+                        open: true,
+                        onSubmit: (result: Result | null) => {
+                            task.options?.onSubmit?.(result)
+                            task.resolve(result)
+                        },
+                        onClose: () => {
+                            task.resolve(null)
+                        },
+                    } as unknown as TaskOptions)
                 })}
             </TaskManagerContext.Provider>
         )
