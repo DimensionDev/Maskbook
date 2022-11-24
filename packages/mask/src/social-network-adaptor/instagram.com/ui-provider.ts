@@ -4,6 +4,7 @@ import { instagramShared } from './shared.js'
 import { instagramBase } from './base.js'
 import { IdentityProviderInstagram } from './collecting/identity-provider.js'
 import { PostProviderInstagram } from './collecting/posts.js'
+import { ThemeSettingsProviderInstagram } from './collecting/theme.js'
 import {
     createTaskStartSetupGuideDefault,
     InitAutonomousStateProfiles,
@@ -38,6 +39,7 @@ const define: SocialNetworkUI.Definition = {
         identityProvider: IdentityProviderInstagram,
         currentVisitingIdentityProvider: CurrentVisitingIdentityProviderInstagram,
         postsProvider: PostProviderInstagram,
+        themeSettingsProvider: ThemeSettingsProviderInstagram,
     },
     configuration: {},
     customization: {},

@@ -12,7 +12,7 @@ import {
 } from '@masknet/shared'
 import { EMPTY_LIST, PluginID, NetworkPluginID } from '@masknet/shared-base'
 import { useRemoteControlledDialog, useValueRef } from '@masknet/shared-base-ui'
-import { makeStyles, MaskColors, MaskLightTheme, useStylesExtends } from '@masknet/theme'
+import { makeStyles, MaskColors, MaskLightTheme } from '@masknet/theme'
 import type { TrendingAPI } from '@masknet/web3-providers'
 import { formatCurrency, TokenType, SourceType } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
@@ -156,7 +156,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
 
     const { t } = useI18N()
     const theme = useTheme()
-    const { classes } = useStylesExtends(useStyles({ isPopper }), props)
+    const { classes } = useStyles({ isPopper }, { props })
 
     const isNFT = coin.type === TokenType.NonFungible
 

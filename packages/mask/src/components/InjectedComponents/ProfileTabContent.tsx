@@ -16,7 +16,7 @@ import {
     useSocialAccountsBySettings,
 } from '@masknet/shared'
 import { CrossIsolationMessages, EMPTY_LIST, NextIDPlatform, PluginID } from '@masknet/shared-base'
-import { makeStyles, MaskLightTheme, MaskTabList, ShadowRootMenu, useStylesExtends, useTabs } from '@masknet/theme'
+import { makeStyles, MaskLightTheme, MaskTabList, ShadowRootMenu, useTabs } from '@masknet/theme'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { TabContext } from '@mui/lab'
 import { Button, Link, MenuItem, Stack, Tab, ThemeProvider, Typography } from '@mui/material'
@@ -32,6 +32,7 @@ import { useGrantPermissions, usePluginHostPermissionCheck } from '../DataSource
 
 const MENU_ITEM_HEIGHT = 40
 const MENU_LIST_PADDING = 8
+
 const useStyles = makeStyles()((theme) => ({
     root: {
         width: isFacebook(activatedSocialNetworkUI) ? 876 : 'auto',
@@ -127,7 +128,7 @@ const useStyles = makeStyles()((theme) => ({
 export interface ProfileTabContentProps extends withClasses<'text' | 'button' | 'root'> {}
 
 export function ProfileTabContent(props: ProfileTabContentProps) {
-    const { classes } = useStylesExtends(useStyles(), props)
+    const { classes } = useStyles(undefined, { props })
 
     const { t } = useI18N()
     const translate = usePluginI18NField()
@@ -383,114 +384,112 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
 
     return (
         <div className={classes.root}>
-            <div>
-                {tabs.length > 0 && !showNextID && (
-                    <div className={classes.container}>
-                        <div className={classes.title}>
-                            <div className={classes.walletItem}>
-                                <Button
-                                    id="wallets"
-                                    variant="text"
-                                    size="small"
-                                    ref={buttonRef}
-                                    onClick={(event) => {
-                                        event.preventDefault()
-                                        event.stopPropagation()
-                                        setMenuOpen(true)
+            {tabs.length > 0 && !showNextID && (
+                <div className={classes.container}>
+                    <div className={classes.title}>
+                        <div className={classes.walletItem}>
+                            <Button
+                                id="wallets"
+                                variant="text"
+                                size="small"
+                                ref={buttonRef}
+                                onClick={(event) => {
+                                    event.preventDefault()
+                                    event.stopPropagation()
+                                    setMenuOpen(true)
+                                }}
+                                className={classes.walletButton}>
+                                <AddressItem
+                                    linkIconClassName={classes.mainLinkIcon}
+                                    TypographyProps={{
+                                        fontSize: '18px',
+                                        fontWeight: 700,
+                                        color: (theme) => theme.palette.maskColor.dark,
                                     }}
-                                    className={classes.walletButton}>
-                                    <AddressItem
-                                        linkIconClassName={classes.mainLinkIcon}
-                                        TypographyProps={{
-                                            fontSize: '18px',
-                                            fontWeight: 700,
-                                            color: (theme) => theme.palette.maskColor.dark,
-                                        }}
-                                        socialAccount={selectedSocialAccount}
-                                    />
-                                    <Icons.ArrowDrop className={classes.arrowDropIcon} />
-                                </Button>
-                                <ShadowRootMenu
-                                    anchorEl={buttonRef.current}
-                                    open={menuOpen}
-                                    disableScrollLock
-                                    PaperProps={{
-                                        className: classes.addressMenu,
-                                    }}
-                                    aria-labelledby="wallets"
-                                    onClose={() => setMenuOpen(false)}>
-                                    {socialAccounts.map((x) => {
-                                        return (
-                                            <MenuItem
-                                                className={classes.menuItem}
-                                                key={x.address}
-                                                value={x.address}
-                                                onClick={() => onSelect(x.address)}>
-                                                <div className={classes.addressItem}>
-                                                    <AddressItem
-                                                        socialAccount={x}
-                                                        linkIconClassName={classes.secondLinkIcon}
-                                                    />
-                                                    <AccountIcon socialAccount={x} />
-                                                </div>
-                                                {isSameAddress(selectedAddress, x.address) && (
-                                                    <Icons.CheckCircle size={20} className={classes.selectedIcon} />
-                                                )}
-                                            </MenuItem>
-                                        )
-                                    })}
-                                </ShadowRootMenu>
-                            </div>
-                            <div className={classes.settingItem}>
-                                <Typography
-                                    fontSize="14px"
-                                    fontWeight={700}
-                                    marginRight="5px"
-                                    color={(theme) => theme.palette.maskColor.secondaryDark}>
-                                    {t('powered_by')}
-                                </Typography>
-                                <Typography
-                                    fontSize="14px"
-                                    fontWeight={700}
-                                    marginRight="4px"
-                                    color={(theme) => theme.palette.maskColor.dark}>
-                                    {t('mask_network')}
-                                </Typography>
-                                {isOwnerIdentity && isTwitter(activatedSocialNetworkUI) ? (
-                                    <ConnectPersonaBoundary
-                                        customHint
-                                        handlerPosition="top-right"
-                                        directTo={PluginID.Web3Profile}>
-                                        <Icons.Gear
-                                            variant="light"
-                                            onClick={handleOpenDialog}
-                                            className={classes.gearIcon}
-                                            sx={{ cursor: 'pointer' }}
-                                        />
-                                    </ConnectPersonaBoundary>
-                                ) : (
-                                    <Link
-                                        className={classes.settingLink}
-                                        href="https://mask.io"
-                                        target="_blank"
-                                        rel="noopener noreferrer">
-                                        <Icons.LinkOut className={classes.linkOutIcon} size={20} />
-                                    </Link>
-                                )}
-                            </div>
+                                    socialAccount={selectedSocialAccount}
+                                />
+                                <Icons.ArrowDrop className={classes.arrowDropIcon} />
+                            </Button>
+                            <ShadowRootMenu
+                                anchorEl={buttonRef.current}
+                                open={menuOpen}
+                                disableScrollLock
+                                PaperProps={{
+                                    className: classes.addressMenu,
+                                }}
+                                aria-labelledby="wallets"
+                                onClose={() => setMenuOpen(false)}>
+                                {socialAccounts.map((x) => {
+                                    return (
+                                        <MenuItem
+                                            className={classes.menuItem}
+                                            key={x.address}
+                                            value={x.address}
+                                            onClick={() => onSelect(x.address)}>
+                                            <div className={classes.addressItem}>
+                                                <AddressItem
+                                                    socialAccount={x}
+                                                    linkIconClassName={classes.secondLinkIcon}
+                                                />
+                                                <AccountIcon socialAccount={x} />
+                                            </div>
+                                            {isSameAddress(selectedAddress, x.address) && (
+                                                <Icons.CheckCircle size={20} className={classes.selectedIcon} />
+                                            )}
+                                        </MenuItem>
+                                    )
+                                })}
+                            </ShadowRootMenu>
                         </div>
-                        <div className={classes.tabs}>
-                            <TabContext value={currentTab}>
-                                <MaskTabList variant="base" onChange={onChange} aria-label="Web3Tabs">
-                                    {tabs.map((tab) => (
-                                        <Tab key={tab.id} label={tab.label} value={tab.id} />
-                                    ))}
-                                </MaskTabList>
-                            </TabContext>
+                        <div className={classes.settingItem}>
+                            <Typography
+                                fontSize="14px"
+                                fontWeight={700}
+                                marginRight="5px"
+                                color={(theme) => theme.palette.maskColor.secondaryDark}>
+                                {t('powered_by')}
+                            </Typography>
+                            <Typography
+                                fontSize="14px"
+                                fontWeight={700}
+                                marginRight="4px"
+                                color={(theme) => theme.palette.maskColor.dark}>
+                                {t('mask_network')}
+                            </Typography>
+                            {isOwnerIdentity && isTwitter(activatedSocialNetworkUI) ? (
+                                <ConnectPersonaBoundary
+                                    customHint
+                                    handlerPosition="top-right"
+                                    directTo={PluginID.Web3Profile}>
+                                    <Icons.Gear
+                                        variant="light"
+                                        onClick={handleOpenDialog}
+                                        className={classes.gearIcon}
+                                        sx={{ cursor: 'pointer' }}
+                                    />
+                                </ConnectPersonaBoundary>
+                            ) : (
+                                <Link
+                                    className={classes.settingLink}
+                                    href="https://mask.io"
+                                    target="_blank"
+                                    rel="noopener noreferrer">
+                                    <Icons.LinkOut className={classes.linkOutIcon} size={20} />
+                                </Link>
+                            )}
                         </div>
                     </div>
-                )}
-            </div>
+                    <div className={classes.tabs}>
+                        <TabContext value={currentTab}>
+                            <MaskTabList variant="base" onChange={onChange} aria-label="Web3Tabs">
+                                {tabs.map((tab) => (
+                                    <Tab key={tab.id} label={tab.label} value={tab.id} />
+                                ))}
+                            </MaskTabList>
+                        </TabContext>
+                    </div>
+                </div>
+            )}
             <div className={classes.content}>{contentComponent}</div>
         </div>
     )

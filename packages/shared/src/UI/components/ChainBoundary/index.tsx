@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo, cloneElement, Children, DetailedReactHTMLElement, isValidElement } from 'react'
 import { useAsyncFn } from 'react-use'
 import { Box, Typography } from '@mui/material'
-import { makeStyles, MaskColorVar, ShadowRootTooltip, useStylesExtends, ActionButton } from '@masknet/theme'
+import { makeStyles, MaskColorVar, ShadowRootTooltip, ActionButton } from '@masknet/theme'
 import {
     useNetworkContext,
     useChainContext,
@@ -69,7 +69,7 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
     } = props
 
     const t = useSharedI18N()
-    const { classes } = useStylesExtends(useStyles(), props)
+    const { classes } = useStyles(undefined, { props })
 
     const { pluginID: actualPluginID } = useNetworkContext()
     const plugin = useActivatedPlugin(actualPluginID, 'any')

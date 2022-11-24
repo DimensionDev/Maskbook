@@ -294,7 +294,6 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
                         <WalletConnectedBoundary
                             classes={{
                                 connectWallet: cx(classes.button, classes.sendButton),
-                                unlockMetaMask: cx(classes.button, classes.sendButton),
                             }}>
                             <ActionButton
                                 size="medium"

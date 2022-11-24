@@ -47,6 +47,7 @@
     "share_dialog_transaction_confirmed": "Your transaction was confirmed!",
     "load_failed": "Load failed",
     "load_retry": "Reload",
+    "loading": "Loading",
     "powered_by": "Powered by",
     "copied": "Copied",
     "copy_wallet_address_success": "Copy wallet address successfully!",

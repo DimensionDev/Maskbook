@@ -94,7 +94,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface SelectNftContractDialogProps extends withClasses<never> {}
+export interface SelectNftContractDialogProps {}
 
 export function SelectNftContractDialog(props: SelectNftContractDialogProps) {
     const { t } = useI18N()
@@ -202,19 +202,18 @@ export function SelectNftContractDialog(props: SelectNftContractDialogProps) {
     )
 }
 
-export interface SearchResultBoxProps extends withClasses<never> {
+export interface SearchResultBoxProps {
     keyword: string
     contractList: Array<NonFungibleTokenContract<ChainId, SchemaType>>
     searchedTokenList: Array<NonFungibleTokenContract<ChainId, SchemaType>>
     onSubmit: (balance: string, contract: NonFungibleTokenContract<ChainId, SchemaType>) => void
 }
 
-function SearchResultBox(props: SearchResultBoxProps) {
+export function SearchResultBox(props: SearchResultBoxProps) {
     const { keyword, searchedTokenList, onSubmit, contractList } = props
     const { t } = useI18N()
     const { classes } = useStyles()
     const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const isValid = EthereumAddress.isValid(keyword)
     const { value: contractDetailed = null, loading } = useNonFungibleTokenContract(
         NetworkPluginID.PLUGIN_EVM,
         keyword,
@@ -225,7 +224,7 @@ function SearchResultBox(props: SearchResultBoxProps) {
         <div className={classes.searchBox}>
             {keyword !== '' && searchedTokenList.length === 0 ? (
                 <div>
-                    {!isValid ||
+                    {!EthereumAddress.isValid(keyword) ||
                     loading ||
                     !contractDetailed ||
                     (contractDetailed.name === '' && contractDetailed.symbol === '') ? (

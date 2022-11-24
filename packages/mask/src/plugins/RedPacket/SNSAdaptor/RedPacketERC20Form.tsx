@@ -1,7 +1,7 @@
 import { ChangeEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { BigNumber } from 'bignumber.js'
 import { omit } from 'lodash-es'
-import { makeStyles, useStylesExtends, ActionButton } from '@masknet/theme'
+import { makeStyles, ActionButton } from '@masknet/theme'
 import {
     FungibleToken,
     isGreaterThan,
@@ -55,7 +55,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface RedPacketFormProps extends withClasses<never> {
+export interface RedPacketFormProps {
     onChange(settings: RedPacketSettings): void
     onClose: () => void
     origin?: RedPacketSettings
@@ -66,7 +66,7 @@ export interface RedPacketFormProps extends withClasses<never> {
 export function RedPacketERC20Form(props: RedPacketFormProps) {
     const t = useI18N()
     const { t: tr } = useBaseI18n()
-    const { classes } = useStylesExtends(useStyles(), props)
+    const { classes } = useStyles()
     const { onChange, onNext, origin } = props
     // context
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()

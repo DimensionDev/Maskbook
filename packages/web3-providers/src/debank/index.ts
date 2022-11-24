@@ -13,7 +13,7 @@ import {
 } from '@masknet/web3-shared-base'
 import { ChainId, formatGweiToWei, getDeBankConstants, SchemaType, GasOption } from '@masknet/web3-shared-evm'
 import { formatAssets, formatTransactions } from './format.js'
-import type { WalletTokenRecord, HistoryResponse, GasPriceDictResponse } from './type.js'
+import type { WalletTokenRecord, GasPriceDictResponse, HistoryRecord } from './type.js'
 import type { FungibleTokenAPI, HistoryAPI, GasOptionAPI } from '../types/index.js'
 import { getAllEVMNativeAssets } from '../helpers.js'
 
@@ -110,8 +110,8 @@ export class DeBankAPI
         const response = await fetch(
             `${DEBANK_OPEN_API}/v1/user/history_list?id=${address.toLowerCase()}&chain_id=${CHAIN_ID}`,
         )
-        const { data, error_code } = (await response.json()) as HistoryResponse
-        if (error_code !== 0) throw new Error('Fail to load transactions.')
+        if (!response.ok) throw new Error('Fail to load transactions.')
+        const data: HistoryRecord = await response.json()
 
         const transactions = formatTransactions(chainId, data)
         return createPageable(transactions, createIndicator(indicator))

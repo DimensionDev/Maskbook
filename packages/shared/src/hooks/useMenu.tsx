@@ -1,4 +1,12 @@
-import { SyntheticEvent, cloneElement, isValidElement, useCallback, useState, createElement } from 'react'
+import {
+    SyntheticEvent,
+    cloneElement,
+    isValidElement,
+    useCallback,
+    useState,
+    MutableRefObject,
+    createElement,
+} from 'react'
 import { Menu, MenuProps } from '@mui/material'
 import { makeStyles, ShadowRootMenu } from '@masknet/theme'
 import { useUpdate } from 'react-use'
@@ -31,6 +39,7 @@ const useStyles = makeStyles()((theme) => ({
 export function useMenuConfig(
     elements: Array<JSX.Element | null>,
     config: useMenuConfig,
+    ref?: MutableRefObject<HTMLDivElement | null>,
 ): [
     menu: React.ReactElement,
     openDialog: (anchorElOrEvent: HTMLElement | SyntheticEvent<HTMLElement>) => void,
@@ -54,9 +63,9 @@ export function useMenuConfig(
                 MenuListProps: menuProps?.MenuListProps,
                 open,
                 anchorEl,
+                ref,
                 onClose: close,
                 onClick: close,
-
                 anchorOrigin: menuProps?.anchorOrigin,
                 transformOrigin: menuProps?.transformOrigin,
             },

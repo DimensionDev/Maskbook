@@ -1,4 +1,4 @@
-import { makeStyles, useStylesExtends } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -14,7 +14,7 @@ export interface ImageIconProps extends withClasses<'icon'> {
 
 export function ImageIcon(props: ImageIconProps) {
     const { size = 48, icon, iconFilterColor } = props
-    const { classes } = useStylesExtends(useStyles(), props)
+    const { classes } = useStyles(undefined, { props })
 
     return (
         <img

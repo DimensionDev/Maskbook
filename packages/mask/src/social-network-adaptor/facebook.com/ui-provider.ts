@@ -17,12 +17,13 @@ import { pasteToCommentBoxFacebook } from './automation/pasteToCommentBoxFaceboo
 import { injectCommentBoxDefaultFactory } from '../../social-network/defaults/inject/CommentBox.js'
 import { injectPostInspectorFacebook } from './injection/PostInspector.js'
 import getSearchedKeywordAtFacebook from './collecting/getSearchedKeyword.js'
-import { injectSearchResultBoxAtFacebook } from './injection/SearchResultBox.js'
+import { injectSearchResultInspectorAtFacebook } from './injection/SearchResultInspector.js'
 import { PostProviderFacebook } from './collecting/posts.js'
+import { ThemeSettingsProviderFacebook } from './collecting/theme.js'
 import { pasteImageToCompositionDefault } from '../../social-network/defaults/automation/AttachImageToComposition.js'
 import { injectPageInspectorDefault } from '../../social-network/defaults/inject/PageInspector.js'
 import { createTaskStartSetupGuideDefault } from '../../social-network/defaults/inject/StartSetupGuide.js'
-import { PaletteModeProviderFacebook, useThemeFacebookVariant } from './customization/custom.js'
+import { useThemeFacebookVariant } from './customization/custom.js'
 import { globalUIState } from '../../social-network/index.js'
 import { injectToolboxHintAtFacebook as injectToolboxAtFacebook } from './injection/Toolbar.js'
 import { injectProfileNFTAvatarInFaceBook } from './injection/NFT/ProfileNFTAvatar.js'
@@ -145,10 +146,10 @@ const facebookUI: SocialNetworkUI.Definition = {
         identityProvider: IdentityProviderFacebook,
         currentVisitingIdentityProvider: CurrentVisitingIdentityProviderFacebook,
         postsProvider: PostProviderFacebook,
+        themeSettingsProvider: ThemeSettingsProviderFacebook,
         getSearchedKeyword: getSearchedKeywordAtFacebook,
     },
     customization: {
-        paletteMode: PaletteModeProviderFacebook,
         sharedComponentOverwrite: {
             InjectedDialog: {
                 classes: useInjectedDialogClassesOverwriteFacebook,
@@ -178,7 +179,7 @@ const facebookUI: SocialNetworkUI.Definition = {
             },
         },
         userBadge: undefined,
-        searchResult: injectSearchResultBoxAtFacebook,
+        searchResult: injectSearchResultInspectorAtFacebook,
         setupPrompt: injectSetupPromptFacebook,
         commentComposition: {
             compositionBox: injectPostCommentsDefault(),

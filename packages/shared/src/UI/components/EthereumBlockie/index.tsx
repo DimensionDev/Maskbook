@@ -1,6 +1,6 @@
 import { useBlockie } from '@masknet/web3-hooks-base'
 import { Avatar, AvatarProps } from '@mui/material'
-import { makeStyles, useStylesExtends } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 
 const useStyles = makeStyles()((theme) => ({
     icon: {
@@ -11,7 +11,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface EthereumBlockieProps extends withClasses<never> {
+export interface EthereumBlockieProps {
     name?: string
     address: string
     AvatarProps?: Partial<AvatarProps>
@@ -19,7 +19,7 @@ export interface EthereumBlockieProps extends withClasses<never> {
 
 export function EthereumBlockie(props: EthereumBlockieProps) {
     const { address, name } = props
-    const { classes } = useStylesExtends(useStyles(), props)
+    const { classes } = useStyles()
     const blockie = useBlockie(address)
 
     return (

@@ -1,6 +1,6 @@
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { useSharedI18N } from '../../../locales/index.js'
-import { makeStyles, useStylesExtends, ActionButtonProps, ActionButton } from '@masknet/theme'
+import { makeStyles, ActionButtonProps, ActionButton } from '@masknet/theme'
 import { useMemo } from 'react'
 import { useWeb3State } from '@masknet/web3-hooks-base'
 import type { NonFungibleTokenContract } from '@masknet/web3-shared-base'
@@ -21,7 +21,7 @@ export function EthereumERC721TokenApprovedBoundary(props: EthereumERC712TokenAp
     const { owner, contractDetailed, operator, children, validationMessage: _validationMessage } = props
     const t = useSharedI18N()
     const { Others } = useWeb3State()
-    const { classes } = useStylesExtends(useStyles(), props)
+    const { classes } = useStyles(undefined, { props })
     const { value, loading, retry } = useERC721ContractIsApproveForAll(contractDetailed?.address, owner, operator)
     const [approveState, approveCallback] = useERC721ContractSetApproveForAllCallback(
         contractDetailed?.address,

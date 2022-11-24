@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react'
-import { makeStyles, useStylesExtends } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 import { IconButton } from '@mui/material'
 import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI.js'
 import Services from '../../extension/service.js'
@@ -11,7 +11,7 @@ import { useCurrentPersonaConnectStatus } from '../DataSource/usePersonaConnectS
 import { hasNativeAPI, nativeAPI } from '../../../shared/native-rpc/index.js'
 import { useValueRef } from '@masknet/shared-base-ui'
 
-interface BannerUIProps extends withClasses<never | 'header' | 'content' | 'actions' | 'buttonText'> {
+interface BannerUIProps extends withClasses<'header' | 'content' | 'actions' | 'buttonText'> {
     description?: string
     nextStep:
         | 'hidden'
@@ -42,7 +42,7 @@ const useStyles = makeStyles()({
 })
 
 export function BannerUI(props: BannerUIProps) {
-    const { classes } = useStylesExtends(useStyles(), props)
+    const { classes } = useStyles(undefined, { props })
 
     return props.nextStep === 'hidden' ? null : (
         <IconButton size="large" className={classes.buttonText} onClick={props.nextStep.onClick}>

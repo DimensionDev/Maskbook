@@ -25,13 +25,13 @@ import { HiddenAddressList } from '../constants.js'
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
     init(signal) {},
-    SearchResultBox: {
+    SearchResultInspector: {
         ID: PluginID.DecentralizedSearch,
         UI: {
-            Content: ({ keyword }) => <SearchResultInspector keyword={keyword} />,
+            Content: ({ result }) => <SearchResultInspector keyword={result.keyword} />,
         },
         Utils: {
-            shouldDisplay(keyword: string) {
+            shouldDisplay({ keyword }) {
                 return Boolean(
                     resolveSearchKeywordType(
                         keyword,

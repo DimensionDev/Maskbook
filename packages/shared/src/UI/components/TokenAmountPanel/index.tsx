@@ -1,7 +1,7 @@
 import { ChangeEvent, useCallback, useMemo } from 'react'
 import { BigNumber } from 'bignumber.js'
 import { Box, Chip, ChipProps, InputProps, StandardTextFieldProps, Typography } from '@mui/material'
-import { makeStyles, MaskTextField, useStylesExtends } from '@masknet/theme'
+import { makeStyles, MaskTextField } from '@masknet/theme'
 import { FungibleToken, formatBalance } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { SelectTokenChip, SelectTokenChipProps } from '../SelectTokenChip/index.js'
@@ -80,7 +80,7 @@ export function TokenAmountPanel(props: TokenAmountPanelProps) {
         MaxChipProps,
     } = props
     const t = useSharedI18N()
-    const { classes, cx } = useStylesExtends(useStyles(), props)
+    const { classes, cx } = useStyles(undefined, { props })
 
     // #region update amount by self
     const { RE_MATCH_WHOLE_AMOUNT, RE_MATCH_FRACTION_AMOUNT } = useMemo(

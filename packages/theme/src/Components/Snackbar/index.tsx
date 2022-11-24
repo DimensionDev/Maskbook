@@ -14,7 +14,7 @@ import {
 import { Typography, IconButton, alpha } from '@mui/material'
 import { Close as CloseIcon, Warning as WarningIcon, Info as InfoIcon } from '@mui/icons-material'
 import { Icons } from '@masknet/icons'
-import { makeStyles, useStylesExtends } from '../../UIHelper/index.js'
+import { makeStyles } from '../../UIHelper/index.js'
 import { MaskColorVar } from '../../CSSVariables/index.js'
 import { usePortalShadowRoot } from '../../entry-base.js'
 
@@ -216,7 +216,7 @@ const IconMap: Record<VariantType, React.ReactNode> = {
 }
 
 export const CustomSnackbarContent = forwardRef<HTMLDivElement, CustomSnackbarContentProps>((props, ref) => {
-    const { classes, cx } = useStylesExtends(useStyles({ offsetY: props.offsetY }), props)
+    const { classes, cx } = useStyles({ offsetY: props.offsetY }, { props })
     const snackbar = useSnackbar()
     const loadingIcon = <Icons.CircleLoading className={classes.spinning} />
     const variantIcon = props.processing ? loadingIcon : props.variant ? IconMap[props.variant] : null

@@ -1,4 +1,4 @@
-import { keyframes, makeStyles, useStylesExtends } from '@masknet/theme'
+import { keyframes, makeStyles } from '@masknet/theme'
 import type { Keyframes } from '@emotion/serialize'
 
 export const rainbowBorderKeyFrames: Keyframes = keyframes`
@@ -54,14 +54,14 @@ interface RainbowBoxProps extends withClasses<'root'> {
     children?: React.ReactNode
 }
 export function RainbowBox(props: RainbowBoxProps) {
-    const { classes } = useStylesExtends(
-        useStyles({
+    const { classes } = useStyles(
+        {
             width: props.width,
             height: props.height,
             radius: props.radius,
             size: props.borderSize,
-        }),
-        props,
+        },
+        { props },
     )
 
     return <div className={classes.root}>{props.children}</div>

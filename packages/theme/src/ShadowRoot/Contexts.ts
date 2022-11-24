@@ -2,7 +2,7 @@ import { createContext } from 'react'
 import type { StyleSheet } from './ShadowRootStyleSheet.js'
 
 /** @internal */
-export const StyleSheetsContext = createContext<readonly StyleSheet[]>([])
+export const StyleSheetsContext = createContext<StyleSheet>(null!)
 StyleSheetsContext.displayName = 'StyleSheetsContext'
 
 /** @internal */

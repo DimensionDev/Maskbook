@@ -1,5 +1,5 @@
 import { Icons } from '@masknet/icons'
-import { makeStyles, useStylesExtends } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 import { Stack, Typography } from '@mui/material'
 import { useI18N } from '../../../utils/index.js'
 
@@ -37,7 +37,7 @@ export interface NFTAvatarButtonProps extends withClasses<'root' | 'text'> {
 export function NFTAvatarButton(props: NFTAvatarButtonProps) {
     const { onClick } = props
     const { t } = useI18N()
-    const { classes } = useStylesExtends(useStyles(), props)
+    const { classes } = useStyles(undefined, { props })
 
     return (
         <div className={classes.root} onClick={onClick}>
