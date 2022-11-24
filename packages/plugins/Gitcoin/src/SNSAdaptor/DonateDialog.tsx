@@ -18,6 +18,7 @@ import { DialogActions, DialogContent, Link, Typography } from '@mui/material'
 import { useDonateCallback } from '../hooks/useDonateCallback.js'
 import { PluginGitcoinMessages } from '../messages.js'
 import { useI18N, Translate } from '../locales/i18n_generated.js'
+import { useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
 
 const useStyles = makeStyles()((theme) => ({
     form: {
@@ -56,7 +57,7 @@ export function DonateDialog(props: DonateDialogProps) {
     const [title, setTitle] = useState('')
     const [address, setAddress] = useState('')
     const [postLink, setPostLink] = useState<string | URL>('')
-    // const { share } = useSNSAdaptorContext()
+    const { share } = useSNSAdaptorContext()
     // context
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const nativeTokenDetailed = useFungibleToken(NetworkPluginID.PLUGIN_EVM)
@@ -119,7 +120,7 @@ export function DonateDialog(props: DonateDialogProps) {
         await openShareTxDialog({
             hash,
             onShare() {
-                // share?.(shareText)
+                share?.(shareText)
             },
         })
 

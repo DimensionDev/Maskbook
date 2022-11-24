@@ -10,6 +10,7 @@ import { useGrant } from '../hooks/useGrant.js'
 import { PluginGitcoinMessages } from '../messages.js'
 import { ChainBoundary } from '@masknet/shared'
 import { useI18N } from '../locales/i18n_generated.js'
+import { usePostLink } from '@masknet/plugin-infra'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -80,8 +81,7 @@ export function PreviewCard(props: PreviewCardProps) {
     const theme = useTheme()
 
     // #region the donation dialog
-    // const postLink = usePostLink()
-    const postLink = new URL('https://www.sohu.com')
+    const postLink = usePostLink()
     const { setDialog: setDonationDialog } = useRemoteControlledDialog(PluginGitcoinMessages.donationDialogUpdated)
     const onDonate = useCallback(() => {
         if (!grant) return

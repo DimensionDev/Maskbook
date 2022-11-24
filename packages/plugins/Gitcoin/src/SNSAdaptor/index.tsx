@@ -1,20 +1,21 @@
 import { useMemo } from 'react'
 import { Trans } from 'react-i18next'
-import { usePostInfoDetails, Plugin, usePluginWrapper } from '@masknet/plugin-infra/content-script'
+import { usePostInfoDetails, Plugin, usePluginWrapper, SNSAdaptorContext } from '@masknet/plugin-infra/content-script'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
-import { parseURLs, PluginID } from '@masknet/shared-base'
+import { createValueRefWithReady, parseURLs, PluginID } from '@masknet/shared-base'
 import { Icons } from '@masknet/icons'
 import { PreviewCard } from './PreviewCard.js'
 import { base } from '../base.js'
 import { PLUGIN_META_KEY, PLUGIN_NAME } from '../constants.js'
 import { DonateDialog } from './DonateDialog.js'
-import { SharedContextSettings } from '../context.js'
+
+export const SharedContextSettings = createValueRefWithReady<Plugin.SNSAdaptor.SNSAdaptorContext>(null!)
 
 const isGitcoin = (x: string): boolean => /^https:\/\/gitcoin.co\/grants\/\d+/.test(x)
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
-    init(signal, context) {
+    init(_, context) {
         SharedContextSettings.value = context
     },
     DecryptedInspector: function Comp(props) {
@@ -24,7 +25,11 @@ const sns: Plugin.SNSAdaptor.Definition = {
             return parseURLs(x.val).find(isGitcoin)
         }, [props.message])
         if (!link) return null
-        return <Renderer url={link} />
+        return (
+            <SNSAdaptorContext.Provider value={SharedContextSettings.value}>
+                <Renderer url={link} />
+            </SNSAdaptorContext.Provider>
+        )
     },
     CompositionDialogMetadataBadgeRender: new Map([[PLUGIN_META_KEY, () => PLUGIN_NAME]]),
     GlobalInjection() {
@@ -67,7 +72,11 @@ function Renderer(
     const [id = ''] = props.url.match(/\d+/) ?? []
     usePluginWrapper(true)
 
-    return <PreviewCard id={id} />
+    return (
+        <SNSAdaptorContext.Provider value={SharedContextSettings.value}>
+            <PreviewCard id={id} />
+        </SNSAdaptorContext.Provider>
+    )
 }
 
 export default sns
