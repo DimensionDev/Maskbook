@@ -21,7 +21,7 @@ export interface TipButtonProps {
     iconSize: number
 }
 
-export const TipButtonStyle: Record<FontSize, FollowTipButtonProps> = {
+export const TipButtonStyle: Record<FontSize, TipButtonProps> = {
     [FontSize.X_Small]: { buttonSize: 29, iconSize: 18 },
     [FontSize.Small]: { buttonSize: 30, iconSize: 19 },
     [FontSize.Normal]: { buttonSize: 32, iconSize: 20 },
