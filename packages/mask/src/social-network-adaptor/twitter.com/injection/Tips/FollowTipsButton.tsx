@@ -1,11 +1,33 @@
 import { DOMProxy, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { createInjectHooksRenderer, Plugin, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
 import { makeStyles } from '@masknet/theme'
+import { FontSize } from '@masknet/web3-shared-base'
 import { memo, useMemo, useState } from 'react'
 import { useAsync } from 'react-use'
+import { activatedSocialNetworkUI } from '../../../../social-network/ui.js'
 import { createReactRootShadowed, startWatch } from '../../../../utils/index.js'
 import { normalFollowButtonSelector as selector } from '../../utils/selector.js'
 import { getUserIdentity } from '../../utils/user.js'
+
+interface TipButtonStyle {
+    buttonSize: number
+    iconSize: number
+}
+
+const getTipButtonStyle = () => {
+    const twitterButtonStyle: Record<FontSize, TipButtonStyle> = {
+        ['xSmall']: {
+            buttonSize: 29,
+            iconSize: 18,
+        },
+        ['small']: { buttonSize: 30, iconSize: 19 },
+        ['normal']: { buttonSize: 32, iconSize: 20 },
+        ['large']: { buttonSize: 35, iconSize: 22 },
+        ['xLarge']: { buttonSize: 38, iconSize: 24 },
+    }
+    const themeSetting = activatedSocialNetworkUI.collecting.themeSettingsProvider?.recognized.value
+    return twitterButtonStyle[themeSetting?.size ?? FontSize.Normal]
+}
 
 function getTwitterId(ele: HTMLElement) {
     const profileLink = ele.closest('[data-testid="UserCell"]')?.querySelector('a[role="link"]')
@@ -23,18 +45,16 @@ export function injectTipsButtonOnFollowButton(signal: AbortSignal) {
             const run = async () => {
                 const twitterId = getTwitterId(ele)
                 if (!twitterId) return
-
-                const buttonCss = window.getComputedStyle(ele.firstChild as HTMLElement)
-                const buttonSize = Number.parseFloat(buttonCss.height.replace('px', ''))
-                const fontSizeCss = window.getComputedStyle(ele.firstChild?.firstChild as HTMLElement)
-                const fontSize = Number.parseFloat(fontSizeCss.fontSize.replace('px', ''))
+                const buttonStyle = getTipButtonStyle()
                 const proxy = DOMProxy({ afterShadowRootInit: { mode: process.env.shadowRootMode } })
                 proxy.realCurrent = ele
                 const identity = await getUserIdentity(twitterId)
                 if (!identity) return
 
                 const root = createReactRootShadowed(proxy.beforeShadow, { signal })
-                root.render(<FollowButtonTipsSlot userId={twitterId} buttonSize={buttonSize} iconSize={20} />)
+                root.render(
+                    <FollowButtonTipsSlot userId={twitterId} buttonSize={buttonStyle.buttonSize} iconSize={20} />,
+                )
                 remover = root.destroy
             }
 
