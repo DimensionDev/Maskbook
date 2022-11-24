@@ -2,6 +2,7 @@ import urlcat from 'urlcat'
 import { ChainId, UserOperation, UserTransaction } from '@masknet/web3-shared-evm'
 import type { BundlerAPI } from '../types/Bundler.js'
 import { BUNDLER_ROOT } from './constants.js'
+import type { WalletContractDeployer } from '../types/WalletContractDeployer.js'
 
 export class SmartPayBundlerAPI implements BundlerAPI.Provider {
     private async healthz() {
@@ -46,5 +47,11 @@ export class SmartPayBundlerAPI implements BundlerAPI.Provider {
 
         const entryPoints = await this.getSupportedEntryPoints()
         return this.handle(userOperation)
+    }
+}
+
+export class SmartPayDeployerAPI implements WalletContractDeployer.Provider {
+    deploy(owner: string, slat: number): Promise<string> {
+        throw new Error('Method not implemented.')
     }
 }

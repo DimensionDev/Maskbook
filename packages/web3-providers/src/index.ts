@@ -44,7 +44,7 @@ import { MirrorAPI } from './mirror/index.js'
 import { MindsAPI } from './minds/index.js'
 import { FuseTrendingAPI } from './fuse/index.js'
 import { CryptoScamDBAPI } from './cryptoscam-db/index.js'
-import { SmartPayBundlerAPI } from './smart-pay/index.js'
+import { SmartPayBundlerAPI, SmartPayDeployerAPI } from './smart-pay/index.js'
 import { NomicsAPI } from './nomics/index.js'
 import { DSearchAPI } from './d-search/index.js'
 
@@ -124,5 +124,6 @@ export const ZerionGas = new ZerionGasAPI()
 // Fuse
 export const FuseTrending = new FuseTrendingAPI()
 
-// Smart Pay Bundler
+// Smart Pay
 export const SmartPayBundler = new SmartPayBundlerAPI()
+export const SmartPayDeployer = new SmartPayDeployerAPI()
