@@ -47,6 +47,7 @@
     "share_dialog_transaction_confirmed": "crwdns16704:0crwdne16704:0",
     "load_failed": "crwdns17242:0crwdne17242:0",
     "load_retry": "crwdns17244:0crwdne17244:0",
+    "loading": "crwdns19075:0crwdne19075:0",
     "powered_by": "crwdns17746:0crwdne17746:0",
     "copied": "crwdns18350:0crwdne18350:0",
     "copy_wallet_address_success": "crwdns18840:0crwdne18840:0",
