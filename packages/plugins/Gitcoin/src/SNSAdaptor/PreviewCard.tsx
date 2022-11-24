@@ -6,12 +6,11 @@ import { QueryBuilder as QueryBuilderIcon, VerifiedUser as VerifiedUserIcon } fr
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
-import { useI18N as useBaseI18N } from '../../../utils/index.js'
-import { useI18N } from '../locales/index.js'
 import { useGrant } from '../hooks/useGrant.js'
 import { PluginGitcoinMessages } from '../messages.js'
-import { usePostLink } from '../../../components/DataSource/usePostInfo.js'
 import { ChainBoundary } from '@masknet/shared'
+import { useI18N } from '../locales/i18n_generated.js'
+import { usePostLink } from '@masknet/plugin-infra'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -77,7 +76,6 @@ export interface PreviewCardProps {
 
 export function PreviewCard(props: PreviewCardProps) {
     const t = useI18N()
-    const { t: tr } = useBaseI18N()
     const { classes } = useStyles()
     const { value: grant, error, loading, retry } = useGrant(props.id)
     const theme = useTheme()
@@ -105,9 +103,9 @@ export function PreviewCard(props: PreviewCardProps) {
     if (error)
         return (
             <Box display="flex" flexDirection="column" alignItems="center" sx={{ padding: 1.5 }}>
-                <Typography color="textPrimary">{tr('go_wrong')}</Typography>
+                <Typography color="textPrimary">{t.go_wrong()}</Typography>
                 <Button variant="roundedDark" onClick={retry}>
-                    {tr('retry')}
+                    {t.retry()}
                 </Button>
             </Box>
         )

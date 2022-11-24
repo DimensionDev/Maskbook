@@ -61,3 +61,7 @@ export function isEthereumInjected() {
 export function isOpera() {
     return globalThis.navigator?.userAgent.includes('OPR/')
 }
+
+export function isTwitter() {
+    return location.href.includes(EnhanceableSite.Twitter)
+}

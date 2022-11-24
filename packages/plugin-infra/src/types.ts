@@ -17,6 +17,7 @@ import type {
     PluginID,
     NetworkPluginID,
     NextIDPlatform,
+    PostIdentifier,
 } from '@masknet/shared-base'
 import type {
     ChainDescriptor,
@@ -389,6 +390,9 @@ export namespace Plugin.SNSAdaptor {
         ) => Promise<SocialIdentity | undefined>
         ownProofChanged: UnboundedRegistry<void>
         setMinimalMode: (id: string, enabled: boolean) => Promise<void>
+
+        getPostURL?: (identifier: PostIdentifier) => URL | null
+        share?: (text: string) => void
     }
 
     export type SelectProviderDialogEvent =
