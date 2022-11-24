@@ -3,6 +3,7 @@ import { makeStyles } from '@masknet/theme'
 import { BoxInfo, BoxMetadata, MediaType } from '../../type.js'
 import { MaskSharpIconOfSize } from '@masknet/shared'
 import { Video } from '../../../../components/shared/Video.js'
+import { resolveIPFS_URL } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     main: {
@@ -41,7 +42,6 @@ export function ArticlesTab(props: ArticlesTabProps) {
     const { boxInfo, boxMetadata } = props
     const { classes } = useStyles()
 
-    const imageUrl = boxMetadata?.mediaUrl.replace('ipfs.infura.io', 'ipfs.io') ?? ''
     return (
         <Box className={classes.main}>
             <Box className={classes.body}>
@@ -54,9 +54,14 @@ export function ArticlesTab(props: ArticlesTabProps) {
                         )
                     switch (boxMetadata.mediaType) {
                         case MediaType.Video:
-                            return <Video VideoProps={{ className: classes.hero, controls: true }} src={imageUrl} />
+                            return (
+                                <Video
+                                    VideoProps={{ className: classes.hero, controls: true }}
+                                    src={resolveIPFS_URL(boxMetadata?.mediaUrl) ?? ''}
+                                />
+                            )
                         default:
-                            return <img className={classes.hero} src={imageUrl} />
+                            return <img className={classes.hero} src={resolveIPFS_URL(boxMetadata?.mediaUrl)} />
                     }
                 })()}
             </Box>
