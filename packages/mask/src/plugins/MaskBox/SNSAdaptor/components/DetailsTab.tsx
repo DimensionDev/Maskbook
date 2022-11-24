@@ -13,7 +13,7 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: 16,
         padding: theme.spacing(2),
         marginBottom: theme.spacing(2),
-        '&:liast-child': {
+        '&:last-child': {
             marginBottom: theme.spacing(0),
         },
     },
