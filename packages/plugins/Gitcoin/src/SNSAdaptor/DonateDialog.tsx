@@ -10,7 +10,7 @@ import {
 } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles, ActionButton } from '@masknet/theme'
-import { EnhanceableSite, NetworkPluginID } from '@masknet/shared-base'
+import { NetworkPluginID, isTwitter } from '@masknet/shared-base'
 import { formatBalance, FungibleToken, rightShift } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType, useGitcoinConstants } from '@masknet/web3-shared-evm'
 import { useChainContext, useFungibleToken, useFungibleTokenBalance } from '@masknet/web3-hooks-base'
@@ -44,10 +44,6 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-function isTwitter() {
-    return location.href.includes(EnhanceableSite.Twitter)
-}
-
 export interface DonateDialogProps extends withClasses<never> {}
 
 export function DonateDialog(props: DonateDialogProps) {
@@ -57,7 +53,6 @@ export function DonateDialog(props: DonateDialogProps) {
     const [address, setAddress] = useState('')
     const [postLink, setPostLink] = useState<string | URL>('')
     const { share } = useSNSAdaptorContext()
-    console.log(share)
     // context
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const nativeTokenDetailed = useFungibleToken(NetworkPluginID.PLUGIN_EVM)
