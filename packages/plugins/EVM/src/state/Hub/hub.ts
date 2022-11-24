@@ -1,4 +1,4 @@
-import { mixin } from '@masknet/shared-base'
+import { EMPTY_LIST, mixin } from '@masknet/shared-base'
 import { HubStateBaseClient, HubStateFungibleClient, HubStateNonFungibleClient } from '@masknet/web3-state'
 import {
     AlchemyEVM,
@@ -28,7 +28,16 @@ import {
     ZerionNonFungibleToken,
     X2Y2,
 } from '@masknet/web3-providers'
-import { SourceType, HubOptions, Pageable, CurrencyType, Transaction } from '@masknet/web3-shared-base'
+import {
+    SourceType,
+    HubOptions,
+    Pageable,
+    CurrencyType,
+    Transaction,
+    attemptUntil,
+    createPageable,
+    createIndicator,
+} from '@masknet/web3-shared-base'
 import { ChainId, chainResolver, SchemaType } from '@masknet/web3-shared-evm'
 import type { EVM_Hub } from './types.js'
 
@@ -56,7 +65,10 @@ class Hub extends HubStateBaseClient<ChainId> implements EVM_Hub {
             account,
             chainId,
         })
-        return DeBank.getTransactions(options.account, options)
+        return attemptUntil(
+            [DeBank, Zerion].map((x) => () => x.getTransactions(options.account, options)),
+            createPageable(EMPTY_LIST, createIndicator(options.indicator)),
+        )
     }
 }
 
