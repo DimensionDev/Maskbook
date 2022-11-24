@@ -2,7 +2,7 @@ import { createContext, PropsWithChildren, useCallback, useMemo } from 'react'
 import { useAsync } from 'react-use'
 import { NextIDProof } from '@masknet/web3-providers'
 import { useWeb3State, useLookupAddress, useReverseAddress } from '@masknet/web3-hooks-base'
-import { SearchKeywordType, resolveSearchKeywordType } from '@masknet/web3-shared-base'
+import { SearchResultType } from '@masknet/web3-shared-base'
 import { BindingProof, NetworkPluginID } from '@masknet/shared-base'
 import { resolveNonFungibleTokenIdFromEnsDomain, ChainId } from '@masknet/web3-shared-evm'
 
@@ -31,13 +31,8 @@ export const ENSContext = createContext<ENSContextProps>({
 })
 ENSContext.displayName = 'ENSContext'
 
-export function ENSProvider({ children, keyword }: PropsWithChildren<SearchResultInspectorProps>) {
+export function ENSProvider({ children, keyword, keywordType }: PropsWithChildren<SearchResultInspectorProps>) {
     const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
-    const keywordType = resolveSearchKeywordType(
-        keyword,
-        (keyword: string) => Boolean(Others?.isValidDomain(keyword)),
-        (keyword: string) => Boolean(Others?.isValidAddress(keyword) && !Others?.isZeroAddress(keyword)),
-    )
     const {
         value: _reversedAddress,
         loading: isLoadingLookup,
@@ -52,25 +47,25 @@ export function ENSProvider({ children, keyword }: PropsWithChildren<SearchResul
     } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, keyword, ChainId.Mainnet)
 
     const isLoading =
-        (isLoadingLookup && keywordType === SearchKeywordType.Domain) ||
-        (isLoadingReverse && keywordType === SearchKeywordType.Address)
+        (isLoadingLookup && keywordType === SearchResultType.Domain) ||
+        (isLoadingReverse && keywordType === SearchResultType.EOA)
     const isError =
-        (!!lookupError && keywordType === SearchKeywordType.Domain) ||
-        (!!reverseError && keywordType === SearchKeywordType.Address)
+        (!!lookupError && keywordType === SearchResultType.Domain) ||
+        (!!reverseError && keywordType === SearchResultType.EOA)
     const retry = useCallback(() => {
-        if (keywordType === SearchKeywordType.Domain) retryLookup()
-        if (keywordType === SearchKeywordType.Address) retryReverse()
+        if (keywordType === SearchResultType.Domain) retryLookup()
+        if (keywordType === SearchResultType.EOA) retryReverse()
     }, [keywordType, keyword])
 
     const reversedAddress = useMemo(() => {
-        if (keywordType === SearchKeywordType.Domain) return _reversedAddress
-        if (keywordType === SearchKeywordType.Address) return keyword
+        if (keywordType === SearchResultType.Domain) return _reversedAddress
+        if (keywordType === SearchResultType.EOA) return keyword
         return undefined
     }, [keywordType, keyword, _reversedAddress])
 
     const domain = useMemo(() => {
-        if (keywordType === SearchKeywordType.Domain) return keyword
-        if (keywordType === SearchKeywordType.Address) return _domain ?? ''
+        if (keywordType === SearchResultType.Domain) return keyword
+        if (keywordType === SearchResultType.EOA) return _domain ?? ''
         return ''
     }, [keywordType, keyword, _domain])
 
@@ -104,5 +99,5 @@ export function ENSProvider({ children, keyword }: PropsWithChildren<SearchResul
 
 export interface SearchResultInspectorProps {
     keyword: string
-    keywordType?: SearchKeywordType
+    keywordType?: SearchResultType
 }
