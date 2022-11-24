@@ -1,0 +1,13 @@
+{
+    "name": "Gitcoin",
+    "promote": "分享或浏览曾经捐助过或感兴趣的 Gitcoin 项目。",
+    "select_a_token": "选择代币",
+    "grant_not_available": "授权不可用",
+    "enter_an_amount": "输入数额",
+    "gitcoin_readme": "通过使用此服务，您将同时向 <fund>Gitcoin grants development fund</fund> 捐赠您5%捐款。",
+    "donate": "捐赠",
+    "last_updated": "最新更新：",
+    "by": "提供者为：",
+    "view_on": "在 Gitcoin 上查看",
+    "readme_fund_link": "https://gitcoin.co/grants/86/gitcoin-sustainability-fund"
+}
