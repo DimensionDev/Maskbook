@@ -2,9 +2,9 @@ import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { createInjectHooksRenderer, Plugin, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
 import { makeStyles } from '@masknet/theme'
 import { useMemo, useState } from 'react'
-import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI.js'
+import { useCurrentVisitingIdentity, useThemeSettings } from '../../../../components/DataSource/useActivatedUI.js'
 import { createReactRootShadowed, startWatch } from '../../../../utils/index.js'
-import { TwitterStyle, useButtonStyles } from '../../constant.js'
+import { ButtonStyle } from '../../constant.js'
 import { profileFollowButtonSelector as selector } from '../../utils/selector.js'
 
 export function injectOpenTipsButtonOnProfile(signal: AbortSignal) {
@@ -37,8 +37,9 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
 
 function ProfileTipsSlot() {
     const visitingPersona = useCurrentVisitingIdentity()
-    const buttonStyles: TwitterStyle = useButtonStyles()
-    const { classes, cx } = useStyles({ size: buttonStyles.buttonSize, marginBottom: buttonStyles.marginBottom })
+    const themeSettings = useThemeSettings()
+    const buttonStyle = ButtonStyle[themeSettings.size]
+    const { classes, cx } = useStyles({ size: buttonStyle.buttonSize, marginBottom: buttonStyle.marginBottom })
     const [disabled, setDisabled] = useState(true)
 
     const component = useMemo(() => {
@@ -51,12 +52,12 @@ function ProfileTipsSlot() {
             <Component
                 identity={visitingPersona.identifier}
                 slot={Plugin.SNSAdaptor.TipsSlot.Profile}
-                iconSize={buttonStyles.iconSize}
-                buttonSize={buttonStyles.buttonSize}
+                iconSize={buttonStyle.iconSize}
+                buttonSize={buttonStyle.buttonSize}
                 onStatusUpdate={setDisabled}
             />
         )
-    }, [visitingPersona.identifier, buttonStyles.buttonSize, buttonStyles.iconSize])
+    }, [visitingPersona.identifier, buttonStyle.buttonSize, buttonStyle.iconSize])
 
     if (!component || !visitingPersona.identifier) return null
 

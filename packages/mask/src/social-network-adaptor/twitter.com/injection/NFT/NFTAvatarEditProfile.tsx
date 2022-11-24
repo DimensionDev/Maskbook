@@ -6,7 +6,8 @@ import { searchEditProfileSelector } from '../../utils/selector.js'
 import { ConnectPersonaBoundary } from '../../../../components/shared/ConnectPersonaBoundary.js'
 import { PluginID, CrossIsolationMessages } from '@masknet/shared-base'
 import { injectOpenNFTAvatarEditProfileButtonAtEditProfileDialog } from './NFTAvatarEditProfileDialog.js'
-import { TwitterStyle, useButtonStyles } from '../../constant.js'
+import { ButtonStyle, TwitterButtonStyle } from '../../constant.js'
+import { useThemeSettings } from '../../../../components/DataSource/useActivatedUI.js'
 
 export function injectOpenNFTAvatarEditProfileButton(signal: AbortSignal) {
     injectOpenNFTAvatarEditProfileButtonAtProfilePage(signal)
@@ -21,7 +22,7 @@ export function injectOpenNFTAvatarEditProfileButtonAtProfilePage(signal: AbortS
     )
 }
 
-const useStyles = makeStyles<TwitterStyle>()((theme, props) => ({
+const useStyles = makeStyles<TwitterButtonStyle>()((theme, props) => ({
     root: {
         minHeight: props.buttonSize,
         marginBottom: props.marginBottom,
@@ -41,7 +42,8 @@ export function openNFTAvatarSettingDialog() {
 }
 
 function useNFTAvatarButtonStyles() {
-    const style = useButtonStyles()
+    const themeSettings = useThemeSettings()
+    const style = ButtonStyle[themeSettings.size]
     return useStyles(style)
 }
 function OpenNFTAvatarEditProfileButtonInTwitter() {
