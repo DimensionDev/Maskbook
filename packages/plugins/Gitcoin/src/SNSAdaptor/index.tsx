@@ -2,14 +2,13 @@ import { useMemo } from 'react'
 import { Trans } from 'react-i18next'
 import { usePostInfoDetails, Plugin, usePluginWrapper, SNSAdaptorContext } from '@masknet/plugin-infra/content-script'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
-import { createValueRefWithReady, parseURLs, PluginID } from '@masknet/shared-base'
+import { parseURLs, PluginID } from '@masknet/shared-base'
 import { Icons } from '@masknet/icons'
 import { PreviewCard } from './PreviewCard.js'
 import { base } from '../base.js'
 import { PLUGIN_META_KEY, PLUGIN_NAME } from '../constants.js'
 import { DonateDialog } from './DonateDialog.js'
-
-export const SharedContextSettings = createValueRefWithReady<Plugin.SNSAdaptor.SNSAdaptorContext>(null!)
+import { SharedContextSettings } from '../settings.js'
 
 const isGitcoin = (x: string): boolean => /^https:\/\/gitcoin.co\/grants\/\d+/.test(x)
 
@@ -33,7 +32,11 @@ const sns: Plugin.SNSAdaptor.Definition = {
     },
     CompositionDialogMetadataBadgeRender: new Map([[PLUGIN_META_KEY, () => PLUGIN_NAME]]),
     GlobalInjection() {
-        return <DonateDialog />
+        return (
+            <SNSAdaptorContext.Provider value={SharedContextSettings.value}>
+                <DonateDialog />
+            </SNSAdaptorContext.Provider>
+        )
     },
     PostInspector() {
         const links = usePostInfoDetails.mentionedLinks()
