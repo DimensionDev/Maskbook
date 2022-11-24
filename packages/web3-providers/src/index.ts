@@ -47,6 +47,7 @@ import { CryptoScamDBAPI } from './cryptoscam-db/index.js'
 import { SmartPayBundlerAPI, SmartPayDeployerAPI } from './smart-pay/index.js'
 import { NomicsAPI } from './nomics/index.js'
 import { DSearchAPI } from './d-search/index.js'
+import { MulticallAPI } from './multicall/index.js'
 
 // #region TODO: to be removed
 export * from './helpers.js'
@@ -127,3 +128,6 @@ export const FuseTrending = new FuseTrendingAPI()
 // Smart Pay
 export const SmartPayBundler = new SmartPayBundlerAPI()
 export const SmartPayDeployer = new SmartPayDeployerAPI()
+
+// EVM multicall
+export const Multicall = new MulticallAPI()
