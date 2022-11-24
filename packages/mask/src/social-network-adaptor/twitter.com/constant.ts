@@ -1,7 +1,6 @@
 import { FontSize } from '@masknet/web3-shared-base'
-import { activatedSocialNetworkUI } from '../../social-network/ui.js'
 
-export interface TwitterButtonStyle {
+export interface ButtonProps {
     buttonSize: number
     iconSize: number
     fontSize: number
@@ -9,36 +8,23 @@ export interface TwitterButtonStyle {
     marginBottom: number
 }
 
-export const ButtonStyle: Record<FontSize, TwitterButtonStyle> = {
-    [FontSize.X_Small]: {
-        buttonSize: 32,
-        iconSize: 18,
-        fontSize: 14,
-        lineHeight: '18px',
-        marginBottom: 11,
-    },
+export const ButtonStyle: Record<FontSize, ButtonProps> = {
+    [FontSize.X_Small]: { buttonSize: 32, iconSize: 18, fontSize: 14, lineHeight: '18px', marginBottom: 11 },
     [FontSize.Small]: { buttonSize: 34, iconSize: 19, fontSize: 14, lineHeight: '19px', marginBottom: 11 },
     [FontSize.Normal]: { buttonSize: 36, iconSize: 20, fontSize: 15, lineHeight: '20px', marginBottom: 12 },
     [FontSize.Large]: { buttonSize: 40, iconSize: 22, fontSize: 17, lineHeight: '22px', marginBottom: 13 },
     [FontSize.X_Large]: { buttonSize: 43, iconSize: 24, fontSize: 18, lineHeight: '24px', marginBottom: 14 },
 }
 
-export interface FollowTipButtonStyle {
+export interface TipButtonProps {
     buttonSize: number
     iconSize: number
 }
 
-export function getFollowTipButtonStyle(): FollowTipButtonStyle {
-    const twitterButtonStyle: Record<FontSize, FollowTipButtonStyle> = {
-        [FontSize.X_Small]: {
-            buttonSize: 29,
-            iconSize: 18,
-        },
-        [FontSize.Small]: { buttonSize: 30, iconSize: 19 },
-        [FontSize.Normal]: { buttonSize: 32, iconSize: 20 },
-        [FontSize.Large]: { buttonSize: 35, iconSize: 22 },
-        [FontSize.X_Large]: { buttonSize: 38, iconSize: 24 },
-    }
-    const themeSetting = activatedSocialNetworkUI.collecting.themeSettingsProvider?.recognized.value
-    return twitterButtonStyle[themeSetting?.size ?? FontSize.Normal]
+export const TipButtonStyle: Record<FontSize, FollowTipButtonProps> = {
+    [FontSize.X_Small]: { buttonSize: 29, iconSize: 18 },
+    [FontSize.Small]: { buttonSize: 30, iconSize: 19 },
+    [FontSize.Normal]: { buttonSize: 32, iconSize: 20 },
+    [FontSize.Large]: { buttonSize: 35, iconSize: 22 },
+    [FontSize.X_Large]: { buttonSize: 38, iconSize: 24 },
 }
