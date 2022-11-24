@@ -54,5 +54,4 @@ export enum PluginID {
     ScamSniffer = 'io.scamsniffer.mask-plugin',
     NFTCard = 'com.maskbook.nft-card',
     ScamWarning = 'com.mask.scam-warning',
-    DecentralizedSearch = 'com.maskbook.decentralized-search',
 }

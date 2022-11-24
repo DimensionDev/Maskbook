@@ -119,7 +119,6 @@
       "@masknet/plugin-cross-chain-bridge": ["./packages/plugins/CrossChainBridge/src"],
       "@masknet/plugin-web3-profile": ["./packages/plugins/Web3Profile/src"],
       "@masknet/plugin-ens": ["./packages/plugins/ens/src"],
-      "@masknet/plugin-decentralized-search": ["./packages/plugins/DecentralizedSearch/src"],
       "@masknet/plugin-approval": ["./packages/plugins/approval/src"],
       "@masknet/plugin-scam-warning": ["./packages/plugins/ScamWarning/src"],
       // @masknet/scripts: insert-here 3
