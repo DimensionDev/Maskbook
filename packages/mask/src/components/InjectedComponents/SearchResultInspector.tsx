@@ -20,7 +20,7 @@ const useStyles = makeStyles()((theme) => ({}))
 export interface SearchResultInspectorProps {}
 
 export function SearchResultInspector(props: SearchResultInspectorProps) {
-    const { classes } = useStyles(undefined, { props })
+    const { classes } = useStyles()
     const translate = usePluginI18NField()
 
     const keyword = useSearchedKeyword()
