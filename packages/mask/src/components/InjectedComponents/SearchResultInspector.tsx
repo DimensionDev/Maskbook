@@ -30,7 +30,7 @@ export function SearchResultInspector(props: SearchResultInspectorProps) {
     const translate = usePluginI18NField()
 
     const keyword = useSearchedKeyword()
-    const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
+    const { Others, NameService } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
     const activatedPlugins = useActivatedPluginsSNSAdaptor.visibility.useNotMinimalMode()
 
@@ -41,8 +41,16 @@ export function SearchResultInspector(props: SearchResultInspectorProps) {
             isZeroAddress: Others?.isZeroAddress,
             isValidDomain: Others?.isValidDomain,
             getAddressType: connection?.getAddressType,
+            lookup: NameService?.lookup,
         })
-    }, [keyword, Others?.isValidAddress, Others?.isZeroAddress, Others?.isValidDomain, connection?.getAddressType])
+    }, [
+        keyword,
+        Others?.isValidAddress,
+        Others?.isZeroAddress,
+        Others?.isValidDomain,
+        connection?.getAddressType,
+        NameService?.lookup,
+    ])
     console.log({ result })
     const contentComponent = useMemo(() => {
         if (!result.value) return null

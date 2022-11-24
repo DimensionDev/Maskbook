@@ -579,6 +579,7 @@ export interface EOAResult<ChainId> extends Result<ChainId> {
 
 export interface DomainResult<ChainId> extends Result<ChainId> {
     type: SearchResultType.Domain
+    address?: string
     domain: string
 }
 

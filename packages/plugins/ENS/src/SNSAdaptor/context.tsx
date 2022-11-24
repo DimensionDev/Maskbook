@@ -1,7 +1,7 @@
 import { createContext, PropsWithChildren, useCallback, useMemo } from 'react'
 import { useAsync } from 'react-use'
 import { NextIDProof } from '@masknet/web3-providers'
-import { useWeb3State, useLookupAddress, useReverseAddress } from '@masknet/web3-hooks-base'
+import { useLookupAddress, useReverseAddress } from '@masknet/web3-hooks-base'
 import { SearchResultType } from '@masknet/web3-shared-base'
 import { BindingProof, NetworkPluginID } from '@masknet/shared-base'
 import { resolveNonFungibleTokenIdFromEnsDomain, ChainId } from '@masknet/web3-shared-evm'
@@ -32,7 +32,6 @@ export const ENSContext = createContext<ENSContextProps>({
 ENSContext.displayName = 'ENSContext'
 
 export function ENSProvider({ children, keyword, keywordType }: PropsWithChildren<SearchResultInspectorProps>) {
-    const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const {
         value: _reversedAddress,
         loading: isLoadingLookup,

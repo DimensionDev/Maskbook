@@ -15,6 +15,7 @@ export function useLookupAddress<T extends NetworkPluginID>(
     return useAsyncRetry(async () => {
         if (!Others?.chainResolver.isValid(chainId) || !domain || !Others?.isValidDomain?.(domain) || !NameService)
             return
+        console.log({ chainId, domain })
         return NameService.lookup?.(chainId, domain)
     }, [chainId, domain, NameService, Others])
 }

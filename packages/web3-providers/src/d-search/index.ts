@@ -25,16 +25,21 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
                 address: string,
                 options?: Web3Helper.Web3ConnectionOptions<NetworkPluginID.PLUGIN_EVM>,
             ) => Promise<AddressType | undefined>
+            lookup?: (chainId: ChainIdEVM, domain: string) => Promise<string | undefined>
         },
         sourceType?: SearchSourceType,
     ): Promise<SearchResult<ChainId, SchemaType>> {
-        const { isValidAddress, isZeroAddress, isValidDomain, getAddressType } = helpers
+        const { isValidAddress, isZeroAddress, isValidDomain, getAddressType, lookup } = helpers
 
         if (isValidDomain?.(keyword)) {
+            // console.log(ChainIdEVM.Mainnet, keyword, lookup)
+            const address = await lookup?.(ChainIdEVM.Mainnet, keyword)
+
             return {
                 type: SearchResultType.Domain,
                 chainId: ChainIdEVM.Mainnet,
                 domain: keyword,
+                address,
                 keyword,
                 pluginID: NetworkPluginID.PLUGIN_EVM,
             } as DomainResult<ChainId>

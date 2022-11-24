@@ -3,7 +3,7 @@ import { Icons } from '@masknet/icons'
 import { Box } from '@mui/material'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import { Web3ContextProvider } from '@masknet/web3-hooks-base'
-import { SocialAddressType } from '@masknet/web3-shared-base'
+import { SocialAddressType, SearchResultType } from '@masknet/web3-shared-base'
 import { NetworkPluginID, parseURLs } from '@masknet/shared-base'
 import { type Plugin, usePostInfoDetails, usePluginWrapper } from '@masknet/plugin-infra/content-script'
 import { PostInspector } from './PostInspector.js'
@@ -105,11 +105,11 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 TabContent({ result }) {
                     const socialAccount = {
                         pluginID: NetworkPluginID.PLUGIN_EVM,
-                        address: '0x790116d0685eB197B886DAcAD9C247f785987A4a',
-                        label: 'nottoobad.eth',
+                        address: result.type === SearchResultType.Domain ? result.address ?? '' : result.keyword,
+                        label: result.type === SearchResultType.Domain ? result.keyword : '',
                         supportedAddressTypes: [SocialAddressType.ENS],
                     }
-                    if (!socialAccount) return null
+
                     return (
                         <Box pr={1.5}>
                             <Web3ContextProvider value={{ pluginID: result.pluginID }}>
@@ -122,7 +122,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             Utils: {
                 ...TabConfig.Utils,
                 shouldDisplay(result) {
-                    return result.pluginID === NetworkPluginID.PLUGIN_EVM
+                    return [SearchResultType.Domain, SearchResultType.EOA].includes(result.type)
                 },
             },
         },

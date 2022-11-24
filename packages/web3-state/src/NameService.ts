@@ -56,7 +56,7 @@ export class NameServiceState<
         })
     }
 
-    async lookup(chainId: ChainId, name: string) {
+    lookup = async (chainId: ChainId, name: string) => {
         if (!name) return
         const callbacks = this.createResolvers(chainId).map((resolver) => {
             return async () => {
@@ -72,7 +72,7 @@ export class NameServiceState<
         return attemptUntil(callbacks, undefined, true)
     }
 
-    async reverse(chainId: ChainId, address: string) {
+    reverse = async (chainId: ChainId, address: string) => {
         if (!this.options.isValidAddress(address)) return
         const callbacks = this.createResolvers(chainId).map((resolver) => {
             return async () => {
