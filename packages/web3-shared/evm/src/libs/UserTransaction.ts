@@ -24,66 +24,32 @@ export class UserTransaction {
         },
     }
 
-    constructor(private chainId: ChainId, private entryPoint: string, private operation: UserOperation) {}
+    constructor(private chainId: ChainId, private entryPoint: string, private userOperation: UserOperation) {}
 
     get sender() {
-        return this.operation.sender
+        return this.userOperation.sender
     }
 
     get signature() {
-        return this.operation.signature
+        return this.userOperation.signature
     }
 
     get initCode() {
-        return this.operation.initCode
+        return this.userOperation.initCode
     }
 
     get hasPaymaster() {
-        return this.operation.paymaster && !isZeroAddress(this.operation.paymaster)
-    }
-
-    get asCamelCase() {
-        return {
-            ...this.operation,
-            signature: this.signature,
-        }
-    }
-
-    get asSnakeCase() {
-        return {
-            ...omit(this.operation, [
-                'initCode',
-                'callData',
-                'callGas',
-                'verificationGas',
-                'preVerificationGas',
-                'maxFeePerGas',
-                'maxPriorityFeePerGas',
-                'paymasterData',
-            ]),
-            init_code: this.operation.initCode,
-            call_data: this.operation.callData,
-            call_gas: this.operation.callGas,
-            verification_gas: this.operation.verificationGas,
-            pre_verification_gas: this.operation.preVerificationGas,
-            max_fee_per_gas: this.operation.maxFeePerGas,
-            max_priority_fee_per_gas: this.operation.maxPriorityFeePerGas,
-            paymaster_data: this.operation.paymasterData,
-        }
-    }
-
-    get asTransaction() {
-        return {}
+        return this.userOperation.paymaster && !isZeroAddress(this.userOperation.paymaster)
     }
 
     get pack() {
-        const encoded = this.coder.encodeParameter(this.CALL_OP_TYPE, this.operation)
+        const encoded = this.coder.encodeParameter(this.CALL_OP_TYPE, this.userOperation)
         return `0x${encoded.slice(66, encoded.length - 64)}`
     }
 
     get packForSignature() {
         const encoded = this.coder.encodeParameter(this.CALL_OP_TYPE, {
-            ...this.operation,
+            ...this.userOperation,
             signature: '0x',
         })
         return `0x${encoded.slice(66, encoded.length - 64)}`
@@ -113,11 +79,38 @@ export class UserTransaction {
 
     async estimateGas() {}
 
-    static fromUserOperation(userOperation?: UserOperation): UserTransaction {
+    static fromUserOperation(chainId: ChainId, entryPoint: string, userOperation: UserOperation): UserTransaction {
+        return new UserTransaction(chainId, entryPoint, userOperation)
+    }
+
+    static fromTransaction(chainId: ChainId, entryPonit: string, transaction: Transaction): UserTransaction {
         throw new Error('Not implemented.')
     }
 
-    static fromTransaction(transaction?: Transaction): UserTransaction {
-        throw new Error('Not implemented.')
+    static toTransaction(chainId: ChainId, entryPoint: string, userOperation: UserOperation) {
+        return {}
+    }
+
+    static toUserOperationSnakeCase(userOperation: UserOperation) {
+        return {
+            ...omit(userOperation, [
+                'initCode',
+                'callData',
+                'callGas',
+                'verificationGas',
+                'preVerificationGas',
+                'maxFeePerGas',
+                'maxPriorityFeePerGas',
+                'paymasterData',
+            ]),
+            init_code: userOperation.initCode,
+            call_data: userOperation.callData,
+            call_gas: userOperation.callGas,
+            verification_gas: userOperation.verificationGas,
+            pre_verification_gas: userOperation.preVerificationGas,
+            max_fee_per_gas: userOperation.maxFeePerGas,
+            max_priority_fee_per_gas: userOperation.maxPriorityFeePerGas,
+            paymaster_data: userOperation.paymasterData,
+        }
     }
 }

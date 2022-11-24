@@ -20,7 +20,7 @@ const userOperation: UserOperation = {
 describe('UserTransaction', () => {
     const userTransaction = new UserTransaction(
         ChainId.Mainnet,
-        '0x0000000000000000000000000000000000000004',
+        '0x0000000000000000000000000000000000000000',
         userOperation,
     )
 
@@ -46,7 +46,7 @@ describe('UserTransaction', () => {
     })
 
     test('requestId', () => {
-        const id = '0xf33844625f678d4ad0a3ac0e10ef69684891771fb945db111dcdb3fd1b9f84a0'
+        const id = '0x1d3bc0ca567dd9b2c15d2cb24c54c2a6c61204b16c8cdae81dc56dc4e562f394'
         expect(userTransaction.requestId).toBe(id)
     })
 })

@@ -8,7 +8,7 @@ import {
     UserOperation,
 } from '@masknet/web3-shared-evm'
 import WalletABI from '@masknet/web3-contracts/abis/Wallet.json'
-import type { Wallet as WalletContract } from '@masknet/web3-contracts/types/Wallet.js'
+import { Wallet as WalletContract } from '@masknet/web3-contracts/types/Wallet.js'
 import { Web3StateSettings } from '../../../settings/index.js'
 import type { Middleware, Context } from '../types.js'
 import { Providers } from '../provider.js'
@@ -55,8 +55,8 @@ export class SCWallet implements Middleware<Context> {
             case EthereumMethodType.ETH_GET_TRANSACTION_COUNT:
                 try {
                     const web3 = await this.createWeb3(context)
-                    const wallet = createContract<WalletContract>(web3, context.account, WalletABI as AbiItem[])
-                    const nonce = await wallet?.methods.nonce()
+                    const walletContract = createContract<WalletContract>(web3, context.account, WalletABI as AbiItem[])
+                    const nonce = await walletContract?.methods.nonce()
                     context.write(nonce ?? 0)
                 } catch (error) {
                     context.abort(error)
@@ -92,6 +92,11 @@ export class SCWallet implements Middleware<Context> {
                 context.abort(new Error('Not implemented.'))
                 break
             case EthereumMethodType.SC_WALLET_DEPLOY:
+                const web3 = await this.createWeb3(context)
+                const walletContract = createContract<WalletContract>(web3, context.account, WalletABI as AbiItem[])
+                walletContract?.deploy({
+                    arguments: [],
+                })
                 context.abort(new Error('Not implemented.'))
                 break
             default:
