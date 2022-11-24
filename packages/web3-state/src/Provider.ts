@@ -40,7 +40,7 @@ export class ProviderState<
             getNetworkTypeFromChainId(chainId: ChainId): NetworkType
         },
     ) {
-        const site = getSiteType()
+        const site = this.site
         const defaultValue = {
             account: {
                 account: '',
