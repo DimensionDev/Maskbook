@@ -9,7 +9,7 @@ export interface TwitterStyle {
     marginBottom: number
 }
 
-export const ButttonStyle: Record<FontSize, TwitterStyle> = {
+export const ButtonStyle: Record<FontSize, TwitterStyle> = {
     ['xSmall']: {
         buttonSize: 32,
         iconSize: 18,
@@ -25,5 +25,5 @@ export const ButttonStyle: Record<FontSize, TwitterStyle> = {
 
 export const useButtonStyles = () => {
     const themeSettings = useThemeSettings()
-    return ButttonStyle[themeSettings.size]
+    return ButtonStyle[themeSettings.size]
 }
