@@ -4,9 +4,9 @@ import {
     SearchResult,
     SearchResultType,
     SearchSourceType,
-    attemptUntil,
     DomainResult,
     EOAResult,
+    attemptUntil,
 } from '@masknet/web3-shared-base'
 import { ChainId as ChainIdEVM, AddressType } from '@masknet/web3-shared-evm'
 import type { DSearchBaseAPI } from '../types/DSearch.js'
@@ -31,13 +31,12 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
         sourceType?: SearchSourceType,
     ): Promise<SearchResult<ChainId, SchemaType>> {
         const { isValidAddress, isZeroAddress, isValidDomain, getAddressType, lookup, reverse } = helpers
-
+        console.log({ keyword })
         if (isValidDomain?.(keyword)) {
             const address = await lookup?.(ChainIdEVM.Mainnet, keyword)
 
             return {
                 type: SearchResultType.Domain,
-                chainId: ChainIdEVM.Mainnet,
                 domain: keyword,
                 address,
                 keyword,
@@ -46,20 +45,19 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
         }
 
         if (isValidAddress?.(keyword) && !isZeroAddress?.(keyword)) {
-            const result = await attemptUntil(
+            const addressType = await attemptUntil(
                 CHAIN_ID_LIST.map((chainId) => async () => {
                     const addressType = await getAddressType?.(keyword, { chainId })
-                    if (addressType !== AddressType.Contract) throw new Error('')
-                    return { addressType, chainId } as { addressType: AddressType | undefined; chainId: ChainId }
+                    if (addressType !== AddressType.Contract) return
+                    return addressType
                 }),
                 undefined,
             )
 
-            if (result && result.addressType !== AddressType.Contract) {
+            if (addressType !== AddressType.Contract) {
                 const domain = await reverse?.(ChainIdEVM.Mainnet, keyword)
                 return {
                     type: SearchResultType.EOA,
-                    chainId: result.chainId,
                     address: keyword,
                     domain,
                     keyword,

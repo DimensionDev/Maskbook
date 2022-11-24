@@ -591,7 +591,7 @@ export interface NonFungibleTokenSecurity {}
 
  export interface Result<ChainId> {
     pluginID: NetworkPluginID
-    chainId: ChainId
+    chainId?: ChainId
     type: SearchResultType
     keyword: string
 }

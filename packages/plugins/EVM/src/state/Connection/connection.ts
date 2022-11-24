@@ -178,10 +178,10 @@ class Connection implements EVM_Connection {
         }
     }
 
-    private getOptions(
+    private getOptions = (
         initial?: EVM_Web3ConnectionOptions,
         overrides?: Partial<EVM_Web3ConnectionOptions>,
-    ): PartialRequired<EVM_Web3ConnectionOptions, 'account' | 'chainId' | 'providerType'> {
+    ): PartialRequired<EVM_Web3ConnectionOptions, 'account' | 'chainId' | 'providerType'> => {
         return {
             account: this.account,
             chainId: this.chainId,
@@ -336,7 +336,7 @@ class Connection implements EVM_Connection {
             this.getOptions(initial),
         )
     }
-    async getAddressType(address: string, initial?: EVM_Web3ConnectionOptions): Promise<AddressType | undefined> {
+    getAddressType = async (address: string, initial?: EVM_Web3ConnectionOptions): Promise<AddressType | undefined> => {
         if (!isValidAddress(address)) return
         const code = await this.getCode(address, initial)
         return code === '0x' ? AddressType.ExternalOwned : AddressType.Contract
@@ -793,7 +793,7 @@ class Connection implements EVM_Connection {
         )
     }
 
-    getCode(address: string, initial?: EVM_Web3ConnectionOptions) {
+    getCode = (address: string, initial?: EVM_Web3ConnectionOptions) => {
         const options = this.getOptions(initial)
         return this.hijackedRequest<string>(
             {

@@ -44,7 +44,16 @@ export function SearchResultInspector(props: SearchResultInspectorProps) {
     const activatedPlugins = useActivatedPluginsSNSAdaptor.visibility.useNotMinimalMode()
 
     const result = useAsyncRetry(async () => {
-        if (!keyword || !Others?.isValidAddress) return
+        if (
+            !keyword ||
+            !Others?.isValidAddress ||
+            !Others?.isZeroAddress ||
+            !Others?.isValidDomain ||
+            !connection?.getAddressType ||
+            !NameService?.lookup ||
+            !NameService?.reverse
+        )
+            return
         return DSearch.search(keyword, {
             isValidAddress: Others?.isValidAddress,
             isZeroAddress: Others?.isZeroAddress,
