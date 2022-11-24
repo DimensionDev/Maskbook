@@ -83,7 +83,7 @@ export class UserTransaction {
         return new UserTransaction(chainId, entryPoint, userOperation)
     }
 
-    static fromTransaction(chainId: ChainId, entryPonit: string, transaction: Transaction): UserTransaction {
+    static fromTransaction(chainId: ChainId, entryPoint: string, transaction: Transaction): UserTransaction {
         throw new Error('Not implemented.')
     }
 

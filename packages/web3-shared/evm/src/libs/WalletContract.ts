@@ -37,13 +37,13 @@ export class WalletContract {
         type: 'function',
     }
 
-    constructor(private chainId: ChainId, private owner: string, private address: string, private entryPonit: string) {}
+    constructor(private chainId: ChainId, private owner: string, private address: string, private entryPoint: string) {}
 
     /**
      * Encode initialize parameters of WalletContract
      */
     async encodeInitData() {
-        return this.coder.encodeFunctionCall(this.INITIALIZE_TYPE as AbiItem, [this.entryPonit, this.owner])
+        return this.coder.encodeFunctionCall(this.INITIALIZE_TYPE as AbiItem, [this.entryPoint, this.owner])
     }
 
     /**

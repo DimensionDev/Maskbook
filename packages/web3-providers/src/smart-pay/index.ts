@@ -12,11 +12,10 @@ export class SmartPayBundlerAPI implements BundlerAPI.Provider {
         return json
     }
 
-    private async handle(chainId: ChainId, entryPoint: string, userOperation: UserOperation) {
-        const userTransaction = new UserTransaction(chainId, entryPoint, userOperation)
+    private async handle(userOperation: UserOperation) {
         const response = await fetch(urlcat(BUNDLER_ROOT, '/handle'), {
             method: 'POST',
-            body: JSON.stringify(userTransaction.asSnakeCase),
+            body: JSON.stringify(UserTransaction.toUserOperationSnakeCase(userOperation)),
         })
         const json = (await response.json()) as { tx_hash: string }
         return json.tx_hash
@@ -46,6 +45,6 @@ export class SmartPayBundlerAPI implements BundlerAPI.Provider {
         if (!chainIds.includes(chainId)) throw new Error('Unable to send UserOperation.')
 
         const entryPoints = await this.getSupportedEntryPoints()
-        return this.handle(chainId, entryPoints[0], userOperation)
+        return this.handle(userOperation)
     }
 }
