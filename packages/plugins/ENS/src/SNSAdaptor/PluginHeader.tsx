@@ -38,7 +38,7 @@ export const PluginHeader = () => {
             <Stack flexDirection="row" justifyContent="space-between" gap={0.5} alignItems="center">
                 <Icons.DecentralizedSearch size={24} />
                 <Typography color={theme.palette.maskColor.dark} fontWeight="bolder">
-                    <PluginI18NFieldRender field={base.name} pluginID={PluginID.DecentralizedSearch} />
+                    {t.plugin_decentralized_search_name()}
                 </Typography>
             </Stack>
             <Box className={classes.provider}>
@@ -52,7 +52,7 @@ export const PluginHeader = () => {
                     component="div"
                     color={MaskColorVar.textPluginColor}>
                     {base.publisher ? (
-                        <PluginI18NFieldRender pluginID={PluginID.DecentralizedSearch} field={base.publisher.name} />
+                        <PluginI18NFieldRender pluginID={PluginID.ENS} field={base.publisher.name} />
                     ) : undefined}
                 </Typography>
                 {base.publisher?.link ? (
