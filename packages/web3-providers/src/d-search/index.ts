@@ -8,10 +8,10 @@ import {
     DomainResult,
     EOAResult,
 } from '@masknet/web3-shared-base'
-import { ChainId, AddressType } from '@masknet/web3-shared-evm'
+import { ChainId as ChainIdEVM, AddressType } from '@masknet/web3-shared-evm'
 import type { DSearchBaseAPI } from '../types/DSearch.js'
 
-const CHAIN_ID_LIST = [ChainId.Mainnet, ChainId.BSC, ChainId.Matic]
+const CHAIN_ID_LIST = [ChainIdEVM.Mainnet, ChainIdEVM.BSC, ChainIdEVM.Matic]
 export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper.SchemaTypeAll>
     implements DSearchBaseAPI.Provider<ChainId, SchemaType, NetworkPluginID.PLUGIN_EVM>
 {
@@ -33,7 +33,7 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
         if (isValidDomain?.(keyword)) {
             return {
                 type: SearchResultType.Domain,
-                chainId: ChainId.Mainnet,
+                chainId: ChainIdEVM.Mainnet,
                 domain: keyword,
                 keyword,
                 pluginID: NetworkPluginID.PLUGIN_EVM,
@@ -62,7 +62,7 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
         }
         return Promise.resolve({
             pluginID: NetworkPluginID.PLUGIN_EVM,
-            chainId: ChainId.Mainnet,
+            chainId: ChainIdEVM.Mainnet,
             type: SearchResultType.FungibleToken,
             address: '0x69af81e73a73b40adf4f3d4223cd9b1ece623074',
             keyword,

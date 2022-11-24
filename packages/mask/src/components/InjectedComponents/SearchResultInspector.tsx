@@ -30,20 +30,20 @@ export function SearchResultInspector(props: SearchResultInspectorProps) {
     const translate = usePluginI18NField()
 
     const keyword = useSearchedKeyword()
-    const { Others } = useWeb3State()
+    const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
     const activatedPlugins = useActivatedPluginsSNSAdaptor.visibility.useNotMinimalMode()
 
     const result = useAsyncRetry(async () => {
-        if (!keyword) return
+        if (!keyword || !Others?.isValidAddress) return
         return DSearch.search(keyword, {
             isValidAddress: Others?.isValidAddress,
             isZeroAddress: Others?.isZeroAddress,
             isValidDomain: Others?.isValidDomain,
             getAddressType: connection?.getAddressType,
         })
-    }, [keyword])
-
+    }, [keyword, Others?.isValidAddress, Others?.isZeroAddress, Others?.isValidDomain, connection?.getAddressType])
+    console.log({ result })
     const contentComponent = useMemo(() => {
         if (!result.value) return null
         const Component = getSearchResultContent(result.value)
