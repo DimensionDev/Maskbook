@@ -53,8 +53,7 @@ export function useSave(pluginID: NetworkPluginID) {
                         const result = await saveToKV(info, account, persona, proof)
                         return result
                 }
-            } catch (error) {
-                console.log(error)
+            } catch {
                 return
             }
         },

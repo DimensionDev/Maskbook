@@ -27,8 +27,7 @@ export function NFTBadge(props: NFTBadgeProps) {
     const { avatar, nftInfo, size = 140, hasRainbow, borderSize } = props
     const { classes } = useStyles(undefined, { props })
     const { t } = useI18N()
-    console.log('Ring')
-    console.log(nftInfo)
+
     if (!nftInfo)
         return (
             <div className={classes.root}>

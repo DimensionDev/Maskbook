@@ -5,6 +5,7 @@ import { activatedSocialNetworkUI } from '../../../social-network/index.js'
 import type { RSS3_KEY_SNS } from '../constants.js'
 import type { AvatarMetaDB, NextIDAvatarMeta } from '../types.js'
 import { useGetNFTAvatar } from './useGetNFTAvatar.js'
+import { getNFTAvatarByUserId } from '../utils/index.js'
 
 const cache = new LRU<string, NextIDAvatarMeta>({
     max: 500,
@@ -38,13 +39,10 @@ async function getNFTAvatarForCache(
     persona: string,
     fn: GetNFTAvatar,
 ) {
-    // const avatarMetaFromPersona = await getNFTAvatarByUserId(userId, avatarId, persona)
-    // if (avatarMetaFromPersona) return avatarMetaFromPersona
-    console.log('222222222')
+    const avatarMetaFromPersona = await getNFTAvatarByUserId(userId, avatarId, persona)
+    if (avatarMetaFromPersona) return avatarMetaFromPersona
     const avatarMeta = await fn(userId, activatedSocialNetworkUI.networkIdentifier as EnhanceableSite, snsKey)
     if (!avatarMeta) return
-    console.log('11111111111')
-    console.log('meta', avatarMeta)
     if (avatarId && avatarId !== avatarMeta.avatarId) return
     if (avatarMeta.pluginId === NetworkPluginID.PLUGIN_SOLANA) {
         return { imageUrl: '', nickname: '', ...avatarMeta, address: avatarMeta.tokenId }

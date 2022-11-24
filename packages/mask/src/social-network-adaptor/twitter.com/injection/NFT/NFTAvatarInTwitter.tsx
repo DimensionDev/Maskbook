@@ -72,12 +72,8 @@ function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
         '',
         RSS3_KEY_SNS.TWITTER,
     )
-    console.log('---------------nftAvatar--------------------')
-    console.log(nftAvatar)
     const { account } = useChainContext()
     const { loading: loadingWallet, value: storage } = useWallet(nftAvatar?.userId)
-    console.log('-------account------')
-    console.log(storage)
     const { value: nftInfo, loading: loadingNFTInfo } = useNFT(
         storage?.address ?? account,
         nftAvatar?.address,
@@ -86,8 +82,7 @@ function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
         nftAvatar?.chainId,
         nftAvatar?.ownerAddress,
     )
-    console.log('---------------nft----------------')
-    console.log(nftInfo)
+
     const windowSize = useWindowSize()
     const _location = useLocation()
 
@@ -288,16 +283,8 @@ function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
             props.signal,
         )
 
-    console.log('--------------------show--------------------')
-    console.log(!nftAvatar)
-    console.log(!size)
-    console.log(loadingWallet)
-    console.log(loadingNFTInfo)
-    console.log(!showAvatar)
-    console.log(!updatedAvatar)
     if (!nftAvatar || !size || loadingWallet || loadingNFTInfo || !showAvatar || !updatedAvatar) return null
 
-    console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
     return (
         <NFTBadge
             nftInfo={nftInfo}
