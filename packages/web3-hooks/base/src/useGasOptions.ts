@@ -12,7 +12,7 @@ export function useGasOptions<S extends 'all' | void = void, T extends NetworkPl
     const hub = useWeb3Hub(pluginID, options)
 
     return useAsyncRetry(async () => {
-        if (!chainId || !hub) return
-        return hub.getGasOptions?.(chainId)
+        if (!chainId) return
+        return hub?.getGasOptions?.(chainId)
     }, [chainId, hub])
 }
