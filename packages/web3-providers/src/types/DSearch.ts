@@ -4,7 +4,7 @@ import type { AddressType, ChainId as ChainIdEVM } from '@masknet/web3-shared-ev
 import type { NetworkPluginID } from '@masknet/shared-base'
 
 export namespace DSearchBaseAPI {
-    export interface Provider<ChainId, SchemaType, T extends NetworkPluginID> {
+    export interface Provider<ChainId, T extends NetworkPluginID> {
         search(
             keyword: string,
             helpers: {
@@ -19,6 +19,6 @@ export namespace DSearchBaseAPI {
                 reverse?: (chainId: ChainIdEVM, address: string) => Promise<string | undefined>
             },
             source?: SearchSourceType,
-        ): Promise<SearchResult<ChainId, SchemaType>>
+        ): Promise<SearchResult<ChainId>>
     }
 }

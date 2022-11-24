@@ -2,12 +2,14 @@ import type { AsyncState } from 'react-use/lib/useAsyncFn.js'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useWeb3State } from '@masknet/web3-hooks-base'
 import { DataProvider } from '@masknet/public-api'
+import type { Web3Helper } from '@masknet/web3-helpers'
+import { SearchResultType, SearchResult } from '@masknet/web3-shared-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import type { TrendingAPI } from '@masknet/web3-providers'
 import { TagType } from '../types/index.js'
 import { useTrendingById, useCoinInfoByAddress } from '../trending/useTrending.js'
 
-export interface SearchResult {
+export interface TrendingSearchResult {
     pluginID: NetworkPluginID
     type: TagType
     id?: string
@@ -21,13 +23,12 @@ export interface SearchResult {
     searchedContractAddress?: string
 }
 
-export function usePayloadFromTokenSearchKeyword(keyword = ''): SearchResult {
-    const regexResult = keyword.match(/([#$])(\w+)/) ?? []
+export function usePayloadFromTokenSearchKeyword(result: SearchResult<Web3Helper.ChainIdAll>): TrendingSearchResult {
+    const { keyword } = result
     const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
-    const searchedContractAddress = Others?.isValidAddress(keyword) ? keyword : ''
-    const type = searchedContractAddress ? '$' : regexResult[1]
-
-    const [_, _type, name = ''] = keyword.match(/([#$])(\w+)/) ?? []
+    const searchedContractAddress = result.type === SearchResultType.TrendingTokenByAddress ? keyword : ''
+    const type = result.type === SearchResultType.TrendingTokenByKeyword ? result.trendingSearchType : '$'
+    const name = result.type === SearchResultType.TrendingTokenByKeyword ? result.name : ''
 
     const trendingByIdResult = useTrendingById(searchedContractAddress, DataProvider.NFTScan)
     const { value: nonFungibleAsset } = trendingByIdResult

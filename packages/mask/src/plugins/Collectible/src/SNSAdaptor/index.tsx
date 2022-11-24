@@ -115,7 +115,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                     }
 
                     return (
-                        <Box pr={1.5}>
+                        <Box pr={1.5} style={{ minHeight: 300 }}>
                             <Web3ContextProvider value={{ pluginID: result.pluginID }}>
                                 <CollectionList socialAccount={socialAccount} persona={undefined} profile={undefined} />
                             </Web3ContextProvider>

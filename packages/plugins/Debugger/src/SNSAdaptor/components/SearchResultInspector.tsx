@@ -3,7 +3,7 @@ import type { SearchResult } from '@masknet/web3-shared-base'
 import { Typography } from '@mui/material'
 
 export interface SearchResultInspectorProps {
-    result: SearchResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
+    result: SearchResult<Web3Helper.ChainIdAll>
 }
 
 export function SearchResultInspector({ result }: SearchResultInspectorProps) {

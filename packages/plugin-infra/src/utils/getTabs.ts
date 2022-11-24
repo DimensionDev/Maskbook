@@ -5,7 +5,7 @@ import { I18NStringField, Plugin, useAvailablePlugins } from '../entry.js'
 
 export function getSearchResultTabs(
     definitions: Plugin.SNSAdaptor.Definition[],
-    result: SearchResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>,
+    result: SearchResult<Web3Helper.ChainIdAll>,
     translate: (pluginID: string, field: I18NStringField) => string,
 ) {
     // eslint-disable-next-line react-hooks/rules-of-hooks

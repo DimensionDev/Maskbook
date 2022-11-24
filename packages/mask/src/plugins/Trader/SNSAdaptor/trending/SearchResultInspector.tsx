@@ -1,22 +1,19 @@
 import { uniq } from 'lodash-es'
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
-import { useAddressType, useNetworkContext, useChainContext } from '@masknet/web3-hooks-base'
+import { useChainContext } from '@masknet/web3-hooks-base'
 import { DataProvider } from '@masknet/public-api'
-import { AddressType } from '@masknet/web3-shared-evm'
 import { TrendingView } from './TrendingView.js'
 import { useAvailableDataProviders } from '../../trending/useAvailableDataProviders.js'
-import type { SearchResult } from '../../trending/usePayloadFromTokenSearchKeyword.js'
+import type { TrendingSearchResult } from '../../trending/usePayloadFromTokenSearchKeyword.js'
 
 export interface SearchResultInspectorProps {
     keyword: string
-    searchResult: SearchResult
+    searchResult: TrendingSearchResult
 }
 
 export function SearchResultInspector({ keyword, searchResult }: SearchResultInspectorProps) {
     const { id, name, asset, type, searchedContractAddress, isNFT } = searchResult
-    const { pluginID } = useNetworkContext()
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const { value: addressType } = useAddressType(pluginID, keyword)
     const { value: dataProviders_ = EMPTY_LIST } = useAvailableDataProviders(type, name)
     const dataProviders = searchedContractAddress
         ? isNFT
@@ -28,7 +25,7 @@ export function SearchResultInspector({ keyword, searchResult }: SearchResultIns
                   ...(id ? [DataProvider.CoinGecko] : []),
               ])
         : dataProviders_
-    if (!name || name === 'UNKNOWN' || addressType === AddressType.ExternalOwned || !dataProviders?.length) return null
+    if (!name || name === 'UNKNOWN' || !dataProviders?.length) return null
     return (
         <TrendingView
             isPopper={false}

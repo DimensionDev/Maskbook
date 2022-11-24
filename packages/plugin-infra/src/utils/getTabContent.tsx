@@ -24,7 +24,7 @@ export function getSettingsTabContent(tabId?: string) {
     })
 }
 
-export function getSearchResultContent(result: SearchResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>) {
+export function getSearchResultContent(result: SearchResult<Web3Helper.ChainIdAll>) {
     return createInjectHooksRenderer(useActivatedPluginsSNSAdaptor.visibility.useNotMinimalMode, (x) => {
         const shouldDisplay = x.SearchResultInspector?.Utils?.shouldDisplay?.(result) ?? true
         return shouldDisplay ? x.SearchResultInspector?.UI?.Content : undefined

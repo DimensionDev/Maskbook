@@ -111,11 +111,11 @@ export enum SearchResultType {
     // e.g., vitalik.eth or vitalik.bnb
     Domain = 'Domain',
     // e.g., $MASK #MASK
-    FungibleToken = 'FungibleToken',
-    // e.g., $PUNK #PUNK
-    NonFungibleToken = 'NonFungibleToken',
-    // e.g., $PUNK #PUNK
-    NonFungibleCollection = 'NonFungibleCollection',
+    TrendingTokenByKeyword = 'TrendingTokenByKeyword',
+    // e.g., 0x69af81e73a73b40adf4f3d4223cd9b1ece623074 (Mask Network)
+    TrendingTokenByAddress = 'TrendingTokenByAddress',
+    // hits none of all above.
+    Unknown = 'Unknown'
 }
 
 export enum ActivityType {
@@ -608,28 +608,27 @@ export interface DomainResult<ChainId> extends Result<ChainId> {
     domain: string
 }
 
-export interface FungibleTokenResult<ChainId, SchemaType> extends Result<ChainId> {
-    address: string
-    token?: FungibleToken<ChainId, SchemaType>
+export interface TrendingTokenByKeywordResult<ChainId> extends Result<ChainId> {
+    type: SearchResultType.TrendingTokenByKeyword
+    trendingSearchType: '#' | '$'
+    name: string
 }
 
-export interface NonFungibleTokenResult<ChainId, SchemaType> extends Result<ChainId> {
-    address: string
-    tokenId: string
-    token?: NonFungibleToken<ChainId, SchemaType>
+export interface TrendingTokenByAddressResult<ChainId> extends Result<ChainId> {
+    type: SearchResultType.TrendingTokenByAddress
 }
 
-export interface NonFungibleCollectionResult<ChainId, SchemaType> extends Result<ChainId> {
-    address: string
-    collection?: NonFungibleCollection<ChainId, SchemaType>
+export interface UnknownResult<ChainId> extends Result<ChainId> {
+    keyword: string
+    type: SearchResultType.Unknown
 }
 
-export type SearchResult<ChainId, SchemaType> = 
+export type SearchResult<ChainId> = 
     | EOAResult<ChainId>
     | DomainResult<ChainId>
-    | FungibleTokenResult<ChainId, SchemaType>
-    | NonFungibleTokenResult<ChainId, SchemaType>
-    | NonFungibleCollectionResult<ChainId, SchemaType>
+    | TrendingTokenByKeywordResult<ChainId>
+    | TrendingTokenByAddressResult<ChainId>
+    | UnknownResult<ChainId>
 
 /**
  * Plugin can declare what chain it supports to trigger side effects (e.g. create a new transaction).

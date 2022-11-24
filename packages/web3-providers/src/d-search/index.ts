@@ -5,6 +5,8 @@ import {
     SearchResultType,
     SearchSourceType,
     DomainResult,
+    TrendingTokenByKeywordResult,
+    TrendingTokenByAddressResult,
     EOAResult,
     attemptUntil,
 } from '@masknet/web3-shared-base'
@@ -12,8 +14,8 @@ import { ChainId as ChainIdEVM, AddressType } from '@masknet/web3-shared-evm'
 import type { DSearchBaseAPI } from '../types/DSearch.js'
 
 const CHAIN_ID_LIST = [ChainIdEVM.Mainnet, ChainIdEVM.BSC, ChainIdEVM.Matic]
-export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper.SchemaTypeAll>
-    implements DSearchBaseAPI.Provider<ChainId, SchemaType, NetworkPluginID.PLUGIN_EVM>
+export class DSearchAPI<ChainId = Web3Helper.ChainIdAll>
+    implements DSearchBaseAPI.Provider<ChainId, NetworkPluginID.PLUGIN_EVM>
 {
     async search(
         keyword: string,
@@ -29,9 +31,24 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
             reverse?: (chainId: ChainIdEVM, address: string) => Promise<string | undefined>
         },
         sourceType?: SearchSourceType,
-    ): Promise<SearchResult<ChainId, SchemaType>> {
+    ): Promise<SearchResult<ChainId>> {
         const { isValidAddress, isZeroAddress, isValidDomain, getAddressType, lookup, reverse } = helpers
-        console.log({ keyword })
+
+        const trendingTokenRegexResult = keyword.match(/([#$])(\w+)/) ?? []
+
+        const [_, trendingSearchType, trendingTokenName = ''] = trendingTokenRegexResult
+
+        if (trendingSearchType && trendingTokenName) {
+            return {
+                type: SearchResultType.TrendingTokenByKeyword,
+                domain: keyword,
+                trendingSearchType,
+                name: trendingTokenName,
+                keyword,
+                pluginID: NetworkPluginID.PLUGIN_EVM,
+            } as TrendingTokenByKeywordResult<ChainId>
+        }
+
         if (isValidDomain?.(keyword)) {
             const address = await lookup?.(ChainIdEVM.Mainnet, keyword)
 
@@ -64,13 +81,16 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
                     pluginID: NetworkPluginID.PLUGIN_EVM,
                 } as EOAResult<ChainId>
             }
+            return {
+                type: SearchResultType.TrendingTokenByAddress,
+                keyword,
+            } as TrendingTokenByAddressResult<ChainId>
         }
-        return Promise.resolve({
+
+        return {
             pluginID: NetworkPluginID.PLUGIN_EVM,
-            chainId: ChainIdEVM.Mainnet,
-            type: SearchResultType.FungibleToken,
-            address: '0x69af81e73a73b40adf4f3d4223cd9b1ece623074',
+            type: SearchResultType.Unknown,
             keyword,
-        }) as Promise<SearchResult<ChainId, SchemaType>>
+        }
     }
 }

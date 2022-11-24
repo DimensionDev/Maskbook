@@ -629,11 +629,11 @@ export namespace Plugin.SNSAdaptor {
         UI?: {
             /** The brief content above detailed tabs. */
             Content?: InjectUI<{
-                result: SearchResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
+                result: SearchResult<Web3Helper.ChainIdAll>
             }>
         }
         Utils?: {
-            shouldDisplay?(result: SearchResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>): boolean
+            shouldDisplay?(result: SearchResult<Web3Helper.ChainIdAll>): boolean
         }
     }
     export interface SearchResultTab {
@@ -655,11 +655,11 @@ export namespace Plugin.SNSAdaptor {
              * The injected tab content
              */
             TabContent: InjectUI<{
-                result: SearchResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
+                result: SearchResult<Web3Helper.ChainIdAll>
             }>
         }
         Utils?: {
-            shouldDisplay?(result: SearchResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>): boolean
+            shouldDisplay?(result: SearchResult<Web3Helper.ChainIdAll>): boolean
         }
     }
 

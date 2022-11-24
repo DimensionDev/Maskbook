@@ -24,7 +24,6 @@ const useStyles = makeStyles()(() => ({
     tabContent: {
         position: 'relative',
         maxHeight: 478,
-        minHeight: 300,
         overflow: 'auto',
         '&::-webkit-scrollbar': {
             display: 'none',
