@@ -76,15 +76,19 @@ export function useCurrentLinkedPersona() {
 export function useSocialIdentity(identity: IdentityResolved | null | undefined) {
     const result = useAsyncRetry<SocialIdentity | undefined>(async () => {
         if (!identity) return
-        const bindings = await queryPersonasFromNextID(identity)
-        const persona = await queryPersonaFromDB(identity)
-        const personaBindings =
-            bindings?.filter((x) => x.persona === persona?.identifier.publicKeyAsHex.toLowerCase()) ?? []
-        return {
-            ...identity,
-            publicKey: persona?.identifier.publicKeyAsHex,
-            hasBinding: personaBindings.length > 0,
-            binding: first(personaBindings),
+        try {
+            const bindings = await queryPersonasFromNextID(identity)
+            const persona = await queryPersonaFromDB(identity)
+            const personaBindings =
+                bindings?.filter((x) => x.persona === persona?.identifier.publicKeyAsHex.toLowerCase()) ?? []
+            return {
+                ...identity,
+                publicKey: persona?.identifier.publicKeyAsHex,
+                hasBinding: personaBindings.length > 0,
+                binding: first(personaBindings),
+            }
+        } catch {
+            return identity
         }
     }, [identity])
 

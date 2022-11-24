@@ -17,6 +17,7 @@ import type {
     PluginID,
     NetworkPluginID,
     NextIDPlatform,
+    PostIdentifier,
 } from '@masknet/shared-base'
 import type {
     ChainDescriptor,
@@ -28,6 +29,7 @@ import type {
     Web3UI,
     Web3State,
     SocialAccount,
+    SearchResult,
     SearchKeywordType,
     ThemeSettings,
 } from '@masknet/web3-shared-base'
@@ -182,6 +184,8 @@ export namespace Plugin.Shared {
         openPopupWindow(route?: PopupRoutes, params?: Record<string, any>): Promise<void>
         /** Close popup window */
         closePopupWindow(): Promise<void>
+        /** Open popup connect window */
+        openPopupConnectWindow(): Promise<void>
 
         /** Open walletconnect dialog */
         openWalletConnectDialog(uri: string, callback: () => void): void
@@ -386,6 +390,9 @@ export namespace Plugin.SNSAdaptor {
         ) => Promise<SocialIdentity | undefined>
         ownProofChanged: UnboundedRegistry<void>
         setMinimalMode: (id: string, enabled: boolean) => Promise<void>
+
+        getPostURL?: (identifier: PostIdentifier) => URL | null
+        share?: (text: string) => void
     }
 
     export type SelectProviderDialogEvent =
@@ -439,9 +446,13 @@ export namespace Plugin.SNSAdaptor {
         }>
         /** This UI will be rendered into the global scope of an SNS. */
         GlobalInjection?: InjectUI<{}>
-        /** This UI will be rendered under the Search of the SNS. */
-        SearchResultBox?: SearchResultBox
-        /** This is the detailed UI content that will be rendered under the Search of the SNS. */
+        /** This UI will be rendered under the Search result of SNS */
+        SearchResultInspector?: SearchResultInspector
+        /** This UI will be rendered under the Search result of SNS. */
+        SearchResultTabs?: SearchResultTab[]
+        /**
+         * @deprecated Use SearchResultInspector stead
+         * This is the detailed UI content that will be rendered under the Search of the SNS. */
         SearchResultContent?: SearchResultContent
         /** This is a chunk of web3 UIs to be rendered into various places of Mask UI. */
         Web3UI?: Web3UI<ChainId, ProviderType, NetworkType>
@@ -617,15 +628,45 @@ export namespace Plugin.SNSAdaptor {
         margin?: string
     }
 
-    export interface SearchResultBox {
+    export interface SearchResultInspector {
         ID: string
+        /**
+         * The injected UI
+         */
         UI?: {
+            /** The brief content above detailed tabs. */
             Content?: InjectUI<{
-                keyword: string
+                result: SearchResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
             }>
         }
         Utils?: {
-            shouldDisplay?(keyword: string): boolean
+            shouldDisplay?(result: SearchResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>): boolean
+        }
+    }
+    export interface SearchResultTab {
+        ID: string
+
+        /**
+         * The name of the slider card
+         */
+        label: I18NStringField | string
+        /**
+         * Used to order the sliders
+         */
+        priority: number
+        /**
+         * The injected UI
+         */
+        UI?: {
+            /**
+             * The injected tab content
+             */
+            TabContent: InjectUI<{
+                result: SearchResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
+            }>
+        }
+        Utils?: {
+            shouldDisplay?(result: SearchResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>): boolean
         }
     }
 

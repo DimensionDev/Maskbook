@@ -122,6 +122,7 @@
       "@masknet/plugin-decentralized-search": ["./packages/plugins/DecentralizedSearch/src"],
       "@masknet/plugin-approval": ["./packages/plugins/approval/src"],
       "@masknet/plugin-scam-warning": ["./packages/plugins/ScamWarning/src"],
+      "@masknet/plugin-gitcoin": ["./packages/plugins/Gitcoin/src"],
       // @masknet/scripts: insert-here 3
       "@masknet/plugin-wallet": ["./packages/plugins/Wallet/src"]
     }

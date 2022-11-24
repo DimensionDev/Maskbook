@@ -9,9 +9,10 @@ import { useFindUsernameStyles } from './FindUsername.js'
 
 interface PinExtensionProps {
     onDone?: () => void
+    onClose?: () => void
 }
 
-export function PinExtension({ onDone }: PinExtensionProps) {
+export function PinExtension({ onDone, onClose }: PinExtensionProps) {
     const pinImg = new URL('../../../resources/extensionPinned.png', import.meta.url).toString()
     const { classes } = useFindUsernameStyles()
     const { t } = useI18N()
@@ -60,7 +61,7 @@ export function PinExtension({ onDone }: PinExtensionProps) {
                     {t('start')}
                 </Button>
             }
-            onClose={onDone}
+            onClose={onClose}
         />
     )
 }

@@ -1,13 +1,13 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { makeStyles } from '@masknet/theme'
-import { useMemo } from 'react'
 import { NFTAvatarButton } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatarButton.js'
 import { startWatch, createReactRootShadowed } from '../../../../utils/index.js'
 import { searchEditProfileSelector } from '../../utils/selector.js'
 import { ConnectPersonaBoundary } from '../../../../components/shared/ConnectPersonaBoundary.js'
 import { PluginID, CrossIsolationMessages } from '@masknet/shared-base'
 import { injectOpenNFTAvatarEditProfileButtonAtEditProfileDialog } from './NFTAvatarEditProfileDialog.js'
-import { useLocation } from 'react-use'
+import { ButtonStyle, ButtonProps } from '../../constant.js'
+import { useThemeSettings } from '../../../../components/DataSource/useActivatedUI.js'
 
 export function injectOpenNFTAvatarEditProfileButton(signal: AbortSignal) {
     injectOpenNFTAvatarEditProfileButtonAtProfilePage(signal)
@@ -22,25 +22,17 @@ export function injectOpenNFTAvatarEditProfileButtonAtProfilePage(signal: AbortS
     )
 }
 
-interface StyleProps {
-    minHeight: number
-    fontSize: number
-    marginBottom: number
-    color: string
-    height: number
-    fontWeight: string
-}
-const useStyles = makeStyles<StyleProps>()((theme, props) => ({
+const useStyles = makeStyles<ButtonProps>()((theme, props) => ({
     root: {
-        minHeight: props.minHeight,
-        fontSize: props.fontSize,
+        minHeight: props.buttonSize,
         marginBottom: props.marginBottom,
         marginTop: 1,
         marginRight: theme.spacing(2),
-        height: props.height,
+        height: props.buttonSize,
     },
     text: {
-        fontWeight: props.fontWeight,
+        fontWeight: 700,
+        fontSize: props.fontSize,
     },
 }))
 
@@ -50,31 +42,8 @@ export function openNFTAvatarSettingDialog() {
 }
 
 function useNFTAvatarButtonStyles() {
-    const setStyleFromEditProfileSelector = () => {
-        const editDom = searchEditProfileSelector().evaluate()
-        if (!editDom)
-            return {
-                minHeight: 32,
-                fontSize: 14,
-                marginBottom: 11,
-                color: '',
-                height: 36,
-                fontWeight: '400',
-            }
-        const css = window.getComputedStyle(editDom)
-        const fontWeightCss = window.getComputedStyle(editDom.firstChild! as HTMLDivElement)
-        const spanCss = window.getComputedStyle(editDom.querySelector('span')!)
-        return {
-            height: Number.parseFloat(css.height.replace('px', '')),
-            minHeight: Number.parseFloat(css.minHeight.replace('px', '')),
-            fontSize: Number.parseFloat(css.fontSize.replace('px', '')),
-            marginBottom: Number.parseFloat(css.marginBottom.replace('px', '')),
-            color: spanCss.color,
-            fontWeight: fontWeightCss.fontWeight,
-        }
-    }
-    const location = useLocation()
-    const style = useMemo(() => setStyleFromEditProfileSelector(), [location])
+    const themeSettings = useThemeSettings()
+    const style = ButtonStyle[themeSettings.size]
     return useStyles(style)
 }
 function OpenNFTAvatarEditProfileButtonInTwitter() {

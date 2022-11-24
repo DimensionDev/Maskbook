@@ -10,17 +10,15 @@ import {
 } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles, ActionButton } from '@masknet/theme'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { NetworkPluginID, isTwitter } from '@masknet/shared-base'
 import { formatBalance, FungibleToken, rightShift } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType, useGitcoinConstants } from '@masknet/web3-shared-evm'
 import { useChainContext, useFungibleToken, useFungibleTokenBalance } from '@masknet/web3-hooks-base'
 import { DialogActions, DialogContent, Link, Typography } from '@mui/material'
-import { activatedSocialNetworkUI } from '../../../social-network/index.js'
-import { isTwitter } from '../../../social-network-adaptor/twitter.com/base.js'
-import { Translate, useI18N } from '../locales/index.js'
-import { useI18N as useBaseI18N } from '../../../utils/index.js'
 import { useDonateCallback } from '../hooks/useDonateCallback.js'
 import { PluginGitcoinMessages } from '../messages.js'
+import { useI18N, Translate } from '../locales/i18n_generated.js'
+import { useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
 
 const useStyles = makeStyles()((theme) => ({
     form: {
@@ -46,16 +44,15 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface DonateDialogProps {}
+export interface DonateDialogProps extends withClasses<never> {}
 
 export function DonateDialog(props: DonateDialogProps) {
-    const { t: tr } = useBaseI18N()
     const t = useI18N()
     const { classes } = useStyles()
     const [title, setTitle] = useState('')
     const [address, setAddress] = useState('')
     const [postLink, setPostLink] = useState<string | URL>('')
-
+    const { share } = useSNSAdaptorContext()
     // context
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const nativeTokenDetailed = useFungibleToken(NetworkPluginID.PLUGIN_EVM)
@@ -106,7 +103,7 @@ export function DonateDialog(props: DonateDialogProps) {
         const hash = await donateCallback()
         if (typeof hash !== 'string') return
 
-        const cashTag = isTwitter(activatedSocialNetworkUI) ? '$' : ''
+        const cashTag = isTwitter() ? '$' : ''
         const shareText = token
             ? t.share_text({
                   balance: formatBalance(amount, token?.decimals),
@@ -118,18 +115,18 @@ export function DonateDialog(props: DonateDialogProps) {
         await openShareTxDialog({
             hash,
             onShare() {
-                activatedSocialNetworkUI.utils.share?.(shareText)
+                share?.(shareText)
             },
         })
 
         // clean dialog
         setRawAmount('')
-    }, [openShareTxDialog, token, donateCallback, tr, t])
+    }, [openShareTxDialog, token, donateCallback, t])
 
     // #region submit button
     const validationMessage = useMemo(() => {
         if (!token) return t.select_a_token()
-        if (!account) return tr('plugin_wallet_connect_a_wallet')
+        if (!account) return t.plugin_wallet_connect_a_wallet()
         if (!address) return t.grant_not_available()
         if (!amount || amount.isZero()) return t.enter_an_amount()
         if (amount.isGreaterThan(tokenBalance.value ?? '0'))
@@ -148,7 +145,7 @@ export function DonateDialog(props: DonateDialogProps) {
                 <DialogContent style={{ padding: 16 }}>
                     <form className={classes.form} noValidate autoComplete="off">
                         <FungibleTokenInput
-                            label={tr('amount')}
+                            label={t.amount()}
                             amount={rawAmount}
                             balance={tokenBalance.value ?? '0'}
                             token={token}

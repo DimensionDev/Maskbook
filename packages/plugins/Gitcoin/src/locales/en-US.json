@@ -11,6 +11,12 @@
     "last_updated": "Last update:",
     "by": "By",
     "view_on": "View on Gitcoin",
+    "amount": "Amount",
+    "go_wrong": "Something went wrong.",
+    "retry": "Retry",
+    "plugin_wallet_connect_a_wallet": "Connect Wallet",
     "readme_fund_link": "https://gitcoin.co/grants/86/gitcoin-sustainability-fund",
+    "plugin_gitcoin_select_a_token": "Select a token",
+    "plugin_gitcoin_insufficient_balance": "Insufficient {{symbol}} balance",
     "share_text": "I just donated {{project_name}} with {{balance}} {{symbol}}.\n\n{{promote}}"
 }

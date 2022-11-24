@@ -31,24 +31,24 @@ const sns: Plugin.SNSAdaptor.Definition<
     init(signal, context) {
         setupStorage(context.createKVStorage('persistent', storageDefaultValue))
     },
-    SearchResultBox: {
+    SearchResultInspector: {
         ID: PluginID.Trader,
         UI: {
-            Content({ keyword }) {
-                const searchResult = usePayloadFromTokenSearchKeyword(keyword)
+            Content({ result }) {
+                const searchResult = usePayloadFromTokenSearchKeyword(result.keyword)
                 return (
                     <Web3ContextProvider
                         value={{
                             pluginID: searchResult.pluginID,
                             chainId: searchResult.chainId ?? ChainId.Mainnet,
                         }}>
-                        <SearchResultInspector keyword={keyword} searchResult={searchResult} />
+                        <SearchResultInspector keyword={result.keyword} searchResult={searchResult} />
                     </Web3ContextProvider>
                 )
             },
         },
         Utils: {
-            shouldDisplay(keyword: string) {
+            shouldDisplay({ keyword }) {
                 return /[#$]\w+/.test(keyword) || (isValidAddress(keyword) && !isZeroAddress(keyword))
             },
         },
