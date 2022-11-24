@@ -17,7 +17,7 @@ import { LockInList } from './LockInList.js'
 import { useI18N } from '../../../utils/index.js'
 import { Trans } from 'react-i18next'
 
-export interface SelectRecipientsUnlockDialogUIProps extends withClasses<never> {
+export interface SelectRecipientsUnlockDialogUIProps {
     open: boolean
     items: UnlockLocks[]
     selected: UnlockLocks[]

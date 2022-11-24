@@ -1,5 +1,5 @@
 import { Card, CardContent, CardProps } from '@mui/material'
-import { makeStyles, useStylesExtends } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -21,7 +21,7 @@ export interface CollectibleCardProps extends withClasses<'root' | 'content'> {
 }
 
 export function CollectibleCard(props: CollectibleCardProps) {
-    const { classes } = useStylesExtends(useStyles(), props)
+    const { classes } = useStyles(undefined, { props })
 
     return (
         <Card className={classes.root} elevation={0} {...props.CardProps}>

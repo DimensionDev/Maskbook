@@ -16,7 +16,7 @@ import {
     useSocialAccountsBySettings,
 } from '@masknet/shared'
 import { CrossIsolationMessages, EMPTY_LIST, NextIDPlatform, PluginID } from '@masknet/shared-base'
-import { makeStyles, MaskLightTheme, MaskTabList, ShadowRootMenu, useStylesExtends, useTabs } from '@masknet/theme'
+import { makeStyles, MaskLightTheme, MaskTabList, ShadowRootMenu, useTabs } from '@masknet/theme'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { TabContext } from '@mui/lab'
 import { Button, Link, MenuItem, Stack, Tab, ThemeProvider, Typography } from '@mui/material'
@@ -128,7 +128,7 @@ const useStyles = makeStyles()((theme) => ({
 export interface ProfileTabContentProps extends withClasses<'text' | 'button' | 'root'> {}
 
 export function ProfileTabContent(props: ProfileTabContentProps) {
-    const { classes } = useStylesExtends(useStyles(), props)
+    const { classes } = useStyles(undefined, { props })
 
     const { t } = useI18N()
     const translate = usePluginI18NField()

@@ -19,10 +19,15 @@ export namespace Solana {
         trait_type: string
         value: string
     }
+    export interface TraitAttribute {
+        attribute_name: string
+        attribute_value: string
+        percentage: string
+    }
 
     export interface Payload {
         background_color?: string
-        attributes: Trait[]
+        attributes: TraitAttribute[]
         name?: string
         symbol?: string
         description?: string
@@ -59,6 +64,7 @@ export namespace Solana {
         owner?: string
         token_address: string
         token_uri?: string
+        attributes?: TraitAttribute[]
     }
 
     export interface Transaction {

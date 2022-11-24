@@ -4,9 +4,6 @@ import { createNormalReactRoot, hydrateNormalReactRoot } from '../../utils/index
 import { createPluginHost, createPartialSharedUIContext } from '../../../shared/plugin-infra/host.js'
 import { Services } from '../service.js'
 import Popups from './UI.js'
-import createCache from '@emotion/cache'
-import { CacheProvider } from '@emotion/react'
-import { TssCacheProvider } from '@masknet/theme'
 import { currentPersonaIdentifier } from '../../../shared/legacy-settings/settings.js'
 import { setInitialPersonaInformation } from './pages/Personas/hooks/PersonaContextInitialData.js'
 import { RestPartOfPluginUIContextShared } from '../../utils/plugin-context-shared-ui.js'
@@ -21,16 +18,7 @@ if (location.hash === '#/personas') {
         ])
         console.timeEnd('[SSR] Fill data')
 
-        // https://github.com/emotion-js/emotion/issues/2933
-        const muiCache = (createCache.default || createCache)({ key: 'css' })
-        const tssCache = (createCache.default || createCache)({ key: 'tss' })
-        hydrateNormalReactRoot(
-            <CacheProvider value={muiCache}>
-                <TssCacheProvider value={tssCache}>
-                    <Popups />
-                </TssCacheProvider>
-            </CacheProvider>,
-        )
+        hydrateNormalReactRoot(<Popups />)
         setTimeout(startPluginHost, 200)
 
         /**

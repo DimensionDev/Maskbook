@@ -21,14 +21,18 @@ export function injectNFTAvatarInFacebook(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchFacebookAvatarSelector())
     if (!isMobileFacebook) {
         startWatch(watcher, signal)
-        createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(<NFTAvatarInFacebook />)
+        createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { untilVisible: true, signal }).render(
+            <NFTAvatarInFacebook />,
+        )
         return
     }
 
     // mobile
     const mobileWatcher = new MutationObserverWatcher(searchFacebookAvatarOnMobileSelector())
     startWatch(mobileWatcher, signal)
-    createReactRootShadowed(mobileWatcher.firstDOMProxy.afterShadow, { signal }).render(<NFTAvatarInFacebook />)
+    createReactRootShadowed(mobileWatcher.firstDOMProxy.afterShadow, { untilVisible: true, signal }).render(
+        <NFTAvatarInFacebook />,
+    )
 }
 
 const useStyles = makeStyles()(() => ({

@@ -10,7 +10,7 @@ import {
     PersonaInformation,
 } from '@masknet/shared-base'
 import { Icons } from '@masknet/icons'
-import { makeStyles, useStylesExtends } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 import type { IdentityResolved } from '@masknet/plugin-infra'
 
 /* cspell:disable-next-line */
@@ -21,7 +21,7 @@ export interface PersonaNextIDMixture {
     avatar?: string
 }
 
-interface PersonaItemProps extends withClasses<never | 'checked' | 'unchecked'> {
+interface PersonaItemProps extends withClasses<'checked' | 'unchecked'> {
     data: PersonaNextIDMixture
     onCopy: (e: React.MouseEvent<HTMLElement, MouseEvent>) => void
     onClick: () => void
@@ -63,7 +63,7 @@ const useStyles = makeStyles()((theme) => {
 
 export const PersonaItemUI = (props: PersonaItemProps) => {
     const { data, onCopy, onClick, currentPersona, currentPersonaIdentifier, currentProfileIdentify } = props
-    const { classes } = useStylesExtends(useStyles(), props)
+    const { classes } = useStyles(undefined, { props })
 
     const isVerified = useMemo(() => {
         return data.proof.some(

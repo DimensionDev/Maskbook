@@ -94,7 +94,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface SelectNftContractDialogProps extends withClasses<never> {}
+export interface SelectNftContractDialogProps {}
 
 export function SelectNftContractDialog(props: SelectNftContractDialogProps) {
     const { t } = useI18N()
@@ -202,7 +202,7 @@ export function SelectNftContractDialog(props: SelectNftContractDialogProps) {
     )
 }
 
-export interface SearchResultBoxProps extends withClasses<never> {
+export interface SearchResultBoxProps {
     keyword: string
     contractList: Array<NonFungibleTokenContract<ChainId, SchemaType>>
     searchedTokenList: Array<NonFungibleTokenContract<ChainId, SchemaType>>

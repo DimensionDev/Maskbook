@@ -10,7 +10,9 @@ import { searchTwitterAvatarNFTLinkSelector, searchTwitterAvatarNFTSelector } fr
 export function injectNFTAvatarClipInTwitter(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchTwitterAvatarNFTSelector())
     startWatch(watcher, signal)
-    createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(<NFTAvatarClipInTwitter />)
+    createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { untilVisible: true, signal }).render(
+        <NFTAvatarClipInTwitter />,
+    )
 }
 
 const useStyles = makeStyles()(() => ({

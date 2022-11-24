@@ -14,7 +14,7 @@ import {
 } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { Box, Stack, Typography, InputBase, inputBaseClasses } from '@mui/material'
-import { makeStyles, useStylesExtends, ActionButton, LoadingBase } from '@masknet/theme'
+import { makeStyles, ActionButton, LoadingBase } from '@masknet/theme'
 import { Check as CheckIcon, Close as UnCheckIcon } from '@mui/icons-material'
 import {
     useCurrentIdentity,
@@ -116,7 +116,7 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
-export interface CreateFormProps extends withClasses<never> {
+export interface CreateFormProps {
     onChangePoolSettings: (pollSettings: PoolSettings) => void
     onNext: () => void
     origin?: PoolSettings
@@ -126,7 +126,7 @@ export interface CreateFormProps extends withClasses<never> {
 export function CreateForm(props: CreateFormProps) {
     const { onChangePoolSettings, onNext, origin, chainId } = props
     const { t } = useI18N()
-    const { classes, cx } = useStylesExtends(useStyles(), props)
+    const { classes, cx } = useStyles()
 
     const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { ITO2_CONTRACT_ADDRESS, DEFAULT_QUALIFICATION2_ADDRESS } = useITOConstants(chainId)

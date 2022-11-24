@@ -1,5 +1,5 @@
 import { Icons } from '@masknet/icons'
-import { InjectedDialog, PersonaAction, WalletTypes } from '@masknet/shared'
+import { InjectedDialog, LoadGuard, PersonaAction, WalletTypes } from '@masknet/shared'
 import { CrossIsolationMessages, EMPTY_LIST, NetworkPluginID, NextIDPlatform, PopupRoutes } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { useChainContext } from '@masknet/web3-hooks-base'
@@ -57,7 +57,12 @@ export function Web3ProfileDialog() {
     const currentPersona = allPersona.find((x) => x.identifier.rawPublicKey === persona?.rawPublicKey)
     const personaPublicKey = currentPersona?.identifier.publicKeyAsHex
 
-    const { value: bindings, retry: retryQueryBinding } = useAsyncRetry(async () => {
+    const {
+        value: bindings,
+        retry: retryQueryBinding,
+        error: loadingBindingError,
+        loading: loadingBinding,
+    } = useAsyncRetry(async () => {
         if (!personaPublicKey) return
         return NextIDProof.queryExistedBindingByPersona(personaPublicKey)
     }, [personaPublicKey])
@@ -128,15 +133,17 @@ export function Web3ProfileDialog() {
             }
             onClose={() => setOpen(false)}>
             <DialogContent className={classes.content}>
-                <Main
-                    openImageSetting={(scene, accountId) => {
-                        setScene(scene)
-                        setAccountId(accountId)
-                    }}
-                    persona={currentPersona}
-                    currentVisitingProfile={currentVisitingProfile}
-                    accountList={accountList}
-                />
+                <LoadGuard loading={loadingBinding} retry={retryQueryBinding} error={!!loadingBindingError}>
+                    <Main
+                        openImageSetting={(scene, accountId) => {
+                            setScene(scene)
+                            setAccountId(accountId)
+                        }}
+                        persona={currentPersona}
+                        currentVisitingProfile={currentVisitingProfile}
+                        accountList={accountList}
+                    />
+                </LoadGuard>
                 {accountId && scene ? (
                     <ImageManagement
                         open

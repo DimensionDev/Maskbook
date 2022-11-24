@@ -8,7 +8,7 @@ import { NFTAvatarButton } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatar
 export function injectOpenNFTAvatarEditProfileButton(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchFacebookProfileSettingButtonSelector())
     startWatch(watcher, signal)
-    createReactRootShadowed(watcher.firstDOMProxy.beforeShadow, { signal }).render(
+    createReactRootShadowed(watcher.firstDOMProxy.beforeShadow, { untilVisible: true, signal }).render(
         <OpenNFTAvatarEditProfileButtonInFaceBook />,
     )
 }

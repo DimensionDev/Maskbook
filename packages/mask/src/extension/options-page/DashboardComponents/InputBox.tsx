@@ -1,4 +1,4 @@
-import { makeStyles, useStylesExtends } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 import { IconButton, InputBase, InputBaseProps } from '@mui/material'
 
 const useStyles = makeStyles()((theme) => ({
@@ -19,7 +19,7 @@ export interface InputBoxProps extends withClasses<'root'> {
 }
 export function InputBox(props: InputBoxProps) {
     const { label, children, onChange, value } = props
-    const { classes } = useStylesExtends(useStyles(), props)
+    const { classes } = useStyles(undefined, { props })
 
     return (
         <InputBase

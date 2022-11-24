@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
 import { Card, Typography, Link, Box } from '@mui/material'
 import { Icons } from '@masknet/icons'
-import { makeStyles, useStylesExtends } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../locales/index.js'
 import { useReverseAddress, useWeb3State } from '@masknet/web3-hooks-base'
 import { ChainId, explorerResolver, NETWORK_DESCRIPTORS } from '@masknet/web3-shared-evm'
@@ -97,7 +97,7 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
-export interface WalletAssetsCardProps extends withClasses<never | 'root'> {
+export interface WalletAssetsCardProps extends withClasses<'root'> {
     networkIcon?: URL
     wallet: WalletTypes
     onSetting: () => void
@@ -109,7 +109,7 @@ export interface WalletAssetsCardProps extends withClasses<never | 'root'> {
 export function WalletAssetsCard(props: WalletAssetsCardProps) {
     const { wallet, onSetting, collections: collectionList = EMPTY_LIST, collectionName, hasUnlisted } = props
     const t = useI18N()
-    const { classes } = useStylesExtends(useStyles(), props)
+    const { classes } = useStyles(undefined, { props })
     const chainId = ChainId.Mainnet
 
     const [loadAll, setLoadAll] = useState(false)

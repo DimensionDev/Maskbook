@@ -72,7 +72,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface SelectRecipientsDialogUIProps extends withClasses<never> {
+export interface SelectRecipientsDialogUIProps {
     open: boolean
     items: Profile[]
     selected: Profile[]

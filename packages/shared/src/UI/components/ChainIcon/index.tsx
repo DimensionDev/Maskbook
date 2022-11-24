@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import { makeStyles, useStylesExtends } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 
 const useStyles = makeStyles()((theme) => ({
     point: {
@@ -16,7 +16,7 @@ export interface ChainIconProps extends withClasses<'point'> {
 }
 
 export const ChainIcon = memo<ChainIconProps>(({ color, size = 12.5, ...props }) => {
-    const { classes } = useStylesExtends(useStyles(), props)
+    const { classes } = useStyles(undefined, { props })
 
     return (
         <div

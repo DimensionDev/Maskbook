@@ -31,7 +31,7 @@ export function usePortalShadowRoot<T>(renderer: (container: HTMLElement | undef
     // so we can violates the React hooks rule and still be safe.
     if (disabled) return renderer(undefined)
 
-    const sheets = useContext(StyleSheetsContext)
+    const sheet = useContext(StyleSheetsContext)
     const signal = useRef<AbortController | null>(null)
     const preventEventPropagationList = useContext(PreventShadowRootEventPropagationListContext)
     const container = useRefInit(() => {
@@ -47,7 +47,7 @@ export function usePortalShadowRoot<T>(renderer: (container: HTMLElement | undef
         }
 
         const container = shadow.appendChild(document.createElement('main'))
-        sheets.map((x) => x.addContainer(shadow))
+        sheet.addContainer(shadow)
 
         // This is important to make the portal orders correct.
         Object.defineProperty(container, 'appendChild', {

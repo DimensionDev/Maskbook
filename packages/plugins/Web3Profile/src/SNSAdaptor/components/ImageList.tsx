@@ -1,7 +1,7 @@
 import { useWeb3State } from '@masknet/web3-hooks-base'
 import { CollectionTypes, InjectedDialog, WalletTypes } from '@masknet/shared'
 import { EMPTY_LIST, NextIDPlatform, PersonaInformation } from '@masknet/shared-base'
-import { makeStyles, useStylesExtends } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 import { isSameAddress, NonFungibleToken } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
 import { Box, Button, DialogActions, DialogContent, Typography } from '@mui/material'
@@ -106,7 +106,7 @@ const useStyles = makeStyles<void, 'list'>()((theme, _, refs) => {
     }
 })
 
-export interface ImageListDialogProps extends withClasses<never | 'root'> {
+export interface ImageListDialogProps extends withClasses<'root'> {
     wallet: WalletTypes
     open: boolean
     onClose: () => void
@@ -132,7 +132,7 @@ export function ImageListDialog(props: ImageListDialogProps) {
     } = props
     const t = useI18N()
     const { Storage } = useWeb3State()
-    const { classes, cx } = useStylesExtends(useStyles(), props)
+    const { classes, cx } = useStyles(undefined, { props })
     const [addNFTOpen, setAddNFTOpen] = useState(false)
 
     const [pendingUnlistedKeys, setPendingUnlistedKeys] = useState(unlistedKeys)

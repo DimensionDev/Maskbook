@@ -14,8 +14,9 @@ import { pasteTextToCompositionMinds } from './automation/pasteTextToComposition
 import { mindsBase } from './base.js'
 import getSearchedKeywordAtMinds from './collecting/getSearchedKeyword.js'
 import { IdentityProviderMinds } from './collecting/identity.js'
+import { ThemeSettingsProviderMinds } from './collecting/theme.js'
 import { PostProviderMinds } from './collecting/post.js'
-import { PaletteModeProviderMinds, useThemeMindsVariant } from './customization/custom.js'
+import { useThemeMindsVariant } from './customization/custom.js'
 import injectCommentBoxAtMinds from './injection/CommentBox.js'
 import { injectPostBoxComposed } from './injection/inject.js'
 import { injectPostInspectorAtMinds } from './injection/PostInspector.js'
@@ -132,10 +133,10 @@ const mindsUI: SocialNetworkUI.Definition = {
     collecting: {
         identityProvider: IdentityProviderMinds,
         postsProvider: PostProviderMinds,
+        themeSettingsProvider: ThemeSettingsProviderMinds,
         getSearchedKeyword: getSearchedKeywordAtMinds,
     },
     customization: {
-        paletteMode: PaletteModeProviderMinds,
         sharedComponentOverwrite: {
             InjectedDialog: {
                 classes: useInjectedDialogClassesOverwriteMinds,
