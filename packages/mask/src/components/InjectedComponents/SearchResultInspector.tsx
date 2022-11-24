@@ -16,10 +16,19 @@ import {
 import { useSearchedKeyword } from '../DataSource/useSearchedKeyword.js'
 import { useWeb3State, useWeb3Connection } from '@masknet/web3-hooks-base'
 
-const useStyles = makeStyles()((theme) => ({
+const useStyles = makeStyles()(() => ({
     contentWrapper: {
         background:
             'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%), linear-gradient(90deg, rgba(28, 104, 243, 0.2) 0%, rgba(69, 163, 251, 0.2) 100%), #FFFFFF;',
+    },
+    tabContent: {
+        position: 'relative',
+        maxHeight: 478,
+        minHeight: 300,
+        overflow: 'auto',
+        '&::-webkit-scrollbar': {
+            display: 'none',
+        },
     },
 }))
 
@@ -42,6 +51,7 @@ export function SearchResultInspector(props: SearchResultInspectorProps) {
             isValidDomain: Others?.isValidDomain,
             getAddressType: connection?.getAddressType,
             lookup: NameService?.lookup,
+            reverse: NameService?.reverse,
         })
     }, [
         keyword,
@@ -50,8 +60,8 @@ export function SearchResultInspector(props: SearchResultInspectorProps) {
         Others?.isValidDomain,
         connection?.getAddressType,
         NameService?.lookup,
+        NameService?.reverse,
     ])
-    console.log({ result })
     const contentComponent = useMemo(() => {
         if (!result.value) return null
         const Component = getSearchResultContent(result.value)
@@ -70,7 +80,6 @@ export function SearchResultInspector(props: SearchResultInspectorProps) {
         const Component = getSearchResultTabContent(currentTab)
         return <Component result={result.value} />
     }, [currentTab, result.value])
-    console.log({ contentComponent, tabContentComponent, tabs })
     if (!keyword && !result.value) return null
     if (!contentComponent) return null
 

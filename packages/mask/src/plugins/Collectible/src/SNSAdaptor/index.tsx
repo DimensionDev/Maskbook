@@ -1,9 +1,10 @@
 import { Trans } from 'react-i18next'
 import { Icons } from '@masknet/icons'
 import { Box } from '@mui/material'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import { Web3ContextProvider } from '@masknet/web3-hooks-base'
-import { SocialAddressType, SearchResultType } from '@masknet/web3-shared-base'
+import { SocialAddressType, SearchResultType, EOAResult } from '@masknet/web3-shared-base'
 import { NetworkPluginID, parseURLs } from '@masknet/shared-base'
 import { type Plugin, usePostInfoDetails, usePluginWrapper } from '@masknet/plugin-infra/content-script'
 import { PostInspector } from './PostInspector.js'
@@ -106,7 +107,10 @@ const sns: Plugin.SNSAdaptor.Definition = {
                     const socialAccount = {
                         pluginID: NetworkPluginID.PLUGIN_EVM,
                         address: result.type === SearchResultType.Domain ? result.address ?? '' : result.keyword,
-                        label: result.type === SearchResultType.Domain ? result.keyword : '',
+                        label:
+                            result.type === SearchResultType.Domain
+                                ? result.keyword
+                                : (result as EOAResult<Web3Helper.ChainIdAll>).domain ?? '',
                         supportedAddressTypes: [SocialAddressType.ENS],
                     }
 

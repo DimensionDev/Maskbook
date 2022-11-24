@@ -598,6 +598,8 @@ export interface NonFungibleTokenSecurity {}
 
 export interface EOAResult<ChainId> extends Result<ChainId> {
     type: SearchResultType.EOA
+    domain?: string
+    address: string
 }
 
 export interface DomainResult<ChainId> extends Result<ChainId> {

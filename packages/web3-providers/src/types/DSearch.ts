@@ -16,6 +16,7 @@ export namespace DSearchBaseAPI {
                     options?: Web3Helper.Web3ConnectionOptions<T>,
                 ) => Promise<AddressType | undefined>
                 lookup?: (chainId: ChainIdEVM, domain: string) => Promise<string | undefined>
+                reverse?: (chainId: ChainIdEVM, address: string) => Promise<string | undefined>
             },
             source?: SearchSourceType,
         ): Promise<SearchResult<ChainId, SchemaType>>

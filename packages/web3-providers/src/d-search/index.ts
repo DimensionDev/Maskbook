@@ -26,13 +26,13 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
                 options?: Web3Helper.Web3ConnectionOptions<NetworkPluginID.PLUGIN_EVM>,
             ) => Promise<AddressType | undefined>
             lookup?: (chainId: ChainIdEVM, domain: string) => Promise<string | undefined>
+            reverse?: (chainId: ChainIdEVM, address: string) => Promise<string | undefined>
         },
         sourceType?: SearchSourceType,
     ): Promise<SearchResult<ChainId, SchemaType>> {
-        const { isValidAddress, isZeroAddress, isValidDomain, getAddressType, lookup } = helpers
+        const { isValidAddress, isZeroAddress, isValidDomain, getAddressType, lookup, reverse } = helpers
 
         if (isValidDomain?.(keyword)) {
-            // console.log(ChainIdEVM.Mainnet, keyword, lookup)
             const address = await lookup?.(ChainIdEVM.Mainnet, keyword)
 
             return {
@@ -56,10 +56,12 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
             )
 
             if (result && result.addressType !== AddressType.Contract) {
+                const domain = await reverse?.(ChainIdEVM.Mainnet, keyword)
                 return {
                     type: SearchResultType.EOA,
                     chainId: result.chainId,
                     address: keyword,
+                    domain,
                     keyword,
                     pluginID: NetworkPluginID.PLUGIN_EVM,
                 } as EOAResult<ChainId>

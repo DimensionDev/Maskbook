@@ -109,16 +109,8 @@ export const SearchResultInspectorContent = forwardRef(function (
     const t = useI18N()
     const { classes, cx } = useStyles({})
     const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
-    const { isLoading, isError, retry, reversedAddress, nextIdBindings, firstNextIdrBinding, domain, tokenId } =
-        useContext(ENSContext)
-    useImperativeHandle(ref, () => ({ isLoading, reversedAddress, domain, isError, tokenId }), [
-        isLoading,
-        reversedAddress,
-        domain,
-        isError,
-        tokenId,
-        retry,
-    ])
+    const { reversedAddress, nextIdBindings, firstNextIdrBinding, domain, tokenId } = useContext(ENSContext)
+    useImperativeHandle(ref, () => ({ reversedAddress, domain, tokenId }), [reversedAddress, domain, tokenId])
     const [, copyToClipboard] = useCopyToClipboard()
     const copyWalletAddress = useSnackbarCallback({
         executor: async (address: string) => copyToClipboard(address),
