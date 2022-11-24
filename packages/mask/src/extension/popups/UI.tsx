@@ -19,6 +19,7 @@ import { ProviderType } from '@masknet/web3-shared-evm'
 function usePopupTheme() {
     return usePopupFullPageTheme(useValueRef(languageSettings))
 }
+
 const Wallet = lazy(() => import(/* webpackPreload: true */ './pages/Wallet/index.js'))
 const Personas = lazy(() => import(/* webpackPreload: true */ './pages/Personas/index.js'))
 const SwapPage = lazy(() => import('./pages/Swap/index.js'))
@@ -27,6 +28,7 @@ const PermissionAwareRedirect = lazy(() => import('./PermissionAwareRedirect/ind
 const ThirdPartyRequestPermission = lazy(() => import('./ThirdPartyRequestPermission/index.js'))
 
 const PluginRender = createInjectHooksRenderer(useActivatedPluginsDashboard, (x) => x.GlobalInjection)
+
 function PluginRenderDelayed() {
     const [canRenderPlugin, setRenderPlugins] = useState(false)
     useEffect(() => setRenderPlugins(true), [])
@@ -37,6 +39,7 @@ function PluginRenderDelayed() {
 export default function Popups() {
     const [title, setTitle] = useState('')
     useEffect(queryRemoteI18NBundle(Services.Helper.queryRemoteI18NBundle), [])
+    useEffect(() => logger.captureMessage(LogsType.PopupAccess), [])
     return MaskUIRootPage(
         usePopupTheme,
         <PopupSnackbarProvider>

@@ -13,7 +13,7 @@ import { I18NextProviderHMR, SharedContextProvider } from '@masknet/shared'
 import { ErrorBoundary } from '@masknet/shared-base-ui'
 import { createInjectHooksRenderer, useActivatedPluginsDashboard } from '@masknet/plugin-infra/dashboard'
 import { Web3ContextProvider } from '@masknet/web3-hooks-base'
-import { i18NextInstance, NetworkPluginID, queryRemoteI18NBundle } from '@masknet/shared-base'
+import { i18NextInstance, LogsType, NetworkPluginID, queryRemoteI18NBundle } from '@masknet/shared-base'
 
 import '../utils/kv-storage.js'
 
@@ -21,8 +21,10 @@ import { Pages } from '../pages/routes.js'
 import { useAppearance } from '../pages/Personas/api.js'
 import { PersonaContext } from '../pages/Personas/hooks/usePersonaContext.js'
 import { Services } from '../API.js'
+import { initLogger, logger } from '../utils'
 
 const PluginRender = createInjectHooksRenderer(useActivatedPluginsDashboard, (x) => x.GlobalInjection)
+initLogger()
 
 export default function DashboardRoot() {
     useEffect(queryRemoteI18NBundle(Services.Helper.queryRemoteI18NBundle), [])
@@ -36,6 +38,8 @@ export default function DashboardRoot() {
         default: mode === 'dark' ? DashboardDarkTheme : DashboardLightTheme,
     }
     const theme = themes[appearance]
+
+    useEffect(() => logger.captureMessage(LogsType.DashboardAccess), [])
 
     applyMaskColorVars(document.body, appearance === 'default' ? mode : appearance)
     // #endregion

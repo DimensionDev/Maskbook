@@ -16,6 +16,7 @@ import { useAllPersonas, useCurrentPersona, useLastRecognizedProfile } from '../
 import { getDonationList, getFootprintList, getNFTList, getUnlistedConfig, getWalletList } from '../utils.js'
 import { ImageManagement } from './ImageManagement.js'
 import { Main } from './Main.js'
+import { logger } from '../logger.js'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -47,6 +48,7 @@ export function Web3ProfileDialog() {
     const [open, setOpen] = useState(false)
     useEffect(() => {
         return CrossIsolationMessages.events.web3ProfileDialogEvent.on(({ open }) => {
+            if (open) logger.captureMessage('web3-profile-dialog')
             setOpen(open)
         })
     }, [])

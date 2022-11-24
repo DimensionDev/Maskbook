@@ -7,13 +7,16 @@ import { Icons } from '@masknet/icons'
 import { base } from '../base.js'
 import { Web3ProfileDialog } from './components/Web3ProfileDialog.js'
 import { setupContext } from './context.js'
+import { initLogger } from './logger.js'
 import { PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
     init(signal, context) {
         setupContext(context)
+        initLogger(context.createLogger())
     },
+
     GlobalInjection: function Component() {
         return <Web3ProfileDialog />
     },

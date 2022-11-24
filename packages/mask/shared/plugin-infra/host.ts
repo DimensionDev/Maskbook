@@ -3,7 +3,14 @@ import './register.js'
 import type { BooleanPreference, Plugin } from '@masknet/plugin-infra'
 import { Emitter } from '@servie/events'
 import { MaskMessages } from '../../shared/messages.js'
-import { createI18NBundle, createSubscriptionFromValueRef, i18NextInstance } from '@masknet/shared-base'
+import {
+    createI18NBundle,
+    createSubscriptionFromValueRef,
+    i18NextInstance,
+    LogHub,
+    LogHubBase,
+    LogPlatform,
+} from '@masknet/shared-base'
 import { InMemoryStorages, PersistentStorages } from '../../shared/index.js'
 import { nativeAPI, hasNativeAPI } from '../../shared/native-rpc/index.js'
 import {
@@ -32,6 +39,9 @@ export function createSharedContext(pluginID: string, signal: AbortSignal): Plug
         createKVStorage<T extends object>(type: 'memory' | 'persistent', defaultValues: T) {
             if (type === 'memory') return InMemoryStorages.Plugin.createSubScope(pluginID, defaultValues, signal)
             else return PersistentStorages.Plugin.createSubScope(pluginID, defaultValues, signal)
+        },
+        createLogger(): LogHubBase {
+            return new LogHub(LogPlatform.Plugin, pluginID)
         },
     }
 }

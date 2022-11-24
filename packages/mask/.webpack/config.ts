@@ -210,7 +210,7 @@ export function createConfiguration(_inputFlags: BuildFlags): Configuration {
                     },
                     {
                         from: join(__dirname, '../../sentry/dist/sentry.js'),
-                        to: join(distFolder, 'sentry.js'),
+                        to: join(flags.outputPath, 'sentry.js'),
                     },
                 ],
             }),

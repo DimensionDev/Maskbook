@@ -1,10 +1,11 @@
 import { Stack, ThemeProvider, Typography } from '@mui/material'
-import { useAsync } from 'react-use'
+import { useAsync, useMount } from 'react-use'
 import { CryptoScamDB } from '@masknet/web3-providers'
 import { uniq } from 'lodash-es'
 import { useI18N } from '../../locales/index.js'
 import { makeStyles, MaskDarkTheme } from '@masknet/theme'
 import { usePluginWrapper } from '@masknet/plugin-infra/content-script'
+import { logger } from '../logger.js'
 
 interface PreviewCardProps {
     links: readonly string[]
@@ -26,6 +27,10 @@ const useStyles = makeStyles()((theme) => ({
 export const PreviewCard = ({ links }: PreviewCardProps) => {
     const t = useI18N()
     const { classes } = useStyles()
+
+    useMount(() => {
+        logger.captureMessage('scam-plugin-timeline')
+    })
 
     const { value, loading } = useAsync(() => {
         return CryptoScamDB.getScamWarnings(uniq(links))

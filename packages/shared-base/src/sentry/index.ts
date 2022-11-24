@@ -1,16 +1,7 @@
-import type { PersonaIdentifier, ProfileIdentifier } from '../Identifier/index.js'
+import type { PersonaIdentifier, ProfileIdentifier } from '@masknet/base'
 
 // @ts-ignore
 const Sentry = globalThis.Sentry as Sentry
-
-Sentry.init({
-    dsn: '',
-    defaultIntegrations: false,
-    integrations: [new Sentry.Integrations.Breadcrumbs({ console: false })],
-    environment: process.env.NODE_ENV,
-    release: process.env.VERSION,
-    tracesSampleRate: 1.0,
-})
 
 export const captureException = () => {
     Sentry.captureException()
@@ -21,42 +12,57 @@ export const captureMessage = () => {
 
 export interface LogHubBase {
     captureException(error: Error): void
+
     captureMessage(message: string | object): void
 }
 
+function hash(value: string) {
+    // to be impl
+    return value
+}
+
 export class LogHub implements LogHubBase {
-    private _platform: string
+    private _platform: LogPlatform
     private _plugin_id?: string
     private _user?: {
-        persona?: PersonaIdentifier
-        profile?: ProfileIdentifier
+        persona?: string
+        profile?: string
     }
 
-    constructor(
-        platform: string,
-        pluginId?: string,
-        user?: { persona?: PersonaIdentifier; profile?: ProfileIdentifier },
-    ) {
+    constructor(platform: LogPlatform, pluginId?: string) {
         this._platform = platform
         this._plugin_id = pluginId
-        this._user = user
+
+        Sentry.init({
+            dsn: '',
+            defaultIntegrations: false,
+            integrations: [new Sentry.Integrations.Breadcrumbs({ console: false })],
+            environment: process.env.NODE_ENV,
+            release: process.env.VERSION,
+            tracesSampleRate: 1.0,
+        })
     }
 
-    set platform(platform: string) {
+    set platform(platform: LogPlatform) {
         this._platform = platform
     }
 
-    set user(user: { persona?: PersonaIdentifier; profile?: ProfileIdentifier }) {
-        this._user = user
+    setLogUser(user: { persona?: PersonaIdentifier; profile?: ProfileIdentifier }) {
+        const checksumPersona = user.persona ? hash(user.persona.toText()) : undefined
+        const checksumProfile = user.profile ? hash(user.profile.toText()) : undefined
+
+        this._user = {
+            persona: checksumPersona,
+            profile: checksumProfile,
+        }
     }
 
     private initScope() {
         const scope = new Sentry.Scope()
         scope.setTag('platform', this._platform)
 
-        scope.setUser({ id: 'id_1', segment: 's_2' })
-        // should handle thie persona public key?
-        if (this._user) scope.setUser({ id: this._user.persona?.toText(), segment: this._user.profile?.toText() })
+        if (this._user?.profile || this._user?.persona)
+            scope.setUser({ id: this._user?.persona, segment: this._user?.profile })
         if (this._plugin_id) scope.setTag('plugin_id', this._plugin_id)
 
         return scope
@@ -74,5 +80,14 @@ export class LogHub implements LogHubBase {
 }
 
 export enum LogsType {
-    ApplicationBoradOpened = 'application-board-opened',
+    DashboardAccess = 'dashboard-access',
+    ApplicationBoardAccess = 'application-board-access',
+    PopupAccess = 'popup-access',
+}
+
+export enum LogPlatform {
+    Background = 'background',
+    Dashboard = 'dashboard',
+    Popup = 'popup',
+    Plugin = 'plugin',
 }
