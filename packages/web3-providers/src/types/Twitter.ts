@@ -198,5 +198,6 @@ export namespace TwitterBaseAPI {
         getUserNftContainer: (screenName: string) => Promise<NFT | undefined>
         uploadUserAvatar: (screenName: string, image: Blob | File) => Promise<TwitterResult>
         updateProfileImage: (screenName: string, media_id_str: string) => Promise<AvatarInfo | undefined>
+        staleUserByScreenName: (screenName: string) => Promise<User | null>
     }
 }
