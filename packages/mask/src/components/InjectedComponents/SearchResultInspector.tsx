@@ -5,7 +5,7 @@ import { Tab } from '@mui/material'
 import { TabContext } from '@mui/lab'
 import { EMPTY_LIST, PluginID, NetworkPluginID } from '@masknet/shared-base'
 import { DSearch } from '@masknet/web3-providers'
-import { makeStyles, MaskTabList, useStylesExtends, useTabs } from '@masknet/theme'
+import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import {
     getSearchResultTabs,
     getSearchResultContent,
@@ -26,7 +26,7 @@ const useStyles = makeStyles()((theme) => ({
 export interface SearchResultInspectorProps {}
 
 export function SearchResultInspector(props: SearchResultInspectorProps) {
-    const { classes } = useStylesExtends(useStyles(), props)
+    const { classes } = useStyles()
     const translate = usePluginI18NField()
 
     const keyword = useSearchedKeyword()
