@@ -34,9 +34,8 @@ const SetPaymentPassword = lazy(() => import('./SetPaymentPassword/index.js'))
 const WalletRecovery = lazy(() => import('./WalletRecovery/index.js'))
 const LegacyWalletRecovery = lazy(() => import('./LegacyWalletRecovery/index.js'))
 const ReplaceTransaction = lazy(() => import('./ReplaceTransaction/index.js'))
-const ConnectWallet = lazy(() => import('./ConnectWallet/index.js'))
 
-const exclusionDetectLocked = [PopupRoutes.Unlock, PopupRoutes.ConnectWallet]
+const exclusionDetectLocked = [PopupRoutes.Unlock]
 
 const r = relativeRouteOf(PopupRoutes.Wallet)
 export default function Wallet() {
@@ -128,7 +127,6 @@ export default function Wallet() {
                         <Route path={r(PopupRoutes.Unlock)} element={<Unlock />} />
                         <Route path={r(PopupRoutes.SetPaymentPassword)} element={<SetPaymentPassword />} />
                         <Route path={r(PopupRoutes.ReplaceTransaction)} element={<ReplaceTransaction />} />
-                        <Route path={r(PopupRoutes.ConnectWallet)} element={<ConnectWallet />} />
                     </Routes>
                 )}
             </WalletContext.Provider>
