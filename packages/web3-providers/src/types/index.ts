@@ -1,6 +1,7 @@
 export * from './Authorization.js'
 export * from './Bundler.js'
 export * from './Domain.js'
+export * from './DSearch.js'
 export * from './Explorer.js'
 export * from './FungibleToken.js'
 export * from './Fuse.js'

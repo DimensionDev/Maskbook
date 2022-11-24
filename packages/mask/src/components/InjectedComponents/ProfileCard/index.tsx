@@ -147,7 +147,6 @@ export const ProfileCard: FC<Props> = ({ identity, ...rest }) => {
 
     const component = useMemo(() => {
         const Component = getProfileCardTabContent(currentTab)
-
         return <Component identity={identity} socialAccount={selectedSocialAccount} />
     }, [currentTab, identity?.publicKey, selectedSocialAccount])
 

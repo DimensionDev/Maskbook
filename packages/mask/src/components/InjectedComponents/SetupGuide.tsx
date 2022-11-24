@@ -121,7 +121,12 @@ function SetupGuideUI(props: SetupGuideUIProps) {
 
     const onClose = useCallback(() => {
         currentSetupGuideStatus[ui.networkIdentifier].value = ''
+        userPinExtension.value = true
     }, [ui.networkIdentifier])
+
+    const onPinClose = useCallback(() => {
+        userPinExtension.value = true
+    }, [])
 
     const onPinDone = useCallback(() => {
         const network = ui.networkIdentifier
@@ -175,7 +180,7 @@ function SetupGuideUI(props: SetupGuideUIProps) {
                 />
             )
         case SetupGuideStep.PinExtension:
-            return <PinExtension onDone={onPinDone} />
+            return <PinExtension onDone={onPinDone} onClose={onPinClose} />
         default:
             return null
     }
