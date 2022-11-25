@@ -54,6 +54,20 @@ const sns: Plugin.SNSAdaptor.Definition = {
             description: <Trans i18nKey="plugin_decentralized_search_description" />,
             name: <Trans i18nKey="plugin_decentralized_search_name" />,
             icon: <Icons.DecentralizedSearch size={36} />,
+            features: [
+                {
+                    name: <Trans i18nKey="plugin_decentralized_search_feature_token_name" />,
+                    description: <Trans i18nKey="plugin_decentralized_search_feature_token_description" />,
+                },
+                {
+                    name: <Trans i18nKey="plugin_decentralized_search_feature_nft_name" />,
+                    description: <Trans i18nKey="plugin_decentralized_search_feature_nft_description" />,
+                },
+                {
+                    name: <Trans i18nKey="plugin_decentralized_search_feature_wallet_name" />,
+                    description: <Trans i18nKey="plugin_decentralized_search_feature_wallet_description" />,
+                },
+            ],
         },
     ],
 }
