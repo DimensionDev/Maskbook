@@ -15,21 +15,22 @@ export interface ComposedTransformers {
 export function composeTransformers(): ComposedTransformers {
     const event = new EventTarget()
     const onUpdate = () => {
-        composedResult = undefined
+        composedTransformer = undefined
         event.dispatchEvent(new Event('update'))
     }
     const transformers = new Set<readonly [Transformer, number]>()
 
-    let composedResult: TypedMessage | undefined
+    let composedTransformer: Transformer | undefined
     function composed(message: TypedMessage, context: TransformationContext) {
         // eslint-disable-next-line unicorn/no-array-reduce
         return [...transformers].sort((a, b) => b[1] - a[1]).reduce((p, [c]) => c(p, context), message)
     }
 
     const subscription = {
-        getCurrentValue: (): Transformer => (message, context) => {
-            return (composedResult ??= composed(message, context))
-        },
+        getCurrentValue: () =>
+            (composedTransformer ??= (message, context) => {
+                return composed(message, context)
+            }),
         subscribe(f: () => void) {
             event.addEventListener('update', f)
             return () => {
