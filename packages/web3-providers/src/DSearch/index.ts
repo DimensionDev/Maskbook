@@ -9,18 +9,43 @@ import {
     EOAResult,
     attemptUntil,
 } from '@masknet/web3-shared-base'
-import { ChainId as ChainIdEVM, AddressType } from '@masknet/web3-shared-evm'
+import {
+    ChainId as ChainIdEVM,
+    AddressType,
+    isValidAddress as isValidAddressEVM,
+    isZeroAddress as isZeroAddressEVM,
+    isValidDomain as isValidDomainEVM,
+} from '@masknet/web3-shared-evm'
+import {
+    isValidAddress as isValidAddressFlow,
+    isZeroAddress as isZeroAddressFlow,
+    isValidDomain as isValidDomainFlow,
+} from '@masknet/web3-shared-flow'
+import {
+    isValidAddress as isValidAddressSolana,
+    isZeroAddress as isZeroAddressSolana,
+    isValidDomain as isValidDomainSolana,
+} from '@masknet/web3-shared-solana'
 import type { DSearchBaseAPI } from '../types/DSearch.js'
 
 const CHAIN_ID_LIST = [ChainIdEVM.Mainnet, ChainIdEVM.BSC, ChainIdEVM.Matic]
+
+const isValidAddress = (address?: string): boolean => {
+    return isValidAddressEVM(address) || isValidAddressFlow(address) || isValidAddressSolana(address)
+}
+
+const isZeroAddress = (address?: string): boolean => {
+    return isZeroAddressEVM(address) || isZeroAddressFlow(address) || isZeroAddressSolana(address)
+}
+
+const isValidDomain = (domain?: string): boolean => {
+    return isValidDomainEVM(domain) || isValidDomainFlow(domain) || isValidDomainSolana(domain)
+}
 
 export class DSearchAPI<ChainId = Web3Helper.ChainIdAll> implements DSearchBaseAPI.Provider<ChainId, NetworkPluginID> {
     async search(
         keyword: string,
         options: {
-            isValidAddress?: (address?: string) => boolean
-            isZeroAddress?: (address?: string) => boolean
-            isValidDomain?: (domain?: string) => boolean
             getAddressType?: (
                 address: string,
                 options?: Web3Helper.Web3ConnectionOptions<NetworkPluginID.PLUGIN_EVM>,
@@ -29,7 +54,7 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll> implements DSearchBaseA
             reverse?: (chainId: ChainIdEVM, address: string) => Promise<string | undefined>
         },
     ): Promise<SearchResult<ChainId>> {
-        const { isValidAddress, isZeroAddress, isValidDomain, getAddressType, lookup, reverse } = options
+        const { getAddressType, lookup, reverse } = options
 
         const trendingTokenRegexResult = keyword.match(/([#$])(\w+)/) ?? []
 

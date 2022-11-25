@@ -54,9 +54,6 @@ export function SearchResultInspector(props: SearchResultInspectorProps) {
         )
             return
         return DSearch.search(keyword, {
-            isValidAddress: Others?.isValidAddress,
-            isZeroAddress: Others?.isZeroAddress,
-            isValidDomain: Others?.isValidDomain,
             getAddressType: connection?.getAddressType,
             lookup: NameService?.lookup,
             reverse: NameService?.reverse,
