@@ -16,7 +16,6 @@ import RPC from '@masknet/web3-constants/evm/rpc.json'
 import Explorer from '@masknet/web3-constants/evm/explorer.json'
 import TokenList from '@masknet/web3-constants/evm/token-list.json'
 import TokenAssetBaseURL from '@masknet/web3-constants/evm/token-asset-base-url.json'
-import GoodGhosting from '@masknet/web3-constants/evm/good-ghosting.json'
 import SpaceStationGalaxy from '@masknet/web3-constants/evm/space-station-galaxy.json'
 import OpenseaAPI from '@masknet/web3-constants/evm/opensea-api.json'
 import ArtBlocks from '@masknet/web3-constants/evm/artblocks.json'
@@ -132,11 +131,6 @@ export const getTokenAssetBaseURLConstant = transform(ChainId, TokenAssetBaseURL
 export const getTokenAssetBaseURLConstants = transformAll(ChainId, TokenAssetBaseURL)
 export const useTokenAssetBaseURLConstant = transformHook(getTokenAssetBaseURLConstants)
 export const useTokenAssetBaseURLConstants = transformAllHook(getTokenAssetBaseURLConstants)
-
-export const getGoodGhostingConstant = transform(ChainId, GoodGhosting)
-export const getGoodGhostingConstants = transformAll(ChainId, GoodGhosting)
-export const useGoodGhostingConstant = transformHook(getGoodGhostingConstants)
-export const useGoodGhostingConstants = transformAllHook(getGoodGhostingConstants)
 
 export const getSpaceStationGalaxyConstant = transform(ChainId, SpaceStationGalaxy)
 export const getSpaceStationGalaxyConstants = transformAll(ChainId, SpaceStationGalaxy)
