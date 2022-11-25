@@ -14,7 +14,7 @@ import {
 } from '@masknet/shared-base'
 import { KVStorage } from '@masknet/shared'
 import { ChainId, isValidAddress, isZeroAddress } from '@masknet/web3-shared-evm'
-import { KeyValue, MaskX, MaskX_BaseAPI, NextIDProof, NextIDStorage, RSS3, Twitter } from '@masknet/web3-providers'
+import { MaskX, MaskX_BaseAPI, NextIDProof, NextIDStorage, RSS3, Twitter } from '@masknet/web3-providers'
 import { ENS_Resolver } from './NameService/ENS.js'
 import { ChainbaseResolver } from './NameService/Chainbase.js'
 import { Web3StateSettings } from '../settings/index.js'
@@ -55,20 +55,21 @@ function getNextIDPlatform() {
     return
 }
 
-async function getWalletAddressesFromNextID(userId?: string): Promise<BindingProof[]> {
-    if (!userId) return EMPTY_LIST
+async function getWalletAddressesFromNextID({ identifier, publicKey }: SocialIdentity): Promise<BindingProof[]> {
+    if (!identifier?.userId) return EMPTY_LIST
 
     const platform = getNextIDPlatform()
     if (!platform) return EMPTY_LIST
 
-    const bindings = await NextIDProof.queryAllExistedBindingsByPlatform(platform, userId)
+    const bindings = await NextIDProof.queryAllExistedBindingsByPlatform(platform, identifier.userId)
     const latestActivatedBinding = first(
         bindings.sort((a, z) => Number.parseInt(z.activated_at, 10) - Number.parseInt(a.activated_at, 10)),
     )
-    if (!latestActivatedBinding) return EMPTY_LIST
-    return latestActivatedBinding.proofs.filter(
-        (x) => x.platform === NextIDPlatform.Ethereum && isValidAddress(x.identity),
-    )
+    const binding = publicKey
+        ? bindings.find((x) => x.persona === publicKey) ?? latestActivatedBinding
+        : latestActivatedBinding
+    if (!binding) return EMPTY_LIST
+    return binding.proofs.filter((x) => x.platform === NextIDPlatform.Ethereum && isValidAddress(x.identity))
 }
 
 const resolveMaskXAddressType = createLookupTableResolver<MaskX_BaseAPI.SourceType, SocialAddressType>(
@@ -133,20 +134,6 @@ export class IdentityService extends IdentityServiceState<ChainId> {
         return compact(allSettled.map((x) => (x.status === 'fulfilled' ? x.value : undefined)).filter(Boolean))
     }
 
-    /** Read a social address from avatar KV storage. */
-    private async getSocialAddressFromAvatarKV({ identifier }: SocialIdentity) {
-        if (!identifier?.userId) return
-        const address = await KeyValue.createJSON_Storage<Record<NetworkPluginID, string>>(
-            `com.maskbook.user_${getSiteType()}`,
-        )
-            .get(identifier.userId)
-            .then((x) => x?.[NetworkPluginID.PLUGIN_EVM])
-
-        if (!address) return
-
-        return this.createSocialAddress(SocialAddressType.Mask, address)
-    }
-
     /** Read a social address from avatar NextID storage. */
     private async getSocialAddressFromAvatarNextID({ identifier, publicKey }: SocialIdentity) {
         const userId = identifier?.userId
@@ -164,8 +151,8 @@ export class IdentityService extends IdentityServiceState<ChainId> {
     }
 
     /** Read a social address from NextID. */
-    private async getSocialAddressesFromNextID({ identifier }: SocialIdentity) {
-        const listOfAddress = await getWalletAddressesFromNextID(identifier?.userId)
+    private async getSocialAddressesFromNextID(identity: SocialIdentity) {
+        const listOfAddress = await getWalletAddressesFromNextID(identity)
         return compact(
             listOfAddress.map((x) =>
                 this.createSocialAddress(
