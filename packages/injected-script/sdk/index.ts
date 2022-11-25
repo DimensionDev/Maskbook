@@ -7,6 +7,7 @@ import { sendEvent, rejectPromise, resolvePromise } from './utils.js'
 import { MathWalletProvider } from './MathWallet.js'
 import { WalletLinkProvider } from './WalletLink.js'
 import { OperaProvider } from './Opera.js'
+import { ClvWalletProvider } from './ClvWallet.js'
 
 export type { EthereumProvider, InternalEvents } from '../shared/index.js'
 export { InjectedProvider } from './Base.js'
@@ -19,6 +20,7 @@ export const injectedMetaMaskProvider = new MetaMaskProvider()
 export const injectedMathWalletProvider = new MathWalletProvider()
 export const injectedWalletLinkProvider = new WalletLinkProvider()
 export const injectedOperaProvider = new OperaProvider()
+export const injectedClvWalletProvider = new ClvWalletProvider()
 
 export function pasteText(text: string) {
     sendEvent('paste', text)
@@ -66,6 +68,7 @@ globalThis?.document?.addEventListener?.(CustomEventId, (e) => {
                 injectedMathWalletProvider,
                 injectedWalletLinkProvider,
                 injectedOperaProvider,
+                injectedClvWalletProvider,
             ].find((x) => x.pathname === pathname)
 
             provider?.emit(eventName, data)
