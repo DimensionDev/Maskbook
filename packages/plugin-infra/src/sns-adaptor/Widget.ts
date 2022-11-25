@@ -9,9 +9,9 @@ export interface WidgetProps<Name extends keyof Plugin.SNSAdaptor.WidgetRegistry
     fallback?: React.ReactElement | null
 }
 
-export const Widget: <Name extends keyof Plugin.SNSAdaptor.WidgetRegistry>(
+export function Widget<Name extends keyof Plugin.SNSAdaptor.WidgetRegistry>(
     props: WidgetProps<Name> & (Plugin.SNSAdaptor.WidgetRegistry[Name] extends infer U extends object ? U : never),
-) => React.ReactElement = (props) => {
+) {
     const { name, pluginID, fallback, ...rest } = props
     const plugins = useActivatedPluginsSNSAdaptor(false)
     const WidgetComponent: any = useMemo(() => {

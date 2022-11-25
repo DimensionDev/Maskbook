@@ -1,4 +1,5 @@
-import { Plugin, useLastRecognizedIdentity } from '@masknet/plugin-infra'
+import { Plugin } from '@masknet/plugin-infra'
+import { useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
 import { PluginGuide, PluginGuideProvider } from '@masknet/shared'
 import { EnhanceableSite, PluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'

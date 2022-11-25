@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
-import { usePostInfoDetails } from '../contexts/PostContext.js'
-import { useSNSAdaptorContext } from '../contexts/SNSAdaptorContext.js'
+import { usePostInfoDetails } from './PostContext.js'
+import { useSNSAdaptorContext } from './SNSAdaptorContext.js'
 
 export function usePostLink() {
     const { getPostURL } = useSNSAdaptorContext()
