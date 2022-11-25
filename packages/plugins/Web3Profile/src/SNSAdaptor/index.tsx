@@ -64,6 +64,20 @@ const sns: Plugin.SNSAdaptor.Definition = {
                     i18nKey: '__plugin_description',
                     fallback: 'Choose and showcase your Web3 footprints on Twitter.',
                 },
+                features: [
+                    {
+                        name: <Trans i18nKey="plugin_web3_profile_feature_general_user_name" />,
+                        description: <Trans i18nKey="plugin_web3_profile_feature_general_user_description" />,
+                    },
+                    {
+                        name: <Trans i18nKey="plugin_web3_profile_feature_nft_name" />,
+                        description: <Trans i18nKey="plugin_web3_profile_feature_nft_description" />,
+                    },
+                    {
+                        name: <Trans i18nKey="plugin_web3_profile_feature_crypto_exchange_name" />,
+                        description: <Trans i18nKey="plugin_web3_profile_feature_crypto_exchange_description" />,
+                    },
+                ],
             }
         })(),
     ],

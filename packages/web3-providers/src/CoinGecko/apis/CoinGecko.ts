@@ -3,14 +3,14 @@ import { attemptUntil, TokenType } from '@masknet/web3-shared-base'
 import { DataProvider } from '@masknet/public-api'
 import { ChainId, getCoinGeckoConstants } from '@masknet/web3-shared-evm'
 import { COINGECKO_CHAIN_ID_LIST, COINGECKO_URL_BASE } from '../constants.js'
-import { getCommunityLink, isMirroredKeyword } from '../../trending/helpers.js'
+import { getCommunityLink, isMirroredKeyword } from '../../Trending/helpers.js'
+import { COIN_RECOMMENDATION_SIZE, VALID_TOP_RANK } from '../../Trending/constants.js'
 import { fetchJSON } from '../../helpers.js'
 import type { TrendingAPI } from '../../types/index.js'
 import { getAllCoins, getCoinInfo, getPriceStats as getStats, getThumbCoins } from './base.js'
 import type { Platform } from '../types.js'
 import { resolveCoinGeckoChainId } from '../helpers.js'
-import { FuseTrendingAPI } from '../../fuse/index.js'
-import { COIN_RECOMMENDATION_SIZE, VALID_TOP_RANK } from '../../trending/constants.js'
+import { FuseTrendingAPI } from '../../Fuse/index.js'
 
 export class CoinGeckoTrending_API implements TrendingAPI.Provider<ChainId> {
     private fuse = new FuseTrendingAPI()

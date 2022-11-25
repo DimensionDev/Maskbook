@@ -3,7 +3,7 @@ import { useChainContext, useNetworkDescriptor, useWeb3State } from '@masknet/we
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { useContainer } from 'unstated-next'
 import { makeStyles, ActionButton, LoadingBase, useTabs, MaskTabList } from '@masknet/theme'
-import { Box, Button, Paper, Tab, Typography, useTheme } from '@mui/material'
+import { Box, Button, Chip, Paper, Tab, Typography, useTheme } from '@mui/material'
 import { WalletConnectedBoundary, ChainBoundary, ImageIcon, TokenIcon } from '@masknet/shared'
 import { Context } from '../../hooks/useContext.js'
 import { BoxState, CardTab } from '../../type.js'
@@ -16,6 +16,7 @@ import { formatBalance } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useI18N } from '../../locales/index.js'
 import { TabContext, TabPanel } from '@mui/lab'
+import Color from 'color'
 
 const useTabsStyles = makeStyles()((theme) => ({
     button: {
@@ -79,20 +80,18 @@ const useTabsStyles = makeStyles()((theme) => ({
         fontWeight: 700,
     },
     active: {
+        color: theme.palette.maskColor.white,
         backgroundColor: theme.palette.maskColor.success,
-        color: theme.palette.maskColor.bottom,
-        fontSize: 12,
-        fontWeight: 700,
-        borderRadius: 9999,
-        padding: '8px 12px',
-        width: 65,
-        textAlign: 'center',
+    },
+    close: {
+        color: theme.palette.maskColor.white,
+        backgroundColor: new Color(theme.palette.maskColor.publicSecond).alpha(0.1).toString(),
     },
     iconBox: {
         position: 'absolute',
         bottom: 0,
         right: -8,
-        padding: 2,
+        padding: 1,
         backgroundColor: theme.palette.maskColor.bg,
         borderRadius: 9999,
         lineHeight: 0,
@@ -298,9 +297,10 @@ export function PreviewCard(props: PreviewCardProps) {
                             </Box>
                         </Box>
                     </Box>
-                    {boxState === BoxState.READY ? (
-                        <Typography className={classes.active}>{t.active()}</Typography>
-                    ) : null}
+                    <Chip
+                        className={boxState === BoxState.READY ? classes.active : classes.close}
+                        label={boxState === BoxState.READY ? t.active() : t.close()}
+                    />
                 </Box>
                 <Box className={classes.body}>
                     <MaskTabList variant="base" aria-label="maskbox" onChange={onChange}>

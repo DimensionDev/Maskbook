@@ -9,7 +9,7 @@ import {
 import type { TokenIconAPI } from '../types/TokenIcon.js'
 import SPECIAL_ICON_LIST from './TokenIconSpecialIconList.json'
 
-export class CF_API implements TokenIconAPI.Provider<ChainId> {
+export class CloudflareAPI implements TokenIconAPI.Provider<ChainId> {
     async getFungibleTokenIconURLs(chainId: ChainId, address: string): Promise<string[]> {
         const { NATIVE_TOKEN_ASSET_BASE_URI = EMPTY_LIST, ERC20_TOKEN_ASSET_BASE_URI = EMPTY_LIST } =
             getTokenAssetBaseURLConstants(chainId)

@@ -1,9 +1,9 @@
 import urlcat from 'urlcat'
 import { compact } from 'lodash-es'
 import { resolveCrossOriginURL } from '@masknet/web3-shared-base'
+import { RSS3API } from '../RSS3/index.js'
 import { MaskX_BaseAPI } from '../types/MaskX.js'
 import { MASK_X_DEFAULT_PAGINATION, MASK_X_ROOT_URL } from './constants.js'
-import { RSS3API } from '../rss3/index.js'
 
 export class MaskX_API implements MaskX_BaseAPI.Provider {
     private RSS3 = new RSS3API()
