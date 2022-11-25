@@ -14,9 +14,7 @@ import type { DSearchBaseAPI } from '../types/DSearch.js'
 
 const CHAIN_ID_LIST = [ChainIdEVM.Mainnet, ChainIdEVM.BSC, ChainIdEVM.Matic]
 
-export class DSearchAPI<ChainId = Web3Helper.ChainIdAll>
-    implements DSearchBaseAPI.Provider<ChainId, NetworkPluginID.PLUGIN_EVM>
-{
+export class DSearchAPI<ChainId = Web3Helper.ChainIdAll> implements DSearchBaseAPI.Provider<ChainId, NetworkPluginID> {
     async search(
         keyword: string,
         options: {
