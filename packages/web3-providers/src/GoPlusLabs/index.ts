@@ -7,9 +7,9 @@ import { GO_PLUS_LABS_ROOT_URL, INFINITE_VALUE } from './constants.js'
 import { SecurityMessageLevel } from './types.js'
 import { SecurityMessages } from './rules.js'
 import { getAllMaskDappContractInfo } from '../rabby/helpers.js'
-import type { GoPlusTokenInfo, GoPlusTokenSpender } from './type.js'
+import type { GoPlusNFTInfo, GoPlusTokenInfo, GoPlusTokenSpender, NFTSpenderInfo } from './type.js'
 import { EMPTY_LIST } from '@masknet/shared-base'
-import { FungibleTokenSpender, isSameAddress } from '@masknet/web3-shared-base'
+import { FungibleTokenSpender, isSameAddress, NonFungibleContractSpender } from '@masknet/web3-shared-base'
 import { BigNumber } from 'bignumber.js'
 
 export interface SupportedChainResponse {
@@ -18,6 +18,57 @@ export interface SupportedChainResponse {
 }
 
 export class GoPlusAuthorizationAPI implements AuthorizationAPI.Provider<ChainId> {
+    async getNonFungibleTokenSpenders(chainId: ChainId, addresses: string) {
+        const maskDappContractInfoList = getAllMaskDappContractInfo(chainId, 'nft')
+        const response = await fetchJSON<{
+            result: GoPlusNFTInfo[]
+        }>(urlcat(GO_PLUS_LABS_ROOT_URL, 'api/v2/nft721_approval_security/:chainId', { chainId, addresses }))
+
+        if (!response.result?.length) return EMPTY_LIST
+
+        return response.result
+            .reduce<NFTSpenderInfo[]>((acc, cur) => {
+                return acc.concat(
+                    cur.approved_list.map((rawSpender) => {
+                        const maskDappContractInfo = maskDappContractInfoList.find((y) =>
+                            isSameAddress(y.address, rawSpender.approved_contract),
+                        )
+
+                        if (maskDappContractInfo) {
+                            return {
+                                isMaskDapp: true,
+                                address: rawSpender.approved_contract,
+                                amount: '1',
+                                name: maskDappContractInfo.name,
+                                logo: maskDappContractInfo.logo,
+                                contract: {
+                                    address: cur.nft_address,
+                                    name: cur.nft_name,
+                                },
+                            }
+                        }
+
+                        return {
+                            isMaskDapp: false,
+                            address: rawSpender.approved_contract,
+                            amount: '1',
+                            name: rawSpender.address_info.tag,
+                            logo: undefined,
+                            contract: {
+                                address: cur.nft_address,
+                                name: cur.nft_name,
+                            },
+                        }
+                    }),
+                )
+            }, [])
+            .sort((a, b) => {
+                if (a.isMaskDapp && !b.isMaskDapp) return -1
+                if (!a.isMaskDapp && b.isMaskDapp) return 1
+                return Number(b.amount) - Number(a.amount)
+            }) as Array<NonFungibleContractSpender<ChainId, SchemaType>>
+    }
+
     async getFungibleTokenSpenders(chainId: ChainId, addresses: string) {
         const maskDappContractInfoList = getAllMaskDappContractInfo(chainId, 'token')
 
