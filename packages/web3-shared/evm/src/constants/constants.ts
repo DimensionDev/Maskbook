@@ -26,6 +26,7 @@ import Game from '@masknet/web3-constants/evm/game.json'
 import Pet from '@masknet/web3-constants/evm/pet.json'
 import SmartPay from '@masknet/web3-constants/evm/smart-pay.json'
 import ENS from '@masknet/web3-constants/evm/ens.json'
+import WHITE_LISTS from '@masknet/web3-constants/evm/whitelist.json'
 
 import {
     transformAllHook,
@@ -184,3 +185,4 @@ export const useSmartPayConstant = transformHook(getSmartPayConstants)
 export const useSmartPayConstants = transformAllHook(getSmartPayConstants)
 
 export const getENSConstants = transformAll(ChainId, ENS)
+export const getWhiteListsConstans = transformAll(ChainId, WHITE_LISTS)

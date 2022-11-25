@@ -1,6 +1,6 @@
 import urlcat from 'urlcat'
 import { first, isEmpty, parseInt, uniqBy } from 'lodash-es'
-import { ChainId, isValidChainId } from '@masknet/web3-shared-evm'
+import { ChainId, checkInWhiteliss, isValidChainId } from '@masknet/web3-shared-evm'
 import type { SecurityAPI } from '../index.js'
 import { fetchJSON } from '../helpers.js'
 import { GO_PLUS_LABS_ROOT_URL, SecurityMessageLevel } from './constants.js'
@@ -75,11 +75,12 @@ export const createTokenSecurity = (
     const makeMessageList = getMessageList(tokenSecurity)
     const risk_item_quantity = makeMessageList.filter((x) => x.level === SecurityMessageLevel.High).length
     const warn_item_quantity = makeMessageList.filter((x) => x.level === SecurityMessageLevel.Medium).length
+    const inWhitelist = checkInWhiteliss(chainId, tokenSecurity.contract)
     return {
         ...tokenSecurity,
-        is_high_risk,
-        risk_item_quantity,
-        warn_item_quantity,
+        is_high_risk: inWhitelist ? false : is_high_risk,
+        risk_item_quantity: inWhitelist ? 0 : risk_item_quantity,
+        warn_item_quantity: inWhitelist ? 0 : warn_item_quantity,
         message_list: makeMessageList,
     }
 }
