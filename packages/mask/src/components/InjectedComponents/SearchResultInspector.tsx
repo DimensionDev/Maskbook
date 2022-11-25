@@ -14,7 +14,7 @@ import {
     useActivatedPluginsSNSAdaptor,
 } from '@masknet/plugin-infra/content-script'
 import { useSearchedKeyword } from '../DataSource/useSearchedKeyword.js'
-import { useWeb3State, useWeb3Connection } from '@masknet/web3-hooks-base'
+import { useWeb3Connection } from '@masknet/web3-hooks-base'
 
 const useStyles = makeStyles()(() => ({
     contentWrapper: {
@@ -38,35 +38,15 @@ export function SearchResultInspector(props: SearchResultInspectorProps) {
     const translate = usePluginI18NField()
 
     const keyword = useSearchedKeyword()
-    const { Others, NameService } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
     const activatedPlugins = useActivatedPluginsSNSAdaptor.visibility.useNotMinimalMode()
 
     const result = useAsyncRetry(async () => {
-        if (
-            !keyword ||
-            !Others?.isValidAddress ||
-            !Others?.isZeroAddress ||
-            !Others?.isValidDomain ||
-            !connection?.getAddressType ||
-            !NameService?.lookup ||
-            !NameService?.reverse
-        )
-            return
+        if (!keyword || !connection?.getAddressType) return
         return DSearch.search(keyword, {
             getAddressType: connection?.getAddressType,
-            lookup: NameService?.lookup,
-            reverse: NameService?.reverse,
         })
-    }, [
-        keyword,
-        Others?.isValidAddress,
-        Others?.isZeroAddress,
-        Others?.isValidDomain,
-        connection?.getAddressType,
-        NameService?.lookup,
-        NameService?.reverse,
-    ])
+    }, [keyword, connection?.getAddressType])
     const contentComponent = useMemo(() => {
         if (!result.value) return null
         const Component = getSearchResultContent(result.value)

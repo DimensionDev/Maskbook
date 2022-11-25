@@ -5,13 +5,18 @@ import type { DomainAPI } from '../index.js'
 import { Web3API } from '../EVM/index.js'
 
 export class ENS_API implements DomainAPI.Provider<ChainId> {
-    private web3 = new Web3API().createSDK(ChainId.Mainnet)
-    private ens = new ENS({
-        provider: this.web3.givenProvider,
-        network: ChainId.Mainnet,
-    })
+    private get web3() {
+        return new Web3API().createSDK(ChainId.Mainnet)
+    }
 
-    async lookup(chainId: ChainId, name: string): Promise<string | undefined> {
+    private get ens() {
+        return new ENS({
+            provider: this.web3.givenProvider,
+            network: ChainId.Mainnet,
+        })
+    }
+
+    lookup = async (chainId: ChainId, name: string): Promise<string | undefined> => {
         try {
             const lookupAddress = await this.ens.resolveAddressForNode(namehash.hash(name))
             return isZeroAddress(lookupAddress) || isEmptyHex(lookupAddress)
@@ -21,7 +26,7 @@ export class ENS_API implements DomainAPI.Provider<ChainId> {
             return this.web3.eth.ens.registry.getOwner(name)
         }
     }
-    async reverse(chainId: ChainId, address: string): Promise<string | undefined> {
+    reverse = async (chainId: ChainId, address: string): Promise<string | undefined> => {
         try {
             const name = await this.ens.reverse(address)
             if (!name.endsWith('.eth')) return

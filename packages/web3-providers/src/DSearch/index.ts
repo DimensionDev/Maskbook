@@ -26,6 +26,7 @@ import {
     isZeroAddress as isZeroAddressSolana,
     isValidDomain as isValidDomainSolana,
 } from '@masknet/web3-shared-solana'
+import { ENS, SpaceID, ChainbaseDomain } from '../index.js'
 import type { DSearchBaseAPI } from '../types/DSearch.js'
 
 const CHAIN_ID_LIST = [ChainIdEVM.Mainnet, ChainIdEVM.BSC, ChainIdEVM.Matic]
@@ -50,12 +51,9 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll> implements DSearchBaseA
                 address: string,
                 options?: Web3Helper.Web3ConnectionOptions<NetworkPluginID.PLUGIN_EVM>,
             ) => Promise<AddressType | undefined>
-            lookup?: (chainId: ChainIdEVM, domain: string) => Promise<string | undefined>
-            reverse?: (chainId: ChainIdEVM, address: string) => Promise<string | undefined>
         },
     ): Promise<SearchResult<ChainId>> {
-        const { getAddressType, lookup, reverse } = options
-
+        const { getAddressType } = options
         const trendingTokenRegexResult = keyword.match(/([#$])(\w+)/) ?? []
 
         const [_, trendingSearchType, trendingTokenName = ''] = trendingTokenRegexResult
@@ -73,8 +71,12 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll> implements DSearchBaseA
         }
 
         if (isValidDomain?.(keyword)) {
-            const address = await lookup?.(ChainIdEVM.Mainnet, keyword)
-
+            const address = await attemptUntil(
+                [ENS, ChainbaseDomain, SpaceID].map((x) => async () => {
+                    return x.lookup(ChainIdEVM.Mainnet, keyword)
+                }),
+                '',
+            )
             return {
                 type: SearchResultType.Domain,
                 domain: keyword,
@@ -95,7 +97,12 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll> implements DSearchBaseA
             )
 
             if (addressType !== AddressType.Contract) {
-                const domain = await reverse?.(ChainIdEVM.Mainnet, keyword)
+                const domain = await attemptUntil(
+                    [ENS, ChainbaseDomain, SpaceID].map((x) => async () => {
+                        return x.reverse(ChainIdEVM.Mainnet, keyword)
+                    }),
+                    '',
+                )
                 return {
                     type: SearchResultType.EOA,
                     address: keyword,
