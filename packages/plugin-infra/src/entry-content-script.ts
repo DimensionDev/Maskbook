@@ -35,7 +35,7 @@ export {
     useLastRecognizedSocialIdentity,
     usePostLink,
     useSNSAdaptorContext,
-    useSearchResultTabs,
+    getSearchResultTabs,
     useSocialIdentity,
     useThemeColor,
     useThemeMode,

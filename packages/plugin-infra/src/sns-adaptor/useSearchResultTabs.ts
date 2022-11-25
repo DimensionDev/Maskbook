@@ -4,7 +4,7 @@ import type { SearchResult } from '@masknet/web3-shared-base'
 import type { I18NStringField, Plugin } from '../entry.js'
 import { getAvailablePlugins } from '../dom/getAvailablePlugins.js'
 
-export function useSearchResultTabs(
+export function getSearchResultTabs(
     definitions: Plugin.SNSAdaptor.Definition[],
     result: SearchResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>,
     translate: (pluginID: string, field: I18NStringField) => string,
