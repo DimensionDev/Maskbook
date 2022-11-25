@@ -1,4 +1,5 @@
 import { memoize } from 'lodash-es'
+import { memoizePromise } from '@masknet/kit'
 import {
     HubOptions,
     HubIndicator,
@@ -13,9 +14,8 @@ import {
     NonFungibleToken,
 } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType, createNativeToken, isValidChainId } from '@masknet/web3-shared-solana'
-import { memoizePromise } from '@masknet/kit'
 import { EMPTY_LIST } from '@masknet/shared-base'
-import { CoinGeckoPriceSolanaAPI } from '../../coingecko/index.js'
+import { CoinGeckoPriceSolanaAPI } from '../../CoinGecko/index.js'
 import type { FungibleTokenAPI, TokenListAPI } from '../../types/index.js'
 import { RAYDIUM_TOKEN_LIST, SPL_TOKEN_PROGRAM_ID } from '../constants.js'
 import { createFungibleAsset, createFungibleToken, requestRPC } from '../helpers.js'

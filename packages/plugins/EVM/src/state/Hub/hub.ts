@@ -21,7 +21,7 @@ import {
     Zora,
     R2D2,
     PriceAPI,
-    CF,
+    Cloudflare,
     CoinGeckoPriceEVM,
     ChainbaseFungibleToken,
     ChainbaseNonFungibleToken,
@@ -92,10 +92,10 @@ class HubFungibleClient extends HubStateFungibleClient<ChainId, SchemaType> {
                 [SourceType.Zerion]: Zerion,
                 [SourceType.Rabby]: Rabby,
                 [SourceType.R2D2]: R2D2,
-                [SourceType.CF]: CF,
+                [SourceType.CF]: Cloudflare,
                 [SourceType.CoinGecko]: CoinGeckoPriceEVM,
             },
-            [DeBank, Zerion, ChainbaseFungibleToken, Rabby, R2D2, CF, CoinGeckoPriceEVM],
+            [DeBank, Zerion, ChainbaseFungibleToken, Rabby, R2D2, Cloudflare, CoinGeckoPriceEVM],
             initial,
         )
     }
