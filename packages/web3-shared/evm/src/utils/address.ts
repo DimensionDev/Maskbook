@@ -2,13 +2,7 @@ import { EthereumAddress } from 'wallet.ts'
 import { getEnumAsArray } from '@masknet/kit'
 import { isPopupPage } from '@masknet/shared-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
-import {
-    getENSConstants,
-    getRedPacketConstants,
-    getTokenConstant,
-    getWhiteListsConstans,
-    ZERO_ADDRESS,
-} from '../constants/index.js'
+import { getENSConstants, getRedPacketConstants, getTokenConstant, ZERO_ADDRESS } from '../constants/index.js'
 import { ChainId, NetworkType, ProviderType } from '../types/index.js'
 
 export function isEmptyHex(hex?: string) {
@@ -91,9 +85,4 @@ export function getMaskTokenAddress(chainId = ChainId.Mainnet) {
 export function isENSContractAddress(contract_address: string) {
     const { ENS_CONTRACT_ADDRESS } = getENSConstants()
     return isSameAddress(contract_address, ENS_CONTRACT_ADDRESS)
-}
-
-export function checkInWhiteliss(chainId = ChainId.Mainnet, address: string) {
-    const { WHITE_LISTS } = getWhiteListsConstans(chainId)
-    return WHITE_LISTS?.some((x) => isSameAddress(x, address))
 }

@@ -1,10 +1,16 @@
 import urlcat from 'urlcat'
 import { first, isEmpty, parseInt, uniqBy } from 'lodash-es'
-import { ChainId, checkInWhiteliss, isValidChainId } from '@masknet/web3-shared-evm'
+import { ChainId, getWhiteListsConstants, isValidChainId } from '@masknet/web3-shared-evm'
 import type { SecurityAPI } from '../index.js'
 import { fetchJSON } from '../helpers.js'
 import { GO_PLUS_LABS_ROOT_URL, SecurityMessageLevel } from './constants.js'
 import { SecurityMessages } from './rules.js'
+import { isSameAddress } from '@masknet/web3-shared-base'
+
+function checkInWhitelist(chainId = ChainId.Mainnet, address: string) {
+    const { GOPLUS_WHITE_LISTS } = getWhiteListsConstants(chainId)
+    return GOPLUS_WHITE_LISTS?.some((x) => isSameAddress(x, address))
+}
 
 export interface SupportedChainResponse {
     id: string
@@ -75,7 +81,7 @@ export const createTokenSecurity = (
     const makeMessageList = getMessageList(tokenSecurity)
     const risk_item_quantity = makeMessageList.filter((x) => x.level === SecurityMessageLevel.High).length
     const warn_item_quantity = makeMessageList.filter((x) => x.level === SecurityMessageLevel.Medium).length
-    const inWhitelist = checkInWhiteliss(chainId, tokenSecurity.contract)
+    const inWhitelist = checkInWhitelist(chainId, tokenSecurity.contract)
     return {
         ...tokenSecurity,
         is_high_risk: inWhitelist ? false : is_high_risk,
