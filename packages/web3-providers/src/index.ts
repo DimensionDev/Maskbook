@@ -39,7 +39,7 @@ import {
 } from './Chainbase/index.js'
 import { SolanaFungibleAPI, SolanaNonFungibleAPI } from './Solana/index.js'
 import { FlowFungibleAPI } from './Flow/index.js'
-import { CF_API } from './Cloudflare/index.js'
+import { CloudflareAPI } from './Cloudflare/index.js'
 import { MirrorAPI } from './Mirror/index.js'
 import { MindsAPI } from './Minds/index.js'
 import { FuseTrendingAPI } from './Fuse/index.js'
@@ -47,6 +47,8 @@ import { CryptoScamDBAPI } from './CryptoScamDB/index.js'
 import { SmartPayBundlerAPI } from './SmartPay/index.js'
 import { NomicsAPI } from './Nomics/index.js'
 import { DSearchAPI } from './DSearch/index.js'
+import { ENS_API } from './ENS/index.js'
+import { SpaceID_API } from './SpaceID/index.js'
 
 // #region TODO: to be removed
 export * from './helpers.js'
@@ -89,7 +91,7 @@ export const CoinMarketCap = new CoinMarketCapAPI()
 export const UniSwap = new UniSwapAPI()
 export const Rabby = new RabbyAPI()
 export const X2Y2 = new X2Y2API()
-export const CF = new CF_API()
+export const Cloudflare = new CloudflareAPI()
 export const Mirror = new MirrorAPI()
 export const CryptoScamDB = new CryptoScamDBAPI()
 
@@ -120,6 +122,12 @@ export const Zerion = new ZerionAPI()
 export const ZerionNonFungibleToken = new ZerionNonFungibleTokenAPI()
 export const ZerionTrending = new ZerionTrendingAPI()
 export const ZerionGas = new ZerionGasAPI()
+
+// ENS
+export const ENS = new ENS_API()
+
+// SpaceID
+export const SpaceID = new SpaceID_API()
 
 // Fuse
 export const FuseTrending = new FuseTrendingAPI()
