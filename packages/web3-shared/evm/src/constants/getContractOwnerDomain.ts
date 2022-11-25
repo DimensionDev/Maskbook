@@ -1,6 +1,5 @@
 import { filter, flatten, pick, uniq, values } from 'lodash-es'
 import Aave from '@masknet/web3-constants/evm/aave.json'
-import Airdrop from '@masknet/web3-constants/evm/airdrop.json'
 import ArtBlocks from '@masknet/web3-constants/evm/artblocks.json'
 import Gitcoin from '@masknet/web3-constants/evm/gitcoin.json'
 import ITO from '@masknet/web3-constants/evm/ito.json'
@@ -55,7 +54,6 @@ const domainAddressMap: Record<string, string[]> = {
     'gitcoin.co': collect(Gitcoin, ['GITCOIN_ETH_ADDRESS', 'BULK_CHECKOUT_ADDRESS']),
     'lido.fi': collect(Lido, ['LIDO_stETH_ADDRESS', 'LIDO_REFERRAL_ADDRESS']),
     'mask.io': [
-        ...collect(Airdrop, ['AIRDROP_CONTRACT_ADDRESS']),
         ...collect(ITO, ['ITO_CONTRACT_ADDRESS']),
         ...collect(RedPacket, [
             'HAPPY_RED_PACKET_ADDRESS_V1',
