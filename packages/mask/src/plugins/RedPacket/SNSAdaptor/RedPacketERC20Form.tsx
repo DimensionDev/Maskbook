@@ -146,7 +146,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
         if (!account) return tr('plugin_wallet_connect_a_wallet')
         if (isZero(shares || '0')) return 'Enter shares'
         if (isGreaterThan(shares || '0', 255)) return 'At most 255 recipients'
-        if (isZero(amount)) return tr('plugin_dhedge_enter_an_amount')
+        if (isZero(amount)) return 'Enter an amount'
         if (isGreaterThan(totalAmount, tokenBalance))
             return tr('plugin_gitcoin_insufficient_balance', { symbol: token.symbol })
         if (!isDivisible)
