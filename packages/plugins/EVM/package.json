@@ -10,7 +10,6 @@
   },
   "dependencies": {
     "@dimensiondev/metamask-extension-provider": "^3.0.6-20221105074301-8806fca",
-    "@ensdomains/eth-ens-namehash": "^2.0.15",
     "@masknet/icons": "workspace:^",
     "@masknet/injected-script": "workspace:^",
     "@masknet/plugin-infra": "workspace:^",
@@ -33,7 +32,6 @@
     "@walletconnect/types": "^1.7.7",
     "bignumber.js": "9.1.0",
     "ethereumjs-util": "^7.1.0",
-    "ethjs-ens": "^2.0.1",
     "fortmatic": "^2.2.1",
     "react-use": "^17.4.0",
     "urlcat": "^2.0.4",

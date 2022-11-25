@@ -1448,9 +1448,6 @@ importers:
       '@dimensiondev/metamask-extension-provider':
         specifier: ^3.0.6-20221105074301-8806fca
         version: 3.0.6-20221105074301-8806fca
-      '@ensdomains/eth-ens-namehash':
-        specifier: ^2.0.15
-        version: 2.0.15
       '@masknet/icons':
         specifier: workspace:^
         version: link:../../icons
@@ -1517,9 +1514,6 @@ importers:
       ethereumjs-util:
         specifier: ^7.1.0
         version: 7.1.4
-      ethjs-ens:
-        specifier: ^2.0.1
-        version: 2.0.1
       fortmatic:
         specifier: ^2.2.1
         version: 2.2.1_tb3oevqnvhntsyfyhi2z6spuea
@@ -2803,6 +2797,9 @@ importers:
       '@dimensiondev/mask-wallet-core':
         specifier: 0.1.0-20211013082857-eb62e5f
         version: 0.1.0-20211013082857-eb62e5f
+      '@ensdomains/eth-ens-namehash':
+        specifier: ^2.0.15
+        version: 2.0.15
       '@masknet/icons':
         specifier: workspace:^
         version: link:../icons
@@ -2839,6 +2836,9 @@ importers:
       '@metaplex/js':
         specifier: ^4.11.7
         version: 4.11.7
+      '@siddomains/sidjs':
+        specifier: ^0.1.16
+        version: 0.1.16
       '@solana/buffer-layout':
         specifier: ^4.0.0
         version: 4.0.0
@@ -2866,6 +2866,9 @@ importers:
       date-fns:
         specifier: ^2.29.3
         version: 2.29.3
+      ethjs-ens:
+        specifier: ^2.0.1
+        version: 2.0.1
       fuse.js:
         specifier: 6.6.2
         version: 6.6.2_b2o4qvyfvxmpo7347sqko6h22a
@@ -15404,7 +15407,7 @@ packages:
       mississippi: 3.0.0
       mkdirp: 0.5.6
       move-concurrently: 1.0.1
-      promise-inflight: 1.0.1_bluebird@3.7.2
+      promise-inflight: 1.0.1
       rimraf: 2.7.1
       ssri: 6.0.2
       unique-filename: 1.1.1
@@ -15428,7 +15431,7 @@ packages:
       minipass-pipeline: 1.2.4
       mkdirp: 1.0.4
       p-map: 4.0.0
-      promise-inflight: 1.0.1_bluebird@3.7.2
+      promise-inflight: 1.0.1
       rimraf: 3.0.2
       ssri: 8.0.1
       tar: 6.1.12
@@ -19299,7 +19302,7 @@ packages:
     dev: false
 
   /eth-ens-namehash/1.0.2:
-    resolution: {integrity: sha1-Bezda6wtf9e8XKhKmTxrrZ2k7bk=}
+    resolution: {integrity: sha512-UCAyRNC3WIhEdGhnczqntMSjbRk8JsusBd5CfHkfctwqXI3ArwAJyTVqYQ/Y+w2IRojiq7dMUROqOQePF/2I2w==}
     dependencies:
       idna-uts46: 1.1.0
       js-sha3: 0.5.7
@@ -19585,7 +19588,7 @@ packages:
     dev: false
 
   /ethjs-abi/0.2.0:
-    resolution: {integrity: sha1-0+LCIQEVIPxJm3FoIDbBT8wvWyU=}
+    resolution: {integrity: sha512-ELExSTNV7rm9WA22pA3kxNmaQz1o/peM8X1pZdWypEhuNzFjOR+hIV09Mcfw69Q0kbdd7JNGAFb5dyoL/bnItA==}
     engines: {node: '>=6.5.0', npm: '>=3'}
     dependencies:
       bn.js: 4.11.6
@@ -19594,7 +19597,7 @@ packages:
     dev: false
 
   /ethjs-contract/0.1.9:
-    resolution: {integrity: sha1-HCdmiWpW1H7B1tZhgpxJzDilUgo=}
+    resolution: {integrity: sha512-0+5p2jZoVYA1rp+pDfhxGBdvHHw8jtyxsryM1CC05sT+vPYWAkDnlahBDBwF3wTtMq2Tslf/rGOJfCh7lEE6fQ==}
     engines: {node: '>=6.5.0', npm: '>=3'}
     dependencies:
       ethjs-abi: 0.2.0
@@ -19604,7 +19607,7 @@ packages:
     dev: false
 
   /ethjs-ens/2.0.1:
-    resolution: {integrity: sha1-7aCiGqy9rC9gxKAQNN8hxIpaMls=}
+    resolution: {integrity: sha512-rQ8hbjGr5Nqitc3wFGsmR/RbZ3iKVWNiPQQuEdKsXEndUVPLaWA8rD+/gl49fzIJ8M0JiZUmAY6umWVT8vMAyw==}
     dependencies:
       eth-ens-namehash: 1.0.2
       ethereum-ens-network-map: 1.0.2
@@ -19613,12 +19616,12 @@ packages:
     dev: false
 
   /ethjs-filter/0.1.5:
-    resolution: {integrity: sha1-ARKvYBfCRnfjK4/esg5hlgGbdZg=}
+    resolution: {integrity: sha512-ii+Av0Kv0mOzQSP2aBSWTeamTntWDXgHN0Sj1UnTpzYH+gQdJCvirsc0BO07MWcsk0kuLogITDOPVFFd7qcUMQ==}
     engines: {node: '>=6.5.0', npm: '>=3'}
     dev: false
 
   /ethjs-format/0.2.2:
-    resolution: {integrity: sha1-1zs6YFwuElcHn3B3/VRI6ZjOD80=}
+    resolution: {integrity: sha512-+iLG5SkJReHkdti/rtHXWNXX9f7S3snouBjs8IOwOUT5uZnkcVuzRDClAamZ+27DVDuPxU1UL/nkXpHl8KO5DQ==}
     engines: {node: '>=6.5.0', npm: '>=3'}
     dependencies:
       bn.js: 4.11.6
@@ -19630,7 +19633,7 @@ packages:
     dev: false
 
   /ethjs-query/0.2.9:
-    resolution: {integrity: sha1-om5rTzhpnpLzSyGE51x4lDKcQvE=}
+    resolution: {integrity: sha512-ZTaV0zze6/OQWwaZQmTzg+RoF5V8s/IZ4Up2GAj8+EzLQ+SnInlyeOYhJLSo93bnv1gdvCK/hJXh8zqzeYWD/Q==}
     engines: {node: '>=6.5.0', npm: '>=3'}
     dependencies:
       ethjs-format: 0.2.2
@@ -19638,12 +19641,12 @@ packages:
     dev: false
 
   /ethjs-rpc/0.1.5:
-    resolution: {integrity: sha1-CZ4i8n3EwYtpeKSF/DaxsPeWkIA=}
+    resolution: {integrity: sha512-RSqGrUjkA1UHl0d/FteGHFCv3spO/sA+lQHiIYIczYKE1nkM1Q2fKjiqssq+6LnYc+g3NWOBr4AIKQzXc8RQ1g==}
     engines: {node: '>=6.5.0', npm: '>=3'}
     dev: false
 
   /ethjs-schema/0.1.5:
-    resolution: {integrity: sha1-WXQOOzl3vNu5sRvDBoIB6Kzquw0=}
+    resolution: {integrity: sha512-QH+Gu7yVYEIXDcLbdDfYxn1CAT0vkH97ZQfaG2wHy6BthuHoUjM0RUgqWaDMM8S8BUKsHq/nAMPPszaROELlbg==}
     dev: false
 
   /ethjs-unit/0.1.6:
@@ -19654,7 +19657,7 @@ packages:
       number-to-bn: 1.7.0
 
   /ethjs-util/0.1.3:
-    resolution: {integrity: sha1-39XqSkANxeQhqInK9H4IGtp4u1U=}
+    resolution: {integrity: sha512-QqpX2dsEG2geSMG9dTMJVhfP1kGRdGMNjiHPiTjkju+X5cB0PQIwUzRr5k21pFkgF5zuLccqe83p7Gh5fFM5tQ==}
     engines: {node: '>=6.5.0', npm: '>=3'}
     dependencies:
       is-hex-prefixed: 1.0.0
@@ -20465,6 +20468,18 @@ packages:
     peerDependenciesMeta:
       debug:
         optional: true
+
+  /follow-redirects/1.15.1_debug@4.3.4:
+    resolution: {integrity: sha512-yLAMQs+k0b2m7cVxpS1VKJVvoz7SS9Td1zss3XRwXj+ZDH00RJgnuLx7E44wx02kQLrdM3aOOy+FpzS7+8OizA==}
+    engines: {node: '>=4.0'}
+    peerDependencies:
+      debug: '*'
+    peerDependenciesMeta:
+      debug:
+        optional: true
+    dependencies:
+      debug: 4.3.4_supports-color@6.1.0
+    dev: false
 
   /follow-redirects/1.15.2:
     resolution: {integrity: sha512-VQLG33o04KaQ8uYi2tVNbdrWp1QWxNNea+nmIB4EVM28v0hmP17z7aG1+wAkNzVq4KeXTq3221ye5qTJP91JwA==}
@@ -21942,7 +21957,7 @@ packages:
     engines: {node: '>=8.0.0'}
     dependencies:
       eventemitter3: 4.0.7
-      follow-redirects: 1.15.1
+      follow-redirects: 1.15.1_debug@4.3.4
       requires-port: 1.0.0
     transitivePeerDependencies:
       - debug
@@ -22070,7 +22085,7 @@ packages:
     dev: false
 
   /idna-uts46/1.1.0:
-    resolution: {integrity: sha1-vgmLK3wcq/vvh6i4D2JvrDc2auo=}
+    resolution: {integrity: sha512-edsPih0TrHpA+8yUtGK7+fBBBCJfajYcFbKVPs3d4ls0O1sGnrvF1tl8jl9/nJssMOnyu0HGH89yHfe7syxyHA==}
     engines: {node: '>=4.0.0'}
     dependencies:
       punycode: 2.1.1
@@ -26970,15 +26985,13 @@ packages:
   /promievent/0.1.5:
     resolution: {integrity: sha512-Yqve4y2sFIz5hHmVpoZWXNayROyAyf3KWeEHZPh60yYiVpmHMKuJt6UoLbs6pC8uEMdFkqukz97mQXaAkHDPAw==}
 
-  /promise-inflight/1.0.1_bluebird@3.7.2:
+  /promise-inflight/1.0.1:
     resolution: {integrity: sha512-6zWPyEOFaQBJYcGMHBKTKJ3u6TBsnMFOIZSa6ce1e/ZrrsOlnHRHbabMjLiBYKp+n44X9eUI6VUPaukCXHuG4g==}
     peerDependencies:
       bluebird: '*'
     peerDependenciesMeta:
       bluebird:
         optional: true
-    dependencies:
-      bluebird: 3.7.2
     dev: true
 
   /promise-to-callback/1.0.0:
@@ -30231,7 +30244,7 @@ packages:
       '@swc/core': ^1.2.147
       webpack: '>=2'
     dependencies:
-      webpack: 5.75.0_webpack-cli@4.10.0
+      webpack: 5.75.0
     dev: true
 
   /symbol-tree/3.2.4:
@@ -31347,7 +31360,7 @@ packages:
     dependencies:
       source-map: 0.5.7
       uglify-js: 2.8.29
-      webpack: 3.12.0_webpack-cli@4.10.0
+      webpack: 3.12.0
       webpack-sources: 1.4.3
     dev: false
 

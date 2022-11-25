@@ -3,6 +3,7 @@ import { serializer } from '@masknet/shared-base'
 import { PLUGIN_ID } from './constants/index.js'
 
 if (import.meta.webpackHot) import.meta.webpackHot.accept()
+
 export interface EVM_Messages {
     rpc: unknown
 }
