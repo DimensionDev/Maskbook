@@ -94,12 +94,7 @@ export enum SourceType {
     R2D2 = 'R2D2',
 }
 
-export enum SearchSourceType {
-    Main = 'Main',
-    Sidebar = 'Sidebar',
-}
-
-/** @deprecated use SearchSourceType stead */
+/** @deprecated use SearchResultType stead */
 export enum SearchKeywordType {
     Address = 'Address',
     Domain = 'Domain',

@@ -3,7 +3,6 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import {
     SearchResult,
     SearchResultType,
-    SearchSourceType,
     DomainResult,
     TrendingTokenByKeywordResult,
     TrendingTokenByAddressResult,
@@ -14,12 +13,11 @@ import { ChainId as ChainIdEVM, AddressType } from '@masknet/web3-shared-evm'
 import type { DSearchBaseAPI } from '../types/DSearch.js'
 
 const CHAIN_ID_LIST = [ChainIdEVM.Mainnet, ChainIdEVM.BSC, ChainIdEVM.Matic]
-export class DSearchAPI<ChainId = Web3Helper.ChainIdAll>
-    implements DSearchBaseAPI.Provider<ChainId, NetworkPluginID.PLUGIN_EVM>
-{
+
+export class DSearchAPI<ChainId = Web3Helper.ChainIdAll> implements DSearchBaseAPI.Provider<ChainId, NetworkPluginID> {
     async search(
         keyword: string,
-        helpers: {
+        options: {
             isValidAddress?: (address?: string) => boolean
             isZeroAddress?: (address?: string) => boolean
             isValidDomain?: (domain?: string) => boolean
@@ -30,9 +28,8 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll>
             lookup?: (chainId: ChainIdEVM, domain: string) => Promise<string | undefined>
             reverse?: (chainId: ChainIdEVM, address: string) => Promise<string | undefined>
         },
-        sourceType?: SearchSourceType,
     ): Promise<SearchResult<ChainId>> {
-        const { isValidAddress, isZeroAddress, isValidDomain, getAddressType, lookup, reverse } = helpers
+        const { isValidAddress, isZeroAddress, isValidDomain, getAddressType, lookup, reverse } = options
 
         const trendingTokenRegexResult = keyword.match(/([#$])(\w+)/) ?? []
 

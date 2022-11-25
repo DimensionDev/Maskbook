@@ -1,16 +1,15 @@
 import type { TrendingAPI } from '@masknet/web3-providers'
 
 export type Settings = TrendingAPI.Settings
-export enum TagType {
-    CASH = 1,
-    HASH = 2,
-}
+
+export type TagType = TrendingAPI.TagType
 
 export type Currency = TrendingAPI.Currency
 
 export type Platform = TrendingAPI.Platform
 
 export type CommunityType = TrendingAPI.CommunityType
+
 export type CommunityUrls = TrendingAPI.CommunityUrls
 
 export type Coin = TrendingAPI.Coin
