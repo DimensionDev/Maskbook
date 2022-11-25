@@ -184,6 +184,7 @@ export namespace TwitterBaseAPI {
             is_quote_status: boolean
             retweet_count: number
             favorite_count: number
+            /* cspell:disable-next-line */
             favorited: boolean
             retweeted: boolean
             lang: 'en'
