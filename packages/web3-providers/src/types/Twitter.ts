@@ -7,7 +7,6 @@ export namespace TwitterBaseAPI {
     export interface AvatarMetadata {
         token_id: string
         smart_contract: {
-            __typename: 'ERC721' | 'ERC1155'
             __isSmartContract: 'ERC721'
             network: 'Ethereum'
             address: string
@@ -40,16 +39,16 @@ export namespace TwitterBaseAPI {
         indices: [number, number]
     }
     export interface User {
-        __typename: 'User'
         id: string
         rest_id: string
         affiliates_highlighted_label: {}
-        has_nft_avatar: boolean
+        /** Only web API provides */
+        has_nft_avatar?: boolean
         legacy?: {
-            blocked_by: boolean
-            blocking: boolean
-            can_dm: boolean
-            can_media_tag: boolean
+            blocked_by?: boolean
+            blocking?: boolean
+            can_dm?: boolean
+            can_media_tag?: boolean
             /** ISODateTime */
             created_at: string
             default_profile: boolean
@@ -57,37 +56,37 @@ export namespace TwitterBaseAPI {
             description: string
             entities: {
                 description: {
-                    urls: []
+                    urls: any[]
                 }
                 url: {
                     urls: UserUrl[]
                 }
             }
-            fast_followers_count: 0
-            favourites_count: 22
-            follow_request_sent: boolean
-            followed_by: boolean
-            followers_count: 35
-            following: boolean
-            friends_count: 76
+            fast_followers_count?: number
+            favourites_count: number
+            follow_request_sent: boolean | null
+            followed_by?: boolean
+            followers_count: number
+            following: boolean | null
+            friends_count: number
             has_custom_timelines: boolean
             is_translator: boolean
-            listed_count: 4
+            listed_count: number
             location: string
-            media_count: 196
-            muting: boolean
+            media_count: number
+            muting?: boolean
             name: string
-            normal_followers_count: 35
-            notifications: boolean
-            pinned_tweet_ids_str: []
-            possibly_sensitive: boolean
+            normal_followers_count?: number
+            notifications: boolean | null
+            pinned_tweet_ids_str?: []
+            possibly_sensitive?: boolean
             /** unused data, declare details when you need */
-            profile_banner_extensions: any
+            profile_banner_extensions?: any
             profile_banner_url: string
             /** unused data, declare details when you need */
-            profile_image_extensions: any
+            profile_image_extensions?: any
             profile_image_url_https: string
-            profile_interstitial_type: string
+            profile_interstitial_type?: string
             protected: boolean
             screen_name: string
             statuses_count: number
@@ -95,21 +94,134 @@ export namespace TwitterBaseAPI {
             /** t.co url */
             url: string
             verified: boolean
-            want_retweets: boolean
+            want_retweets?: boolean
             withheld_in_countries: []
         }
-        smart_blocked_by: false
-        smart_blocking: false
-        super_follow_eligible: false
-        super_followed_by: false
-        super_following: false
-        legacy_extended_profile: {}
-        is_profile_translatable: boolean
+        smart_blocked_by?: boolean
+        smart_blocking?: boolean
+        super_follow_eligible?: boolean
+        super_followed_by?: boolean
+        super_following?: boolean
+        legacy_extended_profile?: {}
+        is_profile_translatable?: boolean
     }
     export type Response<T> = {
         data: T
     }
+    type ResponseError = {
+        code: number
+        extensions: ResponseError
+        kind: 'Validation' | string
+        message: string
+        /** Error constructor */
+        name: string
+        source: 'Client' | string
+        tracking: {
+            trace_id: string
+        }
+    }
     export type UserByScreenNameResponse = Response<{ user: { result: User } }>
+    export type IdentifyResponse = {
+        id: number
+        id_str: string
+        name: string
+        screen_name: string
+        location: string
+        profile_location: null
+        /** bio */
+        description: string
+        url: string
+        entities: {
+            description: {
+                urls: any[]
+            }
+            url: {
+                urls: UserUrl[]
+            }
+        }
+        protected: boolean
+        followers_count: number
+        friends_count: number
+        listed_count: number
+        /** @example Mon May 15 06:29:53 +0000 2017 */
+        created_at: string
+        favourites_count: number
+        utc_offset: null
+        time_zone: null
+        geo_enabled: boolean
+        verified: boolean
+        statuses_count: number
+        media_count: number
+        lang: null
+        status: {
+            /** @example Mon May 15 06:29:53 +0000 2017 */
+            created_at: string
+            id: number
+            id_str: string
+            text: string
+            truncated: boolean
+            entities: {
+                hashtags: []
+                symbols: []
+                user_mentions: []
+                urls: Array<{
+                    url: string
+                    expanded_url: string
+                    display_url: string
+                    indices: number[]
+                }>
+            }
+            source: string
+            in_reply_to_status_id: number
+            in_reply_to_status_id_str: string
+            in_reply_to_user_id: number
+            in_reply_to_user_id_str: string
+            in_reply_to_screen_name: string
+            geo: null
+            coordinates: null
+            place: null
+            contributors: null
+            is_quote_status: boolean
+            retweet_count: number
+            favorite_count: number
+            /* cspell:disable-next-line */
+            favorited: boolean
+            retweeted: boolean
+            lang: 'en'
+            supplemental_language: null
+            self_thread: {
+                id: number
+                id_str: string
+            }
+        }
+        contributors_enabled: boolean
+        is_translator: boolean
+        is_translation_enabled: boolean
+        profile_background_color: string
+        profile_background_image_url: string
+        profile_background_image_url_https: string
+        profile_background_tile: boolean
+        profile_image_url: string
+        profile_image_url_https: string
+        profile_banner_url: string
+        profile_link_color: string
+        profile_sidebar_border_color: string
+        profile_sidebar_fill_color: string
+        profile_text_color: string
+        profile_use_background_image: boolean
+        has_extended_profile: boolean
+        default_profile: boolean
+        default_profile_image: boolean
+        has_custom_timelines: boolean
+        following: null
+        follow_request_sent: null
+        notifications: null
+        business_profile_state: string
+        translator_type: string
+        withheld_in_countries: []
+        require_some_consent: boolean
+    }
+    export type FailedResponse = { errors: ResponseError[] }
     export interface AvatarInfo {
         nickname: string
         userId: string
@@ -143,6 +255,11 @@ export namespace TwitterBaseAPI {
         >
         uploadUserAvatar: (screenName: string, image: Blob | File) => Promise<TwitterResult>
         updateProfileImage: (screenName: string, media_id_str: string) => Promise<AvatarInfo | undefined>
-        getUserByScreenName: (screenName: string) => Promise<User | null>
+        /**
+         * @param screenName
+         * @param checkNFTAvatar With `checkNFTAvatar` true, will get user via web API directly,
+         * because only web API provides has_nft_avatar property
+         */
+        getUserByScreenName: (screenName: string, checkNFTAvatar?: boolean) => Promise<User | null>
     }
 }
