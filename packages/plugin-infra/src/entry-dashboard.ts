@@ -1,4 +1,5 @@
 export * from './entry-dom.js'
+export * from './dom/index.js'
 export {
     startPluginDashboard,
     useActivatedPluginDashboard,
