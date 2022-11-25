@@ -6,10 +6,10 @@ import { TrendingAPI } from '../types/index.js'
 import { BTC_FIRST_LEGER_DATE, CMC_STATIC_BASE_URL, CMC_V1_BASE_URL, THIRD_PARTY_V1_BASE_URL } from './constants.js'
 import { resolveCoinMarketCapChainId } from './helpers.js'
 import { fetchJSON } from '../helpers.js'
-import { getCommunityLink, isMirroredKeyword } from '../trending/helpers.js'
+import { FuseTrendingAPI } from '../Fuse/index.js'
+import { getCommunityLink, isMirroredKeyword } from '../Trending/helpers.js'
+import { COIN_RECOMMENDATION_SIZE, VALID_TOP_RANK } from '../Trending/constants.js'
 import type { Coin, Pair, ResultData, Status, QuotesInfo, CoinInfo } from './types.js'
-import { FuseTrendingAPI } from '../fuse/index.js'
-import { COIN_RECOMMENDATION_SIZE, VALID_TOP_RANK } from '../trending/constants.js'
 
 // #regin get quote info
 export async function getQuotesInfo(id: string, currency: string) {
