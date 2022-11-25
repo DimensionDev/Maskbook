@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import { useSubscription } from 'use-subscription'
 import { FontSize, ThemeColor, ThemeMode } from '@masknet/web3-shared-base'
-import { useSNSAdaptorContext } from '../contexts/SNSAdaptorContext.js'
+import { useSNSAdaptorContext } from './SNSAdaptorContext.js'
 
 const defaults = {
     mode: ThemeMode.Light,

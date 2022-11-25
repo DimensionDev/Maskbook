@@ -18,9 +18,27 @@ export {
     PostInfoContext,
     PostInfoProvider,
     usePostInfoDetails,
-} from './contexts/PostContext.js'
-export { CompositionContext, useCompositionContext } from './contexts/CompositionContext.js'
-export { SNSAdaptorContext, useSNSAdaptorContext } from './contexts/SNSAdaptorContext.js'
-
-// shared components
-export { Widget, type WidgetProps } from './components/Widget.js'
+    CompositionContext,
+    SNSAdaptorContext,
+    Widget,
+    type WidgetProps,
+    getProfileCardTabContent,
+    getProfileTabContent,
+    getSearchResultContent,
+    getSearchResultTabContent,
+    getSettingsTabContent,
+    useAllPersonas,
+    useCompositionContext,
+    useCurrentVisitingIdentity,
+    useCurrentVisitingSocialIdentity,
+    useLastRecognizedIdentity,
+    useLastRecognizedSocialIdentity,
+    usePostLink,
+    useSNSAdaptorContext,
+    useSearchResultTabs,
+    useSocialIdentity,
+    useThemeColor,
+    useThemeMode,
+    useThemeSettings,
+    useThemeSize,
+} from './sns-adaptor/index.js'

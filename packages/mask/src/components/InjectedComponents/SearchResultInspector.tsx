@@ -7,7 +7,7 @@ import { EMPTY_LIST, PluginID } from '@masknet/shared-base'
 import { DSearch } from '@masknet/web3-providers'
 import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import {
-    getSearchResultTabs,
+    useSearchResultTabs,
     getSearchResultContent,
     getSearchResultTabContent,
     usePluginI18NField,
@@ -39,7 +39,7 @@ export function SearchResultInspector(props: SearchResultInspectorProps) {
 
     const tabs = useMemo(() => {
         if (!result.value) return EMPTY_LIST
-        return getSearchResultTabs(activatedPlugins, result.value, translate)
+        return useSearchResultTabs(activatedPlugins, result.value, translate)
     }, [activatedPlugins, result.value])
 
     const [currentTab, onChange] = useTabs(first(tabs)?.id ?? PluginID.Collectible, ...tabs.map((tab) => tab.id))

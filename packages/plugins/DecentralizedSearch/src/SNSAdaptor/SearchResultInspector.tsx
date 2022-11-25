@@ -2,7 +2,7 @@ import { useRef, useMemo } from 'react'
 import { Hidden } from '@masknet/shared'
 import { first } from 'lodash-es'
 import { TabContext } from '@mui/lab'
-import { useAvailablePlugins, getProfileTabContent } from '@masknet/plugin-infra'
+import { getAvailablePlugins, getProfileTabContent } from '@masknet/plugin-infra'
 import {
     useActivatedPluginSNSAdaptor,
     useActivatedPluginsSNSAdaptor,
@@ -68,7 +68,7 @@ export function SearchResultInspector(props: { keyword: string }) {
     }
     const translate = usePluginI18NField()
     const activatedPlugins = useActivatedPluginsSNSAdaptor('any')
-    const displayPlugins = useAvailablePlugins(activatedPlugins, (plugins) => {
+    const displayPlugins = getAvailablePlugins(activatedPlugins, (plugins) => {
         return plugins
             .flatMap((x) => x.ProfileCardTabs?.map((y) => ({ ...y, pluginID: x.ID })) ?? EMPTY_LIST)
             .filter((x) => {

@@ -4,7 +4,7 @@ import { useUpdateEffect } from 'react-use'
 import { first } from 'lodash-es'
 import { Icons } from '@masknet/icons'
 import { useActivatedPluginsSNSAdaptor, usePluginI18NField } from '@masknet/plugin-infra/content-script'
-import { useAvailablePlugins, getProfileCardTabContent } from '@masknet/plugin-infra'
+import { getAvailablePlugins, getProfileCardTabContent } from '@masknet/plugin-infra'
 import { useSocialAccountsBySettings } from '@masknet/shared'
 import { EMPTY_LIST, PluginID, NetworkPluginID } from '@masknet/shared-base'
 import { LoadingBase, makeStyles, MaskTabList, useTabs } from '@masknet/theme'
@@ -128,7 +128,7 @@ export const ProfileCard: FC<Props> = ({ identity, ...rest }) => {
     }, [retrySocialAddress])
 
     const activatedPlugins = useActivatedPluginsSNSAdaptor('any')
-    const displayPlugins = useAvailablePlugins(activatedPlugins, (plugins) => {
+    const displayPlugins = getAvailablePlugins(activatedPlugins, (plugins) => {
         return plugins
             .flatMap((x) => x.ProfileCardTabs?.map((y) => ({ ...y, pluginID: x.ID })) ?? EMPTY_LIST)
             .filter((x) => {

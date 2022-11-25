@@ -8,4 +8,8 @@ export {
     useActivatedPlugin,
     usePluginI18NField,
     usePluginWrapper,
+    getAvailablePlugins,
+    useActivatedPluginWeb3State,
+    useActivatedPluginWeb3UI,
+    useAllPluginsWeb3State,
 } from './hooks/index.js'

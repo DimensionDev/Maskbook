@@ -4,7 +4,7 @@ import { ShadowRootIsolation } from '@masknet/theme'
 import {
     PluginWrapperComponent,
     PluginWrapperMethods,
-    useAvailablePlugins,
+    getAvailablePlugins,
     usePluginI18NField,
 } from '../hooks/index.js'
 import { PluginWrapperMethodsContext } from '../hooks/usePluginWrapper.js'
@@ -51,7 +51,7 @@ export function createInjectHooksRenderer<PluginDefinition extends Plugin.Shared
     }
     function PluginsInjectionHookRender(props: PropsType) {
         const allPlugins = usePlugins()
-        const availablePlugins = useAvailablePlugins<PluginDefinition>(allPlugins)
+        const availablePlugins = getAvailablePlugins<PluginDefinition>(allPlugins)
         const all = availablePlugins.filter(pickInjectorHook).map((plugin) => (
             <ShadowRootIsolation key={plugin.ID} data-plugin={plugin.ID}>
                 <SinglePluginWithinErrorBoundary plugin={plugin} props={props} />

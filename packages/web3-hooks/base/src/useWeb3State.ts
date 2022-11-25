@@ -1,5 +1,5 @@
 import type { NetworkPluginID } from '@masknet/shared-base'
-import { useActivatedPluginWeb3State } from '@masknet/plugin-infra'
+import { useActivatedPluginWeb3State } from '@masknet/plugin-infra/dom'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useNetworkContext } from './useContext.js'
 

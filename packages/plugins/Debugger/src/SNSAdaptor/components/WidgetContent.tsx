@@ -1,5 +1,5 @@
 import { Box, Paper, Typography } from '@mui/material'
-import { useAvailablePlugins } from '@masknet/plugin-infra'
+import { getAvailablePlugins } from '@masknet/plugin-infra'
 import { PluginI18NFieldRender, useActivatedPluginsSNSAdaptor, Widget } from '@masknet/plugin-infra/content-script'
 
 export interface WidgetContentProps {
@@ -8,7 +8,7 @@ export interface WidgetContentProps {
 
 export function WidgetContent(props: WidgetContentProps) {
     const activatedPlugins = useActivatedPluginsSNSAdaptor('any')
-    const displayPlugins = useAvailablePlugins(activatedPlugins, (plugins) => {
+    const displayPlugins = getAvailablePlugins(activatedPlugins, (plugins) => {
         return plugins.filter((x) => x.Widgets)
     })
 
