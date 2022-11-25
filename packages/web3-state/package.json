@@ -18,7 +18,7 @@
     "@servie/events": "^3.0.0",
     "@types/use-subscription": "^1.0.0",
     "lru-cache": "^7.10.1",
-    "use-subscription": "1.6.0",
+    "use-subscription": "^1.8.0",
     "web3-core-helpers": "1.8.0"
   },
   "devDependencies": {

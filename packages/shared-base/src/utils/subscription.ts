@@ -111,9 +111,12 @@ function getEventTarget() {
 }
 
 export function mapSubscription<T, Q>(sub: Subscription<T>, mapper: (val: T) => Q): Subscription<Q> {
+    let value: Option<Q> = None
+    sub.subscribe(() => (value = None))
     return {
         getCurrentValue() {
-            return mapper(sub.getCurrentValue())
+            if (value.none) value = Some(mapper(sub.getCurrentValue()))
+            return value.val
         },
         subscribe: sub.subscribe,
     }
@@ -124,9 +127,12 @@ export function mergeSubscription<T extends Array<Subscription<unknown>>>(
 ): Subscription<{
     [key in keyof T]: T[key] extends Subscription<infer U> ? U : never
 }> {
+    let values: any[] | undefined
+    const f = () => (values = undefined)
+    subscriptions.forEach((x) => x.subscribe(f))
     return {
         getCurrentValue() {
-            return subscriptions.map((x) => x.getCurrentValue()) as any
+            return (values ??= subscriptions.map((x) => x.getCurrentValue())) as any
         },
         subscribe: (callback: () => void) => {
             const removeListeners = subscriptions.map((x) => x.subscribe(callback))
