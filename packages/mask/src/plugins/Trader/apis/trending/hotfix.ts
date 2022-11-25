@@ -1,7 +1,7 @@
 import { getEnumAsArray } from '@masknet/kit'
 import { ChainId, getCoinGeckoConstants, getCoinMarketCapConstants } from '@masknet/web3-shared-evm'
 import { isSameAddress } from '@masknet/web3-shared-base'
-import { TagType } from '../../types/index.js'
+import { TrendingAPI } from '@masknet/web3-providers'
 import { DataProvider } from '@masknet/public-api'
 import STOCKS_KEYWORDS from './stocks.json'
 import CASHTAG_KEYWORDS from './cashtag.json'
@@ -135,10 +135,10 @@ export function isBlockedAddress(chainId: ChainId, address: string) {
     return SCAM_ADDRESS_MAP[chainId]?.find((scamAddress) => isSameAddress(scamAddress, address))
 }
 
-export function isBlockedKeyword(type: TagType, keyword: string) {
+export function isBlockedKeyword(type: TrendingAPI.TagType, keyword: string) {
     const search = keyword.toUpperCase()
     if (STOCKS_KEYWORDS.includes(search)) return true
-    if (type === TagType.HASH) return HASHTAG_KEYWORDS.includes(search)
-    if (type === TagType.CASH) return CASHTAG_KEYWORDS.includes(search)
+    if (type === TrendingAPI.TagType.HASH) return HASHTAG_KEYWORDS.includes(search)
+    if (type === TrendingAPI.TagType.CASH) return CASHTAG_KEYWORDS.includes(search)
     return true
 }

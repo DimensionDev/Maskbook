@@ -5,13 +5,12 @@ import { DataProvider } from '@masknet/public-api'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { SearchResultType, SearchResult } from '@masknet/web3-shared-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
-import type { TrendingAPI } from '@masknet/web3-providers'
-import { TagType } from '../types/index.js'
+import { TrendingAPI } from '@masknet/web3-providers'
 import { useTrendingById, useCoinInfoByAddress } from '../trending/useTrending.js'
 
 export interface TrendingSearchResult {
     pluginID: NetworkPluginID
-    type: TagType
+    type: TrendingAPI.TagType
     id?: string
     name: string
     chainId?: ChainId
@@ -39,7 +38,7 @@ export function usePayloadFromTokenSearchKeyword(result: SearchResult<Web3Helper
 
     return {
         pluginID: NetworkPluginID.PLUGIN_EVM,
-        type: type === '$' ? TagType.CASH : TagType.HASH,
+        type: type === '$' ? TrendingAPI.TagType.CASH : TrendingAPI.TagType.HASH,
         name: searchedContractAddress ? (isNFT ? nonFungibleAssetName : fungibleAsset?.name ?? '') : name,
         id: searchedContractAddress
             ? isNFT
