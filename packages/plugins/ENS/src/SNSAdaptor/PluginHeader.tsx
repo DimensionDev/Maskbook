@@ -38,7 +38,7 @@ export const PluginHeader = () => {
             <Stack flexDirection="row" justifyContent="space-between" gap={0.5} alignItems="center">
                 <Icons.DecentralizedSearch size={24} />
                 <Typography color={theme.palette.maskColor.dark} fontWeight="bolder">
-                    {t.plugin_decentralized_search_name()}
+                    {t.decentralized_search_name()}
                 </Typography>
             </Stack>
             <Box className={classes.provider}>

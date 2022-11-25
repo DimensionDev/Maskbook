@@ -8,9 +8,6 @@ export namespace DSearchBaseAPI {
         search(
             keyword: string,
             options: {
-                isValidAddress?: (address?: string) => boolean
-                isZeroAddress?: (address?: string) => boolean
-                isValidDomain?: (domain?: string) => boolean
                 getAddressType?: (
                     address: string,
                     options?: Web3Helper.Web3ConnectionOptions<T>,
