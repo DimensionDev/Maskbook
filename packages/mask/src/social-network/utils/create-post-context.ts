@@ -164,12 +164,11 @@ export function createRefsForCreatePostContext() {
         snsID: createSubscriptionFromValueRef(postID),
         rawMessage: createSubscriptionFromValueRef(postMessage),
         postImagesProvider: debug({
-            getCurrentValue: () => (postMetadataImages.size ? [...postMetadataImages] : EMPTY_LIST),
+            getCurrentValue: () => postMetadataImages.asValues,
             subscribe: (sub) => postMetadataImages.event.on(ALL_EVENTS, sub),
         }),
         postMentionedLinksProvider: debug({
-            getCurrentValue: () =>
-                postMetadataMentionedLinks.size ? [...postMetadataMentionedLinks.values()] : EMPTY_LIST,
+            getCurrentValue: () => postMetadataMentionedLinks.asValues,
             subscribe: (sub) => postMetadataMentionedLinks.event.on(ALL_EVENTS, sub),
         }),
         coAuthors: createSubscriptionFromValueRef(postCoAuthors),

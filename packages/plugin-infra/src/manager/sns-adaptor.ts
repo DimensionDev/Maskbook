@@ -8,14 +8,22 @@ import type { CurrentSNSNetwork, Plugin } from '../types.js'
 
 const { events, activated, startDaemon, minimalMode } = createManager((def) => def.SNSAdaptor)
 
-const activatedSub: Subscription<Plugin.SNSAdaptor.Definition[]> = {
-    getCurrentValue: () => [...activated.plugins],
-    subscribe: (f) => events.on('activateChanged', f),
-}
-const minimalModeSub: Subscription<string[]> = {
-    getCurrentValue: () => [...minimalMode],
-    subscribe: (f) => events.on('minimalModeChanged', f),
-}
+const activatedSub: Subscription<Plugin.SNSAdaptor.Definition[]> = (() => {
+    let value: any[] | undefined
+    events.on('activateChanged', () => (value = undefined))
+    return {
+        getCurrentValue: () => (value ??= [...activated.plugins]),
+        subscribe: (f) => events.on('activateChanged', f),
+    }
+})()
+const minimalModeSub: Subscription<string[]> = (() => {
+    let value: any[] | undefined
+    events.on('minimalModeChanged', () => (value = undefined))
+    return {
+        getCurrentValue: () => (value ??= [...minimalMode]),
+        subscribe: (f) => events.on('minimalModeChanged', f),
+    }
+})()
 export function useActivatedPluginsSNSAdaptor(minimalModeEqualsTo: 'any' | boolean) {
     const minimalMode = useSubscription(minimalModeSub)
     const result = useSubscription(activatedSub)
