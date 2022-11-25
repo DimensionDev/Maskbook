@@ -1448,9 +1448,6 @@ importers:
       '@dimensiondev/metamask-extension-provider':
         specifier: ^3.0.6-20221105074301-8806fca
         version: 3.0.6-20221105074301-8806fca
-      '@ensdomains/eth-ens-namehash':
-        specifier: ^2.0.15
-        version: 2.0.15
       '@masknet/icons':
         specifier: workspace:^
         version: link:../../icons
@@ -2800,6 +2797,9 @@ importers:
       '@dimensiondev/mask-wallet-core':
         specifier: 0.1.0-20211013082857-eb62e5f
         version: 0.1.0-20211013082857-eb62e5f
+      '@ensdomains/eth-ens-namehash':
+        specifier: ^2.0.15
+        version: 2.0.15
       '@masknet/icons':
         specifier: workspace:^
         version: link:../icons
@@ -2836,6 +2836,9 @@ importers:
       '@metaplex/js':
         specifier: ^4.11.7
         version: 4.11.7
+      '@siddomains/sidjs':
+        specifier: ^0.1.16
+        version: 0.1.16
       '@solana/buffer-layout':
         specifier: ^4.0.0
         version: 4.0.0
@@ -20466,6 +20469,18 @@ packages:
       debug:
         optional: true
 
+  /follow-redirects/1.15.1_debug@4.3.4:
+    resolution: {integrity: sha512-yLAMQs+k0b2m7cVxpS1VKJVvoz7SS9Td1zss3XRwXj+ZDH00RJgnuLx7E44wx02kQLrdM3aOOy+FpzS7+8OizA==}
+    engines: {node: '>=4.0'}
+    peerDependencies:
+      debug: '*'
+    peerDependenciesMeta:
+      debug:
+        optional: true
+    dependencies:
+      debug: 4.3.4_supports-color@6.1.0
+    dev: false
+
   /follow-redirects/1.15.2:
     resolution: {integrity: sha512-VQLG33o04KaQ8uYi2tVNbdrWp1QWxNNea+nmIB4EVM28v0hmP17z7aG1+wAkNzVq4KeXTq3221ye5qTJP91JwA==}
     engines: {node: '>=4.0'}
@@ -21942,7 +21957,7 @@ packages:
     engines: {node: '>=8.0.0'}
     dependencies:
       eventemitter3: 4.0.7
-      follow-redirects: 1.15.1
+      follow-redirects: 1.15.1_debug@4.3.4
       requires-port: 1.0.0
     transitivePeerDependencies:
       - debug
