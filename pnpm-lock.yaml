@@ -347,7 +347,7 @@ importers:
         version: link:../plugins/EVM
       '@masknet/plugin-example':
         specifier: workspace:^
-        version: link:../plugins/example
+        version: link:../plugins/Example
       '@masknet/plugin-flow':
         specifier: workspace:^
         version: link:../plugins/Flow
@@ -647,7 +647,7 @@ importers:
         version: link:../plugins/EVM
       '@masknet/plugin-example':
         specifier: workspace:^
-        version: link:../plugins/example
+        version: link:../plugins/Example
       '@masknet/plugin-file-service':
         specifier: workspace:^
         version: link:../plugins/FileService
@@ -2088,7 +2088,7 @@ importers:
         specifier: 1.7.0
         version: 1.7.0
 
-  packages/plugins/example:
+  packages/plugins/Example:
     dependencies:
       '@masknet/plugin-infra':
         specifier: workspace:^

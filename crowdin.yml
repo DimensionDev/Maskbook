@@ -7,4 +7,4 @@ files:
     update_option: 'update_as_unapproved'
     skip_untranslated_strings: true
     ignore:
-      - /packages/plugins/example
+      - /packages/plugins/Example
