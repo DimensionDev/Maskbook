@@ -400,11 +400,7 @@
     "overrides": [
         {
             "filename": "**/*.md",
-            "ignoreWords": ["guanbinrui", "jkoeaghipilijlahjplgbfiocjhldnap", "pnpx", "yisiliu", "zhouhancheng"]
-        },
-        {
-            "filename": "packages/web3-contracts/types/GoodGhostingIncentives.d.ts",
-            "ignoreWords": ["adming", "ditribution"]
+            "ignoreWords": ["jkoeaghipilijlahjplgbfiocjhldnap"]
         },
         {
             "filename": "packages/web3-shared/evm/assets/**/*.json",
