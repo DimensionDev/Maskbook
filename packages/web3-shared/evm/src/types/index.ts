@@ -167,6 +167,7 @@ export enum EthereumMethodType {
     // EIP-4337
     ETH_SEND_USER_OPERATION = 'eth_sendUserOperation',
     ETH_CALL_USER_OPERATION = 'eth_callUserOperation',
+    ETH_SUPPORTED_CHAIN_IDS = 'eth_supportedChainIds',
     ETH_SUPPORTED_ENTRY_POINTS = 'eth_supportedEntryPoints',
     SC_WALLET_DEPLOY = 'SCWallet_deploy',
     SC_WALLET_CHANGE_OWNER = 'SCWallet_changeOwner',
@@ -356,7 +357,8 @@ export type TransactionState =
       }
 
 export type Web3 = EVM_Web3
-export type Web3Provider = {
+
+export interface Web3Provider {
     send(
         payload: JsonRpcPayload,
         callback: (error: Error | null, response?: JsonRpcResponse) => void,
@@ -376,7 +378,7 @@ export type Web3Provider = {
 
     removeListener(name: string, listener: (event: any) => void): Web3Provider
 }
-export type GasOption = {
+export interface GasOption {
     estimatedSeconds: number
     // eip1559 only
     estimatedBaseFee?: string
@@ -386,7 +388,8 @@ export type GasOption = {
     suggestedMaxPriorityFeePerGas: string
 }
 export type Signature = string
-export type Block = {
+
+export interface Block {
     hash: string
     nonce: string
     timestamp: string
@@ -397,9 +400,9 @@ export type Transaction = TransactionConfig_ & {
     gatewayFeeRecipient?: string // coinbase address of the full serving the light client's transactions
     gatewayFee?: string // value paid to the gateway fee recipient, denominated in the fee currency
 }
-export type UserOperation = {
+export interface UserOperation {
     sender: string
-    nonce: number
+    nonce: string
     initCode?: string
     callData?: string
     callGas: string

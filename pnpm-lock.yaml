@@ -1546,6 +1546,18 @@ importers:
         specifier: ^1.0.0
         version: 1.0.0
 
+  packages/plugins/Example:
+    dependencies:
+      '@masknet/plugin-infra':
+        specifier: workspace:^
+        version: link:../../plugin-infra
+      '@masknet/shared-base':
+        specifier: workspace:^
+        version: link:../../shared-base
+      ts-results:
+        specifier: ^3.3.0
+        version: 3.3.0
+
   packages/plugins/FileService:
     dependencies:
       '@dimensiondev/common-protocols':
@@ -2087,18 +2099,6 @@ importers:
       use-subscription:
         specifier: 1.7.0
         version: 1.7.0
-
-  packages/plugins/Example:
-    dependencies:
-      '@masknet/plugin-infra':
-        specifier: workspace:^
-        version: link:../../plugin-infra
-      '@masknet/shared-base':
-        specifier: workspace:^
-        version: link:../../shared-base
-      ts-results:
-        specifier: ^3.3.0
-        version: 3.3.0
 
   packages/plugins/template:
     dependencies:
@@ -3025,6 +3025,9 @@ importers:
         specifier: 1.8.0
         version: 1.8.0
       web3-core-helpers:
+        specifier: 1.8.0
+        version: 1.8.0
+      web3-eth-abi:
         specifier: 1.8.0
         version: 1.8.0
       web3-eth-contract:
@@ -20469,18 +20472,6 @@ packages:
       debug:
         optional: true
 
-  /follow-redirects/1.15.1_debug@4.3.4:
-    resolution: {integrity: sha512-yLAMQs+k0b2m7cVxpS1VKJVvoz7SS9Td1zss3XRwXj+ZDH00RJgnuLx7E44wx02kQLrdM3aOOy+FpzS7+8OizA==}
-    engines: {node: '>=4.0'}
-    peerDependencies:
-      debug: '*'
-    peerDependenciesMeta:
-      debug:
-        optional: true
-    dependencies:
-      debug: 4.3.4_supports-color@6.1.0
-    dev: false
-
   /follow-redirects/1.15.2:
     resolution: {integrity: sha512-VQLG33o04KaQ8uYi2tVNbdrWp1QWxNNea+nmIB4EVM28v0hmP17z7aG1+wAkNzVq4KeXTq3221ye5qTJP91JwA==}
     engines: {node: '>=4.0'}
@@ -21957,7 +21948,7 @@ packages:
     engines: {node: '>=8.0.0'}
     dependencies:
       eventemitter3: 4.0.7
-      follow-redirects: 1.15.1_debug@4.3.4
+      follow-redirects: 1.15.1
       requires-port: 1.0.0
     transitivePeerDependencies:
       - debug
