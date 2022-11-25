@@ -1,6 +1,6 @@
 import urlcat from 'urlcat'
 import { fetchCache } from '../../helpers.js'
-import type { TwitterBaseAPI } from '../../types/Twitter.js'
+import { TwitterBaseAPI } from '../../types/Twitter.js'
 
 export async function getUserNFTContainer(
     screenName: string,
