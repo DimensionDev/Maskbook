@@ -1,6 +1,6 @@
 import type { Web3Helper } from '@masknet/web3-helpers'
 import type { SearchResult } from '@masknet/web3-shared-base'
-import { createInjectHooksRenderer } from '../utils/createInjectHooksRenderer.js'
+import { createInjectHooksRenderer } from '../dom/createInjectHooksRenderer.js'
 import { useActivatedPluginsSNSAdaptor } from '../manager/sns-adaptor.js'
 
 export function getProfileTabContent(tabId?: string) {
