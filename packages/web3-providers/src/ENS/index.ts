@@ -5,11 +5,16 @@ import type { DomainAPI } from '../index.js'
 import { Web3API } from '../EVM/index.js'
 
 export class ENS_API implements DomainAPI.Provider<ChainId> {
-    private web3 = new Web3API().createSDK(ChainId.Mainnet)
-    private ens = new ENS({
-        provider: this.web3.givenProvider,
-        network: ChainId.Mainnet,
-    })
+    private get web3() {
+        return new Web3API().createSDK(ChainId.Mainnet)
+    }
+
+    private get ens() {
+        return new ENS({
+            provider: this.web3.givenProvider,
+            network: ChainId.Mainnet,
+        })
+    }
 
     async lookup(chainId: ChainId, name: string): Promise<string | undefined> {
         try {
