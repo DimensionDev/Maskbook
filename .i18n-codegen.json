@@ -63,8 +63,8 @@
             }
         },
         {
-            "input": "./packages/plugins/example/src/locales/en-US.json",
-            "output": "./packages/plugins/example/src/locales/i18n_generated",
+            "input": "./packages/plugins/Example/src/locales/en-US.json",
+            "output": "./packages/plugins/Example/src/locales/i18n_generated",
             "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
             "generator": {
                 "type": "i18next/react-hooks",
@@ -298,18 +298,6 @@
                 "type": "i18next/react-hooks",
                 "hooks": "useI18N",
                 "namespace": "com.maskbook.referral",
-                "trans": "Translate",
-                "emitTS": true
-            }
-        },
-        {
-            "input": "./packages/mask/src/plugins/FindTruman/locales/en-US.json",
-            "output": "./packages/mask/src/plugins/FindTruman/locales/i18n_generated",
-            "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
-            "generator": {
-                "type": "i18next/react-hooks",
-                "hooks": "useI18N",
-                "namespace": "org.findtruman",
                 "trans": "Translate",
                 "emitTS": true
             }
