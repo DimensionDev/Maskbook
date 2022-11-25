@@ -10,7 +10,7 @@ import { useGrant } from '../hooks/useGrant.js'
 import { PluginGitcoinMessages } from '../messages.js'
 import { ChainBoundary } from '@masknet/shared'
 import { useI18N } from '../locales/i18n_generated.js'
-import { usePostLink } from '@masknet/plugin-infra'
+import { usePostLink } from '@masknet/plugin-infra/content-script'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
