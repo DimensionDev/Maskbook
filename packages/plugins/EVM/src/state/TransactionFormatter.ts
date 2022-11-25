@@ -21,6 +21,7 @@ import {
     isZeroAddress,
     Transaction,
     TransactionParameter,
+    UserTransaction,
 } from '@masknet/web3-shared-evm'
 import { readABIs } from './TransactionFormatter/abi.js'
 import { createConnection } from './Connection/connection.js'
@@ -136,7 +137,7 @@ export class TransactionFormatter extends TransactionFormatterState<ChainId, Tra
                 const userOperations = decodeUserOperations(transaction)
                 const allSettled = await Promise.allSettled(
                     userOperations.map((x) => {
-                        return this.createContext(chainId, x)
+                        return this.createContext(chainId, UserTransaction.toTransaction(chainId, '', x))
                     }),
                 )
 

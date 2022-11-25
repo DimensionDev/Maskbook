@@ -17,8 +17,7 @@ Request to deploy contracts on <!-- Replace it with the chain name -->.
 | Name         | \- |
 | ChainId      | \- |
 | Website      | \- |
-| RPC Endponit | \- |
-
+| RPC Endpoint | \- |
 
 ## Checklist
 

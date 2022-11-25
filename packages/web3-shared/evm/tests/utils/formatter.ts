@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'vitest'
-import { formatDomainName } from '../src/utils/formatter.js'
+import { formatDomainName } from '../../src/utils/formatter.js'
 
 describe('EVM formatter utilities', () => {
     test.each<{
@@ -11,7 +11,9 @@ describe('EVM formatter utilities', () => {
             result: 'short.eth',
         },
         {
+            /* cspell:disable-next-line */
             domain: 'looooooooooooooooooong.eth',
+            /* cspell:disable-next-line */
             result: 'looooooooooo...ng.eth',
         },
     ])('formatDomainName', ({ domain, result }) => {

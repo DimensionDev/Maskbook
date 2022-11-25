@@ -219,11 +219,10 @@ export function useMulticallStateDecoded<
     return useMemo(() => {
         if (!web3 || state.type !== MulticallStateType.SUCCEED || contracts.length !== state.results.length) return []
         return state.results.map(([succeed, gasUsed, result], index): Result => {
-            // the ignore formatter for better reading
-            // prettier-ignore
-            const outputs: AbiOutput[] = (contracts[index].options.jsonInterface
-                .find(({ type, name }) => type === "function" && name === names[index])
-                ?.outputs ?? []);
+            const outputs: AbiOutput[] =
+                contracts[index].options.jsonInterface.find(
+                    ({ type, name }) => type === 'function' && name === names[index],
+                )?.outputs ?? []
             try {
                 const value = decodeOutputString(web3, outputs, result) as R
                 return { succeed, gasUsed, value, error: null }

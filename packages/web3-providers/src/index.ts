@@ -47,11 +47,11 @@ import { CryptoScamDBAPI } from './CryptoScamDB/index.js'
 import { SmartPayBundlerAPI } from './SmartPay/index.js'
 import { NomicsAPI } from './Nomics/index.js'
 import { DSearchAPI } from './DSearch/index.js'
+import { MulticallAPI } from './Multicall/index.js'
 import { ENS_API } from './ENS/index.js'
 import { SpaceID_API } from './SpaceID/index.js'
 
 // #region TODO: to be removed
-export * from './helpers.js'
 export * from './types/index.js'
 export * from './OpenSea/utils.js'
 export type { SecurityMessage as GoPlusLabsSecurityMessage } from './GoPlusLabs/rules.js'
@@ -132,5 +132,8 @@ export const SpaceID = new SpaceID_API()
 // Fuse
 export const FuseTrending = new FuseTrendingAPI()
 
-// Smart Pay Bundler
+// Smart Pay
 export const SmartPayBundler = new SmartPayBundlerAPI()
+
+// EVM multicall
+export const Multicall = new MulticallAPI()

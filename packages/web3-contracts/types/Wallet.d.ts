@@ -27,12 +27,22 @@ export type EntryPointChanged = ContractEventLog<{
     0: string
     1: string
 }>
+export type Initialized = ContractEventLog<{
+    version: string
+    0: string
+}>
 
 export interface Wallet extends BaseContract {
     constructor(jsonInterface: any[], address?: string, options?: ContractOptions): Wallet
     clone(): Wallet
     methods: {
+        NAME(): NonPayableTransactionObject<string>
+
+        VERSION(): NonPayableTransactionObject<string>
+
         addDeposit(): PayableTransactionObject<void>
+
+        changeOwner(newOwner: string): NonPayableTransactionObject<void>
 
         entryPoint(): NonPayableTransactionObject<string>
 
@@ -48,9 +58,50 @@ export interface Wallet extends BaseContract {
 
         getDeposit(): NonPayableTransactionObject<string>
 
+        initialize(
+            anEntryPoint: string,
+            anOwner: string,
+            gasToken: string,
+            functionData: string | number[],
+        ): NonPayableTransactionObject<void>
+
         nonce(): NonPayableTransactionObject<string>
 
+        onERC1155BatchReceived(
+            arg0: string,
+            arg1: string,
+            arg2: (number | string | BN)[],
+            arg3: (number | string | BN)[],
+            arg4: string | number[],
+        ): NonPayableTransactionObject<string>
+
+        onERC1155Received(
+            arg0: string,
+            arg1: string,
+            arg2: number | string | BN,
+            arg3: number | string | BN,
+            arg4: string | number[],
+        ): NonPayableTransactionObject<string>
+
+        onERC721Received(
+            arg0: string,
+            arg1: string,
+            arg2: number | string | BN,
+            arg3: string | number[],
+        ): NonPayableTransactionObject<string>
+
         owner(): NonPayableTransactionObject<string>
+
+        supportsInterface(interfaceId: string | number[]): NonPayableTransactionObject<boolean>
+
+        tokensReceived(
+            arg0: string,
+            arg1: string,
+            arg2: string,
+            arg3: number | string | BN,
+            arg4: string | number[],
+            arg5: string | number[],
+        ): NonPayableTransactionObject<void>
 
         transfer(dest: string, amount: number | string | BN): NonPayableTransactionObject<void>
 
@@ -81,9 +132,15 @@ export interface Wallet extends BaseContract {
         EntryPointChanged(cb?: Callback<EntryPointChanged>): EventEmitter
         EntryPointChanged(options?: EventOptions, cb?: Callback<EntryPointChanged>): EventEmitter
 
+        Initialized(cb?: Callback<Initialized>): EventEmitter
+        Initialized(options?: EventOptions, cb?: Callback<Initialized>): EventEmitter
+
         allEvents(options?: EventOptions, cb?: Callback<EventLog>): EventEmitter
     }
 
     once(event: 'EntryPointChanged', cb: Callback<EntryPointChanged>): void
     once(event: 'EntryPointChanged', options: EventOptions, cb: Callback<EntryPointChanged>): void
+
+    once(event: 'Initialized', cb: Callback<Initialized>): void
+    once(event: 'Initialized', options: EventOptions, cb: Callback<Initialized>): void
 }

@@ -1,6 +1,17 @@
 import type { ChainId, UserOperation } from '@masknet/web3-shared-evm'
 
 export namespace BundlerAPI {
+    export interface Healthz {
+        bundler_eoa: string
+        chain_id: string
+        entrypoint_contract_address: string
+    }
+
+    export interface Simulation {
+        preOpGas: string
+        prefund: string
+    }
+
     export interface Provider {
         /** Get the address of the signer who drafts and broadcasts the transaction. */
         getSigner(): Promise<string>
@@ -9,13 +20,7 @@ export namespace BundlerAPI {
         /** Get all supported entry contracts. */
         getSupportedEntryPoints(): Promise<string[]>
         /** Simulate a user operation. */
-        simulateUserOperation(
-            chainId: ChainId,
-            userOperation: UserOperation,
-        ): Promise<{
-            preOpGas: string
-            prefund: string
-        }>
+        simulateUserOperation(chainId: ChainId, userOperation: UserOperation): Promise<Simulation>
         /** Send a user operation. */
         sendUserOperation(chainId: ChainId, userOperation: UserOperation): Promise<string>
     }
