@@ -105,12 +105,17 @@ export enum SearchResultType {
     EOA = 'EOA',
     // e.g., vitalik.eth or vitalik.bnb
     Domain = 'Domain',
-    // e.g., $MASK #MASK
-    TrendingTokenByKeyword = 'TrendingTokenByKeyword',
-    // e.g., 0x69af81e73a73b40adf4f3d4223cd9b1ece623074 (Mask Network)
-    TrendingTokenByAddress = 'TrendingTokenByAddress',
+    // e.g., $MASK #MASK or its address 0x69af81e73a73b40adf4f3d4223cd9b1ece623074
+    FungibleToken = 'FungibleToken',
     // hits none of all above.
     Unknown = 'Unknown'
+}
+
+export enum SearchFungibleTokenResultSubType {
+    // e.g., $MASK #MASK
+    Keyword = 'Keyword',
+    // e.g., 0x69af81e73a73b40adf4f3d4223cd9b1ece623074 (Mask Network)
+    Address = 'Address',
 }
 
 export enum ActivityType {
@@ -603,14 +608,11 @@ export interface DomainResult<ChainId> extends Result<ChainId> {
     domain: string
 }
 
-export interface TrendingTokenByKeywordResult<ChainId> extends Result<ChainId> {
-    type: SearchResultType.TrendingTokenByKeyword
-    trendingSearchType: '#' | '$'
-    name: string
-}
-
-export interface TrendingTokenByAddressResult<ChainId> extends Result<ChainId> {
-    type: SearchResultType.TrendingTokenByAddress
+export interface FungibleTokenResult<ChainId> extends Result<ChainId> {
+    type: SearchResultType.FungibleToken,
+    trendingSearchType?: '#' | '$'
+    name?: string
+    subType: SearchFungibleTokenResultSubType
 }
 
 export interface UnknownResult<ChainId> extends Result<ChainId> {
@@ -621,8 +623,7 @@ export interface UnknownResult<ChainId> extends Result<ChainId> {
 export type SearchResult<ChainId> = 
     | EOAResult<ChainId>
     | DomainResult<ChainId>
-    | TrendingTokenByKeywordResult<ChainId>
-    | TrendingTokenByAddressResult<ChainId>
+    | FungibleTokenResult<ChainId>
     | UnknownResult<ChainId>
 
 /**

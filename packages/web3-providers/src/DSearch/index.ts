@@ -4,8 +4,8 @@ import {
     SearchResult,
     SearchResultType,
     DomainResult,
-    TrendingTokenByKeywordResult,
-    TrendingTokenByAddressResult,
+    FungibleTokenResult,
+    SearchFungibleTokenResultSubType,
     EOAResult,
     attemptUntil,
 } from '@masknet/web3-shared-base'
@@ -62,13 +62,14 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll> implements DSearchBaseA
 
         if (trendingSearchType && trendingTokenName) {
             return {
-                type: SearchResultType.TrendingTokenByKeyword,
+                type: SearchResultType.FungibleToken,
                 domain: keyword,
+                subType: SearchFungibleTokenResultSubType.Keyword,
                 trendingSearchType,
                 name: trendingTokenName,
                 keyword,
                 pluginID: NetworkPluginID.PLUGIN_EVM,
-            } as TrendingTokenByKeywordResult<ChainId>
+            } as FungibleTokenResult<ChainId>
         }
 
         if (isValidDomain?.(keyword)) {
@@ -104,9 +105,11 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll> implements DSearchBaseA
                 } as EOAResult<ChainId>
             }
             return {
-                type: SearchResultType.TrendingTokenByAddress,
+                pluginID: NetworkPluginID.PLUGIN_EVM,
+                type: SearchResultType.FungibleToken,
+                subType: SearchFungibleTokenResultSubType.Address,
                 keyword,
-            } as TrendingTokenByAddressResult<ChainId>
+            } as FungibleTokenResult<ChainId>
         }
 
         return {
