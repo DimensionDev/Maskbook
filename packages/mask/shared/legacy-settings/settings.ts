@@ -27,6 +27,7 @@ export const pluginIDSettings = createComplexGlobalSettings<Record<EnhanceableSi
         [EnhanceableSite.Mirror]: NetworkPluginID.PLUGIN_EVM,
         [ExtensionSite.Popup]: NetworkPluginID.PLUGIN_EVM,
         [ExtensionSite.Dashboard]: NetworkPluginID.PLUGIN_EVM,
+        [ExtensionSite.PopupConnect]: NetworkPluginID.PLUGIN_EVM,
     },
     isEqual,
 )

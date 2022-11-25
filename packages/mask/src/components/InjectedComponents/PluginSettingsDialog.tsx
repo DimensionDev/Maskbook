@@ -3,7 +3,7 @@ import { useAsyncRetry } from 'react-use'
 import { first } from 'lodash-es'
 import { InjectedDialog } from '@masknet/shared'
 import { useActivatedPluginsSNSAdaptor, usePluginI18NField } from '@masknet/plugin-infra/content-script'
-import { PluginID, NextIDPlatform, EMPTY_LIST, PopupRoutes, CrossIsolationMessages } from '@masknet/shared-base'
+import { PluginID, NextIDPlatform, EMPTY_LIST, CrossIsolationMessages } from '@masknet/shared-base'
 import { useAvailablePlugins, getSettingsTabContent } from '@masknet/plugin-infra'
 import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import { TabContext } from '@mui/lab'
@@ -53,7 +53,7 @@ export function PluginSettingsDialog() {
 
     const openPopupWindow = useCallback(
         () =>
-            Services.Helper.openPopupWindow(PopupRoutes.ConnectedWallets, {
+            Services.Helper.openPopupConnectWindow({
                 internal: true,
             }),
         [],

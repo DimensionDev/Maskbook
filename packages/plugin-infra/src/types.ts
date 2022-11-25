@@ -17,6 +17,7 @@ import type {
     PluginID,
     NetworkPluginID,
     NextIDPlatform,
+    PostIdentifier,
 } from '@masknet/shared-base'
 import type {
     ChainDescriptor,
@@ -182,6 +183,8 @@ export namespace Plugin.Shared {
         openPopupWindow(route?: PopupRoutes, params?: Record<string, any>): Promise<void>
         /** Close popup window */
         closePopupWindow(): Promise<void>
+        /** Open popup connect window */
+        openPopupConnectWindow(): Promise<void>
 
         /** Open walletconnect dialog */
         openWalletConnectDialog(uri: string, callback: () => void): void
@@ -386,6 +389,9 @@ export namespace Plugin.SNSAdaptor {
         ) => Promise<SocialIdentity | undefined>
         ownProofChanged: UnboundedRegistry<void>
         setMinimalMode: (id: string, enabled: boolean) => Promise<void>
+
+        getPostURL?: (identifier: PostIdentifier) => URL | null
+        share?: (text: string) => void
     }
 
     export type SelectProviderDialogEvent =

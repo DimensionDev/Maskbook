@@ -1,6 +1,12 @@
 export { fetch, fetchJSON } from './fetch.js'
 export { resolveTCOLink } from './short-link-resolver.js'
-export { openPopupWindow, removePopupWindow, openDashboard, queryCurrentActiveTab } from './popup-opener.js'
+export {
+    openPopupWindow,
+    removePopupWindow,
+    openDashboard,
+    queryCurrentActiveTab,
+    openPopupConnectWindow,
+} from './popup-opener.js'
 export {
     queryExtensionPermission,
     requestExtensionPermission,

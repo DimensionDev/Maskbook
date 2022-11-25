@@ -14,6 +14,7 @@ import { PersonaContext } from '../hooks/usePersonaContext.js'
 import type { ConnectedWalletInfo } from '../type.js'
 import Service from '../../../../service.js'
 import { MaskMessages } from '../../../../../../shared/messages.js'
+import urlcat from 'urlcat'
 
 const ConnectedWallets = memo(() => {
     const { t } = useI18N()
@@ -118,10 +119,10 @@ const ConnectedWallets = memo(() => {
         const internal = params.get('internal')
 
         if (internal) {
-            navigate(PopupRoutes.ConnectWallet)
+            window.open(urlcat('popups-connect.html#', PopupRoutes.ConnectWallet), '_self')
             return
         }
-        await Service.Helper.openPopupWindow(PopupRoutes.ConnectWallet)
+        await Service.Helper.openPopupConnectWindow()
         window.close()
     }
 
