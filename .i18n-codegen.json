@@ -303,18 +303,6 @@
             }
         },
         {
-            "input": "./packages/mask/src/plugins/FindTruman/locales/en-US.json",
-            "output": "./packages/mask/src/plugins/FindTruman/locales/i18n_generated",
-            "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
-            "generator": {
-                "type": "i18next/react-hooks",
-                "hooks": "useI18N",
-                "namespace": "org.findtruman",
-                "trans": "Translate",
-                "emitTS": true
-            }
-        },
-        {
             "input": "./packages/mask/src/plugins/MaskBox/locales/en-US.json",
             "output": "./packages/mask/src/plugins/MaskBox/locales/i18n_generated",
             "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
