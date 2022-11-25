@@ -52,7 +52,6 @@ import { ENS_API } from './ENS/index.js'
 import { SpaceID_API } from './SpaceID/index.js'
 
 // #region TODO: to be removed
-export * from './helpers.js'
 export * from './types/index.js'
 export * from './OpenSea/utils.js'
 export type { SecurityMessage as GoPlusLabsSecurityMessage } from './GoPlusLabs/rules.js'

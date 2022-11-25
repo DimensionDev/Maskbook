@@ -98,10 +98,6 @@ export class SCWallet implements Middleware<Context> {
                 context.abort(new Error('Not implemented.'))
                 break
             case EthereumMethodType.SC_WALLET_DEPLOY:
-                const walletContract = await this.createWallet(context)
-                walletContract?.deploy({
-                    arguments: [],
-                })
                 context.abort(new Error('Not implemented.'))
                 break
             default:
