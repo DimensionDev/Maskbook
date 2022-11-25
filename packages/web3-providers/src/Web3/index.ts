@@ -14,6 +14,13 @@ function avg(arr: number[]) {
 export class EthereumWeb3API implements GasOptionAPI.Provider<ChainId, GasOption> {
     static HISTORICAL_BLOCKS = 4
 
+    private createWeb3(chainId: ChainId) {
+        const RPC_URL = first(getRPCConstants(chainId).RPC_URLS)
+        if (!RPC_URL) throw new Error('Failed to create web3 provider.')
+
+        return new Web3SDK(RPC_URL)
+    }
+
     private formatFeeHistory(result: FeeHistoryResult) {
         let index = 0
         const blockNumber = Number(result.oldestBlock)
@@ -33,7 +40,8 @@ export class EthereumWeb3API implements GasOptionAPI.Provider<ChainId, GasOption
         return blocks
     }
 
-    private async getGasOptionsForEIP1559(web3: Web3): Promise<Record<GasOptionType, GasOption>> {
+    private async getGasOptionsForEIP1559(chainId: ChainId): Promise<Record<GasOptionType, GasOption>> {
+        const web3 = this.createWeb3(chainId)
         const history = await web3.eth.getFeeHistory(EthereumWeb3API.HISTORICAL_BLOCKS, 'pending', [25, 50, 75])
         const blocks = this.formatFeeHistory(history)
         const slow = avg(blocks.map((b) => b.priorityFeePerGas[0]))
@@ -69,7 +77,8 @@ export class EthereumWeb3API implements GasOptionAPI.Provider<ChainId, GasOption
         }
     }
 
-    private async getGasOptionsForPriorEIP1559(web3: Web3): Promise<Record<GasOptionType, GasOption>> {
+    private async getGasOptionsForPriorEIP1559(chainId: ChainId): Promise<Record<GasOptionType, GasOption>> {
+        const web3 = this.createWeb3(chainId)
         const gasPrice = await web3.eth.getGasPrice()
         return {
             [GasOptionType.FAST]: {
@@ -94,13 +103,7 @@ export class EthereumWeb3API implements GasOptionAPI.Provider<ChainId, GasOption
     }
 
     async getGasOptions(chainId: ChainId): Promise<Record<GasOptionType, GasOption>> {
-        const RPC_URL = first(getRPCConstants(chainId).RPC_URLS)
-        if (!RPC_URL) throw new Error('Failed to create web3 provider.')
-
-        const web3 = new Web3SDK(RPC_URL)
-        const isEIP1559 = chainResolver.isSupport(chainId, 'EIP1559')
-
-        if (isEIP1559) return this.getGasOptionsForEIP1559(web3)
-        else return this.getGasOptionsForPriorEIP1559(web3)
+        if (chainResolver.isSupport(chainId, 'EIP1559')) return this.getGasOptionsForEIP1559(chainId)
+        else return this.getGasOptionsForPriorEIP1559(chainId)
     }
 }
