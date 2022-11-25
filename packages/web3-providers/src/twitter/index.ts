@@ -145,6 +145,15 @@ const cache = new LRUCache<string, any>({
 const TWITTER_AVATAR_ID_MATCH = /^\/profile_images\/(\d+)/
 
 export class TwitterAPI implements TwitterBaseAPI.Provider {
+    private features: {}
+    constructor() {
+        this.features = {
+            verified_phone_label_enabled: false,
+            responsive_web_graphql_timeline_navigation_enabled: false,
+            responsive_web_twitter_blue_verified_badge_is_enabled: false,
+            responsive_web_twitter_blue_new_verification_copy_is_enabled: false,
+        }
+    }
     getAvatarId(avatarURL?: string) {
         if (!avatarURL) return ''
         const url = new URL(avatarURL)
@@ -254,11 +263,7 @@ export class TwitterAPI implements TwitterBaseAPI.Provider {
                 withSafetyModeUserFields: true,
                 withSuperFollowsUserFields: true,
             }),
-            features: JSON.stringify({
-                verified_phone_label_enabled: false,
-                responsive_web_graphql_timeline_navigation_enabled: false,
-                responsive_web_twitter_blue_verified_badge_is_enabled: false,
-            }),
+            features: JSON.stringify(this.features),
         })
         const cacheKey = `${bearerToken}/${csrfToken}/${queryId}/${screenName}`
         const fetchingTask: Promise<Response> =
@@ -278,6 +283,21 @@ export class TwitterAPI implements TwitterBaseAPI.Provider {
         const response = (await fetchingTask).clone()
         if (!response.ok) {
             cache.delete(cacheKey)
+            const failedResponse: TwitterBaseAPI.FailedResponse = await response.json()
+            const features: string[] = []
+            for (const error of failedResponse.errors) {
+                const match = error.message.match(/The following features cannot be null: (.*)$/)
+                if (match) {
+                    if (process.env.NODE_ENV === 'development') {
+                        console.error(error.message)
+                    }
+                    features.push(...match[1].split(/,\s+/))
+                }
+            }
+            if (features.length) {
+                this.features = { ...this.features, ...Object.fromEntries(features.map((x) => [x, false])) }
+                return this.getUserByScreenName(screenName)
+            }
             return null
         }
         const userResponse: TwitterBaseAPI.UserByScreenNameResponse = await response.json()

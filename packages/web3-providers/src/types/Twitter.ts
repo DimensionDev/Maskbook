@@ -109,7 +109,20 @@ export namespace TwitterBaseAPI {
     export type Response<T> = {
         data: T
     }
+    type ResponseError = {
+        code: number
+        extensions: ResponseError
+        kind: 'Validation' | string
+        message: string
+        /** Error constructor */
+        name: string
+        source: 'Client' | string
+        tracking: {
+            trace_id: string
+        }
+    }
     export type UserByScreenNameResponse = Response<{ user: { result: User } }>
+    export type FailedResponse = { errors: ResponseError[] }
     export interface AvatarInfo {
         nickname: string
         userId: string
