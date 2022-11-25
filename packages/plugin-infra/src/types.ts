@@ -66,6 +66,7 @@ export declare namespace Plugin {
         load(): Promise<{
             default: DeferredModule
         }>
+
         /**
          * This provides the functionality for hot module reload on the plugin.
          * When the callback is called, the old instance of the plugin will be unloaded, then the new instance will be init.
@@ -79,6 +80,7 @@ export declare namespace Plugin {
             ) => void,
         ): void
     }
+
     /**
      * DeferredDefinition should not contain any functionality of the plugin expects the loader.
      * If the plugin is not providing some of the functionality, please can omit that field.
@@ -154,6 +156,7 @@ export namespace Plugin.Shared {
          */
         createKVStorage<T extends object>(type: 'memory' | 'persistent', defaultValues: T): ScopedStorage<T>
     }
+
     export interface SharedUIContext extends SharedContext {
         /** The selected account of Mask Wallet */
         account: Subscription<string>
@@ -170,6 +173,7 @@ export namespace Plugin.Shared {
         nativeType?: 'Android' | 'iOS'
         /** Native API supported */
         hasNativeAPI: boolean
+
         /** Send request to native API */
         send(
             payload: JsonRpcPayload,
@@ -182,18 +186,22 @@ export namespace Plugin.Shared {
 
         /** Open popup window */
         openPopupWindow(route?: PopupRoutes, params?: Record<string, any>): Promise<void>
+
         /** Close popup window */
         closePopupWindow(): Promise<void>
+
         /** Open popup connect window */
         openPopupConnectWindow(): Promise<void>
 
         /** Open walletconnect dialog */
         openWalletConnectDialog(uri: string, callback: () => void): void
+
         /** Close walletconnect dialog */
         closeWalletConnectDialog(): void
 
         /** Select a Mask Wallet account */
         selectAccount(): Promise<string[]>
+
         /** Update Mask Wallet account */
         updateAccount(account: {
             account?: string
@@ -201,6 +209,7 @@ export namespace Plugin.Shared {
             networkType?: string
             providerType?: string
         }): Promise<void>
+
         /** Record which sites are connected to the Mask wallet  */
         recordConnectedSites(site: EnhanceableSite | ExtensionSite, connected: boolean): void
 
@@ -212,22 +221,29 @@ export namespace Plugin.Shared {
 
         /** Sign transaction */
         signTransaction(address: string, transaction: TransactionEVM): Promise<string>
+
         /** Sign personal message, aka. eth.personal.sign() */
         signPersonalMessage(address: string, message: string): Promise<string>
+
         /** Sign typed data */
         signTypedData(address: string, message: string): Promise<string>
 
         /** Get all wallets */
         getWallets(): Promise<Wallet[]>
+
         /** Get the primary wallet */
         getWalletPrimary(): Promise<Wallet | null>
+
         /** Add a new wallet */
         addWallet(id: string, wallet: Wallet): Promise<void>
+
         /** Update a wallet */
         updateWallet(id: string, wallet?: Partial<Wallet>): Promise<void>
+
         /** Remove a old wallet */
         removeWallet(id: string, password?: string): Promise<void>
     }
+
     export interface Definition<
         ChainId = unknown,
         SchemaType = unknown,
@@ -287,6 +303,7 @@ export namespace Plugin.Shared {
         /** Declare ability this plugin supported. */
         ability?: Ability
     }
+
     /**
      * This part is shared between Dashboard, SNSAdaptor and Worker part
      * which you should include the information above in those three parts.
@@ -302,7 +319,9 @@ export namespace Plugin.Shared {
          */
         init(signal: AbortSignal, context: Context): void | Promise<void>
     }
+
     export interface Utilities {}
+
     /** The publisher of the plugin */
     export interface Publisher {
         /** The name of the publisher */
@@ -310,8 +329,10 @@ export namespace Plugin.Shared {
         /** URL of the publisher */
         link: string
     }
+
     /** For what stage the plugin should be included in the Mask. */
     export type ReleaseStages = 'stable' | 'beta' | 'insider'
+
     /**
      * The condition that expected to start the plugin.
      *
@@ -331,6 +352,7 @@ export namespace Plugin.Shared {
          */
         host_permissions?: string[]
     }
+
     export interface SupportedNetworksDeclare {
         /**
          * opt-in means the listed networks is supported.
@@ -339,16 +361,19 @@ export namespace Plugin.Shared {
         type: 'opt-in' | 'opt-out'
         networks: Partial<Record<CurrentSNSNetwork, boolean>>
     }
+
     export type I18NLanguage = string
     export type I18NKey = string
     export type I18NValue = string
     export type I18NResource = Record<I18NLanguage, Record<I18NKey, I18NValue>>
+
     export interface Contribution {
         /** This plugin can recognize and react to the following metadata keys. */
         metadataKeys?: ReadonlySet<string>
         /** This plugin can recognize and enhance the post that matches the following matchers. */
         postContent?: ReadonlySet<RegExp | string>
     }
+
     export interface Ability {}
 
     export interface PersonaSignRequest {
@@ -357,6 +382,7 @@ export namespace Plugin.Shared {
         /** Use what method to sign this message? */
         method: 'eth'
     }
+
     export interface PersonaSignResult {
         /** The persona user selected to sign the message */
         persona: PersonaIdentifier
@@ -404,6 +430,7 @@ export namespace Plugin.SNSAdaptor {
               open: false
               address?: string
           }
+
     export interface PersonaSignResult {
         /** The persona user selected to sign the message */
         persona: PersonaIdentifier
@@ -418,6 +445,7 @@ export namespace Plugin.SNSAdaptor {
         /** Message in hex */
         messageHex: string
     }
+
     export interface Definition<
         ChainId = unknown,
         AddressType = unknown,
@@ -513,6 +541,7 @@ export namespace Plugin.SNSAdaptor {
             ) => () => void
         }
     }
+
     // #region Composition entry
     /**
      * The entry has two type:
@@ -528,9 +557,11 @@ export namespace Plugin.SNSAdaptor {
          * @example {fallback: "🧧 Red Packet"}
          */
         label: I18NFieldOrReactNode
+
         /** This callback will be called when the user clicked on the chip. */
         onClick(): void
     }
+
     export interface CompositionDialogEntryDialog {
         /**
          * A label that will be rendered in the CompositionDialog as a chip.
@@ -546,11 +577,15 @@ export namespace Plugin.SNSAdaptor {
          */
         keepMounted?: boolean
     }
+
     export interface CompositionDialogEntry_DialogProps {
         open: boolean
+
         onClose(): void
+
         isOpenFromApplicationBoard?: boolean
     }
+
     export type CompositionMetadataBadgeRender =
         | CompositionMetadataBadgeRenderStatic
         | CompositionMetadataBadgeRenderDynamic
@@ -560,10 +595,12 @@ export namespace Plugin.SNSAdaptor {
         key: string,
         metadata: unknown,
     ) => string | BadgeDescriptor | null
+
     export interface BadgeDescriptor {
         text: string | React.ReactNode
         tooltip?: React.ReactNode
     }
+
     // #endregion
 
     export interface ApplicationEntry {
@@ -618,6 +655,10 @@ export namespace Plugin.SNSAdaptor {
             backgroundGradient: string
             isFirst?: boolean
         }
+        features?: Array<{
+            name: I18NFieldOrReactNode
+            description: I18NFieldOrReactNode
+        }>
     }
 
     export interface PluginWrapperProps {
@@ -643,6 +684,7 @@ export namespace Plugin.SNSAdaptor {
             shouldDisplay?(result: SearchResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>): boolean
         }
     }
+
     export interface SearchResultTab {
         ID: string
 
@@ -687,6 +729,7 @@ export namespace Plugin.SNSAdaptor {
         Menu = 'Menu',
         Suggestion = 'Suggestion',
     }
+
     export interface AvatarRealm {
         ID: string
         priority: number
@@ -720,6 +763,7 @@ export namespace Plugin.SNSAdaptor {
             ): boolean
         }
     }
+
     export enum TipsSlot {
         FollowButton = 'follow',
         FocusingPost = 'focusing-post',
@@ -728,14 +772,17 @@ export namespace Plugin.SNSAdaptor {
         MirrorMenu = 'mirror-menu',
         MirrorEntry = 'mirror-entry',
     }
+
     export interface TipsRealmOptions {
         identity?: ProfileIdentifier
         slot: TipsSlot
         accounts?: Array<SocialAccount<Web3Helper.ChainIdAll>>
         iconSize?: number
         buttonSize?: number
+
         onStatusUpdate?(disabled: boolean): void
     }
+
     export interface TipsRealm {
         ID: string
         priority: number
@@ -746,6 +793,7 @@ export namespace Plugin.SNSAdaptor {
             Content: InjectUI<TipsRealmOptions>
         }
     }
+
     export interface ProfileSlider {
         ID: string
 
@@ -800,6 +848,7 @@ export namespace Plugin.SNSAdaptor {
             sorter?: (a: SocialAccount<Web3Helper.ChainIdAll>, z: SocialAccount<Web3Helper.ChainIdAll>) => number
         }
     }
+
     export interface ProfileCover {
         ID: string
 
@@ -882,6 +931,7 @@ export namespace Plugin.SNSAdaptor {
 /** This part runs in the dashboard */
 export namespace Plugin.Dashboard {
     export interface DashboardContext extends Shared.SharedUIContext {}
+
     // As you can see we currently don't have so much use case for an API here.
     export interface Definition<
         ChainId = unknown,
@@ -934,9 +984,11 @@ export namespace Plugin.Worker {
     export interface WorkerContext extends Shared.SharedContext {
         getDatabaseStorage<T extends IndexableTaggedUnion>(): DatabaseStorage<T>
     }
+
     export interface Definition extends Shared.DefinitionDeferred<WorkerContext> {
         backup?: BackupHandler
     }
+
     export interface BackupHandler {
         /**
          * This function will be called when user try to generate a new backup.
@@ -947,6 +999,7 @@ export namespace Plugin.Worker {
          * If it returns a Some<T>, T will be serialized by JSON.stringify and added into the backup file.
          */
         onBackup(): Promise<Option<unknown>>
+
         /**
          * This function will be called when the user try to restore a backup file,
          * and there is some data associated with this plugin.
@@ -956,6 +1009,7 @@ export namespace Plugin.Worker {
          */
         onRestore(data: unknown): Promise<Result<void, Error>>
     }
+
     /**
      * @typeParameter Data It should be a [tagged union](https://en.wikipedia.org/wiki/Tagged_union) with an extra `id` field
      * @example
@@ -1000,18 +1054,22 @@ export namespace Plugin.Worker {
               })
             | undefined
         >
+
         has<T extends Data['type']>(type: T, id: Data['id']): Promise<boolean>
+
         /**
          * Store a data into the database.
          * @param data Must be an object with "type" and "id"
          */
         add(data: Data): Promise<void>
+
         /**
          * Remove an object from the database
          * @param type "type" field on the object
          * @param id "id" field on the object
          */
         remove<T extends Data['type']>(type: T, id: Data['id']): Promise<void>
+
         /**
          * Iterate over the database of given type (readonly!)
          *
@@ -1023,6 +1081,7 @@ export namespace Plugin.Worker {
          * @param type "type" field on the object
          */
         iterate<T extends Data['type']>(type: T): AsyncIterableIterator<StorageReadonlyCursor<Data, T>>
+
         /**
          * Iterate over the database of given type (read-write).
          *
@@ -1033,11 +1092,13 @@ export namespace Plugin.Worker {
          */
         iterate_mutate<T extends Data['type']>(type: T): AsyncIterableIterator<StorageMutableCursor<Data, T>>
     }
+
     export interface StorageReadonlyCursor<Data extends IndexableTaggedUnion, T extends Data['type']> {
         value: Data & {
             type: T
         }
     }
+
     export interface StorageMutableCursor<Data extends IndexableTaggedUnion, T extends Data['type']>
         extends StorageReadonlyCursor<Data, T> {
         delete: () => Promise<void>
@@ -1120,15 +1181,18 @@ export namespace Plugin.GeneralUI {
             quitEdit?(save: boolean): void
         }
         export type Context<T> = CompositionContext<T> | DecryptedPostContext
+
         /** This metadata render is called in a composition preview context. */
         export interface CompositionContext<T> {
             context: 'composition'
+
             /**
              * When edit() is called, this component should go into to editable state.
              * If the edit completes, the new metadata will be used to replace the old one.
              */
             onEditComplete(metaKey: string, replaceMeta: T): void
         }
+
         /**
          * This metadata render is called in the decrypted post.
          */
@@ -1175,12 +1239,14 @@ export type IndexableTaggedUnion = {
     type: string | number
     id: string | number
 }
+
 export interface I18NStringField {
     /** The i18n key of the string content. */
     i18nKey?: string
     /** The fallback content to display if there is no i18n string found. */
     fallback: string
 }
+
 export type I18NFieldOrReactNode = I18NStringField | React.ReactNode
 
 /**
@@ -1215,17 +1281,24 @@ export namespace Plugin.__Host {
          * If it is in the minimal mode, it will be omitted in some cases.
          */
         minimalMode: EnabledStatusReporter
+
         addI18NResource(pluginID: string, resources: Plugin.Shared.I18NResource): void
+
         createContext(id: string, signal: AbortSignal): Context
+
         signal?: AbortSignal
         permission: PermissionReporter
     }
+
     export interface PermissionReporter {
         hasPermission(host_permission: string[]): Promise<boolean>
+
         events: Emitter<{ changed: [] }>
     }
+
     export interface EnabledStatusReporter {
         isEnabled(id: string): BooleanPreference | Promise<BooleanPreference>
+
         events: Emitter<{
             enabled: [id: string]
             disabled: [id: string]
