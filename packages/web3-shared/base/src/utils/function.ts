@@ -14,6 +14,6 @@ export async function attemptUntil<T>(funcs: Array<() => Promise<T> | undefined>
             continue
         }
     }
-    if (hasError) throw new Error('At least one of the attempts fails.')
+    if (hasError) throw new Error('Failed to fetch.')
     return fallback
 }

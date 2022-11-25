@@ -14,7 +14,7 @@ interface Props {
 export const AvatarDecoration: FC<Props> = ({ clipPathId, userId, className, size }) => {
     const { value: user } = useAsync(async () => {
         if (!userId) return null
-        return Twitter.getUserByScreenName(userId, true)
+        return Twitter.getUserByScreenName(userId)
     }, [userId])
 
     if (!userId || !user) return null
