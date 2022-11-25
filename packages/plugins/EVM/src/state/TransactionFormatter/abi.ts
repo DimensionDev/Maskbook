@@ -17,7 +17,7 @@ import DODORouteProxy from '@masknet/web3-contracts/abis/DODORouteProxy.json'
 import WETH from '@masknet/web3-contracts/abis/WETH.json'
 import BancorNetwork from '@masknet/web3-contracts/abis/BancorNetwork.json'
 import OpenOceanExchangeV2 from '@masknet/web3-contracts/abis/OpenOceanExchangeV2.json'
-import zeroXSwap from '@masknet/web3-contracts/abis/zeroXSwap.json'
+import ZeroXSwap from '@masknet/web3-contracts/abis/ZeroXSwap.json'
 import Lido from '@masknet/web3-contracts/abis/Lido.json'
 import AaveLendingPool from '@masknet/web3-contracts/abis/AaveLendingPool.json'
 import SmartPayEntryPoint from '@masknet/web3-contracts/abis/SmartPayEntryPoint.json'
@@ -39,7 +39,7 @@ class ABI {
         this.construct(DODORouteProxy as AbiItem[]) // dodo swap
         this.construct(BancorNetwork as AbiItem[]) // bancor swap
         this.construct(OpenOceanExchangeV2 as AbiItem[]) // openocean swap
-        this.construct(zeroXSwap as AbiItem[]) // 0x swap
+        this.construct(ZeroXSwap as AbiItem[]) // 0x swap
         this.construct(WETH as AbiItem[]) // wrap & unwrap
         this.construct(Lido as AbiItem[]) // lido saving
         this.construct(AaveLendingPool as AbiItem[]) // Aave saving

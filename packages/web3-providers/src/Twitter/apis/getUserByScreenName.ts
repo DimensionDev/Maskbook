@@ -1,7 +1,7 @@
 import urlcat from 'urlcat'
 import { getTokens } from './getTokens.js'
-import type { TwitterBaseAPI } from '../../types/index.js'
 import { fetchCache, staleCache } from '../../helpers.js'
+import type { TwitterBaseAPI } from '../../types/Twitter.js'
 
 async function createRequest(screenName: string) {
     const { bearerToken, csrfToken, queryId } = await getTokens('UserByScreenName')

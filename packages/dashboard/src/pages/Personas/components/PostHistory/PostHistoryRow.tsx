@@ -75,11 +75,6 @@ const SUPPORT_PLUGIN: Record<
         icon: <Icons.ITO />,
         messageParse: (body: any) => body.message.split(MSG_DELIMITER)[1],
     },
-    'com.maskbook.poll:1': {
-        pluginID: PluginID.Poll,
-        icon: <Icons.Poll />,
-        messageParse: (body: any) => body.question,
-    },
 }
 
 interface PostHistoryRowProps {
