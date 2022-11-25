@@ -3,8 +3,12 @@ import { Trans } from 'react-i18next'
 import { useUpdateEffect } from 'react-use'
 import { first } from 'lodash-es'
 import { Icons } from '@masknet/icons'
-import { useActivatedPluginsSNSAdaptor, usePluginI18NField } from '@masknet/plugin-infra/content-script'
-import { getAvailablePlugins, getProfileCardTabContent } from '@masknet/plugin-infra'
+import {
+    useActivatedPluginsSNSAdaptor,
+    usePluginI18NField,
+    getProfileCardTabContent,
+} from '@masknet/plugin-infra/content-script'
+import { getAvailablePlugins } from '@masknet/plugin-infra'
 import { useSocialAccountsBySettings } from '@masknet/shared'
 import { EMPTY_LIST, PluginID, NetworkPluginID } from '@masknet/shared-base'
 import { LoadingBase, makeStyles, MaskTabList, useTabs } from '@masknet/theme'

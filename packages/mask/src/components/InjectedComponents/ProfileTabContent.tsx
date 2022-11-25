@@ -6,8 +6,9 @@ import {
     useActivatedPluginsSNSAdaptor,
     useIsMinimalMode,
     usePluginI18NField,
+    getProfileTabContent,
 } from '@masknet/plugin-infra/content-script'
-import { getAvailablePlugins, getProfileTabContent } from '@masknet/plugin-infra'
+import { getAvailablePlugins } from '@masknet/plugin-infra'
 import {
     AccountIcon,
     AddressItem,
