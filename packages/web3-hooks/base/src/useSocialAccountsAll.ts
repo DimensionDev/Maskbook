@@ -16,12 +16,13 @@ export function useSocialAccountsAll(
     const { value: socialAddressList = EMPTY_LIST, ...rest } = useSocialAddressesAll(identity, includes)
     const socialAccounts = useSocialAccountsFrom(socialAddressList) ?? EMPTY_LIST
 
-    const sorted = useMemo(() => {
-        return sorter ? socialAccounts.sort(sorter) : socialAccounts
+    const result = useMemo(() => {
+        const sorted = sorter ? socialAccounts.sort(sorter) : socialAccounts
+        return sorted
     }, [socialAccounts, sorter])
 
     return {
         ...rest,
-        value: sorted,
+        value: result,
     }
 }

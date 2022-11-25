@@ -24,7 +24,7 @@ import { AstarAPI } from './Astar/index.js'
 import { GoPlusLabsAPI } from './GoPlusLabs/index.js'
 import { NextIDProofAPI, NextIDStorageAPI } from './NextID/index.js'
 import { AlchemyEVM_API, AlchemyFlowAPI } from './Alchemy/index.js'
-import { EthereumWeb3API } from './Web3/index.js'
+import { Web3GasOptionAPI } from './EVM/index.js'
 import { MagicEdenAPI } from './MagicEden/index.js'
 import { CoinMarketCapAPI } from './CoinMarketCap/index.js'
 import { UniSwapAPI } from './Uniswap/index.js'
@@ -85,7 +85,7 @@ export const MetaSwap = new MetaSwapAPI()
 export const AstarGas = new AstarAPI()
 export const NextIDProof = new NextIDProofAPI()
 export const NextIDStorage = new NextIDStorageAPI()
-export const EthereumWeb3 = new EthereumWeb3API()
+export const EthereumWeb3 = new Web3GasOptionAPI()
 export const Nomics = new NomicsAPI()
 export const CoinMarketCap = new CoinMarketCapAPI()
 export const UniSwap = new UniSwapAPI()

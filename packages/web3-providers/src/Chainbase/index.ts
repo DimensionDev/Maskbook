@@ -38,7 +38,7 @@ import { CHAINBASE_API_URL } from './constants.js'
 import type { DomainAPI } from '../types/Domain.js'
 
 async function fetchFromChainbase<T>(pathname: string) {
-    const response = await globalThis.fetch(urlcat(CHAINBASE_API_URL, pathname))
+    const response = await fetch(urlcat(CHAINBASE_API_URL, pathname))
     const json = await response.json()
     const data = json as
         | {
@@ -126,7 +126,7 @@ export class ChainbaseDomainAPI implements DomainAPI.Provider<ChainId> {
         })
     }
 
-    async lookup(name: string, chainId: ChainId): Promise<string | undefined> {
+    async lookup(chainId: ChainId, name: string): Promise<string | undefined> {
         if (!name) return
         const address = domainCache.get(chainId)?.[name] || (await this.getAddress(name, chainId))
 
@@ -139,7 +139,7 @@ export class ChainbaseDomainAPI implements DomainAPI.Provider<ChainId> {
         return
     }
 
-    async reverse(address: string, chainId: ChainId): Promise<string | undefined> {
+    async reverse(chainId: ChainId, address: string): Promise<string | undefined> {
         if (!address || !isValidAddress(address)) return
 
         const name = domainCache.get(chainId)?.[formatAddress(address)] || (await this.getName(address, chainId))
