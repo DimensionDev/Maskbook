@@ -3,6 +3,7 @@ import { makeStyles } from '@masknet/theme'
 import { BoxInfo, BoxMetadata, MediaType } from '../../type.js'
 import { MaskSharpIconOfSize } from '@masknet/shared'
 import { Video } from '../../../../components/shared/Video.js'
+import { resolveIPFS_URL } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     main: {
@@ -14,7 +15,7 @@ const useStyles = makeStyles()((theme) => ({
         overflow: 'hidden',
         borderRadius: 8,
         boxSizing: 'border-box',
-        border: `solid 1px ${theme.palette.divider}`,
+        border: `solid 1px ${theme.palette.maskColor.publicLine}`,
     },
     hero: {
         display: 'flex',
@@ -56,11 +57,11 @@ export function ArticlesTab(props: ArticlesTabProps) {
                             return (
                                 <Video
                                     VideoProps={{ className: classes.hero, controls: true }}
-                                    src={boxMetadata.mediaUrl}
+                                    src={resolveIPFS_URL(boxMetadata?.mediaUrl) ?? ''}
                                 />
                             )
                         default:
-                            return <img className={classes.hero} src={boxMetadata.mediaUrl} />
+                            return <img className={classes.hero} src={resolveIPFS_URL(boxMetadata?.mediaUrl)} />
                     }
                 })()}
             </Box>
