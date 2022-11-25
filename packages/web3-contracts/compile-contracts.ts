@@ -1,10 +1,10 @@
 import { promises as fs } from 'fs'
-import path from 'path'
+import { join } from 'path'
 import { runTypeChain, glob } from 'typechain'
 import { run } from './utils'
 
-const ABIS_PATH = path.join(__dirname, 'abis')
-const GENERATED_PATH = path.join(__dirname, 'types')
+const ABIS_PATH = join(__dirname, 'abis')
+const GENERATED_PATH = join(__dirname, 'types')
 
 async function replaceFileAll(file: string, pairs: Array<[string, string]>) {
     let content = await fs.readFile(file, 'utf-8')
@@ -28,7 +28,7 @@ async function main() {
     })
 
     // rename Qualification to QualificationEvent
-    const qualificationDefinition = path.join(GENERATED_PATH, 'Qualification.d.ts')
+    const qualificationDefinition = join(GENERATED_PATH, 'Qualification.d.ts')
     replaceFileAll(qualificationDefinition, [
         ['type Qualification', 'type QualificationEvent'],
         ['Callback<Qualification>', 'Callback<QualificationEvent>'],
