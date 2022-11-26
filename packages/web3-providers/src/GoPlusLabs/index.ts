@@ -8,8 +8,8 @@ import { SecurityMessages } from './rules.js'
 import { isSameAddress } from '@masknet/web3-shared-base'
 
 function checkInWhitelist(chainId = ChainId.Mainnet, address: string) {
-    const { GOPLUS_WHITE_LISTS } = getWhiteListsConstants(chainId)
-    return GOPLUS_WHITE_LISTS?.some((x) => isSameAddress(x, address))
+    const { GOPLUSLABS_WHITE_LISTS } = getWhiteListsConstants(chainId)
+    return GOPLUSLABS_WHITE_LISTS?.some((x) => isSameAddress(x, address))
 }
 
 export interface SupportedChainResponse {
