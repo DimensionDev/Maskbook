@@ -1,27 +1,11 @@
 import { identity, pickBy } from 'lodash-es'
 import { toHex } from 'web3-utils'
-import type {
-    BaseContract,
-    NonPayableTransactionObject,
-    PayableTransactionObject,
-} from '@masknet/web3-contracts/types/types.js'
 import { ZERO_ADDRESS } from '../constants/index.js'
 import { isEmptyHex } from '../utils/address.js'
 import type { ChainId, Transaction, UserOperation } from '../types/index.js'
 
 export class AccountTransaction {
     constructor(private transaction?: Transaction) {}
-
-    private resolveContractTransaction<T extends BaseContract | null>(
-        contract: T,
-        resolver:
-            | PayableTransactionObject<unknown>
-            | NonPayableTransactionObject<unknown>
-            | ((contract: T) => PayableTransactionObject<unknown> | NonPayableTransactionObject<unknown>),
-    ) {
-        if (typeof resolver === 'function') return resolver(contract)
-        return resolver
-    }
 
     get from() {
         const from = this.transaction?.from ?? ''
@@ -56,7 +40,7 @@ export class AccountTransaction {
         return this.data?.slice(10)
     }
 
-    encodeTransaction(overrides?: Transaction): Transaction {
+    encode(overrides?: Transaction): Transaction {
         const { chainId, from, to, value, gas, gasPrice, maxPriorityFeePerGas, maxFeePerGas, data, nonce } = {
             ...this.transaction,
             ...overrides,

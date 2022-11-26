@@ -75,7 +75,7 @@ export class ContractTransaction<T extends BaseContract | null> {
 
     async send(transactionResolver: TransactionResolver<T>, overrides?: Partial<Transaction>) {
         const transaction = this.resolve(transactionResolver)
-        const transactionEncoded = await this.encode(transactionResolver, overrides)
+        const transactionEncoded = await this.encodeWithGas(transactionResolver, overrides)
         const receipt = await transaction?.send(transactionEncoded as PayableTx)
         return receipt?.transactionHash ?? ''
     }
