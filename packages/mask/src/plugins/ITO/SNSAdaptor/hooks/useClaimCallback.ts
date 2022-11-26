@@ -29,13 +29,9 @@ export function useClaimCallback(pids: string[], contractAddress: string | undef
             return
         }
 
-        const config = {
+        const tx = await new ContractTransaction(ITO_Contract).encodeWithGas(ITO_Contract.methods.claim(pids), {
             from: account,
-        }
-        const tx = await new ContractTransaction(ITO_Contract).encodeContractTransactionWithGas(
-            ITO_Contract.methods.claim(pids),
-            config,
-        )
+        })
         return connection.sendTransaction(tx)
     }, [account, chainId, ITO_Contract, stringify(pids), isV1, connection])
 }

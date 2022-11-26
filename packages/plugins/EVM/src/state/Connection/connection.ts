@@ -242,7 +242,7 @@ class Connection implements EVM_Connection {
         if (!address || isNativeTokenAddress(address)) throw new Error('Invalid token address.')
 
         // ERC20
-        return new ContractTransaction(await this.getERC20Contract(address, options)).sendContractTransaction(
+        return new ContractTransaction(await this.getERC20Contract(address, options)).send(
             (x) => x?.methods.approve(recipient, toHex(amount)),
             options.overrides,
         )
@@ -271,7 +271,7 @@ class Connection implements EVM_Connection {
         if (!address || isNativeTokenAddress(address)) throw new Error('Invalid token address.')
 
         // ERC721 & ERC1155
-        return new ContractTransaction(await this.getERC721Contract(address, options)).sendContractTransaction(
+        return new ContractTransaction(await this.getERC721Contract(address, options)).send(
             (x) => x?.methods.setApprovalForAll(recipient, approved),
             options.overrides,
         )
@@ -302,7 +302,7 @@ class Connection implements EVM_Connection {
         }
 
         // ERC20
-        return new ContractTransaction(await this.getERC20Contract(address, options)).sendContractTransaction(
+        return new ContractTransaction(await this.getERC20Contract(address, options)).send(
             (x) => x?.methods.transfer(recipient, toHex(amount)),
             options.overrides,
         )
@@ -320,14 +320,14 @@ class Connection implements EVM_Connection {
 
         // ERC1155
         if (actualSchema === SchemaType.ERC1155) {
-            return new ContractTransaction(await this.getERC1155Contract(address, options)).sendContractTransaction(
+            return new ContractTransaction(await this.getERC1155Contract(address, options)).send(
                 (x) => x?.methods.safeTransferFrom(options.account, recipient, tokenId, amount ?? '', '0x'),
                 options.overrides,
             )
         }
 
         // ERC721
-        return new ContractTransaction(await this.getERC721Contract(address, options)).sendContractTransaction(
+        return new ContractTransaction(await this.getERC721Contract(address, options)).send(
             (x) => x?.methods.transferFrom(options.account, recipient, tokenId),
             options.overrides,
         )

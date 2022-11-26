@@ -12,12 +12,9 @@ export function useMaskClaimCallback() {
     return useAsyncFn(async () => {
         if (!connection || !MaskITO_Contract) return
 
-        const tx = await new ContractTransaction(MaskITO_Contract).encodeContractTransactionWithGas(
-            MaskITO_Contract.methods.claim(),
-            {
-                from: account,
-            },
-        )
+        const tx = await new ContractTransaction(MaskITO_Contract).encodeWithGas(MaskITO_Contract.methods.claim(), {
+            from: account,
+        })
         return connection.sendTransaction(tx)
     }, [account, chainId, MaskITO_Contract, connection])
 }

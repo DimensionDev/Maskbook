@@ -16,16 +16,13 @@ type TransactionResolver<T extends BaseContract | null> =
 export class ContractTransaction<T extends BaseContract | null> {
     constructor(private contract: T) {}
 
-    private resolveContractTransaction(transactionResolver: TransactionResolver<T>) {
+    private resolve(transactionResolver: TransactionResolver<T>) {
         if (typeof transactionResolver === 'function') return transactionResolver(this.contract)
         return transactionResolver
     }
 
-    encodeContractTransaction(
-        transactionResolver: TransactionResolver<T>,
-        overrides?: Partial<Transaction>,
-    ): Transaction {
-        const transaction = this.resolveContractTransaction(transactionResolver)
+    encode(transactionResolver: TransactionResolver<T>, overrides?: Partial<Transaction>): Transaction {
+        const transaction = this.resolve(transactionResolver)
 
         return pickBy(
             {
@@ -46,12 +43,9 @@ export class ContractTransaction<T extends BaseContract | null> {
         )
     }
 
-    async encodeContractTransactionWithGas(
-        transactionResolver: TransactionResolver<T>,
-        overrides?: Partial<Transaction>,
-    ) {
-        const transaction = this.resolveContractTransaction(transactionResolver)
-        const transactionEncoded = this.encodeContractTransaction(transactionResolver, overrides)
+    async encodeWithGas(transactionResolver: TransactionResolver<T>, overrides?: Partial<Transaction>) {
+        const transaction = this.resolve(transactionResolver)
+        const transactionEncoded = this.encode(transactionResolver, overrides)
 
         if (!transactionEncoded.gas) {
             try {
@@ -79,9 +73,9 @@ export class ContractTransaction<T extends BaseContract | null> {
         return transactionEncoded
     }
 
-    async sendContractTransaction(transactionResolver: TransactionResolver<T>, overrides?: Partial<Transaction>) {
-        const transaction = this.resolveContractTransaction(transactionResolver)
-        const transactionEncoded = await this.encodeContractTransaction(transactionResolver, overrides)
+    async send(transactionResolver: TransactionResolver<T>, overrides?: Partial<Transaction>) {
+        const transaction = this.resolve(transactionResolver)
+        const transactionEncoded = await this.encode(transactionResolver, overrides)
         const receipt = await transaction?.send(transactionEncoded as PayableTx)
         return receipt?.transactionHash ?? ''
     }

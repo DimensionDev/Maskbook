@@ -20,14 +20,11 @@ export function useNativeTokenWrapperCallback(chainId?: ChainId) {
             if (isZero(amount)) return
 
             // estimate gas and compose transaction
-            const tx = await new ContractTransaction(wrapperContract).encodeContractTransactionWithGas(
-                wrapperContract.methods.deposit(),
-                {
-                    from: account,
-                    value: amount,
-                    ...gasConfig,
-                },
-            )
+            const tx = await new ContractTransaction(wrapperContract).encodeWithGas(wrapperContract.methods.deposit(), {
+                from: account,
+                value: amount,
+                ...gasConfig,
+            })
 
             // send transaction and wait for hash
             const hash = await connection.sendTransaction(tx, { chainId, overrides: { ...gasConfig } })
@@ -59,7 +56,7 @@ export function useNativeTokenWrapperCallback(chainId?: ChainId) {
             }
 
             // estimate gas and compose transaction
-            const tx = await new ContractTransaction(wrapperContract).encodeContractTransactionWithGas(
+            const tx = await new ContractTransaction(wrapperContract).encodeWithGas(
                 wrapperContract.methods.withdraw(all ? wethBalance : amount),
                 {
                     from: account,

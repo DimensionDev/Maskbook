@@ -15,12 +15,11 @@ export function useRefundCallback(version: number, from: string, id?: string) {
         if (!connection || !redPacketContract || !id) return
 
         setIsRefunded(false)
-        const config = {
-            from,
-        }
-        const tx = await new ContractTransaction(redPacketContract).encodeContractTransactionWithGas(
+        const tx = await new ContractTransaction(redPacketContract).encodeWithGas(
             redPacketContract.methods.refund(id),
-            config,
+            {
+                from,
+            },
         )
         const hash = await connection.sendTransaction(tx)
         setIsRefunded(true)

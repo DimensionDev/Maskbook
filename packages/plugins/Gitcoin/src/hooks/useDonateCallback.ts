@@ -44,7 +44,7 @@ export function useDonateCallback(address: string, amount: string, token?: Fungi
         }
 
         // estimate gas and compose transaction
-        const tx = await new ContractTransaction(bulkCheckoutContract).encodeContractTransactionWithGas(
+        const tx = await new ContractTransaction(bulkCheckoutContract).encodeWithGas(
             bulkCheckoutContract.methods.donate(donations),
             {
                 from: account,

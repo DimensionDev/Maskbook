@@ -117,7 +117,7 @@ export class MulticallAPI implements MulticallBaseAPI.Provider {
                 await Promise.all(
                     this.chunkArray(unresolvedCalls).map(async (chunk) => {
                         // we don't mind the actual block number of the current call
-                        const tx = new ContractTransaction(contract).encodeContractTransaction(
+                        const tx = new ContractTransaction(contract).encode(
                             contract.methods.multicall(chunk),
                             overrides,
                         )

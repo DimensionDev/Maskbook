@@ -19,23 +19,20 @@ export function useClaimNftRedpacketCallback(id: string, totalAmount: number | u
         type MethodParameters = Parameters<NftRedPacket['methods']['claim']>
 
         const params: MethodParameters = [id, signedMsg, account]
-
-        const config = {
-            from: account,
-            gas:
-                (await nftRedPacketContract.methods
-                    .claim(...params)
-                    .estimateGas({ from: account })
-                    .catch((error) => {
-                        throw error
-                    })) +
-                EXTRA_GAS_PER_NFT * totalAmount,
-            chainId,
-        }
-
-        const tx = await new ContractTransaction(nftRedPacketContract).encodeContractTransactionWithGas(
+        const tx = await new ContractTransaction(nftRedPacketContract).encodeWithGas(
             nftRedPacketContract.methods.claim(...params),
-            config,
+            {
+                from: account,
+                gas:
+                    (await nftRedPacketContract.methods
+                        .claim(...params)
+                        .estimateGas({ from: account })
+                        .catch((error) => {
+                            throw error
+                        })) +
+                    EXTRA_GAS_PER_NFT * totalAmount,
+                chainId,
+            },
         )
         return connection.sendTransaction(tx)
     }, [id, connection, signedMsg, account, chainId, totalAmount])

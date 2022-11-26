@@ -145,7 +145,7 @@ export function useMulticallCallback(targetChainId?: ChainId, targetBlockNumber?
                             // we don't mind the actual block number of the current call
                             if (!connection) return
                             const web3 = await connection.getWeb3()
-                            const tx = new ContractTransaction(multicallContract).encodeContractTransaction(
+                            const tx = new ContractTransaction(multicallContract).encode(
                                 multicallContract.methods.multicall(chunk),
                                 overrides,
                             )

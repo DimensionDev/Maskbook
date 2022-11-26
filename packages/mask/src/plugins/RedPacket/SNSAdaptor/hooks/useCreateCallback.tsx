@@ -141,16 +141,13 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings, version:
         }
 
         // estimate gas and compose transaction
-        const value = toFixed(token.schema === SchemaType.Native ? paramsObj.total : 0)
-        const config = {
-            from: account,
-            value,
-            gas,
-        }
-
-        const tx = await new ContractTransaction(redPacketContract).encodeContractTransactionWithGas(
+        const tx = await new ContractTransaction(redPacketContract).encodeWithGas(
             redPacketContract.methods.create_red_packet(...params),
-            config,
+            {
+                from: account,
+                value: toFixed(token.schema === SchemaType.Native ? paramsObj.total : 0),
+                gas,
+            },
         )
 
         const hash = await connection.sendTransaction(tx)

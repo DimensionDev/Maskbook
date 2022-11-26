@@ -13,14 +13,9 @@ export function useDestructCallback(ito_address: string) {
         async (id: string) => {
             if (!connection || !ITO_Contract || !id) return
 
-            const config = {
+            const tx = await new ContractTransaction(ITO_Contract).encodeWithGas(ITO_Contract.methods.destruct(id), {
                 from: account,
-            }
-
-            const tx = await new ContractTransaction(ITO_Contract).encodeContractTransactionWithGas(
-                ITO_Contract.methods.destruct(id),
-                config,
-            )
+            })
             return connection.sendTransaction(tx)
         },
         [ITO_Contract, connection],

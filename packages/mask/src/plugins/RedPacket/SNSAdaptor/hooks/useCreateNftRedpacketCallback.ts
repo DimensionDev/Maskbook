@@ -56,20 +56,18 @@ export function useCreateNftRedpacketCallback(
                 tokenIdList,
             ]
 
-            const config = {
-                from: account,
-                gas: await nftRedPacketContract.methods
-                    .create_red_packet(...params)
-                    .estimateGas({ from: account })
-                    .catch((error) => {
-                        throw error
-                    }),
-                chainId,
-            }
-
-            const tx = await new ContractTransaction(nftRedPacketContract).encodeContractTransactionWithGas(
+            const tx = await new ContractTransaction(nftRedPacketContract).encodeWithGas(
                 nftRedPacketContract.methods.create_red_packet(...params),
-                config,
+                {
+                    from: account,
+                    gas: await nftRedPacketContract.methods
+                        .create_red_packet(...params)
+                        .estimateGas({ from: account })
+                        .catch((error) => {
+                            throw error
+                        }),
+                    chainId,
+                },
             )
 
             const hash = await connection.sendTransaction(tx)
