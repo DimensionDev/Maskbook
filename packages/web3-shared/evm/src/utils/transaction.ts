@@ -7,9 +7,8 @@ import type {
     PayableTransactionObject,
     PayableTx,
 } from '@masknet/web3-contracts/types/types.js'
-import { isValidAddress, isEmptyHex } from './address.js'
+import { isValidAddress } from './address.js'
 import { Transaction, EthereumMethodType, ChainId } from '../types/index.js'
-import { ZERO_ADDRESS } from '../constants/index.js'
 
 const RISK_METHOD_LIST = [
     EthereumMethodType.ETH_SIGN,
@@ -24,29 +23,10 @@ export function isRiskMethod(method: EthereumMethodType) {
     return RISK_METHOD_LIST.includes(method)
 }
 
-export function getData(config: Transaction) {
-    const { data } = config
-    if (!data) return
-    if (isEmptyHex(data)) return
-    if (!data.startsWith('0x')) return `0x${data}`
-    return data
-}
-
-export function getTo(config: Transaction) {
-    const { to } = config
-    if (!to) return ZERO_ADDRESS
-    if (isEmptyHex(to)) return ZERO_ADDRESS
-    return to
-}
-
-export function getFunctionSignature(tx: Transaction) {
-    const data = getData(tx)
-    return data?.slice(0, 10)
-}
-
-export function getFunctionParameters(tx: Transaction) {
-    const data = getData(tx)
-    return data?.slice(10)
+export function createContract<T extends BaseContract>(web3: Web3 | null, address: string, ABI: AbiItem[]) {
+    if (!address || !isValidAddress(address) || !web3) return null
+    const contract = new web3.eth.Contract(ABI, address) as unknown as T
+    return contract
 }
 
 export function getTransactionSignature(chainId?: ChainId, transaction?: Partial<Transaction>) {
@@ -125,10 +105,4 @@ export async function sendTransaction(
     const tx = await encodeContractTransaction(contract, transaction, overrides)
     const receipt = await transaction.send(tx as PayableTx)
     return receipt?.transactionHash ?? ''
-}
-
-export function createContract<T extends BaseContract>(web3: Web3 | null, address: string, ABI: AbiItem[]) {
-    if (!address || !isValidAddress(address) || !web3) return null
-    const contract = new web3.eth.Contract(ABI, address) as unknown as T
-    return contract
 }
