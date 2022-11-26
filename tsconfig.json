@@ -107,7 +107,7 @@
 
       // Plugins
       "@masknet/plugin-debugger": ["./packages/plugins/Debugger/src"],
-      "@masknet/plugin-example": ["./packages/plugins/example/src"],
+      "@masknet/plugin-example": ["./packages/plugins/Example/src"],
       "@masknet/plugin-file-service": ["./packages/plugins/FileService/src"],
       "@masknet/plugin-evm": ["./packages/plugins/./src"],
       "@masknet/plugin-flow": ["./packages/plugins/Flow/src"],
@@ -122,6 +122,7 @@
       "@masknet/plugin-decentralized-search": ["./packages/plugins/DecentralizedSearch/src"],
       "@masknet/plugin-approval": ["./packages/plugins/approval/src"],
       "@masknet/plugin-scam-warning": ["./packages/plugins/ScamWarning/src"],
+      "@masknet/plugin-gitcoin": ["./packages/plugins/Gitcoin/src"],
       // @masknet/scripts: insert-here 3
       "@masknet/plugin-wallet": ["./packages/plugins/Wallet/src"]
     }

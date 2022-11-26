@@ -2,11 +2,12 @@ import { useRef, useMemo } from 'react'
 import { Hidden } from '@masknet/shared'
 import { first } from 'lodash-es'
 import { TabContext } from '@mui/lab'
-import { useAvailablePlugins, getProfileTabContent } from '@masknet/plugin-infra'
+import { getAvailablePlugins } from '@masknet/plugin-infra'
 import {
     useActivatedPluginSNSAdaptor,
     useActivatedPluginsSNSAdaptor,
     usePluginI18NField,
+    getProfileTabContent,
 } from '@masknet/plugin-infra/content-script'
 import { Tab } from '@mui/material'
 import { useWeb3State, useAddressTypeMatched } from '@masknet/web3-hooks-base'
@@ -68,7 +69,7 @@ export function SearchResultInspector(props: { keyword: string }) {
     }
     const translate = usePluginI18NField()
     const activatedPlugins = useActivatedPluginsSNSAdaptor('any')
-    const displayPlugins = useAvailablePlugins(activatedPlugins, (plugins) => {
+    const displayPlugins = getAvailablePlugins(activatedPlugins, (plugins) => {
         return plugins
             .flatMap((x) => x.ProfileCardTabs?.map((y) => ({ ...y, pluginID: x.ID })) ?? EMPTY_LIST)
             .filter((x) => {

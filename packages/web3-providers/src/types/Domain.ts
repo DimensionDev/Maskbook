@@ -1,6 +1,6 @@
 export namespace DomainAPI {
     export interface Provider<ChainId> {
-        lookup(name: string, chainId: ChainId): Promise<string | undefined>
-        reverse(address: string, chainId: ChainId): Promise<string | undefined>
+        lookup(chainId: ChainId, name: string): Promise<string | undefined>
+        reverse(chainId: ChainId, address: string): Promise<string | undefined>
     }
 }

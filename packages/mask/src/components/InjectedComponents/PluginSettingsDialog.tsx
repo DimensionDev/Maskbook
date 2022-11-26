@@ -2,9 +2,13 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useAsyncRetry } from 'react-use'
 import { first } from 'lodash-es'
 import { InjectedDialog } from '@masknet/shared'
-import { useActivatedPluginsSNSAdaptor, usePluginI18NField } from '@masknet/plugin-infra/content-script'
-import { PluginID, NextIDPlatform, EMPTY_LIST, PopupRoutes, CrossIsolationMessages } from '@masknet/shared-base'
-import { useAvailablePlugins, getSettingsTabContent } from '@masknet/plugin-infra'
+import {
+    useActivatedPluginsSNSAdaptor,
+    usePluginI18NField,
+    getSettingsTabContent,
+} from '@masknet/plugin-infra/content-script'
+import { PluginID, NextIDPlatform, EMPTY_LIST, CrossIsolationMessages } from '@masknet/shared-base'
+import { getAvailablePlugins } from '@masknet/plugin-infra'
 import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import { TabContext } from '@mui/lab'
 import { DialogContent, Tab } from '@mui/material'
@@ -33,7 +37,7 @@ export function PluginSettingsDialog() {
 
     const [open, setOpen] = useState(false)
     const activatedPlugins = useActivatedPluginsSNSAdaptor('any')
-    const displayPlugins = useAvailablePlugins(activatedPlugins, (plugins) => {
+    const displayPlugins = getAvailablePlugins(activatedPlugins, (plugins) => {
         return plugins
             .flatMap((x) => x.SettingTabs?.map((y) => ({ ...y, pluginID: x.ID })) ?? EMPTY_LIST)
             .sort((a, z) => {
@@ -53,7 +57,7 @@ export function PluginSettingsDialog() {
 
     const openPopupWindow = useCallback(
         () =>
-            Services.Helper.openPopupWindow(PopupRoutes.ConnectedWallets, {
+            Services.Helper.openPopupConnectWindow({
                 internal: true,
             }),
         [],

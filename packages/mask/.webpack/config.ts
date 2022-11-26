@@ -175,7 +175,7 @@ export function createConfiguration(_inputFlags: BuildFlags): Configuration {
             })(),
             new EnvironmentPlugin({
                 NODE_ENV: flags.mode,
-                shadowRootMode: flags.devtools ? 'open' : 'closed',
+                shadowRootMode: flags.devtools || flags.channel === 'beta' ? 'open' : 'closed',
                 NODE_DEBUG: false,
                 WEB3_CONSTANTS_RPC: process.env.WEB3_CONSTANTS_RPC ?? '',
             }),
@@ -273,12 +273,14 @@ export function createConfiguration(_inputFlags: BuildFlags): Configuration {
     const entries: Record<string, EntryDescription> = (baseConfig.entry = {
         dashboard: normalizeEntryDescription(join(__dirname, '../src/extension/dashboard/index.tsx')),
         popups: normalizeEntryDescription(join(__dirname, '../src/extension/popups/SSR-client.ts')),
+        connect: normalizeEntryDescription(join(__dirname, '../src/extension/popups/renderConnect.tsx')),
         contentScript: normalizeEntryDescription(join(__dirname, '../src/content-script.ts')),
         debug: normalizeEntryDescription(join(__dirname, '../src/extension/debug-page/index.tsx')),
     })
     baseConfig.plugins!.push(
         addHTMLEntry({ chunks: ['dashboard'], filename: 'dashboard.html', lockdown: computedFlags.lockdown }),
         addHTMLEntry({ chunks: ['popups'], filename: 'popups.html', lockdown: computedFlags.lockdown }),
+        addHTMLEntry({ chunks: ['connect'], filename: 'popups-connect.html', lockdown: computedFlags.lockdown }),
         addHTMLEntry({
             chunks: ['contentScript'],
             filename: 'generated__content__script.html',

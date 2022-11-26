@@ -64,6 +64,24 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 ApplicationEntryID: base.ID,
                 nextIdRequired: true,
                 recommendFeature,
+                features: [
+                    {
+                        name: <Trans i18nKey="plugin_avatar_feature_general_user_name" />,
+                        description: <Trans i18nKey="plugin_avatar_feature_general_user_description" />,
+                    },
+                    {
+                        name: <Trans i18nKey="plugin_avatar_feature_token_name" />,
+                        description: <Trans i18nKey="plugin_avatar_feature_token_description" />,
+                    },
+                    {
+                        name: <Trans i18nKey="plugin_avatar_feature_nft_name" />,
+                        description: <Trans i18nKey="plugin_avatar_feature_nft_description" />,
+                    },
+                    {
+                        name: <Trans i18nKey="plugin_avatar_feature_crypto_exchange_name" />,
+                        description: <Trans i18nKey="plugin_avatar_feature_crypto_exchange_description" />,
+                    },
+                ],
             }
         })(),
     ],

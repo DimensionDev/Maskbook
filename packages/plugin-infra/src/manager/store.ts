@@ -14,14 +14,18 @@ export function onNewPluginRegistered(f: onNewPluginRegisteredListener) {
     return () => listeners.delete(f)
 }
 
-export const registeredPlugins: Subscription<Array<[PluginID, Plugin.DeferredDefinition]>> = {
-    getCurrentValue() {
-        return Array.from(__registered.entries())
-    },
-    subscribe(callback) {
-        return onNewPluginRegistered(callback)
-    },
-}
+export const registeredPlugins: Subscription<Array<[PluginID, Plugin.DeferredDefinition]>> = (() => {
+    let value: any[] | undefined
+    onNewPluginRegistered(() => (value = undefined))
+    return {
+        getCurrentValue() {
+            return (value ??= [...__registered.entries()])
+        },
+        subscribe(callback) {
+            return onNewPluginRegistered(callback)
+        },
+    }
+})()
 
 export function getPluginDefine(id: PluginID | NetworkPluginID) {
     return __registered.get(id as unknown as PluginID)

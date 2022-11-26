@@ -15,7 +15,7 @@ import {
     useCurrentVisitingIdentity,
     useCurrentVisitingSocialIdentity,
     useThemeSettings,
-} from '@masknet/plugin-infra'
+} from '@masknet/plugin-infra/content-script'
 
 export interface ConsoleContentProps {
     onClose?: () => void

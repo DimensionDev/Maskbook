@@ -38,7 +38,7 @@ export class BaseHostedProvider extends BaseProvider implements EVM_Provider {
         }
     }
 
-    protected get storage() {
+    get storage() {
         if (this.storageObject) return this.storageObject
 
         const { storage } = SharedContextSettings.value
@@ -51,11 +51,11 @@ export class BaseHostedProvider extends BaseProvider implements EVM_Provider {
         return this.storageObject
     }
 
-    protected get account() {
+    get account() {
         return this.storage.account.value
     }
 
-    protected get chainId() {
+    get chainId() {
         return this.storage.chainId.value
     }
 
@@ -94,11 +94,6 @@ export class BaseHostedProvider extends BaseProvider implements EVM_Provider {
 
     override async switchChain(chainId: ChainId) {
         if (await this.options.isSupportedChainId(chainId)) this.storage.chainId.setValue(chainId)
-    }
-
-    reset() {
-        this.storage.account.setValue(this.options.getDefaultAccount())
-        this.storage.chainId.setValue(this.options.getDefaultChainId())
     }
 
     override async request<T extends unknown>(

@@ -10,6 +10,8 @@ import { SharedContextSettings } from '../../../settings/index.js'
  * Learn more: https://github.com/DimensionDev/PayGasX
  */
 export class SmartPayProvider extends BaseSCWalletProvider implements EVM_Provider {
+    private siteType = getSiteType()
+
     constructor() {
         super(ProviderType.SmartPay, {
             isSupportedAccount: () => Promise.resolve(true),
@@ -20,8 +22,7 @@ export class SmartPayProvider extends BaseSCWalletProvider implements EVM_Provid
     }
 
     override async connect(chainId: ChainId) {
-        const siteType = getSiteType()
-        if (siteType === ExtensionSite.Popup) throw new Error('Cannot connect wallet')
+        if (this.siteType === ExtensionSite.Popup) throw new Error('Cannot connect wallet')
 
         // connected
         if (chainId === this.chainId && isValidAddress(this.account)) {

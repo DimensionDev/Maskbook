@@ -9,7 +9,6 @@ import {
     CrossIsolationMessages,
     EMPTY_LIST,
     formatPersonaFingerprint,
-    PopupRoutes,
     PluginID,
     NetworkPluginID,
 } from '@masknet/shared-base'
@@ -181,7 +180,7 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
         successText: t.copy_success(),
     })
 
-    const openConnectWallet = useCallback(() => Services.Helper.openPopupWindow(PopupRoutes.ConnectWallet), [])
+    const openConnectWallet = useCallback(() => Services.Helper.openPopupConnectWindow(), [])
 
     useEffect(() => {
         return CrossIsolationMessages.events.walletSettingsDialogEvent.on(({ pluginID }) => {

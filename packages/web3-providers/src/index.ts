@@ -1,59 +1,61 @@
-import { CoinGeckoTrending_API, CoinGeckoPriceSolanaAPI, CoinGeckoPriceEVM_API } from './coingecko/index.js'
-import { OpenSeaAPI } from './opensea/index.js'
-import { LooksRareAPI } from './looksrare/index.js'
-import { RaribleAPI } from './rarible/index.js'
+import { CoinGeckoTrending_API, CoinGeckoPriceSolanaAPI, CoinGeckoPriceEVM_API } from './CoinGecko/index.js'
+import { OpenSeaAPI } from './OpenSea/index.js'
+import { LooksRareAPI } from './LooksRare/index.js'
+import { RaribleAPI } from './Rarible/index.js'
 import {
     NFTScanTrendingAPI,
     NFTScanNonFungibleTokenAPI_EVM,
     NFTScanNonFungibleTokenAPI_Solana,
 } from './NFTScan/index.js'
-import { ZoraAPI } from './zora/index.js'
-import { NativeExplorerAPI } from './explorer/index.js'
-import { RiskWarningAPI } from './risk-warning/index.js'
-import { RSS3API } from './rss3/index.js'
-import { KeyValueAPI } from './kv/index.js'
-import { TwitterAPI } from './twitter/index.js'
-import { R2D2API } from './r2d2/index.js'
-import { InstagramAPI } from './instagram/index.js'
-import { DeBankAPI } from './debank/index.js'
-import { ZerionAPI, ZerionGasAPI, ZerionNonFungibleTokenAPI, ZerionTrendingAPI } from './zerion/index.js'
-import { MaskAPI } from './mask/index.js'
-import { MaskX_API } from './mask-x/index.js'
-import { MetaSwapAPI } from './metaswap/index.js'
-import { AstarAPI } from './astar/index.js'
-import { GoPlusLabsAPI } from './gopluslabs/index.js'
+import { ZoraAPI } from './Zora/index.js'
+import { NativeExplorerAPI } from './Explorer/index.js'
+import { RiskWarningAPI } from './RiskWarning/index.js'
+import { RSS3API } from './RSS3/index.js'
+import { KeyValueAPI } from './KV/index.js'
+import { TwitterAPI } from './Twitter/index.js'
+import { R2D2API } from './R2D2/index.js'
+import { InstagramAPI } from './Instagram/index.js'
+import { DeBankAPI } from './DeBank/index.js'
+import { ZerionAPI, ZerionGasAPI, ZerionNonFungibleTokenAPI, ZerionTrendingAPI } from './Zerion/index.js'
+import { MaskAPI } from './Mask/index.js'
+import { MaskX_API } from './MaskX/index.js'
+import { MetaSwapAPI } from './MetaSwap/index.js'
+import { AstarAPI } from './Astar/index.js'
+import { GoPlusLabsAPI } from './GoPlusLabs/index.js'
 import { NextIDProofAPI, NextIDStorageAPI } from './NextID/index.js'
-import { AlchemyEVM_API, AlchemyFlowAPI } from './alchemy/index.js'
-import { EthereumWeb3API } from './web3/index.js'
+import { AlchemyEVM_API, AlchemyFlowAPI } from './Alchemy/index.js'
+import { Web3GasOptionAPI } from './EVM/index.js'
 import { MagicEdenAPI } from './MagicEden/index.js'
-import { CoinMarketCapAPI } from './cmc/index.js'
-import { UniSwapAPI } from './uniswap/index.js'
-import { RabbyAPI } from './rabby/index.js'
-import { GemAPI } from './gem/index.js'
-import { X2Y2API } from './x2y2/index.js'
+import { CoinMarketCapAPI } from './CoinMarketCap/index.js'
+import { UniSwapAPI } from './Uniswap/index.js'
+import { RabbyAPI } from './Rabby/index.js'
+import { GemAPI } from './Gem/index.js'
+import { X2Y2API } from './X2Y2/index.js'
 import {
     ChainbaseHistoryAPI,
     ChainbaseFungibleTokenAPI,
     ChainbaseNonFungibleTokenAPI,
     ChainbaseDomainAPI,
-} from './chainbase/index.js'
-import { SolanaFungibleAPI, SolanaNonFungibleAPI } from './solana/index.js'
-import { FlowFungibleAPI } from './flow/index.js'
-import { CF_API } from './cf/index.js'
-import { MirrorAPI } from './mirror/index.js'
-import { MindsAPI } from './minds/index.js'
-import { FuseTrendingAPI } from './fuse/index.js'
-import { CryptoScamDBAPI } from './cryptoscam-db/index.js'
-import { SmartPayBundlerAPI } from './smart-pay/index.js'
-import { NomicsAPI } from './nomics/index.js'
-import { DSearchAPI } from './d-search/index.js'
+} from './Chainbase/index.js'
+import { SolanaFungibleAPI, SolanaNonFungibleAPI } from './Solana/index.js'
+import { FlowFungibleAPI } from './Flow/index.js'
+import { CloudflareAPI } from './Cloudflare/index.js'
+import { MirrorAPI } from './Mirror/index.js'
+import { MindsAPI } from './Minds/index.js'
+import { FuseTrendingAPI } from './Fuse/index.js'
+import { CryptoScamDBAPI } from './CryptoScamDB/index.js'
+import { SmartPayBundlerAPI } from './SmartPay/index.js'
+import { NomicsAPI } from './Nomics/index.js'
+import { DSearchAPI } from './DSearch/index.js'
+import { MulticallAPI } from './Multicall/index.js'
+import { ENS_API } from './ENS/index.js'
+import { SpaceID_API } from './SpaceID/index.js'
 
 // #region TODO: to be removed
-export * from './helpers.js'
 export * from './types/index.js'
-export * from './opensea/utils.js'
-export type { SecurityMessage as GoPlusLabsSecurityMessage } from './gopluslabs/rules.js'
-export { CollectionType } from './rss3/constants.js'
+export * from './OpenSea/utils.js'
+export type { SecurityMessage as GoPlusLabsSecurityMessage } from './GoPlusLabs/rules.js'
+export { CollectionType } from './RSS3/constants.js'
 // #endregion
 
 export const OpenSea = new OpenSeaAPI()
@@ -83,13 +85,13 @@ export const MetaSwap = new MetaSwapAPI()
 export const AstarGas = new AstarAPI()
 export const NextIDProof = new NextIDProofAPI()
 export const NextIDStorage = new NextIDStorageAPI()
-export const EthereumWeb3 = new EthereumWeb3API()
+export const EthereumWeb3 = new Web3GasOptionAPI()
 export const Nomics = new NomicsAPI()
 export const CoinMarketCap = new CoinMarketCapAPI()
 export const UniSwap = new UniSwapAPI()
 export const Rabby = new RabbyAPI()
 export const X2Y2 = new X2Y2API()
-export const CF = new CF_API()
+export const Cloudflare = new CloudflareAPI()
 export const Mirror = new MirrorAPI()
 export const CryptoScamDB = new CryptoScamDBAPI()
 
@@ -121,8 +123,17 @@ export const ZerionNonFungibleToken = new ZerionNonFungibleTokenAPI()
 export const ZerionTrending = new ZerionTrendingAPI()
 export const ZerionGas = new ZerionGasAPI()
 
+// ENS
+export const ENS = new ENS_API()
+
+// SpaceID
+export const SpaceID = new SpaceID_API()
+
 // Fuse
 export const FuseTrending = new FuseTrendingAPI()
 
-// Smart Pay Bundler
+// Smart Pay
 export const SmartPayBundler = new SmartPayBundlerAPI()
+
+// EVM multicall
+export const Multicall = new MulticallAPI()

@@ -3,7 +3,9 @@ import { createInjectHooksRenderer, Plugin, useActivatedPluginsSNSAdaptor } from
 import { makeStyles } from '@masknet/theme'
 import { memo, useMemo, useState } from 'react'
 import { useAsync } from 'react-use'
+import { useThemeSettings } from '../../../../components/DataSource/useActivatedUI.js'
 import { createReactRootShadowed, startWatch } from '../../../../utils/index.js'
+import { TipButtonStyle } from '../../constant.js'
 import { normalFollowButtonSelector as selector } from '../../utils/selector.js'
 import { getUserIdentity } from '../../utils/user.js'
 
@@ -23,18 +25,13 @@ export function injectTipsButtonOnFollowButton(signal: AbortSignal) {
             const run = async () => {
                 const twitterId = getTwitterId(ele)
                 if (!twitterId) return
-
-                const buttonCss = window.getComputedStyle(ele.firstChild as HTMLElement)
-                const buttonSize = Number.parseFloat(buttonCss.height.replace('px', ''))
-                const fontSizeCss = window.getComputedStyle(ele.firstChild?.firstChild as HTMLElement)
-                const fontSize = Number.parseFloat(fontSizeCss.fontSize.replace('px', ''))
                 const proxy = DOMProxy({ afterShadowRootInit: { mode: process.env.shadowRootMode } })
                 proxy.realCurrent = ele
                 const identity = await getUserIdentity(twitterId)
                 if (!identity) return
 
                 const root = createReactRootShadowed(proxy.beforeShadow, { signal })
-                root.render(<FollowButtonTipsSlot userId={twitterId} buttonSize={buttonSize} iconSize={20} />)
+                root.render(<FollowButtonTipsSlot userId={twitterId} />)
                 remover = root.destroy
             }
 
@@ -65,11 +62,11 @@ const useStyles = makeStyles()((theme) => ({
 
 interface Props {
     userId: string
-    buttonSize: number
-    iconSize: number
 }
 
-const FollowButtonTipsSlot = memo(({ userId, buttonSize, iconSize }: Props) => {
+const FollowButtonTipsSlot = memo(({ userId }: Props) => {
+    const themeSetting = useThemeSettings()
+    const tipStyle = TipButtonStyle[themeSetting.size]
     const { classes, cx } = useStyles()
 
     const { value: identity } = useAsync(async () => getUserIdentity(userId), [userId])
@@ -83,13 +80,13 @@ const FollowButtonTipsSlot = memo(({ userId, buttonSize, iconSize }: Props) => {
         return (
             <Component
                 identity={identity?.identifier}
-                buttonSize={buttonSize}
-                iconSize={iconSize}
+                buttonSize={tipStyle.buttonSize}
+                iconSize={tipStyle.iconSize}
                 slot={Plugin.SNSAdaptor.TipsSlot.FollowButton}
                 onStatusUpdate={setDisabled}
             />
         )
-    }, [identity?.identifier, buttonSize, iconSize])
+    }, [identity?.identifier, tipStyle.buttonSize, tipStyle.iconSize])
 
     if (!identity?.identifier) return null
 

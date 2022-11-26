@@ -6,8 +6,9 @@ import {
     useActivatedPluginsSNSAdaptor,
     useIsMinimalMode,
     usePluginI18NField,
+    getProfileTabContent,
 } from '@masknet/plugin-infra/content-script'
-import { useAvailablePlugins, getProfileTabContent } from '@masknet/plugin-infra'
+import { getAvailablePlugins } from '@masknet/plugin-infra'
 import {
     AccountIcon,
     AddressItem,
@@ -182,7 +183,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     }, [socialAccounts])
 
     const activatedPlugins = useActivatedPluginsSNSAdaptor('any')
-    const displayPlugins = useAvailablePlugins(activatedPlugins, (plugins) => {
+    const displayPlugins = getAvailablePlugins(activatedPlugins, (plugins) => {
         return plugins
             .flatMap((x) => x.ProfileTabs?.map((y) => ({ ...y, pluginID: x.ID })) ?? EMPTY_LIST)
             .filter((x) => {

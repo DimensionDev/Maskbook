@@ -16,25 +16,12 @@ function isLocked() {
     })
 }
 
-const exclusionDetectLocked = [PopupRoutes.PersonaSignRequest, PopupRoutes.Unlock, PopupRoutes.ConnectWallet]
-
-export async function openPopupWindow(route?: PopupRoutes, params?: Record<string, any>): Promise<void> {
+async function openWindow(url: string): Promise<void> {
     const windows = await browser.windows.getAll()
     const popup = windows.find((win) => win && win.type === 'popup' && win.id === currentPopupWindowId)
-
-    // Focus on the pop-up window if it already exists
     if (popup) {
         await browser.windows.update(currentPopupWindowId, { focused: true })
     } else {
-        const locked = await isLocked()
-        const shouldUnlockWallet = locked && !exclusionDetectLocked.includes(route ?? PopupRoutes.Wallet)
-
-        const url = urlcat('popups.html#', shouldUnlockWallet ? PopupRoutes.Unlock : route ?? PopupRoutes.Wallet, {
-            toBeClose: 1,
-            from: locked && route ? route : null,
-            ...params,
-        })
-
         let left: number
         let top: number
 
@@ -87,6 +74,31 @@ export async function openPopupWindow(route?: PopupRoutes, params?: Record<strin
             }
         }
     }
+}
+
+const exclusionDetectLocked = [PopupRoutes.PersonaSignRequest, PopupRoutes.Unlock]
+
+export async function openPopupWindow(route?: PopupRoutes, params?: Record<string, any>): Promise<void> {
+    const locked = await isLocked()
+    const shouldUnlockWallet = locked && !exclusionDetectLocked.includes(route ?? PopupRoutes.Wallet)
+
+    const url = urlcat('popups.html#', shouldUnlockWallet ? PopupRoutes.Unlock : route ?? PopupRoutes.Wallet, {
+        toBeClose: 1,
+        from: locked && route ? route : null,
+        ...params,
+    })
+
+    return openWindow(url)
+}
+
+export async function openPopupConnectWindow(params: Record<string, any> = {}): Promise<void> {
+    const url = urlcat('popups-connect.html#', PopupRoutes.ConnectWallet, {
+        toBeClose: 1,
+        from: PopupRoutes.ConnectWallet,
+        ...params,
+    })
+
+    return openWindow(url)
 }
 
 export async function removePopupWindow(): Promise<void> {
