@@ -1,10 +1,10 @@
-import type { ExchangeProxy } from '@masknet/web3-contracts/types/ExchangeProxy.js'
-import { GasOptionConfig, useTraderConstants, encodeContractTransaction } from '@masknet/web3-shared-evm'
 import { useAsyncFn } from 'react-use'
-import { SLIPPAGE_DEFAULT } from '../../constants/index.js'
-import { SwapResponse, TradeComputed, TradeStrategy } from '../../types/index.js'
+import type { ExchangeProxy } from '@masknet/web3-contracts/types/ExchangeProxy.js'
+import { GasOptionConfig, useTraderConstants, ContractTransaction } from '@masknet/web3-shared-evm'
 import { useChainContext, useNetworkContext, useWeb3Connection, useWeb3State } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
+import { SLIPPAGE_DEFAULT } from '../../constants/index.js'
+import { SwapResponse, TradeComputed, TradeStrategy } from '../../types/index.js'
 import { useTradeAmount } from './useTradeAmount.js'
 
 export function useTradeCallback(
@@ -74,8 +74,7 @@ export function useTradeCallback(
             ...gasConfig,
         }
 
-        const tx = await encodeContractTransaction(
-            exchangeProxyContract,
+        const tx = await new ContractTransaction(exchangeProxyContract).encodeContractTransactionWithGas(
             trade.strategy === TradeStrategy.ExactIn
                 ? exchangeProxyContract.methods.multihopBatchSwapExactIn(
                       swap_,

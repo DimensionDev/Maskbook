@@ -3,7 +3,7 @@ import { useAsyncFn } from 'react-use'
 import { BigNumber } from 'bignumber.js'
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import { FungibleToken, toFixed } from '@masknet/web3-shared-base'
-import { ChainId, encodeContractTransaction, SchemaType, useGitcoinConstants } from '@masknet/web3-shared-evm'
+import { ChainId, ContractTransaction, SchemaType, useGitcoinConstants } from '@masknet/web3-shared-evm'
 import { useChainContext, useWeb3Connection } from '@masknet/web3-hooks-base'
 import { useBulkCheckoutContract } from './useBulkCheckoutWallet.js'
 
@@ -44,16 +44,12 @@ export function useDonateCallback(address: string, amount: string, token?: Fungi
         }
 
         // estimate gas and compose transaction
-        const value = toFixed(token.schema === SchemaType.Native ? amount : 0)
-        const config = {
-            from: account,
-            value,
-        }
-
-        const tx = await encodeContractTransaction(
-            bulkCheckoutContract,
+        const tx = await new ContractTransaction(bulkCheckoutContract).encodeContractTransactionWithGas(
             bulkCheckoutContract.methods.donate(donations),
-            config,
+            {
+                from: account,
+                value: toFixed(token.schema === SchemaType.Native ? amount : 0),
+            },
         )
         return connection.sendTransaction(tx)
     }, [account, amount, token, donations, connection])

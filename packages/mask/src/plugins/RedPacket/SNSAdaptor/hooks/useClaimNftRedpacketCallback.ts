@@ -1,6 +1,6 @@
 import { useAsyncFn } from 'react-use'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { encodeContractTransaction } from '@masknet/web3-shared-evm'
+import { ContractTransaction } from '@masknet/web3-shared-evm'
 import { useChainContext, useWeb3Connection } from '@masknet/web3-hooks-base'
 import type { NftRedPacket } from '@masknet/web3-contracts/types/NftRedPacket.js'
 import { useNftRedPacketContract } from './useNftRedPacketContract.js'
@@ -33,8 +33,7 @@ export function useClaimNftRedpacketCallback(id: string, totalAmount: number | u
             chainId,
         }
 
-        const tx = await encodeContractTransaction(
-            nftRedPacketContract,
+        const tx = await new ContractTransaction(nftRedPacketContract).encodeContractTransactionWithGas(
             nftRedPacketContract.methods.claim(...params),
             config,
         )

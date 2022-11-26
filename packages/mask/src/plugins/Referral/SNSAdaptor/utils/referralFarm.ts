@@ -1,9 +1,9 @@
 import type Web3 from 'web3'
+import { AbiItem, asciiToHex, padRight, toWei } from 'web3-utils'
 import { BigNumber } from 'bignumber.js'
 import { defaultAbiCoder } from '@ethersproject/abi'
 import { parseUnits } from '@ethersproject/units'
-import { ChainId, createContract, encodeContractTransaction } from '@masknet/web3-shared-evm'
-import { AbiItem, asciiToHex, padRight, toWei } from 'web3-utils'
+import { ChainId, ContractTransaction, createContract } from '@masknet/web3-shared-evm'
 import ReferralFarmsV1ABI from '@masknet/web3-contracts/abis/ReferralFarmsV1.json'
 import ERC20ABI from '@masknet/web3-contracts/abis/ERC20.json'
 import type { NetworkPluginID } from '@masknet/shared-base'
@@ -57,8 +57,7 @@ export async function runCreateERC20PairFarm(
     if (isNeededGrantPermission && rewardTokenContract) {
         const maxAllowance = new BigNumber(toWei('10000000000000', 'ether'))
 
-        const approveTx = await encodeContractTransaction(
-            rewardTokenContract,
+        const approveTx = await new ContractTransaction(rewardTokenContract).encodeContractTransactionWithGas(
             rewardTokenContract.methods.approve(farmsAddr, maxAllowance),
             config,
         )
@@ -80,8 +79,7 @@ export async function runCreateERC20PairFarm(
             : []
 
     if (!farms) return
-    const tx = await encodeContractTransaction(
-        farms,
+    const tx = await new ContractTransaction(farms).encodeContractTransactionWithGas(
         farms.methods.increaseReferralFarm(rewardTokenDefn, referredTokenDefn, totalFarmRewardUint128, metaState),
         config,
     )
@@ -145,8 +143,7 @@ export async function adjustFarmRewards(
         ]
 
         if (!farms) return
-        const tx = await encodeContractTransaction(
-            farms,
+        const tx = await new ContractTransaction(farms).encodeContractTransactionWithGas(
             farms.methods.configureMetastate(rewardTokenDefn, referredTokenDefn, metaState),
             config,
         )
