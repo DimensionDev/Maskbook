@@ -3,7 +3,7 @@ import type {
     RequestArguments,
     Transaction as Web3Transaction,
     TransactionReceipt as Web3TransactionReceipt,
-    TransactionConfig as TransactionConfig_,
+    TransactionConfig,
 } from 'web3-core'
 import type { NonPayableTransactionObject, PayableTransactionObject } from '@masknet/web3-contracts/types/types.js'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
@@ -394,7 +394,7 @@ export interface Block {
     nonce: string
     timestamp: string
 }
-export type Transaction = TransactionConfig_ & {
+export type Transaction = TransactionConfig & {
     // CELO
     feeCurrency?: string // address of the ERC20 contract to use to pay for gas and the gateway fee
     gatewayFeeRecipient?: string // coinbase address of the full serving the light client's transactions
