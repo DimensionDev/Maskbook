@@ -1,7 +1,10 @@
 import urlcat from 'urlcat'
-import { ChainId, UserOperation, UserTransaction } from '@masknet/web3-shared-evm'
+import { ChainId, Create2Factory, UserOperation, UserTransaction } from '@masknet/web3-shared-evm'
+import type { NetworkPluginID } from '@masknet/shared-base'
 import type { BundlerAPI } from '../types/Bundler.js'
 import { BUNDLER_ROOT } from './constants.js'
+import type { ContractAccountAPI } from '../index.js'
+import { MulticallAPI } from '../Multicall/index.js'
 
 export class SmartPayBundlerAPI implements BundlerAPI.Provider {
     private async healthz() {
@@ -46,5 +49,14 @@ export class SmartPayBundlerAPI implements BundlerAPI.Provider {
 
         const entryPoints = await this.getSupportedEntryPoints()
         return this.handle(userOperation)
+    }
+}
+
+export class SmartPayAccountAPI implements ContractAccountAPI.Provider<NetworkPluginID.PLUGIN_EVM> {
+    private multicall = new MulticallAPI()
+    private create2Factory = new Create2Factory('')
+
+    getAccounts(owner: string[]): Promise<ContractAccountAPI.ContractAccount<NetworkPluginID.PLUGIN_EVM>> {
+        throw new Error('Method not implemented.')
     }
 }
