@@ -1,12 +1,6 @@
 import type Web3 from 'web3'
-import { identity, pickBy } from 'lodash-es'
-import { AbiItem, hexToNumber, sha3, toHex } from 'web3-utils'
-import type {
-    BaseContract,
-    NonPayableTransactionObject,
-    PayableTransactionObject,
-    PayableTx,
-} from '@masknet/web3-contracts/types/types.js'
+import { AbiItem, sha3, toHex } from 'web3-utils'
+import type { BaseContract } from '@masknet/web3-contracts/types/types.js'
 import { isValidAddress } from './address.js'
 import { Transaction, EthereumMethodType, ChainId } from '../types/index.js'
 
@@ -33,76 +27,4 @@ export function getTransactionSignature(chainId?: ChainId, transaction?: Partial
     if (!chainId || !transaction) return
     const { from, to, data, value } = transaction
     return sha3([chainId, from, to, data || '0x0', toHex((value as string) || '0x0') || '0x0'].join('_')) ?? undefined
-}
-
-export function encodeTransaction(transaction: Transaction): PayableTx & {
-    maxPriorityFeePerGas?: string
-    maxFeePerGas?: string
-} {
-    return pickBy(
-        {
-            from: transaction?.from as string | undefined,
-            to: transaction.to,
-            value: transaction?.value ? toHex(transaction.value) : undefined,
-            gas: transaction?.gas ? toHex(transaction.gas) : undefined,
-            gasPrice: transaction?.gasPrice ? toHex(transaction.gasPrice) : undefined,
-            maxPriorityFeePerGas: transaction?.maxPriorityFeePerGas
-                ? toHex(transaction.maxPriorityFeePerGas)
-                : undefined,
-            maxFeePerGas: transaction?.maxFeePerGas ? toHex(transaction.maxFeePerGas) : undefined,
-            data: transaction.data,
-            nonce: transaction?.nonce ? toHex(transaction.nonce) : undefined,
-            chainId: transaction?.chainId ? toHex(transaction.chainId) : undefined,
-        },
-        identity,
-    )
-}
-
-export async function encodeContractTransaction(
-    contract: BaseContract,
-    transaction: PayableTransactionObject<unknown> | NonPayableTransactionObject<unknown>,
-    overrides?: Partial<Transaction>,
-    withoutGas = false,
-) {
-    const tx: PayableTx & {
-        maxPriorityFeePerGas?: string
-        maxFeePerGas?: string
-    } = {
-        from: (overrides?.from as string | undefined) ?? contract.defaultAccount ?? '',
-        to: contract.options.address,
-        data: transaction.encodeABI(),
-        value: overrides?.value ? toHex(overrides.value) : undefined,
-        gas: overrides?.gas ? toHex(overrides.gas) : undefined,
-        gasPrice: overrides?.gasPrice ? toHex(overrides.gasPrice) : undefined,
-        maxPriorityFeePerGas: overrides?.maxPriorityFeePerGas ? toHex(overrides.maxPriorityFeePerGas) : undefined,
-        maxFeePerGas: overrides?.maxFeePerGas ? toHex(overrides.maxFeePerGas) : undefined,
-        nonce: overrides?.nonce ? toHex(overrides.nonce) : undefined,
-        chainId: overrides?.chainId ? toHex(overrides.chainId) : undefined,
-    }
-
-    if (!tx.gas && !withoutGas) {
-        try {
-            tx.gas = await transaction.estimateGas({
-                from: tx.from as string | undefined,
-                to: tx.to as string | undefined,
-                data: tx.data as string | undefined,
-                value: tx.value,
-                // rpc hack, alchemy rpc must pass gas parameter
-                gas: hexToNumber(overrides?.chainId ?? '0x0') === ChainId.Astar ? '0x135168' : undefined,
-            })
-        } catch {}
-    }
-
-    return encodeTransaction(tx)
-}
-
-export async function sendTransaction(
-    contract: BaseContract | null,
-    transaction?: PayableTransactionObject<unknown> | NonPayableTransactionObject<unknown>,
-    overrides?: Partial<Transaction>,
-) {
-    if (!contract || !transaction) throw new Error('Invalid contract or transaction.')
-    const tx = await encodeContractTransaction(contract, transaction, overrides)
-    const receipt = await transaction.send(tx as PayableTx)
-    return receipt?.transactionHash ?? ''
 }

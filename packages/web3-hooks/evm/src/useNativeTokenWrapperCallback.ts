@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 import { isLessThan, isZero } from '@masknet/web3-shared-base'
 import type { NetworkPluginID } from '@masknet/shared-base'
-import { ChainId, encodeContractTransaction, GasOptionConfig } from '@masknet/web3-shared-evm'
+import { ChainId, ContractTransaction, GasOptionConfig } from '@masknet/web3-shared-evm'
 import { useChainContext, useWeb3Connection } from '@masknet/web3-hooks-base'
 import { useNativeTokenWrapperContract } from './useWrappedEtherContract.js'
 
@@ -20,13 +20,11 @@ export function useNativeTokenWrapperCallback(chainId?: ChainId) {
             if (isZero(amount)) return
 
             // estimate gas and compose transaction
-            const config = {
+            const tx = await new ContractTransaction(wrapperContract).encodeWithGas(wrapperContract.methods.deposit(), {
                 from: account,
                 value: amount,
                 ...gasConfig,
-            }
-
-            const tx = await encodeContractTransaction(wrapperContract, wrapperContract.methods.deposit(), config)
+            })
 
             // send transaction and wait for hash
             const hash = await connection.sendTransaction(tx, { chainId, overrides: { ...gasConfig } })
@@ -58,16 +56,12 @@ export function useNativeTokenWrapperCallback(chainId?: ChainId) {
             }
 
             // estimate gas and compose transaction
-            const withdrawAmount = all ? wethBalance : amount
-            const config = {
-                from: account,
-                ...gasConfig,
-            }
-
-            const tx = await encodeContractTransaction(
-                wrapperContract,
-                wrapperContract.methods.withdraw(withdrawAmount),
-                config,
+            const tx = await new ContractTransaction(wrapperContract).encodeWithGas(
+                wrapperContract.methods.withdraw(all ? wethBalance : amount),
+                {
+                    from: account,
+                    ...gasConfig,
+                },
             )
 
             // send transaction and wait for hash

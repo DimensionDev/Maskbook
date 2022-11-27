@@ -1,8 +1,8 @@
-import { useChainContext, useWeb3Connection } from '@masknet/web3-hooks-base'
-import { NetworkPluginID } from '@masknet/shared-base'
-import { encodeContractTransaction } from '@masknet/web3-shared-evm'
 import { useState } from 'react'
 import { useAsyncFn } from 'react-use'
+import { useChainContext, useWeb3Connection } from '@masknet/web3-hooks-base'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { ContractTransaction } from '@masknet/web3-shared-evm'
 import { useRedPacketContract } from './useRedPacketContract.js'
 
 export function useRefundCallback(version: number, from: string, id?: string) {
@@ -15,10 +15,12 @@ export function useRefundCallback(version: number, from: string, id?: string) {
         if (!connection || !redPacketContract || !id) return
 
         setIsRefunded(false)
-        const config = {
-            from,
-        }
-        const tx = await encodeContractTransaction(redPacketContract, redPacketContract.methods.refund(id), config)
+        const tx = await new ContractTransaction(redPacketContract).encodeWithGas(
+            redPacketContract.methods.refund(id),
+            {
+                from,
+            },
+        )
         const hash = await connection.sendTransaction(tx)
         setIsRefunded(true)
         return hash
