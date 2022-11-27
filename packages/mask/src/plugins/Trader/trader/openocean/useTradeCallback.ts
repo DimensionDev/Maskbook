@@ -3,16 +3,13 @@ import { pick } from 'lodash-es'
 import { useMemo } from 'react'
 import { useAsyncFn } from 'react-use'
 import type { TransactionConfig } from 'web3-core'
-import type { GasOptionConfig } from '@masknet/web3-shared-evm'
+import type { GasConfig } from '@masknet/web3-shared-evm'
 import type { SwapOOSuccessResponse, TradeComputed } from '../../types/index.js'
 import { ZERO } from '@masknet/web3-shared-base'
 import { useChainContext, useNetworkContext, useWeb3Connection } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 
-export function useTradeCallback(
-    tradeComputed: TradeComputed<SwapOOSuccessResponse> | null,
-    gasConfig?: GasOptionConfig,
-) {
+export function useTradeCallback(tradeComputed: TradeComputed<SwapOOSuccessResponse> | null, gasConfig?: GasConfig) {
     const connection = useWeb3Connection()
     const { account, chainId } = useChainContext()
     const { pluginID } = useNetworkContext()

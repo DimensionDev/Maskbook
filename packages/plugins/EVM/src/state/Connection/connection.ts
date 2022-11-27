@@ -1036,7 +1036,7 @@ class Connection implements EVM_Connection {
         )
     }
 
-    requestTransaction(hash: string, transaction: Transaction, initial?: EVM_Web3ConnectionOptions) {
+    replaceTransaction(hash: string, transaction: Transaction, initial?: EVM_Web3ConnectionOptions) {
         const options = this.getOptions(initial)
         return this.hijackedRequest<void>(
             {

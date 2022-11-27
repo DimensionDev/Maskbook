@@ -7,7 +7,7 @@ import {
     useChainContext,
 } from '@masknet/web3-hooks-base'
 import { isSameAddress, SocialAccount } from '@masknet/web3-shared-base'
-import type { ChainId, GasOptionConfig } from '@masknet/web3-shared-evm'
+import type { ChainId, GasConfig } from '@masknet/web3-shared-evm'
 import { NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { getStorage } from '../../storage/index.js'
@@ -49,11 +49,11 @@ export const TipTaskProvider: FC<React.PropsWithChildren<Props>> = memo(({ child
     const { pluginID, setPluginID } = useNetworkContext()
     const { chainId } = useChainContext()
 
-    const [_recipientAddress, setRecipient] = useState<string>(task.recipient ?? '')
+    const [_recipientAddress, setRecipient] = useState(task.recipient ?? '')
     const recipients = useRecipients(pluginID, task.accounts)
-    const [tipType, setTipType] = useState<TipsType>(TipsType.Tokens)
+    const [tipType, setTipType] = useState(TipsType.Tokens)
     const [amount, setAmount] = useState('')
-    const [nonFungibleTokenAddress, setNonFungibleTokenAddress] = useState<string>('')
+    const [nonFungibleTokenAddress, setNonFungibleTokenAddress] = useState('')
     const { value: nativeTokenDetailed = null } = useFungibleToken(pluginID, undefined, undefined, {
         chainId,
     })
@@ -65,7 +65,7 @@ export const TipTaskProvider: FC<React.PropsWithChildren<Props>> = memo(({ child
 
     const { value: nonFungibleTokenContract } = useNonFungibleTokenContract(pluginID, nonFungibleTokenAddress)
 
-    const [gasOption, setGasOption] = useState<GasOptionConfig>()
+    const [gasOption, setGasOption] = useState<GasConfig>()
     const connectionOptions =
         pluginID === NetworkPluginID.PLUGIN_EVM
             ? {
