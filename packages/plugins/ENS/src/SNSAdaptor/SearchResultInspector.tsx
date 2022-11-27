@@ -60,7 +60,7 @@ const useStyles = makeStyles<StyleProps>()((theme) => {
             textOverflow: 'ellipsis',
             fontWeight: 400,
             marginLeft: 4,
-            fontSize: 16,
+            fontSize: 14,
         },
         rightSpace: {
             marginRight: 6,
