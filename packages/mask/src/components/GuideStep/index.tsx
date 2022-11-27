@@ -188,7 +188,7 @@ export default function GuideStep({
         <>
             {cloneElement(children as ReactElement<any>, { ref: childrenRef })}
             {usePortalShadowRoot((container) => {
-                if (!open || !clientRect.top || !clientRect.left) return null
+                if (!open || !clientRect?.top || !clientRect?.left) return null
                 return (
                     <Portal container={container}>
                         <div className={classes.mask} onClick={(e) => e.stopPropagation()}>
