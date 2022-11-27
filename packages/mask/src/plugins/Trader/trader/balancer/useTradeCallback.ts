@@ -1,10 +1,10 @@
-import type { ExchangeProxy } from '@masknet/web3-contracts/types/ExchangeProxy.js'
-import { GasOptionConfig, useTraderConstants, encodeContractTransaction } from '@masknet/web3-shared-evm'
 import { useAsyncFn } from 'react-use'
-import { SLIPPAGE_DEFAULT } from '../../constants/index.js'
-import { SwapResponse, TradeComputed, TradeStrategy } from '../../types/index.js'
+import type { ExchangeProxy } from '@masknet/web3-contracts/types/ExchangeProxy.js'
+import { GasOptionConfig, useTraderConstants, ContractTransaction } from '@masknet/web3-shared-evm'
 import { useChainContext, useNetworkContext, useWeb3Connection, useWeb3State } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
+import { SLIPPAGE_DEFAULT } from '../../constants/index.js'
+import { SwapResponse, TradeComputed, TradeStrategy } from '../../types/index.js'
 import { useTradeAmount } from './useTradeAmount.js'
 
 export function useTradeCallback(
@@ -68,14 +68,7 @@ export function useTradeCallback(
             transactionValue = trade.outputAmount.toFixed()
 
         // send transaction and wait for hash
-        const config = {
-            from: account,
-            value: transactionValue,
-            ...gasConfig,
-        }
-
-        const tx = await encodeContractTransaction(
-            exchangeProxyContract,
+        const tx = await new ContractTransaction(exchangeProxyContract).encodeWithGas(
             trade.strategy === TradeStrategy.ExactIn
                 ? exchangeProxyContract.methods.multihopBatchSwapExactIn(
                       swap_,
@@ -90,13 +83,16 @@ export function useTradeCallback(
                       outputTokenAddress,
                       tradeAmount.toFixed(),
                   ),
-            config,
+            {
+                from: account,
+                value: transactionValue,
+                ...gasConfig,
+            },
         )
 
         // send transaction and wait for hash
         const hash = await connection.sendTransaction(tx, { chainId, overrides: { ...gasConfig } })
         const receipt = await connection.getTransactionReceipt(hash)
-
         return receipt?.transactionHash
     }, [
         chainId,

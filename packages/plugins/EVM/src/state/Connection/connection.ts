@@ -27,7 +27,6 @@ import {
     createNativeToken,
     createContract,
     getTokenConstant,
-    sendTransaction,
     createERC20Token,
     parseStringOrBytes32,
     createWeb3,
@@ -35,9 +34,10 @@ import {
     getEthereumConstant,
     isValidAddress,
     isNativeTokenAddress,
-    encodeTransaction,
     UserOperation,
     AddressType,
+    ContractTransaction,
+    AccountTransaction,
 } from '@masknet/web3-shared-evm'
 import {
     Account,
@@ -242,9 +242,10 @@ class Connection implements EVM_Connection {
         if (!address || isNativeTokenAddress(address)) throw new Error('Invalid token address.')
 
         // ERC20
-        const contract = await this.getERC20Contract(address, options)
-        const tx = contract?.methods.approve(recipient, toHex(amount))
-        return sendTransaction(contract, tx, options.overrides)
+        return new ContractTransaction(await this.getERC20Contract(address, options)).send(
+            (x) => x?.methods.approve(recipient, toHex(amount)),
+            options.overrides,
+        )
     }
     async approveNonFungibleToken(
         address: string,
@@ -270,9 +271,10 @@ class Connection implements EVM_Connection {
         if (!address || isNativeTokenAddress(address)) throw new Error('Invalid token address.')
 
         // ERC721 & ERC1155
-        const contract = await this.getERC721Contract(address, options)
-        const tx = contract?.methods.setApprovalForAll(recipient, approved)
-        return sendTransaction(contract, tx, options.overrides)
+        return new ContractTransaction(await this.getERC721Contract(address, options)).send(
+            (x) => x?.methods.setApprovalForAll(recipient, approved),
+            options.overrides,
+        )
     }
     async transferFungibleToken(
         address: string,
@@ -300,9 +302,10 @@ class Connection implements EVM_Connection {
         }
 
         // ERC20
-        const contract = await this.getERC20Contract(address, options)
-        const tx = contract?.methods.transfer(recipient, toHex(amount))
-        return sendTransaction(contract, tx, options.overrides)
+        return new ContractTransaction(await this.getERC20Contract(address, options)).send(
+            (x) => x?.methods.transfer(recipient, toHex(amount)),
+            options.overrides,
+        )
     }
     async transferNonFungibleToken(
         address: string,
@@ -317,15 +320,17 @@ class Connection implements EVM_Connection {
 
         // ERC1155
         if (actualSchema === SchemaType.ERC1155) {
-            const contract = await this.getERC1155Contract(address, options)
-            const tx = contract?.methods.safeTransferFrom(options.account, recipient, tokenId, amount ?? '', '0x')
-            return sendTransaction(contract, tx, options.overrides)
+            return new ContractTransaction(await this.getERC1155Contract(address, options)).send(
+                (x) => x?.methods.safeTransferFrom(options.account, recipient, tokenId, amount ?? '', '0x'),
+                options.overrides,
+            )
         }
 
         // ERC721
-        const contract = await this.getERC721Contract(address, options)
-        const tx = contract?.methods.transferFrom(options.account, recipient, tokenId)
-        return sendTransaction(contract, tx, options.overrides)
+        return new ContractTransaction(await this.getERC721Contract(address, options)).send(
+            (x) => x?.methods.transferFrom(options.account, recipient, tokenId),
+            options.overrides,
+        )
     }
 
     async getGasPrice(initial?: EVM_Web3ConnectionOptions): Promise<string> {
@@ -983,32 +988,23 @@ class Connection implements EVM_Connection {
 
     callTransaction(transaction: Transaction, initial?: EVM_Web3ConnectionOptions) {
         const options = this.getOptions(initial)
+        const config = new AccountTransaction(transaction).encode(options.overrides)
         return this.hijackedRequest<string>(
             {
                 method: EthereumMethodType.ETH_CALL,
-                params: [
-                    encodeTransaction({
-                        ...transaction,
-                        ...options.overrides,
-                    }),
-                    'latest',
-                ],
+                params: [config, 'latest'],
             },
             options,
         )
     }
     async sendTransaction(transaction: Transaction, initial?: EVM_Web3ConnectionOptions) {
         const options = this.getOptions(initial)
+        const config = new AccountTransaction(transaction).encode(options.overrides)
         // send a transaction which will add into the internal transaction list and start to watch it for confirmation
         const hash = await this.hijackedRequest<string>(
             {
                 method: EthereumMethodType.ETH_SEND_TRANSACTION,
-                params: [
-                    encodeTransaction({
-                        ...transaction,
-                        ...options.overrides,
-                    }),
-                ],
+                params: [config],
             },
             options,
         )

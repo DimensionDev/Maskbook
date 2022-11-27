@@ -6,9 +6,9 @@ import type { BaseContract, NonPayableTx } from '@masknet/web3-contracts/types/t
 import MulticallABI from '@masknet/web3-contracts/abis/Multicall.json'
 import {
     ChainId,
+    ContractTransaction,
     createContract,
     decodeOutputString,
-    encodeContractTransaction,
     getEthereumConstant,
     UnboxTransactionObject,
 } from '@masknet/web3-shared-evm'
@@ -117,11 +117,9 @@ export class MulticallAPI implements MulticallBaseAPI.Provider {
                 await Promise.all(
                     this.chunkArray(unresolvedCalls).map(async (chunk) => {
                         // we don't mind the actual block number of the current call
-                        const tx = await encodeContractTransaction(
-                            contract,
+                        const tx = new ContractTransaction(contract).encode(
                             contract.methods.multicall(chunk),
                             overrides,
-                            true,
                         )
                         const hex = await web3.eth.call(tx)
 

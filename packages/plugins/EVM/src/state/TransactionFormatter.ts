@@ -66,10 +66,7 @@ export class TransactionFormatter extends TransactionFormatterState<ChainId, Tra
         transaction: Transaction,
         hash?: string,
     ): Promise<TransactionContext<ChainId, string | undefined>> {
-        const { from, value, data, to, functionSignature, functionParameters } = new AccountTransaction(
-            chainId,
-            transaction,
-        )
+        const { from, value, data, to, functionSignature, functionParameters } = new AccountTransaction(transaction)
         const context: TransactionContext<ChainId, string | undefined> = {
             type: TransactionDescriptorType.INTERACTION,
             chainId,
