@@ -95,12 +95,14 @@ export enum SchemaType {
 
 export interface EIP1559GasConfig {
     gas?: number
+    gasCurrency?: string
     maxFeePerGas: number | string
     maxPriorityFeePerGas: number | string
 }
 
 export interface PriorEIP1559GasConfig {
     gas?: number
+    gasCurrency?: string
     gasPrice: number | string
 }
 
