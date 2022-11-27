@@ -33,7 +33,7 @@ export function GasSettingsBar() {
                 })
             })
         },
-        [defaultGasPrice],
+        [chainId, defaultGasPrice],
     )
     return (
         <SelectGasSettingsToolbar
