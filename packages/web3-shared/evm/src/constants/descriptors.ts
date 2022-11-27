@@ -382,6 +382,8 @@ export const PROVIDER_DESCRIPTORS: Array<ProviderDescriptor<ChainId, ProviderTyp
         type: ProviderType.ClvWallet,
         name: 'ClvWallet',
         icon: new URL('../assets/clvwallet.png', import.meta.url),
+        backgroundGradient:
+            'linear-gradient(90deg, rgba(52, 133, 196, 0.2) 0%, rgba(0, 239, 139, 0.2) 100%), linear-gradient(0deg, #FFFFFF, #FFFFFF)',
         enableRequirements: {
             supportedChainIds: isFirefox() ? [] : getEnumAsArray(ChainId).map((x) => x.value),
             supportedEnhanceableSites: isFirefox() ? [] : getEnumAsArray(EnhanceableSite).map((x) => x.value),
