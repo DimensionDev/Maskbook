@@ -29,11 +29,12 @@ const useStyles = makeStyles()((theme) => {
 export interface SourceSwitcherProps extends withClasses<'source' | 'sourceNote'> {
     sourceType?: SourceType
     sourceTypes?: SourceType[]
+    hideArrowDropDownIcon?: boolean
     onSourceTypeChange?: (option: FootnoteMenuOption) => void
 }
 
 export function SourceSwitcher(props: SourceSwitcherProps) {
-    const { sourceType, sourceTypes = [], onSourceTypeChange } = props
+    const { sourceType, sourceTypes = [], onSourceTypeChange, hideArrowDropDownIcon = false } = props
     const t = useSharedI18N()
     const { classes } = useStyles(undefined, { props })
 
@@ -45,7 +46,9 @@ export function SourceSwitcher(props: SourceSwitcherProps) {
                 flexDirection="row"
                 alignItems="center"
                 gap={0.5}>
-                <Typography className={classes.sourceNote}>{t.plugin_trader_data_source()}</Typography>
+                <Typography className={classes.sourceNote}>
+                    {hideArrowDropDownIcon ? t.powered_by() : t.plugin_trader_data_source()}
+                </Typography>
                 <FootnoteMenu
                     options={sourceTypes.map((x) => ({
                         name: (
@@ -56,6 +59,7 @@ export function SourceSwitcher(props: SourceSwitcherProps) {
                         ),
                         value: x,
                     }))}
+                    hideArrowDropDownIcon={hideArrowDropDownIcon}
                     selectedIndex={typeof sourceType !== 'undefined' ? sourceTypes.indexOf(sourceType) : -1}
                     onChange={onSourceTypeChange}
                 />

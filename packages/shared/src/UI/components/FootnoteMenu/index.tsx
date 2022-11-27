@@ -34,11 +34,12 @@ export interface FootnoteMenuProps {
     options: FootnoteMenuOption[]
     selectedIndex?: number
     children?: React.ReactNode
+    hideArrowDropDownIcon?: boolean
     onChange?: (option: FootnoteMenuOption) => void
 }
 
 export function FootnoteMenu(props: FootnoteMenuProps) {
-    const { children, options, selectedIndex = -1, onChange } = props
+    const { children, options, selectedIndex = -1, onChange, hideArrowDropDownIcon = false } = props
 
     const { classes, theme } = useStyles()
     const onSelect = (option: FootnoteMenuOption) => {
@@ -88,7 +89,9 @@ export function FootnoteMenu(props: FootnoteMenuProps) {
             <Link className={classes.link} color="inherit" underline="none" onClick={openMenu}>
                 <Typography className={classes.title} variant="subtitle2">
                     {options[selectedIndex]?.name}
-                    <ArrowDropDownIcon style={{ fontSize: 16, cursor: 'pointer' }} className={classes.icon} />
+                    {hideArrowDropDownIcon ? null : (
+                        <ArrowDropDownIcon style={{ fontSize: 16, cursor: 'pointer' }} className={classes.icon} />
+                    )}
                 </Typography>
                 {children}
             </Link>

@@ -38,7 +38,7 @@ import { setStorage } from '../../storage/index.js'
 import type { Coin, Currency, Stat } from '../../types/index.js'
 import { CoinMenu } from './CoinMenu.js'
 import { CoinIcon } from './components/index.js'
-import { PluginHeader } from './PluginHeader.js'
+import { PluginDescriptor } from './PluginDescriptor.js'
 import { PriceChanged } from './PriceChanged.js'
 import { TrendingCard, TrendingCardProps } from './TrendingCard.js'
 
@@ -115,10 +115,12 @@ const useStyles = makeStyles<{
         },
         buyButton: {
             marginLeft: 'auto',
-            marginBottom: theme.spacing(2),
         },
         icon: {
             color: MaskColors.dark.maskColor.dark,
+        },
+        pluginDescriptorWrapper: {
+            padding: '0 12px 12px',
         },
     }
 })
@@ -216,7 +218,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
             <ThemeProvider theme={MaskLightTheme}>
                 <Stack className={classes.cardHeader}>
                     {isPopper ? null : (
-                        <PluginHeader>
+                        <PluginDescriptor>
                             {showDataProviderIcon ? (
                                 <SourceSwitcher
                                     sourceType={dataProvider as unknown as SourceType}
@@ -224,7 +226,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                     onSourceTypeChange={onDataProviderChange}
                                 />
                             ) : null}
-                        </PluginHeader>
+                        </PluginDescriptor>
                     )}
                     <Stack className={classes.headline}>
                         <Stack gap={2} flexGrow={1}>
@@ -339,6 +341,20 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                 <Paper className={classes.body} elevation={0}>
                     {children}
                 </Paper>
+                {isPopper ? (
+                    <section className={classes.pluginDescriptorWrapper}>
+                        <PluginDescriptor>
+                            {showDataProviderIcon ? (
+                                <SourceSwitcher
+                                    sourceType={dataProvider as unknown as SourceType}
+                                    sourceTypes={dataProviders as unknown as SourceType[]}
+                                    onSourceTypeChange={onDataProviderChange}
+                                    hideArrowDropDownIcon
+                                />
+                            ) : null}
+                        </PluginDescriptor>
+                    </section>
+                ) : null}
             </CardContent>
         </TrendingCard>
     )
