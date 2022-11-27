@@ -39,7 +39,7 @@ export function GasSettingsBar() {
         <SelectGasSettingsToolbar
             nativeToken={nativeToken}
             nativeTokenPrice={nativeTokenPrice}
-            gasOption={gasOption}
+            gasConfig={gasOption}
             gasLimit={gasLimit}
             onChange={handleGasSettingChange}
         />

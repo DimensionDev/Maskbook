@@ -2,15 +2,15 @@ import { useEffect, useState, useMemo, useCallback } from 'react'
 import { BigNumber } from 'bignumber.js'
 import { useMenuConfig, FormattedBalance, useSharedI18N, useSelectAdvancedSettings } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
-import { GasOptionType, multipliedBy, isZero, formatBalance, formatCurrency } from '@masknet/web3-shared-base'
+import { GasOptionType, isZero, formatBalance, formatCurrency } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import {
-    EIP1559GasConfig,
+    ChainId,
     formatEtherToGwei,
     formatWeiToEther,
     formatWeiToGwei,
     GasConfig,
-    PriorEIP1559GasConfig,
+    GasEditor,
 } from '@masknet/web3-shared-evm'
 import { Typography, MenuItem, Box } from '@mui/material'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -24,8 +24,8 @@ interface SelectGasSettingsToolbarProps<T extends NetworkPluginID = NetworkPlugi
     nativeToken: Web3Helper.FungibleTokenAll
     nativeTokenPrice: number
     gasLimit: number
-    gasOption?: GasConfig
-    onChange?(gasOption?: GasConfig): void
+    gasConfig?: GasConfig
+    onChange?(gasConfig?: GasConfig): void
 }
 
 const useStyles = makeStyles()((theme) => {
@@ -106,7 +106,7 @@ export function SelectGasSettingsToolbar(props: SelectGasSettingsToolbarProps) {
 
 export function SelectGasSettingsToolbarUI({
     onChange,
-    gasOption,
+    gasConfig: gasOption,
     gasLimit,
     nativeToken,
     nativeTokenPrice,
@@ -209,12 +209,7 @@ export function SelectGasSettingsToolbarUI({
     )
     const gasFee = useMemo(() => {
         if (!gasOption || !gasLimit) return '0'
-        const priorEIP1559GasConfig = gasOption as PriorEIP1559GasConfig
-        const EIP1559GasConfig = gasOption as EIP1559GasConfig
-        const gasPrice = (
-            priorEIP1559GasConfig.gasPrice ? priorEIP1559GasConfig.gasPrice : EIP1559GasConfig.maxFeePerGas
-        ) as string
-        return gasPrice ? multipliedBy(gasPrice, gasLimit).integerValue().toFixed() : '0'
+        return GasEditor.fromConfig(chainId as ChainId, gasOption).getGasFee(gasLimit)
     }, [gasLimit, gasOption])
 
     const gasFeeUSD = useMemo(() => {

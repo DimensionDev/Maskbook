@@ -25,7 +25,7 @@ export class GasEditor {
         return this.config as PriorEIP1559GasConfig
     }
 
-    getGasFee(gas: string) {
+    getGasFee(gas: string | number) {
         return multipliedBy(this.getGasPrice(), gas)
     }
 
@@ -76,6 +76,14 @@ export class GasEditor {
             gasPrice: transaction?.gasPrice as string | undefined,
             maxFeePerGas: transaction?.maxFeePerGas as string | undefined,
             maxPriorityFeePerGas: transaction?.maxPriorityFeePerGas as string | undefined,
+        })
+    }
+
+    static fromGasOption(chainId: ChainId, gasOption?: GasOption) {
+        return new GasEditor(chainId, {
+            gasPrice: toFixed(gasOption?.suggestedMaxFeePerGas ?? 0, 0),
+            maxFeePerGas: toFixed(gasOption?.suggestedMaxFeePerGas ?? 0, 0),
+            maxPriorityFeePerGas: toFixed(gasOption?.suggestedMaxPriorityFeePerGas ?? 0, 0),
         })
     }
 
