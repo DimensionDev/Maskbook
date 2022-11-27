@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 import { isLessThan, isZero } from '@masknet/web3-shared-base'
 import type { NetworkPluginID } from '@masknet/shared-base'
-import { ChainId, ContractTransaction, GasOptionConfig } from '@masknet/web3-shared-evm'
+import { ChainId, ContractTransaction, GasConfig } from '@masknet/web3-shared-evm'
 import { useChainContext, useWeb3Connection } from '@masknet/web3-hooks-base'
 import { useNativeTokenWrapperContract } from './useWrappedEtherContract.js'
 
@@ -11,7 +11,7 @@ export function useNativeTokenWrapperCallback(chainId?: ChainId) {
     const connection = useWeb3Connection()
 
     const wrapCallback = useCallback(
-        async (amount: string, gasConfig?: GasOptionConfig) => {
+        async (amount: string, gasConfig?: GasConfig) => {
             if (!connection || !wrapperContract || !amount) {
                 return
             }
@@ -37,7 +37,7 @@ export function useNativeTokenWrapperCallback(chainId?: ChainId) {
     )
 
     const unwrapCallback = useCallback(
-        async (all = true, amount = '0', gasConfig?: GasOptionConfig) => {
+        async (all = true, amount = '0', gasConfig?: GasConfig) => {
             if (!connection || !wrapperContract || !amount) {
                 return
             }

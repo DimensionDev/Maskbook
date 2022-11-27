@@ -4,7 +4,14 @@ import { useMenuConfig, FormattedBalance, useSharedI18N, useSelectAdvancedSettin
 import { makeStyles } from '@masknet/theme'
 import { GasOptionType, multipliedBy, isZero, formatBalance, formatCurrency } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { formatEtherToGwei, formatWeiToEther, formatWeiToGwei, GasOptionConfig } from '@masknet/web3-shared-evm'
+import {
+    EIP1559GasConfig,
+    formatEtherToGwei,
+    formatWeiToEther,
+    formatWeiToGwei,
+    GasConfig,
+    PriorEIP1559GasConfig,
+} from '@masknet/web3-shared-evm'
 import { Typography, MenuItem, Box } from '@mui/material'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useChainContext, useWeb3State, useNetworkContext } from '@masknet/web3-hooks-base'
@@ -17,8 +24,8 @@ interface SelectGasSettingsToolbarProps<T extends NetworkPluginID = NetworkPlugi
     nativeToken: Web3Helper.FungibleTokenAll
     nativeTokenPrice: number
     gasLimit: number
-    gasOption?: GasOptionConfig
-    onChange?(gasOption?: GasOptionConfig): void
+    gasOption?: GasConfig
+    onChange?(gasOption?: GasConfig): void
 }
 
 const useStyles = makeStyles()((theme) => {
@@ -104,11 +111,11 @@ export function SelectGasSettingsToolbarUI({
     nativeToken,
     nativeTokenPrice,
 }: SelectGasSettingsToolbarProps) {
-    const { gasOptions, GAS_OPTION_NAMES } = SettingsContext.useContainer()
     const t = useSharedI18N()
+    const { classes, cx, theme } = useStyles()
+    const { gasOptions, GAS_OPTION_NAMES } = SettingsContext.useContainer()
     const [isCustomGas, setIsCustomGas] = useState(false)
     const [currentGasOptionType, setCurrentGasOptionType] = useState<GasOptionType>(GasOptionType.NORMAL)
-    const { classes, cx, theme } = useStyles()
     const { chainId } = useChainContext()
     const { Others } = useWeb3State<'all'>()
 
@@ -202,7 +209,11 @@ export function SelectGasSettingsToolbarUI({
     )
     const gasFee = useMemo(() => {
         if (!gasOption || !gasLimit) return '0'
-        const gasPrice = (gasOption.gasPrice ? gasOption.gasPrice : gasOption.maxFeePerGas) as string
+        const priorEIP1559GasConfig = gasOption as PriorEIP1559GasConfig
+        const EIP1559GasConfig = gasOption as EIP1559GasConfig
+        const gasPrice = (
+            priorEIP1559GasConfig.gasPrice ? priorEIP1559GasConfig.gasPrice : EIP1559GasConfig.maxFeePerGas
+        ) as string
         return gasPrice ? multipliedBy(gasPrice, gasLimit).integerValue().toFixed() : '0'
     }, [gasLimit, gasOption])
 

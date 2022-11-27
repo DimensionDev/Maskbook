@@ -9,7 +9,6 @@ import type { NonPayableTransactionObject, PayableTransactionObject } from '@mas
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
 
 export type ChainIdOptionalRecord<T> = { [k in ChainId]?: T }
-export type ChainIdRecord<T> = { [k in ChainId]: T }
 
 // Learn more about ethereum ChainId https://github.com/ethereum/EIPs/blob/master/EIPS/eip-155.md
 export enum ChainId {
@@ -95,13 +94,13 @@ export enum SchemaType {
 }
 
 export interface EIP1559GasConfig {
-    gas: number
+    gas?: number
     maxFeePerGas: number | string
     maxPriorityFeePerGas: number | string
 }
 
 export interface PriorEIP1559GasConfig {
-    gas: number
+    gas?: number
     gasPrice: number | string
 }
 
@@ -116,8 +115,6 @@ export interface GasOption {
     suggestedMaxFeePerGas: string
     suggestedMaxPriorityFeePerGas: string
 }
-
-export type GasOptionConfig = Omit<GasConfig, 'gas'>
 
 // Learn more for a full list of supported JSON RPC methods
 // https://eth.wiki/json-rpc/API#json-rpc-methods
@@ -173,11 +170,6 @@ export enum TransactionEventType {
     RECEIPT = 'receipt',
     CONFIRMATION = 'confirmation',
     ERROR = 'error',
-}
-
-export enum DomainProvider {
-    ENS = 'ENS',
-    UNS = 'UNS',
 }
 
 export type UnboxTransactionObject<T> = T extends NonPayableTransactionObject<infer R>
