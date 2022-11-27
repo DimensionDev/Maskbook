@@ -29,5 +29,7 @@ export * from './Twitter.js'
 export * from './Web3.js'
 
 // Implementations
-export * from '../DeBank/type.js'
-export * from '../Zerion/type.js'
+export * from '../DeBank/types.js'
+export * from '../Zerion/types.js'
+export * from '../RSS3/types.js'
+export * from '../GoPlusLabs/types.js'

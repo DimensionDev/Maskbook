@@ -11,7 +11,8 @@ import RSS3 from 'rss3-next'
 import urlcat, { query } from 'urlcat'
 import { fetchJSON } from '../helpers.js'
 import { NonFungibleTokenAPI, RSS3BaseAPI } from '../types/index.js'
-import { NEW_RSS3_ENDPOINT, RSS3_ENDPOINT, TAG, TYPE } from './constants.js'
+import { NEW_RSS3_ENDPOINT, RSS3_ENDPOINT } from './constants.js'
+import { TAG, TYPE } from './types.js'
 import { normalizedFeed } from './helpers.js'
 
 type RSS3Result<T> = {
