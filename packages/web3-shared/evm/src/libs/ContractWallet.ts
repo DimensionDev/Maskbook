@@ -14,7 +14,7 @@ export class ContractWallet {
      * ContractWallet
      *
      * @param owner the owner address
-     * @param address  the deployed contract address
+     * @param address  the deployed logic contract address
      * @param entryPoint the entry point contract address
      */
     constructor(private owner: string, private address: string, private entryPoint: string) {}

@@ -8,10 +8,9 @@ export namespace AbstractAccountAPI {
         id: string
         address: string
         owner: string
-        index: string
     }
 
     export interface Provider<T extends NetworkPluginID> {
-        getAccounts(owner: string[]): Promise<AbstractAccount<T>>
+        getAccounts(chainId: Web3Helper.Definition[T]['ChainId'], owners: string[]): Promise<AbstractAccount<T>>
     }
 }

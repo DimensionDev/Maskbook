@@ -1,4 +1,5 @@
 import type { NetworkPluginID } from '@masknet/shared-base'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import type { AbstractAccountAPI } from './AbstractAccount.js'
 
 export namespace ContractAccountAPI {
@@ -10,6 +11,6 @@ export namespace ContractAccountAPI {
     }
 
     export interface Provider<T extends NetworkPluginID> {
-        getAccounts(owner: string[]): Promise<ContractAccount<T>>
+        getAccounts(chainId: Web3Helper.Definition[T]['ChainId'], owners: string[]): Promise<Array<ContractAccount<T>>>
     }
 }
