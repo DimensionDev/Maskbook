@@ -60,7 +60,7 @@ const MenuText = styled('span')(`
 export const PersonaRowCard = memo(() => {
     const { currentPersona, connectPersona, disconnectPersona, renamePersona, deleteBound, definedSocialNetworks } =
         PersonaContext.useContainer()
-    if (!currentPersona?.identifier?.publicKeyAsHex) return null
+    if (!currentPersona?.identifier.publicKeyAsHex) return null
 
     return (
         <PersonaRowCardUI
