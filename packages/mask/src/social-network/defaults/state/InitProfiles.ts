@@ -1,7 +1,7 @@
 import { MaskMessages } from '../../../utils/messages.js'
 import Services from '../../../extension/service.js'
 import type { SocialNetworkUI } from '@masknet/types'
-import type { ValueRef , ProfileInformation } from '@masknet/shared-base'
+import type { ValueRef, ProfileInformation } from '@masknet/shared-base'
 
 export function InitAutonomousStateProfiles(
     signal: AbortSignal,

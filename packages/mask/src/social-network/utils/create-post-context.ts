@@ -1,4 +1,5 @@
-import { ValueRef ,
+import {
+    ValueRef,
     ALL_EVENTS,
     ObservableMap,
     ObservableSet,

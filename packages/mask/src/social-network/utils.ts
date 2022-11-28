@@ -1,5 +1,5 @@
 import { isEqual } from 'lodash-es'
-import { ValueRef , ObservableWeakMap } from '@masknet/shared-base'
+import { ValueRef, ObservableWeakMap } from '@masknet/shared-base'
 import type { SocialNetworkUI } from '@masknet/types'
 import { ThemeMode, FontSize, ThemeColor } from '@masknet/web3-shared-base'
 

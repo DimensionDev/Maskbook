@@ -1,5 +1,6 @@
 import type { Subscription } from 'use-subscription'
-import type { ValueRef ,
+import type {
+    ValueRef,
     EncryptionTargetType,
     EnhanceableSite,
     NextIDPlatform,
