@@ -62,7 +62,9 @@ export function PersonaPage({ onNext, onChange }: PersonaPageProps) {
         (proof: BindingProof, tokenInfo?: AllChainsNonFungibleToken) => {
             onChange(
                 proof,
-                bindingProofs.filter((x) => x.platform === NextIDPlatform.Ethereum && isValidAddress(x.identity)),
+                socialIdentity?.binding?.proofs.filter(
+                    (x) => x.platform === NextIDPlatform.Ethereum && isValidAddress(x.identity),
+                ) ?? EMPTY_LIST,
                 tokenInfo,
             )
             onNext()
