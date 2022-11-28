@@ -347,7 +347,7 @@ importers:
         version: link:../plugins/EVM
       '@masknet/plugin-example':
         specifier: workspace:^
-        version: link:../plugins/example
+        version: link:../plugins/Example
       '@masknet/plugin-flow':
         specifier: workspace:^
         version: link:../plugins/Flow
@@ -644,7 +644,7 @@ importers:
         version: link:../plugins/EVM
       '@masknet/plugin-example':
         specifier: workspace:^
-        version: link:../plugins/example
+        version: link:../plugins/Example
       '@masknet/plugin-file-service':
         specifier: workspace:^
         version: link:../plugins/FileService
@@ -1489,6 +1489,18 @@ importers:
         specifier: ^1.0.0
         version: 1.0.0
 
+  packages/plugins/Example:
+    dependencies:
+      '@masknet/plugin-infra':
+        specifier: workspace:^
+        version: link:../../plugin-infra
+      '@masknet/shared-base':
+        specifier: workspace:^
+        version: link:../../shared-base
+      ts-results:
+        specifier: ^3.3.0
+        version: 3.3.0
+
   packages/plugins/FileService:
     dependencies:
       '@dimensiondev/common-protocols':
@@ -2030,18 +2042,6 @@ importers:
       use-subscription:
         specifier: ^1.8.0
         version: 1.8.0
-
-  packages/plugins/example:
-    dependencies:
-      '@masknet/plugin-infra':
-        specifier: workspace:^
-        version: link:../../plugin-infra
-      '@masknet/shared-base':
-        specifier: workspace:^
-        version: link:../../shared-base
-      ts-results:
-        specifier: ^3.3.0
-        version: 3.3.0
 
   packages/plugins/template:
     dependencies:
