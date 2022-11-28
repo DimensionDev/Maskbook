@@ -15,7 +15,7 @@ export interface GoPlusTokenInfo {
     token_name: string
     token_symbol: string
     chain_id: string
-    balanace: string
+    balance: string
     approved_list: GoPlusSpender[]
 }
 
