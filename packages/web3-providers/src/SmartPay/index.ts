@@ -39,7 +39,7 @@ export class SmartPayBundlerAPI implements BundlerAPI.Provider {
 
     private async assetChainId(chainId: ChainId) {
         const chainIds = await this.getSupportedChainIds()
-        if (!chainIds.includes(chainId)) throw new Error(`Not supported.`)
+        if (!chainIds.includes(chainId)) throw new Error('Not supported.')
     }
 
     async getSigner(chainId: ChainId): Promise<string> {
