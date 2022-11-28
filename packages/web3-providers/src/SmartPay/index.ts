@@ -142,14 +142,14 @@ export class SmartPayAccountAPI implements ContractAccountAPI.Provider<NetworkPl
         chainId: ChainId,
         owner: string,
     ): Promise<Array<ContractAccountAPI.ContractAccount<NetworkPluginID.PLUGIN_EVM>>> {
-        const entryPonit = await this.getEntryPoint(chainId)
-        if (!entryPonit) throw new Error('No entry point contract.')
+        const entryPoint = await this.getEntryPoint(chainId)
+        if (!entryPoint) throw new Error('No entry point contract.')
 
         const { LOGIC_WALLET_CONTRACT_ADDRESS, CREATE2_FACTORY_CONTRACT_ADDRESS } = getSmartPayConstants(chainId)
         if (!LOGIC_WALLET_CONTRACT_ADDRESS) throw new Error('No logic wallet contract.')
         if (!CREATE2_FACTORY_CONTRACT_ADDRESS) throw new Error('No create2 contract.')
 
-        const contractWallet = new ContractWallet(owner, LOGIC_WALLET_CONTRACT_ADDRESS, entryPonit)
+        const contractWallet = new ContractWallet(owner, LOGIC_WALLET_CONTRACT_ADDRESS, entryPoint)
         const create2Factory = new Create2Factory(CREATE2_FACTORY_CONTRACT_ADDRESS)
 
         const allSettled = await Promise.allSettled([
