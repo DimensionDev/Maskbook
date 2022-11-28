@@ -86,7 +86,7 @@ export class SCWallet implements Middleware<Context> {
                 context.write(await this.bundler.getSupportedChainIds())
                 break
             case EthereumMethodType.ETH_SUPPORTED_ENTRY_POINTS:
-                context.write(await this.bundler.getSupportedEntryPoints())
+                context.write(await this.bundler.getSupportedEntryPoints(context.chainId))
                 break
             case EthereumMethodType.WALLET_SWITCH_ETHEREUM_CHAIN:
                 context.abort(new Error('Not supported by SC wallet.'))

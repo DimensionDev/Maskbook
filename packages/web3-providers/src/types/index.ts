@@ -1,6 +1,8 @@
 // Providers
+export * from './AbstractAccount.js'
 export * from './Authorization.js'
 export * from './Bundler.js'
+export * from './ContractAccount.js'
 export * from './DSearch.js'
 export * from './Domain.js'
 export * from './Explorer.js'
