@@ -26,7 +26,7 @@ import Game from '@masknet/web3-constants/evm/game.json'
 import Pet from '@masknet/web3-constants/evm/pet.json'
 import SmartPay from '@masknet/web3-constants/evm/smart-pay.json'
 import ENS from '@masknet/web3-constants/evm/ens.json'
-import GOPLUSLABS_WHITE_LISTS from '@masknet/web3-constants/evm/whitelist.json'
+import GOPLUSLABS_WHITE_LISTS from '@masknet/web3-constants/evm/gopluslabs.json'
 
 import {
     transformAllHook,
