@@ -1,24 +1,16 @@
 import type { PersonaIdentifier, ProfileIdentifier } from '@masknet/base'
+import Web3Utils from 'web3-utils'
 
 // @ts-ignore
 const Sentry = globalThis.Sentry as Sentry
 
-export const captureException = () => {
-    Sentry.captureException()
-}
-export const captureMessage = () => {
-    Sentry.captureMessage()
-}
-
 export interface LogHubBase {
     captureException(error: Error): void
-
     captureMessage(message: string | object): void
 }
 
 function hash(value: string) {
-    // to be impl
-    return value
+    return Web3Utils.sha3(value)
 }
 
 export class LogHub implements LogHubBase {
