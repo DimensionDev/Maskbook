@@ -117,7 +117,7 @@ export function ProfileInList(props: ProfileInListProps) {
 
     const tooltipTitle = (() => {
         const linkedNames = profile.linkedTwitterNames
-        if (!linkedNames || !linkedNames.length) return ''
+        if (!linkedNames?.length) return ''
         const mentions = profile.linkedTwitterNames.map((username) => '@' + username)
         return `${t('select_friends_dialog_persona_connect')} ${mentions.join(', ')}.`
     })()

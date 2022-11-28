@@ -23,7 +23,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 const resolveTopOffer = (orders?: Array<NonFungibleTokenOrder<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>) => {
-    if (!orders || !orders.length) return
+    if (!orders?.length) return
     return first(
         orders.sort((a, b) => {
             const value_a = new BigNumber(a.priceInToken?.amount ?? 0)
