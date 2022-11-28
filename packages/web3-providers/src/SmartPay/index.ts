@@ -25,7 +25,10 @@ export class SmartPayBundlerAPI implements BundlerAPI.Provider {
             method: 'GET',
         })
         const json: BundlerAPI.Healthz = await response.json()
-        return json
+        return {
+            ...json,
+            chain_id: '137',
+        }
     }
 
     private async handle(userOperation: UserOperation) {
@@ -39,7 +42,7 @@ export class SmartPayBundlerAPI implements BundlerAPI.Provider {
 
     private async assetChainId(chainId: ChainId) {
         const chainIds = await this.getSupportedChainIds()
-        if (!chainIds.includes(chainId)) throw new Error('Not supported.')
+        if (!chainIds.includes(chainId)) throw new Error(`Not supported ${chainId}.`)
     }
 
     async getSigner(chainId: ChainId): Promise<string> {
