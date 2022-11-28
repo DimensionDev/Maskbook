@@ -12,8 +12,8 @@ import {
     toFixed,
 } from '@masknet/web3-shared-base'
 import { ChainId, formatGweiToWei, getDeBankConstants, SchemaType, GasOption } from '@masknet/web3-shared-evm'
-import { formatAssets, formatTransactions } from './format.js'
-import type { WalletTokenRecord, GasPriceDictResponse, HistoryRecord } from './type.js'
+import { formatAssets, formatTransactions } from './helpers.js'
+import type { WalletTokenRecord, GasPriceDictResponse, HistoryRecord } from './types.js'
 import type { FungibleTokenAPI, HistoryAPI, GasOptionAPI } from '../types/index.js'
 import { getAllEVMNativeAssets } from '../helpers.js'
 

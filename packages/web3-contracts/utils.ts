@@ -1,5 +1,5 @@
 import { spawnSync } from 'child_process'
-import os from 'os'
+import { platform } from 'os'
 import { relative, resolve } from 'path'
 
 const ROOT_PATH = resolve(__dirname, '..', '..')
@@ -9,7 +9,7 @@ export function run(cwd = ROOT_PATH, cmd: string, ...args: string[]) {
     const { status, error } = spawnSync(cmd, args, {
         cwd,
         stdio: 'inherit',
-        shell: os.platform() === 'win32',
+        shell: platform() === 'win32',
     })
     if (error) {
         console.error(error)

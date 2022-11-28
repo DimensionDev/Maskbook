@@ -4,12 +4,13 @@ import { Icons } from '@masknet/icons'
 import { useReverseAddress, useWeb3State } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { ChainId, DebankTransactionDirection, SchemaType, ZerionTransactionDirection } from '@masknet/web3-shared-evm'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { Box, Link, Stack, TableCell, TableRow, Tooltip, Typography } from '@mui/material'
 import { TransactionIcon } from '../TransactionIcon/index.js'
 import { TokenType, Transaction } from '@masknet/web3-shared-base'
 import { BigNumber } from 'bignumber.js'
 import fromUnixTime from 'date-fns/fromUnixTime'
+import { DebankTransactionDirection, ZerionTransactionDirection } from '@masknet/web3-providers'
 
 const useStyles = makeStyles()((theme) => ({
     type: {

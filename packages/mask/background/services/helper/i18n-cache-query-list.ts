@@ -7,7 +7,7 @@ export default {
     '/[DimensionDev.Maskbook] develop/packages/shared/src/locales/%locale%.json': 'shared',
     '/[DimensionDev.Maskbook] develop/packages/shared-base-ui/src/locales/%locale%.json': 'shareBase',
     '/[DimensionDev.Maskbook] develop/packages/dashboard/src/locales/%locale%.json': 'dashboard',
-    '/[DimensionDev.Maskbook] develop/packages/plugins/example/src/locales/%locale%.json': 'io.mask.example',
+    '/[DimensionDev.Maskbook] develop/packages/plugins/Example/src/locales/%locale%.json': 'io.mask.example',
     '/[DimensionDev.Maskbook] develop/packages/plugins/Debugger/src/locales/%locale%.json': 'io.mask.debugger',
     '/[DimensionDev.Maskbook] develop/packages/plugins/Wallet/src/locales/%locale%.json': 'com.maskbook.wallet',
     '/[DimensionDev.Maskbook] develop/packages/plugins/Flow/src/locales/%locale%.json': 'com.mask.flow',
@@ -34,7 +34,6 @@ export default {
     '/[DimensionDev.Maskbook] develop/packages/plugins/Gitcoin/src/locales/%locale%.json': 'co.gitcoin',
     '/[DimensionDev.Maskbook] develop/packages/mask/src/plugins/Referral/locales/%locale%.json':
         'com.maskbook.referral',
-    '/[DimensionDev.Maskbook] develop/packages/mask/src/plugins/FindTruman/locales/%locale%.json': 'org.findtruman',
     '/[DimensionDev.Maskbook] develop/packages/mask/src/plugins/MaskBox/locales/%locale%.json': 'com.maskbook.box',
     '/[DimensionDev.Maskbook] develop/packages/mask/src/plugins/Game/locales/%locale%.json': 'com.maskbook.game',
     '/[DimensionDev.Maskbook] develop/packages/mask/src/plugins/Pets/locales/%locale%.json': 'com.maskbook.pets',

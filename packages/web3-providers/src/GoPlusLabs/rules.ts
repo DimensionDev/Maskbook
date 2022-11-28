@@ -1,25 +1,6 @@
 import { parseInt } from 'lodash-es'
-import { SecurityKey, SecurityMessageLevel } from './constants.js'
 import type { SecurityAPI } from '../types/Security.js'
-export type I18nOptions = 'rate' | 'quantity'
-
-export enum SecurityType {
-    Contract = 'contract-security',
-    Transaction = 'transaction-security',
-    Info = 'info-security',
-}
-
-export interface SecurityMessage {
-    type: SecurityType
-    level: SecurityMessageLevel
-    condition(info: SecurityAPI.TokenSecurityType): boolean
-    titleKey: SecurityKey
-    messageKey: SecurityKey
-    i18nParams?: (info: SecurityAPI.TokenSecurityType) => {
-        [key in I18nOptions]: string
-    }
-    shouldHide(info: SecurityAPI.TokenSecurityType): boolean
-}
+import { SecurityMessage, SecurityType, SecurityMessageLevel } from './types.js'
 
 const percentageToNumber = (value?: string) => parseInt((value ?? '').replace('%', '')) * 100
 const isUnset = (name: keyof SecurityAPI.TokenSecurityType) => (info: SecurityAPI.TokenSecurityType) =>

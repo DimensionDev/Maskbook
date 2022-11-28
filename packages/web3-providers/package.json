@@ -12,6 +12,7 @@
   "types": "./dist/index.d.ts",
   "dependencies": {
     "@dimensiondev/mask-wallet-core": "0.1.0-20211013082857-eb62e5f",
+    "@ensdomains/eth-ens-namehash": "^2.0.15",
     "@masknet/icons": "workspace:^",
     "@masknet/public-api": "workspace:^",
     "@masknet/shared-base": "workspace:^",
@@ -24,6 +25,7 @@
     "@masknet/web3-shared-solana": "workspace:^",
     "@metaplex-foundation/mpl-token-metadata": "^1.1.0",
     "@metaplex/js": "^4.11.7",
+    "@siddomains/sidjs": "^0.1.16",
     "@solana/buffer-layout": "^4.0.0",
     "@solana/spl-name-service": "^0.1.3",
     "@solana/spl-token": "^0.1.8",
@@ -33,6 +35,7 @@
     "bignumber.js": "9.1.0",
     "bloom-filters": "^3.0.0",
     "date-fns": "^2.29.3",
+    "ethjs-ens": "^2.0.1",
     "fuse.js": "6.6.2",
     "graphql-request": "^3.4.0",
     "json-stable-stringify": "^1.0.2",

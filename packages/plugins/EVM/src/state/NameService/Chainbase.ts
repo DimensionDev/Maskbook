@@ -9,10 +9,10 @@ export class ChainbaseResolver implements NameServiceResolver {
     }
 
     async lookup(name: string) {
-        return ChainbaseDomain.lookup(name, ChainId.Mainnet)
+        return ChainbaseDomain.lookup(ChainId.Mainnet, name)
     }
 
     async reverse(address: string) {
-        return ChainbaseDomain.reverse(address, ChainId.Mainnet)
+        return ChainbaseDomain.reverse(ChainId.Mainnet, address)
     }
 }

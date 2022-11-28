@@ -24,7 +24,7 @@ import { AstarAPI } from './Astar/index.js'
 import { GoPlusLabsAPI } from './GoPlusLabs/index.js'
 import { NextIDProofAPI, NextIDStorageAPI } from './NextID/index.js'
 import { AlchemyEVM_API, AlchemyFlowAPI } from './Alchemy/index.js'
-import { EthereumWeb3API } from './Web3/index.js'
+import { Web3GasOptionAPI } from './EVM/index.js'
 import { MagicEdenAPI } from './MagicEden/index.js'
 import { CoinMarketCapAPI } from './CoinMarketCap/index.js'
 import { UniSwapAPI } from './Uniswap/index.js'
@@ -47,16 +47,11 @@ import { CryptoScamDBAPI } from './CryptoScamDB/index.js'
 import { SmartPayBundlerAPI } from './SmartPay/index.js'
 import { NomicsAPI } from './Nomics/index.js'
 import { DSearchAPI } from './DSearch/index.js'
+import { MulticallAPI } from './Multicall/index.js'
 import { ENS_API } from './ENS/index.js'
 import { SpaceID_API } from './SpaceID/index.js'
 
-// #region TODO: to be removed
-export * from './helpers.js'
 export * from './types/index.js'
-export * from './OpenSea/utils.js'
-export type { SecurityMessage as GoPlusLabsSecurityMessage } from './GoPlusLabs/rules.js'
-export { CollectionType } from './RSS3/constants.js'
-// #endregion
 
 export const OpenSea = new OpenSeaAPI()
 export const LooksRare = new LooksRareAPI()
@@ -85,7 +80,7 @@ export const MetaSwap = new MetaSwapAPI()
 export const AstarGas = new AstarAPI()
 export const NextIDProof = new NextIDProofAPI()
 export const NextIDStorage = new NextIDStorageAPI()
-export const EthereumWeb3 = new EthereumWeb3API()
+export const EthereumWeb3 = new Web3GasOptionAPI()
 export const Nomics = new NomicsAPI()
 export const CoinMarketCap = new CoinMarketCapAPI()
 export const UniSwap = new UniSwapAPI()
@@ -132,5 +127,8 @@ export const SpaceID = new SpaceID_API()
 // Fuse
 export const FuseTrending = new FuseTrendingAPI()
 
-// Smart Pay Bundler
+// Smart Pay
 export const SmartPayBundler = new SmartPayBundlerAPI()
+
+// EVM multicall
+export const Multicall = new MulticallAPI()

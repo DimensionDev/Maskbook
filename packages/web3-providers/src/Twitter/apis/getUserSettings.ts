@@ -1,7 +1,7 @@
 import { memoize } from 'lodash-es'
 import { memoizePromise } from '@masknet/kit'
 import { isFirefox } from '@masknet/shared-base'
-import { TwitterBaseAPI } from '../../types/index.js'
+import { TwitterBaseAPI } from '../../types/Twitter.js'
 
 /* cspell:disable-next-line */
 const DB_NAME = 'localforage'

@@ -1,15 +1,15 @@
 import { useAsync } from 'react-use'
 import type { AsyncState } from 'react-use/lib/useAsyncFn.js'
 import { BigNumber } from 'bignumber.js'
-import type { SwapResponse, TradeComputed } from '../../types/index.js'
-import { TradeStrategy } from '../../types/index.js'
-import { ChainId, encodeContractTransaction, useTraderConstants } from '@masknet/web3-shared-evm'
-import { useExchangeProxyContract } from '../../contracts/balancer/useExchangeProxyContract.js'
 import type { ExchangeProxy } from '@masknet/web3-contracts/types/ExchangeProxy.js'
-import { useTradeAmount } from './useTradeAmount.js'
-import { SLIPPAGE_DEFAULT } from '../../constants/index.js'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useChainContext, useNetworkContext, useWeb3Connection, useWeb3State } from '@masknet/web3-hooks-base'
+import type { SwapResponse, TradeComputed } from '../../types/index.js'
+import { TradeStrategy } from '../../types/index.js'
+import { ChainId, ContractTransaction, useTraderConstants } from '@masknet/web3-shared-evm'
+import { useExchangeProxyContract } from '../../contracts/balancer/useExchangeProxyContract.js'
+import { useTradeAmount } from './useTradeAmount.js'
+import { SLIPPAGE_DEFAULT } from '../../constants/index.js'
 
 export function useTradeGasLimit(trade: TradeComputed<SwapResponse> | null): AsyncState<number> {
     const { account, chainId } = useChainContext()
@@ -72,8 +72,7 @@ export function useTradeGasLimit(trade: TradeComputed<SwapResponse> | null): Asy
         )
             transactionValue = trade.outputAmount.toFixed()
 
-        const tx = await encodeContractTransaction(
-            exchangeProxyContract,
+        const tx = await new ContractTransaction(exchangeProxyContract).encodeWithGas(
             trade.strategy === TradeStrategy.ExactIn
                 ? exchangeProxyContract.methods.multihopBatchSwapExactIn(
                       swap_,
@@ -94,7 +93,7 @@ export function useTradeGasLimit(trade: TradeComputed<SwapResponse> | null): Asy
             },
         )
 
-        return new BigNumber(tx.gas).toNumber()
+        return new BigNumber(tx.gas!).toNumber()
     }, [
         trade,
         exchangeProxyContract,

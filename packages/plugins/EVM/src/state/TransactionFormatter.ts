@@ -10,17 +10,15 @@ import {
 } from '@masknet/web3-shared-base'
 import { TransactionFormatterState } from '@masknet/web3-state'
 import {
+    AccountTransaction,
     ChainId,
     decodeUserOperations,
-    getData,
-    getFunctionParameters,
-    getFunctionSignature,
     getSmartPayConstant,
-    getTo,
     isEmptyHex,
     isZeroAddress,
     Transaction,
     TransactionParameter,
+    UserTransaction,
 } from '@masknet/web3-shared-evm'
 import { readABIs } from './TransactionFormatter/abi.js'
 import { createConnection } from './Connection/connection.js'
@@ -68,13 +66,7 @@ export class TransactionFormatter extends TransactionFormatterState<ChainId, Tra
         transaction: Transaction,
         hash?: string,
     ): Promise<TransactionContext<ChainId, string | undefined>> {
-        const from = (transaction.from as string | undefined) ?? ''
-        const value = (transaction.value as string | undefined) ?? '0x0'
-        const data = getData(transaction)
-        const to = getTo(transaction)
-        const signature = getFunctionSignature(transaction)
-        const parameters = getFunctionParameters(transaction)
-
+        const { from, value, data, to, functionSignature, functionParameters } = new AccountTransaction(transaction)
         const context: TransactionContext<ChainId, string | undefined> = {
             type: TransactionDescriptorType.INTERACTION,
             chainId,
@@ -86,7 +78,7 @@ export class TransactionFormatter extends TransactionFormatterState<ChainId, Tra
 
         if (data) {
             // contract interaction
-            const abis = readABIs(signature)
+            const abis = readABIs(functionSignature)
 
             if (abis?.length) {
                 try {
@@ -95,7 +87,7 @@ export class TransactionFormatter extends TransactionFormatterState<ChainId, Tra
                         type: TransactionDescriptorType.INTERACTION,
                         methods: abis.map((x) => ({
                             name: x.name,
-                            parameters: this.coder.decodeParameters(x.parameters, parameters ?? ''),
+                            parameters: this.coder.decodeParameters(x.parameters, functionParameters ?? ''),
                         })),
                     }
                 } catch {
@@ -136,7 +128,7 @@ export class TransactionFormatter extends TransactionFormatterState<ChainId, Tra
                 const userOperations = decodeUserOperations(transaction)
                 const allSettled = await Promise.allSettled(
                     userOperations.map((x) => {
-                        return this.createContext(chainId, x)
+                        return this.createContext(chainId, UserTransaction.toTransaction(chainId, '', x))
                     }),
                 )
 

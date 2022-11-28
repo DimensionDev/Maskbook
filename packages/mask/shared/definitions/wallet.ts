@@ -1,5 +1,5 @@
-import type { Wallet } from '@masknet/web3-shared-evm'
 import type { api } from '@dimensiondev/mask-wallet-core/proto'
+
 export interface LegacyWalletRecord {
     /** ethereum hex address */
     address: string
@@ -27,8 +27,12 @@ export interface LegacyWalletRecord {
     createdAt: Date
     updatedAt: Date
 }
-export interface WalletRecord extends Omit<Wallet, 'configurable' | 'hasStoredKeyInfo' | 'hasDerivationPath'> {
+export interface WalletRecord {
     id: string
+    /** User define wallet name. Default address.prefix(6) */
+    name: string
+    /** The address of wallet */
+    address: string
     type: 'wallet'
     derivationPath?: string
     latestDerivationPath?: string

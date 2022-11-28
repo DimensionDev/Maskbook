@@ -1,12 +1,7 @@
 import { useState, useCallback, useMemo } from 'react'
 import type { AbiOutput } from 'web3-utils'
 import { NetworkPluginID } from '@masknet/shared-base'
-import {
-    ChainId,
-    decodeOutputString,
-    encodeContractTransaction,
-    UnboxTransactionObject,
-} from '@masknet/web3-shared-evm'
+import { ChainId, ContractTransaction, decodeOutputString, UnboxTransactionObject } from '@masknet/web3-shared-evm'
 import { useChainContext, useWeb3, useWeb3Connection } from '@masknet/web3-hooks-base'
 import type { BaseContract, NonPayableTx } from '@masknet/web3-contracts/types/types.js'
 import type { Multicall } from '@masknet/web3-contracts/types/Multicall.js'
@@ -150,11 +145,9 @@ export function useMulticallCallback(targetChainId?: ChainId, targetBlockNumber?
                             // we don't mind the actual block number of the current call
                             if (!connection) return
                             const web3 = await connection.getWeb3()
-                            const tx = await encodeContractTransaction(
-                                multicallContract,
+                            const tx = new ContractTransaction(multicallContract).encode(
                                 multicallContract.methods.multicall(chunk),
                                 overrides,
-                                true,
                             )
                             const hex = await connection.callTransaction(tx)
 
@@ -219,11 +212,10 @@ export function useMulticallStateDecoded<
     return useMemo(() => {
         if (!web3 || state.type !== MulticallStateType.SUCCEED || contracts.length !== state.results.length) return []
         return state.results.map(([succeed, gasUsed, result], index): Result => {
-            // the ignore formatter for better reading
-            // prettier-ignore
-            const outputs: AbiOutput[] = (contracts[index].options.jsonInterface
-                .find(({ type, name }) => type === "function" && name === names[index])
-                ?.outputs ?? []);
+            const outputs: AbiOutput[] =
+                contracts[index].options.jsonInterface.find(
+                    ({ type, name }) => type === 'function' && name === names[index],
+                )?.outputs ?? []
             try {
                 const value = decodeOutputString(web3, outputs, result) as R
                 return { succeed, gasUsed, value, error: null }

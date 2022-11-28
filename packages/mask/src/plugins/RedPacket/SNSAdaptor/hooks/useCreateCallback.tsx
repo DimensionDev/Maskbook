@@ -6,13 +6,7 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import { useChainContext, useWeb3Connection, useWeb3 } from '@masknet/web3-hooks-base'
 import type { HappyRedPacketV4 } from '@masknet/web3-contracts/types/HappyRedPacketV4.js'
 import { FungibleToken, isLessThan, toFixed } from '@masknet/web3-shared-base'
-import {
-    ChainId,
-    encodeContractTransaction,
-    SchemaType,
-    useTokenConstants,
-    decodeEvents,
-} from '@masknet/web3-shared-evm'
+import { ChainId, SchemaType, useTokenConstants, decodeEvents, ContractTransaction } from '@masknet/web3-shared-evm'
 import { useRedPacketContract } from './useRedPacketContract.js'
 
 export interface RedPacketSettings {
@@ -147,17 +141,13 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings, version:
         }
 
         // estimate gas and compose transaction
-        const value = toFixed(token.schema === SchemaType.Native ? paramsObj.total : 0)
-        const config = {
-            from: account,
-            value,
-            gas,
-        }
-
-        const tx = await encodeContractTransaction(
-            redPacketContract,
+        const tx = await new ContractTransaction(redPacketContract).encodeWithGas(
             redPacketContract.methods.create_red_packet(...params),
-            config,
+            {
+                from: account,
+                value: toFixed(token.schema === SchemaType.Native ? paramsObj.total : 0),
+                gas,
+            },
         )
 
         const hash = await connection.sendTransaction(tx)

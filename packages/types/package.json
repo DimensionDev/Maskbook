@@ -25,6 +25,6 @@
     "date-fns": "^2.29.3",
     "react-use": "^17.4.0",
     "urlcat": "^2.0.4",
-    "use-subscription": "1.6.0"
+    "use-subscription": "^1.8.0"
   }
 }
