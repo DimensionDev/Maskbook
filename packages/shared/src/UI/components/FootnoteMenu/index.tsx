@@ -6,12 +6,14 @@ import {
     ArrowDropDown as ArrowDropDownIcon,
 } from '@mui/icons-material'
 import { Icons } from '@masknet/icons'
-
-const useStyles = makeStyles()((theme) => ({
+interface StyleProps {
+    hideArrowDropDownIcon: boolean
+}
+const useStyles = makeStyles<StyleProps>()((theme, { hideArrowDropDownIcon }) => ({
     link: {
         display: 'inline-flex',
         alignItems: 'center',
-        cursor: 'pointer',
+        cursor: hideArrowDropDownIcon ? 'default' : 'pointer',
     },
     title: {
         display: 'inline-flex',
@@ -41,7 +43,7 @@ export interface FootnoteMenuProps {
 export function FootnoteMenu(props: FootnoteMenuProps) {
     const { children, options, selectedIndex = -1, onChange, hideArrowDropDownIcon = false } = props
 
-    const { classes, theme } = useStyles()
+    const { classes, theme } = useStyles({ hideArrowDropDownIcon })
     const onSelect = (option: FootnoteMenuOption) => {
         onChange?.(option)
     }
@@ -86,7 +88,11 @@ export function FootnoteMenu(props: FootnoteMenuProps) {
 
     return (
         <>
-            <Link className={classes.link} color="inherit" underline="none" onClick={openMenu}>
+            <Link
+                className={classes.link}
+                color="inherit"
+                underline="none"
+                onClick={hideArrowDropDownIcon ? undefined : openMenu}>
                 <Typography className={classes.title} variant="subtitle2">
                     {options[selectedIndex]?.name}
                     {hideArrowDropDownIcon ? null : (
