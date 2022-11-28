@@ -1,4 +1,4 @@
-import type { ValueRef } from '@dimensiondev/holoflows-kit'
+import type { ValueRef } from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { Chip } from '@mui/material'
 import { makeStyles } from '@masknet/theme'

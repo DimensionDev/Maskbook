@@ -1,5 +1,5 @@
 import { defer } from '@masknet/kit'
-import { ValueRef } from '@dimensiondev/holoflows-kit'
+import { ValueRef } from '@masknet/shared-base'
 
 export type ValueRefWithReady<T> = ValueRef<T> & {
     readonly ready: boolean

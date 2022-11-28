@@ -29,7 +29,7 @@ export class SCWallet implements Middleware<Context> {
 
     private async createWallet(context: Context) {
         const web3 = await this.createWeb3(context)
-        const contract = await createContract<WalletContract>(web3, context.account, WalletABI as AbiItem[])
+        const contract = createContract<WalletContract>(web3, context.account, WalletABI as AbiItem[])
         if (!contract) throw new Error('Failed to create wallet contract.')
         return contract
     }
@@ -62,7 +62,7 @@ export class SCWallet implements Middleware<Context> {
             case EthereumMethodType.ETH_GET_TRANSACTION_COUNT:
                 try {
                     const walletContract = await this.createWallet(context)
-                    const nonce = await walletContract.methods.nonce()
+                    const nonce = walletContract.methods.nonce()
                     context.write(nonce ?? 0)
                 } catch (error) {
                     context.abort(error)
