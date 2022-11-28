@@ -35,7 +35,7 @@ export function selectNearestNode(nodes: Node[], airports: Airport[], pop: strin
 
         for (const [i] of nodes.entries()) {
             const n = nodes[i]
-            if (!n.location || !n.location.lat || !n.location.lon) {
+            if (!n.location?.lat || !n.location.lon) {
                 continue
             }
 

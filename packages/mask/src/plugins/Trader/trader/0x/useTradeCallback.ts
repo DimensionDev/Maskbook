@@ -3,14 +3,14 @@ import { useAsyncFn } from 'react-use'
 import { pick } from 'lodash-es'
 import stringify from 'json-stable-stringify'
 import type { TransactionConfig } from 'web3-core'
-import type { ChainId, GasOptionConfig } from '@masknet/web3-shared-evm'
+import type { ChainId, GasConfig } from '@masknet/web3-shared-evm'
 import type { SwapQuoteResponse, TradeComputed } from '../../types/index.js'
 import { SUPPORTED_CHAIN_ID_LIST } from './constants.js'
 import { ZERO } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useChainContext, useNetworkContext, useWeb3Connection } from '@masknet/web3-hooks-base'
 
-export function useTradeCallback(tradeComputed: TradeComputed<SwapQuoteResponse> | null, gasConfig?: GasOptionConfig) {
+export function useTradeCallback(tradeComputed: TradeComputed<SwapQuoteResponse> | null, gasConfig?: GasConfig) {
     const { account, chainId } = useChainContext()
     const { pluginID } = useNetworkContext()
     const connection = useWeb3Connection()

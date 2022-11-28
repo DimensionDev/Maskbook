@@ -6,23 +6,30 @@ import WalletABI from '@masknet/web3-contracts/abis/Wallet.json'
 import WalletProxyABI from '@masknet/web3-contracts/abis/WalletProxy.json'
 import { WalletProxyByteCode } from '@masknet/web3-contracts/bytes/WalletProxy.js'
 
-export class WalletContract {
+export class ContractWallet {
     private web3 = new Web3()
     private coder = ABICoder as unknown as ABICoder.AbiCoder
 
     /**
-     * WalletContract
+     * ContractWallet
      *
      * @param owner the owner address
-     * @param address  the deployed contract address
+     * @param address  the deployed logic contract address
      * @param entryPoint the entry point contract address
      */
     constructor(private owner: string, private address: string, private entryPoint: string) {}
 
     /**
-     * Encoded initialize parameters of WalletContract
+     * The wallet proxy contract instance
      */
-    get data() {
+    private get contract() {
+        return new this.web3.eth.Contract(WalletProxyABI as AbiItem[]) as unknown as WalletProxy
+    }
+
+    /**
+     * Encoded initialize parameters of ContractWallet
+     */
+    private get data() {
         const abi = WalletABI.find((x) => x.name === 'initialize' && x.type === 'function')
         if (!abi) throw new Error('Failed to load ABI.')
 
@@ -35,11 +42,10 @@ export class WalletContract {
     }
 
     /**
-     * Encoded initCode to deploy WalletProxy contract
+     * Encoded initCode for deploying a WalletProxy contract
      */
     get initCode() {
-        const contract = new this.web3.eth.Contract(WalletProxyABI as AbiItem[]) as unknown as WalletProxy
-        return contract
+        return this.contract
             .deploy({
                 data: WalletProxyByteCode,
                 arguments: [this.owner, this.address, this.data],

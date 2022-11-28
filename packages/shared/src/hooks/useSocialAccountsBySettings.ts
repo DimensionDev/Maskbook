@@ -25,7 +25,7 @@ export const useSocialAccountsBySettings = (
 
     const addresses = useMemo(() => {
         if (loadingSocialAccounts || loadingHiddenAddress) return EMPTY_LIST
-        if (!hiddenAddress || !hiddenAddress.length) return socialAccounts
+        if (!hiddenAddress?.length) return socialAccounts
 
         return socialAccounts.filter((x) => {
             if (!x.supportedAddressTypes?.includes(SocialAddressType.NEXT_ID)) return true

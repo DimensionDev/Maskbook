@@ -67,6 +67,7 @@ export enum SourceType {
     CoinMarketCap = 'CoinMarketCap',
     UniswapInfo = 'UniswapInfo',
     CF = 'CloudFlare',
+    GoPlus = 'GoPlus',
 
     // NFT assets
     Rabby = 'Rabby',
@@ -1052,7 +1053,7 @@ export interface Connection<
     /** Break connection */
     disconnect(initial?: Web3ConnectionOptions): Promise<void>
     /** Replace transaction */
-    requestTransaction(hash: string, config: Transaction, initial?: Web3ConnectionOptions): Promise<void>
+    replaceTransaction(hash: string, config: Transaction, initial?: Web3ConnectionOptions): Promise<void>
     /** Cancel transaction */
     cancelTransaction(hash: string, config: Transaction, initial?: Web3ConnectionOptions): Promise<void>
 }

@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { useAsyncFn } from 'react-use'
 import { PluginID, NetworkPluginID, isDashboardPage, CrossIsolationMessages, TokenType } from '@masknet/shared-base'
 import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
 import {
@@ -9,19 +10,18 @@ import {
     useWeb3State,
     useFungibleToken,
 } from '@masknet/web3-hooks-base'
-import { SchemaType, Transaction } from '@masknet/web3-shared-evm'
+import { ChainId, GasEditor, SchemaType, Transaction } from '@masknet/web3-shared-evm'
 import { DialogContent, dialogTitleClasses, IconButton } from '@mui/material'
 import { InjectedDialog, useSelectAdvancedSettings, NetworkTab } from '@masknet/shared'
+import { makeStyles, MaskColorVar } from '@masknet/theme'
+import { Icons } from '@masknet/icons'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import { AllProviderTradeContext } from '../../trader/useAllProviderTradeContext.js'
 import { PluginTraderMessages } from '../../messages.js'
 import { Trader, TraderRef } from './Trader.js'
 import { useI18N } from '../../../../utils/index.js'
-import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { Icons } from '@masknet/icons'
 import { currentSlippageSettings } from '../../settings.js'
 import { MIN_GAS_LIMIT } from '../../constants/index.js'
-import { useAsyncFn } from 'react-use'
-import type { Web3Helper } from '@masknet/web3-helpers'
 
 const isDashboard = isDashboardPage()
 
@@ -172,11 +172,7 @@ export function TraderDialog() {
 
         PluginTraderMessages.swapSettingsUpdated.sendToAll({
             open: false,
-            gasConfig: {
-                gasPrice: (transaction as Transaction)?.gasPrice as string | undefined,
-                maxFeePerGas: (transaction as Transaction)?.maxFeePerGas as string | undefined,
-                maxPriorityFeePerGas: (transaction as Transaction)?.maxPriorityFeePerGas as string | undefined,
-            },
+            gasConfig: GasEditor.fromTransaction(chainId as ChainId, transaction as Transaction).getGasConfig(),
         })
     }, [chainId, currentSlippageSettings.value])
 

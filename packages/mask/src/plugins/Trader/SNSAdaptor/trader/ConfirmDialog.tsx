@@ -1,10 +1,10 @@
 import { useCallback, useMemo, useState } from 'react'
+import { useAsyncFn } from 'react-use'
 import { BigNumber } from 'bignumber.js'
 import { useValueRef } from '@masknet/shared-base-ui'
-import type { TradeComputed } from '../../types/index.js'
-import { formatWeiToEther, GasOptionConfig, Transaction } from '@masknet/web3-shared-evm'
+import { formatWeiToEther, ChainId, GasConfig, GasEditor, Transaction } from '@masknet/web3-shared-evm'
 import { formatBalance, formatCurrency, leftShift, multipliedBy } from '@masknet/web3-shared-base'
-import { currentSlippageSettings } from '../../settings.js'
+import type { TradeComputed } from '../../types/index.js'
 import {
     useNativeTokenPrice,
     useFungibleTokenPrice,
@@ -13,15 +13,15 @@ import {
     useNetworkContext,
 } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
+import { useSelectAdvancedSettings } from '@masknet/shared'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { useGreatThanSlippageSetting } from './hooks/useGreatThanSlippageSetting.js'
+import { currentSlippageSettings } from '../../settings.js'
 import { PluginTraderMessages } from '../../messages.js'
 import { ConfirmDialogUI } from './components/ConfirmDialogUI.js'
-import { useSelectAdvancedSettings } from '@masknet/shared'
 import { PriceImpactDialogUI } from './components/PriceImpactDialogUI.js'
 import { AllProviderTradeContext } from '../../trader/useAllProviderTradeContext.js'
 import { MIN_GAS_LIMIT } from '../../constants/index.js'
-import { NetworkPluginID } from '@masknet/shared-base'
-import { useAsyncFn } from 'react-use'
 
 export interface ConfirmDialogProps {
     open: boolean
@@ -31,7 +31,7 @@ export interface ConfirmDialogProps {
     outputToken: Web3Helper.FungibleTokenAll
     gas?: number
     gasPrice?: string
-    gasConfig?: GasOptionConfig
+    gasConfig?: GasConfig
     onConfirm: () => void
 }
 const PERCENT_DENOMINATOR = 10000
@@ -118,11 +118,7 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
 
         PluginTraderMessages.swapSettingsUpdated.sendToAll({
             open: false,
-            gasConfig: {
-                gasPrice: (transaction as Transaction)?.gasPrice as string | undefined,
-                maxFeePerGas: (transaction as Transaction)?.maxFeePerGas as string | undefined,
-                maxPriorityFeePerGas: (transaction as Transaction)?.maxPriorityFeePerGas as string | undefined,
-            },
+            gasConfig: GasEditor.fromTransaction(chainId as ChainId, transaction as Transaction).getGasConfig(),
         })
     }, [chainId, currentSlippageSettings.value, gas, gasConfig])
 

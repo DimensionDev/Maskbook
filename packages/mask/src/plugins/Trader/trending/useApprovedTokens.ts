@@ -9,7 +9,7 @@ export function useApprovedTokens(token_address: string | undefined) {
     const tokens = useValueRef(approvedTokensFromUniswap)
 
     const onApprove = useCallback(() => {
-        if (!token_address || !token_address.length) return
+        if (!token_address?.length) return
 
         const parsed = JSON.parse(tokens) as string[]
 

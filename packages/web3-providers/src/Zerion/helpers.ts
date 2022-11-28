@@ -6,7 +6,7 @@ import {
     ZerionRBDTransactionType,
     ZerionTransactionItem,
     ZerionTransactionStatus,
-} from './type.js'
+} from './types.js'
 
 export function formatAsset(chainId: ChainId, data: ZerionAddressPosition): FungibleAsset<ChainId, SchemaType> {
     const { asset, chain, quantity } = data

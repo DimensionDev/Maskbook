@@ -1,11 +1,12 @@
 import { memo } from 'react'
 import { type PostInfo, PostInfoProvider } from '@masknet/plugin-infra/content-script'
-import { MutationObserverWatcher, ValueRef } from '@dimensiondev/holoflows-kit'
+import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot.js'
 import { PostComment, PostCommentProps } from '../../../components/InjectedComponents/PostComments.js'
 import { makeStyles } from '@masknet/theme'
 import { collectNodeText } from '../../../utils/index.js'
 import { startWatch } from '../../../utils/watcher.js'
+import { ValueRef } from '@masknet/shared-base'
 
 interface injectPostCommentsDefaultConfig {
     needZip?(): void

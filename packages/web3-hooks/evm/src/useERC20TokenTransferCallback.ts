@@ -1,6 +1,5 @@
 import { useAsyncFn } from 'react-use'
 import { useChainContext } from '@masknet/web3-hooks-base'
-import type { NonPayableTx } from '@masknet/web3-contracts/types/types.js'
 import { isGreaterThan, isZero } from '@masknet/web3-shared-base'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import { GasConfig, TransactionEventType, isValidAddress } from '@masknet/web3-shared-evm'
@@ -24,25 +23,22 @@ export function useERC20TokenTransferCallback(address?: string, amount?: string,
 
             if (isGreaterThan(amount, balance)) return
 
-            // estimate gas and compose transaction
-            const config = {
-                from: account,
-                gas: await erc20Contract.methods
-                    .transfer(recipient, amount)
-                    .estimateGas({
-                        from: account,
-                    })
-                    .catch((error) => {
-                        throw error
-                    }),
-                ...gasConfig,
-            }
-
             // send transaction and wait for hash
             return new Promise<string>(async (resolve, reject) => {
                 erc20Contract.methods
                     .transfer(recipient, amount)
-                    .send(config as NonPayableTx)
+                    .send({
+                        from: account,
+                        gas: await erc20Contract.methods
+                            .transfer(recipient, amount)
+                            .estimateGas({
+                                from: account,
+                            })
+                            .catch((error) => {
+                                throw error
+                            }),
+                        ...gasConfig,
+                    })
                     .on(TransactionEventType.CONFIRMATION, (_, receipt) => {
                         resolve(receipt.transactionHash)
                     })

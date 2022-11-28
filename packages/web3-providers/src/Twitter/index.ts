@@ -4,12 +4,13 @@ import type { TwitterBaseAPI } from '../types/index.js'
 import {
     getSettings,
     getTokens,
-    getUserByScreenName,
+    getUserViaWebAPI,
     getUserNFTContainer,
     getDefaultUserSettings,
     getUserSettingsCached,
-    staleUserByScreenName,
+    getUserViaTwitterIdentity,
 } from './apis/index.js'
+import { attemptUntil } from '@masknet/web3-shared-base'
 
 const UPLOAD_AVATAR_URL = 'https://upload.twitter.com/i/media/upload.json'
 const TWITTER_AVATAR_ID_MATCH = /^\/profile_images\/(\d+)/
@@ -133,12 +134,16 @@ export class TwitterAPI implements TwitterBaseAPI.Provider {
         }
     }
 
-    async getUserByScreenName(screenName: string): Promise<TwitterBaseAPI.User | null> {
-        return getUserByScreenName(screenName)
+    async getUserByScreenName(screenName: string, checkNFTAvatar?: boolean): Promise<TwitterBaseAPI.User | null> {
+        if (checkNFTAvatar) return getUserViaWebAPI(screenName)
+        return attemptUntil<TwitterBaseAPI.User | null>(
+            [() => getUserViaWebAPI(screenName), () => getUserViaTwitterIdentity(screenName)],
+            null,
+        )
     }
 
     async staleUserByScreenName(screenName: string): Promise<TwitterBaseAPI.User | null> {
-        return staleUserByScreenName(screenName)
+        return this.staleUserByScreenName(screenName)
     }
 }
 
