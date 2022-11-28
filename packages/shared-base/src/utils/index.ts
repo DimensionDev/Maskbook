@@ -6,6 +6,7 @@ export * from './markdown.js'
 export * from './mixin.js'
 export * from './personas.js'
 export * from './subscription.js'
+export * from './ValueRef.js'
 
 export enum MimeTypes {
     JSON = 'application/json',

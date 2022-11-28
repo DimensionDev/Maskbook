@@ -1,9 +1,10 @@
-import { MutationObserverWatcher, ValueRef } from '@dimensiondev/holoflows-kit'
+import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot.js'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { sideBarProfileSelector, toolboxInSidebarSelector } from '../utils/selector.js'
 import { startWatch } from '../../../utils/watcher.js'
 import { ProfileLinkAtTwitter, ToolboxHintAtTwitter } from './ToolboxHint_UI.js'
+import { ValueRef } from '@masknet/shared-base'
 
 const SideBarNativeItemTextMarginLeftRef = new ValueRef('20px')
 const SideBarNativeItemIconSize = new ValueRef('24px')

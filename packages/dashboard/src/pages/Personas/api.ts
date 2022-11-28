@@ -1,7 +1,7 @@
 import { use, cache } from 'react'
 import type {} from 'react/next'
 import { noop } from 'lodash-es'
-import { ValueRef } from '@dimensiondev/holoflows-kit'
+import { ValueRef } from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { Services, Messages } from '../../API.js'
 
