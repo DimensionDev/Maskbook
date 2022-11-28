@@ -7,12 +7,9 @@ import { useChainContext, useNetworkContext, useWeb3Connection } from '@masknet/
 import type { SwapRouteSuccessResponse, TradeComputed } from '../../types/index.js'
 import { ZERO } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
-import type { GasOptionConfig } from '@masknet/web3-shared-evm'
+import type { GasConfig } from '@masknet/web3-shared-evm'
 
-export function useTradeCallback(
-    tradeComputed: TradeComputed<SwapRouteSuccessResponse> | null,
-    gasConfig?: GasOptionConfig,
-) {
+export function useTradeCallback(tradeComputed: TradeComputed<SwapRouteSuccessResponse> | null, gasConfig?: GasConfig) {
     const { account, chainId } = useChainContext()
     const { pluginID } = useNetworkContext()
     const connection = useWeb3Connection(pluginID, { chainId })

@@ -17,8 +17,8 @@ import {
     toFixed,
 } from '@masknet/web3-shared-base'
 import { ChainId, createNativeToken, GasOption, SchemaType, isValidChainId } from '@masknet/web3-shared-evm'
-import type { ZerionNonFungibleTokenItem, ZerionNonFungibleCollection, ZerionCoin } from './type.js'
-import { formatAsset, formatTransactions } from './format.js'
+import type { ZerionNonFungibleTokenItem, ZerionNonFungibleCollection, ZerionCoin } from './types.js'
+import { formatAsset, formatTransactions } from './helpers.js'
 import type { FungibleTokenAPI, GasOptionAPI, HistoryAPI, NonFungibleTokenAPI, TrendingAPI } from '../types/index.js'
 import { getAllEVMNativeAssets, getAssetFullName } from '../helpers.js'
 import {

@@ -23,6 +23,7 @@ export interface RenderConfig<T extends TypedMessage = TypedMessage> {
 export function createTypedMessageRenderRegistry() {
     const registry = new Map<string, Map<symbol, RenderConfig<any>>>()
     const event = new EventTarget()
+    let getterFunction: typeof getTypedMessageRender | undefined
 
     function registerTypedMessageRender<T extends TypedMessage>(type: T['type'], config: RenderConfig<T>) {
         if (!registry.has(type)) registry.set(type, new Map())
@@ -30,9 +31,11 @@ export function createTypedMessageRenderRegistry() {
 
         const id = config.id
         map.set(id, config)
+        getterFunction = undefined
         event.dispatchEvent(new Event('update'))
         return () => {
             map.delete(id)
+            getterFunction = undefined
             event.dispatchEvent(new Event('update'))
         }
     }
@@ -40,8 +43,8 @@ export function createTypedMessageRenderRegistry() {
         return Array.from(registry.get(type)?.values() || []).sort((a, b) => b.priority - a.priority)[0]
     }
     const subscription = {
-        // generate a new function everytime to make sure old !== new
-        getCurrentValue: (): typeof getTypedMessageRender => (type) => getTypedMessageRender(type),
+        // generate a new function to make sure old !== new
+        getCurrentValue: () => (getterFunction ??= (type) => getTypedMessageRender(type)),
         subscribe: (f: () => void) => {
             event.addEventListener('update', f)
             return () => event.removeEventListener('update', f)

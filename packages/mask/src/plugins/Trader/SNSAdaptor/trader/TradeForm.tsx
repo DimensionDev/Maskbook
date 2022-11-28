@@ -1,5 +1,7 @@
 import { memo, useCallback, useMemo, useRef, useState } from 'react'
 import { useUpdateEffect } from 'react-use'
+import { first, noop } from 'lodash-es'
+import { BigNumber } from 'bignumber.js'
 import { useI18N } from '../../../../utils/index.js'
 import {
     PluginWalletStatusBar,
@@ -14,12 +16,18 @@ import {
 import { makeStyles, MaskColorVar, ActionButton } from '@masknet/theme'
 import { InputTokenPanel } from './InputTokenPanel.js'
 import { alpha, Box, chipClasses, Collapse, IconButton, lighten, Typography } from '@mui/material'
-import { ChainId, formatWeiToEther, GasOptionConfig, SchemaType, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
+import {
+    ChainId,
+    formatWeiToEther,
+    GasConfig,
+    GasEditor,
+    SchemaType,
+    Transaction,
+    ZERO_ADDRESS,
+} from '@masknet/web3-shared-evm'
 import { isLessThan, rightShift, multipliedBy, leftShift } from '@masknet/web3-shared-base'
 import { Tune as TuneIcon } from '@mui/icons-material'
 import { TokenPanelType, TradeInfo } from '../../types/index.js'
-import { BigNumber } from 'bignumber.js'
-import { first, noop } from 'lodash-es'
 import { Icons } from '@masknet/icons'
 import { isNativeTokenWrapper } from '../../helpers/index.js'
 import { DefaultTraderPlaceholder, TraderInfo } from './TraderInfo.js'
@@ -211,7 +219,7 @@ export interface AllTradeFormProps extends withClasses<'root'> {
     onSwap: () => void
     onSwitch: () => void
     settings?: boolean
-    gasConfig?: GasOptionConfig
+    gasConfig?: GasConfig
 }
 
 export const TradeForm = memo<AllTradeFormProps>(
@@ -418,11 +426,7 @@ export const TradeForm = memo<AllTradeFormProps>(
 
             PluginTraderMessages.swapSettingsUpdated.sendToAll({
                 open: false,
-                gasConfig: {
-                    gasPrice: transaction?.gasPrice as string | undefined,
-                    maxFeePerGas: transaction?.maxFeePerGas as string | undefined,
-                    maxPriorityFeePerGas: transaction?.maxPriorityFeePerGas as string | undefined,
-                },
+                gasConfig: GasEditor.fromTransaction(chainId as ChainId, transaction as Transaction).getGasConfig(),
             })
         }, [chainId, focusedTrade?.gas.value, selectAdvancedSettings, gasConfig])
         // #endregion

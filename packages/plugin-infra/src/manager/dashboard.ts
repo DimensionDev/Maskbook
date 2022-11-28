@@ -5,15 +5,23 @@ import type { Plugin } from '../types.js'
 
 const { activated, startDaemon, events, minimalMode } = createManager((def) => def.Dashboard)
 
-const subscription: Subscription<Plugin.Dashboard.Definition[]> = {
-    getCurrentValue: () => [...activated.plugins],
-    subscribe: (f) => events.on(ALL_EVENTS, f),
-}
+const subscription: Subscription<Plugin.Dashboard.Definition[]> = (() => {
+    let value: any[] | undefined
+    events.on('activateChanged', () => (value = undefined))
+    return {
+        getCurrentValue: () => (value ??= [...activated.plugins]),
+        subscribe: (f) => events.on(ALL_EVENTS, f),
+    }
+})()
 
-const minimalModeSub: Subscription<string[]> = {
-    getCurrentValue: () => [...minimalMode],
-    subscribe: (f) => events.on('minimalModeChanged', f),
-}
+const minimalModeSub: Subscription<string[]> = (() => {
+    let value: any[] | undefined
+    events.on('minimalModeChanged', () => (value = undefined))
+    return {
+        getCurrentValue: () => (value ??= [...minimalMode]),
+        subscribe: (f) => events.on('minimalModeChanged', f),
+    }
+})()
 
 export function useIsMinimalModeDashBoard(pluginID: string) {
     return useSubscription(minimalModeSub).includes(pluginID)

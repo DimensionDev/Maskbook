@@ -3,7 +3,8 @@ import { first, isEmpty, parseInt, uniqBy } from 'lodash-es'
 import { ChainId, isValidChainId } from '@masknet/web3-shared-evm'
 import type { SecurityAPI } from '../index.js'
 import { fetchJSON } from '../helpers.js'
-import { GO_PLUS_LABS_ROOT_URL, SecurityMessageLevel } from './constants.js'
+import { GO_PLUS_LABS_ROOT_URL } from './constants.js'
+import { SecurityMessageLevel } from './types.js'
 import { SecurityMessages } from './rules.js'
 
 export interface SupportedChainResponse {

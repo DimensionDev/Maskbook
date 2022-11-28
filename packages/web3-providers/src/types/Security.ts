@@ -1,5 +1,5 @@
 import type { ChainId } from '@masknet/web3-shared-evm'
-import type { SecurityMessage } from '../GoPlusLabs/rules.js'
+import type { SecurityMessage } from '../GoPlusLabs/types.js'
 
 /**
  * "1" means true;

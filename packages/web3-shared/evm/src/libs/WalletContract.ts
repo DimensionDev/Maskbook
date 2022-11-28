@@ -20,9 +20,16 @@ export class WalletContract {
     constructor(private owner: string, private address: string, private entryPoint: string) {}
 
     /**
+     * The wallet proxy contract instance
+     */
+    private get contract() {
+        return new this.web3.eth.Contract(WalletProxyABI as AbiItem[]) as unknown as WalletProxy
+    }
+
+    /**
      * Encoded initialize parameters of WalletContract
      */
-    get data() {
+    private get data() {
         const abi = WalletABI.find((x) => x.name === 'initialize' && x.type === 'function')
         if (!abi) throw new Error('Failed to load ABI.')
 
@@ -35,11 +42,10 @@ export class WalletContract {
     }
 
     /**
-     * Encoded initCode to deploy WalletProxy contract
+     * Encoded initCode for deploying a WalletProxy contract
      */
     get initCode() {
-        const contract = new this.web3.eth.Contract(WalletProxyABI as AbiItem[]) as unknown as WalletProxy
-        return contract
+        return this.contract
             .deploy({
                 data: WalletProxyByteCode,
                 arguments: [this.owner, this.address, this.data],
