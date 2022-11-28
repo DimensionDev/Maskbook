@@ -1,6 +1,6 @@
 import { UNDEFINED } from '@masknet/shared-base'
 import { useSubscription } from 'use-subscription'
-import { useSNSAdaptorContext } from '../contexts/SNSAdaptorContext.js'
+import { useSNSAdaptorContext } from '../sns-adaptor/SNSAdaptorContext.js'
 
 export function useCurrentPersonaInformation() {
     const { currentPersona, allPersonas } = useSNSAdaptorContext()

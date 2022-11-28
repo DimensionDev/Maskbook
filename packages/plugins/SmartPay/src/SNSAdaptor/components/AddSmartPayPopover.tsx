@@ -3,7 +3,7 @@ import { memo } from 'react'
 import { Box, Button, Popover, Typography } from '@mui/material'
 import { useI18N } from '../../locales/i18n_generated.js'
 import { Icon } from '@masknet/shared'
-import { useLastRecognizedIdentity } from '@masknet/plugin-infra'
+import { useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {

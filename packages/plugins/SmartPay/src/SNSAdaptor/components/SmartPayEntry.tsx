@@ -7,7 +7,7 @@ import { PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
 
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { PluginSmartPayMessages } from '../../message.js'
-import { useQueryQuanlification } from '../../hooks/useQueryQualification.js'
+import { useQueryQualification } from '../../hooks/useQueryQualification.js'
 export interface SmartPayEntryProps {
     disabled: boolean
     tooltipHint?: string
@@ -17,7 +17,7 @@ export interface SmartPayEntryProps {
 
 export const SmartPayEntry = memo<SmartPayEntryProps>((props) => {
     const t = useSharedI18N()
-    const [, queryQuanlification] = useQueryQuanlification()
+    const [, queryQualification] = useQueryQualification()
 
     const { setDialog: setPersonaSelectPanelDialog } = useRemoteControlledDialog(
         CrossIsolationMessages.events.PersonaSelectPanelDialogUpdated,
@@ -39,7 +39,7 @@ export const SmartPayEntry = memo<SmartPayEntryProps>((props) => {
     }, [])
 
     const handleClick = useCallback(async () => {
-        const { hasPersona, eligibility } = (await queryQuanlification()) ?? {}
+        const { hasPersona, eligibility } = (await queryQualification()) ?? {}
 
         if (!hasPersona) {
             setCreatePersonaConfirmDialog({

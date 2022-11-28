@@ -1,4 +1,4 @@
-import { useSNSAdaptorContext } from '../contexts/SNSAdaptorContext.js'
+import { useSNSAdaptorContext } from '../sns-adaptor/SNSAdaptorContext.js'
 import { useSubscription } from 'use-subscription'
 import { UNDEFINED, PersonaIdentifier } from '@masknet/shared-base'
 

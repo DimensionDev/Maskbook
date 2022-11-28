@@ -13,7 +13,7 @@
     { "path": "./CyberConnect/" },
     { "path": "./CrossChainBridge/" },
     { "path": "./Web3Profile/" },
-    { "path": "./ScamWarning/" }
+    { "path": "./ScamWarning/" },
     { "path": "./SmartPay/" }
   ]
 }

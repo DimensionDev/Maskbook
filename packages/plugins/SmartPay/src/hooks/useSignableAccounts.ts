@@ -13,7 +13,7 @@ export function useSignableAccounts(): AsyncState<{
 
     useEffect(() => {
         queryQualification()
-    }, [useQueryQualification])
+    }, [queryQualification])
 
     return result
 }

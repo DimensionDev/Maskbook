@@ -1,5 +1,5 @@
 import { Icons } from '@masknet/icons'
-import { useCurrentPersonaInformation, useLastRecognizedIdentity } from '@masknet/plugin-infra'
+import { useCurrentPersonaInformation, useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
 import { ImageIcon, InjectedDialog, PersonaAction, useSnackbarCallback } from '@masknet/shared'
 import { formatPersonaFingerprint, NetworkPluginID } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'

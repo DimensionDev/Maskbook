@@ -1,4 +1,4 @@
-import { useAllPersonas, useLastRecognizedIdentity } from '@masknet/plugin-infra'
+import { useAllPersonas, useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
 import { NextIDPlatform, PersonaInformation } from '@masknet/shared-base'
 import { useWallets } from '@masknet/web3-hooks-base'
 import { NextIDProof } from '@masknet/web3-providers'
@@ -8,7 +8,7 @@ import { first, intersectionWith } from 'lodash-es'
 import { useAsyncFn } from 'react-use'
 import type { AsyncFnReturn } from 'react-use/lib/useAsyncFn.js'
 
-export function useQueryQuanlification(): AsyncFnReturn<
+export function useQueryQualification(): AsyncFnReturn<
     () => Promise<
         | {
               hasPersona: boolean

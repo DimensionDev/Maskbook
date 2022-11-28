@@ -673,7 +673,7 @@ importers:
         specifier: workspace:^
         version: link:../plugins/ScamSniffer
       '@masknet/plugin-smart-pay':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../plugins/SmartPay
       '@masknet/plugin-solana':
         specifier: workspace:^
@@ -1919,37 +1919,37 @@ importers:
   packages/plugins/SmartPay:
     dependencies:
       '@masknet/icons':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../icons
       '@masknet/plugin-infra':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../plugin-infra
       '@masknet/shared':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../shared
       '@masknet/shared-base':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../shared-base
       '@masknet/shared-base-ui':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../shared-base-ui
       '@masknet/theme':
         specifier: 'workspace: *'
         version: link:../../theme
       '@masknet/web3-hooks-base':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../web3-hooks/base
       '@masknet/web3-hooks-evm':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../web3-hooks/evm
       '@masknet/web3-providers':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../web3-providers
       '@masknet/web3-shared-base':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../web3-shared/base
       '@masknet/web3-shared-evm':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../web3-shared/evm
       react-use:
         specifier: ^17.4.0
@@ -3211,7 +3211,7 @@ packages:
       bintrees: 1.0.2
       bn.js: 4.12.0
       compare-versions: 3.6.0
-      ethereumjs-abi: 0.6.6
+      ethereumjs-abi: 0.6.8
       ethereumjs-blockstream: 2.0.7
       ethereumjs-util: 5.2.1
       find-versions: 2.0.0
@@ -11943,6 +11943,7 @@ packages:
 
   /@types/lodash/4.14.188:
     resolution: {integrity: sha512-zmEmF5OIM3rb7SbLCFYoQhO4dGt2FRM9AMkxvA3LaADOF1n8in/zGJlWji9fmafLoNyz+FoL6FE0SLtGIArD7w==}
+    dev: true
 
   /@types/lodash/4.14.190:
     resolution: {integrity: sha512-5iJ3FBJBvQHQ8sFhEhJfjUP+G+LalhavTkYyrAYqz5MEJG+erSv0k9KJLb6q7++17Lafk1scaTIFXcMJlwK8Mw==}
@@ -14353,7 +14354,7 @@ packages:
     dependencies:
       '@babel/core': 7.20.2
       '@babel/helper-define-polyfill-provider': 0.3.1_@babel+core@7.20.2
-      core-js-compat: 3.26.0
+      core-js-compat: 3.26.1
     transitivePeerDependencies:
       - supports-color
     dev: false
@@ -15473,7 +15474,7 @@ packages:
       mississippi: 3.0.0
       mkdirp: 0.5.6
       move-concurrently: 1.0.1
-      promise-inflight: 1.0.1_bluebird@3.7.2
+      promise-inflight: 1.0.1
       rimraf: 2.7.1
       ssri: 6.0.2
       unique-filename: 1.1.1
@@ -16582,6 +16583,7 @@ packages:
     resolution: {integrity: sha512-piOX9Go+Z4f9ZiBFLnZ5VrOpBl0h7IGCkiFUN11QTe6LjAvOT3ifL/5TdoizMh99hcGy5SoLyWbapIY/PIb/3A==}
     dependencies:
       browserslist: 4.21.4
+    dev: true
 
   /core-js-compat/3.26.1:
     resolution: {integrity: sha512-622/KzTudvXCDLRw70iHW4KKs1aGpcRcowGWyYJr2DEBfRrd6hNJybxSWJFuZYD4ma86xhrwDDHxmDaIq4EA8A==}
@@ -19423,13 +19425,6 @@ packages:
 
   /ethereum-ens-network-map/1.0.2:
     resolution: {integrity: sha512-5qwJ5n3YhjSpE6O/WEBXCAb2nagUgyagJ6C0lGUBWC4LjKp/rRzD+pwtDJ6KCiITFEAoX4eIrWOjRy0Sylq5Hg==}
-    dev: false
-
-  /ethereumjs-abi/0.6.6:
-    resolution: {integrity: sha512-w8KubDsA/+OAuqtIR9RGsMcoZ5nhM8vxwjJAJvEIY+clhxA3BHoLG3+ClYQaQhD0n3mlDt3U5rBrmSVJvI3c8A==}
-    dependencies:
-      bn.js: 4.12.0
-      ethereumjs-util: 5.2.1
     dev: false
 
   /ethereumjs-abi/0.6.8:
@@ -27104,17 +27099,6 @@ packages:
         optional: true
     dev: true
 
-  /promise-inflight/1.0.1_bluebird@3.7.2:
-    resolution: {integrity: sha512-6zWPyEOFaQBJYcGMHBKTKJ3u6TBsnMFOIZSa6ce1e/ZrrsOlnHRHbabMjLiBYKp+n44X9eUI6VUPaukCXHuG4g==}
-    peerDependencies:
-      bluebird: '*'
-    peerDependenciesMeta:
-      bluebird:
-        optional: true
-    dependencies:
-      bluebird: 3.7.2
-    dev: true
-
   /promise-to-callback/1.0.0:
     resolution: {integrity: sha512-uhMIZmKM5ZteDMfLgJnoSq9GCwsNKrYau73Awf1jIy6/eUcuuZ3P+CD9zUv0kJsIUbU+x6uLNIhXhLHDs1pNPA==}
     engines: {node: '>=0.10.0'}
@@ -30370,7 +30354,7 @@ packages:
       '@swc/core': ^1.2.147
       webpack: '>=2'
     dependencies:
-      webpack: 5.75.0_webpack-cli@5.0.0
+      webpack: 5.75.0
     dev: true
 
   /symbol-tree/3.2.4:
@@ -30536,7 +30520,7 @@ packages:
       schema-utils: 3.1.1
       serialize-javascript: 6.0.0
       terser: 5.15.1
-      webpack: 5.75.0_webpack-cli@5.0.0
+      webpack: 5.75.0
 
   /terser/4.8.1:
     resolution: {integrity: sha512-4GnLC0x667eJG0ewJTa6z/yXrbLGv80D9Ru6HIpCQmO+Q4PfEtBFi0ObSckqwL6VyQv/7ENJieXHo2ANmdQwgw==}
@@ -31486,7 +31470,7 @@ packages:
     dependencies:
       source-map: 0.5.7
       uglify-js: 2.8.29
-      webpack: 3.12.0_webpack-cli@5.0.0
+      webpack: 3.12.0
       webpack-sources: 1.4.3
     dev: false
 
@@ -31881,6 +31865,15 @@ packages:
     resolution: {integrity: sha512-12c4Vi40DHVdZ/8mOLjZjp0asCzM6hi8Gj116fpImRP1FN4gBMCtMi9XhLNOmre/FEQYNqHbZmX8iyYAtIcy8Q==}
     dev: false
     patched: true
+
+  /use-subscription/1.6.0:
+    resolution: {integrity: sha512-0Y/cTLlZfw547tJhJMoRA16OUbVqRm6DmvGpiGbmLST6BIA5KU5cKlvlz8DVMrACnWpyEjCkgmhLatthP4jUbA==}
+    peerDependencies:
+      react: ^18.0.0 || 0.0.0-experimental-d1e35c703-20221110
+    peerDependenciesMeta:
+      react:
+        optional: true
+    dev: false
 
   /use-subscription/1.8.0:
     resolution: {integrity: sha512-LISuG0/TmmoDoCRmV5XAqYkd3UCBNM0ML3gGBndze65WITcsExCD3DTvXXTLyNcOC0heFQZzluW88bN/oC1DQQ==}
@@ -33103,7 +33096,7 @@ packages:
       json-loader: 0.5.7
       json5: 0.5.1
       loader-runner: 2.4.0
-      loader-utils: 1.4.2
+      loader-utils: 1.4.0
       memory-fs: 0.4.1
       mkdirp: 0.5.6
       node-libs-browser: 2.2.1
@@ -33195,7 +33188,6 @@ packages:
       - '@swc/core'
       - esbuild
       - uglify-js
-    dev: true
 
   /webpack/5.75.0_webpack-cli@5.0.0:
     resolution: {integrity: sha512-piaIaoVJlqMsPtX/+3KTTO6jfvrSYgauFVdt8cr9LTHKmcq/AMd4mhzsiP7ZF/PGRNPGA8336jldh9l2Kt2ogQ==}
@@ -34022,7 +34014,7 @@ packages:
       '@0xproject/types': 0.1.9
       '@0xproject/utils': 0.1.3
       '@0xproject/web3-wrapper': 0.1.14
-      '@types/lodash': 4.14.188
+      '@types/lodash': 4.14.190
       '@types/node': 18.11.9
       awesome-typescript-loader: 3.5.0_typescript@2.9.2
       bn.js: 4.12.0
