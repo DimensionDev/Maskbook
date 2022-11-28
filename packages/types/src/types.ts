@@ -1,5 +1,5 @@
 import type { Subscription } from 'use-subscription'
-import type { ValueRef } from '@dimensiondev/holoflows-kit'
+import type { ValueRef } from '@masknet/shared-base'
 import type { PaletteMode, Theme } from '@mui/material'
 import type { GrayscaleAlgorithm, SocialNetworkEnum } from '@masknet/encryption'
 import type { IdentityResolved, PostContext, PostContextCreation, PostInfo } from '@masknet/plugin-infra/content-script'

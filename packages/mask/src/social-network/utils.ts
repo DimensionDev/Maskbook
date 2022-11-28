@@ -1,5 +1,5 @@
 import { isEqual } from 'lodash-es'
-import { ValueRef } from '@dimensiondev/holoflows-kit'
+import { ValueRef } from '@masknet/shared-base'
 import { ObservableWeakMap } from '@masknet/shared-base'
 import type { SocialNetworkUI } from '@masknet/types'
 import { ThemeMode, FontSize, ThemeColor } from '@masknet/web3-shared-base'
