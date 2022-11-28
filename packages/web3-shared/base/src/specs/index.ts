@@ -413,6 +413,23 @@ export interface NonFungibleCollection<ChainId, SchemaType> {
     source?: SourceType
 }
 
+export interface NonFungibleCollectionOverview {
+    floorPrice?: number
+    marketCap?: number
+    highestPrice?: number
+    volume24h?: number
+    averagePrice24h?: number
+    sales24h?: number
+    owners?: number
+    sales?: number
+    volume?:number
+    volumeIncrease24h?: string
+    sales24hLast?: number
+    sales24hIncrease?: string
+    averagePriceIncrease24h?: string
+    items?: number
+}
+
 export interface NonFungibleToken<ChainId, SchemaType> extends Token<ChainId, SchemaType> {
     /** the token id */
     tokenId: string

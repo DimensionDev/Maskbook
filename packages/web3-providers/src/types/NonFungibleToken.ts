@@ -3,6 +3,7 @@ import type {
     Pageable,
     OrderSide,
     NonFungibleCollection,
+    NonFungibleCollectionOverview,
     NonFungibleTokenContract,
     NonFungibleTokenOrder,
     NonFungibleTokenEvent,
@@ -87,6 +88,11 @@ export namespace NonFungibleTokenAPI {
             address: string,
             options?: HubOptions<ChainId, Indicator>,
         ) => Promise<NonFungibleCollection<ChainId, SchemaType> | undefined>
+        /** Get non-fungible collection overview by the given address. */
+        getCollectionOverview?: (
+            address: string,
+            options?: HubOptions<ChainId, Indicator>,
+        ) => Promise<NonFungibleCollectionOverview | undefined>
         /** Get non-fungible collections owned by the given account. */
         getCollectionsByOwner?: (
             account: string,

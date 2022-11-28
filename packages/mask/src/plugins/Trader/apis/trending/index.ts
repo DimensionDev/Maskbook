@@ -2,6 +2,7 @@ import { first } from 'lodash-es'
 import { getEnumAsArray, unreachable } from '@masknet/kit'
 import { DataProvider } from '@masknet/public-api'
 import { EMPTY_LIST } from '@masknet/shared-base'
+import type { NonFungibleCollectionOverview } from '@masknet/web3-shared-base'
 import { CoinGeckoTrending, CoinMarketCap, NFTScanTrending, TrendingAPI, UniSwap } from '@masknet/web3-providers'
 import { ChainId, chainResolver, NetworkType } from '@masknet/web3-shared-evm'
 import type { Coin, Currency, Stat, TagType, Trending } from '../../types/index.js'
@@ -105,6 +106,20 @@ export async function getCoinTrending(
             return NFTScanTrending.getCoinTrending(chainId, id, currency)
         default:
             unreachable(dataProvider)
+    }
+}
+
+// #region get trending overview
+export async function getCoinTrendingOverview(
+    chainId: ChainId,
+    id: string,
+    dataProvider: DataProvider,
+): Promise<NonFungibleCollectionOverview | undefined> {
+    switch (dataProvider) {
+        case DataProvider.NFTScan:
+            return NFTScanTrending.getCollectionOverview(chainId, id)
+        default:
+            return {}
     }
 }
 

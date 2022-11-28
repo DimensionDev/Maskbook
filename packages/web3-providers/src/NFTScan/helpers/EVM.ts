@@ -16,7 +16,7 @@ import {
     TokenType,
 } from '@masknet/web3-shared-base'
 import { ChainId, createContract, getRPCConstants, SchemaType, WNATIVE } from '@masknet/web3-shared-evm'
-import { NFTSCAN_BASE, NFTSCAN_LOGO_BASE, NFTSCAN_URL } from '../constants.js'
+import { NFTSCAN_BASE, NFTSCAN_LOGO_BASE, NFTSCAN_URL, NFTSCAN_API } from '../constants.js'
 import type { EVM } from '../types/EVM.js'
 import { parseJSON, resolveActivityType, getPaymentToken, getAssetFullName } from '../../helpers.js'
 
@@ -43,6 +43,34 @@ export async function fetchFromNFTScanV2<T>(chainId: ChainId, pathname: string, 
             'content-type': 'application/json',
             ...init?.headers,
             'x-app-chainid': chainId.toString(),
+        },
+        cache: 'no-cache',
+    })
+    const json = await response.json()
+    return json as T
+}
+
+const NFTScanAPIChainResolver = createLookupTableResolver<NFTScanChainId, string>(
+    {
+        [ChainId.Mainnet]: 'ETH',
+        [ChainId.Matic]: 'MATIC',
+        [ChainId.BSC]: 'BNB',
+        [ChainId.Arbitrum]: 'Arbitrum',
+        [ChainId.Optimism]: 'Optimism',
+    },
+    () => 'ETH',
+)
+
+export async function fetchFromNFTScanWebAPI<T>(chainId: ChainId, pathname: string, init?: RequestInit) {
+    const host = resolveHostName(chainId as NFTScanChainId)
+    if (!host) return
+
+    const response = await fetch(urlcat(NFTSCAN_API, pathname), {
+        ...init,
+        headers: {
+            'content-type': 'application/json',
+            ...init?.headers,
+            chain: NFTScanAPIChainResolver(chainId as NFTScanChainId),
         },
         cache: 'no-cache',
     })

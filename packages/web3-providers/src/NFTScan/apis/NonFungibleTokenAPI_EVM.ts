@@ -7,6 +7,7 @@ import {
     HubIndicator,
     HubOptions,
     NonFungibleCollection,
+    NonFungibleCollectionOverview,
     NonFungibleTokenContract,
     NonFungibleTokenEvent,
     Pageable,
@@ -18,6 +19,7 @@ import {
     createNonFungibleAsset,
     createNonFungibleTokenContract,
     fetchFromNFTScanV2,
+    fetchFromNFTScanWebAPI,
     createNonFungibleTokenEvent,
     createNonFungibleCollectionFromGroup,
     createNonFungibleCollectionFromCollection,
@@ -117,6 +119,19 @@ export class NFTScanNonFungibleTokenAPI_EVM implements NonFungibleTokenAPI.Provi
         const response = await fetchFromNFTScanV2<Response<EVM.Collection>>(chainId, path)
         if (!response?.data) return
         return createNonFungibleCollectionFromCollection(chainId, response.data)
+    }
+
+    async getCollectionOverview(
+        address: string,
+        { chainId = ChainId.Mainnet }: HubOptions<ChainId, HubIndicator> = {},
+    ): Promise<NonFungibleCollectionOverview | undefined> {
+        if (!isValidChainId(chainId)) return
+        const path = urlcat('/nftscan/getCollectionOverview', {
+            contract: address,
+        })
+        const response = await fetchFromNFTScanWebAPI<Response<NonFungibleCollectionOverview>>(chainId, path)
+        if (!response?.data) return
+        return response.data
     }
 
     async getContract(

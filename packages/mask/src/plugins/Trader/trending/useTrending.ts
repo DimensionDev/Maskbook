@@ -1,6 +1,6 @@
 import { useAsync, useAsyncRetry } from 'react-use'
 import type { AsyncState } from 'react-use/lib/useAsyncFn.js'
-import type { DataProvider } from '@masknet/public-api'
+import { DataProvider } from '@masknet/public-api'
 import { NetworkPluginID } from '@masknet/shared-base'
 import type { TrendingAPI } from '@masknet/web3-providers'
 import { TokenType } from '@masknet/web3-shared-base'
@@ -69,6 +69,13 @@ export function useTrendingByKeyword(
     }
 }
 
+export function useTrendingOverviewByAddress(address: string, expectedChainId?: ChainId) {
+    return useAsync(async () => {
+        if (!address || !expectedChainId) return null
+        return PluginTraderRPC.getCoinTrendingOverview(expectedChainId, address, DataProvider.NFTScan)
+    }, [expectedChainId, address])
+}
+
 export function useTrendingById(
     id: string,
     dataProvider: DataProvider,
@@ -87,6 +94,7 @@ export function useTrendingById(
     } = useAsync(async () => {
         if (!id) return null
         if (!currency) return null
+        PluginTraderRPC.getCoinTrendingOverview(chainId, id, dataProvider)
         return PluginTraderRPC.getCoinTrending(chainId, id, currency, dataProvider).catch(() => null)
     }, [chainId, dataProvider, currency?.id, id])
 

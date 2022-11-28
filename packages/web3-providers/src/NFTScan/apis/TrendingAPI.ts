@@ -2,11 +2,11 @@ import urlcat from 'urlcat'
 import { compact } from 'lodash-es'
 import { DataProvider } from '@masknet/public-api'
 import { createLookupTableResolver, EMPTY_LIST } from '@masknet/shared-base'
-import { TokenType, attemptUntil } from '@masknet/web3-shared-base'
+import { TokenType, attemptUntil, NonFungibleCollectionOverview } from '@masknet/web3-shared-base'
 import { ChainId, isValidChainId } from '@masknet/web3-shared-evm'
 import { TrendingAPI } from '../../types/index.js'
 import type { EVM, Response } from '../types/index.js'
-import { fetchFromNFTScanV2, getContractSymbol } from '../helpers/EVM.js'
+import { fetchFromNFTScanV2, getContractSymbol, fetchFromNFTScanWebAPI } from '../helpers/EVM.js'
 import { LooksRareAPI } from '../../LooksRare/index.js'
 import { OpenSeaAPI } from '../../OpenSea/index.js'
 import { LooksRareLogo, OpenSeaLogo } from '../../Resources/index.js'
@@ -44,6 +44,16 @@ export class NFTScanTrendingAPI implements TrendingAPI.Provider<ChainId> {
         })
         const response = await fetchFromNFTScanV2<Response<EVM.Collection>>(chainId, path)
         return response?.data
+    }
+
+    async getCollectionOverview(chainId: ChainId, address: string): Promise<NonFungibleCollectionOverview | undefined> {
+        if (!isValidChainId(chainId)) return
+        const path = urlcat('/nftscan/getCollectionOverview', {
+            contract: address,
+        })
+        const response = await fetchFromNFTScanWebAPI<Response<NonFungibleCollectionOverview>>(chainId, path)
+        if (!response?.data) return
+        return response.data
     }
 
     private async searchNFTCollection(chainId: ChainId, keyword: string): Promise<EVM.Collection[]> {
@@ -162,6 +172,7 @@ export class NFTScanTrendingAPI implements TrendingAPI.Provider<ChainId> {
                   }
                 : null,
         ])
+
         return {
             lastUpdated: new Date().toJSON(),
             dataProvider: DataProvider.NFTScan,
