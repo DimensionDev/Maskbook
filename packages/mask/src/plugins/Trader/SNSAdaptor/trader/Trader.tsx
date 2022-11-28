@@ -3,7 +3,7 @@ import { useUnmount, useUpdateEffect } from 'react-use'
 import { delay } from '@masknet/kit'
 import { useOpenShareTxDialog, useSelectFungibleToken } from '@masknet/shared'
 import { formatBalance } from '@masknet/web3-shared-base'
-import type { GasOptionConfig } from '@masknet/web3-shared-evm'
+import type { GasConfig } from '@masknet/web3-shared-evm'
 import { useGasConfig } from '@masknet/web3-hooks-evm'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import {
@@ -37,7 +37,7 @@ export interface TraderProps extends withClasses<'root'> {
 }
 
 export interface TraderRef {
-    gasConfig?: GasOptionConfig
+    gasConfig?: GasConfig
     focusedTrade?: TradeInfo
     refresh: () => void
 }

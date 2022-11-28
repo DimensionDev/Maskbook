@@ -2,7 +2,7 @@ import { noop } from 'lodash-es'
 import { createContext, Dispatch, SetStateAction } from 'react'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import type { NonFungibleTokenContract, SocialAccount } from '@masknet/web3-shared-base'
-import type { GasOptionConfig } from '@masknet/web3-shared-evm'
+import type { GasConfig } from '@masknet/web3-shared-evm'
 import { TipsType, ValidationTuple } from '../../types/index.js'
 
 export interface TipContextOptions {
@@ -27,8 +27,8 @@ export interface TipContextOptions {
     isDirty: boolean
     storedTokens: Web3Helper.NonFungibleTokenAll[]
     reset: () => void
-    setGasOption: Dispatch<SetStateAction<GasOptionConfig | undefined>>
-    gasOption: GasOptionConfig | undefined
+    setGasOption: Dispatch<SetStateAction<GasConfig | undefined>>
+    gasOption: GasConfig | undefined
     validation: ValidationTuple
     validatingRecipient: boolean
     recipientValidation: ValidationTuple

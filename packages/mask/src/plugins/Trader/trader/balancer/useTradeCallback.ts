@@ -1,6 +1,6 @@
 import { useAsyncFn } from 'react-use'
 import type { ExchangeProxy } from '@masknet/web3-contracts/types/ExchangeProxy.js'
-import { GasOptionConfig, useTraderConstants, ContractTransaction } from '@masknet/web3-shared-evm'
+import { GasConfig, useTraderConstants, ContractTransaction } from '@masknet/web3-shared-evm'
 import { useChainContext, useNetworkContext, useWeb3Connection, useWeb3State } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { SLIPPAGE_DEFAULT } from '../../constants/index.js'
@@ -11,7 +11,7 @@ export function useTradeCallback(
     trade: TradeComputed<SwapResponse> | null,
     exchangeProxyContract: ExchangeProxy | null,
     allowedSlippage = SLIPPAGE_DEFAULT,
-    gasConfig?: GasOptionConfig,
+    gasConfig?: GasConfig,
 ) {
     const { account, chainId } = useChainContext()
     const { pluginID } = useNetworkContext()

@@ -166,7 +166,7 @@ const ReplaceTransaction = memo(() => {
                 if (type === ReplaceType.CANCEL) {
                     await connection?.cancelTransaction(transaction?.id, config)
                 } else {
-                    await connection?.requestTransaction(transaction?.id, config)
+                    await connection?.replaceTransaction(transaction?.id, config)
                 }
 
                 navigate(-1)
