@@ -34,9 +34,11 @@ export const RenderLinkFragment = memo(function RenderLink(
 })
 
 function parseText(string: string, Text: NonNullable<RenderFragmentsContextType['Text']>) {
-    const links = parseLink(string).flatMap((x) => {
+    const links = parseLink(string).flatMap((x, index) => {
         if (x.type === 'text') {
-            return sliceString(x.content).map((x) => (x === '\n' ? <br /> : <Text children={x} />))
+            return sliceString(x.content).map((x) =>
+                x === '\n' ? <br key={index} /> : <Text children={x} key={index} />,
+            )
         }
         if (x.category === 'normal' && !x.content.match(/^https?:\/\//gi)) x.content = 'http://' + x.content
         return (

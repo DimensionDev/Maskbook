@@ -67,6 +67,7 @@ export enum SourceType {
     CoinMarketCap = 'CoinMarketCap',
     UniswapInfo = 'UniswapInfo',
     CF = 'CloudFlare',
+    GoPlus = 'GoPlus',
 
     // NFT assets
     Rabby = 'Rabby',
