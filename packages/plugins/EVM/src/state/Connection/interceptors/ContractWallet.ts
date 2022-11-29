@@ -1,6 +1,6 @@
 import { first } from 'lodash-es'
 import type { AbiItem } from 'web3-utils'
-import { BundlerAPI, SmartPayBundler } from '@masknet/web3-providers'
+import type { BundlerAPI } from '@masknet/web3-providers'
 import {
     createContract,
     EthereumMethodType,
@@ -14,11 +14,10 @@ import type { Wallet as WalletContract } from '@masknet/web3-contracts/types/Wal
 import { Web3StateSettings } from '../../../settings/index.js'
 import type { Middleware, Context } from '../types.js'
 import { Providers } from '../provider.js'
-import type { BaseHostedProvider } from '../providers/BaseHosted.js'
 import type { BaseContractWalletProvider } from '../providers/BaseContractWallet.js'
 
 export class ContractWallet implements Middleware<Context> {
-    constructor(protected providerType: ProviderType, protected bundler: BundlerAPI.Provider) {}
+    constructor(protected bundler: BundlerAPI.Provider) {}
 
     private async createWeb3(context: Context) {
         const web3 = await Web3StateSettings.value.Connection?.getWeb3?.({
@@ -30,6 +29,10 @@ export class ContractWallet implements Middleware<Context> {
         return web3
     }
 
+    private createProvider(context: Context) {
+        return Providers[context.providerType] as BaseContractWalletProvider | undefined
+    }
+
     private async createWallet(context: Context) {
         const web3 = await this.createWeb3(context)
         const contract = createContract<WalletContract>(web3, context.account, WalletABI as AbiItem[])
@@ -37,32 +40,34 @@ export class ContractWallet implements Middleware<Context> {
         return contract
     }
 
-    private async sendUserOperation(context: Context, userOperation?: UserOperation): Promise<string> {
+    private async sendUserOperation(
+        context: Context,
+        userOperation?: UserOperation,
+        owner?: string,
+        ownerProviderType?: ProviderType,
+    ): Promise<string> {
         if (!userOperation) throw new Error('Invalid user operation.')
 
-        // get entry point contract address
+        if (owner || !ownerProviderType || ownerProviderType === ProviderType.None)
+            throw new Error('Failed to sign user operation.')
+
         const entryPoints = await this.bundler.getSupportedEntryPoints(context.chainId)
         const entryPoint = first(entryPoints)
         if (!entryPoint) throw new Error(`Not supported ${context.chainId}`)
 
-        // get owner details to sign the user operation
-        const { owner, ownerProviderType } = Providers[this.providerType] as BaseContractWalletProvider
-        if (owner || !ownerProviderType || ownerProviderType === ProviderType.None)
-            throw new Error('Failed to sign user operation.')
-
         // sign user operation
         const userTransaction = await UserTransaction.fromUserOperation(context.chainId, entryPoint, userOperation)
-        await userTransaction.sign((message: string) => {
-            return context.connection.signMessage(message, 'personalSign', {
+        await userTransaction.sign((message: string) =>
+            context.connection.signMessage(message, 'personalSign', {
                 account: owner,
                 providerType: ownerProviderType,
-            })
-        })
-        return SmartPayBundler.sendUserOperation(context.chainId, userTransaction.toUserOperation())
+            }),
+        )
+        return this.bundler.sendUserOperation(context.chainId, userTransaction.toUserOperation())
     }
 
     async fn(context: Context, next: () => Promise<void>) {
-        const provider = Providers[context.providerType] as BaseHostedProvider | undefined
+        const provider = this.createProvider(context)
 
         // not a SC wallet provider
         if (!provider) {
@@ -92,14 +97,28 @@ export class ContractWallet implements Middleware<Context> {
                 break
             case EthereumMethodType.ETH_SEND_TRANSACTION:
                 try {
-                    context.write(await this.sendUserOperation(context, context.userOperation))
+                    context.write(
+                        await this.sendUserOperation(
+                            context,
+                            context.userOperation,
+                            provider.owner,
+                            provider.ownerProviderType,
+                        ),
+                    )
                 } catch (error) {
                     context.abort(error)
                 }
                 break
             case EthereumMethodType.ETH_SEND_USER_OPERATION:
                 try {
-                    context.write(await this.sendUserOperation(context, context.userOperation))
+                    context.write(
+                        await this.sendUserOperation(
+                            context,
+                            context.userOperation,
+                            provider.owner,
+                            provider.ownerProviderType,
+                        ),
+                    )
                 } catch (error) {
                     context.abort(error)
                 }
