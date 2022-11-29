@@ -34,7 +34,6 @@ import { useI18N } from '../../../../utils/index.js'
 import { useTransakAllowanceCoin } from '../../../Transak/hooks/useTransakAllowanceCoin.js'
 import { PluginTransakMessages } from '../../../Transak/messages.js'
 import { getCurrentPreferredCoinIdSettings } from '../../settings.js'
-import { setStorage } from '../../storage/index.js'
 import type { Coin, Currency, Stat } from '../../types/index.js'
 import { CoinMenu } from './CoinMenu.js'
 import { CoinIcon } from './components/index.js'
@@ -132,6 +131,7 @@ export interface TrendingViewDeckProps extends withClasses<'header' | 'body' | '
     currency: Currency
     trending: TrendingAPI.Trending
     dataProvider: DataProvider
+    setDataProvider: (x: DataProvider) => void
     children?: React.ReactNode
     isPreciseSearch?: boolean
     showDataProviderIcon?: boolean
@@ -148,6 +148,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
         dataProvider,
         stats,
         children,
+        setDataProvider,
         showDataProviderIcon = false,
         TrendingCardProps,
         isPopper = true,
@@ -179,8 +180,6 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
         isTokenSecurityEnable,
     )
 
-    console.log({ tokenSecurityInfo, isTokenSecurityEnable, error })
-
     const isBuyable = !isNFT && transakPluginEnabled && !transakIsMinimalMode && coin.symbol && isAllowanceCoin
     const onBuyButtonClicked = useCallback(() => {
         setBuyDialog({
@@ -193,7 +192,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
 
     // #region sync with settings
     const onDataProviderChange = useCallback((option: FootnoteMenuOption) => {
-        setStorage(option.value as DataProvider)
+        setDataProvider(option.value as DataProvider)
     }, [])
     // #endregion
 

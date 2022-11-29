@@ -11,7 +11,6 @@ import { Icons } from '@masknet/icons'
 import { Web3ContextProvider } from '@masknet/web3-hooks-base'
 import { CrossIsolationMessages, NetworkPluginID, PluginID } from '@masknet/shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
-import { setupStorage, storageDefaultValue } from '../storage/index.js'
 import { SearchResultType, FungibleTokenResult } from '@masknet/web3-shared-base'
 import { usePayloadFromTokenSearchKeyword } from '../trending/usePayloadFromTokenSearchKeyword.js'
 
@@ -30,9 +29,7 @@ const sns: Plugin.SNSAdaptor.Definition<
     unknown
 > = {
     ...base,
-    init(signal, context) {
-        setupStorage(context.createKVStorage('persistent', storageDefaultValue))
-    },
+    init(signal, context) {},
     SearchResultInspector: {
         ID: PluginID.Trader,
         UI: {

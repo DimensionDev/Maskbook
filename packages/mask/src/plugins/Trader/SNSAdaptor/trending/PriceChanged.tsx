@@ -9,7 +9,7 @@ const useStyles = makeStyles()((theme) => ({
         fontWeight: 700,
     },
     icon: {
-        color: theme.palette.maskColor.dark,
+        color: theme.palette.text.secondary,
     },
 }))
 

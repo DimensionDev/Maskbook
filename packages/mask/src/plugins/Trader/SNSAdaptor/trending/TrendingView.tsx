@@ -20,17 +20,15 @@ import { compact } from 'lodash-es'
 import { useEffect, useMemo, useState } from 'react'
 import { useI18N } from '../../../../utils/index.js'
 import { resolveDataProviderLink, resolveDataProviderName } from '../../pipes.js'
-import { setStorage } from '../../storage/index.js'
 import { useAvailableCoins } from '../../trending/useAvailableCoins.js'
 import { usePreferredCoinId } from '../../trending/useCurrentCoinId.js'
-import { useCurrentDataProvider } from '../../trending/useCurrentDataProvider.js'
 import { usePriceStats } from '../../trending/usePriceStats.js'
 import { useTrendingById, useTrendingByKeyword } from '../../trending/useTrending.js'
 import type { TagType } from '../../types/index.js'
 import { TradeView } from '../trader/TradeView.js'
 import { CoinMarketPanel } from './CoinMarketPanel.js'
 import { PriceChart } from './PriceChart.js'
-import { DEFAULT_RANGE_OPTIONS, NFT_RANGE_OPTIONS, PriceChartDaysControl } from './PriceChartDaysControl.js'
+import { DEFAULT_RANGE_OPTIONS, PriceChartDaysControl } from './PriceChartDaysControl.js'
 import { TickersTable } from './TickersTable.js'
 import { TrendingViewDeck } from './TrendingViewDeck.js'
 import { TrendingViewError } from './TrendingViewError.js'
@@ -132,7 +130,7 @@ export function TrendingView(props: TrendingViewProps) {
     const { classes } = useStyles({ isPopper })
     const theme = useTheme()
     const isMinimalMode = useIsMinimalMode(PluginID.Trader)
-    const dataProvider = useCurrentDataProvider(dataProviders)
+    const [dataProvider, setDataProvider] = useState(dataProviders[0])
     const [tabIndex, setTabIndex] = useState(dataProvider !== DataProvider.UniswapInfo ? 1 : 0)
     const { chainId, networkType } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const chainIdValid = useChainIdValid(NetworkPluginID.PLUGIN_EVM, chainId)
@@ -239,7 +237,7 @@ export function TrendingView(props: TrendingViewProps) {
         const nextOption = indexOf === dataProviders.length - 1 ? dataProviders[0] : dataProviders[indexOf + 1]
 
         return (
-            <ActionButton sx={{ marginTop: 1 }} color="primary" onClick={() => setStorage(nextOption)}>
+            <ActionButton sx={{ marginTop: 1 }} color="primary" onClick={() => setDataProvider(nextOption)}>
                 {t('plugin_trader_switch_provider', {
                     provider: resolveDataProviderName(nextOption),
                 })}
@@ -311,6 +309,7 @@ export function TrendingView(props: TrendingViewProps) {
                 cardHeader: classes.cardHeader,
             }}
             keyword={name}
+            setDataProvider={setDataProvider}
             stats={stats}
             coins={coins}
             isPreciseSearch={!!searchedContractAddress}
@@ -347,7 +346,7 @@ export function TrendingView(props: TrendingViewProps) {
                             retry={retryStats}
                             loading={loadingStats}>
                             <PriceChartDaysControl
-                                rangeOptions={isNFT ? NFT_RANGE_OPTIONS : DEFAULT_RANGE_OPTIONS}
+                                rangeOptions={DEFAULT_RANGE_OPTIONS}
                                 days={days}
                                 onDaysChange={setDays}
                             />
