@@ -2,7 +2,7 @@ import { useContext, useRef, useEffect, useState, useMemo, unstable_useCacheRefr
 import { Box, List, ListItem, Typography, LinearProgress, styled, Button, linearProgressClasses } from '@mui/material'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { useI18N } from '../../../utils/index.js'
-import millify from 'millify'
+import { millify } from 'millify'
 import { SnapshotContext } from '../context.js'
 import { useProposal } from './hooks/useProposal.js'
 import { useVotes } from './hooks/useVotes.js'
@@ -144,7 +144,7 @@ function Content() {
                                     <Typography className={classes.ellipsisText}>
                                         {result.powerDetail
                                             .flatMap((detail, index) => {
-                                                const name = millify.default(detail.power, {
+                                                const name = millify(detail.power, {
                                                     precision: 2,
                                                     lowercase: true,
                                                 })
@@ -156,7 +156,7 @@ function Content() {
                                 placement="top"
                                 arrow>
                                 <Typography className={classes.power}>
-                                    {millify.default(result.power, { precision: 2, lowercase: true })}
+                                    {millify(result.power, { precision: 2, lowercase: true })}
                                 </Typography>
                             </ShadowRootTooltip>
                             <Typography className={classes.ratio}>
