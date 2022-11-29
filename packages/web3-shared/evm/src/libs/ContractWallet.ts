@@ -6,15 +6,15 @@ import WalletABI from '@masknet/web3-contracts/abis/Wallet.json'
 import WalletProxyABI from '@masknet/web3-contracts/abis/WalletProxy.json'
 import { WalletProxyByteCode } from '@masknet/web3-contracts/bytes/WalletProxy.js'
 
-export class WalletContract {
+export class ContractWallet {
     private web3 = new Web3()
     private coder = ABICoder as unknown as ABICoder.AbiCoder
 
     /**
-     * WalletContract
+     * ContractWallet
      *
      * @param owner the owner address
-     * @param address  the deployed contract address
+     * @param address  the deployed logic contract address
      * @param entryPoint the entry point contract address
      */
     constructor(private owner: string, private address: string, private entryPoint: string) {}
@@ -27,7 +27,7 @@ export class WalletContract {
     }
 
     /**
-     * Encoded initialize parameters of WalletContract
+     * Encoded initialize parameters of ContractWallet
      */
     private get data() {
         const abi = WalletABI.find((x) => x.name === 'initialize' && x.type === 'function')
