@@ -1,3 +1,4 @@
+import { first } from 'lodash-es'
 import type { AbiItem } from 'web3-utils'
 import { BundlerAPI, SmartPayBundler } from '@masknet/web3-providers'
 import {
@@ -6,6 +7,7 @@ import {
     isValidAddress,
     ProviderType,
     UserOperation,
+    UserTransaction,
 } from '@masknet/web3-shared-evm'
 import WalletABI from '@masknet/web3-contracts/abis/Wallet.json'
 import type { Wallet as WalletContract } from '@masknet/web3-contracts/types/Wallet.js'
@@ -13,9 +15,10 @@ import { Web3StateSettings } from '../../../settings/index.js'
 import type { Middleware, Context } from '../types.js'
 import { Providers } from '../provider.js'
 import type { BaseHostedProvider } from '../providers/BaseHosted.js'
+import type { BaseContractWalletProvider } from '../providers/BaseContractWallet.js'
 
 export class ContractWallet implements Middleware<Context> {
-    constructor(protected bundler: BundlerAPI.Provider) {}
+    constructor(protected providerType: ProviderType, protected bundler: BundlerAPI.Provider) {}
 
     private async createWeb3(context: Context) {
         const web3 = await Web3StateSettings.value.Connection?.getWeb3?.({
@@ -34,9 +37,28 @@ export class ContractWallet implements Middleware<Context> {
         return contract
     }
 
-    private sendUserOperation(context: Context, userOperation?: UserOperation): Promise<string> {
+    private async sendUserOperation(context: Context, userOperation?: UserOperation): Promise<string> {
         if (!userOperation) throw new Error('Invalid user operation.')
-        return SmartPayBundler.sendUserOperation(context.chainId, userOperation)
+
+        // get entry point contract address
+        const entryPoints = await this.bundler.getSupportedEntryPoints(context.chainId)
+        const entryPoint = first(entryPoints)
+        if (!entryPoint) throw new Error(`Not supported ${context.chainId}`)
+
+        // get owner details to sign the user operation
+        const { owner, ownerProviderType } = Providers[this.providerType] as BaseContractWalletProvider
+        if (owner || !ownerProviderType || ownerProviderType === ProviderType.None)
+            throw new Error('Failed to sign user operation.')
+
+        // sign user operation
+        const userTransaction = await UserTransaction.fromUserOperation(context.chainId, entryPoint, userOperation)
+        await userTransaction.sign((message: string) => {
+            return context.connection.signMessage(message, 'personalSign', {
+                account: owner,
+                providerType: ownerProviderType,
+            })
+        })
+        return SmartPayBundler.sendUserOperation(context.chainId, userTransaction.toUserOperation())
     }
 
     async fn(context: Context, next: () => Promise<void>) {
