@@ -1,21 +1,12 @@
-import { useState } from 'react'
-import { Box, Link, Stack, Tab, Typography } from '@mui/material'
+import { Link, Stack, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import Avatar from 'boring-avatars'
 import { ChainId, explorerResolver, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import type { IFollowIdentity } from '../Worker/apis/index.js'
-import { TabContext, TabList, TabPanel } from '@mui/lab'
 import { Icons } from '@masknet/icons'
 import { CopyIconButton } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
-    tabPanel: {
-        height: '400px',
-        overflow: 'auto',
-        '::-webkit-scrollbar': {
-            display: 'none',
-        },
-    },
     followRow: { display: 'flex', alignItems: 'center', height: '60px', overflow: 'hidden', textOverflow: 'ellipsis' },
     avatarWrapper: { svg: { borderRadius: '100%' } },
     user: { marginLeft: '16px' },
@@ -68,72 +59,5 @@ export function FollowRow({ identity }: { identity: IFollowIdentity }) {
                 </Stack>
             </div>
         </div>
-    )
-}
-export default function FollowTab({
-    followingList,
-    followerList,
-}: {
-    followingList: IFollowIdentity[]
-    followerList: IFollowIdentity[]
-}) {
-    const { classes } = useStyles()
-    const [tab, setTab] = useState('1')
-    const handleChange = (event: React.SyntheticEvent, newValue: string) => {
-        setTab(newValue)
-    }
-
-    return (
-        <TabContext value={tab}>
-            <Box sx={{ width: '100%', marginTop: '40px' }}>
-                <TabList
-                    sx={{
-                        width: '100%',
-                        color: 'black',
-                        fontSize: '18px',
-                        ' .MuiTabs-indicator': {
-                            backgroundColor: 'black',
-                            height: '3px',
-                        },
-                        ' .Mui-selected': {
-                            color: 'black !important',
-                            opacity: 1,
-                        },
-                        ' .MuiTab-textColorPrimary': {
-                            color: 'black !important',
-                            fontSize: '18px',
-                            textAlign: 'center',
-                        },
-                    }}
-                    onChange={handleChange}>
-                    <Tab sx={{ width: '50%', height: '60px' }} label="Followings" value="1" />
-                    <Tab sx={{ width: '50%', height: '60px' }} label="Followers" value="2" />
-                </TabList>
-            </Box>
-            <TabPanel
-                className={classes.tabPanel}
-                value="1"
-                sx={{
-                    color: 'black',
-                    width: '100%',
-                    boxSizing: 'border-box',
-                }}>
-                {followingList.map((f: IFollowIdentity) => {
-                    return <FollowRow key={f.address} identity={f} />
-                })}
-            </TabPanel>
-            <TabPanel
-                className={classes.tabPanel}
-                value="2"
-                sx={{
-                    color: 'black',
-                    width: '100%',
-                    boxSizing: 'border-box',
-                }}>
-                {followerList.map((f: IFollowIdentity) => {
-                    return <FollowRow key={f.address} identity={f} />
-                })}
-            </TabPanel>
-        </TabContext>
     )
 }
