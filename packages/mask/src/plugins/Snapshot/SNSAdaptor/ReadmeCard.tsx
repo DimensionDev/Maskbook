@@ -8,7 +8,7 @@ const useStyles = makeStyles()((theme) => ({
     markdown: {
         '& p, & li': {
             margin: 0,
-            fontSize: 12,
+            fontSize: 14,
             color: `${theme.palette.maskColor.secondaryDark} !important`,
         },
         '& p + p': {
