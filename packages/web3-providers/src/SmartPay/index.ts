@@ -13,8 +13,9 @@ import {
 import { NetworkPluginID } from '@masknet/shared-base'
 import WalletABI from '@masknet/web3-contracts/abis/Wallet.json'
 import type { Wallet } from '@masknet/web3-contracts/types/Wallet.js'
-import { BUNDLER_ROOT, MAX_ACCOUNT_LENGTH } from './constants.js'
+import { BUNDLER_ROOT, FUNDER_ROOT, MAX_ACCOUNT_LENGTH } from './constants.js'
 import type { BundlerAPI } from '../types/Bundler.js'
+import type { FunderAPI } from '../types/Funder.js'
 import type { ContractAccountAPI } from '../types/index.js'
 import { MulticallAPI } from '../Multicall/index.js'
 import { Web3API } from '../EVM/index.js'
@@ -37,7 +38,7 @@ export class SmartPayBundlerAPI implements BundlerAPI.Provider {
             method: 'POST',
             body: JSON.stringify(UserTransaction.toUserOperationSnakeCase(userOperation)),
         })
-        const json = (await response.json()) as { tx_hash: string }
+        const json: { tx_hash: string } = await response.json()
         return json.tx_hash
     }
 
@@ -73,6 +74,28 @@ export class SmartPayBundlerAPI implements BundlerAPI.Provider {
         await this.assetChainId(chainId)
 
         return this.handle(userOperation)
+    }
+}
+
+export class SmartPayFunderAPI implements FunderAPI.Provider {
+    private async assetChainId(chainId: ChainId) {
+        const chainIds = await this.getSupportedChainIds()
+        if (!chainIds.includes(chainId)) throw new Error(`Not supported ${chainId}.`)
+    }
+
+    getSupportedChainIds(): Promise<ChainId[]> {
+        return Promise.resolve([ChainId.Matic])
+    }
+
+    async fund(chainId: ChainId, proof: FunderAPI.Proof): Promise<FunderAPI.Fund> {
+        await this.assetChainId(chainId)
+
+        const response = await fetch(urlcat(FUNDER_ROOT, '/verify'), {
+            method: 'POST',
+            body: JSON.stringify(proof),
+        })
+        const json: FunderAPI.Fund = await response.json()
+        return json
     }
 }
 

@@ -29,7 +29,7 @@
     "spellcheck": "cspell lint --no-must-find-files"
   },
   "dependencies": {
-    "@dimensiondev/holoflows-kit": "0.9.0-20220916150447-7ac7ff2",
+    "@dimensiondev/holoflows-kit": "0.9.0-20221128033345-3a4bb0c",
     "@emotion/cache": "11.10.3",
     "@emotion/react": "11.10.4",
     "@emotion/serialize": "1.1.0",

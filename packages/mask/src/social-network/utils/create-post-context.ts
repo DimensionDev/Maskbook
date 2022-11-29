@@ -1,18 +1,5 @@
-import { ValueRef } from '@dimensiondev/holoflows-kit'
-import type {
-    PostContext,
-    PostContextAuthor,
-    PostContextCoAuthor,
-    PostContextCreation,
-    PostContextSNSActions,
-} from '@masknet/plugin-infra/content-script'
 import {
-    extractTextFromTypedMessage,
-    makeTypedMessageTupleFromList,
-    type TypedMessage,
-    type TypedMessageTuple,
-} from '@masknet/typed-message'
-import {
+    ValueRef,
     ALL_EVENTS,
     ObservableMap,
     ObservableSet,
@@ -26,6 +13,19 @@ import {
     PostIVIdentifier,
     EnhanceableSite,
 } from '@masknet/shared-base'
+import type {
+    PostContext,
+    PostContextAuthor,
+    PostContextCoAuthor,
+    PostContextCreation,
+    PostContextSNSActions,
+} from '@masknet/plugin-infra/content-script'
+import {
+    extractTextFromTypedMessage,
+    makeTypedMessageTupleFromList,
+    type TypedMessage,
+    type TypedMessageTuple,
+} from '@masknet/typed-message'
 import type { Subscription } from 'use-subscription'
 import { activatedSocialNetworkUI } from '../ui.js'
 import { resolveFacebookLink } from '../../social-network-adaptor/facebook.com/utils/resolveFacebookLink.js'
