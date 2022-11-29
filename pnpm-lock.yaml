@@ -347,7 +347,7 @@ importers:
         version: link:../plugins/EVM
       '@masknet/plugin-example':
         specifier: workspace:^
-        version: link:../plugins/Example
+        version: link:../plugins/example
       '@masknet/plugin-flow':
         specifier: workspace:^
         version: link:../plugins/Flow
@@ -647,7 +647,7 @@ importers:
         version: link:../plugins/EVM
       '@masknet/plugin-example':
         specifier: workspace:^
-        version: link:../plugins/Example
+        version: link:../plugins/example
       '@masknet/plugin-file-service':
         specifier: workspace:^
         version: link:../plugins/FileService
@@ -1546,18 +1546,6 @@ importers:
         specifier: ^1.0.0
         version: 1.0.0
 
-  packages/plugins/Example:
-    dependencies:
-      '@masknet/plugin-infra':
-        specifier: workspace:^
-        version: link:../../plugin-infra
-      '@masknet/shared-base':
-        specifier: workspace:^
-        version: link:../../shared-base
-      ts-results:
-        specifier: ^3.3.0
-        version: 3.3.0
-
   packages/plugins/FileService:
     dependencies:
       '@dimensiondev/common-protocols':
@@ -2099,6 +2087,18 @@ importers:
       use-subscription:
         specifier: ^1.8.0
         version: 1.8.0
+
+  packages/plugins/example:
+    dependencies:
+      '@masknet/plugin-infra':
+        specifier: workspace:^
+        version: link:../../plugin-infra
+      '@masknet/shared-base':
+        specifier: workspace:^
+        version: link:../../shared-base
+      ts-results:
+        specifier: ^3.3.0
+        version: 3.3.0
 
   packages/plugins/template:
     dependencies:
@@ -15426,7 +15426,7 @@ packages:
       mississippi: 3.0.0
       mkdirp: 0.5.6
       move-concurrently: 1.0.1
-      promise-inflight: 1.0.1
+      promise-inflight: 1.0.1_bluebird@3.7.2
       rimraf: 2.7.1
       ssri: 6.0.2
       unique-filename: 1.1.1
@@ -15450,7 +15450,7 @@ packages:
       minipass-pipeline: 1.2.4
       mkdirp: 1.0.4
       p-map: 4.0.0
-      promise-inflight: 1.0.1
+      promise-inflight: 1.0.1_bluebird@3.7.2
       rimraf: 3.0.2
       ssri: 8.0.1
       tar: 6.1.12
@@ -27042,13 +27042,15 @@ packages:
   /promievent/0.1.5:
     resolution: {integrity: sha512-Yqve4y2sFIz5hHmVpoZWXNayROyAyf3KWeEHZPh60yYiVpmHMKuJt6UoLbs6pC8uEMdFkqukz97mQXaAkHDPAw==}
 
-  /promise-inflight/1.0.1:
+  /promise-inflight/1.0.1_bluebird@3.7.2:
     resolution: {integrity: sha512-6zWPyEOFaQBJYcGMHBKTKJ3u6TBsnMFOIZSa6ce1e/ZrrsOlnHRHbabMjLiBYKp+n44X9eUI6VUPaukCXHuG4g==}
     peerDependencies:
       bluebird: '*'
     peerDependenciesMeta:
       bluebird:
         optional: true
+    dependencies:
+      bluebird: 3.7.2
     dev: true
 
   /promise-to-callback/1.0.0:
@@ -30311,7 +30313,7 @@ packages:
       '@swc/core': ^1.2.147
       webpack: '>=2'
     dependencies:
-      webpack: 5.75.0
+      webpack: 5.75.0_webpack-cli@5.0.0
     dev: true
 
   /symbol-tree/3.2.4:
@@ -31428,7 +31430,7 @@ packages:
     dependencies:
       source-map: 0.5.7
       uglify-js: 2.8.29
-      webpack: 3.12.0
+      webpack: 3.12.0_webpack-cli@5.0.0
       webpack-sources: 1.4.3
     dev: false
 
