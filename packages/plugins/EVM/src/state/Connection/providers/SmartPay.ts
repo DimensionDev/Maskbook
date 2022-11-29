@@ -1,8 +1,8 @@
 import { first } from 'lodash-es'
+import { ExtensionSite, getSiteType, PopupRoutes } from '@masknet/shared-base'
 import { ChainId, chainResolver, isValidAddress, ProviderType } from '@masknet/web3-shared-evm'
 import { BaseSCWalletProvider } from './BaseSCWallet.js'
 import type { EVM_Provider } from '../types.js'
-import { ExtensionSite, getSiteType, PopupRoutes } from '@masknet/shared-base'
 import { SharedContextSettings } from '../../../settings/index.js'
 
 /**

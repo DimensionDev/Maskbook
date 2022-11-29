@@ -14,7 +14,7 @@ import type { Middleware, Context } from '../types.js'
 import { Providers } from '../provider.js'
 import type { BaseHostedProvider } from '../providers/BaseHosted.js'
 
-export class SCWallet implements Middleware<Context> {
+export class ContractWallet implements Middleware<Context> {
     constructor(protected bundler: BundlerAPI.Provider) {}
 
     private async createWeb3(context: Context) {
