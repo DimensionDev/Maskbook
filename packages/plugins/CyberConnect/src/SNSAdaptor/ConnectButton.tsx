@@ -1,43 +1,25 @@
 import { useEffect, useState, useCallback } from 'react'
 import { useAsync } from 'react-use'
-import { LoadingBase, makeStyles, MaskColorVar } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useChainContext, useWeb3, useNetworkContext } from '@masknet/web3-hooks-base'
 import CyberConnect, { Env } from '@cyberlab/cyberconnect'
-import { useTheme, Typography } from '@mui/material'
+import { useTheme, Button } from '@mui/material'
 import { PluginCyberConnectRPC } from '../messages.js'
+import { WalletConnectedBoundary } from '@masknet/shared'
 
-const useStyles = makeStyles()(() => ({
+const useStyles = makeStyles()((theme) => ({
     button: {
-        width: '350px',
         display: 'flex',
         alignItems: 'center',
-        background: MaskColorVar.cyberconnectPrimary,
-        fontSize: '20px',
-        color: MaskColorVar.twitterBottom,
-        marginTop: '30px',
-        borderRadius: '4px',
-        padding: '20px 20px 20px 30px',
-        transition: 'all .3s ease',
-        '>svg': {
-            marginRight: '20px',
-            transition: 'all .3s ease',
-        },
-        cursor: 'pointer',
-        '&:hover': {
-            opacity: 0.8,
-            '>svg': {
-                '&:nth-of-type(1)': {
-                    transformOrigin: 'calc(100% + 1px) center',
-                    transform: 'rotate(-45deg) translate(2px,0)',
-                },
-                '&:nth-of-type(2)': {
-                    transformOrigin: '-1px center',
-                    transform: 'rotate(135deg) translate(-8px,0)',
-                },
-            },
-        },
+        fontSize: 12,
+        padding: '8px 12px',
+    },
+    wallet: {
+        padding: '8px 12px',
+        fontSize: 12,
+        color: theme.palette.maskColor.white,
     },
     isFollowing: {
         '&:hover': {
@@ -136,29 +118,20 @@ export default function ConnectButton({
         }
     }, [cc, account, isFollowing])
 
-    if (!account)
+    if (!isSameAddress(account, address)) {
         return (
-            <Typography variant="body2" sx={{ marginTop: 2 }}>
-                Please connect your wallet first
-            </Typography>
-        )
-    if (pluginID !== NetworkPluginID.PLUGIN_EVM) {
-        return (
-            <Typography variant="body2" sx={{ marginTop: 2 }}>
-                Please switch to EVM-based wallet to follow
-            </Typography>
-        )
-    } else if (!isSameAddress(account, address)) {
-        return (
-            <div className={cx(classes.button, { [classes.isFollowing]: isFollowing })} onClick={handleClick}>
-                {!isLoading ? (
-                    <>
-                        <Logo /> <Typography variant="button">{!isFollowing ? 'Follow Now' : 'Following'}</Typography>
-                    </>
-                ) : (
-                    <LoadingBase size={30} sx={{ marginLeft: '154px' }} />
-                )}
-            </div>
+            <WalletConnectedBoundary
+                hideRiskWarningConfirmed
+                ActionButtonProps={{ variant: 'roundedDark' }}
+                classes={{ button: classes.wallet }}>
+                <Button
+                    className={cx(classes.button, { [classes.isFollowing]: isFollowing })}
+                    onClick={handleClick}
+                    variant="roundedContained">
+                    {!isFollowing ? 'Follow Now' : 'Unfollow'}
+                </Button>
+                <div />
+            </WalletConnectedBoundary>
         )
     }
     return null

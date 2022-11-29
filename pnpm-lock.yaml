@@ -1256,6 +1256,9 @@ importers:
       '@masknet/plugin-infra':
         specifier: workspace:^
         version: link:../../plugin-infra
+      '@masknet/shared':
+        specifier: workspace:^
+        version: link:../../shared
       '@masknet/shared-base':
         specifier: workspace:^
         version: link:../../shared-base
