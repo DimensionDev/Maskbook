@@ -207,7 +207,7 @@ export function TrendingView(props: TrendingViewProps) {
             },
             {
                 key: ContentTabs.Price,
-                label: isNFT ? t('plugin_trader_floor_price') : t('plugin_trader_tab_price'),
+                label: isNFT ? t('plugin_trader_trending') : t('plugin_trader_tab_price'),
             },
             {
                 key: ContentTabs.Exchange,
