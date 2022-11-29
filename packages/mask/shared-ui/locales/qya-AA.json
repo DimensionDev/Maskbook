@@ -446,7 +446,6 @@
     "plugin_trader_accept": "crwdns13025:0crwdne13025:0",
     "plugin_trader_volume_24": "crwdns10231:0crwdne10231:0",
     "plugin_trader_market_cap": "crwdns10233:0crwdne10233:0",
-    "plugin_trader_data_source": "crwdns10235:0crwdne10235:0",
     "plugin_trader_risk_warning_short": "crwdns17728:0crwdne17728:0",
     "plugin_trader_risk_warning": "crwdns17730:0crwdne17730:0",
     "plugin_trader_make_risk_trade": "crwdns17732:0crwdne17732:0",

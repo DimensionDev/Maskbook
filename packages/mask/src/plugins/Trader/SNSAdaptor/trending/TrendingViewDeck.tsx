@@ -60,7 +60,7 @@ const useStyles = makeStyles<{
                 'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%), linear-gradient(90deg, rgba(28, 104, 243, 0.2) 0%, rgba(69, 163, 251, 0.2) 100%), #FFFFFF;',
         },
         headline: {
-            marginTop: props.isPopper ? 0 : 30,
+            marginTop: props.isPopper ? 0 : 20,
             alignItems: 'center',
             flexDirection: 'row',
             justifyContent: 'space-between',
@@ -171,13 +171,15 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
     const { setDialog: setBuyDialog } = useRemoteControlledDialog(PluginTransakMessages.buyTokenDialogUpdated)
 
     const snsAdaptorMinimalPlugins = useActivatedPluginsSNSAdaptor(true)
-    const isTokenSecurityEnable = !isNFT && !snsAdaptorMinimalPlugins.map((x) => x.ID).includes(PluginID.GoPlusSecurity)
+    const isTokenSecurityEnable = !snsAdaptorMinimalPlugins.map((x) => x.ID).includes(PluginID.GoPlusSecurity)
 
     const { value: tokenSecurityInfo, error } = useTokenSecurity(
         coin.chainId ?? ChainId.Mainnet,
         coin.contract_address?.trim(),
         isTokenSecurityEnable,
     )
+
+    console.log({ tokenSecurityInfo, isTokenSecurityEnable, error })
 
     const isBuyable = !isNFT && transakPluginEnabled && !transakIsMinimalMode && coin.symbol && isAllowanceCoin
     const onBuyButtonClicked = useCallback(() => {
@@ -295,8 +297,17 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                             {t('buy_now')}
                                         </Button>
                                     ) : null}
+                                    <Button
+                                        color="primary"
+                                        className={classes.buyButton}
+                                        size="small"
+                                        endIcon={<Icons.LinkOut size={16} />}
+                                        variant="roundedContained"
+                                        onClick={() => window.open(first(coin.home_urls))}>
+                                        {t('open')}
+                                    </Button>
                                 </Stack>
-                                <Stack direction="row" justifyContent="space-between">
+                                <Stack direction="row" justifyContent="space-between" marginTop={2}>
                                     <Stack direction="row" gap={1} alignItems="center">
                                         {market ? (
                                             <Typography
