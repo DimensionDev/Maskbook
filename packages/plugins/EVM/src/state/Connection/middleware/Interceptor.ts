@@ -18,7 +18,7 @@ export class Interceptor implements Middleware<Context> {
         [ProviderType.WalletLink]: new MetaMask(),
         [ProviderType.MathWallet]: new MetaMask(),
         [ProviderType.Fortmatic]: new Fortmatic(),
-        [ProviderType.SmartPay]: new ContractWallet(ProviderType.SmartPay, SmartPayBundler),
+        [ProviderType.SmartPay]: new ContractWallet(SmartPayBundler),
         [ProviderType.Opera]: new MetaMask(),
         [ProviderType.ClvWallet]: new MetaMask(),
     }

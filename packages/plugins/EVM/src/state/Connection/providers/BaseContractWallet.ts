@@ -1,6 +1,6 @@
 import type { StorageObject } from '@masknet/shared-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
-import { ChainId, isValidAddress, ProviderType } from '@masknet/web3-shared-evm'
+import { isValidAddress, ProviderType } from '@masknet/web3-shared-evm'
 import type { EVM_Provider } from '../types.js'
 import { BaseHostedProvider } from './BaseHosted.js'
 import { SharedContextSettings } from '../../../settings/index.js'
@@ -34,13 +34,13 @@ export class BaseContractWalletProvider extends BaseHostedProvider implements EV
     }
 
     override async switchAccount(account?: string, owner?: string, ownerProviderType?: ProviderType) {
-        if (isValidAddress(owner) && ownerProviderType && ownerProviderType !== ProviderType.None) {
-            await super.switchAccount(account)
+        if (!isValidAddress(owner) || !ownerProviderType || ownerProviderType === ProviderType.None) return
 
-            if (isSameAddress(this.account, account)) {
-                this.ownerStorage.account.setValue(owner)
-                this.ownerStorage.providerType.setValue(ownerProviderType)
-            }
+        await super.switchAccount(account)
+
+        if (isSameAddress(this.account, account)) {
+            this.ownerStorage.account.setValue(owner)
+            this.ownerStorage.providerType.setValue(ownerProviderType)
         }
     }
 }

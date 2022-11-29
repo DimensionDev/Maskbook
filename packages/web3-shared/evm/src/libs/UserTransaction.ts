@@ -1,4 +1,3 @@
-import { omit } from 'lodash-es'
 import { keccak256 } from 'web3-utils'
 import * as ABICoder from 'web3-eth-abi'
 import type { ChainId, Transaction, UserOperation } from '../types/index.js'
@@ -83,7 +82,7 @@ export class UserTransaction {
 
     async estimateGas() {}
 
-    toTransaction(chainId: ChainId, entryPoint: string, userOperation: UserOperation) {
+    toTransaction(): Transaction {
         return {}
     }
 
@@ -93,28 +92,12 @@ export class UserTransaction {
         }
     }
 
-    toUserOperationSnakeCase() {
-        const userOperation = this.toUserOperation()
-        return {
-            ...omit(userOperation, [
-                'initCode',
-                'callData',
-                'callGas',
-                'verificationGas',
-                'preVerificationGas',
-                'maxFeePerGas',
-                'maxPriorityFeePerGas',
-                'paymasterData',
-            ]),
-            init_code: userOperation.initCode,
-            call_data: userOperation.callData,
-            call_gas: userOperation.callGas,
-            verification_gas: userOperation.verificationGas,
-            pre_verification_gas: userOperation.preVerificationGas,
-            max_fee_per_gas: userOperation.maxFeePerGas,
-            max_priority_fee_per_gas: userOperation.maxPriorityFeePerGas,
-            paymaster_data: userOperation.paymasterData,
-        }
+    static async fromTransaction(
+        chainId: ChainId,
+        entryPoint: string,
+        transaction: Transaction,
+    ): Promise<UserTransaction> {
+        throw new Error('Not implemented.')
     }
 
     static async fromUserOperation(
@@ -123,13 +106,5 @@ export class UserTransaction {
         userOperation: UserOperation,
     ): Promise<UserTransaction> {
         return new UserTransaction(chainId, entryPoint, userOperation)
-    }
-
-    static async fromTransaction(
-        chainId: ChainId,
-        entryPoint: string,
-        transaction: Transaction,
-    ): Promise<UserTransaction> {
-        throw new Error('Not implemented.')
     }
 }
