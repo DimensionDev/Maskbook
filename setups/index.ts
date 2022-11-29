@@ -1,6 +1,10 @@
+import { fetch } from 'cross-fetch'
 import { afterAll, afterEach, beforeAll } from 'vitest'
 import { setupServer } from 'msw/node'
 import { BundlerHandlers } from './handlers/SmartPayBundler.js'
+
+// Add `fetch` polyfill.
+global.fetch = fetch
 
 const server = setupServer(...BundlerHandlers)
 

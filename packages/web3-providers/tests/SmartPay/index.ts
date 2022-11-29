@@ -1,8 +1,6 @@
-import urlcat from 'urlcat'
-import { describe, expect, test, afterAll, afterEach, beforeAll } from 'vitest'
+import { describe, expect, test } from 'vitest'
 import { ChainId } from '@masknet/web3-shared-evm'
-import { SmartPayAccountAPI, SmartPayBundlerAPI } from '../../src/SmartPay/index.js'
-import { BUNDLER_ROOT } from '../../src/SmartPay/constants.js'
+import { SmartPayBundlerAPI } from '../../src/SmartPay/index.js'
 
 describe('SmartPayBundlerAPI', () => {
     const SmartPayBundler = new SmartPayBundlerAPI()
