@@ -73,10 +73,6 @@ const sns: Plugin.SNSAdaptor.Definition = {
                         name: <Trans i18nKey="plugin_web3_profile_feature_nft_name" />,
                         description: <Trans i18nKey="plugin_web3_profile_feature_nft_description" />,
                     },
-                    {
-                        name: <Trans i18nKey="plugin_web3_profile_feature_crypto_exchange_name" />,
-                        description: <Trans i18nKey="plugin_web3_profile_feature_crypto_exchange_description" />,
-                    },
                 ],
             }
         })(),
