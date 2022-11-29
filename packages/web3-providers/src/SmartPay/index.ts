@@ -1,5 +1,5 @@
 import urlcat from 'urlcat'
-import { first } from 'lodash-es'
+import { first, omit } from 'lodash-es'
 import type { AbiItem } from 'web3-utils'
 import {
     ChainId,
@@ -8,7 +8,6 @@ import {
     createContract,
     getSmartPayConstants,
     UserOperation,
-    UserTransaction,
 } from '@masknet/web3-shared-evm'
 import { NetworkPluginID } from '@masknet/shared-base'
 import WalletABI from '@masknet/web3-contracts/abis/Wallet.json'
@@ -36,7 +35,26 @@ export class SmartPayBundlerAPI implements BundlerAPI.Provider {
     private async handle(userOperation: UserOperation) {
         const response = await fetch(urlcat(BUNDLER_ROOT, '/handle'), {
             method: 'POST',
-            body: JSON.stringify(UserTransaction.toUserOperationSnakeCase(userOperation)),
+            body: JSON.stringify({
+                ...omit(userOperation, [
+                    'initCode',
+                    'callData',
+                    'callGas',
+                    'verificationGas',
+                    'preVerificationGas',
+                    'maxFeePerGas',
+                    'maxPriorityFeePerGas',
+                    'paymasterData',
+                ]),
+                init_code: userOperation.initCode,
+                call_data: userOperation.callData,
+                call_gas: userOperation.callGas,
+                verification_gas: userOperation.verificationGas,
+                pre_verification_gas: userOperation.preVerificationGas,
+                max_fee_per_gas: userOperation.maxFeePerGas,
+                max_priority_fee_per_gas: userOperation.maxPriorityFeePerGas,
+                paymaster_data: userOperation.paymasterData,
+            }),
         })
         const json: { tx_hash: string } = await response.json()
         return json.tx_hash
