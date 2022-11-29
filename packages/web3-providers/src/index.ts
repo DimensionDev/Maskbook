@@ -50,7 +50,7 @@ import { DSearchAPI } from './DSearch/index.js'
 import { MulticallAPI } from './Multicall/index.js'
 import { ENS_API } from './ENS/index.js'
 import { SpaceID_API } from './SpaceID/index.js'
-import { LensAPI } from './lens/index.js'
+import { LensAPI } from './Lens/index.js'
 
 export * from './types/index.js'
 
