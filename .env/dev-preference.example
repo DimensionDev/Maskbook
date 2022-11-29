@@ -15,10 +15,10 @@
 ### Preferred Manifest Version
 
 # manifest=2
-# (default) Use Manifest V2 as default development target.
+# Use Manifest V2 as default development target.
 
 # manifest=3
-# Use Manifest V3 as default development target.
+# (default) Use Manifest V3 as default development target.
 
 ### Hot Module Reload
 

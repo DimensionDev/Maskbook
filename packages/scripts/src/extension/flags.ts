@@ -35,7 +35,8 @@ export interface BuildFlagsExtended extends BuildFlags {
 export function getPreset(
     preset: Preset | undefined,
 ): Pick<BuildFlagsExtended, 'architecture' | 'engine' | 'manifest'> {
-    if (preset === Preset.Chromium || preset === undefined) return { architecture: 'web', engine: 'chromium' }
+    if (preset === Preset.Chromium || preset === undefined)
+        return { architecture: 'web', engine: 'chromium', manifest: 3 }
     else if (preset === Preset.Firefox) return { architecture: 'web', engine: 'firefox', manifest: 2 }
     else if (preset === Preset.Android) return { architecture: 'app', engine: 'firefox', manifest: 2 }
     else if (preset === Preset.iOS) return { architecture: 'app', engine: 'safari', manifest: 2 }
