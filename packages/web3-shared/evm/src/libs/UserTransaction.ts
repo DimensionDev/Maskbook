@@ -1,4 +1,4 @@
-import { keccak256 } from 'web3-utils'
+import { bytesToHex, hexToBytes, keccak256 } from 'web3-utils'
 import * as ABICoder from 'web3-eth-abi'
 import type { ChainId, Transaction, UserOperation } from '../types/index.js'
 import { isZeroAddress } from '../utils/index.js'
@@ -41,16 +41,16 @@ export class UserTransaction {
         return !!(this.userOperation.paymaster && !isZeroAddress(this.userOperation.paymaster))
     }
 
-    get packWithSignature() {
-        const encoded = this.coder.encodeParameter(CALL_OP_TYPE, this.userOperation)
-        return `0x${encoded.slice(66, encoded.length - 64)}`
-    }
-
     get pack() {
         const encoded = this.coder.encodeParameter(CALL_OP_TYPE, {
             ...this.userOperation,
             signature: '0x',
         })
+        return `0x${encoded.slice(66, encoded.length - 64)}`
+    }
+
+    get packWithSignature() {
+        const encoded = this.coder.encodeParameter(CALL_OP_TYPE, this.userOperation)
         return `0x${encoded.slice(66, encoded.length - 64)}`
     }
 
@@ -83,7 +83,18 @@ export class UserTransaction {
     async estimateGas() {}
 
     toTransaction(): Transaction {
-        return {}
+        const callBytes = this.userOperation.callData ? hexToBytes(this.userOperation.callData) : []
+
+        return {
+            from: this.userOperation.sender,
+            to: bytesToHex(callBytes.slice(12, 36)),
+            value: bytesToHex(callBytes.slice(36, 68)),
+            gas: this.userOperation.callGas,
+            maxFeePerGas: this.userOperation.maxFeePerGas,
+            maxPriorityFeePerGas: this.userOperation.maxPriorityFeePerGas,
+            nonce: Number.parseInt(this.userOperation.nonce),
+            data: bytesToHex(callBytes.slice(68)),
+        }
     }
 
     toUserOperation() {
