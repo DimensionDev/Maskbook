@@ -28,7 +28,6 @@ const useStyles = makeStyles()((theme) => ({
 const Days = TrendingAPI.Days
 
 export const DEFAULT_RANGE_OPTIONS = [Days.ONE_DAY, Days.ONE_WEEK, Days.ONE_MONTH, Days.ONE_YEAR, Days.MAX]
-export const NFT_RANGE_OPTIONS = [Days.ONE_DAY, Days.ONE_WEEK, Days.ONE_MONTH, Days.THREE_MONTHS, Days.MAX]
 
 export interface PriceChartDaysControlProps {
     days: number
