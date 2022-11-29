@@ -1,7 +1,7 @@
 import { describe, test, expect } from 'vitest'
 import { getAssetFullName } from '../src/helpers.js'
 
-describe('helpers util test', () => {
+describe('helpers', () => {
     test.each([
         { address: '', contract: 'contract', name: '', tokenId: '', expected: 'contract' },
         { address: '', contract: '', name: '', tokenId: '123', expected: '#123' },
@@ -30,7 +30,7 @@ describe('helpers util test', () => {
         { address: '', contract: '', name: 'abc', tokenId: '123', expected: 'abc #123' },
 
         { address: '', contract: 'contract', name: 'abc', tokenId: '', expected: 'contract #abc' },
-    ])('.format($name)', ({ address, contract, name, tokenId, expected }) => {
+    ])('.getAssetFullName($address, $contract, $name, $tokenId)', ({ address, contract, name, tokenId, expected }) => {
         expect(getAssetFullName(address, contract, name, tokenId)).toBe(expected)
     })
 })

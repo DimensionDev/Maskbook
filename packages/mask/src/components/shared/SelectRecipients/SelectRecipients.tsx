@@ -64,7 +64,7 @@ export function SelectRecipientsUI(props: SelectRecipientsUIProps) {
         onSetSelected([...selected, item])
         const whoAmI = await Services.Settings.getCurrentPersonaIdentifier()
 
-        if (!item || !item.fromNextID || !item.linkedPersona || !whoAmI) return
+        if (!item?.fromNextID || !item.linkedPersona || !whoAmI) return
         const [rpc, emit] = batch(Services.Identity)
         item.linkedTwitterNames.forEach((x) => {
             const newItem = {

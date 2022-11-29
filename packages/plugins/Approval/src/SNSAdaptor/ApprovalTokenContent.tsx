@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useAsync } from 'react-use'
-import { ListItem, List, Typography, Link, Avatar } from '@mui/material'
+import { ListItem, List, Typography, Link } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { ActionButton, makeStyles, parseColor } from '@masknet/theme'
 import type { ChainId, NetworkType, SchemaType } from '@masknet/web3-shared-evm'
@@ -8,7 +8,7 @@ import { useERC20TokenApproveCallback } from '@masknet/web3-hooks-evm'
 import { useChainContext, useWeb3State, useNetworkDescriptor, useWeb3Hub } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { NetworkDescriptor, isGreaterThan, FungibleTokenSpender } from '@masknet/web3-shared-base'
-import { ChainBoundary } from '@masknet/shared'
+import { ChainBoundary, TokenIcon } from '@masknet/shared'
 import { useI18N } from '../locales/index.js'
 import { ApprovalLoadingContent } from './ApprovalLoadingContent.js'
 import { ApprovalEmptyContent } from './ApprovalEmptyContent.js'
@@ -191,7 +191,7 @@ function ApprovalTokenItem(props: ApprovalTokenItemProps) {
             <ListItem className={classes.listItem}>
                 <div className={classes.listItemInfo}>
                     <div>
-                        <Avatar src={spender.tokenInfo.logoURL} className={classes.logoIcon} />
+                        <TokenIcon address={spender.tokenInfo.address} className={classes.logoIcon} />
                         <Typography className={classes.primaryText}>{spender.tokenInfo.symbol}</Typography>
                         <Typography className={classes.secondaryText}>{spender.tokenInfo.name}</Typography>
                     </div>
