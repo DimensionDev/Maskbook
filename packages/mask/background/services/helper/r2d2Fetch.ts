@@ -83,6 +83,9 @@ async function squashedFetch(request: Request, init?: RequestInit): Promise<Resp
     if (response.ok && response.status === 200) {
         await cache.put(request.clone(), response.clone())
 
+        console.log(request.clone().url)
+        console.log(await response.clone().json())
+
         // stale the cache
         setTimeout(async () => {
             await cache.delete(request.clone())

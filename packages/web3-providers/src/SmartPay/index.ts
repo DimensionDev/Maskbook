@@ -13,7 +13,7 @@ import {
 import { NetworkPluginID } from '@masknet/shared-base'
 import WalletABI from '@masknet/web3-contracts/abis/Wallet.json'
 import type { Wallet } from '@masknet/web3-contracts/types/Wallet.js'
-import { BUNDLER_ROOT } from './constants.js'
+import { BUNDLER_ROOT, MAX_ACCOUNT_LENGTH } from './constants.js'
 import type { BundlerAPI } from '../types/Bundler.js'
 import type { ContractAccountAPI } from '../types/index.js'
 import { MulticallAPI } from '../Multicall/index.js'
@@ -25,12 +25,6 @@ export class SmartPayBundlerAPI implements BundlerAPI.Provider {
             method: 'GET',
         })
         const json: BundlerAPI.Healthz = await response.json()
-
-        console.log('DEBUG: JSON')
-        console.log({
-            url: urlcat(BUNDLER_ROOT, '/healthz'),
-            json,
-        })
 
         return {
             ...json,
@@ -128,6 +122,7 @@ export class SmartPayAccountAPI implements ContractAccountAPI.Provider<NetworkPl
         const contracts = options.map((x) => this.createWalletContract(chainId, x)!)
         const names = Array.from<'owner'>({ length: options.length }).fill('owner')
         const calls = this.multicall.createMultipleContractSingleData(contracts, names, [])
+
         const results = await this.multicall.call(chainId, contracts, names, calls)
         const accounts = results.flatMap((x) => (x.succeed && x.value ? x.value : []))
 
@@ -163,7 +158,11 @@ export class SmartPayAccountAPI implements ContractAccountAPI.Provider<NetworkPl
         const create2Factory = new Create2Factory(CREATE2_FACTORY_CONTRACT_ADDRESS)
 
         const allSettled = await Promise.allSettled([
-            this.getOwnedAccountsFromMulticall(chainId, owner, create2Factory.derive(contractWallet.initCode)),
+            this.getOwnedAccountsFromMulticall(
+                chainId,
+                owner,
+                create2Factory.derive(contractWallet.initCode, MAX_ACCOUNT_LENGTH),
+            ),
             this.getOwnedAccountsFromChainbase(chainId, owner),
         ])
         return allSettled.flatMap((x) => (x.status === 'fulfilled' ? x.value : []))
