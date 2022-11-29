@@ -25,6 +25,13 @@ export class SmartPayBundlerAPI implements BundlerAPI.Provider {
             method: 'GET',
         })
         const json: BundlerAPI.Healthz = await response.json()
+
+        console.log('DEBUG: JSON')
+        console.log({
+            url: urlcat(BUNDLER_ROOT, '/healthz'),
+            json,
+        })
+
         return {
             ...json,
             chain_id: '137',
