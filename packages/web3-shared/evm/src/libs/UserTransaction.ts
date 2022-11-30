@@ -167,7 +167,7 @@ export class UserTransaction {
         if (!callGas && callData && callData !== '0x') {
             this.userOperation.callGas = toFixed(
                 await web3.eth.estimateGas({
-                    from: sender,
+                    from: this.entryPoint,
                     to: sender,
                     data: callData,
                 }),
@@ -181,29 +181,17 @@ export class UserTransaction {
                 ),
             )
         }
+        if (!verificationGas) {
+            this.userOperation.verificationGas = toFixed(DEFAULT_USER_OPERATION.verificationGas)
+        }
+        if (!preVerificationGas) {
+            this.userOperation.preVerificationGas = toFixed(calculateDataCost(this.packAll))
+        }
         if (!maxPriorityFeePerGas) {
             this.userOperation.maxPriorityFeePerGas = DEFAULT_USER_OPERATION.maxPriorityFeePerGas
         }
-        if (isZeroAddress(preVerificationGas)) {
-            this.userOperation.preVerificationGas = toFixed(calculateDataCost(this.pack))
-        }
         return this
     }
-
-    async estimateVerificationGas() {
-        // 100000 default verification gas. will add create2 cost (3200+200*length) if initCode exists
-        const verificationGas = 100000
-        const initCode = this.userOperation.initCode
-
-        if (initCode && initCode.length > 0) {
-            return verificationGas + 3200 + 200 * initCode.length
-        }
-        return verificationGas
-    }
-
-    async estimateExecutionGas() {}
-
-    async estimateGas() {}
 
     toTransaction(): Transaction {
         const callBytes = this.userOperation.callData ? hexToBytes(this.userOperation.callData) : []
@@ -221,7 +209,7 @@ export class UserTransaction {
         }
     }
 
-    toUserOperation() {
+    toUserOperation(): UserOperation {
         const { nonce, callGas, verificationGas, preVerificationGas, maxFeePerGas, maxPriorityFeePerGas } =
             this.userOperation
         return {
