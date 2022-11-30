@@ -5,12 +5,13 @@ import {
     ObservableMap,
     ObservableSet,
     PostIVIdentifier,
+    ValueRef,
     type PostIdentifier,
     type ProfileIdentifier,
 } from '@masknet/shared-base'
 import { useObservableValues, useValueRef } from '@masknet/shared-base-ui'
 import type { TypedMessageTuple } from '@masknet/typed-message'
-import { ValueRef, LiveSelector, DOMProxy } from '@dimensiondev/holoflows-kit'
+import type { LiveSelector, DOMProxy } from '@dimensiondev/holoflows-kit'
 import type { SupportedPayloadVersions } from '@masknet/encryption'
 export interface PostContextSNSActions {
     hasPayloadLike(content: string): boolean

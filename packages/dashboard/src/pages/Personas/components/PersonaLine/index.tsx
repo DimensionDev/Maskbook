@@ -114,7 +114,7 @@ export const ConnectedPersonaLine = memo<ConnectedPersonaLineProps>(
         }
         const handleProofIconClick = (e: MouseEvent, proof: BindingProof | undefined, profile: ProfileIdentifier) => {
             e.stopPropagation()
-            if (!proof || !proof.is_valid) {
+            if (!proof?.is_valid) {
                 onConnect('nextID', profile)
             }
         }

@@ -1,4 +1,4 @@
-import { assertNotEnvironment, Environment, ValueRef } from '@dimensiondev/holoflows-kit'
+import { assertNotEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 import { delay, waitDocumentReadyState } from '@masknet/kit'
 import { SocialNetworkEnum } from '@masknet/encryption'
 import type { SocialNetworkUI } from '@masknet/types'
@@ -11,6 +11,7 @@ import {
     EnhanceableSite,
     i18NextInstance,
     queryRemoteI18NBundle,
+    ValueRef,
 } from '@masknet/shared-base'
 import type { ThemeSettings } from '@masknet/web3-shared-base'
 import { Flags } from '../../shared/index.js'
