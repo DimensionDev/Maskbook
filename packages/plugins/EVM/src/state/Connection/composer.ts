@@ -96,6 +96,10 @@ class RequestContext implements Context {
         return this.request.method as EthereumMethodType
     }
 
+    get risky() {
+        return this.editor.risky
+    }
+
     get config() {
         return this.editor.config
     }

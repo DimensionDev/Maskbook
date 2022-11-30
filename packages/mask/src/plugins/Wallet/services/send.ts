@@ -190,7 +190,7 @@ export async function sendPayload(payload: JsonRpcPayload, options?: Options) {
                 ...payload,
                 id,
             })
-            if (editor.isRisk) {
+            if (editor.risky) {
                 await WalletRPC.pushUnconfirmedRequest(editor.fill())
                 UNCONFIRMED_CALLBACK_MAP.set(editor.pid!, callback)
                 if (options?.popupsWindow) openPopupWindow()

@@ -39,6 +39,7 @@ export interface Context {
     readonly chainId: ChainId
     readonly requestId: number
     readonly writeable: boolean
+    readonly risky: boolean
     readonly providerType: ProviderType
     readonly method: EthereumMethodType
     readonly connection: EVM_Connection

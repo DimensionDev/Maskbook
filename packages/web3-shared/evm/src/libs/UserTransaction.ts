@@ -8,7 +8,7 @@ import EntryPointABI from '@masknet/web3-contracts/abis/EntryPoint.json'
 import type { Wallet } from '@masknet/web3-contracts/types/Wallet.js'
 import type { EntryPoint } from '@masknet/web3-contracts/types/EntryPoint.js'
 import type { ChainId, Transaction, UserOperation } from '../types/index.js'
-import { getZeroAddress, isZeroAddress } from '../helpers/index.js'
+import { createContract, getZeroAddress, isZeroAddress } from '../helpers/index.js'
 
 const CALL_OP_TYPE = {
     callOp: {
@@ -75,11 +75,11 @@ const coder = ABICoder as unknown as ABICoder.AbiCoder
  */
 export class UserTransaction {
     private get entryPointContract() {
-        return new web3.eth.Contract(EntryPointABI as AbiItem[], this.entryPoint) as unknown as EntryPoint
+        return createContract<EntryPoint>(web3, this.entryPoint, EntryPointABI as AbiItem[])
     }
 
     private get walletContract() {
-        return new web3.eth.Contract(WalletABI as AbiItem[], this.userOperation.sender) as unknown as Wallet
+        return createContract<Wallet>(web3, this.userOperation.sender, WalletABI as AbiItem[])
     }
 
     /**

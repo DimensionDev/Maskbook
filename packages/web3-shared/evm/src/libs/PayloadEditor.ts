@@ -86,7 +86,7 @@ export class PayloadEditor {
         ) as Transaction
     }
 
-    get isRisk() {
+    get risky() {
         const { method } = this.payload
         return [
             EthereumMethodType.ETH_SIGN,
