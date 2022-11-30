@@ -1,7 +1,7 @@
 import { identity, pickBy } from 'lodash-es'
 import { toHex } from 'web3-utils'
 import { ZERO_ADDRESS } from '../constants/index.js'
-import { isEmptyHex } from '../utils/address.js'
+import { isEmptyHex } from '../helpers/address.js'
 import type { ChainId, Transaction, UserOperation } from '../types/index.js'
 
 export class AccountTransaction {
