@@ -10,7 +10,7 @@ export const Logger = ({ children, value }: Logger) => {
     const handleClick = useCallback(
         (e: React.MouseEvent) => {
             if (!isValidElement(children)) return
-            logger.captureMessage(value)
+            logger?.captureMessage(value)
             children.props.onClick?.(e)
         },
         [value],

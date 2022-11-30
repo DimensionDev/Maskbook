@@ -11,11 +11,7 @@ import {
     EnhanceableSite,
     i18NextInstance,
     queryRemoteI18NBundle,
-<<<<<<< HEAD
     ValueRef,
-    LogHub,
-=======
->>>>>>> 11983e4b5 (refactor: use context use resovle logger)
 } from '@masknet/shared-base'
 import type { ThemeSettings } from '@masknet/web3-shared-base'
 import { Flags } from '../../shared/index.js'

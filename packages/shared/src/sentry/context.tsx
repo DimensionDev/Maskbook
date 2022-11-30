@@ -1,8 +1,9 @@
+import type { LogHubBase } from '@masknet/shared-base'
 import { createContext, useContext, useMemo } from 'react'
-import { LogHub, LogHubBase, LogPlatform } from './base.js'
+import { LogHub, LogPlatform } from './base.js'
 
 interface LoggerContext {
-    logger: LogHubBase
+    logger?: LogHubBase
 }
 
 const LoggerContext = createContext<LoggerContext>(null!)
@@ -14,7 +15,7 @@ interface LoggerContextProvider {
 }
 
 export function PluginLoggerContextProvider({ children, value }: React.ProviderProps<LoggerContext>) {
-    return <LoggerContext.Provider value={{ logger: value }}>{children}</LoggerContext.Provider>
+    return <LoggerContext.Provider value={{ logger: value.logger }}>{children}</LoggerContext.Provider>
 }
 
 export function LoggerContextProvider({ value, children }: React.ProviderProps<LoggerContextProvider>) {
