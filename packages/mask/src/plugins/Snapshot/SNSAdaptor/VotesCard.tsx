@@ -1,5 +1,5 @@
 import { unstable_useCacheRefresh, useContext } from 'react'
-import millify from 'millify'
+import { millify } from 'millify'
 import { formatEthereumAddress, explorerResolver, formatPercentage } from '@masknet/web3-shared-evm'
 import { Badge, Box, Link, List, ListItem, Typography } from '@mui/material'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
@@ -145,7 +145,7 @@ function Content() {
                                 classes={{ tooltip: classes.tooltip, arrow: classes.arrow }}
                                 title={
                                     <Typography className={classes.shadowRootTooltip}>
-                                        {millify.default(v.balance, { precision: 2, lowercase: true }) +
+                                        {millify(v.balance, { precision: 2, lowercase: true }) +
                                             ' ' +
                                             (v.strategySymbol ? v.strategySymbol.toUpperCase() : '')}
                                     </Typography>
@@ -153,7 +153,7 @@ function Content() {
                                 placement="top"
                                 arrow>
                                 <Typography className={classes.power}>
-                                    {millify.default(v.balance, { precision: 2, lowercase: true }) +
+                                    {millify(v.balance, { precision: 2, lowercase: true }) +
                                         ' ' +
                                         (v.strategySymbol ? v.strategySymbol.toUpperCase() : '')}
                                 </Typography>
