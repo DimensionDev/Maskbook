@@ -5,7 +5,7 @@ import { ElementAnchor, Linking, AssetPreviewer, RetryHint } from '@masknet/shar
 import { LoadingBase, makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { isSameAddress, NonFungibleToken } from '@masknet/web3-shared-base'
-import { useWeb3State, useNetworkContext } from '@masknet/web3-hooks-base'
+import { useNetworkContext, useWeb3State } from '@masknet/web3-hooks-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { Checkbox, List, ListItem, Radio, Stack, Typography } from '@mui/material'
 
@@ -44,7 +44,7 @@ const useStyles = makeStyles<{ columns?: number; gap?: number }>()((theme, { col
             gridTemplateColumns: `repeat(${columns}, 1fr)`,
         },
         nftContainer: {
-            background: isLight ? '#EDEFEF' : '#2F3336',
+            background: theme.palette.background.default,
             borderRadius: 8,
             width: 126,
             height: 154,
@@ -95,6 +95,10 @@ const useStyles = makeStyles<{ columns?: number; gap?: number }>()((theme, { col
             width: 126,
             height: 126,
         },
+        fallbackImage: {
+            width: 30,
+            height: 30,
+        },
         caption: {
             padding: theme.spacing(0.5),
             color: theme.palette.text.primary,
@@ -113,7 +117,8 @@ const useStyles = makeStyles<{ columns?: number; gap?: number }>()((theme, { col
 
 export const NFTItem: FC<NFTItemProps> = ({ token }) => {
     const { classes } = useStyles({})
-    const caption = token.metadata?.name || token.tokenId
+    const { Others } = useWeb3State()
+    const caption = Others?.formatTokenId(token.tokenId, 4)
     const captionRef = useRef<HTMLDivElement>(null)
 
     const showTooltip = captionRef.current ? captionRef.current.offsetWidth !== captionRef.current.scrollWidth : false
@@ -123,7 +128,7 @@ export const NFTItem: FC<NFTItemProps> = ({ token }) => {
             <AssetPreviewer
                 url={token.metadata?.imageURL ?? token.metadata?.imageURL}
                 classes={{
-                    fallbackImage: classes.image,
+                    fallbackImage: classes.fallbackImage,
                     container: classes.image,
                     root: classes.root,
                 }}

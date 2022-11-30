@@ -125,16 +125,12 @@ export function FungibleCoinMarketTable(props: CoinMarketTableProps) {
 }
 
 export function NonFungibleCoinMarketTable(props: CoinMarketTableProps) {
-    const {
-        trending: { market },
-    } = props
     const { t } = useI18N()
     const { value: overview } = useTrendingOverviewByAddress(
         props.trending.coin.address ?? '',
         props.trending.coin.chainId,
     )
     const { classes } = useStyles()
-    console.log({ market, trending: props.trending, overview })
     return (
         <Stack>
             <Grid spacing={4} className={classes.gridContainer}>
