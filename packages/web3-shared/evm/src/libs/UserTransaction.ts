@@ -7,7 +7,7 @@ import EntryPointABI from '@masknet/web3-contracts/abis/EntryPoint.json'
 import type { Wallet } from '@masknet/web3-contracts/types/Wallet.js'
 import type { EntryPoint } from '@masknet/web3-contracts/types/EntryPoint.js'
 import type { ChainId, Transaction, UserOperation } from '../types/index.js'
-import { calcuateDataCost, getZeroAddress, isZeroAddress } from '../helpers/index.js'
+import { calculateDataCost, getZeroAddress, isZeroAddress } from '../helpers/index.js'
 
 const CALL_OP_TYPE = {
     callOp: {
@@ -55,13 +55,13 @@ export class UserTransaction {
         return new this.web3.eth.Contract(EntryPointABI as AbiItem[], this.entryPoint) as unknown as EntryPoint
     }
 
-    private get walletConract() {
+    private get walletContract() {
         return new this.web3.eth.Contract(WalletABI as AbiItem[], this.userOperation.sender) as unknown as Wallet
     }
 
     /**
      * @deprecated Don't new UserTransaction()
-     * Use UserTransaction.fromTransaction() or UserTranaction.fromUserOperation() stead.
+     * Use UserTransaction.fromTransaction() or UserTransaction.fromUserOperation() stead.
      * They ensure to create of a valid user operation.
      *
      * @param chainId
@@ -130,8 +130,8 @@ export class UserTransaction {
             }
         }
         if (!this.userOperation.nonce) {
-            if (!this.walletConract) throw new Error('Failed to create wallet contract.')
-            this.userOperation.nonce = await this.walletConract.methods.nonce().call()
+            if (!this.walletContract) throw new Error('Failed to create wallet contract.')
+            this.userOperation.nonce = await this.walletContract.methods.nonce().call()
         }
         if (!callGas && callData) {
             const estimated = await this.web3.eth.estimateGas({
@@ -151,7 +151,7 @@ export class UserTransaction {
             this.userOperation.maxPriorityFeePerGas = DEFAULT_USER_OPERATION.maxPriorityFeePerGas
         }
         if (isZeroAddress(preVerificationGas)) {
-            this.userOperation.preVerificationGas = calcuateDataCost(this.pack).toFixed()
+            this.userOperation.preVerificationGas = calculateDataCost(this.pack).toFixed()
         }
         return this
     }
