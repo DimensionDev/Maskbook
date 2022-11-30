@@ -4,7 +4,7 @@ import { hexToBytes, toHex } from 'web3-utils'
 import { toBuffer } from 'ethereumjs-util'
 import { personalSign, signTypedData as signTypedData_, SignTypedDataVersion } from '@metamask/eth-sig-util'
 import { isSameAddress, Wallet, HD_PATH_WITHOUT_INDEX_ETHEREUM } from '@masknet/web3-shared-base'
-import { createPayload, EthereumMethodType, formatEthereumAddress, Transaction } from '@masknet/web3-shared-evm'
+import { EthereumMethodType, formatEthereumAddress, PayloadEditor, Transaction } from '@masknet/web3-shared-evm'
 import { api } from '@dimensiondev/mask-wallet-core/proto'
 import { MAX_DERIVE_COUNT } from '@masknet/plugin-wallet'
 import * as database from './database/index.js'
@@ -52,7 +52,7 @@ export async function getWallet(address?: string) {
 
 export async function getWallets(): Promise<Wallet[]> {
     if (hasNativeAPI) {
-        const response = await sendPayload(createPayload(0, EthereumMethodType.ETH_ACCOUNTS, []))
+        const response = await sendPayload(PayloadEditor.fromMethod(EthereumMethodType.ETH_ACCOUNTS).fill())
         const accounts = response.result as string[] | undefined
         const address = first(accounts) ?? ''
         if (!address) return []

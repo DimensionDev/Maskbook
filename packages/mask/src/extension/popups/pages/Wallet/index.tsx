@@ -13,7 +13,7 @@ import { useWalletLockStatus } from './hooks/useWalletLockStatus.js'
 import { WalletHeader } from './components/WalletHeader/index.js'
 import { useChainContext, useWallet, useWeb3State } from '@masknet/web3-hooks-base'
 import { TransactionDescriptorType } from '@masknet/web3-shared-base'
-import { EthereumMethodType, getPayloadConfig } from '@masknet/web3-shared-evm'
+import { EthereumMethodType, PayloadEditor } from '@masknet/web3-shared-evm'
 
 const ImportWallet = lazy(() => import('./ImportWallet/index.js'))
 const AddDeriveWallet = lazy(() => import('./AddDeriveWallet/index.js'))
@@ -38,6 +38,7 @@ const ReplaceTransaction = lazy(() => import('./ReplaceTransaction/index.js'))
 const exclusionDetectLocked = [PopupRoutes.Unlock]
 
 const r = relativeRouteOf(PopupRoutes.Wallet)
+
 export default function Wallet() {
     const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
     const location = useLocation()
@@ -71,8 +72,7 @@ export default function Wallet() {
             }
         }
 
-        const computedPayload = getPayloadConfig(payload)
-
+        const computedPayload = PayloadEditor.fromPayload(payload).config
         if (!computedPayload) return
 
         const formatterTransaction = await TransactionFormatter?.formatTransaction(chainId, computedPayload)

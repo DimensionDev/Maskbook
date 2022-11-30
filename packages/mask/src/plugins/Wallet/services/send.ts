@@ -3,15 +3,7 @@ import type { HttpProvider } from 'web3-core'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
 import { isNil, omit } from 'lodash-es'
 import { defer } from '@masknet/kit'
-import {
-    ChainId,
-    createWeb3,
-    EthereumMethodType,
-    getSignablePayloadConfig,
-    getPayloadId,
-    getRPCConstants,
-    isRiskMethod,
-} from '@masknet/web3-shared-evm'
+import { ChainId, createWeb3, EthereumMethodType, getRPCConstants, PayloadEditor } from '@masknet/web3-shared-evm'
 import { openPopupWindow, removePopupWindow } from '../../../../background/services/helper/index.js'
 import { nativeAPI } from '../../../../shared/native-rpc/index.js'
 import { WalletRPC } from '../messages.js'
@@ -127,7 +119,7 @@ export async function send(
     switch (payload.method) {
         case EthereumMethodType.ETH_SEND_TRANSACTION:
         case EthereumMethodType.MASK_REPLACE_TRANSACTION:
-            const computedPayload = getSignablePayloadConfig(payload)
+            const computedPayload = PayloadEditor.fromPayload(payload).signableConfig
             if (!computedPayload?.from || !computedPayload.to || !options?.chainId) return
 
             const privateKey = await WalletRPC.exportPrivateKey(computedPayload.from as string)
@@ -194,14 +186,13 @@ export async function sendPayload(payload: JsonRpcPayload, options?: Options) {
 
             id += 1
 
-            const payload_ = {
+            const editor = PayloadEditor.fromPayload({
                 ...payload,
                 id,
-            }
-
-            if (isRiskMethod(payload_.method as EthereumMethodType)) {
-                await WalletRPC.pushUnconfirmedRequest(payload_)
-                UNCONFIRMED_CALLBACK_MAP.set(payload_.id, callback)
+            })
+            if (editor.isRisk) {
+                await WalletRPC.pushUnconfirmedRequest(editor.fill())
+                UNCONFIRMED_CALLBACK_MAP.set(editor.pid!, callback)
                 if (options?.popupsWindow) openPopupWindow()
                 return
             }
@@ -227,7 +218,7 @@ export async function sendPayload(payload: JsonRpcPayload, options?: Options) {
 }
 
 export async function confirmRequest(payload: JsonRpcPayload, options?: Options) {
-    const pid = getPayloadId(payload)
+    const { pid } = PayloadEditor.fromPayload(payload)
     if (!pid) return
     const [deferred, resolve, reject] = defer<JsonRpcResponse | undefined, Error>()
     send(
@@ -257,7 +248,7 @@ export async function confirmRequest(payload: JsonRpcPayload, options?: Options)
 }
 
 export async function rejectRequest(payload: JsonRpcPayload) {
-    const pid = getPayloadId(payload)
+    const { pid } = PayloadEditor.fromPayload(payload)
     if (!pid) return
     UNCONFIRMED_CALLBACK_MAP.get(pid)?.(new Error('User rejected transaction.'))
     await WalletRPC.deleteUnconfirmedRequest(payload)
