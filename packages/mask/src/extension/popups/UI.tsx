@@ -15,6 +15,7 @@ import { LoadingPlaceholder } from './components/LoadingPlaceholder/index.js'
 import Services from '../service.js'
 import { Web3ContextProvider } from '@masknet/web3-hooks-base'
 import { ProviderType } from '@masknet/web3-shared-evm'
+import { LoggerContextProvider, LogPlatform } from '@masknet/shared'
 
 function usePopupTheme() {
     return usePopupFullPageTheme(useValueRef(languageSettings))
@@ -39,13 +40,14 @@ function PluginRenderDelayed() {
 export default function Popups() {
     const [title, setTitle] = useState('')
     useEffect(queryRemoteI18NBundle(Services.Helper.queryRemoteI18NBundle), [])
-    useEffect(() => logger.captureMessage(LogsType.PopupAccess), [])
+    // useEffect(() => logger.captureMessage(LogsType.PopupAccess), [])
     return MaskUIRootPage(
         usePopupTheme,
         <PopupSnackbarProvider>
             <Web3ContextProvider
                 value={{ pluginID: NetworkPluginID.PLUGIN_EVM, providerType: ProviderType.MaskWallet }}>
                 <PopupContext.Provider>
+                    <LoggerContextProvider value={{ platform: LogPlatform.Popup, enable: true }}>
                     <PageTitleContext.Provider value={{ title, setTitle }}>
                         <HashRouter>
                             <Routes>
@@ -67,6 +69,7 @@ export default function Popups() {
                             <PluginRenderDelayed />
                         </HashRouter>
                     </PageTitleContext.Provider>
+                </LoggerContextProvider>
                 </PopupContext.Provider>
             </Web3ContextProvider>
         </PopupSnackbarProvider>,

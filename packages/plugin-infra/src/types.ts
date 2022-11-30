@@ -160,7 +160,7 @@ export namespace Plugin.Shared {
         /**
          * A Logger.
          */
-        createLogger(prefixKey: string): LogHubBase
+        createLogger(): LogHubBase
     }
 
     export interface SharedUIContext extends SharedContext {

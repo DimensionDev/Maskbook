@@ -3,20 +3,14 @@ import './register.js'
 import type { BooleanPreference, Plugin } from '@masknet/plugin-infra'
 import { Emitter } from '@servie/events'
 import { MaskMessages } from '../../shared/messages.js'
-import {
-    createI18NBundle,
-    createSubscriptionFromValueRef,
-    i18NextInstance,
-    LogHub,
-    LogHubBase,
-    LogPlatform,
-} from '@masknet/shared-base'
+import { createI18NBundle, createSubscriptionFromValueRef, i18NextInstance, LogHubBase } from '@masknet/shared-base'
 import { InMemoryStorages, PersistentStorages } from '../../shared/index.js'
 import { nativeAPI, hasNativeAPI } from '../../shared/native-rpc/index.js'
 import {
     currentMaskWalletAccountSettings,
     currentMaskWalletChainIdSettings,
 } from '../legacy-settings/wallet-settings.js'
+import { LogHub, LogPlatform } from '@masknet/shared'
 
 export type PartialSharedUIContext = Pick<
     Plugin.Shared.SharedUIContext,
