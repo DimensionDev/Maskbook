@@ -8,6 +8,7 @@ import CyberConnect, { Env } from '@cyberlab/cyberconnect'
 import { Button } from '@mui/material'
 import { PluginCyberConnectRPC } from '../messages.js'
 import { WalletConnectedBoundary } from '@masknet/shared'
+import { useI18N } from '../locales/i18n_generated.js'
 
 const useStyles = makeStyles()((theme) => ({
     button: {
@@ -45,6 +46,7 @@ export default function ConnectButton({
     address: string
     refreshFollowList: () => void
 }) {
+    const t = useI18N()
     const { classes, cx } = useStyles()
     const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM)
     const { pluginID } = useNetworkContext()
@@ -100,7 +102,7 @@ export default function ConnectButton({
                     className={cx(classes.button, { [classes.isFollowing]: isFollowing })}
                     onClick={handleClick}
                     variant="roundedContained">
-                    {!isFollowing ? 'Follow Now' : 'Unfollow'}
+                    {!isFollowing ? t.unfollow() : t.follow_now()}
                 </Button>
                 <div />
             </WalletConnectedBoundary>
