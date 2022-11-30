@@ -104,7 +104,6 @@ export default function ConnectButton({
                     variant="roundedContained">
                     {!isFollowing ? t.unfollow() : t.follow_now()}
                 </Button>
-                <div />
             </WalletConnectedBoundary>
         )
     }
