@@ -1,9 +1,8 @@
+import type {} from 'react/next'
 import { markdownTransformIpfsURL, purify } from '@masknet/shared-base'
-import { memo } from 'react'
-import ReactMarkdown, { Options } from 'react-markdown'
+import { memo, use } from 'react'
+import type { Options } from 'react-markdown'
 import { resolveIPFS_URL } from '@masknet/web3-shared-base'
-import rehypeRaw from 'rehype-raw'
-import remarkGfm from 'remark-gfm'
 
 import { makeStyles } from '@masknet/theme'
 import { useRemarkable } from '../../../hooks/useRemarkable.js'
@@ -51,6 +50,9 @@ interface MarkdownProps extends Options {
 
 export const Markdown = memo<MarkdownProps>(({ children, className, defaultStyle = true, ...props }) => {
     const { classes, cx } = useStyles()
+    const { default: rehypeRaw } = use(import('rehype-raw'))
+    const { default: remarkGfm } = use(import('remark-gfm'))
+    const { default: ReactMarkdown } = use(import('react-markdown'))
 
     const markdown = markdownTransformIpfsURL(children)
     return (
