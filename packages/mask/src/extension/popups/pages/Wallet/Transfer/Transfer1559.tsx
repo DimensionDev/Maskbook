@@ -429,7 +429,7 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
                 await transferCallback(transferAmount, registeredAddress, {
                     maxFeePerGas: toHex(formatGweiToWei(data.maxFeePerGas).toFixed(0)),
                     maxPriorityFeePerGas: toHex(formatGweiToWei(data.maxPriorityFeePerGas).toFixed(0)),
-                    gas: new BigNumber(data.gasLimit).toNumber(),
+                    gas: data.gasLimit,
                 })
                 return
             }
@@ -437,7 +437,7 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
             await transferCallback(transferAmount, data.address, {
                 maxFeePerGas: toHex(formatGweiToWei(data.maxFeePerGas).toFixed(0)),
                 maxPriorityFeePerGas: toHex(formatGweiToWei(data.maxPriorityFeePerGas).toFixed(0)),
-                gas: new BigNumber(data.gasLimit).toNumber(),
+                gas: data.gasLimit,
             })
         },
         [selectedAsset, transferCallback, registeredAddress, Others],

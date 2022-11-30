@@ -47,7 +47,7 @@ function checkParams(paramsObj: ParamsObjType) {
 
 type MethodParameters = Parameters<HappyRedPacketV4['methods']['create_red_packet']>
 interface CreateParams {
-    gas: number | undefined
+    gas: string | undefined
     params: MethodParameters
     paramsObj: ParamsObjType
     gasError: Error | null
@@ -103,7 +103,7 @@ export function useCreateParamsCallback(
                 gasError = error
             })
 
-        return { gas: gas as number | undefined, params, paramsObj, gasError }
+        return { gas: gas ? toFixed(gas) : undefined, params, paramsObj, gasError }
     }, [redPacketSettings, account, redPacketContract])
 
     return getCreateParams

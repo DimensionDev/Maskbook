@@ -1,5 +1,7 @@
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { multipliedBy, pow10 } from '@masknet/web3-shared-base'
+import { useChainContext } from '@masknet/web3-hooks-base'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import { useTrade as useNativeTokenTrade } from './native/useTrade.js'
 import { useTradeComputed as useNativeTokenTradeComputed } from './native/useTradeComputed.js'
 import { SwapOOData, TradeInfo, TradeStrategy } from '../types/index.js'
@@ -26,8 +28,6 @@ import { TradeProvider } from '@masknet/public-api'
 import { useAvailableTraderProviders } from '../trending/useAvailableTraderProviders.js'
 import { useNativeTradeGasLimit } from './useNativeTradeGasLimit.js'
 import type { TradeComputed } from '../types/index.js'
-import { useChainContext } from '@masknet/web3-hooks-base'
-import type { Web3Helper } from '@masknet/web3-helpers'
 
 export function useAllTradeComputed(
     inputAmount: string,
