@@ -21,6 +21,7 @@ import { Pages } from '../pages/routes.js'
 import { useAppearance } from '../pages/Personas/api.js'
 import { PersonaContext } from '../pages/Personas/hooks/usePersonaContext.js'
 import { Services } from '../API.js'
+import { useLogSettings } from '../hooks/useLogSettings.js'
 
 const PluginRender = createInjectHooksRenderer(useActivatedPluginsDashboard, (x) => x.GlobalInjection)
 
@@ -29,6 +30,7 @@ export default function DashboardRoot() {
 
     // #region theme
     const appearance = useAppearance()
+    const enableLog = useLogSettings()
     const mode = useSystemPreferencePalette()
     const themes: Record<typeof appearance, Theme> = {
         dark: DashboardDarkTheme,
@@ -47,7 +49,7 @@ export default function DashboardRoot() {
             <I18NextProviderHMR i18n={i18NextInstance}>
                 <StyledEngineProvider injectFirst>
                     <ThemeProvider theme={theme}>
-                        <LoggerContextProvider value={{ platform: LogPlatform.Dashboard, enable: true }}>
+                        <LoggerContextProvider value={{ platform: LogPlatform.Dashboard, enable: enableLog }}>
                             <DialogStackingProvider>
                                 <PersonaContext.Provider>
                                     <ErrorBoundary>

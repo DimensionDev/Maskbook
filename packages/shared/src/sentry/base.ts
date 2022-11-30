@@ -4,6 +4,10 @@ import Web3Utils from 'web3-utils'
 // @ts-ignore
 const Sentry = globalThis.Sentry as Sentry
 
+function getSentryDSN() {
+    return process.env.MASK_SENTRY_DSN
+}
+
 function hash(value: string) {
     return Web3Utils.sha3(value)
 }
@@ -21,7 +25,7 @@ export class LogHub implements LogHubBase {
         this._plugin_id = pluginId
 
         Sentry.init({
-            dsn: '',
+            dsn: getSentryDSN,
             defaultIntegrations: false,
             integrations: [new Sentry.Integrations.Breadcrumbs({ console: false })],
             environment: process.env.NODE_ENV,

@@ -31,6 +31,8 @@ export const sayHelloShowed = createBulkSettings('sayHelloShowed', false)
 export const userPinExtension = createGlobalSettings('userPinExtension', false)
 export const dismissVerifyNextID = createBulkSettings<Record<string, boolean>>('dismissVerifyNextID', {}, isEqual)
 
+export const enableLog = createGlobalSettings('enableLog', false)
+
 /**
  * ! DO NOT use this directly to query the plugin status !
  *

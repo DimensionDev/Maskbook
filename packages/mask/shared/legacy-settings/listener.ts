@@ -1,4 +1,10 @@
-import { appearanceSettings, pluginIDSettings, languageSettings, currentPersonaIdentifier } from './settings.js'
+import {
+    appearanceSettings,
+    enableLog,
+    pluginIDSettings,
+    languageSettings,
+    currentPersonaIdentifier,
+} from './settings.js'
 import type { MaskSettingsEvents, ValueRefWithReady } from '@masknet/shared-base'
 
 type ToBeListedSettings = {
@@ -6,6 +12,7 @@ type ToBeListedSettings = {
 }
 export function ToBeListened(): ToBeListedSettings {
     return {
+        logSettings: enableLog,
         appearanceSettings,
         pluginIDSettings,
         languageSettings,

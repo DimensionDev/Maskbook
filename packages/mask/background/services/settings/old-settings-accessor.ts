@@ -6,6 +6,7 @@ import {
     languageSettings,
     getCurrentPluginMinimalMode,
     setCurrentPluginMinimalMode,
+    enableLog,
 } from '../../../shared/legacy-settings/settings.js'
 import { MaskMessages } from '../../../shared/messages.js'
 import { queryPersonasDB } from '../../../background/database/persona/db.js'
@@ -24,6 +25,7 @@ function create<T>(settings: ValueRefWithReady<T>) {
     return [get, set] as const
 }
 export const [getTheme, setTheme] = create(appearanceSettings)
+export const [getLogSetting, setLogEnable] = create(enableLog)
 export const [getLanguage, setLanguage] = create(languageSettings)
 
 export async function getCurrentPersonaIdentifier(): Promise<PersonaIdentifier | undefined> {

@@ -1,4 +1,4 @@
-import { LogHubBase } from '@masknet/shared-base'
+import type { LogHubBase } from '@masknet/shared-base'
 
 export let logger: Readonly<LogHubBase>
 
