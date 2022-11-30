@@ -112,12 +112,11 @@ export default function GuideStep({
     const { t } = useI18N()
     const { classes, cx } = useStyles()
     const childrenRef = useRef<HTMLElement>()
-    const [clientRect, setClientRect] = useState<any>({})
+    const [clientRect, setClientRect] = useState<DOMRect | undefined>()
     const [open, setOpen] = useState(false)
     const [bottomAvailable, setBottomAvailable] = useState(true)
     const ui = activatedSocialNetworkUI
-    const lastStepRef = userGuideStatus[ui.networkIdentifier]
-    const lastStep = useValueRef(lastStepRef)
+    const lastStep = useValueRef(userGuideStatus[ui.networkIdentifier])
     const history = useLocation()
 
     useEffect(() => {
@@ -159,30 +158,30 @@ export default function GuideStep({
     }
 
     useEffect(() => {
-        const onResize = debounce(() => {
+        const setGuideStepRect = () => {
             const cr = childrenRef.current?.getBoundingClientRect()
-
             if (cr) {
                 const bottomAvailable = window.innerHeight - cr.height - cr.top > 200
                 setBottomAvailable(bottomAvailable)
                 if (!cr.width) {
-                    setClientRect({ ...cr, top: 30, left: 'calc(100vw - 300px)' })
+                    setClientRect({ ...cr, top: 30, left: window.innerWidth - 300 })
                 } else {
                     setClientRect(cr)
                 }
             } else {
                 setClientRect(cr)
             }
-        }, 1000)
+        }
+        setGuideStepRect()
 
-        onResize()
+        const onResize = debounce(setGuideStepRect, 500)
 
         window.addEventListener('resize', onResize)
 
         return () => {
             window.removeEventListener('resize', onResize)
         }
-    }, [childrenRef, lastStep, open, history])
+    }, [childrenRef.current, lastStep, open, history])
 
     return (
         <>
