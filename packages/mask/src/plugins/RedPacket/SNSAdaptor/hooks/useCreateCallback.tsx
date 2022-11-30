@@ -141,7 +141,7 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings, version:
         }
 
         // estimate gas and compose transaction
-        const tx = await new ContractTransaction(redPacketContract).encodeWithGas(
+        const tx = await new ContractTransaction(redPacketContract).fillAll(
             redPacketContract.methods.create_red_packet(...params),
             {
                 from: account,

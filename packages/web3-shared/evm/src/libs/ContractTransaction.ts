@@ -21,7 +21,13 @@ export class ContractTransaction<T extends BaseContract | null> {
         return transactionResolver
     }
 
-    encode(transactionResolver: TransactionResolver<T>, overrides?: Partial<Transaction>): Transaction {
+    /**
+     * Fill the transaction without gas
+     * @param transactionResolver
+     * @param overrides
+     * @returns
+     */
+    fill(transactionResolver: TransactionResolver<T>, overrides?: Partial<Transaction>): Transaction {
         const transaction = this.resolve(transactionResolver)
 
         return pickBy(
@@ -43,9 +49,15 @@ export class ContractTransaction<T extends BaseContract | null> {
         )
     }
 
-    async encodeWithGas(transactionResolver: TransactionResolver<T>, overrides?: Partial<Transaction>) {
+    /**
+     * Fill the transaction include gas
+     * @param transactionResolver
+     * @param overrides
+     * @returns
+     */
+    async fillAll(transactionResolver: TransactionResolver<T>, overrides?: Partial<Transaction>) {
         const transaction = this.resolve(transactionResolver)
-        const transactionEncoded = this.encode(transactionResolver, overrides)
+        const transactionEncoded = this.fill(transactionResolver, overrides)
 
         if (!transactionEncoded.gas) {
             try {
@@ -59,7 +71,7 @@ export class ContractTransaction<T extends BaseContract | null> {
                 })
 
                 if (gas) {
-                    transactionEncoded.gas = gas
+                    transactionEncoded.gas = gas.toFixed()
                 }
             } catch {
                 // do nothing
@@ -75,7 +87,7 @@ export class ContractTransaction<T extends BaseContract | null> {
 
     async send(transactionResolver: TransactionResolver<T>, overrides?: Partial<Transaction>) {
         const transaction = this.resolve(transactionResolver)
-        const transactionEncoded = await this.encodeWithGas(transactionResolver, overrides)
+        const transactionEncoded = await this.fillAll(transactionResolver, overrides)
         const receipt = await transaction?.send(transactionEncoded as PayableTx)
         return receipt?.transactionHash ?? ''
     }

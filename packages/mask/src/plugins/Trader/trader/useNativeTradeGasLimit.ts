@@ -39,7 +39,7 @@ export function useNativeTradeGasLimit(
             (trade.strategy === TradeStrategy.ExactIn && Others?.isNativeTokenSchemaType(trade.inputToken.schema)) ||
             (trade.strategy === TradeStrategy.ExactOut && Others?.isNativeTokenSchemaType(trade.outputToken.schema))
         ) {
-            const tx = await new ContractTransaction(wrapperContract).encodeWithGas(wrapperContract.methods.deposit(), {
+            const tx = await new ContractTransaction(wrapperContract).fillAll(wrapperContract.methods.deposit(), {
                 from: account,
                 value: tradeAmount,
             })

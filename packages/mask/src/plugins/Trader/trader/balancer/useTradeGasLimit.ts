@@ -72,7 +72,7 @@ export function useTradeGasLimit(trade: TradeComputed<SwapResponse> | null): Asy
         )
             transactionValue = trade.outputAmount.toFixed()
 
-        const tx = await new ContractTransaction(exchangeProxyContract).encodeWithGas(
+        const tx = await new ContractTransaction(exchangeProxyContract).fillAll(
             trade.strategy === TradeStrategy.ExactIn
                 ? exchangeProxyContract.methods.multihopBatchSwapExactIn(
                       swap_,

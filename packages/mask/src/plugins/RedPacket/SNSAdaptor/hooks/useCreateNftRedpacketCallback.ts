@@ -56,7 +56,7 @@ export function useCreateNftRedpacketCallback(
                 tokenIdList,
             ]
 
-            const tx = await new ContractTransaction(nftRedPacketContract).encodeWithGas(
+            const tx = await new ContractTransaction(nftRedPacketContract).fillAll(
                 nftRedPacketContract.methods.create_red_packet(...params),
                 {
                     from: account,

@@ -19,7 +19,7 @@ export function useClaimNftRedpacketCallback(id: string, totalAmount: number | u
         type MethodParameters = Parameters<NftRedPacket['methods']['claim']>
 
         const params: MethodParameters = [id, signedMsg, account]
-        const tx = await new ContractTransaction(nftRedPacketContract).encodeWithGas(
+        const tx = await new ContractTransaction(nftRedPacketContract).fillAll(
             nftRedPacketContract.methods.claim(...params),
             {
                 from: account,

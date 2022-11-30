@@ -3,7 +3,6 @@ import type {
     RequestArguments,
     Transaction as Web3Transaction,
     TransactionReceipt as Web3TransactionReceipt,
-    TransactionConfig,
 } from 'web3-core'
 import type { NonPayableTransactionObject, PayableTransactionObject } from '@masknet/web3-contracts/types/types.js'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
@@ -94,16 +93,16 @@ export enum SchemaType {
 }
 
 export interface EIP1559GasConfig {
-    gas?: number
+    gas?: string
     gasCurrency?: string
-    maxFeePerGas: number | string
-    maxPriorityFeePerGas: number | string
+    maxFeePerGas: string
+    maxPriorityFeePerGas: string
 }
 
 export interface PriorEIP1559GasConfig {
-    gas?: number
+    gas?: string
     gasCurrency?: string
-    gasPrice: number | string
+    gasPrice: string
 }
 
 export type GasConfig = EIP1559GasConfig | PriorEIP1559GasConfig
@@ -248,7 +247,18 @@ export interface Block {
     nonce: string
     timestamp: string
 }
-export type Transaction = TransactionConfig & {
+export interface Transaction {
+    from?: string
+    to?: string
+    value?: string
+    gas?: string
+    gasPrice?: string
+    maxPriorityFeePerGas?: string
+    maxFeePerGas?: string
+    data?: string
+    nonce?: number
+    chainId?: number
+
     // CELO
     feeCurrency?: string // address of the ERC20 contract to use to pay for gas and the gateway fee
     gatewayFeeRecipient?: string // coinbase address of the full serving the light client's transactions
@@ -256,17 +266,17 @@ export type Transaction = TransactionConfig & {
 }
 export interface UserOperation {
     sender: string
-    nonce: string
+    nonce?: number
     initCode?: string
     callData?: string
-    callGas: string
-    verificationGas: string
-    preVerificationGas: string
-    maxFeePerGas: string
-    maxPriorityFeePerGas: string
+    callGas?: string
+    verificationGas?: string
+    preVerificationGas?: string
+    maxFeePerGas?: string
+    maxPriorityFeePerGas?: string
     paymaster?: string
     paymasterData?: string
-    signature: string
+    signature?: string
 }
 export type TransactionReceipt = Web3TransactionReceipt
 export type TransactionDetailed = Web3Transaction
