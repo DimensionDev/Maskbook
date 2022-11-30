@@ -466,7 +466,7 @@ class Connection implements BaseConnection {
     ): Promise<NonFungibleTokenMetadata<ChainId>> {
         throw new Error('Method not implemented.')
     }
-    requestTransaction(
+    replaceTransaction(
         hash: string,
         config: Transaction,
         options?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined,

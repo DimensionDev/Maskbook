@@ -17,7 +17,7 @@ import {
     Transaction,
 } from '@masknet/web3-shared-base'
 import DeBank from '@masknet/web3-constants/evm/debank.json'
-import { DebankTransactionDirection, HistoryResponse, WalletTokenRecord } from './type.js'
+import { DebankTransactionDirection, HistoryResponse, WalletTokenRecord } from './types.js'
 
 export function formatAssets(data: WalletTokenRecord[]): Array<FungibleAsset<ChainId, SchemaType>> {
     const supportedChains = Object.values({ ...DeBank.CHAIN_ID, BSC: 'bnb' }).filter(Boolean)

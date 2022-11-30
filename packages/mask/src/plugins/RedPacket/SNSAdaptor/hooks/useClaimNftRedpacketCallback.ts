@@ -1,8 +1,8 @@
+import { useAsyncFn } from 'react-use'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { ContractTransaction } from '@masknet/web3-shared-evm'
 import { useChainContext, useWeb3Connection } from '@masknet/web3-hooks-base'
 import type { NftRedPacket } from '@masknet/web3-contracts/types/NftRedPacket.js'
-import { NetworkPluginID } from '@masknet/shared-base'
-import { encodeContractTransaction } from '@masknet/web3-shared-evm'
-import { useAsyncFn } from 'react-use'
 import { useNftRedPacketContract } from './useNftRedPacketContract.js'
 
 const EXTRA_GAS_PER_NFT = 335
@@ -19,24 +19,20 @@ export function useClaimNftRedpacketCallback(id: string, totalAmount: number | u
         type MethodParameters = Parameters<NftRedPacket['methods']['claim']>
 
         const params: MethodParameters = [id, signedMsg, account]
-
-        const config = {
-            from: account,
-            gas:
-                (await nftRedPacketContract.methods
-                    .claim(...params)
-                    .estimateGas({ from: account })
-                    .catch((error) => {
-                        throw error
-                    })) +
-                EXTRA_GAS_PER_NFT * totalAmount,
-            chainId,
-        }
-
-        const tx = await encodeContractTransaction(
-            nftRedPacketContract,
+        const tx = await new ContractTransaction(nftRedPacketContract).encodeWithGas(
             nftRedPacketContract.methods.claim(...params),
-            config,
+            {
+                from: account,
+                gas:
+                    (await nftRedPacketContract.methods
+                        .claim(...params)
+                        .estimateGas({ from: account })
+                        .catch((error) => {
+                            throw error
+                        })) +
+                    EXTRA_GAS_PER_NFT * totalAmount,
+                chainId,
+            },
         )
         return connection.sendTransaction(tx)
     }, [id, connection, signedMsg, account, chainId, totalAmount])

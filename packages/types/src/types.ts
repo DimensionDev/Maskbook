@@ -1,9 +1,6 @@
 import type { Subscription } from 'use-subscription'
-import type { ValueRef } from '@dimensiondev/holoflows-kit'
-import type { PaletteMode, Theme } from '@mui/material'
-import type { GrayscaleAlgorithm, SocialNetworkEnum } from '@masknet/encryption'
-import type { IdentityResolved, PostContext, PostContextCreation, PostInfo } from '@masknet/plugin-infra/content-script'
 import type {
+    ValueRef,
     EncryptionTargetType,
     EnhanceableSite,
     NextIDPlatform,
@@ -13,6 +10,9 @@ import type {
     ProfileIdentifier,
     ProfileInformation,
 } from '@masknet/shared-base'
+import type { PaletteMode, Theme } from '@mui/material'
+import type { GrayscaleAlgorithm, SocialNetworkEnum } from '@masknet/encryption'
+import type { IdentityResolved, PostContext, PostContextCreation, PostInfo } from '@masknet/plugin-infra/content-script'
 import type { SerializableTypedMessages } from '@masknet/typed-message'
 import type { RenderFragmentsContextType } from '@masknet/typed-message-react'
 import type { SharedComponentOverwrite } from '@masknet/shared'

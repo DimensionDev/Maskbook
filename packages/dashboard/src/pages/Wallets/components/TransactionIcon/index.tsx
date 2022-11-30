@@ -3,9 +3,10 @@ import { Icons } from '@masknet/icons'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import type { NetworkPluginID } from '@masknet/shared-base'
-import { TransactionType, useRedPacketConstants } from '@masknet/web3-shared-evm'
+import { useRedPacketConstants } from '@masknet/web3-shared-evm'
 import { Box } from '@mui/material'
 import { useChainContext } from '@masknet/web3-hooks-base'
+import { HistoryAPI } from '@masknet/web3-providers'
 
 const useStyles = makeStyles()(() => ({
     container: {
@@ -74,17 +75,17 @@ export const TransactionIconUI = memo<TransactionIconUIProps>(({ isFailed, isRed
         if (isRedPacket) return <Icons.RedPacket className={classes.icon} />
 
         switch (type) {
-            case TransactionType.SEND:
+            case HistoryAPI.TransactionType.SEND:
                 return <Icons.Upload color={MaskColorVar.warning} className={classes.icon} />
-            case TransactionType.TRANSFER:
+            case HistoryAPI.TransactionType.TRANSFER:
                 return <Icons.Upload color={MaskColorVar.warning} className={classes.icon} />
-            case TransactionType.WITHDRAW:
-            case TransactionType.RECEIVE:
+            case HistoryAPI.TransactionType.WITHDRAW:
+            case HistoryAPI.TransactionType.RECEIVE:
                 return <Icons.Download color={MaskColorVar.success} className={classes.icon} />
-            case TransactionType.CREATE_LUCKY_DROP:
-            case TransactionType.CREATE_RED_PACKET:
+            case HistoryAPI.TransactionType.CREATE_LUCKY_DROP:
+            case HistoryAPI.TransactionType.CREATE_RED_PACKET:
                 return <Icons.RedPacket className={classes.icon} />
-            case TransactionType.FILL_POOL:
+            case HistoryAPI.TransactionType.FILL_POOL:
                 return <Icons.ITO color={MaskColorVar.warning} className={classes.icon} />
             default:
                 return <Icons.Interaction color={MaskColorVar.warning} className={classes.icon} />
@@ -94,19 +95,21 @@ export const TransactionIconUI = memo<TransactionIconUIProps>(({ isFailed, isRed
     const isNotFailed = !isFailed && !!transactionType
     const isSuccess =
         isNotFailed &&
-        [TransactionType.RECEIVE, TransactionType.CLAIM, TransactionType.WITHDRAW].includes(
-            transactionType as TransactionType,
-        )
+        [
+            HistoryAPI.TransactionType.RECEIVE,
+            HistoryAPI.TransactionType.CLAIM,
+            HistoryAPI.TransactionType.WITHDRAW,
+        ].includes(transactionType as HistoryAPI.TransactionType)
     const isWarning =
         isNotFailed &&
         [
-            TransactionType.SEND,
-            TransactionType.FILL_POOL,
-            TransactionType.CREATE_RED_PACKET,
-            TransactionType.CREATE_LUCKY_DROP,
-            TransactionType.TRANSFER,
-            TransactionType.SWAP,
-        ].includes(transactionType as TransactionType)
+            HistoryAPI.TransactionType.SEND,
+            HistoryAPI.TransactionType.FILL_POOL,
+            HistoryAPI.TransactionType.CREATE_RED_PACKET,
+            HistoryAPI.TransactionType.CREATE_LUCKY_DROP,
+            HistoryAPI.TransactionType.TRANSFER,
+            HistoryAPI.TransactionType.SWAP,
+        ].includes(transactionType as HistoryAPI.TransactionType)
 
     return (
         <Box

@@ -2,7 +2,7 @@ import { useAsyncFn } from 'react-use'
 import { BigNumber } from 'bignumber.js'
 import type { TradeProvider } from '@masknet/public-api'
 import type { SwapParameters } from '@uniswap/v2-sdk'
-import type { GasOptionConfig } from '@masknet/web3-shared-evm'
+import type { GasConfig } from '@masknet/web3-shared-evm'
 import { useSwapParameters as useTradeParameters } from './useTradeParameters.js'
 import { swapErrorToUserReadableMessage } from '../../helpers/index.js'
 import type { SwapCall, Trade, TradeComputed } from '../../types/index.js'
@@ -32,7 +32,7 @@ interface FailedCall extends SwapCallEstimate {
 export function useTradeCallback(
     trade: TradeComputed<Trade> | null,
     tradeProvider?: TradeProvider,
-    gasConfig?: GasOptionConfig,
+    gasConfig?: GasConfig,
     allowedSlippage?: number,
 ) {
     const { account, chainId } = useChainContext()

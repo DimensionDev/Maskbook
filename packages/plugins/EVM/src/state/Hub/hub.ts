@@ -27,6 +27,7 @@ import {
     ChainbaseNonFungibleToken,
     ZerionNonFungibleToken,
     X2Y2,
+    GoPlusAuthorization,
 } from '@masknet/web3-providers'
 import {
     SourceType,
@@ -90,12 +91,13 @@ class HubFungibleClient extends HubStateFungibleClient<ChainId, SchemaType> {
                 [SourceType.Chainbase]: ChainbaseFungibleToken,
                 [SourceType.DeBank]: DeBank,
                 [SourceType.Zerion]: Zerion,
+                [SourceType.GoPlus]: GoPlusAuthorization,
                 [SourceType.Rabby]: Rabby,
                 [SourceType.R2D2]: R2D2,
                 [SourceType.CF]: Cloudflare,
                 [SourceType.CoinGecko]: CoinGeckoPriceEVM,
             },
-            [DeBank, Zerion, ChainbaseFungibleToken, Rabby, R2D2, Cloudflare, CoinGeckoPriceEVM],
+            [DeBank, Zerion, ChainbaseFungibleToken, Rabby, GoPlusAuthorization, R2D2, Cloudflare, CoinGeckoPriceEVM],
             initial,
         )
     }
@@ -120,6 +122,7 @@ class HubNonFungibleClient extends HubStateNonFungibleClient<ChainId, SchemaType
                 [SourceType.LooksRare]: LooksRare,
                 [SourceType.Zora]: Zora,
                 [SourceType.Gem]: Gem,
+                [SourceType.GoPlus]: GoPlusAuthorization,
                 [SourceType.Rabby]: Rabby,
                 [SourceType.R2D2]: R2D2,
             },
@@ -134,6 +137,7 @@ class HubNonFungibleClient extends HubStateNonFungibleClient<ChainId, SchemaType
                       LooksRare,
                       Zora,
                       Gem,
+                      GoPlusAuthorization,
                       Rabby,
                       R2D2,
                   ]
@@ -146,6 +150,7 @@ class HubNonFungibleClient extends HubStateNonFungibleClient<ChainId, SchemaType
                       LooksRare,
                       Zora,
                       Gem,
+                      GoPlusAuthorization,
                       Rabby,
                       R2D2,
                   ],

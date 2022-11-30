@@ -2,9 +2,16 @@ import { useEffect, useState, useMemo, useCallback } from 'react'
 import { BigNumber } from 'bignumber.js'
 import { useMenuConfig, FormattedBalance, useSharedI18N, useSelectAdvancedSettings } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
-import { GasOptionType, multipliedBy, isZero, formatBalance, formatCurrency } from '@masknet/web3-shared-base'
+import { GasOptionType, isZero, formatBalance, formatCurrency } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { formatEtherToGwei, formatWeiToEther, formatWeiToGwei, GasOptionConfig } from '@masknet/web3-shared-evm'
+import {
+    ChainId,
+    formatEtherToGwei,
+    formatWeiToEther,
+    formatWeiToGwei,
+    GasConfig,
+    GasEditor,
+} from '@masknet/web3-shared-evm'
 import { Typography, MenuItem, Box } from '@mui/material'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useChainContext, useWeb3State, useNetworkContext } from '@masknet/web3-hooks-base'
@@ -17,8 +24,8 @@ interface SelectGasSettingsToolbarProps<T extends NetworkPluginID = NetworkPlugi
     nativeToken: Web3Helper.FungibleTokenAll
     nativeTokenPrice: number
     gasLimit: number
-    gasOption?: GasOptionConfig
-    onChange?(gasOption?: GasOptionConfig): void
+    gasConfig?: GasConfig
+    onChange?(gasConfig?: GasConfig): void
 }
 
 const useStyles = makeStyles()((theme) => {
@@ -99,16 +106,16 @@ export function SelectGasSettingsToolbar(props: SelectGasSettingsToolbarProps) {
 
 export function SelectGasSettingsToolbarUI({
     onChange,
-    gasOption,
+    gasConfig: gasOption,
     gasLimit,
     nativeToken,
     nativeTokenPrice,
 }: SelectGasSettingsToolbarProps) {
-    const { gasOptions, GAS_OPTION_NAMES } = SettingsContext.useContainer()
     const t = useSharedI18N()
+    const { classes, cx, theme } = useStyles()
+    const { gasOptions, GAS_OPTION_NAMES } = SettingsContext.useContainer()
     const [isCustomGas, setIsCustomGas] = useState(false)
     const [currentGasOptionType, setCurrentGasOptionType] = useState<GasOptionType>(GasOptionType.NORMAL)
-    const { classes, cx, theme } = useStyles()
     const { chainId } = useChainContext()
     const { Others } = useWeb3State<'all'>()
 
@@ -202,8 +209,7 @@ export function SelectGasSettingsToolbarUI({
     )
     const gasFee = useMemo(() => {
         if (!gasOption || !gasLimit) return '0'
-        const gasPrice = (gasOption.gasPrice ? gasOption.gasPrice : gasOption.maxFeePerGas) as string
-        return gasPrice ? multipliedBy(gasPrice, gasLimit).integerValue().toFixed() : '0'
+        return GasEditor.fromConfig(chainId as ChainId, gasOption).getGasFee(gasLimit)
     }, [gasLimit, gasOption])
 
     const gasFeeUSD = useMemo(() => {

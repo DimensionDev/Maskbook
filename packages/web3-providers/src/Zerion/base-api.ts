@@ -15,7 +15,7 @@ import {
     ZerionNonFungibleCollectionBody,
     ZerionNonFungibleTokenInfoBody,
     ZerionGasResponseBody,
-} from './type.js'
+} from './types.js'
 
 const ZERION_API = 'wss://api-v4.zerion.io'
 // cspell:disable-next-line

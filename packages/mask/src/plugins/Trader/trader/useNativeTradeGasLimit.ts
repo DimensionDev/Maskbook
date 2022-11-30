@@ -1,14 +1,14 @@
-import { ChainId, encodeContractTransaction } from '@masknet/web3-shared-evm'
 import { useAsync } from 'react-use'
-import type { TradeComputed } from '../types/index.js'
-import type { NativeTokenWrapper } from './native/useTradeComputed.js'
-import { TradeStrategy } from '../types/index.js'
 import type { AsyncState } from 'react-use/lib/useAsyncFn.js'
+import { BigNumber } from 'bignumber.js'
+import { ChainId, ContractTransaction } from '@masknet/web3-shared-evm'
 import { useChainContext, useNetworkContext, useWeb3Connection, useWeb3State } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useNativeTokenWrapperContract } from '@masknet/web3-hooks-evm'
-import { BigNumber } from 'bignumber.js'
 import type { Web3Helper } from '@masknet/web3-helpers'
+import type { TradeComputed } from '../types/index.js'
+import type { NativeTokenWrapper } from './native/useTradeComputed.js'
+import { TradeStrategy } from '../types/index.js'
 
 export function useNativeTradeGasLimit(
     trade: TradeComputed<NativeTokenWrapper> | null,
@@ -39,12 +39,12 @@ export function useNativeTradeGasLimit(
             (trade.strategy === TradeStrategy.ExactIn && Others?.isNativeTokenSchemaType(trade.inputToken.schema)) ||
             (trade.strategy === TradeStrategy.ExactOut && Others?.isNativeTokenSchemaType(trade.outputToken.schema))
         ) {
-            const tx = await encodeContractTransaction(wrapperContract, wrapperContract.methods.deposit(), {
+            const tx = await new ContractTransaction(wrapperContract).encodeWithGas(wrapperContract.methods.deposit(), {
                 from: account,
                 value: tradeAmount,
             })
 
-            return new BigNumber(tx.gas).toNumber()
+            return new BigNumber(tx.gas!).toNumber()
         }
 
         return 0

@@ -10,7 +10,7 @@ import { MaskWalletProvider } from './MaskWallet.js'
 
 export class BaseHostedProvider extends BaseProvider implements EVM_Provider {
     private provider = new MaskWalletProvider()
-    private storageObject?: StorageObject<{
+    private _storage?: StorageObject<{
         account: string
         chainId: ChainId
     }>
@@ -39,7 +39,7 @@ export class BaseHostedProvider extends BaseProvider implements EVM_Provider {
     }
 
     get storage() {
-        if (this.storageObject) return this.storageObject
+        if (this._storage) return this._storage
 
         const { storage } = SharedContextSettings.value
             .createKVStorage('memory', {})
@@ -47,8 +47,8 @@ export class BaseHostedProvider extends BaseProvider implements EVM_Provider {
                 account: this.options.getDefaultAccount(),
                 chainId: this.options.getDefaultChainId(),
             })
-        this.storageObject = storage
-        return this.storageObject
+        this._storage = storage
+        return this._storage
     }
 
     get account() {

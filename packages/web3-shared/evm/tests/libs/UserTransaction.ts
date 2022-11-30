@@ -33,7 +33,7 @@ describe('UserTransaction', () => {
     })
 
     test('hasPaymaster', () => {
-        expect(userTransaction.hasPaymaster).toBeFalsy()
+        expect(userTransaction.hasPaymaster).toBe(false)
     })
 
     test('pack', () => {

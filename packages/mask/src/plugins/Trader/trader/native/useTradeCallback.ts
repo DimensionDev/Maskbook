@@ -1,13 +1,13 @@
 import { useAsyncFn } from 'react-use'
 import { useNativeTokenWrapperCallback } from '@masknet/web3-hooks-evm'
-import type { GasOptionConfig, ChainId } from '@masknet/web3-shared-evm'
+import type { GasConfig, ChainId } from '@masknet/web3-shared-evm'
 import { TradeComputed, TradeStrategy } from '../../types/index.js'
 import type { NativeTokenWrapper } from './useTradeComputed.js'
 import { useWeb3State } from '@masknet/web3-hooks-base'
 
 export function useTradeCallback(
     trade: TradeComputed<NativeTokenWrapper> | null,
-    gasConfig?: GasOptionConfig,
+    gasConfig?: GasConfig,
     targetChainId?: ChainId,
 ) {
     const [wrapCallback, unwrapCallback] = useNativeTokenWrapperCallback(targetChainId)
