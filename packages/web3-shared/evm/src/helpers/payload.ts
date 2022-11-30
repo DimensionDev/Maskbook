@@ -31,7 +31,7 @@ export function getPayloadFrom(payload: JsonRpcPayload): string | undefined {
             return first(payload.params)
         default:
             const config = getPayloadConfig(payload)
-            return config?.from as string | undefined
+            return config?.from
     }
 }
 
@@ -80,11 +80,11 @@ export function getSignablePayloadConfig(payload: JsonRpcPayload) {
     return omitBy(
         {
             ...raw,
-            value: parseHexNumberString(raw.value as string | undefined),
+            value: parseHexNumberString(raw.value),
             gas: parseHexNumberString(raw.gas),
-            gasPrice: parseHexNumberString(raw.gasPrice as string | undefined),
-            maxFeePerGas: parseHexNumberString(raw.maxFeePerGas as string | undefined),
-            maxPriorityFeePerGas: parseHexNumberString(raw.maxPriorityFeePerGas as string | undefined),
+            gasPrice: parseHexNumberString(raw.gasPrice),
+            maxFeePerGas: parseHexNumberString(raw.maxFeePerGas),
+            maxPriorityFeePerGas: parseHexNumberString(raw.maxPriorityFeePerGas),
             // TODO: revert to parseHexNumberString after update MaskCore
             chainId: parseHexNumber(raw.chainId),
             nonce: parseHexNumberString(raw.nonce),

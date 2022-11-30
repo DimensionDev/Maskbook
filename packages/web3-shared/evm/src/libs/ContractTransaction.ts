@@ -22,7 +22,7 @@ export class ContractTransaction<T extends BaseContract | null> {
     }
 
     /**
-     * Fill the transaction without gas
+     * Fill the transaction without gas (for calling a readonly transaction)
      * @param transactionResolver
      * @param overrides
      * @returns
@@ -32,7 +32,7 @@ export class ContractTransaction<T extends BaseContract | null> {
 
         return pickBy(
             {
-                from: (overrides?.from as string | undefined) ?? this.contract?.defaultAccount ?? '',
+                from: overrides?.from ?? this.contract?.defaultAccount ?? '',
                 to: this.contract?.options.address,
                 data: transaction?.encodeABI(),
                 value: overrides?.value ? toHex(overrides.value) : undefined,
@@ -50,7 +50,7 @@ export class ContractTransaction<T extends BaseContract | null> {
     }
 
     /**
-     * Fill the transaction include gas
+     * Fill the transaction include gas (for sending a payable transaction)
      * @param transactionResolver
      * @param overrides
      * @returns
@@ -62,9 +62,9 @@ export class ContractTransaction<T extends BaseContract | null> {
         if (!transactionEncoded.gas) {
             try {
                 const gas = await transaction?.estimateGas({
-                    from: transactionEncoded.from as string | undefined,
-                    to: transactionEncoded.to as string | undefined,
-                    data: transactionEncoded.data as string | undefined,
+                    from: transactionEncoded.from,
+                    to: transactionEncoded.to,
+                    data: transactionEncoded.data,
                     value: transactionEncoded.value,
                     // rpc hack, alchemy rpc must pass gas parameter
                     gas: hexToNumber(overrides?.chainId ?? '0x0') === ChainId.Astar ? '0x135168' : undefined,

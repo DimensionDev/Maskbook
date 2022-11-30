@@ -251,7 +251,7 @@ const ContractInteraction = memo(() => {
 
     // Wei
     const gasPriceEIP1559 = new BigNumber(maxFeePerGas ?? defaultPrices?.maxFeePerGas ?? 0, 16)
-    const gasPricePriorEIP1559 = new BigNumber((gasPrice as string) ?? defaultPrices?.gasPrice ?? 0)
+    const gasPricePriorEIP1559 = new BigNumber(gasPrice ?? defaultPrices?.gasPrice ?? 0)
     const gasFee = (isSupport1559 ? gasPriceEIP1559 : gasPricePriorEIP1559)
         .multipliedBy(gas ?? 0)
         .integerValue()

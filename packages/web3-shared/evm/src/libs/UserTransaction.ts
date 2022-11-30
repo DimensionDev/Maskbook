@@ -8,7 +8,7 @@ import EntryPointABI from '@masknet/web3-contracts/abis/EntryPoint.json'
 import type { Wallet } from '@masknet/web3-contracts/types/Wallet.js'
 import type { EntryPoint } from '@masknet/web3-contracts/types/EntryPoint.js'
 import type { ChainId, Transaction, UserOperation } from '../types/index.js'
-import { calculateDataCost, getZeroAddress, isZeroAddress } from '../helpers/index.js'
+import { getZeroAddress, isZeroAddress } from '../helpers/index.js'
 
 const CALL_OP_TYPE = {
     callOp: {
@@ -185,7 +185,11 @@ export class UserTransaction {
             this.userOperation.verificationGas = toFixed(DEFAULT_USER_OPERATION.verificationGas)
         }
         if (!preVerificationGas) {
-            this.userOperation.preVerificationGas = toFixed(calculateDataCost(this.packAll))
+            this.userOperation.preVerificationGas = toFixed(
+                hexToBytes(this.packAll)
+                    .map<number>((x) => (x === 0 ? 4 : 16))
+                    .reduce((sum, x) => sum + x),
+            )
         }
         if (!maxPriorityFeePerGas) {
             this.userOperation.maxPriorityFeePerGas = DEFAULT_USER_OPERATION.maxPriorityFeePerGas

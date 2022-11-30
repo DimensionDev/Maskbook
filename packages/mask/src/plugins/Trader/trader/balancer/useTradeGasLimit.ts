@@ -92,7 +92,7 @@ export function useTradeGasLimit(trade: TradeComputed<SwapResponse> | null): Asy
             },
         )
 
-        return tx.gas!
+        return tx.gas ?? '0'
     }, [
         trade,
         exchangeProxyContract,

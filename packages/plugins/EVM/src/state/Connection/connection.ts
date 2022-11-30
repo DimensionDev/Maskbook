@@ -988,23 +988,21 @@ class Connection implements EVM_Connection {
 
     callTransaction(transaction: Transaction, initial?: EVM_Web3ConnectionOptions) {
         const options = this.getOptions(initial)
-        const config = new AccountTransaction(transaction).fill(options.overrides)
         return this.hijackedRequest<string>(
             {
                 method: EthereumMethodType.ETH_CALL,
-                params: [config, 'latest'],
+                params: [new AccountTransaction(transaction).fill(options.overrides), 'latest'],
             },
             options,
         )
     }
     async sendTransaction(transaction: Transaction, initial?: EVM_Web3ConnectionOptions) {
         const options = this.getOptions(initial)
-        const config = new AccountTransaction(transaction).fill(options.overrides)
         // send a transaction which will add into the internal transaction list and start to watch it for confirmation
         const hash = await this.hijackedRequest<string>(
             {
                 method: EthereumMethodType.ETH_SEND_TRANSACTION,
-                params: [config],
+                params: [new AccountTransaction(transaction).fill(options.overrides)],
             },
             options,
         )

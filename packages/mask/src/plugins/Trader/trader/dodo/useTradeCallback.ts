@@ -22,17 +22,14 @@ export function useTradeCallback(tradeComputed: TradeComputed<SwapRouteSuccessRe
     }, [account, tradeComputed])
 
     return useAsyncFn(async () => {
-        // validate config
         if (!account || !config || !connection || pluginID !== NetworkPluginID.PLUGIN_EVM) {
             return
         }
 
-        // send transaction and wait for hash
-        const esitmated = await connection.estimateTransaction?.(config)
         const hash = await connection.sendTransaction(
             {
                 ...config,
-                gas: esitmated ?? '0',
+                gas: await connection.estimateTransaction?.(config),
                 ...gasConfig,
             },
             { chainId, overrides: { ...gasConfig } },

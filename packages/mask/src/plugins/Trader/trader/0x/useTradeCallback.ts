@@ -33,14 +33,13 @@ export function useTradeCallback(tradeComputed: TradeComputed<SwapQuoteResponse>
             return
         }
 
-        const esitmated = await connection.estimateTransaction?.({
-            from: account,
-            ...pick(tradeComputed.trade_, ['to', 'data', 'value']),
-        })
         const hash = await connection.sendTransaction(
             {
                 ...config,
-                gas: esitmated ?? '0',
+                gas: await connection.estimateTransaction?.({
+                    from: account,
+                    ...pick(tradeComputed.trade_, ['to', 'data', 'value']),
+                }),
                 ...gasConfig,
             },
             { chainId, overrides: { ...gasConfig } },
