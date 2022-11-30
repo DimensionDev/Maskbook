@@ -111,11 +111,10 @@ export class MulticallAPI implements MulticallBaseAPI.Provider {
     ): Promise<Array<MulticallBaseAPI.DecodeResult<T, K, R>>> {
         if (!calls.length) return EMPTY_LIST
 
-        const web3 = this.createWeb3(chainId)
-
         const contract = this.createContract(chainId)
         if (!contract) return EMPTY_LIST
 
+        const web3 = this.createWeb3(chainId)
         const blockNumber_ = blockNumber ?? (await web3.eth.getBlockNumber()) ?? 0
 
         // filter out cached calls
@@ -130,7 +129,6 @@ export class MulticallAPI implements MulticallBaseAPI.Provider {
                     const hex = await web3.eth.call(tx)
 
                     const outputType = contract.options.jsonInterface.find(({ name }) => name === 'multicall')?.outputs
-
                     if (!outputType) return
 
                     const decodeResult = decodeOutputString(web3, outputType, hex) as
