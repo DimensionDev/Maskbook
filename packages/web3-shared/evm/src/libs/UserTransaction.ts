@@ -92,7 +92,7 @@ export class UserTransaction {
             gas: this.userOperation.callGas,
             maxFeePerGas: this.userOperation.maxFeePerGas,
             maxPriorityFeePerGas: this.userOperation.maxPriorityFeePerGas,
-            nonce: Number.parseInt(this.userOperation.nonce),
+            nonce: Number.parseInt(this.userOperation.nonce, 16),
             data: bytesToHex(callBytes.slice(68)),
         }
     }
