@@ -6,7 +6,13 @@ import { TokenType, attemptUntil, NonFungibleCollectionOverview } from '@masknet
 import { ChainId, isValidChainId } from '@masknet/web3-shared-evm'
 import { TrendingAPI } from '../../types/index.js'
 import type { EVM, Response } from '../types/index.js'
-import { fetchFromNFTScanV2, getContractSymbol, fetchFromNFTScanWebAPI } from '../helpers/EVM.js'
+import {
+    fetchFromNFTScanV2,
+    getContractSymbol,
+    fetchFromNFTScanWebAPI,
+    resolveNFTScanHostName,
+    NFTScanChainId,
+} from '../helpers/EVM.js'
 import { LooksRareAPI } from '../../LooksRare/index.js'
 import { OpenSeaAPI } from '../../OpenSea/index.js'
 import { LooksRareLogo, OpenSeaLogo } from '../../Resources/index.js'
@@ -187,7 +193,10 @@ export class NFTScanTrendingAPI implements TrendingAPI.Provider<ChainId> {
                 type: TokenType.NonFungible,
                 description: collection.description,
                 image_url: collection.logo_url,
-                home_urls: compact([collection.website]),
+                home_urls: compact([
+                    `${resolveNFTScanHostName(chainId as NFTScanChainId)}/${address}`,
+                    collection.website,
+                ]),
                 community_urls: [
                     {
                         type: 'twitter',

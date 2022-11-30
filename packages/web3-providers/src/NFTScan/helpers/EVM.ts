@@ -20,9 +20,9 @@ import { NFTSCAN_BASE, NFTSCAN_LOGO_BASE, NFTSCAN_URL, NFTSCAN_API } from '../co
 import type { EVM } from '../types/EVM.js'
 import { parseJSON, resolveActivityType, getPaymentToken, getAssetFullName } from '../../helpers.js'
 
-type NFTScanChainId = ChainId.Mainnet | ChainId.Matic | ChainId.BSC | ChainId.Arbitrum | ChainId.Optimism
+export type NFTScanChainId = ChainId.Mainnet | ChainId.Matic | ChainId.BSC | ChainId.Arbitrum | ChainId.Optimism
 
-export const resolveHostName = createLookupTableResolver<NFTScanChainId, string>(
+export const resolveNFTScanHostName = createLookupTableResolver<NFTScanChainId, string>(
     {
         [ChainId.Mainnet]: 'https://www.nftscan.com',
         [ChainId.Matic]: 'https://polygon.nftscan.com',
@@ -34,7 +34,7 @@ export const resolveHostName = createLookupTableResolver<NFTScanChainId, string>
 )
 
 export async function fetchFromNFTScanV2<T>(chainId: ChainId, pathname: string, init?: RequestInit) {
-    const host = resolveHostName(chainId as NFTScanChainId)
+    const host = resolveNFTScanHostName(chainId as NFTScanChainId)
     if (!host) return
 
     const response = await fetch(urlcat(NFTSCAN_URL, pathname), {
@@ -62,7 +62,7 @@ const NFTScanAPIChainResolver = createLookupTableResolver<NFTScanChainId, string
 )
 
 export async function fetchFromNFTScanWebAPI<T>(chainId: ChainId, pathname: string, init?: RequestInit) {
-    const host = resolveHostName(chainId as NFTScanChainId)
+    const host = resolveNFTScanHostName(chainId as NFTScanChainId)
     if (!host) return
 
     const response = await fetch(urlcat(NFTSCAN_API, pathname), {
@@ -93,10 +93,14 @@ export async function getContractSymbol(address: string, chainId: ChainId) {
 }
 
 export function createPermalink(chainId: ChainId, address: string, tokenId: string) {
-    return urlcat(resolveHostName(chainId as NFTScanChainId) || 'https://www.nftscan.com', '/:address/:tokenId', {
-        address,
-        tokenId,
-    })
+    return urlcat(
+        resolveNFTScanHostName(chainId as NFTScanChainId) || 'https://www.nftscan.com',
+        '/:address/:tokenId',
+        {
+            address,
+            tokenId,
+        },
+    )
 }
 
 export function createNonFungibleAsset(
