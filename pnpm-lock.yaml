@@ -17085,7 +17085,7 @@ packages:
       camelcase: 5.3.1
       cssesc: 3.0.0
       icss-utils: 4.1.1
-      loader-utils: 1.4.2
+      loader-utils: 1.4.1
       normalize-path: 3.0.0
       postcss: 7.0.39
       postcss-modules-extract-imports: 2.0.0
@@ -20301,7 +20301,7 @@ packages:
     peerDependencies:
       webpack: ^4.0.0 || ^5.0.0
     dependencies:
-      loader-utils: 2.0.4
+      loader-utils: 2.0.3
       schema-utils: 3.1.1
       webpack: 4.46.0
     dev: true
@@ -21899,7 +21899,7 @@ packages:
       '@types/tapable': 1.0.8
       '@types/webpack': 4.41.33
       html-minifier-terser: 5.1.1
-      loader-utils: 1.4.2
+      loader-utils: 1.4.1
       lodash: 4.17.21
       pretty-error: 2.1.2
       tapable: 1.1.3
@@ -24155,6 +24155,15 @@ packages:
       emojis-list: 3.0.0
       json5: 1.0.1
     dev: false
+
+  /loader-utils/1.4.1:
+    resolution: {integrity: sha512-1Qo97Y2oKaU+Ro2xnDMR26g1BwMT29jNbem1EvcujW2jqt+j5COXyscjM7bLQkM9HaxI7pkWeW7gnI072yMI9Q==}
+    engines: {node: '>=4.0.0'}
+    dependencies:
+      big.js: 5.2.2
+      emojis-list: 3.0.0
+      json5: 1.0.1
+    dev: true
 
   /loader-utils/1.4.2:
     resolution: {integrity: sha512-I5d00Pd/jwMD2QCduo657+YM/6L3KZu++pmX9VFncxaxvHcru9jx1lBaFft+r4Mt2jK0Yhp41XlRAihzPxHNCg==}
@@ -27044,7 +27053,7 @@ packages:
     dependencies:
       cosmiconfig: 7.0.1
       klona: 2.0.5
-      loader-utils: 2.0.4
+      loader-utils: 2.0.3
       postcss: 7.0.39
       schema-utils: 3.1.1
       semver: 7.3.8
@@ -27607,7 +27616,7 @@ packages:
     peerDependencies:
       webpack: ^4.0.0 || ^5.0.0
     dependencies:
-      loader-utils: 2.0.4
+      loader-utils: 2.0.3
       schema-utils: 3.1.1
       webpack: 4.46.0
     dev: true
@@ -30388,7 +30397,7 @@ packages:
     peerDependencies:
       webpack: ^4.0.0 || ^5.0.0
     dependencies:
-      loader-utils: 2.0.4
+      loader-utils: 2.0.3
       schema-utils: 2.7.1
       webpack: 4.46.0
     dev: true
@@ -32014,7 +32023,7 @@ packages:
         optional: true
     dependencies:
       file-loader: 6.2.0_webpack@4.46.0
-      loader-utils: 2.0.4
+      loader-utils: 2.0.3
       mime-types: 2.1.35
       schema-utils: 3.1.1
       webpack: 4.46.0
