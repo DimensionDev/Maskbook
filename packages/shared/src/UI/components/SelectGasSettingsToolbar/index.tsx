@@ -148,11 +148,7 @@ export function SelectGasSettingsToolbarUI({
 
         if (!transaction) return
 
-        setGasConfigCallback(
-            transaction.maxFeePerGas as string,
-            transaction.maxPriorityFeePerGas as string,
-            transaction.gasPrice as string,
-        )
+        setGasConfigCallback(transaction.maxFeePerGas!, transaction.maxPriorityFeePerGas!, transaction.gasPrice!)
     }, [chainId, gasOption, selectAdvancedSettings, setGasConfigCallback])
 
     const currentGasOption = gasOptions?.[currentGasOptionType]

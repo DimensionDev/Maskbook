@@ -4,10 +4,10 @@ import { useAsyncFn } from 'react-use'
 import stringify from 'json-stable-stringify'
 import { ZERO } from '@masknet/web3-shared-base'
 import { useChainContext, useNetworkContext, useWeb3Connection } from '@masknet/web3-hooks-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import type { GasConfig } from '@masknet/web3-shared-evm'
 import { PluginTraderRPC } from '../../messages.js'
 import type { SwapBancorRequest, TradeComputed } from '../../types/index.js'
-import { NetworkPluginID } from '@masknet/shared-base'
 
 export function useTradeCallback(tradeComputed: TradeComputed<SwapBancorRequest> | null, gasConfig?: GasConfig) {
     const { account, chainId } = useChainContext()

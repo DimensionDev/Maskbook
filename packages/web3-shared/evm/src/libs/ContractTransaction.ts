@@ -21,12 +21,18 @@ export class ContractTransaction<T extends BaseContract | null> {
         return transactionResolver
     }
 
-    encode(transactionResolver: TransactionResolver<T>, overrides?: Partial<Transaction>): Transaction {
+    /**
+     * Fill the transaction without gas (for calling a readonly transaction)
+     * @param transactionResolver
+     * @param overrides
+     * @returns
+     */
+    fill(transactionResolver: TransactionResolver<T>, overrides?: Partial<Transaction>): Transaction {
         const transaction = this.resolve(transactionResolver)
 
         return pickBy(
             {
-                from: (overrides?.from as string | undefined) ?? this.contract?.defaultAccount ?? '',
+                from: overrides?.from ?? this.contract?.defaultAccount ?? '',
                 to: this.contract?.options.address,
                 data: transaction?.encodeABI(),
                 value: overrides?.value ? toHex(overrides.value) : undefined,
@@ -43,23 +49,29 @@ export class ContractTransaction<T extends BaseContract | null> {
         )
     }
 
-    async encodeWithGas(transactionResolver: TransactionResolver<T>, overrides?: Partial<Transaction>) {
+    /**
+     * Fill the transaction include gas (for sending a payable transaction)
+     * @param transactionResolver
+     * @param overrides
+     * @returns
+     */
+    async fillAll(transactionResolver: TransactionResolver<T>, overrides?: Partial<Transaction>) {
         const transaction = this.resolve(transactionResolver)
-        const transactionEncoded = this.encode(transactionResolver, overrides)
+        const transactionEncoded = this.fill(transactionResolver, overrides)
 
         if (!transactionEncoded.gas) {
             try {
                 const gas = await transaction?.estimateGas({
-                    from: transactionEncoded.from as string | undefined,
-                    to: transactionEncoded.to as string | undefined,
-                    data: transactionEncoded.data as string | undefined,
+                    from: transactionEncoded.from,
+                    to: transactionEncoded.to,
+                    data: transactionEncoded.data,
                     value: transactionEncoded.value,
                     // rpc hack, alchemy rpc must pass gas parameter
                     gas: hexToNumber(overrides?.chainId ?? '0x0') === ChainId.Astar ? '0x135168' : undefined,
                 })
 
                 if (gas) {
-                    transactionEncoded.gas = gas
+                    transactionEncoded.gas = gas.toFixed()
                 }
             } catch {
                 // do nothing
@@ -75,7 +87,7 @@ export class ContractTransaction<T extends BaseContract | null> {
 
     async send(transactionResolver: TransactionResolver<T>, overrides?: Partial<Transaction>) {
         const transaction = this.resolve(transactionResolver)
-        const transactionEncoded = await this.encodeWithGas(transactionResolver, overrides)
+        const transactionEncoded = await this.fillAll(transactionResolver, overrides)
         const receipt = await transaction?.send(transactionEncoded as PayableTx)
         return receipt?.transactionHash ?? ''
     }

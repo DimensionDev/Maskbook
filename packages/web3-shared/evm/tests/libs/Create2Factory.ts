@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest'
-import { isValidAddress } from '../../src/utils/address.js'
+import { isValidAddress } from '../../src/helpers/address.js'
 import { Create2Factory } from '../../src/libs/Create2Factory.js'
 
 describe('Create2Factory', () => {

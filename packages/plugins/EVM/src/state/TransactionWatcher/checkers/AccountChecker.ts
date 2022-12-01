@@ -57,7 +57,7 @@ export class AccountChecker implements TransactionChecker<ChainId, Transaction> 
     }
 
     async getStatus(chainId: ChainId, id: string, transaction: Transaction): Promise<TransactionStatusType> {
-        const account = transaction.from as string | undefined
+        const account = transaction.from
         if (!account) throw new Error('Cannot found account.')
         const latestTransactions = await this.fetchLatestTransactions(chainId, account)
         const txId = this.getTransactionId(transaction)
