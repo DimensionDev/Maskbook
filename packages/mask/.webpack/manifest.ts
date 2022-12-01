@@ -35,6 +35,10 @@ function modify(manifest: ManifestV2 | ManifestV3, flags: NormalizedFlags, compu
         manifest.devtools_page = 'devtools-background.html'
     }
 
+    if (process.env.npm_package_version) {
+        manifest.version = process.env.npm_package_version
+    }
+
     if (manifest.manifest_version === 2) modify_2(manifest as ManifestV2, flags, computedFlags)
     else modify_3(manifest as ManifestV3, flags)
 }
