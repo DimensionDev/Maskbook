@@ -42,23 +42,11 @@ export async function fetchCache(info: RequestInfo, init?: RequestInit) {
     const { host } = new URL(request.url)
     const cache = await caches.open(host)
     const hit = await cache.match(request)
-    const date = hit?.headers.get('x-cache-date')
-
-    if (hit && date) {
-        // cache for a half an hour
-        const expired = new Date(date).getTime() + 30 * 60 * 1000 > Date.now()
-        if (!expired) return hit
-    }
+    if (hit) return hit
 
     const response = await fetch(request)
-
     if (response.ok && response.status === 200) {
-        const request_ = request.clone()
-        const response_ = response.clone()
-
-        // store the cached date as a UTC string
-        response_.headers.set('x-cache-cate', new Date().toUTCString())
-        await cache.put(request_, response_)
+        await cache.put(request.clone(), response.clone())
     }
     return response
 }
