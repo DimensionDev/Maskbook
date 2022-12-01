@@ -377,11 +377,11 @@ export const PROVIDER_DESCRIPTORS: Array<ProviderDescriptor<ChainId, ProviderTyp
         downloadLink: 'https://www.opera.com/crypto/next',
     },
     {
-        ID: `${PLUGIN_ID}_clvwallet`,
+        ID: `${PLUGIN_ID}_clover`,
         providerAdaptorPluginID: PLUGIN_ID,
-        type: ProviderType.ClvWallet,
-        name: 'ClvWallet',
-        icon: new URL('../assets/clvwallet.png', import.meta.url),
+        type: ProviderType.Clover,
+        name: 'Clover',
+        icon: new URL('../assets/clover.png', import.meta.url),
         backgroundGradient:
             'linear-gradient(90deg, rgba(52, 133, 196, 0.2) 0%, rgba(0, 239, 139, 0.2) 100%), linear-gradient(0deg, #FFFFFF, #FFFFFF)',
         enableRequirements: {

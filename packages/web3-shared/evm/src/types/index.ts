@@ -213,7 +213,7 @@ export enum ProviderType {
     Opera = 'Opera',
     WalletLink = 'WalletLink',
     SmartPay = 'SmartPay',
-    ClvWallet = 'ClvWallet',
+    Clover = 'Clover',
     CustomNetwork = 'CustomNetwork',
 }
 
