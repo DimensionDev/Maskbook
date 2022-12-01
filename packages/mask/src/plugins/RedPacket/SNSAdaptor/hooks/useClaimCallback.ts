@@ -22,11 +22,11 @@ export function useClaimCallback(version: number, from: string, id: string, pass
         const contractTransaction = new ContractTransaction(redPacketContract)
         const tx =
             version === 4
-                ? await contractTransaction.encodeWithGas(
+                ? await contractTransaction.fillAll(
                       (redPacketContract as HappyRedPacketV4).methods.claim(id, password, from),
                       config,
                   )
-                : await contractTransaction.encodeWithGas(
+                : await contractTransaction.fillAll(
                       (redPacketContract as HappyRedPacketV1).methods.claim(id, password, from, Web3Utils.sha3(from)!),
                       config,
                   )

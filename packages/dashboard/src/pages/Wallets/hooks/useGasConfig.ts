@@ -72,11 +72,11 @@ export const useGasConfig = (gasLimit: number, minGasLimit: number) => {
     const gasConfig = useMemo(() => {
         return is1559Supported
             ? {
-                  gas: gasLimit_,
+                  gas: toHex(gasLimit_),
                   maxFeePerGas: toHex(new BigNumber(maxFee).integerValue().toFixed()),
                   maxPriorityFeePerGas: toHex(new BigNumber(priorityFee).integerValue().toFixed()),
               }
-            : { gas: gasLimit_, gasPrice: toHex(gasPrice.toString()) }
+            : { gas: toHex(gasLimit_), gasPrice: toHex(gasPrice.toString()) }
     }, [is1559Supported, gasLimit_, maxFee, priorityFee, gasPrice, chainId])
 
     return {

@@ -5,16 +5,18 @@ import type { WalletProxy } from '@masknet/web3-contracts/types/WalletProxy.js'
 import WalletABI from '@masknet/web3-contracts/abis/Wallet.json'
 import WalletProxyABI from '@masknet/web3-contracts/abis/WalletProxy.json'
 import { WalletProxyByteCode } from '@masknet/web3-contracts/bytes/WalletProxy.js'
+import { createContract } from '../helpers/transaction.js'
+import { ZERO_ADDRESS } from '../constants/index.js'
 
-export class WalletContract {
+export class ContractWallet {
     private web3 = new Web3()
     private coder = ABICoder as unknown as ABICoder.AbiCoder
 
     /**
-     * WalletContract
+     * ContractWallet
      *
      * @param owner the owner address
-     * @param address  the deployed contract address
+     * @param address  the deployed logic contract address
      * @param entryPoint the entry point contract address
      */
     constructor(private owner: string, private address: string, private entryPoint: string) {}
@@ -23,11 +25,11 @@ export class WalletContract {
      * The wallet proxy contract instance
      */
     private get contract() {
-        return new this.web3.eth.Contract(WalletProxyABI as AbiItem[]) as unknown as WalletProxy
+        return createContract<WalletProxy>(this.web3, ZERO_ADDRESS, WalletProxyABI as AbiItem[])
     }
 
     /**
-     * Encoded initialize parameters of WalletContract
+     * Encoded initialize parameters of ContractWallet
      */
     private get data() {
         const abi = WalletABI.find((x) => x.name === 'initialize' && x.type === 'function')
@@ -46,7 +48,7 @@ export class WalletContract {
      */
     get initCode() {
         return this.contract
-            .deploy({
+            ?.deploy({
                 data: WalletProxyByteCode,
                 arguments: [this.owner, this.address, this.data],
             })

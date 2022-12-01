@@ -20,6 +20,20 @@ const sns: Plugin.SNSAdaptor.Definition = {
             ApplicationEntryID: base.ID,
             icon: <Icons.Web3ProfileCard />,
             name: <Trans i18nKey="name" ns={base.ID} />,
+            features: [
+                {
+                    name: <Trans i18nKey="plugin_avatar_feature_general_user_name" />,
+                    description: <Trans i18nKey="plugin_avatar_feature_general_user_description" />,
+                },
+                {
+                    name: <Trans i18nKey="plugin_avatar_feature_token_name" />,
+                    description: <Trans i18nKey="plugin_avatar_feature_token_description" />,
+                },
+                {
+                    name: <Trans i18nKey="plugin_avatar_feature_nft_name" />,
+                    description: <Trans i18nKey="plugin_avatar_feature_nft_description" />,
+                },
+            ],
         },
     ],
     AvatarRealm: {

@@ -29,8 +29,7 @@ export function useGasSchema(
                     .string()
                     .min(1, t.gas_settings_error_gas_limit_absence())
                     .refine(
-                        (gasLimit) =>
-                            isGreaterThanOrEqualTo(gasLimit, (transaction?.gas as string | undefined) ?? 21000),
+                        (gasLimit) => isGreaterThanOrEqualTo(gasLimit, transaction?.gas ?? 21000),
                         t.gas_settings_error_gas_limit_too_low(),
                     ),
                 gasPrice: zod

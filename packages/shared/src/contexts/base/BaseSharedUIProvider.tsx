@@ -1,5 +1,5 @@
 import { createContext, PropsWithChildren, useContext, useMemo } from 'react'
-import { ValueRef } from '@dimensiondev/holoflows-kit'
+import { ValueRef } from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared-base-ui'
 import type { SharedComponentOverwrite } from './types.js'
 

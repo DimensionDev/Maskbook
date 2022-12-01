@@ -62,6 +62,7 @@ export interface Strategy {
         decimals?: number
         symbol: string
     }
+    network: string
     __typename: string
 }
 

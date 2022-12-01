@@ -67,6 +67,7 @@ export enum SourceType {
     CoinMarketCap = 'CoinMarketCap',
     UniswapInfo = 'UniswapInfo',
     CF = 'CloudFlare',
+    GoPlus = 'GoPlus',
 
     // NFT assets
     Rabby = 'Rabby',
@@ -157,7 +158,8 @@ export enum SocialAddressType {
     Leaderboard = '.eth Leaderboard',
     Sybil = 'Sybil',
     TwitterBlue = 'TwitterBlue',
-    Mask = 'Mask Network'
+    Mask = 'Mask Network',
+    Lens = 'Lens'
 }
 
 export enum StorageProviderType {

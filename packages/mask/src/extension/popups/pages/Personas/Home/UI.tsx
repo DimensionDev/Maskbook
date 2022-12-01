@@ -6,7 +6,7 @@ import { Navigator } from '../../../components/Navigator/index.js'
 import { Avatar, Button, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { formatPersonaFingerprint, PopupRoutes, formatPersonaName } from '@masknet/shared-base'
-import { CopyIconButton } from '../../../components/CopyIconButton/index.js'
+import { CopyIconButton } from '@masknet/shared'
 import { useI18N } from '../../../../../utils/i18n-next-ui.js'
 import { Link } from 'react-router-dom'
 

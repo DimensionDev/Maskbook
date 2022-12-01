@@ -7,7 +7,6 @@ import { z as zod } from 'zod'
 import { EthereumAddress } from 'wallet.ts'
 import { BigNumber } from 'bignumber.js'
 import {
-    addGasMargin,
     ChainId,
     explorerResolver,
     formatEthereumAddress,
@@ -388,7 +387,7 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
     )
 
     const maxAmount = useMemo(() => {
-        const gasFee = formatGweiToWei(maxFeePerGas ?? 0).multipliedBy(addGasMargin(minGasLimit ?? MIN_GAS_LIMIT))
+        const gasFee = formatGweiToWei(maxFeePerGas ?? 0).multipliedBy(minGasLimit ?? MIN_GAS_LIMIT)
         let amount_ = new BigNumber(tokenBalance ?? 0)
         amount_ = selectedAsset?.schema === SchemaType.Native ? amount_.minus(gasFee) : amount_
         return formatBalance(BigNumber.max(0, amount_).toFixed(), selectedAsset?.decimals)
@@ -429,7 +428,7 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
                 await transferCallback(transferAmount, registeredAddress, {
                     maxFeePerGas: toHex(formatGweiToWei(data.maxFeePerGas).toFixed(0)),
                     maxPriorityFeePerGas: toHex(formatGweiToWei(data.maxPriorityFeePerGas).toFixed(0)),
-                    gas: new BigNumber(data.gasLimit).toNumber(),
+                    gas: data.gasLimit,
                 })
                 return
             }
@@ -437,7 +436,7 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
             await transferCallback(transferAmount, data.address, {
                 maxFeePerGas: toHex(formatGweiToWei(data.maxFeePerGas).toFixed(0)),
                 maxPriorityFeePerGas: toHex(formatGweiToWei(data.maxPriorityFeePerGas).toFixed(0)),
-                gas: new BigNumber(data.gasLimit).toNumber(),
+                gas: data.gasLimit,
             })
         },
         [selectedAsset, transferCallback, registeredAddress, Others],

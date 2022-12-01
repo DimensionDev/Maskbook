@@ -21,7 +21,7 @@ import { MaskAPI } from './Mask/index.js'
 import { MaskX_API } from './MaskX/index.js'
 import { MetaSwapAPI } from './MetaSwap/index.js'
 import { AstarAPI } from './Astar/index.js'
-import { GoPlusLabsAPI } from './GoPlusLabs/index.js'
+import { GoPlusLabsAPI, GoPlusAuthorizationAPI } from './GoPlusLabs/index.js'
 import { NextIDProofAPI, NextIDStorageAPI } from './NextID/index.js'
 import { AlchemyEVM_API, AlchemyFlowAPI } from './Alchemy/index.js'
 import { Web3GasOptionAPI } from './EVM/index.js'
@@ -44,12 +44,13 @@ import { MirrorAPI } from './Mirror/index.js'
 import { MindsAPI } from './Minds/index.js'
 import { FuseTrendingAPI } from './Fuse/index.js'
 import { CryptoScamDBAPI } from './CryptoScamDB/index.js'
-import { SmartPayBundlerAPI } from './SmartPay/index.js'
+import { SmartPayAccountAPI, SmartPayBundlerAPI, SmartPayFunderAPI } from './SmartPay/index.js'
 import { NomicsAPI } from './Nomics/index.js'
 import { DSearchAPI } from './DSearch/index.js'
 import { MulticallAPI } from './Multicall/index.js'
 import { ENS_API } from './ENS/index.js'
 import { SpaceID_API } from './SpaceID/index.js'
+import { LensAPI } from './Lens/index.js'
 
 export * from './types/index.js'
 
@@ -72,6 +73,7 @@ export const MaskX = new MaskX_API()
 export const Minds = new MindsAPI()
 export const Instagram = new InstagramAPI()
 export const GoPlusLabs = new GoPlusLabsAPI()
+export const GoPlusAuthorization = new GoPlusAuthorizationAPI()
 export const R2D2 = new R2D2API()
 export const DeBank = new DeBankAPI()
 export const DSearch = new DSearchAPI()
@@ -129,6 +131,11 @@ export const FuseTrending = new FuseTrendingAPI()
 
 // Smart Pay
 export const SmartPayBundler = new SmartPayBundlerAPI()
+export const SmartPayFunder = new SmartPayFunderAPI()
+export const SmartPayAccount = new SmartPayAccountAPI()
 
 // EVM multicall
 export const Multicall = new MulticallAPI()
+
+// Lens
+export const Lens = new LensAPI()
