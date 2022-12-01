@@ -1,5 +1,5 @@
-import type { LogHubBase } from '@masknet/shared-base'
 import { useMount } from 'react-use'
+import type { LogHubBase } from '../types/Log.js'
 import { useLoggerContext } from './context.js'
 
 export const useMountLog = (value: string | object, logger: LogHubBase) => {

@@ -7,17 +7,17 @@ import type {
     ExtensionSite,
     NetworkPluginID,
     NextIDPlatform,
+    PostIdentifier,
     PersonaIdentifier,
     PersonaInformation,
     PluginID,
     PopupRoutes,
-    LogHubBase,
-    PostIdentifier,
     ProfileIdentifier,
     ScopedStorage,
 } from '@masknet/shared-base'
 import type { TypedMessage } from '@masknet/typed-message'
 import type { Web3Helper } from '@masknet/web3-helpers'
+import type { LogHubBase } from '@masknet/web3-providers'
 import type {
     ChainDescriptor,
     NetworkDescriptor,

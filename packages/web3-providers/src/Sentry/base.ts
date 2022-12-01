@@ -1,5 +1,6 @@
-import type { LogHubBase, PersonaIdentifier, ProfileIdentifier } from '@masknet/shared-base'
+import type { PersonaIdentifier, ProfileIdentifier } from '@masknet/shared-base'
 import Web3Utils from 'web3-utils'
+import type { LogHubBase } from '../types/Log.js'
 
 // @ts-ignore
 const Sentry = globalThis.Sentry as Sentry

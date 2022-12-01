@@ -1,5 +1,5 @@
-import type { LogHubBase } from '@masknet/shared-base'
 import { createContext, useContext, useMemo } from 'react'
+import type { LogHubBase } from '../types/Log.js'
 import { LogHub, LogPlatform } from './base.js'
 
 interface LoggerContext {

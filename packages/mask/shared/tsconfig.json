@@ -10,7 +10,7 @@
   "exclude": ["./plugin-infra/register.js"],
   "references": [
     { "path": "../../shared-base" },
-    { "path": "../../shared" },
+    { "path": "../../web3-providers" },
     { "path": "../../plugin-infra" },
     { "path": "../../sandboxed-plugin-runtime/src/runtime" }
   ]
