@@ -729,9 +729,11 @@ export interface Wallet {
     storedKeyInfo?: api.IStoredKeyInfo
     /** the Mask SDK stored key info */
     /** record created at */
-    createdAt: Date
+    createdAt?: Date
     /** record updated at */
-    updatedAt: Date
+    updatedAt?: Date
+    /** The address of wallet's owner */
+    owner?: string
 }
 
 export interface Transaction<ChainId, SchemaType> {
@@ -843,6 +845,8 @@ export interface WalletProvider<ChainId, ProviderType, Web3Provider, Web3> {
     connect(chainId?: ChainId): Promise<Account<ChainId>>
     /** Dismiss the connection. */
     disconnect(): Promise<void>
+
+    getNames?: () => Promise<Record<string, string>>
 }
 
 export interface ProviderOptions<ChainId> {
@@ -952,6 +956,8 @@ export interface Connection<
     ): Promise<Record<string, string>>
     /** Get the currently connected account. */
     getAccount(initial?: Web3ConnectionOptions): Promise<string>
+    /** Only used in Mask, get all mask wallets */
+    getWallets?: (initial?: Web3ConnectionOptions) =>  Promise<Wallet[]>
     /** Get the currently chain id. */
     getChainId(initial?: Web3ConnectionOptions): Promise<ChainId>
     /** Get the latest block by number. */
@@ -1448,6 +1454,8 @@ export interface ProviderState<ChainId, ProviderType, NetworkType> {
     connect: (chainId: ChainId, providerType: ProviderType) => Promise<Account<ChainId>>
     /** Disconnect with the provider. */
     disconnect: (providerType: ProviderType) => Promise<void>
+
+    getNames?: () => Promise<Record<string,string>>
 }
 export interface ConnectionState<
     ChainId,

@@ -73,7 +73,6 @@ export class MaskWalletProvider extends BaseProvider implements EVM_Provider {
 
     override async connect(chainId: ChainId) {
         const siteType = getSiteType()
-        if (siteType === ExtensionSite.Popup) throw new Error('Cannot connect wallet')
 
         // connected
         if (chainId === this.chainId && isValidAddress(this.account)) {

@@ -163,6 +163,7 @@ export enum EthereumMethodType {
     // only for mask
     MASK_LOGIN = 'MASK_LOGIN',
     MASK_LOGOUT = 'MASK_LOGOUT',
+    MASK_ACCOUNTS = 'MASK_ACCOUNTS',
     MASK_REPLACE_TRANSACTION = 'mask_replaceTransaction',
 }
 

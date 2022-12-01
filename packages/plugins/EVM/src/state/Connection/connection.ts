@@ -55,6 +55,7 @@ import {
     TransactionStatusType,
     resolveIPFS_URL,
     resolveCrossOriginURL,
+    Wallet,
 } from '@masknet/web3-shared-base'
 import type { BaseContract } from '@masknet/web3-contracts/types/types.js'
 import { createContext, dispatch } from './composer.js'
@@ -135,6 +136,9 @@ class Connection implements EVM_Connection {
                                     break
                                 case EthereumMethodType.MASK_LOGOUT:
                                     context.write(await this.Provider?.disconnect(options.providerType))
+                                    break
+                                case EthereumMethodType.MASK_ACCOUNTS:
+                                    if (options.providerType !== ProviderType.MaskWallet) context.write([])
                                     break
                                 default: {
                                     const provider =
@@ -746,6 +750,17 @@ class Connection implements EVM_Connection {
             options,
         )
         return first(accounts) ?? ''
+    }
+
+    async getWallets(initial?: EVM_Web3ConnectionOptions) {
+        const options = this.getOptions(initial)
+        const wallets = await this.hijackedRequest<Wallet[]>(
+            {
+                method: EthereumMethodType.MASK_ACCOUNTS,
+            },
+            options,
+        )
+        return wallets
     }
 
     async getChainId(initial?: EVM_Web3ConnectionOptions) {
