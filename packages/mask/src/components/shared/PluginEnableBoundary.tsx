@@ -12,7 +12,6 @@ const useStyles = makeStyles()((theme) => ({
     root: {
         display: 'inline-flex',
         justifyContent: 'center',
-        // gap: theme.spacing(1),
         borderRadius: 20,
         width: 254,
         height: 40,
@@ -51,9 +50,7 @@ export const PluginEnableBoundary = memo<PluginEnableBoundaryProps>((props) => {
                     color="primary"
                     onClick={onEnablePlugin}
                     sx={{ mt: 6 }}>
-                    <Typography fontSize={14} fontWeight={700}>
-                        {t('enable_plugin_boundary')}
-                    </Typography>
+                    {t('enable_plugin_boundary')}
                 </ActionButton>
             </Stack>
         )
