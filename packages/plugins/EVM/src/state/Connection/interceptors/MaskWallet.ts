@@ -33,16 +33,18 @@ export class MaskWallet implements Middleware<Context> {
                     ChainId.Matic,
                     localWallets.map((x) => x.address),
                 )
-                const names = await Web3StateSettings.value.Provider?.getNames?.()
                 context.write([
                     ...localWallets,
                     ...contractAccounts.map<Wallet>((x) => ({
+                        id: x.address,
+                        name: 'Smart Pay',
                         address: x.address,
-                        owner: x.owner,
-                        name: names?.[x.address.toLowerCase()] ?? 'Smart Pay',
                         hasDerivationPath: false,
                         hasStoredKeyInfo: false,
-                        id: x.address,
+                        configurable: true,
+                        createdAt: new Date(),
+                        updatedAt: new Date(),
+                        owner: x.owner,
                     })),
                 ])
                 break

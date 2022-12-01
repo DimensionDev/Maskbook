@@ -754,13 +754,12 @@ class Connection implements EVM_Connection {
 
     async getWallets(initial?: EVM_Web3ConnectionOptions) {
         const options = this.getOptions(initial)
-        const wallets = await this.hijackedRequest<Wallet[]>(
+        return this.hijackedRequest<Wallet[]>(
             {
                 method: EthereumMethodType.MASK_ACCOUNTS,
             },
             options,
         )
-        return wallets
     }
 
     async getChainId(initial?: EVM_Web3ConnectionOptions) {

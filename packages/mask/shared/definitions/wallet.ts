@@ -24,8 +24,8 @@ export interface LegacyWalletRecord {
     _public_key_?: string
     /** Wallet recover from private key */
     _private_key_?: string
-    createdAt?: Date
-    updatedAt?: Date
+    createdAt: Date
+    updatedAt: Date
 }
 export interface WalletRecord {
     id: string
@@ -37,6 +37,6 @@ export interface WalletRecord {
     derivationPath?: string
     latestDerivationPath?: string
     storedKeyInfo?: api.IStoredKeyInfo
-    createdAt?: Date
-    updatedAt?: Date
+    createdAt: Date
+    updatedAt: Date
 }

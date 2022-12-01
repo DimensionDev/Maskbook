@@ -89,8 +89,8 @@ export namespace NormalizedBackup {
         publicKey: Option<EC_Public_JsonWebKey>
         privateKey: Option<EC_Private_JsonWebKey>
         mnemonic: Option<Mnemonic>
-        createdAt?: Date
-        updatedAt?: Date
+        createdAt: Date
+        updatedAt: Date
     }
     export interface SettingsBackup {
         grantedHostPermissions: string[]
