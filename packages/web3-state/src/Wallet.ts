@@ -19,7 +19,7 @@ export class WalletState implements Web3WalletState {
         return this.context.addWallet(id, wallet)
     }
 
-    async removeWallet(id: string) {
-        return this.context.removeWallet(id)
+    async removeWallet(id: string, password?: string) {
+        return this.context.removeWallet(id, password)
     }
 }

@@ -11,7 +11,7 @@ import { WalletMessages, WalletRPC } from '../../../../plugins/Wallet/messages.j
 import SelectWallet from './SelectWallet/index.js'
 import { useWalletLockStatus } from './hooks/useWalletLockStatus.js'
 import { WalletHeader } from './components/WalletHeader/index.js'
-import { useChainContext, useWallet, useWeb3State } from '@masknet/web3-hooks-base'
+import { useChainContext, useWallet, useWeb3State, Web3ContextProvider } from '@masknet/web3-hooks-base'
 import { TransactionDescriptorType } from '@masknet/web3-shared-base'
 import { EthereumMethodType, PayloadEditor } from '@masknet/web3-shared-evm'
 
@@ -100,36 +100,38 @@ export default function Wallet() {
 
     return (
         <Suspense fallback={<LoadingPlaceholder />}>
-            <WalletContext.Provider>
-                <WalletHeader />
-                {loading ? (
-                    <LoadingPlaceholder />
-                ) : (
-                    <Routes>
-                        <Route path="*" element={!wallet ? <WalletStartUp /> : <WalletAssets />} />
-                        <Route path={r(PopupRoutes.WalletRecovered)} element={<WalletRecovery />} />
-                        <Route path={r(PopupRoutes.LegacyWalletRecovered)} element={<LegacyWalletRecovery />} />
-                        <Route path={r(PopupRoutes.ImportWallet)} element={<ImportWallet />} />
-                        <Route path={r(PopupRoutes.AddDeriveWallet)} element={<AddDeriveWallet />} />
-                        <Route path={r(PopupRoutes.WalletSettings)} element={<WalletSettings />} />
-                        <Route path={r(PopupRoutes.WalletRename)} element={<WalletRename />} />
-                        <Route path={r(PopupRoutes.DeleteWallet)} element={<DeleteWallet />} />
-                        <Route path={r(PopupRoutes.CreateWallet)} element={<CreateWallet />} />
-                        <Route path={r(PopupRoutes.SwitchWallet)} element={<SwitchWallet />} />
-                        <Route path={r(PopupRoutes.BackupWallet)} element={<BackupWallet />} />
-                        <Route path={r(PopupRoutes.AddToken)} element={<AddToken />} />
-                        <Route path={r(PopupRoutes.WalletSignRequest)} element={<SignRequest />} />
-                        <Route path={r(PopupRoutes.GasSetting)} element={<GasSetting />} />
-                        <Route path={r(PopupRoutes.TokenDetail)} element={<TokenDetail />} />
-                        <Route path={r(PopupRoutes.Transfer)} element={<Transfer />} />
-                        <Route path={r(PopupRoutes.ContractInteraction)} element={<ContractInteraction />} />
-                        <Route path={r(PopupRoutes.SelectWallet)} element={<SelectWallet />} />
-                        <Route path={r(PopupRoutes.Unlock)} element={<Unlock />} />
-                        <Route path={r(PopupRoutes.SetPaymentPassword)} element={<SetPaymentPassword />} />
-                        <Route path={r(PopupRoutes.ReplaceTransaction)} element={<ReplaceTransaction />} />
-                    </Routes>
-                )}
-            </WalletContext.Provider>
+            <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM }}>
+                <WalletContext.Provider>
+                    <WalletHeader />
+                    {loading ? (
+                        <LoadingPlaceholder />
+                    ) : (
+                        <Routes>
+                            <Route path="*" element={!wallet ? <WalletStartUp /> : <WalletAssets />} />
+                            <Route path={r(PopupRoutes.WalletRecovered)} element={<WalletRecovery />} />
+                            <Route path={r(PopupRoutes.LegacyWalletRecovered)} element={<LegacyWalletRecovery />} />
+                            <Route path={r(PopupRoutes.ImportWallet)} element={<ImportWallet />} />
+                            <Route path={r(PopupRoutes.AddDeriveWallet)} element={<AddDeriveWallet />} />
+                            <Route path={r(PopupRoutes.WalletSettings)} element={<WalletSettings />} />
+                            <Route path={r(PopupRoutes.WalletRename)} element={<WalletRename />} />
+                            <Route path={r(PopupRoutes.DeleteWallet)} element={<DeleteWallet />} />
+                            <Route path={r(PopupRoutes.CreateWallet)} element={<CreateWallet />} />
+                            <Route path={r(PopupRoutes.SwitchWallet)} element={<SwitchWallet />} />
+                            <Route path={r(PopupRoutes.BackupWallet)} element={<BackupWallet />} />
+                            <Route path={r(PopupRoutes.AddToken)} element={<AddToken />} />
+                            <Route path={r(PopupRoutes.WalletSignRequest)} element={<SignRequest />} />
+                            <Route path={r(PopupRoutes.GasSetting)} element={<GasSetting />} />
+                            <Route path={r(PopupRoutes.TokenDetail)} element={<TokenDetail />} />
+                            <Route path={r(PopupRoutes.Transfer)} element={<Transfer />} />
+                            <Route path={r(PopupRoutes.ContractInteraction)} element={<ContractInteraction />} />
+                            <Route path={r(PopupRoutes.SelectWallet)} element={<SelectWallet />} />
+                            <Route path={r(PopupRoutes.Unlock)} element={<Unlock />} />
+                            <Route path={r(PopupRoutes.SetPaymentPassword)} element={<SetPaymentPassword />} />
+                            <Route path={r(PopupRoutes.ReplaceTransaction)} element={<ReplaceTransaction />} />
+                        </Routes>
+                    )}
+                </WalletContext.Provider>
+            </Web3ContextProvider>
         </Suspense>
     )
 }
