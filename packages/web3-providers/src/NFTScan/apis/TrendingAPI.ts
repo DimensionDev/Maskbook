@@ -2,7 +2,12 @@ import urlcat from 'urlcat'
 import { compact } from 'lodash-es'
 import { DataProvider } from '@masknet/public-api'
 import { createLookupTableResolver, EMPTY_LIST } from '@masknet/shared-base'
-import { TokenType, attemptUntil, NonFungibleCollectionOverview } from '@masknet/web3-shared-base'
+import {
+    TokenType,
+    attemptUntil,
+    NonFungibleCollectionOverview,
+    NonFungibleTokenActivity,
+} from '@masknet/web3-shared-base'
 import { ChainId, isValidChainId } from '@masknet/web3-shared-evm'
 import { TrendingAPI } from '../../types/index.js'
 import type { EVM, Response } from '../types/index.js'
@@ -124,6 +129,27 @@ export class NFTScanTrendingAPI implements TrendingAPI.Provider<ChainId> {
         const range = resolveNFTScanRange(days)
         const records = await this.getCollectionTrending(chainId, coinId, range)
         return records.map((x) => [x.begin_timestamp, x.average_price])
+    }
+
+    async getCoinActivities(
+        chainId: ChainId,
+        contractAddress: string,
+    ): Promise<NonFungibleTokenActivity[] | undefined> {
+        if (!isValidChainId(chainId)) return
+        const path = urlcat('/nftscan/getTransactionByNftContract', {
+            contract: contractAddress,
+            filterType: 'all',
+            pageIndex: 0,
+            pageSize: 20,
+        })
+        const response = await fetchFromNFTScanWebAPI<
+            Response<{ nft_tx_record: NonFungibleTokenActivity[]; nft_tx_total: number }>
+        >(chainId, path)
+        if (!response?.data.nft_tx_record) return
+        return response.data.nft_tx_record.map((x) => ({
+            ...x,
+            transactionLink: `${resolveNFTScanHostName(chainId as NFTScanChainId)}/${x.transaction_hash}`,
+        }))
     }
 
     async getCoinTrending(

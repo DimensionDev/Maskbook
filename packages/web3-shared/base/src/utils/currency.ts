@@ -58,22 +58,22 @@ export function formatCurrency(
     const resolvedBoundaries = defaults({}, boundaries, DEFAULT_BOUNDARIES)
     const resolvedSymbols = defaults({}, symbols, DEFAULT_CRYPTO_CURRENCY_SYMBOLS)
 
-    const symbol = DEFAULT_CRYPTO_CURRENCY_SYMBOLS[currency]
+    const symbol = currency ? DEFAULT_CRYPTO_CURRENCY_SYMBOLS[currency] : ''
 
     const formatter = new Intl.NumberFormat('en-US', {
         style: 'currency',
-        currency: symbol ? 'USD' : currency,
+        currency: symbol || symbol === '' ? 'USD' : currency,
         currencyDisplay: 'narrowSymbol',
     })
 
     if (bgValue.isZero()) {
-        return symbol ? `0.00 ${symbol}` : formatter.format(0)
+        return symbol !== undefined ? `0.00 ${symbol}` : formatter.format(0)
     }
 
     const isLessMinValue = bgValue.isLessThan(resolvedBoundaries.min)
 
     if (isLessMinValue) {
-        if (symbol) return `< ${DEFAULT_BOUNDARIES.min} ${symbol}`
+        if (symbol !== undefined) return `< ${DEFAULT_BOUNDARIES.min} ${symbol}`
         const value = digitalCurrencyModifier(formatter.formatToParts(resolvedBoundaries.min), resolvedSymbols)
             .map(({ type, value }) => {
                 switch (type) {
@@ -89,7 +89,7 @@ export function formatCurrency(
         return `< ${value}`
     }
 
-    if (symbol) return `${bgValue.toNumber()} ${symbol}`
+    if (symbol !== undefined) return `${bgValue.toNumber()} ${symbol}`
 
     const digitalCurrencyModifierValues = digitalCurrencyModifier(
         formatter.formatToParts(bgValue.toNumber()),

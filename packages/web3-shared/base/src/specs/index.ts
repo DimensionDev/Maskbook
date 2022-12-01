@@ -123,6 +123,7 @@ export enum ActivityType {
     Transfer = 'Transfer',
     Mint = 'Mint',
     Sale = 'Sale',
+    Burn = 'Burn',
     Offer = 'Offer',
     List = 'List',
     CancelOffer = 'CancelOffer',
@@ -429,6 +430,21 @@ export interface NonFungibleCollectionOverview {
     sales24hIncrease?: string
     averagePriceIncrease24h?: string
     items?: number
+}
+
+export interface NonFungibleTokenActivity {
+    transaction_hash: string
+    transaction_method: ActivityType
+    transactionLink: string
+    transaction_time: number
+    tx_value: number
+    from_address: string
+    to_address: string
+    cover: string
+    contract: string
+    token_id: string
+    tradeToken: string
+    tradeTokenLogo: string
 }
 
 export interface NonFungibleToken<ChainId, SchemaType> extends Token<ChainId, SchemaType> {

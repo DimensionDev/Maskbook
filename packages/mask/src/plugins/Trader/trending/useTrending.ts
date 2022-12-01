@@ -1,6 +1,6 @@
 import { useAsync, useAsyncRetry } from 'react-use'
 import type { AsyncState } from 'react-use/lib/useAsyncFn.js'
-import { DataProvider } from '@masknet/public-api'
+import type { DataProvider } from '@masknet/public-api'
 import { NetworkPluginID } from '@masknet/shared-base'
 import type { TrendingAPI } from '@masknet/web3-providers'
 import { TokenType } from '@masknet/web3-shared-base'
@@ -72,7 +72,14 @@ export function useTrendingByKeyword(
 export function useTrendingOverviewByAddress(address: string, expectedChainId?: ChainId) {
     return useAsync(async () => {
         if (!address || !expectedChainId) return null
-        return PluginTraderRPC.getCoinTrendingOverview(expectedChainId, address, DataProvider.NFTScan)
+        return PluginTraderRPC.getNFT_TrendingOverview(expectedChainId, address)
+    }, [expectedChainId, address])
+}
+
+export function useNonFungibleTokenActivities(address: string, expectedChainId?: ChainId) {
+    return useAsync(async () => {
+        if (!address || !expectedChainId) return null
+        return PluginTraderRPC.getNonFungibleTokenActivities(expectedChainId, address)
     }, [expectedChainId, address])
 }
 
@@ -94,7 +101,6 @@ export function useTrendingById(
     } = useAsync(async () => {
         if (!id) return null
         if (!currency) return null
-        PluginTraderRPC.getCoinTrendingOverview(chainId, id, dataProvider)
         return PluginTraderRPC.getCoinTrending(chainId, id, currency, dataProvider).catch(() => null)
     }, [chainId, dataProvider, currency?.id, id])
 

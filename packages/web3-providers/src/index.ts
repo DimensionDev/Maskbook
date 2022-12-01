@@ -52,6 +52,7 @@ import { ENS_API } from './ENS/index.js'
 import { SpaceID_API } from './SpaceID/index.js'
 
 export * from './types/index.js'
+export * from './helpers.js'
 
 export const OpenSea = new OpenSeaAPI()
 export const LooksRare = new LooksRareAPI()

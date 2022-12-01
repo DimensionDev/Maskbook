@@ -30,6 +30,7 @@ import { CoinMarketPanel } from './CoinMarketPanel.js'
 import { PriceChart } from './PriceChart.js'
 import { DEFAULT_RANGE_OPTIONS, PriceChartDaysControl } from './PriceChartDaysControl.js'
 import { TickersTable } from './TickersTable.js'
+import { NonFungibleTickersTable } from './NonFungibleTickersTable.js'
 import { TrendingViewDeck } from './TrendingViewDeck.js'
 import { TrendingViewError } from './TrendingViewError.js'
 import { TrendingViewSkeleton } from './TrendingViewSkeleton.js'
@@ -130,7 +131,7 @@ export function TrendingView(props: TrendingViewProps) {
     const { classes } = useStyles({ isPopper })
     const theme = useTheme()
     const isMinimalMode = useIsMinimalMode(PluginID.Trader)
-    const [dataProvider, setDataProvider] = useState(dataProviders[0])
+    const [dataProvider, setDataProvider] = useState(dataProviders[2])
     const [tabIndex, setTabIndex] = useState(dataProvider !== DataProvider.UniswapInfo ? 1 : 0)
     const { chainId, networkType } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const chainIdValid = useChainIdValid(NetworkPluginID.PLUGIN_EVM, chainId)
@@ -355,7 +356,14 @@ export function TrendingView(props: TrendingViewProps) {
                 ) : null}
                 {currentTab === ContentTabs.Exchange ? (
                     <Box p={2}>
-                        <TickersTable tickers={tickers} coinType={coin.type} dataProvider={dataProvider} />
+                        {isNFT ? (
+                            <NonFungibleTickersTable
+                                address={coin.address ?? ''}
+                                chainId={coin.chainId ?? ChainId.Mainnet}
+                            />
+                        ) : (
+                            <TickersTable tickers={tickers} dataProvider={dataProvider} />
+                        )}
                     </Box>
                 ) : null}
                 {currentTab === ContentTabs.Swap && isSwappable ? (
