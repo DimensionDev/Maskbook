@@ -377,11 +377,11 @@ export const PROVIDER_DESCRIPTORS: Array<ProviderDescriptor<ChainId, ProviderTyp
         downloadLink: 'https://www.opera.com/crypto/next',
     },
     {
-        ID: `${PLUGIN_ID}_clvwallet`,
+        ID: `${PLUGIN_ID}_clover`,
         providerAdaptorPluginID: PLUGIN_ID,
-        type: ProviderType.ClvWallet,
-        name: 'ClvWallet',
-        icon: new URL('../assets/clvwallet.png', import.meta.url),
+        type: ProviderType.Clover,
+        name: 'Clover',
+        icon: new URL('../assets/clover.png', import.meta.url),
         enableRequirements: {
             supportedChainIds: isFirefox() ? [] : getEnumAsArray(ChainId).map((x) => x.value),
             supportedEnhanceableSites: isFirefox() ? [] : getEnumAsArray(EnhanceableSite).map((x) => x.value),
