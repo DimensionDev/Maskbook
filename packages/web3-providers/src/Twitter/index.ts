@@ -9,6 +9,7 @@ import {
     getDefaultUserSettings,
     getUserSettingsCached,
     getUserViaTwitterIdentity,
+    staleUserViaWebAPI,
 } from './apis/index.js'
 import { attemptUntil } from '@masknet/web3-shared-base'
 
@@ -143,7 +144,7 @@ export class TwitterAPI implements TwitterBaseAPI.Provider {
     }
 
     async staleUserByScreenName(screenName: string): Promise<TwitterBaseAPI.User | null> {
-        return this.staleUserByScreenName(screenName)
+        return staleUserViaWebAPI(screenName)
     }
 }
 
