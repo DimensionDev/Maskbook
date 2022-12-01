@@ -109,6 +109,7 @@ const Profile = ({ url }: { url: string }) => {
             </Box>
         )
     }
+
     return (
         <TabContext value={currentTab}>
             <div className={classes.root}>
@@ -135,7 +136,7 @@ const Profile = ({ url }: { url: string }) => {
                                 <Link
                                     onClick={(event) => event.stopPropagation()}
                                     style={{ width: 12, height: 12 }}
-                                    href={explorerResolver.addressLink(ChainId.Mainnet, identity?.address ?? '') ?? ''}
+                                    href={explorerResolver.addressLink(ChainId.Mainnet, identity?.address ?? '')}
                                     target="_blank"
                                     rel="noopener noreferrer">
                                     <Icons.PopupLink className={classes.PopupLink} />
