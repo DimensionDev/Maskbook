@@ -21,7 +21,7 @@
     "send_specific_tip_successfully": "Sent {{amount}} {{name}} tip successfully.",
     "tip_share": "Share",
     "tip_success_ok": "OK",
-    "tip_connect_wallet_message": "Please connect to a wallet.",
+    "tip_connect_wallet_message": "Please connect a wallet.",
     "tip_connect_wallet": "Connect Wallet",
     "search": "Search",
     "tip_type_token": "Token",

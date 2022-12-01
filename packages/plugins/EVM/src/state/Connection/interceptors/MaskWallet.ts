@@ -1,9 +1,9 @@
 import { toHex } from 'web3-utils'
 import { ChainId, EthereumMethodType } from '@masknet/web3-shared-evm'
-import type { Context, Middleware } from '../types.js'
-import { SharedContextSettings, Web3StateSettings } from '../../../settings/index.js'
 import { SmartPayAccount } from '@masknet/web3-providers'
 import type { Wallet } from '@masknet/web3-shared-base'
+import type { Context, Middleware } from '../types.js'
+import { SharedContextSettings } from '../../../settings/index.js'
 
 export class MaskWallet implements Middleware<Context> {
     async fn(context: Context, next: () => Promise<void>) {

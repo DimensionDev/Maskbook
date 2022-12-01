@@ -1,9 +1,9 @@
 import { clone, first } from 'lodash-es'
 import type { Subscription } from 'use-subscription'
 import { delay } from '@masknet/kit'
+import type { Plugin } from '@masknet/plugin-infra'
 import { getSiteType, mapSubscription, mergeSubscription, StorageObject } from '@masknet/shared-base'
 import type { Account, WalletProvider, ProviderState as Web3ProviderState } from '@masknet/web3-shared-base'
-import type { Plugin } from '@masknet/plugin-infra'
 
 export interface ProviderStorage<Account, ProviderType extends string> {
     account: Account
@@ -40,7 +40,6 @@ export class ProviderState<
             getNetworkTypeFromChainId(chainId: ChainId): NetworkType
         },
     ) {
-        const site = this.site
         const defaultValue = {
             account: {
                 account: '',
@@ -49,7 +48,9 @@ export class ProviderState<
             providerType: options.getDefaultProviderType(),
         }
 
-        const { storage } = this.context.createKVStorage('memory', {}).createSubScope(site ?? 'Provider', defaultValue)
+        const { storage } = this.context
+            .createKVStorage('memory', {})
+            .createSubScope(this.site ?? 'Provider', defaultValue)
         this.storage = storage
 
         this.setupSubscriptions()
@@ -57,8 +58,7 @@ export class ProviderState<
     }
 
     protected setupSubscriptions() {
-        const site = this.site
-        if (!site) return
+        if (!this.site) return
 
         this.providerType = mapSubscription(this.storage.providerType.subscription, (provider) => provider)
 
@@ -108,8 +108,7 @@ export class ProviderState<
                     chainId: this.options.getDefaultChainId(),
                 })
 
-                const siteType = getSiteType()
-                if (!siteType) return
+                if (!this.site) return
 
                 this.storage.providerType.setValue(this.options.getDefaultProviderType())
             })
@@ -118,8 +117,7 @@ export class ProviderState<
 
     private async setAccount(providerType: ProviderType, account: Partial<Account<ChainId>>) {
         if (this.storage.providerType.value !== providerType) return
-        const siteType = getSiteType()
-        if (!siteType) return
+        if (!this.site) return
 
         const account_ = this.storage.account.value
         const accountCopied = clone(account)
@@ -143,8 +141,7 @@ export class ProviderState<
     }
 
     private async setProvider(providerType: ProviderType) {
-        const siteType = getSiteType()
-        if (!siteType) return
+        if (!this.site) return
 
         if (this.storage.providerType.value !== providerType) {
             await this.storage.providerType.setValue(providerType)

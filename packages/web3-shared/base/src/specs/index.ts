@@ -1496,15 +1496,13 @@ export interface WalletState<Transaction> {
     /** The default derivable wallet. */
     walletPrimary?: Subscription<Wallet | null>
 
-    getWallet(id: string): Promise<Wallet>
-    getWallets(): Promise<Wallet[]>
-    addWallet(wallet: Wallet): Promise<void>
-    updateWallet(id: string, updates: Partial<Omit<Wallet, 'id' | 'address' | 'createdAt' | 'createdAt'>>): Promise<void>
-    renameWallet(id: string, name: string): Promise<void>
-    removeWallet(id: string, password?: string): Promise<void>
+    addWallet(wallet: Wallet): void
+    updateWallet(address: string, updates: Partial<Omit<Wallet, 'id' | 'address' | 'createdAt' | 'createdAt'>>): void
+    renameWallet(address: string, name: string): void
+    removeWallet(address: string, password?: string): void
 
-    signTransaction(id: string, transaction: Transaction): Promise<string>
-    signMessage(id: string, type: string, message: string, password?: string): Promise<string>
+    signTransaction(address: string, transaction: Transaction): Promise<string>
+    signMessage(address: string, type: string, message: string, password?: string): Promise<string>
 }
 export interface OthersState<ChainId, SchemaType, ProviderType, NetworkType, Transaction> {
     // #region resolvers
@@ -1604,7 +1602,7 @@ export interface Web3State<
         Web3Provider
     >
     Provider?: ProviderState<ChainId, ProviderType, NetworkType>
-    Wallet?: WalletState
+    Wallet?: WalletState<Transaction>
     Others?: OthersState<ChainId, SchemaType, ProviderType, NetworkType, Transaction>
     Storage?: Web3StorageServiceState
 }

@@ -7,7 +7,7 @@
     "game_list_title": "GameList",
     "game_list_rank": "Rank",
     "game_list_play": "Play",
-    "game_list_play_error": "Please connect wallet",
+    "game_list_play_error": "Please connect a wallet",
     "game_list_play_evm_error": "Please connect to EVM wallet",
     "game_share_btn": "Share",
     "game_share_title": "Share",

@@ -59,7 +59,9 @@ export function createWeb3State(context: Plugin.Shared.SharedUIContext): EVM_Web
             account: Provider_.account,
             providerType: Provider_.providerType,
         }),
-        Wallet: new Wallet(context),
+        Wallet: new Wallet(context, {
+            providerType: Provider_.providerType,
+        }),
         Others: new Others(context),
         Storage: new Storage(),
     }
