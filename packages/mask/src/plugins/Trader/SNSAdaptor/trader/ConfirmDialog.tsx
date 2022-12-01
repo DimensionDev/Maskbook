@@ -29,7 +29,7 @@ export interface ConfirmDialogProps {
     trade: TradeComputed
     inputToken: Web3Helper.FungibleTokenAll
     outputToken: Web3Helper.FungibleTokenAll
-    gas?: number
+    gas?: string
     gasPrice?: string
     gasConfig?: GasConfig
     onConfirm: () => void
@@ -37,7 +37,7 @@ export interface ConfirmDialogProps {
 const PERCENT_DENOMINATOR = 10000
 
 export function ConfirmDialog(props: ConfirmDialogProps) {
-    const { inputToken, outputToken, gas, gasPrice, trade, onConfirm, gasConfig } = props
+    const { inputToken, outputToken, gas = MIN_GAS_LIMIT, gasPrice, trade, onConfirm, gasConfig } = props
     const { chainId } = useChainContext()
     const { pluginID } = useNetworkContext()
     const { Others } = useWeb3State()
@@ -109,7 +109,7 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
             disableSlippageTolerance: false,
             slippageTolerance: currentSlippageSettings.value / 100,
             transaction: {
-                gas: gas ?? MIN_GAS_LIMIT,
+                gas,
                 ...(gasConfig ?? {}),
             },
         })

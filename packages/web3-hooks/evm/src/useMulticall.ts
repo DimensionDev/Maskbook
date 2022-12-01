@@ -144,8 +144,7 @@ export function useMulticallCallback(targetChainId?: ChainId, targetBlockNumber?
                         chunkArray(unresolvedCalls).map(async (chunk) => {
                             // we don't mind the actual block number of the current call
                             if (!connection) return
-                            const web3 = await connection.getWeb3()
-                            const tx = new ContractTransaction(multicallContract).encode(
+                            const tx = new ContractTransaction(multicallContract).fill(
                                 multicallContract.methods.multicall(chunk),
                                 overrides,
                             )
@@ -157,6 +156,7 @@ export function useMulticallCallback(targetChainId?: ChainId, targetBlockNumber?
 
                             if (!outputType) return
 
+                            const web3 = await connection.getWeb3()
                             const decodeResult = decodeOutputString(web3, outputType, hex) as
                                 | UnboxTransactionObject<ReturnType<Multicall['methods']['multicall']>>
                                 | undefined

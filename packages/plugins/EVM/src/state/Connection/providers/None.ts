@@ -1,6 +1,6 @@
 import type { RequestArguments } from 'web3-core'
 import type { ProviderOptions } from '@masknet/web3-shared-base'
-import { ChainId, createPayload, ProviderType } from '@masknet/web3-shared-evm'
+import { ChainId, PayloadEditor, ProviderType } from '@masknet/web3-shared-evm'
 import { BaseProvider } from './Base.js'
 import type { EVM_Provider } from '../types.js'
 import { SharedContextSettings } from '../../../settings/index.js'
@@ -15,7 +15,7 @@ export class NoneProvider extends BaseProvider implements EVM_Provider {
         options?: ProviderOptions<ChainId>,
     ): Promise<T> {
         const response = await SharedContextSettings.value.send(
-            createPayload(0, requestArguments.method, requestArguments.params),
+            PayloadEditor.fromMethod(requestArguments.method, requestArguments.params).fill(),
             options,
         )
         return response?.result as T

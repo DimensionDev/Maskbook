@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { useAsyncRetry } from 'react-use'
 import { WalletMessages } from '@masknet/plugin-wallet'
-import { getPayloadConfig } from '@masknet/web3-shared-evm'
+import { PayloadEditor } from '@masknet/web3-shared-evm'
 import { useChainContext, useWeb3State } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages.js'
@@ -13,9 +13,7 @@ export const useUnconfirmedRequest = () => {
         const payload = await WalletRPC.topUnconfirmedRequest()
         if (!payload) return
 
-        const computedPayload = getPayloadConfig(payload)
-        if (!computedPayload) return { payload }
-
+        const computedPayload = PayloadEditor.fromPayload(payload).config!
         const formatterTransaction = await TransactionFormatter?.formatTransaction(chainId, computedPayload)
         const transactionContext = await TransactionFormatter?.createContext(chainId, computedPayload)
         return {

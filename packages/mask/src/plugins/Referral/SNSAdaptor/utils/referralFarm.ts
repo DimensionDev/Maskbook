@@ -57,7 +57,7 @@ export async function runCreateERC20PairFarm(
     if (isNeededGrantPermission && rewardTokenContract) {
         const maxAllowance = new BigNumber(toWei('10000000000000', 'ether'))
 
-        const approveTx = await new ContractTransaction(rewardTokenContract).encodeWithGas(
+        const approveTx = await new ContractTransaction(rewardTokenContract).fillAll(
             rewardTokenContract.methods.approve(farmsAddr, maxAllowance),
             config,
         )
@@ -79,7 +79,7 @@ export async function runCreateERC20PairFarm(
             : []
 
     if (!farms) return
-    const tx = await new ContractTransaction(farms).encodeWithGas(
+    const tx = await new ContractTransaction(farms).fillAll(
         farms.methods.increaseReferralFarm(rewardTokenDefn, referredTokenDefn, totalFarmRewardUint128, metaState),
         config,
     )
@@ -143,7 +143,7 @@ export async function adjustFarmRewards(
         ]
 
         if (!farms) return
-        const tx = await new ContractTransaction(farms).encodeWithGas(
+        const tx = await new ContractTransaction(farms).fillAll(
             farms.methods.configureMetastate(rewardTokenDefn, referredTokenDefn, metaState),
             config,
         )
