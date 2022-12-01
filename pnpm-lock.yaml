@@ -25,7 +25,7 @@ patchedDependencies:
     hash: lwxdtt2msovfmigiutpkaty3lq
     path: patches/arweave@1.11.4.patch
   '@snapshot-labs/snapshot.js@0.4.12':
-    hash: r2lfwabkengwxg57derh27qufe
+    hash: p7agjh5ebmj425gqxjxh7jozii
     path: patches/@snapshot-labs__snapshot.js@0.4.12.patch
   '@ceramicnetwork/rpc-transport@0.3.1':
     hash: subw5upjv36ceix3wmw66isn6u
@@ -1262,6 +1262,9 @@ importers:
       '@masknet/plugin-infra':
         specifier: workspace:^
         version: link:../../plugin-infra
+      '@masknet/shared':
+        specifier: workspace:^
+        version: link:../../shared
       '@masknet/shared-base':
         specifier: workspace:^
         version: link:../../shared-base

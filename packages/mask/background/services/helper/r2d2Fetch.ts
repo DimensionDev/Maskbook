@@ -76,22 +76,17 @@ async function squashedFetch(request: Request, init?: RequestInit): Promise<Resp
     // hit a cached request
     const cache = await caches.open(rule)
     const hit = await cache.match(request)
-    const date = hit?.headers.get('x-cache-date')
-
-    if (hit && date) {
-        const expired = new Date(date).getTime() + CACHE_RULES[rule] > Date.now()
-        if (!expired) return hit
-    }
+    if (hit) return hit
 
     // send the request & cache the response
     const response = await originalFetch(request.clone(), init)
     if (response.ok && response.status === 200) {
-        const request_ = request.clone()
-        const response_ = response.clone()
+        await cache.put(request.clone(), response.clone())
 
-        // store the cached date as a UTC string
-        response_.headers.set('x-cache-date', new Date().toUTCString())
-        await cache.put(request_, response_)
+        // stale the cache
+        setTimeout(async () => {
+            await cache.delete(request.clone())
+        }, CACHE_RULES[rule])
     }
     return response
 }
