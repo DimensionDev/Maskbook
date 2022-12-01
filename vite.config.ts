@@ -20,5 +20,6 @@ export default defineConfig({
             '@masknet/typed-message': createURL('./packages/typed-message/base/src/index.ts'),
             '@masknet/encryption': createURL('./packages/encryption/src/index.ts'),
         },
+        setupFiles: ['./setups/index.ts'],
     },
 })

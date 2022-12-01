@@ -14,7 +14,7 @@ import {
 } from '@masknet/shared-base'
 import { KVStorage } from '@masknet/shared'
 import { ChainId, isValidAddress, isZeroAddress } from '@masknet/web3-shared-evm'
-import { MaskX, MaskX_BaseAPI, NextIDProof, NextIDStorage, RSS3, Twitter } from '@masknet/web3-providers'
+import { Lens, MaskX, MaskX_BaseAPI, NextIDProof, NextIDStorage, RSS3, Twitter } from '@masknet/web3-providers'
 import { ENS_Resolver } from './NameService/ENS.js'
 import { ChainbaseResolver } from './NameService/Chainbase.js'
 import { Web3StateSettings } from '../settings/index.js'
@@ -25,9 +25,16 @@ const SID_RE = /[^\t\n\v()[\]]{1,256}\.bnb\b/i
 const ADDRESS_FULL = /0x\w{40,}/i
 const RSS3_URL_RE = /https?:\/\/(?<name>[\w.]+)\.(rss3|cheers)\.bio/
 const RSS3_RNS_RE = /(?<name>[\w.]+)\.rss3/
+const LENS_RE = /[^\t\n\v()[\]]{1,256}\.lens\b/i
 
 function getENSNames(userId: string, nickname: string, bio: string) {
     return [userId.match(ENS_RE), nickname.match(ENS_RE), bio.match(ENS_RE)]
+        .map((result) => result?.[0] ?? '')
+        .filter(Boolean)
+}
+
+function getLensNames(nickname: string, bio: string, homepage: string) {
+    return [nickname.match(LENS_RE), bio.match(LENS_RE), homepage.match(LENS_RE)]
         .map((result) => result?.[0] ?? '')
         .filter(Boolean)
 }
@@ -203,6 +210,20 @@ export class IdentityService extends IdentityServiceState<ChainId> {
         return compact(allSettled.map((x) => (x.status === 'fulfilled' ? x.value : undefined)).filter(Boolean))
     }
 
+    private async getSocialAddressFromLens({ nickname = '', bio = '', homepage = '' }: SocialIdentity) {
+        const names = getLensNames(nickname, bio, homepage)
+        if (!names.length) return
+
+        const allSettled = await Promise.allSettled(
+            names.map(async (name) => {
+                const profile = await Lens.getProfileByHandle(name)
+                if (!profile) return
+                return this.createSocialAddress(SocialAddressType.Lens, profile.ownedBy, name)
+            }),
+        )
+        return compact(allSettled.map((x) => (x.status === 'fulfilled' ? x.value : undefined)).filter(Boolean))
+    }
+
     /** Read a social address from Twitter Blue. */
     private async getSocialAddressFromTwitterBlue({ identifier }: SocialIdentity) {
         const userId = identifier?.userId
@@ -277,6 +298,7 @@ export class IdentityService extends IdentityServiceState<ChainId> {
             this.getSocialAddressFromTwitterBlue(identity),
             this.getSocialAddressesFromNextID(identity),
             this.getSocialAddressesFromMaskX(identity),
+            this.getSocialAddressFromLens(identity),
         ])
         const identities = allSettled
             .flatMap((x) => (x.status === 'fulfilled' ? x.value : []))

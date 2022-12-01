@@ -158,7 +158,8 @@ export enum SocialAddressType {
     Leaderboard = '.eth Leaderboard',
     Sybil = 'Sybil',
     TwitterBlue = 'TwitterBlue',
-    Mask = 'Mask Network'
+    Mask = 'Mask Network',
+    Lens = 'Lens'
 }
 
 export enum StorageProviderType {
