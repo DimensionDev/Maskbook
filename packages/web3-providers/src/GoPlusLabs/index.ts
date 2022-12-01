@@ -1,16 +1,21 @@
 import urlcat from 'urlcat'
 import { first, isEmpty, parseInt, uniqBy } from 'lodash-es'
-import { ChainId, isValidChainId, SchemaType } from '@masknet/web3-shared-evm'
+import { ChainId, getGoPlusLabsConstants, isValidChainId, SchemaType } from '@masknet/web3-shared-evm'
 import type { AuthorizationAPI, SecurityAPI } from '../index.js'
 import { fetchJSON } from '../helpers.js'
 import { GO_PLUS_LABS_ROOT_URL, INFINITE_VALUE } from './constants.js'
 import { SecurityMessageLevel } from './types.js'
 import { SecurityMessages } from './rules.js'
+import { FungibleTokenSpender, isSameAddress, NonFungibleContractSpender } from '@masknet/web3-shared-base'
 import { getAllMaskDappContractInfo } from '../Rabby/helpers.js'
 import type { GoPlusNFTInfo, GoPlusTokenInfo, GoPlusTokenSpender, NFTSpenderInfo } from './type.js'
 import { EMPTY_LIST } from '@masknet/shared-base'
-import { FungibleTokenSpender, isSameAddress, NonFungibleContractSpender } from '@masknet/web3-shared-base'
 import { BigNumber } from 'bignumber.js'
+
+function checkInWhitelist(chainId = ChainId.Mainnet, address: string) {
+    const { WHITE_LISTS } = getGoPlusLabsConstants(chainId)
+    return WHITE_LISTS?.some((x) => isSameAddress(x, address))
+}
 
 export interface SupportedChainResponse {
     id: string
@@ -185,11 +190,12 @@ export const createTokenSecurity = (
     const makeMessageList = getMessageList(tokenSecurity)
     const risk_item_quantity = makeMessageList.filter((x) => x.level === SecurityMessageLevel.High).length
     const warn_item_quantity = makeMessageList.filter((x) => x.level === SecurityMessageLevel.Medium).length
+    const inWhitelist = checkInWhitelist(chainId, tokenSecurity.contract)
     return {
         ...tokenSecurity,
-        is_high_risk,
-        risk_item_quantity,
-        warn_item_quantity,
+        is_high_risk: inWhitelist ? false : is_high_risk,
+        risk_item_quantity: inWhitelist ? 0 : risk_item_quantity,
+        warn_item_quantity: inWhitelist ? 0 : warn_item_quantity,
         message_list: makeMessageList,
     }
 }
