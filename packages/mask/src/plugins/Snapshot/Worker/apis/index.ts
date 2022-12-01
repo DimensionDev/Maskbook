@@ -27,6 +27,7 @@ async function fetchProposalFromGraphql(id: string) {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
+            operationName: 'Proposal',
             query: `query Proposal($id: String!) {
                 proposal(id: $id) {
                     id
@@ -46,6 +47,7 @@ async function fetchProposalFromGraphql(id: string) {
                     strategies {
                       name
                       params
+                      network
                       __typename
                     }
                     space {

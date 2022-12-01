@@ -15,16 +15,12 @@ import { useGasSchema } from './hooks/index.js'
 
 function getDefaultValues(transaction: Transaction, gasOptions: Record<GasOptionType, GasOption>) {
     return {
-        gasLimit: (transaction.gas as string | number | undefined)?.toString() ?? '21000',
-        gasPrice: formatWeiToGwei(
-            (transaction.gasPrice as string) || gasOptions.normal.suggestedMaxFeePerGas,
-        ).toString(),
+        gasLimit: transaction.gas?.toString() ?? '21000',
+        gasPrice: formatWeiToGwei(transaction.gasPrice || gasOptions.normal.suggestedMaxFeePerGas).toString(),
         maxPriorityFeePerGas: formatWeiToGwei(
-            (transaction.maxPriorityFeePerGas as string) || gasOptions.normal.suggestedMaxPriorityFeePerGas,
+            transaction.maxPriorityFeePerGas || gasOptions.normal.suggestedMaxPriorityFeePerGas,
         ).toString(),
-        maxFeePerGas: formatWeiToGwei(
-            (transaction.maxFeePerGas as string) || gasOptions.normal.suggestedMaxFeePerGas,
-        ).toString(),
+        maxFeePerGas: formatWeiToGwei(transaction.maxFeePerGas || gasOptions.normal.suggestedMaxFeePerGas).toString(),
     }
 }
 

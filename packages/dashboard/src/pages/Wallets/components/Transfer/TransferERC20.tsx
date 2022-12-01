@@ -18,7 +18,6 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import { MaskColorVar, MaskTextField } from '@masknet/theme'
 import { TokenType, FungibleToken, isGreaterThan, isZero, multipliedBy, rightShift } from '@masknet/web3-shared-base'
 import {
-    addGasMargin,
     SchemaType,
     formatWeiToEther,
     ChainId,
@@ -111,7 +110,7 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
 
     const maxAmount = useMemo(() => {
         const price = is1559Supported && maxFee ? new BigNumber(maxFee) : gasPrice
-        const gasFee = multipliedBy(addGasMargin(gasLimit), price)
+        const gasFee = multipliedBy(gasLimit, price)
 
         let amount_ = new BigNumber(tokenBalance || '0')
         amount_ = selectedToken.schema === SchemaType.Native ? amount_.minus(gasFee) : amount_

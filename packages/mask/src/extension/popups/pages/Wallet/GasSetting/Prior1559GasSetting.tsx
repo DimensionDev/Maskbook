@@ -1,13 +1,15 @@
 import { memo, useEffect, useMemo, useState } from 'react'
+import { useAsync, useAsyncFn, useUpdateEffect } from 'react-use'
+import { Controller, useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import { BigNumber } from 'bignumber.js'
-import { makeStyles } from '@masknet/theme'
-import { PopupRoutes, NetworkPluginID } from '@masknet/shared-base'
-import { formatCurrency, GasOptionType, isLessThan, pow10, TransactionDescriptorType } from '@masknet/web3-shared-base'
-import { useI18N } from '../../../../../utils/index.js'
-import { useAsync, useAsyncFn, useUpdateEffect } from 'react-use'
-import { WalletRPC } from '../../../../../plugins/Wallet/messages.js'
-import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest.js'
+import { isEmpty } from 'lodash-es'
+import { toHex } from 'web3-utils'
+import { z as zod } from 'zod'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { Typography } from '@mui/material'
+import { LoadingButton } from '@mui/lab'
+import { useChainContext, useGasOptions, useNativeToken, useNativeTokenPrice, useWeb3 } from '@masknet/web3-hooks-base'
 import {
     ChainId,
     formatGweiToWei,
@@ -15,15 +17,13 @@ import {
     ChainIdOptionalRecord,
     formatWeiToEther,
 } from '@masknet/web3-shared-evm'
-import { z as zod } from 'zod'
-import { Controller, useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { Typography } from '@mui/material'
+import { makeStyles } from '@masknet/theme'
+import { PopupRoutes, NetworkPluginID } from '@masknet/shared-base'
+import { formatCurrency, GasOptionType, isLessThan, pow10, TransactionDescriptorType } from '@masknet/web3-shared-base'
+import { useI18N } from '../../../../../utils/index.js'
+import { WalletRPC } from '../../../../../plugins/Wallet/messages.js'
+import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest.js'
 import { StyledInput } from '../../../components/StyledInput/index.js'
-import { LoadingButton } from '@mui/lab'
-import { isEmpty } from 'lodash-es'
-import { toHex } from 'web3-utils'
-import { useChainContext, useGasOptions, useNativeToken, useNativeTokenPrice, useWeb3 } from '@masknet/web3-hooks-base'
 
 const useStyles = makeStyles()((theme) => ({
     options: {
@@ -200,10 +200,10 @@ export const Prior1559GasSetting = memo(() => {
             if (value?.formatterTransaction._tx.gasPrice) {
                 const minGasPrice = minGasPriceOfChain[chainId as ChainId]
                 // if the gas price in payload is lower than minimum value
-                if (minGasPrice && isLessThan(value.formatterTransaction._tx.gasPrice as number, minGasPrice)) {
+                if (minGasPrice && isLessThan(value.formatterTransaction._tx.gasPrice, minGasPrice)) {
                     setValue('gasPrice', minGasPrice.toString())
                 }
-                setValue('gasPrice', formatWeiToGwei(value.formatterTransaction._tx.gasPrice as number).toString())
+                setValue('gasPrice', formatWeiToGwei(value.formatterTransaction._tx.gasPrice).toString())
             } else {
                 setOption(1)
             }

@@ -3,6 +3,7 @@ import Web3Utils from 'web3-utils'
 import { EthereumAddress } from 'wallet.ts'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { decodeEvents, ContractTransaction } from '@masknet/web3-shared-evm'
+import { toFixed } from '@masknet/web3-shared-base'
 import { useChainContext, useWeb3Connection, useWeb3 } from '@masknet/web3-hooks-base'
 import type { NftRedPacket } from '@masknet/web3-contracts/types/NftRedPacket.js'
 import { useNftRedPacketContract } from './useNftRedPacketContract.js'
@@ -56,16 +57,13 @@ export function useCreateNftRedpacketCallback(
                 tokenIdList,
             ]
 
-            const tx = await new ContractTransaction(nftRedPacketContract).encodeWithGas(
+            const tx = await new ContractTransaction(nftRedPacketContract).fillAll(
                 nftRedPacketContract.methods.create_red_packet(...params),
                 {
                     from: account,
-                    gas: await nftRedPacketContract.methods
-                        .create_red_packet(...params)
-                        .estimateGas({ from: account })
-                        .catch((error) => {
-                            throw error
-                        }),
+                    gas: toFixed(
+                        await nftRedPacketContract.methods.create_red_packet(...params).estimateGas({ from: account }),
+                    ),
                     chainId,
                 },
             )

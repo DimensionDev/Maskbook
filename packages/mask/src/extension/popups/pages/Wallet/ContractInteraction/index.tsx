@@ -1,10 +1,11 @@
+import { toHex } from 'web3-utils'
 import { memo, useMemo, useState } from 'react'
 import { useAsync, useAsyncFn, useUpdateEffect } from 'react-use'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { makeStyles } from '@masknet/theme'
 import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest.js'
 import { formatGweiToWei, formatWeiToEther, isNativeTokenAddress } from '@masknet/web3-shared-evm'
-import { FormattedBalance, FormattedCurrency, TokenIcon } from '@masknet/shared'
+import { FormattedBalance, FormattedCurrency, TokenIcon, CopyIconButton } from '@masknet/shared'
 import { Link, Typography } from '@mui/material'
 import { useI18N } from '../../../../../utils/index.js'
 import { PopupRoutes, NetworkPluginID } from '@masknet/shared-base'
@@ -12,7 +13,6 @@ import { LoadingButton } from '@mui/lab'
 import { unreachable } from '@masknet/kit'
 import { BigNumber } from 'bignumber.js'
 import { LoadingPlaceholder } from '../../../components/LoadingPlaceholder/index.js'
-import { toHex } from 'web3-utils'
 import {
     useChainContext,
     useChainIdSupport,
@@ -32,7 +32,6 @@ import {
     pow10,
     TransactionDescriptorType,
 } from '@masknet/web3-shared-base'
-import { CopyIconButton } from '../../../components/CopyIconButton/index.js'
 import { useTitle } from '../../../hook/useTitle.js'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages.js'
 
@@ -250,8 +249,8 @@ const ContractInteraction = memo(() => {
     }, [request])
 
     // Wei
-    const gasPriceEIP1559 = new BigNumber((maxFeePerGas as number) ?? defaultPrices?.maxFeePerGas ?? 0, 16)
-    const gasPricePriorEIP1559 = new BigNumber((gasPrice as string) ?? defaultPrices?.gasPrice ?? 0)
+    const gasPriceEIP1559 = new BigNumber(maxFeePerGas ?? defaultPrices?.maxFeePerGas ?? 0, 16)
+    const gasPricePriorEIP1559 = new BigNumber(gasPrice ?? defaultPrices?.gasPrice ?? 0)
     const gasFee = (isSupport1559 ? gasPriceEIP1559 : gasPricePriorEIP1559)
         .multipliedBy(gas ?? 0)
         .integerValue()

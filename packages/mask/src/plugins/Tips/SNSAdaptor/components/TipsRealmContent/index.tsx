@@ -57,9 +57,6 @@ const useStyles = makeStyles<{ buttonSize: number }, 'postTipsButton'>()((theme,
         borderRadius: '100%',
     },
     profileTipsButton: {
-        position: 'absolute',
-        left: 0,
-        top: 0,
         width: buttonSize,
         height: buttonSize,
         borderRadius: '100%',
@@ -117,7 +114,14 @@ export const TipsRealmContent: FC<Plugin.SNSAdaptor.TipsRealmOptions> = ({
                     ],
                 }}>
                 <PluginGuide step={1}>
-                    <Stack display="inline-block" width="38px" height="38px" position="relative" top={2}>
+                    <Stack
+                        display="flex"
+                        width="38px"
+                        height="38px"
+                        position="relative"
+                        top={0}
+                        alignItems="center"
+                        justifyContent="center">
                         {button}
                     </Stack>
                 </PluginGuide>
