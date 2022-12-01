@@ -1,6 +1,6 @@
 import urlcat from 'urlcat'
 import { first, isEmpty, parseInt, uniqBy } from 'lodash-es'
-import { ChainId, getWhiteListsConstants, isValidChainId, SchemaType } from '@masknet/web3-shared-evm'
+import { ChainId, getGoPlusLabsConstants, isValidChainId, SchemaType } from '@masknet/web3-shared-evm'
 import type { AuthorizationAPI, SecurityAPI } from '../index.js'
 import { fetchJSON } from '../helpers.js'
 import { GO_PLUS_LABS_ROOT_URL, INFINITE_VALUE } from './constants.js'
@@ -13,8 +13,8 @@ import { EMPTY_LIST } from '@masknet/shared-base'
 import { BigNumber } from 'bignumber.js'
 
 function checkInWhitelist(chainId = ChainId.Mainnet, address: string) {
-    const { GOPLUSLABS_WHITE_LISTS } = getWhiteListsConstants(chainId)
-    return GOPLUSLABS_WHITE_LISTS?.some((x) => isSameAddress(x, address))
+    const { WHITE_LISTS } = getGoPlusLabsConstants(chainId)
+    return WHITE_LISTS?.some((x) => isSameAddress(x, address))
 }
 
 export interface SupportedChainResponse {
