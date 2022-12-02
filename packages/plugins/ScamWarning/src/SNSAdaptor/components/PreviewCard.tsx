@@ -1,4 +1,3 @@
-import * as React from 'react'
 import { Stack, ThemeProvider, Typography } from '@mui/material'
 import { useAsync } from 'react-use'
 import { CryptoScamDB } from '@masknet/web3-providers'
@@ -8,7 +7,7 @@ import { makeStyles, MaskDarkTheme } from '@masknet/theme'
 import { usePluginWrapper } from '@masknet/plugin-infra/content-script'
 
 interface PreviewCardProps {
-    links: string[]
+    links: readonly string[]
 }
 
 const useStyles = makeStyles()((theme) => ({
