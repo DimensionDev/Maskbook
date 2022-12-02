@@ -13,7 +13,7 @@ import { initialPersonaInformation } from './PersonaContextInitialData.js'
 import { NEXT_ID_PLATFORM_SOCIAL_MEDIA_MAP } from '@masknet/shared'
 
 function useSSRPersonaInformation() {
-    const [personas, setPersonas] = useState(initialPersonaInformation)
+    const [personas, setPersonas] = useState(useValueRef(initialPersonaInformation))
     const revalidate = useCallback(
         () => void Services.Identity.queryOwnedPersonaInformation(false).then(setPersonas),
         [],

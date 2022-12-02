@@ -1,8 +1,8 @@
 import { unreachable } from '@masknet/kit'
-import { createGlobalSettings, createInternalSettings } from '../../../shared/legacy-settings/createSettings.js'
+import { createGlobalSettings, createNSSettingsJSON } from '../../../shared/legacy-settings/createSettings.js'
 import { PLUGIN_ID, SLIPPAGE_DEFAULT } from './constants/index.js'
-import type { ZrxTradePool } from './types/index.js'
 import { DataProvider } from '@masknet/public-api'
+import { EMPTY_LIST, EMPTY_OBJECT } from '@masknet/shared-base'
 
 /**
  * The slippage tolerance of trader
@@ -14,16 +14,16 @@ export const currentSlippageSettings = createGlobalSettings(`${PLUGIN_ID}+slippa
  */
 export const currentSingleHopOnlySettings = createGlobalSettings(`${PLUGIN_ID}+singleHopOnly`, false)
 
-// #region trade provider general settings
-export interface TradeProviderSettings {
-    pools: ZrxTradePool[]
-}
-
+const defaultValue: Record<string, string> = EMPTY_OBJECT
 // #region the user preferred coin id
-const coinGeckoPreferredCoinId = createInternalSettings(`${PLUGIN_ID}+currentCoinGeckoPreferredCoinId`, '{}')
-const coinMarketCapPreferredCoinId = createInternalSettings(`${PLUGIN_ID}+currentCoinMarketCapPreferredCoinId`, '{}')
-const coinUniswapPreferredCoinId = createInternalSettings(`${PLUGIN_ID}+currentCoinUniswapPreferredCoinId`, '{}')
-const coinNftScanPreferredCoinId = createInternalSettings(`${PLUGIN_ID}+coinNftScanPreferredCoinId`, '{}')
+const coinGeckoPreferredCoinId = createNSSettingsJSON(PLUGIN_ID, 'currentCoinGeckoPreferredCoinId', defaultValue)
+const coinMarketCapPreferredCoinId = createNSSettingsJSON(
+    PLUGIN_ID,
+    'currentCoinMarketCapPreferredCoinId',
+    defaultValue,
+)
+const coinUniswapPreferredCoinId = createNSSettingsJSON(PLUGIN_ID, 'currentCoinUniswapPreferredCoinId', defaultValue)
+const coinNftScanPreferredCoinId = createNSSettingsJSON(PLUGIN_ID, 'coinNftScanPreferredCoinId', defaultValue)
 
 export function getCurrentPreferredCoinIdSettings(dataProvider: DataProvider) {
     switch (dataProvider) {
@@ -44,4 +44,4 @@ export function getCurrentPreferredCoinIdSettings(dataProvider: DataProvider) {
 /**
  * The approved tokens from uniswap
  */
-export const approvedTokensFromUniswap = createInternalSettings(`${PLUGIN_ID}+approvedTokens`, '[]')
+export const approvedTokensFromUniswap = createNSSettingsJSON<string[]>(PLUGIN_ID, 'approvedTokens', EMPTY_LIST)

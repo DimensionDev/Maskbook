@@ -4,13 +4,13 @@ import { ShadowRootIsolation } from '@masknet/theme'
 import { PluginWrapperComponent, PluginWrapperMethods, usePluginI18NField } from './index.js'
 import { PluginWrapperMethodsContext } from './usePluginWrapper.js'
 import type { Plugin } from '../types.js'
-import { getAvailablePlugins } from './getAvailablePlugins.js'
+import { getAvailablePlugins } from '../utils/getAvailablePlugins.js'
 
 type Inject<T> = Plugin.InjectUI<T>
 type Raw<T> = Plugin.InjectUIRaw<T>
 
 export function createInjectHooksRenderer<PluginDefinition extends Plugin.Shared.Definition, PropsType extends object>(
-    usePlugins: () => PluginDefinition[],
+    usePlugins: () => readonly PluginDefinition[],
     pickInjectorHook: (plugin: PluginDefinition) => undefined | Inject<PropsType>,
     PluginWrapperComponent?: PluginWrapperComponent<PluginDefinition>,
 ) {

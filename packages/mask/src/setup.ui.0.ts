@@ -1,5 +1,6 @@
 import type { KVStorageBackend } from '@masknet/shared-base'
 import { setupMaskKVStorageBackend } from '../shared/kv-storage.js'
+import { setupLegacySettingsAtNonBackground } from '../shared/legacy-settings/createSettings.js'
 import Services from './extension/service.js'
 import { contentFetch } from './utils/fetcher.js'
 
@@ -22,6 +23,7 @@ const indexedDB: KVStorageBackend = {
     },
 }
 setupMaskKVStorageBackend(indexedDB, memory)
+setupLegacySettingsAtNonBackground(Services.Settings.getLegacySettingsInitialValue)
 
 // Temporary, will be removed when the Mask SDK is ready
 Reflect.set(globalThis, 'r2d2Fetch', (req: RequestInfo, init?: RequestInit) => {
