@@ -1,38 +1,28 @@
 import { ALL_EVENTS } from '@servie/events'
-import { useSubscription, Subscription } from 'use-subscription'
 import { createManager } from './manage.js'
 import type { Plugin } from '../types.js'
+import { ValueRefWithReady } from '@masknet/shared-base'
+import { isEqual } from 'lodash-es'
+import { useValueRef } from '@masknet/shared-base-ui'
 
 const { activated, startDaemon, events, minimalMode } = createManager((def) => def.Dashboard)
 
-const subscription: Subscription<Plugin.Dashboard.Definition[]> = (() => {
-    let value: any[] | undefined
-    events.on('activateChanged', () => (value = undefined))
-    return {
-        getCurrentValue: () => (value ??= [...activated.plugins]),
-        subscribe: (f) => events.on(ALL_EVENTS, f),
-    }
-})()
+const activatedSub = new ValueRefWithReady<Plugin.Dashboard.Definition[]>([], isEqual)
+events.on(ALL_EVENTS, () => (activatedSub.value = [...activated.plugins]))
 
-const minimalModeSub: Subscription<string[]> = (() => {
-    let value: any[] | undefined
-    events.on('minimalModeChanged', () => (value = undefined))
-    return {
-        getCurrentValue: () => (value ??= [...minimalMode]),
-        subscribe: (f) => events.on('minimalModeChanged', f),
-    }
-})()
+const minimalModeSub = new ValueRefWithReady<string[]>([], isEqual)
+events.on('minimalModeChanged', () => (minimalModeSub.value = [...minimalMode]))
 
 export function useIsMinimalModeDashBoard(pluginID: string) {
-    return useSubscription(minimalModeSub).includes(pluginID)
+    return useValueRef(minimalModeSub).includes(pluginID)
 }
 
 export function useActivatedPluginsDashboard() {
-    return useSubscription(subscription)
+    return useValueRef(activatedSub)
 }
 
 export function useActivatedPluginDashboard(pluginID: string) {
-    const plugins = useSubscription(subscription)
+    const plugins = useValueRef(activatedSub)
     return plugins.find((x) => x.ID === pluginID)
 }
 

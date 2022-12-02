@@ -1,4 +1,5 @@
 import { timeout } from '@masknet/kit'
+import { None, Option, Some } from 'ts-results-es'
 
 /**
  * Make sure that the storage is used serially.
@@ -67,10 +68,11 @@ const storage = new MutexStorage()
  * @deprecated
  * @internal
  */
-export async function __deprecated__getStorage<T>(key: string): Promise<T | undefined> {
-    if (typeof browser === 'undefined' || !browser.storage) return
+export async function __deprecated__getStorage<T>(key: string): Promise<Option<T>> {
+    if (typeof browser === 'undefined' || !browser.storage) return None
     const value = await storage.getStorage(key)
-    return value as T
+    if (value === undefined) return None
+    return Some(value as any)
 }
 
 /**

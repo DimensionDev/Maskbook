@@ -1,32 +1,23 @@
 import { useMemo } from 'react'
-import { useSubscription, Subscription } from 'use-subscription'
 import { unreachable } from '@masknet/kit'
-import type { NetworkPluginID } from '@masknet/shared-base'
+import { NetworkPluginID, ValueRefWithReady } from '@masknet/shared-base'
 import { createManager } from './manage.js'
 import { getPluginDefine } from './store.js'
 import type { CurrentSNSNetwork, Plugin } from '../types.js'
+import { isEqual } from 'lodash-es'
+import { useValueRef } from '@masknet/shared-base-ui'
 
 const { events, activated, startDaemon, minimalMode } = createManager((def) => def.SNSAdaptor)
 
-const activatedSub: Subscription<Plugin.SNSAdaptor.Definition[]> = (() => {
-    let value: any[] | undefined
-    events.on('activateChanged', () => (value = undefined))
-    return {
-        getCurrentValue: () => (value ??= [...activated.plugins]),
-        subscribe: (f) => events.on('activateChanged', f),
-    }
-})()
-const minimalModeSub: Subscription<string[]> = (() => {
-    let value: any[] | undefined
-    events.on('minimalModeChanged', () => (value = undefined))
-    return {
-        getCurrentValue: () => (value ??= [...minimalMode]),
-        subscribe: (f) => events.on('minimalModeChanged', f),
-    }
-})()
+const activatedSub = new ValueRefWithReady<Plugin.SNSAdaptor.Definition[]>([], isEqual)
+events.on('activateChanged', () => (activatedSub.value = [...activated.plugins]))
+
+const minimalModeSub = new ValueRefWithReady<string[]>([], isEqual)
+events.on('minimalModeChanged', () => (minimalModeSub.value = [...minimalMode]))
+
 export function useActivatedPluginsSNSAdaptor(minimalModeEqualsTo: 'any' | boolean) {
-    const minimalMode = useSubscription(minimalModeSub)
-    const result = useSubscription(activatedSub)
+    const minimalMode = useValueRef(minimalModeSub)
+    const result = useValueRef(activatedSub)
     return useMemo(() => {
         if (minimalModeEqualsTo === 'any') return result
         else if (minimalModeEqualsTo === true) return result.filter((x) => minimalMode.includes(x.ID))
@@ -41,7 +32,7 @@ useActivatedPluginsSNSAdaptor.visibility = {
 }
 
 export function useIsMinimalMode(pluginID: string) {
-    return useSubscription(minimalModeSub).includes(pluginID)
+    return useValueRef(minimalModeSub).includes(pluginID)
 }
 
 /**
@@ -52,7 +43,7 @@ export function useIsMinimalMode(pluginID: string) {
  */
 export function useActivatedPluginSNSAdaptor(pluginID: string, minimalModeEqualsTo: 'any' | boolean) {
     const plugins = useActivatedPluginsSNSAdaptor(minimalModeEqualsTo)
-    const minimalMode = useSubscription(minimalModeSub)
+    const minimalMode = useValueRef(minimalModeSub)
 
     return useMemo(() => {
         const result = plugins.find((x) => x.ID === pluginID)

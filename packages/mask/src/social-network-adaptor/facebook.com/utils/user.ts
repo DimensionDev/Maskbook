@@ -1,4 +1,4 @@
-import { EnhanceableSite } from '@masknet/shared-base'
+import { ValueRef } from '@masknet/shared-base'
 import {
     bioDescriptionSelectorOnMobile,
     searchAvatarSelector,
@@ -13,16 +13,15 @@ import {
 } from './selector.js'
 import { collectNodeText } from '../../../utils/index.js'
 import { isMobileFacebook } from './isMobile.js'
-import { bioDescription, personalHomepage } from '../../../../shared/legacy-settings/settings.js'
 
-export const getNickName = () => {
+export function getNickName() {
     const node = isMobileFacebook ? searchNickNameSelectorOnMobile().evaluate() : searchNickNameSelector().evaluate()
     if (!node) return ''
 
     return collectNodeText(node)
 }
 
-export const getAvatar = () => {
+export function getAvatar() {
     const node = isMobileFacebook
         ? searchFacebookAvatarOnMobileSelector().evaluate()
         : searchAvatarSelector().evaluate()
@@ -36,21 +35,22 @@ export const getAvatar = () => {
     return imageURL.trim()
 }
 
-export const getBioDescription = () => {
+const bioDescription = new ValueRef('')
+export function getBioDescription() {
     const intro = searchIntroSectionSelector().evaluate()
     const node = isMobileFacebook ? bioDescriptionSelectorOnMobile().evaluate() : searchBioSelector().evaluate()
 
     if (intro && node) {
         const text = collectNodeText(node)
-        bioDescription[EnhanceableSite.Facebook].value = text
+        bioDescription.value = text
     } else if (intro) {
-        bioDescription[EnhanceableSite.Facebook].value = ''
+        bioDescription.value = ''
     }
 
-    return bioDescription[EnhanceableSite.Facebook].value
+    return bioDescription.value
 }
 
-export const getFacebookId = () => {
+export function getFacebookId() {
     const node = isMobileFacebook ? searchUserIdSelectorOnMobile().evaluate() : searchUserIdSelector().evaluate()
 
     if (!node) return ''
@@ -63,7 +63,7 @@ export const getFacebookId = () => {
 
 const FACEBOOK_AVATAR_ID_MATCH = /(\w+).(?:png|jpg|gif|bmp)/
 
-export const getAvatarId = (avatarURL: string) => {
+export function getAvatarId(avatarURL: string) {
     if (!avatarURL) return ''
     const _url = new URL(avatarURL)
     const match = _url.pathname.match(FACEBOOK_AVATAR_ID_MATCH)
@@ -71,7 +71,8 @@ export const getAvatarId = (avatarURL: string) => {
     return match[1]
 }
 
-export const getPersonalHomepage = () => {
+const homepageCache = new ValueRef('')
+export function getPersonalHomepage() {
     const intro = searchIntroSectionSelector().evaluate()
     const node = searchHomepageSelector().evaluate()
     if (intro && node) {
@@ -79,10 +80,10 @@ export const getPersonalHomepage = () => {
         if (text && !text.startsWith('http')) {
             text = 'http://' + text
         }
-        personalHomepage[EnhanceableSite.Facebook].value = text
+        homepageCache.value = text
     } else if (intro) {
-        personalHomepage[EnhanceableSite.Facebook].value = ''
+        homepageCache.value = ''
     }
 
-    return personalHomepage[EnhanceableSite.Facebook].value
+    return homepageCache.value
 }
