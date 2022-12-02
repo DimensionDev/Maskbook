@@ -25,7 +25,7 @@ function useDisabledPlugins() {
     return disabledPlugins
 }
 
-export function useDisabledPluginSuggestionFromPost(postContent: Option<string>, metaLinks: string[]) {
+export function useDisabledPluginSuggestionFromPost(postContent: Option<string>, metaLinks: readonly string[]) {
     const disabled = useDisabledPlugins().filter((x) => x.contribution?.postContent)
 
     const { some } = postContent
