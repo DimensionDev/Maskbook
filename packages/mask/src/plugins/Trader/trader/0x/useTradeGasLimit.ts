@@ -1,11 +1,10 @@
-import type { TradeComputed, SwapQuoteResponse } from '../../types/index.js'
-import { useMemo } from 'react'
-import { SUPPORTED_CHAIN_ID_LIST } from './constants.js'
 import { pick } from 'lodash-es'
+import { useMemo } from 'react'
 import { useAsync } from 'react-use'
+import type { TradeComputed, SwapQuoteResponse } from '../../types/index.js'
+import { SUPPORTED_CHAIN_ID_LIST } from './constants.js'
 import { useChainContext, useNetworkContext, useWeb3Connection } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { BigNumber } from 'bignumber.js'
 import type { ChainId } from '@masknet/web3-shared-evm'
 
 export function useTradeGasLimit(tradeComputed: TradeComputed<SwapQuoteResponse> | null) {
@@ -28,8 +27,7 @@ export function useTradeGasLimit(tradeComputed: TradeComputed<SwapQuoteResponse>
             !SUPPORTED_CHAIN_ID_LIST.includes(targetChainId as ChainId) ||
             !config
         )
-            return 0
-        const gas = await connection.estimateTransaction(config)
-        return new BigNumber(gas).toNumber()
+            return '0'
+        return connection.estimateTransaction(config)
     }, [targetChainId, tradeComputed, config, connection, pluginID])
 }

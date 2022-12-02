@@ -23,7 +23,7 @@ export class TransactionWatcher extends TransactionWatcherState<ChainId, Transac
             subscriptions,
             {
                 defaultBlockDelay: 15,
-                getTransactionCreator: (tx) => (tx.from as string | undefined) ?? '',
+                getTransactionCreator: (tx) => tx.from ?? '',
             },
         )
     }

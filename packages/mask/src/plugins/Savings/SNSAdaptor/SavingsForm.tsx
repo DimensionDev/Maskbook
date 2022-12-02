@@ -15,6 +15,7 @@ import {
 import {
     useChainContext,
     useFungibleTokenBalance,
+    useWeb3State,
     useFungibleTokenPrice,
     useNativeToken,
     useWeb3,
@@ -113,6 +114,7 @@ export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFo
     const { value: nativeTokenBalance } = useFungibleTokenBalance(NetworkPluginID.PLUGIN_EVM, nativeToken?.address, {
         chainId,
     })
+    const { Others } = useWeb3State()
 
     // #region form variables
     const { value: inputTokenBalance } = useFungibleTokenBalance(
@@ -128,6 +130,11 @@ export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFo
         () => (tab === TabType.Deposit ? new BigNumber(inputTokenBalance || '0') : protocol.balance),
         [tab, protocol.balance, inputTokenBalance],
     )
+
+    const balanceGasMinus = Others?.isNativeTokenAddress(protocol.bareToken.address)
+        ? balanceAsBN.minus(estimatedGas)
+        : balanceAsBN
+
     const needsSwap = protocol.type === ProtocolType.Lido && tab === TabType.Withdraw
 
     const { loading } = useAsync(async () => {
@@ -151,14 +158,14 @@ export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFo
         if (tokenAmount.isZero() || !inputAmount) return t('plugin_trader_error_amount_absence')
         if (isLessThan(tokenAmount, 0)) return t('plugin_trade_error_input_amount_less_minimum_amount')
 
-        if (isLessThan(balanceAsBN.minus(estimatedGas), tokenAmount)) {
+        if (isLessThan(balanceGasMinus, tokenAmount)) {
             return t('plugin_trader_error_insufficient_balance', {
                 symbol: tab === TabType.Deposit ? protocol.bareToken.symbol : protocol.stakeToken.symbol,
             })
         }
 
         return ''
-    }, [inputAmount, tokenAmount, nativeTokenBalance, balanceAsBN])
+    }, [inputAmount, tokenAmount, nativeTokenBalance, balanceGasMinus])
 
     const { value: tokenPrice = 0 } = useFungibleTokenPrice(
         NetworkPluginID.PLUGIN_EVM,
@@ -294,7 +301,7 @@ export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFo
                             <div className={classes.inputWrap}>
                                 <FungibleTokenInput
                                     amount={inputAmount}
-                                    maxAmount={balanceAsBN.minus(estimatedGas).toString()}
+                                    maxAmount={balanceGasMinus.toString()}
                                     balance={balanceAsBN.toString()}
                                     label={t('plugin_savings_amount')}
                                     token={protocol.bareToken}

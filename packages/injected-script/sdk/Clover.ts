@@ -1,6 +1,6 @@
 import { InjectedProvider } from './Base.js'
 
-export class ClvWalletProvider extends InjectedProvider {
+export class CloverProvider extends InjectedProvider {
     constructor() {
         super('clover')
     }

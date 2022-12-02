@@ -1,4 +1,9 @@
 {
     "__plugin_name": "CyberConnect",
-    "__plugin_description": "Decentralized social graph protocol for user-centric Web3."
+    "__plugin_description": "Decentralized social graph protocol for user-centric Web3.",
+    "followings": "Followings",
+    "followers": "Followers",
+    "no_data": "No data",
+    "follow_now": "Follow Now",
+    "unfollow": "Unfollow"
 }

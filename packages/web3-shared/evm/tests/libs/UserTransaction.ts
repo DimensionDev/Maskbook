@@ -24,16 +24,8 @@ describe('UserTransaction', () => {
         userOperation,
     )
 
-    test('sender', () => {
-        expect(userTransaction.sender).toBe(userOperation.sender)
-    })
-
-    test('initCode', () => {
-        expect(userTransaction.initCode).toBe(userOperation.initCode)
-    })
-
     test('hasPaymaster', () => {
-        expect(userTransaction.hasPaymaster).toBeFalsy()
+        expect(userTransaction.hasPaymaster).toBe(false)
     })
 
     test('pack', () => {

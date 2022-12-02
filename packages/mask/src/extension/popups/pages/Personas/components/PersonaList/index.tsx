@@ -12,7 +12,7 @@ import { Icons } from '@masknet/icons'
 import { useNavigate } from 'react-router-dom'
 import Services from '../../../../../service.js'
 import { useHover } from 'react-use'
-import { CopyIconButton } from '../../../../components/CopyIconButton/index.js'
+import { CopyIconButton } from '@masknet/shared'
 import { PersonaContext } from '../../hooks/usePersonaContext.js'
 import { Trash2 } from 'react-feather'
 

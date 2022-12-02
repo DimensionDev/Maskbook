@@ -6,7 +6,7 @@ import { parseURLs } from '@masknet/shared-base'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import Profile from './Profile.js'
 
-const isCyberConnectUrl = (x: string): boolean => x.includes('app.cyberconnect.me')
+const isCyberConnectUrl = (x: string): boolean => !!x.match(/app\.cyberconnect\.me\/.+\/(0x[\dA-Fa-f]{40}|\w+.eth)/)
 
 function Renderer({ url }: { url: string }) {
     usePluginWrapper(true)

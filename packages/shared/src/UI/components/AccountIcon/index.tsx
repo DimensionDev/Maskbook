@@ -91,6 +91,7 @@ export function AccountIcon({ socialAccount, classes: externalClasses }: Account
         SocialAddressType.RSS3,
         SocialAddressType.SOL,
         SocialAddressType.TwitterBlue,
+        SocialAddressType.Lens,
     ].find((x) => supportedAddressTypes.includes(x))
 
     return (

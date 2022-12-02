@@ -10,7 +10,7 @@ import { WalletRPC } from '../../../../../plugins/Wallet/messages.js'
 import { useI18N } from '../../../../../utils/index.js'
 import Services from '../../../../service.js'
 import { WalletItem } from './WalletItem.js'
-import { useChainIdValid, useWallets, useChainContext } from '@masknet/web3-hooks-base'
+import { useChainIdValid, useWallets, useChainContext, useWeb3Connection } from '@masknet/web3-hooks-base'
 import { getRegisteredWeb3Networks } from '@masknet/plugin-infra'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { ChainIcon, WalletIcon } from '@masknet/shared'
@@ -90,7 +90,7 @@ const SelectWallet = memo(() => {
     const { classes } = useStyles()
     const location = useLocation()
     const navigate = useNavigate()
-
+    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
     const networks = getRegisteredWeb3Networks().filter(
         (x) => x.networkSupporterPluginID === NetworkPluginID.PLUGIN_EVM,
     ) as Array<Web3Helper.Web3NetworkDescriptor<NetworkPluginID.PLUGIN_EVM>>
@@ -131,7 +131,7 @@ const SelectWallet = memo(() => {
             return
         }
 
-        await WalletRPC.updateMaskAccount({
+        connection?.connect({
             chainId,
             account: selected,
         })
@@ -139,7 +139,7 @@ const SelectWallet = memo(() => {
             await WalletRPC.resolveMaskAccount([selected])
         }
         return Services.Helper.removePopupWindow()
-    }, [chainId, selected, isPopup])
+    }, [chainId, selected, isPopup, connection])
 
     useEffect(() => {
         if (!selected && wallets.length) setSelected(first(wallets)?.address ?? '')

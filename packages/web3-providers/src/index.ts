@@ -44,12 +44,13 @@ import { MirrorAPI } from './Mirror/index.js'
 import { MindsAPI } from './Minds/index.js'
 import { FuseTrendingAPI } from './Fuse/index.js'
 import { CryptoScamDBAPI } from './CryptoScamDB/index.js'
-import { SmartPayAccountAPI, SmartPayBundlerAPI } from './SmartPay/index.js'
+import { SmartPayAccountAPI, SmartPayBundlerAPI, SmartPayFunderAPI } from './SmartPay/index.js'
 import { NomicsAPI } from './Nomics/index.js'
 import { DSearchAPI } from './DSearch/index.js'
 import { MulticallAPI } from './Multicall/index.js'
 import { ENS_API } from './ENS/index.js'
 import { SpaceID_API } from './SpaceID/index.js'
+import { LensAPI } from './Lens/index.js'
 
 export * from './types/index.js'
 
@@ -130,7 +131,11 @@ export const FuseTrending = new FuseTrendingAPI()
 
 // Smart Pay
 export const SmartPayBundler = new SmartPayBundlerAPI()
+export const SmartPayFunder = new SmartPayFunderAPI()
 export const SmartPayAccount = new SmartPayAccountAPI()
 
 // EVM multicall
 export const Multicall = new MulticallAPI()
+
+// Lens
+export const Lens = new LensAPI()

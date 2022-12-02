@@ -15,7 +15,7 @@
     "MathWallet.ts",
     "Opera.ts",
     "WalletLink.ts",
-    "ClvWallet.ts",
+    "Clover.ts",
     "utils.ts"
   ],
   "references": [{ "path": "../shared/" }]

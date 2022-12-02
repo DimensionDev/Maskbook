@@ -17,9 +17,7 @@ export class Create2Factory {
     }
 
     /** Derive all deploy addresses from the given initCode. */
-    derive(initCode: string) {
-        return Array.from({ length: Create2Factory.MAX_DERIVATION_NUM }).map((_, i) =>
-            this.getDeployAddress(initCode, i),
-        )
+    derive(initCode: string, length = Create2Factory.MAX_DERIVATION_NUM) {
+        return Array.from({ length }).map((_, i) => this.getDeployAddress(initCode, i))
     }
 }

@@ -158,7 +158,8 @@ export enum SocialAddressType {
     Leaderboard = '.eth Leaderboard',
     Sybil = 'Sybil',
     TwitterBlue = 'TwitterBlue',
-    Mask = 'Mask Network'
+    Mask = 'Mask Network',
+    Lens = 'Lens'
 }
 
 export enum StorageProviderType {
@@ -1492,7 +1493,7 @@ export interface WalletState {
     walletPrimary?: Subscription<Wallet | null>
 
     addWallet?: (id: string, wallet: Wallet) => Promise<void>
-    removeWallet?: (id: string) => Promise<void>
+    removeWallet?: (id: string, password?: string) => Promise<void>
     getAllWallets?: () => Promise<Wallet[]>
 }
 export interface OthersState<ChainId, SchemaType, ProviderType, NetworkType, Transaction> {

@@ -181,6 +181,7 @@ export const resolveSocialAddressLink = createLookupTableResolver<SocialAddressT
         [SocialAddressType.Sybil]: 'https://sybil.org/',
         [SocialAddressType.TwitterBlue]: '',
         [SocialAddressType.Mask]: '',
+        [SocialAddressType.Lens]: '',
     },
     () => '',
 )

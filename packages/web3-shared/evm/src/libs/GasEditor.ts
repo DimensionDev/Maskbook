@@ -1,6 +1,6 @@
 import { toHex } from 'web3-utils'
 import { GasOptionType, multipliedBy, toFixed } from '@masknet/web3-shared-base'
-import { formatWeiToEther, chainResolver } from '../utils/index.js'
+import { formatWeiToEther, chainResolver } from '../helpers/index.js'
 import type {
     ChainId,
     EIP1559GasConfig,
@@ -72,10 +72,10 @@ export class GasEditor {
 
     static fromTransaction(chainId: ChainId, transaction?: Transaction) {
         return new GasEditor(chainId, {
-            gas: transaction?.gas as number | undefined,
-            gasPrice: transaction?.gasPrice as string | undefined,
-            maxFeePerGas: transaction?.maxFeePerGas as string | undefined,
-            maxPriorityFeePerGas: transaction?.maxPriorityFeePerGas as string | undefined,
+            gas: transaction?.gas,
+            gasPrice: transaction?.gasPrice,
+            maxFeePerGas: transaction?.maxFeePerGas,
+            maxPriorityFeePerGas: transaction?.maxPriorityFeePerGas,
         })
     }
 

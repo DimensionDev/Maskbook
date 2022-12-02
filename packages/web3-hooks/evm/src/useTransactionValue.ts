@@ -3,7 +3,7 @@ import { useBalance, useChainContext } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useGasConfig } from './useGasConfig.js'
 
-export function useTransactionValue(originalValue: BigNumber.Value | undefined, gas: number | undefined) {
+export function useTransactionValue(originalValue: BigNumber.Value | undefined, gas: string | undefined) {
     const { value: balance = '0' } = useBalance(NetworkPluginID.PLUGIN_EVM)
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
@@ -13,7 +13,7 @@ export function useTransactionValue(originalValue: BigNumber.Value | undefined, 
     const estimateGasFee = !gas
         ? undefined
         : gasPrice && gasPrice !== '0'
-        ? new BigNumber(gasPrice).multipliedBy(gas * 1.5).toFixed()
+        ? new BigNumber(gasPrice).multipliedBy(gas).multipliedBy(1.5).toFixed()
         : undefined
 
     const transactionValue = new BigNumber(balance).isLessThan(

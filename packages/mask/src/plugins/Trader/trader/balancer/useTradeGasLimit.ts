@@ -1,6 +1,5 @@
 import { useAsync } from 'react-use'
 import type { AsyncState } from 'react-use/lib/useAsyncFn.js'
-import { BigNumber } from 'bignumber.js'
 import type { ExchangeProxy } from '@masknet/web3-contracts/types/ExchangeProxy.js'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useChainContext, useNetworkContext, useWeb3Connection, useWeb3State } from '@masknet/web3-hooks-base'
@@ -11,7 +10,7 @@ import { useExchangeProxyContract } from '../../contracts/balancer/useExchangePr
 import { useTradeAmount } from './useTradeAmount.js'
 import { SLIPPAGE_DEFAULT } from '../../constants/index.js'
 
-export function useTradeGasLimit(trade: TradeComputed<SwapResponse> | null): AsyncState<number> {
+export function useTradeGasLimit(trade: TradeComputed<SwapResponse> | null): AsyncState<string> {
     const { account, chainId } = useChainContext()
     const { pluginID } = useNetworkContext()
     const { Others } = useWeb3State()
@@ -34,7 +33,7 @@ export function useTradeGasLimit(trade: TradeComputed<SwapResponse> | null): Asy
             !BALANCER_ETH_ADDRESS ||
             !connection?.estimateTransaction
         )
-            return 0
+            return '0'
 
         const {
             swaps: [swaps],
@@ -72,7 +71,7 @@ export function useTradeGasLimit(trade: TradeComputed<SwapResponse> | null): Asy
         )
             transactionValue = trade.outputAmount.toFixed()
 
-        const tx = await new ContractTransaction(exchangeProxyContract).encodeWithGas(
+        const tx = await new ContractTransaction(exchangeProxyContract).fillAll(
             trade.strategy === TradeStrategy.ExactIn
                 ? exchangeProxyContract.methods.multihopBatchSwapExactIn(
                       swap_,
@@ -93,7 +92,7 @@ export function useTradeGasLimit(trade: TradeComputed<SwapResponse> | null): Asy
             },
         )
 
-        return new BigNumber(tx.gas!).toNumber()
+        return tx.gas ?? '0'
     }, [
         trade,
         exchangeProxyContract,

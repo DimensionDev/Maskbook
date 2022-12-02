@@ -9,17 +9,12 @@ import { Services } from '../../extension/service.js'
 
 const useStyles = makeStyles()((theme) => ({
     listItem: {
-        display: 'flex',
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
         padding: theme.spacing(1.5),
         borderRadius: 12,
         boxShadow:
             theme.palette.mode === 'dark'
                 ? '0px 0px 20px rgba(255, 255, 255, 0.12)'
                 : '0px 0px 20px rgba(0, 0, 0, 0.05)',
-        backdropFilter: 'blur(8px)',
         '&:hover': {
             boxShadow:
                 theme.palette.mode === 'dark'
