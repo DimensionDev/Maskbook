@@ -43,11 +43,7 @@ export class Base implements Translator {
                 delete config.maxFeePerGas
                 delete config.maxPriorityFeePerGas
 
-                if (
-                    slowOption &&
-                    normalOption &&
-                    isLessThan((config.gasPrice as string) ?? 0, slowOption.suggestedMaxFeePerGas)
-                ) {
+                if (slowOption && normalOption && isLessThan(config.gasPrice ?? 0, slowOption.suggestedMaxFeePerGas)) {
                     config.gasPrice = toHex(toFixed(normalOption.suggestedMaxFeePerGas, 0))
                 }
             }

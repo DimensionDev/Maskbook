@@ -20,7 +20,7 @@ export function useNativeTokenWrapperCallback(chainId?: ChainId) {
             if (isZero(amount)) return
 
             // estimate gas and compose transaction
-            const tx = await new ContractTransaction(wrapperContract).encodeWithGas(wrapperContract.methods.deposit(), {
+            const tx = await new ContractTransaction(wrapperContract).fillAll(wrapperContract.methods.deposit(), {
                 from: account,
                 value: amount,
                 ...gasConfig,
@@ -56,7 +56,7 @@ export function useNativeTokenWrapperCallback(chainId?: ChainId) {
             }
 
             // estimate gas and compose transaction
-            const tx = await new ContractTransaction(wrapperContract).encodeWithGas(
+            const tx = await new ContractTransaction(wrapperContract).fillAll(
                 wrapperContract.methods.withdraw(all ? wethBalance : amount),
                 {
                     from: account,

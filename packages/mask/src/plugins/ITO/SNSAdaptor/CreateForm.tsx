@@ -120,15 +120,14 @@ export interface CreateFormProps {
     onChangePoolSettings: (pollSettings: PoolSettings) => void
     onNext: () => void
     origin?: PoolSettings
-    chainId: ChainId
 }
 
 export function CreateForm(props: CreateFormProps) {
-    const { onChangePoolSettings, onNext, origin, chainId } = props
+    const { onChangePoolSettings, onNext, origin } = props
     const { t } = useI18N()
     const { classes, cx } = useStyles()
 
-    const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { ITO2_CONTRACT_ADDRESS, DEFAULT_QUALIFICATION2_ADDRESS } = useITOConstants(chainId)
 
     const currentIdentity = useCurrentIdentity()

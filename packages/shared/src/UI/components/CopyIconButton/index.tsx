@@ -2,16 +2,16 @@
 
 import { memo, useCallback, useState } from 'react'
 import { IconProps, Tooltip } from '@mui/material'
-import { useI18N } from '../../../../utils/i18n-next-ui.js'
 import { Icons } from '@masknet/icons'
 import { useCopyToClipboard } from 'react-use'
+import { useSharedI18N } from '../../../index.js'
 
 export interface CopyIconButtonProps extends IconProps {
     text: string
 }
 
 export const CopyIconButton = memo<CopyIconButtonProps>(({ text, ...props }) => {
-    const { t } = useI18N()
+    const t = useSharedI18N()
     const [, copyToClipboard] = useCopyToClipboard()
     const [open, setOpen] = useState(false)
 
@@ -31,7 +31,7 @@ export const CopyIconButton = memo<CopyIconButtonProps>(({ text, ...props }) => 
 
     return (
         <Tooltip
-            title={t('copied')}
+            title={t.copied()}
             open={open}
             onMouseLeave={() => setOpen(false)}
             disableFocusListener

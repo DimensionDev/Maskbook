@@ -22,6 +22,9 @@ const useStyles = makeStyles<{
             padding: theme.spacing(1.5, 2, '6px'),
             height: openSettings ? 'auto' : 470,
             overflow: openSettings ? 'hidden scroll' : 'hidden',
+            '&::-webkit-scrollbar': {
+                display: 'none',
+            },
         },
         settingIcon: {
             cursor: 'pointer',

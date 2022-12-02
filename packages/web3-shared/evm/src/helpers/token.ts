@@ -20,7 +20,7 @@ export function createNativeToken(chainId: ChainId) {
         nativeCurrency?.name ?? 'Ether',
         nativeCurrency?.symbol ?? 'ETH',
         nativeCurrency?.decimals ?? 18,
-        nativeCurrency?.logoURL as string | undefined,
+        nativeCurrency?.logoURL,
     )
 }
 

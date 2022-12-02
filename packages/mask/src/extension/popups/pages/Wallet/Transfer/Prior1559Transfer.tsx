@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { z as zod } from 'zod'
 import { BigNumber } from 'bignumber.js'
 import { noop } from 'lodash-es'
+import { toHex } from 'web3-utils'
 import { EthereumAddress } from 'wallet.ts'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { formatGweiToWei, formatEthereumAddress, ChainId, SchemaType, formatWeiToGwei } from '@masknet/web3-shared-evm'
@@ -25,7 +26,6 @@ import { Box, Button, Chip, Collapse, MenuItem, Popover, Typography } from '@mui
 import { StyledInput } from '../../../components/StyledInput/index.js'
 import { Icons } from '@masknet/icons'
 import { FormattedAddress, FormattedBalance, TokenIcon, useMenuConfig } from '@masknet/shared'
-import { toHex } from 'web3-utils'
 import { makeStyles } from '@masknet/theme'
 import { ExpandMore } from '@mui/icons-material'
 import { LoadingButton } from '@mui/lab'
@@ -304,7 +304,7 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
             const transferAmount = rightShift(data.amount || '0', selectedAsset?.decimals).toFixed()
             await transferCallback(transferAmount, data.address, {
                 gasPrice: toHex(formatGweiToWei(data.gasPrice).toString()),
-                gas: new BigNumber(data.gasLimit).toNumber(),
+                gas: data.gasLimit,
             })
         },
         [selectedAsset, transferCallback],

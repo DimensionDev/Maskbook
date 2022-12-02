@@ -4,8 +4,7 @@ import type { Wallet } from '@masknet/web3-shared-base'
 import { makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
 import { ListItem, ListItemText, Typography } from '@mui/material'
-import { FormattedAddress } from '@masknet/shared'
-import { CopyIconButton } from '../../../components/CopyIconButton/index.js'
+import { FormattedAddress, CopyIconButton } from '@masknet/shared'
 import { useReverseAddress, useWeb3State } from '@masknet/web3-hooks-base'
 
 const useStyles = makeStyles()({

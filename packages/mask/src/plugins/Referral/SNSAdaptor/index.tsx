@@ -40,7 +40,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     },
     ApplicationEntries: [
         (() => {
-            const icon = <ReferralFarmsIcon />
+            const icon = <ReferralFarmsIcon style={{ width: 36, height: 36 }} />
             const name = { i18nKey: '__plugin_name', fallback: 'Referral Farms' }
             return {
                 ApplicationEntryID: base.ID,

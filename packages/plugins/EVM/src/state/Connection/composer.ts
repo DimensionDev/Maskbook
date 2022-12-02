@@ -1,14 +1,5 @@
 import type { RequestArguments } from 'web3-core'
-import {
-    getPayloadChainId,
-    getPayloadConfig,
-    getPayloadFrom,
-    ProviderType,
-    EthereumMethodType,
-    Transaction,
-    ChainId,
-    getPayloadUserOperation,
-} from '@masknet/web3-shared-evm'
+import { ProviderType, EthereumMethodType, Transaction, ChainId, PayloadEditor } from '@masknet/web3-shared-evm'
 import { getError, hasError } from './error.js'
 import type { Context, EVM_Connection, EVM_Web3ConnectionOptions, Middleware } from './types.js'
 import { SharedContextSettings, Web3StateSettings } from '../../settings/index.js'
@@ -81,16 +72,20 @@ class RequestContext implements Context {
         }
     }
 
+    get editor() {
+        return PayloadEditor.fromPayload(this.request)
+    }
+
     get writeable() {
         return this._writeable
     }
 
     get account() {
-        return getPayloadFrom(this.request) ?? this._options?.account ?? this._account
+        return this.editor.from ?? this._options?.account ?? this._account
     }
 
     get chainId() {
-        return getPayloadChainId(this.request) ?? this._options?.chainId ?? this._chainId
+        return this.editor.chainId ?? this._options?.chainId ?? this._chainId
     }
 
     get providerType() {
@@ -101,12 +96,16 @@ class RequestContext implements Context {
         return this.request.method as EthereumMethodType
     }
 
+    get risky() {
+        return this.editor.risky
+    }
+
     get config() {
-        return getPayloadConfig(this.request)
+        return this.editor.config
     }
 
     get userOperation() {
-        return getPayloadUserOperation(this.request)
+        return this.editor.userOperation
     }
 
     set config(config: Transaction | undefined) {

@@ -128,7 +128,8 @@ export class TransactionFormatter extends TransactionFormatterState<ChainId, Tra
                 const userOperations = decodeUserOperations(transaction)
                 const allSettled = await Promise.allSettled(
                     userOperations.map((x) => {
-                        return this.createContext(chainId, UserTransaction.toTransaction(chainId, '', x))
+                        const userTransaction = new UserTransaction(chainId, to, x)
+                        return this.createContext(chainId, userTransaction.toTransaction())
                     }),
                 )
 

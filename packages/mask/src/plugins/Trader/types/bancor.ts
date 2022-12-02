@@ -24,7 +24,7 @@ type TradeTransaction = {
         gasPrice: string
         nonce: number
         from: string
-        value: number
+        value: string
     }
 }
 

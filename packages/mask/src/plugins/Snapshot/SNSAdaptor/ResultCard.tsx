@@ -2,7 +2,7 @@ import { useContext, useRef, useEffect, useState, useMemo, unstable_useCacheRefr
 import { Box, List, ListItem, Typography, LinearProgress, styled, Button, linearProgressClasses } from '@mui/material'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { useI18N } from '../../../utils/index.js'
-import millify from 'millify'
+import { millify } from 'millify'
 import { SnapshotContext } from '../context.js'
 import { useProposal } from './hooks/useProposal.js'
 import { useVotes } from './hooks/useVotes.js'
@@ -91,7 +91,7 @@ function Content() {
     const { t } = useI18N()
     const listRef = useRef<HTMLSpanElement[]>([])
     const [tooltipsVisible, setTooltipsVisible] = useState<readonly boolean[]>(
-        Array.from<boolean>({ length: results.length }).fill(false),
+        Array.from<boolean>({ length: results?.length ?? 0 }).fill(false),
     )
 
     useEffect(() => {
@@ -115,59 +115,65 @@ function Content() {
         <SnapshotCard
             title={proposal.isEnd ? t('plugin_snapshot_result_title') : t('plugin_snapshot_current_result_title')}>
             <List className={classes.list}>
-                {results.map((result, i) => (
-                    <ListItem className={classes.listItem} key={i}>
-                        <Box className={classes.listItemHeader}>
-                            <ShadowRootTooltip
-                                PopperProps={{
-                                    disablePortal: true,
-                                }}
-                                title={<Typography>{result.choice}</Typography>}
-                                placement="top"
-                                disableHoverListener={!tooltipsVisible[i]}
-                                classes={{ tooltip: classes.tooltip, arrow: classes.arrow }}
-                                arrow>
-                                <Typography
-                                    ref={(ref) => {
-                                        listRef.current[i] = ref!
-                                    }}
-                                    className={cx(classes.choice, classes.ellipsisText)}>
-                                    {result.choice}
-                                </Typography>
-                            </ShadowRootTooltip>
-                            <ShadowRootTooltip
-                                PopperProps={{
-                                    disablePortal: true,
-                                }}
-                                classes={{ tooltip: classes.tooltip, arrow: classes.arrow }}
-                                title={
-                                    <Typography className={classes.ellipsisText}>
-                                        {result.powerDetail
-                                            .flatMap((detail, index) => {
-                                                const name = millify.default(detail.power, {
-                                                    precision: 2,
-                                                    lowercase: true,
-                                                })
-                                                return [index === 0 ? '' : '+', name, detail.name]
-                                            })
-                                            .join(' ')}
-                                    </Typography>
-                                }
-                                placement="top"
-                                arrow>
-                                <Typography className={classes.power}>
-                                    {millify.default(result.power, { precision: 2, lowercase: true })}
-                                </Typography>
-                            </ShadowRootTooltip>
-                            <Typography className={classes.ratio}>
-                                {Number.parseFloat(result.percentage.toFixed(2))}%
-                            </Typography>
-                        </Box>
-                        <Box className={classes.linearProgressWrap}>
-                            <StyledLinearProgress color="inherit" variant="determinate" value={result.percentage} />
-                        </Box>
-                    </ListItem>
-                ))}
+                {results
+                    ? results.map((result, i) => (
+                          <ListItem className={classes.listItem} key={i}>
+                              <Box className={classes.listItemHeader}>
+                                  <ShadowRootTooltip
+                                      PopperProps={{
+                                          disablePortal: true,
+                                      }}
+                                      title={<Typography>{result.choice}</Typography>}
+                                      placement="top"
+                                      disableHoverListener={!tooltipsVisible[i]}
+                                      classes={{ tooltip: classes.tooltip, arrow: classes.arrow }}
+                                      arrow>
+                                      <Typography
+                                          ref={(ref) => {
+                                              listRef.current[i] = ref!
+                                          }}
+                                          className={cx(classes.choice, classes.ellipsisText)}>
+                                          {result.choice}
+                                      </Typography>
+                                  </ShadowRootTooltip>
+                                  <ShadowRootTooltip
+                                      PopperProps={{
+                                          disablePortal: true,
+                                      }}
+                                      classes={{ tooltip: classes.tooltip, arrow: classes.arrow }}
+                                      title={
+                                          <Typography className={classes.ellipsisText}>
+                                              {result.powerDetail
+                                                  .flatMap((detail, index) => {
+                                                      const name = millify(detail.power, {
+                                                          precision: 2,
+                                                          lowercase: true,
+                                                      })
+                                                      return [index === 0 ? '' : '+', name, detail.name]
+                                                  })
+                                                  .join(' ')}
+                                          </Typography>
+                                      }
+                                      placement="top"
+                                      arrow>
+                                      <Typography className={classes.power}>
+                                          {millify(result.power, { precision: 2, lowercase: true })}
+                                      </Typography>
+                                  </ShadowRootTooltip>
+                                  <Typography className={classes.ratio}>
+                                      {Number.parseFloat(result.percentage.toFixed(2))}%
+                                  </Typography>
+                              </Box>
+                              <Box className={classes.linearProgressWrap}>
+                                  <StyledLinearProgress
+                                      color="inherit"
+                                      variant="determinate"
+                                      value={result.percentage}
+                                  />
+                              </Box>
+                          </ListItem>
+                      ))
+                    : null}
             </List>
             {proposal.isEnd ? (
                 <Button

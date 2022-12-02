@@ -1,13 +1,11 @@
 import { useMemo } from 'react'
 import { useAsyncFn } from 'react-use'
-import type { TransactionConfig } from 'web3-core'
 import { pick } from 'lodash-es'
 import stringify from 'json-stable-stringify'
 import { useChainContext, useNetworkContext, useWeb3Connection } from '@masknet/web3-hooks-base'
-import type { SwapRouteSuccessResponse, TradeComputed } from '../../types/index.js'
-import { ZERO } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
-import type { GasConfig } from '@masknet/web3-shared-evm'
+import type { GasConfig, Transaction } from '@masknet/web3-shared-evm'
+import type { SwapRouteSuccessResponse, TradeComputed } from '../../types/index.js'
 
 export function useTradeCallback(tradeComputed: TradeComputed<SwapRouteSuccessResponse> | null, gasConfig?: GasConfig) {
     const { account, chainId } = useChainContext()
@@ -20,27 +18,23 @@ export function useTradeCallback(tradeComputed: TradeComputed<SwapRouteSuccessRe
         return {
             from: account,
             ...pick(tradeComputed.trade_, ['to', 'data', 'value']),
-        } as TransactionConfig
+        } as Transaction
     }, [account, tradeComputed])
 
     return useAsyncFn(async () => {
-        // validate config
         if (!account || !config || !connection || pluginID !== NetworkPluginID.PLUGIN_EVM) {
             return
         }
 
-        // compose transaction config
-        const config_ = {
-            ...config,
-            gas: (await connection.estimateTransaction?.(config)) ?? ZERO.toString(),
-            ...gasConfig,
-        }
-
-        // send transaction and wait for hash
-
-        const hash = await connection.sendTransaction(config_, { chainId, overrides: { ...gasConfig } })
+        const hash = await connection.sendTransaction(
+            {
+                ...config,
+                gas: await connection.estimateTransaction?.(config),
+                ...gasConfig,
+            },
+            { chainId, overrides: { ...gasConfig } },
+        )
         const receipt = await connection.getTransactionReceipt(hash)
-
         return receipt?.transactionHash
     }, [connection, account, chainId, stringify(config), gasConfig, pluginID])
 }
