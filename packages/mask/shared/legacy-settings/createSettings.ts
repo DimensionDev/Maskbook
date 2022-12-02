@@ -11,7 +11,7 @@ export function setupLegacySettingsAtBackground(
     MaskMessages.events.legacySettings_set.on(async (payload) => {
         const { key, value } = payload
         await setStorage(key, value)
-        MaskMessages.events.legacySettings_boardcast.sendToAll({ key, value })
+        MaskMessages.events.legacySettings_broadcast.sendToAll({ key, value })
     })
 }
 export function setupLegacySettingsAtNonBackground(getStorage: (key: string) => Promise<Option<any>>) {
@@ -29,7 +29,7 @@ function setupValueRef<T>(settings: ValueRef<T>, key: string) {
         })
         .finally(() => (duringInitialValueSet = false))
 
-    MaskMessages.events.legacySettings_boardcast.on((payload) => {
+    MaskMessages.events.legacySettings_broadcast.on((payload) => {
         if (key !== payload.key) return
         settings.value = payload.value
     })

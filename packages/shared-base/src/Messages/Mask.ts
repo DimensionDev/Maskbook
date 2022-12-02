@@ -37,7 +37,7 @@ export interface MaskEvents extends MaskSettingsEvents, MaskMobileOnlyEvents, Ma
     /** emit when the settings changed. */
     legacySettings_set: SettingsUpdateEvent
     /** emit when the settings finished syncing with storage. */
-    legacySettings_boardcast: SettingsUpdateEvent
+    legacySettings_broadcast: SettingsUpdateEvent
     ownPersonaChanged: void
     ownProofChanged: void
     restoreSuccess: void
