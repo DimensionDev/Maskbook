@@ -27,7 +27,7 @@ export const WalletHeader = memo(() => {
     const { classes } = useStyles()
     const navigate = useNavigate()
     const { account, chainId, providerType } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const connection = useWeb3Connection()
+    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
     const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
 
     const networks = getRegisteredWeb3Networks().filter(
