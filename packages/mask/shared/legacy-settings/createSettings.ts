@@ -20,22 +20,25 @@ export function setupLegacySettingsAtNonBackground(getStorage: (key: string) => 
 
 function setupValueRef<T>(settings: ValueRef<T>, key: string) {
     let duringInitialValueSet = false
+    let duringBroadcastSet = false
     Promise.resolve()
         .then(() => getValue(key))
         .then((value) => {
             duringInitialValueSet = true
             if (value.some) settings.value = value.val
-            else if (value instanceof ValueRefWithReady) value.nowReady?.()
+            else if (settings instanceof ValueRefWithReady) settings.nowReady?.()
         })
         .finally(() => (duringInitialValueSet = false))
 
     MaskMessages.events.legacySettings_broadcast.on((payload) => {
         if (key !== payload.key) return
+        duringBroadcastSet = true
         settings.value = payload.value
+        duringBroadcastSet = false
     })
 
     settings.addListener((newVal) => {
-        if (duringInitialValueSet) return
+        if (duringInitialValueSet || duringBroadcastSet) return
         MaskMessages.events.legacySettings_set.sendToAll({
             key,
             value: newVal,
