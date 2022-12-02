@@ -54,5 +54,7 @@
     "delete_file_title$failed": "Delete failed",
     "delete_file_message$success": "Delete file {{name}} successfully.",
     "delete_file_message$failed": "Failed to delete, please try again.",
-    "upload_tips": "Please click Browse Files button to select files to upload."
+    "upload_tips": "Please click Browse Files button to select files to upload.",
+    "file_chip_single": "Attached File: {{name}} ({{size}})",
+    "file_chip_multiple": "{{count}} files selected"
 }

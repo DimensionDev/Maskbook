@@ -1561,10 +1561,10 @@ importers:
   packages/plugins/Example:
     dependencies:
       '@masknet/plugin-infra':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../plugin-infra
       '@masknet/shared-base':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../shared-base
       ts-results:
         specifier: ^3.3.0

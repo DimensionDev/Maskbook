@@ -9,6 +9,7 @@ import { base } from '../base.js'
 import { META_KEY_1, META_KEY_2, META_KEY_3 } from '../constants.js'
 import { FileInfoMetadataReader } from '../helpers.js'
 import type { FileInfo } from '../types.js'
+import { MultipleFileChip, SingleFileChip } from './components/index.js'
 import { FileViewer } from './FileViewer.js'
 import FileServiceDialog, { FileServiceDialogProps } from './MainDialog.js'
 import { setupStorage, StorageOptions } from './storage.js'
@@ -113,17 +114,15 @@ function onAttachedFile(file: FileInfo): Plugin.SNSAdaptor.BadgeDescriptor {
 
     return {
         text: (
-            <div
-                style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}
-                role="button"
+            <SingleFileChip
+                name={name}
+                size={size}
                 onClick={() => {
                     openDialog({
                         selectedFileIds: [file.id],
                     })
-                }}>
-                <Icons.FileService size={16} />
-                Attached File: {name} ({size})
-            </div>
+                }}
+            />
         ),
         tooltip: `${file.name} (${size})`,
     }
@@ -131,20 +130,17 @@ function onAttachedFile(file: FileInfo): Plugin.SNSAdaptor.BadgeDescriptor {
 
 function onAttachedMultipleFile(files: FileInfo[]): Plugin.SNSAdaptor.BadgeDescriptor {
     if (files.length === 1) return onAttachedFile(files[0])
-    const label = `${files.length} files selected`
     return {
         text: (
-            <div
-                style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}
+            <MultipleFileChip
+                count={files.length}
                 role="button"
                 onClick={() => {
                     openDialog({
                         selectedFileIds: files.map((file) => file.id),
                     })
-                }}>
-                <Icons.FileService size={16} />
-                {label}
-            </div>
+                }}
+            />
         ),
     }
 }

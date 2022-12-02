@@ -108,15 +108,7 @@ export const UploadDropArea: React.FC<Props> = memo(({ maxFileSize, onSelectFile
     }
     return (
         <div className={cx(classes.dropArea, { [classes.dragOver]: over }, className)} {...rest} {...bond}>
-            <input
-                type="file"
-                onInput={onInput}
-                hidden
-                ref={inputRef}
-                onChange={(evt) => {
-                    console.log('event', evt)
-                }}
-            />
+            <input type="file" onInput={onInput} hidden ref={inputRef} />
             <div className={classes.uploadIcon}>
                 <Icons.Upload size={30} />
             </div>

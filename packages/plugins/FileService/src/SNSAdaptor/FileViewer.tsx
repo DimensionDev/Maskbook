@@ -17,7 +17,7 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         boxSizing: 'border-box',
         userSelect: 'none',
-        padding: theme.spacing(1),
+        padding: 0,
         backgroundColor: 'transparent',
     },
 }))
