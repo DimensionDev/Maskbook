@@ -13,7 +13,7 @@ export const Logger = ({ children, value }: Logger) => {
             logger?.captureMessage(value)
             children.props.onClick?.(e)
         },
-        [value],
+        [value, children, logger],
     )
 
     return (

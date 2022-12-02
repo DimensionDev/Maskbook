@@ -66,7 +66,7 @@ export class LogHub implements LogHubBase {
     }
 }
 
-export enum LogMessages {
+export enum LogMessage {
     DashboardAccess = 'dashboard-access',
     ApplicationBoardAccess = 'application-board-access',
     PopupAccess = 'popup-access',

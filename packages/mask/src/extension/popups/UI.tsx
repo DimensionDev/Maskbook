@@ -9,7 +9,7 @@ import { PopupFrame } from './components/PopupFrame/index.js'
 import { MaskUIRootPage } from '../../UIRoot-page.js'
 import { PageTitleContext } from './context.js'
 import { useValueRef } from '@masknet/shared-base-ui'
-import { enableLog, languageSettings } from '../../../shared/legacy-settings/settings.js'
+import { logSettings, languageSettings } from '../../../shared/legacy-settings/settings.js'
 import { PopupSnackbarProvider } from '@masknet/theme'
 import { LoadingPlaceholder } from './components/LoadingPlaceholder/index.js'
 import Services from '../service.js'
@@ -22,7 +22,7 @@ function usePopupTheme() {
 }
 
 function useLogSettings() {
-    return useValueRef(enableLog)
+    return useValueRef(logSettings)
 }
 
 const Wallet = lazy(() => import(/* webpackPreload: true */ './pages/Wallet/index.js'))
@@ -44,7 +44,7 @@ function PluginRenderDelayed() {
 export default function Popups() {
     const [title, setTitle] = useState('')
     useEffect(queryRemoteI18NBundle(Services.Helper.queryRemoteI18NBundle), [])
-    const logSetting = useLogSettings()
+    const logSettings = useLogSettings()
 
     return MaskUIRootPage(
         usePopupTheme,
@@ -52,7 +52,7 @@ export default function Popups() {
             <Web3ContextProvider
                 value={{ pluginID: NetworkPluginID.PLUGIN_EVM, providerType: ProviderType.MaskWallet }}>
                 <PopupContext.Provider>
-                    <LoggerContextProvider value={{ platform: LogPlatform.Popup, enable: logSetting }}>
+                    <LoggerContextProvider value={{ platform: LogPlatform.Popup, enable: logSettings }}>
                     <PageTitleContext.Provider value={{ title, setTitle }}>
                         <HashRouter>
                             <Routes>

@@ -10,7 +10,7 @@ import {
     currentMaskWalletAccountSettings,
     currentMaskWalletChainIdSettings,
 } from '../legacy-settings/wallet-settings.js'
-import { enableLog } from '../legacy-settings/settings.js'
+import { logSettings } from '../legacy-settings/settings.js'
 import { LogHub, LogHubBase, LogPlatform } from '@masknet/web3-providers'
 
 export type PartialSharedUIContext = Pick<
@@ -36,7 +36,7 @@ export function createSharedContext(pluginID: string, signal: AbortSignal): Plug
             else return PersistentStorages.Plugin.createSubScope(pluginID, defaultValues, signal)
         },
         createLogger(): LogHubBase | undefined {
-            if (!enableLog.value) return
+            if (!logSettings.value) return
             return new LogHub(LogPlatform.Plugin, pluginID)
         },
     }
