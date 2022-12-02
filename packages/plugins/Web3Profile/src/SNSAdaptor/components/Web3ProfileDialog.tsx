@@ -3,7 +3,7 @@ import { InjectedDialog, LoadGuard, PersonaAction, WalletTypes } from '@masknet/
 import { CrossIsolationMessages, EMPTY_LIST, NetworkPluginID, NextIDPlatform, PopupRoutes } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { useChainContext } from '@masknet/web3-hooks-base'
-import { NextIDProof } from '@masknet/web3-providers'
+import { LogMessages, NextIDProof } from '@masknet/web3-providers'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { DialogActions, DialogContent } from '@mui/material'
 import { sortBy } from 'lodash-es'
@@ -48,7 +48,7 @@ export function Web3ProfileDialog() {
     const [open, setOpen] = useState(false)
     useEffect(() => {
         return CrossIsolationMessages.events.web3ProfileDialogEvent.on(({ open }) => {
-            if (open) logger.captureMessage('web3-profile-dialog')
+            if (open) logger?.captureMessage(LogMessages.Web3ProileDialogAccess)
             setOpen(open)
         })
     }, [])

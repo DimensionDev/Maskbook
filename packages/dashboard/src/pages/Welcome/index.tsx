@@ -1,7 +1,7 @@
 import { Button, useTheme } from '@mui/material'
 import { ColumnLayout } from '../../components/RegisterFrame/ColumnLayout.js'
 import { styled } from '@mui/material/styles'
-import { memo, MutableRefObject, useEffect, useMemo, useRef } from 'react'
+import { memo, MutableRefObject, useCallback, useEffect, useMemo, useRef } from 'react'
 import { useDashboardI18N } from '../../locales/index.js'
 import links from '../../components/FooterLine/links.json'
 import { openWindow } from '@masknet/shared-base-ui'
@@ -71,12 +71,16 @@ export default function Welcome() {
     }
 
     const handleLinkClick = () => openWindow(links.MASK_PRIVACY_POLICY)
+    const handleAgreeLogger = useCallback(() => {
+        return Services.Settings.setLogEnable(true)
+    }, [])
 
     return (
         <WelcomeUI
             iframeRef={iframeRef}
             privacyPolicyURL={agreementContentPageURL}
             iframeLoadHandler={handleIFrameLoad}
+            agreeLoggerHandler={handleAgreeLogger}
             agreeHandler={async () => {
                 const url = await Services.SocialNetwork.setupSite('twitter.com', false)
                 if (url) location.assign(url)
@@ -92,10 +96,18 @@ interface WelcomeUIProps {
     iframeLoadHandler(): void
     agreeHandler(): void
     cancelHandler(): void
+    agreeLoggerHandler(): void
 }
 
 export const WelcomeUI = memo(
-    ({ privacyPolicyURL, iframeLoadHandler, agreeHandler, cancelHandler, iframeRef }: WelcomeUIProps) => {
+    ({
+        privacyPolicyURL,
+        iframeLoadHandler,
+        agreeHandler,
+        agreeLoggerHandler: agreeLogger,
+        cancelHandler,
+        iframeRef,
+    }: WelcomeUIProps) => {
         const t = useDashboardI18N()
         return (
             <ColumnLayout>

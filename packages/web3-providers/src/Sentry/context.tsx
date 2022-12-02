@@ -1,3 +1,4 @@
+import type { EnhanceableSite } from '@masknet/shared-base'
 import { createContext, useContext, useMemo } from 'react'
 import type { LogHubBase } from '../types/Log.js'
 import { LogHub, LogPlatform } from './base.js'
@@ -10,7 +11,7 @@ const LoggerContext = createContext<LoggerContext>(null!)
 LoggerContext.displayName = 'LoggerContext'
 
 interface LoggerContextProvider {
-    platform: LogPlatform
+    platform: LogPlatform | EnhanceableSite
     enable: boolean
 }
 

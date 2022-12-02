@@ -15,9 +15,9 @@ import { LogHub, LogHubBase, LogPlatform } from '@masknet/web3-providers'
 
 export type PartialSharedUIContext = Pick<
     Plugin.Shared.SharedUIContext,
-    'nativeType' | 'hasNativeAPI' | 'account' | 'chainId' | 'createKVStorage'
+    'nativeType' | 'hasNativeAPI' | 'account' | 'chainId' | 'createKVStorage' | 'createLogger'
 >
-let sharedUIContextSingleton: Omit<PartialSharedUIContext, 'createKVStorage'>
+let sharedUIContextSingleton: Omit<PartialSharedUIContext, 'createKVStorage' | 'createLogger'>
 export const createPartialSharedUIContext = (id: string, signal: AbortSignal): PartialSharedUIContext => {
     sharedUIContextSingleton ??= {
         nativeType: nativeAPI?.type,

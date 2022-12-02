@@ -47,7 +47,6 @@
     "unstated-next": "^1.1.0",
     "urlcat": "^2.0.4",
     "use-subscription": "^1.8.0",
-    "web3-utils": "1.8.0",
     "zod": "^3.16.0"
   },
   "devDependencies": {

@@ -1,32 +1,27 @@
-import type { PersonaIdentifier, ProfileIdentifier } from '@masknet/shared-base'
+import type { EnhanceableSite, PersonaIdentifier, ProfileIdentifier } from '@masknet/shared-base'
 import Web3Utils from 'web3-utils'
 import type { LogHubBase } from '../types/Log.js'
 
-// @ts-ignore
-const Sentry = globalThis.Sentry as Sentry
-
-function getSentryDSN() {
-    return process.env.MASK_SENTRY_DSN
-}
+const Sentry = (globalThis as any).Sentry
 
 function hash(value: string) {
     return Web3Utils.sha3(value)
 }
 
 export class LogHub implements LogHubBase {
-    private _platform: LogPlatform
+    private _platform: LogPlatform | EnhanceableSite
     private _plugin_id?: string
     private _user?: {
         persona?: string | null
         profile?: string | null
     }
 
-    constructor(platform: LogPlatform, pluginId?: string) {
+    constructor(platform: LogPlatform | EnhanceableSite, pluginId?: string) {
         this._platform = platform
         this._plugin_id = pluginId
 
         Sentry.init({
-            dsn: getSentryDSN,
+            dsn: process.env.MASK_SENTRY_DSN,
             defaultIntegrations: false,
             integrations: [new Sentry.Integrations.Breadcrumbs({ console: false })],
             environment: process.env.NODE_ENV,
@@ -71,10 +66,12 @@ export class LogHub implements LogHubBase {
     }
 }
 
-export enum LogsType {
+export enum LogMessages {
     DashboardAccess = 'dashboard-access',
     ApplicationBoardAccess = 'application-board-access',
     PopupAccess = 'popup-access',
+    PluginAccess = 'plugin-access',
+    Web3ProileDialogAccess = 'web3-profile-dialog-access',
 }
 
 export enum LogPlatform {
