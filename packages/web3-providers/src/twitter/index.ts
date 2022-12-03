@@ -55,13 +55,18 @@ async function fetchContent(url?: string) {
 }
 
 async function getTokens(operationName?: string) {
+    const indexContent = await fetchContent('https://twitter.com')
     const swContent = await fetchContent('https://twitter.com/sw.js')
-    if (!swContent) throw new Error('Failed to fetch manifest script.')
 
-    const [mainContent, nftContent] = await Promise.all([
-        fetchContent(getScriptURL(swContent, 'main')),
-        fetchContent(getScriptURL(swContent, 'bundle.UserNft')),
+    const allSettled = await Promise.allSettled([
+        fetchContent(getScriptURL(indexContent ?? '', 'main')),
+        fetchContent(getScriptURL(swContent ?? '', 'main')),
+        fetchContent(getScriptURL(swContent ?? '', 'bundle.UserNft')),
     ])
+    const [mainContentPrimary, mainContentSecondary, nftContent] = allSettled.map((x) =>
+        x.status === 'fulfilled' ? x.value ?? '' : '',
+    )
+    const mainContent = mainContentPrimary || mainContentSecondary
 
     const bearerToken = getScriptContentMatched(mainContent ?? '', /,\w="(\w{20,}%3D\w{20,})",/)
     const queryToken = getScriptContentMatched(nftContent ?? '', /{\s?id:\s?"([\w-]+)"/)

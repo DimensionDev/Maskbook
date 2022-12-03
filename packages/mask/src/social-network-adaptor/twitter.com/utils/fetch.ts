@@ -33,9 +33,7 @@ export const postIdParser = (node: HTMLElement) => {
 
 export const postNameParser = (node: HTMLElement) => {
     const tweetElement = node.querySelector<HTMLElement>('[data-testid="tweet"]') ?? node
-    const name = collectNodeText(
-        tweetElement.querySelector<HTMLElement>('a:not([target]) > div > div[dir="auto"] > span'),
-    )
+    const name = collectNodeText(tweetElement.querySelector<HTMLElement>('[data-testid="User-Names"] a span'))
     // Note: quoted tweet has no [data-testid="User-Names"]
     const handle = collectNodeText(
         tweetElement.querySelector<HTMLElement>('[data-testid="User-Names"] a[tabindex="-1"] span'),
