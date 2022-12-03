@@ -1,11 +1,11 @@
 import { memo, useCallback, useState } from 'react'
+import { first } from 'lodash-es'
 import { Button, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
 import { useNavigate } from 'react-router-dom'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { PopupRoutes } from '@masknet/shared-base'
-import { first } from 'lodash-es'
 import { FormattedAddress } from '@masknet/shared'
 import { useI18N } from '../../../../../utils/index.js'
 import { PasswordField } from '../../../components/PasswordField/index.js'
@@ -111,11 +111,8 @@ const DeleteWallet = memo(() => {
             try {
                 await Wallet?.removeWallet?.(wallet.address, password)
 
-                const wallets = await Wallet?.getAllWallets?.()
-                const otherWalletAddress = first(wallets)?.address
-
                 connection?.connect({
-                    account: otherWalletAddress ?? '',
+                    account: first(Wallet?.wallets?.getCurrentValue())?.address ?? '',
                 })
 
                 navigate(PopupRoutes.Wallet, { replace: true })
