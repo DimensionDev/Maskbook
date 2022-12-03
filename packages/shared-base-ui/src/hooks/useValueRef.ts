@@ -1,15 +1,18 @@
-import { useMemo } from 'react'
-import { Subscription, useSubscription } from 'use-subscription'
-import type { ValueRef } from '@masknet/shared-base'
+import { useSyncExternalStore } from 'react'
+import type { ValueRef, ValueRefJSON } from '@masknet/shared-base'
 
-export function useValueRef<T>(ref: ValueRef<T>) {
-    const subscription = useMemo<Subscription<T>>(
-        () => ({
-            getCurrentValue: () => ref.value,
-            subscribe: (callback) => ref.addListener(callback),
-        }),
-        [ref],
+export function useValueRef<T>(ref: ValueRef<T>): Readonly<T> {
+    return useSyncExternalStore(
+        (f) => ref.addListener(f),
+        () => ref.value,
+        () => ref.getServerSnapshot(),
     )
+}
 
-    return useSubscription(subscription)
+/** @deprecated */
+export function useValueRefJSON<T extends object>(ref: ValueRefJSON<T>): Readonly<T> {
+    return useSyncExternalStore(
+        (f) => ref.addListener(f),
+        () => ref.asJSON,
+    )
 }

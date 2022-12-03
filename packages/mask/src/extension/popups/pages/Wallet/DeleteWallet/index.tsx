@@ -7,11 +7,9 @@ import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { PopupRoutes } from '@masknet/shared-base'
 import { first } from 'lodash-es'
 import { FormattedAddress } from '@masknet/shared'
-import { WalletRPC } from '../../../../../plugins/Wallet/messages.js'
 import { useI18N } from '../../../../../utils/index.js'
 import { PasswordField } from '../../../components/PasswordField/index.js'
-import { currentMaskWalletAccountSettings } from '../../../../../../shared/legacy-settings/wallet-settings.js'
-import { useWallet } from '@masknet/web3-hooks-base'
+import { useWallet, useWeb3Connection, useWeb3State } from '@masknet/web3-hooks-base'
 import { WalletContext } from '../hooks/useWalletContext.js'
 import { useTitle } from '../../../hook/useTitle.js'
 
@@ -98,6 +96,8 @@ const useStyles = makeStyles()({
 const DeleteWallet = memo(() => {
     const { t } = useI18N()
     const navigate = useNavigate()
+    const { Wallet } = useWeb3State()
+    const connection = useWeb3Connection()
     const { selectedWallet } = WalletContext.useContainer()
     const currentWallet = useWallet()
     const wallet = selectedWallet ?? currentWallet
@@ -109,17 +109,14 @@ const DeleteWallet = memo(() => {
     const onConfirm = useCallback(async () => {
         if (wallet?.address) {
             try {
-                await WalletRPC.removeWallet(wallet.address, password)
-                const wallets = await WalletRPC.getWallets()
+                await Wallet?.removeWallet?.(wallet.address, password)
+
+                const wallets = await Wallet?.getAllWallets?.()
                 const otherWalletAddress = first(wallets)?.address
 
-                if (otherWalletAddress) {
-                    await WalletRPC.updateMaskAccount({
-                        account: otherWalletAddress,
-                    })
-                } else {
-                    currentMaskWalletAccountSettings.value = ''
-                }
+                connection?.connect({
+                    account: otherWalletAddress ?? '',
+                })
 
                 navigate(PopupRoutes.Wallet, { replace: true })
             } catch (error) {
@@ -130,7 +127,7 @@ const DeleteWallet = memo(() => {
                 }
             }
         }
-    }, [wallet, password])
+    }, [wallet, password, Wallet, connection])
 
     useTitle(t('popups_delete_wallet'))
 

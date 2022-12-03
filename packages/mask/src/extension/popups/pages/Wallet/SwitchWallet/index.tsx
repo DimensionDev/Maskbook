@@ -6,9 +6,8 @@ import { isSameAddress } from '@masknet/web3-shared-base'
 import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { MAX_WALLET_LIMIT } from '@masknet/shared'
 import { useWallet, useWallets } from '@masknet/web3-hooks-base'
-import { useI18N } from '../../../../../utils/index.js'
-import { WalletRPC } from '../../../../../plugins/Wallet/messages.js'
 import { WalletItem } from './WalletItem.js'
+import { useI18N } from '../../../../../utils/index.js'
 import { Services } from '../../../../service.js'
 
 const useStyles = makeStyles()({
@@ -53,7 +52,7 @@ const useStyles = makeStyles()({
 const SwitchWallet = memo(() => {
     const { t } = useI18N()
     const { classes, cx } = useStyles()
-
+    const connection = useWeb3Connection()
     const navigate = useNavigate()
     const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
     const wallets = useWallets(NetworkPluginID.PLUGIN_EVM)
@@ -71,13 +70,12 @@ const SwitchWallet = memo(() => {
 
     const handleSelect = useCallback(
         async (address: string | undefined) => {
-            await WalletRPC.updateMaskAccount({
+            await connection?.connect({
                 account: address,
             })
-
             navigate(PopupRoutes.Wallet, { replace: true })
         },
-        [history],
+        [history, connection],
     )
 
     return (

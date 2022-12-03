@@ -1,5 +1,4 @@
 export * from './asyncIterator.js'
-export * from './createValueRefWithReady.js'
 export * from './detect.js'
 export * from './getLocalImplementation.js'
 export * from './markdown.js'

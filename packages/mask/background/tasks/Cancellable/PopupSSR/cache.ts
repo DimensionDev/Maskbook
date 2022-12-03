@@ -38,9 +38,8 @@ export function startListen(
         })
     }
     MaskMessages.events.ownPersonaChanged.on(throttledTask, { signal })
-    MaskMessages.events.createInternalSettingsUpdated.on(
+    MaskMessages.events.legacySettings_broadcast.on(
         (event) => {
-            if (event.initial) return
             if (event.key === InternalStorageKeys.currentPersona || event.key === InternalStorageKeys.language)
                 throttledTask()
         },
