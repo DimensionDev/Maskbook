@@ -60,11 +60,11 @@ export class WalletState<ProviderType extends string, Transaction> implements We
         }
     }
 
-    addWallet(wallet: Wallet) {
+    async addWallet(wallet: Wallet) {
         const now = new Date()
         const address = this.options.formatAddress(wallet.address)
 
-        this.storage.setValue({
+        await this.storage.setValue({
             ...this.storage.value,
             [this.providerType]: uniqBy(
                 [
@@ -82,7 +82,7 @@ export class WalletState<ProviderType extends string, Transaction> implements We
             ),
         })
     }
-    updateWallet(
+    async updateWallet(
         address: string,
         updates: Partial<Omit<Wallet, 'id' | 'address' | 'createdAt' | 'updatedAt' | 'storedKeyInfo'>>,
     ) {
@@ -90,7 +90,7 @@ export class WalletState<ProviderType extends string, Transaction> implements We
         if (!wallet) throw new Error('Failed to find wallet.')
 
         const now = new Date()
-        this.storage.setValue({
+        await this.storage.setValue({
             ...this.storage.value,
             [this.providerType]: this.all.map((x) =>
                 isSameAddress(x.address, address)
@@ -104,13 +104,13 @@ export class WalletState<ProviderType extends string, Transaction> implements We
             ),
         })
     }
-    renameWallet(address: string, name: string) {
-        this.updateWallet(address, {
+    async renameWallet(address: string, name: string) {
+        await this.updateWallet(address, {
             name,
         })
     }
-    removeWallet(address: string, password?: string | undefined) {
-        this.storage.setValue({
+    async removeWallet(address: string, password?: string | undefined) {
+        await this.storage.setValue({
             ...this.storage.value,
             [this.providerType]: this.all.filter((x) => !isSameAddress(x.address, address)),
         })

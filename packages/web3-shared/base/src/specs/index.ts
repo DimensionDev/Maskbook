@@ -1496,10 +1496,10 @@ export interface WalletState<Transaction> {
     /** The default derivable wallet. */
     walletPrimary?: Subscription<Wallet | null>
 
-    addWallet(wallet: Wallet): void
-    updateWallet(address: string, updates: Partial<Omit<Wallet, 'id' | 'address' | 'createdAt' | 'createdAt'>>): void
-    renameWallet(address: string, name: string): void
-    removeWallet(address: string, password?: string): void
+    addWallet(wallet: Wallet): Promise<void>
+    updateWallet(address: string, updates: Partial<Omit<Wallet, 'id' | 'address' | 'createdAt' | 'createdAt'>>): Promise<void>
+    renameWallet(address: string, name: string): Promise<void>
+    removeWallet(address: string, password?: string): Promise<void>
 
     signTransaction(address: string, transaction: Transaction): Promise<string>
     signMessage(address: string, type: string, message: string, password?: string): Promise<string>
