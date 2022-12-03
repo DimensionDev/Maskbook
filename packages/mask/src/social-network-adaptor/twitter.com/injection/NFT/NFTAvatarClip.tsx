@@ -8,9 +8,12 @@ import { createReactRootShadowed, startWatch } from '../../../../utils/index.js'
 import { searchTwitterAvatarNFTLinkSelector, searchTwitterAvatarNFTSelector } from '../../utils/selector.js'
 
 export function injectNFTAvatarClipInTwitter(signal: AbortSignal) {
-    const watcher = new MutationObserverWatcher(searchTwitterAvatarNFTSelector())
+    const watcher = new MutationObserverWatcher(searchTwitterAvatarNFTSelector()).useForeach((ele, _, proxy) => {
+        const root = createReactRootShadowed(proxy.afterShadow, { signal })
+        root.render(<NFTAvatarClipInTwitter />)
+        return () => root.destroy()
+    })
     startWatch(watcher, signal)
-    createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(<NFTAvatarClipInTwitter />)
 }
 
 const useStyles = makeStyles()(() => ({
