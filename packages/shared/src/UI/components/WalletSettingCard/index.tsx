@@ -17,7 +17,7 @@ interface WalletSettingCardProps {
 }
 
 export const WalletSettingCard = memo<WalletSettingCardProps>(({ wallet, checked, onSwitchChange }) => {
-    const { value: wallets } = useWallets()
+    const wallets = useWallets()
     const networkPluginId = resolveNextID_NetworkPluginID(wallet.platform)
     const chainId = useDefaultChainId(networkPluginId)
     const networkDescriptor = useNetworkDescriptor(networkPluginId, chainId)
@@ -26,7 +26,7 @@ export const WalletSettingCard = memo<WalletSettingCardProps>(({ wallet, checked
 
     const walletName = useMemo(() => {
         if (domain) return domain
-        const walletAtDB = wallets?.find((x) => isSameAddress(wallet.identity, x.address))
+        const walletAtDB = wallets.find((x) => isSameAddress(wallet.identity, x.address))
         if (walletAtDB) return walletAtDB.name
         if (networkPluginId) return resolveNetworkWalletName(networkPluginId)
         return

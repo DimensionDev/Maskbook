@@ -16,21 +16,9 @@ import {
 import type { EVM_Provider } from '../types.js'
 
 export class BaseProvider implements EVM_Provider {
-    // private nameStorageObject?: StorageObject<{ names: Record<string, string> }>
-
     constructor(protected providerType: ProviderType) {}
 
     emitter = new Emitter<ProviderEvents<ChainId, ProviderType>>()
-
-    // get nameStorage() {
-    //     if (this.nameStorageObject) return this.nameStorageObject
-    //     const { storage } = SharedContextSettings.value
-    //         .createKVStorage('persistent', {})
-    //         .createSubScope(`${this.providerType}_names`, { names: {} })
-
-    //     this.nameStorageObject = storage
-    //     return this.nameStorageObject
-    // }
 
     // No need to wait by default
     get ready() {
