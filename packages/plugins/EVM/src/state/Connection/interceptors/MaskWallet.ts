@@ -1,13 +1,15 @@
 import { toHex } from 'web3-utils'
 import { ChainId, EthereumMethodType } from '@masknet/web3-shared-evm'
 import { SmartPayAccount } from '@masknet/web3-providers'
+import { EMPTY_LIST } from '@masknet/shared-base'
 import type { Wallet } from '@masknet/web3-shared-base'
 import type { Context, Middleware } from '../types.js'
-import { SharedContextSettings } from '../../../settings/index.js'
+import { SharedContextSettings, Web3StateSettings } from '../../../settings/index.js'
 
 export class MaskWallet implements Middleware<Context> {
     async fn(context: Context, next: () => Promise<void>) {
-        const { hasNativeAPI, send, account, chainId, wallets } = SharedContextSettings.value
+        const { hasNativeAPI, send, account, chainId } = SharedContextSettings.value
+        const { Wallet } = Web3StateSettings.value
         // redirect to native app
         if (hasNativeAPI) {
             try {
@@ -28,13 +30,14 @@ export class MaskWallet implements Middleware<Context> {
                 context.write([account])
                 break
             case EthereumMethodType.MASK_ACCOUNTS:
-                const localWallets = wallets.getCurrentValue()
+                const now = new Date()
+                const wallets = Wallet?.wallets?.getCurrentValue() ?? EMPTY_LIST
                 const contractAccounts = await SmartPayAccount.getAccounts(
                     ChainId.Matic,
-                    localWallets.map((x) => x.address),
+                    wallets.map((x) => x.address),
                 )
                 context.write([
-                    ...localWallets,
+                    ...wallets,
                     ...contractAccounts.map<Wallet>((x) => ({
                         id: x.address,
                         name: 'Smart Pay',
@@ -42,8 +45,8 @@ export class MaskWallet implements Middleware<Context> {
                         hasDerivationPath: false,
                         hasStoredKeyInfo: false,
                         configurable: true,
-                        createdAt: new Date(),
-                        updatedAt: new Date(),
+                        createdAt: now,
+                        updatedAt: now,
                         owner: x.owner,
                     })),
                 ])

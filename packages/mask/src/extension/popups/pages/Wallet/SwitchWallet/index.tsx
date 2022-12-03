@@ -4,11 +4,11 @@ import { Button, List } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
+import { MAX_WALLET_LIMIT } from '@masknet/shared'
+import { useWallet, useWallets } from '@masknet/web3-hooks-base'
 import { useI18N } from '../../../../../utils/index.js'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages.js'
 import { WalletItem } from './WalletItem.js'
-import { MAX_WALLET_LIMIT } from '@masknet/shared'
-import { useWallet, useWalletPrimary, useWallets } from '@masknet/web3-hooks-base'
 import { Services } from '../../../../service.js'
 
 const useStyles = makeStyles()({
@@ -57,10 +57,9 @@ const SwitchWallet = memo(() => {
     const navigate = useNavigate()
     const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
     const wallets = useWallets(NetworkPluginID.PLUGIN_EVM)
-    const walletPrimary = useWalletPrimary(NetworkPluginID.PLUGIN_EVM)
 
     const handleClickCreate = useCallback(() => {
-        if (!walletPrimary) {
+        if (!wallet) {
             browser.tabs.create({
                 active: true,
                 url: browser.runtime.getURL('/dashboard.html#/create-mask-wallet'),
@@ -68,7 +67,7 @@ const SwitchWallet = memo(() => {
         } else {
             navigate(PopupRoutes.CreateWallet)
         }
-    }, [walletPrimary, history])
+    }, [wallet, history])
 
     const handleSelect = useCallback(
         async (address: string | undefined) => {

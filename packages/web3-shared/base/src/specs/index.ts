@@ -1493,8 +1493,6 @@ export interface ConnectionState<
 export interface WalletState<Transaction> {
     /** The currently stored wallet by MaskWallet. */
     wallets?: Subscription<Wallet[]>
-    /** The default derivable wallet. */
-    walletPrimary?: Subscription<Wallet | null>
 
     addWallet(wallet: Wallet): Promise<void>
     updateWallet(address: string, updates: Partial<Omit<Wallet, 'id' | 'address' | 'createdAt' | 'createdAt'>>): Promise<void>

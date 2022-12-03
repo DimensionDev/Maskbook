@@ -1,4 +1,4 @@
-import { omit, uniqBy } from 'lodash-es'
+import { omit } from 'lodash-es'
 import type { Subscription } from 'use-subscription'
 import type { Plugin } from '@masknet/plugin-infra'
 import { EMPTY_LIST, mapSubscription, mergeSubscription, StorageItem } from '@masknet/shared-base'
@@ -6,30 +6,36 @@ import { isSameAddress, Wallet, WalletState as Web3WalletState } from '@masknet/
 
 export type WalletStorage<ProviderType extends string> = Record<ProviderType, Wallet[]>
 
-export class WalletState<ProviderType extends string, Transaction> implements Web3WalletState<Transaction> {
+export class WalletState<ChainId, ProviderType extends string, Transaction> implements Web3WalletState<Transaction> {
     public wallets?: Subscription<Wallet[]>
-    public walletPrimary?: Subscription<Wallet | null>
 
-    private get providerType() {
-        const providerType = this.subscriptions.providerType?.getCurrentValue()
-        if (!providerType) throw new Error('Please connect a wallet.')
-        return providerType
-    }
+    protected storage: StorageItem<WalletStorage<ProviderType>> = null!
 
-    private get all() {
+    protected get all() {
         return this.wallets?.getCurrentValue() ?? EMPTY_LIST
     }
 
-    protected storage: StorageItem<WalletStorage<ProviderType>> = null!
+    protected get chainId() {
+        return this.subscriptions.chainId?.getCurrentValue() ?? this.options.getDefaultChainId()
+    }
+
+    protected get providerType() {
+        const providerType = this.subscriptions.providerType?.getCurrentValue()
+        if (!providerType) throw new Error('Please connect a wallet.')
+        if (!this.providers.includes(providerType)) throw new Error(`Not supported provider typ: ${providerType}.`)
+        return providerType
+    }
 
     constructor(
         protected context: Plugin.Shared.SharedUIContext,
         protected providers: ProviderType[],
         protected subscriptions: {
             account?: Subscription<string>
+            chainId?: Subscription<ChainId>
             providerType?: Subscription<ProviderType>
         },
         protected options: {
+            getDefaultChainId: () => ChainId
             formatAddress: (address: string) => string
         },
     ) {
@@ -47,39 +53,28 @@ export class WalletState<ProviderType extends string, Transaction> implements We
                 ([providerType, storage]) => storage[providerType],
             )
         }
-        if (this.subscriptions.account && this.subscriptions.providerType) {
-            this.walletPrimary = mapSubscription(
-                mergeSubscription(
-                    this.subscriptions.account,
-                    this.subscriptions.providerType,
-                    this.storage.subscription,
-                ),
-                ([account, providerType, storage]) =>
-                    storage[providerType].find((x) => isSameAddress(account, x.address)) ?? null,
-            )
-        }
     }
 
     async addWallet(wallet: Wallet) {
         const now = new Date()
         const address = this.options.formatAddress(wallet.address)
 
+        // already added
+        if (this.all.some((x) => isSameAddress(x.address, address))) return
+
         await this.storage.setValue({
             ...this.storage.value,
-            [this.providerType]: uniqBy(
-                [
-                    ...this.all,
-                    {
-                        ...wallet,
-                        id: address,
-                        address,
-                        name: wallet.name.trim() || `Account ${this.all.length + 1}`,
-                        createdAt: now,
-                        updatedAt: now,
-                    },
-                ],
-                (x) => x.address.toLowerCase(),
-            ),
+            [this.providerType]: [
+                ...this.all,
+                {
+                    ...wallet,
+                    id: address,
+                    address,
+                    name: wallet.name.trim() || `Account ${this.all.length + 1}`,
+                    createdAt: now,
+                    updatedAt: now,
+                },
+            ],
         })
     }
     async updateWallet(

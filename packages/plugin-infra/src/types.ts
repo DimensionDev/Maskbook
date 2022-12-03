@@ -166,8 +166,6 @@ export namespace Plugin.Shared {
         currentPersona: Subscription<PersonaIdentifier | undefined>
         /** Get all wallets */
         wallets: Subscription<Wallet[]>
-        /** Get the primary wallet */
-        walletPrimary: Subscription<Wallet | null>
 
         /** Native platform type */
         nativeType?: 'Android' | 'iOS'
@@ -230,9 +228,6 @@ export namespace Plugin.Shared {
 
         /** Get all wallets */
         getWallets(): Promise<Wallet[]>
-
-        /** Get the primary wallet */
-        getWalletPrimary(): Promise<Wallet | null>
 
         /** Add a new wallet */
         addWallet(id: string, wallet: Wallet): Promise<void>
