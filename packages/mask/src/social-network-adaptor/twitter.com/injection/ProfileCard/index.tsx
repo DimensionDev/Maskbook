@@ -62,7 +62,6 @@ function ProfileCardHolder() {
     }, [twitterId])
 
     const handleClick = (event: React.MouseEvent) => {
-        event.preventDefault()
         event.stopPropagation()
     }
 
