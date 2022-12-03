@@ -64,7 +64,7 @@ export function CollectibleCard({ className, pluginID, asset }: CollectibleCardP
                     classes={{
                         fallbackImage: classes.fallbackImage,
                     }}
-                    url={asset.metadata?.imageURL}
+                    url={asset.metadata?.imageURL ?? asset.metadata?.mediaURL}
                     icon={pluginID ? <NetworkIcon pluginID={pluginID} chainId={asset.chainId} /> : null}
                 />
             </Card>
