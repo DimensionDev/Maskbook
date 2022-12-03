@@ -7,11 +7,15 @@ import { NFTAvatarMiniClip } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvat
 import { RSS3_KEY_SNS } from '../../../../plugins/Avatar/constants.js'
 
 function getTwitterId(ele: HTMLElement) {
-    const twitterIdNode = (ele.firstChild?.nextSibling as HTMLElement).querySelector(
+    const twitterIdNodes = (ele.firstChild?.nextSibling as HTMLElement).querySelectorAll<HTMLElement>(
         '[dir="ltr"] > span',
-    ) as HTMLSpanElement
-    if (!twitterIdNode) return
-    return twitterIdNode.innerText.trim().replace('@', '')
+    )
+    for (const node of twitterIdNodes) {
+        const id = node.innerText
+        if (id && id[0] === '@') return id.replace('@', '')
+    }
+
+    return
 }
 
 function _(main: () => LiveSelector<HTMLElement, false>, signal: AbortSignal) {
@@ -26,10 +30,8 @@ function _(main: () => LiveSelector<HTMLElement, false>, signal: AbortSignal) {
 
                 const info = getInjectNodeInfo(ele.firstChild as HTMLElement)
                 if (!info) return
-
                 const proxy = DOMProxy({ afterShadowRootInit: { mode: process.env.shadowRootMode } })
                 proxy.realCurrent = info.element.firstChild as HTMLElement
-
                 const root = createReactRootShadowed(proxy.afterShadow, { signal })
                 root.render(
                     <div
