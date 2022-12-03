@@ -120,8 +120,9 @@ export async function getNFT_TrendingOverview(
 export async function getNonFungibleTokenActivities(
     chainId: ChainId,
     contractAddress: string,
+    pageIndex: number,
 ): Promise<NonFungibleTokenActivity[] | undefined> {
-    return NFTScanTrending.getCoinActivities(chainId, contractAddress)
+    return NFTScanTrending.getCoinActivities(chainId, contractAddress, pageIndex)
 }
 
 export async function getCoinTrendingByKeyword(

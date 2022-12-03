@@ -134,12 +134,13 @@ export class NFTScanTrendingAPI implements TrendingAPI.Provider<ChainId> {
     async getCoinActivities(
         chainId: ChainId,
         contractAddress: string,
+        pageIndex: number,
     ): Promise<NonFungibleTokenActivity[] | undefined> {
         if (!isValidChainId(chainId)) return
         const path = urlcat('/nftscan/getTransactionByNftContract', {
             contract: contractAddress,
             filterType: 'all',
-            pageIndex: 0,
+            pageIndex,
             pageSize: 20,
         })
         const response = await fetchFromNFTScanWebAPI<

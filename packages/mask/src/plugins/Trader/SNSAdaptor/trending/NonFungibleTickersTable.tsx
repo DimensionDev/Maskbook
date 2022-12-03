@@ -1,7 +1,9 @@
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, Link } from '@mui/material'
+import { useRef } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
 import { TokenIcon, FormattedAddress } from '@masknet/shared'
+import { useScrollBottomEvent } from '@masknet/shared-base-ui'
 import { useWeb3State } from '@masknet/web3-hooks-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { formatCurrency } from '@masknet/web3-shared-base'
@@ -94,9 +96,10 @@ export function NonFungibleTickersTable({ address, chainId }: NonFungibleTickers
     const { t } = useI18N()
     const { classes } = useStyles()
     const { Others } = useWeb3State()
+    const containerRef = useRef(null)
 
-    const { value: activities } = useNonFungibleTokenActivities(address, chainId)
-    console.log({ activities })
+    const { activities, fetchMore } = useNonFungibleTokenActivities(address, chainId)
+    useScrollBottomEvent(containerRef, fetchMore)
     const headCellMap: Record<Cells, string> = {
         nft: t('plugin_trader_table_nft'),
         method: t('plugin_trader_table_method'),
@@ -174,7 +177,7 @@ export function NonFungibleTickersTable({ address, chainId }: NonFungibleTickers
     const headCells = Object.values(pick(headCellMap, columns))
 
     return (
-        <TableContainer className={classes.container}>
+        <TableContainer className={classes.container} ref={containerRef}>
             <Table size="small" stickyHeader>
                 <TableHead>
                     <TableRow>

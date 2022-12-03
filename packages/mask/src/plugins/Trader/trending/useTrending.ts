@@ -1,9 +1,11 @@
 import { useAsync, useAsyncRetry } from 'react-use'
+import { useCallback, useRef, useState, useEffect } from 'react'
+import { flatten } from 'lodash-es'
 import type { AsyncState } from 'react-use/lib/useAsyncFn.js'
 import type { DataProvider } from '@masknet/public-api'
 import { NetworkPluginID } from '@masknet/shared-base'
 import type { TrendingAPI } from '@masknet/web3-providers'
-import { TokenType } from '@masknet/web3-shared-base'
+import { TokenType, NonFungibleTokenActivity } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { useChainContext, useFungibleToken } from '@masknet/web3-hooks-base'
@@ -77,10 +79,34 @@ export function useTrendingOverviewByAddress(address: string, expectedChainId?: 
 }
 
 export function useNonFungibleTokenActivities(address: string, expectedChainId?: ChainId) {
-    return useAsync(async () => {
-        if (!address || !expectedChainId) return null
-        return PluginTraderRPC.getNonFungibleTokenActivities(expectedChainId, address)
-    }, [expectedChainId, address])
+    const pageIndexRef = useRef<number>(0)
+    const [nonFungibleTokenActivities, setNonFungibleTokenActivities] = useState<
+        Record<number, NonFungibleTokenActivity[]>
+    >({})
+
+    const getNonFungibleTokenActivities = useCallback(async () => {
+        if (!address || !expectedChainId) return
+        const pageIndex = pageIndexRef.current
+
+        const activities = await PluginTraderRPC.getNonFungibleTokenActivities(
+            expectedChainId,
+            address,
+            pageIndexRef.current,
+        )
+
+        setNonFungibleTokenActivities((currentActivities) => {
+            if (currentActivities[pageIndexRef.current] || !activities) return currentActivities
+            pageIndexRef.current = pageIndex + 1
+
+            return { ...currentActivities, [pageIndex]: activities }
+        })
+    }, [address, expectedChainId])
+
+    useEffect(() => {
+        getNonFungibleTokenActivities()
+    }, [getNonFungibleTokenActivities])
+
+    return { activities: flatten(Object.values(nonFungibleTokenActivities)), fetchMore: getNonFungibleTokenActivities }
 }
 
 export function useTrendingById(
