@@ -3,6 +3,7 @@ import { useRef } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
 import { TokenIcon, FormattedAddress } from '@masknet/shared'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { useScrollBottomEvent } from '@masknet/shared-base-ui'
 import { useWeb3State } from '@masknet/web3-hooks-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
@@ -95,7 +96,7 @@ type Cells = 'nft' | 'method' | 'value' | 'from' | 'to' | 'time'
 export function NonFungibleTickersTable({ address, chainId }: NonFungibleTickersTableProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const { Others } = useWeb3State()
+    const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const containerRef = useRef(null)
 
     const { activities, fetchMore } = useNonFungibleTokenActivities(address, chainId)
@@ -138,12 +139,22 @@ export function NonFungibleTickersTable({ address, chainId }: NonFungibleTickers
                 ),
                 from: (
                     <Typography fontSize={12}>
-                        <FormattedAddress address={x.from_address} size={4} formatter={Others?.formatAddress} />
+                        <FormattedAddress
+                            address={x.from_address}
+                            formatter={(address) =>
+                                Others?.formatAddress(Others?.formatDomainName(address, 12), 4) ?? address
+                            }
+                        />
                     </Typography>
                 ),
                 to: (
                     <Typography fontSize={12}>
-                        <FormattedAddress address={x.to_address} size={4} formatter={Others?.formatAddress} />
+                        <FormattedAddress
+                            address={x.to_address}
+                            formatter={(address) =>
+                                Others?.formatAddress(Others?.formatDomainName(address, 12), 4) ?? address
+                            }
+                        />
                     </Typography>
                 ),
                 time: (
