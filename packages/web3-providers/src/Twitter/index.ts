@@ -32,7 +32,7 @@ export class TwitterAPI implements TwitterBaseAPI.Provider {
     async getUserSettings(fresh = false) {
         const defaults = getDefaultUserSettings()
         try {
-            if (fresh) await this.cleanUserSettings()
+            if (fresh) await this.staleUserSettings()
             const userSettings = await timeout(getUserSettingsCached(), 5000)
             return {
                 ...defaults,
@@ -43,7 +43,7 @@ export class TwitterAPI implements TwitterBaseAPI.Provider {
         }
     }
 
-    async cleanUserSettings() {
+    async staleUserSettings() {
         getUserSettingsCached.cache.clear()
     }
 
@@ -134,7 +134,6 @@ export class TwitterAPI implements TwitterBaseAPI.Provider {
             userId: updateInfo.screen_name,
         }
     }
-
     async getUserByScreenName(screenName: string, checkNFTAvatar?: boolean): Promise<TwitterBaseAPI.User | null> {
         if (checkNFTAvatar) return getUserViaWebAPI(screenName)
         return attemptUntil<TwitterBaseAPI.User | null>(
