@@ -78,6 +78,13 @@ export function useTrendingOverviewByAddress(address: string, expectedChainId?: 
     }, [expectedChainId, address])
 }
 
+export function useCollectionByTwitterHandler(twitterHandler?: string) {
+    return useAsync(async () => {
+        if (!twitterHandler) return
+        return PluginTraderRPC.getCollectionByTwitterHandler(twitterHandler)
+    }, [twitterHandler])
+}
+
 export function useNonFungibleTokenActivities(address: string, expectedChainId?: ChainId) {
     const pageIndexRef = useRef<number>(0)
     const [nonFungibleTokenActivities, setNonFungibleTokenActivities] = useState<

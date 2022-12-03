@@ -16,8 +16,9 @@ import {
     TokenType,
 } from '@masknet/web3-shared-base'
 import { ChainId, createContract, getRPCConstants, SchemaType, WNATIVE } from '@masknet/web3-shared-evm'
-import { NFTSCAN_BASE, NFTSCAN_LOGO_BASE, NFTSCAN_URL, NFTSCAN_API } from '../constants.js'
+import { NFTSCAN_BASE, NFTSCAN_LOGO_BASE, NFTSCAN_URL, NFTSCAN_API, NFTSCAN_RESTFUL_API } from '../constants.js'
 import type { EVM } from '../types/EVM.js'
+import type { TrendingAPI } from '../../types/index.js'
 import { parseJSON, resolveActivityType, getPaymentToken, getAssetFullName } from '../../helpers.js'
 
 export type NFTScanChainId = ChainId.Mainnet | ChainId.Matic | ChainId.BSC | ChainId.Arbitrum | ChainId.Optimism
@@ -45,6 +46,22 @@ export async function fetchFromNFTScanV2<T>(chainId: ChainId, pathname: string, 
             'x-app-chainid': chainId.toString(),
         },
         cache: 'no-cache',
+    })
+    const json = await response.json()
+    return json as T
+}
+
+export async function fetchFromNFTScanRestFulAPI<T>(pathname: string, body: string, init?: RequestInit) {
+    const response = await fetch(urlcat(NFTSCAN_RESTFUL_API, pathname), {
+        ...init,
+        method: 'POST',
+        headers: {
+            'content-type': 'application/json',
+            ...init?.headers,
+            'x-api-key': 'YQ3S6KXZ',
+        },
+        cache: 'no-cache',
+        body,
     })
     const json = await response.json()
     return json as T
@@ -203,7 +220,7 @@ export function createNonFungibleCollectionFromGroup(
 
 export function createNonFungibleCollectionFromCollection(
     chainId: ChainId,
-    collection: EVM.Collection,
+    collection: TrendingAPI.Collection,
 ): NonFungibleCollection<ChainId, SchemaType> {
     return {
         chainId,
@@ -221,7 +238,7 @@ export function createNonFungibleCollectionFromCollection(
 
 export function createNonFungibleTokenContract(
     chainId: ChainId,
-    collection: EVM.Collection,
+    collection: TrendingAPI.Collection,
 ): NonFungibleTokenContract<ChainId, SchemaType> {
     return {
         chainId,

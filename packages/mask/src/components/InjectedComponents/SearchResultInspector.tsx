@@ -31,13 +31,16 @@ const useStyles = makeStyles()(() => ({
     },
 }))
 
-export interface SearchResultInspectorProps {}
+export interface SearchResultInspectorProps {
+    keyword?: string
+}
 
 export function SearchResultInspector(props: SearchResultInspectorProps) {
     const { classes } = useStyles()
     const translate = usePluginI18NField()
 
-    const keyword = useSearchedKeyword()
+    const keyword_ = useSearchedKeyword()
+    const keyword = props.keyword || keyword_
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
     const activatedPlugins = useActivatedPluginsSNSAdaptor.visibility.useNotMinimalMode()
 

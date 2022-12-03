@@ -131,7 +131,7 @@ export function TrendingView(props: TrendingViewProps) {
     const { classes } = useStyles({ isPopper })
     const theme = useTheme()
     const isMinimalMode = useIsMinimalMode(PluginID.Trader)
-    const [dataProvider, setDataProvider] = useState(dataProviders[2])
+    const [dataProvider, setDataProvider] = useState(dataProviders[0])
     const [tabIndex, setTabIndex] = useState(dataProvider !== DataProvider.UniswapInfo ? 1 : 0)
     const { chainId, networkType } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const chainIdValid = useChainIdValid(NetworkPluginID.PLUGIN_EVM, chainId)

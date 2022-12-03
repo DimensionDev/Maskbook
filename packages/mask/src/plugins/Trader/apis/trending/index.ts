@@ -125,6 +125,12 @@ export async function getNonFungibleTokenActivities(
     return NFTScanTrending.getCoinActivities(chainId, contractAddress, pageIndex)
 }
 
+export async function getCollectionByTwitterHandler(
+    twitterHandler: string,
+): Promise<TrendingAPI.Collection | undefined> {
+    return NFTScanTrending.getCollectionByTwitterHandler(twitterHandler)
+}
+
 export async function getCoinTrendingByKeyword(
     chainId: ChainId,
     keyword: string,
