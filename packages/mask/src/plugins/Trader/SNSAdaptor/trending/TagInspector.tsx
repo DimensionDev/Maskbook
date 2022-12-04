@@ -11,16 +11,8 @@ export interface TagInspectorProps {}
 
 export function TagInspector(props: TagInspectorProps) {
     const createTrendingView = useCallback(
-        (name: string, type: TagType, dataProviders: DataProvider[], address?: string, reposition?: () => void) => {
-            return (
-                <TrendingView
-                    searchedContractAddress={address}
-                    name={name}
-                    tagType={type}
-                    dataProviders={dataProviders}
-                    onUpdate={reposition}
-                />
-            )
+        (name: string, type: TagType, dataProviders: DataProvider[], reposition?: () => void) => {
+            return <TrendingView name={name} tagType={type} dataProviders={dataProviders} onUpdate={reposition} />
         },
         [],
     )

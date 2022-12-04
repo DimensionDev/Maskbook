@@ -228,7 +228,6 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
             ui.injection.enhancedPostRenderer?.(postSignal, value)
             ui.injection.postInspector?.(postSignal, value)
             ui.injection.postActions?.(postSignal, value)
-            ui.injection.postAvatar?.(postSignal, value)
             ui.injection.commentComposition?.compositionBox(postSignal, value)
             ui.injection.commentComposition?.commentInspector(postSignal, value)
         })

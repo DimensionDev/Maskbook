@@ -9,13 +9,7 @@ import type { TagType } from '../../types/index.js'
 import { PluginTransakMessages } from '../../../Transak/messages.js'
 
 export interface TrendingPopperProps {
-    children?: (
-        name: string,
-        type: TagType,
-        dataProviders: DataProvider[],
-        address?: string,
-        reposition?: () => void,
-    ) => React.ReactNode
+    children?: (name: string, type: TagType, dataProviders: DataProvider[], reposition?: () => void) => React.ReactNode
     PopperProps?: Partial<PopperProps>
 }
 
@@ -26,7 +20,6 @@ export function TrendingPopper(props: TrendingPopperProps) {
     const [freezed, setFreezed] = useState(false) // disable any click
     const [locked, setLocked] = useState(false) // state is updating, lock UI
     const [name, setName] = useState('')
-    const [address, setAddress] = useState('')
     const [type, setType] = useState<TagType | undefined>()
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
     const [availableDataProviders, setAvailableDataProviders] = useState<DataProvider[]>([])
@@ -44,12 +37,11 @@ export function TrendingPopper(props: TrendingPopperProps) {
     // open popper from message center
     useEffect(
         () =>
-            PluginTraderMessages.cashAnchorObserved.on((ev) => {
+            PluginTraderMessages.cashTagObserved.on((ev) => {
                 const update = () => {
                     setLocked(true)
                     setName(ev.name)
                     setType(ev.type)
-                    setAddress(ev.address ?? '')
                     setAnchorEl(ev.element)
                     setAvailableDataProviders(ev.dataProviders)
                     setLocked(false)
@@ -102,7 +94,7 @@ export function TrendingPopper(props: TrendingPopperProps) {
                 {({ TransitionProps }) => (
                     <Fade in={Boolean(anchorEl)} {...TransitionProps}>
                         <div>
-                            {props.children?.(name, type, availableDataProviders, address, () =>
+                            {props.children?.(name, type, availableDataProviders, () =>
                                 setTimeout(() => popperRef.current?.update(), 100),
                             )}
                         </div>

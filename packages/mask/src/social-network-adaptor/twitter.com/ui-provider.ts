@@ -27,7 +27,6 @@ import { createTaskStartSetupGuideDefault } from '../../social-network/defaults/
 import { injectMaskUserBadgeAtTwitter } from './injection/MaskIcon.js'
 import { injectPostInspectorAtTwitter } from './injection/PostInspector.js'
 import { injectPostActionsAtTwitter } from './injection/PostActions/index.js'
-import { injectPostAvatarAtTwitter } from './injection/PostAvatar/index.js'
 import { EnhanceableSite, NextIDPlatform, ProfileIdentifier } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { injectNFTAvatarInTwitter } from './injection/NFT/NFTAvatarInTwitter.js'
@@ -179,7 +178,6 @@ const twitterUI: SocialNetworkUI.Definition = {
         pageInspector: injectPageInspectorDefault(),
         postInspector: injectPostInspectorAtTwitter,
         postActions: injectPostActionsAtTwitter,
-        postAvatar: injectPostAvatarAtTwitter,
         setupPrompt: injectSetupPromptAtTwitter,
         newPostComposition: {
             start: injectPostBoxComposed,

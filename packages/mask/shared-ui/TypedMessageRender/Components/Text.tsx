@@ -26,7 +26,7 @@ export const Link = memo(function Anchor(props: RenderFragmentsContextType.LinkP
     )
 })
 
-export function useCashAnchorEnhancer(kind: 'hash' | 'cash' | 'nftProject', content: string) {
+export function useTagEnhancer(kind: 'hash' | 'cash', content: string) {
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const plugin = useActivatedPluginsSNSAdaptor('any')
         .filter((x) => x.enhanceTag)

@@ -531,13 +531,9 @@ export namespace Plugin.SNSAdaptor {
          * A hook for if this plugin can enhance the #hash or $cash tag.
          */
         enhanceTag?: {
-            onClick?: (
-                kind: 'cash' | 'hash' | 'nftProject',
-                content: string,
-                event: React.MouseEvent<HTMLAnchorElement>,
-            ) => void
+            onClick?: (kind: 'cash' | 'hash', content: string, event: React.MouseEvent<HTMLAnchorElement>) => void
             onHover?: (
-                kind: 'cash' | 'hash' | 'nftProject',
+                kind: 'cash' | 'hash',
                 content: string,
                 event: React.MouseEvent<HTMLAnchorElement>,
                 chainId: ChainId,
