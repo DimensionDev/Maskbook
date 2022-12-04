@@ -1,7 +1,7 @@
 import type { RenderFragmentsContextType } from '@masknet/typed-message-react'
 import { memo } from 'react'
 import { Link } from '@mui/material'
-import { useTagEnhancer } from '../../../../shared-ui/TypedMessageRender/Components/Text.js'
+import { useCashAnchorEnhancer } from '../../../../shared-ui/TypedMessageRender/Components/Text.js'
 
 export const MindsRenderFragments: RenderFragmentsContextType = {
     AtLink: memo(function (props) {
@@ -11,7 +11,7 @@ export const MindsRenderFragments: RenderFragmentsContextType = {
     HashLink: memo(function (props) {
         const text = props.children.slice(1)
         const target = `/discovery/search?q=%23${encodeURIComponent(text)}`
-        const { hasMatch, ...events } = useTagEnhancer('hash', text)
+        const { hasMatch, ...events } = useCashAnchorEnhancer('hash', text)
         return (
             <Link
                 {...events}
@@ -27,7 +27,7 @@ export const MindsRenderFragments: RenderFragmentsContextType = {
     CashLink: memo(function (props) {
         const text = props.children.slice(1)
         const target = `/discovery/search?q=$${encodeURIComponent(text)}`
-        const { hasMatch, ...events } = useTagEnhancer('cash', text)
+        const { hasMatch, ...events } = useCashAnchorEnhancer('cash', text)
         return (
             <Link
                 {...events}

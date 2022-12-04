@@ -32,6 +32,13 @@ function getPostActionsNode(postNode: HTMLElement | null) {
         ?.querySelector<HTMLElement>('[role="group"]:last-child > div:last-child')
 }
 
+function getPostsAvatarNode(postNode: HTMLElement | null) {
+    if (!postNode) return null
+    return postNode
+        .closest('[data-testid="tweet"]')
+        ?.querySelector<HTMLElement>('div div[data-testid="Tweet-User-Avatar"] a')
+}
+
 const getParentTweetNode = (node: HTMLElement) => {
     return node.closest<HTMLElement>('[data-testid="tweet"]')
 }
@@ -93,7 +100,9 @@ function registerPostCollectorInner(
             if (!tweetNode) return
             const refs = createRefsForCreatePostContext()
             let actionsElementProxy: DOMProxy | undefined = undefined
+            let postAvatarElementProxy: DOMProxy | undefined = undefined
             const actionsInjectPoint = getPostActionsNode(proxy.current)
+            const postAvatarInjectPoint = getPostsAvatarNode(proxy.current)
             let unwatchPostNodeChange = noop
             if (actionsInjectPoint && !isQuotedTweet(tweetNode)) {
                 actionsElementProxy = DOMProxy({})
@@ -103,10 +112,21 @@ function registerPostCollectorInner(
                 }
                 unwatchPostNodeChange = proxy.on('currentChanged', handleChanged)
             }
+
+            if (postAvatarInjectPoint) {
+                postAvatarElementProxy = DOMProxy({})
+                postAvatarElementProxy.realCurrent = postAvatarInjectPoint
+                const handleChanged: EventListener<DOMProxyEvents<HTMLElement>, 'currentChanged'> = (e) => {
+                    actionsElementProxy!.realCurrent = getPostsAvatarNode(e.new) || null
+                }
+                unwatchPostNodeChange = proxy.on('currentChanged', handleChanged)
+            }
+
             const info = twitterShared.utils.createPostContext({
                 comments: undefined,
                 rootElement: proxy,
                 actionsElement: actionsElementProxy,
+                postAvatarElement: postAvatarElementProxy,
                 isFocusing: isDetailTweet(tweetNode),
                 suggestedInjectionPoint: tweetNode,
                 ...refs.subscriptions,

@@ -1,5 +1,6 @@
 import { PluginTraderMessages, PluginTraderRPC } from '../messages.js'
 import { TrendingAPI } from '@masknet/web3-providers'
+import { DataProvider } from '@masknet/public-api'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import type { Plugin } from '@masknet/plugin-infra'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -9,10 +10,24 @@ export const enhanceTag: Plugin.SNSAdaptor.Definition<ChainId>['enhanceTag'] = {
     onHover(kind, content, event, chainId: Web3Helper.Definition[NetworkPluginID.PLUGIN_EVM]['ChainId']) {
         const element = event.currentTarget
         const timer = setTimeout(async () => {
+            if (kind === 'nftProject') {
+                const collection = await PluginTraderRPC.getCollectionByTwitterHandler(content)
+                if (!collection) return
+                console.log({ collection })
+                PluginTraderMessages.cashAnchorObserved.sendToLocal({
+                    name: content,
+                    address: collection.contract_address,
+                    type: TrendingAPI.TagType.HASH,
+                    element,
+                    dataProviders: [DataProvider.NFTScan],
+                })
+
+                return
+            }
             const type = kind === 'cash' ? TrendingAPI.TagType.CASH : TrendingAPI.TagType.HASH
             const dataProviders = await PluginTraderRPC.getAvailableDataProviders(chainId, type, content)
             if (!dataProviders.length) return
-            PluginTraderMessages.cashTagObserved.sendToLocal({
+            PluginTraderMessages.cashAnchorObserved.sendToLocal({
                 name: content,
                 type,
                 element,

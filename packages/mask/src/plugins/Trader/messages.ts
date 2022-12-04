@@ -4,8 +4,9 @@ import type { GasConfig } from '@masknet/web3-shared-evm'
 import { PLUGIN_ID } from './constants/index.js'
 import type { TagType } from './types/index.js'
 
-interface CashTagEvent {
+interface CashAnchorEvent {
     name: string
+    address?: string
     type: TagType
     element: HTMLAnchorElement | null
     dataProviders: DataProvider[]
@@ -20,7 +21,7 @@ export interface TraderMessage {
     /**
      * View a cash tag
      */
-    cashTagObserved: CashTagEvent
+    cashAnchorObserved: CashAnchorEvent
 
     /**
      * Swap settings dialog

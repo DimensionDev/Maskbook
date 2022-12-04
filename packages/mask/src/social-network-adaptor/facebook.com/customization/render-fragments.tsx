@@ -1,12 +1,12 @@
 import { DefaultRenderFragments, RenderFragmentsContextType } from '@masknet/typed-message-react'
 import { memo } from 'react'
 import { Link } from '@mui/material'
-import { useTagEnhancer } from '../../../../shared-ui/TypedMessageRender/Components/Text.js'
+import { useCashAnchorEnhancer } from '../../../../shared-ui/TypedMessageRender/Components/Text.js'
 
 function Hash(props: RenderFragmentsContextType.HashLinkProps | RenderFragmentsContextType.CashLinkProps) {
     const text = props.children.slice(1)
     const target = `/hashtag/${encodeURIComponent(text)}`
-    const { hasMatch, ...events } = useTagEnhancer('hash', text)
+    const { hasMatch, ...events } = useCashAnchorEnhancer('hash', text)
     return <Link {...events} href={target} children={props.children} fontSize="inherit" />
 }
 export const FacebookRenderFragments: RenderFragmentsContextType = {

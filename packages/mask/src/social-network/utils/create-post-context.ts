@@ -90,6 +90,7 @@ export function createSNSAdaptorSpecializedPostContext(create: PostContextSNSAct
             },
             rootElement: opt.rootElement,
             actionsElement: opt.actionsElement,
+            postAvatarElement: opt.postAvatarElement,
             isFocusing: opt.isFocusing,
             suggestedInjectionPoint: opt.suggestedInjectionPoint,
 
