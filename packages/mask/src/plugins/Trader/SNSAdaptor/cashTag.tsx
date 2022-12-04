@@ -12,7 +12,7 @@ export const enhanceTag: Plugin.SNSAdaptor.Definition<ChainId>['enhanceTag'] = {
             const type = kind === 'cash' ? TrendingAPI.TagType.CASH : TrendingAPI.TagType.HASH
             const dataProviders = await PluginTraderRPC.getAvailableDataProviders(chainId, type, content)
             if (!dataProviders.length) return
-            PluginTraderMessages.cashTagObserved.sendToLocal({
+            PluginTraderMessages.cashAnchorObserved.sendToLocal({
                 name: content,
                 type,
                 element,
