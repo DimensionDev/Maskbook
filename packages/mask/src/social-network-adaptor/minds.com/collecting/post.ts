@@ -55,6 +55,19 @@ function collectPostsMindsInner(store: Next.CollectingCapabilities.PostsProvider
 
             store.set(metadata, postInfo)
 
+            function collectLinks() {
+                if (!activityNode) return
+                if (signal?.aborted) return
+
+                const links = [...activityNode.querySelectorAll('a')].filter((x) => x.rel)
+                const seen = new Set<string>()
+                for (const x of links) {
+                    if (seen.has(x.href)) continue
+                    seen.add(x.href)
+                    info.postMetadataMentionedLinks.set(x, x.href)
+                }
+            }
+
             function collectPostInfo() {
                 const { pid, messages, handle, name, avatar } = postParser(activityNode)
                 if (!pid) return
@@ -94,10 +107,16 @@ function collectPostsMindsInner(store: Next.CollectingCapabilities.PostsProvider
                 info.postMessage.value = makeTypedMessageTuple([...messages, makeTypedMessagePromise(images)])
             }
 
-            collectPostInfo()
+            function run() {
+                collectPostInfo()
+                collectLinks()
+            }
+
+            run()
+
             return {
-                onNodeMutation: collectPostInfo,
-                onTargetChanged: collectPostInfo,
+                onNodeMutation: run,
+                onTargetChanged: run,
                 onRemove: () => store.delete(metadata),
             }
         }),
