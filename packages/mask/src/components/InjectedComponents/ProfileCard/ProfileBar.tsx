@@ -150,7 +150,7 @@ export const ProfileBar = memo<ProfileBarProps>(
 
         return (
             <Box className={cx(classes.root, className)} {...rest} ref={containerRef}>
-                <div className={classes.avatar} data-id={identity.identifier?.userId}>
+                <div className={classes.avatar}>
                     <Image
                         src={identity.avatar}
                         height={40}
