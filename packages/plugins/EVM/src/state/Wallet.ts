@@ -36,7 +36,7 @@ export class Wallet extends WalletState<ChainId, ProviderType, Transaction> {
                     if (providerType === ProviderType.MaskWallet) {
                         return wallets
                     }
-                    return storage[providerType]
+                    return storage[providerType] ?? EMPTY_LIST
                 },
             )
         }
