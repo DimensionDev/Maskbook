@@ -39,11 +39,10 @@ export class WalletState<ChainId, ProviderType extends string, Transaction> impl
             formatAddress: (address: string) => string
         },
     ) {
-        const defaultValue = Object.fromEntries(
-            this.providers.map((x) => [x, []] as [string, Wallet[]]),
-        ) as WalletStorage<ProviderType>
         const { storage } = this.context.createKVStorage('persistent', {}).createSubScope('Wallet', {
-            value: defaultValue,
+            value: Object.fromEntries(
+                this.providers.map((x) => [x, []] as [string, Wallet[]]),
+            ) as WalletStorage<ProviderType>,
         })
         this.storage = storage.value
 

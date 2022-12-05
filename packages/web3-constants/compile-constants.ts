@@ -10,10 +10,9 @@ async function compileConstants(folderPath: string, names: string[]) {
         const constants: Record<string, Record<string, unknown>> = JSON.parse(data)
         for (const name of Object.keys(constants)) {
             const values = constants[name]
-            const defaultValue = getDefaultValue(Object.values(values)[0])
             const pairs: Array<[string, unknown]> = []
             for (const name of names) {
-                pairs.push([name, values[name] ?? defaultValue])
+                pairs.push([name, values[name] ?? getDefaultValue(Object.values(values)[0])])
             }
             pairs.sort(([a], [b]) => names.indexOf(a) - names.indexOf(b))
             constants[name] = Object.fromEntries(pairs)

@@ -18,13 +18,18 @@ import { BalanceNotifier } from './BalanceNotifier.js'
 import { BlockNumberNotifier } from './BlockNumberNotifier.js'
 import { Storage } from './Storage/index.js'
 
-export function createWeb3State(context: Plugin.Shared.SharedUIContext): EVM_Web3State {
+export async function createWeb3State(context: Plugin.Shared.SharedUIContext): Promise<EVM_Web3State> {
     const Provider_ = new Provider(context)
     const Settings_ = new Settings(context)
     const Transaction_ = new Transaction(context, {
         chainId: Provider_.chainId,
         account: Provider_.account,
     })
+
+    await Provider_.storage.account.initializedPromise
+    await Provider_.storage.providerType.initializedPromise
+    await Settings_.storage.currencyType.initializedPromise
+    await Transaction_.storage.initializedPromise
 
     return {
         Settings: Settings_,

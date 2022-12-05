@@ -158,10 +158,10 @@ class Watcher<ChainId, Transaction> {
 export class TransactionWatcherState<ChainId, Transaction>
     implements Web3TransactionWatcherState<ChainId, Transaction>
 {
-    protected storage: StorageItem<TransactionWatcher<ChainId, Transaction>> = null!
     private watchers: Map<ChainId, Watcher<ChainId, Transaction>> = new Map()
 
-    emitter: Emitter<WatchEvents<Transaction>> = new Emitter()
+    public storage: StorageItem<TransactionWatcher<ChainId, Transaction>> = null!
+    public emitter: Emitter<WatchEvents<Transaction>> = new Emitter()
 
     constructor(
         protected context: Plugin.Shared.SharedContext,
@@ -178,14 +178,9 @@ export class TransactionWatcherState<ChainId, Transaction>
             getTransactionCreator: (transaction: Transaction) => string
         },
     ) {
-        const defaultValue = Object.fromEntries(chainIds.map((x) => [x, {}])) as TransactionWatcher<
-            ChainId,
-            Transaction
-        >
         const { storage } = this.context.createKVStorage('memory', {}).createSubScope('TransactionWatcher', {
-            value: defaultValue,
+            value: Object.fromEntries(chainIds.map((x) => [x, {}])) as TransactionWatcher<ChainId, Transaction>,
         })
-
         this.storage = storage.value
 
         const resume = async () => {
