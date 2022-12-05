@@ -10,7 +10,7 @@ export const PluginDescriptor = ({ children }: PluginHeaderProps) => {
     const t = useSharedI18N()
 
     return (
-        <Stack flexDirection="row" justifyContent="space-between" alignItems="center">
+        <Stack flexDirection="row" justifyContent="space-between" alignItems="center" width="100%">
             <Stack flexDirection="row" justifyContent="space-between" gap={0.5} alignItems="center">
                 <Icons.DecentralizedSearch />
                 <Typography color={theme.palette.maskColor.dark} fontWeight="bolder">

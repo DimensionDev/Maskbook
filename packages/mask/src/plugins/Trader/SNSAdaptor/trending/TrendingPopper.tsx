@@ -14,6 +14,7 @@ export interface TrendingPopperProps {
         type: TagType,
         dataProviders: DataProvider[],
         address?: string,
+        isNFTProjectPopper?: boolean,
         reposition?: () => void,
     ) => React.ReactNode
     PopperProps?: Partial<PopperProps>
@@ -25,6 +26,7 @@ export function TrendingPopper(props: TrendingPopperProps) {
     } | null>(null)
     const [freezed, setFreezed] = useState(false) // disable any click
     const [locked, setLocked] = useState(false) // state is updating, lock UI
+    const [isNFTProjectPopper, setIsNFTProjectPopper] = useState(false)
     const [name, setName] = useState('')
     const [address, setAddress] = useState('')
     const [type, setType] = useState<TagType | undefined>()
@@ -47,9 +49,11 @@ export function TrendingPopper(props: TrendingPopperProps) {
             PluginTraderMessages.cashAnchorObserved.on((ev) => {
                 const update = () => {
                     setLocked(true)
+                    console.log({ ev })
                     setName(ev.name)
                     setType(ev.type)
                     setAddress(ev.address ?? '')
+                    setIsNFTProjectPopper(Boolean(ev.isNFTProjectPopper))
                     setAnchorEl(ev.element)
                     setAvailableDataProviders(ev.dataProviders)
                     setLocked(false)
@@ -102,7 +106,7 @@ export function TrendingPopper(props: TrendingPopperProps) {
                 {({ TransitionProps }) => (
                     <Fade in={Boolean(anchorEl)} {...TransitionProps}>
                         <div>
-                            {props.children?.(name, type, availableDataProviders, address, () =>
+                            {props.children?.(name, type, availableDataProviders, address, isNFTProjectPopper, () =>
                                 setTimeout(() => popperRef.current?.update(), 100),
                             )}
                         </div>

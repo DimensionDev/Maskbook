@@ -120,6 +120,18 @@ const useStyles = makeStyles<{
         },
         pluginDescriptorWrapper: {
             padding: '0 12px 12px',
+            position: 'absolute',
+            width: '100%',
+            height: 48,
+            left: 0,
+            bottom: 0,
+            right: 0,
+            display: 'flex',
+            alignItems: 'center',
+            background: theme.palette.mode === 'dark' ? 'rgba(0, 0, 0, 0.8)' : 'rgba(255, 255, 255, 0.8)',
+            backdropFilter: 'blur(5px)',
+            boxSizing: 'border-box',
+            zIndex: 2,
         },
     }
 })
@@ -338,7 +350,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                             }
                                         />
                                     </Stack>
-                                    {isTokenSecurityEnable && tokenSecurityInfo && !error && (
+                                    {isTokenSecurityEnable && tokenSecurityInfo && !error && !isNFT && (
                                         <TokenSecurityBar tokenSecurity={tokenSecurityInfo} />
                                     )}
                                 </Stack>

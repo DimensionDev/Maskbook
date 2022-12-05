@@ -39,6 +39,7 @@ import { pluginIDSettings } from '../../../../../shared/legacy-settings/settings
 
 const useStyles = makeStyles<{
     isPopper: boolean
+    isNFTProjectPopper: boolean
 }>()((theme, props) => {
     return {
         root: props.isPopper
@@ -61,7 +62,8 @@ const useStyles = makeStyles<{
         },
         body: props.isPopper
             ? {
-                  minHeight: 303,
+                  minHeight: props.isNFTProjectPopper ? 383 : 374,
+                  maxHeight: props.isNFTProjectPopper ? 383 : 'unset',
                   overflow: 'hidden',
                   display: 'flex',
                   flexDirection: 'column',
@@ -113,6 +115,7 @@ export interface TrendingViewProps {
     expectedChainId?: ChainId
     onUpdate?: () => void
     isPopper?: boolean
+    isNFTProjectPopper?: boolean
     asset?: AsyncState<{ currency?: TrendingAPI.Currency; trending?: TrendingAPI.Trending | null }>
 }
 
@@ -125,10 +128,20 @@ enum ContentTabs {
 }
 
 export function TrendingView(props: TrendingViewProps) {
-    const { name, tagType, dataProviders, isPopper = true, searchedContractAddress, expectedChainId, asset, id } = props
+    const {
+        name,
+        tagType,
+        dataProviders,
+        isPopper = true,
+        isNFTProjectPopper = false,
+        searchedContractAddress,
+        expectedChainId,
+        asset,
+        id,
+    } = props
 
     const { t } = useI18N()
-    const { classes } = useStyles({ isPopper })
+    const { classes } = useStyles({ isPopper, isNFTProjectPopper })
     const theme = useTheme()
     const isMinimalMode = useIsMinimalMode(PluginID.Trader)
     const [dataProvider, setDataProvider] = useState(dataProviders[0])

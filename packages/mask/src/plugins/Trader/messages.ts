@@ -7,6 +7,7 @@ import type { TagType } from './types/index.js'
 interface CashAnchorEvent {
     name: string
     address?: string
+    isNFTProjectPopper?: boolean
     type: TagType
     element: HTMLElement | null
     dataProviders: DataProvider[]

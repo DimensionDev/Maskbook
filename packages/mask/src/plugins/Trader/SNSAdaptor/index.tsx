@@ -131,8 +131,8 @@ const sns: Plugin.SNSAdaptor.Definition<
             },
         },
         Utils: {
-            shouldDisplay() {
-                return true
+            shouldDisplay(_, socialAccounts) {
+                return !socialAccounts?.length
             },
         },
     },

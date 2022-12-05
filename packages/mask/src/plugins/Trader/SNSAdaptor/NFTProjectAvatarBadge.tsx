@@ -36,6 +36,7 @@ export const NFTProjectAvatarBadge: FC<Props> = ({ address, userId, className, .
                     name: userId,
                     address,
                     type: TrendingAPI.TagType.HASH,
+                    isNFTProjectPopper: true,
                     element: button,
                     dataProviders: [DataProvider.NFTScan],
                 })
