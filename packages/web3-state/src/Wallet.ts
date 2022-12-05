@@ -1,13 +1,13 @@
 import { omit } from 'lodash-es'
 import type { Subscription } from 'use-subscription'
 import type { Plugin } from '@masknet/plugin-infra'
-import { EMPTY_LIST, mapSubscription, mergeSubscription, StorageItem } from '@masknet/shared-base'
+import { EMPTY_ARRAY, EMPTY_LIST, mapSubscription, mergeSubscription, StorageItem } from '@masknet/shared-base'
 import { isSameAddress, Wallet, WalletState as Web3WalletState } from '@masknet/web3-shared-base'
 
 export type WalletStorage<ProviderType extends string> = Record<ProviderType, Wallet[]>
 
 export class WalletState<ChainId, ProviderType extends string, Transaction> implements Web3WalletState<Transaction> {
-    public wallets?: Subscription<Wallet[]>
+    public wallets?: Subscription<Wallet[]> = EMPTY_ARRAY
 
     protected storage: StorageItem<WalletStorage<ProviderType>> = null!
 

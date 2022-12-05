@@ -6,7 +6,7 @@ import { useQueryQualification } from './useQueryQualification.js'
 
 export function useSignableAccounts(): AsyncState<{
     personas: PersonaInformation[]
-    signablePersonas?: PersonaInformation[]
+    signablePersonas?: Array<PersonaInformation & { address?: string }>
     signableWallets?: Wallet[]
 }> {
     const [result, queryQualification] = useQueryQualification()

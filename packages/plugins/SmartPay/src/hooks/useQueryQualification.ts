@@ -1,4 +1,4 @@
-import { useAllPersonas, useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
+import { useAllPersonas, useLastRecognizedIdentity, useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
 import { NextIDPlatform, PersonaInformation } from '@masknet/shared-base'
 import { useWallets } from '@masknet/web3-hooks-base'
 import { NextIDProof } from '@masknet/web3-providers'
@@ -7,6 +7,7 @@ import { isValidAddress } from '@masknet/web3-shared-evm'
 import { first, intersectionWith } from 'lodash-es'
 import { useAsyncFn } from 'react-use'
 import type { AsyncFnReturn } from 'react-use/lib/useAsyncFn.js'
+import type { SignablePersona } from '../type.js'
 
 export function useQueryQualification(): AsyncFnReturn<
     () => Promise<
@@ -14,7 +15,7 @@ export function useQueryQualification(): AsyncFnReturn<
               hasPersona: boolean
               eligibility: boolean
               personas: PersonaInformation[]
-              signablePersonas?: PersonaInformation[]
+              signablePersonas?: SignablePersona[]
               signableWallets?: Wallet[]
           }
         | undefined
@@ -23,6 +24,7 @@ export function useQueryQualification(): AsyncFnReturn<
     const currentIdentity = useLastRecognizedIdentity()
     const personas = useAllPersonas()
     const wallets = useWallets()
+    const { generateSignResult } = useSNSAdaptorContext()
 
     return useAsyncFn(async () => {
         if (!currentIdentity?.identifier?.userId) return
@@ -46,15 +48,22 @@ export function useQueryQualification(): AsyncFnReturn<
             x.proofs.filter((y) => y.platform === NextIDPlatform.Ethereum && isValidAddress(y.identity)),
         )
 
-        const signablePersonas = intersectionWith(
-            personas.map((x) => ({
-                ...x,
-                persona: x.identifier.publicKeyAsHex.toLowerCase(),
-            })),
-            sortPersonas,
-            (a, b) => {
-                return a.persona === b.persona
-            },
+        const signablePersonas = await Promise.all(
+            intersectionWith(
+                personas.map((x) => ({
+                    ...x,
+                    persona: x.identifier.publicKeyAsHex.toLowerCase(),
+                })),
+                sortPersonas,
+                (a, b) => {
+                    return a.persona === b.persona
+                },
+            ).map(async (x) => {
+                return {
+                    ...x,
+                    address: (await generateSignResult(x.identifier, '')).address,
+                }
+            }),
         )
 
         const signableWallets = intersectionWith(
@@ -73,5 +82,5 @@ export function useQueryQualification(): AsyncFnReturn<
             signableWallets,
             personas,
         }
-    }, [currentIdentity, personas, wallets])
+    }, [currentIdentity, personas, wallets, generateSignResult])
 }

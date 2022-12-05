@@ -13,13 +13,14 @@ import { PersonaIdentifier, fromBase64URL, PopupRoutes, ECKeyIdentifier } from '
 import { queryPersonasWithPrivateKey } from '../../../../background/database/persona/db.js'
 import { openPopupWindow } from '../../../../background/services/helper/index.js'
 import { delay, encodeText } from '@masknet/kit'
+import { personalSign } from '@metamask/eth-sig-util'
 export interface SignRequest {
     /** Use that who to sign this message. */
     identifier?: PersonaIdentifier
     /** The message to be signed. */
     message: string
     /** Use what method to sign this message? */
-    method: 'eth'
+    method: 'eth' | 'personal'
 }
 export interface SignRequestResult {
     /** The persona user selected to sign the message */
@@ -55,6 +56,23 @@ export async function signWithPersona({ message, method, identifier }: SignReque
     return generateSignResult(signer, message)
 }
 
+export async function signPayWithPersona({ message, identifier }: Omit<SignRequest, 'method'>): Promise<string> {
+    const requestID = Math.random().toString(16).slice(3)
+    await openPopupWindow(PopupRoutes.PersonaSignRequest, { message, requestID, identifier: identifier?.toText() })
+
+    const waitForApprove = new Promise<PersonaIdentifier>((resolve, reject) => {
+        delay(1000 * 60).then(() => reject(new Error('Timeout')))
+        MaskMessages.events.personaSignRequest.on((approval) => {
+            if (approval.requestID !== requestID) return
+            if (!approval.selectedPersona) reject(new Error('Persona Rejected'))
+            resolve(approval.selectedPersona!)
+        })
+    })
+    const signer = await waitForApprove
+
+    return generatePaySignResult(signer, message)
+}
+
 /**
  * Generate a signature without confirmation from user
  */
@@ -77,4 +95,14 @@ export async function generateSignResult(signer: ECKeyIdentifier, message: strin
         address: bufferToHex(publicToAddress(privateToPublic(privateKey))),
         messageHex: bufferToHex(Buffer.from(new TextEncoder().encode(message))),
     }
+}
+
+export async function generatePaySignResult(signer: ECKeyIdentifier, message: string) {
+    const persona = (await queryPersonasWithPrivateKey()).find((x) => x.identifier === signer)
+    if (!persona) throw new Error('Persona not found')
+    const privateKey = Buffer.from(fromBase64URL(persona.privateKey.d!))
+    return personalSign({
+        privateKey,
+        data: message,
+    })
 }

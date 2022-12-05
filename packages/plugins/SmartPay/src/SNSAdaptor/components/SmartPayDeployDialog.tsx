@@ -1,19 +1,25 @@
 import { Icons } from '@masknet/icons'
-import { useCurrentPersonaInformation, useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
+import {
+    useCurrentPersonaInformation,
+    useLastRecognizedIdentity,
+    useSNSAdaptorContext,
+} from '@masknet/plugin-infra/content-script'
 import { ImageIcon, InjectedDialog, PersonaAction, useSnackbarCallback } from '@masknet/shared'
 import { formatPersonaFingerprint, NetworkPluginID } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { makeStyles } from '@masknet/theme'
-import { useNetworkDescriptor } from '@masknet/web3-hooks-base'
+import { ActionButton, makeStyles } from '@masknet/theme'
+import { useChainContext, useNetworkDescriptor, useWeb3Connection } from '@masknet/web3-hooks-base'
+import { SmartPayAccount, SmartPayFunder } from '@masknet/web3-providers'
 import { ChainId, formatEthereumAddress } from '@masknet/web3-shared-evm'
-import { DialogActions, DialogContent, Link, Typography, Box, Button } from '@mui/material'
+import { DialogActions, DialogContent, Link, Typography, Box } from '@mui/material'
+import getUnixTime from 'date-fns/getUnixTime'
 import { first } from 'lodash-es'
-import { memo, useState } from 'react'
-import { useAsync, useCopyToClipboard, useUpdateEffect } from 'react-use'
+import { memo, useCallback, useState } from 'react'
+import { useAsync, useAsyncFn, useCopyToClipboard, useUpdateEffect } from 'react-use'
 import { useSignableAccounts } from '../../hooks/useSignableAccounts.js'
 import { Translate, useI18N } from '../../locales/index.js'
 import { PluginSmartPayMessages } from '../../message.js'
-import { context } from '../context.js'
+import { SignAccount, SignAccountType } from '../../type.js'
 import { ManagePopover } from './ManagePopover.js'
 import { SmartPayBanner } from './SmartPayBanner.js'
 
@@ -75,6 +81,7 @@ const useStyles = makeStyles()((theme) => ({
         columnGap: 2,
     },
     select: {
+        cursor: 'pointer',
         backgroundColor: theme.palette.maskColor.input,
         borderRadius: 12,
         padding: theme.spacing(1.5),
@@ -105,14 +112,7 @@ export const SmartPayDeployDialog = memo(() => {
     const { classes } = useStyles()
     const [inWhiteList, setInWhiteList] = useState(true)
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
-    const [signAccount, setSignAccount] = useState<
-        | {
-              type: 'Wallet' | 'Persona'
-              identity?: string
-              name?: string
-          }
-        | undefined
-    >()
+    const [signAccount, setSignAccount] = useState<SignAccount | undefined>()
     const { open, closeDialog } = useRemoteControlledDialog(
         PluginSmartPayMessages.smartPayDeployDialogEvent,
         (event) => {
@@ -121,6 +121,9 @@ export const SmartPayDeployDialog = memo(() => {
         },
     )
 
+    const { personaSignPayMessage, getPersonaAvatar } = useSNSAdaptorContext()
+    const connection = useWeb3Connection()
+    const { account, providerType } = useChainContext()
     const { setDialog } = useRemoteControlledDialog(PluginSmartPayMessages.smartPayDescriptionDialogEvent)
 
     const polygonDescriptor = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, ChainId.Matic)
@@ -133,40 +136,81 @@ export const SmartPayDeployDialog = memo(() => {
     const currentPersona = useCurrentPersonaInformation()
     const currentVisitingProfile = useLastRecognizedIdentity()
     const { value: avatar } = useAsync(
-        async () => context.getPersonaAvatar(currentPersona?.identifier),
-        [currentPersona],
+        async () => getPersonaAvatar(currentPersona?.identifier),
+        [currentPersona, getPersonaAvatar],
     )
     // #endregion
+
+    // #region select signal account
+    useUpdateEffect(() => {
+        if (signablePersonas?.length) {
+            const firstPersona = first(signablePersonas)
+            setSignAccount({
+                type: SignAccountType.Persona,
+                identity: firstPersona?.identifier.publicKeyAsHex,
+                name: firstPersona?.nickname,
+                address: firstPersona?.address,
+            })
+
+            return
+        } else if (signableWallets) {
+            const firstWallet = first(signableWallets)
+            setSignAccount({
+                type: SignAccountType.Wallet,
+                identity: firstWallet?.address,
+                name: firstWallet?.name,
+                address: firstWallet?.address,
+            })
+            return
+        }
+    }, [signablePersonas, signableWallets])
+
+    const handleSelectSignAccount = useCallback((signAccount: SignAccount) => {
+        setSignAccount(signAccount)
+    }, [])
+    // #endregion
+
+    const { value: contractAccount } = useAsync(async () => {
+        if (!signAccount?.identity || !signAccount?.address) return
+
+        const accounts = await SmartPayAccount.getAccounts(ChainId.Matic, [signAccount?.address])
+
+        return first(accounts)
+    }, [signAccount])
+
+    const [{ loading }, handleDeploy] = useAsyncFn(async () => {
+        if (!currentVisitingProfile?.identifier?.userId || !currentPersona || !signAccount?.address) return
+
+        const payload = JSON.stringify({
+            twitterHandler: currentVisitingProfile.identifier.userId,
+            ts: getUnixTime(new Date()),
+            publicKey: currentPersona?.identifier.publicKeyAsHex,
+            nonce: 0,
+        })
+
+        const signature = await personaSignPayMessage({
+            message: payload,
+            identifier: currentPersona.identifier,
+        })
+
+        const response = await SmartPayFunder.fund(ChainId.Matic, {
+            ownerAddress: signAccount.address,
+            signature,
+            payload,
+        })
+
+        // TODO: wallet sign account
+    }, [connection, signAccount, account, providerType, currentVisitingProfile?.identifier, currentPersona])
 
     // #region copy event handler
     const [, copyToClipboard] = useCopyToClipboard()
 
     const onCopy = useSnackbarCallback({
-        executor: async () => copyToClipboard('0x790116d0685eB197B886DAcAD9C247f785987A4a'),
+        executor: async () => copyToClipboard(contractAccount?.address ?? ''),
         deps: [],
         successText: t.copy_wallet_address_success(),
     })
     // #endregion
-
-    useUpdateEffect(() => {
-        if (signablePersonas?.length) {
-            const firstPersona = first(signablePersonas)
-            setSignAccount({
-                type: 'Persona',
-                identity: firstPersona?.identifier.rawPublicKey,
-                name: firstPersona?.nickname,
-            })
-            return
-        } else if (signableWallets) {
-            const firstWallet = first(signableWallets)
-            setSignAccount({
-                type: 'Wallet',
-                identity: firstWallet?.address,
-                name: firstWallet?.name,
-            })
-            return
-        }
-    }, [signablePersonas, signableWallets])
 
     return (
         <InjectedDialog
@@ -200,7 +244,7 @@ export const SmartPayDeployDialog = memo(() => {
                                         Smart Pay 1
                                     </Typography>
                                     <Typography className={classes.address}>
-                                        {formatEthereumAddress('0x790116d0685eB197B886DAcAD9C247f785987A4a', 4)}
+                                        {formatEthereumAddress(contractAccount?.address ?? '', 4)}
                                         <Icons.PopupCopy onClick={onCopy} size={14} />
                                     </Typography>
                                 </Box>
@@ -224,12 +268,7 @@ export const SmartPayDeployDialog = memo(() => {
                             <Typography className={classes.selectTitle}>
                                 {t.setup_smart_pay_managed_account()}
                             </Typography>
-                            <Box
-                                display="flex"
-                                justifyContent="space-between"
-                                alignItems="center"
-                                mt={0.5}
-                                sx={{ cursor: 'pointer' }}>
+                            <Box display="flex" justifyContent="space-between" alignItems="center" mt={0.5}>
                                 <Box display="flex" alignItems="center" columnGap={1}>
                                     <Icons.MaskBlue size={24} className={classes.maskIcon} />
                                     <Typography fontSize={18} fontWeight={700} lineHeight="22px">
@@ -248,6 +287,8 @@ export const SmartPayDeployDialog = memo(() => {
                                 }}
                                 signablePersonas={signablePersonas ?? []}
                                 signableWallets={signableWallets ?? []}
+                                selectedIdentity={signAccount?.identity}
+                                onSelect={handleSelectSignAccount}
                             />
                         </Box>
                         <Box className={classes.tips}>
@@ -304,7 +345,9 @@ export const SmartPayDeployDialog = memo(() => {
                     avatar={avatar !== null ? avatar : undefined}
                     currentPersona={currentPersona}
                     currentVisitingProfile={currentVisitingProfile}>
-                    <Button variant="roundedOutlined">{t.deploy()}</Button>
+                    <ActionButton onClick={handleDeploy} loading={loading} variant="roundedOutlined">
+                        {t.deploy()}
+                    </ActionButton>
                 </PersonaAction>
             </DialogActions>
         </InjectedDialog>

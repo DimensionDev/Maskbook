@@ -17,6 +17,7 @@
         "@masknet/web3-shared-base": "workspace:^",
         "unstated-next": "^1.1.0",
         "react-use": "^17.4.0",
-        "use-subscription": "1.6.0"
+        "use-subscription": "1.6.0",
+        "date-fns": "2.29.3"
     }
 }

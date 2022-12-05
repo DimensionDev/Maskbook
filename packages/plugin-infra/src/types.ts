@@ -214,6 +214,7 @@ export namespace Plugin.Shared {
         /** Sign a message with persona */
         personaSignMessage(payload: PersonaSignRequest): Promise<PersonaSignResult>
 
+        personaSignPayMessage(payload: Omit<PersonaSignRequest, 'method'>): Promise<string>
         /** Generate sign message with persona */
         generateSignResult(signer: ECKeyIdentifier, message: string): Promise<PersonaSignResult>
 
@@ -376,6 +377,7 @@ export namespace Plugin.Shared {
         message: string
         /** Use what method to sign this message? */
         method: 'eth'
+        identifier: PersonaIdentifier
     }
 
     export interface PersonaSignResult {

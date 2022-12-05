@@ -4,11 +4,12 @@ export namespace FunderAPI {
     export interface Payload {
         twitterHandler: string
         nonce: number
+        publicKey: string
         // timestamp will expire after 1 hour
         ts: number
     }
     export interface Proof {
-        publicKey: string
+        ownerAddress: string
         payload: string // JSON.stringify(payload)
         signature: string
     }

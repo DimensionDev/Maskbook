@@ -3,19 +3,22 @@ import { useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
 import { useSnackbarCallback } from '@masknet/shared'
 import { formatPersonaFingerprint, PersonaInformation, PopupRoutes } from '@masknet/shared-base'
 import { makeStyles, usePortalShadowRoot } from '@masknet/theme'
-import type { Wallet } from '@masknet/web3-shared-base'
+import { isSameAddress, Wallet } from '@masknet/web3-shared-base'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { Box, Button, Popover, Radio, Typography } from '@mui/material'
 import { memo } from 'react'
 import { useCopyToClipboard } from 'react-use'
 import { useI18N } from '../../locales/index.js'
+import { SignAccount, SignAccountType } from '../../type.js'
 
 export interface ManagePopoverProps {
     open: boolean
     anchorEl: HTMLElement | null
     onClose: () => void
-    signablePersonas: PersonaInformation[]
+    signablePersonas: Array<PersonaInformation & { address?: string }>
     signableWallets: Wallet[]
+    selectedIdentity?: string
+    onSelect: (account: SignAccount) => void
 }
 
 const useStyles = makeStyles()((theme) => ({
@@ -62,7 +65,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export const ManagePopover = memo<ManagePopoverProps>(
-    ({ open, anchorEl, onClose, signablePersonas, signableWallets }) => {
+    ({ open, anchorEl, onClose, signablePersonas, signableWallets, onSelect, selectedIdentity }) => {
         const t = useI18N()
         const { classes } = useStyles()
 
@@ -88,7 +91,17 @@ export const ManagePopover = memo<ManagePopoverProps>(
                 <Typography className={classes.title}>{t.personas()}</Typography>
                 <Box className={classes.list}>
                     {signablePersonas.map((persona, index) => (
-                        <Box key={index} className={classes.item}>
+                        <Box
+                            key={index}
+                            className={classes.item}
+                            onClick={() =>
+                                onSelect({
+                                    type: SignAccountType.Persona,
+                                    identity: persona.identifier.publicKeyAsHex,
+                                    name: persona.nickname,
+                                    address: persona.address,
+                                })
+                            }>
                             <Box display="flex" alignItems="center" columnGap={0.5}>
                                 <Icons.MaskBlue size={30} />
                                 <Box>
@@ -106,7 +119,7 @@ export const ManagePopover = memo<ManagePopoverProps>(
                                     </Typography>
                                 </Box>
                             </Box>
-                            <Radio checked={false} />
+                            <Radio checked={selectedIdentity === persona.identifier.publicKeyAsHex} />
                         </Box>
                     ))}
                 </Box>
@@ -114,7 +127,17 @@ export const ManagePopover = memo<ManagePopoverProps>(
                 {signableWallets.length ? (
                     <Box className={classes.list}>
                         {signableWallets.map((wallet, index) => (
-                            <Box key={index} className={classes.item}>
+                            <Box
+                                key={index}
+                                className={classes.item}
+                                onClick={() =>
+                                    onSelect({
+                                        type: SignAccountType.Wallet,
+                                        identity: wallet.address,
+                                        name: wallet.name,
+                                        address: wallet.address,
+                                    })
+                                }>
                                 <Box display="flex" alignItems="center" columnGap={0.5}>
                                     <Icons.MaskBlue size={30} />
                                     <Box>
@@ -132,7 +155,7 @@ export const ManagePopover = memo<ManagePopoverProps>(
                                         </Typography>
                                     </Box>
                                 </Box>
-                                <Radio checked={false} />
+                                <Radio checked={isSameAddress(selectedIdentity, wallet.address)} />
                             </Box>
                         ))}
                     </Box>
