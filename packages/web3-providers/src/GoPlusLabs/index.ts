@@ -23,7 +23,13 @@ export interface SupportedChainResponse {
 }
 
 export class GoPlusAuthorizationAPI implements AuthorizationAPI.Provider<ChainId> {
+    async getSupportChainIds() {
+        return [ChainId.Mainnet, ChainId.BSC]
+    }
     async getNonFungibleTokenSpenders(chainId: ChainId, addresses: string) {
+        const supportedChainIds = await this.getSupportChainIds()
+        if (!supportedChainIds.includes(chainId)) return EMPTY_LIST
+
         const maskDappContractInfoList = getAllMaskDappContractInfo(chainId, 'nft')
         const response = await fetchJSON<{
             result: GoPlusNFTInfo[]
@@ -79,6 +85,9 @@ export class GoPlusAuthorizationAPI implements AuthorizationAPI.Provider<ChainId
     }
 
     async getFungibleTokenSpenders(chainId: ChainId, addresses: string) {
+        const supportedChainIds = await this.getSupportChainIds()
+        if (!supportedChainIds.includes(chainId)) return EMPTY_LIST
+
         const maskDappContractInfoList = getAllMaskDappContractInfo(chainId, 'token')
 
         const response = await fetchJSON<{
