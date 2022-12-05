@@ -95,7 +95,7 @@ const useStyles = makeStyles<{
             marginBottom: '-36px',
         },
         nftItems: {
-            height: 530,
+            height: props.isNFTProjectPopper ? 360 : 530,
             padding: theme.spacing(2),
             boxSizing: 'border-box',
             overflow: 'auto',

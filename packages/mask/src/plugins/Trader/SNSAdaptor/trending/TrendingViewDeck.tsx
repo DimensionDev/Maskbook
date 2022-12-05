@@ -124,7 +124,7 @@ const useStyles = makeStyles<{
             width: '100%',
             height: 48,
             left: 0,
-            bottom: 15,
+            bottom: 12,
             right: 0,
             display: 'flex',
             alignItems: 'center',
