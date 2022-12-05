@@ -19,8 +19,8 @@ export class ProviderState<
 > implements Web3ProviderState<ChainId, ProviderType, NetworkType>
 {
     protected site = getSiteType()
-    protected storage: StorageObject<ProviderStorage<Account<ChainId>, ProviderType>> = null!
 
+    public storage: StorageObject<ProviderStorage<Account<ChainId>, ProviderType>> = null!
     public account?: Subscription<string>
     public chainId?: Subscription<ChainId>
     public networkType?: Subscription<NetworkType>
@@ -40,17 +40,13 @@ export class ProviderState<
             getNetworkTypeFromChainId(chainId: ChainId): NetworkType
         },
     ) {
-        const defaultValue = {
+        const { storage } = this.context.createKVStorage('memory', {}).createSubScope(this.site ?? 'Provider', {
             account: {
                 account: '',
                 chainId: options.getDefaultChainId(),
             },
             providerType: options.getDefaultProviderType(),
-        }
-
-        const { storage } = this.context
-            .createKVStorage('memory', {})
-            .createSubScope(this.site ?? 'Provider', defaultValue)
+        })
         this.storage = storage
 
         this.setupSubscriptions()

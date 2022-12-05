@@ -11,8 +11,7 @@ export interface SettingsStorage {
 }
 
 export class SettingsState implements Web3SettingsState {
-    protected storage: StorageObject<SettingsStorage> = null!
-
+    public storage: StorageObject<SettingsStorage> = null!
     public allowTestnet?: Subscription<boolean>
     public currencyType?: Subscription<CurrencyType>
     public gasOptionType?: Subscription<GasOptionType>

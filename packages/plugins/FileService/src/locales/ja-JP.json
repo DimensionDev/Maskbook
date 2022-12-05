@@ -10,19 +10,15 @@
     "uploading_on_cancel": "アップロードしています…今このページを閉じないでください。",
     "recent_files": "最近のファイル",
     "show_more": "更に",
-    "file_key": "ファイルキー：",
     "unencrypted": "このファイルは暗号化されていません。",
     "signing_failed": "サービスが使用できません。今しばらくお待ちください。",
     "on_encrypt_it": "暗号化しましょう",
     "use_cdn": "Mesonを使用して加速する",
     "legal_text": "このプラグインを使用することで<terms>利用規約</terms>並びに<policy>プライバシーポリシー</policy>に同意したこととなります。",
-    "legal_terms_link": "https://legal.mask.io/arweave/file-service/plugin-terms.html",
-    "legal_policy_link": "https://legal.mask.io/arweave/file-service/privacy-policy-uploader.html",
     "drop_indicator": "ファイルをドラッグ＆ドロップしてアップロード！",
     "drop_hint_1": "ファイル容量の超過：{{limit}}",
     "drop_hint_2": "このファイルはすぐにアップロードされ、取り消すことはできません。",
     "drop_here": "ファイルをここにドラッグ＆ドロップ",
-    "error_101": "一つのファイルだけにしてください！",
-    "error_102": "ファイルが大きすぎます！最大容量は {{limit}} です。",
-    "on_change_file": "ファイルの変更"
+    "on_change_file": "ファイルの変更",
+    "file_key": "ファイルキー："
 }
