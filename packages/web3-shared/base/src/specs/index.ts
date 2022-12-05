@@ -723,8 +723,6 @@ export interface Wallet {
     derivationPath?: string
     /** the derivation path when wallet last was derived */
     latestDerivationPath?: string
-    /** eip-4337 compatible salt number using by create2Factory */
-    salt?: number
     /** the internal presentation of mask wallet sdk */
     storedKeyInfo?: api.IStoredKeyInfo
     /** the Mask SDK stored key info */
@@ -732,6 +730,8 @@ export interface Wallet {
     createdAt: Date
     /** record updated at */
     updatedAt: Date
+    /** an abstract wallet has a owner */
+    owner?: string
 }
 
 export interface Transaction<ChainId, SchemaType> {
@@ -952,6 +952,8 @@ export interface Connection<
     ): Promise<Record<string, string>>
     /** Get the currently connected account. */
     getAccount(initial?: Web3ConnectionOptions): Promise<string>
+    /** Get all supported accounts with metadata. */
+    getWallets?: (initial?: Web3ConnectionOptions) =>  Promise<Wallet[]>
     /** Get the currently chain id. */
     getChainId(initial?: Web3ConnectionOptions): Promise<ChainId>
     /** Get the latest block by number. */
@@ -1488,15 +1490,17 @@ export interface ConnectionState<
     /** Get connection */
     getConnection?: (initial?: Web3ConnectionOptions) => Promise<Web3Connection>
 }
-export interface WalletState {
+export interface WalletState<Transaction> {
     /** The currently stored wallet by MaskWallet. */
     wallets?: Subscription<Wallet[]>
-    /** The default derivable wallet. */
-    walletPrimary?: Subscription<Wallet | null>
 
-    addWallet?: (id: string, wallet: Wallet) => Promise<void>
-    removeWallet?: (id: string, password?: string) => Promise<void>
-    getAllWallets?: () => Promise<Wallet[]>
+    addWallet(wallet: Wallet): Promise<void>
+    updateWallet(address: string, updates: Partial<Omit<Wallet, 'id' | 'address' | 'createdAt' | 'createdAt'>>): Promise<void>
+    renameWallet(address: string, name: string): Promise<void>
+    removeWallet(address: string, password?: string): Promise<void>
+
+    signTransaction(address: string, transaction: Transaction): Promise<string>
+    signMessage(address: string, type: string, message: string, password?: string): Promise<string>
 }
 export interface OthersState<ChainId, SchemaType, ProviderType, NetworkType, Transaction> {
     // #region resolvers
@@ -1596,7 +1600,7 @@ export interface Web3State<
         Web3Provider
     >
     Provider?: ProviderState<ChainId, ProviderType, NetworkType>
-    Wallet?: WalletState
+    Wallet?: WalletState<Transaction>
     Others?: OthersState<ChainId, SchemaType, ProviderType, NetworkType, Transaction>
     Storage?: Web3StorageServiceState
 }
