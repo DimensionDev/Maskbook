@@ -241,6 +241,8 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                 sourceType={dataProvider as unknown as SourceType}
                                 sourceTypes={dataProviders as unknown as SourceType[]}
                                 onSourceTypeChange={onDataProviderChange}
+                                isProfilePage={isProfilePage}
+                                isSingleDataProvider={dataProviders.length === 1}
                             />
                         ) : null}
                     </PluginDescriptor>

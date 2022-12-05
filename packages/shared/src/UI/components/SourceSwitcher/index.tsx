@@ -6,36 +6,38 @@ import { useSharedI18N } from '@masknet/shared'
 import { FootnoteMenu, FootnoteMenuOption } from '../FootnoteMenu/index.js'
 import { SourceProviderIcon } from '../SourceProviderIcon/index.js'
 
-const useStyles = makeStyles<{ isSingleDataProvider?: boolean; isNFTProjectPopper?: boolean }>()(
-    (theme, { isSingleDataProvider, isNFTProjectPopper }) => {
-        return {
-            source: {
-                justifyContent: 'space-between',
-            },
-            sourceNote: {
-                color: theme.palette.maskColor.secondaryDark,
-                fontWeight: 700,
-            },
-            sourceMenu: {
-                fontSize: 14,
-                fontWeight: 700,
-            },
-            sourceName: {
-                fontWeight: 700,
-                color: theme.palette.mode === 'dark' && !isNFTProjectPopper ? '' : theme.palette.maskColor.main,
-            },
-            nameWrapper: {
-                flexDirection: isSingleDataProvider ? 'row-reverse' : 'row',
-            },
-        }
-    },
-)
+const useStyles = makeStyles<{
+    isNFTProjectPopper?: boolean
+    isWeb3Profile?: boolean
+}>()((theme, { isWeb3Profile, isNFTProjectPopper }) => {
+    return {
+        source: {
+            justifyContent: 'space-between',
+        },
+        sourceNote: {
+            color: theme.palette.maskColor.secondaryDark,
+            fontWeight: 700,
+        },
+        sourceMenu: {
+            fontSize: 14,
+            fontWeight: 700,
+        },
+        sourceName: {
+            fontWeight: 700,
+            color: theme.palette.mode === 'dark' && !isNFTProjectPopper ? '' : theme.palette.maskColor.main,
+        },
+        nameWrapper: {
+            flexDirection: isWeb3Profile ? 'row-reverse' : 'row',
+        },
+    }
+})
 
 export interface SourceSwitcherProps extends withClasses<'source' | 'sourceNote'> {
     sourceType?: SourceType
     sourceTypes?: SourceType[]
     isSingleDataProvider?: boolean
     isNFTProjectPopper?: boolean
+    isProfilePage?: boolean
     onSourceTypeChange?: (option: FootnoteMenuOption) => void
 }
 
@@ -46,9 +48,11 @@ export function SourceSwitcher(props: SourceSwitcherProps) {
         onSourceTypeChange,
         isSingleDataProvider = false,
         isNFTProjectPopper = false,
+        isProfilePage = false,
     } = props
     const t = useSharedI18N()
-    const { classes } = useStyles({ isSingleDataProvider, isNFTProjectPopper }, { props })
+    const isWeb3Profile = isNFTProjectPopper || isProfilePage
+    const { classes } = useStyles({ isNFTProjectPopper, isWeb3Profile }, { props })
 
     return (
         <Box className={classes.source}>
@@ -58,7 +62,9 @@ export function SourceSwitcher(props: SourceSwitcherProps) {
                 flexDirection="row"
                 alignItems="center"
                 gap={0.5}>
-                <Typography className={classes.sourceNote}>{t.powered_by()}</Typography>
+                <Typography className={classes.sourceNote}>
+                    {isWeb3Profile || isSingleDataProvider ? t.powered_by() : t.plugin_trader_data_source()}
+                </Typography>
                 <FootnoteMenu
                     options={sourceTypes.map((x) => ({
                         name: (
@@ -74,7 +80,7 @@ export function SourceSwitcher(props: SourceSwitcherProps) {
                         ),
                         value: x,
                     }))}
-                    isSingleDataProvider={isSingleDataProvider}
+                    isSingleDataProvider={isSingleDataProvider || isWeb3Profile}
                     selectedIndex={typeof sourceType !== 'undefined' ? sourceTypes.indexOf(sourceType) : -1}
                     onChange={onSourceTypeChange}
                 />

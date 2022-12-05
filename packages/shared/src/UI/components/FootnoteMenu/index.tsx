@@ -37,11 +37,19 @@ export interface FootnoteMenuProps {
     selectedIndex?: number
     children?: React.ReactNode
     isSingleDataProvider?: boolean
+    isWeb3Profile?: boolean
     onChange?: (option: FootnoteMenuOption) => void
 }
 
 export function FootnoteMenu(props: FootnoteMenuProps) {
-    const { children, options, selectedIndex = -1, onChange, isSingleDataProvider = false } = props
+    const {
+        children,
+        options,
+        selectedIndex = -1,
+        onChange,
+        isSingleDataProvider = false,
+        isWeb3Profile = false,
+    } = props
 
     const { classes, theme } = useStyles({ isSingleDataProvider })
     const onSelect = (option: FootnoteMenuOption) => {
