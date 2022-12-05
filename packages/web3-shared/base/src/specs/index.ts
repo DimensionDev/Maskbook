@@ -609,17 +609,20 @@ export interface DomainResult<ChainId> extends Result<ChainId> {
 }
 
 export interface FungibleTokenResult<ChainId, SchemaType> extends Result<ChainId> {
+    type: SearchResultType.FungibleToken
     address: string
     token?: FungibleToken<ChainId, SchemaType>
 }
 
 export interface NonFungibleTokenResult<ChainId, SchemaType> extends Result<ChainId> {
+    type: SearchResultType.NonFungibleToken
     address: string
     tokenId: string
     token?: NonFungibleToken<ChainId, SchemaType>
 }
 
 export interface NonFungibleCollectionResult<ChainId, SchemaType> extends Result<ChainId> {
+    type: SearchResultType.NonFungibleCollection
     address: string
     collection?: NonFungibleCollection<ChainId, SchemaType>
 }
