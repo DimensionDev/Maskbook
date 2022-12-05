@@ -9,7 +9,7 @@ export class AddressBookState<
     AddressBook extends Record<ChainId, string[]> = Record<ChainId, string[]>,
 > implements Web3AddressBookState<ChainId>
 {
-    protected storage: StorageItem<AddressBook> = null!
+    public storage: StorageItem<AddressBook> = null!
     public addressBook?: Subscription<string[]>
 
     constructor(

@@ -20,7 +20,6 @@ export class Wallet extends WalletState<ChainId, ProviderType, Transaction> {
         context: Plugin.Shared.SharedUIContext,
         subscriptions: {
             chainId?: Subscription<ChainId>
-            account?: Subscription<string>
             providerType?: Subscription<ProviderType>
         },
     ) {
@@ -45,12 +44,12 @@ export class Wallet extends WalletState<ChainId, ProviderType, Transaction> {
         const update = async () => {
             const wallets = this.context.wallets.getCurrentValue()
 
-            if (this.providerType === ProviderType.MaskWallet && this.chainId === ChainId.Matic) {
-                const now = new Date()
+            if (this.providerType === ProviderType.MaskWallet) {
                 const accounts = await SmartPayAccount.getAccounts(
                     this.chainId,
                     wallets.map((x) => x.address),
                 )
+                const now = new Date()
                 this.ref.value = [
                     ...wallets,
                     ...accounts.map((x) => ({

@@ -7,9 +7,8 @@ import { isSameAddress, Wallet, WalletState as Web3WalletState } from '@masknet/
 export type WalletStorage<ProviderType extends string> = Partial<Record<ProviderType, Wallet[]>>
 
 export class WalletState<ChainId, ProviderType extends string, Transaction> implements Web3WalletState<Transaction> {
+    public storage: StorageItem<WalletStorage<ProviderType>> = null!
     public wallets?: Subscription<Wallet[]>
-
-    protected storage: StorageItem<WalletStorage<ProviderType>> = null!
 
     protected get all() {
         return this.wallets?.getCurrentValue() ?? EMPTY_LIST
@@ -30,7 +29,6 @@ export class WalletState<ChainId, ProviderType extends string, Transaction> impl
         protected context: Plugin.Shared.SharedUIContext,
         protected providers: ProviderType[],
         protected subscriptions: {
-            account?: Subscription<string>
             chainId?: Subscription<ChainId>
             providerType?: Subscription<ProviderType>
         },
