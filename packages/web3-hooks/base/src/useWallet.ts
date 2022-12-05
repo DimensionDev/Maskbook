@@ -14,6 +14,6 @@ export function useWallet<T extends NetworkPluginID>(pluginID?: T) {
     const wallets = useWallets(pluginID)
 
     return useMemo(() => {
-        return account ? wallets.find((x) => isSameAddress?.(x.address, account)) ?? null : null
-    }, [account, wallets.map((x) => x.address.toLowerCase()).join()])
+        return account ? wallets?.find((x) => isSameAddress?.(x.address, account)) ?? null : null
+    }, [account, wallets?.map((x) => x.address.toLowerCase()).join()])
 }
