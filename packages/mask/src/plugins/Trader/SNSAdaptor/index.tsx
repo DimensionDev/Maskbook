@@ -117,7 +117,6 @@ const sns: Plugin.SNSAdaptor.Definition<
         UI: {
             Decorator({ identity }) {
                 const { value: collection } = useCollectionByTwitterHandler(identity?.identifier?.userId)
-                console.log({ identity, collection })
                 if (!identity?.identifier?.userId || !collection) return null
 
                 return (

@@ -629,6 +629,7 @@ export interface NonFungibleTokenSecurity {}
     chainId?: ChainId
     type: SearchResultType
     keyword: string
+    isProfilePage?: boolean
 }
 
 export interface EOAResult<ChainId> extends Result<ChainId> {

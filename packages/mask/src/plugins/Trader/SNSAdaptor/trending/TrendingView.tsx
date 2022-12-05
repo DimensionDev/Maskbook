@@ -115,6 +115,7 @@ export interface TrendingViewProps {
     expectedChainId?: ChainId
     onUpdate?: () => void
     isPopper?: boolean
+    isProfilePage?: boolean
     isNFTProjectPopper?: boolean
     asset?: AsyncState<{ currency?: TrendingAPI.Currency; trending?: TrendingAPI.Trending | null }>
 }
@@ -137,6 +138,7 @@ export function TrendingView(props: TrendingViewProps) {
         searchedContractAddress,
         expectedChainId,
         asset,
+        isProfilePage = false,
         id,
     } = props
 
@@ -308,6 +310,7 @@ export function TrendingView(props: TrendingViewProps) {
                 <TrendingViewSkeleton
                     classes={{ footer: classes.footerSkeleton }}
                     isNFTProjectPopper={isNFTProjectPopper}
+                    isProfilePage={isProfilePage}
                     TrendingCardProps={{ classes: { root: classes.root } }}
                 />
             </ThemeProvider>
@@ -323,6 +326,7 @@ export function TrendingView(props: TrendingViewProps) {
                 cardHeader: classes.cardHeader,
             }}
             keyword={name}
+            isProfilePage={isProfilePage}
             setDataProvider={setDataProvider}
             isNFTProjectPopper={isNFTProjectPopper}
             stats={stats}

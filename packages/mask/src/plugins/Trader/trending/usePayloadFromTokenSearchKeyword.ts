@@ -20,6 +20,7 @@ export interface TrendingSearchResult {
     }>
     isNFT: boolean
     searchedContractAddress?: string
+    isProfilePage?: boolean
 }
 
 export function usePayloadFromTokenSearchKeyword(
@@ -50,6 +51,7 @@ export function usePayloadFromTokenSearchKeyword(
         chainId: isNFT ? nonFungibleAsset.trending?.coin.chainId : (fungibleAsset?.chainId as ChainId),
         asset: isNFT ? trendingByIdResult : undefined,
         isNFT,
+        isProfilePage: result.isProfilePage,
         searchedContractAddress: Others?.isValidAddress(keyword) ? keyword : undefined,
     }
 }

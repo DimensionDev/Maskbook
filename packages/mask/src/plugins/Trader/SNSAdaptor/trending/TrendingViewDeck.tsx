@@ -141,6 +141,7 @@ export interface TrendingViewDeckProps extends withClasses<'header' | 'body' | '
     isNFTProjectPopper?: boolean
     showDataProviderIcon?: boolean
     isPopper?: boolean
+    isProfilePage?: boolean
     TrendingCardProps?: Partial<TrendingCardProps>
     dataProviders: DataProvider[]
 }
@@ -153,6 +154,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
         dataProvider,
         stats,
         children,
+        isProfilePage,
         setDataProvider,
         isNFTProjectPopper = false,
         showDataProviderIcon = false,
@@ -223,7 +225,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
         <TrendingCard {...TrendingCardProps}>
             <Stack className={classes.cardHeader}>
                 {isPopper ? null : (
-                    <PluginDescriptor>
+                    <PluginDescriptor isProfilePage={isProfilePage}>
                         {showDataProviderIcon ? (
                             <SourceSwitcher
                                 sourceType={dataProvider as unknown as SourceType}
@@ -356,7 +358,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                 </Paper>
                 {isPopper ? (
                     <section className={classes.pluginDescriptorWrapper}>
-                        <PluginDescriptor isNFTProjectPopper={isNFTProjectPopper}>
+                        <PluginDescriptor isNFTProjectPopper={isNFTProjectPopper} isProfilePage={isProfilePage}>
                             {showDataProviderIcon ? (
                                 <SourceSwitcher
                                     sourceType={dataProvider as unknown as SourceType}

@@ -28,6 +28,7 @@ export function SearchResultInspector({ keyword, searchResult }: SearchResultIns
     if (!name || name === 'UNKNOWN' || !dataProviders?.length) return null
     return (
         <TrendingView
+            isProfilePage={searchResult.isProfilePage}
             isPopper={false}
             name={name}
             id={id}

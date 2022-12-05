@@ -33,6 +33,7 @@ const useStyles = makeStyles()(() => ({
 
 export interface SearchResultInspectorProps {
     keyword?: string
+    isProfilePage?: boolean
 }
 
 export function SearchResultInspector(props: SearchResultInspectorProps) {
@@ -53,7 +54,7 @@ export function SearchResultInspector(props: SearchResultInspectorProps) {
     const contentComponent = useMemo(() => {
         if (!result.value) return null
         const Component = getSearchResultContent(result.value)
-        return <Component result={result.value} />
+        return <Component result={{ ...result.value, isProfilePage: props.isProfilePage }} />
     }, [result.value])
 
     const tabs = useMemo(() => {

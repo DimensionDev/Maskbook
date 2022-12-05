@@ -14,22 +14,28 @@ const useStyles = makeStyles()((theme) => {
 })
 interface PluginHeaderProps extends React.PropsWithChildren<{}> {
     isNFTProjectPopper?: boolean
+    isProfilePage?: boolean
 }
 
-export const PluginDescriptor = ({ children, isNFTProjectPopper }: PluginHeaderProps) => {
+export const PluginDescriptor = ({ children, isNFTProjectPopper, isProfilePage }: PluginHeaderProps) => {
     const theme = useTheme()
     const { classes } = useStyles()
     const t = useSharedI18N()
+    const isWeb3Profile = isNFTProjectPopper || isProfilePage
     return (
         <Stack flexDirection="row" justifyContent="space-between" alignItems="center" width="100%">
             <Stack flexDirection="row" justifyContent="space-between" gap={0.5} alignItems="center">
-                {isNFTProjectPopper ? (
+                {isWeb3Profile ? (
                     <Icons.Web3ProfileCard className={classes.cardIcon} size={24} />
                 ) : (
                     <Icons.DecentralizedSearch />
                 )}
                 <Typography color={isNFTProjectPopper ? undefined : theme.palette.maskColor.dark} fontWeight="bolder">
-                    {isNFTProjectPopper ? t.profile_card_name() : t.decentralized_search_name()}
+                    {isNFTProjectPopper
+                        ? t.avatar_profile_card_name()
+                        : isProfilePage
+                        ? t.profile_card_name()
+                        : t.decentralized_search_name()}
                 </Typography>
             </Stack>
             <Box>{children}</Box>

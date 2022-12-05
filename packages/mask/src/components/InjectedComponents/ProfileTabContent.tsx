@@ -299,7 +299,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     if (NFTProjectAddress)
         return (
             <div className={classes.root}>
-                <SearchResultInspector keyword={NFTProjectAddress} />
+                <SearchResultInspector keyword={NFTProjectAddress} isProfilePage />
             </div>
         )
 
