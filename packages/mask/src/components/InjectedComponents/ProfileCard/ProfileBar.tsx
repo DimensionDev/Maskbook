@@ -4,7 +4,7 @@ import { v4 as uuid } from 'uuid'
 import { Icons } from '@masknet/icons'
 import { Box, Link, MenuItem, Typography } from '@mui/material'
 import { useWeb3State, useChainContext } from '@masknet/web3-hooks-base'
-import { AccountIcon, AddressItem, useSnackbarCallback } from '@masknet/shared'
+import { AccountIcon, AddressItem, Image, useSnackbarCallback } from '@masknet/shared'
 import { makeStyles, ShadowRootMenu } from '@masknet/theme'
 import { isSameAddress, SocialAccount, SocialIdentity } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
@@ -43,6 +43,9 @@ const useStyles = makeStyles<void, 'avatarDecoration'>()((theme, _, refs) => ({
             height: '100%',
             transform: 'scale(1)',
         },
+    },
+    avatarImageContainer: {
+        borderRadius: '50%',
     },
     avatarDecoration: {},
     description: {
@@ -147,14 +150,17 @@ export const ProfileBar = memo<ProfileBarProps>(
 
         return (
             <Box className={cx(classes.root, className)} {...rest} ref={containerRef}>
-                <div className={classes.avatar}>
-                    <img
+                <div className={classes.avatar} data-id={identity.identifier?.userId}>
+                    <Image
                         src={identity.avatar}
                         height={40}
                         width={40}
                         alt={identity.nickname}
-                        style={{
-                            WebkitClipPath: `url(#${avatarClipPathId}-clip-path)`,
+                        containerProps={{
+                            className: classes.avatarImageContainer,
+                            style: {
+                                WebkitClipPath: `url(#${avatarClipPathId}-clip-path)`,
+                            },
                         }}
                     />
                     <AvatarDecoration
