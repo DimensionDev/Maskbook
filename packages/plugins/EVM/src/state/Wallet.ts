@@ -10,22 +10,19 @@ import {
 } from '@masknet/shared-base'
 import { SmartPayAccount } from '@masknet/web3-providers'
 import type { Wallet as WalletItem } from '@masknet/web3-shared-base'
-import { ChainId, formatEthereumAddress, getDefaultChainId, ProviderType, Transaction } from '@masknet/web3-shared-evm'
+import { ChainId, formatEthereumAddress, ProviderType, Transaction } from '@masknet/web3-shared-evm'
 
-export class Wallet extends WalletState<ChainId, ProviderType, Transaction> {
+export class Wallet extends WalletState<ProviderType, Transaction> {
     private ref = new ValueRef<WalletItem[]>(EMPTY_LIST)
     private subscription = createSubscriptionFromValueRef(this.ref)
 
     constructor(
         context: Plugin.Shared.SharedUIContext,
         subscriptions: {
-            chainId?: Subscription<ChainId>
-            account?: Subscription<string>
             providerType?: Subscription<ProviderType>
         },
     ) {
         super(context, [ProviderType.MaskWallet], subscriptions, {
-            getDefaultChainId,
             formatAddress: formatEthereumAddress,
         })
 
@@ -45,12 +42,12 @@ export class Wallet extends WalletState<ChainId, ProviderType, Transaction> {
         const update = async () => {
             const wallets = this.context.wallets.getCurrentValue()
 
-            if (this.providerType === ProviderType.MaskWallet && this.chainId === ChainId.Matic) {
-                const now = new Date()
+            if (this.providerType === ProviderType.MaskWallet) {
                 const accounts = await SmartPayAccount.getAccounts(
-                    this.chainId,
+                    ChainId.Matic,
                     wallets.map((x) => x.address),
                 )
+                const now = new Date()
                 this.ref.value = [
                     ...wallets,
                     ...accounts.map((x) => ({

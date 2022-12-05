@@ -43,8 +43,6 @@ export async function createWeb3State(context: Plugin.Shared.SharedUIContext): P
             providerType: Provider_.providerType,
         }),
         Wallet: new Wallet(context, {
-            chainId: Provider_.chainId,
-            account: Provider_.account,
             providerType: Provider_.providerType,
         }),
         Others: new Others(context),

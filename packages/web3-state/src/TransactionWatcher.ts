@@ -1,7 +1,7 @@
 import { omit } from 'lodash-es'
 import type { Subscription } from 'use-subscription'
-import type { JsonRpcPayload } from 'web3-core-helpers'
 import { Emitter } from '@servie/events'
+import type { JsonRpcPayload } from 'web3-core-helpers'
 import { getSubscriptionCurrentValue, StorageItem } from '@masknet/shared-base'
 import {
     TransactionChecker,
@@ -54,7 +54,7 @@ class Watcher<ChainId, Transaction> {
             ...this.storage.value,
             // @ts-ignore
             [chainId]: {
-                ...this.storage.value[chainId],
+                ...this.getStorage(chainId),
                 [item.id]: item,
             },
         })
@@ -64,7 +64,7 @@ class Watcher<ChainId, Transaction> {
         await this.storage.setValue({
             ...this.storage.value,
             // @ts-ignore
-            [chainId]: omit(this.storage.value[chainId], [id]),
+            [chainId]: omit(this.getStorage(chainId), [id]),
         })
     }
 
