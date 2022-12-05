@@ -196,16 +196,18 @@ export function CoinMetadataTable(props: CoinMetadataTableProps) {
                                         flexWrap="wrap"
                                         alignItems="center"
                                         gap={1}>
-                                        {trending.coin.community_urls.map((x) => (
-                                            <Linking
-                                                key={x.link}
-                                                href={x.link}
-                                                LinkProps={{
-                                                    className: classes.link,
-                                                }}>
-                                                {brands[x.type]}
-                                            </Linking>
-                                        ))}
+                                        {trending.coin.community_urls.map((x) =>
+                                            brands[x.type] ? (
+                                                <Linking
+                                                    key={x.link}
+                                                    href={x.link}
+                                                    LinkProps={{
+                                                        className: classes.link,
+                                                    }}>
+                                                    {brands[x.type]}
+                                                </Linking>
+                                            ) : null,
+                                        )}
                                     </Stack>
                                 </TableCell>
                             </TableRow>
