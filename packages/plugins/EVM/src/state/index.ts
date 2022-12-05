@@ -1,6 +1,6 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { createConstantSubscription } from '@masknet/shared-base'
-import { ChainId, ProviderType } from '@masknet/web3-shared-evm'
+import { ProviderType } from '@masknet/web3-shared-evm'
 import { AddressBook } from './AddressBook.js'
 import { Hub } from './Hub.js'
 import { RiskWarning } from './RiskWarning.js'
@@ -67,7 +67,6 @@ export async function createWeb3State(context: Plugin.Shared.SharedUIContext): P
             providerType: Provider_.providerType,
         }),
         Wallet: new Wallet(context, {
-            chainId: createConstantSubscription(ChainId.Matic),
             providerType: createConstantSubscription(ProviderType.MaskWallet),
         }),
         Others: new Others(context),
