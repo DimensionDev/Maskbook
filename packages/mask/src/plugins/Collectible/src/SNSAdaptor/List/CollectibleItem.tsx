@@ -49,7 +49,14 @@ export const CollectibleItem = forwardRef<HTMLDivElement, CollectibleItemProps>(
     }, [textRef.current])
 
     return (
-        <ShadowRootTooltip title={showTooltip ? name : undefined} placement="top" disableInteractive arrow>
+        <ShadowRootTooltip
+            title={showTooltip ? name : undefined}
+            placement="top"
+            disableInteractive
+            arrow
+            PopperProps={{
+                disablePortal: true,
+            }}>
             <div className={cx(classes.card, className)} {...rest} ref={ref}>
                 <CollectibleCard className={classes.collectibleCard} pluginID={pluginID} asset={asset} />
                 <div className={cx(classes.description, name ? '' : classes.hidden)}>
