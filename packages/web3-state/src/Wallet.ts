@@ -4,7 +4,7 @@ import type { Plugin } from '@masknet/plugin-infra'
 import { EMPTY_LIST, mapSubscription, mergeSubscription, StorageItem } from '@masknet/shared-base'
 import { isSameAddress, Wallet, WalletState as Web3WalletState } from '@masknet/web3-shared-base'
 
-export type WalletStorage<ProviderType extends string> = Record<ProviderType, Wallet[]>
+export type WalletStorage<ProviderType extends string> = Partial<Record<ProviderType, Wallet[]>>
 
 export class WalletState<ChainId, ProviderType extends string, Transaction> implements Web3WalletState<Transaction> {
     public wallets?: Subscription<Wallet[]>
@@ -50,7 +50,7 @@ export class WalletState<ChainId, ProviderType extends string, Transaction> impl
         if (this.subscriptions.providerType) {
             this.wallets = mapSubscription(
                 mergeSubscription(this.subscriptions.providerType, this.storage.subscription),
-                ([providerType, storage]) => storage[providerType],
+                ([providerType, storage]) => storage[providerType] ?? EMPTY_LIST,
             )
         }
     }
