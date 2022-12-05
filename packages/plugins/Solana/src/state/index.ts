@@ -38,7 +38,11 @@ export function createWeb3State(context: Plugin.Shared.SharedUIContext): SolanaW
             account: Provider_.account,
             providerType: Provider_.providerType,
         }),
-        Wallet: new Wallet(context),
+        Wallet: new Wallet(context, {
+            chainId: Provider_.chainId,
+            account: Provider_.account,
+            providerType: Provider_.providerType,
+        }),
         Others: new Others(context),
         Storage: new Storage(),
     }

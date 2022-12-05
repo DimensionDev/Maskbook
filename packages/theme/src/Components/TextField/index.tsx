@@ -12,6 +12,7 @@ import { makeStyles } from '../../UIHelper/makeStyles.js'
 import { getMaskColor, MaskColorVar } from '../../CSSVariables/vars.js'
 import { isDashboardPage } from '@masknet/shared-base'
 import { omit } from 'lodash-es'
+import type { BoxProps } from '@mui/system'
 
 const isDashboard = isDashboardPage()
 
@@ -67,14 +68,16 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export type MaskTextFieldProps = Exclude<StandardTextFieldProps, 'variant'>
+export interface MaskTextFieldProps extends Exclude<StandardTextFieldProps, 'variant'> {
+    wrapperProps?: BoxProps
+}
 
 export const MaskTextField = forwardRef((props: MaskTextFieldProps, ref: ForwardedRef<any>) => {
-    const { label, sx, required = false, ...rest } = props
+    const { label, sx, required = false, className, wrapperProps, ...rest } = props
     const inputProps = (props.InputProps as InputProps) ?? {}
     const { classes } = useStyles()
     return (
-        <Box sx={sx}>
+        <Box sx={sx} {...wrapperProps}>
             {label && typeof label === 'string' && (
                 <Typography sx={{ mb: 1 }} variant="body2" className={classes.label}>
                     {label}

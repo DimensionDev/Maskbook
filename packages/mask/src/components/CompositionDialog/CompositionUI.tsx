@@ -105,7 +105,7 @@ export interface SubmitComposition {
 export interface CompositionRef {
     setMessage(message: SerializableTypedMessages): void
     setEncryptionKind(kind: EncryptionTargetType): void
-    startPlugin(id: string): void
+    startPlugin(id: string, props?: any): void
     reset(): void
 }
 export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(function CompositionDialogUI(
@@ -147,7 +147,9 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
                 if (Editor.current) Editor.current.value = msg
             },
             setEncryptionKind,
-            startPlugin: (id) => PluginEntry.current?.openPlugin(id),
+            startPlugin: (id, props) => {
+                PluginEntry.current?.openPlugin(id, props)
+            },
             reset,
         }),
         [reset],

@@ -3,16 +3,18 @@ import { makeStyles } from '@masknet/theme'
 import { isZero } from '@masknet/web3-shared-base'
 import { useEffect, useMemo, useRef } from 'react'
 import { useLocation, useWindowSize } from 'react-use'
+import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI.js'
 import { NFTAvatarClip } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatarClip.js'
 import { createReactRootShadowed, startWatch } from '../../../../utils/index.js'
 import { searchTwitterAvatarNFTLinkSelector, searchTwitterAvatarNFTSelector } from '../../utils/selector.js'
 
 export function injectNFTAvatarClipInTwitter(signal: AbortSignal) {
-    const watcher = new MutationObserverWatcher(searchTwitterAvatarNFTSelector())
+    const watcher = new MutationObserverWatcher(searchTwitterAvatarNFTSelector()).useForeach((ele, _, proxy) => {
+        const root = createReactRootShadowed(proxy.afterShadow, { untilVisible: true, signal })
+        root.render(<NFTAvatarClipInTwitter />)
+        return () => root.destroy()
+    })
     startWatch(watcher, signal)
-    createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { untilVisible: true, signal }).render(
-        <NFTAvatarClipInTwitter />,
-    )
 }
 
 const useStyles = makeStyles()(() => ({
@@ -41,14 +43,7 @@ function NFTAvatarClipInTwitter() {
         return Number.parseInt(style.width.replace('px', '') ?? 0, 10)
     }, [windowSize, location])
 
-    const twitterId = useMemo(() => {
-        const ele = searchTwitterAvatarNFTSelector().evaluate()?.closest('a') as HTMLElement
-        if (!ele) return
-        const path = ele.getAttribute('href')
-        if (!path) return
-        const [, userId] = path.match(/^\/(\w+)\/nft$/) ?? []
-        return userId
-    }, [location])
+    const identity = useCurrentVisitingIdentity()
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -74,10 +69,10 @@ function NFTAvatarClipInTwitter() {
         }
     }, [location.pathname])
 
-    if (isZero(size) || !twitterId) return null
+    if (isZero(size) || !identity.identifier) return null
     return (
         <NFTAvatarClip
-            screenName={twitterId}
+            screenName={identity.identifier.userId}
             width={size}
             height={size}
             classes={{ root: classes.root, text: classes.text, icon: classes.icon }}

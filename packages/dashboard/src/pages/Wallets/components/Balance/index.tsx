@@ -159,7 +159,7 @@ export const Balance = memo<BalanceCardProps>(
                             size="small"
                             color="secondary"
                             onClick={onReceive}
-                            endIcon={<Icons.Download size={12} color={MaskColorVar.textLink} />}>
+                            endIcon={<Icons.TxIn size={12} color={MaskColorVar.textLink} />}>
                             {t.wallets_balance_Receive()}
                         </Button>
                     </ButtonGroup>

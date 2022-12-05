@@ -1,5 +1,6 @@
 import type { Plugin } from '@masknet/plugin-infra'
-import { FileInfoV1ToV2 } from '../helpers.js'
+import compareDesc from 'date-fns/compareDesc'
+import { migrateFileInfoV1 } from '../helpers.js'
 import type { FileInfo, FileInfoV1 } from '../types.js'
 
 type DatabaseTypes = FileInfo | FileInfoV1
@@ -14,7 +15,9 @@ let migrationDone = false
 async function migrationV1_V2() {
     if (migrationDone) return
     for await (const x of Database.iterate_mutate('arweave')) {
-        await Database.add(FileInfoV1ToV2(x.value))
+        for (const file of migrateFileInfoV1(x.value)) {
+            await Database.add(file)
+        }
         await x.delete()
     }
     migrationDone = true
@@ -26,7 +29,7 @@ export async function getAllFiles() {
     for await (const { value } of Database.iterate('file')) {
         files.push(value)
     }
-    return files.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
+    return files.sort((a, b) => compareDesc(a.createdAt, b.createdAt))
 }
 
 export async function getRecentFiles() {
@@ -42,4 +45,15 @@ export async function getFileInfo(checksum: string) {
 export async function setFileInfo(info: FileInfo) {
     await migrationV1_V2()
     return Database.add(info)
+}
+
+export async function renameFile(id: string, newName: string) {
+    const file = await Database.get('file', id)
+    if (!file) throw new Error("File to rename doesn't exist")
+    await Database.remove('file', id)
+    Database.add({ ...file, name: newName })
+}
+
+export async function deleteFile(id: string) {
+    await Database.remove('file', id)
 }

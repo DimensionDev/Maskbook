@@ -39,16 +39,12 @@ export interface MaskSNSEvents {
 }
 
 export interface MaskEvents extends MaskSettingsEvents, MaskMobileOnlyEvents, MaskSNSEvents {
-    /**
-     * Only used by createNetworkSettings.
-     * value is "networkKey"
-     */
-    createNetworkSettingsReady: string
-    // TODO: Document what difference between changed and updated.
+    /** value is "bulkKey" */
+    legacySettings_bulkDiscoverNS: string
     /** emit when the settings changed. */
-    createInternalSettingsChanged: SettingsUpdateEvent
+    legacySettings_set: SettingsUpdateEvent
     /** emit when the settings finished syncing with storage. */
-    createInternalSettingsUpdated: SettingsUpdateEvent
+    legacySettings_broadcast: SettingsUpdateEvent
     ownPersonaChanged: void
     ownProofChanged: void
     restoreSuccess: void
@@ -77,6 +73,7 @@ export interface CompositionDialogEvent {
     readonly options?: {
         target?: EncryptionTargetType
         startupPlugin?: string
+        startupPluginProps?: any
         isOpenFromApplicationBoard?: boolean
     }
 }
@@ -145,10 +142,8 @@ export interface NFTAvatarSettingDialogEvent {
 }
 
 export interface SettingsUpdateEvent {
-    id: number
     key: string
     value: any
-    initial: boolean
 }
 
 export interface ProfileNFTsPageEvent {

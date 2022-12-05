@@ -1,8 +1,8 @@
 import { uniqBy } from 'lodash-es'
 import type { Subscription } from 'use-subscription'
+import type { Plugin } from '@masknet/plugin-infra'
 import { mapSubscription, mergeSubscription, StorageItem } from '@masknet/shared-base'
 import type { AddressBookState as Web3AddressBookState } from '@masknet/web3-shared-base'
-import type { Plugin } from '@masknet/plugin-infra'
 
 export class AddressBookState<
     ChainId extends number,
@@ -33,7 +33,7 @@ export class AddressBookState<
         if (this.subscriptions.chainId) {
             this.addressBook = mapSubscription(
                 mergeSubscription(this.subscriptions.chainId, this.storage.subscription),
-                ([chainId, addressBook]) => addressBook[chainId],
+                ([chainId, storage]) => storage[chainId],
             )
         }
     }

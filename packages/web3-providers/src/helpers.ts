@@ -28,9 +28,9 @@ export async function fetchJSON<T = unknown>(
     },
 ): Promise<T> {
     const fetch = options?.fetch ?? globalThis.fetch
-    const res = await fetch(requestInfo, requestInit)
-    if (!res.ok) throw new Error('Failed to fetch.')
-    return res.json()
+    const response = await fetch(requestInfo, requestInit)
+    if (!response.ok) throw new Error('Failed to fetch.')
+    return response.json()
 }
 
 export async function fetchCache(info: RequestInfo, init?: RequestInit) {
@@ -120,7 +120,7 @@ export function getAssetFullName(contract_address: string, contractName: string,
     return `${contractName} #${first}`
 }
 
-export const resolveActivityType = (type?: string) => {
+export function resolveActivityType(type?: string) {
     if (!type) return ActivityType.Transfer
     const type_ = type.toLowerCase()
     if (['created', 'mint'].includes(type_)) return ActivityType.Mint

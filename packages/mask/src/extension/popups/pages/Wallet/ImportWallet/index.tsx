@@ -17,7 +17,6 @@ import Services from '../../../../service.js'
 import { getDerivableAccounts } from '../../../../../plugins/Wallet/services/index.js'
 import { PageHeader } from '../components/PageHeader/index.js'
 import { PasswordField } from '../../../components/PasswordField/index.js'
-import { currentMaskWalletAccountSettings } from '../../../../../../shared/legacy-settings/wallet-settings.js'
 import { useWeb3Connection } from '@masknet/web3-hooks-base'
 import { useTitle } from '../../../hook/useTitle.js'
 
@@ -148,17 +147,18 @@ const ImportWallet = memo(() => {
                                 keyStoreContent,
                                 keyStorePassword,
                             )
-                            if (!currentMaskWalletAccountSettings.value) {
-                                await WalletRPC.updateMaskAccount({
-                                    account: wallet,
-                                })
-                            }
+
+                            await connection?.connect({
+                                account: wallet,
+                            })
+
                             navigate(PopupRoutes.Wallet, { replace: true })
                             await Services.Helper.removePopupWindow()
                             break
                         case tabs.privateKey:
                             const privateKeyWallet = await WalletRPC.recoverWalletFromPrivateKey(data.name, privateKey)
-                            await WalletRPC.updateMaskAccount({
+
+                            await connection?.connect({
                                 account: privateKeyWallet,
                             })
 

@@ -4,7 +4,8 @@ import { Box, Typography, styled, Portal } from '@mui/material'
 import { debounce } from 'lodash-es'
 import { PropsWithChildren, useRef, cloneElement, useEffect, ReactElement, useState } from 'react'
 import { useLocation } from 'react-use'
-import { sayHelloShowed, userGuideStatus, userGuideVersion } from '../../../shared/legacy-settings/settings.js'
+import { Flags } from '../../../shared/flags.js'
+import { sayHelloShowed, userGuideStatus } from '../../../shared/legacy-settings/settings.js'
 import { activatedSocialNetworkUI } from '../../social-network/index.js'
 import { useI18N } from '../../utils/index.js'
 
@@ -137,7 +138,7 @@ export default function GuideStep({
 
     const onSkip = () => {
         setOpen(false)
-        userGuideStatus[ui.networkIdentifier].value = userGuideVersion.value
+        userGuideStatus[ui.networkIdentifier].value = Flags.userGuideLevel
         sayHelloShowed[ui.networkIdentifier].value = true
     }
 
@@ -153,7 +154,7 @@ export default function GuideStep({
 
     const onTry = () => {
         setOpen(false)
-        userGuideStatus[ui.networkIdentifier].value = userGuideVersion.value
+        userGuideStatus[ui.networkIdentifier].value = Flags.userGuideLevel
         onComplete?.()
     }
 

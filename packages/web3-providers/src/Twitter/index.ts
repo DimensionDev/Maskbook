@@ -1,5 +1,6 @@
 import urlcat from 'urlcat'
 import { timeout } from '@masknet/kit'
+import { attemptUntil } from '@masknet/web3-shared-base'
 import type { TwitterBaseAPI } from '../types/index.js'
 import {
     getSettings,
@@ -10,7 +11,7 @@ import {
     getUserSettingsCached,
     getUserViaTwitterIdentity,
 } from './apis/index.js'
-import { attemptUntil } from '@masknet/web3-shared-base'
+import { fetchJSON } from '../helpers.js'
 
 const UPLOAD_AVATAR_URL = 'https://upload.twitter.com/i/media/upload.json'
 const TWITTER_AVATAR_ID_MATCH = /^\/profile_images\/(\d+)/
@@ -31,7 +32,7 @@ export class TwitterAPI implements TwitterBaseAPI.Provider {
     async getUserSettings(fresh = false) {
         const defaults = getDefaultUserSettings()
         try {
-            if (fresh) await this.cleanUserSettings()
+            if (fresh) await this.staleUserSettings()
             const userSettings = await timeout(getUserSettingsCached(), 5000)
             return {
                 ...defaults,
@@ -42,7 +43,7 @@ export class TwitterAPI implements TwitterBaseAPI.Provider {
         }
     }
 
-    async cleanUserSettings() {
+    async staleUserSettings() {
         getUserSettingsCached.cache.clear()
     }
 
@@ -71,7 +72,7 @@ export class TwitterAPI implements TwitterBaseAPI.Provider {
         const initURL = `${UPLOAD_AVATAR_URL}?command=INIT&total_bytes=${image.size}&media_type=${encodeURIComponent(
             image.type,
         )}`
-        const initRes = await request<{
+        const initRes = await fetchJSON<{
             media_id_string: string
         }>(initURL, {
             method: 'POST',
@@ -93,7 +94,7 @@ export class TwitterAPI implements TwitterBaseAPI.Provider {
 
         // FINALIZE
         const finalizeURL = `${UPLOAD_AVATAR_URL}?command=FINALIZE&media_id=${mediaId}`
-        return request<TwitterBaseAPI.TwitterResult>(finalizeURL, {
+        return fetchJSON<TwitterBaseAPI.TwitterResult>(finalizeURL, {
             method: 'POST',
             credentials: 'include',
             headers,
@@ -133,7 +134,6 @@ export class TwitterAPI implements TwitterBaseAPI.Provider {
             userId: updateInfo.screen_name,
         }
     }
-
     async getUserByScreenName(screenName: string, checkNFTAvatar?: boolean): Promise<TwitterBaseAPI.User | null> {
         if (checkNFTAvatar) return getUserViaWebAPI(screenName)
         return attemptUntil<TwitterBaseAPI.User | null>(
@@ -141,24 +141,4 @@ export class TwitterAPI implements TwitterBaseAPI.Provider {
             null,
         )
     }
-}
-
-function request<TResponse>(
-    url: string,
-    // `RequestInit` is a type for configuring
-    // a `fetch` request. By default, an empty object.
-    config: RequestInit = {},
-): Promise<TResponse> {
-    // Inside, we call the `fetch` function with
-    // a URL and config given:
-    return (
-        fetch(url, config)
-            // When got a response call a `json` method on it
-            .then((response) => response.json())
-            // and return the result data.
-            .then((data) => data as TResponse)
-    )
-
-    // We also can use some post-response
-    // data-transformations in the last `then` clause.
 }

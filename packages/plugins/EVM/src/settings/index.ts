@@ -1,6 +1,6 @@
 import type { Plugin } from '@masknet/plugin-infra'
-import { createValueRefWithReady } from '@masknet/shared-base'
+import { ValueRefWithReady } from '@masknet/shared-base'
 import type { EVM_Web3State } from '../state/Connection/types.js'
 
-export const Web3StateSettings = createValueRefWithReady<EVM_Web3State>(null!)
-export const SharedContextSettings = createValueRefWithReady<Plugin.Shared.SharedUIContext>(null!)
+export const Web3StateSettings = new ValueRefWithReady<EVM_Web3State>()
+export const SharedContextSettings = new ValueRefWithReady<Plugin.Shared.SharedUIContext>()

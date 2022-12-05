@@ -304,6 +304,7 @@ export namespace TwitterBaseAPI {
     export interface Provider {
         getSettings: () => Promise<Settings | undefined>
         getUserSettings: () => Promise<UserSettings>
+        staleUserSettings: () => Promise<void>
         /**
          * @param screenName
          * @param checkNFTAvatar With `checkNFTAvatar` true, will get user via web API directly,
