@@ -23,7 +23,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     GlobalInjection: function Component() {
         return (
             <SNSAdaptorContext.Provider value={context}>
-                <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM, chainId: ChainId.Matic }}>
+                <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM, chainId: ChainId.Mumbai }}>
                     <SmartPayDialog />
                     <SmartPayDeployDialog />
                     <SmartPayDescriptionDialog />
@@ -37,7 +37,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             RenderEntryComponent: (props) => {
                 return (
                     <SNSAdaptorContext.Provider value={context}>
-                        <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM, chainId: ChainId.Matic }}>
+                        <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM, chainId: ChainId.Mumbai }}>
                             <SmartPayEntry {...props} />
                         </Web3ContextProvider>
                     </SNSAdaptorContext.Provider>

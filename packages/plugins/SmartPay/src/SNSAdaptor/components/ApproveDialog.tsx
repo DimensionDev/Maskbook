@@ -45,15 +45,15 @@ export const ApproveMaskDialog = memo(() => {
     const { Others } = useWeb3State()
     const [amount, setAmount] = useState('')
 
-    const maskAddress = Others?.getMaskTokenAddress(ChainId.Matic)
-    const { EP_CONTRACT_ADDRESS } = useSmartPayConstants(ChainId.Matic)
+    const maskAddress = Others?.getMaskTokenAddress(ChainId.Mumbai)
+    const { EP_CONTRACT_ADDRESS } = useSmartPayConstants(ChainId.Mumbai)
 
     const [{ type: approveStateType }, transactionState, approveCallback] = useERC20TokenApproveCallback(
         maskAddress ?? '',
         amount,
         EP_CONTRACT_ADDRESS ?? '',
         noop,
-        ChainId.Matic,
+        ChainId.Mumbai,
     )
 
     const onApprove = useCallback(async () => {

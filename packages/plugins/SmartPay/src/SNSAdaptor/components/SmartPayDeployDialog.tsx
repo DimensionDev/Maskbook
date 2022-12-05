@@ -126,7 +126,7 @@ export const SmartPayDeployDialog = memo(() => {
     const { account, providerType } = useChainContext()
     const { setDialog } = useRemoteControlledDialog(PluginSmartPayMessages.smartPayDescriptionDialogEvent)
 
-    const polygonDescriptor = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, ChainId.Matic)
+    const polygonDescriptor = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, ChainId.Mumbai)
 
     const { value } = useSignableAccounts()
 
@@ -145,6 +145,7 @@ export const SmartPayDeployDialog = memo(() => {
     useUpdateEffect(() => {
         if (signablePersonas?.length) {
             const firstPersona = first(signablePersonas)
+
             setSignAccount({
                 type: SignAccountType.Persona,
                 identity: firstPersona?.identifier.publicKeyAsHex,
@@ -170,10 +171,10 @@ export const SmartPayDeployDialog = memo(() => {
     }, [])
     // #endregion
 
-    const { value: contractAccount } = useAsync(async () => {
+    const { value: contractAccount, error } = useAsync(async () => {
         if (!signAccount?.identity || !signAccount?.address) return
 
-        const accounts = await SmartPayAccount.getAccounts(ChainId.Matic, [signAccount?.address])
+        const accounts = await SmartPayAccount.getAccounts(ChainId.Mumbai, [signAccount?.address])
 
         return first(accounts)
     }, [signAccount])
@@ -193,7 +194,7 @@ export const SmartPayDeployDialog = memo(() => {
             identifier: currentPersona.identifier,
         })
 
-        const response = await SmartPayFunder.fund(ChainId.Matic, {
+        const response = await SmartPayFunder.fund(ChainId.Mumbai, {
             ownerAddress: signAccount.address,
             signature,
             payload,

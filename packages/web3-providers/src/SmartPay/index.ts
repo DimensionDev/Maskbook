@@ -28,7 +28,6 @@ export class SmartPayBundlerAPI implements BundlerAPI.Provider {
 
         return {
             ...json,
-            chain_id: '137',
         }
     }
 
@@ -62,6 +61,7 @@ export class SmartPayBundlerAPI implements BundlerAPI.Provider {
 
     private async assetChainId(chainId: ChainId) {
         const chainIds = await this.getSupportedChainIds()
+        console.log(chainIds)
         if (!chainIds.includes(chainId)) throw new Error(`Not supported ${chainId}.`)
     }
 
@@ -102,7 +102,7 @@ export class SmartPayFunderAPI implements FunderAPI.Provider {
     }
 
     getSupportedChainIds(): Promise<ChainId[]> {
-        return Promise.resolve([ChainId.Matic])
+        return Promise.resolve([ChainId.Matic, ChainId.Mumbai])
     }
 
     async fund(chainId: ChainId, proof: FunderAPI.Proof): Promise<FunderAPI.Fund> {
@@ -115,6 +115,8 @@ export class SmartPayFunderAPI implements FunderAPI.Provider {
         const json: FunderAPI.Fund = await response.json()
         return json
     }
+
+    async queryWhiteList(handler: string) {}
 }
 
 export class SmartPayAccountAPI implements ContractAccountAPI.Provider<NetworkPluginID.PLUGIN_EVM> {
@@ -160,17 +162,22 @@ export class SmartPayAccountAPI implements ContractAccountAPI.Provider<NetworkPl
      * @returns
      */
     private async getOwnedAccountsFromMulticall(chainId: ChainId, owner: string, options: string[]) {
-        const contracts = options.map((x) => this.createWalletContract(chainId, x)!)
-        const names = Array.from<'owner'>({ length: options.length }).fill('owner')
-        const calls = this.multicall.createMultipleContractSingleData(contracts, names, [])
+        try {
+            const contracts = options.map((x) => this.createWalletContract(chainId, x)!)
+            const names = Array.from<'owner'>({ length: options.length }).fill('owner')
+            const calls = this.multicall.createMultipleContractSingleData(contracts, names, [])
 
-        const results = await this.multicall.call(chainId, contracts, names, calls)
-        const accounts = results.flatMap((x) => (x.succeed && x.value ? x.value : []))
+            const results = await this.multicall.call(chainId, contracts, names, calls)
+            const accounts = results.flatMap((x) => (x.succeed && x.value ? x.value : []))
 
-        // if the owner didn't derive any account before, then use the first account.
-        return accounts.length === 0
-            ? options.slice(0, 1).map((x) => this.createContractAccount(chainId, x, owner, false))
-            : accounts.map((x) => this.createContractAccount(chainId, x, owner))
+            // if the owner didn't derive any account before, then use the first account.
+            return accounts.length === 0
+                ? options.slice(0, 1).map((x) => this.createContractAccount(chainId, x, owner, false))
+                : accounts.map((x) => this.createContractAccount(chainId, x, owner))
+        } catch (error) {
+            console.log(error)
+            return []
+        }
     }
 
     /**
@@ -195,7 +202,7 @@ export class SmartPayAccountAPI implements ContractAccountAPI.Provider<NetworkPl
         if (!LOGIC_WALLET_CONTRACT_ADDRESS) throw new Error('No logic wallet contract.')
         if (!CREATE2_FACTORY_CONTRACT_ADDRESS) throw new Error('No create2 contract.')
 
-        const contractWallet = new ContractWallet(owner, LOGIC_WALLET_CONTRACT_ADDRESS, entryPoint)
+        const contractWallet = new ContractWallet(owner, LOGIC_WALLET_CONTRACT_ADDRESS, entryPoint, chainId)
         const create2Factory = new Create2Factory(CREATE2_FACTORY_CONTRACT_ADDRESS)
 
         if (!contractWallet.initCode) throw new Error('Failed to create initCode.')
@@ -216,6 +223,7 @@ export class SmartPayAccountAPI implements ContractAccountAPI.Provider<NetworkPl
         owners: string[],
     ): Promise<Array<ContractAccountAPI.ContractAccount<NetworkPluginID.PLUGIN_EVM>>> {
         const allSettled = await Promise.allSettled(owners.map((x) => this.getOwnedAccounts(chainId, x)))
+        console.log(allSettled)
         return allSettled.flatMap((x) => (x.status === 'fulfilled' ? x.value : []))
     }
 }

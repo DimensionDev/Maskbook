@@ -12,4 +12,4 @@ export interface SignAccount {
     address?: string
 }
 
-export type SignablePersona = PersonaInformation | { address?: string }
+export type SignablePersona = PersonaInformation & { address?: string }

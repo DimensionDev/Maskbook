@@ -185,9 +185,14 @@
                 "type": "address"
             },
             {
-                "internalType": "bytes",
-                "name": "functionData",
-                "type": "bytes"
+                "internalType": "address",
+                "name": "paymaster",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "amount",
+                "type": "uint256"
             }
         ],
         "name": "initialize",
