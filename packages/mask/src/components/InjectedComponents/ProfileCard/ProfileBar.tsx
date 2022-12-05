@@ -21,6 +21,7 @@ const useStyles = makeStyles<void, 'avatarDecoration'>()((theme, _, refs) => ({
         columnGap: 4,
     },
     avatar: {
+        flexShrink: 0,
         position: 'relative',
         height: 40,
         width: 40,
@@ -74,6 +75,10 @@ const useStyles = makeStyles<void, 'avatarDecoration'>()((theme, _, refs) => ({
         height: 18,
         fontWeight: 400,
         lineHeight: '18px',
+        textOverflow: 'ellipsis',
+        overflow: 'hidden',
+        whiteSpace: 'nowrap',
+        flexGrow: 1,
     },
     linkIcon: {
         lineHeight: '14px',
@@ -81,6 +86,7 @@ const useStyles = makeStyles<void, 'avatarDecoration'>()((theme, _, refs) => ({
         overflow: 'hidden',
         color: theme.palette.text.secondary,
         cursor: 'pointer',
+        flexShrink: 0,
     },
     addressMenu: {
         maxHeight: MENU_ITEM_HEIGHT * 10 + MENU_LIST_PADDING * 2,
