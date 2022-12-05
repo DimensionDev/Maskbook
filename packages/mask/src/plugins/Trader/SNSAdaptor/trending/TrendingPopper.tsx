@@ -49,7 +49,6 @@ export function TrendingPopper(props: TrendingPopperProps) {
             PluginTraderMessages.cashAnchorObserved.on((ev) => {
                 const update = () => {
                     setLocked(true)
-                    console.log({ ev })
                     setName(ev.name)
                     setType(ev.type)
                     setAddress(ev.address ?? '')
